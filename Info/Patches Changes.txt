@@ -1,0 +1,365 @@
+=============================
+=== Ocarina of Time REDUX ===
+=============================
+
+Patch Link:			https://www.romhacking.net/hacks/5138/
+Source Code:			https://github.com/MarocZan/Ocarina-of-Time-REDUX
+OoT Randomizer:			https://ootrandomizer.com/
+OoT Randomizer (Source Code):	https://github.com/AmazingAmpharos/OoT-Randomizer
+
+
+--- Changes ---
+
+- Text speed now goes 2 times as fast as the original.
+
+- Collecting Gold Skulltulla Tokens no longer freezes the player but allows it to continue moving. This is similar to what happens in Majora’s Mask spider houses.
+
+- D-Pad can be used to quickly access Ocarina and Iron/Hover Boots.
+
+- Rupee color of the rupee count indicator now changes in color to reflect the wallet upgrade possessed.
+
+- Stone of Agony now works even without rumble. An icon will appear over the rupee count when in proximity of a hidden grotto.
+
+- File select screen now displays all collected items instead of simply showing hearts and medallions/stones.
+
+- Increased speed of block pushing.
+
+- Farore’s Wind does not get dispelled through time travel and can be used independently by child and adult Link.
+
+- The bunny hood now works like in Majora’s Mask boosting movement speed when worn.
+
+- Dampe’s digging tour prize is guaranteed first try instead of random. Additionally he can dig anywhere instead of only on dirt patches.
+
+- Bombchu Bowling prizes now appear in fixed order instead of random (Rotation being: piece of heart, purple rupee, bomb bag capacity upgrade, bombs).
+
+- Fishing made easier by removing most RNG and guaranteeing biting. Additionally a win-requirements big fish is added by himself in the top-left region of the pond.
+
+- Biggoron has you wait 2 days instead of 3 to forge the Biggoron Sword.
+
+- Default Z-targeting is automatically set to HOLD by default.
+
+- Burning Kakariko cutscene now starts by entering Kakariko from any entrance instead of only the main one.
+
+- Song of Storms cooldown is removed, additionally it can be used in every ambient.
+
+- Lab diving heart piece can now be obtained at all times.
+
+- Warp songs and Farore’s Wind can now be used inside Gerudo Training Grounds and Ganon’s Castle.
+
+- All other vanilla features (Rewards, Cutscenes and Animations) are retained.
+
+
+--- Credits ---
+
+Maroc			OoT Randomizer rewrite, text speeds and main hacking
+ShadowOne333		Text and graphic fixes, extensive playtesting and bugfixing
+MattKimura		Extensive playtesting and bugfixing
+Roman971		Randomizer: Skulltulas, Rupee icon colour, fishing, warp songs, Farore's wind and Song of Storms cooldown
+TestRunnerSRL		Randomizer: HOLD as default on Z-Targeting
+AmazingAmpharos		Randomizer: Bombchu Bowling prizes
+Krimtonz		Randomizer: D-Pad, Bunny Hood, Dampe's minigame and Kakariko cutscene hacks
+Fig			Randomizer: Block faster pushing speed
+rlbond86		Randomizer: Stone of Agony icon and File Select items display
+KevinPal		Randomizer: Farore's Wind hacks
+junglechief		Randomizer: Fishing Pond and Claim Check changes
+
+
+
+==================================================
+=== Ocarina of Time REDUX - Additional Options ===
+==================================================
+
+Link:		https://discord.gg/P22GGzz
+
+
+--- Changes ---
+
+- Contains everything from Ocarina of Time REDUX.
+
+- Hero Mode (Extra Damage Received, Reduced Recovery, OHKO Mode.
+
+- Text dialogue at 1x, 2x or 3x speed.
+
+- 16:9 widescreen patch.
+
+- Extended draw distance.
+
+- No black bars during cutscenes and Z-targeting.
+
+- Replace Link's model
+
+- Disable low polygon model of Link.
+
+- Decreased or increased item capacity for deku sticks, deku nuts, deku seeds, arrows and bombs.
+
+- Unlock all tunics for Child Link.
+
+- Unlock all boots for Child Link.
+
+- Unlock Kokiri Sword for Adult Link.
+
+- Low HP sound beep disabled.
+
+- Require all 6 medallions to enter Ganon's Castle.
+
+- Can return to Child Link before Forest Temple is completed.
+
+- No forced popup textboxes from Navi during the first dungeon.
+
+- Hide the D-Pad icons
+
+
+--- Credits ---
+
+Admentus		Porting over changes from OoT Randomizer
+GhostlyDark		Porting over changes from OoT Randomizer
+Maroc			OoT Randomizer rewrite, text speeds and main hacking
+ShadowOne333		Text and graphic fixes, Extensive playtesting and bugfixing
+MattKimura		Extensive playtesting and bugfixing.
+Roman971		Randomizer: Skulltulas, Rupee icon colour, fishing, warp songs, Farore's wind and Song of Storms cooldown
+TestRunnerSRL		Randomizer: HOLD as default on Z-Targeting
+AmazingAmpharos		Randomizer: Bombchu Bowling prizes
+Krimtonz		Randomizer: D-Pad, Bunny Hood, Dampe's minigame and Kakariko cutscene hacks
+Fig			Randomizer: block faster pushing speed
+rlbond86		Randomizer: Stone of Agony icon and File Select items display
+KevinPal		Randomizer: Farore's Wind hacks
+junglechief		Randomizer: Fishing Pond and Claim Check changes
+
+
+
+===========================
+=== Majora's Mask REDUX ===
+===========================
+
+Patch Link:			https://www.romhacking.net/hacks/5122/
+Source Code:			https://github.com/MarocZan/Majora-s-Mask-REDUX
+MM Randomizer (Source Code):	https://github.com/ZoeyZolotova/mm-rando
+				https://github.com/saneki/mm-rando
+
+--- Changes ---
+
+- D-Pad can now be used to access all three transformation masks and the ocarina, allowing a total of seven items to be accessible at all times. Note that this means that the map is no longer possible to toggle off. D-Pad is displayed on the right side.
+
+- When using the bow, magic arrows can be cycled in a similar fashion to wind waker’s magic arrows by setting one and pressing the “R” button.
+
+- Ocarina can now be used underwater as Zora Link.
+
+- Increased block pushing speed.
+
+- Increased Mikau pushing speed to shore.
+
+- All vanilla elements (cutscenes, introduction and first cycle, rewards) are retained.
+
+
+--- Credits ---
+
+Maroc			MMRandomizer rewrite and main hacking
+Saneki			Primary hacking and ASM work
+
+
+
+================================================
+=== Majora's Mask REDUX - Additional Options ===
+================================================
+
+Link:		https://discord.gg/P22GGzz
+
+
+--- Changes ---
+
+- Contains everything from Majora's Mask REDUX.
+
+- Hero Mode (Extra Damage Received, Reduced Recovery, OHKO Mode.
+
+- D-Pad Icons Layout on left side, right side or hidden.
+
+- 16:9 widescreen patch.
+
+- Extended draw distance.
+
+- No black bars during cutscenes and Z-targeting.
+
+- Disable pixelated stars at nighttime.
+
+- Decreased or increased item capacity for deku sticks, deku nuts, arrows and bombs.
+
+- Permanent Razor Sword.
+
+- Low HP sound beep disabled.
+
+
+--- Credits ---
+
+Admentus		Porting over changes from MM Randomizer
+GhostlyDark		Porting over changes from MM Randomizer
+Maroc			MMRandomizer rewrite and main hacking
+Saneki			Primary hacking and ASM work
+
+
+
+====================================
+=== Majora's Mask - Masked Quest ===
+====================================
+
+Patch Link:			https://www.romhacking.net/hacks/3959/
+
+
+--- Changes ---
+
+- Some dungeons modified.
+
+- A new map which replace the Lottery Shop named, “Town Museum”.
+
+- Link and his forms have each individual colors.
+
+- Difficulty increased.
+
+- Sun´s song restored.
+
+- The infamous Moon trial are not optional anymore, with some mask required, perfect for speedruns.
+
+- The 3 MASKS are required for advance to the next trial to gets into the Final room (Majora), the moon field also requires 2 important items in the game To climb towards where is the Majora masked moon child to accept the final challenge of the game, and talking about of moon children, 10 masks are mandatory for gives to the moon children that reminds me the Ganon trials in the Ganon´s Castle in OOT.
+
+- Beta enemies are back.
+
+- Few Sub Bosses are more harder to fight.
+
+- Some aesthetic changes in stages so do remember to its 3DS counterpart.
+
+- Some text are changed and are added for the items, songs and swords.
+
+- The transformation masks have special elemental powers in some attacks (ex. Goron Spikes have the ability to burn some enemies and the Fierce Deity Link is capable of kill enemies with his Sword Beam).
+
+- The Scarecrow´s song, the powder keg and the Elegy are useful.
+
+- Link and his all forms can do manual jump, in 2 different modes, forward and stand jump,
+The shield crouch stab is disabled.
+
+- FD Link have the Adult Link´s size and can open lifting dungeon doors, and can be usable anywhere with no restrictions of any type, he finally can use regular items & weapons, but he can´t use the hookshot, bow and magic arrows.
+
+- Goron Link have the walking speed to match with MM3D's Goron Link walking speed.
+
+- The hookshot range is lightly extended.
+
+- Zora Link´s double cutters´ range is extended for long throw the fins.
+
+- New Prizes from Romani cows and the rupee wallets.
+
+- The normal wallet has a new digit.
+
+- And new gossip stone hints.
+
+- The D-Pad mask and ocarina on-the-fly item selection commands, courtesy from Saneki from his Randomizer hack tool is ported, so you can press each side of the N64 D-Pad directional for choose 3 of 4 transformation masks and the Ocarina of Time as well, give you the chance of handling 7 items.
+
+- D-Pad Right is set to the Deku Mask.
+
+- D-Pad Up is set to the Goron Mask.
+
+- D-Pad Left is set to the Zora Mask.
+
+- D-Pad Down is set to the Ocarina of Time.
+
+- The Iron Knuckles when you awaken them, they start at full rage (running) instead of walking, making it a lot of hard to defeat.
+
+- There is a snowball rolling in the frozen way to Goron village place.
+
+- The ranch dog racing is now easier to beat.
+
+- The beneath the graveyard dampe course is now easier to complete. for now.
+
+- The file selection screen background sky is not glitchy anymore, itself gets a new color for contrast the golden look.
+
+
+--- Credits ---
+
+Garo-Mastah		Romhack author
+Aroenai			Some help, hacking skills and hacks from his GC MM patches
+CloudMax		Texture Explorer program and hacking documentation
+fkualol			RAM to ROM hacking documentation from J 1.0 game
+VictorHale		Hacking	some GameShark codes and assistence
+Ideka			Level documentation and help about level importing-exporting
+Saneki			D-Pad
+
+
+
+============================================
+=== Paper Mario: Hard Mode / Insane Mode ===
+============================================
+
+Patch Link:			http://skelux.net/showthread.php?tid=44 (Hard Mode / Insane Mode)
+				https://www.romhacking.net/hacks/2245/ (Hard Mode and more enemy HP = Hard Mode+)
+
+
+--- Changes
+
+- All enemies will deal 1.5x their normal attack power. (Hard Mode / Hard Mode+)
+- All enemies will deal 2x their normal attack power. (Insane Mode)
+- All enmies have more HP (Hard Mode+)
+
+
+--- Values Changes (Hard Mode and more enemy HP / Hard Mode+)
+
+Goomba					HP: 4		Paragoomba				HP: 5
+Spiked Goomba				HP: 4		Blue Goomba				HP: 8
+Red Goomba				HP: 10		Goomba King				HP: 15
+Jr Troopa 1				HP: 8		Jr Troopa 2				HP: 18
+Jr Troopa 3				HP: 45		Jr Troopa 4				HP: 50
+Jr Troopa 5				HP: 55		Jr Troopa 6				HP: 65
+Chan					HP: 20		Lee					HP: 25
+The Master 1				HP: 60		The Master 2				HP: 80
+The Master 3				HP: 110		Ember					HP: 15
+Koopa Troopa				HP: 6		Paratroopa				HP: 7
+Fuzzy					HP: 6		Kent C Koopa				HP: 75
+Bob-omb					HP: 4		Bill Blaster				HP: 7
+Bullet Bill				HP: 4		G Ninjakoopa				HP: 10
+Y Ninjakoopa				HP: 10		B Ninjakoopa				HP: 10
+R Ninjakoopa				HP: 12		Bowser???				HP: 18
+Cleft					HP: 4		Monty Mole				HP: 6
+Monty Mole (Flower Fields)		HP: 16		Whacka (Unused)				HP: 15
+Buzzar					HP: 50		Pokey					HP: 6
+Bandit					HP: 8		Pokey Mummy				HP: 7
+Swooper					HP: 6		Stone Chomp				HP: 9
+Buzzy Beetle				HP: 6		Tutankoopa				HP: 40
+Forest Fuzzy				HP: 8		Piranha Plant				HP: 10
+Bzzap!					HP: 6		Hyper Goomba				HP: 9
+Hyper Paragoomba			HP: 10		Hyper Cleft				HP: 7
+Tubba's Heart				HP: 60		Tubba Blubba				HP: 15
+Clubba					HP: 12		Tubba Blubba (In Castle)		HP: 127
+Shy Guy					HP: 9		Medi Guy				HP: 13
+Groove Guy				HP: 10		Spy Guy					HP: 11
+Pyro Guy				HP: 12		Sky Guy					HP: 11
+General Guy				HP: 30		General Guy 2				HP: 35
+Bulb					HP: 10		Big Lantern Ghost			HP: 45
+Hammer Bros				HP: 15		Koopatrol				HP: 14
+Fuzzipede				HP: 26		Spear Guy				HP: 10
+Jungle Fuzzy				HP: 9		Spike Top				HP: 6
+Hurt Plant				HP: 11		M Bush					HP: 12
+Putrid Piranha				HP: 15		W Magikoopa				HP: 17
+Lava Bubble				HP: 12		R Magikoopa				HP: 20
+Lava Piranha				HP: 48		Petit Piranha				HP: 3
+Lakitu					HP: 14		Ruff Puff				HP: 16
+Crazee Dayzee				HP: 12		Spiny					HP: 7
+Y Magikoopa				HP: 18		Amazy Dayzee				HP: 25
+GRN Magikoopa				HP: 19		Huff N Puff				HP: 65
+Spike?					HP: 55		Dark Koopa				HP: 10
+Dark Paratroopa (Unused)		HP: 11		Gloomba					HP: 9
+Paragloomba				HP: 10		Spiked Gloomba				HP: 9
+Buzzy Beetle (Toad Town Tunnel 1)	HP: 12		Blooper					HP: 35
+Electro Blooper				HP: 55		Super Blooper				HP: 75
+Swoopula				HP: 9		Duplighost				HP: 20
+Gulpit					HP: 14		Gulpits' Rocks				HP: 2
+Frost Piranha				HP: 20		White Clubba				HP: 16
+GRY Magikoopa				HP: 21		Monstar					HP: 25
+Albino Dino (Unused)			HP: 14		Crystal King 				HP: 77
+Crystal Bit				HP: 2		Magikoopa				HP: 21
+Anti Guy				HP: 60		B Bill Blaster				HP: 12
+Bony Beetle				HP: 11		Dry Bones				HP: 12
+Bowser 1				HP: 60		Bowser 2				HP: 20
+Bowser 3				HP: 60		Bowser 4				HP: 100
+Bowser 5				HP: 100
+
+
+--- Credits ---
+
+Skelux			Hard Mode and Insane Mode
+Knux5577		Hard Mode and more enemy HP (Hard Mode+)
