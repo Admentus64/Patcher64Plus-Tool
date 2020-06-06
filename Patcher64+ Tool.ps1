@@ -19,7 +19,8 @@ Add-Type -AssemblyName 'System.Drawing'
 #==============================================================================================================================================================================================
 # Setup global variables
 
-$global:Version = "06-06-2020"
+$global:VersionDate = "06-06-2020"
+$global:Version     = "v4.0"
 
 $global:GameID = ""
 $global:ChannelTitle = ""
@@ -2221,7 +2222,7 @@ function CreateMainDialog() {
     $CurrentModeLabel.AutoSize = $True
 
     # Create a label to show current version.
-    $global:VersionLabel = CreateLabel -X 15 -Y 10 -Width 120 -Height 20 -Text ("Version: " + $Version) -Font $VCPatchFont -AddTo $MainDialog
+    $global:VersionLabel = CreateLabel -X 15 -Y 10 -Width 120 -Height 30 -Text ("Version: " + $Version + "`n(" + $VersionDate + ")") -Font $VCPatchFont -AddTo $MainDialog
 
 
 
@@ -2678,7 +2679,7 @@ function SetMainScreenSize() {
         $InputROMTextBox.Width = $InputBPSTextBox.Width
         $InputROMButton.Left = $InputBPSButton.Left
 
-        $InputWADPanel.Location = New-Object System.Drawing.Size(10, 35)
+        $InputWADPanel.Location = New-Object System.Drawing.Size(10, 50)
         $InputROMPanel.Location = New-Object System.Drawing.Size(10, ($InputWADPanel.Bottom + 5))
         $InputBPSPanel.Location = New-Object System.Drawing.Size(10, ($InputROMPanel.Bottom + 5))
         $CustomGameIDPanel.Location = New-Object System.Drawing.Size(10, ($InputBPSPanel.Bottom + 5))
@@ -2703,7 +2704,7 @@ function SetMainScreenSize() {
         $InputROMTextBox.Width = $InputWADTextBox.Width
         $InputROMButton.Left = $InputWADButton.Left
 
-        $InputROMPanel.Location = New-Object System.Drawing.Size(10, 35)
+        $InputROMPanel.Location = New-Object System.Drawing.Size(10, 50)
         $InputBPSPanel.Location = New-Object System.Drawing.Size(10, ($InputROMPanel.Bottom + 5))
 
         $PatchOoTPanel.Location = New-Object System.Drawing.Size(10, ($InputBPSPanel.Bottom + 5))
@@ -3155,7 +3156,7 @@ function CreateInfoGameIDDialog() {
     $CloseButton.Add_Click({$InfoGameIDDialog.Hide()})
 
     # Create the string that will be displayed on the window.
-    $InfoString = $ScriptName + " (" + $Version + ")" + '{0}'
+    $InfoString = $ScriptName + " " + $Version + " (" + $VersionDate + ")" + '{0}'
 
     $InfoString += '{0}'
     $InfoString += "--- OFFICIAL GAMEID'S ---{0}"
@@ -3216,7 +3217,7 @@ function CreateInfoOcarinaOfTimeDialog() {
     $CloseButton.Add_Click({$InfoOcarinaOfTimeDialog.Hide()})
 
     # Create the string that will be displayed on the window.
-    $String = $ScriptName + " (" + $Version + ")" + '{0}'
+    $String = $ScriptName + " " + $Version + " (" + $VersionDate + ")" + '{0}'
 
     $String += "{0}"
     $String += "Patches The Legend of Zelda: Ocarina of Time game WAD:{0}"
@@ -3273,7 +3274,7 @@ function CreateInfoMajorasMaskDialog() {
     $CloseButton.Add_Click({$InfoMajorasMaskDialog.Hide()})
 
     # Create the string that will be displayed on the window.
-    $String = $ScriptName + " (" + $Version + ")" + '{0}'
+    $String = $ScriptName + " " + $Version + " (" + $VersionDate + ")" + '{0}'
 
     $String += "{0}"
     $String += "Patches The Legend of Zelda: Majora's Mask game WAD:{0}"
@@ -3332,7 +3333,7 @@ function CreateInfoSuperMario64Dialog() {
     $CloseButton.Add_Click({$InfoSuperMario64Dialog.Hide()})
 
     # Create the string that will be displayed on the window.
-    $String = $ScriptName + " (" + $Version + ")" + '{0}'
+    $String = $ScriptName + " " + $Version + " (" + $VersionDate + ")" + '{0}'
 
     $String += '{0}'
     $String += 'Patches Super Mario 64 game WAD:{0}'
@@ -3387,7 +3388,7 @@ function CreateInfoPaperMarioDialog() {
     $CloseButton.Add_Click({$InfoPaperMarioDialog.Hide()})
 
     # Create the string that will be displayed on the window.
-    $String = $ScriptName + " (" + $Version + ")" + '{0}'
+    $String = $ScriptName + " " + $Version + " (" + $VersionDate + ")" + '{0}'
 
     $String += '{0}'
     $String += 'Patches Paper Mario game WAD:{0}'
@@ -3439,7 +3440,7 @@ function CreateInfoFreeDialog() {
     $CloseButton.Add_Click({$InfoFreeDialog.Hide()})
 
     # Create the string that will be displayed on the window.
-    $String = $ScriptName + " (" + $Version + ")" + '{0}'
+    $String = $ScriptName + " " + $Version + " (" + $VersionDate + ")" + '{0}'
 
     $String += '{0}'
     $String += 'Patches Custom game WAD:{0}'
@@ -3490,7 +3491,7 @@ function CreateCreditsDialog() {
 
 
     # Create the version number and script name label.
-    $InfoLabel = CreateLabel -X ($CreditsDialog.Width / 2 - $String.Width - 80) -Y 10 -Width 160 -Height 15 -Font $VCPatchFont -Text ($ScriptName + " (" + $Version + ")") -AddTo $CreditsDialog
+    $InfoLabel = CreateLabel -X ($CreditsDialog.Width / 2 - $String.Width - 100) -Y 10 -Width 200 -Height 15 -Font $VCPatchFont -Text ($ScriptName + " " + $Version + " (" + $VersionDate + ")") -AddTo $CreditsDialog
 
 
 
@@ -3583,7 +3584,7 @@ function CreateMissingFilesDialog() {
     $CloseButton.Add_Click({$MissingFilesDialog.Hide()})
 
     # Create the string that will be displayed on the window.
-    $String = $ScriptName + " (" + $Version + ")" + "{0}"
+    $String = $ScriptName + " " + $Version + " (" + $VersionDate + ")" + "{0}"
 
     $String += "{0}"
     $String += "Neccessary files are missing.{0}"
