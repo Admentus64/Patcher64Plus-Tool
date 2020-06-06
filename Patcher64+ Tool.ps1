@@ -345,6 +345,7 @@ function MainFunction() {
 function Cleanup() {
     
     RemovePath -LiteralPath ($MasterPath + '\cygdrive')
+    DeleteFile -File $Files.flipscfg
 
     if ($IsWiiVC) {
         RemovePath -LiteralPath $WADFile.Folder
@@ -542,6 +543,7 @@ function SetFileParameters() {
         }
     }
 
+    $Files.flipscfg                      = $MasterPath + "\Base\flipscfg.bin"
     $Files.ckey                          = $MasterPath + "\Wii VC\common-key.bin"
     $Files.dmaTable                      = $BasePath + "\dmaTable.dat"
     $Files.archive                       = $BasePath + "\ARCHIVE.bin"
@@ -1047,20 +1049,6 @@ function PatchRedux() {
         $global:IsCompress = $True
         DecompressROM
     }
-    
-    # NEW DMATABLE #
-    $offsets = ""
-    if ($GameType -eq "Ocarina of Time") {
-        $offsets = "0 1 2 3 4 5 6 7 8 9 15 16 17 18 19 20 21 22 23 24 25 26 942 944 946 948 950 952 954 956 958 960 962 964 966 968 970 972 974 976 978 980 982 984 986 988 990 992 994 "
-        $offsets += "996 998 1000 1002 1004 1497 1498 1499 1500 1501 1502 1503 1504 1505 1506 1507 1508 1509 1510 1511 1512 1513 1514 1515 1516 1517 1518 1519 1520 1521 1522 1523 1524 1525"
-    }
-    elseif ($GameType -eq "Majora's Mask") {
-        $offsets = "0 1 2 3 4 5 6 7 -8 -9 15 16 17 18 19 20 -21 22 25 26 27 28 29 30 -652 1127 -1539 -1540 -1541 -1542 -1543 1544 "
-        $offsets += "1545 1546 1547 1548 1549 1550 -1551 1552 1553 1554 1555 1556 1557 1558 1559 1560 1561 1562 1563 1564 1565 1566 1567" 
-    }
-    
-    DeleteFile -File $Files.dmaTable
-    Add-Content $Files.dmaTable $offsets
 
     # BPS PATCHING #
     if ($GameType -eq "Ocarina of Time") {
