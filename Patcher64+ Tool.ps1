@@ -19,8 +19,8 @@ Add-Type -AssemblyName 'System.Drawing'
 #==============================================================================================================================================================================================
 # Setup global variables
 
-$global:VersionDate = "06-06-2020"
-$global:Version     = "v4.0"
+$global:VersionDate = "09-06-2020"
+$global:Version     = "v4.1"
 
 $global:GameID = ""
 $global:ChannelTitle = ""
@@ -152,102 +152,62 @@ function ExtendString([string]$InputString, [int]$Length) {
 
 
 #==============================================================================================================================================================================================
-function MainFunctionReset([string]$Command, [string]$Hash, [boolean]$Compress) {
+function MainFunction([String]$Command, [string]$Id, [string]$Title, [string]$Patch, [string]$PatchedFile, [string]$Hash, [Boolean]$Compress) {
     
     $global:GetCommand = $Command
     $global:IsCompress = $Compress
-    $global:IsRedux = $False
-    $global:IsDowngrade = $False
-    $global:PatchFile = $null
-    $global:PatchedFileName = "_patched"
-    $global:CheckHashSum = $Hash
-
-    if (!$global:IsWiiVC)                                               { $global:Z64File = SetZ64Parameters -Z64Path $global:GameZ64 }
-    if (!(CheckCheckBox -CheckBox $global:InputCustomGameIDCheckbox))   { ChangeGameMode -Mode $global:GameType }
-
-    if ($global:IsWiiVC -and $global:GetCommand -eq "Downgrade" -and $global:PatchVCDowngrade.Visible) {
-        $global:PatchVCDowngrade.Checked = $True
-        $global:IsDowngrade = $True
-    }
-    elseif ($global:IsWiiVC -and $global:GetCommand -eq "No Downgrade") { $global:PatchVCDowngrade.Checked = $False }
-
-    SetROMFile
-
-}
-
-
-
-#==============================================================================================================================================================================================
-function MainFunctionOoTRedux([string]$Command, [string]$Hash, [boolean]$Compress) {
+    $global:IsRedux = ($GetCommand -eq "Redux")
     
-    MainFunctionReset -Command $Command -Hash $Hash -Compress $Compress
-
-    $global:GameID = "NAC0"
-    $global:ChannelTitle = "Redux: Ocarina"
-    $global:PatchedFileName = '_redux_patched'
-    $global:IsRedux = $true
-
-    $global:PatchVCExpandMemory.Checked = $true
-    $global:PatchVCRemapDPad.Checked = $true
-    if ($global:IsWiiVC -and !$global:PatchVCRemapCDown.Checked -and !$global:PatchVCRemapZ.Checked)   { $global:PatchVCLeaveDPadUp.Checked = $true }
-    if ($global:IncludeReduxOoT.Checked)                                                               { $global:PatchFile = $Files.bpspatch_oot_redux }
-    else { $global:PatchFile = $null }
-    
-    MainFunction
-
-}
-
-
-
-#==============================================================================================================================================================================================
-function MainFunctionMMRedux([string]$Command, [string]$Hash, [boolean]$Compress) {
-    
-    MainFunctionReset -Command $Command -Hash $Hash -Compress $Compress
-
-    $global:GameID = "NAR0"
-    $global:ChannelTitle = "Redux: Majora's"
-    $global:PatchedFileName = '_redux_patched'
-    $global:IsRedux = $true
-
-    if ($IncludeReduxMM.Checked) { $global:PatchFile = $Files.bpspatch_mm_redux }
-    else { $global:PatchFile = $null }
-    $global:PatchVCRemapDPad.Checked = $true
-
-    MainFunction
-
-}
-
-
-
-#==============================================================================================================================================================================================
-function MainFunctionPatchRemap([String]$Command, [string]$Id, [string]$Title, [string]$Patch, [string]$PatchedFile, [string]$Hash, [Boolean]$Compress) {
-    
-    $global:PatchVCRemapDPad.Checked = $true
-    MainFunctionPatch -Command $Command -Id $Id -Title $Title -Patch $Patch -PatchedFile $PatchedFile -Hash $Hash -Compress $Compress
-
-}
-
-
-
-#==============================================================================================================================================================================================
-function MainFunctionPatch([String]$Command, [string]$Id, [string]$Title, [string]$Patch, [string]$PatchedFile, [string]$Hash, [Boolean]$Compress) {
-    
-    MainFunctionReset -Command $Command -Hash $Hash -Compress $Compress
-
-    if ($global:GameID -ne $null)         { $global:GameID = $Id }
-    if ($global:ChannelTitle -ne $null)   { $global:ChannelTitle = $Title }
     $global:PatchFile = $Patch
     $global:PatchedFileName = $PatchedFile
+    $global:CheckHashSum = $Hash
 
-    MainFunction
+    if (!(CheckCheckBox -CheckBox $InputCustomGameIDCheckbox))               { ChangeGameMode -Mode $GameType }
+    if ($Id.length -gt 0)                                                    { $global:GameID = $Id }
+    if ($Title.length -gt 0)                                                 { $global:ChannelTitle = $Title }
+    SetCustomGameID
+
+    if ($IsWiiVC) {
+        if ($PatchVCDowngrade.Checked -and $PatchVCDowngrade.Visible)        { $global:IsDowngrade = $True }
+        if ($GetCommand -eq "Downgrade" -and $PatchVCDowngrade.Visible)      { $global:IsDowngrade = $PatchVCDowngrade.Checked = $True }
+        if ($GetCommand -eq "No Downgrade" -and $PatchVCDowngrade.Visible)   { $global:IsDowngrade = $PatchVCDowngrade.Checked = $False }
+    }
+    else {
+        $global:IsDowngrade = $False
+        $global:Z64File = SetZ64Parameters -Z64Path $global:GameZ64
+    }
+
+    $PatchVCRemapDPad.Checked = ($GetCommand -eq "Remap D-Pad")
+
+    if ($GetCommand -eq "Redux") {
+        $PatchVCRemapDPad.Checked = $true
+        if ($GameType -eq "Ocarina of Time") {
+            $PatchVCExpandMemory.Checked = $true
+            if ($IsWiiVC -and !$PatchVCRemapCDown.Checked -and !$PatchVCRemapZ.Checked)   { $PatchVCLeaveDPadUp.Checked = $true }
+            if (!$IncludeReduxOoT.Checked)                                                { $global:PatchFile = $null }
+            if ($IsWiiVC)                                                                 { $global:IsDowngrade = $PatchVCDowngrade.Checked = $True }
+        }
+        elseif ($GameType -eq "Majora's Mask" -and !$IncludeReduxMM.Checked) { $global:PatchFile = $null }
+    }
+
+    MainFunctionPatch
 
 }
 
 
 
 #==============================================================================================================================================================================================
-function MainFunction() {
+function MainFunctionPatch() {
     
+    Write-Host ""
+    Write-Host "--- Patch Info ---"
+    Write-Host "GameID:" $global:GameID
+    Write-Host "Channel Title:" $ChannelTitle
+    Write-Host "Patch File:" $PatchFile
+    Write-Host "Redux:" $IsRedux
+    Write-Host "Downgrade:" $IsDowngrade
+    Write-Host "ROM File:" $IsDowngrade
+
     # Step 01: Disable the main dialog, allow patching and delete files if they still exist.
     $ContinuePatching = $True
     $MainDialog.Enabled = $False
@@ -318,24 +278,21 @@ function MainFunction() {
         # Step 14: Compress the ROMC again if possible.
         CompressROMC
 
-        # Step 15: Apply Custom Channel Title and GameID if enabled.
-        SetCustomGameID
-
-        # Step 16: Hack the Channel Title.
+        # Step 15: Hack the Channel Title.
         HackOpeningBNRTitle
 
-        # Step 17: Repack the "00000005.app" with the updated ROM file.
+        # Step 16: Repack the "00000005.app" with the updated ROM file.
         RepackU8AppFile
 
-        # Step 18: Repack the WAD file with the updated APP file.
+        # Step 17: Repack the WAD file with the updated APP file.
         RepackWADFile
     }
 
-    # Step 19: Final message.
+    # Step 18: Final message.
     if ($IsWiiVC)   { UpdateStatusLabelDuringPatching -Text ('Finished patching the ' + $GameType + ' VC WAD file.') }
     else            { UpdateStatusLabelDuringPatching -Text ('Finished patching the ' + $GameType + ' ROM file.') }
 
-    # Step 20: Get rid of everything and enable the main dialog.
+    # Step 19: Get rid of everything and enable the main dialog.
     Cleanup
 
 }
@@ -347,6 +304,7 @@ function Cleanup() {
     
     RemovePath -LiteralPath ($MasterPath + '\cygdrive')
     DeleteFile -File $Files.flipscfg
+    DeleteFile -File $Files.stackdump
 
     if ($IsWiiVC) {
         RemovePath -LiteralPath $WADFile.Folder
@@ -548,6 +506,7 @@ function SetFileParameters() {
     $Files.ckey                          = $MasterPath + "\Wii VC\common-key.bin"
     $Files.dmaTable                      = $BasePath + "\dmaTable.dat"
     $Files.archive                       = $BasePath + "\ARCHIVE.bin"
+    $Files.stackdump                     = $MasterPath + "\Wii VC\wadpacker.exe.stackdump"
 
     # Set it to a global value.
     return $Files
@@ -668,12 +627,6 @@ function ExtractWADFile() {
         if ($Folder.PSIsContainer) {
             # Remember the path to this folder.
             $global:WADFile = SetWADParameters -WADPath $GameWAD -FolderName $Folder.Name
-
-            # If it already exists remove it first. Helps me with testing this out.
-            #if (TestPath -LiteralPath $WADFile.Folder) { RemovePath -LiteralPath $WADFile.Folder }
-
-            # Move this folder to where the WAD file is located.
-            #Move-Item -LiteralPath $Folder.FullName -Destination $WADFile.Path -Force
         }
     }
 
@@ -862,6 +815,11 @@ function PatchVCROM() {
             UpdateStatusLabelDuringPatching -Text ("Could not inject " + $GameType + " ROM. Is it a Majora's Mask or Paper Mario ROM?")
             return $False
         }
+
+        if (!(Test-Path $ROMFile -PathType leaf)) {
+            UpdateStatusLabelDuringPatching -Text ("Could not inject " + $GameType + " ROM. Is your ROM filename or destination path too long?")
+            return $False
+        }
     }
 
     # Decompress romc if needed
@@ -905,15 +863,15 @@ function DowngradeROM() {
 
     # Downgrade a ROM if it is required first
     if ($GameType -eq "Ocarina of Time" -and $IsDowngrade) {
-
+        
         $HashSum = (Get-FileHash -Algorithm SHA256 $ROMFile).Hash
         if ($HashSum -ne $HashSum_oot_rev1 -and $HashSum -ne $HashSum_oot_rev2) {
             UpdateStatusLabelDuringPatching -Text ("Failed! Ocarina of Time ROM does not match revision 1 or 2.")
             return $False
         }
 
-        if ($HashSum -eq $HashSum_oot_rev1) { & $Files.flips $Files.bpspatch_oot_rev1_to_rev0 $ROMFile | Out-Host }
-        elseif ($HashSum -eq $HashSum_oot_rev2) { & $Files.flips $Files.bpspatch_oot_rev2_to_rev0 $ROMFile | Out-Host }
+        if ($HashSum -eq $HashSum_oot_rev1)       { & $Files.flips $Files.bpspatch_oot_rev1_to_rev0 $ROMFile | Out-Host }
+        elseif ($HashSum -eq $HashSum_oot_rev2)   { & $Files.flips $Files.bpspatch_oot_rev2_to_rev0 $ROMFile | Out-Host }
         $global:CheckHashSum = (Get-FileHash -Algorithm SHA256 $ROMFile).Hash
 
         $HashSum = $null
@@ -970,7 +928,7 @@ function PatchROM([string]$Hash) {
     UpdateStatusLabelDuringPatching -Text ("BPS Patching " + $GameType + " ROM...")
 
     $HashSum1 = $null
-    if ($IsWiiVC -and $GetCommand -eq "BPS Patch") { $HashSum1 = (Get-FileHash -Algorithm SHA256 $ROMFile).Hash }
+    if ($IsWiiVC -and $GetCommand -eq "Patch BPS") { $HashSum1 = (Get-FileHash -Algorithm SHA256 $ROMFile).Hash }
 
     # Apply the selected patch to the ROM, if it is provided
     if ($PatchFile -ne $null) {
@@ -980,7 +938,7 @@ function PatchROM([string]$Hash) {
         elseif (!$IsWiiVC -and !$IsCompress)   { & $Files.flips --apply $PatchFile $ROMFile $PatchedROMFile | Out-Host }
     }
 
-    if ($IsWiiVC -and $GetCommand -eq "BPS Patch") {
+    if ($IsWiiVC -and $GetCommand -eq "Patch BPS") {
         $HashSum2 = (Get-FileHash -Algorithm SHA256 $ROMFile).Hash
         if ($HashSum1 -eq $HashSum2) {
             UpdateStatusLabelDuringPatching -Text 'Failed! BPS or IPS Patch does not match. ROM has left unchanged.'
@@ -1677,9 +1635,9 @@ function CheckGameID() {
 #==============================================================================================================================================================================================
 function SetCustomGameID() {
     
-    if (!$InputCustomGameIDCheckbox.Checked -or !$IsWiiVC)                                   { return }
-    if ($InputCustomGameIDTextbox.TextLength -eq 4)                                          { $global:GameID = $InputCustomGameIDTextBox.Text }
-    if ($InputCustomChannelTitleTextBox.TextLength -gt 0 -and $global:GameType -ne "Free")   { $global:ChannelTitle = $InputCustomChannelTitleTextBox.Text }
+    if (!$InputCustomGameIDCheckbox.Checked -or !$IsWiiVC)                            { return }
+    if ($InputCustomGameIDTextbox.TextLength -eq 4)                                   { $global:GameID = $InputCustomGameIDTextBox.Text }
+    if ($InputCustomChannelTitleTextBox.TextLength -gt 0 -and $GameType -ne "Free")   { $global:ChannelTitle = $InputCustomChannelTitleTextBox.Text }
 
 }
 
@@ -2276,7 +2234,7 @@ function CreateMainDialog() {
     
     # Create a button to allow patch the WAD with a ROM file.
     $global:InjectROMButton = CreateButton -X 495 -Y 18 -Width 80 -Height 22 -Text "Inject ROM" -ToolTip $ToolTip -Info "Replace the ROM in your selected WAD File with your selected Z64, N64 or V64 ROM File" -AddTo $InputROMGroup
-    $InjectROMButton.Add_Click({ MainFunctionPatch -Command "Inject" -Id $null -Title $null -Patch $null -PatchedFile '_injected' -Hash $null -Compress $False })
+    $InjectROMButton.Add_Click({ MainFunction -Command "Inject" -PatchedFile '_injected' -Compress $False })
 
 
 
@@ -2305,7 +2263,7 @@ function CreateMainDialog() {
     
     # Create a button to allow patch the WAD with a BPS file.
     $global:PatchBPSButton = CreateButton -X 495 -Y 18 -Width 80 -Height 22 -Text "Patch BPS" -ToolTip $ToolTip -Info "Patch the ROM with your selected BPS or IPS Patch File" -AddTo $InputBPSGroup
-    $PatchBPSButton.Add_Click({ MainFunctionPatch -Command "Patch BPS" -Id $null -Title $null -Patch $BPSFilePath -PatchedFile '_bps_patched' -Hash $null -Compress $False })
+    $PatchBPSButton.Add_Click({ MainFunction -Command "Patch BPS" -Patch $BPSFilePath -PatchedFile '_bps_patched' -Compress $False })
 
 
 
@@ -2326,9 +2284,9 @@ function CreateMainDialog() {
     $global:InputCustomChannelTitleTextBox = CreateTextBox -X 85 -Y 20 -Width 260 -Height 22 -Name "CustomGameID" -AddTo $CustomGameIDGroup
     $InputCustomChannelTitleTextBox.MaxLength = $global:ChannelTitleLength
     $InputCustomChannelTitleTextBox.Add_TextChanged({
-        if ($this.Text -match "[^a-z 0-9 : - ']") {
+        if ($this.Text -match "[^a-z 0-9 \: \- \( \) \']") {
             $cursorPos = $this.SelectionStart
-            $this.Text = $this.Text -replace "[^a-z 0-9 : - ']",''
+            $this.Text = $this.Text -replace "[^a-z 0-9 \: \- \( \) \']",''
             $this.SelectionStart = $cursorPos - 1
             $this.SelectionLength = 0
         }
@@ -2368,7 +2326,7 @@ function CreateMainDialog() {
 
     # Create a button to allow patching the WAD (OoT Redux).
     $global:PatchOoTReduxButton = CreateButton -X 75 -Y 30 -Width 100 -Height 35 -Text "OoT Redux" -ToolTip $ToolTip -Info "A romhack that improves mechanics for Ocarina of Time`nIt includes the use of the D-Pad for additional dedicated item buttons`nSupports rev0 US ROM File only" -AddTo $PatchOoTReduxGroup
-    $PatchOoTReduxButton.Add_Click({ MainFunctionOoTRedux -Command "Downgrade" -Hash $HashSum_oot_rev0 -Compress $False })
+    $PatchOoTReduxButton.Add_Click({ MainFunction -Command "Redux" -Id "NAC0" -Title "Redux: Ocarina" -Patch $Files.bpspatch_oot_redux -PatchedFile '_redux_patched' -Hash $HashSum_oot_rev0 -Compress $False })
 
     # Create a button to select additional Redux options.
     $global:PatchOoTReduxOptionsButton = CreateButton -X $PatchOoTReduxButton.Right -Y 30 -Width 40 -Height 35 -Text "+" -ToolTip $ToolTip -Info "Toggle additional features for the Ocarina of Time REDUX romhack" -AddTo $PatchOoTReduxGroup
@@ -2379,30 +2337,30 @@ function CreateMainDialog() {
 
     # Create a button to allow patching the WAD (OoT Dawn and Dusk).
     $global:PatchOoTDawnButton = CreateButton -X 35 -Y 30 -Width 100 -Height 35 -Text "Dawn and Dusk" -ToolTip $ToolTip -Info "A small-sized romhack in a completely new setting`nSupports rev0, rev1 or rev2 US ROM Files" -AddTo $PatchOoTHackGroup
-    $PatchOoTDawnButton.Add_Click({ MainFunctionPatch -Command "No Downgrade" -Id "NAC1" -Title "Zelda: Dawn & Dusk" -Patch $Files.bpspatch_oot_dawn_rev0 -PatchedFile '_dawn_&_dusk_patched' -Hash "Dawn & Dusk" -Compress $False })
+    $PatchOoTDawnButton.Add_Click({ MainFunction -Command "No Downgrade" -Id "NAC1" -Title "Zelda: Dawn & Dusk" -Patch $Files.bpspatch_oot_dawn_rev0 -PatchedFile '_dawn_&_dusk_patched' -Hash "Dawn & Dusk" -Compress $False })
 
     # Create a button to allow patching the WAD (OoT The Fate of the Bombiwa).
     $global:PatchOoTBombiwaButton = CreateButton -X ($PatchOoTDawnButton.Right + 15) -Y 30 -Width 100 -Height 35 -Text "Bombiwa" -ToolTip $ToolTip -Info "A small-sized romhack in a completely new setting, and extremely tricky and difficult`nSupports rev0 US ROM File only" -AddTo $PatchOoTHackGroup
-    $PatchOoTBombiwaButton.Add_Click({ MainFunctionPatch -Command "Downgrade" -Id "NAC2" -Title "Zelda: Bombiwa" -Patch $Files.bpspatch_oot_bombiwa -PatchedFile '_bombiwa_patched' -Hash $HashSum_oot_rev0 -Compress $True })
+    $PatchOoTBombiwaButton.Add_Click({ MainFunction -Command "Downgrade" -Id "NAC2" -Title "Zelda: Bombiwa" -Patch $Files.bpspatch_oot_bombiwa -PatchedFile '_bombiwa_patched' -Hash $HashSum_oot_rev0 -Compress $True })
 
     # Create a groupbox to show the OoT patching buttons.
     $PatchOoTTranslationGroup = CreateGroupBox -Y $PatchOoTReduxGroup.Bottom -Width $PatchOoTPanel.Width -Height ($PatchOoTPanel.Height/2) -Text "Ocarina of Time - Translation Buttons" -AddTo $PatchOoTPanel
 
     # Create a button to allow patching the WAD (OoT Spanish).
     $global:PatchOoTSpaButton = CreateButton -X 50 -Y 30 -Width 100 -Height 35 -Text "Spanish Translation" -ToolTip $ToolTip -Info "Spanish Fan-Translation of Ocarina of Time`nSupports rev0 US ROM File only" -AddTo $PatchOoTTranslationGroup
-    $PatchOoTSpaButton.Add_Click({ MainFunctionPatch -Command "Downgrade" -Id "NACS" -Title "Zelda: Ocarina (SPA)" -Patch $Files.bpspatch_oot_spa -PatchedFile "_spanish_patched" -Hash $HashSum_oot_rev0 -Compress $False })
+    $PatchOoTSpaButton.Add_Click({ MainFunction -Command "Downgrade" -Id "NACS" -Title "Zelda: Ocarina (SPA)" -Patch $Files.bpspatch_oot_spa -PatchedFile "_spanish_patched" -Hash $HashSum_oot_rev0 -Compress $False })
 
     # Create a button to allow patching the WAD (OoT Polish).
     $global:PatchOoTPolButton = CreateButton -X ($PatchOoTSpaButton.Right + 30) -Y 30 -Width 100 -Height 35 -Text "Polish Translation" -ToolTip $ToolTip -Info "Polish Fan-Translation of Ocarina of Time`nSupports rev0 US ROM File only" -AddTo $PatchOoTTranslationGroup
-    $PatchOoTPolButton.Add_Click({ MainFunctionPatch -Command "Downgrade" -Id "NACO" -Title "Zelda: Ocarina (POL)" -Patch $Files.bpspatch_oot_pol -PatchedFile "_polish_patched" -Hash $HashSum_oot_rev0 -Compress $False })
+    $PatchOoTPolButton.Add_Click({ MainFunction -Command "Downgrade" -Id "NACO" -Title "Zelda: Ocarina (POL)" -Patch $Files.bpspatch_oot_pol -PatchedFile "_polish_patched" -Hash $HashSum_oot_rev0 -Compress $False })
 
     # Create a button to allow patching the WAD (OoT Russian).
     $global:PatchOoTRusButton = CreateButton -X ($PatchOoTPolButton.Right + 30) -Y 30 -Width 100 -Height 35 -Text "Russian Translation" -ToolTip $ToolTip -Info "Russian Fan-Translation of Ocarina of Time`nSupports rev0 US ROM File only" -AddTo $PatchOoTTranslationGroup
-    $PatchOoTRusButton.Add_Click({ MainFunctionPatch -Command "Downgrade" -Id "NACR" -Title "Zelda: Ocarina (RUS)" -Patch $Files.bpspatch_oot_rus -PatchedFile '_russian_patched' -Hash $HashSum_oot_rev0 -Compress $False })
+    $PatchOoTRusButton.Add_Click({ MainFunction -Command "Downgrade" -Id "NACR" -Title "Zelda: Ocarina (RUS)" -Patch $Files.bpspatch_oot_rus -PatchedFile '_russian_patched' -Hash $HashSum_oot_rev0 -Compress $False })
 
     # Create a button to allow patching the WAD (OoT Chinese Simplified).
     $global:PatchOoTChiButton = CreateButton -X ($PatchOoTRusButton.Right + 30) -Y 30 -Width 100 -Height 35 -Text "Chinese Translation" -ToolTip $ToolTip -Info "Chinese Fan-Translation of Ocarina of Time`nSupports rev0 US ROM File only" -AddTo $PatchOoTTranslationGroup
-    $PatchOoTChiButton.Add_Click({ MainFunctionPatch -Command "Downgrade" -Id "NACC" -Title "Zelda: Ocarina (CHI)" -Patch $Files.bpspatch_oot_chi -PatchedFile "_chinese_patched" -Hash $HashSum_oot_rev0 -Compress $False })
+    $PatchOoTChiButton.Add_Click({ MainFunction -Command "Downgrade" -Id "NACC" -Title "Zelda: Ocarina (CHI)" -Patch $Files.bpspatch_oot_chi -PatchedFile "_chinese_patched" -Hash $HashSum_oot_rev0 -Compress $False })
 
 
 
@@ -2418,7 +2376,7 @@ function CreateMainDialog() {
 
     # Create a button to allow patching the WAD (MM Redux).
     $global:PatchMMReduxButton = CreateButton -X 75 -Y 30 -Width 100 -Height 35 -Text "MM Redux" -ToolTip $ToolTip -Info "A romhack that improves mechanics for Majorea's Mask`nIt includes the use of the D-Pad for additional dedicated item buttons`nSupports US ROM File only" -AddTo $PatchMMReduxGroup
-    $PatchMMReduxButton.Add_Click({ MainFunctionMMRedux -Command $null -Hash $HashSum_mm -Compress $False })
+    $PatchMMReduxButton.Add_Click({ MainFunction -Command "Redux" -Id "NAR0" -Title "Redux: Majora's" -Patch $Files.bpspatch_mm_redux -PatchedFile '_redux_patched' -Hash $HashSum_mm -Compress $False })
 
     # Create a button to select additional Redux options.
     $global:PatchMMReduxOptionsButton = CreateButton -X $PatchMMReduxButton.Right -Y 30 -Width 40 -Height 35 -Text "+" -ToolTip $ToolTip -Info "Toggle additional features for the Majora's Mask REDUX romhack" -AddTo $PatchMMReduxGroup
@@ -2429,7 +2387,7 @@ function CreateMainDialog() {
 
     # Create a button to allow patching the WAD (MM Masked Quest).
     $global:PatchMMMaskedQuestButton = CreateButton -X 100 -Y 30 -Width 100 -Height 35 -Text "Masked Quest" -ToolTip $ToolTip -Info "A Master Quest style romhack for Majora's Mask, offering a higher difficulty`nSupports US ROM File only" -AddTo $PatchMMHackGroup
-    $PatchMMMaskedQuestButton.Add_Click({ MainFunctionPatchRemap -Command $null -Id "NAR1" -Title "Zelda: Masked Quest" -Patch $Files.bpspatch_mm_masked_quest -PatchedFile "_masked_quest_patched" -Hash $HashSum_mm -Compress $False })
+    $PatchMMMaskedQuestButton.Add_Click({ MainFunction -Command "Remap D-Pad" -Id "NAR1" -Title "Zelda: Masked Quest" -Patch $Files.bpspatch_mm_masked_quest -PatchedFile "_masked_quest_patched" -Hash $HashSum_mm -Compress $False })
 
     # Create a groupbox to show the MM patching buttons.
     $PatchMMTranslationGroup = CreateGroupBox -Y $PatchMMReduxGroup.Bottom -Width $PatchMMPanel.Width -Height ($PatchMMPanel.Height/2) -Text "Majora's Mask - Translation Buttons" -AddTo $PatchMMPanel
@@ -2437,11 +2395,11 @@ function CreateMainDialog() {
     # Create a button to allow patching the WAD (MM Polish).
     $global:PatchMMPolButton = CreateButton -X 180 -Y 30 -Width 100 -Height 35 -Text "Polish Translation" -ToolTip $ToolTip -Info "Polish Fan-Translation of Majora's Mask`nSupports US ROM File only" -AddTo $PatchMMTranslationGroup
     $PatchMMPolButton.Size = New-Object System.Drawing.Size(100, 35)
-    $PatchMMPolButton.Add_Click({ MainFunctionPatch -Command $null -Id "NARO" -Title "Zelda: Majora's (POL)" -Patch $Files.bpspatch_mm_pol -PatchedFile "_polish_patched" -Hash $HashSum_mm -Compress $False })
+    $PatchMMPolButton.Add_Click({ MainFunction -Command $null -Id "NARO" -Title "Zelda: Majora's (POL)" -Patch $Files.bpspatch_mm_pol -PatchedFile "_polish_patched" -Hash $HashSum_mm -Compress $False })
 
     # Create a button to allow patching the WAD (MM Russian).
     $global:PatchMMRusButton = CreateButton -X ($PatchMMPolButton.Right + 30) -Y 30 -Width 100 -Height 35 -Text "Russian Translation" -ToolTip $ToolTip -Info "Polish Fan-Translation of Majora's Mask`nSupports US ROM File only" -AddTo $PatchMMTranslationGroup
-    $PatchMMRusButton.Add_Click({ MainFunctionPatch -Command $null -Id "NARR" -Title "Zelda: Majora's (RUS)" -Patch $Files.bpspatch_mm_rus -PatchedFile "_russian_patched" -Hash $HashSum_mm -Compress $False })
+    $PatchMMRusButton.Add_Click({ MainFunction -Command $null -Id "NARR" -Title "Zelda: Majora's (RUS)" -Patch $Files.bpspatch_mm_rus -PatchedFile "_russian_patched" -Hash $HashSum_mm -Compress $False })
 
 
 
@@ -2457,16 +2415,16 @@ function CreateMainDialog() {
 
     # Create a button to allow patching the WAD (SM64 60 FPS V2).
     $global:PatchSM64FPSButton = CreateButton -X 130 -Y 25 -Width 100 -Height 35 -Text "60 FPS v2" -ToolTip $ToolTip -Info "Increases the FPS from 30 to 60`nWtiness Super Mario 64 in glorious 60 FPS`nSupports US ROM File only" -AddTo $PatchSM64Group
-    $PatchSM64FPSButton.Add_Click({ MainFunctionPatch -Command $null -Id "NAAX" -Title "Super Mario 64: 60 FPS v2" -Patch $Files.bpspatch_sm64_fps -PatchedFile "_60_fps_v2_patched" -Hash $HashSum_sm64 -Compress $False })
+    $PatchSM64FPSButton.Add_Click({ MainFunction -Command $null -Id "NAAX" -Title "Super Mario 64: 60 FPS v2" -Patch $Files.bpspatch_sm64_fps -PatchedFile "_60_fps_v2_patched" -Hash $HashSum_sm64 -Compress $False })
 
     # Create a button to allow patching the WAD (SM64 Analog Camera).
     $global:PatchSM64CamButton = CreateButton -X ($PatchSM64FPSButton.Right + 15) -Y $PatchSM64FPSButton.Top -Width 100 -Height 35 -Text "Analog Camera" -ToolTip $ToolTip -AddTo $PatchSM64Group
     $ToolTip.SetToolTip($PatchSM64CamButton, "Enable full 360 degrees sideways analog camera`nEnable a second emulated controller and bind the Analog stick to the C-Stick on the first emulated controller`nSupports US ROM File only")
-    $PatchSM64CamButton.Add_Click({ MainFunctionPatch -Command $null -Id "NAAY" -Title "Super Mario 64: Free Cam" -Patch $Files.bpspatch_sm64_cam -PatchedFile "_analog_camera_patched" -Hash $HashSum_sm64 -Compress $False })
+    $PatchSM64CamButton.Add_Click({ MainFunction -Command $null -Id "NAAY" -Title "Super Mario 64: Free Cam" -Patch $Files.bpspatch_sm64_cam -PatchedFile "_analog_camera_patched" -Hash $HashSum_sm64 -Compress $False })
 
     # Create a button to allow patching the WAD (SM64 Multiplayer).
     $global:PatchSM64MultiplayerButton = CreateButton -X ($PatchSM64CamButton.Right + 15) -Y $PatchSM64FPSButton.Top -Width 100 -Height 35 -Text "Multiplayer v1.4.2" -ToolTip $ToolTip -Info "Single-Screen Multiplayer with Mario and Luigi`nPlugin a second emulated controller for Luigi`nSupports US ROM File only" -AddTo $PatchSM64Group
-    $PatchSM64MultiplayerButton.Add_Click({ MainFunctionPatch -Command "Patch Boot DOL" -Id "NAAM" -Title "SM64: Multiplayer" -Patch $Files.bpspatch_sm64_multiplayer -PatchedFile "_multiplayer__v1.4.2_patched" -Hash $HashSum_sm64 -Compress $False })
+    $PatchSM64MultiplayerButton.Add_Click({ MainFunction -Command "Patch Boot DOL" -Id "NAAM" -Title "SM64: Multiplayer" -Patch $Files.bpspatch_sm64_multiplayer -PatchedFile "_multiplayer__v1.4.2_patched" -Hash $HashSum_sm64 -Compress $False })
 
 
 
@@ -2482,15 +2440,15 @@ function CreateMainDialog() {
 
     # Create a button to allow patching the WAD (PP 60 Hard Mode).
     $global:PatchPPHardMode = CreateButton -X 130 -Y 25 -Width 100 -Height 35 -Text "Hard Mode" -ToolTip $ToolTip -Info "Increases the damage dealt by enemies by 1.5x`nSupports US ROM File only" -AddTo $PatchPPGroup
-    $PatchPPHardMode.Add_Click({ MainFunctionPatch -Command $null -Id "NAE0" -Title "Paper Mario: Hard Mode" -Patch $Files.bpspatch_pp_hard_mode -PatchedFile "_hard_mode_patched" -Hash $HashSum_pp -Compress $False })
+    $PatchPPHardMode.Add_Click({ MainFunction -Command $null -Id "NAE0" -Title "Paper Mario: Hard Mode" -Patch $Files.bpspatch_pp_hard_mode -PatchedFile "_hard_mode_patched" -Hash $HashSum_pp -Compress $False })
 
     # Create a button to allow patching the WAD (PP 60 Hard Mode+).
     $global:PatchPPHardModePlus = CreateButton -X ($PatchPPHardMode.Right + 15) -Y $PatchPPHardMode.Top -Width 100 -Height 35 -Text "Hard Mode+" -ToolTip $ToolTip -Info "Increases the damage dealt by enemies by 1.5x`nAlso increases the HP of enemies`nSupports US ROM File only" -AddTo $PatchPPGroup
-    $PatchPPHardModePlus.Add_Click({ MainFunctionPatch -Command $null -Id "NAE1" -Title "Paper Mario: Hard Mode+" -Patch $Files.bpspatch_pp_hard_mode_plus -PatchedFile "_hard_mode_plus_patched" -Hash $HashSum_pp -Compress $False })
+    $PatchPPHardModePlus.Add_Click({ MainFunction -Command $null -Id "NAE1" -Title "Paper Mario: Hard Mode+" -Patch $Files.bpspatch_pp_hard_mode_plus -PatchedFile "_hard_mode_plus_patched" -Hash $HashSum_pp -Compress $False })
 
     # Create a button to allow patching the WAD (PP 60 Insane Mode).
     $global:PatchPPInsaneMode = CreateButton -X ($PatchPPHardModePlus.Right + 15) -Y $PatchPPHardMode.Top -Width 100 -Height 35 -Text "Insane Mode" -ToolTip $ToolTip -Info "Increases the damage dealt by enemies by 2x`nSupports US ROM File only" -AddTo $PatchPPGroup
-    $PatchPPInsaneMode.Add_Click({ MainFunctionPatch -Command $null -Id "NAE2" -Title "Paper Mario: Insane Mode" -Patch $Files.bpspatch_pp_insane_mode -PatchedFile "_insane_mode_patched" -Hash $HashSum_pp -Compress $False })
+    $PatchPPInsaneMode.Add_Click({ MainFunction -Command $null -Id "NAE2" -Title "Paper Mario: Insane Mode" -Patch $Files.bpspatch_pp_insane_mode -PatchedFile "_insane_mode_patched" -Hash $HashSum_pp -Compress $False })
 
 
 
@@ -2556,11 +2514,11 @@ function CreateMainDialog() {
 
     # Create a button to patch the VC
     $global:PatchVCButton = CreateButton -X 80 -Y 65 -Width 150 -Height 30 -Text "Patch VC Emulator Only" -ToolTip $ToolTip -Info "Ignore any patches and only patches the Virtual Console emulator`nDowngrading and channing the Channel Title or GameID is still accepted" -AddTo $PatchVCGroup
-    $PatchVCButton.Add_Click({ MainFunctionPatch -Command "Patch VC" -Id $null -Title $null -Patch $BPSFilePath -PatchedFile '_vc_patched' -Hash $null -Compress $False })
+    $PatchVCButton.Add_Click({ MainFunction -Command "Patch VC" -Patch $BPSFilePath -PatchedFile '_vc_patched' -Compress $False })
 
     # Create a button to extract the ROM
     $global:ExtractROMButton = CreateButton -X 240 -Y 65 -Width 150 -Height 30 -Text "Extract ROM Only" -ToolTip $ToolTip -Info "Only extract the .Z64 ROM from the WAD file`nUseful for native N64 emulators" -AddTo $PatchVCGroup
-    $ExtractROMButton.Add_Click({ MainFunctionPatch -Command "Extract" -Id $null -Title $null -Patch $BPSFilePath -PatchedFile '_extracted' -Hash $null -Compress $False })
+    $ExtractROMButton.Add_Click({ MainFunction -Command "Extract" -Patch $BPSFilePath -PatchedFile '_extracted' -Compress $False })
 
 
 
