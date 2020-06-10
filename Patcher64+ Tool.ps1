@@ -19,8 +19,8 @@ Add-Type -AssemblyName 'System.Drawing'
 #==============================================================================================================================================================================================
 # Setup global variables
 
-$global:VersionDate = "09-06-2020"
-$global:Version     = "v4.1"
+$global:VersionDate = "10-06-2020"
+$global:Version     = "v4.2"
 
 $global:GameID = ""
 $global:ChannelTitle = ""
@@ -172,10 +172,9 @@ function MainFunction([String]$Command, [string]$Id, [string]$Title, [string]$Pa
         if ($GetCommand -eq "Downgrade" -and $PatchVCDowngrade.Visible)      { $global:IsDowngrade = $PatchVCDowngrade.Checked = $True }
         if ($GetCommand -eq "No Downgrade" -and $PatchVCDowngrade.Visible)   { $global:IsDowngrade = $PatchVCDowngrade.Checked = $False }
     }
-    else {
-        $global:IsDowngrade = $False
-        $global:Z64File = SetZ64Parameters -Z64Path $global:GameZ64
-    }
+    else                                                                     { $global:IsDowngrade = $False }
+    if ($Z64FilePath.length -gt 0)                                           { $global:Z64File = SetZ64Parameters -Z64Path $global:GameZ64 }
+    
 
     $PatchVCRemapDPad.Checked = ($GetCommand -eq "Remap D-Pad")
 
@@ -206,7 +205,9 @@ function MainFunctionPatch() {
     Write-Host "Patch File:" $PatchFile
     Write-Host "Redux:" $IsRedux
     Write-Host "Downgrade:" $IsDowngrade
-    Write-Host "ROM File:" $IsDowngrade
+    Write-Host "ROM File:" $ROMFile
+    Write-Host "WAD File Path:" $WADFilePath
+    Write-Host "Z64 File Path:" $Z64FilePath
 
     # Step 01: Disable the main dialog, allow patching and delete files if they still exist.
     $ContinuePatching = $True
@@ -233,6 +234,7 @@ function MainFunctionPatch() {
 
         # Step 06: Do some initial patching stuff for the ROM for VC WAD files.
         $ContinuePatching = PatchVCROM
+
         if (!$ContinuePatching) {
             Cleanup
             return
@@ -259,6 +261,7 @@ function MainFunctionPatch() {
 
     # Step 10: Patch and extend the ROM file with the patch through Floating IPS.
     $ContinuePatching = PatchROM
+    
     if (!$ContinuePatching) {
         Cleanup
         return
@@ -325,6 +328,7 @@ function Cleanup() {
 
     DeleteFile -File $Files.dmaTable
     DeleteFile -File $Files.archive
+    DeleteFile -File $Files.decompressedROM
 
     $MainDialog.Enabled = $True
     [System.GC]::Collect() | Out-Null
@@ -334,7 +338,7 @@ function Cleanup() {
 
 
 #==============================================================================================================================================================================================
-function DeleteFile([string]$File) { if (Test-Path $File -PathType leaf) { Remove-Item $File } }
+function DeleteFile([string]$File) { if (Test-Path -LiteralPath $File -PathType leaf) { Remove-Item -LiteralPath $File } }
 
 
 
@@ -506,6 +510,7 @@ function SetFileParameters() {
     $Files.ckey                          = $MasterPath + "\Wii VC\common-key.bin"
     $Files.dmaTable                      = $BasePath + "\dmaTable.dat"
     $Files.archive                       = $BasePath + "\ARCHIVE.bin"
+    $Files.decompressedROM               = $BasePath + "\decompressed"
     $Files.stackdump                     = $MasterPath + "\Wii VC\wadpacker.exe.stackdump"
 
     # Set it to a global value.
@@ -607,6 +612,9 @@ function ExtractWADFile() {
 
     # We need to be in the same path as some files so just jump there.
     Push-Location $WiiVCPath
+
+    # Check if an extracted folder existed previously
+    foreach($Folder in Get-ChildItem -LiteralPath $WiiVCPath -Force) { if ($Folder.PSIsContainer) { if (TestPath -LiteralPath $Folder) { RemovePath -LiteralPath $Folder } } }
     
     $ByteArray = $null
     if (!(Test-Path $Files.ckey -PathType Leaf)) {
@@ -796,8 +804,8 @@ function PatchVCROM() {
         if ($GameType -eq "Free")   { $ROMTitle = "n64_rom_extracted.z64" }
         else                        { $ROMTitle = $GameType + "_rom_extracted.z64" }
 
-        if (Test-Path $ROMFile -PathType leaf) {
-            Move-Item $ROMFile -Destination $WADFile.Extracted
+        if (Test-Path -LiteralPath $ROMFile -PathType leaf) {
+            Move-Item -LiteralPath $ROMFile -Destination $WADFile.Extracted
             UpdateStatusLabelDuringPatching -Text ("Successfully extracted " + $GameType + " ROM.")
         }
         else { UpdateStatusLabelDuringPatching -Text ("Could not extract " + $GameType + " ROM. Is it a Majora's Mask or Paper Mario ROM?") }
@@ -807,16 +815,20 @@ function PatchVCROM() {
 
     # Replace ROM if needed
     if ($GetCommand -eq "Inject") {
-        if (Test-Path $ROMFile -PathType leaf) {
-            Remove-Item $ROMFile
-            Copy-Item $Z64FilePath -Destination $ROMFile
+        if (Test-Path -LiteralPath $ROMFile -PathType leaf) {
+            Remove-Item -LiteralPath $ROMFile
+            if ((Test-Path -LiteralPath $Z64FilePath -PathType leaf)) { Copy-Item -LiteralPath $Z64FilePath -Destination $ROMFile }
+            else {
+                UpdateStatusLabelDuringPatching -Text ("Could not inject " + $GameType + " ROM. Did you move or rename the ROM file?")
+                return $False
+            }
         }
         else {
             UpdateStatusLabelDuringPatching -Text ("Could not inject " + $GameType + " ROM. Is it a Majora's Mask or Paper Mario ROM?")
             return $False
         }
 
-        if (!(Test-Path $ROMFile -PathType leaf)) {
+        if (!(Test-Path -LiteralPath $ROMFile -PathType leaf)) {
             UpdateStatusLabelDuringPatching -Text ("Could not inject " + $GameType + " ROM. Is your ROM filename or destination path too long?")
             return $False
         }
@@ -825,11 +837,11 @@ function PatchVCROM() {
     # Decompress romc if needed
     if ($GetCommand -ne "Inject" -and ($GameType -eq "Majora's Mask" -or $GameType -eq "Paper Mario") ) {  
 
-        if (Test-Path $ROMFile -PathType leaf) {
+        if (Test-Path -LiteralPath $ROMFile -PathType leaf) {
             if ($GameType -eq "Majora's Mask")     { & $Files.romchu $ROMFile $ROMCFile | Out-Null }
             elseif ($GameType -eq "Paper Mario")   { & $Files.romc d $ROMFile $ROMCFile | Out-Null }
-            Remove-Item $ROMFile
-            Rename-Item -Path $ROMCFile -NewName "romc"
+            Remove-Item -LiteralPath $ROMFile
+            Rename-Item -LiteralPath $ROMCFile -NewName "romc"
         }
         else {
             UpdateStatusLabelDuringPatching -Text ("Could not decompress " + $GameType + " ROM. Is it a Majora's Mask or Paper Mario ROM?")
@@ -962,7 +974,7 @@ function DecompressROM() {
     & $Files.TabExt $ROMFile | Out-Host
     & $Files.ndec $ROMFile $DecompressedROMFile | Out-Host
 
-    if ($IsWiiVC) { Remove-Item $ROMFile }
+    if ($IsWiiVC) { Remove-Item -LiteralPath $ROMFile }
     [System.GC]::Collect() | Out-Null
 
 }
@@ -975,7 +987,7 @@ function CompressROM() {
     if (!$IsCompress -or $GetCommand -eq "Inject" -or ($GameType -ne "Ocarina of Time" -and $GameType -ne "Majora's Mask")) { return }
 
     & $Files.Compress $DecompressedROMFile $PatchedROMFile | Out-Null
-    Remove-Item $DecompressedROMFile
+    Remove-Item -LiteralPath $DecompressedROMFile
     [System.GC]::Collect() | Out-Null
 
 }
@@ -988,8 +1000,8 @@ function CompressROMC() {
     if ($GameType -ne "Paper Mario") { return }
 
     & $Files.romc e $ROMFile $ROMCFile | Out-Null
-    Remove-Item $ROMFile
-    Rename-Item -Path $ROMCFile -NewName "romc"
+    Remove-Item -LiteralPath $ROMFile
+    Rename-Item -LiteralPath $ROMCFile -NewName "romc"
     [System.GC]::Collect() | Out-Null
 
 }
@@ -1006,7 +1018,9 @@ function PatchRedux() {
     # RUN DECOMPRESS #
     if (!$IsCompress) {
         $global:IsCompress = $True
+        $global:ROMFile = $PatchedROMFile
         DecompressROM
+        SetROMFile
     }
 
     # BPS PATCHING #
