@@ -19,8 +19,8 @@ Add-Type -AssemblyName 'System.Drawing'
 #==============================================================================================================================================================================================
 # Setup global variables
 
-$global:VersionDate = "10-06-2020"
-$global:Version     = "v4.2"
+$global:VersionDate = "11-06-2020"
+$global:Version     = "v4.3"
 
 $global:GameID = ""
 $global:ChannelTitle = ""
@@ -675,117 +675,55 @@ function PatchVCEmulator() {
     # Set the status label.
     UpdateStatusLabelDuringPatching -Text ('Patching ' + $GameType + ' VC Emulator...')
 
-    $ByteArray = $null
-
     if ($GameType -eq "Ocarina of Time") {
-        
-        $ByteArray = [IO.File]::ReadAllBytes($WadFile.AppFile01)
 
         if ($PatchVCExpandMemory.Checked) {
-            $ByteArray[(GetDecimal -Hex "0x2EB0")] = (GetDecimal -Hex "0x60")
-            $ByteArray[(GetDecimal -Hex "0x2EB1")] = 0
-            $ByteArray[(GetDecimal -Hex "0x2EB2")] = 0
-            $ByteArray[(GetDecimal -Hex "0x2EB3")] = 0
-
-            $ByteArray[(GetDecimal -Hex "0x5BF44")] = (GetDecimal -Hex "0x3C")
-            $ByteArray[(GetDecimal -Hex "0x5BF45")] = (GetDecimal -Hex "0x80")
-            $ByteArray[(GetDecimal -Hex "0x5BF46")] = (GetDecimal -Hex "0x72")
-            $ByteArray[(GetDecimal -Hex "0x5BF47")] = 0
-
-            $ByteArray[(GetDecimal -Hex "0x5BFD7")] = 0
+            PatchBytesSequence -File $WadFile.AppFile01 -Offset "0x2EB0" -Values @("0x60", "0x00", "0x00", "0x00")
+            PatchBytesSequence -File $WadFile.AppFile01 -Offset "0x5BF44" -Values @("0x3C", "0x80", "0x72", "0x00")
+            PatchBytesSequence -File $WadFile.AppFile01 -Offset "0x5BFD7" -Values @("0x00")
         }
 
         if ($PatchVCRemapDPad.Checked) {
-            if (!$PatchLeaveDPadUp.Checked) {
-                $ByteArray[(GetDecimal -Hex "0x16BAF0")] = 8
-                $ByteArray[(GetDecimal -Hex "0x16BAF1")] = 0
-            }
-
-            $ByteArray[(GetDecimal -Hex "0x16BAF4")] = 4
-            $ByteArray[(GetDecimal -Hex "0x16BAF5")] = 0
-
-            $ByteArray[(GetDecimal -Hex "0x16BAF8")] = 2
-            $ByteArray[(GetDecimal -Hex "0x16BAF9")] = 0
-
-            $ByteArray[(GetDecimal -Hex "0x16BAFC")] = 1
-            $ByteArray[(GetDecimal -Hex "0x16BAFD")] = 0
+            if (!$PatchLeaveDPadUp.Checked)     { PatchBytesSequence -File $WadFile.AppFile01 -Offset "0x16BAF0" -Values @("0x08", "0x00") }
+            PatchBytesSequence -File $WadFile.AppFile01 -Offset "0x16BAF4" -Values @("0x04", "0x00")
+            PatchBytesSequence -File $WadFile.AppFile01 -Offset "0x16BAF8" -Values @("0x02", "0x00")
+            PatchBytesSequence -File $WadFile.AppFile01 -Offset "0x16BAFC" -Values @("0x01", "0x00")
         }
 
-        if ($PatchVCRemapCDown.Checked) {
-            $ByteArray[(GetDecimal -Hex "0x16BB04")] = 0
-            $ByteArray[(GetDecimal -Hex "0x16BB05")] = (GetDecimal -Hex "0x20")
-        }
-
-        if ($PatchVCRemapZ.Checked) {
-            $ByteArray[(GetDecimal -Hex "0x16BAD8")] = 0
-            $ByteArray[(GetDecimal -Hex "0x16BAD9")] = (GetDecimal -Hex "0x20")
-        }
-
-        [io.file]::WriteAllBytes($WADFile.AppFile01, $ByteArray)
+        if ($PatchVCRemapCDown.Checked)         { PatchBytesSequence -File $WadFile.AppFile01 -Offset "0x16BB04" -Values @("0x00", "0x20") }
+        if ($PatchVCRemapZ.Checked)             { PatchBytesSequence -File $WadFile.AppFile01 -Offset "0x16BAD8" -Values @("0x00", "0x20") }
 
     }
 
     elseif ($GameType -eq "Majora's Mask") {
         
         & $Files.lzss -d $WADFile.AppFile01 | Out-Host
-        $ByteArray = [IO.File]::ReadAllBytes($WadFile.AppFile01)
 
         if ($PatchVCExpandMemory.Checked) {
-            $ByteArray[(GetDecimal -Hex "0x10B58")] = (GetDecimal -Hex "0x3C")
-            $ByteArray[(GetDecimal -Hex "0x10B59")] = (GetDecimal -Hex "0x80")
-            $ByteArray[(GetDecimal -Hex "0x10B5A")] = 0
-            $ByteArray[(GetDecimal -Hex "0x10B5B")] = (GetDecimal -Hex "0xC0")
-
-            $ByteArray[(GetDecimal -Hex "0x4BD20")] = (GetDecimal -Hex "0x67")
-            $ByteArray[(GetDecimal -Hex "0x4BD21")] = (GetDecimal -Hex "0xE4")
-            $ByteArray[(GetDecimal -Hex "0x4BD22")] = (GetDecimal -Hex "0x70")
-            $ByteArray[(GetDecimal -Hex "0x4BD23")] = 0
-
-            $ByteArray[(GetDecimal -Hex "0x4BC80")] = (GetDecimal -Hex "0x3C")
-            $ByteArray[(GetDecimal -Hex "0x4BC81")] = (GetDecimal -Hex "0xA0")
-            $ByteArray[(GetDecimal -Hex "0x4BC82")] = 1
-            $ByteArray[(GetDecimal -Hex "0x4BC83")] = 0
+            PatchBytesSequence -File $WadFile.AppFile01 -Offset "0x10B58" -Values @("0x3C", "0x80", "0x00", "0xC0")
+            PatchBytesSequence -File $WadFile.AppFile01 -Offset "0x4BD20" -Values @("0x67", "0xE4", "0x70", "0x00")
+            PatchBytesSequence -File $WadFile.AppFile01 -Offset "0x4BC80" -Values @("0x3C", "0xA0", "0x01", "0x00")
         }
 
         if ($PatchVCRemapDPad.Checked) {
-            $ByteArray[(GetDecimal -Hex "0x148514")] = 8
-            $ByteArray[(GetDecimal -Hex "0x148515")] = 0
-
-            $ByteArray[(GetDecimal -Hex "0x148518")] = 4
-            $ByteArray[(GetDecimal -Hex "0x148519")] = 0
-
-            $ByteArray[(GetDecimal -Hex "0x14851C")] = 2
-            $ByteArray[(GetDecimal -Hex "0x14851D")] = 0
-
-            $ByteArray[(GetDecimal -Hex "0x148520")] = 1
-            $ByteArray[(GetDecimal -Hex "0x148521")] = 0
+            PatchBytesSequence -File $WadFile.AppFile01 -Offset "0x148514" -Values @("0x08", "0x00")
+            PatchBytesSequence -File $WadFile.AppFile01 -Offset "0x148518" -Values @("0x04", "0x00")
+            PatchBytesSequence -File $WadFile.AppFile01 -Offset "0x14851C" -Values @("0x02", "0x00")
+            PatchBytesSequence -File $WadFile.AppFile01y -Offset "0x148520" -Values @("0x01", "0x00")
         }
 
-        if ($PatchVCRemapCDown.Checked) {
-            $ByteArray[(GetDecimal -Hex "0x148528")] = 0
-            $ByteArray[(GetDecimal -Hex "0x148529")] = (GetDecimal -Hex "0x20")
-        }
+        if ($PatchVCRemapCDown.Checked)         { PatchBytesSequence -File $WadFile.AppFile01 -Offset "0x148528" -Values @("0x00", "0x20") }
+        if ($PatchVCRemapZ.Checked)             { PatchBytesSequence -File $WadFile.AppFile01 -Offset "0x1484F8" -Values @("0x00", "0x20") }
 
-        if ($PatchVCRemapZ.Checked) {
-            $ByteArray[(GetDecimal -Hex "0x1484F8")] = 0
-            $ByteArray[(GetDecimal -Hex "0x1484F9")] = (GetDecimal -Hex "0x20")
-        }
-
-        [io.file]::WriteAllBytes($WADFile.AppFile01, $ByteArray)
         & $Files.lzss -evn $WADFile.AppFile01 | Out-Host
 
     }
 
     elseif ($GameType -eq "Super Mario 64") {
 
-        if ($GetCommand -eq "Patch Boot DOL") {
-            & $Files.flips $Files.bpspatch_sm64_appFile_01 $WADFile.AppFile01 | Out-Host
-        }
+        if ($GetCommand -eq "Patch Boot DOL")   { & $Files.flips $Files.bpspatch_sm64_appFile_01 $WADFile.AppFile01 | Out-Host }
 
     }
-
-    $ByteArray = $null
-    [System.GC]::Collect() | Out-Null
 
 }
 
@@ -1007,6 +945,22 @@ function CompressROMC() {
 }
 
 
+#==============================================================================================================================================================================================
+function PatchBytesSequence([String]$File, [int]$Offset, $Values, [int]$Increment) {
+    
+    $ByteArray = [IO.File]::ReadAllBytes($File)
+
+    if ($Increment -eq $null -or $Increment -lt 1) { $Increment = 1 }
+
+    for ($i=0; $i -lt $Values.Length; $i++) {
+        $ByteArray[(GetDecimal -Hex ($Offset + ($i * $Increment)))] = (GetDecimal -Hex $Values[$i])
+    }
+
+    [io.file]::WriteAllBytes($File, $ByteArray)
+    [System.GC]::Collect() | Out-Null
+
+}
+
 
 #==============================================================================================================================================================================================
 function PatchRedux() {
@@ -1031,106 +985,51 @@ function PatchRedux() {
     }
 
     # BYTE PATCHING #
-    $ByteArray = [IO.File]::ReadAllBytes($DecompressedROMFile)
-    if ($GameType -eq "Ocarina of Time")     { $ByteArray = PatchReduxOoT -ByteArray $ByteArray }
-    elseif ($GameType -eq "Majora's Mask")   { $ByteArray = PatchReduxMM -ByteArray $ByteArray }
-    [io.file]::WriteAllBytes($DecompressedROMFile, $ByteArray)
-
-    $ByteArray = $null
-    [System.GC]::Collect() | Out-Null
+    if ($GameType -eq "Ocarina of Time")     { PatchReduxOoT }
+    elseif ($GameType -eq "Majora's Mask")   { PatchReduxMM }
 
 }
 
 
 #==============================================================================================================================================================================================
-function PatchReduxOoT($ByteArray) {
+function PatchReduxOoT() {
     
     # HERO MODE #
 
     if (CheckCheckBox -CheckBox $OHKOModeOoT) {
-        $ByteArray[(GetDecimal -Hex "0xAE8073")] = (GetDecimal -Hex "0x09")
-        $ByteArray[(GetDecimal -Hex "0xAE8083")] = (GetDecimal -Hex "0x04")
-        $ByteArray[(GetDecimal -Hex "0xAE8096")] = (GetDecimal -Hex "0x82")
-        $ByteArray[(GetDecimal -Hex "0xAE8097")] = (GetDecimal -Hex "0x00")
-        $ByteArray[(GetDecimal -Hex "0xAE8099")] = (GetDecimal -Hex "0x00")
-        $ByteArray[(GetDecimal -Hex "0xAE809A")] = (GetDecimal -Hex "0x00")
-        $ByteArray[(GetDecimal -Hex "0xAE809B")] = (GetDecimal -Hex "0x00")
+        PatchBytesSequence -File $DecompressedROMFile -Offset "0xAE8073" -Values @("0x09", "0x04") -Increment 16
+        PatchBytesSequence -File $DecompressedROMFile -Offset "0xAE8096" -Values @("0x82", "0x00")
+        PatchBytesSequence -File $DecompressedROMFile -Offset "0xAE8099" -Values @("0x00", "0x00", "0x00")
     }
     elseif (!(CheckCheckBox -CheckBox $1xDamageOoT) -and !(CheckCheckBox -CheckBox $NormalRecoveryOoT)) {
-        $ByteArray[(GetDecimal -Hex "0xAE8073")] = (GetDecimal -Hex "0x09")
-        $ByteArray[(GetDecimal -Hex "0xAE8083")] = (GetDecimal -Hex "0x04")
+        PatchBytesSequence -File $DecompressedROMFile -Offset "0xAE8073" -Values @("0x09", "0x04") -Increment 16
         if (CheckCheckBox -CheckBox $NormalRecoveryOoT) {                
-            $ByteArray[(GetDecimal -Hex "0xAE8096")] = (GetDecimal -Hex "0x80")
-            if (CheckCheckBox -CheckBox $2xDamageOoT )      { $ByteArray[(GetDecimal -Hex "0xAE8097")] = (GetDecimal -Hex "0x40") }
-            elseif (CheckCheckBox -CheckBox $4xDamageOoT)   { $ByteArray[(GetDecimal -Hex "0xAE8097")] = (GetDecimal -Hex "0x80") }
-            elseif (CheckCheckBox -CheckBox $8xDamageOoT)   { $ByteArray[(GetDecimal -Hex "0xAE8097")] = (GetDecimal -Hex "0xC0") }
-            $ByteArray[(GetDecimal -Hex "0xAE8099")] = (GetDecimal -Hex "0x00")
-            $ByteArray[(GetDecimal -Hex "0xAE809A")] = (GetDecimal -Hex "0x00")
-            $ByteArray[(GetDecimal -Hex "0xAE809B")] = (GetDecimal -Hex "0x00")
+            if (CheckCheckBox -CheckBox $2xDamageOoT )      { PatchBytesSequence -File $DecompressedROMFile -Offset "0xAE8096" -Values @("0x80", "0x40") }
+            elseif (CheckCheckBox -CheckBox $4xDamageOoT)   { PatchBytesSequence -File $DecompressedROMFile -Offset "0xAE8096" -Values @("0x80", "0x80") }
+            elseif (CheckCheckBox -CheckBox $8xDamageOoT)   { PatchBytesSequence -File $DecompressedROMFile -Offset "0xAE8096" -Values @("0x80", "0xC0") }
+            PatchBytesSequence -File $DecompressedROMFile -Offset "0xAE8099" -Values @("0x00", "0x00", "0x00")
         }
         elseif (CheckCheckBox -CheckBox $HalfRecoveryOoT) {               
-            if (CheckCheckBox -CheckBox $1xDamageOoT) {
-                $ByteArray[(GetDecimal -Hex "0xAE8096")] = (GetDecimal -Hex "0x80")
-                $ByteArray[(GetDecimal -Hex "0xAE8097")] = (GetDecimal -Hex "0x40")
-            }
-            elseif (CheckCheckBox -CheckBox $2xDamageOoT) {
-                $ByteArray[(GetDecimal -Hex "0xAE8096")] = (GetDecimal -Hex "0x80")
-                $ByteArray[(GetDecimal -Hex "0xAE8097")] = (GetDecimal -Hex "0x80")
-            }
-            elseif (CheckCheckBox -CheckBox $4xDamageOoT) {
-                $ByteArray[(GetDecimal -Hex "0xAE8096")] = (GetDecimal -Hex "0x80")
-                $ByteArray[(GetDecimal -Hex "0xAE8097")] = (GetDecimal -Hex "0xC0")
-            }
-            elseif (CheckCheckBox -CheckBox $8xDamageOoT) {
-                $ByteArray[(GetDecimal -Hex "0xAE8096")] = (GetDecimal -Hex "0x81")
-                $ByteArray[(GetDecimal -Hex "0xAE8097")] = (GetDecimal -Hex "0x00")
-            }
-            $ByteArray[(GetDecimal -Hex "0xAE8099")] = (GetDecimal -Hex "0x10")
-            $ByteArray[(GetDecimal -Hex "0xAE809A")] = (GetDecimal -Hex "0x80")
-            $ByteArray[(GetDecimal -Hex "0xAE809B")] = (GetDecimal -Hex "0x43")
+            if (CheckCheckBox -CheckBox $1xDamageOoT)       { PatchBytesSequence -File $DecompressedROMFile -Offset "0xAE8096" -Values @("0x80", "0x40") }
+            elseif (CheckCheckBox -CheckBox $2xDamageOoT)   { PatchBytesSequence -File $DecompressedROMFile -Offset "0xAE8096" -Values @("0x80", "0x80") }
+            elseif (CheckCheckBox -CheckBox $4xDamageOoT)   { PatchBytesSequence -File $DecompressedROMFile -Offset "0xAE8096" -Values @("0x80", "0xC0") }
+            elseif (CheckCheckBox -CheckBox $8xDamageOoT)   { PatchBytesSequence -File $DecompressedROMFile -Offset "0xAE8096" -Values @("0x81", "0x00") }
+            PatchBytesSequence -File $DecompressedROMFile -Offset "0xAE8099" -Values @("0x10", "0x80", "0x43")
         }
         elseif (CheckCheckBox -CheckBox $QuarterRecoveryOoT) {                
-            if (CheckCheckBox -CheckBox $1xDamageOoT) {
-                $ByteArray[(GetDecimal -Hex "0xAE8096")] = (GetDecimal -Hex "0x80")
-                $ByteArray[(GetDecimal -Hex "0xAE8097")] = (GetDecimal -Hex "0x80")
-            }
-            elseif (CheckCheckBox -CheckBox $2xDamageOoT) {
-                $ByteArray[(GetDecimal -Hex "0xAE8096")] = (GetDecimal -Hex "0x80")
-                $ByteArray[(GetDecimal -Hex "0xAE8097")] = (GetDecimal -Hex "0xC0")
-            }
-            elseif (CheckCheckBox -CheckBox $4xDamageOoT) {
-                $ByteArray[(GetDecimal -Hex "0xAE8096")] = (GetDecimal -Hex "0x81")
-                $ByteArray[(GetDecimal -Hex "0xAE8097")] = (GetDecimal -Hex "0x00")
-            }
-            elseif (CheckCheckBox -CheckBox $8xDamageOoT) {
-                $ByteArray[(GetDecimal -Hex "0xAE8096")] = (GetDecimal -Hex "0x81")
-                $ByteArray[(GetDecimal -Hex "0xAE8097")] = (GetDecimal -Hex "0x40")
-                }
-                $ByteArray[(GetDecimal -Hex "0xAE8099")] = (GetDecimal -Hex "0x10")
-                $ByteArray[(GetDecimal -Hex "0xAE809A")] = (GetDecimal -Hex "0x80")
-                $ByteArray[(GetDecimal -Hex "0xAE809B")] = (GetDecimal -Hex "0x83")
+            if (CheckCheckBox -CheckBox $1xDamageOoT)       { PatchBytesSequence -File $DecompressedROMFile -Offset "0xAE8096" -Values @("0x80", "0x80") }
+            elseif (CheckCheckBox -CheckBox $2xDamageOoT)   { PatchBytesSequence -File $DecompressedROMFile -Offset "0xAE8096" -Values @("0x80", "0xC0") }
+            elseif (CheckCheckBox -CheckBox $4xDamageOoT)   { PatchBytesSequence -File $DecompressedROMFile -Offset "0xAE8096" -Values @("0x81", "0x00") }
+            elseif (CheckCheckBox -CheckBox $8xDamageOoT)   { PatchBytesSequence -File $DecompressedROMFile -Offset "0xAE8096" -Values @("0x81", "0x40") }
+            PatchBytesSequence -File $DecompressedROMFile -Offset "0xAE8099" -Values @("0x10", "0x80", "0x83")
 
-            }
-            elseif (CheckCheckBox -CheckBox $NoRecoveryOoT) {                
-            if (CheckCheckBox -CheckBox $1xDamageOoT) {
-                $ByteArray[(GetDecimal -Hex "0xAE8096")] = (GetDecimal -Hex "0x81")
-                $ByteArray[(GetDecimal -Hex "0xAE8097")] = (GetDecimal -Hex "0x40")
-            }
-            elseif (CheckCheckBox -CheckBox $2xDamageOoT) {
-                $ByteArray[(GetDecimal -Hex "0xAE8096")] = (GetDecimal -Hex "0x81")
-                $ByteArray[(GetDecimal -Hex "0xAE8097")] = (GetDecimal -Hex "0x80")
-            }
-            elseif (CheckCheckBox -CheckBox $4xDamageOoT) {
-                $ByteArray[(GetDecimal -Hex "0xAE8096")] = (GetDecimal -Hex "0x81")
-                $ByteArray[(GetDecimal -Hex "0xAE8097")] = (GetDecimal -Hex "0xC0")
-            }
-            elseif (CheckCheckBox -CheckBox $8xDamageOoT) {
-                $ByteArray[(GetDecimal -Hex "0xAE8096")] = (GetDecimal -Hex "0x82")
-                $ByteArray[(GetDecimal -Hex "0xAE8097")] = (GetDecimal -Hex "0x00")
-            }
-            $ByteArray[(GetDecimal -Hex "0xAE8099")] = (GetDecimal -Hex "0x10")
-            $ByteArray[(GetDecimal -Hex "0xAE809A")] = (GetDecimal -Hex "0x81")
-            $ByteArray[(GetDecimal -Hex "0xAE809B")] = (GetDecimal -Hex "0x43")
+        }
+        elseif (CheckCheckBox -CheckBox $NoRecoveryOoT) {                
+            if (CheckCheckBox -CheckBox $1xDamageOoT)       { PatchBytesSequence -File $DecompressedROMFile -Offset "0xAE8096" -Values @("0x81", "0x40") }
+            elseif (CheckCheckBox -CheckBox $2xDamageOoT)   { PatchBytesSequence -File $DecompressedROMFile -Offset "0xAE8096" -Values @("0x81", "0x80") }
+            elseif (CheckCheckBox -CheckBox $4xDamageOoT)   { PatchBytesSequence -File $DecompressedROMFile -Offset "0xAE8096" -Values @("0x81", "0xC0") }
+            elseif (CheckCheckBox -CheckBox $8xDamageOoT)   { PatchBytesSequence -File $DecompressedROMFile -Offset "0xAE8096" -Values @("0x82", "0x00") }
+            PatchBytesSequence -File $DecompressedROMFile -Offset "0xAE8099" -Values @("0x10", "0x81", "0x43")
         }
     }
 
@@ -1138,345 +1037,151 @@ function PatchReduxOoT($ByteArray) {
 
     # TEXT DIALOGUE SPEED #
 
-    if (CheckCheckBox -CheckBox $1xTextOoT)       { $ByteArray[(GetDecimal -Hex "0xB5006F")] = 1 }
-    elseif (CheckCheckBox -CheckBox $2xTextOoT)   { $ByteArray[(GetDecimal -Hex "0xB5006F")] = 2 }
+    if (CheckCheckBox -CheckBox $2xTextOoT)   { PatchBytesSequence -File $DecompressedROMFile -Offset "0xB5006F" -Values @("0x02") }
     elseif (CheckCheckBox -CheckBox $3xTextOoT) {
-        $ByteArray[(GetDecimal -Hex "0x93B6E7")] = (GetDecimal -Hex "0x05")
-        $ByteArray[(GetDecimal -Hex "0x93B6E8")] = (GetDecimal -Hex "0x40")
-        $ByteArray[(GetDecimal -Hex "0x93B6E9")] = (GetDecimal -Hex "0x2E")
-        $ByteArray[(GetDecimal -Hex "0x93B6EA")] = (GetDecimal -Hex "0x05")
-        $ByteArray[(GetDecimal -Hex "0x93B6EB")] = (GetDecimal -Hex "0x46")
-        $ByteArray[(GetDecimal -Hex "0x93B6EC")] = (GetDecimal -Hex "0x01")
-        $ByteArray[(GetDecimal -Hex "0x93B6ED")] = (GetDecimal -Hex "0x05")
-        $ByteArray[(GetDecimal -Hex "0x93B6EE")] = (GetDecimal -Hex "0x40")
-        $ByteArray[(GetDecimal -Hex "0x93B6EF")] = (GetDecimal -Hex "0x01")
+        PatchBytesSequence -File $DecompressedROMFile -Offset "0x93B6E7" -Values @("0x09", "0x05", "0x40", "0x2E", "0x05", "0x46", "0x01", "0x05", "0x40")
+        PatchBytesSequence -File $DecompressedROMFile -Offset "0x93B6F1" -Values @("0x01")
+        PatchBytesSequence -File $DecompressedROMFile -Offset "0x93B71E" -Values @("0x09", "0x2E")
+        PatchBytesSequence -File $DecompressedROMFile -Offset "0x93B722" -Values @("0x01")
+        PatchBytesSequence -File $DecompressedROMFile -Offset "0x93B74C" -Values @("0x09", "0x21", "0x05", "0x42")
+        PatchBytesSequence -File $DecompressedROMFile -Offset "0x93B752" -Values @("0x01", "0x05", "0x40")
+        PatchBytesSequence -File $DecompressedROMFile -Offset "0x93B776" -Values @("0x09", "0x21")
+        PatchBytesSequence -File $DecompressedROMFile -Offset "0x93B77A" -Values @("0x01")
+        PatchBytesSequence -File $DecompressedROMFile -Offset "0x93B7A1" -Values @("0x09", "0x21")
+        PatchBytesSequence -File $DecompressedROMFile -Offset "0x93B7A5" -Values @("0x01")
+        PatchBytesSequence -File $DecompressedROMFile -Offset "0x93B7A8" -Values @("0x1A")
+        PatchBytesSequence -File $DecompressedROMFile -Offset "0x93B7C9" -Values @("0x09", "0x21")
+        PatchBytesSequence -File $DecompressedROMFile -Offset "0x93B7CD" -Values @("0x01")
+        PatchBytesSequence -File $DecompressedROMFile -Offset "0x93B7F2" -Values @("0x09", "0x21")
+        PatchBytesSequence -File $DecompressedROMFile -Offset "0x93B7F6" -Values @("0x01")
+        PatchBytesSequence -File $DecompressedROMFile -Offset "0x93B81C" -Values @("0x09", "0x21")
+        PatchBytesSequence -File $DecompressedROMFile -Offset "0x93B820" -Values @("0x01")
+        PatchBytesSequence -File $DecompressedROMFile -Offset "0x93B849" -Values @("0x09", "0x21")
+        PatchBytesSequence -File $DecompressedROMFile -Offset "0x93B84D" -Values @("0x01")
+        PatchBytesSequence -File $DecompressedROMFile -Offset "0x93B86D" -Values @("0x09", "0x2E")
+        PatchBytesSequence -File $DecompressedROMFile -Offset "0x93B871" -Values @("0x01") 
+        PatchBytesSequence -File $DecompressedROMFile -Offset "0x93B88F" -Values @("0x09", "0x2E")
+        PatchBytesSequence -File $DecompressedROMFile -Offset "0x93B893" -Values @("0x01")
+        PatchBytesSequence -File $DecompressedROMFile -Offset "0x93B8BE" -Values @("0x09", "0x2E")
+        PatchBytesSequence -File $DecompressedROMFile -Offset "0x93B8C2" -Values @("0x01")
+        PatchBytesSequence -File $DecompressedROMFile -Offset "0x93B8EF" -Values @("0x09", "0x2E")
+        PatchBytesSequence -File $DecompressedROMFile -Offset "0x93B8F3" -Values @("0x01")
+        PatchBytesSequence -File $DecompressedROMFile -Offset "0x93B91A" -Values @("0x09", "0x21")
+        PatchBytesSequence -File $DecompressedROMFile -Offset "0x93B91E" -Values @("0x01")
+        PatchBytesSequence -File $DecompressedROMFile -Offset "0x93B94E" -Values @("0x09", "0x2E")
+        PatchBytesSequence -File $DecompressedROMFile -Offset "0x93B952" -Values @("0x01")
+        PatchBytesSequence -File $DecompressedROMFile -Offset "0x93B728" -Values @("0x10")
+        PatchBytesSequence -File $DecompressedROMFile -Offset "0x93B72A" -Values @("0x01")
 
-        $ByteArray[(GetDecimal -Hex "0x93B6F1")] = (GetDecimal -Hex "0x01")
-
-        $ByteArray[(GetDecimal -Hex "0x93B71E")] = (GetDecimal -Hex "0x09")
-        $ByteArray[(GetDecimal -Hex "0x93B71D")] = (GetDecimal -Hex "0x2E")
-
-        $ByteArray[(GetDecimal -Hex "0x93B722")] = (GetDecimal -Hex "0x01")
-
-        $ByteArray[(GetDecimal -Hex "0x93B74C")] = (GetDecimal -Hex "0x09")
-        $ByteArray[(GetDecimal -Hex "0x93B74D")] = (GetDecimal -Hex "0x21")
-        $ByteArray[(GetDecimal -Hex "0x93B74E")] = (GetDecimal -Hex "0x05")
-        $ByteArray[(GetDecimal -Hex "0x93B74F")] = (GetDecimal -Hex "0x42")
-
-        $ByteArray[(GetDecimal -Hex "0x93B752")] = (GetDecimal -Hex "0x01")
-        $ByteArray[(GetDecimal -Hex "0x93B753")] = (GetDecimal -Hex "0x05")
-        $ByteArray[(GetDecimal -Hex "0x93B754")] = (GetDecimal -Hex "0x40")
-
-        $ByteArray[(GetDecimal -Hex "0x93B776")] = (GetDecimal -Hex "0x09")
-        $ByteArray[(GetDecimal -Hex "0x93B777")] = (GetDecimal -Hex "0x21")
-
-        $ByteArray[(GetDecimal -Hex "0x93B77A")] = (GetDecimal -Hex "0x01")
-
-        $ByteArray[(GetDecimal -Hex "0x93B7A1")] = (GetDecimal -Hex "0x09")
-        $ByteArray[(GetDecimal -Hex "0x93B7A2")] = (GetDecimal -Hex "0x21")
-
-        $ByteArray[(GetDecimal -Hex "0x93B7A5")] = (GetDecimal -Hex "0x01")
-
-        $ByteArray[(GetDecimal -Hex "0x93B7A8")] = (GetDecimal -Hex "0x1A")
-
-        $ByteArray[(GetDecimal -Hex "0x93B7C9")] = (GetDecimal -Hex "0x09")
-        $ByteArray[(GetDecimal -Hex "0x93B7CA")] = (GetDecimal -Hex "0x21")
-
-        $ByteArray[(GetDecimal -Hex "0x93B7CD")] = (GetDecimal -Hex "0x01")
-
-        $ByteArray[(GetDecimal -Hex "0x93B7F2")] = (GetDecimal -Hex "0x09")
-        $ByteArray[(GetDecimal -Hex "0x93B7F3")] = (GetDecimal -Hex "0x21")
-
-        $ByteArray[(GetDecimal -Hex "0x93B7F6")] = (GetDecimal -Hex "0x01")
-
-        $ByteArray[(GetDecimal -Hex "0x93B81C")] = (GetDecimal -Hex "0x09")
-        $ByteArray[(GetDecimal -Hex "0x93B81D")] = (GetDecimal -Hex "0x21")
-
-        $ByteArray[(GetDecimal -Hex "0x93B820")] = (GetDecimal -Hex "0x1")
-
-        $ByteArray[(GetDecimal -Hex "0x93B849")] = (GetDecimal -Hex "0x09")
-        $ByteArray[(GetDecimal -Hex "0x93B84A")] = (GetDecimal -Hex "0x21")
-
-        $ByteArray[(GetDecimal -Hex "0x93B84D")] = (GetDecimal -Hex "0x1")
-
-        $ByteArray[(GetDecimal -Hex "0x93B86D")] = (GetDecimal -Hex "0x09")
-        $ByteArray[(GetDecimal -Hex "0x93B86E")] = (GetDecimal -Hex "0x2E")
-
-        $ByteArray[(GetDecimal -Hex "0x93B871")] = (GetDecimal -Hex "0x01")
-
-        $ByteArray[(GetDecimal -Hex "0x93B88F")] = (GetDecimal -Hex "0x09")
-        $ByteArray[(GetDecimal -Hex "0x93B890")] = (GetDecimal -Hex "0x2E")
-
-        $ByteArray[(GetDecimal -Hex "0x93B893")] = (GetDecimal -Hex "0x01")
-
-        $ByteArray[(GetDecimal -Hex "0x93B8BE")] = (GetDecimal -Hex "0x09")
-        $ByteArray[(GetDecimal -Hex "0x93B8BF")] = (GetDecimal -Hex "0x2E")
-
-        $ByteArray[(GetDecimal -Hex "0x93B8C2")] = (GetDecimal -Hex "0x01")
-
-        $ByteArray[(GetDecimal -Hex "0x93B8EF")] = (GetDecimal -Hex "0x09")
-        $ByteArray[(GetDecimal -Hex "0x93B8F0")] = (GetDecimal -Hex "0x2E")
-
-        $ByteArray[(GetDecimal -Hex "0x93B8F3")] = (GetDecimal -Hex "0x01")
-
-        $ByteArray[(GetDecimal -Hex "0x93B91A")] = (GetDecimal -Hex "0x09")
-        $ByteArray[(GetDecimal -Hex "0x93B91B")] = (GetDecimal -Hex "0x21")
-
-        $ByteArray[(GetDecimal -Hex "0x93B91E")] = (GetDecimal -Hex "0x01")
-
-        $ByteArray[(GetDecimal -Hex "0x93B94E")] = (GetDecimal -Hex "0x09")
-        $ByteArray[(GetDecimal -Hex "0x93B94F")] = (GetDecimal -Hex "0x2E")
-
-        $ByteArray[(GetDecimal -Hex "0x93B952")] = (GetDecimal -Hex "0x01")
-
-        $ByteArray[(GetDecimal -Hex "0x93B728")] = (GetDecimal -Hex "0x10")
-        $ByteArray[(GetDecimal -Hex "0x93B72A")] = (GetDecimal -Hex "0x01")
-
-            $ByteArray[(GetDecimal -Hex "0xB5006F")] = (GetDecimal -Hex "0x03")
+        PatchBytesSequence -File $DecompressedROMFile -Offset "0xB5006F" -Values @("0x03")
     }
 
 
 
     # GRAPHICS #
 
-    if (CheckCheckBox -CheckBox $WideScreenOoT) {
-        $ByteArray[(GetDecimal -Hex "0xB08038")] = (GetDecimal -Hex "0x3C")
-        $ByteArray[(GetDecimal -Hex "0xB08039")] = (GetDecimal -Hex "0x07")
-        $ByteArray[(GetDecimal -Hex "0xB0803A")] = (GetDecimal -Hex "0x3F")
-        $ByteArray[(GetDecimal -Hex "0xB0803B")] = (GetDecimal -Hex "0xE3")
-    }
-
-    if (CheckCheckBox -CheckBox $ExtendedDrawOoT) {
-        $ByteArray[(GetDecimal -Hex "0xA9A970")] = 0
-        $ByteArray[(GetDecimal -Hex "0xA9A971")] = 1
-    }
+    if (CheckCheckBox -CheckBox $WideScreenOoT)        { PatchBytesSequence -File $DecompressedROMFile -Offset "0xB08038" -Values @("0x3C", "0x07", "0x3F", "0xE3") }
+    if (CheckCheckBox -CheckBox $ExtendedDrawOoT)      { PatchBytesSequence -File $DecompressedROMFile -Offset "0xA9A970" -Values @("0x00", "0x01") }
+    if (CheckCheckBox -CheckBox $ForceHiresModelOoT)   { PatchBytesSequence -File $DecompressedROMFile -Offset "0xBE608B" -Values @("0x00") }
 
     if (CheckCheckBox -CheckBox $BlackBarsOoT) {
-        $ByteArray[(GetDecimal -Hex "0xB0F5A4")] = 0
-        $ByteArray[(GetDecimal -Hex "0xB0F5A5")] = 0
-        $ByteArray[(GetDecimal -Hex "0xB0F5A6")] = 0
-        $ByteArray[(GetDecimal -Hex "0xB0F5A7")] = 0
-
-        $ByteArray[(GetDecimal -Hex "0xB0F5D4")] = 0
-        $ByteArray[(GetDecimal -Hex "0xB0F5D5")] = 0
-        $ByteArray[(GetDecimal -Hex "0xB0F5D6")] = 0
-        $ByteArray[(GetDecimal -Hex "0xB0F5D7")] = 0
-
-        $ByteArray[(GetDecimal -Hex "0xB0F5E4")] = 0
-        $ByteArray[(GetDecimal -Hex "0xB0F5E5")] = 0
-        $ByteArray[(GetDecimal -Hex "0xB0F5E6")] = 0
-        $ByteArray[(GetDecimal -Hex "0xB0F5E7")] = 0
-
-        $ByteArray[(GetDecimal -Hex "0xB0F680")] = 0
-        $ByteArray[(GetDecimal -Hex "0xB0F681")] = 0
-        $ByteArray[(GetDecimal -Hex "0xB0F682")] = 0
-        $ByteArray[(GetDecimal -Hex "0xB0F683")] = 0
-
-        $ByteArray[(GetDecimal -Hex "0xB0F688")] = 0
-        $ByteArray[(GetDecimal -Hex "0xB0F689")] = 0
-        $ByteArray[(GetDecimal -Hex "0xB0F68A")] = 0
-        $ByteArray[(GetDecimal -Hex "0xB0F68B")] = 0
+        PatchBytesSequence -File $DecompressedROMFile -Offset "0xB0F5A4" -Values @("0x00", "0x00","0x00", "0x00")
+        PatchBytesSequence -File $DecompressedROMFile -Offset "0xB0F5D4" -Values @("0x00", "0x00","0x00", "0x00")
+        PatchBytesSequence -File $DecompressedROMFile -Offset "0xB0F5E4" -Values @("0x00", "0x00","0x00", "0x00")
+        PatchBytesSequence -File $DecompressedROMFile -Offset "0xB0F680" -Values @("0x00", "0x00","0x00", "0x00")
+        PatchBytesSequence -File $DecompressedROMFile -Offset "0xB0F688" -Values @("0x00", "0x00","0x00", "0x00")
     }
 
-    if (CheckCheckBox -CheckBox $ForceHiresModelOoT)   { $ByteArray[(GetDecimal -Hex "0xBE608B")] = 0 }
 
-
-
+    
     # EQUIPMENT #
 
     if (CheckCheckBox -CheckBox $ReducedItemCapacityOoT) {
-        $ByteArray[(GetDecimal -Hex "0xB6EC2F")] = 20
-        $ByteArray[(GetDecimal -Hex "0xB6EC31")] = 25
-        $ByteArray[(GetDecimal -Hex "0xB6EC33")] = 30
-        $ByteArray[(GetDecimal -Hex "0xB6EC37")] = 10
-        $ByteArray[(GetDecimal -Hex "0xB6EC39")] = 15
-        $ByteArray[(GetDecimal -Hex "0xB6EC3B")] = 20
-        $ByteArray[(GetDecimal -Hex "0xB6EC57")] = 20
-        $ByteArray[(GetDecimal -Hex "0xB6EC59")] = 25
-        $ByteArray[(GetDecimal -Hex "0xB6EC5B")] = 30
-        $ByteArray[(GetDecimal -Hex "0xB6EC5F")] = 5
-        $ByteArray[(GetDecimal -Hex "0xB6EC61")] = 10
-        $ByteArray[(GetDecimal -Hex "0xB6EC63")] = 15
-        $ByteArray[(GetDecimal -Hex "0xB6EC67")] = 10
-        $ByteArray[(GetDecimal -Hex "0xB6EC69")] = 15
-        $ByteArray[(GetDecimal -Hex "0xB6EC6A")] = 20
+        PatchBytesSequence -File $DecompressedROMFile -Offset "0xB6EC2F" -Values @("0x14", "0x19", "0x1E") -Increment 2
+        PatchBytesSequence -File $DecompressedROMFile -Offset "0xB6EC37" -Values @("0x0A", "0x0F", "0x14") -Increment 2
+        PatchBytesSequence -File $DecompressedROMFile -Offset "0xB6EC57" -Values @("0x14", "0x19", "0x1E") -Increment 2
+        PatchBytesSequence -File $DecompressedROMFile -Offset "0xB6EC5F" -Values @("0x05", "0x0A", "0x0F") -Increment 2
+        PatchBytesSequence -File $DecompressedROMFile -Offset "0xB6EC67" -Values @("0x0A", "0x0F", "0x14") -Increment 2
     }
     elseif (CheckCheckBox -CheckBox $IncreasedIemCapacityOOT) {
-        $ByteArray[(GetDecimal -Hex "0xB6EC2F")] = 40
-        $ByteArray[(GetDecimal -Hex "0xB6EC31")] = 70
-        $ByteArray[(GetDecimal -Hex "0xB6EC33")] = 99
-        $ByteArray[(GetDecimal -Hex "0xB6EC37")] = 30
-        $ByteArray[(GetDecimal -Hex "0xB6EC39")] = 55
-        $ByteArray[(GetDecimal -Hex "0xB6EC3B")] = 80
-        $ByteArray[(GetDecimal -Hex "0xB6EC57")] = 40
-        $ByteArray[(GetDecimal -Hex "0xB6EC59")] = 70
-        $ByteArray[(GetDecimal -Hex "0xB6EC5B")] = 99
-        $ByteArray[(GetDecimal -Hex "0xB6EC5F")] = 15
-        $ByteArray[(GetDecimal -Hex "0xB6EC61")] = 30
-        $ByteArray[(GetDecimal -Hex "0xB6EC63")] = 45
-        $ByteArray[(GetDecimal -Hex "0xB6EC67")] = 30
-        $ByteArray[(GetDecimal -Hex "0xB6EC69")] = 55
-        $ByteArray[(GetDecimal -Hex "0xB6EC6A")] = 80
+        PatchBytesSequence -File $DecompressedROMFile -Offset "0xB6EC2F" -Values @("0x28", "0x46", "0x63") -Increment 2
+        PatchBytesSequence -File $DecompressedROMFile -Offset "0xB6EC37" -Values @("0x1E", "0x37", "0x50") -Increment 2
+        PatchBytesSequence -File $DecompressedROMFile -Offset "0xB6EC57" -Values @("0x28", "0x46", "0x63") -Increment 2
+        PatchBytesSequence -File $DecompressedROMFile -Offset "0xB6EC5F" -Values @("0x0F", "0x1E", "0x2D") -Increment 2
+        PatchBytesSequence -File $DecompressedROMFile -Offset "0xB6EC67" -Values @("0x1E", "0x37", "0x50") -Increment 2
     }
 
     if (CheckCheckBox -CheckBox $UnlockSwordOoT) {
-        $ByteArray[(GetDecimal -Hex "0xBC77AD")] = 9
-        $ByteArray[(GetDecimal -Hex "0xBC77F7")] = 9
+        PatchBytesSequence -File $DecompressedROMFile -Offset "0xBC77AD" -Values @("0x09")
+        PatchBytesSequence -File $DecompressedROMFile -Offset "0xBC77F7" -Values @("0x09")
     }
 
     if (CheckCheckBox -CheckBox $UnlockTunicsOoT) {
-        $ByteArray[(GetDecimal -Hex "0xBC77B6")] = 9 # Goron Tunic
-        $ByteArray[(GetDecimal -Hex "0xBC77B7")] = 9
-        $ByteArray[(GetDecimal -Hex "0xBC77FE")] = 9 # Zora Tunic
-        $ByteArray[(GetDecimal -Hex "0xBC77FF")] = 9
+        PatchBytesSequence -File $DecompressedROMFile -Offset "0xBC77B6" -Values @("0x09", "0x09")
+        PatchBytesSequence -File $DecompressedROMFile -Offset "0xBC77FE" -Values @("0x09", "0x09")
     }
 
     if (CheckCheckBox -CheckBox $UnlockBootsOoT) {
-        $ByteArray[(GetDecimal -Hex "0xBC77BA")] = 9 # Iron Boots
-        $ByteArray[(GetDecimal -Hex "0xBC77BB")] = 9
-        $ByteArray[(GetDecimal -Hex "0xBC7801")] = 9 # Hover Boots
-        $ByteArray[(GetDecimal -Hex "0xBC7802")] = 9
+        PatchBytesSequence -File $DecompressedROMFile -Offset "0xBC77BA" -Values @("0x09", "0x09")
+        PatchBytesSequence -File $DecompressedROMFile -Offset "0xBC7801" -Values @("0x09", "0x09")
     }
 
 
 
     # OTHER #
 
-    if (CheckCheckBox -CheckBox $MedallionsOoT) {
-        $ByteArray[(GetDecimal -Hex "0xE2B454")] = (GetDecimal -Hex "0x80")
-        $ByteArray[(GetDecimal -Hex "0xE2B455")] = (GetDecimal -Hex "0xEA")
-        $ByteArray[(GetDecimal -Hex "0xE2B456")] = 0
-        $ByteArray[(GetDecimal -Hex "0xE2B457")] = (GetDecimal -Hex "0xA7")
-        $ByteArray[(GetDecimal -Hex "0xE2B458")] = (GetDecimal -Hex "0x24")
-        $ByteArray[(GetDecimal -Hex "0xE2B459")] = 1
-        $ByteArray[(GetDecimal -Hex "0xE2B45A")] = 0
-        $ByteArray[(GetDecimal -Hex "0xE2B45B")] = (GetDecimal -Hex "0x3F")
-        $ByteArray[(GetDecimal -Hex "0xE2B45C")] = (GetDecimal -Hex "0x31")
-        $ByteArray[(GetDecimal -Hex "0xE2B45D")] = (GetDecimal -Hex "0x4A")
-        $ByteArray[(GetDecimal -Hex "0xE2B45E")] = 0
-        $ByteArray[(GetDecimal -Hex "0xE2B45F")] = (GetDecimal -Hex "0x3F")
-        $ByteArray[(GetDecimal -Hex "0xE2B460")] = 0
-        $ByteArray[(GetDecimal -Hex "0xE2B461")] = 0
-        $ByteArray[(GetDecimal -Hex "0xE2B462")] = 0
-        $ByteArray[(GetDecimal -Hex "0xE2B463")] = 0
-    }
+    if (CheckCheckBox -CheckBox $MedallionsOoT)            { PatchBytesSequence -File $DecompressedROMFile -Offset "0xE2B454" -Values @("0x80", "0xEA", "0x00", "0xA7", "0x24", "0x01", "0x00", "0x3F", "0x31", "0x4A", "0x00", "0x3F", "0x00", "0x00", "0x00", "0x00") }
+    if (CheckCheckBox -CheckBox $DisableLowHPSoundOoT)     { PatchBytesSequence -File $DecompressedROMFile -Offset "0xADBA1A" -Values @("0x00", "0x00") }
+    if (CheckCheckBox -CheckBox $DisableNaviooT)           { PatchBytesSequence -File $DecompressedROMFile -Offset "0xDF8B84" -Values @("0x00", "0x00", "0x00", "0x00") }
+    if (CheckCheckBox -CheckBox $HideDPadOOT)              { PatchBytesSequence -File $DecompressedROMFile -Offset "0x348086E" -Values @("0x00") }
 
     if (CheckCheckBox -CheckBox $ReturnChildOoT) {
-        $ByteArray[(GetDecimal -Hex "0xCB6844")] = (GetDecimal -Hex "0x35")
-        $ByteArray[(GetDecimal -Hex "0x253C0E2")] = 3
+        PatchBytesSequence -File $DecompressedROMFile -Offset "0xCB6844" -Values @("0x35")
+        PatchBytesSequence -File $DecompressedROMFile -Offset "0x253C0E2" -Values @("0x03")
     }
-
-    if (CheckCheckBox -CheckBox $DisableLowHPSoundOoT) {
-        $ByteArray[(GetDecimal -Hex "0xADBA1A")] = 0
-        $ByteArray[(GetDecimal -Hex "0xADBA1B")] = 0
-    }
-
-    if (CheckCheckBox -CheckBox $DisableNaviooT) {
-        $ByteArray[(GetDecimal -Hex "0xDF8B84")] = 0
-        $ByteArray[(GetDecimal -Hex "0xDF8B85")] = 0
-        $ByteArray[(GetDecimal -Hex "0xDF8B86")] = 0
-        $ByteArray[(GetDecimal -Hex "0xDF8B87")] = 0
-    }
-
-    if (CheckCheckBox -CheckBox $HideDPadOOT)   { $ByteArray[(GetDecimal -Hex "0x348086E")] = (GetDecimal -Hex "0x00") }
-
-
-
-    # Finished
-    return $ByteArray
 
 }
 
 
 
 #==============================================================================================================================================================================================
-function PatchReduxMM($ByteArray) {
+function PatchReduxMM() {
     
     # HERO MODE #
 
     if (CheckCheckBox -CheckBox $OHKOModeMM) {
-        $ByteArray[(GetDecimal -Hex "0xBABE7F")] = (GetDecimal -Hex "0x09")
-        $ByteArray[(GetDecimal -Hex "0xBABE8F")] = (GetDecimal -Hex "0x04")
-        $ByteArray[(GetDecimal -Hex "0xBABEA2")] = (GetDecimal -Hex "0x2A")
-        $ByteArray[(GetDecimal -Hex "0xBABEA3")] = (GetDecimal -Hex "0x00")
-        $ByteArray[(GetDecimal -Hex "0xBABEA5")] = (GetDecimal -Hex "0x00")
-        $ByteArray[(GetDecimal -Hex "0xBABEA6")] = (GetDecimal -Hex "0x00")
-        $ByteArray[(GetDecimal -Hex "0xBABEA7")] = (GetDecimal -Hex "0x00")
+        PatchBytesSequence -File $DecompressedROMFile -Offset "0xBABE7F" -Values @("0x09", "0x04") -Increment 16
+        PatchBytesSequence -File $DecompressedROMFile -Offset "0xBABEA2" -Values @("0x2A", "0x00")
+        PatchBytesSequence -File $DecompressedROMFile -Offset "0xBABEA5" -Values @("0x00", "0x00", "0x00")
     }
     elseif (!(CheckCheckBox -CheckBox $1xDamageMM) -and !(CheckCheckBox -CheckBox $NormalRecoveryMM)) {
-        $ByteArray[(GetDecimal -Hex "0xBABE7F")] = (GetDecimal -Hex "0x09")
-        $ByteArray[(GetDecimal -Hex "0xBABE8F")] = (GetDecimal -Hex "0x04")
+        PatchBytesSequence -File $DecompressedROMFile -Offset "0xBABE7F" -Values @("0x09", "0x04") -Increment 16
         if (CheckCheckBox -CheckBox $NormalRecoveryMM) {
-            $ByteArray[(GetDecimal -Hex "0xBABEA2")] = (GetDecimal -Hex "0x28")
-            if (CheckCheckBox -CheckBox $2xDamageMM)       { $ByteArray[(GetDecimal -Hex "0xBABEA3")] = (GetDecimal -Hex "0x40") }
-            elseif (CheckCheckBox -CheckBox $4xDamageMM)   { $ByteArray[(GetDecimal -Hex "0xBABEA3")] = (GetDecimal -Hex "0x80") }
-            elseif (CheckCheckBox -CheckBox $8xDamageMM)   { $ByteArray[(GetDecimal -Hex "0xBABEA3")] = (GetDecimal -Hex "0xC0") }
-            $ByteArray[(GetDecimal -Hex "0xBABEA5")] = (GetDecimal -Hex "0x00")
-            $ByteArray[(GetDecimal -Hex "0xBABEA6")] = (GetDecimal -Hex "0x00")
-            $ByteArray[(GetDecimal -Hex "0xBABEA7")] = (GetDecimal -Hex "0x00")
+            if (CheckCheckBox -CheckBox $2xDamageMM)       { PatchBytesSequence -File $DecompressedROMFile -Offset "0xBABEA2" -Values @("0x28", "0x40") }
+            elseif (CheckCheckBox -CheckBox $4xDamageMM)   { PatchBytesSequence -File $DecompressedROMFile -Offset "0xBABEA2" -Values @("0x28", "0x80") }
+            elseif (CheckCheckBox -CheckBox $8xDamageMM)   { PatchBytesSequence -File $DecompressedROMFile -Offset "0xBABEA2" -Values @("0x28", "0xC0") }
+            PatchBytesSequence -File $DecompressedROMFile -Offset "0xBABEA5" -Values @("0x00", "0x00", "0x00")
         }
         elseif (CheckCheckBox -CheckBox $HalfRecoveryMM) {
-            if (CheckCheckBox -CheckBox $1xDamageMM) {
-                $ByteArray[(GetDecimal -Hex "0xBABEA2")] = (GetDecimal -Hex "0x28")
-                $ByteArray[(GetDecimal -Hex "0xBABEA3")] = (GetDecimal -Hex "0x40")
-            }
-            elseif (CheckCheckBox -CheckBox $2xDamageMM) {
-                $ByteArray[(GetDecimal -Hex "0xBABEA2")] = (GetDecimal -Hex "0x28")
-                $ByteArray[(GetDecimal -Hex "0xBABEA2")] = (GetDecimal -Hex "0x80")
-            }
-            elseif (CheckCheckBox -CheckBox $4xDamageMM) {
-                $ByteArray[(GetDecimal -Hex "0xBABEA2")] = (GetDecimal -Hex "0x28")
-                $ByteArray[(GetDecimal -Hex "0xBABEA3")] = (GetDecimal -Hex "0xC0")
-            }
-            elseif (CheckCheckBox -CheckBox $8xDamageMM) {
-                $ByteArray[(GetDecimal -Hex "0xBABEA2")] = (GetDecimal -Hex "0x29")
-                $ByteArray[(GetDecimal -Hex "0xBABEA3")] = (GetDecimal -Hex "0x00")
-            }
-            $ByteArray[(GetDecimal -Hex "0xBABEA5")] = (GetDecimal -Hex "0x05")
-            $ByteArray[(GetDecimal -Hex "0xBABEA6")] = (GetDecimal -Hex "0x28")
-            $ByteArray[(GetDecimal -Hex "0xBABEA7")] = (GetDecimal -Hex "0x43")
+            if (CheckCheckBox -CheckBox $1xDamageMM)       { PatchBytesSequence -File $DecompressedROMFile -Offset "0xBABEA2" -Values @("0x28", "0x40") }
+            elseif (CheckCheckBox -CheckBox $2xDamageMM)   { PatchBytesSequence -File $DecompressedROMFile -Offset "0xBABEA2" -Values @("0x28", "0x80") }
+            elseif (CheckCheckBox -CheckBox $4xDamageMM)   { PatchBytesSequence -File $DecompressedROMFile -Offset "0xBABEA2" -Values @("0x28", "0xC0") }
+            elseif (CheckCheckBox -CheckBox $8xDamageMM)   { PatchBytesSequence -File $DecompressedROMFile -Offset "0xBABEA2" -Values @("0x29", "0x00") }
+            PatchBytesSequence -File $DecompressedROMFile -Offset "0xBABEA5" -Values @("0x05", "0x28", "0x43")
         }
         elseif (CheckCheckBox -CheckBox $QuarterRecoveryMM) {
-            if (CheckCheckBox -CheckBox $1xDamageMM) {
-                $ByteArray[(GetDecimal -Hex "0xBABEA2")] = (GetDecimal -Hex "0x28")
-                $ByteArray[(GetDecimal -Hex "0xBABEA3")] = (GetDecimal -Hex "0x80")
-            }
-            elseif (CheckCheckBox -CheckBox $2xDamageMM) {
-                $ByteArray[(GetDecimal -Hex "0xBABEA2")] = (GetDecimal -Hex "0x28")
-                $ByteArray[(GetDecimal -Hex "0xBABEA3")] = (GetDecimal -Hex "0xC0")
-            }
-            elseif (CheckCheckBox -CheckBox $4xDamageMM) {
-                $ByteArray[(GetDecimal -Hex "0xBABEA2")] = (GetDecimal -Hex "0x29")
-                $ByteArray[(GetDecimal -Hex "0xBABEA3")] = (GetDecimal -Hex "0x00")
-            }
-            elseif (CheckCheckBox -CheckBox $8xDamageMM) {
-                $ByteArray[(GetDecimal -Hex "0xBABEA2")] = (GetDecimal -Hex "0x29")
-                $ByteArray[(GetDecimal -Hex "0xBABEA3")] = (GetDecimal -Hex "0x40")
-            }
-            $ByteArray[(GetDecimal -Hex "0xBABEA5")] = (GetDecimal -Hex "0x05")
-            $ByteArray[(GetDecimal -Hex "0xBABEA6")] = (GetDecimal -Hex "0x28")
-            $ByteArray[(GetDecimal -Hex "0xBABEA7")] = (GetDecimal -Hex "0x83")
+            if (CheckCheckBox -CheckBox $1xDamageMM)       { PatchBytesSequence -File $DecompressedROMFile -Offset "0xBABEA2" -Values @("0x28", "0x80") }
+            elseif (CheckCheckBox -CheckBox $2xDamageMM)   { PatchBytesSequence -File $DecompressedROMFile -Offset "0xBABEA2" -Values @("0x28", "0xC0") }
+            elseif (CheckCheckBox -CheckBox $4xDamageMM)   { PatchBytesSequence -File $DecompressedROMFile -Offset "0xBABEA2" -Values @("0x29", "0x00") }
+            elseif (CheckCheckBox -CheckBox $8xDamageMM)   { PatchBytesSequence -File $DecompressedROMFile -Offset "0xBABEA2" -Values @("0x29", "0x40") }
+            PatchBytesSequence -File $DecompressedROMFile -Offset "0xBABEA5" -Values @("0x05", "0x28", "0x83")
         }
         elseif (CheckCheckBox -CheckBox $NoRecoveryMM) {
-            if (CheckCheckBox -CheckBox $1xDamageMM) {
-                $ByteArray[(GetDecimal -Hex "0xBABEA2")] = (GetDecimal -Hex "0x29")
-                $ByteArray[(GetDecimal -Hex "0xBABEA3")] = (GetDecimal -Hex "0x40")
-            }
-            elseif (CheckCheckBox -CheckBox $2xDamageMM) {
-                $ByteArray[(GetDecimal -Hex "0xBABEA2")] = (GetDecimal -Hex "0x29")
-                $ByteArray[(GetDecimal -Hex "0xBABEA3")] = (GetDecimal -Hex "0x80")
-            }
-            elseif (CheckCheckBox -CheckBox $4xDamageMM) {
-                $ByteArray[(GetDecimal -Hex "0xBABEA2")] = (GetDecimal -Hex "0x29")
-                $ByteArray[(GetDecimal -Hex "0xBABEA3")] = (GetDecimal -Hex "0xC0")
-            }
-            elseif (CheckCheckBox -CheckBox $8xDamageMM) {
-                $ByteArray[(GetDecimal -Hex "0xBABEA2")] = (GetDecimal -Hex "0x2A")
-                $ByteArray[(GetDecimal -Hex "0xBABEA3")] = (GetDecimal -Hex "0x00")
-            }
-            $ByteArray[(GetDecimal -Hex "0xBABEA5")] = (GetDecimal -Hex "0x05")
-            $ByteArray[(GetDecimal -Hex "0xBABEA6")] = (GetDecimal -Hex "0x29")
-            $ByteArray[(GetDecimal -Hex "0xBABEA7")] = (GetDecimal -Hex "0x43")
+            if (CheckCheckBox -CheckBox $1xDamageMM)       { PatchBytesSequence -File $DecompressedROMFile -Offset "0xBABEA2" -Values @("0x29", "0x40") }
+            elseif (CheckCheckBox -CheckBox $2xDamageMM)   { PatchBytesSequence -File $DecompressedROMFile -Offset "0xBABEA2" -Values @("0x29", "0x80") }
+            elseif (CheckCheckBox -CheckBox $4xDamageMM)   { PatchBytesSequence -File $DecompressedROMFile -Offset "0xBABEA2" -Values @("0x29", "0xC0") }
+            elseif (CheckCheckBox -CheckBox $8xDamageMM)   { PatchBytesSequence -File $DecompressedROMFile -Offset "0xBABEA2" -Values @("0x2A", "0x00") }
+            PatchBytesSequence -File $DecompressedROMFile -Offset "0xBABEA5" -Values @("0x05", "0x29", "0x43")
         }
     }
 
@@ -1484,106 +1189,47 @@ function PatchReduxMM($ByteArray) {
 
     # D-PAD #
 
-    if (CheckCheckBox -CheckBox $LeftDPadMM)        { $ByteArray[(GetDecimal -Hex "0x3806365")] = 1  }
-    elseif (CheckCheckBox -CheckBox $RightDPadMM)   { $ByteArray[(GetDecimal -Hex "0x3806365")] = 2 }
-    elseif (CheckCheckBox -CheckBox $HideDPadMM)    { $ByteArray[(GetDecimal -Hex "0x3806365")] = 0 }
+    if (CheckCheckBox -CheckBox $LeftDPadMM)               { PatchBytesSequence -File $DecompressedROMFile -Offset "0x3806365" -Values @("0x01") }
+    elseif (CheckCheckBox -CheckBox $RightDPadMM)          { PatchBytesSequence -File $DecompressedROMFile -Offset "0x3806365" -Values @("0x02") }
+    elseif (CheckCheckBox -CheckBox $HideDPadMM)           { PatchBytesSequence -File $DecompressedROMFile -Offset "0x3806365" -Values @("0x00") }
 
 
 
     # GRAPHICS #
 
-    if (CheckCheckBox -CheckBox $WideScreenMM) {
-        $ByteArray[(GetDecimal -Hex "0xBD5D74")] = (GetDecimal -Hex "0x3C")
-        $ByteArray[(GetDecimal -Hex "0xBD5D75")] = (GetDecimal -Hex "0x07")
-        $ByteArray[(GetDecimal -Hex "0xBD5D76")] = (GetDecimal -Hex "0x3F")
-        $ByteArray[(GetDecimal -Hex "0xBD5D77")] = (GetDecimal -Hex "0xE3")
-
-        $ByteArray[(GetDecimal -Hex "0xCA58F5")] = (GetDecimal -Hex "0x6C")
-        $ByteArray[(GetDecimal -Hex "0xCA58F7")] = (GetDecimal -Hex "0x53")
-        $ByteArray[(GetDecimal -Hex "0xCA58F9")] = (GetDecimal -Hex "0x6C")
-        $ByteArray[(GetDecimal -Hex "0xCA58FB")] = (GetDecimal -Hex "0x84")
-        $ByteArray[(GetDecimal -Hex "0xCA58FD")] = (GetDecimal -Hex "0x9E")
-        $ByteArray[(GetDecimal -Hex "0xCA58FF")] = (GetDecimal -Hex "0xB7")
-        $ByteArray[(GetDecimal -Hex "0xCA5901")] = (GetDecimal -Hex "0x53")
-        $ByteArray[(GetDecimal -Hex "0xCA5903")] = (GetDecimal -Hex "0x6C")
-    }
-
-    if (CheckCheckBox -CheckBox $ExtendedDrawMM) {
-        $ByteArray[(GetDecimal -Hex "0xB50874")] = 0
-        $ByteArray[(GetDecimal -Hex "0xB50875")] = 0
-        $ByteArray[(GetDecimal -Hex "0xB50876")] = 0
-        $ByteArray[(GetDecimal -Hex "0xB50877")] = 0
-    }
-
-    if (CheckCheckBox -CheckBox $BlackBarsMM) {
-        $ByteArray[(GetDecimal -Hex "0xBF72A4")] = 0
-        $ByteArray[(GetDecimal -Hex "0xBF72A5")] = 0
-        $ByteArray[(GetDecimal -Hex "0xBF72A6")] = 0
-        $ByteArray[(GetDecimal -Hex "0xBF72A7")] = 0
-    }
-
-    if (CheckCheckBox -CheckBox $PixelatedStarsMM) {
-        $ByteArray[(GetDecimal -Hex "0xB943FC")] = (GetDecimal -Hex "0x10")
-        $ByteArray[(GetDecimal -Hex "0xB943FD")] = 0
-    }
+    if (CheckCheckBox -CheckBox $WideScreenMM)             { PatchBytesSequence -File $DecompressedROMFile -Offset "0xCA58F5" -Values @("0x6C", "0x53", "0x6C", "0x84", "0x9E", "0xB7", "0x53", "0x6C") -Increment 2 }
+    if (CheckCheckBox -CheckBox $ExtendedDrawMM)           { PatchBytesSequence -File $DecompressedROMFile -Offset "0xB50874" -Values @("0x00", "0x00", "0x00", "0x00") }
+    if (CheckCheckBox -CheckBox $BlackBarsMM)              { PatchBytesSequence -File $DecompressedROMFile -Offset "0xBF72A4" -Values @("0x00", "0x00", "0x00", "0x00") }
+    if (CheckCheckBox -CheckBox $PixelatedStarsMM)         { PatchBytesSequence -File $DecompressedROMFile -Offset "0xB943FC" -Values @("0x10", "0x00") }
 
 
 
     # EQUIPMENT #
 
     if (CheckCheckBox -CheckBox $ReducedItemCapacityMM) {
-        $ByteArray[(GetDecimal -Hex "0xC5834F")] = 20
-        $ByteArray[(GetDecimal -Hex "0xC58351")] = 25
-        $ByteArray[(GetDecimal -Hex "0xC58353")] = 30
-        $ByteArray[(GetDecimal -Hex "0xC58357")] = 10
-        $ByteArray[(GetDecimal -Hex "0xC58359")] = 15
-        $ByteArray[(GetDecimal -Hex "0xC5835B")] = 20
-        $ByteArray[(GetDecimal -Hex "0xC5837F")] = 5
-        $ByteArray[(GetDecimal -Hex "0xC58381")] = 10
-        $ByteArray[(GetDecimal -Hex "0xC58383")] = 15
-        $ByteArray[(GetDecimal -Hex "0xC58387")] = 10
-        $ByteArray[(GetDecimal -Hex "0xC58389")] = 15
-        $ByteArray[(GetDecimal -Hex "0xC5838B")] = 20
+        PatchBytesSequence -File $DecompressedROMFile "0xC5834F" -Values @("0x14", "0x19", "0x1E") -Increment 2
+        PatchBytesSequence -File $DecompressedROMFile "0xC58357" -Values @("0x0A", "0x0F", "0x14") -Increment 2
+        PatchBytesSequence -File $DecompressedROMFile "0xC5837F" -Values @("0x05", "0x0A", "0x0F") -Increment 2
+        PatchBytesSequence -File $DecompressedROMFile "0xC58387" -Values @("0x0A", "0x0F", "0x14") -Increment 2
     }
     elseif (CheckCheckBox -CheckBox $IncreasedIemCapacityMM) {
-        $ByteArray[(GetDecimal -Hex "0xC5834F")] = 40
-        $ByteArray[(GetDecimal -Hex "0xC58351")] = 70
-        $ByteArray[(GetDecimal -Hex "0xC58353")] = 99
-        $ByteArray[(GetDecimal -Hex "0xC58357")] = 30
-        $ByteArray[(GetDecimal -Hex "0xC58359")] = 55
-        $ByteArray[(GetDecimal -Hex "0xC5835B")] = 80
-        $ByteArray[(GetDecimal -Hex "0xC5837F")] = 15
-        $ByteArray[(GetDecimal -Hex "0xC58381")] = 30
-        $ByteArray[(GetDecimal -Hex "0xC58383")] = 45
-        $ByteArray[(GetDecimal -Hex "0xC58387")] = 30
-        $ByteArray[(GetDecimal -Hex "0xC58389")] = 55
-        $ByteArray[(GetDecimal -Hex "0xC5838B")] = 80
+        PatchBytesSequence -File $DecompressedROMFile "0xC5834F" -Values @("0x28", "0x46", "0x63") -Increment 2
+        PatchBytesSequence -File $DecompressedROMFile "0xC58357" -Values @("0x1E", "0x37", "0x50") -Increment 2
+        PatchBytesSequence -File $DecompressedROMFile "0xC5837F" -Values @("0x0F", "0x1E", "0x2D") -Increment 2
+        PatchBytesSequence -File $DecompressedROMFile "0xC58387" -Values @("0x1E", "0x37", "0x50") -Increment 2
     }
 
     if (CheckCheckBox -CheckBox $RazorSwordMM) {
-        $ByteArray[(GetDecimal -Hex "0xCBA496")] = 0 # Prevent losing hits
-        $ByteArray[(GetDecimal -Hex "0xCBA497")] = 0
-        $ByteArray[(GetDecimal -Hex "0xBDA6B7")] = 1 # Keep sword after Song of Time
+        PatchBytesSequence -File $DecompressedROMFile -Offset "0xCBA496" -Values @("0x00", "0x00") # Prevent losing hits
+        PatchBytesSequence -File $DecompressedROMFile -Offset "0xBDA6B7" -Values @("0x01")         # Keep sword after Song of Time
     }
 
 
 
     # OTHER #
     
-    if (CheckCheckBox -CheckBox $DisableLowHPSoundMM) {
-        $ByteArray[(GetDecimal -Hex "0xB97E2A")] = 0
-        $ByteArray[(GetDecimal -Hex "0xB97E2B")] = 0
-    }
-
-    if (CheckCheckBox -CheckBox $PieceOfHeartSoundMM) {
-        $ByteArray[(GetDecimal -Hex "0xBA94C8")] = (GetDecimal -Hex "0x10")
-        $ByteArray[(GetDecimal -Hex "0xBA94C9")] = (GetDecimal -Hex "0x00")
-    }
-
-
-
-    # Finished
-    return $ByteArray
+    if (CheckCheckBox -CheckBox $DisableLowHPSoundMM)      { PatchBytesSequence -File $DecompressedROMFile -Offset "0xB97E2A" -Values @("0x00", "0x00") }
+    if (CheckCheckBox -CheckBox $PieceOfHeartSoundMM)      { PatchBytesSequence -File $DecompressedROMFile -Offset "0xBA94C8" -Values @("0x10", "0x00") }
 
 }
 
@@ -2860,8 +2506,7 @@ function CheckReduxOptions() {
         if ($QuarterRecoveryOoT.Checked)                          { return $True }
         if ($NoRecoveryOoT.Checked)                               { return $True }
 
-        if ($1xTextOoT.Checked -and $IncludeReduxOoT.Checked)     { return $True }
-        if ($2xTextOoT.Checked -and !$IncludeReduxOoT.Checked)    { return $True }
+        if ($2xTextOoT.Checked)                                   { return $True }
         if ($3xTextOoT.Checked)                                   { return $True }
 
         if ($WidescreenOoT.Checked)                               { return $True }
@@ -2965,8 +2610,8 @@ function CreateOcarinaOfTimeReduxOptionsDialog() {
     $global:TextBoxOoT                 = CreateReduxGroup -Y ($HeroModeBoxOoT.Bottom + 5) -Height 1 -Dialog $OoTReduxOptionsDialog -Text "Text Dialogue Speed"
     
     $global:TextPanelOoT               = CreateReduxPanel -Row 0 -Group $TextBoxOoT 
-    $global:1xTextOoT                  = CreateReduxRadioButton -Column 0 -Row 0 -ToolTip $ToolTip -Panel $TextPanelOoT                -Text "1x Speed" -Info "Leave the dialogue text speed at normal"
-    $global:2xTextOoT                  = CreateReduxRadioButton -Column 1 -Row 0 -ToolTip $ToolTip -Panel $TextPanelOoT -Checked $True -Text "2x Speed" -Info "Set the dialogue text speed to be twice as fast"
+    $global:1xTextOoT                  = CreateReduxRadioButton -Column 0 -Row 0 -ToolTip $ToolTip -Panel $TextPanelOoT -Checked $True -Text "1x Speed" -Info "Leave the dialogue text speed at normal"
+    $global:2xTextOoT                  = CreateReduxRadioButton -Column 1 -Row 0 -ToolTip $ToolTip -Panel $TextPanelOoT                -Text "2x Speed" -Info "Set the dialogue text speed to be twice as fast"
     $global:3xTextOoT                  = CreateReduxRadioButton -Column 2 -Row 0 -ToolTip $ToolTip -Panel $TextPanelOoT                -Text "3x Speed" -Info "Set the dialogue text speed to be three times as fast"
 
 
