@@ -159,8 +159,8 @@ slash004, The3Dude
 --- MM Adult Link Model for Ocarina of Time (ROM Patch) ---
 Skilar (https://youtu.be/x6MIeEZIsPw)
 
---- 16:9 Backgrounds for Ocarina of Time (ROM Patch) ---
-GhostlyDark (Patch)
+--- 16:9 backgrounds and textures (ROM Patch) ---
+GhostlyDark (Patches)
 Admentus (Scripting and Assistance)
 
 --- Dawn & Dusk (ROM Hack) ---
