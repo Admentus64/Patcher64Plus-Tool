@@ -482,6 +482,7 @@ function SetFileParameters() {
     $Files.bpspatch_oot_rev2_to_rev0     = $MasterPath + "\Ocarina of Time\oot_rev2_to_rev0.bps"
     $Files.bpspatch_oot_redux            = $MasterPath + "\Ocarina of Time\Decompressed\oot_redux.bps"
     $Files.bpspatch_oot_models_mm        = $MasterPath + "\Ocarina of Time\Decompressed\oot_models_mm.bps"
+    $Files.bpspatch_oot_models_mm_redux  = $MasterPath + "\Ocarina of Time\Decompressed\oot_models_mm_redux.bps"
     $Files.bpspatch_oot_widescreen       = $MasterPath + "\Ocarina of Time\Decompressed\oot_widescreen.bps"
     
     $Files.bpspatch_pp_hard_mode         = $MasterPath + "\Paper Mario\pp_hard_mode.bps"
@@ -975,9 +976,10 @@ function PatchRedux() {
         $offsets = "0 1 2 3 4 5 6 7 8 9 15 16 17 18 19 20 21 22 23 24 25 26 942 944 946 948 950 952 954 956 958 960 962 964 966 968 970 972 974 976 978 980 982 984 986 988 990 992 994 "
         $offsets += "996 998 1000 1002 1004 1497 1498 1499 1500 1501 1502 1503 1504 1505 1506 1507 1508 1509 1510 1511 1512 1513 1514 1515 1516 1517 1518 1519 1520 1521 1522 1523 1524 1525"
 
-        if (CheckCheckBox -CheckBox $IncludeReduxOoT)            { & $Files.flips --ignore-checksum $Files.bpspatch_oot_redux $DecompressedROMFile | Out-Host }
-        if (CheckCheckBox -CheckBox $MMModelsOoT)                { & $Files.flips --ignore-checksum $Files.bpspatch_oot_models_mm $DecompressedROMFile | Out-Host }
-        if (CheckCheckBox -CheckBox $WidescreenTexturesOoT)      { & $Files.flips --ignore-checksum $Files.bpspatch_oot_widescreen $DecompressedROMFile | Out-Host }
+        if (CheckCheckBox -CheckBox $IncludeReduxOoT)                                                { & $Files.flips --ignore-checksum $Files.bpspatch_oot_redux $DecompressedROMFile | Out-Host }
+        if (CheckCheckBox -CheckBox $MMModelsOoT -and CheckCheckBox -CheckBox $IncludeReduxOoT)      { & $Files.flips --ignore-checksum $Files.bpspatch_oot_models_mm_redux $DecompressedROMFile | Out-Host }
+        if (CheckCheckBox -CheckBox $MMModelsOoT -and !(CheckCheckBox -CheckBox $IncludeReduxOoT))   { & $Files.flips --ignore-checksum $Files.bpspatch_oot_models_mm $DecompressedROMFile | Out-Host }
+        if (CheckCheckBox -CheckBox $WidescreenTexturesOoT)                                          { & $Files.flips --ignore-checksum $Files.bpspatch_oot_widescreen $DecompressedROMFile | Out-Host }
         [System.GC]::Collect() | Out-Null
     }
     elseif ($GameType -eq "Majora's Mask") {
@@ -2531,7 +2533,7 @@ function CheckReduxOptions() {
         if ($ExtendedDrawOoT.Checked)                             { return $True }
         if ($BlackBarsOoT.Checked)                                { return $True }
         if ($ForceHiresModelOoT.Checked)                          { return $True }
-        if ($MMModelsOoT.Checked -and $IncludeReduxOoT.Checked)   { return $True }
+        if ($MMModelsOoT.Checked)                                 { return $True }
 
         if ($ReducedItemCapacityOoT.Checked)                      { return $True }
         if ($IncreasedItemCapacityOoT.Checked)                    { return $True }
@@ -2679,7 +2681,6 @@ function CreateOcarinaOfTimeReduxOptionsDialog() {
     $IncludeReduxLabel                 = CreateLabel -X $IncludeReduxOoT.Right -Y ($IncludeReduxOoT.Top + 3) -Width 135 -Height 15 -Text "Include Redux Patch" -ToolTip $ToolTip -Info "Include the base REDUX patch`nDisable this option to patch only the vanilla ROM with the above options" -AddTo $OoTReduxOptionsDialog
 
     $IncludeReduxOoT.Add_CheckStateChanged({
-        $GraphicsBoxOoT.Controls[5 * 2].Enabled = $IncludeReduxOoT.Checked
         $OtherBoxOoT.Controls[4 * 2].Enabled = $IncludeReduxOoT.Checked
     })
 
