@@ -82,6 +82,8 @@ Link:		https://discord.gg/P22GGzz
 
 - 16:9 widescreen patch.
 
+- 16:9 widescreen adjusted backgrounds and textures.
+
 - Extended draw distance.
 
 - No black bars during cutscenes and Z-targeting.
@@ -174,6 +176,8 @@ Link:		https://discord.gg/P22GGzz
 - D-Pad Icons Layout on left side, right side or hidden.
 
 - 16:9 widescreen patch.
+
+- 16:9 widescreen adjusted backgrounds and textures.
 
 - Extended draw distance.
 
