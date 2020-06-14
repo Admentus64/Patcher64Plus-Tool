@@ -19,8 +19,8 @@ Add-Type -AssemblyName 'System.Drawing'
 #==============================================================================================================================================================================================
 # Setup global variables
 
-$global:VersionDate = "13-06-2020"
-$global:Version     = "v4.4"
+$global:VersionDate = "14-06-2020"
+$global:Version     = "v4.4.1"
 
 $global:GameID = ""
 $global:ChannelTitle = ""
@@ -635,8 +635,6 @@ function ExtractWADFile() {
     # Doesn't matter, but return to where we were.
     Pop-Location
 
-    [System.GC]::Collect() | Out-Null
-
 }
 
 
@@ -654,8 +652,6 @@ function ExtractU8AppFile() {
     if ($PatchVCRemoveT64.Checked) {
         Get-ChildItem $WADFile.AppPath05 -Include *.T64 -Recurse | Remove-Item
     }
-
-    [System.GC]::Collect() | Out-Null
 
 }
 
@@ -678,7 +674,7 @@ function PatchVCEmulator() {
         }
 
         if ($PatchVCRemapDPad.Checked) {
-            if (!$PatchLeaveDPadUp.Checked)     { PatchBytesSequence -File $WadFile.AppFile01 -Offset "0x16BAF0" -Values @("0x08", "0x00") }
+            if (!$PatchVCLeaveDPadUp.Checked) { PatchBytesSequence -File $WadFile.AppFile01 -Offset "0x16BAF0" -Values @("0x08", "0x00") }
             PatchBytesSequence -File $WadFile.AppFile01 -Offset "0x16BAF4" -Values @("0x04", "0x00")
             PatchBytesSequence -File $WadFile.AppFile01 -Offset "0x16BAF8" -Values @("0x02", "0x00")
             PatchBytesSequence -File $WadFile.AppFile01 -Offset "0x16BAFC" -Values @("0x01", "0x00")
@@ -792,7 +788,6 @@ function PatchVCROM() {
     for ($i=0; $i-lt $ByteArray.Length; $i++) { $NewByteArray[$i] = 255 }
 
     $ByteArray = $null
-    [System.GC]::Collect() | Out-Null
 
     return $True
 
@@ -819,7 +814,6 @@ function DowngradeROM() {
         $global:CheckHashSum = (Get-FileHash -Algorithm SHA256 $ROMFile).Hash
 
         $HashSum = $null
-        [System.GC]::Collect() | Out-Null
 
     }
 
@@ -853,7 +847,6 @@ function CompareHashSums() {
         }
 
         $HashSum = $Null
-        [System.GC]::Collect() | Out-Null
 
     }
 
@@ -909,7 +902,6 @@ function DecompressROM() {
     & $Files.ndec $ROMFile $DecompressedROMFile | Out-Host
 
     if ($IsWiiVC) { Remove-Item -LiteralPath $ROMFile }
-    [System.GC]::Collect() | Out-Null
 
 }
 
@@ -924,7 +916,6 @@ function CompressROM() {
 
     & $Files.Compress $DecompressedROMFile $PatchedROMFile | Out-Null
     Remove-Item -LiteralPath $DecompressedROMFile
-    [System.GC]::Collect() | Out-Null
 
 }
 
@@ -940,7 +931,6 @@ function CompressROMC() {
     & $Files.romc e $ROMFile $ROMCFile | Out-Null
     Remove-Item -LiteralPath $ROMFile
     Rename-Item -LiteralPath $ROMCFile -NewName "romc"
-    [System.GC]::Collect() | Out-Null
 
 }
 
@@ -958,7 +948,6 @@ function PatchBytesSequence([String]$File, [int]$Offset, $Values, [int]$Incremen
 
     [io.file]::WriteAllBytes($File, $ByteArray)
     $ByteArray = $null
-    [System.GC]::Collect() | Out-Null
 
 }
 
@@ -977,10 +966,11 @@ function PatchRedux() {
         $offsets += "996 998 1000 1002 1004 1497 1498 1499 1500 1501 1502 1503 1504 1505 1506 1507 1508 1509 1510 1511 1512 1513 1514 1515 1516 1517 1518 1519 1520 1521 1522 1523 1524 1525"
 
         if (CheckCheckBox -CheckBox $IncludeReduxOoT)                                                { & $Files.flips --ignore-checksum $Files.bpspatch_oot_redux $DecompressedROMFile | Out-Host }
-        if (CheckCheckBox -CheckBox $MMModelsOoT -and CheckCheckBox -CheckBox $IncludeReduxOoT)      { & $Files.flips --ignore-checksum $Files.bpspatch_oot_models_mm_redux $DecompressedROMFile | Out-Host }
-        if (CheckCheckBox -CheckBox $MMModelsOoT -and !(CheckCheckBox -CheckBox $IncludeReduxOoT))   { & $Files.flips --ignore-checksum $Files.bpspatch_oot_models_mm $DecompressedROMFile | Out-Host }
+        if (CheckCheckBox -CheckBox $MMModelsOoT) {
+            if (CheckCheckBox -CheckBox $IncludeReduxOoT)                                            { & $Files.flips --ignore-checksum $Files.bpspatch_oot_models_mm_redux $DecompressedROMFile | Out-Host }
+            else                                                                                     { & $Files.flips --ignore-checksum $Files.bpspatch_oot_models_mm $DecompressedROMFile | Out-Host }
+        }
         if (CheckCheckBox -CheckBox $WidescreenTexturesOoT)                                          { & $Files.flips --ignore-checksum $Files.bpspatch_oot_widescreen $DecompressedROMFile | Out-Host }
-        [System.GC]::Collect() | Out-Null
     }
     elseif ($GameType -eq "Majora's Mask") {
         $offsets = "0 1 2 3 4 5 6 7 -8 -9 15 16 17 18 19 20 -21 22 25 26 27 28 29 30 -652 1127 -1539 -1540 -1541 -1542 -1543 1544 "
@@ -1253,7 +1243,6 @@ function ExtendROM() {
     [io.file]::WriteAllBytes($ROMFile, $Bytes + $ByteArray)
 
     $ByteArray = $null
-    [System.GC]::Collect() | Out-Null
 
 }
 
@@ -1293,7 +1282,6 @@ function CheckGameID() {
 
     $CompareArray = $null
     $CompareAgainst = $null
-    [System.GC]::Collect() | Out-Null
 
     return $True
 
@@ -3396,7 +3384,6 @@ function CreateReduxCheckbox([int]$Column, [int]$Row, [Object]$ToolTip, [Object]
 
 # Hide the PowerShell console from the user.
 ShowPowerShellConsole -ShowConsole $False
-[System.GC]::Collect() | Out-Null
 
 # Find icons
 $global:Icons = SetIconParameters
