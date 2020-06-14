@@ -2324,7 +2324,7 @@ function SetMainScreenSize() {
         elseif ($GameType -eq "Majora's Mask")    { $MiscPanel.Location = New-Object System.Drawing.Size(10, ($PatchMMPanel.Bottom + 5)) }
         elseif ($GameType -eq "Super Mario 64")   { $MiscPanel.Location = New-Object System.Drawing.Size(10, ($PatchSM64Panel.Bottom + 5)) }
         elseif ($GameType -eq "Paper Mario")      { $MiscPanel.Location = New-Object System.Drawing.Size(10, ($PatchPPPanel.Bottom + 5)) }
-        else                                      { $MiscPanel.Location = New-Object System.Drawing.Size(10, ($InputBPSPanel.Bottom + 5)) }
+        else                                      { $MiscPanel.Location = New-Object System.Drawing.Size(10, ($CurrentGamePanel.Bottom + 5)) }
 
     }
 
