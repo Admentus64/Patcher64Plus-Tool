@@ -1,0 +1,17 @@
+{ "game" : [ {
+	"title" : "The Legend of Zelda: Ocarina of Time",
+	"mode" : "Ocarina of Time"
+}, {
+	"title" : "The Legend of Zelda: Majora's Mask",
+	"mode" : "Majora's Mask"
+}, {
+	"title" : "Super Mario 64",
+	"mode" : "Super Mario 64"
+}, {
+	"title" : "Paper Mario",
+	"mode" : "Paper Mario"
+}, {
+	"title" : "Free (Nintendo 64)",
+	"mode" : "Free"
+}
+] }

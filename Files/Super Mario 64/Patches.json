@@ -1,0 +1,41 @@
+{ "patch" : [ {
+	"title" : "60 FPS V2",
+	"console" : "All",
+	"command" : "",
+	"redux" : -1,
+	"n64_gameID" : "NSME",
+	"n64_title" : "SUPER MARIO 64",
+	"wii_gameID" : "NAAX",
+	"wii_title" : "Super Mario 64: 60 FPS v2",
+	"bps" : "\\sm64_fps.bps",
+	"output" : "_60_fps_v2_patched",
+	"hash" : "17CE077343C6133F8C9F2D6D6D9A4AB62C8CD2AA57C40AEA1F490B4C8BB21D91",
+	"tooltip" : "Increases the FPS from 30 to 60{0}Witness Super Mario 64 in glorious 60 FPS{0}- Supported: Rev 0 (US)"
+}, {
+	"title" : "Analog Camera",
+	"console" : "All",
+	"command" : "",
+	"redux" : -1,
+	"n64_gameID" : "NSME",
+	"n64_title" : "SUPER MARIO 64",
+	"wii_gameID" : "NAAY",
+	"wii_title" : "Super Mario 64: Free Cam",
+	"bps" : "\\sm64_cam.bps",
+	"output" : "_analog_camera_patched",
+	"hash" : "17CE077343C6133F8C9F2D6D6D9A4AB62C8CD2AA57C40AEA1F490B4C8BB21D91",
+	"tooltip" : "Enable full 360 degrees sideways analog camera{0}Enable a second emulated controller and bind the Analog stick to the C-Stick on the first emulated controller{0}- Supported: Rev 0 (US)"
+}, {
+	"title" : "Super Mario 64: Multiplayer V1.4.2",
+	"console" : "Wii VC",
+	"command" : "Patch Boot DOL",
+	"redux" : -1,
+	"n64_gameID" : "NSME",
+	"n64_title" : "SM64 Multiplayer",
+	"wii_gameID" : "NAAM",
+	"wii_title" : "SM64: Multiplayer",
+	"bps" : "\\sm64_multiplayer.bps",
+	"output" : "_multiplayer_v1.4.2_patched",
+	"hash" : "17CE077343C6133F8C9F2D6D6D9A4AB62C8CD2AA57C40AEA1F490B4C8BB21D91",
+	"tooltip" : "Single-Screen Multiplayer with Mario and Luigi{0}Plugin a second emulated controller for Luigi{0}- Supported: Rev 0 (US)"
+}
+] }

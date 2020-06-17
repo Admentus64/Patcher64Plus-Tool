@@ -1,0 +1,54 @@
+{ "patch" : [ {
+	"title" : "Majora's Mask: REDUX",
+	"console" : "All",
+	"command" : "",
+	"redux" : 1,
+	"n64_gameID" : "NZSE",
+	"n64_title" : "ZELDA MAJORA'S MASK",
+	"wii_gameID" : "NAR0",
+	"wii_title" : "Redux: Majora's",
+	"bps" : "",
+	"output" : "_redux_patched",
+	"hash" : "EFB1365B3AE362604514C0F9A1A2D11F5DC8688BA5BE660A37DEBF5E3BE43F2B",
+	"tooltip" : "A ROM hack that improves the mechanics for Majora's Mask{0}It includes the use of the D-Pad for additional dedicated item buttons{0}- Supported: Rev 0 (US)"
+}, {
+	"title" : "Polish Translation",
+	"console" : "All",
+	"command" : "",
+	"redux" : 0,
+	"n64_gameID" : "NZSE",
+	"n64_title" : "ZELDA MAJORA'S MASK",
+	"wii_gameID" : "NARO",
+	"wii_title" : "Zelda: Majora's (POL)",
+	"bps" : "\\Decompressed\\mm_pol.bps",
+	"output" : "_polish_patched",
+	"hash" : "EFB1365B3AE362604514C0F9A1A2D11F5DC8688BA5BE660A37DEBF5E3BE43F2B",
+	"tooltip" : "Patches Polish Fan Translation for Majora's Mask{0}- Supported: Rev 0 (US)"
+}, {
+	"title" : "Russian Translation",
+	"console" : "All",
+	"command" : "Downgrade",
+	"redux" : 0,
+	"n64_gameID" : "NZSE",
+	"n64_title" : "ZELDA MAJORA'S MASK",
+	"wii_gameID" : "NARR",
+	"wii_title" : "Zelda: Majora's (RUS)",
+	"bps" : "\\Decompressed\\mm_rus.bps",
+	"output" : "_russian_patched",
+	"hash" : "EFB1365B3AE362604514C0F9A1A2D11F5DC8688BA5BE660A37DEBF5E3BE43F2B",
+	"tooltip" : "Patches Russian Fan Translation for Majora's Mask{0}- Supported: Rev 0 (US)"
+}, {
+	"title" : "The Legend of Zelda: Masked Quest",
+	"console" : "All",
+	"command" : "Remap D-Pad",
+	"redux" : -1,
+	"n64_gameID" : "NZSE",
+	"n64_title" : "ZELDA MAJORA'S MASK",
+	"wii_gameID" : "NAC1",
+	"wii_title" : "Zelda: Masked Quest",
+	"bps" : "\\mm_masked_quest.bps",
+	"output" : "_masked_quest_patched",
+	"hash" : "EFB1365B3AE362604514C0F9A1A2D11F5DC8688BA5BE660A37DEBF5E3BE43F2B",
+	"tooltip" : "A Master Quest style romhack for Majora's Mask, offering a higher difficulty{0}- Supported: Rev 0 (US)"
+}
+] }
