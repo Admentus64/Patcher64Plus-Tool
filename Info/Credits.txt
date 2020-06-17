@@ -1,0 +1,68 @@
+--- Ocarina of Time REDUX ---
+- Maroc
+- ShadowOne
+- MattKimura
+- Roman971
+- TestRunnerSRL
+- AmazingAmpharos
+- Krimtonz
+- Fig
+- rlbond86
+- KevinPal
+- junglechief
+
+--- Majora's Mask REDUX ---
+- Maroc
+- Saneki
+
+--- MM Young Link Model for Ocarina of Time ---
+- slash004
+- The3Dude
+
+--- MM Adult Link Model for Ocarina of Time ---
+- Skilar (https://youtu.be/x6MIeEZIsPw)
+
+--- 16:9 backgrounds and textures ---
+GhostlyDark (Patches), Admentus (Scripting and Assistance)
+
+--- Dawn and Dusk ---
+- Lead Development and Music: Captain Seedy-Eye
+- 64DD Porting: LuigiBlood
+- Special Thanks: PK-LOVE, BWIX, Hylian Modding
+- Testers:  Captain Seedy, LuigiBlood, Hard4Games, ZFG, Dry4Haz, Fig
+
+--- The Fate of the Bombiwa ---
+- DezZiBao
+
+--- Majora's Mask: Masked Quest ---
+- Garo-Mastah
+- Aroenai
+- CloudMax
+- fkualol
+- VictorHale
+- Ideka
+- Saneki
+
+--- Translations Ocarina of Time ---
+- Spanish: eduardo_a2j (v2.2)
+- Polish: RPG (v1.3)
+- Russian: Zelda64rus (v2.32)
+- Chinese Simplified: madcell (2009)
+
+--- Translations Majora's Mask ---
+- Polish: RPG (v1.1)
+- Russian: Zelda64rus (v2.0 Beta)
+
+--- Super Mario 64: 60 FPS v2 / Analog Camera ---
+- Kaze Emanuar
+
+--- Super Mario 64: Multiplayer v1.4.2 ---
+- Skelux
+
+--- Paper Mario: Hard Mode / Insane Mode ---
+- Skelux (Extra Damage), Knux5577 (Enemy HP)
+
+--- Dolphin ---
+- Admentus (Testing and PowerShell Patcher)
+- Bighead (Initial PowerShell patcher)
+- GhostlyDark (Testing and Assistance)'

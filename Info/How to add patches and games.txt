@@ -1,0 +1,82 @@
+-------------
+--- Games ---
+-------------
+
+Open the Games.json file in the Files directory.
+Each game consists of 2 lines, in JSON format. The main object is "game".
+When adding a new entry, make sure to add a new folder in Files with the same name as the "mode" attribute.
+Patches can be added in the newly created game folder in Files.
+
+
+
+--- Lines ---
+title		Game title as shown in the Patcher64+ GUI
+
+mode		Game mode as shown in the Active Mode label, also used to read code with
+
+
+
+--- Example Game ---
+"title" : "The Legend of Zelda: Ocarina of Time",
+"mode" : "Ocarina of Time"
+
+
+
+---------------
+--- Patches ---
+---------------
+
+Open the Patches.json file in one of the game folders in Files.
+Each patch consists of 12 lines, in JSON format. The main object is "patch".
+
+
+
+--- Lines ---
+title		Patch title as shown in the Patcher64+ GUI
+
+console		In which console mode the patch is accesible. Accepted values are: N64, Wii VC or All
+
+command		Special command for patches.
+		""			Empty, no command given
+		"Downgrade"		Downgrade OoT Rev 1 or OoT Rev 2 ROM file to Rev 0
+		"No Downgrade"		Do not downgrade an OoT ROM file
+		"Remap D-Pad"		Remap the D-Pad for OoT or MM
+		"Patch Boot DOL" 	For Super Mario 64, patch the Boot DOL File in the VC WAD
+
+redux		If the patch supports Redux. Redux is only supported for OoT or MM
+		-1			Disable Redux
+		0			Allow Redux if the checkbox is checked
+		1			Force Redux
+
+n64_gameID	N64 ROM GameID. Requires 4 characters.
+
+n64_title	N64 Title Header. No more than 20 characters.
+
+wii_gameID	Wii VC WAD GameID. Requires 4 characters.
+
+wii_title	Wii VC WAD Channel Title. No more than 40 characters.
+
+bps		Patch file. Start with \\. Patch is located in current same folder.
+		Add \\Decompressed for decompressed patches. Provide patches in .bps or .ips
+
+output		Output file name extension.
+
+hash		Hashsum check on N64 rom. Dawn & Dusk is a special command that allows all three N64 US OoT revisions.
+
+tooltip		Patch button description.
+
+
+
+--- Example Patch ---
+"title" : "Spanish Translation",
+"console" : "All",
+"command" : "Downgrade",
+"redux" : 0,
+"n64_gameID" : "CZLE",
+"n64_title" : "THE LEGEND OF ZELDA",
+"wii_gameID" : "NACS",
+"wii_title" : "Zelda: Ocarina (SPA)",
+"bps" : "\\Decompressed\\oot_spa.bps",
+"output" : "_spanish_patched",
+"hash" : "C916AB315FBE82A22169BFF13D6B866E9FDDC907461EB6B0A227B82ACDF5B506",
+"tooltip" : "Patches Spanish Fan Translation for Ocarina of Time{0}- Supported: Rev 0 (US)"
