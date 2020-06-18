@@ -1,0 +1,67 @@
+--- OFFICIAL WII VC GAMEID'S ---
+- NACE = Ocarina of Time
+- NARE = Majora's Mask
+- NAAE = Super Mario 64
+- NAEE = Paper Mario
+
+
+
+--- OFFICIAL MD5 HASHSUMS ---
+Ocarina of Time (Rev 0 - US)
+5BD1FE107BF8106B2AB6650ABECD54D6
+
+Ocarina of Time (Rev 1 - US)
+721FDCC6F5F34BE55C43A807F2A16AF4
+
+Ocarina of Time (Rev 2 - US)
+57A9719AD547C516342E1A15D5C28C3D
+
+Majora's Mask (US)
+2A0A8ACB61538235BC1094D297FB6556
+
+Super Mario 64 (US)
+20B854B239203BAF6C961B850A4A51A2
+
+Paper Mario (US)
+A722F8161FF489943191330BF8416496
+
+Super Smash Bros. (US)
+F7C52568A31AADF26E14DC2B6416B2ED
+
+
+
+--- UNOFFICIAL WII VC GAMEID'S (Rom Hacks) ---
+- NAC0 = Ocarina of Time REDUX
+- NAC1 = Ocarina of Time: Dawn & Dusk
+- NAR0 = Majora's Mask REDUX
+- NAR1 = Majora's Mask: Masked Quest
+- NAAX = Super Mario 64: 60 FPS v2
+- NAAY = Super Mario 64: Analog Camera
+- NAAM = Super Mario 64: Multiplayer v1.4.2
+- NAE0 = Paper Mario: Hard Mode
+- NAE1 = Paper Mario: Hard Mode+
+- NAE2 = Paper Mario: Insane Mode
+
+
+
+--- UNOFFICIAL WII VC GAMEID'S (Translations) ---
+- NACS = Ocarina of Time (Spanish)
+- NACO = Ocarina of Time (Polish)
+- NACR = Ocarina of Time (Russian)
+- NACC = Ocarina of Time (Chinese)
+- NARO = Majora's Mask (Polish)
+- NARR = Majora's Mask (Russian)
+
+
+
+--- RECOMMENDED WII VC GAMEID'S (Custom Injection) ---
+- NAQE = Master Quest 
+- NAQS = Master Quest (Spanish)
+
+
+
+--- Instructions (Custom GameID and Channel Title) ---
+- Can be overwritten for any patch or ROM injection
+- Check the checkbox to enable override
+- Custom GameID requires 4 characters for acceptance
+- Incorrect length uses default values instead

@@ -1,5 +1,5 @@
 { "patch" : [ {
-	"title" : "Ocarina of Time: REDUX",
+	"title" : "Ocarina of Time REDUX",
 	"console" : "All",
 	"command" : "Downgrade",
 	"redux" : 1,
@@ -9,7 +9,7 @@
 	"wii_title" : "Redux: Ocarina",
 	"bps" : "",
 	"output" : "_redux_patched",
-	"hash" : "C916AB315FBE82A22169BFF13D6B866E9FDDC907461EB6B0A227B82ACDF5B506",
+	"hash" : "5BD1FE107BF8106B2AB6650ABECD54D6",
 	"tooltip" : "A ROM hack that improves the mechanics for Ocarina of Time{0}It includes the use of the D-Pad for additional dedicated item buttons{0}- Supported: Rev 0 (US)"
 }, {
 	"title" : "Spanish Translation",
@@ -22,7 +22,7 @@
 	"wii_title" : "Zelda: Ocarina (SPA)",
 	"bps" : "\\Decompressed\\oot_spa.bps",
 	"output" : "_spanish_patched",
-	"hash" : "C916AB315FBE82A22169BFF13D6B866E9FDDC907461EB6B0A227B82ACDF5B506",
+	"hash" : "5BD1FE107BF8106B2AB6650ABECD54D6",
 	"tooltip" : "Patches Spanish Fan Translation for Ocarina of Time{0}- Supported: Rev 0 (US)"
 }, {
 	"title" : "Polish Translation",
@@ -35,7 +35,7 @@
 	"wii_title" : "Zelda: Ocarina (POL)",
 	"bps" : "\\Decompressed\\oot_pol.bps",
 	"output" : "_polish_patched",
-	"hash" : "C916AB315FBE82A22169BFF13D6B866E9FDDC907461EB6B0A227B82ACDF5B506",
+	"hash" : "5BD1FE107BF8106B2AB6650ABECD54D6",
 	"tooltip" : "Patches Polish Fan Translation for Ocarina of Time{0}- Supported: Rev 0 (US)"
 }, {
 	"title" : "Russian Translation",
@@ -48,7 +48,7 @@
 	"wii_title" : "Zelda: Ocarina (RUS)",
 	"bps" : "\\Decompressed\\oot_rus.bps",
 	"output" : "_russian_patched",
-	"hash" : "C916AB315FBE82A22169BFF13D6B866E9FDDC907461EB6B0A227B82ACDF5B506",
+	"hash" : "5BD1FE107BF8106B2AB6650ABECD54D6",
 	"tooltip" : "Patches Russian Fan Translation for Ocarina of Time{0}- Supported: Rev 0 (US)"
 }, {
 	"title" : "Chinese Translation",
@@ -61,7 +61,7 @@
 	"wii_title" : "Zelda: Ocarina (CHI)",
 	"bps" : "\\Decompressed\\oot_chi.bps",
 	"output" : "_chinese_patched",
-	"hash" : "C916AB315FBE82A22169BFF13D6B866E9FDDC907461EB6B0A227B82ACDF5B506",
+	"hash" : "5BD1FE107BF8106B2AB6650ABECD54D6",
 	"tooltip" : "Patches Chinese Fan Translation for Ocarina of Time{0}- Supported: Rev 0 (US)"
 }, {
 	"title" : "The Legend of Zelda: Dawn & Dusk",
@@ -87,7 +87,7 @@
 	"wii_title" : "Zelda: Bombiwa",
 	"bps" : "\\Decompressed\\oot_bombiwa.bps",
 	"output" : "_bombiwa_patched",
-	"hash" : "C916AB315FBE82A22169BFF13D6B866E9FDDC907461EB6B0A227B82ACDF5B506",
+	"hash" : "5BD1FE107BF8106B2AB6650ABECD54D6",
 	"tooltip" : "A small-sized ROM hack in a completely new setting, and extremely tricky and difficult{0}- Supported: Rev 0 (US)"
 }
 ] }

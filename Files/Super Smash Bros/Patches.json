@@ -1,0 +1,15 @@
+{ "patch" : [ {
+	"title" : "Smash Remix v0.9.3",
+	"console" : "N64",
+	"command" : "",
+	"redux" : -1,
+	"n64_gameID" : "NALE",
+	"n64_title" : "SMASH BROTHERS",
+	"wii_gameID" : "NALE",
+	"wii_title" : "Super Smash Brothers. Remix",
+	"bps" : "\\smash_remix.bps",
+	"output" : "_remix_patched",
+	"hash" : "F7C52568A31AADF26E14DC2B6416B2ED",
+	"tooltip" : "Remixes the whole of Super Smash Bros.{0}Contains new stages and characters to use.{0}- Supported: Rev 0 (US)"
+}
+] }

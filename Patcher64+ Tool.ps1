@@ -19,12 +19,13 @@ Add-Type -AssemblyName 'System.Drawing'
 #==============================================================================================================================================================================================
 # Setup global variables
 
-$global:VersionDate = "17-06-2020"
-$global:Version     = "v4.5"
+$global:VersionDate = "18-06-2020"
+$global:Version     = "v4.5.1"
 
 $global:GameID = ""
 $global:ChannelTitle = ""
 $global:GameType = ""
+$global:GamePatch = ""
 $global:GetCommand = ""
 $global:IsRedux = $False
 $global:IsCompress = $False
@@ -43,9 +44,9 @@ $global:VCPatchFont = [System.Drawing.Font]::new("Microsoft Sans Serif", 8, [Sys
 #==============================================================================================================================================================================================
 # Hashes
 
-$global:HashSum_oot_rev0 = "C916AB315FBE82A22169BFF13D6B866E9FDDC907461EB6B0A227B82ACDF5B506"
-$global:HashSum_oot_rev1 = "FB87A0DAC188F9292C679DA7AC6F772ACEBE6F68E27293CFC281FC8636008DB0"
-$global:HashSum_oot_rev2 = "49ACD3885F13B0730119B78FB970911CC8ABA614FE383368015C21565983368D"
+$global:HashSum_oot_rev0 = "5BD1FE107BF8106B2AB6650ABECD54D6"
+$global:HashSum_oot_rev1 = "721FDCC6F5F34BE55C43A807F2A16AF4"
+$global:HashSum_oot_rev2 = "57A9719AD547C516342E1A15D5C28C3D"
 
 
 
@@ -65,6 +66,7 @@ else {
 $global:MasterPath = $BasePath + "\Files"
 $global:InfoPath = $BasePath + "\Info"
 $global:IconsPath = $MasterPath + "\Icons"
+$global:TextPath = $MasterPath + "\Text"
 $global:WiiVCPath = $MasterPath + "\Wii VC"
 
 
@@ -420,12 +422,6 @@ function SetIconParameters() {
     # Store all files by their name.
     $Icons.Main                 = $IconsPath + "\Main.ico"
 
-    $Icons.OcarinaOfTime        = $IconsPath + "\Ocarina of Time.ico"
-    $Icons.MajorasMask          = $IconsPath + "\Majora's Mask.ico"
-    $Icons.SuperMario64         = $IconsPath + "\Super Mario 64.ico"
-    $Icons.PaperMario           = $IconsPath + "\Paper Mario.ico"
-    $Icons.Free                 = $IconsPath + "\Free.ico"
-
     $Icons.OcarinaOfTimeRedux   = $IconsPath + "\Ocarina of Time REDUX.ico"
     $Icons.MajorasMaskRedux     = $IconsPath + "\Majora's Mask REDUX.ico"
 
@@ -488,13 +484,8 @@ function SetFileParameters() {
         }
     }
 
-    $Files.text_gameID                   = $InfoPath + "\GameID's.txt"
-    $Files.text_credits                  = $InfoPath + "\Credits.txt"
-    $Files.text_info_oot                 = $InfoPath + "\Ocarina of Time.txt"
-    $Files.text_info_mm                  = $InfoPath + "\Majora's Mask.txt"
-    $Files.text_info_sm64                = $InfoPath + "\Super Mario 64.txt"
-    $Files.text_info_pp                  = $InfoPath + "\Paper Mario.txt"
-    $Files.text_info_free                = $InfoPath + "\Free.txt"
+    $Files.text_gameID                   = $TextPath + "\GameID's.txt"
+    $Files.text_credits                  = $TextPath + "\Credits.txt"
 
     $Files.flipscfg                      = $MasterPath + "\Base\flipscfg.bin"
     $Files.ckey                          = $MasterPath + "\Wii VC\common-key.bin"
@@ -799,7 +790,7 @@ function DowngradeROM() {
     # Downgrade a ROM if it is required first
     if ($GameType -eq "Ocarina of Time" -and $IsDowngrade) {
         
-        $HashSum = (Get-FileHash -Algorithm SHA256 $ROMFile).Hash
+        $HashSum = (Get-FileHash -Algorithm MD5 $ROMFile).Hash
         if ($HashSum -ne $HashSum_oot_rev1 -and $HashSum -ne $HashSum_oot_rev2) {
             UpdateStatusLabel -Text "Failed! Ocarina of Time ROM does not match revision 1 or 2."
             return $False
@@ -807,7 +798,7 @@ function DowngradeROM() {
 
         if ($HashSum -eq $HashSum_oot_rev1)       { & $Files.flips --ignore-checksum $Files.bpspatch_oot_rev1_to_rev0 $ROMFile | Out-Host }
         elseif ($HashSum -eq $HashSum_oot_rev2)   { & $Files.flips --ignore-checksum $Files.bpspatch_oot_rev2_to_rev0 $ROMFile | Out-Host }
-        $global:CheckHashSum = (Get-FileHash -Algorithm SHA256 $ROMFile).Hash
+        $global:CheckHashSum = (Get-FileHash -Algorithm MD5 $ROMFile).Hash
 
         $HashSum = $null
 
@@ -827,7 +818,7 @@ function CompareHashSums() {
     if (($PatchFile -ne $Null -or $IsRedux) -and $GetCommand -ne "Patch BPS") {
 
         $ContinuePatching = $True
-        $HashSum = (Get-FileHash -Algorithm SHA256 $ROMFile).Hash
+        $HashSum = (Get-FileHash -Algorithm MD5 $ROMFile).Hash
         
         if ($CheckHashSum -eq "Dawn & Dusk") {
             if ($HashSum -eq $HashSum_oot_rev0)     { $global:PatchFile = $Files.bpspatch_oot_dawn_rev0 }
@@ -861,7 +852,7 @@ function PatchROM([string]$Hash) {
     UpdateStatusLabel -Text ("BPS Patching " + $GameType + " ROM...")
 
     $HashSum1 = $null
-    if ($IsWiiVC -and $GetCommand -eq "Patch BPS") { $HashSum1 = (Get-FileHash -Algorithm SHA256 $ROMFile).Hash }
+    if ($IsWiiVC -and $GetCommand -eq "Patch BPS") { $HashSum1 = (Get-FileHash -Algorithm MD5 $ROMFile).Hash }
 
     # Apply the selected patch to the ROM, if it is provided
     if ($PatchFile.Length -gt 0) {
@@ -872,7 +863,7 @@ function PatchROM([string]$Hash) {
     }
 
     if ($IsWiiVC -and $GetCommand -eq "Patch BPS") {
-        $HashSum2 = (Get-FileHash -Algorithm SHA256 $ROMFile).Hash
+        $HashSum2 = (Get-FileHash -Algorithm MD5 $ROMFile).Hash
         if ($HashSum1 -eq $HashSum2) {
             UpdateStatusLabel -Text 'Failed! BPS or IPS Patch does not match. ROM has left unchanged.'
             if ($GameType -eq "Ocarina of Time" -and !$IsDowngrade) { UpdateStatusLabel -Text "Failed! BPS or IPS Patch does not match. ROM has left unchanged. Enable Downgrade Ocarina of Time?" }
@@ -1462,6 +1453,7 @@ function WADPath_Finish([object]$TextBox, [string]$VarName, [string]$WADPath) {
 
     EnablePatchButtons -Enable $True
     SetWiiVCMode -Bool $True
+    ChangeGamesList
 
     # Check if both a .WAD and .Z64 have been provided for ROM injection
     if ($global:Z64FilePath -ne $null) { $InjectROMButton.Enabled = $true }
@@ -1480,7 +1472,7 @@ function Z64Path_Finish([object]$TextBox, [string]$VarName, [string]$Z64Path) {
     Set-Variable -Name $VarName -Value $Z64Path -Scope 'Global'
     $global:Z64FilePath =  $Z64Path
 
-    #Write-Host (Get-FileHash -Algorithm SHA256 $Z64Path).Hash
+    $HashSumROMTextBox.Text = (Get-FileHash -Algorithm MD5 $Z64Path).Hash
 
     # Update the textbox to the current WAD.
     $TextBox.Text = $Z64Path
@@ -1506,7 +1498,7 @@ function BPSPath_Finish([object]$TextBox, [string]$VarName, [string]$BPSPath) {
     $TextBox.Text = $BPSPath
 
     # Check if both a .WAD and .BPS have been provided for BPS patching
-    if ($WADFilePath -ne $null -and $IsWiiVC)       { $PatchBPSButton.Enabled = $true }
+    if ($WADFilePath -ne $null -and $IsWiiVC)        { $PatchBPSButton.Enabled = $true }
     elseif ($Z64FilePath -ne $null -and !$IsWiiVC)   { $PatchBPSButton.Enabled = $true }
 
 }
@@ -1673,6 +1665,9 @@ function CreateMainDialog() {
     $MainDialog.Add_Shown({ $MainDialog.Activate() })
     $MainDialog.Icon = $Icons.Main
 
+    # Create a tooltip
+    $global:ToolTip = CreateToolTip
+
     # Create a label to show current mode.
     $global:CurrentModeLabel = CreateLabel -Font $CurrentModeFont -AddTo $MainDialog
     $CurrentModeLabel.AutoSize = $True
@@ -1701,16 +1696,17 @@ function CreateMainDialog() {
     $InputWADTextBox.Add_DragDrop({ WADPath_DragDrop })
 
     # Create a button to allow manually selecting a WAD.
-    $global:InputWADButton = CreateButton -X 456 -Y 18 -Width 24 -Height 22 -Name "GameWAD" -Text "..." -Info "Select your VC WAD File using file explorer" -AddTo $InputWADGroup
+    $global:InputWADButton = CreateButton -X 456 -Y 18 -Width 24 -Height 22 -Name "GameWAD" -Text "..." -ToolTip $ToolTip -Info "Select your VC WAD File using file explorer" -AddTo $InputWADGroup
     $InputWADButton.Add_Click({ WADPath_Button -TextBox $InputWADTextBox -Description 'VC WAD File' -FileName '*.wad' })
 
     # Create a button to clear the WAD Path
-    $global:ClearWADPathButton = CreateButton -X 495 -Y 18 -Width 80 -Height 22 -Text "Clear" -Info "Clear the selected WAD file" -AddTo $InputWADGroup
+    $global:ClearWADPathButton = CreateButton -X 495 -Y 18 -Width 80 -Height 22 -Text "Clear" -ToolTip $ToolTip -Info "Clear the selected WAD file" -AddTo $InputWADGroup
     $ClearWADPathButton.Add_Click({
         if ($WADFilePath.Length -gt 0) {
             $global:WADFilePath = $null
             $InputWADTextBox.Text = "Select or drag and drop your Virtual Console WAD file..."
             SetWiiVCMode -Bool $False
+            ChangeGamesList
         }
     })
 
@@ -1736,11 +1732,11 @@ function CreateMainDialog() {
     $InputROMTextBox.Add_DragDrop({ Z64Path_DragDrop })
 
     # Create a button to allow manually selecting a ROM.
-    $global:InputROMButton = CreateButton -X 456 -Y 18 -Width 24 -Height 22 -Name "GameZ64" -Text "..." -Info "Select your Z64, N64 or V64 ROM File using file explorer" -AddTo $InputROMGroup
+    $global:InputROMButton = CreateButton -X 456 -Y 18 -Width 24 -Height 22 -Name "GameZ64" -Text "..." -ToolTip $ToolTip -Info "Select your Z64, N64 or V64 ROM File using file explorer" -AddTo $InputROMGroup
     $InputROMButton.Add_Click({ z64Path_Button -TextBox $InputROMTextBox -Description @('Z64 ROM', 'N64 ROM', 'V64 ROM') -FileName @('*.z64', '*.n64', '*.v64') })
     
     # Create a button to allow patch the WAD with a ROM file.
-    $global:InjectROMButton = CreateButton -X 495 -Y 18 -Width 80 -Height 22 -Text "Inject ROM" -Info "Replace the ROM in your selected WAD File with your selected Z64, N64 or V64 ROM File" -AddTo $InputROMGroup
+    $global:InjectROMButton = CreateButton -X 495 -Y 18 -Width 80 -Height 22 -Text "Inject ROM" -ToolTip $ToolTip -Info "Replace the ROM in your selected WAD File with your selected Z64, N64 or V64 ROM File" -AddTo $InputROMGroup
     $InjectROMButton.Add_Click({ MainFunction -Command "Inject" -PatchedFile '_injected' })
 
 
@@ -1765,11 +1761,11 @@ function CreateMainDialog() {
     $InputBPSTextBox.Add_DragDrop({ BPSPath_DragDrop })
 
     # Create a button to allow manually selecting a ROM.
-    $global:InputBPSButton = CreateButton -X 456 -Y 18 -Width 24 -Height 22 -Name "GameBPS" -Text "..." -Info "Select your BPS or IPS Patch File using file explorer" -AddTo $InputBPSGroup
+    $global:InputBPSButton = CreateButton -X 456 -Y 18 -Width 24 -Height 22 -Name "GameBPS" -Text "..." -ToolTip $ToolTip -Info "Select your BPS or IPS Patch File using file explorer" -AddTo $InputBPSGroup
     $InputBPSButton.Add_Click({ BPSPath_Button -TextBox $InputBPSTextBox -Description @('BPS Patch File', 'IPS Patch File') -FileName @('*.bps', '*.ips') })
     
     # Create a button to allow patch the WAD with a BPS file.
-    $global:PatchBPSButton = CreateButton -X 495 -Y 18 -Width 80 -Height 22 -Text "Patch BPS" -Info "Patch the ROM with your selected BPS or IPS Patch File" -AddTo $InputBPSGroup
+    $global:PatchBPSButton = CreateButton -X 495 -Y 18 -Width 80 -Height 22 -Text "Patch BPS" -ToolTip $ToolTip -Info "Patch the ROM with your selected BPS or IPS Patch File" -AddTo $InputBPSGroup
     $PatchBPSButton.Add_Click({ MainFunction -Command "Patch BPS" -Patch $BPSFilePath -PatchedFile '_bps_patched' })
 
 
@@ -1785,22 +1781,13 @@ function CreateMainDialog() {
     $CurrentGameGroup = CreateGroupBox -Width $CurrentGamePanel.Width -Height $CurrentGamePanel.Height -Text "Current Game Mode" -AddTo $CurrentGamePanel
 
     # Create a combox for OoT ROM hack patches
-    #$Items = ("The Legend of Zelda: Ocarina of Time", "The Legend of Zelda: Majora's Mask", "Super Mario 64", "Paper Mario", "Free Mode (Nintendo 64)")
-
-    if (Test-Path -LiteralPath $Files.Games -PathType Leaf)   { $global:GamesJSONFile = Get-Content -Raw -Path $Files.Games | ConvertFrom-Json }
-
-    $Items = @()
-    Foreach ($i in $GamesJSONFile.game) { $Items += $i.title }
-
-    $global:CurrentGameComboBox = CreateComboBox -X 10 -Y 20 -Width 440 -Height 30 -Items $Items -AddTo $CurrentGameGroup
+    $global:CurrentGameComboBox = CreateComboBox -X 10 -Y 20 -Width 440 -Height 30 -AddTo $CurrentGameGroup
     $CurrentGameComboBox.Add_SelectedIndexChanged({
-        for ($i=0; $i -lt $GamesJSONFile.game.length; $i++) {
-            if ($GamesJSONFile.game[$i].title -eq $CurrentGameComboBox.Text) {
-                $Item = $i
-            }
+        Foreach ($i in $GamesJSONFile.game) {
+            if ( ($i.title -eq $CurrentGameComboBox.Text) -and ($CurrentGameComboBox.Text -ne $GameType) ) { ChangeGameMode -Mode $i.mode }
         }
-        ChangeGameMode -Mode $GamesJSONFile.game[$Item].mode
     })
+    if (Test-Path -LiteralPath $Files.Games -PathType Leaf)   { $global:GamesJSONFile = Get-Content -Raw -Path $Files.Games | ConvertFrom-Json }
     
 
 
@@ -1862,15 +1849,55 @@ function CreateMainDialog() {
 
     # Create patch button
     $global:PatchButton = CreateButton -X 10 -Y 45 -Width 300 -Height 35 -Text "Patch Selected Option" -AddTo $PatchGroup
+    $PatchButton.Add_Click( {
+        Foreach ($Item in $PatchesJSONFile.patch) {
+            if ($Item.title -eq $PatchComboBox.Text) {
+                if ($Item.redux -eq 0)        { $Redux = $PatchReduxCheckbox.Checked }
+                elseif ($Item.redux -eq 1)    { $Redux = $True }
+                else                          { $Redux = $False }
+
+                if (!$IsWiiVC) {
+                    $Id = $Item.n64_gameID
+                    $Title = $Item.n64_title
+                }
+                else {
+                    $Id = $Item.wii_gameID
+                    $Title = $Item.wii_title
+                }
+
+                if ($Item.bps.Length -gt 4)   { $Patch = $MasterPath + "\" + $GameType + $Item.bps }
+                else                          { $Patch = $null }
+
+                $Command = $Item.command
+                $PatchedFile = $Item.output
+                $Hash = $Item.hash
+
+                MainFunction -Command $Command -Redux $Redux -Id $Id -Title $Title -Patch $Patch -PatchedFile $PatchedFile -Hash $Hash
+            }
+        }
+    } )
 
     # Create combobox
     $global:PatchComboBox = CreateComboBox -X $PatchButton.Left -Y ($PatchButton.Top - 25) -Width $PatchButton.Width -Height 30 -AddTo $PatchGroup
+    $PatchComboBox.Add_SelectedIndexChanged( {
+        Foreach ($Item in $PatchesJSONFile.patch) {
+            if ($Item.title -eq $PatchComboBox.Text) {
+                $PatchReduxCheckbox.Enabled = $Item.redux -eq 0
+                $global:GamePatch = $Item.title
+                $global:ToolTip.SetToolTip($PatchButton, ([String]::Format($Item.tooltip, [Environment]::NewLine)))
+            }
+        }
+    } )
 
     # Create a checkbox to enable Redux support.
-    $global:PatchReduxLabel = CreateLabel -X ($PatchButton.Right + 10) -Y ($PatchButton.Top + 10) -Width 40 -Height 15 -Text "Redux:" -Info "Include the Redux patch on for the translation patches" -AddTo $PatchGroup
-    $global:PatchReduxCheckbox = CreateCheckBox -X $PatchReduxLabel.Right -Y ($PatchReduxLabel.Top - 2) -Width 20 -Height 20 -Info "Include the Redux patch on for the translation patches" -AddTo $PatchGroup
+    $global:PatchReduxLabel = CreateLabel -X ($PatchButton.Right + 10) -Y ($PatchButton.Top + 10) -Width 40 -Height 15 -Text "Redux:" -ToolTip $ToolTip -Info "Include the Redux patch on for the translation patches" -AddTo $PatchGroup
+    $global:PatchReduxCheckbox = CreateCheckBox -X $PatchReduxLabel.Right -Y ($PatchReduxLabel.Top - 2) -Width 20 -Height 20 -ToolTip $ToolTip -Info "Include the Redux patch on for the translation patches" -AddTo $PatchGroup
 
     $global:PatchReduxButton = CreateButton -X ($PatchGroup.Right - 170) -Y 20 -Width 150 -Height 55 -Text "Additional Redux Options" -AddTo $PatchGroup
+    $PatchReduxButton.Add_Click( {
+        if ($GameType -eq "Ocarina of Time")     { $OoTReduxOptionsDialog.ShowDialog() }
+        elseif ($GameType -eq "Majora's Mask")   { $MMReduxOptionsDialog.ShowDialog() }
+    } )
 
 
 
@@ -1890,23 +1917,23 @@ function CreateMainDialog() {
     $global:PatchVCCoreLabel = CreateLabel -X 10 -Y 22 -Width 50 -Height 15 -Text "Core" -Font $VCPatchFont -AddTo $PatchVCGroup
 
     # Remove T64 description
-    $global:PatchVCRemoveT64Label = CreateLabel -X ($PatchVCCoreLabel.Right + 20) -Y $PatchVCCoreLabel.Top -Width 95 -Height 15 -Text "Remove All T64:" -Info "Remove all injected T64 format textures" -AddTo $PatchVCGroup
-    $global:PatchVCRemoveT64 = CreateCheckBox -X $PatchVCRemoveT64Label.Right -Y ($PatchVCCoreLabel.Top - 2) -Width 20 -Height 20 -Info "Remove all injected T64 format textures" -AddTo $PatchVCGroup
+    $global:PatchVCRemoveT64Label = CreateLabel -X ($PatchVCCoreLabel.Right + 20) -Y $PatchVCCoreLabel.Top -Width 95 -Height 15 -Text "Remove All T64:" -ToolTip $ToolTip -Info "Remove all injected T64 format textures" -AddTo $PatchVCGroup
+    $global:PatchVCRemoveT64 = CreateCheckBox -X $PatchVCRemoveT64Label.Right -Y ($PatchVCCoreLabel.Top - 2) -Width 20 -Height 20 -ToolTip $ToolTip -Info "Remove all injected T64 format textures" -AddTo $PatchVCGroup
     $PatchVCRemoveT64.Add_CheckStateChanged({ CheckForCheckboxes })
     
     # Expand Memory
-    $global:PatchVCExpandMemoryLabel = CreateLabel -X ($PatchVCRemoveT64.Right + 10) -Y $PatchVCCoreLabel.Top -Width 95 -Height 15 -Text "Expand Memory:" -Info "Expand the game's memory by 4MB" -AddTo $PatchVCGroup
-    $global:PatchVCExpandMemory = CreateCheckBox -X $PatchVCExpandMemoryLabel.Right -Y ($PatchVCCoreLabel.Top - 2) -Width 20 -Height 20 -Info "Expand the game's memory by 4MB" -AddTo $PatchVCGroup
+    $global:PatchVCExpandMemoryLabel = CreateLabel -X ($PatchVCRemoveT64.Right + 10) -Y $PatchVCCoreLabel.Top -Width 95 -Height 15 -Text "Expand Memory:" -ToolTip $ToolTip -Info "Expand the game's memory by 4MB" -AddTo $PatchVCGroup
+    $global:PatchVCExpandMemory = CreateCheckBox -X $PatchVCExpandMemoryLabel.Right -Y ($PatchVCCoreLabel.Top - 2) -Width 20 -Height 20 -ToolTip $ToolTip -Info "Expand the game's memory by 4MB" -AddTo $PatchVCGroup
     $PatchVCExpandMemory.Add_CheckStateChanged({ CheckForCheckboxes })
 
     # Remap D-Pad
-    $global:PatchVCRemapDPadLabel = CreateLabel -X ($PatchVCExpandMemory.Right + 10) -Y $PatchVCCoreLabel.Top -Width 95 -Height 15 -Text "Remap D-Pad:" -Info "Remap the D-Pad to the actual four D-Pad directional buttons instead of toggling the minimap" -AddTo $PatchVCGroup
-    $global:PatchVCRemapDPad = CreateCheckBox -X $PatchVCRemapDPadLabel.Right -Y ($PatchVCCoreLabel.Top - 2) -Width 20 -Height 20 -Info "Remap the D-Pad to the actual four D-Pad directional buttons instead of toggling the minimap" -AddTo $PatchVCGroup
+    $global:PatchVCRemapDPadLabel = CreateLabel -X ($PatchVCExpandMemory.Right + 10) -Y $PatchVCCoreLabel.Top -Width 95 -Height 15 -Text "Remap D-Pad:" -ToolTip $ToolTip -Info "Remap the D-Pad to the actual four D-Pad directional buttons instead of toggling the minimap" -AddTo $PatchVCGroup
+    $global:PatchVCRemapDPad = CreateCheckBox -X $PatchVCRemapDPadLabel.Right -Y ($PatchVCCoreLabel.Top - 2) -Width 20 -Height 20 -ToolTip $ToolTip -Info "Remap the D-Pad to the actual four D-Pad directional buttons instead of toggling the minimap" -AddTo $PatchVCGroup
     $PatchVCRemapDPad.Add_CheckStateChanged({ CheckForCheckboxes })
 
     # Downgrade
-    $global:PatchVCDowngradeLabel = CreateLabel -X ($PatchVCRemapDPad.Right + 10) -Y $PatchVCCoreLabel.Top -Width 95 -Height 15 -Text "Downgrade:" -Info "Downgrade Ocarina of Time from version 1.2 US to 1.0 US" -AddTo $PatchVCGroup
-    $global:PatchVCDowngrade = CreateCheckBox -X $PatchVCDowngradeLabel.Right -Y ($PatchVCCoreLabel.Top - 2) -Width 20 -Height 20 -Info "Downgrade Ocarina of Time from version 1.2 US to 1.0 US" -AddTo $PatchVCGroup
+    $global:PatchVCDowngradeLabel = CreateLabel -X ($PatchVCRemapDPad.Right + 10) -Y $PatchVCCoreLabel.Top -Width 95 -Height 15 -Text "Downgrade:" -ToolTip $ToolTip -Info "Downgrade Ocarina of Time from version 1.2 US to 1.0 US" -AddTo $PatchVCGroup
+    $global:PatchVCDowngrade = CreateCheckBox -X $PatchVCDowngradeLabel.Right -Y ($PatchVCCoreLabel.Top - 2) -Width 20 -Height 20 -ToolTip $ToolTip -Info "Downgrade Ocarina of Time from version 1.2 US to 1.0 US" -AddTo $PatchVCGroup
     $PatchVCDowngrade.Add_CheckStateChanged({ CheckForCheckboxes })
 
 
@@ -1915,18 +1942,18 @@ function CreateMainDialog() {
     $global:PatchVCMinimapLabel = CreateLabel -X 10 -Y ($PatchVCCoreLabel.Bottom + 5) -Width 50 -Height 15 -Text "Minimap" -Font $VCPatchFont -AddTo $PatchVCGroup
 
     # Remap C-Down
-    $global:PatchVCRemapCDownLabel = CreateLabel -X ($PatchVCMinimapLabel.Right + 20) -Y $PatchVCMinimapLabel.Top -Width 95 -Height 15 -Text "Remap C-Down:" -Info "Remap the C-Down button for toggling the minimap instead of using an item" -AddTo $PatchVCGroup
-    $global:PatchVCRemapCDown = CreateCheckBox -X $PatchVCRemapCDownLabel.Right -Y ($PatchVCMinimapLabel.Top - 2) -Width 20 -Height 20 -Info "Remap the C-Down button for toggling the minimap instead of using an item" -AddTo $PatchVCGroup
+    $global:PatchVCRemapCDownLabel = CreateLabel -X ($PatchVCMinimapLabel.Right + 20) -Y $PatchVCMinimapLabel.Top -Width 95 -Height 15 -Text "Remap C-Down:" -ToolTip $ToolTip -Info "Remap the C-Down button for toggling the minimap instead of using an item" -AddTo $PatchVCGroup
+    $global:PatchVCRemapCDown = CreateCheckBox -X $PatchVCRemapCDownLabel.Right -Y ($PatchVCMinimapLabel.Top - 2) -Width 20 -Height 20 -ToolTip $ToolTip -Info "Remap the C-Down button for toggling the minimap instead of using an item" -AddTo $PatchVCGroup
     $PatchVCRemapCDown.Add_CheckStateChanged({ CheckForCheckboxes })
 
     # Remap Z
-    $global:PatchVCRemapZLabel = CreateLabel -X ($PatchVCRemapCDown.Right + 10) -Y $PatchVCMinimapLabel.Top -Width 95 -Height 15 -Text "Remap Z:" -Info "Remap the Z (GameCube) or ZL and ZR (Classic) buttons for toggling the minimap instead of using an item" -AddTo $PatchVCGroup
-    $global:PatchVCRemapZ = CreateCheckBox -X $PatchVCRemapZLabel.Right -Y ($PatchVCMinimapLabel.Top - 2) -Width 20 -Height 20 -Info "Remap the Z (GameCube) or ZL and ZR (Classic) buttons for toggling the minimap instead of using an item" -AddTo $PatchVCGroup
+    $global:PatchVCRemapZLabel = CreateLabel -X ($PatchVCRemapCDown.Right + 10) -Y $PatchVCMinimapLabel.Top -Width 95 -Height 15 -Text "Remap Z:" -ToolTip $ToolTip -Info "Remap the Z (GameCube) or ZL and ZR (Classic) buttons for toggling the minimap instead of using an item" -AddTo $PatchVCGroup
+    $global:PatchVCRemapZ = CreateCheckBox -X $PatchVCRemapZLabel.Right -Y ($PatchVCMinimapLabel.Top - 2) -Width 20 -Height 20 -ToolTip $ToolTip -Info "Remap the Z (GameCube) or ZL and ZR (Classic) buttons for toggling the minimap instead of using an item" -AddTo $PatchVCGroup
     $PatchVCRemapZ.Add_CheckStateChanged({ CheckForCheckboxes })
 
     # Leave D-Pad Up
-    $global:PatchVCLeaveDPadUpLabel = CreateLabel -X ($PatchVCRemapZ.Right + 10) -Y $PatchVCMinimapLabel.Top -Width 95 -Height 15 -Text "Leave D-Pad Up:" -Info "Leave the D-Pad untouched so it can be used to toggle the minimap" -AddTo $PatchVCGroup
-    $global:PatchVCLeaveDPadUp = CreateCheckBox -X $PatchVCLeaveDPadUpLabel.Right -Y ($PatchVCMinimapLabel.Top - 2) -Width 20 -Height 20 -Info "Leave the D-Pad untouched so it can be used to toggle the minimap" -AddTo $PatchVCGroup
+    $global:PatchVCLeaveDPadUpLabel = CreateLabel -X ($PatchVCRemapZ.Right + 10) -Y $PatchVCMinimapLabel.Top -Width 95 -Height 15 -Text "Leave D-Pad Up:" -ToolTip $ToolTip -Info "Leave the D-Pad untouched so it can be used to toggle the minimap" -AddTo $PatchVCGroup
+    $global:PatchVCLeaveDPadUp = CreateCheckBox -X $PatchVCLeaveDPadUpLabel.Right -Y ($PatchVCMinimapLabel.Top - 2) -Width 20 -Height 20 -ToolTip $ToolTip -Info "Leave the D-Pad untouched so it can be used to toggle the minimap" -AddTo $PatchVCGroup
     $PatchVCLeaveDPadUp.Add_CheckStateChanged({ CheckForCheckboxes })
 
 
@@ -1935,11 +1962,11 @@ function CreateMainDialog() {
     $global:ActionsLabel = CreateLabel -X 10 -Y 72 -Width 50 -Height 15 -Text "Actions" -Font $VCPatchFont -AddTo $PatchVCGroup
 
     # Create a button to patch the VC
-    $global:PatchVCButton = CreateButton -X 80 -Y 65 -Width 150 -Height 30 -Text "Patch VC Emulator Only" -Info "Ignore any patches and only patches the Virtual Console emulator`nDowngrading and channing the Channel Title or GameID is still accepted" -AddTo $PatchVCGroup
+    $global:PatchVCButton = CreateButton -X 80 -Y 65 -Width 150 -Height 30 -Text "Patch VC Emulator Only" -ToolTip $ToolTip -Info "Ignore any patches and only patches the Virtual Console emulator`nDowngrading and channing the Channel Title or GameID is still accepted" -AddTo $PatchVCGroup
     $PatchVCButton.Add_Click({ MainFunction -Command "Patch VC" -Patch $BPSFilePath -PatchedFile '_vc_patched' })
 
     # Create a button to extract the ROM
-    $global:ExtractROMButton = CreateButton -X 240 -Y 65 -Width 150 -Height 30 -Text "Extract ROM Only" -Info "Only extract the .Z64 ROM from the WAD file`nUseful for native N64 emulators" -AddTo $PatchVCGroup
+    $global:ExtractROMButton = CreateButton -X 240 -Y 65 -Width 150 -Height 30 -Text "Extract ROM Only" -ToolTip $ToolTip -Info "Only extract the .Z64 ROM from the WAD file`nUseful for native N64 emulators" -AddTo $PatchVCGroup
     $ExtractROMButton.Add_Click({ MainFunction -Command "Extract" -Patch $BPSFilePath -PatchedFile '_extracted' })
 
 
@@ -1955,19 +1982,19 @@ function CreateMainDialog() {
     $global:MiscGroup = CreateGroupBox -Width 590 -Height $MiscPanel.Height -Text "Other Buttons" -AddTo $MiscPanel
 
     # Create a button to show info about which GameID to use.
-    $InfoGameIDButton = CreateButton -X 75 -Y 25 -Width 100 -Height 35 -Text "GameID's" -Info "Open the list with official, used and recommend GameID values to refer to" -AddTo $MiscGroup
+    $InfoGameIDButton = CreateButton -X 30 -Y 25 -Width 120 -Height 35 -Text "GameID's and Hashsums" -ToolTip $ToolTip -Info "Open the list with official, used and recommend GameID and hashsum values to refer to" -AddTo $MiscGroup
     $InfoGameIDButton.Add_Click({ $InfoGameIDDialog.ShowDialog() | Out-Null })
 
     # Create a button to show information about the patches.
-    $global:InfoButton = CreateButton -X ($InfoGameIDButton.Right + 15) -Y $InfoGameIDButton.Top -Width 100 -Height 35 -Text "Info              Ocarina of Time" -Info "Open the list with information about the Ocarina of Time patching mode" -AddTo $MiscGroup
+    $global:InfoButton = CreateButton -X ($InfoGameIDButton.Right + 15) -Y $InfoGameIDButton.Top -Width 120 -Height 35 -AddTo $MiscGroup
     $InfoButton.Add_Click({ $InfoDialog.ShowDialog() | Out-Null })
 
     # Create a button to show credits about the patches.
-    $CreditsButton = CreateButton -X ($InfoButton.Right + 15) -Y $InfoGameIDButton.Top -Width 100 -Height 35 -Text "Credits" -Info ("Open the list with credits of all of patches involved and those who helped with the " + $ScriptName + " tool") -AddTo $MiscGroup
+    $CreditsButton = CreateButton -X ($InfoButton.Right + 15) -Y $InfoGameIDButton.Top -Width 120 -Height 35 -Text "Credits" -ToolTip $ToolTip -Info ("Open the list with credits of all of patches involved and those who helped with the " + $ScriptName + " tool") -AddTo $MiscGroup
     $CreditsButton.Add_Click({ $CreditsDialog.ShowDialog() | Out-Null })
 
     # Create a button to close the dialog.
-    $global:ExitButton = CreateButton -X ($CreditsButton.Right + 15) -Y $InfoGameIDButton.Top -Width 100 -Height 35 -Text "Exit" -Info ("Close the " + $ScriptName + " tool") -AddTo $MiscGroup
+    $global:ExitButton = CreateButton -X ($CreditsButton.Right + 15) -Y $InfoGameIDButton.Top -Width 120 -Height 35 -Text "Exit" -ToolTip $ToolTip -Info ("Close the " + $ScriptName + " tool") -AddTo $MiscGroup
     $ExitButton.Add_Click({ $MainDialog.Close() })
 
 
@@ -1997,82 +2024,69 @@ function CreateMainDialog() {
 
 
 #==============================================================================================================================================================================================
+function ChangeGamesList() {
+    
+    # Reset
+    $CurrentGameComboBox.Items.Clear()
+
+    # Stop here if Games.json file is not present
+    if ($GamesJSONFile -eq $null) { return }
+
+    $Items = @()
+    Foreach ($Game in $GamesJSONFile.game) {
+        if ( ($IsWiiVC -and $Game.console -eq "Wii VC") -or (!$IsWiiVC -and $Game.console -eq "N64") -or ($Game.console -eq "All") ) { $Items += $Game.title }
+    }
+
+    $CurrentGameComboBox.Items.AddRange($Items)
+
+    # Reset last index
+    For ($i=0; $i -lt $Items.Length; $i++) {
+        Foreach ($Game in $GamesJSONFile.game) {
+            if ($Game.mode -eq $GameType -and $Game.title -eq $Items[$i]) { $CurrentGameComboBox.SelectedIndex = $i }
+        }
+    }
+    if ($Items.Length -gt 0 -and $CurrentGameComboBox.SelectedIndex -eq -1)   { $CurrentGameComboBox.SelectedIndex = 0 }
+
+}
+
+
+
+#==============================================================================================================================================================================================
 function ChangePatchPanel() {
     
-    $PatchGroup.text = $GameType + " - Patch Options"
-
     # Reset
+    $PatchGroup.text = $GameType + " - Patch Options"
     $PatchComboBox.Items.Clear()
-    if ($global:ClickPatchButtonEvent -ne $null) { $PatchButton.Remove_Click($global:ClickPatchButtonEvent) }
-    if ($global:ChangeComboBoxEvent -ne $null) { $PatchComboBox.Remove_SelectedIndexChanged($global:ChangeComboBoxEvent) }
 
-    # Stop here if Patchs.JSON file not present
-    if ($PatchesJSONFile -eq $null) { return }
-
-    # Assign patch button click
-    $global:ClickPatchButtonEvent = {
-        for ($i=0; $i -lt $PatchesJSONFile.patch.length; $i++) {
-            if ($PatchesJSONFile.patch[$i].title -eq $PatchComboBox.Text) { $Item = $i }
-        }
-
-        if ($PatchesJSONFile.patch[$Item].redux -eq 0)        { $Redux = $PatchReduxCheckbox.Checked }
-        elseif ($PatchesJSONFile.patch[$Item].redux -eq 1)    { $Redux = $True }
-        else                                                  { $Redux = $False }
-
-        if (!$IsWiiVC) {
-            $Id = $PatchesJSONFile.patch[$Item].n64_gameID
-            $Title = $PatchesJSONFile.patch[$Item].n64_title
-        }
-        else {
-            $Id = $PatchesJSONFile.patch[$Item].wii_gameID
-            $Title = $PatchesJSONFile.patch[$Item].wii_title
-        }
-
-        if ($PatchesJSONFile.patch[$Item].bps.Length -gt 4)   { $Patch = $MasterPath + "\" + $GameType + $PatchesJSONFile.patch[$Item].bps }
-        else                                                  { $Patch = $null }
-
-        $Command = $PatchesJSONFile.patch[$Item].command
-        $PatchedFile = $PatchesJSONFile.patch[$Item].output
-        $Hash = $PatchesJSONFile.patch[$Item].hash
-
-        MainFunction -Command $Command -Redux $Redux -Id $Id -Title $Title -Patch $Patch -PatchedFile $PatchedFile -Hash $Hash
-    }
-    $PatchButton.Add_Click($ClickPatchButtonEvent)
+    # Stop here if Games.json or Patches.json file is not present
+    if ($GamesJSONFile -eq $null -or $PatchesJSONFile -eq $null) { return }
 
     # Set combobox for patches
     $Items = @()
-    $FirstItem = 0
-    for ($i=0; $i -lt $PatchesJSONFile.patch.length; $i++) {
-        if ( ($IsWiiVC -and $PatchesJSONFile.patch[$i].console -eq "Wii VC") -or (!$IsWiiVC -and $PatchesJSONFile.patch[$i].console -eq "N64") -or ($PatchesJSONFile.patch[$i].console -eq "All") ) {
-            $Items += $PatchesJSONFile.patch[$i].title
-            if ($FirstItem -eq 0) { $FirstItemIndex = $i }
+    Foreach ($i in $PatchesJSONFile.patch) {
+        if ( ($IsWiiVC -and $i.console -eq "Wii VC") -or (!$IsWiiVC -and $i.console -eq "N64") -or ($i.console -eq "All") ) {
+            $Items += $i.title
+            if ($FirstItem -eq $null) { $FirstItem = $i }
         }
-        $ToolTip.SetToolTip($PatchButton, ([String]::Format($PatchesJSONFile.patch[$FirstItem].tooltip, [Environment]::NewLine)))
+        #$global:ToolTip.SetToolTip($PatchButton, ([String]::Format($FirstItem.tooltip, [Environment]::NewLine)))
     }
 
-    
     $PatchComboBox.Items.AddRange($Items)
-    if ($Items.Length -gt 0)   { $PatchComboBox.SelectedIndex = 0 }
-    else                       { $PatchComboBox.SelectedIndex = -1 }
 
-    $global:ChangeComboBoxEvent = {
-        for ($i=0; $i -lt $PatchesJSONFile.patch.length; $i++) {
-            if ($PatchesJSONFile.patch[$i].title -eq $PatchComboBox.Text) { $Item = $i }
+    # Reset last index
+    For ($i=0; $i -lt $Items.Length; $i++) {
+        Foreach ($Item in $PatchesJSONFile.patch) {
+            if ($Item.title -eq $GamePatch -and $Item.title -eq $Items[$i]) { $PatchComboBox.SelectedIndex = $i }
         }
-
-        $PatchReduxCheckbox.Enabled = $PatchesJSONFile.patch[$Item].redux -eq 0
-        $ToolTip.SetToolTip($PatchButton, ([String]::Format($PatchesJSONFile.patch[$Item].tooltip, [Environment]::NewLine)))
     }
-    $PatchComboBox.Add_SelectedIndexChanged($global:ChangeComboBoxEvent)
+    if ($Items.Length -gt 0 -and $PatchComboBox.SelectedIndex -eq -1)   { $PatchComboBox.SelectedIndex = 0 }
 
-    if ($global:ClickPatchReduxButtonEvent -ne $null)   { $PatchReduxButton.Remove_Click($global:ClickPatchReduxButtonEvent) }
-    if ($GameType -eq "Ocarina of Time")                { $global:ClickPatchReduxButtonEvent = { $OoTReduxOptionsDialog.ShowDialog() } }
-    elseif ($GameType -eq "Majora's Mask")              { $global:ClickPatchReduxButtonEvent = { $MMReduxOptionsDialog.ShowDialog() } }
-    $PatchReduxButton.Add_Click($ClickPatchReduxButtonEvent)
+    if ($GameType -eq "Ocarina of Time" -or $GameType -eq "Majora's Mask") { $global:ToolTip.SetToolTip($PatchReduxButton, "Toggle additional features for the " + $GameType +  " REDUX romhack") }
+    $PatchReduxButton.Visible = $PatchReduxCheckbox.Visible = $PatchReduxLabel.Visible = $False
 
-    if ($GameType -eq "Ocarina of Time" -or $GameType -eq "Majora's Mask")   { $ToolTip.SetToolTip($PatchReduxButton, "Toggle additional features for the " + $GameType +  " REDUX romhack") }
-
-    $PatchReduxButton.Visible = $PatchReduxCheckbox.Visible = $PatchReduxLabel.Visible = ($GameType -eq "Ocarina of Time" -or $GameType -eq "Majora's Mask")
+    Foreach ($Game in $GamesJSONFile.game) {
+        if ($Game.mode -eq $GameType -and $Game.redux -eq 1) { $PatchReduxButton.Visible = $PatchReduxCheckbox.Visible = $PatchReduxLabel.Visible = $True }
+    }
 
 }
 
@@ -2114,35 +2128,22 @@ function ChangeGameMode([string]$Mode) {
     $PatchVCRemapZLabel.Visible = $PatchVCRemapZ.Visible = $False
     $PatchVCLeaveDPadUpLabel.Visible = $PatchVCLeaveDPadUp.Visible = $False
  
-    if ($GameType -eq "Ocarina of Time") {
-        $PatchVCDowngradeLabel.Visible = $PatchVCDowngrade.Visible = $PatchVCLeaveDPadUpLabel.Visible = $PatchVCLeaveDPadUp.Visible = $True
-        AddTextFileToTexTbox -TextBox $InfoTextbox -File $Files.text_info_oot
-        $InfoDialog.Icon = $Icons.OcarinaOfTime
-    }
-    elseif ($GameType -eq "Majora's Mask")    {
-        AddTextFileToTexTbox -TextBox $InfoTextbox -File $Files.text_info_mm
-        $InfoDialog.Icon = $Icons.MajorasMask
-    }
-    elseif ($GameType -eq "Super Mario 64") {
-        AddTextFileToTexTbox -TextBox $InfoTextbox -File $Files.text_info_sm64
-        $InfoDialog.Icon = $Icons.SuperMario64
-    }
-    elseif ($GameType -eq "Paper Mario")      {
-        AddTextFileToTexTbox -TextBox $InfoTextbox -File $Files.text_info_pp
-        $InfoDialog.Icon = $Icons.PaperMario
-    }
-    elseif ($GameType -eq "Free") {
-        AddTextFileToTexTbox -TextBox $InfoTextbox -File $Files.text_info_free
-        $InfoDialog.Icon = $Icons.Free
-    }
-
     if ($GameType -ne "Free" -and (Test-Path -LiteralPath ($MasterPath + "\" + $GameType + "\Patches.json") -PathType Leaf))   { $global:PatchesJSONFile = Get-Content -Raw -Path ($MasterPath + "\" + $GameType + "\Patches.json") | ConvertFrom-Json }
     else                                                                                                                       { $global:PatchesJSONFile = $null }
 
-    $ToolTip.SetToolTip($InfoButton, "Open the list with information about the " + $GameType + " patching mode")
-    $InfoButton.Text = "Info                " + $GameType
-    $PatchPanel.Visible = ($GameType -ne "Free")
+    if ($GameType -ne "") {
+        if (Test-Path -LiteralPath ($TextPath + "\" + $GameType + ".txt") -PathType Leaf)    { AddTextFileToTexTbox -TextBox $InfoTextbox -File ($TextPath + "\" + $GameType + ".txt") }
+        else                                                                                 { AddTextFileToTexTbox -TextBox $InfoTextbox -File $null }
 
+        if (Test-Path -LiteralPath ($IconsPath + "\" + $GameType + ".ico") -PathType Leaf)   { $InfoDialog.Icon = $IconsPath + "\" + $GameType + ".ico" }
+        else                                                                                 { $InfoDialog.Icon = $null }
+
+        $global:ToolTip.SetToolTip($InfoButton, "Open the list with information about the " + $GameType + " patching mode")
+        $InfoButton.Text = "Info`n" + $GameType
+        $PatchPanel.Visible = ($GameType -ne "Free")
+    }
+
+    if ($GameType -eq "Ocarina of Time") { $PatchVCDowngradeLabel.Visible = $PatchVCDowngrade.Visible = $PatchVCLeaveDPadUpLabel.Visible = $PatchVCLeaveDPadUp.Visible = $True }
     if ($GameType -eq "Ocarina of Time" -or $GameType -eq "Majora's Mask") {
         $PatchVCExpandMemoryLabel.Visible = $PatchVCExpandMemory.Visible = $True
         $PatchVCRemapDPadLabel.Visible = $PatchVCRemapDPad.Visible = $True
@@ -2161,47 +2162,18 @@ function ChangeGameMode([string]$Mode) {
 #==============================================================================================================================================================================================
 function ResetGameID() {
 
-    if ($GameType -eq "Ocarina of Time" -and $IsWiiVC) {
-        $global:GameID = "NACE"
-        $global:ChannelTitle = "Zelda: Ocarina"
-    }
-    elseif ($GameType -eq "Majora's Mask" -and $IsWiiVC) {
-        $global:GameID = "NARE"
-        $global:ChannelTitle = "Zelda: Majora's"
-    }
-    elseif ($GameType -eq "Super Mario 64" -and $IsWiiVC) {
-        $global:GameID = "NAAE"
-        $global:ChannelTitle = "Super Mario 64"
-    }
-    elseif ($GameType -eq "Paper Mario" -and $IsWiiVC) {
-        $global:GameID = "NAEE"
-        $global:ChannelTitle = "Paper Mario"
-        
-    }
-    elseif ($GameType -eq "Free" -and $IsWiiVC) {
-        $global:GameID = "CUST"
-        $global:ChannelTitle = "Custom Channel"
-    }
+    # Stop here if Patchs.JSON file not present
+    if ($GamesJSONFile -eq $null) { return }
 
-    elseif ($GameType -eq "Ocarina of Time" -and !$IsWiiVC) {
-        $global:GameID = "CZLE"
-        $global:ChannelTitle = "THE LEGEND OF ZELDA"
-    }
-    elseif ($GameType -eq "Majora's Mask" -and !$IsWiiVC) {
-        $global:GameID = "NZSE"
-        $global:ChannelTitle = "ZELDA MAJORA'S MASK"
-    }
-    elseif ($GameType -eq "Super Mario 64" -and !$IsWiiVC) {
-        $global:GameID = "NSME"
-        $global:ChannelTitle = "SUPER MARIO 64"
-    }
-    elseif ($GameType -eq "Paper Mario" -and !$IsWiiVC) {
-        $global:GameID = "NMQE"
-        $global:ChannelTitle = "PAPER MARIO"
-    }
-    elseif ($GameType -eq "Free" -and !$IsWiiVC) {
-        $global:GameID = "CUST"
-        $global:ChannelTitle = "CUSTOM NINTENDO 64"
+    Foreach ($Item in $GamesJSONFile.game) {
+        if ($IsWiiVC -and $GameType -eq $Item.mode) {
+            $global:GameID = $Item.wii.gameID
+            $global:ChannelTitle = $Item.wii_title
+        }
+        elseif (!$IsWiiVC -and $GameType -eq $Item.mode) {
+            $global:GameID = $Item.n64_gameID
+            $global:ChannelTitle = $Item.n64_title
+        }
     }
 
 }
@@ -2382,6 +2354,9 @@ function CreateOcarinaOfTimeReduxOptionsDialog() {
     $CloseButton = CreateButton -X ($OoTReduxOptionsDialog.Width / 2 - 40) -Y ($OoTReduxOptionsDialog.Height - 90) -Width 80 -Height 35 -Text "Close" -AddTo $OoTReduxOptionsDialog
     $CloseButton.Add_Click({$OoTReduxOptionsDialog.Hide()})
 
+    # Create tooltip
+    $ToolTip = CreateToolTip
+
     # Options Label
     $TextLabel = CreateLabel -X 30 -Y 20 -Width 300 -Height 15 -Font $VCPatchFont -Text "Ocarina of Time REDUX - Additional Options" -AddTo $OoTReduxOptionsDialog
     
@@ -2392,26 +2367,26 @@ function CreateOcarinaOfTimeReduxOptionsDialog() {
     
     # Damage
     $global:DamagePanelOoT             = CreateReduxPanel -Row 0 -Group $HeroModeBoxOoT 
-    $global:1xDamageOoT                = CreateReduxRadioButton -Column 0 -Row 0 -Panel $DamagePanelOoT -Checked $True -Text "1x Damage" -Info "Enemies deal normal damage"
-    $global:2xDamageOoT                = CreateReduxRadioButton -Column 1 -Row 0 -Panel $DamagePanelOoT                -Text "2x Damage" -Info "Enemies deal twice as much damage"
-    $global:4xDamageOoT                = CreateReduxRadioButton -Column 2 -Row 0 -Panel $DamagePanelOoT                -Text "4x Damage" -Info "Enemies deal four times as much damage"
-    $global:8xDamageOoT                = CreateReduxRadioButton -Column 3 -Row 0 -Panel $DamagePanelOoT                -Text "8x Damage" -Info "Enemies deal four times as much damage"
+    $global:1xDamageOoT                = CreateReduxRadioButton -Column 0 -Row 0 -Panel $DamagePanelOoT -Checked $True -Text "1x Damage" -ToolTip $ToolTip -Info "Enemies deal normal damage"
+    $global:2xDamageOoT                = CreateReduxRadioButton -Column 1 -Row 0 -Panel $DamagePanelOoT                -Text "2x Damage" -ToolTip $ToolTip -Info "Enemies deal twice as much damage"
+    $global:4xDamageOoT                = CreateReduxRadioButton -Column 2 -Row 0 -Panel $DamagePanelOoT                -Text "4x Damage" -ToolTip $ToolTip -Info "Enemies deal four times as much damage"
+    $global:8xDamageOoT                = CreateReduxRadioButton -Column 3 -Row 0 -Panel $DamagePanelOoT                -Text "8x Damage" -ToolTip $ToolTip -Info "Enemies deal four times as much damage"
 
     # Recovery
     $global:RecoveryPanelOoT           = CreateReduxPanel -Row 1 -Group $HeroModeBoxOoT 
-    $global:NormalRecoveryOoT          = CreateReduxRadioButton -Column 0 -Row 0 -Panel $RecoveryPanelOoT -Checked $True -Text "1x Recovery"   -Info "Recovery Hearts restore Link's health for their full amount (1 Heart)" 
-    $global:HalfRecoveryOoT            = CreateReduxRadioButton -Column 1 -Row 0 -Panel $RecoveryPanelOoT                -Text "1/2x Recovery" -Info "Recovery Hearts restore Link's health for half their amount (1/2 Heart)"
-    $global:QuarterRecoveryOoT         = CreateReduxRadioButton -Column 2 -Row 0 -Panel $RecoveryPanelOoT                -Text "1/4x Recovery" -Info "Recovery Hearts restore Link's for a quarter of their amount (1/4 Heart)"
-    $global:NoRecoveryOoT              = CreateReduxRadioButton -Column 3 -Row 0 -Panel $RecoveryPanelOoT                -Text "0x Recovery"   -Info "Recovery Hearts will not restore Link's health anymore"
+    $global:NormalRecoveryOoT          = CreateReduxRadioButton -Column 0 -Row 0 -Panel $RecoveryPanelOoT -Checked $True -Text "1x Recovery"   -ToolTip $ToolTip -Info "Recovery Hearts restore Link's health for their full amount (1 Heart)" 
+    $global:HalfRecoveryOoT            = CreateReduxRadioButton -Column 1 -Row 0 -Panel $RecoveryPanelOoT                -Text "1/2x Recovery" -ToolTip $ToolTip -Info "Recovery Hearts restore Link's health for half their amount (1/2 Heart)"
+    $global:QuarterRecoveryOoT         = CreateReduxRadioButton -Column 2 -Row 0 -Panel $RecoveryPanelOoT                -Text "1/4x Recovery" -ToolTip $ToolTip -Info "Recovery Hearts restore Link's for a quarter of their amount (1/4 Heart)"
+    $global:NoRecoveryOoT              = CreateReduxRadioButton -Column 3 -Row 0 -Panel $RecoveryPanelOoT                -Text "0x Recovery"   -ToolTip $ToolTip -Info "Recovery Hearts will not restore Link's health anymore"
 
     # Boss HP
   # $global:BossHPPanelOoT             = CreateReduxPanel -Row 2 -Group $HeroModeBoxOoT 
-  # $global:1xBossHPOoT                = CreateReduxRadioButton -Column 0 -Row 0 -Panel $BossHPPanelOoT -Checked $True -Text "1x Boss HP" -Info "Bosses have normal hit points" 
-  # $global:2xBossHPOoT                = CreateReduxRadioButton -Column 1 -Row 0 -Panel $BossHPPanelOoT                -Text "2x Boss HP" -Info "Bosses have double as much hit points"
-  # $global:3xBossHPOoT                = CreateReduxRadioButton -Column 2 -Row 0 -Panel $BossHPPanelOoT                -Text "3x Boss HP" -Info "Bosses have thrice as much hit points"
+  # $global:1xBossHPOoT                = CreateReduxRadioButton -Column 0 -Row 0 -Panel $BossHPPanelOoT -Checked $True -Text "1x Boss HP" -ToolTip $ToolTip -Info "Bosses have normal hit points" 
+  # $global:2xBossHPOoT                = CreateReduxRadioButton -Column 1 -Row 0 -Panel $BossHPPanelOoT                -Text "2x Boss HP" -ToolTip $ToolTip -Info "Bosses have double as much hit points"
+  # $global:3xBossHPOoT                = CreateReduxRadioButton -Column 2 -Row 0 -Panel $BossHPPanelOoT                -Text "3x Boss HP" -ToolTip $ToolTip -Info "Bosses have thrice as much hit points"
 
     # OHKO MODE
-    $global:OHKOModeOoT                = CreateReduxCheckbox -Column 0 -Row 3 -Group $HeroModeBoxOoT -Text "OHKO Mode" -Info "Enemies kill Link with just a single hit\`nPrepare too die a lot"
+    $global:OHKOModeOoT                = CreateReduxCheckbox -Column 0 -Row 3 -Group $HeroModeBoxOoT -Text "OHKO Mode" -ToolTip $ToolTip -Info "Enemies kill Link with just a single hit\`nPrepare too die a lot"
 
 
 
@@ -2419,21 +2394,21 @@ function CreateOcarinaOfTimeReduxOptionsDialog() {
     $global:TextBoxOoT                 = CreateReduxGroup -Y ($HeroModeBoxOoT.Bottom + 5) -Height 1 -Dialog $OoTReduxOptionsDialog -Text "Text Dialogue Speed"
     
     $global:TextPanelOoT               = CreateReduxPanel -Row 0 -Group $TextBoxOoT 
-    $global:1xTextOoT                  = CreateReduxRadioButton -Column 0 -Row 0 -Panel $TextPanelOoT -Checked $True -Text "1x Speed" -Info "Leave the dialogue text speed at normal"
-    $global:2xTextOoT                  = CreateReduxRadioButton -Column 1 -Row 0 -Panel $TextPanelOoT                -Text "2x Speed" -Info "Set the dialogue text speed to be twice as fast"
-    $global:3xTextOoT                  = CreateReduxRadioButton -Column 2 -Row 0 -Panel $TextPanelOoT                -Text "3x Speed" -Info "Set the dialogue text speed to be three times as fast"
+    $global:1xTextOoT                  = CreateReduxRadioButton -Column 0 -Row 0 -Panel $TextPanelOoT -Checked $True -Text "1x Speed" -ToolTip $ToolTip -Info "Leave the dialogue text speed at normal"
+    $global:2xTextOoT                  = CreateReduxRadioButton -Column 1 -Row 0 -Panel $TextPanelOoT                -Text "2x Speed" -ToolTip $ToolTip -Info "Set the dialogue text speed to be twice as fast"
+    $global:3xTextOoT                  = CreateReduxRadioButton -Column 2 -Row 0 -Panel $TextPanelOoT                -Text "3x Speed" -ToolTip $ToolTip -Info "Set the dialogue text speed to be three times as fast"
 
 
 
     # GRAPHICS #
     $global:GraphicsBoxOoT             = CreateReduxGroup -Y ($TextBoxOoT.Bottom + 5) -Height 2 -Dialog $OoTReduxOptionsDialog -Text "Graphics"
     
-    $global:WidescreenOoT              = CreateReduxCheckbox -Column 0 -Row 1 -Group $GraphicsBoxOoT -Text "16:9 Widescreen"        -Info "Native 16:9 widescreen display support"
-    $global:WidescreenTexturesOoT      = CreateReduxCheckbox -Column 1 -Row 1 -Group $GraphicsBoxOoT -Text "16:9 Textures"          -Info "16:9 backgrounds and textures suitable for native 16:9 widescreen display support"
-    $global:ExtendedDrawOoT            = CreateReduxCheckbox -Column 2 -Row 1 -Group $GraphicsBoxOoT -Text "Extended Draw Distance" -Info "Increases the game's draw distance for objects`nDoes not work on all objects"
-    $global:BlackBarsOoT               = CreateReduxCheckbox -Column 3 -Row 1 -Group $GraphicsBoxOoT -Text "No Black Bars"          -Info "Removes the black bars shown on the top and bottom of the screen during Z-targeting and cutscenes"
-    $global:ForceHiresModelOoT         = CreateReduxCheckbox -Column 0 -Row 2 -Group $GraphicsBoxOoT -Text "Force Hires Link Model" -Info "Always use Link's High Resolution Model when Link is too far away"
-    $global:MMModelsOoT                = CreateReduxCheckbox -Column 1 -Row 2 -Group $GraphicsBoxOoT -Text "Replace Link's Models"  -Info "Replaces Link's models to be styled towards Majora's Mask"
+    $global:WidescreenOoT              = CreateReduxCheckbox -Column 0 -Row 1 -Group $GraphicsBoxOoT -Text "16:9 Widescreen"        -ToolTip $ToolTip -Info "Native 16:9 widescreen display support"
+    $global:WidescreenTexturesOoT      = CreateReduxCheckbox -Column 1 -Row 1 -Group $GraphicsBoxOoT -Text "16:9 Textures"          -ToolTip $ToolTip -Info "16:9 backgrounds and textures suitable for native 16:9 widescreen display support"
+    $global:ExtendedDrawOoT            = CreateReduxCheckbox -Column 2 -Row 1 -Group $GraphicsBoxOoT -Text "Extended Draw Distance" -ToolTip $ToolTip -Info "Increases the game's draw distance for objects`nDoes not work on all objects"
+    $global:BlackBarsOoT               = CreateReduxCheckbox -Column 3 -Row 1 -Group $GraphicsBoxOoT -Text "No Black Bars"          -ToolTip $ToolTip -Info "Removes the black bars shown on the top and bottom of the screen during Z-targeting and cutscenes"
+    $global:ForceHiresModelOoT         = CreateReduxCheckbox -Column 0 -Row 2 -Group $GraphicsBoxOoT -Text "Force Hires Link Model" -ToolTip $ToolTip -Info "Always use Link's High Resolution Model when Link is too far away"
+    $global:MMModelsOoT                = CreateReduxCheckbox -Column 1 -Row 2 -Group $GraphicsBoxOoT -Text "Replace Link's Models"  -ToolTip $ToolTip -Info "Replaces Link's models to be styled towards Majora's Mask"
 
 
 
@@ -2441,30 +2416,30 @@ function CreateOcarinaOfTimeReduxOptionsDialog() {
     $global:EquipmentBoxOoT            = CreateReduxGroup -Y ($GraphicsBoxOoT.Bottom + 5) -Height 2 -Dialog $OoTReduxOptionsDialog -Text "Equipment"
     
     $global:ItemCapacityPanelOoT       = CreateReduxPanel -Row 0 -Group $EquipmentBoxOoT 
-    $global:ReducedItemCapacityOoT     = CreateReduxRadioButton -Column 0 -Row 0 -Panel $ItemCapacityPanelOoT                -Text "Reduced Item Capacity"   -Info "Decrease the amount of deku sticks, deku nuts, deku seeds, bombs and arrows you can carry"
-    $global:NormalItemCapacityOoT      = CreateReduxRadioButton -Column 1 -Row 0 -Panel $ItemCapacityPanelOoT -Checked $True -Text "Normal Item Capacity"    -Info "Keep the normal amount of deku sticks, deku nuts, deku seeds, bombs and arrows you can carry"
-    $global:IncreasedItemCapacityOoT   = CreateReduxRadioButton -Column 2 -Row 0 -Panel $ItemCapacityPanelOoT                -Text "Increased Item Capacity" -Info "Increase the amount of deku sticks, deku nuts, deku seeds, bombs and arrows you can carry"
+    $global:ReducedItemCapacityOoT     = CreateReduxRadioButton -Column 0 -Row 0 -Panel $ItemCapacityPanelOoT                -Text "Reduced Item Capacity"   -ToolTip $ToolTip -Info "Decrease the amount of deku sticks, deku nuts, deku seeds, bombs and arrows you can carry"
+    $global:NormalItemCapacityOoT      = CreateReduxRadioButton -Column 1 -Row 0 -Panel $ItemCapacityPanelOoT -Checked $True -Text "Normal Item Capacity"    -ToolTip $ToolTip -Info "Keep the normal amount of deku sticks, deku nuts, deku seeds, bombs and arrows you can carry"
+    $global:IncreasedItemCapacityOoT   = CreateReduxRadioButton -Column 2 -Row 0 -Panel $ItemCapacityPanelOoT                -Text "Increased Item Capacity" -ToolTip $ToolTip -Info "Increase the amount of deku sticks, deku nuts, deku seeds, bombs and arrows you can carry"
 
-    $global:UnlockSwordOoT             = CreateReduxCheckbox -Column 0 -Row 2 -Group $EquipmentBoxOoT -Text "Unlock Kokiri Sword" -Info "Adult Link is able to use the Kokiri Sword`nThe Kokiri Sword does half as much damage as the Master Sword"
-    $global:UnlockTunicsOoT            = CreateReduxCheckbox -Column 1 -Row 2 -Group $EquipmentBoxOoT -Text "Unlock Tunics"       -Info "Child Link is able to use the Goron TUnic and Zora Tunic`nSince you might want to walk around in style as well when you are young"
-    $global:UnlockBootsOoT             = CreateReduxCheckbox -Column 2 -Row 2 -Group $EquipmentBoxOoT -Text "Unlock Boots"        -Info "Child Link is able to use the Iron Boots and Hover Boots"
+    $global:UnlockSwordOoT             = CreateReduxCheckbox -Column 0 -Row 2 -Group $EquipmentBoxOoT -Text "Unlock Kokiri Sword" -ToolTip $ToolTip -Info "Adult Link is able to use the Kokiri Sword`nThe Kokiri Sword does half as much damage as the Master Sword"
+    $global:UnlockTunicsOoT            = CreateReduxCheckbox -Column 1 -Row 2 -Group $EquipmentBoxOoT -Text "Unlock Tunics"       -ToolTip $ToolTip -Info "Child Link is able to use the Goron TUnic and Zora Tunic`nSince you might want to walk around in style as well when you are young"
+    $global:UnlockBootsOoT             = CreateReduxCheckbox -Column 2 -Row 2 -Group $EquipmentBoxOoT -Text "Unlock Boots"        -ToolTip $ToolTip -Info "Child Link is able to use the Iron Boots and Hover Boots"
 
 
 
     # EVERYTHING ELSE #
     $global:OtherBoxOoT                = CreateReduxGroup -Y ($EquipmentBoxOoT.Bottom + 5) -Height 2 -Dialog $OoTReduxOptionsDialog -Text "Other"
 
-    $global:DisableLowHPSoundOoT       = CreateReduxCheckbox -Column 0 -Row 1 -Group $OtherBoxOoT -Text "Disable Low HP Beep"    -Info "There will be absolute silence when Link's HP is getting low"
-    $global:MedallionsOoT              = CreateReduxCheckbox -Column 1 -Row 1 -Group $OtherBoxOoT -Text "Require All Medallions" -Info "All six medallions are required for the Rainbow Bridge to appear before Ganon's Castle`The vanilla requirements were the Shadow and Spirit Medallions and the Light Arrows"
-    $global:ReturnChildOoT             = CreateReduxCheckbox -Column 2 -Row 1 -Group $OtherBoxOoT -Text "Can Always Return"      -Info "You can always go back to being a child again before clearing the boss of the Forest Temple`nOut of the way Sheik!"
-    $global:DisableNaviOoT             = CreateReduxCheckbox -Column 3 -Row 1 -Group $OtherBoxOoT -Text "Remove Navi Prompts"    -Info "Navi will no longer interupt your during the first dungeon with mandatory textboxes"
-    $global:HideDPadOoT                = CreateReduxCheckbox -Column 0 -Row 2 -Group $OtherBoxOoT -Text "Hide D-Pad Icon"        -Info "Hide the D-Pad icon, while it is still active"
+    $global:DisableLowHPSoundOoT       = CreateReduxCheckbox -Column 0 -Row 1 -Group $OtherBoxOoT -Text "Disable Low HP Beep"    -ToolTip $ToolTip -Info "There will be absolute silence when Link's HP is getting low"
+    $global:MedallionsOoT              = CreateReduxCheckbox -Column 1 -Row 1 -Group $OtherBoxOoT -Text "Require All Medallions" -ToolTip $ToolTip -Info "All six medallions are required for the Rainbow Bridge to appear before Ganon's Castle`The vanilla requirements were the Shadow and Spirit Medallions and the Light Arrows"
+    $global:ReturnChildOoT             = CreateReduxCheckbox -Column 2 -Row 1 -Group $OtherBoxOoT -Text "Can Always Return"      -ToolTip $ToolTip -Info "You can always go back to being a child again before clearing the boss of the Forest Temple`nOut of the way Sheik!"
+    $global:DisableNaviOoT             = CreateReduxCheckbox -Column 3 -Row 1 -Group $OtherBoxOoT -Text "Remove Navi Prompts"    -ToolTip $ToolTip -Info "Navi will no longer interupt your during the first dungeon with mandatory textboxes"
+    $global:HideDPadOoT                = CreateReduxCheckbox -Column 0 -Row 2 -Group $OtherBoxOoT -Text "Hide D-Pad Icon"        -ToolTip $ToolTip -Info "Hide the D-Pad icon, while it is still active"
     
 
 
     # Include Redux (Checkbox)
-    $global:IncludeReduxOoT            = CreateCheckbox -X 30 -Y ($CloseButton.Top + 5) -Checked $True -Info "Include the base REDUX patch`nDisable this option to patch only the vanilla ROM with the above options" -AddTo $OoTReduxOptionsDialog
-    $IncludeReduxLabel                 = CreateLabel -X $IncludeReduxOoT.Right -Y ($IncludeReduxOoT.Top + 3) -Width 135 -Height 15 -Text "Include Redux Patch" -Info "Include the base REDUX patch`nDisable this option to patch only the vanilla ROM with the above options" -AddTo $OoTReduxOptionsDialog
+    $global:IncludeReduxOoT            = CreateCheckbox -X 30 -Y ($CloseButton.Top + 5) -Checked $True -ToolTip $ToolTip -Info "Include the base REDUX patch`nDisable this option to patch only the vanilla ROM with the above options" -AddTo $OoTReduxOptionsDialog
+    $IncludeReduxLabel                 = CreateLabel -X $IncludeReduxOoT.Right -Y ($IncludeReduxOoT.Top + 3) -Width 135 -Height 15 -Text "Include Redux Patch" -ToolTip $ToolTip -Info "Include the base REDUX patch`nDisable this option to patch only the vanilla ROM with the above options" -AddTo $OoTReduxOptionsDialog
 
     $IncludeReduxOoT.Add_CheckStateChanged({
         $OtherBoxOoT.Controls[4 * 2].Enabled = $IncludeReduxOoT.Checked
@@ -2482,6 +2457,9 @@ function CreateMajorasMaskReduxOptionsDialog() {
     $CloseButton = CreateButton -X ($MMReduxOptionsDialog.Width / 2 - 40) -Y ($MMReduxOptionsDialog.Height - 90) -Width 80 -Height 35 -Text "Close" -AddTo $MMReduxOptionsDialog
     $CloseButton.Add_Click({$MMReduxOptionsDialog.Hide()})
 
+    # Create tooltip
+    $ToolTip = CreateToolTip
+
     # Options Label
     $TextLabel = CreateLabel -X 30 -Y 20 -Width 300 -Height 15 -Font $VCPatchFont -Text "Majora's Mask REDUX - Additional Options" -AddTo $MMReduxOptionsDialog
 
@@ -2492,26 +2470,26 @@ function CreateMajorasMaskReduxOptionsDialog() {
     
     # Damage
     $global:DamagePanelMM              = CreateReduxPanel -Row 0 -Group $HeroModeBoxMM 
-    $global:1xDamageMM                 = CreateReduxRadioButton -Column 0 -Row 0 -Panel $DamagePanelMM -Checked $True -Text "1x Damage" -Info "Enemies deal normal damage"
-    $global:2xDamageMM                 = CreateReduxRadioButton -Column 1 -Row 0 -Panel $DamagePanelMM                -Text "2x Damage" -Info "Enemies deal twice as much damage"
-    $global:4xDamageMM                 = CreateReduxRadioButton -Column 2 -Row 0 -Panel $DamagePanelMM                -Text "4x Damage" -Info "Enemies deal four times as much damage"
-    $global:8xDamageMM                 = CreateReduxRadioButton -Column 3 -Row 0 -Panel $DamagePanelMM                -Text "8x Damage" -Info "Enemies deal four times as much damage"
+    $global:1xDamageMM                 = CreateReduxRadioButton -Column 0 -Row 0 -Panel $DamagePanelMM -Checked $True -Text "1x Damage" -ToolTip $ToolTip -Info "Enemies deal normal damage"
+    $global:2xDamageMM                 = CreateReduxRadioButton -Column 1 -Row 0 -Panel $DamagePanelMM                -Text "2x Damage" -ToolTip $ToolTip -Info "Enemies deal twice as much damage"
+    $global:4xDamageMM                 = CreateReduxRadioButton -Column 2 -Row 0 -Panel $DamagePanelMM                -Text "4x Damage" -ToolTip $ToolTip -Info "Enemies deal four times as much damage"
+    $global:8xDamageMM                 = CreateReduxRadioButton -Column 3 -Row 0 -Panel $DamagePanelMM                -Text "8x Damage" -ToolTip $ToolTip -Info "Enemies deal four times as much damage"
 
     # Recovery
     $global:RecoveryPanelMM            = CreateReduxPanel -Row 1 -Group $HeroModeBoxMM 
-    $global:NormalRecoveryMM           = CreateReduxRadioButton -Column 0 -Row 0 -Panel $RecoveryPanelMM -Checked $True -Text "1x Recovery"   -Info "Recovery Hearts restore Link's health for their full amount (1 Heart)" 
-    $global:HalfRecoveryMM             = CreateReduxRadioButton -Column 1 -Row 0 -Panel $RecoveryPanelMM                -Text "1/2x Recovery" -Info "Recovery Hearts restore Link's health for half their amount (1/2 Heart)"
-    $global:QuarterRecoveryMM          = CreateReduxRadioButton -Column 2 -Row 0 -Panel $RecoveryPanelMM                -Text "1/4x Recovery" -Info "Recovery Hearts restore Link's for a quarter of their amount (1/4 Heart)"
-    $global:NoRecoveryMM               = CreateReduxRadioButton -Column 3 -Row 0 -Panel $RecoveryPanelMM                -Text "0x Recovery"   -Info "Recovery Hearts will not restore Link's health anymore"
+    $global:NormalRecoveryMM           = CreateReduxRadioButton -Column 0 -Row 0 -Panel $RecoveryPanelMM -Checked $True -Text "1x Recovery"   -ToolTip $ToolTip -Info "Recovery Hearts restore Link's health for their full amount (1 Heart)" 
+    $global:HalfRecoveryMM             = CreateReduxRadioButton -Column 1 -Row 0 -Panel $RecoveryPanelMM                -Text "1/2x Recovery" -ToolTip $ToolTip -Info "Recovery Hearts restore Link's health for half their amount (1/2 Heart)"
+    $global:QuarterRecoveryMM          = CreateReduxRadioButton -Column 2 -Row 0 -Panel $RecoveryPanelMM                -Text "1/4x Recovery" -ToolTip $ToolTip -Info "Recovery Hearts restore Link's for a quarter of their amount (1/4 Heart)"
+    $global:NoRecoveryMM               = CreateReduxRadioButton -Column 3 -Row 0 -Panel $RecoveryPanelMM                -Text "0x Recovery"   -ToolTip $ToolTip -Info "Recovery Hearts will not restore Link's health anymore"
 
     # Boss HP
   # $global:BossHPPanelMM              = CreateReduxPanel -Row 2 -Group $HeroModeBoxMM 
-  # $global:1xBossHPMM                 = CreateReduxRadioButton -Column 0 -Row 0 -Panel $BossHPPanelMM -Checked $True -Text "1x Boss HP" -Info "Bosses have normal hit points" 
-  # $global:2xBossHPMM                 = CreateReduxRadioButton -Column 1 -Row 0 -Panel $BossHPPanelMM                -Text "2x Boss HP" -Info "Bosses have double as much hit points"
-  # $global:3xBossHPMM                 = CreateReduxRadioButton -Column 2 -Row 0 -Panel $BossHPPanelMM                -Text "3x Boss HP" -Info "Bosses have thrice as much hit points"
+  # $global:1xBossHPMM                 = CreateReduxRadioButton -Column 0 -Row 0 -Panel $BossHPPanelMM -Checked $True -Text "1x Boss HP" -ToolTip $ToolTip -Info "Bosses have normal hit points" 
+  # $global:2xBossHPMM                 = CreateReduxRadioButton -Column 1 -Row 0 -Panel $BossHPPanelMM                -Text "2x Boss HP" -ToolTip $ToolTip -Info "Bosses have double as much hit points"
+  # $global:3xBossHPMM                 = CreateReduxRadioButton -Column 2 -Row 0 -Panel $BossHPPanelMM                -Text "3x Boss HP" -ToolTip $ToolTip -Info "Bosses have thrice as much hit points"
 
     # OHKO MODE
-    $global:OHKOModeMM                 = CreateReduxCheckbox -Column 0 -Row 3 -Group $HeroModeBoxMM -Text "OHKO Mode" -Info "Enemies kill Link with just a single hit\`nPrepare too die a lot"
+    $global:OHKOModeMM                 = CreateReduxCheckbox -Column 0 -Row 3 -Group $HeroModeBoxMM -Text "OHKO Mode" -ToolTip $ToolTip -Info "Enemies kill Link with just a single hit\`nPrepare too die a lot"
 
 
 
@@ -2519,20 +2497,20 @@ function CreateMajorasMaskReduxOptionsDialog() {
     $global:DPadBoxMM                  = CreateReduxGroup -Y ($HeroModeBoxMM.Bottom + 5) -Height 1 -Dialog $MMReduxOptionsDialog -Text "D-Pad Icons Layout"
     
     $global:DPadPanelMM                = CreateReduxPanel -Row 0 -Group $DPadBoxMM 
-    $global:LeftDPadMM                 = CreateReduxRadioButton -Column 0 -Row 0 -Panel $DPadPanelMM                -Text "Left Side" -Info "Show the D-Pad icons on the left side of the HUD"
-    $global:RightDPadMM                = CreateReduxRadioButton -Column 1 -Row 0 -Panel $DPadPanelMM -Checked $True -Text "Right Side" -Info "Show the D-Pad icons on the right side of the HUD"
-    $global:HideDPadMM                 = CreateReduxRadioButton -Column 2 -Row 0 -Panel $DPadPanelMM                -Text "Hidden" -Info "Hide the D-Pad icons, while they are still active"
+    $global:LeftDPadMM                 = CreateReduxRadioButton -Column 0 -Row 0 -Panel $DPadPanelMM                -Text "Left Side" -ToolTip $ToolTip -Info "Show the D-Pad icons on the left side of the HUD"
+    $global:RightDPadMM                = CreateReduxRadioButton -Column 1 -Row 0 -Panel $DPadPanelMM -Checked $True -Text "Right Side" -ToolTip $ToolTip -Info "Show the D-Pad icons on the right side of the HUD"
+    $global:HideDPadMM                 = CreateReduxRadioButton -Column 2 -Row 0 -Panel $DPadPanelMM                -Text "Hidden" -ToolTip $ToolTip -Info "Hide the D-Pad icons, while they are still active"
     
     
    
     # GRAPHICS #
     $global:GraphicsBoxMM              = CreateReduxGroup -Y ($DPadBoxMM.Bottom + 5) -Height 2 -Dialog $MMReduxOptionsDialog -Text "Graphics"
     
-    $global:WidescreenMM               = CreateReduxCheckbox -Column 0 -Row 1 -Group $GraphicsBoxMM -Text "16:9 Widescreen"         -Info "Native 16:9 Widescreen Display support"
-    $global:WidescreenTexturesMM       = CreateReduxCheckbox -Column 1 -Row 1 -Group $GraphicsBoxMM -Text "16:9 Textures"           -Info "16:9 backgrounds and textures suitable for native 16:9 widescreen display support"
-    $global:ExtendedDrawMM             = CreateReduxCheckbox -Column 2 -Row 1 -Group $GraphicsBoxMM -Text "Extended Draw Distance"  -Info "Increases the game's draw distance for objects`nDoes not work on all objects"
-    $global:BlackBarsMM                = CreateReduxCheckbox -Column 3 -Row 1 -Group $GraphicsBoxMM -Text "No Black Bars"           -Info "Removes the black bars shown on the top and bottom of the screen during Z-targeting and cutscenes"
-    $global:PixelatedStarsMM           = CreateReduxCheckbox -Column 0 -Row 2 -Group $GraphicsBoxMM -Text "Disable Pixelated Stars" -Info "Completely disable the stars at night-time, which are pixelated dots and do not have any textures for HD replacement"
+    $global:WidescreenMM               = CreateReduxCheckbox -Column 0 -Row 1 -Group $GraphicsBoxMM -Text "16:9 Widescreen"         -ToolTip $ToolTip -Info "Native 16:9 Widescreen Display support"
+    $global:WidescreenTexturesMM       = CreateReduxCheckbox -Column 1 -Row 1 -Group $GraphicsBoxMM -Text "16:9 Textures"           -ToolTip $ToolTip -Info "16:9 backgrounds and textures suitable for native 16:9 widescreen display support"
+    $global:ExtendedDrawMM             = CreateReduxCheckbox -Column 2 -Row 1 -Group $GraphicsBoxMM -Text "Extended Draw Distance"  -ToolTip $ToolTip -Info "Increases the game's draw distance for objects`nDoes not work on all objects"
+    $global:BlackBarsMM                = CreateReduxCheckbox -Column 3 -Row 1 -Group $GraphicsBoxMM -Text "No Black Bars"           -ToolTip $ToolTip -Info "Removes the black bars shown on the top and bottom of the screen during Z-targeting and cutscenes"
+    $global:PixelatedStarsMM           = CreateReduxCheckbox -Column 0 -Row 2 -Group $GraphicsBoxMM -Text "Disable Pixelated Stars" -ToolTip $ToolTip -Info "Completely disable the stars at night-time, which are pixelated dots and do not have any textures for HD replacement"
 
     
 
@@ -2540,25 +2518,25 @@ function CreateMajorasMaskReduxOptionsDialog() {
     $global:EquipmentBoxMM             = CreateReduxGroup -Y ($GraphicsBoxMM.Bottom + 5) -Height 2 -Dialog $MMReduxOptionsDialog -Text "Equipment"
     
     $global:ItemCapacityPanelMM        = CreateReduxPanel -Row 0 -Group $EquipmentBoxMM 
-    $global:ReducedItemCapacityMM      = CreateReduxRadioButton -Column 0 -Row 0 -Panel $ItemCapacityPanelMM                -Text "Reduced Item Capacity"   -Info "Decrease the amount of deku sticks, deku nuts, bombs and arrows you can carry"
-    $global:NormalItemCapacityMM       = CreateReduxRadioButton -Column 1 -Row 0 -Panel $ItemCapacityPanelMM -Checked $True -Text "Normal Item Capacity"    -Info "Keep the normal amount of deku sticks, deku nuts, bombs and arrows you can carry"
-    $global:IncreasedItemCapacityMM    = CreateReduxRadioButton -Column 2 -Row 0 -Panel $ItemCapacityPanelMM                -Text "Increased Item Capacity" -Info "Increase the amount of deku sticks, deku nuts, bombs and arrows you can carry"
+    $global:ReducedItemCapacityMM      = CreateReduxRadioButton -Column 0 -Row 0 -Panel $ItemCapacityPanelMM                -Text "Reduced Item Capacity"   -ToolTip $ToolTip -Info "Decrease the amount of deku sticks, deku nuts, bombs and arrows you can carry"
+    $global:NormalItemCapacityMM       = CreateReduxRadioButton -Column 1 -Row 0 -Panel $ItemCapacityPanelMM -Checked $True -Text "Normal Item Capacity"    -ToolTip $ToolTip -Info "Keep the normal amount of deku sticks, deku nuts, bombs and arrows you can carry"
+    $global:IncreasedItemCapacityMM    = CreateReduxRadioButton -Column 2 -Row 0 -Panel $ItemCapacityPanelMM                -Text "Increased Item Capacity" -ToolTip $ToolTip -Info "Increase the amount of deku sticks, deku nuts, bombs and arrows you can carry"
 
-    $global:RazorSwordMM               = CreateReduxCheckbox -Column 0 -Row 2 -Group $EquipmentBoxMM -Text "Permanent Razor Sword" -Info "The Razor Sword won't get destroyed after 100 it`nYou can also keep the Razor Sword when traveling back in time"
+    $global:RazorSwordMM               = CreateReduxCheckbox -Column 0 -Row 2 -Group $EquipmentBoxMM -Text "Permanent Razor Sword" -ToolTip $ToolTip -Info "The Razor Sword won't get destroyed after 100 it`nYou can also keep the Razor Sword when traveling back in time"
 
 
 
     # EVERYTHING ELSE #
     $global:OtherBoxMM                 = CreateReduxGroup -Y ($EquipmentBoxMM.Bottom + 5) -Height 1 -Dialog $MMReduxOptionsDialog -Text "Other"
 
-    $global:DisableLowHPSoundMM        = CreateReduxCheckbox -Column 0 -Row 1 -Group $OtherBoxMM -Text "Disable Low HP Beep"      -Info "There will be absolute silence when Link's HP is getting low"
-    $global:PieceOfHeartSoundMM        = CreateReduxCheckbox -Column 1 -Row 1 -Group $OtherBoxMM -Text "4th Piece of Heart Sound" -Info "Restore the sound effect when collecting the fourth Piece of Heart that grants Link a new Heart Container"
+    $global:DisableLowHPSoundMM        = CreateReduxCheckbox -Column 0 -Row 1 -Group $OtherBoxMM -Text "Disable Low HP Beep"      -ToolTip $ToolTip -Info "There will be absolute silence when Link's HP is getting low"
+    $global:PieceOfHeartSoundMM        = CreateReduxCheckbox -Column 1 -Row 1 -Group $OtherBoxMM -Text "4th Piece of Heart Sound" -ToolTip $ToolTip -Info "Restore the sound effect when collecting the fourth Piece of Heart that grants Link a new Heart Container"
 
 
 
     # Include Redux (Checkbox)
-    $global:IncludeReduxMM             = CreateCheckbox -X 30 -Y ($CloseButton.Top + 5) -Checked $True -Info "Include the base REDUX patch`nDisable this option to patch only the vanilla ROM with the above options" -AddTo $MMReduxOptionsDialog
-    $IncludeReduxLabel                 = CreateLabel -X $IncludeReduxMM.Right -Y ($IncludeReduxMM.Top + 3) -Width 135 -Height 15 -Text "Include Redux Patch" -Info "Include the base REDUX patch`nDisable this option to patch only the vanilla ROM with the above options" -AddTo $MMReduxOptionsDialog
+    $global:IncludeReduxMM             = CreateCheckbox -X 30 -Y ($CloseButton.Top + 5) -Checked $True -ToolTip $ToolTip -Info "Include the base REDUX patch`nDisable this option to patch only the vanilla ROM with the above options" -AddTo $MMReduxOptionsDialog
+    $IncludeReduxLabel                 = CreateLabel -X $IncludeReduxMM.Right -Y ($IncludeReduxMM.Top + 3) -Width 135 -Height 15 -Text "Include Redux Patch" -ToolTip $ToolTip -Info "Include the base REDUX patch`nDisable this option to patch only the vanilla ROM with the above options" -AddTo $MMReduxOptionsDialog
 
     $IncludeReduxMM.Add_CheckStateChanged({
         $DPadPanelMM.Controls[0 * 2].Enabled = $IncludeReduxMM.Checked
@@ -2581,8 +2559,12 @@ function CreateInfoGameIDDialog() {
     # Create the version number and script name label.
     $InfoLabel = CreateLabel -X ($InfoGameIDDialog.Width / 2 - $String.Width - 100) -Y 10 -Width 200 -Height 15 -Font $VCPatchFont -Text ($ScriptName + " " + $Version + " (" + $VersionDate + ")") -AddTo $InfoGameIDDialog
 
+    $HashSumROMLabel = CreateLabel -X 40 -Y 55 -Width 120 -Height 15 -Font $VCPatchFont -Text "N64 ROM Hashsum:" -AddTo $InfoGameIDDialog
+    $global:HashSumROMTextBox = CreateTextBox -X $HashSumROMLabel.Right -Y ($HashSumROMLabel.Top - 3) -Width ($InfoGameIDDialog.Width -$HashSumROMLabel.Width - 100) -Height 50 -AddTo $InfoGameIDDialog
+    $HashSumROMTextBox.ReadOnly = $True
+
     # Create textbox
-    $TextBox = CreateTextBox -X 40 -Y 50 -Width ($InfoGameIDDialog.Width - 100) -Height ($CloseButton.Top - 60) -ReadOnly $True -AddTo $InfoGameIDDialog
+    $TextBox = CreateTextBox -X 40 -Y ($HashSumROMTextBox.Bottom + 10) -Width ($InfoGameIDDialog.Width - 100) -Height ($CloseButton.Top - 100) -ReadOnly $True -AddTo $InfoGameIDDialog
     AddTextFileToTexTbox -TextBox $Textbox -File $Files.text_gameID
 
 }
@@ -2629,6 +2611,11 @@ function CreateInfoDialog() {
 #==============================================================================================================================================================================================
 function AddTextFileToTexTbox($TextBox, $File) {
     
+    if ($File -eq $null) {
+        $TextBox.Text = ""
+        return
+    }
+
     if (Test-Path -LiteralPath $File -PathType Leaf) {
         $str = ""
         for ($i=0; $i -lt (Get-Content -Path $File).Count; $i++) {
@@ -2771,11 +2758,11 @@ function CreateComboBox([int]$X, [int]$Y, [int]$Width, [int]$Height, [string]$Na
 
 
 #==============================================================================================================================================================================================
-function CreateCheckbox([int]$X, [int]$Y, [string]$Name, [boolean]$Checked, [boolean]$IsRadio, [string]$Info, [Object]$AddTo) {
+function CreateCheckbox([int]$X, [int]$Y, [string]$Name, [boolean]$Checked, [boolean]$IsRadio, [Object]$Tooltip, [string]$Info, [Object]$AddTo) {
     
-    if ($IsRadio)          { $Checkbox = CreateForm -X $X -Y $Y -Width 20 -Height 20 -Name $Name -Object (New-Object System.Windows.Forms.RadioButton) -AddTo $AddTo }
-    else                   { $Checkbox = CreateForm -X $X -Y $Y -Width 20 -Height 20 -Name $Name -Object (New-Object System.Windows.Forms.CheckBox) -AddTo $AddTo }
-    if ($Info -ne $null)   { $ToolTip.SetToolTip($Checkbox, $Info) }
+    if ($IsRadio)             { $Checkbox = CreateForm -X $X -Y $Y -Width 20 -Height 20 -Name $Name -Object (New-Object System.Windows.Forms.RadioButton) -AddTo $AddTo }
+    else                      { $Checkbox = CreateForm -X $X -Y $Y -Width 20 -Height 20 -Name $Name -Object (New-Object System.Windows.Forms.CheckBox) -AddTo $AddTo }
+    if ($Tooltip -ne $null)   { $ToolTip.SetToolTip($Checkbox, $Info) }
     $Checkbox.Checked = $Checked
     return $Checkbox
 
@@ -2784,12 +2771,12 @@ function CreateCheckbox([int]$X, [int]$Y, [string]$Name, [boolean]$Checked, [boo
 
 
 #==============================================================================================================================================================================================
-function CreateLabel([int]$X, [int]$Y, [string]$Name, [int]$Width, [int]$Height, [string]$Text, [Object]$Font, [string]$Info, [Object]$AddTo) {
+function CreateLabel([int]$X, [int]$Y, [string]$Name, [int]$Width, [int]$Height, [string]$Text, [Object]$Font, [Object]$Tooltip, [string]$Info, [Object]$AddTo) {
     
     $Label = CreateForm -X $X -Y $Y -Width $Width -Height $Height -Name $Name -Object (New-Object System.Windows.Forms.Label) -AddTo $AddTo
-    if ($Text -ne $null)   { $Label.Text = $Text }
-    if ($Font -ne $null)   { $Label.Font = $Font }
-    if ($Info -ne $null)   { $ToolTip.SetToolTip($Label, $Info) }
+    if ($Text -ne $null)      { $Label.Text = $Text }
+    if ($Font -ne $null)      { $Label.Font = $Font }
+    if ($ToolTip -ne $null)   { $ToolTip.SetToolTip($Label, $Info) }
     return $Label
 
 }
@@ -2797,12 +2784,13 @@ function CreateLabel([int]$X, [int]$Y, [string]$Name, [int]$Width, [int]$Height,
 
 
 #==============================================================================================================================================================================================
-function CreateButton([int]$X, [int]$Y, [string]$Name, [int]$Width, [int]$Height, [string]$Text, [string]$Info, [Object]$AddTo) {
+function CreateButton([int]$X, [int]$Y, [string]$Name, [int]$Width, [int]$Height, [string]$Text, [Object]$Tooltip, [string]$Info, [Object]$AddTo) {
     
     $Button = CreateForm -X $X -Y $Y -Width $Width -Height $Height -Name $Name -Object (New-Object System.Windows.Forms.Button) -AddTo $AddTo
-    if ($Text -ne $null)   { $Button.Text = $Text }
-    if ($Font -ne $null)   { $Button.Font = $Font }
-    if ($Info -ne $null)   { $ToolTip.SetToolTip($Button, $Info) }
+    if ($Text -ne $null)      { $Button.Text = $Text }
+    if ($Font -ne $null)      { $Button.Font = $Font }
+    if ($ToolTip -ne $null)   { $ToolTip.SetToolTip($Button, $Info) }
+
     return $Button
 
 }
@@ -2816,10 +2804,10 @@ function CreateReduxPanel([int]$Row, [Object]$Group)                            
 
 
 #==============================================================================================================================================================================================
-function CreateReduxRadioButton([int]$Column, [int]$Row, [Object]$Panel, [boolean]$Checked, [string]$Text, [string]$Info) {
+function CreateReduxRadioButton([int]$Column, [int]$Row, [Object]$Panel, [boolean]$Checked, [string]$Text, [Object]$Tooltip, [string]$Info) {
     
-    $Button = CreateCheckbox -X ($Column * 155) -Y ($Row * 30) -Checked $Checked -IsRadio $True -Info $Info -AddTo $Panel
-    CreateLabel -X $Button.Right -Y ($Button.Top + 3) -Width 135 -Height 15 -Text $Text -Info $Info -AddTo $Panel
+    $Button = CreateCheckbox -X ($Column * 155) -Y ($Row * 30) -Checked $Checked -IsRadio $True -ToolTip $ToolTip -Info $Info -AddTo $Panel
+    CreateLabel -X $Button.Right -Y ($Button.Top + 3) -Width 135 -Height 15 -Text $Text -ToolTip $ToolTip -Info $Info -AddTo $Panel
     return $Button
 
 }
@@ -2827,10 +2815,10 @@ function CreateReduxRadioButton([int]$Column, [int]$Row, [Object]$Panel, [boolea
 
 
 #==============================================================================================================================================================================================
-function CreateReduxCheckbox([int]$Column, [int]$Row, [Object]$Group, [boolean]$Checked, [string]$Text, [string]$Info) {
+function CreateReduxCheckbox([int]$Column, [int]$Row, [Object]$Group, [boolean]$Checked, [string]$Text, [Object]$Tooltip, [string]$Info) {
     
-    $Checkbox = CreateCheckbox -X ($Column * 155 + 15) -Y ($Row * 30 - 10) -Checked $False -IsRadio $False -Info $Info -AddTo $Group
-    CreateLabel -X $CheckBox.Right -Y ($CheckBox.Top + 3) -Width 135 -Height 15 -Text $Text -Info $Info -AddTo $Group
+    $Checkbox = CreateCheckbox -X ($Column * 155 + 15) -Y ($Row * 30 - 10) -Checked $False -IsRadio $False -ToolTip $ToolTip -Info $Info -AddTo $Group
+    CreateLabel -X $CheckBox.Right -Y ($CheckBox.Top + 3) -Width 135 -Height 15 -Text $Text -ToolTip $ToolTip -Info $Info -AddTo $Group
     return $CheckBox
 
 }
@@ -2855,8 +2843,6 @@ if ($MissingFiles) {
     Exit
 }
 
-$global:ToolTip = CreateToolTip
-
 # Create the dialogs to show to the user.
 CreateMainDialog
 CreateOcarinaOfTimeReduxOptionsDialog
@@ -2866,14 +2852,7 @@ CreateInfoDialog
 CreateCreditsDialog
 
 # Set default game mode.
-if ($CurrentGameComboBox.Items.Length -gt 0)   {
-    $CurrentGameComboBox.SelectedIndex = 0
-    ChangeGameMode -Mode $GamesJSONFile.game[0].mode
-}
-else {
-    $CurrentGameComboBox.SelectedIndex = -1
-    ChangeGameMode -Mode $null
-}
+ChangeGamesList
 
 # Disable patching buttons.
 EnablePatchButtons -Enable $False

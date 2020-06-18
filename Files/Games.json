@@ -1,17 +1,57 @@
 { "game" : [ {
 	"title" : "The Legend of Zelda: Ocarina of Time",
-	"mode" : "Ocarina of Time"
+	"mode" : "Ocarina of Time",
+	"console" : "All",
+	"redux" : 1,
+	"n64_gameID" : "CZLE",
+	"n64_title" : "THE LEGEND OF ZELDA",
+	"wii_gameID" : "NACE",
+	"wii_title" : "Zelda: Ocarina"
 }, {
 	"title" : "The Legend of Zelda: Majora's Mask",
-	"mode" : "Majora's Mask"
+	"mode" : "Majora's Mask",
+	"console" : "All",
+	"redux" : 1,
+	"n64_gameID" : "NZSE",
+	"n64_title" : "MAJORA'S MASK",
+	"wii_gameID" : "NARE",
+	"wii_title" : "Zelda: Majora's"
 }, {
 	"title" : "Super Mario 64",
-	"mode" : "Super Mario 64"
+	"mode" : "Super Mario 64",
+	"console" : "All",
+	"redux" : 0,
+	"n64_gameID" : "NSME",
+	"n64_title" : "SUPER MARIO 64",
+	"wii_gameID" : "NAAE",
+	"wii_title" : "Super Mario 64"
 }, {
 	"title" : "Paper Mario",
-	"mode" : "Paper Mario"
+	"mode" : "Paper Mario",
+	"console" : "All",
+	"redux" : 0,
+	"n64_gameID" : "NMQE",
+	"n64_title" : "PAPER MARIO",
+	"wii_gameID" : "NAEE",
+	"wii_title" : "Paper Mario"
+}, {
+}, {
+	"title" : "Super Smash Bros.",
+	"mode" : "Super Smash Bros",
+	"console" : "N64",
+	"redux" : 0,
+	"n64_gameID" : "NALE",
+	"n64_title" : "SMASH BROTHERS",
+	"wii_gameID" : "NALE",
+	"wii_title" : "Super Smash Bros."
 }, {
 	"title" : "Free (Nintendo 64)",
-	"mode" : "Free"
+	"mode" : "Free",
+	"console" : "All",
+	"redux" : 0,
+	"n64_gameID" : "CUST",
+	"n64_title" : "CUSTOM TITLE",
+	"wii_gameID" : "CUST",
+	"wii_title" : "Custom Channel"
 }
 ] }
