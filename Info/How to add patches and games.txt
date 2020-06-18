@@ -3,22 +3,48 @@
 -------------
 
 Open the Games.json file in the Files directory.
-Each game consists of 2 lines, in JSON format. The main object is "game".
+Each game consists of 8 lines, in JSON format. The main object is "game".
 When adding a new entry, make sure to add a new folder in Files with the same name as the "mode" attribute.
 Patches can be added in the newly created game folder in Files.
+
+Add a new icon with the same name as the mode with the ".ico" extension and put it in "/Files/Icons".
+Ex. "Ocarina of Time.ico"
+
+Add a new text file with same name as the mod with the ".txt" extension and put it in "/Files/Text".
+Ex. "Ocarina of Time.txt"
 
 
 
 --- Lines ---
-title		Game title as shown in the Patcher64+ GUI
+title		Game title as shown in the Patcher64+ GUI.
 
-mode		Game mode as shown in the Active Mode label, also used to read code with
+mode		Game mode as shown in the Active Mode label, also used to read code with.
+
+console		In which console mode the game is accessible. Accepted values are: "N64", "Wii VC" or "All".
+
+redux		If Redux options are shown in the patch panel. Currently only OoT and MM support Redux.
+		0			Hide Redux options
+		1			Show Redux options
+
+n64_gameID	Default GameID used in Nintendo 64 mode. Requires 4 characters.
+
+n64_title	Default Game Title used in Nintendo 64 mode. No more than 20 characters.
+
+wii_gameID	Default GameID used in Wii VC mode. Requires 4 characters.
+
+wii_title	Default Channel Title used in Wii VC mode. No more than 40 characters.
 
 
 
 --- Example Game ---
 "title" : "The Legend of Zelda: Ocarina of Time",
-"mode" : "Ocarina of Time"
+"mode" : "Ocarina of Time",
+"console" : "All",
+"redux" : 1,
+"n64_gameID" : "CZLE",
+"n64_title" : "THE LEGEND OF ZELDA",
+"wii_gameID" : "NACE",
+"wii_title" : "Zelda: Ocarina"
 
 
 
@@ -34,7 +60,7 @@ Each patch consists of 12 lines, in JSON format. The main object is "patch".
 --- Lines ---
 title		Patch title as shown in the Patcher64+ GUI
 
-console		In which console mode the patch is accesible. Accepted values are: N64, Wii VC or All
+console		In which console mode the patch is accessible. Accepted values are: "N64", "Wii VC" or "All"
 
 command		Special command for patches.
 		""			Empty, no command given
@@ -61,7 +87,8 @@ bps		Patch file. Start with \\. Patch is located in current same folder.
 
 output		Output file name extension.
 
-hash		Hashsum check on N64 rom. Dawn & Dusk is a special command that allows all three N64 US OoT revisions.
+hash		Hashsum check on N64 rom. Hashes are in MD5.
+		"Dawn & Dusk" is a special hash command that allows all three N64 US OoT revisions.
 
 tooltip		Patch button description.
 
