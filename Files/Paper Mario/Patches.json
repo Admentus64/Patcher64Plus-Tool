@@ -1,8 +1,6 @@
 { "patch" : [ {
 	"title" : "Hard console",
 	"console" : "All",
-	"command" : "",
-	"redux" : -1,
 	"n64_gameID" : "NMQE",
 	"n64_title" : "PAPER MARIO",
 	"wii_gameID" : "NAE0",
@@ -14,8 +12,6 @@
 }, {
 	"title" : "Hard console+",
 	"console" : "All",
-	"command" : "",
-	"redux" : -1,
 	"n64_gameID" : "NMQE",
 	"n64_title" : "PAPER MARIO",
 	"wii_gameID" : "NAE1",
@@ -27,8 +23,6 @@
 }, {
 	"title" : "Insane console",
 	"console" : "All",
-	"command" : "",
-	"redux" : -1,
 	"n64_gameID" : "NMQE",
 	"n64_title" : "PAPER MARIO",
 	"wii_gameID" : "NAE2",

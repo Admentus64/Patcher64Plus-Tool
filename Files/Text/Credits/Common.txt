@@ -1,0 +1,4 @@
+--- Patcher64+ Tool ---
+- Admentus (Testing and Coding of Patcher64+ Tool)
+- Bighead (Initial PowerShell patcher)
+- GhostlyDark (Testing and Assistance)

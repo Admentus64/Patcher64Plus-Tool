@@ -1,8 +1,6 @@
 { "patch" : [ {
 	"title" : "Smash Remix v0.9.3",
 	"console" : "N64",
-	"command" : "",
-	"redux" : -1,
 	"n64_gameID" : "NALE",
 	"n64_title" : "SMASH BROTHERS",
 	"wii_gameID" : "NALE",

@@ -1,0 +1,20 @@
+--- Majora's Mask REDUX ---
+- Maroc
+- Saneki
+
+--- 16:9 backgrounds and textures ---
+GhostlyDark (Patches)
+- Admentus (Scripting and Assistance)
+
+--- Majora's Mask: Masked Quest ---
+- Garo-Mastah
+- Aroenai
+- CloudMax
+- fkualol
+- VictorHale
+- Ideka
+- Saneki
+
+--- Translations Majora's Mask ---
+- Polish: RPG (v1.1)
+- Russian: Zelda64rus (v2.0 Beta)

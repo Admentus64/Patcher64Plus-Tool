@@ -19,19 +19,13 @@ Add-Type -AssemblyName 'System.Drawing'
 #==============================================================================================================================================================================================
 # Setup global variables
 
-$global:VersionDate = "18-06-2020"
-$global:Version     = "v4.5.1"
+$global:VersionDate = "19-06-2020"
+$global:Version     = "v5.0"
 
-$global:GameID = ""
-$global:ChannelTitle = ""
 $global:GameType = ""
 $global:GamePatch = ""
-$global:GetCommand = ""
-$global:IsRedux = $False
-$global:IsCompress = $False
 $global:IsWiiVC = $False
 $global:IsDowngrade = $False
-$global:PatchedFileName = ""
 $global:CheckHashSum = ""
 $global:MissingFiles = $False
 $global:GameTitleLength = 0
@@ -119,7 +113,7 @@ function ShowPowerShellConsole([bool]$ShowConsole) {
 
 
 #==============================================================================================================================================================================================
-function ExtendString([string]$InputString, [int]$Length) {
+function ExtendString([String]$InputString, [int]$Length) {
 
     # Count the number of characters in the input string.
     $Count = ($InputString | Measure-Object -Character).Characters
@@ -144,43 +138,55 @@ function ExtendString([string]$InputString, [int]$Length) {
 
 
 #==============================================================================================================================================================================================
-function MainFunction([String]$Command, [boolean]$Redux, [string]$Id, [string]$Title, [string]$Patch, [string]$PatchedFile, [string]$Hash) {
-    
-    $global:GetCommand = $Command
-    $global:IsRedux = $Redux
+function MainFunction([String]$Command, [String]$Patch, [String]$PatchedFileName, [String]$Hash) {
+
     $global:PatchFile = $Patch
-    $global:PatchedFileName = $PatchedFile
     $global:CheckHashSum = $Hash
 
-    if (!(CheckCheckBox -CheckBox $InputCustomGameIDCheckbox))               { ResetGameID }
-    if ($Id.length -gt 0)                                                    { $global:GameID = $Id }
-    if ($Title.length -gt 0)                                                 { $global:ChannelTitle = $Title }
-    SetCustomGameID
-
-    if ($IsWiiVC) {
-        if ($PatchVCDowngrade.Checked -and $PatchVCDowngrade.Visible)        { $global:IsDowngrade = $True }
-        if ($GetCommand -eq "Downgrade" -and $PatchVCDowngrade.Visible)      { $global:IsDowngrade = $PatchVCDowngrade.Checked = $True }
-        if ($GetCommand -eq "No Downgrade" -and $PatchVCDowngrade.Visible)   { $global:IsDowngrade = $PatchVCDowngrade.Checked = $False }
+    # GameID / Title
+    if ($InputCustomGameIDCheckbox.Checked) {
+        if ($InputCustomTitleTextBox.TextLength -gt 0)    { $Title = $InputCustomTitleTextBox.Text }
+        if ($InputCustomGameIDTextbox.TextLength -eq 4)   { $GameID = $InputCustomGameIDTextBox.Text }
     }
-    else                                                                     { $global:IsDowngrade = $False }
-    if ($Z64FilePath.length -gt 0)                                           { $global:Z64File = SetZ64Parameters -Z64Path $global:GameZ64 }
-    
-    $PatchVCRemapDPad.Checked = ($GetCommand -eq "Remap D-Pad")
+    elseif ($IsWiiVC) {
+        $Title = $GamePatch.wii_title
+        $GameID = $GamePatch.wii_gameID
+    }
+    else {
+        $Title = $GamePatch.n64_title
+        $GameID = $GamePatch.n64_gameID
+    }
 
-    if ($IsRedux) {
-        $PatchVCRemapDPad.Checked = $true
-        if ($GameType -eq "Ocarina of Time") {
+    # Redux
+    $Redux = $False
+    if ($GamePatch.redux -and $PatchEnableReduxCheckbox.Checked)                        { $Redux = $True }
+    elseif ($GamePatch.additional -and $PatchEnableAdditionalOptionsCheckbox.Checked)   { $Redux = $True }
+
+    # Downgrade
+    $Downgrade = $False
+    if ($IsWiiVC) {
+        if ($PatchVCDowngrade.Checked -and $PatchVCDowngrade.Visible)     { $Downgrade = $True }
+        if ($Command -eq "Downgrade" -and $PatchVCDowngrade.Visible)      { $Downgrade = $PatchVCDowngrade.Checked = $True }
+        if ($Command -eq "No Downgrade" -and $PatchVCDowngrade.Visible)   { $Downgrade = $PatchVCDowngrade.Checked = $False }
+    }
+    if ($Z64FilePath.length -gt 0)                                        { $global:Z64File = SetZ64Parameters -Z64Path $global:GameZ64 -PatchedFileName $PatchedFileName }
+    
+    if ($GameType.patch_vc -ge 2) { $PatchVCRemapDPad.Checked = ($Command -eq "Remap D-Pad") }
+
+    if ($Redux) {
+        $PatchVCRemapDPad.Checked = $True
+        if ($GameType.patch_vc -eq 3) {
             $PatchVCExpandMemory.Checked = $true
-            if ($IsWiiVC -and !$PatchVCRemapCDown.Checked -and !$PatchVCRemapZ.Checked)   { $PatchVCLeaveDPadUp.Checked = $true }
-            if ($IsWiiVC)                                                                 { $global:IsDowngrade = $PatchVCDowngrade.Checked = $True }
+            if ($IsWiiVC -and !$PatchVCRemapCDown.Checked -and !$PatchVCRemapZ.Checked)   { $PatchVCLeaveDPadUp.Checked = $True }
+            if ($IsWiiVC)                                                                 { $Downgrade = $PatchVCDowngrade.Checked = $True }
         }
     }
 
-    if ($PatchFile -like "*\Decompressed\*")   { $global:IsCompress = $True }
-    elseif ($IsRedux)                          { $global:IsCompress = $True }
-    else                                       { $global:IsCompress = $False }
+    $Compress = $False
+    if ($PatchFile -like "*\Decompressed\*")   { $Compress = $True }
+    elseif ($Redux)                            { $Compress = $True }
 
-    MainFunctionPatch
+    MainFunctionPatch -Command $Command -Title $Title -GameID $GameID -Redux $Redux -PatchedFileName $PatchedFileName -Compress $Compress -Downgrade $Downgrade
     Cleanup
 
 }
@@ -188,9 +194,9 @@ function MainFunction([String]$Command, [boolean]$Redux, [string]$Id, [string]$T
 
 
 #==============================================================================================================================================================================================
-function MainFunctionPatch() {
+function MainFunctionPatch([String]$Command, [String]$Title, [String]$GameID, [Boolean]$Redux, [String]$PatchedFileName, [Boolean]$Compress, [Boolean]$Downgrade) {
     
-    #if (!(WriteDebug)) { return }
+    #if (!(WriteDebug -Command $Command -Title $Title -GameID $GameID -Redux $Redux -PatchedFileName $PatchedFileName -Hash $Hash -Compress $Compress -Downgrade $Downgrade)) { return }
 
     # Step 01: Disable the main dialog, allow patching and delete files if they still exist.
     EnableGUI -Enable $False
@@ -199,39 +205,39 @@ function MainFunctionPatch() {
     if ($IsWiiVC) {
         
         # Step 02: Extract the contents of the WAD file.
-        ExtractWADFile
+        ExtractWADFile -PatchedFileName $PatchedFileName
 
         # Step 03: Check the GameID to be vanilla.
-        if (!(CheckGameID)) { return }
+        if (!(CheckGameID -Command $Command)) { return }
 
         # Step 04: Replace the Virtual Console emulator within the WAD file.
-        PatchVCEmulator
+        PatchVCEmulator -Command $Command
 
         # Step 05: Extract "00000005.app" file to get the ROM.
         ExtractU8AppFile
 
         # Step 06: Do some initial patching stuff for the ROM for VC WAD files.
-        if (!(PatchVCROM)) { return }
+        if (!(PatchVCROM -Command $Command)) { return }
 
     }
 
     # Step 07: Downgrade the ROM if required
-    if (!(DowngradeROM)) { return }
+    if (!(DowngradeROM -Command $Command, -Downgrade $Downgrade)) { return }
 
     # Step 08: Compare HashSums for untouched ROM Files
-    if (!(CompareHashSums)) { return }
+    if (!(CompareHashSums -Command $Command -Redux $Redux)) { return }
 
     # Step 09: Decompress the ROM if required.
-    DecompressROM
+    DecompressROM -Command $Command -Compress $Compress
 
     # Step 11: Apply additional patches on top of the Redux patches.
     PatchRedux
 
     # Step 10: Patch and extend the ROM file with the patch through Floating IPS.
-    if (!(PatchROM)) { return }
+    if (!(PatchROM -Command $Command -Compress $Compress -Downgrade $Downgrade)) { return }
 
     # Step 12: Compress the decompressed ROM if required.
-    CompressROM
+    CompressROM -Command $Command -Compress $Compress
 
     # Only continue with these steps in VC WAD mode. Otherwise ignore these steps.
     if ($IsWiiVC) {
@@ -239,42 +245,43 @@ function MainFunctionPatch() {
         ExtendROM
 
         # Step 14: Compress the ROMC again if possible.
-        CompressROMC
+        CompressROMC 
 
         # Step 15: Hack the Channel Title.
-        HackOpeningBNRTitle
+        HackOpeningBNRTitle -Title $Title
 
         # Step 16: Repack the "00000005.app" with the updated ROM file.
         RepackU8AppFile
 
         # Step 17: Repack the WAD file with the updated APP file.
-        RepackWADFile
+        RepackWADFile -GameID $GameID
     }
     else {
         # Step 13: Hack the Game Title and GameID of a N64 ROM
-        HackN64GameTitle
+        HackN64GameTitle -Title $Title -GameID $GameID
     }
 
     # Step 18: Final message.
-    if ($IsWiiVC)   { UpdateStatusLabel -Text ('Finished patching the ' + $GameType + ' VC WAD file.') }
-    else            { UpdateStatusLabel -Text ('Finished patching the ' + $GameType + ' ROM file.') }
+    if ($IsWiiVC)   { UpdateStatusLabel -Text ('Finished patching the ' + $GameType.mode + ' VC WAD file.') }
+    else            { UpdateStatusLabel -Text ('Finished patching the ' + $GameType.mode + ' ROM file.') }
 
 }
 
 
 
 #==============================================================================================================================================================================================
-function WriteDebug() {
+function WriteDebug([String]$Command, [String]$Title, [String] $GameID, [Boolean]$Redux, [String]$PatchedFileName, [Boolean]$Compress, [Boolean]$Downgrade) {
 
     Write-Host ""
     Write-Host "--- Patch Info ---"
-    Write-Host "GameID:" $global:GameID
-    Write-Host "Channel Title:" $ChannelTitle
+    Write-Host "Title:" $Title
+    Write-Host "GameID:" $GameID
     Write-Host "Patch File:" $PatchFile
-    Write-Host "Command:" $global:GetCommand
-    Write-Host "Redux:" $IsRedux
-    Write-Host "Downgrade:" $IsDowngrade
-    Write-Host "Compress:" $IsCompress
+    Write-Host "Patched File Name:" $PatchedFileName
+    Write-Host "Command:" $Command
+    Write-Host "Redux:" $Redux
+    Write-Host "Downgrade:" $Downgrade
+    Write-Host "Compress:" $Compress
     Write-Host "Wii VC:" $IsWiiVC
     Write-Host "ROM File:" $ROMFile
     Write-Host "WAD File Path:" $WADFilePath
@@ -324,9 +331,8 @@ function Cleanup() {
 
 
 #==============================================================================================================================================================================================
-function EnableGUI([boolean]$Enable) {
+function EnableGUI([Boolean]$Enable) {
     
-    #$InputWADPanel.Enabled = $InputROMPanel.Enabled = $InputBPSPanel.Enabled = $CurrentGamePanel.Enabled = $CustomGameIDPanel.Enabled = $Enable
     $InputWADPanel.Enabled = $Enable
     $PatchPanel.Enabled = $Enable
     $MiscPanel.Enabled = $PatchVCPanel.Enabled = $Enable
@@ -336,12 +342,12 @@ function EnableGUI([boolean]$Enable) {
 
 
 #==============================================================================================================================================================================================
-function DeleteFile([string]$File) { if (Test-Path -LiteralPath $File -PathType Leaf) { Remove-Item -LiteralPath $File -Force } }
+function DeleteFile([String]$File) { if (Test-Path -LiteralPath $File -PathType Leaf) { Remove-Item -LiteralPath $File -Force } }
 
 
 
 #==============================================================================================================================================================================================
-function RemovePath([string]$LiteralPath) {
+function RemovePath([String]$LiteralPath) {
     
     # Make sure the path isn't null to avoid errors.
     if ($LiteralPath -ne '') {
@@ -357,7 +363,7 @@ function RemovePath([string]$LiteralPath) {
 
 
 #==============================================================================================================================================================================================
-function CreatePath([string]$LiteralPath) {
+function CreatePath([String]$LiteralPath) {
     
     # Make sure the path isn't null to avoid errors.
     if ($LiteralPath -ne '') {
@@ -376,7 +382,7 @@ function CreatePath([string]$LiteralPath) {
 
 
 #==============================================================================================================================================================================================
-function TestPath([string]$LiteralPath, [string]$PathType = 'Any') {
+function TestPath([String]$LiteralPath, [String]$PathType = 'Any') {
     
     # Make sure the path isn't null to avoid errors.
     if ($LiteralPath -ne '') {
@@ -395,7 +401,7 @@ function TestPath([string]$LiteralPath, [string]$PathType = 'Any') {
 
 
 #==============================================================================================================================================================================================
-function Get-FileName([string]$Path, [string[]]$Description, [string[]]$FileName) {
+function Get-FileName([String]$Path, [String[]]$Description, [String[]]$FileName) {
     
     $OpenFileDialog = New-Object System.Windows.Forms.OpenFileDialog
     $OpenFileDialog.InitialDirectory = $Path
@@ -421,9 +427,6 @@ function SetIconParameters() {
 
     # Store all files by their name.
     $Icons.Main                 = $IconsPath + "\Main.ico"
-
-    $Icons.OcarinaOfTimeRedux   = $IconsPath + "\Ocarina of Time REDUX.ico"
-    $Icons.MajorasMaskRedux     = $IconsPath + "\Majora's Mask REDUX.ico"
 
     $Icons.CheckGameID          = $IconsPath + "\Check GameID.ico"
     $Icons.Credits              = $IconsPath + "\Credits.ico"
@@ -474,18 +477,13 @@ function SetFileParameters() {
     $Files.bpspatch_mm_redux             = $MasterPath + "\Majora's Mask\Decompressed\mm_redux.bps"
     $Files.bpspatch_mm_widescreen        = $MasterPath + "\Majora's Mask\Decompressed\mm_widescreen.bps"
 
-    $Files.bpspatch_sm64_appFile_01      = $MasterPath + "\Super Mario 64\sm64_appFile_01.bps"
-
     $Files.games                         = $MasterPath + "\Games.json"
 
     $Files.GetEnumerator() | ForEach-Object {
-        if (!(Test-Path $_.value -PathType leaf)) {
-            $global:MissingFiles = $True
-        }
+        if (!(Test-Path $_.value -PathType leaf)) { CreateErrorDialog -Error "Missing Files" }
     }
 
     $Files.text_gameID                   = $TextPath + "\GameID's.txt"
-    $Files.text_credits                  = $TextPath + "\Credits.txt"
 
     $Files.flipscfg                      = $MasterPath + "\Base\flipscfg.bin"
     $Files.ckey                          = $MasterPath + "\Wii VC\common-key.bin"
@@ -502,7 +500,7 @@ function SetFileParameters() {
 
 
 #==============================================================================================================================================================================================
-function SetWADParameters([string]$WADPath, [string]$FolderName) {
+function SetWADParameters([String]$WADPath, [String]$FolderName, [String]$PatchedFileName) {
     
     # Create a hash table.
     $WADFile = @{}
@@ -527,8 +525,8 @@ function SetWADParameters([string]$WADPath, [string]$FolderName) {
     $WADFile.tmd          = $WADFile.Folder + '\' + $FolderName + '.tmd'
     $WADFile.trailer      = $WADFile.Folder + '\' + $FolderName + '.trailer'
     
-    if ($GameType -eq "Majora's Mask" -or $GameType -eq "Paper Mario")   { $WADFile.ROMFile = $WADFile.AppPath05 + '\romc' }
-    else                                                                 { $WADFile.ROMFile = $WADFile.AppPath05 + '\rom' }
+    if ($GameType.romc -gt 0)   { $WADFile.ROMFile = $WADFile.AppPath05 + '\romc' }
+    else                        { $WADFile.ROMFile = $WADFile.AppPath05 + '\rom' }
     $WADFile.Patched      = $WADItem.DirectoryName + '\' + $WADFile.Name + $PatchedFileName + '.wad'
     $WADFile.Extracted    = $WADItem.DirectoryName + '\' + $WADFile.Name + "_extracted_rom" + '.z64'
 
@@ -542,7 +540,7 @@ function SetWADParameters([string]$WADPath, [string]$FolderName) {
 
 
 #==============================================================================================================================================================================================
-function SetZ64Parameters([string]$Z64Path) {
+function SetZ64Parameters([String]$Z64Path, [String]$PatchedFileName) {
     
     # Create a hash table.
     $Z64File = @{}
@@ -586,7 +584,7 @@ function SetROMFile() {
 
 
 #==============================================================================================================================================================================================
-function ExtractWADFile() {
+function ExtractWADFile([String]$PatchedFileName) {
     
     # Set the status label.
     UpdateStatusLabel -Text "Extracting WAD file..."
@@ -615,7 +613,7 @@ function ExtractWADFile() {
         # There will only be one folder, the one we want.
         if ($Folder.PSIsContainer) {
             # Remember the path to this folder.
-            $global:WADFile = SetWADParameters -WADPath $GameWAD -FolderName $Folder.Name
+            $global:WADFile = SetWADParameters -WADPath $GameWAD -FolderName $Folder.Name -PatchedFileName $PatchedFileName
         }
     }
 
@@ -645,14 +643,14 @@ function ExtractU8AppFile() {
 
 
 #==============================================================================================================================================================================================
-function PatchVCEmulator() {
+function PatchVCEmulator([String]$Command) {
     
-    if ($GetCommand -eq "Extract" -or !(CheckBootDolOptions)) { return }
+    if ($Command -eq "Extract" -or !(CheckBootDolOptions -Command $Command)) { return }
 
     # Set the status label.
-    UpdateStatusLabel -Text ("Patching " + $GameType + " VC Emulator...")
+    UpdateStatusLabel -Text ("Patching " + $GameType.mode + " VC Emulator...")
 
-    if ($GameType -eq "Ocarina of Time") {
+    if ($GameType.mode -eq "Ocarina of Time") {
         
         if ($PatchVCExpandMemory.Checked) {
             PatchBytesSequence -File $WadFile.AppFile01 -Offset "0x2EB0" -Values @("0x60", "0x00", "0x00", "0x00")
@@ -672,7 +670,7 @@ function PatchVCEmulator() {
 
     }
 
-    elseif ($GameType -eq "Majora's Mask") {
+    elseif ($GameType.mode -eq "Majora's Mask") {
         
         & $Files.lzss -d $WADFile.AppFile01 | Out-Host
 
@@ -696,9 +694,12 @@ function PatchVCEmulator() {
 
     }
 
-    elseif ($GameType -eq "Super Mario 64") {
+    elseif ($GameType.mode -eq "Super Mario 64") {
 
-        if ($GetCommand -eq "Patch Boot DOL")   { & $Files.flips --ignore-checksum $Files.bpspatch_sm64_appFile_01 $WADFile.AppFile01 | Out-Host }
+        if ($Command -eq "Patch Boot DOL") {
+            $File = $MasterPath + "\" + $GameType.mode + "\AppFile01" +  $GamePatch.bps
+            & $Files.flips --ignore-checksum $File $WADFile.AppFile01 | Out-Host
+        }
 
     }
 
@@ -707,59 +708,59 @@ function PatchVCEmulator() {
 
 
 #==============================================================================================================================================================================================
-function PatchVCROM() {
+function PatchVCROM([String]$Command) {
 
-    if ($GetCommand -eq "Patch VC") { return $True }
+    if ($Command -eq "Patch VC") { return $True }
 
     # Set the status label.
-    UpdateStatusLabel -Text ("Initial patching of " + $GameType + " ROM...")
+    UpdateStatusLabel -Text ("Initial patching of " + $GameType.mode + " ROM...")
     
     # Extract ROM if required
     if ($GetCommand -eq "Extract") {
-        if ($GameType -eq "Free")   { $ROMTitle = "n64_rom_extracted.z64" }
-        else                        { $ROMTitle = $GameType + "_rom_extracted.z64" }
+        if (!$GameType.patches)   { $ROMTitle = "n64_rom_extracted.z64" }
+        else                      { $ROMTitle = $GameType + "_rom_extracted.z64" }
 
         if (Test-Path -LiteralPath $ROMFile -PathType leaf) {
             Move-Item -LiteralPath $ROMFile -Destination $WADFile.Extracted
-            UpdateStatusLabel -Text ("Successfully extracted " + $GameType + " ROM.")
+            UpdateStatusLabel -Text ("Successfully extracted " + $GameType.mode + " ROM.")
         }
-        else { UpdateStatusLabel -Text ("Could not extract " + $GameType + " ROM. Is it a Majora's Mask or Paper Mario ROM?") }
+        else { UpdateStatusLabel -Text ("Could not extract " + $GameType.mode + " ROM. Is it a Majora's Mask or Paper Mario ROM?") }
 
         return $False
     }
 
     # Replace ROM if needed
-    if ($GetCommand -eq "Inject") {
+    if ($Command -eq "Inject") {
         if (Test-Path -LiteralPath $ROMFile -PathType leaf) {
             Remove-Item -LiteralPath $ROMFile
             if ((Test-Path -LiteralPath $Z64FilePath -PathType leaf)) { Copy-Item -LiteralPath $Z64FilePath -Destination $ROMFile }
             else {
-                UpdateStatusLabel -Text ("Could not inject " + $GameType + " ROM. Did you move or rename the ROM file?")
+                UpdateStatusLabel -Text ("Could not inject " + $GameType.mode + " ROM. Did you move or rename the ROM file?")
                 return $False
             }
         }
         else {
-            UpdateStatusLabel -Text ("Could not inject " + $GameType + " ROM. Is it a Majora's Mask or Paper Mario ROM?")
+            UpdateStatusLabel -Text ("Could not inject " + $GameType.mode + " ROM. Is it a Majora's Mask or Paper Mario ROM?")
             return $False
         }
 
         if (!(Test-Path -LiteralPath $ROMFile -PathType leaf)) {
-            UpdateStatusLabel -Text ("Could not inject " + $GameType + " ROM. Is your ROM filename or destination path too long?")
+            UpdateStatusLabel -Text ("Could not inject " + $GameType.mode + " ROM. Is your ROM filename or destination path too long?")
             return $False
         }
     }
 
     # Decompress romc if needed
-    if ($GetCommand -ne "Inject" -and ($GameType -eq "Majora's Mask" -or $GameType -eq "Paper Mario") ) {  
+    if ($Command -ne "Inject" -and $GameType.romc -gt 0) {  
 
         if (Test-Path -LiteralPath $ROMFile -PathType leaf) {
-            if ($GameType -eq "Majora's Mask")     { & $Files.romchu $ROMFile $ROMCFile | Out-Null }
-            elseif ($GameType -eq "Paper Mario")   { & $Files.romc d $ROMFile $ROMCFile | Out-Null }
+            if ($GameType.romc -eq 1)       { & $Files.romchu $ROMFile $ROMCFile | Out-Null }
+            elseif ($GameType.romc -eq 2)   { & $Files.romc d $ROMFile $ROMCFile | Out-Null }
             Remove-Item -LiteralPath $ROMFile
             Rename-Item -LiteralPath $ROMCFile -NewName "romc"
         }
         else {
-            UpdateStatusLabel -Text ("Could not decompress " + $GameType + " ROM. Is it a Majora's Mask or Paper Mario ROM?")
+            UpdateStatusLabel -Text ("Could not decompress " + $GameType.mode + " ROM. Is it a Majora's Mask or Paper Mario ROM?")
             return $False
         }
 
@@ -783,12 +784,12 @@ function PatchVCROM() {
 
 
 #==============================================================================================================================================================================================
-function DowngradeROM() {
+function DowngradeROM([String]$Command, [Boolean]$Downgrade) {
     
-    if ($GetCommand -eq "Inject") { return $True }
+    if ($Command -eq "Inject") { return $True }
 
     # Downgrade a ROM if it is required first
-    if ($GameType -eq "Ocarina of Time" -and $IsDowngrade) {
+    if ($GameType.downgrade -and $Downgrade) {
         
         $HashSum = (Get-FileHash -Algorithm MD5 $ROMFile).Hash
         if ($HashSum -ne $HashSum_oot_rev1 -and $HashSum -ne $HashSum_oot_rev2) {
@@ -811,11 +812,11 @@ function DowngradeROM() {
 
 
 #==============================================================================================================================================================================================
-function CompareHashSums() {
+function CompareHashSums([String]$Command, [Boolean]$Redux) {
     
-    if ($GetCommand -eq "Inject" -or $GetCommand -eq "Patch VC") { return $True }
+    if ($Command -eq "Inject" -or $Command -eq "Patch VC") { return $True }
 
-    if (($PatchFile -ne $Null -or $IsRedux) -and $GetCommand -ne "Patch BPS") {
+    if (($PatchFile -ne $Null -or $Redux) -and $Command -ne "Patch BPS") {
 
         $ContinuePatching = $True
         $HashSum = (Get-FileHash -Algorithm MD5 $ROMFile).Hash
@@ -844,30 +845,30 @@ function CompareHashSums() {
 
 
 #==============================================================================================================================================================================================
-function PatchROM([string]$Hash) {
+function PatchROM([String]$Command, [Boolean]$Compress, [Boolean]$Downgrade) {
 
-    if ($GetCommand -eq "Inject" -or $GetCommand -eq "Patch VC") { return $True }
+    if ($Command -eq "Inject" -or $Command -eq "Patch VC") { return $True }
     
     # Set the status label.
-    UpdateStatusLabel -Text ("BPS Patching " + $GameType + " ROM...")
+    UpdateStatusLabel -Text ("BPS Patching " + $GameType.mode + " ROM...")
 
     $HashSum1 = $null
-    if ($IsWiiVC -and $GetCommand -eq "Patch BPS") { $HashSum1 = (Get-FileHash -Algorithm MD5 $ROMFile).Hash }
+    if ($IsWiiVC -and $Command -eq "Patch BPS") { $HashSum1 = (Get-FileHash -Algorithm MD5 $ROMFile).Hash }
 
     # Apply the selected patch to the ROM, if it is provided
     if ($PatchFile.Length -gt 0) {
-        if ($IsWiiVC -and $IsCompress)         { & $Files.flips --ignore-checksum $PatchFile $DecompressedROMFile | Out-Host }
-        elseif ($IsWiiVC -and !$IsCompress)    { & $Files.flips --ignore-checksum $PatchFile $PatchedROMFile | Out-Host }
-        elseif (!$IsWiiVC -and $IsCompress)    { & $Files.flips --ignore-checksum $PatchFile $DecompressedROMFile | Out-Host }
-        elseif (!$IsWiiVC -and !$IsCompress)   { & $Files.flips --ignore-checksum --apply $PatchFile $ROMFile $PatchedROMFile | Out-Host }
+        if ($IsWiiVC -and $Compress)         { & $Files.flips --ignore-checksum $PatchFile $DecompressedROMFile | Out-Host }
+        elseif ($IsWiiVC -and !$Compress)    { & $Files.flips --ignore-checksum $PatchFile $PatchedROMFile | Out-Host }
+        elseif (!$IsWiiVC -and $Compress)    { & $Files.flips --ignore-checksum $PatchFile $DecompressedROMFile | Out-Host }
+        elseif (!$IsWiiVC -and !$Compress)   { & $Files.flips --ignore-checksum --apply $PatchFile $ROMFile $PatchedROMFile | Out-Host }
     }
 
-    if ($IsWiiVC -and $GetCommand -eq "Patch BPS") {
+    if ($IsWiiVC -and $Command -eq "Patch BPS") {
         $HashSum2 = (Get-FileHash -Algorithm MD5 $ROMFile).Hash
         if ($HashSum1 -eq $HashSum2) {
             UpdateStatusLabel -Text 'Failed! BPS or IPS Patch does not match. ROM has left unchanged.'
-            if ($GameType -eq "Ocarina of Time" -and !$IsDowngrade) { UpdateStatusLabel -Text "Failed! BPS or IPS Patch does not match. ROM has left unchanged. Enable Downgrade Ocarina of Time?" }
-            elseif ($GameType -eq "Ocarina of Time" -and $IsDowngrade) { UpdateStatusLabel -Text "Failed! BPS or IPS Patch does not match. ROM has left unchanged. Disable Downgrade Ocarina of Time?" }
+            if ($GameType.downgrade -and !$Downgrade) { UpdateStatusLabel -Text "Failed! BPS or IPS Patch does not match. ROM has left unchanged. Enable Downgrade " + $GameType.mode + "?" }
+            elseif ($GameType.downgrade -and $Downgrade) { UpdateStatusLabel -Text "Failed! BPS or IPS Patch does not match. ROM has left unchanged. Disable Downgrade " + $GameType.mode + "?" }
             return $False
         }
     }
@@ -879,11 +880,11 @@ function PatchROM([string]$Hash) {
 
 
 #==============================================================================================================================================================================================
-function DecompressROM() {
+function DecompressROM([String]$Command, [Boolean]$Compress) {
     
-    if (!$IsCompress -or $GetCommand -eq "Inject" -or ($GameType -ne "Ocarina of Time" -and $GameType -ne "Majora's Mask")) { return }
+    if (!$Compress -or $Command -eq "Inject" -or !$GameType.decompress) { return }
 
-    UpdateStatusLabel -Text ("Decompressing " + $GameType + " ROM...")
+    UpdateStatusLabel -Text ("Decompressing " + $GameType.mode + " ROM...")
 
     & $Files.TabExt $ROMFile | Out-Host
     & $Files.ndec $ROMFile $DecompressedROMFile | Out-Host
@@ -895,11 +896,11 @@ function DecompressROM() {
 
 
 #==============================================================================================================================================================================================
-function CompressROM() {
+function CompressROM([String]$Command, [Boolean]$Compress) {
     
-    if (!$IsCompress -or $GetCommand -eq "Inject" -or ($GameType -ne "Ocarina of Time" -and $GameType -ne "Majora's Mask")) { return }
+    if (!$Compress -or $Command -eq "Inject" -or !$GameType.decompress) { return }
 
-    UpdateStatusLabel -Text ("Compressing " + $GameType + " ROM...")
+    UpdateStatusLabel -Text ("Compressing " + $GameType.mode + " ROM...")
 
     & $Files.Compress $DecompressedROMFile $PatchedROMFile | Out-Null
     Remove-Item -LiteralPath $DecompressedROMFile
@@ -911,9 +912,9 @@ function CompressROM() {
 #==============================================================================================================================================================================================
 function CompressROMC() {
     
-    if ($GameType -ne "Paper Mario") { return }
+    if ($GameType.romc -ne 2) { return }
 
-    UpdateStatusLabel -Text ("Compressing " + $GameType + " VC ROM...")
+    UpdateStatusLabel -Text ("Compressing " + $GameType.mode + " VC ROM...")
 
     & $Files.romc e $ROMFile $ROMCFile | Out-Null
     Remove-Item -LiteralPath $ROMFile
@@ -923,7 +924,7 @@ function CompressROMC() {
 
 
 #==============================================================================================================================================================================================
-function PatchBytesSequence([String]$File, [int]$Offset, $Values, [int]$Increment, [boolean]$IsDec) {
+function PatchBytesSequence([String]$File, [int]$Offset, $Values, [int]$Increment, [Boolean]$IsDec) {
     
     $ByteArray = [IO.File]::ReadAllBytes($File)
 
@@ -943,37 +944,38 @@ function PatchBytesSequence([String]$File, [int]$Offset, $Values, [int]$Incremen
 #==============================================================================================================================================================================================
 function PatchRedux() {
     
-    # SETUP #
-    if (!(CheckReduxOptions) -or !$IsRedux -or ($GameType -ne "Ocarina of Time" -and $GameType -ne "Majora's Mask")) { return }
-    UpdateStatusLabel -Text ("Patching " + $GameType + " REDUX...")
-    $offsets = ""
+    if (!$GameType.redux -and !$GameType.additional) { return }
 
-    # BPS PATCHING #
-    if ($GameType -eq "Ocarina of Time") {
-        $offsets = "0 1 2 3 4 5 6 7 8 9 15 16 17 18 19 20 21 22 23 24 25 26 942 944 946 948 950 952 954 956 958 960 962 964 966 968 970 972 974 976 978 980 982 984 986 988 990 992 994 "
-        $offsets += "996 998 1000 1002 1004 1497 1498 1499 1500 1501 1502 1503 1504 1505 1506 1507 1508 1509 1510 1511 1512 1513 1514 1515 1516 1517 1518 1519 1520 1521 1522 1523 1524 1525"
+    # BPS PATCHING REDUX #
+    if ($PatchEnableReduxCheckbox.Checked -and $GameType.Redux) {
+        pdateStatusLabel -Text ("Patching " + $GameType.mode + " REDUX...")
+        if ($GameType.mode -eq "Ocarina of Time")     { & $Files.flips --ignore-checksum $Files.bpspatch_oot_redux $DecompressedROMFile | Out-Host }
+        elseif ($GameType.mode -eq "Majora's Mask")   { & $Files.flips --ignore-checksum $Files.bpspatch_mm_redux $DecompressedROMFile | Out-Host }
 
-        if (CheckCheckBox -CheckBox $IncludeReduxOoT)                                                { & $Files.flips --ignore-checksum $Files.bpspatch_oot_redux $DecompressedROMFile | Out-Host }
-        if (CheckCheckBox -CheckBox $MMModelsOoT) {
-            if (CheckCheckBox -CheckBox $IncludeReduxOoT)                                            { & $Files.flips --ignore-checksum $Files.bpspatch_oot_models_mm_redux $DecompressedROMFile | Out-Host }
-            else                                                                                     { & $Files.flips --ignore-checksum $Files.bpspatch_oot_models_mm $DecompressedROMFile | Out-Host }
+        if ($GameType.dmaTable -ne $null -and $GameType.dmaTable -ne "") {
+            if (Test-Path dmaTable.dat -PathType leaf) { Remove-Item dmaTable.dat }
+            Add-Content dmaTable.dat $GameType.dmaTable
         }
-        if (CheckCheckBox -CheckBox $WidescreenTexturesOoT)                                          { & $Files.flips --ignore-checksum $Files.bpspatch_oot_widescreen $DecompressedROMFile | Out-Host }
-    }
-    elseif ($GameType -eq "Majora's Mask") {
-        $offsets = "0 1 2 3 4 5 6 7 -8 -9 15 16 17 18 19 20 -21 22 25 26 27 28 29 30 -652 1127 -1539 -1540 -1541 -1542 -1543 1544 "
-        $offsets += "1545 1546 1547 1548 1549 1550 -1551 1552 1553 1554 1555 1556 1557 1558 1559 1560 1561 1562 1563 1564 1565 1566 1567" 
-
-        if (CheckCheckBox -CheckBox $IncludeReduxMM)             { & $Files.flips --ignore-checksum $Files.bpspatch_mm_redux $DecompressedROMFile | Out-Host }
-        if (CheckCheckBox -CheckBox $WidescreenTexturesMM)       { & $Files.flips --ignore-checksum $Files.bpspatch_mm_widescreen $DecompressedROMFile | Out-Host }
     }
 
-    if (Test-Path dmaTable.dat -PathType leaf) { Remove-Item dmaTable.dat }
-    Add-Content dmaTable.dat $offsets
+    # BPS PATCHING ADDITIONAL OPTIONS #
+    if ($PatchEnableAdditionalOptionsCheckbox.Checked -and $GameType.Additional) {
+        pdateStatusLabel -Text ("Patching " + $GameType.mode + " Additional Options...")
+        if ($GameType.mode -eq "Ocarina of Time") {
+            if (CheckCheckBox -CheckBox $MMModelsOoT) {
+                if ($PatchEnableReduxCheckbox.Checked)            { & $Files.flips --ignore-checksum $Files.bpspatch_oot_models_mm_redux $DecompressedROMFile | Out-Host }
+                else                                              { & $Files.flips --ignore-checksum $Files.bpspatch_oot_models_mm $DecompressedROMFile | Out-Host }
+            }
+            if (CheckCheckBox -CheckBox $WidescreenTexturesOoT)   { & $Files.flips --ignore-checksum $Files.bpspatch_oot_widescreen $DecompressedROMFile | Out-Host }
+        }
+        elseif ($GameType.mode -eq "Majora's Mask") {
+            if (CheckCheckBox -CheckBox $WidescreenTexturesMM)    { & $Files.flips --ignore-checksum $Files.bpspatch_mm_widescreen $DecompressedROMFile | Out-Host }
+        }
 
-    # BYTE PATCHING #
-    if ($GameType -eq "Ocarina of Time")     { PatchReduxOoT }
-    elseif ($GameType -eq "Majora's Mask")   { PatchReduxMM }
+        # BYTE PATCHING #
+        if ($GameType.mode -eq "Ocarina of Time")     { PatchReduxOoT }
+        elseif ($GameType.mode -eq "Majora's Mask")   { PatchReduxMM }
+    }
 
 }
 
@@ -1224,7 +1226,7 @@ function PatchReduxMM() {
 #==============================================================================================================================================================================================
 function ExtendROM() {
     
-    if ($GameType -ne "Majora's Mask") { return }
+    if ($GameType.romc -ne 1) { return }
 
     $Bytes = @(08, 00, 00, 00)
     $ByteArray = [IO.File]::ReadAllBytes($ROMFile)
@@ -1237,10 +1239,10 @@ function ExtendROM() {
 
 
 #==============================================================================================================================================================================================
-function CheckGameID() {
+function CheckGameID([String]$Command) {
     
     # Return if freely patching, injecting or extracting
-    if ($GameType -eq "Free" -or $GetCommand -eq "Inject" -or $GetCommand -eq "Extract" -or $GetCommand -eq "Patch VC") { return $True }
+    if (!$GameType.patches -or $Command -eq "Inject" -or $Command -eq "Extract" -or $Command -eq "Patch VC") { return $True }
 
     # Set the status label.
     UpdateStatusLabel -Text "Checking GameID in .tmd..."
@@ -1248,13 +1250,7 @@ function CheckGameID() {
     # Get the ".tmd" file as a byte array.
     $ByteArray = [IO.File]::ReadAllBytes($WadFile.tmd)
     
-    $CompareArray = $null
-
-    if ($GameType -eq "Ocarina of Time")      { $CompareArray = @(78, 65, 67, 69) }
-    elseif ($GameType -eq "Majora's Mask")    { $CompareArray = @(78, 65, 82, 69) }
-    elseif ($GameType -eq "Super Mario 64")   { $CompareArray = @(78, 65, 65, 69) }
-    elseif ($GameType -eq "Paper Mario 64")   { $CompareArray = @(78, 65, 69, 69) }
-
+    $CompareArray = ($GameType.wii_gameID.ToCharArray() | % { [int][char]$_ })
     $CompareAgainst = $ByteArray[400..(403)]
 
     # Check each value of the array.
@@ -1262,7 +1258,7 @@ function CheckGameID() {
         # The current values do not match
         if ($CompareArray[$i] -ne $CompareAgainst[$i]) {
             # This is not a "NACE", "NARE", "NAAE" or "NAEE" entry.
-            UpdateStatusLabel -Text ("Failed! This is not an vanilla " + $GameType + " USA VC WAD file.")
+            UpdateStatusLabel -Text ("Failed! This is not an vanilla " + $GameType.mode + " USA VC WAD file.")
             # Stop wasting time.
             return $False
         }
@@ -1278,18 +1274,7 @@ function CheckGameID() {
 
 
 #==============================================================================================================================================================================================
-function SetCustomGameID() {
-    
-    if (!$InputCustomGameIDCheckbox.Checked)                                          { return }
-    if ($InputCustomGameIDTextbox.TextLength -eq 4)                                   { $global:GameID = $InputCustomGameIDTextBox.Text }
-    if ($InputCustomChannelTitleTextBox.TextLength -gt 0)                             { $global:ChannelTitle = $InputCustomChannelTitleTextBox.Text }
-
-}
-
-
-
-#==============================================================================================================================================================================================
-function HackOpeningBNRTitle() {
+function HackOpeningBNRTitle([String]$Title) {
     
     # Set the status label.
     UpdateStatusLabel -Text "Hacking in Opening.bnr custom title..."
@@ -1315,7 +1300,7 @@ function HackOpeningBNRTitle() {
 
         if ($Matches -eq $True) {
             for ($j=0; $j-lt $GameTitleLength; $j++) { $ByteArray[$i + ($j*2)] = 0 }
-            for ($j=0; $j-lt $ChannelTitle.Length; $j++) { $ByteArray[$i + ($j*2)] = [int][char]$ChannelTitle.Substring($j, 1) }
+            for ($j=0; $j-lt $Title.Length; $j++) { $ByteArray[$i + ($j*2)] = [int][char]$Title.Substring($j, 1) }
             $i += $GameTitleLength
         }        
     }
@@ -1329,11 +1314,11 @@ function HackOpeningBNRTitle() {
 
 
 #==============================================================================================================================================================================================
-function HackN64GameTitle {
+function HackN64GameTitle([String]$Title, [String]$GameID) {
     
     $emptyTitle = foreach ($i in 1..$GameTitleLength) { 32 }
     PatchBytesSequence -File $PatchedROMFile -Offset "0x20" -Values $emptyTitle
-    PatchBytesSequence -File $PatchedROMFile -Offset "0x20" -Values ($ChannelTitle.ToUpper().ToCharArray() | % { [int][char]$_ }) -IsDec $True
+    PatchBytesSequence -File $PatchedROMFile -Offset "0x20" -Values ($Title.ToUpper().ToCharArray() | % { [int][char]$_ }) -IsDec $True
     PatchBytesSequence -File $PatchedROMFile -Offset "0x3B" -Values ($GameID.ToCharArray() | % { [int][char]$_ }) -IsDec $True
 
 }
@@ -1369,7 +1354,7 @@ function RepackU8AppFile() {
 
 
 #==============================================================================================================================================================================================
-function RepackWADFile() {
+function RepackWADFile([String]$GameID) {
     
     # Set the status label.
     UpdateStatusLabel -Text "Repacking patched WAD file..."
@@ -1395,7 +1380,7 @@ function RepackWADFile() {
     Push-Location $WiiVCPath
 
     # Repack the WAD using the new files.
-    & $Files.wadpacker $tik $tmd $cert $WadFile.Patched '-sign' '-i' $global:GameID
+    & $Files.wadpacker $tik $tmd $cert $WadFile.Patched '-sign' '-i' $GameID
 
     # If the patched file was created.
     if (TestPath -LiteralPath $WadFile.Patched) {
@@ -1419,7 +1404,7 @@ function RepackWADFile() {
 
 
 #==================================================================================================================================================================================================================================================================
-function EnablePatchButtons([boolean]$Enable) {
+function EnablePatchButtons([Boolean]$Enable) {
     
     # Set the status that we are ready to roll... Or not...
     if ($Enable)        { UpdateStatusLabel -Text "Ready to patch!" }
@@ -1442,7 +1427,7 @@ function EnablePatchButtons([boolean]$Enable) {
 
 
 #==================================================================================================================================================================================================================================================================
-function WADPath_Finish([object]$TextBox, [string]$VarName, [string]$WADPath) {
+function WADPath_Finish([Object]$TextBox, [String]$VarName, [String]$WADPath) {
     
     # Set the "GameWAD" variable that tracks the path.
     Set-Variable -Name $VarName -Value $WADPath -Scope 'Global'
@@ -1452,8 +1437,8 @@ function WADPath_Finish([object]$TextBox, [string]$VarName, [string]$WADPath) {
     $TextBox.Text = $WADPath
 
     EnablePatchButtons -Enable $True
-    SetWiiVCMode -Bool $True
     ChangeGamesList
+    SetWiiVCMode -Bool $True
 
     # Check if both a .WAD and .Z64 have been provided for ROM injection
     if ($global:Z64FilePath -ne $null) { $InjectROMButton.Enabled = $true }
@@ -1466,7 +1451,7 @@ function WADPath_Finish([object]$TextBox, [string]$VarName, [string]$WADPath) {
 
 
 #==================================================================================================================================================================================================================================================================
-function Z64Path_Finish([object]$TextBox, [string]$VarName, [string]$Z64Path) {
+function Z64Path_Finish([Object]$TextBox, [String]$VarName, [String]$Z64Path) {
     
     # Set the "Z64 ROM" variable that tracks the path.
     Set-Variable -Name $VarName -Value $Z64Path -Scope 'Global'
@@ -1488,7 +1473,7 @@ function Z64Path_Finish([object]$TextBox, [string]$VarName, [string]$Z64Path) {
 
 
 #==================================================================================================================================================================================================================================================================
-function BPSPath_Finish([object]$TextBox, [string]$VarName, [string]$BPSPath) {
+function BPSPath_Finish([Object]$TextBox, [String]$VarName, [String]$BPSPath) {
     
     # Set the "BPS File" variable that tracks the path.
     Set-Variable -Name $VarName -Value $BPSPath -Scope 'Global'
@@ -1511,7 +1496,7 @@ function WADPath_DragDrop() {
     # Check for drag and drop data.
     if ($_.Data.GetDataPresent([Windows.Forms.DataFormats]::FileDrop)) {
         # Get the first item in the list.
-        $DroppedPath = [string]($_.Data.GetData([Windows.Forms.DataFormats]::FileDrop))
+        $DroppedPath = [String]($_.Data.GetData([Windows.Forms.DataFormats]::FileDrop))
         
         # See if the dropped item is a file.
         if (Test-Path -LiteralPath $DroppedPath -PathType Leaf) {
@@ -1536,7 +1521,7 @@ function Z64Path_DragDrop() {
     # Check for drag and drop data.
     if ($_.Data.GetDataPresent([Windows.Forms.DataFormats]::FileDrop)) {
         # Get the first item in the list.
-        $DroppedPath = [string]($_.Data.GetData([Windows.Forms.DataFormats]::FileDrop))
+        $DroppedPath = [String]($_.Data.GetData([Windows.Forms.DataFormats]::FileDrop))
         
         # See if the dropped item is a file.
         if (Test-Path -LiteralPath $DroppedPath -PathType Leaf) {
@@ -1561,7 +1546,7 @@ function BPSPath_DragDrop() {
     # Check for drag and drop data.
     if ($_.Data.GetDataPresent([Windows.Forms.DataFormats]::FileDrop)) {
         # Get the first item in the list.
-        $DroppedPath = [string]($_.Data.GetData([Windows.Forms.DataFormats]::FileDrop))
+        $DroppedPath = [String]($_.Data.GetData([Windows.Forms.DataFormats]::FileDrop))
         
         # See if the dropped item is a file.
         if (Test-Path -LiteralPath $DroppedPath -PathType Leaf) {
@@ -1581,7 +1566,7 @@ function BPSPath_DragDrop() {
 
 
 #==================================================================================================================================================================================================================================================================
-function WADPath_Button([object]$TextBox, [string[]]$Description, [string[]]$FileName) {
+function WADPath_Button([Object]$TextBox, [string[]]$Description, [string[]]$FileName) {
         # Allow the user to select a file.
     $SelectedPath = Get-FileName -Path $BasePath -Description $Description -FileName $FileName
 
@@ -1596,7 +1581,7 @@ function WADPath_Button([object]$TextBox, [string[]]$Description, [string[]]$Fil
 
 
 #==================================================================================================================================================================================================================================================================
-function Z64Path_Button([object]$TextBox, [string[]]$Description, [string[]]$FileName) {
+function Z64Path_Button([Object]$TextBox, [string[]]$Description, [string[]]$FileName) {
         # Allow the user to select a file.
     $SelectedPath = Get-FileName -Path $BasePath -Description $Description -FileName $FileName
 
@@ -1611,7 +1596,7 @@ function Z64Path_Button([object]$TextBox, [string[]]$Description, [string[]]$Fil
 
 
 #==================================================================================================================================================================================================================================================================
-function BPSPath_Button([object]$TextBox, [string[]]$Description, [string[]]$FileName) {
+function BPSPath_Button([Object]$TextBox, [string[]]$Description, [string[]]$FileName) {
         # Allow the user to select a file.
     $SelectedPath = Get-FileName -Path $BasePath -Description $Description -FileName $FileName
 
@@ -1626,7 +1611,7 @@ function BPSPath_Button([object]$TextBox, [string[]]$Description, [string[]]$Fil
 
 
 #==================================================================================================================================================================================================================================================================
-function GetDecimal([string]$Hex) {
+function GetDecimal([String]$Hex) {
     
     $decimal = [uint32]$hex
     return $decimal
@@ -1705,8 +1690,8 @@ function CreateMainDialog() {
         if ($WADFilePath.Length -gt 0) {
             $global:WADFilePath = $null
             $InputWADTextBox.Text = "Select or drag and drop your Virtual Console WAD file..."
-            SetWiiVCMode -Bool $False
             ChangeGamesList
+            SetWiiVCMode -Bool $False
         }
     })
 
@@ -1737,7 +1722,7 @@ function CreateMainDialog() {
     
     # Create a button to allow patch the WAD with a ROM file.
     $global:InjectROMButton = CreateButton -X 495 -Y 18 -Width 80 -Height 22 -Text "Inject ROM" -ToolTip $ToolTip -Info "Replace the ROM in your selected WAD File with your selected Z64, N64 or V64 ROM File" -AddTo $InputROMGroup
-    $InjectROMButton.Add_Click({ MainFunction -Command "Inject" -PatchedFile '_injected' })
+    $InjectROMButton.Add_Click({ MainFunction -Command "Inject" -PatchedFileName '_injected' })
 
 
 
@@ -1766,7 +1751,7 @@ function CreateMainDialog() {
     
     # Create a button to allow patch the WAD with a BPS file.
     $global:PatchBPSButton = CreateButton -X 495 -Y 18 -Width 80 -Height 22 -Text "Patch BPS" -ToolTip $ToolTip -Info "Patch the ROM with your selected BPS or IPS Patch File" -AddTo $InputBPSGroup
-    $PatchBPSButton.Add_Click({ MainFunction -Command "Patch BPS" -Patch $BPSFilePath -PatchedFile '_bps_patched' })
+    $PatchBPSButton.Add_Click({ MainFunction -Command "Patch BPS" -Patch $BPSFilePath -PatchedFileName '_bps_patched' })
 
 
 
@@ -1783,12 +1768,13 @@ function CreateMainDialog() {
     # Create a combox for OoT ROM hack patches
     $global:CurrentGameComboBox = CreateComboBox -X 10 -Y 20 -Width 440 -Height 30 -AddTo $CurrentGameGroup
     $CurrentGameComboBox.Add_SelectedIndexChanged({
-        Foreach ($i in $GamesJSONFile.game) {
-            if ( ($i.title -eq $CurrentGameComboBox.Text) -and ($CurrentGameComboBox.Text -ne $GameType) ) { ChangeGameMode -Mode $i.mode }
-        }
+        if ($CurrentGameComboBox.Text -ne $GameType.title) { ChangeGameMode }
     })
-    if (Test-Path -LiteralPath $Files.Games -PathType Leaf)   { $global:GamesJSONFile = Get-Content -Raw -Path $Files.Games | ConvertFrom-Json }
-    
+
+
+    try { if (Test-Path -LiteralPath $Files.Games -PathType Leaf)   { $global:GamesJSONFile = Get-Content -Raw -Path $Files.Games | ConvertFrom-Json } }
+    catch { CreateErrorDialog -Error "Corrupted JSON" }
+
 
 
     ##################
@@ -1802,11 +1788,11 @@ function CreateMainDialog() {
     $CustomGameIDGroup = CreateGroupBox -Width $CustomGameIDPanel.Width -Height $CustomGameIDPanel.Height -Name "CustomGameID" -Text "Custom Channel Title and GameID" -AddTo $CustomGameIDPanel
 
     # Create a label to show Custom Channel Title description.
-    $global:InputCustomChannelTitleTextBoxLabel = CreateLabel -X 8 -Y 22 -Width 75 -Height 15 -Text "Channel Title:" -AddTo $CustomGameIDGroup
+    $global:InputCustomTitleTextBoxLabel = CreateLabel -X 8 -Y 22 -Width 75 -Height 15 -Text "Channel Title:" -AddTo $CustomGameIDGroup
 
     # Create a textbox to display the selected Custom Channel Title.
-    $global:InputCustomChannelTitleTextBox = CreateTextBox -X 85 -Y 20 -Width 260 -Height 22 -Name "CustomGameID" -AddTo $CustomGameIDGroup
-    $InputCustomChannelTitleTextBox.Add_TextChanged({
+    $global:InputCustomTitleTextBox = CreateTextBox -X 85 -Y 20 -Width 260 -Height 22 -Name "CustomGameID" -AddTo $CustomGameIDGroup
+    $InputCustomTitleTextBox.Add_TextChanged({
         if ($this.Text -match "[^a-z 0-9 \: \- \( \) \']") {
             $cursorPos = $this.SelectionStart
             $this.Text = $this.Text -replace "[^a-z 0-9 \: \- \( \) \']",''
@@ -1842,7 +1828,7 @@ function CreateMainDialog() {
     ###############
 
     # Create a panel to contain everything for patches.
-    $global:PatchPanel = CreatePanel -Width 590 -Height 90 -AddTo $MainDialog
+    $global:PatchPanel = CreatePanel -Width 590 -Height 90 -AddTo $MainDialog 
 
     # Create a groupbox to show the patching buttons.
     $global:PatchGroup = CreateGroupBox -Width $PatchPanel.Width -Height $PatchPanel.Height -AddTo $PatchPanel
@@ -1850,31 +1836,10 @@ function CreateMainDialog() {
     # Create patch button
     $global:PatchButton = CreateButton -X 10 -Y 45 -Width 300 -Height 35 -Text "Patch Selected Option" -AddTo $PatchGroup
     $PatchButton.Add_Click( {
-        Foreach ($Item in $PatchesJSONFile.patch) {
-            if ($Item.title -eq $PatchComboBox.Text) {
-                if ($Item.redux -eq 0)        { $Redux = $PatchReduxCheckbox.Checked }
-                elseif ($Item.redux -eq 1)    { $Redux = $True }
-                else                          { $Redux = $False }
+        if ($GamePatch.bps.Length -gt 4)   { $Patch = $MasterPath + "\" + $GameType.mode + $GamePatch.bps }
+        else                               { $Patch = $null }
 
-                if (!$IsWiiVC) {
-                    $Id = $Item.n64_gameID
-                    $Title = $Item.n64_title
-                }
-                else {
-                    $Id = $Item.wii_gameID
-                    $Title = $Item.wii_title
-                }
-
-                if ($Item.bps.Length -gt 4)   { $Patch = $MasterPath + "\" + $GameType + $Item.bps }
-                else                          { $Patch = $null }
-
-                $Command = $Item.command
-                $PatchedFile = $Item.output
-                $Hash = $Item.hash
-
-                MainFunction -Command $Command -Redux $Redux -Id $Id -Title $Title -Patch $Patch -PatchedFile $PatchedFile -Hash $Hash
-            }
-        }
+        MainFunction -Command $GamePatch.command -Patch $Patch -PatchedFileName $GamePatch.output -Hash $GamePatch.hash
     } )
 
     # Create combobox
@@ -1882,22 +1847,31 @@ function CreateMainDialog() {
     $PatchComboBox.Add_SelectedIndexChanged( {
         Foreach ($Item in $PatchesJSONFile.patch) {
             if ($Item.title -eq $PatchComboBox.Text) {
-                $PatchReduxCheckbox.Enabled = $Item.redux -eq 0
-                $global:GamePatch = $Item.title
-                $global:ToolTip.SetToolTip($PatchButton, ([String]::Format($Item.tooltip, [Environment]::NewLine)))
+                if ( ($IsWiiVC -and $Item.console -eq "Wii VC") -or (!$IsWiiVC -and $Item.console -eq "N64") -or ($Item.console -eq "All") ) {
+                    $global:GamePatch = $Item
+                }
             }
+            
         }
+        $PatchEnableReduxCheckbox.Enabled = $GamePatch.redux
+        $PatchEnableAdditionalOptionsCheckbox.Enabled = $GamePatch.additional
+        $PatchAdditionalOptionsButton.Enabled = ($GamePatch.additional -and $PatchEnableAdditionalOptionsCheckbox.Checked)
+        $global:ToolTip.SetToolTip($PatchButton, ([String]::Format($Item.tooltip, [Environment]::NewLine)))
     } )
 
-    # Create a checkbox to enable Redux support.
-    $global:PatchReduxLabel = CreateLabel -X ($PatchButton.Right + 10) -Y ($PatchButton.Top + 10) -Width 40 -Height 15 -Text "Redux:" -ToolTip $ToolTip -Info "Include the Redux patch on for the translation patches" -AddTo $PatchGroup
-    $global:PatchReduxCheckbox = CreateCheckBox -X $PatchReduxLabel.Right -Y ($PatchReduxLabel.Top - 2) -Width 20 -Height 20 -ToolTip $ToolTip -Info "Include the Redux patch on for the translation patches" -AddTo $PatchGroup
+    # Create a checkbox to enable Redux and Additional Options support.
+    $global:PatchEnableReduxLabel = CreateLabel -X ($PatchButton.Right + 10) -Y ($PatchComboBox.Top + 5) -Width 100 -Height 15 -Text "Include Redux:" -ToolTip $ToolTip -Info "Enable the Redux patch" -AddTo $PatchGroup
+    $global:PatchEnableReduxCheckbox = CreateCheckBox -X $PatchEnableReduxLabel.Right -Y ($PatchEnableReduxLabel.Top - 2) -Width 20 -Height 20 -ToolTip $ToolTip -Info "Enable the Redux patch" -AddTo $PatchGroup
 
-    $global:PatchReduxButton = CreateButton -X ($PatchGroup.Right - 170) -Y 20 -Width 150 -Height 55 -Text "Additional Redux Options" -AddTo $PatchGroup
-    $PatchReduxButton.Add_Click( {
-        if ($GameType -eq "Ocarina of Time")     { $OoTReduxOptionsDialog.ShowDialog() }
-        elseif ($GameType -eq "Majora's Mask")   { $MMReduxOptionsDialog.ShowDialog() }
-    } )
+    $global:PatchEnableAdditionalOptionsLabel = CreateLabel -X ($PatchButton.Right + 10) -Y ($PatchEnableReduxLabel.Bottom + 15) -Width 100 -Height 15 -Text "Additional Options:" -ToolTip $ToolTip -Info "Enable additional options" -AddTo $PatchGroup
+    $global:PatchEnableAdditionalOptionsCheckbox = CreateCheckBox -X $PatchEnableAdditionalOptionsLabel.Right -Y ($PatchEnableAdditionalOptionsLabel.Top - 2) -Width 20 -Height 20 -ToolTip $ToolTip -Info "Enable additional options" -AddTo $PatchGroup
+    $PatchEnableAdditionalOptionsCheckbox.Add_CheckStateChanged({
+        $PatchAdditionalOptionsButton.Enabled = $PatchEnableAdditionalOptionsCheckbox.Checked
+    })
+
+    $global:PatchAdditionalOptionsButton = CreateButton -X ($PatchGroup.Right - 140) -Y 20 -Width 120 -Height 55 -Text "Select Additional Options" -AddTo $PatchGroup
+    $PatchAdditionalOptionsButton.Add_Click( { $AdditionalOptionsDialog.ShowDialog() } )
+    $PatchAdditionalOptionsButton.Enabled = $False
 
 
 
@@ -1963,11 +1937,11 @@ function CreateMainDialog() {
 
     # Create a button to patch the VC
     $global:PatchVCButton = CreateButton -X 80 -Y 65 -Width 150 -Height 30 -Text "Patch VC Emulator Only" -ToolTip $ToolTip -Info "Ignore any patches and only patches the Virtual Console emulator`nDowngrading and channing the Channel Title or GameID is still accepted" -AddTo $PatchVCGroup
-    $PatchVCButton.Add_Click({ MainFunction -Command "Patch VC" -Patch $BPSFilePath -PatchedFile '_vc_patched' })
+    $PatchVCButton.Add_Click({ MainFunction -Command "Patch VC" -Patch $BPSFilePath -PatchedFileName '_vc_patched' })
 
     # Create a button to extract the ROM
     $global:ExtractROMButton = CreateButton -X 240 -Y 65 -Width 150 -Height 30 -Text "Extract ROM Only" -ToolTip $ToolTip -Info "Only extract the .Z64 ROM from the WAD file`nUseful for native N64 emulators" -AddTo $PatchVCGroup
-    $ExtractROMButton.Add_Click({ MainFunction -Command "Extract" -Patch $BPSFilePath -PatchedFile '_extracted' })
+    $ExtractROMButton.Add_Click({ MainFunction -Command "Extract" -Patch $BPSFilePath -PatchedFileName '_extracted' })
 
 
 
@@ -1990,7 +1964,7 @@ function CreateMainDialog() {
     $InfoButton.Add_Click({ $InfoDialog.ShowDialog() | Out-Null })
 
     # Create a button to show credits about the patches.
-    $CreditsButton = CreateButton -X ($InfoButton.Right + 15) -Y $InfoGameIDButton.Top -Width 120 -Height 35 -Text "Credits" -ToolTip $ToolTip -Info ("Open the list with credits of all of patches involved and those who helped with the " + $ScriptName + " tool") -AddTo $MiscGroup
+    $global:CreditsButton = CreateButton -X ($InfoButton.Right + 15) -Y $InfoGameIDButton.Top -Width 120 -Height 35 -ToolTip $ToolTip -Info ("Open the list with credits of all of patches involved and those who helped with the " + $ScriptName + " tool") -AddTo $MiscGroup
     $CreditsButton.Add_Click({ $CreditsDialog.ShowDialog() | Out-Null })
 
     # Create a button to close the dialog.
@@ -2029,9 +2003,6 @@ function ChangeGamesList() {
     # Reset
     $CurrentGameComboBox.Items.Clear()
 
-    # Stop here if Games.json file is not present
-    if ($GamesJSONFile -eq $null) { return }
-
     $Items = @()
     Foreach ($Game in $GamesJSONFile.game) {
         if ( ($IsWiiVC -and $Game.console -eq "Wii VC") -or (!$IsWiiVC -and $Game.console -eq "N64") -or ($Game.console -eq "All") ) { $Items += $Game.title }
@@ -2041,9 +2012,7 @@ function ChangeGamesList() {
 
     # Reset last index
     For ($i=0; $i -lt $Items.Length; $i++) {
-        Foreach ($Game in $GamesJSONFile.game) {
-            if ($Game.mode -eq $GameType -and $Game.title -eq $Items[$i]) { $CurrentGameComboBox.SelectedIndex = $i }
-        }
+        if ($GameType.title -eq $Items[$i]) { $CurrentGameComboBox.SelectedIndex = $i }
     }
     if ($Items.Length -gt 0 -and $CurrentGameComboBox.SelectedIndex -eq -1)   { $CurrentGameComboBox.SelectedIndex = 0 }
 
@@ -2055,11 +2024,8 @@ function ChangeGamesList() {
 function ChangePatchPanel() {
     
     # Reset
-    $PatchGroup.text = $GameType + " - Patch Options"
+    $PatchGroup.text = $GameType.mode + " - Patch Options"
     $PatchComboBox.Items.Clear()
-
-    # Stop here if Games.json or Patches.json file is not present
-    if ($GamesJSONFile -eq $null -or $PatchesJSONFile -eq $null) { return }
 
     # Set combobox for patches
     $Items = @()
@@ -2068,7 +2034,7 @@ function ChangePatchPanel() {
             $Items += $i.title
             if ($FirstItem -eq $null) { $FirstItem = $i }
         }
-        #$global:ToolTip.SetToolTip($PatchButton, ([String]::Format($FirstItem.tooltip, [Environment]::NewLine)))
+        $global:ToolTip.SetToolTip($PatchButton, ([String]::Format($FirstItem.tooltip, [Environment]::NewLine)))
     }
 
     $PatchComboBox.Items.AddRange($Items)
@@ -2076,17 +2042,13 @@ function ChangePatchPanel() {
     # Reset last index
     For ($i=0; $i -lt $Items.Length; $i++) {
         Foreach ($Item in $PatchesJSONFile.patch) {
-            if ($Item.title -eq $GamePatch -and $Item.title -eq $Items[$i]) { $PatchComboBox.SelectedIndex = $i }
+            if ($Item.title -eq $GamePatch.title -and $Item.title -eq $Items[$i]) { $PatchComboBox.SelectedIndex = $i }
         }
     }
     if ($Items.Length -gt 0 -and $PatchComboBox.SelectedIndex -eq -1)   { $PatchComboBox.SelectedIndex = 0 }
 
-    if ($GameType -eq "Ocarina of Time" -or $GameType -eq "Majora's Mask") { $global:ToolTip.SetToolTip($PatchReduxButton, "Toggle additional features for the " + $GameType +  " REDUX romhack") }
-    $PatchReduxButton.Visible = $PatchReduxCheckbox.Visible = $PatchReduxLabel.Visible = $False
-
-    Foreach ($Game in $GamesJSONFile.game) {
-        if ($Game.mode -eq $GameType -and $Game.redux -eq 1) { $PatchReduxButton.Visible = $PatchReduxCheckbox.Visible = $PatchReduxLabel.Visible = $True }
-    }
+    if ($GameType.additional)  { $global:ToolTip.SetToolTip($PatchAdditionalOptionsButton, "Toggle additional features for the " + $GameType.mode +  " REDUX romhack") }
+    $PatchAdditionalOptionsButton.Visible = $PatchEnableReduxCheckbox.Visible = $PatchEnableReduxLabel.Visible = $PatchEnableAdditionalOptionsCheckbox.Visible = $PatchEnableAdditionalOptionsLabel.Visible = $GameType.redux 
 
 }
 
@@ -2096,16 +2058,16 @@ function ChangePatchPanel() {
 function SetMainScreenSize() {
     
     if ($IsWiiVC) {
-        $InputCustomChannelTitleTextBoxLabel.Text = "Channel Title:"
-        if ($GameType -ne "Free")   { $PatchVCPanel.Location = New-Object System.Drawing.Size(10, ($PatchPanel.Bottom + 5)) }
-        else                        { $PatchVCPanel.Location = New-Object System.Drawing.Size(10, ($CurrentGamePanel.Bottom + 5)) }
+        $InputCustomTitleTextBoxLabel.Text = "Channel Title:"
+        if ($GameType.patches)   { $PatchVCPanel.Location = New-Object System.Drawing.Size(10, ($PatchPanel.Bottom + 5)) }
+        else                     { $PatchVCPanel.Location = New-Object System.Drawing.Size(10, ($CurrentGamePanel.Bottom + 5)) }
         $MiscPanel.Location = New-Object System.Drawing.Size(10, ($PatchVCPanel.Bottom + 5))
     }
 
     else {
-        $InputCustomChannelTitleTextBoxLabel.Text = "Game Title:"
-        if ($GameType -ne "Free")   { $MiscPanel.Location = New-Object System.Drawing.Size(10, ($PatchPanel.Bottom + 5)) }
-        else                        { $MiscPanel.Location = New-Object System.Drawing.Size(10, ($CustomGameIDPanel.Bottom + 5)) }
+        $InputCustomTitleTextBoxLabel.Text = "Game Title:"
+        if ($GameType.patches)   { $MiscPanel.Location = New-Object System.Drawing.Size(10, ($PatchPanel.Bottom + 5)) }
+        else                     { $MiscPanel.Location = New-Object System.Drawing.Size(10, ($CustomGameIDPanel.Bottom + 5)) }
     }
 
     $StatusPanel.Location = New-Object System.Drawing.Size(10, ($MiscPanel.Bottom + 5))
@@ -2115,9 +2077,11 @@ function SetMainScreenSize() {
 
 
 #==============================================================================================================================================================================================
-function ChangeGameMode([string]$Mode) {
+function ChangeGameMode() {
     
-    $global:GameType = $Mode
+    Foreach ($Item in $GamesJSONFile.game) {
+        if ($Item.title -eq $CurrentGameComboBox.text) { $global:GameType = $Item }
+    }
 
     $PatchVCExpandMemoryLabel.Visible = $PatchVCExpandMemory.Visible = $False
     $PatchVCRemapDPadLabel.Visible = $PatchVCRemapDPad.Visible = $False
@@ -2127,24 +2091,36 @@ function ChangeGameMode([string]$Mode) {
     $PatchVCRemapCDown.Visible = $PatchVCRemapCDownLabel.Visible = $False
     $PatchVCRemapZLabel.Visible = $PatchVCRemapZ.Visible = $False
     $PatchVCLeaveDPadUpLabel.Visible = $PatchVCLeaveDPadUp.Visible = $False
- 
-    if ($GameType -ne "Free" -and (Test-Path -LiteralPath ($MasterPath + "\" + $GameType + "\Patches.json") -PathType Leaf))   { $global:PatchesJSONFile = Get-Content -Raw -Path ($MasterPath + "\" + $GameType + "\Patches.json") | ConvertFrom-Json }
-    else                                                                                                                       { $global:PatchesJSONFile = $null }
+    
+    try { if ($GameType.patches -and (Test-Path -LiteralPath ($MasterPath + "\" + $GameType.mode + "\Patches.json") -PathType Leaf))   { $global:PatchesJSONFile = Get-Content -Raw -Path ($MasterPath + "\" + $GameType.mode + "\Patches.json") | ConvertFrom-Json } }
+    catch { CreateErrorDialog -Error "Corrupted JSON" }
 
-    if ($GameType -ne "") {
-        if (Test-Path -LiteralPath ($TextPath + "\" + $GameType + ".txt") -PathType Leaf)    { AddTextFileToTexTbox -TextBox $InfoTextbox -File ($TextPath + "\" + $GameType + ".txt") }
-        else                                                                                 { AddTextFileToTexTbox -TextBox $InfoTextbox -File $null }
+    if (Test-Path -LiteralPath ($TextPath + "\Info\" + $GameType.mode + ".txt") -PathType Leaf)      { AddTextFileToTextbox -TextBox $InfoTextbox -File ($TextPath + "\Info\" + $GameType.mode + ".txt") }
+    else                                                                                             { AddTextFileToTextbox -TextBox $InfoTextbox -File $null }
 
-        if (Test-Path -LiteralPath ($IconsPath + "\" + $GameType + ".ico") -PathType Leaf)   { $InfoDialog.Icon = $IconsPath + "\" + $GameType + ".ico" }
-        else                                                                                 { $InfoDialog.Icon = $null }
+    if (Test-Path -LiteralPath ($TextPath + "\Credits\" + $GameType.mode + ".txt") -PathType Leaf)   { AddTextFileToTextbox -TextBox $CreditsTextBox -File ($TextPath + "\Credits\" + $GameType.mode + ".txt") -PostSpace 2 }
+    else                                                                                             { AddTextFileToTextbox -TextBox $CreditsTextBox -File $null }
 
-        $global:ToolTip.SetToolTip($InfoButton, "Open the list with information about the " + $GameType + " patching mode")
-        $InfoButton.Text = "Info`n" + $GameType
-        $PatchPanel.Visible = ($GameType -ne "Free")
-    }
+    if (Test-Path -LiteralPath ($TextPath + "\Credits\Common.txt") -PathType Leaf)                   { AddTextFileToTextbox -TextBox $CreditsTextBox -File ($TextPath + "\Credits\Common.txt") -Add $True }
 
-    if ($GameType -eq "Ocarina of Time") { $PatchVCDowngradeLabel.Visible = $PatchVCDowngrade.Visible = $PatchVCLeaveDPadUpLabel.Visible = $PatchVCLeaveDPadUp.Visible = $True }
-    if ($GameType -eq "Ocarina of Time" -or $GameType -eq "Majora's Mask") {
+    if (Test-Path -LiteralPath ($IconsPath + "\" + $GameType.mode + ".ico") -PathType Leaf)          { $InfoDialog.Icon = $AdditionalOptionsDialog.Icon = $IconsPath + "\" + $GameType.mode + ".ico" }
+    else                                                                                             { $InfoDialog.Icon = $AdditionalOptionsDialog.Icon = $null }
+
+    $global:ToolTip.SetToolTip($InfoButton, "Open the list with information about the " + $GameType.mode + " patching mode")
+    $InfoButton.Text = "Info`n" + $GameType.mode
+    $CreditsButton.Text = "Credits`n" + $GameType.mode
+
+    $PatchPanel.Visible = $GameType.patches
+
+    $OoTAdditionalOptionsPanel.Visible = $MMAdditionalOptionsPanel.Visible = $False
+    if ($GameType.mode -eq "Ocarina of Time")     { $OoTAdditionalOptionsPanel.Show() }
+    elseif ($GameType.mode -eq "Majora's Mask")   { $MMAdditionalOptionsPanel.Show() }
+
+    $AdditionalOptionsLabel.text = $GameType.mode + " - Additional Options"
+
+    if ($GameType.downgrade)      { $PatchVCDowngradeLabel.Visible = $PatchVCDowngrade.Visible = $True }
+    if ($GameType.patch_vc -eq 3) { $PatchVCLeaveDPadUpLabel.Visible = $PatchVCLeaveDPadUp.Visible = $True }
+    if ($GameType.patch_vc -ge 2) {
         $PatchVCExpandMemoryLabel.Visible = $PatchVCExpandMemory.Visible = $True
         $PatchVCRemapDPadLabel.Visible = $PatchVCRemapDPad.Visible = $True
         $PatchVCMinimapLabel.Show() 
@@ -2160,28 +2136,7 @@ function ChangeGameMode([string]$Mode) {
 
 
 #==============================================================================================================================================================================================
-function ResetGameID() {
-
-    # Stop here if Patchs.JSON file not present
-    if ($GamesJSONFile -eq $null) { return }
-
-    Foreach ($Item in $GamesJSONFile.game) {
-        if ($IsWiiVC -and $GameType -eq $Item.mode) {
-            $global:GameID = $Item.wii.gameID
-            $global:ChannelTitle = $Item.wii_title
-        }
-        elseif (!$IsWiiVC -and $GameType -eq $Item.mode) {
-            $global:GameID = $Item.n64_gameID
-            $global:ChannelTitle = $Item.n64_title
-        }
-    }
-
-}
-
-
-
-#==============================================================================================================================================================================================
-function UpdateStatusLabel([string]$Text) {
+function UpdateStatusLabel([String]$Text) {
     
     $StatusLabel.Text = $Text
     $StatusLabel.Refresh()
@@ -2191,7 +2146,7 @@ function UpdateStatusLabel([string]$Text) {
 
 
 #==============================================================================================================================================================================================
-function SetWiiVCMode([boolean]$Bool) {
+function SetWiiVCMode([Boolean]$Bool) {
     
     $InjectROMButton.Visible = $PatchVCPanel.Visible = $Bool
 
@@ -2199,22 +2154,22 @@ function SetWiiVCMode([boolean]$Bool) {
     if ($Bool)   {
         EnablePatchButtons -Enable ($WADFilePath -ne $null)
         $global:GameTitleLength = 40
+        $InputCustomTitleTextBox.Text = $GameType.wii_title
+        $InputCustomGameIDTextBox.Text =  $Gametype.wii_gameID
     }
     else {
         EnablePatchButtons -Enable ($Z64FilePath -ne $null)
         $global:GameTitleLength = 20
+        $InputCustomTitleTextBox.Text = $Gametype.n64_title
+        $InputCustomGameIDTextBox.Text =  $Gametype.n64_gameID
     }
     
-    $InputCustomChannelTitleTextBox.MaxLength = $GameTitleLength
+    $InputCustomTitleTextBox.MaxLength = $GameTitleLength
     $ClearWADPathButton.Enabled = ($WADFilePath.Length -gt 0)
 
     SetMainScreenSize
-    ResetGameID
     SetModeLabel
     ChangePatchPanel
-
-    $InputCustomChannelTitleTextBox.Text = $ChannelTitle
-    $InputCustomGameIDTextBox.Text =  $GameID
 
 }
 
@@ -2223,7 +2178,7 @@ function SetWiiVCMode([boolean]$Bool) {
 #==============================================================================================================================================================================================
 function SetModeLabel() {
 	
-    $CurrentModeLabel.Text = "Current  Mode  :  " + $GameType
+    $CurrentModeLabel.Text = "Current  Mode  :  " + $GameType.mode
     if ($IsWiiVC) { $CurrentModeLabel.Text += "  (Wii  VC)" } else { $CurrentModeLabel.Text += "  (N64)" }
     $CurrentModeLabel.Location = New-Object System.Drawing.Size(([Math]::Floor($MainDialog.Width / 2) - [Math]::Floor($CurrentModeLabel.Width / 2)), 10)
 
@@ -2232,10 +2187,10 @@ function SetModeLabel() {
 
 
 #==============================================================================================================================================================================================
-function CheckBootDolOptions() {
+function CheckBootDolOptions([String]$Command) {
     
-    if ($GetCommand -eq "Patch Boot DOL")   { return $True }
-    if ($GameType -eq "Ocarina of Time" -or $GameType -eq "Majora's Mask") {
+    if ($Command -eq "Patch Boot DOL")   { return $True }
+    if ($GameType.patch_vc -ge 2) {
         if ($PatchVCExpandMemory.Checked)   { return $True }
         if ($PatchVCRemapDPad.Checked)      { return $True }
         if ($PatchVCRemapCDown.Checked)     { return $True }
@@ -2274,96 +2229,34 @@ function CheckCheckBox([Object]$CheckBox) {
 
 
 #==============================================================================================================================================================================================
-function CheckReduxOptions() {
+function CreateAdditionalOptionsDialog() {
+
+    # Create Dialog
+    $global:AdditionalOptionsDialog = CreateDialog -Width 700 -Height 580 -Icon $Icons.OcarinaOfTime
+    $CloseButton = CreateButton -X ($AdditionalOptionsDialog.Width / 2 - 40) -Y ($AdditionalOptionsDialog.Height - 90) -Width 80 -Height 35 -Text "Close" -AddTo $AdditionalOptionsDialog
+    $CloseButton.Add_Click({$AdditionalOptionsDialog.Hide()})
+
+    # Create tooltip
+    $ToolTip = CreateToolTip
+
+    # Options Label
+    $global:AdditionalOptionsLabel = CreateLabel -X 30 -Y 20 -Width 300 -Height 15 -Font $VCPatchFont -AddTo $AdditionalOptionsDialog
     
-    if ($GameType -eq "Ocarina of Time") {
+    $global:OoTAdditionalOptionsPanel = CreatePanel -Width $AdditionalOptionsDialog.Width -Height $AdditionalOptionsDialog.Height -AddTo $AdditionalOptionsDialog
+    $global:MMAdditionalOptionsPanel = CreatePanel -Width $AdditionalOptionsDialog.Width -Height $AdditionalOptionsDialog.Height -AddTo $AdditionalOptionsDialog
 
-        if ($2xDamageOoT.Checked)                                 { return $True }
-        if ($4xDamageOoT.Checked)                                 { return $True }
-        if ($8xDamageOoT.Checked)                                 { return $True }
-
-        if ($HalfRecoveryOoT.Checked)                             { return $True }
-        if ($QuarterRecoveryOoT.Checked)                          { return $True }
-        if ($NoRecoveryOoT.Checked)                               { return $True }
-
-        if ($2xTextOoT.Checked)                                   { return $True }
-        if ($3xTextOoT.Checked)                                   { return $True }
-
-        if ($WidescreenOoT.Checked)                               { return $True }
-        if ($WidescreenTexturesOoT.Checked)                       { return $True }
-        if ($ExtendedDrawOoT.Checked)                             { return $True }
-        if ($BlackBarsOoT.Checked)                                { return $True }
-        if ($ForceHiresModelOoT.Checked)                          { return $True }
-        if ($MMModelsOoT.Checked)                                 { return $True }
-
-        if ($ReducedItemCapacityOoT.Checked)                      { return $True }
-        if ($IncreasedItemCapacityOoT.Checked)                    { return $True }
-        if ($UnlockSwordOoT.Checked)                              { return $True }
-        if ($UnlockTunicsOoT.Checked)                             { return $True }
-        if ($UnlockBootsOoT.Checked)                              { return $True }
-
-        if ($DisableLowHPSoundOoT.Checked)                        { return $True }
-        if ($MedallionsOoT.Checked)                               { return $True }
-        if ($ReturnChildOoT.Checked)                              { return $True }
-        if ($DisableNaviOoT.Checked)                              { return $True }
-        if ($HideDPadOoT.Checked -and $IncludeReduxOoT.Checked)   { return $True }
-
-        if ($IncludeReduxOoT.Checked)                             { return $True }
-    }
-
-    elseif ($GameType -eq "Majora's Mask") {
-        
-        if ($2xDamageMM.Checked)                                  { return $True }
-        if ($4xDamageMM.Checked)                                  { return $True }
-        if ($8xDamageMM.Checked)                                  { return $True }
-
-        if ($HalfRecoveryMM.Checked)                              { return $True }
-        if ($QuarterRecoveryMM.Checked)                           { return $True }
-        if ($NoRecoveryMM.Checked)                                { return $True }
-        if ($LeftDPadMM.Checked -and $IncludeReduxMM.Checked)     { return $True }
-        if ($HideDPadMM.Checked -and $IncludeReduxMM.Checked)     { return $True }
-
-        if ($WidescreenMM.Checked)                                { return $True }
-        if ($WidescreenTexturesMM.Checked)                        { return $True }
-        if ($ExtendedDrawMM.Checked)                              { return $True }
-        if ($BlackBarsMM.Checked)                                 { return $True }
-        if ($PixelatedStarsMM.Checked)                            { return $True }
-
-        if ($ReducedItemCapacityMM.Checked)                       { return $True }
-        if ($IncreasedItemCapacityMM.Checked)                     { return $True }
-        if ($RazorSwordMM.Checked)                                { return $True }
-
-        if ($DisableLowHPSoundMM.Checked)                         { return $True }
-        if ($PieceOfHeartSoundMM.Checked)                         { return $True }
-
-        if ($IncludeReduxMM.Checked)                              { return $True }
-
-    }
-
-    return $False
+    CreateOoTAdditionalOptionsContent
+    CreateMMAdditionalOptionsContent
 
 }
 
 
 
 #==============================================================================================================================================================================================
-function CreateOcarinaOfTimeReduxOptionsDialog() {
-
-    # Create Dialog
-    $global:OoTReduxOptionsDialog = CreateDialog -Width 700 -Height 580 -Icon $Icons.OcarinaOfTimeRedux
-    $CloseButton = CreateButton -X ($OoTReduxOptionsDialog.Width / 2 - 40) -Y ($OoTReduxOptionsDialog.Height - 90) -Width 80 -Height 35 -Text "Close" -AddTo $OoTReduxOptionsDialog
-    $CloseButton.Add_Click({$OoTReduxOptionsDialog.Hide()})
-
-    # Create tooltip
-    $ToolTip = CreateToolTip
-
-    # Options Label
-    $TextLabel = CreateLabel -X 30 -Y 20 -Width 300 -Height 15 -Font $VCPatchFont -Text "Ocarina of Time REDUX - Additional Options" -AddTo $OoTReduxOptionsDialog
-    
-   # $OoTReduxOptionsDialog.Show()
+function CreateOoTAdditionalOptionsContent() {
 
     # HERO MODE #
-    $global:HeroModeBoxOoT             = CreateReduxGroup -Y 50 -Height 3 -Dialog $OoTReduxOptionsDialog -Text "Hero Mode"
+    $global:HeroModeBoxOoT             = CreateReduxGroup -Y 50 -Height 3 -Dialog $OoTAdditionalOptionsPanel -Text "Hero Mode"
     
     # Damage
     $global:DamagePanelOoT             = CreateReduxPanel -Row 0 -Group $HeroModeBoxOoT 
@@ -2391,7 +2284,7 @@ function CreateOcarinaOfTimeReduxOptionsDialog() {
 
 
     # TEXT SPEED #
-    $global:TextBoxOoT                 = CreateReduxGroup -Y ($HeroModeBoxOoT.Bottom + 5) -Height 1 -Dialog $OoTReduxOptionsDialog -Text "Text Dialogue Speed"
+    $global:TextBoxOoT                 = CreateReduxGroup -Y ($HeroModeBoxOoT.Bottom + 5) -Height 1 -Dialog $OoTAdditionalOptionsPanel -Text "Text Dialogue Speed"
     
     $global:TextPanelOoT               = CreateReduxPanel -Row 0 -Group $TextBoxOoT 
     $global:1xTextOoT                  = CreateReduxRadioButton -Column 0 -Row 0 -Panel $TextPanelOoT -Checked $True -Text "1x Speed" -ToolTip $ToolTip -Info "Leave the dialogue text speed at normal"
@@ -2401,7 +2294,7 @@ function CreateOcarinaOfTimeReduxOptionsDialog() {
 
 
     # GRAPHICS #
-    $global:GraphicsBoxOoT             = CreateReduxGroup -Y ($TextBoxOoT.Bottom + 5) -Height 2 -Dialog $OoTReduxOptionsDialog -Text "Graphics"
+    $global:GraphicsBoxOoT             = CreateReduxGroup -Y ($TextBoxOoT.Bottom + 5) -Height 2 -Dialog $OoTAdditionalOptionsPanel -Text "Graphics"
     
     $global:WidescreenOoT              = CreateReduxCheckbox -Column 0 -Row 1 -Group $GraphicsBoxOoT -Text "16:9 Widescreen"        -ToolTip $ToolTip -Info "Native 16:9 widescreen display support"
     $global:WidescreenTexturesOoT      = CreateReduxCheckbox -Column 1 -Row 1 -Group $GraphicsBoxOoT -Text "16:9 Textures"          -ToolTip $ToolTip -Info "16:9 backgrounds and textures suitable for native 16:9 widescreen display support"
@@ -2413,7 +2306,7 @@ function CreateOcarinaOfTimeReduxOptionsDialog() {
 
 
     # EQUIPMENT #
-    $global:EquipmentBoxOoT            = CreateReduxGroup -Y ($GraphicsBoxOoT.Bottom + 5) -Height 2 -Dialog $OoTReduxOptionsDialog -Text "Equipment"
+    $global:EquipmentBoxOoT            = CreateReduxGroup -Y ($GraphicsBoxOoT.Bottom + 5) -Height 2 -Dialog $OoTAdditionalOptionsPanel -Text "Equipment"
     
     $global:ItemCapacityPanelOoT       = CreateReduxPanel -Row 0 -Group $EquipmentBoxOoT 
     $global:ReducedItemCapacityOoT     = CreateReduxRadioButton -Column 0 -Row 0 -Panel $ItemCapacityPanelOoT                -Text "Reduced Item Capacity"   -ToolTip $ToolTip -Info "Decrease the amount of deku sticks, deku nuts, deku seeds, bombs and arrows you can carry"
@@ -2427,46 +2320,29 @@ function CreateOcarinaOfTimeReduxOptionsDialog() {
 
 
     # EVERYTHING ELSE #
-    $global:OtherBoxOoT                = CreateReduxGroup -Y ($EquipmentBoxOoT.Bottom + 5) -Height 2 -Dialog $OoTReduxOptionsDialog -Text "Other"
+    $global:OtherBoxOoT                = CreateReduxGroup -Y ($EquipmentBoxOoT.Bottom + 5) -Height 2 -Dialog $OoTAdditionalOptionsPanel -Text "Other"
 
-    $global:DisableLowHPSoundOoT       = CreateReduxCheckbox -Column 0 -Row 1 -Group $OtherBoxOoT -Text "Disable Low HP Beep"    -ToolTip $ToolTip -Info "There will be absolute silence when Link's HP is getting low"
-    $global:MedallionsOoT              = CreateReduxCheckbox -Column 1 -Row 1 -Group $OtherBoxOoT -Text "Require All Medallions" -ToolTip $ToolTip -Info "All six medallions are required for the Rainbow Bridge to appear before Ganon's Castle`The vanilla requirements were the Shadow and Spirit Medallions and the Light Arrows"
-    $global:ReturnChildOoT             = CreateReduxCheckbox -Column 2 -Row 1 -Group $OtherBoxOoT -Text "Can Always Return"      -ToolTip $ToolTip -Info "You can always go back to being a child again before clearing the boss of the Forest Temple`nOut of the way Sheik!"
-    $global:DisableNaviOoT             = CreateReduxCheckbox -Column 3 -Row 1 -Group $OtherBoxOoT -Text "Remove Navi Prompts"    -ToolTip $ToolTip -Info "Navi will no longer interupt your during the first dungeon with mandatory textboxes"
-    $global:HideDPadOoT                = CreateReduxCheckbox -Column 0 -Row 2 -Group $OtherBoxOoT -Text "Hide D-Pad Icon"        -ToolTip $ToolTip -Info "Hide the D-Pad icon, while it is still active"
+    $global:DisableLowHPSoundOoT       = CreateReduxCheckbox -Column 0 -Row 1 -Group $OtherBoxOoT -Text "Disable Low HP Beep"             -ToolTip $ToolTip -Info "There will be absolute silence when Link's HP is getting low"
+    $global:MedallionsOoT              = CreateReduxCheckbox -Column 1 -Row 1 -Group $OtherBoxOoT -Text "Require All Medallions"          -ToolTip $ToolTip -Info "All six medallions are required for the Rainbow Bridge to appear before Ganon's Castle`The vanilla requirements were the Shadow and Spirit Medallions and the Light Arrows"
+    $global:ReturnChildOoT             = CreateReduxCheckbox -Column 2 -Row 1 -Group $OtherBoxOoT -Text "Can Always Return"               -ToolTip $ToolTip -Info "You can always go back to being a child again before clearing the boss of the Forest Temple`nOut of the way Sheik!"
+    $global:DisableNaviOoT             = CreateReduxCheckbox -Column 3 -Row 1 -Group $OtherBoxOoT -Text "Remove Navi Prompts"             -ToolTip $ToolTip -Info "Navi will no longer interupt your during the first dungeon with mandatory textboxes"
+    $global:HideDPadOoT                = CreateReduxCheckbox -Column 0 -Row 2 -Group $OtherBoxOoT -Text "Hide D-Pad Icon" -Disable $True -ToolTip $ToolTip -Info "Hide the D-Pad icon, while it is still active"
     
 
 
-    # Include Redux (Checkbox)
-    $global:IncludeReduxOoT            = CreateCheckbox -X 30 -Y ($CloseButton.Top + 5) -Checked $True -ToolTip $ToolTip -Info "Include the base REDUX patch`nDisable this option to patch only the vanilla ROM with the above options" -AddTo $OoTReduxOptionsDialog
-    $IncludeReduxLabel                 = CreateLabel -X $IncludeReduxOoT.Right -Y ($IncludeReduxOoT.Top + 3) -Width 135 -Height 15 -Text "Include Redux Patch" -ToolTip $ToolTip -Info "Include the base REDUX patch`nDisable this option to patch only the vanilla ROM with the above options" -AddTo $OoTReduxOptionsDialog
-
-    $IncludeReduxOoT.Add_CheckStateChanged({
-        $OtherBoxOoT.Controls[4 * 2].Enabled = $IncludeReduxOoT.Checked
+    $PatchEnableReduxCheckbox.Add_CheckStateChanged({
+        $OtherBoxOoT.Controls[4 * 2].Enabled = $PatchEnableReduxCheckbox.Checked
     })
 
 }
 
- 
+
 
 #==============================================================================================================================================================================================
-function CreateMajorasMaskReduxOptionsDialog() {
-    
-    # Create Dialog
-    $global:MMReduxOptionsDialog = CreateDialog -Width 700 -Height 580 -Icon $Icons.MajorasMaskRedux
-    $CloseButton = CreateButton -X ($MMReduxOptionsDialog.Width / 2 - 40) -Y ($MMReduxOptionsDialog.Height - 90) -Width 80 -Height 35 -Text "Close" -AddTo $MMReduxOptionsDialog
-    $CloseButton.Add_Click({$MMReduxOptionsDialog.Hide()})
-
-    # Create tooltip
-    $ToolTip = CreateToolTip
-
-    # Options Label
-    $TextLabel = CreateLabel -X 30 -Y 20 -Width 300 -Height 15 -Font $VCPatchFont -Text "Majora's Mask REDUX - Additional Options" -AddTo $MMReduxOptionsDialog
-
-    #$MMReduxOptionsDialog.Show()
+function CreateMMAdditionalOptionsContent() {
 
     # HERO MODE #
-    $global:HeroModeBoxMM              = CreateReduxGroup -Y 50 -Height 3 -Dialog $MMReduxOptionsDialog -Text "Hero Mode"
+    $global:HeroModeBoxMM              = CreateReduxGroup -Y 50 -Height 3 -Dialog $MMAdditionalOptionsPanel -Text "Hero Mode"
     
     # Damage
     $global:DamagePanelMM              = CreateReduxPanel -Row 0 -Group $HeroModeBoxMM 
@@ -2494,17 +2370,17 @@ function CreateMajorasMaskReduxOptionsDialog() {
 
 
     # D-PAD #
-    $global:DPadBoxMM                  = CreateReduxGroup -Y ($HeroModeBoxMM.Bottom + 5) -Height 1 -Dialog $MMReduxOptionsDialog -Text "D-Pad Icons Layout"
+    $global:DPadBoxMM                  = CreateReduxGroup -Y ($HeroModeBoxMM.Bottom + 5) -Height 1 -Dialog $MMAdditionalOptionsPanel -Text "D-Pad Icons Layout"
     
     $global:DPadPanelMM                = CreateReduxPanel -Row 0 -Group $DPadBoxMM 
-    $global:LeftDPadMM                 = CreateReduxRadioButton -Column 0 -Row 0 -Panel $DPadPanelMM                -Text "Left Side" -ToolTip $ToolTip -Info "Show the D-Pad icons on the left side of the HUD"
-    $global:RightDPadMM                = CreateReduxRadioButton -Column 1 -Row 0 -Panel $DPadPanelMM -Checked $True -Text "Right Side" -ToolTip $ToolTip -Info "Show the D-Pad icons on the right side of the HUD"
-    $global:HideDPadMM                 = CreateReduxRadioButton -Column 2 -Row 0 -Panel $DPadPanelMM                -Text "Hidden" -ToolTip $ToolTip -Info "Hide the D-Pad icons, while they are still active"
+    $global:LeftDPadMM                 = CreateReduxRadioButton -Column 0 -Row 0 -Panel $DPadPanelMM                -Disable $True -Text "Left Side" -ToolTip $ToolTip -Info "Show the D-Pad icons on the left side of the HUD"
+    $global:RightDPadMM                = CreateReduxRadioButton -Column 1 -Row 0 -Panel $DPadPanelMM -Checked $True -Disable $True -Text "Right Side" -ToolTip $ToolTip -Info "Show the D-Pad icons on the right side of the HUD"
+    $global:HideDPadMM                 = CreateReduxRadioButton -Column 2 -Row 0 -Panel $DPadPanelMM                -Disable $True -Text "Hidden" -ToolTip $ToolTip -Info "Hide the D-Pad icons, while they are still active"
     
     
    
     # GRAPHICS #
-    $global:GraphicsBoxMM              = CreateReduxGroup -Y ($DPadBoxMM.Bottom + 5) -Height 2 -Dialog $MMReduxOptionsDialog -Text "Graphics"
+    $global:GraphicsBoxMM              = CreateReduxGroup -Y ($DPadBoxMM.Bottom + 5) -Height 2 -Dialog $MMAdditionalOptionsPanel -Text "Graphics"
     
     $global:WidescreenMM               = CreateReduxCheckbox -Column 0 -Row 1 -Group $GraphicsBoxMM -Text "16:9 Widescreen"         -ToolTip $ToolTip -Info "Native 16:9 Widescreen Display support"
     $global:WidescreenTexturesMM       = CreateReduxCheckbox -Column 1 -Row 1 -Group $GraphicsBoxMM -Text "16:9 Textures"           -ToolTip $ToolTip -Info "16:9 backgrounds and textures suitable for native 16:9 widescreen display support"
@@ -2515,7 +2391,7 @@ function CreateMajorasMaskReduxOptionsDialog() {
     
 
     # EQUIPMENT #
-    $global:EquipmentBoxMM             = CreateReduxGroup -Y ($GraphicsBoxMM.Bottom + 5) -Height 2 -Dialog $MMReduxOptionsDialog -Text "Equipment"
+    $global:EquipmentBoxMM             = CreateReduxGroup -Y ($GraphicsBoxMM.Bottom + 5) -Height 2 -Dialog $MMAdditionalOptionsPanel -Text "Equipment"
     
     $global:ItemCapacityPanelMM        = CreateReduxPanel -Row 0 -Group $EquipmentBoxMM 
     $global:ReducedItemCapacityMM      = CreateReduxRadioButton -Column 0 -Row 0 -Panel $ItemCapacityPanelMM                -Text "Reduced Item Capacity"   -ToolTip $ToolTip -Info "Decrease the amount of deku sticks, deku nuts, bombs and arrows you can carry"
@@ -2527,21 +2403,17 @@ function CreateMajorasMaskReduxOptionsDialog() {
 
 
     # EVERYTHING ELSE #
-    $global:OtherBoxMM                 = CreateReduxGroup -Y ($EquipmentBoxMM.Bottom + 5) -Height 1 -Dialog $MMReduxOptionsDialog -Text "Other"
+    $global:OtherBoxMM                 = CreateReduxGroup -Y ($EquipmentBoxMM.Bottom + 5) -Height 1 -Dialog $MMAdditionalOptionsPanel -Text "Other"
 
     $global:DisableLowHPSoundMM        = CreateReduxCheckbox -Column 0 -Row 1 -Group $OtherBoxMM -Text "Disable Low HP Beep"      -ToolTip $ToolTip -Info "There will be absolute silence when Link's HP is getting low"
     $global:PieceOfHeartSoundMM        = CreateReduxCheckbox -Column 1 -Row 1 -Group $OtherBoxMM -Text "4th Piece of Heart Sound" -ToolTip $ToolTip -Info "Restore the sound effect when collecting the fourth Piece of Heart that grants Link a new Heart Container"
 
 
 
-    # Include Redux (Checkbox)
-    $global:IncludeReduxMM             = CreateCheckbox -X 30 -Y ($CloseButton.Top + 5) -Checked $True -ToolTip $ToolTip -Info "Include the base REDUX patch`nDisable this option to patch only the vanilla ROM with the above options" -AddTo $MMReduxOptionsDialog
-    $IncludeReduxLabel                 = CreateLabel -X $IncludeReduxMM.Right -Y ($IncludeReduxMM.Top + 3) -Width 135 -Height 15 -Text "Include Redux Patch" -ToolTip $ToolTip -Info "Include the base REDUX patch`nDisable this option to patch only the vanilla ROM with the above options" -AddTo $MMReduxOptionsDialog
-
-    $IncludeReduxMM.Add_CheckStateChanged({
-        $DPadPanelMM.Controls[0 * 2].Enabled = $IncludeReduxMM.Checked
-        $DPadPanelMM.Controls[1 * 2].Enabled = $IncludeReduxMM.Checked
-        $DPadPanelMM.Controls[2 * 2].Enabled = $IncludeReduxMM.Checked
+    $PatchEnableReduxCheckbox.Add_CheckStateChanged({
+        $DPadPanelMM.Controls[0 * 2].Enabled = $PatchEnableReduxCheckbox.Checked
+        $DPadPanelMM.Controls[1 * 2].Enabled = $PatchEnableReduxCheckbox.Checked
+        $DPadPanelMM.Controls[2 * 2].Enabled = $PatchEnableReduxCheckbox.Checked
     })
 
 }
@@ -2565,7 +2437,7 @@ function CreateInfoGameIDDialog() {
 
     # Create textbox
     $TextBox = CreateTextBox -X 40 -Y ($HashSumROMTextBox.Bottom + 10) -Width ($InfoGameIDDialog.Width - 100) -Height ($CloseButton.Top - 100) -ReadOnly $True -AddTo $InfoGameIDDialog
-    AddTextFileToTexTbox -TextBox $Textbox -File $Files.text_gameID
+    AddTextFileToTextbox -TextBox $Textbox -File $Files.text_gameID
 
 }
 
@@ -2583,8 +2455,7 @@ function CreateCreditsDialog() {
     $InfoLabel = CreateLabel -X ($CreditsDialog.Width / 2 - $String.Width - 100) -Y 10 -Width 200 -Height 15 -Font $VCPatchFont -Text ($ScriptName + " " + $Version + " (" + $VersionDate + ")") -AddTo $CreditsDialog
 
     # Create textbox
-    $TextBox = CreateTextBox -X 40 -Y 50 -Width ($CreditsDialog.Width - 100) -Height ($CloseButton.Top - 60) -ReadOnly $True -AddTo $CreditsDialog
-    AddTextFileToTexTbox -TextBox $Textbox -File $Files.text_credits
+    $global:CreditsTextBox = CreateTextBox -X 40 -Y 50 -Width ($CreditsDialog.Width - 100) -Height ($CloseButton.Top - 60) -ReadOnly $True -AddTo $CreditsDialog
 
 }
 
@@ -2609,9 +2480,9 @@ function CreateInfoDialog() {
 
 
 #==============================================================================================================================================================================================
-function AddTextFileToTexTbox($TextBox, $File) {
+function AddTextFileToTextbox([Object]$TextBox, [String]$File, [Boolean]$Add, [int]$PreSpace, [int]$PostSpace) {
     
-    if ($File -eq $null) {
+    if ($File -eq "") {
         $TextBox.Text = ""
         return
     }
@@ -2625,8 +2496,18 @@ function AddTextFileToTexTbox($TextBox, $File) {
             }
             else { $str += "{0}" }
         }
+
+        if ($PreSpace -gt 0) {
+            for ($i=0; $i -lt $PreSpace; $i++) { $str = "{0}" + $str }
+        }
+        if ($PostSpace -gt 0) {
+            for ($i=0; $i -lt $PostSpace; $i++) { $str = $str + "{0}" }
+        }
+
         $str = [String]::Format($str, [Environment]::NewLine)
-        $TextBox.Text = $str
+
+        if ($Add) { $TextBox.Text += $str }
+        else      { $TextBox.Text = $str }
     }
 
 }
@@ -2634,33 +2515,40 @@ function AddTextFileToTexTbox($TextBox, $File) {
 
 
 #==============================================================================================================================================================================================
-function CreateMissingFilesDialog() {
+function CreateErrorDialog([String]$Error) {
     
     # Create Dialog
-    $global:MissingFilesDialog = CreateDialog -Width 300 -Height 200 -Icon $null
+    $ErrorDialog = CreateDialog -Width 300 -Height 200 -Icon $null
 
-    $CloseButton = CreateButton -X ($MissingFilesDialog.Width / 2 - 40) -Y ($MissingFilesDialog.Height - 90) -Width 80 -Height 35 -Text "Close" -AddTo $MissingFilesDialog
-    $CloseButton.Add_Click({$MissingFilesDialog.Hide()})
+    $CloseButton = CreateButton -X ($ErrorDialog.Width / 2 - 40) -Y ($ErrorDialog.Height - 90) -Width 80 -Height 35 -Text "Close" -AddTo $ErrorDialog
+    $CloseButton.Add_Click({$ErrorDialog.Hide()})
 
     # Create the string that will be displayed on the window.
     $String = $ScriptName + " " + $Version + " (" + $VersionDate + ")" + "{0}"
 
     $String += "{0}"
-    $String += "Neccessary files are missing.{0}"
+
+    if ($Error -eq "Missing Files")        { $String += "Neccessary files are missing.{0}" }
+    elseif ($Error -eq "Corrupted JSON")   { $String += "Games.json or Patches.json files are corrupted.{0}" }
+
     $String += "{0}"
     $String += "Please download the Patcher64+ Tool again."
 
     $String = [String]::Format($String, [Environment]::NewLine)
 
     #Create Label
-    $Label = CreateLabel -X 10 -Y 10 -Width ($MissingFilesDialog.Width-10) -Height ($MissingFilesDialog.Height - 110) -Text $String -AddTo $MissingFilesDialog
+    $Label = CreateLabel -X 10 -Y 10 -Width ($ErrorDialog.Width-10) -Height ($ErrorDialog.Height - 110) -Text $String -AddTo $ErrorDialog
+
+    if ($MainDialog -ne $null) { $MainDialog.Hide() }
+    $ErrorDialog.ShowDialog() | Out-Null
+    if ($MainDialog -eq $null) { Exit }
 
 }
 
 
 
 #==============================================================================================================================================================================================
-function CreateForm([int]$X, [int]$Y, [int]$Width, [int]$Height, [string]$Name, [Object]$Object, [Object]$AddTo) {
+function CreateForm([int]$X, [int]$Y, [int]$Width, [int]$Height, [String]$Name, [Object]$Object, [Object]$AddTo) {
     
     $Form = $Object
     if ($Width -ne $null -and $Height -ne $null)   { $Form.Size = New-Object System.Drawing.Size($Width, $Height) }
@@ -2697,7 +2585,7 @@ function CreateDialog([int]$Width, [int]$Height, [Object]$Icon) {
 
 
 #==============================================================================================================================================================================================
-function CreateGroupBox([int]$X, [int]$Y, [int]$Width, [int]$Height, [string]$Name, [string]$Text, [Object]$AddTo) {
+function CreateGroupBox([int]$X, [int]$Y, [int]$Width, [int]$Height, [String]$Name, [String]$Text, [Object]$AddTo) {
     
     $GroupBox = CreateForm -X $X -Y $Y -Width $Width -Height $Height -Name $Name -Object (New-Object System.Windows.Forms.GroupBox) -AddTo $AddTo
     if ($Text -ne $null -and $Text -ne "") { $GroupBox.Text = (" " + $Text + " ") }
@@ -2708,16 +2596,18 @@ function CreateGroupBox([int]$X, [int]$Y, [int]$Width, [int]$Height, [string]$Na
 
 
 #==============================================================================================================================================================================================
-function CreatePanel([int]$X, [int]$Y, [int]$Width, [int]$Height, [string]$Name, [Object]$AddTo) {
+function CreatePanel([int]$X, [int]$Y, [int]$Width, [int]$Height, [String]$Name, [Boolean]$Hide, [Object]$AddTo) {
     
-    return CreateForm -X $X -Y $Y -Width $Width -Height $Height -Name $Name -Object (New-Object System.Windows.Forms.Panel) -AddTo $AddTo
+    $Panel = CreateForm -X $X -Y $Y -Width $Width -Height $Height -Name $Name -Object (New-Object System.Windows.Forms.Panel) -AddTo $AddTo
+    if ($Hide) { $Panel.Hide() }
+    return $Panel
 
 }
 
 
 
 #==============================================================================================================================================================================================
-function CreateTextBox([int]$X, [int]$Y, [int]$Width, [int]$Height, [string]$Name, [boolean]$ReadOnly, [string]$Text, [Object]$AddTo) {
+function CreateTextBox([int]$X, [int]$Y, [int]$Width, [int]$Height, [String]$Name, [Boolean]$ReadOnly, [String]$Text, [Object]$AddTo) {
     
     $TextBox = CreateForm -X $X -Y $Y -Width $Width -Height $Height -Name $Name -Object (New-Object System.Windows.Forms.TextBox) -AddTo $AddTo
     if ($Text -ne $null) { $TextBox.Text = $Text }
@@ -2741,7 +2631,7 @@ function CreateTextBox([int]$X, [int]$Y, [int]$Width, [int]$Height, [string]$Nam
 
 
 #==============================================================================================================================================================================================
-function CreateComboBox([int]$X, [int]$Y, [int]$Width, [int]$Height, [string]$Name, $Items, [Object]$AddTo) {
+function CreateComboBox([int]$X, [int]$Y, [int]$Width, [int]$Height, [String]$Name, [Object]$Items, [Object]$AddTo) {
     
     $ComboBox = CreateForm -X $X -Y $Y -Width $Width -Height $Height -Name $Name -Object (New-Object System.Windows.Forms.ComboBox) -AddTo $AddTo
 
@@ -2758,12 +2648,13 @@ function CreateComboBox([int]$X, [int]$Y, [int]$Width, [int]$Height, [string]$Na
 
 
 #==============================================================================================================================================================================================
-function CreateCheckbox([int]$X, [int]$Y, [string]$Name, [boolean]$Checked, [boolean]$IsRadio, [Object]$Tooltip, [string]$Info, [Object]$AddTo) {
+function CreateCheckbox([int]$X, [int]$Y, [String]$Name, [Boolean]$Checked, [Boolean]$Disable, [Boolean]$IsRadio, [Object]$Tooltip, [String]$Info, [Object]$AddTo) {
     
     if ($IsRadio)             { $Checkbox = CreateForm -X $X -Y $Y -Width 20 -Height 20 -Name $Name -Object (New-Object System.Windows.Forms.RadioButton) -AddTo $AddTo }
     else                      { $Checkbox = CreateForm -X $X -Y $Y -Width 20 -Height 20 -Name $Name -Object (New-Object System.Windows.Forms.CheckBox) -AddTo $AddTo }
     if ($Tooltip -ne $null)   { $ToolTip.SetToolTip($Checkbox, $Info) }
     $Checkbox.Checked = $Checked
+    $Checkbox.Enabled = !$Disable
     return $Checkbox
 
 }
@@ -2771,7 +2662,7 @@ function CreateCheckbox([int]$X, [int]$Y, [string]$Name, [boolean]$Checked, [boo
 
 
 #==============================================================================================================================================================================================
-function CreateLabel([int]$X, [int]$Y, [string]$Name, [int]$Width, [int]$Height, [string]$Text, [Object]$Font, [Object]$Tooltip, [string]$Info, [Object]$AddTo) {
+function CreateLabel([int]$X, [int]$Y, [String]$Name, [int]$Width, [int]$Height, [String]$Text, [Object]$Font, [Object]$Tooltip, [String]$Info, [Object]$AddTo) {
     
     $Label = CreateForm -X $X -Y $Y -Width $Width -Height $Height -Name $Name -Object (New-Object System.Windows.Forms.Label) -AddTo $AddTo
     if ($Text -ne $null)      { $Label.Text = $Text }
@@ -2784,7 +2675,7 @@ function CreateLabel([int]$X, [int]$Y, [string]$Name, [int]$Width, [int]$Height,
 
 
 #==============================================================================================================================================================================================
-function CreateButton([int]$X, [int]$Y, [string]$Name, [int]$Width, [int]$Height, [string]$Text, [Object]$Tooltip, [string]$Info, [Object]$AddTo) {
+function CreateButton([int]$X, [int]$Y, [String]$Name, [int]$Width, [int]$Height, [String]$Text, [Object]$Tooltip, [String]$Info, [Object]$AddTo) {
     
     $Button = CreateForm -X $X -Y $Y -Width $Width -Height $Height -Name $Name -Object (New-Object System.Windows.Forms.Button) -AddTo $AddTo
     if ($Text -ne $null)      { $Button.Text = $Text }
@@ -2798,15 +2689,15 @@ function CreateButton([int]$X, [int]$Y, [string]$Name, [int]$Width, [int]$Height
 
 
 #==============================================================================================================================================================================================
-function CreateReduxGroup([int]$Y, [int]$Height, [Object]$Dialog, [string]$Text)   { return CreateGroupBox -X 15 -Y $Y -Width ($Dialog.Width - 50) -Height ($Height * 30 + 20) -Text $Text -AddTo $Dialog }
+function CreateReduxGroup([int]$Y, [int]$Height, [Object]$Dialog, [String]$Text)   { return CreateGroupBox -X 15 -Y $Y -Width ($Dialog.Width - 50) -Height ($Height * 30 + 20) -Text $Text -AddTo $Dialog }
 function CreateReduxPanel([int]$Row, [Object]$Group)                               { return CreatePanel -X $Group.Left -Y ($Row * 30 + 20) -Width ($Group.Width - 20) -Height 20 -AddTo $Group }
 
 
 
 #==============================================================================================================================================================================================
-function CreateReduxRadioButton([int]$Column, [int]$Row, [Object]$Panel, [boolean]$Checked, [string]$Text, [Object]$Tooltip, [string]$Info) {
+function CreateReduxRadioButton([int]$Column, [int]$Row, [Object]$Panel, [Boolean]$Checked, [Boolean]$Disable, [String]$Text, [Object]$Tooltip, [String]$Info) {
     
-    $Button = CreateCheckbox -X ($Column * 155) -Y ($Row * 30) -Checked $Checked -IsRadio $True -ToolTip $ToolTip -Info $Info -AddTo $Panel
+    $Button = CreateCheckbox -X ($Column * 155) -Y ($Row * 30) -Checked $Checked -Disable $Disable -IsRadio $True -ToolTip $ToolTip -Info $Info -AddTo $Panel
     CreateLabel -X $Button.Right -Y ($Button.Top + 3) -Width 135 -Height 15 -Text $Text -ToolTip $ToolTip -Info $Info -AddTo $Panel
     return $Button
 
@@ -2815,10 +2706,11 @@ function CreateReduxRadioButton([int]$Column, [int]$Row, [Object]$Panel, [boolea
 
 
 #==============================================================================================================================================================================================
-function CreateReduxCheckbox([int]$Column, [int]$Row, [Object]$Group, [boolean]$Checked, [string]$Text, [Object]$Tooltip, [string]$Info) {
+function CreateReduxCheckbox([int]$Column, [int]$Row, [Object]$Group, [Boolean]$Checked, [Boolean]$Disable, [String]$Text, [Object]$Tooltip, [String]$Info) {
     
-    $Checkbox = CreateCheckbox -X ($Column * 155 + 15) -Y ($Row * 30 - 10) -Checked $False -IsRadio $False -ToolTip $ToolTip -Info $Info -AddTo $Group
+    $Checkbox = CreateCheckbox -X ($Column * 155 + 15) -Y ($Row * 30 - 10) -Checked $False -Disable $Disable -IsRadio $False -ToolTip $ToolTip -Info $Info -AddTo $Group
     CreateLabel -X $CheckBox.Right -Y ($CheckBox.Top + 3) -Width 135 -Height 15 -Text $Text -ToolTip $ToolTip -Info $Info -AddTo $Group
+
     return $CheckBox
 
 }
@@ -2836,17 +2728,9 @@ $global:Icons = SetIconParameters
 # Set paths to all the files stored in the script.
 $global:Files = SetFileParameters
 
-# Files are missing, error!
-if ($MissingFiles) {
-    CreateMissingFilesDialog
-    $MissingFilesDialog.ShowDialog() | Out-Null
-    Exit
-}
-
 # Create the dialogs to show to the user.
 CreateMainDialog
-CreateOcarinaOfTimeReduxOptionsDialog
-CreateMajorasMaskReduxOptionsDialog
+CreateAdditionalOptionsDialog
 CreateInfoGameIDDialog
 CreateInfoDialog
 CreateCreditsDialog
