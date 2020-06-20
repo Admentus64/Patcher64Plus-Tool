@@ -34,6 +34,7 @@
 	"console" : "All",
 	"patch_vc" : 1,
 	"patches" : 1,
+	"decompress" : 2,
 	"n64_gameID" : "NSME",
 	"n64_title" : "SUPER MARIO 64",
 	"wii_gameID" : "NAAE",

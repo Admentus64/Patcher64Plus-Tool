@@ -19,8 +19,8 @@ Add-Type -AssemblyName 'System.Drawing'
 #==============================================================================================================================================================================================
 # Setup global variables
 
-$global:VersionDate = "19-06-2020"
-$global:Version     = "v5.0"
+$global:VersionDate = "20-06-2020"
+$global:Version     = "v5.1"
 
 $global:GameType = ""
 $global:GamePatch = ""
@@ -182,11 +182,18 @@ function MainFunction([String]$Command, [String]$Patch, [String]$PatchedFileName
         }
     }
 
-    $Compress = $False
-    if ($PatchFile -like "*\Decompressed\*")   { $Compress = $True }
-    elseif ($Redux)                            { $Compress = $True }
+    $Decompress = $False
+    if ($PatchFile -like "*\Decompressed\*")   { $Decompress = $True }
+    elseif ($Redux)                            { $Decompress = $True }
 
-    MainFunctionPatch -Command $Command -Title $Title -GameID $GameID -Redux $Redux -PatchedFileName $PatchedFileName -Compress $Compress -Downgrade $Downgrade
+    $Patcher = $null
+    if ($PatchFile -like "*.bps*")          { $Patcher = "Flips" }
+    elseif ($PatchFile -like "*.ips*")      { $Patcher = "Flips" }
+    elseif ($PatchFile -like "*.xdelta*")   { $Patcher = "Xdelta" }
+    elseif ($PatchFile -like "*.vcdiff*")   { $Patcher = "Xdelta3" }
+    else                                    { $Patcher = "Flips" }
+
+    MainFunctionPatch -Command $Command -Title $Title -GameID $GameID -Redux $Redux -PatchedFileName $PatchedFileName -Decompress $Decompress -Downgrade $Downgrade -Patcher $Patcher
     Cleanup
 
 }
@@ -194,9 +201,9 @@ function MainFunction([String]$Command, [String]$Patch, [String]$PatchedFileName
 
 
 #==============================================================================================================================================================================================
-function MainFunctionPatch([String]$Command, [String]$Title, [String]$GameID, [Boolean]$Redux, [String]$PatchedFileName, [Boolean]$Compress, [Boolean]$Downgrade) {
+function MainFunctionPatch([String]$Command, [String]$Title, [String]$GameID, [Boolean]$Redux, [String]$PatchedFileName, [Boolean]$Decompress, [Boolean]$Downgrade, [String]$Patcher) {
     
-    #if (!(WriteDebug -Command $Command -Title $Title -GameID $GameID -Redux $Redux -PatchedFileName $PatchedFileName -Hash $Hash -Compress $Compress -Downgrade $Downgrade)) { return }
+    #if (!(WriteDebug -Command $Command -Title $Title -GameID $GameID -Redux $Redux -PatchedFileName $PatchedFileName -Hash $Hash -Decompress $Decompress -Downgrade $Downgrade -Patcher $Patcher)) { return }
 
     # Step 01: Disable the main dialog, allow patching and delete files if they still exist.
     EnableGUI -Enable $False
@@ -228,16 +235,16 @@ function MainFunctionPatch([String]$Command, [String]$Title, [String]$GameID, [B
     if (!(CompareHashSums -Command $Command -Redux $Redux)) { return }
 
     # Step 09: Decompress the ROM if required.
-    DecompressROM -Command $Command -Compress $Compress
+    DecompressROM -Command $Command -Decompress $Decompress
 
     # Step 11: Apply additional patches on top of the Redux patches.
     PatchRedux
 
     # Step 10: Patch and extend the ROM file with the patch through Floating IPS.
-    if (!(PatchROM -Command $Command -Compress $Compress -Downgrade $Downgrade)) { return }
+    if (!(PatchROM -Command $Command -Decompress $Decompress -Downgrade $Downgrade -Patcher $Patcher)) { return }
 
     # Step 12: Compress the decompressed ROM if required.
-    CompressROM -Command $Command -Compress $Compress
+    CompressROM -Command $Command -Decompress $Decompress
 
     # Only continue with these steps in VC WAD mode. Otherwise ignore these steps.
     if ($IsWiiVC) {
@@ -270,7 +277,7 @@ function MainFunctionPatch([String]$Command, [String]$Title, [String]$GameID, [B
 
 
 #==============================================================================================================================================================================================
-function WriteDebug([String]$Command, [String]$Title, [String] $GameID, [Boolean]$Redux, [String]$PatchedFileName, [Boolean]$Compress, [Boolean]$Downgrade) {
+function WriteDebug([String]$Command, [String]$Title, [String] $GameID, [Boolean]$Redux, [String]$PatchedFileName, [Boolean]$Decompress, [Boolean]$Downgrade, [String]$Patcher) {
 
     Write-Host ""
     Write-Host "--- Patch Info ---"
@@ -281,8 +288,9 @@ function WriteDebug([String]$Command, [String]$Title, [String] $GameID, [Boolean
     Write-Host "Command:" $Command
     Write-Host "Redux:" $Redux
     Write-Host "Downgrade:" $Downgrade
-    Write-Host "Compress:" $Compress
+    Write-Host "Decompress:" $Decompress
     Write-Host "Wii VC:" $IsWiiVC
+    Write-Host "Patcher:" $Patcher
     Write-Host "ROM File:" $ROMFile
     Write-Host "WAD File Path:" $WADFilePath
     Write-Host "Z64 File Path:" $Z64FilePath
@@ -451,6 +459,14 @@ function SetFileParameters() {
 
     # Store all files by their name.
     $Files.flips                         = $MasterPath + "\Base\flips.exe"
+    $Files.xdelta                        = $MasterPath + "\Base\xdelta.exe"
+    $Files.xdelta3                       = $MasterPath + "\Base\xdelta3.exe"
+
+    $Files.Compress                      = $MasterPath + "\Compression\Compress.exe"
+    $Files.ndec                          = $MasterPath + "\Compression\ndec.exe"
+    $Files.sm64extend                    = $MasterPath + "\Compression\sm64extend.exe"
+    $Files.TabExt                        = $MasterPath + "\Compression\TabExt.exe"
+    
     $Files.wadpacker                     = $MasterPath + "\Wii VC\wadpacker.exe"
     $Files.wadunpacker                   = $MasterPath + "\Wii VC\wadunpacker.exe"
     $Files.wszst                         = $MasterPath + "\Wii VC\wszst.exe"
@@ -460,9 +476,6 @@ function SetFileParameters() {
     $Files.cygpng1616                    = $MasterPath + "\Wii VC\cygpng16-16.dll"
     $Files.cygwin1                       = $MasterPath + "\Wii VC\cygwin1.dll"
     $Files.cygz                          = $MasterPath + "\Wii VC\cygz.dll"
-    $Files.ndec                          = $MasterPath + "\Compression\ndec.exe"
-    $Files.TabExt                        = $MasterPath + "\Compression\TabExt.exe"
-    $Files.Compress                      = $MasterPath + "\Compression\Compress.exe"
     $Files.lzss                          = $MasterPath + "\Wii VC\lzss.exe"
     $Files.romc                          = $MasterPath + "\Wii VC\romc.exe"
     $Files.romchu                        = $MasterPath + "\Wii VC\romchu.exe"
@@ -694,13 +707,12 @@ function PatchVCEmulator([String]$Command) {
 
     }
 
-    elseif ($GameType.mode -eq "Super Mario 64") {
-
-        if ($Command -eq "Patch Boot DOL") {
-            $File = $MasterPath + "\" + $GameType.mode + "\AppFile01" +  $GamePatch.bps
-            & $Files.flips --ignore-checksum $File $WADFile.AppFile01 | Out-Host
-        }
-
+    if ($Command -eq "Patch Boot DOL") {
+        $File = $MasterPath + "\" + $GameType.mode + "\AppFile01" +  $GamePatch.file
+        if ($File -like "*.vcdiff*")          { $File = $File -replace '.vcdiff', '.bps' }
+        elseif ($File -like "*.xdelta*")      { $File = $File -replace '.xdelta', '.bps' }
+        if ($File -like "*\Decompressed\*")   { $File = $File -replace '\\Decompressed\\', '\' }
+        & $Files.flips --ignore-checksum $File $WADFile.AppFile01 | Out-Host
     }
 
 }
@@ -845,7 +857,7 @@ function CompareHashSums([String]$Command, [Boolean]$Redux) {
 
 
 #==============================================================================================================================================================================================
-function PatchROM([String]$Command, [Boolean]$Compress, [Boolean]$Downgrade) {
+function PatchROM([String]$Command, [Boolean]$Decompress, [Boolean]$Downgrade, [String]$Patcher) {
 
     if ($Command -eq "Inject" -or $Command -eq "Patch VC") { return $True }
     
@@ -856,12 +868,7 @@ function PatchROM([String]$Command, [Boolean]$Compress, [Boolean]$Downgrade) {
     if ($IsWiiVC -and $Command -eq "Patch BPS") { $HashSum1 = (Get-FileHash -Algorithm MD5 $ROMFile).Hash }
 
     # Apply the selected patch to the ROM, if it is provided
-    if ($PatchFile.Length -gt 0) {
-        if ($IsWiiVC -and $Compress)         { & $Files.flips --ignore-checksum $PatchFile $DecompressedROMFile | Out-Host }
-        elseif ($IsWiiVC -and !$Compress)    { & $Files.flips --ignore-checksum $PatchFile $PatchedROMFile | Out-Host }
-        elseif (!$IsWiiVC -and $Compress)    { & $Files.flips --ignore-checksum $PatchFile $DecompressedROMFile | Out-Host }
-        elseif (!$IsWiiVC -and !$Compress)   { & $Files.flips --ignore-checksum --apply $PatchFile $ROMFile $PatchedROMFile | Out-Host }
-    }
+    RunPatcher -Decompress $Decompress -Patcher $Patcher
 
     if ($IsWiiVC -and $Command -eq "Patch BPS") {
         $HashSum2 = (Get-FileHash -Algorithm MD5 $ROMFile).Hash
@@ -880,14 +887,54 @@ function PatchROM([String]$Command, [Boolean]$Compress, [Boolean]$Downgrade) {
 
 
 #==============================================================================================================================================================================================
-function DecompressROM([String]$Command, [Boolean]$Compress) {
+function RunPatcher([Boolean]$Decompress, [String]$Patcher) {
     
-    if (!$Compress -or $Command -eq "Inject" -or !$GameType.decompress) { return }
+    if ($PatchFile.Length -gt 0) {
+
+        if ($Patcher -eq "Flips") {
+            if ($IsWiiVC -and $Decompress)         { & $Files.flips --ignore-checksum $PatchFile $DecompressedROMFile | Out-Host }
+            elseif ($IsWiiVC -and !$Decompress)    { & $Files.flips --ignore-checksum $PatchFile $PatchedROMFile | Out-Host }
+            elseif (!$IsWiiVC -and $Decompress)    { & $Files.flips --ignore-checksum $PatchFile $DecompressedROMFile | Out-Host }
+            elseif (!$IsWiiVC -and !$Decompress)   { & $Files.flips --ignore-checksum --apply $PatchFile $ROMFile $PatchedROMFile | Out-Host }
+        }
+
+        else {
+            if ($Patcher -eq "Xdelta") { $File = $Files.xdelta }
+            elseif ($Patcher -eq "Xdelta3")     { $File = $Files.xdelta3 }
+
+            if ($IsWiiVC -and $Decompress) {
+                & $File -d -s $DecompressedROMFile $PatchFile ($DecompressedROMFile + ".ext") | Out-Host
+                Move-Item -LiteralPath ($DecompressedROMFile + ".ext") -Destination $DecompressedROMFile -Force
+            }
+            elseif ($IsWiiVC -and !$Decompress) {
+                & $File -d -s $PatchedROMFile $PatchFile ($PatchedROMFile + ".ext") | Out-Host
+                Move-Item -LiteralPath ($PatchedROMFile + ".ext") -Destination $PatchedROMFile -Force
+            }
+            elseif (!$IsWiiVC -and $Decompress) {
+                & $File -d -s $DecompressedROMFile $PatchFile ($DecompressedROMFile + ".ext") | Out-Host
+                Move-Item -LiteralPath ($DecompressedROMFile + ".ext") -Destination $DecompressedROMFile -Force
+            }
+            elseif (!$IsWiiVC -and !$Decompress) { & $File -d -s $ROMFile $PatchFile $PatchedROMFile | Out-Host }
+        }
+
+    }
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function DecompressROM([String]$Command, [Boolean]$Decompress) {
+    
+    if (!$Decompress -or $Command -eq "Inject") { return }
 
     UpdateStatusLabel -Text ("Decompressing " + $GameType.mode + " ROM...")
 
-    & $Files.TabExt $ROMFile | Out-Host
-    & $Files.ndec $ROMFile $DecompressedROMFile | Out-Host
+    if ($GameType.decompress -eq 1) {
+        & $Files.TabExt $ROMFile | Out-Host
+        & $Files.ndec $ROMFile $DecompressedROMFile | Out-Host
+    }
+    elseif ($GameType.decompress -eq 2) { & $Files.sm64extend $ROMFile -s $GamePatch.extend $DecompressedROMFile | Out-Host }
 
     if ($IsWiiVC) { Remove-Item -LiteralPath $ROMFile }
 
@@ -896,14 +943,17 @@ function DecompressROM([String]$Command, [Boolean]$Compress) {
 
 
 #==============================================================================================================================================================================================
-function CompressROM([String]$Command, [Boolean]$Compress) {
+function CompressROM([String]$Command, [Boolean]$Decompress) {
     
-    if (!$Compress -or $Command -eq "Inject" -or !$GameType.decompress) { return }
+    if (!$Decompress -or $Command -eq "Inject") { return }
 
     UpdateStatusLabel -Text ("Compressing " + $GameType.mode + " ROM...")
 
-    & $Files.Compress $DecompressedROMFile $PatchedROMFile | Out-Null
-    Remove-Item -LiteralPath $DecompressedROMFile
+    if ($GameType.decompress -eq 1) {
+        & $Files.Compress $DecompressedROMFile $PatchedROMFile | Out-Null
+        Remove-Item -LiteralPath $DecompressedROMFile
+    }
+    elseif ($GameType.decompress -eq 2) { Move-Item -LiteralPath $DecompressedROMFile -Destination $PatchedROMFile -Force }
 
 }
 
@@ -943,12 +993,12 @@ function PatchBytesSequence([String]$File, [int]$Offset, $Values, [int]$Incremen
 
 #==============================================================================================================================================================================================
 function PatchRedux() {
-    
+
     if (!$GameType.redux -and !$GameType.additional) { return }
 
     # BPS PATCHING REDUX #
     if ($PatchEnableReduxCheckbox.Checked -and $GameType.Redux) {
-        pdateStatusLabel -Text ("Patching " + $GameType.mode + " REDUX...")
+        UpdateStatusLabel -Text ("Patching " + $GameType.mode + " REDUX...")
         if ($GameType.mode -eq "Ocarina of Time")     { & $Files.flips --ignore-checksum $Files.bpspatch_oot_redux $DecompressedROMFile | Out-Host }
         elseif ($GameType.mode -eq "Majora's Mask")   { & $Files.flips --ignore-checksum $Files.bpspatch_mm_redux $DecompressedROMFile | Out-Host }
 
@@ -960,7 +1010,7 @@ function PatchRedux() {
 
     # BPS PATCHING ADDITIONAL OPTIONS #
     if ($PatchEnableAdditionalOptionsCheckbox.Checked -and $GameType.Additional) {
-        pdateStatusLabel -Text ("Patching " + $GameType.mode + " Additional Options...")
+        UpdateStatusLabel -Text ("Patching " + $GameType.mode + " Additional Options...")
         if ($GameType.mode -eq "Ocarina of Time") {
             if (CheckCheckBox -CheckBox $MMModelsOoT) {
                 if ($PatchEnableReduxCheckbox.Checked)            { & $Files.flips --ignore-checksum $Files.bpspatch_oot_models_mm_redux $DecompressedROMFile | Out-Host }
@@ -1316,6 +1366,10 @@ function HackOpeningBNRTitle([String]$Title) {
 #==============================================================================================================================================================================================
 function HackN64GameTitle([String]$Title, [String]$GameID) {
     
+    if (!(Test-Path -LiteralPath $PatchedROMFile -PathType leaf)) { return }
+
+    UpdateStatusLabel -Text "Hacking in Custom Title and GameID..."
+
     $emptyTitle = foreach ($i in 1..$GameTitleLength) { 32 }
     PatchBytesSequence -File $PatchedROMFile -Offset "0x20" -Values $emptyTitle
     PatchBytesSequence -File $PatchedROMFile -Offset "0x20" -Values ($Title.ToUpper().ToCharArray() | % { [int][char]$_ }) -IsDec $True
@@ -1836,8 +1890,8 @@ function CreateMainDialog() {
     # Create patch button
     $global:PatchButton = CreateButton -X 10 -Y 45 -Width 300 -Height 35 -Text "Patch Selected Option" -AddTo $PatchGroup
     $PatchButton.Add_Click( {
-        if ($GamePatch.bps.Length -gt 4)   { $Patch = $MasterPath + "\" + $GameType.mode + $GamePatch.bps }
-        else                               { $Patch = $null }
+        if ($GamePatch.file.Length -gt 4)   { $Patch = $MasterPath + "\" + $GameType.mode + $GamePatch.file }
+        else                                { $Patch = $null }
 
         MainFunction -Command $GamePatch.command -Patch $Patch -PatchedFileName $GamePatch.output -Hash $GamePatch.hash
     } )
@@ -2097,9 +2151,6 @@ function ChangeGameMode() {
 
     if (Test-Path -LiteralPath ($TextPath + "\Info\" + $GameType.mode + ".txt") -PathType Leaf)      { AddTextFileToTextbox -TextBox $InfoTextbox -File ($TextPath + "\Info\" + $GameType.mode + ".txt") }
     else                                                                                             { AddTextFileToTextbox -TextBox $InfoTextbox -File $null }
-
-    if (Test-Path -LiteralPath ($TextPath + "\Credits\" + $GameType.mode + ".txt") -PathType Leaf)   { AddTextFileToTextbox -TextBox $CreditsTextBox -File ($TextPath + "\Credits\" + $GameType.mode + ".txt") -PostSpace 2 }
-    else                                                                                             { AddTextFileToTextbox -TextBox $CreditsTextBox -File $null }
 
     if (Test-Path -LiteralPath ($TextPath + "\Credits\Common.txt") -PathType Leaf)                   { AddTextFileToTextbox -TextBox $CreditsTextBox -File ($TextPath + "\Credits\Common.txt") -Add $True }
 
@@ -2447,7 +2498,7 @@ function CreateInfoGameIDDialog() {
 function CreateCreditsDialog() {
     
     # Create Dialog
-    $global:CreditsDialog = CreateDialog -Width 500 -Height 500 -Icon $Icon.Credits
+    $global:CreditsDialog = CreateDialog -Width 500 -Height 500 -Icon $Icons.Credits
     $CloseButton = CreateButton -X ($CreditsDialog.Width / 2 - 40) -Y ($CreditsDialog.Height - 90) -Width 80 -Height 35 -Text "Close" -AddTo $CreditsDialog
     $CloseButton.Add_Click({$CreditsDialog.Hide()})
 

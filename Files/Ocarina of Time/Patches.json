@@ -21,7 +21,7 @@
 	"n64_title" : "THE LEGEND OF ZELDA",
 	"wii_gameID" : "NACS",
 	"wii_title" : "Zelda: Ocarina (SPA)",
-	"bps" : "\\Decompressed\\oot_spa.bps",
+	"file" : "\\Decompressed\\oot_spa.bps",
 	"output" : "_spanish_patched",
 	"hash" : "5BD1FE107BF8106B2AB6650ABECD54D6",
 	"tooltip" : "Patches Spanish Fan Translation for Ocarina of Time{0}- Supported: Rev 0 (US)"
@@ -35,7 +35,7 @@
 	"n64_title" : "THE LEGEND OF ZELDA",
 	"wii_gameID" : "NACO",
 	"wii_title" : "Zelda: Ocarina (POL)",
-	"bps" : "\\Decompressed\\oot_pol.bps",
+	"file" : "\\Decompressed\\oot_pol.bps",
 	"output" : "_polish_patched",
 	"hash" : "5BD1FE107BF8106B2AB6650ABECD54D6",
 	"tooltip" : "Patches Polish Fan Translation for Ocarina of Time{0}- Supported: Rev 0 (US)"
@@ -49,7 +49,7 @@
 	"n64_title" : "THE LEGEND OF ZELDA",
 	"wii_gameID" : "NACR",
 	"wii_title" : "Zelda: Ocarina (RUS)",
-	"bps" : "\\Decompressed\\oot_rus.bps",
+	"file" : "\\Decompressed\\oot_rus.bps",
 	"output" : "_russian_patched",
 	"hash" : "5BD1FE107BF8106B2AB6650ABECD54D6",
 	"tooltip" : "Patches Russian Fan Translation for Ocarina of Time{0}- Supported: Rev 0 (US)"
@@ -63,7 +63,7 @@
 	"n64_title" : "THE LEGEND OF ZELDA",
 	"wii_gameID" : "NACC",
 	"wii_title" : "Zelda: Ocarina (CHI)",
-	"bps" : "\\Decompressed\\oot_chi.bps",
+	"file" : "\\Decompressed\\oot_chi.bps",
 	"output" : "_chinese_patched",
 	"hash" : "5BD1FE107BF8106B2AB6650ABECD54D6",
 	"tooltip" : "Patches Chinese Fan Translation for Ocarina of Time{0}- Supported: Rev 0 (US)"
@@ -75,7 +75,7 @@
 	"n64_title" : "THE LEGEND OF ZELDA",
 	"wii_gameID" : "NAC1",
 	"wii_title" : "Zelda: Dawn & Dusk",
-	"bps" : "\\oot_dawn.bps",
+	"file" : "\\oot_dawn.bps",
 	"output" : "_dawn_&_dusk_patched",
 	"hash" : "Dawn & Dusk",
 	"tooltip" : "A small-sized ROM hack in a completely new setting{0}- Supported: Rev 0 (US), Rev 1 (US) & Rev 2 (US)"
@@ -87,7 +87,7 @@
 	"n64_title" : "THE LEGEND OF ZELDA",
 	"wii_gameID" : "NAC2",
 	"wii_title" : "Zelda: Bombiwa",
-	"bps" : "\\Decompressed\\oot_bombiwa.bps",
+	"file" : "\\Decompressed\\oot_bombiwa.bps",
 	"output" : "_bombiwa_patched",
 	"hash" : "5BD1FE107BF8106B2AB6650ABECD54D6",
 	"tooltip" : "A small-sized ROM hack in a completely new setting, and extremely tricky and difficult{0}- Supported: Rev 0 (US)"
@@ -99,7 +99,7 @@
 	"n64_title" : "THE LEGEND OF ZELDA",
 	"wii_gameID" : "NAC3",
 	"wii_title" : "Zelda: Nimpize",
-	"bps" : "\\Decompressed\\oot_nimpize.bps",
+	"file" : "\\Decompressed\\oot_nimpize.bps",
 	"output" : "_nimpize_patched",
 	"hash" : "5BD1FE107BF8106B2AB6650ABECD54D6",
 	"tooltip" : "A reworked and harder version of Ocarina of Time with remixed dungeons{0}- Supported: Rev 0 (US)"
@@ -111,7 +111,7 @@
 	"n64_title" : "THE LEGEND OF ZELDA",
 	"wii_gameID" : "NAC4",
 	"wii_title" : "Zelda: Puzzling",
-	"bps" : "\\oot_puzzling.bps",
+	"file" : "\\oot_puzzling.bps",
 	"output" : "_puzzling_patched",
 	"hash" : "5BD1FE107BF8106B2AB6650ABECD54D6",
 	"tooltip" : "A small-sized ROM hack that focuses on puzzling your way through{0}- Supported: Rev 0 (US)"

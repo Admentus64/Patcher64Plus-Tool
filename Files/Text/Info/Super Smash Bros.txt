@@ -17,4 +17,4 @@ Information:
 - Requires the the 8 MB expansion pak to be enabled
      
 Programs:
-- Wiimm's 'wszst' Tool
+- Xdelta3

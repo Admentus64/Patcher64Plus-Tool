@@ -19,7 +19,7 @@
 	"n64_title" : "ZELDA MAJORA'S MASK",
 	"wii_gameID" : "NARO",
 	"wii_title" : "Zelda: Majora's (POL)",
-	"bps" : "\\Decompressed\\mm_pol.bps",
+	"file" : "\\Decompressed\\mm_pol.bps",
 	"output" : "_polish_patched",
 	"hash" : "2A0A8ACB61538235BC1094D297FB6556",
 	"tooltip" : "Patches Polish Fan Translation for Majora's Mask{0}- Supported: Rev 0 (US)"
@@ -33,7 +33,7 @@
 	"n64_title" : "ZELDA MAJORA'S MASK",
 	"wii_gameID" : "NARR",
 	"wii_title" : "Zelda: Majora's (RUS)",
-	"bps" : "\\Decompressed\\mm_rus.bps",
+	"file" : "\\Decompressed\\mm_rus.bps",
 	"output" : "_russian_patched",
 	"hash" : "2A0A8ACB61538235BC1094D297FB6556",
 	"tooltip" : "Patches Russian Fan Translation for Majora's Mask{0}- Supported: Rev 0 (US)"
@@ -45,7 +45,7 @@
 	"n64_title" : "ZELDA MAJORA'S MASK",
 	"wii_gameID" : "NAC1",
 	"wii_title" : "Zelda: Masked Quest",
-	"bps" : "\\mm_masked_quest.bps",
+	"file" : "\\mm_masked_quest.bps",
 	"output" : "_masked_quest_patched",
 	"hash" : "2A0A8ACB61538235BC1094D297FB6556",
 	"tooltip" : "A Master Quest style romhack for Majora's Mask, offering a higher difficulty{0}- Supported: Rev 0 (US)"
