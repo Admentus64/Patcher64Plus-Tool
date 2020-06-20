@@ -3,7 +3,7 @@
 -------------
 
 Open the Games.json file in the Files directory.
-Each game consists of 14 lines, in JSON format. The main object is "game".
+Each game consists of 15 lines, in JSON format. The main object is "game".
 When adding a new entry, make sure to add a new folder in Files with the same name as the "mode" attribute.
 Patches can be added in the newly created game folder in Files.
 
@@ -44,8 +44,9 @@ patches		If the Patch Options panel is shown
 		1			Show Patch Options panel
 
 decompress	If the ROM is capable of decompressing
-		0			ROM can decompress
-		1			ROM can not decompress
+		0			ROM can not decompress
+		1			ROM can decompress (OoT and MM only)
+		2			ROM can decompress (SM64 only)
 
 redux		If Redux is shown in the patch panel. Currently only OoT and MM support Redux.
 		0			Disable and hide Redux
@@ -90,7 +91,7 @@ wii_title	Default Channel Title used in Wii VC mode. No more than 40 characters.
 ---------------
 
 Open the Patches.json file in one of the game folders in Files.
-Each patch consists of 13 lines, in JSON format. The main object is "patch".
+Each patch consists of 14 lines, in JSON format. The main object is "patch".
 
 Attributes lines that are not shown are equivalent to 0 or just empty.
 
@@ -124,8 +125,12 @@ wii_gameID	Wii VC WAD GameID. Requires 4 characters.
 
 wii_title	Wii VC WAD Channel Title. No more than 40 characters.
 
-bps		Patch file. Start with \\. Patch is located in current same folder.
-		Add \\Decompressed for decompressed patches. Provide patches in .bps or .ips
+file		Patch file. Start with \\. Patch is located in current same folder.
+		Add \\Decompressed for decompressed patches. Provide patches in .bps, .ips, .xdelta or .vcdiff
+	 	Flips is be used by default (.bps / .ips). Xdelta (.xdelta) or Xdelta3 (.vcdiff) will be automaticially recognized.
+
+extend		Specify the new size for the extended ROM. Only works for SM64. Is required for decompressed patches.
+		Size value must be between 18 and 64. Will only be used for decompressed patches.
 
 output		Output file name extension.
 
