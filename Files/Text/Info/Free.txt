@@ -19,4 +19,6 @@ Information:
 Programs:
 - Wad Packer/Wad Unpacker
 - Floating IPS
-- Wiimms wszst Tool
+- Xdelta
+- Xdelta3
+- Wiimm's 'wszst' Tool
