@@ -19,8 +19,8 @@ Add-Type -AssemblyName 'System.Drawing'
 #==============================================================================================================================================================================================
 # Setup global variables
 
-$global:VersionDate = "20-06-2020"
-$global:Version     = "v5.1"
+$global:VersionDate = "21-06-2020"
+$global:Version     = "v5.1.1"
 
 $global:GameType = ""
 $global:GamePatch = ""
@@ -183,15 +183,12 @@ function MainFunction([String]$Command, [String]$Patch, [String]$PatchedFileName
     }
 
     $Decompress = $False
-    if ($PatchFile -like "*\Decompressed\*")   { $Decompress = $True }
-    elseif ($Redux)                            { $Decompress = $True }
+    if ($PatchFile -like "*\Decompressed\*" -and $Command -ne "Apply Patch")   { $Decompress = $True }
+    elseif ($Redux -and $Command -ne "Apply Patch")                            { $Decompress = $True }
 
-    $Patcher = $null
-    if ($PatchFile -like "*.bps*")          { $Patcher = "Flips" }
-    elseif ($PatchFile -like "*.ips*")      { $Patcher = "Flips" }
-    elseif ($PatchFile -like "*.xdelta*")   { $Patcher = "Xdelta" }
+    $Patcher = $Flips
+    if ($PatchFile -like "*.xdelta*")       { $Patcher = "Xdelta" }
     elseif ($PatchFile -like "*.vcdiff*")   { $Patcher = "Xdelta3" }
-    else                                    { $Patcher = "Flips" }
 
     MainFunctionPatch -Command $Command -Title $Title -GameID $GameID -Redux $Redux -PatchedFileName $PatchedFileName -Decompress $Decompress -Downgrade $Downgrade -Patcher $Patcher
     Cleanup
@@ -235,7 +232,7 @@ function MainFunctionPatch([String]$Command, [String]$Title, [String]$GameID, [B
     if (!(CompareHashSums -Command $Command -Redux $Redux)) { return }
 
     # Step 09: Decompress the ROM if required.
-    DecompressROM -Command $Command -Decompress $Decompress
+    if (!(DecompressROM -Command $Command -Decompress $Decompress)) { return }
 
     # Step 11: Apply additional patches on top of the Redux patches.
     PatchRedux
@@ -440,7 +437,7 @@ function SetIconParameters() {
     $Icons.Credits              = $IconsPath + "\Credits.ico"
 
     $Icons.GetEnumerator() | ForEach-Object {
-        if (!(Test-Path $_.value -PathType leaf)) {
+        if (!(Test-Path $_.value -PathType Leaf)) {
             $global:MissingFiles = $True
         }
     }
@@ -493,7 +490,7 @@ function SetFileParameters() {
     $Files.games                         = $MasterPath + "\Games.json"
 
     $Files.GetEnumerator() | ForEach-Object {
-        if (!(Test-Path $_.value -PathType leaf)) { CreateErrorDialog -Error "Missing Files" }
+        if (!(Test-Path $_.value -PathType Leaf)) { CreateErrorDialog -Error "Missing Files" }
     }
 
     $Files.text_gameID                   = $TextPath + "\GameID's.txt"
@@ -732,7 +729,7 @@ function PatchVCROM([String]$Command) {
         if (!$GameType.patches)   { $ROMTitle = "n64_rom_extracted.z64" }
         else                      { $ROMTitle = $GameType + "_rom_extracted.z64" }
 
-        if (Test-Path -LiteralPath $ROMFile -PathType leaf) {
+        if (Test-Path -LiteralPath $ROMFile -PathType Leaf) {
             Move-Item -LiteralPath $ROMFile -Destination $WADFile.Extracted
             UpdateStatusLabel -Text ("Successfully extracted " + $GameType.mode + " ROM.")
         }
@@ -743,9 +740,9 @@ function PatchVCROM([String]$Command) {
 
     # Replace ROM if needed
     if ($Command -eq "Inject") {
-        if (Test-Path -LiteralPath $ROMFile -PathType leaf) {
+        if (Test-Path -LiteralPath $ROMFile -PathType Leaf) {
             Remove-Item -LiteralPath $ROMFile
-            if ((Test-Path -LiteralPath $Z64FilePath -PathType leaf)) { Copy-Item -LiteralPath $Z64FilePath -Destination $ROMFile }
+            if ((Test-Path -LiteralPath $Z64FilePath -PathType Leaf)) { Copy-Item -LiteralPath $Z64FilePath -Destination $ROMFile }
             else {
                 UpdateStatusLabel -Text ("Could not inject " + $GameType.mode + " ROM. Did you move or rename the ROM file?")
                 return $False
@@ -756,7 +753,7 @@ function PatchVCROM([String]$Command) {
             return $False
         }
 
-        if (!(Test-Path -LiteralPath $ROMFile -PathType leaf)) {
+        if (!(Test-Path -LiteralPath $ROMFile -PathType Leaf)) {
             UpdateStatusLabel -Text ("Could not inject " + $GameType.mode + " ROM. Is your ROM filename or destination path too long?")
             return $False
         }
@@ -765,7 +762,7 @@ function PatchVCROM([String]$Command) {
     # Decompress romc if needed
     if ($Command -ne "Inject" -and $GameType.romc -gt 0) {  
 
-        if (Test-Path -LiteralPath $ROMFile -PathType leaf) {
+        if (Test-Path -LiteralPath $ROMFile -PathType Leaf) {
             if ($GameType.romc -eq 1)       { & $Files.romchu $ROMFile $ROMCFile | Out-Null }
             elseif ($GameType.romc -eq 2)   { & $Files.romc d $ROMFile $ROMCFile | Out-Null }
             Remove-Item -LiteralPath $ROMFile
@@ -828,7 +825,7 @@ function CompareHashSums([String]$Command, [Boolean]$Redux) {
     
     if ($Command -eq "Inject" -or $Command -eq "Patch VC") { return $True }
 
-    if (($PatchFile -ne $Null -or $Redux) -and $Command -ne "Patch BPS") {
+    if (($PatchFile -ne $Null -or $Redux) -and $Command -ne "Apply Patch") {
 
         $ContinuePatching = $True
         $HashSum = (Get-FileHash -Algorithm MD5 $ROMFile).Hash
@@ -862,20 +859,19 @@ function PatchROM([String]$Command, [Boolean]$Decompress, [Boolean]$Downgrade, [
     if ($Command -eq "Inject" -or $Command -eq "Patch VC") { return $True }
     
     # Set the status label.
-    UpdateStatusLabel -Text ("BPS Patching " + $GameType.mode + " ROM...")
+    UpdateStatusLabel -Text ("Patching " + $GameType.mode + " ROM with patch file...")
 
-    $HashSum1 = $null
-    if ($IsWiiVC -and $Command -eq "Patch BPS") { $HashSum1 = (Get-FileHash -Algorithm MD5 $ROMFile).Hash }
+    if ($Command -eq "Apply Patch") { $HashSum1 = (Get-FileHash -Algorithm MD5 $ROMFile).Hash }
 
     # Apply the selected patch to the ROM, if it is provided
-    RunPatcher -Decompress $Decompress -Patcher $Patcher
+    if (!(RunPatcher -Decompress $Decompress -Patcher $Patcher)) { return $False }
 
-    if ($IsWiiVC -and $Command -eq "Patch BPS") {
-        $HashSum2 = (Get-FileHash -Algorithm MD5 $ROMFile).Hash
+    if ($Command -eq "Apply Patch") {
+        $HashSum2 = (Get-FileHash -Algorithm MD5 $PatchedROMFile).Hash
         if ($HashSum1 -eq $HashSum2) {
-            UpdateStatusLabel -Text 'Failed! BPS or IPS Patch does not match. ROM has left unchanged.'
-            if ($GameType.downgrade -and !$Downgrade) { UpdateStatusLabel -Text "Failed! BPS or IPS Patch does not match. ROM has left unchanged. Enable Downgrade " + $GameType.mode + "?" }
-            elseif ($GameType.downgrade -and $Downgrade) { UpdateStatusLabel -Text "Failed! BPS or IPS Patch does not match. ROM has left unchanged. Disable Downgrade " + $GameType.mode + "?" }
+            if ($IsWiiVC -and $GameType.downgrade -and !$Downgrade)      { UpdateStatusLabel -Text "Failed! Patch file does not match source. ROM has left unchanged. Enable Downgrade?" }
+            elseif ($IsWiiVC -and $GameType.downgrade -and $Downgrade)   { UpdateStatusLabel -Text "Failed! Patch file does not match source. ROM has left unchanged. Disable Downgrade?" }
+            else                                                         { UpdateStatusLabel -Text "Failed! Patch file does not match source. ROM has left unchanged." }
             return $False
         }
     }
@@ -889,35 +885,54 @@ function PatchROM([String]$Command, [Boolean]$Decompress, [Boolean]$Downgrade, [
 #==============================================================================================================================================================================================
 function RunPatcher([Boolean]$Decompress, [String]$Patcher) {
     
-    if ($PatchFile.Length -gt 0) {
+    if ($PatchFile -eq $null -or $PatchFile -eq "" -or $PatchFile.Length -le 0) { return $False }
 
-        if ($Patcher -eq "Flips") {
-            if ($IsWiiVC -and $Decompress)         { & $Files.flips --ignore-checksum $PatchFile $DecompressedROMFile | Out-Host }
-            elseif ($IsWiiVC -and !$Decompress)    { & $Files.flips --ignore-checksum $PatchFile $PatchedROMFile | Out-Host }
-            elseif (!$IsWiiVC -and $Decompress)    { & $Files.flips --ignore-checksum $PatchFile $DecompressedROMFile | Out-Host }
-            elseif (!$IsWiiVC -and !$Decompress)   { & $Files.flips --ignore-checksum --apply $PatchFile $ROMFile $PatchedROMFile | Out-Host }
-        }
-
-        else {
-            if ($Patcher -eq "Xdelta") { $File = $Files.xdelta }
-            elseif ($Patcher -eq "Xdelta3")     { $File = $Files.xdelta3 }
-
-            if ($IsWiiVC -and $Decompress) {
-                & $File -d -s $DecompressedROMFile $PatchFile ($DecompressedROMFile + ".ext") | Out-Host
-                Move-Item -LiteralPath ($DecompressedROMFile + ".ext") -Destination $DecompressedROMFile -Force
-            }
-            elseif ($IsWiiVC -and !$Decompress) {
-                & $File -d -s $PatchedROMFile $PatchFile ($PatchedROMFile + ".ext") | Out-Host
-                Move-Item -LiteralPath ($PatchedROMFile + ".ext") -Destination $PatchedROMFile -Force
-            }
-            elseif (!$IsWiiVC -and $Decompress) {
-                & $File -d -s $DecompressedROMFile $PatchFile ($DecompressedROMFile + ".ext") | Out-Host
-                Move-Item -LiteralPath ($DecompressedROMFile + ".ext") -Destination $DecompressedROMFile -Force
-            }
-            elseif (!$IsWiiVC -and !$Decompress) { & $File -d -s $ROMFile $PatchFile $PatchedROMFile | Out-Host }
-        }
-
+    if ($IsWiiVC -and $Decompress -and !(Test-Path -LiteralPath $DecompressedROMFile -PathType Leaf)) {
+        UpdateStatusLabel -Text "Failed! Could not find decompressed ROM file."
+        return $False
     }
+    elseif ($IsWiiVC -and !$Decompress -and !(Test-Path -LiteralPath $PatchedROMFile -PathType Leaf)) {
+        UpdateStatusLabel -Text "Failed! Could not find patched ROM file."
+        return $False
+    }
+    elseif (!$IsWiiVC -and $Decompress -and !(Test-Path -LiteralPath $DecompressedROMFile -PathType Leaf)) {
+        UpdateStatusLabel -Text "Failed! Could not find decompressed ROM file."
+        return $False
+    }
+    elseif (!$IsWiiVC -and !$Decompres -and !(Test-Path -LiteralPath $ROMFile -PathType Leaf)) {
+        UpdateStatusLabel -Text "Failed! Could not find ROM file."
+        return $False
+    }
+
+    if ($Patcher -eq "Flips") {
+        if ($IsWiiVC -and $Decompress)         { & $Files.flips --ignore-checksum $PatchFile $DecompressedROMFile | Out-Host }
+        elseif ($IsWiiVC -and !$Decompress)    { & $Files.flips --ignore-checksum $PatchFile $PatchedROMFile | Out-Host }
+        elseif (!$IsWiiVC -and $Decompress)    { & $Files.flips --ignore-checksum $PatchFile $DecompressedROMFile | Out-Host }
+        elseif (!$IsWiiVC -and !$Decompress)   { & $Files.flips --ignore-checksum --apply $PatchFile $ROMFile $PatchedROMFile | Out-Host }
+    }
+    else {
+        if ($Patcher -eq "Xdelta") { $File = $Files.xdelta }
+        elseif ($Patcher -eq "Xdelta3")     { $File = $Files.xdelta3 }
+
+        if ($IsWiiVC -and $Decompress) {
+            & $File -d -s $DecompressedROMFile $PatchFile ($DecompressedROMFile + ".ext") | Out-Host
+            Move-Item -LiteralPath ($DecompressedROMFile + ".ext") -Destination $DecompressedROMFile -Force
+        }
+        elseif ($IsWiiVC -and !$Decompress) {
+            & $File -d -s $PatchedROMFile $PatchFile ($PatchedROMFile + ".ext") | Out-Host
+            Move-Item -LiteralPath ($PatchedROMFile + ".ext") -Destination $PatchedROMFile -Force
+        }
+        elseif (!$IsWiiVC -and $Decompress) {
+            & $File -d -s $DecompressedROMFile $PatchFile ($DecompressedROMFile + ".ext") | Out-Host
+            Move-Item -LiteralPath ($DecompressedROMFile + ".ext") -Destination $DecompressedROMFile -Force
+        }
+        elseif (!$IsWiiVC -and !$Decompress) {
+            DeleteFile -File $PatchedROMFile
+            & $File -d -s $ROMFile $PatchFile $PatchedROMFile | Out-Host
+        }
+    }
+
+    return $True
 
 }
 
@@ -926,7 +941,7 @@ function RunPatcher([Boolean]$Decompress, [String]$Patcher) {
 #==============================================================================================================================================================================================
 function DecompressROM([String]$Command, [Boolean]$Decompress) {
     
-    if (!$Decompress -or $Command -eq "Inject") { return }
+    if (!$Decompress -or $Command -eq "Inject") { return $True }
 
     UpdateStatusLabel -Text ("Decompressing " + $GameType.mode + " ROM...")
 
@@ -934,9 +949,17 @@ function DecompressROM([String]$Command, [Boolean]$Decompress) {
         & $Files.TabExt $ROMFile | Out-Host
         & $Files.ndec $ROMFile $DecompressedROMFile | Out-Host
     }
-    elseif ($GameType.decompress -eq 2) { & $Files.sm64extend $ROMFile -s $GamePatch.extend $DecompressedROMFile | Out-Host }
+    elseif ($GameType.decompress -eq 2) {
+        if ($GamePatch.extend -eq "" -or $GamePatch.extend -eq $null -or $GamePatch.extend -lt 18 -or  $GamePatch.extend -gt 64) {
+            UpdateStatusLabel -Text 'Failed. Could not extend SM64 ROM. Make sure the "extend" value is between 18 and 64.'
+            return $False
+        }
+        & $Files.sm64extend $ROMFile -s $GamePatch.extend $DecompressedROMFile | Out-Host
+    }
 
     if ($IsWiiVC) { Remove-Item -LiteralPath $ROMFile }
+
+    return $True
 
 }
 
@@ -1003,7 +1026,7 @@ function PatchRedux() {
         elseif ($GameType.mode -eq "Majora's Mask")   { & $Files.flips --ignore-checksum $Files.bpspatch_mm_redux $DecompressedROMFile | Out-Host }
 
         if ($GameType.dmaTable -ne $null -and $GameType.dmaTable -ne "") {
-            if (Test-Path dmaTable.dat -PathType leaf) { Remove-Item dmaTable.dat }
+            if (Test-Path dmaTable.dat -PathType Leaf) { Remove-Item dmaTable.dat }
             Add-Content dmaTable.dat $GameType.dmaTable
         }
     }
@@ -1366,7 +1389,7 @@ function HackOpeningBNRTitle([String]$Title) {
 #==============================================================================================================================================================================================
 function HackN64GameTitle([String]$Title, [String]$GameID) {
     
-    if (!(Test-Path -LiteralPath $PatchedROMFile -PathType leaf)) { return }
+    if (!(Test-Path -LiteralPath $PatchedROMFile -PathType Leaf)) { return }
 
     UpdateStatusLabel -Text "Hacking in Custom Title and GameID..."
 
@@ -1536,7 +1559,7 @@ function BPSPath_Finish([Object]$TextBox, [String]$VarName, [String]$BPSPath) {
     # Update the textbox to the current WAD.
     $TextBox.Text = $BPSPath
 
-    # Check if both a .WAD and .BPS have been provided for BPS patching
+    # Check if both a .WAD and Patch File have been provided for Patch File patching
     if ($WADFilePath -ne $null -and $IsWiiVC)        { $PatchBPSButton.Enabled = $true }
     elseif ($Z64FilePath -ne $null -and !$IsWiiVC)   { $PatchBPSButton.Enabled = $true }
 
@@ -1608,7 +1631,7 @@ function BPSPath_DragDrop() {
             $DroppedExtn = (Get-Item -LiteralPath $DroppedPath).Extension
 
             # Make sure it is a BPS File.
-            if ($DroppedExtn -eq '.bps' -or $DroppedExtn -eq '.ips') {
+            if ($DroppedExtn -eq '.bps' -or $DroppedExtn -eq '.ips' -or $DroppedExtn -eq '.xdelta' -or $DroppedExtn -eq '.vcdiff') {
                 # Finish everything up.
                 BPSPath_Finish -TextBox $InputBPSTextBox -VarName $this.Name -BPSPath $DroppedPath
             }
@@ -1788,24 +1811,24 @@ function CreateMainDialog() {
     $global:InputBPSPanel = CreatePanel -Width 590 -Height 50 -AddTo $MainDialog
 
     # Create the groupbox that holds the BPS path.
-    $InputBPSGroup = CreateGroupBox -Width $InputBPSPanel.Width -Height $InputBPSPanel.Height -Name "GameBPS" -Text "BPS Path" -AddTo $InputBPSPanel
+    $InputBPSGroup = CreateGroupBox -Width $InputBPSPanel.Width -Height $InputBPSPanel.Height -Name "GameBPS" -Text "Custom Patch Path" -AddTo $InputBPSPanel
     $InputBPSGroup.AllowDrop = $true
     $InputBPSGroup.Add_DragEnter({ $_.Effect = [Windows.Forms.DragDropEffects]::Copy })
     $InputBPSGroup.Add_DragDrop({ BPSPath_DragDrop })
     
     # Create a textbox to display the selected BPS.
-    $global:InputBPSTextBox = CreateTextBox -X 10 -Y 20 -Width 440 -Height 22 -Name "GameBPS" -Text "Select or drag and drop your BPS or IPS Patch File..." -AddTo $InputBPSGroup
+    $global:InputBPSTextBox = CreateTextBox -X 10 -Y 20 -Width 440 -Height 22 -Name "GameBPS" -Text "Select or drag and drop your BPS, IPS, Xdelta or VCDiff Patch File..." -AddTo $InputBPSGroup
     $InputBPSTextBox.AllowDrop = $true
     $InputBPSTextBox.Add_DragEnter({ $_.Effect = [Windows.Forms.DragDropEffects]::Copy })
     $InputBPSTextBox.Add_DragDrop({ BPSPath_DragDrop })
 
     # Create a button to allow manually selecting a ROM.
-    $global:InputBPSButton = CreateButton -X 456 -Y 18 -Width 24 -Height 22 -Name "GameBPS" -Text "..." -ToolTip $ToolTip -Info "Select your BPS or IPS Patch File using file explorer" -AddTo $InputBPSGroup
-    $InputBPSButton.Add_Click({ BPSPath_Button -TextBox $InputBPSTextBox -Description @('BPS Patch File', 'IPS Patch File') -FileName @('*.bps', '*.ips') })
+    $global:InputBPSButton = CreateButton -X 456 -Y 18 -Width 24 -Height 22 -Name "GameBPS" -Text "..." -ToolTip $ToolTip -Info "Select your BPS, IPS, Xdelta or VCDiff Patch File using file explorer" -AddTo $InputBPSGroup
+    $InputBPSButton.Add_Click({ BPSPath_Button -TextBox $InputBPSTextBox -Description @('BPS Patch File', 'IPS Patch File', 'XDelta Patch File', 'VCDiff Patch File') -FileName @('*.bps', '*.ips', '*.xdelta', '*.vcdiff') })
     
     # Create a button to allow patch the WAD with a BPS file.
-    $global:PatchBPSButton = CreateButton -X 495 -Y 18 -Width 80 -Height 22 -Text "Patch BPS" -ToolTip $ToolTip -Info "Patch the ROM with your selected BPS or IPS Patch File" -AddTo $InputBPSGroup
-    $PatchBPSButton.Add_Click({ MainFunction -Command "Patch BPS" -Patch $BPSFilePath -PatchedFileName '_bps_patched' })
+    $global:PatchBPSButton = CreateButton -X 495 -Y 18 -Width 80 -Height 22 -Text "Apply Patch" -ToolTip $ToolTip -Info "Patch the ROM with your selected BPS or IPS Patch File" -AddTo $InputBPSGroup
+    $PatchBPSButton.Add_Click({ MainFunction -Command "Apply Patch" -Patch $BPSFilePath -PatchedFileName '_bps_patched' })
 
 
 
