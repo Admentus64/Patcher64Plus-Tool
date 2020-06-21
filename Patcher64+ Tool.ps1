@@ -2168,13 +2168,15 @@ function ChangeGameMode() {
     try { if ($GameType.patches -and (Test-Path -LiteralPath ($MasterPath + "\" + $GameType.mode + "\Patches.json") -PathType Leaf))   { $global:PatchesJSONFile = Get-Content -Raw -Path ($MasterPath + "\" + $GameType.mode + "\Patches.json") | ConvertFrom-Json } }
     catch { CreateErrorDialog -Error "Corrupted JSON" }
 
+    # Info
     if (Test-Path -LiteralPath ($TextPath + "\Info\" + $GameType.mode + ".txt") -PathType Leaf)      { AddTextFileToTextbox -TextBox $InfoTextbox -File ($TextPath + "\Info\" + $GameType.mode + ".txt") }
     else                                                                                             { AddTextFileToTextbox -TextBox $InfoTextbox -File $null }
-
-    if (Test-Path -LiteralPath ($TextPath + "\Credits\Common.txt") -PathType Leaf)                   { AddTextFileToTextbox -TextBox $CreditsTextBox -File ($TextPath + "\Credits\Common.txt") -Add $True }
-
     if (Test-Path -LiteralPath ($IconsPath + "\" + $GameType.mode + ".ico") -PathType Leaf)          { $InfoDialog.Icon = $AdditionalOptionsDialog.Icon = $IconsPath + "\" + $GameType.mode + ".ico" }
     else                                                                                             { $InfoDialog.Icon = $AdditionalOptionsDialog.Icon = $null }
+
+    # Credits
+    if (Test-Path -LiteralPath ($TextPath + "\Credits\Common.txt") -PathType Leaf)                   { AddTextFileToTextbox -TextBox $CreditsTextBox -File ($TextPath + "\Credits\Common.txt") }
+    if (Test-Path -LiteralPath ($TextPath + "\Credits\" + $GameType.mode + ".txt") -PathType Leaf)   { AddTextFileToTextbox -TextBox $CreditsTextBox -File ($TextPath + "\Credits\" + $GameType.mode + ".txt") -Add $True -PreSpace 2 }
 
     $global:ToolTip.SetToolTip($InfoButton, "Open the list with information about the " + $GameType.mode + " patching mode")
     $InfoButton.Text = "Info`n" + $GameType.mode
