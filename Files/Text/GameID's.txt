@@ -30,14 +30,21 @@ F7C52568A31AADF26E14DC2B6416B2ED
 
 
 
---- UNOFFICIAL WII VC GAMEID'S (Rom Hacks) ---
+--- UNOFFICIAL WII VC GAMEID'S (ROM Hacks) ---
 - NAC0 = Ocarina of Time REDUX
 - NAC1 = Ocarina of Time: Dawn & Dusk
+- NAC2 = Ocarina of Time: The Fate of the Bombiwa
+- NAC3 = Ocarina of Time: Nimpize Adventure
+- NAC4 = Ocarina of Time Puzzling
+
 - NAR0 = Majora's Mask REDUX
 - NAR1 = Majora's Mask: Masked Quest
+
 - NAAX = Super Mario 64: 60 FPS v2
 - NAAY = Super Mario 64: Analog Camera
 - NAAM = Super Mario 64: Multiplayer v1.4.2
+- NAA0 = Super Mario: Star Road
+
 - NAE0 = Paper Mario: Hard Mode
 - NAE1 = Paper Mario: Hard Mode+
 - NAE2 = Paper Mario: Insane Mode
