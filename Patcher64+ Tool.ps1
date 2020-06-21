@@ -5,7 +5,7 @@ $ScriptName = 'Patcher64+ Tool'
 
 #=============================================================================================================================================================================================
 # Patcher By     :  Admentus
-# Concept By     :   
+# Concept By     :  Bighead
 # Testing By     :  Admentus, GhostlyDark
 
 
@@ -22,12 +22,8 @@ Add-Type -AssemblyName 'System.Drawing'
 $global:VersionDate = "21-06-2020"
 $global:Version     = "v5.1.1"
 
-$global:GameType = ""
-$global:GamePatch = ""
-$global:IsWiiVC = $False
-$global:IsDowngrade = $False
-$global:CheckHashSum = ""
-$global:MissingFiles = $False
+$global:GameType = $global:GamePatch = $global:CheckHashSum = ""
+$global:IsWiiVC = $global:IsDowngrade = $global:MissingFiles = $False
 $global:GameTitleLength = 0
 
 $global:CurrentModeFont = [System.Drawing.Font]::new("Microsoft Sans Serif", 12, [System.Drawing.FontStyle]::Bold)
@@ -68,23 +64,12 @@ $global:WiiVCPath = $MasterPath + "\Wii VC"
 #==============================================================================================================================================================================================
 # Files to patch and use
 
-$global:WADFilePath = $null
-$global:Z64FilePath = $null
-$global:BPSFilePath = $null
-$global:PatchFile = $null
-$global:ROMFile = $null
-$global:ROMCFile = $null
-$global:PatchedROMFile = $null
+$global:WADFilePath = $global:Z64FilePath = $global:BPSFilePath = $null
+
+$global:ROMFile = $global:ROMCFil = $null
+$global:PatchedROMFile = $global:DecompressedROMFile = $null
 $global:DecompressedROMFile = $null
-$global:PatchesJSONFile = $null
-$global:GamesJSONFile = $null
-
-
-
-#==============================================================================================================================================================================================
-# Import code
-
-#Import-Module -Name ($BasePath + '\Extension.psm1')
+$global:GamesJSONFile = $global:PatchesJSONFile = $null
 
 
 
@@ -139,8 +124,12 @@ function ExtendString([String]$InputString, [int]$Length) {
 
 #==============================================================================================================================================================================================
 function MainFunction([String]$Command, [String]$Patch, [String]$PatchedFileName, [String]$Hash) {
-
-    $global:PatchFile = $Patch
+    
+    # Patchfile
+    $global:PatchFile = $null
+    if ($patch.Length -ge 4) { $global:PatchFile = Get-Item -LiteralPath $Patch }
+    
+    # Hashsum
     $global:CheckHashSum = $Hash
 
     # GameID / Title
@@ -182,14 +171,17 @@ function MainFunction([String]$Command, [String]$Patch, [String]$PatchedFileName
         }
     }
 
+    # Decompress
     $Decompress = $False
     if ($PatchFile -like "*\Decompressed\*" -and $Command -ne "Apply Patch")   { $Decompress = $True }
     elseif ($Redux -and $Command -ne "Apply Patch")                            { $Decompress = $True }
 
+    # Patcher Tool
     $Patcher = $Flips
     if ($PatchFile -like "*.xdelta*")       { $Patcher = "Xdelta" }
     elseif ($PatchFile -like "*.vcdiff*")   { $Patcher = "Xdelta3" }
 
+    # GO!
     MainFunctionPatch -Command $Command -Title $Title -GameID $GameID -Redux $Redux -PatchedFileName $PatchedFileName -Decompress $Decompress -Downgrade $Downgrade -Patcher $Patcher
     Cleanup
 
@@ -370,7 +362,7 @@ function RemovePath([String]$LiteralPath) {
 #==============================================================================================================================================================================================
 function CreatePath([String]$LiteralPath) {
     
-    # Make sure the path isn't null to avoid errors.
+    # Make sure the path is not null to avoid errors.
     if ($LiteralPath -ne '') {
         # Check to see if the path does not exist.
         if (!(Test-Path -LiteralPath $LiteralPath)) {
@@ -389,7 +381,7 @@ function CreatePath([String]$LiteralPath) {
 #==============================================================================================================================================================================================
 function TestPath([String]$LiteralPath, [String]$PathType = 'Any') {
     
-    # Make sure the path isn't null to avoid errors.
+    # Make sure the path is not null to avoid errors.
     if ($LiteralPath -ne '') {
         # Check to see if the path exists.
         if (Test-Path -LiteralPath $LiteralPath -PathType $PathType -ErrorAction 'SilentlyContinue') {
@@ -586,7 +578,7 @@ function SetROMFile() {
     else {
         $global:ROMFile = $Z64File.ROMFile
         $global:PatchedROMFile = $Z64File.Patched
-        $global:DecompressedROMFile = $MasterPath + "\decompressed"
+        $global:DecompressedROMFile = ($MasterPath + "\decompressed")
     }
 
 }
@@ -705,10 +697,7 @@ function PatchVCEmulator([String]$Command) {
     }
 
     if ($Command -eq "Patch Boot DOL") {
-        $File = $MasterPath + "\" + $GameType.mode + "\AppFile01" +  $GamePatch.file
-        if ($File -like "*.vcdiff*")          { $File = $File -replace '.vcdiff', '.bps' }
-        elseif ($File -like "*.xdelta*")      { $File = $File -replace '.xdelta', '.bps' }
-        if ($File -like "*\Decompressed\*")   { $File = $File -replace '\\Decompressed\\', '\' }
+        $File = $MasterPath + "\" + $GameType.mode + "\AppFile01\" +  $PatchFile.BaseName + ".bps"
         & $Files.flips --ignore-checksum $File $WADFile.AppFile01 | Out-Host
     }
 
@@ -831,9 +820,9 @@ function CompareHashSums([String]$Command, [Boolean]$Redux) {
         $HashSum = (Get-FileHash -Algorithm MD5 $ROMFile).Hash
         
         if ($CheckHashSum -eq "Dawn & Dusk") {
-            if ($HashSum -eq $HashSum_oot_rev0)     { $global:PatchFile = $Files.bpspatch_oot_dawn_rev0 }
-            elseif ($HashSum -eq $HashSum_oot_rev1) { $global:PatchFile = $Files.bpspatch_oot_dawn_rev1 }
-            elseif ($HashSum -eq $HashSum_oot_rev2) { $global:PatchFile = $Files.bpspatch_oot_dawn_rev2 }
+            if ($HashSum -eq $HashSum_oot_rev0)     { $global:PatchFile = Get-Item -LiteralPath $Files.bpspatch_oot_dawn_rev0 }
+            elseif ($HashSum -eq $HashSum_oot_rev1) { $global:PatchFile = Get-Item -LiteralPath $Files.bpspatch_oot_dawn_rev1 }
+            elseif ($HashSum -eq $HashSum_oot_rev2) { $global:PatchFile = Get-Item -LiteralPath $Files.bpspatch_oot_dawn_rev2 }
             else { $ContinuePatching = $False }
         }
         elseif ($HashSum -ne $CheckHashSum) { $ContinuePatching = $False }
@@ -885,7 +874,7 @@ function PatchROM([String]$Command, [Boolean]$Decompress, [Boolean]$Downgrade, [
 #==============================================================================================================================================================================================
 function RunPatcher([Boolean]$Decompress, [String]$Patcher) {
     
-    if ($PatchFile -eq $null -or $PatchFile -eq "" -or $PatchFile.Length -le 0) { return $False }
+    if ($PatchFile -eq $null -or $PatchFile -eq "" -or $PatchFile.Length -le 0) { return $True }
 
     if ($IsWiiVC -and $Decompress -and !(Test-Path -LiteralPath $DecompressedROMFile -PathType Leaf)) {
         UpdateStatusLabel -Text "Failed! Could not find decompressed ROM file."
@@ -1508,7 +1497,7 @@ function WADPath_Finish([Object]$TextBox, [String]$VarName, [String]$WADPath) {
     
     # Set the "GameWAD" variable that tracks the path.
     Set-Variable -Name $VarName -Value $WADPath -Scope 'Global'
-    $global:WADFilePath =  $WADPath
+    $global:WADFilePath = Get-Item -LiteralPath $WADPath
 
     # Update the textbox to the current WAD.
     $TextBox.Text = $WADPath
@@ -1532,7 +1521,7 @@ function Z64Path_Finish([Object]$TextBox, [String]$VarName, [String]$Z64Path) {
     
     # Set the "Z64 ROM" variable that tracks the path.
     Set-Variable -Name $VarName -Value $Z64Path -Scope 'Global'
-    $global:Z64FilePath =  $Z64Path
+    $global:Z64FilePath = Get-Item -LiteralPath $Z64Path
 
     $HashSumROMTextBox.Text = (Get-FileHash -Algorithm MD5 $Z64Path).Hash
 
@@ -1554,7 +1543,7 @@ function BPSPath_Finish([Object]$TextBox, [String]$VarName, [String]$BPSPath) {
     
     # Set the "BPS File" variable that tracks the path.
     Set-Variable -Name $VarName -Value $BPSPath -Scope 'Global'
-    $global:BPSFilePath =  $BPSPath
+    $global:BPSFilePath = Get-Item -LiteralPath $BPSPath
 
     # Update the textbox to the current WAD.
     $TextBox.Text = $BPSPath
@@ -1934,16 +1923,23 @@ function CreateMainDialog() {
         $PatchEnableAdditionalOptionsCheckbox.Enabled = $GamePatch.additional
         $PatchAdditionalOptionsButton.Enabled = ($GamePatch.additional -and $PatchEnableAdditionalOptionsCheckbox.Checked)
         $global:ToolTip.SetToolTip($PatchButton, ([String]::Format($Item.tooltip, [Environment]::NewLine)))
+
+        if ($GamePatch.file -eq $null)   { $PatchButton.Enabled = (CheckCheckBox -CheckBox $PatchEnableReduxCheckbox) -or (CheckCheckBox -CheckBox $PatchEnableAdditionalOptionsCheckbox) }
+        else                             { $PatchButton.Enabled = $True}
     } )
 
     # Create a checkbox to enable Redux and Additional Options support.
     $global:PatchEnableReduxLabel = CreateLabel -X ($PatchButton.Right + 10) -Y ($PatchComboBox.Top + 5) -Width 100 -Height 15 -Text "Include Redux:" -ToolTip $ToolTip -Info "Enable the Redux patch" -AddTo $PatchGroup
     $global:PatchEnableReduxCheckbox = CreateCheckBox -X $PatchEnableReduxLabel.Right -Y ($PatchEnableReduxLabel.Top - 2) -Width 20 -Height 20 -ToolTip $ToolTip -Info "Enable the Redux patch" -AddTo $PatchGroup
+    $PatchEnableReduxCheckbox.Add_CheckStateChanged({
+        if ($GamePatch.file -eq $null) { $PatchButton.Enabled = (CheckCheckBox -CheckBox $PatchEnableReduxCheckbox) -or (CheckCheckBox -CheckBox $PatchEnableAdditionalOptionsCheckbox) }
+    })
 
     $global:PatchEnableAdditionalOptionsLabel = CreateLabel -X ($PatchButton.Right + 10) -Y ($PatchEnableReduxLabel.Bottom + 15) -Width 100 -Height 15 -Text "Additional Options:" -ToolTip $ToolTip -Info "Enable additional options" -AddTo $PatchGroup
     $global:PatchEnableAdditionalOptionsCheckbox = CreateCheckBox -X $PatchEnableAdditionalOptionsLabel.Right -Y ($PatchEnableAdditionalOptionsLabel.Top - 2) -Width 20 -Height 20 -ToolTip $ToolTip -Info "Enable additional options" -AddTo $PatchGroup
     $PatchEnableAdditionalOptionsCheckbox.Add_CheckStateChanged({
         $PatchAdditionalOptionsButton.Enabled = $PatchEnableAdditionalOptionsCheckbox.Checked
+        if ($GamePatch.file -eq $null) { $PatchButton.Enabled = (CheckCheckBox -CheckBox $PatchEnableReduxCheckbox) -or (CheckCheckBox -CheckBox $PatchEnableAdditionalOptionsCheckbox) }
     })
 
     $global:PatchAdditionalOptionsButton = CreateButton -X ($PatchGroup.Right - 140) -Y 20 -Width 120 -Height 55 -Text "Select Additional Options" -AddTo $PatchGroup
