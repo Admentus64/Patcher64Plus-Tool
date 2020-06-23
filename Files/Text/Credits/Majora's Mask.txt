@@ -3,7 +3,8 @@
 - Saneki
 
 --- 16:9 backgrounds and textures ---
-GhostlyDark (Patches)
+- GhostlyDark (Patches)
+- ShadowOne333 (Offsets)
 - Admentus (Scripting and Assistance)
 
 --- Majora's Mask: Masked Quest ---

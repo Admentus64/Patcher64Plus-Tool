@@ -1,7 +1,7 @@
 { "patch" : [ {
 	"title" : "Ocarina of Time REDUX",
 	"console" : "All",
-	"command" : "Downgrade",
+	"command" : "Force Downgrade",
 	"redux" : 1,
 	"additional" : 1,
 	"n64_gameID" : "CZLE",
@@ -14,7 +14,7 @@
 }, {
 	"title" : "Spanish Translation",
 	"console" : "All",
-	"command" : "Downgrade",
+	"command" : "Force Downgrade",
 	"redux" : 1,
 	"additional" : 1,
 	"n64_gameID" : "CZLE",
@@ -28,7 +28,7 @@
 }, {
 	"title" : "Polish Translation",
 	"console" : "All",
-	"command" : "Downgrade",
+	"command" : "Force Downgrade",
 	"redux" : 1,
 	"additional" : 1,
 	"n64_gameID" : "CZLE",
@@ -42,7 +42,7 @@
 }, {
 	"title" : "Russian Translation",
 	"console" : "All",
-	"command" : "Downgrade",
+	"command" : "Force Downgrade",
 	"redux" : 1,
 	"additional" : 1,
 	"n64_gameID" : "CZLE",
@@ -56,7 +56,7 @@
 }, {
 	"title" : "Chinese Translation",
 	"console" : "All",
-	"command" : "Downgrade",
+	"command" : "Force Downgrade",
 	"redux" : 1,
 	"additional" : 1,
 	"n64_gameID" : "CZLE",
@@ -75,14 +75,14 @@
 	"n64_title" : "THE LEGEND OF ZELDA",
 	"wii_gameID" : "NAC1",
 	"wii_title" : "Zelda: Dawn & Dusk",
-	"file" : "\\oot_dawn.bps",
+	"file" : "\\oot_dawn_rev2.bps",
 	"output" : "_dawn_&_dusk_patched",
 	"hash" : "Dawn & Dusk",
 	"tooltip" : "A small-sized ROM hack in a completely new setting{0}- Supported: Rev 0 (US), Rev 1 (US) & Rev 2 (US)"
 }, {
 	"title" : "The Legend of Zelda: The Fate of the Bombiwa",
 	"console" : "All",
-	"command" : "Downgrade",
+	"command" : "Force Downgrade",
 	"n64_gameID" : "CZLE",
 	"n64_title" : "THE LEGEND OF ZELDA",
 	"wii_gameID" : "NAC2",
@@ -94,7 +94,7 @@
 }, {
 	"title" : "The Legend of Zelda: Nimpize Adventure",
 	"console" : "All",
-	"command" : "Downgrade",
+	"command" : "Force Downgrade",
 	"n64_gameID" : "CZLE",
 	"n64_title" : "THE LEGEND OF ZELDA",
 	"wii_gameID" : "NAC3",
@@ -106,7 +106,7 @@
 }, {
 	"title" : "Ocarina of Time Puzzling",
 	"console" : "All",
-	"command" : "Downgrade",
+	"command" : "Force Downgrade",
 	"n64_gameID" : "CZLE",
 	"n64_title" : "THE LEGEND OF ZELDA",
 	"wii_gameID" : "NAC4",

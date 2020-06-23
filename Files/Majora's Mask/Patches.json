@@ -26,7 +26,6 @@
 }, {
 	"title" : "Russian Translation",
 	"console" : "All",
-	"command" : "Downgrade",
 	"redux" : 1,
 	"additional" : 1,
 	"n64_gameID" : "NZSE",
@@ -40,7 +39,7 @@
 }, {
 	"title" : "The Legend of Zelda: Masked Quest",
 	"console" : "All",
-	"command" : "Remap D-Pad",
+	"command" : "Force Remap D-Pad",
 	"n64_gameID" : "NZSE",
 	"n64_title" : "ZELDA MAJORA'S MASK",
 	"wii_gameID" : "NAC1",
