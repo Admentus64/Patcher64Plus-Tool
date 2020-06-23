@@ -43,24 +43,30 @@ The following games have included patches:
 - Super Smash Bros. (Smash - N64 Mode Only)
 
 The following patches are included:
-- Redux romhack (OoT & MM)
-- Dawn & Dusk romhack (OoT)
-- The Fate of the Bombiwa romhack (OoT)
-- Masked Quest romhack (MM)
-- Spanish Translation patch (OoT)
-- Polish Translation patch (OoT & MM)
-- Chinese Translation patch (OoT)
-- Russian Translation patch (OoT & MM)
+- Redux (OoT & MM)
+- Dawn & Dusk (OoT)
+- The Fate of the Bombiwa (OoT)
+- Nimpize Adventure (OoT)
+- Ocarina of Time Puzzling (OoT)
+- Masked Quest (MM)
+- Spanish Translation (OoT)
+- Polish Translation (OoT & MM)
+- Chinese Translation (OoT)
+- Russian Translation (OoT & MM)
 - Master Quest injection (OoT)
-- 60 FPS romhack (SM64)
-- Analog Camera romhack (SM64)
-- Multiplayer romhack (SM64)
+- Single-Screen / Split-Screen Multiplayer (SM64)
+- Star Road / Star Road Single-Screen Multiplayer (SM64)
+- SM64: Last Impact (SM64)
+- Super Mario 64 Land (SM64)
+- Super Mario Odyssey 64 (SM64)
+- SM64: Ocarina of Time (SM64)
 - Hard Mode romhack (PP)
 - Hard Mode+ romhack (PP)
 - Insane Mode romhack (PP)
 - Super Smash Bros. Remix romhack (Smash)
 
-Redux patches can be applied on Translation patches as well and offer an additional set of customization options.
+Redux patches can be applied on Translation patches as well and offer an additional set of additional customization options.
+These additional customization options can be applied to some of the patches for OoT, MM and SM64.
 
 
 
