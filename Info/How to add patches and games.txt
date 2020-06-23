@@ -36,8 +36,9 @@ romc		Type of ROM in the VC WAD File
 patch_vc	Amount of Patch VC options which are available
 		0			No Patch VC Options are available
 		1			Only base Patch VC Options are available
-		2			More Patch VC Options are available
-		3			All Patch VC Options are available
+		2			More Patch VC Options are available (Super Mario 64)
+		3			More Patch VC Options are available (Zelda 64)
+		4			All Patch VC Options are available (Zelda 64)
 
 patches		If the Patch Options panel is shown
 		0			Hide Patch Options panel
@@ -47,14 +48,6 @@ decompress	If the ROM is capable of decompressing
 		0			ROM can not decompress
 		1			ROM can decompress (OoT and MM only)
 		2			ROM can decompress (SM64 only)
-
-redux		If Redux is shown in the patch panel. Currently only OoT and MM support Redux.
-		0			Disable and hide Redux
-		1			Allow and show Redux
-
-additional	If Additional Options are shown in the patch panel. Currently only OoT and MM support AdditionalOptions.
-		0			Disable and hide Additional Options
-		1			Allow and show Additional options
 
 dmaTable	New dmatable to overwrite existing dmatable with
 
@@ -98,24 +91,32 @@ Attributes lines that are not shown are equivalent to 0 or just empty.
 
 
 --- Lines ---
-title		Patch title as shown in the Patcher64+ GUI
+title		Patch title as shown in the Patcher64+ GUI.
 
-console		In which console mode the patch is accessible. Accepted values are: "N64", "Wii VC" or "All"
+console		In which console mode the patch is accessible. Accepted values are: "N64", "Wii VC" or "All".
 
-command		Special command for patches.
+command		Special command for patches. Commands can be mixed. Uppercase or lowercase does not matter.
 		""			Empty, no command given
-		"Downgrade"		Downgrade OoT Rev 1 or OoT Rev 2 ROM file to Rev 0
-		"No Downgrade"		Do not downgrade an OoT ROM file
-		"Remap D-Pad"		Remap the D-Pad for OoT or MM
+		"Force Downgrade"	Downgrade OoT Rev 1 or OoT Rev 2 ROM file to Rev 0
+		"No Downgrade"		Prevent downgrading OoT to a Rev 0 ROM File
+		"Force Remap D-Pad"	Remap the D-Pad for OoT or MM
 		"Patch Boot DOL" 	For Super Mario 64, patch the Boot DOL File in the VC WAD
+		"Multiplayer" 		For Super Mario 64, allows byte-patching the modified MP Boot DOL File in the VC WAD
+		"No FPS"		Disable the 60 FPS patch for Super Mario 64 in "Additional Options"
+		"No Free Cam"		Disable the Analog Camera patch for Super Mario 64 in "Additional Options"
+		"Extract"		Extract .Z64 ROM from Wii VC .WAD only
+		"Inject"		Inject .Z64 ROM into Wii VC .WAD File
+		"Patch VC"		Patch Wii VC .WAD File with "Patch VC Options" only
+		"Apply Patch"		Apply custom provided .bps, .ips, .xdelta or .vcdiff patch file
+		
 
-redux		If the patch supports Redux. Redux is only supported for OoT or MM
-		0			Disable Redux
-		1			Allow Redux if the checkbox is checked
+redux		If the patch supports Redux. Redux is only supported by OoT and MM.
+		0			Disable "Redux"
+		1			Show "Redux" and allow it if the checkbox is checked
 
-additional	If the patch supports Additional Options. Additional Option is only supported for OoT or MM
-		0			Disable Additional Option
-		1			Allow Additional Option if the checkbox is checked
+additional	If the patch supports Additional Options. Additional Option is only supported by OoT, MM and SM64.
+		0			Disable "Additional Options"
+		1			Show "Additional Options" and allow it if the checkbox is checked
 
 n64_gameID	N64 ROM GameID. Requires 4 characters.
 
