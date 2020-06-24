@@ -1269,7 +1269,11 @@ function PatchAdditionalMM() {
 
     # GRAPHICS #
 
-    if (CheckCheckBox -CheckBox $WideScreenMM)             { PatchBytesSequence -File $DecompressedROMFile -Offset "0xCA58F5" -Values @("0x6C", "0x53", "0x6C", "0x84", "0x9E", "0xB7", "0x53", "0x6C") -Increment 2 }
+    if (CheckCheckBox -CheckBox $WideScreenMM) {
+        PatchBytesSequence -File $DecompressedROMFile -Offset "0xBD5D74" -Values @("0x3C", "0x07", "0x3F", "0xE3")
+        PatchBytesSequence -File $DecompressedROMFile -Offset "0xCA58F5" -Values @("0x6C", "0x53", "0x6C", "0x84", "0x9E", "0xB7", "0x53", "0x6C") -Increment 2
+    }
+
     if (CheckCheckBox -CheckBox $ExtendedDrawMM)           { PatchBytesSequence -File $DecompressedROMFile -Offset "0xB50874" -Values @("0x00", "0x00", "0x00", "0x00") }
     if (CheckCheckBox -CheckBox $BlackBarsMM)              { PatchBytesSequence -File $DecompressedROMFile -Offset "0xBF72A4" -Values @("0x00", "0x00", "0x00", "0x00") }
     if (CheckCheckBox -CheckBox $PixelatedStarsMM)         { PatchBytesSequence -File $DecompressedROMFile -Offset "0xB943FC" -Values @("0x10", "0x00") }
