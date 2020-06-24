@@ -5,7 +5,7 @@
 	"n64_gameID" : "NSME",
 	"n64_title" : "SUPER MARIO 64",
 	"wii_gameID" : "NAAE",
-	"wii_title" : "Super Mario 64:",
+	"wii_title" : "Super Mario 64",
 	"output" : "_patched",
 	"hash" : "20B854B239203BAF6C961B850A4A51A2",
 	"tooltip" : "The regular Super Mario 64 experience{0}With support for additional patches{0}- Supported: Rev 0 (US)"
