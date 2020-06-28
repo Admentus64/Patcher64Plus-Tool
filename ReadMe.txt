@@ -14,7 +14,7 @@ Wii VC mode only handles N64 titles on the Wii VC currently.
 
 Keep in mind that:
 
-a) Patching Majora's Mask or Paper Mario requires their respective modes and not Free Mode, since both VC WAD titles have applied specific compression to their rom and boot dol.
+a) Patching Majora's Mask or Paper Mario requires their respective modes and not Free Mode, since both VC WAD titles have applied specific compression to their ROM and Boot DOL.
 
 b) Free Mode likely will not work on anything other than Nintendo 64 titles for the Virtual Console
 
@@ -42,18 +42,18 @@ The following games have included patches:
 - Paper Mario (PP)
 - Super Smash Bros. (Smash - N64 Mode Only)
 
+
+
+===============
+=== PATCHES ===
+===============
+
 The following patches are included:
-- Redux (OoT & MM)
 - Dawn & Dusk (OoT)
 - The Fate of the Bombiwa (OoT)
 - Nimpize Adventure (OoT)
 - Ocarina of Time Puzzling (OoT)
 - Masked Quest (MM)
-- Spanish Translation (OoT)
-- Polish Translation (OoT & MM)
-- Chinese Translation (OoT)
-- Russian Translation (OoT & MM)
-- Master Quest injection (OoT)
 - Single-Screen / Split-Screen Multiplayer (SM64)
 - Star Road / Star Road Single-Screen Multiplayer (SM64)
 - SM64: Last Impact (SM64)
@@ -65,8 +65,30 @@ The following patches are included:
 - Insane Mode romhack (PP)
 - Super Smash Bros. Remix romhack (Smash)
 
-Redux patches can be applied on Translation patches as well and offer an additional set of additional customization options.
-These additional customization options can be applied to some of the patches for OoT, MM and SM64.
+
+
+=============
+=== EXTRA ===
+=============
+
+Ocarina of Time and Majora's Mask have support for Redux and language selection.
+Additional options can be chosen for Ocarina of Time, Majora's Mask and Super Mario 64.
+
+Supported languages for Ocarina of Time include:
+- English
+- Japanese
+- Spanish
+- Polish
+- Russian
+- Chinese
+
+Supported languages for Majora's Mask include:
+- English
+- Polish
+- Russian
+
+Redux offers many improved game mechanics such as having items on dedicated buttons (D-Pad) and some other quality of life changes.
+Options offers smaller individual changes that can be applied individually from each other, such as Widescreen support.
 
 
 
