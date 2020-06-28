@@ -7,10 +7,11 @@
 	"patches" : 1,
 	"decompress" : 1,
 	"dmaTable" : "0 1 2 3 4 5 6 7 8 9 15 16 17 18 19 20 21 22 23 24 25 26 942 944 946 948 950 952 954 956 958 960 962 964 966 968 970 972 974 976 978 980 982 984 986 988 990 992 994 996 998 1000 1002 1004 1497 1498 1499 1500 1501 1502 1503 1504 1505 1506 1507 1508 1509 1510 1511 1512 1513 1514 1515 1516 1517 1518 1519 1520 1521 1522 1523 1524 1525",
-	"n64_gameID" : "CZLE",
 	"n64_title" : "THE LEGEND OF ZELDA",
+	"n64_gameID" : "CZLE",
+	"wii_title" : "Zelda: Ocarina",
 	"wii_gameID" : "NACE",
-	"wii_title" : "Zelda: Ocarina"
+	"hash" : "5BD1FE107BF8106B2AB6650ABECD54D6"
 }, {
 	"title" : "The Legend of Zelda: Majora's Mask",
 	"mode" : "Majora's Mask",
@@ -20,10 +21,11 @@
 	"patches" : 1,
 	"decompress" : 1,
 	"dmaTable" : "0 1 2 3 4 5 6 7 -8 -9 15 16 17 18 19 20 -21 22 25 26 27 28 29 30 -652 1127 -1539 -1540 -1541 -1542 -1543 1544 1545 1546 1547 1548 1549 1550 -1551 1552 1553 1554 1555 1556 1557 1558 1559 1560 1561 1562 1563 1564 1565 1566 1567",
+	"n64_title" : "ZELDA MAJORA'S MASK",
 	"n64_gameID" : "NZSE",
-	"n64_title" : "MAJORA'S MASK",
+	"wii_title" : "Zelda: Majora's",
 	"wii_gameID" : "NARE",
-	"wii_title" : "Zelda: Majora's"
+	"hash" : "2A0A8ACB61538235BC1094D297FB6556"
 }, {
 	"title" : "Super Mario 64",
 	"mode" : "Super Mario 64",
@@ -31,10 +33,11 @@
 	"patch_vc" : 2,
 	"patches" : 1,
 	"decompress" : 2,
-	"n64_gameID" : "NSME",
 	"n64_title" : "SUPER MARIO 64",
+	"n64_gameID" : "NSME",
+	"wii_title" : "Super Mario 64",
 	"wii_gameID" : "NAAE",
-	"wii_title" : "Super Mario 64"
+	"hash" : "20B854B239203BAF6C961B850A4A51A2"
 }, {
 	"title" : "Paper Mario",
 	"mode" : "Paper Mario",
@@ -42,24 +45,27 @@
 	"romc" : 2,
 	"patch_vc" : 1,
 	"patches" : 1,
-	"n64_gameID" : "NMQE",
 	"n64_title" : "PAPER MARIO",
+	"n64_gameID" : "NMQE",
+	"wii_title" : "Paper Mario",
 	"wii_gameID" : "NAEE",
-	"wii_title" : "Paper Mario"
+	"hash" : "A722F8161FF489943191330BF8416496"
 }, {
 	"title" : "Super Smash Bros.",
 	"mode" : "Super Smash Bros",
 	"console" : "N64",
 	"patch_vc" : 1,
 	"patches" : 1,
-	"n64_gameID" : "NALE",
 	"n64_title" : "SMASH BROTHERS",
+	"n64_gameID" : "NALE",
+	"wii_title" : "Super Smash Bros.",
 	"wii_gameID" : "NALE",
-	"wii_title" : "Super Smash Bros."
+	"hash" : "F7C52568A31AADF26E14DC2B6416B2ED"
 }, {
 	"title" : "Free (Nintendo 64)",
 	"mode" : "Free",
 	"patch_vc" : 1,
+	"patches" : 0,
 	"console" : "All",
 	"n64_gameID" : "CUST",
 	"n64_title" : "CUSTOM TITLE",

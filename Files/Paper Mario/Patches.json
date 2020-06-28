@@ -1,35 +1,26 @@
 { "patch" : [ {
 	"title" : "Hard console",
 	"console" : "All",
-	"n64_gameID" : "NMQE",
-	"n64_title" : "PAPER MARIO",
-	"wii_gameID" : "NAE0",
 	"wii_title" : "Paper Mario: Hard console",
+	"wii_gameID" : "NAE0",
 	"file" : "\\pp_hard_console.bps",
 	"output" : "_hard_console_patched",
-	"hash" : "A722F8161FF489943191330BF8416496",
 	"tooltip" : "Increases the damage dealt by enemies by 1.5x{0}- Supported: Rev 0 (US)"
 }, {
 	"title" : "Hard console+",
 	"console" : "All",
-	"n64_gameID" : "NMQE",
-	"n64_title" : "PAPER MARIO",
-	"wii_gameID" : "NAE1",
 	"wii_title" : "Paper Mario: Hard console+",
+	"wii_gameID" : "NAE1",
 	"file" : "\\pp_hard_console_plus.bps",
 	"output" : "_hard_console_plus_patched",
-	"hash" : "A722F8161FF489943191330BF8416496",
 	"tooltip" : "Increases the damage dealt by enemies by 1.5x{0}Also increases the HP of enemies{0}- Supported: Rev 0 (US)"
 }, {
 	"title" : "Insane console",
 	"console" : "All",
-	"n64_gameID" : "NMQE",
-	"n64_title" : "PAPER MARIO",
-	"wii_gameID" : "NAE2",
 	"wii_title" : "Paper Mario: Insane console",
+	"wii_gameID" : "NAE2",
 	"file" : "\\pp_insane_console.bps",
 	"output" : "_insane_console_patched",
-	"hash" : "A722F8161FF489943191330BF8416496",
 	"tooltip" : "Increases the damage dealt by enemies by 2x{0}- Supported: Rev 0 (US)"
 }
 ] }

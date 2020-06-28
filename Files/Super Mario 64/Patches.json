@@ -1,110 +1,87 @@
 { "patch" : [ {
 	"title" : "Super Mario 64",
 	"console" : "All",
-	"additional" : 1,
-	"n64_gameID" : "NSME",
-	"n64_title" : "SUPER MARIO 64",
-	"wii_gameID" : "NAAE",
-	"wii_title" : "Super Mario 64",
-	"output" : "_patched",
-	"hash" : "20B854B239203BAF6C961B850A4A51A2",
-	"tooltip" : "The regular Super Mario 64 experience{0}With support for additional patches{0}- Supported: Rev 0 (US)"
+	"options" : 1,
+	"tooltip" : "The regular Super Mario 64 experience{0}With support for additional options{0}- Supported: Rev 0 (US)"
 }, {
 	"title" : "Super Mario 64: Multiplayer (v1.4.2)",
 	"console" : "All",
 	"command" : "Patch Boot DOL Multiplayer",
-	"additional" : 1,
-	"n64_gameID" : "NSME",
+	"options" : 1,
 	"n64_title" : "SM64 Multiplayer",
-	"wii_gameID" : "NAAM",
 	"wii_title" : "SM64: Multiplayer",
+	"wii_gameID" : "NAAM",
 	"file" : "\\Decompressed\\sm64_multiplayer.bps",
 	"extend" : 18,
 	"output" : "_multiplayer_v1.4.2_patched",
-	"hash" : "20B854B239203BAF6C961B850A4A51A2",
 	"tooltip" : "Single-Screen Multiplayer with Mario and Luigi{0}Plugin a second emulated controller for Luigi{0}- Supported: Rev 0 (US)"
 }, {
 	"title" : "Super Mario 64: Split-Screen Multiplayer",
 	"console" : "N64",
-	"n64_gameID" : "NSME",
 	"n64_title" : "SM64 Multiplayer",
 	"file" : "\\sm64_split_screen_multiplayer.vcdiff",
 	"output" : "_split_screen_multiplayer_patched",
-	"hash" : "20B854B239203BAF6C961B850A4A51A2",
 	"tooltip" : "Split-Screen Multiplayer with Mario and Luigi{0}Plugin a second emulated controller for Luigi{0}- Supported: Rev 0 (US)"
 }, {
 	"title" : "Super Mario: Star Road",
 	"console" : "N64",
-	"additional" : 1,
-	"n64_gameID" : "NSME",
+	"options" : 1,
 	"n64_title" : "SM64 Star Road",
 	"file" : "\\Decompressed\\sm64_star_road_n64.bps",
 	"extend" : 45,
 	"output" : "_star_road_patched",
-	"hash" : "20B854B239203BAF6C961B850A4A51A2",
 	"tooltip" : "A brand new world for Super Mario 64 with new stages and more than 120 stars to collect{0}- Supported: Rev 0 (US)"
 }, {
 	"title" : "Super Mario: Star Road Multiplayer (v1.2.1)",
 	"console" : "N64",
-	"additional" : 1,
-	"n64_gameID" : "NSME",
+	"options" : 1,
 	"n64_title" : "SM64 Star Road",
 	"file" : "\\Decompressed\\sm64_star_road_multiplayer.bps",
 	"extend" : 48,
 	"output" : "_star_road_multiplayer_patched",
-	"hash" : "20B854B239203BAF6C961B850A4A51A2",
 	"tooltip" : "A brand new world for Super Mario 64 with new stages and more than 120 stars to collect{0}Includes Multiplayer with Mario and Luigi{0}Plugin a second emulated controller for Luigi{0}- Supported: Rev 0 (US)"
 }, {
 	"title" : "Super Mario: Star Road",
 	"console" : "Wii VC",
 	"command" : "Patch Boot DOL",
-	"additional" : 1,
-	"wii_gameID" : "NAA0",
+	"options" : 1,
 	"wii_title" : "Super Mario: Star Road",
+	"wii_gameID" : "NAA0",
 	"file" : "\\Decompressed\\sm64_star_road_wii_vc.bps",
 	"extend" : 26,
 	"output" : "_star_road_patched",
-	"hash" : "20B854B239203BAF6C961B850A4A51A2",
 	"tooltip" : "A brand new world for Super Mario 64 with new stages and more than 120 stars to collect{0}- Supported: Rev 0 (US)"
 }, {
 	"title" : "Super Mario: Last Impact (v1.2)",
 	"console" : "N64",
-	"n64_gameID" : "NSME",
 	"n64_title" : "SM64 Last Impact",
 	"file" : "\\Decompressed\\sm64_last_impact.vcdiff",
 	"extend" : 64,
 	"output" : "_last_impact_patched",
-	"hash" : "20B854B239203BAF6C961B850A4A51A2",
 	"tooltip" : "A brand new world for Super Mario 64 with new stages and more than 120 stars to collect{0}- Supported: Rev 0 (US)"
 }, {
 	"title" : "Super Mario 64 Land (v1.1)",
 	"console" : "N64",
-	"n64_gameID" : "NSME",
 	"n64_title" : "SM64 Land",
 	"file" : "\\Decompressed\\sm64_land.vcdiff",
 	"extend" : 64,
 	"output" : "_land_patched",
-	"hash" : "20B854B239203BAF6C961B850A4A51A2",
 	"tooltip" : "A brand new world for Super Mario 64 with new stages and more than 120 stars to collect{0}- Supported: Rev 0 (US)"
 }, {
 	"title" : "Super Mario Odyssey 64",
 	"console" : "N64",
-	"n64_gameID" : "NSME",
 	"n64_title" : "SM64 Odyssey",
 	"file" : "\\Decompressed\\sm64_odyssey.vcdiff",
 	"extend" : 64,
 	"output" : "_odyssey_patched",
-	"hash" : "20B854B239203BAF6C961B850A4A51A2",
 	"tooltip" : "A brand new world for Super Mario 64 with new stages and 80 stars to collect{0}- Supported: Rev 0 (US)"
 }, {
 	"title" : "Super Mario 64: Ocarina of Time",
 	"console" : "N64",
-	"n64_gameID" : "NSME",
 	"n64_title" : "SM64 Ocarina",
 	"file" : "\\Decompressed\\sm64_ocarina.vcdiff",
 	"extend" : 64,
 	"output" : "_ocarina_patched",
-	"hash" : "20B854B239203BAF6C961B850A4A51A2",
 	"tooltip" : "A brand new world for Super Mario 64 with new stages and news stars to collect{0}- Supported: Rev 0 (US)"
 }
 ] }

@@ -1,80 +1,54 @@
 { "patch" : [ {
-	"title" : "Ocarina of Time REDUX",
+	"title" : "Ocarina of Time",
 	"console" : "All",
 	"command" : "Force Downgrade",
-	"redux" : 1,
-	"additional" : 1,
-	"n64_gameID" : "CZLE",
-	"n64_title" : "THE LEGEND OF ZELDA",
-	"wii_gameID" : "NAC0",
-	"wii_title" : "Redux: Ocarina",
-	"output" : "_redux_patched",
-	"hash" : "5BD1FE107BF8106B2AB6650ABECD54D6",
-	"tooltip" : "A ROM hack that improves the mechanics for Ocarina of Time{0}It includes the use of the D-Pad for additional dedicated item buttons{0}- Supported: Rev 0 (US)"
-}, {
-	"title" : "Spanish Translation",
-	"console" : "All",
-	"command" : "Force Downgrade",
-	"redux" : 1,
-	"additional" : 1,
-	"n64_gameID" : "CZLE",
-	"n64_title" : "THE LEGEND OF ZELDA",
-	"wii_gameID" : "NACS",
-	"wii_title" : "Zelda: Ocarina (SPA)",
-	"file" : "\\Decompressed\\oot_spa.bps",
-	"output" : "_spanish_patched",
-	"hash" : "5BD1FE107BF8106B2AB6650ABECD54D6",
-	"tooltip" : "Patches Spanish Fan Translation for Ocarina of Time{0}- Supported: Rev 0 (US)"
-}, {
-	"title" : "Polish Translation",
-	"console" : "All",
-	"command" : "Force Downgrade",
-	"redux" : 1,
-	"additional" : 1,
-	"n64_gameID" : "CZLE",
-	"n64_title" : "THE LEGEND OF ZELDA",
-	"wii_gameID" : "NACO",
-	"wii_title" : "Zelda: Ocarina (POL)",
-	"file" : "\\Decompressed\\oot_pol.bps",
-	"output" : "_polish_patched",
-	"hash" : "5BD1FE107BF8106B2AB6650ABECD54D6",
-	"tooltip" : "Patches Polish Fan Translation for Ocarina of Time{0}- Supported: Rev 0 (US)"
-}, {
-	"title" : "Russian Translation",
-	"console" : "All",
-	"command" : "Force Downgrade",
-	"redux" : 1,
-	"additional" : 1,
-	"n64_gameID" : "CZLE",
-	"n64_title" : "THE LEGEND OF ZELDA",
-	"wii_gameID" : "NACR",
-	"wii_title" : "Zelda: Ocarina (RUS)",
-	"file" : "\\Decompressed\\oot_rus.bps",
-	"output" : "_russian_patched",
-	"hash" : "5BD1FE107BF8106B2AB6650ABECD54D6",
-	"tooltip" : "Patches Russian Fan Translation for Ocarina of Time{0}- Supported: Rev 0 (US)"
-}, {
-	"title" : "Chinese Translation",
-	"console" : "All",
-	"command" : "Force Downgrade",
-	"redux" : 1,
-	"additional" : 1,
-	"n64_gameID" : "CZLE",
-	"n64_title" : "THE LEGEND OF ZELDA",
-	"wii_gameID" : "NACC",
-	"wii_title" : "Zelda: Ocarina (CHI)",
-	"file" : "\\Decompressed\\oot_chi.bps",
-	"output" : "_chinese_patched",
-	"hash" : "5BD1FE107BF8106B2AB6650ABECD54D6",
-	"tooltip" : "Patches Chinese Fan Translation for Ocarina of Time{0}- Supported: Rev 0 (US)"
+	"redux" : {
+		"wii_title" : "Redux: Ocarina",
+		"wii_gameID" : "NAC0",
+		"file" : "\\Decompressed\\oot_redux.bps",
+		"output" : "_redux_patched"
+	},
+	"options" : 1,
+	"languages" : [ {
+		"title" : "English"
+	}, {
+		"title" : "Japanese",
+		"n64_gameID" : "CZLJ",
+		"wii_title" : "Zelda: Ocarina (JAP)",
+		"wii_gameID" : "NACJ",
+		"output" : "_japanese_patched"
+	}, {
+		"title" : "Spanish",
+		"wii_title" : "Zelda: Ocarina (SPA)",
+		"wii_gameID" : "NACS",
+		"file" : "\\Decompressed\\oot_spa.bps",
+		"output" : "_spanish_patched"
+	}, {
+		"title" : "Polish",
+		"wii_title" : "Zelda: Ocarina (POL)",
+		"wii_gameID" : "NACO",
+		"file" : "\\Decompressed\\oot_pol.bps",
+		"output" : "_polish_patched"
+	}, {
+		"title" : "Russian",
+		"wii_title" : "Zelda: Ocarina (RUS)",
+		"wii_gameID" : "NACR",
+		"file" : "\\Decompressed\\oot_rus.bps",
+		"output" : "_russian_patched"
+	}, {
+		"title" : "Chinese",
+		"wii_title" : "Zelda: Ocarina (CHI)",
+		"wii_gameID" : "NACC",
+		"file" : "\\Decompressed\\oot_chi.bps",
+		"output" : "_chinese_patched"
+	} ],
+	"tooltip" : "The regular Ocarina of Time experience{0}With support for languages, redux and additional options{0}- Supported: Rev 0 (US)"
 }, {
 	"title" : "The Legend of Zelda: Dawn & Dusk",
 	"console" : "All",
 	"command" : "No Downgrade",
-	"n64_gameID" : "CZLE",
-	"n64_title" : "THE LEGEND OF ZELDA",
-	"wii_gameID" : "NAC1",
 	"wii_title" : "Zelda: Dawn & Dusk",
+	"wii_gameID" : "NAC1",
 	"file" : "\\oot_dawn_rev2.bps",
 	"output" : "_dawn_&_dusk_patched",
 	"hash" : "Dawn & Dusk",
@@ -83,37 +57,28 @@
 	"title" : "The Legend of Zelda: The Fate of the Bombiwa",
 	"console" : "All",
 	"command" : "Force Downgrade",
-	"n64_gameID" : "CZLE",
-	"n64_title" : "THE LEGEND OF ZELDA",
-	"wii_gameID" : "NAC2",
 	"wii_title" : "Zelda: Bombiwa",
+	"wii_gameID" : "NAC2",
 	"file" : "\\Decompressed\\oot_bombiwa.bps",
 	"output" : "_bombiwa_patched",
-	"hash" : "5BD1FE107BF8106B2AB6650ABECD54D6",
 	"tooltip" : "A small-sized ROM hack in a completely new setting, and extremely tricky and difficult{0}- Supported: Rev 0 (US)"
 }, {
 	"title" : "The Legend of Zelda: Nimpize Adventure",
 	"console" : "All",
 	"command" : "Force Downgrade",
-	"n64_gameID" : "CZLE",
-	"n64_title" : "THE LEGEND OF ZELDA",
-	"wii_gameID" : "NAC3",
 	"wii_title" : "Zelda: Nimpize",
+	"wii_gameID" : "NAC3",
 	"file" : "\\Decompressed\\oot_nimpize.bps",
 	"output" : "_nimpize_patched",
-	"hash" : "5BD1FE107BF8106B2AB6650ABECD54D6",
 	"tooltip" : "A reworked and harder version of Ocarina of Time with remixed dungeons{0}- Supported: Rev 0 (US)"
 }, {
 	"title" : "Ocarina of Time Puzzling",
 	"console" : "All",
 	"command" : "Force Downgrade",
-	"n64_gameID" : "CZLE",
-	"n64_title" : "THE LEGEND OF ZELDA",
-	"wii_gameID" : "NAC4",
 	"wii_title" : "Zelda: Puzzling",
+	"wii_gameID" : "NAC4",
 	"file" : "\\oot_puzzling.bps",
 	"output" : "_puzzling_patched",
-	"hash" : "5BD1FE107BF8106B2AB6650ABECD54D6",
 	"tooltip" : "A small-sized ROM hack that focuses on puzzling your way through{0}- Supported: Rev 0 (US)"
 }
 ] }
