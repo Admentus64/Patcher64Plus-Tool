@@ -1,0 +1,108 @@
+--- REDUX ---
+- Hacking: Maroc
+- Editing / Revision: ShadowOne333, MattKimura
+- Original Hacking: Roman971, TestRunnerSRL, AmazingAmpharos, fig02,
+krimtonz, rlbond86, KevinPal, junglechief87
+
+--- Options ---
+- 16:9 backgrounds and textures: GhostlyDark & ShadowOne333
+- MM Young Link Model: slash004 & The3Dude
+- MM Adult Link Model: Skilar (https://youtu.be/x6MIeEZIsPw)
+- Correct Rupee Colors: GhostlyDark
+- Admentus (Scripting and Assistance)
+
+--- Translations ---
+- Spanish: eduardo_a2j (v2.2)
+- Polish: RPG (v1.3)
+- Russian: Zelda64rus (v2.32)
+- Chinese Simplified: madcell (2009)
+
+--- Dawn and Dusk ---
+- Lead Development and Music: Captain Seedy-Eye
+- 64DD Porting: LuigiBlood
+- Special Thanks: PK-LOVE, BWIX, Hylian Modding
+- Testers:  Captain Seedy, LuigiBlood, Hard4Games, ZFG, Dry4Haz, fig02
+
+--- The Fate of the Bombiwa ---
+- DezZiBao
+
+--- Nimpize Adventure ---
+- Marco8641
+- Sauraen
+- DeathBasket
+- Sairugoth
+- Ideka
+- Mzxrules
+- Nokaubure
+- CDi-Fails
+- Psi-Hate
+- MelonSpeedruns
+- Ozidual
+- Jimmie1717
+- E-gor
+- Apasher
+- Menou
+
+--- Ocarina of Time Puzzling ---
+- DezZiBao
+
+--- Randomizer ---
+- Roman971
+- AmazingAmpharos
+- Zannick
+- Cuphat
+- r0bd0g
+- rattus128
+- dragonbane0
+- LumenTheFairy
+- flagrama
+- nlangille
+- krimtonz
+- mzxrules
+- dotzo
+- phixtyseven
+- junglechief87
+- fig02
+- KevinPal
+- TeknoAnonymous
+- rlbond86
+- Hamsda
+- scatter-dev
+- TestRunnerSRL
+- ETR-BTF
+- CMuncey
+- Tyrusss
+- dombarrieau
+- Exter-N
+- Darkunov
+- ChrisMuncey
+- Dwood15
+- BladefangFT
+- itsmedoggo
+- BeeLuigi
+- aofengen
+- LostThePirate
+- TreZc0
+- Raizuto
+- ThomasJRyan
+- Raikaru13
+- Mast3rGenius
+- thills03
+- pksage
+- aplumafreak500
+- Triaphlax
+- Jademalo
+- IcySlurpee
+- DatXFire
+- mwiens91
+- darkangel93x
+- danxensen
+- Zamiell
+- Sicilica
+- Mego
+- Martakia
+- Ketris
+- GoldenSierpinski
+- GhostlyDark
+- BananaSplit2
+- Apasher

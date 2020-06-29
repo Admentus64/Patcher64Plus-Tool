@@ -1,0 +1,42 @@
+--- REDUX ---
+- Hacking: Maroc
+- Original Hacking: Saneki
+
+--- Options ---
+- 16:9 Backgrounds and Offsets: GhostlyDark & ShadowOne333
+- Correct Rupee Colors: GhostlyDark
+- 4th Piece of Heart Sound: ShadowOne333
+- Fix Goth Cutscene: ShadowOne333
+- Move Bomber Kid: ShadowOne333
+- Admentus (Scripting and Assistance)
+
+--- Translations ---
+- Polish: RPG (v1.1)
+- Russian: Zelda64rus (v2.0 Beta)
+
+--- Masked Quest ---
+- Garo-Mastah
+- Aroenai
+- CloudMax
+- fkualol
+- VictorHale
+- Ideka
+- Saneki
+
+--- Randomizer ---
+- ZoeyZolotova
+- Saneki
+- zmarotrix
+- mzxrules
+- 5isghj5
+- az64
+- nlangille
+- junglechief87
+- aroenai
+- phixtyseven
+- krimtonz
+- flagrama
+- Kjelli
+- AmazingAmpharos
+- Zannick
+- TeknoAnonymous
