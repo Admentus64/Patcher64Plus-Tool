@@ -1,9 +1,9 @@
---- Paper Mario: Hard Mode ---
+--- Hard Mode ---
 - Skelux (Extra Damage)
 
---- Paper Mario: Hard Mode+ ---
+--- Hard Mode+ ---
 - Skelux (Extra Damage)
 - Knux5577 (Enemy HP)
 
---- Paper Mario: Insane Mode ---
+--- Insane Mode ---
 - Skelux (Extra Damage)

@@ -1,27 +1,27 @@
---- Super Mario 64: 60 FPS (v2) ---
+--- 60 FPS (v2) ---
 - Kaze Emanuar
 
---- Super Mario 64: Analog Camera ---
+--- Analog Camera ---
 - Kaze Emanuar
 
---- Super Mario 64: Multiplayer (v1.4.2) ---
+--- Multiplayer (v1.4.2) ---
 - Skelux
 
---- Super Mario 64: Split-screen Multiplayer ---
+--- Split-screen Multiplayer ---
 - Kaze Emanuar
 
---- Super Mario: Star Road ---
+--- Star Road ---
 - Skelux (original ROM Hack)
 - Kaze Emanuar (revised ROM Hack)
 - aglab2 (Wii VC crashfixes)
 
---- Super Mario: Star Road Multiplayer (v1.2.1) ---
+--- Star Road Multiplayer (v1.2.1) ---
 - Skelux
 
---- Super Mario 64: Last Impact (v1.2)
+--- Last Impact (v1.2)
 - Kaze Emanuar
 
---- Super Mario 64: Ocarina of Time
+--- SM64: Ocarina of Time
 - Kaze Emanuar
 
 --- Super Mario 64 Land (v1.1)
