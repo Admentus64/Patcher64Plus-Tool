@@ -1372,7 +1372,7 @@ function PatchOptionsMM() {
     
     if (IsChecked -Elem $Options.DisableLowHPSound -Enabled $True)      { PatchBytesSequence -File $DecompressedROMFile -Offset "B97E2A" -Values @("00", "00") }
     if (IsChecked -Elem $Options.PieceOfHeartSound -Enabled $True)      { PatchBytesSequence -File $DecompressedROMFile -Offset "BA94C8" -Values @("10", "00") }
-    if (IsChecked -Elem $Options.FixGothCutscene -Enabled $True)        { PatchBytesSequence -File $DecompressedROMFile -Offset "F6DE89" -Values @("8D", "00", "02", "10", "00", "00", "0A") }
+    if (IsChecked -Elem $Options.FixGohtCutscene -Enabled $True)        { PatchBytesSequence -File $DecompressedROMFile -Offset "F6DE89" -Values @("8D", "00", "02", "10", "00", "00", "0A") }
     if (IsChecked -Elem $Options.MoveBomberKid -Enabled $True)          { PatchBytesSequence -File $DecompressedROMFile -Offset "2DE4396" -Values @("02", "C5", "01", "18", "FB", "55", "00", "07", "2D") }
 
 }
@@ -2686,7 +2686,7 @@ function CreateMMOptionsContent() {
     $Options.DisableLowHPSound        = CreateReduxCheckbox -Column 0 -Row 1 -Group $OtherBox -Text "Disable Low HP Beep"      -ToolTip $ToolTip -Info "There will be absolute silence when Link's HP is getting low"
     $Options.PieceOfHeartSound        = CreateReduxCheckbox -Column 1 -Row 1 -Group $OtherBox -Text "4th Piece of Heart Sound" -ToolTip $ToolTip -Info "Restore the sound effect when collecting the fourth Piece of Heart that grants Link a new Heart Container"
 
-    $Options.FixGothCutscene          = CreateReduxCheckbox -Column 2 -Row 1 -Group $OtherBox -Text "Fix Goth Cutscene"        -ToolTip $ToolTip -Info "Fix Goht's awakening cutscene so that Link no longer gets run over"
+    $Options.FixGohtCutscene          = CreateReduxCheckbox -Column 2 -Row 1 -Group $OtherBox -Text "Fix Goht Cutscene"        -ToolTip $ToolTip -Info "Fix Goht's awakening cutscene so that Link no longer gets run over"
     $Options.MoveBomberKid            = CreateReduxCheckbox -Column 3 -Row 1 -Group $OtherBox -Text "Move Bomber Kid"          -ToolTip $ToolTip -Info "Moves the Bomber at the top of the Stock Pot Inn to be behind the bell like in the original Japanese ROM"
 
 }
