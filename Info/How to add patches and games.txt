@@ -2,16 +2,11 @@
 --- Games ---
 -------------
 
-Open the Games.json file in the Files directory.
+Open the Games.json file in the /Files/Games directory.
 Each game consists of attributes in the JSON format. The main object is "game".
 When adding a new entry, make sure to add a new folder in Files with the same name as the "mode" attribute.
-Patches can be added in the newly created game folder in Files.
-
-Add a new icon with the same name as the mode with the ".ico" extension and put it in "/Files/Icons".
-Ex. "Ocarina of Time.ico"
-
-Add a new text file with same name as the mod with the ".txt" extension and put it in "/Files/Text".
-Ex. "Ocarina of Time.txt"
+Each game folder should contain an icon (Icon.ico), credits (Credits.txt), information (Info.txt) and a set of patches (Patches.json).
+Patches can be added Patches.json file.
 
 Attributes lines that are not present are equivalent to 0 or just empty.
 
@@ -24,9 +19,10 @@ mode		Game mode as shown in the Active Mode label, also used to read code with.
 
 console		In which console mode the game is accessible. Accepted values are: "N64", "Wii VC" or "All".
 
-downgrade	If ROM is capable of downgrading
-		0			Downgrading not possible
-		1			Downgrading is possible
+downgrade	If the ROM is capable of downgrading and can contain multiple entries.
+		The following sub-attributes can be assigned to "downgrade"
+		"file"			Downgrade patch file path. Supports Decompression and Extension.
+		"hash"			ROM Hash checksum to apply the downgrade patch on.
 
 romc		Type of ROM in the VC WAD File
 		0			Regular uncompressed ROM
@@ -67,7 +63,13 @@ hash		Default MD5 hash checksum for ROM files.
 "title" : "The Legend of Zelda: Ocarina of Time",
 "mode" : "Ocarina of Time",
 "console" : "All",
-"downgrade" : 1,
+"downgrade" : [ {
+	"file" : "\\oot_rev1_to_rev0.bps",
+	"hash" : "721FDCC6F5F34BE55C43A807F2A16AF"
+}, {
+	"file" : "\\oot_rev2_to_rev0.bps",
+	"hash" : "57A9719AD547C516342E1A15D5C28C3D"
+} ],
 "patch_vc" : 4,
 "patches" : 1,
 "decompress" : 1,
@@ -84,8 +86,11 @@ hash		Default MD5 hash checksum for ROM files.
 --- Patches ---
 ---------------
 
-Open the Patches.json file in one of the game folders in Files.
+Open the Patches.json file in one of the game folders in /Files/Games.
 Each patch consists of attributes in the JSON format. The main object is "patch".
+
+Currently each game folder has four sub-directories: Binaries (hardcoded), Compressed, Decompressed and Textures (hardcoded).
+A few patches in Compressed and Decompressed are hardcoded.
 
 Attributes lines that are not present are equivalent to 0 or just empty.
 
@@ -117,21 +122,21 @@ redux		If the patch supports Redux. Redux is only supported by OoT and MM.
 		"n64_gameID"		N64 ROM GameID. Requires 4 characters.
 		"wii_title"		Wii VC WAD Channel Title. No more than 40 characters.
 		"wii_gameID"		Wii VC WAD GameID. Requires 4 characters.
-		"file"			Patch file path. Supports Decompression and extension.
+		"file"			Patch file path. Supports Decompression and Extension.
 		"output"		Output file name extension.
 
 options		If the patch supports additional options.
 		0			Disable "Options"
 		1			Show "Options" and allow it if the checkbox is checked
 
-languages	If the patch supports multiple languages.
+languages	If the patch supports multiple languages and can contain multiple entries.
 		The following sub-attributes can be assigned to "languages" as well. These attributes overwrite the regular attributes.
 		"title"			Button with title for the language that displays.
 		"n64_title"		N64 Title Header. No more than 20 characters.
 		"n64_gameID"		N64 ROM GameID. Requires 4 characters.
 		"wii_title"		Wii VC WAD Channel Title. No more than 40 characters.
 		"wii_gameID"		Wii VC WAD GameID. Requires 4 characters.
-		"file"			Patch file path. Supports Decompression and extension.
+		"file"			Patch file path. Supports Decompression and Extension.
 		"output"		Output file name extension.
 
 n64_title	N64 Title Header. No more than 20 characters.
@@ -142,7 +147,7 @@ wii_title	Wii VC WAD Channel Title. No more than 40 characters.
 
 wii_gameID	Wii VC WAD GameID. Requires 4 characters.
 
-file		Patch file. Start with \\. Patch is located in current same folder.
+file		Patch file. Start with \\. Patch is located in current same folder, but can be set into folders.
 		Add \\Decompressed for decompressed patches. Provide patches in .bps, .ips, .xdelta or .vcdiff
 	 	Flips is be used by default (.bps / .ips). Xdelta (.xdelta) or Xdelta3 (.vcdiff) will be automaticially recognized.
 
