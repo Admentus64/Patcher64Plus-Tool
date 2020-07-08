@@ -1,0 +1,26 @@
+Patches Paper Mario game WAD:
+1. ROM Injection (requires .Z64 ROM)
+2. Free BPS Patching (requires .IPS or .BPS File)
+3. Paper Mario: Hard Mode (Extra damage)
+4. Paper Mario: Hard Mode+ (Extra damage and enemy HP) 
+5. Paper Mario: Insane Mode (Insane damage)
+
+Known Issues:
+- Unknown
+
+Requirements:
+- Paper Mario VC USA WAD File
+
+Instructions:
+- Select Paper Mario VC USA WAD File
+- Press one of several patching buttons
+- Original WAD is preserved
+
+Information:
+- Existing AR/Gecko codes still work
+    
+Programs:
+- Wad Packer/Wad Unpacker
+- Floating IPS
+- Wiimm's 'wszst' Tool
+- Romc Tool

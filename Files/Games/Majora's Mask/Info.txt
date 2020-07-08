@@ -1,0 +1,32 @@
+Patches The Legend of Zelda: Majora's Mask game WAD:
+1. ROM Injection (requires .Z64 ROM)
+2. Free BPS Patching (requires .IPS or .BPS File)
+3. Two ROM hack (MM Redux, Masked Quest)
+4. Two fan translations (Polish, Russian)
+
+Known Issues:
+- Unknown
+
+Requirements:
+- The Legend of Zelda: Majora's Mask USA VC WAD File
+
+Instructions:
+- Select WAD File
+- Press one of several patching buttons
+- Enable optional Remap D-Pad
+
+Information:
+- Original WAD is preserved
+- Patches are mostly compatible with existing AR/Gecko Codes
+- Redux forces Remap D-Pad 
+- Expand Memory renders AR/Gecko Codes unsuable
+    
+Programs:
+- Wad Packer/Wad Unpacker
+- Floating IPS
+- Wiimm's 'wszst' Tool
+- Romchu Tool
+- LZSS Compression Tool
+- Compress Tool
+- ndec Tool
+- TabExt Tool

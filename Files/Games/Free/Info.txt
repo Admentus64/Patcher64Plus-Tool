@@ -1,0 +1,24 @@
+Patches Custom game WAD:
+1. ROM Injection (requires .Z64 ROM)
+2. Free BPS Patching (requires .IPS or .BPS File)
+
+Known Issues:
+- Unknown
+
+Requirements:
+- Any VC WAD File
+
+Instructions:
+- Select VC WAD File
+- Press Inject ROM or Patch BPS
+- Original WAD is preserved
+
+Information:
+- Existing AR/Gecko codes likely will not work
+
+Programs:
+- Wad Packer/Wad Unpacker
+- Floating IPS
+- Xdelta
+- Xdelta3
+- Wiimm's 'wszst' Tool

@@ -1,0 +1,26 @@
+{ "patch" : [ {
+	"title" : "Hard Mode",
+	"console" : "All",
+	"wii_title" : "Paper Mario: Hard Mode",
+	"wii_gameID" : "NAE0",
+	"file" : "\\Compressed\\hard_mode.bps",
+	"output" : "_hard_mode_patched",
+	"tooltip" : "Increases the damage dealt by enemies by 1.5x{0}- Supported: Rev 0 (US)"
+}, {
+	"title" : "Hard Mode+",
+	"console" : "All",
+	"wii_title" : "Paper Mario: Hard Mode+",
+	"wii_gameID" : "NAE1",
+	"file" : "\\Compressed\\hard_mode_plus.bps",
+	"output" : "_hard_mode_plus_patched",
+	"tooltip" : "Increases the damage dealt by enemies by 1.5x{0}Also increases the HP of enemies{0}- Supported: Rev 0 (US)"
+}, {
+	"title" : "Insane Mode",
+	"console" : "All",
+	"wii_title" : "Paper Mario: Insane Mode",
+	"wii_gameID" : "NAE2",
+	"file" : "\\Compressed\\insane_mode.bps",
+	"output" : "_insane_mode_patched",
+	"tooltip" : "Increases the damage dealt by enemies by 2x{0}- Supported: Rev 0 (US)"
+}
+] }
