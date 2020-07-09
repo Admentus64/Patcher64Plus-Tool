@@ -470,15 +470,12 @@ function SetFileParameters() {
     $Files.oot.dawn_rev2                    = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Compressed\dawn_rev2")
     $Files.oot.models_mm                    = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Decompressed\models_mm")
     $Files.oot.models_mm_redux              = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Decompressed\models_mm_redux")
+    $Files.oot.fire_temple                  = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Decompressed\fire_temple.bps")
     $Files.oot.lens_of_truth                = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Binaries\Lens of Truth.bin")
     $Files.oot.title_copyright              = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Binaries\Master Quest\Title Copyright.bin")
     $Files.oot.title_master_quest           = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Binaries\Master Quest\Title Logo.bin")
     $Files.oot.file_select_1                = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Binaries\File Select\1.bin")
     $Files.oot.file_select_2                = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Binaries\File Select\2.bin")
-    $Files.oot.fire_temple_bank             = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Binaries\Fire Temple\12AudioBankPointers.bin")
-    $Files.oot.fire_temple_seq              = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Binaries\Fire Temple\12AudioSeqPointers.bin")
-    $Files.oot.fire_temple_table            = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Binaries\Fire Temple\12AudioTablePointers.bin")
-    $Files.oot.fire_temple                  = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Binaries\Fire Temple\12FireTemple.bin")
     for ($i=1; $i -le 18; $i++) {
         if ($i -ne 6) { $Files["oot"][$i]   = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Binaries\Gerudo\" + $i + ".bin") }
     }
@@ -1383,23 +1380,11 @@ function PatchOptionsOoT() {
 
 
     # RESTORE
+    if (IsChecked -Elem $Options.RestoreFireTemple -Enabled)   { ApplyPatch -File $Files.decompressedROM -Patch "\Decompressed\fire_temple.bps" }
 
     if (IsChecked -Elem $Options.CorrectRupeeColors -Enabled) {
         ChangeBytes -File $Files.decompressedROM -Offset "F47EB0" -Values @("70", "6B", "BB", "3F", "FF", "FF", "EF", "3F", "68", "AD", "C3", "FD", "E6", "BF", "CD", "7F", "48", "9B", "91", "AF", "C3", "7D", "BB", "3D", "40", "0F", "58", "19", "88", "ED", "80", "AB") # Purple
         ChangeBytes -File $Files.decompressedROM -Offset "F47ED0" -Values @("D4", "C3", "F7", "49", "FF", "FF", "F7", "E1", "DD", "03", "EF", "89", "E7", "E3", "E7", "DD", "A3", "43", "D5", "C3", "DF", "85", "E7", "45", "7A", "43", "82", "83", "B4", "43", "CC", "83") # Gold
-    }
-
-    if (IsChecked -Elem $Options.RestoreFireTemple -Enabled) {
-        ChangeBytes -File $Files.decompressedROM -Offset "7465" -Values @("03", "91", "30") # DMA Table, Pointer to AudioBank
-        ChangeBytes -File $Files.decompressedROM -Offset "7471" -Values @("03", "91", "30", "00", "08", "8B", "B0", "00", "03", "91", "30") # DMA Table, Pointer to AudioSeq
-        ChangeBytes -File $Files.decompressedROM -Offset "7481" -Values @("08", "8B", "B0", "00", "4D", "9F", "40", "00", "08", "8B", "B0") # DMA Table, Pointer to AudioTable
-        ChangeBytes -File $Files.decompressedROM -Offset "B2E82F" -Values @("04", "24", "A5", "91", "30") # MIPS assembly that loads AudioSeq
-        ChangeBytes -File $Files.decompressedROM -Offset "B2E857" -Values @("09", "24", "A5", "8B", "B0") # MIPS assembly that loads AudioTable
-
-        PatchBytes -File $Files.decompressedROM -Offset "B896A0" -Patch "Fire Temple/12AudioBankPointers.bin"
-        PatchBytes -File $Files.decompressedROM -Offset "B89AD0" -Patch "Fire Temple/12AudioSeqPointers.bin"
-        PatchBytes -File $Files.decompressedROM -Offset "B8A1C0" -Patch "Fire Temple/12AudioTablePointers.bin"
-        PatchBytes -File $Files.decompressedROM -Offset "D390"   -Patch "Fire Temple/12FireTemple.bin"
     }
 
     if (IsChecked -Elem $Options.RestoreGerudoTextures -Enabled) {
