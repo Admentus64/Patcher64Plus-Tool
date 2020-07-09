@@ -6,11 +6,17 @@
 - 16:9 Backgrounds & Textures: GhostlyDark & ShadowOne333
 - Zora Physics: ShadowOne333
 - Correct Rupee Colors: GhostlyDark
+- Correct Romani Sign: ShadowOne333
+- Correct Comma: ShadowOne333
+- Correct Circus Mask: ShadowOne
 - Restore Title: ShadowOne333 & Garo-Mastah
 - Restore Skull Kid: ShadowOne333
+- Restore Palace Route: ShadowOne333
+- Restore Cow Nose Ring: ShadowOne333
 - 4th Piece of Heart Sound: ShadowOne333
 - Fix Goth Cutscene: ShadowOne333
 - Move Bomber Kid: ShadowOne333
+- Fix Mushroom Bottle: ShadowOne333 & ozidual
 - Admentus (Scripting and Assistance of all Options)
 
 --- Translations ---

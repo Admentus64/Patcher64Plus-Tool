@@ -12,6 +12,10 @@ krimtonz, rlbond86, KevinPal, junglechief87
 - MM Young Link Model: slash004 & The3Dude
 - MM Adult Link Model: Skilar (https://youtu.be/x6MIeEZIsPw)
 - Correct Rupee Colors: GhostlyDark
+- Easier Minigames: ShadowOne333
+- Restore Fire Temple: ShadowOne333
+- Restore Gerudo Textures: GhostlyDark & ShadowOne333
+- Hide File Select Icons: ShadowOne333
 - Admentus (Scripting and Assistance of all Options)
 
 --- Translations ---

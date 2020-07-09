@@ -19,8 +19,8 @@ Add-Type -AssemblyName 'System.Drawing'
 #==============================================================================================================================================================================================
 # Setup global variables
 
-$global:VersionDate = "08-07-2020"
-$global:Version     = "v6.0"
+$global:VersionDate = "09-07-2020"
+$global:Version     = "v6.1"
 
 $global:GameType = $global:GamePatch = $global:CheckHashSum = ""
 $global:GameFiles = @{}
@@ -471,14 +471,28 @@ function SetFileParameters() {
     $Files.oot.models_mm                    = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Decompressed\models_mm")
     $Files.oot.models_mm_redux              = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Decompressed\models_mm_redux")
     $Files.oot.lens_of_truth                = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Binaries\Lens of Truth.bin")
-    $Files.oot.title_copyright              = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Binaries\Title Copyright.bin")
-    $Files.oot.title_master_quest           = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Binaries\Title Master Quest.bin")
+    $Files.oot.title_copyright              = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Binaries\Master Quest\Title Copyright.bin")
+    $Files.oot.title_master_quest           = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Binaries\Master Quest\Title Logo.bin")
+    $Files.oot.file_select_1                = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Binaries\File Select\1.bin")
+    $Files.oot.file_select_2                = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Binaries\File Select\2.bin")
+    $Files.oot.fire_temple_bank             = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Binaries\Fire Temple\12AudioBankPointers.bin")
+    $Files.oot.fire_temple_seq              = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Binaries\Fire Temple\12AudioSeqPointers.bin")
+    $Files.oot.fire_temple_table            = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Binaries\Fire Temple\12AudioTablePointers.bin")
+    $Files.oot.fire_temple                  = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Binaries\Fire Temple\12FireTemple.bin")
+    for ($i=1; $i -le 18; $i++) {
+        if ($i -ne 6) { $Files["oot"][$i]   = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Binaries\Gerudo\" + $i + ".bin") }
+    }
 
     # Store Majora's Mask files
+    $Files.mm.troupe_leaders_mask           = CheckPatchExtension -File ($Paths.Games + "\Majora's Mask\Textures\Troupe Leader's Mask.yaz0")
     $Files.mm.carnival_of_time              = CheckPatchExtension -File ($Paths.Games + "\Majora's Mask\Binaries\Carnival of Time.bin")
     $Files.mm.four_giant                    = CheckPatchExtension -File ($Paths.Games + "\Majora's Mask\Binaries\Four Giants.bin")
     $Files.mm.lens_of_truth                 = CheckPatchExtension -File ($Paths.Games + "\Majora's Mask\Binaries\Lens of Truth.bin")
-    $Files.mm.zora_physics                  = CheckPatchExtension -File ($Paths.Games + "\Majora's Mask\Binaries\Zora Physics Fix.bin")
+    $Files.mm.romani_ranch                  = CheckPatchExtension -File ($Paths.Games + "\Majora's Mask\Binaries\Romani Sign.bin")
+    $Files.mm.deku_room_00                  = CheckPatchExtension -File ($Paths.Games + "\Majora's Mask\Binaries\Palace Route\DekuRoom00.bin")
+    $Files.mm.deku_room_01                  = CheckPatchExtension -File ($Paths.Games + "\Majora's Mask\Binaries\Palace Route\DekuRoom01.bin")
+    $Files.mm.deku_room_02                  = CheckPatchExtension -File ($Paths.Games + "\Majora's Mask\Binaries\Palace Route\DekuRoom02.bin")
+    $Files.mm.deku_scene                    = CheckPatchExtension -File ($Paths.Games + "\Majora's Mask\Binaries\Palace Route\DekuScene.bin")
 
     # Store Super Mario 64 files
     $Files.sm64.cam                         = CheckPatchExtension -File ($Paths.Games + "\Super Mario 64\Compressed\cam")
@@ -1030,21 +1044,21 @@ function CompressROMC() {
 
 
 #==============================================================================================================================================================================================
-function ChangeBytes([String]$File, [String]$Offset, [String[]]$Values, [int]$Increment, [Boolean]$IsDec) {
+function ChangeBytes([String]$File, [String]$Offset, [String[]]$Values, [int]$Interval, [Boolean]$IsDec) {
     
     $ByteArray = [IO.File]::ReadAllBytes($File)
 
-    if (!(IsSet -Elem $Increment -Min 1)) { $Increment = 1 }
+    if (!(IsSet -Elem $Interval -Min 1)) { $Interval = 1 }
     [uint32]$Offset = GetDecimal -Hex $Offset
 
     for ($i=0; $i -lt $Values.Length; $i++) {
         if ($IsDec)   { [uint32]$Value = $Values[$i] }
         else          { [uint32]$Value = GetDecimal -Hex $Values[$i] }
-        $ByteArray[$Offset + ($i * $Increment)] = $Value
+        $ByteArray[$Offset + ($i * $Interval)] = $Value
     }
 
     [io.file]::WriteAllBytes($File, $ByteArray)
-    $File = $Offset = $Increment = $ByteArray = $Value = $null
+    $File = $Offset = $Interval = $ByteArray = $Value = $null
     $Values = $null
 
 }
@@ -1059,11 +1073,16 @@ function PatchBytes([String]$File, [String]$Offset, [String]$Length, [String]$Pa
     else            { $PatchByteArray = [IO.File]::ReadAllBytes($GameFiles.binaries + "\" + $Patch) }
 
     [uint32]$Offset = GetDecimal -Hex $Offset
-    [uint32]$Length = GetDecimal -Hex $Length
 
-    for ($i=0; $i -lt $Length; $i++) {
-        if ($i -le $PatchByteArray.Length)   { $ByteArray[$Offset + $i] = $PatchByteArray[($i)] }
-        else                                 { $ByteArray[$Offset + $i] = 0 }
+    if (IsSet -Elem $Length) {
+        [uint32]$Length = GetDecimal -Hex $Length
+        for ($i=0; $i -lt $Length; $i++) {
+            if ($i -le $PatchByteArray.Length)   { $ByteArray[$Offset + $i] = $PatchByteArray[($i)] }
+            else                                 { $ByteArray[$Offset + $i] = 0 }
+        }
+    }
+    else {
+        for ($i=0; $i -lt $PatchByteArray.Length; $i++) { $ByteArray[$Offset + $i] = $PatchByteArray[($i)] }
     }
 
     [io.file]::WriteAllBytes($File, $ByteArray)
@@ -1115,53 +1134,53 @@ function PatchOptionsOoT() {
     
     # HERO MODE #
 
-    if ($Options.Damage.Text -eq "OKHO Mode") {
-        ChangeBytes -File $Files.decompressedROM -Offset "AE8073" -Values @("09", "04") -Increment 16
+    if (IsText -Elem $Options.Damage -Text "OKHO Mode" -Enabled) {
+        ChangeBytes -File $Files.decompressedROM -Offset "AE8073" -Values @("09", "04") -Interval 16
         ChangeBytes -File $Files.decompressedROM -Offset "AE8096" -Values @("82", "00")
         ChangeBytes -File $Files.decompressedROM -Offset "AE8099" -Values @("00", "00", "00")
     }
-    elseif ($Options.Damage.Text -ne "1x Damage" -and $Options.Recovery -ne "1x Recovery") {
-        ChangeBytes -File $Files.decompressedROM -Offset "AE8073" -Values @("09", "04") -Increment 16
-        if ($Options.Recovery.Text -eq "1x Recovery") {                
-            if ($Options.Damage.Text -eq "2x Damage")          { ChangeBytes -File $Files.decompressedROM -Offset "AE8096" -Values @("80", "40") }
-            elseif ($Options.Damage.Text -eq "4x Damage")      { ChangeBytes -File $Files.decompressedROM -Offset "AE8096" -Values @("80", "80") }
-            elseif ($Options.Damage.Text -eq "8x Damage")      { ChangeBytes -File $Files.decompressedROM -Offset "AE8096" -Values @("80", "C0") }
+    elseif ( (IsText -Elem $Options.Damage -Text "1x Damage" -Enabled -Not) -and (IsText -Elem $Options.Recovery -Text "1x Recovery" -Enabled -Not) ) {
+        ChangeBytes -File $Files.decompressedROM -Offset "AE8073" -Values @("09", "04") -Interval 16
+        if (IsText -Elem $Options.Recovery -Text "1x Recovery" -Enabled) {                
+            if (IsText -Elem $Options.Damage -Text "2x Damage" -Enabled)       { ChangeBytes -File $Files.decompressedROM -Offset "AE8096" -Values @("80", "40") }
+            elseif (IsText -Elem $Options.Damage -Text "4x Damage" -Enabled)   { ChangeBytes -File $Files.decompressedROM -Offset "AE8096" -Values @("80", "80") }
+            elseif (IsText -Elem $Options.Damage -Text "8x Damage" -Enabled)   { ChangeBytes -File $Files.decompressedROM -Offset "AE8096" -Values @("80", "C0") }
             ChangeBytes -File $Files.decompressedROM -Offset "AE8099" -Values @("00", "00", "00")
         }
-        elseif ($Options.Recovery.Text -eq "1/2x Recovery") {               
-            if ($Options.Damage.Text -eq "1x Damage")          { ChangeBytes -File $Files.decompressedROM -Offset "AE8096" -Values @("80", "40") }
-            elseif ($Options.Damage.Text -eq "2x Damage")      { ChangeBytes -File $Files.decompressedROM -Offset "AE8096" -Values @("80", "80") }
-            elseif ($Options.Damage.Text -eq "4x Damage")      { ChangeBytes -File $Files.decompressedROM -Offset "AE8096" -Values @("80", "C0") }
-            elseif ($Options.Damage.Text -eq "8x Damage")      { ChangeBytes -File $Files.decompressedROM -Offset "AE8096" -Values @("81", "00") }
+        elseif (IsText -Elem $Options.Recovery -Text "1/2x Recovery" -Enabled) {               
+            if (IsText -Elem $Options.Damage -Text "1x Damage" -Enabled)       { ChangeBytes -File $Files.decompressedROM -Offset "AE8096" -Values @("80", "40") }
+            elseif (IsText -Elem $Options.Damage -Text "2x Damage" -Enabled)   { ChangeBytes -File $Files.decompressedROM -Offset "AE8096" -Values @("80", "80") }
+            elseif (IsText -Elem $Options.Damage -Text "4x Damage" -Enabled)   { ChangeBytes -File $Files.decompressedROM -Offset "AE8096" -Values @("80", "C0") }
+            elseif (IsText -Elem $Options.Damage -Text "8x Damage" -Enabled)   { ChangeBytes -File $Files.decompressedROM -Offset "AE8096" -Values @("81", "00") }
             ChangeBytes -File $Files.decompressedROM -Offset "AE8099" -Values @("10", "80", "43")
         }
-        elseif ($Options.Recovery.Text -eq "1/2x Recovery") {                
-            if ($Options.Damage.Text -eq "1x Damage")          { ChangeBytes -File $Files.decompressedROM -Offset "AE8096" -Values @("80", "80") }
-            elseif ($Options.Damage.Text -eq "2x Damage")      { ChangeBytes -File $Files.decompressedROM -Offset "AE8096" -Values @("80", "C0") }
-            elseif ($Options.Damage.Text -eq "4x Damage")      { ChangeBytes -File $Files.decompressedROM -Offset "AE8096" -Values @("81", "00") }
-            elseif ($Options.Damage.Text -eq "8x Damage")      { ChangeBytes -File $Files.decompressedROM -Offset "AE8096" -Values @("81", "40") }
+        elseif (IsText -Elem $Options.Recovery -Text "1/2x Recovery" -Enabled) {                
+            if (IsText -Elem $Options.Damage -Text "1x Damage" -Enabled)       { ChangeBytes -File $Files.decompressedROM -Offset "AE8096" -Values @("80", "80") }
+            elseif (IsText -Elem $Options.Damage -Text "2x Damage" -Enabled)   { ChangeBytes -File $Files.decompressedROM -Offset "AE8096" -Values @("80", "C0") }
+            elseif (IsText -Elem $Options.Damage -Text "4x Damage" -Enabled)   { ChangeBytes -File $Files.decompressedROM -Offset "AE8096" -Values @("81", "00") }
+            elseif (IsText -Elem $Options.Damage -Text "8x Damage" -Enabled)   { ChangeBytes -File $Files.decompressedROM -Offset "AE8096" -Values @("81", "40") }
             ChangeBytes -File $Files.decompressedROM -Offset "AE8099" -Values @("10", "80", "83")
 
         }
-        elseif ($Options.Recovery.Text -eq "1/2x Recovery") {                
-            if ($Options.Damage.Text -eq "1x Damage")          { ChangeBytes -File $Files.decompressedROM -Offset "AE8096" -Values @("81", "40") }
-            elseif ($Options.Damage.Text -eq "2x Damage")      { ChangeBytes -File $Files.decompressedROM -Offset "AE8096" -Values @("81", "80") }
-            elseif ($Options.Damage.Text -eq "4x Damage")      { ChangeBytes -File $Files.decompressedROM -Offset "AE8096" -Values @("81", "C0") }
-            elseif ($Options.Damage.Text -eq "8x Damage")      { ChangeBytes -File $Files.decompressedROM -Offset "AE8096" -Values @("82", "00") }
+        elseif (IsText -Elem $Options.Recovery -Text "1/2x Recovery" -Enabled) {                
+            if (IsText -Elem $Options.Damage -Text "1x Damage" -Enabled)       { ChangeBytes -File $Files.decompressedROM -Offset "AE8096" -Values @("81", "40") }
+            elseif (IsText -Elem $Options.Damage -Text "2x Damage" -Enabled)   { ChangeBytes -File $Files.decompressedROM -Offset "AE8096" -Values @("81", "80") }
+            elseif (IsText -Elem $Options.Damage -Text "4x Damage" -Enabled)   { ChangeBytes -File $Files.decompressedROM -Offset "AE8096" -Values @("81", "C0") }
+            elseif (IsText -Elem $Options.Damage -Text "8x Damage" -Enabled)   { ChangeBytes -File $Files.decompressedROM -Offset "AE8096" -Values @("82", "00") }
             ChangeBytes -File $Files.decompressedROM -Offset "AE8099" -Values @("10", "81", "43")
         }
     }
 
     if (IsChecked -Elem $Options.MasterQuest -Enabled) {
-        PatchBytes -File $Files.decompressedROM -Offset "1795300" -Length "19000" -Patch "Title Master Quest.bin"
-        PatchBytes -File $Files.decompressedROM -Offset "17AE380" -Length "700"   -Patch "Title Copyright.bin"
+        PatchBytes -File $Files.decompressedROM -Offset "1795300" -Length "19000" -Patch "Master Quest\Title Logo.bin"
+        PatchBytes -File $Files.decompressedROM -Offset "17AE380" -Length "700"   -Patch "Master Quest\Title Copyright.bin"
         ChangeBytes -File $Files.decompressedROM -Offset "E6C4BC" -Values @("3C", "01", "43", "48", "44", "81", "30", "00", "E4", "60", "62", "D8", "E4", "60", "62", "DC", "E4", "60", "62", "E4", "E4", "64", "62", "D4", "E4", "66", "62", "E0")
         ChangeBytes -File $Files.decompressedROM -Offset "E6C764" -Values @("3C", "01", "43", "2A", "44", "81", "50", "00", "26", "01", "7F", "FF", "24", "0A", "00", "02", "E4", "42", "62", "D8", "E4", "42", "62", "DC", "E4", "42", "62", "E4", "E4", "48", "62", "D4", "E4", "4A", "62", "E0")
         ChangeBytes -File $Files.decompressedROM -Offset "E6C9F0" -Values @("3C", "01", "BF", "B0", "C4", "44", "62", "D4", "44", "81", "80", "00", "C4", "4A", "62", "E0", "46", "06", "22", "00", "84", "4E", "62", "CA", "26", "01", "7F", "FF", "46", "10", "54", "80", "E4", "48", "62", "D4", "25", "CF", "FF", "FF", "E4", "52", "62", "E0")
         ChangeBytes -File $Files.decompressedROM -Offset "E6CA48" -Values @("3C", "01", "43", "48", "44", "81", "40", "00", "26", "01", "7F", "FF", "E4", "46", "62", "D4", "E4", "48", "62", "E0")
     }
 
-    if ($Options.BossHP.Text -eq "2x Boss HP") {
+    if (IsText -Elem $Options.BossHP -Text "2x Boss HP" -Enabled) {
         #ChangeBytes -File $Files.decompressedROM -Offset "C44F2B" -Values @("14") # Gohma             0xC44C30 -> 0xC4ABB0 (Length: 0x5F80) (ovl_Boss_Goma) (HP: 0A) (Mass: FF)
 
         #ChangeBytes -File $Files.decompressedROM -Offset "C3B9FF" -Values @("18") # King Dodongo      0xC3B150 -> 0xC44C30 (Length: 0x9AE0) (ovl_Boss_Dodongo) (HP: 0C) (Mass: 00)
@@ -1208,7 +1227,7 @@ function PatchOptionsOoT() {
 
         # ChangeBytes -File $Files.decompressedROM -Offset "C44F2B" -Values @("3C") # Ganon           0xE826C0 -> 0xE939B0 (Length: 0x112F0) (ovl_Boss_Ganon2) (HP: 1E) (Mass: FF)
     }
-    elseif ($Options.BossHP.Text -eq "3x Boss HP") {
+    elseif (IsText -Elem $Options.BossHP -Text "3x Boss HP" -Enabled) {
         #ChangeBytes -File $Files.decompressedROM -Offset "C44F2B" -Values @("1E") # Gohma             0xC44C30 -> 0xC4ABB0 (Length: 0x5F80) (ovl_Boss_Goma) (HP: 0A) (Mass: FF)
 
         #ChangeBytes -File $Files.decompressedROM -Offset "C3B9FF" -Values @("24") # King Dodongo      0xC3B150 -> 0xC44C30 (Length: 0x9AE0) (ovl_Boss_Dodongo) (HP: 0C) (Mass: 00)
@@ -1370,23 +1389,56 @@ function PatchOptionsOoT() {
         ChangeBytes -File $Files.decompressedROM -Offset "F47ED0" -Values @("D4", "C3", "F7", "49", "FF", "FF", "F7", "E1", "DD", "03", "EF", "89", "E7", "E3", "E7", "DD", "A3", "43", "D5", "C3", "DF", "85", "E7", "45", "7A", "43", "82", "83", "B4", "43", "CC", "83") # Gold
     }
 
+    if (IsChecked -Elem $Options.RestoreFireTemple -Enabled) {
+        ChangeBytes -File $Files.decompressedROM -Offset "7465" -Values @("03", "91", "30") # DMA Table, Pointer to AudioBank
+        ChangeBytes -File $Files.decompressedROM -Offset "7471" -Values @("03", "91", "30", "00", "08", "8B", "B0", "00", "03", "91", "30") # DMA Table, Pointer to AudioSeq
+        ChangeBytes -File $Files.decompressedROM -Offset "7481" -Values @("08", "8B", "B0", "00", "4D", "9F", "40", "00", "08", "8B", "B0") # DMA Table, Pointer to AudioTable
+        ChangeBytes -File $Files.decompressedROM -Offset "B2E82F" -Values @("04", "24", "A5", "91", "30") # MIPS assembly that loads AudioSeq
+        ChangeBytes -File $Files.decompressedROM -Offset "B2E857" -Values @("09", "24", "A5", "8B", "B0") # MIPS assembly that loads AudioTable
+
+        PatchBytes -File $Files.decompressedROM -Offset "B896A0" -Patch "Fire Temple/12AudioBankPointers.bin"
+        PatchBytes -File $Files.decompressedROM -Offset "B89AD0" -Patch "Fire Temple/12AudioSeqPointers.bin"
+        PatchBytes -File $Files.decompressedROM -Offset "B8A1C0" -Patch "Fire Temple/12AudioTablePointers.bin"
+        PatchBytes -File $Files.decompressedROM -Offset "D390"   -Patch "Fire Temple/12FireTemple.bin"
+    }
+
+    if (IsChecked -Elem $Options.RestoreGerudoTextures -Enabled) {
+        PatchBytes -File $Files.decompressedROM -Offset "2464D88" -Patch "Gerudo/1.bin"
+        PatchBytes -File $Files.decompressedROM -Offset "12985F0" -Patch "Gerudo/2.bin"
+        PatchBytes -File $Files.decompressedROM -Offset "21B8678" -Patch "Gerudo/3.bin"
+        PatchBytes -File $Files.decompressedROM -Offset "13B4000" -Patch "Gerudo/4.bin"
+        PatchBytes -File $Files.decompressedROM -Offset "7FD000"  -Patch "Gerudo/5.bin"
+        PatchBytes -File $Files.decompressedROM -Offset "28BBCD8" -Patch "Gerudo/7.bin"
+        PatchBytes -File $Files.decompressedROM -Offset "F70350"  -Patch "Gerudo/8.bin"
+        PatchBytes -File $Files.decompressedROM -Offset "F80CB0"  -Patch "Gerudo/9.bin"
+        PatchBytes -File $Files.decompressedROM -Offset "11FB000" -Patch "Gerudo/10.bin"
+        PatchBytes -File $Files.decompressedROM -Offset "2B03928" -Patch "Gerudo/11.bin"
+        PatchBytes -File $Files.decompressedROM -Offset "2B5CDA0" -Patch "Gerudo/12.bin"
+        PatchBytes -File $Files.decompressedROM -Offset "F7A8A0"  -Patch "Gerudo/13.bin"
+        PatchBytes -File $Files.decompressedROM -Offset "F71350"  -Patch "Gerudo/14.bin"
+        PatchBytes -File $Files.decompressedROM -Offset "F92280"  -Patch "Gerudo/15.bin"
+        PatchBytes -File $Files.decompressedROM -Offset "F748A0"  -Patch "Gerudo/16.bin"
+        PatchBytes -File $Files.decompressedROM -Offset "E68CE8"  -Patch "Gerudo/17.bin"
+        PatchBytes -File $Files.decompressedROM -Offset "F70B50"  -Patch "Gerudo/18.bin"
+    }
+
 
     
     # EQUIPMENT #
 
     if (IsChecked -Elem $Options.ReducedItemCapacity -Enabled) {
-        ChangeBytes -File $Files.decompressedROM -Offset "B6EC2F" -Values @("14", "19", "1E") -Increment 2
-        ChangeBytes -File $Files.decompressedROM -Offset "B6EC37" -Values @("0A", "0F", "14") -Increment 2
-        ChangeBytes -File $Files.decompressedROM -Offset "B6EC57" -Values @("14", "19", "1E") -Increment 2
-        ChangeBytes -File $Files.decompressedROM -Offset "B6EC5F" -Values @("05", "0A", "0F") -Increment 2
-        ChangeBytes -File $Files.decompressedROM -Offset "B6EC67" -Values @("0A", "0F", "14") -Increment 2
+        ChangeBytes -File $Files.decompressedROM -Offset "B6EC2F" -Values @("14", "19", "1E") -Interval 2
+        ChangeBytes -File $Files.decompressedROM -Offset "B6EC37" -Values @("0A", "0F", "14") -Interval 2
+        ChangeBytes -File $Files.decompressedROM -Offset "B6EC57" -Values @("14", "19", "1E") -Interval 2
+        ChangeBytes -File $Files.decompressedROM -Offset "B6EC5F" -Values @("05", "0A", "0F") -Interval 2
+        ChangeBytes -File $Files.decompressedROM -Offset "B6EC67" -Values @("0A", "0F", "14") -Interval 2
     }
     elseif (IsChecked -Elem $Options.IncreasedIemCapacity -Enabled) {
-        ChangeBytes -File $Files.decompressedROM -Offset "B6EC2F" -Values @("28", "46", "63") -Increment 2
-        ChangeBytes -File $Files.decompressedROM -Offset "B6EC37" -Values @("1E", "37", "50") -Increment 2
-        ChangeBytes -File $Files.decompressedROM -Offset "B6EC57" -Values @("28", "46", "63") -Increment 2
-        ChangeBytes -File $Files.decompressedROM -Offset "B6EC5F" -Values @("0F", "1E", "2D") -Increment 2
-        ChangeBytes -File $Files.decompressedROM -Offset "B6EC67" -Values @("1E", "37", "50") -Increment 2
+        ChangeBytes -File $Files.decompressedROM -Offset "B6EC2F" -Values @("28", "46", "63") -Interval 2
+        ChangeBytes -File $Files.decompressedROM -Offset "B6EC37" -Values @("1E", "37", "50") -Interval 2
+        ChangeBytes -File $Files.decompressedROM -Offset "B6EC57" -Values @("28", "46", "63") -Interval 2
+        ChangeBytes -File $Files.decompressedROM -Offset "B6EC5F" -Values @("0F", "1E", "2D") -Interval 2
+        ChangeBytes -File $Files.decompressedROM -Offset "B6EC67" -Values @("1E", "37", "50") -Interval 2
     }
 
     if (IsChecked -Elem $Options.UnlockSword -Enabled) {
@@ -1412,6 +1464,12 @@ function PatchOptionsOoT() {
     if (IsChecked -Elem $Options.DisableNavi -Enabled)         { ChangeBytes -File $Files.decompressedROM -Offset "DF8B84"  -Values @("00", "00", "00", "00") }
     if (IsChecked -Elem $Options.HideDPad -Enabled)            { ChangeBytes -File $Files.decompressedROM -Offset "348086E" -Values @("00") }
 
+    if (IsChecked -Elem $Options.HideFileSelectIcons -Enabled) {
+        ChangeBytes -File $Files.decompressedROM -Offset "348A1FD"  -Values @("FF", "FF", "FF") -Interval 2
+        PatchBytes -File $Files.decompressedROM -Offset "3488EA4" -Patch "File Select/1.bin"
+        PatchBytes -File $Files.decompressedROM -Offset "34890B0" -Patch "File Select/2.bin"
+    }
+
 }
 
 
@@ -1421,38 +1479,38 @@ function PatchOptionsMM() {
     
     # HERO MODE #
 
-    if ($Options.Damage.Text -eq "OKHO Mode") {
-        ChangeBytes -File $Files.decompressedROM -Offset "BABE7F" -Values @("09", "04") -Increment 16
+    if (IsText -Elem $Options.Damage -Text "OKHO Mode" -Enabled) {
+        ChangeBytes -File $Files.decompressedROM -Offset "BABE7F" -Values @("09", "04") -Interval 16
         ChangeBytes -File $Files.decompressedROM -Offset "BABEA2" -Values @("2A", "00")
         ChangeBytes -File $Files.decompressedROM -Offset "BABEA5" -Values @("00", "00", "00")
     }
-    elseif ($Options.Damage.Text -ne "1x Damage" -and $Options.Recovery.Text -ne "1x Recovery") {
-        ChangeBytes -File $Files.decompressedROM -Offset "BABE7F" -Values @("09", "04") -Increment 16
-        if ($Options.Recovery.Text -eq "1x Recovery") {
-            if ($Options.Damage.Text -eq "2x Damage")          { ChangeBytes -File $Files.decompressedROM -Offset "BABEA2" -Values @("28", "40") }
-            elseif ($Options.Damage.Text -eq "4x Damage")      { ChangeBytes -File $Files.decompressedROM -Offset "BABEA2" -Values @("28", "80") }
-            elseif ($Options.Damage.Text -eq "8x Damage")      { ChangeBytes -File $Files.decompressedROM -Offset "BABEA2" -Values @("28", "C0") }
-            ChangeBytes -File $Files.decompressedROM -Offset "BABEA5" -Values @("00", "00", "00")
+    elseif ( (IsText -Elem $Options.Damage -Text "1x Damage" -Enabled -Not) -and (IsText -Elem $Options.Recovery -Text "1x Recovery" -Enabled -Not) ) {
+        ChangeBytes -File $Files.decompressedROM -Offset "BABE7F" -Values @("09", "04") -Interval 16
+        if (IsText -Elem $Options.Recovery -Text "1x Recovery" -Enabled) {
+            if (IsText -Elem $Options.Damage -Text "2x Damage" -Enabled)       { ChangeBytes -File $Files.decompressedROM -Offset "BABEA2" -Values @("28", "40") }
+            elseif (IsText -Elem $Options.Damage -Text "4x Damage" -Enabled)   { ChangeBytes -File $Files.decompressedROM -Offset "BABEA2" -Values @("28", "80") }
+            elseif (IsText -Elem $Options.Damage -Text "8x Damage" -Enabled)   { ChangeBytes -File $Files.decompressedROM -Offset "BABEA2" -Values @("28", "C0") }
+            ChangeBytes -Elem -File $Files.decompressedROM -Offset "BABEA5" -Values @("00", "00", "00")
         }
-        elseif ($Options.Recovery.Text -eq "1/2x Recovery") {
-            if ($Options.Damage.Text -eq "1x Damage")          { ChangeBytes -File $Files.decompressedROM -Offset "BABEA2" -Values @("28", "40") }
-            elseif ($Options.Damage.Text -eq "2x Damage")      { ChangeBytes -File $Files.decompressedROM -Offset "BABEA2" -Values @("28", "80") }
-            elseif ($Options.Damage.Text -eq "4x Damage")      { ChangeBytes -File $Files.decompressedROM -Offset "BABEA2" -Values @("28", "C0") }
-            elseif ($Options.Damage.Text -eq "8x Damage")      { ChangeBytes -File $Files.decompressedROM -Offset "BABEA2" -Values @("29", "00") }
+        elseif (IsText -Elem $Options.Recovery -Text "1/2x Recovery" -Enabled) {
+            if (IsText -Elem $Options.Damage -Text "1x Damage" -Enabled)       { ChangeBytes -File $Files.decompressedROM -Offset "BABEA2" -Values @("28", "40") }
+            elseif (IsText -Elem $Options.Damage -Text "2x Damage" -Enabled)   { ChangeBytes -File $Files.decompressedROM -Offset "BABEA2" -Values @("28", "80") }
+            elseif (IsText -Elem $Options.Damage -Text "4x Damage" -Enabled)   { ChangeBytes -File $Files.decompressedROM -Offset "BABEA2" -Values @("28", "C0") }
+            elseif (IsText -Elem $Options.Damage -Text "8x Damage" -Enabled)   { ChangeBytes -File $Files.decompressedROM -Offset "BABEA2" -Values @("29", "00") }
             ChangeBytes -File $Files.decompressedROM -Offset "BABEA5" -Values @("05", "28", "43")
         }
-        elseif ($Options.Recovery.Text -eq "1/4x Recovery") {
-            if ($Options.Damage.Text -eq "1x Damage")          { ChangeBytes -File $Files.decompressedROM -Offset "BABEA2" -Values @("28", "80") }
-            elseif ($Options.Damage.Text -eq "2x Damage")      { ChangeBytes -File $Files.decompressedROM -Offset "BABEA2" -Values @("28", "C0") }
-            elseif ($Options.Damage.Text -eq "4x Damage")      { ChangeBytes -File $Files.decompressedROM -Offset "BABEA2" -Values @("29", "00") }
-            elseif ($Options.Damage.Text -eq "8x Damage")      { ChangeBytes -File $Files.decompressedROM -Offset "BABEA2" -Values @("29", "40") }
+        elseif (IsText -Elem $Options.Recovery -Text "1/4x Recovery" -Enabled) {
+            if (IsText -Elem $Options.Damage -Text "1x Damage" -Enabled)       { ChangeBytes -File $Files.decompressedROM -Offset "BABEA2" -Values @("28", "80") }
+            elseif (IsText -Elem $Options.Damage -Text "2x Damage" -Enabled)   { ChangeBytes -File $Files.decompressedROM -Offset "BABEA2" -Values @("28", "C0") }
+            elseif (IsText -Elem $Options.Damage -Text "4x Damage" -Enabled)   { ChangeBytes -File $Files.decompressedROM -Offset "BABEA2" -Values @("29", "00") }
+            elseif (IsText -Elem $Options.Damage -Text "8x Damage" -Enabled)   { ChangeBytes -File $Files.decompressedROM -Offset "BABEA2" -Values @("29", "40") }
             ChangeBytes -File $Files.decompressedROM -Offset "BABEA5" -Values @("05", "28", "83")
         }
-        elseif ($Options.Recovery.Text -eq "0x Recovery") {
-            if ($Options.Damage.Text -eq "1x Damage")          { ChangeBytes -File $Files.decompressedROM -Offset "BABEA2" -Values @("29", "40") }
-            elseif ($Options.Damage.Text -eq "2x Damage")      { ChangeBytes -File $Files.decompressedROM -Offset "BABEA2" -Values @("29", "80") }
-            elseif ($Options.Damage.Text -eq "4x Damage")      { ChangeBytes -File $Files.decompressedROM -Offset "BABEA2" -Values @("29", "C0") }
-            elseif ($Options.Damage.Text -eq "8x Damage")      { ChangeBytes -File $Files.decompressedROM -Offset "BABEA2" -Values @("2A", "00") }
+        elseif (IsText -Elem $Options.Recovery -Text "0x Recovery" -Enabled) {
+            if (IsText -Elem $Options.Damage -Text "1x Damage" -Enabled)       { ChangeBytes -File $Files.decompressedROM -Offset "BABEA2" -Values @("29", "40") }
+            elseif (IsText -Elem $Options.Damage -Text "2x Damage" -Enabled)   { ChangeBytes -File $Files.decompressedROM -Offset "BABEA2" -Values @("29", "80") }
+            elseif (IsText -Elem $Options.Damage -Text "4x Damage" -Enabled)   { ChangeBytes -File $Files.decompressedROM -Offset "BABEA2" -Values @("29", "C0") }
+            elseif (IsText -Elem $Options.Damage -Text "8x Damage" -Enabled)   { ChangeBytes -File $Files.decompressedROM -Offset "BABEA2" -Values @("2A", "00") }
             ChangeBytes -File $Files.decompressedROM -Offset "BABEA5" -Values @("05", "29", "43")
         }
     }
@@ -1471,7 +1529,7 @@ function PatchOptionsMM() {
 
     if (IsChecked -Elem $Options.WideScreen -Enabled) {
         ChangeBytes -File $Files.decompressedROM -Offset "BD5D74" -Values @("3C", "07", "3F", "E3")
-        ChangeBytes -File $Files.decompressedROM -Offset "CA58F5" -Values @("6C", "53", "6C", "84", "9E", "B7", "53", "6C") -Increment 2
+        ChangeBytes -File $Files.decompressedROM -Offset "CA58F5" -Values @("6C", "53", "6C", "84", "9E", "B7", "53", "6C") -Interval 2
     }
 
     if (IsChecked -Elem $Options.WidescreenTextures -Enabled) {
@@ -1488,18 +1546,32 @@ function PatchOptionsMM() {
 
     # GAMEPLAY
     
-    if (IsChecked -Elem $Options.ZoraPhysics -Enabled $True)         { PatchBytes -File $Files.decompressedROM -Offset "65D000" -Length "BAB6" -Patch "Zora Physics Fix.bin" }
+    if (IsChecked -Elem $Options.ZoraPhysics -Enabled $True)   { PatchBytes -File $Files.decompressedROM -Offset "65D000" -Patch "Zora Physics Fix.bin" }
 
 
 
     # RESTORE
+
+    if (IsChecked -Elem $Options.CorrectRomaniSign -Enabled)   { PatchBytes -File $Files.decompressedROM -Offset "26A58C0" -Patch "Romani Sign.bin" }
+    if (IsChecked -Elem $Options.CorrectComma -Enabled)        { ChangeBytes -File $Files.decompressedROM -Offset "ACC660" -Values @("00", "F3", "00", "00", "00", "00", "00", "00", "4F", "60", "00", "00", "00", "00", "00", "00", "24") }
+    if (IsChecked -Elem $Options.RestoreTitle -Enabled)        { ChangeBytes -File $Files.decompressedROM -Offset "DE0C2E" -Values @("DE", "D0", "36", "10", "66", "00") }
 
     if (IsChecked -Elem $Options.CorrectRupeeColors -Enabled) {
         ChangeBytes -File $Files.decompressedROM -Offset "10ED020" -Values @("70", "6B", "BB", "3F", "FF", "FF", "EF", "3F", "68", "AD", "C3", "FD", "E6", "BF", "CD", "7F", "48", "9B", "91", "AF", "C3", "7D", "BB", "3D", "40", "0F", "58", "19", "88", "ED", "80", "AB") # Purple
         ChangeBytes -File $Files.decompressedROM -Offset "10ED040" -Values @("D4", "C3", "F7", "49", "FF", "FF", "F7", "E1", "DD", "03", "EF", "89", "E7", "E3", "E7", "DD", "A3", "43", "D5", "C3", "DF", "85", "E7", "45", "7A", "43", "82", "83", "B4", "43", "CC", "83") # Gold
     }
 
-    if (IsChecked -Elem $Options.RestoreTitle -Enabled) { ChangeBytes -File $Files.decompressedROM -Offset "DE0C2E" -Values @("DE", "D0", "36", "10", "66", "00") }
+    if (IsChecked -Elem $Options.CorrectCircusMask -Enabled) {
+        PatchBytes -File $Files.decompressedROM -Offset "A2DDC4" -Length "26F" -Texture -Patch "Troupe Leader's Mask.yaz0"
+
+        ChangeBytes -File $Files.decompressedROM -Offset "AD423D" -Values @("54", "72", "6F", "75", "70", "65")
+        ChangeBytes -File $Files.decompressedROM -Offset "B12B60" -Values @("54", "72", "6F", "75", "70", "65")
+        ChangeBytes -File $Files.decompressedROM -Offset "B1B766" -Values @("54", "72", "6F", "75", "70", "65")
+        ChangeBytes -File $Files.decompressedROM -Offset "B1F495" -Values @("54", "72", "6F", "75", "70", "65")
+        ChangeBytes -File $Files.decompressedROM -Offset "B20678" -Values @("74", "72", "6F", "75", "70", "65")
+        ChangeBytes -File $Files.decompressedROM -Offset "B21258" -Values @("54", "72", "6F", "75", "70", "65")
+        ChangeBytes -File $Files.decompressedROM -Offset "B22B67" -Values @("54", "72", "6F", "75", "70", "65")
+    }
 
     if (IsChecked -Elem $Options.RestoreSkullKid -Enabled) {
         $Values = @()
@@ -1510,26 +1582,45 @@ function PatchOptionsMM() {
         ChangeBytes -File $Files.decompressedROM -Offset "181C820" -Values $Values
     }
 
+    if (IsChecked -Elem $Options.RestorePalaceRoute -Enabled) {
+        PatchBytes -File $Files.decompressedROM -Offset "2534000" -Patch "Palace Route\DekuScene.bin"
+
+        PatchBytes -File $Files.decompressedROM -Offset "2542000" -Patch "Palace Route\DekuRoom00.bin"
+
+        PatchBytes -File $Files.decompressedROM -Offset "2554000" -Patch "Palace Route\DekuRoom01.bin"
+        ChangeBytes -File $Files.decompressedROM "1F6A7" -Values @("B0")
+        ChangeBytes -File $Files.decompressedROM "253419F" -Values @("B0")
+
+        PatchBytes -File $Files.decompressedROM -Offset "2563000" -Patch "Palace Route\DekuRoom02.bin"
+        ChangeBytes -File $Files.decompressedROM "1F6B7" -Values @("B0")
+        ChangeBytes -File $Files.decompressedROM "25341A7" -Values @("B0")
+    }
+
+    if (IsChecked -Elem $Options.RestoreCowNoseRing -Enabled) {
+        ChangeBytes -File $Files.decompressedROM "E0FB84" -Values @("C4", "84", "00", "98", "44", "81", "30", "00", "34", "AE", "00", "04", "46", "06", "20", "3C", "00", "00", "00", "00", "45", "00", "00", "1F")
+        ChangeBytes -File $Files.decompressedROM "E10270" -Values @("00", "00", "00", "00", "03", "E0", "00", "08", "00", "00", "00", "00", "27", "BD", "FF", "E8")
+    }
+
 
 
     # EQUIPMENT #
 
     if (IsChecked -Elem $Options.ReducedItemCapacity -Enabled) {
-        ChangeBytes -File $Files.decompressedROM "C5834F" -Values @("14", "19", "1E") -Increment 2
-        ChangeBytes -File $Files.decompressedROM "C58357" -Values @("0A", "0F", "14") -Increment 2
-        ChangeBytes -File $Files.decompressedROM "C5837F" -Values @("05", "0A", "0F") -Increment 2
-        ChangeBytes -File $Files.decompressedROM "C58387" -Values @("0A", "0F", "14") -Increment 2
+        ChangeBytes -File $Files.decompressedROM "C5834F" -Values @("14", "19", "1E") -Interval 2
+        ChangeBytes -File $Files.decompressedROM "C58357" -Values @("0A", "0F", "14") -Interval 2
+        ChangeBytes -File $Files.decompressedROM "C5837F" -Values @("05", "0A", "0F") -Interval 2
+        ChangeBytes -File $Files.decompressedROM "C58387" -Values @("0A", "0F", "14") -Interval 2
     }
     elseif (IsChecked -Elem $Options.IncreasedIemCapacity -Enabled) {
-        ChangeBytes -File $Files.decompressedROM "C5834F" -Values @("28", "46", "63") -Increment 2
-        ChangeBytes -File $Files.decompressedROM "C58357" -Values @("1E", "37", "50") -Increment 2
-        ChangeBytes -File $Files.decompressedROM "C5837F" -Values @("0F", "1E", "2D") -Increment 2
-        ChangeBytes -File $Files.decompressedROM "C58387" -Values @("1E", "37", "50") -Increment 2
+        ChangeBytes -File $Files.decompressedROM "C5834F" -Values @("28", "46", "63") -Interval 2
+        ChangeBytes -File $Files.decompressedROM "C58357" -Values @("1E", "37", "50") -Interval 2
+        ChangeBytes -File $Files.decompressedROM "C5837F" -Values @("0F", "1E", "2D") -Interval 2
+        ChangeBytes -File $Files.decompressedROM "C58387" -Values @("1E", "37", "50") -Interval 2
     }
 
     if (IsChecked -Elem $Options.RazorSword -Enabled) {
         ChangeBytes -File $Files.decompressedROM -Offset "CBA496" -Values @("00", "00") # Prevent losing hits
-        ChangeBytes -File $Files.decompressedROM -Offset "BDA6B7" -Values @("01")         # Keep sword after Song of Time
+        ChangeBytes -File $Files.decompressedROM -Offset "BDA6B7" -Values @("01")       # Keep sword after Song of Time
     }
 
 
@@ -1540,6 +1631,7 @@ function PatchOptionsMM() {
     if (IsChecked -Elem $Options.PieceOfHeartSound -Enabled)   { ChangeBytes -File $Files.decompressedROM -Offset "BA94C8"  -Values @("10", "00") }
     if (IsChecked -Elem $Options.FixGohtCutscene -Enabled)     { ChangeBytes -File $Files.decompressedROM -Offset "F6DE89"  -Values @("8D", "00", "02", "10", "00", "00", "0A") }
     if (IsChecked -Elem $Options.MoveBomberKid -Enabled)       { ChangeBytes -File $Files.decompressedROM -Offset "2DE4396" -Values @("02", "C5", "01", "18", "FB", "55", "00", "07", "2D") }
+    if (IsChecked -Elem $Options.FixMushroomBottle -Enabled)   { ChangeBytes -File $Files.decompressedROM -Offset "CD7C48"  -Values @("1E", "6B") }
 
 }
 
@@ -1557,8 +1649,8 @@ function PatchOptionsSM64() {
 
     # HERO MODE
 
-    if ($Options.Damage.Text -eq "2x Damage")                  { ChangeBytes -File $Files.decompressedROM -Offset "F207" -Values @("80") }
-    elseif ($Options.Damage.Text -eq "3x Damage")              { ChangeBytes -File $Files.decompressedROM -Offset "F207" -Values @("40") }
+    if (IsText -Elem $Options.Damage -Text "2x Damage" -Enabled)       { ChangeBytes -File $Files.decompressedROM -Offset "F207" -Values @("80") }
+    elseif (IsText -Elem $Options.Damage -Text "3x Damage" -Enabled)   { ChangeBytes -File $Files.decompressedROM -Offset "F207" -Values @("40") }
 
 
 
@@ -1572,14 +1664,14 @@ function PatchOptionsSM64() {
     if (IsChecked -Elem $Options.ForceHiresModel -Enabled)     { ChangeBytes -File $Files.decompressedROM -Offset "32184" -Values @("10", "00")}
     
     if (IsChecked -Elem $Options.BlackBars -Enabled) {
-        ChangeBytes -File $Files.decompressedROM -Offset "23A7" -Values @("BC", "00") -Increment 12
+        ChangeBytes -File $Files.decompressedROM -Offset "23A7" -Values @("BC", "00") -Interval 12
         ChangeBytes -File $Files.decompressedROM -Offset "248E" -Values @("00")
-        ChangeBytes -File $Files.decompressedROM -Offset "2966" -Values @("00", "00") -Increment 48
+        ChangeBytes -File $Files.decompressedROM -Offset "2966" -Values @("00", "00") -Interval 48
         ChangeBytes -File $Files.decompressedROM -Offset "3646A" -Values @("00")
         ChangeBytes -File $Files.decompressedROM -Offset "364AA" -Values @("00")
         ChangeBytes -File $Files.decompressedROM -Offset "364F6" -Values @("00")
         ChangeBytes -File $Files.decompressedROM -Offset "36582" -Values @("00")
-        ChangeBytes -File $Files.decompressedROM -Offset "3799F" -Values @("BC", "00") -Increment 12
+        ChangeBytes -File $Files.decompressedROM -Offset "3799F" -Values @("BC", "00") -Interval 12
     }
 
 
@@ -2229,12 +2321,11 @@ function CreateMainDialog() {
     # Create a checkbox to enable Redux and Options support.
     $global:PatchReduxLabel = CreateLabel -X ($PatchButton.Right + 10) -Y ($PatchComboBox.Top + 5) -Width 85 -Height 15 -Text "Enable Redux:" -ToolTip $ToolTip -Info "Enable the Redux patch" -AddTo $PatchGroup
     $global:PatchReduxCheckbox = CreateCheckBox -X $PatchReduxLabel.Right -Y ($PatchReduxLabel.Top - 2) -Width 20 -Height 20 -ToolTip $ToolTip -Info "Enable the Redux patch which improves game mechanics`nIncludes among other changes the inclusion of the D-Pad for dedicated item buttons" -Name "Redux" -AddTo $PatchGroup
+    $PatchReduxCheckbox.Add_CheckStateChanged({ EnableReduxOptions })
 
     $global:PatchOptionsLabel = CreateLabel -X ($PatchButton.Right + 10) -Y ($PatchReduxLabel.Bottom + 15) -Width 85 -Height 15 -Text "Enable Options:" -ToolTip $ToolTip -Info "Enable options" -AddTo $PatchGroup
     $global:PatchOptionsCheckbox = CreateCheckBox -X $PatchOptionsLabel.Right -Y ($PatchOptionsLabel.Top - 2) -Width 20 -Height 20 -ToolTip $ToolTip -Info "Enable options" -Name "Options" -AddTo $PatchGroup
-    $PatchOptionsCheckbox.Add_CheckStateChanged({
-        $PatchOptionsButton.Enabled = $PatchOptionsCheckbox.Checked
-    })
+    $PatchOptionsCheckbox.Add_CheckStateChanged({ $PatchOptionsButton.Enabled = $this.Checked })
 
     $global:PatchLanguagesButton = CreateButton -X ($PatchOptionsCheckbox.Right + 5) -Y 20 -Width 145 -Height 25 -Text "Select Language" -ToolTip $ToolTip -Info 'Open the "Languages" panel to change the language' -AddTo $PatchGroup
     $PatchLanguagesButton.Add_Click( { $LanguagesDialog.ShowDialog() } )
@@ -2390,8 +2481,9 @@ function ChangeGamesList() {
     For ($i=0; $i -lt $Items.Length; $i++) {
         if ($GameType.title -eq $Items[$i]) { $CurrentGameComboBox.SelectedIndex = $i }
     }
+
     if ($Items.Length -gt 0 -and $CurrentGameComboBox.SelectedIndex -eq -1) {
-        try { $CurrentGameComboBox.SelectedIndex = $Settings[“core”][$CurrentGameComboBox.Name] }
+        try { $CurrentGameComboBox.SelectedIndex = $Settings["Core"][$CurrentGameComboBox.Name] }
         catch { $CurrentGameComboBox.SelectedIndex = 0 }
     }
 
@@ -2425,7 +2517,7 @@ function ChangePatchPanel() {
         }
     }
     if ($Items.Length -gt 0 -and $PatchComboBox.SelectedIndex -eq -1) {
-        try { $PatchComboBox.SelectedIndex = $Settings[“Core”][$PatchComboBox.Name] }
+        try { $PatchComboBox.SelectedIndex = $Settings["Core"][$PatchComboBox.Name] }
         catch { $PatchComboBox.SelectedIndex = 0 }
     }
 
@@ -2610,11 +2702,27 @@ function CheckVCOptions() {
 
 
 #==============================================================================================================================================================================================
-function IsChecked([Object]$Elem, [Switch]$Visible, [Switch]$Enabled) {
+function IsChecked([Object]$Elem, [Switch]$Visible, [Switch]$Enabled, [Switch]$Not) {
     
-    if ($Visible -and !$Elem.Visible)   { return $False }
-    if ($Enabled -and !$Elem.Enabled)   { return $False }
-    if ($Elem.Checked)                  { return $True }
+    if (!(IsSet -Elem $Elem))              { return $False }
+    if ($Visible -and !$Elem.Visible)      { return $False }
+    if ($Enabled -and !$Elem.Enabled)      { return $False }
+    if ($Not -and !$Elem.Checked)          { return $True }
+    if (!$Not -and $Elem.Checked)          { return $True }
+    return $False
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function IsText([Object]$Elem, [String]$Text, [Switch]$Visible, [Switch]$Enabled, [Switch]$Not) {
+    
+    if (!(IsSet -Elem $Elem))              { return $False }
+    if ($Visible -and !$Elem.Visible)      { return $False }
+    if ($Enabled -and !$Elem.Enabled)      { return $False }
+    if ($Not -and $Elem.Text -ne $Text)    { return $True }
+    if (!$Not -and $Elem.Text -eq $Text)   { return $True }
     return $False
 
 }
@@ -2687,42 +2795,40 @@ function CreateLanguagesContent() {
 
 
 #==============================================================================================================================================================================================
-function CreateOptionsDialog() {
-
+function CreateOptionsDialog([int]$Width, [int]$Height) {
+    
     # Create Dialog
-    $global:OptionsDialog = CreateDialog -Width 700 -Height 640
+    if ( (IsSet -Elem $Width) -and (IsSet -Elem $Height) )   { $global:OptionsDialog = CreateDialog -Width $Width -Height $Height }
+    else                                                     { $global:OptionsDialog = CreateDialog -Width 900 -Height 640 }
+
+    # Close Button
     $CloseButton = CreateButton -X ($OptionsDialog.Width / 2 - 40) -Y ($OptionsDialog.Height - 90) -Width 80 -Height 35 -Text "Close" -AddTo $OptionsDialog
-    $CloseButton.Add_Click({$OptionsDialog.Hide()})
+    $CloseButton.Add_Click( {$OptionsDialog.Hide()} )
 
     # Options Label
     $global:OptionsLabel = CreateLabel -X 30 -Y 20 -Width 300 -Height 15 -Font $VCPatchFont -AddTo $OptionsDialog
 
-    $PatchReduxCheckbox.Add_CheckStateChanged({
-        if ($GameType.mode -eq "Ocarina of Time") {
-            $Options.HideDPad.Enabled = $PatchReduxCheckbox.Checked
-        }
-
-        elseif ($GameType.mode -eq "Majora's Mask") {
-            $Options.LeftDPad.Enabled = $PatchReduxCheckbox.Checked
-            $Options.RightDPad.Enabled = $PatchReduxCheckbox.Checked
-            $Options.HideDPad.Enabled = $PatchReduxCheckbox.Checked
-        }
-    })
+    # Options
+    $global:Options = @{}
+    $global:OptionsToolTip = CreateToolTip
+    $Options.Panel = CreatePanel -Width $OptionsDialog.Width -Height $OptionsDialog.Height -AddTo $OptionsDialog
 
 }
 
 
 
 #==============================================================================================================================================================================================
-function CreateOptionsContent() {
-    
-    if (IsSet -Elem $Options.panel) {
-        $OptionsDialog.Controls.Remove($Options.panel)
-    }
+function EnableReduxOptions() {
 
-    $global:Options = @{}
-    $global:OptionsToolTip = CreateToolTip
-    $Options.Panel = CreatePanel -Width $OptionsDialog.Width -Height $OptionsDialog.Height -AddTo $OptionsDialog
+    if ($GameType.mode -eq "Ocarina of Time") {
+        $Options.HideDPad.Enabled = $this.Checked
+        $Options.HideFileSelectIcons.Enabled = $this.Checked
+    }
+    elseif ($GameType.mode -eq "Majora's Mask") {
+        $Options.LeftDPad.Enabled = $this.Checked
+        $Options.RightDPad.Enabled = $this.Checked
+        $Options.HideDPad.Enabled = $this.Checked
+    }
 
 }
 
@@ -2732,7 +2838,7 @@ function CreateOptionsContent() {
 #==============================================================================================================================================================================================
 function CreateOoTOptionsContent() {
     
-    CreateOptionsContent
+    CreateOptionsDialog -Width 900 -Height 600
 
     # HERO MODE #
     $HeroModeBox                       = CreateReduxGroup -Y 50 -Height 1 -AddTo $Options.Panel -Text "Hero Mode"
@@ -2759,10 +2865,10 @@ function CreateOoTOptionsContent() {
     
     $Options.Widescreen                = CreateReduxCheckbox -Column 0 -Row 1 -AddTo $GraphicsBox -Text "16:9 Widescreen"        -ToolTip $OptionsToolTip -Info "Native 16:9 widescreen display support" -Name "Widescreen"
     $Options.WidescreenTextures        = CreateReduxCheckbox -Column 1 -Row 1 -AddTo $GraphicsBox -Text "16:9 Textures"          -ToolTip $OptionsToolTip -Info "16:9 backgrounds and textures suitable for native 16:9 widescreen display support" -Name "WideScreenTextures"
-    $Options.ExtendedDraw              = CreateReduxCheckbox -Column 2 -Row 1 -AddTo $GraphicsBox -Text "Extended Draw Distance" -ToolTip $OptionsToolTip -Info "Increases the game's draw distance for objects`nDoes not work on all objects" -Name "ExtendedDraw"
-    $Options.BlackBars                 = CreateReduxCheckbox -Column 3 -Row 1 -AddTo $GraphicsBox -Text "No Black Bars"          -ToolTip $OptionsToolTip -Info "Removes the black bars shown on the top and bottom of the screen during Z-targeting and cutscenes" -Name "BlackBars"
-    $Options.ForceHiresModel           = CreateReduxCheckbox -Column 0 -Row 2 -AddTo $GraphicsBox -Text "Force Hires Link Model" -ToolTip $OptionsToolTip -Info "Always use Link's High Resolution Model when Link is too far away" -Name "ForceHiresModel"
-    $Options.MMModels                  = CreateReduxCheckbox -Column 1 -Row 2 -AddTo $GraphicsBox -Text "Replace Link's Models"  -ToolTip $OptionsToolTip -Info "Replaces Link's models to be styled towards Majora's Mask" -Name "MMModels"
+    $Options.BlackBars                 = CreateReduxCheckbox -Column 2 -Row 1 -AddTo $GraphicsBox -Text "No Black Bars"          -ToolTip $OptionsToolTip -Info "Removes the black bars shown on the top and bottom of the screen during Z-targeting and cutscenes" -Name "BlackBars"
+    $Options.ExtendedDraw              = CreateReduxCheckbox -Column 3 -Row 1 -AddTo $GraphicsBox -Text "Extended Draw Distance" -ToolTip $OptionsToolTip -Info "Increases the game's draw distance for objects`nDoes not work on all objects" -Name "ExtendedDraw"
+    $Options.ForceHiresModel           = CreateReduxCheckbox -Column 4 -Row 1 -AddTo $GraphicsBox -Text "Force Hires Link Model" -ToolTip $OptionsToolTip -Info "Always use Link's High Resolution Model when Link is too far away" -Name "ForceHiresModel"
+    $Options.MMModels                  = CreateReduxCheckbox -Column 0 -Row 2 -AddTo $GraphicsBox -Text "Replace Link's Models"  -ToolTip $OptionsToolTip -Info "Replaces Link's models to be styled towards Majora's Mask" -Name "MMModels"
 
 
 
@@ -2776,9 +2882,11 @@ function CreateOoTOptionsContent() {
 
 
     # RESTORE #
-    $RestoreBox                        = CreateReduxGroup -Y ($GameplayBox.Bottom + 5) -Height 1 -AddTo $Options.Panel -Text "Restore / Revert / Correct"
+    $RestoreBox                        = CreateReduxGroup -Y ($GameplayBox.Bottom + 5) -Height 1 -AddTo $Options.Panel -Text "Restore / Correct"
 
-    $Options.CorrectRupeeColors        = CreateReduxCheckbox -Column 0 -Row 1 -AddTo $RestoreBox -Text "Correct Rupee Colors" -ToolTip $OptionsToolTip -Info "Corrects the colors for the Purple (50) and Golden (200) Rupees" -Name "CorrectRupeeColors"
+    $Options.CorrectRupeeColors        = CreateReduxCheckbox -Column 0 -Row 1 -AddTo $RestoreBox -Text "Correct Rupee Colors"    -ToolTip $OptionsToolTip -Info "Corrects the colors for the Purple (50) and Golden (200) Rupees" -Name "CorrectRupeeColors"
+    $Options.RestoreFireTemple         = CreateReduxCheckbox -Column 1 -Row 1 -AddTo $RestoreBox -Text "Restore Fire Temple"     -ToolTip $OptionsToolTip -Info "Restore the censored Fire Temple theme used in the Rev 2 ROM" -Name "RestoreFireTemple"
+    $Options.RestoreGerudoTextures     = CreateReduxCheckbox -Column 2 -Row 1 -AddTo $RestoreBox -Text "Restore Gerudo Textures" -ToolTip $OptionsToolTip -Info "Restore the censored Gerudo symbol textures used in the Rev 2 ROM" -Name "RestoreGerudoTextures"
 
 
 
@@ -2799,9 +2907,10 @@ function CreateOoTOptionsContent() {
     # EVERYTHING ELSE #
     $OtherBox                          = CreateReduxGroup -Y ($EquipmentBox.Bottom + 5) -Height 1 -AddTo $Options.Panel -Text "Other"
 
-    $Options.DisableLowHPSound         = CreateReduxCheckbox -Column 0 -Row 1 -AddTo $OtherBox -Text "Disable Low HP Beep"      -ToolTip $OptionsToolTip -Info "There will be absolute silence when Link's HP is getting low" -Name "DisableLowHPSound"
-    $Options.DisableNavi               = CreateReduxCheckbox -Column 1 -Row 1 -AddTo $OtherBox -Text "Remove Navi Prompts"      -ToolTip $OptionsToolTip -Info "Navi will no longer interupt your during the first dungeon with mandatory textboxes" -Name "DisableNavi"
-    $Options.HideDPad                  = CreateReduxCheckbox -Column 2 -Row 1 -AddTo $OtherBox -Text "Hide D-Pad Icon" -Disable -ToolTip $OptionsToolTip -Info "Hide the D-Pad icon, while it is still active" -Name "HideDPad"
+    $Options.DisableLowHPSound         = CreateReduxCheckbox -Column 0 -Row 1 -AddTo $OtherBox -Text "Disable Low HP Beep"             -ToolTip $OptionsToolTip -Info "There will be absolute silence when Link's HP is getting low" -Name "DisableLowHPSound"
+    $Options.DisableNavi               = CreateReduxCheckbox -Column 1 -Row 1 -AddTo $OtherBox -Text "Remove Navi Prompts"             -ToolTip $OptionsToolTip -Info "Navi will no longer interupt your during the first dungeon with mandatory textboxes" -Name "DisableNavi"
+    $Options.HideDPad                  = CreateReduxCheckbox -Column 2 -Row 1 -AddTo $OtherBox -Text "Hide D-Pad Icon" -Disable        -ToolTip $OptionsToolTip -Info "Hide the D-Pad icon, while it is still active" -Name "HideDPad"
+    $Options.HideFileSelectIcons       = CreateReduxCheckbox -Column 3 -Row 1 -AddTo $OtherBox -Text "Hide File Select Icons" -Disable -ToolTip $OptionsToolTip -Info "Hide the icons shown on the File Select screen" -Name "HideFileSelectIcons"
 
 
 
@@ -2814,7 +2923,7 @@ function CreateOoTOptionsContent() {
 #==============================================================================================================================================================================================
 function CreateMMOptionsContent() {
     
-    CreateOptionsContent
+    CreateOptionsDialog -Width 900 -Height 600
 
     # HERO MODE #
     $HeroModeBox                       = CreateReduxGroup -Y 50 -Height 1 -AddTo $Options.Panel -Text "Hero Mode"
@@ -2836,13 +2945,13 @@ function CreateMMOptionsContent() {
 
    
     # GRAPHICS #
-    $GraphicsBox                       = CreateReduxGroup -Y ($DPadBox.Bottom + 5) -Height 2 -AddTo $Options.Panel -Text "Graphics"
+    $GraphicsBox                       = CreateReduxGroup -Y ($DPadBox.Bottom + 5) -Height 1 -AddTo $Options.Panel -Text "Graphics"
     
     $Options.Widescreen                = CreateReduxCheckbox -Column 0 -Row 1 -AddTo $GraphicsBox -Text "16:9 Widescreen"         -ToolTip $OptionsToolTip -Info "Native 16:9 Widescreen Display support" -Name "Widescreen"
     $Options.WidescreenTextures        = CreateReduxCheckbox -Column 1 -Row 1 -AddTo $GraphicsBox -Text "16:9 Textures"           -ToolTip $OptionsToolTip -Info "16:9 backgrounds and textures suitable for native 16:9 widescreen display support" -Name "WidescreenTextures"
-    $Options.ExtendedDraw              = CreateReduxCheckbox -Column 2 -Row 1 -AddTo $GraphicsBox -Text "Extended Draw Distance"  -ToolTip $OptionsToolTip -Info "Increases the game's draw distance for objects`nDoes not work on all objects" -Name "ExtendedDraw"
-    $Options.BlackBars                 = CreateReduxCheckbox -Column 3 -Row 1 -AddTo $GraphicsBox -Text "No Black Bars"           -ToolTip $OptionsToolTip -Info "Removes the black bars shown on the top and bottom of the screen during Z-targeting and cutscenes" -Name "BlackBars"
-    $Options.PixelatedStars            = CreateReduxCheckbox -Column 0 -Row 2 -AddTo $GraphicsBox -Text "Disable Pixelated Stars" -ToolTip $OptionsToolTip -Info "Completely disable the stars at night-time, which are pixelated dots and do not have any textures for HD replacement" -Name "PixelatedStars"
+    $Options.BlackBars                 = CreateReduxCheckbox -Column 2 -Row 1 -AddTo $GraphicsBox -Text "No Black Bars"           -ToolTip $OptionsToolTip -Info "Removes the black bars shown on the top and bottom of the screen during Z-targeting and cutscenes" -Name "BlackBars"
+    $Options.ExtendedDraw              = CreateReduxCheckbox -Column 3 -Row 1 -AddTo $GraphicsBox -Text "Extended Draw Distance"  -ToolTip $OptionsToolTip -Info "Increases the game's draw distance for objects`nDoes not work on all objects" -Name "ExtendedDraw"
+    $Options.PixelatedStars            = CreateReduxCheckbox -Column 4 -Row 1 -AddTo $GraphicsBox -Text "Disable Pixelated Stars" -ToolTip $OptionsToolTip -Info "Completely disable the stars at night-time, which are pixelated dots and do not have any textures for HD replacement" -Name "PixelatedStars"
     
     
     # GAMEPLAY #
@@ -2853,12 +2962,16 @@ function CreateMMOptionsContent() {
 
 
     # RESTORE #
-    $RestoreBox                        = CreateReduxGroup -Y ($GameplayBox.Bottom + 5) -Height 1 -AddTo $Options.Panel -Text "Restore / Revert / Correct"
+    $RestoreBox                        = CreateReduxGroup -Y ($GameplayBox.Bottom + 5) -Height 2 -AddTo $Options.Panel -Text "Restore / Correct"
 
-    $Options.CorrectRupeeColors        = CreateReduxCheckbox -Column 0 -Row 1 -AddTo $RestoreBox -Text "Correct Rupee Colors" -ToolTip $OptionsToolTip -Info "Corrects the colors for the Purple (50) and Golden (200) Rupees" -Name "CorrectRupeeColors"
-    $Options.RestoreTitle              = CreateReduxCheckbox -Column 1 -Row 1 -AddTo $RestoreBox -Text "Restore Title"        -ToolTip $OptionsToolTip -Info "Restore the title logo colors as seen in the Japanese release" -Name "RestoreTitle"
-    $Options.RestoreSkullKid           = CreateReduxCheckbox -Column 2 -Row 1 -AddTo $RestoreBox -Text "Restore Skull Kid"    -ToolTip $OptionsToolTip -Info "Restore Skull Kid's face as seen in the Japanese release" -Name "RestoreSkullKid"
-
+    $Options.CorrectRupeeColors        = CreateReduxCheckbox -Column 0 -Row 1 -AddTo $RestoreBox -Text "Correct Rupee Colors"  -ToolTip $OptionsToolTip -Info "Corrects the colors for the Purple (50) and Golden (200) Rupees" -Name "CorrectRupeeColors"
+    $Options.CorrectRomaniSign         = CreateReduxCheckbox -Column 1 -Row 1 -AddTo $RestoreBox -Text "Correct Romani Sign"   -ToolTip $OptionsToolTip -Info "Replace the Romani Sign texture to display Romani's Ranch instead of Kakariko Village" -Name "CorrectRomaniSign"
+    $Options.CorrectComma              = CreateReduxCheckbox -Column 2 -Row 1 -AddTo $RestoreBox -Text "Correct Comma"         -ToolTip $OptionsToolTip -Info "Make the comma not look as awful" -Name "CorrectComma"
+    $Options.CorrectCircusMask         = CreateReduxCheckbox -Column 3 -Row 1 -AddTo $RestoreBox -Text "Correct Circus Mask"   -ToolTip $OptionsToolTip -Info "Change the Circus Leader's Mask to Troupe Leader's Mask and all references to it." -Name "CorrectCircusMask"
+    $Options.RestoreTitle              = CreateReduxCheckbox -Column 4 -Row 1 -AddTo $RestoreBox -Text "Restore Title"         -ToolTip $OptionsToolTip -Info "Restore the title logo colors as seen in the Japanese release" -Name "RestoreTitle"
+    $Options.RestoreSkullKid           = CreateReduxCheckbox -Column 0 -Row 2 -AddTo $RestoreBox -Text "Restore Skull Kid"     -ToolTip $OptionsToolTip -Info "Restore Skull Kid's face as seen in the Japanese release" -Name "RestoreSkullKid"
+    $Options.RestorePalaceRoute        = CreateReduxCheckbox -Column 1 -Row 2 -AddTo $RestoreBox -Text "Restore Palace Route"  -ToolTip $OptionsToolTip -Info "Restore the route to the Bean Seller within the Deku Palace as seen in the Japanese release" -Name "RestorePalaceRoute"
+    $Options.RestoreCowNoseRing        = CreateReduxCheckbox -Column 2 -Row 2 -AddTo $RestoreBox -Text "Restore Cow Nose Ring" -ToolTip $OptionsToolTip -Info "Restore the rings in the noses for Cows as seen in the Japanese release" -Name "RestoreCowNoseRing"
 
 
     # EQUIPMENT #
@@ -2880,6 +2993,7 @@ function CreateMMOptionsContent() {
     $Options.PieceOfHeartSound        = CreateReduxCheckbox -Column 1 -Row 1 -AddTo $OtherBox -Text "4th Piece of Heart Sound" -ToolTip $OptionsToolTip -Info "Restore the sound effect when collecting the fourth Piece of Heart that grants Link a new Heart Container" -Name "PieceOfHeartSound"
     $Options.FixGohtCutscene          = CreateReduxCheckbox -Column 2 -Row 1 -AddTo $OtherBox -Text "Fix Goht Cutscene"        -ToolTip $OptionsToolTip -Info "Fix Goht's awakening cutscene so that Link no longer gets run over" -Name "FixGohtCutscene"
     $Options.MoveBomberKid            = CreateReduxCheckbox -Column 3 -Row 1 -AddTo $OtherBox -Text "Move Bomber Kid"          -ToolTip $OptionsToolTip -Info "Moves the Bomber at the top of the Stock Pot Inn to be behind the bell like in the original Japanese ROM" -Name "MoveBomberKid"
+    $Options.FixMushroomBottle        = CreateReduxCheckbox -Column 4 -Row 1 -AddTo $OtherBox -Text "Fix Mushroom Bottle"      -ToolTip $OptionsToolTip -Info "Correct the item reference when collecting Magical Mushrooms as Link puts away the bottle automatically due to an error" -Name "FixMushroomBottle"
 
 
 
@@ -2892,7 +3006,7 @@ function CreateMMOptionsContent() {
 #==============================================================================================================================================================================================
 function CreateSM64OptionsContent() {
     
-    CreateOptionsContent
+    CreateOptionsDialog -Width 550 -Height 320
 
      # HERO MODE #
     $HeroModeBox                       = CreateReduxGroup -Y 50 -Height 1 -AddTo $Options.Panel -Text "Hero Mode"
@@ -3097,7 +3211,6 @@ function CreateDialog([int]$Width, [int]$Height, [Object]$Icon) {
     $Dialog.FormBorderStyle = [System.Windows.Forms.FormBorderStyle]::FixedDialog
     $Dialog.StartPosition = "CenterScreen"
     $Dialog.Icon = $Icon
-
     return $Dialog
 
 }
@@ -3236,7 +3349,6 @@ function CreateButton([int]$X, [int]$Y, [String]$Name, [int]$Width, [int]$Height
     if ($Text -ne $null)      { $Button.Text = $Text }
     if ($Font -ne $null)      { $Button.Font = $Font }
     if ($ToolTip -ne $null)   { $ToolTip.SetToolTip($Button, $Info) }
-
     return $Button
 
 }
@@ -3253,7 +3365,7 @@ function CreateReduxPanel([int]$Row, [Object]$AddTo)                            
 function CreateReduxRadioButton([int]$Column, [int]$Row, [Object]$AddTo, [Switch]$Checked, [Switch]$Disable, [String]$Text, [Object]$ToolTip, [String]$Info, [String]$Name) {
     
     if ($Disable) { $Disable = !$PatchReduxCheckbox.Checked }
-    $Radio = CreateCheckbox -X ($Column * 155) -Y ($Row * 30) -Checked $Checked -Disable $Disable  -IsRadio $True -ToolTip $ToolTip -Info $Info -IsGame $True -Name $Name -AddTo $AddTo
+    $Radio = CreateCheckbox -X ($Column * 165) -Y ($Row * 30) -Checked $Checked -Disable $Disable  -IsRadio $True -ToolTip $ToolTip -Info $Info -IsGame $True -Name $Name -AddTo $AddTo
     $Label = CreateLabel -X $Radio.Right -Y ($Radio.Top + 3) -Width 135 -Height 15 -Text $Text -ToolTip $ToolTip -Info $Info -AddTo $AddTo
     return $Radio
 
@@ -3265,7 +3377,7 @@ function CreateReduxRadioButton([int]$Column, [int]$Row, [Object]$AddTo, [Switch
 function CreateReduxCheckbox([int]$Column, [int]$Row, [Object]$AddTo, [Switch]$Checked, [Switch]$Disable, [String]$Text, [Object]$ToolTip, [String]$Info, [String]$Name) {
     
     if ($Disable) { $Disable = !$PatchReduxCheckbox.Checked }
-    $Checkbox = CreateCheckbox -X ($Column * 155 + 15) -Y ($Row * 30 - 10) -Checked $Checked -Disable $Disable -IsRadio $False -ToolTip $ToolTip -Info $Info -IsGame $True -Name $Name -AddTo $AddTo
+    $Checkbox = CreateCheckbox -X ($Column * 165 + 15) -Y ($Row * 30 - 10) -Checked $Checked -Disable $Disable -IsRadio $False -ToolTip $ToolTip -Info $Info -IsGame $True -Name $Name -AddTo $AddTo
     $Label = CreateLabel -X $CheckBox.Right -Y ($CheckBox.Top + 3) -Width 135 -Height 15 -Text $Text -ToolTip $ToolTip -Info $Info -AddTo $AddTo
     return $CheckBox
 
@@ -3276,7 +3388,7 @@ function CreateReduxCheckbox([int]$Column, [int]$Row, [Object]$AddTo, [Switch]$C
 #==============================================================================================================================================================================================
 function CreateReduxComboBox([int]$Column, [int]$Row, [Object]$AddTo, [Object]$Items, [String]$Text, [Object]$ToolTip, [String]$Info, [String]$Name) {
     
-    $Label = CreateLabel -X ($Column * 155 + 15) -Y ($Row * 30 - 10) -Width 80 -Height 15 -Text $Text -ToolTip $ToolTip -Info $Info -AddTo $AddTo
+    $Label = CreateLabel -X ($Column * 165 + 15) -Y ($Row * 30 - 10) -Width 80 -Height 15 -Text $Text -ToolTip $ToolTip -Info $Info -AddTo $AddTo
     $ComboBox = CreateComboBox -X $Label.Right -Y ($Label.Top - 3) -Width 150 -Height 40 -Items $Items -ToolTip $ToolTip -Info $Info -IsGame $True -Name $Name -AddTo $AddTo
     return $ComboBox
 
@@ -3299,20 +3411,20 @@ function Get-IniContent ([String]$FilePath) {
 
     $ini = @{}
     switch -regex -file $FilePath {
-        “^\[(.+)\]” # Section
+        "^\[(.+)\]" # Section
         {
             $section = $matches[1]
             $ini[$section] = @{}
             $CommentCount = 0
         }
-        “^(;.*)$” # Comment
+        "^(;.*)$"
         {
             $value = $matches[1]
             $CommentCount = $CommentCount + 1
-            $name = “Comment” + $CommentCount
+            $name = "Comment" + $CommentCount
             $ini[$section][$name] = $value
         }
-        “(.+?)\s*=(.*)” # Key
+        "(.+?)\s*=(.*)" # Key
         {
             $name,$value = $matches[1..2]
             $ini[$section][$name] = $value
@@ -3330,15 +3442,15 @@ function Out-IniFile([hashtable]$InputObject, [String]$FilePath) {
     RemoveFile $FilePath
     $OutFile = New-Item -ItemType file -Path $Filepath
     foreach ($i in $InputObject.keys) {
-        if (!($($InputObject[$i].GetType().Name) -eq “Hashtable”)) { Add-Content -Path $outFile -Value “$i=$($InputObject[$i])” } # No Sections
+        if (!($($InputObject[$i].GetType().Name) -eq "Hashtable")) { Add-Content -Path $outFile -Value "$i=$($InputObject[$i])" } # No Sections
         else {
             #Sections
-            Add-Content -Path $outFile -Value “[$i]”
+            Add-Content -Path $outFile -Value "[$i]"
             foreach ($j in ($InputObject[$i].keys | Sort-Object)) {
-                if ($j -match “^Comment[\d]+”)   { Add-Content -Path $OutFile -Value “$($InputObject[$i][$j])” }
-                else                             { Add-Content -Path $OutFile -Value “$j=$($InputObject[$i][$j])” }
+                if ($j -match "^Comment[\d]+")   { Add-Content -Path $OutFile -Value "$($InputObject[$i][$j])" }
+                else                             { Add-Content -Path $OutFile -Value "$j=$($InputObject[$i][$j])" }
             }
-            Add-Content -Path $outFile -Value “”
+            Add-Content -Path $outFile -Value ""
         }
     }
 
