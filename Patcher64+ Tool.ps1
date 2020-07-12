@@ -19,8 +19,8 @@ Add-Type -AssemblyName 'System.Drawing'
 #==============================================================================================================================================================================================
 # Setup global variables
 
-$global:VersionDate = "09-07-2020"
-$global:Version     = "v6.1"
+$global:VersionDate = "12-07-2020"
+$global:Version     = "v6.1.1"
 
 $global:GameType = $global:GamePatch = $global:CheckHashSum = ""
 $global:GameFiles = @{}
@@ -266,6 +266,9 @@ function MainFunctionPatch([String]$Command, [String[]]$Header, [String]$Patched
     if ($IsWiiVC)   { UpdateStatusLabel -Text ('Finished patching the ' + $GameType.mode + ' VC WAD file.') }
     else            { UpdateStatusLabel -Text ('Finished patching the ' + $GameType.mode + ' ROM file.') }
 
+    # Step 22: Debug
+    CreateDebugPatches
+
 }
 
 
@@ -320,6 +323,8 @@ function Cleanup() {
 
     RemoveFile -LiteralPath $Files.dmaTable
     RemoveFile -LiteralPath $Files.archive
+    RemoveFile -LiteralPath $Files.cleanROM
+    RemoveFile -LiteralPath $Files.cleanDecompressedROM
     RemoveFile -LiteralPath $Files.decompressedROM
 
     foreach($Folder in Get-ChildItem -LiteralPath $Paths.WiiVC -Force) { if ($Folder.PSIsContainer) { if (TestPath -LiteralPath $Folder) { RemovePath -LiteralPath $Folder } } }
@@ -332,9 +337,22 @@ function Cleanup() {
 
 #==============================================================================================================================================================================================
 function UpdateROMCRC() {
-
+    
+    if ($Settings.Debug.NoCRCChange -eq $True) { return }
     if (!(Test-Path -LiteralPath $Files.patchedROM -PathType Leaf)) { Copy-Item -LiteralPath $Files.ROM -Destination $Files.patchedROM }
     & $Files.tool.rn64crc $Files.PatchedROM -update | Out-Host
+    if ($Settings.KeepDecompressed -eq $True) { & $Files.tool.rn64crc $Files.DebugROM -update | Out-Host }
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function CreateDebugPatches() {
+    
+    if ($Settings.Debug.CreateBPS -ne $True) { return }
+    if ( (Test-Path -LiteralPath $Files.cleanDecompressedROM -PathType Leaf) -and (Test-Path -LiteralPath $Files.decompressedROM -PathType Leaf) ) { & $Files.tool.flips --create --bps $Files.cleanDecompressedROM $Files.decompressedROM $Files.decompressedBPS | Out-Host }
+    & $Files.tool.flips --create --bps $Files.cleanROM $Files.patchedROM $Files.compressedBPS | Out-Host
 
 }
 
@@ -441,6 +459,8 @@ function SetFileParameters() {
     $Files.icon = @{}
     $Files.text = @{}
 
+
+
     # Store all tool files
     $Files.tool.flips                       = $Paths.Master + "\Base\flips.exe"
     $Files.tool.rn64crc                     = $Paths.Master + "\Base\rn64crc.exe"
@@ -465,20 +485,41 @@ function SetFileParameters() {
     $Files.tool.romc                        = $Paths.WiiVC + "\romc.exe"
     $Files.tool.romchu                      = $Paths.WiiVC + "\romchu.exe"
     
+
+
     # Store Ocarina of Time files
     $Files.oot.dawn_rev1                    = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Compressed\dawn_rev1")
     $Files.oot.dawn_rev2                    = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Compressed\dawn_rev2")
     $Files.oot.models_mm                    = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Decompressed\models_mm")
     $Files.oot.models_mm_redux              = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Decompressed\models_mm_redux")
     $Files.oot.fire_temple                  = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Decompressed\fire_temple.bps")
+    $Files.oot_master_quest                 = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Decompressed\master_quest.bps")
+    
     $Files.oot.lens_of_truth                = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Binaries\Lens of Truth.bin")
     $Files.oot.title_copyright              = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Binaries\Master Quest\Title Copyright.bin")
     $Files.oot.title_master_quest           = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Binaries\Master Quest\Title Logo.bin")
     $Files.oot.file_select_1                = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Binaries\File Select\1.bin")
     $Files.oot.file_select_2                = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Binaries\File Select\2.bin")
-    for ($i=1; $i -le 18; $i++) {
-        if ($i -ne 6) { $Files["oot"][$i]   = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Binaries\Gerudo\" + $i + ".bin") }
-    }
+    
+    $Files.oot.gerudo_1                     = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Binaries\Gerudo\1.bin")
+    $Files.oot.gerudo_2                     = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Binaries\Gerudo\2.bin")
+    $Files.oot.gerudo_3                     = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Binaries\Gerudo\3.bin")
+    $Files.oot.gerudo_4                     = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Binaries\Gerudo\4.bin")
+    $Files.oot.gerudo_5                     = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Binaries\Gerudo\5.bin")
+    $Files.oot.gerudo_7                     = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Binaries\Gerudo\7.bin")
+    $Files.oot.gerudo_8                     = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Binaries\Gerudo\8.bin")
+    $Files.oot.gerudo_9                     = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Binaries\Gerudo\9.bin")
+    $Files.oot.gerudo_10                    = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Binaries\Gerudo\10.bin")
+    $Files.oot.gerudo_11                    = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Binaries\Gerudo\11.bin")
+    $Files.oot.gerudo_12                    = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Binaries\Gerudo\12.bin")
+    $Files.oot.gerudo_13                    = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Binaries\Gerudo\13.bin")
+    $Files.oot.gerudo_14                    = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Binaries\Gerudo\14.bin")
+    $Files.oot.gerudo_15                    = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Binaries\Gerudo\15.bin")
+    $Files.oot.gerudo_16                    = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Binaries\Gerudo\16.bin")
+    $Files.oot.gerudo_17                    = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Binaries\Gerudo\17.bin")
+    $Files.oot.gerudo_18                    = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Binaries\Gerudo\18.bin")
+
+
 
     # Store Majora's Mask files
     $Files.mm.troupe_leaders_mask           = CheckPatchExtension -File ($Paths.Games + "\Majora's Mask\Textures\Troupe Leader's Mask.yaz0")
@@ -491,17 +532,25 @@ function SetFileParameters() {
     $Files.mm.deku_room_02                  = CheckPatchExtension -File ($Paths.Games + "\Majora's Mask\Binaries\Palace Route\DekuRoom02.bin")
     $Files.mm.deku_scene                    = CheckPatchExtension -File ($Paths.Games + "\Majora's Mask\Binaries\Palace Route\DekuScene.bin")
 
+
+
     # Store Super Mario 64 files
     $Files.sm64.cam                         = CheckPatchExtension -File ($Paths.Games + "\Super Mario 64\Compressed\cam")
     $Files.sm64.fps                         = CheckPatchExtension -File ($Paths.Games + "\Super Mario 64\Compressed\fps")
 
+
+
     # Store JSON files
     $Files.json.games                       = $Paths.Games + "\Games.json"
+
+
 
     # Store ICO files
     $Files.icon.main                        = $Paths.Main + "\Main.ico"
     $Files.icon.gameID                      = $Paths.Main + "\GameID.ico"
     $Files.icon.credits                     = $Paths.Main + "\Credits.ico"
+
+
 
     # Store text files
     $Files.text.credits                     = $Paths.Main + "\Credits.txt"
@@ -515,6 +564,8 @@ function SetFileParameters() {
     CheckFilesExists -HashTable $Files.sm64
     CheckFilesExists -HashTable $Files.json
     CheckFilesExists -HashTable $Files.icon
+
+
 
     # Store misc files
     $Files.flipscfg                         = $Paths.Master + "\Base\flipscfg.bin"
@@ -583,9 +634,10 @@ function SetWADParameters([String]$WADPath, [String]$FolderName, [String]$Patche
     $WADFile.trailer      = $WADFile.Folder + '\' + $FolderName + '.trailer'
     
     if ($GameType.romc -gt 0)   { $WADFile.ROMFile = $WADFile.AppPath05 + '\romc' }
-    else                         { $WADFile.ROMFile = $WADFile.AppPath05 + '\rom' }
+    else                        { $WADFile.ROMFile = $WADFile.AppPath05 + '\rom' }
     $WADFile.Patched      = $WADItem.DirectoryName + '\' + $WADFile.Name + $PatchedFileName + '.wad'
     $WADFile.Extracted    = $WADItem.DirectoryName + '\' + $WADFile.Name + "_extracted_rom" + '.z64'
+    $WADFile.Debug        = $WADItem.DirectoryName + '\' + $WADFile.Name + "_decompressed" + '.z64'
 
     SetROMFile
 
@@ -611,6 +663,7 @@ function SetZ64Parameters([String]$Z64Path, [String]$PatchedFileName) {
 
     $Z64File.ROMFile   = $Z64Path
     $Z64File.Patched   = $Z64File.Path + '\' + $Z64File.Name + $PatchedFileName + '.z64'
+    $Z64File.Debug   = $Z64File.Path + '\' + $Z64File.Name + "_decompressed" + '.z64'
 
     SetROMFile
 
@@ -624,14 +677,25 @@ function SetZ64Parameters([String]$Z64Path, [String]$PatchedFileName) {
 #==============================================================================================================================================================================================
 function SetROMFile() {
     
-    if ($IsWiiVC) { $Files.ROM = $Files.patchedROM = $WADFile.ROMFile }
+    if ($IsWiiVC) {
+        $Files.ROM = $Files.patchedROM = $WADFile.ROMFile
+        $Files.DebugROM = $WADFile.Debug
+    }
     else {
         $Files.ROM = $Z64File.ROMFile
         $Files.patchedROM = $Z64File.Patched
+        $Files.DebugROM = $Z64File.Debug
     }
 
     $Files.outROM = $Paths.Master + "\out"
+    $Files.cleanROM = $Paths.Master + "\clean.z64"
+    $Files.cleanDecompressedROM = $Paths.Master + "\clean-decompressed"
     $Files.decompressedROM = $Paths.Master + "\decompressed"
+
+    if ($Settings.Debug.CreateBPS -eq $True) {
+        $Files.compressedBPS = $Paths.Base + "\compressed.bps"
+        $Files.decompressedBPS = $Paths.Base + "\decompressed.bps"
+    }
 
 }
 
@@ -872,6 +936,8 @@ function DowngradeROM([String]$Command) {
 #==============================================================================================================================================================================================
 function CompareHashSums([String]$Command) {
     
+    if ($Settings.Debug.CreateBPS -eq $True) { Copy-Item -LiteralPath $Files.ROM -Destination $Files.cleanROM -Force }
+
     if ( (StrLike -str $Command -val "Inject") -or (StrLike -str $Command -val "Patch VC") -or (StrLike -str $Command -val "Apply Patch") ) { return $True }
 
     $ContinuePatching = $True
@@ -988,7 +1054,8 @@ function DecompressROM([String]$Command, [Boolean]$Decompress) {
 
     if ($GameType.decompress -eq 1) {
         & $Files.tool.TabExt $Files.ROM | Out-Host
-        & $Files.tool.ndec $Files.ROM $Files.decompressedROM | Out-Host   
+        & $Files.tool.ndec $Files.ROM $Files.decompressedROM | Out-Host
+        if ($Settings.Debug.CreateBPS -eq $True) { Copy-Item -LiteralPath $Files.decompressedROM -Destination $Files.cleanDecompressedROM -Force } 
     }
     elseif ($GameType.decompress -eq 2) {
         if (!(IsSet -Elem $GamePatch.extend -Min 18 -Max 64)) {
@@ -1016,6 +1083,7 @@ function CompressROM([Boolean]$Decompress) {
     UpdateStatusLabel -Text ("Compressing " + $GameType.mode + " ROM...")
 
     if ($GameType.decompress -eq 1) {
+        if ($Settings.Debug.KeepDecompressed -eq $True)   { Copy-Item -LiteralPath $Files.decompressedROM -Destination $Files.debugROM -Force }
         RemoveFile -LiteralPath $Files.archive
         & $Files.tool.Compress $Files.decompressedROM $Files.patchedROM | Out-Null
     }
@@ -1136,7 +1204,7 @@ function PatchOptionsOoT() {
         ChangeBytes -File $Files.decompressedROM -Offset "AE8096" -Values @("82", "00")
         ChangeBytes -File $Files.decompressedROM -Offset "AE8099" -Values @("00", "00", "00")
     }
-    elseif ( (IsText -Elem $Options.Damage -Text "1x Damage" -Enabled -Not) -and (IsText -Elem $Options.Recovery -Text "1x Recovery" -Enabled -Not) ) {
+    elseif ( (IsText -Elem $Options.Damage -Text "1x Damage" -Enabled -Not) -or (IsText -Elem $Options.Recovery -Text "1x Recovery" -Enabled -Not) ) {
         ChangeBytes -File $Files.decompressedROM -Offset "AE8073" -Values @("09", "04") -Interval 16
         if (IsText -Elem $Options.Recovery -Text "1x Recovery" -Enabled) {                
             if (IsText -Elem $Options.Damage -Text "2x Damage" -Enabled)       { ChangeBytes -File $Files.decompressedROM -Offset "AE8096" -Values @("80", "40") }
@@ -1166,86 +1234,6 @@ function PatchOptionsOoT() {
             elseif (IsText -Elem $Options.Damage -Text "8x Damage" -Enabled)   { ChangeBytes -File $Files.decompressedROM -Offset "AE8096" -Values @("82", "00") }
             ChangeBytes -File $Files.decompressedROM -Offset "AE8099" -Values @("10", "81", "43")
         }
-    }
-
-    if (IsChecked -Elem $Options.MasterQuest -Enabled) {
-        PatchBytes -File $Files.decompressedROM -Offset "1795300" -Length "19000" -Patch "Master Quest\Title Logo.bin"
-        PatchBytes -File $Files.decompressedROM -Offset "17AE380" -Length "700"   -Patch "Master Quest\Title Copyright.bin"
-        ChangeBytes -File $Files.decompressedROM -Offset "E6C4BC" -Values @("3C", "01", "43", "48", "44", "81", "30", "00", "E4", "60", "62", "D8", "E4", "60", "62", "DC", "E4", "60", "62", "E4", "E4", "64", "62", "D4", "E4", "66", "62", "E0")
-        ChangeBytes -File $Files.decompressedROM -Offset "E6C764" -Values @("3C", "01", "43", "2A", "44", "81", "50", "00", "26", "01", "7F", "FF", "24", "0A", "00", "02", "E4", "42", "62", "D8", "E4", "42", "62", "DC", "E4", "42", "62", "E4", "E4", "48", "62", "D4", "E4", "4A", "62", "E0")
-        ChangeBytes -File $Files.decompressedROM -Offset "E6C9F0" -Values @("3C", "01", "BF", "B0", "C4", "44", "62", "D4", "44", "81", "80", "00", "C4", "4A", "62", "E0", "46", "06", "22", "00", "84", "4E", "62", "CA", "26", "01", "7F", "FF", "46", "10", "54", "80", "E4", "48", "62", "D4", "25", "CF", "FF", "FF", "E4", "52", "62", "E0")
-        ChangeBytes -File $Files.decompressedROM -Offset "E6CA48" -Values @("3C", "01", "43", "48", "44", "81", "40", "00", "26", "01", "7F", "FF", "E4", "46", "62", "D4", "E4", "48", "62", "E0")
-    }
-
-    if (IsText -Elem $Options.BossHP -Text "2x Boss HP" -Enabled) {
-        #ChangeBytes -File $Files.decompressedROM -Offset "C44F2B" -Values @("14") # Gohma             0xC44C30 -> 0xC4ABB0 (Length: 0x5F80) (ovl_Boss_Goma) (HP: 0A) (Mass: FF)
-
-        #ChangeBytes -File $Files.decompressedROM -Offset "C3B9FF" -Values @("18") # King Dodongo      0xC3B150 -> 0xC44C30 (Length: 0x9AE0) (ovl_Boss_Dodongo) (HP: 0C) (Mass: 00)
-
-        # ChangeBytes -File $Files.decompressedROM -Offset "C44F2B" -Values @("08") # Barinade        0xD22360  -> 0xD30B50 (Length: 0xE7F0)(ovl_Boss_Va) (HP: 04 -> 03 -> 03) (Mass: 00)
-        # ChangeBytes -File $Files.decompressedROM -Offset "C44F2B" -Values @("06") # Barinade        
-
-        #ChangeBytes -File $Files.decompressedROM -Offset "C91F8F" -Values @("3C") # Phantom Ganon     0xC91AD0  -> 0xC96840  (Length: 0x4D70) (ovl_Boss_Ganondrof) (HP: 1E -> 18) (Mass: 32)
-
-        #ChangeBytes -File $Files.decompressedROM -Offset "C91B99" -Values @("1D") # Phantom Ganon 2A
-        #ChangeBytes -File $Files.decompressedROM -Offset "C91C95" -Values @("1D") # Phantom Ganon
-        #ChangeBytes -File $Files.decompressedROM -Offset "C922C3" -Values @("1D") # Phantom Ganon
-        #ChangeBytes -File $Files.decompressedROM -Offset "C92399" -Values @("1D") # Phantom Ganon
-        #ChangeBytes -File $Files.decompressedROM -Offset "C9263F" -Values @("1D") # Phantom Ganon
-        #ChangeBytes -File $Files.decompressedROM -Offset "C9266B" -Values @("1D") # Phantom Ganon
-        #ChangeBytes -File $Files.decompressedROM -Offset "C92AE7" -Values @("1D") # Phantom Ganon
-
-        #ChangeBytes -File $Files.decompressedROM -Offset "C91BE1" -Values @("1D") # Phantom Ganon
-        #ChangeBytes -File $Files.decompressedROM -Offset "C91C4B" -Values @("1D") # Phantom Ganon
-        #ChangeBytes -File $Files.decompressedROM -Offset "C91C91" -Values @("1D") # Phantom Ganon
-        #ChangeBytes -File $Files.decompressedROM -Offset "C91CCD" -Values @("1D") # Phantom Ganon
-        #ChangeBytes -File $Files.decompressedROM -Offset "C91D2D" -Values @("1D") # Phantom Ganon
-        #ChangeBytes -File $Files.decompressedROM -Offset "C91D8D" -Values @("1D") # Phantom Ganon
-        #ChangeBytes -File $Files.decompressedROM -Offset "C91E9B" -Values @("1D") # Phantom Ganon
-        #ChangeBytes -File $Files.decompressedROM -Offset "C91F83" -Values @("1D") # Phantom Ganon
-        #ChangeBytes -File $Files.decompressedROM -Offset "C9200B" -Values @("1D") # Phantom Ganon
-        #ChangeBytes -File $Files.decompressedROM -Offset "C920EB" -Values @("1D") # Phantom Ganon
-        #ChangeBytes -File $Files.decompressedROM -Offset "C92123" -Values @("1D") # Phantom Ganon
-        #ChangeBytes -File $Files.decompressedROM -Offset "C92177" -Values @("1D") # Phantom Ganon
-        #ChangeBytes -File $Files.decompressedROM -Offset "C9219F" -Values @("1D") # Phantom Ganon
-
-
-
-        # ChangeBytes -File $Files.decompressedROM -Offset "C44F2B" -Values @("30") # Volvagia        0xCE65F0  -> 0xCED920 (Length: 0x7330) (ovl_Boss_Fd) (Has HP) (HP: 18) (Mass: 32)
-                                                                                    # Volvagia        0xD04790 -> 0xD084C0 (Length:0x3D30) (ovl_Boss_Fd2) (Has No HP, Forwards HP to Flying)
-
-        # ChangeBytes -File $Files.decompressedROM -Offset "C44F2B" -Values @("28") # Morpha          ? -> ? (Length: ?) (ovl_Boss_Mo) (HP: 14) (Mass: 00)
-
-        # ChangeBytes -File $Files.decompressedROM -Offset "C44F2B" -Values @("48") # Bongo Bongo     ? -> ? (Length: ?) (ovl_Boss_Sst) (HP: 24) (Mass: C8)
-
-        # ChangeBytes -File $Files.decompressedROM -Offset "C44F2B" -Values @("30") # Twinrova        0xD612E0 -> 0xD74360 (Length: 0x13080) (ovl_Boss_Tw) (HP: 18) (Mass: FF)
-
-        # ChangeBytes -File $Files.decompressedROM -Offset "C44F2B" -Values @("50") # Ganondorf       ? -> ? (Length: ?) (ovl_Boss_Ganon) (HP: 28) (Mass: 32)
-
-        # ChangeBytes -File $Files.decompressedROM -Offset "C44F2B" -Values @("3C") # Ganon           0xE826C0 -> 0xE939B0 (Length: 0x112F0) (ovl_Boss_Ganon2) (HP: 1E) (Mass: FF)
-    }
-    elseif (IsText -Elem $Options.BossHP -Text "3x Boss HP" -Enabled) {
-        #ChangeBytes -File $Files.decompressedROM -Offset "C44F2B" -Values @("1E") # Gohma             0xC44C30 -> 0xC4ABB0 (Length: 0x5F80) (ovl_Boss_Goma) (HP: 0A) (Mass: FF)
-
-        #ChangeBytes -File $Files.decompressedROM -Offset "C3B9FF" -Values @("24") # King Dodongo      0xC3B150 -> 0xC44C30 (Length: 0x9AE0) (ovl_Boss_Dodongo) (HP: 0C) (Mass: 00)
-
-        # ChangeBytes -File $Files.decompressedROM -Offset "C44F2B" -Values @("0C") # Barinade        0xD22360  -> 0xD30B50 (Length: 0xE7F0)(ovl_Boss_Va) (HP: 04 -> 03 -> 03) (Mass: 00)
-        # ChangeBytes -File $Files.decompressedROM -Offset "C44F2B" -Values @("09") # Barinade        
-
-        #ChangeBytes -File $Files.decompressedROM -Offset "C91F8F" -Values @("5A") # Phantom Ganon     0xC91AD0  -> 0xC96840  (Length: 0x4D70) (ovl_Boss_Ganondrof) (HP: 1E -> 18) (Mass: 32)
-
-        # ChangeBytes -File $Files.decompressedROM -Offset "C44F2B" -Values @("48") # Volvagia        0xCE65F0  -> 0xCED920 (Length: 0x7330) (ovl_Boss_Fd) (Has HP) (HP: 18) (Mass: 32)
-                                                                                    # Volvagia        0xD04790 -> 0xD084C0 (Length:0x3D30) (ovl_Boss_Fd2) (Has No HP, Forwards HP to Flying)
-
-        # ChangeBytes -File $Files.decompressedROM -Offset "C44F2B" -Values @("3C") # Morpha          ? -> ? (Length: ?) (ovl_Boss_Mo) (HP: 14) (Mass: 00)
-
-        # ChangeBytes -File $Files.decompressedROM -Offset "C44F2B" -Values @("6C") # Bongo Bongo     ? -> ? (Length: ?) (ovl_Boss_Sst) (HP: 24) (Mass: C8)
-
-        # ChangeBytes -File $Files.decompressedROM -Offset "C44F2B" -Values @("48") # Twinrova        0xD612E0 -> 0xD74360 (Length: 0x13080) (ovl_Boss_Tw) (HP: 18) (Mass: FF)
-
-        # ChangeBytes -File $Files.decompressedROM -Offset "C44F2B" -Values @("78") # Ganondorf       ? -> ? (Length: ?) (ovl_Boss_Ganon) (HP: 28) (Mass: 32)
-
-        # ChangeBytes -File $Files.decompressedROM -Offset "C44F2B" -Values @("5A") # Ganon           0xE826C0 -> 0xE939B0 (Length: 0x112F0) (ovl_Boss_Ganon2) (HP: 1E) (Mass: FF)
     }
 
 
@@ -1377,6 +1365,27 @@ function PatchOptionsOoT() {
         ChangeBytes -File $Files.decompressedROM -Offset "DCBF9F" -Values @("30") # Child Fish size requirement
     }
 
+    if (IsChecked -Elem $Options.FasterBlockPushing) {
+        ChangeBytes -File $Files.decompressedROM -Offset "DD2B87" -Values @("80") # Block Speed
+        ChangeBytes -File $Files.decompressedROM -Offset "DD2D27" -Values @("03") # Block Delay
+
+        ChangeBytes -File $Files.decompressedROM -Offset "DD9683" -Values @("80") # Milk Crate Speed
+        ChangeBytes -File $Files.decompressedROM -Offset "DD981F" -Values @("03") # Milk Crate Delay
+
+        ChangeBytes -File $Files.decompressedROM -Offset "CE1BD0" -Values @("40", "80", "00", "00") # Amy Puzzle Speed
+        ChangeBytes -File $Files.decompressedROM -Offset "CE0F0F" -Values @("03") # Amy Puzzle Delay
+
+        ChangeBytes -File $Files.decompressedROM -Offset "C77CA8" -Values @("40", "80", "00", "00") # Fire Block Speed
+        ChangeBytes -File $Files.decompressedROM -Offset "C770C3" -Values @("01") # Fire Block Delay
+
+        ChangeBytes -File $Files.decompressedROM -Offset "CC5DBF" -Values @("01") # Forest Basement Puzzle Delay
+
+        ChangeBytes -File $Files.decompressedROM -Offset "DBCF73" -Values @("01") # spirit Cobra Mirror Delay
+
+        ChangeBytes -File $Files.decompressedROM -Offset "DBA233" -Values @("19") # Truth Spinner Speed
+        ChangeBytes -File $Files.decompressedROM -Offset "DBA3A7" -Values @("00") # Truth Spinner Delay
+    }
+
 
 
     # RESTORE
@@ -1388,23 +1397,35 @@ function PatchOptionsOoT() {
     }
 
     if (IsChecked -Elem $Options.RestoreGerudoTextures -Enabled) {
-        PatchBytes -File $Files.decompressedROM -Offset "2464D88" -Patch "Gerudo/1.bin"
-        PatchBytes -File $Files.decompressedROM -Offset "12985F0" -Patch "Gerudo/2.bin"
-        PatchBytes -File $Files.decompressedROM -Offset "21B8678" -Patch "Gerudo/3.bin"
-        PatchBytes -File $Files.decompressedROM -Offset "13B4000" -Patch "Gerudo/4.bin"
-        PatchBytes -File $Files.decompressedROM -Offset "7FD000"  -Patch "Gerudo/5.bin"
-        PatchBytes -File $Files.decompressedROM -Offset "28BBCD8" -Patch "Gerudo/7.bin"
-        PatchBytes -File $Files.decompressedROM -Offset "F70350"  -Patch "Gerudo/8.bin"
-        PatchBytes -File $Files.decompressedROM -Offset "F80CB0"  -Patch "Gerudo/9.bin"
-        PatchBytes -File $Files.decompressedROM -Offset "11FB000" -Patch "Gerudo/10.bin"
-        PatchBytes -File $Files.decompressedROM -Offset "2B03928" -Patch "Gerudo/11.bin"
-        PatchBytes -File $Files.decompressedROM -Offset "2B5CDA0" -Patch "Gerudo/12.bin"
-        PatchBytes -File $Files.decompressedROM -Offset "F7A8A0"  -Patch "Gerudo/13.bin"
-        PatchBytes -File $Files.decompressedROM -Offset "F71350"  -Patch "Gerudo/14.bin"
-        PatchBytes -File $Files.decompressedROM -Offset "F92280"  -Patch "Gerudo/15.bin"
-        PatchBytes -File $Files.decompressedROM -Offset "F748A0"  -Patch "Gerudo/16.bin"
-        PatchBytes -File $Files.decompressedROM -Offset "E68CE8"  -Patch "Gerudo/17.bin"
-        PatchBytes -File $Files.decompressedROM -Offset "F70B50"  -Patch "Gerudo/18.bin"
+        PatchBytes -File $Files.decompressedROM -Offset "12985F0" -Patch "Gerudo\2.bin"
+        PatchBytes -File $Files.decompressedROM -Offset "21B8678" -Patch "Gerudo\3.bin"
+        PatchBytes -File $Files.decompressedROM -Offset "13B4000" -Patch "Gerudo\4.bin"
+        PatchBytes -File $Files.decompressedROM -Offset "7FD000"  -Patch "Gerudo\5.bin"
+        PatchBytes -File $Files.decompressedROM -Offset "F70350"  -Patch "Gerudo\8.bin"
+        PatchBytes -File $Files.decompressedROM -Offset "F80CB0"  -Patch "Gerudo\9.bin"
+        PatchBytes -File $Files.decompressedROM -Offset "11FB000" -Patch "Gerudo\10.bin"
+        PatchBytes -File $Files.decompressedROM -Offset "F7A8A0"  -Patch "Gerudo\13.bin"
+        PatchBytes -File $Files.decompressedROM -Offset "F71350"  -Patch "Gerudo\14.bin"
+        PatchBytes -File $Files.decompressedROM -Offset "F92280"  -Patch "Gerudo\15.bin"
+        PatchBytes -File $Files.decompressedROM -Offset "F748A0"  -Patch "Gerudo\16.bin"
+        PatchBytes -File $Files.decompressedROM -Offset "E68CE8"  -Patch "Gerudo\17.bin"
+        PatchBytes -File $Files.decompressedROM -Offset "F70B50"  -Patch "Gerudo\18.bin"
+
+        <#
+        if ( (IsChecked -Elem $Options.MasterQuest -Enabled) -and (IsChecked -Elem $Options.MQForestTemple -Enabled))         { PatchBytes -File $Files.decompressedROM -Offset "2464D98" -Patch "Gerudo\MQ\1.bin"  } # Room 11 Forest Temple
+        else                                                                                                                  { PatchBytes -File $Files.decompressedROM -Offset "2464D88" -Patch "Gerudo\OoT\1.bin" } # Room 11 Forest Temple
+        if ( (IsChecked -Elem $Options.MasterQuest -Enabled) -and (IsChecked -Elem $Options.MQGerudoTrainingGround -Enabled)) { PatchBytes -File $Files.decompressedROM -Offset "28BBC18" -Patch "Gerudo\MQ\7.bin"  } # Room 5 Gerudo Training
+        else                                                                                                                  { PatchBytes -File $Files.decompressedROM -Offset "28BBCD8" -Patch "Gerudo\OoT\7.bin" } # Room 5 Gerudo Training
+
+        if ( (IsChecked -Elem $Options.MasterQuest -Enabled) -and (IsChecked -Elem $Options.MQSpiritTemple -Enabled)) {
+            PatchBytes -File $Files.decompressedROM -Offset "2B039D8" -Patch "Gerudo\MQ\11.bin" # Room 0 Spirit Temple
+            PatchBytes -File $Files.decompressedROM -Offset "2B5CDA0" -Patch "Gerudo\MQ\12.bin" # Room 10 Spirit Temple
+        }  
+        else { # Room 0 Spirit Temple
+            PatchBytes -File $Files.decompressedROM -Offset "2B03928" -Patch "Gerudo\OoT\11.bin" # Room 0 Spirit Temple
+            PatchBytes -File $Files.decompressedROM -Offset "2B5CDA0" -Patch "Gerudo\OoT\12.bin" # Room 10 Spirit Temple
+        }
+        #>
     }
 
 
@@ -1418,7 +1439,7 @@ function PatchOptionsOoT() {
         ChangeBytes -File $Files.decompressedROM -Offset "B6EC5F" -Values @("05", "0A", "0F") -Interval 2
         ChangeBytes -File $Files.decompressedROM -Offset "B6EC67" -Values @("0A", "0F", "14") -Interval 2
     }
-    elseif (IsChecked -Elem $Options.IncreasedIemCapacity -Enabled) {
+    elseif (IsChecked -Elem $Options.IncreasedItemCapacity -Enabled) {
         ChangeBytes -File $Files.decompressedROM -Offset "B6EC2F" -Values @("28", "46", "63") -Interval 2
         ChangeBytes -File $Files.decompressedROM -Offset "B6EC37" -Values @("1E", "37", "50") -Interval 2
         ChangeBytes -File $Files.decompressedROM -Offset "B6EC57" -Values @("28", "46", "63") -Interval 2
@@ -1451,8 +1472,8 @@ function PatchOptionsOoT() {
 
     if (IsChecked -Elem $Options.HideFileSelectIcons -Enabled) {
         ChangeBytes -File $Files.decompressedROM -Offset "348A1FD"  -Values @("FF", "FF", "FF") -Interval 2
-        PatchBytes -File $Files.decompressedROM -Offset "3488EA4" -Patch "File Select/1.bin"
-        PatchBytes -File $Files.decompressedROM -Offset "34890B0" -Patch "File Select/2.bin"
+        PatchBytes -File $Files.decompressedROM -Offset "3488EA4" -Patch "File Select\1.bin"
+        PatchBytes -File $Files.decompressedROM -Offset "34890B0" -Patch "File Select\2.bin"
     }
 
 }
@@ -1469,7 +1490,7 @@ function PatchOptionsMM() {
         ChangeBytes -File $Files.decompressedROM -Offset "BABEA2" -Values @("2A", "00")
         ChangeBytes -File $Files.decompressedROM -Offset "BABEA5" -Values @("00", "00", "00")
     }
-    elseif ( (IsText -Elem $Options.Damage -Text "1x Damage" -Enabled -Not) -and (IsText -Elem $Options.Recovery -Text "1x Recovery" -Enabled -Not) ) {
+    elseif ( (IsText -Elem $Options.Damage -Text "1x Damage" -Enabled -Not) -or (IsText -Elem $Options.Recovery -Text "1x Recovery" -Enabled -Not) ) {
         ChangeBytes -File $Files.decompressedROM -Offset "BABE7F" -Values @("09", "04") -Interval 16
         if (IsText -Elem $Options.Recovery -Text "1x Recovery" -Enabled) {
             if (IsText -Elem $Options.Damage -Text "2x Damage" -Enabled)       { ChangeBytes -File $Files.decompressedROM -Offset "BABEA2" -Values @("28", "40") }
@@ -1596,7 +1617,7 @@ function PatchOptionsMM() {
         ChangeBytes -File $Files.decompressedROM "C5837F" -Values @("05", "0A", "0F") -Interval 2
         ChangeBytes -File $Files.decompressedROM "C58387" -Values @("0A", "0F", "14") -Interval 2
     }
-    elseif (IsChecked -Elem $Options.IncreasedIemCapacity -Enabled) {
+    elseif (IsChecked -Elem $Options.IncreasedItemCapacity -Enabled) {
         ChangeBytes -File $Files.decompressedROM "C5834F" -Values @("28", "46", "63") -Interval 2
         ChangeBytes -File $Files.decompressedROM "C58357" -Values @("1E", "37", "50") -Interval 2
         ChangeBytes -File $Files.decompressedROM "C5837F" -Values @("0F", "1E", "2D") -Interval 2
@@ -1763,6 +1784,7 @@ function HackOpeningBNRTitle([String]$Title) {
 #==============================================================================================================================================================================================
 function HackN64GameTitle([String]$Title, [String]$GameID) {
     
+    if ($Settings.NoHeaderChange -eq $True) { return }
     if (!(Test-Path -LiteralPath $Files.PatchedROM -PathType Leaf)) { return }
 
     UpdateStatusLabel -Text "Hacking in Custom Title and GameID..."
@@ -2819,20 +2841,17 @@ function EnableReduxOptions() {
 
 
 
-
 #==============================================================================================================================================================================================
 function CreateOoTOptionsContent() {
     
-    CreateOptionsDialog -Width 900 -Height 600
+    CreateOptionsDialog -Width 900 -Height 590
 
     # HERO MODE #
     $HeroModeBox                       = CreateReduxGroup -Y 50 -Height 1 -AddTo $Options.Panel -Text "Hero Mode"
 
     $Options.Damage                    = CreateReduxComboBox -Column 0 -Row 1 -AddTo $HeroModeBox -Items @("1x Damage", "2x Damage", "4x Damage", "8x Damage", "OKHO Mode") -Text "Damage:" -ToolTip $OptionsToolTip -Info "Set the amount of damage you receive`nOKHO Mode = You die in one hit" -Name "Damage"
     $Options.Recovery                  = CreateReduxComboBox -Column 2 -Row 1 -AddTo $HeroModeBox -Items @("1x Recovery", "1/2x Recovery", "1/4x Recovery", "0x Recovery") -Text "Recovery:" -ToolTip $OptionsToolTip -Info "Set the amount health you recovery from Recovery Hearts" -Name "Recovery"
-    #$Options.BossHP                    = CreateReduxComboBox -Column 0 -Row 2 -AddTo $HeroModeBox -Items @("1x Boss HP", "2x Boss HP", "3x Boss HP") -Text "Boss HP:" -ToolTip $OptionsToolTip -Info "Set the amount of health for bosses" -Name "BossHP"
-    #$Options.MasterQuest               = CreateReduxCheckbox -Column 2 -Row 2 -AddTo $HeroModeBox -Text "Master Quest (WIP)" -ToolTip $OptionsToolTip -Info "Changes Ocarina of Time into Master Quest`nMaster Quest remixes the dungeons with harder challenges`nThe intro title is changed as well" -Name "MasterQuest"
-
+    
 
 
     # TEXT SPEED #
@@ -2863,7 +2882,7 @@ function CreateOoTOptionsContent() {
     $Options.ReturnChild               = CreateReduxCheckbox -Column 0 -Row 1 -AddTo $GameplayBox -Text "Can Always Return"      -ToolTip $OptionsToolTip -Info "You can always go back to being a child again before clearing the boss of the Forest Temple`nOut of the way Sheik!" -Name "ReturnChild"
     $Options.Medallions                = CreateReduxCheckbox -Column 1 -Row 1 -AddTo $GameplayBox -Text "Require All Medallions" -ToolTip $OptionsToolTip -Info "All six medallions are required for the Rainbow Bridge to appear before Ganon's Castle`nThe vanilla requirements were the Shadow and Spirit Medallions and the Light Arrows" -Name "Medallions"
     $Options.EasierMinigames           = CreateReduxCheckbox -Column 2 -Row 1 -AddTo $GameplayBox -Text "Easier Minigames"       -ToolTip $OptionsToolTip -Info "Certain minigames are made easier`nDampe's Digging Game (first try) & Fishing (less random and requirements)" -Name "EasierMinigames"
-
+    $Options.FasterBlockPushing        = CreateReduxCheckbox -Column 3 -Row 1 -AddTo $GameplayBox -Text "Faster Block Pushing"   -ToolTip $OptionsToolTip -Info "All blocks are pushed faster." -Name "FasterBlockPushing"
 
 
     # RESTORE #
@@ -2871,7 +2890,7 @@ function CreateOoTOptionsContent() {
 
     $Options.CorrectRupeeColors        = CreateReduxCheckbox -Column 0 -Row 1 -AddTo $RestoreBox -Text "Correct Rupee Colors"    -ToolTip $OptionsToolTip -Info "Corrects the colors for the Purple (50) and Golden (200) Rupees" -Name "CorrectRupeeColors"
     $Options.RestoreFireTemple         = CreateReduxCheckbox -Column 1 -Row 1 -AddTo $RestoreBox -Text "Restore Fire Temple"     -ToolTip $OptionsToolTip -Info "Restore the censored Fire Temple theme used in the Rev 2 ROM" -Name "RestoreFireTemple"
-    $Options.RestoreGerudoTextures     = CreateReduxCheckbox -Column 2 -Row 1 -AddTo $RestoreBox -Text "Restore Gerudo Textures" -ToolTip $OptionsToolTip -Info "Restore the censored Gerudo symbol textures used in the Rev 2 ROM" -Name "RestoreGerudoTextures"
+    $Options.RestoreGerudoTextures     = CreateReduxCheckbox -Column 2 -Row 1 -AddTo $RestoreBox -Text "Restore Gerudo Textures" -ToolTip $OptionsToolTip -Info "Restore the censored Gerudo symbol textures used in the GameCube / Virtual Console releases" -Name "RestoreGerudoTextures"
 
 
 
@@ -2884,7 +2903,7 @@ function CreateOoTOptionsContent() {
     $Options.IncreasedItemCapacity     = CreateReduxRadioButton -Column 2 -Row 0 -AddTo $ItemCapacityPanel          -Text "Increased Item Capacity" -ToolTip $OptionsToolTip -Info "Increase the amount of deku sticks, deku nuts, deku seeds, bombs and arrows you can carry" -Name "IncreasedItemCapacity"
 
     $Options.UnlockSword               = CreateReduxCheckbox -Column 0 -Row 2 -AddTo $EquipmentBox -Text "Unlock Kokiri Sword" -ToolTip $OptionsToolTip -Info "Adult Link is able to use the Kokiri Sword`nThe Kokiri Sword does half as much damage as the Master Sword" -Name "UnlockSword"
-    $Options.UnlockTunics              = CreateReduxCheckbox -Column 1 -Row 2 -AddTo $EquipmentBox -Text "Unlock Tunics"       -ToolTip $OptionsToolTip -Info "Child Link is able to use the Goron TUnic and Zora Tunic`nSince you might want to walk around in style as well when you are young" -Name "UnlockTunics"
+    $Options.UnlockTunics              = CreateReduxCheckbox -Column 1 -Row 2 -AddTo $EquipmentBox -Text "Unlock Tunics"       -ToolTip $OptionsToolTip -Info "Child Link is able to use the Goron Tunic and Zora Tunic`nSince you might want to walk around in style as well when you are young" -Name "UnlockTunics"
     $Options.UnlockBoots               = CreateReduxCheckbox -Column 2 -Row 2 -AddTo $EquipmentBox -Text "Unlock Boots"        -ToolTip $OptionsToolTip -Info "Child Link is able to use the Iron Boots and Hover Boots" -Name "UnlockBoots"
 
 
@@ -2900,6 +2919,7 @@ function CreateOoTOptionsContent() {
 
 
     $Options.Damage.Add_SelectedIndexChanged({ $Options.Recovery.Enabled = $this.Text -ne "OKHO Mode" })
+    $Options.Recovery.Enabled = $Options.Damage.Text -ne "OKHO Mode"
 
 }
 
@@ -2915,8 +2935,7 @@ function CreateMMOptionsContent() {
 
     $Options.Damage                    = CreateReduxComboBox -Column 0 -Row 1 -AddTo $HeroModeBox -Items @("1x Damage", "2x Damage", "4x Damage", "8x Damage", "OKHO Mode") -Text "Damage:" -ToolTip $OptionsToolTip -Info "Set the amount of damage you receive`nOKHO Mode = You die in one hit" -Name "Damage"
     $Options.Recovery                  = CreateReduxComboBox -Column 2 -Row 1 -AddTo $HeroModeBox -Items @("1x Recovery", "1/2x Recovery", "1/4x Recovery", "0x Recovery") -Text "Recovery:" -ToolTip $OptionsToolTip -Info "Set the amount health you recovery from Recovery Hearts" -Name "Recovery"
-    #$Options.BossHP                    = CreateReduxComboBox -Column 0 -Row 2 -AddTo $HeroModeBox -Items @("1x Boss HP", "2x Boss HP", "3x Boss HP") -Text "Boss HP:" -ToolTip $OptionsToolTip -Info "Set the amount of health for bosses" -Name "BossHP"
-
+    
 
 
     # D-PAD #
@@ -2942,7 +2961,7 @@ function CreateMMOptionsContent() {
     # GAMEPLAY #
     $GameplayBox                       = CreateReduxGroup -Y ($GraphicsBox.Bottom + 5) -Height 1 -AddTo $Options.Panel -Text "Gameplay"
 
-    $Options.ZoraPhysics               = CreateReduxCheckbox -Column 0 -Row 1 -AddTo $GameplayBox -Text "Zora Physics" -ToolTip $OptionsToolTip -Info "Change the Zora physics when using the boomerang`nZora Link will take a step forward instead of staying on his spot" -Name "ZoraPhysics"
+    $Options.ZoraPhysics               = CreateReduxCheckbox -Column 0 -Row 1 -AddTo $GameplayBox -Text "Zora Physics"         -ToolTip $OptionsToolTip -Info "Change the Zora physics when using the boomerang`nZora Link will take a step forward instead of staying on his spot" -Name "ZoraPhysics"
 
 
 
@@ -2983,6 +3002,7 @@ function CreateMMOptionsContent() {
 
 
     $Options.Damage.Add_SelectedIndexChanged({ $Options.Recovery.Enabled = $this.Text -ne "OKHO Mode" })
+    $Options.Recovery.Enabled = $Options.Damage.Text -ne "OKHO Mode"
 
 }
 
@@ -3020,6 +3040,8 @@ function CreateSM64OptionsContent() {
 
     $Options.FPS.Add_CheckStateChanged({ $Options.FreeCam.Enabled = !$this.Checked })
     $Options.FreeCam.Add_CheckStateChanged({ $Options.FPS.Enabled = !$this.Checked })
+    $Options.FreeCam.Enabled = !$Options.FPS.Checked
+    $Options.FPS.Enabled = !$Options.FreeCam.Checked
 
 }
 
@@ -3341,8 +3363,9 @@ function CreateButton([int]$X, [int]$Y, [String]$Name, [int]$Width, [int]$Height
 
 
 #==============================================================================================================================================================================================
-function CreateReduxGroup([int]$Y, [int]$Height, [Object]$AddTo, [String]$Text)   { return CreateGroupBox -X 15 -Y $Y -Width ($AddTo.Width - 50) -Height ($Height * 30 + 20) -Text $Text -AddTo $AddTo }
-function CreateReduxPanel([int]$Row, [Object]$AddTo)                              { return CreatePanel -X $AddTo.Left -Y ($Row * 30 + 20) -Width ($AddTo.Width - 20) -Height 20 -AddTo $AddTo }
+function CreateReduxGroup([int]$Y, [int]$Height, [Object]$AddTo, [String]$Text)                                       { return CreateGroupBox -X 15                   -Y $Y               -Width ($AddTo.Width - 50) -Height ($Height * 30 + 20) -Text $Text              -AddTo $AddTo }
+function CreateReduxPanel([int]$Row, [Object]$AddTo)                                                                  { return CreatePanel    -X $AddTo.Left          -Y ($Row * 30 + 20) -Width ($AddTo.Width - 20) -Height 20                                           -AddTo $AddTo }
+function CreateReduxButton([int]$Column, [int]$Row, [Object]$AddTo, [String]$Text, [Object]$ToolTip, [String]$Info)   { return CreateButton   -X ($Column * 165 + 15) -Y ($Row * 30 - 10) -Width 150                 -Height 20 -Text $Text -ToolTip $ToolTip -Info $Info -AddTo $AddTo }
 
 
 
@@ -3449,7 +3472,13 @@ function SetSettings() {
     if (!(Test-Path -LiteralPath $Files.settings -PathType Leaf)) { New-Item -Path $Files.settings | Out-Null }
     $Lines = Get-Content -Path $Files.settings
     if ($Lines -notcontains "[Core]") { Add-Content -Path $Files.settings -Value "[Core]" | Out-Null }
+    if ($Lines -notcontains "[Debug]") { Add-Content -Path $Files.settings -Value "[Debug]" | Out-Null }
     $global:Settings = Get-IniContent $Files.settings
+
+    if (!(IsSet -Elem $Settings.Debug.CreateBPS))          { $Settings.Debug.CreateBPS = $False }
+    if (!(IsSet -Elem $Settings.Debug.KeepDecompressed))   { $Settings.Debug.KeepDecompressed = $False }
+    if (!(IsSet -Elem $Settings.Debug.NoHeaderChange))     { $Settings.Debug.NoHeaderChange = $False }
+    if (!(IsSet -Elem $Settings.Debug.NoCRCChange))        { $Settings.Debug.NoCRCChange = $False }
 
 }
 
