@@ -2346,27 +2346,27 @@ function CreateMainDialog() {
     # Remove T64 description
     $global:PatchVCRemoveT64Label = CreateLabel -X ($PatchVCCoreLabel.Right + 20) -Y $PatchVCCoreLabel.Top -Width 95 -Height 15 -Text "Remove All T64:" -ToolTip $ToolTip -Info "Remove all injected T64 format textures" -AddTo $PatchVCGroup
     $global:PatchVCRemoveT64 = CreateCheckBox -X $PatchVCRemoveT64Label.Right -Y ($PatchVCCoreLabel.Top - 2) -Width 20 -Height 20 -ToolTip $ToolTip -Info "Remove all injected T64 format textures" -Name "RemoveT64" -AddTo $PatchVCGroup
-    $PatchVCRemoveT64.Add_CheckStateChanged({ $PatchVCButton.Enabled = CheckVCOptions })
+    $PatchVCRemoveT64.Add_CheckStateChanged({ CheckVCOptions })
     
     # Expand Memory
     $global:PatchVCExpandMemoryLabel = CreateLabel -X ($PatchVCRemoveT64.Right + 10) -Y $PatchVCCoreLabel.Top -Width 95 -Height 15 -Text "Expand Memory:" -ToolTip $ToolTip -Info "Expand the game's memory by 4MB" -AddTo $PatchVCGroup
     $global:PatchVCExpandMemory = CreateCheckBox -X $PatchVCExpandMemoryLabel.Right -Y ($PatchVCCoreLabel.Top - 2) -Width 20 -Height 20 -ToolTip $ToolTip -Info "Expand the game's memory by 4MB" -Name "ExpandMemory" -AddTo $PatchVCGroup
-    $PatchVCExpandMemory.Add_CheckStateChanged({ $PatchVCButton.Enabled = CheckVCOptions })
+    $PatchVCExpandMemory.Add_CheckStateChanged({ CheckVCOptions })
 
     # Remove Filter
     $global:PatchVCRemoveFilterLabel = CreateLabel -X ($PatchVCRemoveT64.Right + 10) -Y $PatchVCCoreLabel.Top -Width 95 -Height 15 -Text "Remove Filter:" -ToolTip $ToolTip -Info "Remove the dark overlay filter" -AddTo $PatchVCGroup
     $global:PatchVCRemoveFilter = CreateCheckBox -X $PatchVCRemoveFilterLabel.Right -Y ($PatchVCCoreLabel.Top - 2) -Width 20 -Height 20 -ToolTip $ToolTip -Info "Remove the dark overlay filter" -Name "RemoveFilter" -AddTo $PatchVCGroup
-    $PatchVCRemoveFilter.Add_CheckStateChanged({ $PatchVCButton.Enabled = CheckVCOptions })
+    $PatchVCRemoveFilter.Add_CheckStateChanged({ CheckVCOptions })
 
     # Remap D-Pad
     $global:PatchVCRemapDPadLabel = CreateLabel -X ($PatchVCExpandMemory.Right + 10) -Y $PatchVCCoreLabel.Top -Width 95 -Height 15 -Text "Remap D-Pad:" -ToolTip $ToolTip -Info "Remap the D-Pad to the actual four D-Pad directional buttons instead of toggling the minimap" -AddTo $PatchVCGroup
     $global:PatchVCRemapDPad = CreateCheckBox -X $PatchVCRemapDPadLabel.Right -Y ($PatchVCCoreLabel.Top - 2) -Width 20 -Height 20 -ToolTip $ToolTip -Info "Remap the D-Pad to the actual four D-Pad directional buttons instead of toggling the minimap" -Name "RemapDPad" -AddTo $PatchVCGroup
-    $PatchVCRemapDPad.Add_CheckStateChanged({ $PatchVCButton.Enabled = CheckVCOptions })
+    $PatchVCRemapDPad.Add_CheckStateChanged({ CheckVCOptions })
 
     # Downgrade
     $global:PatchVCDowngradeLabel = CreateLabel -X ($PatchVCRemapDPad.Right + 10) -Y $PatchVCCoreLabel.Top -Width 95 -Height 15 -Text "Downgrade:" -ToolTip $ToolTip -Info "Downgrade Ocarina of Time from version 1.2 US to 1.0 US" -AddTo $PatchVCGroup
     $global:PatchVCDowngrade = CreateCheckBox -X $PatchVCDowngradeLabel.Right -Y ($PatchVCCoreLabel.Top - 2) -Width 20 -Height 20 -ToolTip $ToolTip -Info "Downgrade Ocarina of Time from version 1.2 US to 1.0 US" -Name "Downgrade" -AddTo $PatchVCGroup
-    $PatchVCDowngrade.Add_CheckStateChanged({ $PatchVCButton.Enabled = CheckVCOptions })
+    $PatchVCDowngrade.Add_CheckStateChanged({ CheckVCOptions })
 
 
 
@@ -2376,17 +2376,17 @@ function CreateMainDialog() {
     # Remap C-Down
     $global:PatchVCRemapCDownLabel = CreateLabel -X ($PatchVCMinimapLabel.Right + 20) -Y $PatchVCMinimapLabel.Top -Width 95 -Height 15 -Text "Remap C-Down:" -ToolTip $ToolTip -Info "Remap the C-Down button for toggling the minimap instead of using an item" -AddTo $PatchVCGroup
     $global:PatchVCRemapCDown = CreateCheckBox -X $PatchVCRemapCDownLabel.Right -Y ($PatchVCMinimapLabel.Top - 2) -Width 20 -Height 20 -ToolTip $ToolTip -Info "Remap the C-Down button for toggling the minimap instead of using an item" -Name "RemapCDown" -AddTo $PatchVCGroup
-    $PatchVCRemapCDown.Add_CheckStateChanged({ $PatchVCButton.Enabled = CheckVCOptions })
+    $PatchVCRemapCDown.Add_CheckStateChanged({ CheckVCOptions })
 
     # Remap Z
     $global:PatchVCRemapZLabel = CreateLabel -X ($PatchVCRemapCDown.Right + 10) -Y $PatchVCMinimapLabel.Top -Width 95 -Height 15 -Text "Remap Z:" -ToolTip $ToolTip -Info "Remap the Z (GameCube) or ZL and ZR (Classic) buttons for toggling the minimap instead of using an item" -AddTo $PatchVCGroup
     $global:PatchVCRemapZ = CreateCheckBox -X $PatchVCRemapZLabel.Right -Y ($PatchVCMinimapLabel.Top - 2) -Width 20 -Height 20 -ToolTip $ToolTip -Info "Remap the Z (GameCube) or ZL and ZR (Classic) buttons for toggling the minimap instead of using an item" -Name "RemapZ" -AddTo $PatchVCGroup
-    $PatchVCRemapZ.Add_CheckStateChanged({ $PatchVCButton.Enabled = CheckVCOptions })
+    $PatchVCRemapZ.Add_CheckStateChanged({ CheckVCOptions })
 
     # Leave D-Pad Up
     $global:PatchVCLeaveDPadUpLabel = CreateLabel -X ($PatchVCRemapZ.Right + 10) -Y $PatchVCMinimapLabel.Top -Width 95 -Height 15 -Text "Leave D-Pad Up:" -ToolTip $ToolTip -Info "Leave the D-Pad untouched so it can be used to toggle the minimap" -AddTo $PatchVCGroup
     $global:PatchVCLeaveDPadUp = CreateCheckBox -X $PatchVCLeaveDPadUpLabel.Right -Y ($PatchVCMinimapLabel.Top - 2) -Width 20 -Height 20 -ToolTip $ToolTip -Info "Leave the D-Pad untouched so it can be used to toggle the minimap" -Name "LeaveDPadUp" -AddTo $PatchVCGroup
-    $PatchVCLeaveDPadUp.Add_CheckStateChanged({ $PatchVCButton.Enabled = CheckVCOptions })
+    $PatchVCLeaveDPadUp.Add_CheckStateChanged({ CheckVCOptions })
 
 
 
@@ -2621,7 +2621,6 @@ function ChangeGameMode() {
     }
 
     SetWiiVCMode -Enable $IsWiiVC
-    $PatchVCButton.Enabled = CheckVCOptions
     
 }
 
@@ -2691,16 +2690,18 @@ function SetModeLabel() {
 
 #==============================================================================================================================================================================================
 function CheckVCOptions() {
+    
+    if (!$IsWiiVC) { return }
 
-    if (IsChecked -Elem $PatchVCRemoveT64 -Visible)      { return $True }
-    if (IsChecked -Elem $PatchVCExpandMemory -Visible)   { return $True }
-    if (IsChecked -Elem $PatchVCRemoveFilter -Visible)   { return $True }
-    if (IsChecked -Elem $PatchVCRemapDPad -Visible)      { return $True }
-    if (IsChecked -Elem $PatchVCDowngrade -Visible)      { return $True }
-    if (IsChecked -Elem $PatchVCRemapCDown -Visible)     { return $True }
-    if (IsChecked -Elem $PatchVCRemapZ -Visible)         { return $True }
-    if (IsChecked -Elem $PatchLeaveDPadUp -Visible)      { return $True }
-    return $False
+    if (IsChecked -Elem $PatchVCRemoveT64)          { $PatchVCButton.Enabled = $True }
+    elseif (IsChecked -Elem $PatchVCExpandMemory)   { $PatchVCButton.Enabled = $True }
+    elseif (IsChecked -Elem $PatchVCRemoveFilter)   { $PatchVCButton.Enabled = $True }
+    elseif (IsChecked -Elem $PatchVCRemapDPad)      { $PatchVCButton.Enabled = $True }
+    elseif (IsChecked -Elem $PatchVCDowngrade)      { $PatchVCButton.Enabled = $True }
+    elseif (IsChecked -Elem $PatchVCRemapCDown)     { $PatchVCButton.Enabled = $True }
+    elseif (IsChecked -Elem $PatchVCRemapZ)         { $PatchVCButton.Enabled = $True }
+    elseif (IsChecked -Elem $PatchLeaveDPadUp)      { $PatchVCButton.Enabled = $True }
+    else                                            { $PatchVCButton.Enabled = $False }
 
 }
 
@@ -3563,6 +3564,7 @@ $CustomTitleTextBox.Add_TextChanged({  if (IsChecked $CustomHeaderCheckbox)   { 
 $CustomGameIDTextBox.Add_TextChanged({ if (IsChecked $CustomHeaderCheckbox)   { $Settings["Core"][$CustomGameIDTextBox.Name] = $this.Text } })
 $CustomHeaderCheckbox.Add_CheckedChanged({ RestoreCustomGameID })
 RestoreCustomGameID
+CheckVCOptions
 
 # Show the dialog to the user.
 $MainDialog.ShowDialog() | Out-Null
