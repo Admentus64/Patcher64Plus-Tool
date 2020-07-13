@@ -1772,7 +1772,7 @@ function HackOpeningBNRTitle([String]$Title) {
 #==============================================================================================================================================================================================
 function HackN64GameTitle([String]$Title, [String]$GameID) {
     
-    if ($Settings.NoHeaderChange -eq $True) { return }
+    if ($Settings.Debug.NoHeaderChange -eq $True) { return }
     if (!(Test-Path -LiteralPath $Files.PatchedROM -PathType Leaf)) { return }
 
     UpdateStatusLabel -Text "Hacking in Custom Title and GameID..."
