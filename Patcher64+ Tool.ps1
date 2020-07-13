@@ -19,8 +19,8 @@ Add-Type -AssemblyName 'System.Drawing'
 #==============================================================================================================================================================================================
 # Setup global variables
 
-$global:VersionDate = "12-07-2020"
-$global:Version     = "v6.1.1"
+$global:VersionDate = "13-07-2020"
+$global:Version     = "v6.2"
 
 $global:GameType = $global:GamePatch = $global:CheckHashSum = ""
 $global:GameFiles = @{}
