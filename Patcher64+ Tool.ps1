@@ -3526,7 +3526,7 @@ ChangeGamesList
 GetFilePaths
 
 # Restore Last Custom Title & GameID
-if ($Settings["Core"]["CustomHeader"] -eq "True") {
+if ($Settings["Core"]["CustomHeader"] -eq $True) {
     if (IsSet -Elem $Settings["Core"]["CustomGameID"])   { $CustomGameIDTextBox.Text = $Settings["Core"]["CustomGameID"] }
     if (IsSet -Elem $Settings["Core"]["CustomTitle"])    { $CustomTitleTextBox.Text  = $Settings["Core"]["CustomTitle"] }
 }
