@@ -1397,35 +1397,23 @@ function PatchOptionsOoT() {
     }
 
     if (IsChecked -Elem $Options.RestoreGerudoTextures -Enabled) {
+        PatchBytes -File $Files.decompressedROM -Offset "2464D88" -Patch "Gerudo\1.bin"
         PatchBytes -File $Files.decompressedROM -Offset "12985F0" -Patch "Gerudo\2.bin"
         PatchBytes -File $Files.decompressedROM -Offset "21B8678" -Patch "Gerudo\3.bin"
         PatchBytes -File $Files.decompressedROM -Offset "13B4000" -Patch "Gerudo\4.bin"
         PatchBytes -File $Files.decompressedROM -Offset "7FD000"  -Patch "Gerudo\5.bin"
+        PatchBytes -File $Files.decompressedROM -Offset "28BBCD8" -Patch "Gerudo\7.bin"
         PatchBytes -File $Files.decompressedROM -Offset "F70350"  -Patch "Gerudo\8.bin"
         PatchBytes -File $Files.decompressedROM -Offset "F80CB0"  -Patch "Gerudo\9.bin"
         PatchBytes -File $Files.decompressedROM -Offset "11FB000" -Patch "Gerudo\10.bin"
+        PatchBytes -File $Files.decompressedROM -Offset "2B03928" -Patch "Gerudo\11.bin"
+        PatchBytes -File $Files.decompressedROM -Offset "2B5CDA0" -Patch "Gerudo\12.bin"
         PatchBytes -File $Files.decompressedROM -Offset "F7A8A0"  -Patch "Gerudo\13.bin"
         PatchBytes -File $Files.decompressedROM -Offset "F71350"  -Patch "Gerudo\14.bin"
         PatchBytes -File $Files.decompressedROM -Offset "F92280"  -Patch "Gerudo\15.bin"
         PatchBytes -File $Files.decompressedROM -Offset "F748A0"  -Patch "Gerudo\16.bin"
         PatchBytes -File $Files.decompressedROM -Offset "E68CE8"  -Patch "Gerudo\17.bin"
         PatchBytes -File $Files.decompressedROM -Offset "F70B50"  -Patch "Gerudo\18.bin"
-
-        <#
-        if ( (IsChecked -Elem $Options.MasterQuest -Enabled) -and (IsChecked -Elem $Options.MQForestTemple -Enabled))         { PatchBytes -File $Files.decompressedROM -Offset "2464D98" -Patch "Gerudo\MQ\1.bin"  } # Room 11 Forest Temple
-        else                                                                                                                  { PatchBytes -File $Files.decompressedROM -Offset "2464D88" -Patch "Gerudo\OoT\1.bin" } # Room 11 Forest Temple
-        if ( (IsChecked -Elem $Options.MasterQuest -Enabled) -and (IsChecked -Elem $Options.MQGerudoTrainingGround -Enabled)) { PatchBytes -File $Files.decompressedROM -Offset "28BBC18" -Patch "Gerudo\MQ\7.bin"  } # Room 5 Gerudo Training
-        else                                                                                                                  { PatchBytes -File $Files.decompressedROM -Offset "28BBCD8" -Patch "Gerudo\OoT\7.bin" } # Room 5 Gerudo Training
-
-        if ( (IsChecked -Elem $Options.MasterQuest -Enabled) -and (IsChecked -Elem $Options.MQSpiritTemple -Enabled)) {
-            PatchBytes -File $Files.decompressedROM -Offset "2B039D8" -Patch "Gerudo\MQ\11.bin" # Room 0 Spirit Temple
-            PatchBytes -File $Files.decompressedROM -Offset "2B5CDA0" -Patch "Gerudo\MQ\12.bin" # Room 10 Spirit Temple
-        }  
-        else { # Room 0 Spirit Temple
-            PatchBytes -File $Files.decompressedROM -Offset "2B03928" -Patch "Gerudo\OoT\11.bin" # Room 0 Spirit Temple
-            PatchBytes -File $Files.decompressedROM -Offset "2B5CDA0" -Patch "Gerudo\OoT\12.bin" # Room 10 Spirit Temple
-        }
-        #>
     }
 
 
