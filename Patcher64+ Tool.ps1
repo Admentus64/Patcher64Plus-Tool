@@ -495,42 +495,42 @@ function SetFileParameters() {
     $Files.oot.fire_temple                  = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Decompressed\fire_temple.bps")
     $Files.oot_master_quest                 = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Decompressed\master_quest.bps")
     
-    $Files.oot.lens_of_truth                = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Binaries\Lens of Truth.bin")
-    $Files.oot.title_copyright              = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Binaries\Master Quest\Title Copyright.bin")
-    $Files.oot.title_master_quest           = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Binaries\Master Quest\Title Logo.bin")
-    $Files.oot.file_select_1                = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Binaries\File Select\1.bin")
-    $Files.oot.file_select_2                = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Binaries\File Select\2.bin")
+    $Files.oot.lens_of_truth                = $Paths.Games + "\Ocarina of Time\Binaries\Lens of Truth.bin"
+    $Files.oot.title_copyright              = $Paths.Games + "\Ocarina of Time\Binaries\Master Quest\Title Copyright.bin"
+    $Files.oot.title_master_quest           = $Paths.Games + "\Ocarina of Time\Binaries\Master Quest\Title Logo.bin"
+    $Files.oot.file_select_1                = $Paths.Games + "\Ocarina of Time\Binaries\File Select\1.bin"
+    $Files.oot.file_select_2                = $Paths.Games + "\Ocarina of Time\Binaries\File Select\2.bin"
     
-    $Files.oot.gerudo_1                     = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Binaries\Gerudo\1.bin")
-    $Files.oot.gerudo_2                     = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Binaries\Gerudo\2.bin")
-    $Files.oot.gerudo_3                     = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Binaries\Gerudo\3.bin")
-    $Files.oot.gerudo_4                     = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Binaries\Gerudo\4.bin")
-    $Files.oot.gerudo_5                     = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Binaries\Gerudo\5.bin")
-    $Files.oot.gerudo_7                     = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Binaries\Gerudo\7.bin")
-    $Files.oot.gerudo_8                     = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Binaries\Gerudo\8.bin")
-    $Files.oot.gerudo_9                     = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Binaries\Gerudo\9.bin")
-    $Files.oot.gerudo_10                    = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Binaries\Gerudo\10.bin")
-    $Files.oot.gerudo_11                    = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Binaries\Gerudo\11.bin")
-    $Files.oot.gerudo_12                    = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Binaries\Gerudo\12.bin")
-    $Files.oot.gerudo_13                    = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Binaries\Gerudo\13.bin")
-    $Files.oot.gerudo_14                    = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Binaries\Gerudo\14.bin")
-    $Files.oot.gerudo_15                    = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Binaries\Gerudo\15.bin")
-    $Files.oot.gerudo_16                    = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Binaries\Gerudo\16.bin")
-    $Files.oot.gerudo_17                    = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Binaries\Gerudo\17.bin")
-    $Files.oot.gerudo_18                    = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Binaries\Gerudo\18.bin")
+    $Files.oot.gerudo_1                     = $Paths.Games + "\Ocarina of Time\Binaries\Gerudo\1.bin"
+    $Files.oot.gerudo_2                     = $Paths.Games + "\Ocarina of Time\Binaries\Gerudo\2.bin"
+    $Files.oot.gerudo_3                     = $Paths.Games + "\Ocarina of Time\Binaries\Gerudo\3.bin"
+    $Files.oot.gerudo_4                     = $Paths.Games + "\Ocarina of Time\Binaries\Gerudo\4.bin"
+    $Files.oot.gerudo_5                     = $Paths.Games + "\Ocarina of Time\Binaries\Gerudo\5.bin"
+    $Files.oot.gerudo_7                     = $Paths.Games + "\Ocarina of Time\Binaries\Gerudo\7.bin"
+    $Files.oot.gerudo_8                     = $Paths.Games + "\Ocarina of Time\Binaries\Gerudo\8.bin"
+    $Files.oot.gerudo_9                     = $Paths.Games + "\Ocarina of Time\Binaries\Gerudo\9.bin"
+    $Files.oot.gerudo_10                    = $Paths.Games + "\Ocarina of Time\Binaries\Gerudo\10.bin"
+    $Files.oot.gerudo_11                    = $Paths.Games + "\Ocarina of Time\Binaries\Gerudo\11.bin"
+    $Files.oot.gerudo_12                    = $Paths.Games + "\Ocarina of Time\Binaries\Gerudo\12.bin"
+    $Files.oot.gerudo_13                    = $Paths.Games + "\Ocarina of Time\Binaries\Gerudo\13.bin"
+    $Files.oot.gerudo_14                    = $Paths.Games + "\Ocarina of Time\Binaries\Gerudo\14.bin"
+    $Files.oot.gerudo_15                    = $Paths.Games + "\Ocarina of Time\Binaries\Gerudo\15.bin"
+    $Files.oot.gerudo_16                    = $Paths.Games + "\Ocarina of Time\Binaries\Gerudo\16.bin"
+    $Files.oot.gerudo_17                    = $Paths.Games + "\Ocarina of Time\Binaries\Gerudo\17.bin"
+    $Files.oot.gerudo_18                    = $Paths.Games + "\Ocarina of Time\Binaries\Gerudo\18.bin"
 
 
 
     # Store Majora's Mask files
-    $Files.mm.troupe_leaders_mask           = CheckPatchExtension -File ($Paths.Games + "\Majora's Mask\Textures\Troupe Leader's Mask.yaz0")
-    $Files.mm.carnival_of_time              = CheckPatchExtension -File ($Paths.Games + "\Majora's Mask\Binaries\Carnival of Time.bin")
-    $Files.mm.four_giant                    = CheckPatchExtension -File ($Paths.Games + "\Majora's Mask\Binaries\Four Giants.bin")
-    $Files.mm.lens_of_truth                 = CheckPatchExtension -File ($Paths.Games + "\Majora's Mask\Binaries\Lens of Truth.bin")
-    $Files.mm.romani_ranch                  = CheckPatchExtension -File ($Paths.Games + "\Majora's Mask\Binaries\Romani Sign.bin")
-    $Files.mm.deku_room_00                  = CheckPatchExtension -File ($Paths.Games + "\Majora's Mask\Binaries\Palace Route\DekuRoom00.bin")
-    $Files.mm.deku_room_01                  = CheckPatchExtension -File ($Paths.Games + "\Majora's Mask\Binaries\Palace Route\DekuRoom01.bin")
-    $Files.mm.deku_room_02                  = CheckPatchExtension -File ($Paths.Games + "\Majora's Mask\Binaries\Palace Route\DekuRoom02.bin")
-    $Files.mm.deku_scene                    = CheckPatchExtension -File ($Paths.Games + "\Majora's Mask\Binaries\Palace Route\DekuScene.bin")
+    $Files.mm.troupe_leaders_mask           = $Paths.Games + "\Majora's Mask\Textures\Troupe Leader's Mask.yaz0"
+    $Files.mm.carnival_of_time              = $Paths.Games + "\Majora's Mask\Binaries\Carnival of Time.bin"
+    $Files.mm.four_giant                    = $Paths.Games + "\Majora's Mask\Binaries\Four Giants.bin"
+    $Files.mm.lens_of_truth                 = $Paths.Games + "\Majora's Mask\Binaries\Lens of Truth.bin"
+    $Files.mm.romani_ranch                  = $Paths.Games + "\Majora's Mask\Binaries\Romani Sign.bin"
+    $Files.mm.deku_room_00                  = $Paths.Games + "\Majora's Mask\Binaries\Palace Route\DekuRoom00.bin"
+    $Files.mm.deku_room_01                  = $Paths.Games + "\Majora's Mask\Binaries\Palace Route\DekuRoom01.bin"
+    $Files.mm.deku_room_02                  = $Paths.Games + "\Majora's Mask\Binaries\Palace Route\DekuRoom02.bin"
+    $Files.mm.deku_scene                    = $Paths.Games + "\Majora's Mask\Binaries\Palace Route\DekuScene.bin"
 
 
 
