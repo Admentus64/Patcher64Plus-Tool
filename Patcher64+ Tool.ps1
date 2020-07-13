@@ -492,8 +492,7 @@ function SetFileParameters() {
     $Files.oot.dawn_rev2                    = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Compressed\dawn_rev2")
     $Files.oot.models_mm                    = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Decompressed\models_mm")
     $Files.oot.models_mm_redux              = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Decompressed\models_mm_redux")
-    $Files.oot.fire_temple                  = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Decompressed\fire_temple.bps")
-    $Files.oot_master_quest                 = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Decompressed\master_quest.bps")
+    $Files.oot.theme_fire_temple            = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Decompressed\theme_fire_temple.bps")
     
     $Files.oot.lens_of_truth                = $Paths.Games + "\Ocarina of Time\Binaries\Lens of Truth.bin"
     $Files.oot.title_copyright              = $Paths.Games + "\Ocarina of Time\Binaries\Master Quest\Title Copyright.bin"
@@ -558,12 +557,12 @@ function SetFileParameters() {
 
 
     # Check if all files so far exist
-    CheckFilesExists -HashTable $Files.tool
-    CheckFilesExists -HashTable $Files.oot
-    CheckFilesExists -HashTable $Files.mm
-    CheckFilesExists -HashTable $Files.sm64
-    CheckFilesExists -HashTable $Files.json
-    CheckFilesExists -HashTable $Files.icon
+    CheckFilesExists -HashTable $Files.tool   -Error "Missing Files"
+    CheckFilesExists -HashTable $Files.oot    -Error "Missing Files"
+    CheckFilesExists -HashTable $Files.mm     -Error "Missing Files"
+    CheckFilesExists -HashTable $Files.sm64   -Error "Missing Files"
+    CheckFilesExists -HashTable $Files.json   -Error "Missing Files"
+    CheckFilesExists -HashTable $Files.icon   -Error "Missing Files"
 
 
 
@@ -583,10 +582,10 @@ function SetFileParameters() {
 
 
 #==============================================================================================================================================================================================
-function CheckFilesExists([hashtable]$HashTable) {
+function CheckFilesExists([hashtable]$HashTable, [String]$Error) {
     
     $HashTable.GetEnumerator() | ForEach-Object {
-        if ( !(Test-Path $_.value -PathType Leaf) -and (IsSet -Elem $_.value) ) { CreateErrorDialog -Error "Missing Files" -Exit }
+        if ( !(Test-Path $_.value -PathType Leaf) -and (IsSet -Elem $_.value) ) { CreateErrorDialog -Error $Error -Exit }
     }
 
 }
