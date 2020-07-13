@@ -2250,9 +2250,9 @@ function CreateMainDialog() {
     # Create a textbox to display the selected Custom Channel Title.
     $global:CustomTitleTextBox = CreateTextBox -X 85 -Y 20 -Width 260 -Height 22 -Name "CustomTitle" -AddTo $CustomGameIDGroup
     $CustomTitleTextBox.Add_TextChanged({
-        if ($this.Text -match "[^a-z 0-9 \: \- \( \) \']") {
+        if ($this.Text -match "[^a-z 0-9 \: \- \( \) \' \&]") {
             $cursorPos = $this.SelectionStart
-            $this.Text = $this.Text -replace "[^a-z 0-9 \: \- \( \) \']",''
+            $this.Text = $this.Text -replace "[^a-z 0-9 \: \- \( \) \' \&]",''
             $this.SelectionStart = $cursorPos - 1
             $this.SelectionLength = 0
         }
@@ -2307,6 +2307,7 @@ function CreateMainDialog() {
         }
         DisablePatches
         CreateLanguagesContent
+        GetHeader
     } )
 
     # Create a checkbox to enable Redux and Options support.
@@ -2641,24 +2642,37 @@ function SetWiiVCMode([Boolean]$Enable) {
     
     $global:IsWiiVC = $Enable
 
-    if ($IsWiiVC) {
-        EnablePatchButtons -Enable (IsSet -Elem $Files.WAD)
-        $CustomTitleTextBox.Text = $GameType.wii_title
-        $CustomGameIDTextBox.Text =  $GameType.wii_gameID
-    }
-    else {
-        EnablePatchButtons -Enable (IsSet -Elem $Files.Z64)
-        $CustomTitleTextBox.Text = $GameType.n64_title
-        $CustomGameIDTextBox.Text =  $GameType.n64_gameID
-    }
+    if ($IsWiiVC)   { EnablePatchButtons -Enable (IsSet -Elem $Files.WAD) }
+    else            { EnablePatchButtons -Enable (IsSet -Elem $Files.Z64) }
     
     $InjectROMButton.Visible = $PatchVCPanel.Visible = $IsWiiVC
     $CustomTitleTextBox.MaxLength = $GameTitleLength[[uint32]$IsWiiVC]
     $ClearWADPathButton.Enabled = (IsSet -Elem $Files.WAD -MinLength 1)
-
+    
+    GetHeader
     SetMainScreenSize
     SetModeLabel
     ChangePatchPanel
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function GetHeader() {
+    
+    if ($IsWiiVC) {
+        if (IsSet -Elem $GamePatch.wii_title)    { $CustomTitleTextBox.Text  = $GamePatch.wii_title }
+        else                                     { $CustomTitleTextBox.Text  = $GameType.wii_title }
+        if (IsSet -Elem $GamePatch.wii_gameID)   { $CustomGameIDTextBox.Text = $GamePatch.wii_gameID }
+        else                                     { $CustomGameIDTextBox.Text = $GameType.wii_gameID }
+    }
+    else {
+        if (IsSet -Elem $GamePatch.n64_title)    { $CustomTitleTextBox.Text  = $GamePatch.n64_title }
+        else                                     { $CustomTitleTextBox.Text  = $GameType.n64_title }
+        if (IsSet -Elem $GamePatch.n64_gameID)   { $CustomGameIDTextBox.Text = $GamePatch.n64_gameID }
+        else                                     { $CustomGameIDTextBox.Text = $GameType.n64_gameID }
+    }
 
 }
 
@@ -3505,6 +3519,25 @@ function GetFilePaths() {
 
 
 #==============================================================================================================================================================================================
+function RestoreCustomGameID() {
+    
+    if (IsChecked $CustomHeaderCheckbox) {
+        if (IsSet -Elem $Settings["Core"]["CustomTitle"]) {
+            $CustomTitleTextBox.Text  = $Settings["Core"]["CustomTitle"]
+        }
+        if (IsSet -Elem $Settings["Core"]["CustomGameID"]) {
+            $CustomGameIDTextBox.Text = $Settings["Core"]["CustomGameID"]
+        }
+    }
+    else { GetHeader }
+
+    $CustomGameIDTextBox.Enabled = $CustomTitleTextBox.Enabled = $CustomHeaderCheckbox.Checked
+
+}
+
+
+
+#==============================================================================================================================================================================================
 
 # Hide the PowerShell console from the user.
 ShowPowerShellConsole -ShowConsole $False
@@ -3526,16 +3559,14 @@ ChangeGamesList
 GetFilePaths
 
 # Restore Last Custom Title & GameID
-if ($Settings["Core"]["CustomHeader"] -eq $True) {
-    if (IsSet -Elem $Settings["Core"]["CustomGameID"])   { $CustomGameIDTextBox.Text = $Settings["Core"]["CustomGameID"] }
-    if (IsSet -Elem $Settings["Core"]["CustomTitle"])    { $CustomTitleTextBox.Text  = $Settings["Core"]["CustomTitle"] }
-}
+$CustomTitleTextBox.Add_TextChanged({  if (IsChecked $CustomHeaderCheckbox)   { $Settings["Core"][$CustomTitleTextBox.Name] = $this.Text } })
+$CustomGameIDTextBox.Add_TextChanged({ if (IsChecked $CustomHeaderCheckbox)   { $Settings["Core"][$CustomGameIDTextBox.Name] = $this.Text } })
+$CustomHeaderCheckbox.Add_CheckedChanged({ RestoreCustomGameID })
+RestoreCustomGameID
 
 # Show the dialog to the user.
 $MainDialog.ShowDialog() | Out-Null
 
 # Exit
-$Settings["Core"]["CustomGameID"] = $CustomGameIDTextBox.Text
-$Settings["Core"]["CustomTitle"]  = $CustomTitleTextBox.Text
 Out-IniFile -FilePath $Files.settings -InputObject $Settings | Out-Null
 Exit
