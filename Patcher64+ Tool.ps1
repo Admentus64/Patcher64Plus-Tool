@@ -244,30 +244,30 @@ function MainFunctionPatch([String]$Command, [String[]]$Header, [String]$Patched
     # Step 15: Hack the Game Title and GameID of a N64 ROM
     HackN64GameTitle -Title $Header[0] -GameID $Header[1]
 
+    # Step 16: Debug
+    CreateDebugPatches
+
     # Only continue with these steps in VC WAD mode. Otherwise ignore these steps.
     if ($IsWiiVC) {
-        # Step 16: Extend a ROM if it is neccesary for the Virtual Console. Mostly applies to decompressed ROMC files
+        # Step 17: Extend a ROM if it is neccesary for the Virtual Console. Mostly applies to decompressed ROMC files
         ExtendROM
 
-        # Step 17: Compress the ROMC again if possible.
+        # Step 18: Compress the ROMC again if possible.
         CompressROMC 
 
-        # Step 18: Hack the Channel Title.
+        # Step 19: Hack the Channel Title.
         HackOpeningBNRTitle -Title $Header[2]
 
-        # Step 19: Repack the "00000005.app" with the updated ROM file 
+        # Step 20: Repack the "00000005.app" with the updated ROM file 
         RepackU8AppFile
         
-        # Step 20: Repack the WAD file with the updated APP file.
+        # Step 21: Repack the WAD file with the updated APP file.
         RepackWADFile -GameID $Header[3]
     }
 
-    # Step 21: Final message.
+    # Step 22: Final message.
     if ($IsWiiVC)   { UpdateStatusLabel -Text ('Finished patching the ' + $GameType.mode + ' VC WAD file.') }
     else            { UpdateStatusLabel -Text ('Finished patching the ' + $GameType.mode + ' ROM file.') }
-
-    # Step 22: Debug
-    CreateDebugPatches
 
 }
 
@@ -361,9 +361,9 @@ function CreateDebugPatches() {
 #==============================================================================================================================================================================================
 function EnableGUI([Boolean]$Enable) {
     
-    $InputWADPanel.Enabled = $Enable
-    $PatchPanel.Enabled = $Enable
-    $MiscPanel.Enabled = $PatchVCPanel.Enabled = $Enable
+    $InputWADPanel.Enabled = $InputROMPanel.Enabled = $InputBPSPanel.Enabled = $Enable
+    $CurrentGamePanel.Enabled = $CustomGameIDPanel.Enabled = $Enable
+    $PatchPanel.Enabled = $MiscPanel.Enabled = $PatchVCPanel.Enabled = $Enable
 
 }
 
