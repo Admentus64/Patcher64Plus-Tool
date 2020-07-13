@@ -113,7 +113,7 @@ function MainFunction([String]$Command, [String]$PatchedFileName) {
 
     # Hash
     if (IsSet -Elem $GamePatch.Hash)   { $global:CheckHashSum = $GamePatch.Hash }
-    else                                { $global:CheckHashSum = $GameType.Hash }
+    else                               { $global:CheckHashSum = $GameType.Hash }
 
     # Output
     if (!(IsSet -Elem $PatchedFileName)) { $PatchedFileName = "_patched" }
@@ -150,11 +150,11 @@ function MainFunction([String]$Command, [String]$PatchedFileName) {
     }
 
     # GameID / Title
-    if ($InputCustomGameIDCheckbox.Checked) {
-        if ($InputCustomTitleTextBox.TextLength -gt 0)    { $Header[0 + [int]$IsWiiVC * 2] = $InputCustomTitleTextBox.Text }
+    if ($CustomHeaderCheckbox.Checked) {
+        if ($CustomTitleTextBox.TextLength -gt 0)    { $Header[0 + [int]$IsWiiVC * 2] = $CustomTitleTextBox.Text }
 
         if (!(IsSet -Elem $GamePatch.languages[$Item].n64_gameID)) {
-            if ($InputCustomGameIDTextbox.TextLength -eq 4)   { $Header[1 + [int]$IsWiiVC * 2] = $InputCustomGameIDTextBox.Text }
+            if ($CustomGameIDTextbox.TextLength -eq 4)   { $Header[1 + [int]$IsWiiVC * 2] = $CustomGameIDTextBox.Text }
         }
     }
 
@@ -1855,16 +1855,12 @@ function RepackWADFile([String]$GameID) {
     # Repack the WAD using the new files.
     & $Files.tool.wadpacker $tik $tmd $cert $WadFile.Patched '-sign' '-i' $GameID
 
-    # If the patched file was created.
-    if (TestPath -LiteralPath $WadFile.Patched) {
-        # Play a sound when it is finished.
-        [Media.SystemSounds]::Beep.Play()
-  
-        # Set the status label.
-        UpdateStatusLabel -Text "Complete! File successfully patched."
+    # If the patched file was created or could not be created.
+    if (TestPath -LiteralPath $WadFile.Patched) { 
+        # [System.Media.SystemSounds]::Beep.Play()                       # Play a sound when it is finished.
+        UpdateStatusLabel -Text "Complete! File successfully patched."   # Set the status label.
     }
-    # If the patched file failed to be created, set the status label to failed.
-    UpdateStatusLabel -Text "Failed! Patched Wii VC WAD was not created."
+    else { UpdateStatusLabel -Text "Failed! Patched Wii VC WAD was not created." }
 
     # Remove the folder the extracted files were in, and delete files
     RemovePath -LiteralPath $WadFile.Folder
@@ -2250,9 +2246,9 @@ function CreateMainDialog() {
 
 
 
-    ##################
-    # Custom Game ID #
-    ##################
+    #################
+    # Custom Header #
+    #################
 
     # Create the panel that holds the Custom GameID.
     $global:CustomGameIDPanel = CreatePanel -Width 590 -Height 50 -AddTo $MainDialog
@@ -2261,11 +2257,11 @@ function CreateMainDialog() {
     $CustomGameIDGroup = CreateGroupBox -Width $CustomGameIDPanel.Width -Height $CustomGameIDPanel.Height -Name "CustomGameID" -Text "Custom Channel Title and GameID" -AddTo $CustomGameIDPanel
 
     # Create a label to show Custom Channel Title description.
-    $global:InputCustomTitleTextBoxLabel = CreateLabel -X 8 -Y 22 -Width 75 -Height 15 -Text "Channel Title:" -AddTo $CustomGameIDGroup
+    $global:CustomTitleTextBoxLabel = CreateLabel -X 8 -Y 22 -Width 75 -Height 15 -Text "Channel Title:" -AddTo $CustomGameIDGroup
 
     # Create a textbox to display the selected Custom Channel Title.
-    $global:InputCustomTitleTextBox = CreateTextBox -X 85 -Y 20 -Width 260 -Height 22 -Name "CustomGameID" -AddTo $CustomGameIDGroup
-    $InputCustomTitleTextBox.Add_TextChanged({
+    $global:CustomTitleTextBox = CreateTextBox -X 85 -Y 20 -Width 260 -Height 22 -Name "CustomTitle" -AddTo $CustomGameIDGroup
+    $CustomTitleTextBox.Add_TextChanged({
         if ($this.Text -match "[^a-z 0-9 \: \- \( \) \']") {
             $cursorPos = $this.SelectionStart
             $this.Text = $this.Text -replace "[^a-z 0-9 \: \- \( \) \']",''
@@ -2275,12 +2271,12 @@ function CreateMainDialog() {
     })
 
     # Create a label to show Custom GameID description
-    $global:InputCustomGameIDTextBoxLabel = CreateLabel -X 370 -Y 22 -Width 50 -Height 15 -Text "GameID:" -AddTo $CustomGameIDGroup
+    $CustomGameIDTextBoxLabel = CreateLabel -X 370 -Y 22 -Width 50 -Height 15 -Text "GameID:" -AddTo $CustomGameIDGroup
 
     # Create a textbox to display the selected Custom GameID.
-    $global:InputCustomGameIDTextBox = CreateTextBox -X 425 -Y 20 -Width 55 -Height 22 -Name "CustomGameID" -AddTo $CustomGameIDGroup
-    $InputCustomGameIDTextBox.MaxLength = 4
-    $InputCustomGameIDTextBox.Add_TextChanged({
+    $global:CustomGameIDTextBox = CreateTextBox -X 425 -Y 20 -Width 55 -Height 22 -Name "CustomGameID" -AddTo $CustomGameIDGroup
+    $CustomGameIDTextBox.MaxLength = 4
+    $CustomGameIDTextBox.Add_TextChanged({
         if ($this.Text -cmatch "[^A-Z 0-9]") {
             $this.Text = $this.Text.ToUpper() -replace "[^A-Z 0-9]",''
             $this.Select($this.Text.Length, $this.Text.Length)
@@ -2288,10 +2284,10 @@ function CreateMainDialog() {
     })
 
     # Create a label to show Custom GameID description
-    $global:InputCustomGameIDCheckboxLabel = CreateLabel -X 510 -Y 22 -Width 50 -Height 15 -Text "Enable:" -AddTo $CustomGameIDGroup
+    $CustomHeaderLabel = CreateLabel -X 510 -Y 22 -Width 50 -Height 15 -Text "Enable:" -AddTo $CustomGameIDGroup
 
     # Create a checkbox to allow Custom Channel Title & GameID.
-    $global:InputCustomGameIDCheckbox = CreateCheckBox -X 560 -Y 20 -Width 20 -Height 20 -Name "CustomGameID" -AddTo $CustomGameIDGroup
+    $global:CustomHeaderCheckbox = CreateCheckBox -X 560 -Y 20 -Width 20 -Height 20 -Name "CustomHeader" -AddTo $CustomGameIDGroup
 
 
 
@@ -2538,14 +2534,14 @@ function ChangePatchPanel() {
 function SetMainScreenSize() {
     
     if ($IsWiiVC) {
-        $InputCustomTitleTextBoxLabel.Text = "Channel Title:"
+        $CustomTitleTextBoxLabel.Text = "Channel Title:"
         if ($GameType.patches)   { $PatchVCPanel.Location = New-Object System.Drawing.Size(10, ($PatchPanel.Bottom + 5)) }
         else                     { $PatchVCPanel.Location = New-Object System.Drawing.Size(10, ($CurrentGamePanel.Bottom + 5)) }
         $MiscPanel.Location = New-Object System.Drawing.Size(10, ($PatchVCPanel.Bottom + 5))
     }
 
     else {
-        $InputCustomTitleTextBoxLabel.Text = "Game Title:"
+        $CustomTitleTextBoxLabel.Text = "Game Title:"
         if ($GameType.patches)   { $MiscPanel.Location = New-Object System.Drawing.Size(10, ($PatchPanel.Bottom + 5)) }
         else                     { $MiscPanel.Location = New-Object System.Drawing.Size(10, ($CustomGameIDPanel.Bottom + 5)) }
     }
@@ -2659,17 +2655,17 @@ function SetWiiVCMode([Boolean]$Enable) {
 
     if ($IsWiiVC) {
         EnablePatchButtons -Enable (IsSet -Elem $Files.WAD)
-        $InputCustomTitleTextBox.Text = $GameType.wii_title
-        $InputCustomGameIDTextBox.Text =  $GameType.wii_gameID
+        $CustomTitleTextBox.Text = $GameType.wii_title
+        $CustomGameIDTextBox.Text =  $GameType.wii_gameID
     }
     else {
         EnablePatchButtons -Enable (IsSet -Elem $Files.Z64)
-        $InputCustomTitleTextBox.Text = $GameType.n64_title
-        $InputCustomGameIDTextBox.Text =  $GameType.n64_gameID
+        $CustomTitleTextBox.Text = $GameType.n64_title
+        $CustomGameIDTextBox.Text =  $GameType.n64_gameID
     }
     
     $InjectROMButton.Visible = $PatchVCPanel.Visible = $IsWiiVC
-    $InputCustomTitleTextBox.MaxLength = $GameTitleLength[[uint32]$IsWiiVC]
+    $CustomTitleTextBox.MaxLength = $GameTitleLength[[uint32]$IsWiiVC]
     $ClearWADPathButton.Enabled = (IsSet -Elem $Files.WAD -MinLength 1)
 
     SetMainScreenSize
@@ -3265,6 +3261,17 @@ function CreateTextBox([int]$X, [int]$Y, [int]$Width, [int]$Height, [String]$Nam
         $TextBox.TabStop = $False
     }
     
+    if (IsSet -Elem $TextBox.Name) {
+        if ($Game) {
+            if (IsSet $Settings[$GameType.mode][$TextBox.Name])   { $TextBox.Text = $Settings[$GameType.mode][$TextBox.Name] }
+            else                                                  { $Settings[$GameType.mode][$TextBox.Name] = "" }
+        }
+        else {
+            if (IsSet $Settings["Core"][$TextBox.Name])           { $TextBox.Text = $Settings["Core"][$TextBox.Name] }
+            else                                                  { $Settings["Core"][$TextBox.Name] = "" }
+        }
+    }
+
     $TextBox.Add_Click({ $this.SelectionLength = 0 })
 
     return $TextBox
@@ -3284,12 +3291,12 @@ function CreateComboBox([int]$X, [int]$Y, [int]$Width, [int]$Height, [String]$Na
         if (IsSet -Elem $ComboBox.Name) {
             if ($Game) {
                 if (IsSet $Settings[$GameType.mode][$ComboBox.Name])   { $ComboBox.SelectedIndex = $Settings[$GameType.mode][$ComboBox.Name] }
-                else                                                    { $Settings[$GameType.mode][$ComboBox.Name] = 0 }
+                else                                                   { $Settings[$GameType.mode][$ComboBox.Name] = 0 }
                 $ComboBox.Add_SelectedIndexChanged({ $Settings[$GameType.mode][$this.Name] = $this.SelectedIndex })
             }
             else {
-                if (IsSet $Settings["Core"][$ComboBox.Name])            { $ComboBox.SelectedIndex = $Settings["Core"][$ComboBox.Name] }
-                else                                                    { $Settings["Core"][$ComboBox.Name] = "False" }
+                if (IsSet $Settings["Core"][$ComboBox.Name])           { $ComboBox.SelectedIndex = $Settings["Core"][$ComboBox.Name] }
+                else                                                   { $Settings["Core"][$ComboBox.Name] = 0 }
                 $ComboBox.Add_SelectedIndexChanged({ $Settings["Core"][$this.Name] = $this.SelectedIndex })
             }
 
@@ -3530,9 +3537,17 @@ CreateCreditsDialog
 ChangeGamesList
 GetFilePaths
 
+# Restore Last Custom Title & GameID
+if ($Settings["Core"]["CustomHeader"] -eq "True") {
+    if (IsSet -Elem $Settings["Core"]["CustomGameID"])   { $CustomGameIDTextBox.Text = $Settings["Core"]["CustomGameID"] }
+    if (IsSet -Elem $Settings["Core"]["CustomTitle"])    { $CustomTitleTextBox.Text  = $Settings["Core"]["CustomTitle"] }
+}
+
 # Show the dialog to the user.
 $MainDialog.ShowDialog() | Out-Null
 
 # Exit
+$Settings["Core"]["CustomGameID"] = $CustomGameIDTextBox.Text
+$Settings["Core"]["CustomTitle"]  = $CustomTitleTextBox.Text
 Out-IniFile -FilePath $Files.settings -InputObject $Settings | Out-Null
 Exit
