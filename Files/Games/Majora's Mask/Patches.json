@@ -14,13 +14,13 @@
 		"title" : "Polish",
 		"wii_title" : "Zelda: Majora's (POL)",
 		"wii_gameID" : "NARO",
-		"file" : "\\Decompressed\\pol.bps",
+		"file" : "\\Decompressed\\pol.ppf",
 		"output" : "_polish_patched"
 	}, {
 		"title" : "Russian",
 		"wii_title" : "Zelda: Majora's (RUS)",
 		"wii_gameID" : "NARR",
-		"file" : "\\Decompressed\\rus.bps",
+		"file" : "\\Decompressed\\rus.ppf",
 		"output" : "_russian_patched"
 	} ],
 	"tooltip" : "The regular Majora's Mask experience{0}With support for languages, redux and additional options{0}- Supported: Rev 0 (US)"

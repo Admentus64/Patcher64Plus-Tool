@@ -1,9 +1,5 @@
 --- Thanks to my past Patreons --
-Raim
-Gicrax
-Crypto Logiq
-Moons / Luke
-Ronald
+- Raim, Gicrax, Crypto Logiq, Moons (Luke), Ronald
 
 --- Patcher64+ Tool ---
 - Admentus (Testing and Coding of Patcher64+ Tool)

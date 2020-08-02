@@ -36,6 +36,8 @@ F7C52568A31AADF26E14DC2B6416B2ED
 - NAC2 = Ocarina of Time: The Fate of the Bombiwa
 - NAC3 = Ocarina of Time: Nimpize Adventure
 - NAC4 = Ocarina of Time Puzzling
+- NAC5 = Ocarina of Time: The Missing Link
+- NAC6 = Ocarina of Time: Master of Time
 
 - NAR0 = Majora's Mask REDUX
 - NAR1 = Majora's Mask: Masked Quest
@@ -54,6 +56,7 @@ F7C52568A31AADF26E14DC2B6416B2ED
 - NACO = Ocarina of Time (Polish)
 - NACR = Ocarina of Time (Russian)
 - NACC = Ocarina of Time (Chinese)
+
 - NARO = Majora's Mask (Polish)
 - NARR = Majora's Mask (Russian)
 

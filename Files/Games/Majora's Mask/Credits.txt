@@ -1,27 +1,32 @@
 --- REDUX ---
-- Hacking: Maroc
-- Original Hacking: Saneki
+- Hacking:			Maroc
+- Original Hacking:			Saneki
 
 --- Options ---
-- 16:9 Backgrounds & Textures: GhostlyDark & ShadowOne333
-- Zora Physics: ShadowOne333
-- Correct Rupee Colors: GhostlyDark
-- Correct Romani Sign: ShadowOne333
-- Correct Comma: ShadowOne333
-- Correct Circus Mask: ShadowOne
-- Restore Title: ShadowOne333 & Garo-Mastah
-- Restore Skull Kid: ShadowOne333
-- Restore Palace Route: ShadowOne333
-- Restore Cow Nose Ring: ShadowOne333
-- 4th Piece of Heart Sound: ShadowOne333
-- Fix Goth Cutscene: ShadowOne333
-- Move Bomber Kid: ShadowOne333
-- Fix Mushroom Bottle: ShadowOne333 & ozidual
+- 16:9 Backgrounds & Textures:	GhostlyDark & ShadowOne333
+- Zora Physics:			ShadowOne333
+- Kokiri Tunic Color:			GhostlyDark
+- Correct Rupee Colors:		GhostlyDark
+- Restore Cow Nose Ring:		ShadowOne333
+- Restore Text:			ShadowOne333
+- Correct Romani Sign:		ShadowOne333
+- Correct Comma:			ShadowOne333
+- Correct Circus Mask:		ShadowOne
+- Restore Title:			ShadowOne333 & Garo-Mastah
+- Restore Skull Kid:			ShadowOne333
+- Restore Palace Route:		ShadowOne333
+- Restore Shop Music:		ShadowOne333
+- 4th Piece of Heart Sound:		ShadowOne333
+- Move Bomber Kid:			ShadowOne333
+- Set Capacity:			GhostlyDark
+- Fix Goth Cutscene:		ShadowOne333
+- Fix Mushroom Bottle:		ShadowOne333 & ozidual
+- Fix Southern Swamp:		ShadowOne333
 - Admentus (Scripting and Assistance of all Options)
 
 --- Translations ---
-- Polish: RPG (v1.1)
-- Russian: Zelda64rus (v2.0 Beta)
+- Polish:				RPG (v1.1)
+- Russian:				Zelda64rus (v2.0 Beta)
 
 --- Masked Quest ---
 - Garo-Mastah

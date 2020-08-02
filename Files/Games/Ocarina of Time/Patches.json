@@ -21,28 +21,38 @@
 		"title" : "Spanish",
 		"wii_title" : "Zelda: Ocarina (SPA)",
 		"wii_gameID" : "NACS",
-		"file" : "\\Decompressed\\spa.bps",
+		"file" : "\\Decompressed\\spa.ppf",
 		"output" : "_spanish_patched"
 	}, {
 		"title" : "Polish",
 		"wii_title" : "Zelda: Ocarina (POL)",
 		"wii_gameID" : "NACO",
-		"file" : "\\Decompressed\\pol.bps",
+		"file" : "\\Decompressed\\pol.ppf",
 		"output" : "_polish_patched"
 	}, {
 		"title" : "Russian",
 		"wii_title" : "Zelda: Ocarina (RUS)",
 		"wii_gameID" : "NACR",
-		"file" : "\\Decompressed\\rus.bps",
+		"file" : "\\Decompressed\\rus.ppf",
 		"output" : "_russian_patched"
 	}, {
 		"title" : "Chinese",
+		"n64_gameID" : "CZLJ",
 		"wii_title" : "Zelda: Ocarina (CHI)",
 		"wii_gameID" : "NACC",
-		"file" : "\\Decompressed\\chi.bps",
+		"file" : "\\Decompressed\\chi.ppf",
 		"output" : "_chinese_patched"
 	} ],
 	"tooltip" : "The regular Ocarina of Time experience{0}With support for languages, redux and additional options{0}- Supported: Rev 0 (US)"
+}, {
+	"title" : "The Legend of Zelda: The Missing Link",
+	"console" : "All",
+	"command" : "Force Expand Memory Force Downgrade",
+	"wii_title" : "Zelda: The Missing Link",
+	"wii_gameID" : "NAC5",
+	"file" : "\\Compressed\\the_missing_link.bps",
+	"output" : "_the_missing_link_patched",
+	"tooltip" : "A small-sized ROM hack in a completely new setting{0}- Supported: Rev 0 (US)"
 }, {
 	"title" : "The Legend of Zelda: Dawn & Dusk",
 	"console" : "All",
@@ -53,6 +63,15 @@
 	"output" : "_dawn_&_dusk_patched",
 	"hash" : "Dawn & Dusk",
 	"tooltip" : "A small-sized ROM hack in a completely new setting{0}- Supported: Rev 0 (US), Rev 1 (US) & Rev 2 (US)"
+}, {
+	"title" : "The Legend of Zelda: Master of Time",
+	"console" : "All",
+	"command" : "Force Downgrade",
+	"wii_title" : "Zelda: Master of Time",
+	"wii_gameID" : "NAC6",
+	"file" : "\\Compressed\\master_of_time.bps",
+	"output" : "_master_of_time_patched",
+	"tooltip" : "A small-sized ROM hack in a completely new setting{0}- Supported: Rev 0 (US)"
 }, {
 	"title" : "The Legend of Zelda: The Fate of the Bombiwa",
 	"console" : "All",
