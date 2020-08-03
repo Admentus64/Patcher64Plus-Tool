@@ -477,7 +477,9 @@ function CreateLanguagesContent() {
         $Languages.MQTextDialogueColors   = CreateReduxCheckBox    -Column 2 -Row 2 -AddTo $Languages.TextBox -Text "MQ Text Dialogue Colors" -ToolTip $ToolTip -Info "Set the Text Dialogue Colors to match Master Quest`n- Requires the Restore Text option" -Name "MQTextDialogueColors"
 
         #$Languages.FemalePronouns.Enabled = $Languages.MQTextDialogueColors.Enabled = $Languages.RestoreText.Checked
-        $Languages.RestoreText.Add_CheckedChanged({ $Languages.FemalePronouns.Enabled = $Languages.MQTextDialogueColors.Enabled = $this.checked })
+        #$Languages.RestoreText.Add_CheckedChanged({ $Languages.FemalePronouns.Enabled = $Languages.MQTextDialogueColors.Enabled = $this.checked })
+        $Languages.MQTextDialogueColors.Enabled = $Languages.RestoreText.Checked
+        $Languages.RestoreText.Add_CheckedChanged({ $Languages.MQTextDialogueColors.Enabled = $this.checked })
     }
 
     elseif ($GameType.mode -eq "Majora's Mask") {
