@@ -20,7 +20,11 @@ function CreateMainDialog() {
     $CurrentModeLabel.AutoSize = $True
 
     # Create a label to show current version.
-    $global:VersionLabel = CreateLabel -X 15 -Y 10 -Width 120 -Height 30 -Text ("Version: " + $Version + "`n(" + $VersionDate + ")") -Font $VCPatchFont -AddTo $MainDialog
+    $VersionLabel = CreateLabel -X 15 -Y 10 -Width 120 -Height 30 -Text ("Version: " + $Version + "`n(" + $VersionDate + ")") -Font $VCPatchFont -AddTo $MainDialog
+
+    # Create a checkbox with label for 64-bit support
+    $64BitLabel = CreateLabel -X ($MainDialog.Right - 100) -Y ($MainDialog.Top + 15) -Width 40 -Height 30 -Text "64-Bit:" -Font $VCPatchFont -AddTo $MainDialog
+    $global:64BitCheckbox = CreateCheckBox -X ($64BitLabel.Right + 10) -Y ($64BitLabel.Top - 2) -Width 20 -Height 20 -Checked $True -Name "64Bit" -AddTo $MainDialog
 
 
 

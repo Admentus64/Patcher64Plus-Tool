@@ -424,7 +424,6 @@ function GetFilePaths() {
     if (IsSet $Settings["Core"][$InputWADTextBox.Name]) {
         if (Test-Path -LiteralPath $Settings["Core"][$InputWADTextBox.Name] -PathType Leaf) {
             WADPath_Finish $InputWADTextBox -VarName $InputWADTextBox.Name -WADPath $Settings["Core"][$InputWADTextBox.Name]
-            return $True
         }
         else { $InputWADTextBox.Text = "Select or drag and drop your Virtual Console WAD file..." }
     }
@@ -432,21 +431,16 @@ function GetFilePaths() {
     if (IsSet $Settings["Core"][$InputROMTextBox.Name]) {
         if (Test-Path -LiteralPath $Settings["Core"][$InputROMTextBox.Name] -PathType Leaf) {
             Z64Path_Finish $InputROMTextBox -VarName $InputROMTextBox.Name -Z64Path $Settings["Core"][$InputROMTextBox.Name]
-            return $True
         }
         else { $InputROMTextBox.Text = "Select or drag and drop your Z64, N64 or V64 ROM..." }
     }
 
     if (IsSet $Settings["Core"][$InputBPSTextBox.Name]) {
-        
         if (Test-Path -LiteralPath $Settings["Core"][$InputBPSTextBox.Name] -PathType Leaf) {	
             BPSPath_Finish $InputBPSTextBox -VarName $InputBPSTextBox.Name -BPSPath $Settings["Core"][$InputBPSTextBox.Name]
-            return $True
         }
         else { $InputBPSTextBox.Text = "Select or drag and drop your BPS, IPS, Xdelta or VCDiff Patch File..." }
     }
-
-    return $False
 
 }
 

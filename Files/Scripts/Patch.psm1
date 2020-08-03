@@ -732,7 +732,8 @@ function DecompressROM([Boolean]$Decompress) {
     UpdateStatusLabel -Text ("Decompressing " + $GameType.mode + " ROM...")
 
     if ($GameType.decompress -eq 1) {
-        & $Files.tool.TabExt $Files.ROM | Out-Host
+        if (IsChecked -Elem $64BitCheckbox)   { & $Files.tool.TabExt $Files.ROM | Out-Host }
+        else                                  { & $Files.tool.TabExt32 $Files.ROM | Out-Host }
         & $Files.tool.ndec $Files.ROM $Files.decompressedROM | Out-Host
         if ($Settings.Debug.CreateBPS -eq $True) { Copy-Item -LiteralPath $Files.decompressedROM -Destination $Files.cleanDecompressedROM -Force } 
     }
@@ -764,7 +765,8 @@ function CompressROM([Boolean]$Decompress) {
     if ($GameType.decompress -eq 1) {
         if ($Settings.Debug.KeepDecompressed -eq $True)   { Copy-Item -LiteralPath $Files.decompressedROM -Destination $Files.debugROM -Force }
         RemoveFile -LiteralPath $Files.archive
-        & $Files.tool.Compress $Files.decompressedROM $Files.patchedROM | Out-Null
+        if (IsChecked -Elem $64BitCheckbox)   { & $Files.tool.Compress $Files.decompressedROM $Files.patchedROM | Out-Null }
+        else                                  { & $Files.tool.Compress32 $Files.decompressedROM $Files.patchedROM | Out-Null }
     }
     elseif ($GameType.decompress -eq 2) { Move-Item -LiteralPath $Files.decompressedROM -Destination $Files.patchedROM -Force }
 

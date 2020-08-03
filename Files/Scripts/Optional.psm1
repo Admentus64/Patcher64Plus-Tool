@@ -3,118 +3,118 @@ function PatchByteOptionsOoT() {
     # HERO MODE #
 
     if (IsText -Elem $Options.Damage -Text "OKHO Mode" -Enabled) {
-        ChangeBytesGame -Offset "AE8073" -Values @("09", "04") -Interval 16
-        ChangeBytesGame -Offset "AE8096" -Values @("82", "00")
-        ChangeBytesGame -Offset "AE8099" -Values @("00", "00", "00")
+        ChangeBytes -Offset "AE8073" -Values @("09", "04") -Interval 16
+        ChangeBytes -Offset "AE8096" -Values @("82", "00")
+        ChangeBytes -Offset "AE8099" -Values @("00", "00", "00")
     }
     elseif ( (IsText -Elem $Options.Damage -Text "1x Damage" -Enabled -Not) -or (IsText -Elem $Options.Recovery -Text "1x Recovery" -Enabled -Not) ) {
-        ChangeBytesGame -Offset "AE8073" -Values @("09", "04") -Interval 16
+        ChangeBytes -Offset "AE8073" -Values @("09", "04") -Interval 16
         if (IsText -Elem $Options.Recovery -Text "1x Recovery" -Enabled) {                
-            if (IsText -Elem $Options.Damage -Text "2x Damage" -Enabled)       { ChangeBytesGame -Offset "AE8096" -Values @("80", "40") }
-            elseif (IsText -Elem $Options.Damage -Text "4x Damage" -Enabled)   { ChangeBytesGame -Offset "AE8096" -Values @("80", "80") }
-            elseif (IsText -Elem $Options.Damage -Text "8x Damage" -Enabled)   { ChangeBytesGame -Offset "AE8096" -Values @("80", "C0") }
-        ChangeBytesGame -Offset "AE8099" -Values @("00", "00", "00")
+            if (IsText -Elem $Options.Damage -Text "2x Damage" -Enabled)       { ChangeBytes -Offset "AE8096" -Values @("80", "40") }
+            elseif (IsText -Elem $Options.Damage -Text "4x Damage" -Enabled)   { ChangeBytes -Offset "AE8096" -Values @("80", "80") }
+            elseif (IsText -Elem $Options.Damage -Text "8x Damage" -Enabled)   { ChangeBytes -Offset "AE8096" -Values @("80", "C0") }
+        ChangeBytes -Offset "AE8099" -Values @("00", "00", "00")
         }
         elseif (IsText -Elem $Options.Recovery -Text "1/2x Recovery" -Enabled) {               
-            if (IsText -Elem $Options.Damage -Text "1x Damage" -Enabled)       { ChangeBytesGame -Offset "AE8096" -Values @("80", "40") }
-            elseif (IsText -Elem $Options.Damage -Text "2x Damage" -Enabled)   { ChangeBytesGame -Offset "AE8096" -Values @("80", "80") }
-            elseif (IsText -Elem $Options.Damage -Text "4x Damage" -Enabled)   { ChangeBytesGame -Offset "AE8096" -Values @("80", "C0") }
-            elseif (IsText -Elem $Options.Damage -Text "8x Damage" -Enabled)   { ChangeBytesGame -Offset "AE8096" -Values @("81", "00") }
-        ChangeBytesGame -Offset "AE8099" -Values @("10", "80", "43")
+            if (IsText -Elem $Options.Damage -Text "1x Damage" -Enabled)       { ChangeBytes -Offset "AE8096" -Values @("80", "40") }
+            elseif (IsText -Elem $Options.Damage -Text "2x Damage" -Enabled)   { ChangeBytes -Offset "AE8096" -Values @("80", "80") }
+            elseif (IsText -Elem $Options.Damage -Text "4x Damage" -Enabled)   { ChangeBytes -Offset "AE8096" -Values @("80", "C0") }
+            elseif (IsText -Elem $Options.Damage -Text "8x Damage" -Enabled)   { ChangeBytes -Offset "AE8096" -Values @("81", "00") }
+        ChangeBytes -Offset "AE8099" -Values @("10", "80", "43")
         }
         elseif (IsText -Elem $Options.Recovery -Text "1/2x Recovery" -Enabled) {                
-            if (IsText -Elem $Options.Damage -Text "1x Damage" -Enabled)       { ChangeBytesGame -Offset "AE8096" -Values @("80", "80") }
-            elseif (IsText -Elem $Options.Damage -Text "2x Damage" -Enabled)   { ChangeBytesGame -Offset "AE8096" -Values @("80", "C0") }
-            elseif (IsText -Elem $Options.Damage -Text "4x Damage" -Enabled)   { ChangeBytesGame -Offset "AE8096" -Values @("81", "00") }
-            elseif (IsText -Elem $Options.Damage -Text "8x Damage" -Enabled)   { ChangeBytesGame -Offset "AE8096" -Values @("81", "40") }
-        ChangeBytesGame -Offset "AE8099" -Values @("10", "80", "83")
+            if (IsText -Elem $Options.Damage -Text "1x Damage" -Enabled)       { ChangeBytes -Offset "AE8096" -Values @("80", "80") }
+            elseif (IsText -Elem $Options.Damage -Text "2x Damage" -Enabled)   { ChangeBytes -Offset "AE8096" -Values @("80", "C0") }
+            elseif (IsText -Elem $Options.Damage -Text "4x Damage" -Enabled)   { ChangeBytes -Offset "AE8096" -Values @("81", "00") }
+            elseif (IsText -Elem $Options.Damage -Text "8x Damage" -Enabled)   { ChangeBytes -Offset "AE8096" -Values @("81", "40") }
+        ChangeBytes -Offset "AE8099" -Values @("10", "80", "83")
 
         }
         elseif (IsText -Elem $Options.Recovery -Text "1/2x Recovery" -Enabled) {                
-            if (IsText -Elem $Options.Damage -Text "1x Damage" -Enabled)       { ChangeBytesGame -Offset "AE8096" -Values @("81", "40") }
-            elseif (IsText -Elem $Options.Damage -Text "2x Damage" -Enabled)   { ChangeBytesGame -Offset "AE8096" -Values @("81", "80") }
-            elseif (IsText -Elem $Options.Damage -Text "4x Damage" -Enabled)   { ChangeBytesGame -Offset "AE8096" -Values @("81", "C0") }
-            elseif (IsText -Elem $Options.Damage -Text "8x Damage" -Enabled)   { ChangeBytesGame -Offset "AE8096" -Values @("82", "00") }
-        ChangeBytesGame -Offset "AE8099" -Values @("10", "81", "43")
+            if (IsText -Elem $Options.Damage -Text "1x Damage" -Enabled)       { ChangeBytes -Offset "AE8096" -Values @("81", "40") }
+            elseif (IsText -Elem $Options.Damage -Text "2x Damage" -Enabled)   { ChangeBytes -Offset "AE8096" -Values @("81", "80") }
+            elseif (IsText -Elem $Options.Damage -Text "4x Damage" -Enabled)   { ChangeBytes -Offset "AE8096" -Values @("81", "C0") }
+            elseif (IsText -Elem $Options.Damage -Text "8x Damage" -Enabled)   { ChangeBytes -Offset "AE8096" -Values @("82", "00") }
+        ChangeBytes -Offset "AE8099" -Values @("10", "81", "43")
         }
     }
 
     <#
     if (IsText -Elem $Options.BossHP -Text "2x Boss HP" -Enabled) {
-        ChangeBytesGame -Offset "C44F2B" -Values @("14") # Gohma           0xC44C30 -> 0xC4ABB0 (Length: 0x5F80) (ovl_Boss_Goma) (HP: 0A) (Mass: FF)
+        ChangeBytes -Offset "C44F2B" -Values @("14") # Gohma           0xC44C30 -> 0xC4ABB0 (Length: 0x5F80) (ovl_Boss_Goma) (HP: 0A) (Mass: FF)
 
-        ChangeBytesGame -Offset "C3B9FF" -Values @("18") # King Dodongo    0xC3B150 -> 0xC44C30 (Length: 0x9AE0) (ovl_Boss_Dodongo) (HP: 0C) (Mass: 00)
+        ChangeBytes -Offset "C3B9FF" -Values @("18") # King Dodongo    0xC3B150 -> 0xC44C30 (Length: 0x9AE0) (ovl_Boss_Dodongo) (HP: 0C) (Mass: 00)
 
-        # ChangeBytesGame -Offset "" -Values @("08") # Barinade            0xD22360 -> 0xD30B50 (Length: 0xE7F0)(ovl_Boss_Va) (HP: 04 -> 03 -> 03) (Mass: 00)
-        # ChangeBytesGame -Offset "" -Values @("06") # Barinade        
+        # ChangeBytes -Offset "" -Values @("08") # Barinade            0xD22360 -> 0xD30B50 (Length: 0xE7F0)(ovl_Boss_Va) (HP: 04 -> 03 -> 03) (Mass: 00)
+        # ChangeBytes -Offset "" -Values @("06") # Barinade        
 
-        ChangeBytesGame -Offset "C91F8F" -Values @("3C") # Phantom Ganon   0xC91AD0 -> 0xC96840  (Length: 0x4D70) (ovl_Boss_Ganondrof) (HP: 1E -> 18) (Mass: 32)
+        ChangeBytes -Offset "C91F8F" -Values @("3C") # Phantom Ganon   0xC91AD0 -> 0xC96840  (Length: 0x4D70) (ovl_Boss_Ganondrof) (HP: 1E -> 18) (Mass: 32)
 
-        #ChangeBytesGame -Offset "C91B99" -Values @("1D") # Phantom Ganon 2A
-        #ChangeBytesGame -Offset "C91C95" -Values @("1D") # Phantom Ganon
-        #ChangeBytesGame -Offset "C922C3" -Values @("1D") # Phantom Ganon
-        #ChangeBytesGame -Offset "C92399" -Values @("1D") # Phantom Ganon
-        #ChangeBytesGame -Offset "C9263F" -Values @("1D") # Phantom Ganon
-        #ChangeBytesGame -Offset "C9266B" -Values @("1D") # Phantom Ganon
-        #ChangeBytesGame -Offset "C92AE7" -Values @("1D") # Phantom Ganon
+        #ChangeBytes -Offset "C91B99" -Values @("1D") # Phantom Ganon 2A
+        #ChangeBytes -Offset "C91C95" -Values @("1D") # Phantom Ganon
+        #ChangeBytes -Offset "C922C3" -Values @("1D") # Phantom Ganon
+        #ChangeBytes -Offset "C92399" -Values @("1D") # Phantom Ganon
+        #ChangeBytes -Offset "C9263F" -Values @("1D") # Phantom Ganon
+        #ChangeBytes -Offset "C9266B" -Values @("1D") # Phantom Ganon
+        #ChangeBytes -Offset "C92AE7" -Values @("1D") # Phantom Ganon
 
-        #ChangeBytesGame -Offset "C91BE1" -Values @("1D") # Phantom Ganon
-        #ChangeBytesGame -Offset "C91C4B" -Values @("1D") # Phantom Ganon
-        #ChangeBytesGame -Offset "C91C91" -Values @("1D") # Phantom Ganon
-        #ChangeBytesGame -Offset "C91CCD" -Values @("1D") # Phantom Ganon
-        #ChangeBytesGame -Offset "C91D2D" -Values @("1D") # Phantom Ganon
-        #ChangeBytesGame -Offset "C91D8D" -Values @("1D") # Phantom Ganon
-        #ChangeBytesGame -Offset "C91E9B" -Values @("1D") # Phantom Ganon
-        #ChangeBytesGame -Offset "C91F83" -Values @("1D") # Phantom Ganon
-        #ChangeBytesGame -Offset "C9200B" -Values @("1D") # Phantom Ganon
-        #ChangeBytesGame -Offset "C920EB" -Values @("1D") # Phantom Ganon
-        #ChangeBytesGame -Offset "C92123" -Values @("1D") # Phantom Ganon
-        #ChangeBytesGame -Offset "C92177" -Values @("1D") # Phantom Ganon
-        #ChangeBytesGame -Offset "C9219F" -Values @("1D") # Phantom Ganon
+        #ChangeBytes -Offset "C91BE1" -Values @("1D") # Phantom Ganon
+        #ChangeBytes -Offset "C91C4B" -Values @("1D") # Phantom Ganon
+        #ChangeBytes -Offset "C91C91" -Values @("1D") # Phantom Ganon
+        #ChangeBytes -Offset "C91CCD" -Values @("1D") # Phantom Ganon
+        #ChangeBytes -Offset "C91D2D" -Values @("1D") # Phantom Ganon
+        #ChangeBytes -Offset "C91D8D" -Values @("1D") # Phantom Ganon
+        #ChangeBytes -Offset "C91E9B" -Values @("1D") # Phantom Ganon
+        #ChangeBytes -Offset "C91F83" -Values @("1D") # Phantom Ganon
+        #ChangeBytes -Offset "C9200B" -Values @("1D") # Phantom Ganon
+        #ChangeBytes -Offset "C920EB" -Values @("1D") # Phantom Ganon
+        #ChangeBytes -Offset "C92123" -Values @("1D") # Phantom Ganon
+        #ChangeBytes -Offset "C92177" -Values @("1D") # Phantom Ganon
+        #ChangeBytes -Offset "C9219F" -Values @("1D") # Phantom Ganon
 
 
-        ChangeBytesGame -Offset "CE6D2F" -Values @("30") # Volvagia        0xCE65F0 -> 0xCED920 (Length: 0x7330) (ovl_Boss_Fd) (Has HP) (HP: 18) (Mass: 32)
+        ChangeBytes -Offset "CE6D2F" -Values @("30") # Volvagia        0xCE65F0 -> 0xCED920 (Length: 0x7330) (ovl_Boss_Fd) (Has HP) (HP: 18) (Mass: 32)
                                                          # Volvagia        0xD04790 -> 0xD084C0 (Length:0x3D30) (ovl_Boss_Fd2) (Has No HP, Forwards HP to Flying)
 
-        ChangeBytesGame -Offset "D3B4A7" -Values @("28") # Morpha          0xD3ADF0 -> 0xD46390 (Length: 0xB5A0) (ovl_Boss_Mo) (HP: 14) (Mass: 00)
+        ChangeBytes -Offset "D3B4A7" -Values @("28") # Morpha          0xD3ADF0 -> 0xD46390 (Length: 0xB5A0) (ovl_Boss_Mo) (HP: 14) (Mass: 00)
 
-        # ChangeBytesGame -Offset "" -Values @("48") # Bongo Bongo         0xDA1660 -> 0xDADB80 (Length: 0xC520) (ovl_Boss_Sst) (HP: 24) (Mass: C8)
+        # ChangeBytes -Offset "" -Values @("48") # Bongo Bongo         0xDA1660 -> 0xDADB80 (Length: 0xC520) (ovl_Boss_Sst) (HP: 24) (Mass: C8)
 
-        # ChangeBytesGame -Offset "" -Values @("30") # Twinrova            0xD612E0 -> 0xD74360 (Length: 0x13080) (ovl_Boss_Tw) (HP: 18) (Mass: FF)
+        # ChangeBytes -Offset "" -Values @("30") # Twinrova            0xD612E0 -> 0xD74360 (Length: 0x13080) (ovl_Boss_Tw) (HP: 18) (Mass: FF)
 
-        # ChangeBytesGame -Offset "D7FDA3" -Values @("50") # Ganondorf     0xD7F3F0 -> 0xDA1660 (Length: 0x22270) (ovl_Boss_Ganon) (HP: 28) (Mass: 32)
+        # ChangeBytes -Offset "D7FDA3" -Values @("50") # Ganondorf     0xD7F3F0 -> 0xDA1660 (Length: 0x22270) (ovl_Boss_Ganon) (HP: 28) (Mass: 32)
 
-        # ChangeBytesGame -Offset "" -Values @("3C") # Ganon               0xE826C0 -> 0xE939B0 (Length: 0x112F0) (ovl_Boss_Ganon2) (HP: 1E) (Mass: FF)
+        # ChangeBytes -Offset "" -Values @("3C") # Ganon               0xE826C0 -> 0xE939B0 (Length: 0x112F0) (ovl_Boss_Ganon2) (HP: 1E) (Mass: FF)
     }
     elseif (IsText -Elem $Options.BossHP -Text "3x Boss HP" -Enabled) {
-        ChangeBytesGame -Offset "C44F2B" -Values @("1E") # Gohma           0xC44C30 -> 0xC4ABB0 (Length: 0x5F80) (ovl_Boss_Goma) (HP: 0A) (Mass: FF)
+        ChangeBytes -Offset "C44F2B" -Values @("1E") # Gohma           0xC44C30 -> 0xC4ABB0 (Length: 0x5F80) (ovl_Boss_Goma) (HP: 0A) (Mass: FF)
 
-        ChangeBytesGame -Offset "C3B9FF" -Values @("24") # King Dodongo    0xC3B150 -> 0xC44C30 (Length: 0x9AE0) (ovl_Boss_Dodongo) (HP: 0C) (Mass: 00)
+        ChangeBytes -Offset "C3B9FF" -Values @("24") # King Dodongo    0xC3B150 -> 0xC44C30 (Length: 0x9AE0) (ovl_Boss_Dodongo) (HP: 0C) (Mass: 00)
 
-        # ChangeBytesGame -Offset "" -Values @("0C") # Barinade            0xD22360 -> 0xD30B50 (Length: 0xE7F0)(ovl_Boss_Va) (HP: 04 -> 03 -> 03) (Mass: 00)
-        # ChangeBytesGame -Offset "" -Values @("09") # Barinade        
+        # ChangeBytes -Offset "" -Values @("0C") # Barinade            0xD22360 -> 0xD30B50 (Length: 0xE7F0)(ovl_Boss_Va) (HP: 04 -> 03 -> 03) (Mass: 00)
+        # ChangeBytes -Offset "" -Values @("09") # Barinade        
 
-        ChangeBytesGame -Offset "C91F8F" -Values @("5A") # Phantom Ganon   0xC91AD0 -> 0xC96840  (Length: 0x4D70) (ovl_Boss_Ganondrof) (HP: 1E -> 18) (Mass: 32)
+        ChangeBytes -Offset "C91F8F" -Values @("5A") # Phantom Ganon   0xC91AD0 -> 0xC96840  (Length: 0x4D70) (ovl_Boss_Ganondrof) (HP: 1E -> 18) (Mass: 32)
 
-        ChangeBytesGame -Offset "CE6D2F" -Values @("48") # Volvagia        0xCE65F0 -> 0xCED920 (Length: 0x7330) (ovl_Boss_Fd) (Has HP) (HP: 18) (Mass: 32)
+        ChangeBytes -Offset "CE6D2F" -Values @("48") # Volvagia        0xCE65F0 -> 0xCED920 (Length: 0x7330) (ovl_Boss_Fd) (Has HP) (HP: 18) (Mass: 32)
                                                          # Volvagia        0xD04790 -> 0xD084C0 (Length:0x3D30) (ovl_Boss_Fd2) (Has No HP, Forwards HP to Flying)
 
-        ChangeBytesGame -Offset "D3B4A7" -Values @("3C") # Morpha          0xD3ADF0 -> 0xD46390 (Length: 0xB5A0) (ovl_Boss_Mo) (HP: 14) (Mass: 00)
+        ChangeBytes -Offset "D3B4A7" -Values @("3C") # Morpha          0xD3ADF0 -> 0xD46390 (Length: 0xB5A0) (ovl_Boss_Mo) (HP: 14) (Mass: 00)
 
-        # ChangeBytesGame -Offset "" -Values @("6C") # Bongo Bongo         0xDA1660 -> 0xDADB80 (Length: 0xC520) (ovl_Boss_Sst) (HP: 24) (Mass: C8)
+        # ChangeBytes -Offset "" -Values @("6C") # Bongo Bongo         0xDA1660 -> 0xDADB80 (Length: 0xC520) (ovl_Boss_Sst) (HP: 24) (Mass: C8)
 
-        # ChangeBytesGame -Offset "" -Values @("48") # Twinrova            0xD612E0 -> 0xD74360 (Length: 0x13080) (ovl_Boss_Tw) (HP: 18) (Mass: FF)
+        # ChangeBytes -Offset "" -Values @("48") # Twinrova            0xD612E0 -> 0xD74360 (Length: 0x13080) (ovl_Boss_Tw) (HP: 18) (Mass: FF)
 
-        # ChangeBytesGame -Offset "D7FDA3" -Values @("78") # Ganondorf     0xD7F3F0 -> 0xDA1660 (Length: 0x22270) (ovl_Boss_Ganon) (HP: 28) (Mass: 32)
+        # ChangeBytes -Offset "D7FDA3" -Values @("78") # Ganondorf     0xD7F3F0 -> 0xDA1660 (Length: 0x22270) (ovl_Boss_Ganon) (HP: 28) (Mass: 32)
 
-        # ChangeBytesGame -Offset "" -Values @("5A") # Ganon               0xE826C0 -> 0xE939B0 (Length: 0x112F0) (ovl_Boss_Ganon2) (HP: 1E) (Mass: FF)
+        # ChangeBytes -Offset "" -Values @("5A") # Ganon               0xE826C0 -> 0xE939B0 (Length: 0x112F0) (ovl_Boss_Ganon2) (HP: 1E) (Mass: FF)
     }
 
     if (IsText -Elem $Options.MonsterHP -Text "2x Monster HP" -Enabled) {
-        ChangeBytesGame -Offset "BFADC5" -Values("14") # Stalfos
+        ChangeBytes -Offset "BFADC5" -Values("14") # Stalfos
     }
     elseif (IsText -Elem $Options.MonsterHP -Text "3x Monster HP" -Enabled) {
-        ChangeBytesGame -Offset "BFADC5" -Values("1E") # Stalfos
+        ChangeBytes -Offset "BFADC5" -Values("1E") # Stalfos
     }
     #>
 
@@ -122,159 +122,159 @@ function PatchByteOptionsOoT() {
 
     # GRAPHICS #
 
-    if (IsChecked -Elem $Options.WideScreen -Enabled)          { ChangeBytesGame -Offset "B08038" -Values @("3C", "07", "3F", "E3") }
+    if (IsChecked -Elem $Options.WideScreen -Enabled)          { ChangeBytes -Offset "B08038" -Values @("3C", "07", "3F", "E3") }
     
     if (IsChecked -Elem $Options.WidescreenTextures -Enabled) {
-        PatchBytesGame -Offset "28E7FB0" -Length "3A57" -Texture -Patch "Backgrounds\Bazaar.jpeg"
-        PatchBytesGame -Offset "2DDB160" -Length "38B8" -Texture -Patch "Backgrounds\Bombchu Shop.jpeg"
-        PatchBytesGame -Offset "2D339D0" -Length "3934" -Texture -Patch "Backgrounds\Goron Shop.jpeg"
-        PatchBytesGame -Offset "2CD0DA0" -Length "37CF" -Texture -Patch "Backgrounds\Gravekeeper's Hut.jpeg"
-        PatchBytesGame -Offset "3412E40" -Length "4549" -Texture -Patch "Backgrounds\Happy Mask Shop.jpeg"
-        PatchBytesGame -Offset "2E30EF0" -Length "4313" -Texture -Patch "Backgrounds\Impa's House.jpeg"
-        PatchBytesGame -Offset "300CD80" -Length "43AC" -Texture -Patch "Backgrounds\Kakariko House 3.jpeg"
-        PatchBytesGame -Offset "2C8A7C0" -Length "31C6" -Texture -Patch "Backgrounds\Kakariko House.jpeg"
-        PatchBytesGame -Offset "2D89660" -Length "3E49" -Texture -Patch "Backgrounds\Kakariko Potion Shop.jpeg"
-        PatchBytesGame -Offset "268D430" -Length "5849" -Texture -Patch "Backgrounds\Kokiri Know-It-All-Brothers' House.jpeg"
-        PatchBytesGame -Offset "2592490" -Length "410F" -Texture -Patch "Backgrounds\Kokiri Shop.jpeg"
-        PatchBytesGame -Offset "2AA90C0" -Length "5D69" -Texture -Patch "Backgrounds\Kokiri Twins' House.jpeg"
-        PatchBytesGame -Offset "2560480" -Length "5B1E" -Texture -Patch "Backgrounds\Link's House.jpeg"
-        PatchBytesGame -Offset "2C5DA50" -Length "4B12" -Texture -Patch "Backgrounds\Lon Lon Ranch Stables.jpeg"
-        PatchBytesGame -Offset "2E037A0" -Length "3439" -Texture -Patch "Backgrounds\Mamamu Yan's House.jpeg"
-        PatchBytesGame -Offset "2946120" -Length "4554" -Texture -Patch "Backgrounds\Market Back Alley 1 Day.jpeg"
-        PatchBytesGame -Offset "2A2A110" -Length "2F31" -Texture -Patch "Backgrounds\Market Back Alley 1 Night.jpeg"
-        PatchBytesGame -Offset "296B920" -Length "41ED" -Texture -Patch "Backgrounds\Market Back Alley 2 Day.jpeg"
-        PatchBytesGame -Offset "2A4F910" -Length "3015" -Texture -Patch "Backgrounds\Market Back Alley 2 Night.jpeg"
-        PatchBytesGame -Offset "2991120" -Length "4AC4" -Texture -Patch "Backgrounds\Market Back Alley 3 Day.jpeg"
-        PatchBytesGame -Offset "2A75110" -Length "366B" -Texture -Patch "Backgrounds\Market Back Alley 3 Night.jpeg"
-        PatchBytesGame -Offset "2718370" -Length "62CE" -Texture -Patch "Backgrounds\Market Entrance Day.jpeg"
-        PatchBytesGame -Offset "2A02360" -Length "54CC" -Texture -Patch "Backgrounds\Market Entrance Future.jpeg"
-        PatchBytesGame -Offset "29DB370" -Length "4144" -Texture -Patch "Backgrounds\Market Entrance Night.jpeg"
-        PatchBytesGame -Offset "2DB1430" -Length "39DF" -Texture -Patch "Backgrounds\Market Potion Shop.jpeg"
-        PatchBytesGame -Offset "2F7B0F0" -Length "669B" -Texture -Patch "Backgrounds\Mido's House.jpeg"
-        PatchBytesGame -Offset "2FB60E0" -Length "5517" -Texture -Patch "Backgrounds\Saria's House.jpeg"
-        PatchBytesGame -Offset "307EAF0" -Length "428D" -Texture -Patch "Backgrounds\Temple of Time Entrance Day.jpeg"
-        PatchBytesGame -Offset "3142AF0" -Length "3222" -Texture -Patch "Backgrounds\Temple of Time Entrance Future.jpeg"
-        PatchBytesGame -Offset "30EDB10" -Length "2C02" -Texture -Patch "Backgrounds\Temple of Time Entrance Night.jpeg"
-        PatchBytesGame -Offset "30A42F0" -Length "5328" -Texture -Patch "Backgrounds\Temple of Time Path Day.jpeg"
-        PatchBytesGame -Offset "31682F0" -Length "3860" -Texture -Patch "Backgrounds\Temple of Time Path Future.jpeg"
-        PatchBytesGame -Offset "3113310" -Length "3BC7" -Texture -Patch "Backgrounds\Temple of Time Path Night.jpeg"
-        PatchBytesGame -Offset "2E65EA0" -Length "49E0" -Texture -Patch "Backgrounds\Tent.jpeg"
-        PatchBytesGame -Offset "2D5B9E0" -Length "4119" -Texture -Patch "Backgrounds\Zora Shop.jpeg"
-        PatchBytesGame -Offset "F21810"  -Length "1000" -Texture -Patch "Lens of Truth.bin"
+        PatchBytes -Offset "28E7FB0" -Length "3A57" -Texture -Patch "Backgrounds\Bazaar.jpeg"
+        PatchBytes -Offset "2DDB160" -Length "38B8" -Texture -Patch "Backgrounds\Bombchu Shop.jpeg"
+        PatchBytes -Offset "2D339D0" -Length "3934" -Texture -Patch "Backgrounds\Goron Shop.jpeg"
+        PatchBytes -Offset "2CD0DA0" -Length "37CF" -Texture -Patch "Backgrounds\Gravekeeper's Hut.jpeg"
+        PatchBytes -Offset "3412E40" -Length "4549" -Texture -Patch "Backgrounds\Happy Mask Shop.jpeg"
+        PatchBytes -Offset "2E30EF0" -Length "4313" -Texture -Patch "Backgrounds\Impa's House.jpeg"
+        PatchBytes -Offset "300CD80" -Length "43AC" -Texture -Patch "Backgrounds\Kakariko House 3.jpeg"
+        PatchBytes -Offset "2C8A7C0" -Length "31C6" -Texture -Patch "Backgrounds\Kakariko House.jpeg"
+        PatchBytes -Offset "2D89660" -Length "3E49" -Texture -Patch "Backgrounds\Kakariko Potion Shop.jpeg"
+        PatchBytes -Offset "268D430" -Length "5849" -Texture -Patch "Backgrounds\Kokiri Know-It-All-Brothers' House.jpeg"
+        PatchBytes -Offset "2592490" -Length "410F" -Texture -Patch "Backgrounds\Kokiri Shop.jpeg"
+        PatchBytes -Offset "2AA90C0" -Length "5D69" -Texture -Patch "Backgrounds\Kokiri Twins' House.jpeg"
+        PatchBytes -Offset "2560480" -Length "5B1E" -Texture -Patch "Backgrounds\Link's House.jpeg"
+        PatchBytes -Offset "2C5DA50" -Length "4B12" -Texture -Patch "Backgrounds\Lon Lon Ranch Stables.jpeg"
+        PatchBytes -Offset "2E037A0" -Length "3439" -Texture -Patch "Backgrounds\Mamamu Yan's House.jpeg"
+        PatchBytes -Offset "2946120" -Length "4554" -Texture -Patch "Backgrounds\Market Back Alley 1 Day.jpeg"
+        PatchBytes -Offset "2A2A110" -Length "2F31" -Texture -Patch "Backgrounds\Market Back Alley 1 Night.jpeg"
+        PatchBytes -Offset "296B920" -Length "41ED" -Texture -Patch "Backgrounds\Market Back Alley 2 Day.jpeg"
+        PatchBytes -Offset "2A4F910" -Length "3015" -Texture -Patch "Backgrounds\Market Back Alley 2 Night.jpeg"
+        PatchBytes -Offset "2991120" -Length "4AC4" -Texture -Patch "Backgrounds\Market Back Alley 3 Day.jpeg"
+        PatchBytes -Offset "2A75110" -Length "366B" -Texture -Patch "Backgrounds\Market Back Alley 3 Night.jpeg"
+        PatchBytes -Offset "2718370" -Length "62CE" -Texture -Patch "Backgrounds\Market Entrance Day.jpeg"
+        PatchBytes -Offset "2A02360" -Length "54CC" -Texture -Patch "Backgrounds\Market Entrance Future.jpeg"
+        PatchBytes -Offset "29DB370" -Length "4144" -Texture -Patch "Backgrounds\Market Entrance Night.jpeg"
+        PatchBytes -Offset "2DB1430" -Length "39DF" -Texture -Patch "Backgrounds\Market Potion Shop.jpeg"
+        PatchBytes -Offset "2F7B0F0" -Length "669B" -Texture -Patch "Backgrounds\Mido's House.jpeg"
+        PatchBytes -Offset "2FB60E0" -Length "5517" -Texture -Patch "Backgrounds\Saria's House.jpeg"
+        PatchBytes -Offset "307EAF0" -Length "428D" -Texture -Patch "Backgrounds\Temple of Time Entrance Day.jpeg"
+        PatchBytes -Offset "3142AF0" -Length "3222" -Texture -Patch "Backgrounds\Temple of Time Entrance Future.jpeg"
+        PatchBytes -Offset "30EDB10" -Length "2C02" -Texture -Patch "Backgrounds\Temple of Time Entrance Night.jpeg"
+        PatchBytes -Offset "30A42F0" -Length "5328" -Texture -Patch "Backgrounds\Temple of Time Path Day.jpeg"
+        PatchBytes -Offset "31682F0" -Length "3860" -Texture -Patch "Backgrounds\Temple of Time Path Future.jpeg"
+        PatchBytes -Offset "3113310" -Length "3BC7" -Texture -Patch "Backgrounds\Temple of Time Path Night.jpeg"
+        PatchBytes -Offset "2E65EA0" -Length "49E0" -Texture -Patch "Backgrounds\Tent.jpeg"
+        PatchBytes -Offset "2D5B9E0" -Length "4119" -Texture -Patch "Backgrounds\Zora Shop.jpeg"
+        PatchBytes -Offset "F21810"  -Length "1000" -Texture -Patch "Lens of Truth.bin"
     }
 
-    if (IsChecked -Elem $Options.ExtendedDraw -Enabled)        { ChangeBytesGame -Offset "A9A970" -Values @("00", "01") }
-    if (IsChecked -Elem $Options.ForceHiresModel -Enabled)     { ChangeBytesGame -Offset "BE608B" -Values @("00") }
+    if (IsChecked -Elem $Options.ExtendedDraw -Enabled)        { ChangeBytes -Offset "A9A970" -Values @("00", "01") }
+    if (IsChecked -Elem $Options.ForceHiresModel -Enabled)     { ChangeBytes -Offset "BE608B" -Values @("00") }
 
     if (IsChecked -Elem $Options.BlackBars -Enabled) {
-        ChangeBytesGame -Offset "B0F5A4" -Values @("00", "00","00", "00")
-        ChangeBytesGame -Offset "B0F5D4" -Values @("00", "00","00", "00")
-        ChangeBytesGame -Offset "B0F5E4" -Values @("00", "00","00", "00")
-        ChangeBytesGame -Offset "B0F680" -Values @("00", "00","00", "00")
-        ChangeBytesGame -Offset "B0F688" -Values @("00", "00","00", "00")
+        ChangeBytes -Offset "B0F5A4" -Values @("00", "00","00", "00")
+        ChangeBytes -Offset "B0F5D4" -Values @("00", "00","00", "00")
+        ChangeBytes -Offset "B0F5E4" -Values @("00", "00","00", "00")
+        ChangeBytes -Offset "B0F680" -Values @("00", "00","00", "00")
+        ChangeBytes -Offset "B0F688" -Values @("00", "00","00", "00")
     }
 
-    if (IsChecked -Elem $Options.DisableLowHPSound -Enabled)   { ChangeBytesGame -Offset "ADBA1A"  -Values @("00", "00") }
-    if (IsChecked -Elem $Options.DisableNaviPrompts -Enabled)  { ChangeBytesGame -Offset "DF8B84"  -Values @("00", "00", "00", "00") }
+    if (IsChecked -Elem $Options.DisableLowHPSound -Enabled)   { ChangeBytes -Offset "ADBA1A"  -Values @("00", "00") }
+    if (IsChecked -Elem $Options.DisableNaviPrompts -Enabled)  { ChangeBytes -Offset "DF8B84"  -Values @("00", "00", "00", "00") }
 
 
 
     # INTERFACE #
 
     if (IsChecked -Elem $Options.HudTextures -Enabled) {
-        PatchBytesGame  -Offset "1A3CA00" -Texture -Patch "HUD\MM HUD Button.bin"
-        PatchBytesGame  -Offset "1A3C100" -Texture -Patch "HUD\MM HUD Hearts.bin"
-        PatchBytesGame  -Offset "1A3DE00" -Texture -Patch "HUD\MM HUD Key & Rupee.bin"
+        PatchBytes  -Offset "1A3CA00" -Texture -Patch "HUD\MM HUD Button.bin"
+        PatchBytes  -Offset "1A3C100" -Texture -Patch "HUD\MM HUD Hearts.bin"
+        PatchBytes  -Offset "1A3DE00" -Texture -Patch "HUD\MM HUD Key & Rupee.bin"
     }
 
     if (IsChecked -Elem $Options.ButtonPositions -Enabled) {
-        ChangeBytesGame -Offset "0B57EEF" -Values @("A7")
-        ChangeBytesGame -Offset "0B57F03" -Values @("BE")
-        ChangeBytesGame -Offset "0B586A7" -Values @("17")
-        ChangeBytesGame -Offset "0B589EB" -Values @("9B")
+        ChangeBytes -Offset "0B57EEF" -Values @("A7")
+        ChangeBytes -Offset "0B57F03" -Values @("BE")
+        ChangeBytes -Offset "0B586A7" -Values @("17")
+        ChangeBytes -Offset "0B589EB" -Values @("9B")
     }
 
-    if (IsChecked -Elem $Options.ShowFileSelectIcons -Enabled) { PatchBytesGame  -Offset "BAF738" -Patch "File Select.bin" }
-    if (IsChecked -Elem $Options.ShowDPad -Enabled)            { ChangeBytesGame -Offset "348086E" -Values @("01") }
+    if (IsChecked -Elem $Options.ShowFileSelectIcons -Enabled) { PatchBytes  -Offset "BAF738" -Patch "File Select.bin" }
+    if (IsChecked -Elem $Options.ShowDPad -Enabled)            { ChangeBytes -Offset "348086E" -Values @("01") }
 
 
 
     # COLORS
 
     if (IsChecked -Elem $Options.EnableTunicColors -Enabled) {
-        ChangeBytesGame -Offset "B6DA38" -IsDec -Values @($Options.SetKokiriTunicColor.Color.R, $Options.SetKokiriTunicColor.Color.G, $Options.SetKokiriTunicColor.Color.B) # Kokiri Tunic
-        ChangeBytesGame -Offset "B6DA3B" -IsDec -Values @($Options.SetGoronTunicColor.Color.R, $Options.SetGoronTunicColor.Color.G, $Options.SetGoronTunicColor.Color.B)    # Goron Tunic
-        ChangeBytesGame -Offset "B6DA3E" -IsDec -Values @($Options.SetZoraTunicColor.Color.R, $Options.SetZoraTunicColor.Color.G, $Options.SetZoraTunicColor.Color.B)       # Zora Tunic
+        ChangeBytes -Offset "B6DA38" -IsDec -Values @($Options.SetKokiriTunicColor.Color.R, $Options.SetKokiriTunicColor.Color.G, $Options.SetKokiriTunicColor.Color.B) # Kokiri Tunic
+        ChangeBytes -Offset "B6DA3B" -IsDec -Values @($Options.SetGoronTunicColor.Color.R, $Options.SetGoronTunicColor.Color.G, $Options.SetGoronTunicColor.Color.B)    # Goron Tunic
+        ChangeBytes -Offset "B6DA3E" -IsDec -Values @($Options.SetZoraTunicColor.Color.R, $Options.SetZoraTunicColor.Color.G, $Options.SetZoraTunicColor.Color.B)       # Zora Tunic
     }
 
     if (IsChecked -Elem $Options.EnableGauntletTunics -Enabled) {
-        ChangeBytesGame -Offset "B6DA44" -IsDec -Values @($Options.SetSilverGauntletsColor.Color.R, $Options.SetSilverGauntletsColor.Color.G, $Options.SetSilverGauntletsColor.Color.B) # Silver Gauntlets
-        ChangeBytesGame -Offset "B6DA47" -IsDec -Values @($Options.SetGoldenGauntletsColor.Color.R, $Options.SetGoldenGauntletsColor.Color.G, $Options.SetGoldenGauntletsColor.Color.B) # Golden Gauntlets
+        ChangeBytes -Offset "B6DA44" -IsDec -Values @($Options.SetSilverGauntletsColor.Color.R, $Options.SetSilverGauntletsColor.Color.G, $Options.SetSilverGauntletsColor.Color.B) # Silver Gauntlets
+        ChangeBytes -Offset "B6DA47" -IsDec -Values @($Options.SetGoldenGauntletsColor.Color.R, $Options.SetGoldenGauntletsColor.Color.G, $Options.SetGoldenGauntletsColor.Color.B) # Golden Gauntlets
     }
 
     if (IsChecked -Elem $Options.EnableButtonColors -Enabled) {
-        ChangeBytesGame -Offset "3480845" -IsDec -Values @($Options.SetAButtonColor.Color.R, $Options.SetAButtonColor.Color.G, $Options.SetAButtonColor.Color.B) -Interval 2 # A Button
-        ChangeBytesGame -Offset "348084B" -IsDec -Values @($Options.SetBButtonColor.Color.R, $Options.SetBButtonColor.Color.G, $Options.SetBButtonColor.Color.B) -Interval 2 # B Button
-        ChangeBytesGame -Offset "3480851" -IsDec -Values @($Options.SetCButtonColor.Color.R, $Options.SetCButtonColor.Color.G, $Options.SetCButtonColor.Color.B) -Interval 2 # C Buttons
-        ChangeBytesGame -Offset "3480863" -IsDec -Values @($Options.SetAButtonColor.Color.R, $Options.SetAButtonColor.Color.G, $Options.SetAButtonColor.Color.B) -Interval 2 # A Note Button
+        ChangeBytes -Offset "3480845" -IsDec -Values @($Options.SetAButtonColor.Color.R, $Options.SetAButtonColor.Color.G, $Options.SetAButtonColor.Color.B) -Interval 2 # A Button
+        ChangeBytes -Offset "348084B" -IsDec -Values @($Options.SetBButtonColor.Color.R, $Options.SetBButtonColor.Color.G, $Options.SetBButtonColor.Color.B) -Interval 2 # B Button
+        ChangeBytes -Offset "3480851" -IsDec -Values @($Options.SetCButtonColor.Color.R, $Options.SetCButtonColor.Color.G, $Options.SetCButtonColor.Color.B) -Interval 2 # C Buttons
+        ChangeBytes -Offset "3480863" -IsDec -Values @($Options.SetAButtonColor.Color.R, $Options.SetAButtonColor.Color.G, $Options.SetAButtonColor.Color.B) -Interval 2 # A Note Button
 
-        ChangeBytesGame -Offset "BB2C8E"  -IsDec -Values @($Options.SetAButtonColor.Color.R, $Options.SetAButtonColor.Color.G) # Pause Screen A Note Button (Red + Green)
-        ChangeBytesGame -Offset "BB2C92"  -IsDec -Values @($Options.SetAButtonColor.Color.B) # Pause Screen A Note Button (Blue)
+        ChangeBytes -Offset "BB2C8E"  -IsDec -Values @($Options.SetAButtonColor.Color.R, $Options.SetAButtonColor.Color.G) # Pause Screen A Note Button (Red + Green)
+        ChangeBytes -Offset "BB2C92"  -IsDec -Values @($Options.SetAButtonColor.Color.B) # Pause Screen A Note Button (Blue)
 
-        ChangeBytesGame -Offset "AE9EC6"  -IsDec -Values @($Options.SetSButtonColor.Color.R, $Options.SetSButtonColor.Color.G) # Start Button (Red + Green)
-        ChangeBytesGame -Offset "AE9ED8"  -IsDec -Values @(53, 238, $Options.SetSButtonColor.Color.B) # Start Button (Blue)
+        ChangeBytes -Offset "AE9EC6"  -IsDec -Values @($Options.SetSButtonColor.Color.R, $Options.SetSButtonColor.Color.G) # Start Button (Red + Green)
+        ChangeBytes -Offset "AE9ED8"  -IsDec -Values @(53, 238, $Options.SetSButtonColor.Color.B) # Start Button (Blue)
     }
 
     if (IsChecked -Elem $Options.MQPauseMenuColors -Enabled) {
         # Cursor
         if (IsChecked -Elem $PatchReduxCheckbox -Visible) {
-            ChangeBytesGame -Offset "3480859"  -Values @("C8", "00", "50")
-            ChangeBytesGame -Offset "348085F"  -Values @("FF", "00", "50")
+            ChangeBytes -Offset "3480859"  -Values @("C8", "00", "50")
+            ChangeBytes -Offset "348085F"  -Values @("FF", "00", "50")
         }
-        ChangeBytesGame -Offset "BC784B"  -Values @("FF", "00", "32")
-        ChangeBytesGame -Offset "BC78AB"  -Values @("FF", "00", "32")
-        ChangeBytesGame -Offset "BC78BD"  -Values @("FF", "00", "32")
-        ChangeBytesGame -Offset "845755"  -Values @("FF", "64")
+        ChangeBytes -Offset "BC784B"  -Values @("FF", "00", "32")
+        ChangeBytes -Offset "BC78AB"  -Values @("FF", "00", "32")
+        ChangeBytes -Offset "BC78BD"  -Values @("FF", "00", "32")
+        ChangeBytes -Offset "845755"  -Values @("FF", "64")
     }
 
 
 
     # GAMEPLAY
 
-    if (IsChecked -Elem $Options.Medallions -Enabled)          { ChangeBytesGame -Offset "E2B454" -Values @("80", "EA", "00", "A7", "24", "01", "00", "3F", "31", "4A", "00", "3F", "00", "00", "00", "00") }
+    if (IsChecked -Elem $Options.Medallions -Enabled)          { ChangeBytes -Offset "E2B454" -Values @("80", "EA", "00", "A7", "24", "01", "00", "3F", "31", "4A", "00", "3F", "00", "00", "00", "00") }
 
     if (IsChecked -Elem $Options.ReturnChild -Enabled) {
-        ChangeBytesGame -Offset "CB6844"  -Values @("35")
-        ChangeBytesGame -Offset "253C0E2" -Values @("03")
+        ChangeBytes -Offset "CB6844"  -Values @("35")
+        ChangeBytes -Offset "253C0E2" -Values @("03")
     }
 
     if (IsChecked -Elem $Options.EasierPuzzles -Enabled) {
-        ChangeBytesGame -Offset "CC4024" -Values @("00", "00", "00", "00") # Dampe's Digging Game
-        ChangeBytesGame -Offset "DBF428" -Values @("0C", "10", "07", "7D", "3C", "01", "42", "82", "44", "81", "40", "00", "44", "98", "90", "00", "E6", "52") # Easier Fishing
-        ChangeBytesGame -Offset "DBF484" -Values @("00", "00", "00", "00") # Easier Fishing
-        ChangeBytesGame -Offset "DBF4A8" -Values @("00", "00", "00", "00") # Easier Fishing
-        ChangeBytesGame -Offset "DCBEAB" -Values @("48")                   # Adult Fish size requirement
-        ChangeBytesGame -Offset "DCBF27" -Values @("48")                   # Adult Fish size requirement
-        ChangeBytesGame -Offset "DCBF33" -Values @("30")                   # Child Fish size requirement
-        ChangeBytesGame -Offset "DCBF9F" -Values @("30")                   # Child Fish size requirement
+        ChangeBytes -Offset "CC4024" -Values @("00", "00", "00", "00") # Dampe's Digging Game
+        ChangeBytes -Offset "DBF428" -Values @("0C", "10", "07", "7D", "3C", "01", "42", "82", "44", "81", "40", "00", "44", "98", "90", "00", "E6", "52") # Easier Fishing
+        ChangeBytes -Offset "DBF484" -Values @("00", "00", "00", "00") # Easier Fishing
+        ChangeBytes -Offset "DBF4A8" -Values @("00", "00", "00", "00") # Easier Fishing
+        ChangeBytes -Offset "DCBEAB" -Values @("48")                   # Adult Fish size requirement
+        ChangeBytes -Offset "DCBF27" -Values @("48")                   # Adult Fish size requirement
+        ChangeBytes -Offset "DCBF33" -Values @("30")                   # Child Fish size requirement
+        ChangeBytes -Offset "DCBF9F" -Values @("30")                   # Child Fish size requirement
 
         # First try truth spinner
-        if (!(IsChecked -Elem $Options.MQShadowTemple -Enabled)) { ChangeBytesGame -Offset "DB9E7C" -Values @("0C", "10", "0D", "", "", "00", "00", "00") }
+        if (!(IsChecked -Elem $Options.MQShadowTemple -Enabled)) { ChangeBytes -Offset "DB9E7C" -Values @("0C", "10", "0D", "", "", "00", "00", "00") }
     }
 
     if (IsChecked -Elem $Options.FasterBlockPushing) {
-        ChangeBytesGame -Offset "DD2B87" -Values @("80")                   # Block Speed
-        ChangeBytesGame -Offset "DD2D27" -Values @("03")                   # Block Delay
-        ChangeBytesGame -Offset "DD9683" -Values @("80")                   # Milk Crate Speed
-        ChangeBytesGame -Offset "DD981F" -Values @("03")                   # Milk Crate Delay
-        ChangeBytesGame -Offset "CE1BD0" -Values @("40", "80", "00", "00") # Amy Puzzle Speed
-        ChangeBytesGame -Offset "CE0F0F" -Values @("03")                   # Amy Puzzle Delay
-        ChangeBytesGame -Offset "C77CA8" -Values @("40", "80", "00", "00") # Fire Block Speed
-        ChangeBytesGame -Offset "C770C3" -Values @("01")                   # Fire Block Delay
-        ChangeBytesGame -Offset "CC5DBF" -Values @("01")                   # Forest Basement Puzzle Delay
-        ChangeBytesGame -Offset "DBCF73" -Values @("01")                   # spirit Cobra Mirror Delay
-        ChangeBytesGame -Offset "DBA233" -Values @("19")                   # Truth Spinner Speed
-        ChangeBytesGame -Offset "DBA3A7" -Values @("00")                   # Truth Spinner Delay
+        ChangeBytes -Offset "DD2B87" -Values @("80")                   # Block Speed
+        ChangeBytes -Offset "DD2D27" -Values @("03")                   # Block Delay
+        ChangeBytes -Offset "DD9683" -Values @("80")                   # Milk Crate Speed
+        ChangeBytes -Offset "DD981F" -Values @("03")                   # Milk Crate Delay
+        ChangeBytes -Offset "CE1BD0" -Values @("40", "80", "00", "00") # Amy Puzzle Speed
+        ChangeBytes -Offset "CE0F0F" -Values @("03")                   # Amy Puzzle Delay
+        ChangeBytes -Offset "C77CA8" -Values @("40", "80", "00", "00") # Fire Block Speed
+        ChangeBytes -Offset "C770C3" -Values @("01")                   # Fire Block Delay
+        ChangeBytes -Offset "CC5DBF" -Values @("01")                   # Forest Basement Puzzle Delay
+        ChangeBytes -Offset "DBCF73" -Values @("01")                   # spirit Cobra Mirror Delay
+        ChangeBytes -Offset "DBA233" -Values @("19")                   # Truth Spinner Speed
+        ChangeBytes -Offset "DBA3A7" -Values @("00")                   # Truth Spinner Delay
     }
 
 
@@ -282,23 +282,23 @@ function PatchByteOptionsOoT() {
     # RESTORE #
 
     if (IsChecked -Elem $Options.CorrectRupeeColors -Enabled) {
-        ChangeBytesGame -Offset "F47EB0" -Values @("70", "6B", "BB", "3F", "FF", "FF", "EF", "3F", "68", "AD", "C3", "FD", "E6", "BF", "CD", "7F", "48", "9B", "91", "AF", "C3", "7D", "BB", "3D", "40", "0F", "58", "19", "88", "ED", "80", "AB") # Purple
-        ChangeBytesGame -Offset "F47ED0" -Values @("D4", "C3", "F7", "49", "FF", "FF", "F7", "E1", "DD", "03", "EF", "89", "E7", "E3", "E7", "DD", "A3", "43", "D5", "C3", "DF", "85", "E7", "45", "7A", "43", "82", "83", "B4", "43", "CC", "83") # Gold
+        ChangeBytes -Offset "F47EB0" -Values @("70", "6B", "BB", "3F", "FF", "FF", "EF", "3F", "68", "AD", "C3", "FD", "E6", "BF", "CD", "7F", "48", "9B", "91", "AF", "C3", "7D", "BB", "3D", "40", "0F", "58", "19", "88", "ED", "80", "AB") # Purple
+        ChangeBytes -Offset "F47ED0" -Values @("D4", "C3", "F7", "49", "FF", "FF", "F7", "E1", "DD", "03", "EF", "89", "E7", "E3", "E7", "DD", "A3", "43", "D5", "C3", "DF", "85", "E7", "45", "7A", "43", "82", "83", "B4", "43", "CC", "83") # Gold
     }
 
     if (IsChecked -Elem $Options.RestoreCowNoseRing -Enabled) {
-        ChangeBytesGame "EF3E68" -Values @("00", "00")
+        ChangeBytes -Offset "EF3E68" -Values @("00", "00")
     }
 
     if (IsChecked -Elem $Options.RestoreFireTemple -Enabled) {
-        ChangeBytesGame -Offset "7465"   -Values @("03", "91", "30") # DMA Table, Pointer to AudioBank
-        ChangeBytesGame -Offset "7471"   -Values @("03", "91", "30", "00", "08", "8B", "B0", "00", "03", "91", "30") # DMA Table, Pointer to AudioSeq
-        ChangeBytesGame -Offset "7481"   -Values @("08", "8B", "B0", "00", "4D", "9F", "40", "00", "08", "8B", "B0") # DMA Table, Pointer to AudioTable
-        ChangeBytesGame -Offset "B2E82F" -Values @("04", "24", "A5", "91", "30") # MIPS assembly that loads AudioSeq
-        ChangeBytesGame -Offset "B2E857" -Values @("09", "24", "A5", "8B", "B0") # MIPS assembly that loads AudioTable
-        PatchBytesGame  -Offset "B896A0" -Patch "Fire Temple Theme\12AudioBankPointers.bin"
-        PatchBytesGame  -Offset "B89AD0" -Patch "Fire Temple Theme\12AudioSeqPointers.bin"
-        PatchBytesGame  -Offset "B8A1C0" -Patch "Fire Temple Theme\12AudioTablePointers.bin"
+        ChangeBytes -Offset "7465"   -Values @("03", "91", "30") # DMA Table, Pointer to AudioBank
+        ChangeBytes -Offset "7471"   -Values @("03", "91", "30", "00", "08", "8B", "B0", "00", "03", "91", "30") # DMA Table, Pointer to AudioSeq
+        ChangeBytes -Offset "7481"   -Values @("08", "8B", "B0", "00", "4D", "9F", "40", "00", "08", "8B", "B0") # DMA Table, Pointer to AudioTable
+        ChangeBytes -Offset "B2E82F" -Values @("04", "24", "A5", "91", "30") # MIPS assembly that loads AudioSeq
+        ChangeBytes -Offset "B2E857" -Values @("09", "24", "A5", "8B", "B0") # MIPS assembly that loads AudioTable
+        PatchBytes  -Offset "B896A0" -Patch "Fire Temple Theme\12AudioBankPointers.bin"
+        PatchBytes  -Offset "B89AD0" -Patch "Fire Temple Theme\12AudioSeqPointers.bin"
+        PatchBytes  -Offset "B8A1C0" -Patch "Fire Temple Theme\12AudioTablePointers.bin"
         ExportAndPatch -Path "Fire Temple Theme\12FireTemple"  -Offset "D390" -Length "4CCBB0"
     }
 
@@ -307,12 +307,12 @@ function PatchByteOptionsOoT() {
     # VOICES #
 
     if (IsText -Elem $Options.Voices -Text "Feminine Link Voices" -Enabled) {
-        if (IsChecked -Elem $Options.RestoreFireTemple -Enabled)   { PatchBytesGame -Offset "19D920" -Patch "Voices\Feminine Link Voices.bin" }
-        else                                                       { PatchBytesGame -Offset "18E1E0" -Patch "Voices\Feminine Link Voices.bin" }
+        if (IsChecked -Elem $Options.RestoreFireTemple -Enabled)   { PatchBytes -Offset "19D920" -Patch "Voices\Feminine Link Voices.bin" }
+        else                                                       { PatchBytes -Offset "18E1E0" -Patch "Voices\Feminine Link Voices.bin" }
     }
     elseif (IsText -Elem $Options.Voices -Text "Majora's Mask Link Voices" -Enabled) {
-        if (IsChecked -Elem $Options.RestoreFireTemple -Enabled)   { PatchBytesGame -Offset "19D920" -Patch "Voices\MM Link Voices.bin" }
-        else                                                       { PatchBytesGame -Offset "18E1E0" -Patch "Voices\MM Link Voices.bin" }
+        if (IsChecked -Elem $Options.RestoreFireTemple -Enabled)   { PatchBytes -Offset "19D920" -Patch "Voices\MM Link Voices.bin" }
+        else                                                       { PatchBytes -Offset "18E1E0" -Patch "Voices\MM Link Voices.bin" }
     }
 
 
@@ -320,42 +320,42 @@ function PatchByteOptionsOoT() {
     # EQUIPMENT #
 
     if (IsChecked -Elem $Options.EnableAmmoCapacity -Enabled) {
-        ChangeBytesGame -Offset "B6EC2F" -IsDec -Values @($Options.Quiver1.Text, $Options.Quiver2.Text, $Options.Quiver3.Text) -Interval 2
-        ChangeBytesGame -Offset "B6EC37" -IsDec -Values @($Options.BombBag1.Text, $Options.BombBag2.Text, $Options.BombBag3.Text) -Interval 2
-        ChangeBytesGame -Offset "B6EC57" -IsDec -Values @($Options.BulletBag1.Text, $Options.BulletBag2.Text, $Options.BulletBag3.Text) -Interval 2
-        ChangeBytesGame -Offset "B6EC5F" -IsDec -Values @($Options.DekuSticks1.Text, $Options.DekuSticks2.Text, $Options.DekuSticks3.Text) -Interval 2
-        ChangeBytesGame -Offset "B6EC67" -IsDec -Values @($Options.DekuNuts1.Text, $Options.DekuNuts2.Text, $Options.DekuNuts3.Text) -Interval 2
+        ChangeBytes -Offset "B6EC2F" -IsDec -Values @($Options.Quiver1.Text, $Options.Quiver2.Text, $Options.Quiver3.Text) -Interval 2
+        ChangeBytes -Offset "B6EC37" -IsDec -Values @($Options.BombBag1.Text, $Options.BombBag2.Text, $Options.BombBag3.Text) -Interval 2
+        ChangeBytes -Offset "B6EC57" -IsDec -Values @($Options.BulletBag1.Text, $Options.BulletBag2.Text, $Options.BulletBag3.Text) -Interval 2
+        ChangeBytes -Offset "B6EC5F" -IsDec -Values @($Options.DekuSticks1.Text, $Options.DekuSticks2.Text, $Options.DekuSticks3.Text) -Interval 2
+        ChangeBytes -Offset "B6EC67" -IsDec -Values @($Options.DekuNuts1.Text, $Options.DekuNuts2.Text, $Options.DekuNuts3.Text) -Interval 2
     }
 
     if (IsChecked -Elem $Options.EnableWalletCapacity -Enabled) {
         $Wallet1 = Get16Bit -Value ($Options.Wallet1.Text)
         $Wallet2 = Get16Bit -Value ($Options.Wallet2.Text)
         $Wallet3 = Get16Bit -Value ($Options.Wallet3.Text)
-        ChangeBytesGame -Offset "B6EC4C" -Values @($Wallet1.Substring(0, 2), $Wallet1.Substring(2) )
-        ChangeBytesGame -Offset "B6EC4E" -Values @($Wallet2.Substring(0, 2), $Wallet2.Substring(2) )
-        ChangeBytesGame -Offset "B6EC50" -Values @($Wallet3.Substring(0, 2), $Wallet3.Substring(2) )
+        ChangeBytes -Offset "B6EC4C" -Values @($Wallet1.Substring(0, 2), $Wallet1.Substring(2) )
+        ChangeBytes -Offset "B6EC4E" -Values @($Wallet2.Substring(0, 2), $Wallet2.Substring(2) )
+        ChangeBytes -Offset "B6EC50" -Values @($Wallet3.Substring(0, 2), $Wallet3.Substring(2) )
     }
 
     if (IsChecked -Elem $Options.UnlockSword -Enabled) {
-        ChangeBytesGame -Offset "BC77AD" -Values @("09")
-        ChangeBytesGame -Offset "BC77F7" -Values @("09")
+        ChangeBytes -Offset "BC77AD" -Values @("09")
+        ChangeBytes -Offset "BC77F7" -Values @("09")
     }
 
     if (IsChecked -Elem $Options.UnlockTunics -Enabled) {
-        ChangeBytesGame -Offset "BC77B6" -Values @("09", "09")
-        ChangeBytesGame -Offset "BC77FE" -Values @("09", "09")
+        ChangeBytes -Offset "BC77B6" -Values @("09", "09")
+        ChangeBytes -Offset "BC77FE" -Values @("09", "09")
     }
 
     if (IsChecked -Elem $Options.UnlockBoots -Enabled) {
-        ChangeBytesGame -Offset "BC77BA" -Values @("09", "09")
-        ChangeBytesGame -Offset "BC7801" -Values @("09", "09")
+        ChangeBytes -Offset "BC77BA" -Values @("09", "09")
+        ChangeBytes -Offset "BC7801" -Values @("09", "09")
     }
 
 
 
     # OTHER #
 
-    if (IsChecked -Elem $Options.ZTargeting -Enabled)          { ChangeBytesGame -Offset "B71E6D"  -Values @("01") }
+    if (IsChecked -Elem $Options.ZTargeting -Enabled)          { ChangeBytes -Offset "B71E6D"  -Values @("01") }
     
 
 
@@ -368,35 +368,35 @@ function PatchByteOptionsOoT() {
     # Censor Gerudo Textures
 
     if (IsChecked -Elem $Options.CensorGerudoTextures -Enabled) {
-        PatchBytesGame -Offset "12985F0" -Texture -Patch "Gerudo Symbols\2.bin"
-        PatchBytesGame -Offset "21B8678" -Texture -Patch "Gerudo Symbols\3.bin"
-        PatchBytesGame -Offset "13B4000" -Texture -Patch "Gerudo Symbols\4.bin"
-        PatchBytesGame -Offset "7FD000"  -Texture -Patch "Gerudo Symbols\5.bin"
-        PatchBytesGame -Offset "F70350"  -Texture -Patch "Gerudo Symbols\8.bin"
-        PatchBytesGame -Offset "F80CB0"  -Texture -Patch "Gerudo Symbols\9.bin"
-        PatchBytesGame -Offset "11FB000" -Texture -Patch "Gerudo Symbols\10.bin"
-        PatchBytesGame -Offset "F7A8A0"  -Texture -Patch "Gerudo Symbols\13.bin"
-        PatchBytesGame -Offset "F71350"  -Texture -Patch "Gerudo Symbols\14.bin"
-        PatchBytesGame -Offset "F748A0"  -Texture -Patch "Gerudo Symbols\16.bin"
-        PatchBytesGame -Offset "E68CE8"  -Texture -Patch "Gerudo Symbols\17.bin"
-        PatchBytesGame -Offset "F70B50"  -Texture -Patch "Gerudo Symbols\18.bin"
-        PatchBytesGame -Offset "1456388" -Texture -Patch "Gerudo Symbols\19.bin"
-        PatchBytesGame -Offset "1616000" -Texture -Patch "Gerudo Symbols\20.bin"
-        PatchBytesGame -Offset "2F64E38" -Texture -Patch "Gerudo Symbols\21.bin"
-        PatchBytesGame -Offset "2F73700" -Texture -Patch "Gerudo Symbols\21.bin"
+        PatchBytes -Offset "12985F0" -Texture -Patch "Gerudo Symbols\2.bin"
+        PatchBytes -Offset "21B8678" -Texture -Patch "Gerudo Symbols\3.bin"
+        PatchBytes -Offset "13B4000" -Texture -Patch "Gerudo Symbols\4.bin"
+        PatchBytes -Offset "7FD000"  -Texture -Patch "Gerudo Symbols\5.bin"
+        PatchBytes -Offset "F70350"  -Texture -Patch "Gerudo Symbols\8.bin"
+        PatchBytes -Offset "F80CB0"  -Texture -Patch "Gerudo Symbols\9.bin"
+        PatchBytes -Offset "11FB000" -Texture -Patch "Gerudo Symbols\10.bin"
+        PatchBytes -Offset "F7A8A0"  -Texture -Patch "Gerudo Symbols\13.bin"
+        PatchBytes -Offset "F71350"  -Texture -Patch "Gerudo Symbols\14.bin"
+        PatchBytes -Offset "F748A0"  -Texture -Patch "Gerudo Symbols\16.bin"
+        PatchBytes -Offset "E68CE8"  -Texture -Patch "Gerudo Symbols\17.bin"
+        PatchBytes -Offset "F70B50"  -Texture -Patch "Gerudo Symbols\18.bin"
+        PatchBytes -Offset "1456388" -Texture -Patch "Gerudo Symbols\19.bin"
+        PatchBytes -Offset "1616000" -Texture -Patch "Gerudo Symbols\20.bin"
+        PatchBytes -Offset "2F64E38" -Texture -Patch "Gerudo Symbols\21.bin"
+        PatchBytes -Offset "2F73700" -Texture -Patch "Gerudo Symbols\21.bin"
 
-        if ( (IsText -Elem $Options.Models -Text "Replace Adult Model Only" -Enabled) -or (IsText -Elem $Options.Models -Text "Replace Both Models" -Enabled) )   { PatchBytesGame -Offset "F9B318"  -Texture -Patch "Gerudo Symbols\15.bin" }
-        else                                                                                                                                                      { PatchBytesGame -Offset "F92280"  -Texture -Patch "Gerudo Symbols\15.bin" }
+        if ( (IsText -Elem $Options.Models -Text "Replace Adult Model Only" -Enabled) -or (IsText -Elem $Options.Models -Text "Replace Both Models" -Enabled) )   { PatchBytes -Offset "F9B318"  -Texture -Patch "Gerudo Symbols\15.bin" }
+        else                                                                                                                                                      { PatchBytes -Offset "F92280"  -Texture -Patch "Gerudo Symbols\15.bin" }
 
-        PatchBytesGame -Offset "2464D88" -Texture -Patch "Gerudo Symbols\1.bin"  # Room 11 Forest Temple
-        PatchBytesGame -Offset "28BBCD8" -Texture -Patch "Gerudo Symbols\7.bin"  # Room 5 Gerudo Training Ground
-        PatchBytesGame -Offset "28CA728" -Texture -Patch "Gerudo Symbols\7.bin"  # Room 5 Gerudo Training Ground
-        PatchBytesGame -Offset "2B5CDA0" -Texture -Patch "Gerudo Symbols\12.bin" # Room 10 Spirit Temple
-        PatchBytesGame -Offset "2B9BDB8" -Texture -Patch "Gerudo Symbols\12.bin" # Room 10 Spirit Temple
-        PatchBytesGame -Offset "2BE7920" -Texture -Patch "Gerudo Symbols\12.bin" # Room 10 Spirit Temple
+        PatchBytes -Offset "2464D88" -Texture -Patch "Gerudo Symbols\1.bin"  # Room 11 Forest Temple
+        PatchBytes -Offset "28BBCD8" -Texture -Patch "Gerudo Symbols\7.bin"  # Room 5 Gerudo Training Ground
+        PatchBytes -Offset "28CA728" -Texture -Patch "Gerudo Symbols\7.bin"  # Room 5 Gerudo Training Ground
+        PatchBytes -Offset "2B5CDA0" -Texture -Patch "Gerudo Symbols\12.bin" # Room 10 Spirit Temple
+        PatchBytes -Offset "2B9BDB8" -Texture -Patch "Gerudo Symbols\12.bin" # Room 10 Spirit Temple
+        PatchBytes -Offset "2BE7920" -Texture -Patch "Gerudo Symbols\12.bin" # Room 10 Spirit Temple
 
-        if (IsChecked -Elem $Options.MQSpiritTemple -Enabled)   { PatchBytesGame -Offset "2B03528" -Texture -Patch "Gerudo Symbols\11.bin" } # Room 0 Spirit Temple
-        else                                                    { PatchBytesGame -Offset "2B03928" -Texture -Patch "Gerudo Symbols\11.bin" } # Room 0 Spirit Temple
+        if (IsChecked -Elem $Options.MQSpiritTemple -Enabled)   { PatchBytes -Offset "2B03528" -Texture -Patch "Gerudo Symbols\11.bin" } # Room 0 Spirit Temple
+        else                                                    { PatchBytes -Offset "2B03928" -Texture -Patch "Gerudo Symbols\11.bin" } # Room 0 Spirit Temple
     }
 
 }
@@ -431,11 +431,11 @@ function PatchBPSOptionsOoT() {
 function PatchLanguageOptionsOoT() {
     
     if (IsChecked -Elem $Languages.RestoreText -Enabled) {
-        ChangeBytesGame -Offset "7596" -Values @("52", "40")
-        PatchBytesGame  -Offset "B849EC" -Patch "Message\Table.bin"
+        ChangeBytes -Offset "7596" -Values @("52", "40")
+        PatchBytes  -Offset "B849EC" -Patch "Message\Table.bin"
 
         $File = $GameFiles.binaries + "\" + "Message\Message Data Static.bin"
-        ExportBytesGame -Offset "92D000" -Length "38140" -Output $File
+        ExportBytes -Offset "92D000" -Length "38140" -Output $File
         if (IsChecked -Elem $PatchReduxCheckbox -Visible)  { ApplyPatch -File $File -Patch "\Data Extraction\Message\Message Data Static OoT Redux.bps" -FilesPath }
         else                                               { ApplyPatch -File $File -Patch "\Data Extraction\Message\Message Data Static OoT.bps"       -FilesPath }
 
@@ -475,14 +475,14 @@ function PatchLanguageOptionsOoT() {
         }
         #>
 
-        PatchBytesGame -Offset "92D000" -Patch ("Message\Message Data Static.bin")
+        PatchBytes -Offset "92D000" -Patch ("Message\Message Data Static.bin")
     }
 
-    if (IsChecked -Elem $Languages.Text2x -Enabled)            { ChangeBytesGame -Offset "B5006F" -Values @("02") }
+    if (IsChecked -Elem $Languages.Text2x -Enabled)            { ChangeBytes -Offset "B5006F" -Values @("02") }
     elseif (IsChecked -Elem $Languages.Text3x -Enabled) {
-        if (IsChecked -Elem $Languages.RestoreText -Enabled)   { PatchBytesGame -Offset "93B6EC" -Patch "Message\Songs.bin" }
-        else                                                   { PatchBytesGame -Offset "93B6CC" -Patch "Message\Songs.bin" }
-        ChangeBytesGame -Offset "B5006F" -Values @("03")
+        if (IsChecked -Elem $Languages.RestoreText -Enabled)   { PatchBytes -Offset "93B6EC" -Patch "Message\Songs.bin" }
+        else                                                   { PatchBytes -Offset "93B6CC" -Patch "Message\Songs.bin" }
+        ChangeBytes -Offset "B5006F" -Values @("03")
     }
     
 }
@@ -495,38 +495,38 @@ function PatchByteOptionsMM() {
     # HERO MODE #
 
     if (IsText -Elem $Options.Damage -Text "OKHO Mode" -Enabled) {
-        ChangeBytesGame -Offset "BABE7F" -Values @("09", "04") -Interval 16
-        ChangeBytesGame -Offset "BABEA2" -Values @("2A", "00")
-        ChangeBytesGame -Offset "BABEA5" -Values @("00", "00", "00")
+        ChangeBytes -Offset "BABE7F" -Values @("09", "04") -Interval 16
+        ChangeBytes -Offset "BABEA2" -Values @("2A", "00")
+        ChangeBytes -Offset "BABEA5" -Values @("00", "00", "00")
     }
     elseif ( (IsText -Elem $Options.Damage -Text "1x Damage" -Enabled -Not) -or (IsText -Elem $Options.Recovery -Text "1x Recovery" -Enabled -Not) ) {
-        ChangeBytesGame -Offset "BABE7F" -Values @("09", "04") -Interval 16
+        ChangeBytes -Offset "BABE7F" -Values @("09", "04") -Interval 16
         if (IsText -Elem $Options.Recovery -Text "1x Recovery" -Enabled) {
-            if (IsText -Elem $Options.Damage -Text "2x Damage" -Enabled)       { ChangeBytesGame -Offset "BABEA2" -Values @("28", "40") }
-            elseif (IsText -Elem $Options.Damage -Text "4x Damage" -Enabled)   { ChangeBytesGame -Offset "BABEA2" -Values @("28", "80") }
-            elseif (IsText -Elem $Options.Damage -Text "8x Damage" -Enabled)   { ChangeBytesGame -Offset "BABEA2" -Values @("28", "C0") }
+            if (IsText -Elem $Options.Damage -Text "2x Damage" -Enabled)       { ChangeBytes -Offset "BABEA2" -Values @("28", "40") }
+            elseif (IsText -Elem $Options.Damage -Text "4x Damage" -Enabled)   { ChangeBytes -Offset "BABEA2" -Values @("28", "80") }
+            elseif (IsText -Elem $Options.Damage -Text "8x Damage" -Enabled)   { ChangeBytes -Offset "BABEA2" -Values @("28", "C0") }
         ChangeBytes -Elem -File $Files.decompressedROM -Offset "BABEA5" -Values @("00", "00", "00")
         }
         elseif (IsText -Elem $Options.Recovery -Text "1/2x Recovery" -Enabled) {
-            if (IsText -Elem $Options.Damage -Text "1x Damage" -Enabled)       { ChangeBytesGame -Offset "BABEA2" -Values @("28", "40") }
-            elseif (IsText -Elem $Options.Damage -Text "2x Damage" -Enabled)   { ChangeBytesGame -Offset "BABEA2" -Values @("28", "80") }
-            elseif (IsText -Elem $Options.Damage -Text "4x Damage" -Enabled)   { ChangeBytesGame -Offset "BABEA2" -Values @("28", "C0") }
-            elseif (IsText -Elem $Options.Damage -Text "8x Damage" -Enabled)   { ChangeBytesGame -Offset "BABEA2" -Values @("29", "00") }
-        ChangeBytesGame -Offset "BABEA5" -Values @("05", "28", "43")
+            if (IsText -Elem $Options.Damage -Text "1x Damage" -Enabled)       { ChangeBytes -Offset "BABEA2" -Values @("28", "40") }
+            elseif (IsText -Elem $Options.Damage -Text "2x Damage" -Enabled)   { ChangeBytes -Offset "BABEA2" -Values @("28", "80") }
+            elseif (IsText -Elem $Options.Damage -Text "4x Damage" -Enabled)   { ChangeBytes -Offset "BABEA2" -Values @("28", "C0") }
+            elseif (IsText -Elem $Options.Damage -Text "8x Damage" -Enabled)   { ChangeBytes -Offset "BABEA2" -Values @("29", "00") }
+        ChangeBytes -Offset "BABEA5" -Values @("05", "28", "43")
         }
         elseif (IsText -Elem $Options.Recovery -Text "1/4x Recovery" -Enabled) {
-            if (IsText -Elem $Options.Damage -Text "1x Damage" -Enabled)       { ChangeBytesGame -Offset "BABEA2" -Values @("28", "80") }
-            elseif (IsText -Elem $Options.Damage -Text "2x Damage" -Enabled)   { ChangeBytesGame -Offset "BABEA2" -Values @("28", "C0") }
-            elseif (IsText -Elem $Options.Damage -Text "4x Damage" -Enabled)   { ChangeBytesGame -Offset "BABEA2" -Values @("29", "00") }
-            elseif (IsText -Elem $Options.Damage -Text "8x Damage" -Enabled)   { ChangeBytesGame -Offset "BABEA2" -Values @("29", "40") }
-        ChangeBytesGame -Offset "BABEA5" -Values @("05", "28", "83")
+            if (IsText -Elem $Options.Damage -Text "1x Damage" -Enabled)       { ChangeBytes -Offset "BABEA2" -Values @("28", "80") }
+            elseif (IsText -Elem $Options.Damage -Text "2x Damage" -Enabled)   { ChangeBytes -Offset "BABEA2" -Values @("28", "C0") }
+            elseif (IsText -Elem $Options.Damage -Text "4x Damage" -Enabled)   { ChangeBytes -Offset "BABEA2" -Values @("29", "00") }
+            elseif (IsText -Elem $Options.Damage -Text "8x Damage" -Enabled)   { ChangeBytes -Offset "BABEA2" -Values @("29", "40") }
+        ChangeBytes -Offset "BABEA5" -Values @("05", "28", "83")
         }
         elseif (IsText -Elem $Options.Recovery -Text "0x Recovery" -Enabled) {
-            if (IsText -Elem $Options.Damage -Text "1x Damage" -Enabled)       { ChangeBytesGame -Offset "BABEA2" -Values @("29", "40") }
-            elseif (IsText -Elem $Options.Damage -Text "2x Damage" -Enabled)   { ChangeBytesGame -Offset "BABEA2" -Values @("29", "80") }
-            elseif (IsText -Elem $Options.Damage -Text "4x Damage" -Enabled)   { ChangeBytesGame -Offset "BABEA2" -Values @("29", "C0") }
-            elseif (IsText -Elem $Options.Damage -Text "8x Damage" -Enabled)   { ChangeBytesGame -Offset "BABEA2" -Values @("2A", "00") }
-        ChangeBytesGame -Offset "BABEA5" -Values @("05", "29", "43")
+            if (IsText -Elem $Options.Damage -Text "1x Damage" -Enabled)       { ChangeBytes -Offset "BABEA2" -Values @("29", "40") }
+            elseif (IsText -Elem $Options.Damage -Text "2x Damage" -Enabled)   { ChangeBytes -Offset "BABEA2" -Values @("29", "80") }
+            elseif (IsText -Elem $Options.Damage -Text "4x Damage" -Enabled)   { ChangeBytes -Offset "BABEA2" -Values @("29", "C0") }
+            elseif (IsText -Elem $Options.Damage -Text "8x Damage" -Enabled)   { ChangeBytes -Offset "BABEA2" -Values @("2A", "00") }
+        ChangeBytes -Offset "BABEA5" -Values @("05", "29", "43")
         }
     }
 
@@ -534,68 +534,68 @@ function PatchByteOptionsMM() {
 
     # D-PAD #
 
-    if (IsChecked -Elem $Options.LeftDPad -Enabled)            { ChangeBytesGame -Offset "3806365" -Values @("01") }
-    elseif (IsChecked -Elem $Options.RightDPad -Enabled)       { ChangeBytesGame -Offset "3806365" -Values @("02") }
-    elseif (IsChecked -Elem $Options.HideDPad -Enabled)        { ChangeBytesGame -Offset "3806365" -Values @("00") }
+    if (IsChecked -Elem $Options.LeftDPad -Enabled)            { ChangeBytes -Offset "3806365" -Values @("01") }
+    elseif (IsChecked -Elem $Options.RightDPad -Enabled)       { ChangeBytes -Offset "3806365" -Values @("02") }
+    elseif (IsChecked -Elem $Options.HideDPad -Enabled)        { ChangeBytes -Offset "3806365" -Values @("00") }
 
 
 
     # GRAPHICS #
 
     if (IsChecked -Elem $Options.WideScreen -Enabled) {
-        ChangeBytesGame -Offset "BD5D74" -Values @("3C", "07", "3F", "E3")
-        ChangeBytesGame -Offset "CA58F5" -Values @("6C", "53", "6C", "84", "9E", "B7", "53", "6C") -Interval 2
+        ChangeBytes -Offset "BD5D74" -Values @("3C", "07", "3F", "E3")
+        ChangeBytes -Offset "CA58F5" -Values @("6C", "53", "6C", "84", "9E", "B7", "53", "6C") -Interval 2
     }
 
     if (IsChecked -Elem $Options.WidescreenTextures -Enabled) {
-        PatchBytesGame -Offset "A9A000" -Length "12C00" -Texture -Patch "Carnival of Time.bin"
-        PatchBytesGame -Offset "AACC00" -Length "12C00" -Texture -Patch "Four Giants.bin"
-        PatchBytesGame -Offset "C74DD0" -Length "800"   -Texture -Patch "Lens of Truth.bin"
+        PatchBytes -Offset "A9A000" -Length "12C00" -Texture -Patch "Carnival of Time.bin"
+        PatchBytes -Offset "AACC00" -Length "12C00" -Texture -Patch "Four Giants.bin"
+        PatchBytes -Offset "C74DD0" -Length "800"   -Texture -Patch "Lens of Truth.bin"
     }
 
-    if (IsChecked -Elem $Options.ExtendedDraw -Enabled)        { ChangeBytesGame -Offset "B50874" -Values @("00", "00", "00", "00") }
-    if (IsChecked -Elem $Options.BlackBars -Enabled)           { ChangeBytesGame -Offset "BF72A4" -Values @("00", "00", "00", "00") }
-    if (IsChecked -Elem $Options.PixelatedStars -Enabled)      { ChangeBytesGame -Offset "B943FC" -Values @("10", "00") }
+    if (IsChecked -Elem $Options.ExtendedDraw -Enabled)        { ChangeBytes -Offset "B50874" -Values @("00", "00", "00", "00") }
+    if (IsChecked -Elem $Options.BlackBars -Enabled)           { ChangeBytes -Offset "BF72A4" -Values @("00", "00", "00", "00") }
+    if (IsChecked -Elem $Options.PixelatedStars -Enabled)      { ChangeBytes -Offset "B943FC" -Values @("10", "00") }
 
 
 
     # COLORS #
 
     if (IsChecked -Elem $Options.EnableTunicColors -Enabled) {
-        ChangeBytesGame -Offset "116639C" -IsDec -Values @($Options.SetKokiriTunicColor.Color.R, $Options.SetKokiriTunicColor.Color.G,$Options.SetKokiriTunicColor.Color.B)
-        ChangeBytesGame -Offset "11668C4" -IsDec -Values @($Options.SetKokiriTunicColor.Color.R, $Options.SetKokiriTunicColor.Color.G,$Options.SetKokiriTunicColor.Color.B)
-        ChangeBytesGame -Offset "1166DCC" -IsDec -Values @($Options.SetKokiriTunicColor.Color.R, $Options.SetKokiriTunicColor.Color.G,$Options.SetKokiriTunicColor.Color.B)
-        ChangeBytesGame -Offset "1166FA4" -IsDec -Values @($Options.SetKokiriTunicColor.Color.R, $Options.SetKokiriTunicColor.Color.G,$Options.SetKokiriTunicColor.Color.B)
-        ChangeBytesGame -Offset "1167064" -IsDec -Values @($Options.SetKokiriTunicColor.Color.R, $Options.SetKokiriTunicColor.Color.G,$Options.SetKokiriTunicColor.Color.B)
-        ChangeBytesGame -Offset "116766C" -IsDec -Values @($Options.SetKokiriTunicColor.Color.R, $Options.SetKokiriTunicColor.Color.G,$Options.SetKokiriTunicColor.Color.B)
-        ChangeBytesGame -Offset "1167AE4" -IsDec -Values @($Options.SetKokiriTunicColor.Color.R, $Options.SetKokiriTunicColor.Color.G,$Options.SetKokiriTunicColor.Color.B)
-        ChangeBytesGame -Offset "1167D1C" -IsDec -Values @($Options.SetKokiriTunicColor.Color.R, $Options.SetKokiriTunicColor.Color.G,$Options.SetKokiriTunicColor.Color.B)
-        ChangeBytesGame -Offset "11681EC" -IsDec -Values @($Options.SetKokiriTunicColor.Color.R, $Options.SetKokiriTunicColor.Color.G,$Options.SetKokiriTunicColor.Color.B)
+        ChangeBytes -Offset "116639C" -IsDec -Values @($Options.SetKokiriTunicColor.Color.R, $Options.SetKokiriTunicColor.Color.G,$Options.SetKokiriTunicColor.Color.B)
+        ChangeBytes -Offset "11668C4" -IsDec -Values @($Options.SetKokiriTunicColor.Color.R, $Options.SetKokiriTunicColor.Color.G,$Options.SetKokiriTunicColor.Color.B)
+        ChangeBytes -Offset "1166DCC" -IsDec -Values @($Options.SetKokiriTunicColor.Color.R, $Options.SetKokiriTunicColor.Color.G,$Options.SetKokiriTunicColor.Color.B)
+        ChangeBytes -Offset "1166FA4" -IsDec -Values @($Options.SetKokiriTunicColor.Color.R, $Options.SetKokiriTunicColor.Color.G,$Options.SetKokiriTunicColor.Color.B)
+        ChangeBytes -Offset "1167064" -IsDec -Values @($Options.SetKokiriTunicColor.Color.R, $Options.SetKokiriTunicColor.Color.G,$Options.SetKokiriTunicColor.Color.B)
+        ChangeBytes -Offset "116766C" -IsDec -Values @($Options.SetKokiriTunicColor.Color.R, $Options.SetKokiriTunicColor.Color.G,$Options.SetKokiriTunicColor.Color.B)
+        ChangeBytes -Offset "1167AE4" -IsDec -Values @($Options.SetKokiriTunicColor.Color.R, $Options.SetKokiriTunicColor.Color.G,$Options.SetKokiriTunicColor.Color.B)
+        ChangeBytes -Offset "1167D1C" -IsDec -Values @($Options.SetKokiriTunicColor.Color.R, $Options.SetKokiriTunicColor.Color.G,$Options.SetKokiriTunicColor.Color.B)
+        ChangeBytes -Offset "11681EC" -IsDec -Values @($Options.SetKokiriTunicColor.Color.R, $Options.SetKokiriTunicColor.Color.G,$Options.SetKokiriTunicColor.Color.B)
     }
 
 
 
     # GAMEPLAY
     
-    if (IsChecked -Elem $Options.ZoraPhysics -Enabled $True)   { PatchBytesGame -Offset "65D000" -Patch "Zora Physics Fix.bin" }
+    if (IsChecked -Elem $Options.ZoraPhysics -Enabled $True)   { PatchBytes -Offset "65D000" -Patch "Zora Physics Fix.bin" }
 
 
 
     # RESTORE
 
-    if (IsChecked -Elem $Options.CorrectRomaniSign -Enabled)   { PatchBytesGame -Offset "26A58C0" -Texture -Patch "Romani Sign.bin" }
-    if (IsChecked -Elem $Options.CorrectComma -Enabled)        { ChangeBytesGame -Offset "ACC660" -Values @("00", "F3", "00", "00", "00", "00", "00", "00", "4F", "60", "00", "00", "00", "00", "00", "00", "24") }
-    if (IsChecked -Elem $Options.RestoreTitle -Enabled)        { ChangeBytesGame -Offset "DE0C2E" -Values @("FF", "C8", "36", "10", "98", "00") }
+    if (IsChecked -Elem $Options.CorrectRomaniSign -Enabled)   { PatchBytes -Offset "26A58C0" -Texture -Patch "Romani Sign.bin" }
+    if (IsChecked -Elem $Options.CorrectComma -Enabled)        { ChangeBytes -Offset "ACC660" -Values @("00", "F3", "00", "00", "00", "00", "00", "00", "4F", "60", "00", "00", "00", "00", "00", "00", "24") }
+    if (IsChecked -Elem $Options.RestoreTitle -Enabled)        { ChangeBytes -Offset "DE0C2E" -Values @("FF", "C8", "36", "10", "98", "00") }
 
     if (IsChecked -Elem $Options.CorrectRupeeColors -Enabled) {
-        ChangeBytesGame -Offset "10ED020" -Values @("70", "6B", "BB", "3F", "FF", "FF", "EF", "3F", "68", "AD", "C3", "FD", "E6", "BF", "CD", "7F", "48", "9B", "91", "AF", "C3", "7D", "BB", "3D", "40", "0F", "58", "19", "88", "ED", "80", "AB") # Purple
-        ChangeBytesGame -Offset "10ED040" -Values @("D4", "C3", "F7", "49", "FF", "FF", "F7", "E1", "DD", "03", "EF", "89", "E7", "E3", "E7", "DD", "A3", "43", "D5", "C3", "DF", "85", "E7", "45", "7A", "43", "82", "83", "B4", "43", "CC", "83") # Gold
+        ChangeBytes -Offset "10ED020" -Values @("70", "6B", "BB", "3F", "FF", "FF", "EF", "3F", "68", "AD", "C3", "FD", "E6", "BF", "CD", "7F", "48", "9B", "91", "AF", "C3", "7D", "BB", "3D", "40", "0F", "58", "19", "88", "ED", "80", "AB") # Purple
+        ChangeBytes -Offset "10ED040" -Values @("D4", "C3", "F7", "49", "FF", "FF", "F7", "E1", "DD", "03", "EF", "89", "E7", "E3", "E7", "DD", "A3", "43", "D5", "C3", "DF", "85", "E7", "45", "7A", "43", "82", "83", "B4", "43", "CC", "83") # Gold
     }
 
     if (IsChecked -Elem $Options.RestoreCowNoseRing -Enabled) {
-        # ChangeBytesGame "E0FB84" -Values @("C4", "84", "00", "98", "44", "81", "30", "00", "34", "AE", "00", "04", "46", "06", "20", "3C", "00", "00", "00", "00", "45", "00", "00", "1F")
-        # ChangeBytesGame "E10270" -Values @("00", "00", "00", "00", "03", "E0", "00", "08", "00", "00", "00", "00", "27", "BD", "FF", "E8")
-        ChangeBytesGame "E10270" -Values @("00", "00")
+        # ChangeBytes "E0FB84" -Values @("C4", "84", "00", "98", "44", "81", "30", "00", "34", "AE", "00", "04", "46", "06", "20", "3C", "00", "00", "00", "00", "45", "00", "00", "1F")
+        # ChangeBytes "E10270" -Values @("00", "00", "00", "00", "03", "E0", "00", "08", "00", "00", "00", "00", "27", "BD", "FF", "E8")
+        ChangeBytes "E10270" -Values @("00", "00")
     }
 
     if (IsChecked -Elem $Options.RestoreSkullKid -Enabled) {
@@ -604,47 +604,47 @@ function PatchByteOptionsMM() {
             $Values += 0
             $Values += 1
         }
-        ChangeBytesGame -Offset "181C820" -Values $Values
-        PatchBytesGame  -Offset "181C620" -Texture -Patch "Skull Kid Beak.bin"
+        ChangeBytes -Offset "181C820" -Values $Values
+        PatchBytes  -Offset "181C620" -Texture -Patch "Skull Kid Beak.bin"
     }
 
     if (IsChecked -Elem $Options.RestorePalaceRoute -Enabled) {
         CreateSubPath -Path ($GameFiles.binaries + "\Deku Palace")
-        ChangeBytesGame "1F6A7" -Values @("B0")
-        ChangeBytesGame "1F6B7" -Values @("B0")
+        ChangeBytes "1F6A7" -Values @("B0")
+        ChangeBytes "1F6B7" -Values @("B0")
         ExportAndPatch -Path "Deku Palace\deku_palace_scene"  -Offset "2534000" -Length "D220"
         ExportAndPatch -Path "Deku Palace\deku_palace_room_0" -Offset "2542000" -Length "11A50"
         ExportAndPatch -Path "Deku Palace\deku_palace_room_1" -Offset "2554000" -Length "E9B0" 
         ExportAndPatch -Path "Deku Palace\deku_palace_room_2" -Offset "2563000" -Length "124F0"
     }
 
-    if (IsChecked -Elem $Options.RestoreShopMusic -Enabled)    { ChangeBytesGame "2678007" -Values @("44") }
-    if (IsChecked -Elem $Options.PieceOfHeartSound -Enabled)   { ChangeBytesGame -Offset "BA94C8"  -Values @("10", "00") }
-    if (IsChecked -Elem $Options.MoveBomberKid -Enabled)       { ChangeBytesGame -Offset "2DE4396" -Values @("02", "C5", "01", "18", "FB", "55", "00", "07", "2D") }
+    if (IsChecked -Elem $Options.RestoreShopMusic -Enabled)    { ChangeBytes "2678007" -Values @("44") }
+    if (IsChecked -Elem $Options.PieceOfHeartSound -Enabled)   { ChangeBytes -Offset "BA94C8"  -Values @("10", "00") }
+    if (IsChecked -Elem $Options.MoveBomberKid -Enabled)       { ChangeBytes -Offset "2DE4396" -Values @("02", "C5", "01", "18", "FB", "55", "00", "07", "2D") }
 
 
 
     # EQUIPMENT #
 
     if (IsChecked -Elem $Options.EnableAmmoCapacity -Enabled) {
-        ChangeBytesGame -Offset "C5834F" -IsDec -Values @($Options.Quiver1.Text, $Options.Quiver2.Text, $Options.Quiver3.Text) -Interval 2
-        ChangeBytesGame -Offset "C58357" -IsDec -Values @($Options.BombBag1.Text, $Options.BombBag2.Text, $Options.BombBag3.Text) -Interval 2
-        ChangeBytesGame -Offset "C5837F" -IsDec -Values @($Options.DekuSticks1.Text, $Options.DekuSticks1.Text, $Options.DekuSticks1.Text) -Interval 2
-        ChangeBytesGame -Offset "C58387" -IsDec -Values @($Options.DekuNuts1.Text, $Options.DekuNuts1.Text, $Options.DekuNuts1.Text) -Interval 2
+        ChangeBytes -Offset "C5834F" -IsDec -Values @($Options.Quiver1.Text, $Options.Quiver2.Text, $Options.Quiver3.Text) -Interval 2
+        ChangeBytes -Offset "C58357" -IsDec -Values @($Options.BombBag1.Text, $Options.BombBag2.Text, $Options.BombBag3.Text) -Interval 2
+        ChangeBytes -Offset "C5837F" -IsDec -Values @($Options.DekuSticks1.Text, $Options.DekuSticks1.Text, $Options.DekuSticks1.Text) -Interval 2
+        ChangeBytes -Offset "C58387" -IsDec -Values @($Options.DekuNuts1.Text, $Options.DekuNuts1.Text, $Options.DekuNuts1.Text) -Interval 2
     }
 
     if (IsChecked -Elem $Options.EnableWalletCapacity -Enabled) {
         $Wallet1 = Get16Bit -Value ($Options.Wallet1.Text)
         $Wallet2 = Get16Bit -Value ($Options.Wallet2.Text)
         $Wallet3 = Get16Bit -Value ($Options.Wallet3.Text)
-        ChangeBytesGame -Offset "C5836C" -Values @($Wallet1.Substring(0, 2), $Wallet1.Substring(2) )
-        ChangeBytesGame -Offset "C5836E" -Values @($Wallet2.Substring(0, 2), $Wallet2.Substring(2) )
-        ChangeBytesGame -Offset "C58370" -Values @($Wallet3.Substring(0, 2), $Wallet3.Substring(2) )
+        ChangeBytes -Offset "C5836C" -Values @($Wallet1.Substring(0, 2), $Wallet1.Substring(2) )
+        ChangeBytes -Offset "C5836E" -Values @($Wallet2.Substring(0, 2), $Wallet2.Substring(2) )
+        ChangeBytes -Offset "C58370" -Values @($Wallet3.Substring(0, 2), $Wallet3.Substring(2) )
     }
 
     if (IsChecked -Elem $Options.RazorSword -Enabled) {
-        ChangeBytesGame -Offset "CBA496" -Values @("00", "00") # Prevent losing hits
-        ChangeBytesGame -Offset "BDA6B7" -Values @("01")       # Keep sword after Song of Time
+        ChangeBytes -Offset "CBA496" -Values @("00", "00") # Prevent losing hits
+        ChangeBytes -Offset "BDA6B7" -Values @("01")       # Keep sword after Song of Time
     }
 
 
@@ -653,16 +653,16 @@ function PatchByteOptionsMM() {
     
     if (IsChecked -Elem $Options.FixSouthernSwamp -Enabled) {
         CreateSubPath -Path ($GameFiles.binaries + "\Southern Swamp")
-        ChangeBytesGame -Offset "1EC27"  -Values @("50")
-        ChangeBytesGame -Offset "1EC47"  -Values @("B0")
+        ChangeBytes -Offset "1EC27"  -Values @("50")
+        ChangeBytes -Offset "1EC47"  -Values @("B0")
         ExportAndPatch -Path "Southern Swamp\southern_swamp_cleared_scene"  -Offset "1F0D000" -Length "10630"
         ExportAndPatch -Path "Southern Swamp\southern_swamp_cleared_room_0" -Offset "1F1E000" -Length "1B240"
         ExportAndPatch -Path "Southern Swamp\southern_swamp_cleared_room_2" -Offset "1F4D000" -Length "D0A0"
     }
 
-    if (IsChecked -Elem $Options.DisableLowHPSound -Enabled)   { ChangeBytesGame -Offset "B97E2A"  -Values @("00", "00") }
-    if (IsChecked -Elem $Options.FixGohtCutscene -Enabled)     { ChangeBytesGame -Offset "F6DE89"  -Values @("8D", "00", "02", "10", "00", "00", "0A") }
-    if (IsChecked -Elem $Options.FixMushroomBottle -Enabled)   { ChangeBytesGame -Offset "CD7C48"  -Values @("1E", "6B") }
+    if (IsChecked -Elem $Options.DisableLowHPSound -Enabled)   { ChangeBytes -Offset "B97E2A"  -Values @("00", "00") }
+    if (IsChecked -Elem $Options.FixGohtCutscene -Enabled)     { ChangeBytes -Offset "F6DE89"  -Values @("8D", "00", "02", "10", "00", "00", "0A") }
+    if (IsChecked -Elem $Options.FixMushroomBottle -Enabled)   { ChangeBytes -Offset "CD7C48"  -Values @("1E", "6B") }
 
 }
 
@@ -672,23 +672,23 @@ function PatchByteOptionsMM() {
 function PatchBPSOptionsMM() {
     
     if (IsChecked -Elem $Languages.RestoreText -Enabled) {
-        ChangeBytesGame -Offset "1A6D6"  -Values @("AC", "A0")
-        PatchBytesGame  -Offset "C5D0D8" -Patch "Message\Table.bin"
+        ChangeBytes -Offset "1A6D6"  -Values @("AC", "A0")
+        PatchBytes  -Offset "C5D0D8" -Patch "Message\Table.bin"
         ExportAndPatch -Path "Message\Message Data Static MM"  -Offset "AD1000" -Length "699F0"
     }
 
     if (IsChecked -Elem $Languages.CorrectCircusMask -Enabled) {
-        PatchBytesGame -Offset "A2DDC4" -Length "26F" -Texture -Patch "Troupe Leader's Mask.yaz0"
+        PatchBytes -Offset "A2DDC4" -Length "26F" -Texture -Patch "Troupe Leader's Mask.yaz0"
 
         if (IsChecked -Elem $Languages.RestoreText -Enabled) {
-            ChangeBytesGame -Offset "AD4431" -Values @("54", "72", "6F", "75", "70", "65"); ChangeBytesGame -Offset "B12DF0" -Values @("54", "72", "6F", "75", "70", "65"); ChangeBytesGame -Offset "B1BA02" -Values @("54", "72", "6F", "75", "70", "65")
-            ChangeBytesGame -Offset "B1F741" -Values @("54", "72", "6F", "75", "70", "65"); ChangeBytesGame -Offset "B20924" -Values @("74", "72", "6F", "75", "70", "65"); ChangeBytesGame -Offset "B21504" -Values @("54", "72", "6F", "75", "70", "65")
-            ChangeBytesGame -Offset "B22E13" -Values @("54", "72", "6F", "75", "70", "65")
+            ChangeBytes -Offset "AD4431" -Values @("54", "72", "6F", "75", "70", "65"); ChangeBytes -Offset "B12DF0" -Values @("54", "72", "6F", "75", "70", "65"); ChangeBytes -Offset "B1BA02" -Values @("54", "72", "6F", "75", "70", "65")
+            ChangeBytes -Offset "B1F741" -Values @("54", "72", "6F", "75", "70", "65"); ChangeBytes -Offset "B20924" -Values @("74", "72", "6F", "75", "70", "65"); ChangeBytes -Offset "B21504" -Values @("54", "72", "6F", "75", "70", "65")
+            ChangeBytes -Offset "B22E13" -Values @("54", "72", "6F", "75", "70", "65")
         }
         else {
-            ChangeBytesGame -Offset "AD423D" -Values @("54", "72", "6F", "75", "70", "65"); ChangeBytesGame -Offset "B12B60" -Values @("54", "72", "6F", "75", "70", "65"); ChangeBytesGame -Offset "B1B766" -Values @("54", "72", "6F", "75", "70", "65")
-            ChangeBytesGame -Offset "B1F495" -Values @("54", "72", "6F", "75", "70", "65"); ChangeBytesGame -Offset "B20678" -Values @("74", "72", "6F", "75", "70", "65"); ChangeBytesGame -Offset "B21258" -Values @("54", "72", "6F", "75", "70", "65")
-            ChangeBytesGame -Offset "B22B67" -Values @("54", "72", "6F", "75", "70", "65")
+            ChangeBytes -Offset "AD423D" -Values @("54", "72", "6F", "75", "70", "65"); ChangeBytes -Offset "B12B60" -Values @("54", "72", "6F", "75", "70", "65"); ChangeBytes -Offset "B1B766" -Values @("54", "72", "6F", "75", "70", "65")
+            ChangeBytes -Offset "B1F495" -Values @("54", "72", "6F", "75", "70", "65"); ChangeBytes -Offset "B20678" -Values @("74", "72", "6F", "75", "70", "65"); ChangeBytes -Offset "B21258" -Values @("54", "72", "6F", "75", "70", "65")
+            ChangeBytes -Offset "B22B67" -Values @("54", "72", "6F", "75", "70", "65")
         }
     }
 
@@ -727,35 +727,35 @@ function PatchOptionsSM64() {
 
     # HERO MODE
 
-    if (IsText -Elem $Options.Damage -Text "2x Damage" -Enabled)       { ChangeBytesGame -Offset "F207" -Values @("80") }
-    elseif (IsText -Elem $Options.Damage -Text "3x Damage" -Enabled)   { ChangeBytesGame -Offset "F207" -Values @("40") }
+    if (IsText -Elem $Options.Damage -Text "2x Damage" -Enabled)       { ChangeBytes -Offset "F207" -Values @("80") }
+    elseif (IsText -Elem $Options.Damage -Text "3x Damage" -Enabled)   { ChangeBytes -Offset "F207" -Values @("40") }
 
 
 
     # GRAPHICS #
 
     if (IsChecked -Elem $Options.WideScreen -Enabled) {
-        ChangeBytesGame -Offset "3855E" -Values @("47", "40")
-        ChangeBytesGame -Offset "35456" -Values @("46", "C0")
+        ChangeBytes -Offset "3855E" -Values @("47", "40")
+        ChangeBytes -Offset "35456" -Values @("46", "C0")
     }
 
-    if (IsChecked -Elem $Options.ForceHiresModel -Enabled)     { ChangeBytesGame -Offset "32184" -Values @("10", "00")}
+    if (IsChecked -Elem $Options.ForceHiresModel -Enabled)     { ChangeBytes -Offset "32184" -Values @("10", "00")}
     
     if (IsChecked -Elem $Options.BlackBars -Enabled) {
-        ChangeBytesGame -Offset "23A7" -Values @("BC", "00") -Interval 12
-        ChangeBytesGame -Offset "248E" -Values @("00")
-        ChangeBytesGame -Offset "2966" -Values @("00", "00") -Interval 48
-        ChangeBytesGame -Offset "3646A" -Values @("00")
-        ChangeBytesGame -Offset "364AA" -Values @("00")
-        ChangeBytesGame -Offset "364F6" -Values @("00")
-        ChangeBytesGame -Offset "36582" -Values @("00")
-        ChangeBytesGame -Offset "3799F" -Values @("BC", "00") -Interval 12
+        ChangeBytes -Offset "23A7" -Values @("BC", "00") -Interval 12
+        ChangeBytes -Offset "248E" -Values @("00")
+        ChangeBytes -Offset "2966" -Values @("00", "00") -Interval 48
+        ChangeBytes -Offset "3646A" -Values @("00")
+        ChangeBytes -Offset "364AA" -Values @("00")
+        ChangeBytes -Offset "364F6" -Values @("00")
+        ChangeBytes -Offset "36582" -Values @("00")
+        ChangeBytes -Offset "3799F" -Values @("BC", "00") -Interval 12
     }
 
 
 
     # GAMEPLAY #
-    if (IsChecked -Elem $Options.LagFix -Enabled)              { ChangeBytesGame -Offset "F0022" -Values @("0D") }
+    if (IsChecked -Elem $Options.LagFix -Enabled)              { ChangeBytes -Offset "F0022" -Values @("0D") }
 
 
 

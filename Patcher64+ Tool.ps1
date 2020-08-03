@@ -153,8 +153,8 @@ CreateInfoDialog
 CreateCreditsDialog
 
 # Set default game mode.
-if (GetFilePaths) {}
-else { ChangeGamesList }
+GetFilePaths
+ChangeGamesList
 
 # Restore Last Custom Title and GameID
 $CustomTitleTextBox.Add_TextChanged({  if (IsChecked $CustomHeaderCheckbox)   { $Settings["Core"]["CustomTitle"] = $this.Text } })
