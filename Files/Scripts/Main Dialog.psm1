@@ -469,17 +469,15 @@ function CreateLanguagesContent() {
     $Languages.TextBox.Controls.Clear()
     if ($GameType.mode -eq "Ocarina of Time") {
         $TextPanel                        = CreateReduxPanel                 -Row 0 -AddTo $Languages.TextBox
-        $Languages.Text1x                 = CreateReduxRadioButton -Column 0 -Row 0 -AddTo $TextPanel -Checked -Text "1x Speed"        -ToolTip $ToolTip -Info "Leave the dialogue text speed at normal"               -Name "Text1x"
-        $Languages.Text2x                 = CreateReduxRadioButton -Column 1 -Row 0 -AddTo $TextPanel          -Text "2x Speed"        -ToolTip $ToolTip -Info "Set the dialogue text speed to be twice as fast"       -Name "Text2x"
-        $Languages.Text3x                 = CreateReduxRadioButton -Column 2 -Row 0 -AddTo $TextPanel          -Text "3x Speed"        -ToolTip $ToolTip -Info "Set the dialogue text speed to be three times as fast" -Name "Text3x"
-        $Languages.RestoreText            = CreateReduxCheckBox    -Column 0 -Row 2 -AddTo $Languages.TextBox -Text "Restore Text"            -ToolTip $ToolTip -Info "Restores the text used from the GC revision and applies grammar and typo fixes" -Name "RestoreText"
-        #$Languages.FemalePronouns         = CreateReduxCheckBox    -Column 1 -Row 2 -AddTo $Languages.TextBox -Text "Female Pronouns"         -ToolTip $ToolTip -Info "Refer to Link as a female character`n- Requires the Restore Text option" -Name "FemalePronouns"
-        $Languages.MQTextDialogueColors   = CreateReduxCheckBox    -Column 2 -Row 2 -AddTo $Languages.TextBox -Text "MQ Text Dialogue Colors" -ToolTip $ToolTip -Info "Set the Text Dialogue Colors to match Master Quest`n- Requires the Restore Text option" -Name "MQTextDialogueColors"
+        $Languages.Text1x                 = CreateReduxRadioButton -Column 0 -Row 0 -AddTo $TextPanel -Checked -Text "1x Speed"                -ToolTip $ToolTip -Info "Leave the dialogue text speed at normal"               -Name "Text1x"
+        $Languages.Text2x                 = CreateReduxRadioButton -Column 1 -Row 0 -AddTo $TextPanel          -Text "2x Speed"                -ToolTip $ToolTip -Info "Set the dialogue text speed to be twice as fast"       -Name "Text2x"
+        $Languages.Text3x                 = CreateReduxRadioButton -Column 2 -Row 0 -AddTo $TextPanel          -Text "3x Speed"                -ToolTip $ToolTip -Info "Set the dialogue text speed to be three times as fast" -Name "Text3x"
+        $Languages.RestoreText            = CreateReduxCheckBox    -Column 0 -Row 2 -AddTo $Languages.TextBox  -Text "Restore Text"            -ToolTip $ToolTip -Info "Restores the text used from the GC revision and applies grammar and typo fixes" -Name "RestoreText"
+        $Languages.FemalePronouns         = CreateReduxCheckBox    -Column 1 -Row 2 -AddTo $Languages.TextBox  -Text "Female Pronouns"         -ToolTip $ToolTip -Info "Refer to Link as a female character`n- Requires the Restore Text option" -Name "FemalePronouns"
+        $Languages.TextDialogueColors     = CreateReduxCheckBox    -Column 2 -Row 2 -AddTo $Languages.TextBox  -Text "GC Text Dialogue Colors" -ToolTip $ToolTip -Info "Set the Text Dialogue Colors to match the GameCube's color scheme" -Name "TextDialogueColors"
 
-        #$Languages.FemalePronouns.Enabled = $Languages.MQTextDialogueColors.Enabled = $Languages.RestoreText.Checked
-        #$Languages.RestoreText.Add_CheckedChanged({ $Languages.FemalePronouns.Enabled = $Languages.MQTextDialogueColors.Enabled = $this.checked })
-        $Languages.MQTextDialogueColors.Enabled = $Languages.RestoreText.Checked
-        $Languages.RestoreText.Add_CheckedChanged({ $Languages.MQTextDialogueColors.Enabled = $this.checked })
+        $Languages.FemalePronouns.Enabled = $Languages.RestoreText.Checked
+        $Languages.RestoreText.Add_CheckedChanged({ $Languages.FemalePronouns.Enabled = $this.checked })
     }
 
     elseif ($GameType.mode -eq "Majora's Mask") {

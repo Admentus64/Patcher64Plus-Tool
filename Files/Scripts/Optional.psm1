@@ -109,14 +109,17 @@ function PatchByteOptionsOoT() {
 
         # ChangeBytes -Offset "" -Values @("5A") # Ganon               0xE826C0 -> 0xE939B0 (Length: 0x112F0) (ovl_Boss_Ganon2) (HP: 1E) (Mass: FF)
     }
+    #>
 
+    <#
     if (IsText -Elem $Options.MonsterHP -Text "2x Monster HP" -Enabled) {
-        ChangeBytes -Offset "BFADC5" -Values("14") # Stalfos
+        ChangeBytes -Offset "BFADAB" -Values("14") # Stalfos
     }
     elseif (IsText -Elem $Options.MonsterHP -Text "3x Monster HP" -Enabled) {
         ChangeBytes -Offset "BFADC5" -Values("1E") # Stalfos
     }
     #>
+    
 
 
 
@@ -430,61 +433,98 @@ function PatchBPSOptionsOoT() {
 #==============================================================================================================================================================================================
 function PatchLanguageOptionsOoT() {
     
-    if (IsChecked -Elem $Languages.RestoreText -Enabled) {
-        ChangeBytes -Offset "7596" -Values @("52", "40")
-        PatchBytes  -Offset "B849EC" -Patch "Message\Table.bin"
-
+    if ( (IsChecked -Elem $Languages.RestoreText -Enabled) -or (IsChecked -Elem $Languages.Text3x -Enabled) -or (IsChecked -Elem $Languages.TextDialogueColors -Enabled) ) {
         $File = $GameFiles.binaries + "\" + "Message\Message Data Static.bin"
         ExportBytes -Offset "92D000" -Length "38140" -Output $File
+    }
+
+    if (IsChecked -Elem $Languages.RestoreText -Enabled) {
+        if (!(IsChecked -Elem $Languages.FemalePronouns -Enabled)) {
+            ChangeBytes -Offset "7596" -Values @("52", "40")
+            PatchBytes  -Offset "B849EC" -Patch "Message\Table Restore.bin"
+        }
+
         if (IsChecked -Elem $PatchReduxCheckbox -Visible)  { ApplyPatch -File $File -Patch "\Data Extraction\Message\Message Data Static OoT Redux.bps" -FilesPath }
         else                                               { ApplyPatch -File $File -Patch "\Data Extraction\Message\Message Data Static OoT.bps"       -FilesPath }
 
-        if (IsChecked -Elem $Languages.MQTextDialogueColors -Enabled) {
-            ChangeBytes -File $File -Offset "1558"  -Values @("41"); ChangeBytes -File $File -Offset "1D0C"  -Values @("42"); ChangeBytes -File $File -Offset "28A5"  -Values @("42"); ChangeBytes -File $File -Offset "28CE"  -Values @("41"); ChangeBytes -File $File -Offset "294D"  -Values @("41")
-            ChangeBytes -File $File -Offset "29F6"  -Values @("42"); ChangeBytes -File $File -Offset "2AEC"  -Values @("42"); ChangeBytes -File $File -Offset "315A"  -Values @("42"); ChangeBytes -File $File -Offset "3246"  -Values @("42"); ChangeBytes -File $File -Offset "35EE"  -Values @("44")
-            ChangeBytes -File $File -Offset "3E25"  -Values @("42"); ChangeBytes -File $File -Offset "4C78"  -Values @("42"); ChangeBytes -File $File -Offset "5C6F"  -Values @("42"); ChangeBytes -File $File -Offset "5CE3"  -Values @("42"); ChangeBytes -File $File -Offset "60B6"  -Values @("41")
-            ChangeBytes -File $File -Offset "60DB"  -Values @("41"); ChangeBytes -File $File -Offset "616C"  -Values @("41"); ChangeBytes -File $File -Offset "7172"  -Values @("42"); ChangeBytes -File $File -Offset "7187"  -Values @("42"); ChangeBytes -File $File -Offset "71D9"  -Values @("42")
-            ChangeBytes -File $File -Offset "7246"  -Values @("42"); ChangeBytes -File $File -Offset "72AA"  -Values @("42"); ChangeBytes -File $File -Offset "9C15"  -Values @("42"); ChangeBytes -File $File -Offset "B5CC"  -Values @("41"); ChangeBytes -File $File -Offset "B64A"  -Values @("42")
-            ChangeBytes -File $File -Offset "B66F"  -Values @("42"); ChangeBytes -File $File -Offset "B6A9"  -Values @("42"); ChangeBytes -File $File -Offset "B6F7"  -Values @("41"); ChangeBytes -File $File -Offset "BEA4"  -Values @("41"); ChangeBytes -File $File -Offset "E6FB"  -Values @("42")
-            ChangeBytes -File $File -Offset "E721"  -Values @("42"); ChangeBytes -File $File -Offset "E732"  -Values @("41"); ChangeBytes -File $File -Offset "E951"  -Values @("42"); ChangeBytes -File $File -Offset "E962"  -Values @("41"); ChangeBytes -File $File -Offset "EDF5"  -Values @("42")
-            ChangeBytes -File $File -Offset "EE15"  -Values @("42"); ChangeBytes -File $File -Offset "F057"  -Values @("42"); ChangeBytes -File $File -Offset "F0AB"  -Values @("42"); ChangeBytes -File $File -Offset "F0FE"  -Values @("42"); ChangeBytes -File $File -Offset "F19D"  -Values @("42")
-            ChangeBytes -File $File -Offset "1097A" -Values @("67"); ChangeBytes -File $File -Offset "10D5B" -Values @("44"); ChangeBytes -File $File -Offset "10FBB" -Values @("44"); ChangeBytes -File $File -Offset "110A1" -Values @("42"); ChangeBytes -File $File -Offset "1115A" -Values @("44")
-            ChangeBytes -File $File -Offset "1118B" -Values @("41"); ChangeBytes -File $File -Offset "1130F" -Values @("44"); ChangeBytes -File $File -Offset "113BA" -Values @("42"); ChangeBytes -File $File -Offset "12ABC" -Values @("41"); ChangeBytes -File $File -Offset "1767E" -Values @("42")
-            ChangeBytes -File $File -Offset "176CF" -Values @("42"); ChangeBytes -File $File -Offset "177CF" -Values @("42"); ChangeBytes -File $File -Offset "178AC" -Values @("42"); ChangeBytes -File $File -Offset "19051" -Values @("44"); ChangeBytes -File $File -Offset "196F6" -Values @("44")
-            ChangeBytes -File $File -Offset "1B3B9" -Values @("42"); ChangeBytes -File $File -Offset "1C488" -Values @("42"); ChangeBytes -File $File -Offset "1C6DC" -Values @("42"); ChangeBytes -File $File -Offset "1CB55" -Values @("42"); ChangeBytes -File $File -Offset "1CB62" -Values @("42")
-            ChangeBytes -File $File -Offset "236ED" -Values @("41"); ChangeBytes -File $File -Offset "236FA" -Values @("42"); ChangeBytes -File $File -Offset "2377B" -Values @("41"); ChangeBytes -File $File -Offset "23799" -Values @("42"); ChangeBytes -File $File -Offset "237AB" -Values @("42")
-            ChangeBytes -File $File -Offset "237ED" -Values @("42"); ChangeBytes -File $File -Offset "23831" -Values @("42"); ChangeBytes -File $File -Offset "23967" -Values @("42"); ChangeBytes -File $File -Offset "2E23E" -Values @("42"); ChangeBytes -File $File -Offset "2E256" -Values @("42")
-
-            ChangeBytes -File $File -Offset "1097A" -Values @("67", "72", "65", "65", "6E", "20", "69", "63", "6F", "6E", "05", "40", "02")
-            PatchBytes  -File $File -Offset "6E10"  -Patch "Message\MQ\Navi Door.bin"
-            PatchBytes  -File $File -Offset "10A98" -Patch "Message\MQ\Navi Action.bin"
-        }
-
-        <#
         if (IsChecked -Elem $Languages.FemalePronouns -Enabled) {
-            PatchBytes  -File $File -Offset "1A371" -Patch "Message\Girl\Cowgirl.bin"
-            PatchBytes  -File $File -Offset "642B"  -Patch "Message\Girl\Messenger.bin"
-
-            ChangeBytes -File $File -Offset "17E89" -Values @("67", "69", "72", "6C", "20", "66", "72", "6F", "6D") # Malon
-
-            # Intro cutscene
-            ChangeBytes -File $File -Offset "13E0C" -Values @("67", "69", "72", "6C", "05", "41", "20", "05", "40", "77", "68", "6F", "01", "06", "20", "64", "6F", "65", "73", "6E", "27")
-            ChangeBytes -File $File -Offset "1398A" -Values @("67", "69", "72", "6C", "20", "77", "69", "74", "68", "6F", "75", "74", "20", "61", "20", "66", "61", "69", "72", "79", "20", "05", "40", "74", "6F", "20", "62", "65", "67", "69", "6E", "01", "68", "65", "72")
-            ChangeBytes -File $File -Offset "13A41" -Values @("65", "72")
-            ChangeBytes -File $File -Offset "136B7" -Values @("67", "69", "72", "6C", "3F", "05", "40", "02")
+            ChangeBytes -Offset "7596" -Values @("52", "E0")
+            PatchBytes  -Offset "B849EC" -Patch "Message\Table Girl.bin"
+            ApplyPatch -File $File -Patch "\Data Extraction\Message\Message Data Static Girl.bps" -FilesPath
         }
-        #>
 
+    }
+
+    if (IsChecked -Elem $Languages.Text2x -Enabled) { ChangeBytes -Offset "B5006F" -Values @("02") }
+    elseif (IsChecked -Elem $Languages.Text3x -Enabled) {
+        $Offset = SearchBytes -File $File -Values @("08", "06", "3C", "50", "6C", "61", "79", "20", "75", "73", "69", "6E", "67", "20", "05")
+        PatchBytes -File $File -Offset $Offset -Patch "Message\Songs.bin"
+        ChangeBytes -Offset "B5006F" -Values @("03")
+    }
+        
+    if (IsChecked -Elem $Languages.TextDialogueColors -Enabled) {
+        $Offset = SearchBytes -File $File -Values @("62", "6C", "75", "65", "20", "69", "63", "6F", "6E", "05", "40", "02", "00", "00", "54", "68")
+        ChangeBytes -File $File -Offset $Offset -Values @("67", "72", "65", "65", "6E", "20", "69", "63", "6F", "6E", "05", "40", "02")
+            
+        $Offset = SearchBytes -File $File -Values @("1A", "05", "44", "59", "6F", "75", "20", "63", "61", "6E", "20", "6F", "70", "65", "6E", "20")
+        PatchBytes  -File $File -Offset $Offset -Patch "Message\MQ Navi Door.bin"
+            
+        $Offset = SearchBytes -File $File -Values @("62", "6C", "75", "65", "20", "69", "63", "6F", "6E", "20", "61", "74", "20", "74", "68", "65")
+        PatchBytes  -File $File -Offset $Offset -Patch "Message\MQ Navi Action.bin"
+
+        $Offset = "0"
+        do { # A button
+            $Offset = SearchBytes -File $File -Start $Offset -Values @("05", "43", "9F", "05")
+            if ($Offset -ne -1) { ChangeBytes -File $File -Offset $Offset -Values @("05", "42") }
+        } while ($Offset -gt 0)
+
+        $Offset = "0"
+        do { # A button
+            $Offset = SearchBytes -File $File -Start $Offset -Values @("05", "43", "9F", "", "05", "40")
+            if ($Offset -ne -1) { ChangeBytes -File $File -Offset $Offset -Values @("05", "42") }
+        } while ($Offset -gt 0)
+
+        $Offset = "0"
+        do { # A button
+            $Offset = SearchBytes -File $File -Start $Offset -Values @("05", "43", "20", "9F", "05", "44")
+            if ($Offset -ne -1) { ChangeBytes -File $File -Offset $Offset -Values @("05", "42") }
+        } while ($Offset -gt 0)
+
+        $Offset = "0"
+        do { # A button
+            $Offset = SearchBytes -File $File -Start $Offset -Values @("05", "43", "41", "63", "74", "69", "6F", "6E")
+            if ($Offset -ne -1) { ChangeBytes -File $File -Offset $Offset -Values @("05", "42") }
+        } while ($Offset -gt 0)
+
+        $Offset = "0"
+        do { # B button
+            $Offset = SearchBytes -File $File -Start $Offset -Values @("05", "42", "A0", "05", "40")
+            if ($Offset -ne -1) { ChangeBytes -File $File -Offset $Offset -Values @("05", "41") }
+        } while ($Offset -gt 0)
+
+        $Offset = "0"
+        do { # B button
+            $Offset = SearchBytes -File $File -Start $Offset -Values @("05", "42", "A0", "20", "05", "40")
+            if ($Offset -ne -1) { ChangeBytes -File $File -Offset $Offset -Values @("05", "41") }
+        } while ($Offset -gt 0)
+
+        $Offset = "0"
+        do { # Start button
+            $Offset = SearchBytes -File $File -Start $Offset -Values @("05", "41", "53", "54", "41", "52", "54", "05", "40")
+            if ($Offset -ne -1) { ChangeBytes -File $File -Offset $Offset -Values @("05", "44") }
+        } while ($Offset -gt 0)
+
+        $Offset = "0"
+        do { # Start button
+            $Offset = SearchBytes -File $File -Start $Offset -Values @("05", "41", "53", "54", "41", "52", "54", "20", "05", "40")
+            if ($Offset -ne -1) { ChangeBytes -File $File -Offset $Offset -Values @("05", "44") }
+        } while ($Offset -gt 0)
+    }
+
+    if ( (IsChecked -Elem $Languages.RestoreText -Enabled) -or (IsChecked -Elem $Languages.Text3x -Enabled) -or (IsChecked -Elem $Languages.TextDialogueColors -Enabled) ) {
         PatchBytes -Offset "92D000" -Patch ("Message\Message Data Static.bin")
     }
 
-    if (IsChecked -Elem $Languages.Text2x -Enabled)            { ChangeBytes -Offset "B5006F" -Values @("02") }
-    elseif (IsChecked -Elem $Languages.Text3x -Enabled) {
-        if (IsChecked -Elem $Languages.RestoreText -Enabled)   { PatchBytes -Offset "93B6EC" -Patch "Message\Songs.bin" }
-        else                                                   { PatchBytes -Offset "93B6CC" -Patch "Message\Songs.bin" }
-        ChangeBytes -Offset "B5006F" -Values @("03")
-    }
-    
 }
 
 
@@ -661,8 +701,9 @@ function PatchByteOptionsMM() {
     }
 
     if (IsChecked -Elem $Options.DisableLowHPSound -Enabled)   { ChangeBytes -Offset "B97E2A"  -Values @("00", "00") }
-    if (IsChecked -Elem $Options.FixGohtCutscene -Enabled)     { ChangeBytes -Offset "F6DE89"  -Values @("8D", "00", "02", "10", "00", "00", "0A") }
+    if (IsChecked -Elem $Options.FixGohtCutscene   -Enabled)   { ChangeBytes -Offset "F6DE89"  -Values @("8D", "00", "02", "10", "00", "00", "0A") }
     if (IsChecked -Elem $Options.FixMushroomBottle -Enabled)   { ChangeBytes -Offset "CD7C48"  -Values @("1E", "6B") }
+    if (IsChecked -Elem $Options.FixFairyFountain  -Enabled)   { ChangeBytes -Offset "B9133E"  -Values @("01", "0F") }
 
 }
 
@@ -1032,7 +1073,7 @@ function CreateMMOptionsContent() {
     $Options.FixGohtCutscene           = CreateReduxCheckBox -Column 1 -Row 1 -AddTo $OtherBox -Text "Fix Goht Cutscene"   -ToolTip $ToolTip -Info "Fix Goht's awakening cutscene so that Link no longer gets run over" -Name "FixGohtCutscene"
     $Options.FixMushroomBottle         = CreateReduxCheckBox -Column 2 -Row 1 -AddTo $OtherBox -Text "Fix Mushroom Bottle" -ToolTip $ToolTip -Info "Fix the item reference when collecting Magical Mushrooms as Link puts away the bottle automatically due to an error" -Name "FixMushroomBottle"
     $Options.FixSouthernSwamp          = CreateReduxCheckBox -Column 3 -Row 1 -AddTo $OtherBox -Text "Fix Southern Swamp"  -ToolTip $ToolTip -Info "Fix a misplaced door after Woodfall has been cleared and you return to the Potion Shop`nThe door is slightly pushed forward after Odolwa has been defeated." -Name "FixSouthernSwamp"
-
+    $Options.FixFairyFountain          = CreateReduxCheckBox -Column 4 -Row 1 -AddTo $OtherBox -Text "Fix Fairy Fountain"  -ToolTip $ToolTip -Info "Fix the Ikana Canyon Fairy Fountain area not displaying the correct color." -Name "FixFairyFountain"
 
 
     CreateCapacityDialog

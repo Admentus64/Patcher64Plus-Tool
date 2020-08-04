@@ -1,10 +1,18 @@
 function ChangeBytes([String]$File, [String]$Offset, [Array]$Values, [int]$Interval=1, [Switch]$IsDec) {
 
     if ($ExternalScript) { Write-Host "Change values:" $Values }
-
     if (IsSet -Elem $File) { $ByteArrayGame = [IO.File]::ReadAllBytes($File) }
     if ($Interval -lt 1) { $Interval = 1 }
     [uint32]$Offset = GetDecimal -Hex $Offset
+
+    if ($Offset -lt 0) {
+        Write-Host "Offset is negative!"
+        return
+    }
+    elseif ($Offset -gt $ByteArrayGame.Length) {
+        Write-Host "Offset is too large for file!"
+        return
+    }
 
     for ($i=0; $i -lt $Values.Length; $i++) {
         if ($IsDec)   { [Byte]$Value = $Values[$i] }
@@ -35,6 +43,15 @@ function PatchBytes([String]$File, [String]$Offset, [String]$Length, [String]$Pa
 
     [uint32]$Offset = GetDecimal -Hex $Offset
 
+    if ($Offset -lt 0) {
+        Write-Host "Offset is negative!"
+        return
+    }
+    elseif ($Offset -gt $ByteArrayGame.Length) {
+        Write-Host "Offset is too large for file!"
+        return
+    }
+
     if (IsSet -Elem $Length) {
         [uint32]$Length = GetDecimal -Hex $Length
         for ($i=0; $i -lt $Length; $i++) {
@@ -57,9 +74,17 @@ function PatchBytes([String]$File, [String]$Offset, [String]$Length, [String]$Pa
 function ExportBytes([String]$File, [String]$Offset, [String]$End, [String]$Length, [String]$Output) {
     
     if ($ExternalScript) { Write-Host "Write file to:" $Output }
-
     if (IsSet -Elem $File) { $ByteArrayGame = [IO.File]::ReadAllBytes($File) }
     [uint32]$Offset = GetDecimal -Hex $Offset
+
+    if ($Offset -lt 0) {
+        Write-Host "Offset is negative!"
+        return
+    }
+    elseif ($Offset -gt $ByteArrayGame.Length) {
+        Write-Host "Offset is too large for file!"
+        return
+    }
 
     if (IsSet -Elem $End) {
         [uint32]$End = GetDecimal -Hex $End
@@ -71,6 +96,51 @@ function ExportBytes([String]$File, [String]$Offset, [String]$End, [String]$Leng
     }
 
     $File = $Offset = $Length = $Output = $NewArray = $null
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function SearchBytes([String]$File, [String]$Start="0", [String]$End, [Array]$Values) {
+    
+    if (IsSet -Elem $File) { $ByteArrayGame = [IO.File]::ReadAllBytes($File) }
+
+    [uint32]$Start = GetDecimal -Hex $Start
+    if (IsSet -Elem $End)   { [uint32]$End = GetDecimal -Hex $End }
+    else                    { [uint32]$End = $ByteArrayGame.Length }
+
+    if ($Start -lt 0 -or $End -lt 0) {
+        Write-Host "Start or end offset is negative!"
+        return
+    }
+    elseif ($Start -gt $ByteArrayGame.Length -or $End -gt $ByteArrayGame.Length) {
+        Write-Host "Start or end offset is too large for file!"
+        return
+    }
+    elseif ($Start -gt $End) {
+        Write-Host "Start offset can not be greater than end offset"
+        return
+    }
+
+    for ($i=$Start; $i -lt $End; $i++) {
+        $Search = $True
+        for ($j=0; $j -lt $Values.Length; $j++) {
+            if ($Values[$j] -ne "") {
+                if ($ByteArrayGame[$i + $j] -ne (GetDecimal -Hex $Values[$j]) ) {
+                    $Search = $False
+                    break
+                }
+            }
+        }
+        if ($Search -eq $True) {
+            if ($ExternalScript) { Write-Host "Found values at:" (Get32Bit -Value $i) }
+            return Get32Bit -Value $i
+        }
+    }
+
+    Write-Host "Did not find searched values"
+    return -1;
 
 }
 
@@ -103,6 +173,7 @@ function Get32Bit($Value)           { return '{0:X8}' -f [int]$Value }
 Export-ModuleMember -Function ChangeBytes
 Export-ModuleMember -Function PatchBytes
 Export-ModuleMember -Function ExportBytes
+Export-ModuleMember -Function SearchBytes
 Export-ModuleMember -Function ExportAndPatch
 
 Export-ModuleMember -Function GetDecimal
