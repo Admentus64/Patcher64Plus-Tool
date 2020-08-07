@@ -1,7 +1,7 @@
 function CreateLanguagesDialog() {
 
     # Create Dialog
-    $global:LanguagesDialog = CreateDialog -Width 560 -Height 280
+    $global:LanguagesDialog = CreateDialog -Width 560 -Height 310
     $CloseButton = CreateButton -X ($LanguagesDialog.Width / 2 - 40) -Y ($LanguagesDialog.Height - 90) -Width 80 -Height 35 -Text "Close" -AddTo $LanguagesDialog
     $CloseButton.Add_Click({ $LanguagesDialog.Hide() })
 
@@ -10,7 +10,7 @@ function CreateLanguagesDialog() {
     #$global:Languages.Box = CreateGroupBox -X 15 -Y 10 -Width ($LanguagesDialog.Width - 50) -Text "Languages" -AddTo $LanguagesDialog
     $Languages.Box     = CreateReduxGroup -Y 10 -Height 2 -AddTo $LanguagesDialog -Text "Languages"
     $Languages.Panel   = CreateReduxPanel -Row 0 -Rows 2 -AddTo $Languages.Box
-    $Languages.TextBox = CreateReduxGroup -Y ($Languages.Box.Bottom + 5) -Height 2 -AddTo $LanguagesDialog -Text "English Text"
+    $Languages.TextBox = CreateReduxGroup -Y ($Languages.Box.Bottom + 5) -Height 3 -AddTo $LanguagesDialog -Text "English Text"
 
 }
 

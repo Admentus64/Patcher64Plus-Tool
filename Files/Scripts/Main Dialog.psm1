@@ -472,17 +472,19 @@ function CreateLanguagesContent() {
         $Languages.Text1x                 = CreateReduxRadioButton -Column 0 -Row 0 -AddTo $TextPanel -Checked -Text "1x Speed"                -ToolTip $ToolTip -Info "Leave the dialogue text speed at normal"               -Name "Text1x"
         $Languages.Text2x                 = CreateReduxRadioButton -Column 1 -Row 0 -AddTo $TextPanel          -Text "2x Speed"                -ToolTip $ToolTip -Info "Set the dialogue text speed to be twice as fast"       -Name "Text2x"
         $Languages.Text3x                 = CreateReduxRadioButton -Column 2 -Row 0 -AddTo $TextPanel          -Text "3x Speed"                -ToolTip $ToolTip -Info "Set the dialogue text speed to be three times as fast" -Name "Text3x"
-        $Languages.RestoreText            = CreateReduxCheckBox    -Column 0 -Row 2 -AddTo $Languages.TextBox  -Text "Restore Text"            -ToolTip $ToolTip -Info "Restores the text used from the GC revision and applies grammar and typo fixes" -Name "RestoreText"
-        $Languages.FemalePronouns         = CreateReduxCheckBox    -Column 1 -Row 2 -AddTo $Languages.TextBox  -Text "Female Pronouns"         -ToolTip $ToolTip -Info "Refer to Link as a female character`n- Requires the Restore Text option" -Name "FemalePronouns"
+        $Languages.TextRestore            = CreateReduxCheckBox    -Column 0 -Row 2 -AddTo $Languages.TextBox  -Text "Restore Text"            -ToolTip $ToolTip -Info "Restores the text used from the GC revision and applies grammar and typo fixes" -Name "TextRestore"
+        $Languages.TextFemalePronouns     = CreateReduxCheckBox    -Column 1 -Row 2 -AddTo $Languages.TextBox  -Text "Female Pronouns"         -ToolTip $ToolTip -Info "Refer to Link as a female character`n- Requires the Restore Text option" -Name "TextFemalePronouns"
         $Languages.TextDialogueColors     = CreateReduxCheckBox    -Column 2 -Row 2 -AddTo $Languages.TextBox  -Text "GC Text Dialogue Colors" -ToolTip $ToolTip -Info "Set the Text Dialogue Colors to match the GameCube's color scheme" -Name "TextDialogueColors"
+        $Languages.TextUnisizeTunics      = CreateReduxCheckBox    -Column 0 -Row 3 -AddTo $Languages.TextBox  -Text "Unisize Tunics"          -ToolTip $ToolTip -Info "Adjust the dialogue to mention that the Goron Tunic and Zora Tunic are unisize`n- Useful for the Unlock Tunics option" -Name "TextUnisizeTunics"
 
-        $Languages.FemalePronouns.Enabled = $Languages.RestoreText.Checked
-        $Languages.RestoreText.Add_CheckedChanged({ $Languages.FemalePronouns.Enabled = $this.checked })
+        $Languages.TextFemalePronouns.Enabled = $Languages.TextRestore.Checked
+        $Languages.TextRestore.Add_CheckedChanged({ $Languages.TextFemalePronouns.Enabled = $this.checked })
     }
 
     elseif ($GameType.mode -eq "Majora's Mask") {
-        $Languages.RestoreText            = CreateReduxCheckBox -Column 0 -Row 1 -AddTo $Languages.TextBox -Text "Restore Text"        -ToolTip $ToolTip -Info "Restores and fixes the following:`n- Restore the area titles cards for those that do not have any`n- Sound effects that do not play during dialogue`n- Grammar and typo fixes" -Name "RestoreText"
-        $Languages.CorrectCircusMask      = CreateReduxCheckBox -Column 1 -Row 1 -AddTo $Languages.TextBox -Text "Correct Circus Mask" -ToolTip $ToolTip -Info "Change the Circus Leader's Mask to Troupe Leader's Mask and all references to it." -Name "CorrectCircusMask"
+        $Languages.TextRestore            = CreateReduxCheckBox -Column 0 -Row 1 -AddTo $Languages.TextBox -Text "Restore Text"            -ToolTip $ToolTip -Info "Restores and fixes the following:`n- Restore the area titles cards for those that do not have any`n- Sound effects that do not play during dialogue`n- Grammar and typo fixes" -Name "TextRestore"
+        $Languages.CorrectCircusMask      = CreateReduxCheckBox -Column 1 -Row 1 -AddTo $Languages.TextBox -Text "Correct Circus Mask"     -ToolTip $ToolTip -Info "Change the Circus Leader's Mask to Troupe Leader's Mask and all references to it" -Name "CorrectCircusMask"
+        $Languages.TextRazorSword         = CreateReduxCheckBox -Column 2 -Row 1 -AddTo $Languages.TextBox -Text "Permanent Razor Sword" -ToolTip $ToolTip -Info "Refer the Razor Sword as no longer being breakable" -Name "TextRazorSword"
     }
 
     if (IsSet -Elem $GamePatch.languages -MinLength 0) {

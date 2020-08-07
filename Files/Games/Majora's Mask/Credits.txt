@@ -22,6 +22,7 @@
 - Fix Goth Cutscene:		ShadowOne333
 - Fix Mushroom Bottle:		ShadowOne333 & ozidual
 - Fix Southern Swamp:		ShadowOne333
+- Fix Fairy Fountain			Dybbles (fix) & ShadowOne333 (ROM / patch)
 - Admentus (Scripting and Assistance of all Options)
 
 --- Translations ---

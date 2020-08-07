@@ -74,7 +74,7 @@ function PatchByteOptionsOoT() {
 
 
         ChangeBytes -Offset "CE6D2F" -Values @("30") # Volvagia        0xCE65F0 -> 0xCED920 (Length: 0x7330) (ovl_Boss_Fd) (Has HP) (HP: 18) (Mass: 32)
-                                                         # Volvagia        0xD04790 -> 0xD084C0 (Length:0x3D30) (ovl_Boss_Fd2) (Has No HP, Forwards HP to Flying)
+                                                     # Volvagia        0xD04790 -> 0xD084C0 (Length:0x3D30) (ovl_Boss_Fd2) (Has No HP, Forwards HP to Flying)
 
         ChangeBytes -Offset "D3B4A7" -Values @("28") # Morpha          0xD3ADF0 -> 0xD46390 (Length: 0xB5A0) (ovl_Boss_Mo) (HP: 14) (Mass: 00)
 
@@ -97,7 +97,7 @@ function PatchByteOptionsOoT() {
         ChangeBytes -Offset "C91F8F" -Values @("5A") # Phantom Ganon   0xC91AD0 -> 0xC96840  (Length: 0x4D70) (ovl_Boss_Ganondrof) (HP: 1E -> 18) (Mass: 32)
 
         ChangeBytes -Offset "CE6D2F" -Values @("48") # Volvagia        0xCE65F0 -> 0xCED920 (Length: 0x7330) (ovl_Boss_Fd) (Has HP) (HP: 18) (Mass: 32)
-                                                         # Volvagia        0xD04790 -> 0xD084C0 (Length:0x3D30) (ovl_Boss_Fd2) (Has No HP, Forwards HP to Flying)
+                                                     # Volvagia        0xD04790 -> 0xD084C0 (Length:0x3D30) (ovl_Boss_Fd2) (Has No HP, Forwards HP to Flying)
 
         ChangeBytes -Offset "D3B4A7" -Values @("3C") # Morpha          0xD3ADF0 -> 0xD46390 (Length: 0xB5A0) (ovl_Boss_Mo) (HP: 14) (Mass: 00)
 
@@ -179,6 +179,7 @@ function PatchByteOptionsOoT() {
 
     if (IsChecked -Elem $Options.DisableLowHPSound -Enabled)   { ChangeBytes -Offset "ADBA1A"  -Values @("00", "00") }
     if (IsChecked -Elem $Options.DisableNaviPrompts -Enabled)  { ChangeBytes -Offset "DF8B84"  -Values @("00", "00", "00", "00") }
+    if (IsChecked -Elem $Options.SubscreenDelayFix -Enabled)   { ChangeBytes -Offset "B13C75"  -Values @("8A") }
 
 
 
@@ -289,10 +290,6 @@ function PatchByteOptionsOoT() {
         ChangeBytes -Offset "F47ED0" -Values @("D4", "C3", "F7", "49", "FF", "FF", "F7", "E1", "DD", "03", "EF", "89", "E7", "E3", "E7", "DD", "A3", "43", "D5", "C3", "DF", "85", "E7", "45", "7A", "43", "82", "83", "B4", "43", "CC", "83") # Gold
     }
 
-    if (IsChecked -Elem $Options.RestoreCowNoseRing -Enabled) {
-        ChangeBytes -Offset "EF3E68" -Values @("00", "00")
-    }
-
     if (IsChecked -Elem $Options.RestoreFireTemple -Enabled) {
         ChangeBytes -Offset "7465"   -Values @("03", "91", "30") # DMA Table, Pointer to AudioBank
         ChangeBytes -Offset "7471"   -Values @("03", "91", "30", "00", "08", "8B", "B0", "00", "03", "91", "30") # DMA Table, Pointer to AudioSeq
@@ -304,6 +301,8 @@ function PatchByteOptionsOoT() {
         PatchBytes  -Offset "B8A1C0" -Patch "Fire Temple Theme\12AudioTablePointers.bin"
         ExportAndPatch -Path "Fire Temple Theme\12FireTemple"  -Offset "D390" -Length "4CCBB0"
     }
+
+    if (IsChecked -Elem $Options.RestoreCowNoseRing -Enabled) { ChangeBytes -Offset "EF3E68" -Values @("00", "00") }
 
 
 
@@ -389,6 +388,7 @@ function PatchByteOptionsOoT() {
         PatchBytes -Offset "2F73700" -Texture -Patch "Gerudo Symbols\21.bin"
 
         if ( (IsText -Elem $Options.Models -Text "Replace Adult Model Only" -Enabled) -or (IsText -Elem $Options.Models -Text "Replace Both Models" -Enabled) )   { PatchBytes -Offset "F9B318"  -Texture -Patch "Gerudo Symbols\15.bin" }
+        elseif (IsText -Elem $Options.Models -Text "Change to Female Models" -Enabled)                                                                            { PatchBytes -Offset "FA0780"  -Texture -Patch "Gerudo Symbols\15.bin" }
         else                                                                                                                                                      { PatchBytes -Offset "F92280"  -Texture -Patch "Gerudo Symbols\15.bin" }
 
         PatchBytes -Offset "2464D88" -Texture -Patch "Gerudo Symbols\1.bin"  # Room 11 Forest Temple
@@ -418,13 +418,6 @@ function PatchBPSOptionsOoT() {
     if (IsText -Elem $Options.Models -Text "Change to Female Models" -Enabled) {
         ApplyPatch -File $Files.decompressedROM -Patch "\Decompressed\Models\female_models.ppf"
     }
-
-    #if ( (IsText -Elem $Options.Voices -Text "Majora's Mask Link Voices" -Enabled)) {
-    #    ApplyPatch -File $Files.decompressedROM -Patch "\Decompressed\Voices\mm_link_voices.ppf"
-    #}
-    #elseif (IsText -Elem $Options.Voices -Text "Feminine Link Voices" -Enabled) {
-    #    ApplyPatch -File $Files.decompressedROM -Patch "\Decompressed\Voices\female_link_voices.ppf"
-    #}
     
 }
 
@@ -433,12 +426,12 @@ function PatchBPSOptionsOoT() {
 #==============================================================================================================================================================================================
 function PatchLanguageOptionsOoT() {
     
-    if ( (IsChecked -Elem $Languages.RestoreText -Enabled) -or (IsChecked -Elem $Languages.Text3x -Enabled) -or (IsChecked -Elem $Languages.TextDialogueColors -Enabled) ) {
+    if ( (IsChecked -Elem $Languages.TextRestore -Enabled) -or (IsChecked -Elem $Languages.Text3x -Enabled) -or (IsChecked -Elem $Languages.TextDialogueColors -Enabled) -or (IsChecked -Elem $Languages.TextUnisizeTunics -Enabled)  ) {
         $File = $GameFiles.binaries + "\" + "Message\Message Data Static.bin"
         ExportBytes -Offset "92D000" -Length "38140" -Output $File
     }
 
-    if (IsChecked -Elem $Languages.RestoreText -Enabled) {
+    if (IsChecked -Elem $Languages.TextRestore -Enabled) {
         if (!(IsChecked -Elem $Languages.FemalePronouns -Enabled)) {
             ChangeBytes -Offset "7596" -Values @("52", "40")
             PatchBytes  -Offset "B849EC" -Patch "Message\Table Restore.bin"
@@ -447,7 +440,7 @@ function PatchLanguageOptionsOoT() {
         if (IsChecked -Elem $PatchReduxCheckbox -Visible)  { ApplyPatch -File $File -Patch "\Data Extraction\Message\Message Data Static OoT Redux.bps" -FilesPath }
         else                                               { ApplyPatch -File $File -Patch "\Data Extraction\Message\Message Data Static OoT.bps"       -FilesPath }
 
-        if (IsChecked -Elem $Languages.FemalePronouns -Enabled) {
+        if (IsChecked -Elem $Languages.TextFemalePronouns -Enabled) {
             ChangeBytes -Offset "7596" -Values @("52", "E0")
             PatchBytes  -Offset "B849EC" -Patch "Message\Table Girl.bin"
             ApplyPatch -File $File -Patch "\Data Extraction\Message\Message Data Static Girl.bps" -FilesPath
@@ -521,7 +514,17 @@ function PatchLanguageOptionsOoT() {
         } while ($Offset -gt 0)
     }
 
-    if ( (IsChecked -Elem $Languages.RestoreText -Enabled) -or (IsChecked -Elem $Languages.Text3x -Enabled) -or (IsChecked -Elem $Languages.TextDialogueColors -Enabled) ) {
+    if (IsChecked -Elem $Languages.TextUnisizeTunics -Enabled) {
+        $Offset = SearchBytes -File $File -Values @("59", "6F", "75", "20", "67", "6F", "74", "20", "61", "20", "05", "41", "47", "6F", "72", "6F", "6E", "20", "54", "75", "6E", "69", "63")
+        ChangeBytes -File $File -Offset ( Get24Bit -Value ( (GetDecimal -Hex $Offset) + (GetDecimal -Hex "39") ) ) -Values @("75", "6E", "69", "73", "69", "7A", "65", "2C", "20", "73", "6F", "20", "69", "74", "20", "66", "69", "74", "73", "20", "61", "64", "75", "6C", "74", "20", "61", "6E", "64")
+        ChangeBytes -File $File -Offset ( Get24Bit -Value ( (GetDecimal -Hex $Offset) + (GetDecimal -Hex "B3") ) ) -Values @("75", "6E", "69", "73", "69", "7A", "65", "2C", "01", "73", "6F", "20", "69", "74", "20", "66", "69", "74", "73", "20", "61", "64", "75", "6C", "74", "20", "61", "6E", "64")
+
+        $Offset = SearchBytes -File $File -Values @("41", "20", "74", "75", "6E", "69", "63", "20", "6D", "61", "64", "65", "20", "62", "79", "20", "47", "6F", "72", "6F", "6E", "73")
+        ChangeBytes -File $File -Offset ( Get24Bit -Value ( (GetDecimal -Hex $Offset) + (GetDecimal -Hex "18") ) ) -Values @("55", "6E", "69", "2D", "20")
+        ChangeBytes -File $File -Offset ( Get24Bit -Value ( (GetDecimal -Hex $Offset) + (GetDecimal -Hex "7A") ) ) -Values @("55", "6E", "69", "73", "69", "7A", "65", "2E", "20", "20", "20")
+    }
+
+    if ( (IsChecked -Elem $Languages.TextRestore -Enabled) -or (IsChecked -Elem $Languages.Text3x -Enabled) -or (IsChecked -Elem $Languages.TextDialogueColors -Enabled) -or (IsChecked -Elem $Languages.TextUnisizeTunics -Enabled) ) {
         PatchBytes -Offset "92D000" -Patch ("Message\Message Data Static.bin")
     }
 
@@ -574,9 +577,10 @@ function PatchByteOptionsMM() {
 
     # D-PAD #
 
-    if (IsChecked -Elem $Options.LeftDPad -Enabled)            { ChangeBytes -Offset "3806365" -Values @("01") }
+    if (IsChecked -Elem $Options.HideDPad -Enabled)            { ChangeBytes -Offset "3806365" -Values @("00") }
+    elseif (IsChecked -Elem $Options.LeftDPad -Enabled)        { ChangeBytes -Offset "3806365" -Values @("01") }
     elseif (IsChecked -Elem $Options.RightDPad -Enabled)       { ChangeBytes -Offset "3806365" -Values @("02") }
-    elseif (IsChecked -Elem $Options.HideDPad -Enabled)        { ChangeBytes -Offset "3806365" -Values @("00") }
+    
 
 
 
@@ -633,9 +637,8 @@ function PatchByteOptionsMM() {
     }
 
     if (IsChecked -Elem $Options.RestoreCowNoseRing -Enabled) {
-        # ChangeBytes "E0FB84" -Values @("C4", "84", "00", "98", "44", "81", "30", "00", "34", "AE", "00", "04", "46", "06", "20", "3C", "00", "00", "00", "00", "45", "00", "00", "1F")
-        # ChangeBytes "E10270" -Values @("00", "00", "00", "00", "03", "E0", "00", "08", "00", "00", "00", "00", "27", "BD", "FF", "E8")
-        ChangeBytes "E10270" -Values @("00", "00")
+        ChangeBytes -Offset "E10270"  -Values @("00", "00")
+        ChangeBytes -Offset "107F5C4" -Values @("00", "00")
     }
 
     if (IsChecked -Elem $Options.RestoreSkullKid -Enabled) {
@@ -650,15 +653,15 @@ function PatchByteOptionsMM() {
 
     if (IsChecked -Elem $Options.RestorePalaceRoute -Enabled) {
         CreateSubPath -Path ($GameFiles.binaries + "\Deku Palace")
-        ChangeBytes "1F6A7" -Values @("B0")
-        ChangeBytes "1F6B7" -Values @("B0")
+        ChangeBytes -Offset "1F6A7" -Values @("B0")
+        ChangeBytes -Offset "1F6B7" -Values @("B0")
         ExportAndPatch -Path "Deku Palace\deku_palace_scene"  -Offset "2534000" -Length "D220"
         ExportAndPatch -Path "Deku Palace\deku_palace_room_0" -Offset "2542000" -Length "11A50"
         ExportAndPatch -Path "Deku Palace\deku_palace_room_1" -Offset "2554000" -Length "E9B0" 
         ExportAndPatch -Path "Deku Palace\deku_palace_room_2" -Offset "2563000" -Length "124F0"
     }
 
-    if (IsChecked -Elem $Options.RestoreShopMusic -Enabled)    { ChangeBytes "2678007" -Values @("44") }
+    if (IsChecked -Elem $Options.RestoreShopMusic -Enabled)    { ChangeBytes -Offset "2678007" -Values @("44") }
     if (IsChecked -Elem $Options.PieceOfHeartSound -Enabled)   { ChangeBytes -Offset "BA94C8"  -Values @("10", "00") }
     if (IsChecked -Elem $Options.MoveBomberKid -Enabled)       { ChangeBytes -Offset "2DE4396" -Values @("02", "C5", "01", "18", "FB", "55", "00", "07", "2D") }
 
@@ -712,16 +715,31 @@ function PatchByteOptionsMM() {
 #==============================================================================================================================================================================================
 function PatchBPSOptionsMM() {
     
-    if (IsChecked -Elem $Languages.RestoreText -Enabled) {
+    
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function PatchLanguageOptionsMM() {
+    
+    if ( (IsChecked -Elem $Languages.TextRestore -Enabled) ) {
+        $File = $GameFiles.binaries + "\" + "Message\Message Data Static MM.bin"
+        ExportBytes -Offset "AD1000" -Length "699F0" -Output $File
+    }
+
+    if (IsChecked -Elem $Languages.TextRestore -Enabled) {
         ChangeBytes -Offset "1A6D6"  -Values @("AC", "A0")
         PatchBytes  -Offset "C5D0D8" -Patch "Message\Table.bin"
-        ExportAndPatch -Path "Message\Message Data Static MM"  -Offset "AD1000" -Length "699F0"
+        ApplyPatch -File $File -Patch "\Data Extraction\Message\Message Data Static MM.bps" -FilesPath
+        #ExportAndPatch -Path "Message\Message Data Static MM"  -Offset "AD1000" -Length "699F0"
     }
 
     if (IsChecked -Elem $Languages.CorrectCircusMask -Enabled) {
         PatchBytes -Offset "A2DDC4" -Length "26F" -Texture -Patch "Troupe Leader's Mask.yaz0"
 
-        if (IsChecked -Elem $Languages.RestoreText -Enabled) {
+        if (IsChecked -Elem $Languages.TextRestore -Enabled) {
             ChangeBytes -Offset "AD4431" -Values @("54", "72", "6F", "75", "70", "65"); ChangeBytes -Offset "B12DF0" -Values @("54", "72", "6F", "75", "70", "65"); ChangeBytes -Offset "B1BA02" -Values @("54", "72", "6F", "75", "70", "65")
             ChangeBytes -Offset "B1F741" -Values @("54", "72", "6F", "75", "70", "65"); ChangeBytes -Offset "B20924" -Values @("74", "72", "6F", "75", "70", "65"); ChangeBytes -Offset "B21504" -Values @("54", "72", "6F", "75", "70", "65")
             ChangeBytes -Offset "B22E13" -Values @("54", "72", "6F", "75", "70", "65")
@@ -733,12 +751,23 @@ function PatchBPSOptionsMM() {
         }
     }
 
-}
+    if (IsChecked -Elem $Languages.TextRazorSword -Enabled) {
+        $Offset = SearchBytes -File $File -Values @("54", "68", "69", "73", "20", "6E", "65", "77", "2C", "20", "73", "68", "61", "72", "70", "65", "72", "20", "62", "6C", "61", "64", "65")
+        ChangeBytes -File $File -Offset ( Get24Bit -Value ( (GetDecimal -Hex $Offset) + (GetDecimal -Hex "38") ) ) -Values @("61", "73", "20", "6D", "75", "63", "68", "11", "79", "6F", "75", "20", "77", "61", "6E", "74", "20")
 
+        $Offset = SearchBytes -File $File -Values @("54", "68", "65", "20", "4B", "6F", "6B", "69", "72", "69", "20", "53", "77", "6F", "72", "64", "20", "72", "65", "66", "6F", "72", "67", "65", "64")
+        ChangeBytes -File $File -Offset ( Get24Bit -Value ( (GetDecimal -Hex $Offset) + (GetDecimal -Hex "30") ) ) -Values @("61", "73", "20", "6D", "75", "63", "68", "20", "79", "6F", "75", "20", "77", "61", "6E", "74", "2E", "20")
 
+        $Offset = SearchBytes -File $File -Values @("4B", "65", "65", "70", "20", "69", "6E", "20", "6D", "69", "6E", "64", "20", "74", "68", "61", "74")
+        PatchBytes  -File $File -Offset $Offset -Patch "Message\Razor Sword 1.bin"
 
-#==============================================================================================================================================================================================
-function PatchLanguageOptionsMM() {
+        $Offset = SearchBytes -File $File -Values @("4E", "6F", "77", "20", "6B", "65", "65", "70", "20", "69", "6E", "20", "6D", "69", "6E", "64", "20", "74", "68", "61", "74")
+        PatchBytes  -File $File -Offset $Offset -Patch "Message\Razor Sword 2.bin"
+    }
+
+    if ( (IsChecked -Elem $Languages.TextRestore -Enabled) ) {
+        PatchBytes -Offset "AD1000" -Patch ("Message\Message Data Static MM.bin")
+    }
 
 }
 
@@ -942,9 +971,10 @@ function CreateOoTOptionsContent() {
 
     # EVERYTHING ELSE #
     $OtherBox                          = CreateReduxGroup -Y ($EquipmentBox.Bottom + 5) -Height 1 -AddTo $Options.Panel -Text "Other"
-
+    
     $Options.DisableNaviPrompts        = CreateReduxCheckBox -Column 0 -Row 1 -AddTo $OtherBox -Text "Remove Navi Prompts" -ToolTip $ToolTip -Info "Navi will no longer interupt your during the first dungeon with mandatory textboxes" -Name "DisableNaviPrompts"
     $Options.DefaultZTargeting         = CreateReduxCheckBox -Column 1 -Row 1 -AddTo $OtherBox -Text "Default Hold Z-Targeting" -ToolTip $ToolTip -Info "Change the Default Z-Targeting option to Hold instead of Switch" -Name "DefaultZTargeting"
+    $Options.SubscreenDelayFix         = CreateReduxCheckBox -Column 2 -Row 1 -AddTo $OtherBox -Text "Subscreen Delay Fix" -ToolTip $ToolTip -Info "Fixes the delay lag when opening and closing the Pause Screen`n- Not supported in Wii VC mode" -Name "SubscreenDelayFix"
 
 
 
@@ -1005,9 +1035,10 @@ function CreateMMOptionsContent() {
     $DPadBox                           = CreateReduxGroup -Y ($HeroModeBox.Bottom + 5) -Height 1 -AddTo $Options.Panel -Text "D-Pad Icons Layout"
     
     $DPadPanel                         = CreateReduxPanel -Row 0 -AddTo $DPadBox
-    $Options.LeftDPad                  = CreateReduxRadioButton -Column 0 -Row 0 -AddTo $DPadPanel          -Disable -Text "Left Side"  -ToolTip $ToolTip -Info "Show the D-Pad icons on the left side of the HUD`n- Requires Redux patch" -Name "LeftDPad"
-    $Options.RightDPad                 = CreateReduxRadioButton -Column 1 -Row 0 -AddTo $DPadPanel -Checked -Disable -Text "Right Side" -ToolTip $ToolTip -Info "Show the D-Pad icons on the right side of the HUD`n- Requires Redux patch" -Name "RightDPad"
-    $Options.HideDPad                  = CreateReduxRadioButton -Column 2 -Row 0 -AddTo $DPadPanel          -Disable -Text "Hidden"     -ToolTip $ToolTip -Info "Hide the D-Pad icons, while they are still active`n- Requires Redux patch" -Name "HideDPad"
+    $Options.HideDPad                  = CreateReduxRadioButton -Column 0 -Row 0 -AddTo $DPadPanel -Checked -Disable -Text "Hidden"     -ToolTip $ToolTip -Info "Hide the D-Pad icons, while they are still active`n- Requires Redux patch" -Name "HideDPad"
+    $Options.LeftDPad                  = CreateReduxRadioButton -Column 1 -Row 0 -AddTo $DPadPanel          -Disable -Text "Left Side"  -ToolTip $ToolTip -Info "Show the D-Pad icons on the left side of the HUD`n- Requires Redux patch"  -Name "LeftDPad"
+    $Options.RightDPad                 = CreateReduxRadioButton -Column 2 -Row 0 -AddTo $DPadPanel          -Disable -Text "Right Side" -ToolTip $ToolTip -Info "Show the D-Pad icons on the right side of the HUD`n- Requires Redux patch" -Name "RightDPad"
+    
     
 
    

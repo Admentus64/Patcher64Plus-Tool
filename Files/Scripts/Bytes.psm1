@@ -30,7 +30,7 @@ function ChangeBytes([String]$File, [String]$Offset, [Array]$Values, [int]$Inter
 
 #==============================================================================================================================================================================================
 function PatchBytes([String]$File, [String]$Offset, [String]$Length, [String]$Patch, [Switch]$Texture) {
-
+    
     if (IsSet -Elem $File) { $ByteArrayGame = [IO.File]::ReadAllBytes($File) }
     if ($Texture) {
         $PatchByteArray = [IO.File]::ReadAllBytes($GameFiles.textures + "\" + $Patch)

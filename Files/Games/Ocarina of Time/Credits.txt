@@ -21,6 +21,7 @@
 - Restore Fire Temple:		ShadowOne333
 - Restore Gerudo Textures:		GhostlyDark & ShadowOne333
 - Set Capacity:			GhostlyDark
+- Subscreen Delay Fix:		ShadowOne333
 - Hide File Select Icons:		ShadowOne333
 - MM Button Positions:		GhostlyDark
 - MM Link Voice:			Korey Cryderman
