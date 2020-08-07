@@ -82,6 +82,8 @@ function SetFileParameters() {
     $Files.mm.romani_ranch                  = $Paths.Games + "\Majora's Mask\Textures\Romani Sign.bin"
     $Files.mm.skull_kid_beak                = $Paths.Games + "\Majora's Mask\Textures\Skull Kid Beak.bin"
     $Files.mm.message_table                 = $Paths.Games + "\Majora's Mask\Binaries\Message\Table.bin"
+    $Files.mm.message_razor1                = $Paths.Games + "\Majora's Mask\Binaries\Message\Razor Sword 1.bin"
+    $Files.mm.message_razor2                = $Paths.Games + "\Majora's Mask\Binaries\Message\Razor Sword 2.bin"
 
     $Files.mm.southern_swamp_cleared        = CheckPatchExtension -File ($Paths.Master + "\Data Extraction\Southern Swamp\southern_swamp_cleared_scene")
     $Files.mm.southern_swamp_cleared_0      = CheckPatchExtension -File ($Paths.Master + "\Data Extraction\Southern Swamp\southern_swamp_cleared_room_0")
