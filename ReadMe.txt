@@ -1,4 +1,5 @@
 Patcher64+ Tool
+Join our Discord: https://discord.gg/P22GGzz and feel free to contact us there.
 
 
 
