@@ -696,11 +696,11 @@ function PatchByteOptionsMM() {
     
     if (IsChecked -Elem $Options.FixSouthernSwamp -Enabled) {
         CreateSubPath -Path ($GameFiles.binaries + "\Southern Swamp")
-        ChangeBytes -Offset "1EC27"  -Values @("50")
-        ChangeBytes -Offset "1EC47"  -Values @("B0")
+        ChangeBytes -Offset "1EC26"  -Values @("94", "F0")
+        ChangeBytes -Offset "1EC46"  -Values @("A1", "C0")
         ExportAndPatch -Path "Southern Swamp\southern_swamp_cleared_scene"  -Offset "1F0D000" -Length "10630"
-        ExportAndPatch -Path "Southern Swamp\southern_swamp_cleared_room_0" -Offset "1F1E000" -Length "1B240"
-        ExportAndPatch -Path "Southern Swamp\southern_swamp_cleared_room_2" -Offset "1F4D000" -Length "D0A0"
+        ExportAndPatch -Path "Southern Swamp\southern_swamp_cleared_room_0" -Offset "1F1E000" -Length "1B4F0"
+        ExportAndPatch -Path "Southern Swamp\southern_swamp_cleared_room_2" -Offset "1F4D000" -Length "D1C0"
     }
 
     if (IsChecked -Elem $Options.DisableLowHPSound -Enabled)   { ChangeBytes -Offset "B97E2A"  -Values @("00", "00") }
