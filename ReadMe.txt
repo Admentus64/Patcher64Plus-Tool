@@ -1,6 +1,6 @@
 Patcher64+ Tool
 Join our Discord: https://discord.gg/P22GGzz and feel free to contact us there.
-List of credits are accesible within the Patcher64+ Tool.
+List of credits are accessible within the Patcher64+ Tool.
 
 
 
