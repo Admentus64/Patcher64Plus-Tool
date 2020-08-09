@@ -785,8 +785,8 @@ function PatchOptionsSM64() {
 
     # BPS Patching
 
-    if (IsChecked -Elem $Options.FPS -Enabled)                 { ApplyPatch -File $Files.decompressedROM -Patch "\fps.bps" }
-    if (IsChecked -Elem $Options.FreeCam -Enabled)             { ApplyPatch -File $Files.decompressedROM -Patch "\cam.bps" }
+    if (IsChecked -Elem $Options.FPS -Enabled)                 { ApplyPatch -File $Files.decompressedROM -Patch "\Compressed\fps.bps" }
+    if (IsChecked -Elem $Options.FreeCam -Enabled)             { ApplyPatch -File $Files.decompressedROM -Patch "\Compressed\cam.bps" }
 
 
 
