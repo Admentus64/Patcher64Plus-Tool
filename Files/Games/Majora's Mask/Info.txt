@@ -15,6 +15,9 @@ Instructions:
 - Press one of several patching buttons
 - Enable optional Remap D-Pad
 
+Documentation:
+- https://github.com/ShadowOne333/Zelda64-Redux-Documentation
+
 Information:
 - Original WAD is preserved
 - Patches are mostly compatible with existing AR/Gecko Codes
