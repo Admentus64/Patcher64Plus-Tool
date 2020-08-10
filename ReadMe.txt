@@ -1,5 +1,6 @@
 Patcher64+ Tool
 Join our Discord: https://discord.gg/P22GGzz and feel free to contact us there.
+List of credits are accessible within the Patcher64+ Tool.
 
 
 
@@ -50,21 +51,23 @@ The following games have included patches:
 ===============
 
 The following patches are included:
-- Dawn & Dusk (OoT)
+- The Legend of Zelda: Dawn & Dusk (OoT)
+- The Legend of Zelda: The Missing Link (OoT)
+- The Legend of Zelda: Master of Time (OoT)
 - The Fate of the Bombiwa (OoT)
-- Nimpize Adventure (OoT)
+- The Legend of Zelda: Nimpize Adventure (OoT)
 - Ocarina of Time Puzzling (OoT)
-- Masked Quest (MM)
-- Single-Screen / Split-Screen Multiplayer (SM64)
-- Star Road / Star Road Single-Screen Multiplayer (SM64)
+- Majora's Mask: Masked Quest (MM)
+- SM64: Single-Screen / SM64: Split-Screen Multiplayer (SM64)
+- SM64: Star Road / SM64: Star Road Single-Screen Multiplayer (SM64)
 - SM64: Last Impact (SM64)
 - Super Mario 64 Land (SM64)
 - Super Mario Odyssey 64 (SM64)
 - SM64: Ocarina of Time (SM64)
-- Hard Mode romhack (PP)
-- Hard Mode+ romhack (PP)
-- Insane Mode romhack (PP)
-- Super Smash Bros. Remix romhack (Smash)
+- Paper Mario: Hard Mode (PP)
+- Paper Mario: Hard Mode+ (PP)
+- Paper Mario: Insane Mode (PP)
+- Super Smash Bros. Remix (Smash)
 
 
 
@@ -124,6 +127,7 @@ Options offers smaller individual changes that can be applied individually from 
 =====================================
 
 - Remove All T64		Remove all injected custom textures by the Virtual Console in the .T64 format
+- Remove Filter			Remove the dark filter injected by the Virtual Console to display the original N64 gamma
 - Expand Memory			Expand the available RAM memory, but invalidates existing AR/Gecko codes
 - Remap D-Pad			Remap the D-Pad to their four D-Pad button directions instead of toggling the minimap
 - Downgrade			Downgrade Ocarina of Time from US 1.2 (default in the Wii VC WAD) to US 1.0

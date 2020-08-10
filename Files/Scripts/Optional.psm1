@@ -653,9 +653,10 @@ function PatchByteOptionsMM() {
 
     if (IsChecked -Elem $Options.RestorePalaceRoute -Enabled) {
         CreateSubPath -Path ($GameFiles.binaries + "\Deku Palace")
+        ChangeBytes -Offset "1F687" -Values @("30")
         ChangeBytes -Offset "1F6A7" -Values @("B0")
         ChangeBytes -Offset "1F6B7" -Values @("B0")
-        ExportAndPatch -Path "Deku Palace\deku_palace_scene"  -Offset "2534000" -Length "D220"
+        ExportAndPatch -Path "Deku Palace\deku_palace_scene"  -Offset "2534000" -Length "D230"
         ExportAndPatch -Path "Deku Palace\deku_palace_room_0" -Offset "2542000" -Length "11A50"
         ExportAndPatch -Path "Deku Palace\deku_palace_room_1" -Offset "2554000" -Length "E9B0" 
         ExportAndPatch -Path "Deku Palace\deku_palace_room_2" -Offset "2563000" -Length "124F0"
