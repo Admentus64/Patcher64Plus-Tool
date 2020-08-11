@@ -357,7 +357,7 @@ function PatchByteOptionsOoT() {
 
     # OTHER #
 
-    if (IsChecked -Elem $Options.ZTargeting -Enabled)          { ChangeBytes -Offset "B71E6D"  -Values @("01") }
+    if (IsChecked -Elem $Options.DefaultZTargeting -Enabled)       { ChangeBytes -Offset "B71E6D"  -Values @("01") }
     
 
 

@@ -283,6 +283,24 @@ function Z64Path_Finish([Object]$TextBox, [String]$VarName, [String]$Z64Path) {
     Set-Variable -Name $VarName -Value $Z64Path -Scope 'Global'
     $Files.Z64 = Get-Item -LiteralPath $Z64Path
 
+    # Update hash
+    $HashSumROMTextBox.Text = (Get-FileHash -Algorithm MD5 $Z64Path).Hash
+
+    # Verify ROM
+    $MatchingROMTextBox.Text = "No Valid ROM Selected"
+    Foreach ($Item in $Files.json.games.game) {
+        if ($HashSumROMTextBox.Text -eq $Item.hash) {
+            $MatchingROMTextBox.Text = $Item.mode + " (Rev 0)"
+            break
+        }
+        for ($i = 0; $i -lt $Item.downgrade.length; $i++) {
+            if ($HashSumROMTextBox.Text -eq $Item.downgrade[$i].hash) {
+                $MatchingROMTextBox.Text = $Item.mode + " (" +  $Item.downgrade[$i].rev + ")"
+                break
+            }
+        }
+    }
+
     # Update the textbox to the current WAD.
     $TextBox.Text = $Z64Path
 

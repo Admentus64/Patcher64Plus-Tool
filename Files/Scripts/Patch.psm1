@@ -696,15 +696,15 @@ function ApplyPatch([String]$File, [String]$Patch, [String]$New, [Switch]$FilesP
         else { & $Files.tool.flips --ignore-checksum $Patch $File | Out-Host }
     }
     elseif ($Patch -like "*.xdelta*" -or $Patch -like "*.vcdiff*") {
-        if ($Patch -like "*.xdelta*")       { $File = $Files.tool.xdelta }
-        elseif ($Patch -like "*.vcdiff*")   { $File = $Files.tool.xdelta3 }
+        if ($Patch -like "*.xdelta*")       { $Tool = $Files.tool.xdelta }
+        elseif ($Patch -like "*.vcdiff*")   { $Tool = $Files.tool.xdelta3 }
 
         if ($New.Length -gt 0) {
             RemoveFile -LiteralPath $New
-            & $File -d -s $File $Patch $New | Out-Host
+            & $Tool -d -s $File $Patch $New | Out-Host
         }
         else {
-            & $File -d -s $File $Patch ($File + ".ext") | Out-Host
+            & $Tool -d -s $File $Patch ($File + ".ext") | Out-Host
             Move-Item -LiteralPath ($File + ".ext") -Destination $File -Force
         }
     }

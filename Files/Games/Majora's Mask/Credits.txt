@@ -11,7 +11,7 @@
 - Restore Text:			ShadowOne333
 - Correct Romani Sign:		ShadowOne333
 - Correct Comma:			ShadowOne333
-- Correct Circus Mask:		ShadowOne
+- Correct Circus Mask:		ShadowOne333
 - Restore Title:			ShadowOne333 & Garo-Mastah
 - Restore Skull Kid:			ShadowOne333
 - Restore Palace Route:		ShadowOne333
@@ -22,7 +22,7 @@
 - Fix Goth Cutscene:		ShadowOne333
 - Fix Mushroom Bottle:		ShadowOne333 & ozidual
 - Fix Southern Swamp:		ShadowOne333
-- Fix Fairy Fountain			Dybbles (fix) & ShadowOne333 (ROM / patch)
+- Fix Fairy Fountain:			Dybbles (fix) & ShadowOne333 (ROM / patch)
 - Admentus (Scripting and Assistance of all Options)
 
 --- Translations ---

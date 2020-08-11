@@ -4,10 +4,12 @@
 	"console" : "All",
 	"downgrade" : [ {
 		"file" : "\\Compressed\\rev1_to_rev0.bps",
-		"hash" : "721FDCC6F5F34BE55C43A807F2A16AF"
+		"hash" : "721FDCC6F5F34BE55C43A807F2A16AF4",
+		"rev" : "Rev 1"
 	}, {
 		"file" : "\\Compressed\\rev2_to_rev0.bps",
-		"hash" : "57A9719AD547C516342E1A15D5C28C3D"
+		"hash" : "57A9719AD547C516342E1A15D5C28C3D",
+		"rev" : "Rev 2"
 	} ],
 	"patch_vc" : 4,
 	"patches" : 1,
