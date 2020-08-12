@@ -179,7 +179,6 @@ function PatchByteOptionsOoT() {
 
     if (IsChecked -Elem $Options.DisableLowHPSound -Enabled)   { ChangeBytes -Offset "ADBA1A"  -Values @("00", "00") }
     if (IsChecked -Elem $Options.DisableNaviPrompts -Enabled)  { ChangeBytes -Offset "DF8B84"  -Values @("00", "00", "00", "00") }
-    if (IsChecked -Elem $Options.SubscreenDelayFix -Enabled)   { ChangeBytes -Offset "B13C75"  -Values @("8A") }
 
 
 
@@ -975,7 +974,6 @@ function CreateOoTOptionsContent() {
     
     $Options.DisableNaviPrompts        = CreateReduxCheckBox -Column 0 -Row 1 -AddTo $OtherBox -Text "Remove Navi Prompts" -ToolTip $ToolTip -Info "Navi will no longer interupt your during the first dungeon with mandatory textboxes" -Name "DisableNaviPrompts"
     $Options.DefaultZTargeting         = CreateReduxCheckBox -Column 1 -Row 1 -AddTo $OtherBox -Text "Default Hold Z-Targeting" -ToolTip $ToolTip -Info "Change the Default Z-Targeting option to Hold instead of Switch" -Name "DefaultZTargeting"
-    $Options.SubscreenDelayFix         = CreateReduxCheckBox -Column 2 -Row 1 -AddTo $OtherBox -Text "Subscreen Delay Fix" -ToolTip $ToolTip -Info "Fixes the delay lag when opening and closing the Pause Screen`n- Not supported in Wii VC mode" -Name "SubscreenDelayFix"
 
 
 

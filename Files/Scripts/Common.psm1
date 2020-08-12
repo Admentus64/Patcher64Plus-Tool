@@ -8,10 +8,6 @@ function SetWiiVCMode([Boolean]$Enable) {
     $InjectROMButton.Visible = $PatchVCPanel.Visible = $IsWiiVC
     $CustomTitleTextBox.MaxLength = $GameTitleLength[[uint32]$IsWiiVC]
     $ClearWADPathButton.Enabled = (IsSet -Elem $Files.WAD -MinLength 1)
-    
-    if ($GameType.mode -eq "Ocarina of Time") {
-        $Options.SubscreenDelayFix.Enabled = !$IsWiiVC
-    }
 
     GetHeader
     SetMainScreenSize
