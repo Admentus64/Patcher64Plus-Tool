@@ -164,9 +164,9 @@ function CreateMainDialog() {
     # Create a textbox to display the selected Custom Channel Title.
     $global:CustomTitleTextBox = CreateTextBox -X 85 -Y 20 -Width 260 -Height 22 -AddTo $CustomGameIDGroup
     $CustomTitleTextBox.Add_TextChanged({
-        if ($this.Text -match "[^a-z 0-9 \: \- \( \) \' \&]") {
+        if ($this.Text -match "[^a-z 0-9 \: \- \( \) \' \&] \.") {
             $cursorPos = $this.SelectionStart
-            $this.Text = $this.Text -replace "[^a-z 0-9 \: \- \( \) \' \&]",''
+            $this.Text = $this.Text -replace "[^a-z 0-9 \: \- \( \) \' \& \.]",''
             $this.SelectionStart = $cursorPos - 1
             $this.SelectionLength = 0
         }
@@ -334,19 +334,19 @@ function CreateMainDialog() {
     $InfoGameIDButton.Add_Click({ $InfoGameIDDialog.ShowDialog() | Out-Null })
 
     # Create a button to show information about the patches.
-    $global:InfoButton = CreateButton -X ($InfoGameIDButton.Right + 15) -Y $InfoGameIDButton.Top -Width 100 -Height 35 -AddTo $MiscGroup
+    $global:InfoButton = CreateButton -X ($InfoGameIDButton.Right + 15) -Y $InfoGameIDButton.Top -Width 120 -Height 35 -AddTo $MiscGroup
     $InfoButton.Add_Click({ $InfoDialog.ShowDialog() | Out-Null })
 
     # Create a button to show credits about the patches.
-    $global:CreditsButton = CreateButton -X ($InfoButton.Right + 15) -Y $InfoGameIDButton.Top -Width 100 -Height 35 -ToolTip $ToolTip -Info ("Open the list with credits of all of patches involved and those who helped with the " + $ScriptName) -AddTo $MiscGroup
+    $global:CreditsButton = CreateButton -X ($InfoButton.Right + 15) -Y $InfoGameIDButton.Top -Width 120 -Height 35 -ToolTip $ToolTip -Info ("Open the list with credits of all of patches involved and those who helped with the " + $ScriptName) -AddTo $MiscGroup
     $CreditsButton.Add_Click({ $CreditsDialog.ShowDialog() | Out-Null })
 
     # Create a button to reset the tool.
-    $ResetButton = CreateButton -X ($CreditsButton.Right + 15) -Y $InfoGameIDButton.Top -Width 100 -Height 35 -Text "Reset" -ToolTip $ToolTip -Info ("Resets all settings stored in the " + $ScriptName) -AddTo $MiscGroup
+    $ResetButton = CreateButton -X ($CreditsButton.Right + 15) -Y $InfoGameIDButton.Top -Width 80 -Height 35 -Text "Reset" -ToolTip $ToolTip -Info ("Resets all settings stored in the " + $ScriptName) -AddTo $MiscGroup
     $ResetButton.Add_Click({ ResetTool })
 
     # Create a button to close the dialog.
-    $global:ExitButton = CreateButton -X ($ResetButton.Right + 15) -Y $InfoGameIDButton.Top -Width 100 -Height 35 -Text "Exit" -ToolTip $ToolTip -Info ("Save all settings and close the " + $ScriptName) -AddTo $MiscGroup
+    $global:ExitButton = CreateButton -X ($ResetButton.Right + 15) -Y $InfoGameIDButton.Top -Width 80 -Height 35 -Text "Exit" -ToolTip $ToolTip -Info ("Save all settings and close the " + $ScriptName) -AddTo $MiscGroup
     $ExitButton.Add_Click({ $MainDialog.Close() })
 
 
@@ -469,9 +469,9 @@ function CreateLanguagesContent() {
     $Languages.TextBox.Controls.Clear()
     if ($GameType.mode -eq "Ocarina of Time") {
         $TextPanel                        = CreateReduxPanel                 -Row 0 -AddTo $Languages.TextBox
-        $Languages.Text1x                 = CreateReduxRadioButton -Column 0 -Row 0 -AddTo $TextPanel -Checked -Text "1x Speed"                -ToolTip $ToolTip -Info "Leave the dialogue text speed at normal"               -Name "Text1x"
-        $Languages.Text2x                 = CreateReduxRadioButton -Column 1 -Row 0 -AddTo $TextPanel          -Text "2x Speed"                -ToolTip $ToolTip -Info "Set the dialogue text speed to be twice as fast"       -Name "Text2x"
-        $Languages.Text3x                 = CreateReduxRadioButton -Column 2 -Row 0 -AddTo $TextPanel          -Text "3x Speed"                -ToolTip $ToolTip -Info "Set the dialogue text speed to be three times as fast" -Name "Text3x"
+        $Languages.TextSpeed1x            = CreateReduxRadioButton -Column 0 -Row 0 -AddTo $TextPanel -Checked -Text "1x Text Speed"           -ToolTip $ToolTip -Info "Leave the dialogue text speed at normal"               -Name "TextSpeed1x"
+        $Languages.TextSpeed2x            = CreateReduxRadioButton -Column 1 -Row 0 -AddTo $TextPanel          -Text "2x Text Speed"           -ToolTip $ToolTip -Info "Set the dialogue text speed to be twice as fast"       -Name "TextSpeed2x"
+        $Languages.TextSpeed3x            = CreateReduxRadioButton -Column 2 -Row 0 -AddTo $TextPanel          -Text "3x Text Speed"           -ToolTip $ToolTip -Info "Set the dialogue text speed to be three times as fast" -Name "TextSpeed3x"
         $Languages.TextRestore            = CreateReduxCheckBox    -Column 0 -Row 2 -AddTo $Languages.TextBox  -Text "Restore Text"            -ToolTip $ToolTip -Info "Restores the text used from the GC revision and applies grammar and typo fixes" -Name "TextRestore"
         $Languages.TextFemalePronouns     = CreateReduxCheckBox    -Column 1 -Row 2 -AddTo $Languages.TextBox  -Text "Female Pronouns"         -ToolTip $ToolTip -Info "Refer to Link as a female character`n- Requires the Restore Text option" -Name "TextFemalePronouns"
         $Languages.TextDialogueColors     = CreateReduxCheckBox    -Column 2 -Row 2 -AddTo $Languages.TextBox  -Text "GC Text Dialogue Colors" -ToolTip $ToolTip -Info "Set the Text Dialogue Colors to match the GameCube's color scheme" -Name "TextDialogueColors"

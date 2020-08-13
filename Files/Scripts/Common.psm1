@@ -52,6 +52,7 @@ function ChangeGamesList() {
     }
 
     if ($Items.Length -gt 0 -and $CurrentGameComboBox.SelectedIndex -eq -1) {
+        #$CurrentGameComboBox.SelectedIndex = $Settings["Core"][$CurrentGameComboBox.Name]
         try { $CurrentGameComboBox.SelectedIndex = $Settings["Core"][$CurrentGameComboBox.Name] }
         catch { $CurrentGameComboBox.SelectedIndex = 0 }
     }
@@ -102,7 +103,7 @@ function SetMainScreenSize() {
     if ($IsWiiVC) {
         $CustomTitleTextBoxLabel.Text = "Channel Title:"
         if ($GameType.patches)   { $PatchVCPanel.Location = New-Object System.Drawing.Size(10, ($PatchPanel.Bottom + 5)) }
-        else                     { $PatchVCPanel.Location = New-Object System.Drawing.Size(10, ($CurrentGamePanel.Bottom + 5)) }
+        else                     { $PatchVCPanel.Location = New-Object System.Drawing.Size(10, ($CustomGameIDPanel.Bottom + 5)) }
         $MiscPanel.Location = New-Object System.Drawing.Size(10, ($PatchVCPanel.Bottom + 5))
     }
 
@@ -185,7 +186,7 @@ function ChangeGameMode() {
     elseif ($GameType.mode -eq "Majora's Mask")    { CreateMMOptionsContent }
     elseif ($GameType.mode -eq "Super Mario 64")   { CreateSM64OptionsContent }
 
-    $OptionsLabel.text = $GameType.mode + " - Additional Options"
+    if ($GamePatch.options -eq 1)  { $OptionsLabel.text = $GameType.mode + " - Additional Options" }
 
     if ($GameType.downgrade)      { $PatchVCDowngradeLabel.Visible = $PatchVCDowngrade.Visible = $True }
     if ($GameType.patch_vc -eq 2) { $PatchVCRemoveFilterLabel.Visible = $PatchVCRemoveFilter.Visible = $True }

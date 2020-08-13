@@ -425,7 +425,7 @@ function PatchBPSOptionsOoT() {
 #==============================================================================================================================================================================================
 function PatchLanguageOptionsOoT() {
     
-    if ( (IsChecked -Elem $Languages.TextRestore -Enabled) -or (IsChecked -Elem $Languages.Text3x -Enabled) -or (IsChecked -Elem $Languages.TextDialogueColors -Enabled) -or (IsChecked -Elem $Languages.TextUnisizeTunics -Enabled)  ) {
+    if ( (IsChecked -Elem $Languages.TextRestore -Enabled) -or (IsChecked -Elem $Languages.TextSpeed2x -Enabled) -or (IsChecked -Elem $Languages.TextSpeed3x -Enabled) -or (IsChecked -Elem $Languages.TextDialogueColors -Enabled) -or (IsChecked -Elem $Languages.TextUnisizeTunics -Enabled)  ) {
         $File = $GameFiles.binaries + "\" + "Message\Message Data Static.bin"
         ExportBytes -Offset "92D000" -Length "38140" -Output $File
     }
@@ -447,11 +447,35 @@ function PatchLanguageOptionsOoT() {
 
     }
 
-    if (IsChecked -Elem $Languages.Text2x -Enabled) { ChangeBytes -Offset "B5006F" -Values @("02") }
-    elseif (IsChecked -Elem $Languages.Text3x -Enabled) {
+    if (IsChecked -Elem $Languages.TextSpeed2x -Enabled) {
+        ChangeBytes -Offset "B5006F" -Values @("02") # Text Speed
+
+        # Correct Ruto Confession Textboxes
+        $Offset = SearchBytes -File $File -Values @("1A", "41", "73", "20", "61", "20", "72", "65", "77", "61", "72", "64", "2E", "2E", "2E", "01")
+        PatchBytes -File $File -Offset $Offset -Patch "Message\Ruto Confession.bin"
+
+        # Correct Phantom Ganon Defeat Textboxes
+        $Offset = SearchBytes -File $File -Values @("0C", "3C", "42", "75", "74", "20", "79", "6F", "75", "20", "68", "61", "76", "65", "20", "64")
+        ChangeBytes -File $File -Offset ( Get24Bit -Value ( (GetDecimal -Hex $Offset) + (GetDecimal -Hex "1") ) ) -Values @("66")
+        ChangeBytes -File $File -Offset ( Get24Bit -Value ( (GetDecimal -Hex $Offset) + (GetDecimal -Hex "5D") ) ) -Values @("66")
+        ChangeBytes -File $File -Offset ( Get24Bit -Value ( (GetDecimal -Hex $Offset) + (GetDecimal -Hex "BA") ) ) -Values @("60")
+    }
+    elseif (IsChecked -Elem $Languages.TextSpeed3x -Enabled) {
+        ChangeBytes -Offset "B5006F" -Values @("03") # Text Speed
+
+        # Correct Learning Song Textboxes
         $Offset = SearchBytes -File $File -Values @("08", "06", "3C", "50", "6C", "61", "79", "20", "75", "73", "69", "6E", "67", "20", "05")
         PatchBytes -File $File -Offset $Offset -Patch "Message\Songs.bin"
-        ChangeBytes -Offset "B5006F" -Values @("03")
+
+        # Correct Ruto Confession Textboxes
+        $Offset = SearchBytes -File $File -Values @("1A", "41", "73", "20", "61", "20", "72", "65", "77", "61", "72", "64", "2E", "2E", "2E", "01")
+        PatchBytes -File $File -Offset $Offset -Patch "Message\Ruto Confession.bin"
+        
+        # Correct Phantom Ganon Defeat Textboxes
+        $Offset = SearchBytes -File $File -Values @("0C", "3C", "42", "75", "74", "20", "79", "6F", "75", "20", "68", "61", "76", "65", "20", "64")
+        ChangeBytes -File $File -Offset ( Get24Bit -Value ( (GetDecimal -Hex $Offset) + (GetDecimal -Hex "1") ) ) -Values @("76")
+        ChangeBytes -File $File -Offset ( Get24Bit -Value ( (GetDecimal -Hex $Offset) + (GetDecimal -Hex "5D") ) ) -Values @("76")
+        ChangeBytes -File $File -Offset ( Get24Bit -Value ( (GetDecimal -Hex $Offset) + (GetDecimal -Hex "BA") ) ) -Values @("70")
     }
         
     if (IsChecked -Elem $Languages.TextDialogueColors -Enabled) {
@@ -523,7 +547,7 @@ function PatchLanguageOptionsOoT() {
         ChangeBytes -File $File -Offset ( Get24Bit -Value ( (GetDecimal -Hex $Offset) + (GetDecimal -Hex "7A") ) ) -Values @("55", "6E", "69", "73", "69", "7A", "65", "2E", "20", "20", "20")
     }
 
-    if ( (IsChecked -Elem $Languages.TextRestore -Enabled) -or (IsChecked -Elem $Languages.Text3x -Enabled) -or (IsChecked -Elem $Languages.TextDialogueColors -Enabled) -or (IsChecked -Elem $Languages.TextUnisizeTunics -Enabled) ) {
+    if ( (IsChecked -Elem $Languages.TextRestore -Enabled) -or (IsChecked -Elem $Languages.TextSpeed2x -Enabled) -or (IsChecked -Elem $Languages.TextSpeed3x -Enabled) -or (IsChecked -Elem $Languages.TextDialogueColors -Enabled) -or (IsChecked -Elem $Languages.TextUnisizeTunics -Enabled) ) {
         PatchBytes -Offset "92D000" -Patch ("Message\Message Data Static.bin")
     }
 

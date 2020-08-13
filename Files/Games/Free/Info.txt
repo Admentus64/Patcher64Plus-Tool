@@ -1,6 +1,6 @@
-Patches Custom game WAD:
+Patches for custom VC WAD:
 1. ROM Injection (requires .Z64 ROM)
-2. Free BPS Patching (requires .IPS or .BPS File)
+2. Free Patching (requires .IPS, .BPS, .XDELTA, .VCDIFF or .PPF File)
 
 Known Issues:
 - Unknown
@@ -10,7 +10,8 @@ Requirements:
 
 Instructions:
 - Select VC WAD File
-- Press Inject ROM or Patch BPS
+- Enable optional VC Options checkboxes
+- Press Inject ROM or Apply Patch
 - Original WAD is preserved
 
 Information:
@@ -21,4 +22,6 @@ Programs:
 - Floating IPS
 - Xdelta
 - Xdelta3
+- PPF3
 - Wiimm's 'wszst' Tool
+- RN64CRC

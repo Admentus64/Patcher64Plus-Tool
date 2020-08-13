@@ -1,25 +1,30 @@
-Patches The Legend of Zelda: Ocarina of Time game WAD:
+Patches for Ocarina of Time:
 1. ROM Injection (requires .Z64 ROM)
-2. Free BPS Patching (requires .IPS or .BPS File)
+2. Free Patching (requires .IPS, .BPS, .XDELTA, .VCDIFF or .PPF File)
 3. Two ROM hacks (OoT Redux, Dawn and Dusk)
 4. Four fan translations (Spanish, Polish, Russian, Chinese)
 
 Known Issues:
 - Trees show transparent outlines through walls (Dawn and Dusk)
 
-Requirements:
-- The Legend of Zelda: Ocarina of Time USA VC WAD File
+Requirements (one of):
+- The Legend of Zelda: Ocarina of Time US VC WAD
+- The Legend of Zelda: Ocarina of Time US 1.0 Z64 ROM
 
 Instructions:
-- Select WAD File
-- Press one of several patching buttons
-- Enable optional Remap D-Pad
+- Select VC WAD or Z64 ROM
+- Select patch
+- Enable optional VC Options checkboxes
+- Enable optional "Enable Redux" or "Enable Options" checkboxes
+- Customize your patch within "Select Options" and "Select Language"
+- Press "Patch Select Option"
 
 Documentation:
 - https://github.com/ShadowOne333/Zelda64-Redux-Documentation
 
 Information:
-- Original WAD is preserved
+- Original Z64 ROM or VC WAD is preserved
+- Certain patches requires the 8MB Expansion Pak to be enabled
 - Few patches are compatible with existing AR/Gecko Codes
 - Redux forces Expand Memory, Remap D-Pad and Leave D-Pad Up
 - Most patches forces Downgrade
@@ -27,7 +32,9 @@ Information:
 Programs:
 - Wad Packer/Wad Unpacker
 - Floating IPS
+- PPF3
 - Wiimm's 'wszst' Tool
 - Compress Tool
 - ndec Tool
 - TabExt Tool
+- RN64CRC

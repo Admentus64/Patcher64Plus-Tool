@@ -61,7 +61,8 @@
 }, {
 	"title" : "Super Smash Bros.",
 	"mode" : "Super Smash Bros",
-	"console" : "N64",
+	"console" : "All",
+	"romc" : 1,
 	"patch_vc" : 1,
 	"patches" : 1,
 	"n64_title" : "SMASH BROTHERS",

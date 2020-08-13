@@ -484,6 +484,18 @@ function PatchVCEmulator([String]$Command) {
 
     }
 
+    <#
+    elseif ($GameType.mode -eq "Super Smash Bros") {
+        
+        if ($PatchVCExpandMemory.Checked) {
+            & $Files.tool.lzss -d $WADFile.AppFile01 | Out-Host
+            ChangeBytes -File $WadFile.AppFile01 -Offset "3094" -Values @("60", "00", "00", "00")
+            & $Files.tool.lzss -evn $WADFile.AppFile01 | Out-Host
+        }
+
+    }
+    #>
+
 }
 
 

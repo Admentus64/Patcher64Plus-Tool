@@ -1,6 +1,6 @@
-Patches Super Mario 64 game WAD:
+Patches for Super Mario 64:
 1. ROM Injection (requires .Z64 ROM)
-2. Free BPS Patching (requires .IPS or .BPS File)
+2. Free Patching (requires .IPS, .BPS, .XDELTA, .VCDIFF or .PPF File)
 3. Super Mario 64: 60 FPS v2 (Native 60 FPS support)
 4. Super Mario 64: Free Cam (Analog Camera)
 5. SM64: Multiplayer (V1.4.2)
@@ -9,15 +9,21 @@ Known Issues:
 - Mario camera is inoperable (60 FPS)
 - Intro demo is broken (60 FPS)
 
-Requirements:
-- Super Mario 64 VC USA WAD File
+Requirements (one of):
+- Super Mario 64 US VC WAD
+- Super Mario 64 US Z64 ROM
 
 Instructions:
-- Select Super Mario 64 VC USA WAD File
-- Press one of several patching buttons
-- Original WAD is preserved
+- Select VC WAD or Z64 ROM
+- Select patch
+- Enable optional VC Options checkboxes
+- Enable optional "Enable Options" checkboxes
+- Customize your patch within "Select Options"
+- Press "Patch Select Option"
 
 Information:
+- Original Z64 ROM or VC WAD is preserved
+- Star Road and Multiplayer include a modified VC emulator
 - Existing AR/Gecko codes still work (60 FPS / Analog Camera)
 - Existing AR/Gecko codes do not work (Multiplayer)
 - Enable second emulated controller (Analog Camera / Multiplayer)
@@ -29,3 +35,4 @@ Programs:
 - Xdelta3
 - Wiimm's 'wszst' Tool
 - sm64extend Tool
+- RN64CRC

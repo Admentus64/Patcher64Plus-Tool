@@ -59,7 +59,7 @@ function CreateInfoGameIDDialog() {
     $HashSumROMTextBox.ReadOnly = $True
 
     # Matching Hash
-    $Label = CreateLabel -X 40 -Y ($HashSumROMTextBox.Bottom + 10) -Width 120 -Height 15 -Font $VCPatchFont -Text "Current ROM:" -AddTo $InfoGameIDDialog
+    $Label = CreateLabel -X 40 -Y ($HashSumROMTextBox.Bottom + 10) -Width 120 -Height 15 -Font $VCPatchFont -Text "Current Z64 ROM:" -AddTo $InfoGameIDDialog
     $global:MatchingROMTextBox = CreateTextBox -X $Label.Right -Y ($Label.Top - 3) -Width ($InfoGameIDDialog.Width -$Label.Width - 100) -Height 50 -Text "No ROM Selected" -AddTo $InfoGameIDDialog
     $MatchingROMTextBox.ReadOnly = $True
 

@@ -3,6 +3,7 @@
 - NARE = Majora's Mask
 - NAAE = Super Mario 64
 - NAEE = Paper Mario
+- NALE = Super Smash Bros.
 
 
 
@@ -48,6 +49,9 @@ F7C52568A31AADF26E14DC2B6416B2ED
 - NAE0 = Paper Mario: Hard Mode
 - NAE1 = Paper Mario: Hard Mode+
 - NAE2 = Paper Mario: Insane Mode
+
+- NALE = Super Smash Bros. WS
+- NAL0 = Super Smash Bros: More Stages Edition
 
 
 

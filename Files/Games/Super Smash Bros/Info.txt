@@ -1,20 +1,32 @@
-Patches Super Smash Bros. Z64 ROM:
-1. Free BPS Patching (requires .IPS or .BPS File)
-2. Super Smash Bros. Remix (new characters and stages)
+Patches for Super Smash Bros:
+1. ROM Injection (requires .Z64 ROM)
+2. Free Patching (requires .IPS, .BPS, .XDELTA, .VCDIFF or .PPF File)
+3. Super Smash Bros. Remix (new characters and stages)
+4. Super Smash Bros: More Stage Edition (new stages)
+5. Widescreen
 
 Known Issues:
-- Unknown
+- Training Mode crashes (Widescreen patch for Virtual Console)
 
-Requirements:
+Requirements (one of(:
+- Super Smash Bros. US VC WAD
 - Super Smash Bros. US Z64 ROM
 
 Instructions:
-- Select Super Smash Bros. US Z64 ROM
-- Press one of several patching buttons
-- Original ROM is preserved
+- Select VC WAD or Z64 ROM
+- Select patch
+- Enable optional VC Options checkboxes
+- Press "Patch Select Option"
 
 Information:
-- Requires the the 8 MB expansion pak to be enabled
+- Original ROM or WAD is preserved
+- Remix requires the 8MB Expansion Pak to be enabled
      
 Programs:
+- Wad Packer/Wad Unpacker
+- Xdelta
 - Xdelta3
+- Wiimm's 'wszst' Tool
+- Romchu Tool
+- LZSS Compression Tool
+- RN64CRC
