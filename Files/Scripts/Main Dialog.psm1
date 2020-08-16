@@ -224,6 +224,7 @@ function CreateMainDialog() {
         DisablePatches
         CreateLanguagesContent
         GetHeader
+        if ($GamePatch.options -eq 1) { $OptionsLabel.text = $GameType.mode + " - Additional Options" }
     } )
 
     # Create a checkbox to enable Redux and Options support.
@@ -233,10 +234,11 @@ function CreateMainDialog() {
 
     $global:PatchOptionsLabel = CreateLabel -X ($PatchButton.Right + 10) -Y ($PatchReduxLabel.Bottom + 15) -Width 85 -Height 15 -Text "Enable Options:" -ToolTip $ToolTip -Info "Enable options" -AddTo $PatchGroup
     $global:PatchOptionsCheckbox = CreateCheckBox -X $PatchOptionsLabel.Right -Y ($PatchOptionsLabel.Top - 2) -Width 20 -Height 20 -ToolTip $ToolTip -Info "Enable options" -Name "Options" -AddTo $PatchGroup
-    $PatchOptionsCheckbox.Add_CheckStateChanged({ $PatchOptionsButton.Enabled = $this.Checked })
+    $PatchOptionsCheckbox.Add_CheckStateChanged({ $PatchOptionsButton.Enabled = $PatchLanguagesButton.Enabled = $this.Checked })
 
     $global:PatchLanguagesButton = CreateButton -X ($PatchOptionsCheckbox.Right + 5) -Y 20 -Width 145 -Height 25 -Text "Select Language" -ToolTip $ToolTip -Info 'Open the "Languages" panel to change the language' -AddTo $PatchGroup
     $PatchLanguagesButton.Add_Click( { $LanguagesDialog.ShowDialog() } )
+    $PatchLanguagesButton.Enabled = $False
 
     $global:PatchOptionsButton = CreateButton -X $PatchLanguagesButton.Left -Y ($PatchLanguagesButton.Bottom + 5) -Width $PatchLanguagesButton.Width -Height $PatchLanguagesButton.Height -Text "Select Options" -ToolTip $ToolTip -Info 'Open the "Additional Options" panel to change preferences' -AddTo $PatchGroup
     $PatchOptionsButton.Add_Click( { $OptionsDialog.ShowDialog() } )
@@ -423,7 +425,7 @@ function DisablePatches() {
     
     $PatchReduxCheckbox.Visible = $PatchReduxLabel.Visible = (IsSet -Elem $GamePatch.redux.file)
     $PatchOptionsCheckbox.Visible = $PatchOptionsLabel.Visible = $PatchOptionsButton.Visible = $GamePatch.options
-    $PatchOptionsButton.Enabled = $GamePatch.options -and $PatchOptionsCheckbox.Checked
+    $PatchOptionsButton.Enabled = $PatchLanguagesButton.Enabled = $GamePatch.options -and $PatchOptionsCheckbox.Checked
 
     $PatchVCRemoveFilterLabel.Enabled = $PatchVCRemoveFilter.Enabled = !(StrLike -str $GamePatch.command -val "Patch Boot DOL")
     $global:ToolTip.SetToolTip($PatchButton, ([String]::Format($Item.tooltip, [Environment]::NewLine)))

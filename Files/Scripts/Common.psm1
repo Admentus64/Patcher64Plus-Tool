@@ -186,8 +186,6 @@ function ChangeGameMode() {
     elseif ($GameType.mode -eq "Majora's Mask")    { CreateMMOptionsContent }
     elseif ($GameType.mode -eq "Super Mario 64")   { CreateSM64OptionsContent }
 
-    if ($GamePatch.options -eq 1)  { $OptionsLabel.text = $GameType.mode + " - Additional Options" }
-
     if ($GameType.downgrade)      { $PatchVCDowngradeLabel.Visible = $PatchVCDowngrade.Visible = $True }
     if ($GameType.patch_vc -eq 2) { $PatchVCRemoveFilterLabel.Visible = $PatchVCRemoveFilter.Visible = $True }
     if ($GameType.patch_vc -eq 4) { $PatchVCLeaveDPadUpLabel.Visible = $PatchVCLeaveDPadUp.Visible = $True }

@@ -443,9 +443,9 @@ function PatchVCEmulator([String]$Command) {
 
         if ($PatchVCRemapDPad.Checked) {
             if (!$PatchVCLeaveDPadUp.Checked) { ChangeBytes -File $WadFile.AppFile01 -Offset "16BAF0" -Values @("08", "00") }
-        ChangeBytes -File $WadFile.AppFile01 -Offset "16BAF4" -Values @("04", "00")
-        ChangeBytes -File $WadFile.AppFile01 -Offset "16BAF8" -Values @("02", "00")
-        ChangeBytes -File $WadFile.AppFile01 -Offset "16BAFC" -Values @("01", "00")
+                ChangeBytes -File $WadFile.AppFile01 -Offset "16BAF4" -Values @("04", "00")
+                ChangeBytes -File $WadFile.AppFile01 -Offset "16BAF8" -Values @("02", "00")
+                ChangeBytes -File $WadFile.AppFile01 -Offset "16BAFC" -Values @("01", "00")
         }
 
         if ($PatchVCRemapCDown.Checked)         { ChangeBytes -File $WadFile.AppFile01 -Offset "16BB04" -Values @("00", "20") }
@@ -458,16 +458,16 @@ function PatchVCEmulator([String]$Command) {
         if ($PatchVCExpandMemory.Checked -or $PatchVCRemapDPad.Checked -or $PatchVCRemapCDown.Checked -or $PatchVCRemapZ.Checked) { & $Files.tool.lzss -d $WADFile.AppFile01 | Out-Host }
 
         if ($PatchVCExpandMemory.Checked) {
-        ChangeBytes -File $WadFile.AppFile01 -Offset "10B58" -Values @("3C", "80", "00", "C0")
-        ChangeBytes -File $WadFile.AppFile01 -Offset "4BD20" -Values @("67", "E4", "70", "00")
-        ChangeBytes -File $WadFile.AppFile01 -Offset "4BC80" -Values @("3C", "A0", "01", "00")
+            ChangeBytes -File $WadFile.AppFile01 -Offset "10B58" -Values @("3C", "80", "00", "C0")
+            ChangeBytes -File $WadFile.AppFile01 -Offset "4BD20" -Values @("67", "E4", "70", "00")
+            ChangeBytes -File $WadFile.AppFile01 -Offset "4BC80" -Values @("3C", "A0", "01", "00")
         }
 
         if ($PatchVCRemapDPad.Checked) {
-        ChangeBytes -File $WadFile.AppFile01 -Offset "148514" -Values @("08", "00")
-        ChangeBytes -File $WadFile.AppFile01 -Offset "148518" -Values @("04", "00")
-        ChangeBytes -File $WadFile.AppFile01 -Offset "14851C" -Values @("02", "00")
-        ChangeBytes -File $WadFile.AppFile01 -Offset "148520" -Values @("01", "00")
+            ChangeBytes -File $WadFile.AppFile01 -Offset "148514" -Values @("08", "00")
+            ChangeBytes -File $WadFile.AppFile01 -Offset "148518" -Values @("04", "00")
+            ChangeBytes -File $WadFile.AppFile01 -Offset "14851C" -Values @("02", "00")
+            ChangeBytes -File $WadFile.AppFile01 -Offset "148520" -Values @("01", "00")
         }
 
         if ($PatchVCRemapCDown.Checked)         { ChangeBytes -File $WadFile.AppFile01 -Offset "148528" -Values @("00", "20") }
@@ -811,13 +811,13 @@ function ExtractDungeon([String]$Path, [String]$Offset, [int]$Length) {
     $Table = $ByteArrayGame[(GetDecimal -Hex $Start)..(GetDecimal -Hex $End)]
     CreateSubPath -Path $Path
 
-    ExportBytesGame -Offset $Start -End $End -Output ($Path + "\table.dmaTable") 
+    ExportBytes -Offset $Start -End $End -Output ($Path + "\table.dmaTable") 
     
     for ($i=0; $i -le $Length; $i++) {
         $Start = (Get8Bit -Value $Table[($i*16)+0]) + (Get8Bit -Value $Table[($i*16)+1]) + (Get8Bit -Value $Table[($i*16)+2]) + (Get8Bit -Value $Table[($i*16)+3])
         $End   = (Get8Bit -Value $Table[($i*16)+4]) + (Get8Bit -Value $Table[($i*16)+5]) + (Get8Bit -Value $Table[($i*16)+6]) + (Get8Bit -Value $Table[($i*16)+7])
-        if ($i -eq 0)   { ExportBytesGame -Offset $Start -End $End -Output ($Path + "\scene.zscene") }
-        else            { ExportBytesGame -Offset $Start -End $End -Output ($Path + "\room_" + ($i-1) + ".zmap") }
+        if ($i -eq 0)   { ExportBytes -Offset $Start -End $End -Output ($Path + "\scene.zscene") }
+        else            { ExportBytes -Offset $Start -End $End -Output ($Path + "\room_" + ($i-1) + ".zmap") }
     }
 
 }

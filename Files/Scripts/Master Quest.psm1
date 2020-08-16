@@ -6,7 +6,7 @@ function PatchDungeonsMQ() {
     UpdateStatusLabel -Text ("Patching " + $GameType.mode + " Master Quest Dungeons...") -Patch ""
 
     # Title
-    if ($Settings.Debug.OnlyMQDungeons -ne $True) {
+    if ($Settings.Debug.KeepLogo -ne $True) {
         PatchBytes -Offset "1795300" -Length "19000" -Texture -Patch "Logo\Master Quest Title Logo.bin"
         PatchBytes -Offset "17AE380" -Length "700"   -Texture -Patch "Logo\Master Quest Title Copyright.bin"
         ChangeBytes -Offset "E6E266"  -Values @("64", "96", "34", "21", "FF") # THE LEGEND OF

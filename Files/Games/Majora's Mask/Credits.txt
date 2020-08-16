@@ -16,11 +16,11 @@
 - Restore Skull Kid:			ShadowOne333
 - Restore Palace Route:		ShadowOne333
 - Restore Shop Music:		ShadowOne333
-- 4th Piece of Heart Sound:		ShadowOne333
+- 4th Piece of Heart Sound:		fkualol
 - Move Bomber Kid:			ShadowOne333
 - Set Capacity:			GhostlyDark
 - Fix Goth Cutscene:		ShadowOne333
-- Fix Mushroom Bottle:		ShadowOne333 & ozidual
+- Fix Mushroom Bottle:		ozidual
 - Fix Southern Swamp:		ShadowOne333
 - Fix Fairy Fountain:			Dybbles (fix) & ShadowOne333 (ROM / patch)
 - Admentus (Scripting and Assistance of all Options)
