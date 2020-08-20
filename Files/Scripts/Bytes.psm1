@@ -147,14 +147,21 @@ function SearchBytes([String]$File, [String]$Start="0", [String]$End, [Array]$Va
 
 
 #==============================================================================================================================================================================================
-function ExportAndPatch([String]$Path, [String]$Offset, [String]$Length) {
+function ExportAndPatch([String]$Path, [String]$Offset, [String]$Length, [String]$NewLength, [String]$TableOffset, [Array]$Values) {
 
     $File = $GameFiles.binaries + "\" + $Path + ".bin"
     if (!(Test-Path -LiteralPath $File -PathType Leaf)) {
         ExportBytes -Offset $Offset -Length $Length -Output $File
         ApplyPatch -File $File -Patch ("\Data Extraction\" + $Path + ".bps") -FilesPath
     }
-    PatchBytes  -Offset $Offset -Patch ($Path + ".bin")
+
+    if (!(IsSet -Elem $NewLength)) { $NewLength = $Length }
+    if ($NewLength -lt $Length)   { PatchBytes -Offset $Offset -Patch ($Path + ".bin") -Length $Length }
+    else                          { PatchBytes -Offset $Offset -Patch ($Path + ".bin") -Length $NewLength }
+
+    if ( (IsSet -Elem $TableOffset) -and (IsSet -Elem $Values) ) {
+        ChangeBytes -Offset $TableOffset -Values $Values
+    }
 
 }
 

@@ -12,6 +12,7 @@
 - MM Adult Link Model:		Skilar
 - Hatsune Miku Link Models:		JanexLane
 - MM HUD Textures:		GhostlyDark
+- MM Pause Screen:		Garo-Mastah & CM
 - Colors:				GhostlyDark
 - Easier Minigames:			ShadowOne333
 - Faster Block Pushing:		ShadowOne333

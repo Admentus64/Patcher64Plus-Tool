@@ -61,8 +61,8 @@ function MainFunction([String]$Command, [String]$PatchedFileName) {
 
     # Decompress
     $Decompress = $False
-    if ($GamePatch.file -like "*\Decompressed\*") { $Decompress = $True }
-    if ($LanguagePatch -like "*\Decompressed\*") { $Decompress = $True }
+    if ($GamePatch.file -like "*\Decompressed\*")   { $Decompress = $True }
+    if ($LanguagePatch -like "*\Decompressed\*")    { $Decompress = $True }
     if ($GameType.decompress -eq 1) {
         if ( (IsChecked -Elem $PatchReduxCheckbox -Visible) -or (IsChecked -Elem $PatchOptionsCheckbox -Visible) ) { $Decompress = $True }
     }
@@ -137,10 +137,13 @@ function MainFunctionPatch([String]$Command, [String[]]$Header, [String]$Patched
         if ($GameType.decompress -eq 1) { PatchOptionsZelda }
 
         # Step 12: Patch and extend the ROM file with the patch through Floating IPS.
-        if (!(PatchROM)) { return }
+        if (!(PatchDecompressedROM)) { return }
 
         # Step 13: Compress the decompressed ROM if required.
         CompressROM -Decompress $Decompress
+
+        # Step 12: Patch and extend the ROM file with the patch through Floating IPS.
+        if (!(PatchCompressedROM)) { return }
     }
     elseif (StrLike -str $Command -val "Apply Patch") {
         # Step 14: Apply provided BPS Patch
@@ -634,18 +637,41 @@ function CompareHashSums([String]$Command) {
 
 
 #==============================================================================================================================================================================================
-function PatchROM() {
+function PatchDecompressedROM() {
 
-    if (!(IsSet $GamePatch.file)) { return $True }
+    if (!(IsSet $GamePatch.file))                                                { return $True }
+    if (!$Decompress -or !(StrLike -str $GamePatch.file -val "\Decompressed"))   { return $True }
     
     # Set the status label.
     UpdateStatusLabel -Text ("Patching " + $GameType.mode + " ROM with patch file...")
 
     # Apply the selected patch to the ROM, if it is provided
-    if ($IsWiiVC -and $Decompress)         { if (!(ApplyPatch -File $Files.decompressedROM -Patch $GamePatch.file))              { return $False } }
-    elseif ($IsWiiVC -and !$Decompress)    { if (!(ApplyPatch -File $Files.patchedROM -Patch $GamePatch.file))                   { return $False } }
-    elseif (!$IsWiiVC -and $Decompress)    { if (!(ApplyPatch -File $Files.decompressedROM -Patch $GamePatch.file))              { return $False } }
-    elseif (!$IsWiiVC -and !$Decompress)   { if (!(ApplyPatch -File $Files.ROM -Patch $GamePatch.file -New $Files.patchedROM))   { return $False } }
+    if (!(ApplyPatch -File $Files.decompressedROM -Patch $GamePatch.file)) { return $False }
+
+    #if ($IsWiiVC -and $Decompress -and (StrLike -str $GamePatch.file -val "\\Decompressed"))        { if (!(ApplyPatch -File $Files.decompressedROM -Patch $GamePatch.file))              { return $False } }
+    #elseif (!$IsWiiVC -and $Decompress -and (StrLike -str $GamePatch.file -val "\\Decompressed"))   { if (!(ApplyPatch -File $Files.decompressedROM -Patch $GamePatch.file))              { return $False } }
+
+    return $True
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function PatchCompressedROM() {
+
+    if (!(IsSet $GamePatch.file))                                             { return $True }
+    if ($Decompress -or !(StrLike -str $GamePatch.file -val "\Compressed"))   { return $True }
+    
+    # Set the status label.
+    UpdateStatusLabel -Text ("Patching " + $GameType.mode + " ROM with patch file...")
+
+    # Apply the selected patch to the ROM, if it is provided
+    if ($IsWiiVC)        { if (!(ApplyPatch -File $Files.patchedROM -Patch $GamePatch.file))                   { return $False } }
+    elseif (!$IsWiiVC)   { if (!(ApplyPatch -File $Files.ROM -Patch $GamePatch.file -New $Files.patchedROM))   { return $False } }
+
+    #elseif ($IsWiiVC -and !$Decompress -and (StrLike -str $GamePatch.file -val "\\Compressed"))     { if (!(ApplyPatch -File $Files.patchedROM -Patch $GamePatch.file))                   { return $False } }
+    #elseif (!$IsWiiVC -and !$Decompress -and (StrLike -str $GamePatch.file -val "\\Compressed"))    { if (!(ApplyPatch -File $Files.ROM -Patch $GamePatch.file -New $Files.patchedROM))   { return $False } }
 
     return $True
 

@@ -234,7 +234,10 @@ function CreateMainDialog() {
 
     $global:PatchOptionsLabel = CreateLabel -X ($PatchButton.Right + 10) -Y ($PatchReduxLabel.Bottom + 15) -Width 85 -Height 15 -Text "Enable Options:" -ToolTip $ToolTip -Info "Enable options" -AddTo $PatchGroup
     $global:PatchOptionsCheckbox = CreateCheckBox -X $PatchOptionsLabel.Right -Y ($PatchOptionsLabel.Top - 2) -Width 20 -Height 20 -ToolTip $ToolTip -Info "Enable options" -Name "Options" -AddTo $PatchGroup
-    $PatchOptionsCheckbox.Add_CheckStateChanged({ $PatchOptionsButton.Enabled = $PatchLanguagesButton.Enabled = $this.Checked })
+    $PatchOptionsCheckbox.Add_CheckStateChanged({
+        $PatchOptionsButton.Enabled = $Languages.TextBox.Visible = $this.Checked
+        $Languages.TextBox.Enabled = $this.Checked -and $Languages[0].Checked
+    })
 
     $global:PatchLanguagesButton = CreateButton -X ($PatchOptionsCheckbox.Right + 5) -Y 20 -Width 145 -Height 25 -Text "Select Language" -ToolTip $ToolTip -Info 'Open the "Languages" panel to change the language' -AddTo $PatchGroup
     $PatchLanguagesButton.Add_Click( { $LanguagesDialog.ShowDialog() } )

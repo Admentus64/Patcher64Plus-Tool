@@ -198,7 +198,7 @@ function PatchByteOptionsOoT() {
     }
 
     if (IsChecked -Elem $Options.ShowFileSelectIcons -Enabled) { PatchBytes  -Offset "BAF738" -Patch "File Select.bin" }
-    if (IsChecked -Elem $Options.ShowDPad -Enabled)            { ChangeBytes -Offset "348086E" -Values @("01") }
+    if (IsChecked -Elem $Options.DPadLayoutShow -Enabled)      { ChangeBytes -Offset "348086E" -Values @("01") }
 
 
 
@@ -251,7 +251,7 @@ function PatchByteOptionsOoT() {
         ChangeBytes -Offset "253C0E2" -Values @("03")
     }
 
-    if (IsChecked -Elem $Options.EasierPuzzles -Enabled) {
+    if (IsChecked -Elem $Options.EasierMinigames -Enabled) {
         ChangeBytes -Offset "CC4024" -Values @("00", "00", "00", "00") # Dampe's Digging Game
         ChangeBytes -Offset "DBF428" -Values @("0C", "10", "07", "7D", "3C", "01", "42", "82", "44", "81", "40", "00", "44", "98", "90", "00", "E6", "52") # Easier Fishing
         ChangeBytes -Offset "DBF484" -Values @("00", "00", "00", "00") # Easier Fishing
@@ -260,9 +260,7 @@ function PatchByteOptionsOoT() {
         ChangeBytes -Offset "DCBF27" -Values @("48")                   # Adult Fish size requirement
         ChangeBytes -Offset "DCBF33" -Values @("30")                   # Child Fish size requirement
         ChangeBytes -Offset "DCBF9F" -Values @("30")                   # Child Fish size requirement
-
-        # First try truth spinner
-        if (!(IsChecked -Elem $Options.MQShadowTemple -Enabled)) { ChangeBytes -Offset "DB9E7C" -Values @("0C", "10", "0D", "", "", "00", "00", "00") }
+        # ChangeBytes -Offset "DB9E7C" -Values @("0C", "10", "0D", "AB", "00", "00", "00", "00") # First try truth spinner
     }
 
     if (IsChecked -Elem $Options.FasterBlockPushing) {
@@ -416,6 +414,10 @@ function PatchBPSOptionsOoT() {
     }
     if (IsText -Elem $Options.Models -Text "Change to Female Models" -Enabled) {
         ApplyPatch -File $Files.decompressedROM -Patch "\Decompressed\Models\female_models.ppf"
+    }
+
+    if (IsChecked -Elem $Options.PauseScreen -Enabled) {
+        ApplyPatch -File $Files.decompressedROM -Patch "\Decompressed\mm_pause_screen.ppf"
     }
     
 }
@@ -600,10 +602,18 @@ function PatchByteOptionsMM() {
 
     # D-PAD #
 
-    if (IsChecked -Elem $Options.HideDPad -Enabled)            { ChangeBytes -Offset "3806365" -Values @("00") }
-    elseif (IsChecked -Elem $Options.LeftDPad -Enabled)        { ChangeBytes -Offset "3806365" -Values @("01") }
-    elseif (IsChecked -Elem $Options.RightDPad -Enabled)       { ChangeBytes -Offset "3806365" -Values @("02") }
-    
+    if ( (IsChecked -Elem $Options.DPadLayoutHide -Enabled) -or (IsChecked -Elem $Options.DPadLayoutLeft -Enabled) -or (IsChecked -Elem $Options.DPadLayoutRight -Enabled) ) {
+        $Array = @()
+        $Array += GetItemIDMM -Item $Options.DPadUp.Text
+        $Array += GetItemIDMM -Item $Options.DPadRight.Text
+        $Array += GetItemIDMM -Item $Options.DPadDown.Text
+        $Array += GetItemIDMM -Item $Options.DPadLeft.Text
+        ChangeBytes -Offset "3806354" -Values $Array
+
+        ChangeBytes -Offset "3806364" -Values "01"
+        if (IsChecked -Elem $Options.DPadLayoutLeft -Enabled)        { ChangeBytes -Offset "3806365" -Values "01" }
+        elseif (IsChecked -Elem $Options.DPadLayoutRight -Enabled)   { ChangeBytes -Offset "3806365" -Values "02" }
+    }
 
 
 
@@ -644,6 +654,39 @@ function PatchByteOptionsMM() {
 
     # GAMEPLAY
     
+    if (IsChecked -Elem $Options.RestorePalaceRoute -Enabled) {
+        CreateSubPath -Path ($GameFiles.binaries + "\Deku Palace")
+        ExportAndPatch -Path "Deku Palace\deku_palace_scene"  -Offset "2534000" -Length "D220"  -NewLength "D230"  -TableOffset "1F687" -Values @("30")
+        ExportAndPatch -Path "Deku Palace\deku_palace_room_0" -Offset "2542000" -Length "11A50"
+        ExportAndPatch -Path "Deku Palace\deku_palace_room_1" -Offset "2554000" -Length "E950"  -NewLength "E9B0"  -TableOffset "1F6A7" -Values @("B0")
+        ExportAndPatch -Path "Deku Palace\deku_palace_room_2" -Offset "2563000" -Length "124F0" -NewLength "124B0" -TableOffset "1F6B7" -Values @("B0")
+    }
+
+    <#
+    if (IsChecked -Elem $Options.ResearchLabPlatform -Enabled) {
+        CreateSubPath -Path ($GameFiles.binaries + "\Great Bay Coast")
+        ExportAndPatch -Path "Great Bay Coast\great_bay_coast_scene"  -Offset "26BF000" -Length "1EDD0" -NewLength "1EEB0" -TableOffset "1F826" -Values @("DE", "B0")
+        ExportAndPatch -Path "Great Bay Coast\great_bay_coast_room_0" -Offset "26DE000" -Length "1D300" -NewLength "1D2F0" -TableOffset "1F836" -Values @("B2", "F0")
+
+        #ChangeBytes -Offset ( Get32Bit -Value ( (GetDecimal -Hex "26BF000") + (GetDecimal -Hex "190")  ) ) -Values @("02", "6D", "E0", "00", "02", "6F", "B2", "F0")
+        #ChangeBytes -Offset ( Get32Bit -Value ( (GetDecimal -Hex "26BF000") + (GetDecimal -Hex "9680") ) ) -Values @("02", "6D", "E0", "00", "02", "6F", "B2", "F0")
+        #ChangeBytes -Offset ( Get32Bit -Value ( (GetDecimal -Hex "26BF000") + (GetDecimal -Hex "C168") ) ) -Values @("02", "6D", "E0", "00", "02", "6F", "B2", "F0")
+
+        #ChangeBytes -Offset ( Get32Bit -Value ( (GetDecimal -Hex "26BF000") + (GetDecimal -Hex "1A8") ) ) -Values @("02", "6D", "E0", "00", "02", "6F", "B2", "F0")
+        #ChangeBytes -Offset ( Get32Bit -Value ( (GetDecimal -Hex "26BF000") + (GetDecimal -Hex "95A0") ) ) -Values @("02", "6D", "E0", "00", "02", "6F", "B2", "F0")
+        #ChangeBytes -Offset ( Get32Bit -Value ( (GetDecimal -Hex "26BF000") + (GetDecimal -Hex "C088") ) ) -Values @("02", "6D", "E0", "00", "02", "6F", "B2", "F0")
+    }
+    #>
+
+    <#
+    if (IsChecked -Elem $Options.RanchDirtRoad -Enabled) {
+        CreateSubPath -Path ($GameFiles.binaries + "\Romani Ranch")
+        ExportAndPatch -Path "Romani Ranch\romani_ranch_scene"  -Offset "2690000" -Length "1C460" -NewLength "1EA90" -TableOffset "1F7E6" -Values @("EA", "90")
+        ExportAndPatch -Path "Romani Ranch\romani_ranch_room_0" -Offset "26AD000" -Length "D2C0"  -NewLength "CDE0"  -TableOffset "1F7F6" -Values @("9D", "E0")
+    }
+    #>
+
+    if (IsChecked -Elem $Options.FasterBlockPushing)           { ChangeBytes -Offset "3806530" -Values @("BF", "D8", "B6", "FB", "3D", "22", "B9", "83", "3B", "A0", "99", "46", "20", "33", "FB", "70", "10") }
     if (IsChecked -Elem $Options.ZoraPhysics -Enabled $True)   { PatchBytes -Offset "65D000" -Patch "Zora Physics Fix.bin" }
 
 
@@ -672,17 +715,6 @@ function PatchByteOptionsMM() {
         }
         ChangeBytes -Offset "181C820" -Values $Values
         PatchBytes  -Offset "181C620" -Texture -Patch "Skull Kid Beak.bin"
-    }
-
-    if (IsChecked -Elem $Options.RestorePalaceRoute -Enabled) {
-        CreateSubPath -Path ($GameFiles.binaries + "\Deku Palace")
-        ChangeBytes -Offset "1F687" -Values @("30")
-        ChangeBytes -Offset "1F6A7" -Values @("B0")
-        ChangeBytes -Offset "1F6B7" -Values @("B0")
-        ExportAndPatch -Path "Deku Palace\deku_palace_scene"  -Offset "2534000" -Length "D230"
-        ExportAndPatch -Path "Deku Palace\deku_palace_room_0" -Offset "2542000" -Length "11A50"
-        ExportAndPatch -Path "Deku Palace\deku_palace_room_1" -Offset "2554000" -Length "E9B0" 
-        ExportAndPatch -Path "Deku Palace\deku_palace_room_2" -Offset "2563000" -Length "124F0"
     }
 
     if (IsChecked -Elem $Options.RestoreShopMusic -Enabled)    { ChangeBytes -Offset "2678007" -Values @("44") }
@@ -720,11 +752,9 @@ function PatchByteOptionsMM() {
     
     if (IsChecked -Elem $Options.FixSouthernSwamp -Enabled) {
         CreateSubPath -Path ($GameFiles.binaries + "\Southern Swamp")
-        ChangeBytes -Offset "1EC26"  -Values @("94", "F0")
-        ChangeBytes -Offset "1EC46"  -Values @("A1", "C0")
         ExportAndPatch -Path "Southern Swamp\southern_swamp_cleared_scene"  -Offset "1F0D000" -Length "10630"
-        ExportAndPatch -Path "Southern Swamp\southern_swamp_cleared_room_0" -Offset "1F1E000" -Length "1B4F0"
-        ExportAndPatch -Path "Southern Swamp\southern_swamp_cleared_room_2" -Offset "1F4D000" -Length "D1C0"
+        ExportAndPatch -Path "Southern Swamp\southern_swamp_cleared_room_0" -Offset "1F1E000" -Length "1B240" -NewLength "1B4F0" -TableOffset "1EC26"  -Values @("94", "F0")
+        ExportAndPatch -Path "Southern Swamp\southern_swamp_cleared_room_2" -Offset "1F4D000" -Length "D0A0"  -NewLength "D1C0"  -TableOffset "1EC46"  -Values @("A1", "C0")
     }
 
     if (IsChecked -Elem $Options.DisableLowHPSound -Enabled)   { ChangeBytes -Offset "B97E2A"  -Values @("00", "00") }
@@ -792,6 +822,20 @@ function PatchLanguageOptionsMM() {
     if ( (IsChecked -Elem $Languages.TextRestore -Enabled) ) {
         PatchBytes -Offset "AD1000" -Patch ("Message\Message Data Static MM.bin")
     }
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function GetItemIDMM([String]$Item) {
+    
+    if ($Item -eq "None")                { return "FF" }
+    if ($Item -eq "Ocarina of Time")     { return "00" }
+    if ($Item -eq "Deku Mask")           { return "32" }
+    if ($Item -eq "Goron Mask")          { return "33" }
+    if ($Item -eq "Zora Mask")           { return "34" }
+    if ($Item -eq "Fierce Deity's Mask") { return "35" }
 
 }
 
@@ -899,8 +943,9 @@ function CreateOoTOptionsContent() {
 
     $Options.HudTextures               = CreateReduxCheckBox -Column 0 -Row 1 -AddTo $InterfaceBox -Text "MM HUD Textures"                 -ToolTip $ToolTip -Info "Replaces the HUD textures with those froom Majora's Mask" -Name "HudTextures"
     $Options.ButtonPositions           = CreateReduxCheckBox -Column 1 -Row 1 -AddTo $InterfaceBox -Text "MM Button Positions"             -ToolTip $ToolTip -Info "Positions the A and B buttons like in Majora's Mask" -Name "ButtonPositions"
-    $Options.ShowFileSelectIcons       = CreateReduxCheckBox -Column 2 -Row 1 -AddTo $InterfaceBox -Text "Show File Select Icons" -Checked -ToolTip $ToolTip -Info "Show icons on the File Select screen to display your save file progress`n- Requires Redux patch" -Name "ShowFileSelectIcons"
-    $Options.ShowDPad                  = CreateReduxCheckBox -Column 3 -Row 1 -AddTo $InterfaceBox -Text "Show D-Pad Icon"        -Checked -ToolTip $ToolTip -Info "Show the D-Pad icons ingame that display item shortcuts`n- Requires Redux patch" -Name "ShowDPad"
+    $Options.PauseScreen               = CreateReduxCheckBox -Column 2 -Row 1 -AddTo $InterfaceBox -Text "MM Pause Screen"                 -ToolTip $ToolTip -Info "Replaces the Pause Screen textures to be styled like Majora's Mask" -Name "PauseScreen"
+    $Options.ShowFileSelectIcons       = CreateReduxCheckBox -Column 3 -Row 1 -AddTo $InterfaceBox -Text "Show File Select Icons" -Checked -ToolTip $ToolTip -Info "Show icons on the File Select screen to display your save file progress`n- Requires Redux patch" -Name "ShowFileSelectIcons"
+    $Options.DPadLayoutShow            = CreateReduxCheckBox -Column 4 -Row 1 -AddTo $InterfaceBox -Text "Show D-Pad Icon"        -Checked -ToolTip $ToolTip -Info "Show the D-Pad icons ingame that display item shortcuts`n- Requires Redux patch" -Name "DPadLayoutShow"
 
 
 
@@ -964,20 +1009,20 @@ function CreateOoTOptionsContent() {
     # GAMEPLAY #
     $GameplayBox                       = CreateReduxGroup -Y ($ColorsBox.Bottom + 5) -Height 1 -AddTo $Options.Panel -Text "Gameplay"
 
-    $Options.ReturnChild               = CreateReduxCheckBox -Column 0 -Row 1 -AddTo $GameplayBox -Text "Can Always Return"      -ToolTip $ToolTip -Info "You can always go back to being a child again before clearing the boss of the Forest Temple`nOut of the way Sheik!" -Name "ReturnChild"
-    $Options.Medallions                = CreateReduxCheckBox -Column 1 -Row 1 -AddTo $GameplayBox -Text "Require All Medallions" -ToolTip $ToolTip -Info "All six medallions are required for the Rainbow Bridge to appear before Ganon's Castle`nThe vanilla requirements were the Shadow and Spirit Medallions and the Light Arrows" -Name "Medallions"
-    $Options.FasterBlockPushing        = CreateReduxCheckBox -Column 2 -Row 1 -AddTo $GameplayBox -Text "Faster Block Pushing"   -ToolTip $ToolTip -Info "All blocks are pushed faster" -Name "FasterBlockPushing"
-    $Options.EasierPuzzles             = CreateReduxCheckBox -Column 3 -Row 1 -AddTo $GameplayBox -Text "Easier Puzzles"         -ToolTip $ToolTip -Info "Certain minigames and puzzles are made easier and faster`n- Dampe's Digging Game is first try always`n- Fishing is less random and has less demanding requirements`n- Shadow Temple Truth Spinner is first try always (Regular Quest only)" -Name "EasierPuzzles"
+    $Options.FasterBlockPushing        = CreateReduxCheckBox -Column 0 -Row 1 -AddTo $GameplayBox -Text "Faster Block Pushing"   -ToolTip $ToolTip -Info "All blocks are pushed faster" -Name "FasterBlockPushing"
+    $Options.ReturnChild               = CreateReduxCheckBox -Column 1 -Row 1 -AddTo $GameplayBox -Text "Can Always Return"      -ToolTip $ToolTip -Info "You can always go back to being a child again before clearing the boss of the Forest Temple`nOut of the way Sheik!" -Name "ReturnChild"
+    $Options.Medallions                = CreateReduxCheckBox -Column 2 -Row 1 -AddTo $GameplayBox -Text "Require All Medallions" -ToolTip $ToolTip -Info "All six medallions are required for the Rainbow Bridge to appear before Ganon's Castle`nThe vanilla requirements were the Shadow and Spirit Medallions and the Light Arrows" -Name "Medallions"
+    $Options.EasierMinigames           = CreateReduxCheckBox -Column 3 -Row 1 -AddTo $GameplayBox -Text "Easier Minigames"       -ToolTip $ToolTip -Info "Certain minigames are made easier and faster`n- Dampe's Digging Game is first try always`n- Fishing is less random and has less demanding requirements" -Name "EasierMinigames"
     
 
 
     # RESTORE #
     $RestoreBox                        = CreateReduxGroup -Y ($GameplayBox.Bottom + 5) -Height 1 -AddTo $Options.Panel -Text "Restore / Correct / Censor"
 
-    $Options.CorrectRupeeColors        = CreateReduxCheckBox -Column 0 -Row 1 -AddTo $RestoreBox -Text "Correct Rupee Colors"      -ToolTip $ToolTip -Info "Corrects the colors for the Purple (50) and Golden (200) Rupees" -Name "CorrectRupeeColors"
-    $Options.RestoreCowNoseRing        = CreateReduxCheckBox -Column 1 -Row 1 -AddTo $RestoreBox -Text "Restore Cow Nose Ring"     -ToolTip $ToolTip -Info "Restore the rings in the noses for Cows as seen in the Japanese release" -Name "RestoreCowNoseRing"
-    $Options.RestoreFireTemple         = CreateReduxCheckBox -Column 2 -Row 1 -AddTo $RestoreBox -Text "Restore Fire Temple"       -ToolTip $ToolTip -Info "Restore the censored Fire Temple theme used since the Rev 2 ROM" -Name "RestoreFireTemple"
-    $Options.CensorGerudoTextures      = CreateReduxCheckBox -Column 3 -Row 1 -AddTo $RestoreBox -Text "Censor Gerudo Textures"    -ToolTip $ToolTip -Info "Restore the censored Gerudo symbol textures used in the GameCube / Virtual Console releases`n- Disable the option to uncensor the Gerudo Texture used in the Master Quest dungeons" -Name "CensorGerudoTextures"
+    $Options.CorrectRupeeColors        = CreateReduxCheckBox -Column 0 -Row 1 -AddTo $RestoreBox -Text "Correct Rupee Colors"   -ToolTip $ToolTip -Info "Corrects the colors for the Purple (50) and Golden (200) Rupees" -Name "CorrectRupeeColors"
+    $Options.RestoreCowNoseRing        = CreateReduxCheckBox -Column 1 -Row 1 -AddTo $RestoreBox -Text "Restore Cow Nose Ring"  -ToolTip $ToolTip -Info "Restore the rings in the noses for Cows as seen in the Japanese release" -Name "RestoreCowNoseRing"
+    $Options.RestoreFireTemple         = CreateReduxCheckBox -Column 2 -Row 1 -AddTo $RestoreBox -Text "Restore Fire Temple"    -ToolTip $ToolTip -Info "Restore the censored Fire Temple theme used since the Rev 2 ROM" -Name "RestoreFireTemple"
+    $Options.CensorGerudoTextures      = CreateReduxCheckBox -Column 3 -Row 1 -AddTo $RestoreBox -Text "Censor Gerudo Textures" -ToolTip $ToolTip -Info "Restore the censored Gerudo symbol textures used in the GameCube / Virtual Console releases`n- Disable the option to uncensor the Gerudo Texture used in the Master Quest dungeons" -Name "CensorGerudoTextures"
     
 
 
@@ -1001,9 +1046,9 @@ function CreateOoTOptionsContent() {
 
 
 
-    ToggleReduxOptions
     CreateMasterQuestDungeonsDialog
-    CreateCapacityDialog  
+    CreateCapacityDialog
+    ToggleReduxOptions
 
     $Options.Damage.Add_SelectedIndexChanged({ $Options.Recovery.Enabled = $this.Text -ne "OKHO Mode" })
     $Options.EnableTunicColors.Add_CheckStateChanged({ $Options.KokiriTunicColor.Enabled = $Options.GoronTunicColor.Enabled = $Options.ZoraTunicColor.Enabled = $this.Checked })
@@ -1057,12 +1102,15 @@ function CreateMMOptionsContent() {
     # D-PAD #
     $DPadBox                           = CreateReduxGroup -Y ($HeroModeBox.Bottom + 5) -Height 1 -AddTo $Options.Panel -Text "D-Pad Icons Layout"
     
-    $DPadPanel                         = CreateReduxPanel -Row 0 -AddTo $DPadBox
-    $Options.HideDPad                  = CreateReduxRadioButton -Column 0 -Row 0 -AddTo $DPadPanel -Checked -Disable -Text "Hidden"     -ToolTip $ToolTip -Info "Hide the D-Pad icons, while they are still active`n- Requires Redux patch" -Name "HideDPad"
-    $Options.LeftDPad                  = CreateReduxRadioButton -Column 1 -Row 0 -AddTo $DPadPanel          -Disable -Text "Left Side"  -ToolTip $ToolTip -Info "Show the D-Pad icons on the left side of the HUD`n- Requires Redux patch"  -Name "LeftDPad"
-    $Options.RightDPad                 = CreateReduxRadioButton -Column 2 -Row 0 -AddTo $DPadPanel          -Disable -Text "Right Side" -ToolTip $ToolTip -Info "Show the D-Pad icons on the right side of the HUD`n- Requires Redux patch" -Name "RightDPad"
+    $DPadPanel                         = CreateReduxPanel -Row 0 -Columns 4 -AddTo $DPadBox
+    $Options.DPadDisable               = CreateReduxRadioButton -Column 0 -Row 0 -AddTo $DPadPanel -Checked -Disable -Text "Disable"    -ToolTip $ToolTip -Info "Completely disable the D-Pad`n- Requires Redux patch"                      -Name "DPadDisable"
+    $Options.DPadLayoutHide            = CreateReduxRadioButton -Column 1 -Row 0 -AddTo $DPadPanel          -Disable -Text "Hidden"     -ToolTip $ToolTip -Info "Hide the D-Pad icons, while they are still active`n- Requires Redux patch" -Name "DPadLayoutHide"
+    $Options.DPadLayoutLeft            = CreateReduxRadioButton -Column 2 -Row 0 -AddTo $DPadPanel          -Disable -Text "Left Side"  -ToolTip $ToolTip -Info "Show the D-Pad icons on the left side of the HUD`n- Requires Redux patch"  -Name "DPadLayoutLeft"
+    $Options.DPadLayoutRight           = CreateReduxRadioButton -Column 3 -Row 0 -AddTo $DPadPanel          -Disable -Text "Right Side" -ToolTip $ToolTip -Info "Show the D-Pad icons on the right side of the HUD`n- Requires Redux patch" -Name "DPadLayoutRight"
+    $Options.DPadLayout                = CreateReduxButton      -Column 4 -Row 1 -AddTo $DPadBox -Text "Customize D-Pad" -ToolTip $ToolTip -Info "Customize the D-Pad Layout"
     
-    
+    $Options.DPadLayout.Add_Click( { $Options.DPadDialog.ShowDialog() } )
+
 
    
     # GRAPHICS #
@@ -1090,7 +1138,11 @@ function CreateMMOptionsContent() {
     # GAMEPLAY #
     $GameplayBox                       = CreateReduxGroup -Y ($ColorsBox.Bottom + 5) -Height 1 -AddTo $Options.Panel -Text "Gameplay"
 
-    $Options.ZoraPhysics               = CreateReduxCheckBox -Column 0 -Row 1 -AddTo $GameplayBox -Text "Zora Physics"         -ToolTip $ToolTip -Info "Change the Zora physics when using the boomerang`nZora Link will take a step forward instead of staying on his spot" -Name "ZoraPhysics"
+    $Options.FasterBlockPushing        = CreateReduxCheckBox -Column 0 -Row 1 -AddTo $GameplayBox -Text "Faster Block Pushing"  -ToolTip $ToolTip -Info "All blocks are pushed faster" -Name "FasterBlockPushing"
+    $Options.ZoraPhysics               = CreateReduxCheckBox -Column 1 -Row 1 -AddTo $GameplayBox -Text "Zora Physics"          -ToolTip $ToolTip -Info "Change the Zora physics when using the boomerang`nZora Link will take a step forward instead of staying on his spot" -Name "ZoraPhysics"
+    $Options.RestorePalaceRoute        = CreateReduxCheckBox -Column 2 -Row 1 -AddTo $GameplayBox -Text "Restore Palace Route"  -ToolTip $ToolTip -Info "Restore the route to the Bean Seller within the Deku Palace as seen in the Japanese release" -Name "RestorePalaceRoute"
+    #$Options.ResearchLabPlatform      = CreateReduxCheckBox -Column 3 -Row 1 -AddTo $GameplayBox -Text "Research Lab Platform" -ToolTip $ToolTip -Info "Raises the platform to access the Marine Research Lab in the Great Bay Coast as seen in the Japanese release" -Name "ResearchLabPlatform"
+    #$Options.RanchDirtRoad            = CreateReduxCheckBox -Column 4 -Row 1 -AddTo $GameplayBox -Text "Ranch Dirt Road"       -ToolTip $ToolTip -Info "Restore the Romani Ranch dirt road to allow Deku Link to borrow in it as used in the Japanese release" -Name "RanchDirtRoad"
 
 
 
@@ -1103,10 +1155,9 @@ function CreateMMOptionsContent() {
     $Options.CorrectComma              = CreateReduxCheckBox -Column 3 -Row 1 -AddTo $RestoreBox -Text "Correct Comma"            -ToolTip $ToolTip -Info "Make the comma not look as awful" -Name "CorrectComma"
     $Options.RestoreTitle              = CreateReduxCheckBox -Column 4 -Row 1 -AddTo $RestoreBox -Text "Restore Title"            -ToolTip $ToolTip -Info "Restore the title logo colors as seen in the Japanese release" -Name "RestoreTitle"
     $Options.RestoreSkullKid           = CreateReduxCheckBox -Column 0 -Row 2 -AddTo $RestoreBox -Text "Restore Skull Kid"        -ToolTip $ToolTip -Info "Restore Skull Kid's face as seen in the Japanese release" -Name "RestoreSkullKid"
-    $Options.RestorePalaceRoute        = CreateReduxCheckBox -Column 1 -Row 2 -AddTo $RestoreBox -Text "Restore Palace Route"     -ToolTip $ToolTip -Info "Restore the route to the Bean Seller within the Deku Palace as seen in the Japanese release" -Name "RestorePalaceRoute"
-    $Options.RestoreShopMusic          = CreateReduxCheckBox -Column 2 -Row 2 -AddTo $RestoreBox -Text "Restore Shop Music"       -ToolTip $ToolTip -Info "Restores the Shop music intro theme as heard in the Japanese release" -Name "RestoreShopMusic"
-    $Options.PieceOfHeartSound         = CreateReduxCheckBox -Column 3 -Row 2 -AddTo $RestoreBox -Text "4th Piece of Heart Sound" -ToolTip $ToolTip -Info "Restore the sound effect when collecting the fourth Piece of Heart that grants Link a new Heart Container" -Name "PieceOfHeartSound"
-    $Options.MoveBomberKid             = CreateReduxCheckBox -Column 4 -Row 2 -AddTo $RestoreBox -Text "Move Bomber Kid"          -ToolTip $ToolTip -Info "Moves the Bomber at the top of the Stock Pot Inn to be behind the bell like in the original Japanese ROM" -Name "MoveBomberKid"
+    $Options.RestoreShopMusic          = CreateReduxCheckBox -Column 1 -Row 2 -AddTo $RestoreBox -Text "Restore Shop Music"       -ToolTip $ToolTip -Info "Restores the Shop music intro theme as heard in the Japanese release" -Name "RestoreShopMusic"
+    $Options.PieceOfHeartSound         = CreateReduxCheckBox -Column 2 -Row 2 -AddTo $RestoreBox -Text "4th Piece of Heart Sound" -ToolTip $ToolTip -Info "Restore the sound effect when collecting the fourth Piece of Heart that grants Link a new Heart Container" -Name "PieceOfHeartSound"
+    $Options.MoveBomberKid             = CreateReduxCheckBox -Column 3 -Row 2 -AddTo $RestoreBox -Text "Move Bomber Kid"          -ToolTip $ToolTip -Info "Moves the Bomber at the top of the Stock Pot Inn to be behind the bell like in the original Japanese ROM" -Name "MoveBomberKid"
 
 
 
@@ -1130,13 +1181,17 @@ function CreateMMOptionsContent() {
     $Options.FixFairyFountain          = CreateReduxCheckBox -Column 4 -Row 1 -AddTo $OtherBox -Text "Fix Fairy Fountain"  -ToolTip $ToolTip -Info "Fix the Ikana Canyon Fairy Fountain area not displaying the correct color." -Name "FixFairyFountain"
 
 
+
     CreateCapacityDialog
+    CreateDPadDialog
     ToggleReduxOptions
 
     $Options.Damage.Add_SelectedIndexChanged({ $Options.Recovery.Enabled = $this.Text -ne "OKHO Mode" })
+    $Options.DPadDisable.Add_CheckedChanged({ $Options.DPadLayout.Enabled = $PatchReduxCheckbox.Checked -and !$this.checked })
     $Options.EnableTunicColors.Add_CheckStateChanged({ $Options.KokiriTunicColor.Enabled = $Options.ResetAllColors.Enabled = $this.Checked })
 
     $Options.Recovery.Enabled = $Options.Damage.Text -ne "OKHO Mode"
+    $Options.DPadLayout.Enabled = $PatchReduxCheckbox.Checked -and !$Options.DPadDisable.Checked
     $Options.KokiriTunicColor.Enabled = $Options.ResetAllColors.Enabled = $Options.EnableTunicColors.Checked
 
     $Options.SetKokiriTunicColor       = CreateColorDialog -Red "1E" -Green "69" -Blue "1B" -Name "SetKokiriTunicColor"     -IsGame
@@ -1309,17 +1364,60 @@ function CreateCapacityDialog() {
 
 
 #==============================================================================================================================================================================================
+function CreateDPadDialog() {
+
+    # Create Dialog
+    $Options.DPadDialog = CreateDialog -Width 530 -Height 400
+    if (Test-Path -LiteralPath $GameFiles.icon -PathType Leaf)       { $Options.DPadDialog.Icon = $GameFiles.icon }
+    else                                                             { $Options.DPadDialog.Icon = $null }
+
+    # Tooltip
+    $ToolTip = CreateTooltip
+
+    # Close Button
+    $CloseButton = CreateButton -X ($Options.DPadDialog.Width / 2 - 60) -Y ($Options.DPadDialog.Height - 90) -Width 100 -Height 35 -Text "Close" -AddTo $Options.DPadDialog
+    $CloseButton.Add_Click( {$Options.DPadDialog.Hide()} )
+
+    
+    # Options Label
+    $Label = CreateLabel -X 30 -Y 20 -Width 300 -Height 15 -Font $VCPatchFont -Text ($GameType.mode + " - Customize D-Pad") -AddTo $Options.DPadDialog
+
+    # Capacity
+    $DPadPanel                         = CreatePanel -Width $Options.DPadDialog.Width -Height ($Options.DPadDialog.Height) -AddTo $Options.DPadDialog
+
+    # Enable checkbox
+    $DPadBox                           = CreateReduxGroup -Y 50 -Height 7 -AddTo $DPadPanel -Text "D-Pad Buttons Customization"
+
+    $Options.DPadUp                    = CreateReduxComboBox -Column 1 -Row 1 -Length 120 -AddTo $DPadBox -Items @("None", "Ocarina of Time", "Deku Mask", "Goron Mask", "Zora Mask", "Fierce Deity's Mask") -Default 2 -Text ""    -ToolTip $OptionsToolTip -Info "Set the quick slot item for the D-Pad Up button"    -Name "DPadUp"
+    $Options.DPadLeft                  = CreateReduxComboBox -Column 0 -Row 4 -Length 120 -AddTo $DPadBox -Items @("None", "Ocarina of Time", "Deku Mask", "Goron Mask", "Zora Mask", "Fierce Deity's Mask") -Default 3 -Text ""  -ToolTip $OptionsToolTip -Info "Set the quick slot item for the D-Pad Left button"  -Name "DPadLeft"
+    $Options.DPadRight                 = CreateReduxComboBox -Column 2 -Row 4 -Length 120 -AddTo $DPadBox -Items @("None", "Ocarina of Time", "Deku Mask", "Goron Mask", "Zora Mask", "Fierce Deity's Mask") -Default 4 -Text "" -ToolTip $OptionsToolTip -Info "Set the quick slot item for the D-Pad Right button" -Name "DPadRight"
+    $Options.DPadDown                  = CreateReduxComboBox -Column 1 -Row 7 -Length 120 -AddTo $DPadBox -Items @("None", "Ocarina of Time", "Deku Mask", "Goron Mask", "Zora Mask", "Fierce Deity's Mask") -Default 1 -Text ""  -ToolTip $OptionsToolTip -Info "Set the quick slot item for the D-Pad Down button"  -Name "DPadDown"
+    
+    $Image = [System.Drawing.Image]::Fromfile( ( Get-Item ($Paths.Main + "\D-Pad.png") ) )
+    $PictureBox = New-Object Windows.Forms.PictureBox
+    $PictureBox.Location = New-object System.Drawing.Size( ($Options.DPadRight.Left / 2 + 5), ($Options.DPadDown.Bottom / 4) )
+    $PictureBox.Width =  $Image.Size.Width
+    $PictureBox.Height =  $Image.Size.Height
+    $PictureBox.Image = $Image
+    $DPadBox.controls.add($PictureBox)
+
+}
+
+
+
+
+#==============================================================================================================================================================================================
 function ToggleReduxOptions() {
     
     if ($GameType.mode -eq "Ocarina of Time") {
         $Options.ShowFileSelectIcons.Enabled = $PatchReduxCheckbox.Checked
-        $Options.ShowDPad.Enabled = $PatchReduxCheckbox.Checked
+        $Options.DPadLayoutShow.Enabled = $PatchReduxCheckbox.Checked
         $Options.EnableButtonColors.Enabled = $PatchReduxCheckbox.Checked
     }
     elseif ($GameType.mode -eq "Majora's Mask") {
-        $Options.LeftDPad.Enabled = $PatchReduxCheckbox.Checked
-        $Options.RightDPad.Enabled = $PatchReduxCheckbox.Checked
-        $Options.HideDPad.Enabled = $PatchReduxCheckbox.Checked
+        $Options.DPadDisable.Enabled = $Options.DPadLayoutHide.Enabled = $Options.DPadLayoutLeft.Enabled = $Options.DPadLayoutRight.Enabled = $PatchReduxCheckbox.Checked
+        $Options.DPadUp.Enabled = $Options.DPadLeft.Enabled = $Options.DPadRight.Enabled = $Options.DPadDown.Enabled = $PatchReduxCheckbox.Checked
+        $Options.DPadLayout.Enabled = $PatchReduxCheckbox.Checked -and !$Options.DPadDisable.Checked
     }
 
 }
