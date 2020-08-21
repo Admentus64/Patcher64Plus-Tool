@@ -197,10 +197,7 @@ function PatchByteOptionsOoT() {
         ChangeBytes -Offset "0B589EB" -Values @("9B")
     }
 
-    if (IsChecked -Elem $Options.ShowFileSelectIcons -Enabled) { PatchBytes  -Offset "BAF738" -Patch "File Select.bin" }
-    if (IsChecked -Elem $Options.DPadLayoutShow -Enabled)      { ChangeBytes -Offset "348086E" -Values @("01") }
-
-
+    
 
     # COLORS
 
@@ -213,19 +210,6 @@ function PatchByteOptionsOoT() {
     if (IsChecked -Elem $Options.EnableGauntletTunics -Enabled) {
         ChangeBytes -Offset "B6DA44" -IsDec -Values @($Options.SetSilverGauntletsColor.Color.R, $Options.SetSilverGauntletsColor.Color.G, $Options.SetSilverGauntletsColor.Color.B) # Silver Gauntlets
         ChangeBytes -Offset "B6DA47" -IsDec -Values @($Options.SetGoldenGauntletsColor.Color.R, $Options.SetGoldenGauntletsColor.Color.G, $Options.SetGoldenGauntletsColor.Color.B) # Golden Gauntlets
-    }
-
-    if (IsChecked -Elem $Options.EnableButtonColors -Enabled) {
-        ChangeBytes -Offset "3480845" -IsDec -Values @($Options.SetAButtonColor.Color.R, $Options.SetAButtonColor.Color.G, $Options.SetAButtonColor.Color.B) -Interval 2 # A Button
-        ChangeBytes -Offset "348084B" -IsDec -Values @($Options.SetBButtonColor.Color.R, $Options.SetBButtonColor.Color.G, $Options.SetBButtonColor.Color.B) -Interval 2 # B Button
-        ChangeBytes -Offset "3480851" -IsDec -Values @($Options.SetCButtonColor.Color.R, $Options.SetCButtonColor.Color.G, $Options.SetCButtonColor.Color.B) -Interval 2 # C Buttons
-        ChangeBytes -Offset "3480863" -IsDec -Values @($Options.SetAButtonColor.Color.R, $Options.SetAButtonColor.Color.G, $Options.SetAButtonColor.Color.B) -Interval 2 # A Note Button
-
-        ChangeBytes -Offset "BB2C8E"  -IsDec -Values @($Options.SetAButtonColor.Color.R, $Options.SetAButtonColor.Color.G) # Pause Screen A Note Button (Red + Green)
-        ChangeBytes -Offset "BB2C92"  -IsDec -Values @($Options.SetAButtonColor.Color.B) # Pause Screen A Note Button (Blue)
-
-        ChangeBytes -Offset "AE9EC6"  -IsDec -Values @($Options.SetSButtonColor.Color.R, $Options.SetSButtonColor.Color.G) # Start Button (Red + Green)
-        ChangeBytes -Offset "AE9ED8"  -IsDec -Values @(53, 238, $Options.SetSButtonColor.Color.B) # Start Button (Blue)
     }
 
     if (IsChecked -Elem $Options.MQPauseMenuColors -Enabled) {
@@ -397,6 +381,35 @@ function PatchByteOptionsOoT() {
 
         if (IsChecked -Elem $Options.MQSpiritTemple -Enabled)   { PatchBytes -Offset "2B03528" -Texture -Patch "Gerudo Symbols\11.bin" } # Room 0 Spirit Temple
         else                                                    { PatchBytes -Offset "2B03928" -Texture -Patch "Gerudo Symbols\11.bin" } # Room 0 Spirit Temple
+    }
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function PatchByteReduxOoT() {
+
+    # INTERFACE #
+
+    if (IsChecked -Elem $Redux.ShowFileSelectIcons -Enabled) { PatchBytes  -Offset "BAF738" -Patch "File Select.bin" }
+    if (IsChecked -Elem $Redux.DPadLayoutShow -Enabled)      { ChangeBytes -Offset "348086E" -Values @("01") }
+
+
+
+     # COLORS
+
+     if (IsChecked -Elem $Redux.EnableButtonColors -Enabled) {
+        ChangeBytes -Offset "3480845" -IsDec -Values @($Redux.SetAButtonColor.Color.R, $Redux.SetAButtonColor.Color.G, $Redux.SetAButtonColor.Color.B) -Interval 2 # A Button
+        ChangeBytes -Offset "348084B" -IsDec -Values @($Redux.SetBButtonColor.Color.R, $Redux.SetBButtonColor.Color.G, $Redux.SetBButtonColor.Color.B) -Interval 2 # B Button
+        ChangeBytes -Offset "3480851" -IsDec -Values @($Redux.SetCButtonColor.Color.R, $Redux.SetCButtonColor.Color.G, $Redux.SetCButtonColor.Color.B) -Interval 2 # C Buttons
+        ChangeBytes -Offset "3480863" -IsDec -Values @($Redux.SetAButtonColor.Color.R, $Redux.SetAButtonColor.Color.G, $Redux.SetAButtonColor.Color.B) -Interval 2 # A Note Button
+
+        ChangeBytes -Offset "BB2C8E"  -IsDec -Values @($Redux.SetAButtonColor.Color.R, $Redux.SetAButtonColor.Color.G) # Pause Screen A Note Button (Red + Green)
+        ChangeBytes -Offset "BB2C92"  -IsDec -Values @($Redux.SetAButtonColor.Color.B) # Pause Screen A Note Button (Blue)
+
+        ChangeBytes -Offset "AE9EC6"  -IsDec -Values @($Redux.SetSButtonColor.Color.R, $Redux.SetSButtonColor.Color.G) # Start Button (Red + Green)
+        ChangeBytes -Offset "AE9ED8"  -IsDec -Values @(53, 238, $Redux.SetSButtonColor.Color.B) # Start Button (Blue)
     }
 
 }
@@ -600,23 +613,6 @@ function PatchByteOptionsMM() {
 
 
 
-    # D-PAD #
-
-    if ( (IsChecked -Elem $Options.DPadLayoutHide -Enabled) -or (IsChecked -Elem $Options.DPadLayoutLeft -Enabled) -or (IsChecked -Elem $Options.DPadLayoutRight -Enabled) ) {
-        $Array = @()
-        $Array += GetItemIDMM -Item $Options.DPadUp.Text
-        $Array += GetItemIDMM -Item $Options.DPadRight.Text
-        $Array += GetItemIDMM -Item $Options.DPadDown.Text
-        $Array += GetItemIDMM -Item $Options.DPadLeft.Text
-        ChangeBytes -Offset "3806354" -Values $Array
-
-        ChangeBytes -Offset "3806364" -Values "01"
-        if (IsChecked -Elem $Options.DPadLayoutLeft -Enabled)        { ChangeBytes -Offset "3806365" -Values "01" }
-        elseif (IsChecked -Elem $Options.DPadLayoutRight -Enabled)   { ChangeBytes -Offset "3806365" -Values "02" }
-    }
-
-
-
     # GRAPHICS #
 
     if (IsChecked -Elem $Options.WideScreen -Enabled) {
@@ -686,7 +682,6 @@ function PatchByteOptionsMM() {
     }
     #>
 
-    if (IsChecked -Elem $Options.FasterBlockPushing)           { ChangeBytes -Offset "3806530" -Values @("BF", "D8", "B6", "FB", "3D", "22", "B9", "83", "3B", "A0", "99", "46", "20", "33", "FB", "70", "10") }
     if (IsChecked -Elem $Options.ZoraPhysics -Enabled $True)   { PatchBytes -Offset "65D000" -Patch "Zora Physics Fix.bin" }
 
 
@@ -764,6 +759,36 @@ function PatchByteOptionsMM() {
 
 }
 
+
+
+#==============================================================================================================================================================================================
+function PatchByteReduxMM() {
+    
+    # D-PAD #
+
+    if ( (IsChecked -Elem $Redux.DPadLayoutHide -Enabled) -or (IsChecked -Elem $Redux.DPadLayoutLeft -Enabled) -or (IsChecked -Elem $Redux.DPadLayoutRight -Enabled) ) {
+        $Array = @()
+        $Array += GetItemIDMM -Item $Redux.DPadUp.Text
+        $Array += GetItemIDMM -Item $Redux.DPadRight.Text
+        $Array += GetItemIDMM -Item $Redux.DPadDown.Text
+        $Array += GetItemIDMM -Item $Redux.DPadLeft.Text
+        ChangeBytes -Offset "3806354" -Values $Array
+
+        if (IsChecked -Elem $Redux.DPadLayoutLeft -Enabled)        { ChangeBytes -Offset "3806364" -Values @("01", "01") }
+        elseif (IsChecked -Elem $Redux.DPadLayoutRight -Enabled)   { ChangeBytes -Offset "3806364" -Values @("01", "02") }
+        else                                                       { ChangeBytes -Offset "3806364" -Values "01" }
+    }
+
+
+
+    # GAMEPLAY
+
+    if ( (IsChecked -Elem $Redux.EasierMinigames -Not) -and (IsChecked -Elem $Redux.FasterBlockPushing) )       { ChangeBytes -Offset "3806530" -Values @("9E", "45", "06", "2D", "57", "4B", "28", "62", "49", "87", "69", "FB", "0F", "79", "1B", "9F", "18", "30") }
+    elseif ( (IsChecked -Elem $Redux.EasierMinigames) -and (IsChecked -Elem $Redux.FasterBlockPushing -Not) )   { ChangeBytes -Offset "3806530" -Values @("D2", "AD", "24", "8F", "0C", "58", "D0", "A8", "96", "55", "0E", "EE", "D2", "2B", "25", "EB", "08", "30") }
+    elseif ( (IsChecked -Elem $Redux.EasierMinigames) -and (IsChecked -Elem $Redux.FasterBlockPushing) )        { ChangeBytes -Offset "3806530" -Values @("B7", "36", "99", "48", "85", "BF", "FF", "B1", "FB", "EB", "D8", "B1", "06", "C8", "A8", "3B", "18", "30") }
+    #ChangeBytes -Offset "3806530" -Values @("00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "BE", "70")
+
+}
 
 
 #==============================================================================================================================================================================================
@@ -906,7 +931,7 @@ function PatchOptionsSM64() {
 #==============================================================================================================================================================================================
 function CreateOoTOptionsContent() {
     
-    CreateOptionsDialog -Width 900 -Height 710
+    CreateOptionsDialog -Width 900 -Height 680
     $ToolTip = CreateTooltip
 
 
@@ -944,18 +969,15 @@ function CreateOoTOptionsContent() {
     $Options.HudTextures               = CreateReduxCheckBox -Column 0 -Row 1 -AddTo $InterfaceBox -Text "MM HUD Textures"                 -ToolTip $ToolTip -Info "Replaces the HUD textures with those froom Majora's Mask" -Name "HudTextures"
     $Options.ButtonPositions           = CreateReduxCheckBox -Column 1 -Row 1 -AddTo $InterfaceBox -Text "MM Button Positions"             -ToolTip $ToolTip -Info "Positions the A and B buttons like in Majora's Mask" -Name "ButtonPositions"
     $Options.PauseScreen               = CreateReduxCheckBox -Column 2 -Row 1 -AddTo $InterfaceBox -Text "MM Pause Screen"                 -ToolTip $ToolTip -Info "Replaces the Pause Screen textures to be styled like Majora's Mask" -Name "PauseScreen"
-    $Options.ShowFileSelectIcons       = CreateReduxCheckBox -Column 3 -Row 1 -AddTo $InterfaceBox -Text "Show File Select Icons" -Checked -ToolTip $ToolTip -Info "Show icons on the File Select screen to display your save file progress`n- Requires Redux patch" -Name "ShowFileSelectIcons"
-    $Options.DPadLayoutShow            = CreateReduxCheckBox -Column 4 -Row 1 -AddTo $InterfaceBox -Text "Show D-Pad Icon"        -Checked -ToolTip $ToolTip -Info "Show the D-Pad icons ingame that display item shortcuts`n- Requires Redux patch" -Name "DPadLayoutShow"
-
+    
 
 
     # COLORS #
-    $ColorsBox                         = CreateReduxGroup -Y ($InterfaceBox.Bottom + 5) -Height 4 -AddTo $Options.Panel -Text "Colors"
+    $ColorsBox                         = CreateReduxGroup -Y ($InterfaceBox.Bottom + 5) -Height 3 -AddTo $Options.Panel -Text "Colors"
 
     $Options.EnableTunicColors         = CreateReduxCheckBox -Column 0 -Row 1 -AddTo $ColorsBox -Text "Change Tunic Colors"        -ToolTip $ToolTip -Info "Enable changing the color for all three tunics" -Name "EnableTunicColors"
     $Options.EnableGauntletColors      = CreateReduxCheckBox -Column 0 -Row 2 -AddTo $ColorsBox -Text "Change Gauntlet Colors"     -ToolTip $ToolTip -Info "Enable changing the color for the Silver and Golden Gauntlets" -Name "EnableGauntletColors"
-    $Options.EnableButtonColors        = CreateReduxCheckBox -Column 0 -Row 3 -AddTo $ColorsBox -Text "Change Button Colors"       -ToolTip $ToolTip -Info "Enable changing the color for the buttons`n- Requires Redux patch" -Name "EnableButtonColors"
-
+    
     $Options.KokiriTunicColor          = CreateReduxButton   -Column 1 -Row 1 -AddTo $ColorsBox -Text "Set Kokiri Tunic Color"     -ToolTip $ToolTip -Info "Select the color you want for the Kokiri Tunic"
     $Options.GoronTunicColor           = CreateReduxButton   -Column 2 -Row 1 -AddTo $ColorsBox -Text "Set Goron Tunic Color"      -ToolTip $ToolTip -Info "Select the color you want for the Goron Tunic"
     $Options.ZoraTunicColor            = CreateReduxButton   -Column 3 -Row 1 -AddTo $ColorsBox -Text "Set Zora Tunic Color"       -ToolTip $ToolTip -Info "Select the color you want for the Zora Tunic"
@@ -963,16 +985,7 @@ function CreateOoTOptionsContent() {
     $Options.SilverGauntletsColor      = CreateReduxButton   -Column 1 -Row 2 -AddTo $ColorsBox -Text "Set Silver Gaunlets Color"  -ToolTip $ToolTip -Info "Select the color you want for the Silver Gauntlets"
     $Options.GoldenGauntletsColor      = CreateReduxButton   -Column 2 -Row 2 -AddTo $ColorsBox -Text "Set Golden Gauntlets Color" -ToolTip $ToolTip -Info "Select the color you want for the Golden Gauntlets"
 
-    $Options.AButtonColor              = CreateReduxButton   -Column 1 -Row 3 -AddTo $ColorsBox -Text "Set A Button Color"         -ToolTip $ToolTip -Info "Select the color you want for the A button"
-    $Options.BButtonColor              = CreateReduxButton   -Column 2 -Row 3 -AddTo $ColorsBox -Text "Set B Button Color"         -ToolTip $ToolTip -Info "Select the color you want for the B button"
-    $Options.CButtonColor              = CreateReduxButton   -Column 3 -Row 3 -AddTo $ColorsBox -Text "Set C Button Color"         -ToolTip $ToolTip -Info "Select the color you want for the C buttons"
-    $Options.SButtonColor              = CreateReduxButton   -Column 4 -Row 3 -AddTo $ColorsBox -Text "Set Start Button Color"     -ToolTip $ToolTip -Info "Select the color you want for the Start button"
-    
-    $Options.ResetAllColors            = CreateReduxButton   -Column 0 -Row 4 -AddTo $ColorsBox -Text "Reset All Colors"           -ToolTip $ToolTip -Info "Reset all colors to their default values"
-    $Options.N64OoTColors              = CreateReduxButton   -Column 1 -Row 4 -AddTo $ColorsBox -Text "N64 OoT Button Colors"      -ToolTip $ToolTip -Info "Set the button colors to match the Nintendo 64 revision of Ocarina of Time"
-    $Options.N64MMColors               = CreateReduxButton   -Column 2 -Row 4 -AddTo $ColorsBox -Text "N64 MM Button Colors"       -ToolTip $ToolTip -Info "Set the button colors to match the Nintendo 64 revision of Majora's mask"
-    $Options.GCOoTColors               = CreateReduxButton   -Column 3 -Row 4 -AddTo $ColorsBox -Text "GC OoT Button Colors"       -ToolTip $ToolTip -Info "Set the button colors to match the GameCube revision of Ocarina of Time"
-    $Options.GCMMColors                = CreateReduxButton   -Column 4 -Row 4 -AddTo $ColorsBox -Text "GC MM Button Colors"        -ToolTip $ToolTip -Info "Set the button colors to match the GameCube revision of Majora's Mask"
+    $Options.ResetAllColors            = CreateReduxButton   -Column 0 -Row 3 -AddTo $ColorsBox -Text "Reset All Colors"           -ToolTip $ToolTip -Info "Reset all colors to their default values"
 
     $Options.KokiriTunicColor.Add_Click(     { $Options.SetKokiriTunicColor.ShowDialog();     $Settings[$GameType.mode][$Options.SetKokiriTunicColor.Tag] = $Options.SetKokiriTunicColor.Color.Name } )
     $Options.GoronTunicColor.Add_Click(      { $Options.SetGoronTunicColor.ShowDialog();      $Settings[$GameType.mode][$Options.SetGoronTunicColor.Tag]  = $Options.SetGoronTunicColor.Color.Name } )
@@ -981,11 +994,6 @@ function CreateOoTOptionsContent() {
     $Options.SilverGauntletsColor.Add_Click( { $Options.SetSilverGauntletsColor.ShowDialog(); $Settings[$GameType.mode][$Options.SetSilverGauntletsColor.Tag] = $Options.SetSilverGauntletsColor.Color.Name } )
     $Options.GoldenGauntletsColor.Add_Click( { $Options.SetGoldenGauntletsColor.ShowDialog(); $Settings[$GameType.mode][$Options.SetGoldenGauntletsColor.Tag] = $Options.SetGoldenGauntletsColor.Color.Name } )
 
-    $Options.AButtonColor.Add_Click(         { $Options.SetAButtonColor.ShowDialog();         $Settings[$GameType.mode][$Options.SetAButtonColor.Tag] = $Options.SetAButtonColor.Color.Name } )
-    $Options.BButtonColor.Add_Click(         { $Options.SetBButtonColor.ShowDialog();         $Settings[$GameType.mode][$Options.SetBButtonColor.Tag] = $Options.SetBButtonColor.Color.Name } )
-    $Options.CButtonColor.Add_Click(         { $Options.SetCButtonColor.ShowDialog();         $Settings[$GameType.mode][$Options.SetCButtonColor.Tag] = $Options.SetCButtonColor.Color.Name } )
-    $Options.SButtonColor.Add_Click(         { $Options.SetSButtonColor.ShowDialog();         $Settings[$GameType.mode][$Options.SetSButtonColor.Tag] = $Options.SetSButtonColor.Color.Name } )
-    
     $Options.ResetAllColors.Add_Click( {
         SetButtonColors -A "5A5AFF" -B "009600" -C "FFA000" -Start "C80000"
         $Options.SetKokiriTunicColor.Color     = "#1E691B"; $Settings[$GameType.mode][$Options.SetKokiriTunicColor.Tag]     = $Options.SetKokiriTunicColor.Color.Name
@@ -993,16 +1001,7 @@ function CreateOoTOptionsContent() {
         $Options.SetZoraTunicColor.Color       = "#003C64"; $Settings[$GameType.mode][$Options.SetZoraTunicColor.Tag]       = $Options.SetZoraTunicColor.Color.Name
         $Options.SetSilverGauntletsColor.Color = "#FFFFFF"; $Settings[$GameType.mode][$Options.SetSilverGauntletsColor.Tag] = $Options.SetSilverGauntletsColor.Color.Name
         $Options.SetGoldenGauntletsColor.Color = "#FECF0F"; $Settings[$GameType.mode][$Options.SetGoldenGauntletsColor.Tag] = $Options.SetGoldenGauntletsColor.Color.Name
-        $Options.SetAButtonColor.Color         = "#5A5AFF"; $Settings[$GameType.mode][$Options.SetAButtonColor.Tag]         = $Options.SetAButtonColor.Color.Name
-        $Options.SetBButtonColor.Color         = "#009600"; $Settings[$GameType.mode][$Options.SetBButtonColor.Tag]         = $Options.SetBButtonColor.Color.Name
-        $Options.SetCButtonColor.Color         = "#FFFA00"; $Settings[$GameType.mode][$Options.SetCButtonColor.Tag]         = $Options.SetCButtonColor.Color.Name
-        $Options.SetSButtonColor.Color         = "#C80000"; $Settings[$GameType.mode][$Options.SetSButtonColor.Tag]         = $Options.SetSButtonColor.Color.Name
     } )
-
-    $Options.N64OoTColors.Add_Click(         { SetButtonColors -A "5A5AFF" -B "009600" -C "FFA000" -Start "C80000" } )
-    $Options.N64MMColors.Add_Click(          { SetButtonColors -A "64C8FF" -B "64FF78" -C "FFF000" -Start "FF823C" } )
-    $Options.GCOoTColors.Add_Click(          { SetButtonColors -A "00C832" -B "FF1E1E" -C "FFA000" -Start "787878" } )
-    $Options.GCMMColors.Add_Click(           { SetButtonColors -A "64FF78" -B "FF6464" -C "FFF000" -Start "787878" } )
 
 
 
@@ -1010,9 +1009,9 @@ function CreateOoTOptionsContent() {
     $GameplayBox                       = CreateReduxGroup -Y ($ColorsBox.Bottom + 5) -Height 1 -AddTo $Options.Panel -Text "Gameplay"
 
     $Options.FasterBlockPushing        = CreateReduxCheckBox -Column 0 -Row 1 -AddTo $GameplayBox -Text "Faster Block Pushing"   -ToolTip $ToolTip -Info "All blocks are pushed faster" -Name "FasterBlockPushing"
-    $Options.ReturnChild               = CreateReduxCheckBox -Column 1 -Row 1 -AddTo $GameplayBox -Text "Can Always Return"      -ToolTip $ToolTip -Info "You can always go back to being a child again before clearing the boss of the Forest Temple`nOut of the way Sheik!" -Name "ReturnChild"
-    $Options.Medallions                = CreateReduxCheckBox -Column 2 -Row 1 -AddTo $GameplayBox -Text "Require All Medallions" -ToolTip $ToolTip -Info "All six medallions are required for the Rainbow Bridge to appear before Ganon's Castle`nThe vanilla requirements were the Shadow and Spirit Medallions and the Light Arrows" -Name "Medallions"
-    $Options.EasierMinigames           = CreateReduxCheckBox -Column 3 -Row 1 -AddTo $GameplayBox -Text "Easier Minigames"       -ToolTip $ToolTip -Info "Certain minigames are made easier and faster`n- Dampe's Digging Game is first try always`n- Fishing is less random and has less demanding requirements" -Name "EasierMinigames"
+    $Options.EasierMinigames           = CreateReduxCheckBox -Column 1 -Row 1 -AddTo $GameplayBox -Text "Easier Minigames"       -ToolTip $ToolTip -Info "Certain minigames are made easier and faster`n- Dampe's Digging Game is first try always`n- Fishing is less random and has less demanding requirements" -Name "EasierMinigames"
+    $Options.ReturnChild               = CreateReduxCheckBox -Column 2 -Row 1 -AddTo $GameplayBox -Text "Can Always Return"      -ToolTip $ToolTip -Info "You can always go back to being a child again before clearing the boss of the Forest Temple`nOut of the way Sheik!" -Name "ReturnChild"
+    $Options.Medallions                = CreateReduxCheckBox -Column 3 -Row 1 -AddTo $GameplayBox -Text "Require All Medallions" -ToolTip $ToolTip -Info "All six medallions are required for the Rainbow Bridge to appear before Ganon's Castle`nThe vanilla requirements were the Shadow and Spirit Medallions and the Light Arrows" -Name "Medallions"
     
 
 
@@ -1048,35 +1047,89 @@ function CreateOoTOptionsContent() {
 
     CreateMasterQuestDungeonsDialog
     CreateCapacityDialog
-    ToggleReduxOptions
 
     $Options.Damage.Add_SelectedIndexChanged({ $Options.Recovery.Enabled = $this.Text -ne "OKHO Mode" })
     $Options.EnableTunicColors.Add_CheckStateChanged({ $Options.KokiriTunicColor.Enabled = $Options.GoronTunicColor.Enabled = $Options.ZoraTunicColor.Enabled = $this.Checked })
     $Options.EnableGauntletColors.Add_CheckStateChanged({ $Options.SilverGauntletsColor.Enabled = $Options.GoldenGauntletsColor.Enabled = $this.Checked })
-    $Options.EnableButtonColors.Add_CheckStateChanged({
-        $Options.AButtonColor.Enabled = $Options.BButtonColor.Enabled = $Options.CButtonColor.Enabled = $Options.SButtonColor.Enabled = $Options.EnableButtonColors.Enabled -and $Options.EnableButtonColors.Checked
-        $Options.N64OoTColors.Enabled = $Options.N64MMColors.Enabled = $Options.GCOoTColors.Enabled = $Options.GCMMColors.Enabled = $Options.EnableButtonColors.Enabled -and $Options.EnableButtonColors.Checked
-    })
-    $Options.EnableButtonColors.Add_EnabledChanged({
-        $Options.AButtonColor.Enabled = $Options.BButtonColor.Enabled = $Options.CButtonColor.Enabled = $Options.SButtonColor.Enabled = $Options.EnableButtonColors.Enabled -and $Options.EnableButtonColors.Checked
-        $Options.N64OoTColors.Enabled = $Options.N64MMColors.Enabled = $Options.GCOoTColors.Enabled = $Options.GCMMColors.Enabled = $Options.EnableButtonColors.Enabled -and $Options.EnableButtonColors.Checked
-    })
 
     $Options.Recovery.Enabled = $Options.Damage.Text -ne "OKHO Mode"
     $Options.KokiriTunicColor.Enabled = $Options.GoronTunicColor.Enabled = $Options.ZoraTunicColor.Enabled = $Options.EnableTunicColors.Checked
     $Options.SilverGauntletsColor.Enabled = $Options.GoldenGauntletsColor.Enabled = $Options.EnableGauntletColors.Checked
-    $Options.AButtonColor.Enabled = $Options.BButtonColor.Enabled = $Options.CButtonColor.Enabled = $Options.SButtonColor.Enabled = $Options.EnableButtonColors.Enabled -and $Options.EnableButtonColors.Checked
-    $Options.N64OoTColors.Enabled = $Options.N64MMColors.Enabled = $Options.GCOoTColors.Enabled = $Options.GCMMColors.Enabled = $Options.EnableButtonColors.Enabled -and $Options.EnableButtonColors.Checked
 
     $Options.SetKokiriTunicColor       = CreateColorDialog -Color "1E691B" -Name "SetKokiriTunicColor"     -IsGame
     $Options.SetGoronTunicColor        = CreateColorDialog -Color "641400" -Name "SetGoronTunicColor"      -IsGame
     $Options.SetZoraTunicColor         = CreateColorDialog -Color "003C64" -Name "SetZoraTunicColor"       -IsGame
     $Options.SetSilverGauntletsColor   = CreateColorDialog -Color "FFFFFF" -Name "SetSilverGauntletsColor" -IsGame
     $Options.SetGoldenGauntletsColor   = CreateColorDialog -Color "FECF0F" -Name "SetGoldenGauntletsColor" -IsGame
-    $Options.SetAButtonColor           = CreateColorDialog -Color "5A5AFF" -Name "SetAButtonColor"         -IsGame
-    $Options.SetBButtonColor           = CreateColorDialog -Color "009600" -Name "SetBButtonColor"         -IsGame
-    $Options.SetCButtonColor           = CreateColorDialog -Color "FFFA00" -Name "SetCButtonColor"         -IsGame
-    $Options.SetSButtonColor           = CreateColorDialog -Color "C80000" -Name "SetSButtonColor"         -IsGame
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function CreateOoTReduxContent() {
+    
+    CreateReduxDialog -Width 730 -Height 320
+    $ToolTip = CreateTooltip
+
+
+
+    # INTERFACE #
+    $InterfaceBox                      = CreateReduxGroup -Y 50 -Height 1 -AddTo $Redux.Panel -Text "Interface"
+
+    $Redux.ShowFileSelectIcons         = CreateReduxCheckBox -Column 0 -Row 1 -AddTo $InterfaceBox -Text "Show File Select Icons" -Checked -ToolTip $ToolTip -Info "Show icons on the File Select screen to display your save file progress`n- Requires Redux patch" -Name "ShowFileSelectIcons"
+    $Redux.DPadLayoutShow              = CreateReduxCheckBox -Column 1 -Row 1 -AddTo $InterfaceBox -Text "Show D-Pad Icon"        -Checked -ToolTip $ToolTip -Info "Show the D-Pad icons ingame that display item shortcuts`n- Requires Redux patch" -Name "DPadLayoutShow"
+
+    
+
+    # COLORS #
+    $ColorsBox                         = CreateReduxGroup -Y ($InterfaceBox.Bottom + 5) -Height 3 -AddTo $Redux.Panel -Text "Colors"
+
+    $Redux.EnableButtonColors          = CreateReduxCheckBox -Column 0 -Row 1 -AddTo $ColorsBox -Text "Change Button Colors"       -ToolTip $ToolTip -Info "Enable changing the color for the buttons`n- Requires Redux patch" -Name "EnableButtonColors"
+    $Redux.ResetAllColors              = CreateReduxButton   -Column 1 -Row 1 -AddTo $ColorsBox -Text "Reset All Colors"           -ToolTip $ToolTip -Info "Reset all colors to their default values"
+
+    $Redux.AButtonColor                = CreateReduxButton   -Column 0 -Row 2 -AddTo $ColorsBox -Text "Set A Button Color"         -ToolTip $ToolTip -Info "Select the color you want for the A button"
+    $Redux.BButtonColor                = CreateReduxButton   -Column 1 -Row 2 -AddTo $ColorsBox -Text "Set B Button Color"         -ToolTip $ToolTip -Info "Select the color you want for the B button"
+    $Redux.CButtonColor                = CreateReduxButton   -Column 2 -Row 2 -AddTo $ColorsBox -Text "Set C Button Color"         -ToolTip $ToolTip -Info "Select the color you want for the C buttons"
+    $Redux.SButtonColor                = CreateReduxButton   -Column 3 -Row 2 -AddTo $ColorsBox -Text "Set Start Button Color"     -ToolTip $ToolTip -Info "Select the color you want for the Start button"
+
+    $Redux.N64OoTColors                = CreateReduxButton   -Column 0 -Row 3 -AddTo $ColorsBox -Text "N64 OoT Button Colors"      -ToolTip $ToolTip -Info "Set the button colors to match the Nintendo 64 revision of Ocarina of Time"
+    $Redux.N64MMColors                 = CreateReduxButton   -Column 1 -Row 3 -AddTo $ColorsBox -Text "N64 MM Button Colors"       -ToolTip $ToolTip -Info "Set the button colors to match the Nintendo 64 revision of Majora's mask"
+    $Redux.GCOoTColors                 = CreateReduxButton   -Column 2 -Row 3 -AddTo $ColorsBox -Text "GC OoT Button Colors"       -ToolTip $ToolTip -Info "Set the button colors to match the GameCube revision of Ocarina of Time"
+    $Redux.GCMMColors                  = CreateReduxButton   -Column 3 -Row 3 -AddTo $ColorsBox -Text "GC MM Button Colors"        -ToolTip $ToolTip -Info "Set the button colors to match the GameCube revision of Majora's Mask"
+
+    $Redux.ResetAllColors.Add_Click( {
+        SetButtonColors -A "5A5AFF" -B "009600" -C "FFA000" -Start "C80000"
+        $Redux.SetAButtonColor.Color         = "#5A5AFF"; $Settings[$GameType.mode][$Redux.SetAButtonColor.Tag]         = $Redux.SetAButtonColor.Color.Name
+        $Redux.SetBButtonColor.Color         = "#009600"; $Settings[$GameType.mode][$Redux.SetBButtonColor.Tag]         = $Redux.SetBButtonColor.Color.Name
+        $Redux.SetCButtonColor.Color         = "#FFFA00"; $Settings[$GameType.mode][$Redux.SetCButtonColor.Tag]         = $Redux.SetCButtonColor.Color.Name
+        $Redux.SetSButtonColor.Color         = "#C80000"; $Settings[$GameType.mode][$Redux.SetSButtonColor.Tag]         = $Redux.SetSButtonColor.Color.Name
+    } )
+
+    $Redux.AButtonColor.Add_Click(         { $Redux.SetAButtonColor.ShowDialog();         $Settings[$GameType.mode][$Redux.SetAButtonColor.Tag] = $Redux.SetAButtonColor.Color.Name } )
+    $Redux.BButtonColor.Add_Click(         { $Redux.SetBButtonColor.ShowDialog();         $Settings[$GameType.mode][$Redux.SetBButtonColor.Tag] = $Redux.SetBButtonColor.Color.Name } )
+    $Redux.CButtonColor.Add_Click(         { $Redux.SetCButtonColor.ShowDialog();         $Settings[$GameType.mode][$Redux.SetCButtonColor.Tag] = $Redux.SetCButtonColor.Color.Name } )
+    $Redux.SButtonColor.Add_Click(         { $Redux.SetSButtonColor.ShowDialog();         $Settings[$GameType.mode][$Redux.SetSButtonColor.Tag] = $Redux.SetSButtonColor.Color.Name } )
+
+    $Redux.N64OoTColors.Add_Click(         { SetButtonColors -A "5A5AFF" -B "009600" -C "FFA000" -Start "C80000" } )
+    $Redux.N64MMColors.Add_Click(          { SetButtonColors -A "64C8FF" -B "64FF78" -C "FFF000" -Start "FF823C" } )
+    $Redux.GCOoTColors.Add_Click(          { SetButtonColors -A "00C832" -B "FF1E1E" -C "FFA000" -Start "787878" } )
+    $Redux.GCMMColors.Add_Click(           { SetButtonColors -A "64FF78" -B "FF6464" -C "FFF000" -Start "787878" } )
+
+
+
+    $Redux.AButtonColor.Enabled = $Redux.BButtonColor.Enabled = $Redux.CButtonColor.Enabled = $Redux.SButtonColor.Enabled = $Redux.EnableButtonColors.Enabled -and $Redux.EnableButtonColors.Checked
+    $Redux.ResetAllColors.Enabled = $Redux.N64OoTColors.Enabled = $Redux.N64MMColors.Enabled = $Redux.GCOoTColors.Enabled = $Redux.GCMMColors.Enabled = $Redux.EnableButtonColors.Enabled -and $Redux.EnableButtonColors.Checked
+
+    $Redux.EnableButtonColors.Add_CheckStateChanged({
+        $Redux.AButtonColor.Enabled = $Redux.BButtonColor.Enabled = $Redux.CButtonColor.Enabled = $Redux.SButtonColor.Enabled = $Redux.EnableButtonColors.Enabled -and $Redux.EnableButtonColors.Checked
+        $Redux.ResetAllColors.Enabled = $Redux.N64OoTColors.Enabled = $Redux.N64MMColors.Enabled = $Redux.GCOoTColors.Enabled = $Redux.GCMMColors.Enabled = $Redux.EnableButtonColors.Enabled -and $Redux.EnableButtonColors.Checked
+    })
+
+    $Redux.SetAButtonColor           = CreateColorDialog -Color "5A5AFF" -Name "SetAButtonColor"         -IsGame
+    $Redux.SetBButtonColor           = CreateColorDialog -Color "009600" -Name "SetBButtonColor"         -IsGame
+    $Redux.SetCButtonColor           = CreateColorDialog -Color "FFFA00" -Name "SetCButtonColor"         -IsGame
+    $Redux.SetSButtonColor           = CreateColorDialog -Color "C80000" -Name "SetSButtonColor"         -IsGame
 
 }
 
@@ -1085,7 +1138,7 @@ function CreateOoTOptionsContent() {
 #==============================================================================================================================================================================================
 function CreateMMOptionsContent() {
     
-    CreateOptionsDialog -Width 900 -Height 620
+    CreateOptionsDialog -Width 900 -Height 560
     $ToolTip = CreateTooltip
 
 
@@ -1099,22 +1152,8 @@ function CreateMMOptionsContent() {
 
 
 
-    # D-PAD #
-    $DPadBox                           = CreateReduxGroup -Y ($HeroModeBox.Bottom + 5) -Height 1 -AddTo $Options.Panel -Text "D-Pad Icons Layout"
-    
-    $DPadPanel                         = CreateReduxPanel -Row 0 -Columns 4 -AddTo $DPadBox
-    $Options.DPadDisable               = CreateReduxRadioButton -Column 0 -Row 0 -AddTo $DPadPanel -Checked -Disable -Text "Disable"    -ToolTip $ToolTip -Info "Completely disable the D-Pad`n- Requires Redux patch"                      -Name "DPadDisable"
-    $Options.DPadLayoutHide            = CreateReduxRadioButton -Column 1 -Row 0 -AddTo $DPadPanel          -Disable -Text "Hidden"     -ToolTip $ToolTip -Info "Hide the D-Pad icons, while they are still active`n- Requires Redux patch" -Name "DPadLayoutHide"
-    $Options.DPadLayoutLeft            = CreateReduxRadioButton -Column 2 -Row 0 -AddTo $DPadPanel          -Disable -Text "Left Side"  -ToolTip $ToolTip -Info "Show the D-Pad icons on the left side of the HUD`n- Requires Redux patch"  -Name "DPadLayoutLeft"
-    $Options.DPadLayoutRight           = CreateReduxRadioButton -Column 3 -Row 0 -AddTo $DPadPanel          -Disable -Text "Right Side" -ToolTip $ToolTip -Info "Show the D-Pad icons on the right side of the HUD`n- Requires Redux patch" -Name "DPadLayoutRight"
-    $Options.DPadLayout                = CreateReduxButton      -Column 4 -Row 1 -AddTo $DPadBox -Text "Customize D-Pad" -ToolTip $ToolTip -Info "Customize the D-Pad Layout"
-    
-    $Options.DPadLayout.Add_Click( { $Options.DPadDialog.ShowDialog() } )
-
-
-   
     # GRAPHICS #
-    $GraphicsBox                       = CreateReduxGroup -Y ($DPadBox.Bottom + 5) -Height 1 -AddTo $Options.Panel -Text "Graphics"
+    $GraphicsBox                       = CreateReduxGroup -Y ($HeroModeBox.Bottom + 5) -Height 1 -AddTo $Options.Panel -Text "Graphics"
     
     $Options.Widescreen                = CreateReduxCheckBox -Column 0 -Row 1 -AddTo $GraphicsBox -Text "16:9 Widescreen"         -ToolTip $ToolTip -Info "Native 16:9 Widescreen Display support" -Name "Widescreen"
     $Options.WidescreenTextures        = CreateReduxCheckBox -Column 1 -Row 1 -AddTo $GraphicsBox -Text "16:9 Textures"           -ToolTip $ToolTip -Info "16:9 backgrounds and textures suitable for native 16:9 widescreen display support" -Name "WidescreenTextures"
@@ -1138,11 +1177,10 @@ function CreateMMOptionsContent() {
     # GAMEPLAY #
     $GameplayBox                       = CreateReduxGroup -Y ($ColorsBox.Bottom + 5) -Height 1 -AddTo $Options.Panel -Text "Gameplay"
 
-    $Options.FasterBlockPushing        = CreateReduxCheckBox -Column 0 -Row 1 -AddTo $GameplayBox -Text "Faster Block Pushing"  -ToolTip $ToolTip -Info "All blocks are pushed faster" -Name "FasterBlockPushing"
-    $Options.ZoraPhysics               = CreateReduxCheckBox -Column 1 -Row 1 -AddTo $GameplayBox -Text "Zora Physics"          -ToolTip $ToolTip -Info "Change the Zora physics when using the boomerang`nZora Link will take a step forward instead of staying on his spot" -Name "ZoraPhysics"
-    $Options.RestorePalaceRoute        = CreateReduxCheckBox -Column 2 -Row 1 -AddTo $GameplayBox -Text "Restore Palace Route"  -ToolTip $ToolTip -Info "Restore the route to the Bean Seller within the Deku Palace as seen in the Japanese release" -Name "RestorePalaceRoute"
-    #$Options.ResearchLabPlatform      = CreateReduxCheckBox -Column 3 -Row 1 -AddTo $GameplayBox -Text "Research Lab Platform" -ToolTip $ToolTip -Info "Raises the platform to access the Marine Research Lab in the Great Bay Coast as seen in the Japanese release" -Name "ResearchLabPlatform"
-    #$Options.RanchDirtRoad            = CreateReduxCheckBox -Column 4 -Row 1 -AddTo $GameplayBox -Text "Ranch Dirt Road"       -ToolTip $ToolTip -Info "Restore the Romani Ranch dirt road to allow Deku Link to borrow in it as used in the Japanese release" -Name "RanchDirtRoad"
+    $Options.ZoraPhysics               = CreateReduxCheckBox -Column 0 -Row 1 -AddTo $GameplayBox -Text "Zora Physics"          -ToolTip $ToolTip -Info "Change the Zora physics when using the boomerang`nZora Link will take a step forward instead of staying on his spot" -Name "ZoraPhysics"
+    $Options.RestorePalaceRoute        = CreateReduxCheckBox -Column 1 -Row 1 -AddTo $GameplayBox -Text "Restore Palace Route"  -ToolTip $ToolTip -Info "Restore the route to the Bean Seller within the Deku Palace as seen in the Japanese release" -Name "RestorePalaceRoute"
+    #$Options.ResearchLabPlatform      = CreateReduxCheckBox -Column 2 -Row 1 -AddTo $GameplayBox -Text "Research Lab Platform" -ToolTip $ToolTip -Info "Raises the platform to access the Marine Research Lab in the Great Bay Coast as seen in the Japanese release" -Name "ResearchLabPlatform"
+    #$Options.RanchDirtRoad            = CreateReduxCheckBox -Column 3 -Row 1 -AddTo $GameplayBox -Text "Ranch Dirt Road"       -ToolTip $ToolTip -Info "Restore the Romani Ranch dirt road to allow Deku Link to borrow in it as used in the Japanese release" -Name "RanchDirtRoad"
 
 
 
@@ -1183,18 +1221,54 @@ function CreateMMOptionsContent() {
 
 
     CreateCapacityDialog
-    CreateDPadDialog
-    ToggleReduxOptions
-
+    
     $Options.Damage.Add_SelectedIndexChanged({ $Options.Recovery.Enabled = $this.Text -ne "OKHO Mode" })
-    $Options.DPadDisable.Add_CheckedChanged({ $Options.DPadLayout.Enabled = $PatchReduxCheckbox.Checked -and !$this.checked })
     $Options.EnableTunicColors.Add_CheckStateChanged({ $Options.KokiriTunicColor.Enabled = $Options.ResetAllColors.Enabled = $this.Checked })
 
     $Options.Recovery.Enabled = $Options.Damage.Text -ne "OKHO Mode"
-    $Options.DPadLayout.Enabled = $PatchReduxCheckbox.Checked -and !$Options.DPadDisable.Checked
     $Options.KokiriTunicColor.Enabled = $Options.ResetAllColors.Enabled = $Options.EnableTunicColors.Checked
 
     $Options.SetKokiriTunicColor       = CreateColorDialog -Red "1E" -Green "69" -Blue "1B" -Name "SetKokiriTunicColor"     -IsGame
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function CreateMMReduxContent() {
+
+    CreateReduxDialog -Width 700 -Height 290
+    $ToolTip = CreateTooltip
+
+
+
+    # D-PAD #
+    $DPadBox                           = CreateReduxGroup -Y 50 -Height 2 -AddTo $Redux.Panel -Text "D-Pad Icons Layout"
+    
+    $DPadPanel                         = CreateReduxPanel -Row 0 -Columns 4 -AddTo $DPadBox
+    $Redux.DPadDisable                 = CreateReduxRadioButton -Column 0 -Row 0 -AddTo $DPadPanel -Checked -Disable -Text "Disable"    -ToolTip $ToolTip -Info "Completely disable the D-Pad`n- Requires Redux patch"                      -Name "DPadDisable"
+    $Redux.DPadLayoutHide              = CreateReduxRadioButton -Column 1 -Row 0 -AddTo $DPadPanel          -Disable -Text "Hidden"     -ToolTip $ToolTip -Info "Hide the D-Pad icons, while they are still active`n- Requires Redux patch" -Name "DPadLayoutHide"
+    $Redux.DPadLayoutLeft              = CreateReduxRadioButton -Column 2 -Row 0 -AddTo $DPadPanel          -Disable -Text "Left Side"  -ToolTip $ToolTip -Info "Show the D-Pad icons on the left side of the HUD`n- Requires Redux patch"  -Name "DPadLayoutLeft"
+    $Redux.DPadLayoutRight             = CreateReduxRadioButton -Column 3 -Row 0 -AddTo $DPadPanel          -Disable -Text "Right Side" -ToolTip $ToolTip -Info "Show the D-Pad icons on the right side of the HUD`n- Requires Redux patch" -Name "DPadLayoutRight"
+    $Redux.DPadLayout                  = CreateReduxButton      -Column 0 -Row 2 -AddTo $DPadBox -Text "Customize D-Pad" -ToolTip $ToolTip -Info "Customize the D-Pad Layout"
+    
+    $Redux.DPadLayout.Add_Click( { $Redux.DPadDialog.ShowDialog() } )
+
+
+
+    # GAMEPLAY #
+    $GameplayBox                       = CreateReduxGroup -Y ($DPadBox.Bottom + 5) -Height 1 -AddTo $Redux.Panel -Text "Gameplay"
+
+    $Redux.FasterBlockPushing          = CreateReduxCheckBox -Column 0 -Row 1 -AddTo $GameplayBox -Text "Faster Block Pushing"  -ToolTip $ToolTip -Info "All blocks are pushed faster" -Name "FasterBlockPushing"
+    $Redux.EasierMinigames             = CreateReduxCheckBox -Column 1 -Row 1 -AddTo $GameplayBox -Text "Easier Minigames"      -ToolTip $ToolTip -Info "Certain minigames are made easier and faster`n- Dampe's Digging Game always has two Ghost Flames on the ground and one up the ladder`n- The Gold Dog always wins the Doggy Racetrack race if you have the Mask of Truth`nOnly one fish has to be feeded in the Marine Research Lab" -Name "EasierMinigames"
+    
+
+
+    CreateDPadDialog
+
+    $Redux.DPadDisable.Add_CheckedChanged({ $Redux.DPadLayout.Enabled = !$this.checked })
+
+    $Redux.DPadLayout.Enabled = !$Redux.DPadDisable.Checked
 
 }
 
@@ -1367,58 +1441,39 @@ function CreateCapacityDialog() {
 function CreateDPadDialog() {
 
     # Create Dialog
-    $Options.DPadDialog = CreateDialog -Width 530 -Height 400
-    if (Test-Path -LiteralPath $GameFiles.icon -PathType Leaf)       { $Options.DPadDialog.Icon = $GameFiles.icon }
-    else                                                             { $Options.DPadDialog.Icon = $null }
+    $Redux.DPadDialog = CreateDialog -Width 530 -Height 400
+    if (Test-Path -LiteralPath $GameFiles.icon -PathType Leaf)       { $Redux.DPadDialog.Icon = $GameFiles.icon }
+    else                                                             { $Redux.DPadDialog.Icon = $null }
 
     # Tooltip
     $ToolTip = CreateTooltip
 
     # Close Button
-    $CloseButton = CreateButton -X ($Options.DPadDialog.Width / 2 - 60) -Y ($Options.DPadDialog.Height - 90) -Width 100 -Height 35 -Text "Close" -AddTo $Options.DPadDialog
-    $CloseButton.Add_Click( {$Options.DPadDialog.Hide()} )
+    $CloseButton = CreateButton -X ($Redux.DPadDialog.Width / 2 - 60) -Y ($Redux.DPadDialog.Height - 90) -Width 100 -Height 35 -Text "Close" -AddTo $Redux.DPadDialog
+    $CloseButton.Add_Click( {$Redux.DPadDialog.Hide()} )
 
     
     # Options Label
-    $Label = CreateLabel -X 30 -Y 20 -Width 300 -Height 15 -Font $VCPatchFont -Text ($GameType.mode + " - Customize D-Pad") -AddTo $Options.DPadDialog
+    $Label = CreateLabel -X 30 -Y 20 -Width 300 -Height 15 -Font $VCPatchFont -Text ($GameType.mode + " - Customize D-Pad") -AddTo $Redux.DPadDialog
 
     # Capacity
-    $DPadPanel                         = CreatePanel -Width $Options.DPadDialog.Width -Height ($Options.DPadDialog.Height) -AddTo $Options.DPadDialog
+    $DPadPanel                         = CreatePanel -Width $Redux.DPadDialog.Width -Height ($Redux.DPadDialog.Height) -AddTo $Redux.DPadDialog
 
     # Enable checkbox
     $DPadBox                           = CreateReduxGroup -Y 50 -Height 7 -AddTo $DPadPanel -Text "D-Pad Buttons Customization"
 
-    $Options.DPadUp                    = CreateReduxComboBox -Column 1 -Row 1 -Length 120 -AddTo $DPadBox -Items @("None", "Ocarina of Time", "Deku Mask", "Goron Mask", "Zora Mask", "Fierce Deity's Mask") -Default 2 -Text ""    -ToolTip $OptionsToolTip -Info "Set the quick slot item for the D-Pad Up button"    -Name "DPadUp"
-    $Options.DPadLeft                  = CreateReduxComboBox -Column 0 -Row 4 -Length 120 -AddTo $DPadBox -Items @("None", "Ocarina of Time", "Deku Mask", "Goron Mask", "Zora Mask", "Fierce Deity's Mask") -Default 3 -Text ""  -ToolTip $OptionsToolTip -Info "Set the quick slot item for the D-Pad Left button"  -Name "DPadLeft"
-    $Options.DPadRight                 = CreateReduxComboBox -Column 2 -Row 4 -Length 120 -AddTo $DPadBox -Items @("None", "Ocarina of Time", "Deku Mask", "Goron Mask", "Zora Mask", "Fierce Deity's Mask") -Default 4 -Text "" -ToolTip $OptionsToolTip -Info "Set the quick slot item for the D-Pad Right button" -Name "DPadRight"
-    $Options.DPadDown                  = CreateReduxComboBox -Column 1 -Row 7 -Length 120 -AddTo $DPadBox -Items @("None", "Ocarina of Time", "Deku Mask", "Goron Mask", "Zora Mask", "Fierce Deity's Mask") -Default 1 -Text ""  -ToolTip $OptionsToolTip -Info "Set the quick slot item for the D-Pad Down button"  -Name "DPadDown"
+    $Redux.DPadUp                      = CreateReduxComboBox -Column 1 -Row 1 -Length 120 -AddTo $DPadBox -Items @("None", "Ocarina of Time", "Deku Mask", "Goron Mask", "Zora Mask", "Fierce Deity's Mask") -Default 2 -Text ""    -ToolTip $OptionsToolTip -Info "Set the quick slot item for the D-Pad Up button" -Name "DPadUp"
+    $Redux.DPadLeft                    = CreateReduxComboBox -Column 0 -Row 4 -Length 120 -AddTo $DPadBox -Items @("None", "Ocarina of Time", "Deku Mask", "Goron Mask", "Zora Mask", "Fierce Deity's Mask") -Default 3 -Text ""  -ToolTip $OptionsToolTip -Info "Set the quick slot item for the D-Pad Left button" -Name "DPadLeft"
+    $Redux.DPadRight                   = CreateReduxComboBox -Column 2 -Row 4 -Length 120 -AddTo $DPadBox -Items @("None", "Ocarina of Time", "Deku Mask", "Goron Mask", "Zora Mask", "Fierce Deity's Mask") -Default 4 -Text "" -ToolTip $OptionsToolTip -Info "Set the quick slot item for the D-Pad Right button" -Name "DPadRight"
+    $Redux.DPadDown                    = CreateReduxComboBox -Column 1 -Row 7 -Length 120 -AddTo $DPadBox -Items @("None", "Ocarina of Time", "Deku Mask", "Goron Mask", "Zora Mask", "Fierce Deity's Mask") -Default 1 -Text ""  -ToolTip $OptionsToolTip -Info "Set the quick slot item for the D-Pad Down button" -Name "DPadDown"
     
     $Image = [System.Drawing.Image]::Fromfile( ( Get-Item ($Paths.Main + "\D-Pad.png") ) )
     $PictureBox = New-Object Windows.Forms.PictureBox
-    $PictureBox.Location = New-object System.Drawing.Size( ($Options.DPadRight.Left / 2 + 5), ($Options.DPadDown.Bottom / 4) )
+    $PictureBox.Location = New-object System.Drawing.Size( ($Redux.DPadRight.Left / 2 + 5), ($Redux.DPadDown.Bottom / 4) )
     $PictureBox.Width =  $Image.Size.Width
     $PictureBox.Height =  $Image.Size.Height
     $PictureBox.Image = $Image
     $DPadBox.controls.add($PictureBox)
-
-}
-
-
-
-
-#==============================================================================================================================================================================================
-function ToggleReduxOptions() {
-    
-    if ($GameType.mode -eq "Ocarina of Time") {
-        $Options.ShowFileSelectIcons.Enabled = $PatchReduxCheckbox.Checked
-        $Options.DPadLayoutShow.Enabled = $PatchReduxCheckbox.Checked
-        $Options.EnableButtonColors.Enabled = $PatchReduxCheckbox.Checked
-    }
-    elseif ($GameType.mode -eq "Majora's Mask") {
-        $Options.DPadDisable.Enabled = $Options.DPadLayoutHide.Enabled = $Options.DPadLayoutLeft.Enabled = $Options.DPadLayoutRight.Enabled = $PatchReduxCheckbox.Checked
-        $Options.DPadUp.Enabled = $Options.DPadLeft.Enabled = $Options.DPadRight.Enabled = $Options.DPadDown.Enabled = $PatchReduxCheckbox.Checked
-        $Options.DPadLayout.Enabled = $PatchReduxCheckbox.Checked -and !$Options.DPadDisable.Checked
-    }
 
 }
 
@@ -1483,6 +1538,8 @@ Export-ModuleMember -Function ToggleReduxOptions
 
 Export-ModuleMember -Function PatchByteOptionsOoT
 Export-ModuleMember -Function PatchByteOptionsMM
+Export-ModuleMember -Function PatchByteReduxOoT
+Export-ModuleMember -Function PatchByteReduxMM
 Export-ModuleMember -Function PatchBPSOptionsOoT
 Export-ModuleMember -Function PatchBPSOptionsMM
 Export-ModuleMember -Function PatchOptionsSM64
@@ -1490,5 +1547,7 @@ Export-ModuleMember -Function PatchLanguageOptionsOoT
 Export-ModuleMember -Function PatchLanguageOptionsMM
 
 Export-ModuleMember -Function CreateOoTOptionsContent
+Export-ModuleMember -Function CreateOoTReduxContent
 Export-ModuleMember -Function CreateMMOptionsContent
+Export-ModuleMember -Function CreateMMReduxContent
 Export-ModuleMember -Function CreateSM64OptionsContent

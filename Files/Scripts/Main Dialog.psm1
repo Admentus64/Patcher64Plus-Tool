@@ -221,29 +221,35 @@ function CreateMainDialog() {
                 }
             }
         }
-        DisablePatches
         CreateLanguagesContent
+        DisablePatches
         GetHeader
-        if ($GamePatch.options -eq 1) { $OptionsLabel.text = $GameType.mode + " - Additional Options" }
+        if ($GamePatch.options -eq 1)            { $OptionsLabel.text = $GameType.mode + " - Additional Options" }
+        if (IsSet -Elem $GamePatch.redux.file)   { $ReduxLabel.text = $GameType.mode + " - Redux Settings" }
     } )
 
     # Create a checkbox to enable Redux and Options support.
     $global:PatchReduxLabel = CreateLabel -X ($PatchButton.Right + 10) -Y ($PatchComboBox.Top + 5) -Width 85 -Height 15 -Text "Enable Redux:" -ToolTip $ToolTip -Info "Enable the Redux patch" -AddTo $PatchGroup
     $global:PatchReduxCheckbox = CreateCheckBox -X $PatchReduxLabel.Right -Y ($PatchReduxLabel.Top - 2) -Width 20 -Height 20 -ToolTip $ToolTip -Info "Enable the Redux patch which improves game mechanics`nIncludes among other changes the inclusion of the D-Pad for dedicated item buttons" -Name "Redux" -AddTo $PatchGroup
-    $PatchReduxCheckbox.Add_CheckStateChanged({ ToggleReduxOptions })
+    $PatchReduxCheckbox.Add_CheckStateChanged({
+        $PatchReduxButton.Enabled = $this.Checked
+    })
 
     $global:PatchOptionsLabel = CreateLabel -X ($PatchButton.Right + 10) -Y ($PatchReduxLabel.Bottom + 15) -Width 85 -Height 15 -Text "Enable Options:" -ToolTip $ToolTip -Info "Enable options" -AddTo $PatchGroup
     $global:PatchOptionsCheckbox = CreateCheckBox -X $PatchOptionsLabel.Right -Y ($PatchOptionsLabel.Top - 2) -Width 20 -Height 20 -ToolTip $ToolTip -Info "Enable options" -Name "Options" -AddTo $PatchGroup
     $PatchOptionsCheckbox.Add_CheckStateChanged({
-        $PatchOptionsButton.Enabled = $Languages.TextBox.Visible = $this.Checked
-        $Languages.TextBox.Enabled = $this.Checked -and $Languages[0].Checked
+        $PatchOptionsButton.Enabled = $this.Checked
+        $Languages.TextBox.Enabled = $Languages.TextBox.Visible = $this.Checked -and $Languages[0].Checked
     })
 
-    $global:PatchLanguagesButton = CreateButton -X ($PatchOptionsCheckbox.Right + 5) -Y 20 -Width 145 -Height 25 -Text "Select Language" -ToolTip $ToolTip -Info 'Open the "Languages" panel to change the language' -AddTo $PatchGroup
-    $PatchLanguagesButton.Add_Click( { $LanguagesDialog.ShowDialog() } )
-    $PatchLanguagesButton.Enabled = $False
+    $global:PatchReduxButton = CreateButton -X ($PatchReduxCheckbox.Right + 5) -Y 20 -Width 70 -Height 25 -Text "Redux" -ToolTip $ToolTip -Info 'Open the "Redux" panel to change the settings for the Redux patch' -AddTo $PatchGroup
+    $PatchReduxButton.Add_Click( { $ReduxDialog.ShowDialog() } )
+    $PatchReduxButton.Enabled = $False
 
-    $global:PatchOptionsButton = CreateButton -X $PatchLanguagesButton.Left -Y ($PatchLanguagesButton.Bottom + 5) -Width $PatchLanguagesButton.Width -Height $PatchLanguagesButton.Height -Text "Select Options" -ToolTip $ToolTip -Info 'Open the "Additional Options" panel to change preferences' -AddTo $PatchGroup
+    $global:PatchLanguagesButton = CreateButton -X ($PatchReduxButton.Right + 5) -Y 20 -Width 70 -Height 25 -Text "Language" -ToolTip $ToolTip -Info 'Open the "Languages" panel to change the language' -AddTo $PatchGroup
+    $PatchLanguagesButton.Add_Click( { $LanguagesDialog.ShowDialog() } )
+
+    $global:PatchOptionsButton = CreateButton -X $PatchReduxButton.Left -Y ($PatchReduxButton.Bottom + 5) -Width 145 -Height $PatchLanguagesButton.Height -Text "Select Options" -ToolTip $ToolTip -Info 'Open the "Additional Options" panel to change preferences' -AddTo $PatchGroup
     $PatchOptionsButton.Add_Click( { $OptionsDialog.ShowDialog() } )
     $PatchOptionsButton.Enabled = $False
 
@@ -426,9 +432,14 @@ function CheckVCOptions() {
 #==============================================================================================================================================================================================
 function DisablePatches() {
     
-    $PatchReduxCheckbox.Visible = $PatchReduxLabel.Visible = (IsSet -Elem $GamePatch.redux.file)
+    $PatchReduxCheckbox.Visible = $PatchReduxLabel.Visible = $PatchReduxButton.Visible = (IsSet -Elem $GamePatch.redux.file)
+    $PatchReduxButton.Enabled = (IsSet -Elem $GamePatch.redux.file) -and $PatchReduxCheckbox.Checked
+
     $PatchOptionsCheckbox.Visible = $PatchOptionsLabel.Visible = $PatchOptionsButton.Visible = $GamePatch.options
-    $PatchOptionsButton.Enabled = $PatchLanguagesButton.Enabled = $GamePatch.options -and $PatchOptionsCheckbox.Checked
+    $PatchOptionsButton.Enabled = $GamePatch.options -and $PatchOptionsCheckbox.Checked
+    
+    $PatchLanguagesButton.Enabled = $PatchLanguagesButton.Visible = (IsSet -Elem $GamePatch.languages)
+    $Languages.TextBox.Enabled = $Languages.TextBox.Visible = $PatchOptionsCheckbox.Checked -and $Languages[0].Checked -and (IsSet -Elem $GamePatch.languages -MinLength 1)
 
     $PatchVCRemoveFilterLabel.Enabled = $PatchVCRemoveFilter.Enabled = !(StrLike -str $GamePatch.command -val "Patch Boot DOL")
     $global:ToolTip.SetToolTip($PatchButton, ([String]::Format($Item.tooltip, [Environment]::NewLine)))

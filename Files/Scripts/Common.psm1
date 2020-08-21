@@ -182,8 +182,14 @@ function ChangeGameMode() {
 
     $PatchPanel.Visible = $GameType.patches
 
-    if ($GameType.mode -eq "Ocarina of Time")      { CreateOoTOptionsContent }
-    elseif ($GameType.mode -eq "Majora's Mask")    { CreateMMOptionsContent }
+    if ($GameType.mode -eq "Ocarina of Time") {
+        CreateOoTOptionsContent
+        CreateOoTReduxContent
+    }
+    elseif ($GameType.mode -eq "Majora's Mask") {
+        CreateMMOptionsContent
+        CreateMMReduxContent
+    }
     elseif ($GameType.mode -eq "Super Mario 64")   { CreateSM64OptionsContent }
 
     if ($GameType.downgrade)      { $PatchVCDowngradeLabel.Visible = $PatchVCDowngrade.Visible = $True }

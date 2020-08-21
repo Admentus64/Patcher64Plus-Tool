@@ -43,6 +43,32 @@ function CreateOptionsDialog([int]$Width, [int]$Height) {
 
 
 #==============================================================================================================================================================================================
+function CreateReduxDialog([int]$Width, [int]$Height) {
+    
+    # Create Dialog
+    if ( (IsSet -Elem $Width) -and (IsSet -Elem $Height) )   { $global:ReduxDialog = CreateDialog -Width $Width -Height $Height }
+    else                                                     { $global:ReduxDialog = CreateDialog -Width 900 -Height 640 }
+
+    # Close Button
+    $CloseButton = CreateButton -X ($ReduxDialog.Width / 2 - 40) -Y ($ReduxDialog.Height - 90) -Width 80 -Height 35 -Text "Close" -AddTo $ReduxDialog
+    $CloseButton.Add_Click( {$ReduxDialog.Hide() })
+
+    # Options Label
+    $global:ReduxLabel = CreateLabel -X 30 -Y 20 -Width 300 -Height 15 -Font $VCPatchFont -AddTo $ReduxDialog
+
+    # Options
+    $global:Redux = @{}
+    $Redux.Panel = CreatePanel -Width $ReduxDialog.Width -Height $ReduxDialog.Height -AddTo $ReduxDialog
+
+    # Icon
+    if (Test-Path -LiteralPath $GameFiles.icon -PathType Leaf)       { $ReduxDialog.Icon = $GameFiles.icon }
+    else                                                             { $ReduxDialog.Icon = $null }
+
+}
+
+
+
+#==============================================================================================================================================================================================
 function CreateInfoGameIDDialog() {
     
     # Create Dialog
@@ -144,6 +170,7 @@ function CreateErrorDialog([String]$Error, [Switch]$Exit) {
 
 Export-ModuleMember -Function CreateLanguagesDialog
 Export-ModuleMember -Function CreateOptionsDialog
+Export-ModuleMember -Function CreateReduxDialog
 Export-ModuleMember -Function CreateInfoGameIDDialog
 Export-ModuleMember -Function CreateCreditsDialog
 Export-ModuleMember -Function CreateInfoDialog

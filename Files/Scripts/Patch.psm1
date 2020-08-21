@@ -923,29 +923,37 @@ function PatchOptionsZelda() {
     }
 
 
+    if ( ( (IsChecked $PatchOptionsCheckbox -Visible) -and $GamePatch.options) -or ( (IsChecked $PatchReduxCheckbox -Visible) -and (IsSet -Elem $GamePatch.redux.file) ) -or ( (IsChecked $PatchOptionsCheckbox -Visible) -and $GamePatch.options) ) {
+        $Global:ByteArrayGame = [IO.File]::ReadAllBytes($Files.decompressedROM)
+    }
 
     # BYTE PATCHING OPTIONS #
     if ( (IsChecked $PatchOptionsCheckbox -Visible) -and $GamePatch.options) {
-        $Global:ByteArrayGame = [IO.File]::ReadAllBytes($Files.decompressedROM)
-
         UpdateStatusLabel -Text ("Patching " + $GameType.mode + " Additional Options...")
         if ($GameType.mode -eq "Ocarina of Time")     { PatchByteOptionsOoT }
         elseif ($GameType.mode -eq "Majora's Mask")   { PatchByteOptionsMM }
+    }
 
-        [io.file]::WriteAllBytes($Files.decompressedROM, $ByteArrayGame) 
+
+
+    # BYTE PATCHING REDUX #
+    if ( (IsChecked $PatchReduxCheckbox -Visible) -and (IsSet -Elem $GamePatch.redux.file) ) {
+        UpdateStatusLabel -Text ("Patching " + $GameType.mode + " Redux Options...")
+        if ($GameType.mode -eq "Ocarina of Time")     { PatchByteReduxOoT }
+        elseif ($GameType.mode -eq "Majora's Mask")   { PatchByteReduxMM }
     }
 
 
 
     # LANGUAGE BYTE PATCHING OPTIONS #
     if ( (IsChecked $PatchOptionsCheckbox -Visible) -and $GamePatch.options) {
-        $Global:ByteArrayGame = [IO.File]::ReadAllBytes($Files.decompressedROM)
-
         UpdateStatusLabel -Text ("Patching " + $GameType.mode + " Additional Options English...")
         if ($GameType.mode -eq "Ocarina of Time")     { PatchLanguageOptionsOoT }
         elseif ($GameType.mode -eq "Majora's Mask")   { PatchLanguageOptionsMM }
+    }
 
-        [io.file]::WriteAllBytes($Files.decompressedROM, $ByteArrayGame) 
+    if ( ( (IsChecked $PatchOptionsCheckbox -Visible) -and $GamePatch.options) -or ( (IsChecked $PatchReduxCheckbox -Visible) -and (IsSet -Elem $GamePatch.redux.file) ) -or ( (IsChecked $PatchOptionsCheckbox -Visible) -and $GamePatch.options) ) {
+        [io.file]::WriteAllBytes($Files.decompressedROM, $ByteArrayGame)
     }
 
 }
