@@ -11,22 +11,22 @@
 - MM Young Link Model:		The3Dude
 - MM Adult Link Model:		Skilar
 - Hatsune Miku Link Models:		JanexLane
+- MM Link Voice:			Korey Cryderman
+- Feminine Link Voice:		theluigidude2007
 - MM HUD Textures:		GhostlyDark
+- MM Button Positions:		GhostlyDark
 - MM Pause Screen:		Garo-Mastah & CM
-- Colors:				GhostlyDark
 - Easier Minigames:			ShadowOne333
 - Faster Block Pushing:		ShadowOne333
 - Correct Rupee Colors:		GhostlyDark
 - Restore Cow Nose Ring:		ShadowOne333
-- Restore Text:			ShadowOne333
 - Restore Fire Temple:		ShadowOne333
 - Restore Gerudo Textures:		GhostlyDark & ShadowOne333
 - Set Capacity:			GhostlyDark
-- Subscreen Delay Fix:		ShadowOne333
-- Hide File Select Icons:		ShadowOne333
-- MM Button Positions:		GhostlyDark
-- MM Link Voice:			Korey Cryderman
-- Feminine Link Voice:		theluigidude2007
+- Pause Screen Delay Fix		zel
+- Show File Select Icons:		ShadowOne333
+- Colors:				GhostlyDark
+- Restore Text:			ShadowOne333
 - Admentus (Scripting and Assistance of all Options)
 
 --- Translations ---

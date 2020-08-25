@@ -338,6 +338,11 @@ function PatchByteOptionsOoT() {
 
     # OTHER #
 
+    if (IsChecked -Elem $Options.SubscreenDelayFix -Enabled) {
+        ChangeBytes -Offset "B15DD0" -Values @("00", "00", "00", "00")
+        ChangeBytes -Offset "B12947" -Values @("03")
+    }
+
     if (IsChecked -Elem $Options.DefaultZTargeting -Enabled)       { ChangeBytes -Offset "B71E6D"  -Values @("01") }
     
 
@@ -931,7 +936,7 @@ function PatchOptionsSM64() {
 #==============================================================================================================================================================================================
 function CreateOoTOptionsContent() {
     
-    CreateOptionsDialog -Width 900 -Height 680
+    CreateOptionsDialog -Width 900 -Height 650
     $ToolTip = CreateTooltip
 
 
@@ -973,19 +978,20 @@ function CreateOoTOptionsContent() {
 
 
     # COLORS #
-    $ColorsBox                         = CreateReduxGroup -Y ($InterfaceBox.Bottom + 5) -Height 3 -AddTo $Options.Panel -Text "Colors"
+    $ColorsBox                         = CreateReduxGroup -Y ($InterfaceBox.Bottom + 5) -Height 2 -AddTo $Options.Panel -Text "Colors"
 
     $Options.EnableTunicColors         = CreateReduxCheckBox -Column 0 -Row 1 -AddTo $ColorsBox -Text "Change Tunic Colors"        -ToolTip $ToolTip -Info "Enable changing the color for all three tunics" -Name "EnableTunicColors"
-    $Options.EnableGauntletColors      = CreateReduxCheckBox -Column 0 -Row 2 -AddTo $ColorsBox -Text "Change Gauntlet Colors"     -ToolTip $ToolTip -Info "Enable changing the color for the Silver and Golden Gauntlets" -Name "EnableGauntletColors"
+    $Options.EnableGauntletColors      = CreateReduxCheckBox -Column 1 -Row 1 -AddTo $ColorsBox -Text "Change Gauntlet Colors"     -ToolTip $ToolTip -Info "Enable changing the color for the Silver and Golden Gauntlets" -Name "EnableGauntletColors"
+    $Options.ResetAllColors            = CreateReduxButton   -Column 2 -Row 1 -AddTo $ColorsBox -Text "Reset All Colors"           -ToolTip $ToolTip -Info "Reset all colors to their default values"
+
+    $Options.KokiriTunicColor          = CreateReduxButton   -Column 0 -Row 2 -AddTo $ColorsBox -Text "Set Kokiri Tunic Color"     -ToolTip $ToolTip -Info "Select the color you want for the Kokiri Tunic"
+    $Options.GoronTunicColor           = CreateReduxButton   -Column 1 -Row 2 -AddTo $ColorsBox -Text "Set Goron Tunic Color"      -ToolTip $ToolTip -Info "Select the color you want for the Goron Tunic"
+    $Options.ZoraTunicColor            = CreateReduxButton   -Column 2 -Row 2 -AddTo $ColorsBox -Text "Set Zora Tunic Color"       -ToolTip $ToolTip -Info "Select the color you want for the Zora Tunic"
+
+    $Options.SilverGauntletsColor      = CreateReduxButton   -Column 3 -Row 2 -AddTo $ColorsBox -Text "Set Silver Gaunlets Color"  -ToolTip $ToolTip -Info "Select the color you want for the Silver Gauntlets"
+    $Options.GoldenGauntletsColor      = CreateReduxButton   -Column 4 -Row 2 -AddTo $ColorsBox -Text "Set Golden Gauntlets Color" -ToolTip $ToolTip -Info "Select the color you want for the Golden Gauntlets"
+
     
-    $Options.KokiriTunicColor          = CreateReduxButton   -Column 1 -Row 1 -AddTo $ColorsBox -Text "Set Kokiri Tunic Color"     -ToolTip $ToolTip -Info "Select the color you want for the Kokiri Tunic"
-    $Options.GoronTunicColor           = CreateReduxButton   -Column 2 -Row 1 -AddTo $ColorsBox -Text "Set Goron Tunic Color"      -ToolTip $ToolTip -Info "Select the color you want for the Goron Tunic"
-    $Options.ZoraTunicColor            = CreateReduxButton   -Column 3 -Row 1 -AddTo $ColorsBox -Text "Set Zora Tunic Color"       -ToolTip $ToolTip -Info "Select the color you want for the Zora Tunic"
-
-    $Options.SilverGauntletsColor      = CreateReduxButton   -Column 1 -Row 2 -AddTo $ColorsBox -Text "Set Silver Gaunlets Color"  -ToolTip $ToolTip -Info "Select the color you want for the Silver Gauntlets"
-    $Options.GoldenGauntletsColor      = CreateReduxButton   -Column 2 -Row 2 -AddTo $ColorsBox -Text "Set Golden Gauntlets Color" -ToolTip $ToolTip -Info "Select the color you want for the Golden Gauntlets"
-
-    $Options.ResetAllColors            = CreateReduxButton   -Column 0 -Row 3 -AddTo $ColorsBox -Text "Reset All Colors"           -ToolTip $ToolTip -Info "Reset all colors to their default values"
 
     $Options.KokiriTunicColor.Add_Click(     { $Options.SetKokiriTunicColor.ShowDialog();     $Settings[$GameType.mode][$Options.SetKokiriTunicColor.Tag] = $Options.SetKokiriTunicColor.Color.Name } )
     $Options.GoronTunicColor.Add_Click(      { $Options.SetGoronTunicColor.ShowDialog();      $Settings[$GameType.mode][$Options.SetGoronTunicColor.Tag]  = $Options.SetGoronTunicColor.Color.Name } )
@@ -1040,8 +1046,9 @@ function CreateOoTOptionsContent() {
     # EVERYTHING ELSE #
     $OtherBox                          = CreateReduxGroup -Y ($EquipmentBox.Bottom + 5) -Height 1 -AddTo $Options.Panel -Text "Other"
     
-    $Options.DisableNaviPrompts        = CreateReduxCheckBox -Column 0 -Row 1 -AddTo $OtherBox -Text "Remove Navi Prompts" -ToolTip $ToolTip -Info "Navi will no longer interupt your during the first dungeon with mandatory textboxes" -Name "DisableNaviPrompts"
-    $Options.DefaultZTargeting         = CreateReduxCheckBox -Column 1 -Row 1 -AddTo $OtherBox -Text "Default Hold Z-Targeting" -ToolTip $ToolTip -Info "Change the Default Z-Targeting option to Hold instead of Switch" -Name "DefaultZTargeting"
+    $Options.SubscreenDelayFix         = CreateReduxCheckBox -Column 0 -Row 1 -AddTo $OtherBox -Text "Pause Screen Delay Fix" -ToolTip $ToolTip -Info "Removes the delay when opening the Pause Screen" -Name "SubscreenDelayFix"
+    $Options.DisableNaviPrompts        = CreateReduxCheckBox -Column 1 -Row 1 -AddTo $OtherBox -Text "Remove Navi Prompts" -ToolTip $ToolTip -Info "Navi will no longer interupt your during the first dungeon with mandatory textboxes" -Name "DisableNaviPrompts"
+    $Options.DefaultZTargeting         = CreateReduxCheckBox -Column 2 -Row 1 -AddTo $OtherBox -Text "Default Hold Z-Targeting" -ToolTip $ToolTip -Info "Change the Default Z-Targeting option to Hold instead of Switch" -Name "DefaultZTargeting"
 
 
 
@@ -1049,12 +1056,19 @@ function CreateOoTOptionsContent() {
     CreateCapacityDialog
 
     $Options.Damage.Add_SelectedIndexChanged({ $Options.Recovery.Enabled = $this.Text -ne "OKHO Mode" })
-    $Options.EnableTunicColors.Add_CheckStateChanged({ $Options.KokiriTunicColor.Enabled = $Options.GoronTunicColor.Enabled = $Options.ZoraTunicColor.Enabled = $this.Checked })
-    $Options.EnableGauntletColors.Add_CheckStateChanged({ $Options.SilverGauntletsColor.Enabled = $Options.GoldenGauntletsColor.Enabled = $this.Checked })
+    $Options.EnableTunicColors.Add_CheckStateChanged({
+        $Options.KokiriTunicColor.Enabled = $Options.GoronTunicColor.Enabled = $Options.ZoraTunicColor.Enabled = $this.Checked
+        $Options.ResetAllColors.Enabled = $this.Enabled -or $Options.EnableGauntletColors.Enabled
+    })
+    $Options.EnableGauntletColors.Add_CheckStateChanged({
+        $Options.SilverGauntletsColor.Enabled = $Options.GoldenGauntletsColor.Enabled = $this.Checked
+        $Options.ResetAllColors.Enabled = $Options.EnableTunicColors.Checked -or $this.Checked
+    })
 
     $Options.Recovery.Enabled = $Options.Damage.Text -ne "OKHO Mode"
     $Options.KokiriTunicColor.Enabled = $Options.GoronTunicColor.Enabled = $Options.ZoraTunicColor.Enabled = $Options.EnableTunicColors.Checked
     $Options.SilverGauntletsColor.Enabled = $Options.GoldenGauntletsColor.Enabled = $Options.EnableGauntletColors.Checked
+    $Options.ResetAllColors.Enabled = $Options.EnableTunicColors.Checked -or $Options.EnableGauntletColors.Checked
 
     $Options.SetKokiriTunicColor       = CreateColorDialog -Color "1E691B" -Name "SetKokiriTunicColor"     -IsGame
     $Options.SetGoronTunicColor        = CreateColorDialog -Color "641400" -Name "SetGoronTunicColor"      -IsGame
