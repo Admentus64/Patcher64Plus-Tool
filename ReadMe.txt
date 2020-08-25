@@ -1,9 +1,13 @@
 Patcher64+ Tool
-Join our Discord: https://discord.gg/P22GGzz and feel free to contact us there.
+Join our Discord and feel free to contact us there.
 List of credits are accessible within the Patcher64+ Tool.
 Documentation for Zelda 64 options can be found at: https://github.com/ShadowOne333/Zelda64-Redux-Documentation
 
-Support me at: https://www.patreon.com/Admentus
+--- Support or visit me ---
+Discord:	https://discord.gg/P22GGzz
+GitHub:		https://github.com/Admentus64
+Patreon:	https://www.patreon.com/Admentus
+PayPal:		https://www.paypal.com/paypalme/Admentus/
 
 
 

@@ -16,7 +16,7 @@ Add-Type -AssemblyName 'System.Drawing'
 
 $global:ScriptName = "Patcher64+ Tool"
 $global:VersionDate = "25-08-2020"
-$global:Version     = "v7.3.2"
+$global:Version     = "v7.3.3"
 
 $global:GameType = $global:GamePatch = $global:CheckHashSum = ""
 $global:GameFiles = $global:Settings = @{}
@@ -25,6 +25,7 @@ $global:GameTitleLength = @(20, 40)
 
 $global:CurrentModeFont = [System.Drawing.Font]::new("Microsoft Sans Serif", 12, [System.Drawing.FontStyle]::Bold)
 $global:VCPatchFont = [System.Drawing.Font]::new("Microsoft Sans Serif", 8, [System.Drawing.FontStyle]::Bold)
+$global:URLFont = [System.Drawing.Font]::new("Microsoft Sans Serif", 8, [System.Drawing.FontStyle]::Underline)
 
 
 

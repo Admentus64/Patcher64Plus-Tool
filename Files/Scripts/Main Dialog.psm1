@@ -404,6 +404,7 @@ function ResetTool() {
     
     RestoreCustomGameID
     ChangeGameMode
+    SetWiiVCMode -Enable $False
     EnablePatchButtons -Enable $False
 
 }

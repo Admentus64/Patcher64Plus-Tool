@@ -101,7 +101,7 @@ function CreateInfoGameIDDialog() {
 function CreateCreditsDialog() {
     
     # Create Dialog
-    $global:CreditsDialog = CreateDialog -Width 650 -Height 500 -Icon $Files.icon.credits
+    $global:CreditsDialog = CreateDialog -Width 650 -Height 600 -Icon $Files.icon.credits
     $CloseButton = CreateButton -X ($CreditsDialog.Width / 2 - 40) -Y ($CreditsDialog.Height - 90) -Width 80 -Height 35 -Text "Close" -AddTo $CreditsDialog
     $CloseButton.Add_Click({ $CreditsDialog.Hide() })
 
@@ -109,7 +109,27 @@ function CreateCreditsDialog() {
     $InfoLabel = CreateLabel -X ($CreditsDialog.Width / 2 - $String.Width - 100) -Y 10 -Width 200 -Height 15 -Font $VCPatchFont -Text ($ScriptName + " " + $Version + " (" + $VersionDate + ")") -AddTo $CreditsDialog
 
     # Create Text Box
-    $global:CreditsTextBox = CreateTextBox -X 40 -Y 50 -Width ($CreditsDialog.Width - 100) -Height ($CloseButton.Top - 60) -ReadOnly -Multiline -AddTo $CreditsDialog
+    $global:CreditsTextBox = CreateTextBox -X 40 -Y 50 -Width ($CreditsDialog.Width - 100) -Height ($CloseButton.Top - 120) -ReadOnly -Multiline -AddTo $CreditsDialog
+
+    # Support
+    $SupportLabel  = CreateLabel -X 40                          -Y ($CreditsTextBox.Bottom + 10) -Width 200 -Height 15 -Font $VCPatchFont -Text ("--- Support or visit me at ---")   -AddTo $CreditsDialog
+
+    $Discord1Label = CreateLabel -X 40                          -Y ($SupportLabel.Bottom + 2)  -Width 80  -Height 15 -Font $VCPatchFont -Text ("Discord")                          -AddTo $CreditsDialog
+    $Discord2Label = CreateLabel -X $Discord1Label.Right        -Y ($SupportLabel.Bottom + 2)  -Width 140 -Height 15 -Font $URLFont     -Text ("https://discord.gg/P22GGzz")       -AddTo $CreditsDialog
+    $GitHub1Label  = CreateLabel -X 40                          -Y ($Discord1Label.Bottom + 2) -Width 80  -Height 15 -Font $VCPatchFont -Text ("GitHub")                           -AddTo $CreditsDialog
+    $GitHub2Label  = CreateLabel -X $GitHub1Label.Right         -Y ($Discord1Label.Bottom + 2) -Width 180 -Height 15 -Font $URLFont     -Text ("https://github.com/Admentus64")    -AddTo $CreditsDialog
+    
+    $Patreon1Label = CreateLabel -X ($Discord2Label.Right + 60) -Y ($SupportLabel.Bottom + 2)  -Width 80  -Height 15 -Font $VCPatchFont -Text ("Patreon")                          -AddTo $CreditsDialog
+    $Patreon2Label = CreateLabel -X $Patreon1Label.Right        -Y ($SupportLabel.Bottom + 2)  -Width 145 -Height 15 -Font $URLFont     -Text ("www.patreon.com/Admentus")         -AddTo $CreditsDialog
+    $PayPal1Label  = CreateLabel -X ($Discord2Label.Right + 60) -Y ($Patreon1Label.Bottom + 2) -Width 80  -Height 15 -Font $VCPatchFont -Text ("PayPal")                           -AddTo $CreditsDialog
+    $PayPal2Label  = CreateLabel -X $Patreon1Label.Right        -Y ($Patreon1Label.Bottom + 2) -Width 190 -Height 15 -Font $URLFont     -Text ("www.paypal.com/paypalme/Admentus") -AddTo $CreditsDialog
+
+    $Discord2Label.add_Click({[system.Diagnostics.Process]::start("https://discord.gg/P22GGzz")})
+    $GitHub2Label.add_Click({[system.Diagnostics.Process]::start("https://github.com/Admentus64")})
+    $Patreon2Label.add_Click({[system.Diagnostics.Process]::start("https://www.patreon.com/Admentus")})
+    $PayPal2Label.add_Click({[system.Diagnostics.Process]::start("https://www.paypal.com/paypalme/Admentus/")})
+    $Discord2Label.ForeColor = $GitHub2Label.ForeColor = $Patreon2Label.ForeColor = $PayPal2Label.ForeColor = "Blue"
+
 
 }
 
@@ -119,7 +139,7 @@ function CreateCreditsDialog() {
 function CreateInfoDialog() {
     
     # Create Dialog
-    $global:InfoDialog = CreateDialog -Width 500 -Height 500 -Icon $Icon
+    $global:InfoDialog = CreateDialog -Width 500 -Height 550 -Icon $Icon
     $CloseButton = CreateButton -X ($InfoDialog.Width / 2 - 40) -Y ($InfoDialog.Height - 90) -Width 80 -Height 35 -Text "Close" -AddTo $InfoDialog
     $CloseButton.Add_Click({ $InfoDialog.Hide() })
 
@@ -127,8 +147,16 @@ function CreateInfoDialog() {
     $InfoLabel = CreateLabel -X ($InfoDialog.Width / 2 - $String.Width - 100) -Y 10 -Width 200 -Height 15 -Font $VCPatchFont -Text ($ScriptName + " " + $Version + " (" + $VersionDate + ")") -AddTo $InfoDialog
 
     # Create Text Box
-    $global:InfoTextBox = CreateTextBox -X 40 -Y 50 -Width ($InfoDialog.Width - 100) -Height ($CloseButton.Top - 60) -ReadOnly -Multiline -AddTo $InfoDialog
+    $global:InfoTextBox = CreateTextBox -X 40 -Y 50 -Width ($InfoDialog.Width - 100) -Height ($CloseButton.Top - 110) -ReadOnly -Multiline -AddTo $InfoDialog
+
+    # Documentation
+    $Documentation1Label  = CreateLabel -X 40                         -Y ($InfoTextBox.Bottom + 10)        -Width 150 -Height 15 -Font $VCPatchFont -Text ("--- Documentation Source ---")                                -AddTo $InfoDialog
+    $Documentation2Label  = CreateLabel -X 40                         -Y ($Documentation1Label.Bottom + 2) -Width 70  -Height 15 -Font $VCPatchFont -Text ("GitHub")                                                      -AddTo $InfoDialog
+    $Documentation3Label  = CreateLabel -X $Documentation2Label.Right -Y ($Documentation1Label.Bottom + 2) -Width 330 -Height 15 -Font $URLFont     -Text ("https://github.com/ShadowOne333/Zelda64-Redux-Documentation") -AddTo $InfoDialog
     
+    $Documentation3Label.add_Click({[system.Diagnostics.Process]::start("https://github.com/ShadowOne333/Zelda64-Redux-Documentation")})
+    $Documentation3Label.ForeColor = "Blue"
+
 }
 
 
