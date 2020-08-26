@@ -18,34 +18,34 @@
 =======================
 
 --- REDUX ---
-- Hacking:			Maroc
+- Hacking:				Maroc
 - Editing / Revision:			ShadowOne333, MattKimura
 - Original Hacking:			Roman971, TestRunnerSRL, AmazingAmpharos, fig02, krimtonz,
-				rlbond86, KevinPal, junglechief87
+					rlbond86, KevinPal, junglechief87
 
 --- Additional Options ---
-- Master Quest:			ShadowOne333
+- Master Quest:				ShadowOne333
 - Force Hires Link Model:		GhostlyDark
-- 16:9 Backgrounds & Textures:	GhostlyDark & ShadowOne333
-- MM Young Link Model:		The3Dude
-- MM Adult Link Model:		Skilarbabcock (www.youtube.com/user/skilarbabcock)
+- 16:9 Backgrounds & Textures:		GhostlyDark & ShadowOne333
+- MM Young Link Model:			The3Dude
+- MM Adult Link Model:			Skilarbabcock (www.youtube.com/user/skilarbabcock)
 - Hatsune Miku Link Models:		JanexLane
 - MM Link Voice:			Korey Cryderman
-- Feminine Link Voice:		theluigidude2007
-- MM HUD Textures:		GhostlyDark
-- MM Button Positions:		GhostlyDark
-- MM Pause Screen:		Garo-Mastah & CM
+- Feminine Link Voice:			theluigidude2007
+- MM HUD Textures:			GhostlyDark
+- MM Button Positions:			GhostlyDark
+- MM Pause Screen:			Garo-Mastah & CM
 - Easier Minigames:			ShadowOne333
-- Faster Block Pushing:		ShadowOne333
-- Correct Rupee Colors:		GhostlyDark
+- Faster Block Pushing:			ShadowOne333
+- Correct Rupee Colors:			GhostlyDark
 - Restore Cow Nose Ring:		ShadowOne333
-- Restore Fire Temple:		ShadowOne333
+- Restore Fire Temple:			ShadowOne333
 - Restore Gerudo Textures:		GhostlyDark & ShadowOne333
-- Set Capacity:			GhostlyDark
+- Set Capacity:				GhostlyDark
 - Pause Screen Delay Fix		zel
 - Show File Select Icons:		ShadowOne333
 - Colors:				GhostlyDark
-- Restore Text:			ShadowOne333
+- Restore Text:				ShadowOne333
 - Admentus (Scripting and Assistance of all Options)
 
 --- Translations ---
@@ -55,8 +55,8 @@
 - Chinese Simplified:			madcell (2009)
 
 --- Dawn and Dusk ---
-- Lead Development and Music:	Captain Seedy-Eye
-- 64DD Porting:			LuigiBlood
+- Lead Development and Music:		Captain Seedy-Eye
+- 64DD Porting:				LuigiBlood
 - Special Thanks:			PK-LOVE, BWIX, Hylian Modding
 - Testers:				Captain Seedy, LuigiBlood, Hard4Games, ZFG, Dry4Haz, fig02
 
@@ -85,16 +85,16 @@
 
 --- The Missing Link ---
 Director:				Kaze Emanuar
-3D Modelers:			CDi-Fails, /Zel/
-Composers:			Zerovolt0v, A6stringthing, Sauraen, Badub, DezZival
+3D Modelers:				CDi-Fails, /Zel/
+Composers:				Zerovolt0v, A6stringthing, Sauraen, Badub, DezZival
 Concept Artists:			Ty Anderson, Aurora-Xatu
 Testers:				Zerovolt0v, Sauraen, E-Gor, GTM, Collins, Ricar, Fig
-Level Designer:			Kaze Emanuar
-Programmers:			Kaze Emanuar, /Zel/
-Enemy Animator:			rankaisija
+Level Designer:				Kaze Emanuar
+Programmers:				Kaze Emanuar, /Zel/
+Enemy Animator:				rankaisija
 Cinematographers:			Ostrealava02, CDi-Fails, /Zel/
 Writers:				CDi-Fails, /Zel/
-Special Thanks:			Nokaubure, z64me, Ultra553, OoT Decomp
+Special Thanks:				Nokaubure, z64me, Ultra553, OoT Decomp
 
 --- Master of Time ---
 - doncamilo
@@ -182,31 +182,31 @@ Special Thanks:			Nokaubure, z64me, Ultra553, OoT Decomp
 =====================
 
 --- REDUX ---
-- Hacking:			Maroc
+- Hacking:				Maroc
 - Original Hacking:			Saneki
 
 --- Additional Options ---
-- 16:9 Backgrounds & Textures:	GhostlyDark & ShadowOne333
+- 16:9 Backgrounds & Textures:		GhostlyDark & ShadowOne333
 - Kokiri Tunic Color:			GhostlyDark
-- Zora Physics:			ShadowOne333
-- Restore Palace Route:		ShadowOne333
-- Correct Rupee Colors:		GhostlyDark
+- Zora Physics:				ShadowOne333
+- Restore Palace Route:			ShadowOne333
+- Correct Rupee Colors:			GhostlyDark
 - Restore Cow Nose Ring:		ShadowOne333
-- Correct Romani Sign:		ShadowOne333
+- Correct Romani Sign:			ShadowOne333
 - Correct Comma:			ShadowOne333
 - Restore Title:			ShadowOne333 & Garo-Mastah
 - Restore Skull Kid:			ShadowOne333
-- Restore Shop Music:		ShadowOne333
+- Restore Shop Music:			ShadowOne333
 - 4th Piece of Heart Sound:		fkualol
 - Move Bomber Kid:			ShadowOne333
 - Permanent Razor Sword:		darklord92
-- Set Capacity:			GhostlyDark
-- Fix Goht Cutscene:		ShadowOne333
-- Fix Mushroom Bottle:		ozidual
-- Fix Southern Swamp:		ShadowOne333
+- Set Capacity:				GhostlyDark
+- Fix Goht Cutscene:			ShadowOne333
+- Fix Mushroom Bottle:			ozidual
+- Fix Southern Swamp:			ShadowOne333
 - Fix Fairy Fountain:			Dybbles (fix) & ShadowOne333 (ROM / patch)
-- Restore Text:			ShadowOne333
-- Correct Circus Mask:		ShadowOne333
+- Restore Text:				ShadowOne333
+- Correct Circus Mask:			ShadowOne333
 - Admentus (Scripting and Assistance of all Options)
 
 --- Translations ---
