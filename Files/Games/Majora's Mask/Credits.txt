@@ -2,27 +2,28 @@
 - Hacking:			Maroc
 - Original Hacking:			Saneki
 
---- Options ---
+--- Additional Options ---
 - 16:9 Backgrounds & Textures:	GhostlyDark & ShadowOne333
-- Zora Physics:			ShadowOne333
 - Kokiri Tunic Color:			GhostlyDark
+- Zora Physics:			ShadowOne333
+- Restore Palace Route:		ShadowOne333
 - Correct Rupee Colors:		GhostlyDark
 - Restore Cow Nose Ring:		ShadowOne333
-- Restore Text:			ShadowOne333
 - Correct Romani Sign:		ShadowOne333
 - Correct Comma:			ShadowOne333
-- Correct Circus Mask:		ShadowOne333
 - Restore Title:			ShadowOne333 & Garo-Mastah
 - Restore Skull Kid:			ShadowOne333
-- Restore Palace Route:		ShadowOne333
 - Restore Shop Music:		ShadowOne333
 - 4th Piece of Heart Sound:		fkualol
 - Move Bomber Kid:			ShadowOne333
+- Permanent Razor Sword:		darklord92
 - Set Capacity:			GhostlyDark
-- Fix Goth Cutscene:		ShadowOne333
+- Fix Goht Cutscene:		ShadowOne333
 - Fix Mushroom Bottle:		ozidual
 - Fix Southern Swamp:		ShadowOne333
 - Fix Fairy Fountain:			Dybbles (fix) & ShadowOne333 (ROM / patch)
+- Restore Text:			ShadowOne333
+- Correct Circus Mask:		ShadowOne333
 - Admentus (Scripting and Assistance of all Options)
 
 --- Translations ---

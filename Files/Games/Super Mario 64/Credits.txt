@@ -1,4 +1,4 @@
---- Options ---
+--- Additional Options ---
 - Admentus (Scripting and Assistance of all Options)
 
 --- 60 FPS (v2) ---

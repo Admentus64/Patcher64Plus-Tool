@@ -1,3 +1,22 @@
+=======================
+=== PATCHER64+ TOOL ===
+=======================
+
+--- Thanks to my past Patreons --
+- Raim, Gicrax, Crypto Logiq, Moons (Luke), Ronald
+
+--- Patcher64+ Tool ---
+- Admentus (Testing and Coding of Patcher64+ Tool)
+- Bighead (Initial PowerShell patcher)
+- GhostlyDark (Testing and Assistance)
+- ShadowOne333 (Testing and Assistance)
+
+
+
+=======================
+=== OCARINA OF TIME ===
+=======================
+
 --- REDUX ---
 - Hacking:			Maroc
 - Editing / Revision:			ShadowOne333, MattKimura
@@ -155,3 +174,147 @@ Special Thanks:			Nokaubure, z64me, Ultra553, OoT Decomp
 - GhostlyDark
 - BananaSplit2
 - Apasher
+
+
+
+=====================
+=== MAJORA'S MASK ===
+=====================
+
+--- REDUX ---
+- Hacking:			Maroc
+- Original Hacking:			Saneki
+
+--- Additional Options ---
+- 16:9 Backgrounds & Textures:	GhostlyDark & ShadowOne333
+- Kokiri Tunic Color:			GhostlyDark
+- Zora Physics:			ShadowOne333
+- Restore Palace Route:		ShadowOne333
+- Correct Rupee Colors:		GhostlyDark
+- Restore Cow Nose Ring:		ShadowOne333
+- Correct Romani Sign:		ShadowOne333
+- Correct Comma:			ShadowOne333
+- Restore Title:			ShadowOne333 & Garo-Mastah
+- Restore Skull Kid:			ShadowOne333
+- Restore Shop Music:		ShadowOne333
+- 4th Piece of Heart Sound:		fkualol
+- Move Bomber Kid:			ShadowOne333
+- Permanent Razor Sword:		darklord92
+- Set Capacity:			GhostlyDark
+- Fix Goht Cutscene:		ShadowOne333
+- Fix Mushroom Bottle:		ozidual
+- Fix Southern Swamp:		ShadowOne333
+- Fix Fairy Fountain:			Dybbles (fix) & ShadowOne333 (ROM / patch)
+- Restore Text:			ShadowOne333
+- Correct Circus Mask:		ShadowOne333
+- Admentus (Scripting and Assistance of all Options)
+
+--- Translations ---
+- Polish:				RPG (v1.1)
+- Russian:				Zelda64rus (v2.0 Beta)
+
+--- Masked Quest ---
+- Garo-Mastah
+- Aroenai
+- CloudMax
+- fkualol
+- VictorHale
+- Ideka
+- Saneki
+
+--- Randomizer ---
+- ZoeyZolotova
+- Saneki
+- zmarotrix
+- mzxrules
+- 5isghj5
+- az64
+- nlangille
+- junglechief87
+- aroenai
+- phixtyseven
+- krimtonz
+- flagrama
+- Kjelli
+- AmazingAmpharos
+- Zannick
+- TeknoAnonymous
+
+
+
+======================
+=== SUPER MARIO 64 ===
+======================
+
+--- Additional Options ---
+- Admentus (Scripting and Assistance of all Options)
+
+--- 60 FPS (v2) ---
+- Kaze Emanuar
+
+--- Analog Camera ---
+- Kaze Emanuar
+
+--- Multiplayer (v1.4.2) ---
+- Skelux
+
+--- Split-screen Multiplayer ---
+- Kaze Emanuar
+
+--- Star Road ---
+- Skelux (original ROM Hack)
+- Kaze Emanuar (revised ROM Hack)
+- aglab2 (Wii VC crashfixes)
+
+--- Star Road Multiplayer (v1.2.1) ---
+- Skelux
+
+--- Last Impact (v1.2)
+- Kaze Emanuar
+
+--- SM64: Ocarina of Time
+- Kaze Emanuar
+
+--- Super Mario 64 Land (v1.1)
+- Kaze Emanuar
+
+--- Super Mario Odyssey 64
+- Kaze Emanuar
+
+
+
+===================
+=== PAPER MARIO ===
+===================
+
+--- Hard Mode ---
+- Skelux (Extra Damage)
+
+--- Hard Mode+ ---
+- Skelux (Extra Damage)
+- Knux5577 (Enemy HP)
+
+--- Insane Mode ---
+- Skelux (Extra Damage)
+
+
+
+============================
+=== SUPER SMASH BROTHERS ===
+============================
+
+--- Remix ---
+- The_Smashfather
+- JSsixtyfour
+- jtl3d
+- FraySSB
+- jordanbarkley
+
+--- Super Smash Bros: More Stages Edition ---
+- ComJay
+- cyjorg
+- Carnivorous
+- SubDrag
+
+--- Widescreen ---
+- gamemasterplc

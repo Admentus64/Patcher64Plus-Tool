@@ -244,7 +244,6 @@ function PatchByteOptionsOoT() {
         ChangeBytes -Offset "DCBF27" -Values @("48")                   # Adult Fish size requirement
         ChangeBytes -Offset "DCBF33" -Values @("30")                   # Child Fish size requirement
         ChangeBytes -Offset "DCBF9F" -Values @("30")                   # Child Fish size requirement
-        # ChangeBytes -Offset "DB9E7C" -Values @("0C", "10", "0D", "AB", "00", "00", "00", "00") # First try truth spinner
     }
 
     if (IsChecked -Elem $Options.FasterBlockPushing) {
@@ -663,30 +662,6 @@ function PatchByteOptionsMM() {
         ExportAndPatch -Path "Deku Palace\deku_palace_room_2" -Offset "2563000" -Length "124F0" -NewLength "124B0" -TableOffset "1F6B7" -Values @("B0")
     }
 
-    <#
-    if (IsChecked -Elem $Options.ResearchLabPlatform -Enabled) {
-        CreateSubPath -Path ($GameFiles.binaries + "\Great Bay Coast")
-        ExportAndPatch -Path "Great Bay Coast\great_bay_coast_scene"  -Offset "26BF000" -Length "1EDD0" -NewLength "1EEB0" -TableOffset "1F826" -Values @("DE", "B0")
-        ExportAndPatch -Path "Great Bay Coast\great_bay_coast_room_0" -Offset "26DE000" -Length "1D300" -NewLength "1D2F0" -TableOffset "1F836" -Values @("B2", "F0")
-
-        #ChangeBytes -Offset ( Get32Bit -Value ( (GetDecimal -Hex "26BF000") + (GetDecimal -Hex "190")  ) ) -Values @("02", "6D", "E0", "00", "02", "6F", "B2", "F0")
-        #ChangeBytes -Offset ( Get32Bit -Value ( (GetDecimal -Hex "26BF000") + (GetDecimal -Hex "9680") ) ) -Values @("02", "6D", "E0", "00", "02", "6F", "B2", "F0")
-        #ChangeBytes -Offset ( Get32Bit -Value ( (GetDecimal -Hex "26BF000") + (GetDecimal -Hex "C168") ) ) -Values @("02", "6D", "E0", "00", "02", "6F", "B2", "F0")
-
-        #ChangeBytes -Offset ( Get32Bit -Value ( (GetDecimal -Hex "26BF000") + (GetDecimal -Hex "1A8") ) ) -Values @("02", "6D", "E0", "00", "02", "6F", "B2", "F0")
-        #ChangeBytes -Offset ( Get32Bit -Value ( (GetDecimal -Hex "26BF000") + (GetDecimal -Hex "95A0") ) ) -Values @("02", "6D", "E0", "00", "02", "6F", "B2", "F0")
-        #ChangeBytes -Offset ( Get32Bit -Value ( (GetDecimal -Hex "26BF000") + (GetDecimal -Hex "C088") ) ) -Values @("02", "6D", "E0", "00", "02", "6F", "B2", "F0")
-    }
-    #>
-
-    <#
-    if (IsChecked -Elem $Options.RanchDirtRoad -Enabled) {
-        CreateSubPath -Path ($GameFiles.binaries + "\Romani Ranch")
-        ExportAndPatch -Path "Romani Ranch\romani_ranch_scene"  -Offset "2690000" -Length "1C460" -NewLength "1EA90" -TableOffset "1F7E6" -Values @("EA", "90")
-        ExportAndPatch -Path "Romani Ranch\romani_ranch_room_0" -Offset "26AD000" -Length "D2C0"  -NewLength "CDE0"  -TableOffset "1F7F6" -Values @("9D", "E0")
-    }
-    #>
-
     if (IsChecked -Elem $Options.ZoraPhysics -Enabled $True)   { PatchBytes -Offset "65D000" -Patch "Zora Physics Fix.bin" }
 
 
@@ -1099,18 +1074,18 @@ function CreateOoTReduxContent() {
     # COLORS #
     $ColorsBox                         = CreateReduxGroup -Y ($InterfaceBox.Bottom + 5) -Height 3 -AddTo $Redux.Panel -Text "Colors"
 
-    $Redux.EnableButtonColors          = CreateReduxCheckBox -Column 0 -Row 1 -AddTo $ColorsBox -Text "Change Button Colors"       -ToolTip $ToolTip -Info "Enable changing the color for the buttons`n- Requires Redux patch" -Name "EnableButtonColors"
-    $Redux.ResetAllColors              = CreateReduxButton   -Column 1 -Row 1 -AddTo $ColorsBox -Text "Reset All Colors"           -ToolTip $ToolTip -Info "Reset all colors to their default values"
+    $Redux.EnableButtonColors          = CreateReduxCheckBox -Column 0 -Row 1 -AddTo $ColorsBox -Text "Change Button Colors"   -ToolTip $ToolTip -Info "Enable changing the color for the buttons`n- Requires Redux patch" -Name "EnableButtonColors"
+    $Redux.ResetAllColors              = CreateReduxButton   -Column 1 -Row 1 -AddTo $ColorsBox -Text "Reset All Colors"       -ToolTip $ToolTip -Info "Reset all colors to their default values"
 
-    $Redux.AButtonColor                = CreateReduxButton   -Column 0 -Row 2 -AddTo $ColorsBox -Text "Set A Button Color"         -ToolTip $ToolTip -Info "Select the color you want for the A button"
-    $Redux.BButtonColor                = CreateReduxButton   -Column 1 -Row 2 -AddTo $ColorsBox -Text "Set B Button Color"         -ToolTip $ToolTip -Info "Select the color you want for the B button"
-    $Redux.CButtonColor                = CreateReduxButton   -Column 2 -Row 2 -AddTo $ColorsBox -Text "Set C Button Color"         -ToolTip $ToolTip -Info "Select the color you want for the C buttons"
-    $Redux.SButtonColor                = CreateReduxButton   -Column 3 -Row 2 -AddTo $ColorsBox -Text "Set Start Button Color"     -ToolTip $ToolTip -Info "Select the color you want for the Start button"
+    $Redux.AButtonColor                = CreateReduxButton   -Column 0 -Row 2 -AddTo $ColorsBox -Text "Set A Button Color"     -ToolTip $ToolTip -Info "Select the color you want for the A button"
+    $Redux.BButtonColor                = CreateReduxButton   -Column 1 -Row 2 -AddTo $ColorsBox -Text "Set B Button Color"     -ToolTip $ToolTip -Info "Select the color you want for the B button"
+    $Redux.CButtonColor                = CreateReduxButton   -Column 2 -Row 2 -AddTo $ColorsBox -Text "Set C Button Color"     -ToolTip $ToolTip -Info "Select the color you want for the C buttons"
+    $Redux.SButtonColor                = CreateReduxButton   -Column 3 -Row 2 -AddTo $ColorsBox -Text "Set Start Button Color" -ToolTip $ToolTip -Info "Select the color you want for the Start button"
 
-    $Redux.N64OoTColors                = CreateReduxButton   -Column 0 -Row 3 -AddTo $ColorsBox -Text "N64 OoT Button Colors"      -ToolTip $ToolTip -Info "Set the button colors to match the Nintendo 64 revision of Ocarina of Time"
-    $Redux.N64MMColors                 = CreateReduxButton   -Column 1 -Row 3 -AddTo $ColorsBox -Text "N64 MM Button Colors"       -ToolTip $ToolTip -Info "Set the button colors to match the Nintendo 64 revision of Majora's mask"
-    $Redux.GCOoTColors                 = CreateReduxButton   -Column 2 -Row 3 -AddTo $ColorsBox -Text "GC OoT Button Colors"       -ToolTip $ToolTip -Info "Set the button colors to match the GameCube revision of Ocarina of Time"
-    $Redux.GCMMColors                  = CreateReduxButton   -Column 3 -Row 3 -AddTo $ColorsBox -Text "GC MM Button Colors"        -ToolTip $ToolTip -Info "Set the button colors to match the GameCube revision of Majora's Mask"
+    $Redux.N64OoTColors                = CreateReduxButton   -Column 0 -Row 3 -AddTo $ColorsBox -Text "N64 OoT Button Colors"  -ToolTip $ToolTip -Info "Set the button colors to match the Nintendo 64 revision of Ocarina of Time"
+    $Redux.N64MMColors                 = CreateReduxButton   -Column 1 -Row 3 -AddTo $ColorsBox -Text "N64 MM Button Colors"   -ToolTip $ToolTip -Info "Set the button colors to match the Nintendo 64 revision of Majora's mask"
+    $Redux.GCOoTColors                 = CreateReduxButton   -Column 2 -Row 3 -AddTo $ColorsBox -Text "GC OoT Button Colors"   -ToolTip $ToolTip -Info "Set the button colors to match the GameCube revision of Ocarina of Time"
+    $Redux.GCMMColors                  = CreateReduxButton   -Column 3 -Row 3 -AddTo $ColorsBox -Text "GC MM Button Colors"    -ToolTip $ToolTip -Info "Set the button colors to match the GameCube revision of Majora's Mask"
 
     $Redux.ResetAllColors.Add_Click( {
         SetButtonColors -A "5A5AFF" -B "009600" -C "FFA000" -Start "C80000"
@@ -1260,10 +1235,10 @@ function CreateMMReduxContent() {
     $DPadBox                           = CreateReduxGroup -Y 50 -Height 2 -AddTo $Redux.Panel -Text "D-Pad Icons Layout"
     
     $DPadPanel                         = CreateReduxPanel -Row 0 -Columns 4 -AddTo $DPadBox
-    $Redux.DPadDisable                 = CreateReduxRadioButton -Column 0 -Row 0 -AddTo $DPadPanel -Checked -Disable -Text "Disable"    -ToolTip $ToolTip -Info "Completely disable the D-Pad`n- Requires Redux patch"                      -Name "DPadDisable"
-    $Redux.DPadLayoutHide              = CreateReduxRadioButton -Column 1 -Row 0 -AddTo $DPadPanel          -Disable -Text "Hidden"     -ToolTip $ToolTip -Info "Hide the D-Pad icons, while they are still active`n- Requires Redux patch" -Name "DPadLayoutHide"
-    $Redux.DPadLayoutLeft              = CreateReduxRadioButton -Column 2 -Row 0 -AddTo $DPadPanel          -Disable -Text "Left Side"  -ToolTip $ToolTip -Info "Show the D-Pad icons on the left side of the HUD`n- Requires Redux patch"  -Name "DPadLayoutLeft"
-    $Redux.DPadLayoutRight             = CreateReduxRadioButton -Column 3 -Row 0 -AddTo $DPadPanel          -Disable -Text "Right Side" -ToolTip $ToolTip -Info "Show the D-Pad icons on the right side of the HUD`n- Requires Redux patch" -Name "DPadLayoutRight"
+    $Redux.DPadDisable                 = CreateReduxRadioButton -Column 0 -Row 0 -AddTo $DPadPanel -Checked -Text "Disable"    -ToolTip $ToolTip -Info "Completely disable the D-Pad`n- Requires Redux patch"                      -Name "DPadDisable"
+    $Redux.DPadLayoutHide              = CreateReduxRadioButton -Column 1 -Row 0 -AddTo $DPadPanel          -Text "Hidden"     -ToolTip $ToolTip -Info "Hide the D-Pad icons, while they are still active`n- Requires Redux patch" -Name "DPadLayoutHide"
+    $Redux.DPadLayoutLeft              = CreateReduxRadioButton -Column 2 -Row 0 -AddTo $DPadPanel          -Text "Left Side"  -ToolTip $ToolTip -Info "Show the D-Pad icons on the left side of the HUD`n- Requires Redux patch"  -Name "DPadLayoutLeft"
+    $Redux.DPadLayoutRight             = CreateReduxRadioButton -Column 3 -Row 0 -AddTo $DPadPanel          -Text "Right Side" -ToolTip $ToolTip -Info "Show the D-Pad icons on the right side of the HUD`n- Requires Redux patch" -Name "DPadLayoutRight"
     $Redux.DPadLayout                  = CreateReduxButton      -Column 0 -Row 2 -AddTo $DPadBox -Text "Customize D-Pad" -ToolTip $ToolTip -Info "Customize the D-Pad Layout"
     
     $Redux.DPadLayout.Add_Click( { $Redux.DPadDialog.ShowDialog() } )
@@ -1273,8 +1248,8 @@ function CreateMMReduxContent() {
     # GAMEPLAY #
     $GameplayBox                       = CreateReduxGroup -Y ($DPadBox.Bottom + 5) -Height 1 -AddTo $Redux.Panel -Text "Gameplay"
 
-    $Redux.FasterBlockPushing          = CreateReduxCheckBox -Column 0 -Row 1 -AddTo $GameplayBox -Text "Faster Block Pushing"  -ToolTip $ToolTip -Info "All blocks are pushed faster" -Name "FasterBlockPushing"
-    $Redux.EasierMinigames             = CreateReduxCheckBox -Column 1 -Row 1 -AddTo $GameplayBox -Text "Easier Minigames"      -ToolTip $ToolTip -Info "Certain minigames are made easier and faster`n- Dampe's Digging Game always has two Ghost Flames on the ground and one up the ladder`n- The Gold Dog always wins the Doggy Racetrack race if you have the Mask of Truth`nOnly one fish has to be feeded in the Marine Research Lab" -Name "EasierMinigames"
+    $Redux.FasterBlockPushing          = CreateReduxCheckBox -Column 0 -Row 1 -AddTo $GameplayBox -Text "Faster Block Pushing" -ToolTip $ToolTip -Info "All blocks are pushed faster" -Name "FasterBlockPushing"
+    $Redux.EasierMinigames             = CreateReduxCheckBox -Column 1 -Row 1 -AddTo $GameplayBox -Text "Easier Minigames"     -ToolTip $ToolTip -Info "Certain minigames are made easier and faster`n- Dampe's Digging Game always has two Ghost Flames on the ground and one up the ladder`n- The Gold Dog always wins the Doggy Racetrack race if you have the Mask of Truth`nOnly one fish has to be feeded in the Marine Research Lab" -Name "EasierMinigames"
     
 
 

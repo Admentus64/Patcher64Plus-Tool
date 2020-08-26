@@ -139,7 +139,7 @@ function CreateCreditsDialog() {
 function CreateInfoDialog() {
     
     # Create Dialog
-    $global:InfoDialog = CreateDialog -Width 500 -Height 550 -Icon $Icon
+    $global:InfoDialog = CreateDialog -Width 650 -Height 600 -Icon $Icon
     $CloseButton = CreateButton -X ($InfoDialog.Width / 2 - 40) -Y ($InfoDialog.Height - 90) -Width 80 -Height 35 -Text "Close" -AddTo $InfoDialog
     $CloseButton.Add_Click({ $InfoDialog.Hide() })
 
@@ -147,15 +147,20 @@ function CreateInfoDialog() {
     $InfoLabel = CreateLabel -X ($InfoDialog.Width / 2 - $String.Width - 100) -Y 10 -Width 200 -Height 15 -Font $VCPatchFont -Text ($ScriptName + " " + $Version + " (" + $VersionDate + ")") -AddTo $InfoDialog
 
     # Create Text Box
-    $global:InfoTextBox = CreateTextBox -X 40 -Y 50 -Width ($InfoDialog.Width - 100) -Height ($CloseButton.Top - 110) -ReadOnly -Multiline -AddTo $InfoDialog
+    $global:InfoTextBox = CreateTextBox -X 40 -Y 50 -Width ($InfoDialog.Width - 100) -Height ($CloseButton.Top - 120) -ReadOnly -Multiline -AddTo $InfoDialog
 
     # Documentation
-    $Documentation1Label  = CreateLabel -X 40                         -Y ($InfoTextBox.Bottom + 10)        -Width 150 -Height 15 -Font $VCPatchFont -Text ("--- Documentation Source ---")                                -AddTo $InfoDialog
-    $Documentation2Label  = CreateLabel -X 40                         -Y ($Documentation1Label.Bottom + 2) -Width 70  -Height 15 -Font $VCPatchFont -Text ("GitHub")                                                      -AddTo $InfoDialog
-    $Documentation3Label  = CreateLabel -X $Documentation2Label.Right -Y ($Documentation1Label.Bottom + 2) -Width 330 -Height 15 -Font $URLFont     -Text ("https://github.com/ShadowOne333/Zelda64-Redux-Documentation") -AddTo $InfoDialog
+    $SourcesLabel  = CreateLabel -X 40                  -Y ($InfoTextBox.Bottom + 10)        -Width 150 -Height 15 -Font $VCPatchFont -Text ("--- Sources ---")                                       -AddTo $InfoDialog
     
-    $Documentation3Label.add_Click({[system.Diagnostics.Process]::start("https://github.com/ShadowOne333/Zelda64-Redux-Documentation")})
-    $Documentation3Label.ForeColor = "Blue"
+    $Shadow1Label  = CreateLabel -X 40                  -Y ($SourcesLabel.Bottom + 2) -Width 150  -Height 15 -Font $VCPatchFont -Text ("ShadowOne333's GitHub")                                       -AddTo $InfoDialog
+    $Shadow2Label  = CreateLabel -X $Shadow1Label.Right -Y ($SourcesLabel.Bottom + 2) -Width 330  -Height 15 -Font $URLFont     -Text ("https://github.com/ShadowOne333/Zelda64-Redux-Documentation") -AddTo $InfoDialog
+    
+    $Skilar1Label  = CreateLabel -X 40                  -Y ($Shadow1Label.Bottom + 2) -Width 150  -Height 15 -Font $VCPatchFont -Text ("Skilarbabcock's YouTube")                                     -AddTo $InfoDialog
+    $Skilar2Label  = CreateLabel -X $Skilar1Label.Right -Y ($Shadow1Label.Bottom + 2) -Width 225  -Height 15 -Font $URLFont     -Text ("https://www.youtube.com/user/skilarbabcock")                  -AddTo $InfoDialog
+
+    $Shadow2Label.add_Click({[system.Diagnostics.Process]::start("https://github.com/ShadowOne333/Zelda64-Redux-Documentation")})
+    $Skilar2Label.add_Click({[system.Diagnostics.Process]::start("https://www.youtube.com/user/skilarbabcock")})
+    $Shadow2Label.ForeColor = $Skilar2Label.ForeColor = "Blue"
 
 }
 
