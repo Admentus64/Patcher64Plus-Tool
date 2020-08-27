@@ -71,7 +71,7 @@ function CreateReduxDialog([int]$Width, [int]$Height) {
 function CreateCreditsDialog() {
     
     # Create Dialog
-    $global:CreditsDialog = CreateDialog -Width 600 -Height 550 -Icon $Files.icon.credits
+    $global:CreditsDialog = CreateDialog -Width 650 -Height 550 -Icon $Files.icon.credits
     $CloseButton = CreateButton -X ($CreditsDialog.Width / 2 - 40) -Y ($CreditsDialog.Height - 90) -Width 80 -Height 35 -Text "Close" -AddTo $CreditsDialog
     $CloseButton.Add_Click({ $CreditsDialog.Hide() })
 
