@@ -60,15 +60,6 @@ function GetSettings() {
     if ($Lines -notcontains "[Debug]") { Add-Content -Path $File -Value "[Debug]" | Out-Null }
     $global:Settings = Get-IniContent $File
 
-    if (!(IsSet -Elem $Settings.Debug.CreateBPS))          { $Settings.Debug.CreateBPS = $False }
-    if (!(IsSet -Elem $Settings.Debug.KeepDecompressed))   { $Settings.Debug.KeepDecompressed = $False }
-    if (!(IsSet -Elem $Settings.Debug.NoHeaderChange))     { $Settings.Debug.NoHeaderChange = $False }
-    if (!(IsSet -Elem $Settings.Debug.NoCRCChange))        { $Settings.Debug.NoCRCChange = $False }
-    if (!(IsSet -Elem $Settings.Debug.KeepLogo))           { $Settings.Debug.KeepLogo = $False }
-    if (!(IsSet -Elem $Settings.Debug.Console))            { $Settings.Debug.Console = $False }
-    if (!(IsSet -Elem $Settings.Debug.Stop))               { $Settings.Debug.Stop = $False }
-    if (!(IsSet -Elem $Settings.Debug.Rev0DungeonFiles))   { $Settings.Debug.Rev0DungeonFiles = $False }
-
 }
 
 

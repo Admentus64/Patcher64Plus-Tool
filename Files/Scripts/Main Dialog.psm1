@@ -22,10 +22,6 @@ function CreateMainDialog() {
     # Create a label to show current version.
     $VersionLabel = CreateLabel -X 15 -Y 10 -Width 120 -Height 30 -Text ("Version: " + $Version + "`n(" + $VersionDate + ")") -Font $VCPatchFont -AddTo $MainDialog
 
-    # Create a checkbox with label for 64-bit support
-    $64BitLabel = CreateLabel -X ($MainDialog.Right - 100) -Y ($MainDialog.Top + 15) -Width 40 -Height 30 -Text "64-Bit:" -Font $VCPatchFont -AddTo $MainDialog
-    $global:64BitCheckbox = CreateCheckBox -X ($64BitLabel.Right + 10) -Y ($64BitLabel.Top - 2) -Width 20 -Height 20 -Checked $True -Name "64Bit" -AddTo $MainDialog
-
 
 
     ############
@@ -108,7 +104,7 @@ function CreateMainDialog() {
     $InputBPSGroup.Add_DragDrop({ BPSPath_DragDrop })
     
     # Create a textbox to display the selected BPS.
-    $global:InputBPSTextBox = CreateTextBox -X 10 -Y 20 -Width 440 -Height 22 -Name "GameBPS" -Text "Select or drag and drop your BPS, IPS, Xdelta or VCDiff Patch File..." -ReadOnly $True -AddTo $InputBPSGroup
+    $global:InputBPSTextBox = CreateTextBox -X 10 -Y 20 -Width 440 -Height 22 -Name "GameBPS" -Text "Select or drag and drop your BPS, IPS, Xdelta, VCDiff or PPF Patch File..." -ReadOnly $True -AddTo $InputBPSGroup
     $InputBPSTextBox.AllowDrop = $True
     $InputBPSTextBox.Add_DragEnter({ $_.Effect = [Windows.Forms.DragDropEffects]::Copy })
     $InputBPSTextBox.Add_DragDrop({ BPSPath_DragDrop })
@@ -335,29 +331,21 @@ function CreateMainDialog() {
     ##############
 
     # Create a panel to contain everything for other.
-    $global:MiscPanel = CreatePanel -Width 625 -Height 75 -AddTo $MainDialog
+    $global:MiscPanel = CreatePanel -Width 590 -Height 75 -AddTo $MainDialog
 
     # Create a groupbox to show the misc buttons.
-    $global:MiscGroup = CreateGroupBox -Width 590 -Height $MiscPanel.Height -Text "Other Buttons" -AddTo $MiscPanel
-
-    # Create a button to show info about which GameID to use.
-    $InfoGameIDButton = CreateButton -X 15 -Y 25 -Width 100 -Height 35 -Text "GameID's and Hashsums" -ToolTip $ToolTip -Info "Open the list with official, used and recommend GameID and hashsum values to refer to" -AddTo $MiscGroup
-    $InfoGameIDButton.Add_Click({ $InfoGameIDDialog.ShowDialog() | Out-Null })
+    $global:MiscGroup = CreateGroupBox -Width ($MiscPanel.Width - 5) -Height $MiscPanel.Height -Text "Other Buttons" -AddTo $MiscPanel
 
     # Create a button to show information about the patches.
-    $global:InfoButton = CreateButton -X ($InfoGameIDButton.Right + 15) -Y $InfoGameIDButton.Top -Width 120 -Height 35 -AddTo $MiscGroup
-    $InfoButton.Add_Click({ $InfoDialog.ShowDialog() | Out-Null })
-
-    # Create a button to show credits about the patches.
-    $global:CreditsButton = CreateButton -X ($InfoButton.Right + 15) -Y $InfoGameIDButton.Top -Width 120 -Height 35 -ToolTip $ToolTip -Info ("Open the list with credits of all of patches involved and those who helped with the " + $ScriptName) -AddTo $MiscGroup
+    $CreditsButton = CreateButton -X 10 -Y 25 -Width 180 -Height 35 -Text "Info / Credits" -ToolTip $ToolTip -Info ("Open the list with credits and info of all of patches involved and those who helped with the " + $ScriptName) -AddTo $MiscGroup
     $CreditsButton.Add_Click({ $CreditsDialog.ShowDialog() | Out-Null })
 
-    # Create a button to reset the tool.
-    $ResetButton = CreateButton -X ($CreditsButton.Right + 15) -Y $InfoGameIDButton.Top -Width 80 -Height 35 -Text "Reset" -ToolTip $ToolTip -Info ("Resets all settings stored in the " + $ScriptName) -AddTo $MiscGroup
-    $ResetButton.Add_Click({ ResetTool })
+    # Create a button to show the global settings panel
+    $SettingsButton = CreateButton ($CreditsButton.Right + 10) -Y $CreditsButton.Top -Width $CreditsButton.Width -Height $CreditsButton.Height -Text "Settings" -ToolTip $ToolTip -Info "Open the global settings panel" -AddTo $MiscGroup
+    $SettingsButton.Add_Click({ $SettingsDialog.ShowDialog() | Out-Null })
 
     # Create a button to close the dialog.
-    $global:ExitButton = CreateButton -X ($ResetButton.Right + 15) -Y $InfoGameIDButton.Top -Width 80 -Height 35 -Text "Exit" -ToolTip $ToolTip -Info ("Save all settings and close the " + $ScriptName) -AddTo $MiscGroup
+    $global:ExitButton = CreateButton -X ($SettingsButton.Right + 10) -Y $CreditsButton.Top -Width $CreditsButton.Width -Height $CreditsButton.Height -Text "Exit" -ToolTip $ToolTip -Info ("Save all settings and close the " + $ScriptName) -AddTo $MiscGroup
     $ExitButton.Add_Click({ $MainDialog.Close() })
 
 
@@ -499,8 +487,8 @@ function CreateLanguagesContent() {
     }
 
     elseif ($GameType.mode -eq "Majora's Mask") {
-        $Languages.TextRestore            = CreateReduxCheckBox -Column 0 -Row 1 -AddTo $Languages.TextBox -Text "Restore Text"            -ToolTip $ToolTip -Info "Restores and fixes the following:`n- Restore the area titles cards for those that do not have any`n- Sound effects that do not play during dialogue`n- Grammar and typo fixes" -Name "TextRestore"
-        $Languages.CorrectCircusMask      = CreateReduxCheckBox -Column 1 -Row 1 -AddTo $Languages.TextBox -Text "Correct Circus Mask"     -ToolTip $ToolTip -Info "Change the Circus Leader's Mask to Troupe Leader's Mask and all references to it" -Name "CorrectCircusMask"
+        $Languages.TextRestore            = CreateReduxCheckBox -Column 0 -Row 1 -AddTo $Languages.TextBox -Text "Restore Text"          -ToolTip $ToolTip -Info "Restores and fixes the following:`n- Restore the area titles cards for those that do not have any`n- Sound effects that do not play during dialogue`n- Grammar and typo fixes" -Name "TextRestore"
+        $Languages.CorrectCircusMask      = CreateReduxCheckBox -Column 1 -Row 1 -AddTo $Languages.TextBox -Text "Correct Circus Mask"   -ToolTip $ToolTip -Info "Change the Circus Leader's Mask to Troupe Leader's Mask and all references to it" -Name "CorrectCircusMask"
         $Languages.TextRazorSword         = CreateReduxCheckBox -Column 2 -Row 1 -AddTo $Languages.TextBox -Text "Permanent Razor Sword" -ToolTip $ToolTip -Info "Refer the Razor Sword as no longer being breakable" -Name "TextRazorSword"
     }
 

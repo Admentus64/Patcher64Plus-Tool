@@ -158,7 +158,7 @@ function CreateComboBox([int]$X=0, [int]$Y=0, [int]$Width=0, [int]$Height=0, [St
 
 
 #==============================================================================================================================================================================================
-function CreateCheckBox([int]$X=0, [int]$Y=0, [String]$Name, [Boolean]$Checked=$False, [Boolean]$Disable=$False, [Boolean]$IsRadio=$False, [Object]$ToolTip, [String]$Info="", [Boolean]$IsGame=$False, [Object]$AddTo) {
+function CreateCheckBox([int]$X=0, [int]$Y=0, [String]$Name, [Boolean]$Checked=$False, [Boolean]$Disable=$False, [Boolean]$IsRadio=$False, [Object]$ToolTip, [String]$Info="", [Boolean]$IsGame=$False, [Boolean]$IsDebug=$False, [Object]$AddTo) {
     
     if ($IsRadio)             { $Checkbox = CreateForm -X $X -Y $Y -Width 20 -Height 20 -Name $Name -Object (New-Object System.Windows.Forms.RadioButton) -AddTo $AddTo }
     else                      { $Checkbox = CreateForm -X $X -Y $Y -Width 20 -Height 20 -Name $Name -Object (New-Object System.Windows.Forms.CheckBox) -AddTo $AddTo }
@@ -171,6 +171,12 @@ function CreateCheckBox([int]$X=0, [int]$Y=0, [String]$Name, [Boolean]$Checked=$
             else                                                   { $Checkbox.Checked = $Settings[$GameType.mode][$Checkbox.Name] = $Checked }
             if ($IsRadio)                                          { $Checkbox.Add_CheckedChanged({ $Settings[$GameType.mode][$this.Name] = $this.Checked }) }
             else                                                   { $Checkbox.Add_CheckStateChanged({ $Settings[$GameType.mode][$this.Name] = $this.Checked }) }
+        }
+        elseif ($IsDebug) {
+            if (IsSet $Settings["Debug"][$Checkbox.Name])          { $Checkbox.Checked = $Settings["Debug"][$Checkbox.Name] -eq "True" }
+            else                                                   { $Checkbox.Checked = $Settings["Debug"][$Checkbox.Name] = $Checked }
+            if ($IsRadio)                                          { $Checkbox.Add_CheckedChanged({ $Settings["Debug"][$this.Name] = $this.Checked }) }
+            else                                                   { $Checkbox.Add_CheckStateChanged({ $Settings["Debug"][$this.Name] = $this.Checked }) }
         }
         else {
             if (IsSet $Settings["Core"][$Checkbox.Name])           { $Checkbox.Checked = $Settings["Core"][$Checkbox.Name] -eq "True" }

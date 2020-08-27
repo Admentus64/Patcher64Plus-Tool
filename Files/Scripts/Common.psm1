@@ -173,13 +173,10 @@ function ChangeGameMode() {
     if (Test-Path -LiteralPath $GameFiles.credits -PathType Leaf)    { AddTextFileToTextbox -TextBox $CreditsTextBox -File $GameFiles.credits -Add -PreSpace 2 }
 
     # Icon
-    if (Test-Path -LiteralPath $GameFiles.icon -PathType Leaf)       { $InfoDialog.Icon = $LanguagesDialog.Icon = $GameFiles.icon }
-    else                                                             { $InfoDialog.Icon = $LanguagesDialog.Icon = $null }
+    if (Test-Path -LiteralPath $GameFiles.icon -PathType Leaf)       { $LanguagesDialog.Icon = $GameFiles.icon }
+    else                                                             { $LanguagesDialog.Icon = $null }
 
-    $global:ToolTip.SetToolTip($InfoButton, "Open the list with information about the " + $GameType.mode + " patching mode")
-    $InfoButton.Text = "Info`n" + $GameType.mode
-    $CreditsButton.Text = "Credits`n" + $GameType.mode
-
+    $CreditsGameLabel.Text = "Current Game: " + $GameType.mode
     $PatchPanel.Visible = $GameType.patches
 
     if ($GameType.mode -eq "Ocarina of Time") {
@@ -462,7 +459,7 @@ function GetFilePaths() {
         if (Test-Path -LiteralPath $Settings["Core"][$InputBPSTextBox.Name] -PathType Leaf) {	
             BPSPath_Finish $InputBPSTextBox -VarName $InputBPSTextBox.Name -BPSPath $Settings["Core"][$InputBPSTextBox.Name]
         }
-        else { $InputBPSTextBox.Text = "Select or drag and drop your BPS, IPS, Xdelta or VCDiff Patch File..." }
+        else { $InputBPSTextBox.Text = "Select or drag and drop your BPS, IPS, Xdelta, VCDiff or PPF Patch File..." }
     }
 
 }
@@ -588,6 +585,52 @@ function CreateSubPath([String]$Path) { if (!(Test-Path -LiteralPath $Path -Path
 
 
 #==============================================================================================================================================================================================
+function ShowPowerShellConsole([bool]$ShowConsole) {
+    
+    # Sshows or hide the console window
+    switch ($ShowConsole) {
+        $True   { [Console.Window]::ShowWindow([Console.Window]::GetConsoleWindow(), 5) | Out-Null }
+        $False  { [Console.Window]::ShowWindow([Console.Window]::GetConsoleWindow(), 0) | Out-Null }
+    }
+
+}
+
+
+
+#==================================================================================================================================================================================================================================================================
+function TogglePowerShellOpenWithClicks([Boolean]$Enable) {
+    
+    # Create a temporary folder to create the registry entry and and set the path to it
+    RemovePath -LiteralPath $Paths.Registry
+    CreatePath -LiteralPath $Paths.Registry
+    $RegFile = $Paths.Registry + "\Double Click.reg"
+
+    # Create the registry file.
+    Add-Content -LiteralPath $RegFile -Value 'Windows Registry Editor Version 5.00'
+    Add-Content -LiteralPath $RegFile -Value ''
+    Add-Content -LiteralPath $RegFile -Value '[HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Microsoft.PowerShellScript.1\Shell]'
+
+    # Get the current state of the value in the registry.
+    $PS_DC_State = (Get-ItemProperty -LiteralPath "HKLM:\Software\Classes\Microsoft.PowerShellScript.1\Shell").'(default)'
+
+    # Check the current state and add the value to the registry
+    switch ($PS_DC_State) {
+        # A "0" means that a script won't automatically launch with PowerShell so change it to "Open"
+        '0'     { Add-Content -LiteralPath $RegFile -Value '@="Open"' }
+        default { Add-Content -LiteralPath $RegFile -Value '@="0"' }
+    }
+
+    #if (!$Enable) { Add-Content -LiteralPath $RegFile -Value '@="Open"' }
+    #else          { Add-Content -LiteralPath $RegFile -Value '@="0"' }
+
+    # Execute the registry file.
+    & regedit /s $RegFile
+
+}
+
+
+
+#==============================================================================================================================================================================================
 
 Export-ModuleMember -Function SetWiiVCMode
 Export-ModuleMember -Function CreateToolTip
@@ -620,3 +663,6 @@ Export-ModuleMember -Function CreatePath
 Export-ModuleMember -Function TestPath
 Export-ModuleMember -Function RemoveFile
 Export-ModuleMember -Function CreateSubPath
+
+Export-ModuleMember -Function ShowPowerShellConsole
+Export-ModuleMember -Function TogglePowerShellOpenWithClicks

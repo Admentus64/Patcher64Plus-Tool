@@ -108,7 +108,7 @@ function SetFileParameters() {
 
     # Store ICO files
     $Files.icon.main                        = $Paths.Main + "\Main.ico"
-    $Files.icon.gameID                      = $Paths.Main + "\GameID.ico"
+    $Files.icon.settings                    = $Paths.Main + "\Settings.ico"
     $Files.icon.credits                     = $Paths.Main + "\Credits.ico"
 
 

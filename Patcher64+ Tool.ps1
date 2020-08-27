@@ -15,8 +15,8 @@ Add-Type -AssemblyName 'System.Drawing'
 # Setup global variables
 
 $global:ScriptName = "Patcher64+ Tool"
-$global:VersionDate = "26-08-2020"
-$global:Version     = "v7.3.4"
+$global:VersionDate = "27-08-2020"
+$global:Version     = "v7.4.0"
 
 $global:GameType = $global:GamePatch = $global:CheckHashSum = ""
 $global:GameFiles = $global:Settings = @{}
@@ -48,6 +48,7 @@ else {
 
 # Set all other paths
 $Paths.Master          = $Paths.Base + "\Files"
+$Paths.Registry        = $Paths.Master + "\Registry"
 $Paths.WiiVC           = $Paths.Master + "\Wii VC"
 $Paths.Games           = $Paths.Master + "\Games"
 $Paths.Main            = $Paths.Master + "\Main"
@@ -95,18 +96,6 @@ Add-Type -Namespace Console -Name Window -MemberDefinition $HidePSConsole
 
 
 
-#==============================================================================================================================================================================================
-# Function that shows or hides the console window.
-function ShowPowerShellConsole([bool]$ShowConsole) {
-
-    switch ($ShowConsole) {
-        $True   { [Console.Window]::ShowWindow([Console.Window]::GetConsoleWindow(), 5) | Out-Null }
-        $False  { [Console.Window]::ShowWindow([Console.Window]::GetConsoleWindow(), 0) | Out-Null }
-    }
-
-}
-
-
 
 <#
 #==============================================================================================================================================================================================
@@ -149,9 +138,8 @@ SetFileParameters
 # Create the dialogs to show to the user.
 CreateMainDialog
 CreateLanguagesDialog
-CreateInfoGameIDDialog
-CreateInfoDialog
 CreateCreditsDialog
+CreateSettingsDialog
 
 # Set default game mode.
 GetFilePaths
@@ -171,4 +159,5 @@ $MainDialog.ShowDialog() | Out-Null
 
 # Exit
 Out-IniFile -FilePath $Files.settings -InputObject $Settings | Out-Null
+RemovePath -LiteralPath $Paths.Registry
 Exit
