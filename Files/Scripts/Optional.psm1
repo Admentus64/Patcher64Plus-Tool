@@ -1512,10 +1512,10 @@ function ToggleWalletCapacityOptions() {
 #==============================================================================================================================================================================================
 function SetButtonColors([String]$A, [String]$B, [String]$C, [String]$Start) {
 
-    $Settings[$GameType.mode][$Options.SetAButtonColor.Tag] = $A;     $Options.SetAButtonColor.Color = "#" + $A
-    $Settings[$GameType.mode][$Options.SetBButtonColor.Tag] = $B;     $Options.SetBButtonColor.Color = "#" + $B
-    $Settings[$GameType.mode][$Options.SetCButtonColor.Tag] = $C;     $Options.SetCButtonColor.Color = "#" + $C
-    $Settings[$GameType.mode][$Options.SetSButtonColor.Tag] = $Start; $Options.SetSButtonColor.Color = "#" + $Start
+    $Settings[$GameType.mode][$Redux.SetAButtonColor.Tag] = $A;     $Redux.SetAButtonColor.Color = "#" + $A
+    $Settings[$GameType.mode][$Redux.SetBButtonColor.Tag] = $B;     $Redux.SetBButtonColor.Color = "#" + $B
+    $Settings[$GameType.mode][$Redux.SetCButtonColor.Tag] = $C;     $Redux.SetCButtonColor.Color = "#" + $C
+    $Settings[$GameType.mode][$Redux.SetSButtonColor.Tag] = $Start; $Redux.SetSButtonColor.Color = "#" + $Start
 
 }
 
