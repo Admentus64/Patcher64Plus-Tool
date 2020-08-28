@@ -21,7 +21,8 @@
 - Correct Rupee Colors:		GhostlyDark
 - Restore Cow Nose Ring:		ShadowOne333
 - Restore Fire Temple:		ShadowOne333
-- Restore Gerudo Textures:		GhostlyDark & ShadowOne333
+- Censor Blood			ShadowOne333
+- Censor Gerudo Textures:		GhostlyDark & ShadowOne333
 - Set Capacity:			GhostlyDark
 - Pause Screen Delay Fix		zel
 - Show File Select Icons:		ShadowOne333
