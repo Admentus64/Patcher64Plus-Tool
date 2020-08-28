@@ -84,46 +84,31 @@ function CreateCreditsDialog() {
     # Create Switch subpanel buttons
     $CreditsButton = CreateButton 40 -Y 80 -Width 80 -Height 20 -Text "Credits" -ToolTip $ToolTip -Info "Check the credits for this game" -AddTo $CreditsDialog
     $CreditsButton.Add_Click({
+        $InfoTextBox.Visible = $GameIDTextBox.Visible = $CreditsMiscPanel.Visible = $CreditsChecksumPanel.Visible = $False
         $CreditsTextBox.Show()
-        $InfoTextBox.Hide()
-        $GameIDTextBox.Hide()
-        $CreditsMiscPanel.Hide()
-        $CreditsChecksumPanel.Hide()
     })
     
     $InfoButton = CreateButton ($CreditsButton.Right + 10) -Y $CreditsButton.Top -Width $CreditsButton.Width -Height $CreditsButton.Height -Text "Info" -ToolTip $ToolTip -Info "Check the info for this game" -AddTo $CreditsDialog
     $InfoButton.Add_Click({
-        $CreditsTextBox.Hide()
+        $CreditsTextBox.Visible = $GameIDTextBox.Visible = $CreditsMiscPanel.Visible = $CreditsChecksumPanel.Visible = $False
         $InfoTextBox.Show()
-        $GameIDTextBox.Hide()
-        $CreditsMiscPanel.Hide()
-        $CreditsChecksumPanel.Hide()
     })
 
     $GameIDButton = CreateButton ($InfoButton.Right + 10) -Y $CreditsButton.Top -Width $CreditsButton.Width -Height $CreditsButton.Height -Text "GameID's" -ToolTip $ToolTip -Info "Open the list with official and patched GameID's" -AddTo $CreditsDialog
     $GameIDButton.Add_Click({
-        $CreditsTextBox.Hide()
-        $InfoTextBox.Hide()
+        $CreditsTextBox.Visible = $InfoTextBox.Visible = $CreditsMiscPanel.Visible = $CreditsChecksumPanel.Visible = $False
         $GameIDTextBox.Show()
-        $CreditsMiscPanel.Hide()
-        $CreditsChecksumPanel.Hide()
     })
 
     $MiscButton = CreateButton ($GameIDButton.Right + 10) -Y $CreditsButton.Top -Width $CreditsButton.Width -Height $CreditsButton.Height -Text "Misc" -ToolTip $ToolTip -Info "General credits and info in general" -AddTo $CreditsDialog
     $MiscButton.Add_Click({
-        $CreditsTextBox.Hide()
-        $InfoTextBox.Hide()
-        $GameIDTextBox.Hide()
+        $CreditsTextBox.Visible = $InfoTextBox.Visible = $GameIDTextBox.Visible = $CreditsChecksumPanel.Visible = $False
         $CreditsMiscPanel.Show()
-        $CreditsChecksumPanel.Hide()
     })
 
     $ChecksumButton = CreateButton ($MiscButton.Right + 10) -Y $CreditsButton.Top -Width $CreditsButton.Width -Height $CreditsButton.Height -Text "Checksum" -ToolTip $ToolTip -Info "General credits and info in general" -AddTo $CreditsDialog
     $ChecksumButton.Add_Click({
-        $CreditsTextBox.Hide()
-        $InfoTextBox.Hide()
-        $GameIDTextBox.Hide()
-        $CreditsMiscPanel.Hide()
+        $CreditsTextBox.Visible = $InfoTextBox.Visible = $GameIDTextBox.Visible = $CreditsMiscPanel.Visible = $False
         $CreditsChecksumPanel.Show()
     })
 

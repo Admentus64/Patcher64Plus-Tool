@@ -13,29 +13,28 @@ function PatchByteOptionsOoT() {
             if (IsText -Elem $Options.Damage -Text "2x Damage" -Enabled)       { ChangeBytes -Offset "AE8096" -Values @("80", "40") }
             elseif (IsText -Elem $Options.Damage -Text "4x Damage" -Enabled)   { ChangeBytes -Offset "AE8096" -Values @("80", "80") }
             elseif (IsText -Elem $Options.Damage -Text "8x Damage" -Enabled)   { ChangeBytes -Offset "AE8096" -Values @("80", "C0") }
-        ChangeBytes -Offset "AE8099" -Values @("00", "00", "00")
+            ChangeBytes -Offset "AE8099" -Values @("00", "00", "00")
         }
         elseif (IsText -Elem $Options.Recovery -Text "1/2x Recovery" -Enabled) {               
             if (IsText -Elem $Options.Damage -Text "1x Damage" -Enabled)       { ChangeBytes -Offset "AE8096" -Values @("80", "40") }
             elseif (IsText -Elem $Options.Damage -Text "2x Damage" -Enabled)   { ChangeBytes -Offset "AE8096" -Values @("80", "80") }
             elseif (IsText -Elem $Options.Damage -Text "4x Damage" -Enabled)   { ChangeBytes -Offset "AE8096" -Values @("80", "C0") }
             elseif (IsText -Elem $Options.Damage -Text "8x Damage" -Enabled)   { ChangeBytes -Offset "AE8096" -Values @("81", "00") }
-        ChangeBytes -Offset "AE8099" -Values @("10", "80", "43")
+            ChangeBytes -Offset "AE8099" -Values @("10", "80", "43")
         }
         elseif (IsText -Elem $Options.Recovery -Text "1/2x Recovery" -Enabled) {                
             if (IsText -Elem $Options.Damage -Text "1x Damage" -Enabled)       { ChangeBytes -Offset "AE8096" -Values @("80", "80") }
             elseif (IsText -Elem $Options.Damage -Text "2x Damage" -Enabled)   { ChangeBytes -Offset "AE8096" -Values @("80", "C0") }
             elseif (IsText -Elem $Options.Damage -Text "4x Damage" -Enabled)   { ChangeBytes -Offset "AE8096" -Values @("81", "00") }
             elseif (IsText -Elem $Options.Damage -Text "8x Damage" -Enabled)   { ChangeBytes -Offset "AE8096" -Values @("81", "40") }
-        ChangeBytes -Offset "AE8099" -Values @("10", "80", "83")
-
+            ChangeBytes -Offset "AE8099" -Values @("10", "80", "83")
         }
         elseif (IsText -Elem $Options.Recovery -Text "1/2x Recovery" -Enabled) {                
             if (IsText -Elem $Options.Damage -Text "1x Damage" -Enabled)       { ChangeBytes -Offset "AE8096" -Values @("81", "40") }
             elseif (IsText -Elem $Options.Damage -Text "2x Damage" -Enabled)   { ChangeBytes -Offset "AE8096" -Values @("81", "80") }
             elseif (IsText -Elem $Options.Damage -Text "4x Damage" -Enabled)   { ChangeBytes -Offset "AE8096" -Values @("81", "C0") }
             elseif (IsText -Elem $Options.Damage -Text "8x Damage" -Enabled)   { ChangeBytes -Offset "AE8096" -Values @("82", "00") }
-        ChangeBytes -Offset "AE8099" -Values @("10", "81", "43")
+            ChangeBytes -Offset "AE8099" -Values @("10", "81", "43")
         }
     }
 
@@ -280,6 +279,11 @@ function PatchByteOptionsOoT() {
         PatchBytes  -Offset "B89AD0" -Patch "Fire Temple Theme\12AudioSeqPointers.bin"
         PatchBytes  -Offset "B8A1C0" -Patch "Fire Temple Theme\12AudioTablePointers.bin"
         ExportAndPatch -Path "Fire Temple Theme\12FireTemple"  -Offset "D390" -Length "4CCBB0"
+    }
+
+    if (IsChecked -Elem $Options.CensorBlood -Enabled) {
+        ChangeBytes -Offset "D8D590 " -Values @("00", "78", "00", "FF", "00", "78", "00", "FF")
+        ChangeBytes -Offset "E8C424 " -Values @("00", "78", "00", "FF", "00", "78", "00", "FF")
     }
 
     if (IsChecked -Elem $Options.RestoreCowNoseRing -Enabled) { ChangeBytes -Offset "EF3E68" -Values @("00", "00") }
@@ -590,28 +594,28 @@ function PatchByteOptionsMM() {
             if (IsText -Elem $Options.Damage -Text "2x Damage" -Enabled)       { ChangeBytes -Offset "BABEA2" -Values @("28", "40") }
             elseif (IsText -Elem $Options.Damage -Text "4x Damage" -Enabled)   { ChangeBytes -Offset "BABEA2" -Values @("28", "80") }
             elseif (IsText -Elem $Options.Damage -Text "8x Damage" -Enabled)   { ChangeBytes -Offset "BABEA2" -Values @("28", "C0") }
-        ChangeBytes -Elem -File $Files.decompressedROM -Offset "BABEA5" -Values @("00", "00", "00")
+            ChangeBytes -Offset "BABEA5" -Values @("00", "00", "00")
         }
         elseif (IsText -Elem $Options.Recovery -Text "1/2x Recovery" -Enabled) {
             if (IsText -Elem $Options.Damage -Text "1x Damage" -Enabled)       { ChangeBytes -Offset "BABEA2" -Values @("28", "40") }
             elseif (IsText -Elem $Options.Damage -Text "2x Damage" -Enabled)   { ChangeBytes -Offset "BABEA2" -Values @("28", "80") }
             elseif (IsText -Elem $Options.Damage -Text "4x Damage" -Enabled)   { ChangeBytes -Offset "BABEA2" -Values @("28", "C0") }
             elseif (IsText -Elem $Options.Damage -Text "8x Damage" -Enabled)   { ChangeBytes -Offset "BABEA2" -Values @("29", "00") }
-        ChangeBytes -Offset "BABEA5" -Values @("05", "28", "43")
+            ChangeBytes -Offset "BABEA5" -Values @("05", "28", "43")
         }
         elseif (IsText -Elem $Options.Recovery -Text "1/4x Recovery" -Enabled) {
             if (IsText -Elem $Options.Damage -Text "1x Damage" -Enabled)       { ChangeBytes -Offset "BABEA2" -Values @("28", "80") }
             elseif (IsText -Elem $Options.Damage -Text "2x Damage" -Enabled)   { ChangeBytes -Offset "BABEA2" -Values @("28", "C0") }
             elseif (IsText -Elem $Options.Damage -Text "4x Damage" -Enabled)   { ChangeBytes -Offset "BABEA2" -Values @("29", "00") }
             elseif (IsText -Elem $Options.Damage -Text "8x Damage" -Enabled)   { ChangeBytes -Offset "BABEA2" -Values @("29", "40") }
-        ChangeBytes -Offset "BABEA5" -Values @("05", "28", "83")
+            ChangeBytes -Offset "BABEA5" -Values @("05", "28", "83")
         }
         elseif (IsText -Elem $Options.Recovery -Text "0x Recovery" -Enabled) {
             if (IsText -Elem $Options.Damage -Text "1x Damage" -Enabled)       { ChangeBytes -Offset "BABEA2" -Values @("29", "40") }
             elseif (IsText -Elem $Options.Damage -Text "2x Damage" -Enabled)   { ChangeBytes -Offset "BABEA2" -Values @("29", "80") }
             elseif (IsText -Elem $Options.Damage -Text "4x Damage" -Enabled)   { ChangeBytes -Offset "BABEA2" -Values @("29", "C0") }
             elseif (IsText -Elem $Options.Damage -Text "8x Damage" -Enabled)   { ChangeBytes -Offset "BABEA2" -Values @("2A", "00") }
-        ChangeBytes -Offset "BABEA5" -Values @("05", "29", "43")
+            ChangeBytes -Offset "BABEA5" -Values @("05", "29", "43")
         }
     }
 
@@ -1002,7 +1006,8 @@ function CreateOoTOptionsContent() {
     $Options.CorrectRupeeColors        = CreateReduxCheckBox -Column 0 -Row 1 -AddTo $RestoreBox -Text "Correct Rupee Colors"   -ToolTip $ToolTip -Info "Corrects the colors for the Purple (50) and Golden (200) Rupees" -Name "CorrectRupeeColors"
     $Options.RestoreCowNoseRing        = CreateReduxCheckBox -Column 1 -Row 1 -AddTo $RestoreBox -Text "Restore Cow Nose Ring"  -ToolTip $ToolTip -Info "Restore the rings in the noses for Cows as seen in the Japanese release" -Name "RestoreCowNoseRing"
     $Options.RestoreFireTemple         = CreateReduxCheckBox -Column 2 -Row 1 -AddTo $RestoreBox -Text "Restore Fire Temple"    -ToolTip $ToolTip -Info "Restore the censored Fire Temple theme used since the Rev 2 ROM" -Name "RestoreFireTemple"
-    $Options.CensorGerudoTextures      = CreateReduxCheckBox -Column 3 -Row 1 -AddTo $RestoreBox -Text "Censor Gerudo Textures" -ToolTip $ToolTip -Info "Restore the censored Gerudo symbol textures used in the GameCube / Virtual Console releases`n- Disable the option to uncensor the Gerudo Texture used in the Master Quest dungeons" -Name "CensorGerudoTextures"
+    $Options.CensorBlood               = CreateReduxCheckBox -Column 3 -Row 1 -AddTo $RestoreBox -Text "Censor Blood"           -ToolTip $ToolTip -Info "Restore the censored green blood for Ganondorf and Ganon used since the Rev 2 ROM" -Name "CensorBlood"
+    $Options.CensorGerudoTextures      = CreateReduxCheckBox -Column 4 -Row 1 -AddTo $RestoreBox -Text "Censor Gerudo Textures" -ToolTip $ToolTip -Info "Restore the censored Gerudo symbol textures used in the GameCube / Virtual Console releases`n- Disable the option to uncensor the Gerudo Texture used in the Master Quest dungeons" -Name "CensorGerudoTextures"
     
 
 
