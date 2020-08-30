@@ -11,7 +11,7 @@
 - MM Young Link Model:		The3Dude
 - MM Adult Link Model:		Skilarbabcock (www.youtube.com/user/skilarbabcock)
 - Hatsune Miku Link Models:		JanexLane
-- MM Link Voice:			Korey Cryderman
+- MM Link Voice:			Korey Cryderman & GhostlyDark
 - Feminine Link Voice:		theluigidude2007
 - MM HUD Textures:		GhostlyDark
 - MM Button Positions:		GhostlyDark

@@ -30,7 +30,7 @@
 - MM Young Link Model:			The3Dude
 - MM Adult Link Model:			Skilarbabcock (www.youtube.com/user/skilarbabcock)
 - Hatsune Miku Link Models:		JanexLane
-- MM Link Voice:			Korey Cryderman
+- MM Link Voice:			Korey Cryderman & GhostlyDark
 - Feminine Link Voice:			theluigidude2007
 - MM HUD Textures:			GhostlyDark
 - MM Button Positions:			GhostlyDark
@@ -40,6 +40,7 @@
 - Correct Rupee Colors:			GhostlyDark
 - Restore Cow Nose Ring:		ShadowOne333
 - Restore Fire Temple:			ShadowOne333
+- Censor Blood				ShadowOne333
 - Restore Gerudo Textures:		GhostlyDark & ShadowOne333
 - Set Capacity:				GhostlyDark
 - Pause Screen Delay Fix		zel
@@ -221,6 +222,9 @@ Special Thanks:				Nokaubure, z64me, Ultra553, OoT Decomp
 - VictorHale
 - Ideka
 - Saneki
+
+--- Master Quest ---
+- DeathBasket
 
 --- Randomizer ---
 - ZoeyZolotova

@@ -39,6 +39,9 @@
 - Ideka
 - Saneki
 
+--- Master Quest ---
+- DeathBasket
+
 --- Randomizer ---
 - ZoeyZolotova
 - Saneki
