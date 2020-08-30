@@ -20,8 +20,7 @@
 --- REDUX ---
 - Hacking:				Maroc
 - Editing / Revision:			ShadowOne333, MattKimura
-- Original Hacking:			Roman971, TestRunnerSRL, AmazingAmpharos, fig02, krimtonz,
-					rlbond86, KevinPal, junglechief87
+- Original Hacking:			Roman971, TestRunnerSRL, AmazingAmpharos, fig02, krimtonz, rlbond86, KevinPal, junglechief87
 
 --- Additional Options ---
 - Master Quest:				ShadowOne333
