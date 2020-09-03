@@ -65,6 +65,7 @@ The following patches are included:
 - The Legend of Zelda: Nimpize Adventure (OoT)
 - Ocarina of Time Puzzling (OoT)
 - Majora's Mask: Masked Quest (MM)
+- Majora's Mask: Master Quest (MM)
 - SM64: Single-Screen / SM64: Split-Screen Multiplayer (SM64)
 - SM64: Star Road / SM64: Star Road Single-Screen Multiplayer (SM64)
 - SM64: Last Impact (SM64)
