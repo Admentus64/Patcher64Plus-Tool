@@ -26,7 +26,7 @@ function CreateToolTip() {
     $ToolTip.AutoPopDelay = 32767
     $ToolTip.InitialDelay = 500
     $ToolTip.ReshowDelay = 0
-    $ToolTip.ShowAlways = $true
+    $ToolTip.ShowAlways = $True
     return $ToolTip
 
 }
@@ -75,7 +75,6 @@ function ChangePatchPanel() {
             $Items += $i.title
             if (!(IsSet -Elem $FirstItem)) { $FirstItem = $i }
         }
-        $global:ToolTip.SetToolTip($PatchButton, ([String]::Format($FirstItem.tooltip, [Environment]::NewLine)))
     }
 
     $PatchComboBox.Items.AddRange($Items)
@@ -91,7 +90,7 @@ function ChangePatchPanel() {
         catch { $PatchComboBox.SelectedIndex = 0 }
     }
 
-    if ($GameType.options)  { $global:ToolTip.SetToolTip($PatchOptionsButton, "Toggle options for the " + $GameType.mode +  " REDUX romhack") }
+    #if ($GameType.options)  { $global:ToolTip.SetToolTip($PatchOptionsButton, "Toggle options for the " + $GameType.mode +  " REDUX romhack") }
 
 }
 

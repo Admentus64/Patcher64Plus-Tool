@@ -7,7 +7,7 @@
 --- Additional Options ---
 - Master Quest:			ShadowOne333
 - Force Hires Link Model:		GhostlyDark
-- 16:9 Backgrounds & Textures:	GhostlyDark & ShadowOne333
+- 16:9 Backgrounds & Textures:	GhostlyDark, ShadowOne333 & CYB3RTR0N
 - MM Young Link Model:		The3Dude
 - MM Adult Link Model:		Skilarbabcock (www.youtube.com/user/skilarbabcock)
 - Hatsune Miku Link Models:		JanexLane

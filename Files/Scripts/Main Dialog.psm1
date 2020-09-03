@@ -185,10 +185,10 @@ function CreateMainDialog() {
     })
 
     # Create a label to show Custom GameID description
-    $CustomHeaderLabel = CreateLabel -X 510 -Y 22 -Width 50 -Height 15 -Text "Enable:" -AddTo $CustomGameIDGroup
+    $CustomHeaderLabel = CreateLabel -X 510 -Y 22 -Width 50 -Height 15 -Text "Enable:" -ToolTip $Tooltip -Info "Enable in order to change the Game ID and title of the ROM or WAD file" -AddTo $CustomGameIDGroup
 
     # Create a checkbox to allow Custom Channel Title & GameID.
-    $global:CustomHeaderCheckbox = CreateCheckBox -X 560 -Y 20 -Width 20 -Height 20 -Name "CustomHeader" -AddTo $CustomGameIDGroup
+    $global:CustomHeaderCheckbox = CreateCheckBox -X 560 -Y 20 -Width 20 -Height 20 -Name "CustomHeader" -ToolTip $Tooltip -Info "Enable in order to change the Game ID and title of the ROM or WAD file" -AddTo $CustomGameIDGroup
 
 
 
@@ -214,6 +214,7 @@ function CreateMainDialog() {
             if ($Item.title -eq $PatchComboBox.Text) {
                 if ( ($IsWiiVC -and $Item.console -eq "Wii VC") -or (!$IsWiiVC -and $Item.console -eq "N64") -or ($Item.console -eq "All") ) {
                     $global:GamePatch = $Item
+                    $ToolTip.SetToolTip($PatchButton, ([String]::Format($Item.tooltip, [Environment]::NewLine)))
                 }
             }
         }
@@ -225,17 +226,17 @@ function CreateMainDialog() {
     } )
 
     # Create a checkbox to enable Redux and Options support.
-    $global:PatchReduxLabel = CreateLabel -X ($PatchButton.Right + 10) -Y ($PatchComboBox.Top + 5) -Width 85 -Height 15 -Text "Enable Redux:" -ToolTip $ToolTip -Info "Enable the Redux patch" -AddTo $PatchGroup
+    $global:PatchReduxLabel = CreateLabel -X ($PatchButton.Right + 10) -Y ($PatchComboBox.Top + 5) -Width 85 -Height 15 -Text "Enable Redux:" -ToolTip $ToolTip -Info "Enable the Redux patch which improves game mechanics`nIncludes among other changes the inclusion of the D-Pad for dedicated item buttons" -AddTo $PatchGroup
     $global:PatchReduxCheckbox = CreateCheckBox -X $PatchReduxLabel.Right -Y ($PatchReduxLabel.Top - 2) -Width 20 -Height 20 -ToolTip $ToolTip -Info "Enable the Redux patch which improves game mechanics`nIncludes among other changes the inclusion of the D-Pad for dedicated item buttons" -Name "Redux" -AddTo $PatchGroup
     $PatchReduxCheckbox.Add_CheckStateChanged({
         $PatchReduxButton.Enabled = $this.Checked
     })
 
-    $global:PatchOptionsLabel = CreateLabel -X ($PatchButton.Right + 10) -Y ($PatchReduxLabel.Bottom + 15) -Width 85 -Height 15 -Text "Enable Options:" -ToolTip $ToolTip -Info "Enable options" -AddTo $PatchGroup
-    $global:PatchOptionsCheckbox = CreateCheckBox -X $PatchOptionsLabel.Right -Y ($PatchOptionsLabel.Top - 2) -Width 20 -Height 20 -ToolTip $ToolTip -Info "Enable options" -Name "Options" -AddTo $PatchGroup
+    $global:PatchOptionsLabel = CreateLabel -X ($PatchButton.Right + 10) -Y ($PatchReduxLabel.Bottom + 15) -Width 85 -Height 15 -Text "Enable Options:" -ToolTip $ToolTip -Info "Enable options in order to apply a customizable set of features and changes" -AddTo $PatchGroup
+    $global:PatchOptionsCheckbox = CreateCheckBox -X $PatchOptionsLabel.Right -Y ($PatchOptionsLabel.Top - 2) -Width 20 -Height 20 -ToolTip $ToolTip -Info "Enable options in order to apply a customizable set of features and changes" -Name "Options" -AddTo $PatchGroup
     $PatchOptionsCheckbox.Add_CheckStateChanged({
         $PatchOptionsButton.Enabled = $this.Checked
-        $Languages.TextBox.Enabled = $Languages.TextBox.Visible = $this.Checked -and $Languages[0].Checked
+        $Languages.TextBox.Enabled = $this.Checked -and $Languages[0].Checked
     })
 
     $global:PatchReduxButton = CreateButton -X ($PatchReduxCheckbox.Right + 5) -Y 20 -Width 70 -Height 25 -Text "Redux" -ToolTip $ToolTip -Info 'Open the "Redux" panel to change the settings for the Redux patch' -AddTo $PatchGroup
@@ -428,10 +429,9 @@ function DisablePatches() {
     $PatchOptionsButton.Enabled = $GamePatch.options -and $PatchOptionsCheckbox.Checked
     
     $PatchLanguagesButton.Enabled = $PatchLanguagesButton.Visible = (IsSet -Elem $GamePatch.languages)
-    $Languages.TextBox.Enabled = $Languages.TextBox.Visible = $PatchOptionsCheckbox.Checked -and $Languages[0].Checked -and (IsSet -Elem $GamePatch.languages -MinLength 1)
+    $Languages.TextBox.Enabled = $PatchOptionsCheckbox.Checked -and $Languages[0].Checked -and (IsSet -Elem $GamePatch.languages -MinLength 1)
 
     $PatchVCRemoveFilterLabel.Enabled = $PatchVCRemoveFilter.Enabled = !(StrLike -str $GamePatch.command -val "Patch Boot DOL")
-    $global:ToolTip.SetToolTip($PatchButton, ([String]::Format($Item.tooltip, [Environment]::NewLine)))
 
 }
 

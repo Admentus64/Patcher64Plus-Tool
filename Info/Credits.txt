@@ -25,7 +25,7 @@
 --- Additional Options ---
 - Master Quest:				ShadowOne333
 - Force Hires Link Model:		GhostlyDark
-- 16:9 Backgrounds & Textures:		GhostlyDark & ShadowOne333
+- 16:9 Backgrounds & Textures:		GhostlyDark, ShadowOne333 & CYB3RTR0N
 - MM Young Link Model:			The3Dude
 - MM Adult Link Model:			Skilarbabcock (www.youtube.com/user/skilarbabcock)
 - Hatsune Miku Link Models:		JanexLane
@@ -188,6 +188,7 @@ Special Thanks:				Nokaubure, z64me, Ultra553, OoT Decomp
 --- Additional Options ---
 - 16:9 Backgrounds & Textures:		GhostlyDark & ShadowOne333
 - Kokiri Tunic Color:			GhostlyDark
+- Recolor Mask Forms:			ShadowOne333 & Garo-Mastah
 - Zora Physics:				ShadowOne333
 - Restore Palace Route:			ShadowOne333
 - Correct Rupee Colors:			GhostlyDark

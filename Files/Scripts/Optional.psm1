@@ -626,6 +626,9 @@ function PatchByteOptionsMM() {
     if (IsChecked -Elem $Options.WideScreen -Enabled) {
         ChangeBytes -Offset "BD5D74" -Values @("3C", "07", "3F", "E3")
         ChangeBytes -Offset "CA58F5" -Values @("6C", "53", "6C", "84", "9E", "B7", "53", "6C") -Interval 2
+
+        # ChangeBytes -Offset "BAF2E0" -Values @("") # A Button
+        # ChangeBytes -Offset "C55F14" -Values @("") # B, C-Left, C-Down, C-Right Buttons
     }
 
     if (IsChecked -Elem $Options.WidescreenTextures -Enabled) {
@@ -652,6 +655,13 @@ function PatchByteOptionsMM() {
         ChangeBytes -Offset "1167AE4" -IsDec -Values @($Options.SetKokiriTunicColor.Color.R, $Options.SetKokiriTunicColor.Color.G,$Options.SetKokiriTunicColor.Color.B)
         ChangeBytes -Offset "1167D1C" -IsDec -Values @($Options.SetKokiriTunicColor.Color.R, $Options.SetKokiriTunicColor.Color.G,$Options.SetKokiriTunicColor.Color.B)
         ChangeBytes -Offset "11681EC" -IsDec -Values @($Options.SetKokiriTunicColor.Color.R, $Options.SetKokiriTunicColor.Color.G,$Options.SetKokiriTunicColor.Color.B)
+    }
+
+    if (IsChecked -Elem $Options.RecolorMaskForms -Enabled) {
+        PatchBytes -Offset "117C780" -Length "100" -Texture -Patch "Recolor\Goron Red Tunic.bin"
+        PatchBytes -Offset "1197120" -Length "50"  -Texture -Patch "Recolor\Zora Blue Palette.bin"
+        PatchBytes -Offset "10FB0B0" -Length "400" -Texture -Patch "Recolor\Zora Blue Gradient.bin"
+        PatchBytes -Offset "11A2228" -Length "400" -Texture -Patch "Recolor\Zora Blue Gradient.bin"
     }
 
 
@@ -1159,10 +1169,11 @@ function CreateMMOptionsContent() {
 
     # COLORS #
     $ColorsBox                         = CreateReduxGroup -Y ($GraphicsBox.Bottom + 5) -Height 1 -AddTo $Options.Panel -Text "Colors"
-    $Options.EnableTunicColors         = CreateReduxCheckBox -Column 0 -Row 1 -AddTo $ColorsBox -Text "Change Tunic Color"       -ToolTip $ToolTip -Info "Enable changing the color for the Hylian form Kokiri tunics" -Name "EnableTunicColors"
-    $Options.KokiriTunicColor          = CreateReduxButton   -Column 1 -Row 1 -AddTo $ColorsBox -Text "Set Kokiri Tunic Color"   -ToolTip $ToolTip -Info "Select the color you want for the Kokiri Tunic"
-    $Options.ResetAllColors            = CreateReduxButton   -Column 2 -Row 1 -AddTo $ColorsBox -Text "Reset Kokiri Tunic Color" -ToolTip $ToolTip -Info "Reset the  color for the Kokiri Tunic to it's default value"
-    
+    $Options.EnableTunicColors         = CreateReduxCheckBox -Column 0 -Row 1 -AddTo $ColorsBox -Text "Change Tunic Color"        -ToolTip $ToolTip -Info "Enable changing the color for the Hylian form Kokiri tunics" -Name "EnableTunicColors"
+    $Options.KokiriTunicColor          = CreateReduxButton   -Column 1 -Row 1 -AddTo $ColorsBox -Text "Set Kokiri Tunic Color"    -ToolTip $ToolTip -Info "Select the color you want for the Kokiri Tunic"
+    $Options.ResetAllColors            = CreateReduxButton   -Column 2 -Row 1 -AddTo $ColorsBox -Text "Reset Kokiri Tunic Color"  -ToolTip $ToolTip -Info "Reset the  color for the Kokiri Tunic to it's default value"
+    $Options.RecolorMaskForms          = CreateReduxCheckBox -Column 4 -Row 1 -AddTo $ColorsBox -Text "Recolor Mask Forms"        -ToolTip $ToolTip -Info "Recolor Goron Link to appear in Red and Zora Link to appear in Blue" -Name "RecolorMaskForms"
+
     $Options.KokiriTunicColor.Add_Click( { $Options.SetKokiriTunicColor.ShowDialog(); $Settings[$GameType.mode][$Options.SetKokiriTunicColor.Tag] = $Options.SetKokiriTunicColor.Color.Name } )
     $Options.ResetAllColors.Add_Click( { $Settings[$GameType.mode][$Options.SetKokiriTunicColor.Tag] = $Options.SetKokiriTunicColor.Color.Name; $Options.SetKokiriTunicColor.Color = "#1E691B" } )
 

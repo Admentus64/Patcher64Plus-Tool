@@ -5,6 +5,7 @@
 --- Additional Options ---
 - 16:9 Backgrounds & Textures:	GhostlyDark & ShadowOne333
 - Kokiri Tunic Color:			GhostlyDark
+- Recolor Mask Forms:		ShadowOne333 & Garo-Mastah
 - Zora Physics:			ShadowOne333
 - Restore Palace Route:		ShadowOne333
 - Correct Rupee Colors:		GhostlyDark
