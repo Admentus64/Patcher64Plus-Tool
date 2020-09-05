@@ -660,8 +660,10 @@ function PatchByteOptionsMM() {
     if (IsChecked -Elem $Options.RecolorMaskForms -Enabled) {
         PatchBytes -Offset "117C780" -Length "100" -Texture -Patch "Recolor\Goron Red Tunic.bin"
         PatchBytes -Offset "1197120" -Length "50"  -Texture -Patch "Recolor\Zora Blue Palette.bin"
+        PatchBytes -Offset "119E698" -Length "50"  -Texture -Patch "Recolor\Zora Blue Palette.bin"
         PatchBytes -Offset "10FB0B0" -Length "400" -Texture -Patch "Recolor\Zora Blue Gradient.bin"
-        PatchBytes -Offset "11A2228" -Length "400" -Texture -Patch "Recolor\Zora Blue Gradient.bin"
+        PatchBytes -Offset "10FB4B0" -Length "400" -Texture -Patch "Recolor\Zora Blue Gradient.bin"
+        PatchBytes -Offset "11A2028" -Length "400" -Texture -Patch "Recolor\Zora Blue Gradient.bin"
     }
 
 

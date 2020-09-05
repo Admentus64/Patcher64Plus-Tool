@@ -108,7 +108,9 @@ function MainFunctionPatch([String]$Command, [String[]]$Header, [String]$Patched
         ExtractWADFile -PatchedFileName $PatchedFileName
 
         # Step 03: Check the GameID to be vanilla.
-        if (!(CheckGameID -Command $Command)) { return }
+        if ($Settings.Debug.IgnoreChecksum -ne $True) {
+            if (!(CheckGameID -Command $Command)) { return }
+        }
 
         # Step 04: Replace the Virtual Console emulator within the WAD file.
         PatchVCEmulator -Command $Command
@@ -124,7 +126,9 @@ function MainFunctionPatch([String]$Command, [String[]]$Header, [String]$Patched
     }
 
     # Step 08: Compare HashSums for untouched ROM Files
-    if (!(CompareHashSums -Command $Command)) { return }
+    if ($Settings.Debug.IgnoreChecksum -ne $True) {
+        if (!(CompareHashSums -Command $Command)) { return }
+    }
 
     if ( !(StrLike -str $Command -val "Inject") -and !(StrLike -str $Command -val "Apply Patch") -and !(StrLike -str $Command -val "Patch VC") -and !(StrLike -str $Command -val "Extract") ) {
         # Step 09: Apply option patches for SM64.
