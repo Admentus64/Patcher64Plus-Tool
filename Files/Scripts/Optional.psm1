@@ -659,11 +659,12 @@ function PatchByteOptionsMM() {
 
     if (IsChecked -Elem $Options.RecolorMaskForms -Enabled) {
         PatchBytes -Offset "117C780" -Length "100" -Texture -Patch "Recolor\Goron Red Tunic.bin"
+        PatchBytes -Offset "1186EB8" -Length "100" -Texture -Patch "Recolor\Goron Red Tunic.bin" 
+
         PatchBytes -Offset "1197120" -Length "50"  -Texture -Patch "Recolor\Zora Blue Palette.bin"
         PatchBytes -Offset "119E698" -Length "50"  -Texture -Patch "Recolor\Zora Blue Palette.bin"
         PatchBytes -Offset "10FB0B0" -Length "400" -Texture -Patch "Recolor\Zora Blue Gradient.bin"
-        PatchBytes -Offset "10FB4B0" -Length "400" -Texture -Patch "Recolor\Zora Blue Gradient.bin"
-        PatchBytes -Offset "11A2028" -Length "400" -Texture -Patch "Recolor\Zora Blue Gradient.bin"
+        PatchBytes -Offset "11A2228" -Length "400" -Texture -Patch "Recolor\Zora Blue Gradient.bin"
     }
 
 
@@ -1174,7 +1175,7 @@ function CreateMMOptionsContent() {
     $Options.EnableTunicColors         = CreateReduxCheckBox -Column 0 -Row 1 -AddTo $ColorsBox -Text "Change Tunic Color"        -ToolTip $ToolTip -Info "Enable changing the color for the Hylian form Kokiri tunics" -Name "EnableTunicColors"
     $Options.KokiriTunicColor          = CreateReduxButton   -Column 1 -Row 1 -AddTo $ColorsBox -Text "Set Kokiri Tunic Color"    -ToolTip $ToolTip -Info "Select the color you want for the Kokiri Tunic"
     $Options.ResetAllColors            = CreateReduxButton   -Column 2 -Row 1 -AddTo $ColorsBox -Text "Reset Kokiri Tunic Color"  -ToolTip $ToolTip -Info "Reset the  color for the Kokiri Tunic to it's default value"
-    $Options.RecolorMaskForms          = CreateReduxCheckBox -Column 4 -Row 1 -AddTo $ColorsBox -Text "Recolor Mask Forms"        -ToolTip $ToolTip -Info "Recolor Goron Link to appear in Red and Zora Link to appear in Blue" -Name "RecolorMaskForms"
+    $Options.RecolorMaskForms          = CreateReduxCheckBox -Column 4 -Row 1 -AddTo $ColorsBox -Text "Recolor Mask Forms"        -ToolTip $ToolTip -Info "Recolor the clothing for Goron Link to appear in Red and Zora Link to appear in Blue" -Name "RecolorMaskForms"
 
     $Options.KokiriTunicColor.Add_Click( { $Options.SetKokiriTunicColor.ShowDialog(); $Settings[$GameType.mode][$Options.SetKokiriTunicColor.Tag] = $Options.SetKokiriTunicColor.Color.Name } )
     $Options.ResetAllColors.Add_Click( { $Settings[$GameType.mode][$Options.SetKokiriTunicColor.Tag] = $Options.SetKokiriTunicColor.Color.Name; $Options.SetKokiriTunicColor.Color = "#1E691B" } )

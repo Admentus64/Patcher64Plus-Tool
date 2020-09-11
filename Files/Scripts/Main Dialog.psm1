@@ -1,7 +1,7 @@
 function CreateMainDialog() {
 
     # Create the main dialog that is shown to the user.
-    $global:MainDialog = New-Object System.Windows.Forms.Form
+    $Global:MainDialog = New-Object System.Windows.Forms.Form
     $MainDialog.Text = $ScriptName
     $MainDialog.Size = New-Object System.Drawing.Size(625, 745)
     $MainDialog.MaximizeBox = $false
@@ -13,10 +13,10 @@ function CreateMainDialog() {
     $MainDialog.Icon = $Files.icon.main
 
     # Create a tooltip
-    $global:ToolTip = CreateToolTip
+    $Global:ToolTip = CreateToolTip
 
     # Create a label to show current mode.
-    $global:CurrentModeLabel = CreateLabel -Font $CurrentModeFont -AddTo $MainDialog
+    $Global:CurrentModeLabel = CreateLabel -Font $CurrentModeFont -AddTo $MainDialog
     $CurrentModeLabel.AutoSize = $True
 
     # Create a label to show current version.
@@ -29,26 +29,26 @@ function CreateMainDialog() {
     ############
 
     # Create the panel that holds the WAD path.
-    $global:InputWADPanel = CreatePanel -Width 590 -Height 50 -AddTo $MainDialog
+    $Global:InputWADPanel = CreatePanel -Width 590 -Height 50 -AddTo $MainDialog
 
     # Create the groupbox that holds the WAD path.
-    $global:InputWADGroup = CreateGroupBox -Width $InputWADPanel.Width -Height $InputWADPanel.Height -Name "GameWAD" -Text "WAD Path" -AddTo $InputWADPanel
+    $Global:InputWADGroup = CreateGroupBox -Width $InputWADPanel.Width -Height $InputWADPanel.Height -Name "GameWAD" -Text "WAD Path" -AddTo $InputWADPanel
     $InputWADGroup.AllowDrop = $True
     $InputWADGroup.Add_DragEnter({ $_.Effect = [Windows.Forms.DragDropEffects]::Copy })
     $InputWADGroup.Add_DragDrop({ WADPath_DragDrop })
 
     # Create a textbox to display the selected WAD.
-    $global:InputWADTextBox = CreateTextBox -X 10 -Y 20 -Width 440 -Height 22 -Name "GameWAD" -Text "Select or drag and drop your Virtual Console WAD file..." -ReadOnly $True -AddTo $InputWADGroup
+    $Global:InputWADTextBox = CreateTextBox -X 10 -Y 20 -Width 440 -Height 22 -Name "GameWAD" -Text "Select or drag and drop your Virtual Console WAD file..." -ReadOnly $True -AddTo $InputWADGroup
     $InputWADTextBox.AllowDrop = $True
     $InputWADTextBox.Add_DragEnter({ $_.Effect = [Windows.Forms.DragDropEffects]::Copy })
     $InputWADTextBox.Add_DragDrop({ WADPath_DragDrop })
 
     # Create a button to allow manually selecting a WAD.
-    $global:InputWADButton = CreateButton -X 456 -Y 18 -Width 24 -Height 22 -Name "GameWAD" -Text "..." -ToolTip $ToolTip -Info "Select your VC WAD File using file explorer" -AddTo $InputWADGroup
+    $Global:InputWADButton = CreateButton -X 456 -Y 18 -Width 24 -Height 22 -Name "GameWAD" -Text "..." -ToolTip $ToolTip -Info "Select your VC WAD File using file explorer" -AddTo $InputWADGroup
     $InputWADButton.Add_Click({ WADPath_Button -TextBox $InputWADTextBox -Description 'VC WAD File' -FileName '*.wad' })
 
     # Create a button to clear the WAD Path
-    $global:ClearWADPathButton = CreateButton -X 495 -Y 18 -Width 80 -Height 22 -Text "Clear" -ToolTip $ToolTip -Info "Clear the selected WAD file" -AddTo $InputWADGroup
+    $Global:ClearWADPathButton = CreateButton -X 495 -Y 18 -Width 80 -Height 22 -Text "Clear" -ToolTip $ToolTip -Info "Clear the selected WAD file" -AddTo $InputWADGroup
     $ClearWADPathButton.Add_Click({
         if (IsSet -Elem $Files.WAD -MinLength 1) {
             $Files.WAD = $null
@@ -66,7 +66,7 @@ function CreateMainDialog() {
     ############
 
     # Create the panel that holds the ROM path.
-    $global:InputROMPanel = CreatePanel -Width 590 -Height 50 -AddTo $MainDialog
+    $Global:InputROMPanel = CreatePanel -Width 590 -Height 50 -AddTo $MainDialog
 
     # Create the groupbox that holds the ROM path.
     $InputROMGroup = CreateGroupBox -Width $InputROMPanel.Width -Heigh $InputROMPanel.Height -Name "GameZ64" -Text "ROM Path" -AddTo $InputROMPanel
@@ -75,17 +75,17 @@ function CreateMainDialog() {
     $InputROMGroup.Add_DragDrop({ Z64Path_DragDrop })
 
     # Create a textbox to display the selected ROM.
-    $global:InputROMTextBox = CreateTextBox -X 10 -Y 20 -Width 440 -Height 22 -Name "GameZ64" -Text "Select or drag and drop your Z64, N64 or V64 ROM..." -ReadOnly $True -AddTo $InputROMGroup
+    $Global:InputROMTextBox = CreateTextBox -X 10 -Y 20 -Width 440 -Height 22 -Name "GameZ64" -Text "Select or drag and drop your Z64, N64 or V64 ROM..." -ReadOnly $True -AddTo $InputROMGroup
     $InputROMTextBox.AllowDrop = $True
     $InputROMTextBox.Add_DragEnter({ $_.Effect = [Windows.Forms.DragDropEffects]::Copy })
     $InputROMTextBox.Add_DragDrop({ Z64Path_DragDrop })
 
     # Create a button to allow manually selecting a ROM.
-    $global:InputROMButton = CreateButton -X 456 -Y 18 -Width 24 -Height 22 -Name "GameZ64" -Text "..." -ToolTip $ToolTip -Info "Select your Z64, N64 or V64 ROM File using file explorer" -AddTo $InputROMGroup
+    $Global:InputROMButton = CreateButton -X 456 -Y 18 -Width 24 -Height 22 -Name "GameZ64" -Text "..." -ToolTip $ToolTip -Info "Select your Z64, N64 or V64 ROM File using file explorer" -AddTo $InputROMGroup
     $InputROMButton.Add_Click({ z64Path_Button -TextBox $InputROMTextBox -Description @('Z64 ROM', 'N64 ROM', 'V64 ROM') -FileName @('*.z64', '*.n64', '*.v64') })
     
     # Create a button to allow patch the WAD with a ROM file.
-    $global:InjectROMButton = CreateButton -X 495 -Y 18 -Width 80 -Height 22 -Text "Inject ROM" -ToolTip $ToolTip -Info "Replace the ROM in your selected WAD File with your selected Z64, N64 or V64 ROM File" -AddTo $InputROMGroup
+    $Global:InjectROMButton = CreateButton -X 495 -Y 18 -Width 80 -Height 22 -Text "Inject ROM" -ToolTip $ToolTip -Info "Replace the ROM in your selected WAD File with your selected Z64, N64 or V64 ROM File" -AddTo $InputROMGroup
     $InjectROMButton.Add_Click({ MainFunction -Command "Inject" -PatchedFileName "_injected" })
 
 
@@ -95,7 +95,7 @@ function CreateMainDialog() {
     ############
     
     # Create the panel that holds the BPS path.
-    $global:InputBPSPanel = CreatePanel -Width 590 -Height 50 -AddTo $MainDialog
+    $Global:InputBPSPanel = CreatePanel -Width 590 -Height 50 -AddTo $MainDialog
 
     # Create the groupbox that holds the BPS path.
     $InputBPSGroup = CreateGroupBox -Width $InputBPSPanel.Width -Height $InputBPSPanel.Height -Name "GameBPS" -Text "Custom Patch Path" -AddTo $InputBPSPanel
@@ -104,17 +104,17 @@ function CreateMainDialog() {
     $InputBPSGroup.Add_DragDrop({ BPSPath_DragDrop })
     
     # Create a textbox to display the selected BPS.
-    $global:InputBPSTextBox = CreateTextBox -X 10 -Y 20 -Width 440 -Height 22 -Name "GameBPS" -Text "Select or drag and drop your BPS, IPS, Xdelta, VCDiff or PPF Patch File..." -ReadOnly $True -AddTo $InputBPSGroup
+    $Global:InputBPSTextBox = CreateTextBox -X 10 -Y 20 -Width 440 -Height 22 -Name "GameBPS" -Text "Select or drag and drop your BPS, IPS, Xdelta, VCDiff or PPF Patch File..." -ReadOnly $True -AddTo $InputBPSGroup
     $InputBPSTextBox.AllowDrop = $True
     $InputBPSTextBox.Add_DragEnter({ $_.Effect = [Windows.Forms.DragDropEffects]::Copy })
     $InputBPSTextBox.Add_DragDrop({ BPSPath_DragDrop })
 
     # Create a button to allow manually selecting a ROM.
-    $global:InputBPSButton = CreateButton -X 456 -Y 18 -Width 24 -Height 22 -Name "GameBPS" -Text "..." -ToolTip $ToolTip -Info "Select your BPS, IPS, Xdelta or VCDiff Patch File using file explorer" -AddTo $InputBPSGroup
+    $Global:InputBPSButton = CreateButton -X 456 -Y 18 -Width 24 -Height 22 -Name "GameBPS" -Text "..." -ToolTip $ToolTip -Info "Select your BPS, IPS, Xdelta or VCDiff Patch File using file explorer" -AddTo $InputBPSGroup
     $InputBPSButton.Add_Click({ BPSPath_Button -TextBox $InputBPSTextBox -Description @('BPS Patch File', 'IPS Patch File', 'XDelta Patch File', 'VCDiff Patch File') -FileName @('*.bps', '*.ips', '*.xdelta', '*.vcdiff') })
     
     # Create a button to allow patch the WAD with a BPS file.
-    $global:PatchBPSButton = CreateButton -X 495 -Y 18 -Width 80 -Height 22 -Text "Apply Patch" -ToolTip $ToolTip -Info "Patch the ROM with your selected BPS or IPS Patch File" -AddTo $InputBPSGroup
+    $Global:PatchBPSButton = CreateButton -X 495 -Y 18 -Width 80 -Height 22 -Text "Apply Patch" -ToolTip $ToolTip -Info "Patch the ROM with your selected BPS or IPS Patch File" -AddTo $InputBPSGroup
     $PatchBPSButton.Add_Click({ MainFunction -Command "Apply Patch" -PatchedFileName "_bps_patched" })
 
 
@@ -124,13 +124,13 @@ function CreateMainDialog() {
     ################
 
     # Create the panel that holds the current selected game.
-    $global:CurrentGamePanel = CreatePanel -Width 590 -Height 50 -AddTo $MainDialog
+    $Global:CurrentGamePanel = CreatePanel -Width 590 -Height 50 -AddTo $MainDialog
 
     # Create the groupbox that holds the current game options
     $CurrentGameGroup = CreateGroupBox -Width $CurrentGamePanel.Width -Height $CurrentGamePanel.Height -Text "Current Game Mode" -Name "CurrentGame" -AddTo $CurrentGamePanel
 
     # Create a combox for OoT ROM hack patches
-    $global:CurrentGameComboBox = CreateComboBox -X 10 -Y 20 -Width 440 -Height 30 -Name "CurrentGame" -AddTo $CurrentGameGroup
+    $Global:CurrentGameComboBox = CreateComboBox -X 10 -Y 20 -Width 440 -Height 30 -Name "CurrentGame" -AddTo $CurrentGameGroup
     $CurrentGameComboBox.Add_SelectedIndexChanged({
         $Settings["Core"][$this.Name] = $this.SelectedIndex
         if ($this.Text -ne $GameType.title) { ChangeGameMode }
@@ -148,17 +148,17 @@ function CreateMainDialog() {
     # Custom Header #
     #################
 
-    # Create the panel that holds the Custom GameID.
-    $global:CustomGameIDPanel = CreatePanel -Width 590 -Height 50 -AddTo $MainDialog
+    # Create the panel that holds the Custom Header.
+    $Global:CustomHeaderPanel = CreatePanel -Width 590 -Height 50 -AddTo $MainDialog
 
-    # Create the groupbox that holds the Custom GameID.
-    $CustomGameIDGroup = CreateGroupBox -Width $CustomGameIDPanel.Width -Height $CustomGameIDPanel.Height -Name "CustomGameID" -Text "Custom Channel Title and GameID" -AddTo $CustomGameIDPanel
+    # Create the groupbox that holds the Custom Header.
+    $CustomHeaderGroup = CreateGroupBox -Width $CustomHeaderPanel.Width -Height $CustomHeaderPanel.Height -Text "Custom Channel Title and GameID" -AddTo $CustomHeaderPanel
 
     # Create a label to show Custom Channel Title description.
-    $global:CustomTitleTextBoxLabel = CreateLabel -X 8 -Y 22 -Width 75 -Height 15 -Text "Channel Title:" -AddTo $CustomGameIDGroup
+    $Global:CustomTitleTextBoxLabel = CreateLabel -X 8 -Y 22 -Width 75 -Height 15 -Text "Channel Title:" -AddTo $CustomHeaderGroup
 
     # Create a textbox to display the selected Custom Channel Title.
-    $global:CustomTitleTextBox = CreateTextBox -X 85 -Y 20 -Width 260 -Height 22 -AddTo $CustomGameIDGroup
+    $Global:CustomTitleTextBox = CreateTextBox -X 85 -Y 20 -Width 260 -Height 22 -AddTo $CustomHeaderGroup
     $CustomTitleTextBox.Add_TextChanged({
         if ($this.Text -match "[^a-z 0-9 \: \- \( \) \' \&] \.") {
             $cursorPos = $this.SelectionStart
@@ -169,10 +169,10 @@ function CreateMainDialog() {
     })
 
     # Create a label to show Custom GameID description
-    $CustomGameIDTextBoxLabel = CreateLabel -X 370 -Y 22 -Width 50 -Height 15 -Text "GameID:" -AddTo $CustomGameIDGroup
+    $CustomGameIDTextBoxLabel = CreateLabel -X 370 -Y 22 -Width 50 -Height 15 -Text "GameID:" -AddTo $CustomHeaderGroup
 
     # Create a textbox to display the selected Custom GameID.
-    $global:CustomGameIDTextBox = CreateTextBox -X 425 -Y 20 -Width 55 -Height 22 -Length 4 -AddTo $CustomGameIDGroup
+    $Global:CustomGameIDTextBox = CreateTextBox -X 425 -Y 20 -Width 55 -Height 22 -Length 4 -AddTo $CustomHeaderGroup
     $CustomGameIDTextBox.Add_TextChanged({
         if ($this.Text -cmatch "[^A-Z 0-9]") {
             $this.Text = $this.Text.ToUpper() -replace "[^A-Z 0-9]",''
@@ -185,10 +185,10 @@ function CreateMainDialog() {
     })
 
     # Create a label to show Custom GameID description
-    $CustomHeaderLabel = CreateLabel -X 510 -Y 22 -Width 50 -Height 15 -Text "Enable:" -ToolTip $Tooltip -Info "Enable in order to change the Game ID and title of the ROM or WAD file" -AddTo $CustomGameIDGroup
+    $CustomHeaderLabel = CreateLabel -X 510 -Y 22 -Width 50 -Height 15 -Text "Enable:" -ToolTip $Tooltip -Info "Enable in order to change the Game ID and title of the ROM or WAD file" -AddTo $CustomHeaderGroup
 
     # Create a checkbox to allow Custom Channel Title & GameID.
-    $global:CustomHeaderCheckbox = CreateCheckBox -X 560 -Y 20 -Width 20 -Height 20 -Name "CustomHeader" -ToolTip $Tooltip -Info "Enable in order to change the Game ID and title of the ROM or WAD file" -AddTo $CustomGameIDGroup
+    $Global:CustomHeaderCheckbox = CreateCheckBox -X 560 -Y 20 -Width 20 -Height 20 -Name "CustomHeader" -ToolTip $Tooltip -Info "Enable in order to change the Game ID and title of the ROM or WAD file" -AddTo $CustomHeaderGroup
 
 
 
@@ -197,23 +197,23 @@ function CreateMainDialog() {
     ###############
 
     # Create a panel to contain everything for patches.
-    $global:PatchPanel = CreatePanel -Width 590 -Height 90 -AddTo $MainDialog 
+    $Global:PatchPanel = CreatePanel -Width 590 -Height 90 -AddTo $MainDialog 
 
     # Create a groupbox to show the patching buttons.
-    $global:PatchGroup = CreateGroupBox -Width $PatchPanel.Width -Height $PatchPanel.Height -AddTo $PatchPanel
+    $Global:PatchGroup = CreateGroupBox -Width $PatchPanel.Width -Height $PatchPanel.Height -AddTo $PatchPanel
 
     # Create patch button
-    $global:PatchButton = CreateButton -X 10 -Y 45 -Width 300 -Height 35 -Text "Patch Selected Option" -AddTo $PatchGroup
+    $Global:PatchButton = CreateButton -X 10 -Y 45 -Width 300 -Height 35 -Text "Patch Selected Option" -AddTo $PatchGroup
     $PatchButton.Add_Click( { MainFunction -Command $GamePatch.command -PatchedFileName $GamePatch.output } )
 
     # Create combobox
-    $global:PatchComboBox = CreateComboBox -X $PatchButton.Left -Y ($PatchButton.Top - 25) -Width $PatchButton.Width -Height 30 -Name "Patch" -AddTo $PatchGroup
+    $Global:PatchComboBox = CreateComboBox -X $PatchButton.Left -Y ($PatchButton.Top - 25) -Width $PatchButton.Width -Height 30 -Name "Patch" -AddTo $PatchGroup
     $PatchComboBox.Add_SelectedIndexChanged( {
         $Settings["Core"][$this.Name] = $this.SelectedIndex
         foreach ($Item in $Files.json.patches.patch) {
             if ($Item.title -eq $PatchComboBox.Text) {
                 if ( ($IsWiiVC -and $Item.console -eq "Wii VC") -or (!$IsWiiVC -and $Item.console -eq "N64") -or ($Item.console -eq "All") ) {
-                    $global:GamePatch = $Item
+                    $Global:GamePatch = $Item
                     $ToolTip.SetToolTip($PatchButton, ([String]::Format($Item.tooltip, [Environment]::NewLine)))
                 }
             }
@@ -226,27 +226,27 @@ function CreateMainDialog() {
     } )
 
     # Create a checkbox to enable Redux and Options support.
-    $global:PatchReduxLabel = CreateLabel -X ($PatchButton.Right + 10) -Y ($PatchComboBox.Top + 5) -Width 85 -Height 15 -Text "Enable Redux:" -ToolTip $ToolTip -Info "Enable the Redux patch which improves game mechanics`nIncludes among other changes the inclusion of the D-Pad for dedicated item buttons" -AddTo $PatchGroup
-    $global:PatchReduxCheckbox = CreateCheckBox -X $PatchReduxLabel.Right -Y ($PatchReduxLabel.Top - 2) -Width 20 -Height 20 -ToolTip $ToolTip -Info "Enable the Redux patch which improves game mechanics`nIncludes among other changes the inclusion of the D-Pad for dedicated item buttons" -Name "Redux" -AddTo $PatchGroup
+    $Global:PatchReduxLabel = CreateLabel -X ($PatchButton.Right + 10) -Y ($PatchComboBox.Top + 5) -Width 85 -Height 15 -Text "Enable Redux:" -ToolTip $ToolTip -Info "Enable the Redux patch which improves game mechanics`nIncludes among other changes the inclusion of the D-Pad for dedicated item buttons" -AddTo $PatchGroup
+    $Global:PatchReduxCheckbox = CreateCheckBox -X $PatchReduxLabel.Right -Y ($PatchReduxLabel.Top - 2) -Width 20 -Height 20 -ToolTip $ToolTip -Info "Enable the Redux patch which improves game mechanics`nIncludes among other changes the inclusion of the D-Pad for dedicated item buttons" -Name "Redux" -AddTo $PatchGroup
     $PatchReduxCheckbox.Add_CheckStateChanged({
         $PatchReduxButton.Enabled = $this.Checked
     })
 
-    $global:PatchOptionsLabel = CreateLabel -X ($PatchButton.Right + 10) -Y ($PatchReduxLabel.Bottom + 15) -Width 85 -Height 15 -Text "Enable Options:" -ToolTip $ToolTip -Info "Enable options in order to apply a customizable set of features and changes" -AddTo $PatchGroup
-    $global:PatchOptionsCheckbox = CreateCheckBox -X $PatchOptionsLabel.Right -Y ($PatchOptionsLabel.Top - 2) -Width 20 -Height 20 -ToolTip $ToolTip -Info "Enable options in order to apply a customizable set of features and changes" -Name "Options" -AddTo $PatchGroup
+    $Global:PatchOptionsLabel = CreateLabel -X ($PatchButton.Right + 10) -Y ($PatchReduxLabel.Bottom + 15) -Width 85 -Height 15 -Text "Enable Options:" -ToolTip $ToolTip -Info "Enable options in order to apply a customizable set of features and changes" -AddTo $PatchGroup
+    $Global:PatchOptionsCheckbox = CreateCheckBox -X $PatchOptionsLabel.Right -Y ($PatchOptionsLabel.Top - 2) -Width 20 -Height 20 -ToolTip $ToolTip -Info "Enable options in order to apply a customizable set of features and changes" -Name "Options" -AddTo $PatchGroup
     $PatchOptionsCheckbox.Add_CheckStateChanged({
         $PatchOptionsButton.Enabled = $this.Checked
         $Languages.TextBox.Enabled = $this.Checked -and $Languages[0].Checked
     })
 
-    $global:PatchReduxButton = CreateButton -X ($PatchReduxCheckbox.Right + 5) -Y 20 -Width 70 -Height 25 -Text "Redux" -ToolTip $ToolTip -Info 'Open the "Redux" panel to change the settings for the Redux patch' -AddTo $PatchGroup
+    $Global:PatchReduxButton = CreateButton -X ($PatchReduxCheckbox.Right + 5) -Y 20 -Width 70 -Height 25 -Text "Redux" -ToolTip $ToolTip -Info 'Open the "Redux" panel to change the settings for the Redux patch' -AddTo $PatchGroup
     $PatchReduxButton.Add_Click( { $ReduxDialog.ShowDialog() } )
     $PatchReduxButton.Enabled = $False
 
-    $global:PatchLanguagesButton = CreateButton -X ($PatchReduxButton.Right + 5) -Y 20 -Width 70 -Height 25 -Text "Language" -ToolTip $ToolTip -Info 'Open the "Languages" panel to change the language' -AddTo $PatchGroup
+    $Global:PatchLanguagesButton = CreateButton -X ($PatchReduxButton.Right + 5) -Y 20 -Width 70 -Height 25 -Text "Language" -ToolTip $ToolTip -Info 'Open the "Languages" panel to change the language' -AddTo $PatchGroup
     $PatchLanguagesButton.Add_Click( { $LanguagesDialog.ShowDialog() } )
 
-    $global:PatchOptionsButton = CreateButton -X $PatchReduxButton.Left -Y ($PatchReduxButton.Bottom + 5) -Width 145 -Height $PatchLanguagesButton.Height -Text "Select Options" -ToolTip $ToolTip -Info 'Open the "Additional Options" panel to change preferences' -AddTo $PatchGroup
+    $Global:PatchOptionsButton = CreateButton -X $PatchReduxButton.Left -Y ($PatchReduxButton.Bottom + 5) -Width 145 -Height $PatchLanguagesButton.Height -Text "Select Options" -ToolTip $ToolTip -Info 'Open the "Additional Options" panel to change preferences' -AddTo $PatchGroup
     $PatchOptionsButton.Add_Click( { $OptionsDialog.ShowDialog() } )
     $PatchOptionsButton.Enabled = $False
 
@@ -257,72 +257,72 @@ function CreateMainDialog() {
     ####################
 
     # Create a panel to show the patch options.
-    $global:PatchVCPanel = CreatePanel -Width 590 -Height 105 -AddTo $MainDialog
+    $Global:PatchVCPanel = CreatePanel -Width 590 -Height 105 -AddTo $MainDialog
 
     # Create a groupbox to show the patch options.
-    $global:PatchVCGroup = CreateGroupBox -Width $PatchVCPanel.Width -Height $PatchVCPanel.Height -Text "Virtual Console - Patch Options" -AddTo $PatchVCPanel
+    $Global:PatchVCGroup = CreateGroupBox -Width $PatchVCPanel.Width -Height $PatchVCPanel.Height -Text "Virtual Console - Patch Options" -AddTo $PatchVCPanel
 
 
 
     # Create a label for Core patches
-    $global:PatchVCCoreLabel = CreateLabel -X 10 -Y 22 -Width 50 -Height 15 -Text "Core" -Font $VCPatchFont -AddTo $PatchVCGroup
+    $Global:PatchVCCoreLabel = CreateLabel -X 10 -Y 22 -Width 50 -Height 15 -Text "Core" -Font $VCPatchFont -AddTo $PatchVCGroup
 
     # Remove T64 description
-    $global:PatchVCRemoveT64Label = CreateLabel -X ($PatchVCCoreLabel.Right + 20) -Y $PatchVCCoreLabel.Top -Width 95 -Height 15 -Text "Remove All T64:" -ToolTip $ToolTip -Info "Remove all injected T64 format textures" -AddTo $PatchVCGroup
-    $global:PatchVCRemoveT64 = CreateCheckBox -X $PatchVCRemoveT64Label.Right -Y ($PatchVCCoreLabel.Top - 2) -Width 20 -Height 20 -ToolTip $ToolTip -Info "Remove all injected T64 format textures" -Name "RemoveT64" -AddTo $PatchVCGroup
+    $Global:PatchVCRemoveT64Label = CreateLabel -X ($PatchVCCoreLabel.Right + 20) -Y $PatchVCCoreLabel.Top -Width 95 -Height 15 -Text "Remove All T64:" -ToolTip $ToolTip -Info "Remove all injected T64 format textures" -AddTo $PatchVCGroup
+    $Global:PatchVCRemoveT64 = CreateCheckBox -X $PatchVCRemoveT64Label.Right -Y ($PatchVCCoreLabel.Top - 2) -Width 20 -Height 20 -ToolTip $ToolTip -Info "Remove all injected T64 format textures" -Name "RemoveT64" -AddTo $PatchVCGroup
     $PatchVCRemoveT64.Add_CheckStateChanged({ CheckVCOptions })
     
     # Expand Memory
-    $global:PatchVCExpandMemoryLabel = CreateLabel -X ($PatchVCRemoveT64.Right + 10) -Y $PatchVCCoreLabel.Top -Width 95 -Height 15 -Text "Expand Memory:" -ToolTip $ToolTip -Info "Expand the game's memory by 4MB" -AddTo $PatchVCGroup
-    $global:PatchVCExpandMemory = CreateCheckBox -X $PatchVCExpandMemoryLabel.Right -Y ($PatchVCCoreLabel.Top - 2) -Width 20 -Height 20 -ToolTip $ToolTip -Info "Expand the game's memory by 4MB" -Name "ExpandMemory" -AddTo $PatchVCGroup
+    $Global:PatchVCExpandMemoryLabel = CreateLabel -X ($PatchVCRemoveT64.Right + 10) -Y $PatchVCCoreLabel.Top -Width 95 -Height 15 -Text "Expand Memory:" -ToolTip $ToolTip -Info "Expand the game's memory by 4MB" -AddTo $PatchVCGroup
+    $Global:PatchVCExpandMemory = CreateCheckBox -X $PatchVCExpandMemoryLabel.Right -Y ($PatchVCCoreLabel.Top - 2) -Width 20 -Height 20 -ToolTip $ToolTip -Info "Expand the game's memory by 4MB" -Name "ExpandMemory" -AddTo $PatchVCGroup
     $PatchVCExpandMemory.Add_CheckStateChanged({ CheckVCOptions })
 
     # Remove Filter
-    $global:PatchVCRemoveFilterLabel = CreateLabel -X ($PatchVCRemoveT64.Right + 10) -Y $PatchVCCoreLabel.Top -Width 95 -Height 15 -Text "Remove Filter:" -ToolTip $ToolTip -Info "Remove the dark overlay filter" -AddTo $PatchVCGroup
-    $global:PatchVCRemoveFilter = CreateCheckBox -X $PatchVCRemoveFilterLabel.Right -Y ($PatchVCCoreLabel.Top - 2) -Width 20 -Height 20 -ToolTip $ToolTip -Info "Remove the dark overlay filter" -Name "RemoveFilter" -AddTo $PatchVCGroup
+    $Global:PatchVCRemoveFilterLabel = CreateLabel -X ($PatchVCRemoveT64.Right + 10) -Y $PatchVCCoreLabel.Top -Width 95 -Height 15 -Text "Remove Filter:" -ToolTip $ToolTip -Info "Remove the dark overlay filter" -AddTo $PatchVCGroup
+    $Global:PatchVCRemoveFilter = CreateCheckBox -X $PatchVCRemoveFilterLabel.Right -Y ($PatchVCCoreLabel.Top - 2) -Width 20 -Height 20 -ToolTip $ToolTip -Info "Remove the dark overlay filter" -Name "RemoveFilter" -AddTo $PatchVCGroup
     $PatchVCRemoveFilter.Add_CheckStateChanged({ CheckVCOptions })
 
     # Remap D-Pad
-    $global:PatchVCRemapDPadLabel = CreateLabel -X ($PatchVCExpandMemory.Right + 10) -Y $PatchVCCoreLabel.Top -Width 95 -Height 15 -Text "Remap D-Pad:" -ToolTip $ToolTip -Info "Remap the D-Pad to the actual four D-Pad directional buttons instead of toggling the minimap" -AddTo $PatchVCGroup
-    $global:PatchVCRemapDPad = CreateCheckBox -X $PatchVCRemapDPadLabel.Right -Y ($PatchVCCoreLabel.Top - 2) -Width 20 -Height 20 -ToolTip $ToolTip -Info "Remap the D-Pad to the actual four D-Pad directional buttons instead of toggling the minimap" -Name "RemapDPad" -AddTo $PatchVCGroup
+    $Global:PatchVCRemapDPadLabel = CreateLabel -X ($PatchVCExpandMemory.Right + 10) -Y $PatchVCCoreLabel.Top -Width 95 -Height 15 -Text "Remap D-Pad:" -ToolTip $ToolTip -Info "Remap the D-Pad to the actual four D-Pad directional buttons instead of toggling the minimap" -AddTo $PatchVCGroup
+    $Global:PatchVCRemapDPad = CreateCheckBox -X $PatchVCRemapDPadLabel.Right -Y ($PatchVCCoreLabel.Top - 2) -Width 20 -Height 20 -ToolTip $ToolTip -Info "Remap the D-Pad to the actual four D-Pad directional buttons instead of toggling the minimap" -Name "RemapDPad" -AddTo $PatchVCGroup
     $PatchVCRemapDPad.Add_CheckStateChanged({ CheckVCOptions })
 
     # Downgrade
-    $global:PatchVCDowngradeLabel = CreateLabel -X ($PatchVCRemapDPad.Right + 10) -Y $PatchVCCoreLabel.Top -Width 95 -Height 15 -Text "Downgrade:" -ToolTip $ToolTip -Info "Downgrade Ocarina of Time from version 1.2 US to 1.0 US" -AddTo $PatchVCGroup
-    $global:PatchVCDowngrade = CreateCheckBox -X $PatchVCDowngradeLabel.Right -Y ($PatchVCCoreLabel.Top - 2) -Width 20 -Height 20 -ToolTip $ToolTip -Info "Downgrade Ocarina of Time from version 1.2 US to 1.0 US" -Name "Downgrade" -AddTo $PatchVCGroup
+    $Global:PatchVCDowngradeLabel = CreateLabel -X ($PatchVCRemapDPad.Right + 10) -Y $PatchVCCoreLabel.Top -Width 95 -Height 15 -Text "Downgrade:" -ToolTip $ToolTip -Info "Downgrade Ocarina of Time from version 1.2 US to 1.0 US" -AddTo $PatchVCGroup
+    $Global:PatchVCDowngrade = CreateCheckBox -X $PatchVCDowngradeLabel.Right -Y ($PatchVCCoreLabel.Top - 2) -Width 20 -Height 20 -ToolTip $ToolTip -Info "Downgrade Ocarina of Time from version 1.2 US to 1.0 US" -Name "Downgrade" -AddTo $PatchVCGroup
     $PatchVCDowngrade.Add_CheckStateChanged({ CheckVCOptions })
 
 
 
     # Create a label for Minimap
-    $global:PatchVCMinimapLabel = CreateLabel -X 10 -Y ($PatchVCCoreLabel.Bottom + 5) -Width 50 -Height 15 -Text "Minimap" -Font $VCPatchFont -AddTo $PatchVCGroup
+    $Global:PatchVCMinimapLabel = CreateLabel -X 10 -Y ($PatchVCCoreLabel.Bottom + 5) -Width 50 -Height 15 -Text "Minimap" -Font $VCPatchFont -AddTo $PatchVCGroup
 
     # Remap C-Down
-    $global:PatchVCRemapCDownLabel = CreateLabel -X ($PatchVCMinimapLabel.Right + 20) -Y $PatchVCMinimapLabel.Top -Width 95 -Height 15 -Text "Remap C-Down:" -ToolTip $ToolTip -Info "Remap the C-Down button for toggling the minimap instead of using an item" -AddTo $PatchVCGroup
-    $global:PatchVCRemapCDown = CreateCheckBox -X $PatchVCRemapCDownLabel.Right -Y ($PatchVCMinimapLabel.Top - 2) -Width 20 -Height 20 -ToolTip $ToolTip -Info "Remap the C-Down button for toggling the minimap instead of using an item" -Name "RemapCDown" -AddTo $PatchVCGroup
+    $Global:PatchVCRemapCDownLabel = CreateLabel -X ($PatchVCMinimapLabel.Right + 20) -Y $PatchVCMinimapLabel.Top -Width 95 -Height 15 -Text "Remap C-Down:" -ToolTip $ToolTip -Info "Remap the C-Down button for toggling the minimap instead of using an item" -AddTo $PatchVCGroup
+    $Global:PatchVCRemapCDown = CreateCheckBox -X $PatchVCRemapCDownLabel.Right -Y ($PatchVCMinimapLabel.Top - 2) -Width 20 -Height 20 -ToolTip $ToolTip -Info "Remap the C-Down button for toggling the minimap instead of using an item" -Name "RemapCDown" -AddTo $PatchVCGroup
     $PatchVCRemapCDown.Add_CheckStateChanged({ CheckVCOptions })
 
     # Remap Z
-    $global:PatchVCRemapZLabel = CreateLabel -X ($PatchVCRemapCDown.Right + 10) -Y $PatchVCMinimapLabel.Top -Width 95 -Height 15 -Text "Remap Z:" -ToolTip $ToolTip -Info "Remap the Z (GameCube) or ZL and ZR (Classic) buttons for toggling the minimap instead of using an item" -AddTo $PatchVCGroup
-    $global:PatchVCRemapZ = CreateCheckBox -X $PatchVCRemapZLabel.Right -Y ($PatchVCMinimapLabel.Top - 2) -Width 20 -Height 20 -ToolTip $ToolTip -Info "Remap the Z (GameCube) or ZL and ZR (Classic) buttons for toggling the minimap instead of using an item" -Name "RemapZ" -AddTo $PatchVCGroup
+    $Global:PatchVCRemapZLabel = CreateLabel -X ($PatchVCRemapCDown.Right + 10) -Y $PatchVCMinimapLabel.Top -Width 95 -Height 15 -Text "Remap Z:" -ToolTip $ToolTip -Info "Remap the Z (GameCube) or ZL and ZR (Classic) buttons for toggling the minimap instead of using an item" -AddTo $PatchVCGroup
+    $Global:PatchVCRemapZ = CreateCheckBox -X $PatchVCRemapZLabel.Right -Y ($PatchVCMinimapLabel.Top - 2) -Width 20 -Height 20 -ToolTip $ToolTip -Info "Remap the Z (GameCube) or ZL and ZR (Classic) buttons for toggling the minimap instead of using an item" -Name "RemapZ" -AddTo $PatchVCGroup
     $PatchVCRemapZ.Add_CheckStateChanged({ CheckVCOptions })
 
     # Leave D-Pad Up
-    $global:PatchVCLeaveDPadUpLabel = CreateLabel -X ($PatchVCRemapZ.Right + 10) -Y $PatchVCMinimapLabel.Top -Width 95 -Height 15 -Text "Leave D-Pad Up:" -ToolTip $ToolTip -Info "Leave the D-Pad untouched so it can be used to toggle the minimap" -AddTo $PatchVCGroup
-    $global:PatchVCLeaveDPadUp = CreateCheckBox -X $PatchVCLeaveDPadUpLabel.Right -Y ($PatchVCMinimapLabel.Top - 2) -Width 20 -Height 20 -ToolTip $ToolTip -Info "Leave the D-Pad untouched so it can be used to toggle the minimap" -Name "LeaveDPadUp" -AddTo $PatchVCGroup
+    $Global:PatchVCLeaveDPadUpLabel = CreateLabel -X ($PatchVCRemapZ.Right + 10) -Y $PatchVCMinimapLabel.Top -Width 95 -Height 15 -Text "Leave D-Pad Up:" -ToolTip $ToolTip -Info "Leave the D-Pad untouched so it can be used to toggle the minimap" -AddTo $PatchVCGroup
+    $Global:PatchVCLeaveDPadUp = CreateCheckBox -X $PatchVCLeaveDPadUpLabel.Right -Y ($PatchVCMinimapLabel.Top - 2) -Width 20 -Height 20 -ToolTip $ToolTip -Info "Leave the D-Pad untouched so it can be used to toggle the minimap" -Name "LeaveDPadUp" -AddTo $PatchVCGroup
     $PatchVCLeaveDPadUp.Add_CheckStateChanged({ CheckVCOptions })
 
 
 
     # Create a label for Patch VC Buttons
-    $global:ActionsLabel = CreateLabel -X 10 -Y 72 -Width 50 -Height 15 -Text "Actions" -Font $VCPatchFont -AddTo $PatchVCGroup
+    $Global:ActionsLabel = CreateLabel -X 10 -Y 72 -Width 50 -Height 15 -Text "Actions" -Font $VCPatchFont -AddTo $PatchVCGroup
 
     # Create a button to patch the VC
-    $global:PatchVCButton = CreateButton -X 80 -Y 65 -Width 150 -Height 30 -Text "Patch VC Emulator Only" -ToolTip $ToolTip -Info "Ignore any patches and only patches the Virtual Console emulator`nDowngrading and channing the Channel Title or GameID is still accepted" -AddTo $PatchVCGroup
+    $Global:PatchVCButton = CreateButton -X 80 -Y 65 -Width 150 -Height 30 -Text "Patch VC Emulator Only" -ToolTip $ToolTip -Info "Ignore any patches and only patches the Virtual Console emulator`nDowngrading and channing the Channel Title or GameID is still accepted" -AddTo $PatchVCGroup
     $PatchVCButton.Add_Click({ MainFunction -Command "Patch VC" -PatchedFileName "_vc_patched" })
 
     # Create a button to extract the ROM
-    $global:ExtractROMButton = CreateButton -X 240 -Y 65 -Width 150 -Height 30 -Text "Extract ROM Only" -ToolTip $ToolTip -Info "Only extract the .Z64 ROM from the WAD file`nUseful for native N64 emulators" -AddTo $PatchVCGroup
+    $Global:ExtractROMButton = CreateButton -X 240 -Y 65 -Width 150 -Height 30 -Text "Extract ROM Only" -ToolTip $ToolTip -Info "Only extract the .Z64 ROM from the WAD file`nUseful for native N64 emulators" -AddTo $PatchVCGroup
     $ExtractROMButton.Add_Click({ MainFunction -Command "Extract" -PatchedFileName "_extracted" })
 
 
@@ -332,10 +332,10 @@ function CreateMainDialog() {
     ##############
 
     # Create a panel to contain everything for other.
-    $global:MiscPanel = CreatePanel -Width 590 -Height 75 -AddTo $MainDialog
+    $Global:MiscPanel = CreatePanel -Width 590 -Height 75 -AddTo $MainDialog
 
     # Create a groupbox to show the misc buttons.
-    $global:MiscGroup = CreateGroupBox -Width ($MiscPanel.Width - 5) -Height $MiscPanel.Height -Text "Other Buttons" -AddTo $MiscPanel
+    $Global:MiscGroup = CreateGroupBox -Width ($MiscPanel.Width - 5) -Height $MiscPanel.Height -Text "Other Buttons" -AddTo $MiscPanel
 
     # Create a button to show information about the patches.
     $CreditsButton = CreateButton -X 10 -Y 25 -Width 180 -Height 35 -Text "Info / Credits" -ToolTip $ToolTip -Info ("Open the list with credits and info of all of patches involved and those who helped with the " + $ScriptName) -AddTo $MiscGroup
@@ -346,7 +346,7 @@ function CreateMainDialog() {
     $SettingsButton.Add_Click({ $SettingsDialog.ShowDialog() | Out-Null })
 
     # Create a button to close the dialog.
-    $global:ExitButton = CreateButton -X ($SettingsButton.Right + 10) -Y $CreditsButton.Top -Width $CreditsButton.Width -Height $CreditsButton.Height -Text "Exit" -ToolTip $ToolTip -Info ("Save all settings and close the " + $ScriptName) -AddTo $MiscGroup
+    $Global:ExitButton = CreateButton -X ($SettingsButton.Right + 10) -Y $CreditsButton.Top -Width $CreditsButton.Width -Height $CreditsButton.Height -Text "Exit" -ToolTip $ToolTip -Info ("Save all settings and close the " + $ScriptName) -AddTo $MiscGroup
     $ExitButton.Add_Click({ $MainDialog.Close() })
 
 
@@ -355,9 +355,9 @@ function CreateMainDialog() {
     # Misc Panel #
     ##############
 
-    $global:StatusPanel = CreatePanel -Width 625 -Height 30 -AddTo $MainDialog
-    $global:StatusGroup = CreateGroupBox -Width 590 -Height 30 -AddTo $StatusPanel
-    $global:StatusLabel = Createlabel -X 8 -Y 10 -Width 570 -Height 15 -AddTo $StatusGroup
+    $Global:StatusPanel = CreatePanel -Width 625 -Height 30 -AddTo $MainDialog
+    $Global:StatusGroup = CreateGroupBox -Width 590 -Height 30 -AddTo $StatusPanel
+    $Global:StatusLabel = Createlabel -X 8 -Y 10 -Width 570 -Height 15 -AddTo $StatusGroup
 
 
 
@@ -369,8 +369,8 @@ function CreateMainDialog() {
     $InputROMPanel.Location = New-Object System.Drawing.Size(10, ($InputWADPanel.Bottom + 5))
     $InputBPSPanel.Location = New-Object System.Drawing.Size(10, ($InputROMPanel.Bottom + 5))
     $CurrentGamePanel.Location = New-Object System.Drawing.Size(10, ($InputBPSPanel.Bottom + 5))
-    $CustomGameIDPanel.Location = New-Object System.Drawing.Size(10, ($CurrentGamePanel.Bottom + 5))
-    $PatchPanel.Location = New-Object System.Drawing.Size(10, ($CustomGameIDPanel.Bottom + 5))
+    $CustomHeaderPanel.Location = New-Object System.Drawing.Size(10, ($CurrentGamePanel.Bottom + 5))
+    $PatchPanel.Location = New-Object System.Drawing.Size(10, ($CustomHeaderPanel.Bottom + 5))
 
 }
 
@@ -391,7 +391,7 @@ function ResetTool() {
     $CurrentGameComboBox.SelectedIndex = $PatchComboBox.SelectedIndex =  0
     $InjectROMButton.Enabled = $PatchBPSButton.Enabled = $False
     
-    RestoreCustomGameID
+    RestoreCustomHeader
     ChangeGameMode
     SetWiiVCMode -Enable $False
     EnablePatchButtons -Enable $False
@@ -494,8 +494,7 @@ function CreateLanguagesContent() {
 
     if (IsSet -Elem $GamePatch.languages -MinLength 0) {
         $Languages.TextBox.Enabled = $Languages[0].Checked
-        $Languages[0].Add_CheckedChanged({ 
-        $Languages.TextBox.Enabled = $this.checked })
+        $Languages[0].Add_CheckedChanged({ $Languages.TextBox.Enabled = $this.checked -and $PatchOptionsCheckbox.Checked })
     }
     
 }

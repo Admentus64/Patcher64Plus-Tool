@@ -15,17 +15,17 @@ Add-Type -AssemblyName 'System.Drawing'
 # Setup global variables
 
 $global:ScriptName = "Patcher64+ Tool"
-$global:VersionDate = "05-09-2020"
-$global:Version     = "v7.5.1"
+$global:VersionDate = "11-09-2020"
+$global:Version     = "v7.5.2"
 
 $global:GameType = $global:GamePatch = $global:CheckHashSum = ""
 $global:GameFiles = $global:Settings = @{}
 $global:IsWiiVC = $global:MissingFiles = $False
 $global:GameTitleLength = @(20, 40)
 
-$global:CurrentModeFont = [System.Drawing.Font]::new("Microsoft Sans Serif", 12, [System.Drawing.FontStyle]::Bold)
-$global:VCPatchFont = [System.Drawing.Font]::new("Microsoft Sans Serif", 8, [System.Drawing.FontStyle]::Bold)
-$global:URLFont = [System.Drawing.Font]::new("Microsoft Sans Serif", 8, [System.Drawing.FontStyle]::Underline)
+$global:CurrentModeFont = New-Object System.Drawing.Font("Microsoft Sans Serif", 12, [System.Drawing.FontStyle]::Bold)
+$global:VCPatchFont     = New-Object System.Drawing.Font("Microsoft Sans Serif", 8,  [System.Drawing.FontStyle]::Bold)
+$global:URLFont         = New-Object System.Drawing.Font("Microsoft Sans Serif", 8,  [System.Drawing.FontStyle]::Underline)
 
 
 
@@ -148,8 +148,8 @@ ChangeGamesList
 # Restore Last Custom Title and GameID
 $CustomTitleTextBox.Add_TextChanged({  if (IsChecked $CustomHeaderCheckbox)   { $Settings["Core"]["CustomTitle"] = $this.Text } })
 $CustomGameIDTextBox.Add_TextChanged({ if (IsChecked $CustomHeaderCheckbox)   { $Settings["Core"]["CustomGameID"] = $this.Text } })
-$CustomHeaderCheckbox.Add_CheckedChanged({ RestoreCustomGameID })
-RestoreCustomGameID
+$CustomHeaderCheckbox.Add_CheckedChanged({ RestoreCustomHeader })
+RestoreCustomHeader
 
 # Restore VC Checkboxes
 CheckVCOptions

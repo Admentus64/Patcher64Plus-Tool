@@ -53,12 +53,14 @@ function MainFunction([String]$Command, [String]$PatchedFileName) {
     # GameID / Title
     if ($CustomHeaderCheckbox.Checked) {
         if ($CustomTitleTextBox.TextLength -gt 0)    { $Header[0 + [int]$IsWiiVC * 2] = $CustomTitleTextBox.Text }
+        if ($CustomGameIDTextbox.TextLength -eq 4)   { $Header[1 + [int]$IsWiiVC * 2] = $CustomGameIDTextBox.Text }
 
-        if (!(IsSet -Elem $GamePatch.languages[$Item].n64_gameID)) {
-            if ($CustomGameIDTextbox.TextLength -eq 4)   { $Header[1 + [int]$IsWiiVC * 2] = $CustomGameIDTextBox.Text }
+        if (IsSet -Elem $GamePatch.languages[$Item].n64_gameID -and !$IsWiiVC) {
+            $Header[1] = $Header[1].substring(0, 3)
+            $Header[1] += $GamePatch.languages[$Item].n64_gameID.substring(3, 1)
         }
     }
-
+    
     # Decompress
     $Decompress = $False
     if ($GamePatch.file -like "*\Decompressed\*")   { $Decompress = $True }

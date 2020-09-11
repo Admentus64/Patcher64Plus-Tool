@@ -102,14 +102,14 @@ function SetMainScreenSize() {
     if ($IsWiiVC) {
         $CustomTitleTextBoxLabel.Text = "Channel Title:"
         if ($GameType.patches)   { $PatchVCPanel.Location = New-Object System.Drawing.Size(10, ($PatchPanel.Bottom + 5)) }
-        else                     { $PatchVCPanel.Location = New-Object System.Drawing.Size(10, ($CustomGameIDPanel.Bottom + 5)) }
+        else                     { $PatchVCPanel.Location = New-Object System.Drawing.Size(10, ($CustomHeaderPanel.Bottom + 5)) }
         $MiscPanel.Location = New-Object System.Drawing.Size(10, ($PatchVCPanel.Bottom + 5))
     }
 
     else {
         $CustomTitleTextBoxLabel.Text = "Game Title:"
         if ($GameType.patches)   { $MiscPanel.Location = New-Object System.Drawing.Size(10, ($PatchPanel.Bottom + 5)) }
-        else                     { $MiscPanel.Location = New-Object System.Drawing.Size(10, ($CustomGameIDPanel.Bottom + 5)) }
+        else                     { $MiscPanel.Location = New-Object System.Drawing.Size(10, ($CustomHeaderPanel.Bottom + 5)) }
     }
 
     $StatusPanel.Location = New-Object System.Drawing.Size(10, ($MiscPanel.Bottom + 5))
@@ -466,14 +466,14 @@ function GetFilePaths() {
 
 
 #==============================================================================================================================================================================================
-function RestoreCustomGameID() {
+function RestoreCustomHeader() {
     
     if (IsChecked $CustomHeaderCheckbox) {
-        if (IsSet -Elem $Settings["Core"][$CustomTitleTextBox.Name]) {
-            $CustomTitleTextBox.Text  = $Settings["Core"][$CustomTitleTextBox.Name]
+        if (IsSet -Elem $Settings["Core"]["CustomTitle"]) {
+            $CustomTitleTextBox.Text  = $Settings["Core"]["CustomTitle"]
         }
-        if (IsSet -Elem $Settings["Core"][$CustomGameIDTextBox.Name]) {
-            $CustomGameIDTextBox.Text = $Settings["Core"][$CustomGameIDTextBox.Name]
+        if (IsSet -Elem $Settings["Core"]["CustomGameID"]) {
+            $CustomGameIDTextBox.Text = $Settings["Core"]["CustomGameID"]
         }
     }
     else { GetHeader }
@@ -488,7 +488,7 @@ function RestoreCustomGameID() {
 function EnableGUI([Boolean]$Enable) {
     
     $InputWADPanel.Enabled = $InputROMPanel.Enabled = $InputBPSPanel.Enabled = $Enable
-    $CurrentGamePanel.Enabled = $CustomGameIDPanel.Enabled = $Enable
+    $CurrentGamePanel.Enabled = $CustomHeaderPanel.Enabled = $Enable
     $PatchPanel.Enabled = $MiscPanel.Enabled = $PatchVCPanel.Enabled = $Enable
 
 }
@@ -652,7 +652,7 @@ Export-ModuleMember -Function IsSet
 Export-ModuleMember -Function AddTextFileToTextbox
 Export-ModuleMember -Function StrLike
 Export-ModuleMember -Function GetFilePaths
-Export-ModuleMember -Function RestoreCustomGameID
+Export-ModuleMember -Function RestoreCustomHeader
 Export-ModuleMember -Function EnableGUI
 
 Export-ModuleMember -Function Get-FileName
