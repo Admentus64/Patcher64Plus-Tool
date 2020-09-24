@@ -29,7 +29,7 @@ function ChangeBytes([String]$File, [String]$Offset, [Array]$Values, [int]$Inter
 
 
 #==============================================================================================================================================================================================
-function PatchBytes([String]$File, [String]$Offset, [String]$Length, [String]$Patch, [Switch]$Texture) {
+function PatchBytes([String]$File, [String]$Offset, [String]$Length, [String]$Patch, [Switch]$Texture, [Switch]$Pad) {
     
     if (IsSet -Elem $File) { $ByteArrayGame = [IO.File]::ReadAllBytes($File) }
     if ($Texture) {
@@ -56,6 +56,7 @@ function PatchBytes([String]$File, [String]$Offset, [String]$Length, [String]$Pa
         [uint32]$Length = GetDecimal -Hex $Length
         for ($i=0; $i -lt $Length; $i++) {
             if ($i -le $PatchByteArray.Length)   { $ByteArrayGame[$Offset + $i] = $PatchByteArray[($i)] }
+            elseif ($Pad)                        { $ByteArrayGame[$Offset + $i] = 255 }
             else                                 { $ByteArrayGame[$Offset + $i] = 0 }
         }
     }

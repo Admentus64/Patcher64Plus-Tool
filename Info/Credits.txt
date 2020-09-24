@@ -2,6 +2,9 @@
 === PATCHER64+ TOOL ===
 =======================
 
+--- Thanks to my Patreons --
+- Richard Moser
+
 --- Thanks to my past Patreons --
 - Raim, Gicrax, Crypto Logiq, Moons (Luke), Ronald
 

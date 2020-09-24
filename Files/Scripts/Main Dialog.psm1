@@ -429,7 +429,6 @@ function DisablePatches() {
     $PatchOptionsButton.Enabled = $GamePatch.options -and $PatchOptionsCheckbox.Checked
     
     $PatchLanguagesButton.Enabled = $PatchLanguagesButton.Visible = (IsSet -Elem $GamePatch.languages)
-    $Languages.TextBox.Enabled = $PatchOptionsCheckbox.Checked -and $Languages[0].Checked -and (IsSet -Elem $GamePatch.languages -MinLength 1)
 
     $PatchVCRemoveFilterLabel.Enabled = $PatchVCRemoveFilter.Enabled = !(StrLike -str $GamePatch.command -val "Patch Boot DOL")
 
@@ -473,30 +472,60 @@ function CreateLanguagesContent() {
     # OPTIONS #
     $Languages.TextBox.Controls.Clear()
     if ($GameType.mode -eq "Ocarina of Time") {
-        $TextPanel                        = CreateReduxPanel                 -Row 0 -AddTo $Languages.TextBox
-        $Languages.TextSpeed1x            = CreateReduxRadioButton -Column 0 -Row 0 -AddTo $TextPanel -Checked -Text "1x Text Speed"           -ToolTip $ToolTip -Info "Leave the dialogue text speed at normal"               -Name "TextSpeed1x"
-        $Languages.TextSpeed2x            = CreateReduxRadioButton -Column 1 -Row 0 -AddTo $TextPanel          -Text "2x Text Speed"           -ToolTip $ToolTip -Info "Set the dialogue text speed to be twice as fast"       -Name "TextSpeed2x"
-        $Languages.TextSpeed3x            = CreateReduxRadioButton -Column 2 -Row 0 -AddTo $TextPanel          -Text "3x Text Speed"           -ToolTip $ToolTip -Info "Set the dialogue text speed to be three times as fast" -Name "TextSpeed3x"
+        $Languages.TextSpeedPanel         = CreateReduxPanel                 -Row 0 -AddTo $Languages.TextBox
+        $Languages.TextSpeed1x            = CreateReduxRadioButton -Column 0 -Row 0 -AddTo $Languages.TextSpeedPanel -Checked -Text "1x Text Speed"           -ToolTip $ToolTip -Info "Leave the dialogue text speed at normal"               -Name "TextSpeed1x"
+        $Languages.TextSpeed2x            = CreateReduxRadioButton -Column 1 -Row 0 -AddTo $Languages.TextSpeedPanel          -Text "2x Text Speed"           -ToolTip $ToolTip -Info "Set the dialogue text speed to be twice as fast"       -Name "TextSpeed2x"
+        $Languages.TextSpeed3x            = CreateReduxRadioButton -Column 2 -Row 0 -AddTo $Languages.TextSpeedPanel          -Text "3x Text Speed"           -ToolTip $ToolTip -Info "Set the dialogue text speed to be three times as fast" -Name "TextSpeed3x"
         $Languages.TextRestore            = CreateReduxCheckBox    -Column 0 -Row 2 -AddTo $Languages.TextBox  -Text "Restore Text"            -ToolTip $ToolTip -Info "Restores the text used from the GC revision and applies grammar and typo fixes" -Name "TextRestore"
         $Languages.TextFemalePronouns     = CreateReduxCheckBox    -Column 1 -Row 2 -AddTo $Languages.TextBox  -Text "Female Pronouns"         -ToolTip $ToolTip -Info "Refer to Link as a female character`n- Requires the Restore Text option" -Name "TextFemalePronouns"
         $Languages.TextDialogueColors     = CreateReduxCheckBox    -Column 2 -Row 2 -AddTo $Languages.TextBox  -Text "GC Text Dialogue Colors" -ToolTip $ToolTip -Info "Set the Text Dialogue Colors to match the GameCube's color scheme" -Name "TextDialogueColors"
         $Languages.TextUnisizeTunics      = CreateReduxCheckBox    -Column 0 -Row 3 -AddTo $Languages.TextBox  -Text "Unisize Tunics"          -ToolTip $ToolTip -Info "Adjust the dialogue to mention that the Goron Tunic and Zora Tunic are unisize`n- Useful for the Unlock Tunics option" -Name "TextUnisizeTunics"
+        
+        for ($i=0; $i -lt $GamePatch.languages.Length; $i++) {
+            $Languages[$i].Add_CheckedChanged({ UnlockLanguageContent })
+        }
+        UnlockLanguageContent
 
-        $Languages.TextFemalePronouns.Enabled = $Languages.TextRestore.Checked
-        $Languages.TextRestore.Add_CheckedChanged({ $Languages.TextFemalePronouns.Enabled = $this.checked })
     }
 
     elseif ($GameType.mode -eq "Majora's Mask") {
         $Languages.TextRestore            = CreateReduxCheckBox -Column 0 -Row 1 -AddTo $Languages.TextBox -Text "Restore Text"          -ToolTip $ToolTip -Info "Restores and fixes the following:`n- Restore the area titles cards for those that do not have any`n- Sound effects that do not play during dialogue`n- Grammar and typo fixes" -Name "TextRestore"
         $Languages.CorrectCircusMask      = CreateReduxCheckBox -Column 1 -Row 1 -AddTo $Languages.TextBox -Text "Correct Circus Mask"   -ToolTip $ToolTip -Info "Change the Circus Leader's Mask to Troupe Leader's Mask and all references to it" -Name "CorrectCircusMask"
         $Languages.TextRazorSword         = CreateReduxCheckBox -Column 2 -Row 1 -AddTo $Languages.TextBox -Text "Permanent Razor Sword" -ToolTip $ToolTip -Info "Refer the Razor Sword as no longer being breakable" -Name "TextRazorSword"
+        $Languages.OcarinaIcons           = CreateReduxCheckBox -Column 0 -Row 2 -AddTo $Languages.TextBox -Text "Ocarina Icons (WIP)"   -ToolTip $ToolTip -Info "Restore the Ocarina Icons with their text when transformed like in the N64 Beta or 3DS version (Work-In-Progress)`nRequires the Restore Text option" -Name "OcarinaIcons"
+        
+        $Languages[0].Add_CheckedChanged({
+            $Languages.TextRestore.Enabled = $Languages.CorrectCircusMask.Enabled =  $Languages.TextRazorSword.Enabled = $Languages.OcarinaIcons.Enabled = $this.checked
+        })
+
+        $Languages.OcarinaIcons.Enabled = $Languages.TextRestore.Checked
+        $Languages.TextRestore.Add_CheckedChanged({ $Languages.OcarinaIcons.Enabled = $this.checked })
+    }
+        
+}
+
+
+
+#==============================================================================================================================================================================================
+function UnlockLanguageContent() {
+    
+    # English options
+    $Languages.TextRestore.Enabled = $Languages.TextFemalePronouns.Enabled = $Languages.TextDialogueColors.Enabled = $Languages.TextUnisizeTunics.Enabled = $Languages[0].checked
+
+    # Set max text speed in each language
+    for ($i=0; $i -lt $GamePatch.languages.Length; $i++) {
+        if ($Languages[$i].checked) {
+            $Languages.TextSpeed1x.Enabled = $Languages.TextSpeed2x.Enabled = $Languages.TextSpeed3x.Enabled = $True
+            if ($GamePatch.languages[$i].max_text_speed -lt 3) {
+                $Languages.TextSpeed3x.Enabled = $False
+                if ($Languages.TextSpeed3x.Checked) { $Languages.TextSpeed2x.checked = $True }
+            }
+            if ($GamePatch.languages[$i].max_text_speed -lt 2) {
+                $Languages.TextSpeed1x.Enabled = $Languages.TextSpeed2x.Enabled = $False
+            }
+        }
     }
 
-    if (IsSet -Elem $GamePatch.languages -MinLength 0) {
-        $Languages.TextBox.Enabled = $Languages[0].Checked
-        $Languages[0].Add_CheckedChanged({ $Languages.TextBox.Enabled = $this.checked -and $PatchOptionsCheckbox.Checked })
-    }
-    
 }
 
 

@@ -55,7 +55,8 @@ function SetFileParameters() {
     $Files.oot.hud_mm_hearts                = $Paths.Games + "\Ocarina of Time\Textures\HUD\MM HUD Hearts.bin"
     $Files.oot.hud_mm_button                = $Paths.Games + "\Ocarina of Time\Textures\HUD\MM HUD Button.bin"
     $Files.oot.hud_mm_key_rupee             = $Paths.Games + "\Ocarina of Time\Textures\HUD\MM HUD Key & Rupee.bin"
-    $Files.oot.file_select_1                = $Paths.Games + "\Ocarina of Time\Binaries\File Select.bin"
+
+    $Files.oot.file_select                  = $Paths.Games + "\Ocarina of Time\Binaries\File Select.bin"
     $Files.oot.message_table_restore        = $Paths.Games + "\Ocarina of Time\Binaries\Message\Table Restore.bin"
     $Files.oot.message_table_girl           = $Paths.Games + "\Ocarina of Time\Binaries\Message\Table Girl.bin"
     $Files.oot.message_songs                = $Paths.Games + "\Ocarina of Time\Binaries\Message\Songs.bin"
@@ -75,12 +76,27 @@ function SetFileParameters() {
 
 
     # Store Majora's Mask files
-    $Files.mm.troupe_leaders_mask           = $Paths.Games + "\Majora's Mask\Textures\Troupe Leader's Mask.yaz0"
-    $Files.mm.carnival_of_time              = $Paths.Games + "\Majora's Mask\Textures\Carnival of Time.bin"
-    $Files.mm.four_giant                    = $Paths.Games + "\Majora's Mask\Textures\Four Giants.bin"
-    $Files.mm.lens_of_truth                 = $Paths.Games + "\Majora's Mask\Textures\Lens of Truth.bin"
+    $Files.mm.troupe_leaders_mask_text      = $Paths.Games + "\Majora's Mask\Textures\Icons\Troupe Leader's Mask Text.yaz0"
+    $Files.mm.deku_pipes_icon               = $Paths.Games + "\Majora's Mask\Textures\Icons\Deku Pipes Icon.yaz0"
+    $Files.mm.deku_pipes_Text               = $Paths.Games + "\Majora's Mask\Textures\Icons\Deku Pipes Text.yaz0"
+    $Files.mm.goron_drums_icon              = $Paths.Games + "\Majora's Mask\Textures\Icons\Goron Drums Icon.yaz0"
+    $Files.mm.goron_drums_text              = $Paths.Games + "\Majora's Mask\Textures\Icons\Goron Drums Text.yaz0"
+    $Files.mm.zora_guitar_icon              = $Paths.Games + "\Majora's Mask\Textures\Icons\Zora Guitar Icon.yaz0"
+    $Files.mm.zora_guitar_text              = $Paths.Games + "\Majora's Mask\Textures\Icons\Zora Guitar Text.yaz0"
+
+    $Files.mm.carnival_of_time              = $Paths.Games + "\Majora's Mask\Textures\Widescreen\Carnival of Time.bin"
+    $Files.mm.four_giant                    = $Paths.Games + "\Majora's Mask\Textures\Widescreen\Four Giants.bin"
+    $Files.mm.lens_of_truth                 = $Paths.Games + "\Majora's Mask\Textures\Widescreen\Lens of Truth.bin"
+
+    $Files.mm.goron_red_runic               = $Paths.Games + "\Majora's Mask\Textures\Recolor\Goron Red Tunic.bin"
+    $Files.mm.zora_blue_gradient            = $Paths.Games + "\Majora's Mask\Textures\Recolor\Zora Blue Gradient.bin"
+    $Files.mm.zora_blue_palette             = $Paths.Games + "\Majora's Mask\Textures\Recolor\Zora Blue Palette.bin"
+
     $Files.mm.romani_ranch                  = $Paths.Games + "\Majora's Mask\Textures\Romani Sign.bin"
     $Files.mm.skull_kid_beak                = $Paths.Games + "\Majora's Mask\Textures\Skull Kid Beak.bin"
+
+    $Files.mm.zora_physics_fix              = $Paths.Games + "\Majora's Mask\Binaries\Zora Physics Fix.bin"
+
     $Files.mm.message_table                 = $Paths.Games + "\Majora's Mask\Binaries\Message\Table.bin"
     $Files.mm.message_razor1                = $Paths.Games + "\Majora's Mask\Binaries\Message\Razor Sword 1.bin"
     $Files.mm.message_razor2                = $Paths.Games + "\Majora's Mask\Binaries\Message\Razor Sword 2.bin"

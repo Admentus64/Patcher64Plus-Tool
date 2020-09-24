@@ -2,7 +2,7 @@ function PatchByteOptionsOoT() {
     
     # HERO MODE #
 
-    if (IsText -Elem $Options.Damage -Text "OKHO Mode" -Enabled) {
+    if (IsText -Elem $Options.Damage -Text "OHKO Mode" -Enabled) {
         ChangeBytes -Offset "AE8073" -Values @("09", "04") -Interval 16
         ChangeBytes -Offset "AE8096" -Values @("82", "00")
         ChangeBytes -Offset "AE8099" -Values @("00", "00", "00")
@@ -37,6 +37,9 @@ function PatchByteOptionsOoT() {
             ChangeBytes -Offset "AE8099" -Values @("10", "81", "43")
         }
     }
+
+    if (IsText -Elem $Options.MagicUsage -Text "2x Magic Usage" -Enabled)      { ChangeBytes -Offset "AE84FA" -Values @("2C","40") }
+    elseif (IsText -Elem $Options.MagicUsage -Text "3x Magic Usage" -Enabled)  { ChangeBytes -Offset "AE84FA" -Values @("2C","80") }
 
     <#
     if (IsText -Elem $Options.BossHP -Text "2x Boss HP" -Enabled) {
@@ -174,6 +177,63 @@ function PatchByteOptionsOoT() {
         ChangeBytes -Offset "B0F5E4" -Values @("00", "00","00", "00")
         ChangeBytes -Offset "B0F680" -Values @("00", "00","00", "00")
         ChangeBytes -Offset "B0F688" -Values @("00", "00","00", "00")
+    }
+
+    if (IsChecked -Elem $Options.JumpAnimations -Enabled) {
+        
+
+
+        <#
+        # Animations
+        PatchBytes  -Offset "66B420" -Patch "Jump\Front Flip.bin"
+        PatchBytes  -Offset "66BFB0" -Patch "Jump\Back Flip.bin"
+        ChangeBytes -Offset "F05B78" -Values @("00", "0D") # Front Flip Pointer
+        ChangeBytes -Offset "F05B88" -Values @("00", "0D") # Back Flip Pointer
+
+        # Control code
+        #ChangeBytes -Offset ""  -Values @("0C", "03", "60", "4D")
+        #ChangeBytes -Offset ""  -Values @("00", "00", "00", "00")
+        #PatchBytes  -Offset ""  -Patch "Jump\Control Code.bin"
+        
+        # Switch to alternate jump animations
+        #ChangeBytes -Offset ""  -Values @("0C", "03", "61", "02")
+        #ChangeBytes -Offset ""  -Values @("0C", "03", "61", "02")
+        #ChangeBytes -Offset ""  -Values @("0C", "03", "61", "02")
+        #ChangeBytes -Offset ""  -Values @("0C", "03", "61", "02")
+        #ChangeBytes -Offset ""  -Values @("0C", "03", "61", "02")
+        #ChangeBytes -Offset ""  -Values @("0C", "03", "61", "02")
+        #ChangeBytes -Offset ""  -Values @("0C", "03", "61", "02")
+        #ChangeBytes -Offset ""  -Values @("0C", "03", "61", "02")
+        #ChangeBytes -Offset ""  -Values @("0C", "03", "61", "02")
+        #ChangeBytes -Offset ""  -Values @("0C", "03", "61", "02")
+        #ChangeBytes -Offset ""  -Values @("0C", "03", "61", "02")
+        #ChangeBytes -Offset ""  -Values @("0C", "03", "61", "02")
+        #ChangeBytes -Offset ""  -Values @("0C", "03", "61", "02")
+        #ChangeBytes -Offset ""  -Values @("0C", "03", "61", "02")
+        #ChangeBytes -Offset ""  -Values @("0C", "03", "61", "02")
+        #ChangeBytes -Offset ""  -Values @("0C", "03", "61", "02")
+        #ChangeBytes -Offset ""  -Values @("0C", "03", "61", "02")
+        #ChangeBytes -Offset ""  -Values @("0C", "03", "61", "02")
+        #ChangeBytes -Offset ""  -Values @("0C", "03", "61", "02")
+        #ChangeBytes -Offset ""  -Values @("0C", "03", "61", "02")
+        #ChangeBytes -Offset ""  -Values @("0C", "03", "61", "02")
+        #ChangeBytes -Offset ""  -Values @("0C", "03", "61", "02")
+        #ChangeBytes -Offset ""  -Values @("0C", "03", "61", "02")
+        #ChangeBytes -Offset ""  -Values @("0C", "03", "61", "02")
+        #ChangeBytes -Offset ""  -Values @("0C", "03", "61", "02")
+        #ChangeBytes -Offset ""  -Values @("0C", "03", "61", "02")
+        #ChangeBytes -Offset ""  -Values @("0C", "03", "61", "02")
+        #ChangeBytes -Offset ""  -Values @("0C", "03", "61", "02")
+        #ChangeBytes -Offset ""  -Values @("0C", "03", "61", "02")
+        #ChangeBytes -Offset ""  -Values @("0C", "03", "61", "02")
+        #ChangeBytes -Offset ""  -Values @("0C", "03", "61", "02")
+        #ChangeBytes -Offset ""  -Values @("0C", "03", "61", "02")
+        #ChangeBytes -Offset ""  -Values @("0C", "03", "61", "02")
+        #ChangeBytes -Offset ""  -Values @("0C", "03", "61", "02")
+
+        #PatchBytes  -Offset ""  -Patch "Jump\Animation.bin"
+        #>
+
     }
 
     if (IsChecked -Elem $Options.DisableLowHPSound -Enabled)   { ChangeBytes -Offset "ADBA1A"  -Values @("00", "00") }
@@ -473,15 +533,17 @@ function PatchLanguageOptionsOoT() {
     if (IsChecked -Elem $Languages.TextSpeed2x -Enabled) {
         ChangeBytes -Offset "B5006F" -Values @("02") # Text Speed
 
-        # Correct Ruto Confession Textboxes
-        $Offset = SearchBytes -File $File -Values @("1A", "41", "73", "20", "61", "20", "72", "65", "77", "61", "72", "64", "2E", "2E", "2E", "01")
-        PatchBytes -File $File -Offset $Offset -Patch "Message\Ruto Confession.bin"
+        if ($Languages[0].checked) {
+            # Correct Ruto Confession Textboxes
+            $Offset = SearchBytes -File $File -Values @("1A", "41", "73", "20", "61", "20", "72", "65", "77", "61", "72", "64", "2E", "2E", "2E", "01")
+            PatchBytes -File $File -Offset $Offset -Patch "Message\Ruto Confession.bin"
 
-        # Correct Phantom Ganon Defeat Textboxes
-        $Offset = SearchBytes -File $File -Values @("0C", "3C", "42", "75", "74", "20", "79", "6F", "75", "20", "68", "61", "76", "65", "20", "64")
-        ChangeBytes -File $File -Offset ( Get24Bit -Value ( (GetDecimal -Hex $Offset) + (GetDecimal -Hex "1") ) ) -Values @("66")
-        ChangeBytes -File $File -Offset ( Get24Bit -Value ( (GetDecimal -Hex $Offset) + (GetDecimal -Hex "5D") ) ) -Values @("66")
-        ChangeBytes -File $File -Offset ( Get24Bit -Value ( (GetDecimal -Hex $Offset) + (GetDecimal -Hex "BA") ) ) -Values @("60")
+            # Correct Phantom Ganon Defeat Textboxes
+            $Offset = SearchBytes -File $File -Values @("0C", "3C", "42", "75", "74", "20", "79", "6F", "75", "20", "68", "61", "76", "65", "20", "64")
+            ChangeBytes -File $File -Offset ( Get24Bit -Value ( (GetDecimal -Hex $Offset) + (GetDecimal -Hex "1") ) ) -Values @("66")
+            ChangeBytes -File $File -Offset ( Get24Bit -Value ( (GetDecimal -Hex $Offset) + (GetDecimal -Hex "5D") ) ) -Values @("66")
+            ChangeBytes -File $File -Offset ( Get24Bit -Value ( (GetDecimal -Hex $Offset) + (GetDecimal -Hex "BA") ) ) -Values @("60")
+        }
     }
     elseif (IsChecked -Elem $Languages.TextSpeed3x -Enabled) {
         ChangeBytes -Offset "B5006F" -Values @("03") # Text Speed
@@ -583,7 +645,7 @@ function PatchByteOptionsMM() {
     
     # HERO MODE #
 
-    if (IsText -Elem $Options.Damage -Text "OKHO Mode" -Enabled) {
+    if (IsText -Elem $Options.Damage -Text "OHKO Mode" -Enabled) {
         ChangeBytes -Offset "BABE7F" -Values @("09", "04") -Interval 16
         ChangeBytes -Offset "BABEA2" -Values @("2A", "00")
         ChangeBytes -Offset "BABEA5" -Values @("00", "00", "00")
@@ -619,6 +681,9 @@ function PatchByteOptionsMM() {
         }
     }
 
+    if (IsText -Elem $Options.MagicUsage -Text "2x Magic Usage" -Enabled)      { ChangeBytes -Offset "BAC306" -Values @("2C","40") }
+    elseif (IsText -Elem $Options.MagicUsage -Text "3x Magic Usage" -Enabled)  { ChangeBytes -Offset "BAC306" -Values @("2C","80") }
+
 
 
     # GRAPHICS #
@@ -632,9 +697,9 @@ function PatchByteOptionsMM() {
     }
 
     if (IsChecked -Elem $Options.WidescreenTextures -Enabled) {
-        PatchBytes -Offset "A9A000" -Length "12C00" -Texture -Patch "Carnival of Time.bin"
-        PatchBytes -Offset "AACC00" -Length "12C00" -Texture -Patch "Four Giants.bin"
-        PatchBytes -Offset "C74DD0" -Length "800"   -Texture -Patch "Lens of Truth.bin"
+        PatchBytes -Offset "A9A000" -Length "12C00" -Texture -Patch "Widescreen\Carnival of Time.bin"
+        PatchBytes -Offset "AACC00" -Length "12C00" -Texture -Patch "Widescreen\Four Giants.bin"
+        PatchBytes -Offset "C74DD0" -Length "800"   -Texture -Patch "Widescreen\Lens of Truth.bin"
     }
 
     if (IsChecked -Elem $Options.ExtendedDraw -Enabled)        { ChangeBytes -Offset "B50874" -Values @("00", "00", "00", "00") }
@@ -813,7 +878,7 @@ function PatchLanguageOptionsMM() {
     }
 
     if (IsChecked -Elem $Languages.CorrectCircusMask -Enabled) {
-        PatchBytes -Offset "A2DDC4" -Length "26F" -Texture -Patch "Troupe Leader's Mask.yaz0"
+        PatchBytes -Offset "A2DDC4" -Length "26F" -Texture -Patch "Icons\Troupe Leader's Mask Text.yaz0"
 
         if (IsChecked -Elem $Languages.TextRestore -Enabled) {
             ChangeBytes -Offset "AD4431" -Values @("54", "72", "6F", "75", "70", "65"); ChangeBytes -Offset "B12DF0" -Values @("54", "72", "6F", "75", "70", "65"); ChangeBytes -Offset "B1BA02" -Values @("54", "72", "6F", "75", "70", "65")
@@ -825,6 +890,22 @@ function PatchLanguageOptionsMM() {
             ChangeBytes -Offset "B1F495" -Values @("54", "72", "6F", "75", "70", "65"); ChangeBytes -Offset "B20678" -Values @("74", "72", "6F", "75", "70", "65"); ChangeBytes -Offset "B21258" -Values @("54", "72", "6F", "75", "70", "65")
             ChangeBytes -Offset "B22B67" -Values @("54", "72", "6F", "75", "70", "65")
         }
+    }
+
+    if (IsChecked -Elem $Languages.OcarinaIcons -Enabled) {
+        PatchBytes -Offset "A3B9BC" -Length "850" -Texture -Pad -Patch "Icons\Deku Pipes Icon.yaz0"  # Slingshot, ID: 0x0B
+        PatchBytes -Offset "A28AF4" -Length "1AF" -Texture -Pad -Patch "Icons\Deku Pipes Text.yaz0"
+        PatchBytes -Offset "A44BFC" -Length "A69" -Texture -Pad -Patch "Icons\Goron Drums Icon.yaz0" # Blue Fire, ID: 0x1C
+        PatchBytes -Offset "A28204" -Length "26F" -Texture -Pad -Patch "Icons\Goron Drums Text.yaz0"
+        PatchBytes -Offset "A4AAFC" -Length "999" -Texture -Pad -Patch "Icons\Zora Guitar Icon.yaz0" # Hylian Loach, ID: 0x26
+        PatchBytes -Offset "A2B2B4" -Length "230" -Texture -Pad -Patch "Icons\Zora Guitar Text.yaz0"
+
+        # Pointer Deku Pipes icon
+        ChangeBytes -Offset "A36D80" -Values @("00", "00", "4A", "B0")
+
+        # Pointer Goron Drums Text
+        ChangeBytes -Offset "A27674" -Values @("00", "00", "2B", "A0")
+        ChangeBytes -Offset "A276D0" -Values @("00", "00", "09", "C0")
     }
 
     if (IsChecked -Elem $Languages.TextRazorSword -Enabled) {
@@ -928,25 +1009,26 @@ function PatchOptionsSM64() {
 #==============================================================================================================================================================================================
 function CreateOoTOptionsContent() {
     
-    CreateOptionsDialog -Width 900 -Height 650
+    CreateOptionsDialog -Width 900 -Height 710
     $ToolTip = CreateTooltip
 
 
 
     # HERO MODE #
-    $HeroModeBox                       = CreateReduxGroup -Y 50 -Height 1 -AddTo $Options.Panel -Text "Hero Mode"
+    $HeroModeBox                       = CreateReduxGroup -Y 50 -Height 2 -AddTo $Options.Panel -Text "Hero Mode"
 
-    $Options.Damage                    = CreateReduxComboBox -Column 0 -Row 1 -AddTo $HeroModeBox -Items @("1x Damage", "2x Damage", "4x Damage", "8x Damage", "OKHO Mode") -Text "Damage:" -ToolTip $ToolTip -Info "Set the amount of damage you receive`nOKHO Mode = You die in one hit" -Name "Damage"
+    $Options.Damage                    = CreateReduxComboBox -Column 0 -Row 1 -AddTo $HeroModeBox -Items @("1x Damage", "2x Damage", "4x Damage", "8x Damage", "OHKO Mode") -Text "Damage:" -ToolTip $ToolTip -Info "Set the amount of damage you receive`nOHKO Mode = You die in one hit" -Name "Damage"
     $Options.Recovery                  = CreateReduxComboBox -Column 2 -Row 1 -AddTo $HeroModeBox -Items @("1x Recovery", "1/2x Recovery", "1/4x Recovery", "0x Recovery") -Text "Recovery:" -ToolTip $ToolTip -Info "Set the amount health you recovery from Recovery Hearts" -Name "Recovery"
     $Options.SelectMQDungeons          = CreateReduxButton   -Column 4 -Row 1 -AddTo $HeroModeBox -Text "Set Master Quest" -ToolTip $ToolTip -Info "Select the dungeons you want from Master Quest to patch into Ocarina of Time"
     $Options.SelectMQDungeons.Add_Click( { $Options.MasterQuestDungeonsDialog.ShowDialog() } )
-    #$Options.BossHP                    = CreateReduxComboBox -Column 0 -Row 2 -AddTo $HeroModeBox -Items @("1x Boss HP", "2x Boss HP", "3x Boss HP")          -Text "Boss HP:"    -ToolTip $ToolTip -Info "Set the amount of health for bosses"   -Name "BossHP"
-    #$Options.MonsterHP                 = CreateReduxComboBox -Column 2 -Row 2 -AddTo $HeroModeBox -Items @("1x Monster HP", "2x Monster HP", "3x Monster HP") -Text "Monster HP:" -ToolTip $ToolTip -Info "Set the amount of health for monsters" -Name "MonsterHP"
+    $Options.MagicUsage                = CreateReduxComboBox -Column 0 -Row 2 -AddTo $HeroModeBox -Items @("1x Magic Usage", "2x Magic Usage", "3x Magic Usage") -Text "Magic Usage:" -ToolTip $ToolTip -Info "Set the amount of times magic is consumed at" -Name "MagicUsage"
+    #$Options.BossHP                   = CreateReduxComboBox -Column 0 -Row 2 -AddTo $HeroModeBox -Items @("1x Boss HP", "2x Boss HP", "3x Boss HP")          -Text "Boss HP:"    -ToolTip $ToolTip -Info "Set the amount of health for bosses"   -Name "BossHP"
+    #$Options.MonsterHP                = CreateReduxComboBox -Column 2 -Row 2 -AddTo $HeroModeBox -Items @("1x Monster HP", "2x Monster HP", "3x Monster HP") -Text "Monster HP:" -ToolTip $ToolTip -Info "Set the amount of health for monsters" -Name "MonsterHP"
 
 
 
     # GRAPHICS / Sound #
-    $GraphicsBox                       = CreateReduxGroup -Y ($HeroModeBox.Bottom + 5) -Height 2 -AddTo $Options.Panel -Text "Graphics / Sound"
+    $GraphicsBox                       = CreateReduxGroup -Y ($HeroModeBox.Bottom + 5) -Height 3 -AddTo $Options.Panel -Text "Graphics / Sound"
     
     $Options.Widescreen                = CreateReduxCheckBox -Column 0 -Row 1 -AddTo $GraphicsBox -Text "16:9 Widescreen"        -ToolTip $ToolTip -Info "Native 16:9 widescreen display support" -Name "Widescreen"
     $Options.WidescreenTextures        = CreateReduxCheckBox -Column 1 -Row 1 -AddTo $GraphicsBox -Text "16:9 Textures"          -ToolTip $ToolTip -Info "16:9 backgrounds and textures suitable for native 16:9 widescreen display support" -Name "WideScreenTextures"
@@ -958,6 +1040,8 @@ function CreateOoTOptionsContent() {
     $Options.Voices                    = CreateReduxComboBox -Column 2 -Row 2 -AddTo $GraphicsBox -Items @("No Voice Changes", "Majora's Mask Link Voices", "Feminine Link Voices") -Text "Voice:" -ToolTip $ToolTip -Info "1. Replace the voices for Link with those used in Majora's Mask`n2. Replace the voices for Link to sound feminine" -Name "Voices"
     $Options.DisableLowHPSound         = CreateReduxCheckBox -Column 4 -Row 2 -AddTo $GraphicsBox -Text "Disable Low HP Beep"    -ToolTip $ToolTip -Info "There will be absolute silence when Link's HP is getting low" -Name "DisableLowHPSound"
     
+    $Options.JumpAnimations            = CreateReduxCheckBox -Column 0 -Row 3 -AddTo $GraphicsBox -Text "MM Jump Animations"     -ToolTip $ToolTip -Info "Replacing the jumping animations with those from Majora's mask" -Name "JumpAnimations"
+
 
 
     # INTERFACE #
@@ -1048,7 +1132,7 @@ function CreateOoTOptionsContent() {
     CreateMasterQuestDungeonsDialog
     CreateCapacityDialog
 
-    $Options.Damage.Add_SelectedIndexChanged({ $Options.Recovery.Enabled = $this.Text -ne "OKHO Mode" })
+    $Options.Damage.Add_SelectedIndexChanged({ $Options.Recovery.Enabled = $this.Text -ne "OHKO Mode" })
     $Options.EnableTunicColors.Add_CheckStateChanged({
         $Options.KokiriTunicColor.Enabled = $Options.GoronTunicColor.Enabled = $Options.ZoraTunicColor.Enabled = $this.Checked
         $Options.ResetAllColors.Enabled = $this.Enabled -or $Options.EnableGauntletColors.Enabled
@@ -1058,7 +1142,7 @@ function CreateOoTOptionsContent() {
         $Options.ResetAllColors.Enabled = $Options.EnableTunicColors.Checked -or $this.Checked
     })
 
-    $Options.Recovery.Enabled = $Options.Damage.Text -ne "OKHO Mode"
+    $Options.Recovery.Enabled = $Options.Damage.Text -ne "OHKO Mode"
     $Options.KokiriTunicColor.Enabled = $Options.GoronTunicColor.Enabled = $Options.ZoraTunicColor.Enabled = $Options.EnableTunicColors.Checked
     $Options.SilverGauntletsColor.Enabled = $Options.GoldenGauntletsColor.Enabled = $Options.EnableGauntletColors.Checked
     $Options.ResetAllColors.Enabled = $Options.EnableTunicColors.Checked -or $Options.EnableGauntletColors.Checked
@@ -1145,16 +1229,17 @@ function CreateOoTReduxContent() {
 #==============================================================================================================================================================================================
 function CreateMMOptionsContent() {
     
-    CreateOptionsDialog -Width 900 -Height 560
+    CreateOptionsDialog -Width 900 -Height 590
     $ToolTip = CreateTooltip
 
 
 
     # HERO MODE #
-    $HeroModeBox                       = CreateReduxGroup -Y 50 -Height 1 -AddTo $Options.Panel -Text "Hero Mode"
+    $HeroModeBox                       = CreateReduxGroup -Y 50 -Height 2 -AddTo $Options.Panel -Text "Hero Mode"
 
-    $Options.Damage                    = CreateReduxComboBox -Column 0 -Row 1 -AddTo $HeroModeBox -Items @("1x Damage", "2x Damage", "4x Damage", "8x Damage", "OKHO Mode") -Text "Damage:" -ToolTip $OptionsToolTip -Info "Set the amount of damage you receive`nOKHO Mode = You die in one hit" -Name "Damage"
+    $Options.Damage                    = CreateReduxComboBox -Column 0 -Row 1 -AddTo $HeroModeBox -Items @("1x Damage", "2x Damage", "4x Damage", "8x Damage", "OHKO Mode") -Text "Damage:" -ToolTip $OptionsToolTip -Info "Set the amount of damage you receive`nOHKO Mode = You die in one hit" -Name "Damage"
     $Options.Recovery                  = CreateReduxComboBox -Column 2 -Row 1 -AddTo $HeroModeBox -Items @("1x Recovery", "1/2x Recovery", "1/4x Recovery", "0x Recovery") -Text "Recovery:" -ToolTip $OptionsToolTip -Info "Set the amount health you recovery from Recovery Hearts" -Name "Recovery"
+    $Options.MagicUsage                = CreateReduxComboBox -Column 0 -Row 2 -AddTo $HeroModeBox -Items @("1x Magic Usage", "2x Magic Usage", "3x Magic Usage") -Text "Magic Usage:" -ToolTip $ToolTip -Info "Set the amount of times magic is consumed at" -Name "MagicUsage"
     #$Options.BossHP                   = CreateReduxComboBox -Column 0 -Row 2 -AddTo $HeroModeBox -Items @("1x Boss HP", "2x Boss HP", "3x Boss HP") -Text "Boss HP:" -ToolTip $OptionsToolTip -Info "Set the amount of health for bosses" -Name "BossHP"
 
 
@@ -1230,10 +1315,10 @@ function CreateMMOptionsContent() {
 
     CreateCapacityDialog
     
-    $Options.Damage.Add_SelectedIndexChanged({ $Options.Recovery.Enabled = $this.Text -ne "OKHO Mode" })
+    $Options.Damage.Add_SelectedIndexChanged({ $Options.Recovery.Enabled = $this.Text -ne "OHKO Mode" })
     $Options.EnableTunicColors.Add_CheckStateChanged({ $Options.KokiriTunicColor.Enabled = $Options.ResetAllColors.Enabled = $this.Checked })
 
-    $Options.Recovery.Enabled = $Options.Damage.Text -ne "OKHO Mode"
+    $Options.Recovery.Enabled = $Options.Damage.Text -ne "OHKO Mode"
     $Options.KokiriTunicColor.Enabled = $Options.ResetAllColors.Enabled = $Options.EnableTunicColors.Checked
 
     $Options.SetKokiriTunicColor       = CreateColorDialog -Red "1E" -Green "69" -Blue "1B" -Name "SetKokiriTunicColor"     -IsGame

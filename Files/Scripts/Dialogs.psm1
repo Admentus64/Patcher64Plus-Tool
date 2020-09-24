@@ -198,7 +198,8 @@ function CreateSettingsDialog() {
 
     # General Settings
     $GeneralSettings.GeneralBox        = CreateReduxGroup -Y 40 -Height 1 -AddTo $SettingsDialog -Text "General Settings"
-    $GeneralSettings.Bit64             = CreateSettingsCheckbox -Column 0 -Row 1 -AddTo $GeneralSettings.GeneralBox -Text "Use 64-Bit Tools" -ToolTip $ToolTip -Info "Use 64-bit tools instead of 32-bit tools if available for patching ROMs" -Name "64Bit"
+
+    $GeneralSettings.Bit64             = CreateSettingsCheckbox -Column 0 -Row 1 -AddTo $GeneralSettings.GeneralBox -Text "Use 64-Bit Tools" -Checked ([Environment]::Is64BitOperatingSystem) -ToolTip $ToolTip -Info "Use 64-bit tools instead of 32-bit tools if available for patching ROMs" -Name "64Bit"
     $GeneralSettings.DoubleClick       = CreateSettingsCheckbox -Column 1 -Row 1 -AddTo $GeneralSettings.GeneralBox -Text "Double Click"     -ToolTip $ToolTip -Info "Allows a PowerShell file to be opened by double-clicking it"
     $GeneralSettings.DoubleClick.Checked = ((Get-ItemProperty -LiteralPath "HKLM:\Software\Classes\Microsoft.PowerShellScript.1\Shell").'(default)' -eq '0')
 
@@ -231,8 +232,8 @@ function CreateSettingsDialog() {
 
 
 #==============================================================================================================================================================================================
-function CreateSettingsCheckbox([int]$Column=0, [int]$Row=0, [Object]$AddTo, [Switch]$Checked, [Switch]$Disable, [String]$Text="", [Object]$ToolTip, [String]$Info="", [String]$Name, [Switch]$IsDebug) {
-
+function CreateSettingsCheckbox([int]$Column=0, [int]$Row=0, [Object]$AddTo, [Boolean]$Checked, [Switch]$Disable, [String]$Text="", [Object]$ToolTip, [String]$Info="", [String]$Name, [Switch]$IsDebug) {
+    
     $Checkbox = CreateCheckbox -X ($Column * 165 + 15) -Y ($Row * 30 - 10) -Checked $Checked -Disable $Disable -IsRadio $False -ToolTip $ToolTip -Info $Info -IsDebug $IsDebug -Name $Name -AddTo $AddTo
     $Label = CreateLabel -X $CheckBox.Right -Y ($CheckBox.Top + 3) -Width 135 -Height 15 -Text $Text -ToolTip $ToolTip -Info $Info -AddTo $AddTo
     

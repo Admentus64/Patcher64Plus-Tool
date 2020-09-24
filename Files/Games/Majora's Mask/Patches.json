@@ -29,7 +29,7 @@
 	"console" : "All",
 	"command" : "Force Remap D-Pad",
 	"wii_title" : "Zelda: Masked Quest",
-	"wii_gameID" : "NAC1",
+	"wii_gameID" : "NURE",
 	"file" : "\\Compressed\\masked_quest.bps",
 	"output" : "_masked_quest_patched",
 	"tooltip" : "A Master Quest style romhack for Majora's Mask, offering a higher difficulty{0}The patch contains major changes to where progress is obtained throughout the overworld and dungeons{0}Includes some of the changes featured in the Redux / Randomizer patches like D-Pad support{0}- Supported: Rev 0 (US)"

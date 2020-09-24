@@ -10,38 +10,44 @@
 	},
 	"options" : 1,
 	"languages" : [ {
-		"title" : "English"
+		"title" : "English",
+		"max_text_speed" : 3
 	}, {
 		"title" : "Japanese",
 		"n64_gameID" : "CZLJ",
 		"wii_title" : "Zelda: Ocarina (JAP)",
 		"wii_gameID" : "NACJ",
-		"output" : "_japanese_patched"
+		"output" : "_japanese_patched",
+		"max_text_speed" : 1
 	}, {
 		"title" : "Spanish",
 		"wii_title" : "Zelda: Ocarina (SPA)",
 		"wii_gameID" : "NACS",
 		"file" : "\\Decompressed\\spa.ppf",
-		"output" : "_spanish_patched"
+		"output" : "_spanish_patched",
+		"max_text_speed" : 2
 	}, {
 		"title" : "Polish",
 		"wii_title" : "Zelda: Ocarina (POL)",
 		"wii_gameID" : "NACO",
 		"file" : "\\Decompressed\\pol.ppf",
-		"output" : "_polish_patched"
+		"output" : "_polish_patched",
+		"max_text_speed" : 2
 	}, {
 		"title" : "Russian",
 		"wii_title" : "Zelda: Ocarina (RUS)",
 		"wii_gameID" : "NACR",
 		"file" : "\\Decompressed\\rus.ppf",
-		"output" : "_russian_patched"
+		"output" : "_russian_patched",
+		"max_text_speed" : 2
 	}, {
 		"title" : "Chinese",
 		"n64_gameID" : "CZLJ",
 		"wii_title" : "Zelda: Ocarina (CHI)",
 		"wii_gameID" : "NACC",
 		"file" : "\\Decompressed\\chi.ppf",
-		"output" : "_chinese_patched"
+		"output" : "_chinese_patched",
+		"max_text_speed" : 1
 	} ],
 	"tooltip" : "The regular Ocarina of Time experience{0}With support for languages, redux and additional options{0}- Supported: Rev 0 (US)"
 }, {

@@ -138,6 +138,7 @@ languages	If the patch supports multiple languages and can contain multiple entr
 		"wii_gameID"		Wii VC WAD GameID. Requires 4 characters.
 		"file"			Patch file path. Supports Decompression and Extension.
 		"output"		Output file name extension.
+		"max_text_speed"	Allow the max text speed for a language, can be set to 1, 2 or 3.
 
 n64_title	N64 Title Header. No more than 20 characters.
 
@@ -175,36 +176,42 @@ tooltip		Patch button description.
 },
 "options" : 1,
 "languages" : [ {
-	"title" : "English"
+	"title" : "English",
+	"max_text_speed" : 3
 }, {
 	"title" : "Japanese",
 	"n64_gameID" : "CZLJ",
 	"wii_title" : "Zelda: Ocarina (JAP)",
 	"wii_gameID" : "NACJ",
-	"output" : "_japanese_patched"
+	"output" : "_japanese_patched",
+	"max_text_speed" : 1
 }, {
 	"title" : "Spanish",
 	"wii_title" : "Zelda: Ocarina (SPA)",
 	"wii_gameID" : "NACS",
 	"file" : "\\Decompressed\\oot_spa.bps",
-	"output" : "_spanish_patched"
+	"output" : "_spanish_patched",
+	"max_text_speed" : 2
 }, {
 	"title" : "Polish",
 	"wii_title" : "Zelda: Ocarina (POL)",
 	"wii_gameID" : "NACO",
 	"file" : "\\Decompressed\\oot_pol.bps",
-	"output" : "_polish_patched"
+	"output" : "_polish_patched",
+	"max_text_speed" : 2
 }, {
 	"title" : "Russian",
 	"wii_title" : "Zelda: Ocarina (RUS)",
 	"wii_gameID" : "NACR",
 	"file" : "\\Decompressed\\oot_rus.bps",
-	"output" : "_russian_patched"
+	"output" : "_russian_patched",
+	"max_text_speed" : 2
 }, {
 	"title" : "Chinese",
 	"wii_title" : "Zelda: Ocarina (CHI)",
 	"wii_gameID" : "NACC",
 	"file" : "\\Decompressed\\oot_chi.bps",
-	"output" : "_chinese_patched"
+	"output" : "_chinese_patched",
+	"max_text_speed" : 1
 } ],
 "tooltip" : "The regular Ocarina of Time experience{0}With support for languages, redux and additional options{0}- Supported: Rev 0 (US)"
