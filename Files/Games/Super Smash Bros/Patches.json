@@ -1,7 +1,7 @@
 { "patch" : [ {
-	"title" : "Smash Remix v0.9.3",
+	"title" : "Smash Remix v0.9.4",
 	"console" : "N64",
-	"file" : "\\Compressed\\remix.vcdiff",
+	"file" : "\\Compressed\\remix.xdelta",
 	"output" : "_remix_patched",
 	"tooltip" : "Remixes the whole of Super Smash Bros.{0}Contains new stages and characters to use.{0}- Supported: Rev 0 (US)"
 }, {
