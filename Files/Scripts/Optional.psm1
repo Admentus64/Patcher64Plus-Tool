@@ -179,63 +179,6 @@ function PatchByteOptionsOoT() {
         ChangeBytes -Offset "B0F688" -Values @("00", "00","00", "00")
     }
 
-    if (IsChecked -Elem $Options.JumpAnimations -Enabled) {
-        
-
-
-        <#
-        # Animations
-        PatchBytes  -Offset "66B420" -Patch "Jump\Front Flip.bin"
-        PatchBytes  -Offset "66BFB0" -Patch "Jump\Back Flip.bin"
-        ChangeBytes -Offset "F05B78" -Values @("00", "0D") # Front Flip Pointer
-        ChangeBytes -Offset "F05B88" -Values @("00", "0D") # Back Flip Pointer
-
-        # Control code
-        #ChangeBytes -Offset ""  -Values @("0C", "03", "60", "4D")
-        #ChangeBytes -Offset ""  -Values @("00", "00", "00", "00")
-        #PatchBytes  -Offset ""  -Patch "Jump\Control Code.bin"
-        
-        # Switch to alternate jump animations
-        #ChangeBytes -Offset ""  -Values @("0C", "03", "61", "02")
-        #ChangeBytes -Offset ""  -Values @("0C", "03", "61", "02")
-        #ChangeBytes -Offset ""  -Values @("0C", "03", "61", "02")
-        #ChangeBytes -Offset ""  -Values @("0C", "03", "61", "02")
-        #ChangeBytes -Offset ""  -Values @("0C", "03", "61", "02")
-        #ChangeBytes -Offset ""  -Values @("0C", "03", "61", "02")
-        #ChangeBytes -Offset ""  -Values @("0C", "03", "61", "02")
-        #ChangeBytes -Offset ""  -Values @("0C", "03", "61", "02")
-        #ChangeBytes -Offset ""  -Values @("0C", "03", "61", "02")
-        #ChangeBytes -Offset ""  -Values @("0C", "03", "61", "02")
-        #ChangeBytes -Offset ""  -Values @("0C", "03", "61", "02")
-        #ChangeBytes -Offset ""  -Values @("0C", "03", "61", "02")
-        #ChangeBytes -Offset ""  -Values @("0C", "03", "61", "02")
-        #ChangeBytes -Offset ""  -Values @("0C", "03", "61", "02")
-        #ChangeBytes -Offset ""  -Values @("0C", "03", "61", "02")
-        #ChangeBytes -Offset ""  -Values @("0C", "03", "61", "02")
-        #ChangeBytes -Offset ""  -Values @("0C", "03", "61", "02")
-        #ChangeBytes -Offset ""  -Values @("0C", "03", "61", "02")
-        #ChangeBytes -Offset ""  -Values @("0C", "03", "61", "02")
-        #ChangeBytes -Offset ""  -Values @("0C", "03", "61", "02")
-        #ChangeBytes -Offset ""  -Values @("0C", "03", "61", "02")
-        #ChangeBytes -Offset ""  -Values @("0C", "03", "61", "02")
-        #ChangeBytes -Offset ""  -Values @("0C", "03", "61", "02")
-        #ChangeBytes -Offset ""  -Values @("0C", "03", "61", "02")
-        #ChangeBytes -Offset ""  -Values @("0C", "03", "61", "02")
-        #ChangeBytes -Offset ""  -Values @("0C", "03", "61", "02")
-        #ChangeBytes -Offset ""  -Values @("0C", "03", "61", "02")
-        #ChangeBytes -Offset ""  -Values @("0C", "03", "61", "02")
-        #ChangeBytes -Offset ""  -Values @("0C", "03", "61", "02")
-        #ChangeBytes -Offset ""  -Values @("0C", "03", "61", "02")
-        #ChangeBytes -Offset ""  -Values @("0C", "03", "61", "02")
-        #ChangeBytes -Offset ""  -Values @("0C", "03", "61", "02")
-        #ChangeBytes -Offset ""  -Values @("0C", "03", "61", "02")
-        #ChangeBytes -Offset ""  -Values @("0C", "03", "61", "02")
-
-        #PatchBytes  -Offset ""  -Patch "Jump\Animation.bin"
-        #>
-
-    }
-
     if (IsChecked -Elem $Options.DisableLowHPSound -Enabled)   { ChangeBytes -Offset "ADBA1A"  -Values @("00", "00") }
     if (IsChecked -Elem $Options.DisableNaviPrompts -Enabled)  { ChangeBytes -Offset "DF8B84"  -Values @("00", "00", "00", "00") }
 
@@ -407,7 +350,8 @@ function PatchByteOptionsOoT() {
     }
 
     if (IsChecked -Elem $Options.DefaultZTargeting -Enabled)       { ChangeBytes -Offset "B71E6D"  -Values @("01") }
-    
+    if (IsChecked -Elem $Options.HideCredits -Enabled)             { PatchBytes -Offset "966000" -Patch "Message\Credits.bin" }
+
 
 
     # Patch Dungeons Master Quest
@@ -814,10 +758,11 @@ function PatchByteOptionsMM() {
         ExportAndPatch -Path "Southern Swamp\southern_swamp_cleared_room_2" -Offset "1F4D000" -Length "D0A0"  -NewLength "D1C0"  -TableOffset "1EC46"  -Values @("A1", "C0")
     }
 
-    if (IsChecked -Elem $Options.DisableLowHPSound -Enabled)   { ChangeBytes -Offset "B97E2A"  -Values @("00", "00") }
-    if (IsChecked -Elem $Options.FixGohtCutscene   -Enabled)   { ChangeBytes -Offset "F6DE89"  -Values @("8D", "00", "02", "10", "00", "00", "0A") }
-    if (IsChecked -Elem $Options.FixMushroomBottle -Enabled)   { ChangeBytes -Offset "CD7C48"  -Values @("1E", "6B") }
-    if (IsChecked -Elem $Options.FixFairyFountain  -Enabled)   { ChangeBytes -Offset "B9133E"  -Values @("01", "0F") }
+    if (IsChecked -Elem $Options.DisableLowHPSound -Enabled)   { ChangeBytes -Offset "B97E2A" -Values @("00", "00") }
+    if (IsChecked -Elem $Options.FixGohtCutscene   -Enabled)   { ChangeBytes -Offset "F6DE89" -Values @("8D", "00", "02", "10", "00", "00", "0A") }
+    if (IsChecked -Elem $Options.FixMushroomBottle -Enabled)   { ChangeBytes -Offset "CD7C48" -Values @("1E", "6B") }
+    if (IsChecked -Elem $Options.FixFairyFountain  -Enabled)   { ChangeBytes -Offset "B9133E" -Values @("01", "0F") }
+    if (IsChecked -Elem $Options.HideCredits -Enabled)         { PatchBytes  -Offset "B3B000" -Patch "Message\Credits.bin" }
 
 }
 
@@ -1009,7 +954,7 @@ function PatchOptionsSM64() {
 #==============================================================================================================================================================================================
 function CreateOoTOptionsContent() {
     
-    CreateOptionsDialog -Width 900 -Height 710
+    CreateOptionsDialog -Width 900 -Height 680
     $ToolTip = CreateTooltip
 
 
@@ -1028,7 +973,7 @@ function CreateOoTOptionsContent() {
 
 
     # GRAPHICS / Sound #
-    $GraphicsBox                       = CreateReduxGroup -Y ($HeroModeBox.Bottom + 5) -Height 3 -AddTo $Options.Panel -Text "Graphics / Sound"
+    $GraphicsBox                       = CreateReduxGroup -Y ($HeroModeBox.Bottom + 5) -Height 2 -AddTo $Options.Panel -Text "Graphics / Sound"
     
     $Options.Widescreen                = CreateReduxCheckBox -Column 0 -Row 1 -AddTo $GraphicsBox -Text "16:9 Widescreen"        -ToolTip $ToolTip -Info "Native 16:9 widescreen display support" -Name "Widescreen"
     $Options.WidescreenTextures        = CreateReduxCheckBox -Column 1 -Row 1 -AddTo $GraphicsBox -Text "16:9 Textures"          -ToolTip $ToolTip -Info "16:9 backgrounds and textures suitable for native 16:9 widescreen display support" -Name "WideScreenTextures"
@@ -1039,8 +984,6 @@ function CreateOoTOptionsContent() {
     $Options.Models                    = CreateReduxComboBox -Column 0 -Row 2 -AddTo $GraphicsBox -Items @("No Model Replacements", "Replace Child Model Only", "Replace Adult Model Only", "Replace Both Models", "Change to Female Models") -Text "Link's Models:" -ToolTip $ToolTip -Info "1. Replace the model for Child Link with that of Majora's Mask`n2. Replace the model for Adult Link to be Majora's Mask-styled`n3. Combine both previous options`n4. Transform Link into a female" -Name "Models"
     $Options.Voices                    = CreateReduxComboBox -Column 2 -Row 2 -AddTo $GraphicsBox -Items @("No Voice Changes", "Majora's Mask Link Voices", "Feminine Link Voices") -Text "Voice:" -ToolTip $ToolTip -Info "1. Replace the voices for Link with those used in Majora's Mask`n2. Replace the voices for Link to sound feminine" -Name "Voices"
     $Options.DisableLowHPSound         = CreateReduxCheckBox -Column 4 -Row 2 -AddTo $GraphicsBox -Text "Disable Low HP Beep"    -ToolTip $ToolTip -Info "There will be absolute silence when Link's HP is getting low" -Name "DisableLowHPSound"
-    
-    $Options.JumpAnimations            = CreateReduxCheckBox -Column 0 -Row 3 -AddTo $GraphicsBox -Text "MM Jump Animations"     -ToolTip $ToolTip -Info "Replacing the jumping animations with those from Majora's mask" -Name "JumpAnimations"
 
 
 
@@ -1123,9 +1066,10 @@ function CreateOoTOptionsContent() {
     # EVERYTHING ELSE #
     $OtherBox                          = CreateReduxGroup -Y ($EquipmentBox.Bottom + 5) -Height 1 -AddTo $Options.Panel -Text "Other"
     
-    $Options.SubscreenDelayFix         = CreateReduxCheckBox -Column 0 -Row 1 -AddTo $OtherBox -Text "Pause Screen Delay Fix" -ToolTip $ToolTip -Info "Removes the delay when opening the Pause Screen" -Name "SubscreenDelayFix"
-    $Options.DisableNaviPrompts        = CreateReduxCheckBox -Column 1 -Row 1 -AddTo $OtherBox -Text "Remove Navi Prompts" -ToolTip $ToolTip -Info "Navi will no longer interupt your during the first dungeon with mandatory textboxes" -Name "DisableNaviPrompts"
+    $Options.SubscreenDelayFix         = CreateReduxCheckBox -Column 0 -Row 1 -AddTo $OtherBox -Text "Pause Screen Delay Fix"   -ToolTip $ToolTip -Info "Removes the delay when opening the Pause Screen" -Name "SubscreenDelayFix"
+    $Options.DisableNaviPrompts        = CreateReduxCheckBox -Column 1 -Row 1 -AddTo $OtherBox -Text "Remove Navi Prompts"      -ToolTip $ToolTip -Info "Navi will no longer interupt your during the first dungeon with mandatory textboxes" -Name "DisableNaviPrompts"
     $Options.DefaultZTargeting         = CreateReduxCheckBox -Column 2 -Row 1 -AddTo $OtherBox -Text "Default Hold Z-Targeting" -ToolTip $ToolTip -Info "Change the Default Z-Targeting option to Hold instead of Switch" -Name "DefaultZTargeting"
+    $Options.HideCredits               = CreateReduxCheckBox -Column 3 -Row 1 -AddTo $OtherBox -Text "Hide Credits"             -ToolTip $ToolTip -Info "Do not show the credits text during the credits sequence" -Name "HideCredits"
 
 
 
@@ -1229,7 +1173,7 @@ function CreateOoTReduxContent() {
 #==============================================================================================================================================================================================
 function CreateMMOptionsContent() {
     
-    CreateOptionsDialog -Width 900 -Height 590
+    CreateOptionsDialog -Width 900 -Height 620
     $ToolTip = CreateTooltip
 
 
@@ -1303,13 +1247,14 @@ function CreateMMOptionsContent() {
 
 
     # EVERYTHING ELSE #
-    $OtherBox                          = CreateReduxGroup -Y ($EquipmentBox.Bottom + 5) -Height 1 -AddTo $Options.Panel -Text "Other"
+    $OtherBox                          = CreateReduxGroup -Y ($EquipmentBox.Bottom + 5) -Height 2 -AddTo $Options.Panel -Text "Other"
 
     $Options.DisableLowHPSound         = CreateReduxCheckBox -Column 0 -Row 1 -AddTo $OtherBox -Text "Disable Low HP Beep" -ToolTip $ToolTip -Info "There will be absolute silence when Link's HP is getting low" -Name "DisableLowHPSound"
     $Options.FixGohtCutscene           = CreateReduxCheckBox -Column 1 -Row 1 -AddTo $OtherBox -Text "Fix Goht Cutscene"   -ToolTip $ToolTip -Info "Fix Goht's awakening cutscene so that Link no longer gets run over" -Name "FixGohtCutscene"
     $Options.FixMushroomBottle         = CreateReduxCheckBox -Column 2 -Row 1 -AddTo $OtherBox -Text "Fix Mushroom Bottle" -ToolTip $ToolTip -Info "Fix the item reference when collecting Magical Mushrooms as Link puts away the bottle automatically due to an error" -Name "FixMushroomBottle"
     $Options.FixSouthernSwamp          = CreateReduxCheckBox -Column 3 -Row 1 -AddTo $OtherBox -Text "Fix Southern Swamp"  -ToolTip $ToolTip -Info "Fix a misplaced door after Woodfall has been cleared and you return to the Potion Shop`nThe door is slightly pushed forward after Odolwa has been defeated." -Name "FixSouthernSwamp"
     $Options.FixFairyFountain          = CreateReduxCheckBox -Column 4 -Row 1 -AddTo $OtherBox -Text "Fix Fairy Fountain"  -ToolTip $ToolTip -Info "Fix the Ikana Canyon Fairy Fountain area not displaying the correct color." -Name "FixFairyFountain"
+    $Options.HideCredits               = CreateReduxCheckBox -Column 0 -Row 2 -AddTo $OtherBox -Text "Hide Credits"             -ToolTip $ToolTip -Info "Do not show the credits text during the credits sequence" -Name "HideCredits"
 
 
 
