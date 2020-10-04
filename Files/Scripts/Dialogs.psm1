@@ -184,7 +184,7 @@ function CreateCreditsDialog() {
 function CreateSettingsDialog() {
     
     # Create Dialog
-    $global:SettingsDialog = CreateDialog -Width 600 -Height 400 -Icon $Files.icon.settings
+    $global:SettingsDialog = CreateDialog -Width 600 -Height 460 -Icon $Files.icon.settings
     $CloseButton = CreateButton -X ($SettingsDialog.Width / 2 - 40) -Y ($SettingsDialog.Height - 90) -Width 80 -Height 35 -Text "Close" -AddTo $SettingsDialog
     $CloseButton.Add_Click({ $SettingsDialog.Hide() })
 
@@ -203,24 +203,27 @@ function CreateSettingsDialog() {
     $GeneralSettings.DoubleClick       = CreateSettingsCheckbox -Column 1 -Row 1 -AddTo $GeneralSettings.GeneralBox -Text "Double Click"     -ToolTip $ToolTip -Info "Allows a PowerShell file to be opened by double-clicking it"
     $GeneralSettings.DoubleClick.Checked = ((Get-ItemProperty -LiteralPath "HKLM:\Software\Classes\Microsoft.PowerShellScript.1\Shell").'(default)' -eq '0')
 
+    # Advanced Settings
+    $GeneralSettings.AdvancedBox       = CreateReduxGroup -Y ($GeneralSettings.GeneralBox.Bottom + 10) -Height 1 -AddTo $SettingsDialog -Text "Advanced Settings"
+    $GeneralSettings.IgnoreChecksum    = CreateSettingsCheckbox -Column 0 -Row 1 -AddTo $GeneralSettings.AdvancedBox -Text "Ignore Input Checksum" -IsDebug -ToolTip $ToolTip -Info "Do not check the checksum of a ROM or WAD and patch it regardless" -Name "IgnoreChecksum"
+    $GeneralSettings.KeepLogo          = CreateSettingsCheckbox -Column 1 -Row 1 -AddTo $GeneralSettings.AdvancedBox -Text "Keep Logo"             -IsDebug -ToolTip $ToolTip -Info "Keep the vanilla title logo instead of the Master Quest title logo" -Name "KeepLogo"
+
     # Debug Settings
-    $GeneralSettings.DebugBox          = CreateReduxGroup -Y ($GeneralSettings.GeneralBox.Bottom + 10) -Height 3 -AddTo $SettingsDialog -Text "Debug Settings"
+    $GeneralSettings.DebugBox          = CreateReduxGroup -Y ($GeneralSettings.AdvancedBox.Bottom + 10) -Height 3 -AddTo $SettingsDialog -Text "Debug Settings"
     $GeneralSettings.Console           = CreateSettingsCheckbox -Column 0 -Row 1 -AddTo $GeneralSettings.DebugBox -Text "Console"               -IsDebug -ToolTip $ToolTip -Info "Show the console log" -Name "Console"
     $GeneralSettings.Stop              = CreateSettingsCheckbox -Column 1 -Row 1 -AddTo $GeneralSettings.DebugBox -Text "Stop Patching"         -IsDebug -ToolTip $ToolTip -Info "Do not start the patching process and instead show debug information for the console log" -Name "Stop"
     $GeneralSettings.CreateBPS         = CreateSettingsCheckbox -Column 2 -Row 1 -AddTo $GeneralSettings.DebugBox -Text "Create BPS"            -IsDebug -ToolTip $ToolTip -Info "Create compressed and decompressed BPS patches when patching is concluded" -Name "CreateBPS"
     $GeneralSettings.KeepDecompressed  = CreateSettingsCheckbox -Column 0 -Row 2 -AddTo $GeneralSettings.DebugBox -Text "Keep Decompressed"     -IsDebug -ToolTip $ToolTip -Info "Keep the decompressed patched ROM in the output folder" -Name "KeepDecompressed"
-    $GeneralSettings.KeepLogo          = CreateSettingsCheckbox -Column 1 -Row 2 -AddTo $GeneralSettings.DebugBox -Text "Keep Logo"             -IsDebug -ToolTip $ToolTip -Info "Keep the vanilla title logo instead of the Master Quest title logo" -Name "KeepLogo"
-    $GeneralSettings.Rev0DungeonFiles  = CreateSettingsCheckbox -Column 2 -Row 2 -AddTo $GeneralSettings.DebugBox -Text "Rev 0 Dungeon Files"   -IsDebug -ToolTip $ToolTip -Info "Extract the dungeon files from the Rev 0 US OoT ROM as well when extracting dungeon files" -Name "Rev0DungeonFiles"
-    $GeneralSettings.NoHeaderChange    = CreateSettingsCheckbox -Column 0 -Row 3 -AddTo $GeneralSettings.DebugBox -Text "No Header Change"      -IsDebug -ToolTip $ToolTip -Info "Do not change the title header of the ROM when patching is concluded" -Name "NoHeaderChange"
-    $GeneralSettings.NoCRCChange       = CreateSettingsCheckbox -Column 1 -Row 3 -AddTo $GeneralSettings.DebugBox -Text "No CRC Change"         -IsDebug -ToolTip $ToolTip -Info "Do not change the CRC of the ROM when patching is concluded" -Name "NoCRCChange"
-    $GeneralSettings.IgnoreChecksum    = CreateSettingsCheckbox -Column 2 -Row 3 -AddTo $GeneralSettings.DebugBox -Text "Ignore Input Checksum" -IsDebug -ToolTip $ToolTip -Info "Do not check the checksum of a ROM or WAD and patch it regardless" -Name "IgnoreChecksum"
-
+    $GeneralSettings.Rev0DungeonFiles  = CreateSettingsCheckbox -Column 1 -Row 2 -AddTo $GeneralSettings.DebugBox -Text "Rev 0 Dungeon Files"   -IsDebug -ToolTip $ToolTip -Info "Extract the dungeon files from the Rev 0 US OoT ROM as well when extracting dungeon files" -Name "Rev0DungeonFiles"
+    $GeneralSettings.NoHeaderChange    = CreateSettingsCheckbox -Column 2 -Row 2 -AddTo $GeneralSettings.DebugBox -Text "No Header Change"      -IsDebug -ToolTip $ToolTip -Info "Do not change the title header of the ROM when patching is concluded" -Name "NoHeaderChange"
+    $GeneralSettings.NoCRCChange       = CreateSettingsCheckbox -Column 0 -Row 3 -AddTo $GeneralSettings.DebugBox -Text "No CRC Change"         -IsDebug -ToolTip $ToolTip -Info "Do not change the CRC of the ROM when patching is concluded" -Name "NoCRCChange"
+    
     $GeneralSettings.Console.Add_CheckStateChanged({ ShowPowerShellConsole -ShowConsole $this.Checked })
     $GeneralSettings.DoubleClick.Add_CheckStateChanged({ TogglePowerShellOpenWithClicks -Enable $this.Checked })
 
     # Create a button to reset the tool.
     $GeneralSettings.ResetBox          = CreateReduxGroup -Y ($GeneralSettings.DebugBox.Bottom + 10) -Height 2 -AddTo $SettingsDialog -Text "Reset"
-    $GeneralSettings.ResetButton       = CreateReduxButton -Column 0 -Row 1 -Width 150 -Height 45 -AddTo $GeneralSettings.ResetBox -Text "Reset" -ToolTip $ToolTip -Info ("Resets all settings stored in the " + $ScriptName)
+    $GeneralSettings.ResetButton       = CreateReduxButton -Column 0 -Row 1 -Width 150 -Height 45 -AddTo $GeneralSettings.ResetBox -Text "Reset All Settings" -ToolTip $ToolTip -Info ("Resets all settings stored in the " + $ScriptName)
     $GeneralSettings.ResetButton.Add_Click({ ResetTool })
 
     # Disable Stop if no Console

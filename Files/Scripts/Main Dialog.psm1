@@ -477,7 +477,7 @@ function CreateLanguagesContent() {
         $Languages.TextSpeed2x            = CreateReduxRadioButton -Column 1 -Row 0 -AddTo $Languages.TextSpeedPanel          -Text "2x Text Speed"           -ToolTip $ToolTip -Info "Set the dialogue text speed to be twice as fast"       -Name "TextSpeed2x"
         $Languages.TextSpeed3x            = CreateReduxRadioButton -Column 2 -Row 0 -AddTo $Languages.TextSpeedPanel          -Text "3x Text Speed"           -ToolTip $ToolTip -Info "Set the dialogue text speed to be three times as fast" -Name "TextSpeed3x"
         $Languages.TextRestore            = CreateReduxCheckBox    -Column 0 -Row 2 -AddTo $Languages.TextBox  -Text "Restore Text"            -ToolTip $ToolTip -Info "Restores the text used from the GC revision and applies grammar and typo fixes" -Name "TextRestore"
-        $Languages.TextFemalePronouns     = CreateReduxCheckBox    -Column 1 -Row 2 -AddTo $Languages.TextBox  -Text "Female Pronouns"         -ToolTip $ToolTip -Info "Refer to Link as a female character`n- Requires the Restore Text option" -Name "TextFemalePronouns"
+        $Languages.TextFemalePronouns     = CreateReduxCheckBox    -Column 1 -Row 2 -AddTo $Languages.TextBox  -Text "Female Pronouns [!]"         -ToolTip $ToolTip -Info "Refer to Link as a female character`n- Requires the Restore Text option`n[!] Not all of the dialogue is adjusted yet" -Name "TextFemalePronouns"
         $Languages.TextDialogueColors     = CreateReduxCheckBox    -Column 2 -Row 2 -AddTo $Languages.TextBox  -Text "GC Text Dialogue Colors" -ToolTip $ToolTip -Info "Set the Text Dialogue Colors to match the GameCube's color scheme" -Name "TextDialogueColors"
         $Languages.TextUnisizeTunics      = CreateReduxCheckBox    -Column 0 -Row 3 -AddTo $Languages.TextBox  -Text "Unisize Tunics"          -ToolTip $ToolTip -Info "Adjust the dialogue to mention that the Goron Tunic and Zora Tunic are unisize`n- Useful for the Unlock Tunics option" -Name "TextUnisizeTunics"
         
@@ -660,3 +660,4 @@ function BPSPath_DragDrop() {
 
 Export-ModuleMember -Function CreateMainDialog
 Export-ModuleMember -Function CheckVCOptions
+Export-ModuleMember -Function ResetTool

@@ -168,8 +168,8 @@ function PatchByteOptionsOoT() {
         PatchBytes -Offset "F21810"  -Length "1000" -Texture -Patch "Lens of Truth.bin"
     }
 
-    if (IsChecked -Elem $Options.ExtendedDraw -Enabled)        { ChangeBytes -Offset "A9A970" -Values @("00", "01") }
-    if (IsChecked -Elem $Options.ForceHiresModel -Enabled)     { ChangeBytes -Offset "BE608B" -Values @("00") }
+    if (IsChecked -Elem $Options.ExtendedDraw -Enabled)            { ChangeBytes -Offset "A9A970" -Values @("00", "01") }
+    if (IsChecked -Elem $Options.ForceHiresModel -Enabled)         { ChangeBytes -Offset "BE608B" -Values @("00") }
 
     if (IsChecked -Elem $Options.BlackBars -Enabled) {
         ChangeBytes -Offset "B0F5A4" -Values @("00", "00","00", "00")
@@ -178,9 +178,6 @@ function PatchByteOptionsOoT() {
         ChangeBytes -Offset "B0F680" -Values @("00", "00","00", "00")
         ChangeBytes -Offset "B0F688" -Values @("00", "00","00", "00")
     }
-
-    if (IsChecked -Elem $Options.DisableLowHPSound -Enabled)   { ChangeBytes -Offset "ADBA1A"  -Values @("00", "00") }
-    if (IsChecked -Elem $Options.DisableNaviPrompts -Enabled)  { ChangeBytes -Offset "DF8B84"  -Values @("00", "00", "00", "00") }
 
 
 
@@ -230,13 +227,6 @@ function PatchByteOptionsOoT() {
 
     # GAMEPLAY
 
-    if (IsChecked -Elem $Options.Medallions -Enabled)          { ChangeBytes -Offset "E2B454" -Values @("80", "EA", "00", "A7", "24", "01", "00", "3F", "31", "4A", "00", "3F", "00", "00", "00", "00") }
-
-    if (IsChecked -Elem $Options.ReturnChild -Enabled) {
-        ChangeBytes -Offset "CB6844"  -Values @("35")
-        ChangeBytes -Offset "253C0E2" -Values @("03")
-    }
-
     if (IsChecked -Elem $Options.EasierMinigames -Enabled) {
         ChangeBytes -Offset "CC4024" -Values @("00", "00", "00", "00") # Dampe's Digging Game
         ChangeBytes -Offset "DBF428" -Values @("0C", "10", "07", "7D", "3C", "01", "42", "82", "44", "81", "40", "00", "44", "98", "90", "00", "E6", "52") # Easier Fishing
@@ -262,6 +252,10 @@ function PatchByteOptionsOoT() {
         ChangeBytes -Offset "DBA233" -Values @("19")                   # Truth Spinner Speed
         ChangeBytes -Offset "DBA3A7" -Values @("00")                   # Truth Spinner Delay
     }
+    
+    if (IsChecked -Elem $Options.Medallions -Enabled)              { ChangeBytes -Offset "E2B454" -Values @("80", "EA", "00", "A7", "24", "01", "00", "3F", "31", "4A", "00", "3F", "00", "00", "00", "00") }
+    if (IsChecked -Elem $Options.ReturnChild -Enabled)             { ChangeBytes -Offset "CB6844"  -Values @("35"); ChangeBytes -Offset "253C0E2" -Values @("03") }
+    if (IsChecked -Elem $Options.FixGraves -Enabled)               { ChangeBytes -Offset "202039D" -Values @("20"); ChangeBytes -Offset "202043C" -Values @("24") }
 
 
 
@@ -271,6 +265,17 @@ function PatchByteOptionsOoT() {
         ChangeBytes -Offset "F47EB0" -Values @("70", "6B", "BB", "3F", "FF", "FF", "EF", "3F", "68", "AD", "C3", "FD", "E6", "BF", "CD", "7F", "48", "9B", "91", "AF", "C3", "7D", "BB", "3D", "40", "0F", "58", "19", "88", "ED", "80", "AB") # Purple
         ChangeBytes -Offset "F47ED0" -Values @("D4", "C3", "F7", "49", "FF", "FF", "F7", "E1", "DD", "03", "EF", "89", "E7", "E3", "E7", "DD", "A3", "43", "D5", "C3", "DF", "85", "E7", "45", "7A", "43", "82", "83", "B4", "43", "CC", "83") # Gold
     }
+
+    if (IsChecked -Elem $Options.CensorBlood -Enabled) {
+        ChangeBytes -Offset "D8D590 " -Values @("00", "78", "00", "FF", "00", "78", "00", "FF")
+        ChangeBytes -Offset "E8C424 " -Values @("00", "78", "00", "FF", "00", "78", "00", "FF")
+    }
+
+    if (IsChecked -Elem $Options.RestoreCowNoseRing -Enabled)      { ChangeBytes -Offset "EF3E68" -Values @("00", "00") }
+
+
+
+    # SOUND / VOICES #
 
     if (IsChecked -Elem $Options.RestoreFireTemple -Enabled) {
         ChangeBytes -Offset "7465"   -Values @("03", "91", "30") # DMA Table, Pointer to AudioBank
@@ -284,29 +289,21 @@ function PatchByteOptionsOoT() {
         ExportAndPatch -Path "Fire Temple Theme\12FireTemple"  -Offset "D390" -Length "4CCBB0"
     }
 
-    if (IsChecked -Elem $Options.CensorBlood -Enabled) {
-        ChangeBytes -Offset "D8D590 " -Values @("00", "78", "00", "FF", "00", "78", "00", "FF")
-        ChangeBytes -Offset "E8C424 " -Values @("00", "78", "00", "FF", "00", "78", "00", "FF")
-    }
-
-    if (IsChecked -Elem $Options.RestoreCowNoseRing -Enabled) { ChangeBytes -Offset "EF3E68" -Values @("00", "00") }
-
-
-
-    # VOICES #
-
-    if (IsText -Elem $Options.Voices -Text "Feminine Link Voices" -Enabled) {
-        if (IsChecked -Elem $Options.RestoreFireTemple -Enabled)   { PatchBytes -Offset "19D920" -Patch "Voices\Feminine Link Voices.bin" }
-        else                                                       { PatchBytes -Offset "18E1E0" -Patch "Voices\Feminine Link Voices.bin" }
-    }
-    elseif (IsText -Elem $Options.Voices -Text "Majora's Mask Link Voices" -Enabled) {
+    if (IsText -Elem $Options.Voices -Text "Majora's Mask Link Voices" -Enabled) {
         if (IsChecked -Elem $Options.RestoreFireTemple -Enabled)   { PatchBytes -Offset "19D920" -Patch "Voices\MM Link Voices.bin" }
         else                                                       { PatchBytes -Offset "18E1E0" -Patch "Voices\MM Link Voices.bin" }
     }
+    elseif (IsText -Elem $Options.Voices -Text "Feminine Link Voices" -Enabled) {
+        if (IsChecked -Elem $Options.RestoreFireTemple -Enabled)   { PatchBytes -Offset "19D920" -Patch "Voices\Feminine Link Voices.bin" }
+        else                                                       { PatchBytes -Offset "18E1E0" -Patch "Voices\Feminine Link Voices.bin" }
+    }
+
+    if (IsText -Elem $Options.LowHPBeep -Text "Softer Beep" -Enabled)     { ChangeBytes -Offset "ADBA1A"  -Values @("48", "04") }
+    if (IsText -Elem $Options.LowHPBeep -Text "Beep Disabled" -Enabled)   { ChangeBytes -Offset "ADBA1A"  -Values @("00", "00") }
 
 
     
-    # EQUIPMENT #
+    # AGE RESTRICTIONS #
 
     if (IsChecked -Elem $Options.EnableAmmoCapacity -Enabled) {
         ChangeBytes -Offset "B6EC2F" -IsDec -Values @($Options.Quiver1.Text, $Options.Quiver2.Text, $Options.Quiver3.Text) -Interval 2
@@ -317,40 +314,43 @@ function PatchByteOptionsOoT() {
     }
 
     if (IsChecked -Elem $Options.EnableWalletCapacity -Enabled) {
-        $Wallet1 = Get16Bit -Value ($Options.Wallet1.Text)
-        $Wallet2 = Get16Bit -Value ($Options.Wallet2.Text)
-        $Wallet3 = Get16Bit -Value ($Options.Wallet3.Text)
+        $Wallet1 = Get16Bit -Value ($Options.Wallet1.Text); $Wallet2 = Get16Bit -Value ($Options.Wallet2.Text); $Wallet3 = Get16Bit -Value ($Options.Wallet3.Text)
         ChangeBytes -Offset "B6EC4C" -Values @($Wallet1.Substring(0, 2), $Wallet1.Substring(2) )
         ChangeBytes -Offset "B6EC4E" -Values @($Wallet2.Substring(0, 2), $Wallet2.Substring(2) )
         ChangeBytes -Offset "B6EC50" -Values @($Wallet3.Substring(0, 2), $Wallet3.Substring(2) )
     }
 
-    if (IsChecked -Elem $Options.UnlockSword -Enabled) {
-        ChangeBytes -Offset "BC77AD" -Values @("09")
-        ChangeBytes -Offset "BC77F7" -Values @("09")
-    }
-
-    if (IsChecked -Elem $Options.UnlockTunics -Enabled) {
-        ChangeBytes -Offset "BC77B6" -Values @("09", "09")
-        ChangeBytes -Offset "BC77FE" -Values @("09", "09")
-    }
-
-    if (IsChecked -Elem $Options.UnlockBoots -Enabled) {
-        ChangeBytes -Offset "BC77BA" -Values @("09", "09")
-        ChangeBytes -Offset "BC7801" -Values @("09", "09")
-    }
+    if (IsChecked -Elem $Options.UnlockTunics -Enabled)            { ChangeBytes -Offset "BC77B6" -Values @("09", "09"); ChangeBytes -Offset "BC77FE" -Values @("09", "09") }
+    if (IsChecked -Elem $Options.UnlockBoots -Enabled)             { ChangeBytes -Offset "BC77BA" -Values @("09", "09"); ChangeBytes -Offset "BC7801" -Values @("09", "09") }
+    if (IsChecked -Elem $Options.UnlockMegatonHammer -Enabled)     { ChangeBytes -Offset "BC77A3" -Values @("09"); ChangeBytes -Offset "BC77CD" -Values @("09") }
+    if (IsChecked -Elem $Options.UnlockKokiriSword -Enabled)       { ChangeBytes -Offset "BC77AD" -Values @("09"); ChangeBytes -Offset "BC77F7" -Values @("09") }
+    if (IsChecked -Elem $Options.UnlockFairySlingshot -Enabled)    { ChangeBytes -Offset "BC779A" -Values @("09"); ChangeBytes -Offset "BC77C2" -Values @("09") }
+    if (IsChecked -Elem $Options.UnlockBoomerang -Enabled)         { ChangeBytes -Offset "BC77A0" -Values @("09"); ChangeBytes -Offset "BC77CA" -Values @("09") }
 
 
 
     # OTHER #
 
-    if (IsChecked -Elem $Options.SubscreenDelayFix -Enabled) {
-        ChangeBytes -Offset "B15DD0" -Values @("00", "00", "00", "00")
-        ChangeBytes -Offset "B12947" -Values @("03")
+    if (IsChecked -Elem $Options.DebugMapSelect -Enabled) {
+        ChangeBytes -Offset "A94994" -Values @("00", "00", "00", "00", "AE", "08", "00", "14", "34", "84", "B9", "2C", "8E", "02", "00", "18", "24", "0B", "00", "00", "AC", "8B", "00", "00")
+        ChangeBytes -Offset "B67395" -Values @("B9", "E4", "00", "00", "BA", "11", "60", "80", "80", "09", "C0", "80", "80", "37", "20", "80", "80", "1C", "14", "80", "80", "1C", "14", "80", "80", "1C", "08");
     }
 
-    if (IsChecked -Elem $Options.DefaultZTargeting -Enabled)       { ChangeBytes -Offset "B71E6D"  -Values @("01") }
-    if (IsChecked -Elem $Options.HideCredits -Enabled)             { PatchBytes -Offset "966000" -Patch "Message\Credits.bin" }
+    if (IsChecked -Elem $Options.SubscreenDelayFix -Enabled)       { ChangeBytes -Offset "B15DD0" -Values @("00", "00", "00", "00"); ChangeBytes -Offset "B12947" -Values @("03") }
+    if (IsChecked -Elem $Options.DisableNaviPrompts -Enabled)      { ChangeBytes -Offset "DF8B84"  -Values @("00", "00", "00", "00") }
+    if (IsChecked -Elem $Options.DefaultZTargeting -Enabled)       { ChangeBytes -Offset "B71E6D" -Values @("01") }
+    if (IsChecked -Elem $Options.HideCredits -Enabled)             { PatchBytes  -Offset "966000" -Patch "Message\Credits.bin" }
+
+
+
+    # CUTSCENES #
+
+    if (IsChecked -Elem $Options.SkipIntroSequence  -Enabled)      { ChangeBytes -Offset "B06BBA"  -Values @("00", "00") }
+    if (IsChecked -Elem $Options.SkipAllMedallions  -Enabled)      { ChangeBytes -Offset "ACA409"  -Values @("AD"); ChangeBytes -Offset "ACA49D"  -Values @("CE") }
+    if (IsChecked -Elem $Options.SkipDaruniaDance  -Enabled)       { ChangeBytes -Offset "22769E4" -Values @("FF", "FF", "FF", "FF") }
+    if (IsChecked -Elem $Options.SpeedupOpeningChests  -Enabled)   { ChangeBytes -Offset "BDA2E8"  -Values @("24", "0A", "FF", "FF") }
+    if (IsChecked -Elem $Options.SpeedupKingZora  -Enabled)        { ChangeBytes -Offset "E56924"  -Values @("00", "00", "00", "00") }
+    if (IsChecked -Elem $Options.SpeedupZeldasEscape  -Enabled)    { ChangeBytes -Offset "1FC0CF8" -Values @("00", "00", "00", "01", "00", "21", "00", "01", "00", "02", "00", "02") }
 
 
 
@@ -391,8 +391,8 @@ function PatchByteOptionsOoT() {
         PatchBytes -Offset "2B9BDB8" -Texture -Patch "Gerudo Symbols\12.bin" # Room 10 Spirit Temple
         PatchBytes -Offset "2BE7920" -Texture -Patch "Gerudo Symbols\12.bin" # Room 10 Spirit Temple
 
-        if (IsChecked -Elem $Options.MQSpiritTemple -Enabled)   { PatchBytes -Offset "2B03528" -Texture -Patch "Gerudo Symbols\11.bin" } # Room 0 Spirit Temple
-        else                                                    { PatchBytes -Offset "2B03928" -Texture -Patch "Gerudo Symbols\11.bin" } # Room 0 Spirit Temple
+        if (IsChecked -Elem $Options.MQSpiritTemple -Enabled)      { PatchBytes -Offset "2B03528" -Texture -Patch "Gerudo Symbols\11.bin" } # Room 0 Spirit Temple
+        else                                                       { PatchBytes -Offset "2B03928" -Texture -Patch "Gerudo Symbols\11.bin" } # Room 0 Spirit Temple
     }
 
 }
@@ -404,8 +404,8 @@ function PatchByteReduxOoT() {
 
     # INTERFACE #
 
-    if (IsChecked -Elem $Redux.ShowFileSelectIcons -Enabled) { PatchBytes  -Offset "BAF738" -Patch "File Select.bin" }
-    if (IsChecked -Elem $Redux.DPadLayoutShow -Enabled)      { ChangeBytes -Offset "348086E" -Values @("01") }
+    if (IsChecked -Elem $Redux.ShowFileSelectIcons -Enabled)       { PatchBytes  -Offset "BAF738" -Patch "File Select.bin" }
+    if (IsChecked -Elem $Redux.DPadLayoutShow -Enabled)            { ChangeBytes -Offset "348086E" -Values @("01") }
 
 
 
@@ -758,7 +758,9 @@ function PatchByteOptionsMM() {
         ExportAndPatch -Path "Southern Swamp\southern_swamp_cleared_room_2" -Offset "1F4D000" -Length "D0A0"  -NewLength "D1C0"  -TableOffset "1EC46"  -Values @("A1", "C0")
     }
 
-    if (IsChecked -Elem $Options.DisableLowHPSound -Enabled)   { ChangeBytes -Offset "B97E2A" -Values @("00", "00") }
+    if (IsText -Elem $Options.LowHPBeep -Text "Softer Beep" -Enabled)     { ChangeBytes -Offset "B97E2A"  -Values @("48", "04") }
+    if (IsText -Elem $Options.LowHPBeep -Text "Beep Disabled" -Enabled)   { ChangeBytes -Offset "B97E2A"  -Values @("00", "00") }
+
     if (IsChecked -Elem $Options.FixGohtCutscene   -Enabled)   { ChangeBytes -Offset "F6DE89" -Values @("8D", "00", "02", "10", "00", "00", "0A") }
     if (IsChecked -Elem $Options.FixMushroomBottle -Enabled)   { ChangeBytes -Offset "CD7C48" -Values @("1E", "6B") }
     if (IsChecked -Elem $Options.FixFairyFountain  -Enabled)   { ChangeBytes -Offset "B9133E" -Values @("01", "0F") }
@@ -954,7 +956,7 @@ function PatchOptionsSM64() {
 #==============================================================================================================================================================================================
 function CreateOoTOptionsContent() {
     
-    CreateOptionsDialog -Width 900 -Height 680
+    CreateOptionsDialog -Width 920 -Height 650
     $ToolTip = CreateTooltip
 
 
@@ -983,7 +985,7 @@ function CreateOoTOptionsContent() {
 
     $Options.Models                    = CreateReduxComboBox -Column 0 -Row 2 -AddTo $GraphicsBox -Items @("No Model Replacements", "Replace Child Model Only", "Replace Adult Model Only", "Replace Both Models", "Change to Female Models") -Text "Link's Models:" -ToolTip $ToolTip -Info "1. Replace the model for Child Link with that of Majora's Mask`n2. Replace the model for Adult Link to be Majora's Mask-styled`n3. Combine both previous options`n4. Transform Link into a female" -Name "Models"
     $Options.Voices                    = CreateReduxComboBox -Column 2 -Row 2 -AddTo $GraphicsBox -Items @("No Voice Changes", "Majora's Mask Link Voices", "Feminine Link Voices") -Text "Voice:" -ToolTip $ToolTip -Info "1. Replace the voices for Link with those used in Majora's Mask`n2. Replace the voices for Link to sound feminine" -Name "Voices"
-    $Options.DisableLowHPSound         = CreateReduxCheckBox -Column 4 -Row 2 -AddTo $GraphicsBox -Text "Disable Low HP Beep"    -ToolTip $ToolTip -Info "There will be absolute silence when Link's HP is getting low" -Name "DisableLowHPSound"
+    $Options.LowHPBeep                 = CreateReduxComboBox -Column 4 -Row 2 -AddTo $GraphicsBox -Items @("Default Beep", "Softer Beep", "Beep Disabled") -Text "Low HP Beep:" -ToolTip $ToolTip -Info "Set the sound effect for the low HP beeping" -Name "LowHPBeep" -Length 100
 
 
 
@@ -1037,7 +1039,8 @@ function CreateOoTOptionsContent() {
     $Options.EasierMinigames           = CreateReduxCheckBox -Column 1 -Row 1 -AddTo $GameplayBox -Text "Easier Minigames"       -ToolTip $ToolTip -Info "Certain minigames are made easier and faster`n- Dampe's Digging Game is first try always`n- Fishing is less random and has less demanding requirements" -Name "EasierMinigames"
     $Options.ReturnChild               = CreateReduxCheckBox -Column 2 -Row 1 -AddTo $GameplayBox -Text "Can Always Return"      -ToolTip $ToolTip -Info "You can always go back to being a child again before clearing the boss of the Forest Temple`nOut of the way Sheik!" -Name "ReturnChild"
     $Options.Medallions                = CreateReduxCheckBox -Column 3 -Row 1 -AddTo $GameplayBox -Text "Require All Medallions" -ToolTip $ToolTip -Info "All six medallions are required for the Rainbow Bridge to appear before Ganon's Castle`nThe vanilla requirements were the Shadow and Spirit Medallions and the Light Arrows" -Name "Medallions"
-    
+    $Options.FixGraves                 = CreateReduxCheckBox -Column 4 -Row 1 -AddTo $GameplayBox -Text "Fix Graves"             -ToolTip $ToolTip -Info "The grave holes in Kakariko Graveyard behave as in the Rev 1 revision`nThe edges no longer force Link to grab or jump over them when trying to enter" -Name "FixGraves"
+
 
 
     # RESTORE #
@@ -1051,30 +1054,30 @@ function CreateOoTOptionsContent() {
     
 
 
-    # EQUIPMENT #
-    $EquipmentBox                      = CreateReduxGroup -Y ($RestoreBox.Bottom + 5) -Height 1 -AddTo $Options.Panel -Text "Equipment"
-    
-    $Options.UnlockSword               = CreateReduxCheckBox -Column 0 -Row 1 -AddTo $EquipmentBox -Text "Unlock Kokiri Sword" -ToolTip $ToolTip -Info "Adult Link is able to use the Kokiri Sword`nThe Kokiri Sword does half as much damage as the Master Sword" -Name "UnlockSword"
-    $Options.UnlockTunics              = CreateReduxCheckBox -Column 1 -Row 1 -AddTo $EquipmentBox -Text "Unlock Tunics"       -ToolTip $ToolTip -Info "Child Link is able to use the Goron Tunic and Zora Tunic`nSince you might want to walk around in style as well when you are young" -Name "UnlockTunics"
-    $Options.UnlockBoots               = CreateReduxCheckBox -Column 2 -Row 1 -AddTo $EquipmentBox -Text "Unlock Boots"        -ToolTip $ToolTip -Info "Child Link is able to use the Iron Boots and Hover Boots" -Name "UnlockBoots"
-
-    $Options.Capacity                  = CreateReduxButton   -Column 3 -Row 1 -AddTo $EquipmentBox -Text "Set Capacity"        -ToolTip $OptionsToolTip -Info "Select the capacity values you want for ammo and wallets"
-    $Options.Capacity.Add_Click( { $Options.CapacityDialog.ShowDialog() } )
-
-
-
     # EVERYTHING ELSE #
-    $OtherBox                          = CreateReduxGroup -Y ($EquipmentBox.Bottom + 5) -Height 1 -AddTo $Options.Panel -Text "Other"
+    $OtherBox                          = CreateReduxGroup -Y ($RestoreBox.Bottom + 5) -Height 2 -AddTo $Options.Panel -Text "Other"
     
     $Options.SubscreenDelayFix         = CreateReduxCheckBox -Column 0 -Row 1 -AddTo $OtherBox -Text "Pause Screen Delay Fix"   -ToolTip $ToolTip -Info "Removes the delay when opening the Pause Screen" -Name "SubscreenDelayFix"
     $Options.DisableNaviPrompts        = CreateReduxCheckBox -Column 1 -Row 1 -AddTo $OtherBox -Text "Remove Navi Prompts"      -ToolTip $ToolTip -Info "Navi will no longer interupt your during the first dungeon with mandatory textboxes" -Name "DisableNaviPrompts"
     $Options.DefaultZTargeting         = CreateReduxCheckBox -Column 2 -Row 1 -AddTo $OtherBox -Text "Default Hold Z-Targeting" -ToolTip $ToolTip -Info "Change the Default Z-Targeting option to Hold instead of Switch" -Name "DefaultZTargeting"
     $Options.HideCredits               = CreateReduxCheckBox -Column 3 -Row 1 -AddTo $OtherBox -Text "Hide Credits"             -ToolTip $ToolTip -Info "Do not show the credits text during the credits sequence" -Name "HideCredits"
+    $Options.DebugMapSelect            = CreateReduxCheckBox -Column 4 -Row 1 -AddTo $OtherBox -Text "Debug Map Select"         -ToolTip $ToolTip -Info "Enable the Map Select menu like in the Debug ROM`nThe File Select menu now opens the Map Select menu instead`nA separate debug save file is used" -Name "DebugMapSelect"
+
+    $Options.UnlockAgeRestrictions     = CreateReduxButton   -Column 0 -Row 2 -AddTo $OtherBox -Text "Unlock Age Restrictions"  -ToolTip $OptionsToolTip -Info "Select the items and equipment you want unlocked for Child and Adult Link"
+    $Options.UnlockAgeRestrictions.Add_Click( { $Options.UnlockAgeRestrictionsDialog.ShowDialog() } )
+
+    $Options.Capacity                  = CreateReduxButton   -Column 1 -Row 2 -AddTo $OtherBox -Text "Set Capacity"             -ToolTip $OptionsToolTip -Info "Select the capacity values you want for ammo and wallets"
+    $Options.Capacity.Add_Click( { $Options.CapacityDialog.ShowDialog() } )
+
+    $Options.Cutscenes                 = CreateReduxButton   -Column 2 -Row 2 -AddTo $OtherBox -Text "Cutscenes"                -ToolTip $ToolTip -Info "Select cutscenes which are sped up or skipped"
+    $Options.Cutscenes.Add_Click( { $Options.CutscenesDialog.ShowDialog() } )
 
 
 
     CreateMasterQuestDungeonsDialog
     CreateCapacityDialog
+    CreateUnlockAgeRestrictionsDialog
+    CreateCutscenesDialog
 
     $Options.Damage.Add_SelectedIndexChanged({ $Options.Recovery.Enabled = $this.Text -ne "OHKO Mode" })
     $Options.EnableTunicColors.Add_CheckStateChanged({
@@ -1120,7 +1123,7 @@ function CreateOoTReduxContent() {
     # COLORS #
     $ColorsBox                         = CreateReduxGroup -Y ($InterfaceBox.Bottom + 5) -Height 3 -AddTo $Redux.Panel -Text "Colors"
 
-    $Redux.EnableButtonColors          = CreateReduxCheckBox -Column 0 -Row 1 -AddTo $ColorsBox -Text "Change Button Colors"   -ToolTip $ToolTip -Info "Enable changing the color for the buttons`n- Requires Redux patch" -Name "EnableButtonColors"
+    $Redux.EnableButtonColors          = CreateReduxCheckBox -Column 0 -Row 1 -AddTo $ColorsBox -Text "Change Button Colors [!]"   -ToolTip $ToolTip -Info "Enable changing the color for the buttons`n- Requires Redux patch`n[!] Some button icon colors are still unaffected" -Name "EnableButtonColors"
     $Redux.ResetAllColors              = CreateReduxButton   -Column 1 -Row 1 -AddTo $ColorsBox -Text "Reset All Colors"       -ToolTip $ToolTip -Info "Reset all colors to their default values"
 
     $Redux.AButtonColor                = CreateReduxButton   -Column 0 -Row 2 -AddTo $ColorsBox -Text "Set A Button Color"     -ToolTip $ToolTip -Info "Select the color you want for the A button"
@@ -1189,14 +1192,15 @@ function CreateMMOptionsContent() {
 
 
     # GRAPHICS #
-    $GraphicsBox                       = CreateReduxGroup -Y ($HeroModeBox.Bottom + 5) -Height 1 -AddTo $Options.Panel -Text "Graphics"
+    $GraphicsBox                       = CreateReduxGroup -Y ($HeroModeBox.Bottom + 5) -Height 2 -AddTo $Options.Panel -Text "Graphics / Sound"
     
     $Options.Widescreen                = CreateReduxCheckBox -Column 0 -Row 1 -AddTo $GraphicsBox -Text "16:9 Widescreen"         -ToolTip $ToolTip -Info "Native 16:9 Widescreen Display support" -Name "Widescreen"
     $Options.WidescreenTextures        = CreateReduxCheckBox -Column 1 -Row 1 -AddTo $GraphicsBox -Text "16:9 Textures"           -ToolTip $ToolTip -Info "16:9 backgrounds and textures suitable for native 16:9 widescreen display support" -Name "WidescreenTextures"
     $Options.BlackBars                 = CreateReduxCheckBox -Column 2 -Row 1 -AddTo $GraphicsBox -Text "No Black Bars"           -ToolTip $ToolTip -Info "Removes the black bars shown on the top and bottom of the screen during Z-targeting and cutscenes" -Name "BlackBars"
     $Options.ExtendedDraw              = CreateReduxCheckBox -Column 3 -Row 1 -AddTo $GraphicsBox -Text "Extended Draw Distance"  -ToolTip $ToolTip -Info "Increases the game's draw distance for objects`nDoes not work on all objects" -Name "ExtendedDraw"
     $Options.PixelatedStars            = CreateReduxCheckBox -Column 4 -Row 1 -AddTo $GraphicsBox -Text "Disable Pixelated Stars" -ToolTip $ToolTip -Info "Completely disable the stars at night-time, which are pixelated dots and do not have any textures for HD replacement" -Name "PixelatedStars"
-    
+    $Options.LowHPBeep                 = CreateReduxComboBox -Column 0 -Row 2 -AddTo $GraphicsBox -Items @("Default Beep", "Softer Beep", "Beep Disabled") -Text "Low HP Beep:" -ToolTip $ToolTip -Info "Set the sound effect for the low HP beeping" -Name "LowHPBeep" -Length 100
+
 
 
     # COLORS #
@@ -1216,8 +1220,6 @@ function CreateMMOptionsContent() {
 
     $Options.ZoraPhysics               = CreateReduxCheckBox -Column 0 -Row 1 -AddTo $GameplayBox -Text "Zora Physics"          -ToolTip $ToolTip -Info "Change the Zora physics when using the boomerang`nZora Link will take a step forward instead of staying on his spot" -Name "ZoraPhysics"
     $Options.RestorePalaceRoute        = CreateReduxCheckBox -Column 1 -Row 1 -AddTo $GameplayBox -Text "Restore Palace Route"  -ToolTip $ToolTip -Info "Restore the route to the Bean Seller within the Deku Palace as seen in the Japanese release" -Name "RestorePalaceRoute"
-    #$Options.ResearchLabPlatform      = CreateReduxCheckBox -Column 2 -Row 1 -AddTo $GameplayBox -Text "Research Lab Platform" -ToolTip $ToolTip -Info "Raises the platform to access the Marine Research Lab in the Great Bay Coast as seen in the Japanese release" -Name "ResearchLabPlatform"
-    #$Options.RanchDirtRoad            = CreateReduxCheckBox -Column 3 -Row 1 -AddTo $GameplayBox -Text "Ranch Dirt Road"       -ToolTip $ToolTip -Info "Restore the Romani Ranch dirt road to allow Deku Link to borrow in it as used in the Japanese release" -Name "RanchDirtRoad"
 
 
 
@@ -1239,7 +1241,7 @@ function CreateMMOptionsContent() {
     # EQUIPMENT #
     $EquipmentBox                      = CreateReduxGroup -Y ($RestoreBox.Bottom + 5) -Height 1 -AddTo $Options.Panel -Text "Equipment"
     
-    $Options.RazorSword                = CreateReduxCheckBox -Column 0 -Row 1 -AddTo $EquipmentBox -Text "Permanent Razor Sword" -ToolTip $ToolTip -Info "The Razor Sword won't get destroyed after 100 it`nYou can also keep the Razor Sword when traveling back in time" -Name "RazorSword"
+    $Options.RazorSword                = CreateReduxCheckBox -Column 0 -Row 1 -AddTo $EquipmentBox -Text "Permanent Razor Sword" -ToolTip $ToolTip -Info "The Razor Sword won't get destroyed after 100 hits`nYou can also keep the Razor Sword when traveling back in time" -Name "RazorSword"
 
     $Options.Capacity                  = CreateReduxButton   -Column 1 -Row 1 -AddTo $EquipmentBox -Text "Set Capacity"          -ToolTip $ToolTip -Info "Select the capacity values you want for ammo and wallets"
     $Options.Capacity.Add_Click( { $Options.CapacityDialog.ShowDialog() } )
@@ -1247,14 +1249,13 @@ function CreateMMOptionsContent() {
 
 
     # EVERYTHING ELSE #
-    $OtherBox                          = CreateReduxGroup -Y ($EquipmentBox.Bottom + 5) -Height 2 -AddTo $Options.Panel -Text "Other"
+    $OtherBox                          = CreateReduxGroup -Y ($EquipmentBox.Bottom + 5) -Height 1 -AddTo $Options.Panel -Text "Other"
 
-    $Options.DisableLowHPSound         = CreateReduxCheckBox -Column 0 -Row 1 -AddTo $OtherBox -Text "Disable Low HP Beep" -ToolTip $ToolTip -Info "There will be absolute silence when Link's HP is getting low" -Name "DisableLowHPSound"
-    $Options.FixGohtCutscene           = CreateReduxCheckBox -Column 1 -Row 1 -AddTo $OtherBox -Text "Fix Goht Cutscene"   -ToolTip $ToolTip -Info "Fix Goht's awakening cutscene so that Link no longer gets run over" -Name "FixGohtCutscene"
-    $Options.FixMushroomBottle         = CreateReduxCheckBox -Column 2 -Row 1 -AddTo $OtherBox -Text "Fix Mushroom Bottle" -ToolTip $ToolTip -Info "Fix the item reference when collecting Magical Mushrooms as Link puts away the bottle automatically due to an error" -Name "FixMushroomBottle"
-    $Options.FixSouthernSwamp          = CreateReduxCheckBox -Column 3 -Row 1 -AddTo $OtherBox -Text "Fix Southern Swamp"  -ToolTip $ToolTip -Info "Fix a misplaced door after Woodfall has been cleared and you return to the Potion Shop`nThe door is slightly pushed forward after Odolwa has been defeated." -Name "FixSouthernSwamp"
-    $Options.FixFairyFountain          = CreateReduxCheckBox -Column 4 -Row 1 -AddTo $OtherBox -Text "Fix Fairy Fountain"  -ToolTip $ToolTip -Info "Fix the Ikana Canyon Fairy Fountain area not displaying the correct color." -Name "FixFairyFountain"
-    $Options.HideCredits               = CreateReduxCheckBox -Column 0 -Row 2 -AddTo $OtherBox -Text "Hide Credits"             -ToolTip $ToolTip -Info "Do not show the credits text during the credits sequence" -Name "HideCredits"
+    $Options.FixGohtCutscene           = CreateReduxCheckBox -Column 0 -Row 1 -AddTo $OtherBox -Text "Fix Goht Cutscene"   -ToolTip $ToolTip -Info "Fix Goht's awakening cutscene so that Link no longer gets run over" -Name "FixGohtCutscene"
+    $Options.FixMushroomBottle         = CreateReduxCheckBox -Column 1 -Row 1 -AddTo $OtherBox -Text "Fix Mushroom Bottle" -ToolTip $ToolTip -Info "Fix the item reference when collecting Magical Mushrooms as Link puts away the bottle automatically due to an error" -Name "FixMushroomBottle"
+    $Options.FixSouthernSwamp          = CreateReduxCheckBox -Column 2 -Row 1 -AddTo $OtherBox -Text "Fix Southern Swamp"  -ToolTip $ToolTip -Info "Fix a misplaced door after Woodfall has been cleared and you return to the Potion Shop`nThe door is slightly pushed forward after Odolwa has been defeated." -Name "FixSouthernSwamp"
+    $Options.FixFairyFountain          = CreateReduxCheckBox -Column 3 -Row 1 -AddTo $OtherBox -Text "Fix Fairy Fountain"  -ToolTip $ToolTip -Info "Fix the Ikana Canyon Fairy Fountain area not displaying the correct color." -Name "FixFairyFountain"
+    $Options.HideCredits               = CreateReduxCheckBox -Column 4 -Row 1 -AddTo $OtherBox -Text "Hide Credits"             -ToolTip $ToolTip -Info "Do not show the credits text during the credits sequence" -Name "HideCredits"
 
 
 
@@ -1431,45 +1432,134 @@ function CreateCapacityDialog() {
     $Options.EnableAmmoCapacity        = CreateReduxCheckBox -Column 0 -Row 1 -AddTo $ToggleBox -Text "Change Ammo Capacity"   -ToolTip $ToolTip -Info "Enable changing the capacity values for ammo" -Name "EnableAmmoCapacity"
     $Options.EnableWalletCapacity      = CreateReduxCheckBox -Column 1 -Row 1 -AddTo $ToggleBox -Text "Change Wallet Capacity" -ToolTip $ToolTip -Info "Enable changing the capacity values for the wallets" -Name "EnableWalletCapacity"
 
-    if ($GameType.mode -eq "Ocarina of Time")     { $AmmoBox = CreateReduxGroup -Y ($ToggleBox.Bottom + 5) -Height 5 -AddTo $CapacityPanel -Text "Ammo Capacity Selection" }
-    elseif ($GameType.mode -eq "Majora's Mask")   { $AmmoBox = CreateReduxGroup -Y ($ToggleBox.Bottom + 5) -Height 4 -AddTo $CapacityPanel -Text "Ammo Capacity Selection" }
+    if ($GameType.mode -eq "Ocarina of Time")     { $Options.AmmoBox = CreateReduxGroup -Y ($ToggleBox.Bottom + 5) -Height 5 -AddTo $CapacityPanel -Text "Ammo Capacity Selection" }
+    elseif ($GameType.mode -eq "Majora's Mask")   { $Options.AmmoBox = CreateReduxGroup -Y ($ToggleBox.Bottom + 5) -Height 4 -AddTo $CapacityPanel -Text "Ammo Capacity Selection" }
 
-    $Options.Quiver1                   = CreateReduxTextBox -Column 0 -Row 1 -Text "Quiver (1)"      -Value 30 -AddTo $AmmoBox -ToolTip $ToolTip -Info "Set the capacity for the Quiver (Base)`nDefault = 30"           -Name "Quiver1"
-    $Options.Quiver2                   = CreateReduxTextBox -Column 1 -Row 1 -Text "Quiver (2)"      -Value 40 -AddTo $AmmoBox -ToolTip $ToolTip -Info "Set the capacity for the Quiver (Upgrade 1)`nDefault = 40"      -Name "Quiver2"
-    $Options.Quiver3                   = CreateReduxTextBox -Column 2 -Row 1 -Text "Quiver (3)"      -Value 50 -AddTo $AmmoBox -ToolTip $ToolTip -Info "Set the capacity for the Quiver (Upgrade 2)`nDefault = 50"      -Name "Quiver3"
+    $Options.Quiver1                   = CreateReduxTextBox -Column 0 -Row 1 -Text "Quiver (1)"      -Value 30 -AddTo $Options.AmmoBox -ToolTip $ToolTip -Info "Set the capacity for the Quiver (Base)`nDefault = 30"           -Name "Quiver1"
+    $Options.Quiver2                   = CreateReduxTextBox -Column 1 -Row 1 -Text "Quiver (2)"      -Value 40 -AddTo $Options.AmmoBox -ToolTip $ToolTip -Info "Set the capacity for the Quiver (Upgrade 1)`nDefault = 40"      -Name "Quiver2"
+    $Options.Quiver3                   = CreateReduxTextBox -Column 2 -Row 1 -Text "Quiver (3)"      -Value 50 -AddTo $Options.AmmoBox -ToolTip $ToolTip -Info "Set the capacity for the Quiver (Upgrade 2)`nDefault = 50"      -Name "Quiver3"
 
-    $Options.BombBag1                  = CreateReduxTextBox -Column 0 -Row 2 -Text "Bomb Bag (1)"    -Value 20 -AddTo $AmmoBox -ToolTip $ToolTip -Info "Set the capacity for the Bomb Bag (Base)`nDefault = 20"         -Name "BombBag1"
-    $Options.BombBag2                  = CreateReduxTextBox -Column 1 -Row 2 -Text "Bomb Bag (2)"    -Value 30 -AddTo $AmmoBox -ToolTip $ToolTip -Info "Set the capacity for the Bomb Bag (Upgrade 1)`nDefault = 30"    -Name "BombBag2"
-    $Options.BombBag3                  = CreateReduxTextBox -Column 2 -Row 2 -Text "Bomb Bag (3)"    -Value 40 -AddTo $AmmoBox -ToolTip $ToolTip -Info "Set the capacity for the Bomb Bag (Upgrade 2)`nDefault = 40"    -Name "BombBag3"
+    $Options.BombBag1                  = CreateReduxTextBox -Column 0 -Row 2 -Text "Bomb Bag (1)"    -Value 20 -AddTo $Options.AmmoBox -ToolTip $ToolTip -Info "Set the capacity for the Bomb Bag (Base)`nDefault = 20"         -Name "BombBag1"
+    $Options.BombBag2                  = CreateReduxTextBox -Column 1 -Row 2 -Text "Bomb Bag (2)"    -Value 30 -AddTo $Options.AmmoBox -ToolTip $ToolTip -Info "Set the capacity for the Bomb Bag (Upgrade 1)`nDefault = 30"    -Name "BombBag2"
+    $Options.BombBag3                  = CreateReduxTextBox -Column 2 -Row 2 -Text "Bomb Bag (3)"    -Value 40 -AddTo $Options.AmmoBox -ToolTip $ToolTip -Info "Set the capacity for the Bomb Bag (Upgrade 2)`nDefault = 40"    -Name "BombBag3"
 
     if ($GameType.mode -eq "Ocarina of Time") {
-        $Options.BulletBag1            = CreateReduxTextBox -Column 0 -Row 3 -Text "Bullet Bag (1)"  -Value 30 -AddTo $AmmoBox -ToolTip $ToolTip -Info "Set the capacity for the Bullet Bag (Base)`nDefault = 30"       -Name "BulletBag1"
-        $Options.BulletBag2            = CreateReduxTextBox -Column 1 -Row 3 -Text "Bullet Bag (2)"  -Value 40 -AddTo $AmmoBox -ToolTip $ToolTip -Info "Set the capacity for the Bullet Bag (Upgrade 1)`nDefault = 40"  -Name "BulletBag2"
-        $Options.BulletBag3            = CreateReduxTextBox -Column 2 -Row 3 -Text "Bullet Bag (3)"  -Value 50 -AddTo $AmmoBox -ToolTip $ToolTip -Info "Set the capacity for the Bullet Bag (Upgrade 2)`nDefault = 50"  -Name "BulletBag3"
+        $Options.BulletBag1            = CreateReduxTextBox -Column 0 -Row 3 -Text "Bullet Bag (1)"  -Value 30 -AddTo $Options.AmmoBox -ToolTip $ToolTip -Info "Set the capacity for the Bullet Bag (Base)`nDefault = 30"       -Name "BulletBag1"
+        $Options.BulletBag2            = CreateReduxTextBox -Column 1 -Row 3 -Text "Bullet Bag (2)"  -Value 40 -AddTo $Options.AmmoBox -ToolTip $ToolTip -Info "Set the capacity for the Bullet Bag (Upgrade 1)`nDefault = 40"  -Name "BulletBag2"
+        $Options.BulletBag3            = CreateReduxTextBox -Column 2 -Row 3 -Text "Bullet Bag (3)"  -Value 50 -AddTo $Options.AmmoBox -ToolTip $ToolTip -Info "Set the capacity for the Bullet Bag (Upgrade 2)`nDefault = 50"  -Name "BulletBag3"
 
-        $Options.DekuSticks1           = CreateReduxTextBox -Column 0 -Row 4 -Text "Deku Sticks (1)" -Value 10 -AddTo $AmmoBox -ToolTip $ToolTip -Info "Set the capacity for the Deku Sticks (Base)`nDefault = 10"      -Name "DekuSticks1"
-        $Options.DekuSticks2           = CreateReduxTextBox -Column 1 -Row 4 -Text "Deku Sticks (2)" -Value 20 -AddTo $AmmoBox -ToolTip $ToolTip -Info "Set the capacity for the Deku Sticks (Upgrade 1)`nDefault = 20" -Name "DekuSticks2"
-        $Options.DekuSticks3           = CreateReduxTextBox -Column 2 -Row 4 -Text "Deku Sticks (3)" -Value 30 -AddTo $AmmoBox -ToolTip $ToolTip -Info "Set the capacity for the Deku Sticks (Upgrade 2)`nDefault = 30" -Name "DekuSticks3"
+        $Options.DekuSticks1           = CreateReduxTextBox -Column 0 -Row 4 -Text "Deku Sticks (1)" -Value 10 -AddTo $Options.AmmoBox -ToolTip $ToolTip -Info "Set the capacity for the Deku Sticks (Base)`nDefault = 10"      -Name "DekuSticks1"
+        $Options.DekuSticks2           = CreateReduxTextBox -Column 1 -Row 4 -Text "Deku Sticks (2)" -Value 20 -AddTo $Options.AmmoBox -ToolTip $ToolTip -Info "Set the capacity for the Deku Sticks (Upgrade 1)`nDefault = 20" -Name "DekuSticks2"
+        $Options.DekuSticks3           = CreateReduxTextBox -Column 2 -Row 4 -Text "Deku Sticks (3)" -Value 30 -AddTo $Options.AmmoBox -ToolTip $ToolTip -Info "Set the capacity for the Deku Sticks (Upgrade 2)`nDefault = 30" -Name "DekuSticks3"
 
-        $Options.DekuNuts1             = CreateReduxTextBox -Column 0 -Row 5 -Text "Deku Nuts (1)"   -Value 20 -AddTo $AmmoBox -ToolTip $ToolTip -Info "Set the capacity for the Deku Nuts (Base)`nDefault = 20"        -Name "DekuNuts1"
-        $Options.DekuNuts2             = CreateReduxTextBox -Column 1 -Row 5 -Text "Deku Nuts (2)"   -Value 30 -AddTo $AmmoBox -ToolTip $ToolTip -Info "Set the capacity for the Deku Nuts (Upgrade 1)`nDefault = 30"   -Name "DekuNuts2"
-        $Options.DekuNuts3             = CreateReduxTextBox -Column 2 -Row 5 -Text "Deku Nuts (3)"   -Value 40 -AddTo $AmmoBox -ToolTip $ToolTip -Info "Set the capacity for the Deku Nuts (Upgrade 2)`nDefault = 40"   -Name "DekuNuts3"
+        $Options.DekuNuts1             = CreateReduxTextBox -Column 0 -Row 5 -Text "Deku Nuts (1)"   -Value 20 -AddTo $Options.AmmoBox -ToolTip $ToolTip -Info "Set the capacity for the Deku Nuts (Base)`nDefault = 20"        -Name "DekuNuts1"
+        $Options.DekuNuts2             = CreateReduxTextBox -Column 1 -Row 5 -Text "Deku Nuts (2)"   -Value 30 -AddTo $Options.AmmoBox -ToolTip $ToolTip -Info "Set the capacity for the Deku Nuts (Upgrade 1)`nDefault = 30"   -Name "DekuNuts2"
+        $Options.DekuNuts3             = CreateReduxTextBox -Column 2 -Row 5 -Text "Deku Nuts (3)"   -Value 40 -AddTo $Options.AmmoBox -ToolTip $ToolTip -Info "Set the capacity for the Deku Nuts (Upgrade 2)`nDefault = 40"   -Name "DekuNuts3"
     }
     else {
-        $Options.DekuSticks1           = CreateReduxTextBox -Column 0 -Row 3 -Text "Deku Sticks (1)" -Value 10 -AddTo $AmmoBox -ToolTip $ToolTip -Info "Set the capacity for the Deku Sticks (Base)`nDefault = 10"      -Name "DekuSticks1"
-        $Options.DekuNuts1             = CreateReduxTextBox -Column 0 -Row 4 -Text "Deku Nuts (1)"   -Value 20 -AddTo $AmmoBox -ToolTip $ToolTip -Info "Set the capacity for the Deku Nuts (Base)`nDefault = 20"        -Name "DekuNuts1"
+        $Options.DekuSticks1           = CreateReduxTextBox -Column 0 -Row 3 -Text "Deku Sticks (1)" -Value 10 -AddTo $Options.AmmoBox -ToolTip $ToolTip -Info "Set the capacity for the Deku Sticks (Base)`nDefault = 10"      -Name "DekuSticks1"
+        $Options.DekuNuts1             = CreateReduxTextBox -Column 0 -Row 4 -Text "Deku Nuts (1)"   -Value 20 -AddTo $Options.AmmoBox -ToolTip $ToolTip -Info "Set the capacity for the Deku Nuts (Base)`nDefault = 20"        -Name "DekuNuts1"
     }
 
-    $WalletBox                         = CreateReduxGroup -Y ($AmmoBox.Bottom + 5) -Height 1 -AddTo $CapacityPanel -Text "Wallet Capacity Selection"
-    $Options.Wallet1                   = CreateReduxTextBox -Column 0 -Row 1 -Length 3 -Text "Wallet (1)" -Value 99  -AddTo $WalletBox -ToolTip $ToolTip -Info "Set the capacity for the Wallet (Base)`nDefault = 99"       -Name "Wallet1"
-    $Options.Wallet2                   = CreateReduxTextBox -Column 1 -Row 1 -Length 3 -Text "Wallet (2)" -Value 200 -AddTo $WalletBox -ToolTip $ToolTip -Info "Set the capacity for the Wallet (Upgrade 1)`nDefault = 200" -Name "Wallet2"
-    $Options.Wallet3                   = CreateReduxTextBox -Column 2 -Row 1 -Length 3 -Text "Wallet (3)" -Value 500 -AddTo $WalletBox -ToolTip $ToolTip -Info "Set the capacity for the Wallet (Upgrade 2)`nDefault = 500" -Name "Wallet3"
+    $Options.WalletBox                         = CreateReduxGroup -Y ($Options.AmmoBox.Bottom + 5) -Height 1 -AddTo $CapacityPanel -Text "Wallet Capacity Selection"
+    $Options.Wallet1                   = CreateReduxTextBox -Column 0 -Row 1 -Length 3 -Text "Wallet (1)" -Value 99  -AddTo $Options.WalletBox -ToolTip $ToolTip -Info "Set the capacity for the Wallet (Base)`nDefault = 99"       -Name "Wallet1"
+    $Options.Wallet2                   = CreateReduxTextBox -Column 1 -Row 1 -Length 3 -Text "Wallet (2)" -Value 200 -AddTo $Options.WalletBox -ToolTip $ToolTip -Info "Set the capacity for the Wallet (Upgrade 1)`nDefault = 200" -Name "Wallet2"
+    $Options.Wallet3                   = CreateReduxTextBox -Column 2 -Row 1 -Length 3 -Text "Wallet (3)" -Value 500 -AddTo $Options.WalletBox -ToolTip $ToolTip -Info "Set the capacity for the Wallet (Upgrade 2)`nDefault = 500" -Name "Wallet3"
 
-    ToggleAmmoCapacityOptions
-    $Options.EnableAmmoCapacity.Add_CheckStateChanged({ ToggleAmmoCapacityOptions })
+    $Options.AmmoBox.Enabled = $Options.EnableAmmoCapacity.Checked
+    $Options.EnableAmmoCapacity.Add_CheckStateChanged({ $Options.AmmoBox.Enabled = $Options.EnableAmmoCapacity.Checked })
+    $Options.WalletBox.Enabled = $Options.EnableWalletCapacity.Checked
+    $Options.EnableWalletCapacity.Add_CheckStateChanged({ $Options.WalletBox.Enabled = $Options.EnableWalletCapacity.Checked })
 
-    ToggleWalletCapacityOptions
-    $Options.EnableWalletCapacity.Add_CheckStateChanged({ ToggleWalletCapacityOptions })
+}
+
+
+
+#==============================================================================================================================================================================================
+function CreateUnlockAgeRestrictionsDialog() {
+    
+    # Create Dialog
+    $Options.UnlockAgeRestrictionsDialog = CreateDialog -Width 600 -Height 310
+    if (Test-Path -LiteralPath $GameFiles.icon -PathType Leaf) { $Options.UnlockAgeRestrictionsDialog.Icon = $GameFiles.icon }
+    else                                                       { $Options.UnlockAgeRestrictionsDialog.Icon = $null }
+
+    # Tooltip
+    $ToolTip = CreateTooltip
+
+    # Close Button
+    $CloseButton = CreateButton -X ($Options.UnlockAgeRestrictionsDialog.Width / 2 - 40) -Y ($Options.UnlockAgeRestrictionsDialog.Height - 90) -Width 80 -Height 35 -Text "Close" -AddTo $Options.UnlockAgeRestrictionsDialog
+    $CloseButton.Add_Click( {$Options.UnlockAgeRestrictionsDialog.Hide()} )
+
+    # Options Label
+    $Label = CreateLabel -X 30 -Y 20 -Width 300 -Height 15 -Font $VCPatchFont -Text ($GameType.mode + " - Unlock Age Restrictions") -AddTo $Options.UnlockAgeRestrictionsDialog
+
+    # Capacity
+    $UnlockAgeRestrictionsPanel             = CreatePanel -Width $Options.UnlockAgeRestrictionsDialog.Width -Height $Options.UnlockAgeRestrictionsDialog.Height -AddTo $Options.UnlockAgeRestrictionsDialog
+
+    # Enable checkbox
+    $ToggleBox                              = CreateReduxGroup -Y 50 -Height 1 -AddTo $UnlockAgeRestrictionsPanel -Text "Global Toggle"
+    $Options.EnabledUnlockChildRestrictions = CreateReduxCheckBox -Column 0 -Row 1 -AddTo $ToggleBox -Text "Unlock Child Restrictions" -ToolTip $ToolTip -Info "Enable unlocking items and equipment for Child Link" -Name "EnabledUnlockChildRestrictions"
+    $Options.EnabledUnlockAdultRestrictions = CreateReduxCheckBox -Column 1 -Row 1 -AddTo $ToggleBox -Text "Unlock Adult Restrictions" -ToolTip $ToolTip -Info "Enable unlocking items and equipment for Adult Link" -Name "EnabledUnlockAdultRestrictions"
+
+    $Options.UnlockChildRestrictionsBox     = CreateReduxGroup -Y ($ToggleBox.Bottom + 5) -Height 1 -AddTo $UnlockAgeRestrictionsPanel -Text "Unlock Child Restrictions"
+    $Options.UnlockTunics                   = CreateReduxCheckBox -Column 0 -Row 1 -AddTo $Options.UnlockChildRestrictionsBox -Text "Unlock Tunics"     -ToolTip $ToolTip -Info "Child Link is able to use the Goron Tunic and Zora Tunic`nSince you might want to walk around in style as well when you are young" -Name "UnlockTunics"
+    $Options.UnlockBoots                    = CreateReduxCheckBox -Column 1 -Row 1 -AddTo $Options.UnlockChildRestrictionsBox -Text "Unlock Boots [!]"  -ToolTip $ToolTip -Info "Child Link is able to use the Iron Boots and Hover Boots`n[!] The Iron and Hover Boots appears as the Kokiri Boots"                -Name "UnlockBoots"
+    $Options.UnlockMegatonHammer            = CreateReduxCheckBox -Column 2 -Row 1 -AddTo $Options.UnlockChildRestrictionsBox -Text "Unlock Hammer [!]" -ToolTip $ToolTip -Info "Child Link is able to use the Megaton Hammer`n[!] The Megaton Hammer appears as invisible"                                         -Name "UnlockMegatonHammer"
+
+    $Options.UnlockAdultRestrictionsBox     = CreateReduxGroup -Y ($Options.UnlockChildRestrictionsBox.Bottom + 5) -Height 1 -AddTo $UnlockAgeRestrictionsPanel -Text "Unlock Adult Restrictions"
+    $Options.UnlockKokiriSword              = CreateReduxCheckBox -Column 0 -Row 1 -AddTo $Options.UnlockAdultRestrictionsBox -Text "Unlock Kokiri Sword"  -ToolTip $ToolTip -Info "Adult Link is able to use the Kokiri Sword`nThe Kokiri Sword does half as much damage as the Master Sword"                      -Name "UnlockKokiriSword"
+    $Options.UnlockFairySlingshot           = CreateReduxCheckBox -Column 1 -Row 1 -AddTo $Options.UnlockAdultRestrictionsBox -Text "Unlock Slingshot [!]" -ToolTip $ToolTip -Info "Adult Link is able to use the Fairy Slingshot`n[!] The Fairy Slingshot appears as the Fairy Bow"                                -Name "UnlockFairySlingshot"
+    $Options.UnlockBoomerang                = CreateReduxCheckBox -Column 2 -Row 1 -AddTo $Options.UnlockAdultRestrictionsBox -Text "Unlock Boomerang [!]" -ToolTip $ToolTip -Info "Adult Link is able to use the Boomerang`n[!] The Boomerang appears as invisible"                                                -Name "UnlockBoomerang"
+
+    $Options.UnlockChildRestrictionsBox.Enabled = $Options.EnabledUnlockChildRestrictions.Checked
+    $Options.EnabledUnlockChildRestrictions.Add_CheckStateChanged({ $Options.UnlockChildRestrictionsBox.Enabled = $Options.EnabledUnlockChildRestrictions.Checked })
+    $Options.UnlockAdultRestrictionsBox.Enabled = $Options.EnabledUnlockAdultRestrictions.Checked
+    $Options.EnabledUnlockAdultRestrictions.Add_CheckStateChanged({ $Options.UnlockAdultRestrictionsBox.Enabled = $Options.EnabledUnlockAdultRestrictions.Checked })
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function CreateCutscenesDialog() {
+    
+    # Create Dialog
+    $Options.CutscenesDialog = CreateDialog -Width 600 -Height 310
+    if (Test-Path -LiteralPath $GameFiles.icon -PathType Leaf) { $Options.CutscenesDialog.Icon = $GameFiles.icon }
+    else                                                       { $Options.CutscenesDialog.Icon = $null }
+
+    # Tooltip
+    $ToolTip = CreateTooltip
+
+    # Close Button
+    $CloseButton = CreateButton -X ($Options.CutscenesDialog.Width / 2 - 40) -Y ($Options.CutscenesDialog.Height - 90) -Width 80 -Height 35 -Text "Close" -AddTo $Options.CutscenesDialog
+    $CloseButton.Add_Click( {$Options.CutscenesDialog.Hide()} )
+
+    # Options Label
+    $Label = CreateLabel -X 30 -Y 20 -Width 300 -Height 15 -Font $VCPatchFont -Text ($GameType.mode + " - Skip Cutscenes") -AddTo $Options.CutscenesDialog
+
+    # Capacity
+    $CutscenesPanel                     = CreatePanel -Width $Options.CutscenesDialog.Width -Height ($Options.CutscenesDialog.Height) -AddTo $Options.CutscenesDialog
+
+    # Enable checkbox
+    $ToggleBox                         = CreateReduxGroup -Y 50 -Height 1 -AddTo $CutscenesPanel -Text "Global Toggle"
+    $Options.EnableSkipCutscenes       = CreateReduxCheckBox -Column 0 -Row 1 -AddTo $ToggleBox                   -Text "Skip Cutscenes"     -ToolTip $ToolTip -Info "Enable changing skipping cutscenes"                                               -Name "EnableSkipCutscenes"
+    $Options.EnableSpeedupCutscenes    = CreateReduxCheckBox -Column 1 -Row 1 -AddTo $ToggleBox                   -Text "Speed-Up Cutscenes" -ToolTip $ToolTip -Info "Enable changing speeding up cutscenes"                                            -Name "EnabledSpeedupCutscenes"
+
+    $Options.SkipCutscenesBox          = CreateReduxGroup -Y ($ToggleBox.Bottom + 5) -Height 1 -AddTo $CutscenesPanel -Text "Skip Cutscenes"
+    $Options.SkipIntroSequence         = CreateReduxCheckBox -Column 0 -Row 1 -AddTo $Options.SkipCutscenesBox    -Text "Intro Sequence"     -ToolTip $ToolTip -Info "Skip the intro sequence, so you can start playing immediately"                    -Name "SkipIntroSequence"
+    $Options.SkipAllMedallions         = CreateReduxCheckBox -Column 1 -Row 1 -AddTo $Options.SkipCutscenesBox    -Text "All Medallions"     -ToolTip $ToolTip -Info "Cutscene for all medallions never triggers when leaving shadow or spirit temples" -Name "SkipAllMedallions"
+    $Options.SkipDaruniaDance          = CreateReduxCheckBox -Column 2 -Row 1 -AddTo $Options.SkipCutscenesBox    -Text "Darunia Dance"      -ToolTip $ToolTip -Info "Darunia will not dance"                                                           -Name "SkipDaruniaDance"
+
+    $Options.SpeedupCutscenesBox       = CreateReduxGroup -Y ($Options.SkipCutscenesBox.Bottom + 5) -Height 1 -AddTo $CutscenesPanel -Text "Speed-Up Cutscenes"
+    $Options.SpeedupOpeningChests      = CreateReduxCheckBox -Column 0 -Row 1 -AddTo $Options.SpeedupCutscenesBox -Text "Opening Chests"     -ToolTip $ToolTip -Info "Make all chest opening animations fast by kicking them open"                      -Name "SpeedupOpeningChests"
+    $Options.SpeedupKingZora           = CreateReduxCheckBox -Column 1 -Row 1 -AddTo $Options.SpeedupCutscenesBox -Text "King Zora"          -ToolTip $ToolTip -Info "King Zora moves quickly"                                                          -Name "SpeedupKingZora"
+    $Options.SpeedupZeldasEscape       = CreateReduxCheckBox -Column 2 -Row 1 -AddTo $Options.SpeedupCutscenesBox -Text "Zelda's Escape"     -ToolTip $ToolTip -Info "Speed-up Zelda escaping from Hyrule Castle "                                      -Name "SpeedupZeldasEscape"
+
+    $Options.SkipCutscenesBox.Enabled = $Options.EnableSkipCutscenes.Checked
+    $Options.EnableSkipCutscenes.Add_CheckStateChanged({ $Options.SkipCutscenesBox.Enabled = $Options.EnableSkipCutscenes.Checked })
+    $Options.SpeedupCutscenesBox.Enabled = $Options.EnableSpeedupCutscenes.Checked
+    $Options.EnableSpeedupCutscenes.Add_CheckStateChanged({ $Options.SpeedupCutscenesBox.Enabled = $Options.EnableSpeedupCutscenes.Checked })
 
 }
 
@@ -1512,47 +1602,6 @@ function CreateDPadDialog() {
     $PictureBox.Height =  $Image.Size.Height
     $PictureBox.Image = $Image
     $DPadBox.controls.add($PictureBox)
-
-}
-
-
-
-#==============================================================================================================================================================================================
-function ToggleAmmoCapacityOptions() {
-    
-    $Options.Quiver1.Enabled     = $Options.EnableAmmoCapacity.Checked
-    $Options.Quiver2.Enabled     = $Options.EnableAmmoCapacity.Checked
-    $Options.Quiver3.Enabled     = $Options.EnableAmmoCapacity.Checked
-
-    $Options.BombBag1.Enabled    = $Options.EnableAmmoCapacity.Checked
-    $Options.BombBag2.Enabled    = $Options.EnableAmmoCapacity.Checked
-    $Options.BombBag3.Enabled    = $Options.EnableAmmoCapacity.Checked
-
-    $Options.DekuSticks1.Enabled = $Options.EnableAmmoCapacity.Checked
-    $Options.DekuNuts1.Enabled   = $Options.EnableAmmoCapacity.Checked
-
-    if ($GameType.mode -eq "Ocarina of Time") {
-        $Options.BulletBag1.Enabled  = $Options.EnableAmmoCapacity.Checked
-        $Options.BulletBag2.Enabled  = $Options.EnableAmmoCapacity.Checked
-        $Options.BulletBag3.Enabled  = $Options.EnableAmmoCapacity.Checked
-
-        $Options.DekuSticks2.Enabled = $Options.EnableAmmoCapacity.Checked
-        $Options.DekuSticks3.Enabled = $Options.EnableAmmoCapacity.Checked
-
-        $Options.DekuNuts2.Enabled   = $Options.EnableAmmoCapacity.Checked
-        $Options.DekuNuts3.Enabled   = $Options.EnableAmmoCapacity.Checked
-    }
-
-}
-
-
-
-#==============================================================================================================================================================================================
-function ToggleWalletCapacityOptions() {
-    
-    $Options.Wallet1.Enabled = $Options.EnableWalletCapacity.Checked
-    $Options.Wallet2.Enabled = $Options.EnableWalletCapacity.Checked
-    $Options.Wallet3.Enabled = $Options.EnableWalletCapacity.Checked
 
 }
 

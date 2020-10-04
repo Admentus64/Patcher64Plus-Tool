@@ -19,8 +19,8 @@
 	"title" : "Super Mario 64: Split-Screen Multiplayer",
 	"console" : "N64",
 	"n64_title" : "SM64 Multiplayer",
-	"file" : "\\Compressed\\split_screen_multiplayer.vcdiff",
-	"output" : "_split_screen_multiplayer_patched",
+	"file" : "\\Compressed\\splitscreen_multiplayer.vcdiff",
+	"output" : "_splitscreen_multiplayer_patched",
 	"tooltip" : "Split-Screen Multiplayer with Mario and Luigi{0}Plugin a second emulated controller for Luigi{0}- Supported: Rev 0 (US)"
 }, {
 	"title" : "Super Mario: Star Road",
