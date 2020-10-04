@@ -44,8 +44,9 @@
 - Restore Fire Temple:			ShadowOne333
 - Censor Blood				ShadowOne333
 - Restore Gerudo Textures:		GhostlyDark & ShadowOne333
-- Set Capacity:				GhostlyDark
 - Pause Screen Delay Fix		zel
+- Debug Map Select			Jared Johnson
+- Set Capacity:				GhostlyDark
 - Show File Select Icons:		ShadowOne333
 - Colors:				GhostlyDark
 - Restore Text:				ShadowOne333
