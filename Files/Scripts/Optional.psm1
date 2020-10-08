@@ -1330,7 +1330,7 @@ function CreateSM64OptionsContent() {
     # GRAPHICS #
     $GraphicsBox                       = CreateReduxGroup -Y ($HeroModeBox.Bottom + 5) -Height 1 -AddTo $Options.Panel -Text "Graphics"
     
-    $Options.Widescreen                = CreateReduxCheckBox -Column 0 -Row 1 -AddTo $GraphicsBox -Text "16:9 Widescreen"         -ToolTip $ToolTip -Info "Native 16:9 Widescreen Display support" -Name "Widescreen"
+    $Options.Widescreen                = CreateReduxCheckBox -Column 0 -Row 1 -AddTo $GraphicsBox -Text "16:9 Widescreen [!]"     -ToolTip $ToolTip -Info "Native 16:9 Widescreen Display support`n[!] Requires Dolphin's or GlideN64's internal Widescreen Hack" -Name "Widescreen"
     $Options.ForceHiresModel           = CreateReduxCheckBox -Column 1 -Row 1 -AddTo $GraphicsBox -Text "Force Hires Mario Model" -ToolTip $ToolTip -Info "Always use Mario's High Resolution Model when Mario is too far away" -Name "ForceHiresModel"
     $Options.BlackBars                 = CreateReduxCheckBox -Column 2 -Row 1 -AddTo $GraphicsBox -Text "No Black Bars"           -ToolTip $ToolTip -Info "Removes the black bars shown on the top and bottom of the screen" -Name "BlackBars"
     
