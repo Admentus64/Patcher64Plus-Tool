@@ -992,9 +992,8 @@ function CreateOoTOptionsContent() {
     # INTERFACE #
     $InterfaceBox                      = CreateReduxGroup -Y ($GraphicsBox.Bottom + 5) -Height 1 -AddTo $Options.Panel -Text "Interface"
 
-    $Options.HudTextures               = CreateReduxCheckBox -Column 0 -Row 1 -AddTo $InterfaceBox -Text "MM HUD Textures"                 -ToolTip $ToolTip -Info "Replaces the HUD textures with those froom Majora's Mask" -Name "HudTextures"
+    $Options.HudTextures               = CreateReduxCheckBox -Column 0 -Row 1 -AddTo $InterfaceBox -Text "MM HUD Textures"                 -ToolTip $ToolTip -Info "Replaces the HUD textures with those from Majora's Mask" -Name "HudTextures"
     $Options.ButtonPositions           = CreateReduxCheckBox -Column 1 -Row 1 -AddTo $InterfaceBox -Text "MM Button Positions"             -ToolTip $ToolTip -Info "Positions the A and B buttons like in Majora's Mask" -Name "ButtonPositions"
-    $Options.PauseScreen               = CreateReduxCheckBox -Column 2 -Row 1 -AddTo $InterfaceBox -Text "MM Pause Screen"                 -ToolTip $ToolTip -Info "Replaces the Pause Screen textures to be styled like Majora's Mask" -Name "PauseScreen"
     
 
 
@@ -1442,6 +1441,15 @@ function CreateCapacityDialog() {
     $Options.BombBag1                  = CreateReduxTextBox -Column 0 -Row 2 -Text "Bomb Bag (1)"    -Value 20 -AddTo $Options.AmmoBox -ToolTip $ToolTip -Info "Set the capacity for the Bomb Bag (Base)`nDefault = 20"         -Name "BombBag1"
     $Options.BombBag2                  = CreateReduxTextBox -Column 1 -Row 2 -Text "Bomb Bag (2)"    -Value 30 -AddTo $Options.AmmoBox -ToolTip $ToolTip -Info "Set the capacity for the Bomb Bag (Upgrade 1)`nDefault = 30"    -Name "BombBag2"
     $Options.BombBag3                  = CreateReduxTextBox -Column 2 -Row 2 -Text "Bomb Bag (3)"    -Value 40 -AddTo $Options.AmmoBox -ToolTip $ToolTip -Info "Set the capacity for the Bomb Bag (Upgrade 2)`nDefault = 40"    -Name "BombBag3"
+
+    $Options.BombBag1.Add_TextChanged({
+        if ($this.Text -eq "30") {
+            $cursorPos = $this.SelectionStart
+            $this.Text = $this.Text = "31"
+            $this.SelectionStart = $cursorPos - 1
+            $this.SelectionLength = 0
+        }
+    })
 
     if ($GameType.mode -eq "Ocarina of Time") {
         $Options.BulletBag1            = CreateReduxTextBox -Column 0 -Row 3 -Text "Bullet Bag (1)"  -Value 30 -AddTo $Options.AmmoBox -ToolTip $ToolTip -Info "Set the capacity for the Bullet Bag (Base)`nDefault = 30"       -Name "BulletBag1"

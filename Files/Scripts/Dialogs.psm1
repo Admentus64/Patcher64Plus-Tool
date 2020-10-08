@@ -217,7 +217,8 @@ function CreateSettingsDialog() {
     $GeneralSettings.Rev0DungeonFiles  = CreateSettingsCheckbox -Column 1 -Row 2 -AddTo $GeneralSettings.DebugBox -Text "Rev 0 Dungeon Files"   -IsDebug -ToolTip $ToolTip -Info "Extract the dungeon files from the Rev 0 US OoT ROM as well when extracting dungeon files" -Name "Rev0DungeonFiles"
     $GeneralSettings.NoHeaderChange    = CreateSettingsCheckbox -Column 2 -Row 2 -AddTo $GeneralSettings.DebugBox -Text "No Header Change"      -IsDebug -ToolTip $ToolTip -Info "Do not change the title header of the ROM when patching is concluded" -Name "NoHeaderChange"
     $GeneralSettings.NoCRCChange       = CreateSettingsCheckbox -Column 0 -Row 3 -AddTo $GeneralSettings.DebugBox -Text "No CRC Change"         -IsDebug -ToolTip $ToolTip -Info "Do not change the CRC of the ROM when patching is concluded" -Name "NoCRCChange"
-    
+    $GeneralSettings.NoCleanup         = CreateSettingsCheckbox -Column 1 -Row 3 -AddTo $GeneralSettings.DebugBox -Text "No Cleanup"            -IsDebug -ToolTip $ToolTip -Info "Do not clean up the files after the patching process fails or succeeds" -Name "NoCleanup"
+
     $GeneralSettings.Console.Add_CheckStateChanged({ ShowPowerShellConsole -ShowConsole $this.Checked })
     $GeneralSettings.DoubleClick.Add_CheckStateChanged({ TogglePowerShellOpenWithClicks -Enable $this.Checked })
 

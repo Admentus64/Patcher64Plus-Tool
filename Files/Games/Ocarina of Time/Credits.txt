@@ -3,7 +3,6 @@
 - Editing / Revision:			ShadowOne333, MattKimura
 - Original Hacking:			Roman971, TestRunnerSRL, AmazingAmpharos, fig02, krimtonz,
 				rlbond86, KevinPal, junglechief87
-
 --- Additional Options ---
 - Master Quest:			ShadowOne333
 - Force Hires Link Model:		GhostlyDark
@@ -30,6 +29,9 @@
 - Colors:				GhostlyDark
 - Restore Text:			ShadowOne333
 - Admentus (Scripting and Assistance of all Options)
+
+--- Quality Insurance ---
+- Translations			GhostlyDark
 
 --- Translations ---
 - Spanish:				eduardo_a2j (v2.2)

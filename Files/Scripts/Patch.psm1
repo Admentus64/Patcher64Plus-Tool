@@ -75,7 +75,7 @@ function MainFunction([String]$Command, [String]$PatchedFileName) {
     # GO!
     MainFunctionPatch -Command $Command -Header $Header -PatchedFileName $PatchedFileName -Decompress $Decompress
     EnableGUI -Enable $True
-    Cleanup
+    if (!($GeneralSettings.NoCleanup.Checked)) { Cleanup }
 
 }
 
@@ -107,7 +107,7 @@ function MainFunctionPatch([String]$Command, [String[]]$Header, [String]$Patched
     # Only continue with these steps in VC WAD mode. Otherwise ignore these steps.
     if ($IsWiiVC) {
         # Step 02: Extract the contents of the WAD file.
-        ExtractWADFile -PatchedFileName $PatchedFileName
+        if (!(ExtractWADFile -PatchedFileName $PatchedFileName)) { return }
 
         # Step 03: Check the GameID to be vanilla.
         if ($Settings.Debug.IgnoreChecksum -ne $True) {
@@ -394,9 +394,11 @@ function ExtractWADFile([String]$PatchedFileName) {
     $ErrorActionPreference = 'Continue'
 
     # Find the extracted folder by looping through all files in the folder.
-    foreach($Folder in Get-ChildItem -LiteralPath $Paths.WiiVC -Force) {
+    $FolderExists = $False
+    foreach ($Folder in Get-ChildItem -LiteralPath $Paths.WiiVC -Force) {
         # There will only be one folder, the one we want.
         if ($Folder.PSIsContainer) {
+            $FolderExists = $True
             # Remember the path to this folder.
             $global:WADFile = SetWADParameters -WADPath $GameWAD -FolderName $Folder.Name -PatchedFileName $PatchedFileName
         }
@@ -404,6 +406,12 @@ function ExtractWADFile([String]$PatchedFileName) {
 
     # Doesn't matter, but return to where we were.
     Pop-Location
+
+    if (!$FolderExists) {
+        UpdateStatusLabel -Text "Failed! Could not extract Wii VC WAD. Try using a different filename."
+        return $False
+    }
+    return $True
 
 }
 
@@ -493,18 +501,6 @@ function PatchVCEmulator([String]$Command) {
 
     }
 
-    <#
-    elseif ($GameType.mode -eq "Super Smash Bros") {
-        
-        if ($PatchVCExpandMemory.Checked) {
-            & $Files.tool.lzss -d $WADFile.AppFile01 | Out-Host
-            ChangeBytes -File $WadFile.AppFile01 -Offset "3094" -Values @("60", "00", "00", "00")
-            & $Files.tool.lzss -evn $WADFile.AppFile01 | Out-Host
-        }
-
-    }
-    #>
-
 }
 
 
@@ -523,7 +519,7 @@ function PatchVCROM([String]$Command) {
             Move-Item -LiteralPath $Files.ROM -Destination $WADFile.Extracted
             UpdateStatusLabel -Text ("Successfully extracted " + $GameType.mode + " ROM.")
         }
-        else { UpdateStatusLabel -Text ("Could not extract " + $GameType.mode + " ROM. Is it a Majora's Mask or Paper Mario ROM?") }
+        else { UpdateStatusLabel -Text ("Could not extract " + $GameType.mode + " ROM. Is it a VC compressed ROM?") }
 
         return $False
     }
@@ -539,7 +535,7 @@ function PatchVCROM([String]$Command) {
             }
         }
         else {
-            UpdateStatusLabel -Text ("Could not inject " + $GameType.mode + " ROM. Is it a Majora's Mask or Paper Mario ROM?")
+            UpdateStatusLabel -Text ("Could not inject " + $GameType.mode + " ROM. Is it a VC compressed ROM?")
             return $False
         }
     }
@@ -554,7 +550,7 @@ function PatchVCROM([String]$Command) {
             Move-Item -LiteralPath $Files.OutROM -Destination $Files.ROM -Force
         }
         else {
-            UpdateStatusLabel -Text ("Could not decompress " + $GameType.mode + " ROM. Is it a Majora's Mask or Paper Mario ROM?")
+            UpdateStatusLabel -Text ("Could not decompress " + $GameType.mode + " ROM. Is it a VC compressed ROM?")
             return $False
         }
 
@@ -654,9 +650,6 @@ function PatchDecompressedROM() {
     # Apply the selected patch to the ROM, if it is provided
     if (!(ApplyPatch -File $Files.decompressedROM -Patch $GamePatch.file)) { return $False }
 
-    #if ($IsWiiVC -and $Decompress -and (StrLike -str $GamePatch.file -val "\\Decompressed"))        { if (!(ApplyPatch -File $Files.decompressedROM -Patch $GamePatch.file))              { return $False } }
-    #elseif (!$IsWiiVC -and $Decompress -and (StrLike -str $GamePatch.file -val "\\Decompressed"))   { if (!(ApplyPatch -File $Files.decompressedROM -Patch $GamePatch.file))              { return $False } }
-
     return $True
 
 }
@@ -675,9 +668,6 @@ function PatchCompressedROM() {
     # Apply the selected patch to the ROM, if it is provided
     if ($IsWiiVC)        { if (!(ApplyPatch -File $Files.patchedROM -Patch $GamePatch.file))                   { return $False } }
     elseif (!$IsWiiVC)   { if (!(ApplyPatch -File $Files.ROM -Patch $GamePatch.file -New $Files.patchedROM))   { return $False } }
-
-    #elseif ($IsWiiVC -and !$Decompress -and (StrLike -str $GamePatch.file -val "\\Compressed"))     { if (!(ApplyPatch -File $Files.patchedROM -Patch $GamePatch.file))                   { return $False } }
-    #elseif (!$IsWiiVC -and !$Decompress -and (StrLike -str $GamePatch.file -val "\\Compressed"))    { if (!(ApplyPatch -File $Files.ROM -Patch $GamePatch.file -New $Files.patchedROM))   { return $False } }
 
     return $True
 
@@ -923,7 +913,7 @@ function PatchOptionsZelda() {
 
     # BPS PATCHING OPTIONS #
     if ( (IsChecked $PatchOptionsCheckbox -Visible) -and $GamePatch.options) {
-        UpdateStatusLabel -Text ("Patching " + $GameType.mode + " Additional Options BPS Patches...")
+        UpdateStatusLabel -Text ("Patching " + $GameType.mode + " Additional BPS Patch Options...")
         if ($GameType.mode -eq "Ocarina of Time")     { PatchBPSOptionsOoT }
         elseif ($GameType.mode -eq "Majora's Mask")   { PatchBPSOptionsMM }
     }
@@ -935,7 +925,7 @@ function PatchOptionsZelda() {
 
     # BYTE PATCHING OPTIONS #
     if ( (IsChecked $PatchOptionsCheckbox -Visible) -and $GamePatch.options) {
-        UpdateStatusLabel -Text ("Patching " + $GameType.mode + " Additional Options...")
+        UpdateStatusLabel -Text ("Patching " + $GameType.mode + " Additional General Options...")
         if ($GameType.mode -eq "Ocarina of Time")     { PatchByteOptionsOoT }
         elseif ($GameType.mode -eq "Majora's Mask")   { PatchByteOptionsMM }
     }
@@ -944,7 +934,7 @@ function PatchOptionsZelda() {
 
     # BYTE PATCHING REDUX #
     if ( (IsChecked $PatchReduxCheckbox -Visible) -and (IsSet -Elem $GamePatch.redux.file) ) {
-        UpdateStatusLabel -Text ("Patching " + $GameType.mode + " Redux Options...")
+        UpdateStatusLabel -Text ("Patching " + $GameType.mode + " Additional Redux Options...")
         if ($GameType.mode -eq "Ocarina of Time")     { PatchByteReduxOoT }
         elseif ($GameType.mode -eq "Majora's Mask")   { PatchByteReduxMM }
     }
@@ -953,7 +943,7 @@ function PatchOptionsZelda() {
 
     # LANGUAGE BYTE PATCHING OPTIONS #
     if ( (IsChecked $PatchOptionsCheckbox -Visible) -and $GamePatch.options) {
-        UpdateStatusLabel -Text ("Patching " + $GameType.mode + " Additional Options English...")
+        UpdateStatusLabel -Text ("Patching " + $GameType.mode + " Additional Language Options...")
         if ($GameType.mode -eq "Ocarina of Time")     { PatchLanguageOptionsOoT }
         elseif ($GameType.mode -eq "Majora's Mask")   { PatchLanguageOptionsMM }
     }

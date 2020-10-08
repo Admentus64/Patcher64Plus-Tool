@@ -27,6 +27,9 @@
 - Correct Circus Mask:		ShadowOne333
 - Admentus (Scripting and Assistance of all Options)
 
+--- Quality Insurance ---
+- Translations			GhostlyDark
+
 --- Translations ---
 - Polish:				RPG (v1.1)
 - Russian:				Zelda64rus (v2.0 Beta)

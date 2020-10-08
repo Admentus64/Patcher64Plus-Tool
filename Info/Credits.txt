@@ -52,6 +52,9 @@
 - Restore Text:				ShadowOne333
 - Admentus (Scripting and Assistance of all Options)
 
+--- Quality Insurance ---
+- Translations				GhostlyDark
+
 --- Translations ---
 - Spanish:				eduardo_a2j (v2.2)
 - Polish:				RPG (v1.3)
@@ -213,6 +216,9 @@ Special Thanks:				Nokaubure, z64me, Ultra553, OoT Decomp
 - Restore Text:				ShadowOne333
 - Correct Circus Mask:			ShadowOne333
 - Admentus (Scripting and Assistance of all Options)
+
+--- Quality Insurance ---
+- Translations				GhostlyDark
 
 --- Translations ---
 - Polish:				RPG (v1.1)
