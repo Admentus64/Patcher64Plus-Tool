@@ -31,7 +31,7 @@ function MainFunction([String]$Command, [String]$PatchedFileName) {
             $PatchVCRemapDPad.Checked = $True
             if ($GameType.patch_vc -eq 4) {
                 $PatchVCExpandMemory.Checked = $True
-                if ($IsWiiVC -and !(IsChecked -Elem $PatchVCRemapCDown -Visible) -and !(IsChecked -Elem $PatchVCRemapZ -Visible) ) { $PatchVCLeaveDPadUp.Checked = $True }
+                #if ($IsWiiVC -and !(IsChecked -Elem $PatchVCRemapCDown -Visible) -and !(IsChecked -Elem $PatchVCRemapZ -Visible) ) { $PatchVCLeaveDPadUp.Checked = $True }
             }
             $Header = SetHeader -Header $Header -N64Title $GamePatch.redux.n64_title -N64GameID $GamePatch.redux.n64_gameID -WiiTitle $GamePatch.redux.wii_title -WiiGameID $GamePatch.redux.wii_gameID
             if (IsSet -Elem $GamePatch.redux.output) { $PatchedFileName = $GamePatch.redux.output }

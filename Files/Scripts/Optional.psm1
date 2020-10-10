@@ -168,9 +168,6 @@ function PatchByteOptionsOoT() {
         PatchBytes -Offset "F21810"  -Length "1000" -Texture -Patch "Lens of Truth.bin"
     }
 
-    if (IsChecked -Elem $Options.ExtendedDraw -Enabled)            { ChangeBytes -Offset "A9A970" -Values @("00", "01") }
-    if (IsChecked -Elem $Options.ForceHiresModel -Enabled)         { ChangeBytes -Offset "BE608B" -Values @("00") }
-
     if (IsChecked -Elem $Options.BlackBars -Enabled) {
         ChangeBytes -Offset "B0F5A4" -Values @("00", "00","00", "00")
         ChangeBytes -Offset "B0F5D4" -Values @("00", "00","00", "00")
@@ -178,6 +175,15 @@ function PatchByteOptionsOoT() {
         ChangeBytes -Offset "B0F680" -Values @("00", "00","00", "00")
         ChangeBytes -Offset "B0F688" -Values @("00", "00","00", "00")
     }
+
+    if (IsChecked -Elem $Options.SilentNavi -Enabled) {
+        ChangeBytes -Offset "AE7EC6" -Values @("00", "00")
+        ChangeBytes -Offset "AE7EF2" -Values @("00", "00")
+        ChangeBytes -Offset "C26C7E" -Values @("00", "00")
+    }
+
+    if (IsChecked -Elem $Options.ExtendedDraw -Enabled)            { ChangeBytes -Offset "A9A970" -Values @("00", "01") }
+    if (IsChecked -Elem $Options.ForceHiresModel -Enabled)         { ChangeBytes -Offset "BE608B" -Values @("00") }
 
 
 
@@ -253,9 +259,10 @@ function PatchByteOptionsOoT() {
         ChangeBytes -Offset "DBA3A7" -Values @("00")                   # Truth Spinner Delay
     }
     
-    if (IsChecked -Elem $Options.Medallions -Enabled)              { ChangeBytes -Offset "E2B454" -Values @("80", "EA", "00", "A7", "24", "01", "00", "3F", "31", "4A", "00", "3F", "00", "00", "00", "00") }
+    if (IsChecked -Elem $Options.Medallions -Enabled)              { ChangeBytes -Offset "E2B454"  -Values @("80", "EA", "00", "A7", "24", "01", "00", "3F", "31", "4A", "00", "3F", "00", "00", "00", "00") }
     if (IsChecked -Elem $Options.ReturnChild -Enabled)             { ChangeBytes -Offset "CB6844"  -Values @("35"); ChangeBytes -Offset "253C0E2" -Values @("03") }
     if (IsChecked -Elem $Options.FixGraves -Enabled)               { ChangeBytes -Offset "202039D" -Values @("20"); ChangeBytes -Offset "202043C" -Values @("24") }
+    if (IsChecked -Elem $Options.DistantZTargeting -Enabled)       { ChangeBytes -Offset "A987AC"  -Values @("00", "00", "00", "00") }
 
 
 
@@ -688,7 +695,8 @@ function PatchByteOptionsMM() {
         ExportAndPatch -Path "Deku Palace\deku_palace_room_2" -Offset "2563000" -Length "124F0" -NewLength "124B0" -TableOffset "1F6B7" -Values @("B0")
     }
 
-    if (IsChecked -Elem $Options.ZoraPhysics -Enabled $True)   { PatchBytes -Offset "65D000" -Patch "Zora Physics Fix.bin" }
+    if (IsChecked -Elem $Options.ZoraPhysics -Enabled)         { PatchBytes  -Offset "65D000" -Patch "Zora Physics Fix.bin" }
+    if (IsChecked -Elem $Options.DistantZTargeting -Enabled)   { ChangeBytes -Offset "B4E924"  -Values @("00", "00", "00", "00") }
 
 
 
@@ -956,7 +964,7 @@ function PatchOptionsSM64() {
 #==============================================================================================================================================================================================
 function CreateOoTOptionsContent() {
     
-    CreateOptionsDialog -Width 920 -Height 650
+    CreateOptionsDialog -Width 1050 -Height 650
     $ToolTip = CreateTooltip
 
 
@@ -966,12 +974,12 @@ function CreateOoTOptionsContent() {
 
     $Options.Damage                    = CreateReduxComboBox -Column 0 -Row 1 -AddTo $HeroModeBox -Items @("1x Damage", "2x Damage", "4x Damage", "8x Damage", "OHKO Mode") -Text "Damage:" -ToolTip $ToolTip -Info "Set the amount of damage you receive`nOHKO Mode = You die in one hit" -Name "Damage"
     $Options.Recovery                  = CreateReduxComboBox -Column 2 -Row 1 -AddTo $HeroModeBox -Items @("1x Recovery", "1/2x Recovery", "1/4x Recovery", "0x Recovery") -Text "Recovery:" -ToolTip $ToolTip -Info "Set the amount health you recovery from Recovery Hearts" -Name "Recovery"
-    $Options.SelectMQDungeons          = CreateReduxButton   -Column 4 -Row 1 -AddTo $HeroModeBox -Text "Set Master Quest" -ToolTip $ToolTip -Info "Select the dungeons you want from Master Quest to patch into Ocarina of Time"
-    $Options.SelectMQDungeons.Add_Click( { $Options.MasterQuestDungeonsDialog.ShowDialog() } )
-    $Options.MagicUsage                = CreateReduxComboBox -Column 0 -Row 2 -AddTo $HeroModeBox -Items @("1x Magic Usage", "2x Magic Usage", "3x Magic Usage") -Text "Magic Usage:" -ToolTip $ToolTip -Info "Set the amount of times magic is consumed at" -Name "MagicUsage"
+    
+    $Options.MagicUsage                = CreateReduxComboBox -Column 4 -Row 1 -AddTo $HeroModeBox -Items @("1x Magic Usage", "2x Magic Usage", "3x Magic Usage") -Text "Magic Usage:" -ToolTip $ToolTip -Info "Set the amount of times magic is consumed at" -Name "MagicUsage"
     #$Options.BossHP                   = CreateReduxComboBox -Column 0 -Row 2 -AddTo $HeroModeBox -Items @("1x Boss HP", "2x Boss HP", "3x Boss HP")          -Text "Boss HP:"    -ToolTip $ToolTip -Info "Set the amount of health for bosses"   -Name "BossHP"
     #$Options.MonsterHP                = CreateReduxComboBox -Column 2 -Row 2 -AddTo $HeroModeBox -Items @("1x Monster HP", "2x Monster HP", "3x Monster HP") -Text "Monster HP:" -ToolTip $ToolTip -Info "Set the amount of health for monsters" -Name "MonsterHP"
-
+    $Options.SelectMQDungeons          = CreateReduxButton   -Column 0 -Row 2 -AddTo $HeroModeBox -Text "Set Master Quest" -ToolTip $ToolTip -Info "Select the dungeons you want from Master Quest to patch into Ocarina of Time"
+    $Options.SelectMQDungeons.Add_Click( { $Options.MasterQuestDungeonsDialog.ShowDialog() } )
 
 
     # GRAPHICS / Sound #
@@ -982,6 +990,8 @@ function CreateOoTOptionsContent() {
     $Options.BlackBars                 = CreateReduxCheckBox -Column 2 -Row 1 -AddTo $GraphicsBox -Text "No Black Bars"          -ToolTip $ToolTip -Info "Removes the black bars shown on the top and bottom of the screen during Z-targeting and cutscenes" -Name "BlackBars"
     $Options.ExtendedDraw              = CreateReduxCheckBox -Column 3 -Row 1 -AddTo $GraphicsBox -Text "Extended Draw Distance" -ToolTip $ToolTip -Info "Increases the game's draw distance for objects`nDoes not work on all objects" -Name "ExtendedDraw"
     $Options.ForceHiresModel           = CreateReduxCheckBox -Column 4 -Row 1 -AddTo $GraphicsBox -Text "Force Hires Link Model" -ToolTip $ToolTip -Info "Always use Link's High Resolution Model when Link is too far away" -Name "ForceHiresModel"
+    $Options.SilentNavi                = CreateReduxCheckBox -Column 5 -Row 1 -AddTo $GraphicsBox -Text "Silent Navi"            -ToolTip $ToolTip -Info "Navi will stay silent when calling for Link's attention" -Name "SilentNavi"
+
 
     $Options.Models                    = CreateReduxComboBox -Column 0 -Row 2 -AddTo $GraphicsBox -Items @("No Model Replacements", "Replace Child Model Only", "Replace Adult Model Only", "Replace Both Models", "Change to Female Models") -Text "Link's Models:" -ToolTip $ToolTip -Info "1. Replace the model for Child Link with that of Majora's Mask`n2. Replace the model for Adult Link to be Majora's Mask-styled`n3. Combine both previous options`n4. Transform Link into a female" -Name "Models"
     $Options.Voices                    = CreateReduxComboBox -Column 2 -Row 2 -AddTo $GraphicsBox -Items @("No Voice Changes", "Majora's Mask Link Voices", "Feminine Link Voices") -Text "Voice:" -ToolTip $ToolTip -Info "1. Replace the voices for Link with those used in Majora's Mask`n2. Replace the voices for Link to sound feminine" -Name "Voices"
@@ -1039,6 +1049,7 @@ function CreateOoTOptionsContent() {
     $Options.ReturnChild               = CreateReduxCheckBox -Column 2 -Row 1 -AddTo $GameplayBox -Text "Can Always Return"      -ToolTip $ToolTip -Info "You can always go back to being a child again before clearing the boss of the Forest Temple`nOut of the way Sheik!" -Name "ReturnChild"
     $Options.Medallions                = CreateReduxCheckBox -Column 3 -Row 1 -AddTo $GameplayBox -Text "Require All Medallions" -ToolTip $ToolTip -Info "All six medallions are required for the Rainbow Bridge to appear before Ganon's Castle`nThe vanilla requirements were the Shadow and Spirit Medallions and the Light Arrows" -Name "Medallions"
     $Options.FixGraves                 = CreateReduxCheckBox -Column 4 -Row 1 -AddTo $GameplayBox -Text "Fix Graves"             -ToolTip $ToolTip -Info "The grave holes in Kakariko Graveyard behave as in the Rev 1 revision`nThe edges no longer force Link to grab or jump over them when trying to enter" -Name "FixGraves"
+    $Options.DistantZTargeting         = CreateReduxCheckBox -Column 5 -Row 1 -AddTo $GameplayBox -Text "Distant Z-Targeting"    -ToolTip $ToolTip -Info "Allow to use Z-Targeting on enemies, objects and NPC's from any distance" -Name "DistantZTargeting"
 
 
 
@@ -1175,17 +1186,17 @@ function CreateOoTReduxContent() {
 #==============================================================================================================================================================================================
 function CreateMMOptionsContent() {
     
-    CreateOptionsDialog -Width 900 -Height 620
+    CreateOptionsDialog -Width 1050 -Height 590
     $ToolTip = CreateTooltip
 
 
 
     # HERO MODE #
-    $HeroModeBox                       = CreateReduxGroup -Y 50 -Height 2 -AddTo $Options.Panel -Text "Hero Mode"
+    $HeroModeBox                       = CreateReduxGroup -Y 50 -Height 1 -AddTo $Options.Panel -Text "Hero Mode"
 
     $Options.Damage                    = CreateReduxComboBox -Column 0 -Row 1 -AddTo $HeroModeBox -Items @("1x Damage", "2x Damage", "4x Damage", "8x Damage", "OHKO Mode") -Text "Damage:" -ToolTip $OptionsToolTip -Info "Set the amount of damage you receive`nOHKO Mode = You die in one hit" -Name "Damage"
     $Options.Recovery                  = CreateReduxComboBox -Column 2 -Row 1 -AddTo $HeroModeBox -Items @("1x Recovery", "1/2x Recovery", "1/4x Recovery", "0x Recovery") -Text "Recovery:" -ToolTip $OptionsToolTip -Info "Set the amount health you recovery from Recovery Hearts" -Name "Recovery"
-    $Options.MagicUsage                = CreateReduxComboBox -Column 0 -Row 2 -AddTo $HeroModeBox -Items @("1x Magic Usage", "2x Magic Usage", "3x Magic Usage") -Text "Magic Usage:" -ToolTip $ToolTip -Info "Set the amount of times magic is consumed at" -Name "MagicUsage"
+    $Options.MagicUsage                = CreateReduxComboBox -Column 4 -Row 1 -AddTo $HeroModeBox -Items @("1x Magic Usage", "2x Magic Usage", "3x Magic Usage") -Text "Magic Usage:" -ToolTip $ToolTip -Info "Set the amount of times magic is consumed at" -Name "MagicUsage"
     #$Options.BossHP                   = CreateReduxComboBox -Column 0 -Row 2 -AddTo $HeroModeBox -Items @("1x Boss HP", "2x Boss HP", "3x Boss HP") -Text "Boss HP:" -ToolTip $OptionsToolTip -Info "Set the amount of health for bosses" -Name "BossHP"
 
 
@@ -1193,21 +1204,21 @@ function CreateMMOptionsContent() {
     # GRAPHICS #
     $GraphicsBox                       = CreateReduxGroup -Y ($HeroModeBox.Bottom + 5) -Height 2 -AddTo $Options.Panel -Text "Graphics / Sound"
     
-    $Options.Widescreen                = CreateReduxCheckBox -Column 0 -Row 1 -AddTo $GraphicsBox -Text "16:9 Widescreen"         -ToolTip $ToolTip -Info "Native 16:9 Widescreen Display support" -Name "Widescreen"
-    $Options.WidescreenTextures        = CreateReduxCheckBox -Column 1 -Row 1 -AddTo $GraphicsBox -Text "16:9 Textures"           -ToolTip $ToolTip -Info "16:9 backgrounds and textures suitable for native 16:9 widescreen display support" -Name "WidescreenTextures"
-    $Options.BlackBars                 = CreateReduxCheckBox -Column 2 -Row 1 -AddTo $GraphicsBox -Text "No Black Bars"           -ToolTip $ToolTip -Info "Removes the black bars shown on the top and bottom of the screen during Z-targeting and cutscenes" -Name "BlackBars"
-    $Options.ExtendedDraw              = CreateReduxCheckBox -Column 3 -Row 1 -AddTo $GraphicsBox -Text "Extended Draw Distance"  -ToolTip $ToolTip -Info "Increases the game's draw distance for objects`nDoes not work on all objects" -Name "ExtendedDraw"
-    $Options.PixelatedStars            = CreateReduxCheckBox -Column 4 -Row 1 -AddTo $GraphicsBox -Text "Disable Pixelated Stars" -ToolTip $ToolTip -Info "Completely disable the stars at night-time, which are pixelated dots and do not have any textures for HD replacement" -Name "PixelatedStars"
+    $Options.Widescreen                = CreateReduxCheckBox -Column 0 -Row 1 -AddTo $GraphicsBox -Text "16:9 Widescreen"                                                       -ToolTip $ToolTip -Info "Native 16:9 Widescreen Display support" -Name "Widescreen"
+    $Options.WidescreenTextures        = CreateReduxCheckBox -Column 1 -Row 1 -AddTo $GraphicsBox -Text "16:9 Textures"                                                         -ToolTip $ToolTip -Info "16:9 backgrounds and textures suitable for native 16:9 widescreen display support" -Name "WidescreenTextures"
+    $Options.BlackBars                 = CreateReduxCheckBox -Column 2 -Row 1 -AddTo $GraphicsBox -Text "No Black Bars"                                                         -ToolTip $ToolTip -Info "Removes the black bars shown on the top and bottom of the screen during Z-targeting and cutscenes" -Name "BlackBars"
+    $Options.ExtendedDraw              = CreateReduxCheckBox -Column 3 -Row 1 -AddTo $GraphicsBox -Text "Extended Draw Distance"                                                -ToolTip $ToolTip -Info "Increases the game's draw distance for objects`nDoes not work on all objects" -Name "ExtendedDraw"
+    $Options.PixelatedStars            = CreateReduxCheckBox -Column 4 -Row 1 -AddTo $GraphicsBox -Text "Disable Pixelated Stars"                                               -ToolTip $ToolTip -Info "Completely disable the stars at night-time, which are pixelated dots and do not have any textures for HD replacement" -Name "PixelatedStars"
     $Options.LowHPBeep                 = CreateReduxComboBox -Column 0 -Row 2 -AddTo $GraphicsBox -Items @("Default Beep", "Softer Beep", "Beep Disabled") -Text "Low HP Beep:" -ToolTip $ToolTip -Info "Set the sound effect for the low HP beeping" -Name "LowHPBeep" -Length 100
 
 
 
     # COLORS #
     $ColorsBox                         = CreateReduxGroup -Y ($GraphicsBox.Bottom + 5) -Height 1 -AddTo $Options.Panel -Text "Colors"
-    $Options.EnableTunicColors         = CreateReduxCheckBox -Column 0 -Row 1 -AddTo $ColorsBox -Text "Change Tunic Color"        -ToolTip $ToolTip -Info "Enable changing the color for the Hylian form Kokiri tunics" -Name "EnableTunicColors"
-    $Options.KokiriTunicColor          = CreateReduxButton   -Column 1 -Row 1 -AddTo $ColorsBox -Text "Set Kokiri Tunic Color"    -ToolTip $ToolTip -Info "Select the color you want for the Kokiri Tunic"
-    $Options.ResetAllColors            = CreateReduxButton   -Column 2 -Row 1 -AddTo $ColorsBox -Text "Reset Kokiri Tunic Color"  -ToolTip $ToolTip -Info "Reset the  color for the Kokiri Tunic to it's default value"
-    $Options.RecolorMaskForms          = CreateReduxCheckBox -Column 4 -Row 1 -AddTo $ColorsBox -Text "Recolor Mask Forms"        -ToolTip $ToolTip -Info "Recolor the clothing for Goron Link to appear in Red and Zora Link to appear in Blue" -Name "RecolorMaskForms"
+    $Options.EnableTunicColors         = CreateReduxCheckBox -Column 0 -Row 1 -AddTo $ColorsBox -Text "Change Tunic Color"       -ToolTip $ToolTip -Info "Enable changing the color for the Hylian form Kokiri tunics" -Name "EnableTunicColors"
+    $Options.KokiriTunicColor          = CreateReduxButton   -Column 1 -Row 1 -AddTo $ColorsBox -Text "Set Kokiri Tunic Color"   -ToolTip $ToolTip -Info "Select the color you want for the Kokiri Tunic"
+    $Options.ResetAllColors            = CreateReduxButton   -Column 2 -Row 1 -AddTo $ColorsBox -Text "Reset Kokiri Tunic Color" -ToolTip $ToolTip -Info "Reset the  color for the Kokiri Tunic to it's default value"
+    $Options.RecolorMaskForms          = CreateReduxCheckBox -Column 5 -Row 1 -AddTo $ColorsBox -Text "Recolor Mask Forms"       -ToolTip $ToolTip -Info "Recolor the clothing for Goron Link to appear in Red and Zora Link to appear in Blue" -Name "RecolorMaskForms"
 
     $Options.KokiriTunicColor.Add_Click( { $Options.SetKokiriTunicColor.ShowDialog(); $Settings[$GameType.mode][$Options.SetKokiriTunicColor.Tag] = $Options.SetKokiriTunicColor.Color.Name } )
     $Options.ResetAllColors.Add_Click( { $Settings[$GameType.mode][$Options.SetKokiriTunicColor.Tag] = $Options.SetKokiriTunicColor.Color.Name; $Options.SetKokiriTunicColor.Color = "#1E691B" } )
@@ -1217,8 +1228,9 @@ function CreateMMOptionsContent() {
     # GAMEPLAY #
     $GameplayBox                       = CreateReduxGroup -Y ($ColorsBox.Bottom + 5) -Height 1 -AddTo $Options.Panel -Text "Gameplay"
 
-    $Options.ZoraPhysics               = CreateReduxCheckBox -Column 0 -Row 1 -AddTo $GameplayBox -Text "Zora Physics"          -ToolTip $ToolTip -Info "Change the Zora physics when using the boomerang`nZora Link will take a step forward instead of staying on his spot" -Name "ZoraPhysics"
-    $Options.RestorePalaceRoute        = CreateReduxCheckBox -Column 1 -Row 1 -AddTo $GameplayBox -Text "Restore Palace Route"  -ToolTip $ToolTip -Info "Restore the route to the Bean Seller within the Deku Palace as seen in the Japanese release" -Name "RestorePalaceRoute"
+    $Options.ZoraPhysics               = CreateReduxCheckBox -Column 0 -Row 1 -AddTo $GameplayBox -Text "Zora Physics"         -ToolTip $ToolTip -Info "Change the Zora physics when using the boomerang`nZora Link will take a step forward instead of staying on his spot" -Name "ZoraPhysics"
+    $Options.RestorePalaceRoute        = CreateReduxCheckBox -Column 1 -Row 1 -AddTo $GameplayBox -Text "Restore Palace Route" -ToolTip $ToolTip -Info "Restore the route to the Bean Seller within the Deku Palace as seen in the Japanese release" -Name "RestorePalaceRoute"
+    $Options.DistantZTargeting         = CreateReduxCheckBox -Column 2 -Row 1 -AddTo $GameplayBox -Text "Distant Z-Targeting"  -ToolTip $ToolTip -Info "Allow to use Z-Targeting on enemies, objects and NPC's from any distance" -Name "DistantZTargeting"
 
 
 
@@ -1230,10 +1242,10 @@ function CreateMMOptionsContent() {
     $Options.CorrectRomaniSign         = CreateReduxCheckBox -Column 2 -Row 1 -AddTo $RestoreBox -Text "Correct Romani Sign"      -ToolTip $ToolTip -Info "Replace the Romani Sign texture to display Romani's Ranch instead of Kakariko Village" -Name "CorrectRomaniSign"
     $Options.CorrectComma              = CreateReduxCheckBox -Column 3 -Row 1 -AddTo $RestoreBox -Text "Correct Comma"            -ToolTip $ToolTip -Info "Make the comma not look as awful" -Name "CorrectComma"
     $Options.RestoreTitle              = CreateReduxCheckBox -Column 4 -Row 1 -AddTo $RestoreBox -Text "Restore Title"            -ToolTip $ToolTip -Info "Restore the title logo colors as seen in the Japanese release" -Name "RestoreTitle"
-    $Options.RestoreSkullKid           = CreateReduxCheckBox -Column 0 -Row 2 -AddTo $RestoreBox -Text "Restore Skull Kid"        -ToolTip $ToolTip -Info "Restore Skull Kid's face as seen in the Japanese release" -Name "RestoreSkullKid"
-    $Options.RestoreShopMusic          = CreateReduxCheckBox -Column 1 -Row 2 -AddTo $RestoreBox -Text "Restore Shop Music"       -ToolTip $ToolTip -Info "Restores the Shop music intro theme as heard in the Japanese release" -Name "RestoreShopMusic"
-    $Options.PieceOfHeartSound         = CreateReduxCheckBox -Column 2 -Row 2 -AddTo $RestoreBox -Text "4th Piece of Heart Sound" -ToolTip $ToolTip -Info "Restore the sound effect when collecting the fourth Piece of Heart that grants Link a new Heart Container" -Name "PieceOfHeartSound"
-    $Options.MoveBomberKid             = CreateReduxCheckBox -Column 3 -Row 2 -AddTo $RestoreBox -Text "Move Bomber Kid"          -ToolTip $ToolTip -Info "Moves the Bomber at the top of the Stock Pot Inn to be behind the bell like in the original Japanese ROM" -Name "MoveBomberKid"
+    $Options.RestoreSkullKid           = CreateReduxCheckBox -Column 5 -Row 1 -AddTo $RestoreBox -Text "Restore Skull Kid"        -ToolTip $ToolTip -Info "Restore Skull Kid's face as seen in the Japanese release" -Name "RestoreSkullKid"
+    $Options.RestoreShopMusic          = CreateReduxCheckBox -Column 0 -Row 2 -AddTo $RestoreBox -Text "Restore Shop Music"       -ToolTip $ToolTip -Info "Restores the Shop music intro theme as heard in the Japanese release" -Name "RestoreShopMusic"
+    $Options.PieceOfHeartSound         = CreateReduxCheckBox -Column 1 -Row 2 -AddTo $RestoreBox -Text "4th Piece of Heart Sound" -ToolTip $ToolTip -Info "Restore the sound effect when collecting the fourth Piece of Heart that grants Link a new Heart Container" -Name "PieceOfHeartSound"
+    $Options.MoveBomberKid             = CreateReduxCheckBox -Column 2 -Row 2 -AddTo $RestoreBox -Text "Move Bomber Kid"          -ToolTip $ToolTip -Info "Moves the Bomber at the top of the Stock Pot Inn to be behind the bell like in the original Japanese ROM" -Name "MoveBomberKid"
 
 
 
@@ -1254,7 +1266,7 @@ function CreateMMOptionsContent() {
     $Options.FixMushroomBottle         = CreateReduxCheckBox -Column 1 -Row 1 -AddTo $OtherBox -Text "Fix Mushroom Bottle" -ToolTip $ToolTip -Info "Fix the item reference when collecting Magical Mushrooms as Link puts away the bottle automatically due to an error" -Name "FixMushroomBottle"
     $Options.FixSouthernSwamp          = CreateReduxCheckBox -Column 2 -Row 1 -AddTo $OtherBox -Text "Fix Southern Swamp"  -ToolTip $ToolTip -Info "Fix a misplaced door after Woodfall has been cleared and you return to the Potion Shop`nThe door is slightly pushed forward after Odolwa has been defeated." -Name "FixSouthernSwamp"
     $Options.FixFairyFountain          = CreateReduxCheckBox -Column 3 -Row 1 -AddTo $OtherBox -Text "Fix Fairy Fountain"  -ToolTip $ToolTip -Info "Fix the Ikana Canyon Fairy Fountain area not displaying the correct color." -Name "FixFairyFountain"
-    $Options.HideCredits               = CreateReduxCheckBox -Column 4 -Row 1 -AddTo $OtherBox -Text "Hide Credits"             -ToolTip $ToolTip -Info "Do not show the credits text during the credits sequence" -Name "HideCredits"
+    $Options.HideCredits               = CreateReduxCheckBox -Column 4 -Row 1 -AddTo $OtherBox -Text "Hide Credits"        -ToolTip $ToolTip -Info "Do not show the credits text during the credits sequence" -Name "HideCredits"
 
 
 
@@ -1266,7 +1278,7 @@ function CreateMMOptionsContent() {
     $Options.Recovery.Enabled = $Options.Damage.Text -ne "OHKO Mode"
     $Options.KokiriTunicColor.Enabled = $Options.ResetAllColors.Enabled = $Options.EnableTunicColors.Checked
 
-    $Options.SetKokiriTunicColor       = CreateColorDialog -Red "1E" -Green "69" -Blue "1B" -Name "SetKokiriTunicColor"     -IsGame
+    $Options.SetKokiriTunicColor       = CreateColorDialog -Red "1E" -Green "69" -Blue "1B" -Name "SetKokiriTunicColor" -IsGame
 
 }
 
