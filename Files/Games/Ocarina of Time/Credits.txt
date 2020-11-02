@@ -28,6 +28,7 @@
 - Show File Select Icons:		ShadowOne333
 - Colors:				GhostlyDark
 - Restore Text:			ShadowOne333
+- Female Pronouns:			Admentus, Mil
 - Admentus (Scripting and Assistance of all Options)
 
 --- Quality Insurance ---

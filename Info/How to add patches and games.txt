@@ -1,3 +1,69 @@
+----------------
+--- Consoles ---
+----------------
+
+Open the Consoles.json file in the /Files/Games directory.
+Each game consists of attributes in the JSON format. The main object is "console".
+Make sure to assign a console mode for every new game.
+
+Attributes lines that are not present are equivalent to 0 or just empty.
+
+
+
+--- Lines ---
+title			Console title as shown in the Patcher64+ Tool GUI.
+
+mode			Console mode which is used to link a game with, also used to read code with.
+
+options_vc		If the Virtual Console supports options
+			0		Disable Virtual Console options
+			1		Allow Virtual Console options
+
+rom_title		If the Console supports a ROM title in native mode so it can be changed
+			0		ROM title is not supported in native mode
+			1		ROM title is supported in native mode
+
+rom_title_length	Decimal value for how long the game title may be in the ROM
+
+rom_title_offset	Hexadecimal value for where the game title can be found in the ROM
+
+rom_title_offset_2	Alternative hexadecimal value for where the game title can be found in the ROM
+
+rom_title_uppercase	If the ROM title should be forced in uppercase
+			0		Uppercase for the ROM title is not forced
+			1		Uppercase for the ROM title is forced
+
+rom_gameID		If the Console supports a ROM GameID in native mode so it can be changed
+			0		ROM GameID is not supported in native mode
+			1		ROM GameID is supported in native mode
+
+rom_gameID_offset	Hexadecimal value for where the GameID can be found in the ROM
+
+appfile			The AppFile which should contain the ROM in the Virtual Console's WAD file
+			"00000001.app"	Used for NES ROMs, this is the VC emulator itself
+			"00000005.app"	Used for SNES/N64 ROMs, which is a container for the ROM and T64 files
+
+t64			If console contains T64 textures
+			0		Disable the "Remove All T64" checkbox
+			1		Allow the "Remove All T64" checkbox
+
+
+
+--- Example Console ---
+"title" : "Nintendo 64",
+"mode" : "N64",
+"options_vc" : 1,
+"rom_title" : 1,
+"rom_title_length" : 20,
+"rom_title_offset" : "20",
+"rom_title_uppercase" : 1,
+"rom_gameID" : 1,
+"rom_gameID_offset" : "3B",
+"appfile": "00000005.app",
+"t64" : 1
+
+
+
 -------------
 --- Games ---
 -------------
@@ -13,23 +79,28 @@ Attributes lines that are not present are equivalent to 0 or just empty.
 
 
 --- Lines ---
-title		Game title as shown in the Patcher64+ GUI.
+title		Game title as shown in the Patcher64+ Tool GUI.
 
 mode		Game mode as shown in the Active Mode label, also used to read code with.
 
-console		In which console mode the game is accessible. Accepted values are: "N64", "Wii VC" or "All".
+support_vc	If the game supports the Virtual Console
+		0			Game is not available in Wii VC mode
+		1			Game is available in Wii VC mode
+
+console		In which console mode the game is accessible, accepted values are defined the Consoles.json file
 
 downgrade	If the ROM is capable of downgrading and can contain multiple entries.
 		The following sub-attributes can be assigned to "downgrade"
-		"file"			Downgrade patch file path. Supports Decompression and Extension.
-		"hash"			ROM Hash checksum to apply the downgrade patch on.
+		"file"			Downgrade patch file path, Supports Decompression and Extension
+		"hash"			ROM Hash checksum to apply the downgrade patch on
+		"rev"			Revision title to show
 
 romc		Type of ROM in the VC WAD File
 		0			Regular uncompressed ROM
 		1			The Legend of Zelda: Majora's Mask compressed ROMC
 		2			Paper Mario compressed ROMC
 
-patch_vc	Amount of Patch VC options which are available
+patches_vc	Amount of Patch VC options which are available
 		0			No Patch VC Options are available
 		1			Only base Patch VC Options are available
 		2			More Patch VC Options are available (Super Mario 64)
@@ -47,37 +118,44 @@ decompress	If the ROM is capable of decompressing
 
 dmaTable	New dmatable to overwrite existing dmatable with
 
-n64_title	Default Game Title used in Nintendo 64 mode. No more than 20 characters.
+rom_title	Default game title for the ROM, no more than the amount of characters defined for the console
 
-n64_gameID	Default GameID used in Nintendo 64 mode. Requires 4 characters.
+rom_gameID	Default GameID for the ROM, requires 4 characters
 
-wii_title	Default Channel Title used in Wii VC mode. No more than 40 characters.
+vc_title	Default channel title for the Wii VC WAD, no more than 40 characters
 
-wii_gameID	Default GameID used in Wii VC mode. Requires 4 characters.
+vc_gameID	Default GameID for Wii VC WAD, requires 4 character
 
-hash		Default MD5 hash checksum for ROM files.
+hash		Default MD5 hash checksum for ROM files
 
 
 
 --- Example Game ---
 "title" : "The Legend of Zelda: Ocarina of Time",
 "mode" : "Ocarina of Time",
-"console" : "All",
+"support_vc" : 1,
+"console" : "N64",
 "downgrade" : [ {
-	"file" : "\\oot_rev1_to_rev0.bps",
-	"hash" : "721FDCC6F5F34BE55C43A807F2A16AF"
+	"file" : "\\Downgrade\\rev1_to_rev0.bps",
+	"hash" : "721FDCC6F5F34BE55C43A807F2A16AF4",
+	"rev" : "Rev 1"
 }, {
-	"file" : "\\oot_rev2_to_rev0.bps",
-	"hash" : "57A9719AD547C516342E1A15D5C28C3D"
+	"file" : "\\Downgrade\\rev2_to_rev0.bps",
+	"hash" : "57A9719AD547C516342E1A15D5C28C3D",
+	"rev" : "Rev 2"
+}, {
+	"file" : "\\Downgrade\\gc_to_rev0.bps",
+	"hash" : "CD09029EDCFB7C097AC01986A0F83D3F",
+	"rev" : "GC"
 } ],
-"patch_vc" : 4,
+"patches_vc" : 4,
 "patches" : 1,
 "decompress" : 1,
-"dmaTable" : "0 1 2 3 4 5 6 7 8 9 15 16 17 18 19 20 21 22 23 24 25 26 942 944 946 948 950 952 954 956 958 960 962 964 966 968 970 972 974 976 978 980 982 984 986 988 990 992 994 996 998 1000 1002 1004 1497 1498 1499 1500 1501 1502 1503 1504 1505 1506 1507 1508 1509 1510 1511 1512 1513 1514 1515 1516 1517 1518 1519 1520 1521 1522 1523 1524 1525",
-"n64_title" : "THE LEGEND OF ZELDA",
-"n64_gameID" : "CZLE",
-"wii_title" : "Zelda: Ocarina",
-"wii_gameID" : "NACE",
+"dmaTable" : "0 1 2 3 4 5 6 7 8 9 15 16 17 18 19 20 21 22 23 24 25 26 942 944 946 948 950 952 954 956 958 960 962 964 966 968 970 972 974 976 978 980 982 984 986 988 990 992 994 996 998 1000 1002 1004 1510 1511 1512 1513 1514 1515 1516 1517 1518 1519 1520 1521 1522 1523 1524 1525",
+"rom_title" : "THE LEGEND OF ZELDA",
+"rom_gameID" : "CZLE",
+"vc_title" : "Zelda: Ocarina",
+"vc_gameID" : "NACE",
 "hash" : "5BD1FE107BF8106B2AB6650ABECD54D6"
 
 
@@ -99,7 +177,7 @@ Attributes lines that are not present are equivalent to 0 or just empty.
 --- Lines ---
 title		Patch title as shown in the Patcher64+ GUI.
 
-console		In which console mode the patch is accessible. Accepted values are: "N64", "Wii VC" or "All".
+console		In which console mode the patch is accessible, accepted values are: "Native", "Wii VC" or "Both"
 
 command		Special command for patches. Commands can be mixed. Uppercase or lowercase does not matter.
 		""			Empty, no command given
@@ -116,37 +194,37 @@ command		Special command for patches. Commands can be mixed. Uppercase or lowerc
 		"Apply Patch"		Apply custom provided .bps, .ips, .xdelta or .vcdiff patch file
 		
 
-redux		If the patch supports Redux. Redux is only supported by OoT and MM.
-		The following sub-attributes can be assigned to "redux" as well. These attributes overwrite the regular attributes.
-		"n64_title"		N64 Title Header. No more than 20 characters.
-		"n64_gameID"		N64 ROM GameID. Requires 4 characters.
-		"wii_title"		Wii VC WAD Channel Title. No more than 40 characters.
-		"wii_gameID"		Wii VC WAD GameID. Requires 4 characters.
-		"file"			Patch file path. Supports Decompression and Extension.
-		"output"		Output file name extension.
+redux		If the patch supports Redux. Redux is only supported by OoT and MM
+		The following sub-attributes can be assigned to "redux" as well. These attributes overwrite the regular attributes
+		"rom_title"		ROM game title, no more than the amount of characters defined for the console
+		"rom_gameID"		ROM GameID, requires 4 characters
+		"vc_title"		Wii VC WAD channel title, no more than 40 characters
+		"vc_gameID"		Wii VC WAD GameID, requires 4 characters
+		"file"			Patch file path, supports Decompression and Extension
+		"output"		Output file name extension
 
 options		If the patch supports additional options.
 		0			Disable "Options"
 		1			Show "Options" and allow it if the checkbox is checked
 
-languages	If the patch supports multiple languages and can contain multiple entries.
-		The following sub-attributes can be assigned to "languages" as well. These attributes overwrite the regular attributes.
-		"title"			Button with title for the language that displays.
-		"n64_title"		N64 Title Header. No more than 20 characters.
-		"n64_gameID"		N64 ROM GameID. Requires 4 characters.
-		"wii_title"		Wii VC WAD Channel Title. No more than 40 characters.
-		"wii_gameID"		Wii VC WAD GameID. Requires 4 characters.
-		"file"			Patch file path. Supports Decompression and Extension.
-		"output"		Output file name extension.
-		"max_text_speed"	Allow the max text speed for a language, can be set to 1, 2 or 3.
+languages	If the patch supports multiple languages and can contain multiple entries
+		The following sub-attributes can be assigned to "languages" as well, these attributes overwrite the regular attributes
+		"title"			Button with title for the language that displays
+		"rom_title"		ROM game title, no more than the amount of characters defined for the console
+		"rom_gameID"		ROM GameID, requires 4 characters.
+		"vc_title"		Wii VC WAD channel title, no more than 40 characters
+		"vc_gameID"		Wii VC WAD GameID, requires 4 characters
+		"file"			Patch file path, supports Decompression and Extension
+		"output"		Output file name extension
+		"max_text_speed"	Allow the max text speed for a language, can be set to 1, 2 or 3
 
-n64_title	N64 Title Header. No more than 20 characters.
+rom_title	ROM game title for the patch, No more than 20 characters.
 
-n64_gameID	N64 ROM GameID. Requires 4 characters.
+rom_gameID	ROM GameID for the patch, requires 4 characters.
 
-wii_title	Wii VC WAD Channel Title. No more than 40 characters.
+vc_title	Wii VC WAD Channel Title for the patch, no more than 40 characters.
 
-wii_gameID	Wii VC WAD GameID. Requires 4 characters.
+vc_gameID	Wii VC WAD GameID for the patch, requires 4 characters.
 
 file		Patch file. Start with \\. Patch is located in current same folder, but can be set into folders.
 		Add \\Decompressed for decompressed patches. Provide patches in .bps, .ips, .xdelta or .vcdiff
@@ -166,12 +244,13 @@ tooltip		Patch button description.
 
 --- Example Patch ---
 "title" : "Ocarina of Time",
-"console" : "All",
+"console" : "Both",
 "command" : "Force Downgrade",
 "redux" : {
-	"wii_title" : "Redux: Ocarina",
-	"wii_gameID" : "NAC0",
-	"file" : "\\Decompressed\\oot_redux.bps",
+	"options" : 1,
+	"vc_title" : "Redux: Ocarina",
+	"vc_gameid" : "NAC0",
+	"file" : "\\Decompressed\\redux.bps",
 	"output" : "_redux_patched"
 },
 "options" : 1,
@@ -180,38 +259,39 @@ tooltip		Patch button description.
 	"max_text_speed" : 3
 }, {
 	"title" : "Japanese",
-	"n64_gameID" : "CZLJ",
-	"wii_title" : "Zelda: Ocarina (JAP)",
-	"wii_gameID" : "NACJ",
+	"rom_gameID" : "CZLJ",
+	"vc_title" : "Zelda: Ocarina (JAP)",
+	"vc_gameid" : "NACJ",
 	"output" : "_japanese_patched",
 	"max_text_speed" : 1
 }, {
+	"title" : "Chinese",
+	"rom_gameID" : "CZLJ",
+	"vc_title" : "Zelda: Ocarina (CHI)",
+	"vc_gameid" : "NACC",
+	"file" : "\\Decompressed\\chi.ppf",
+	"output" : "_chinese_patched",
+	"max_text_speed" : 1
+}, {
 	"title" : "Spanish",
-	"wii_title" : "Zelda: Ocarina (SPA)",
-	"wii_gameID" : "NACS",
-	"file" : "\\Decompressed\\oot_spa.bps",
+	"vc_title" : "Zelda: Ocarina (SPA)",
+	"vc_gameid" : "NACS",
+	"file" : "\\Decompressed\\spa.ppf",
 	"output" : "_spanish_patched",
 	"max_text_speed" : 2
 }, {
 	"title" : "Polish",
-	"wii_title" : "Zelda: Ocarina (POL)",
-	"wii_gameID" : "NACO",
-	"file" : "\\Decompressed\\oot_pol.bps",
+	"vc_title" : "Zelda: Ocarina (POL)",
+	"vc_gameid" : "NACO",
+	"file" : "\\Decompressed\\pol.ppf",
 	"output" : "_polish_patched",
 	"max_text_speed" : 2
 }, {
 	"title" : "Russian",
-	"wii_title" : "Zelda: Ocarina (RUS)",
-	"wii_gameID" : "NACR",
-	"file" : "\\Decompressed\\oot_rus.bps",
+	"vc_title" : "Zelda: Ocarina (RUS)",
+	"vc_gameid" : "NACR",
+	"file" : "\\Decompressed\\rus.ppf",
 	"output" : "_russian_patched",
 	"max_text_speed" : 2
-}, {
-	"title" : "Chinese",
-	"wii_title" : "Zelda: Ocarina (CHI)",
-	"wii_gameID" : "NACC",
-	"file" : "\\Decompressed\\oot_chi.bps",
-	"output" : "_chinese_patched",
-	"max_text_speed" : 1
 } ],
 "tooltip" : "The regular Ocarina of Time experience{0}With support for languages, redux and additional options{0}- Supported: Rev 0 (US)"

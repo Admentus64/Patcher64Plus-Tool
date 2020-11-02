@@ -167,12 +167,12 @@ function CreateCreditsDialog() {
 
 
     # Hash
-    $HashSumROMLabel          = CreateLabel   -X 10 -Y 20 -Width 120 -Height 15 -Font $VCPatchFont -Text "N64 ROM Hashsum:" -AddTo $CreditsChecksumPanel
+    $HashSumROMLabel          = CreateLabel   -X 10 -Y 20 -Width 120 -Height 15 -Font $VCPatchFont -Text "ROM Hashsum:" -AddTo $CreditsChecksumPanel
     $global:HashSumROMTextBox = CreateTextBox -X $HashSumROMLabel.Right -Y ($HashSumROMLabel.Top - 3) -Width ($CreditsChecksumPanel.Width -$HashSumROMLabel.Width - 100) -Height 50 -AddTo $CreditsChecksumPanel
     $HashSumROMTextBox.ReadOnly = $True
 
     # Matching Hash
-    $MatchingROMLabel          = CreateLabel   -X 10 -Y ($HashSumROMTextBox.Bottom + 10) -Width 120 -Height 15 -Font $VCPatchFont -Text "Current Z64 ROM:" -AddTo $CreditsChecksumPanel
+    $MatchingROMLabel          = CreateLabel   -X 10 -Y ($HashSumROMTextBox.Bottom + 10) -Width 120 -Height 15 -Font $VCPatchFont -Text "Current ROM:" -AddTo $CreditsChecksumPanel
     $global:MatchingROMTextBox = CreateTextBox -X $MatchingROMLabel.Right -Y ($MatchingROMLabel.Top - 3) -Width ($CreditsChecksumPanel.Width -$MatchingROMLabel.Width - 100) -Height 50 -Text "No ROM Selected" -AddTo $CreditsChecksumPanel
     $MatchingROMTextBox.ReadOnly = $True
 
@@ -207,6 +207,7 @@ function CreateSettingsDialog() {
     $GeneralSettings.AdvancedBox       = CreateReduxGroup -Y ($GeneralSettings.GeneralBox.Bottom + 10) -Height 1 -AddTo $SettingsDialog -Text "Advanced Settings"
     $GeneralSettings.IgnoreChecksum    = CreateSettingsCheckbox -Column 0 -Row 1 -AddTo $GeneralSettings.AdvancedBox -Text "Ignore Input Checksum" -IsDebug -ToolTip $ToolTip -Info "Do not check the checksum of a ROM or WAD and patch it regardless" -Name "IgnoreChecksum"
     $GeneralSettings.KeepLogo          = CreateSettingsCheckbox -Column 1 -Row 1 -AddTo $GeneralSettings.AdvancedBox -Text "Keep Logo"             -IsDebug -ToolTip $ToolTip -Info "Keep the vanilla title logo instead of the Master Quest title logo" -Name "KeepLogo"
+    $GeneralSettings.ForceExtract      = CreateSettingsCheckbox -Column 2 -Row 1 -AddTo $GeneralSettings.AdvancedBox -Text "Force Extract"         -IsDebug -ToolTip $ToolTip -Info "Always extract game data required for patching even if it was already extracted on a previous run" -Name "ForceExtract"
 
     # Debug Settings
     $GeneralSettings.DebugBox          = CreateReduxGroup -Y ($GeneralSettings.AdvancedBox.Bottom + 10) -Height 3 -AddTo $SettingsDialog -Text "Debug Settings"
@@ -264,9 +265,11 @@ function CreateErrorDialog([String]$Error, [Switch]$Exit) {
     # Create the string that will be displayed on the window.
     $String = $ScriptName + " " + $Version + " (" + $VersionDate + ")" + "{0}{0}"
 
+    ShowPowerShellConsole -ShowConsole $True
+
     if ($Error -eq "Missing Files")         { $String += "Neccessary files are missing.{0}" }
-    elseif ($Error -eq "Missing JSON")      { $String += "Games.json or Patches.json files are missing.{0}" }
-    elseif ($Error -eq "Corrupted JSON")    { $String += "Games.json or Patches.json files are corrupted.{0}" }
+    elseif ($Error -eq "Missing JSON")      { $String += ".JSON files are missing.{0}" }
+    elseif ($Error -eq "Corrupted JSON")    { $String += ".JSON files are corrupted.{0}" }
     elseif ($Error -eq "Missing Modules")   { $String += ".PSM1 module files are missing for import.{0}" }
 
     $String += "{0}"

@@ -1,11 +1,10 @@
 --- Additional Options ---
+- 60 FPS (v2):				Kaze Emanuar
+- Free Cam:				Kaze Emanuar
+- Model:					Fnzmeatpopsicle, ElectroMew/P0PPY, Yoshi Milkman,
+					Marshivolt
+- GhostlyDark (documenting several offsets)
 - Admentus (Scripting and Assistance of all Options)
-
---- 60 FPS (v2) ---
-- Kaze Emanuar
-
---- Analog Camera ---
-- Kaze Emanuar
 
 --- Multiplayer (v1.4.2) ---
 - Skelux
@@ -20,6 +19,13 @@
 
 --- Star Road Multiplayer (v1.2.1) ---
 - Skelux
+
+--- Arguably Better Edition (R3) ---
+- Mors
+- GTM
+- Benial
+- Kaze Emanuar
+- SM64 Decompilation Project
 
 --- Last Impact (v1.2)
 - Kaze Emanuar

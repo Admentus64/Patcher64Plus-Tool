@@ -1,0 +1,29 @@
+Patches for Mario Kart 64:
+1. Virtual Console Exclusive patch options
+	* Inject ROM (requires Z64 ROM)
+	* Patch VC Emulator Only
+	* Extract ROM Only
+2. Apply Patch (requires a patch file)
+3. Patch Header
+4. One ROM hacks
+
+Known Issues:
+- Unknown
+
+Requirements:
+- US Z64 ROM or US VC WAD for Mario Kart 64
+
+Instructions:
+- Select Z64 ROM or VC WAD
+- Select patch
+- Press "Patch Select Option"
+
+Information:
+- Original Z64 ROM or VC WAD is preserved
+- Patches are mostly compatible with existing AR/Gecko Codes
+     
+Programs:
+- Wad Packer/Wad Unpacker
+- Wiimm's 'wszst' Tool
+- Floating IPS
+- RN64CRC

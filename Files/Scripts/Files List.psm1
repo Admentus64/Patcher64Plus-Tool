@@ -1,6 +1,6 @@
 function SetFileParameters() {
     
-    # Create a hash table.
+    # Create a hash table
     $global:Files = @{}
     $Files.tool = @{}
     $Files.oot = @{}
@@ -118,6 +118,7 @@ function SetFileParameters() {
 
 
     # Store JSON files
+    $Files.json.consoles                    = $Paths.Games + "\Consoles.json"
     $Files.json.games                       = $Paths.Games + "\Games.json"
 
 
@@ -142,20 +143,9 @@ function SetFileParameters() {
     CheckFilesExists -HashTable $Files.json
     CheckFilesExists -HashTable $Files.icon
 
-
-
-    # Store misc files
-    $Files.outROM                           = $Paths.Master + "\out"
-    $Files.cleanROM                         = $Paths.Master + "\clean.z64"
-    $Files.cleanDecompressedROM             = $Paths.Master + "\clean-decompressed"
-    $Files.decompressedROM                  = $Paths.Master + "\decompressed"
-    $Files.masterQuestROM                   = $Paths.Master + "\master-quest-decompressed"
-
     $Files.flipscfg                         = $Paths.Master + "\Base\flipscfg.bin"
     $Files.ckey                             = $Paths.Master + "\Wii VC\common-key.bin"
-
     $Files.stackdump                        = $Paths.WiiVC + "\wadpacker.exe.stackdump"
-
     $Files.dmaTable                         = $Paths.Base + "\dmaTable.dat"
     $Files.archive                          = $Paths.Base + "\ARCHIVE.bin"
     $Files.settings                         = $Paths.Base + "\Settings.ini"
@@ -170,11 +160,50 @@ function SetFileParameters() {
 
 
 #==============================================================================================================================================================================================
+function SetGetROM() {
+
+    # Store misc files
+    $global:GetROM = @{}
+    $GetROM.romc                            = $Paths.Master + "\romc"
+    $GetROM.clean                           = $Paths.Master + "\clean"
+    $GetROM.cleanDecomp                     = $Paths.Master + "\clean-decompressed"
+    $GetROM.decomp                          = $Paths.Master + "\decompressed"
+    $GetROM.masterQuest                     = $Paths.Master + "\master-quest-decompressed"
+    $GetROM.downgrade                       = $Paths.Master + "\downgraded"
+    $GetROM.nes                             = $Paths.Master + "\rom.nes"
+
+    if ($IsWiiVC) {
+        if (!(IsSet -Elem $WADFile.ROM)) { $WADFile.ROM = $GetROM.nes }
+        $GetROM.in       = $GetROM.patched = $WADFile.ROM
+        $GetROM.debug    = $WADFile.Debug
+    }
+    else {
+        $GetROM.in       = $ROMFile.ROM
+        $GetROM.patched  = $ROMFile.Patched
+        $GetROM.debug    = $ROMFile.Debug
+    }
+
+    if ($Settings.Debug.CreateBPS -eq $True) {
+        $Files.compBPS   = $Paths.Base + "\compressed.bps"
+        $Files.decompBPS = $Paths.Base + "\decompressed.bps"
+    }
+
+}
+
+
+
+#==============================================================================================================================================================================================
 function CheckFilesExists([hashtable]$HashTable) {
     
+    $FilesMissing = $False
     $HashTable.GetEnumerator() | ForEach-Object {
-        if ( !(Test-Path $_.value -PathType Leaf) -and (IsSet -Elem $_.value) ) { CreateErrorDialog -Error "Missing Files" -Exit }
+        if ( !(Test-Path $_.value -PathType Leaf) -and (IsSet -Elem $_.value) ) {
+            $FilesMissing = $True
+            Write-Host "Missing file: " $_.value
+        }
     }
+
+    if ($FilesMissing) { CreateErrorDialog -Error "Missing Files" -Exit }
 
 }
 
@@ -197,3 +226,4 @@ function CheckPatchExtension([String]$File) {
 #==============================================================================================================================================================================================
 
 Export-ModuleMember -Function SetFileParameters
+Export-ModuleMember -Function SetGetROM

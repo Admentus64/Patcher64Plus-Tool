@@ -1,0 +1,31 @@
+Patches for A Link to the Past:
+1. Virtual Console Exclusive patch options
+	* Inject ROM (requires SFC ROM)
+	* Patch VC Emulator Only
+	* Extract ROM Only
+2. Apply Patch (requires a patch file)
+3. Patch Header
+4. Three ROM hacks
+5. Additional Options
+
+Known Issues:
+- Unknown
+
+Requirements:
+- US SFC ROM or US VC WAD for A Link to the Past
+
+Instructions:
+- Select SFC ROM or VC WAD
+- Select patch
+- Enable optional "Enable Options" checkbox
+- Customize your patch within "Select Options"
+- Press "Patch Select Option"
+
+Information:
+- Original SFC ROM or VC WAD is preserved
+- Patches are mostly compatible with existing AR/Gecko Codes
+     
+Programs:
+- Wad Packer/Wad Unpacker
+- Wiimm's 'wszst' Tool
+- Floating IPS

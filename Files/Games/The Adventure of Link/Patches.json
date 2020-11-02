@@ -1,0 +1,17 @@
+{ "patch" : [ {
+	"title" : "The Adventure of Link",
+	"console" : "Both",
+	"command" : "Force Downgrade",
+	"redux" : {
+		"options" : 1,
+		"vc_title" : "The Adventure of Link Redux",
+		"vc_gameid" : "FA90",
+		"file" : "\\Compressed\\redux.ips",
+		"output" : "_redux_patched"
+	},
+	"options" : 1,
+	"file" : "\\Compressed\\redux.ips",
+	"output" : "_redux_patched",
+	"tooltip" : "The regular Zelda II: The Adventure of Link experience{0}With support for redux and additional options{0}- Supported: Rev 0 (US)"
+}
+] }

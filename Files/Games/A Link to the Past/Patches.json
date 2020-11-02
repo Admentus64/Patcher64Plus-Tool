@@ -1,0 +1,27 @@
+{ "patch" : [ {
+	"title" : "A Link to the Past Redux",
+	"console" : "Both",
+	"options" : 1,
+	"vc_title" : "ALTTP Redux",
+	"vc_gameID" : "JAD0",
+	"file" : "\\Compressed\\redux.ips",
+	"output" : "_redux_patched",
+	"tooltip" : "A Redux adjusted version of the vanilla game that offers Quality-of-Life (QoL) tweaks{0}- Supported: Rev 0 (US)"
+}, {
+	"title" : "The Legend of Zelda: Parallel Worlds (v1.23)",
+	"console" : "Both",
+	"vc_title" : "Parallel Worlds",
+	"vc_gameID" : "JAD1",
+	"file" : "\\Compressed\\parallel_worlds.ips",
+	"output" : "_parallel_worlds_patched",
+	"tooltip" : "A full-sized ROM hack in a completely new setting, which can be quite difficult{0}- Supported: Rev 0 (US)"
+}, {
+	"title" : "The Legend of Zelda: Parallel Remodel (v1.1)",
+	"console" : "Both",
+	"vc_title" : "Parallel Remodel",
+	"vc_gameID" : "JAD2",
+	"file" : "\\Compressed\\parallel_remodel.ips",
+	"output" : "_parallel_remodel_patched",
+	"tooltip" : "An easier and more vanilla-like balanced version of the Parallel Worlds ROM hack{0}- Supported: Rev 0 (US)"
+}
+] }

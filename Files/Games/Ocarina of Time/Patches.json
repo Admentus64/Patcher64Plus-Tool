@@ -1,10 +1,11 @@
 { "patch" : [ {
 	"title" : "Ocarina of Time",
-	"console" : "All",
+	"console" : "Both",
 	"command" : "Force Downgrade",
 	"redux" : {
-		"wii_title" : "Redux: Ocarina",
-		"wii_gameID" : "NAC0",
+		"options" : 1,
+		"vc_title" : "Redux: Ocarina",
+		"vc_gameid" : "NAC0",
 		"file" : "\\Decompressed\\redux.bps",
 		"output" : "_redux_patched"
 	},
@@ -14,94 +15,93 @@
 		"max_text_speed" : 3
 	}, {
 		"title" : "Japanese",
-		"n64_gameID" : "CZLJ",
-		"wii_title" : "Zelda: Ocarina (JAP)",
-		"wii_gameID" : "NACJ",
+		"rom_gameID" : "CZLJ",
+		"vc_title" : "Zelda: Ocarina (JAP)",
+		"vc_gameid" : "NACJ",
 		"output" : "_japanese_patched",
 		"max_text_speed" : 1
 	}, {
+		"title" : "Chinese",
+		"rom_gameID" : "CZLJ",
+		"vc_title" : "Zelda: Ocarina (CHI)",
+		"vc_gameid" : "NACC",
+		"file" : "\\Decompressed\\chi.ppf",
+		"output" : "_chinese_patched",
+		"max_text_speed" : 1
+	}, {
 		"title" : "Spanish",
-		"wii_title" : "Zelda: Ocarina (SPA)",
-		"wii_gameID" : "NACS",
+		"vc_title" : "Zelda: Ocarina (SPA)",
+		"vc_gameid" : "NACS",
 		"file" : "\\Decompressed\\spa.ppf",
 		"output" : "_spanish_patched",
 		"max_text_speed" : 2
 	}, {
 		"title" : "Polish",
-		"wii_title" : "Zelda: Ocarina (POL)",
-		"wii_gameID" : "NACO",
+		"vc_title" : "Zelda: Ocarina (POL)",
+		"vc_gameid" : "NACO",
 		"file" : "\\Decompressed\\pol.ppf",
 		"output" : "_polish_patched",
 		"max_text_speed" : 2
 	}, {
 		"title" : "Russian",
-		"wii_title" : "Zelda: Ocarina (RUS)",
-		"wii_gameID" : "NACR",
+		"vc_title" : "Zelda: Ocarina (RUS)",
+		"vc_gameid" : "NACR",
 		"file" : "\\Decompressed\\rus.ppf",
 		"output" : "_russian_patched",
 		"max_text_speed" : 2
-	}, {
-		"title" : "Chinese",
-		"n64_gameID" : "CZLJ",
-		"wii_title" : "Zelda: Ocarina (CHI)",
-		"wii_gameID" : "NACC",
-		"file" : "\\Decompressed\\chi.ppf",
-		"output" : "_chinese_patched",
-		"max_text_speed" : 1
 	} ],
 	"tooltip" : "The regular Ocarina of Time experience{0}With support for languages, redux and additional options{0}- Supported: Rev 0 (US)"
 }, {
-	"title" : "The Legend of Zelda: The Missing Link",
-	"console" : "All",
+	"title" : "The Legend of Zelda: The Missing Link (v1.4)",
+	"console" : "Both",
 	"command" : "Force Expand Memory Force Downgrade",
-	"wii_title" : "Zelda: The Missing Link",
-	"wii_gameID" : "NAC5",
+	"vc_title" : "Zelda: The Missing Link",
+	"vc_gameid" : "NAC5",
 	"file" : "\\Compressed\\the_missing_link.bps",
 	"output" : "_the_missing_link_patched",
 	"tooltip" : "A small-sized ROM hack in a completely new setting{0}- Supported: Rev 0 (US)"
 }, {
-	"title" : "The Legend of Zelda: Dawn & Dusk",
-	"console" : "All",
-	"command" : "No Downgrade",
-	"wii_title" : "Zelda: Dawn & Dusk",
-	"wii_gameID" : "NAC1",
+	"title" : "The Legend of Zelda: Dawn & Dusk (v2.0)",
+	"console" : "Both",
+	"vc_title" : "Zelda: Dawn & Dusk",
+	"vc_gameid" : "NAC1",
 	"file" : "\\Compressed\\dawn_rev0.bps",
 	"output" : "_dawn_&_dusk_patched",
 	"hash" : "Dawn & Dusk",
 	"tooltip" : "A small-sized ROM hack in a completely new setting{0}- Supported: Rev 0 (US), Rev 1 (US) & Rev 2 (US)"
 }, {
 	"title" : "The Legend of Zelda: Master of Time",
-	"console" : "All",
+	"console" : "Both",
 	"command" : "Force Downgrade",
-	"wii_title" : "Zelda: Master of Time",
-	"wii_gameID" : "NAC6",
+	"vc_title" : "Zelda: Master of Time",
+	"vc_gameid" : "NAC6",
 	"file" : "\\Compressed\\master_of_time.bps",
 	"output" : "_master_of_time_patched",
 	"tooltip" : "A small-sized ROM hack in a completely new setting{0}- Supported: Rev 0 (US)"
 }, {
-	"title" : "The Legend of Zelda: The Fate of the Bombiwa",
-	"console" : "All",
+	"title" : "The Legend of Zelda: The Fate of the Bombiwa (v1.0.3)",
+	"console" : "Both",
 	"command" : "Force Downgrade",
-	"wii_title" : "Zelda: Bombiwa",
-	"wii_gameID" : "NAC2",
+	"vc_title" : "Zelda: Bombiwa",
+	"vc_gameid" : "NAC2",
 	"file" : "\\Decompressed\\bombiwa.bps",
 	"output" : "_bombiwa_patched",
 	"tooltip" : "A small-sized ROM hack in a completely new setting, and extremely tricky and difficult{0}- Supported: Rev 0 (US)"
 }, {
 	"title" : "The Legend of Zelda: Nimpize Adventure",
-	"console" : "All",
+	"console" : "Both",
 	"command" : "Force Downgrade",
-	"wii_title" : "Zelda: Nimpize",
-	"wii_gameID" : "NAC3",
+	"vc_title" : "Zelda: Nimpize",
+	"vc_gameid" : "NAC3",
 	"file" : "\\Decompressed\\nimpize.bps",
 	"output" : "_nimpize_patched",
 	"tooltip" : "A reworked and harder version of Ocarina of Time with remixed dungeons{0}- Supported: Rev 0 (US)"
 }, {
-	"title" : "Ocarina of Time Puzzling",
-	"console" : "All",
+	"title" : "Ocarina of Time Puzzling (v1.1.2)",
+	"console" : "Both",
 	"command" : "Force Downgrade",
-	"wii_title" : "Zelda: Puzzling",
-	"wii_gameID" : "NAC4",
+	"vc_title" : "Zelda: Puzzling",
+	"vc_gameid" : "NAC4",
 	"file" : "\\Compressed\\puzzling.bps",
 	"output" : "_puzzling_patched",
 	"tooltip" : "A small-sized ROM hack that focuses on puzzling your way through{0}- Supported: Rev 0 (US)"

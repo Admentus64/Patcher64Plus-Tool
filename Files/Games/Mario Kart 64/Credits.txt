@@ -1,0 +1,2 @@
+--- CPUs use human items including shells ---
+- triclon

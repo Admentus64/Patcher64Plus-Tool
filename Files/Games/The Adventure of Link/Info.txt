@@ -1,0 +1,30 @@
+Patch Options for The Adventure of Link:
+1. Virtual Console Exclusive patch options
+	* Inject ROM (requires NES ROM)
+	* Patch VC Emulator Only
+	* Extract ROM Only
+2. Apply Patch (requires a patch file)
+3. Redux and Additional Options
+
+Known Issues:
+- Unknown
+
+Requirements:
+- US NES ROM or US VC WAD for The Adventure of Link
+
+Instructions:
+- Select NES ROM or VC WAD
+- Select patch
+- Enable optional "Enable Redux" or "Enable Options" checkboxes
+- Customize your patch within "Select Options" and "Redux"
+- Press "Patch Selected Option"
+
+Information:
+- Original NES ROM or VC WAD is preserved
+- Redux should be compatible with existing AR/Gecko Codes
+- The VC WAD and most patches forces "Downgrade" to Rev 0
+    
+Programs:
+- Wad Packer/Wad Unpacker
+- Wiimm's 'wszst' Tool
+- Floating IPS

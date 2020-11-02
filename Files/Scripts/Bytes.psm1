@@ -72,8 +72,10 @@ function PatchBytes([String]$File, [String]$Offset, [String]$Length, [String]$Pa
 
 
 #==============================================================================================================================================================================================
-function ExportBytes([String]$File, [String]$Offset, [String]$End, [String]$Length, [String]$Output) {
+function ExportBytes([String]$File, [String]$Offset, [String]$End, [String]$Length, [String]$Output, [Switch]$Force) {
     
+    if ( (Test-Path -LiteralPath $Output) -and ($Settings.Debug.ForceExtract -eq $False) -and !$Force) { return }
+
     if ($ExternalScript) { Write-Host "Write file to:" $Output }
     if (IsSet -Elem $File) { $ByteArrayGame = [IO.File]::ReadAllBytes($File) }
     [uint32]$Offset = GetDecimal -Hex $Offset
@@ -86,6 +88,8 @@ function ExportBytes([String]$File, [String]$Offset, [String]$End, [String]$Leng
         Write-Host "Offset is too large for file!"
         return
     }
+
+    RemoveFile -LiteralPath $Output
 
     if (IsSet -Elem $End) {
         [uint32]$End = GetDecimal -Hex $End
@@ -151,7 +155,7 @@ function SearchBytes([String]$File, [String]$Start="0", [String]$End, [Array]$Va
 function ExportAndPatch([String]$Path, [String]$Offset, [String]$Length, [String]$NewLength, [String]$TableOffset, [Array]$Values) {
 
     $File = $GameFiles.binaries + "\" + $Path + ".bin"
-    if (!(Test-Path -LiteralPath $File -PathType Leaf)) {
+    if ( !(Test-Path -LiteralPath $File -PathType Leaf) -or ($Settings.Debug.ForceExtract -eq $True) ) {
         ExportBytes -Offset $Offset -Length $Length -Output $File
         ApplyPatch -File $File -Patch ("\Data Extraction\" + $Path + ".bps") -FilesPath
     }
@@ -174,6 +178,7 @@ function Get8Bit($Value)            { return '{0:X2}' -f [int]$Value }
 function Get16Bit($Value)           { return '{0:X4}' -f [int]$Value }
 function Get24Bit($Value)           { return '{0:X6}' -f [int]$Value }
 function Get32Bit($Value)           { return '{0:X8}' -f [int]$Value }
+
 
 
 #==============================================================================================================================================================================================

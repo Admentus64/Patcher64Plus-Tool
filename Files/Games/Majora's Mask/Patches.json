@@ -1,9 +1,11 @@
 { "patch" : [ {
 	"title" : "Majora's Mask",
-	"console" : "All",
+	"console" : "Both",
+	"command" : "Force Downgrade",
 	"redux" : {
-		"wii_title" : "Redux: Majora's",
-		"wii_gameID" : "NAR0",
+		"options" : 1,
+		"vc_title" : "Redux: Majora's",
+		"vc_gameID" : "NAR0",
 		"file" : "\\Decompressed\\redux.bps",
 		"output" : "_redux_patched"
 	},
@@ -12,32 +14,33 @@
 		"title" : "English"
 	}, {
 		"title" : "Polish",
-		"wii_title" : "Zelda: Majora's (POL)",
-		"wii_gameID" : "NARO",
+		"vc_title" : "Zelda: Majora's (POL)",
+		"vc_gameID" : "NARO",
 		"file" : "\\Decompressed\\pol.ppf",
 		"output" : "_polish_patched"
 	}, {
 		"title" : "Russian",
-		"wii_title" : "Zelda: Majora's (RUS)",
-		"wii_gameID" : "NARR",
+		"vc_title" : "Zelda: Majora's (RUS)",
+		"vc_gameID" : "NARR",
 		"file" : "\\Decompressed\\rus.ppf",
 		"output" : "_russian_patched"
 	} ],
 	"tooltip" : "The regular Majora's Mask experience{0}With support for languages, redux and additional options{0}- Supported: Rev 0 (US)"
 }, {
-	"title" : "The Legend of Zelda: Masked Quest",
-	"console" : "All",
-	"command" : "Force Remap D-Pad",
-	"wii_title" : "Zelda: Masked Quest",
-	"wii_gameID" : "NURE",
+	"title" : "Majora's Mask: Masked Quest",
+	"console" : "Both",
+	"command" : "Force Remap D-Pad Force Downgrade",
+	"vc_title" : "Zelda: Masked Quest",
+	"vc_gameID" : "NURE",
 	"file" : "\\Compressed\\masked_quest.bps",
 	"output" : "_masked_quest_patched",
 	"tooltip" : "A Master Quest style romhack for Majora's Mask, offering a higher difficulty{0}The patch contains major changes to where progress is obtained throughout the overworld and dungeons{0}Includes some of the changes featured in the Redux / Randomizer patches like D-Pad support{0}- Supported: Rev 0 (US)"
 }, {
-	"title" : "The Legend of Zelda: Master Quest",
-	"console" : "All",
-	"wii_title" : "Zelda: MM Master Quest",
-	"wii_gameID" : "NAC2",
+	"title" : "Majora's Mask: Master Quest",
+	"console" : "Both",
+	"command" : "Force Downgrade",
+	"vc_title" : "Zelda: MM Master Quest",
+	"vc_gameID" : "NAR1",
 	"file" : "\\Compressed\\master_quest.bps",
 	"output" : "_master_quest_patched",
 	"tooltip" : "A Master Quest style romhack for Majora's Mask, offering a higher difficulty{0}- Supported: Rev 0 (US)"

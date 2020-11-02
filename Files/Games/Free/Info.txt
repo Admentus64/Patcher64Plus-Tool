@@ -1,27 +1,35 @@
-Patches for custom VC WAD:
-1. ROM Injection (requires .Z64 ROM)
-2. Free Patching (requires .IPS, .BPS, .XDELTA, .VCDIFF or .PPF File)
+Patches for Free Game Selection:
+1. Virtual Console Exclusive patch options
+	* Inject ROM (requires ROM)
+	* Patch VC Emulator Only
+	* Extract ROM Only
+2. Apply Patch (requires a patch file)
+3. Patch Header
 
 Known Issues:
 - Unknown
 
 Requirements:
-- Any VC WAD File
+- ROM or VC WAD of any game
 
 Instructions:
-- Select VC WAD File
-- Enable optional VC Options checkboxes
-- Press Inject ROM or Apply Patch
-- Original WAD is preserved
+- Select ROM or VC WAD
+- Customize "Virtual Console - Patch Options" checkboxes
+- Use one of the optioons available for "Free Game Selection"
 
 Information:
+- Original ROM or VC WAD is preserved
 - Existing AR/Gecko codes likely will not work
+- Most ROMs injected into a WAD will fail to boot
+- The header can not be adjusted in Native NES Mode
+- The GameID can not be adjusted in Native NES or Native SNES Mode
+- The header can always be fully adjusted in Wii VC Mode
 
 Programs:
 - Wad Packer/Wad Unpacker
+- Wiimm's 'wszst' Tool
 - Floating IPS
 - Xdelta
 - Xdelta3
 - PPF3
-- Wiimm's 'wszst' Tool
 - RN64CRC

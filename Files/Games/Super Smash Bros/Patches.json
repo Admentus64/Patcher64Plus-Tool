@@ -1,21 +1,22 @@
 { "patch" : [ {
 	"title" : "Smash Remix v0.9.4",
-	"console" : "N64",
+	"console" : "Native",
 	"file" : "\\Compressed\\remix.xdelta",
 	"output" : "_remix_patched",
 	"tooltip" : "Remixes the whole of Super Smash Bros.{0}Contains new stages and characters to use.{0}- Supported: Rev 0 (US)"
 }, {
 	"title" : "Super Smash Bros: More Stages Edition v0.5.1",
-	"console" : "All",
-	"wii_title" : "Super Smash Bros: MSE",
-	"wii_gameID" : "NAL0",
+	"console" : "Both",
+	"vc_title" : "Super Smash Bros: MSE",
+	"vc_gameID" : "NAL0",
 	"file" : "\\Compressed\\SSBMSE.xdelta",
 	"output" : "_ssbmse_patched",
 	"tooltip" : "Add new stages from the newer Super Smash Bros. entries.{0}- Supported: Rev 0 (US)"
 }, {
 	"title" : "Widescreen",
-	"console" : "All",
-	"wii_title" : "Super Smash Bros. WS",
+	"console" : "Both",
+	"vc_title" : "Super Smash Bros. WS",
+	"vc_gameID" : "NAL1",
 	"file" : "\\Compressed\\widescreen.xdelta",
 	"output" : "_widescreen_patched",
 	"tooltip" : "Add widescreen support to Super Smash Bros.{0}- Supported: Rev 0 (US)"

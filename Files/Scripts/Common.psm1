@@ -1,16 +1,21 @@
 function SetWiiVCMode([Boolean]$Enable) {
     
+    if ($IsWiiVC -eq $Enable) { return }
     $global:IsWiiVC = $Enable
 
-    if ($IsWiiVC)   { EnablePatchButtons -Enable (IsSet -Elem $Files.WAD) }
-    else            { EnablePatchButtons -Enable (IsSet -Elem $Files.Z64) }
+    if ($IsWiiVC) {
+        EnablePatchButtons -Enable (IsSet -Elem $Files.WAD)
+        $CustomTitleTextBox.MaxLength = $VCTitleLength 
+    }
+    else {
+        EnablePatchButtons -Enable (IsSet -Elem $Files.ROM)
+        $CustomTitleTextBox.MaxLength = $GameConsole.title_length
+    }
     
-    $InjectROMButton.Visible = $PatchVCPanel.Visible = $IsWiiVC
-    $CustomTitleTextBox.MaxLength = $GameTitleLength[[uint32]$IsWiiVC]
+    $InjectROMButton.Visible = $VC.Panel.Visible = $IsWiiVC
     $ClearWADPathButton.Enabled = (IsSet -Elem $Files.WAD -MinLength 1)
 
     GetHeader
-    SetMainScreenSize
     SetModeLabel
     ChangePatchPanel
 
@@ -34,14 +39,49 @@ function CreateToolTip() {
 
 
 #==============================================================================================================================================================================================
+function ChangeConsolesList() {
+    
+    # Reset
+    $ConsoleComboBox.Items.Clear()
+
+    $Items = @()
+    Foreach ($Console in $Files.json.consoles.console) {
+        $Items += $Console.title
+    }
+
+    $ConsoleComboBox.Items.AddRange($Items)
+
+    # Reset last index
+    For ($i=0; $i -lt $Items.Length; $i++) {
+        if ($GameConsole.title -eq $Items[$i]) { $ConsoleComboBox.SelectedIndex = $i }
+    }
+
+    if ($Items.Length -gt 0 -and $ConsoleComboBox.SelectedIndex -eq -1) {
+        try { $ConsoleComboBox.SelectedIndex = $Settings["Core"][$ConsoleComboBox.Name] }
+        catch { $ConsoleComboBox.SelectedIndex = 0 }
+    }
+
+}
+
+
+
+#==============================================================================================================================================================================================
 function ChangeGamesList() {
     
+    # Set console
+    foreach ($Item in $Files.json.consoles.console) {
+        if ($Item.title -eq $ConsoleComboBox.Text) { $global:GameConsole = $Item }
+    }
+
     # Reset
     $CurrentGameComboBox.Items.Clear()
 
     $Items = @()
     Foreach ($Game in $Files.json.games.game) {
-        if ( ($IsWiiVC -and $Game.console -eq "Wii VC") -or (!$IsWiiVC -and $Game.console -eq "N64") -or ($Game.console -eq "All") ) { $Items += $Game.title }
+        if ( ($ConsoleComboBox.text -eq $GameConsole.title) -and ($GameConsole.mode -contains $Game.console) ) {
+            if ( ( $IsWiiVC -and $Game.support_vc -eq 1) -or (!$IsWiiVC) ) { $Items += $Game.title }
+        }
+        elseif ($Game.console -contains "All") { $Items += $Game.title }
     }
 
     $CurrentGameComboBox.Items.AddRange($Items)
@@ -52,10 +92,13 @@ function ChangeGamesList() {
     }
 
     if ($Items.Length -gt 0 -and $CurrentGameComboBox.SelectedIndex -eq -1) {
-        #$CurrentGameComboBox.SelectedIndex = $Settings["Core"][$CurrentGameComboBox.Name]
         try { $CurrentGameComboBox.SelectedIndex = $Settings["Core"][$CurrentGameComboBox.Name] }
         catch { $CurrentGameComboBox.SelectedIndex = 0 }
     }
+
+    $PatchHeaderROMButton.Visible = !$IsWiiVC -and ( ($GameConsole.rom_title -gt 0) -or ($GameConsole.rom_gameID -gt 0) )
+    SetVCPanel
+    SetMainScreenSize
 
 }
 
@@ -64,33 +107,34 @@ function ChangeGamesList() {
 #==============================================================================================================================================================================================
 function ChangePatchPanel() {
     
+    # Return is no GameType is set
+    if (!(IsSet -Elem $GameType)) { return }
+
     # Reset
-    $PatchGroup.text = $GameType.mode + " - Patch Options"
-    $PatchComboBox.Items.Clear()
+    $Patches.Group.text = $GameType.mode + " - Patch Options"
+    $Patches.ComboBox.Items.Clear()
 
     # Set combobox for patches
     $Items = @()
     foreach ($i in $Files.json.patches.patch) {
-        if ( ($IsWiiVC -and $i.console -eq "Wii VC") -or (!$IsWiiVC -and $i.console -eq "N64") -or ($i.console -eq "All") ) {
+        if ( ($IsWiiVC -and $i.console -eq "Wii VC") -or (!$IsWiiVC -and $i.console -eq "Native") -or ($i.console -eq "Both") ) {
             $Items += $i.title
             if (!(IsSet -Elem $FirstItem)) { $FirstItem = $i }
         }
     }
 
-    $PatchComboBox.Items.AddRange($Items)
+    $Patches.ComboBox.Items.AddRange($Items)
 
     # Reset last index
     For ($i=0; $i -lt $Items.Length; $i++) {
         Foreach ($Item in $Files.json.patches.patch) {
-            if ($Item.title -eq $GamePatch.title -and $Item.title -eq $Items[$i]) { $PatchComboBox.SelectedIndex = $i }
+            if ($Item.title -eq $GamePatch.title -and $Item.title -eq $Items[$i]) { $Patches.ComboBox.SelectedIndex = $i }
         }
     }
-    if ($Items.Length -gt 0 -and $PatchComboBox.SelectedIndex -eq -1) {
-        try { $PatchComboBox.SelectedIndex = $Settings["Core"][$PatchComboBox.Name] }
-        catch { $PatchComboBox.SelectedIndex = 0 }
+    if ($Items.Length -gt 0 -and $Patches.ComboBox.SelectedIndex -eq -1) {
+        try { $Patches.ComboBox.SelectedIndex = $Settings["Core"][$Patches.ComboBox.Name] }
+        catch { $Patches.ComboBox.SelectedIndex = 0 }
     }
-
-    #if ($GameType.options)  { $global:ToolTip.SetToolTip($PatchOptionsButton, "Toggle options for the " + $GameType.mode +  " REDUX romhack") }
 
 }
 
@@ -99,23 +143,65 @@ function ChangePatchPanel() {
 #==============================================================================================================================================================================================
 function SetMainScreenSize() {
     
+    # Show / Hide Custom Header
     if ($IsWiiVC) {
         $CustomTitleTextBoxLabel.Text = "Channel Title:"
-        if ($GameType.patches)   { $PatchVCPanel.Location = New-Object System.Drawing.Size(10, ($PatchPanel.Bottom + 5)) }
-        else                     { $PatchVCPanel.Location = New-Object System.Drawing.Size(10, ($CustomHeaderPanel.Bottom + 5)) }
-        $MiscPanel.Location = New-Object System.Drawing.Size(10, ($PatchVCPanel.Bottom + 5))
+        $CustomHeaderGroup.Text = " Custom Channel Title and GameID "
     }
-
     else {
         $CustomTitleTextBoxLabel.Text = "Game Title:"
-        if ($GameType.patches)   { $MiscPanel.Location = New-Object System.Drawing.Size(10, ($PatchPanel.Bottom + 5)) }
-        else                     { $MiscPanel.Location = New-Object System.Drawing.Size(10, ($CustomHeaderPanel.Bottom + 5)) }
+        $CustomHeaderGroup.Text = " Custom Game Title and GameID "
     }
 
+    # Custom Header Panel Visibility
+    $CustomHeaderPanel.Visible = ($GameConsole.rom_title -gt 0) -or ($GameConsole.rom_gameID -gt 0) -or $IsWiiVC
+    $CustomTitleTextBox.Visible = $CustomTitleTextBoxLabel.Visible = ($GameConsole.rom_title -gt 0) -or $IsWiiVC
+    $CustomGameIDTextBox.Visible = $CustomGameIDTextBoxLabel.Visible = ($GameConsole.rom_gameID -gt 0) -or $IsWiiVC
+    $VC.Panel.Visible = $IsWiiVC
+
+    # Set Patch Panel Size
+    if ( (IsSet -Elem $GamePatch.Redux) -and (IsSet -Elem $GameType.Downgrade) )   {
+        $Patches.DowngradeLabel.Top = $Patches.OptionsLabel.Bottom + 15
+        $Patches.Panel.Height = $Patches.Group.Height = 110
+    }
+    else {
+        $Patches.DowngradeLabel.Top = $Patches.ReduxLabel.Top
+        $Patches.Panel.Height = $Patches.Group.Height = 90
+    }
+    $Patches.Downgrade.Top = $Patches.DowngradeLabel.Top - 2
+
+    # Set VC Panel Size
+    if ($GameConsole.options_vc -eq 0)                               { $VC.Panel.Height = $VC.Group.Height = 70 }
+    elseif ($GameType.patches_vc -gt 2)                              { $VC.Panel.Height = $VC.Group.Height = 105 }
+    elseif ($GameType.patches_vc -gt 0 -or $GameConsole.t64 -eq 1)   { $VC.Panel.Height = $VC.Group.Height = 90 }
+    else                                                             { $VC.Panel.Height = $VC.Group.Height = 70 }
+
+    # Arrange Panels
+    if ($IsWiiVC) {
+        if ($GameType.patches) {
+            $Patches.Panel.Location = New-Object System.Drawing.Size(10, ($CustomHeaderPanel.Bottom + 5))
+            $VC.Panel.Location = New-Object System.Drawing.Size(10, ($Patches.Panel.Bottom + 5))
+        }
+        else { $VC.Panel.Location = New-Object System.Drawing.Size(10, ($CustomHeaderPanel.Bottom + 5)) }
+        $MiscPanel.Location = New-Object System.Drawing.Size(10, ($VC.Panel.Bottom + 5))
+    }
+    else {
+        if ( ($GameConsole.rom_title -eq 0) -and ($GameConsole.rom_gameID -eq 0) ) {
+            if ($GameType.patches) { $Patches.Panel.Location = New-Object System.Drawing.Size(10, ($CurrentGamePanel.Bottom + 5)) }
+            else                   { $MiscPanel.Location = New-Object System.Drawing.Size(10, ($CurrentGamePanel.Bottom + 5)) }
+        }
+        else {
+            if ($GameType.patches) { $Patches.Panel.Location = New-Object System.Drawing.Size(10, ($CustomHeaderPanel.Bottom + 5)) }
+            else                   { $MiscPanel.Location = New-Object System.Drawing.Size(10, ($CustomHeaderPanel.Bottom + 5)) }
+        }
+        if ($GameType.patches)     { $MiscPanel.Location = New-Object System.Drawing.Size(10, ($Patches.Panel.Bottom + 5)) }
+    }
+    
     $StatusPanel.Location = New-Object System.Drawing.Size(10, ($MiscPanel.Bottom + 5))
-    $MainDialog.Height = ($StatusPanel.Bottom + 50)
+    $MainDialog.Height = $StatusPanel.Bottom + 50
 
 }
+
 
 
 #==============================================================================================================================================================================================
@@ -145,16 +231,6 @@ function ChangeGameMode() {
         $global:Settings = Get-IniContent $Files.settings
     }
 
-    $PatchVCExpandMemoryLabel.Visible = $PatchVCExpandMemory.Visible = $False
-    $PatchVCRemoveFilterLabel.Visible = $PatchVCRemoveFilter.Visible = $False
-    $PatchVCRemapDPadLabel.Visible = $PatchVCRemapDPad.Visible = $False
-    $PatchVCDowngradeLabel.Visible = $PatchVCDowngrade.Visible = $False
-    
-    $PatchVCMinimapLabel.Hide()
-    $PatchVCRemapCDown.Visible = $PatchVCRemapCDownLabel.Visible = $False
-    $PatchVCRemapZLabel.Visible = $PatchVCRemapZ.Visible = $False
-    $PatchVCLeaveDPadUpLabel.Visible = $PatchVCLeaveDPadUp.Visible = $False
-
     if (IsSet -Elem $GameType.patches) {
         if (Test-Path -LiteralPath $GameFiles.json) {
             try { $Files.json.patches = Get-Content -Raw -Path $GameFiles.json | ConvertFrom-Json }
@@ -176,31 +252,51 @@ function ChangeGameMode() {
     else                                                             { $LanguagesDialog.Icon = $null }
 
     $CreditsGameLabel.Text = "Current Game: " + $GameType.mode
-    $PatchPanel.Visible = $GameType.patches
+    $Patches.Panel.Visible = $GameType.patches
+    $Patches.DowngradeLabel.Visible = $Patches.Downgrade.Visible = (IsSet -elem $GameType.downgrade)
 
-    if ($GameType.mode -eq "Ocarina of Time") {
-        CreateOoTOptionsContent
-        CreateOoTReduxContent
-    }
-    elseif ($GameType.mode -eq "Majora's Mask") {
-        CreateMMOptionsContent
-        CreateMMReduxContent
-    }
-    elseif ($GameType.mode -eq "Super Mario 64")   { CreateSM64OptionsContent }
-
-    if ($GameType.downgrade)      { $PatchVCDowngradeLabel.Visible = $PatchVCDowngrade.Visible = $True }
-    if ($GameType.patch_vc -eq 2) { $PatchVCRemoveFilterLabel.Visible = $PatchVCRemoveFilter.Visible = $True }
-    if ($GameType.patch_vc -eq 4) { $PatchVCLeaveDPadUpLabel.Visible = $PatchVCLeaveDPadUp.Visible = $True }
-    if ($GameType.patch_vc -ge 3) {
-        $PatchVCExpandMemoryLabel.Visible = $PatchVCExpandMemory.Visible = $True
-        $PatchVCRemapDPadLabel.Visible = $PatchVCRemapDPad.Visible = $True
-        $PatchVCMinimapLabel.Show() 
-        $PatchVCRemapCDownLabel.Visible = $PatchVCRemapCDown.Visible = $True
-        $PatchVCRemapZLabel.Visible = $PatchVCRemapZ.Visible = $True
-    }
+    # Create options content based on current game
+    $FunctionTitle = $GameType.mode
+    $FunctionTitle = $FunctionTitle -replace " ", ""
+    $FunctionTitle = $FunctionTitle -replace ",", ""
+    $FunctionTitle = $FunctionTitle -replace "'", ""
+    if (Get-Command ("Create" + $FunctionTitle + "OptionsContent") -errorAction SilentlyContinue)   { &("Create" + $FunctionTitle + "OptionsContent") }
+    if (Get-Command ("Create" + $FunctionTitle + "ReduxContent") -errorAction SilentlyContinue)   { &("Create" + $FunctionTitle + "ReduxContent") }
 
     SetWiiVCMode -Enable $IsWiiVC
+    ChangePatchPanel
+    SetVCPanel
+    GetHeader
+    SetModeLabel
+    SetMainScreenSize
     
+}
+
+
+
+#==============================================================================================================================================================================================
+function SetVCPanel() {
+    
+    # Reset VC panel visibility
+    $VC.Group.Controls.GetEnumerator() | ForEach-Object { $_.visible = $False }
+    $VC.ActionsLabel.Visible = $VC.PatchVCButton.Visible = $VC.ExtractROMButton.Visible = $True
+
+    # Enable VC panel visiblity
+    if ($GameConsole.options_vc -gt 0) {
+        if ($GameConsole.t64 -eq 1)                                      { $VC.RemoveT64label.Visible = $VC.RemoveT64.Visible = $True }
+        if ($GameType.patches_vc -gt 0 -or $GameConsole.t64 -eq 1)       { $VC.CoreLabel.Visible = $True }
+        if ($GameType.patches_vc -eq 1 -or $GameType.patches_vc -eq 2)   { $VC.RemoveFilterLabel.Visible = $VC.RemoveFilter.Visible = $True }
+        if ($GameType.patches_vc -eq 2)                                  { $VC.RemapLLabel.Visible = $VC.RemapL.Visible = $True }
+        if ($GameType.patches_vc -ge 3) {
+            $VC.ExpandMemoryLabel.Visible = $VC.ExpandMemory.Visible = $True
+            $VC.RemapDPadLabel.Visible = $VC.RemapDPad.Visible = $True
+            $VC.MinimapLabel.Show() 
+            $VC.RemapCDownLabel.Visible = $VC.RemapCDown.Visible = $True
+            $VC.RemapZLabel.Visible = $VC.RemapZ.Visible = $True
+        }
+        if ($GameType.patches_vc -eq 4) { $VC.LeaveDPadUpLabel.Visible = $VC.LeaveDPadUp.Visible = $True }
+    }
+
 }
 
 
@@ -220,7 +316,7 @@ function UpdateStatusLabel([String]$Text) {
 function SetModeLabel() {
 	
     $CurrentModeLabel.Text = "Current  Mode  :  " + $GameType.mode
-    if ($IsWiiVC) { $CurrentModeLabel.Text += "  (Wii  VC)" } else { $CurrentModeLabel.Text += "  (N64)" }
+    if ($IsWiiVC) { $CurrentModeLabel.Text += "  (Wii  VC)" } else { $CurrentModeLabel.Text += "  (" + $GameConsole.Mode + ")" }
     $CurrentModeLabel.Location = New-Object System.Drawing.Size(([Math]::Floor($MainDialog.Width / 2) - [Math]::Floor($CurrentModeLabel.Width / 2)), 10)
 
 }
@@ -233,18 +329,22 @@ function EnablePatchButtons([Boolean]$Enable) {
     # Set the status that we are ready to roll... Or not...
     if ($Enable)        { UpdateStatusLabel -Text "Ready to patch!" }
     elseif ($IsWiiVC)   { UpdateStatusLabel -Text "Select your Virtual Console WAD file to continue." }
-    else                { UpdateStatusLabel -Text "Select your Nintendo 64 ROM file to continue." }
+    else                { UpdateStatusLabel -Text "Select your NES, SNES or N64 ROM file to continue." }
 
-    if ($IsWiiVC)      {
-        $InjectROMButton.Enabled = ($Files.WAD -ne $null -and $Files.Z64 -ne $null)
-        $PatchBPSButton.Enabled = ($Files.WAD -ne $null -and $Files.BPS -ne $null) } else { $PatchBPSButton.Enabled = ($Files.Z64 -ne $null -and $Files.BPS -ne $null)
-   }
-    
+    if ($IsWiiVC) {
+        $InjectROMButton.Enabled = ($Files.WAD -ne $null -and $Files.ROM -ne $null)
+        $PatchBPSButton.Enabled = ($Files.WAD -ne $null -and $Files.BPS -ne $null)
+    }
+    else {
+        $PatchHeaderROMButton.Enabled = $Files.ROM -ne $null -and $CustomHeaderCheckbox.Checked
+        $PatchBPSButton.Enabled = ($Files.ROM -ne $null -and $Files.BPS -ne $null)
+    }
+
     # Enable patcher buttons.
-    $PatchPanel.Enabled = $Enable
+    $Patches.Panel.Enabled = $Enable
 
     # Enable ROM extract
-    $ExtractROMButton.Enabled = $Enable
+    $VC.ExtractROMButton.Enabled = $Enable
 
 }
 
@@ -253,18 +353,18 @@ function EnablePatchButtons([Boolean]$Enable) {
 #==================================================================================================================================================================================================================================================================
 function WADPath_Finish([Object]$TextBox, [String]$VarName, [String]$WADPath) {
     
-    # Set the "GameWAD" variable that tracks the path.
+    # Set the "GameWAD" variable that tracks the path
     Set-Variable -Name $VarName -Value $WADPath -Scope 'Global'
     $Files.WAD = Get-Item -LiteralPath $WADPath
 
     # Update the textbox to the current WAD.
     $TextBox.Text = $WADPath
 
-    ChangeGamesList
     SetWiiVCMode -Enable $True
+    ChangeGamesList
 
-    # Check if both a .WAD and .Z64 have been provided for ROM injection
-    if ($Files.Z64 -ne $null) { $InjectROMButton.Enabled = $true }
+    # Check if both a WAD and ROM have been provided for ROM injection
+    if ($Files.ROM -ne $null) { $InjectROMButton.Enabled = $true }
 
     # Check if both a .WAD and .BPS have been provided for BPS patching
     if ($Files.BPS -ne $null) { $PatchBPSButton.Enabled = $true }
@@ -274,36 +374,36 @@ function WADPath_Finish([Object]$TextBox, [String]$VarName, [String]$WADPath) {
 
 
 #==================================================================================================================================================================================================================================================================
-function Z64Path_Finish([Object]$TextBox, [String]$VarName, [String]$Z64Path) {
+function ROMPath_Finish([Object]$TextBox, [String]$VarName, [String]$ROMPath) {
     
-    # Set the "Z64 ROM" variable that tracks the path.
-    Set-Variable -Name $VarName -Value $Z64Path -Scope 'Global'
-    $Files.Z64 = Get-Item -LiteralPath $Z64Path
+    # Set the "ROM" variable that tracks the path
+    Set-Variable -Name $VarName -Value $ROMPath -Scope 'Global'
+    $Files.ROM = Get-Item -LiteralPath $ROMPath
 
     # Update hash
-    $HashSumROMTextBox.Text = (Get-FileHash -Algorithm MD5 $Z64Path).Hash
+    $HashSumROMTextBox.Text = (Get-FileHash -Algorithm MD5 $ROMPath).Hash
 
     # Verify ROM
     $MatchingROMTextBox.Text = "No Valid ROM Selected"
     Foreach ($Item in $Files.json.games.game) {
         if ($HashSumROMTextBox.Text -eq $Item.hash) {
-            $MatchingROMTextBox.Text = $Item.mode + " (Rev 0)"
+            $MatchingROMTextBox.Text = $Item.title + " (Rev 0)"
             break
         }
         for ($i = 0; $i -lt $Item.downgrade.length; $i++) {
             if ($HashSumROMTextBox.Text -eq $Item.downgrade[$i].hash) {
-                $MatchingROMTextBox.Text = $Item.mode + " (" +  $Item.downgrade[$i].rev + ")"
+                $MatchingROMTextBox.Text = $Item.title + " (" +  $Item.downgrade[$i].rev + ")"
                 break
             }
         }
     }
 
-    # Update the textbox to the current WAD.
-    $TextBox.Text = $Z64Path
+    # Update the textbox to the current WAD
+    $TextBox.Text = $ROMPath
 
     if (!$IsWiiVC) { EnablePatchButtons -Enable $True }
     
-    # Check if both a .WAD and .Z64 have been provided for ROM injection or both a .Z64 and .BPS have been provided for BPS patching
+    # Check if both a .WAD and ROM have been provided for ROM injection or both a ROM and .BPS have been provided for BPS patching
     if ($Files.WAD -ne $null -and $IsWiiVC)        { $InjectROMButton.Enabled = $true }
     elseif ($Files.BPS -ne $null -and !$IsWiiVC)   { $PatchBPSButton.Enabled = $true }
 
@@ -314,16 +414,16 @@ function Z64Path_Finish([Object]$TextBox, [String]$VarName, [String]$Z64Path) {
 #==================================================================================================================================================================================================================================================================
 function BPSPath_Finish([Object]$TextBox, [String]$VarName, [String]$BPSPath) {
     
-    # Set the "BPS File" variable that tracks the path.
+    # Set the "BPS File" variable that tracks the path
     Set-Variable -Name $VarName -Value $BPSPath -Scope 'Global'
     $Files.BPS = Get-Item -LiteralPath $BPSPath
 
-    # Update the textbox to the current WAD.
+    # Update the textbox to the current WAD
     $TextBox.Text = $BPSPath
 
-    # Check if both a .WAD and Patch File have been provided for Patch File patching
+    # Check if both a WAD and Patch File have been provided for Patch File patching
     if ($Files.WAD -ne $null -and $IsWiiVC)        { $PatchBPSButton.Enabled = $true }
-    elseif ($Files.Z64 -ne $null -and !$IsWiiVC)   { $PatchBPSButton.Enabled = $true }
+    elseif ($Files.ROM -ne $null -and !$IsWiiVC)   { $PatchBPSButton.Enabled = $true }
 
 }
 
@@ -333,16 +433,16 @@ function BPSPath_Finish([Object]$TextBox, [String]$VarName, [String]$BPSPath) {
 function GetHeader() {
     
     if ($IsWiiVC) {
-        if (IsSet -Elem $GamePatch.wii_title)    { $CustomTitleTextBox.Text  = $GamePatch.wii_title }
-        else                                     { $CustomTitleTextBox.Text  = $GameType.wii_title }
-        if (IsSet -Elem $GamePatch.wii_gameID)   { $CustomGameIDTextBox.Text = $GamePatch.wii_gameID }
-        else                                     { $CustomGameIDTextBox.Text = $GameType.wii_gameID }
+        if (IsSet -Elem $GamePatch.vc_title)     { $CustomTitleTextBox.Text  = $GamePatch.vc_title }
+        else                                     { $CustomTitleTextBox.Text  = $GameType.vc_title }
+        if (IsSet -Elem $GamePatch.vc_gameID)    { $CustomGameIDTextBox.Text = $GamePatch.vc_gameID }
+        else                                     { $CustomGameIDTextBox.Text = $GameType.vc_gameID }
     }
     else {
-        if (IsSet -Elem $GamePatch.n64_title)    { $CustomTitleTextBox.Text  = $GamePatch.n64_title }
-        else                                     { $CustomTitleTextBox.Text  = $GameType.n64_title }
-        if (IsSet -Elem $GamePatch.n64_gameID)   { $CustomGameIDTextBox.Text = $GamePatch.n64_gameID }
-        else                                     { $CustomGameIDTextBox.Text = $GameType.n64_gameID }
+        if (IsSet -Elem $GamePatch.rom_title)    { $CustomTitleTextBox.Text  = $GamePatch.rom_title }
+        else                                     { $CustomTitleTextBox.Text  = $GameType.rom_title }
+        if (IsSet -Elem $GamePatch.rom_gameID)   { $CustomGameIDTextBox.Text = $GamePatch.rom_gameID }
+        else                                     { $CustomGameIDTextBox.Text = $GameType.rom_gameID }
     }
 
 }
@@ -350,13 +450,23 @@ function GetHeader() {
 
 
 #==============================================================================================================================================================================================
-function IsChecked([Object]$Elem, [Switch]$Visible, [Switch]$Enabled, [Switch]$Not) {
+function IsChecked([Object]$Elem, [Switch]$Active, [Switch]$Not) {
     
-    if (!(IsSet -Elem $Elem))              { return $False }
-    if ($Visible -and !$Elem.Visible)      { return $False }
-    if ($Enabled -and !$Elem.Enabled)      { return $False }
-    if ($Not -and !$Elem.Checked)          { return $True }
-    if (!$Not -and $Elem.Checked)          { return $True }
+    if (!(IsSet -Elem $Elem))               { return $False }
+    if ($Active -and !$Elem.Visible)        { return $False }
+    elseif (!$Active -and !$Elem.Enabled)   { return $False }
+    if ($Not -and !$Elem.Checked)           { return $True }
+    if (!$Not -and $Elem.Checked)           { return $True }
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function IsLanguage([Object]$Elem, [int]$Lang=0) {
+    
+    if (!$Languages[$Lang].Checked)         { return $False }
+    if (IsChecked -Elem $Elem)              { return $True }
     return $False
 
 }
@@ -364,13 +474,13 @@ function IsChecked([Object]$Elem, [Switch]$Visible, [Switch]$Enabled, [Switch]$N
 
 
 #==============================================================================================================================================================================================
-function IsText([Object]$Elem, [String]$Text, [Switch]$Visible, [Switch]$Enabled, [Switch]$Not) {
+function IsText([Object]$Elem, [String]$Text, [Switch]$Active, [Switch]$Not) {
     
-    if (!(IsSet -Elem $Elem))              { return $False }
-    if ($Visible -and !$Elem.Visible)      { return $False }
-    if ($Enabled -and !$Elem.Enabled)      { return $False }
-    if ($Not -and $Elem.Text -ne $Text)    { return $True }
-    if (!$Not -and $Elem.Text -eq $Text)   { return $True }
+    if (!(IsSet -Elem $Elem))               { return $False }
+    if ($Active -and !$Elem.Visible)        { return $False }
+    elseif (!$Active -and !$Elem.Enabled)   { return $False }
+    if ($Not -and $Elem.Text -ne $Text)     { return $True }
+    if (!$Not -and $Elem.Text -eq $Text)    { return $True }
     return $False
 
 }
@@ -449,9 +559,9 @@ function GetFilePaths() {
 
     if (IsSet $Settings["Core"][$InputROMTextBox.Name]) {
         if (Test-Path -LiteralPath $Settings["Core"][$InputROMTextBox.Name] -PathType Leaf) {
-            Z64Path_Finish $InputROMTextBox -VarName $InputROMTextBox.Name -Z64Path $Settings["Core"][$InputROMTextBox.Name]
+            ROMPath_Finish $InputROMTextBox -VarName $InputROMTextBox.Name -ROMPath $Settings["Core"][$InputROMTextBox.Name]
         }
-        else { $InputROMTextBox.Text = "Select or drag and drop your Z64, N64 or V64 ROM..." }
+        else { $InputROMTextBox.Text = "Select or drag and drop your NES, SNES or N64 ROM..." }
     }
 
     if (IsSet $Settings["Core"][$InputBPSTextBox.Name]) {
@@ -460,6 +570,8 @@ function GetFilePaths() {
         }
         else { $InputBPSTextBox.Text = "Select or drag and drop your BPS, IPS, Xdelta, VCDiff or PPF Patch File..." }
     }
+
+    if ($Files.WAD -eq $null -and $Files.ROM -eq $null) { EnablePatchButtons -Enable $False }
 
 }
 
@@ -489,7 +601,7 @@ function EnableGUI([Boolean]$Enable) {
     
     $InputWADPanel.Enabled = $InputROMPanel.Enabled = $InputBPSPanel.Enabled = $Enable
     $CurrentGamePanel.Enabled = $CustomHeaderPanel.Enabled = $Enable
-    $PatchPanel.Enabled = $MiscPanel.Enabled = $PatchVCPanel.Enabled = $Enable
+    $Patches.Panel.Enabled = $MiscPanel.Enabled = $VC.Panel.Enabled = $Enable
 
 }
 
@@ -633,6 +745,7 @@ function TogglePowerShellOpenWithClicks([Boolean]$Enable) {
 
 Export-ModuleMember -Function SetWiiVCMode
 Export-ModuleMember -Function CreateToolTip
+Export-ModuleMember -Function ChangeConsolesList
 Export-ModuleMember -Function ChangeGamesList
 Export-ModuleMember -Function ChangePatchPanel
 Export-ModuleMember -Function SetMainScreenSize
@@ -642,11 +755,12 @@ Export-ModuleMember -Function SetModeLabel
 Export-ModuleMember -Function EnablePatchButtons
 
 Export-ModuleMember -Function WADPath_Finish
-Export-ModuleMember -Function Z64Path_Finish
+Export-ModuleMember -Function ROMPath_Finish
 Export-ModuleMember -Function BPSPath_Finish
 
 Export-ModuleMember -Function GetHeader
 Export-ModuleMember -Function IsChecked
+Export-ModuleMember -Function IsLanguage
 Export-ModuleMember -Function IsText
 Export-ModuleMember -Function IsSet
 Export-ModuleMember -Function AddTextFileToTextbox

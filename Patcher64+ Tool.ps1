@@ -6,6 +6,14 @@
 
 
 #==============================================================================================================================================================================================
+if ( (Get-ExecutionPolicy) -eq "Restricted") {
+    Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Scope CurrentUser
+    Write-Host "Execution Policy for the current user has been set to Unrestricted to allow usage of PowerShell scripts such as Patcher64+"
+}
+
+
+
+#==============================================================================================================================================================================================
 Add-Type -AssemblyName 'System.Windows.Forms'
 Add-Type -AssemblyName 'System.Drawing'
 
@@ -15,13 +23,13 @@ Add-Type -AssemblyName 'System.Drawing'
 # Setup global variables
 
 $global:ScriptName = "Patcher64+ Tool"
-$global:VersionDate = "10-10-2020"
-$global:Version     = "v7.7.2"
+$global:VersionDate = "2020-11-02"
+$global:Version     = "v8.0.0"
 
-$global:GameType = $global:GamePatch = $global:CheckHashSum = ""
+$global:GameConsole = $global:GameType = $global:GamePatch = $global:CheckHashSum = ""
 $global:GameFiles = $global:Settings = @{}
 $global:IsWiiVC = $global:MissingFiles = $False
-$global:GameTitleLength = @(20, 40)
+$global:VCTitleLength = 40
 
 $global:CurrentModeFont = New-Object System.Drawing.Font("Microsoft Sans Serif", 12, [System.Drawing.FontStyle]::Bold)
 $global:VCPatchFont     = New-Object System.Drawing.Font("Microsoft Sans Serif", 8,  [System.Drawing.FontStyle]::Bold)
@@ -74,7 +82,6 @@ ImportModule -Name "Files List"
 ImportModule -Name "Forms"
 ImportModule -Name "Main Dialog"
 ImportModule -Name "Master Quest"
-ImportModule -Name "Optional"
 ImportModule -Name "Patch"
 ImportModule -Name "Settings"
 
@@ -82,6 +89,7 @@ ImportModule -Name "Settings"
 #$publicFunctions = (Get-Command -Module $module.name).name
 #$privateFunctions = ($module.Invoke({Get-Command -module $module.name})).name | Where-Object { $_ -notin $publicFunctions }
 #Write-Host "Private Functions:" $privateFunctions
+#Write-Host (Get-PSCallStack)[1].Command
 
 
 
@@ -141,9 +149,14 @@ CreateLanguagesDialog
 CreateCreditsDialog
 CreateSettingsDialog
 
+# Load Game Modules
+foreach ($Game in $Files.json.games.game) {
+    if (Test-Path -LiteralPath ($Paths.Scripts + "\Optional\" + $Game.mode + ".psm1") -PathType Leaf) { ImportModule -Name ("Optional\" + $Game.Mode) }
+}
+
 # Set default game mode.
+ChangeConsolesList
 GetFilePaths
-ChangeGamesList
 
 # Restore Last Custom Title and GameID
 $CustomTitleTextBox.Add_TextChanged({  if (IsChecked $CustomHeaderCheckbox)   { $Settings["Core"]["CustomTitle"] = $this.Text } })

@@ -3,7 +3,7 @@
 =======================
 
 --- Thanks to my Patreons --
-- Richard Moser
+- Richard Moser, Leigh Pierce
 
 --- Thanks to my past Patreons --
 - Raim, Gicrax, Crypto Logiq, Moons (Luke), Ronald
@@ -50,6 +50,7 @@
 - Show File Select Icons:		ShadowOne333
 - Colors:				GhostlyDark
 - Restore Text:				ShadowOne333
+- Female Pronouns:			Admentus, Mil
 - Admentus (Scripting and Assistance of all Options)
 
 --- Quality Insurance ---
@@ -194,6 +195,7 @@ Special Thanks:				Nokaubure, z64me, Ultra553, OoT Decomp
 
 --- Additional Options ---
 - 16:9 Backgrounds & Textures:		GhostlyDark & ShadowOne333
+- Improved Link Model:			Skilarbabcock (www.youtube.com/user/skilarbabcock) & Nerrel
 - Kokiri Tunic Color:			GhostlyDark
 - Recolor Mask Forms:			ShadowOne333 & Garo-Mastah
 - Zora Physics:				ShadowOne333
@@ -261,13 +263,11 @@ Special Thanks:				Nokaubure, z64me, Ultra553, OoT Decomp
 ======================
 
 --- Additional Options ---
+- 60 FPS (v2):				Kaze Emanuar
+- Free Cam:				Kaze Emanuar
+- Model:				Fnzmeatpopsicle, ElectroMew/P0PPY, Yoshi Milkman, Marshivolt
+- GhostlyDark (documenting several offsets)
 - Admentus (Scripting and Assistance of all Options)
-
---- 60 FPS (v2) ---
-- Kaze Emanuar
-
---- Analog Camera ---
-- Kaze Emanuar
 
 --- Multiplayer (v1.4.2) ---
 - Skelux
@@ -282,6 +282,13 @@ Special Thanks:				Nokaubure, z64me, Ultra553, OoT Decomp
 
 --- Star Road Multiplayer (v1.2.1) ---
 - Skelux
+
+--- Arguably Better Edition (R3) ---
+- Mors
+- GTM
+- Benial
+- Kaze Emanuar
+- SM64 Decompilation Project
 
 --- Last Impact (v1.2)
 - Kaze Emanuar
@@ -332,3 +339,105 @@ Special Thanks:				Nokaubure, z64me, Ultra553, OoT Decomp
 
 --- Widescreen ---
 - gamemasterplc
+
+
+
+=====================
+=== MARIO KART 64 ===
+=====================
+
+--- CPUs use human items including shells ---
+- triclon
+
+
+
+==========================
+=== A LINK TO THE PAST ===
+==========================
+
+--- Parallel Worlds ---
+- Directors:				Euclid, SePH, qwertymodo
+- Music:				Richyawyingtmv 
+- Graphics:				Daisuke, .TakaM, GanonSpriteR, aab, NoeL, Calvein, Geckkko,
+					Bearer, Revan, Hero Of Fire, Dark Link, Retro
+- Coding:				Reshaper256, JaSp, d4s
+- Dialog:				The5thHerring, Dr Floppy
+- Documentation:			NEONswift, Omega45889, MathOnNapkins, Chickenlump, Danaelo,
+					AstroBlue
+- Tools:				Sephiroth3, FuSoYa, Yy, Ryusui
+- Testing:				KTurbo
+- Ideas:				NEONswift, KTurbo, GameMakr24 , Ghillie, Duke Serkol
+
+--- Parallel Remodel ---
+- Remodel Hacking:			PuzzleDude
+- Original Hacking:			Euclid, SePH and all Parallel World contributors
+
+
+
+=========================
+=== SUPER MARIO WORLD ===
+=========================
+
+--- Kaizo Mario World 1/2/3 ---
+- T. Takemoto
+
+--- Invictus ---
+- Director:				juzcook
+- Final Boss:				Kaizoman, Thomas
+- Special Thanks:			Nexus15, Freakin_HA, HmWhyNot, ChrisG___, White_Moth,
+					Hiro_sofT, DanTheVP, LadiesMan217, Kaizoman
+- Music:				tcdw, Sinc-X, Wakana, RednGreen, Izuna, Dr. Tapeworm, Wavee,
+					WorldPeace, Lui37, Masterlink, Crew, S.N.N., Sinister Pixel, Pinci,
+					DanTheVP, aCrowned, MaxodeX, Crispy, LadiesMan217, Amphobius
+
+
+
+=====================
+=== SUPER METROID ===
+=====================
+
+--- REDUX ---
+- Main Hacking:				ShadowOne333
+- Hacking:				Adamf, Bregrimed, Kejardon, PHOSPHOTiDYL, Scyzer, Sylandro,
+					DC, Sadiztyk, Dmit Ryaz, Matt Kimura, samsamcmoi
+- Disassembly:				Patrick Johnston, PJBoy
+- Support:				Smiley, PJBoy, Nodever, Metroid Construction Discord Server
+
+--- Additional Options ---
+- Widescreen:				ocesse
+- Save Stations Refill:			Adamf
+- ShadowOne333
+
+
+
+===========================
+=== THE LEGEND OF ZELDA ===
+===========================
+
+--- REDUX ---
+- Main Hacking:				ShadowOne333
+- Hacking:				BogaaBogaa, DarkSamus993, Stratoform, snarfblam, gzip, abw
+- Disassembly:				Trax
+
+--- Additional Options ---
+- New GFX:				darthvaderx
+- New Exp:				IcePenguin
+- Rearranged Bosses:			lexluthermeister
+- ShadowOne333
+
+
+
+=============================
+=== THE ADVENTURE OF LINK ===
+=============================
+
+--- REDUX ---
+- Main Hacking:				ShadowOne333
+- Hacking:				the_icepenguin, DarkSamus993, njosro
+- Disassembly:				Trax
+- Overworld Animation:			JaSp, Trax
+
+--- Additional Options ---
+- Restart at Palace:			njosro
+- New GFX:				darthvaderx
+- the_icepenguin
