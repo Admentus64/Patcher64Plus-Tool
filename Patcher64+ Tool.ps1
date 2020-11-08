@@ -23,8 +23,8 @@ Add-Type -AssemblyName 'System.Drawing'
 # Setup global variables
 
 $global:ScriptName = "Patcher64+ Tool"
-$global:VersionDate = "2020-11-02"
-$global:Version     = "v8.0.0"
+$global:VersionDate = "2020-11-08"
+$global:Version     = "v8.0.1"
 
 $global:GameConsole = $global:GameType = $global:GamePatch = $global:CheckHashSum = ""
 $global:GameFiles = $global:Settings = @{}
@@ -132,6 +132,17 @@ function ExtendString([String]$InputString, [int]$Length) {
 
 
 
+#==================================================================================================================================================================================================================================================================
+function IsNumeric([String]$str) {
+    
+    if ($Str -match "^\d+$") { return $True }
+
+    return $False
+
+}
+
+
+
 #==============================================================================================================================================================================================
 
 # Retrieve settings
@@ -166,6 +177,7 @@ RestoreCustomHeader
 
 # Restore VC Checkboxes
 CheckVCOptions
+
 
 # Show the dialog to the user.
 $MainDialog.ShowDialog() | Out-Null

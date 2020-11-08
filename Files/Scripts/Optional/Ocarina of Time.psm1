@@ -335,7 +335,7 @@ function PatchByteOptionsOcarinaOfTime() {
         PatchBytes  -Offset "B896A0" -Patch "Fire Temple Theme\12AudioBankPointers.bin"
         PatchBytes  -Offset "B89AD0" -Patch "Fire Temple Theme\12AudioSeqPointers.bin"
         PatchBytes  -Offset "B8A1C0" -Patch "Fire Temple Theme\12AudioTablePointers.bin"
-        ExportAndPatch -Path "Fire Temple Theme\12FireTemple"  -Offset "D390" -Length "4CCBB0"
+        ExportAndPatch -Path "12FireTemple"  -Offset "D390" -Length "4CCBB0"
     }
 
     if (IsText -Elem $Options.Voices -Text "Majora's Mask Link Voices") {
@@ -412,36 +412,42 @@ function PatchByteOptionsOcarinaOfTime() {
     # Censor Gerudo Textures
 
     if (IsChecked -Elem $Options.CensorGerudoTextures) {
-        PatchBytes -Offset "12985F0" -Texture -Patch "Gerudo Symbols\2.bin"
-        PatchBytes -Offset "21B8678" -Texture -Patch "Gerudo Symbols\3.bin"
-        PatchBytes -Offset "13B4000" -Texture -Patch "Gerudo Symbols\4.bin"
-        PatchBytes -Offset "7FD000"  -Texture -Patch "Gerudo Symbols\5.bin"
-        PatchBytes -Offset "F70350"  -Texture -Patch "Gerudo Symbols\8.bin"
-        PatchBytes -Offset "F80CB0"  -Texture -Patch "Gerudo Symbols\9.bin"
-        PatchBytes -Offset "11FB000" -Texture -Patch "Gerudo Symbols\10.bin"
-        PatchBytes -Offset "F7A8A0"  -Texture -Patch "Gerudo Symbols\13.bin"
-        PatchBytes -Offset "F71350"  -Texture -Patch "Gerudo Symbols\14.bin"
-        PatchBytes -Offset "F748A0"  -Texture -Patch "Gerudo Symbols\16.bin"
-        PatchBytes -Offset "E68CE8"  -Texture -Patch "Gerudo Symbols\17.bin"
-        PatchBytes -Offset "F70B50"  -Texture -Patch "Gerudo Symbols\18.bin"
-        PatchBytes -Offset "1456388" -Texture -Patch "Gerudo Symbols\19.bin"
-        PatchBytes -Offset "1616000" -Texture -Patch "Gerudo Symbols\20.bin"
-        PatchBytes -Offset "2F64E38" -Texture -Patch "Gerudo Symbols\21.bin"
-        PatchBytes -Offset "2F73700" -Texture -Patch "Gerudo Symbols\21.bin"
+        
+        PatchBytes -Offset "E68CE8"  -Texture -Patch "Gerudo Symbols\ganondorf_cape.bin"
 
-        if ( (IsText -Elem $Options.Models -Text "Replace Adult Model Only") -or (IsText -Elem $Options.Models -Text "Replace Both Models") )   { PatchBytes -Offset "F9B318"  -Texture -Patch "Gerudo Symbols\15.bin" }
-        elseif (IsText -Elem $Options.Models -Text "Change to Female Models")                                                                            { PatchBytes -Offset "FA0780"  -Texture -Patch "Gerudo Symbols\15.bin" }
-        else                                                                                                                                                      { PatchBytes -Offset "F92280"  -Texture -Patch "Gerudo Symbols\15.bin" }
+        # Blocks / Switches
+        PatchBytes -Offset "F70350"  -Texture -Patch "Gerudo Symbols\pushing_block.bin"
+        PatchBytes -Offset "F70B50"  -Texture -Patch "Gerudo Symbols\silver_gauntlets_block.bin"
+        PatchBytes -Offset "13B4000" -Texture -Patch "Gerudo Symbols\golden_gauntlets_pillar.bin"
+        PatchBytes -Offset "F748A0"  -Texture -Patch "Gerudo Symbols\floor_switch.bin"
+        PatchBytes -Offset "F7A8A0"  -Texture -Patch "Gerudo Symbols\rusted_floor_switch.bin"
+        PatchBytes -Offset "F80CB0"  -Texture -Patch "Gerudo Symbols\crystal_switch.bin"
+        
+        # Mirror Shield
+        PatchBytes -Offset "7FD000"  -Texture -Patch "Gerudo Symbols\mirror_shield_icon.bin"
+        PatchBytes -Offset "1456388" -Texture -Patch "Gerudo Symbols\mirror_shield_reflection.bin"
+        PatchBytes -Offset "1616000" -Texture -Patch "Gerudo Symbols\mirror_shield_chest.bin"
 
-        PatchBytes -Offset "2464D88" -Texture -Patch "Gerudo Symbols\1.bin"  # Room 11 Forest Temple
-        PatchBytes -Offset "28BBCD8" -Texture -Patch "Gerudo Symbols\7.bin"  # Room 5 Gerudo Training Ground
-        PatchBytes -Offset "28CA728" -Texture -Patch "Gerudo Symbols\7.bin"  # Room 5 Gerudo Training Ground
-        PatchBytes -Offset "2B5CDA0" -Texture -Patch "Gerudo Symbols\12.bin" # Room 10 Spirit Temple
-        PatchBytes -Offset "2B9BDB8" -Texture -Patch "Gerudo Symbols\12.bin" # Room 10 Spirit Temple
-        PatchBytes -Offset "2BE7920" -Texture -Patch "Gerudo Symbols\12.bin" # Room 10 Spirit Temple
+        $Offset = SearchBytes -Start "F86000" -End "FBD800" -Values @("90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90")
+        PatchBytes -Offset $Offset -Texture -Patch "Gerudo Symbols\mirror_shield.bin"
 
-        if (IsChecked -Elem $Options.MQSpiritTemple)      { PatchBytes -Offset "2B03528" -Texture -Patch "Gerudo Symbols\11.bin" } # Room 0 Spirit Temple
-        else                                              { PatchBytes -Offset "2B03928" -Texture -Patch "Gerudo Symbols\11.bin" } # Room 0 Spirit Temple
+        # Dungeons / Areas
+        PatchBytes -Offset "21B8678" -Texture -Patch "Gerudo Symbols\gerudo_valley.bin"
+        PatchBytes -Offset "F71350"  -Texture -Patch "Gerudo Symbols\forest_temple_room_11_block.bin"
+        PatchBytes -Offset "2464D88" -Texture -Patch "Gerudo Symbols\forest_temple_room_11_hole.bin"
+        PatchBytes -Offset "12985F0" -Texture -Patch "Gerudo Symbols\shadow_temple_room_0.bin"
+        PatchBytes -Offset "2F64E38" -Texture -Patch "Gerudo Symbols\spirit_temple_boss.bin"
+        PatchBytes -Offset "2F73700" -Texture -Patch "Gerudo Symbols\spirit_temple_boss.bin"
+        PatchBytes -Offset "2B5CDA0" -Texture -Patch "Gerudo Symbols\spirit_temple_room_10.bin"
+        PatchBytes -Offset "2B9BDB8" -Texture -Patch "Gerudo Symbols\spirit_temple_room_10.bin"
+        PatchBytes -Offset "2BE7920" -Texture -Patch "Gerudo Symbols\spirit_temple_room_10.bin"
+        PatchBytes -Offset "1636940" -Texture -Patch "Gerudo Symbols\spirit_temple_room_0_elevator.bin"
+        PatchBytes -Offset "28BBCD8" -Texture -Patch "Gerudo Symbols\gerudo_training_ground_room_5.bin"
+        PatchBytes -Offset "28CA728" -Texture -Patch "Gerudo Symbols\gerudo_training_ground_room_5.bin"
+        PatchBytes -Offset "11FB000" -Texture -Patch "Gerudo Symbols\gerudo_training_ground_door.bin"
+
+        $Offset = SearchBytes -Start "2AF8000" -End "2B08F40" -Values @("00", "05", "00", "11", "06", "00", "06", "4E", "06", "06", "06", "06", "11", "11", "06", "11")
+        PatchBytes -Offset $Offset -Texture -Patch "Gerudo Symbols\spirit_temple_room_0_pillars.bin"
     }
 
 }
@@ -500,7 +506,7 @@ function PatchBPSOptionsOcarinaOfTime() {
 function PatchLanguageOptionsOcarinaOfTime() {
     
     if ( (IsChecked -Elem $Languages.TextRestore) -or (IsChecked -Elem $Languages.TextSpeed2x) -or (IsChecked -Elem $Languages.TextSpeed3x) -or (IsChecked -Elem $Languages.TextDialogueColors) -or (IsLanguage -Elem $Options.UnlockTunics) ) {
-        $File = $GameFiles.binaries + "\" + "Message\Message Data Static.bin"
+        $File = $GameFiles.extracted + "\Message Data Static.bin"
         ExportBytes -Offset "92D000" -Length "38140" -Output $File -Force
     }
 
@@ -624,7 +630,7 @@ function PatchLanguageOptionsOcarinaOfTime() {
     }
 
     if ( (IsChecked -Elem $Languages.TextRestore) -or (IsChecked -Elem $Languages.TextSpeed2x) -or (IsChecked -Elem $Languages.TextSpeed3x) -or (IsChecked -Elem $Languages.TextDialogueColors) -or (IsLanguage -Elem $Options.UnlockTunics) ) {
-        PatchBytes -Offset "92D000" -Patch ("Message\Message Data Static.bin")
+        PatchBytes -Offset "92D000" -Patch "Message Data Static.bin" -Extracted
     }
 
 }

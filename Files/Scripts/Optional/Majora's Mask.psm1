@@ -130,7 +130,7 @@ function PatchByteOptionsMajorasMask() {
     # GAMEPLAY
     
     if (IsChecked -Elem $Options.RestorePalaceRoute) {
-        CreateSubPath -Path ($GameFiles.binaries + "\Deku Palace")
+        CreateSubPath -Path ($GameFiles.extracted + "\Deku Palace")
         ExportAndPatch -Path "Deku Palace\deku_palace_scene"  -Offset "2534000" -Length "D220"
         ExportAndPatch -Path "Deku Palace\deku_palace_room_0" -Offset "2542000" -Length "11A50"
         ExportAndPatch -Path "Deku Palace\deku_palace_room_1" -Offset "2554000" -Length "E950"  -NewLength "E9B0"  -TableOffset "1F6A7" -Values @("B0")
@@ -202,7 +202,7 @@ function PatchByteOptionsMajorasMask() {
     # OTHER #
     
     if (IsChecked -Elem $Options.FixSouthernSwamp) {
-        CreateSubPath -Path ($GameFiles.binaries + "\Southern Swamp")
+        CreateSubPath -Path ($GameFiles.extracted + "\Southern Swamp")
         ExportAndPatch -Path "Southern Swamp\southern_swamp_cleared_scene"  -Offset "1F0D000" -Length "10630"
         ExportAndPatch -Path "Southern Swamp\southern_swamp_cleared_room_0" -Offset "1F1E000" -Length "1B240" -NewLength "1B4F0" -TableOffset "1EC26"  -Values @("94", "F0")
         ExportAndPatch -Path "Southern Swamp\southern_swamp_cleared_room_2" -Offset "1F4D000" -Length "D0A0"  -NewLength "D1C0"  -TableOffset "1EC46"  -Values @("A1", "C0")
@@ -249,12 +249,11 @@ function PatchByteReduxMajorasMask() {
 }
 
 
+
 #==============================================================================================================================================================================================
 function PatchBPSOptionsMajorasMask() {
     
-    if (IsChecked -Elem $Options.ImprovedLinkModel) {
-        ApplyPatch -File $GetROM.decomp -Patch "\Decompressed\improved_link_model.ppf"
-    }
+    if (IsChecked -Elem $Options.ImprovedLinkModel) { ApplyPatch -File $GetROM.decomp -Patch "\Decompressed\improved_link_model.ppf" }
 
 }
 
@@ -264,7 +263,7 @@ function PatchBPSOptionsMajorasMask() {
 function PatchLanguageOptionsMajorasMask() {
     
     if ( (IsChecked -Elem $Languages.TextRestore) -or (IsLanguage -Elem $Options.RazorSword) ) {
-        $File = $GameFiles.binaries + "\" + "Message\Message Data Static MM.bin"
+        $File = $GameFiles.extracted + "\Message Data Static MM.bin"
         ExportBytes -Offset "AD1000" -Length "699F0" -Output $File -Force
     }
 
@@ -299,14 +298,14 @@ function PatchLanguageOptionsMajorasMask() {
         ChangeBytes -File $File -Offset ( Get24Bit -Value ( (GetDecimal -Hex $Offset) + (GetDecimal -Hex "30") ) ) -Values @("61", "73", "20", "6D", "75", "63", "68", "20", "79", "6F", "75", "20", "77", "61", "6E", "74", "2E", "20")
 
         $Offset = SearchBytes -File $File -Values @("4B", "65", "65", "70", "20", "69", "6E", "20", "6D", "69", "6E", "64", "20", "74", "68", "61", "74")
-        PatchBytes  -File $File -Offset $Offset -Patch "Message\Razor Sword 1.bin"
+        PatchBytes -File $File -Offset $Offset -Patch "Message\Razor Sword 1.bin"
 
         $Offset = SearchBytes -File $File -Values @("4E", "6F", "77", "20", "6B", "65", "65", "70", "20", "69", "6E", "20", "6D", "69", "6E", "64", "20", "74", "68", "61", "74")
-        PatchBytes  -File $File -Offset $Offset -Patch "Message\Razor Sword 2.bin"
+        PatchBytes -File $File -Offset $Offset -Patch "Message\Razor Sword 2.bin"
     }
 
     if ( (IsChecked -Elem $Languages.TextRestore) -or (IsLanguage -Elem $Options.RazorSword) ) {
-        PatchBytes -Offset "AD1000" -Patch ("Message\Message Data Static MM.bin")
+        PatchBytes -Offset "AD1000" -Patch "Message Data Static MM.bin" -Extracted
     }
 
 }
@@ -352,14 +351,14 @@ function CreateMajorasMaskOptionsContent() {
     $Options.BlackBars                 = CreateReduxCheckBox -Column 1 -Row 1 -AddTo $GraphicsBox -Text "No Black Bars"                                                         -ToolTip $ToolTip -Info "Removes the black bars shown on the top and bottom of the screen during Z-targeting and cutscenes" -Name "BlackBars"
     $Options.ExtendedDraw              = CreateReduxCheckBox -Column 2 -Row 1 -AddTo $GraphicsBox -Text "Extended Draw Distance"                                                -ToolTip $ToolTip -Info "Increases the game's draw distance for objects`nDoes not work on all objects" -Name "ExtendedDraw"
     $Options.PixelatedStars            = CreateReduxCheckBox -Column 3 -Row 1 -AddTo $GraphicsBox -Text "Disable Pixelated Stars"                                               -ToolTip $ToolTip -Info "Completely disable the stars at night-time, which are pixelated dots and do not have any textures for HD replacement" -Name "PixelatedStars"
-    $Options.ImprovedLinkModel         = CreateReduxCheckBox -Column 4 -Row 1 -AddTo $GraphicsBox -Text "Improved Link Model"                                                   -ToolTip $ToolTip -Info "Improves the model used for Hylian Link" -Name "ImprovedLinkModel"
+    $Options.ImprovedLinkModel         = CreateReduxCheckBox -Column 4 -Row 1 -AddTo $GraphicsBox -Text "Improved Link Model"                                                   -ToolTip $ToolTip -Info "Improves the model used for Hylian Link`nCustom tunic colors are not supported with this option" -Name "ImprovedLinkModel"
     $Options.LowHPBeep                 = CreateReduxComboBox -Column 0 -Row 2 -AddTo $GraphicsBox -Items @("Default Beep", "Softer Beep", "Beep Disabled") -Text "Low HP Beep:" -ToolTip $ToolTip -Info "Set the sound effect for the low HP beeping" -Name "LowHPBeep" -Length 100
 
 
 
     # COLORS #
     $ColorsBox                         = CreateReduxGroup -Y ($GraphicsBox.Bottom + 5) -Height 1 -AddTo $Options.Panel -Text "Colors"
-    $Options.EnableTunicColors         = CreateReduxCheckBox -Column 0 -Row 1 -AddTo $ColorsBox -Text "Change Tunic Color"       -ToolTip $ToolTip -Info "Enable changing the color for the Hylian form Kokiri tunics" -Name "EnableTunicColors"
+    $Options.EnableTunicColors         = CreateReduxCheckBox -Column 0 -Row 1 -AddTo $ColorsBox -Text "Change Tunic Color"       -ToolTip $ToolTip -Info ("Enable changing the color for the Hylian form Kokiri tunics`nRequires the " + '"Improved Link Model"' + " option to be disabled") -Name "EnableTunicColors"
     $Options.KokiriTunicColor          = CreateReduxButton   -Column 1 -Row 1 -AddTo $ColorsBox -Text "Set Kokiri Tunic Color"   -ToolTip $ToolTip -Info "Select the color you want for the Kokiri Tunic"
     $Options.ResetAllColors            = CreateReduxButton   -Column 2 -Row 1 -AddTo $ColorsBox -Text "Reset Kokiri Tunic Color" -ToolTip $ToolTip -Info "Reset the  color for the Kokiri Tunic to it's default value"
     $Options.RecolorMaskForms          = CreateReduxCheckBox -Column 4 -Row 1 -AddTo $ColorsBox -Text "Recolor Mask Forms"       -ToolTip $ToolTip -Info "Recolor the clothing for Goron Link to appear in Red and Zora Link to appear in Blue" -Name "RecolorMaskForms"
@@ -417,10 +416,15 @@ function CreateMajorasMaskOptionsContent() {
     CreateCapacityDialog
     
     $Options.Damage.Add_SelectedIndexChanged({ $Options.Recovery.Enabled = $this.Text -ne "OHKO Mode" })
-    $Options.EnableTunicColors.Add_CheckStateChanged({ $Options.KokiriTunicColor.Enabled = $Options.ResetAllColors.Enabled = $this.Checked })
-
     $Options.Recovery.Enabled = $Options.Damage.Text -ne "OHKO Mode"
-    $Options.KokiriTunicColor.Enabled = $Options.ResetAllColors.Enabled = $Options.EnableTunicColors.Checked
+
+    $Options.ImprovedLinkModel.Add_CheckedChanged({
+        $Options.EnableTunicColors.Enabled = !$this.checked
+        $Options.KokiriTunicColor.Enabled = $Options.ResetAllColors.Enabled = !$this.checked -and $Options.EnableTunicColors.Checked
+    })
+    $Options.EnableTunicColors.Add_CheckStateChanged({ $Options.KokiriTunicColor.Enabled = $Options.ResetAllColors.Enabled = $this.Checked })
+    $Options.EnableTunicColors.Enabled = !$Options.ImprovedLinkModel.Checked
+    $Options.KokiriTunicColor.Enabled = $Options.ResetAllColors.Enabled = !$Options.ImprovedLinkModel.Checked -and $Options.EnableTunicColors.Checked
 
     $Options.SetKokiriTunicColor       = CreateColorDialog -Red "1E" -Green "69" -Blue "1B" -Name "SetKokiriTunicColor" -IsGame
 

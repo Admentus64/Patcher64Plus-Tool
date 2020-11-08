@@ -216,6 +216,7 @@ function ChangeGameMode() {
 
     $GameFiles.base = $Paths.games + "\" + $GameType.mode
     $GameFiles.binaries = $GameFiles.base + "\Binaries"
+    $GameFiles.extracted = $GameFiles.base + "\Extracted"
     $GameFiles.compressed = $GameFiles.base + "\Compressed"
     $GameFiles.decompressed = $GameFiles.base + "\Decompressed"
     $GameFiles.textures = $GameFiles.base + "\Textures"

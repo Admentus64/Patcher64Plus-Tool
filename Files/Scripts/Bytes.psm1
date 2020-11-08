@@ -29,12 +29,16 @@ function ChangeBytes([String]$File, [String]$Offset, [Array]$Values, [int]$Inter
 
 
 #==============================================================================================================================================================================================
-function PatchBytes([String]$File, [String]$Offset, [String]$Length, [String]$Patch, [Switch]$Texture, [Switch]$Pad) {
+function PatchBytes([String]$File, [String]$Offset, [String]$Length, [String]$Patch, [Switch]$Texture, [Switch]$Extracted, [Switch]$Pad) {
     
     if (IsSet -Elem $File) { $ByteArrayGame = [IO.File]::ReadAllBytes($File) }
     if ($Texture) {
         $PatchByteArray = [IO.File]::ReadAllBytes($GameFiles.textures + "\" + $Patch)
         if ($ExternalScript) { Write-Host "Patch file from:" ($GameFiles.textures + "\" + $Patch) }
+    }
+    elseif ($Extracted) {
+        $PatchByteArray = [IO.File]::ReadAllBytes($GameFiles.extracted + "\" + $Patch)
+        if ($ExternalScript) { Write-Host "Patch file from:" ($GameFiles.extracted + "\" + $Patch) }
     }
     else {
         $PatchByteArray = [IO.File]::ReadAllBytes($GameFiles.binaries + "\" + $Patch)
@@ -90,6 +94,10 @@ function ExportBytes([String]$File, [String]$Offset, [String]$End, [String]$Leng
     }
 
     RemoveFile -LiteralPath $Output
+    $Path = $Output.substring(0, $Output.LastIndexOf('\'))
+    $Folder = $Path.substring($Path.LastIndexOf('\') + 1)
+    $Path = $Path.substring(0, $Path.LastIndexOf('\') + 1)
+    if (!(Test-Path -LiteralPath ($Path + $Folder) -PathType Container)) { New-Item -Path $Path -Name $Folder -ItemType Directory | Out-Null }
 
     if (IsSet -Elem $End) {
         [uint32]$End = GetDecimal -Hex $End
@@ -154,15 +162,15 @@ function SearchBytes([String]$File, [String]$Start="0", [String]$End, [Array]$Va
 #==============================================================================================================================================================================================
 function ExportAndPatch([String]$Path, [String]$Offset, [String]$Length, [String]$NewLength, [String]$TableOffset, [Array]$Values) {
 
-    $File = $GameFiles.binaries + "\" + $Path + ".bin"
+    $File = $GameFiles.extracted + "\" + $Path + ".bin"
     if ( !(Test-Path -LiteralPath $File -PathType Leaf) -or ($Settings.Debug.ForceExtract -eq $True) ) {
         ExportBytes -Offset $Offset -Length $Length -Output $File
         ApplyPatch -File $File -Patch ("\Data Extraction\" + $Path + ".bps") -FilesPath
     }
 
     if (!(IsSet -Elem $NewLength)) { $NewLength = $Length }
-    if ($NewLength -lt $Length)   { PatchBytes -Offset $Offset -Patch ($Path + ".bin") -Length $Length }
-    else                          { PatchBytes -Offset $Offset -Patch ($Path + ".bin") -Length $NewLength }
+    if ($NewLength -lt $Length)   { PatchBytes -Offset $Offset -Extracted -Patch ($Path + ".bin") -Length $Length }
+    else                          { PatchBytes -Offset $Offset -Extracted -Patch ($Path + ".bin") -Length $NewLength }
 
     if ( (IsSet -Elem $TableOffset) -and (IsSet -Elem $Values) ) {
         ChangeBytes -Offset $TableOffset -Values $Values
@@ -173,7 +181,16 @@ function ExportAndPatch([String]$Path, [String]$Offset, [String]$Length, [String
 
 
 #==================================================================================================================================================================================================================================================================
-function GetDecimal([String]$Hex)   { return [uint32]("0x" + $Hex) }
+function GetDecimal([String]$Hex) {
+    
+    try { return [uint32]("0x" + $Hex) }
+    catch { return -1 }
+
+}
+
+
+
+#==================================================================================================================================================================================================================================================================
 function Get8Bit($Value)            { return '{0:X2}' -f [int]$Value }
 function Get16Bit($Value)           { return '{0:X4}' -f [int]$Value }
 function Get24Bit($Value)           { return '{0:X6}' -f [int]$Value }

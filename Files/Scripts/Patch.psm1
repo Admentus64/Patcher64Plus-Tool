@@ -161,7 +161,7 @@ function MainFunctionPatch([String]$Command, [String[]]$Header, [String]$Patched
         # Step 14: Patch and extend the ROM file with the patch through Floating IPS
         if (!(PatchCompressedROM)) { return }
     }
-    elseif (StrLike -str $Command -val "Apply Patch" -and ) {
+    elseif (StrLike -str $Command -val "Apply Patch") {
         # Step 15: Apply provided BPS Patch
         if (!(ApplyPatchROM)) { return }
     }
@@ -257,6 +257,7 @@ function Cleanup() {
             RemoveFile -LiteralPath $_.value
         }
     }
+    RemoveFile -LiteralPath $GetROM.nes
 
     RemoveFile -LiteralPath $Files.flipscfg
     RemoveFile -LiteralPath $Files.stackdump
@@ -446,6 +447,7 @@ function ExtractU8AppFile([String]$Command) {
     elseif ($GameConsole.appfile -eq "00000001.app") {
         UpdateStatusLabel -Text 'Extracting ROM from "00000001.app" file...'             # Set the status label
         SetGetROM
+        RemoveFile -LiteralPath $GetROM.nes
         $WADFile.Offset = SearchBytes -File $WADFile.AppFile01 -Values @("4E", "45", "53", "1A") -Start "100000"
         
         if ($WADFile.Offset -ne -1) {
@@ -484,9 +486,9 @@ function PatchVCEmulator([String]$Command) {
 
         if ($VC.RemapDPad.Checked) {
             if (!$VC.LeaveDPadUp.Checked) { ChangeBytes -File $WadFile.AppFile01 -Offset "16BAF0" -Values @("08", "00") }
-                ChangeBytes -File $WadFile.AppFile01 -Offset "16BAF4" -Values @("04", "00")
-                ChangeBytes -File $WadFile.AppFile01 -Offset "16BAF8" -Values @("02", "00")
-                ChangeBytes -File $WadFile.AppFile01 -Offset "16BAFC" -Values @("01", "00")
+            ChangeBytes -File $WadFile.AppFile01 -Offset "16BAF4" -Values @("04", "00")
+            ChangeBytes -File $WadFile.AppFile01 -Offset "16BAF8" -Values @("02", "00")
+            ChangeBytes -File $WadFile.AppFile01 -Offset "16BAFC" -Values @("01", "00")
         }
 
         if ($VC.RemapCDown.Checked)         { ChangeBytes -File $WadFile.AppFile01 -Offset "16BB04" -Values @("00", "20") }
@@ -653,6 +655,7 @@ function CompareHashSums([String]$Command) {
         }
     }
     
+    Write-Host $GetROM.in
     UpdateStatusLabel -Text "Failed! ROM does not match the patching button target. ROM has left unchanged."
     return $False
 

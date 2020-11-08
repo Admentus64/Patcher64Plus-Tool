@@ -61,15 +61,15 @@ function CreateTheLegendOfZeldaReduxContent() {
     # ORIGINAL #
     $OriginalBox                       = CreateReduxGroup -Y 50 -Height 1 -AddTo $Redux.Panel -Text "Original (Revert)"
 
-    $Options.NESGFX                    = CreateReduxCheckBox -Column 0 -Row 1 -AddTo $OriginalBox -Text "NES GFX"              -ToolTip $ToolTip -Info "Revert back any GFX graphics changes that Redux adjusted, for the original experience`nNot compatible with the Link's Awakening GFX option" -Name "NESGFX"
-    $Options.HiddenSecrets             = CreateReduxCheckBox -Column 1 -Row 1 -AddTo $OriginalBox -Text "Hidden Secrets"       -ToolTip $ToolTip -Info "Revert back all hiden secrets like that Redux adjusted, for the orginal experience" -Name "HiddenSecrets"
+    $Redux.NESGFX                      = CreateReduxCheckBox -Column 0 -Row 1 -AddTo $OriginalBox -Text "NES GFX"              -ToolTip $ToolTip -Info "Revert back any GFX graphics changes that Redux adjusted, for the original experience`nNot compatible with the Link's Awakening GFX option" -Name "NESGFX"
+    $Redux.HiddenSecrets               = CreateReduxCheckBox -Column 1 -Row 1 -AddTo $OriginalBox -Text "Hidden Secrets"       -ToolTip $ToolTip -Info "Revert back all hiden secrets like that Redux adjusted, for the orginal experience" -Name "HiddenSecrets"
 
 
 
-    $Options.LinksAwakeningGFX.Add_CheckStateChanged({ $Options.NESGFX.Enabled = !$this.Checked })
-    $Options.NESGFX.Add_CheckStateChanged({ $Options.LinksAwakeningGFX.Enabled = !$this.Checked })
-    $Options.LinksAwakeningGFX.Enabled = !$Options.NESGFX.Checked
-    $Options.NESGFX.Enabled = !$Options.LinksAwakeningGFX.Checked
+    $Options.LinksAwakeningGFX.Add_CheckStateChanged({ $Redux.NESGFX.Enabled = !$this.Checked })
+    $Redux.NESGFX.Add_CheckStateChanged({ $Options.LinksAwakeningGFX.Enabled = !$this.Checked })
+    $Options.LinksAwakeningGFX.Enabled = !$Redux.NESGFX.Checked
+    $Redux.NESGFX.Enabled = !$Options.LinksAwakeningGFX.Checked
 
 }
 

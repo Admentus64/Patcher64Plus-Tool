@@ -2,8 +2,8 @@ function PatchOptionsSuperMetroid() {
     
     # BPS Patching
 
-    if (IsChecked -Elem $Options.Xray)                    { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\Original\x_ray.ips" }
-    if (IsChecked -Elem $Options.ElevatorSpeed)           { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\Original\elevator_speed.ips" }
+    if (IsChecked -Elem $Redux.Xray)                      { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\Original\x_ray.ips" }
+    if (IsChecked -Elem $Redux.ElevatorSpeed)             { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\Original\elevator_speed.ips" }
 
     if (IsChecked -Elem $Options.Widescreen)              { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\widescreen.ips" }
     if (IsChecked -Elem $Options.RedesignedSamus)         { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\redesigned_samus.ips" }
@@ -60,8 +60,8 @@ function CreateSuperMetroidReduxContent() {
     # ORIGINAL #
     $OriginalBox                       = CreateReduxGroup -Y 50 -Height 1 -AddTo $Redux.Panel -Text "Original (Revert)"
 
-    $Options.Xray                      = CreateReduxCheckBox -Column 0 -Row 1 -AddTo $OriginalBox -Text "X-Ray"                -ToolTip $ToolTip -Info "Restores the original Super Metroid X-Ray Visor width" -Name "Xray"
-    $Options.ElevatorSpeed             = CreateReduxCheckBox -Column 1 -Row 1 -AddTo $OriginalBox -Text "Elevator Speed"       -ToolTip $ToolTip -Info "Restores the original Super Metroid elevator speeds" -Name "ElevatorSpeed"
+    $Redux.Xray                        = CreateReduxCheckBox -Column 0 -Row 1 -AddTo $OriginalBox -Text "X-Ray"                -ToolTip $ToolTip -Info "Restores the original Super Metroid X-Ray Visor width" -Name "Xray"
+    $Redux.ElevatorSpeed               = CreateReduxCheckBox -Column 1 -Row 1 -AddTo $OriginalBox -Text "Elevator Speed"       -ToolTip $ToolTip -Info "Restores the original Super Metroid elevator speeds" -Name "ElevatorSpeed"
 
 }
 

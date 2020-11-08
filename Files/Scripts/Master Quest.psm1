@@ -3,8 +3,8 @@ function PatchDungeonsMQ() {
     # BYTE PATCHING MASTER QUEST DUNGEONS
     if (IsChecked -Elem $Options.MasterQuest -Not) { return }
 
-    if (!(Test-Path -LiteralPath ($GameFiles.binaries + "\Master Quest") -PathType Container)) {
-        if ($Settings.Debug.Console -eq $True) { Write-Host ('Error: "' + ($GameFiles.binaries + "\Master Quest") + '" was not found') }
+    if (!(Test-Path -LiteralPath ($GameFiles.extracted + "\Master Quest") -PathType Container)) {
+        if ($Settings.Debug.Console -eq $True) { Write-Host ('Error: "' + ($GameFiles.extracted + "\Master Quest") + '" was not found') }
         return
     }
 
@@ -139,7 +139,7 @@ function ExtractMQData([Boolean]$Decompress) {
 
     # EXTRACT MQ DATA #
     if ($GameType.mode -eq "Ocarina of Time") {
-        $Path = $Paths.Games + "\Ocarina of Time\Binaries\Master Quest"
+        $Path = $Paths.Games + "\Ocarina of Time\Extracted\Master Quest"
         if ( (IsChecked -Elem $Options.MasterQuest) -and (IsChecked -Elem $Patches.Options -Active) ) { # EXTRACT MQ DUNGEON DATA #
             if ( !(Test-Path -LiteralPath $Path -PathType Container) -or ($Settings.Debug.ForceExtract -eq $True) ) {
                 ApplyPatch -File $GetROM.decomp -Patch "\Decompressed\master_quest.bps" -New $GetROM.masterQuest
@@ -204,9 +204,9 @@ function ExtractAllDungeons([String]$Path) {
 #==============================================================================================================================================================================================
 function PatchDungeon([String]$TableOffset, [String]$Path, [int]$Length, [String]$Scene) {
     
-    if (!(CheckDungeonData -Path ($Gamefiles.binaries + "\" + $Path))) { return $False }
+    if (!(CheckDungeonData -Path ($Gamefiles.extracted + "\" + $Path))) { return $False }
 
-    $Table = [IO.File]::ReadAllBytes($GameFiles.binaries + "\" + $Path + "table.dmaTable")
+    $Table = [IO.File]::ReadAllBytes($GameFiles.extracted + "\" + $Path + "table.dmaTable")
     for ($i=0; $i -le $Length; $i++) {
         $Values = @()
         for ($j=0; $j -lt 12; $j++) { $Values += Get8Bit -Value $Table[($i*16)+$j] }
@@ -227,8 +227,8 @@ function PatchDungeon([String]$TableOffset, [String]$Path, [int]$Length, [String
 #==============================================================================================================================================================================================
 function PatchDungeonFile([String]$Offset, [Array]$Values, [String]$Patch, [String]$Length) {
     
-    ChangeBytes -Offset $Offset -Values $Values                                                           # Update DMA Table
-    PatchBytes  -Offset ($Values[0] + $Values[1] + $Values[2] + $Values[3]) -Length $Length -Patch $Patch # Inject .zmap or .zscene
+    ChangeBytes -Offset $Offset -Values $Values                                                                      # Update DMA Table
+    PatchBytes  -Offset ($Values[0] + $Values[1] + $Values[2] + $Values[3]) -Length $Length -Patch $Patch -Extracted # Inject .zmap or .zscene
 
 }
 
