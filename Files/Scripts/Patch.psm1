@@ -726,7 +726,7 @@ function ApplyPatch([String]$File, [String]$Patch, [String]$New, [Switch]$FilesP
 
     # File
     if (!(Test-Path -LiteralPath $File -PathType Leaf)) {
-        UpdateStatusLabel -Text "Failed! Could not find ROM file."
+        UpdateStatusLabel -Text "Failed! Could not find file."
         return $False
     }
 

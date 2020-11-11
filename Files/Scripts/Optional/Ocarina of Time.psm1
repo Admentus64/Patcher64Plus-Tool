@@ -255,7 +255,7 @@ function PatchByteOptionsOcarinaOfTime() {
     }
 
     if (IsChecked -Elem $Options.MQPauseMenuColors) {
-        if (IsChecked -Elem $PatchReduxCheckbox -Active) { # Cursor
+        if (IsChecked -Elem $Patches.Redux -Active) { # Cursor
             ChangeBytes -Offset "3480859"  -Values @("C8", "00", "50")
             ChangeBytes -Offset "348085F"  -Values @("FF", "00", "50")
         }
@@ -335,7 +335,7 @@ function PatchByteOptionsOcarinaOfTime() {
         PatchBytes  -Offset "B896A0" -Patch "Fire Temple Theme\12AudioBankPointers.bin"
         PatchBytes  -Offset "B89AD0" -Patch "Fire Temple Theme\12AudioSeqPointers.bin"
         PatchBytes  -Offset "B8A1C0" -Patch "Fire Temple Theme\12AudioTablePointers.bin"
-        ExportAndPatch -Path "12FireTemple"  -Offset "D390" -Length "4CCBB0"
+        ExportAndPatch -Path "Audiobank Fire Temple"  -Offset "D390" -Length "4CCBB0"
     }
 
     if (IsText -Elem $Options.Voices -Text "Majora's Mask Link Voices") {
@@ -516,8 +516,8 @@ function PatchLanguageOptionsOcarinaOfTime() {
             PatchBytes  -Offset "B849EC" -Patch "Message\Table Restore.bin"
         }
 
-        if (IsChecked -Elem $PatchReduxCheckbox -Active)  { ApplyPatch -File $File -Patch "\Data Extraction\Message\Message Data Static OoT Redux.bps" -FilesPath }
-        else                                              { ApplyPatch -File $File -Patch "\Data Extraction\Message\Message Data Static OoT.bps"       -FilesPath }
+        if (IsChecked -Elem $Patches.Redux -Active)   { ApplyPatch -File $File -Patch "\Data Extraction\Message\Message Data Static OoT Redux.bps" -FilesPath }
+        else                                          { ApplyPatch -File $File -Patch "\Data Extraction\Message\Message Data Static OoT.bps"       -FilesPath }
 
         if (IsChecked -Elem $Languages.TextFemalePronouns) {
             ChangeBytes -Offset "7596" -Values @("52", "E0")
