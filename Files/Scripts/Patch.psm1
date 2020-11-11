@@ -624,8 +624,10 @@ function DowngradeROM([Boolean]$Decompress, [String]$Hash) {
             }
         }
 
-        UpdateStatusLabel -Text "Failed! Unknown revision."
-        return $False
+        if ($Settings.Debug.IgnoreChecksum -ne $True) {
+            UpdateStatusLabel -Text "Failed! Unknown revision."
+            return $False
+        }
         
     }
 
