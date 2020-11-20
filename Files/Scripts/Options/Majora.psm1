@@ -54,7 +54,7 @@ function ByteOptionsMajorasMask() {
 
     # GRAPHICS #
 
-    if (IsChecked -Elem $Redux.Graphics.WideScreen) {
+    if (IsChecked -Elem $Redux.Graphics.Widescreen) {
         # 16:9 Widescreen
         if ($IsWiiVC) {
             ChangeBytes -Offset "BD5D74" -Values @("3C", "07", "3F", "E3")
@@ -522,7 +522,7 @@ function CreateTabEquipmentMajorasMask() {
 #==============================================================================================================================================================================================
 
 Export-ModuleMember -Function PatchOptionsMajorasMask
-Export-ModuleMember -Function ByteOptionsReduxMajorasMask
+Export-ModuleMember -Function ByteOptionsMajorasMask
 Export-ModuleMember -Function ByteReduxMajorasMask
 Export-ModuleMember -Function ByteLanguageMajorasMask
 
