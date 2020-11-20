@@ -55,9 +55,7 @@ function CreateMainDialog() {
             $global:GamePath = $null
             $Settings["Core"][$InputPaths.GameTextBox.name] = ""
             $InputPaths.GameTextBox.Text = "Select or drag and drop your ROM or VC WAD file..."
-            $InputPaths.ClearGameButton.Enabled = $False
-            $InputPaths.PatchPanel.Visible = $False
-            $global:GameIsSelected = $False
+            $global:GameIsSelected = $Patches.Panel.Enabled = $InputPaths.ClearGameButton.Enabled = $InputPaths.PatchPanel.Visible = $False
             if ($IsWiiVC) {
                 SetWiiVCMode -Enable $False
                 ChangeGamesList
@@ -202,7 +200,7 @@ function CreateMainDialog() {
     # Custom Region (SNES only)
     $global:CustomRegionCodeLabel = CreateLabel -X $CustomTitleTextBoxLabel.Left -Y 50 -Width 55 -Height 15 -Text "Region:" -Info "--- WARNING ---`nChanging the Region Code can softlock the game"
     $Items = @("Japan (NTSC)", "North America (NTSC)", "Europe (PAL)", "Sweden/Scandinavia (PAL)", "Finland (PAL)", "Denmark (PAL)", "France (SECAM)", "Netherlands (PAL)", "Spain (PAL)", "Germany (PAL)", "Italy (PAL)", "China (PAL)", "Indonesia (PAL)", "Kora (NTSC)", "Global", "Canada (NTSC)", "Brazil (PAL-M)", "Australia (PAL)", "Other (1)", "Other (2)", "Other (3)")
-    $global:CustomRegionCodeComboBox = CreateComboBox -X $CustomTitleTextBox.Left -Y ($CustomTitleTextBoxLabel.Bottom + 12) -Width $CustomTitleTextBox.Width -Height $CustomTitleTextBox.Height -Items $Items -Default 1
+    $global:CustomRegionCodeComboBox = CreateComboBox -X $CustomTitleTextBox.Left -Y ($CustomTitleTextBoxLabel.Bottom + 12) -Width $CustomTitleTextBox.Width -Height $CustomTitleTextBox.Height -Items $Items -Default 2
     
     # Custom Header Checkbox
     $CustomHeaderLabel = CreateLabel -X 510 -Y 22 -Width 50 -Height 15 -Text "Enable:" -Info "Enable in order to change the Game ID and title of the ROM or WAD file"
@@ -221,6 +219,7 @@ function CreateMainDialog() {
 
     # Create a panel to contain everything for patches.
     $Patches.Panel = CreatePanel -Width 590 -Height 90
+    $Patches.Panel.Enabled = $False
 
     # Create a groupbox to show the patching buttons.
     $Patches.Group = CreateGroupBox -Width $Patches.Panel.Width -Height $Patches.Panel.Height

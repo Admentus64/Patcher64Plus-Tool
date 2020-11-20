@@ -126,11 +126,12 @@ function CreateTextBox([int]$X=0, [int]$Y=0, [int]$Width=0, [int]$Height=0, [int
 
 
 #==============================================================================================================================================================================================
-function CreateComboBox([int]$X=0, [int]$Y=0, [int]$Width=0, [int]$Height=0, [String]$Name, [String]$Tag, [Object]$Items, [int]$Default=0, [String]$Info, [Switch]$IsGame, [Object]$AddTo=$Last.Group) {
+function CreateComboBox([int]$X=0, [int]$Y=0, [int]$Width=0, [int]$Height=0, [String]$Name, [String]$Tag, [Object]$Items, [int]$Default=1, [String]$Info, [Switch]$IsGame, [Object]$AddTo=$Last.Group) {
     
     $ComboBox = CreateForm -X $X -Y $Y -Width $Width -Height $Height -Name $Name -Tag $Tag -IsGame $IsGame -Object (New-Object System.Windows.Forms.ComboBox) -AddTo $AddTo
     $ComboBox.DropDownStyle = "DropDownList"
     $ToolTip = CreateToolTip -Form $ComboBox -Info $Info
+    if ($Default -lt 1) { $Default = 1 }
 
     if (IsSet -Elem $Items) {
         $ComboBox.Items.AddRange($Items)
@@ -139,11 +140,11 @@ function CreateComboBox([int]$X=0, [int]$Y=0, [int]$Width=0, [int]$Height=0, [St
             if ($IsGame)   { $ComboBox.Tag = $GameType.mode }
             else           { $ComboBox.Tag = "Core" }
             if (IsSet $Settings[$ComboBox.Tag][$ComboBox.Name])   { $ComboBox.SelectedIndex = $Settings[$ComboBox.Tag][$ComboBox.Name] }
-            else                                                  { $Settings[$ComboBox.Tag][$ComboBox.Name] = $Default }
+            else                                                  { $Settings[$ComboBox.Tag][$ComboBox.Name] = ($Default-1) }
             $ComboBox.Add_SelectedIndexChanged({ $Settings[$this.Tag][$this.Name] = $this.SelectedIndex })
 
         }
-        if ($ComboBox.SelectedIndex -eq -1) { $ComboBox.SelectedIndex = $Default }
+        if ($ComboBox.SelectedIndex -eq -1) { $ComboBox.SelectedIndex = ($Default-1) }
     }
 
     return $ComboBox
@@ -333,12 +334,12 @@ function CreateReduxCheckBox([int]$Column=1, [int]$Row=1, [Switch]$Checked, [Swi
 
 
 #==============================================================================================================================================================================================
-function CreateReduxComboBox([int]$Column=1, [int]$Row=1, [int]$Length=160, [int]$Shift=0, [Object]$Items, [int]$Default=0, [String]$Text, [String]$Info, [String]$Name, [String]$Tag, [Object]$AddTo=$Last.Group) {
+function CreateReduxComboBox([int]$Column=1, [int]$Row=1, [int]$Length=160, [int]$Shift=0, [Object]$Items, [int]$Default=1, [String]$Text, [String]$Info, [String]$Name, [String]$Tag, [Object]$AddTo=$Last.Group) {
     
     if (IsSet -Elem $Text)   { $Width = (80 + $Shift) }
     else                     { $Width = 0 }
     $Label = CreateLabel -X (($Column-1) * 165 + 15) -Y ($Row * 30 - 10) -Width $Width -Height 15 -Text $Text -Info $Info -AddTo $AddTo
-    $ComboBox = CreateComboBox -X $Label.Right -Y ($Label.Top - 3) -Width ($Length - $Shift) -Height 20 -Items $Items -Default $Default -Info $Info -IsGame $True -Name $Name -Tag $Tag -AddTo $AddTo
+    $ComboBox = CreateComboBox -X $Label.Right -Y ($Label.Top - 3) -Width ($Length - $Shift) -Height 20 -Items $Items -Default ($Default-1) -Info $Info -IsGame $True -Name $Name -Tag $Tag -AddTo $AddTo
     return $ComboBox
 
 }

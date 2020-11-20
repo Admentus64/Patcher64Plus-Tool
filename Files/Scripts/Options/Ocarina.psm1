@@ -823,8 +823,8 @@ function CreateTabReduxOcarinaOfTime() {
 
 
     # BUTTON COLORS #
-    CreateReduxGroup    -Tag  "Colors" -Height 2 -Text "Button Colors"
-    CreateReduxComboBox -Name "Buttons" -Items @("N64 OoT (default)", "N64 MM", "GC OoT", "GC MM", "Randomized", "Custom") -Text "Button Colors:" -Info ("Select a preset for the button colors`n" + '"Random" fully randomizes the button colors each time the game is patched')
+    CreateReduxGroup    -Tag  "Colors"  -Height 2 -Text "Button Colors"
+    CreateReduxComboBox -Name "Buttons" -Text "Button Colors:" -Items @("N64 OoT (default)", "N64 MM", "GC OoT", "GC MM", "Randomized", "Custom") -Info ("Select a preset for the button colors`n" + '"Random" fully randomizes the button colors each time the game is patched')
 
     # Button Colors - Buttons
     $Buttons = @()
@@ -835,10 +835,10 @@ function CreateTabReduxOcarinaOfTime() {
 
     # Button Colors - Dialogs
     $Redux.Colors.SetButtons = @()
-    $Redux.Colors.SetButtons += CreateColorDialog -Color "5A5AFF" -Name "SetAButton" -IsGame
-    $Redux.Colors.SetButtons += CreateColorDialog -Color "009600" -Name "SetBButton" -IsGame
+    $Redux.Colors.SetButtons += CreateColorDialog -Color "5A5AFF" -Name "SetAButton"  -IsGame
+    $Redux.Colors.SetButtons += CreateColorDialog -Color "009600" -Name "SetBButton"  -IsGame
     $Redux.Colors.SetButtons += CreateColorDialog -Color "FFA000" -Name "SetCButtons" -IsGame
-    $Redux.Colors.SetButtons += CreateColorDialog -Color "C80000" -Name "SetSButton" -IsGame
+    $Redux.Colors.SetButtons += CreateColorDialog -Color "C80000" -Name "SetSButton"  -IsGame
 
     # Button Colors - Labels
     $Redux.Colors.ButtonLabels = @()
@@ -846,7 +846,6 @@ function CreateTabReduxOcarinaOfTime() {
         $Buttons[$i].Add_Click({ $Redux.Colors.SetButtons[[int]$this.Tag].ShowDialog(); $Redux.Colors.Buttons.Text = "Custom"; $Redux.Colors.ButtonLabels[[int]$this.Tag].BackColor = $Redux.Colors.SetButtons[[int]$this.Tag].Color; $Settings[$GameType.mode][$Redux.Colors.SetButtons[[int]$this.Tag].Tag] = $Redux.Colors.SetButtons[[int]$this.Tag].Color.Name })
         $Redux.Colors.ButtonLabels += CreateReduxColoredLabel -Link $Buttons[$i]  -Color $Redux.Colors.SetButtons[$i].Color
     }
-
     
     $Redux.Colors.Buttons.Add_SelectedIndexChanged({ SetButtonColorsPreset -ComboBox $Redux.Colors.Buttons })
     SetButtonColorsPreset -ComboBox $Redux.Colors.Buttons
@@ -930,7 +929,7 @@ function CreateTabAudiovisualOcarinaOfTime() {
     # SOUNDS / VOICES #
     CreateReduxGroup    -Tag  "Sounds" -Text "Sounds / Voices"
     CreateReduxComboBox -Name "Voices"          -Column 1 -Text "Link's Voice:"          -Items @("No Voice Changes", "Majora's Mask Link Voices", "Feminine Link Voices")  -Info "1. Replace the voices for Link with those used in Majora's Mask`n2. Replace the voices for Link to sound feminine"
-    CreateReduxComboBox -Name "Instrument"      -Column 3 -Text "Instrument:" -Default 1 -Items @("Disabled", "Ocarina (default)", "Malon", "Whistle", "Harp", "Grind-Organ", "Flute") -Info "Replace the sound used for playing the Ocarina of Time"
+    CreateReduxComboBox -Name "Instrument"      -Column 3 -Text "Instrument:" -Default 2 -Items @("Disabled", "Ocarina (default)", "Malon", "Whistle", "Harp", "Grind-Organ", "Flute") -Info "Replace the sound used for playing the Ocarina of Time"
 
     # SFX SOUND EFFECTS #
     CreateReduxGroup    -Tag "SFX" -Text "SFX Sound Effects" -Height 3
@@ -1016,12 +1015,12 @@ function CreateTabColorsOcarinaOfTime() {
     CreateReduxGroup -Tag "Colors" -Text "Equipment Colors" -Height 3
     $Redux.Colors.Equipment = @()
     $Colors = @("Kokiri Green", "Goron Red", "Zora Blue", "Black", "White", "Azure Blue", "Vivid Cyan", "Light Red", "Fuchsia", "Purple", "Majora Purple", "Twitch Purple", "Persian Rose", "Dirty Yellow", "Blush Pink", "Hot Pink", "Rose Pink", "Orange", "Gray", "Gold", "Silver", "Beige", "Teal", "Blood Red", "Blood Orange", "Royal Blue", "Sonic Blue", "NES Green", "Dark Green", "Lumen", "Randomized", "Custom")
-    $Redux.Colors.Equipment += CreateReduxComboBox -Name "KokiriTunic"       -Column 1 -Row 1 -Length 230 -Shift 70 -Items $Colors -Default 0 -Text "Kokiri Tunic Colors:" -Info "Select a color scheme for the Kokiri Tunic"
-    $Redux.Colors.Equipment += CreateReduxComboBox -Name "GoronTunic"        -Column 1 -Row 2 -Length 230 -Shift 70 -Items $Colors -Default 1 -Text "Goron Tunic Colors:"  -Info "Select a color scheme for the Goron Tunic"
-    $Redux.Colors.Equipment += CreateReduxComboBox -Name "ZoraTunic"         -Column 1 -Row 3 -Length 230 -Shift 70 -Items $Colors -Default 2 -Text "Zora Tunic Colors:"   -Info "Select a color scheme for the Zora Tunic"
+    $Redux.Colors.Equipment += CreateReduxComboBox -Name "KokiriTunic"       -Column 1 -Row 1 -Length 230 -Shift 70 -Items $Colors -Default 1 -Text "Kokiri Tunic Colors:" -Info "Select a color scheme for the Kokiri Tunic"
+    $Redux.Colors.Equipment += CreateReduxComboBox -Name "GoronTunic"        -Column 1 -Row 2 -Length 230 -Shift 70 -Items $Colors -Default 2 -Text "Goron Tunic Colors:"  -Info "Select a color scheme for the Goron Tunic"
+    $Redux.Colors.Equipment += CreateReduxComboBox -Name "ZoraTunic"         -Column 1 -Row 3 -Length 230 -Shift 70 -Items $Colors -Default 3 -Text "Zora Tunic Colors:"   -Info "Select a color scheme for the Zora Tunic"
     $Colors = @("Silver", "Gold", "Black", "Green", "Blue", "Bronze", "Red", "Sky Blue", "Pink", "Magenta", "Orange", "Lime", "Purple", "Randomized", "Custom")
-    $Redux.Colors.Equipment += CreateReduxComboBox -Name "SilverGauntlets"   -Column 4 -Row 1 -Length 230 -Shift 70 -Items $Colors -Default 0 -Text "Silver Gauntlets Colors:" -Info "Select a color scheme for the Silver Gauntlets"
-    $Redux.Colors.Equipment += CreateReduxComboBox -Name "GoldenGauntlets"   -Column 4 -Row 2 -Length 230 -Shift 70 -Items $Colors -Default 1 -Text "Golden Gauntlets Colors:" -Info "Select a color scheme for the Golden Gauntlets"
+    $Redux.Colors.Equipment += CreateReduxComboBox -Name "SilverGauntlets"   -Column 4 -Row 1 -Length 230 -Shift 70 -Items $Colors -Default 1 -Text "Silver Gauntlets Colors:" -Info "Select a color scheme for the Silver Gauntlets"
+    $Redux.Colors.Equipment += CreateReduxComboBox -Name "GoldenGauntlets"   -Column 4 -Row 2 -Length 230 -Shift 70 -Items $Colors -Default 2 -Text "Golden Gauntlets Colors:" -Info "Select a color scheme for the Golden Gauntlets"
     $Redux.Colors.Equipment += CreateReduxComboBox -Name "MirrorShieldFrame" -Column 4 -Row 3 -Length 230 -Shift 70 -Items @("Red (default)", "Green", "Blue", "Yellow", "Cyan", "Magenta", "Orange", "Gold", "Purple", "Pink", "Randomized", "Custom") -Text "Mirror Shield Frame Colors:" -Info "Select a color scheme for the Mirror Shield Frame"
 
     # Equipment Colors - Buttons
@@ -1199,10 +1198,10 @@ function CreateTabCutscenesOcarinaOfTime() {
 #==============================================================================================================================================================================================
 function SetButtonColorsPreset([Object]$ComboBox) {
     
-    if     ($ComboBox.Text -like '*N64 OoT*')    { SetButtonColors -Colors @("5A5AFF", "009600", "FFA000", "C80000") }
-    elseif ($ComboBox.Text -like '*N64 MM*')     { SetButtonColors -Colors @("64C8FF", "64FF78", "FFF000", "FF823C") }
-    elseif ($ComboBox.Text -like '*GC OoT*')     { SetButtonColors -Colors @("00C832", "FF1E1E", "FFA000", "787878") }
-    elseif ($ComboBox.Text -like '*GC MM*')      { SetButtonColors -Colors @("64FF78", "FF6464", "FFF000", "787878") }
+    if     ($ComboBox.Text -like '*N64 OoT*')    { SetColors -Colors @("5A5AFF", "009600", "FFA000", "C80000") -Dialogs $Redux.Colors.SetButtons -Labels $Redux.Colors.ButtonLabels }
+    elseif ($ComboBox.Text -like '*N64 MM*')     { SetColors -Colors @("64C8FF", "64FF78", "FFF000", "FF823C") -Dialogs $Redux.Colors.SetButtons -Labels $Redux.Colors.ButtonLabels }
+    elseif ($ComboBox.Text -like '*GC OoT*')     { SetColors -Colors @("00C832", "FF1E1E", "FFA000", "787878") -Dialogs $Redux.Colors.SetButtons -Labels $Redux.Colors.ButtonLabels }
+    elseif ($ComboBox.Text -like '*GC MM*')      { SetColors -Colors @("64FF78", "FF6464", "FFF000", "787878") -Dialogs $Redux.Colors.SetButtons -Labels $Redux.Colors.ButtonLabels }
     elseif ($ComboBox.Text -like '*Randomized*') {
         $Colors = @()
         for ($i=0; $i -lt $Redux.Colors.SetButtons.length; $i++) {
@@ -1210,21 +1209,9 @@ function SetButtonColorsPreset([Object]$ComboBox) {
             $Red   = Get8Bit -Value (Get-Random -Maximum 255)
             $Blue  = Get8Bit -Value (Get-Random -Maximum 255)
             $Colors += $Green + $Red + $Blue
-            SetColors -Color ($Green + $Red + $Blue) -Dialog $Redux.Colors.SetButtons[$i] -Label $Redux.Colors.ButtonLabels[$i]
+            SetColor -Color ($Green + $Red + $Blue) -Dialog $Redux.Colors.SetButtons[$i] -Label $Redux.Colors.ButtonLabels[$i]
         }
         if ($Settings.Debug.Console -eq $True) { Write-Host ("Randomize Button Colors: " + $Colors) }
-    }
-
-}
-
-
-
-#==============================================================================================================================================================================================
-function SetButtonColors([Array]$Colors) {
-    
-    for ($i=0; $i -lt $Colors.length; $i++) {
-        $Settings[$GameType.mode][$Redux.Colors.SetButtons[$i].Tag] = $Colors[$i]
-        $Redux.Colors.ButtonLabels[$i].BackColor = $Redux.Colors.SetButtons[$i].Color = "#" + $Colors[$i]
     }
 
 }
@@ -1260,7 +1247,7 @@ function SetNaviColorsPreset([Object]$ComboBox) {
             $Red   = Get8Bit -Value (Get-Random -Maximum 255)
             $Blue  = Get8Bit -Value (Get-Random -Maximum 255)
             $Colors += $Green + $Red + $Blue
-            SetColors -Color ($Green + $Red + $Blue) -Dialog $Redux.Colors.SetNavi[$i] -Label $Redux.Colors.NaviLabels[$i]
+            SetColor -Color ($Green + $Red + $Blue) -Dialog $Redux.Colors.SetNavi[$i] -Label $Redux.Colors.NaviLabels[$i]
         }
         if ($Settings.Debug.Console -eq $True) { Write-Host ("Randomize Navi Colors: " + $Colors) }
     }
@@ -1287,43 +1274,43 @@ function SetNaviColors([String]$Inner, [String]$Outer) {
 #==============================================================================================================================================================================================
 function SetTunicColorsPreset([Object]$ComboBox, [Object]$Dialog, [Object]$Label) {
     
-    if     ($ComboBox.Text -like '*Kokiri Green*')    { SetColors -Color "1E691B" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Goron Red*')       { SetColors -Color "641400" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Zora Blue*')       { SetColors -Color "003C64" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Black*')           { SetColors -Color "303030" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*White*')           { SetColors -Color "F0F0FF" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Azure Blue*')      { SetColors -Color "139ED8" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Vivid Cyan*')      { SetColors -Color "13E9D8" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Light Red*')       { SetColors -Color "F87C6D" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Fuchsia*')         { SetColors -Color "FF00FF" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -eq   "Purple")            { SetColors -Color "953080" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Majora Purple*')   { SetColors -Color "400040" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Twitch Purple*')   { SetColors -Color "6441A5" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Purple Heart*')    { SetColors -Color "8A2BE2" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Persian Rose*')    { SetColors -Color "FF1493" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Dirty Yellow*')    { SetColors -Color "E0D860" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Blush Pink*')      { SetColors -Color "F86CF8" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Hot Pink*')        { SetColors -Color "FF69B4" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Rose Pink*')       { SetColors -Color "FF90B3" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -eq   "Orange")            { SetColors -Color "E07940" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Gray*')            { SetColors -Color "A0A0B0" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Gold*')            { SetColors -Color "D8B060" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Silver*')          { SetColors -Color "D0F0FF" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Beige*')           { SetColors -Color "C0A0A0" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Teal*')            { SetColors -Color "30D0B0" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Blood Red*')       { SetColors -Color "830303" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Blood Orange*')    { SetColors -Color "FE4B03" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Royal Blue*')      { SetColors -Color "400090" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Sonic Blue*')      { SetColors -Color "5090E0" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*NES Green*')       { SetColors -Color "00D000" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Dark Green*')      { SetColors -Color "002518" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Lumen*')           { SetColors -Color "508CF0" -Dialog $Dialog -Label $Label }
+    if     ($ComboBox.Text -like '*Kokiri Green*')    { SetColor -Color "1E691B" -Dialog $Dialog -Label $Label }
+    elseif ($ComboBox.Text -like '*Goron Red*')       { SetColor -Color "641400" -Dialog $Dialog -Label $Label }
+    elseif ($ComboBox.Text -like '*Zora Blue*')       { SetColor -Color "003C64" -Dialog $Dialog -Label $Label }
+    elseif ($ComboBox.Text -like '*Black*')           { SetColor -Color "303030" -Dialog $Dialog -Label $Label }
+    elseif ($ComboBox.Text -like '*White*')           { SetColor -Color "F0F0FF" -Dialog $Dialog -Label $Label }
+    elseif ($ComboBox.Text -like '*Azure Blue*')      { SetColor -Color "139ED8" -Dialog $Dialog -Label $Label }
+    elseif ($ComboBox.Text -like '*Vivid Cyan*')      { SetColor -Color "13E9D8" -Dialog $Dialog -Label $Label }
+    elseif ($ComboBox.Text -like '*Light Red*')       { SetColor -Color "F87C6D" -Dialog $Dialog -Label $Label }
+    elseif ($ComboBox.Text -like '*Fuchsia*')         { SetColor -Color "FF00FF" -Dialog $Dialog -Label $Label }
+    elseif ($ComboBox.Text -eq   "Purple")            { SetColor -Color "953080" -Dialog $Dialog -Label $Label }
+    elseif ($ComboBox.Text -like '*Majora Purple*')   { SetColor -Color "400040" -Dialog $Dialog -Label $Label }
+    elseif ($ComboBox.Text -like '*Twitch Purple*')   { SetColor -Color "6441A5" -Dialog $Dialog -Label $Label }
+    elseif ($ComboBox.Text -like '*Purple Heart*')    { SetColor -Color "8A2BE2" -Dialog $Dialog -Label $Label }
+    elseif ($ComboBox.Text -like '*Persian Rose*')    { SetColor -Color "FF1493" -Dialog $Dialog -Label $Label }
+    elseif ($ComboBox.Text -like '*Dirty Yellow*')    { SetColor -Color "E0D860" -Dialog $Dialog -Label $Label }
+    elseif ($ComboBox.Text -like '*Blush Pink*')      { SetColor -Color "F86CF8" -Dialog $Dialog -Label $Label }
+    elseif ($ComboBox.Text -like '*Hot Pink*')        { SetColor -Color "FF69B4" -Dialog $Dialog -Label $Label }
+    elseif ($ComboBox.Text -like '*Rose Pink*')       { SetColor -Color "FF90B3" -Dialog $Dialog -Label $Label }
+    elseif ($ComboBox.Text -eq   "Orange")            { SetColor -Color "E07940" -Dialog $Dialog -Label $Label }
+    elseif ($ComboBox.Text -like '*Gray*')            { SetColor -Color "A0A0B0" -Dialog $Dialog -Label $Label }
+    elseif ($ComboBox.Text -like '*Gold*')            { SetColor -Color "D8B060" -Dialog $Dialog -Label $Label }
+    elseif ($ComboBox.Text -like '*Silver*')          { SetColor -Color "D0F0FF" -Dialog $Dialog -Label $Label }
+    elseif ($ComboBox.Text -like '*Beige*')           { SetColor -Color "C0A0A0" -Dialog $Dialog -Label $Label }
+    elseif ($ComboBox.Text -like '*Teal*')            { SetColor -Color "30D0B0" -Dialog $Dialog -Label $Label }
+    elseif ($ComboBox.Text -like '*Blood Red*')       { SetColor -Color "830303" -Dialog $Dialog -Label $Label }
+    elseif ($ComboBox.Text -like '*Blood Orange*')    { SetColor -Color "FE4B03" -Dialog $Dialog -Label $Label }
+    elseif ($ComboBox.Text -like '*Royal Blue*')      { SetColor -Color "400090" -Dialog $Dialog -Label $Label }
+    elseif ($ComboBox.Text -like '*Sonic Blue*')      { SetColor -Color "5090E0" -Dialog $Dialog -Label $Label }
+    elseif ($ComboBox.Text -like '*NES Green*')       { SetColor -Color "00D000" -Dialog $Dialog -Label $Label }
+    elseif ($ComboBox.Text -like '*Dark Green*')      { SetColor -Color "002518" -Dialog $Dialog -Label $Label }
+    elseif ($ComboBox.Text -like '*Lumen*')           { SetColor -Color "508CF0" -Dialog $Dialog -Label $Label }
     elseif ($ComboBox.Text -like '*Randomized*') {
         $Green = Get8Bit -Value (Get-Random -Maximum 255)
         $Red   = Get8Bit -Value (Get-Random -Maximum 255)
         $Blue  = Get8Bit -Value (Get-Random -Maximum 255)
         if ($Settings.Debug.Console -eq $True) { Write-Host ("Randomize Tunic Color: " + ($Green + $Red + $Blue)) }
-        SetColors -Color ($Green + $Red + $Blue) -Dialog $Dialog -Label $Label
+        SetColor -Color ($Green + $Red + $Blue) -Dialog $Dialog -Label $Label
     }
 
 }
@@ -1333,25 +1320,25 @@ function SetTunicColorsPreset([Object]$ComboBox, [Object]$Dialog, [Object]$Label
 #==============================================================================================================================================================================================
 function SetGauntletsColorsPreset([Object]$ComboBox, [Object]$Dialog, [Object]$Label) {
     
-    if     ($ComboBox.Text -like '*Silver*')     { SetColors -Color "FFFFFF" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Gold*')       { SetColors -Color "FECF0F" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Black*')      { SetColors -Color "000006" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Green*')      { SetColors -Color "025918" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -eq   "Blue")         { SetColors -Color "06025A" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Bronze*')     { SetColors -Color "600602" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Red*')        { SetColors -Color "FF0000" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Sky Blue*')   { SetColors -Color "025DB0" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Pink*')       { SetColors -Color "FA6A90" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Magenta*')    { SetColors -Color "FF00FF" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Orange*')     { SetColors -Color "DA3800" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Lime*')       { SetColors -Color "5BA806" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Purple*')     { SetColors -Color "800080" -Dialog $Dialog -Label $Label }
+    if     ($ComboBox.Text -like '*Silver*')     { SetColor -Color "FFFFFF" -Dialog $Dialog -Label $Label }
+    elseif ($ComboBox.Text -like '*Gold*')       { SetColor -Color "FECF0F" -Dialog $Dialog -Label $Label }
+    elseif ($ComboBox.Text -like '*Black*')      { SetColor -Color "000006" -Dialog $Dialog -Label $Label }
+    elseif ($ComboBox.Text -like '*Green*')      { SetColor -Color "025918" -Dialog $Dialog -Label $Label }
+    elseif ($ComboBox.Text -eq   "Blue")         { SetColor -Color "06025A" -Dialog $Dialog -Label $Label }
+    elseif ($ComboBox.Text -like '*Bronze*')     { SetColor -Color "600602" -Dialog $Dialog -Label $Label }
+    elseif ($ComboBox.Text -like '*Red*')        { SetColor -Color "FF0000" -Dialog $Dialog -Label $Label }
+    elseif ($ComboBox.Text -like '*Sky Blue*')   { SetColor -Color "025DB0" -Dialog $Dialog -Label $Label }
+    elseif ($ComboBox.Text -like '*Pink*')       { SetColor -Color "FA6A90" -Dialog $Dialog -Label $Label }
+    elseif ($ComboBox.Text -like '*Magenta*')    { SetColor -Color "FF00FF" -Dialog $Dialog -Label $Label }
+    elseif ($ComboBox.Text -like '*Orange*')     { SetColor -Color "DA3800" -Dialog $Dialog -Label $Label }
+    elseif ($ComboBox.Text -like '*Lime*')       { SetColor -Color "5BA806" -Dialog $Dialog -Label $Label }
+    elseif ($ComboBox.Text -like '*Purple*')     { SetColor -Color "800080" -Dialog $Dialog -Label $Label }
     elseif ($ComboBox.Text -like '*Randomized*') {
         $Green = Get8Bit -Value (Get-Random -Maximum 255)
         $Red   = Get8Bit -Value (Get-Random -Maximum 255)
         $Blue  = Get8Bit -Value (Get-Random -Maximum 255)
         if ($Settings.Debug.Console -eq $True) { Write-Host ("Randomize Gauntlets Color: " + ($Green + $Red + $Blue)) }
-        SetColors -Color ($Green + $Red + $Blue) -Dialog $Dialog -Label $Label
+        SetColor -Color ($Green + $Red + $Blue) -Dialog $Dialog -Label $Label
     }
 
 }
@@ -1360,22 +1347,22 @@ function SetGauntletsColorsPreset([Object]$ComboBox, [Object]$Dialog, [Object]$L
 #==============================================================================================================================================================================================
 function SetMirrorShieldFrameColorsPreset([Object]$ComboBox, [Object]$Dialog, [Object]$Label) {
     
-    if     ($ComboBox.Text -like '*Red*')        { SetColors -Color "D70000" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Green*')      { SetColors -Color "00FF00" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Blue*')       { SetColors -Color "0040D8" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Yellow*')     { SetColors -Color "FFFF64" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Cyan*')       { SetColors -Color "00FFFF" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Magenta*')    { SetColors -Color "FF00FF" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Orange*')     { SetColors -Color "FFA500" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Gold*')       { SetColors -Color "FFD700" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Purple*')     { SetColors -Color "800080" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Pink*')       { SetColors -Color "FF69B4" -Dialog $Dialog -Label $Label }
+    if     ($ComboBox.Text -like '*Red*')        { SetColor -Color "D70000" -Dialog $Dialog -Label $Label }
+    elseif ($ComboBox.Text -like '*Green*')      { SetColor -Color "00FF00" -Dialog $Dialog -Label $Label }
+    elseif ($ComboBox.Text -like '*Blue*')       { SetColor -Color "0040D8" -Dialog $Dialog -Label $Label }
+    elseif ($ComboBox.Text -like '*Yellow*')     { SetColor -Color "FFFF64" -Dialog $Dialog -Label $Label }
+    elseif ($ComboBox.Text -like '*Cyan*')       { SetColor -Color "00FFFF" -Dialog $Dialog -Label $Label }
+    elseif ($ComboBox.Text -like '*Magenta*')    { SetColor -Color "FF00FF" -Dialog $Dialog -Label $Label }
+    elseif ($ComboBox.Text -like '*Orange*')     { SetColor -Color "FFA500" -Dialog $Dialog -Label $Label }
+    elseif ($ComboBox.Text -like '*Gold*')       { SetColor -Color "FFD700" -Dialog $Dialog -Label $Label }
+    elseif ($ComboBox.Text -like '*Purple*')     { SetColor -Color "800080" -Dialog $Dialog -Label $Label }
+    elseif ($ComboBox.Text -like '*Pink*')       { SetColor -Color "FF69B4" -Dialog $Dialog -Label $Label }
     elseif ($ComboBox.Text -like '*Randomized*') {
         $Green = Get8Bit -Value (Get-Random -Maximum 255)
         $Red   = Get8Bit -Value (Get-Random -Maximum 255)
         $Blue  = Get8Bit -Value (Get-Random -Maximum 255)
         if ($Settings.Debug.Console -eq $True) { Write-Host ("Randomize Mirror Shield Frame Color: " + ($Green + $Red + $Blue)) }
-        SetColors -Color ($Green + $Red + $Blue) -Dialog $Dialog -Label $Label
+        SetColor -Color ($Green + $Red + $Blue) -Dialog $Dialog -Label $Label
     }
 
 }
@@ -1383,9 +1370,21 @@ function SetMirrorShieldFrameColorsPreset([Object]$ComboBox, [Object]$Dialog, [O
 
 
 #==============================================================================================================================================================================================
-function SetColors([String]$Color, [Object]$Dialog, [Object]$Label) {
+function SetColor([String]$Color, [Object]$Dialog, [Object]$Label) {
     
     $Settings[$GameType.mode][$Dialog.Tag] = $Color; $Label.BackColor  = $Dialog.Color = "#" + $Color
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function SetColors([Array]$Colors, [Array]$Dialogs, [Array]$Labels) {
+    
+    for ($i=0; $i -lt $Colors.length; $i++) {
+        $Settings[$GameType.mode][$Dialogs[$i].Tag] = $Colors[$i]
+        $Labels[$i].BackColor = $Dialogs[$i].Color = "#" + $Colors[$i]
+    }
 
 }
 
@@ -1409,3 +1408,6 @@ Export-ModuleMember -Function CreateTabReduxOcarinaOfTime
 Export-ModuleMember -Function CreateTabLanguageOcarinaOfTime
 
 Export-ModuleMember -Function GetSFXID
+Export-ModuleMember -Function SetButtonColorsPreset
+Export-ModuleMember -Function SetColor
+Export-ModuleMember -Function SetColors

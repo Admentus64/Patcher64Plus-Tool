@@ -548,18 +548,21 @@ function GetFilePaths() {
         if (Test-Path -LiteralPath $Settings["Core"][$InputPaths.GameTextBox.Name] -PathType Leaf) {
             GamePath_Finish $InputPaths.GameTextBox -VarName $InputPaths.GameTextBox.Name -Path $Settings["Core"][$InputPaths.GameTextBox.Name]
         }
+        else { $InputPaths.GameTextBox.Text = "Select or drag and drop your ROM or VC WAD file..." }
     }
 
     if (IsSet $Settings["Core"][$InputPaths.InjectTextBox.Name]) {
         if (Test-Path -LiteralPath $Settings["Core"][$InputPaths.InjectTextBox.Name] -PathType Leaf) {
             InjectPath_Finish $InputPaths.InjectTextBox -VarName $InputPaths.InjectTextBox.Name -Path $Settings["Core"][$InputPaths.InjectTextBox.Name]
         }
+        else { $InputPaths.InjectTextBox.Text = "Select or drag and drop your NES, SNES or N64 ROM..." }
     }
 
     if (IsSet $Settings["Core"][$InputPaths.PatchTextBox.Name]) {
         if (Test-Path -LiteralPath $Settings["Core"][$InputPaths.PatchTextBox.Name] -PathType Leaf) {	
             PatchPath_Finish $InputPaths.PatchTextBox -VarName $InputPaths.PatchTextBox.Name -Path $Settings["Core"][$InputPaths.PatchTextBox.Name]
         }
+        else { $InputPaths.PatchTextBox.Text = "Select or drag and drop your BPS, IPS, Xdelta, VCDiff or PPF Patch File..." }
     }
 
 }

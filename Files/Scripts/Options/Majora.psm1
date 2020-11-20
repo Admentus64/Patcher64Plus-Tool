@@ -344,11 +344,11 @@ function CreateTabMainMajorasMask() {
 
     # EVERYTHING ELSE #
     CreateReduxGroup    -Tag  "Other" -Text "Other"
-    CreateReduxCheckBox -Name "GohtCutscene"   -Column 1 -Row 1 -Text "Fix Goht Cutscene"   -Info "Fix Goht's awakening cutscene so that Link no longer gets run over"
-    CreateReduxCheckBox -Name "MushroomBottle" -Column 2 -Row 1 -Text "Fix Mushroom Bottle" -Info "Fix the item reference when collecting Magical Mushrooms as Link puts away the bottle automatically due to an error"
-    CreateReduxCheckBox -Name "SouthernSwamp"  -Column 3 -Row 1 -Text "Fix Southern Swamp"  -Info "Fix a misplaced door after Woodfall has been cleared and you return to the Potion Shop`nThe door is slightly pushed forward after Odolwa has been defeated."
-    CreateReduxCheckBox -Name "FairyFountain"  -Column 4 -Row 1 -Text "Fix Fairy Fountain"  -Info "Fix the Ikana Canyon Fairy Fountain area not displaying the correct color."
-    CreateReduxCheckBox -Name "HideCredits"    -Column 5 -Row 1 -Text "Hide Credits"        -Info "Do not show the credits text during the credits sequence"
+    CreateReduxCheckBox -Name "GohtCutscene"      -Column 1 -Row 1 -Text "Fix Goht Cutscene"        -Info "Fix Goht's awakening cutscene so that Link no longer gets run over"
+    CreateReduxCheckBox -Name "MushroomBottle"    -Column 2 -Row 1 -Text "Fix Mushroom Bottle"      -Info "Fix the item reference when collecting Magical Mushrooms as Link puts away the bottle automatically due to an error"
+    CreateReduxCheckBox -Name "SouthernSwamp"     -Column 3 -Row 1 -Text "Fix Southern Swamp"       -Info "Fix a misplaced door after Woodfall has been cleared and you return to the Potion Shop`nThe door is slightly pushed forward after Odolwa has been defeated."
+    CreateReduxCheckBox -Name "FairyFountain"     -Column 4 -Row 1 -Text "Fix Fairy Fountain"       -Info "Fix the Ikana Canyon Fairy Fountain area not displaying the correct color."
+    CreateReduxCheckBox -Name "HideCredits"       -Column 5 -Row 1 -Text "Hide Credits"             -Info "Do not show the credits text during the credits sequence"
 
 }
 
@@ -372,10 +372,10 @@ function CreateTabReduxMajorasMask() {
 
     # D-PAD BUTTONS CUSTOMIZATION #
     $Redux.Box.DPad = CreateReduxGroup -Tag "DPad" -Text "D-Pad Buttons Customization" -Height 7
-    CreateReduxComboBox     -Name "Up"                 -Column 2 -Row 1 -Length 120 -Items @("Disabled", "Ocarina of Time", "Deku Mask", "Goron Mask", "Zora Mask", "Fierce Deity's Mask") -Default 2 -Info "Set the quick slot item for the D-Pad Up button"
-    CreateReduxComboBox     -Name "Left"               -Column 1 -Row 4 -Length 120 -Items @("Disabled", "Ocarina of Time", "Deku Mask", "Goron Mask", "Zora Mask", "Fierce Deity's Mask") -Default 3 -Info "Set the quick slot item for the D-Pad Left button"
-    CreateReduxComboBox     -Name "Right"              -Column 3 -Row 4 -Length 120 -Items @("Disabled", "Ocarina of Time", "Deku Mask", "Goron Mask", "Zora Mask", "Fierce Deity's Mask") -Default 4 -Info "Set the quick slot item for the D-Pad Right button"
-    CreateReduxComboBox     -Name "Down"               -Column 2 -Row 7 -Length 120 -Items @("Disabled", "Ocarina of Time", "Deku Mask", "Goron Mask", "Zora Mask", "Fierce Deity's Mask") -Default 1 -Info "Set the quick slot item for the D-Pad Down button"
+    CreateReduxComboBox     -Name "Up"                 -Column 2 -Row 1 -Length 120 -Items @("Disabled", "Ocarina of Time", "Deku Mask", "Goron Mask", "Zora Mask", "Fierce Deity's Mask") -Default 3 -Info "Set the quick slot item for the D-Pad Up button"
+    CreateReduxComboBox     -Name "Left"               -Column 1 -Row 4 -Length 120 -Items @("Disabled", "Ocarina of Time", "Deku Mask", "Goron Mask", "Zora Mask", "Fierce Deity's Mask") -Default 4 -Info "Set the quick slot item for the D-Pad Left button"
+    CreateReduxComboBox     -Name "Right"              -Column 3 -Row 4 -Length 120 -Items @("Disabled", "Ocarina of Time", "Deku Mask", "Goron Mask", "Zora Mask", "Fierce Deity's Mask") -Default 5 -Info "Set the quick slot item for the D-Pad Right button"
+    CreateReduxComboBox     -Name "Down"               -Column 2 -Row 7 -Length 120 -Items @("Disabled", "Ocarina of Time", "Deku Mask", "Goron Mask", "Zora Mask", "Fierce Deity's Mask") -Default 2 -Info "Set the quick slot item for the D-Pad Down button"
     
     # D-Pad Buttons Customization - Image #
     $PictureBox = New-Object Windows.Forms.PictureBox
