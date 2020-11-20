@@ -1,20 +1,12 @@
 function SetWiiVCMode([Boolean]$Enable) {
     
-    if ($IsWiiVC -eq $Enable) { return }
+    if ( ($Enable -eq $IsWiiVC) -and $GameIsSelected) { return }
+
     $global:IsWiiVC = $Enable
-
-    if ($IsWiiVC) {
-        EnablePatchButtons -Enable (IsSet -Elem $Files.WAD)
-        $CustomTitleTextBox.MaxLength = $VCTitleLength 
-    }
-    else {
-        EnablePatchButtons -Enable (IsSet -Elem $Files.ROM)
-        $CustomTitleTextBox.MaxLength = $GameConsole.title_length
-    }
+    if ($IsWiiVC)   { $CustomTitleTextBox.MaxLength = $VCTitleLength  }
+    else            { $CustomTitleTextBox.MaxLength = $GameConsole.rom_title_length }
     
-    $InjectROMButton.Visible = $VC.Panel.Visible = $IsWiiVC
-    $ClearWADPathButton.Enabled = (IsSet -Elem $Files.WAD -MinLength 1)
-
+    EnablePatchButtons -Enable (IsSet -Elem $GamePath)
     GetHeader
     SetModeLabel
     ChangePatchPanel
@@ -24,7 +16,7 @@ function SetWiiVCMode([Boolean]$Enable) {
 
 
 #==================================================================================================================================================================================================================================================================
-function CreateToolTip() {
+function CreateToolTip($Form, $Info) {
 
     # Create ToolTip
     $ToolTip = New-Object System.Windows.Forms.ToolTip
@@ -32,6 +24,7 @@ function CreateToolTip() {
     $ToolTip.InitialDelay = 500
     $ToolTip.ReshowDelay = 0
     $ToolTip.ShowAlways = $True
+    if ( (IsSet -Elem $Form) -and (IsSet -Elem $Info) ) { $ToolTip.SetToolTip($Form, $Info) }
     return $ToolTip
 
 }
@@ -75,6 +68,7 @@ function ChangeGamesList() {
 
     # Reset
     $CurrentGameComboBox.Items.Clear()
+    if (!$IsWiiVC) { $CustomTitleTextBox.MaxLength = $GameConsole.rom_title_length }
 
     $Items = @()
     Foreach ($Game in $Files.json.games.game) {
@@ -96,9 +90,7 @@ function ChangeGamesList() {
         catch { $CurrentGameComboBox.SelectedIndex = 0 }
     }
 
-    $PatchHeaderROMButton.Visible = !$IsWiiVC -and ( ($GameConsole.rom_title -gt 0) -or ($GameConsole.rom_gameID -gt 0) )
     SetVCPanel
-    SetMainScreenSize
 
 }
 
@@ -131,11 +123,13 @@ function ChangePatchPanel() {
             if ($Item.title -eq $GamePatch.title -and $Item.title -eq $Items[$i]) { $Patches.ComboBox.SelectedIndex = $i }
         }
     }
+
+    if ($InputPaths.GameTextBox.Text -notlike '*:\*') { $global:IsActiveGameField = $True }
     if ($Items.Length -gt 0 -and $Patches.ComboBox.SelectedIndex -eq -1) {
         try { $Patches.ComboBox.SelectedIndex = $Settings["Core"][$Patches.ComboBox.Name] }
         catch { $Patches.ComboBox.SelectedIndex = 0 }
     }
-
+    
 }
 
 
@@ -156,19 +150,25 @@ function SetMainScreenSize() {
     # Custom Header Panel Visibility
     $CustomHeaderPanel.Visible = ($GameConsole.rom_title -gt 0) -or ($GameConsole.rom_gameID -gt 0) -or $IsWiiVC
     $CustomTitleTextBox.Visible = $CustomTitleTextBoxLabel.Visible = ($GameConsole.rom_title -gt 0) -or $IsWiiVC
-    $CustomGameIDTextBox.Visible = $CustomGameIDTextBoxLabel.Visible = ($GameConsole.rom_gameID -gt 0) -or $IsWiiVC
+    $CustomGameIDTextBox.Visible = $CustomGameIDTextBoxLabel.Visible = ($GameConsole.rom_gameID -eq 1) -or $IsWiiVC
+    $CustomRegionCodeLabel.Visible = $CustomRegionCodeComboBox.Visible = ($GameConsole.rom_gameID -eq 2)
+    $InputPaths.InjectPanel.Visible = $IsWiiVC
     $VC.Panel.Visible = $IsWiiVC
 
-    # Set Patch Panel Size
-    if ( (IsSet -Elem $GamePatch.Redux) -and (IsSet -Elem $GameType.Downgrade) )   {
-        $Patches.DowngradeLabel.Top = $Patches.OptionsLabel.Bottom + 15
-        $Patches.Panel.Height = $Patches.Group.Height = 110
+    # Set Input Paths Sizes
+    $InputPaths.GamePanel.Location = $InputPaths.InjectPanel.Location = $InputPaths.PatchPanel.Location = New-Object System.Drawing.Size(10, 50)
+    if ($IsWiiVC) {
+        $InputPaths.InjectPanel.Top = $InputPaths.GamePanel.Bottom + 15
+        $InputPaths.PatchPanel.Top = $InputPaths.InjectPanel.Bottom + 15
     }
     else {
-        $Patches.DowngradeLabel.Top = $Patches.ReduxLabel.Top
-        $Patches.Panel.Height = $Patches.Group.Height = 90
+        $InputPaths.PatchPanel.Top = $InputPaths.GamePanel.Bottom + 15
     }
-    $Patches.Downgrade.Top = $Patches.DowngradeLabel.Top - 2
+
+    # Positioning
+    if (IsSet -Elem $GamePath)   { $CurrentGamePanel.Location = New-Object System.Drawing.Size(10, ($InputPaths.PatchPanel.Bottom + 5)) }
+    else                         { $CurrentGamePanel.Location = New-Object System.Drawing.Size(10, ($InputPaths.GamePanel.Bottom + 5)) }
+    $CustomHeaderPanel.Location = New-Object System.Drawing.Size(10, ($CurrentGamePanel.Bottom + 5))
 
     # Set VC Panel Size
     if ($GameConsole.options_vc -eq 0)                               { $VC.Panel.Height = $VC.Group.Height = 70 }
@@ -199,7 +199,7 @@ function SetMainScreenSize() {
     
     $StatusPanel.Location = New-Object System.Drawing.Size(10, ($MiscPanel.Bottom + 5))
     $MainDialog.Height = $StatusPanel.Bottom + 50
-
+    
 }
 
 
@@ -222,7 +222,6 @@ function ChangeGameMode() {
     $GameFiles.textures = $GameFiles.base + "\Textures"
     $GameFiles.credits = $GameFiles.base + "\Credits.txt"
     $GameFiles.info = $GameFiles.base + "\Info.txt"
-    $GameFiles.icon = $GameFiles.base + "\Icon.ico"
     $GameFiles.json = $GameFiles.base + "\Patches.json"
 
     $Lines = Get-Content -Path $Files.settings
@@ -241,36 +240,21 @@ function ChangeGameMode() {
     }
 
     # Info
-    if (Test-Path -LiteralPath $GameFiles.info -PathType Leaf)       { AddTextFileToTextbox -TextBox $InfoTextbox -File $GameFiles.info }
-    else                                                             { AddTextFileToTextbox -TextBox $InfoTextbox -File $null }
+    if (Test-Path -LiteralPath $GameFiles.info -PathType Leaf)       { AddTextFileToTextbox -TextBox $Credits.Sections[0] -File $GameFiles.info }
+    else                                                             { AddTextFileToTextbox -TextBox $Credits.Sections[0] -File $null }
 
     # Credits
-    if (Test-Path -LiteralPath $Files.text.credits -PathType Leaf)   { AddTextFileToTextbox -TextBox $CreditsTextBox -File $Files.text.credits }
-    if (Test-Path -LiteralPath $GameFiles.credits -PathType Leaf)    { AddTextFileToTextbox -TextBox $CreditsTextBox -File $GameFiles.credits -Add -PreSpace 2 }
-
-    # Icon
-    if (Test-Path -LiteralPath $GameFiles.icon -PathType Leaf)       { $LanguagesDialog.Icon = $GameFiles.icon }
-    else                                                             { $LanguagesDialog.Icon = $null }
+    if (Test-Path -LiteralPath $Files.text.credits -PathType Leaf)   { AddTextFileToTextbox -TextBox $Credits.Sections[1] -File $Files.text.credits }
+    if (Test-Path -LiteralPath $GameFiles.credits -PathType Leaf)    { AddTextFileToTextbox -TextBox $Credits.Sections[1] -File $GameFiles.credits -Add -PreSpace 2 }
 
     $CreditsGameLabel.Text = "Current Game: " + $GameType.mode
     $Patches.Panel.Visible = $GameType.patches
     $Patches.DowngradeLabel.Visible = $Patches.Downgrade.Visible = (IsSet -elem $GameType.downgrade)
 
-    # Create options content based on current game
-    $FunctionTitle = $GameType.mode
-    $FunctionTitle = $FunctionTitle -replace " ", ""
-    $FunctionTitle = $FunctionTitle -replace ",", ""
-    $FunctionTitle = $FunctionTitle -replace "'", ""
-    if (Get-Command ("Create" + $FunctionTitle + "OptionsContent") -errorAction SilentlyContinue)   { &("Create" + $FunctionTitle + "OptionsContent") }
-    if (Get-Command ("Create" + $FunctionTitle + "ReduxContent") -errorAction SilentlyContinue)   { &("Create" + $FunctionTitle + "ReduxContent") }
-
-    SetWiiVCMode -Enable $IsWiiVC
-    ChangePatchPanel
-    SetVCPanel
-    GetHeader
     SetModeLabel
-    SetMainScreenSize
-    
+    ChangePatchPanel
+    $global:IsActiveGameField = $True
+
 }
 
 
@@ -305,7 +289,7 @@ function SetVCPanel() {
 #==============================================================================================================================================================================================
 function UpdateStatusLabel([String]$Text) {
     
-    if ($ExternalScript) { Write-Host $Text }
+    if ($Settings.Debug.Console -eq $True) { Write-Host $Text }
     $StatusLabel.Text = $Text
     $StatusLabel.Refresh()
 
@@ -329,17 +313,7 @@ function EnablePatchButtons([Boolean]$Enable) {
     
     # Set the status that we are ready to roll... Or not...
     if ($Enable)        { UpdateStatusLabel -Text "Ready to patch!" }
-    elseif ($IsWiiVC)   { UpdateStatusLabel -Text "Select your Virtual Console WAD file to continue." }
-    else                { UpdateStatusLabel -Text "Select your NES, SNES or N64 ROM file to continue." }
-
-    if ($IsWiiVC) {
-        $InjectROMButton.Enabled = ($Files.WAD -ne $null -and $Files.ROM -ne $null)
-        $PatchBPSButton.Enabled = ($Files.WAD -ne $null -and $Files.BPS -ne $null)
-    }
-    else {
-        $PatchHeaderROMButton.Enabled = $Files.ROM -ne $null -and $CustomHeaderCheckbox.Checked
-        $PatchBPSButton.Enabled = ($Files.ROM -ne $null -and $Files.BPS -ne $null)
-    }
+    else                { UpdateStatusLabel -Text "Select your ROM or VC WAD file to continue." }
 
     # Enable patcher buttons.
     $Patches.Panel.Enabled = $Enable
@@ -352,79 +326,82 @@ function EnablePatchButtons([Boolean]$Enable) {
 
 
 #==================================================================================================================================================================================================================================================================
-function WADPath_Finish([Object]$TextBox, [String]$VarName, [String]$WADPath) {
+function GamePath_Finish([Object]$TextBox, [String]$Path) {
     
-    # Set the "GameWAD" variable that tracks the path
-    Set-Variable -Name $VarName -Value $WADPath -Scope 'Global'
-    $Files.WAD = Get-Item -LiteralPath $WADPath
+    # Set the "GamePath" variable that tracks the path
+    $global:GamePath = $Path
 
-    # Update the textbox to the current WAD.
-    $TextBox.Text = $WADPath
+    # Update the textbox with the current game
+    $TextBox.Text = $GamePath
 
-    SetWiiVCMode -Enable $True
+    # Check if the game is a WAD
+    $DroppedExtn = (Get-Item -LiteralPath $GamePath).Extension
+
+    if ( ($DroppedExtn -eq '.wad') -and !$IsWiiVC)              { SetWiiVCMode -Enable $True }
+    elseif ( ($DroppedExtn -ne '.wad') -and $IsWiiVC)           { SetWiiVCMode -Enable $False }
+    elseif ( ($DroppedExtn -ne '.wad') -and !$GameIsSelected)   { SetWiiVCMode -Enable $False }
+    SetMainScreenSize
+    $global:GameIsSelected = $True
+
     ChangeGamesList
+    $InputPaths.ClearGameButton.Enabled = $True
+    $InputPaths.PatchPanel.Visible = $True
+    $CustomHeaderPatchButton.Enabled = $CustomHeaderCheckbox.checked
 
-    # Check if both a WAD and ROM have been provided for ROM injection
-    if ($Files.ROM -ne $null) { $InjectROMButton.Enabled = $true }
+    # Calculate checksum if Native Mode
+    if (!$IsWiiVC) {
+        # Update hash
+        $HashSumROMTextBox.Text = (Get-FileHash -Algorithm MD5 $GamePath).Hash
 
-    # Check if both a .WAD and .BPS have been provided for BPS patching
-    if ($Files.BPS -ne $null) { $PatchBPSButton.Enabled = $true }
-
-}
-
-
-
-#==================================================================================================================================================================================================================================================================
-function ROMPath_Finish([Object]$TextBox, [String]$VarName, [String]$ROMPath) {
-    
-    # Set the "ROM" variable that tracks the path
-    Set-Variable -Name $VarName -Value $ROMPath -Scope 'Global'
-    $Files.ROM = Get-Item -LiteralPath $ROMPath
-
-    # Update hash
-    $HashSumROMTextBox.Text = (Get-FileHash -Algorithm MD5 $ROMPath).Hash
-
-    # Verify ROM
-    $MatchingROMTextBox.Text = "No Valid ROM Selected"
-    Foreach ($Item in $Files.json.games.game) {
-        if ($HashSumROMTextBox.Text -eq $Item.hash) {
-            $MatchingROMTextBox.Text = $Item.title + " (Rev 0)"
-            break
-        }
-        for ($i = 0; $i -lt $Item.downgrade.length; $i++) {
-            if ($HashSumROMTextBox.Text -eq $Item.downgrade[$i].hash) {
-                $MatchingROMTextBox.Text = $Item.title + " (" +  $Item.downgrade[$i].rev + ")"
-                break
+        # Verify ROM
+        $MatchingROMTextBox.Text = "No Valid ROM Selected"
+        Foreach ($Item in $Files.json.games.game) {
+            if ($HashSumROMTextBox.Text -eq $Item.hash) {
+              $MatchingROMTextBox.Text = $Item.title + " (Rev 0)"
+              break
+            }
+            for ($i = 0; $i -lt $Item.downgrade.length; $i++) {
+              if ($HashSumROMTextBox.Text -eq $Item.downgrade[$i].hash) {
+                   $MatchingROMTextBox.Text = $Item.title + " (" +  $Item.downgrade[$i].rev + ")"
+                    break
+                }
             }
         }
     }
-
-    # Update the textbox to the current WAD
-    $TextBox.Text = $ROMPath
-
-    if (!$IsWiiVC) { EnablePatchButtons -Enable $True }
-    
-    # Check if both a .WAD and ROM have been provided for ROM injection or both a ROM and .BPS have been provided for BPS patching
-    if ($Files.WAD -ne $null -and $IsWiiVC)        { $InjectROMButton.Enabled = $true }
-    elseif ($Files.BPS -ne $null -and !$IsWiiVC)   { $PatchBPSButton.Enabled = $true }
+    else {
+        $HashSumROMTextBox.Text = ""
+        $MatchingROMTextBox.Text = "No checksums for WAD files"
+    }
 
 }
 
 
 
 #==================================================================================================================================================================================================================================================================
-function BPSPath_Finish([Object]$TextBox, [String]$VarName, [String]$BPSPath) {
+function InjectPath_Finish([Object]$TextBox, [String]$Path) {
     
-    # Set the "BPS File" variable that tracks the path
-    Set-Variable -Name $VarName -Value $BPSPath -Scope 'Global'
-    $Files.BPS = Get-Item -LiteralPath $BPSPath
+    # Set the "InjectPath" variable that tracks the path
+    $global:InjectPath = $Path
 
-    # Update the textbox to the current WAD
-    $TextBox.Text = $BPSPath
+    # Update the textbox to the current injection ROM
+    $TextBox.Text = $InjectPath
 
-    # Check if both a WAD and Patch File have been provided for Patch File patching
-    if ($Files.WAD -ne $null -and $IsWiiVC)        { $PatchBPSButton.Enabled = $true }
-    elseif ($Files.ROM -ne $null -and !$IsWiiVC)   { $PatchBPSButton.Enabled = $true }
+    $InputPaths.ApplyInjectButton.Enabled = $True
+
+}
+
+
+
+#==================================================================================================================================================================================================================================================================
+function PatchPath_Finish([Object]$TextBox, [String]$Path) {
+    
+    # Set the "PatchPath" variable that tracks the path
+    $global:PatchPath = $Path
+
+    # Update the textbox to the current patch
+    $TextBox.Text = $PatchPath
+
+    $InputPaths.ApplyPatchButton.Enabled = $True
 
 }
 
@@ -444,6 +421,8 @@ function GetHeader() {
         else                                     { $CustomTitleTextBox.Text  = $GameType.rom_title }
         if (IsSet -Elem $GamePatch.rom_gameID)   { $CustomGameIDTextBox.Text = $GamePatch.rom_gameID }
         else                                     { $CustomGameIDTextBox.Text = $GameType.rom_gameID }
+        if (IsSet -Elem $GamePatch.rom_region)   { $CustomRegionCodeComboBox.SelectedIndex = $GamePatch.rom_region }
+        else                                     { $CustomRegionCodeComboBox.SelectedIndex = $GameType.rom_region }
     }
 
 }
@@ -466,7 +445,7 @@ function IsChecked([Object]$Elem, [Switch]$Active, [Switch]$Not) {
 #==============================================================================================================================================================================================
 function IsLanguage([Object]$Elem, [int]$Lang=0) {
     
-    if (!$Languages[$Lang].Checked)         { return $False }
+    if (!$Redux.Language[$Lang].Checked)    { return $False }
     if (IsChecked -Elem $Elem)              { return $True }
     return $False
 
@@ -482,6 +461,20 @@ function IsText([Object]$Elem, [String]$Text, [Switch]$Active, [Switch]$Not) {
     elseif (!$Active -and !$Elem.Enabled)   { return $False }
     if ($Not -and $Elem.Text -ne $Text)     { return $True }
     if (!$Not -and $Elem.Text -eq $Text)    { return $True }
+    return $False
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function IsIndex([Object]$Elem, [int]$Index=0, [Switch]$Active, [Switch]$Not) {
+    
+    if (!(IsSet -Elem $Elem))                        { return $False }
+    if ($Active -and !$Elem.Visible)                 { return $False }
+    elseif (!$Active -and !$Elem.Enabled)            { return $False }
+    if ($Not -and $Elem.SelectedIndex -ne $Index)    { return $True }
+    if (!$Not -and $Elem.SelectedIndex -eq $Index)   { return $True }
     return $False
 
 }
@@ -551,28 +544,23 @@ function StrLike([String]$str, [String]$val) {
 #==============================================================================================================================================================================================
 function GetFilePaths() {
     
-    if (IsSet $Settings["Core"][$InputWADTextBox.Name]) {
-        if (Test-Path -LiteralPath $Settings["Core"][$InputWADTextBox.Name] -PathType Leaf) {
-            WADPath_Finish $InputWADTextBox -VarName $InputWADTextBox.Name -WADPath $Settings["Core"][$InputWADTextBox.Name]
+    if (IsSet $Settings["Core"][$InputPaths.GameTextBox.Name]) {
+        if (Test-Path -LiteralPath $Settings["Core"][$InputPaths.GameTextBox.Name] -PathType Leaf) {
+            GamePath_Finish $InputPaths.GameTextBox -VarName $InputPaths.GameTextBox.Name -Path $Settings["Core"][$InputPaths.GameTextBox.Name]
         }
-        else { $InputWADTextBox.Text = "Select or drag and drop your Virtual Console WAD file..." }
     }
 
-    if (IsSet $Settings["Core"][$InputROMTextBox.Name]) {
-        if (Test-Path -LiteralPath $Settings["Core"][$InputROMTextBox.Name] -PathType Leaf) {
-            ROMPath_Finish $InputROMTextBox -VarName $InputROMTextBox.Name -ROMPath $Settings["Core"][$InputROMTextBox.Name]
+    if (IsSet $Settings["Core"][$InputPaths.InjectTextBox.Name]) {
+        if (Test-Path -LiteralPath $Settings["Core"][$InputPaths.InjectTextBox.Name] -PathType Leaf) {
+            InjectPath_Finish $InputPaths.InjectTextBox -VarName $InputPaths.InjectTextBox.Name -Path $Settings["Core"][$InputPaths.InjectTextBox.Name]
         }
-        else { $InputROMTextBox.Text = "Select or drag and drop your NES, SNES or N64 ROM..." }
     }
 
-    if (IsSet $Settings["Core"][$InputBPSTextBox.Name]) {
-        if (Test-Path -LiteralPath $Settings["Core"][$InputBPSTextBox.Name] -PathType Leaf) {	
-            BPSPath_Finish $InputBPSTextBox -VarName $InputBPSTextBox.Name -BPSPath $Settings["Core"][$InputBPSTextBox.Name]
+    if (IsSet $Settings["Core"][$InputPaths.PatchTextBox.Name]) {
+        if (Test-Path -LiteralPath $Settings["Core"][$InputPaths.PatchTextBox.Name] -PathType Leaf) {	
+            PatchPath_Finish $InputPaths.PatchTextBox -VarName $InputPaths.PatchTextBox.Name -Path $Settings["Core"][$InputPaths.PatchTextBox.Name]
         }
-        else { $InputBPSTextBox.Text = "Select or drag and drop your BPS, IPS, Xdelta, VCDiff or PPF Patch File..." }
     }
-
-    if ($Files.WAD -eq $null -and $Files.ROM -eq $null) { EnablePatchButtons -Enable $False }
 
 }
 
@@ -588,10 +576,14 @@ function RestoreCustomHeader() {
         if (IsSet -Elem $Settings["Core"]["CustomGameID"]) {
             $CustomGameIDTextBox.Text = $Settings["Core"]["CustomGameID"]
         }
+        if (IsSet -Elem $Settings["Core"]["CustomRegionCode"]) {
+            $CustomRegionCodeComboBox.SelectedIndex = $Settings["Core"]["CustomRegionCode"]
+        }
     }
     else { GetHeader }
 
-    $CustomGameIDTextBox.Enabled = $CustomTitleTextBox.Enabled = $CustomHeaderCheckbox.Checked
+    $CustomGameIDTextBox.Enabled = $CustomTitleTextBox.Enabled = $CustomRegionCodeComboBox.Enabled = $CustomHeaderCheckbox.Checked
+    $CustomHeaderPatchButton.Enabled = (IsSet -Elem GamePath) -and $CustomHeaderCheckbox.Checked
 
 }
 
@@ -600,9 +592,22 @@ function RestoreCustomHeader() {
 #==============================================================================================================================================================================================
 function EnableGUI([Boolean]$Enable) {
     
-    $InputWADPanel.Enabled = $InputROMPanel.Enabled = $InputBPSPanel.Enabled = $Enable
+    $InputPaths.GamePanel.Enabled = $InputPaths.InjectPanel.Enabled = $InputPaths.PatchPanel.Enabled = $Enable
     $CurrentGamePanel.Enabled = $CustomHeaderPanel.Enabled = $Enable
     $Patches.Panel.Enabled = $MiscPanel.Enabled = $VC.Panel.Enabled = $Enable
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function EnableForm([Object]$Form, [Boolean]$Enable, [Switch]$Not) {
+    
+    if ($Not) { $Enable = !$Enable }
+    if ($Form.Controls.length -eq $True) {
+        $Form.Controls.GetEnumerator() | ForEach-Object { $_.Enabled = $Enable }
+    }
+    else { $Form.Enabled = $Enable }
 
 }
 
@@ -630,11 +635,11 @@ function Get-FileName([String]$Path, [String[]]$Description, [String[]]$FileName
 #==============================================================================================================================================================================================
 function RemovePath([String]$LiteralPath) {
     
-    # Make sure the path isn't null to avoid errors.
+    # Make sure the path isn't null to avoid errors
     if ($LiteralPath -ne '') {
-        # Check to see if the path exists.
+        # Check to see if the path exists
         if (Test-Path -LiteralPath $LiteralPath) {
-            # Remove the path.
+            # Remove the path
             Remove-Item -LiteralPath $LiteralPath -Recurse -Force -ErrorAction 'SilentlyContinue' | Out-Null
         }
     }
@@ -646,16 +651,16 @@ function RemovePath([String]$LiteralPath) {
 #==============================================================================================================================================================================================
 function CreatePath([String]$LiteralPath) {
     
-    # Make sure the path is not null to avoid errors.
+    # Make sure the path is not null to avoid errors
     if ($LiteralPath -ne '') {
-        # Check to see if the path does not exist.
+        # Check to see if the path does not exist
         if (!(Test-Path -LiteralPath $LiteralPath)) {
             # Create the path.
             New-Item -Path $LiteralPath -ItemType 'Directory' | Out-Null
         }
     }
 
-    # Return the path so it can be set to a variable when creating.
+    # Return the path so it can be set to a variable when creating
     return $LiteralPath
 
 }
@@ -741,10 +746,22 @@ function TogglePowerShellOpenWithClicks([Boolean]$Enable) {
 }
 
 
+#==================================================================================================================================================================================================================================================================
+function SetFunctionTitle([String]$Function) {
+
+    $Function = $Function -replace " ", ""
+    $Function = $Function -replace ",", ""
+    $Function = $Function -replace "'", ""
+    return $Function
+
+}
+
+
 
 #==============================================================================================================================================================================================
 
 Export-ModuleMember -Function SetWiiVCMode
+Export-ModuleMember -Function SetVCPanel
 Export-ModuleMember -Function CreateToolTip
 Export-ModuleMember -Function ChangeConsolesList
 Export-ModuleMember -Function ChangeGamesList
@@ -755,20 +772,22 @@ Export-ModuleMember -Function UpdateStatusLabel
 Export-ModuleMember -Function SetModeLabel
 Export-ModuleMember -Function EnablePatchButtons
 
-Export-ModuleMember -Function WADPath_Finish
-Export-ModuleMember -Function ROMPath_Finish
-Export-ModuleMember -Function BPSPath_Finish
+Export-ModuleMember -Function GamePath_Finish
+Export-ModuleMember -Function InjectPath_Finish
+Export-ModuleMember -Function PatchPath_Finish
 
 Export-ModuleMember -Function GetHeader
 Export-ModuleMember -Function IsChecked
 Export-ModuleMember -Function IsLanguage
 Export-ModuleMember -Function IsText
+Export-ModuleMember -Function IsIndex
 Export-ModuleMember -Function IsSet
 Export-ModuleMember -Function AddTextFileToTextbox
 Export-ModuleMember -Function StrLike
 Export-ModuleMember -Function GetFilePaths
 Export-ModuleMember -Function RestoreCustomHeader
 Export-ModuleMember -Function EnableGUI
+Export-ModuleMember -Function EnableForm
 
 Export-ModuleMember -Function Get-FileName
 Export-ModuleMember -Function RemoveFile
@@ -780,3 +799,4 @@ Export-ModuleMember -Function CreateSubPath
 
 Export-ModuleMember -Function ShowPowerShellConsole
 Export-ModuleMember -Function TogglePowerShellOpenWithClicks
+Export-ModuleMember -Function SetFunctionTitle

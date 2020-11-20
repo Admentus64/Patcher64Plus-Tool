@@ -104,6 +104,7 @@
 	"console" : "SNES",
 	"patches" : 1,
 	"rom_title" : "THE LEGEND OF ZELDA",
+	"rom_region" : 1,
 	"vc_title" : "The Legend of Zelda",
 	"vc_gameid" : "JADE",
 	"hash" : "3F4D2B3C92B6308BEB1AF2CE15C29DEB"
@@ -119,6 +120,7 @@
 	} ],
 	"patches" : 1,
 	"rom_title" : "SUPER MARIOWORLD",
+	"rom_region" : 1,
 	"vc_title" : "Super Mario World",
 	"vc_gameid" : "JAAE",
 	"hash" : "CDD3C8C37322978CA8669B34BC89C804"
@@ -129,6 +131,7 @@
 	"console" : "SNES",
 	"patches" : 1,
 	"rom_title" : "Super Metroid",
+	"rom_region" : 1,
 	"vc_title" : "Super Metroid",
 	"vc_gameid" : "JAVE",
 	"hash" : "C2E63A2CA2A46411DDBF758AB017F398"

@@ -146,6 +146,7 @@ function SetFileParameters() {
     $Files.icon.main                        = $Paths.Main + "\Main.ico"
     $Files.icon.settings                    = $Paths.Main + "\Settings.ico"
     $Files.icon.credits                     = $Paths.Main + "\Credits.ico"
+    $Files.icon.additional                  = $Paths.Main + "\Additional.ico"
 
 
 
@@ -191,12 +192,12 @@ function SetGetROM() {
     $GetROM.downgrade                       = $Paths.Master + "\downgraded"
     $GetROM.nes                             = $Paths.Master + "\rom.nes"
 
-    if ($IsWiiVC) {
+    if ($IsWiiVC -and (IsSet -Elem $WADFile) ) {
         if (!(IsSet -Elem $WADFile.ROM)) { $WADFile.ROM = $GetROM.nes }
         $GetROM.in       = $GetROM.patched = $WADFile.ROM
         $GetROM.debug    = $WADFile.Debug
     }
-    else {
+    elseif (!$IsWiiVC -and (IsSet -Elem $ROMFile) ) {
         $GetROM.in       = $ROMFile.ROM
         $GetROM.patched  = $ROMFile.Patched
         $GetROM.debug    = $ROMFile.Debug

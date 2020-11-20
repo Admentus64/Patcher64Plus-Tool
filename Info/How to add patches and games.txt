@@ -34,8 +34,9 @@ rom_title_uppercase	If the ROM title should be forced in uppercase
 			1		Uppercase for the ROM title is forced
 
 rom_gameID		If the Console supports a ROM GameID in native mode so it can be changed
-			0		ROM GameID is not supported in native mode
+			0		ROM GameID and Region Code are not supported in native mode
 			1		ROM GameID is supported in native mode
+			2		ROM Region Code is supported in native mode
 
 rom_gameID_offset	Hexadecimal value for where the GameID can be found in the ROM
 
@@ -97,15 +98,15 @@ downgrade	If the ROM is capable of downgrading and can contain multiple entries.
 
 romc		Type of ROM in the VC WAD File
 		0			Regular uncompressed ROM
-		1			The Legend of Zelda: Majora's Mask compressed ROMC
+		1			Super Smash Bros. / The Legend of Zelda: Majora's Mask compressed ROMC
 		2			Paper Mario compressed ROMC
 
 patches_vc	Amount of Patch VC options which are available
 		0			No Patch VC Options are available
 		1			Only base Patch VC Options are available
 		2			More Patch VC Options are available (Super Mario 64)
-		3			More Patch VC Options are available (Zelda 64)
-		4			All Patch VC Options are available (Zelda 64)
+		3			More Patch VC Options are available (Majora's Mask)
+		4			All Patch VC Options are available (Ocarina of Time)
 
 patches		If the Patch Options panel is shown
 		0			Hide Patch Options panel
@@ -113,14 +114,16 @@ patches		If the Patch Options panel is shown
 
 decompress	If the ROM is capable of decompressing
 		0			ROM can not decompress
-		1			ROM can decompress (OoT and MM only)
-		2			ROM can decompress (SM64 only)
+		1			ROM can decompress (Zelda 64 only)
+		2			ROM can decompress (Super Mario 64 only)
 
 dmaTable	New dmatable to overwrite existing dmatable with
 
 rom_title	Default game title for the ROM, no more than the amount of characters defined for the console
 
-rom_gameID	Default GameID for the ROM, requires 4 characters
+rom_gameID	Default GameID for the ROM, requires 4 characters (N64 only)
+
+rom_region	Default Region Code for the ROM, requires value between 0 and 20 (SNES only)
 
 vc_title	Default channel title for the Wii VC WAD, no more than 40 characters
 
@@ -295,3 +298,42 @@ tooltip		Patch button description.
 	"max_text_speed" : 2
 } ],
 "tooltip" : "The regular Ocarina of Time experience{0}With support for languages, redux and additional options{0}- Supported: Rev 0 (US)"
+
+
+
+--------------------------------
+--- PowerShell Script Module ---
+--------------------------------
+
+In order to create a new GUI for a game defined in the Games.json file a new PowerShell Script Module (.psm1) has to be created.
+The new .psm1 file should be placed in \Files\Scripts\Options with any file name you like.
+
+Each module automaticially recognizes the following functions:
+- PatchOptions (for file-patching regular options)
+- PatchRedux (for file-patching Redux related options)
+- ByteOptions (for byte-patching regular options)
+- ByteRedux (for byte-patching Redux related options)
+- ByteLanguage (for byte-patching language related options)
+- CreateOptions (initial function to call the GUI)
+
+Each of these functions need their function name extended by the "mode" value of the game without any spaces or special symbols in it, so for example:
+- PatchOptionsMajorasMask
+
+The GUI can be divided into tabs by calling the CreateOptionsDialog with the -Tabs attribute.
+Ex. -Tabs @("Audiovisual", "Difficulty", "Colors", "Equipment", "Cutscenes")
+This adds the tabs as defined above.
+The tab "Redux" is automaticially defined if there is a Redux patch.
+The tab "Language" is automaticially defined if there are Language patches available. Call the funcrion CreateLanguageContent to add the available languages.
+The tab "Main" is automaticially added when more than more tab is defined.
+
+A tab can be initalized by calling the function in the following manner "CreateTab" + TabName + GameMode. An example is listed below.
+- CreateTabAudiovisualOcarinaOfTime
+
+File-patching functions should be used for options that are applied through a patch file such as BPS or IPS.
+Byte-patching functions should be used for options that are applied directly by loading in the whole ROM in the RAM, alter individual changes and then resave the ROM.
+
+Existing modules can be looked at as an example.
+
+Other than using the reserved functions to get started, just about everything can be manually coded as you like.
+Make sure to export all used functions, including the reserved functions.
+Reserved functions are not required to be used.

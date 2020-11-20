@@ -23,13 +23,15 @@ Add-Type -AssemblyName 'System.Drawing'
 # Setup global variables
 
 $global:ScriptName = "Patcher64+ Tool"
-$global:VersionDate = "2020-11-11"
-$global:Version     = "v8.0.2"
+$global:VersionDate = "2020-11-20"
+$global:Version     = "v9.0.0"
 
 $global:GameConsole = $global:GameType = $global:GamePatch = $global:CheckHashSum = ""
 $global:GameFiles = $global:Settings = @{}
 $global:IsWiiVC = $global:MissingFiles = $False
 $global:VCTitleLength = 40
+$global:Bootup = $global:GameIsSelected = $global:IsActiveGameField = $False
+$global:Last = @{}
 
 $global:CurrentModeFont = New-Object System.Drawing.Font("Microsoft Sans Serif", 12, [System.Drawing.FontStyle]::Bold)
 $global:VCPatchFont     = New-Object System.Drawing.Font("Microsoft Sans Serif", 8,  [System.Drawing.FontStyle]::Bold)
@@ -75,15 +77,12 @@ function ImportModule([String]$Name) {
 
 }
 
-ImportModule -Name "Bytes"
-ImportModule -Name "Common"
-ImportModule -Name "Dialogs"
-ImportModule -Name "Files List"
-ImportModule -Name "Forms"
-ImportModule -Name "Main Dialog"
-ImportModule -Name "Master Quest"
-ImportModule -Name "Patch"
-ImportModule -Name "Settings"
+foreach ($Script in Get-ChildItem -LiteralPath $Paths.Scripts -Force) {
+    if ( !$Script.PSIsContainer -and $Script.Extension -eq ".psm1") { ImportModule -Name $Script.BaseName }
+}
+foreach ($Script in Get-ChildItem -LiteralPath ($Paths.Scripts + "\Options") -Force) {
+    if ( !$Script.PSIsContainer -and $Script.Extension -eq ".psm1") { ImportModule -Name ("Options\" + $Script.BaseName) }
+}
 
 #$module = Get-Module -Name "Forms"
 #$publicFunctions = (Get-Command -Module $module.name).name
@@ -148,36 +147,31 @@ function IsNumeric([String]$str) {
 # Retrieve settings
 GetSettings
 
-# Hide the PowerShell console from the user.
+# Hide the PowerShell console from the user
 if ($Settings.Debug.Console -ne $True) { ShowPowerShellConsole -ShowConsole $False }
 
-# Set paths to all the files stored in the script.
+# Set paths to all the files stored in the script
 SetFileParameters
 
-# Create the dialogs to show to the user.
+# Create the dialogs to show to the user
 CreateMainDialog
-CreateLanguagesDialog
 CreateCreditsDialog
 CreateSettingsDialog
 
-# Load Game Modules
-foreach ($Game in $Files.json.games.game) {
-    if (Test-Path -LiteralPath ($Paths.Scripts + "\Optional\" + $Game.mode + ".psm1") -PathType Leaf) { ImportModule -Name ("Optional\" + $Game.Mode) }
-}
-
-# Set default game mode.
+# Set default game mode
 ChangeConsolesList
 GetFilePaths
 
 # Restore Last Custom Title and GameID
-$CustomTitleTextBox.Add_TextChanged({  if (IsChecked $CustomHeaderCheckbox)   { $Settings["Core"]["CustomTitle"] = $this.Text } })
-$CustomGameIDTextBox.Add_TextChanged({ if (IsChecked $CustomHeaderCheckbox)   { $Settings["Core"]["CustomGameID"] = $this.Text } })
+$CustomTitleTextBox.Add_TextChanged({                  if (IsChecked $CustomHeaderCheckbox)   { $Settings["Core"]["CustomTitle"] = $this.Text } })
+$CustomGameIDTextBox.Add_TextChanged({                 if (IsChecked $CustomHeaderCheckbox)   { $Settings["Core"]["CustomGameID"] = $this.Text } })
+$CustomRegionCodeComboBox.Add_SelectedIndexChanged({   if (IsChecked $CustomHeaderCheckbox)   { $Settings["Core"]["CustomRegionCode"] = $this.SelectedIndex } })
 $CustomHeaderCheckbox.Add_CheckedChanged({ RestoreCustomHeader })
 RestoreCustomHeader
 
 # Restore VC Checkboxes
 CheckVCOptions
-
+SetMainScreenSize
 
 # Show the dialog to the user.
 $MainDialog.ShowDialog() | Out-Null

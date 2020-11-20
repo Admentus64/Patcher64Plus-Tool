@@ -25,7 +25,7 @@
 	"rom_title_length" : 21,
 	"rom_title_offset" : "7FC0",
 	"rom_title_offset_2" : "FFC0",
-	"rom_gameID" : 0,
+	"rom_gameID" : 2,
 	"appfile": "00000005.app"
 }
 ] }
