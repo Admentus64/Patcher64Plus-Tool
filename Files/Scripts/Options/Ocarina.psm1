@@ -211,22 +211,22 @@ function ByteOptionsOcarinaOfTime() {
     }
 
     if (IsChecked -Elem $Redux.UI.ButtonPositions) {
-        ChangeBytes -Offset "0B57EEF" -Values @("A7")
-        ChangeBytes -Offset "0B57F03" -Values @("BE")
-        ChangeBytes -Offset "0B586A7" -Values @("17")
-        ChangeBytes -Offset "0B589EB" -Values @("9B")
+        ChangeBytes -Offset "0B57EEF" -Values "A7"
+        ChangeBytes -Offset "0B57F03" -Values "BE"
+        ChangeBytes -Offset "0B586A7" -Values "17"
+        ChangeBytes -Offset "0B589EB" -Values "9B"
     }
 
     
 
     # COLORS
 
-    if (IsIndex -Elem $Redux.Colors.Equipment[0] -Index 0 -Not) { ChangeBytes -Offset "B6DA38" -IsDec -Values @($Redux.Colors.SetEquipment[0].Color.R, $Redux.Colors.SetEquipment[0].Color.G, $Redux.Colors.SetEquipment[0].Color.B) } # Kokiri Tunic
-    if (IsIndex -Elem $Redux.Colors.Equipment[1] -Index 1 -Not) { ChangeBytes -Offset "B6DA3B" -IsDec -Values @($Redux.Colors.SetEquipment[1].Color.R, $Redux.Colors.SetEquipment[1].Color.G, $Redux.Colors.SetEquipment[1].Color.B) } # Goron Tunic
-    if (IsIndex -Elem $Redux.Colors.Equipment[2] -Index 2 -Not) { ChangeBytes -Offset "B6DA3E" -IsDec -Values @($Redux.Colors.SetEquipment[2].Color.R, $Redux.Colors.SetEquipment[2].Color.G, $Redux.Colors.SetEquipment[2].Color.B) } # Zora Tunic
-    if (IsIndex -Elem $Redux.Colors.Equipment[3] -Index 0 -Not) { ChangeBytes -Offset "B6DA44" -IsDec -Values @($Redux.Colors.SetEquipment[3].Color.R, $Redux.Colors.SetEquipment[3].Color.G, $Redux.Colors.SetEquipment[3].Color.B) } # Silver Gauntlets
-    if (IsIndex -Elem $Redux.Colors.Equipment[4] -Index 1 -Not) { ChangeBytes -Offset "B6DA47" -IsDec -Values @($Redux.Colors.SetEquipment[4].Color.R, $Redux.Colors.SetEquipment[4].Color.G, $Redux.Colors.SetEquipment[4].Color.B) } # Golden Gauntlets
-    if (IsIndex -Elem $Redux.Colors.Equipment[5] -Index 0 -Not) { # Mirror Shield Frame
+    if (IsIndex -Elem $Redux.Colors.Equipment[0] -Index 1 -Not) { ChangeBytes -Offset "B6DA38" -IsDec -Values @($Redux.Colors.SetEquipment[0].Color.R, $Redux.Colors.SetEquipment[0].Color.G, $Redux.Colors.SetEquipment[0].Color.B) } # Kokiri Tunic
+    if (IsIndex -Elem $Redux.Colors.Equipment[1] -Index 2 -Not) { ChangeBytes -Offset "B6DA3B" -IsDec -Values @($Redux.Colors.SetEquipment[1].Color.R, $Redux.Colors.SetEquipment[1].Color.G, $Redux.Colors.SetEquipment[1].Color.B) } # Goron Tunic
+    if (IsIndex -Elem $Redux.Colors.Equipment[2] -Index 3 -Not) { ChangeBytes -Offset "B6DA3E" -IsDec -Values @($Redux.Colors.SetEquipment[2].Color.R, $Redux.Colors.SetEquipment[2].Color.G, $Redux.Colors.SetEquipment[2].Color.B) } # Zora Tunic
+    if (IsIndex -Elem $Redux.Colors.Equipment[3] -Index 1 -Not) { ChangeBytes -Offset "B6DA44" -IsDec -Values @($Redux.Colors.SetEquipment[3].Color.R, $Redux.Colors.SetEquipment[3].Color.G, $Redux.Colors.SetEquipment[3].Color.B) } # Silver Gauntlets
+    if (IsIndex -Elem $Redux.Colors.Equipment[4] -Index 2 -Not) { ChangeBytes -Offset "B6DA47" -IsDec -Values @($Redux.Colors.SetEquipment[4].Color.R, $Redux.Colors.SetEquipment[4].Color.G, $Redux.Colors.SetEquipment[4].Color.B) } # Golden Gauntlets
+    if (IsIndex -Elem $Redux.Colors.Equipment[5] -Index 1 -Not) { # Mirror Shield Frame
         ChangeBytes -Offset "FA7274" -IsDec -Values @($Redux.Colors.SetEquipment[5].Color.R, $Redux.Colors.SetEquipment[5].Color.G, $Redux.Colors.SetEquipment[5].Color.B)
         ChangeBytes -Offset "FA776C" -IsDec -Values @($Redux.Colors.SetEquipment[5].Color.R, $Redux.Colors.SetEquipment[5].Color.G, $Redux.Colors.SetEquipment[5].Color.B)
         ChangeBytes -Offset "FAA27C" -IsDec -Values @($Redux.Colors.SetEquipment[5].Color.R, $Redux.Colors.SetEquipment[5].Color.G, $Redux.Colors.SetEquipment[5].Color.B)
@@ -340,7 +340,7 @@ function ByteOptionsOcarinaOfTime() {
         else                                             { PatchBytes -Offset "18E1E0" -Patch "Voices\Feminine Link Voices.bin" }
     }
 
-    if (IsIndex -Elem $Redux.Sounds.Instrument -Index 1 -Not) {
+    if (IsIndex -Elem $Redux.Sounds.Instrument -Index 2 -Not) {
         ChangeBytes -Offset "B53C7B" -Values @($Redux.Sounds.Instrument.SelectedIndex); ChangeBytes -Offset "B4BF6F" -Values @($Redux.Sounds.Instrument.SelectedIndex)
     }
 
@@ -382,8 +382,8 @@ function ByteOptionsOcarinaOfTime() {
         ChangeBytes -Offset "BA9FD2" -Values (GetSFXID -SFX $Redux.SFX.FileMenuSelect.Text);     ChangeBytes -Offset "BAE6D6" -Values (GetSFXID -SFX $Redux.SFX.FileMenuSelect.Text)
     }
 
-    if (IsText -Elem $Redux.SFX.ZTarget -Text "Default" -Not)      { ChangeBytes -Offset "AE7EC6" -Values (GetSFXID -SFX $Redux.SFX.ZTarget.Text) }
-    if (IsText -Elem $Redux.SFX.LowHP -Text "Default" -Not)        { ChangeBytes -Offset "ADBA1A" -Values (GetSFXID -SFX $Redux.SFX.LowHP.Text) }
+    if (IsText -Elem $Redux.SFX.ZTarget    -Text "Default" -Not)   { ChangeBytes -Offset "AE7EC6" -Values (GetSFXID -SFX $Redux.SFX.ZTarget.Text) }
+    if (IsText -Elem $Redux.SFX.LowHP      -Text "Default" -Not)   { ChangeBytes -Offset "ADBA1A" -Values (GetSFXID -SFX $Redux.SFX.LowHP.Text) }
     if (IsText -Elem $Redux.SFX.HoverBoots -Text "Default" -Not)   { ChangeBytes -Offset "BDBD8A" -Values (GetSFXID -SFX $Redux.SFX.HoverBoots.Text) } 
 
 
@@ -407,10 +407,10 @@ function ByteOptionsOcarinaOfTime() {
 
     if (IsChecked -Elem $Redux.Unlock.Tunics)              { ChangeBytes -Offset "BC77B6" -Values @("09", "09"); ChangeBytes -Offset "BC77FE" -Values @("09", "09") }
     if (IsChecked -Elem $Redux.Unlock.Boots)               { ChangeBytes -Offset "BC77BA" -Values @("09", "09"); ChangeBytes -Offset "BC7801" -Values @("09", "09") }
-    if (IsChecked -Elem $Redux.Unlock.MegatonHammer)       { ChangeBytes -Offset "BC77A3" -Values @("09");       ChangeBytes -Offset "BC77CD" -Values @("09") }
-    if (IsChecked -Elem $Redux.Unlock.KokiriSword)         { ChangeBytes -Offset "BC77AD" -Values @("09");       ChangeBytes -Offset "BC77F7" -Values @("09") }
-    if (IsChecked -Elem $Redux.Unlock.FairySlingshot)      { ChangeBytes -Offset "BC779A" -Values @("09");       ChangeBytes -Offset "BC77C2" -Values @("09") }
-    if (IsChecked -Elem $Redux.Unlock.Boomerang)           { ChangeBytes -Offset "BC77A0" -Values @("09");       ChangeBytes -Offset "BC77CA" -Values @("09") }
+    if (IsChecked -Elem $Redux.Unlock.MegatonHammer)       { ChangeBytes -Offset "BC77A3" -Values "09";          ChangeBytes -Offset "BC77CD" -Values "09" }
+    if (IsChecked -Elem $Redux.Unlock.KokiriSword)         { ChangeBytes -Offset "BC77AD" -Values "09";          ChangeBytes -Offset "BC77F7" -Values "09" }
+    if (IsChecked -Elem $Redux.Unlock.FairySlingshot)      { ChangeBytes -Offset "BC779A" -Values "09";          ChangeBytes -Offset "BC77C2" -Values "09" }
+    if (IsChecked -Elem $Redux.Unlock.Boomerang)           { ChangeBytes -Offset "BC77A0" -Values "09";          ChangeBytes -Offset "BC77CA" -Values "09" }
 
 
 
@@ -423,7 +423,7 @@ function ByteOptionsOcarinaOfTime() {
 
     if (IsChecked -Elem $Redux.Other.SubscreenDelayFix)    { ChangeBytes -Offset "B15DD0" -Values @("00", "00", "00", "00"); ChangeBytes -Offset "B12947" -Values @("03") }
     if (IsChecked -Elem $Redux.Other.DisableNaviPrompts)   { ChangeBytes -Offset "DF8B84" -Values @("00", "00", "00", "00") }
-    if (IsChecked -Elem $Redux.Other.DefaultZTargeting)    { ChangeBytes -Offset "B71E6D" -Values @("01") }
+    if (IsChecked -Elem $Redux.Other.DefaultZTargeting)    { ChangeBytes -Offset "B71E6D" -Values "01" }
     if (IsChecked -Elem $Redux.Other.HideCredits)          { PatchBytes  -Offset "966000" -Patch "Message\Credits.bin" }
 
 
@@ -496,7 +496,7 @@ function ByteReduxOcarinaOfTime() {
     # INTERFACE #
 
     if (IsChecked -Elem $Redux.UI.ShowFileSelectIcons)   { PatchBytes  -Offset "BAF738" -Patch "File Select.bin" }
-    if (IsChecked -Elem $Redux.UI.DPadLayoutShow)        { ChangeBytes -Offset "348086E" -Values @("01") }
+    if (IsChecked -Elem $Redux.UI.DPadLayoutShow)        { ChangeBytes -Offset "348086E" -Values "01" }
 
 
 
@@ -508,10 +508,10 @@ function ByteReduxOcarinaOfTime() {
 
         # A Button
         ChangeBytes -Offset "3480845" -IsDec -Values @($Redux.Colors.SetButtons[0].Color.R, $Redux.Colors.SetButtons[0].Color.G, $Redux.Colors.SetButtons[0].Color.B) -Interval 2
-        ChangeBytes -Offset "3480863" -IsDec -Values @($Redux.Colors.SetButtons[0].Color.R, $Redux.Colors.SetButtons[0].Color.G, $Redux.Colors.SetButtons[0].Color.B) -Interval 2 # A Note Button
+        ChangeBytes -Offset "3480863" -IsDec -Values @($Redux.Colors.SetButtons[0].Color.R, $Redux.Colors.SetButtons[0].Color.G, $Redux.Colors.SetButtons[0].Color.B) -Interval 2 # Note Button
 
         # A Button - Text Cursor
-        ChangeBytes -Offset "B88E81"  -IsDec -Values @($Redux.Colors.SetButtons[0].Color.R, $Redux.Colors.SetButtons[0].Color.G, $Redux.Colors.SetButtons[0].Color.B) -Interval 4 # Red + Green
+        ChangeBytes -Offset "B88E81"  -IsDec -Values @($Redux.Colors.SetButtons[0].Color.R, $Redux.Colors.SetButtons[0].Color.G, $Redux.Colors.SetButtons[0].Color.B) -Interval 4
 
         # A Button - Pause Menu Cursor
         ChangeBytes -Offset "BC7849"  -IsDec -Values @($Redux.Colors.SetButtons[0].Color.R, $Redux.Colors.SetButtons[0].Color.G, $Redux.Colors.SetButtons[0].Color.B) -Interval 2
@@ -519,7 +519,7 @@ function ByteReduxOcarinaOfTime() {
         ChangeBytes -Offset "BC78BB"  -IsDec -Values @($Redux.Colors.SetButtons[0].Color.R, $Redux.Colors.SetButtons[0].Color.G, $Redux.Colors.SetButtons[0].Color.B) -Interval 2
 
         # A Button - Pause Menu Icon
-        ChangeBytes -Offset "845754"  -IsDec -Values @($Redux.Colors.SetButtons[0].Color.R, $Redux.Colors.SetButtons[0].Color.G, $Redux.Colors.SetButtons[0].Color.B) # Icon Color
+        ChangeBytes -Offset "845754"  -IsDec -Values @($Redux.Colors.SetButtons[0].Color.R, $Redux.Colors.SetButtons[0].Color.G, $Redux.Colors.SetButtons[0].Color.B)
 
         # A Button - Save/Death Cursor
         ChangeBytes -Offset "BBEBC2"  -IsDec -Values @($Redux.Colors.SetButtons[0].Color.R, $Redux.Colors.SetButtons[0].Color.G) # Red + Green
@@ -536,7 +536,7 @@ function ByteReduxOcarinaOfTime() {
         ChangeBytes -Offset "BB2F96"  -IsDec -Values @($Redux.Colors.SetButtons[0].Color.B) # Blue
 
         # B Button
-        ChangeBytes -Offset "348084B" -IsDec -Values @($Redux.Colors.SetButtons[1].Color.R, $Redux.Colors.SetButtons[1].Color.G, $Redux.Colors.SetButtons[1].Color.B) -Interval 2 # B Button
+        ChangeBytes -Offset "348084B" -IsDec -Values @($Redux.Colors.SetButtons[1].Color.R, $Redux.Colors.SetButtons[1].Color.G, $Redux.Colors.SetButtons[1].Color.B) -Interval 2
 
         # C Buttons
         ChangeBytes -Offset "3480851" -IsDec -Values @($Redux.Colors.SetButtons[2].Color.R, $Redux.Colors.SetButtons[2].Color.G, $Redux.Colors.SetButtons[2].Color.B) -Interval 2
@@ -548,7 +548,7 @@ function ByteReduxOcarinaOfTime() {
             ChangeBytes -Offset "BC78A3"  -IsDec -Values @($Redux.Colors.SetButtons[2].Color.R, $Redux.Colors.SetButtons[2].Color.G, $Redux.Colors.SetButtons[2].Color.B) -Interval 2
 
             # C Buttons - Pause Menu Icon
-            ChangeBytes -Offset "8456FC"  -IsDec -Values @($Redux.Colors.SetButtons[2].Color.R, $Redux.Colors.SetButtons[2].Color.G, $Redux.Colors.SetButtons[2].Color.B) # Pause Menu
+            ChangeBytes -Offset "8456FC"  -IsDec -Values @($Redux.Colors.SetButtons[2].Color.R, $Redux.Colors.SetButtons[2].Color.G, $Redux.Colors.SetButtons[2].Color.B)
 
             # C Buttons - Note Color
             ChangeBytes -Offset "BB2996"  -IsDec -Values @($Redux.Colors.SetButtons[2].Color.R, $Redux.Colors.SetButtons[2].Color.G) # Red + Green
@@ -594,7 +594,7 @@ function ByteLanguageOcarinaOfTime() {
     }
 
     if (IsChecked -Elem $Redux.TextSpeed2x) {
-        ChangeBytes -Offset "B5006F" -Values @("02") # Text Speed
+        ChangeBytes -Offset "B5006F" -Values "02" # Text Speed
 
         if ($Redux.Language[0].checked) {
             # Correct Ruto Confession Textboxes
@@ -609,7 +609,7 @@ function ByteLanguageOcarinaOfTime() {
         }
     }
     elseif (IsChecked -Elem $Redux.Text.Speed3x) {
-        ChangeBytes -Offset "B5006F" -Values @("03") # Text Speed
+        ChangeBytes -Offset "B5006F" -Values "03" # Text Speed
 
         # Correct Learning Song Textboxes
         $Offset = SearchBytes -File $File -Values @("08", "06", "3C", "50", "6C", "61", "79", "20", "75", "73", "69", "6E", "67", "20", "05")
@@ -797,9 +797,9 @@ function CreateTabMainOcarinaOfTime() {
     CreateReduxGroup    -Tag  "Restore" -Text "Restore / Correct / Censor"
     CreateReduxCheckBox -Name "RupeeColors"        -Column 1 -Text "Correct Rupee Colors"            -Info "Corrects the colors for the Purple (50) and Golden (200) Rupees"
     CreateReduxCheckBox -Name "CowNoseRing"        -Column 2 -Text "Restore Cow Nose Ring"           -Info "Restore the rings in the noses for Cows as seen in the Japanese release"
-    CreateReduxCheckBox -Name "FireTemple"         -Column 3 -Text "Restore Fire Temple"             -Info "Restore the censored Fire Temple theme used since the Rev 2 ROM"
-    CreateReduxCheckBox -Name "Blood"              -Column 4 -Text "Censor Blood"                    -Info "Restore the censored green blood for Ganondorf and Ganon used since the Rev 2 ROM"
-    CreateReduxCheckBox -Name "GerudoTextures"     -Column 5 -Text "Censor Gerudo Textures"          -Info "Restore the censored Gerudo symbol textures used in the GameCube / Virtual Console releases`n- Disable the option to uncensor the Gerudo Texture used in the Master Quest dungeons"
+    CreateReduxCheckBox -Name "FireTemple"         -Column 3 -Text "Censor Fire Temple"              -Info " Censor Fire Temple theme as used in the Rev 2 ROM"
+    CreateReduxCheckBox -Name "Blood"              -Column 4 -Text "Censor Blood"                    -Info "Censor the green blood for Ganondorf and Ganon as used in the Rev 2 ROM"
+    CreateReduxCheckBox -Name "GerudoTextures"     -Column 5 -Text "Censor Gerudo Textures"          -Info "Censor Gerudo symbol textures used in the GameCube / Virtual Console releases`n- Disable the option to uncensor the Gerudo Texture used in the Master Quest dungeons"
     
     # OTHER #
     CreateReduxGroup    -Tag  "Other" -Text "Other"

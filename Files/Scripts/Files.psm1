@@ -19,11 +19,11 @@ function SetFileParameters() {
     $Files.tool.xdelta3                     = $Paths.Master + "\Base\xdelta3.exe"
     $Files.tool.applyPPF3                   = $Paths.Master + "\Base\ApplyPPF3.exe"
 
-    $Files.tool.Compress                    = $Paths.Master + "\Compression\Compress.exe"
+    $Files.tool.Compress64                  = $Paths.Master + "\Compression\Compress64.exe"
     $Files.tool.Compress32                  = $Paths.Master + "\Compression\Compress32.exe"
     $Files.tool.ndec                        = $Paths.Master + "\Compression\ndec.exe"
     $Files.tool.sm64extend                  = $Paths.Master + "\Compression\sm64extend.exe"
-    $Files.tool.TabExt                      = $Paths.Master + "\Compression\TabExt.exe"
+    $Files.tool.TabExt64                    = $Paths.Master + "\Compression\TabExt64.exe"
     $Files.tool.TabExt32                    = $Paths.Master + "\Compression\TabExt32.exe"
     
     $Files.tool.wadpacker                   = $Paths.WiiVC + "\wadpacker.exe"

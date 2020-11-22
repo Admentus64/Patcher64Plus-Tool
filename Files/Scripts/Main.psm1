@@ -39,14 +39,15 @@ function CreateMainDialog() {
     $InputPaths.GameGroup.Add_DragDrop({ GamePath_DragDrop })
 
     # Create a textbox to display the selected WAD
-    $InputPaths.GameTextBox = CreateTextBox -X 10 -Y 20 -Width 420 -Height 22 -Text "Select or drag and drop your ROM or VC WAD file..." -Name "GamePath" -ReadOnly $True
+    $InputPaths.GameTextBox = CreateTextBox -X 10 -Y 20 -Width 420 -Height 22 -Text "Select or drag and drop your ROM or VC WAD file..." -Name "Path.Game" -ReadOnly $True
     $InputPaths.GameTextBox.AllowDrop = $True
     $InputPaths.GameTextBox.Add_DragEnter({ $_.Effect = [Windows.Forms.DragDropEffects]::Copy })
     $InputPaths.GameTextBox.Add_DragDrop({ GamePath_DragDrop })
 
-    # Create a button to allow manually selecting a WAD
+    # Create a button to allow manually selecting a ROM or WAD
     $InputPaths.GameButton = CreateButton -X ($InputPaths.GameTextBox.Right + 6) -Y 18 -Width 24 -Height 22 -Text "..." -Info "Select your ROM or VC WAD using file explorer"
-    $InputPaths.GameButton.Add_Click({ GamePath_Button -TextBox $InputWADTextBox -Description ('VC WAD', 'Z64 ROM', 'N64 ROM', 'V64 ROM', 'SFC ROM', 'SMC ROM', 'NES ROM') -FileName @('*.wad', '*.z64', '*.n64', '*.v64', '*.sfc', '*.smc', '*.nes') })
+    $InputPaths.GameButton.Add_Click({ GamePath_Button -TextBox $InputPaths.GameTextBox -Description "ROM/WAD Files" -FileNames @('*.wad', '*.z64', '*.n64', '*.v64', '*.sfc', '*.smc', '*.nes') })
+    #"Image Files(*.BMP;*.JPG;*.GIF)|*.BMP;*.JPG;*.GIF|All files (*.*)|*.*"
 
     # Create a button to clear the WAD Path
     $InputPaths.ClearGameButton = CreateButton -X ($InputPaths.GameButton.Right + 15) -Y 18 -Width ($InputPaths.GameGroup.Right - $InputPaths.GameButton.Right - 30) -Height 22 -Text "Clear" -Info "Clear the selected ROM or VC WAD file"
@@ -81,14 +82,14 @@ function CreateMainDialog() {
     $InputPaths.InjectGroup.Add_DragDrop({ InjectPath_DragDrop })
 
     # Create a textbox to display the selected ROM
-    $InputPaths.InjectTextBox = CreateTextBox -X 10 -Y 20 -Width 420 -Height 22 -Text "Select or drag and drop your NES, SNES or N64 ROM..." -Name "InjectPath" -ReadOnly $True
+    $InputPaths.InjectTextBox = CreateTextBox -X 10 -Y 20 -Width 420 -Height 22 -Text "Select or drag and drop your NES, SNES or N64 ROM..." -Name "Path.Inject" -ReadOnly $True
     $InputPaths.InjectTextBox.AllowDrop = $True
     $InputPaths.InjectTextBox.Add_DragEnter({ $_.Effect = [Windows.Forms.DragDropEffects]::Copy })
     $InputPaths.InjectTextBox.Add_DragDrop({ InjectPath_DragDrop })
 
     # Create a button to allow manually selecting a ROM
     $InputPaths.InjectButton = CreateButton -X ($InputPaths.InjectTextBox.Right + 6) -Y 18 -Width 24 -Height 22 -Text "..." -Info "Select your N64, SNES or NES ROM File using file explorer"
-    $InputPaths.InjectButton.Add_Click({ InjectPath_Button -TextBox $InputPaths.InjectTextBox -Description @('Z64 ROM', 'N64 ROM', 'V64 ROM', 'SFC ROM', 'SMC ROM', 'NES ROM') -FileName @('*.z64', '*.n64', '*.v64', '*.sfc', '*.smc', '*.nes') })
+    $InputPaths.InjectButton.Add_Click({ InjectPath_Button -TextBox $InputPaths.InjectTextBox -Description "ROM Files" -FileNames @('*.z64', '*.n64', '*.v64', '*.sfc', '*.smc', '*.nes') })
     
     # Create a button to allow patch the WAD with a ROM file
     $InputPaths.ApplyInjectButton = CreateButton -X ($InputPaths.InjectButton.Right + 15) -Y 18 -Width ($InputPaths.InjectGroup.Right - $InputPaths.InjectButton.Right - 30) -Height 22 -Text "Inject ROM" -Info "Replace the ROM in your selected WAD File with your selected injection file"
@@ -104,22 +105,22 @@ function CreateMainDialog() {
     # Create the panel that holds the patch path.
     $InputPaths.PatchPanel = CreatePanel -Width 590 -Height 50
     $InputPaths.PatchPanel.Visible = $False
-
+    
     # Create the groupbox that holds the BPS path.
     $InputPaths.PatchGroup = CreateGroupBox -Width $InputPaths.PatchPanel.Width -Height $InputPaths.PatchPanel.Height -Text "Custom Patch Path"
     $InputPaths.PatchGroup.AllowDrop = $True
     $InputPaths.PatchGroup.Add_DragEnter({ $_.Effect = [Windows.Forms.DragDropEffects]::Copy })
-    $InputPaths.PatchGroup.Add_DragDrop({ BPSPath_DragDrop })
+    $InputPaths.PatchGroup.Add_DragDrop({ PatchPath_DragDrop })
     
     # Create a textbox to display the selected BPS.
-    $InputPaths.PatchTextBox = CreateTextBox -X 10 -Y 20 -Width 420 -Height 22 -Text "Select or drag and drop your BPS, IPS, Xdelta, VCDiff or PPF Patch File..." -Name "PatchPath" -ReadOnly $True
+    $InputPaths.PatchTextBox = CreateTextBox -X 10 -Y 20 -Width 420 -Height 22 -Text "Select or drag and drop your BPS, IPS, Xdelta, VCDiff or PPF Patch File..." -Name "Path.Patch" -ReadOnly $True
     $InputPaths.PatchTextBox.AllowDrop = $True
     $InputPaths.PatchTextBox.Add_DragEnter({ $_.Effect = [Windows.Forms.DragDropEffects]::Copy })
-    $InputPaths.PatchTextBox.Add_DragDrop({ BPSPath_DragDrop })
+    $InputPaths.PatchTextBox.Add_DragDrop({ PatchPath_DragDrop })
 
     # Create a button to allow manually selecting a ROM.
     $InputPaths.PatchButton = CreateButton -X ($InputPaths.PatchTextBox.Right + 6) -Y 18 -Width 24 -Height 22 -Text "..." -Info "Select your BPS, IPS, Xdelta or VCDiff Patch File using file explorer"
-    $InputPaths.PatchButton.Add_Click({ BPSPath_Button -TextBox $InputPaths.PatchTextBox -Description @('BPS Patch File', 'IPS Patch File', 'XDelta Patch File', 'VCDiff Patch File') -FileName @('*.bps', '*.ips', '*.xdelta', '*.vcdiff') })
+    $InputPaths.PatchButton.Add_Click({ PatchPath_Button -TextBox $InputPaths.PatchTextBox -Description "Patch Files" -FileNames @('*.bps', '*.ips', '*.xdelta', '*.vcdiff') })
     
     # Create a button to allow patch the WAD with a BPS file.
     $InputPaths.ApplyPatchButton = CreateButton -X ($InputPaths.PatchButton.Right + 15) -Y 18 -Width ($InputPaths.PatchGroup.Right - $InputPaths.PatchButton.Right - 30) -Height 22 -Text "Apply Patch" -Info "Patch the ROM with your selected BPS or IPS Patch File"
@@ -139,14 +140,14 @@ function CreateMainDialog() {
     $CurrentGameGroup = CreateGroupBox -Width $CurrentGamePanel.Width -Height $CurrentGamePanel.Height -Text "Current Game Mode"
 
     # Create a combobox with the list of supported consoles
-    $global:ConsoleComboBox = CreateComboBox -X 10 -Y 20 -Width 200 -Height 30 -Name "CurrentConsole"
+    $global:ConsoleComboBox = CreateComboBox -X 10 -Y 20 -Width 200 -Height 30 -Name "Selected.Console"
     $ConsoleComboBox.Add_SelectedIndexChanged({
         $Settings["Core"][$this.Name] = $this.SelectedIndex
         if ($this.Text -ne $GameConsole.title) { ChangeGamesList }
     })
 
     # Create a combobox with the list of supported games
-    $global:CurrentGameComboBox = CreateComboBox -X ($ConsoleComboBox.Right + 5) -Y 20 -Width 360 -Height 30 -Name "CurrentGame"
+    $global:CurrentGameComboBox = CreateComboBox -X ($ConsoleComboBox.Right + 5) -Y 20 -Width 360 -Height 30 -Name "Selected.Game"
     $CurrentGameComboBox.Add_SelectedIndexChanged({
         $Settings["Core"][$this.Name] = $this.SelectedIndex
         if ($this.Text -ne $GameType.title) {
@@ -229,7 +230,7 @@ function CreateMainDialog() {
     $Patches.Button.Add_Click( { MainFunction -Command $GamePatch.command -PatchedFileName $GamePatch.output } )
 
     # Create combobox
-    $Patches.ComboBox = CreateComboBox -X $Patches.Button.Left -Y ($Patches.Button.Top - 25) -Width $Patches.Button.Width -Height 30 -Name "Patch"
+    $Patches.ComboBox = CreateComboBox -X $Patches.Button.Left -Y ($Patches.Button.Top - 25) -Width $Patches.Button.Width -Height 30 -Name "Selected.Patch"
     $global:PatchToolTip = CreateToolTip
     $Patches.ComboBox.Add_SelectedIndexChanged( {
         if (!$IsActiveGameField) { return }
@@ -256,26 +257,26 @@ function CreateMainDialog() {
 
     # Additional Options Checkbox
     $Patches.OptionsLabel = CreateLabel -X ($Patches.Button.Right + 10) -Y ($Patches.ComboBox.Top + 5) -Width 85 -Height 15 -Text "Enable Options:" -Info "Enable options in order to apply a customizable set of features and changes" 
-    $Patches.Options = CreateCheckBox -X $Patches.OptionsLabel.Right -Y ($Patches.OptionsLabel.Top - 2) -Width 20 -Height 20 -Info "Enable options in order to apply a customizable set of features and changes" -Name "Options" -Checked $True
+    $Patches.Options = CreateCheckBox -X $Patches.OptionsLabel.Right -Y ($Patches.OptionsLabel.Top - 2) -Width 20 -Height 20 -Info "Enable options in order to apply a customizable set of features and changes" -Name "Patches.Options" -Checked $True
     $Patches.Options.Add_CheckStateChanged({
+        $Patches.OptionsButton.Enabled = $this.checked
         $Redux.Groups.GetEnumerator() | ForEach-Object {
-            if ( ($_.Name -notlike '*Redux*') -and ($_.Tag -ne "Language") )   { $_.Enabled = $this.Checked }
-            if ($_.Name -like '*Redux*')                                       { $_.Enabled = $this.Checked -and $Patches.Redux.Checked }
+            if ($_.IsRedux) { $_.Enabled = $this.Checked -and $Patches.Redux.Checked }
         }
     })
 
     # Redux Checkbox
     $Patches.ReduxLabel = CreateLabel -X ($Patches.Button.Right + 10) -Y ($Patches.OptionsLabel.Bottom + 15) -Width 85 -Height 15 -Text "Enable Redux:" -Info "Enable the Redux patch which improves game mechanics`nIncludes among other changes the inclusion of the D-Pad for dedicated item buttons"
-    $Patches.Redux = CreateCheckBox -X $Patches.ReduxLabel.Right -Y ($Patches.ReduxLabel.Top - 2) -Width 20 -Height 20 -Info "Enable the Redux patch which improves game mechanics`nIncludes among other changes the inclusion of the D-Pad for dedicated item buttons" -Name "Redux" -Checked $True
+    $Patches.Redux = CreateCheckBox -X $Patches.ReduxLabel.Right -Y ($Patches.ReduxLabel.Top - 2) -Width 20 -Height 20 -Info "Enable the Redux patch which improves game mechanics`nIncludes among other changes the inclusion of the D-Pad for dedicated item buttons" -Name "Patches.Redux" -Checked $True
     $Patches.Redux.Add_CheckStateChanged({
         $Redux.Groups.GetEnumerator() | ForEach-Object {
-            if ($_.Name -like '*Redux*') { $_.Enabled = $this.Checked -and $Patches.Options.Checked }
+            if ($_.IsRedux) { $_.Enabled = $this.Checked -and $Patches.Options.Checked }
         }
     })
 
     # Downgrade Checkbox
     $Patches.DowngradeLabel = CreateLabel -X ($Patches.OptionsLabel.Right + 50) -Y $Patches.ReduxLabel.Top -Width 85 -Height 15 -Text "Downgrade:" -Info "Downgrade the ROM to the first original revision"
-    $Patches.Downgrade = CreateCheckBox -X $Patches.DowngradeLabel.Right -Y ($Patches.DowngradeLabel.Top - 2) -Width 20 -Height 20 -Info "Downgrade the ROM to the first original revision" -Name "Downgrade"
+    $Patches.Downgrade = CreateCheckBox -X $Patches.DowngradeLabel.Right -Y ($Patches.DowngradeLabel.Top - 2) -Width 20 -Height 20 -Info "Downgrade the ROM to the first original revision" -Name "Patches.Downgrade"
 
     # Patch Options
     $Patches.OptionsButton = CreateButton -X ($Patches.Group.Right - 15 - 145) -Y ($Patches.Options.Top - 3) -Width 145 -Height 25 -Text "Select Options" -Info 'Open the "Additional Options" panel to change preferences'
@@ -309,27 +310,27 @@ function CreateMainDialog() {
 
     # Remove T64 description
     $VC.RemoveT64Label = CreateLabel -X ($VC.CoreLabel.Right + 20) -Y $VC.CoreLabel.Top -Width 95 -Height 15 -Text "Remove All T64:" -Info "Remove all textures that the Virtual Console replaced in the ROM`nThese replaced textures are known as T64`nThese replaced textures maybe be censored or to make the game look darker more fitting for the Wii"
-    $VC.RemoveT64 = CreateCheckBox -X $VC.RemoveT64Label.Right -Y ($VC.CoreLabel.Top - 2) -Width 20 -Height 20 -Checked $True -Info "Remove all textures that the Virtual Console replaced in the ROM`nThese replaced textures are known as T64`nThese replaced textures maybe be censored or to make the game look darker more fitting for the Wii" -Name "RemoveT64"
+    $VC.RemoveT64 = CreateCheckBox -X $VC.RemoveT64Label.Right -Y ($VC.CoreLabel.Top - 2) -Width 20 -Height 20 -Checked $True -Info "Remove all textures that the Virtual Console replaced in the ROM`nThese replaced textures are known as T64`nThese replaced textures maybe be censored or to make the game look darker more fitting for the Wii" -Name "VC.RemoveT64"
     $VC.RemoveT64.Add_CheckStateChanged({ CheckVCOptions })
     
     # Expand Memory
     $VC.ExpandMemoryLabel = CreateLabel -X ($VC.RemoveT64.Right + 10) -Y $VC.CoreLabel.Top -Width 95 -Height 15 -Text "Expand Memory:" -Info "Expand the game's memory by 4MB"
-    $VC.ExpandMemory = CreateCheckBox -X $VC.ExpandMemoryLabel.Right -Y ($VC.CoreLabel.Top - 2) -Width 20 -Height 20 -Info "Expand the game's memory by 4MB" -Name "ExpandMemory"
+    $VC.ExpandMemory = CreateCheckBox -X $VC.ExpandMemoryLabel.Right -Y ($VC.CoreLabel.Top - 2) -Width 20 -Height 20 -Info "Expand the game's memory by 4MB" -Name "VC.ExpandMemory"
     $VC.ExpandMemory.Add_CheckStateChanged({ CheckVCOptions })
 
     # Remove Filter
     $VC.RemoveFilterLabel = CreateLabel -X ($VC.RemoveT64.Right + 10) -Y $VC.CoreLabel.Top -Width 95 -Height 15 -Text "Remove Filter:" -Info "Remove the dark overlay filter"
-    $VC.RemoveFilter = CreateCheckBox -X $VC.RemoveFilterLabel.Right -Y ($VC.CoreLabel.Top - 2) -Width 20 -Height 20 -Checked $True -Info "Remove the dark overlay filter" -Name "RemoveFilter"
+    $VC.RemoveFilter = CreateCheckBox -X $VC.RemoveFilterLabel.Right -Y ($VC.CoreLabel.Top - 2) -Width 20 -Height 20 -Checked $True -Info "Remove the dark overlay filter" -Name "VC.RemoveFilter"
     $VC.RemoveFilter.Add_CheckStateChanged({ CheckVCOptions })
 
     # Remap D-Pad
     $VC.RemapDPadLabel = CreateLabel -X ($VC.ExpandMemory.Right + 10) -Y $VC.CoreLabel.Top -Width 95 -Height 15 -Text "Remap D-Pad:" -Info "Remap the D-Pad to the actual four D-Pad directional buttons instead of toggling the minimap"
-    $VC.RemapDPad = CreateCheckBox -X $VC.RemapDPadLabel.Right -Y ($VC.CoreLabel.Top - 2) -Width 20 -Height 20 -Info "Remap the D-Pad to the actual four D-Pad directional buttons instead of toggling the minimap" -Name "RemapDPad"
+    $VC.RemapDPad = CreateCheckBox -X $VC.RemapDPadLabel.Right -Y ($VC.CoreLabel.Top - 2) -Width 20 -Height 20 -Info "Remap the D-Pad to the actual four D-Pad directional buttons instead of toggling the minimap" -Name "VC.RemapDPad"
     $VC.RemapDPad.Add_CheckStateChanged({ CheckVCOptions })
 
     # Remap L
     $VC.RemapLLabel = CreateLabel -X ($VC.ExpandMemory.Right + 10) -Y $VC.CoreLabel.Top -Width 95 -Height 15 -Text "Remap L Button:" -Info "Remap the L button to the actual L button button"
-    $VC.RemapL = CreateCheckBox -X $VC.RemapDPadLabel.Right -Y ($VC.CoreLabel.Top - 2) -Width 20 -Height 20 -Info "Remap the L button to the actual L button button" -Name "RemapL"
+    $VC.RemapL = CreateCheckBox -X $VC.RemapDPadLabel.Right -Y ($VC.CoreLabel.Top - 2) -Width 20 -Height 20 -Info "Remap the L button to the actual L button button" -Name "VC.RemapL"
     $VC.RemapL.Add_CheckStateChanged({ CheckVCOptions })
 
     # Create a label for Minimap
@@ -337,17 +338,17 @@ function CreateMainDialog() {
 
     # Remap C-Down
     $VC.RemapCDownLabel = CreateLabel -X ($VC.MinimapLabel.Right + 20) -Y $VC.MinimapLabel.Top -Width 95 -Height 15 -Text "Remap C-Down:" -Info "Remap the C-Down button for toggling the minimap instead of using an item"
-    $VC.RemapCDown = CreateCheckBox -X $VC.RemapCDownLabel.Right -Y ($VC.MinimapLabel.Top - 2) -Width 20 -Height 20 -Info "Remap the C-Down button for toggling the minimap instead of using an item" -Name "RemapCDown"
+    $VC.RemapCDown = CreateCheckBox -X $VC.RemapCDownLabel.Right -Y ($VC.MinimapLabel.Top - 2) -Width 20 -Height 20 -Info "Remap the C-Down button for toggling the minimap instead of using an item" -Name "VC.RemapCDown"
     $VC.RemapCDown.Add_CheckStateChanged({ CheckVCOptions })
 
     # Remap Z
     $VC.RemapZLabel = CreateLabel -X ($VC.RemapCDown.Right + 10) -Y $VC.MinimapLabel.Top -Width 95 -Height 15 -Text "Remap Z Button:" -Info "Remap the Z (GameCube) or ZL and ZR (Classic) buttons for toggling the minimap instead of using an item"
-    $VC.RemapZ = CreateCheckBox -X $VC.RemapZLabel.Right -Y ($VC.MinimapLabel.Top - 2) -Width 20 -Height 20 -Info "Remap the Z (GameCube) or ZL and ZR (Classic) buttons for toggling the minimap instead of using an item" -Name "RemapZ"
+    $VC.RemapZ = CreateCheckBox -X $VC.RemapZLabel.Right -Y ($VC.MinimapLabel.Top - 2) -Width 20 -Height 20 -Info "Remap the Z (GameCube) or ZL and ZR (Classic) buttons for toggling the minimap instead of using an item" -Name "VC.RemapZ"
     $VC.RemapZ.Add_CheckStateChanged({ CheckVCOptions })
 
     # Leave D-Pad Up
     $VC.LeaveDPadUpLabel = CreateLabel -X ($VC.RemapZ.Right + 10) -Y $VC.MinimapLabel.Top -Width 95 -Height 15 -Text "Leave D-Pad Up:" -Info "Leave the D-Pad untouched so it can be used to toggle the minimap"
-    $VC.LeaveDPadUp = CreateCheckBox -X $VC.LeaveDPadUpLabel.Right -Y ($VC.MinimapLabel.Top - 2) -Width 20 -Height 20 -Info "Leave the D-Pad untouched so it can be used to toggle the minimap" -Name "LeaveDPadUp"
+    $VC.LeaveDPadUp = CreateCheckBox -X $VC.LeaveDPadUpLabel.Right -Y ($VC.MinimapLabel.Top - 2) -Width 20 -Height 20 -Info "Leave the D-Pad untouched so it can be used to toggle the minimap" -Name "VC.LeaveDPadUp"
     $VC.LeaveDPadUp.Add_CheckStateChanged({ CheckVCOptions })
 
 
@@ -458,9 +459,11 @@ function DisablePatches() {
     $VC.RemoveFilterLabel.Enabled = $VC.RemoveFilter.Enabled = !(StrLike -str $GamePatch.command -val "Patch Boot DOL")
 
     # Disable boxes if needed
-    $Redux.Groups.GetEnumerator() | ForEach-Object {
-        if ( ($_.Name -notlike '*Redux*') -and ($_.Tag -ne "Language") )   { $_.Enabled = $Patches.Options.Checked }
-        if ($_.Name -like '*Redux*')                                       { $_.Enabled = $Patches.Options.Checked -and $Patches.Redux.Checked }
+    $Patches.OptionsButton.Enabled = $Patches.Options.Checked
+    if (IsSet -Elem $Redux) {
+        $Redux.Groups.GetEnumerator() | ForEach-Object {
+            if ($_.IsRedux) { $_.Enabled = $Patches.Options.Checked -and $Patches.Redux.Checked }
+        }
     }
 
 }
@@ -468,13 +471,13 @@ function DisablePatches() {
 
 
 #==================================================================================================================================================================================================================================================================
-function GamePath_Button([Object]$TextBox, [string[]]$Description, [string[]]$FileName) {
-        # Allow the user to select a file.
-    $SelectedPath = Get-FileName -Path $Paths.Base -Description $Description -FileName $FileName
+function GamePath_Button([Object]$TextBox, [String]$Description, [String[]]$FileNames) {
+        # Allow the user to select a file
+    $SelectedPath = Get-FileName -Path $Paths.Base -Description $Description -FileNames $FileNames
 
-    # Make sure the path is not blank and also test that the path exists.
+    # Make sure the path is not blank and also test that the path exists
     if (($SelectedPath -ne '') -and (TestPath -LiteralPath $SelectedPath)) {
-        # Finish everything up.
+        # Finish everything up
         $Settings["Core"][$this.name] = $SelectedPath
         GamePath_Finish -TextBox $TextBox -Path $SelectedPath
     }
@@ -484,9 +487,9 @@ function GamePath_Button([Object]$TextBox, [string[]]$Description, [string[]]$Fi
 
 
 #==================================================================================================================================================================================================================================================================
-function InjectPath_Button([Object]$TextBox, [string[]]$Description, [string[]]$FileName) {
+function InjectPath_Button([Object]$TextBox, [String]$Description, [String[]]$FileNames) {
         # Allow the user to select a file
-    $SelectedPath = Get-FileName -Path $Paths.Base -Description $Description -FileName $FileName
+    $SelectedPath = Get-FileName -Path $Paths.Base -Description $Description -FileNames $FileNames
 
     # Make sure the path is not blank and also test that the path exists
     if (($SelectedPath -ne '') -and (TestPath -LiteralPath $SelectedPath)) {
@@ -499,18 +502,21 @@ function InjectPath_Button([Object]$TextBox, [string[]]$Description, [string[]]$
 
 
 
+
 #==================================================================================================================================================================================================================================================================
-function PatchPath_Button([Object]$TextBox, [string[]]$Description, [string[]]$FileName) {
+function PatchPath_Button([Object]$TextBox, [String]$Description, [String[]]$FileNames) {
         # Allow the user to select a file
-    $SelectedPath = Get-FileName -Path $Paths.Base -Description $Description -FileName $FileName
+    $SelectedPath = Get-FileName -Path $Paths.Base -Description $Description -FileNames $FileNames
 
     # Make sure the path is not blank and also test that the path exists
     if (($SelectedPath -ne '') -and (TestPath -LiteralPath $SelectedPath)) {
+        # Finish everything up
         $Settings["Core"][$this.name] = $SelectedPath
         PatchPath_Finish -TextBox $TextBox -Path $SelectedPath
     }
 
 }
+
 
 
 

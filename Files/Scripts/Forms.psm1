@@ -6,12 +6,12 @@ function CreateForm([int]$X=0, [int]$Y=0, [int]$Width=0, [int]$Height=0, [String
     if ( ($Tag -ne "") -or ($Tag -ne $null) ) { $Form.Tag = $Tag }
     $AddTo.Controls.Add($Form)
 
-    if ($IsGame) {
-        if ( (IsSet $Last.Extend) -and (IsSet -Elem $Name) ) {
+    if ( ($IsGame) -and (IsSet -Elem $Name) ) {
+        if (IsSet $Last.Extend) {
             $Redux[$Last.Extend][$Name] = $Form
             $Name = $Last.Extend + "." + $Name
         }
-        elseif (IsSet -Elem $Name) { $Redux[$Name] = $Form }
+        else { $Redux[$Name] = $Form }
     }
     if (IsSet -Elem $Name) { $Form.Name = $Name }
 
@@ -248,13 +248,13 @@ function CreateReduxPanel([int]$Row=0, [int]$Columns, [int]$Rows=1,  [String]$Na
     
     if (IsSet -Elem $Columns -Min 1)   { $Width = 150 * $Columns }
     else                               { $Width = $AddTo.Width - 20 }
-    return CreatePanel -X $AddTo.Left -Y ($Row * 30 + 20) -Width $Width -Height (25 * $Rows) -Name $Name -Tag $Tag -AddTo $AddTo
+    return CreatePanel -X $AddTo.Left -Y ($Row * 30 + 20) -Width $Width -Height (26.5 * $Rows) -Name $Name -Tag $Tag -AddTo $AddTo
 
 }
 
 
 #==============================================================================================================================================================================================
-function CreateReduxGroup([int]$Y=50, [int]$Height=1, [String]$Name=$Last.TabName, [String]$Tag, [Switch]$Hide, [Boolean]$IsGame=$True, [String]$Text="", [Object]$AddTo=$Redux.Panel) {
+function CreateReduxGroup([int]$Y=50, [int]$Height=1, [String]$Name=$Last.TabName, [String]$Tag, [Switch]$Hide, [Boolean]$IsGame=$True, [String]$Text="", [Switch]$IsRedux, [Object]$AddTo=$Redux.Panel) {
     
     if (IsSet -Elem $Name) {
         if ($Last.GroupName -eq $Name)     { $Y = $Last.Group.Bottom + 5}
@@ -268,7 +268,11 @@ function CreateReduxGroup([int]$Y=50, [int]$Height=1, [String]$Name=$Last.TabNam
     if ( (IsSet -Elem $Tag) -and !(IsSet -Elem $Redux[$Tag]) )   { $Redux[$Tag] = @{} }
     if (IsSet -Elem $Tag)                                        { $Last.Extend = $Tag }
     else                                                         { $Last.Extend = $null }
-    
+    Add-Member -InputObject $Group -NotePropertyMembers @{
+        IsRedux = $IsRedux -or $Name -eq "Redux"
+        IsLanguage = $False
+    }
+
     if ($IsGame) { $Redux.Groups += $Group }
     return $Group
 

@@ -3,13 +3,6 @@ function PatchOptionsSuperMario64() {
     if (IsChecked -Elem $Redux.Gameplay.FPS)                     { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\fps.ppf" }
     if (IsChecked -Elem $Redux.Gameplay.FreeCam)                 { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\cam.ppf" }
 
-    if (IsText -Elem $Redux.Graphics.Model -Text "Improved Lowres Mario") {
-        ApplyPatch -File $GetROM.decomp -Patch "\Compressed\improved_lowres_mario.ppf"
-    }
-    if (IsText -Elem $Redux.Graphics.Model -Text "Luigi with Improved Lowres Model") {
-        ApplyPatch -File $GetROM.decomp -Patch "\Compressed\improved_lowres_luigi.ppf"
-    }
-
 }
 
 
@@ -19,8 +12,8 @@ function ByteOptionsSuperMario64() {
     
     # HERO MODE
 
-    if     (IsText -Elem $Redux.Hero.Damage -Text "2x Damage")   { ChangeBytes -Offset "F207" -Values @("80") }
-    elseif (IsText -Elem $Redux.Hero.Damage -Text "3x Damage")   { ChangeBytes -Offset "F207" -Values @("40") }
+    if     (IsText -Elem $Redux.Hero.Damage -Text "2x Damage")   { ChangeBytes -Offset "F207" -Values "80" }
+    elseif (IsText -Elem $Redux.Hero.Damage -Text "3x Damage")   { ChangeBytes -Offset "F207" -Values "40" }
 
 
 
@@ -32,12 +25,12 @@ function ByteOptionsSuperMario64() {
 
     if (IsChecked -Elem $Redux.Graphics.BlackBars) {
         ChangeBytes -Offset "23A7" -Values @("BC", "00") -Interval 12
-        ChangeBytes -Offset "248E" -Values @("00")
+        ChangeBytes -Offset "248E" -Values "00"
         ChangeBytes -Offset "2966" -Values @("00", "00") -Interval 48
-        ChangeBytes -Offset "3646A" -Values @("00")
-        ChangeBytes -Offset "364AA" -Values @("00")
-        ChangeBytes -Offset "364F6" -Values @("00")
-        ChangeBytes -Offset "36582" -Values @("00")
+        ChangeBytes -Offset "3646A" -Values "00"
+        ChangeBytes -Offset "364AA" -Values "00"
+        ChangeBytes -Offset "364F6" -Values "00"
+        ChangeBytes -Offset "36582" -Values "00"
         ChangeBytes -Offset "3799F" -Values @("BC", "00") -Interval 12
     }
 
@@ -55,7 +48,7 @@ function ByteOptionsSuperMario64() {
     
 
     # GAMEPLAY #
-    if (IsChecked -Elem $Redux.Gameplay.LagFix)                  { ChangeBytes -Offset "F0022" -Values @("0D") }
+    if (IsChecked -Elem $Redux.Gameplay.LagFix)                  { ChangeBytes -Offset "F0022" -Values "0D" }
     if (IsChecked -Elem $Redux.ExitLevelAnytime)                 { ChangeBytes -Offset "97B74" -Values @("00", "00", "00", "00") }
 
 
@@ -95,22 +88,18 @@ function ByteOptionsSuperMario64() {
 #==============================================================================================================================================================================================
 function CreateOptionsSuperMario64() {
     
-    CreateOptionsDialog -Width 740 -Height 470
+    CreateOptionsDialog -Width 740 -Height 440
 
     # HERO MODE #
     CreateReduxGroup    -Tag  "Hero" -Text "Hero Mode"
-
-    Write-Host $Redux.Groups[0].Name
-
-    CreateReduxComboBox -Name "Damage"             -Column 1 -Row 1 -Items @("1x Damage", "2x Damage", "3x Damage") -Text "Damage:" -Info "Set the amount of damage you receive"
+    CreateReduxComboBox -Name "Damage"           -Column 1 -Row 1 -Items @("1x Damage", "2x Damage", "3x Damage") -Text "Damage:" -Info "Set the amount of damage you receive"
 
     # GRAPHICS #
-    CreateReduxGroup    -Tag  "Graphics" -Text "Graphics" -Height 2 
+    CreateReduxGroup    -Tag  "Graphics" -Text "Graphics"
     CreateReduxCheckBox -Name "Widescreen"       -Column 1 -Row 1 -Text "16:9 Widescreen [!]"     -Info "Native 16:9 Widescreen Display support`n[!] Requires Dolphin's or GlideN64's internal Widescreen Hack"
     CreateReduxCheckBox -Name "BlackBars"        -Column 2 -Row 1 -Text "No Black Bars"           -Info "Removes the black bars shown on the top and bottom of the screen"
     CreateReduxCheckBox -Name "ExtendedDraw"     -Column 3 -Row 1 -Text "Extended Draw Distance"  -Info "Increases the game's draw distance for solid objects with collision`nIncludes coin formations as well"
     CreateReduxCheckBox -Name "ForceHiresModel"  -Column 4 -Row 1 -Text "Force Hires Mario Model" -Info "Always use Mario's High Resolution Model when Mario is too far away"
-    CreateReduxComboBox -Name "Model"            -Column 1 -Row 2 -Items @("Vanilla", "Improved Lowres Mario", "Luigi with Improved Lowres Model") -Text "Model:" -Info "Change the player character model`nThis option only works when modifying the vanilla Super Mario 64 game" -Length 200
 
     # GAMEPLAY #
     CreateReduxGroup    -Tag  "Gameplay" -Text "Gameplay"
@@ -138,7 +127,7 @@ function CreateOptionsSuperMario64() {
     $Redux.Gameplay.FPS.Enabled = !$Redux.FreeCam.Checked
     $Redux.Gameplay.FreeCam.Enabled = !$Redux.Gameplay.FPS.Checked
 
-    $Redux.Skip.TitleScreen.Enabled = $Redux.Graphics.Model.Enabled = $GamePatch.title -eq "Super Mario 64"
+    $Redux.Skip.TitleScreen.Enabled = $GamePatch.title -eq "Super Mario 64"
 
 }
 

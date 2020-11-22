@@ -72,7 +72,11 @@ function ByteOptionsMajorasMask() {
     if (IsChecked -Elem $Redux.Graphics.ExtendedDraw)     { ChangeBytes -Offset "B50874" -Values @("00", "00", "00", "00") }
     if (IsChecked -Elem $Redux.Graphics.BlackBars)        { ChangeBytes -Offset "BF72A4" -Values @("00", "00", "00", "00") }
     if (IsChecked -Elem $Redux.Graphics.PixelatedStars)   { ChangeBytes -Offset "B943FC" -Values @("10", "00") }
-    if (IsIndex   -Elem $Redux.Graphics.LowHP -Not)       { ChangeBytes -Offset "B97E2A"  -Values (GetSFXID -SFX $Redux.Graphics.LowHP.Text) }
+    if (IsIndex   -Elem $Redux.Graphics.LowHP -Not)       { ChangeBytes -Offset "B97E2A" -Values (GetSFXID -SFX $Redux.Graphics.LowHP.Text) }
+
+    if (IsIndex -Elem $Redux.Graphics.Instrument -Index 2 -Not) {
+        ChangeBytes -Offset "51CBE" -Values (GetInstrumentID -SFX $Redux.Graphics.Instrument.Text)
+    }
 
 
 
@@ -108,8 +112,8 @@ function ByteOptionsMajorasMask() {
         CreateSubPath -Path ($GameFiles.extracted + "\Deku Palace")
         ExportAndPatch -Path "Deku Palace\deku_palace_scene"  -Offset "2534000" -Length "D220"
         ExportAndPatch -Path "Deku Palace\deku_palace_room_0" -Offset "2542000" -Length "11A50"
-        ExportAndPatch -Path "Deku Palace\deku_palace_room_1" -Offset "2554000" -Length "E950"  -NewLength "E9B0"  -TableOffset "1F6A7" -Values @("B0")
-        ExportAndPatch -Path "Deku Palace\deku_palace_room_2" -Offset "2563000" -Length "124F0" -NewLength "124B0" -TableOffset "1F6B7" -Values @("B0")
+        ExportAndPatch -Path "Deku Palace\deku_palace_room_1" -Offset "2554000" -Length "E950"  -NewLength "E9B0"  -TableOffset "1F6A7" -Values "B0"
+        ExportAndPatch -Path "Deku Palace\deku_palace_room_2" -Offset "2563000" -Length "124F0" -NewLength "124B0" -TableOffset "1F6B7" -Values "B0"
     }
 
     if (IsChecked -Elem $Redux.Gameplay.ZoraPhysics)         { PatchBytes  -Offset "65D000" -Patch "Zora Physics Fix.bin" }
@@ -143,7 +147,7 @@ function ByteOptionsMajorasMask() {
         PatchBytes  -Offset "181C620" -Texture -Patch "Skull Kid Beak.bin"
     }
 
-    if (IsChecked -Elem $Redux.Restore.ShopMusic)           { ChangeBytes -Offset "2678007" -Values @("44") }
+    if (IsChecked -Elem $Redux.Restore.ShopMusic)           { ChangeBytes -Offset "2678007" -Values "44" }
     if (IsChecked -Elem $Redux.Restore.PieceOfHeartSound)   { ChangeBytes -Offset "BA94C8"  -Values @("10", "00") }
     if (IsChecked -Elem $Redux.Restore.MoveBomberKid)       { ChangeBytes -Offset "2DE4396" -Values @("02", "C5", "01", "18", "FB", "55", "00", "07", "2D") }
 
@@ -169,7 +173,7 @@ function ByteOptionsMajorasMask() {
 
     if (IsChecked -Elem $Redux.Gameplay.RazorSword) {
         ChangeBytes -Offset "CBA496" -Values @("00", "00") # Prevent losing hits
-        ChangeBytes -Offset "BDA6B7" -Values @("01")       # Keep sword after Song of Time
+        ChangeBytes -Offset "BDA6B7" -Values "01"          # Keep sword after Song of Time
     }
 
 
@@ -187,7 +191,7 @@ function ByteOptionsMajorasMask() {
     if (IsChecked -Elem $Redux.Other.GohtCutscene)     { ChangeBytes -Offset "F6DE89" -Values @("8D", "00", "02", "10", "00", "00", "0A") }
     if (IsChecked -Elem $Redux.Other.MushroomBottle)   { ChangeBytes -Offset "CD7C48" -Values @("1E", "6B") }
     if (IsChecked -Elem $Redux.Other.FairyFountain)    { ChangeBytes -Offset "B9133E" -Values @("01", "0F") }
-    if (IsChecked -Elem $Redux.Other.HideCredits)         { PatchBytes  -Offset "B3B000" -Patch "Message\Credits.bin" }
+    if (IsChecked -Elem $Redux.Other.HideCredits)      { PatchBytes  -Offset "B3B000" -Patch "Message\Credits.bin" }
 
 }
 
@@ -196,6 +200,14 @@ function ByteOptionsMajorasMask() {
 #==============================================================================================================================================================================================
 function ByteReduxMajorasMask() {
     
+    # GAMEPLAY
+
+    if     ( (IsChecked -Elem $Redux.Gameplay.EasierMinigames -Not) -and (IsChecked -Elem $Redux.Gameplay.FasterBlockPushing) )   { ChangeBytes -Offset "3806530" -Values @("9E", "45", "06", "2D", "57", "4B", "28", "62", "49", "87", "69", "FB", "0F", "79", "1B", "9F", "18", "30") }
+    elseif ( (IsChecked -Elem $Redux.Gameplay.EasierMinigames) -and (IsChecked -Elem $Redux.Gameplay.FasterBlockPushing -Not) )   { ChangeBytes -Offset "3806530" -Values @("D2", "AD", "24", "8F", "0C", "58", "D0", "A8", "96", "55", "0E", "EE", "D2", "2B", "25", "EB", "08", "30") }
+    elseif ( (IsChecked -Elem $Redux.Gameplay.EasierMinigames) -and (IsChecked -Elem $Redux.Gameplay.FasterBlockPushing) )        { ChangeBytes -Offset "3806530" -Values @("B7", "36", "99", "48", "85", "BF", "FF", "B1", "FB", "EB", "D8", "B1", "06", "C8", "A8", "3B", "18", "30") }
+
+
+
     # D-PAD #
 
     if ( (IsChecked -Elem $Redux.DPad.Hide) -or (IsChecked -Elem $Redux.DPad.LayoutLeft) -or (IsChecked -Elem $Redux.DPad.LayoutRight) ) {
@@ -213,11 +225,45 @@ function ByteReduxMajorasMask() {
 
 
 
-    # GAMEPLAY
+    # COLORS
 
-    if     ( (IsChecked -Elem $Redux.Gameplay.EasierMinigames -Not) -and (IsChecked -Elem $Redux.Gameplay.FasterBlockPushing) )   { ChangeBytes -Offset "3806530" -Values @("9E", "45", "06", "2D", "57", "4B", "28", "62", "49", "87", "69", "FB", "0F", "79", "1B", "9F", "18", "30") }
-    elseif ( (IsChecked -Elem $Redux.Gameplay.EasierMinigames) -and (IsChecked -Elem $Redux.Gameplay.FasterBlockPushing -Not) )   { ChangeBytes -Offset "3806530" -Values @("D2", "AD", "24", "8F", "0C", "58", "D0", "A8", "96", "55", "0E", "EE", "D2", "2B", "25", "EB", "08", "30") }
-    elseif ( (IsChecked -Elem $Redux.Gameplay.EasierMinigames) -and (IsChecked -Elem $Redux.Gameplay.FasterBlockPushing) )        { ChangeBytes -Offset "3806530" -Values @("B7", "36", "99", "48", "85", "BF", "FF", "B1", "FB", "EB", "D8", "B1", "06", "C8", "A8", "3B", "18", "30") }
+     if (IsIndex -Elem $Redux.Colors.Buttons -Index 2 -Not) {
+        # A Button
+        ChangeBytes -Offset "3806470" -IsDec -Values @($Redux.Colors.SetButtons[0].Color.R, $Redux.Colors.SetButtons[0].Color.G, $Redux.Colors.SetButtons[0].Color.B) # Button
+        ChangeBytes -Offset "38064F0" -IsDec -Values @($Redux.Colors.SetButtons[0].Color.R, $Redux.Colors.SetButtons[0].Color.G, $Redux.Colors.SetButtons[0].Color.B) # Text Icons
+        ChangeBytes -Offset "38064C0" -IsDec -Values @($Redux.Colors.SetButtons[0].Color.R, $Redux.Colors.SetButtons[0].Color.G, $Redux.Colors.SetButtons[0].Color.B)
+        ChangeBytes -Offset "38064EC" -IsDec -Values @($Redux.Colors.SetButtons[0].Color.R, $Redux.Colors.SetButtons[0].Color.G, $Redux.Colors.SetButtons[0].Color.B)
+        ChangeBytes -Offset "38064F8" -IsDec -Values @($Redux.Colors.SetButtons[0].Color.R, $Redux.Colors.SetButtons[0].Color.G, $Redux.Colors.SetButtons[0].Color.B)
+        ChangeBytes -Offset "380650C" -IsDec -Values @($Redux.Colors.SetButtons[0].Color.R, $Redux.Colors.SetButtons[0].Color.G, $Redux.Colors.SetButtons[0].Color.B)
+        ChangeBytes -Offset "3806514" -IsDec -Values @($Redux.Colors.SetButtons[0].Color.R, $Redux.Colors.SetButtons[0].Color.G, $Redux.Colors.SetButtons[0].Color.B)
+        ChangeBytes -Offset "3806518" -IsDec -Values @($Redux.Colors.SetButtons[0].Color.R, $Redux.Colors.SetButtons[0].Color.G, $Redux.Colors.SetButtons[0].Color.B)
+        ChangeBytes -Offset "380651C" -IsDec -Values @($Redux.Colors.SetButtons[0].Color.R, $Redux.Colors.SetButtons[0].Color.G, $Redux.Colors.SetButtons[0].Color.B)
+        if ( ($Redux.Colors.Buttons.Text -like '*Randomized*') -or ($Redux.Colors.Buttons.Text -like '*Custom*') ) {
+            ChangeBytes -Offset "38064CC" -IsDec -Values @($Redux.Colors.SetButtons[0].Color.R, $Redux.Colors.SetButtons[0].Color.G, $Redux.Colors.SetButtons[0].Color.B) # Pause Outer Selection
+            ChangeBytes -Offset "38064D0" -IsDec -Values @($Redux.Colors.SetButtons[0].Color.R, $Redux.Colors.SetButtons[0].Color.G, $Redux.Colors.SetButtons[0].Color.B) # Pause Outer Glow Selection
+            # ChangeBytes -Offset "38064D4" -IsDec -Values @(($Redux.Colors.SetButtons[0].Color.R+20), ($Redux.Colors.SetButtons[0].Color.G+20), ($Redux.Colors.SetButtons[0].Color.B+20)) -Overflow # Pause Outer Glow Selection
+            # ChangeBytes -Offset "38064D8" -IsDec -Values @(($Redux.Colors.SetButtons[0].Color.R-50), ($Redux.Colors.SetButtons[0].Color.G-50), ($Redux.Colors.SetButtons[0].Color.B-50)) -Overflow # Pause Glow Selection
+        }
+
+        # B Button
+        ChangeBytes -Offset "3806474" -IsDec -Values @($Redux.Colors.SetButtons[1].Color.R, $Redux.Colors.SetButtons[1].Color.G, $Redux.Colors.SetButtons[1].Color.B) # Button
+        ChangeBytes -Offset "38064C4" -IsDec -Values @($Redux.Colors.SetButtons[1].Color.R, $Redux.Colors.SetButtons[1].Color.G, $Redux.Colors.SetButtons[1].Color.B) # Text Icons
+
+        # C Buttons
+        ChangeBytes -Offset "3806478" -IsDec -Values @($Redux.Colors.SetButtons[2].Color.R, $Redux.Colors.SetButtons[2].Color.G, $Redux.Colors.SetButtons[2].Color.B) # Buttons
+        if ( ($Redux.Colors.Buttons.Text -like '*Randomized*') -or ($Redux.Colors.Buttons.Text -like '*Custom*') ) {
+            ChangeBytes -Offset "38064C8" -IsDec -Values @($Redux.Colors.SetButtons[2].Color.R, $Redux.Colors.SetButtons[2].Color.G, $Redux.Colors.SetButtons[2].Color.B) # Text Icons
+            ChangeBytes -Offset "3806510" -IsDec -Values @($Redux.Colors.SetButtons[2].Color.R, $Redux.Colors.SetButtons[2].Color.G, $Redux.Colors.SetButtons[2].Color.B) # to Equip
+            ChangeBytes -Offset "38064FC" -IsDec -Values @($Redux.Colors.SetButtons[2].Color.R, $Redux.Colors.SetButtons[2].Color.G, $Redux.Colors.SetButtons[2].Color.B) # Note
+            ChangeBytes -Offset "38064DC" -IsDec -Values @($Redux.Colors.SetButtons[2].Color.R, $Redux.Colors.SetButtons[2].Color.G, $Redux.Colors.SetButtons[2].Color.B) # Pause Outer Selection
+            ChangeBytes -Offset "38064E0" -IsDec -Values @($Redux.Colors.SetButtons[2].Color.R, $Redux.Colors.SetButtons[2].Color.G, $Redux.Colors.SetButtons[2].Color.B) # Pause Selection
+            # ChangeBytes -Offset "38064E8" -IsDec -Values @($Redux.Colors.SetButtons[2].Color.R, $Redux.Colors.SetButtons[2].Color.G, $Redux.Colors.SetButtons[2].Color.B) # Pause Outer Glow Selection
+            # ChangeBytes -Offset "3806500" -IsDec -Values @($Redux.Colors.SetButtons[2].Color.R, $Redux.Colors.SetButtons[2].Color.G, $Redux.Colors.SetButtons[2].Color.B) # Pause Outer Selection
+        }
+
+        # Start Button
+        ChangeBytes -Offset "380647C" -IsDec -Values @($Redux.Colors.SetButtons[3].Color.R, $Redux.Colors.SetButtons[3].Color.G, $Redux.Colors.SetButtons[3].Color.B) # Button
+    }
 
 }
 
@@ -279,9 +325,23 @@ function ByteLanguageMajorasMask() {
 #==============================================================================================================================================================================================
 function GetItemID([String]$Item) {
     
-    if     ($Item -like '*None*' -or $Item -like '*Disabled*')     { return "FF" }
-    elseif ($Item -like '*Ocarina of Time*')   { return "00" }     elseif ($Item -like '*Deku Mask*')         { return "32" }     elseif ($Item -like '*Goron Mask*')        { return "33" }
-    elseif ($Item -like '*Zora Mask*')         { return "34" }     elseif ($Item -eq "Fierce Deity's Mask")   { return "35" }
+    if     ($Item -like '*None*' -or $Item -like '*Disabled*')   { return "FF" }
+    elseif ($Item -like '*Ocarina of Time*')   { return "00" }   elseif ($Item -like '*Deku Mask*')         { return "32" }   elseif ($Item -like '*Goron Mask*')   { return "33" }
+    elseif ($Item -like '*Zora Mask*')         { return "34" }   elseif ($Item -eq "Fierce Deity's Mask")   { return "35" }
+    else {
+        if ($Settings.Debug.Console -eq $True) { Write-Host ("Could not find item ID for : " + $Item) }
+        return -1
+    }
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function GetInstrumentID([String]$SFX) {
+    
+    if     ($SFX -like '*None*' -or $SFX -like '*Disabled*')   { return "FF" }
+    elseif ($SFX -like '*Ocarina*')   { return "34" }          elseif ($SFX -like '*Female Voice*')   { return "55" }
     else {
         if ($Settings.Debug.Console -eq $True) { Write-Host ("Could not find item ID for : " + $Item) }
         return -1
@@ -294,7 +354,7 @@ function GetItemID([String]$Item) {
 #==============================================================================================================================================================================================
 function CreateOptionsMajorasMask() {
     
-    CreateOptionsDialog -Width 930 -Height 520 -Tabs @("Difficulty", "Colors", "Equipment")
+    CreateOptionsDialog -Width 930 -Height 470 -Tabs @("Difficulty", "Colors", "Equipment")
 
     $Redux.Colors.EnableTunic.Add_CheckedChanged({
         $Redux.Graphics.ImprovedLinkModel.Enabled = !$this.checked
@@ -322,7 +382,9 @@ function CreateTabMainMajorasMask() {
     CreateReduxCheckBox -Name "ExtendedDraw"      -Column 3 -Row 1 -Text "Extended Draw Distance"                                    -Info "Increases the game's draw distance for objects`nDoes not work on all objects"
     CreateReduxCheckBox -Name "PixelatedStars"    -Column 4 -Row 1 -Text "Disable Pixelated Stars"                                   -Info "Completely disable the stars at night-time, which are pixelated dots and do not have any textures for HD replacement"
     CreateReduxCheckBox -Name "ImprovedLinkModel" -Column 5 -Row 1 -Text "Improved Link Model"                                       -Info "Improves the model used for Hylian Link`nCustom tunic colors are not supported with this option"
-    CreateReduxComboBox -Name "LowHP"             -Column 1 -Row 2 -Text "Low HP SFX:" -Items @("Default", "Disabled", "Soft Beep")  -Info "Set the sound effect for the low HP beeping" -Length 100
+    CreateReduxComboBox -Name "LowHP"             -Column 1 -Row 2 -Text "Low HP SFX:" -Items @("Default", "Disabled", "Soft Beep")  -Info "Set the sound effect for the low HP beeping"
+    $SFX = @("Disabled", "Ocarina (default)", "Female Voice", "Tatl", "Bell", "Cathedral Bell", "Whistle", "Harp", "Soft Harp", "Accordion", "Flute", "Whistling Flute", "Piano", "Drums", "Guitar", "Deku Pipes", "Giant Singing", "Ikana King")
+    CreateReduxComboBox -Name "Instrument"        -Column 3 -Row 2 -Text "Instrument:" -Default 2 -Items $SFX -Info "Replace the sound used for playing the Ocarina of Time"
 
     # GAMEPLAY #
     CreateReduxGroup    -Tag  "Gameplay" -Text "Gameplay" 
@@ -362,34 +424,35 @@ function CreateTabReduxMajorasMask() {
     CreateReduxCheckBox     -Name "FasterBlockPushing" -Column 1 -Checked -Text "Faster Block Pushing" -Info "All blocks are pushed faster"
     CreateReduxCheckBox     -Name "EasierMinigames"    -Column 2          -Text "Easier Minigames"     -Info "Certain minigames are made easier and faster`n- Dampe's Digging Game always has two Ghost Flames on the ground and one up the ladder`n- The Gold Dog always wins the Doggy Racetrack race if you have the Mask of Truth`nOnly one fish has to be feeded in the Marine Research Lab"
 
-    # D-PAD ICONS LAYOUT #
-    CreateReduxGroup       -Tag  "DPad" -Text "D-Pad Icons Layout"
-    CreateReduxPanel       -Columns 4
-    CreateReduxRadioButton -Name "Disable"             -Column 1          -Text "Disable"              -Info "Completely disable the D-Pad"
-    CreateReduxRadioButton -Name "Hide"                -Column 2          -Text "Hidden"               -Info "Hide the D-Pad icons, while they are still active"
-    CreateReduxRadioButton -Name "LayoutLeft"          -Column 3          -Text "Left Side"            -Info "Show the D-Pad icons on the left side of the HUD"
-    CreateReduxRadioButton -Name "LayoutRight"         -Column 4 -Checked -Text "Right Side"           -Info "Show the D-Pad icons on the right side of the HUD"
 
-    # D-PAD BUTTONS CUSTOMIZATION #
-    $Redux.Box.DPad = CreateReduxGroup -Tag "DPad" -Text "D-Pad Buttons Customization" -Height 7
-    CreateReduxComboBox     -Name "Up"                 -Column 2 -Row 1 -Length 120 -Items @("Disabled", "Ocarina of Time", "Deku Mask", "Goron Mask", "Zora Mask", "Fierce Deity's Mask") -Default 3 -Info "Set the quick slot item for the D-Pad Up button"
-    CreateReduxComboBox     -Name "Left"               -Column 1 -Row 4 -Length 120 -Items @("Disabled", "Ocarina of Time", "Deku Mask", "Goron Mask", "Zora Mask", "Fierce Deity's Mask") -Default 4 -Info "Set the quick slot item for the D-Pad Left button"
-    CreateReduxComboBox     -Name "Right"              -Column 3 -Row 4 -Length 120 -Items @("Disabled", "Ocarina of Time", "Deku Mask", "Goron Mask", "Zora Mask", "Fierce Deity's Mask") -Default 5 -Info "Set the quick slot item for the D-Pad Right button"
-    CreateReduxComboBox     -Name "Down"               -Column 2 -Row 7 -Length 120 -Items @("Disabled", "Ocarina of Time", "Deku Mask", "Goron Mask", "Zora Mask", "Fierce Deity's Mask") -Default 2 -Info "Set the quick slot item for the D-Pad Down button"
+
+    # D-PAD ICONS LAYOUT #
+    CreateReduxGroup -Tag  "DPad" -Text "D-Pad Layout" -Height 7
+    CreateReduxPanel -Columns 1 -Rows 4
+    CreateReduxRadioButton -Name "Disable"             -Column 1 -Row 1          -Text "Disable"              -Info "Completely disable the D-Pad"
+    CreateReduxRadioButton -Name "Hide"                -Column 1 -Row 2          -Text "Hidden"               -Info "Hide the D-Pad icons, while they are still active"
+    CreateReduxRadioButton -Name "LayoutLeft"          -Column 1 -Row 3          -Text "Left Side"            -Info "Show the D-Pad icons on the left side of the HUD"
+    CreateReduxRadioButton -Name "LayoutRight"         -Column 1 -Row 4 -Checked -Text "Right Side"           -Info "Show the D-Pad icons on the right side of the HUD"
+    CreateReduxComboBox     -Name "Up"                 -Column 4 -Row 1 -Length 120 -Items @("Disabled", "Ocarina of Time", "Deku Mask", "Goron Mask", "Zora Mask", "Fierce Deity's Mask") -Default 3 -Info "Set the quick slot item for the D-Pad Up button"
+    CreateReduxComboBox     -Name "Left"               -Column 3 -Row 4 -Length 120 -Items @("Disabled", "Ocarina of Time", "Deku Mask", "Goron Mask", "Zora Mask", "Fierce Deity's Mask") -Default 4 -Info "Set the quick slot item for the D-Pad Left button"
+    CreateReduxComboBox     -Name "Right"              -Column 5 -Row 4 -Length 120 -Items @("Disabled", "Ocarina of Time", "Deku Mask", "Goron Mask", "Zora Mask", "Fierce Deity's Mask") -Default 5 -Info "Set the quick slot item for the D-Pad Right button"
+    CreateReduxComboBox     -Name "Down"               -Column 4 -Row 7 -Length 120 -Items @("Disabled", "Ocarina of Time", "Deku Mask", "Goron Mask", "Zora Mask", "Fierce Deity's Mask") -Default 2 -Info "Set the quick slot item for the D-Pad Down button"
+    $Redux.DPad.Reset = CreateReduxButton -Column 1 -Row 5 -Height 30 -Text "Reset Layout" -Info "Reset the layout for the D-Pad"
     
     # D-Pad Buttons Customization - Image #
     $PictureBox = New-Object Windows.Forms.PictureBox
-    $PictureBox.Location = New-object System.Drawing.Size( ($Redux.DPad.Right.Left / 2 + 5), ($Redux.DPad.Down.Bottom / 4) )
+    $PictureBox.Location = New-object System.Drawing.Size( (($Redux.DPad.Right.Left) - ($Redux.DPad.Left.Left)/2), ($Redux.DPad.Down.Bottom / 4) )
     $PictureBox.Image  = [System.Drawing.Image]::Fromfile( ( Get-Item ($Paths.Main + "\D-Pad.png") ) )
     $PictureBox.Width  = $PictureBox.Image.Size.Width
     $PictureBox.Height = $PictureBox.Image.Size.Height
-    $Redux.Box.DPad.controls.add($PictureBox)
+    $Last.Group.controls.add($PictureBox)
     
-
-
-    EnableForm -Form $Redux.Box.DPad -Enable $Redux.DPad.Disable.Checked -Not
-    $Redux.DPad.Disable.Add_CheckedChanged({ EnableForm -Form $Redux.Box.DPad -Enable $Redux.DPad.Disable.Checked -Not })
-
+    $Redux.DPad.Up.Enabled = $Redux.DPad.Left.Enabled = $Redux.DPad.Right.Enabled = $Redux.DPad.Down.Enabled = $Redux.DPad.Reset.Enabled = !$Redux.DPad.Disable.Checked
+    $Redux.DPad.Disable.Add_CheckedChanged({
+        $Redux.DPad.Up.Enabled = $Redux.DPad.Left.Enabled = $Redux.DPad.Right.Enabled = $Redux.DPad.Down.Enabled = $Redux.DPad.Reset.Enabled = !$Redux.DPad.Disable.Checked
+    })
+    $Redux.DPad.Reset.Add_Click({ $Redux.DPad.Up.SelectedIndex = 2; $Redux.DPad.Left.SelectedIndex = 3; $Redux.DPad.Right.SelectedIndex = 4; $Redux.DPad.Down.SelectedIndex = 1 })
+    
 }
 
 
@@ -451,8 +514,8 @@ function CreateTabDifficultyMajorasMask() {
 #==============================================================================================================================================================================================
 function CreateTabColorsMajorasMask() {
     
-    # COLORS #
-    CreateReduxGroup -Tag "Colors" -Text "Colors"
+    # TUNIC COLORS #
+    CreateReduxGroup     -Tag  "Colors" -Text "Tunic Colors"
     CreateReduxCheckBox  -Name "EnableTunic" -Column 1 -Text "Change Tunic Color"       -Info ("Enable changing the color for the Hylian form Kokiri tunics`nRequires the " + '"Improved Link Model"' + " option to be disabled")
     $Redux.Colors.KokiriTunic = CreateReduxButton -Column 2 -Text "Kokiri Tunic" -Width 100  -Info "Select the color you want for the Kokiri Tunic"
     $Redux.Colors.ResetAll    = CreateReduxButton -Column 3 -Text "Reset Kokiri Tunic Color" -Info "Reset the  color for the Kokiri Tunic to it's default value"
@@ -461,10 +524,38 @@ function CreateTabColorsMajorasMask() {
     $Redux.Colors.SetKokiriTunic   = CreateColorDialog -Name "SetKokiriTunic" -Color "1E691B" -IsGame
     $Redux.Colors.KokiriTunicLabel = CreateReduxColoredLabel -Link $Redux.Colors.KokiriTunic -Color $Redux.Colors.SetKokiriTunic.Color
 
-
-
     $Redux.Colors.KokiriTunic.Add_Click( { $Redux.Colors.SetKokiriTunic.ShowDialog(); $Redux.Colors.KokiriTunicLabel.BackColor = $Redux.Colors.SetKokiriTunic.Color; $Settings[$GameType.mode][$Redux.Colors.SetKokiriTunic.Tag] = $Redux.Colors.SetKokiriTunic.Color.Name } )
     $Redux.Colors.ResetAll.Add_Click(    { $Redux.Colors.KokiriTunicLabel.BackColor = $Redux.Colors.SetKokiriTunic.Color = "#1E691B"; $Settings[$GameType.mode][$Redux.Colors.SetKokiriTunic.Tag] = $Redux.Colors.SetKokiriTunic.Color.Name } )
+
+
+
+    # BUTTON COLORS #
+    CreateReduxGroup    -Tag  "Colors"  -Text "Button Colors"  -IsRedux -Height 2
+    CreateReduxComboBox -Name "Buttons" -Text "Button Colors:" -Default 2 -Items @("N64 OoT", "N64 MM (default)", "GC OoT", "GC MM", "Randomized", "Custom") -Info ("Select a preset for the button colors`n" + '"Random" fully randomizes the button colors each time the game is patched')
+
+    # Button Colors - Buttons
+    $Buttons = @()
+    $Buttons += CreateReduxButton -Column 1 -Row 2 -Width 100 -Tag $Buttons.Count -Text "A Button"     -Info "Select the color you want for the A button"
+    $Buttons += CreateReduxButton -Column 2 -Row 2 -Width 100 -Tag $Buttons.Count -Text "B Button"     -Info "Select the color you want for the B button"
+    $Buttons += CreateReduxButton -Column 3 -Row 2 -Width 100 -Tag $Buttons.Count -Text "C Buttons"    -Info "Select the color you want for the C buttons"
+    $Buttons += CreateReduxButton -Column 4 -Row 2 -Width 100 -Tag $Buttons.Count -Text "Start Button" -Info "Select the color you want for the Start button"
+
+    # Button Colors - Dialogs
+    $Redux.Colors.SetButtons = @()
+    $Redux.Colors.SetButtons += CreateColorDialog -Color "5A5AFF" -Name "SetAButton"  -IsGame
+    $Redux.Colors.SetButtons += CreateColorDialog -Color "009600" -Name "SetBButton"  -IsGame
+    $Redux.Colors.SetButtons += CreateColorDialog -Color "FFA000" -Name "SetCButtons" -IsGame
+    $Redux.Colors.SetButtons += CreateColorDialog -Color "C80000" -Name "SetSButton"  -IsGame
+
+    # Button Colors - Labels
+    $Redux.Colors.ButtonLabels = @()
+    for ($i=0; $i -lt $Buttons.length; $i++) {
+        $Buttons[$i].Add_Click({ $Redux.Colors.SetButtons[[int]$this.Tag].ShowDialog(); $Redux.Colors.Buttons.Text = "Custom"; $Redux.Colors.ButtonLabels[[int]$this.Tag].BackColor = $Redux.Colors.SetButtons[[int]$this.Tag].Color; $Settings[$GameType.mode][$Redux.Colors.SetButtons[[int]$this.Tag].Tag] = $Redux.Colors.SetButtons[[int]$this.Tag].Color.Name })
+        $Redux.Colors.ButtonLabels += CreateReduxColoredLabel -Link $Buttons[$i]  -Color $Redux.Colors.SetButtons[$i].Color
+    }
+    
+    $Redux.Colors.Buttons.Add_SelectedIndexChanged({ SetButtonColorsPreset -ComboBox $Redux.Colors.Buttons })
+    SetButtonColorsPreset -ComboBox $Redux.Colors.Buttons
 
 }
 

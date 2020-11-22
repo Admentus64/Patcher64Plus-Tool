@@ -34,6 +34,7 @@ function CreateLanguageContent($Columns=3) {
     
     # Box + Panel
     CreateReduxGroup -Text "Languages" -Tag "Language"
+    $Last.Group.IsLanguage = $True
     CreateReduxPanel
 
     if (IsSet -Elem $GamePatch.languages -MinLength 0) {
@@ -178,7 +179,7 @@ function CreateSettingsDialog() {
 
     # General Settings
     $GeneralSettings.GeneralBox        = CreateReduxGroup -Y 40 -AddTo $SettingsDialog -IsGame $False -Text "General Settings"
-    $GeneralSettings.Bit64             = CreateSettingsCheckbox -Column 1 -Text "Use 64-Bit Tools" -Checked ([Environment]::Is64BitOperatingSystem) -Info "Use 64-bit tools instead of 32-bit tools if available for patching ROMs" -Name "64Bit"
+    $GeneralSettings.Bit64             = CreateSettingsCheckbox -Column 1 -Text "Use 64-Bit Tools" -Checked ([Environment]::Is64BitOperatingSystem) -Info "Use 64-bit tools instead of 32-bit tools if available for patching ROMs" -Name "Bit64"
     $GeneralSettings.DoubleClick       = CreateSettingsCheckbox -Column 2 -Text "Double Click"                                                      -Info "Allows a PowerShell file to be opened by double-clicking it"
     $GeneralSettings.DoubleClick.Checked = ((Get-ItemProperty -LiteralPath "HKLM:\Software\Classes\Microsoft.PowerShellScript.1\Shell").'(default)' -eq '0')
 
@@ -195,9 +196,10 @@ function CreateSettingsDialog() {
     $GeneralSettings.CreateBPS         = CreateSettingsCheckbox -Column 3 -Row 1 -Text "Create BPS"          -IsDebug -Info "Create compressed and decompressed BPS patches when patching is concluded" -Name "CreateBPS"
     $GeneralSettings.KeepDecompressed  = CreateSettingsCheckbox -Column 1 -Row 2 -Text "Keep Decompressed"   -IsDebug -Info "Keep the decompressed patched ROM in the output folder" -Name "KeepDecompressed"
     $GeneralSettings.Rev0DungeonFiles  = CreateSettingsCheckbox -Column 2 -Row 2 -Text "Rev 0 Dungeon Files" -IsDebug -Info "Extract the dungeon files from the Rev 0 US OoT ROM as well when extracting dungeon files" -Name "Rev0DungeonFiles"
-    $GeneralSettings.NoHeaderChange    = CreateSettingsCheckbox -Column 3 -Row 2 -Text "No Header Change"    -IsDebug -Info "Do not change the title header of the ROM when patching is concluded" -Name "NoHeaderChange"
-    $GeneralSettings.NoCRCChange       = CreateSettingsCheckbox -Column 1 -Row 3 -Text "No CRC Change"       -IsDebug -Info "Do not change the CRC of the ROM when patching is concluded" -Name "NoCRCChange"
-    $GeneralSettings.NoCleanup         = CreateSettingsCheckbox -Column 2 -Row 3 -Text "No Cleanup"          -IsDebug -Info "Do not clean up the files after the patching process fails or succeeds" -Name "NoCleanup"
+    $GeneralSettings.NoCleanup         = CreateSettingsCheckbox -Column 3 -Row 2 -Text "No Cleanup"          -IsDebug -Info "Do not clean up the files after the patching process fails or succeeds" -Name "NoCleanup"
+    $GeneralSettings.NoHeaderChange    = CreateSettingsCheckbox -Column 1 -Row 3 -Text "No Header Change"    -IsDebug -Info "Do not change the title header of the ROM when patching is concluded" -Name "NoHeaderChange"
+    $GeneralSettings.NoCRCChange       = CreateSettingsCheckbox -Column 2 -Row 3 -Text "No CRC Change"       -IsDebug -Info "Do not change the CRC of the ROM when patching is concluded" -Name "NoCRCChange"
+    $GeneralSettings.NoChannelChange   = CreateSettingsCheckbox -Column 3 -Row 3 -Text "No Channel Change"   -IsDebug -Info "Do not change the channel title and channel GameID of the WAD when patching is concluded" -Name "NoChannelChange"
 
     $GeneralSettings.Console.Add_CheckStateChanged({ ShowPowerShellConsole -ShowConsole $this.Checked })
     $GeneralSettings.DoubleClick.Add_CheckStateChanged({ TogglePowerShellOpenWithClicks -Enable $this.Checked })

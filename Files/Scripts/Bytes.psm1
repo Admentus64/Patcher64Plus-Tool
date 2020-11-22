@@ -1,4 +1,4 @@
-function ChangeBytes([String]$File, [String]$Offset, [Array]$Values, [int]$Interval=1, [Switch]$IsDec) {
+function ChangeBytes([String]$File, [String]$Offset, [Array]$Values, [int]$Interval=1, [Switch]$IsDec, [Switch]$Overflow) {
 
     if ($ExternalScript) { Write-Host "Change values:" $Values }
     if (IsSet -Elem $File) { $ByteArrayGame = [IO.File]::ReadAllBytes($File) }
@@ -15,8 +15,14 @@ function ChangeBytes([String]$File, [String]$Offset, [Array]$Values, [int]$Inter
     }
 
     for ($i=0; $i -lt $Values.Length; $i++) {
-        if ($IsDec)   { [Byte]$Value = $Values[$i] }
-        else          { [Byte]$Value = GetDecimal -Hex $Values[$i] }
+        if ($IsDec)   {
+            if ($Values[$i] -lt 0 -and $Overflow) { $Values[$i] = 255 + $Values[$i] }
+            [Byte]$Value = $Values[$i]
+        }
+        else {
+            if ((GetDecimal -Hex $Values[$i]) -lt 0 -and $Overflow) { $Values[$i] = 255 + (Get8Bit -Value $Values[$i]) }
+            [Byte]$Value = GetDecimal -Hex $Values[$i]
+        }
         $ByteArrayGame[$Offset + ($i * $Interval)] = $Value
     }
 

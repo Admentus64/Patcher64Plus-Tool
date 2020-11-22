@@ -219,6 +219,7 @@ function ChangeGameMode() {
     $GameFiles.extracted = $GameFiles.base + "\Extracted"
     $GameFiles.compressed = $GameFiles.base + "\Compressed"
     $GameFiles.decompressed = $GameFiles.base + "\Decompressed"
+    $GameFiles.downgrade = $GameFiles.base + "\Downgrade"
     $GameFiles.textures = $GameFiles.base + "\Textures"
     $GameFiles.credits = $GameFiles.base + "\Credits.txt"
     $GameFiles.info = $GameFiles.base + "\Info.txt"
@@ -252,7 +253,7 @@ function ChangeGameMode() {
     $Patches.DowngradeLabel.Visible = $Patches.Downgrade.Visible = (IsSet -elem $GameType.downgrade)
 
     SetModeLabel
-    ChangePatchPanel
+    if ($IsActiveGameField) { ChangePatchPanel }
     $global:IsActiveGameField = $True
 
 }
@@ -437,6 +438,7 @@ function IsChecked([Object]$Elem, [Switch]$Active, [Switch]$Not) {
     elseif (!$Active -and !$Elem.Enabled)   { return $False }
     if ($Not -and !$Elem.Checked)           { return $True }
     if (!$Not -and $Elem.Checked)           { return $True }
+    return $False
 
 }
 
@@ -468,13 +470,13 @@ function IsText([Object]$Elem, [String]$Text, [Switch]$Active, [Switch]$Not) {
 
 
 #==============================================================================================================================================================================================
-function IsIndex([Object]$Elem, [int]$Index=0, [Switch]$Active, [Switch]$Not) {
+function IsIndex([Object]$Elem, [int]$Index=1, [Switch]$Active, [Switch]$Not) {
     
-    if (!(IsSet -Elem $Elem))                        { return $False }
-    if ($Active -and !$Elem.Visible)                 { return $False }
-    elseif (!$Active -and !$Elem.Enabled)            { return $False }
-    if ($Not -and $Elem.SelectedIndex -ne $Index)    { return $True }
-    if (!$Not -and $Elem.SelectedIndex -eq $Index)   { return $True }
+    if (!(IsSet -Elem $Elem))                            { return $False }
+    if ($Active -and !$Elem.Visible)                     { return $False }
+    elseif (!$Active -and !$Elem.Enabled)                { return $False }
+    if ($Not -and $Elem.SelectedIndex -ne ($Index-1))    { return $True }
+    if (!$Not -and $Elem.SelectedIndex -eq ($Index-1))   { return $True }
     return $False
 
 }
@@ -532,9 +534,10 @@ function AddTextFileToTextbox([Object]$TextBox, [String]$File, [Switch]$Add, [in
 
 
 #==============================================================================================================================================================================================
-function StrLike([String]$str, [String]$val) {
+function StrLike([String]$str, [String]$val, [Switch]$Not) {
     
-    if ($str.ToLower() -like "*" + $val + "*") { return $True }
+    if     ($str.ToLower() -like "*" + $val + "*"    -and !$Not)   { return $True }
+    elseif ($str.ToLower() -notlike "*" + $val + "*" -and $Not)    { return $True }
     return $False
 
 }
@@ -617,15 +620,17 @@ function EnableForm([Object]$Form, [Boolean]$Enable, [Switch]$Not) {
 
 
 #==============================================================================================================================================================================================
-function Get-FileName([String]$Path, [String[]]$Description, [String[]]$FileName) {
+function Get-FileName([String]$Path, [String]$Description, [String[]]$FileNames) {
     
     $OpenFileDialog = New-Object System.Windows.Forms.OpenFileDialog
     $OpenFileDialog.InitialDirectory = $Path
     
-    for($i = 0; $i -lt $FileName.Count; $i++) {
-        $FilterString += $Description[$i] + '|' + $FileName[$i] + '|'
+    $FilterString = $Description + "|"
+    for($i = 0; $i -lt $FileNames.Count; $i++) {
+        $FilterString += $FileNames[$i] + ';'
     }
-    
+    $FilterString += "|All Files|(*.*)"
+
     $OpenFileDialog.Filter = $FilterString.TrimEnd('|')
     $OpenFileDialog.ShowDialog() | Out-Null
     
