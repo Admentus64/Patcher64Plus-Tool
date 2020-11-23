@@ -331,11 +331,11 @@ function ByteOptionsOcarinaOfTime() {
 
     # SOUND / VOICES #
 
-    if (IsText -Elem $Redux.Sounds.Voices -Text "Majora's Mask Link Sound.Voices") {
+    if (IsText -Elem $Redux.Sounds.Voices -Text "Majora's Mask") {
         if (IsChecked -Elem $Redux.Restore.FireTemple)   { PatchBytes -Offset "19D920" -Patch "Voices\MM Link Voices.bin" }
         else                                             { PatchBytes -Offset "18E1E0" -Patch "Voices\MM Link Voices.bin" }
     }
-    elseif (IsText -Elem $Redux.Sounds.Voices -Text "Feminine Link Sound.Voices") {
+    elseif (IsText -Elem $Redux.Sounds.Voices -Text "Feminine") {
         if (IsChecked -Elem $Redux.Restore.FireTemple)   { PatchBytes -Offset "19D920" -Patch "Voices\Feminine Link Voices.bin" }
         else                                             { PatchBytes -Offset "18E1E0" -Patch "Voices\Feminine Link Voices.bin" }
     }
@@ -541,7 +541,7 @@ function ByteReduxOcarinaOfTime() {
         # C Buttons
         ChangeBytes -Offset "3480851" -IsDec -Values @($Redux.Colors.SetButtons[2].Color.R, $Redux.Colors.SetButtons[2].Color.G, $Redux.Colors.SetButtons[2].Color.B) -Interval 2
         
-        if ( ($Redux.Colors.Buttons.Text -like '*Randomized*') -or ($Redux.Colors.Buttons.Text -like '*Custom*') ) {
+        if ($Redux.Colors.Buttons.Text -eq "Randomized" -or $Redux.Colors.Buttons.Text -eq "Custom") {
         # C Buttons - Pause Menu Cursor
             ChangeBytes -Offset "BC7843"  -IsDec -Values @($Redux.Colors.SetButtons[2].Color.R, $Redux.Colors.SetButtons[2].Color.G, $Redux.Colors.SetButtons[2].Color.B) -Interval 2
             ChangeBytes -Offset "BC7891"  -IsDec -Values @($Redux.Colors.SetButtons[2].Color.R, $Redux.Colors.SetButtons[2].Color.G, $Redux.Colors.SetButtons[2].Color.B) -Interval 2
@@ -729,40 +729,41 @@ function ByteLanguageOcarinaOfTime() {
 #==============================================================================================================================================================================================
 function GetSFXID([String]$SFX) {
     
-    if     ($SFX -like '*None*' -or $SFX -like '*Disabled*')                     { return @("00", "00") }
-    elseif ($SFX -like '*Armos*')                   { return @("38", "48") }     elseif ($SFX -like '*Bark*')                    { return @("28", "D8") }     elseif ($SFX -like '*Bomb Bounce*')             { return @("28", "2F") }
-    elseif ($SFX -like '*Bongo Bongo High*')        { return @("39", "51") }     elseif ($SFX -like '*Bongo Bongo Low*')         { return @("39", "50") }     elseif ($SFX -like '*Bottle Cork*')             { return @("28", "6C") }
-    elseif ($SFX -like '*Bow Twang*')               { return @("18", "30") }     elseif ($SFX -like '*Bubble Laugh*')            { return @("38", "CA") }     elseif ($SFX -like '*Business Scrub*')          { return @("38", "82") }
-    elseif ($SFX -like '*Carrot Refill*')           { return @("48", "45") }     elseif ($SFX -like '*Cartoon Fall*')            { return @("28", "A0") }     elseif ($SFX -like '*Change Item*')             { return @("08", "35") }
-    elseif ($SFX -like '*Chest Open*')              { return @("28", "20") }     elseif ($SFX -like '*Child Cringe*')            { return @("68", "3A") }     elseif ($SFX -like '*Child Gasp*')              { return @("68", "36") }
-    elseif ($SFX -like '*Child Hurt*')              { return @("68", "25") }     elseif ($SFX -like '*Child Owo*')               { return @("68", "23") }     elseif ($SFX -like '*Child Pant*')              { return @("68", "29") }
-    elseif ($SFX -like '*Child Scream*')            { return @("68", "28") }     elseif ($SFX -like '*Cluck*')                   { return @("28", "12") }     elseif ($SFX -like '*Cockadoodledoo*')          { return @("28", "13") }
-    elseif ($SFX -like '*Cursed Attack*')           { return @("68", "68") }     elseif ($SFX -like '*Cursed Scream*')           { return @("68", "67") }     elseif ($SFX -like '*Deku Baba*')               { return @("38", "60") }
-    elseif ($SFX -like '*Drawbridge Set*')          { return @("28", "0E") }     elseif ($SFX -like '*Dusk Howl*')               { return @("28", "AE") }     elseif ($SFX -like '*Epona (Young)*')           { return @("28", "44") }
-    elseif ($SFX -like '*Exploding Crate*')         { return @("28", "39") }     elseif ($SFX -like '*Explosion*')               { return @("18", "0E") }     elseif ($SFX -like '*Fanfare (Light)*')         { return @("48", "24") }
-    elseif ($SFX -like '*Fanfare (Medium)*')        { return @("48", "31") }     elseif ($SFX -like '*Field Shrub*')             { return @("28", "77") }     elseif ($SFX -like '*Flare Dancer Laugh*')      { return @("39", "81") }
-    elseif ($SFX -like '*Flare Dancer Startled*')   { return @("39", "8B") }     elseif ($SFX -like '*Ganondorf "Teh!"*')        { return @("39", "CA") }     elseif ($SFX -like '*Gohma Lava Croak*')        { return @("39", "5D") }
-    elseif ($SFX -like '*Gold Skull Token*')        { return @("48", "43") }     elseif ($SFX -like '*Goron Wake*')              { return @("38", "FC") }     elseif ($SFX -like '*Great Fairy*')             { return @("68", "58") }
-    elseif ($SFX -like '*Guay*')                    { return @("38", "B6") }     elseif ($SFX -like '*Gunshot*')                 { return @("48", "35") }     elseif ($SFX -like '*Hammer Bonk*')             { return @("18", "0A") }
-    elseif ($SFX -like '*Horse Neigh*')             { return @("28", "05") }     elseif ($SFX -like '*Horse Trot*')              { return @("28", "04") }     elseif ($SFX -like '*Hover Boots*')             { return @("08", "C9") }
-    elseif ($SFX -like '*HP Low*')                  { return @("48", "1B") }     elseif ($SFX -like '*HP Recover*')              { return @("48", "0B") }     elseif ($SFX -like '*Ice Shattering*')          { return @("08", "75") }
-    elseif ($SFX -like '*Ingo Wooah*')              { return @("68", "54") }     elseif ($SFX -like '*Ingo Kaah!*')              { return @("68", "55") }     elseif ($SFX -like '*Iron Boots*')              { return @("08", "0D") }
-    elseif ($SFX -like '*Iron Knuckle*')            { return @("39", "29") }     elseif ($SFX -like '*Moblin Club Ground*')      { return @("38", "E1") }     elseif ($SFX -like '*Moblin Club Swing*')       { return @("39", "EF") }
-    elseif ($SFX -like '*Moo*')                     { return @("28", "DF") }     elseif ($SFX -like '*Mweep!*')                  { return @("68", "7A") }     elseif ($SFX -like '*Navi "Hello!"*')           { return @("68", "44") }
-    elseif ($SFX -like '*Navi "Hey!"*')             { return @("68", "5F") }     elseif ($SFX -like '*Navi Random*')             { return @("68", "43") }     elseif ($SFX -like '*Notification*')            { return @("48", "20") }
-    elseif ($SFX -like '*Phantom Ganon Laugh*')     { return @("38", "B0") }     elseif ($SFX -like '*Plant Explode*')           { return @("28", "4E") }     elseif ($SFX -like '*Poe*')                     { return @("38", "EC") }
-    elseif ($SFX -like '*Pot Shattering*')          { return @("28", "87") }     elseif ($SFX -like '*Redead Moan*')             { return @("38", "E4") }     elseif ($SFX -like '*Redead Screan*')           { return @("38", "E5") }
-    elseif ($SFX -like '*Ribbit*')                  { return @("28", "B1") }     elseif ($SFX -like '*Rupee*')                   { return @("48", "03") }     elseif ($SFX -like '*Rupee (Silver)*')          { return @("28", "E8") }
-    elseif ($SFX -like '*Ruto Crash*')              { return @("68", "60") }     elseif ($SFX -like '*Ruto Excited*')            { return @("68", "61") }     elseif ($SFX -like '*Ruto Giggle*')             { return @("68", "63") }
-    elseif ($SFX -like '*Ruto Lift*')               { return @("68", "74") }     elseif ($SFX -like '*Ruto Thrown*')             { return @("68", "65") }     elseif ($SFX -like '*Ruto Wiggle*')             { return @("68", "66") }
-    elseif ($SFX -like '*Scrub Emerge*')            { return @("38", "7C") }     elseif ($SFX -like '*Shabom Bounce*')           { return @("39", "48") }     elseif ($SFX -like '*Shabom Pop*')              { return @("39", "49") }
-    elseif ($SFX -like '*Shellblade*')              { return @("38", "49") }     elseif ($SFX -like '*Skultula*')                { return @("39", "DA") }     elseif ($SFX -like '*Soft Beep*')               { return @("48", "04") }
-    elseif ($SFX -like '*Spike Trap*')              { return @("38", "E9") }     elseif ($SFX -like '*Spit Nut*')                { return @("38", "7E") }     elseif ($SFX -like '*Stalchild Attack*')        { return @("38", "31") }
-    elseif ($SFX -like '*Stinger Squeak*')          { return @("39", "A3") }     elseif ($SFX -like '*Switch*')                  { return @("28", "15") }     elseif ($SFX -like '*Sword Bonk*')              { return @("18", "1A") }
-    elseif ($SFX -like '*Talon Cry*')               { return @("68", "53") }     elseif ($SFX -like '*Talon "Hmm"*')             { return @("68", "52") }     elseif ($SFX -like '*Talon Snore*')             { return @("68", "50") }
-    elseif ($SFX -like '*Talon WTF*')               { return @("68", "51") }     elseif ($SFX -like '*Tambourine*')              { return @("48", "42") }     elseif ($SFX -like '*Target Enemy*')            { return @("48", "30") }
-    elseif ($SFX -like '*Target Neutral*')          { return @("48", "0C") }     elseif ($SFX -like '*Thunder*')                 { return @("28", "2E") }     elseif ($SFX -like '*Timer*')                   { return @("48", "1A") }
-    elseif ($SFX -like '*Twinrova Bicker*')         { return @("39", "E7") }     elseif ($SFX -like '*Wolfos Howl*')             { return @("38", "3C") }     elseif ($SFX -like '*Zelda Gasp (Adult)*')      { return @("68", "79") }
+    $SFX = $SFX.replace(' (default)', "")
+    if     ($SFX -eq "None" -or $SFX -eq "Disabled")   { return @("00", "00") }
+    elseif ($SFX -eq "Armos")                   { return @("38", "48") }     elseif ($SFX -eq "Bark")                    { return @("28", "D8") }     elseif ($SFX -eq "Bomb Bounce")             { return @("28", "2F") }
+    elseif ($SFX -eq "Bongo Bongo High")        { return @("39", "51") }     elseif ($SFX -eq "Bongo Bongo Low")         { return @("39", "50") }     elseif ($SFX -eq "Bottle Cork")             { return @("28", "6C") }
+    elseif ($SFX -eq "Bow Twang")               { return @("18", "30") }     elseif ($SFX -eq "Bubble Laugh")            { return @("38", "CA") }     elseif ($SFX -eq "Business Scrub")          { return @("38", "82") }
+    elseif ($SFX -eq "Carrot Refill")           { return @("48", "45") }     elseif ($SFX -eq "Cartoon Fall")            { return @("28", "A0") }     elseif ($SFX -eq "Change Item")             { return @("08", "35") }
+    elseif ($SFX -eq "Chest Open")              { return @("28", "20") }     elseif ($SFX -eq "Child Cringe")            { return @("68", "3A") }     elseif ($SFX -eq "Child Gasp")              { return @("68", "36") }
+    elseif ($SFX -eq "Child Hurt")              { return @("68", "25") }     elseif ($SFX -eq "Child Owo")               { return @("68", "23") }     elseif ($SFX -eq "Child Pant")              { return @("68", "29") }
+    elseif ($SFX -eq "Child Scream")            { return @("68", "28") }     elseif ($SFX -eq "Cluck")                   { return @("28", "12") }     elseif ($SFX -eq "Cockadoodledoo")          { return @("28", "13") }
+    elseif ($SFX -eq "Cursed Attack")           { return @("68", "68") }     elseif ($SFX -eq "Cursed Scream")           { return @("68", "67") }     elseif ($SFX -eq "Deku Baba")               { return @("38", "60") }
+    elseif ($SFX -eq "Drawbridge Set")          { return @("28", "0E") }     elseif ($SFX -eq "Dusk Howl")               { return @("28", "AE") }     elseif ($SFX -eq "Epona (Young)")           { return @("28", "44") }
+    elseif ($SFX -eq "Exploding Crate")         { return @("28", "39") }     elseif ($SFX -eq "Explosion")               { return @("18", "0E") }     elseif ($SFX -eq "Fanfare (Light)")         { return @("48", "24") }
+    elseif ($SFX -eq "Fanfare (Medium)")        { return @("48", "31") }     elseif ($SFX -eq "Field Shrub")             { return @("28", "77") }     elseif ($SFX -eq "Flare Dancer Laugh")      { return @("39", "81") }
+    elseif ($SFX -eq "Flare Dancer Startled")   { return @("39", "8B") }     elseif ($SFX -eq 'Ganondorf "Teh!"')        { return @("39", "CA") }     elseif ($SFX -eq "Gohma Lava Croak")        { return @("39", "5D") }
+    elseif ($SFX -eq "Gold Skull Token")        { return @("48", "43") }     elseif ($SFX -eq "Goron Wake")              { return @("38", "FC") }     elseif ($SFX -eq "Great Fairy")             { return @("68", "58") }
+    elseif ($SFX -eq "Guay")                    { return @("38", "B6") }     elseif ($SFX -eq "Gunshot")                 { return @("48", "35") }     elseif ($SFX -eq "Hammer Bonk")             { return @("18", "0A") }
+    elseif ($SFX -eq "Horse Neigh")             { return @("28", "05") }     elseif ($SFX -eq "Horse Trot")              { return @("28", "04") }     elseif ($SFX -eq "Hover Boots")             { return @("08", "C9") }
+    elseif ($SFX -eq "HP Low")                  { return @("48", "1B") }     elseif ($SFX -eq "HP Recover")              { return @("48", "0B") }     elseif ($SFX -eq "Ice Shattering")          { return @("08", "75") }
+    elseif ($SFX -eq "Ingo Wooah")              { return @("68", "54") }     elseif ($SFX -eq "Ingo Kaah!")              { return @("68", "55") }     elseif ($SFX -eq "Iron Boots")              { return @("08", "0D") }
+    elseif ($SFX -eq "Iron Knuckle")            { return @("39", "29") }     elseif ($SFX -eq "Moblin Club Ground")      { return @("38", "E1") }     elseif ($SFX -eq "Moblin Club Swing")       { return @("39", "EF") }
+    elseif ($SFX -eq "Moo")                     { return @("28", "DF") }     elseif ($SFX -eq "Mweep!")                  { return @("68", "7A") }     elseif ($SFX -eq 'Navi "Hello!"')           { return @("68", "44") }
+    elseif ($SFX -eq 'Navi "Hey!"')             { return @("68", "5F") }     elseif ($SFX -eq "Navi Random")             { return @("68", "43") }     elseif ($SFX -eq "Notification")            { return @("48", "20") }
+    elseif ($SFX -eq "Phantom Ganon Laugh")     { return @("38", "B0") }     elseif ($SFX -eq "Plant Explode")           { return @("28", "4E") }     elseif ($SFX -eq "Poe")                     { return @("38", "EC") }
+    elseif ($SFX -eq "Pot Shattering")          { return @("28", "87") }     elseif ($SFX -eq "Redead Moan")             { return @("38", "E4") }     elseif ($SFX -eq "Redead Screan")           { return @("38", "E5") }
+    elseif ($SFX -eq "Ribbit")                  { return @("28", "B1") }     elseif ($SFX -eq "Rupee")                   { return @("48", "03") }     elseif ($SFX -eq "Rupee (Silver)")          { return @("28", "E8") }
+    elseif ($SFX -eq "Ruto Crash")              { return @("68", "60") }     elseif ($SFX -eq "Ruto Excited")            { return @("68", "61") }     elseif ($SFX -eq "Ruto Giggle")             { return @("68", "63") }
+    elseif ($SFX -eq "Ruto Lift")               { return @("68", "74") }     elseif ($SFX -eq "Ruto Thrown")             { return @("68", "65") }     elseif ($SFX -eq "Ruto Wiggle")             { return @("68", "66") }
+    elseif ($SFX -eq "Scrub Emerge")            { return @("38", "7C") }     elseif ($SFX -eq "Shabom Bounce")           { return @("39", "48") }     elseif ($SFX -eq "Shabom Pop")              { return @("39", "49") }
+    elseif ($SFX -eq "Shellblade")              { return @("38", "49") }     elseif ($SFX -eq "Skultula")                { return @("39", "DA") }     elseif ($SFX -eq "Soft Beep")               { return @("48", "04") }
+    elseif ($SFX -eq "Spike Trap")              { return @("38", "E9") }     elseif ($SFX -eq "Spit Nut")                { return @("38", "7E") }     elseif ($SFX -eq "Stalchild Attack")        { return @("38", "31") }
+    elseif ($SFX -eq "Stinger Squeak")          { return @("39", "A3") }     elseif ($SFX -eq "Switch")                  { return @("28", "15") }     elseif ($SFX -eq "Sword Bonk")              { return @("18", "1A") }
+    elseif ($SFX -eq "Talon Cry")               { return @("68", "53") }     elseif ($SFX -eq 'Talon "Hmm"')             { return @("68", "52") }     elseif ($SFX -eq "Talon Snore")             { return @("68", "50") }
+    elseif ($SFX -eq "Talon WTF")               { return @("68", "51") }     elseif ($SFX -eq "Tambourine")              { return @("48", "42") }     elseif ($SFX -eq "Target Enemy")            { return @("48", "30") }
+    elseif ($SFX -eq "Target Neutral")          { return @("48", "0C") }     elseif ($SFX -eq "Thunder")                 { return @("28", "2E") }     elseif ($SFX -eq "Timer")                   { return @("48", "1A") }
+    elseif ($SFX -eq "Twinrova Bicker")         { return @("39", "E7") }     elseif ($SFX -eq "Wolfos Howl")             { return @("38", "3C") }     elseif ($SFX -eq "Zelda Gasp (Adult)")      { return @("68", "79") }
     else {
         if ($Settings.Debug.Console -eq $True) { Write-Host ("Could not find sound ID for: " + $SFX) }
         return -1
@@ -824,7 +825,7 @@ function CreateTabReduxOcarinaOfTime() {
 
     # BUTTON COLORS #
     CreateReduxGroup    -Tag  "Colors"  -Height 2 -Text "Button Colors"
-    CreateReduxComboBox -Name "Buttons" -Text "Button Colors:" -Items @("N64 OoT (default)", "N64 MM", "GC OoT", "GC MM", "Randomized", "Custom") -Info ("Select a preset for the button colors`n" + '"Random" fully randomizes the button colors each time the game is patched')
+    CreateReduxComboBox -Name "Buttons" -Text "Button Colors:" -Items @("N64 OoT", "N64 MM", "GC OoT", "GC MM", "Randomized", "Custom") -Info ("Select a preset for the button colors`n" + '"Randomized" fully randomizes the colors each time the patcher is opened')
 
     # Button Colors - Buttons
     $Buttons = @()
@@ -919,7 +920,7 @@ function CreateTabAudiovisualOcarinaOfTime() {
     CreateReduxCheckBox -Name "BlackBars"       -Column 2 -Text "No Black Bars"          -Info "Removes the black bars shown on the top and bottom of the screen during Z-targeting and cutscenes"
     CreateReduxCheckBox -Name "ExtendedDraw"    -Column 3 -Text "Extended Draw Distance" -Info "Increases the game's draw distance for objects`nDoes not work on all objects"
     CreateReduxCheckBox -Name "ForceHiresModel" -Column 4 -Text "Force Hires Link Model" -Info "Always use Link's High Resolution Model when Link is too far away"
-    CreateReduxComboBox -Name "Models"          -Column 5 -Text "Link's Models:" -Items @("No Model Replacements", "Replace Child Model Only", "Replace Adult Model Only", "Replace Both Models", "Change to Female Models") -Info "1. Replace the model for Child Link with that of Majora's Mask`n2. Replace the model for Adult Link to be Majora's Mask-styled`n3. Combine both previous options`n4. Transform Link into a female"
+    CreateReduxComboBox -Name "Models"          -Column 5 -Text "Link's Models:"      -Items @("Original Models", "Replace Child Model Only", "Replace Adult Model Only", "Replace Both Models", "Change to Female Models") -Info "1. Replace the model for Child Link with that of Majora's Mask`n2. Replace the model for Adult Link to be Majora's Mask-styled`n3. Combine both previous options`n4. Transform Link into a female"
     
     # INTERFACE #
     CreateReduxGroup    -Tag  "UI" -Text "Interface"
@@ -928,8 +929,8 @@ function CreateTabAudiovisualOcarinaOfTime() {
 
     # SOUNDS / VOICES #
     CreateReduxGroup    -Tag  "Sounds" -Text "Sounds / Voices"
-    CreateReduxComboBox -Name "Voices"          -Column 1 -Text "Link's Voice:"       -Items @("No Voice Changes", "Majora's Mask Link Voices", "Feminine Link Voices")  -Info "1. Replace the voices for Link with those used in Majora's Mask`n2. Replace the voices for Link to sound feminine"
-    CreateReduxComboBox -Name "Instrument"      -Column 3 -Text "Instrument:"         -Items @("Ocarina (default)", "Malon", "Whistle", "Harp", "Grind-Organ", "Flute") -Info "Replace the sound used for playing the Ocarina of Time"
+    CreateReduxComboBox -Name "Voices"          -Column 1 -Text "Link's Voice:"       -Items @("Original", "Majora's Mask", "Feminine")  -Info "1. Replace the voices for Link with those used in Majora's Mask`n2. Replace the voices for Link to sound feminine"
+    CreateReduxComboBox -Name "Instrument"      -Column 3 -Text "Instrument:"         -Items @("Ocarina", "Female Voice", "Whistle", "Harp", "Grind-Organ", "Flute") -Info "Replace the sound used for playing the Ocarina of Time"
 
     # SFX SOUND EFFECTS #
     CreateReduxGroup    -Tag "SFX" -Text "SFX Sound Effects" -Height 3
@@ -957,11 +958,11 @@ function CreateTabDifficultyOcarinaOfTime() {
     
     # HERO MODE #
     CreateReduxGroup    -Tag  "Hero" -Text "Hero Mode"
-    CreateReduxComboBox -Name "Damage"     -Column 1 -Row 1 -Items @("1x Damage", "2x Damage", "4x Damage", "8x Damage", "OHKO Mode") -Text "Damage:" -Info "Set the amount of damage you receive`nOHKO Mode = You die in one hit"
-    CreateReduxComboBox -Name "Recovery"   -Column 3 -Row 1 -Items @("1x Recovery", "1/2x Recovery", "1/4x Recovery", "0x Recovery") -Text "Recovery:" -Info "Set the amount health you recovery from Recovery Hearts"
-    CreateReduxComboBox -Name "MagicUsage" -Column 5 -Row 1 -Items @("1x Magic Usage", "2x Magic Usage", "3x Magic Usage") -Text "Magic Usage:" -Info "Set the amount of times magic is consumed at"
-    #CreateReduxComboBox -Name "BossHP"    -Column 1 -Row 2 -Items @("1x Boss HP", "2x Boss HP", "3x Boss HP")          -Text "Boss HP:"    -Info "Set the amount of health for bosses"
-    #CreateReduxComboBox -Name "MonsterHP" -Column 3 -Row 2 -Items @("1x Monster HP", "2x Monster HP", "3x Monster HP") -Text "Monster HP:" -Info "Set the amount of health for monsters"
+    CreateReduxComboBox -Name "Damage"     -Column 1 -Row 1 -Text "Damage:"      -Items @("1x Damage", "2x Damage", "4x Damage", "8x Damage", "OHKO Mode") -Info "Set the amount of damage you receive`nOHKO Mode = You die in one hit"
+    CreateReduxComboBox -Name "Recovery"   -Column 3 -Row 1 -Text "Recovery:"    -Items @("1x Recovery", "1/2x Recovery", "1/4x Recovery", "0x Recovery")  -Info "Set the amount health you recovery from Recovery Hearts"
+    CreateReduxComboBox -Name "MagicUsage" -Column 5 -Row 1 -Text "Magic Usage:" -Items @("1x Magic Usage", "2x Magic Usage", "3x Magic Usage")            -Info "Set the amount of times magic is consumed at"
+   #CreateReduxComboBox -Name "BossHP"     -Column 1 -Row 2 -Text "Boss HP:"     -Items @("1x Boss HP", "2x Boss HP", "3x Boss HP")                        -Info "Set the amount of health for bosses"
+   #CreateReduxComboBox -Name "MonsterHP"  -Column 3 -Row 2 -Text "Monster HP:"  -Items @("1x Monster HP", "2x Monster HP", "3x Monster HP")               -Info "Set the amount of health for monsters"
 
     # MASTER QUEST #
     CreateReduxGroup    -Text "Master Quest"
@@ -984,8 +985,8 @@ function CreateTabDifficultyOcarinaOfTime() {
 
 
 
-    $Redux.Hero.Damage.Add_SelectedIndexChanged({ $Redux.Hero.Recovery.Enabled = $this.Text -ne "OHKO Mode" })
-    $Redux.Hero.Recovery.Enabled = $Redux.Hero.Damage.Text -ne "OHKO Mode"
+    $Redux.Hero.Damage.Add_SelectedIndexChanged({ $Redux.Hero.Recovery.Enabled = $this.text -ne "OHKO Mode" })
+    $Redux.Hero.Recovery.Enabled = $Redux.Hero.Damage.text -ne "OHKO Mode"
      
     EnableForm -Form $Redux.Box.MQ -Enable $Redux.MasterQuest.Checked
     $Redux.MasterQuest.Add_CheckStateChanged({ EnableForm -Form $Redux.Box.MQ -Enable $Redux.MasterQuest.Checked })
@@ -1015,13 +1016,13 @@ function CreateTabColorsOcarinaOfTime() {
     CreateReduxGroup -Tag "Colors" -Text "Equipment Colors" -Height 3
     $Redux.Colors.Equipment = @()
     $Colors = @("Kokiri Green", "Goron Red", "Zora Blue", "Black", "White", "Azure Blue", "Vivid Cyan", "Light Red", "Fuchsia", "Purple", "Majora Purple", "Twitch Purple", "Persian Rose", "Dirty Yellow", "Blush Pink", "Hot Pink", "Rose Pink", "Orange", "Gray", "Gold", "Silver", "Beige", "Teal", "Blood Red", "Blood Orange", "Royal Blue", "Sonic Blue", "NES Green", "Dark Green", "Lumen", "Randomized", "Custom")
-    $Redux.Colors.Equipment += CreateReduxComboBox -Name "KokiriTunic"       -Column 1 -Row 1 -Length 230 -Shift 70 -Items $Colors -Default 1 -Text "Kokiri Tunic Colors:" -Info "Select a color scheme for the Kokiri Tunic"
-    $Redux.Colors.Equipment += CreateReduxComboBox -Name "GoronTunic"        -Column 1 -Row 2 -Length 230 -Shift 70 -Items $Colors -Default 2 -Text "Goron Tunic Colors:"  -Info "Select a color scheme for the Goron Tunic"
-    $Redux.Colors.Equipment += CreateReduxComboBox -Name "ZoraTunic"         -Column 1 -Row 3 -Length 230 -Shift 70 -Items $Colors -Default 3 -Text "Zora Tunic Colors:"   -Info "Select a color scheme for the Zora Tunic"
+    $Redux.Colors.Equipment += CreateReduxComboBox -Name "KokiriTunic"       -Column 1 -Row 1 -Text "Kokiri Tunic Colors:"        -Default 1 -Length 230 -Shift 70 -Items $Colors -Info ("Select a color scheme for the Kokiri Tunic`n" + '"Randomized" fully randomizes the colors each time the patcher is opened')
+    $Redux.Colors.Equipment += CreateReduxComboBox -Name "GoronTunic"        -Column 1 -Row 2 -Text "Goron Tunic Colors:"         -Default 2 -Length 230 -Shift 70 -Items $Colors -Info ("Select a color scheme for the Goron Tunic`n" + '"Randomized" fully randomizes the colors each time the patcher is opened')
+    $Redux.Colors.Equipment += CreateReduxComboBox -Name "ZoraTunic"         -Column 1 -Row 3 -Text "Zora Tunic Colors:"          -Default 3 -Length 230 -Shift 70 -Items $Colors -Info ("Select a color scheme for the Zora Tunic`n" + '"Randomized" fully randomizes the colors each time the patcher is opened')
     $Colors = @("Silver", "Gold", "Black", "Green", "Blue", "Bronze", "Red", "Sky Blue", "Pink", "Magenta", "Orange", "Lime", "Purple", "Randomized", "Custom")
-    $Redux.Colors.Equipment += CreateReduxComboBox -Name "SilverGauntlets"   -Column 4 -Row 1 -Length 230 -Shift 70 -Items $Colors -Default 1 -Text "Silver Gauntlets Colors:" -Info "Select a color scheme for the Silver Gauntlets"
-    $Redux.Colors.Equipment += CreateReduxComboBox -Name "GoldenGauntlets"   -Column 4 -Row 2 -Length 230 -Shift 70 -Items $Colors -Default 2 -Text "Golden Gauntlets Colors:" -Info "Select a color scheme for the Golden Gauntlets"
-    $Redux.Colors.Equipment += CreateReduxComboBox -Name "MirrorShieldFrame" -Column 4 -Row 3 -Length 230 -Shift 70 -Items @("Red (default)", "Green", "Blue", "Yellow", "Cyan", "Magenta", "Orange", "Gold", "Purple", "Pink", "Randomized", "Custom") -Text "Mirror Shield Frame Colors:" -Info "Select a color scheme for the Mirror Shield Frame"
+    $Redux.Colors.Equipment += CreateReduxComboBox -Name "SilverGauntlets"   -Column 4 -Row 1 -Text "Silver Gauntlets Colors:"    -Default 1 -Length 230 -Shift 70 -Items $Colors -Info ("Select a color scheme for the Silver Gauntlets`n" + '"Randomized" fully randomizes the colors each time the patcher is opened')
+    $Redux.Colors.Equipment += CreateReduxComboBox -Name "GoldenGauntlets"   -Column 4 -Row 2 -Text "Golden Gauntlets Colors:"    -Default 2 -Length 230 -Shift 70 -Items $Colors -Info ("Select a color scheme for the Golden Gauntlets`n" + '"Randomized" fully randomizes the colors each time the patcher is opened')
+    $Redux.Colors.Equipment += CreateReduxComboBox -Name "MirrorShieldFrame" -Column 4 -Row 3 -Text "Mirror Shield Frame Colors:" -Default 1 -Length 230 -Shift 70 -Items @("Red", "Green", "Blue", "Yellow", "Cyan", "Magenta", "Orange", "Gold", "Purple", "Pink", "Randomized", "Custom") -Info "Select a color scheme for the Mirror Shield Frame"
 
     # Equipment Colors - Buttons
     $Buttons = @()
@@ -1067,8 +1068,8 @@ function CreateTabColorsOcarinaOfTime() {
 
     # NAVI COLORS #
     CreateReduxGroup    -Tag  "Colors" -Text "Navi Colors" -Height 4
-    $Items = @("White (default)", "Gold", "Green", "Light Blue", "Yellow", "Red", "Magenta", "Black", "Tatl", "Tael", "Fi", "Ciela", "Epona", "Ezlo", "King of Red Lions", "Linebeck", "Loftwing", "Midna", "Phantom Zelda", "Randomized", "Custom")
-    CreateReduxComboBox -Name "Navi" -Length 230 -Shift 70 -Items $Items -Text "Navi Colors:" -Info ("Select a color scheme for Navi`nSelecting the presets " + '"Tatl" or "Tael"' + " will also change the references for Navi in the dialogue")
+    $Items = @("White", "Gold", "Green", "Light Blue", "Yellow", "Red", "Magenta", "Black", "Tatl", "Tael", "Fi", "Ciela", "Epona", "Ezlo", "King of Red Lions", "Linebeck", "Loftwing", "Midna", "Phantom Zelda", "Randomized", "Custom")
+    CreateReduxComboBox -Name "Navi" -Length 230 -Shift 70 -Items $Items -Text "Navi Colors:" -Info ("Select a color scheme for Navi`nSelecting the presets " + '"Tatl" or "Tael"' + " will also change the references for Navi in the dialogue`n" + '"Randomized" fully randomizes the colors each time the patcher is opened')
 
     # Navi Colors - Buttons
     $Buttons = @()
@@ -1198,11 +1199,12 @@ function CreateTabCutscenesOcarinaOfTime() {
 #==============================================================================================================================================================================================
 function SetButtonColorsPreset([Object]$ComboBox) {
     
-    if     ($ComboBox.Text -like '*N64 OoT*')    { SetColors -Colors @("5A5AFF", "009600", "FFA000", "C80000") -Dialogs $Redux.Colors.SetButtons -Labels $Redux.Colors.ButtonLabels }
-    elseif ($ComboBox.Text -like '*N64 MM*')     { SetColors -Colors @("64C8FF", "64FF78", "FFF000", "FF823C") -Dialogs $Redux.Colors.SetButtons -Labels $Redux.Colors.ButtonLabels }
-    elseif ($ComboBox.Text -like '*GC OoT*')     { SetColors -Colors @("00C832", "FF1E1E", "FFA000", "787878") -Dialogs $Redux.Colors.SetButtons -Labels $Redux.Colors.ButtonLabels }
-    elseif ($ComboBox.Text -like '*GC MM*')      { SetColors -Colors @("64FF78", "FF6464", "FFF000", "787878") -Dialogs $Redux.Colors.SetButtons -Labels $Redux.Colors.ButtonLabels }
-    elseif ($ComboBox.Text -like '*Randomized*') {
+    $Text = $ComboBox.Text.replace(' (default)', "")
+    if     ($Text -eq "N64 OoT")      { SetColors -Colors @("5A5AFF", "009600", "FFA000", "C80000") -Dialogs $Redux.Colors.SetButtons -Labels $Redux.Colors.ButtonLabels }
+    elseif ($Text -eq "N64 MM")       { SetColors -Colors @("64C8FF", "64FF78", "FFF000", "FF823C") -Dialogs $Redux.Colors.SetButtons -Labels $Redux.Colors.ButtonLabels }
+    elseif ($Text -eq "GC OoT")       { SetColors -Colors @("00C832", "FF1E1E", "FFA000", "787878") -Dialogs $Redux.Colors.SetButtons -Labels $Redux.Colors.ButtonLabels }
+    elseif ($Text -eq "GC MM")        { SetColors -Colors @("64FF78", "FF6464", "FFF000", "787878") -Dialogs $Redux.Colors.SetButtons -Labels $Redux.Colors.ButtonLabels }
+    elseif ($Text -eq "Randomized")   {
         $Colors = @()
         for ($i=0; $i -lt $Redux.Colors.SetButtons.length; $i++) {
             $Green = Get8Bit -Value (Get-Random -Maximum 255)
@@ -1221,26 +1223,27 @@ function SetButtonColorsPreset([Object]$ComboBox) {
 #==============================================================================================================================================================================================
 function SetNaviColorsPreset([Object]$ComboBox) {
     
-    if     ($ComboBox.Text -like '*White*')               { SetNaviColors -Inner "FFFFFF" -Outer "0000FF" }
-    elseif ($ComboBox.Text -like '*Gold*')                { SetNaviColors -Inner "FECC3C" -Outer "FEC007" }
-    elseif ($ComboBox.Text -like '*Green*')               { SetNaviColors -Inner "00FF00" -Outer "00FF00" }
-    elseif ($ComboBox.Text -like '*Light Blue*')          { SetNaviColors -Inner "9696FF" -Outer "9696FF" }
-    elseif ($ComboBox.Text -like '*Yellow*')              { SetNaviColors -Inner "FFFF00" -Outer "C89B00" }
-    elseif ($ComboBox.Text -like '*Red*')                 { SetNaviColors -Inner "FF0000" -Outer "FF0000" }
-    elseif ($ComboBox.Text -like '*Magenta*')             { SetNaviColors -Inner "FF00FF" -Outer "C8009B" }
-    elseif ($ComboBox.Text -like '*Black*')               { SetNaviColors -Inner "000000" -Outer "000000" }
-    elseif ($ComboBox.Text -like '*Tatl*')                { SetNaviColors -Inner "FFFFFF" -Outer "C89800" }
-    elseif ($ComboBox.Text -like '*Tael*')                { SetNaviColors -Inner "49146C" -Outer "FF0000" }
-    elseif ($ComboBox.Text -like '*Fi*')                  { SetNaviColors -Inner "2C9EC4" -Outer "2C1983" }
-    elseif ($ComboBox.Text -like '*Ciela*')               { SetNaviColors -Inner "E6DE83" -Outer "C6BE5B" }
-    elseif ($ComboBox.Text -like '*Epona*')               { SetNaviColors -Inner "D14902" -Outer "551F08" }
-    elseif ($ComboBox.Text -like '*Ezlo*')                { SetNaviColors -Inner "629C5F" -Outer "3F5D37" }
-    elseif ($ComboBox.Text -like '*King of Red Lions*')   { SetNaviColors -Inner "A83317" -Outer "DED7C5" }
-    elseif ($ComboBox.Text -like '*Linebeck*')            { SetNaviColors -Inner "032660" -Outer "EFFFFF" }
-    elseif ($ComboBox.Text -like '*Loftwing*')            { SetNaviColors -Inner "D62E31" -Outer "FDE6CC" }
-    elseif ($ComboBox.Text -like '*Midna*')               { SetNaviColors -Inner "192426" -Outer "D28330" }
-    elseif ($ComboBox.Text -like '*Phantom Zelda*')       { SetNaviColors -Inner "977A6C" -Outer "6F4667" }
-    elseif ($ComboBox.Text -like '*Randomized*') {
+    $Text = $ComboBox.Text.replace(' (default)', "")
+    if     ($Text -eq "White")               { SetNaviColors -Inner "FFFFFF" -Outer "0000FF" }
+    elseif ($Text -eq "Gold")                { SetNaviColors -Inner "FECC3C" -Outer "FEC007" }
+    elseif ($Text -eq "Green")               { SetNaviColors -Inner "00FF00" -Outer "00FF00" }
+    elseif ($Text -eq "Light Blue")          { SetNaviColors -Inner "9696FF" -Outer "9696FF" }
+    elseif ($Text -eq "Yellow")              { SetNaviColors -Inner "FFFF00" -Outer "C89B00" }
+    elseif ($Text -eq "Red")                 { SetNaviColors -Inner "FF0000" -Outer "FF0000" }
+    elseif ($Text -eq "Magenta")             { SetNaviColors -Inner "FF00FF" -Outer "C8009B" }
+    elseif ($Text -eq "Black")               { SetNaviColors -Inner "000000" -Outer "000000" }
+    elseif ($Text -eq "Tatl")                { SetNaviColors -Inner "FFFFFF" -Outer "C89800" }
+    elseif ($Text -eq "Tael")                { SetNaviColors -Inner "49146C" -Outer "FF0000" }
+    elseif ($Text -eq "Fi")                  { SetNaviColors -Inner "2C9EC4" -Outer "2C1983" }
+    elseif ($Text -eq "Ciela")               { SetNaviColors -Inner "E6DE83" -Outer "C6BE5B" }
+    elseif ($Text -eq "Epona")               { SetNaviColors -Inner "D14902" -Outer "551F08" }
+    elseif ($Text -eq "Ezlo")                { SetNaviColors -Inner "629C5F" -Outer "3F5D37" }
+    elseif ($Text -eq "King of Red Lions")   { SetNaviColors -Inner "A83317" -Outer "DED7C5" }
+    elseif ($Text -eq "Linebeck")            { SetNaviColors -Inner "032660" -Outer "EFFFFF" }
+    elseif ($Text -eq "Loftwing")            { SetNaviColors -Inner "D62E31" -Outer "FDE6CC" }
+    elseif ($Text -eq "Midna")               { SetNaviColors -Inner "192426" -Outer "D28330" }
+    elseif ($Text -eq "Phantom Zelda")       { SetNaviColors -Inner "977A6C" -Outer "6F4667" }
+    elseif ($Text -eq "Randomized") {
         $Colors = @()
         for ($i=0; $i -lt $Redux.Colors.SetNavi.length; $i++) {
             $Green = Get8Bit -Value (Get-Random -Maximum 255)
@@ -1274,38 +1277,39 @@ function SetNaviColors([String]$Inner, [String]$Outer) {
 #==============================================================================================================================================================================================
 function SetTunicColorsPreset([Object]$ComboBox, [Object]$Dialog, [Object]$Label) {
     
-    if     ($ComboBox.Text -like '*Kokiri Green*')    { SetColor -Color "1E691B" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Goron Red*')       { SetColor -Color "641400" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Zora Blue*')       { SetColor -Color "003C64" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Black*')           { SetColor -Color "303030" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*White*')           { SetColor -Color "F0F0FF" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Azure Blue*')      { SetColor -Color "139ED8" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Vivid Cyan*')      { SetColor -Color "13E9D8" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Light Red*')       { SetColor -Color "F87C6D" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Fuchsia*')         { SetColor -Color "FF00FF" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -eq   "Purple")            { SetColor -Color "953080" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Majora Purple*')   { SetColor -Color "400040" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Twitch Purple*')   { SetColor -Color "6441A5" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Purple Heart*')    { SetColor -Color "8A2BE2" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Persian Rose*')    { SetColor -Color "FF1493" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Dirty Yellow*')    { SetColor -Color "E0D860" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Blush Pink*')      { SetColor -Color "F86CF8" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Hot Pink*')        { SetColor -Color "FF69B4" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Rose Pink*')       { SetColor -Color "FF90B3" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -eq   "Orange")            { SetColor -Color "E07940" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Gray*')            { SetColor -Color "A0A0B0" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Gold*')            { SetColor -Color "D8B060" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Silver*')          { SetColor -Color "D0F0FF" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Beige*')           { SetColor -Color "C0A0A0" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Teal*')            { SetColor -Color "30D0B0" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Blood Red*')       { SetColor -Color "830303" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Blood Orange*')    { SetColor -Color "FE4B03" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Royal Blue*')      { SetColor -Color "400090" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Sonic Blue*')      { SetColor -Color "5090E0" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*NES Green*')       { SetColor -Color "00D000" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Dark Green*')      { SetColor -Color "002518" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Lumen*')           { SetColor -Color "508CF0" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Randomized*') {
+    $Text = $ComboBox.Text.replace(' (default)', "")
+    if     ($Text -eq "Kokiri Green")    { SetColor -Color "1E691B" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "Goron Red")       { SetColor -Color "641400" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "Zora Blue")       { SetColor -Color "003C64" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "Black")           { SetColor -Color "303030" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "White")           { SetColor -Color "F0F0FF" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "Azure Blue")      { SetColor -Color "139ED8" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "Vivid Cyan")      { SetColor -Color "13E9D8" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "Light Red")       { SetColor -Color "F87C6D" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "Fuchsia")         { SetColor -Color "FF00FF" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "Purple")          { SetColor -Color "953080" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "Majora Purple")   { SetColor -Color "400040" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "Twitch Purple")   { SetColor -Color "6441A5" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "Purple Heart")    { SetColor -Color "8A2BE2" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "Persian Rose")    { SetColor -Color "FF1493" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "Dirty Yellow")    { SetColor -Color "E0D860" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "Blush Pink")      { SetColor -Color "F86CF8" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "Hot Pink")        { SetColor -Color "FF69B4" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "Rose Pink")       { SetColor -Color "FF90B3" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "Orange")          { SetColor -Color "E07940" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "Gray")            { SetColor -Color "A0A0B0" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "Gold")            { SetColor -Color "D8B060" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "Silver")          { SetColor -Color "D0F0FF" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "Beige")           { SetColor -Color "C0A0A0" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "Teal")            { SetColor -Color "30D0B0" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "Blood Red")       { SetColor -Color "830303" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "Blood Orange")    { SetColor -Color "FE4B03" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "Royal Blue")      { SetColor -Color "400090" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "Sonic Blue")      { SetColor -Color "5090E0" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "NES Green")       { SetColor -Color "00D000" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "Dark Green")      { SetColor -Color "002518" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "Lumen")           { SetColor -Color "508CF0" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "Randomized") {
         $Green = Get8Bit -Value (Get-Random -Maximum 255)
         $Red   = Get8Bit -Value (Get-Random -Maximum 255)
         $Blue  = Get8Bit -Value (Get-Random -Maximum 255)
@@ -1320,20 +1324,21 @@ function SetTunicColorsPreset([Object]$ComboBox, [Object]$Dialog, [Object]$Label
 #==============================================================================================================================================================================================
 function SetGauntletsColorsPreset([Object]$ComboBox, [Object]$Dialog, [Object]$Label) {
     
-    if     ($ComboBox.Text -like '*Silver*')     { SetColor -Color "FFFFFF" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Gold*')       { SetColor -Color "FECF0F" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Black*')      { SetColor -Color "000006" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Green*')      { SetColor -Color "025918" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -eq   "Blue")         { SetColor -Color "06025A" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Bronze*')     { SetColor -Color "600602" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Red*')        { SetColor -Color "FF0000" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Sky Blue*')   { SetColor -Color "025DB0" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Pink*')       { SetColor -Color "FA6A90" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Magenta*')    { SetColor -Color "FF00FF" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Orange*')     { SetColor -Color "DA3800" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Lime*')       { SetColor -Color "5BA806" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Purple*')     { SetColor -Color "800080" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Randomized*') {
+    $Text = $ComboBox.Text.replace(' (default)', "")
+    if     ($Text -eq "Silver")     { SetColor -Color "FFFFFF" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "Gold")       { SetColor -Color "FECF0F" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "Black")      { SetColor -Color "000006" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "Green")      { SetColor -Color "025918" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "Blue")       { SetColor -Color "06025A" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "Bronze")     { SetColor -Color "600602" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "Red")        { SetColor -Color "FF0000" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "Sky Blue")   { SetColor -Color "025DB0" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "Pink")       { SetColor -Color "FA6A90" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "Magenta")    { SetColor -Color "FF00FF" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "Orange")     { SetColor -Color "DA3800" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "Lime")       { SetColor -Color "5BA806" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "Purple")     { SetColor -Color "800080" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "Randomized") {
         $Green = Get8Bit -Value (Get-Random -Maximum 255)
         $Red   = Get8Bit -Value (Get-Random -Maximum 255)
         $Blue  = Get8Bit -Value (Get-Random -Maximum 255)
@@ -1347,17 +1352,18 @@ function SetGauntletsColorsPreset([Object]$ComboBox, [Object]$Dialog, [Object]$L
 #==============================================================================================================================================================================================
 function SetMirrorShieldFrameColorsPreset([Object]$ComboBox, [Object]$Dialog, [Object]$Label) {
     
-    if     ($ComboBox.Text -like '*Red*')        { SetColor -Color "D70000" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Green*')      { SetColor -Color "00FF00" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Blue*')       { SetColor -Color "0040D8" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Yellow*')     { SetColor -Color "FFFF64" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Cyan*')       { SetColor -Color "00FFFF" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Magenta*')    { SetColor -Color "FF00FF" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Orange*')     { SetColor -Color "FFA500" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Gold*')       { SetColor -Color "FFD700" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Purple*')     { SetColor -Color "800080" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Pink*')       { SetColor -Color "FF69B4" -Dialog $Dialog -Label $Label }
-    elseif ($ComboBox.Text -like '*Randomized*') {
+    $Text = $ComboBox.Text.replace(' (default)', "")
+    if     ($Text -eq "Red")        { SetColor -Color "D70000" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "Green")      { SetColor -Color "00FF00" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "Blue")       { SetColor -Color "0040D8" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "Yellow")     { SetColor -Color "FFFF64" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "Cyan")       { SetColor -Color "00FFFF" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "Magenta")    { SetColor -Color "FF00FF" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "Orange")     { SetColor -Color "FFA500" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "Gold")       { SetColor -Color "FFD700" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "Purple")     { SetColor -Color "800080" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "Pink")       { SetColor -Color "FF69B4" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "Randomized") {
         $Green = Get8Bit -Value (Get-Random -Maximum 255)
         $Red   = Get8Bit -Value (Get-Random -Maximum 255)
         $Blue  = Get8Bit -Value (Get-Random -Maximum 255)
@@ -1372,7 +1378,7 @@ function SetMirrorShieldFrameColorsPreset([Object]$ComboBox, [Object]$Dialog, [O
 #==============================================================================================================================================================================================
 function SetColor([String]$Color, [Object]$Dialog, [Object]$Label) {
     
-    $Settings[$GameType.mode][$Dialog.Tag] = $Color; $Label.BackColor  = $Dialog.Color = "#" + $Color
+    $Settings[$GameType.mode][$Dialog.Tag] = $Color; $Label.BackColor = $Dialog.Color = "#" + $Color
 
 }
 

@@ -16,11 +16,13 @@ function ChangeBytes([String]$File, [String]$Offset, [Array]$Values, [int]$Inter
 
     for ($i=0; $i -lt $Values.Length; $i++) {
         if ($IsDec)   {
-            if ($Values[$i] -lt 0 -and $Overflow) { $Values[$i] = 255 + $Values[$i] }
+            if     ($Values[$i] -lt 0   -and $Overflow)   { $Values[$i] = $Values[$i] + 255 }
+            elseif ($Values[$i] -gt 255 -and $Overflow)   { $Values[$i] = $Values[$i] - 255 }
             [Byte]$Value = $Values[$i]
         }
         else {
-            if ((GetDecimal -Hex $Values[$i]) -lt 0 -and $Overflow) { $Values[$i] = 255 + (Get8Bit -Value $Values[$i]) }
+            if     ((GetDecimal -Hex $Values[$i]) -lt 0   -and $Overflow)   { $Values[$i] = Get8Bit -Value ($Values[$i] + 255) }
+            elseif ((GetDecimal -Hex $Values[$i]) -gt 255 -and $Overflow)   { $Values[$i] = Get8Bit -Value ($Values[$i] - 255) }
             [Byte]$Value = GetDecimal -Hex $Values[$i]
         }
         $ByteArrayGame[$Offset + ($i * $Interval)] = $Value

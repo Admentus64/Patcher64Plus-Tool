@@ -4,9 +4,9 @@ function CreateForm([int]$X=0, [int]$Y=0, [int]$Width=0, [int]$Height=0, [String
     $Form.Size = New-Object System.Drawing.Size($Width, $Height)
     $Form.Location = New-Object System.Drawing.Size($X, $Y)
     if ( ($Tag -ne "") -or ($Tag -ne $null) ) { $Form.Tag = $Tag }
-    $AddTo.Controls.Add($Form)
+    if (IsSet -Elem $AddTo) { $AddTo.Controls.Add($Form) }
 
-    if ( ($IsGame) -and (IsSet -Elem $Name) ) {
+    if ($IsGame -and (IsSet -Elem $Name) ) {
         if (IsSet $Last.Extend) {
             $Redux[$Last.Extend][$Name] = $Form
             $Name = $Last.Extend + "." + $Name
@@ -47,9 +47,17 @@ function CreateDialog([int]$Width=0, [int]$Height=0, [Object]$Icon) {
 function CreateColorDialog([String]$Color="000000", [String]$Name, [Switch]$IsGame) {
     
     $ColorDialog = New-Object System.Windows.Forms.ColorDialog
-    if (IsSet -Elem $Name) { $ColorDialog.Tag = $Name }
     $ColorDialog.Color = "#" + $Color
 
+    if ($IsGame -and (IsSet -Elem $Name) ) {
+        if (IsSet $Last.Extend) {
+            $Redux[$Last.Extend][$Name] = $ColorDialog
+            $Name = $Last.Extend + "." + $Name
+        }
+        else { $Redux[$Name] = $ColorDialog }
+    }
+    if (IsSet -Elem $Name) { $ColorDialog.Tag = $Name }
+    
     if (IsSet -Elem $ColorDialog.Tag) {
         if ($IsGame)   { $mode = $GameType.mode }
         else           { $mode = "Core" }
@@ -128,7 +136,6 @@ function CreateTextBox([int]$X=0, [int]$Y=0, [int]$Width=0, [int]$Height=0, [int
 #==============================================================================================================================================================================================
 function CreateComboBox([int]$X=0, [int]$Y=0, [int]$Width=0, [int]$Height=0, [String]$Name, [String]$Tag, [Object]$Items, [int]$Default=1, [String]$Info, [Switch]$IsGame, [Object]$AddTo=$Last.Group) {
     
-    Write-Host $Name $Default
     $ComboBox = CreateForm -X $X -Y $Y -Width $Width -Height $Height -Name $Name -Tag $Tag -IsGame $IsGame -Object (New-Object System.Windows.Forms.ComboBox) -AddTo $AddTo
     $ComboBox.DropDownStyle = "DropDownList"
     $ToolTip = CreateToolTip -Form $ComboBox -Info $Info
@@ -339,10 +346,14 @@ function CreateReduxCheckBox([int]$Column=1, [int]$Row=1, [Switch]$Checked, [Swi
 
 
 #==============================================================================================================================================================================================
-function CreateReduxComboBox([int]$Column=1, [int]$Row=1, [int]$Length=160, [int]$Shift=0, [Object]$Items, [int]$Default=1, [String]$Text, [String]$Info, [String]$Name, [String]$Tag, [Object]$AddTo=$Last.Group) {
+function CreateReduxComboBox([int]$Column=1, [int]$Row=1, [int]$Length=160, [int]$Shift=0, [Array]$Items, [int]$Default=1, [String]$Text, [String]$Info, [String]$Name, [String]$Tag, [Object]$AddTo=$Last.Group) {
     
     if (IsSet -Elem $Text)   { $Width = (80 + $Shift) }
     else                     { $Width = 0 }
+    if ($Items[($Default-1)] -ne "Default") {
+        $Items = $Items.Clone()
+        $Items[($Default-1)] += " (default)"
+    }
     $Label = CreateLabel -X (($Column-1) * 165 + 15) -Y ($Row * 30 - 10) -Width $Width -Height 15 -Text $Text -Info $Info -AddTo $AddTo
     $ComboBox = CreateComboBox -X $Label.Right -Y ($Label.Top - 3) -Width ($Length - $Shift) -Height 20 -Items $Items -Default $Default -Info $Info -IsGame $True -Name $Name -Tag $Tag -AddTo $AddTo
     return $ComboBox

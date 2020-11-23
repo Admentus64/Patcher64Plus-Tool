@@ -72,11 +72,17 @@ function ByteOptionsMajorasMask() {
     if (IsChecked -Elem $Redux.Graphics.ExtendedDraw)     { ChangeBytes -Offset "B50874" -Values @("00", "00", "00", "00") }
     if (IsChecked -Elem $Redux.Graphics.BlackBars)        { ChangeBytes -Offset "BF72A4" -Values @("00", "00", "00", "00") }
     if (IsChecked -Elem $Redux.Graphics.PixelatedStars)   { ChangeBytes -Offset "B943FC" -Values @("10", "00") }
-    if (IsIndex   -Elem $Redux.Graphics.LowHP -Not)       { ChangeBytes -Offset "B97E2A" -Values (GetSFXID -SFX $Redux.Graphics.LowHP.Text) }
+    
 
-    if (IsIndex -Elem $Redux.Graphics.Instrument -Not) {
-        ChangeBytes -Offset "51CBE" -Values (GetInstrumentID -SFX $Redux.Graphics.Instrument.Text)
-    }
+
+
+    # SOUNDS #
+
+    if (IsIndex -Elem $Redux.Sounds.LowHP -Not)                       { ChangeBytes -Offset "B97E2A" -Values (GetSFXID -SFX $Redux.Sounds.LowHP.Text) }
+    if (IsIndex -Elem $Redux.Sounds.InstrumentHylian -Not -Index 1)   { ChangeBytes -Offset "51CBE"  -Values (GetInstrumentID -SFX $Redux.Sounds.InstrumentHylian.Text); ChangeBytes -Offset "C668DC"  -Values (GetInstrumentID -SFX $Redux.Sounds.InstrumentHylian.Text) }
+    if (IsIndex -Elem $Redux.Sounds.InstrumentDeku   -Not -Index 2)   { ChangeBytes -Offset "51CC6"  -Values (GetInstrumentID -SFX $Redux.Sounds.InstrumentDeku.Text);   ChangeBytes -Offset "C668DF"  -Values (GetInstrumentID -SFX $Redux.Sounds.InstrumentDeku.Text)   }
+    if (IsIndex -Elem $Redux.Sounds.InstrumentGoron  -Not -Index 3)   { ChangeBytes -Offset "51CC4"  -Values (GetInstrumentID -SFX $Redux.Sounds.InstrumentGoron.Text);  ChangeBytes -Offset "C668DD"  -Values (GetInstrumentID -SFX $Redux.Sounds.InstrumentGoron.Text)  }
+    if (IsIndex -Elem $Redux.Sounds.InstrumentZora   -Not -Index 4)   { ChangeBytes -Offset "51CC5"  -Values (GetInstrumentID -SFX $Redux.Sounds.InstrumentZora.Text);   ChangeBytes -Offset "C668DE"  -Values (GetInstrumentID -SFX $Redux.Sounds.InstrumentZora.Text)   }
 
 
 
@@ -238,7 +244,7 @@ function ByteReduxMajorasMask() {
         ChangeBytes -Offset "3806514" -IsDec -Values @($Redux.Colors.SetButtons[0].Color.R, $Redux.Colors.SetButtons[0].Color.G, $Redux.Colors.SetButtons[0].Color.B)
         ChangeBytes -Offset "3806518" -IsDec -Values @($Redux.Colors.SetButtons[0].Color.R, $Redux.Colors.SetButtons[0].Color.G, $Redux.Colors.SetButtons[0].Color.B)
         ChangeBytes -Offset "380651C" -IsDec -Values @($Redux.Colors.SetButtons[0].Color.R, $Redux.Colors.SetButtons[0].Color.G, $Redux.Colors.SetButtons[0].Color.B)
-        if ( ($Redux.Colors.Buttons.Text -like '*Randomized*') -or ($Redux.Colors.Buttons.Text -like '*Custom*') ) {
+        if ($Redux.Colors.Buttons.Text -eq "Randomized" -or $Redux.Colors.Buttons.Text -eq "Custom") {
             ChangeBytes -Offset "38064CC" -IsDec -Values @($Redux.Colors.SetButtons[0].Color.R, $Redux.Colors.SetButtons[0].Color.G, $Redux.Colors.SetButtons[0].Color.B) # Pause Outer Selection
             ChangeBytes -Offset "38064D0" -IsDec -Values @($Redux.Colors.SetButtons[0].Color.R, $Redux.Colors.SetButtons[0].Color.G, $Redux.Colors.SetButtons[0].Color.B) # Pause Outer Glow Selection
             # ChangeBytes -Offset "38064D4" -IsDec -Values @(($Redux.Colors.SetButtons[0].Color.R+20), ($Redux.Colors.SetButtons[0].Color.G+20), ($Redux.Colors.SetButtons[0].Color.B+20)) -Overflow # Pause Outer Glow Selection
@@ -251,7 +257,7 @@ function ByteReduxMajorasMask() {
 
         # C Buttons
         ChangeBytes -Offset "3806478" -IsDec -Values @($Redux.Colors.SetButtons[2].Color.R, $Redux.Colors.SetButtons[2].Color.G, $Redux.Colors.SetButtons[2].Color.B) # Buttons
-        if ( ($Redux.Colors.Buttons.Text -like '*Randomized*') -or ($Redux.Colors.Buttons.Text -like '*Custom*') ) {
+        if ($Redux.Colors.Buttons.Text -eq "Randomized" -or $Redux.Colors.Buttons.Text -eq "Custom") {
             ChangeBytes -Offset "38064C8" -IsDec -Values @($Redux.Colors.SetButtons[2].Color.R, $Redux.Colors.SetButtons[2].Color.G, $Redux.Colors.SetButtons[2].Color.B) # Text Icons
             ChangeBytes -Offset "3806510" -IsDec -Values @($Redux.Colors.SetButtons[2].Color.R, $Redux.Colors.SetButtons[2].Color.G, $Redux.Colors.SetButtons[2].Color.B) # to Equip
             ChangeBytes -Offset "38064FC" -IsDec -Values @($Redux.Colors.SetButtons[2].Color.R, $Redux.Colors.SetButtons[2].Color.G, $Redux.Colors.SetButtons[2].Color.B) # Note
@@ -263,6 +269,16 @@ function ByteReduxMajorasMask() {
 
         # Start Button
         ChangeBytes -Offset "380647C" -IsDec -Values @($Redux.Colors.SetButtons[3].Color.R, $Redux.Colors.SetButtons[3].Color.G, $Redux.Colors.SetButtons[3].Color.B) # Button
+    }
+
+    if (IsIndex -Elem $Redux.Colors.Hearts -Not) {
+        ChangeBytes -Offset "3806498" -IsDec -Values @($Redux.Colors.SetHearts.Color.R, $Redux.Colors.SetHearts.Color.G, $Redux.Colors.SetHearts.Color.B)
+        ChangeBytes -Offset "380649C" -IsDec -Values @($Redux.Colors.SetHearts.Color.R, $Redux.Colors.SetHearts.Color.G, $Redux.Colors.SetHearts.Color.B)
+    }
+
+    if (IsIndex -Elem $Redux.Colors.Magic -Not) {
+        ChangeBytes -Offset "38064A0" -IsDec -Values @($Redux.Colors.SetMagic.Color.R, $Redux.Colors.SetMagic.Color.G, $Redux.Colors.SetMagic.Color.B)
+        ChangeBytes -Offset "38064A4" -IsDec -Values @($Redux.Colors.SetMagic.Color.R, $Redux.Colors.SetMagic.Color.G, $Redux.Colors.SetMagic.Color.B)
     }
 
 }
@@ -325,9 +341,10 @@ function ByteLanguageMajorasMask() {
 #==============================================================================================================================================================================================
 function GetItemID([String]$Item) {
     
-    if     ($Item -like '*None*' -or $Item -like '*Disabled*')   { return "FF" }
-    elseif ($Item -like '*Ocarina of Time*')   { return "00" }   elseif ($Item -like '*Deku Mask*')         { return "32" }   elseif ($Item -like '*Goron Mask*')   { return "33" }
-    elseif ($Item -like '*Zora Mask*')         { return "34" }   elseif ($Item -eq "Fierce Deity's Mask")   { return "35" }
+    $Item = $Item.replace(' (default)', "")
+    if     ($Item -eq "None" -or $Item -eq "Disabled")       { return "FF" }
+    elseif ($Item -eq "Ocarina of Time")   { return "00" }   elseif ($Item -eq "Deku Mask")             { return "32" }   elseif ($Item -eq "Goron Mask")   { return "33" }
+    elseif ($Item -eq "Zora Mask")         { return "34" }   elseif ($Item -eq "Fierce Deity's Mask")   { return "35" }
     else {
         if ($Settings.Debug.Console -eq $True) { Write-Host ("Could not find item ID for : " + $Item) }
         return -1
@@ -340,7 +357,16 @@ function GetItemID([String]$Item) {
 #==============================================================================================================================================================================================
 function GetInstrumentID([String]$SFX) {
     
-    if ($SFX -like '*Ocarina*')   { return "34" }     elseif ($SFX -like '*Female Voice*')   { return "55" }
+    $SFX = $SFX.replace(' (default)', "")
+    if     ($SFX -eq "Ocarina")             { return "34" }   elseif ($SFX -eq "Deku Pipes")     { return "5E" }   elseif ($SFX -eq "Goron Drums")       { return "5C" }
+    elseif ($SFX -eq "Zora Guitar")         { return "5D" }   elseif ($SFX -eq "Female Voice")   { return "55" }   elseif ($SFX -eq "Bell")              { return "57" }
+    elseif ($SFX -eq "Piano")               { return "73" }   elseif ($SFX -eq "Harp")           { return "59" }   elseif ($SFX -eq "Accordion")         { return "53" }
+    elseif ($SFX -eq "Cathedral Bell")      { return "64" }   elseif ($SFX -eq "Choir")          { return "2E" }   elseif ($SFX -eq "Dodongo")           { return "51" }
+    elseif ($SFX -eq "Eagle Seagull")       { return "65" }   elseif ($SFX -eq "Flute")          { return "77" }   elseif ($SFX -eq "Frog Croak")        { return "5F" }
+    elseif ($SFX -eq "Giants Singing")      { return "72" }   elseif ($SFX -eq "Gong")           { return "75" }   elseif ($SFX -eq "Ikana King")        { return "78" }
+    elseif ($SFX -eq "Soft Harp")           { return "54" }   elseif ($SFX -eq "Tatl")           { return "56" }   elseif ($SFX -eq "Whistling Flute")   { return "52" }
+    elseif ($SFX -eq "Arguing")             { return "4F" }   elseif ($SFX -eq "Bass Guitar")    { return "74" }   elseif ($SFX -eq "Beaver")            { return "61" }
+    elseif ($SFX -eq "Elder Goron Drums")   { return "71" }
     else {
         if ($Settings.Debug.Console -eq $True) { Write-Host ("Could not find SFX ID for : " + $Item) }
         return -1
@@ -353,7 +379,7 @@ function GetInstrumentID([String]$SFX) {
 #==============================================================================================================================================================================================
 function CreateOptionsMajorasMask() {
     
-    CreateOptionsDialog -Width 930 -Height 470 -Tabs @("Difficulty", "Colors", "Equipment")
+    CreateOptionsDialog -Width 1060 -Height 470 -Tabs @("Audiovisual", "Difficulty", "Colors", "Equipment")
 
     $Redux.Colors.EnableTunic.Add_CheckedChanged({
         $Redux.Graphics.ImprovedLinkModel.Enabled = !$this.checked
@@ -373,18 +399,6 @@ function CreateOptionsMajorasMask() {
 
 #==============================================================================================================================================================================================
 function CreateTabMainMajorasMask() {
-
-    # GRAPHICS #
-    CreateReduxGroup    -Tag  "Graphics" -Text "Graphics / Sound" -Height 2
-    CreateReduxCheckBox -Name "Widescreen"        -Column 1 -Row 1 -Text "16:9 Widescreen"                                           -Info "Native 16:9 Widescreen Display support with backgrounds and textures adjusted for widescreen`nThe aspect ratio fix is only applied when patching in Wii VC mode`nUse the Widescreen hack by GlideN64 instead if running on an N64 emulator`nTexture changes are always applied"
-    CreateReduxCheckBox -Name "BlackBars"         -Column 2 -Row 1 -Text "No Black Bars"                                             -Info "Removes the black bars shown on the top and bottom of the screen during Z-targeting and cutscenes"
-    CreateReduxCheckBox -Name "ExtendedDraw"      -Column 3 -Row 1 -Text "Extended Draw Distance"                                    -Info "Increases the game's draw distance for objects`nDoes not work on all objects"
-    CreateReduxCheckBox -Name "PixelatedStars"    -Column 4 -Row 1 -Text "Disable Pixelated Stars"                                   -Info "Completely disable the stars at night-time, which are pixelated dots and do not have any textures for HD replacement"
-    CreateReduxCheckBox -Name "ImprovedLinkModel" -Column 5 -Row 1 -Text "Improved Link Model"                                       -Info "Improves the model used for Hylian Link`nCustom tunic colors are not supported with this option"
-    CreateReduxComboBox -Name "LowHP"             -Column 1 -Row 2 -Text "Low HP SFX:" -Items @("Default", "Disabled", "Soft Beep")  -Info "Set the sound effect for the low HP beeping"
-    #$SFX = @("Ocarina (default)", "Female Voice", "Tatl", "Bell", "Cathedral Bell", "Whistle", "Harp", "Soft Harp", "Accordion", "Flute", "Whistling Flute", "Piano", "Drums", "Guitar", "Deku Pipes", "Giant Singing", "Ikana King")
-    $SFX =  @("Ocarina (default)", "Female Voice")
-    CreateReduxComboBox -Name "Instrument"        -Column 3 -Row 2 -Text "Instrument:" -Items $SFX -Info "Replace the sound used for playing the Ocarina of Time"
 
     # GAMEPLAY #
     CreateReduxGroup    -Tag  "Gameplay" -Text "Gameplay" 
@@ -433,15 +447,15 @@ function CreateTabReduxMajorasMask() {
     CreateReduxRadioButton -Name "Hide"                -Column 1 -Row 2          -Text "Hidden"               -Info "Hide the D-Pad icons, while they are still active"
     CreateReduxRadioButton -Name "LayoutLeft"          -Column 1 -Row 3          -Text "Left Side"            -Info "Show the D-Pad icons on the left side of the HUD"
     CreateReduxRadioButton -Name "LayoutRight"         -Column 1 -Row 4 -Checked -Text "Right Side"           -Info "Show the D-Pad icons on the right side of the HUD"
-    CreateReduxComboBox     -Name "Up"                 -Column 4 -Row 1 -Length 120 -Items @("Disabled", "Ocarina of Time", "Deku Mask", "Goron Mask", "Zora Mask", "Fierce Deity's Mask") -Default 3 -Info "Set the quick slot item for the D-Pad Up button"
-    CreateReduxComboBox     -Name "Left"               -Column 3 -Row 4 -Length 120 -Items @("Disabled", "Ocarina of Time", "Deku Mask", "Goron Mask", "Zora Mask", "Fierce Deity's Mask") -Default 4 -Info "Set the quick slot item for the D-Pad Left button"
-    CreateReduxComboBox     -Name "Right"              -Column 5 -Row 4 -Length 120 -Items @("Disabled", "Ocarina of Time", "Deku Mask", "Goron Mask", "Zora Mask", "Fierce Deity's Mask") -Default 5 -Info "Set the quick slot item for the D-Pad Right button"
-    CreateReduxComboBox     -Name "Down"               -Column 4 -Row 7 -Length 120 -Items @("Disabled", "Ocarina of Time", "Deku Mask", "Goron Mask", "Zora Mask", "Fierce Deity's Mask") -Default 2 -Info "Set the quick slot item for the D-Pad Down button"
+    CreateReduxComboBox     -Name "Up"                 -Column 4 -Row 1 -Length 175 -Items @("Disabled", "Ocarina of Time", "Deku Mask", "Goron Mask", "Zora Mask", "Fierce Deity's Mask") -Default 3 -Info "Set the quick slot item for the D-Pad Up button"
+    CreateReduxComboBox     -Name "Left"               -Column 3 -Row 4 -Length 175 -Items @("Disabled", "Ocarina of Time", "Deku Mask", "Goron Mask", "Zora Mask", "Fierce Deity's Mask") -Default 4 -Info "Set the quick slot item for the D-Pad Left button"
+    CreateReduxComboBox     -Name "Right"              -Column 5 -Row 4 -Length 175 -Items @("Disabled", "Ocarina of Time", "Deku Mask", "Goron Mask", "Zora Mask", "Fierce Deity's Mask") -Default 5 -Info "Set the quick slot item for the D-Pad Right button"
+    CreateReduxComboBox     -Name "Down"               -Column 4 -Row 7 -Length 175 -Items @("Disabled", "Ocarina of Time", "Deku Mask", "Goron Mask", "Zora Mask", "Fierce Deity's Mask") -Default 2 -Info "Set the quick slot item for the D-Pad Down button"
     $Redux.DPad.Reset = CreateReduxButton -Column 1 -Row 5 -Height 30 -Text "Reset Layout" -Info "Reset the layout for the D-Pad"
     
     # D-Pad Buttons Customization - Image #
     $PictureBox = New-Object Windows.Forms.PictureBox
-    $PictureBox.Location = New-object System.Drawing.Size( (($Redux.DPad.Right.Left) - ($Redux.DPad.Left.Left)/2), ($Redux.DPad.Down.Bottom / 4) )
+    $PictureBox.Location = New-object System.Drawing.Size( ($Redux.DPad.Right.Left - ($Redux.DPad.Left.Left)/2 + 30), ($Redux.DPad.Down.Bottom / 4) )
     $PictureBox.Image  = [System.Drawing.Image]::Fromfile( ( Get-Item ($Paths.Main + "\D-Pad.png") ) )
     $PictureBox.Width  = $PictureBox.Image.Size.Width
     $PictureBox.Height = $PictureBox.Image.Size.Height
@@ -491,16 +505,39 @@ function UnlockLanguageContent() {
 
 
 
+#==============================================================================================================================================================================================
+function CreateTabAudiovisualMajorasMask() {
+
+    # GRAPHICS #
+    CreateReduxGroup    -Tag  "Graphics" -Text "Graphics / Sound"
+    CreateReduxCheckBox -Name "Widescreen"        -Column 1 -Row 1 -Text "16:9 Widescreen"         -Info "Native 16:9 Widescreen Display support with backgrounds and textures adjusted for widescreen`nThe aspect ratio fix is only applied when patching in Wii VC mode`nUse the Widescreen hack by GlideN64 instead if running on an N64 emulator`nTexture changes are always applied"
+    CreateReduxCheckBox -Name "BlackBars"         -Column 2 -Row 1 -Text "No Black Bars"           -Info "Removes the black bars shown on the top and bottom of the screen during Z-targeting and cutscenes"
+    CreateReduxCheckBox -Name "ExtendedDraw"      -Column 3 -Row 1 -Text "Extended Draw Distance"  -Info "Increases the game's draw distance for objects`nDoes not work on all objects"
+    CreateReduxCheckBox -Name "PixelatedStars"    -Column 4 -Row 1 -Text "Disable Pixelated Stars" -Info "Completely disable the stars at night-time, which are pixelated dots and do not have any textures for HD replacement"
+    CreateReduxCheckBox -Name "ImprovedLinkModel" -Column 5 -Row 1 -Text "Improved Link Model"     -Info "Improves the model used for Hylian Link`nCustom tunic colors are not supported with this option"
+
+    # SOUNDS / SFX SOUND EFFECTS
+    CreateReduxGroup    -Tag  "Sounds" -Text "Sounds / SFX Sound Effects" -Height 2
+    CreateReduxComboBox -Name "LowHP"             -Column 5 -Row 1 -Text "Low HP SFX:"                 -Items @("Default", "Disabled", "Soft Beep")  -Info "Set the sound effect for the low HP beeping"
+    $SFX =  @("Ocarina", "Deku Pipes", "Goron Drums", "Zora Guitar", "Female Voice", "Bell", "Cathedral Bell", "Piano", "Soft Harp", "Harp", "Accordion", "Bass Guitar", "Flute", "Whistling Flute", "Gong", "Elder Goron Drums", "Choir", "Arguing", "Tatl", "Giants Singing", "Ikana King", "Frog Croak", "Beaver", "Eagle Seagull", "Dodongo")
+    CreateReduxComboBox -Name "InstrumentHylian"  -Column 1 -Row 1 -Text "Instrument (Hylian):" -Default 1 -Shift 30 -Length 200 -Items $SFX -Info "Replace the sound used for playing the Ocarina of Time in Hylian Form"
+    CreateReduxComboBox -Name "InstrumentDeku"    -Column 3 -Row 1 -Text "Instrument (Deku):"   -Default 2 -Shift 30 -Length 200 -Items $SFX -Info "Replace the sound used for playing the Deku Pipes in Deku Form"
+    CreateReduxComboBox -Name "InstrumentGoron"   -Column 1 -Row 2 -Text "Instrument (Goron):"  -Default 3 -Shift 30 -Length 200 -Items $SFX -Info "Replace the sound used for playing the Goron Drums in Goron Form"
+    CreateReduxComboBox -Name "InstrumentZora"    -Column 3 -Row 2 -Text "Instrument (Zora):"   -Default 4 -Shift 30 -Length 200 -Items $SFX -Info "Replace the sound used for playing the Zora Guitar in Zora Form"
+
+}
+
+
 
 #==============================================================================================================================================================================================
 function CreateTabDifficultyMajorasMask() {
     
     # HERO MODE #
     CreateReduxGroup    -Tag  "Hero" -Text "Hero Mode"
-    CreateReduxComboBox -Name "Damage"     -Column 1 -Row 1 -Items @("1x Damage", "2x Damage", "4x Damage", "8x Damage", "OHKO Mode") -Text "Damage:" -ToolTip $OptionsToolTip -Info "Set the amount of damage you receive`nOHKO Mode = You die in one hit"
-    CreateReduxComboBox -Name "Recovery"   -Column 3 -Row 1 -Items @("1x Recovery", "1/2x Recovery", "1/4x Recovery", "0x Recovery") -Text "Recovery:" -ToolTip $OptionsToolTip -Info "Set the amount health you recovery from Recovery Hearts"
-    CreateReduxComboBox -Name "MagicUsage" -Column 5 -Row 1 -Items @("1x Magic Usage", "2x Magic Usage", "3x Magic Usage") -Text "Magic Usage:" -Info "Set the amount of times magic is consumed at" -Length 110
-    # CreateReduxComboBox -Name "BossHP"   -Column 0 -Row 2 -Items @("1x Boss HP", "2x Boss HP", "3x Boss HP") -Text "Boss HP:" -ToolTip $OptionsToolTip -Info "Set the amount of health for bosses"
+    CreateReduxComboBox -Name "Damage"     -Column 1 -Row 1 -Text "Damage:"     -Items @("1x Damage", "2x Damage", "4x Damage", "8x Damage", "OHKO Mode") -Info "Set the amount of damage you receive`nOHKO Mode = You die in one hit"
+    CreateReduxComboBox -Name "Recovery"   -Column 3 -Row 1 -Text "Recovery:"    -Items @("1x Recovery", "1/2x Recovery", "1/4x Recovery", "0x Recovery") -Info "Set the amount health you recovery from Recovery Hearts"
+    CreateReduxComboBox -Name "MagicUsage" -Column 5 -Row 1 -Text "Magic Usage:" -Items @("1x Magic Usage", "2x Magic Usage", "3x Magic Usage")           -Info "Set the amount of times magic is consumed at"
+   #CreateReduxComboBox -Name "BossHP"     -Column 0 -Row 2 -Text "Boss HP:"     -Items @("1x Boss HP", "2x Boss HP", "3x Boss HP")                       -Info "Set the amount of health for bosses"
 
 
 
@@ -531,7 +568,7 @@ function CreateTabColorsMajorasMask() {
 
     # BUTTON COLORS #
     CreateReduxGroup    -Tag  "Colors"  -Text "Button Colors"  -IsRedux -Height 2
-    CreateReduxComboBox -Name "Buttons" -Text "Button Colors:" -Default 2 -Items @("N64 OoT", "N64 MM (default)", "GC OoT", "GC MM", "Randomized", "Custom") -Info ("Select a preset for the button colors`n" + '"Random" fully randomizes the button colors each time the game is patched')
+    CreateReduxComboBox -Name "Buttons" -Text "Button Colors:" -Default 2 -Items @("N64 OoT", "N64 MM", "GC OoT", "GC MM", "Randomized", "Custom") -Info ("Select a preset for the button colors`n" + '"Randomized" fully randomizes the colors each time the patcher is opened')
 
     # Button Colors - Buttons
     $Buttons = @()
@@ -556,6 +593,35 @@ function CreateTabColorsMajorasMask() {
     
     $Redux.Colors.Buttons.Add_SelectedIndexChanged({ SetButtonColorsPreset -ComboBox $Redux.Colors.Buttons })
     SetButtonColorsPreset -ComboBox $Redux.Colors.Buttons
+
+
+
+    # HUD COLORS #
+    CreateReduxGroup    -Tag  "Colors" -Text "HUD Colors"  -IsRedux -Height 2
+    CreateReduxComboBox -Name "Hearts" -Column 1 -Text "Heart Colors:" -Items @("Red", "Green", "Blue", "Yellow", "Randomized", "Custom") -Info ("Select a preset for the button colors`n" + '"Randomized" fully randomizes the colors each time the patcher is opened')
+    CreateReduxComboBox -Name "Magic"  -Column 3 -Text "Magic Colors:" -Items @("Green", "Red", "Blue", "Purple", "Pink", "Yellow", "White", "Randomized", "Custom") -Info ("Select a preset for the button colors`n" + '"Randomized" fully randomizes the colors each time the patcher is opened')
+
+    # Button Colors - Buttons
+    $Buttons = @()
+    $Buttons += CreateReduxButton -Column 1 -Row 2 -Width 100 -Text "Hearts" -Info "Select the color you want for the hearts display"
+    $Buttons += CreateReduxButton -Column 3 -Row 2 -Width 100 -Text "Magic"  -Info "Select the color you want for the magic display"
+
+    # Button Colors - Dialogs
+    CreateColorDialog -Color "FF4632" -Name "SetHearts" -IsGame
+    CreateColorDialog -Color "00C800" -Name "SetMagic"  -IsGame
+
+    # Button Colors - Labels
+    $Redux.Colors.HeartsLabel = CreateReduxColoredLabel -Link $Buttons[0]  -Color $Redux.Colors.SetHearts.Color
+    $Redux.Colors.MagicLabel  = CreateReduxColoredLabel -Link $Buttons[1]  -Color $Redux.Colors.SetMagic.Color
+
+    # Buttons - Click
+    $Buttons[0].Add_Click({ $Redux.Colors.SetHearts.ShowDialog(); $Redux.Colors.Hearts.Text = "Custom"; $Redux.Colors.HeartsLabel.BackColor = $Redux.Colors.SetHearts.Color; $Settings[$GameType.mode][$Redux.Colors.SetHearts].Tag = $Redux.Colors.SetHearts.Color.Name })
+    $Buttons[1].Add_Click({ $Redux.Colors.SetMagic.ShowDialog();  $Redux.Colors.Magic.Text  = "Custom"; $Redux.Colors.MagicLabel.BackColor  = $Redux.Colors.SetMagic.Color;  $Settings[$GameType.mode][$Redux.Colors.SetMagic].Tag  = $Redux.Colors.SetMagic.Color.Name  })
+    
+    $Redux.Colors.Hearts.Add_SelectedIndexChanged({ SetHeartsColorsPreset -ComboBox $Redux.Colors.Hearts -Dialog $Redux.Colors.SetHearts -Label $Redux.Colors.HeartsLabel })
+    SetHeartsColorsPreset -ComboBox $Redux.Colors.Hearts-Dialog $Redux.Colors.SetHearts -Label $Redux.Colors.HeartsLabel
+    $Redux.Colors.Magic.Add_SelectedIndexChanged({ SetMagicColorsPreset -ComboBox $Redux.Colors.Magic -Dialog $Redux.Colors.SetMagic -Label $Redux.Colors.MagicLabel })
+    SetMagicColorsPreset -ComboBox $Redux.Colors.Magic -Dialog $Redux.Colors.SetMagic -Label $Redux.Colors.MagicLabel
 
 }
 
@@ -611,6 +677,49 @@ function CreateTabEquipmentMajorasMask() {
 
 
 #==============================================================================================================================================================================================
+function SetHeartsColorsPreset([Object]$ComboBox, [Object]$Dialog, [Object]$Label) {
+    
+    $Text = $ComboBox.Text.replace(' (default)', "")
+    if     ($Text -eq "Red")        { SetColor -Color "FF4632" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "Green")      { SetColor -Color "46C832" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "Blue")       { SetColor -Color "3246FF" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "Yellow")     { SetColor -Color "FFE000" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "Randomized") {
+        $Green = Get8Bit -Value (Get-Random -Maximum 255)
+        $Red   = Get8Bit -Value (Get-Random -Maximum 255)
+        $Blue  = Get8Bit -Value (Get-Random -Maximum 255)
+        if ($Settings.Debug.Console -eq $True) { Write-Host ("Randomize Hearts Color: " + ($Green + $Red + $Blue)) }
+        SetColor -Color ($Green + $Red + $Blue) -Dialog $Dialog -Label $Label
+    }
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function SetMagicColorsPreset([Object]$ComboBox, [Object]$Dialog, [Object]$Label) {
+    
+    $Text = $ComboBox.Text.replace(' (default)', "")
+    if     ($Text -eq "Green")      { SetColor -Color "00C800" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "Red")        { SetColor -Color "C80000" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "Blue")       { SetColor -Color "0030FF" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "Purple")     { SetColor -Color "B000FF" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "Pink")       { SetColor -Color "FF00C8" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "Yellow")     { SetColor -Color "FFFF00" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "White")      { SetColor -Color "FFFFFF" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "Randomized") {
+        $Green = Get8Bit -Value (Get-Random -Maximum 255)
+        $Red   = Get8Bit -Value (Get-Random -Maximum 255)
+        $Blue  = Get8Bit -Value (Get-Random -Maximum 255)
+        if ($Settings.Debug.Console -eq $True) { Write-Host ("Randomize Magic Color: " + ($Green + $Red + $Blue)) }
+        SetColor -Color ($Green + $Red + $Blue) -Dialog $Dialog -Label $Label
+    }
+
+}
+
+
+
+#==============================================================================================================================================================================================
 
 Export-ModuleMember -Function PatchOptionsMajorasMask
 Export-ModuleMember -Function ByteOptionsMajorasMask
@@ -621,6 +730,7 @@ Export-ModuleMember -Function CreateOptionsMajorasMask
 Export-ModuleMember -Function CreateTabMainMajorasMask
 Export-ModuleMember -Function CreateTabReduxMajorasMask
 Export-ModuleMember -Function CreateTabLanguageMajorasMask
+Export-ModuleMember -Function CreateTabAudiovisualMajorasMask
 Export-ModuleMember -Function CreateTabDifficultyMajorasMask
 Export-ModuleMember -Function CreateTabColorsMajorasMask
 Export-ModuleMember -Function CreateTabEquipmentMajorasMask

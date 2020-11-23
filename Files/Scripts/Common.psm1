@@ -458,6 +458,7 @@ function IsLanguage([Object]$Elem, [int]$Lang=0) {
 #==============================================================================================================================================================================================
 function IsText([Object]$Elem, [String]$Text, [Switch]$Active, [Switch]$Not) {
     
+    $Text = $Text.replace(" (default)", "")
     if (!(IsSet -Elem $Elem))               { return $False }
     if ($Active -and !$Elem.Visible)        { return $False }
     if (!$Active -and !$Elem.Enabled)       { return $False }
@@ -534,17 +535,6 @@ function AddTextFileToTextbox([Object]$TextBox, [String]$File, [Switch]$Add, [in
 
 
 #==============================================================================================================================================================================================
-function StrLike([String]$str, [String]$val, [Switch]$Not) {
-    
-    if     ($str.ToLower() -like "*" + $val + "*"    -and !$Not)   { return $True }
-    elseif ($str.ToLower() -notlike "*" + $val + "*" -and $Not)    { return $True }
-    return $False
-
-}
-
-
-
-#==============================================================================================================================================================================================
 function GetFilePaths() {
     
     if (IsSet $Settings["Core"][$InputPaths.GameTextBox.Name]) {
@@ -590,6 +580,17 @@ function RestoreCustomHeader() {
 
     $CustomGameIDTextBox.Enabled = $CustomTitleTextBox.Enabled = $CustomRegionCodeComboBox.Enabled = $CustomHeaderCheckbox.Checked
     $CustomHeaderPatchButton.Enabled = (IsSet -Elem GamePath) -and $CustomHeaderCheckbox.Checked
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function StrLike([String]$str, [String]$val, [Switch]$Not) {
+    
+    if     ($str.ToLower() -like "*"    + $val + "*")   { return !$Not }
+    elseif ($str.ToLower() -notlike "*" + $val + "*")   { return $Not }
+    return $False
 
 }
 
