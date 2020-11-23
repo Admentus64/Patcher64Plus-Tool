@@ -349,7 +349,8 @@ function ByteOptionsOcarinaOfTime() {
     # SFX SOUND EFFECTS #
 
     if (IsText -Elem $Redux.SFX.Navi -Text "Default" -Not) {
-        ChangeBytes -Offset "AE7EF2" -Values (GetSFXID -SFX $Redux.SFX.NaviOverworld.Text); ChangeBytes -Offset "C26C7E" -Values (GetSFXID -SFX $Redux.SFX.Navi.Text)
+        ChangeBytes -Offset "AE7EF2" -Values (GetSFXID -SFX $Redux.SFX.Navi.Text)
+        ChangeBytes -Offset "C26C7E" -Values (GetSFXID -SFX $Redux.SFX.Navi.Text)
     }
 
     if (IsText -Elem $Redux.SFX.Nightfall -Text "Default" -Not) {
