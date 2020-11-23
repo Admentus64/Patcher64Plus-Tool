@@ -874,7 +874,7 @@ function CompressROM([Boolean]$Decompress) {
         if ($Settings.Core.Bit64 -eq $True)   { & $Files.tool.Compress64 $GetROM.decomp $GetROM.patched | Out-Null }
         else                                  { & $Files.tool.Compress32 $GetROM.decomp $GetROM.patched | Out-Null }
 
-        if ( !(IsChecked -Elem $Patches.Options -Active) -and !(IsChecked -Elem $Patches.Redux -Active) ) {
+        if (IsChecked -Elem $Patches.Redux -Active -Not) {
             if (Test-Path -LiteralPath ($GameFiles.downgrade + "\finalize_rev0.bps") -PathType Leaf) { ApplyPatch -File $GetROM.patched -Patch "\Downgrade\finalize_rev0.bps" }
         }
 

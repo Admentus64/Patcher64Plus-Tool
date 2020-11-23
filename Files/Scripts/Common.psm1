@@ -435,9 +435,9 @@ function IsChecked([Object]$Elem, [Switch]$Active, [Switch]$Not) {
     
     if (!(IsSet -Elem $Elem))               { return $False }
     if ($Active -and !$Elem.Visible)        { return $False }
-    elseif (!$Active -and !$Elem.Enabled)   { return $False }
-    if ($Not -and !$Elem.Checked)           { return $True }
-    if (!$Not -and $Elem.Checked)           { return $True }
+    if (!$Active -and !$Elem.Enabled)       { return $False }
+    if ($Elem.Checked)                      { return !$Not  }
+    if (!$Elem.Checked)                     { return $Not   }
     return $False
 
 }
@@ -448,7 +448,7 @@ function IsChecked([Object]$Elem, [Switch]$Active, [Switch]$Not) {
 function IsLanguage([Object]$Elem, [int]$Lang=0) {
     
     if (!$Redux.Language[$Lang].Checked)    { return $False }
-    if (IsChecked -Elem $Elem)              { return $True }
+    if (IsChecked -Elem $Elem)              { return $True  }
     return $False
 
 }
@@ -460,9 +460,9 @@ function IsText([Object]$Elem, [String]$Text, [Switch]$Active, [Switch]$Not) {
     
     if (!(IsSet -Elem $Elem))               { return $False }
     if ($Active -and !$Elem.Visible)        { return $False }
-    elseif (!$Active -and !$Elem.Enabled)   { return $False }
-    if ($Not -and $Elem.Text -ne $Text)     { return $True }
-    if (!$Not -and $Elem.Text -eq $Text)    { return $True }
+    if (!$Active -and !$Elem.Enabled)       { return $False }
+    if ($Elem.Text -eq $Text)               { return !$Not  }
+    if ($Elem.Text -ne $Text)               { return $Not   }
     return $False
 
 }
@@ -472,11 +472,11 @@ function IsText([Object]$Elem, [String]$Text, [Switch]$Active, [Switch]$Not) {
 #==============================================================================================================================================================================================
 function IsIndex([Object]$Elem, [int]$Index=1, [Switch]$Active, [Switch]$Not) {
     
-    if (!(IsSet -Elem $Elem))                            { return $False }
-    if ($Active -and !$Elem.Visible)                     { return $False }
-    elseif (!$Active -and !$Elem.Enabled)                { return $False }
-    if ($Not -and $Elem.SelectedIndex -ne ($Index-1))    { return $True }
-    if (!$Not -and $Elem.SelectedIndex -eq ($Index-1))   { return $True }
+    if (!(IsSet -Elem $Elem))                 { return $False }
+    if ($Active -and !$Elem.Visible)          { return $False }
+    if (!$Active -and !$Elem.Enabled)         { return $False }
+    if ($Elem.SelectedIndex -eq ($Index-1))   { return !$Not  }
+    if ($Elem.SelectedIndex -ne ($Index-1))   { return $Not   }
     return $False
 
 }
