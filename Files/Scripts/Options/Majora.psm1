@@ -74,7 +74,7 @@ function ByteOptionsMajorasMask() {
     if (IsChecked -Elem $Redux.Graphics.PixelatedStars)   { ChangeBytes -Offset "B943FC" -Values @("10", "00") }
     if (IsIndex   -Elem $Redux.Graphics.LowHP -Not)       { ChangeBytes -Offset "B97E2A" -Values (GetSFXID -SFX $Redux.Graphics.LowHP.Text) }
 
-    if (IsIndex -Elem $Redux.Graphics.Instrument -Index 2 -Not) {
+    if (IsIndex -Elem $Redux.Graphics.Instrument -Not) {
         ChangeBytes -Offset "51CBE" -Values (GetInstrumentID -SFX $Redux.Graphics.Instrument.Text)
     }
 
@@ -340,8 +340,7 @@ function GetItemID([String]$Item) {
 #==============================================================================================================================================================================================
 function GetInstrumentID([String]$SFX) {
     
-    if     ($SFX -like '*None*' -or $SFX -like '*Disabled*')   { return "FF" }
-    elseif ($SFX -like '*Ocarina*')   { return "34" }          elseif ($SFX -like '*Female Voice*')   { return "55" }
+    if ($SFX -like '*Ocarina*')   { return "34" }     elseif ($SFX -like '*Female Voice*')   { return "55" }
     else {
         if ($Settings.Debug.Console -eq $True) { Write-Host ("Could not find SFX ID for : " + $Item) }
         return -1
@@ -383,9 +382,9 @@ function CreateTabMainMajorasMask() {
     CreateReduxCheckBox -Name "PixelatedStars"    -Column 4 -Row 1 -Text "Disable Pixelated Stars"                                   -Info "Completely disable the stars at night-time, which are pixelated dots and do not have any textures for HD replacement"
     CreateReduxCheckBox -Name "ImprovedLinkModel" -Column 5 -Row 1 -Text "Improved Link Model"                                       -Info "Improves the model used for Hylian Link`nCustom tunic colors are not supported with this option"
     CreateReduxComboBox -Name "LowHP"             -Column 1 -Row 2 -Text "Low HP SFX:" -Items @("Default", "Disabled", "Soft Beep")  -Info "Set the sound effect for the low HP beeping"
-    #$SFX = @("Disabled", "Ocarina (default)", "Female Voice", "Tatl", "Bell", "Cathedral Bell", "Whistle", "Harp", "Soft Harp", "Accordion", "Flute", "Whistling Flute", "Piano", "Drums", "Guitar", "Deku Pipes", "Giant Singing", "Ikana King")
-    $SFX =  @("Disabled", "Ocarina (default)", "Female Voice")
-    CreateReduxComboBox -Name "Instrument"        -Column 3 -Row 2 -Text "Instrument:" -Default 2 -Items $SFX -Info "Replace the sound used for playing the Ocarina of Time"
+    #$SFX = @("Ocarina (default)", "Female Voice", "Tatl", "Bell", "Cathedral Bell", "Whistle", "Harp", "Soft Harp", "Accordion", "Flute", "Whistling Flute", "Piano", "Drums", "Guitar", "Deku Pipes", "Giant Singing", "Ikana King")
+    $SFX =  @("Ocarina (default)", "Female Voice")
+    CreateReduxComboBox -Name "Instrument"        -Column 3 -Row 2 -Text "Instrument:" -Items $SFX -Info "Replace the sound used for playing the Ocarina of Time"
 
     # GAMEPLAY #
     CreateReduxGroup    -Tag  "Gameplay" -Text "Gameplay" 

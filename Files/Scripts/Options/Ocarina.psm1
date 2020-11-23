@@ -340,8 +340,8 @@ function ByteOptionsOcarinaOfTime() {
         else                                             { PatchBytes -Offset "18E1E0" -Patch "Voices\Feminine Link Voices.bin" }
     }
 
-    if (IsIndex -Elem $Redux.Sounds.Instrument -Index 2 -Not) {
-        ChangeBytes -Offset "B53C7B" -Values @($Redux.Sounds.Instrument.SelectedIndex); ChangeBytes -Offset "B4BF6F" -Values @($Redux.Sounds.Instrument.SelectedIndex)
+    if (IsIndex -Elem $Redux.Sounds.Instrument -Not) {
+        ChangeBytes -Offset "B53C7B" -Values ($Redux.Sounds.Instrument.SelectedIndex+1); ChangeBytes -Offset "B4BF6F" -Values ($Redux.Sounds.Instrument.SelectedIndex+1)
     }
 
 
@@ -928,25 +928,25 @@ function CreateTabAudiovisualOcarinaOfTime() {
 
     # SOUNDS / VOICES #
     CreateReduxGroup    -Tag  "Sounds" -Text "Sounds / Voices"
-    CreateReduxComboBox -Name "Voices"          -Column 1 -Text "Link's Voice:"          -Items @("No Voice Changes", "Majora's Mask Link Voices", "Feminine Link Voices")  -Info "1. Replace the voices for Link with those used in Majora's Mask`n2. Replace the voices for Link to sound feminine"
-    CreateReduxComboBox -Name "Instrument"      -Column 3 -Text "Instrument:" -Default 2 -Items @("Disabled", "Ocarina (default)", "Malon", "Whistle", "Harp", "Grind-Organ", "Flute") -Info "Replace the sound used for playing the Ocarina of Time"
+    CreateReduxComboBox -Name "Voices"          -Column 1 -Text "Link's Voice:"       -Items @("No Voice Changes", "Majora's Mask Link Voices", "Feminine Link Voices")  -Info "1. Replace the voices for Link with those used in Majora's Mask`n2. Replace the voices for Link to sound feminine"
+    CreateReduxComboBox -Name "Instrument"      -Column 3 -Text "Instrument:"         -Items @("Ocarina (default)", "Malon", "Whistle", "Harp", "Grind-Organ", "Flute") -Info "Replace the sound used for playing the Ocarina of Time"
 
     # SFX SOUND EFFECTS #
     CreateReduxGroup    -Tag "SFX" -Text "SFX Sound Effects" -Height 3
     $SFX = @("Default", "Disabled", "Soft Beep", "Bark", "Bomb Bounce", "Bongo Bongo Low", "Bow Twang", "Business Scrub", "Carrot Refill", "Cluck", "Drawbridge Set", "Guay", "Horse Trot", "HP Recover", "Iron Boots", "Moo", "Mweep!", 'Navi "Hey!"', "Navi Random", "Notification", "Pot Shattering", "Ribbit", "Rupee (Silver)", "Switch", "Sword Bonk", "Tambourine", "Timer", "Zelda Gasp (Adult)")
-    CreateReduxComboBox -Name "LowHP"           -Column 1 -Row 1 -Text "Low HP:"         -Items $SFX -Info "Set the sound effect for the low HP beeping"
+    CreateReduxComboBox -Name "LowHP"           -Column 1 -Row 1 -Text "Low HP:"      -Items $SFX -Info "Set the sound effect for the low HP beeping"
     $SFX = @("Default",  "Disabled", "Soft Beep", "Bark", "Business Scrub", "Carrot Refill", "Cluck", "Cockadoodledoo", "Dusk Howl", "Exploding Crate", "Explosion", "Great Fairy", "Guay", "Horse Neigh", "HP Low", "HP Recover", "Ice Shattering", "Moo", "Meweep!", 'Navi "Hello!"', "Notification", "Pot Shattering", "Redead Scream", "Ribbit", "Ruto Giggle", "Skulltula", "Tambourine", "Timer", "Zelda Gasp (Adult)")
-    CreateReduxComboBox -Name "Navi"            -Column 3 -Row 1 -Text "Navi:"           -Items $SFX -Info "Replace the sound used for Navi when she wants to tell something"
-    CreateReduxComboBox -Name "ZTarget"         -Column 5 -Row 1 -Text "Z-Target:"       -Items $SFX -Info "Replace the sound used for Z-Targeting enemies" 
+    CreateReduxComboBox -Name "Navi"            -Column 3 -Row 1 -Text "Navi:"        -Items $SFX -Info "Replace the sound used for Navi when she wants to tell something"
+    CreateReduxComboBox -Name "ZTarget"         -Column 5 -Row 1 -Text "Z-Target:"    -Items $SFX -Info "Replace the sound used for Z-Targeting enemies" 
 
-    CreateReduxComboBox -Name "HoverBoots"      -Column 1 -Row 2 -Text "Hover Boots:"    -Items @("Default", "Disabled", "Bark", "Cartoon Fall", "Flare Dancer Laugh", "Mweep!", "Shabom Pop", "Tambourine") -Info "Replace the sound used for the Hover Boots"
-    CreateReduxComboBox -Name "Horse"           -Column 3 -Row 2 -Text "Horse Neigh:"    -Items @("Default", "Disabled", "Armos", "Child Scream", "Great Fairy", "Moo", "Mweep!", "Redead Scream", "Ruto Wiggle", "Stalchild Attack") -Info "Replace the sound for horses when neighing"
-    CreateReduxComboBox -Name "Nightfall"       -Column 5 -Row 2 -Text "Nightfall:"      -Items @("Default", "Disabled", "Cockadoodledoo", "Gold Skull Token", "Great Fairy", "Moo", "Mweep!", "Redead Moan", "Talon Snore", "Thunder") -Info "Replace the sound used when Nightfall occurs"
+    CreateReduxComboBox -Name "HoverBoots"      -Column 1 -Row 2 -Text "Hover Boots:" -Items @("Default", "Disabled", "Bark", "Cartoon Fall", "Flare Dancer Laugh", "Mweep!", "Shabom Pop", "Tambourine") -Info "Replace the sound used for the Hover Boots"
+    CreateReduxComboBox -Name "Horse"           -Column 3 -Row 2 -Text "Horse Neigh:" -Items @("Default", "Disabled", "Armos", "Child Scream", "Great Fairy", "Moo", "Mweep!", "Redead Scream", "Ruto Wiggle", "Stalchild Attack") -Info "Replace the sound for horses when neighing"
+    CreateReduxComboBox -Name "Nightfall"       -Column 5 -Row 2 -Text "Nightfall:"   -Items @("Default", "Disabled", "Cockadoodledoo", "Gold Skull Token", "Great Fairy", "Moo", "Mweep!", "Redead Moan", "Talon Snore", "Thunder") -Info "Replace the sound used when Nightfall occurs"
     $SFX = @("Default", "Disabled", "Soft Beep", "Bark", "Bomb Bounce", "Bongo Bongo High", "Bongo Bongo Low", "Bottle Cork", "Bow Twang", "Bubble Laugh", "Carrot Refill", "Change Item", "Child Pant", "Cluck", "Deku Baba", "Drawbridge Set", "Dusk Howl", "Fanfare (Light)", "Fanfare (Medium)", "Field Shrub", "Flare Dancer Startled",
     'Ganondorf "Teh"', "Gohma Larva Croak", "Gold Skull Token", "Goron Wake", "Guay", "Gunshot", "Hammer Bonk", "Horse Trot", "HP Low", "HP Recover", "Iron Boots", "Iron Knuckle", "Moo", "Mweep!", "Notification", "Phantom Ganon Laugh", "Plant Explode", "Pot Shattering", "Redead Moan", "Ribbit", "Rupee", "Rupee (Silver)", "Ruto Crash",
     "Ruto Lift", "Ruto Thrown", "Scrub Emerge", "Shabom Bounce", "Shabom Pop", "Shellblade", "Skulltula", "Spit Nut", "Switch", "Sword Bonk", 'Talon "Hmm"', "Talon Snore", "Talon WTF", "Tambourine", "Target Enemy", "Target Neutral", "Thunder", "Timer", "Zelda Gasp (Adult)")
-    CreateReduxComboBox -Name "FileMenuCursor"  -Column 1 -Row 3 -Text "File Cursor:"    -Items $SFX -Info "Replace the sound used when moving the cursor in the File Select menu"
-    CreateReduxComboBox -Name "FileMenuSelect"  -Column 3 -Row 3 -Text "File Select:"    -Items $SFX -Info "Replace the sound used when selecting something in the File Select menu"
+    CreateReduxComboBox -Name "FileMenuCursor"  -Column 1 -Row 3 -Text "File Cursor:" -Items $SFX -Info "Replace the sound used when moving the cursor in the File Select menu"
+    CreateReduxComboBox -Name "FileMenuSelect"  -Column 3 -Row 3 -Text "File Select:" -Items $SFX -Info "Replace the sound used when selecting something in the File Select menu"
 
 }
 
