@@ -12,8 +12,8 @@ function ByteOptionsSuperMario64() {
     
     # HERO MODE
 
-    if     (IsText -Elem $Redux.Hero.Damage -Text "2x Damage")   { ChangeBytes -Offset "F207" -Values "80" }
-    elseif (IsText -Elem $Redux.Hero.Damage -Text "3x Damage")   { ChangeBytes -Offset "F207" -Values "40" }
+    if     (IsText -Elem $Redux.Hero.Damage -Compare "2x Damage")   { ChangeBytes -Offset "F207" -Values "80" }
+    elseif (IsText -Elem $Redux.Hero.Damage -Compare "3x Damage")   { ChangeBytes -Offset "F207" -Values "40" }
 
 
 

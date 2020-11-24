@@ -11,44 +11,44 @@ function ByteOptionsMajorasMask() {
     
     # HERO MODE #
 
-    if (IsText -Elem $Redux.Hero.Damage -Text "OHKO Mode") {
+    if (IsText -Elem $Redux.Hero.Damage -Compare "OHKO Mode") {
         ChangeBytes -Offset "BABE7F" -Values @("09", "04") -Interval 16
         ChangeBytes -Offset "BABEA2" -Values @("2A", "00")
         ChangeBytes -Offset "BABEA5" -Values @("00", "00", "00")
     }
-    elseif ( (IsText -Elem $Redux.Hero.Damage -Text "1x Damage" -Not) -or (IsText -Elem $Redux.Hero.Recovery -Text "1x Recovery" -Not) ) {
+    elseif ( (IsText -Elem $Redux.Hero.Damage -Compare "1x Damage" -Not) -or (IsText -Elem $Redux.Hero.Recovery -Compare "1x Recovery" -Not) ) {
         ChangeBytes -Offset "BABE7F" -Values @("09", "04") -Interval 16
-        if (IsText -Elem $Redux.Hero.Recovery -Text "1x Recovery") {
-            if     (IsText -Elem $Redux.Hero.Damage -Text "2x Damage")   { ChangeBytes -Offset "BABEA2" -Values @("28", "40") }
-            elseif (IsText -Elem $Redux.Hero.Damage -Text "4x Damage")   { ChangeBytes -Offset "BABEA2" -Values @("28", "80") }
-            elseif (IsText -Elem $Redux.Hero.Damage -Text "8x Damage")   { ChangeBytes -Offset "BABEA2" -Values @("28", "C0") }
+        if         (IsText -Elem $Redux.Hero.Recovery -Compare "1x Recovery") {
+            if     (IsText -Elem $Redux.Hero.Damage -Compare "2x Damage")   { ChangeBytes -Offset "BABEA2" -Values @("28", "40") }
+            elseif (IsText -Elem $Redux.Hero.Damage -Compare "4x Damage")   { ChangeBytes -Offset "BABEA2" -Values @("28", "80") }
+            elseif (IsText -Elem $Redux.Hero.Damage -Compare "8x Damage")   { ChangeBytes -Offset "BABEA2" -Values @("28", "C0") }
             ChangeBytes -Offset "BABEA5" -Values @("00", "00", "00")
         }
-        elseif     (IsText -Elem $Redux.Hero.Recovery -Text "1/2x Recovery") {
-            if     (IsText -Elem $Redux.Hero.Damage -Text "1x Damage")   { ChangeBytes -Offset "BABEA2" -Values @("28", "40") }
-            elseif (IsText -Elem $Redux.Hero.Damage -Text "2x Damage")   { ChangeBytes -Offset "BABEA2" -Values @("28", "80") }
-            elseif (IsText -Elem $Redux.Hero.Damage -Text "4x Damage")   { ChangeBytes -Offset "BABEA2" -Values @("28", "C0") }
-            elseif (IsText -Elem $Redux.Hero.Damage -Text "8x Damage")   { ChangeBytes -Offset "BABEA2" -Values @("29", "00") }
+        elseif     (IsText -Elem $Redux.Hero.Recovery -Compare "1/2x Recovery") {
+            if     (IsText -Elem $Redux.Hero.Damage -Compare "1x Damage")   { ChangeBytes -Offset "BABEA2" -Values @("28", "40") }
+            elseif (IsText -Elem $Redux.Hero.Damage -Compare "2x Damage")   { ChangeBytes -Offset "BABEA2" -Values @("28", "80") }
+            elseif (IsText -Elem $Redux.Hero.Damage -Compare "4x Damage")   { ChangeBytes -Offset "BABEA2" -Values @("28", "C0") }
+            elseif (IsText -Elem $Redux.Hero.Damage -Compare "8x Damage")   { ChangeBytes -Offset "BABEA2" -Values @("29", "00") }
             ChangeBytes -Offset "BABEA5" -Values @("05", "28", "43")
         }
-        elseif     (IsText -Elem $Redux.Hero.Recovery -Text "1/4x Recovery") {
-            if     (IsText -Elem $Redux.Hero.Damage -Text "1x Damage")   { ChangeBytes -Offset "BABEA2" -Values @("28", "80") }
-            elseif (IsText -Elem $Redux.Hero.Damage -Text "2x Damage")   { ChangeBytes -Offset "BABEA2" -Values @("28", "C0") }
-            elseif (IsText -Elem $Redux.Hero.Damage -Text "4x Damage")   { ChangeBytes -Offset "BABEA2" -Values @("29", "00") }
-            elseif (IsText -Elem $Redux.Hero.Damage -Text "8x Damage")   { ChangeBytes -Offset "BABEA2" -Values @("29", "40") }
+        elseif     (IsText -Elem $Redux.Hero.Recovery -Compare "1/4x Recovery") {
+            if     (IsText -Elem $Redux.Hero.Damage -Compare "1x Damage")   { ChangeBytes -Offset "BABEA2" -Values @("28", "80") }
+            elseif (IsText -Elem $Redux.Hero.Damage -Compare "2x Damage")   { ChangeBytes -Offset "BABEA2" -Values @("28", "C0") }
+            elseif (IsText -Elem $Redux.Hero.Damage -Compare "4x Damage")   { ChangeBytes -Offset "BABEA2" -Values @("29", "00") }
+            elseif (IsText -Elem $Redux.Hero.Damage -Compare "8x Damage")   { ChangeBytes -Offset "BABEA2" -Values @("29", "40") }
             ChangeBytes -Offset "BABEA5" -Values @("05", "28", "83")
         }
-        elseif     (IsText -Elem $Redux.Hero.Recovery -Text "0x Recovery") {
-            if     (IsText -Elem $Redux.Hero.Damage -Text "1x Damage")   { ChangeBytes -Offset "BABEA2" -Values @("29", "40") }
-            elseif (IsText -Elem $Redux.Hero.Damage -Text "2x Damage")   { ChangeBytes -Offset "BABEA2" -Values @("29", "80") }
-            elseif (IsText -Elem $Redux.Hero.Damage -Text "4x Damage")   { ChangeBytes -Offset "BABEA2" -Values @("29", "C0") }
-            elseif (IsText -Elem $Redux.Hero.Damage -Text "8x Damage")   { ChangeBytes -Offset "BABEA2" -Values @("2A", "00") }
+        elseif     (IsText -Elem $Redux.Hero.Recovery -Compare "0x Recovery") {
+            if     (IsText -Elem $Redux.Hero.Damage -Compare "1x Damage")   { ChangeBytes -Offset "BABEA2" -Values @("29", "40") }
+            elseif (IsText -Elem $Redux.Hero.Damage -Compare "2x Damage")   { ChangeBytes -Offset "BABEA2" -Values @("29", "80") }
+            elseif (IsText -Elem $Redux.Hero.Damage -Compare "4x Damage")   { ChangeBytes -Offset "BABEA2" -Values @("29", "C0") }
+            elseif (IsText -Elem $Redux.Hero.Damage -Compare "8x Damage")   { ChangeBytes -Offset "BABEA2" -Values @("2A", "00") }
             ChangeBytes -Offset "BABEA5" -Values @("05", "29", "43")
         }
     }
 
-    if     (IsText -Elem $Redux.Hero.MagicUsage -Text "2x Magic Usage")  { ChangeBytes -Offset "BAC306" -Values @("2C","40") }
-    elseif (IsText -Elem $Redux.Hero.MagicUsage -Text "3x Magic Usage")  { ChangeBytes -Offset "BAC306" -Values @("2C","80") }
+    if     (IsText -Elem $Redux.Hero.MagicUsage -Compare "2x Magic Usage")  { ChangeBytes -Offset "BAC306" -Values @("2C","40") }
+    elseif (IsText -Elem $Redux.Hero.MagicUsage -Compare "3x Magic Usage")  { ChangeBytes -Offset "BAC306" -Values @("2C","80") }
 
 
 

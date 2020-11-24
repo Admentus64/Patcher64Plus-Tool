@@ -456,14 +456,14 @@ function IsLanguage([Object]$Elem, [int]$Lang=0) {
 
 
 #==============================================================================================================================================================================================
-function IsText([Object]$Elem, [String]$Text, [Switch]$Active, [Switch]$Not) {
+function IsText([Object]$Elem, [String]$Compare, [Switch]$Active, [Switch]$Not) {
     
-    $Text = $Text.replace(" (default)", "")
-    if (!(IsSet -Elem $Elem))               { return $False }
-    if ($Active -and !$Elem.Visible)        { return $False }
-    if (!$Active -and !$Elem.Enabled)       { return $False }
-    if ($Elem.Text -eq $Text)               { return !$Not  }
-    if ($Elem.Text -ne $Text)               { return $Not   }
+    $Text = $Elem.Text.replace(" (default)", "")
+    if (!(IsSet -Elem $Elem))           { return $False }
+    if ($Active -and !$Elem.Visible)    { return $False }
+    if (!$Active -and !$Elem.Enabled)   { return $False }
+    if ($Text -eq $Compare)             { return !$Not  }
+    if ($Text -ne $Compare)             { return $Not   }
     return $False
 
 }
@@ -473,6 +473,7 @@ function IsText([Object]$Elem, [String]$Text, [Switch]$Active, [Switch]$Not) {
 #==============================================================================================================================================================================================
 function IsIndex([Object]$Elem, [int]$Index=1, [Switch]$Active, [Switch]$Not) {
     
+    if ($Index -lt 1) { $Index = 1 }
     if (!(IsSet -Elem $Elem))                 { return $False }
     if ($Active -and !$Elem.Visible)          { return $False }
     if (!$Active -and !$Elem.Enabled)         { return $False }

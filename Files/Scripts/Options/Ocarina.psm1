@@ -1,12 +1,12 @@
 function PatchOptionsOcarinaOfTime() {
     
-    if ( (IsText -Elem $Redux.Graphics.Models -Text "Replace Child Model Only") -or (IsText -Elem $Redux.Graphics.Models -Text "Replace Both Models") ) {
+    if ( (IsText -Elem $Redux.Graphics.Models -Compare "Replace Child Model Only") -or (IsText -Elem $Redux.Graphics.Models -Compare "Replace Both Models") ) {
         ApplyPatch -File $GetROM.decomp -Patch "\Decompressed\Models\child_model.ppf"
     }
-    if ( (IsText -Elem $Redux.Graphics.Models -Text "Replace Adult Model Only") -or (IsText -Elem $Redux.Graphics.Models -Text "Replace Both Models")) {
+    if ( (IsText -Elem $Redux.Graphics.Models -Compare "Replace Adult Model Only") -or (IsText -Elem $Redux.Graphics.Models -Compare "Replace Both Models")) {
         ApplyPatch -File $GetROM.decomp -Patch "\Decompressed\Models\adult_model.ppf"
     }
-    if (IsText -Elem $Redux.Graphics.Models -Text "Change to Female Models") {
+    if (IsText -Elem $Redux.Graphics.Models -Compare "Change to Female Models") {
         ApplyPatch -File $GetROM.decomp -Patch "\Decompressed\Models\female_models.ppf"
     }
 
@@ -21,47 +21,47 @@ function ByteOptionsOcarinaOfTime() {
     
     # HERO MODE #
 
-    if (IsText -Elem $Redux.Hero.Damage -Text "OHKO Mode") {
+    if (IsText -Elem $Redux.Hero.Damage -Compare "OHKO Mode") {
         ChangeBytes -Offset "AE8073" -Values @("09", "04") -Interval 16
         ChangeBytes -Offset "AE8096" -Values @("82", "00")
         ChangeBytes -Offset "AE8099" -Values @("00", "00", "00")
     }
-    elseif ( (IsText -Elem $Redux.Hero.Damage -Text "1x Damage" -Not) -or (IsText -Elem $Redux.Hero.Recovery -Text "1x Recovery" -Not) ) {
+    elseif ( (IsText -Elem $Redux.Hero.Damage -Compare "1x Damage" -Not) -or (IsText -Elem $Redux.Hero.Recovery -Compare "1x Recovery" -Not) ) {
         ChangeBytes -Offset "AE8073" -Values @("09", "04") -Interval 16
-        if         (IsText -Elem $Redux.Hero.Recovery -Text "1x Recovery") {                
-            if     (IsText -Elem $Redux.Hero.Damage -Text "2x Damage")   { ChangeBytes -Offset "AE8096" -Values @("80", "40") }
-            elseif (IsText -Elem $Redux.Hero.Damage -Text "4x Damage")   { ChangeBytes -Offset "AE8096" -Values @("80", "80") }
-            elseif (IsText -Elem $Redux.Hero.Damage -Text "8x Damage")   { ChangeBytes -Offset "AE8096" -Values @("80", "C0") }
+        if         (IsText -Elem $Redux.Hero.Recovery -Compare "1x Recovery") {                
+            if     (IsText -Elem $Redux.Hero.Damage -Compare "2x Damage")   { ChangeBytes -Offset "AE8096" -Values @("80", "40") }
+            elseif (IsText -Elem $Redux.Hero.Damage -Compare "4x Damage")   { ChangeBytes -Offset "AE8096" -Values @("80", "80") }
+            elseif (IsText -Elem $Redux.Hero.Damage -Compare "8x Damage")   { ChangeBytes -Offset "AE8096" -Values @("80", "C0") }
             ChangeBytes -Offset "AE8099" -Values @("00", "00", "00")
         }
-        elseif     (IsText -Elem $Redux.Hero.Recovery -Text "1/2x Recovery") {               
-            if     (IsText -Elem $Redux.Hero.Damage -Text "1x Damage")   { ChangeBytes -Offset "AE8096" -Values @("80", "40") }
-            elseif (IsText -Elem $Redux.Hero.Damage -Text "2x Damage")   { ChangeBytes -Offset "AE8096" -Values @("80", "80") }
-            elseif (IsText -Elem $Redux.Hero.Damage -Text "4x Damage")   { ChangeBytes -Offset "AE8096" -Values @("80", "C0") }
-            elseif (IsText -Elem $Redux.Hero.Damage -Text "8x Damage")   { ChangeBytes -Offset "AE8096" -Values @("81", "00") }
+        elseif     (IsText -Elem $Redux.Hero.Recovery -Compare "1/2x Recovery") {               
+            if     (IsText -Elem $Redux.Hero.Damage -Compare "1x Damage")   { ChangeBytes -Offset "AE8096" -Values @("80", "40") }
+            elseif (IsText -Elem $Redux.Hero.Damage -Compare "2x Damage")   { ChangeBytes -Offset "AE8096" -Values @("80", "80") }
+            elseif (IsText -Elem $Redux.Hero.Damage -Compare "4x Damage")   { ChangeBytes -Offset "AE8096" -Values @("80", "C0") }
+            elseif (IsText -Elem $Redux.Hero.Damage -Compare "8x Damage")   { ChangeBytes -Offset "AE8096" -Values @("81", "00") }
             ChangeBytes -Offset "AE8099" -Values @("10", "80", "43")
         }
-        elseif     (IsText -Elem $Redux.Hero.Recovery -Text "1/2x Recovery") {                
-            if     (IsText -Elem $Redux.Hero.Damage -Text "1x Damage")   { ChangeBytes -Offset "AE8096" -Values @("80", "80") }
-            elseif (IsText -Elem $Redux.Hero.Damage -Text "2x Damage")   { ChangeBytes -Offset "AE8096" -Values @("80", "C0") }
-            elseif (IsText -Elem $Redux.Hero.Damage -Text "4x Damage")   { ChangeBytes -Offset "AE8096" -Values @("81", "00") }
-            elseif (IsText -Elem $Redux.Hero.Damage -Text "8x Damage")   { ChangeBytes -Offset "AE8096" -Values @("81", "40") }
+        elseif     (IsText -Elem $Redux.Hero.Recovery -Compare "1/2x Recovery") {                
+            if     (IsText -Elem $Redux.Hero.Damage -Compare "1x Damage")   { ChangeBytes -Offset "AE8096" -Values @("80", "80") }
+            elseif (IsText -Elem $Redux.Hero.Damage -Compare "2x Damage")   { ChangeBytes -Offset "AE8096" -Values @("80", "C0") }
+            elseif (IsText -Elem $Redux.Hero.Damage -Compare "4x Damage")   { ChangeBytes -Offset "AE8096" -Values @("81", "00") }
+            elseif (IsText -Elem $Redux.Hero.Damage -Compare "8x Damage")   { ChangeBytes -Offset "AE8096" -Values @("81", "40") }
             ChangeBytes -Offset "AE8099" -Values @("10", "80", "83")
         }
-        elseif     (IsText -Elem $Redux.Hero.Recovery -Text "1/2x Recovery") {                
-            if     (IsText -Elem $Redux.Hero.Damage -Text "1x Damage")   { ChangeBytes -Offset "AE8096" -Values @("81", "40") }
-            elseif (IsText -Elem $Redux.Hero.Damage -Text "2x Damage")   { ChangeBytes -Offset "AE8096" -Values @("81", "80") }
-            elseif (IsText -Elem $Redux.Hero.Damage -Text "4x Damage")   { ChangeBytes -Offset "AE8096" -Values @("81", "C0") }
-            elseif (IsText -Elem $Redux.Hero.Damage -Text "8x Damage")   { ChangeBytes -Offset "AE8096" -Values @("82", "00") }
+        elseif     (IsText -Elem $Redux.Hero.Recovery -Compare "1/2x Recovery") {                
+            if     (IsText -Elem $Redux.Hero.Damage -Compare "1x Damage")   { ChangeBytes -Offset "AE8096" -Values @("81", "40") }
+            elseif (IsText -Elem $Redux.Hero.Damage -Compare "2x Damage")   { ChangeBytes -Offset "AE8096" -Values @("81", "80") }
+            elseif (IsText -Elem $Redux.Hero.Damage -Compare "4x Damage")   { ChangeBytes -Offset "AE8096" -Values @("81", "C0") }
+            elseif (IsText -Elem $Redux.Hero.Damage -Compare "8x Damage")   { ChangeBytes -Offset "AE8096" -Values @("82", "00") }
             ChangeBytes -Offset "AE8099" -Values @("10", "81", "43")
         }
     }
 
-    if (IsText -Elem $Redux.Hero.MagicUsage -Text "2x Magic Usage")      { ChangeBytes -Offset "AE84FA" -Values @("2C","40") }
-    elseif (IsText -Elem $Redux.Hero.MagicUsage -Text "3x Magic Usage")  { ChangeBytes -Offset "AE84FA" -Values @("2C","80") }
+    if (IsText -Elem $Redux.Hero.MagicUsage -Compare "2x Magic Usage")      { ChangeBytes -Offset "AE84FA" -Values @("2C","40") }
+    elseif (IsText -Elem $Redux.Hero.MagicUsage -Compare "3x Magic Usage")  { ChangeBytes -Offset "AE84FA" -Values @("2C","80") }
 
     <#
-    if (IsText -Elem $Redux.BossHP -Text "2x Boss HP") {
+    if (IsText -Elem $Redux.BossHP -Compare "2x Boss HP") {
         ChangeBytes -Offset "C44F2B" -Values @("14") # Gohma           0xC44C30 -> 0xC4ABB0 (Length: 0x5F80) (ovl_Boss_Goma) (HP: 0A) (Mass: FF)
 
         ChangeBytes -Offset "C3B9FF" -Values @("18") # King Dodongo    0xC3B150 -> 0xC44C30 (Length: 0x9AE0) (ovl_Boss_Dodongo) (HP: 0C) (Mass: 00)
@@ -107,7 +107,7 @@ function ByteOptionsOcarinaOfTime() {
 
         # ChangeBytes -Offset "" -Values @("3C") # Ganon               0xE826C0 -> 0xE939B0 (Length: 0x112F0) (ovl_Boss_Ganon2) (HP: 1E) (Mass: FF)
     }
-    elseif (IsText -Elem $Redux.BossHP -Text "3x Boss HP") {
+    elseif (IsText -Elem $Redux.BossHP -Compare "3x Boss HP") {
         ChangeBytes -Offset "C44F2B" -Values @("1E") # Gohma           0xC44C30 -> 0xC4ABB0 (Length: 0x5F80) (ovl_Boss_Goma) (HP: 0A) (Mass: FF)
 
         ChangeBytes -Offset "C3B9FF" -Values @("24") # King Dodongo    0xC3B150 -> 0xC44C30 (Length: 0x9AE0) (ovl_Boss_Dodongo) (HP: 0C) (Mass: 00)
@@ -133,10 +133,10 @@ function ByteOptionsOcarinaOfTime() {
     #>
 
     <#
-    if (IsText -Elem $Redux.MonsterHP -Text "2x Monster HP") {
+    if (IsText -Elem $Redux.MonsterHP -Compare "2x Monster HP") {
         ChangeBytes -Offset "BFADAB" -Values("14") # Stalfos
     }
-    elseif (IsText -Elem $Redux.MonsterHP -Text "3x Monster HP") {
+    elseif (IsText -Elem $Redux.MonsterHP -Compare "3x Monster HP") {
         ChangeBytes -Offset "BFADC5" -Values("1E") # Stalfos
     }
     #>
@@ -331,11 +331,11 @@ function ByteOptionsOcarinaOfTime() {
 
     # SOUND / VOICES #
 
-    if (IsText -Elem $Redux.Sounds.Voices -Text "Majora's Mask") {
+    if (IsText -Elem $Redux.Sounds.Voices -Compare "Majora's Mask") {
         if (IsChecked -Elem $Redux.Restore.FireTemple)   { PatchBytes -Offset "19D920" -Patch "Voices\MM Link Voices.bin" }
         else                                             { PatchBytes -Offset "18E1E0" -Patch "Voices\MM Link Voices.bin" }
     }
-    elseif (IsText -Elem $Redux.Sounds.Voices -Text "Feminine") {
+    elseif (IsText -Elem $Redux.Sounds.Voices -Compare "Feminine") {
         if (IsChecked -Elem $Redux.Restore.FireTemple)   { PatchBytes -Offset "19D920" -Patch "Voices\Feminine Link Voices.bin" }
         else                                             { PatchBytes -Offset "18E1E0" -Patch "Voices\Feminine Link Voices.bin" }
     }
@@ -348,44 +348,44 @@ function ByteOptionsOcarinaOfTime() {
 
     # SFX SOUND EFFECTS #
 
-    if (IsText -Elem $Redux.SFX.Navi -Text "Default" -Not) {
+    if (IsIndex -Elem $Redux.SFX.Navi -Not) {
         ChangeBytes -Offset "AE7EF2" -Values (GetSFXID -SFX $Redux.SFX.Navi.Text)
         ChangeBytes -Offset "C26C7E" -Values (GetSFXID -SFX $Redux.SFX.Navi.Text)
     }
 
-    if (IsText -Elem $Redux.SFX.Nightfall -Text "Default" -Not) {
+    if (IsIndex -Elem $Redux.SFX.Nightfall -Not) {
         ChangeBytes -Offset "AD3466" -Values (GetSFXID -SFX $Redux.SFX.Nightfall.Text)
         ChangeBytes -Offset "AD7A2E" -Values (GetSFXID -SFX $Redux.SFX.Nightfall.Text)
     }
 
-    if (IsText -Elem $Redux.SFX.Horse -Text "Default" -Not) {
-        ChangeBytes -Offset "C18832" -Values (GetSFXID -SFX $Redux.SFX.Horse.Text);     ChangeBytes -Offset "C18C32" -Values (GetSFXID -SFX $Redux.SFX.Horse.Text);     ChangeBytes -Offset "C19A7E" -Values (GetSFXID -SFX $Redux.SFX.Horse.Text);
-        ChangeBytes -Offset "C19CBE" -Values (GetSFXID -SFX $Redux.SFX.Horse.Text);     ChangeBytes -Offset "C1A1F2" -Values (GetSFXID -SFX $Redux.SFX.Horse.Text);     ChangeBytes -Offset "C1A3B6" -Values (GetSFXID -SFX $Redux.SFX.Horse.Text);
-        ChangeBytes -Offset "C1B08A" -Values (GetSFXID -SFX $Redux.SFX.Horse.Text);     ChangeBytes -Offset "C1B556" -Values (GetSFXID -SFX $Redux.SFX.Horse.Text);     ChangeBytes -Offset "C1C28A" -Values (GetSFXID -SFX $Redux.SFX.Horse.Text);
-        ChangeBytes -Offset "C1CC36" -Values (GetSFXID -SFX $Redux.SFX.Horse.Text);     ChangeBytes -Offset "C1EB4A" -Values (GetSFXID -SFX $Redux.SFX.Horse.Text);     ChangeBytes -Offset "C1F18E" -Values (GetSFXID -SFX $Redux.SFX.Horse.Text);
-        ChangeBytes -Offset "C6B136" -Values (GetSFXID -SFX $Redux.SFX.Horse.Text);     ChangeBytes -Offset "C6BBA2" -Values (GetSFXID -SFX $Redux.SFX.Horse.Text);     ChangeBytes -Offset "C1E93A" -Values (GetSFXID -SFX $Redux.SFX.Horse.Text)
-        ChangeBytes -Offset "C6B366" -Values (GetSFXID -SFX $Redux.SFX.Horse.Text);     ChangeBytes -Offset "C6B562" -Values (GetSFXID -SFX $Redux.SFX.Horse.Text)
+    if (IsIndex -Elem $Redux.SFX.Horse -Not) {
+        ChangeBytes -Offset "C18832" -Values (GetSFXID -SFX $Redux.SFX.Horse.Text);   ChangeBytes -Offset "C18C32" -Values (GetSFXID -SFX $Redux.SFX.Horse.Text);   ChangeBytes -Offset "C19A7E" -Values (GetSFXID -SFX $Redux.SFX.Horse.Text);
+        ChangeBytes -Offset "C19CBE" -Values (GetSFXID -SFX $Redux.SFX.Horse.Text);   ChangeBytes -Offset "C1A1F2" -Values (GetSFXID -SFX $Redux.SFX.Horse.Text);   ChangeBytes -Offset "C1A3B6" -Values (GetSFXID -SFX $Redux.SFX.Horse.Text);
+        ChangeBytes -Offset "C1B08A" -Values (GetSFXID -SFX $Redux.SFX.Horse.Text);   ChangeBytes -Offset "C1B556" -Values (GetSFXID -SFX $Redux.SFX.Horse.Text);   ChangeBytes -Offset "C1C28A" -Values (GetSFXID -SFX $Redux.SFX.Horse.Text);
+        ChangeBytes -Offset "C1CC36" -Values (GetSFXID -SFX $Redux.SFX.Horse.Text);   ChangeBytes -Offset "C1EB4A" -Values (GetSFXID -SFX $Redux.SFX.Horse.Text);   ChangeBytes -Offset "C1F18E" -Values (GetSFXID -SFX $Redux.SFX.Horse.Text);
+        ChangeBytes -Offset "C6B136" -Values (GetSFXID -SFX $Redux.SFX.Horse.Text);   ChangeBytes -Offset "C6BBA2" -Values (GetSFXID -SFX $Redux.SFX.Horse.Text);   ChangeBytes -Offset "C1E93A" -Values (GetSFXID -SFX $Redux.SFX.Horse.Text)
+        ChangeBytes -Offset "C6B366" -Values (GetSFXID -SFX $Redux.SFX.Horse.Text);   ChangeBytes -Offset "C6B562" -Values (GetSFXID -SFX $Redux.SFX.Horse.Text)
     }
 
-    if (IsText -Elem $Redux.SFX.FileMenuCursor -Text "Default" -Not) {
-        ChangeBytes -Offset "BA165E" -Values (GetSFXID -SFX $Redux.SFX.FileMenuCursor.Text);     ChangeBytes -Offset "BA1C1A" -Values (GetSFXID -SFX $Redux.SFX.FileMenuCursor.Text);     ChangeBytes -Offset "BA2406" -Values (GetSFXID -SFX $Redux.SFX.FileMenuCursor.Text);
-        ChangeBytes -Offset "BA327E" -Values (GetSFXID -SFX $Redux.SFX.FileMenuCursor.Text);     ChangeBytes -Offset "BA3936" -Values (GetSFXID -SFX $Redux.SFX.FileMenuCursor.Text);     ChangeBytes -Offset "BA77C2" -Values (GetSFXID -SFX $Redux.SFX.FileMenuCursor.Text);
-        ChangeBytes -Offset "BA7886" -Values (GetSFXID -SFX $Redux.SFX.FileMenuCursor.Text);     ChangeBytes -Offset "BA7A06" -Values (GetSFXID -SFX $Redux.SFX.FileMenuCursor.Text);     ChangeBytes -Offset "BA7A6E" -Values (GetSFXID -SFX $Redux.SFX.FileMenuCursor.Text);
-        ChangeBytes -Offset "BA7AE6" -Values (GetSFXID -SFX $Redux.SFX.FileMenuCursor.Text);     ChangeBytes -Offset "BA7D6A" -Values (GetSFXID -SFX $Redux.SFX.FileMenuCursor.Text);     ChangeBytes -Offset "BA8186" -Values (GetSFXID -SFX $Redux.SFX.FileMenuCursor.Text);
-        ChangeBytes -Offset "BA822E" -Values (GetSFXID -SFX $Redux.SFX.FileMenuCursor.Text);     ChangeBytes -Offset "BA82A2" -Values (GetSFXID -SFX $Redux.SFX.FileMenuCursor.Text);     ChangeBytes -Offset "BAA11E" -Values (GetSFXID -SFX $Redux.SFX.FileMenuCursor.Text);
+    if (IsIndex -Elem $Redux.SFX.FileMenuCursor -Not) {
+        ChangeBytes -Offset "BA165E" -Values (GetSFXID -SFX $Redux.SFX.FileMenuCursor.Text);   ChangeBytes -Offset "BA1C1A" -Values (GetSFXID -SFX $Redux.SFX.FileMenuCursor.Text);   ChangeBytes -Offset "BA2406" -Values (GetSFXID -SFX $Redux.SFX.FileMenuCursor.Text);
+        ChangeBytes -Offset "BA327E" -Values (GetSFXID -SFX $Redux.SFX.FileMenuCursor.Text);   ChangeBytes -Offset "BA3936" -Values (GetSFXID -SFX $Redux.SFX.FileMenuCursor.Text);   ChangeBytes -Offset "BA77C2" -Values (GetSFXID -SFX $Redux.SFX.FileMenuCursor.Text);
+        ChangeBytes -Offset "BA7886" -Values (GetSFXID -SFX $Redux.SFX.FileMenuCursor.Text);   ChangeBytes -Offset "BA7A06" -Values (GetSFXID -SFX $Redux.SFX.FileMenuCursor.Text);   ChangeBytes -Offset "BA7A6E" -Values (GetSFXID -SFX $Redux.SFX.FileMenuCursor.Text);
+        ChangeBytes -Offset "BA7AE6" -Values (GetSFXID -SFX $Redux.SFX.FileMenuCursor.Text);   ChangeBytes -Offset "BA7D6A" -Values (GetSFXID -SFX $Redux.SFX.FileMenuCursor.Text);   ChangeBytes -Offset "BA8186" -Values (GetSFXID -SFX $Redux.SFX.FileMenuCursor.Text);
+        ChangeBytes -Offset "BA822E" -Values (GetSFXID -SFX $Redux.SFX.FileMenuCursor.Text);   ChangeBytes -Offset "BA82A2" -Values (GetSFXID -SFX $Redux.SFX.FileMenuCursor.Text);   ChangeBytes -Offset "BAA11E" -Values (GetSFXID -SFX $Redux.SFX.FileMenuCursor.Text);
         ChangeBytes -Offset "BAE7C6" -Values (GetSFXID -SFX $Redux.SFX.FileMenuCursor.Text)
     }
 
-    if (IsText -Elem $Redux.SFX.FileMenuSelect -Text "Default" -Not) {
-        ChangeBytes -Offset "BA1BBE" -Values (GetSFXID -SFX $Redux.SFX.FileMenuSelect.Text);     ChangeBytes -Offset "BA23CE" -Values (GetSFXID -SFX $Redux.SFX.FileMenuSelect.Text);     ChangeBytes -Offset "BA2956" -Values (GetSFXID -SFX $Redux.SFX.FileMenuSelect.Text);
-        ChangeBytes -Offset "BA321A" -Values (GetSFXID -SFX $Redux.SFX.FileMenuSelect.Text);     ChangeBytes -Offset "BA72F6" -Values (GetSFXID -SFX $Redux.SFX.FileMenuSelect.Text);     ChangeBytes -Offset "BA8106" -Values (GetSFXID -SFX $Redux.SFX.FileMenuSelect.Text);
-        ChangeBytes -Offset "BA82EE" -Values (GetSFXID -SFX $Redux.SFX.FileMenuSelect.Text);     ChangeBytes -Offset "BA9DAE" -Values (GetSFXID -SFX $Redux.SFX.FileMenuSelect.Text);     ChangeBytes -Offset "BA9EAE" -Values (GetSFXID -SFX $Redux.SFX.FileMenuSelect.Text);
-        ChangeBytes -Offset "BA9FD2" -Values (GetSFXID -SFX $Redux.SFX.FileMenuSelect.Text);     ChangeBytes -Offset "BAE6D6" -Values (GetSFXID -SFX $Redux.SFX.FileMenuSelect.Text)
+    if (IsIndex -Elem $Redux.SFX.FileMenuSelect -Not) {
+        ChangeBytes -Offset "BA1BBE" -Values (GetSFXID -SFX $Redux.SFX.FileMenuSelect.Text);   ChangeBytes -Offset "BA23CE" -Values (GetSFXID -SFX $Redux.SFX.FileMenuSelect.Text);   ChangeBytes -Offset "BA2956" -Values (GetSFXID -SFX $Redux.SFX.FileMenuSelect.Text);
+        ChangeBytes -Offset "BA321A" -Values (GetSFXID -SFX $Redux.SFX.FileMenuSelect.Text);   ChangeBytes -Offset "BA72F6" -Values (GetSFXID -SFX $Redux.SFX.FileMenuSelect.Text);   ChangeBytes -Offset "BA8106" -Values (GetSFXID -SFX $Redux.SFX.FileMenuSelect.Text);
+        ChangeBytes -Offset "BA82EE" -Values (GetSFXID -SFX $Redux.SFX.FileMenuSelect.Text);   ChangeBytes -Offset "BA9DAE" -Values (GetSFXID -SFX $Redux.SFX.FileMenuSelect.Text);   ChangeBytes -Offset "BA9EAE" -Values (GetSFXID -SFX $Redux.SFX.FileMenuSelect.Text);
+        ChangeBytes -Offset "BA9FD2" -Values (GetSFXID -SFX $Redux.SFX.FileMenuSelect.Text);   ChangeBytes -Offset "BAE6D6" -Values (GetSFXID -SFX $Redux.SFX.FileMenuSelect.Text)
     }
 
-    if (IsText -Elem $Redux.SFX.ZTarget    -Text "Default" -Not)   { ChangeBytes -Offset "AE7EC6" -Values (GetSFXID -SFX $Redux.SFX.ZTarget.Text) }
-    if (IsText -Elem $Redux.SFX.LowHP      -Text "Default" -Not)   { ChangeBytes -Offset "ADBA1A" -Values (GetSFXID -SFX $Redux.SFX.LowHP.Text) }
-    if (IsText -Elem $Redux.SFX.HoverBoots -Text "Default" -Not)   { ChangeBytes -Offset "BDBD8A" -Values (GetSFXID -SFX $Redux.SFX.HoverBoots.Text) } 
+    if (IsIndex -Elem $Redux.SFX.ZTarget    -Not)   { ChangeBytes -Offset "AE7EC6" -Values (GetSFXID -SFX $Redux.SFX.ZTarget.Text) }
+    if (IsIndex -Elem $Redux.SFX.LowHP      -Not)   { ChangeBytes -Offset "ADBA1A" -Values (GetSFXID -SFX $Redux.SFX.LowHP.Text) }
+    if (IsIndex -Elem $Redux.SFX.HoverBoots -Not)   { ChangeBytes -Offset "BDBD8A" -Values (GetSFXID -SFX $Redux.SFX.HoverBoots.Text) } 
 
 
 
@@ -572,7 +572,7 @@ function ByteReduxOcarinaOfTime() {
 #==============================================================================================================================================================================================
 function ByteLanguageOcarinaOfTime() {
     
-    if ( (IsChecked -Elem $Redux.Text.Restore) -or (IsChecked -Elem $Redux.Text.Speed2x) -or (IsChecked -Elem $Redux.Text.Speed3x) -or (IsChecked -Elem $Redux.Text.GCScheme) -or (IsLanguage -Elem $Redux.Unlock.Tunics) -or (IsText -Elem $Redux.Colors.Navi -Text "Tatl") -or (IsText -Elem $Redux.Colors.Navi -Text "Tael") ) {
+    if ( (IsChecked -Elem $Redux.Text.Restore) -or (IsChecked -Elem $Redux.Text.Speed2x) -or (IsChecked -Elem $Redux.Text.Speed3x) -or (IsChecked -Elem $Redux.Text.GCScheme) -or (IsLanguage -Elem $Redux.Unlock.Tunics) -or (IsText -Elem $Redux.Colors.Navi -Compare "Tatl") -or (IsText -Elem $Redux.Colors.Navi -Compare "Tael") ) {
         $File = $GameFiles.extracted + "\Message Data Static.bin"
         ExportBytes -Offset "92D000" -Length "38140" -Output $File -Force
     }
@@ -706,20 +706,20 @@ function ByteLanguageOcarinaOfTime() {
         ChangeBytes -File $File -Offset ( Get24Bit -Value ( (GetDecimal -Hex $Offset) + (GetDecimal -Hex "7A") ) ) -Values @("55", "6E", "69", "73", "69", "7A", "65", "2E", "20", "20", "20")
     }
 
-     if (IsText -Elem $Redux.Colors.Navi -Text "Tatl") {
+     if (IsText -Elem $Redux.Colors.Navi -Compare "Tatl") {
         do { # Tatl
-            $Offset = SearchBytes -File $File -Start $Offset -Values @("4E", "61", "76", "", "69")
+            $Offset = SearchBytes -File $File -Start $Offset -Values @("4E", "61", "76", "69")
             if ($Offset -ne -1) { ChangeBytes -File $File -Offset $Offset -Values @("54", "61", "74", "6C") }
         } while ($Offset -gt 0)
      }
-     elseif (IsText -Elem $Redux.Colors.Navi -Text "Tael") {
+     elseif (IsText -Elem $Redux.Colors.Navi -Compare "Tael") {
         do { # Tael
-            $Offset = SearchBytes -File $File -Start $Offset -Values @("4E", "61", "76", "", "69")
+            $Offset = SearchBytes -File $File -Start $Offset -Values @("4E", "61", "76", "69")
             if ($Offset -ne -1) { ChangeBytes -File $File -Offset $Offset -Values @("54", "61", "65", "6C") }
         } while ($Offset -gt 0)
      }
 
-    if ( (IsChecked -Elem $Redux.Text.Restore) -or (IsChecked -Elem $Redux.Text.Speed2x) -or (IsChecked -Elem $Redux.Text.Speed3x) -or (IsChecked -Elem $Redux.Text.GCScheme) -or (IsLanguage -Elem $Redux.Unlock.Tunics) -or (IsText -Elem $Redux.Colors.Navi -Text "Tatl") -or (IsText -Elem $Redux.Colors.Navi -Text "Tael") ) {
+    if ( (IsChecked -Elem $Redux.Text.Restore) -or (IsChecked -Elem $Redux.Text.Speed2x) -or (IsChecked -Elem $Redux.Text.Speed3x) -or (IsChecked -Elem $Redux.Text.GCScheme) -or (IsLanguage -Elem $Redux.Unlock.Tunics) -or (IsText -Elem $Redux.Colors.Navi -Compare "Tatl") -or (IsText -Elem $Redux.Colors.Navi -Compare "Tael") ) {
         PatchBytes -Offset "92D000" -Patch "Message Data Static.bin" -Extracted
     }
 
