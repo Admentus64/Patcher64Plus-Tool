@@ -10,7 +10,7 @@ function PatchOptionsOcarinaOfTime() {
         ApplyPatch -File $GetROM.decomp -Patch "\Decompressed\Models\female_models.ppf"
     }
 
-    if (IsChecked -Elem $Languages.PauseScreen) { ApplyPatch -File $GetROM.decomp -Patch "\Decompressed\mm_pause_screen.ppf" }
+    if (IsChecked -Elem $Redux.Text.PauseScreen) { ApplyPatch -File $GetROM.decomp -Patch "\Decompressed\mm_pause_screen.ppf" }
     
 }
 
@@ -434,7 +434,7 @@ function ByteOptionsOcarinaOfTime() {
     if (IsChecked -Elem $Redux.Skip.IntroSequence)         { ChangeBytes -Offset "B06BBA"  -Values @("00", "00") }
     if (IsChecked -Elem $Redux.Skip.AllMedallions)         { ChangeBytes -Offset "ACA409"  -Values @("AD"); ChangeBytes -Offset "ACA49D"  -Values @("CE") }
     if (IsChecked -Elem $Redux.Skip.DaruniaDance)          { ChangeBytes -Offset "22769E4" -Values @("FF", "FF", "FF", "FF") }
-    if (IsChecked -Elem $Redux.Skip.pOpeningChests)        { ChangeBytes -Offset "BDA2E8"  -Values @("24", "0A", "FF", "FF") }
+    if (IsChecked -Elem $Redux.Skip.OpeningChests)         { ChangeBytes -Offset "BDA2E8"  -Values @("24", "0A", "FF", "FF") }
     if (IsChecked -Elem $Redux.Skip.KingZora)              { ChangeBytes -Offset "E56924"  -Values @("00", "00", "00", "00") }
     if (IsChecked -Elem $Redux.Skip.ZeldasEscape)          { ChangeBytes -Offset "1FC0CF8" -Values @("00", "00", "00", "01", "00", "21", "00", "01", "00", "02", "00", "02") }
 
