@@ -205,21 +205,25 @@ function ByteOptionsOcarinaOfTime() {
     # INTERFACE #
 
     if (IsChecked -Elem $Redux.UI.HudTextures) {
-        PatchBytes  -Offset "1A3CA00" -Texture -Patch "HUD\MM HUD Button.bin"
-        PatchBytes  -Offset "1A3C100" -Texture -Patch "HUD\MM HUD Hearts.bin"
-        PatchBytes  -Offset "1A3DE00" -Texture -Patch "HUD\MM HUD Key & Rupee.bin"
+        PatchBytes  -Offset "1A3CA00" -Texture -Patch "HUD\MM Button.bin"
+        PatchBytes  -Offset "1A3C100" -Texture -Patch "HUD\MM Hearts.bin"
+        PatchBytes  -Offset "1A3DE00" -Texture -Patch "HUD\MM Key & Rupee.bin"
     }
 
     if (IsChecked -Elem $Redux.UI.ButtonPositions) {
-        ChangeBytes -Offset "0B57EEF" -Values "A7"
-        ChangeBytes -Offset "0B57F03" -Values "BE"
-        ChangeBytes -Offset "0B586A7" -Values "17"
-        ChangeBytes -Offset "0B589EB" -Values "9B"
+        ChangeBytes -Offset "B57EEF" -Values "A7"
+        ChangeBytes -Offset "B57F03" -Values "BE"
+        ChangeBytes -Offset "B586A7" -Values "17"
+        ChangeBytes -Offset "B589EB" -Values "9B"
+    }
+
+    if (IsChecked -Elem $Redux.UI.CenterNaviPrompt) {
+        ChangeBytes -Offset "B582DF" -Values "F6"
     }
 
     
 
-    # COLORS
+    # COLORS #
 
     if (IsIndex -Elem $Redux.Colors.Equipment[0] -Index 1 -Not) { ChangeBytes -Offset "B6DA38" -IsDec -Values @($Redux.Colors.SetEquipment[0].Color.R, $Redux.Colors.SetEquipment[0].Color.G, $Redux.Colors.SetEquipment[0].Color.B) } # Kokiri Tunic
     if (IsIndex -Elem $Redux.Colors.Equipment[1] -Index 2 -Not) { ChangeBytes -Offset "B6DA3B" -IsDec -Values @($Redux.Colors.SetEquipment[1].Color.R, $Redux.Colors.SetEquipment[1].Color.G, $Redux.Colors.SetEquipment[1].Color.B) } # Goron Tunic
@@ -260,7 +264,7 @@ function ByteOptionsOcarinaOfTime() {
 
     
 
-    # GAMEPLAY
+    # GAMEPLAY #
 
     if (IsChecked -Elem $Redux.Gameplay.EasierMinigames) {
         ChangeBytes -Offset "CC4024" -Values @("00", "00", "00", "00") # Dampe's Digging Game
@@ -501,7 +505,7 @@ function ByteReduxOcarinaOfTime() {
 
 
 
-     # COLORS
+     # COLORS #
 
      if (IsIndex -Elem $Redux.Colors.Buttons -Not) {
         #ChangeBytes -Offset "348085F"  -Values @("FF", "00", "50") # Cursor
@@ -711,12 +715,14 @@ function ByteLanguageOcarinaOfTime() {
             $Offset = SearchBytes -File $File -Start $Offset -Values @("4E", "61", "76", "69")
             if ($Offset -ne -1) { ChangeBytes -File $File -Offset $Offset -Values @("54", "61", "74", "6C") }
         } while ($Offset -gt 0)
+        PatchBytes -Offset "1A3EFC0" -Texture -Patch "HUD\Tatl.bin"
      }
      elseif (IsText -Elem $Redux.Colors.Navi -Compare "Tael") {
         do { # Tael
             $Offset = SearchBytes -File $File -Start $Offset -Values @("4E", "61", "76", "69")
             if ($Offset -ne -1) { ChangeBytes -File $File -Offset $Offset -Values @("54", "61", "65", "6C") }
         } while ($Offset -gt 0)
+        PatchBytes -Offset "1A3EFC0" -Texture -Patch "HUD\Tael.bin"
      }
 
     if ( (IsChecked -Elem $Redux.Text.Restore) -or (IsChecked -Elem $Redux.Text.Speed2x) -or (IsChecked -Elem $Redux.Text.Speed3x) -or (IsChecked -Elem $Redux.Text.GCScheme) -or (IsLanguage -Elem $Redux.Unlock.Tunics) -or (IsText -Elem $Redux.Colors.Navi -Compare "Tatl") -or (IsText -Elem $Redux.Colors.Navi -Compare "Tael") ) {
@@ -917,38 +923,39 @@ function CreateTabAudiovisualOcarinaOfTime() {
 
     # GRAPHICS #
     CreateReduxGroup    -Tag  "Graphics" -Text "Graphics" 
-    CreateReduxCheckBox -Name "Widescreen"      -Column 1 -Text "16:9 Widescreen"        -Info "Native 16:9 Widescreen Display support with backgrounds and textures adjusted for widescreen`nThe aspect ratio fix is only applied when patching in Wii VC mode`nUse the Widescreen hack by GlideN64 instead if running on an N64 emulator`nTexture changes are always applied"
-    CreateReduxCheckBox -Name "BlackBars"       -Column 2 -Text "No Black Bars"          -Info "Removes the black bars shown on the top and bottom of the screen during Z-targeting and cutscenes"
-    CreateReduxCheckBox -Name "ExtendedDraw"    -Column 3 -Text "Extended Draw Distance" -Info "Increases the game's draw distance for objects`nDoes not work on all objects"
-    CreateReduxCheckBox -Name "ForceHiresModel" -Column 4 -Text "Force Hires Link Model" -Info "Always use Link's High Resolution Model when Link is too far away"
-    CreateReduxComboBox -Name "Models"          -Column 5 -Text "Link's Models:"      -Items @("Original Models", "Replace Child Model Only", "Replace Adult Model Only", "Replace Both Models", "Change to Female Models") -Info "1. Replace the model for Child Link with that of Majora's Mask`n2. Replace the model for Adult Link to be Majora's Mask-styled`n3. Combine both previous options`n4. Transform Link into a female"
+    CreateReduxCheckBox -Name "Widescreen"       -Column 1 -Text "16:9 Widescreen"        -Info "Native 16:9 Widescreen Display support with backgrounds and textures adjusted for widescreen`nThe aspect ratio fix is only applied when patching in Wii VC mode`nUse the Widescreen hack by GlideN64 instead if running on an N64 emulator`nTexture changes are always applied"
+    CreateReduxCheckBox -Name "BlackBars"        -Column 2 -Text "No Black Bars"          -Info "Removes the black bars shown on the top and bottom of the screen during Z-targeting and cutscenes"
+    CreateReduxCheckBox -Name "ExtendedDraw"     -Column 3 -Text "Extended Draw Distance" -Info "Increases the game's draw distance for objects`nDoes not work on all objects"
+    CreateReduxCheckBox -Name "ForceHiresModel"  -Column 4 -Text "Force Hires Link Model" -Info "Always use Link's High Resolution Model when Link is too far away"
+    CreateReduxComboBox -Name "Models"           -Column 5 -Text "Link's Models:"      -Items @("Original Models", "Replace Child Model Only", "Replace Adult Model Only", "Replace Both Models", "Change to Female Models") -Info "1. Replace the model for Child Link with that of Majora's Mask`n2. Replace the model for Adult Link to be Majora's Mask-styled`n3. Combine both previous options`n4. Transform Link into a female"
     
     # INTERFACE #
     CreateReduxGroup    -Tag  "UI" -Text "Interface"
-    CreateReduxCheckBox -Name "HudTextures"     -Column 1 -Text "MM HUD Textures"     -Info "Replaces the HUD textures with those from Majora's Mask"
-    CreateReduxCheckBox -Name "ButtonPositions" -Column 2 -Text "MM Button Positions" -Info "Positions the A and B buttons like in Majora's Mask"
+    CreateReduxCheckBox -Name "HudTextures"      -Column 1 -Text "MM HUD Textures"     -Info "Replaces the HUD textures with those from Majora's Mask"
+    CreateReduxCheckBox -Name "ButtonPositions"  -Column 2 -Text "MM Button Positions" -Info "Positions the A and B buttons like in Majora's Mask"
+    CreateReduxCheckBox -Name "CenterNaviPrompt" -Column 3 -Text "Center Navi Prompt"  -Info 'Centers the "Navi" prompt shown in the C-Up button'
 
     # SOUNDS / VOICES #
     CreateReduxGroup    -Tag  "Sounds" -Text "Sounds / Voices"
-    CreateReduxComboBox -Name "Voices"          -Column 1 -Text "Link's Voice:"       -Items @("Original", "Majora's Mask", "Feminine")  -Info "1. Replace the voices for Link with those used in Majora's Mask`n2. Replace the voices for Link to sound feminine"
-    CreateReduxComboBox -Name "Instrument"      -Column 3 -Text "Instrument:"         -Items @("Ocarina", "Female Voice", "Whistle", "Harp", "Grind-Organ", "Flute") -Info "Replace the sound used for playing the Ocarina of Time"
+    CreateReduxComboBox -Name "Voices"           -Column 1 -Text "Link's Voice:"       -Items @("Original", "Majora's Mask", "Feminine")  -Info "1. Replace the voices for Link with those used in Majora's Mask`n2. Replace the voices for Link to sound feminine"
+    CreateReduxComboBox -Name "Instrument"       -Column 3 -Text "Instrument:"         -Items @("Ocarina", "Female Voice", "Whistle", "Harp", "Grind-Organ", "Flute") -Info "Replace the sound used for playing the Ocarina of Time"
 
     # SFX SOUND EFFECTS #
     CreateReduxGroup    -Tag "SFX" -Text "SFX Sound Effects" -Height 3
     $SFX = @("Default", "Disabled", "Soft Beep", "Bark", "Bomb Bounce", "Bongo Bongo Low", "Bow Twang", "Business Scrub", "Carrot Refill", "Cluck", "Drawbridge Set", "Guay", "Horse Trot", "HP Recover", "Iron Boots", "Moo", "Mweep!", 'Navi "Hey!"', "Navi Random", "Notification", "Pot Shattering", "Ribbit", "Rupee (Silver)", "Switch", "Sword Bonk", "Tambourine", "Timer", "Zelda Gasp (Adult)")
-    CreateReduxComboBox -Name "LowHP"           -Column 1 -Row 1 -Text "Low HP:"      -Items $SFX -Info "Set the sound effect for the low HP beeping"
+    CreateReduxComboBox -Name "LowHP"            -Column 1 -Row 1 -Text "Low HP:"      -Items $SFX -Info "Set the sound effect for the low HP beeping"
     $SFX = @("Default",  "Disabled", "Soft Beep", "Bark", "Business Scrub", "Carrot Refill", "Cluck", "Cockadoodledoo", "Dusk Howl", "Exploding Crate", "Explosion", "Great Fairy", "Guay", "Horse Neigh", "HP Low", "HP Recover", "Ice Shattering", "Moo", "Meweep!", 'Navi "Hello!"', "Notification", "Pot Shattering", "Redead Scream", "Ribbit", "Ruto Giggle", "Skulltula", "Tambourine", "Timer", "Zelda Gasp (Adult)")
-    CreateReduxComboBox -Name "Navi"            -Column 3 -Row 1 -Text "Navi:"        -Items $SFX -Info "Replace the sound used for Navi when she wants to tell something"
-    CreateReduxComboBox -Name "ZTarget"         -Column 5 -Row 1 -Text "Z-Target:"    -Items $SFX -Info "Replace the sound used for Z-Targeting enemies" 
+    CreateReduxComboBox -Name "Navi"             -Column 3 -Row 1 -Text "Navi:"        -Items $SFX -Info "Replace the sound used for Navi when she wants to tell something"
+    CreateReduxComboBox -Name "ZTarget"          -Column 5 -Row 1 -Text "Z-Target:"    -Items $SFX -Info "Replace the sound used for Z-Targeting enemies" 
 
-    CreateReduxComboBox -Name "HoverBoots"      -Column 1 -Row 2 -Text "Hover Boots:" -Items @("Default", "Disabled", "Bark", "Cartoon Fall", "Flare Dancer Laugh", "Mweep!", "Shabom Pop", "Tambourine") -Info "Replace the sound used for the Hover Boots"
-    CreateReduxComboBox -Name "Horse"           -Column 3 -Row 2 -Text "Horse Neigh:" -Items @("Default", "Disabled", "Armos", "Child Scream", "Great Fairy", "Moo", "Mweep!", "Redead Scream", "Ruto Wiggle", "Stalchild Attack") -Info "Replace the sound for horses when neighing"
-    CreateReduxComboBox -Name "Nightfall"       -Column 5 -Row 2 -Text "Nightfall:"   -Items @("Default", "Disabled", "Cockadoodledoo", "Gold Skull Token", "Great Fairy", "Moo", "Mweep!", "Redead Moan", "Talon Snore", "Thunder") -Info "Replace the sound used when Nightfall occurs"
+    CreateReduxComboBox -Name "HoverBoots"       -Column 1 -Row 2 -Text "Hover Boots:" -Items @("Default", "Disabled", "Bark", "Cartoon Fall", "Flare Dancer Laugh", "Mweep!", "Shabom Pop", "Tambourine") -Info "Replace the sound used for the Hover Boots"
+    CreateReduxComboBox -Name "Horse"            -Column 3 -Row 2 -Text "Horse Neigh:" -Items @("Default", "Disabled", "Armos", "Child Scream", "Great Fairy", "Moo", "Mweep!", "Redead Scream", "Ruto Wiggle", "Stalchild Attack") -Info "Replace the sound for horses when neighing"
+    CreateReduxComboBox -Name "Nightfall"        -Column 5 -Row 2 -Text "Nightfall:"   -Items @("Default", "Disabled", "Cockadoodledoo", "Gold Skull Token", "Great Fairy", "Moo", "Mweep!", "Redead Moan", "Talon Snore", "Thunder") -Info "Replace the sound used when Nightfall occurs"
     $SFX = @("Default", "Disabled", "Soft Beep", "Bark", "Bomb Bounce", "Bongo Bongo High", "Bongo Bongo Low", "Bottle Cork", "Bow Twang", "Bubble Laugh", "Carrot Refill", "Change Item", "Child Pant", "Cluck", "Deku Baba", "Drawbridge Set", "Dusk Howl", "Fanfare (Light)", "Fanfare (Medium)", "Field Shrub", "Flare Dancer Startled",
     'Ganondorf "Teh"', "Gohma Larva Croak", "Gold Skull Token", "Goron Wake", "Guay", "Gunshot", "Hammer Bonk", "Horse Trot", "HP Low", "HP Recover", "Iron Boots", "Iron Knuckle", "Moo", "Mweep!", "Notification", "Phantom Ganon Laugh", "Plant Explode", "Pot Shattering", "Redead Moan", "Ribbit", "Rupee", "Rupee (Silver)", "Ruto Crash",
     "Ruto Lift", "Ruto Thrown", "Scrub Emerge", "Shabom Bounce", "Shabom Pop", "Shellblade", "Skulltula", "Spit Nut", "Switch", "Sword Bonk", 'Talon "Hmm"', "Talon Snore", "Talon WTF", "Tambourine", "Target Enemy", "Target Neutral", "Thunder", "Timer", "Zelda Gasp (Adult)")
-    CreateReduxComboBox -Name "FileMenuCursor"  -Column 1 -Row 3 -Text "File Cursor:" -Items $SFX -Info "Replace the sound used when moving the cursor in the File Select menu"
-    CreateReduxComboBox -Name "FileMenuSelect"  -Column 3 -Row 3 -Text "File Select:" -Items $SFX -Info "Replace the sound used when selecting something in the File Select menu"
+    CreateReduxComboBox -Name "FileMenuCursor"   -Column 1 -Row 3 -Text "File Cursor:" -Items $SFX -Info "Replace the sound used when moving the cursor in the File Select menu"
+    CreateReduxComboBox -Name "FileMenuSelect"   -Column 3 -Row 3 -Text "File Select:" -Items $SFX -Info "Replace the sound used when selecting something in the File Select menu"
 
 }
 
@@ -1069,7 +1076,7 @@ function CreateTabColorsOcarinaOfTime() {
 
     # NAVI COLORS #
     CreateReduxGroup    -Tag  "Colors" -Text "Navi Colors" -Height 4
-    $Items = @("White", "Gold", "Green", "Light Blue", "Yellow", "Red", "Magenta", "Black", "Tatl", "Tael", "Fi", "Ciela", "Epona", "Ezlo", "King of Red Lions", "Linebeck", "Loftwing", "Midna", "Phantom Zelda", "Randomized", "Custom")
+    $Items = @("White", "Tatl", "Tael", "Gold", "Green", "Light Blue", "Yellow", "Red", "Magenta", "Black", "Fi", "Ciela", "Epona", "Ezlo", "King of Red Lions", "Linebeck", "Loftwing", "Midna", "Phantom Zelda", "Randomized", "Custom")
     CreateReduxComboBox -Name "Navi" -Length 230 -Shift 70 -Items $Items -Text "Navi Colors:" -Info ("Select a color scheme for Navi`nSelecting the presets " + '"Tatl" or "Tael"' + " will also change the references for Navi in the dialogue`n" + '"Randomized" fully randomizes the colors each time the patcher is opened')
 
     # Navi Colors - Buttons

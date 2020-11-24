@@ -75,6 +75,12 @@ function ByteOptionsMajorasMask() {
     
 
 
+    # INTERFACE #
+
+    if (IsChecked -Elem $Redux.UI.HudTextures)            { PatchBytes  -Offset "1EBDF60" -Texture -Patch "HUD\OoT Button.bin" }
+    if (IsChecked -Elem $Redux.UI.Comma)                  { ChangeBytes -Offset "ACC660"  -Values @("00", "F3", "00", "00", "00", "00", "00", "00", "4F", "60", "00", "00", "00", "00", "00", "00", "24") }
+
+
 
     # SOUNDS #
 
@@ -112,7 +118,7 @@ function ByteOptionsMajorasMask() {
 
 
 
-    # GAMEPLAY
+    # GAMEPLAY #
     
     if (IsChecked -Elem $Redux.Gameplay.PalaceRoute) {
         CreateSubPath -Path ($GameFiles.extracted + "\Deku Palace")
@@ -127,10 +133,9 @@ function ByteOptionsMajorasMask() {
 
 
 
-    # RESTORE
+    # RESTORE #
 
     if (IsChecked -Elem $Redux.Restore.RomaniSign)   { PatchBytes  -Offset "26A58C0" -Texture -Patch "Romani Sign.bin" }
-    if (IsChecked -Elem $Redux.Restore.Comma)        { ChangeBytes -Offset "ACC660"  -Values @("00", "F3", "00", "00", "00", "00", "00", "00", "4F", "60", "00", "00", "00", "00", "00", "00", "24") }
     if (IsChecked -Elem $Redux.Restore.Title)        { ChangeBytes -Offset "DE0C2E"  -Values @("FF", "C8", "36", "10", "98", "00") }
 
     if (IsChecked -Elem $Redux.Restore.RupeeColors) {
@@ -206,7 +211,7 @@ function ByteOptionsMajorasMask() {
 #==============================================================================================================================================================================================
 function ByteReduxMajorasMask() {
     
-    # GAMEPLAY
+    # GAMEPLAY #
 
     if     ( (IsChecked -Elem $Redux.Gameplay.EasierMinigames -Not) -and (IsChecked -Elem $Redux.Gameplay.FasterBlockPushing) )   { ChangeBytes -Offset "3806530" -Values @("9E", "45", "06", "2D", "57", "4B", "28", "62", "49", "87", "69", "FB", "0F", "79", "1B", "9F", "18", "30") }
     elseif ( (IsChecked -Elem $Redux.Gameplay.EasierMinigames) -and (IsChecked -Elem $Redux.Gameplay.FasterBlockPushing -Not) )   { ChangeBytes -Offset "3806530" -Values @("D2", "AD", "24", "8F", "0C", "58", "D0", "A8", "96", "55", "0E", "EE", "D2", "2B", "25", "EB", "08", "30") }
@@ -231,7 +236,7 @@ function ByteReduxMajorasMask() {
 
 
 
-    # COLORS
+    # COLORS #
 
      if (IsIndex -Elem $Redux.Colors.Buttons -Index 2 -Not) {
         # A Button
@@ -411,12 +416,11 @@ function CreateTabMainMajorasMask() {
     CreateReduxCheckBox -Name "RupeeColors"       -Column 1 -Row 1 -Text "Correct Rupee Colors"     -Info "Corrects the colors for the Purple (50) and Golden (200) Rupees"
     CreateReduxCheckBox -Name "CowNoseRing"       -Column 2 -Row 1 -Text "Restore Cow Nose Ring"    -Info "Restore the rings in the noses for Cows as seen in the Japanese release"
     CreateReduxCheckBox -Name "RomaniSign"        -Column 3 -Row 1 -Text "Correct Romani Sign"      -Info "Replace the Romani Sign texture to display Romani's Ranch instead of Kakariko Village"
-    CreateReduxCheckBox -Name "CorrectComma"      -Column 4 -Row 1 -Text "Correct Comma"            -Info "Make the comma not look as awful"
-    CreateReduxCheckBox -Name "Title"             -Column 5 -Row 1 -Text "Restore Title"            -Info "Restore the title logo colors as seen in the Japanese release"
-    CreateReduxCheckBox -Name "SkullKid"          -Column 1 -Row 2 -Text "Restore Skull Kid"        -Info "Restore Skull Kid's face as seen in the Japanese release"
-    CreateReduxCheckBox -Name "ShopMusic"         -Column 2 -Row 2 -Text "Restore Shop Music"       -Info "Restores the Shop music intro theme as heard in the Japanese release"
-    CreateReduxCheckBox -Name "PieceOfHeartSound" -Column 3 -Row 2 -Text "4th Piece of Heart Sound" -Info "Restore the sound effect when collecting the fourth Piece of Heart that grants Link a new Heart Container"
-    CreateReduxCheckBox -Name "MoveBomberKid"     -Column 4 -Row 2 -Text "Move Bomber Kid"          -Info "Moves the Bomber at the top of the Stock Pot Inn to be behind the bell like in the original Japanese ROM"
+    CreateReduxCheckBox -Name "Title"             -Column 4 -Row 1 -Text "Restore Title"            -Info "Restore the title logo colors as seen in the Japanese release"
+    CreateReduxCheckBox -Name "SkullKid"          -Column 5 -Row 1 -Text "Restore Skull Kid"        -Info "Restore Skull Kid's face as seen in the Japanese release"
+    CreateReduxCheckBox -Name "ShopMusic"         -Column 6 -Row 1 -Text "Restore Shop Music"       -Info "Restores the Shop music intro theme as heard in the Japanese release"
+    CreateReduxCheckBox -Name "PieceOfHeartSound" -Column 1 -Row 2 -Text "4th Piece of Heart Sound" -Info "Restore the sound effect when collecting the fourth Piece of Heart that grants Link a new Heart Container"
+    CreateReduxCheckBox -Name "MoveBomberKid"     -Column 2 -Row 2 -Text "Move Bomber Kid"          -Info "Moves the Bomber at the top of the Stock Pot Inn to be behind the bell like in the original Japanese ROM"
 
     # EVERYTHING ELSE #
     CreateReduxGroup    -Tag  "Other" -Text "Other"
@@ -447,15 +451,15 @@ function CreateTabReduxMajorasMask() {
     CreateReduxRadioButton -Name "Hide"                -Column 1 -Row 2          -Text "Hidden"               -Info "Hide the D-Pad icons, while they are still active"
     CreateReduxRadioButton -Name "LayoutLeft"          -Column 1 -Row 3          -Text "Left Side"            -Info "Show the D-Pad icons on the left side of the HUD"
     CreateReduxRadioButton -Name "LayoutRight"         -Column 1 -Row 4 -Checked -Text "Right Side"           -Info "Show the D-Pad icons on the right side of the HUD"
-    CreateReduxComboBox     -Name "Up"                 -Column 4 -Row 1 -Length 175 -Items @("Disabled", "Ocarina of Time", "Deku Mask", "Goron Mask", "Zora Mask", "Fierce Deity's Mask") -Default 3 -Info "Set the quick slot item for the D-Pad Up button"
-    CreateReduxComboBox     -Name "Left"               -Column 3 -Row 4 -Length 175 -Items @("Disabled", "Ocarina of Time", "Deku Mask", "Goron Mask", "Zora Mask", "Fierce Deity's Mask") -Default 4 -Info "Set the quick slot item for the D-Pad Left button"
-    CreateReduxComboBox     -Name "Right"              -Column 5 -Row 4 -Length 175 -Items @("Disabled", "Ocarina of Time", "Deku Mask", "Goron Mask", "Zora Mask", "Fierce Deity's Mask") -Default 5 -Info "Set the quick slot item for the D-Pad Right button"
-    CreateReduxComboBox     -Name "Down"               -Column 4 -Row 7 -Length 175 -Items @("Disabled", "Ocarina of Time", "Deku Mask", "Goron Mask", "Zora Mask", "Fierce Deity's Mask") -Default 2 -Info "Set the quick slot item for the D-Pad Down button"
+    CreateReduxComboBox     -Name "Up"                 -Column 5 -Row 1 -Length 150 -Items @("Disabled", "Ocarina of Time", "Deku Mask", "Goron Mask", "Zora Mask", "Fierce Deity's Mask") -Default 3 -Info "Set the quick slot item for the D-Pad Up button"
+    CreateReduxComboBox     -Name "Left"               -Column 4 -Row 4 -Length 150 -Items @("Disabled", "Ocarina of Time", "Deku Mask", "Goron Mask", "Zora Mask", "Fierce Deity's Mask") -Default 4 -Info "Set the quick slot item for the D-Pad Left button"
+    CreateReduxComboBox     -Name "Right"              -Column 6 -Row 4 -Length 150 -Items @("Disabled", "Ocarina of Time", "Deku Mask", "Goron Mask", "Zora Mask", "Fierce Deity's Mask") -Default 5 -Info "Set the quick slot item for the D-Pad Right button"
+    CreateReduxComboBox     -Name "Down"               -Column 5 -Row 7 -Length 150 -Items @("Disabled", "Ocarina of Time", "Deku Mask", "Goron Mask", "Zora Mask", "Fierce Deity's Mask") -Default 2 -Info "Set the quick slot item for the D-Pad Down button"
     $Redux.DPad.Reset = CreateReduxButton -Column 1 -Row 5 -Height 30 -Text "Reset Layout" -Info "Reset the layout for the D-Pad"
     
     # D-Pad Buttons Customization - Image #
     $PictureBox = New-Object Windows.Forms.PictureBox
-    $PictureBox.Location = New-object System.Drawing.Size( ($Redux.DPad.Right.Left - ($Redux.DPad.Left.Left)/2 + 30), ($Redux.DPad.Down.Bottom / 4) )
+    $PictureBox.Location = New-object System.Drawing.Size( ($Redux.DPad.Left.Right + 25), ($Redux.DPad.Down.Bottom / 4) )
     $PictureBox.Image  = [System.Drawing.Image]::Fromfile( ( Get-Item ($Paths.Main + "\D-Pad.png") ) )
     $PictureBox.Width  = $PictureBox.Image.Size.Width
     $PictureBox.Height = $PictureBox.Image.Size.Height
@@ -516,6 +520,11 @@ function CreateTabAudiovisualMajorasMask() {
     CreateReduxCheckBox -Name "PixelatedStars"    -Column 4 -Row 1 -Text "Disable Pixelated Stars" -Info "Completely disable the stars at night-time, which are pixelated dots and do not have any textures for HD replacement"
     CreateReduxCheckBox -Name "ImprovedLinkModel" -Column 5 -Row 1 -Text "Improved Link Model"     -Info "Improves the model used for Hylian Link`nCustom tunic colors are not supported with this option"
 
+    # INTERFACE #
+    CreateReduxGroup    -Tag  "UI" -Text "Interface"
+    CreateReduxCheckBox -Name "HudTextures"       -Column 1 -Row 1 -Text "OoT HUD Textures"        -Info "Replaces the HUD textures with those from Ocarina of Time"
+    CreateReduxCheckBox -Name "Comma"             -Column 2 -Row 1 -Text "Better Comma"            -Info "Make the comma not look as awful"
+
     # SOUNDS / SFX SOUND EFFECTS
     CreateReduxGroup    -Tag  "Sounds" -Text "Sounds / SFX Sound Effects" -Height 2
     CreateReduxComboBox -Name "LowHP"             -Column 5 -Row 1 -Text "Low HP SFX:"                 -Items @("Default", "Disabled", "Soft Beep")  -Info "Set the sound effect for the low HP beeping"
@@ -556,7 +565,7 @@ function CreateTabColorsMajorasMask() {
     CreateReduxCheckBox  -Name "EnableTunic" -Column 1 -Text "Change Tunic Color"       -Info ("Enable changing the color for the Hylian form Kokiri tunics`nRequires the " + '"Improved Link Model"' + " option to be disabled")
     $Redux.Colors.KokiriTunic = CreateReduxButton -Column 2 -Text "Kokiri Tunic" -Width 100  -Info "Select the color you want for the Kokiri Tunic"
     $Redux.Colors.ResetAll    = CreateReduxButton -Column 3 -Text "Reset Kokiri Tunic Color" -Info "Reset the  color for the Kokiri Tunic to it's default value"
-    CreateReduxCheckBox  -Name "MaskForms"   -Column 5 -Text "Recolor Mask Forms"       -Info "Recolor the clothing for Goron Link to appear in Red and Zora Link to appear in Blue"
+    CreateReduxCheckBox  -Name "MaskForms"   -Column 6 -Text "Recolor Mask Forms"       -Info "Recolor the clothing for Goron Link to appear in Red and Zora Link to appear in Blue"
 
     $Redux.Colors.SetKokiriTunic   = CreateColorDialog -Name "SetKokiriTunic" -Color "1E691B" -IsGame
     $Redux.Colors.KokiriTunicLabel = CreateReduxColoredLabel -Link $Redux.Colors.KokiriTunic -Color $Redux.Colors.SetKokiriTunic.Color
