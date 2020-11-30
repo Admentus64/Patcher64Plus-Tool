@@ -2,8 +2,9 @@ Patcher64+ Tool
 Join our Discord and feel free to contact us there.
 List of credits are accessible within the Patcher64+ Tool.
 Documentation and sources for Zelda 64 options can be found at:
-- https://github.com/ShadowOne333/Zelda64-Redux-Documentation
-- www.youtube.com/user/skilarbabcock
+- https://github.com/ShadowOne333/Zelda64-Redux-Documentation (General)
+- https://docs.google.com/document/d/1_1f2GzzGdtVqykNaKJrupoz5nBW386EwNQIPbMo042I (Feminine Pronouns Script)
+- www.youtube.com/user/skilarbabcock (Model Replacements)
 
 --- Support or visit me ---
 Discord:	https://discord.gg/P22GGzz
