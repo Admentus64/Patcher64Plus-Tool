@@ -12,6 +12,9 @@ GitHub:		https://github.com/Admentus64
 Patreon:	https://www.patreon.com/Admentus
 PayPal:		https://www.paypal.com/paypalme/Admentus/
 
+--- WARNING ---
+If you're upgrading from a previous version and are using the settings.txt file from the previous version, you may encounter some issues. Removing or deleting the file from the folder and restarting fixes the issue.
+
 
 
 ===============
