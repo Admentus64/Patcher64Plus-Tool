@@ -1,0 +1,453 @@
+=======================
+=== PATCHER64+ TOOL ===
+=======================
+
+--- Thanks to my Patreons --
+- Leigh Pierce
+
+--- Thanks to my past Patreons --
+- Raim, Gicrax, Crypto Logiq, Moons (Luke), Ronald, Richard Moser
+
+--- Patcher64+ Tool ---
+- Admentus (Testing and Coding of Patcher64+ Tool)
+- Bighead (Initial PowerShell patcher)
+- GhostlyDark (Testing and Assistance)
+- ShadowOne333 (Testing and Assistance)
+
+
+
+=======================
+=== OCARINA OF TIME ===
+=======================
+
+--- REDUX ---
+- Hacking:				Maroc
+- Editing / Revision:			ShadowOne333, MattKimura
+- Original Hacking:			Roman971, TestRunnerSRL, AmazingAmpharos, fig02, krimtonz, rlbond86, KevinPal, junglechief87
+
+--- Additional Options ---
+- Master Quest:				ShadowOne333
+- Force Hires Link Model:		GhostlyDark
+- 16:9 Backgrounds & Textures:		GhostlyDark, ShadowOne333 & CYB3RTR0N
+- MM Young Link Model:			The3Dude
+- MM Adult Link Model:			Skilarbabcock (www.youtube.com/user/skilarbabcock)
+- ALTTP Link Models:			ONI 3D-Arts
+- ALTTP Zelda Child Model:		Unesag
+- ALTTP Zelda Adult Model:		Lopieloo
+- Hatsune Miku Link Models:		JanexLane
+- Saria Models:				Malon's Rose
+- Malon 3D/Thicc Models:		Kimi-Stardust
+- Aria the Demon Models:		AriaHiro64
+- MM Link Voice:			Korey Cryderman & GhostlyDark
+- Feminine Link Voice:			theluigidude2007
+- MM HUD Textures:			GhostlyDark
+- MM Button Positions:			GhostlyDark
+- MM Pause Screen:			Garo-Mastah & CM
+- Easier Minigames:			ShadowOne333
+- Faster Block Pushing:			ShadowOne333
+- Correct Rupee Colors:			GhostlyDark
+- Restore Cow Nose Ring:		ShadowOne333
+- Restore Fire Temple:			ShadowOne333
+- Censor Blood				ShadowOne333
+- Restore Gerudo Textures:		GhostlyDark & ShadowOne333
+- Pause Screen Delay Fix		zel
+- Debug Map Select			Jared Johnson
+- Set Capacity:				GhostlyDark
+- Show File Select Icons:		ShadowOne333
+- Colors:				GhostlyDark
+- Restore Text:				ShadowOne333
+- Female Pronouns:			Admentus, Mil
+- Various offsets:			Chez Cousteau
+- Admentus (Scripting and Maintaince of all Options)
+
+--- Quality Insurance ---
+- Translations				GhostlyDark
+
+--- Translations ---
+- Spanish:				eduardo_a2j (v2.2)
+- Polish:				RPG (v1.3)
+- Russian:				Zelda64rus (v2.32)
+- Chinese Simplified:			madcell (2009)
+
+--- Dawn and Dusk ---
+- Lead Development and Music:		Captain Seedy-Eye
+- 64DD Porting:				LuigiBlood
+- Special Thanks:			PK-LOVE, BWIX, Hylian Modding
+- Testers:				Captain Seedy, LuigiBlood, Hard4Games, ZFG, Dry4Haz, fig02
+
+--- The Fate of the Bombiwa ---
+- DezZiBao
+
+--- Nimpize Adventure ---
+- Marco8641
+- Sauraen
+- DeathBasket
+- Sairugoth
+- Ideka
+- Mzxrules
+- Nokaubure
+- CDi-Fails
+- Psi-Hate
+- MelonSpeedruns
+- Ozidual
+- Jimmie1717
+- E-gor
+- Apasher
+- Menou
+
+--- Ocarina of Time Puzzling ---
+- DezZiBao
+
+--- The Missing Link ---
+Director:				Kaze Emanuar
+3D Modelers:				CDi-Fails, /Zel/
+Composers:				Zerovolt0v, A6stringthing, Sauraen, Badub, DezZival
+Concept Artists:			Ty Anderson, Aurora-Xatu
+Testers:				Zerovolt0v, Sauraen, E-Gor, GTM, Collins, Ricar, Fig
+Level Designer:				Kaze Emanuar
+Programmers:				Kaze Emanuar, /Zel/
+Enemy Animator:				rankaisija
+Cinematographers:			Ostrealava02, CDi-Fails, /Zel/
+Writers:				CDi-Fails, /Zel/
+Special Thanks:				Nokaubure, z64me, Ultra553, OoT Decomp
+
+--- Master of Time ---
+- doncamilo
+- Zel
+- Nokaubure
+- Mikus64
+- Rogue_Millipede
+- Marco
+- dstin
+- LinkMaster
+- BETA_Unknow
+- StoneeBadLuck
+- XenoWars
+- Bas
+- hylianmonkeys
+- Nighttime71
+- Rogue_Millipede
+- DezZival
+
+--- Randomizer ---
+- Roman971
+- AmazingAmpharos
+- Zannick
+- Cuphat
+- r0bd0g
+- rattus128
+- dragonbane0
+- LumenTheFairy
+- flagrama
+- nlangille
+- krimtonz
+- mzxrules
+- dotzo
+- phixtyseven
+- junglechief87
+- fig02
+- KevinPal
+- TeknoAnonymous
+- rlbond86
+- Hamsda
+- scatter-dev
+- TestRunnerSRL
+- ETR-BTF
+- CMuncey
+- Tyrusss
+- dombarrieau
+- Exter-N
+- Darkunov
+- ChrisMuncey
+- Dwood15
+- BladefangFT
+- itsmedoggo
+- BeeLuigi
+- aofengen
+- LostThePirate
+- TreZc0
+- Raizuto
+- ThomasJRyan
+- Raikaru13
+- Mast3rGenius
+- thills03
+- pksage
+- aplumafreak500
+- Triaphlax
+- Jademalo
+- IcySlurpee
+- DatXFire
+- mwiens91
+- darkangel93x
+- danxensen
+- Zamiell
+- Sicilica
+- Mego
+- Martakia
+- Ketris
+- GoldenSierpinski
+- GhostlyDark
+- BananaSplit2
+- Apasher
+
+
+
+=====================
+=== MAJORA'S MASK ===
+=====================
+
+--- REDUX ---
+- Hacking:				Maroc
+- Original Hacking:			Saneki
+
+--- Additional Options ---
+- 16:9 Backgrounds & Textures:		GhostlyDark & ShadowOne333
+- Improved Link Model:			Skilarbabcock (www.youtube.com/user/skilarbabcock) & Nerrel
+- Kokiri Tunic Color:			GhostlyDark
+- Recolor Mask Forms:			ShadowOne333 & Garo-Mastah
+- Zora Physics:				ShadowOne333
+- Restore Palace Route:			ShadowOne333
+- Correct Rupee Colors:			GhostlyDark
+- Restore Cow Nose Ring:		ShadowOne333
+- Correct Romani Sign:			ShadowOne333
+- Correct Comma:			ShadowOne333
+- Restore Title:			ShadowOne333 & Garo-Mastah
+- Restore Skull Kid:			ShadowOne333
+- Restore Shop Music:			ShadowOne333
+- 4th Piece of Heart Sound:		fkualol
+- Move Bomber Kid:			ShadowOne333
+- Permanent Razor Sword:		darklord92
+- Set Capacity:				GhostlyDark
+- Fix Goht Cutscene:			ShadowOne333
+- Fix Mushroom Bottle:			ozidual
+- Fix Southern Swamp:			ShadowOne333
+- Fix Fairy Fountain:			Dybbles (fix) & ShadowOne333 (ROM / patch)
+- Restore Text:				ShadowOne333
+- Correct Circus Mask:			ShadowOne333
+- Fairy Colors:				Dzeko
+- Spin Attack Colors:			Dzeko
+- Various offsets:			Chez Cousteau
+- Admentus (Scripting and Assistance of all Options)
+
+--- Quality Insurance ---
+- Translations				GhostlyDark
+
+--- Translations ---
+- Polish:				RPG (v1.1)
+- Russian:				Zelda64rus (v2.0 Beta)
+
+--- Masked Quest ---
+- Garo-Mastah
+- Aroenai
+- CloudMax
+- fkualol
+- VictorHale
+- Ideka
+- Saneki
+
+--- Master Quest ---
+- DeathBasket
+
+--- Randomizer ---
+- ZoeyZolotova
+- Saneki
+- zmarotrix
+- mzxrules
+- 5isghj5
+- az64
+- nlangille
+- junglechief87
+- aroenai
+- phixtyseven
+- krimtonz
+- flagrama
+- Kjelli
+- AmazingAmpharos
+- Zannick
+- TeknoAnonymous
+
+
+
+======================
+=== SUPER MARIO 64 ===
+======================
+
+--- Additional Options ---
+- 60 FPS (v2):				Kaze Emanuar
+- Free Cam:				Kaze Emanuar
+- Model:				Fnzmeatpopsicle, ElectroMew/P0PPY, Yoshi Milkman, Marshivolt
+- GhostlyDark (documenting several offsets)
+- Admentus (Scripting and Assistance of all Options)
+
+--- Multiplayer (v1.4.2) ---
+- Skelux
+
+--- Split-screen Multiplayer ---
+- Kaze Emanuar
+
+--- Star Road ---
+- Skelux (original ROM Hack)
+- Kaze Emanuar (revised ROM Hack)
+- aglab2 (Wii VC crashfixes)
+
+--- Star Road Multiplayer (v1.2.1) ---
+- Skelux
+
+--- Arguably Better Edition (R3) ---
+- Mors
+- GTM
+- Benial
+- Kaze Emanuar
+- SM64 Decompilation Project
+
+--- Last Impact (v1.2)
+- Kaze Emanuar
+
+--- SM64: Ocarina of Time
+- Kaze Emanuar
+
+--- Super Mario 64 Land (v1.1)
+- Kaze Emanuar
+
+--- Super Mario Odyssey 64
+- Kaze Emanuar
+
+
+
+===================
+=== PAPER MARIO ===
+===================
+
+--- Hard Mode ---
+- Skelux (Extra Damage)
+
+--- Hard Mode+ ---
+- Skelux (Extra Damage)
+- Knux5577 (Enemy HP)
+
+--- Insane Mode ---
+- Skelux (Extra Damage)
+
+
+
+============================
+=== SUPER SMASH BROTHERS ===
+============================
+
+--- Remix ---
+- The_Smashfather
+- JSsixtyfour
+- jtl3d
+- FraySSB
+- jordanbarkley
+
+--- Super Smash Bros: More Stages Edition ---
+- ComJay
+- cyjorg
+- Carnivorous
+- SubDrag
+
+--- Widescreen ---
+- gamemasterplc
+
+
+
+=====================
+=== MARIO KART 64 ===
+=====================
+
+--- CPUs use human items including shells ---
+- triclon
+
+
+
+==========================
+=== A LINK TO THE PAST ===
+==========================
+
+--- Parallel Worlds ---
+- Directors:				Euclid, SePH, qwertymodo
+- Music:				Richyawyingtmv 
+- Graphics:				Daisuke, .TakaM, GanonSpriteR, aab, NoeL, Calvein, Geckkko,
+					Bearer, Revan, Hero Of Fire, Dark Link, Retro
+- Coding:				Reshaper256, JaSp, d4s
+- Dialog:				The5thHerring, Dr Floppy
+- Documentation:			NEONswift, Omega45889, MathOnNapkins, Chickenlump, Danaelo,
+					AstroBlue
+- Tools:				Sephiroth3, FuSoYa, Yy, Ryusui
+- Testing:				KTurbo
+- Ideas:				NEONswift, KTurbo, GameMakr24 , Ghillie, Duke Serkol
+
+--- Parallel Remodel ---
+- Remodel Hacking:			PuzzleDude
+- Original Hacking:			Euclid, SePH and all Parallel World contributors
+
+
+
+=========================
+=== SUPER MARIO WORLD ===
+=========================
+
+--- Kaizo Mario World 1/2/3 ---
+- T. Takemoto
+
+--- Invictus ---
+- Director:				juzcook
+- Final Boss:				Kaizoman, Thomas
+- Special Thanks:			Nexus15, Freakin_HA, HmWhyNot, ChrisG___, White_Moth,
+					Hiro_sofT, DanTheVP, LadiesMan217, Kaizoman
+- Music:				tcdw, Sinc-X, Wakana, RednGreen, Izuna, Dr. Tapeworm, Wavee,
+					WorldPeace, Lui37, Masterlink, Crew, S.N.N., Sinister Pixel, Pinci,
+					DanTheVP, aCrowned, MaxodeX, Crispy, LadiesMan217, Amphobius
+
+
+
+=====================
+=== SUPER METROID ===
+=====================
+
+--- REDUX ---
+- Main Hacking:				ShadowOne333
+- Hacking:				Adamf, Bregrimed, Kejardon, PHOSPHOTiDYL, Scyzer, Sylandro,
+					DC, Sadiztyk, Dmit Ryaz, Matt Kimura, samsamcmoi
+- Disassembly:				Patrick Johnston, PJBoy
+- Support:				Smiley, PJBoy, Nodever, Metroid Construction Discord Server
+
+--- Additional Options ---
+- Widescreen:				ocesse
+- Save Stations Refill:			Adamf
+- ShadowOne333
+
+
+
+===========================
+=== THE LEGEND OF ZELDA ===
+===========================
+
+--- REDUX ---
+- Main Hacking:				ShadowOne333
+- Hacking:				BogaaBogaa, DarkSamus993, Stratoform, snarfblam, gzip, abw
+- Disassembly:				Trax
+
+--- Additional Options ---
+- New GFX:				darthvaderx
+- New Exp:				IcePenguin
+- Rearranged Bosses:			lexluthermeister
+- ShadowOne333
+
+
+
+=============================
+=== THE ADVENTURE OF LINK ===
+=============================
+
+--- REDUX ---
+- Main Hacking:				ShadowOne333
+- Hacking:				the_icepenguin, DarkSamus993, njosro
+- Disassembly:				Trax
+- Overworld Animation:			JaSp, Trax
+
+--- Additional Options ---
+- Restart at Palace:			njosro
+- New GFX:				darthvaderx
+- the_icepenguin
