@@ -14,11 +14,11 @@ function CreateMainDialog() {
     $MainDialog.Icon = $Files.icon.main
 
     # Create a label to show current mode.
-    $global:CurrentModeLabel = CreateLabel -Font $CurrentModeFont -AddTo $MainDialog
+    $global:CurrentModeLabel = CreateLabel -Font $Fonts.Medium -AddTo $MainDialog
     $CurrentModeLabel.AutoSize = $True
 
     # Create a label to show current version.
-    $VersionLabel = CreateLabel -X 15 -Y 10 -Width 120 -Height 30 -Text ($Version + "`n(" + $VersionDate + ")") -Font $VCPatchFont -AddTo $MainDialog
+    $VersionLabel = CreateLabel -X 15 -Y 10 -Width 120 -Height 30 -Text ($Version + "`n(" + $VersionDate + ")") -Font $Fonts.SmallBold -AddTo $MainDialog
 
     # Create Arrays for groups
     $global:InputPaths = @{}; $global:Patches = @{}; $global:VC = @{}
@@ -152,8 +152,8 @@ function CreateMainDialog() {
         $Settings["Core"][$this.Name] = $this.SelectedIndex
         if ($this.Text -ne $GameType.title) {
             ChangeGameMode
-            SetMainScreenSize
             SetVCPanel
+            SetMainScreenSize
         }
     })
 
@@ -206,6 +206,7 @@ function CreateMainDialog() {
     # Custom Header Checkbox
     $CustomHeaderLabel = CreateLabel -X 510 -Y 22 -Width 50 -Height 15 -Text "Enable:" -Info "Enable in order to change the Game ID and title of the ROM or WAD file"
     $global:CustomHeaderCheckbox = CreateCheckBox -X 560 -Y 20 -Width 20 -Height 20 -Name "CustomHeader" -Info "Enable in order to change the Game ID and title of the ROM or WAD file"
+    $CustomHeaderLabel.Add_Click({ $CustomHeaderCheckbox.Checked = !$CustomHeaderCheckbox.Checked })
 
     # Create a button to patch the header only
     $global:CustomHeaderPatchButton = CreateButton -X $InputPaths.ClearGameButton.Left -Y ($CustomTitleTextBoxLabel.Bottom + 12) -Width $InputPaths.ClearGameButton.Width -Height 22 -Text "Patch Header" -Info "Patch the header of the selected game only"
@@ -240,7 +241,6 @@ function CreateMainDialog() {
             if ($Item.title -eq $Patches.ComboBox.Text) {
                 if ( ($IsWiiVC -and $Item.console -eq "Wii VC") -or (!$IsWiiVC -and $Item.console -eq "Native") -or ($Item.console -eq "Both") ) {
                     $global:GamePatch = $Item
-                    #SetMainScreenSize
                     $PatchToolTip.SetToolTip($Patches.Button, ([String]::Format($Item.tooltip, [Environment]::NewLine)))
                     
                     # Create options content based on current game
@@ -248,11 +248,12 @@ function CreateMainDialog() {
                         $FunctionTitle = SetFunctionTitle -Function $GameType.mode
                         if (Get-Command ("CreateOptions" + $FunctionTitle) -errorAction SilentlyContinue)   { &("CreateOptions" + $FunctionTitle) }
                     }
+                    DisablePatches
+                    GetHeader
+                    [System.GC]::Collect() | Out-Null
                 }
             }
         }
-        DisablePatches
-        GetHeader
     } )
 
     # Additional Options Checkbox
@@ -260,23 +261,28 @@ function CreateMainDialog() {
     $Patches.Options = CreateCheckBox -X $Patches.OptionsLabel.Right -Y ($Patches.OptionsLabel.Top - 2) -Width 20 -Height 20 -Info "Enable options in order to apply a customizable set of features and changes" -Name "Patches.Options" -Checked $True
     $Patches.Options.Add_CheckStateChanged({
         $Patches.OptionsButton.Enabled = $this.checked
+        if (!(IsSet -Elem $Redux.Groups)) { return }
         $Redux.Groups.GetEnumerator() | ForEach-Object {
             if ($_.IsRedux) { $_.Enabled = $this.Checked -and $Patches.Redux.Checked }
         }
     })
+    $Patches.OptionsLabel.Add_Click({ $Patches.Options.Checked = !$Patches.Options.Checked })
 
     # Redux Checkbox
     $Patches.ReduxLabel = CreateLabel -X ($Patches.Button.Right + 10) -Y ($Patches.OptionsLabel.Bottom + 15) -Width 85 -Height 15 -Text "Enable Redux:" -Info "Enable the Redux patch which improves game mechanics`nIncludes among other changes the inclusion of the D-Pad for dedicated item buttons"
     $Patches.Redux = CreateCheckBox -X $Patches.ReduxLabel.Right -Y ($Patches.ReduxLabel.Top - 2) -Width 20 -Height 20 -Info "Enable the Redux patch which improves game mechanics`nIncludes among other changes the inclusion of the D-Pad for dedicated item buttons" -Name "Patches.Redux" -Checked $True
     $Patches.Redux.Add_CheckStateChanged({
+        if (!(IsSet -Elem $Redux.Groups)) { return }
         $Redux.Groups.GetEnumerator() | ForEach-Object {
             if ($_.IsRedux) { $_.Enabled = $this.Checked -and $Patches.Options.Checked }
         }
     })
+    $Patches.ReduxLabel.Add_Click({ $Patches.Redux.Checked = !$Patches.Redux.Checked })
 
     # Downgrade Checkbox
     $Patches.DowngradeLabel = CreateLabel -X ($Patches.OptionsLabel.Right + 50) -Y $Patches.ReduxLabel.Top -Width 85 -Height 15 -Text "Downgrade:" -Info "Downgrade the ROM to the first original revision"
     $Patches.Downgrade = CreateCheckBox -X $Patches.DowngradeLabel.Right -Y ($Patches.DowngradeLabel.Top - 2) -Width 20 -Height 20 -Info "Downgrade the ROM to the first original revision" -Name "Patches.Downgrade"
+    $Patches.DowngradeLabel.Add_Click({ $Patches.Downgrade.Checked = !$Patches.Downgrade.Checked })
 
     # Patch Options
     $Patches.OptionsButton = CreateButton -X ($Patches.Group.Right - 15 - 145) -Y ($Patches.Options.Top - 3) -Width 145 -Height 25 -Text "Select Options" -Info 'Open the "Additional Options" panel to change preferences'
@@ -295,7 +301,7 @@ function CreateMainDialog() {
     $VC.Group = CreateGroupBox -Width $VC.Panel.Width -Height $VC.Panel.Height -Text "Virtual Console - Patch Options"
 
     # Create a label for Patch VC Buttons
-    $VC.ActionsLabel = CreateLabel -X 10 -Y 32 -Width 50 -Height 15 -Text "Actions" -Font $VCPatchFont -AddTo $VC.Group
+    $VC.ActionsLabel = CreateLabel -X 10 -Y 32 -Width 50 -Height 15 -Text "Actions" -Font $Fonts.SmallBold -AddTo $VC.Group
 
     # Create a button to patch the VC
     $VC.PatchVCButton = CreateButton -X ($VC.ActionsLabel.Right + 20) -Y ($VC.ActionsLabel.Top - 7) -Width 150 -Height 30 -Text "Patch VC Emulator Only" -Info "Ignore any patches and only patches the Virtual Console emulator`nDowngrading and channing the Channel Title or GameID is still accepted"
@@ -306,50 +312,58 @@ function CreateMainDialog() {
     $VC.ExtractROMButton.Add_Click({ MainFunction -Command "Extract" -PatchedFileName "_extracted" })
 
     # Create a label for Core patches
-    $VC.CoreLabel = CreateLabel -X 10 -Y 62 -Width 50 -Height 15 -Text "Core" -Font $VCPatchFont
+    $VC.CoreLabel = CreateLabel -X 10 -Y 62 -Width 50 -Height 15 -Text "Core" -Font $Fonts.SmallBold
 
     # Remove T64 description
     $VC.RemoveT64Label = CreateLabel -X ($VC.CoreLabel.Right + 20) -Y $VC.CoreLabel.Top -Width 95 -Height 15 -Text "Remove All T64:" -Info "Remove all textures that the Virtual Console replaced in the ROM`nThese replaced textures are known as T64`nThese replaced textures maybe be censored or to make the game look darker more fitting for the Wii"
     $VC.RemoveT64 = CreateCheckBox -X $VC.RemoveT64Label.Right -Y ($VC.CoreLabel.Top - 2) -Width 20 -Height 20 -Checked $True -Info "Remove all textures that the Virtual Console replaced in the ROM`nThese replaced textures are known as T64`nThese replaced textures maybe be censored or to make the game look darker more fitting for the Wii" -Name "VC.RemoveT64"
     $VC.RemoveT64.Add_CheckStateChanged({ CheckVCOptions })
-    
+    $VC.RemoveT64Label.Add_Click({ $VC.RemoveT64.Checked = !$VC.RemoveT64.Checked })
+
     # Expand Memory
     $VC.ExpandMemoryLabel = CreateLabel -X ($VC.RemoveT64.Right + 10) -Y $VC.CoreLabel.Top -Width 95 -Height 15 -Text "Expand Memory:" -Info "Expand the game's memory by 4MB"
     $VC.ExpandMemory = CreateCheckBox -X $VC.ExpandMemoryLabel.Right -Y ($VC.CoreLabel.Top - 2) -Width 20 -Height 20 -Info "Expand the game's memory by 4MB" -Name "VC.ExpandMemory"
     $VC.ExpandMemory.Add_CheckStateChanged({ CheckVCOptions })
+    $VC.ExpandMemoryLabel.Add_Click({ $VC.ExpandMemory.Checked = !$VC.ExpandMemory.Checked })
 
     # Remove Filter
     $VC.RemoveFilterLabel = CreateLabel -X ($VC.RemoveT64.Right + 10) -Y $VC.CoreLabel.Top -Width 95 -Height 15 -Text "Remove Filter:" -Info "Remove the dark overlay filter"
     $VC.RemoveFilter = CreateCheckBox -X $VC.RemoveFilterLabel.Right -Y ($VC.CoreLabel.Top - 2) -Width 20 -Height 20 -Checked $True -Info "Remove the dark overlay filter" -Name "VC.RemoveFilter"
     $VC.RemoveFilter.Add_CheckStateChanged({ CheckVCOptions })
+    $VC.RemoveFilterLabel.Add_Click({ $VC.RemoveFilter.Checked = !$VC.RemoveFilter.Checked })
 
     # Remap D-Pad
     $VC.RemapDPadLabel = CreateLabel -X ($VC.ExpandMemory.Right + 10) -Y $VC.CoreLabel.Top -Width 95 -Height 15 -Text "Remap D-Pad:" -Info "Remap the D-Pad to the actual four D-Pad directional buttons instead of toggling the minimap"
     $VC.RemapDPad = CreateCheckBox -X $VC.RemapDPadLabel.Right -Y ($VC.CoreLabel.Top - 2) -Width 20 -Height 20 -Info "Remap the D-Pad to the actual four D-Pad directional buttons instead of toggling the minimap" -Name "VC.RemapDPad"
     $VC.RemapDPad.Add_CheckStateChanged({ CheckVCOptions })
+    $VC.RemapDPadLabel.Add_Click({ $VC.RemapDPad.Checked = !$VC.RemapDPad.Checked })
 
     # Remap L
     $VC.RemapLLabel = CreateLabel -X ($VC.ExpandMemory.Right + 10) -Y $VC.CoreLabel.Top -Width 95 -Height 15 -Text "Remap L Button:" -Info "Remap the L button to the actual L button button"
     $VC.RemapL = CreateCheckBox -X $VC.RemapDPadLabel.Right -Y ($VC.CoreLabel.Top - 2) -Width 20 -Height 20 -Info "Remap the L button to the actual L button button" -Name "VC.RemapL"
     $VC.RemapL.Add_CheckStateChanged({ CheckVCOptions })
+    $VC.RemapLLabel.Add_Click({ $VC.RemapL.Checked = !$VC.RemapL.Checked })
 
     # Create a label for Minimap
-    $VC.MinimapLabel = CreateLabel -X 10 -Y ($VC.CoreLabel.Bottom + 5) -Width 50 -Height 15 -Text "Minimap" -Font $VCPatchFont -AddTo $VC.Group
+    $VC.MinimapLabel = CreateLabel -X 10 -Y ($VC.CoreLabel.Bottom + 5) -Width 50 -Height 15 -Text "Minimap" -Font $Fonts.SmallBold -AddTo $VC.Group
 
     # Remap C-Down
     $VC.RemapCDownLabel = CreateLabel -X ($VC.MinimapLabel.Right + 20) -Y $VC.MinimapLabel.Top -Width 95 -Height 15 -Text "Remap C-Down:" -Info "Remap the C-Down button for toggling the minimap instead of using an item"
     $VC.RemapCDown = CreateCheckBox -X $VC.RemapCDownLabel.Right -Y ($VC.MinimapLabel.Top - 2) -Width 20 -Height 20 -Info "Remap the C-Down button for toggling the minimap instead of using an item" -Name "VC.RemapCDown"
     $VC.RemapCDown.Add_CheckStateChanged({ CheckVCOptions })
+    $VC.RemapCDownLabel.Add_Click({ $VC.RemapCDown.Checked = !$VC.RemapCDown.Checked })
 
     # Remap Z
     $VC.RemapZLabel = CreateLabel -X ($VC.RemapCDown.Right + 10) -Y $VC.MinimapLabel.Top -Width 95 -Height 15 -Text "Remap Z Button:" -Info "Remap the Z (GameCube) or ZL and ZR (Classic) buttons for toggling the minimap instead of using an item"
     $VC.RemapZ = CreateCheckBox -X $VC.RemapZLabel.Right -Y ($VC.MinimapLabel.Top - 2) -Width 20 -Height 20 -Info "Remap the Z (GameCube) or ZL and ZR (Classic) buttons for toggling the minimap instead of using an item" -Name "VC.RemapZ"
     $VC.RemapZ.Add_CheckStateChanged({ CheckVCOptions })
+    $VC.RemapZLabel.Add_Click({ $VC.RemapZ.Checked = !$VC.RemapZ.Checked })
 
     # Leave D-Pad Up
     $VC.LeaveDPadUpLabel = CreateLabel -X ($VC.RemapZ.Right + 10) -Y $VC.MinimapLabel.Top -Width 95 -Height 15 -Text "Leave D-Pad Up:" -Info "Leave the D-Pad untouched so it can be used to toggle the minimap"
     $VC.LeaveDPadUp = CreateCheckBox -X $VC.LeaveDPadUpLabel.Right -Y ($VC.MinimapLabel.Top - 2) -Width 20 -Height 20 -Info "Leave the D-Pad untouched so it can be used to toggle the minimap" -Name "VC.LeaveDPadUp"
     $VC.LeaveDPadUp.Add_CheckStateChanged({ CheckVCOptions })
+    $VC.LeaveDPadUpLabel.Add_Click({ $VC.LeaveDPadUp.Checked = !$VC.LeaveDPadUp.Checked })
 
 
 
@@ -384,30 +398,6 @@ function CreateMainDialog() {
     $global:StatusPanel = CreatePanel -Width 625 -Height 30
     $global:StatusGroup = CreateGroupBox -Width 590 -Height 30
     $global:StatusLabel = Createlabel -X 8 -Y 10 -Width 570 -Height 15
-
-}
-
-
-
-#==============================================================================================================================================================================================
-function ResetTool() {
-    
-    $InputPaths.GameTextBox.Text = "Select or drag and drop your ROM or VC WAD file..."
-    $InputPaths.InjectTextBox.Text = "Select or drag and drop your NES, SNES or N64 ROM..."
-    $InputPaths.PatchTextBox.Text = "Select or drag and drop your BPS, IPS, Xdelta or VCDiff Patch File..."
-
-    RemoveFile -LiteralPath ($Paths.Base + "\Settings.ini")
-    GetSettings
-
-    $VC.RemoveT64.Checked = $VC.ExpandMemory.Checked = $VC.RemoveFilter.Checked = $VC.RemapDPad.Checked = $VC.Downgrade.Checked = $VC.RemapCDown.Checked = $VC.RemapZ.Checked = $VC.LeaveDPadUp.Checked = $False
-    $Patches.Redux.Checked = $Patches.Options.Checked = $CustomHeaderCheckbox.Checked = $False
-    $ConsoleComboBox.SelectedIndex = $CurrentGameComboBox.SelectedIndex = $Patches.ComboBox.SelectedIndex =  0
-    $InputPaths.ApplyInjectButton.Enabled = $InputPaths.ApplyPatchButton.Enabled = $False
-    
-    RestoreCustomHeader
-    ChangeGameMode
-    SetWiiVCMode -Enable $False
-    EnablePatchButtons -Enable $False
 
 }
 
@@ -600,4 +590,3 @@ function PatchPath_DragDrop() {
 
 Export-ModuleMember -Function CreateMainDialog
 Export-ModuleMember -Function CheckVCOptions
-Export-ModuleMember -Function ResetTool

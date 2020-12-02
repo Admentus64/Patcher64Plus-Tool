@@ -63,6 +63,8 @@ function MainFunction([String]$Command, [String]$PatchedFileName) {
     
     # Decompress
     $Decompress = $False
+
+    if (!$IsWiiVC -and (Get-FileHash -Algorithm MD5 $GamePath).Hash -eq $GameType.Hash) { $Patches.Downgrade.Checked = $False }
     if ($GameType.decompress -gt 0) {
         if     ($GamePatch.file -like "*\Decompressed\*")   { $Decompress = $True }
         elseif ($LanguagePatch -like "*\Decompressed\*")    { $Decompress = $True }
@@ -110,6 +112,7 @@ function MainFunctionPatch([String]$Command, [String[]]$Header, [String]$Patched
 
     # Step 01: Disable the main dialog, allow patching and delete files if they still exist.
     EnableGUI -Enable $False
+    CreatePath -LiteralPath $Paths.Temp
 
     # Only continue with these steps in VC WAD mode. Otherwise ignore these steps.
     if ($IsWiiVC) {
@@ -129,7 +132,8 @@ function MainFunctionPatch([String]$Command, [String[]]$Header, [String]$Patched
         if (!(PatchVCROM -Command $Command)) { return }
     }
 
-    # Step 07: Compare HashSums for untouched ROM Files
+    # Step 07: Convert and compare the hashsum of the ROM
+    ConvertROM -Command $Command
     if (!(CompareHashSums -Command $Command)) { return }
 
     # Step 08: Downgrade and decompress the ROM if required
@@ -228,28 +232,14 @@ function Cleanup() {
     
     if ($Settings.Debug.Console -eq $True) { Write-Host "Cleaning up files..." }
 
-    RemovePath -LiteralPath ($Paths.Master + '\cygdrive')
-    RemovePath -LiteralPath $WADFile.Folder
-    RemoveFile -LiteralPath $Files.ckey
-    RemoveFile -LiteralPath $Files.flipscfg
-    RemoveFile -LiteralPath $Files.stackdump
-    RemoveFile -LiteralPath $Files.dmaTable
-    RemoveFile -LiteralPath $Files.archive
-
-    foreach ($File in Get-ChildItem -LiteralPath $Paths.WiiVC -Force) {
-        if ($File.PSIsContainer) { RemovePath -LiteralPath ($Paths.WiiVC + "\" + $File) }
-        if ($File.Extension -eq ".app" -or $File.Extension -eq ".cert" -or $File.Extension -eq ".tik" -or $File.Extension -eq ".tmd" -or $File.Extension -eq ".trailer") { RemoveFile -LiteralPath ($Paths.WiiVC + "\" + $File) }
-    }
-
     $global:ByteArrayGame = $ROMFile = $WADFile = $null
     SetGetROM
 
-    $GetROM.GetEnumerator() | ForEach-Object {
-        if ($_.value -ne $GetROM.in -and $_.value -ne $GetROM.patched -and $_.value -ne $GetROM.debug) {
-            RemoveFile -LiteralPath $_.value
-        }
-    }
-    RemoveFile -LiteralPath $GetROM.nes
+    RemovePath -LiteralPath $WADFile.Folder
+    RemovePath -LiteralPath $Paths.cygdrive
+    RemovePath -LiteralPath $Paths.Temp
+    RemoveFile -LiteralPath $Files.flipscfg
+    RemoveFile -LiteralPath $Files.stackdump
 
     [System.GC]::Collect() | Out-Null
 
@@ -262,7 +252,7 @@ function PatchingAdditionalOptions() {
     
     if ( ($GamePatch.options -gt 0) -and (IsChecked -Elem $Patches.Options -Active) )   {
 
-        if ( !$Decompress -and !(Test-Path -LiteralPath $GetROM.decomp) ) { Copy-Item -LiteralPath $GetROM.in -Destination $GetROM.decomp -Force }
+        if ( !$Decompress -and !(Test-Path -LiteralPath $GetROM.decomp) ) { Copy-Item -LiteralPath $GetROM.run -Destination $GetROM.decomp -Force }
         $FunctionTitle = SetFunctionTitle -Function $GameType.mode
         
         # Language patch
@@ -317,9 +307,12 @@ function PatchingAdditionalOptions() {
 function UpdateROMCRC() {
     
     if ($Settings.Debug.NoCRCChange -eq $True -or $GameConsole.mode -ne "N64") { return }
-    if (!(Test-Path -LiteralPath $GetROM.patched -PathType Leaf)) { Copy-Item -LiteralPath $GetROM.in -Destination $GetROM.patched }
+    if (!(Test-Path -LiteralPath $GetROM.patched -PathType Leaf)) { Copy-Item -LiteralPath $GetROM.run -Destination $GetROM.patched }
     & $Files.tool.rn64crc $GetROM.patched -update | Out-Host
-    if ($Settings.Debug.KeepDecompressed -eq $True) { & $Files.tool.rn64crc $GetROM.debug -update | Out-Host }
+
+    if ($Settings.Debug.KeepConverted -eq $True -and (Test-Path -LiteralPath $GetROM.keepConvert -PathType Leaf) )      { & $Files.tool.rn64crc $GetROM.keepConvert -update | Out-Host }
+    if ($Settings.Debug.KeepDowngraded -eq $True -and (Test-Path -LiteralPath $GetROM.keepDowngrade -PathType Leaf) )   { & $Files.tool.rn64crc $GetROM.keepDowngrade -update | Out-Host }
+    if ($Settings.Debug.KeepDecompressed -eq $True -and (Test-Path -LiteralPath $GetROM.keepDecomp -PathType Leaf) )    { & $Files.tool.rn64crc $GetROM.keepDecomp -update | Out-Host }
 
 }
 
@@ -347,7 +340,7 @@ function SetWADParameters([String]$Path, [String]$FolderName, [String]$PatchedFi
     
     # Store some stuff about the WAD to reference
     $WADFile.Name         = $WADItem.BaseName
-    $WADFile.Folder       = $Paths.WiiVC + "\" + $FolderName
+    $WADFile.Folder       = $Paths.Temp + "\" + $FolderName
     $WADFile.FolderName   = $FolderName
 
     $WADFile.AppFile00    = $WADFile.Folder + "\00000000.app"
@@ -365,8 +358,10 @@ function SetWADParameters([String]$Path, [String]$FolderName, [String]$PatchedFi
     $WADFile.Extension = GetROMExtension
 
     $WADFile.Patched      = $WADItem.DirectoryName + "\" + $WADFile.Name + $PatchedFileName + ".wad"
-    $WADFile.Extracted    = $WADItem.DirectoryName + "\" + $WADFile.Name + "_extracted_rom" + $WADFile.Extension
-    $WADFile.Debug        = $WADItem.DirectoryName + "\" + $WADFile.Name + "_decompressed" + $WADFile.Extension
+    $WADFile.Extracted    = $WADItem.DirectoryName + "\" + $WADFile.Name + "_extracted"     + $WADFile.Extension
+    $WADFile.Convert      = $WADItem.DirectoryName + "\" + $WADFile.Name + "_converted"     + $WADFile.Extension
+    $WADFile.Downgrade    = $WADItem.DirectoryName + "\" + $WADFile.Name + "_downgraded"    + $WADFile.Extension
+    $WADFile.Decomp       = $WADItem.DirectoryName + "\" + $WADFile.Name + "_decompressed"  + $WADFile.Extension
 
     $WADFile.Offset = $WadFile.Length = "0"
 
@@ -393,8 +388,11 @@ function SetROMParameters([String]$Path, [String]$PatchedFileName) {
     $ROMFile.Extension = GetROMExtension
 
     $ROMFile.ROM     = $Path
-    $ROMFile.Patched = $ROMFile.Path + "\" + $ROMFile.Name + $PatchedFileName + $ROMFile.Extension
-    $ROMFile.Debug   = $ROMFile.Path + "\" + $ROMFile.Name + "_decompressed" + $ROMFile.Extension
+    $ROMFile.Patched   = $ROMFile.Path + "\" + $ROMFile.Name + $PatchedFileName + $ROMFile.Extension
+    $ROMFile.Convert   = $ROMFile.Path + "\" + $ROMFile.Name + "_converted"     + $ROMFile.Extension
+    $ROMFile.Downgrade = $ROMFile.Path + "\" + $ROMFile.Name + "_downgraded"    + $ROMFile.Extension
+    $ROMFile.Decomp    = $ROMFile.Path + "\" + $ROMFile.Name + "_decompressed"  + $ROMFile.Extension
+    
 
     # Set it to a global value
     return $ROMFile
@@ -421,19 +419,14 @@ function ExtractWADFile([String]$PatchedFileName) {
     UpdateStatusLabel -Text "Extracting WAD file..."
 
     # We need to be in the same path as some files so just jump there
-    Push-Location $Paths.WiiVC
+    Push-Location $Paths.Temp
 
     # Check if an extracted folder existed previously
-    foreach($Folder in Get-ChildItem -LiteralPath $Paths.WiiVC -Force) {
+    foreach($Folder in Get-ChildItem -LiteralPath $Paths.Temp -Force) {
         if ($Folder.PSIsContainer) { RemovePath -LiteralPath $Folder }
     }
     
-    $ByteArray = $null
-    if (!(Test-Path $Files.ckey -PathType Leaf)) {
-        $ByteArray = @(235, 228, 42, 34, 94, 133, 147, 228, 72, 217, 197, 69, 115, 129, 170, 247)
-        [io.file]::WriteAllBytes($Files.ckey, $ByteArray) | Out-Null
-    }
-    $ByteArray = $null
+    [io.file]::WriteAllBytes($Files.ckey, @(235, 228, 42, 34, 94, 133, 147, 228, 72, 217, 197, 69, 115, 129, 170, 247)) | Out-Null
     
     # Run the program to extract the wad file
     $ErrorActionPreference = 'SilentlyContinue'
@@ -443,7 +436,7 @@ function ExtractWADFile([String]$PatchedFileName) {
 
     # Find the extracted folder by looping through all files in the folder.
     $FolderExists = $False
-    foreach ($Folder in Get-ChildItem -LiteralPath $Paths.WiiVC -Force) {
+    foreach ($Folder in Get-ChildItem -LiteralPath $Paths.Temp -Force) {
         # There will only be one folder, the one we want.
         if ($Folder.PSIsContainer) {
             $FolderExists = $True
@@ -586,8 +579,8 @@ function PatchVCROM([String]$Command) {
     
     # Extract ROM if required
     if (StrLike -str $Command -val "Extract") {
-        if (Test-Path -LiteralPath $GetROM.in -PathType Leaf) {
-            Move-Item -LiteralPath $GetROM.in -Destination $WADFile.Extracted -Force
+        if (Test-Path -LiteralPath $GetROM.run -PathType Leaf) {
+            Move-Item -LiteralPath $GetROM.run -Destination $WADFile.Extracted -Force
             UpdateStatusLabel -Text ("Successfully extracted " + $GameType.mode + " ROM.")
         }
         else { UpdateStatusLabel -Text ("Could not extract " + $GameType.mode + " ROM. Is it a VC compressed ROM?") }
@@ -597,9 +590,8 @@ function PatchVCROM([String]$Command) {
 
     # Replace ROM if needed
     if (StrLike -str $Command -val "Inject") {
-        if (Test-Path -LiteralPath $GetROM.in -PathType Leaf) {
-            RemoveFile -LiteralPath $GetROM.in
-            if (Test-Path -LiteralPath $InjectPath -PathType Leaf) { Copy-Item -LiteralPath $InjectPath -Destination $GetROM.in }
+        if (Test-Path -LiteralPath $GetROM.run -PathType Leaf) {
+            if (Test-Path -LiteralPath $InjectPath -PathType Leaf) { Copy-Item -LiteralPath $InjectPath -Destination $GetROM.run -Force }
             else {
                 UpdateStatusLabel -Text ("Could not inject " + $GameType.mode + " ROM. Did you move or rename the ROM file?")
                 return $False
@@ -613,22 +605,20 @@ function PatchVCROM([String]$Command) {
 
     # Decompress romc if needed
     if ($GameType.romc -ge 1 -and !(StrLike -str $Command -val "Inject") ) {  
-
-        if (Test-Path -LiteralPath $GetROM.in -PathType Leaf) {
+        if (Test-Path -LiteralPath $GetROM.run -PathType Leaf) {
             RemoveFile -LiteralPath $GetROM.romc
-            if ($GameType.romc -eq 1)       { & $Files.tool.romchu $GetROM.in $GetROM.romc | Out-Null }
-            elseif ($GameType.romc -eq 2)   { & $Files.tool.romc d $GetROM.in $GetROM.romc | Out-Null }
-            Move-Item -LiteralPath $GetROM.romc -Destination $GetROM.in -Force
+            if ($GameType.romc -eq 1)       { & $Files.tool.romchu $GetROM.run $GetROM.romc | Out-Null }
+            elseif ($GameType.romc -eq 2)   { & $Files.tool.romc d $GetROM.run $GetROM.romc | Out-Null }
+            Move-Item -LiteralPath $GetROM.romc -Destination $GetROM.run -Force
         }
         else {
             UpdateStatusLabel -Text ("Could not decompress " + $GameType.mode + " ROM. Is it a VC compressed ROM?")
             return $False
         }
-
     }
 
     # Get the file as a byte array so the size can be analyzed.
-    $ByteArray = [IO.File]::ReadAllBytes($GetROM.in)
+    $ByteArray = [IO.File]::ReadAllBytes($GetROM.run)
     
     # Create an empty byte array that matches the size of the ROM byte array.
     $NewByteArray = New-Object Byte[] $ByteArray.Length
@@ -647,31 +637,53 @@ function PatchVCROM([String]$Command) {
 #==============================================================================================================================================================================================
 function DowngradeROM([Boolean]$Decompress, [String]$Hash) {
     
+    if (IsChecked $Patches.Downgrade -Active -Not) { return }
+
     # Downgrade a ROM if it is required first
-    if (IsChecked $Patches.Downgrade -Active) {
-        UpdateStatusLabel -Text "Downgrading ROM..."
+    UpdateStatusLabel -Text "Downgrading ROM..."
 
-        if ($Decompress)   { $File = $GetROM.decomp }
-        else               { $File = $GetROM.in }
+    if ($Hash -eq $GameType.Hash) {
+        Write-Host "ROM is already downgraded"
+        return
+    }
 
-        if ($Hash -eq $CheckHashSum) { return $True }
-
-        Foreach ($Item in $GameType.downgrade) {
-            if ($Hash -eq $Item.hash) {
-                if (!(ApplyPatch -File $File -Patch $Item.file -New $GetROM.downgrade)) {
-                    if ($Settings.Debug.Console -eq $True) { Write-Host "Could not apply downgrade patch" }
-                    return $False
-                }
-                if ($Decompress)   { $GetROM.decomp = $GetROM.downgrade }
-                else               { $GetROM.in = $GetROM.downgrade }
+    if ($Decompress) { $GetROM.run = $GetROM.decomp }
+    
+    Foreach ($Item in $GameType.downgrade) {
+        if ($Hash -eq $Item.hash) {
+            if (!(ApplyPatch -File $GetROM.run -Patch $Item.file)) {
+                if ($Settings.Debug.Console -eq $True) { Write-Host "Could not apply downgrade patch" }
                 return
             }
+            if ($Settings.Debug.KeepDowngraded -eq $True) { Copy-Item -LiteralPath $GetROM.run -Destination $GetROM.keepDowngrade -Force }
+            return
         }
-
-        if ($Settings.Debug.Console -eq $True) { Write-Host "Unknown revision for downgrading" }
-        
     }
+
+    if ($Settings.Debug.Console -eq $True) { Write-Host "Unknown revision for downgrading" }
     
+}
+
+
+
+#==============================================================================================================================================================================================
+function ConvertROM([String]$Command) {
+    
+    if ($Settings.Debug.NoConversion -eq $True) { return }
+    if ( (StrLike -str $Command -val "Inject") -or (StrLike -str $Command -val "Patch Header") -or (StrLike -str $Command -val "Patch VC") ) { return }
+
+    # Converse ROM if needed
+    $Name = [System.IO.Path]::GetFileNameWithoutExtension($GetROM.run)
+    $Ext =  [System.IO.Path]::GetExtension($GetROM.run)
+    if ($Ext -eq ".v64" -or $Ext -eq ".n64") {
+        Push-Location $Paths.Temp
+        & $Files.tool.ucon64 --z64 $GetROM.run | Out-Host
+        Move-Item -LiteralPath ($Paths.Temp + "\" + $Name + ".z64") -Destination ($Paths.Temp + "\converted") -Force
+        $GetROM.run =  $Paths.Temp + "\converted"
+        Pop-Location
+        if ($Settings.Debug.KeepConverted -eq $True) { Copy-Item -LiteralPath $GetROM.run -Destination $GetROM.keepConvert -Force }
+    }
+
 }
 
 
@@ -679,24 +691,30 @@ function DowngradeROM([Boolean]$Decompress, [String]$Hash) {
 #==============================================================================================================================================================================================
 function CompareHashSums([String]$Command) {
     
-    if ($Settings.Debug.CreateBPS -eq $True) { Copy-Item -LiteralPath $GetROM.in -Destination $GetROM.clean -Force }
+    if ($Settings.Debug.CreateBPS -eq $True) { Copy-Item -LiteralPath $GetROM.run -Destination $GetROM.clean -Force }
     if ($Settings.Debug.IgnoreChecksum -eq $True) { return $True }
     if ( (StrLike -str $Command -val "Inject") -or (StrLike -str $Command -val "Patch Header") -or (StrLike -str $Command -val "Patch VC") -or (StrLike -str $Command -val "Apply Patch") ) { return $True }
 
-    $HashSum = (Get-FileHash -Algorithm MD5 $GetROM.in).Hash
+    # Calculate Hashsum
+    $HashSum = (Get-FileHash -Algorithm MD5 $GetROM.run).Hash
+
     if ($CheckHashSum -eq "Dawn & Dusk") {
-        if ($HashSum -eq "5BD1FE107BF8106B2AB6650ABECD54D6")     { $GamePatch.file = "\Compressed\dawn_rev0.bps"; return $True }
-        elseif ($HashSum -eq "721FDCC6F5F34BE55C43A807F2A16AF4") { $GamePatch.file = "\Compressed\dawn_rev1.bps"; return $True }
-        elseif ($HashSum -eq "57A9719AD547C516342E1A15D5C28C3D") { $GamePatch.file = "\Compressed\dawn_rev2.bps"; return $True }
+        if     ($HashSum -eq "5BD1FE107BF8106B2AB6650ABECD54D6")   { $GamePatch.file = "\Compressed\dawn_rev0.bps"; return $True }
+        elseif ($HashSum -eq "721FDCC6F5F34BE55C43A807F2A16AF4")   { $GamePatch.file = "\Compressed\dawn_rev1.bps"; return $True }
+        elseif ($HashSum -eq "57A9719AD547C516342E1A15D5C28C3D")   { $GamePatch.file = "\Compressed\dawn_rev2.bps"; return $True }
+        elseif ($HashSum -eq "CD09029EDCFB7C097AC01986A0F83D3F" -and !$Patches.Downgrade.Checked) {
+            UpdateStatusLabel -Text "Failed! Enable the Downgrade option and retry."
+            return $False
+        }
     }
-    elseif ($HashSum -eq $CheckHashSum) { return $True }
+    if ($HashSum -eq $CheckHashSum) { return $True }
     elseif (IsSet -Elem $GameType.downgrade) {
         Foreach ($Item in $GameType.downgrade) {
             if ($HashSum -eq $Item.hash) { return $True }
         }
     }
     
-    UpdateStatusLabel -Text "Failed! ROM does not match the patching button target. ROM has left unchanged."
+    UpdateStatusLabel -Text "Failed! The ROM has an incorrect version or is not proper."
     return $False
 
 }
@@ -730,7 +748,7 @@ function PatchCompressedROM() {
 
     # Apply the selected patch to the ROM, if it is provided
     if ($IsWiiVC)        { if (!(ApplyPatch -File $GetROM.patched -Patch $GamePatch.file))                   { return $False } }
-    elseif (!$IsWiiVC)   { if (!(ApplyPatch -File $GetROM.in -Patch $GamePatch.file -New $GetROM.patched))   { return $False } }
+    elseif (!$IsWiiVC)   { if (!(ApplyPatch -File $GetROM.run -Patch $GamePatch.file -New $GetROM.patched))   { return $False } }
 
     return $True
 
@@ -741,9 +759,9 @@ function PatchCompressedROM() {
 #==============================================================================================================================================================================================
 function ApplyPatchROM([Boolean]$Decompress) {
 
-    $HashSum1 = (Get-FileHash -Algorithm MD5 $GetROM.in).Hash
+    $HashSum1 = (Get-FileHash -Algorithm MD5 $GetROM.run).Hash
     if ($Decompress)   { $File = $GetROM.patched }
-    else               { $File = $GetROM.in }
+    else               { $File = $GetROM.run }
 
     if (!(ApplyPatch -File $File -Patch $PatchPath -New $GetROM.patched -FullPath)) { return $False }
     $HashSum2 = (Get-FileHash -Algorithm MD5 $GetROM.patched).Hash
@@ -827,20 +845,24 @@ function ApplyPatch([String]$File, [String]$Patch, [String]$New, [Switch]$FilesP
 #==============================================================================================================================================================================================
 function DecompressROM([Boolean]$Decompress) {
     
-    $Hashsum = (Get-FileHash -Algorithm MD5 $GetROM.in).Hash
+    $Hashsum = (Get-FileHash -Algorithm MD5 $GetROM.run).Hash
     if (!$Decompress) { return $Hashsum }
     
     if ($GameType.decompress -eq 1) {
         UpdateStatusLabel -Text ("Decompressing " + $GameType.mode + " ROM...")
 
+        Push-Location $Paths.Temp
         if ($HashSum -ne $CheckHashSum -and (IsChecked $Patches.Downgrade -Active))   {
             RemoveFile -LiteralPath $Files.dmaTable
             Add-Content $Files.dmaTable $GameType.dmaTable
         }
-        elseif ($Settings.Core.Bit64 -eq $True)                                       { & $Files.tool.TabExt64 $GetROM.in | Out-Host }
-        else                                                                          { & $Files.tool.TabExt32 $GetROM.in | Out-Host }
-        & $Files.tool.ndec $GetROM.in $GetROM.decomp | Out-Host
+        elseif ($Settings.Core.Bit64 -eq $True)                                       { & $Files.tool.TabExt64 $GetROM.run | Out-Host }
+        else                                                                          { & $Files.tool.TabExt32 $GetROM.run | Out-Host }
+        & $Files.tool.ndec $GetROM.run $GetROM.decomp | Out-Host
+        Pop-Location
+
         if ($Settings.Debug.CreateBPS -eq $True) { Copy-Item -LiteralPath $GetROM.decomp -Destination $GetROM.cleanDecomp -Force }
+        
     }
     elseif ($GameType.decompress -eq 2) {
         UpdateStatusLabel -Text ("Extending " + $GameType.mode + " ROM...")
@@ -850,11 +872,10 @@ function DecompressROM([Boolean]$Decompress) {
             return $null
         }
 
-        if (Test-Path -LiteralPath $GetROM.decomp -PathType Leaf)   { & $Files.tool.sm64extend $GetROM.decomp -s $GamePatch.extend $GetROM.decomp | Out-Host }
-        else                                                        { & $Files.tool.sm64extend $GetROM.in -s $GamePatch.extend $GetROM.decomp | Out-Host }
+        & $Files.tool.sm64extend $GetROM.run -s $GamePatch.extend $GetROM.decomp | Out-Host
     }
 
-    if ($IsWiiVC) { RemoveFile -LiteralPath $GetROM.in }
+    if ($IsWiiVC) { RemoveFile -LiteralPath $GetROM.run }
     return $HashSum
 
 }
@@ -869,10 +890,13 @@ function CompressROM([Boolean]$Decompress) {
     if ($GameType.decompress -eq 1) {
         UpdateStatusLabel -Text ("Compressing " + $GameType.mode + " ROM...")
 
-        if ($Settings.Debug.KeepDecompressed -eq $True) { Copy-Item -LiteralPath $GetROM.decomp -Destination $GetROM.debug -Force }
+        if ($Settings.Debug.KeepDecompressed -eq $True) { Copy-Item -LiteralPath $GetROM.decomp -Destination $GetROM.keepDecomp -Force }
         RemoveFile -LiteralPath $Files.archive
+        
+        Push-Location $Paths.Temp
         if ($Settings.Core.Bit64 -eq $True)   { & $Files.tool.Compress64 $GetROM.decomp $GetROM.patched | Out-Null }
         else                                  { & $Files.tool.Compress32 $GetROM.decomp $GetROM.patched | Out-Null }
+        Pop-Location
 
         if (IsChecked -Elem $Patches.Redux -Active -Not) {
             if (Test-Path -LiteralPath ($GameFiles.downgrade + "\finalize_rev0.bps") -PathType Leaf) { ApplyPatch -File $GetROM.patched -Patch "\Downgrade\finalize_rev0.bps" }
@@ -893,8 +917,8 @@ function CompressROMC() {
     UpdateStatusLabel -Text ("Compressing " + $GameType.mode + " VC ROM...")
 
     RemoveFile -LiteralPath $GetROM.romc
-    & $Files.tool.romc e $GetROM.in $GetROM.romc | Out-Null
-    Move-Item -LiteralPath $GetROM.romc -Destination $GetROM.in -Force
+    & $Files.tool.romc e $GetROM.run $GetROM.romc | Out-Null
+    Move-Item -LiteralPath $GetROM.romc -Destination $GetROM.run -Force
 
 }
 
@@ -906,7 +930,7 @@ function PatchRedux([Boolean]$Decompress) {
     # BPS PATCHING REDUX #
     if ( (IsChecked $Patches.Redux -Active) -and (IsSet -Elem $GamePatch.redux.file) ) {
 
-        if ( !$Decompress -and !(Test-Path -LiteralPath $GetROM.decomp) ) { Copy-Item -LiteralPath $GetROM.in -Destination $GetROM.decomp -Force }
+        if ( !$Decompress -and !(Test-Path -LiteralPath $GetROM.decomp) ) { Copy-Item -LiteralPath $GetROM.run -Destination $GetROM.decomp -Force }
 
         UpdateStatusLabel -Text ("Patching " + $GameType.mode + " REDUX...")
 
@@ -929,8 +953,8 @@ function ExtendROM() {
     if ($GameType.romc -ne 1) { return }
 
     $Bytes = @(08, 00, 00, 00)
-    $ByteArray = [IO.File]::ReadAllBytes($GetROM.in)
-    [io.file]::WriteAllBytes($GetROM.in, $Bytes + $ByteArray)
+    $ByteArray = [IO.File]::ReadAllBytes($GetROM.run)
+    [io.file]::WriteAllBytes($GetROM.run, $Bytes + $ByteArray)
 
     $ByteArray = $null
 
@@ -1021,7 +1045,7 @@ function HackROMGameTitle([String]$Title, [String]$GameID) {
     $offset = $null
 
     if ($Settings.Debug.NoHeaderChange -eq $True) { return }
-    if (StrLike -str $Command -val "Patch Header") { Copy-Item -LiteralPath $GetROM.in -Destination $GetROM.patched -Force }
+    if (StrLike -str $Command -val "Patch Header") { Copy-Item -LiteralPath $GetROM.run -Destination $GetROM.patched -Force }
     if (!(Test-Path -LiteralPath $GetROM.patched -PathType Leaf)) { return }
 
     UpdateStatusLabel -Text "Hacking in Custom Title and GameID..."
@@ -1108,22 +1132,22 @@ function RepackWADFile([String]$GameID) {
     # Loop through all files in the extracted WAD folder.
     foreach($File in Get-ChildItem -LiteralPath $WadFile.Folder -Force) {
         # Move the file to the same folder as the unpacker tool.
-        RemoveFile -LiteralPath ($Paths.WiiVC + "\" + $File.Name)
-        Move-Item -LiteralPath $File.FullName -Destination $Paths.WiiVC
+        RemoveFile -LiteralPath ($Paths.Temp + "\" + $File.Name)
+        Move-Item -LiteralPath $File.FullName -Destination $Paths.Temp
         
         # Create an entry for the database.
         $ListEntry = $RepackPath + '\' + $File.Name
         
         # Some files need to be fed into the tool so keep track of them.
         switch ($File.Extension) {
-            '.tik'  { $tik  = $Paths.WiiVC + '\' + $File.Name }
-            '.tmd'  { $tmd  = $Paths.WiiVC + '\' + $File.Name }
-            '.cert' { $cert = $Paths.WiiVC + '\' + $File.Name }
+            '.tik'  { $tik  = $Paths.Temp + '\' + $File.Name }
+            '.tmd'  { $tmd  = $Paths.Temp + '\' + $File.Name }
+            '.cert' { $cert = $Paths.Temp + '\' + $File.Name }
         }
     }
 
     # We need to be in the same path as some files so just jump there.
-    Push-Location $Paths.WiiVC
+    Push-Location $Paths.Temp
 
     # Repack the WAD using the new files.
     & $Files.tool.wadpacker $tik $tmd $cert $WadFile.Patched '-sign' '-i' $GameID

@@ -23,8 +23,8 @@ Add-Type -AssemblyName 'System.Drawing'
 # Setup global variables
 
 $global:ScriptName = "Patcher64+ Tool"
-$global:VersionDate = "2020-11-24"
-$global:Version     = "v9.0.5"
+$global:VersionDate = "2020-12-02"
+$global:Version     = "v9.1.0"
 
 $global:GameConsole = $global:GameType = $global:GamePatch = $global:CheckHashSum = ""
 $global:GameFiles = $global:Settings = @{}
@@ -32,10 +32,7 @@ $global:IsWiiVC = $global:MissingFiles = $False
 $global:VCTitleLength = 40
 $global:Bootup = $global:GameIsSelected = $global:IsActiveGameField = $False
 $global:Last = @{}
-
-$global:CurrentModeFont = New-Object System.Drawing.Font("Microsoft Sans Serif", 12, [System.Drawing.FontStyle]::Bold)
-$global:VCPatchFont     = New-Object System.Drawing.Font("Microsoft Sans Serif", 8,  [System.Drawing.FontStyle]::Bold)
-$global:URLFont         = New-Object System.Drawing.Font("Microsoft Sans Serif", 8,  [System.Drawing.FontStyle]::Underline)
+$global:Fonts = @{}
 
 
 
@@ -64,6 +61,8 @@ $Paths.Games           = $Paths.Master + "\Games"
 $Paths.Main            = $Paths.Master + "\Main"
 $Paths.Scripts         = $Paths.Master + "\Scripts"
 $Paths.Extraction      = $Paths.Master + "\Data Extraction"
+$Paths.Temp            = $Paths.Master + "\Temp"
+$Paths.cygdrive        = $Paths.Master + "\cygdrive"
 
 
 
@@ -147,6 +146,14 @@ function IsNumeric([String]$str) {
 # Retrieve settings
 GetSettings
 
+# Font
+if ($Settings.Core.ClearType -eq $True)   { $Font = "Segoe UI" }
+else                                      { $Font = "Microsoft Sans Serif" }
+$Fonts.Medium         = New-Object System.Drawing.Font($Font, 12, [System.Drawing.FontStyle]::Bold)
+$Fonts.Small          = New-Object System.Drawing.Font($Font, 8,  [System.Drawing.FontStyle]::Regular)
+$Fonts.SmallBold      = New-Object System.Drawing.Font($Font, 8,  [System.Drawing.FontStyle]::Bold)
+$Fonts.SmallUnderline = New-Object System.Drawing.Font($Font, 8,  [System.Drawing.FontStyle]::Underline)
+
 # Hide the PowerShell console from the user
 if ($Settings.Debug.Console -ne $True) { ShowPowerShellConsole -ShowConsole $False }
 
@@ -171,7 +178,7 @@ RestoreCustomHeader
 
 # Restore VC Checkboxes
 CheckVCOptions
-SetMainScreenSize
+if (!$GameIsSelected) { ChangePatchPanel }
 
 # Show the dialog to the user
 $MainDialog.ShowDialog() | Out-Null
@@ -179,4 +186,5 @@ $MainDialog.ShowDialog() | Out-Null
 # Exit
 Out-IniFile -FilePath $Files.settings -InputObject $Settings | Out-Null
 RemovePath -LiteralPath $Paths.Registry
+[System.GC]::Collect() | Out-Null
 Exit

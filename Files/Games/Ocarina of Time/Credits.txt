@@ -9,7 +9,13 @@
 - 16:9 Backgrounds & Textures:	GhostlyDark, ShadowOne333 & CYB3RTR0N
 - MM Young Link Model:		The3Dude
 - MM Adult Link Model:		Skilarbabcock (www.youtube.com/user/skilarbabcock)
+- ALLTP Link Models:		ONI 3D-Arts
+- ALTTP Zelda Child Model:		Unesag
+- ALTTP Zelda Adult Model:		Lopieloo
 - Hatsune Miku Link Models:		JanexLane
+- Saria Models:			Malon's Rose
+- Malon 3D/Thicc Models:		Kimi-Stardust
+- Aria the Demon Models:		AriaHiro64
 - MM Link Voice:			Korey Cryderman & GhostlyDark
 - Feminine Link Voice:		theluigidude2007
 - MM HUD Textures:		GhostlyDark
@@ -29,7 +35,8 @@
 - Colors:				GhostlyDark
 - Restore Text:			ShadowOne333
 - Female Pronouns:			Admentus, Mil
-- Admentus (Scripting and Assistance of all Options)
+- Various offsets:			Chez Cousteau
+- Admentus (Scripting and Maintaince of all Options)
 
 --- Quality Insurance ---
 - Translations			GhostlyDark

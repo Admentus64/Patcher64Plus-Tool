@@ -19,6 +19,10 @@ function SetFileParameters() {
     $Files.tool.xdelta3                     = $Paths.Master + "\Base\xdelta3.exe"
     $Files.tool.applyPPF3                   = $Paths.Master + "\Base\ApplyPPF3.exe"
 
+    $Files.tool.inpout32                    = $Paths.Master + "\Conversion\inpout32.dll"
+    $Files.tool.io                          = $Paths.Master + "\Conversion\io.dll"
+    $Files.tool.ucon64                      = $Paths.Master + "\Conversion\ucon64.exe"
+
     $Files.tool.Compress64                  = $Paths.Master + "\Compression\Compress64.exe"
     $Files.tool.Compress32                  = $Paths.Master + "\Compression\Compress32.exe"
     $Files.tool.ndec                        = $Paths.Master + "\Compression\ndec.exe"
@@ -45,10 +49,17 @@ function SetFileParameters() {
     $Files.oot.dawn_rev1                    = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Compressed\dawn_rev1")
     $Files.oot.dawn_rev2                    = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Compressed\dawn_rev2")
     $Files.oot.master_quest                 = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Decompressed\master_quest")
-    $Files.oot.child_model                  = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Decompressed\Models\child_model")
-    $Files.oot.adult_model                  = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Decompressed\Models\adult_model")
-    $Files.oot.female_models                = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Decompressed\Models\female_models")
     $Files.oot.mm_pause_screen              = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Decompressed\mm_pause_screen")
+
+    $Files.oot.male_model_child_link_mm     = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Decompressed\Models\male_model_child_link_mm")
+    $Files.oot.male_model_adult_link_mm     = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Decompressed\Models\male_model_adult_link_mm")
+    $Files.oot.male_models_link_alttp       = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Decompressed\Models\male_models_link_alttp")
+    $Files.oot.female_models_zelda_alttp    = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Decompressed\Models\female_models_zelda_alttp")
+    $Files.oot.female_models_miku           = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Decompressed\Models\female_models_miku")
+    $Files.oot.female_models_malon_3d       = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Decompressed\Models\female_models_malon_3d")
+    $Files.oot.female_models_malon_sexy     = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Decompressed\Models\female_models_malon_sexy")
+    $Files.oot.female_models_saria          = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Decompressed\Models\female_models_saria")
+    $Files.oot.female_models_aria           = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Decompressed\Models\female_models_aria_the_demon")
 
     $Files.oot.lens_of_truth                = $Paths.Games + "\Ocarina of Time\Textures\Lens of Truth.bin"
     $Files.oot.title_copyright              = $Paths.Games + "\Ocarina of Time\Textures\Logo\Master Quest Title Copyright.bin"
@@ -60,8 +71,8 @@ function SetFileParameters() {
     $Files.oot.hud_tael                     = $Paths.Games + "\Ocarina of Time\Textures\HUD\Tael.bin"
 
     $Files.oot.file_select                  = $Paths.Games + "\Ocarina of Time\Binaries\File Select.bin"
-    $Files.oot.message_table_restore        = $Paths.Games + "\Ocarina of Time\Binaries\Message\Table Restore.bin"
-    $Files.oot.message_table_girl           = $Paths.Games + "\Ocarina of Time\Binaries\Message\Table Girl.bin"
+    $Files.oot.message_table_restore_text   = $Paths.Games + "\Ocarina of Time\Binaries\Message\Table Restore Text.bin"
+    $Files.oot.message_table_feminine       = $Paths.Games + "\Ocarina of Time\Binaries\Message\Table Feminine Pronouns.bin"
     $Files.oot.message_songs                = $Paths.Games + "\Ocarina of Time\Binaries\Message\Songs.bin"
     $Files.oot.message_mq1                  = $Paths.Games + "\Ocarina of Time\Binaries\Message\MQ Navi Action.bin"
     $Files.oot.message_mq2                  = $Paths.Games + "\Ocarina of Time\Binaries\Message\MQ Navi Door.bin"
@@ -71,6 +82,9 @@ function SetFileParameters() {
     $Files.oot.fire_temple_seq              = $Paths.Games + "\Ocarina of Time\Binaries\Fire Temple Theme\12AudioSeqPointers.bin"
     $Files.oot.fire_temple_table            = $Paths.Games + "\Ocarina of Time\Binaries\Fire Temple Theme\12AudioTablePointers.bin"
     $Files.oot.theme_fire_temple            = CheckPatchExtension -File ($Paths.Master + "\Data Extraction\Audiobank Fire Temple")
+    $Files.oot.restore_text                 = CheckPatchExtension -File ($Paths.Master + "\Data Extraction\Message\OoT Restore Text")
+    $Files.oot.restore_text_redux           = CheckPatchExtension -File ($Paths.Master + "\Data Extraction\Message\OoT Restore Text Redux")
+    $Files.oot.feminine_pronouns            = CheckPatchExtension -File ($Paths.Master + "\Data Extraction\Message\OoT Feminine Pronouns")
 
     $Files.oot.gerudo1                      = $Paths.Games + "\Ocarina of Time\Textures\Gerudo Symbols\crystal_switch.bin"
     $Files.oot.gerudo2                      = $Paths.Games + "\Ocarina of Time\Textures\Gerudo Symbols\floor_switch.bin"
@@ -120,7 +134,7 @@ function SetFileParameters() {
 
     $Files.mm.zora_physics_fix              = $Paths.Games + "\Majora's Mask\Binaries\Zora Physics Fix.bin"
 
-    $Files.mm.message_table                 = $Paths.Games + "\Majora's Mask\Binaries\Message\Table.bin"
+    $Files.mm.message_table_restore_text   = $Paths.Games + "\Majora's Mask\Binaries\Message\Table Restore Text.bin"
     $Files.mm.message_razor1                = $Paths.Games + "\Majora's Mask\Binaries\Message\Razor Sword 1.bin"
     $Files.mm.message_razor2                = $Paths.Games + "\Majora's Mask\Binaries\Message\Razor Sword 2.bin"
 
@@ -131,7 +145,7 @@ function SetFileParameters() {
     $Files.mm.deku_palace_0                 = CheckPatchExtension -File ($Paths.Master + "\Data Extraction\Deku Palace\deku_palace_room_0")
     $Files.mm.deku_palace_1                 = CheckPatchExtension -File ($Paths.Master + "\Data Extraction\Deku Palace\deku_palace_room_1")
     $Files.mm.deku_palace_2                 = CheckPatchExtension -File ($Paths.Master + "\Data Extraction\Deku Palace\deku_palace_room_2")
-
+    $Files.mm.restore_text                  = CheckPatchExtension -File ($Paths.Master + "\Data Extraction\Message\MM Restore Text")
 
 
     # Store Super Mario 64 files
@@ -168,10 +182,10 @@ function SetFileParameters() {
     CheckFilesExists -HashTable $Files.icon
 
     $Files.flipscfg                         = $Paths.Master + "\Base\flipscfg.bin"
-    $Files.ckey                             = $Paths.Master + "\Wii VC\common-key.bin"
+    $Files.ckey                             = $Paths.Temp + "\common-key.bin"
     $Files.stackdump                        = $Paths.WiiVC + "\wadpacker.exe.stackdump"
-    $Files.dmaTable                         = $Paths.Base + "\dmaTable.dat"
-    $Files.archive                          = $Paths.Base + "\ARCHIVE.bin"
+    $Files.dmaTable                         = $Paths.Temp + "\dmaTable.dat"
+    $Files.archive                          = $Paths.Temp + "\ARCHIVE.bin"
     $Files.settings                         = $Paths.Base + "\Settings.ini"
 
 
@@ -187,29 +201,37 @@ function SetFileParameters() {
 function SetGetROM() {
 
     # Store misc files
+    CreatePath -LiteralPath $Paths.Temp
+
     $global:GetROM = @{}
-    $GetROM.romc                            = $Paths.Master + "\romc"
-    $GetROM.clean                           = $Paths.Master + "\clean"
-    $GetROM.cleanDecomp                     = $Paths.Master + "\clean-decompressed"
-    $GetROM.decomp                          = $Paths.Master + "\decompressed"
-    $GetROM.masterQuest                     = $Paths.Master + "\master-quest-decompressed"
-    $GetROM.downgrade                       = $Paths.Master + "\downgraded"
-    $GetROM.nes                             = $Paths.Master + "\rom.nes"
+    $GetROM.romc                            = $Paths.Temp + "\romc"
+    $GetROM.clean                           = $Paths.Temp + "\clean"
+    $GetROM.cleanDecomp                     = $Paths.Temp + "\clean-decompressed"
+    $GetROM.decomp                          = $Paths.Temp + "\decompressed"
+    $GetROM.masterQuest                     = $Paths.Temp + "\master-quest-decompressed"
+    $GetROM.nes                             = $Paths.Temp + "\rom.nes"
 
     if ($IsWiiVC -and (IsSet -Elem $WADFile) ) {
         if (!(IsSet -Elem $WADFile.ROM)) { $WADFile.ROM = $GetROM.nes }
-        $GetROM.in       = $GetROM.patched = $WADFile.ROM
-        $GetROM.debug    = $WADFile.Debug
+        $GetROM.in            = $GetROM.patched = $WADFile.ROM
+        $GetROM.keepConvert   = $WADFile.Convert
+        $GetROM.keepDowngrade = $WADFile.Downgrade
+        $GetROM.keepDecomp    = $WADFile.Decomp
     }
     elseif (!$IsWiiVC -and (IsSet -Elem $ROMFile) ) {
-        $GetROM.in       = $ROMFile.ROM
-        $GetROM.patched  = $ROMFile.Patched
-        $GetROM.debug    = $ROMFile.Debug
+        $GetROM.in            = $ROMFile.ROM
+        $GetROM.patched       = $ROMFile.Patched
+        $GetROM.keepConvert   = $ROMFile.Convert
+        $GetROM.keepDowngrade = $ROMFile.Downgrade
+        $GetROM.keepDecomp    = $ROMFile.Decomp
     }
 
+    $GetROM.run = $GetROM.in
+    $Paths.Input =  [System.IO.Path]::GetDirectoryName($GetROM.in)
+
     if ($Settings.Debug.CreateBPS -eq $True) {
-        $Files.compBPS   = $Paths.Base + "\compressed.bps"
-        $Files.decompBPS = $Paths.Base + "\decompressed.bps"
+        $Files.compBPS   = $Paths.Input + "\compressed.bps"
+        $Files.decompBPS = $Paths.Input + "\decompressed.bps"
     }
 
 }

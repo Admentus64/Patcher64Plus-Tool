@@ -99,8 +99,9 @@ function ChangeGamesList() {
 #==============================================================================================================================================================================================
 function ChangePatchPanel() {
     
-    # Return is no GameType is set
-    if (!(IsSet -Elem $GameType)) { return }
+    # Return is no GameType or game file is set
+    if (!(IsSet -Elem $GameType))   { return }
+
 
     # Reset
     $Patches.Group.text = $GameType.mode + " - Patch Options"
@@ -486,9 +487,10 @@ function IsIndex([Object]$Elem, [int]$Index=1, [Switch]$Active, [Switch]$Not) {
 
 
 #==============================================================================================================================================================================================
-function IsSet([Object]$Elem, [int]$Min, [int]$Max, [int]$MinLength, [int]$MaxLength) {
+function IsSet([Object]$Elem, [int]$Min, [int]$Max, [int]$MinLength, [int]$MaxLength, [Switch]$HasInt) {
     
-    if ($Elem -eq $null -or $Elem -eq "" -or $Elem -eq 0) { return $False }
+    if ($Elem -eq $null -or $Elem -eq "")                    { return $False }
+    if (!$HasInt -and $Elem -eq 0)                           { return $False }
     if ($Min -ne $null -and $Min -ne "" -and $Elem -lt $Min) { return $False }
     if ($Max -ne $null -and $Max -ne "" -and $Elem -gt $Max) { return $False }
     if ($MinLength -ne $null -and $MinLength -ne "" -and $Elem.Length -lt $MinLength) { return $False }

@@ -10,7 +10,7 @@ function CreateOptionsDialog([int]$Width, [int]$Height, [Array]$Tabs=@()) {
     $CloseButton.Add_Click( {$OptionsDialog.Hide() })
 
     # Options Label
-    $global:OptionsLabel = CreateLabel -Y 15 -Width $OptionsDialog.width -Height 15 -Font $VCPatchFont -Text ($GameType.mode + " - Additional Options") -AddTo $OptionsDialog
+    $global:OptionsLabel = CreateLabel -Y 15 -Width $OptionsDialog.width -Height 15 -Font $Fonts.SmallBold -Text ($GameType.mode + " - Additional Options") -AddTo $OptionsDialog
     $OptionsLabel.AutoSize = $True
     $OptionsLabel.Left = ([Math]::Floor($OptionsDialog.Width / 2) - [Math]::Floor($OptionsLabel.Width / 2))
 
@@ -22,6 +22,7 @@ function CreateOptionsDialog([int]$Width, [int]$Height, [Array]$Tabs=@()) {
 
     # Reset
     $Last.Group = $Last.Panel = $Last.GroupName = $null
+    $Last.Half = $False
 
     CreateTabButtons -Tabs $Tabs
 
@@ -71,24 +72,24 @@ function CreateCreditsDialog() {
     $CloseButton.Add_Click({ $CreditsDialog.Hide() })
 
     # Create the current game label
-    $global:CreditsGameLabel = CreateLabel -X 40 -Y 50 -Width 200 -Height 15 -Font $VCPatchFont -AddTo $CreditsDialog
+    $global:CreditsGameLabel = CreateLabel -X 40 -Y 50 -Width 200 -Height 15 -Font $Fonts.SmallBold -AddTo $CreditsDialog
 
     # Create Switch subpanel buttons
     $global:Credits = @{}
     $Credits.Buttons = @()
-    $Credits.Buttons += CreateButton -X 40  -Y 70 -Width 110 -Height 30 -ForeColor "White" -BackColor "Gray" -Text "Credits" -Tag $Credits.Buttons.Count -Info "Check the credits for this game" -AddTo $CreditsDialog
-    $Credits.Buttons += CreateButton -X ($Credits.Buttons[0].Right) -Y $Credits.Buttons[0].Top -Width $Credits.Buttons[0].Width -Height $Credits.Buttons[0].Height -ForeColor "White" -BackColor "Gray" -Text "Info"     -Tag $Credits.Buttons.Count -Info "Check the info for this game" -AddTo $CreditsDialog
+    $Credits.Buttons += CreateButton -X 40  -Y 70 -Width 110 -Height 30 -ForeColor "White" -BackColor "Gray" -Text "Info" -Tag $Credits.Buttons.Count -Info "Check the info for this game" -AddTo $CreditsDialog
+    $Credits.Buttons += CreateButton -X ($Credits.Buttons[0].Right) -Y $Credits.Buttons[0].Top -Width $Credits.Buttons[0].Width -Height $Credits.Buttons[0].Height -ForeColor "White" -BackColor "Gray" -Text "Credits"  -Tag $Credits.Buttons.Count -Info "Check the credits for this game" -AddTo $CreditsDialog
     $Credits.Buttons += CreateButton -X ($Credits.Buttons[1].Right) -Y $Credits.Buttons[0].Top -Width $Credits.Buttons[0].Width -Height $Credits.Buttons[0].Height -ForeColor "White" -BackColor "Gray" -Text "GameID's" -Tag $Credits.Buttons.Count -Info "Open the list with official and patched GameID's" -AddTo $CreditsDialog
     $Credits.Buttons += CreateButton -X ($Credits.Buttons[2].Right) -Y $Credits.Buttons[0].Top -Width $Credits.Buttons[0].Width -Height $Credits.Buttons[0].Height -ForeColor "White" -BackColor "Gray" -Text "Misc"     -Tag $Credits.Buttons.Count -Info "General credits and info in general" -AddTo $CreditsDialog
     $Credits.Buttons += CreateButton -X ($Credits.Buttons[3].Right) -Y $Credits.Buttons[0].Top -Width $Credits.Buttons[0].Width -Height $Credits.Buttons[0].Height -ForeColor "White" -BackColor "Gray" -Text "Checksum" -Tag $Credits.Buttons.Count -Info "General credits and info in general" -AddTo $CreditsDialog
     
     # Create the version number and script name label
-    $InfoLabel = CreateLabel -X ($CreditsDialog.Width / 2 - $String.Width - 100) -Y 10 -Width 200 -Height 15 -Font $VCPatchFont -Text ($ScriptName + " " + $Version + " (" + $VersionDate + ")") -AddTo $CreditsDialog
+    $InfoLabel = CreateLabel -X ($CreditsDialog.Width / 2 - $String.Width - 100) -Y 10 -Width 200 -Height 15 -Font $Fonts.SmallBold -Text ($ScriptName + " " + $Version + " (" + $VersionDate + ")") -AddTo $CreditsDialog
 
     # Create Text Box
     $Credits.Sections = @()
-    $Credits.Sections += CreateTextBox -X 40 -Y ($Credits.Buttons[0].Bottom + 10) -Width ($CreditsDialog.Width - 100) -Height ($CloseButton.Top - 120) -ReadOnly -Multiline -AddTo $CreditsDialog -Tag "Credits"
-    $Credits.Sections += CreateTextBox -X $Credits.Sections[0].Left -Y $Credits.Sections[0].Top -Width $Credits.Sections[0].Width -Height $Credits.Sections[0].Height -ReadOnly -Multiline -AddTo $CreditsDialog -Tag "Info"
+    $Credits.Sections += CreateTextBox -X 40 -Y ($Credits.Buttons[0].Bottom + 10) -Width ($CreditsDialog.Width - 100) -Height ($CloseButton.Top - 120) -ReadOnly -Multiline -AddTo $CreditsDialog -Tag "Info"
+    $Credits.Sections += CreateTextBox -X $Credits.Sections[0].Left -Y $Credits.Sections[0].Top -Width $Credits.Sections[0].Width -Height $Credits.Sections[0].Height -ReadOnly -Multiline -AddTo $CreditsDialog -Tag "Credits"
     $Credits.Sections += CreateTextBox -X $Credits.Sections[0].Left -Y $Credits.Sections[0].Top -Width $Credits.Sections[0].Width -Height $Credits.Sections[0].Height -ReadOnly -Multiline -AddTo $CreditsDialog -Tag "GameID's"
     AddTextFileToTextbox -TextBox $Credits.Sections[2] -File $Files.text.gameID
     $Credits.Sections += CreatePanel   -X $Credits.Sections[0].Left -Y $Credits.Sections[0].Top -Width $Credits.Sections[0].Width -Height $Credits.Sections[0].Height -AddTo $CreditsDialog -Tag "Misc"
@@ -115,17 +116,17 @@ function CreateCreditsDialog() {
 
 
     # Support
-    $SupportLabel  = CreateLabel -X 10                   -Y 10                          -Width 200 -Height 15 -Font $VCPatchFont -Text ("--- Support or visit me at ---")   -AddTo $Credits.Sections[3]
+    $SupportLabel  = CreateLabel -X 10                   -Y 10                          -Width 200 -Height 15 -Font $Fonts.SmallBold      -Text ("--- Support or visit me at ---")   -AddTo $Credits.Sections[3]
 
-    $Discord1Label = CreateLabel -X 10                   -Y ($SupportLabel.Bottom + 2)  -Width 150 -Height 15 -Font $VCPatchFont -Text ("Discord")                          -AddTo $Credits.Sections[3]
-    $Discord2Label = CreateLabel -X $Discord1Label.Right -Y ($SupportLabel.Bottom + 2)  -Width 140 -Height 15 -Font $URLFont     -Text ("https://discord.gg/P22GGzz")       -AddTo $Credits.Sections[3]
-    $GitHub1Label  = CreateLabel -X 10                   -Y ($Discord1Label.Bottom + 2) -Width 150 -Height 15 -Font $VCPatchFont -Text ("GitHub")                           -AddTo $Credits.Sections[3]
-    $GitHub2Label  = CreateLabel -X $GitHub1Label.Right  -Y ($Discord1Label.Bottom + 2) -Width 180 -Height 15 -Font $URLFont     -Text ("https://github.com/Admentus64")    -AddTo $Credits.Sections[3]
+    $Discord1Label = CreateLabel -X 10                   -Y ($SupportLabel.Bottom + 2)  -Width 150 -Height 15 -Font $Fonts.SmallBold      -Text ("Discord")                          -AddTo $Credits.Sections[3]
+    $Discord2Label = CreateLabel -X $Discord1Label.Right -Y ($SupportLabel.Bottom + 2)  -Width 140 -Height 15 -Font $Fonts.SmallUnderline -Text ("https://discord.gg/P22GGzz")       -AddTo $Credits.Sections[3]
+    $GitHub1Label  = CreateLabel -X 10                   -Y ($Discord1Label.Bottom + 2) -Width 150 -Height 15 -Font $Fonts.SmallBold          -Text ("GitHub")                           -AddTo $Credits.Sections[3]
+    $GitHub2Label  = CreateLabel -X $GitHub1Label.Right  -Y ($Discord1Label.Bottom + 2) -Width 180 -Height 15 -Font $Fonts.SmallUnderline -Text ("https://github.com/Admentus64")    -AddTo $Credits.Sections[3]
     
-    $Patreon1Label = CreateLabel -X 10                   -Y ($GitHub1Label.Bottom + 2)  -Width 150 -Height 15 -Font $VCPatchFont -Text ("Patreon")                          -AddTo $Credits.Sections[3]
-    $Patreon2Label = CreateLabel -X $Patreon1Label.Right -Y ($GitHub1Label.Bottom + 2)  -Width 145 -Height 15 -Font $URLFont     -Text ("www.patreon.com/Admentus")         -AddTo $Credits.Sections[3]
-    $PayPal1Label  = CreateLabel -X 10                   -Y ($Patreon1Label.Bottom + 2) -Width 150 -Height 15 -Font $VCPatchFont -Text ("PayPal")                           -AddTo $Credits.Sections[3]
-    $PayPal2Label  = CreateLabel -X $PayPal1Label.Right  -Y ($Patreon1Label.Bottom + 2) -Width 190 -Height 15 -Font $URLFont     -Text ("www.paypal.com/paypalme/Admentus") -AddTo $Credits.Sections[3]
+    $Patreon1Label = CreateLabel -X 10                   -Y ($GitHub1Label.Bottom + 2)  -Width 150 -Height 15 -Font $Fonts.SmallBold      -Text ("Patreon")                          -AddTo $Credits.Sections[3]
+    $Patreon2Label = CreateLabel -X $Patreon1Label.Right -Y ($GitHub1Label.Bottom + 2)  -Width 145 -Height 15 -Font $Fonts.SmallUnderline -Text ("www.patreon.com/Admentus")         -AddTo $Credits.Sections[3]
+    $PayPal1Label  = CreateLabel -X 10                   -Y ($Patreon1Label.Bottom + 2) -Width 150 -Height 15 -Font $Fonts.SmallBold      -Text ("PayPal")                           -AddTo $Credits.Sections[3]
+    $PayPal2Label  = CreateLabel -X $PayPal1Label.Right  -Y ($Patreon1Label.Bottom + 2) -Width 190 -Height 15 -Font $Fonts.SmallUnderline -Text ("www.paypal.com/paypalme/Admentus") -AddTo $Credits.Sections[3]
 
     $Discord2Label.add_Click({[system.Diagnostics.Process]::start("https://discord.gg/P22GGzz")})
     $GitHub2Label.add_Click({[system.Diagnostics.Process]::start("https://github.com/Admentus64")})
@@ -136,27 +137,31 @@ function CreateCreditsDialog() {
 
 
     # Documentation
-    $SourcesLabel  = CreateLabel -X 10                  -Y ($PayPal2Label.Bottom + 10) -Width 150 -Height 15 -Font $VCPatchFont -Text ("--- Sources ---")                                              -AddTo $Credits.Sections[3]
+    $SourcesLabel  = CreateLabel -X 10                   -Y ($PayPal2Label.Bottom + 10) -Width 150 -Height 15 -Font $Fonts.SmallBold       -Text ("--- Sources ---")                                                                  -AddTo $Credits.Sections[3]
     
-    $Shadow1Label  = CreateLabel -X 10                  -Y ($SourcesLabel.Bottom + 2)  -Width 150  -Height 15 -Font $VCPatchFont -Text ("ShadowOne333's GitHub")                                       -AddTo $Credits.Sections[3]
-    $Shadow2Label  = CreateLabel -X $Shadow1Label.Right -Y ($SourcesLabel.Bottom + 2)  -Width 330  -Height 15 -Font $URLFont     -Text ("https://github.com/ShadowOne333/Zelda64-Redux-Documentation") -AddTo $Credits.Sections[3]
+    $Shadow1Label  = CreateLabel -X 10                   -Y ($SourcesLabel.Bottom + 2)  -Width 150 -Height 15 -Font $Fonts.SmallBold      -Text ("ShadowOne333's GitHub")                                                             -AddTo $Credits.Sections[3]
+    $Shadow2Label  = CreateLabel -X $Shadow1Label.Right  -Y ($SourcesLabel.Bottom + 2)  -Width 340 -Height 15 -Font $Fonts.SmallUnderline -Text ("https://github.com/ShadowOne333/Zelda64-Redux-Documentation")                       -AddTo $Credits.Sections[3]
     
-    $Skilar1Label  = CreateLabel -X 10                  -Y ($Shadow1Label.Bottom + 2)  -Width 150  -Height 15 -Font $VCPatchFont -Text ("Skilarbabcock's YouTube")                                     -AddTo $Credits.Sections[3]
-    $Skilar2Label  = CreateLabel -X $Skilar1Label.Right -Y ($Shadow1Label.Bottom + 2)  -Width 225  -Height 15 -Font $URLFont     -Text ("https://www.youtube.com/user/skilarbabcock")                  -AddTo $Credits.Sections[3]
+    $Female1Label = CreateLabel -X 10                    -Y ($Shadow1Label.Bottom + 2)  -Width 150 -Height 35 -Font $Fonts.SmallBold      -Text ("Feminine Pronouns Script`nBy Mil") -AddTo $Credits.Sections[3]
+    $Female2Label = CreateLabel -X $Female1Label.Right   -Y ($Shadow1Label.Bottom + 2)  -Width 300 -Height 35 -Font $Fonts.SmallUnderline -Text ("https://docs.google.com/document/d/1_`n1f2GzzGdtVqykNaKJrupoz5nBW386EwNQIPbMo042I") -AddTo $Credits.Sections[3]
+
+    $Skilar1Label  = CreateLabel -X 10                   -Y ($Female1Label.Bottom + 2)  -Width 150 -Height 15 -Font $Fonts.SmallBold      -Text ("Skilarbabcock's YouTube")                                                           -AddTo $Credits.Sections[3]
+    $Skilar2Label  = CreateLabel -X $Skilar1Label.Right  -Y ($Female1Label.Bottom + 2)  -Width 225 -Height 15 -Font $Fonts.SmallUnderline -Text ("https://www.youtube.com/user/skilarbabcock")                                        -AddTo $Credits.Sections[3]
 
     $Shadow2Label.add_Click({[system.Diagnostics.Process]::start("https://github.com/ShadowOne333/Zelda64-Redux-Documentation")})
+    $Female2Label.add_Click({[system.Diagnostics.Process]::start("https://docs.google.com/document/d/1_1f2GzzGdtVqykNaKJrupoz5nBW386EwNQIPbMo042I")})
     $Skilar2Label.add_Click({[system.Diagnostics.Process]::start("https://www.youtube.com/user/skilarbabcock")})
     $Shadow2Label.ForeColor = $Skilar2Label.ForeColor = "Blue"
 
 
 
     # Hash
-    $HashSumROMLabel          = CreateLabel   -X 10 -Y 20 -Width 120 -Height 15 -Font $VCPatchFont -Text "ROM Hashsum:" -AddTo $Credits.Sections[4]
+    $HashSumROMLabel          = CreateLabel   -X 10 -Y 20 -Width 120 -Height 15 -Font $Fonts.SmallBold -Text "ROM Hashsum:" -AddTo $Credits.Sections[4]
     $global:HashSumROMTextBox = CreateTextBox -X $HashSumROMLabel.Right -Y ($HashSumROMLabel.Top - 3) -Width ($Credits.Sections[4].Width -$HashSumROMLabel.Width - 100) -Height 50 -AddTo $Credits.Sections[4]
     $HashSumROMTextBox.ReadOnly = $True
 
     # Matching Hash
-    $MatchingROMLabel          = CreateLabel   -X 10 -Y ($HashSumROMTextBox.Bottom + 10) -Width 120 -Height 15 -Font $VCPatchFont -Text "Current ROM:" -AddTo $Credits.Sections[4]
+    $MatchingROMLabel          = CreateLabel   -X 10 -Y ($HashSumROMTextBox.Bottom + 10) -Width 120 -Height 15 -Font $Fonts.SmallBold -Text "Current ROM:" -AddTo $Credits.Sections[4]
     $global:MatchingROMTextBox = CreateTextBox -X $MatchingROMLabel.Right -Y ($MatchingROMLabel.Top - 3) -Width ($Credits.Sections[4].Width -$MatchingROMLabel.Width - 100) -Height 50 -Text "No ROM Selected" -AddTo $Credits.Sections[4]
     $MatchingROMTextBox.ReadOnly = $True
 
@@ -168,50 +173,143 @@ function CreateCreditsDialog() {
 function CreateSettingsDialog() {
     
     # Create Dialog
-    $global:SettingsDialog = CreateDialog -Width 600 -Height 460 -Icon $Files.icon.settings
+    $global:SettingsDialog = CreateDialog -Width 600 -Height 580 -Icon $Files.icon.settings
     $CloseButton = CreateButton -X ($SettingsDialog.Width / 2 - 40) -Y ($SettingsDialog.Height - 90) -Width 80 -Height 35 -Text "Close" -AddTo $SettingsDialog
     $CloseButton.Add_Click({ $SettingsDialog.Hide() })
 
     # Create the version number and script name label.
-    $InfoLabel = CreateLabel -X ($SettingsDialog.Width / 2 - $String.Width - 100) -Y 10 -Width 200 -Height 15 -Font $VCPatchFont -Text ($ScriptName + " " + $Version + " (" + $VersionDate + ")") -AddTo $SettingsDialog
+    $InfoLabel = CreateLabel -X ($SettingsDialog.Width / 2 - $String.Width - 100) -Y 10 -Width 200 -Height 15 -Font $Fonts.SmallBold -Text ($ScriptName + " " + $Version + " (" + $VersionDate + ")") -AddTo $SettingsDialog
 
     $global:GeneralSettings = @{}
 
     # General Settings
     $GeneralSettings.GeneralBox        = CreateReduxGroup -Y 40 -AddTo $SettingsDialog -IsGame $False -Text "General Settings"
-    $GeneralSettings.Bit64             = CreateSettingsCheckbox -Column 1 -Text "Use 64-Bit Tools" -Checked ([Environment]::Is64BitOperatingSystem) -Info "Use 64-bit tools instead of 32-bit tools if available for patching ROMs" -Name "Bit64"
-    $GeneralSettings.DoubleClick       = CreateSettingsCheckbox -Column 2 -Text "Double Click"                                                      -Info "Allows a PowerShell file to be opened by double-clicking it"
+    $GeneralSettings.Bit64             = CreateSettingsCheckbox -Name "Bit64"            -Column 1 -Row 1 -Text "Use 64-Bit Tools" -Checked ([Environment]::Is64BitOperatingSystem) -Info "Use 64-bit tools instead of 32-bit tools if available for patching ROMs"
+    $GeneralSettings.DoubleClick       = CreateSettingsCheckbox                          -Column 2 -Row 1 -Text "Double Click"                                                      -Info "Allows a PowerShell file to be opened by double-clicking it"
     $GeneralSettings.DoubleClick.Checked = ((Get-ItemProperty -LiteralPath "HKLM:\Software\Classes\Microsoft.PowerShellScript.1\Shell").'(default)' -eq '0')
+    $GeneralSettings.ClearType         = CreateSettingsCheckbox -Name "ClearType"        -Column 3 -Row 1 -Text "Use ClearType Font" -Checked $True                                 -Info ('Use the ClearType font "Segoe UI" instead of the default font "Microsft Sans Serif"' + "`nThe option will only go in effect when opening the tool`nPlease restart the tool when changing this option")
 
     # Advanced Settings
-    $GeneralSettings.AdvancedBox       = CreateReduxGroup -Y ($GeneralSettings.GeneralBox.Bottom + 10) -IsGame $False -AddTo $SettingsDialog -Text "Advanced Settings"
-    $GeneralSettings.IgnoreChecksum    = CreateSettingsCheckbox -Column 1 -Text "Ignore Input Checksum" -IsDebug -Info "Do not check the checksum of a ROM or WAD and patch it regardless" -Name "IgnoreChecksum"
-    $GeneralSettings.KeepLogo          = CreateSettingsCheckbox -Column 2 -Text "Keep Logo"             -IsDebug -Info "Keep the vanilla title logo instead of the Master Quest title logo" -Name "KeepLogo"
-    $GeneralSettings.ForceExtract      = CreateSettingsCheckbox -Column 3 -Text "Force Extract"         -IsDebug -Info "Always extract game data required for patching even if it was already extracted on a previous run" -Name "ForceExtract"
+    $GeneralSettings.AdvancedBox       = CreateReduxGroup -Y ($GeneralSettings.GeneralBox.Bottom + 10) -IsGame $False -Height 2 -AddTo $SettingsDialog -Text "Advanced Settings"
+    $GeneralSettings.IgnoreChecksum    = CreateSettingsCheckbox -Name "IgnoreChecksum"   -Column 1 -Row 1 -Text "Ignore Input Checksum"  -IsDebug -Info "Do not check the checksum of a ROM or WAD and patch it regardless"
+    $GeneralSettings.KeepLogo          = CreateSettingsCheckbox -Name "KeepLogo"         -Column 2 -Row 1 -Text "Keep Logo"              -IsDebug -Info "Keep the vanilla title logo instead of the Master Quest title logo"
+    $GeneralSettings.ForceExtract      = CreateSettingsCheckbox -Name "ForceExtract"     -Column 3 -Row 1 -Text "Force Extract"          -IsDebug -Info "Always extract game data required for patching even if it was already extracted on a previous run"
+    $GeneralSettings.ForceExtract      = CreateSettingsCheckbox -Name "ForceWidescreen"  -Column 1 -Row 2 -Text "Force Aspect Ratio Fix" -IsDebug -Info "Always force patching in the 16:9 Aspect Ratio Fix in Native Mode in addition to the 16:9 Widescreen Textures"
 
     # Debug Settings
     $GeneralSettings.DebugBox          = CreateReduxGroup -Y ($GeneralSettings.AdvancedBox.Bottom + 10) -IsGame $False -Height 3 -AddTo $SettingsDialog -Text "Debug Settings"
-    $GeneralSettings.Console           = CreateSettingsCheckbox -Column 1 -Row 1 -Text "Console"             -IsDebug -Info "Show the console log" -Name "Console"
-    $GeneralSettings.Stop              = CreateSettingsCheckbox -Column 2 -Row 1 -Text "Stop Patching"       -IsDebug -Info "Do not start the patching process and instead show debug information for the console log" -Name "Stop"
-    $GeneralSettings.CreateBPS         = CreateSettingsCheckbox -Column 3 -Row 1 -Text "Create BPS"          -IsDebug -Info "Create compressed and decompressed BPS patches when patching is concluded" -Name "CreateBPS"
-    $GeneralSettings.KeepDecompressed  = CreateSettingsCheckbox -Column 1 -Row 2 -Text "Keep Decompressed"   -IsDebug -Info "Keep the decompressed patched ROM in the output folder" -Name "KeepDecompressed"
-    $GeneralSettings.Rev0DungeonFiles  = CreateSettingsCheckbox -Column 2 -Row 2 -Text "Rev 0 Dungeon Files" -IsDebug -Info "Extract the dungeon files from the Rev 0 US OoT ROM as well when extracting dungeon files" -Name "Rev0DungeonFiles"
-    $GeneralSettings.NoCleanup         = CreateSettingsCheckbox -Column 3 -Row 2 -Text "No Cleanup"          -IsDebug -Info "Do not clean up the files after the patching process fails or succeeds" -Name "NoCleanup"
-    $GeneralSettings.NoHeaderChange    = CreateSettingsCheckbox -Column 1 -Row 3 -Text "No Header Change"    -IsDebug -Info "Do not change the title header of the ROM when patching is concluded" -Name "NoHeaderChange"
-    $GeneralSettings.NoCRCChange       = CreateSettingsCheckbox -Column 2 -Row 3 -Text "No CRC Change"       -IsDebug -Info "Do not change the CRC of the ROM when patching is concluded" -Name "NoCRCChange"
-    $GeneralSettings.NoChannelChange   = CreateSettingsCheckbox -Column 3 -Row 3 -Text "No Channel Change"   -IsDebug -Info "Do not change the channel title and channel GameID of the WAD when patching is concluded" -Name "NoChannelChange"
+    $GeneralSettings.Console           = CreateSettingsCheckbox -Name "Console"          -Column 1 -Row 1 -Text "Console"                -IsDebug -Info "Show the console log"
+    $GeneralSettings.Stop              = CreateSettingsCheckbox -Name "Stop"             -Column 2 -Row 1 -Text "Stop Patching"          -IsDebug -Info "Do not start the patching process and instead show debug information for the console log"
+    $GeneralSettings.CreateBPS         = CreateSettingsCheckbox -Name "CreateBPS"        -Column 3 -Row 1 -Text "Create BPS"             -IsDebug -Info "Create compressed and decompressed BPS patches when patching is concluded"
+    $GeneralSettings.NoCleanup         = CreateSettingsCheckbox -Name "NoCleanup"        -Column 1 -Row 2 -Text "No Cleanup"             -IsDebug -Info "Do not clean up the files after the patching process fails or succeeds"
+    $GeneralSettings.NoHeaderChange    = CreateSettingsCheckbox -Name "NoHeaderChange"   -Column 2 -Row 2 -Text "No Header Change"       -IsDebug -Info "Do not change the title header of the ROM when patching is concluded"
+    $GeneralSettings.NoChannelChange   = CreateSettingsCheckbox -Name "NoChannelChange"  -Column 3 -Row 2 -Text "No Channel Change"      -IsDebug -Info "Do not change the channel title and channel GameID of the WAD when patching is concluded"
+    $GeneralSettings.KeepDowngraded    = CreateSettingsCheckbox -Name "KeepDowngraded"   -Column 1 -Row 3 -Text "Keep Downgraded"        -IsDebug -Info "Keep the downgraded patched ROM in the output folder"
+
+    # Debug Settings (Nintendo 64)
+    $GeneralSettings.DebugBox          = CreateReduxGroup -Y ($GeneralSettings.DebugBox.Bottom + 10) -IsGame $False -Height 2 -AddTo $SettingsDialog -Text "Debug Settings (Nintendo 64)"
+    $GeneralSettings.KeepConverted     = CreateSettingsCheckbox -Name "KeepConverted"    -Column 1 -Row 1 -Text "Keep Converted"         -IsDebug -Info "Keep the converted patched ROM in the output folder"
+    $GeneralSettings.KeepDecompressed  = CreateSettingsCheckbox -Name "KeepDecompressed" -Column 2 -Row 1 -Text "Keep Decompressed"      -IsDebug -Info "Keep the decompressed patched ROM in the output folder"
+    $GeneralSettings.NoConversion      = CreateSettingsCheckbox -Name "NoConversion"     -Column 3 -Row 1 -Text "No Conversion"          -IsDebug -Info "Do not attempt to convert the ROM to a proper format"
+    $GeneralSettings.NoCRCChange       = CreateSettingsCheckbox -Name "NoCRCChange"      -Column 1 -Row 2 -Text "No CRC Change"          -IsDebug -Info "Do not change the CRC of the ROM when patching is concluded"
+    $GeneralSettings.Rev0DungeonFiles  = CreateSettingsCheckbox -Name "Rev0DungeonFiles" -Column 2 -Row 2 -Text "Rev 0 Dungeon Files"    -IsDebug -Info "Extract the dungeon files from the Rev 0 US OoT ROM as well when extracting dungeon files"
+
 
     $GeneralSettings.Console.Add_CheckStateChanged({ ShowPowerShellConsole -ShowConsole $this.Checked })
     $GeneralSettings.DoubleClick.Add_CheckStateChanged({ TogglePowerShellOpenWithClicks -Enable $this.Checked })
 
     # Create a button to reset the tool.
     $GeneralSettings.ResetBox          = CreateReduxGroup -Y ($GeneralSettings.DebugBox.Bottom + 10) -IsGame $False -Height 2 -AddTo $SettingsDialog -Text "Reset"
-    $GeneralSettings.ResetButton       = CreateReduxButton -Width 150 -Height 45 -AddTo $GeneralSettings.ResetBox -Text "Reset All Settings" -Info ("Resets all settings stored in the " + $ScriptName)
+    $GeneralSettings.ResetButton       = CreateReduxButton -Column 1 -Width 150 -Height 45 -AddTo $GeneralSettings.ResetBox -Text "Reset All Settings" -Info ("Resets all settings stored in the " + $ScriptName)
     $GeneralSettings.ResetButton.Add_Click({ ResetTool })
+    $GeneralSettings.ResetGameButton   = CreateReduxButton -Column 2 -Width 150 -Height 45 -AddTo $GeneralSettings.ResetBox -Text "Reset Current Game" -Info ("Resets all settings for the current game mode " + $GameType.mode)
+    $GeneralSettings.ResetGameButton.Add_Click({ ResetGame })
+    $GeneralSettings.CleanupButton     = CreateReduxButton -Column 3 -Width 150 -Height 45 -AddTo $GeneralSettings.ResetBox -Text "Cleanup Files"      -Info "Remove all temporary and extracted files`nThis process is automaticially done after patching a game"
+    $GeneralSettings.CleanupButton.Add_Click({ CleanupFiles })
 
     # Disable Stop if no Console
     $GeneralSettings.Console.Add_CheckStateChanged({ $GeneralSettings.Stop.Enabled = $this.Checked })
     $GeneralSettings.Stop.Enabled = $GeneralSettings.Console.Checked
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function ResetTool() {
+    
+    $InputPaths.GameTextBox.Text = "Select or drag and drop your ROM or VC WAD file..."
+    $InputPaths.InjectTextBox.Text = "Select or drag and drop your NES, SNES or N64 ROM..."
+    $InputPaths.PatchTextBox.Text = "Select or drag and drop your BPS, IPS, Xdelta or VCDiff Patch File..."
+
+    $GeneralSettings.GetEnumerator() | ForEach-Object {
+        if ($_.value.GetType() -eq [System.Windows.Forms.CheckBox]) { $_.value.Checked = $_.value.Default }
+    }
+
+    $VC.GetEnumerator() | ForEach-Object {
+        if ($_.value.GetType() -eq [System.Windows.Forms.CheckBox]) { $_.value.Checked = $_.value.Default }
+    }
+
+    $Patches.Downgrade.Checked = $Patches.Downgrade.Default
+    $Patches.Redux.Checked = $Patches.Redux.Default
+    $Patches.Options.Checked = $Patches.Options.Default
+    $CustomHeaderCheckbox.Checked = $CustomHeaderCheckbox.Default
+    
+    $ConsoleComboBox.SelectedIndex = $ConsoleComboBox.Default
+    $CurrentGameComboBox.SelectedIndex = $CurrentGameComboBox.Default
+    $Patches.ComboBox.SelectedIndex = $Patches.ComboBox.Default
+    $InputPaths.ApplyInjectButton.Enabled = $InputPaths.ApplyPatchButton.Enabled = $False
+
+    RemoveFile -LiteralPath ($Paths.Base + "\Settings.ini")
+    GetSettings
+
+    RestoreCustomHeader
+    ChangeGameMode
+    SetWiiVCMode -Enable $False
+    EnablePatchButtons -Enable $False
+    SetMainScreenSize
+
+    $global:GameIsSelected = $False
+    [System.GC]::Collect() | Out-Null
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function ResetGame() {
+    
+    if (!(IsSet -Elem $Redux.Groups)) { return }
+
+    $Redux.Groups.GetEnumerator() | ForEach-Object {
+        ForEach ($Form in $_.controls) {
+            if     ($Form.GetType() -eq [System.Windows.Forms.CheckBox])      { $Form.Checked       = $Form.Default }
+            elseif ($Form.GetType() -eq [System.Windows.Forms.RadioButton])   { $Form.Checked       = $Form.Default }
+            elseif ($Form.GetType() -eq [System.Windows.Forms.ComboBox])      { $Form.SelectedIndex = $Form.Default }
+            elseif ($Form.GetType() -eq [System.Windows.Forms.TextBox])       { $Form.Text          = $Form.Default }
+        }
+    }
+
+    [System.GC]::Collect() | Out-Null
+
+}
+
+
+
+
+#==============================================================================================================================================================================================
+function CleanupFiles() {
+    
+    $Files.json.games.game.GetEnumerator() | ForEach-Object {
+        RemovePath -LiteralPath ($Paths.Games + "\" + $_.mode + "\Extracted")
+    }
+
+    RemovePath -LiteralPath $Paths.cygdrive
+    RemovePath -LiteralPath $Paths.Temp
+    RemoveFile -LiteralPath $Files.flipscfg
+    RemoveFile -LiteralPath $Files.stackdump
+
+    [System.GC]::Collect() | Out-Null
 
 }
 

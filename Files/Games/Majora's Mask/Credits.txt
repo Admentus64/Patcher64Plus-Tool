@@ -26,7 +26,10 @@
 - Fix Fairy Fountain:			Dybbles (fix) & ShadowOne333 (ROM / patch)
 - Restore Text:			ShadowOne333
 - Correct Circus Mask:		ShadowOne333
-- Admentus (Scripting and Assistance of all Options)
+- Fairy Colors:			Dzeko
+- Spin Attack Colors:		Dzeko
+- Various offsets:			Chez Cousteau
+- Admentus (Scripting and Maintaince of all Options)
 
 --- Quality Insurance ---
 - Translations			GhostlyDark
