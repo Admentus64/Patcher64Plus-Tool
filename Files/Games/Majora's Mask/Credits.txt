@@ -1,11 +1,11 @@
 --- REDUX ---
 - Hacking:			Maroc
-- Original Hacking:			Saneki
+- Original Hacking:		Saneki
 
 --- Additional Options ---
 - 16:9 Backgrounds & Textures:	GhostlyDark & ShadowOne333
 - Improved Link Model:		Skilarbabcock (www.youtube.com/user/skilarbabcock) & Nerrel
-- Kokiri Tunic Color:			GhostlyDark
+- Kokiri Tunic Color:		GhostlyDark
 - Recolor Mask Forms:		ShadowOne333 & Garo-Mastah
 - Zora Physics:			ShadowOne333
 - Restore Palace Route:		ShadowOne333
@@ -14,16 +14,16 @@
 - Correct Romani Sign:		ShadowOne333
 - Correct Comma:			ShadowOne333
 - Restore Title:			ShadowOne333 & Garo-Mastah
-- Restore Skull Kid:			ShadowOne333
+- Restore Skull Kid:		ShadowOne333
 - Restore Shop Music:		ShadowOne333
 - 4th Piece of Heart Sound:		fkualol
-- Move Bomber Kid:			ShadowOne333
+- Move Bomber Kid:		ShadowOne333
 - Permanent Razor Sword:		darklord92
 - Set Capacity:			GhostlyDark
 - Fix Goht Cutscene:		ShadowOne333
 - Fix Mushroom Bottle:		ozidual
 - Fix Southern Swamp:		ShadowOne333
-- Fix Fairy Fountain:			Dybbles (fix) & ShadowOne333 (ROM / patch)
+- Fix Fairy Fountain:		Dybbles (fix) & ShadowOne333 (ROM / patch)
 - Restore Text:			ShadowOne333
 - Correct Circus Mask:		ShadowOne333
 - Fairy Colors:			Dzeko
@@ -36,7 +36,7 @@
 
 --- Translations ---
 - Polish:				RPG (v1.1)
-- Russian:				Zelda64rus (v2.0 Beta)
+- Russian:			Zelda64rus (v2.0 Beta)
 
 --- Masked Quest ---
 - Garo-Mastah

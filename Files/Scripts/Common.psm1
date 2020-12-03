@@ -222,6 +222,7 @@ function ChangeGameMode() {
     $GameFiles.decompressed = $GameFiles.base + "\Decompressed"
     $GameFiles.downgrade = $GameFiles.base + "\Downgrade"
     $GameFiles.textures = $GameFiles.base + "\Textures"
+    $GameFiles.previews = $GameFiles.base + "\Previews"
     $GameFiles.credits = $GameFiles.base + "\Credits.txt"
     $GameFiles.info = $GameFiles.base + "\Info.txt"
     $GameFiles.json = $GameFiles.base + "\Patches.json"

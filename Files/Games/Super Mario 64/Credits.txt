@@ -1,8 +1,7 @@
 --- Additional Options ---
-- 60 FPS (v2):				Kaze Emanuar
-- Free Cam:				Kaze Emanuar
-- Model:					Fnzmeatpopsicle, ElectroMew/P0PPY, Yoshi Milkman,
-					Marshivolt
+- 60 FPS (v2):			Kaze Emanuar
+- Free Cam:			Kaze Emanuar
+- Model:				Fnzmeatpopsicle, ElectroMew/P0PPY, Yoshi Milkman, Marshivolt
 - GhostlyDark (documenting several offsets)
 - Admentus (Scripting and Assistance of all Options)
 

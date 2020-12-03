@@ -61,6 +61,28 @@ function GetItemID([String]$Item) {
 
 
 #==============================================================================================================================================================================================
+function ShowModelPreview([Object]$Dropdown, [Object]$Box) {
+
+    $image = "Default"
+    if ($Dropdown.selectedIndex -eq 1)    { $image = "Child_Link_MM" }
+    if ($Dropdown.selectedIndex -eq 2)    { $image = "Adult_Link_MM" }
+    if ($Dropdown.selectedIndex -eq 3)    { $image = "Link_MM" }
+    if ($Dropdown.selectedIndex -eq 4)    { $image = "Link_ALTTP" }
+    if ($Dropdown.selectedIndex -eq 5)    { $image = "Happy_Mask_Salesman" }
+    if ($Dropdown.selectedIndex -eq 6)    { $image = "Mega_Man" }
+    if ($Dropdown.selectedIndex -eq 8)    { $image = "Miku" }
+    if ($Dropdown.selectedIndex -eq 9)    { $image = "Malon_3D" }
+    if ($Dropdown.selectedIndex -eq 10)   { $image = "Malon_Sexy" }
+    if ($Dropdown.selectedIndex -eq 11)   { $image = "Saria" }
+    if ($Dropdown.selectedIndex -eq 12)   { $image = "Ruto" }
+    if ($Dropdown.selectedIndex -eq 13)   { $image = "Aria" }
+    $Box.Image  = [System.Drawing.Image]::Fromfile( ( Get-Item ($GameFiles.previews + "\" + $image + ".png") ) )
+
+}
+
+
+
+#==============================================================================================================================================================================================
 function GetInstrumentID([String]$SFX) {
     
     $SFX = $SFX.replace(' (default)', "")
@@ -123,15 +145,15 @@ function CreateSpinAttackColorOptions() {
     # SPIN ATTACK COLORS #
     CreateReduxGroup    -Tag  "Colors" -Text "Magic Spin Attack Colors" -Height 2
     $Items = @("Blue", "Red", "Green", "White", "Cyan", "Magenta", "Orange", "Gold", "Purple", "Pink", "Black", "Randomized", "Custom")
-    CreateReduxComboBox -Name "BlueSpinAttack" -Column 1 -Text "Blue Spin Colors:" -Length 185 -Shift 35 -Items $Items -Default 1 -Info ("Select a preset for the blue spin attack colors`n" + '"Randomized" fully randomizes the colors each time the patcher is opened')
-    CreateReduxComboBox -Name "RedSpinAttack"  -Column 3 -Text "Red Spin Colors:"  -Length 185 -Shift 35 -Items $Items -Default 2 -Info ("Select a preset for the red spin attack colors`n" + '"Randomized" fully randomizes the colors each time the patcher is opened')
+    CreateReduxComboBox -Name "BlueSpinAttack" -Column 1 -Text "Blue Spin Attack Colors:" -Length 230 -Shift 70 -Items $Items -Default 1 -Info ("Select a preset for the blue spin attack colors`n" + '"Randomized" fully randomizes the colors each time the patcher is opened')
+    CreateReduxComboBox -Name "RedSpinAttack"  -Column 4 -Text "Red Spin Attack Colors:"  -Length 230 -Shift 70 -Items $Items -Default 2 -Info ("Select a preset for the red spin attack colors`n" + '"Randomized" fully randomizes the colors each time the patcher is opened')
 
     # Spin Attack Colors - Buttons
     $Buttons = @()
-    $Buttons += CreateReduxButton -Column 1 -Row 2 -Width 100 -Text "Blue Spin (Inner)" -Info "Select the inner color you want for the blue spin attack"
-    $Buttons += CreateReduxButton -Column 2 -Row 2 -Width 100 -Text "Blue Spin (Outer)" -Info "Select the outer color you want for the blue spin attack"
-    $Buttons += CreateReduxButton -Column 3 -Row 2 -Width 100 -Text "Red Spin (Inner)"  -Info "Select the inner color you want for the red spin attack"
-    $Buttons += CreateReduxButton -Column 4 -Row 2 -Width 100 -Text "Red Spin (Outer)"  -Info "Select the outer color you want for the red spin attack"
+    $Buttons += CreateReduxButton -Column 3 -Row 1 -Width 100 -Text "Blue Spin (Inner)" -Info "Select the inner color you want for the blue spin attack"
+    $Buttons += CreateReduxButton -Column 3 -Row 2 -Width 100 -Text "Blue Spin (Outer)" -Info "Select the outer color you want for the blue spin attack"
+    $Buttons += CreateReduxButton -Column 6 -Row 1 -Width 100 -Text "Red Spin (Inner)"  -Info "Select the inner color you want for the red spin attack"
+    $Buttons += CreateReduxButton -Column 6 -Row 2 -Width 100 -Text "Red Spin (Outer)"  -Info "Select the outer color you want for the red spin attack"
 
     # Spin Attack Colors - Dialogs
     $Redux.Colors.SetSpinAttack = @()
@@ -168,26 +190,29 @@ function CreateSpinAttackColorOptions() {
 function CreateFairyColorOptions([String]$Name, [String]$Second, [String]$Presets="") {
 
     # FAIRY COLORS #
-    CreateReduxGroup    -Tag  "Colors" -Text ($Name + " Colors") -Height 4
+    CreateReduxGroup    -Tag  "Colors" -Text "Fairy Colors" -Height 2
     $Items = @($Name, $Second, "Tael", "Gold", "Green", "Light Blue", "Yellow", "Red", "Magenta", "Black", "Fi", "Ciela", "Epona", "Ezlo", "King of Red Lions", "Linebeck", "Loftwing", "Midna", "Phantom Zelda", "Randomized", "Custom")
     CreateReduxComboBox -Name "Fairy" -Length 230 -Shift 70 -Items $Items -Text ($name + " Colors:") -Info ("Select a color scheme for " + $name + $Presets + "`n" + '"Randomized" fully randomizes the colors each time the patcher is opened')
 
     # Fairy Colors - Buttons
     $Buttons = @()
-    $Buttons += CreateReduxButton -Column 1 -Row 3 -Width 100 -Tag $Buttons.Count -Text "Idle (Inner)"     -Info ("Select the color you want for the Inner Idle stance for " + $name)
-    $Buttons += CreateReduxButton -Column 2 -Row 3 -Width 100 -Tag $Buttons.Count -Text "Idle (Outer)"     -Info ("Select the color you want for the Outer Idle stance for " + $name)
-    $Buttons += CreateReduxButton -Column 3 -Row 3 -Width 100 -Tag $Buttons.Count -Text "Interact (Inner)" -Info ("Select the color you want for the Inner Other stance for " + $name)
-    $Buttons += CreateReduxButton -Column 4 -Row 3 -Width 100 -Tag $Buttons.Count -Text "Interact (Outer)" -Info ("Select the color you want for the Outer Other stance for " + $name)
-    $Buttons += CreateReduxButton -Column 1 -Row 4 -Width 100 -Tag $Buttons.Count -Text "NPC (Inner)"      -Info ("Select the color you want for the Inner NPC stance for " + $name)
-    $Buttons += CreateReduxButton -Column 2 -Row 4 -Width 100 -Tag $Buttons.Count -Text "NPC (Outer)"      -Info ("Select the color you want for the Outer NPC stance for " + $name)
-    $Buttons += CreateReduxButton -Column 3 -Row 4 -Width 100 -Tag $Buttons.Count -Text "Enemy (Inner)"    -Info ("Select the color you want for the Inner Enemy stance for " + $name)
-    $Buttons += CreateReduxButton -Column 4 -Row 4 -Width 100 -Tag $Buttons.Count -Text "Enemy (Outer)"    -Info ("Select the color you want for the Outer Enemy stance for " + $name)
+    $Buttons += CreateReduxButton -Column 3 -Row 1 -Width 100 -Tag $Buttons.Count -Text "Idle (Inner)"     -Info ("Select the color you want for the Inner Idle stance for " + $name)
+    $Buttons += CreateReduxButton -Column 3 -Row 2 -Width 100 -Tag $Buttons.Count -Text "Idle (Outer)"     -Info ("Select the color you want for the Outer Idle stance for " + $name)
+
+    $Buttons += CreateReduxButton -Column 4 -Row 1 -Width 100 -Tag $Buttons.Count -Text "Interact (Inner)" -Info ("Select the color you want for the Inner Other stance for " + $name)
+    $Buttons += CreateReduxButton -Column 4 -Row 2 -Width 100 -Tag $Buttons.Count -Text "Interact (Outer)" -Info ("Select the color you want for the Outer Other stance for " + $name)
+
+    $Buttons += CreateReduxButton -Column 5 -Row 1 -Width 100 -Tag $Buttons.Count -Text "NPC (Inner)"      -Info ("Select the color you want for the Inner NPC stance for " + $name)
+    $Buttons += CreateReduxButton -Column 5 -Row 2 -Width 100 -Tag $Buttons.Count -Text "NPC (Outer)"      -Info ("Select the color you want for the Outer NPC stance for " + $name)
+
+    $Buttons += CreateReduxButton -Column 6 -Row 1 -Width 100 -Tag $Buttons.Count -Text "Enemy (Inner)"    -Info ("Select the color you want for the Inner Enemy stance for " + $name)
+    $Buttons += CreateReduxButton -Column 6 -Row 2 -Width 100 -Tag $Buttons.Count -Text "Enemy (Outer)"    -Info ("Select the color you want for the Outer Enemy stance for " + $name)
 
     # Fairy Colors - Info Label
-    CreateLabel -X ($Buttons[0].Left + 5) -Y ($Buttons[0].Top - 20) -Width 100 -Height 15 -Text "Inner " + $name + " Color" -Font $Fonts.SmallBold -AddTo $Last.Group
-    CreateLabel -X ($Buttons[1].Left + 5) -Y ($Buttons[0].Top - 20) -Width 100 -Height 15 -Text "Outer " + $name + " Color" -Font $Fonts.SmallBold -AddTo $Last.Group
-    CreateLabel -X ($Buttons[2].Left + 5) -Y ($Buttons[0].Top - 20) -Width 100 -Height 15 -Text "Inner " + $name + " Color" -Font $Fonts.SmallBold -AddTo $Last.Group
-    CreateLabel -X ($Buttons[3].Left + 5) -Y ($Buttons[0].Top - 20) -Width 100 -Height 15 -Text "Outer " + $name + " Color" -Font $Fonts.SmallBold -AddTo $Last.Group
+    #CreateLabel -X ($Buttons[0].Left + 5) -Y ($Buttons[0].Top - 20) -Width 100 -Height 15 -Text "Inner " + $name + " Color" -Font $Fonts.SmallBold -AddTo $Last.Group
+    #CreateLabel -X ($Buttons[1].Left + 5) -Y ($Buttons[0].Top - 20) -Width 100 -Height 15 -Text "Outer " + $name + " Color" -Font $Fonts.SmallBold -AddTo $Last.Group
+    #CreateLabel -X ($Buttons[2].Left + 5) -Y ($Buttons[0].Top - 20) -Width 100 -Height 15 -Text "Inner " + $name + " Color" -Font $Fonts.SmallBold -AddTo $Last.Group
+    #CreateLabel -X ($Buttons[3].Left + 5) -Y ($Buttons[0].Top - 20) -Width 100 -Height 15 -Text "Outer " + $name + " Color" -Font $Fonts.SmallBold -AddTo $Last.Group
 
     # Fairy Colors - Dialogs
     $Redux.Colors.SetFairy = @()
@@ -489,6 +514,8 @@ function SetColors([Array]$Colors, [Array]$Dialogs, [Array]$Labels) {
 Export-ModuleMember -Function GetSFXID
 Export-ModuleMember -Function GetItemID
 Export-ModuleMember -Function GetInstrumentsID
+
+Export-ModuleMember -Function ShowModelPreview
 
 Export-ModuleMember -Function CreateButtonColorOptions
 Export-ModuleMember -Function CreateSpinAttackColorOptions

@@ -2,10 +2,11 @@
 - T. Takemoto
 
 --- Invictus ---
-- Director:				juzcook
+- Director:			juzcook
 - Final Boss:			Kaizoman, Thomas
 - Special Thanks:			Nexus15, Freakin_HA, HmWhyNot, ChrisG___, White_Moth,
 				Hiro_sofT, DanTheVP, LadiesMan217, Kaizoman
 - Music:				tcdw, Sinc-X, Wakana, RednGreen, Izuna, Dr. Tapeworm, Wavee,
 				WorldPeace, Lui37, Masterlink, Crew, S.N.N., Sinister Pixel, Pinci,
-				DanTheVP, aCrowned, MaxodeX, Crispy, LadiesMan217, Amphobius
+				DanTheVP, aCrowned, MaxodeX, Crispy, LadiesMan217,
+				Amphobius

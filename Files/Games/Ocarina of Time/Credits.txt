@@ -1,7 +1,7 @@
 --- REDUX ---
 - Hacking:			Maroc
-- Editing / Revision:			ShadowOne333, MattKimura
-- Original Hacking:			Roman971, TestRunnerSRL, AmazingAmpharos, fig02, krimtonz,
+- Editing / Revision:		ShadowOne333, MattKimura
+- Original Hacking:		Roman971, TestRunnerSRL, AmazingAmpharos, fig02, krimtonz,
 				rlbond86, KevinPal, junglechief87
 --- Additional Options ---
 - Master Quest:			ShadowOne333
@@ -10,18 +10,21 @@
 - MM Young Link Model:		The3Dude
 - MM Adult Link Model:		Skilarbabcock (www.youtube.com/user/skilarbabcock)
 - ALLTP Link Models:		ONI 3D-Arts
+- Happy Mask Salesman:		Anubis-V1
+- Mega Man:			Megaman Legends
 - ALTTP Zelda Child Model:		Unesag
 - ALTTP Zelda Adult Model:		Lopieloo
-- Hatsune Miku Link Models:		JanexLane
-- Saria Models:			Malon's Rose
+- Hatsune Miku Link Models:	JanexLane
 - Malon 3D/Thicc Models:		Kimi-Stardust
+- Saria Models:			Malon's Rose
+- Princess Ruto:			Unesag
 - Aria the Demon Models:		AriaHiro64
 - MM Link Voice:			Korey Cryderman & GhostlyDark
 - Feminine Link Voice:		theluigidude2007
 - MM HUD Textures:		GhostlyDark
 - MM Button Positions:		GhostlyDark
 - MM Pause Screen:		Garo-Mastah & CM
-- Easier Minigames:			ShadowOne333
+- Easier Minigames:		ShadowOne333
 - Faster Block Pushing:		ShadowOne333
 - Correct Rupee Colors:		GhostlyDark
 - Restore Cow Nose Ring:		ShadowOne333
@@ -29,12 +32,12 @@
 - Censor Blood			ShadowOne333
 - Censor Gerudo Textures:		GhostlyDark & ShadowOne333
 - Pause Screen Delay Fix		zel
-- Debug Map Select			Jared Johnson
+- Debug Map Select		Jared Johnson
 - Set Capacity:			GhostlyDark
 - Show File Select Icons:		ShadowOne333
 - Colors:				GhostlyDark
 - Restore Text:			ShadowOne333
-- Female Pronouns:			Admentus, Mil
+- Female Pronouns:		Admentus, Mil
 - Various offsets:			Chez Cousteau
 - Admentus (Scripting and Maintaince of all Options)
 
@@ -42,10 +45,10 @@
 - Translations			GhostlyDark
 
 --- Translations ---
-- Spanish:				eduardo_a2j (v2.2)
+- Spanish:			eduardo_a2j (v2.2)
 - Polish:				RPG (v1.3)
-- Russian:				Zelda64rus (v2.32)
-- Chinese Simplified:			madcell (2009)
+- Russian:			Zelda64rus (v2.32)
+- Chinese Simplified:		madcell (2009)
 
 --- Dawn and Dusk ---
 - Lead Development and Music:	Captain Seedy-Eye
@@ -85,7 +88,7 @@ Testers:				Zerovolt0v, Sauraen, E-Gor, GTM, Collins, Ricar, Fig
 Level Designer:			Kaze Emanuar
 Programmers:			Kaze Emanuar, /Zel/
 Enemy Animator:			rankaisija
-Cinematographers:			Ostrealava02, CDi-Fails, /Zel/
+Cinematographers:		Ostrealava02, CDi-Fails, /Zel/
 Writers:				CDi-Fails, /Zel/
 Special Thanks:			Nokaubure, z64me, Ultra553, OoT Decomp
 

@@ -270,10 +270,8 @@ function CreateReduxPanel([Float]$Row=0, [Float]$Columns, [Float]$Rows=1,  [Stri
 
 
 #==============================================================================================================================================================================================
-function CreateReduxGroup([Float]$Y=50, [Float]$Height=1, [String]$Name=$Last.TabName, [String]$Tag, [Switch]$Hide, [Boolean]$IsGame=$True, [String]$Text="", [Switch]$IsRedux, [Float]$Columns=0, [Object]$AddTo=$Redux.Panel) {
+function CreateReduxGroup([Float]$X=15, [Float]$Y=50, [Float]$Height=1, [String]$Name=$Last.TabName, [String]$Tag, [Switch]$Hide, [Boolean]$IsGame=$True, [String]$Text="", [Switch]$IsRedux, [Float]$Columns=0, [Object]$AddTo=$Redux.Panel) {
     
-
-    $X = 15
     $Width = ($AddTo.Width - 50)
 
     if (IsSet -Elem $Name) {

@@ -390,7 +390,7 @@ function ByteLanguageMajorasMask() {
 #==============================================================================================================================================================================================
 function CreateOptionsMajorasMask() {
     
-    CreateOptionsDialog -Width 1060 -Height 550 -Tabs @("Audiovisual", "Difficulty", "Colors", "Equipment")
+    CreateOptionsDialog -Width 1060 -Height 485 -Tabs @("Audiovisual", "Difficulty", "Colors", "Equipment")
 
 }
 
@@ -438,15 +438,15 @@ function CreateTabReduxMajorasMask() {
     CreateReduxRadioButton -Name "Hide"        -Column 1 -Row 2          -Text "Hidden"               -Info "Hide the D-Pad icons, while they are still active"
     CreateReduxRadioButton -Name "LayoutLeft"  -Column 1 -Row 3          -Text "Left Side"            -Info "Show the D-Pad icons on the left side of the HUD"
     CreateReduxRadioButton -Name "LayoutRight" -Column 1 -Row 4 -Checked -Text "Right Side"           -Info "Show the D-Pad icons on the right side of the HUD"
-    CreateReduxComboBox    -Name "Up"          -Column 2.8 -Row 1 -Length 150 -Items @("Disabled", "Ocarina of Time", "Deku Mask", "Goron Mask", "Zora Mask", "Fierce Deity's Mask") -Default 3 -Info "Set the quick slot item for the D-Pad Up button"
-    CreateReduxComboBox    -Name "Left"        -Column 1.8 -Row 3.5 -Length 150 -Items @("Disabled", "Ocarina of Time", "Deku Mask", "Goron Mask", "Zora Mask", "Fierce Deity's Mask") -Default 4 -Info "Set the quick slot item for the D-Pad Left button"
-    CreateReduxComboBox    -Name "Right"       -Column 3.8 -Row 3.5 -Length 150 -Items @("Disabled", "Ocarina of Time", "Deku Mask", "Goron Mask", "Zora Mask", "Fierce Deity's Mask") -Default 5 -Info "Set the quick slot item for the D-Pad Right button"
-    CreateReduxComboBox    -Name "Down"        -Column 2.8 -Row 6 -Length 150 -Items @("Disabled", "Ocarina of Time", "Deku Mask", "Goron Mask", "Zora Mask", "Fierce Deity's Mask") -Default 2 -Info "Set the quick slot item for the D-Pad Down button"
+    CreateReduxComboBox    -Name "Up"          -Column 2.8 -Row 1   -Length 160 -Items @("Disabled", "Ocarina of Time", "Deku Mask", "Goron Mask", "Zora Mask", "Fierce Deity's Mask") -Default 3 -Info "Set the quick slot item for the D-Pad Up button"
+    CreateReduxComboBox    -Name "Left"        -Column 1.8 -Row 3.5 -Length 160 -Items @("Disabled", "Ocarina of Time", "Deku Mask", "Goron Mask", "Zora Mask", "Fierce Deity's Mask") -Default 4 -Info "Set the quick slot item for the D-Pad Left button"
+    CreateReduxComboBox    -Name "Right"       -Column 3.8 -Row 3.5 -Length 160 -Items @("Disabled", "Ocarina of Time", "Deku Mask", "Goron Mask", "Zora Mask", "Fierce Deity's Mask") -Default 5 -Info "Set the quick slot item for the D-Pad Right button"
+    CreateReduxComboBox    -Name "Down"        -Column 2.8 -Row 6   -Length 160 -Items @("Disabled", "Ocarina of Time", "Deku Mask", "Goron Mask", "Zora Mask", "Fierce Deity's Mask") -Default 2 -Info "Set the quick slot item for the D-Pad Down button"
     $Redux.DPad.Reset = CreateReduxButton      -Column 1 -Row 5 -Height 30 -Text "Reset Layout" -Info "Reset the layout for the D-Pad"
 
     # D-Pad Buttons Customization - Image #
     $PictureBox = New-Object Windows.Forms.PictureBox
-    $PictureBox.Location = New-object System.Drawing.Size( ($Redux.DPad.Left.Right + 25), $Redux.DPad.Up.Bottom)
+    $PictureBox.Location = New-object System.Drawing.Size( ($Redux.DPad.Left.Right + 20), $Redux.DPad.Up.Bottom)
     $PictureBox.Image  = [System.Drawing.Image]::Fromfile( ( Get-Item ($Paths.Main + "\D-Pad.png") ) )
     $PictureBox.Width  = $PictureBox.Image.Size.Width
     $PictureBox.Height = $PictureBox.Image.Size.Height

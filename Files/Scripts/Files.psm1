@@ -54,11 +54,14 @@ function SetFileParameters() {
     $Files.oot.male_model_child_link_mm     = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Decompressed\Models\male_model_child_link_mm")
     $Files.oot.male_model_adult_link_mm     = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Decompressed\Models\male_model_adult_link_mm")
     $Files.oot.male_models_link_alttp       = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Decompressed\Models\male_models_link_alttp")
+    $Files.oot.male_models_salesman         = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Decompressed\Models\male_models_happy_mask_salesman")
+    $Files.oot.male_models_mega_man         = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Decompressed\Models\male_models_mega_man")
     $Files.oot.female_models_zelda_alttp    = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Decompressed\Models\female_models_zelda_alttp")
     $Files.oot.female_models_miku           = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Decompressed\Models\female_models_miku")
     $Files.oot.female_models_malon_3d       = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Decompressed\Models\female_models_malon_3d")
     $Files.oot.female_models_malon_sexy     = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Decompressed\Models\female_models_malon_sexy")
     $Files.oot.female_models_saria          = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Decompressed\Models\female_models_saria")
+    $Files.oot.female_models_ruto           = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Decompressed\Models\female_models_ruto")
     $Files.oot.female_models_aria           = CheckPatchExtension -File ($Paths.Games + "\Ocarina of Time\Decompressed\Models\female_models_aria_the_demon")
 
     $Files.oot.lens_of_truth                = $Paths.Games + "\Ocarina of Time\Textures\Lens of Truth.bin"
@@ -107,6 +110,20 @@ function SetFileParameters() {
     $Files.oot.gerudo19                     = $Paths.Games + "\Ocarina of Time\Textures\Gerudo Symbols\spirit_temple_room_0_elevator.bin"
     $Files.oot.gerudo20                     = $Paths.Games + "\Ocarina of Time\Textures\Gerudo Symbols\spirit_temple_room_0_pillars.bin"
     $Files.oot.gerudo21                     = $Paths.Games + "\Ocarina of Time\Textures\Gerudo Symbols\spirit_temple_room_10.bin"
+
+    $Files.oot.previews1                    = $Paths.Games + "\Ocarina of Time\Previews\Default.png"
+    $Files.oot.previews2                    = $Paths.Games + "\Ocarina of Time\Previews\Child_Link_MM.png"
+    $Files.oot.previews3                    = $Paths.Games + "\Ocarina of Time\Previews\Adult_Link_MM.png"
+    $Files.oot.previews4                    = $Paths.Games + "\Ocarina of Time\Previews\Link_MM.png"
+    $Files.oot.previews5                    = $Paths.Games + "\Ocarina of Time\Previews\Link_ALTTP.png"
+    $Files.oot.previews6                    = $Paths.Games + "\Ocarina of Time\Previews\Happy_Mask_Salesman.png"
+    $Files.oot.previews7                    = $Paths.Games + "\Ocarina of Time\Previews\Mega_Man.png"
+    $Files.oot.previews8                    = $Paths.Games + "\Ocarina of Time\Previews\Miku.png"
+    $Files.oot.previews9                    = $Paths.Games + "\Ocarina of Time\Previews\Malon_3D.png"
+    $Files.oot.previews10                   = $Paths.Games + "\Ocarina of Time\Previews\Malon_Sexy.png"
+    $Files.oot.previews11                   = $Paths.Games + "\Ocarina of Time\Previews\Saria.png"
+    $Files.oot.previews12                   = $Paths.Games + "\Ocarina of Time\Previews\Ruto.png"
+    $Files.oot.previews13                   = $Paths.Games + "\Ocarina of Time\Previews\Aria.png"
 
 
 
