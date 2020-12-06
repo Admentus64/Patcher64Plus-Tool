@@ -75,7 +75,7 @@ function SetFileParameters() {
 
     $Files.oot.file_select                  = $Paths.Games + "\Ocarina of Time\Binaries\File Select.bin"
     $Files.oot.message_table_restore_text   = $Paths.Games + "\Ocarina of Time\Binaries\Message\Table Restore Text.bin"
-    $Files.oot.message_table_feminine       = $Paths.Games + "\Ocarina of Time\Binaries\Message\Table Feminine Pronouns.bin"
+   #$Files.oot.message_table_feminine       = $Paths.Games + "\Ocarina of Time\Binaries\Message\Table Feminine Pronouns.bin"
     $Files.oot.message_songs                = $Paths.Games + "\Ocarina of Time\Binaries\Message\Songs.bin"
     $Files.oot.message_mq1                  = $Paths.Games + "\Ocarina of Time\Binaries\Message\MQ Navi Action.bin"
     $Files.oot.message_mq2                  = $Paths.Games + "\Ocarina of Time\Binaries\Message\MQ Navi Door.bin"
@@ -87,7 +87,7 @@ function SetFileParameters() {
     $Files.oot.theme_fire_temple            = CheckPatchExtension -File ($Paths.Master + "\Data Extraction\Audiobank Fire Temple")
     $Files.oot.restore_text                 = CheckPatchExtension -File ($Paths.Master + "\Data Extraction\Message\OoT Restore Text")
     $Files.oot.restore_text_redux           = CheckPatchExtension -File ($Paths.Master + "\Data Extraction\Message\OoT Restore Text Redux")
-    $Files.oot.feminine_pronouns            = CheckPatchExtension -File ($Paths.Master + "\Data Extraction\Message\OoT Feminine Pronouns")
+   #$Files.oot.feminine_pronouns            = CheckPatchExtension -File ($Paths.Master + "\Data Extraction\Message\OoT Feminine Pronouns")
 
     $Files.oot.gerudo1                      = $Paths.Games + "\Ocarina of Time\Textures\Gerudo Symbols\crystal_switch.bin"
     $Files.oot.gerudo2                      = $Paths.Games + "\Ocarina of Time\Textures\Gerudo Symbols\floor_switch.bin"

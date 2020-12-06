@@ -522,19 +522,19 @@ function ByteLanguageOcarinaOfTime() {
     }
 
     if (IsChecked -Elem $Redux.Text.Restore) {
-        if (!(IsChecked -Elem $Redux.Text.FemalePronouns)) {
+        #if (!(IsChecked -Elem $Redux.Text.FemalePronouns)) {
             ChangeBytes -Offset "7596" -Values @("52", "40")
             PatchBytes  -Offset "B849EC" -Patch "Message\Table Restore Text.bin"
-        }
+        #}
 
         if (IsChecked -Elem $Patches.Redux -Active)   { ApplyPatch -File $File -Patch "\Data Extraction\Message\OoT Restore Text Redux.bps" -FilesPath }
         else                                          { ApplyPatch -File $File -Patch "\Data Extraction\Message\OoT Restore Text.bps"       -FilesPath }
 
-        if (IsChecked -Elem $Redux.Text.FemalePronouns) {
-            ChangeBytes -Offset "7596" -Values @("52", "E0")
-            PatchBytes  -Offset "B849EC" -Patch "Message\Table Feminine Pronouns.bin"
-            ApplyPatch -File $File -Patch "\Data Extraction\Message\OoT Feminine Pronouns.bps" -FilesPath
-        }
+        #if (IsChecked -Elem $Redux.Text.FemalePronouns) {
+        #    ChangeBytes -Offset "7596" -Values @("52", "E0")
+        #    PatchBytes  -Offset "B849EC" -Patch "Message\Table Feminine Pronouns.bin"
+        #    ApplyPatch -File $File -Patch "\Data Extraction\Message\OoT Feminine Pronouns.bps" -FilesPath
+        #}
 
     }
 
@@ -742,9 +742,9 @@ function CreateTabLanguageOcarinaOfTime() {
     # ENGLISH TEXT #
     $Redux.Box.Text = CreateReduxGroup -Tag  "Text" -Text "English Text"
     CreateReduxCheckBox    -Name "Restore"        -Column 1 -Text "Restore Text"           -Info "Restores the text used from the GC revision and applies grammar and typo fixes`nAlso corrects some icons in the text"
-    CreateReduxCheckBox    -Name "FemalePronouns" -Column 2 -Text "Female Pronouns"        -Info "Refer to Link as a female character`n- Requires the Restore Text option"
-    CreateReduxCheckBox    -Name "GCScheme"       -Column 3 -Text "GC Scheme"              -Info "Set the Textures and Text Dialogue Colors to match the GameCube's scheme"
-    CreateReduxCheckBox    -Name "PauseScreen"    -Column 4 -Text "MM Pause Screen"        -Info "Replaces the Pause Screen textures to be styled like Majora's Mask"
+   #CreateReduxCheckBox    -Name "FemalePronouns" -Column 2 -Text "Female Pronouns"        -Info "Refer to Link as a female character`n- Requires the Restore Text option"
+    CreateReduxCheckBox    -Name "GCScheme"       -Column 2 -Text "GC Scheme"              -Info "Set the Textures and Text Dialogue Colors to match the GameCube's scheme"
+    CreateReduxCheckBox    -Name "PauseScreen"    -Column 3 -Text "MM Pause Screen"        -Info "Replaces the Pause Screen textures to be styled like Majora's Mask"
 
 
 
