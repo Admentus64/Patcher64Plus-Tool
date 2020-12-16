@@ -6,7 +6,7 @@ function SetWiiVCMode([Boolean]$Enable) {
     if ($IsWiiVC)   { $CustomTitleTextBox.MaxLength = $VCTitleLength  }
     else            { $CustomTitleTextBox.MaxLength = $GameConsole.rom_title_length }
     
-    EnablePatchButtons -Enable (IsSet -Elem $GamePath)
+    EnablePatchButtons (IsSet -Elem $GamePath)
     GetHeader
     SetModeLabel
     ChangePatchPanel
@@ -218,6 +218,7 @@ function ChangeGameMode() {
     $GameFiles.base = $Paths.games + "\" + $GameType.mode
     $GameFiles.binaries = $GameFiles.base + "\Binaries"
     $GameFiles.extracted = $GameFiles.base + "\Extracted"
+    $GameFiles.export = $GameFiles.base + "\Export"
     $GameFiles.compressed = $GameFiles.base + "\Compressed"
     $GameFiles.decompressed = $GameFiles.base + "\Decompressed"
     $GameFiles.downgrade = $GameFiles.base + "\Downgrade"
@@ -292,11 +293,16 @@ function SetVCPanel() {
 #==============================================================================================================================================================================================
 function UpdateStatusLabel([String]$Text) {
     
-    if ($Settings.Debug.Console -eq $True) { Write-Host $Text }
+    WriteToConsole $Text
     $StatusLabel.Text = $Text
     $StatusLabel.Refresh()
 
 }
+
+
+
+#==============================================================================================================================================================================================
+function WriteToConsole([String]$Text) { if ($Settings.Debug.Console -eq $True) { Write-Host $Text } }
 
 
 
@@ -315,8 +321,8 @@ function SetModeLabel() {
 function EnablePatchButtons([Boolean]$Enable) {
     
     # Set the status that we are ready to roll... Or not...
-    if ($Enable)        { UpdateStatusLabel -Text "Ready to patch!" }
-    else                { UpdateStatusLabel -Text "Select your ROM or VC WAD file to continue." }
+    if ($Enable)        { UpdateStatusLabel "Ready to patch!" }
+    else                { UpdateStatusLabel "Select your ROM or VC WAD file to continue." }
 
     # Enable patcher buttons.
     $Patches.Panel.Enabled = $Enable
@@ -340,9 +346,9 @@ function GamePath_Finish([Object]$TextBox, [String]$Path) {
     # Check if the game is a WAD
     $DroppedExtn = (Get-Item -LiteralPath $GamePath).Extension
 
-    if ( ($DroppedExtn -eq '.wad') -and !$IsWiiVC)              { SetWiiVCMode -Enable $True }
-    elseif ( ($DroppedExtn -ne '.wad') -and $IsWiiVC)           { SetWiiVCMode -Enable $False }
-    elseif ( ($DroppedExtn -ne '.wad') -and !$GameIsSelected)   { SetWiiVCMode -Enable $False }
+    if ( ($DroppedExtn -eq '.wad') -and !$IsWiiVC)              { SetWiiVCMode $True }
+    elseif ( ($DroppedExtn -ne '.wad') -and $IsWiiVC)           { SetWiiVCMode $False }
+    elseif ( ($DroppedExtn -ne '.wad') -and !$GameIsSelected)   { SetWiiVCMode $False }
     SetMainScreenSize
     $global:GameIsSelected = $True
 
@@ -590,7 +596,7 @@ function RestoreCustomHeader() {
 
 
 #==============================================================================================================================================================================================
-function StrLike([String]$str, [String]$val, [Switch]$Not) {
+function StrLike([String]$Str, [String]$Val, [Switch]$Not) {
     
     if     ($str.ToLower() -like "*"    + $val + "*")   { return !$Not }
     elseif ($str.ToLower() -notlike "*" + $val + "*")   { return $Not }
@@ -625,7 +631,7 @@ function EnableForm([Object]$Form, [Boolean]$Enable, [Switch]$Not) {
 
 
 #==============================================================================================================================================================================================
-function Get-FileName([String]$Path, [String]$Description, [String[]]$FileNames) {
+function GetFileName([String]$Path, [String]$Description, [String[]]$FileNames) {
     
     $OpenFileDialog = New-Object System.Windows.Forms.OpenFileDialog
     $OpenFileDialog.InitialDirectory = $Path
@@ -681,25 +687,6 @@ function CreatePath([String]$LiteralPath) {
 
 
 #==============================================================================================================================================================================================
-function TestPath([String]$LiteralPath, [String]$PathType = 'Any') {
-    
-    # Make sure the path is not null to avoid errors.
-    if ($LiteralPath -ne '') {
-        # Check to see if the path exists.
-        if (Test-Path -LiteralPath $LiteralPath -PathType $PathType -ErrorAction 'SilentlyContinue') {
-            # The path exists.
-            return $True
-        }
-    }
-
-    # The path is bunk.
-    return $False
-
-}
-
-
-
-#==============================================================================================================================================================================================
 function RemoveFile([String]$LiteralPath) {
     
     if (!(IsSet -Elem $LiteralPath)) { return }
@@ -731,8 +718,8 @@ function ShowPowerShellConsole([bool]$ShowConsole) {
 function TogglePowerShellOpenWithClicks([Boolean]$Enable) {
     
     # Create a temporary folder to create the registry entry and and set the path to it
-    RemovePath -LiteralPath $Paths.Registry
-    CreatePath -LiteralPath $Paths.Registry
+    RemovePath $Paths.Registry
+    CreatePath $Paths.Registry
     $RegFile = $Paths.Registry + "\Double Click.reg"
 
     # Create the registry file.
@@ -782,6 +769,7 @@ Export-ModuleMember -Function ChangePatchPanel
 Export-ModuleMember -Function SetMainScreenSize
 Export-ModuleMember -Function ChangeGameMode
 Export-ModuleMember -Function UpdateStatusLabel
+Export-ModuleMember -Function WriteToConsole
 Export-ModuleMember -Function SetModeLabel
 Export-ModuleMember -Function EnablePatchButtons
 
@@ -802,11 +790,11 @@ Export-ModuleMember -Function RestoreCustomHeader
 Export-ModuleMember -Function EnableGUI
 Export-ModuleMember -Function EnableForm
 
-Export-ModuleMember -Function Get-FileName
+Export-ModuleMember -Function GetFileName
 Export-ModuleMember -Function RemoveFile
 Export-ModuleMember -Function RemovePath
 Export-ModuleMember -Function CreatePath
-Export-ModuleMember -Function TestPath
+Export-ModuleMember -Function Test-Path
 Export-ModuleMember -Function RemoveFile
 Export-ModuleMember -Function CreateSubPath
 

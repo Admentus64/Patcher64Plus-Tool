@@ -55,6 +55,7 @@ function GetSettings() {
     $File = $Paths.Base + "\Settings.ini"
 
     if (!(Test-Path -LiteralPath $File -PathType Leaf)) { New-Item -Path $File | Out-Null }
+
     $Lines = Get-Content -Path $File
     if ($Lines -notcontains "[Core]") { Add-Content -Path $File -Value "[Core]" | Out-Null }
     if ($Lines -notcontains "[Debug]") { Add-Content -Path $File -Value "[Debug]" | Out-Null }

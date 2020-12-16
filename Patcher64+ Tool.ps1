@@ -23,8 +23,8 @@ Add-Type -AssemblyName 'System.Drawing'
 # Setup global variables
 
 $global:ScriptName = "Patcher64+ Tool"
-$global:VersionDate = "2020-12-06"
-$global:Version     = "v9.1.2"
+$global:VersionDate = "2020-12-15"
+$global:Version     = "v9.2.0"
 
 $global:GameConsole = $global:GameType = $global:GamePatch = $global:CheckHashSum = ""
 $global:GameFiles = $global:Settings = @{}
@@ -56,11 +56,11 @@ else {
 # Set all other paths
 $Paths.Master          = $Paths.Base + "\Files"
 $Paths.Registry        = $Paths.Master + "\Registry"
-$Paths.WiiVC           = $Paths.Master + "\Wii VC"
 $Paths.Games           = $Paths.Master + "\Games"
 $Paths.Main            = $Paths.Master + "\Main"
+$Paths.Tools           = $Paths.Master + "\Tools"
+$Paths.WiiVC           = $Paths.Tools  + "\Wii VC"
 $Paths.Scripts         = $Paths.Master + "\Scripts"
-$Paths.Extraction      = $Paths.Master + "\Data Extraction"
 $Paths.Temp            = $Paths.Master + "\Temp"
 $Paths.cygdrive        = $Paths.Master + "\cygdrive"
 
@@ -71,8 +71,8 @@ $Paths.cygdrive        = $Paths.Master + "\cygdrive"
 
 function ImportModule([String]$Name) {
     
-    if (Test-Path ($Paths.Scripts + "\" + $Name + ".psm1") -PathType Leaf)   { Import-Module -Name ($Paths.Scripts + "\" + $Name + ".psm1") }
-    else                                                                     { CreateErrorDialog -Error "Missing Modules" -Exit }
+    if (Test-Path -LiteralPath ($Paths.Scripts + "\" + $Name + ".psm1") -PathType Leaf)   { Import-Module -Name ($Paths.Scripts + "\" + $Name + ".psm1") }
+    else                                                                                  { CreateErrorDialog -Error "Missing Modules" -Exit }
 
 }
 

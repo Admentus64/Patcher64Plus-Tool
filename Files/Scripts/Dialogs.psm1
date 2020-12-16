@@ -191,7 +191,7 @@ function CreateSettingsDialog() {
 
     # Advanced Settings
     $GeneralSettings.AdvancedBox       = CreateReduxGroup -Y ($GeneralSettings.GeneralBox.Bottom + 10) -IsGame $False -Height 2 -AddTo $SettingsDialog -Text "Advanced Settings"
-    $GeneralSettings.IgnoreChecksum    = CreateSettingsCheckbox -Name "IgnoreChecksum"   -Column 1 -Row 1 -Text "Ignore Input Checksum"  -IsDebug -Info "Do not check the checksum of a ROM or WAD and patch it regardless"
+    $GeneralSettings.IgnoreChecksum    = CreateSettingsCheckbox -Name "IgnoreChecksum"   -Column 1 -Row 1 -Text "Ignore Input Checksum"  -IsDebug -Info "Do not check the checksum of a ROM or WAD and patch it regardless`nDowngrade is no longer forced anymore if the checksum is different than the supported revision"
     $GeneralSettings.KeepLogo          = CreateSettingsCheckbox -Name "KeepLogo"         -Column 2 -Row 1 -Text "Keep Logo"              -IsDebug -Info "Keep the vanilla title logo instead of the Master Quest title logo"
     $GeneralSettings.ForceExtract      = CreateSettingsCheckbox -Name "ForceExtract"     -Column 3 -Row 1 -Text "Force Extract"          -IsDebug -Info "Always extract game data required for patching even if it was already extracted on a previous run"
     $GeneralSettings.ForceExtract      = CreateSettingsCheckbox -Name "ForceWidescreen"  -Column 1 -Row 2 -Text "Force Aspect Ratio Fix" -IsDebug -Info "Always force patching in the 16:9 Aspect Ratio Fix in Native Mode in addition to the 16:9 Widescreen Textures"
@@ -287,6 +287,15 @@ function ResetGame() {
             elseif ($Form.GetType() -eq [System.Windows.Forms.RadioButton])   { $Form.Checked       = $Form.Default }
             elseif ($Form.GetType() -eq [System.Windows.Forms.ComboBox])      { $Form.SelectedIndex = $Form.Default }
             elseif ($Form.GetType() -eq [System.Windows.Forms.TextBox])       { $Form.Text          = $Form.Default }
+
+            elseif ($Form.GetType() -eq [System.Windows.Forms.Panel]) {
+                forEach ($Subform in $Form.controls) {
+                    if     ($Subform.GetType() -eq [System.Windows.Forms.CheckBox])      { $Subform.Checked       = $Subform.Default }
+                    elseif ($Subform.GetType() -eq [System.Windows.Forms.RadioButton])   { $Subform.Checked       = $Subform.Default }
+                    elseif ($Subform.GetType() -eq [System.Windows.Forms.ComboBox])      { $Subform.SelectedIndex = $Subform.Default }
+                    elseif ($Subform.GetType() -eq [System.Windows.Forms.TextBox])       { $Subform.Text          = $Subform.Default }
+                }
+            }
         }
     }
 

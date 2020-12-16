@@ -84,11 +84,11 @@ function ByteOptionsMajorasMask() {
 
     # SOUNDS #
 
-    if (IsIndex -Elem $Redux.Sounds.LowHP -Not)                       { ChangeBytes -Offset "B97E2A" -Values (GetSFXID -SFX $Redux.Sounds.LowHP.Text) }
-    if (IsIndex -Elem $Redux.Sounds.InstrumentHylian -Not -Index 1)   { ChangeBytes -Offset "51CBE"  -Values (GetInstrumentID -SFX $Redux.Sounds.InstrumentHylian.Text); ChangeBytes -Offset "C668DC"  -Values (GetInstrumentID -SFX $Redux.Sounds.InstrumentHylian.Text) }
-    if (IsIndex -Elem $Redux.Sounds.InstrumentDeku   -Not -Index 2)   { ChangeBytes -Offset "51CC6"  -Values (GetInstrumentID -SFX $Redux.Sounds.InstrumentDeku.Text);   ChangeBytes -Offset "C668DF"  -Values (GetInstrumentID -SFX $Redux.Sounds.InstrumentDeku.Text)   }
-    if (IsIndex -Elem $Redux.Sounds.InstrumentGoron  -Not -Index 3)   { ChangeBytes -Offset "51CC4"  -Values (GetInstrumentID -SFX $Redux.Sounds.InstrumentGoron.Text);  ChangeBytes -Offset "C668DD"  -Values (GetInstrumentID -SFX $Redux.Sounds.InstrumentGoron.Text)  }
-    if (IsIndex -Elem $Redux.Sounds.InstrumentZora   -Not -Index 4)   { ChangeBytes -Offset "51CC5"  -Values (GetInstrumentID -SFX $Redux.Sounds.InstrumentZora.Text);   ChangeBytes -Offset "C668DE"  -Values (GetInstrumentID -SFX $Redux.Sounds.InstrumentZora.Text)   }
+    if (IsIndex -Elem $Redux.Sounds.LowHP -Not)                       { ChangeBytes -Offset "B97E2A" -Values (GetSFXID $Redux.Sounds.LowHP.Text) }
+    if (IsIndex -Elem $Redux.Sounds.InstrumentHylian -Not -Index 1)   { ChangeBytes -Offset "51CBE"  -Values (GetInstrumentID $Redux.Sounds.InstrumentHylian.Text); ChangeBytes -Offset "C668DC" -Values (GetInstrumentID $Redux.Sounds.InstrumentHylian.Text) }
+    if (IsIndex -Elem $Redux.Sounds.InstrumentDeku   -Not -Index 2)   { ChangeBytes -Offset "51CC6"  -Values (GetInstrumentID $Redux.Sounds.InstrumentDeku.Text);   ChangeBytes -Offset "C668DF" -Values (GetInstrumentID $Redux.Sounds.InstrumentDeku.Text)   }
+    if (IsIndex -Elem $Redux.Sounds.InstrumentGoron  -Not -Index 3)   { ChangeBytes -Offset "51CC4"  -Values (GetInstrumentID $Redux.Sounds.InstrumentGoron.Text);  ChangeBytes -Offset "C668DD" -Values (GetInstrumentID $Redux.Sounds.InstrumentGoron.Text)  }
+    if (IsIndex -Elem $Redux.Sounds.InstrumentZora   -Not -Index 4)   { ChangeBytes -Offset "51CC5"  -Values (GetInstrumentID $Redux.Sounds.InstrumentZora.Text);   ChangeBytes -Offset "C668DE" -Values (GetInstrumentID $Redux.Sounds.InstrumentZora.Text)   }
 
 
 
@@ -200,9 +200,9 @@ function ByteOptionsMajorasMask() {
     }
 
     if (IsChecked -Elem $Redux.Capacity.EnableWallet) {
-        $Wallet1 = Get16Bit -Value ($Redux.Capacity.Wallet1.Text)
-        $Wallet2 = Get16Bit -Value ($Redux.Capacity.Wallet2.Text)
-        $Wallet3 = Get16Bit -Value ($Redux.Capacity.Wallet3.Text)
+        $Wallet1 = Get16Bit ($Redux.Capacity.Wallet1.Text)
+        $Wallet2 = Get16Bit ($Redux.Capacity.Wallet2.Text)
+        $Wallet3 = Get16Bit ($Redux.Capacity.Wallet3.Text)
         ChangeBytes -Offset "C5836C" -Values @($Wallet1.Substring(0, 2), $Wallet1.Substring(2) )
         ChangeBytes -Offset "C5836E" -Values @($Wallet2.Substring(0, 2), $Wallet2.Substring(2) )
         ChangeBytes -Offset "C58370" -Values @($Wallet3.Substring(0, 2), $Wallet3.Substring(2) )
@@ -323,14 +323,14 @@ function ByteReduxMajorasMask() {
 function ByteLanguageMajorasMask() {
     
     if ( (IsChecked -Elem $Redux.Text.Restore) -or (IsLanguage -Elem $Redux.Gameplay.RazorSword) -or (IsText -Elem $Redux.Colors.Fairy -Compare "Tatl") -or (IsText -Elem $Redux.Colors.Fairy -Compare "Tael") ) {
-        $File = $GameFiles.extracted + "\Message Data Static.bin"
+        $File = $GameFiles.extracted + "\message_data_static.bin"
         ExportBytes -Offset "AD1000" -Length "699F0" -Output $File -Force
     }
 
     if (IsChecked -Elem $Redux.Text.Restore) {
         ChangeBytes -Offset "1A6D6"  -Values @("AC", "A0")
         PatchBytes  -Offset "C5D0D8" -Patch "Message\Table Restore Text.bin"
-        ApplyPatch -File $File -Patch "\Data Extraction\Message\MM Restore Text.bps" -FilesPath
+        ApplyPatch -File $File -Patch "\Export\Message\restore_text.bps"
         PatchBytes -Offset "A2DDC4" -Length "26F" -Texture -Patch "Icons\Troupe Leader's Mask Text.yaz0" # Correct Circus Mask
     }
 
@@ -352,10 +352,10 @@ function ByteLanguageMajorasMask() {
 
     if (IsLanguage -Elem $Redux.Gameplay.RazorSword) {
         $Offset = SearchBytes -File $File -Values @("54", "68", "69", "73", "20", "6E", "65", "77", "2C", "20", "73", "68", "61", "72", "70", "65", "72", "20", "62", "6C", "61", "64", "65")
-        ChangeBytes -File $File -Offset ( Get24Bit -Value ( (GetDecimal -Hex $Offset) + (GetDecimal -Hex "38") ) ) -Values @("61", "73", "20", "6D", "75", "63", "68", "11", "79", "6F", "75", "20", "77", "61", "6E", "74", "20")
+        ChangeBytes -File $File -Offset ( Get24Bit ( (GetDecimal $Offset) + (GetDecimal "38") ) ) -Values @("61", "73", "20", "6D", "75", "63", "68", "11", "79", "6F", "75", "20", "77", "61", "6E", "74", "20")
 
         $Offset = SearchBytes -File $File -Values @("54", "68", "65", "20", "4B", "6F", "6B", "69", "72", "69", "20", "53", "77", "6F", "72", "64", "20", "72", "65", "66", "6F", "72", "67", "65", "64")
-        ChangeBytes -File $File -Offset ( Get24Bit -Value ( (GetDecimal -Hex $Offset) + (GetDecimal -Hex "30") ) ) -Values @("61", "73", "20", "6D", "75", "63", "68", "20", "79", "6F", "75", "20", "77", "61", "6E", "74", "2E", "20")
+        ChangeBytes -File $File -Offset ( Get24Bit ( (GetDecimal $Offset) + (GetDecimal "30") ) ) -Values @("61", "73", "20", "6D", "75", "63", "68", "20", "79", "6F", "75", "20", "77", "61", "6E", "74", "2E", "20")
 
         $Offset = SearchBytes -File $File -Values @("4B", "65", "65", "70", "20", "69", "6E", "20", "6D", "69", "6E", "64", "20", "74", "68", "61", "74")
         PatchBytes -File $File -Offset $Offset -Patch "Message\Razor Sword 1.bin"
@@ -380,7 +380,7 @@ function ByteLanguageMajorasMask() {
     }
 
     if ( (IsChecked -Elem $Redux.Text.Restore) -or (IsLanguage -Elem $Redux.Gameplay.RazorSword) -or (IsText -Elem $Redux.Colors.Fairy -Compare "Tatl") -or (IsText -Elem $Redux.Colors.Fairy -Compare "Tael")  ) {
-        PatchBytes -Offset "AD1000" -Patch "Message Data Static.bin" -Extracted
+        PatchBytes -Offset "AD1000" -Patch "message_data_static.bin" -Extracted
     }
 
 }
@@ -558,10 +558,11 @@ function CreateTabColorsMajorasMask() {
     # TUNIC COLORS #
     $Colors = @("Kokiri Green", "Goron Red", "Zora Blue", "Black", "White", "Azure Blue", "Vivid Cyan", "Light Red", "Fuchsia", "Purple", "Majora Purple", "Twitch Purple", "Persian Rose", "Dirty Yellow", "Blush Pink", "Hot Pink", "Rose Pink", "Orange", "Gray", "Gold", "Silver", "Beige", "Teal", "Blood Red", "Blood Orange", "Royal Blue", "Sonic Blue", "NES Green", "Dark Green", "Lumen", "Randomized", "Custom")
     CreateReduxGroup    -Tag  "Colors" -Text "Tunic Colors"
-    CreateReduxComboBox -Name "KokiriTunic" -Column 1 -Text "Kokiri Tunic Color:" -Length 185 -Shift 35 -Items $Colors -Info ("Select a color scheme for the Kokiri Tunic`n" + '"Randomized" fully randomizes the colors each time the patcher is opened')
+    CreateReduxComboBox -Name "KokiriTunic" -Column 1 -Text "Kokiri Tunic Color:" -Length 230 -Shift 70 -Items $Colors -Info ("Select a color scheme for the Kokiri Tunic`n" + '"Randomized" fully randomizes the colors each time the patcher is opened')
     $Redux.Colors.KokiriTunicButton = CreateReduxButton -Column 3 -Text "Kokiri Tunic" -Width 100  -Info "Select the color you want for the Kokiri Tunic"
     CreateReduxCheckBox -Name "MaskForms"   -Column 6 -Text "Recolor Mask Forms"       -Info "Recolor the clothing for Goron Link to appear in Red and Zora Link to appear in Blue"
 
+    $Redux.Colors.KokiriTunicButton.Add_Click({ $Redux.Colors.SetKokiriTunic.ShowDialog(); $Redux.Colors.KokiriTunic.Text = "Custom"; $Redux.Colors.KokiriTunicLabel.BackColor = $Redux.Colors.SetKokiriTunic.Color; $Settings[$GameType.mode][$Redux.Colors.SetKokiriTunic] = $Redux.Colors.SetKokiriTunic.Color.Name })
     $Redux.Colors.SetKokiriTunic   = CreateColorDialog -Name "SetKokiriTunic" -Color "1E691B" -IsGame
     $Redux.Colors.KokiriTunicLabel = CreateReduxColoredLabel -Link $Redux.Colors.KokiriTunicButton -Color $Redux.Colors.SetKokiriTunic.Color
 
@@ -575,50 +576,53 @@ function CreateTabColorsMajorasMask() {
 
 
 
+    # SPIN ATTACK COLORS #
+    CreateSpinAttackColorOptions
+
+    # FAIRY COLORS #
+    CreateFairyColorOptions -Name "Tatl" -Second "Navi" -Preset ("`n" + 'Selecting the presets "Navi" or "Tael" will also change the references for "Tatl" in the dialogue')
+
+
+
     # HEART / MAGIC COLORS #
-    CreateReduxGroup    -Tag  "Colors" -Text "HUD Colors" -Height 2
+    CreateReduxGroup    -Tag  "Colors" -Text "HUD Colors" -Height 2 -IsRedux
     CreateReduxComboBox -Name "Hearts" -Column 1 -Text "Hearts Colors:" -Length 185 -Shift 35 -Items @("Red", "Green", "Blue", "Yellow", "Randomized", "Custom") -Info ("Select a preset for the hearts colors`n" + '"Randomized" fully randomizes the colors each time the patcher is opened')
     CreateReduxComboBox -Name "Magic"  -Column 3 -Text "Magic Colors:"  -Length 185 -Shift 35 -Items @("Green", "Red", "Blue", "Purple", "Pink", "Yellow", "White", "Randomized", "Custom") -Info ("Select a preset for the magic colors`n" + '"Randomized" fully randomizes the colors each time the patcher is opened')
 
     # Heart / Magic Colors - Buttons
     $Buttons = @()
-    $Buttons += CreateReduxButton -Column 1 -Row 2 -Width 100 -Text "Hearts (Base)" -Info "Select the color you want for the standard hearts display"
-    $Buttons += CreateReduxButton -Column 2 -Row 2 -Width 100 -Text "Hearts (Double)" -Info "Select the color you want for the enhanced hearts display"
-    $Buttons += CreateReduxButton -Column 3 -Row 2 -Width 100 -Text "Magi (Base)"   -Info "Select the color you want for the standard magic display"
-    $Buttons += CreateReduxButton -Column 4 -Row 2 -Width 100 -Text "Magic (Dobule)"  -Info "Select the color you want for the enhanced magic display"
+    $Buttons += CreateReduxButton -Column 1 -Row 2 -Width 100 -Tag $Buttons.Count -Text "Hearts (Base)"   -Info "Select the color you want for the standard hearts display"
+    $Buttons += CreateReduxButton -Column 2 -Row 2 -Width 100 -Tag $Buttons.Count -Text "Hearts (Double)" -Info "Select the color you want for the enhanced hearts display"
+    $Buttons += CreateReduxButton -Column 3 -Row 2 -Width 100 -Tag $Buttons.Count -Text "Magic (Base)"    -Info "Select the color you want for the standard magic display"
+    $Buttons += CreateReduxButton -Column 4 -Row 2 -Width 100 -Tag $Buttons.Count -Text "Magic (Double)"  -Info "Select the color you want for the enhanced magic display"
 
     # Heart / Magic Colors - Dialogs
     $Redux.Colors.SetHUDStats = @()
-    $Redux.Colors.SetHUDStats += CreateColorDialog -Color "0000FF" -Name "SetBaseHearts" -IsGame
+    $Redux.Colors.SetHUDStats += CreateColorDialog -Color "0000FF" -Name "SetBaseHearts"   -IsGame
     $Redux.Colors.SetHUDStats += CreateColorDialog -Color "0064FF" -Name "SetDoubleHearts" -IsGame
-    $Redux.Colors.SetHUDStats += CreateColorDialog -Color "FF0000" -Name "SetBaseMagic"  -IsGame
+    $Redux.Colors.SetHUDStats += CreateColorDialog -Color "FF0000" -Name "SetBaseMagic"    -IsGame
     $Redux.Colors.SetHUDStats += CreateColorDialog -Color "FF6400" -Name "SetDoubleMagic"  -IsGame
 
     # Heart / Magic Colors - Labels
     $Redux.Colors.HUDStatsLabels = @()
     for ($i=0; $i -lt $Buttons.length; $i++) {
-        if ($i -lt 2)   { $dropdown = $Redux.Colors.Hearts }
-        else            { $dropdown = $Redux.Colors.Magic }
-
-        $Buttons[$i].Add_Click({ $Redux.Colors.SetHUDStats[[int]$this.Tag].ShowDialog(); $dropdown.Text = "Custom"; $Redux.Colors.HUDStatsLabels[[int]$this.Tag].BackColor = $Redux.Colors.SetHUDStats[[int]$this.Tag].Color; $Settings[$GameType.mode][$Redux.Colors.SetHUDStats[[int]$this.Tag].Tag] = $Redux.Colors.SetHUDStats[[int]$this.Tag].Color.Name })
+        $Buttons[$i].Add_Click({
+            $Redux.Colors.SetHUDStats[[int]$this.Tag].ShowDialog(); $Redux.Colors.HUDStatsLabels[[int]$this.Tag].BackColor = $Redux.Colors.SetHUDStats[[int]$this.Tag].Color; $Settings[$GameType.mode][$Redux.Colors.SetHUDStats[[int]$this.Tag].Tag] = $Redux.Colors.SetHUDStats[[int]$this.Tag].Color.Name
+            if ($this.Tag -lt 2)   { $Redux.Colors.Hearts.Text = "Custom" }
+            else                   { $Redux.Colors.Magic.Text  = "Custom" }
+        })
         $Redux.Colors.HUDStatsLabels += CreateReduxColoredLabel -Link $Buttons[$i]  -Color $Redux.Colors.SetHUDStats[$i].Color
     }
 
     $Redux.Colors.Hearts.Add_SelectedIndexChanged({ SetHeartsColorsPreset -ComboBox $Redux.Colors.Hearts -Dialog $Redux.Colors.SetHUDStats[0] -Label $Redux.Colors.HUDStatsLabels[0] })
     SetHeartsColorsPreset -ComboBox $Redux.Colors.Hearts -Dialog $Redux.Colors.SetHUDStats[0] -Label $Redux.Colors.HUDStatsLabels[0]
     $Redux.Colors.Hearts.Add_SelectedIndexChanged({ SetHeartsColorsPreset -ComboBox $Redux.Colors.Hearts -Dialog $Redux.Colors.SetHUDStats[1] -Label $Redux.Colors.HUDStatsLabels[1] })
-    SetHeartsColorsPreset -ComboBox $Redux.Colors.Hearts -Dialog $Redux.Colors.SetHUDStats[0] -Label $Redux.Colors.HUDStatsLabels[1]
+    SetHeartsColorsPreset -ComboBox $Redux.Colors.Hearts -Dialog $Redux.Colors.SetHUDStats[1] -Label $Redux.Colors.HUDStatsLabels[1]
 
     $Redux.Colors.Magic.Add_SelectedIndexChanged({ SetMagicColorsPreset -ComboBox $Redux.Colors.Magic -Dialog $Redux.Colors.SetHUDStats[2] -Label $Redux.Colors.HUDStatsLabels[2] })
     SetMagicColorsPreset -ComboBox $Redux.Colors.Magic -Dialog $Redux.Colors.SetHUDStats[2] -Label $Redux.Colors.HUDStatsLabels[2]
     $Redux.Colors.Magic.Add_SelectedIndexChanged({ SetMagicColorsPreset -ComboBox $Redux.Colors.Magic -Dialog $Redux.Colors.SetHUDStats[3] -Label $Redux.Colors.HUDStatsLabels[3] })
     SetMagicColorsPreset -ComboBox $Redux.Colors.Magic -Dialog $Redux.Colors.SetHUDStats[3] -Label $Redux.Colors.HUDStatsLabels[3]
-
-    # SPIN ATTACK COLORS #
-    CreateSpinAttackColorOptions
-
-    # FAIRY COLORS #
-    CreateFairyColorOptions -Name "Tatl" -Second "Navi" -Preset ("`n" + 'Selecting the presets "Navi" or "Tael" will also change the references for "Tatl" in the dialogue')
 
 }
 

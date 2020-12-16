@@ -157,12 +157,14 @@ function ByteOptionsOcarinaOfTime() {
     if (IsIndex -Elem $Redux.Colors.Equipment[3] -Index 1 -Not) { ChangeBytes -Offset "B6DA44" -IsDec -Values @($Redux.Colors.SetEquipment[3].Color.R, $Redux.Colors.SetEquipment[3].Color.G, $Redux.Colors.SetEquipment[3].Color.B) } # Silver Gauntlets
     if (IsIndex -Elem $Redux.Colors.Equipment[4] -Index 2 -Not) { ChangeBytes -Offset "B6DA47" -IsDec -Values @($Redux.Colors.SetEquipment[4].Color.R, $Redux.Colors.SetEquipment[4].Color.G, $Redux.Colors.SetEquipment[4].Color.B) } # Golden Gauntlets
     if (IsIndex -Elem $Redux.Colors.Equipment[5] -Index 1 -Not) { # Mirror Shield Frame
-        ChangeBytes -Offset "FA7274" -IsDec -Values @($Redux.Colors.SetEquipment[5].Color.R, $Redux.Colors.SetEquipment[5].Color.G, $Redux.Colors.SetEquipment[5].Color.B)
-        ChangeBytes -Offset "FA776C" -IsDec -Values @($Redux.Colors.SetEquipment[5].Color.R, $Redux.Colors.SetEquipment[5].Color.G, $Redux.Colors.SetEquipment[5].Color.B)
-        ChangeBytes -Offset "FAA27C" -IsDec -Values @($Redux.Colors.SetEquipment[5].Color.R, $Redux.Colors.SetEquipment[5].Color.G, $Redux.Colors.SetEquipment[5].Color.B)
-        ChangeBytes -Offset "FAC564" -IsDec -Values @($Redux.Colors.SetEquipment[5].Color.R, $Redux.Colors.SetEquipment[5].Color.G, $Redux.Colors.SetEquipment[5].Color.B)
-        ChangeBytes -Offset "FAC984" -IsDec -Values @($Redux.Colors.SetEquipment[5].Color.R, $Redux.Colors.SetEquipment[5].Color.G, $Redux.Colors.SetEquipment[5].Color.B)
-        ChangeBytes -Offset "FAEDD4" -IsDec -Values @($Redux.Colors.SetEquipment[5].Color.R, $Redux.Colors.SetEquipment[5].Color.G, $Redux.Colors.SetEquipment[5].Color.B)
+        if ($Redux.Graphics.Models.Text -notlike "*Saria*") {
+            ChangeBytes -Offset "FA7274" -IsDec -Values @($Redux.Colors.SetEquipment[5].Color.R, $Redux.Colors.SetEquipment[5].Color.G, $Redux.Colors.SetEquipment[5].Color.B)
+            ChangeBytes -Offset "FA776C" -IsDec -Values @($Redux.Colors.SetEquipment[5].Color.R, $Redux.Colors.SetEquipment[5].Color.G, $Redux.Colors.SetEquipment[5].Color.B)
+            ChangeBytes -Offset "FAA27C" -IsDec -Values @($Redux.Colors.SetEquipment[5].Color.R, $Redux.Colors.SetEquipment[5].Color.G, $Redux.Colors.SetEquipment[5].Color.B)
+            ChangeBytes -Offset "FAC564" -IsDec -Values @($Redux.Colors.SetEquipment[5].Color.R, $Redux.Colors.SetEquipment[5].Color.G, $Redux.Colors.SetEquipment[5].Color.B)
+            ChangeBytes -Offset "FAC984" -IsDec -Values @($Redux.Colors.SetEquipment[5].Color.R, $Redux.Colors.SetEquipment[5].Color.G, $Redux.Colors.SetEquipment[5].Color.B)
+            ChangeBytes -Offset "FAEDD4" -IsDec -Values @($Redux.Colors.SetEquipment[5].Color.R, $Redux.Colors.SetEquipment[5].Color.G, $Redux.Colors.SetEquipment[5].Color.B)
+        }
     }
 
     if (IsIndex -Elem $Redux.Colors.Fairy -Not) {
@@ -264,7 +266,7 @@ function ByteOptionsOcarinaOfTime() {
         PatchBytes  -Offset "B896A0" -Patch "Fire Temple Theme\12AudioBankPointers.bin"
         PatchBytes  -Offset "B89AD0" -Patch "Fire Temple Theme\12AudioSeqPointers.bin"
         PatchBytes  -Offset "B8A1C0" -Patch "Fire Temple Theme\12AudioTablePointers.bin"
-        ExportAndPatch -Path "Audiobank Fire Temple"  -Offset "D390" -Length "4CCBB0"
+        ExportAndPatch -Path "audiobank_fire_temple"  -Offset "D390" -Length "4CCBB0"
     }
 
 
@@ -289,43 +291,43 @@ function ByteOptionsOcarinaOfTime() {
     # SFX SOUND EFFECTS #
 
     if (IsIndex -Elem $Redux.SFX.Navi -Not) {
-        ChangeBytes -Offset "AE7EF2" -Values (GetSFXID -SFX $Redux.SFX.Navi.Text)
-        ChangeBytes -Offset "C26C7E" -Values (GetSFXID -SFX $Redux.SFX.Navi.Text)
+        ChangeBytes -Offset "AE7EF2" -Values (GetSFXID $Redux.SFX.Navi.Text)
+        ChangeBytes -Offset "C26C7E" -Values (GetSFXID $Redux.SFX.Navi.Text)
     }
 
     if (IsIndex -Elem $Redux.SFX.Nightfall -Not) {
-        ChangeBytes -Offset "AD3466" -Values (GetSFXID -SFX $Redux.SFX.Nightfall.Text)
-        ChangeBytes -Offset "AD7A2E" -Values (GetSFXID -SFX $Redux.SFX.Nightfall.Text)
+        ChangeBytes -Offset "AD3466" -Values (GetSFXID $Redux.SFX.Nightfall.Text)
+        ChangeBytes -Offset "AD7A2E" -Values (GetSFXID $Redux.SFX.Nightfall.Text)
     }
 
     if (IsIndex -Elem $Redux.SFX.Horse -Not) {
-        ChangeBytes -Offset "C18832" -Values (GetSFXID -SFX $Redux.SFX.Horse.Text);   ChangeBytes -Offset "C18C32" -Values (GetSFXID -SFX $Redux.SFX.Horse.Text);   ChangeBytes -Offset "C19A7E" -Values (GetSFXID -SFX $Redux.SFX.Horse.Text);
-        ChangeBytes -Offset "C19CBE" -Values (GetSFXID -SFX $Redux.SFX.Horse.Text);   ChangeBytes -Offset "C1A1F2" -Values (GetSFXID -SFX $Redux.SFX.Horse.Text);   ChangeBytes -Offset "C1A3B6" -Values (GetSFXID -SFX $Redux.SFX.Horse.Text);
-        ChangeBytes -Offset "C1B08A" -Values (GetSFXID -SFX $Redux.SFX.Horse.Text);   ChangeBytes -Offset "C1B556" -Values (GetSFXID -SFX $Redux.SFX.Horse.Text);   ChangeBytes -Offset "C1C28A" -Values (GetSFXID -SFX $Redux.SFX.Horse.Text);
-        ChangeBytes -Offset "C1CC36" -Values (GetSFXID -SFX $Redux.SFX.Horse.Text);   ChangeBytes -Offset "C1EB4A" -Values (GetSFXID -SFX $Redux.SFX.Horse.Text);   ChangeBytes -Offset "C1F18E" -Values (GetSFXID -SFX $Redux.SFX.Horse.Text);
-        ChangeBytes -Offset "C6B136" -Values (GetSFXID -SFX $Redux.SFX.Horse.Text);   ChangeBytes -Offset "C6BBA2" -Values (GetSFXID -SFX $Redux.SFX.Horse.Text);   ChangeBytes -Offset "C1E93A" -Values (GetSFXID -SFX $Redux.SFX.Horse.Text)
-        ChangeBytes -Offset "C6B366" -Values (GetSFXID -SFX $Redux.SFX.Horse.Text);   ChangeBytes -Offset "C6B562" -Values (GetSFXID -SFX $Redux.SFX.Horse.Text)
+        ChangeBytes -Offset "C18832" -Values (GetSFXID $Redux.SFX.Horse.Text);   ChangeBytes -Offset "C18C32" -Values (GetSFXID $Redux.SFX.Horse.Text);   ChangeBytes -Offset "C19A7E" -Values (GetSFXID $Redux.SFX.Horse.Text);
+        ChangeBytes -Offset "C19CBE" -Values (GetSFXID $Redux.SFX.Horse.Text);   ChangeBytes -Offset "C1A1F2" -Values (GetSFXID $Redux.SFX.Horse.Text);   ChangeBytes -Offset "C1A3B6" -Values (GetSFXID $Redux.SFX.Horse.Text);
+        ChangeBytes -Offset "C1B08A" -Values (GetSFXID $Redux.SFX.Horse.Text);   ChangeBytes -Offset "C1B556" -Values (GetSFXID $Redux.SFX.Horse.Text);   ChangeBytes -Offset "C1C28A" -Values (GetSFXID $Redux.SFX.Horse.Text);
+        ChangeBytes -Offset "C1CC36" -Values (GetSFXID $Redux.SFX.Horse.Text);   ChangeBytes -Offset "C1EB4A" -Values (GetSFXID $Redux.SFX.Horse.Text);   ChangeBytes -Offset "C1F18E" -Values (GetSFXID $Redux.SFX.Horse.Text);
+        ChangeBytes -Offset "C6B136" -Values (GetSFXID $Redux.SFX.Horse.Text);   ChangeBytes -Offset "C6BBA2" -Values (GetSFXID $Redux.SFX.Horse.Text);   ChangeBytes -Offset "C1E93A" -Values (GetSFXID $Redux.SFX.Horse.Text)
+        ChangeBytes -Offset "C6B366" -Values (GetSFXID $Redux.SFX.Horse.Text);   ChangeBytes -Offset "C6B562" -Values (GetSFXID $Redux.SFX.Horse.Text)
     }
 
     if (IsIndex -Elem $Redux.SFX.FileMenuCursor -Not) {
-        ChangeBytes -Offset "BA165E" -Values (GetSFXID -SFX $Redux.SFX.FileMenuCursor.Text);   ChangeBytes -Offset "BA1C1A" -Values (GetSFXID -SFX $Redux.SFX.FileMenuCursor.Text);   ChangeBytes -Offset "BA2406" -Values (GetSFXID -SFX $Redux.SFX.FileMenuCursor.Text);
-        ChangeBytes -Offset "BA327E" -Values (GetSFXID -SFX $Redux.SFX.FileMenuCursor.Text);   ChangeBytes -Offset "BA3936" -Values (GetSFXID -SFX $Redux.SFX.FileMenuCursor.Text);   ChangeBytes -Offset "BA77C2" -Values (GetSFXID -SFX $Redux.SFX.FileMenuCursor.Text);
-        ChangeBytes -Offset "BA7886" -Values (GetSFXID -SFX $Redux.SFX.FileMenuCursor.Text);   ChangeBytes -Offset "BA7A06" -Values (GetSFXID -SFX $Redux.SFX.FileMenuCursor.Text);   ChangeBytes -Offset "BA7A6E" -Values (GetSFXID -SFX $Redux.SFX.FileMenuCursor.Text);
-        ChangeBytes -Offset "BA7AE6" -Values (GetSFXID -SFX $Redux.SFX.FileMenuCursor.Text);   ChangeBytes -Offset "BA7D6A" -Values (GetSFXID -SFX $Redux.SFX.FileMenuCursor.Text);   ChangeBytes -Offset "BA8186" -Values (GetSFXID -SFX $Redux.SFX.FileMenuCursor.Text);
-        ChangeBytes -Offset "BA822E" -Values (GetSFXID -SFX $Redux.SFX.FileMenuCursor.Text);   ChangeBytes -Offset "BA82A2" -Values (GetSFXID -SFX $Redux.SFX.FileMenuCursor.Text);   ChangeBytes -Offset "BAA11E" -Values (GetSFXID -SFX $Redux.SFX.FileMenuCursor.Text);
-        ChangeBytes -Offset "BAE7C6" -Values (GetSFXID -SFX $Redux.SFX.FileMenuCursor.Text)
+        ChangeBytes -Offset "BA165E" -Values (GetSFXID $Redux.SFX.FileMenuCursor.Text);   ChangeBytes -Offset "BA1C1A" -Values (GetSFXID $Redux.SFX.FileMenuCursor.Text);   ChangeBytes -Offset "BA2406" -Values (GetSFXID $Redux.SFX.FileMenuCursor.Text);
+        ChangeBytes -Offset "BA327E" -Values (GetSFXID $Redux.SFX.FileMenuCursor.Text);   ChangeBytes -Offset "BA3936" -Values (GetSFXID $Redux.SFX.FileMenuCursor.Text);   ChangeBytes -Offset "BA77C2" -Values (GetSFXID $Redux.SFX.FileMenuCursor.Text);
+        ChangeBytes -Offset "BA7886" -Values (GetSFXID $Redux.SFX.FileMenuCursor.Text);   ChangeBytes -Offset "BA7A06" -Values (GetSFXID $Redux.SFX.FileMenuCursor.Text);   ChangeBytes -Offset "BA7A6E" -Values (GetSFXID $Redux.SFX.FileMenuCursor.Text);
+        ChangeBytes -Offset "BA7AE6" -Values (GetSFXID $Redux.SFX.FileMenuCursor.Text);   ChangeBytes -Offset "BA7D6A" -Values (GetSFXID $Redux.SFX.FileMenuCursor.Text);   ChangeBytes -Offset "BA8186" -Values (GetSFXID $Redux.SFX.FileMenuCursor.Text);
+        ChangeBytes -Offset "BA822E" -Values (GetSFXID $Redux.SFX.FileMenuCursor.Text);   ChangeBytes -Offset "BA82A2" -Values (GetSFXID $Redux.SFX.FileMenuCursor.Text);   ChangeBytes -Offset "BAA11E" -Values (GetSFXID $Redux.SFX.FileMenuCursor.Text);
+        ChangeBytes -Offset "BAE7C6" -Values (GetSFXID $Redux.SFX.FileMenuCursor.Text)
     }
 
     if (IsIndex -Elem $Redux.SFX.FileMenuSelect -Not) {
-        ChangeBytes -Offset "BA1BBE" -Values (GetSFXID -SFX $Redux.SFX.FileMenuSelect.Text);   ChangeBytes -Offset "BA23CE" -Values (GetSFXID -SFX $Redux.SFX.FileMenuSelect.Text);   ChangeBytes -Offset "BA2956" -Values (GetSFXID -SFX $Redux.SFX.FileMenuSelect.Text);
-        ChangeBytes -Offset "BA321A" -Values (GetSFXID -SFX $Redux.SFX.FileMenuSelect.Text);   ChangeBytes -Offset "BA72F6" -Values (GetSFXID -SFX $Redux.SFX.FileMenuSelect.Text);   ChangeBytes -Offset "BA8106" -Values (GetSFXID -SFX $Redux.SFX.FileMenuSelect.Text);
-        ChangeBytes -Offset "BA82EE" -Values (GetSFXID -SFX $Redux.SFX.FileMenuSelect.Text);   ChangeBytes -Offset "BA9DAE" -Values (GetSFXID -SFX $Redux.SFX.FileMenuSelect.Text);   ChangeBytes -Offset "BA9EAE" -Values (GetSFXID -SFX $Redux.SFX.FileMenuSelect.Text);
-        ChangeBytes -Offset "BA9FD2" -Values (GetSFXID -SFX $Redux.SFX.FileMenuSelect.Text);   ChangeBytes -Offset "BAE6D6" -Values (GetSFXID -SFX $Redux.SFX.FileMenuSelect.Text)
+        ChangeBytes -Offset "BA1BBE" -Values (GetSFXID $Redux.SFX.FileMenuSelect.Text);   ChangeBytes -Offset "BA23CE" -Values (GetSFXID $Redux.SFX.FileMenuSelect.Text);   ChangeBytes -Offset "BA2956" -Values (GetSFXID $Redux.SFX.FileMenuSelect.Text);
+        ChangeBytes -Offset "BA321A" -Values (GetSFXID $Redux.SFX.FileMenuSelect.Text);   ChangeBytes -Offset "BA72F6" -Values (GetSFXID $Redux.SFX.FileMenuSelect.Text);   ChangeBytes -Offset "BA8106" -Values (GetSFXID $Redux.SFX.FileMenuSelect.Text);
+        ChangeBytes -Offset "BA82EE" -Values (GetSFXID $Redux.SFX.FileMenuSelect.Text);   ChangeBytes -Offset "BA9DAE" -Values (GetSFXID $Redux.SFX.FileMenuSelect.Text);   ChangeBytes -Offset "BA9EAE" -Values (GetSFXID $Redux.SFX.FileMenuSelect.Text);
+        ChangeBytes -Offset "BA9FD2" -Values (GetSFXID $Redux.SFX.FileMenuSelect.Text);   ChangeBytes -Offset "BAE6D6" -Values (GetSFXID $Redux.SFX.FileMenuSelect.Text)
     }
 
-    if (IsIndex -Elem $Redux.SFX.ZTarget    -Not)   { ChangeBytes -Offset "AE7EC6" -Values (GetSFXID -SFX $Redux.SFX.ZTarget.Text) }
-    if (IsIndex -Elem $Redux.SFX.LowHP      -Not)   { ChangeBytes -Offset "ADBA1A" -Values (GetSFXID -SFX $Redux.SFX.LowHP.Text) }
-    if (IsIndex -Elem $Redux.SFX.HoverBoots -Not)   { ChangeBytes -Offset "BDBD8A" -Values (GetSFXID -SFX $Redux.SFX.HoverBoots.Text) } 
+    if (IsIndex -Elem $Redux.SFX.ZTarget    -Not)   { ChangeBytes -Offset "AE7EC6" -Values (GetSFXID $Redux.SFX.ZTarget.Text) }
+    if (IsIndex -Elem $Redux.SFX.LowHP      -Not)   { ChangeBytes -Offset "ADBA1A" -Values (GetSFXID $Redux.SFX.LowHP.Text) }
+    if (IsIndex -Elem $Redux.SFX.HoverBoots -Not)   { ChangeBytes -Offset "BDBD8A" -Values (GetSFXID $Redux.SFX.HoverBoots.Text) } 
 
 
 
@@ -340,7 +342,7 @@ function ByteOptionsOcarinaOfTime() {
     }
 
     if (IsChecked -Elem $Redux.Capacity.EnableWallet) {
-        $Wallet1 = Get16Bit -Value ($Redux.Capacity.Wallet1.Text); $Wallet2 = Get16Bit -Value ($Redux.Capacity.Wallet2.Text); $Wallet3 = Get16Bit -Value ($Redux.Capacity.Wallet3.Text)
+        $Wallet1 = Get16Bit ($Redux.Capacity.Wallet1.Text); $Wallet2 = Get16Bit ($Redux.Capacity.Wallet2.Text); $Wallet3 = Get16Bit ($Redux.Capacity.Wallet3.Text)
         ChangeBytes -Offset "B6EC4C" -Values @($Wallet1.Substring(0, 2), $Wallet1.Substring(2) )
         ChangeBytes -Offset "B6EC4E" -Values @($Wallet2.Substring(0, 2), $Wallet2.Substring(2) )
         ChangeBytes -Offset "B6EC50" -Values @($Wallet3.Substring(0, 2), $Wallet3.Substring(2) )
@@ -409,8 +411,10 @@ function ByteOptionsOcarinaOfTime() {
         PatchBytes -Offset "1456388" -Texture -Patch "Gerudo Symbols\mirror_shield_reflection.bin"
         PatchBytes -Offset "1616000" -Texture -Patch "Gerudo Symbols\mirror_shield_chest.bin"
 
-        $Offset = SearchBytes -Start "F86000" -End "FBD800" -Values @("90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90")
-        PatchBytes -Offset $Offset -Texture -Patch "Gerudo Symbols\mirror_shield.bin"
+        if ($Redux.Graphics.Models.Text -notlike "*Saria*") {
+            $Offset = SearchBytes -Start "F86000" -End "FBD800" -Values @("90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90")
+            PatchBytes -Offset $Offset -Texture -Patch "Gerudo Symbols\mirror_shield.bin"
+        }
 
         # Dungeons / Areas
         PatchBytes -Offset "21B8678" -Texture -Patch "Gerudo Symbols\gerudo_valley.bin"
@@ -516,27 +520,21 @@ function ByteReduxOcarinaOfTime() {
 #==============================================================================================================================================================================================
 function ByteLanguageOcarinaOfTime() {
     
-    if ( (IsChecked -Elem $Redux.Text.Restore) -or (IsChecked -Elem $Redux.Text.Speed2x) -or (IsChecked -Elem $Redux.Text.Speed3x) -or (IsChecked -Elem $Redux.Text.GCScheme) -or (IsLanguage -Elem $Redux.Unlock.Tunics) -or (IsText -Elem $Redux.Colors.Fairy -Compare "Tatl") -or (IsText -Elem $Redux.Colors.Fairy -Compare "Tael") ) {
-        $File = $GameFiles.extracted + "\Message Data Static.bin"
-        ExportBytes -Offset "92D000" -Length "38140" -Output $File -Force
+    if ( (IsChecked -Elem $Redux.Text.Vanilla -Not) -or (IsChecked -Elem $Redux.Text.Speed1x -Not) -or (IsChecked -Elem $Redux.Text.GCScheme) -or (IsLanguage -Elem $Redux.Unlock.Tunics) -or (IsText -Elem $Redux.Colors.Fairy -Compare "Tatl") -or (IsText -Elem $Redux.Colors.Fairy -Compare "Tael") ) {
+        $File = $GameFiles.extracted + "\message_data_static.bin"
+        ExportBytes -Offset "92D000" -Length "38130" -Output $File -Force
     }
 
-    if (IsChecked -Elem $Redux.Text.Restore) {
-        #if (!(IsChecked -Elem $Redux.Text.FemalePronouns)) {
-            ChangeBytes -Offset "7596" -Values @("52", "40")
-            PatchBytes  -Offset "B849EC" -Patch "Message\Table Restore Text.bin"
-        #}
-
-        if (IsChecked -Elem $Patches.Redux -Active)   { ApplyPatch -File $File -Patch "\Data Extraction\Message\OoT Restore Text Redux.bps" -FilesPath }
-        else                                          { ApplyPatch -File $File -Patch "\Data Extraction\Message\OoT Restore Text.bps"       -FilesPath }
-
-        #if (IsChecked -Elem $Redux.Text.FemalePronouns) {
-        #    ChangeBytes -Offset "7596" -Values @("52", "E0")
-        #    PatchBytes  -Offset "B849EC" -Patch "Message\Table Feminine Pronouns.bin"
-        #    ApplyPatch -File $File -Patch "\Data Extraction\Message\OoT Feminine Pronouns.bps" -FilesPath
-        #}
-
+    if (IsChecked -Elem $Redux.Text.Redux) { ApplyPatch -File $File -Patch "\Export\Message\redux.bps" }
+    elseif (IsChecked -Elem $Redux.Text.Restore) {
+        ChangeBytes -Offset "7596" -Values @("52", "40")
+        PatchBytes  -Offset "B849EC" -Patch "Message\Table Restore Text.bin"
+        ApplyPatch -File $File -Patch "\Export\Message\restore_text.bps"
     }
+    <#elseif (IsChecked -Elem $Redux.Text.FemalePronouns) {
+        PatchBytes  -Offset "B849EC" -Patch "Message\Table Female Pronouns.bin"
+        ApplyPatch -File $File -Patch "\Export\Message\female_pronouns.bps" -FilesPath
+    }#>
 
     if (IsChecked -Elem $Redux.TextSpeed2x) {
         ChangeBytes -Offset "B5006F" -Values "02" # Text Speed
@@ -548,9 +546,9 @@ function ByteLanguageOcarinaOfTime() {
 
             # Correct Phantom Ganon Defeat Textboxes
             $Offset = SearchBytes -File $File -Values @("0C", "3C", "42", "75", "74", "20", "79", "6F", "75", "20", "68", "61", "76", "65", "20", "64")
-            ChangeBytes -File $File -Offset ( Get24Bit -Value ( (GetDecimal -Hex $Offset) + (GetDecimal -Hex "01") ) ) -Values @("66")
-            ChangeBytes -File $File -Offset ( Get24Bit -Value ( (GetDecimal -Hex $Offset) + (GetDecimal -Hex "5D") ) ) -Values @("66")
-            ChangeBytes -File $File -Offset ( Get24Bit -Value ( (GetDecimal -Hex $Offset) + (GetDecimal -Hex "BA") ) ) -Values @("60")
+            ChangeBytes -File $File -Offset ( Get24Bit ( (GetDecimal $Offset) + (GetDecimal "01") ) ) -Values @("66")
+            ChangeBytes -File $File -Offset ( Get24Bit ( (GetDecimal $Offset) + (GetDecimal "5D") ) ) -Values @("66")
+            ChangeBytes -File $File -Offset ( Get24Bit ( (GetDecimal $Offset) + (GetDecimal "BA") ) ) -Values @("60")
         }
     }
     elseif (IsChecked -Elem $Redux.Text.Speed3x) {
@@ -566,9 +564,9 @@ function ByteLanguageOcarinaOfTime() {
         
         # Correct Phantom Ganon Defeat Textboxes
         $Offset = SearchBytes -File $File -Values @("0C", "3C", "42", "75", "74", "20", "79", "6F", "75", "20", "68", "61", "76", "65", "20", "64")
-        ChangeBytes -File $File -Offset ( Get24Bit -Value ( (GetDecimal -Hex $Offset) + (GetDecimal -Hex "01") ) ) -Values @("76")
-        ChangeBytes -File $File -Offset ( Get24Bit -Value ( (GetDecimal -Hex $Offset) + (GetDecimal -Hex "5D") ) ) -Values @("76")
-        ChangeBytes -File $File -Offset ( Get24Bit -Value ( (GetDecimal -Hex $Offset) + (GetDecimal -Hex "BA") ) ) -Values @("70")
+        ChangeBytes -File $File -Offset ( Get24Bit ( (GetDecimal $Offset) + (GetDecimal "01") ) ) -Values @("76")
+        ChangeBytes -File $File -Offset ( Get24Bit ( (GetDecimal $Offset) + (GetDecimal "5D") ) ) -Values @("76")
+        ChangeBytes -File $File -Offset ( Get24Bit ( (GetDecimal $Offset) + (GetDecimal "BA") ) ) -Values @("70")
     }
         
     if (IsChecked -Elem $Redux.Text.GCScheme) {
@@ -642,12 +640,12 @@ function ByteLanguageOcarinaOfTime() {
 
     if (IsLanguage -Elem $Redux.Unlock.Tunics) {
         $Offset = SearchBytes -File $File -Values @("59", "6F", "75", "20", "67", "6F", "74", "20", "61", "20", "05", "41", "47", "6F", "72", "6F", "6E", "20", "54", "75", "6E", "69", "63")
-        ChangeBytes -File $File -Offset ( Get24Bit -Value ( (GetDecimal -Hex $Offset) + (GetDecimal -Hex "39") ) ) -Values @("75", "6E", "69", "73", "69", "7A", "65", "2C", "20", "73", "6F", "20", "69", "74", "20", "66", "69", "74", "73", "20", "61", "64", "75", "6C", "74", "20", "61", "6E", "64")
-        ChangeBytes -File $File -Offset ( Get24Bit -Value ( (GetDecimal -Hex $Offset) + (GetDecimal -Hex "B3") ) ) -Values @("75", "6E", "69", "73", "69", "7A", "65", "2C", "01", "73", "6F", "20", "69", "74", "20", "66", "69", "74", "73", "20", "61", "64", "75", "6C", "74", "20", "61", "6E", "64")
+        ChangeBytes -File $File -Offset ( Get24Bit ( (GetDecimal $Offset) + (GetDecimal "39") ) ) -Values @("75", "6E", "69", "73", "69", "7A", "65", "2C", "20", "73", "6F", "20", "69", "74", "20", "66", "69", "74", "73", "20", "61", "64", "75", "6C", "74", "20", "61", "6E", "64")
+        ChangeBytes -File $File -Offset ( Get24Bit ( (GetDecimal $Offset) + (GetDecimal "B3") ) ) -Values @("75", "6E", "69", "73", "69", "7A", "65", "2C", "01", "73", "6F", "20", "69", "74", "20", "66", "69", "74", "73", "20", "61", "64", "75", "6C", "74", "20", "61", "6E", "64")
 
         $Offset = SearchBytes -File $File -Values @("41", "20", "74", "75", "6E", "69", "63", "20", "6D", "61", "64", "65", "20", "62", "79", "20", "47", "6F", "72", "6F", "6E", "73")
-        ChangeBytes -File $File -Offset ( Get24Bit -Value ( (GetDecimal -Hex $Offset) + (GetDecimal -Hex "18") ) ) -Values @("55", "6E", "69", "2D", "20")
-        ChangeBytes -File $File -Offset ( Get24Bit -Value ( (GetDecimal -Hex $Offset) + (GetDecimal -Hex "7A") ) ) -Values @("55", "6E", "69", "73", "69", "7A", "65", "2E", "20", "20", "20")
+        ChangeBytes -File $File -Offset ( Get24Bit ( (GetDecimal $Offset) + (GetDecimal "18") ) ) -Values @("55", "6E", "69", "2D", "20")
+        ChangeBytes -File $File -Offset ( Get24Bit ( (GetDecimal $Offset) + (GetDecimal "7A") ) ) -Values @("55", "6E", "69", "73", "69", "7A", "65", "2E", "20", "20", "20")
     }
 
     if (IsText -Elem $Redux.Colors.Fairy -Compare "Tatl") {
@@ -665,8 +663,8 @@ function ByteLanguageOcarinaOfTime() {
         PatchBytes -Offset "1A3EFC0" -Texture -Patch "HUD\Tael.bin"
     }
 
-    if ( (IsChecked -Elem $Redux.Text.Restore) -or (IsChecked -Elem $Redux.Text.Speed2x) -or (IsChecked -Elem $Redux.Text.Speed3x) -or (IsChecked -Elem $Redux.Text.GCScheme) -or (IsLanguage -Elem $Redux.Unlock.Tunics) -or (IsText -Elem $Redux.Colors.Fairy -Compare "Tatl") -or (IsText -Elem $Redux.Colors.Fairy -Compare "Tael") ) {
-        PatchBytes -Offset "92D000" -Patch "Message Data Static.bin" -Extracted
+    if ( (IsChecked -Elem $Redux.Text.Vanilla -Not) -or (IsChecked -Elem $Redux.Text.Speed1x -Not) -or (IsChecked -Elem $Redux.Text.GCScheme) -or (IsLanguage -Elem $Redux.Unlock.Tunics) -or (IsText -Elem $Redux.Colors.Fairy -Compare "Tatl") -or (IsText -Elem $Redux.Colors.Fairy -Compare "Tael") ) {
+        PatchBytes -Offset "92D000" -Patch "message_data_static.bin" -Extracted
     }
 
 }
@@ -700,7 +698,7 @@ function CreateTabMainOcarinaOfTime() {
     CreateReduxCheckBox -Name "CowNoseRing"        -Column 2 -Text "Restore Cow Nose Ring"           -Info "Restore the rings in the noses for Cows as seen in the Japanese release"
     CreateReduxCheckBox -Name "FireTemple"         -Column 3 -Text "Censor Fire Temple"              -Info " Censor Fire Temple theme as used in the Rev 2 ROM"
     CreateReduxCheckBox -Name "Blood"              -Column 4 -Text "Censor Blood"                    -Info "Censor the green blood for Ganondorf and Ganon as used in the Rev 2 ROM"
-    CreateReduxCheckBox -Name "GerudoTextures"     -Column 5 -Text "Censor Gerudo Textures"          -Info "Censor Gerudo symbol textures used in the GameCube / Virtual Console releases`n- Disable the option to uncensor the Gerudo Texture used in the Master Quest dungeons"
+    CreateReduxCheckBox -Name "GerudoTextures"     -Column 5 -Text "Censor Gerudo Textures"          -Info "Censor Gerudo symbol textures used in the GameCube / Virtual Console releases`n- Disable the option to uncensor the Gerudo Texture used in the Master Quest dungeons`n- Player model textures such as the Mirror Shield might not get restored for specific custom models"
     
     # OTHER #
     CreateReduxGroup    -Tag  "Other" -Text "Other"
@@ -735,20 +733,22 @@ function CreateTabLanguageOcarinaOfTime() {
     # TEXT SPEED #
     CreateReduxGroup       -Tag  "Text" -Text "Text Speed"
     CreateReduxPanel
-    CreateReduxRadioButton -Name "Speed1x"        -Column 1 -Checked -Text "1x Text Speed" -Info "Leave the dialogue text speed at normal"     
-    CreateReduxRadioButton -Name "Speed2x"        -Column 2          -Text "2x Text Speed" -Info "Set the dialogue text speed to be twice as fast"
-    CreateReduxRadioButton -Name "Speed3x"        -Column 3          -Text "3x Text Speed" -Info "Set the dialogue text speed to be three times as fast"
+    CreateReduxRadioButton -Name "Speed1x"        -Column 1 -Checked -Text "1x Text Speed"   -Info "Leave the dialogue text speed at normal"     
+    CreateReduxRadioButton -Name "Speed2x"        -Column 2          -Text "2x Text Speed"   -Info "Set the dialogue text speed to be twice as fast"
+    CreateReduxRadioButton -Name "Speed3x"        -Column 3          -Text "3x Text Speed"   -Info "Set the dialogue text speed to be three times as fast"
     
     # ENGLISH TEXT #
-    $Redux.Box.Text = CreateReduxGroup -Tag  "Text" -Text "English Text"
-    CreateReduxCheckBox    -Name "Restore"        -Column 1 -Text "Restore Text"           -Info "Restores the text used from the GC revision and applies grammar and typo fixes`nAlso corrects some icons in the text"
-   #CreateReduxCheckBox    -Name "FemalePronouns" -Column 2 -Text "Female Pronouns"        -Info "Refer to Link as a female character`n- Requires the Restore Text option"
-    CreateReduxCheckBox    -Name "GCScheme"       -Column 2 -Text "GC Scheme"              -Info "Set the Textures and Text Dialogue Colors to match the GameCube's scheme"
-    CreateReduxCheckBox    -Name "PauseScreen"    -Column 3 -Text "MM Pause Screen"        -Info "Replaces the Pause Screen textures to be styled like Majora's Mask"
+    $Redux.Box.Dialogue = CreateReduxGroup -Tag  "Text" -Text "English Dialogue"
+    CreateReduxPanel
+    CreateReduxRadioButton -Name "Vanilla"        -Column 1          -Text "Vanilla Text"    -Info "Keep the text as it is"
+    CreateReduxRadioButton -Name "Redux"          -Column 2 -Checked -Text "Redux Text"      -Info "Include the changes from the Redux script such as being able to move during the Gold Skulltula Token textboxes"
+    CreateReduxRadioButton -Name "Restore"        -Column 3          -Text "Restore Text"    -Info ("Restores the text used from the GC revision and applies grammar and typo fixes`nAlso corrects some icons in the text`n" + 'Includes the changes from "Redux Text" as well')
+   #CreateReduxRadioButton -Name "FemalePronouns" -Column 4          -Text "Female Pronouns" -Info "Refer to Link as a female character"
 
+    $Redux.Box.Text = CreateReduxGroup -Tag  "Text" -Text "Other English Options"
+    CreateReduxCheckBox    -Name "GCScheme"       -Column 1 -Text "GC Scheme"                -Info "Set the Textures and Text Dialogue Colors to match the GameCube's scheme"
+    CreateReduxCheckBox    -Name "PauseScreen"    -Column 2 -Text "MM Pause Screen"          -Info "Replaces the Pause Screen textures to be styled like Majora's Mask"
 
-
-    $Redux.Text.Restore.Add_CheckedChanged({ $Redux.Text.FemalePronouns.Enabled = $this.Checked })
     for ($i=0; $i -lt $GamePatch.languages.Length; $i++) {
         $Redux.Language[$i].Add_CheckedChanged({ UnlockLanguageContent })
     }
@@ -762,8 +762,8 @@ function CreateTabLanguageOcarinaOfTime() {
 function UnlockLanguageContent() {
     
     # English options
+    $Redux.Box.Dialogue.Controls.GetEnumerator() | ForEach-Object { $_.Enabled = $Redux.Language[0].Checked }
     $Redux.Box.Text.Controls.GetEnumerator() | ForEach-Object { $_.Enabled = $Redux.Language[0].Checked }
-    $Redux.Text.FemalePronouns.Enabled = $Redux.Language[0].checked -and $Redux.Text.Restore.Checked
 
     # Set max text speed in each language
     for ($i=0; $i -lt $GamePatch.languages.Length; $i++) {
@@ -907,7 +907,7 @@ function CreateTabDifficultyOcarinaOfTime() {
 #==============================================================================================================================================================================================
 function CreateTabColorsOcarinaOfTime() {
 
-    # Equipment Colors - Dropdowns
+    # EQUIPMENT COLORS #
     CreateReduxGroup -Tag "Colors" -Text "Equipment Colors" -Height 3
     $Redux.Colors.Equipment = @()
     $Colors = @("Kokiri Green", "Goron Red", "Zora Blue", "Black", "White", "Azure Blue", "Vivid Cyan", "Light Red", "Fuchsia", "Purple", "Majora Purple", "Twitch Purple", "Persian Rose", "Dirty Yellow", "Blush Pink", "Hot Pink", "Rose Pink", "Orange", "Gray", "Gold", "Silver", "Beige", "Teal", "Blood Red", "Blood Orange", "Royal Blue", "Sonic Blue", "NES Green", "Dark Green", "Lumen", "Randomized", "Custom")
@@ -917,7 +917,7 @@ function CreateTabColorsOcarinaOfTime() {
     $Colors = @("Silver", "Gold", "Black", "Green", "Blue", "Bronze", "Red", "Sky Blue", "Pink", "Magenta", "Orange", "Lime", "Purple", "Randomized", "Custom")
     $Redux.Colors.Equipment += CreateReduxComboBox -Name "SilverGauntlets"   -Column 4 -Row 1 -Text "Silver Gauntlets Color:"    -Default 1 -Length 230 -Shift 70 -Items $Colors -Info ("Select a color scheme for the Silver Gauntlets`n" + '"Randomized" fully randomizes the colors each time the patcher is opened')
     $Redux.Colors.Equipment += CreateReduxComboBox -Name "GoldenGauntlets"   -Column 4 -Row 2 -Text "Golden Gauntlets Color:"    -Default 2 -Length 230 -Shift 70 -Items $Colors -Info ("Select a color scheme for the Golden Gauntlets`n" + '"Randomized" fully randomizes the colors each time the patcher is opened')
-    $Redux.Colors.Equipment += CreateReduxComboBox -Name "MirrorShieldFrame" -Column 4 -Row 3 -Text "Mirror Shield Frame Color:" -Default 1 -Length 230 -Shift 70 -Items @("Red", "Green", "Blue", "Yellow", "Cyan", "Magenta", "Orange", "Gold", "Purple", "Pink", "Randomized", "Custom") -Info "Select a color scheme for the Mirror Shield Frame"
+    $Redux.Colors.Equipment += CreateReduxComboBox -Name "MirrorShieldFrame" -Column 4 -Row 3 -Text "Mirror Shield Frame Color:" -Default 1 -Length 230 -Shift 70 -Items @("Red", "Green", "Blue", "Yellow", "Cyan", "Magenta", "Orange", "Gold", "Purple", "Pink", "Randomized", "Custom") -Info "Select a color scheme for the Mirror Shield Frame`n- This option might not work for every custom player model"
 
     # Equipment Colors - Buttons
     $Buttons = @()

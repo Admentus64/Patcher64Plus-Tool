@@ -4,17 +4,21 @@
 	"support_vc" : 1,
 	"console" : "N64",
 	"downgrade" : [ {
-		"file" : "\\Downgrade\\rev1_to_rev0.bps",
+		"file" : "rev1_to_rev0.bps",
 		"hash" : "721FDCC6F5F34BE55C43A807F2A16AF4",
 		"rev" : "Rev 1"
 	}, {
-		"file" : "\\Downgrade\\rev2_to_rev0.bps",
+		"file" : "rev2_to_rev0.bps",
 		"hash" : "57A9719AD547C516342E1A15D5C28C3D",
 		"rev" : "Rev 2"
 	}, {
-		"file" : "\\Downgrade\\gc_to_rev0.bps",
+		"file" : "gc_to_rev0.bps",
 		"hash" : "CD09029EDCFB7C097AC01986A0F83D3F",
 		"rev" : "GC"
+	}, {
+		"file" : "gc_mq_to_rev0.bps",
+		"hash" : "DA35577FE54579F6A266931CC75F512D",
+		"rev" : "GC MQ"
 	} ],
 	"patches_vc" : 4,
 	"patches" : 1,
@@ -31,11 +35,12 @@
 	"support_vc" : 1,
 	"console" : "N64",
 	"downgrade" : [ {
-		"file" : "\\Downgrade\\gc_to_rev0.bps",
+		"file" : "gc_to_rev0.bps",
 		"hash" : "AC0751DBC23AB2EC0C3144203ACA0003",
 		"rev" : "GC"
 	} ],
 	"romc" : 1,
+	"lzss" : 1,
 	"patches_vc" : 3,
 	"patches" : 1,
 	"decompress" : 1,
@@ -114,7 +119,7 @@
 	"support_vc" : 1,
 	"console" : "SNES",
 	"downgrade" : [ {
-		"file" : "\\Downgrade\\vc_to_rev0.bps",
+		"file" : "vc_to_rev0.bps",
 		"hash" : "679698A7D92E4BE3B8019C075E74594D",
 		"rev" : "VC"
 	} ],
@@ -141,15 +146,15 @@
 	"support_vc" : 1,
 	"console" : "NES",
 	"downgrade" : [ {
-		"file" : "\\Downgrade\\rev1_to_rev0.bps",
+		"file" : "rev1_to_rev0.bps",
 		"hash" : "F4095791987351BE68674A9355B266BC",
 		"rev" : "Rev 1"
 	}, {
-		"file" : "\\Downgrade\\vc_to_rev0.bps",
+		"file" : "vc_to_rev0.bps",
 		"hash" : "F6DE506F3019B88F35D62BFE4FF41FE2",
 		"rev" : "VC"
 	}, {
-		"file" : "\\Downgrade\\gc_to_rev0.bps",
+		"file" : "gc_to_rev0.bps",
 		"hash" : "DA78C49364D9739E406B4AEFA46FAB03",
 		"rev" : "GC"
 	} ],
@@ -164,11 +169,11 @@
 	"support_vc" : 1,
 	"console" : "NES",
 	"downgrade" : [ {
-		"file" : "\\Downgrade\\vc_to_rev0.bps",
+		"file" : "vc_to_rev0.bps",
 		"hash" : "D21D31E0EB0E666E9224954F312E915C",
 		"rev" : "VC"
 	}, {
-		"file" : "\\Downgrade\\gc_to_rev0.bps",
+		"file" : "gc_to_rev0.bps",
 		"hash" : "6587C65FAACEBECCABAC13CFA5C5078A",
 		"rev" : "GC"
 	} ],

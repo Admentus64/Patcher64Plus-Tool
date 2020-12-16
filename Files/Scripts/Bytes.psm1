@@ -1,16 +1,16 @@
 function ChangeBytes([String]$File, [String]$Offset, [Array]$Values, [int]$Interval=1, [Switch]$IsDec, [Switch]$Overflow) {
 
-    if ($ExternalScript) { Write-Host "Change values:" $Values }
+    WriteToConsole -Text ("Change values: " + $Values)
     if (IsSet -Elem $File) { $ByteArrayGame = [IO.File]::ReadAllBytes($File) }
     if ($Interval -lt 1) { $Interval = 1 }
     [uint32]$Offset = GetDecimal -Hex $Offset
 
     if ($Offset -lt 0) {
-        Write-Host "Offset is negative!"
+        WriteToConsole "Offset is negative!"
         return
     }
     elseif ($Offset -gt $ByteArrayGame.Length) {
-        Write-Host "Offset is too large for file!"
+        WriteToConsole "Offset is too large for file!"
         return
     }
 
@@ -42,25 +42,25 @@ function PatchBytes([String]$File, [String]$Offset, [String]$Length, [String]$Pa
     if (IsSet -Elem $File) { $ByteArrayGame = [IO.File]::ReadAllBytes($File) }
     if ($Texture) {
         $PatchByteArray = [IO.File]::ReadAllBytes($GameFiles.textures + "\" + $Patch)
-        if ($ExternalScript) { Write-Host "Patch file from:" ($GameFiles.textures + "\" + $Patch) }
+        WriteToConsole ("Patch file from: " + $GameFiles.textures + "\" + $Patch)
     }
     elseif ($Extracted) {
         $PatchByteArray = [IO.File]::ReadAllBytes($GameFiles.extracted + "\" + $Patch)
-        if ($ExternalScript) { Write-Host "Patch file from:" ($GameFiles.extracted + "\" + $Patch) }
+        WriteToConsole ("Patch file from: " + $GameFiles.extracted + "\" + $Patch)
     }
     else {
         $PatchByteArray = [IO.File]::ReadAllBytes($GameFiles.binaries + "\" + $Patch)
-        if ($ExternalScript) { Write-Host "Patch file from:" ($GameFiles.binaries + "\" + $Patch) }
+        WriteToConsole ("Patch file from: " + $GameFiles.binaries + "\" + $Patch)
     }
 
     [uint32]$Offset = GetDecimal -Hex $Offset
 
     if ($Offset -lt 0) {
-        Write-Host "Offset is negative!"
+        WriteToConsole "Offset is negative!"
         return
     }
     elseif ($Offset -gt $ByteArrayGame.Length) {
-        Write-Host "Offset is too large for file!"
+        WriteToConsole "Offset is too large for file!"
         return
     }
 
@@ -88,16 +88,16 @@ function ExportBytes([String]$File, [String]$Offset, [String]$End, [String]$Leng
     
     if ( (Test-Path -LiteralPath $Output) -and ($Settings.Debug.ForceExtract -eq $False) -and !$Force) { return }
 
-    if ($ExternalScript) { Write-Host "Write file to:" $Output }
+    WriteToConsole ("Write file to: " + $Output)
     if (IsSet -Elem $File) { $ByteArrayGame = [IO.File]::ReadAllBytes($File) }
     [uint32]$Offset = GetDecimal -Hex $Offset
 
     if ($Offset -lt 0) {
-        Write-Host "Offset is negative!"
+        WriteToConsole "Offset is negative!"
         return
     }
     elseif ($Offset -gt $ByteArrayGame.Length) {
-        Write-Host "Offset is too large for file!"
+        WriteToConsole "Offset is too large for file!"
         return
     }
 
@@ -132,11 +132,11 @@ function SearchBytes([String]$File, [String]$Start="0", [String]$End, [Array]$Va
     else                    { [uint32]$End = $ByteArrayGame.Length }
 
     if ($Start -lt 0 -or $End -lt 0) {
-        Write-Host "Start or end offset is negative!"
+        WriteToConsole "Start or end offset is negative!"
         return
     }
     elseif ($Start -gt $ByteArrayGame.Length -or $End -gt $ByteArrayGame.Length) {
-        Write-Host "Start or end offset is too large for file!"
+        WriteToConsole "Start or end offset is too large for file!"
         return
     }
     elseif ($Start -gt $End) {
@@ -155,12 +155,12 @@ function SearchBytes([String]$File, [String]$Start="0", [String]$End, [Array]$Va
             }
         }
         if ($Search -eq $True) {
-            if ($ExternalScript) { Write-Host "Found values at:" (Get32Bit -Value $i) }
+            WriteToConsole ("Found values at: " + (Get32Bit -Value $i))
             return Get32Bit -Value $i
         }
     }
 
-    Write-Host "Did not find searched values"
+    WriteToConsole "Did not find searched values"
     return -1;
 
 }
@@ -173,7 +173,7 @@ function ExportAndPatch([String]$Path, [String]$Offset, [String]$Length, [String
     $File = $GameFiles.extracted + "\" + $Path + ".bin"
     if ( !(Test-Path -LiteralPath $File -PathType Leaf) -or ($Settings.Debug.ForceExtract -eq $True) ) {
         ExportBytes -Offset $Offset -Length $Length -Output $File
-        ApplyPatch -File $File -Patch ("\Data Extraction\" + $Path + ".bps") -FilesPath
+        ApplyPatch -File $File -Patch (CheckPatchExtension -File ($GameFiles.export + "\" + $Path)) -FullPath
     }
 
     if (!(IsSet -Elem $NewLength)) { $NewLength = $Length }

@@ -5,7 +5,7 @@
 	"vc_title" : "Kaizo Mario World",
 	"vc_gameID" : "JAA1",
 	"rom_title" : "KAIZO MARIOWORLD",
-	"file" : "\\Compressed\\kaizo_mario_world.bps",
+	"patch" : "\\Compressed\\kaizo_mario_world.bps",
 	"output" : "_kaizo_mario_world_patched",
 	"tooltip" : "A full-sized ROM hack in a completely new setting, which is extremely difficult{0}Only recommended for hardcore players!{0}- Supported: Rev 0 (US)"
 }, {
@@ -15,7 +15,7 @@
 	"vc_title" : "Kaizo Mario World 2",
 	"vc_gameID" : "JAA2",
 	"rom_title" : "KAIZO MARIOWORLD2",
-	"file" : "\\Compressed\\kaizo_mario_world_2.bps",
+	"patch" : "\\Compressed\\kaizo_mario_world_2.bps",
 	"output" : "_kaizo_mario_world_2_patched",
 	"tooltip" : "A full-sized ROM hack in a completely new setting, which is extremely difficult{0}Only recommended for hardcore players and sequel to Kaizo Mario World!{0}- Supported: Rev 0 (US)"
 }, {
@@ -25,7 +25,7 @@
 	"vc_title" : "Kaizo Mario World 3",
 	"vc_gameID" : "JAA3",
 	"rom_title" : "KAIZO MARIOWORLD3",
-	"file" : "\\Compressed\\kaizo_mario_world_3.bps",
+	"patch" : "\\Compressed\\kaizo_mario_world_3.bps",
 	"output" : "_kaizo_mario_world_3_patched",
 	"tooltip" : "A full-sized ROM hack in a completely new setting, which is extremely difficult{0}Only recommended for hardcore players and sequel to Kaizo Mario World 2!{0}- Supported: Rev 0 (US)"
 }, {
@@ -33,7 +33,7 @@
 	"console" : "Native",
 	"command" : "Force Downgrade",
 	"rom_title" : "INVICTUS",
-	"file" : "\\Compressed\\invictus.bps",
+	"patch" : "\\Compressed\\invictus.bps",
 	"output" : "_invictus_patched",
 	"tooltip" : "A full-sized ROM hack in a completely new setting, which is extremely difficult{0}Only recommended for hardcore players!{0}- Supported: Rev 0 (US)"
 }

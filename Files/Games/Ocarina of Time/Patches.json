@@ -52,57 +52,101 @@
 	} ],
 	"tooltip" : "The regular Ocarina of Time experience{0}With support for languages, redux and additional options{0}- Supported: Rev 0 (US)"
 }, {
+	"title" : "GZ Practice ROM",
+	"console" : "Wii VC",
+	"command" : "Force Remap D-Pad No Expand Memory Patch Boot DOL",
+	"vc_title" : "Zelda: GZ Practice ROM",
+	"vc_gameid" : "NZCE",
+	"patch" : [ {
+		"file" : "\\Compressed\\GZ Practice\\gz_practice_rev0_vc.bps",
+		"hash" : "5BD1FE107BF8106B2AB6650ABECD54D6"
+	}, {
+		"file" : "\\Compressed\\GZ Practice\\gz_practice_rev2_vc.bps",
+		"hash" : "57A9719AD547C516342E1A15D5C28C3D"
+	} ],
+	"output" : "_gz_practice_patched",
+	"tooltip" : "A trainer / practice / testing utility for The Legend of Zelda: Ocarina of Time{0}Formally known by its codename 'gz', but generally referred to as 'The Practice ROM'{0}- Supported: Rev 2 (US)"
+}, {
+	"title" : "GZ Practice ROM",
+	"console" : "Native",
+	"patch" : [ {
+		"file" : "\\Compressed\\GZ Practice\\gz_practice_rev0.bps",
+		"hash" : "5BD1FE107BF8106B2AB6650ABECD54D6"
+	}, {
+		"file" : "\\Compressed\\GZ Practice\\gz_practice_rev1.bps",
+		"hash" : "721FDCC6F5F34BE55C43A807F2A16AF4"
+	}, {
+		"file" : "\\Compressed\\GZ Practice\\gz_practice_rev2.bps",
+		"hash" : "57A9719AD547C516342E1A15D5C28C3D"
+	}, {
+		"file" : "\\Compressed\\GZ Practice\\gz_practice_rev_gc.bps",
+		"hash" : "CD09029EDCFB7C097AC01986A0F83D3F"
+	}, {
+		"file" : "\\Compressed\\GZ Practice\\gz_practice_rev_gc_mq.bps",
+		"hash" : "DA35577FE54579F6A266931CC75F512D"
+	} ],
+	"output" : "_gz_practice_patched",
+	"tooltip" : "A trainer / practice / testing utility for The Legend of Zelda: Ocarina of Time{0}Formally known by its codename 'gz', but generally referred to as 'The Practice ROM'{0}- Supported: Rev 0 (US), Rev 1 (US), Rev 2 (US), Rev GC (US) & Rev MQ (US)"
+}, {
 	"title" : "The Legend of Zelda: The Missing Link (v1.4)",
 	"console" : "Both",
 	"command" : "Force Expand Memory Force Downgrade",
 	"vc_title" : "Zelda: The Missing Link",
-	"vc_gameid" : "NAC5",
-	"file" : "\\Compressed\\the_missing_link.bps",
+	"vc_gameid" : "NAC1",
+	"patch" : "\\Compressed\\the_missing_link.bps",
 	"output" : "_the_missing_link_patched",
 	"tooltip" : "A small-sized ROM hack in a completely new setting{0}- Supported: Rev 0 (US)"
 }, {
 	"title" : "The Legend of Zelda: Dawn & Dusk (v2.0)",
 	"console" : "Both",
 	"vc_title" : "Zelda: Dawn & Dusk",
-	"vc_gameid" : "NAC1",
-	"file" : "\\Compressed\\dawn_rev0.bps",
+	"vc_gameid" : "NAC2",
+	"patch" : [ {
+		"file" : "\\Compressed\\Dawn & Dusk\\dawn_rev0.bps",
+		"hash" : "5BD1FE107BF8106B2AB6650ABECD54D6"
+	}, {
+		"file" : "\\Compressed\\Dawn & Dusk\\dawn_rev1.bps",
+		"hash" : "721FDCC6F5F34BE55C43A807F2A16AF4"
+	}, {
+		"file" : "\\Compressed\\Dawn & Dusk\\dawn_rev2.bps",
+		"hash" : "57A9719AD547C516342E1A15D5C28C3D"
+	} ],
 	"output" : "_dawn_&_dusk_patched",
-	"hash" : "Dawn & Dusk",
 	"tooltip" : "A small-sized ROM hack in a completely new setting{0}- Supported: Rev 0 (US), Rev 1 (US) & Rev 2 (US)"
 }, {
 	"title" : "The Legend of Zelda: Master of Time",
 	"console" : "Both",
 	"command" : "Force Downgrade",
 	"vc_title" : "Zelda: Master of Time",
-	"vc_gameid" : "NAC6",
-	"file" : "\\Compressed\\master_of_time.bps",
+	"vc_gameid" : "NAC3",
+	"patch" : "\\Compressed\\master_of_time.bps",
 	"output" : "_master_of_time_patched",
 	"tooltip" : "A small-sized ROM hack in a completely new setting{0}- Supported: Rev 0 (US)"
-}, {
-	"title" : "The Legend of Zelda: The Fate of the Bombiwa (v1.0.3)",
-	"console" : "Both",
-	"command" : "Force Downgrade",
-	"vc_title" : "Zelda: Bombiwa",
-	"vc_gameid" : "NAC2",
-	"file" : "\\Decompressed\\bombiwa.bps",
-	"output" : "_bombiwa_patched",
-	"tooltip" : "A small-sized ROM hack in a completely new setting, and extremely tricky and difficult{0}- Supported: Rev 0 (US)"
 }, {
 	"title" : "The Legend of Zelda: Nimpize Adventure",
 	"console" : "Both",
 	"command" : "Force Downgrade",
 	"vc_title" : "Zelda: Nimpize",
-	"vc_gameid" : "NAC3",
-	"file" : "\\Decompressed\\nimpize.bps",
+	"vc_gameid" : "NAC4",
+	"patch" : "\\Decompressed\\nimpize.bps",
 	"output" : "_nimpize_patched",
 	"tooltip" : "A reworked and harder version of Ocarina of Time with remixed dungeons{0}- Supported: Rev 0 (US)"
+}, {
+	"title" : "The Legend of Zelda: The Fate of the Bombiwa (v1.0.3)",
+	"console" : "Both",
+	"command" : "Force Downgrade",
+	"vc_title" : "Zelda: Bombiwa",
+	"vc_gameid" : "NAC5",
+	"patch" : "\\Decompressed\\bombiwa.bps",
+	"output" : "_bombiwa_patched",
+	"tooltip" : "A small-sized ROM hack in a completely new setting, and extremely tricky and difficult{0}- Supported: Rev 0 (US)"
 }, {
 	"title" : "Ocarina of Time Puzzling (v1.1.2)",
 	"console" : "Both",
 	"command" : "Force Downgrade",
 	"vc_title" : "Zelda: Puzzling",
-	"vc_gameid" : "NAC4",
-	"file" : "\\Compressed\\puzzling.bps",
+	"vc_gameid" : "NAC6",
+	"patch" : "\\Compressed\\puzzling.bps",
 	"output" : "_puzzling_patched",
 	"tooltip" : "A small-sized ROM hack that focuses on puzzling your way through{0}- Supported: Rev 0 (US)"
 }

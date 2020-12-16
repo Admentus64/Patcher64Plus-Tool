@@ -4,11 +4,11 @@ function PatchDungeonsMQ() {
     if (IsChecked -Elem $Redux.MQ.Disable) { return }
 
     if (!(Test-Path -LiteralPath ($GameFiles.extracted + "\Master Quest") -PathType Container)) {
-        if ($Settings.Debug.Console -eq $True) { Write-Host ('Error: "' + ($GameFiles.extracted + "\Master Quest") + '" was not found') }
+        WriteToConsole ('Error: "' + ($GameFiles.extracted + "\Master Quest") + '" was not found')
         return
     }
 
-    UpdateStatusLabel -Text ("Patching " + $GameType.mode + " Master Quest Dungeons...") -Patch ""
+    UpdateStatusLabel ("Patching " + $GameType.mode + " Master Quest Dungeons...")
 
     if (IsChecked -Elem $Redux.MQ.Randomize) {
         $min = $Redux.MQ.Minimum.Text.replace(" (default)", "")
@@ -33,93 +33,93 @@ function PatchDungeonsMQ() {
 
     # Inside the Deku Tree
     if ( (IsChecked -Elem $Redux.MQ.InsideTheDekuTree) -or ($RandomizedDungeons -Contains "InsideTheDekuTree") ) { 
-        UpdateStatusLabel -Text "Patching MQ Dungeon: Inside the Deku Tree"
+        UpdateStatusLabel "Patching MQ Dungeon: Inside the Deku Tree"
         if (!(PatchDungeon -TableOffset "BB40" -Path "Master Quest\Inside the Deku Tree\" -Length 12 -Scene "B71440")) { return }
-        PatchBytes -Offset ( Get24Bit -Value ( (GetDecimal -Hex "BC7E00") + (GetDecimal -Hex "0") ) )    -Patch "Master Quest Chests\Inside the Deku Tree\Mainmap Chests.bin"
-        PatchBytes -Offset ( Get24Bit -Value ( (GetDecimal -Hex "BF40D0") + (GetDecimal -Hex "0") ) )    -Patch "Master Quest Chests\Inside the Deku Tree\Minimap Chests.bin"
+        PatchBytes -Offset ( Get24Bit ( (GetDecimal "BC7E00") + (GetDecimal "0") ) )    -Patch "Master Quest Chests\Inside the Deku Tree\Mainmap Chests.bin"
+        PatchBytes -Offset ( Get24Bit ( (GetDecimal "BF40D0") + (GetDecimal "0") ) )    -Patch "Master Quest Chests\Inside the Deku Tree\Minimap Chests.bin"
     }
 
     # Dodongo's Cavern
     if ( (IsChecked -Elem $Redux.MQ.DodongosCavern) -or ($RandomizedDungeons -Contains "DodongosCavern") ) {
-        UpdateStatusLabel -Text "Patching MQ Dungeon: Dodongo's Cavern"
+        UpdateStatusLabel "Patching MQ Dungeon: Dodongo's Cavern"
         if (!(PatchDungeon -TableOffset "B320" -Path "Master Quest\Dodongo's Cavern\" -Length 17 -Scene "B71454")) { return }
-        PatchBytes -Offset ( Get24Bit -Value ( (GetDecimal -Hex "BC7E00") + (GetDecimal -Hex "99C") ) )  -Patch "Master Quest Chests\Dodongo's Cavern\Mainmap Chests.bin"
-        PatchBytes -Offset ( Get24Bit -Value ( (GetDecimal -Hex "BF40D0") + (GetDecimal -Hex "5CC") ) )  -Patch "Master Quest Chests\Dodongo's Cavern\Minimap Chests.bin"
+        PatchBytes -Offset ( Get24Bit ( (GetDecimal "BC7E00") + (GetDecimal "99C") ) )  -Patch "Master Quest Chests\Dodongo's Cavern\Mainmap Chests.bin"
+        PatchBytes -Offset ( Get24Bit ( (GetDecimal "BF40D0") + (GetDecimal "5CC") ) )  -Patch "Master Quest Chests\Dodongo's Cavern\Minimap Chests.bin"
     }
 
     # Inside Jabu-Jabu's Belly
     if ( (IsChecked -Elem $Redux.MQ.InsideJabuJabusBelly) -or ($RandomizedDungeons -Contains "InsideJabuJabusBelly") ) {
-        UpdateStatusLabel -Text "Patching MQ Dungeon: Inside Jabu-Jabu's Belly"
+        UpdateStatusLabel "Patching MQ Dungeon: Inside Jabu-Jabu's Belly"
         if (!(PatchDungeon -TableOffset "BF50" -Path "Master Quest\Inside Jabu-Jabu's Belly\" -Length 16 -Scene "B71468")) { return }
-        PatchBytes -Offset ( Get24Bit -Value ( (GetDecimal -Hex "BC7E00") + (GetDecimal -Hex "D74") ) )  -Patch "Master Quest Chests\Inside Jabu-Jabu's Belly\Mainmap Chests.bin"
-        PatchBytes -Offset ( Get24Bit -Value ( (GetDecimal -Hex "BF40D0") + (GetDecimal -Hex "E44") ) )  -Patch "Master Quest Chests\Inside Jabu-Jabu's Belly\Minimap Chests.bin"
+        PatchBytes -Offset ( Get24Bit ( (GetDecimal "BC7E00") + (GetDecimal "D74") ) )  -Patch "Master Quest Chests\Inside Jabu-Jabu's Belly\Mainmap Chests.bin"
+        PatchBytes -Offset ( Get24Bit ( (GetDecimal "BF40D0") + (GetDecimal "E44") ) )  -Patch "Master Quest Chests\Inside Jabu-Jabu's Belly\Minimap Chests.bin"
     }
 
     # Forest Temple
     if ( (IsChecked -Elem $Redux.MQ.ForestTemple) -or ($RandomizedDungeons -Contains "ForestTemple") ) {
-        UpdateStatusLabel -Text "Patching MQ Dungeon: Forest Temple"
+        UpdateStatusLabel "Patching MQ Dungeon: Forest Temple"
         if (!(PatchDungeon -TableOffset "B9C0" -Path "Master Quest\Forest Temple\" -Length 23 -Scene "B7147C")) { return }
-        PatchBytes -Offset ( Get24Bit -Value ( (GetDecimal -Hex "BC7E00") + (GetDecimal -Hex "114C") ) ) -Patch "Master Quest Chests\Forest Temple\Mainmap Chests.bin"
-        PatchBytes -Offset ( Get24Bit -Value ( (GetDecimal -Hex "BF40D0") + (GetDecimal -Hex "15D8") ) ) -Patch "Master Quest Chests\Forest Temple\Minimap Chests.bin"
+        PatchBytes -Offset ( Get24Bit ( (GetDecimal "BC7E00") + (GetDecimal "114C") ) ) -Patch "Master Quest Chests\Forest Temple\Mainmap Chests.bin"
+        PatchBytes -Offset ( Get24Bit ( (GetDecimal "BF40D0") + (GetDecimal "15D8") ) ) -Patch "Master Quest Chests\Forest Temple\Minimap Chests.bin"
     }
 
     # Fire Temple
     if ( (IsChecked -Elem $Redux.MQ.FireTemple) -or ($RandomizedDungeons -Contains "FireTemple") ) {
-        UpdateStatusLabel -Text "Patching MQ Dungeon: Fire Temple"
+        UpdateStatusLabel "Patching MQ Dungeon: Fire Temple"
         if (!(PatchDungeon -TableOffset "B800" -Path "Master Quest\Fire Temple\" -Length 27 -Scene "B71490")) { return }
-        PatchBytes -Offset ( Get24Bit -Value ( (GetDecimal -Hex "BC7E00") + (GetDecimal -Hex "18FC") ) ) -Patch "Master Quest Chests\Fire Temple\Mainmap Chests.bin"
-        PatchBytes -Offset ( Get24Bit -Value ( (GetDecimal -Hex "BF40D0") + (GetDecimal -Hex "21E0") ) ) -Patch "Master Quest Chests\Fire Temple\Minimap Chests.bin"
+        PatchBytes -Offset ( Get24Bit ( (GetDecimal "BC7E00") + (GetDecimal "18FC") ) ) -Patch "Master Quest Chests\Fire Temple\Mainmap Chests.bin"
+        PatchBytes -Offset ( Get24Bit ( (GetDecimal "BF40D0") + (GetDecimal "21E0") ) ) -Patch "Master Quest Chests\Fire Temple\Minimap Chests.bin"
     }
 
     # Water Temple
     if ( (IsChecked -Elem $Redux.MQ.WaterTemple) -or ($RandomizedDungeons -Contains "WaterTemple") ) {
-        UpdateStatusLabel -Text "Patching MQ Dungeon: Water Temple"
+        UpdateStatusLabel "Patching MQ Dungeon: Water Temple"
         if (!(PatchDungeon -TableOffset "BCA0" -Path "Master Quest\Water Temple\" -Length 23 -Scene "B714A4")) { return }
-        PatchBytes -Offset ( Get24Bit -Value ( (GetDecimal -Hex "BC7E00") + (GetDecimal -Hex "2298") ) ) -Patch "Master Quest Chests\Water Temple\Mainmap Chests.bin"
-        PatchBytes -Offset ( Get24Bit -Value ( (GetDecimal -Hex "BF40D0") + (GetDecimal -Hex "32CC") ) ) -Patch "Master Quest Chests\Water Temple\Minimap Chests.bin"
+        PatchBytes -Offset ( Get24Bit ( (GetDecimal "BC7E00") + (GetDecimal "2298") ) ) -Patch "Master Quest Chests\Water Temple\Mainmap Chests.bin"
+        PatchBytes -Offset ( Get24Bit ( (GetDecimal "BF40D0") + (GetDecimal "32CC") ) ) -Patch "Master Quest Chests\Water Temple\Minimap Chests.bin"
     }
 
     # Shadow Temple
     if ( (IsChecked -Elem $Redux.MQ.ShadowTemple) -or ($RandomizedDungeons -Contains "ShadowTemple") ) {
-        UpdateStatusLabel -Text "Patching MQ Dungeon: Shadow Temple"
+        UpdateStatusLabel "Patching MQ Dungeon: Shadow Temple"
         if (!(PatchDungeon -TableOffset "C060" -Path "Master Quest\Shadow Temple\" -Length 23 -Scene "B714CC")) { return }
-        PatchBytes -Offset ( Get24Bit -Value ( (GetDecimal -Hex "BC7E00") + (GetDecimal -Hex "31F8") ) ) -Patch "Master Quest Chests\Shadow Temple\Mainmap Chests.bin"
-        PatchBytes -Offset ( Get24Bit -Value ( (GetDecimal -Hex "BF40D0") + (GetDecimal -Hex "5518") ) ) -Patch "Master Quest Chests\Shadow Temple\Minimap Chests.bin"
+        PatchBytes -Offset ( Get24Bit ( (GetDecimal "BC7E00") + (GetDecimal "31F8") ) ) -Patch "Master Quest Chests\Shadow Temple\Mainmap Chests.bin"
+        PatchBytes -Offset ( Get24Bit ( (GetDecimal "BF40D0") + (GetDecimal "5518") ) ) -Patch "Master Quest Chests\Shadow Temple\Minimap Chests.bin"
     }
     
     # Spirit Temple
     if ( (IsChecked -Elem $Redux.MQ.SpiritTemple) -or ($RandomizedDungeons -Contains "SpiritTemple") ) {
-        UpdateStatusLabel -Text "Patching MQ Dungeon: Spirit Temple"
+        UpdateStatusLabel "Patching MQ Dungeon: Spirit Temple"
         if (!(PatchDungeon -TableOffset "C450" -Path "Master Quest\Spirit Temple\" -Length 29 -Scene "B714B8")) { return }
-        PatchBytes -Offset ( Get24Bit -Value ( (GetDecimal -Hex "BC7E00") + (GetDecimal -Hex "2A48") ) ) -Patch "Master Quest Chests\Spirit Temple\Mainmap Chests.bin"
-        PatchBytes -Offset ( Get24Bit -Value ( (GetDecimal -Hex "BF40D0") + (GetDecimal -Hex "4664") ) ) -Patch "Master Quest Chests\Spirit Temple\Minimap Chests.bin"
+        PatchBytes -Offset ( Get24Bit ( (GetDecimal "BC7E00") + (GetDecimal "2A48") ) ) -Patch "Master Quest Chests\Spirit Temple\Mainmap Chests.bin"
+        PatchBytes -Offset ( Get24Bit ( (GetDecimal "BF40D0") + (GetDecimal "4664") ) ) -Patch "Master Quest Chests\Spirit Temple\Minimap Chests.bin"
     }
 
     # Ice Cavern
     if ( (IsChecked -Elem $Redux.MQ.IceCavern) -or ($RandomizedDungeons -Contains "IceCavern") ) {
-        UpdateStatusLabel -Text "Patching MQ Dungeon: Ice Cavern"
+        UpdateStatusLabel "Patching MQ Dungeon: Ice Cavern"
         if (!(PatchDungeon -TableOffset "C630" -Path "Master Quest\Ice Cavern\" -Length 12 -Scene "B714F4")) { return }
-        PatchBytes -Offset ( Get24Bit -Value ( (GetDecimal -Hex "BC7E00") + (GetDecimal -Hex "3F6C") ) ) -Patch "Master Quest Chests\Ice Cavern\Mainmap Chests.bin"
-        PatchBytes -Offset ( Get24Bit -Value ( (GetDecimal -Hex "BF40D0") + (GetDecimal -Hex "6594") ) ) -Patch "Master Quest Chests\Ice Cavern\Minimap Chests.bin"
+        PatchBytes -Offset ( Get24Bit ( (GetDecimal "BC7E00") + (GetDecimal "3F6C") ) ) -Patch "Master Quest Chests\Ice Cavern\Mainmap Chests.bin"
+        PatchBytes -Offset ( Get24Bit ( (GetDecimal "BF40D0") + (GetDecimal "6594") ) ) -Patch "Master Quest Chests\Ice Cavern\Minimap Chests.bin"
     }
 
     # Bottom of the Well
     if ( (IsChecked -Elem $Redux.MQ.BottomOfTheWell) -or ($RandomizedDungeons -Contains "BottomOfTheWell") ) { 
-        UpdateStatusLabel -Text "Patching MQ Dungeon: Bottom of the Well"
+        UpdateStatusLabel "Patching MQ Dungeon: Bottom of the Well"
         if (!(PatchDungeon -TableOffset "CEA0" -Path "Master Quest\Bottom of the Well\" -Length 7 -Scene "B714E0")) { return }
-        PatchBytes -Offset ( Get24Bit -Value ( (GetDecimal -Hex "BC7E00") + (GetDecimal -Hex "39A8") ) ) -Patch "Master Quest Chests\Bottom of the Well\Mainmap Chests.bin"
-        PatchBytes -Offset ( Get24Bit -Value ( (GetDecimal -Hex "BF40D0") + (GetDecimal -Hex "6120") ) ) -Patch "Master Quest Chests\Bottom of the Well\Minimap Chests.bin"
+        PatchBytes -Offset ( Get24Bit ( (GetDecimal "BC7E00") + (GetDecimal "39A8") ) ) -Patch "Master Quest Chests\Bottom of the Well\Mainmap Chests.bin"
+        PatchBytes -Offset ( Get24Bit ( (GetDecimal "BF40D0") + (GetDecimal "6120") ) ) -Patch "Master Quest Chests\Bottom of the Well\Minimap Chests.bin"
     }
 
     # Gerudo Training Ground
     if ( (IsChecked -Elem $Redux.MQ.GerudoTrainingGround) -or ($RandomizedDungeons -Contains "GerudoTrainingGround") ) {
-        UpdateStatusLabel -Text "Patching MQ Dungeon: Gerudo Training Ground"
+        UpdateStatusLabel "Patching MQ Dungeon: Gerudo Training Ground"
         if (!(PatchDungeon -TableOffset "C230" -Path "Master Quest\Gerudo Training Ground\" -Length 11 -Scene "B7151C")) { return }
     }
 
     # Inside Ganon's Castle
     if ( (IsChecked -Elem $Redux.MQ.InsideGanonsCastle) -or ($RandomizedDungeons -Contains "InsideGanonsCastle") ) {
-        UpdateStatusLabel -Text "Patching MQ Dungeon: Inside Ganon's Castle"
+        UpdateStatusLabel "Patching MQ Dungeon: Inside Ganon's Castle"
         if (!(PatchDungeon -TableOffset "CCC0" -Path "Master Quest\Inside Ganon's Castle\" -Length 20 -Scene "B71544")) { return }
     }
 
@@ -131,7 +131,7 @@ function PatchDungeonsMQ() {
 function CheckDungeonData([String]$Path) {
     
     if (!(Test-Path -LiteralPath $Path -PathType Container)) {
-        if ($Settings.Debug.Console -eq $True) { Write-Host ('Error: "' + $Path + '" was not found') }
+        WriteToConsole ('Error: "' + $Path + '" was not found')
         return $False
     }
     return $True
@@ -152,12 +152,12 @@ function ExtractMQData([Boolean]$Decompress) {
             if ( !(Test-Path -LiteralPath $Path -PathType Container) -or ($Settings.Debug.ForceExtract -eq $True) ) {
                 ApplyPatch -File $GetROM.decomp -Patch "\Decompressed\master_quest.bps" -New $GetROM.masterQuest
                 $global:ByteArrayGame = [IO.File]::ReadAllBytes($GetROM.masterQuest)
-                ExtractAllDungeons -Path $Path
+                ExtractAllDungeons $Path
             }
         }
         if ($Settings.Debug.Rev0DungeonFiles -eq $True) { # EXTRACT VANILLA DUNGEON DATA DEBUG #
             $global:ByteArrayGame = [IO.File]::ReadAllBytes($GetROM.decomp)
-            ExtractAllDungeons -Path ($Path + " (Rev 0)")
+            ExtractAllDungeons ($Path + " (Rev 0)")
         }
     }
 
@@ -170,16 +170,16 @@ function ExtractDungeon([String]$Path, [String]$Offset, [int]$Length) {
     
     if ( (Test-Path -LiteralPath $Path -PathType Container) -and ($Settings.Debug.ForceExtract -eq $False) ) { return }
 
-    $Start = Get8Bit -Value ( (GetDecimal -Hex $Offset) )
-    $End = Get8Bit -Value ( (GetDecimal -Hex $Start) + ($Length * 16) + 16)
-    $Table = $ByteArrayGame[(GetDecimal -Hex $Start)..(GetDecimal -Hex $End)]
-    CreateSubPath -Path $Path
+    $Start = Get8Bit ( (GetDecimal $Offset) )
+    $End   = Get8Bit ( (GetDecimal $Start) + ($Length * 16) + 16)
+    $Table = $ByteArrayGame[(GetDecimal $Start)..(GetDecimal $End)]
+    CreateSubPath $Path
 
     ExportBytes -Offset $Start -End $End -Output ($Path + "\table.dmaTable") 
     
     for ($i=0; $i -le $Length; $i++) {
-        $Start = (Get8Bit -Value $Table[($i*16)+0]) + (Get8Bit -Value $Table[($i*16)+1]) + (Get8Bit -Value $Table[($i*16)+2]) + (Get8Bit -Value $Table[($i*16)+3])
-        $End   = (Get8Bit -Value $Table[($i*16)+4]) + (Get8Bit -Value $Table[($i*16)+5]) + (Get8Bit -Value $Table[($i*16)+6]) + (Get8Bit -Value $Table[($i*16)+7])
+        $Start = (Get8Bit $Table[($i*16)+0]) + (Get8Bit $Table[($i*16)+1]) + (Get8Bit $Table[($i*16)+2]) + (Get8Bit $Table[($i*16)+3])
+        $End   = (Get8Bit $Table[($i*16)+4]) + (Get8Bit $Table[($i*16)+5]) + (Get8Bit $Table[($i*16)+6]) + (Get8Bit $Table[($i*16)+7])
         if ($i -eq 0)   { ExportBytes -Offset $Start -End $End -Output ($Path + "\scene.zscene") }
         else            { ExportBytes -Offset $Start -End $End -Output ($Path + "\room_" + ($i-1) + ".zmap") }
     }
@@ -191,7 +191,7 @@ function ExtractDungeon([String]$Path, [String]$Offset, [int]$Length) {
 #==============================================================================================================================================================================================
 function ExtractAllDungeons([String]$Path) {
     
-    if (!(Test-Path -LiteralPath $Path -PathType Container)) { CreateSubPath  -Path $Path }
+    if (!(Test-Path -LiteralPath $Path -PathType Container)) { CreateSubPath $Path }
     ExtractDungeon -Path ($Path + "\Inside the Deku Tree")     -Offset "BB40" -Length 12
     ExtractDungeon -Path ($Path + "\Dodongo's Cavern")         -Offset "B320" -Length 17
     ExtractDungeon -Path ($Path + "\Inside Jabu-Jabu's Belly") -Offset "BF50" -Length 16

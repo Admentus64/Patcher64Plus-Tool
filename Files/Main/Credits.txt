@@ -1,8 +1,5 @@
---- Thanks to my Patreons ---
-- Leigh Pierce
-
 --- Thanks to my past Patreons --
-- Raim, Gicrax, Crypto Logiq, Moons (Luke), Ronald, Richard Moser
+- Leigh Pierce, Raim, Gicrax, Crypto Logiq, Moons (Luke), Ronald, Richard Moser
 
 --- Patcher64+ Tool ---
 - Admentus (Testing and Coding of Patcher64+ Tool)

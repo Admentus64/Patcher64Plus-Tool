@@ -58,7 +58,7 @@ function CreateMainDialog() {
             $InputPaths.GameTextBox.Text = "Select or drag and drop your ROM or VC WAD file..."
             $global:GameIsSelected = $Patches.Panel.Enabled = $InputPaths.ClearGameButton.Enabled = $InputPaths.PatchPanel.Visible = $False
             if ($IsWiiVC) {
-                SetWiiVCMode -Enable $False
+                SetWiiVCMode $False
                 ChangeGamesList
             }
             SetMainScreenSize
@@ -113,17 +113,17 @@ function CreateMainDialog() {
     $InputPaths.PatchGroup.Add_DragDrop({ PatchPath_DragDrop })
     
     # Create a textbox to display the selected BPS.
-    $InputPaths.PatchTextBox = CreateTextBox -X 10 -Y 20 -Width 420 -Height 22 -Text "Select or drag and drop your BPS, IPS, Xdelta, VCDiff or PPF Patch File..." -Name "Path.Patch" -ReadOnly $True
+    $InputPaths.PatchTextBox = CreateTextBox -X 10 -Y 20 -Width 420 -Height 22 -Text "Select or drag and drop your BPS, IPS, UPS, Xdelta, VCDiff or PPF Patch File..." -Name "Path.Patch" -ReadOnly $True
     $InputPaths.PatchTextBox.AllowDrop = $True
     $InputPaths.PatchTextBox.Add_DragEnter({ $_.Effect = [Windows.Forms.DragDropEffects]::Copy })
     $InputPaths.PatchTextBox.Add_DragDrop({ PatchPath_DragDrop })
 
     # Create a button to allow manually selecting a ROM.
-    $InputPaths.PatchButton = CreateButton -X ($InputPaths.PatchTextBox.Right + 6) -Y 18 -Width 24 -Height 22 -Text "..." -Info "Select your BPS, IPS, Xdelta or VCDiff Patch File using file explorer"
-    $InputPaths.PatchButton.Add_Click({ PatchPath_Button -TextBox $InputPaths.PatchTextBox -Description "Patch Files" -FileNames @('*.bps', '*.ips', '*.xdelta', '*.vcdiff') })
+    $InputPaths.PatchButton = CreateButton -X ($InputPaths.PatchTextBox.Right + 6) -Y 18 -Width 24 -Height 22 -Text "..." -Info "Select your BPS, IPS, UPS, Xdelta or VCDiff Patch File using file explorer"
+    $InputPaths.PatchButton.Add_Click({ PatchPath_Button -TextBox $InputPaths.PatchTextBox -Description "Patch Files" -FileNames @('*.bps', '*.ips', '*.ups' ,'*.xdelta', '*.vcdiff') })
     
     # Create a button to allow patch the WAD with a BPS file.
-    $InputPaths.ApplyPatchButton = CreateButton -X ($InputPaths.PatchButton.Right + 15) -Y 18 -Width ($InputPaths.PatchGroup.Right - $InputPaths.PatchButton.Right - 30) -Height 22 -Text "Apply Patch" -Info "Patch the ROM with your selected BPS or IPS Patch File"
+    $InputPaths.ApplyPatchButton = CreateButton -X ($InputPaths.PatchButton.Right + 15) -Y 18 -Width ($InputPaths.PatchGroup.Right - $InputPaths.PatchButton.Right - 30) -Height 22 -Text "Apply Patch" -Info "Patch the ROM with your selected BPS, IPS, UPS, Xdelta or VCDiff Patch File"
     $InputPaths.ApplyPatchButton.Add_Click({ MainFunction -Command "Apply Patch" -PatchedFileName "_bps_patched" })
     $InputPaths.ApplyPatchButton.Enabled = $False
 
@@ -425,7 +425,7 @@ function CheckVCOptions() {
     
     if (!$IsWiiVC) { return }
 
-    if (IsChecked -Elem $VC.RemoveT64)          { $VC.PatchVCButton.Enabled = $True }
+    if     (IsChecked -Elem $VC.RemoveT64)      { $VC.PatchVCButton.Enabled = $True }
     elseif (IsChecked -Elem $VC.ExpandMemory)   { $VC.PatchVCButton.Enabled = $True }
     elseif (IsChecked -Elem $VC.RemoveFilter)   { $VC.PatchVCButton.Enabled = $True }
     elseif (IsChecked -Elem $VC.RemapDPad)      { $VC.PatchVCButton.Enabled = $True }
@@ -463,10 +463,10 @@ function DisablePatches() {
 #==================================================================================================================================================================================================================================================================
 function GamePath_Button([Object]$TextBox, [String]$Description, [String[]]$FileNames) {
         # Allow the user to select a file
-    $SelectedPath = Get-FileName -Path $Paths.Base -Description $Description -FileNames $FileNames
+    $SelectedPath = GetFileName -Path $Paths.Base -Description $Description -FileNames $FileNames
 
     # Make sure the path is not blank and also test that the path exists
-    if (($SelectedPath -ne '') -and (TestPath -LiteralPath $SelectedPath)) {
+    if (($SelectedPath -ne '') -and (Test-Path -LiteralPath $SelectedPath)) {
         # Finish everything up
         $Settings["Core"][$this.name] = $SelectedPath
         GamePath_Finish -TextBox $TextBox -Path $SelectedPath
@@ -479,10 +479,10 @@ function GamePath_Button([Object]$TextBox, [String]$Description, [String[]]$File
 #==================================================================================================================================================================================================================================================================
 function InjectPath_Button([Object]$TextBox, [String]$Description, [String[]]$FileNames) {
         # Allow the user to select a file
-    $SelectedPath = Get-FileName -Path $Paths.Base -Description $Description -FileNames $FileNames
+    $SelectedPath = GetFileName -Path $Paths.Base -Description $Description -FileNames $FileNames
 
     # Make sure the path is not blank and also test that the path exists
-    if (($SelectedPath -ne '') -and (TestPath -LiteralPath $SelectedPath)) {
+    if (($SelectedPath -ne '') -and (Test-Path -LiteralPath $SelectedPath)) {
         # Finish everything up
         $Settings["Core"][$this.name] = $SelectedPath
         InjectPath_Finish -TextBox $TextBox -Path $SelectedPath
@@ -496,10 +496,10 @@ function InjectPath_Button([Object]$TextBox, [String]$Description, [String[]]$Fi
 #==================================================================================================================================================================================================================================================================
 function PatchPath_Button([Object]$TextBox, [String]$Description, [String[]]$FileNames) {
         # Allow the user to select a file
-    $SelectedPath = Get-FileName -Path $Paths.Base -Description $Description -FileNames $FileNames
+    $SelectedPath = GetFileName -Path $Paths.Base -Description $Description -FileNames $FileNames
 
     # Make sure the path is not blank and also test that the path exists
-    if (($SelectedPath -ne '') -and (TestPath -LiteralPath $SelectedPath)) {
+    if (($SelectedPath -ne '') -and (Test-Path -LiteralPath $SelectedPath)) {
         # Finish everything up
         $Settings["Core"][$this.name] = $SelectedPath
         PatchPath_Finish -TextBox $TextBox -Path $SelectedPath
@@ -574,7 +574,7 @@ function PatchPath_DragDrop() {
             $DroppedExtn = (Get-Item -LiteralPath $DroppedPath).Extension
 
             # Make sure it is a BPS File
-            if ($DroppedExtn -eq '.bps' -or $DroppedExtn -eq '.ips' -or $DroppedExtn -eq '.xdelta' -or $DroppedExtn -eq '.vcdiff') {
+            if ($DroppedExtn -eq '.bps' -or $DroppedExtn -eq '.ips' -or $DroppedExtn -eq '.ups' -or $DroppedExtn -eq '.xdelta' -or $DroppedExtn -eq '.vcdiff') {
                 # Finish everything up.
                 $Settings["Core"][$this.name] = $DroppedPath
                 PatchPath_Finish -TextBox $InputPaths.PatchTextBox -Path $DroppedPath

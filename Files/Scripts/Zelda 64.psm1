@@ -36,7 +36,7 @@ function GetSFXID([String]$SFX) {
     elseif ($SFX -eq "Target Neutral")          { return @("48", "0C") }     elseif ($SFX -eq "Thunder")                 { return @("28", "2E") }     elseif ($SFX -eq "Timer")                   { return @("48", "1A") }
     elseif ($SFX -eq "Twinrova Bicker")         { return @("39", "E7") }     elseif ($SFX -eq "Wolfos Howl")             { return @("38", "3C") }     elseif ($SFX -eq "Zelda Gasp (Adult)")      { return @("68", "79") }
     else {
-        if ($Settings.Debug.Console -eq $True) { Write-Host ("Could not find sound ID for: " + $SFX) }
+        WriteToConsole ("Could not find sound ID for: " + $SFX)
         return -1
     }
 
@@ -52,7 +52,7 @@ function GetItemID([String]$Item) {
     elseif ($Item -eq "Ocarina of Time")   { return "00" }   elseif ($Item -eq "Deku Mask")             { return "32" }   elseif ($Item -eq "Goron Mask")   { return "33" }
     elseif ($Item -eq "Zora Mask")         { return "34" }   elseif ($Item -eq "Fierce Deity's Mask")   { return "35" }
     else {
-        if ($Settings.Debug.Console -eq $True) { Write-Host ("Could not find item ID for : " + $Item) }
+        WriteToConsole ("Could not find item ID for : " + $Item)
         return -1
     }
 
@@ -63,20 +63,11 @@ function GetItemID([String]$Item) {
 #==============================================================================================================================================================================================
 function ShowModelPreview([Object]$Dropdown, [Object]$Box) {
 
-    $image = "Default"
-    if ($Dropdown.selectedIndex -eq 1)    { $image = "Child_Link_MM" }
-    if ($Dropdown.selectedIndex -eq 2)    { $image = "Adult_Link_MM" }
-    if ($Dropdown.selectedIndex -eq 3)    { $image = "Link_MM" }
-    if ($Dropdown.selectedIndex -eq 4)    { $image = "Link_ALTTP" }
-    if ($Dropdown.selectedIndex -eq 5)    { $image = "Happy_Mask_Salesman" }
-    if ($Dropdown.selectedIndex -eq 6)    { $image = "Mega_Man" }
-    if ($Dropdown.selectedIndex -eq 8)    { $image = "Miku" }
-    if ($Dropdown.selectedIndex -eq 9)    { $image = "Malon_3D" }
-    if ($Dropdown.selectedIndex -eq 10)   { $image = "Malon_Sexy" }
-    if ($Dropdown.selectedIndex -eq 11)   { $image = "Saria" }
-    if ($Dropdown.selectedIndex -eq 12)   { $image = "Ruto" }
-    if ($Dropdown.selectedIndex -eq 13)   { $image = "Aria" }
-    $Box.Image  = [System.Drawing.Image]::Fromfile( ( Get-Item ($GameFiles.previews + "\" + $image + ".png") ) )
+    if (Test-Path ($GameFiles.previews + "\" + $Dropdown.selectedIndex + ".png") -PathType Leaf) {
+        $Box.Image  = [System.Drawing.Image]::Fromfile( ( Get-Item ($GameFiles.previews + "\" + $Dropdown.selectedIndex + ".png") ) )
+    }
+    else { $Box.Image = $null }
+    
 
 }
 
@@ -96,7 +87,7 @@ function GetInstrumentID([String]$SFX) {
     elseif ($SFX -eq "Arguing")             { return "4F" }   elseif ($SFX -eq "Bass Guitar")    { return "74" }   elseif ($SFX -eq "Beaver")            { return "61" }
     elseif ($SFX -eq "Elder Goron Drums")   { return "71" }
     else {
-        if ($Settings.Debug.Console -eq $True) { Write-Host ("Could not find SFX ID for : " + $Item) }
+        WriteToConsole ("Could not find SFX ID for : " + $Item)
         return -1
     }
 
@@ -150,10 +141,10 @@ function CreateSpinAttackColorOptions() {
 
     # Spin Attack Colors - Buttons
     $Buttons = @()
-    $Buttons += CreateReduxButton -Column 3 -Row 1 -Width 100 -Text "Blue Spin (Inner)" -Info "Select the inner color you want for the blue spin attack"
-    $Buttons += CreateReduxButton -Column 3 -Row 2 -Width 100 -Text "Blue Spin (Outer)" -Info "Select the outer color you want for the blue spin attack"
-    $Buttons += CreateReduxButton -Column 6 -Row 1 -Width 100 -Text "Red Spin (Inner)"  -Info "Select the inner color you want for the red spin attack"
-    $Buttons += CreateReduxButton -Column 6 -Row 2 -Width 100 -Text "Red Spin (Outer)"  -Info "Select the outer color you want for the red spin attack"
+    $Buttons += CreateReduxButton -Column 3 -Row 1 -Width 100 -Tag $Buttons.Count -Text "Blue Spin (Inner)" -Info "Select the inner color you want for the blue spin attack"
+    $Buttons += CreateReduxButton -Column 3 -Row 2 -Width 100 -Tag $Buttons.Count -Text "Blue Spin (Outer)" -Info "Select the outer color you want for the blue spin attack"
+    $Buttons += CreateReduxButton -Column 6 -Row 1 -Width 100 -Tag $Buttons.Count -Text "Red Spin (Inner)"  -Info "Select the inner color you want for the red spin attack"
+    $Buttons += CreateReduxButton -Column 6 -Row 2 -Width 100 -Tag $Buttons.Count -Text "Red Spin (Outer)"  -Info "Select the outer color you want for the red spin attack"
 
     # Spin Attack Colors - Dialogs
     $Redux.Colors.SetSpinAttack = @()
@@ -165,10 +156,11 @@ function CreateSpinAttackColorOptions() {
     # Spin Attack Colors - Labels
     $Redux.Colors.SpinAttackLabels = @()
     for ($i=0; $i -lt $Buttons.length; $i++) {
-        if ($i -lt 2)   { $dropdown = $Redux.Colors.BlueSpinAttack }
-        else            { $dropdown = $Redux.Colors.RedSpinAttack }
-
-        $Buttons[$i].Add_Click({ $Redux.Colors.SetSpinAttack[[int]$this.Tag].ShowDialog(); $dropdown.Text = "Custom"; $Redux.Colors.SpinAttackLabels[[int]$this.Tag].BackColor = $Redux.Colors.SetSpinAttack[[int]$this.Tag].Color; $Settings[$GameType.mode][$Redux.Colors.SetSpinAttack[[int]$this.Tag].Tag] = $Redux.Colors.SetSpinAttack[[int]$this.Tag].Color.Name })
+        $Buttons[$i].Add_Click({
+            $Redux.Colors.SetSpinAttack[[int]$this.Tag].ShowDialog(); $Redux.Colors.SpinAttackLabels[[int]$this.Tag].BackColor = $Redux.Colors.SetSpinAttack[[int]$this.Tag].Color; $Settings[$GameType.mode][$Redux.Colors.SetSpinAttack[[int]$this.Tag].Tag] = $Redux.Colors.SetSpinAttack[[int]$this.Tag].Color.Name
+            if ($this.Tag -lt 2)   { $Redux.Colors.BlueSpinAttack.Text = "Custom" }
+            else                   { $Redux.Colors.RedSpinAttack.Text  = "Custom" }
+        })
         $Redux.Colors.SpinAttackLabels += CreateReduxColoredLabel -Link $Buttons[$i]  -Color $Redux.Colors.SetSpinAttack[$i].Color
     }
 
@@ -268,7 +260,8 @@ function SetFairyColorsPreset([Object]$ComboBox, [Array]$Dialogs, [Array]$Labels
     
     $Text = $ComboBox.Text.replace(' (default)', "")
     if     ($Text -eq "Navi")                { SetFairyColors -Inner "FFFFFF" -Outer "0000FF" -Dialogs $Dialogs -Labels $Labels }
-    elseif ($Text -eq "Tatl")                { SetFairyColors -Inner "FFFFFF" -Outer "C89800" -Dialogs $Dialogs -Labels $Labels }
+   #elseif ($Text -eq "Tatl")                { SetFairyColors -Inner "FFFFFF" -Outer "C89800" -Dialogs $Dialogs -Labels $Labels }
+    elseif ($Text -eq "Tatl")                { SetFairyColors -Inner "FFFFE6" -Outer "DCA050" -Dialogs $Dialogs -Labels $Labels }
     elseif ($Text -eq "Tael")                { SetFairyColors -Inner "49146C" -Outer "FF0000" -Dialogs $Dialogs -Labels $Labels }
     elseif ($Text -eq "Gold")                { SetFairyColors -Inner "FECC3C" -Outer "FEC007" -Dialogs $Dialogs -Labels $Labels }
     elseif ($Text -eq "Green")               { SetFairyColors -Inner "00FF00" -Outer "00FF00" -Dialogs $Dialogs -Labels $Labels }
@@ -295,7 +288,7 @@ function SetFairyColorsPreset([Object]$ComboBox, [Array]$Dialogs, [Array]$Labels
             $Colors += $Green + $Red + $Blue
             SetColor -Color ($Green + $Red + $Blue) -Dialog $Dialogs[$i] -Label $Labels[$i]
         }
-        if ($Settings.Debug.Console -eq $True) { Write-Host ("Randomize Navi Colors: " + $Colors) }
+        WriteToConsole ("Randomize Navi Colors: " + $Colors)
     }
 
 }
@@ -356,7 +349,7 @@ function SetTunicColorsPreset([Object]$ComboBox, [Object]$Dialog, [Object]$Label
         $Green = Get8Bit -Value (Get-Random -Maximum 255)
         $Red   = Get8Bit -Value (Get-Random -Maximum 255)
         $Blue  = Get8Bit -Value (Get-Random -Maximum 255)
-        if ($Settings.Debug.Console -eq $True) { Write-Host ("Randomize Tunic Color: " + ($Green + $Red + $Blue)) }
+        WriteToConsole ("Randomize Tunic Color: " + ($Green + $Red + $Blue))
         SetColor -Color ($Green + $Red + $Blue) -Dialog $Dialog -Label $Label
     }
 
@@ -385,7 +378,7 @@ function SetGauntletsColorsPreset([Object]$ComboBox, [Object]$Dialog, [Object]$L
         $Green = Get8Bit -Value (Get-Random -Maximum 255)
         $Red   = Get8Bit -Value (Get-Random -Maximum 255)
         $Blue  = Get8Bit -Value (Get-Random -Maximum 255)
-        if ($Settings.Debug.Console -eq $True) { Write-Host ("Randomize Gauntlets Color: " + ($Green + $Red + $Blue)) }
+        WriteToConsole ("Randomize Gauntlets Color: " + ($Green + $Red + $Blue))
         SetColor -Color ($Green + $Red + $Blue) -Dialog $Dialog -Label $Label
     }
 
@@ -410,7 +403,7 @@ function SetMirrorShieldFrameColorsPreset([Object]$ComboBox, [Object]$Dialog, [O
         $Green = Get8Bit -Value (Get-Random -Maximum 255)
         $Red   = Get8Bit -Value (Get-Random -Maximum 255)
         $Blue  = Get8Bit -Value (Get-Random -Maximum 255)
-        if ($Settings.Debug.Console -eq $True) { Write-Host ("Randomize Mirror Shield Frame Color: " + ($Green + $Red + $Blue)) }
+        WriteToConsole ("Randomize Mirror Shield Frame Color: " + ($Green + $Red + $Blue))
         SetColor -Color ($Green + $Red + $Blue) -Dialog $Dialog -Label $Label
     }
 
@@ -430,7 +423,7 @@ function SetHeartsColorsPreset([Object]$ComboBox, [Object]$Dialog, [Object]$Labe
         $Green = Get8Bit -Value (Get-Random -Maximum 255)
         $Red   = Get8Bit -Value (Get-Random -Maximum 255)
         $Blue  = Get8Bit -Value (Get-Random -Maximum 255)
-        if ($Settings.Debug.Console -eq $True) { Write-Host ("Randomize Hearts Color: " + ($Green + $Red + $Blue)) }
+        WriteToConsole ("Randomize Hearts Color: " + ($Green + $Red + $Blue))
         SetColor -Color ($Green + $Red + $Blue) -Dialog $Dialog -Label $Label
     }
 
@@ -453,7 +446,7 @@ function SetMagicColorsPreset([Object]$ComboBox, [Object]$Dialog, [Object]$Label
         $Green = Get8Bit -Value (Get-Random -Maximum 255)
         $Red   = Get8Bit -Value (Get-Random -Maximum 255)
         $Blue  = Get8Bit -Value (Get-Random -Maximum 255)
-        if ($Settings.Debug.Console -eq $True) { Write-Host ("Randomize Magic Color: " + ($Green + $Red + $Blue)) }
+        WriteToConsole ("Randomize Magic Color: " + ($Green + $Red + $Blue))
         SetColor -Color ($Green + $Red + $Blue) -Dialog $Dialog -Label $Label
     }
 
@@ -480,7 +473,7 @@ function SetSpinAttackColorsPreset([Object]$ComboBox, [Object]$Dialog, [Object]$
         $Green = Get8Bit -Value (Get-Random -Maximum 255)
         $Red   = Get8Bit -Value (Get-Random -Maximum 255)
         $Blue  = Get8Bit -Value (Get-Random -Maximum 255)
-        if ($Settings.Debug.Console -eq $True) { Write-Host ("Randomize Spin Attack Color: " + ($Green + $Red + $Blue)) }
+        WriteToConsole ("Randomize Spin Attack Color: " + ($Green + $Red + $Blue))
         SetColor -Color ($Green + $Red + $Blue) -Dialog $Dialog -Label $Label
     }
 
