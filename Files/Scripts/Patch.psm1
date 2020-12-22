@@ -57,11 +57,6 @@ function MainFunction([String]$Command, [String]$PatchedFileName) {
         }
     }
     
-    # Downgrade
-    if (!$IsWiiVC -and $ROMHashSum -eq $GameType.Hash)                                                                                       { $Patches.Downgrade.Checked = $False }
-    elseif ($Patches.Downgrade.Visible -and (StrLike -str $Command -val "Force Downgrade") -and $Settings.Debug.IgnoreChecksum -eq $False)   { $Patches.Downgrade.Checked = $True }
-    elseif ($Patches.Downgrade.Visible -and (StrLike -str $Command -val "No Downgrade") )                                                    { $Patches.Downgrade.Checked = $False }
-
     # Decompress
     $Decompress = $False
     if ($GameType.decompress -gt 0) {
@@ -80,6 +75,11 @@ function MainFunction([String]$Command, [String]$PatchedFileName) {
         $global:ROMFile = SetROMParameters -Path $GamePath -PatchedFileName $PatchedFileName
         SetGetROM
     }
+
+    # Downgrade
+    if (!$IsWiiVC -and $ROMHashSum -eq $CheckHashSum)                                                                                        { $Patches.Downgrade.Checked = $False }
+    elseif ($Patches.Downgrade.Visible -and (StrLike -str $Command -val "Force Downgrade") -and $Settings.Debug.IgnoreChecksum -eq $False)   { $Patches.Downgrade.Checked = $True }
+    elseif ($Patches.Downgrade.Visible -and (StrLike -str $Command -val "No Downgrade") )                                                    { $Patches.Downgrade.Checked = $False }
 
     # GO!
     MainFunctionPatch -Command $Command -Header $Header -PatchedFileName $PatchedFileName -Decompress $Decompress
@@ -723,11 +723,31 @@ function ConvertROM([String]$Command) {
     $Ext =  [System.IO.Path]::GetExtension($GetROM.run)
     if ($Ext -eq ".v64" -or $Ext -eq ".n64") {
         UpdateStatusLabel "Converting ROM to Big Endian..."
-        Push-Location $Paths.Temp
-        & $Files.tool.ucon64 --z64 $GetROM.run | Out-Host
-        Move-Item -LiteralPath ($Paths.Temp + "\" + $Name + ".z64") -Destination ($Paths.Temp + "\converted") -Force
+
+        if ($Ext -eq ".v64") {
+            Push-Location $Paths.Temp
+            & $Files.tool.ucon64 --z64 $GetROM.run | Out-Host
+            Pop-Location
+            Move-Item -LiteralPath ($Paths.Temp + "\" + $Name + ".z64") -Destination ($Paths.Temp + "\converted") -Force
+        }
+
+        if ($Ext -eq ".n64") {
+            $array = [IO.File]::ReadAllBytes($GetROM.run)
+
+            for ($i=0; $i -lt $array.length; $i+=4) {
+                $temp = @($array[$i], $array[$i + 1], $array[$i + 2], $array[$i + 3])
+                $array[$i]     = $temp[3]
+                $array[$i + 1] = $temp[2]
+                $array[$i + 2] = $temp[1]
+                $array[$i + 3] = $temp[0]
+            }
+
+            [IO.File]::WriteAllBytes($Paths.Temp + "\converted", $array)
+            $array = $temp = $null
+        }
+
         $GetROM.run =  $Paths.Temp + "\converted"
-        Pop-Location
+        $global:ROMHashSum = (Get-FileHash -Algorithm MD5 $GetROM.run).Hash
         if ($Settings.Debug.KeepConverted -eq $True) { Copy-Item -LiteralPath $GetROM.run -Destination $GetROM.keepConvert -Force }
         GetPatchFile
     }
@@ -746,7 +766,7 @@ function CompareHashSums([String]$Command) {
     if ($ROMHashSum -eq $CheckHashSum) { return $True }
     elseif (IsSet -Elem $GameType.downgrade) {
         Foreach ($Item in $GameType.downgrade) {
-            if ($ROMHashSum -eq $Item.hash) { return $True }
+            if ($ROMHashSum -eq $Item.hash) { Write-Host "456";return $True }
         }
     }
     

@@ -218,12 +218,23 @@ function ByteOptionsMajorasMask() {
     # OTHER #
 
     if (IsChecked -Elem $Redux.Other.SouthernSwamp) {
-        CreateSubPath -Path ($GameFiles.extracted + "\Southern Swamp")
+        CreateSubPath  -Path ($GameFiles.extracted + "\Southern Swamp")
         ExportAndPatch -Path "Southern Swamp\southern_swamp_cleared_scene"  -Offset "1F0D000" -Length "10630"
         ExportAndPatch -Path "Southern Swamp\southern_swamp_cleared_room_0" -Offset "1F1E000" -Length "1B240" -NewLength "1B4F0" -TableOffset "1EC26"  -Values @("94", "F0")
         ExportAndPatch -Path "Southern Swamp\southern_swamp_cleared_room_2" -Offset "1F4D000" -Length "D0A0"  -NewLength "D1C0"  -TableOffset "1EC46"  -Values @("A1", "C0")
     }
 
+    if (IsChecked -Elem $Redux.Other.AlwaysBestEnding) {
+        ChangeBytes -Offset "B81CE0" -Values @("00", "00", "00", "00")
+        ChangeBytes -Offset "B81D48" -Values @("00", "00", "00", "00")
+        ChangeBytes -Offset "B81DB0" -Values @("00", "00", "00", "00")
+        ChangeBytes -Offset "B81E18" -Values @("00", "00", "00", "00")
+        ChangeBytes -Offset "B81E80" -Values @("00", "00", "00", "00")
+        ChangeBytes -Offset "B81EE8" -Values @("00", "00", "00", "00")
+        ChangeBytes -Offset "B81F84" -Values @("00", "00", "00", "00")
+        ChangeBytes -Offset "B81FEC" -Values @("00", "00", "00", "00")
+        ChangeBytes -Offset "B82054" -Values @("00", "00", "00", "00")
+    }
 
     if (IsChecked -Elem $Redux.Other.GohtCutscene)     { ChangeBytes -Offset "F6DE89" -Values @("8D", "00", "02", "10", "00", "00", "0A") }
     if (IsChecked -Elem $Redux.Other.MushroomBottle)   { ChangeBytes -Offset "CD7C48" -Values @("1E", "6B") }
@@ -420,9 +431,10 @@ function CreateTabMainMajorasMask() {
     CreateReduxGroup    -Tag  "Other" -Text "Other"
     CreateReduxCheckBox -Name "GohtCutscene"      -Column 1 -Row 1 -Text "Fix Goht Cutscene"        -Info "Fix Goht's awakening cutscene so that Link no longer gets run over"
     CreateReduxCheckBox -Name "MushroomBottle"    -Column 2 -Row 1 -Text "Fix Mushroom Bottle"      -Info "Fix the item reference when collecting Magical Mushrooms as Link puts away the bottle automatically due to an error"
-    CreateReduxCheckBox -Name "SouthernSwamp"     -Column 3 -Row 1 -Text "Fix Southern Swamp"       -Info "Fix a misplaced door after Woodfall has been cleared and you return to the Potion Shop`nThe door is slightly pushed forward after Odolwa has been defeated."
-    CreateReduxCheckBox -Name "FairyFountain"     -Column 4 -Row 1 -Text "Fix Fairy Fountain"       -Info "Fix the Ikana Canyon Fairy Fountain area not displaying the correct color."
-    CreateReduxCheckBox -Name "HideCredits"       -Column 5 -Row 1 -Text "Hide Credits"             -Info "Do not show the credits text during the credits sequence"
+    CreateReduxCheckBox -Name "SouthernSwamp"     -Column 3 -Row 1 -Text "Fix Southern Swamp"       -Info "Fix a misplaced door after Woodfall has been cleared and you return to the Potion Shop`nThe door is slightly pushed forward after Odolwa has been defeated"
+    CreateReduxCheckBox -Name "FairyFountain"     -Column 4 -Row 1 -Text "Fix Fairy Fountain"       -Info "Fix the Ikana Canyon Fairy Fountain area not displaying the correct color"
+    CreateReduxCheckBox -Name "AlwaysBestEnding"  -Column 5 -Row 1 -Text "Always Best Ending"       -Info "The credits sequence always includes the best ending, regardless of actual ingame progression"
+    CreateReduxCheckBox -Name "HideCredits"       -Column 6 -Row 1 -Text "Hide Credits"             -Info "Do not show the credits text during the credits sequence"
 
 }
 

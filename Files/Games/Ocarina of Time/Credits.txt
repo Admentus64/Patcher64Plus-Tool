@@ -7,18 +7,6 @@
 - Master Quest:			ShadowOne333
 - Force Hires Link Model:		GhostlyDark
 - 16:9 Backgrounds & Textures:	GhostlyDark, ShadowOne333 & CYB3RTR0N
-- MM Young Link Model:		The3Dude
-- MM Adult Link Model:		Skilarbabcock (www.youtube.com/user/skilarbabcock)
-- ALLTP Link Models:		ONI 3D-Arts
-- Happy Mask Salesman:		Anubis-V1
-- Mega Man:			Megaman Legends
-- ALTTP Zelda Child Model:		Unesag
-- ALTTP Zelda Adult Model:		Lopieloo
-- Hatsune Miku Link Models:	JanexLane
-- Malon 3D/Thicc Models:		Kimi-Stardust
-- Saria Models:			Malon's Rose
-- Princess Ruto:			Unesag
-- Aria the Demon Models:		AriaHiro64
 - MM Link Voice:			Korey Cryderman & GhostlyDark
 - Feminine Link Voice:		theluigidude2007
 - MM HUD Textures:		GhostlyDark
@@ -41,7 +29,22 @@
 - Various offsets:			Chez Cousteau
 - Admentus (Scripting and Maintaince of all Options)
 
---- Quality Insurance ---
+--- Custom Models ---
+- MM Young Link Model:		The3Dude, Neirn
+- MM Adult Link Model:		Skilarbabcock (www.youtube.com/user/skilarbabcock)
+- Fierce Deity Adult Model:		CrookedPoe
+- ALLTP Link Models:		ONI 3D-Arts
+- Happy Mask Salesman:		Anubis-V1
+- Mega Man:			Megaman Legends
+- ALTTP Zelda Child Model:		Unesag
+- ALTTP Zelda Adult Model:		Lopieloo
+- Hatsune Miku Link Models:	JanexLane
+- Malon 3D/Thicc Models:		Kimi-Stardust
+- Saria Models:			Malon's Rose
+- Princess Ruto:			Unesag
+- Aria the Demon Models:		AriaHiro64
+
+--- Quality Assurance ---
 - Translations			GhostlyDark
 
 --- Translations ---

@@ -7,16 +7,17 @@ function PatchOptionsOcarinaOfTime() {
         ApplyPatch -File $GetROM.decomp -Patch "\Decompressed\Models\male_model_adult_link_mm.ppf"
     }
 
-    if (IsIndex -Elem $Redux.Graphics.Models -Index 5)    { ApplyPatch -File $GetROM.decomp -Patch "\Decompressed\Models\male_models_link_alttp.ppf" }
-    if (IsIndex -Elem $Redux.Graphics.Models -Index 6)    { ApplyPatch -File $GetROM.decomp -Patch "\Decompressed\Models\male_models_happy_mask_salesman.ppf" }
-    if (IsIndex -Elem $Redux.Graphics.Models -Index 7)    { ApplyPatch -File $GetROM.decomp -Patch "\Decompressed\Models\male_models_mega_man.ppf" }
-    if (IsIndex -Elem $Redux.Graphics.Models -Index 8)    { ApplyPatch -File $GetROM.decomp -Patch "\Decompressed\Models\female_models_zelda_alttp.ppf" }
-    if (IsIndex -Elem $Redux.Graphics.Models -Index 9)    { ApplyPatch -File $GetROM.decomp -Patch "\Decompressed\Models\female_models_miku.ppf" }
-    if (IsIndex -Elem $Redux.Graphics.Models -Index 10)   { ApplyPatch -File $GetROM.decomp -Patch "\Decompressed\Models\female_models_malon_3d.ppf" }
-    if (IsIndex -Elem $Redux.Graphics.Models -Index 11)   { ApplyPatch -File $GetROM.decomp -Patch "\Decompressed\Models\female_models_malon_sexy.ppf" }
-    if (IsIndex -Elem $Redux.Graphics.Models -Index 12)   { ApplyPatch -File $GetROM.decomp -Patch "\Decompressed\Models\female_models_saria.ppf" }
-    if (IsIndex -Elem $Redux.Graphics.Models -Index 13)   { ApplyPatch -File $GetROM.decomp -Patch "\Decompressed\Models\female_models_ruto.ppf" }
-    if (IsIndex -Elem $Redux.Graphics.Models -Index 14)   { ApplyPatch -File $GetROM.decomp -Patch "\Decompressed\Models\female_models_aria_the_demon.ppf" }
+    if (IsIndex -Elem $Redux.Graphics.Models -Index 5)    { ApplyPatch -File $GetROM.decomp -Patch "\Decompressed\Models\male_model_adult_link_fierce_deity.ppf" }
+    if (IsIndex -Elem $Redux.Graphics.Models -Index 6)    { ApplyPatch -File $GetROM.decomp -Patch "\Decompressed\Models\male_models_link_alttp.ppf" }
+    if (IsIndex -Elem $Redux.Graphics.Models -Index 7)    { ApplyPatch -File $GetROM.decomp -Patch "\Decompressed\Models\male_models_happy_mask_salesman.ppf" }
+    if (IsIndex -Elem $Redux.Graphics.Models -Index 8)    { ApplyPatch -File $GetROM.decomp -Patch "\Decompressed\Models\male_models_mega_man.ppf" }
+    if (IsIndex -Elem $Redux.Graphics.Models -Index 9)    { ApplyPatch -File $GetROM.decomp -Patch "\Decompressed\Models\female_models_zelda_alttp.ppf" }
+    if (IsIndex -Elem $Redux.Graphics.Models -Index 10)   { ApplyPatch -File $GetROM.decomp -Patch "\Decompressed\Models\female_models_miku.ppf" }
+    if (IsIndex -Elem $Redux.Graphics.Models -Index 11)   { ApplyPatch -File $GetROM.decomp -Patch "\Decompressed\Models\female_models_malon_3d.ppf" }
+    if (IsIndex -Elem $Redux.Graphics.Models -Index 12)   { ApplyPatch -File $GetROM.decomp -Patch "\Decompressed\Models\female_models_malon_thicc.ppf" }
+    if (IsIndex -Elem $Redux.Graphics.Models -Index 13)   { ApplyPatch -File $GetROM.decomp -Patch "\Decompressed\Models\female_models_saria.ppf" }
+    if (IsIndex -Elem $Redux.Graphics.Models -Index 14)   { ApplyPatch -File $GetROM.decomp -Patch "\Decompressed\Models\female_models_ruto.ppf" }
+    if (IsIndex -Elem $Redux.Graphics.Models -Index 15)   { ApplyPatch -File $GetROM.decomp -Patch "\Decompressed\Models\female_models_aria_the_demon.ppf" }
 
     if (IsChecked -Elem $Redux.Text.PauseScreen) { ApplyPatch -File $GetROM.decomp -Patch "\Decompressed\mm_pause_screen.ppf" }
     
@@ -793,8 +794,8 @@ function CreateTabAudiovisualOcarinaOfTime() {
     CreateReduxCheckBox -Name "BlackBars"        -Column 2 -Row 1 -Text "No Black Bars"          -Info "Removes the black bars shown on the top and bottom of the screen during Z-targeting and cutscenes"
     CreateReduxCheckBox -Name "ExtendedDraw"     -Column 3 -Row 1 -Text "Extended Draw Distance" -Info "Increases the game's draw distance for objects`nDoes not work on all objects"
     CreateReduxCheckBox -Name "ForceHiresModel"  -Column 4 -Row 1 -Text "Force Hires Link Model" -Info "Always use Link's High Resolution Model when Link is too far away"
-    $Models = @("Original Models", "Child Model       (Link MM)", "Adult Model       (Link MM)", "Male Models      (Link MM)", "Male Models      (Link ALTTP)", "Male Models      (Happy Mask Salesman)",  "Male Models      (Mega Man)")
-    $Models += ("Female Models  (Zelda ALTTP)","Female Models  (Miku)", "Female Models  (Malon 3D)", "Female Models  (Malon Sexy)", "Female Models  (Saria)", "Female Models  (Princess Ruto)", "Female Models  (Aria the Demon)")
+    $Models = @("Original Models", "Child Model       (Link MM)", "Adult Model       (Link MM)", "Male Models      (Link MM)", "Adult Model      (Link Fierce Deity)", "Male Models      (Link ALTTP)", "Male Models      (Happy Mask Salesman)",  "Male Models      (Mega Man)")
+    $Models += ("Female Models  (Zelda ALTTP)","Female Models  (Miku)", "Female Models  (Malon 3D)", "Female Models  (Thicc Malon)", "Female Models  (Saria)", "Female Models  (Princess Ruto)", "Female Models  (Aria the Demon)")
     CreateReduxComboBox -Name "Models"           -Column 1 -Row 2 -Text "Link's Models:" -Items $Models -Length 240 -Info "Replace the model(s) used for Link`nOptions include separate model for Link, combined models for Link or female model replacements"
 
     # MODELS PREVIEW #
@@ -805,8 +806,11 @@ function CreateTabAudiovisualOcarinaOfTime() {
     $Redux.Graphics.ModelsPreview.Width  = $Last.Group.Width - 10
     $Redux.Graphics.ModelsPreview.Height = $Last.Group.Height - 20
     $Last.Group.controls.add($Redux.Graphics.ModelsPreview)
+    $global:PreviewToolTip = CreateToolTip
     $Redux.Graphics.Models.Add_SelectedIndexChanged({ ShowModelPreview -Dropdown $Redux.Graphics.Models -Box $Redux.Graphics.ModelsPreview })
     ShowModelPreview -Dropdown $Redux.Graphics.Models -Box $Redux.Graphics.ModelsPreview
+
+
 
     # INTERFACE #
     CreateReduxGroup    -Tag  "UI" -Text "Interface"

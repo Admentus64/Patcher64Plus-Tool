@@ -63,10 +63,24 @@ function GetItemID([String]$Item) {
 #==============================================================================================================================================================================================
 function ShowModelPreview([Object]$Dropdown, [Object]$Box) {
 
-    if (Test-Path ($GameFiles.previews + "\" + $Dropdown.selectedIndex + ".png") -PathType Leaf) {
+    if (Test-Path -LiteralPath ($GameFiles.previews + "\" + $Dropdown.selectedIndex + ".png") -PathType Leaf) {
         $Box.Image  = [System.Drawing.Image]::Fromfile( ( Get-Item ($GameFiles.previews + "\" + $Dropdown.selectedIndex + ".png") ) )
+        if (Test-Path -LiteralPath ($GameFiles.previews + "\Credits.txt") -PathType Leaf) {
+            $item = (Get-Content -Path ($GameFiles.previews + "\Credits.txt") -TotalCount ($Dropdown.selectedIndex+1))[-1]
+            $PreviewToolTip.SetToolTip($Redux.Graphics.ModelsPreview, ([String]::Format($item, [Environment]::NewLine)))
+        }
+        else { $PreviewToolTip.RemoveAll() }
     }
-    else { $Box.Image = $null }
+    else {
+        $Box.Image = $null
+        $PreviewToolTip.RemoveAll()
+    }
+
+
+   #$global:PatchToolTip = CreateToolTip
+    
+
+    
     
 
 }

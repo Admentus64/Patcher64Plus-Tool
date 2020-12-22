@@ -24,6 +24,7 @@
 - Fix Mushroom Bottle:		ozidual
 - Fix Southern Swamp:		ShadowOne333
 - Fix Fairy Fountain:		Dybbles (fix) & ShadowOne333 (ROM / patch)
+- Always Best Ending:		Marcelo20XX
 - Restore Text:			ShadowOne333
 - Correct Circus Mask:		ShadowOne333
 - Fairy Colors:			Dzeko
@@ -31,7 +32,7 @@
 - Various offsets:			Chez Cousteau
 - Admentus (Scripting and Maintaince of all Options)
 
---- Quality Insurance ---
+--- Quality Assurance ---
 - Translations			GhostlyDark
 
 --- Translations ---

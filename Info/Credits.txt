@@ -2,11 +2,8 @@
 === PATCHER64+ TOOL ===
 =======================
 
---- Thanks to my Patreons --
-- Leigh Pierce
-
 --- Thanks to my past Patreons --
-- Raim, Gicrax, Crypto Logiq, Moons (Luke), Ronald, Richard Moser
+- Leigh Pierce, Raim, Gicrax, Crypto Logiq, Moons (Luke), Ronald, Richard Moser
 
 --- Patcher64+ Tool ---
 - Admentus (Testing and Coding of Patcher64+ Tool)
@@ -29,18 +26,6 @@
 - Master Quest:				ShadowOne333
 - Force Hires Link Model:		GhostlyDark
 - 16:9 Backgrounds & Textures:		GhostlyDark, ShadowOne333 & CYB3RTR0N
-- MM Young Link Model:			The3Dude
-- MM Adult Link Model:			Skilarbabcock (www.youtube.com/user/skilarbabcock)
-- ALTTP Link Models:			ONI 3D-Arts
-- Happy Mask Salesman:			Anubis-V1
-- Mega Man:				Megaman Legends
-- ALTTP Zelda Child Model:		Unesag
-- ALTTP Zelda Adult Model:		Lopieloo
-- Hatsune Miku Link Models:		JanexLane
-- Malon 3D/Thicc Models:		Kimi-Stardust
-- Saria Models:				Malon's Rose
-- Princess Ruto:			Unesag
-- Aria the Demon Models:		AriaHiro64
 - MM Link Voice:			Korey Cryderman & GhostlyDark
 - Feminine Link Voice:			theluigidude2007
 - MM HUD Textures:			GhostlyDark
@@ -63,7 +48,20 @@
 - Various offsets:			Chez Cousteau
 - Admentus (Scripting and Maintaince of all Options)
 
---- Quality Insurance ---
+--- Custom Models ---
+- MM Young Link Model:			The3Dude, Neirn
+- MM Adult Link Model:			Skilarbabcock (www.youtube.com/user/skilarbabcock)
+- ALTTP Link Models:			ONI 3D-Arts
+- Happy Mask Salesman:			Anubis-V1
+- Mega Man:				Megaman Legends
+- ALTTP Zelda Child Model:		Unesag
+- ALTTP Zelda Adult Model:		Lopieloo
+- Hatsune Miku Link Models:		JanexLane
+- Malon 3D/Thicc Models:		Kimi-Stardust
+- Saria Models:				Malon's Rose
+- Princess Ruto:			Unesag
+- Aria the Demon Models:		AriaHiro64
+--- Quality Assurance ---
 - Translations				GhostlyDark
 
 --- Translations ---
@@ -225,6 +223,7 @@ Special Thanks:				Nokaubure, z64me, Ultra553, OoT Decomp
 - Fix Mushroom Bottle:			ozidual
 - Fix Southern Swamp:			ShadowOne333
 - Fix Fairy Fountain:			Dybbles (fix) & ShadowOne333 (ROM / patch)
+- Always Best Ending:			Marcelo20XX
 - Restore Text:				ShadowOne333
 - Correct Circus Mask:			ShadowOne333
 - Fairy Colors:				Dzeko
@@ -232,7 +231,7 @@ Special Thanks:				Nokaubure, z64me, Ultra553, OoT Decomp
 - Various offsets:			Chez Cousteau
 - Admentus (Scripting and Assistance of all Options)
 
---- Quality Insurance ---
+--- Quality Assurance ---
 - Translations				GhostlyDark
 
 --- Translations ---
