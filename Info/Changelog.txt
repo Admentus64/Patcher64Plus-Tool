@@ -1,0 +1,532 @@
+v10.0.0
+- Rewrote the system for saving the last chosen settings
+- Added config presets, now you can keep track of multiple "Additional Options" configurations for each game
+- Added support for applying patches prior to patching in Redux
+- Revamped "Force Aspect Ratio Fix" into "Change Widescreen"
+- Added widescreen patches for MM in Native Mode
+- Improved (dungeon map) the "16:9 Widescreen" option for MM in VC Mode
+- Added Lite GUI option, to only display compatible options for ex. OoT Randomizer
+- Added option to recolor the minimap for MM
+- Added several new custom models for OoT
+- Redesigned the GUI for choosing custom models for OoT
+- Fixed default value for "Button Colors" for MM
+- Fixed shocked eyes of the Hatsune Miku model for OoT
+- Revived the "Female Pronouns" option as WIP for OoT
+- Fixed issues with incorrectly restoring settings which do not match
+- Rewrote and optimized several components
+- Some small bug fixes
+
+v9.2.1
+- Added Fierce Deity Adult Link model
+- Added tooltip with the author of the model in the preview image section
+- Added "Always Best Ending" option for MM. Thanks Marcelo20XX.
+- Updated credits
+- Fixed ROM conversion, and added ROM conversion from Little Endian to Big Endian
+- Fixed not downgrading if already using a proper Rev 0 US ROM
+
+v9.2.0
+- Reworked all dialogue options for OoT into it's own radiobutton panel
+- Updated Smash Remix to v0.9.5
+- Added GZ and KZ Practice ROM patches for OoT and MM
+- Added a preview images for the default models and the Zelda - ALTTP custom models
+- Added downgrade patch for the Master Quest (GC) revision for OoT
+- Re-arranged Wii GameIDs for OoT patches
+- The "Ignore Checksum" option will no longer force downgrade for a different than supported revision
+- Optimized the flow when downgrading should be forced or not
+- Options (ex. radio buttons) within panels are now properly reset when using "Reset Current Game"
+- Added support for UPS patching
+- Adjusted specifications for Games.json and Patches.json
+- Changed how the console log is reporting
+- Fixed "Colors" tab for OoT and MM not properly setting values in the GUI
+- Fixed issues with downgrading
+- Cleaned up code and functions
+- Overhaul of "Files" organization
+
+v9.1.2
+- Removed the "Female Pronouns" option for OoT until it is properly fixed
+
+v9.1.1
+- Added three more model options for OoT
+- Added a "Models Preview" section for OoT
+- Re-aligned "Colors" tab for OoT and MM
+- Re-aligned credits tab
+
+v9.1.0
+- Added more color customization options for OoT and MM
+- Added more models for OoT
+- Added more unlock equipment options for OoT
+- Entirely rewrote the "Feminine Pronouns" to avoid softlock issues
+- Updated C-button icon for Tatl or Tael for OoT (thanks to Flux)
+- Added .v64 to .z64 ROM conversion
+- Added more debug options
+- Added ClearType font option, requires restart when changed
+- Checkboxes and radio button can also be toggled when clicking on their text label
+- Dropdown menu will now reset to the default option if they can't be retrieved
+- Swapped the titles of the Info and Credits tab buttons
+- Temporary files are now stored in the Temp folder
+- Fixed the "Keep Decompressed" debug option
+- Fixed the "Reset" option
+- Added new option to force the 16:9 Aspect Ratio Fix in Native Mode in addition to the 16:9 Widescreen Textures
+- Added new option to only reset the selected options for the current game
+- Added data garbage collection on changing patches and exiting the tool
+
+v9.0.5
+- Added Navi Text Prompt replacements for the Tatl and Tael "Navi Colors" preset options for OoT
+- Added "Center Navi Prompt" option for OoT
+- Added "OoT HUD Textures" option for MM
+- Fixed even more regressions with some options not properly working
+
+v9.0.4
+- Fixed more regressions with several options for OoT not working
+- Reworked comparing selected options in dropdown menus
+
+v9.0.3
+- Added Instrument SFX options for MM, including different forms and song playback
+- Added "Hearts" and "Magic" HUD color options for MM
+- Fixed regression with several options for OoT not working
+- Re-arranged "Additional Options" window for MM
+- Various small optimizations
+
+v9.0.2
+- Various small optimizations
+- Removed placeholder SFX options for Instruments for MM
+- Removed the "Disabled" SFX option for Instruments
+- Fixed default values for dropdown menus
+
+v9.0.1
+- Added "Button Colors" and "Instrument" options for MM
+- Optimized layout of the "Additional Options" window for MM
+- Clarified the title and tooltip of several Restore options for OoT
+- Extended Redux Groups support with new attributes for more control of placement and behaviour in tabs
+- Fixed regression that prevented selecting a custom patch
+- Fixed regression with the "Use 64-Bit Tools" option not working
+- Fixed regression with the last selected patch not being properly restored
+- Fixed regression with custom patch or ROM injection not working
+- Reworked the downgrading mechanics when considering decompression of ROMs
+- Downgrading should no longer abort the patching process if no defined downgrade was found
+- Added "No Channel Change" option to prevent changing the channel title and channel GameID of a WAD
+- Removed "Models" option for SM64 due conflicting issues
+- File Selection boxes now only hold two options: all supported files (default first index) or all files
+- Optimized loading patches when opening the tool
+- The "Select Options" menu is now locked when "Enable Options" is not checked
+
+v9.0.0
+- Revamped Main window
+- Revamped Additional Options window with the extension of tabs
+- Revamped tabs for the Info / Credits window
+- The "Redux" and "Languages" button are no longer required, thanks to the inclusion of tabs
+- The Main window no longer refreshes when selecting a different ROM or WAD when another was already selected
+- Updated icons for the "Info / Credits" and "Settings" windows
+- Added support for Region Codes in SNES mode
+- Chosen colors are now shown besides their option
+- Updated "Feminine Pronouns" option with new fixes
+- Added more options for OoT (mostly colors and SFX)
+- Changed "GC Text Dialogue Colors" into "GC Scheme", which also covers dialogue and textures now
+- Added "Navi Colors" for OoT, go nuts, or go complete randomized
+- "Improved Link Model" can now longer be selected if "Change Tunic Color" is enabled
+- Improved cleanup of files after patching
+- Revamped Additional Options through external PowerShell script files
+- All external .psm1 scripts in the Scripts (and the Options subfolder) are now loaded through dynamic search
+- Various bug fixes and code logic changes
+- Reworked internal logics
+- The usual bug fixes
+
+v8.0.3
+- Added new "Instrument" option for OoT
+- Reworked options related to button & HUD colors for OoT
+
+v8.0.2
+- Fixed the "Restore Fire Temple" option from being broken
+- Fixed the "Restore Text" option not properly being patched in Redux
+- Updated the Redux patch for TAoL
+- Fixed the "Ignore Input Checksum" option
+
+v8.0.1
+- Updated Redux and some patches for "The Adventure of Link" and added more Additional Options
+- Fixed GUI logics for "The Adventure of Link"
+- Removed the custom title text from the "Super Mario 64: Arguably Better Edition" patch
+- "Change Tunic Color" is now disabled for MM if "Improved Link Model" is selected
+- Updated the "Adult Model" for OoT to include the uncensored mirror shield by default
+- Fixed the "Censor Gerudo Textures" option with missing textures for OoT
+- Added a missing dialogue line for the "Female Pronouns" option for OoT
+- Fixed Additional Options for ALttP not working
+- Extracted ROM data is now kept in the "Extracted" folder within the corresponding game folder
+- Fixed an issue with NES patching not properly cleaning up which causes extraction conflicts
+- Some minor fixes
+
+v8.0.0
+- Added "Improved Link Model" option for MM
+- Added several new "Additional Options" for SM64
+- Added support for Mario Kart 64, including a patch
+- Included NES and SNES support
+- Added Console selection dropdown, consoles are now stored in Consoles.json
+- Games.json and Patches.json are updated with some specification changes
+- Added patches for Zeldas 1-3, Super Mario World and Super Metroid to kick off NES and SNES support
+- Added Additional Options and Redux support for Zeldas 1-2 and Super Metroid
+- Added Improved Link Model option for MM, thanks Skilar Babcock and Nerrel!
+- Major rewrite and cleanup of systems
+- Added warnings to the tooltips when setting a custom GameID or Game Title
+- Fixed bug with ROM extraction not being extracted if the ROM already was extracted
+- Added revision number for some patches
+- Added new debug option to always force extraction of necessary files for patching
+- Added new "Patch Header" option for native mode (if supported)
+- The exact missing files are now printed out in the console (console will be forced)
+- The "Female Pronouns" option should only be available if "Restore Text" is enabled once more (thank you Mil!)
+- Updated the "Female Pronouns" option with more fixes
+- The "Downgrade" option has been moved into the "Patch Options" panel so that it is available in Native Mode as well
+- Fixed an issue with language options not properly unlocking... Again...
+- Merged several language options into their actual core options
+- Merged "Correct Circus Mask" option with "Restore Text" for MM
+- Fixed MM Pause Screen option being broken for OoT
+- Added checks with console warnings to prevent patching in MQ dungeon data if it is missing
+- Some Redux checkboxes for Additional Options for MM are now checked by default
+- The "Keep Decompressed" debug option also performs a CRC update on the kept decompressed ROM
+- Renamed the titles for some patches
+- Changed the GameID for the "Majora's Mask: Masked Quest" patch
+- Changed date and version format
+
+v7.7.2
+- "Leave D-Pad Up" for OoT is no longer being forced
+- Added "Distant Z-Targeting" option for OoT and MM
+- Added "Silent Navi" option for OoT
+- Re-arranged the "Additional Options" windows for OoT and MM
+
+v7.7.1
+- The base Bomb Bag capacity can no longer be set to 30 to avoid a progression bug and will be automatically set to 31 instead
+- The "MM Pause Screen" options has been moved to the Languages window and is only available in English now to avoid corrupted textures
+- Fixed the logo and it's text tiles for the Russian fan-translation patch
+- Updated some status messages
+- Patching in VC mode will now be stopped if the WAD could not be extracted, along with a new status message
+- Added new Debug option to not run the cleanup after patching, regardless of being it failed or successful
+- Updated some tooltips
+
+v7.7.0
+- Fixed "Super Mario 64 Split-Screen" multiplayer not getting patched in N64 mode
+- Added new "Cutscenes" window for OoT which contains options for skipping or speeding up several cutscenes
+- Added new "Unlock Age Restrictions" window which now contains the options to unlock restrictions for Child or Adult Link
+- Several new options can be unlocked for Child or Adult Link in the "Unlock Age Restrictions" window
+- Added new "Debug Map Select" option for OoT
+- Added new "Fix Graves" option for OoT (was included as part of Redux but is now made optional)
+- The "Low HP Beep" option for OoT and MM now has an option for a softer beeping sound as well
+- Fixed some tooltip typos
+- Adjusted some tooltips with an [!] disclaimer
+- Re-adjusted the layout of the "Addtional Options" window for OoT
+- Re-adjusted the layout of the "Settings" window
+- Fixed the "Reset All Settings" button in the settings window not working at all
+
+v7.6.1
+- Added new "Hide Credits" option for OoT and MM
+- Updated Smash Remix to v0.9.4
+
+v7.6.0
+- Changed default GameID for Masked Quest to NURE
+- Added "Magic Usage" options for OoT and MM
+- Added WIP option "Ocarina Icons" for MM
+- Updated "Restore Text" table for MM
+- Updated the missing files list check when opening Patcher64+
+- OKHO is now refered as OHKO
+- 2x Text Speed is now available for Russian, Polish and Spanish
+- The "Use 64-Bit Tools" option is now enabled by default if the user's OS is 64-bit compatible
+- Fixed a progression-blocking bug with MM Redux to obtain a Piece of Heart through the Title Deed trading quest
+
+v7.5.2
+- Fixed Zora Link for the "Recolor Mask Forms" option
+- Properly disable Language Options when English is not selected (again)
+- Fixed Custom Header not being saved and how it is applied
+- Fixed issue with fonts showcasing an error on older PowerShell version
+
+v7.5.1
+- Updated "Masked Quest" by Garo-Mastah
+- Improved "Recolor Mask Forms" option for Zora Link
+- Added "Ignore Input Checksum" debug option for patching any ROM or WAD (use on own risk)
+
+v7.5.0
+- Replaced "16:9 Textures" option to patch in true 16:9 backgrounds for Ocarina of Time
+- Added new "Master Quest" patch for Majora's Mask
+- Added new "Recolor Mask Forms" option for Majora's Mask
+- Fixed language options not properly displaying when it's not set to English
+- Fixed, added and corrected several tooltips
+
+v7.4.1
+- Fixed the "Damage" modifier for Majora's Mask when the "Recovery" is set to 1x
+- Added new "Censor Blood" option that censors the blood of Ganondorf / Ganon to green instead of red
+
+v7.4.0
+- Overhauled GUI
+- Added "Settings" window (debug options now can now toggled in there)
+- Added new option to allow double clicking the PowerShell file to open it
+- Fixed "Restore Palace Route" option for Majora's Mask when using on N64 emulators
+- Fixed "Change Button Colors" being broken
+
+v7.3.4
+- Fixed the Goron Link dialogue after obtaining the Goron Tunic with the Redux patch
+- Fixed an issue with the D-Pad layout not being selectable for Majora's Mask Redux
+- Fine-tuned "Credits" and "Info" further
+
+v7.3.3
+- "Reset" now also properly resets Wii VC mode to N64 mode
+- Adjusted titles in the "Colors" panel for Majora's Mask
+- Expanded "Credits" and "Info"
+
+v7.3.2
+- Added "Pause Screen Delay Fix" option for Ocarina of Time
+- Fixed uncensored Mirror Shield for the "MM Adult Model" for Ocarina of Time
+- Adjusted "Colors" panel in the "Additional Options" window
+
+v7.3.1
+- Redux-only compatible settings are placed in their own window
+- Optimized patching a decompressed Zelda ROM a bit more
+- Fixed some issues with button activations through checkboxes
+- Fixed some issues with how the "Fast Block Pushing" option affected some features of Majora's Mask Redux
+- Added "Easier Minigames" option for Majora's Mask
+
+v7.3.0
+- Changed the order of patching compressed patches
+- Changed how file data is extracted, patched and then written in sequence
+- Updated Masked Quest
+- Added "MM Pause Screen" option for Ocarina of Time
+- Added "Fast Block Pushing" option for Majora's Mask
+- D-Pad Button Layout can be customized or completely disabled for Majora's Mask
+- "Easier Puzzles" has been renamed to "Easier Minigames" as the first try Truth Spinner fix in the Shadow Temple is now completely removed
+- Different language can still be chosen if "Enable Options is not checked, but the English Text options will remain disabled
+- Adjusted default values for the Majora's Mask Redux patch (Fast Block Pushing and D-Pad are disabled by default)
+
+v7.2.1
+- Updated MM Child Model patch
+- Fixed label not showing in "Additional Options" panel
+- Fixed data extract of Master Quest dungeons not working at all
+- Updated credits for Majora's Mask
+- Changed debug option from "OnlyMQDungeons" to "KeepLogo"
+- "Select Language" is now disabled as well if "Enable Options" is not checked
+
+v7.2.0
+- Addded "Super Smash Bros: More Stages Edition" patch
+- Super Smash Bros. is now available for patching in VC Mode thanks to the "Super Smash Bros: More Stages Edition" patch
+- The Missing Link is updated to v1.4 (Kaze Emanuar)
+- Re-aligned "Other Buttons" section
+- Fixed issue with certain last chosen games getting retrieved properly on loading the tool
+- Fixed issue with Free Patching GUI in Wii VC mode not fully shown
+- Updated "Info" for all games
+- Improved "2x Text Speed" and "3x Text Speed" for a few more cutscenes
+- Allow dot as input for Custom Title
+
+v7.1.5
+- Removed "Subscreen Delay Fix" option... It was probably a bit too broken...
+
+v7.1.4
+- Added ROM Checksum Comparison
+- Added links to documentation
+- Fixed incorrect checksum for Ocarina of Time Rev 1
+- Fixed Xdelta and Xdelta3 patching being broken
+- Fixed "Default Z-Targeting" option
+
+v7.1.3
+- Changed "Restore Palace Route" option for Majora's Mask
+- Changed "Restore Text" option for Majora's Mask
+
+v7.1.2
+- Changed "Southern Swamp Fix" option for Majora's Mask
+- Fixed "60 FPS" and "Free Cam" for Super Mario 64
+
+v7.1.1
+- Improved "Restore Cow Nose Ring" option
+- Fixed Female Link Adult model when using the "Censor Gerudo Textures" option
+- Added "Subscreen Delay Fix" option... Probably don't use it for on the VC...
+- New option to refer the Goron Tunic and Zora Tunic as unisize (useful for Unlock Tunics option)
+- New option to refer the Razor Sword as being unbreakable (useful for Permanent Razor Sword option)
+- D-Pad is now hidden by default for Majora's Mask (additional options / Redux)
+- Fixed patching several options for Majora's Mask
+
+v7.1.0
+- Added Female Pronouns option
+- Added option to fix Ikana Canyon's Fairy Fountain colors
+- MQ Text Dialogue Colors (now known as GC Text Dialogue Colors) can now be selected separately from the Restore Text option
+- Text fixes are now searched for instead of being inserted at a fixed position, but increases the time to patch
+
+v7.0.1
+- Fixed issue with N64 Mode not properly restoring from last settings
+- Added 32-bit support (64-bit mode is enabled by default)
+- Simplified byte patching code
+- Removed .exe
+
+v7.0.0
+- Added new ROM hack: The Missing Link
+- Added new ROM hack: Master of Time
+- Added new options for Ocarina of Time and Majora's Mask
+- Added Master Quest option for Ocarina of Time
+- Added new option to play as a Female Link, with optional Feminine voices (Female Pronouns patch is in the works)
+- Moved all dialogue related options to the Languages GUI and are now only available in English language
+- Fixed Remix for Super Smash Bros.
+- Disable more GUI panels during patching
+- Fixed creating compressed BPS patch with debug option
+- Last chosen custom title and GameID is now restored when opening the tool if the option was enabled
+- Error message when failed to produce WAD file is no longer shown by default
+- Added syntax for the & symbol for the Game Title / Channel Title
+- Fixed default state for the "Patch VC Emulator Only" button
+- Decreased the time needed to patch drasticially
+- New debug option for showing the console and extracting Vanilla dungeon data files
+- Master Quest dungeon data files are extracted during patching of the Master Quest option
+- The Fire Temple Rev 2 theme is now extracted during patching
+- Adjusted Restore Color Title option for Majora's Mask
+- Reworked Censor Gerudo Textures option, including support for Master Quest and more textures that went missing
+- Textboxes which can be edited now now have their text selected
+- The Custom GameID textbox can no longer contain spaces
+- Implemented the Color Picker Dialog Screen for the options to change the colors of equipment
+- Ammo and wallet capacities can now contain any custom value within limits through a new Dialog Screen
+- ROM Injects will no longer apply patches
+- Reworked Inject ROM, Apply Patch, Patch VC Emulator Only and Extract ROM Only options
+- Added new debug option
+- Added new Reset button to reset all saved settings
+- Adjusted credits and credits GUI
+- Added support for .PPF patches
+- Run loading only once
+- A lot of major rewrites
+
+v6.1.1
+- Fixed Hero Mode and Increased Item Capacity for Ocarina of Time and Majora's Mask
+- Added debug options which can be set in Settings.ini
+
+v6.1.0
+- Adjusted Options screen size
+- Added new options for Ocarina of Time and Majora's Mask
+- Optimized checking dropdown menus for Options screen
+- Fixed a bug with patching Hero Mode for Ocarina of Time
+
+v6.0.0
+- Updated Polish translations for Ocarina of Time and Majora's Mask
+- Added new options for Ocarina of Time and Majora's Mask
+- Replaced a few .bps patches with .jpeg and .bin patches (Byte Patching)
+- Fixed Dawn & Dusk for Rev 0 and Rev 1 ROM files
+- Reworked parsing files for patching
+- More JSON attributes and reworked parsing and checking them
+- Adjusted GUI for Options screen
+- Last chosen settings are now remembered when opening the Patcher64+ Tool
+- Fixed graphical GUI error in the languages screen
+- Fixed issues with Paper Mario
+- Reworked patching logics
+
+v5.3.1
+- Reworked "Options" screen, which now only loads in the options for the current game mode
+- Reworked patching bytes
+- Added more options for Ocarina of Time and Majora's Mask
+- Fixed title header for N64 ROM files
+
+v5.3.0
+- Fixed missing 16:9 background for widescreen patch (Ocarina of Time)
+- Fixed "Free Mode" patching
+- Separate translation patches into new GUI window
+- More JSON attributes for Games.json and Patches.json
+- Reworked parsing through patching values
+- Fixed error handling once more
+- Fixed injecting ROM files once more
+- Fixed ROM extraction from Wii VC WAD once more
+- Corrected default N64 Game Title for Majora's Mask
+- Fixed options for Super Mario 64
+- Many more bug fixes
+
+v5.2.0
+- Updated Widescreen patch for Majora's Mask
+- Fixed extracting ROM from WAD
+- "Redux" and "Additional Options" only show when the patch supports it rather than the game
+- Removed "Redux" and "Additional" attributes from Games.json
+- Fixed not forcing "Remapping D-Pad" when only using "Additional Options"
+- Added "Additional Options" for Super Mario 64
+- All patches can be provided in .bps, .ips, .xdelta or .vcdiff
+- Only show the error dialog once in case of errors
+- Missing JSON files are now considered an error as well
+- Added extra value for "patches_vc" attribute, for "Remove Filter" for Super Mario 64
+- Included Z64 ROM recalculation with rn64crc
+- Fixed Dawn & Dusk not patching
+- Added warning for missing patch file from Patches.json
+- "Command" attribute can now contain multiple commands
+- Restored Widescreen "Additional Option" for Majora's Mask
+
+v5.1.1
+- Added warnings and protection again incorrect attributes in Patches.json
+- "BPS Path" has been renamed to "Custom Patch Path" and "Patch BPS" has been renamed to "Apply Patch"
+- .xdelta and .vcdiff patch files can now be drag-and-dropped or selected in the "Custom Patch Path" field
+- Check if a correct ROM file exists before patching
+- Fixed MD5 checking when applying custom patch
+- WAD, ROM and Patch files are now parsed as files instead of strings
+- Fixed issue with the "Patch Boot DOL" command when using different folder structures
+- Patching is disabled if a patch is missing in the Patches.json and "Redux" or "Additional Options" are disabled
+- Fixed game-specific credits not showing up
+- Added more missing credits and info
+
+v5.1.0
+- Added support for Xdelta and Xdelta3 patches ("file" attribute)
+- Added support for SM64 ROM decompression ("decompress", "file" and "extend" attributes)
+- Adjusted Credits for Super Mario 64 and Super Smash Bros.
+- Most Super Mario 64 and Super Smash Bros. patches are now provided in Xdelta3's ".vcdiff" format, for smaller sizes
+- Fixed error with Redux patching when neither "Redux" nor "Additional Options" are enabled
+- Fixed icon on Credits screen not displaying
+
+v5.0.0
+- Rewrote more logics
+- Added and adjusted more attributes for Games.json and Patches.json
+- Enable Base Redux patch has been moved to the Main screen instead of the Redux screen
+- "Additional Redux Options" button has been renamed to "Select Additional Options"
+- Redux options screen is only accesible when the global Additional Options checkbox is enabled and checked
+- "Additional Redux Options" screen has been renamed to "Additional Options"
+- Credits are now only shown for the current active game mode
+- Added more patches for Ocarina of Time (Nimpize Adventure & Puzzling)
+- Added more patches for Super Mario 64 (Star Road, Last Impact, Ocarina of Time, Odyssey and more)
+- Updated Spanish Translation and Widescreen patches for Ocarina of Time
+
+v4.5.1
+- Fixed tooltips
+- Dynamic icons support
+- Redux panel, Default Game Title and GameID are now read from Games.json
+- Game Modes can be for N64, Wii VC or both
+- Changed hashsums from SHA256 to MD5
+- Display MD5 hashsum for N64 ROM file in GameID's window
+- Fixed patching with BPS files through Patches.json files
+- Keep same selected game mod and patch file if it is available when changing between console and game modes
+- Included new Super Smash Bros. game mode with the Super Smash Bros. Remix patch
+
+v4.5.0
+- Redesigned GUI for Super Mario 64 and Paper Mario Mode
+- Added Custom Game Title and GameID support in Nintendo 64 mode
+- Added Custom Channel Title support in Wii VC mode
+- Dynamic Game Selection GUI support
+- Dynamic Patch Panel GUI support
+- Dynamic Credits, Info and GameID dialog windows
+- Renamed Ocarina of Time info button
+- Fixed SM64: Multiplayer
+
+v4.4.1
+- Fixed Leave D-Pad Up for OoT mode
+- Fixed error with MM Models
+- Reduced garbage collection
+- Fixed Free Mode in N64 Mode GUI
+
+v4.4.0
+- Overhauled the GUI
+- Included Redux support for translations
+- Refreshing bottom label for clearer status updates during the patching progress
+- Most patches for Ocarina of Time and Majora's Mask are now applied on decompressed ROM files
+- Patcher64+ Tool starts in N64 mode and Wii VC mode is activated when a WAD file is selected
+- Included widescreen backgrounds patch for Majora's Mask (found in additional Redux options)
+- Included MM Models patch for OoT when the Base Redux patch is disabled
+
+v4.3.0
+- Redux patch now uses 1x Text Speed as the default (2x or 3x Text Speed has to be selected instead)
+- Fixed 3x Text Speed when learning a new song
+- Included widescreen adjusted Lens of Truth effect (Widescreen Option for OoT)
+- Optimized byte patching (far less RAM is now being used)
+
+v4.2.0
+- Delete previously extracted WAD folders before extracting a WAD file
+- Files are now recognized as a literal paths (accepts more file and path characters symbols now)
+- Fixed additional Redux options in Nintendo 64 mode
+
+v4.1.0
+- Fixed BPS Patching
+- Fixed downgrading for BPS Patching in Ocarina of Time mode
+- Added warning if injected ROM filename or it's destination path is too long
+- Reworked main function logistics
+- Custom Channel title name now accepts parentheses and dashes as well
+- Delete WADPacker error file after patching process (failure or otherwise)
+
+v4.0.0
+- Fourth Release

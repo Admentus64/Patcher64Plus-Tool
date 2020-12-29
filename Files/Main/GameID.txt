@@ -7,7 +7,7 @@
 - NABE		Mario Kart 64		(N64)
 
 - JADE		A Link to the Past		(SNES)
-- JAAE		Super Mario World		(SNES)
+- JAAE		Super Mario World	(SNES)
 - JAVE		Super Metroid		(SNES)
 
 - FAKE		The Legend of Zelda	(NES)
@@ -18,7 +18,7 @@
 --- OFFICIAL US MD5 HASHSUMS ---
 Ocarina of Time				(N64)
 5BD1FE107BF8106B2AB6650ABECD54D6	(Rev 0)
-721FDCC6F5F34BE55C43A807F2A16AF4	(Rev 1 )
+721FDCC6F5F34BE55C43A807F2A16AF4	(Rev 1)
 57A9719AD547C516342E1A15D5C28C3D	(Rev 2)
 CD09029EDCFB7C097AC01986A0F83D3F	(GC)
 
@@ -41,7 +41,7 @@ Mario Kart 64				(N64)
 A Link to the Past				(SNES)
 3F4D2B3C92B6308BEB1AF2CE15C29DEB	(Rev 0)
 
-Super Mario World				(SNES)
+Super Mario World			(SNES)
 CDD3C8C37322978CA8669B34BC89C804	(Rev 0)
 679698A7D92E4BE3B8019C075E74594D	(VC)
 
@@ -63,14 +63,18 @@ D21D31E0EB0E666E9224954F312E915C	(VC)
 
 --- UNOFFICIAL WII VC GAMEID'S (ROM Hacks) ---
 - NAC0		Ocarina of Time REDUX
-- NAC1		Ocarina of Time: Dawn & Dusk
-- NAC2		Ocarina of Time: The Fate of the Bombiwa
-- NAC3		Ocarina of Time: Nimpize Adventure
-- NAC4		Ocarina of Time Puzzling
-- NAC5		Ocarina of Time: The Missing Link
-- NAC6		Ocarina of Time: Master of Time
+- NZCE		GZ Practice ROM
+- NAC1		Ocarina of Time: The Missing Link
+- NAC2		Ocarina of Time: Dawn & Dusk
+- NAC3		Ocarina of Time: Master of Time
+- NAC4		Ocarina of Time: Nimpize Adventure
+- NAC5		Ocarina of Time: The Fate of the Bombiwa
+- NAC6		Ocarina of Time Puzzling
+
 
 - NAR0		Majora's Mask REDUX
+- NG2E		KZ Practice ROM
+- NG2E		KZ Practice ROM (Lite)
 - NURE		Majora's Mask: Masked Quest
 - NAR1		Majora's Mask: Master Quest
 
@@ -108,12 +112,6 @@ D21D31E0EB0E666E9224954F312E915C	(VC)
 
 - NARO		Majora's Mask (Polish)
 - NARR		Majora's Mask (Russian)
-
-
-
---- RECOMMENDED WII VC GAMEID'S (Custom Injection) ---
-- NAQE		Master Quest 
-- NAQS		Master Quest (Spanish)
 
 
 

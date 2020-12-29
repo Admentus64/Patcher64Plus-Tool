@@ -1,7 +1,7 @@
 function PatchOptionsSuperMario64() {
     
-    if (IsChecked -Elem $Redux.Gameplay.FPS)                     { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\fps.ppf" }
-    if (IsChecked -Elem $Redux.Gameplay.FreeCam)                 { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\cam.ppf" }
+    if (IsChecked $Redux.Gameplay.FPS)       { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\fps.ppf" }
+    if (IsChecked $Redux.Gameplay.FreeCam)   { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\cam.ppf" }
 
 }
 
@@ -18,12 +18,12 @@ function ByteOptionsSuperMario64() {
 
 
     # GRAPHICS #
-    if (IsChecked -Elem $Redux.Graphics.WideScreen) {
+    if (IsChecked $Redux.Graphics.WideScreen) {
         ChangeBytes -Offset "3855E" -Values @("47", "40")
         ChangeBytes -Offset "35456" -Values @("46", "C0")
     }
 
-    if (IsChecked -Elem $Redux.Graphics.BlackBars) {
+    if (IsChecked $Redux.Graphics.BlackBars) {
         ChangeBytes -Offset "23A7" -Values @("BC", "00") -Interval 12
         ChangeBytes -Offset "248E" -Values "00"
         ChangeBytes -Offset "2966" -Values @("00", "00") -Interval 48
@@ -34,7 +34,7 @@ function ByteOptionsSuperMario64() {
         ChangeBytes -Offset "3799F" -Values @("BC", "00") -Interval 12
     }
 
-    if (IsChecked -Elem $Redux.Graphics.ExtendedDraw) {
+    if (IsChecked $Redux.Graphics.ExtendedDraw) {
         ChangeBytes -Offset "1007F0" -Values @("00", "00", "00", "00") # Solid objects
         ChangeBytes -Offset "1008B8" -Values @("00", "00", "00", "00")
         ChangeBytes -Offset "1008D0" -Values @("00", "00", "00", "00")
@@ -43,18 +43,18 @@ function ByteOptionsSuperMario64() {
         ChangeBytes -Offset "66F56" -Values @("46", "9C")
     }
 
-    if (IsChecked -Elem $Redux.Graphics.ForceHiresModel)         { ChangeBytes -Offset "32184" -Values @("10", "00") }
+    if (IsChecked $Redux.Graphics.ForceHiresModel)         { ChangeBytes -Offset "32184" -Values @("10", "00") }
 
     
 
     # GAMEPLAY #
-    if (IsChecked -Elem $Redux.Gameplay.LagFix)                  { ChangeBytes -Offset "F0022" -Values "0D" }
-    if (IsChecked -Elem $Redux.ExitLevelAnytime)                 { ChangeBytes -Offset "97B74" -Values @("00", "00", "00", "00") }
+    if (IsChecked $Redux.Gameplay.LagFix)                  { ChangeBytes -Offset "F0022" -Values "0D" }
+    if (IsChecked $Redux.ExitLevelAnytime)                 { ChangeBytes -Offset "97B74" -Values @("00", "00", "00", "00") }
 
 
 
     # INTERFACE #
-    if (IsChecked -Elem $Redux.UI.HideHUD) {
+    if (IsChecked $Redux.UI.HideHUD) {
         ChangeBytes -Offset "9EB69" -Values @("11", "80", "34", "82", "31", "AF", "A1", "24", "12", "00", "20", "16", "51", "00", "68", "00", "00", "00", "00")
         PatchBytes  -Offset "9EDA0" -Patch "Hide HUD.bin"
     }
@@ -63,23 +63,23 @@ function ByteOptionsSuperMario64() {
 
     # SKIP #
 
-    if (IsChecked -Elem $Redux.Skip.Opening) {
+    if (IsChecked $Redux.Skip.Opening) {
         ChangeBytes -Offset "6BD4" -Values @("24", "00"); ChangeBytes -Offset "6D90" -Values @("24", "10", "00", "00")
         ChangeBytes -Offset "4B7C" -Values @("24", "00"); ChangeBytes -Offset "4924" -Values @("10", "00")
     }
 
-    if (IsChecked -Elem $Redux.Skip.MarioScreen) {
+    if (IsChecked $Redux.Skip.MarioScreen) {
         ChangeBytes -Offset "269F4C" -Values @("34", "04", "00", "00", "01", "10", "00", "14", "00", "26", "9E", "A0", "00", "26", "A3", "A0", "14", "00", "02", "0C")
         ChangeBytes -Offset "269FD8" -Values @("34", "04", "00", "00", "01", "10", "00", "14", "00", "26", "9E", "A0", "00", "26", "A3", "A0", "14", "00", "02", "0C")
     }
 
-    if (IsChecked -Elem $Redux.Skip.BoosDialogue) {
+    if (IsChecked $Redux.Skip.BoosDialogue) {
         ChangeBytes -Offset "3F330" -Values @("A7", "20", "00", "74") # Boo
         ChangeBytes -Offset "7F774" -Values @("A7", "20", "00", "74") # Big Boo
     }
 
-    if (IsChecked -Elem $Redux.Skip.StarMessages)                { ChangeBytes -Offset "123F8" -Values @("10", "00") }
-    if (IsChecked -Elem $Redux.Skip.TitleScreen)                 { ChangeBytes -Offset "269ECC" -Values @("34", "04", "00", "00", "01", "10", "00", "14", "00", "26", "9E", "A0", "00", "26", "A3", "A0", "14", "00", "00", "78") }
+    if (IsChecked $Redux.Skip.StarMessages)                { ChangeBytes -Offset "123F8" -Values @("10", "00") }
+    if (IsChecked $Redux.Skip.TitleScreen)                 { ChangeBytes -Offset "269ECC" -Values @("34", "04", "00", "00", "01", "10", "00", "14", "00", "26", "9E", "A0", "00", "26", "A3", "A0", "14", "00", "00", "78") }
 
 }
 

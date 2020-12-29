@@ -1,8 +1,8 @@
 function CreateOptionsDialog([int]$Width, [int]$Height, [Array]$Tabs=@()) {
     
     # Create Dialog
-    if ( (IsSet -Elem $Width) -and (IsSet -Elem $Height) )   { $global:OptionsDialog = CreateDialog -Width $Width -Height $Height }
-    else                                                     { $global:OptionsDialog = CreateDialog -Width 900 -Height 640 }
+    if ( (IsSet $Width) -and (IsSet $Height) )   { $global:OptionsDialog = CreateDialog -Width $Width -Height $Height }
+    else                                         { $global:OptionsDialog = CreateDialog -Width 900 -Height 640 }
     $OptionsDialog.Icon = $Files.icon.additional
 
     # Close Button
@@ -24,7 +24,7 @@ function CreateOptionsDialog([int]$Width, [int]$Height, [Array]$Tabs=@()) {
     $Last.Group = $Last.Panel = $Last.GroupName = $null
     $Last.Half = $False
 
-    CreateTabButtons -Tabs $Tabs
+    CreateTabButtons $Tabs
 
 }
 
@@ -46,7 +46,7 @@ function CreateLanguageContent($Columns=3) {
                 $Column = 0
                 $Row += 1
             }
-            $Redux.Language[$i] = CreateReduxRadioButton -Column ($Column+1) -Row $Row -Text $GamePatch.languages[$i].title -Info ("Play the game in " + $GamePatch.languages[$i].title) -Name $GamePatch.languages[$i].title
+            $Redux.Language[$i] = CreateReduxRadioButton -Column ($Column+1) -Row $Row -Text $GamePatch.languages[$i].title -Info ("Play the game in " + $GamePatch.languages[$i].title) -Name $GamePatch.languages[$i].title -SaveTo "Translation"
         }
     
         $HasDefault = $False
@@ -137,16 +137,16 @@ function CreateCreditsDialog() {
 
 
     # Documentation
-    $SourcesLabel  = CreateLabel -X 10                   -Y ($PayPal2Label.Bottom + 10) -Width 150 -Height 15 -Font $Fonts.SmallBold       -Text ("--- Sources ---")                                                                  -AddTo $Credits.Sections[3]
+    $SourcesLabel = CreateLabel -X 10                  -Y ($PayPal2Label.Bottom + 10) -Width 150 -Height 15 -Font $Fonts.SmallBold       -Text ("--- Sources ---")                                                                  -AddTo $Credits.Sections[3]
     
-    $Shadow1Label  = CreateLabel -X 10                   -Y ($SourcesLabel.Bottom + 2)  -Width 150 -Height 15 -Font $Fonts.SmallBold      -Text ("ShadowOne333's GitHub")                                                             -AddTo $Credits.Sections[3]
-    $Shadow2Label  = CreateLabel -X $Shadow1Label.Right  -Y ($SourcesLabel.Bottom + 2)  -Width 340 -Height 15 -Font $Fonts.SmallUnderline -Text ("https://github.com/ShadowOne333/Zelda64-Redux-Documentation")                       -AddTo $Credits.Sections[3]
+    $Shadow1Label = CreateLabel -X 10                  -Y ($SourcesLabel.Bottom + 2)  -Width 150 -Height 15 -Font $Fonts.SmallBold      -Text ("ShadowOne333's GitHub")                                                             -AddTo $Credits.Sections[3]
+    $Shadow2Label = CreateLabel -X $Shadow1Label.Right -Y ($SourcesLabel.Bottom + 2)  -Width 340 -Height 15 -Font $Fonts.SmallUnderline -Text ("https://github.com/ShadowOne333/Zelda64-Redux-Documentation")                       -AddTo $Credits.Sections[3]
     
-    $Female1Label = CreateLabel -X 10                    -Y ($Shadow1Label.Bottom + 2)  -Width 150 -Height 35 -Font $Fonts.SmallBold      -Text ("Feminine Pronouns Script`nBy Mil") -AddTo $Credits.Sections[3]
-    $Female2Label = CreateLabel -X $Female1Label.Right   -Y ($Shadow1Label.Bottom + 2)  -Width 300 -Height 35 -Font $Fonts.SmallUnderline -Text ("https://docs.google.com/document/d/1_`n1f2GzzGdtVqykNaKJrupoz5nBW386EwNQIPbMo042I") -AddTo $Credits.Sections[3]
+    $Female1Label = CreateLabel -X 10                  -Y ($Shadow1Label.Bottom + 2)  -Width 150 -Height 35 -Font $Fonts.SmallBold      -Text ("Feminine Pronouns Script`nBy Mil") -AddTo $Credits.Sections[3]
+    $Female2Label = CreateLabel -X $Female1Label.Right -Y ($Shadow1Label.Bottom + 2)  -Width 300 -Height 35 -Font $Fonts.SmallUnderline -Text ("https://docs.google.com/document/d/1_`n1f2GzzGdtVqykNaKJrupoz5nBW386EwNQIPbMo042I") -AddTo $Credits.Sections[3]
 
-    $Skilar1Label  = CreateLabel -X 10                   -Y ($Female1Label.Bottom + 2)  -Width 150 -Height 15 -Font $Fonts.SmallBold      -Text ("Skilarbabcock's YouTube")                                                           -AddTo $Credits.Sections[3]
-    $Skilar2Label  = CreateLabel -X $Skilar1Label.Right  -Y ($Female1Label.Bottom + 2)  -Width 225 -Height 15 -Font $Fonts.SmallUnderline -Text ("https://www.youtube.com/user/skilarbabcock")                                        -AddTo $Credits.Sections[3]
+    $Skilar1Label = CreateLabel -X 10                  -Y ($Female1Label.Bottom + 2)  -Width 150 -Height 15 -Font $Fonts.SmallBold      -Text ("Skilarbabcock's YouTube")                                                           -AddTo $Credits.Sections[3]
+    $Skilar2Label = CreateLabel -X $Skilar1Label.Right -Y ($Female1Label.Bottom + 2)  -Width 225 -Height 15 -Font $Fonts.SmallUnderline -Text ("https://www.youtube.com/user/skilarbabcock")                                        -AddTo $Credits.Sections[3]
 
     $Shadow2Label.add_Click({[system.Diagnostics.Process]::start("https://github.com/ShadowOne333/Zelda64-Redux-Documentation")})
     $Female2Label.add_Click({[system.Diagnostics.Process]::start("https://docs.google.com/document/d/1_1f2GzzGdtVqykNaKJrupoz5nBW386EwNQIPbMo042I")})
@@ -173,7 +173,7 @@ function CreateCreditsDialog() {
 function CreateSettingsDialog() {
     
     # Create Dialog
-    $global:SettingsDialog = CreateDialog -Width 600 -Height 580 -Icon $Files.icon.settings
+    $global:SettingsDialog = CreateDialog -Width 600 -Height 680 -Icon $Files.icon.settings
     $CloseButton = CreateButton -X ($SettingsDialog.Width / 2 - 40) -Y ($SettingsDialog.Height - 90) -Width 80 -Height 35 -Text "Close" -AddTo $SettingsDialog
     $CloseButton.Add_Click({ $SettingsDialog.Hide() })
 
@@ -183,53 +183,88 @@ function CreateSettingsDialog() {
     $global:GeneralSettings = @{}
 
     # General Settings
-    $GeneralSettings.GeneralBox        = CreateReduxGroup -Y 40 -AddTo $SettingsDialog -IsGame $False -Text "General Settings"
-    $GeneralSettings.Bit64             = CreateSettingsCheckbox -Name "Bit64"            -Column 1 -Row 1 -Text "Use 64-Bit Tools" -Checked ([Environment]::Is64BitOperatingSystem) -Info "Use 64-bit tools instead of 32-bit tools if available for patching ROMs"
-    $GeneralSettings.DoubleClick       = CreateSettingsCheckbox                          -Column 2 -Row 1 -Text "Double Click"                                                      -Info "Allows a PowerShell file to be opened by double-clicking it"
+    $GeneralSettings.Box                 = CreateReduxGroup -Y 40 -AddTo $SettingsDialog -IsGame $False -Text "General Settings"
+    $GeneralSettings.Bit64               = CreateSettingsCheckbox -Name "Bit64"            -Column 1 -Row 1 -Text "Use 64-Bit Tools" -Checked ([Environment]::Is64BitOperatingSystem) -Info "Use 64-bit tools instead of 32-bit tools if available for patching ROMs"
+    $GeneralSettings.DoubleClick         = CreateSettingsCheckbox                          -Column 2 -Row 1 -Text "Double Click"                                                      -Info "Allows a PowerShell file to be opened by double-clicking it"
     $GeneralSettings.DoubleClick.Checked = ((Get-ItemProperty -LiteralPath "HKLM:\Software\Classes\Microsoft.PowerShellScript.1\Shell").'(default)' -eq '0')
-    $GeneralSettings.ClearType         = CreateSettingsCheckbox -Name "ClearType"        -Column 3 -Row 1 -Text "Use ClearType Font" -Checked $True                                 -Info ('Use the ClearType font "Segoe UI" instead of the default font "Microsft Sans Serif"' + "`nThe option will only go in effect when opening the tool`nPlease restart the tool when changing this option")
+    $GeneralSettings.ClearType           = CreateSettingsCheckbox -Name "ClearType"        -Column 3 -Row 1 -Text "Use ClearType Font" -Checked $True                                 -Info ('Use the ClearType font "Segoe UI" instead of the default font "Microsft Sans Serif"' + "`nThe option will only go in effect when opening the tool`nPlease restart the tool when changing this option")
 
     # Advanced Settings
-    $GeneralSettings.AdvancedBox       = CreateReduxGroup -Y ($GeneralSettings.GeneralBox.Bottom + 10) -IsGame $False -Height 2 -AddTo $SettingsDialog -Text "Advanced Settings"
-    $GeneralSettings.IgnoreChecksum    = CreateSettingsCheckbox -Name "IgnoreChecksum"   -Column 1 -Row 1 -Text "Ignore Input Checksum"  -IsDebug -Info "Do not check the checksum of a ROM or WAD and patch it regardless`nDowngrade is no longer forced anymore if the checksum is different than the supported revision"
-    $GeneralSettings.KeepLogo          = CreateSettingsCheckbox -Name "KeepLogo"         -Column 2 -Row 1 -Text "Keep Logo"              -IsDebug -Info "Keep the vanilla title logo instead of the Master Quest title logo"
-    $GeneralSettings.ForceExtract      = CreateSettingsCheckbox -Name "ForceExtract"     -Column 3 -Row 1 -Text "Force Extract"          -IsDebug -Info "Always extract game data required for patching even if it was already extracted on a previous run"
-    $GeneralSettings.ForceExtract      = CreateSettingsCheckbox -Name "ForceWidescreen"  -Column 1 -Row 2 -Text "Force Aspect Ratio Fix" -IsDebug -Info "Always force patching in the 16:9 Aspect Ratio Fix in Native Mode in addition to the 16:9 Widescreen Textures"
+    $GeneralSettings.Box                 = CreateReduxGroup -Y ($GeneralSettings.Box.Bottom + 10) -IsGame $False -Height 2 -AddTo $SettingsDialog -Text "Advanced Settings"
+    $GeneralSettings.IgnoreChecksum      = CreateSettingsCheckbox -Name "IgnoreChecksum"   -Column 1 -Row 1 -Text "Ignore Input Checksum" -IsDebug -Info "Do not check the checksum of a ROM or WAD and patch it regardless`nDowngrade is no longer forced anymore if the checksum is different than the supported revision"
+    $GeneralSettings.KeepLogo            = CreateSettingsCheckbox -Name "KeepLogo"         -Column 2 -Row 1 -Text "Keep Logo"             -IsDebug -Info "Keep the vanilla title logo instead of the Master Quest title logo"
+    $GeneralSettings.ForceExtract        = CreateSettingsCheckbox -Name "ForceExtract"     -Column 3 -Row 1 -Text "Force Extract"         -IsDebug -Info "Always extract game data required for patching even if it was already extracted on a previous run"
+    $Info = "Changes how the widescreen option behaves for Majora's Mask in Native (N64) Mode`nOnly apply the 16:9 textures`nUse GLideN64 " + '"adjust to fit"' + " option for 16:9 widescreen"
+    $GeneralSettings.ChangeWidescreen    = CreateSettingsCheckbox -Name "ChangeWidescreen" -Column 1 -Row 2 -Text "Change Widescreen"     -IsDebug -Info $Info
+    $GeneralSettings.LiteGUI             = CreateSettingsCheckbox -Name "LiteGUI"          -Column 2 -Row 2 -Text "Lite Options GUI"      -IsDebug -Info "Only display and allow options which are highly compatible, such as with the Randomizer for Ocarina of Time"
 
     # Debug Settings
-    $GeneralSettings.DebugBox          = CreateReduxGroup -Y ($GeneralSettings.AdvancedBox.Bottom + 10) -IsGame $False -Height 3 -AddTo $SettingsDialog -Text "Debug Settings"
-    $GeneralSettings.Console           = CreateSettingsCheckbox -Name "Console"          -Column 1 -Row 1 -Text "Console"                -IsDebug -Info "Show the console log"
-    $GeneralSettings.Stop              = CreateSettingsCheckbox -Name "Stop"             -Column 2 -Row 1 -Text "Stop Patching"          -IsDebug -Info "Do not start the patching process and instead show debug information for the console log"
-    $GeneralSettings.CreateBPS         = CreateSettingsCheckbox -Name "CreateBPS"        -Column 3 -Row 1 -Text "Create BPS"             -IsDebug -Info "Create compressed and decompressed BPS patches when patching is concluded"
-    $GeneralSettings.NoCleanup         = CreateSettingsCheckbox -Name "NoCleanup"        -Column 1 -Row 2 -Text "No Cleanup"             -IsDebug -Info "Do not clean up the files after the patching process fails or succeeds"
-    $GeneralSettings.NoHeaderChange    = CreateSettingsCheckbox -Name "NoHeaderChange"   -Column 2 -Row 2 -Text "No Header Change"       -IsDebug -Info "Do not change the title header of the ROM when patching is concluded"
-    $GeneralSettings.NoChannelChange   = CreateSettingsCheckbox -Name "NoChannelChange"  -Column 3 -Row 2 -Text "No Channel Change"      -IsDebug -Info "Do not change the channel title and channel GameID of the WAD when patching is concluded"
-    $GeneralSettings.KeepDowngraded    = CreateSettingsCheckbox -Name "KeepDowngraded"   -Column 1 -Row 3 -Text "Keep Downgraded"        -IsDebug -Info "Keep the downgraded patched ROM in the output folder"
+    $GeneralSettings.Box                 = CreateReduxGroup -Y ($GeneralSettings.Box.Bottom + 10) -IsGame $False -Height 3 -AddTo $SettingsDialog -Text "Debug Settings"
+    $GeneralSettings.Console             = CreateSettingsCheckbox -Name "Console"          -Column 1 -Row 1 -Text "Console"               -IsDebug -Info "Show the console log"
+    $GeneralSettings.Stop                = CreateSettingsCheckbox -Name "Stop"             -Column 2 -Row 1 -Text "Stop Patching"         -IsDebug -Info "Do not start the patching process and instead show debug information for the console log"
+    $GeneralSettings.CreateBPS           = CreateSettingsCheckbox -Name "CreateBPS"        -Column 3 -Row 1 -Text "Create BPS"            -IsDebug -Info "Create compressed and decompressed BPS patches when patching is concluded"
+    $GeneralSettings.NoCleanup           = CreateSettingsCheckbox -Name "NoCleanup"        -Column 1 -Row 2 -Text "No Cleanup"            -IsDebug -Info "Do not clean up the files after the patching process fails or succeeds"
+    $GeneralSettings.NoHeaderChange      = CreateSettingsCheckbox -Name "NoHeaderChange"   -Column 2 -Row 2 -Text "No Header Change"      -IsDebug -Info "Do not change the title header of the ROM when patching is concluded"
+    $GeneralSettings.NoChannelChange     = CreateSettingsCheckbox -Name "NoChannelChange"  -Column 3 -Row 2 -Text "No Channel Change"     -IsDebug -Info "Do not change the channel title and channel GameID of the WAD when patching is concluded"
+    $GeneralSettings.KeepDowngraded      = CreateSettingsCheckbox -Name "KeepDowngraded"   -Column 1 -Row 3 -Text "Keep Downgraded"       -IsDebug -Info "Keep the downgraded patched ROM in the output folder"
 
     # Debug Settings (Nintendo 64)
-    $GeneralSettings.DebugBox          = CreateReduxGroup -Y ($GeneralSettings.DebugBox.Bottom + 10) -IsGame $False -Height 2 -AddTo $SettingsDialog -Text "Debug Settings (Nintendo 64)"
-    $GeneralSettings.KeepConverted     = CreateSettingsCheckbox -Name "KeepConverted"    -Column 1 -Row 1 -Text "Keep Converted"         -IsDebug -Info "Keep the converted patched ROM in the output folder"
-    $GeneralSettings.KeepDecompressed  = CreateSettingsCheckbox -Name "KeepDecompressed" -Column 2 -Row 1 -Text "Keep Decompressed"      -IsDebug -Info "Keep the decompressed patched ROM in the output folder"
-    $GeneralSettings.NoConversion      = CreateSettingsCheckbox -Name "NoConversion"     -Column 3 -Row 1 -Text "No Conversion"          -IsDebug -Info "Do not attempt to convert the ROM to a proper format"
-    $GeneralSettings.NoCRCChange       = CreateSettingsCheckbox -Name "NoCRCChange"      -Column 1 -Row 2 -Text "No CRC Change"          -IsDebug -Info "Do not change the CRC of the ROM when patching is concluded"
-    $GeneralSettings.Rev0DungeonFiles  = CreateSettingsCheckbox -Name "Rev0DungeonFiles" -Column 2 -Row 2 -Text "Rev 0 Dungeon Files"    -IsDebug -Info "Extract the dungeon files from the Rev 0 US OoT ROM as well when extracting dungeon files"
+    $GeneralSettings.Box                 = CreateReduxGroup -Y ($GeneralSettings.Box.Bottom + 10) -IsGame $False -Height 2 -AddTo $SettingsDialog -Text "Debug Settings (Nintendo 64)"
+    $GeneralSettings.KeepConverted       = CreateSettingsCheckbox -Name "KeepConverted"    -Column 1 -Row 1 -Text "Keep Converted"        -IsDebug -Info "Keep the converted patched ROM in the output folder"
+    $GeneralSettings.KeepDecompressed    = CreateSettingsCheckbox -Name "KeepDecompressed" -Column 2 -Row 1 -Text "Keep Decompressed"     -IsDebug -Info "Keep the decompressed patched ROM in the output folder"
+    $GeneralSettings.NoConversion        = CreateSettingsCheckbox -Name "NoConversion"     -Column 3 -Row 1 -Text "No Conversion"         -IsDebug -Info "Do not attempt to convert the ROM to a proper format"
+    $GeneralSettings.NoCRCChange         = CreateSettingsCheckbox -Name "NoCRCChange"      -Column 1 -Row 2 -Text "No CRC Change"         -IsDebug -Info "Do not change the CRC of the ROM when patching is concluded"
+    $GeneralSettings.Rev0DungeonFiles    = CreateSettingsCheckbox -Name "Rev0DungeonFiles" -Column 2 -Row 2 -Text "Rev 0 Dungeon Files"   -IsDebug -Info "Extract the dungeon files from the Rev 0 US OoT ROM as well when extracting dungeon files"
 
+    # Settings preset
+    $GeneralSettings.Box                 = CreateReduxGroup -Y ($GeneralSettings.Box.Bottom + 10) -IsGame $False -Height 2 -AddTo $SettingsDialog -Text "Settings Presets"
+    $GeneralSettings.PresetsPanel        = CreateReduxPanel -Row 2 -AddTo $GeneralSettings.Box
+    $GeneralSettings.Presets = @()
+    $GeneralSettings.Presets            += CreateSettingsRadioField -Name "Preset" -SaveAs 1 -Max 6 -NameTextbox "Preset.Label1" -Column 1 -Row 1 -Checked $True -Text "Preset 1" -Info ""
+    $GeneralSettings.Presets            += CreateSettingsRadioField -Name "Preset" -SaveAs 2 -Max 6 -NameTextbox "Preset.Label2" -Column 2 -Row 1                -Text "Preset 2" -Info ""
+    $GeneralSettings.Presets            += CreateSettingsRadioField -Name "Preset" -SaveAs 3 -Max 6 -NameTextbox "Preset.Label3" -Column 3 -Row 1                -Text "Preset 3" -Info "" 
+    $GeneralSettings.Presets            += CreateSettingsRadioField -Name "Preset" -SaveAs 4 -Max 6 -NameTextbox "Preset.Label4" -Column 1 -Row 2                -Text "Preset 4" -Info ""
+    $GeneralSettings.Presets            += CreateSettingsRadioField -Name "Preset" -SaveAs 5 -Max 6 -NameTextbox "Preset.Label5" -Column 2 -Row 2                -Text "Preset 5" -Info ""
+    $GeneralSettings.Presets            += CreateSettingsRadioField -Name "Preset" -SaveAs 6 -Max 6 -NameTextbox "Preset.Label6" -Column 3 -Row 2                -Text "Preset 6" -Info ""
 
-    $GeneralSettings.Console.Add_CheckStateChanged({ ShowPowerShellConsole -ShowConsole $this.Checked })
-    $GeneralSettings.DoubleClick.Add_CheckStateChanged({ TogglePowerShellOpenWithClicks -Enable $this.Checked })
+    # Double Click
+    $GeneralSettings.DoubleClick.Add_CheckStateChanged({ TogglePowerShellOpenWithClicks $this.Checked })
+
+    # Console
+    $GeneralSettings.Console.Add_CheckStateChanged({
+        ShowPowerShellConsole $this.Checked
+        $GeneralSettings.Stop.Enabled = $this.Checked
+    })
+    $GeneralSettings.Stop.Enabled = $GeneralSettings.Console.Checked
+
+    # Lite GUI
+    $GeneralSettings.LiteGUI.Add_CheckStateChanged({
+        LoadAdditionalOptions
+        DisablePatches
+    })
+
+    # Presets
+
+    $GeneralSettings.Presets | ForEach-Object {
+        $_.Add_CheckedChanged({
+            for ($i=0; $i -lt $GeneralSettings.Presets.length; $i++) {
+                if (!$this.checked -and $GeneralSettings.Presets[$i] -eq $this) {
+                    if ($GameType.save -gt 0) { Out-IniFile -FilePath ($Paths.Settings + "\" + $GameType.mode + " - " + ($i+1) + ".ini") -InputObject $GameSettings }
+                }
+            }
+            $global:GameSettings = GetSettings -File (GetGameSettingsFile) -IsGame
+            LoadAdditionalOptions
+        })
+    }
 
     # Create a button to reset the tool.
-    $GeneralSettings.ResetBox          = CreateReduxGroup -Y ($GeneralSettings.DebugBox.Bottom + 10) -IsGame $False -Height 2 -AddTo $SettingsDialog -Text "Reset"
-    $GeneralSettings.ResetButton       = CreateReduxButton -Column 1 -Width 150 -Height 45 -AddTo $GeneralSettings.ResetBox -Text "Reset All Settings" -Info ("Resets all settings stored in the " + $ScriptName)
+    $GeneralSettings.Box               = CreateReduxGroup -Y ($GeneralSettings.Box.Bottom + 10) -IsGame $False -Height 2 -AddTo $SettingsDialog -Text "Reset"
+    $GeneralSettings.ResetButton       = CreateReduxButton -Column 1 -Width 150 -Height 45 -AddTo $GeneralSettings.Box -Text "Reset All Settings" -Info ("Resets all settings stored in the " + $ScriptName)
     $GeneralSettings.ResetButton.Add_Click({ ResetTool })
-    $GeneralSettings.ResetGameButton   = CreateReduxButton -Column 2 -Width 150 -Height 45 -AddTo $GeneralSettings.ResetBox -Text "Reset Current Game" -Info ("Resets all settings for the current game mode " + $GameType.mode)
+    $GeneralSettings.ResetGameButton   = CreateReduxButton -Column 2 -Width 150 -Height 45 -AddTo $GeneralSettings.Box -Text "Reset Current Game" -Info ("Resets all settings for the current game mode " + $GameType.mode)
     $GeneralSettings.ResetGameButton.Add_Click({ ResetGame })
-    $GeneralSettings.CleanupButton     = CreateReduxButton -Column 3 -Width 150 -Height 45 -AddTo $GeneralSettings.ResetBox -Text "Cleanup Files"      -Info "Remove all temporary and extracted files`nThis process is automaticially done after patching a game"
+    $GeneralSettings.CleanupButton     = CreateReduxButton -Column 3 -Width 150 -Height 45 -AddTo $GeneralSettings.Box -Text "Cleanup Files"      -Info "Remove all temporary and extracted files`nThis process is automaticially done after patching a game"
     $GeneralSettings.CleanupButton.Add_Click({ CleanupFiles })
-
-    # Disable Stop if no Console
-    $GeneralSettings.Console.Add_CheckStateChanged({ $GeneralSettings.Stop.Enabled = $this.Checked })
-    $GeneralSettings.Stop.Enabled = $GeneralSettings.Console.Checked
 
 }
 
@@ -260,13 +295,14 @@ function ResetTool() {
     $Patches.ComboBox.SelectedIndex = $Patches.ComboBox.Default
     $InputPaths.ApplyInjectButton.Enabled = $InputPaths.ApplyPatchButton.Enabled = $False
 
-    RemoveFile -LiteralPath ($Paths.Base + "\Settings.ini")
-    GetSettings
+    RemoveFile ($Paths.Settings)
+    $global:Settings = GetSettings ($Paths.Settings + "\Core.ini")
+    $global:GameSettings = GetSettings (GetGameSettingsFile)
 
     RestoreCustomHeader
     ChangeGameMode
-    SetWiiVCMode -Enable $False
-    EnablePatchButtons -Enable $False
+    SetWiiVCMode $False
+    EnablePatchButtons $False
     SetMainScreenSize
 
     $global:GameIsSelected = $False
@@ -279,7 +315,7 @@ function ResetTool() {
 #==============================================================================================================================================================================================
 function ResetGame() {
     
-    if (!(IsSet -Elem $Redux.Groups)) { return }
+    if (!(IsSet $Redux.Groups)) { return }
 
     $Redux.Groups.GetEnumerator() | ForEach-Object {
         ForEach ($Form in $_.controls) {
@@ -310,13 +346,13 @@ function ResetGame() {
 function CleanupFiles() {
     
     $Files.json.games.game.GetEnumerator() | ForEach-Object {
-        RemovePath -LiteralPath ($Paths.Games + "\" + $_.mode + "\Extracted")
+        RemovePath ($Paths.Games + "\" + $_.mode + "\Extracted")
     }
 
-    RemovePath -LiteralPath $Paths.cygdrive
-    RemovePath -LiteralPath $Paths.Temp
-    RemoveFile -LiteralPath $Files.flipscfg
-    RemoveFile -LiteralPath $Files.stackdump
+    RemovePath $Paths.cygdrive
+    RemovePath $Paths.Temp
+    RemoveFile $Files.flipscfg
+    RemoveFile $Files.stackdump
 
     [System.GC]::Collect() | Out-Null
 
@@ -328,12 +364,19 @@ function CleanupFiles() {
 function CreateSettingsCheckbox([int]$Column=1, [int]$Row=1, [Boolean]$Checked, [Switch]$Disable, [String]$Text="", [Object]$ToolTip, [String]$Info="", [String]$Name, [Switch]$IsDebug) {
     
     $Checkbox = CreateCheckbox -X (($Column-1) * 165 + 15) -Y ($Row * 30 - 10) -Checked $Checked -Disable $Disable -IsRadio $False -Info $Info -IsDebug $IsDebug -Name $Name
-    $Label = CreateLabel -X $CheckBox.Right -Y ($CheckBox.Top + 3) -Width 135 -Height 15 -Text $Text -Info $Info
+    if (IsSet $Text) { $Label = CreateLabel -X $CheckBox.Right -Y ($CheckBox.Top + 3) -Width 135 -Height 15 -Text $Text -Info $Info }
     
-    if (IsSet -Elem $Name) {
-        if ($IsDebug) { $Checkbox.Add_CheckStateChanged({ $Settings["Debug"][$this.Name] = $this.Checked }) }
-        else          { $Checkbox.Add_CheckStateChanged({ $Settings["Core"][$this.Name] = $this.Checked }) }
-    }
+    return $CheckBox
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function CreateSettingsRadioField([int]$Column=1, [int]$Row=1, [Boolean]$Checked, [Switch]$Disable, [String]$Text="", [Object]$ToolTip, [String]$Info="", [String]$Name, [int]$SaveAs, [int]$Max, [String]$NameTextbox, [Switch]$IsDebug) {
+    
+    $Checkbox = CreateCheckbox -X (($Column-1) * 165 + 15) -Y ($Row * 30 - 10) -Checked $Checked -Disable $Disable -IsRadio $True -Info $Info -IsDebug $IsDebug -Name $Name -SaveAs $SaveAs -SaveTo $Name -Max $Max
+    $Textbox  = CreateTextBox  -X $Checkbox.Right -Y ($Checkbox.Top - 2) -Width 130 -Height 15 -Length 20 -Text $Text -IsDebug $IsDebug -Name $NameTextbox
 
     return $CheckBox
 
@@ -353,7 +396,7 @@ function CreateErrorDialog([String]$Error, [Switch]$Exit) {
     # Create the string that will be displayed on the window.
     $String = $ScriptName + " " + $Version + " (" + $VersionDate + ")" + "{0}{0}"
 
-    ShowPowerShellConsole -ShowConsole $True
+    ShowPowerShellConsole $True
 
     if ($Error -eq "Missing Files")         { $String += "Neccessary files are missing.{0}" }
     elseif ($Error -eq "Missing JSON")      { $String += ".JSON files are missing.{0}" }
@@ -368,7 +411,7 @@ function CreateErrorDialog([String]$Error, [Switch]$Exit) {
     #Create Label
     $Label = CreateLabel -X 10 -Y 10 -Width ($ErrorDialog.Width-10) -Height ($ErrorDialog.Height - 110) -Text $String -AddTo $ErrorDialog
 
-    if (IsSet -Elem $MainDialog) { $MainDialog.Hide() }
+    if (IsSet $MainDialog) { $MainDialog.Hide() }
     $ErrorDialog.ShowDialog() | Out-Null
     if ($Exit -eq $True) { Exit }
 

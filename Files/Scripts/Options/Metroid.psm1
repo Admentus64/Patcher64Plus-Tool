@@ -1,12 +1,12 @@
 function PatchOptionsSuperMetroid() {
     
-    if (IsChecked -Elem $Redux.Graphics.Widescreen)           { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\widescreen.ips" }
-    if (IsChecked -Elem $Redux.Graphics.RedesignedSamus)      { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\redesigned_samus.ips" }
+    if (IsChecked $Redux.Graphics.Widescreen)           { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\widescreen.ips" }
+    if (IsChecked $Redux.Graphics.RedesignedSamus)      { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\redesigned_samus.ips" }
 
-    if (IsChecked -Elem $Redux.Gameplay.FixedUnlockedDoors)   { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\fixed_tourian_unlocked_doors.ips" }
-    if (IsChecked -Elem $Redux.Gameplay.HeavyPhysics)         { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\heavy_physics.ips" }
-    if (IsChecked -Elem $Redux.Gameplay.SaveStationsRefill)   { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\save_stations_refill_everything.ips" }
-    if (IsChecked -Elem $Redux.Gameplay.SkipCeres)            { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\skip_ceres.ips" }
+    if (IsChecked $Redux.Gameplay.FixedUnlockedDoors)   { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\fixed_tourian_unlocked_doors.ips" }
+    if (IsChecked $Redux.Gameplay.HeavyPhysics)         { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\heavy_physics.ips" }
+    if (IsChecked $Redux.Gameplay.SaveStationsRefill)   { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\save_stations_refill_everything.ips" }
+    if (IsChecked $Redux.Gameplay.SkipCeres)            { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\skip_ceres.ips" }
 
 }
 
@@ -15,8 +15,8 @@ function PatchOptionsSuperMetroid() {
 #==============================================================================================================================================================================================
 function PatchReduxSuperMetroid() {
 
-    if (IsChecked -Elem $Redux.Revert.Xray)                   { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\Original\x_ray.ips" }
-    if (IsChecked -Elem $Redux.Revert.ElevatorSpeed)          { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\Original\elevator_speed.ips" }
+    if (IsChecked $Redux.Revert.Xray)                   { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\Original\x_ray.ips" }
+    if (IsChecked $Redux.Revert.ElevatorSpeed)          { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\Original\elevator_speed.ips" }
 
 }
 

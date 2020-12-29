@@ -1,9 +1,9 @@
 function ChangeBytes([String]$File, [String]$Offset, [Array]$Values, [int]$Interval=1, [Switch]$IsDec, [Switch]$Overflow) {
 
-    WriteToConsole -Text ("Change values: " + $Values)
-    if (IsSet -Elem $File) { $ByteArrayGame = [IO.File]::ReadAllBytes($File) }
+    WriteToConsole ("Change values: " + $Values)
+    if (IsSet $File) { $ByteArrayGame = [IO.File]::ReadAllBytes($File) }
     if ($Interval -lt 1) { $Interval = 1 }
-    [uint32]$Offset = GetDecimal -Hex $Offset
+    [uint32]$Offset = GetDecimal $Offset
 
     if ($Offset -lt 0) {
         WriteToConsole "Offset is negative!"
@@ -21,14 +21,14 @@ function ChangeBytes([String]$File, [String]$Offset, [Array]$Values, [int]$Inter
             [Byte]$Value = $Values[$i]
         }
         else {
-            if     ((GetDecimal -Hex $Values[$i]) -lt 0   -and $Overflow)   { $Values[$i] = Get8Bit -Value ($Values[$i] + 255) }
-            elseif ((GetDecimal -Hex $Values[$i]) -gt 255 -and $Overflow)   { $Values[$i] = Get8Bit -Value ($Values[$i] - 255) }
-            [Byte]$Value = GetDecimal -Hex $Values[$i]
+            if     ((GetDecimal $Values[$i]) -lt 0   -and $Overflow)   { $Values[$i] = Get8Bit ($Values[$i] + 255) }
+            elseif ((GetDecimal $Values[$i]) -gt 255 -and $Overflow)   { $Values[$i] = Get8Bit ($Values[$i] - 255) }
+            [Byte]$Value = GetDecimal $Values[$i]
         }
         $ByteArrayGame[$Offset + ($i * $Interval)] = $Value
     }
 
-    if (IsSet -Elem $File) { [io.file]::WriteAllBytes($File, $ByteArrayGame) }
+    if (IsSet $File) { [io.file]::WriteAllBytes($File, $ByteArrayGame) }
     $File = $Offset = $Interval = $Value = $null
     $Values = $null
 
@@ -39,7 +39,7 @@ function ChangeBytes([String]$File, [String]$Offset, [Array]$Values, [int]$Inter
 #==============================================================================================================================================================================================
 function PatchBytes([String]$File, [String]$Offset, [String]$Length, [String]$Patch, [Switch]$Texture, [Switch]$Extracted, [Switch]$Pad) {
     
-    if (IsSet -Elem $File) { $ByteArrayGame = [IO.File]::ReadAllBytes($File) }
+    if (IsSet $File) { $ByteArrayGame = [IO.File]::ReadAllBytes($File) }
     if ($Texture) {
         $PatchByteArray = [IO.File]::ReadAllBytes($GameFiles.textures + "\" + $Patch)
         WriteToConsole ("Patch file from: " + $GameFiles.textures + "\" + $Patch)
@@ -53,7 +53,7 @@ function PatchBytes([String]$File, [String]$Offset, [String]$Length, [String]$Pa
         WriteToConsole ("Patch file from: " + $GameFiles.binaries + "\" + $Patch)
     }
 
-    [uint32]$Offset = GetDecimal -Hex $Offset
+    [uint32]$Offset = GetDecimal $Offset
 
     if ($Offset -lt 0) {
         WriteToConsole "Offset is negative!"
@@ -64,8 +64,8 @@ function PatchBytes([String]$File, [String]$Offset, [String]$Length, [String]$Pa
         return
     }
 
-    if (IsSet -Elem $Length) {
-        [uint32]$Length = GetDecimal -Hex $Length
+    if (IsSet $Length) {
+        [uint32]$Length = GetDecimal $Length
         for ($i=0; $i -lt $Length; $i++) {
             if ($i -le $PatchByteArray.Length)   { $ByteArrayGame[$Offset + $i] = $PatchByteArray[($i)] }
             elseif ($Pad)                        { $ByteArrayGame[$Offset + $i] = 255 }
@@ -76,7 +76,7 @@ function PatchBytes([String]$File, [String]$Offset, [String]$Length, [String]$Pa
         for ($i=0; $i -lt $PatchByteArray.Length; $i++) { $ByteArrayGame[$Offset + $i] = $PatchByteArray[($i)] }
     }
 
-    if (IsSet -Elem $File) { [io.file]::WriteAllBytes($File, $ByteArrayGame) }
+    if (IsSet $File) { [io.file]::WriteAllBytes($File, $ByteArrayGame) }
     $File = $Offset = $Length = $Patch = $PatchByteArray = $null
 
 }
@@ -86,11 +86,11 @@ function PatchBytes([String]$File, [String]$Offset, [String]$Length, [String]$Pa
 #==============================================================================================================================================================================================
 function ExportBytes([String]$File, [String]$Offset, [String]$End, [String]$Length, [String]$Output, [Switch]$Force) {
     
-    if ( (Test-Path -LiteralPath $Output) -and ($Settings.Debug.ForceExtract -eq $False) -and !$Force) { return }
+    if ( (TestFile $Output) -and ($Settings.Debug.ForceExtract -eq $False) -and !$Force) { return }
 
     WriteToConsole ("Write file to: " + $Output)
-    if (IsSet -Elem $File) { $ByteArrayGame = [IO.File]::ReadAllBytes($File) }
-    [uint32]$Offset = GetDecimal -Hex $Offset
+    if (IsSet $File) { $ByteArrayGame = [IO.File]::ReadAllBytes($File) }
+    [uint32]$Offset = GetDecimal $Offset
 
     if ($Offset -lt 0) {
         WriteToConsole "Offset is negative!"
@@ -101,18 +101,18 @@ function ExportBytes([String]$File, [String]$Offset, [String]$End, [String]$Leng
         return
     }
 
-    RemoveFile -LiteralPath $Output
+    RemoveFile $Output
     $Path = $Output.substring(0, $Output.LastIndexOf('\'))
     $Folder = $Path.substring($Path.LastIndexOf('\') + 1)
     $Path = $Path.substring(0, $Path.LastIndexOf('\') + 1)
-    if (!(Test-Path -LiteralPath ($Path + $Folder) -PathType Container)) { New-Item -Path $Path -Name $Folder -ItemType Directory | Out-Null }
+    if (!(TestFile -Path ($Path + $Folder) -Container)) { New-Item -Path $Path -Name $Folder -ItemType Directory | Out-Null }
 
-    if (IsSet -Elem $End) {
-        [uint32]$End = GetDecimal -Hex $End
+    if (IsSet $End) {
+        [uint32]$End = GetDecimal $End
         [io.file]::WriteAllBytes($Output, $ByteArrayGame[$Offset..($End - 1)])
     }
-    elseif (IsSet -Elem $Length) {
-        [uint32]$Length = GetDecimal -Hex $Length
+    elseif (IsSet $Length) {
+        [uint32]$Length = GetDecimal $Length
         [io.file]::WriteAllBytes($Output, $ByteArrayGame[$Offset..($Offset + $Length - 1)])
     }
 
@@ -125,11 +125,11 @@ function ExportBytes([String]$File, [String]$Offset, [String]$End, [String]$Leng
 #==============================================================================================================================================================================================
 function SearchBytes([String]$File, [String]$Start="0", [String]$End, [Array]$Values) {
     
-    if (IsSet -Elem $File) { $ByteArrayGame = [IO.File]::ReadAllBytes($File) }
+    if (IsSet $File) { $ByteArrayGame = [IO.File]::ReadAllBytes($File) }
 
-    [uint32]$Start = GetDecimal -Hex $Start
-    if (IsSet -Elem $End)   { [uint32]$End = GetDecimal -Hex $End }
-    else                    { [uint32]$End = $ByteArrayGame.Length }
+    [uint32]$Start = GetDecimal $Start
+    if (IsSet $End)   { [uint32]$End = GetDecimal $End }
+    else              { [uint32]$End = $ByteArrayGame.Length }
 
     if ($Start -lt 0 -or $End -lt 0) {
         WriteToConsole "Start or end offset is negative!"
@@ -148,15 +148,15 @@ function SearchBytes([String]$File, [String]$Start="0", [String]$End, [Array]$Va
         $Search = $True
         for ($j=0; $j -lt $Values.Length; $j++) {
             if ($Values[$j] -ne "") {
-                if ($ByteArrayGame[$i + $j] -ne (GetDecimal -Hex $Values[$j]) ) {
+                if ($ByteArrayGame[$i + $j] -ne (GetDecimal $Values[$j]) ) {
                     $Search = $False
                     break
                 }
             }
         }
         if ($Search -eq $True) {
-            WriteToConsole ("Found values at: " + (Get32Bit -Value $i))
-            return Get32Bit -Value $i
+            WriteToConsole ("Found values at: " + (Get32Bit $i))
+            return Get32Bit $i
         }
     }
 
@@ -171,16 +171,16 @@ function SearchBytes([String]$File, [String]$Start="0", [String]$End, [Array]$Va
 function ExportAndPatch([String]$Path, [String]$Offset, [String]$Length, [String]$NewLength, [String]$TableOffset, [Array]$Values) {
 
     $File = $GameFiles.extracted + "\" + $Path + ".bin"
-    if ( !(Test-Path -LiteralPath $File -PathType Leaf) -or ($Settings.Debug.ForceExtract -eq $True) ) {
+    if ( !(TestFile $File) -or ($Settings.Debug.ForceExtract -eq $True) ) {
         ExportBytes -Offset $Offset -Length $Length -Output $File
         ApplyPatch -File $File -Patch (CheckPatchExtension -File ($GameFiles.export + "\" + $Path)) -FullPath
     }
 
-    if (!(IsSet -Elem $NewLength)) { $NewLength = $Length }
+    if (!(IsSet $NewLength))      { $NewLength = $Length }
     if ($NewLength -lt $Length)   { PatchBytes -Offset $Offset -Extracted -Patch ($Path + ".bin") -Length $Length }
     else                          { PatchBytes -Offset $Offset -Extracted -Patch ($Path + ".bin") -Length $NewLength }
 
-    if ( (IsSet -Elem $TableOffset) -and (IsSet -Elem $Values) ) {
+    if ( (IsSet $TableOffset) -and (IsSet $Values) ) {
         ChangeBytes -Offset $TableOffset -Values $Values
     }
 

@@ -23,8 +23,8 @@ Add-Type -AssemblyName 'System.Drawing'
 # Setup global variables
 
 $global:ScriptName = "Patcher64+ Tool"
-$global:VersionDate = "2020-12-22"
-$global:Version     = "v9.2.1"
+$global:VersionDate = "2020-12-29"
+$global:Version     = "v10.0.0"
 
 $global:GameConsole = $global:GameType = $global:GamePatch = $global:CheckHashSum = ""
 $global:GameFiles = $global:Settings = @{}
@@ -62,6 +62,7 @@ $Paths.Tools           = $Paths.Master + "\Tools"
 $Paths.WiiVC           = $Paths.Tools  + "\Wii VC"
 $Paths.Scripts         = $Paths.Master + "\Scripts"
 $Paths.Temp            = $Paths.Master + "\Temp"
+$Paths.Settings        = $Paths.Master + "\Settings"
 $Paths.cygdrive        = $Paths.Master + "\cygdrive"
 
 
@@ -71,7 +72,7 @@ $Paths.cygdrive        = $Paths.Master + "\cygdrive"
 
 function ImportModule([String]$Name) {
     
-    if (Test-Path -LiteralPath ($Paths.Scripts + "\" + $Name + ".psm1") -PathType Leaf)   { Import-Module -Name ($Paths.Scripts + "\" + $Name + ".psm1") }
+    if (Test-Path -LiteralPath ($Paths.Scripts + "\" + $Name + ".psm1") -PathType Leaf)   { Import-Module ($Paths.Scripts + "\" + $Name + ".psm1") }
     else                                                                                  { CreateErrorDialog -Error "Missing Modules" -Exit }
 
 }
@@ -144,7 +145,9 @@ function IsNumeric([String]$str) {
 #==============================================================================================================================================================================================
 
 # Retrieve settings
-GetSettings
+$global:Settings = GetSettings ($Paths.Settings + "\Core.ini")
+if (!(IsSet $Settings.Core))   { $Settings.Core  = @{} }
+if (!(IsSet $Settings.Debug))  { $Settings.Debug = @{} }
 
 # Font
 if ($Settings.Core.ClearType -eq $True)   { $Font = "Segoe UI" }
@@ -155,7 +158,7 @@ $Fonts.SmallBold      = New-Object System.Drawing.Font($Font, 8,  [System.Drawin
 $Fonts.SmallUnderline = New-Object System.Drawing.Font($Font, 8,  [System.Drawing.FontStyle]::Underline)
 
 # Hide the PowerShell console from the user
-if ($Settings.Debug.Console -ne $True) { ShowPowerShellConsole -ShowConsole $False }
+if ($Settings.Debug.Console -ne $True) { ShowPowerShellConsole $False }
 
 # Set paths to all the files stored in the script
 SetFileParameters
@@ -185,6 +188,7 @@ $MainDialog.ShowDialog() | Out-Null
 
 # Exit
 Out-IniFile -FilePath $Files.settings -InputObject $Settings | Out-Null
-RemovePath -LiteralPath $Paths.Registry
+if ($GameType.save -gt 0) { Out-IniFile -FilePath (GetGameSettingsFile) -InputObject $GameSettings | Out-Null }
+RemovePath $Paths.Registry
 [System.GC]::Collect() | Out-Null
 Exit

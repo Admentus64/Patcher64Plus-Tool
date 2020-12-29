@@ -1,6 +1,7 @@
 { "game" : [ {
 	"title" : "The Legend of Zelda: Ocarina of Time",
 	"mode" : "Ocarina of Time",
+	"save": 1,
 	"support_vc" : 1,
 	"console" : "N64",
 	"downgrade" : [ {
@@ -32,6 +33,7 @@
 }, {
 	"title" : "The Legend of Zelda: Majora's Mask",
 	"mode" : "Majora's Mask",
+	"save": 1,
 	"support_vc" : 1,
 	"console" : "N64",
 	"downgrade" : [ {
@@ -53,6 +55,7 @@
 }, {
 	"title" : "Super Mario 64",
 	"mode" : "Super Mario 64",
+	"save": 1,
 	"support_vc" : 1,
 	"console" : "N64",
 	"patches_vc" : 2,
@@ -105,6 +108,7 @@
 }, {
 	"title" : "The Legend of Zelda: A Link to the Past",
 	"mode" : "A Link to the Past",
+	"save": 1,
 	"support_vc" : 1,
 	"console" : "SNES",
 	"patches" : 1,
@@ -132,6 +136,7 @@
 }, {
 	"title" : "Super Metroid",
 	"mode" : "Super Metroid",
+	"save": 1,
 	"support_vc" : 1,
 	"console" : "SNES",
 	"patches" : 1,
@@ -143,6 +148,7 @@
 }, {
 	"title" : "The Legend of Zelda",
 	"mode" : "The Legend of Zelda",
+	"save": 1,
 	"support_vc" : 1,
 	"console" : "NES",
 	"downgrade" : [ {
@@ -166,6 +172,7 @@
 }, {
 	"title" : "Zelda II: The Adventure of Link",
 	"mode" : "The Adventure of Link",
+	"save": 1,
 	"support_vc" : 1,
 	"console" : "NES",
 	"downgrade" : [ {

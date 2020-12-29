@@ -1,7 +1,7 @@
 function PatchOptionsALinkToThePast() {
     
-    if (IsChecked -Elem $Redux.Revert.PinkHairGFX)   { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\Original\pink_hair.ips" }
-    if (IsChecked -Elem $Redux.Revert.MenuGFX)       { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\Original\menu.ips" }
+    if (IsChecked $Redux.Revert.PinkHairGFX)   { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\Original\pink_hair.ips" }
+    if (IsChecked $Redux.Revert.MenuGFX)       { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\Original\menu.ips" }
 
 }
 

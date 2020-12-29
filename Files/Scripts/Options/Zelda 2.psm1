@@ -1,21 +1,21 @@
 function PatchOptionsTheAdventureOfLink() {
     
-    if (IsChecked -Elem $Redux.Graphics.NewGFX)                   { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\new_gfx.ips" }
-    if (IsChecked -Elem $Redux.Graphics.RevilityEditionSprites)   { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\revility_edition_sprites.ips" }
+    if (IsChecked $Redux.Graphics.NewGFX)                   { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\new_gfx.ips" }
+    if (IsChecked $Redux.Graphics.RevilityEditionSprites)   { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\revility_edition_sprites.ips" }
     
-    if (IsChecked -Elem $Redux.Sound.NoLowHPBeep)                 { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\no_low_hp_beep.ips" }
-    if (IsChecked -Elem $Redux.Sound.ReduceTextSound)             { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\reduce_text_sound.ips" }
-    elseif (IsChecked -Elem $Redux.Sound.NoTextSound)             { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\no_text_sound.ips" }
+    if (IsChecked $Redux.Sound.NoLowHPBeep)                 { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\no_low_hp_beep.ips" }
+    if (IsChecked $Redux.Sound.ReduceTextSound)             { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\reduce_text_sound.ips" }
+    elseif (IsChecked $Redux.Sound.NoTextSound)             { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\no_text_sound.ips" }
     
-    if (IsChecked -Elem $Redux.Gameplay.RestartSameScreen)        { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\restart_same_screen.ips" }
-    if (IsChecked -Elem $Redux.Gameplay.FDSKingsTomb)             { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\fds_kings_tomb.ips" }
-    if (IsChecked -Elem $Redux.Gameplay.Secret)                   { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\secret.ips" }
+    if (IsChecked $Redux.Gameplay.RestartSameScreen)        { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\restart_same_screen.ips" }
+    if (IsChecked $Redux.Gameplay.FDSKingsTomb)             { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\fds_kings_tomb.ips" }
+    if (IsChecked $Redux.Gameplay.Secret)                   { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\secret.ips" }
 
-    if (IsChecked -Elem $Redux.Experience.NewExp)                 { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\new_exp.ips" }
-    if ( (IsChecked -Elem $Redux.Experience.KeepExpGameOver ) -and !(IsChecked -Elem $Redux.Gameplay.RestartSameScreen) ) { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\keep_exp_game_over.ips" }
-    if (IsChecked -Elem $Redux.Experience.StaticExpPalaceCrystal) { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\static_exp_palace_crystal.ips" }
+    if (IsChecked $Redux.Experience.NewExp)                 { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\new_exp.ips" }
+    if ( (IsChecked $Redux.Experience.KeepExpGameOver ) -and !(IsChecked $Redux.Gameplay.RestartSameScreen) ) { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\keep_exp_game_over.ips" }
+    if (IsChecked $Redux.Experience.StaticExpPalaceCrystal) { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\static_exp_palace_crystal.ips" }
 
-    if (IsChecked -Elem $Redux.Other.ReduceLag)                   { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\reduce_lag.ips" }
+    if (IsChecked $Redux.Other.ReduceLag)                   { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\reduce_lag.ips" }
 
 }
 
@@ -24,16 +24,16 @@ function PatchOptionsTheAdventureOfLink() {
 #==============================================================================================================================================================================================
 function PatchReduxTheAdventureOfLink() {
     
-    if (IsChecked -Elem $Redux.Revert.EnemyAttributes)            { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\Original\enemy_attributes.ips" }
-    if (IsChecked -Elem $Redux.Revert.LinkDolls)                  { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\Original\link_dolls.ips" }
-    if (IsChecked -Elem $Redux.Revert.SpellMagicConsumption)      { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\Original\spell_magic_consumption.ips" }
-    if (IsChecked -Elem $Redux.Music.RandomBattleTheme)           { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\random_battle_theme.ips" }
+    if (IsChecked $Redux.Revert.EnemyAttributes)            { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\Original\enemy_attributes.ips" }
+    if (IsChecked $Redux.Revert.LinkDolls)                  { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\Original\link_dolls.ips" }
+    if (IsChecked $Redux.Revert.SpellMagicConsumption)      { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\Original\spell_magic_consumption.ips" }
+    if (IsChecked $Redux.Music.RandomBattleTheme)           { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\random_battle_theme.ips" }
 
-    if ( (IsChecked -Elem $Redux.Revert.TitleScreenPalette) -and (IsChecked -Elem $Redux.Revert.TitleScreenSword) ) { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\Original\title_screen.ips" }
-    elseif (IsChecked -Elem $Redux.Revert.TitleScreenPalette)     { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\Original\title_screen_palette.ips" }
-    elseif (IsChecked -Elem $Redux.Revert.TitleScreenSword)       { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\Original\title_screen_sword.ips" }
+    if ( (IsChecked $Redux.Revert.TitleScreenPalette) -and (IsChecked $Redux.Revert.TitleScreenSword) ) { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\Original\title_screen.ips" }
+    elseif (IsChecked $Redux.Revert.TitleScreenPalette)     { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\Original\title_screen_palette.ips" }
+    elseif (IsChecked $Redux.Revert.TitleScreenSword)       { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\Original\title_screen_sword.ips" }
 
-    if ( (IsChecked -Elem $Redux.Revert.RestartGameOver) -and !(IsChecked -Elem $Redux.Gameplay.RestartSameScreen) ) { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\Original\restart_game_over.ips" }
+    if ( (IsChecked $Redux.Revert.RestartGameOver) -and !(IsChecked $Redux.Gameplay.RestartSameScreen) ) { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\Original\restart_game_over.ips" }
 
 }
 

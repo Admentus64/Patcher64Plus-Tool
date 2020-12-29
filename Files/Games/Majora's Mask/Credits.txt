@@ -4,6 +4,7 @@
 
 --- Additional Options ---
 - 16:9 Backgrounds & Textures:	GhostlyDark & ShadowOne333
+- Enhanced 16:9 Widescreen:	gamemasterplc & GhostlyDark
 - Improved Link Model:		Skilarbabcock (www.youtube.com/user/skilarbabcock) & Nerrel
 - Kokiri Tunic Color:		GhostlyDark
 - Recolor Mask Forms:		ShadowOne333 & Garo-Mastah
@@ -33,7 +34,7 @@
 - Admentus (Scripting and Maintaince of all Options)
 
 --- Quality Assurance ---
-- Translations			GhostlyDark
+- Translations:			GhostlyDark
 
 --- Translations ---
 - Polish:				RPG (v1.1)

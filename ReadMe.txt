@@ -3,7 +3,7 @@ Join our Discord and feel free to contact us there.
 List of credits are accessible within the Patcher64+ Tool.
 Documentation and sources for Zelda 64 options can be found at:
 - https://github.com/ShadowOne333/Zelda64-Redux-Documentation (General)
-- https://docs.google.com/document/d/1_1f2GzzGdtVqykNaKJrupoz5nBW386EwNQIPbMo042I (Feminine Pronouns Script)
+- https://docs.google.com/spreadsheets/d/1Ihccm8noxsfHZfN1E3Gkccov1F27WXXxl-rxOuManUk (Female Pronouns Script)
 - www.youtube.com/user/skilarbabcock (Model Replacements)
 
 --- Support or visit me ---
@@ -13,7 +13,8 @@ Patreon:	https://www.patreon.com/Admentus
 PayPal:		https://www.paypal.com/paypalme/Admentus/
 
 --- WARNING ---
-If you're upgrading from a previous version and are using the settings.txt file from the previous version, you may encounter some issues. Removing or deleting the file from the folder and restarting fixes the issue.
+If you're upgrading from a previous version and are using the Files\Settings folder from the previous version, you may encounter some issues.
+Removing or deleting all files from that folder and restarting fixes the issue.
 
 
 
@@ -74,12 +75,15 @@ The following games have included patches:
 ===============
 
 The following patches are included:
-- The Legend of Zelda: Dawn & Dusk (OoT)
+- GZ Practice ROM (OoT)
 - The Legend of Zelda: The Missing Link (OoT)
+- The Legend of Zelda: Dawn & Dusk (OoT)
 - The Legend of Zelda: Master of Time (OoT)
 - The Fate of the Bombiwa (OoT)
 - The Legend of Zelda: Nimpize Adventure (OoT)
 - Ocarina of Time Puzzling (OoT)
+- KZ Practice ROM (MM)
+- KZ Practice ROM Lite (MM)
 - Majora's Mask: Masked Quest (MM)
 - Majora's Mask: Master Quest (MM)
 - SM64: Single-Screen / SM64: Split-Screen Multiplayer (SM64)
@@ -183,10 +187,18 @@ Options offers smaller individual changes that can be applied individually from 
 - Downgrade			Downgrade a ROM to the first revision, but only works with No-Intro US ROMs. This checkbox is only shown if it is supported.
 
 --- Buttons ---
-- Redux				Additional Options that are require the Redux patch can be customized in here
+- Select Options		Additional Options in general can be fully customized in here.
+- Patch Selected Option		Run the patching process.
+
+--- Select Options ---
+- Main				Contains several options in general to customize.
+- Audiovisual			Contains graphics, music and sound related options to customize.
+- Difficulty			Contains difficulty-related options to customize.
+- Colors			Contains options in where HUD elements and ingame objects can be customized with different color schemes.
+- Equipment			Contains options to change the behaviour of equipable or usable items, such as ammunition.
+- Cutscenes			Contains cutscene- and skip-related options to customize, often to speed-up the flow of the game.
+- Redux				Additional Options that are require the Redux patch can be customized in here.
 - Language			Different languages can be customized in here, as well as specific options that are language-dependant.
-- Select Options		Additional Options in general can be fully customized in here
-- Patch Selected Option		Run the patching process
 
 
 
@@ -195,14 +207,14 @@ Options offers smaller individual changes that can be applied individually from 
 =====================================
 
 --- Checkboxes ---
-- Remove All T64		Remove all injected custom textures by the Virtual Console in the .T64 format
-- Remove Filter			Remove the dark filter injected by the Virtual Console to display the original N64 gamma
-- Expand Memory			Expand the available RAM memory, but invalidates existing AR/Gecko codes
-- Remap D-Pad			Remap the D-Pad to their four D-Pad button directions instead of toggling the minimap
-- Remap L Button		Remap L to it's actual L button (ex. for showing the interface in SM64)
-- Remap C-Down			Remap C-Down to toggle the minimap button
-- Remap Z Button		Remap Z, ZL and ZR to toggle the minimap
-- Leave D-Pad Up		Keep D-Pad for toggling the minimap
+- Remove All T64		Remove all injected custom textures by the Virtual Console in the .T64 format.
+- Remove Filter			Remove the dark filter injected by the Virtual Console to display the original N64 gamma.
+- Expand Memory			Expand the available RAM memory, but invalidates existing AR/Gecko codes.
+- Remap D-Pad			Remap the D-Pad to their four D-Pad button directions instead of toggling the minimap.
+- Remap L Button		Remap L to it's actual L button (ex. for showing the interface in SM64).
+- Remap C-Down			Remap C-Down to toggle the minimap button.
+- Remap Z Button		Remap Z, ZL and ZR to toggle the minimap.
+- Leave D-Pad Up		Keep D-Pad for toggling the minimap.
 
 --- Buttons ---
 - Patch VC Emulator Only	Only apply the VC Patch Options to the ROM, and nothing else.

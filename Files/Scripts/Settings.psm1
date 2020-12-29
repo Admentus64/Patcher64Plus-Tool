@@ -30,6 +30,7 @@ function Get-IniContent ([String]$FilePath) {
 #==============================================================================================================================================================================================
 function Out-IniFile([hashtable]$InputObject, [String]$FilePath) {
     
+    if (!(TestFile -Path ($Paths.Settings) -Container)) { New-Item -Path $Paths.Master -Name "Settings" -ItemType Directory | Out-Null }
     RemoveFile $FilePath
     $OutFile = New-Item -ItemType File -Path $Filepath
     foreach ($i in $InputObject.keys) {
@@ -38,6 +39,7 @@ function Out-IniFile([hashtable]$InputObject, [String]$FilePath) {
             #Sections
             Add-Content -Path $outFile -Value "[$i]"
             foreach ($j in ($InputObject[$i].keys | Sort-Object)) {
+                
                 if ($j -match "^Comment[\d]+")   { Add-Content -Path $OutFile -Value "$($InputObject[$i][$j])" }
                 else                             { Add-Content -Path $OutFile -Value "$j=$($InputObject[$i][$j])" }
             }
@@ -50,18 +52,29 @@ function Out-IniFile([hashtable]$InputObject, [String]$FilePath) {
 
 
 #==============================================================================================================================================================================================
-function GetSettings() {
+function GetSettings([String]$File) {
     
-    $File = $Paths.Base + "\Settings.ini"
-
-    if (!(Test-Path -LiteralPath $File -PathType Leaf)) { New-Item -Path $File | Out-Null }
-
-    $Lines = Get-Content -Path $File
-    if ($Lines -notcontains "[Core]") { Add-Content -Path $File -Value "[Core]" | Out-Null }
-    if ($Lines -notcontains "[Debug]") { Add-Content -Path $File -Value "[Debug]" | Out-Null }
-    $global:Settings = Get-IniContent $File
+    if (TestFile $File)   { return Get-IniContent $File }
+    else                  { return @{} }
 
 }
+
+
+
+#==============================================================================================================================================================================================
+function GetGameTypePreset() {
+    
+    for ($i=0; $i -lt $GeneralSettings.Presets.length; $i++) {
+        if ($GeneralSettings.Presets[$i].checked) { return $GameType.mode + " - " + ($i+1) }
+    }
+    return $null
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function GetGameSettingsFile() { return $Paths.Settings + "\" + (GetGameTypePreset) + ".ini" }
 
 
 
@@ -70,3 +83,6 @@ function GetSettings() {
 Export-ModuleMember -Function Get-IniContent
 Export-ModuleMember -Function Out-IniFile
 Export-ModuleMember -Function GetSettings
+Export-ModuleMember -Function GetGameTypePreset
+Export-ModuleMember -Function CreateGameTypePreset
+Export-ModuleMember -Function GetGameSettingsFile

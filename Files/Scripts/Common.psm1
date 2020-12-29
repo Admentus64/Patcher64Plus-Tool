@@ -6,7 +6,7 @@ function SetWiiVCMode([Boolean]$Enable) {
     if ($IsWiiVC)   { $CustomTitleTextBox.MaxLength = $VCTitleLength  }
     else            { $CustomTitleTextBox.MaxLength = $GameConsole.rom_title_length }
     
-    EnablePatchButtons (IsSet -Elem $GamePath)
+    EnablePatchButtons (IsSet $GamePath)
     GetHeader
     SetModeLabel
     ChangePatchPanel
@@ -24,7 +24,7 @@ function CreateToolTip($Form, $Info) {
     $ToolTip.InitialDelay = 500
     $ToolTip.ReshowDelay = 0
     $ToolTip.ShowAlways = $True
-    if ( (IsSet -Elem $Form) -and (IsSet -Elem $Info) ) { $ToolTip.SetToolTip($Form, $Info) }
+    if ( (IsSet $Form) -and (IsSet $Info) ) { $ToolTip.SetToolTip($Form, $Info) }
     return $ToolTip
 
 }
@@ -100,7 +100,7 @@ function ChangeGamesList() {
 function ChangePatchPanel() {
     
     # Return is no GameType or game file is set
-    if (!(IsSet -Elem $GameType))   { return }
+    if (!(IsSet $GameType)) { return }
 
 
     # Reset
@@ -112,7 +112,7 @@ function ChangePatchPanel() {
     foreach ($i in $Files.json.patches.patch) {
         if ( ($IsWiiVC -and $i.console -eq "Wii VC") -or (!$IsWiiVC -and $i.console -eq "Native") -or ($i.console -eq "Both") ) {
             $Items += $i.title
-            if (!(IsSet -Elem $FirstItem)) { $FirstItem = $i }
+            if (!(IsSet $FirstItem)) { $FirstItem = $i }
         }
     }
 
@@ -167,8 +167,8 @@ function SetMainScreenSize() {
     }
 
     # Positioning
-    if (IsSet -Elem $GamePath)   { $CurrentGamePanel.Location = New-Object System.Drawing.Size(10, ($InputPaths.PatchPanel.Bottom + 5)) }
-    else                         { $CurrentGamePanel.Location = New-Object System.Drawing.Size(10, ($InputPaths.GamePanel.Bottom + 5)) }
+    if (IsSet $GamePath)   { $CurrentGamePanel.Location = New-Object System.Drawing.Size(10, ($InputPaths.PatchPanel.Bottom + 5)) }
+    else                   { $CurrentGamePanel.Location = New-Object System.Drawing.Size(10, ($InputPaths.GamePanel.Bottom + 5)) }
     $CustomHeaderPanel.Location = New-Object System.Drawing.Size(10, ($CurrentGamePanel.Bottom + 5))
 
     # Set VC Panel Size
@@ -208,6 +208,8 @@ function SetMainScreenSize() {
 #==============================================================================================================================================================================================
 function ChangeGameMode() {
     
+    if ($GameType.save -gt 0) { Out-IniFile -FilePath (GetGameSettingsFile) -InputObject $GameSettings | Out-Null }
+
     Foreach ($Item in $Files.json.games.game) {
         if ($Item.title -eq $CurrentGameComboBox.text) {
             $global:GameType = $Item
@@ -228,32 +230,26 @@ function ChangeGameMode() {
     $GameFiles.info = $GameFiles.base + "\Info.txt"
     $GameFiles.json = $GameFiles.base + "\Patches.json"
 
-    $Lines = Get-Content -Path $Files.settings
-    if ( $Lines -notcontains ("[" + $GameType.mode + "]") ) {
-        Out-IniFile -FilePath $Files.settings -InputObject $Settings | Out-Null
-        Add-Content -Path $Files.settings -Value ("[" + $GameType.mode + "]") | Out-Null
-        $global:Settings = Get-IniContent $Files.settings
-    }
+    $global:GameSettings = GetSettings (GetGameSettingsFile)
 
-    if (IsSet -Elem $GameType.patches) {
-        if (Test-Path -LiteralPath $GameFiles.json) {
+    if (IsSet $GameType.patches) {
+        if (TestFile $GameFiles.json) {
             try { $Files.json.patches = Get-Content -Raw -Path $GameFiles.json | ConvertFrom-Json }
-            catch { CreateErrorDialog -Error "Corrupted JSON" }
+            catch { CreateErrorDialog "Corrupted JSON" }
         }
-        else { CreateErrorDialog -Error "Missing JSON" }
+        else { CreateErrorDialog "Missing JSON" }
     }
 
     # Info
-    if (Test-Path -LiteralPath $GameFiles.info -PathType Leaf)       { AddTextFileToTextbox -TextBox $Credits.Sections[0] -File $GameFiles.info }
-    else                                                             { AddTextFileToTextbox -TextBox $Credits.Sections[0] -File $null }
+    if (TestFile $GameFiles.info)       { AddTextFileToTextbox -TextBox $Credits.Sections[0] -File $GameFiles.info }
+    else                                { AddTextFileToTextbox -TextBox $Credits.Sections[0] -File $null }
 
     # Credits
-    if (Test-Path -LiteralPath $Files.text.credits -PathType Leaf)   { AddTextFileToTextbox -TextBox $Credits.Sections[1] -File $Files.text.credits }
-    if (Test-Path -LiteralPath $GameFiles.credits -PathType Leaf)    { AddTextFileToTextbox -TextBox $Credits.Sections[1] -File $GameFiles.credits -Add -PreSpace 2 }
+    if (TestFile $Files.text.credits)   { AddTextFileToTextbox -TextBox $Credits.Sections[1] -File $Files.text.credits }
+    if (TestFile $GameFiles.credits)    { AddTextFileToTextbox -TextBox $Credits.Sections[1] -File $GameFiles.credits -Add -PreSpace 2 }
 
     $CreditsGameLabel.Text = "Current Game: " + $GameType.mode
     $Patches.Panel.Visible = $GameType.patches
-    $Patches.DowngradeLabel.Visible = $Patches.Downgrade.Visible = (IsSet -elem $GameType.downgrade)
 
     SetModeLabel
     if ($IsActiveGameField) { ChangePatchPanel }
@@ -420,18 +416,18 @@ function PatchPath_Finish([Object]$TextBox, [String]$Path) {
 function GetHeader() {
     
     if ($IsWiiVC) {
-        if (IsSet -Elem $GamePatch.vc_title)     { $CustomTitleTextBox.Text  = $GamePatch.vc_title }
-        else                                     { $CustomTitleTextBox.Text  = $GameType.vc_title }
-        if (IsSet -Elem $GamePatch.vc_gameID)    { $CustomGameIDTextBox.Text = $GamePatch.vc_gameID }
-        else                                     { $CustomGameIDTextBox.Text = $GameType.vc_gameID }
+        if (IsSet $GamePatch.vc_title)     { $CustomTitleTextBox.Text  = $GamePatch.vc_title }
+        else                               { $CustomTitleTextBox.Text  = $GameType.vc_title }
+        if (IsSet $GamePatch.vc_gameID)    { $CustomGameIDTextBox.Text = $GamePatch.vc_gameID }
+        else                               { $CustomGameIDTextBox.Text = $GameType.vc_gameID }
     }
     else {
-        if (IsSet -Elem $GamePatch.rom_title)    { $CustomTitleTextBox.Text  = $GamePatch.rom_title }
-        else                                     { $CustomTitleTextBox.Text  = $GameType.rom_title }
-        if (IsSet -Elem $GamePatch.rom_gameID)   { $CustomGameIDTextBox.Text = $GamePatch.rom_gameID }
-        else                                     { $CustomGameIDTextBox.Text = $GameType.rom_gameID }
-        if (IsSet -Elem $GamePatch.rom_region)   { $CustomRegionCodeComboBox.SelectedIndex = $GamePatch.rom_region }
-        else                                     { $CustomRegionCodeComboBox.SelectedIndex = $GameType.rom_region }
+        if (IsSet $GamePatch.rom_title)    { $CustomTitleTextBox.Text  = $GamePatch.rom_title }
+        else                               { $CustomTitleTextBox.Text  = $GameType.rom_title }
+        if (IsSet $GamePatch.rom_gameID)   { $CustomGameIDTextBox.Text = $GamePatch.rom_gameID }
+        else                               { $CustomGameIDTextBox.Text = $GameType.rom_gameID }
+        if (IsSet $GamePatch.rom_region)   { $CustomRegionCodeComboBox.SelectedIndex = $GamePatch.rom_region }
+        else                               { $CustomRegionCodeComboBox.SelectedIndex = $GameType.rom_region }
     }
 
 }
@@ -441,11 +437,11 @@ function GetHeader() {
 #==============================================================================================================================================================================================
 function IsChecked([Object]$Elem, [Switch]$Active, [Switch]$Not) {
     
-    if (!(IsSet -Elem $Elem))               { return $False }
-    if ($Active -and !$Elem.Visible)        { return $False }
-    if (!$Active -and !$Elem.Enabled)       { return $False }
-    if ($Elem.Checked)                      { return !$Not  }
-    if (!$Elem.Checked)                     { return $Not   }
+    if (!(IsSet $Elem))                 { return $False }
+    if ($Active -and !$Elem.Visible)    { return $False }
+    if (!$Active -and !$Elem.Enabled)   { return $False }
+    if ($Elem.Checked)                  { return !$Not  }
+    if (!$Elem.Checked)                 { return $Not   }
     return $False
 
 }
@@ -455,8 +451,8 @@ function IsChecked([Object]$Elem, [Switch]$Active, [Switch]$Not) {
 #==============================================================================================================================================================================================
 function IsLanguage([Object]$Elem, [int]$Lang=0) {
     
-    if (!$Redux.Language[$Lang].Checked)    { return $False }
-    if (IsChecked -Elem $Elem)              { return $True  }
+    if (!$Redux.Language[$Lang].Checked)   { return $False }
+    if (IsChecked $Elem)                   { return $True  }
     return $False
 
 }
@@ -467,7 +463,7 @@ function IsLanguage([Object]$Elem, [int]$Lang=0) {
 function IsText([Object]$Elem, [String]$Compare, [Switch]$Active, [Switch]$Not) {
     
     $Text = $Elem.Text.replace(" (default)", "")
-    if (!(IsSet -Elem $Elem))           { return $False }
+    if (!(IsSet $Elem))                 { return $False }
     if ($Active -and !$Elem.Visible)    { return $False }
     if (!$Active -and !$Elem.Enabled)   { return $False }
     if ($Text -eq $Compare)             { return !$Not  }
@@ -479,14 +475,22 @@ function IsText([Object]$Elem, [String]$Compare, [Switch]$Active, [Switch]$Not) 
 
 
 #==============================================================================================================================================================================================
-function IsIndex([Object]$Elem, [int]$Index=1, [Switch]$Active, [Switch]$Not) {
+function IsIndex([Object]$Elem, [int]$Index=1, [String]$Text, [Switch]$Active, [Switch]$Not) {
     
     if ($Index -lt 1) { $Index = 1 }
-    if (!(IsSet -Elem $Elem))                 { return $False }
+    if (!(IsSet $Elem))                       { return $False }
     if ($Active -and !$Elem.Visible)          { return $False }
     if (!$Active -and !$Elem.Enabled)         { return $False }
+
+    if (IsSet $Text) {
+        $Text = $Text.replace(" (default)", "")
+        if ($Elem.indexOf($Text))             { return !$Not  }
+        if (!$Elem.indexOf($Text))            { return $Not   }
+    }
+
     if ($Elem.SelectedIndex -eq ($Index-1))   { return !$Not  }
     if ($Elem.SelectedIndex -ne ($Index-1))   { return $Not   }
+
     return $False
 
 }
@@ -495,13 +499,13 @@ function IsIndex([Object]$Elem, [int]$Index=1, [Switch]$Active, [Switch]$Not) {
 
 #==============================================================================================================================================================================================
 function IsSet([Object]$Elem, [int]$Min, [int]$Max, [int]$MinLength, [int]$MaxLength, [Switch]$HasInt) {
-    
-    if ($Elem -eq $null -or $Elem -eq "")                    { return $False }
-    if (!$HasInt -and $Elem -eq 0)                           { return $False }
-    if ($Min -ne $null -and $Min -ne "" -and $Elem -lt $Min) { return $False }
-    if ($Max -ne $null -and $Max -ne "" -and $Elem -gt $Max) { return $False }
-    if ($MinLength -ne $null -and $MinLength -ne "" -and $Elem.Length -lt $MinLength) { return $False }
-    if ($MaxLength -ne $null -and $MaxLength -ne "" -and $Elem.Length -gt $MaxLength) { return $False }
+
+    if ($Elem -eq $null -or $Elem -eq "")                                               { return $False }
+    if (!$HasInt -and $Elem -eq 0)                                                      { return $False }
+    if ($Min -ne $null -and $Min -ne "" -and [int]$Elem -lt $Min)                       { return $False }
+    if ($Max -ne $null -and $Max -ne "" -and [int]$Elem -gt $Max)                       { return $False }
+    if ($MinLength -ne $null -and $MinLength -ne "" -and $Elem.Length -lt $MinLength)   { return $False }
+    if ($MaxLength -ne $null -and $MaxLength -ne "" -and $Elem.Length -gt $MaxLength)   { return $False }
 
     return $True
 
@@ -512,17 +516,17 @@ function IsSet([Object]$Elem, [int]$Min, [int]$Max, [int]$MinLength, [int]$MaxLe
 #==============================================================================================================================================================================================
 function AddTextFileToTextbox([Object]$TextBox, [String]$File, [Switch]$Add, [int]$PreSpace, [int]$PostSpace) {
     
-    if (!(IsSet -Elem $File)) {
+    if (!(IsSet $File)) {
         $TextBox.Text = ""
         return
     }
 
-    if (Test-Path -LiteralPath $File -PathType Leaf) {
+    if (TestFile $File) {
         $str = ""
-        for ($i=0; $i -lt (Get-Content -Path $File).Count; $i++) {
-            if ((Get-Content -Path $File)[$i] -ne "") {
-                $str += (Get-Content -Path $File)[$i]
-                if ($i -lt  (Get-Content -Path $File).Count-1) { $str += "{0}" }
+        for ($i=0; $i -lt (Get-Content $File).Count; $i++) {
+            if ((Get-Content $File)[$i] -ne "") {
+                $str += (Get-Content $File)[$i]
+                if ($i -lt  (Get-Content $File).Count-1) { $str += "{0}" }
             }
             else { $str += "{0}" }
         }
@@ -548,21 +552,21 @@ function AddTextFileToTextbox([Object]$TextBox, [String]$File, [Switch]$Add, [in
 function GetFilePaths() {
     
     if (IsSet $Settings["Core"][$InputPaths.GameTextBox.Name]) {
-        if (Test-Path -LiteralPath $Settings["Core"][$InputPaths.GameTextBox.Name] -PathType Leaf) {
+        if (TestFile $Settings["Core"][$InputPaths.GameTextBox.Name]) {
             GamePath_Finish $InputPaths.GameTextBox -VarName $InputPaths.GameTextBox.Name -Path $Settings["Core"][$InputPaths.GameTextBox.Name]
         }
         else { $InputPaths.GameTextBox.Text = "Select or drag and drop your ROM or VC WAD file..." }
     }
 
     if (IsSet $Settings["Core"][$InputPaths.InjectTextBox.Name]) {
-        if (Test-Path -LiteralPath $Settings["Core"][$InputPaths.InjectTextBox.Name] -PathType Leaf) {
+        if (TestFile $Settings["Core"][$InputPaths.InjectTextBox.Name]) {
             InjectPath_Finish $InputPaths.InjectTextBox -VarName $InputPaths.InjectTextBox.Name -Path $Settings["Core"][$InputPaths.InjectTextBox.Name]
         }
         else { $InputPaths.InjectTextBox.Text = "Select or drag and drop your NES, SNES or N64 ROM..." }
     }
 
     if (IsSet $Settings["Core"][$InputPaths.PatchTextBox.Name]) {
-        if (Test-Path -LiteralPath $Settings["Core"][$InputPaths.PatchTextBox.Name] -PathType Leaf) {	
+        if (TestFile $Settings["Core"][$InputPaths.PatchTextBox.Name]) {	
             PatchPath_Finish $InputPaths.PatchTextBox -VarName $InputPaths.PatchTextBox.Name -Path $Settings["Core"][$InputPaths.PatchTextBox.Name]
         }
         else { $InputPaths.PatchTextBox.Text = "Select or drag and drop your BPS, IPS, Xdelta, VCDiff or PPF Patch File..." }
@@ -576,13 +580,13 @@ function GetFilePaths() {
 function RestoreCustomHeader() {
     
     if (IsChecked $CustomHeaderCheckbox) {
-        if (IsSet -Elem $Settings["Core"]["CustomTitle"]) {
+        if (IsSet $Settings["Core"]["CustomTitle"]) {
             $CustomTitleTextBox.Text  = $Settings["Core"]["CustomTitle"]
         }
-        if (IsSet -Elem $Settings["Core"]["CustomGameID"]) {
+        if (IsSet $Settings["Core"]["CustomGameID"]) {
             $CustomGameIDTextBox.Text = $Settings["Core"]["CustomGameID"]
         }
-        if (IsSet -Elem $Settings["Core"]["CustomRegionCode"]) {
+        if (IsSet $Settings["Core"]["CustomRegionCode"]) {
             $CustomRegionCodeComboBox.SelectedIndex = $Settings["Core"]["CustomRegionCode"]
         }
     }
@@ -652,14 +656,14 @@ function GetFileName([String]$Path, [String]$Description, [String[]]$FileNames) 
 
 
 #==============================================================================================================================================================================================
-function RemovePath([String]$LiteralPath) {
+function RemovePath([String]$Path) {
     
     # Make sure the path isn't null to avoid errors
-    if ($LiteralPath -ne '') {
+    if ($Path -ne '') {
         # Check to see if the path exists
-        if (Test-Path -LiteralPath $LiteralPath) {
+        if (TestFile -Path $Path -Container) {
             # Remove the path
-            Remove-Item -LiteralPath $LiteralPath -Recurse -Force -ErrorAction 'SilentlyContinue' | Out-Null
+            Remove-Item -LiteralPath $Path -Recurse -Force -ErrorAction 'SilentlyContinue' | Out-Null
         }
     }
 
@@ -668,44 +672,59 @@ function RemovePath([String]$LiteralPath) {
 
 
 #==============================================================================================================================================================================================
-function CreatePath([String]$LiteralPath) {
+function CreatePath([String]$Path) {
     
     # Make sure the path is not null to avoid errors
-    if ($LiteralPath -ne '') {
+    if ($Path -ne '') {
         # Check to see if the path does not exist
-        if (!(Test-Path -LiteralPath $LiteralPath)) {
+        if (!(TestFile -Path $Path -Container)) {
             # Create the path.
-            New-Item -Path $LiteralPath -ItemType 'Directory' | Out-Null
+            New-Item -Path $Path -ItemType 'Directory' | Out-Null
         }
     }
 
     # Return the path so it can be set to a variable when creating
-    return $LiteralPath
+    return $Path
 
 }
 
 
 
 #==============================================================================================================================================================================================
-function RemoveFile([String]$LiteralPath) {
+function RemoveFile([String]$Path) {
     
-    if (!(IsSet -Elem $LiteralPath)) { return }
-    if (Test-Path -LiteralPath $LiteralPath -PathType Leaf) { Remove-Item -LiteralPath $LiteralPath -Force }
+    if (TestFile $Path)   { Remove-Item -LiteralPath $Path -Force }
 
 }
 
 
 
 #==============================================================================================================================================================================================
-function CreateSubPath([String]$Path) { if (!(Test-Path -LiteralPath $Path -PathType Container)) { New-Item -Path $Path.substring(0, $Path.LastIndexOf('\')) -Name $Path.substring($Path.LastIndexOf('\') + 1) -ItemType Directory | Out-Null } }
+function TestFile([String]$Path, [Switch]$Container) {
+    
+    if ($Container)   { return Test-Path -LiteralPath $Path -PathType Container }
+    else              { return Test-Path -LiteralPath $Path -PathType Leaf }
+
+}
 
 
 
 #==============================================================================================================================================================================================
-function ShowPowerShellConsole([bool]$ShowConsole) {
+function CreateSubPath([String]$Path) {
+
+    if (!(TestFile -Path $Path -Container)) {
+        New-Item -Path $Path.substring(0, $Path.LastIndexOf('\')) -Name $Path.substring($Path.LastIndexOf('\') + 1) -ItemType Directory | Out-Null
+    }
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function ShowPowerShellConsole([bool]$Show) {
     
     # Sshows or hide the console window
-    switch ($ShowConsole) {
+    switch ($Show) {
         $True   { [Console.Window]::ShowWindow([Console.Window]::GetConsoleWindow(), 5) | Out-Null }
         $False  { [Console.Window]::ShowWindow([Console.Window]::GetConsoleWindow(), 0) | Out-Null }
     }
@@ -736,9 +755,6 @@ function TogglePowerShellOpenWithClicks([Boolean]$Enable) {
         '0'     { Add-Content -LiteralPath $RegFile -Value '@="Open"' }
         default { Add-Content -LiteralPath $RegFile -Value '@="0"' }
     }
-
-    #if (!$Enable) { Add-Content -LiteralPath $RegFile -Value '@="Open"' }
-    #else          { Add-Content -LiteralPath $RegFile -Value '@="0"' }
 
     # Execute the registry file.
     & regedit /s $RegFile
@@ -794,8 +810,8 @@ Export-ModuleMember -Function GetFileName
 Export-ModuleMember -Function RemoveFile
 Export-ModuleMember -Function RemovePath
 Export-ModuleMember -Function CreatePath
-Export-ModuleMember -Function Test-Path
 Export-ModuleMember -Function RemoveFile
+Export-ModuleMember -Function TestFile
 Export-ModuleMember -Function CreateSubPath
 
 Export-ModuleMember -Function ShowPowerShellConsole

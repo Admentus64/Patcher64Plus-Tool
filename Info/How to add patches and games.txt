@@ -84,6 +84,11 @@ title		Game title as shown in the Patcher64+ Tool GUI.
 
 mode		Game mode as shown in the Active Mode label, also used to read code with.
 
+save		If the game supports saving it's individual settings
+		0			Save settings to ini file is not enabled
+		1			Save settings to ini file is enabled
+
+
 support_vc	If the game supports the Virtual Console
 		0			Game is not available in Wii VC mode
 		1			Game is available in Wii VC mode
@@ -204,6 +209,7 @@ redux		If the patch supports Redux. Redux is only supported by OoT and MM
 		"vc_title"		Wii VC WAD channel title, no more than 40 characters
 		"vc_gameID"		Wii VC WAD GameID, requires 4 characters
 		"file"			Patch file path, supports Decompression and Extension
+		"file_widescreen"	Alternate patch file patch (for widescreen modified versions)
 		"output"		Output file name extension
 
 options		If the patch supports additional options.

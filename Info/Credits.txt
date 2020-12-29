@@ -24,8 +24,8 @@
 
 --- Additional Options ---
 - Master Quest:				ShadowOne333
-- Force Hires Link Model:		GhostlyDark
 - 16:9 Backgrounds & Textures:		GhostlyDark, ShadowOne333 & CYB3RTR0N
+- Force Hires Link Model:		GhostlyDark
 - MM Link Voice:			Korey Cryderman & GhostlyDark
 - Feminine Link Voice:			theluigidude2007
 - MM HUD Textures:			GhostlyDark
@@ -44,25 +44,41 @@
 - Show File Select Icons:		ShadowOne333
 - Colors:				GhostlyDark
 - Restore Text:				ShadowOne333
-- Female Pronouns:			Admentus, Mil
+- Female Pronouns:			Mil
 - Various offsets:			Chez Cousteau
 - Admentus (Scripting and Maintaince of all Options)
 
---- Custom Models ---
-- MM Young Link Model:			The3Dude, Neirn
-- MM Adult Link Model:			Skilarbabcock (www.youtube.com/user/skilarbabcock)
-- ALTTP Link Models:			ONI 3D-Arts
+--- Custom Link Models ---
+- A Link to the Past:			ONI 3D-Arts
+- Breath of the Wild (Adult):		Skilarbabcock (www.youtube.com/user/skilarbabcock)
+- Dark Link (Adult):			CrookedPoe
+- Fierce Deity 64 (Adult):		CrookedPoe
+- Fierce Deity Remastered (Adult):	CrookedPoe
+- Link's Awakening (Adult):		Skilarbabcock (www.youtube.com/user/skilarbabcock)
+- Majora's Mask (Child):		The3Dude & Neirn
+- Majora's Mask (Adult):		Skilarbabcock (www.youtube.com/user/skilarbabcock)
+- Ocarina of Time 3D:			Skilarbabcock (www.youtube.com/user/skilarbabcock)
+- Twilight Princess:			Skilarbabcock (www.youtube.com/user/skilarbabcock)
+
+--- Custom Male Models ---
 - Happy Mask Salesman:			Anubis-V1
 - Mega Man:				Megaman Legends
-- ALTTP Zelda Child Model:		Unesag
-- ALTTP Zelda Adult Model:		Lopieloo
-- Hatsune Miku Link Models:		JanexLane
-- Malon 3D/Thicc Models:		Kimi-Stardust
-- Saria Models:				Malon's Rose
+
+--- Custom Female Models ---
+- Aria the Demon:			AriaHiro64
+- Hatsune Miku - Link:			JanexLane
+- Hatsune Miku - Vocaloid:		JanexLane
+- Malon 3D:				Kimi-Stardust
+- Malon Thicc:				Kimi-Stardust
 - Princess Ruto:			Unesag
-- Aria the Demon Models:		AriaHiro64
+- Princess Zelda ALttP (Child):		Unesag
+- Princes Zelda ALttP (Adult):		Lopieloo
+- Roll:					Psi-Hate
+- Saria:				Malon's Rose
+
 --- Quality Assurance ---
-- Translations				GhostlyDark
+- Translations:				GhostlyDark
+- Custom Models:			GhostlyDark
 
 --- Translations ---
 - Spanish:				eduardo_a2j (v2.2)
@@ -203,6 +219,7 @@ Special Thanks:				Nokaubure, z64me, Ultra553, OoT Decomp
 
 --- Additional Options ---
 - 16:9 Backgrounds & Textures:		GhostlyDark & ShadowOne333
+- Enhanced 16:9 Widescreen:		gamemasterplc & GhostlyDark
 - Improved Link Model:			Skilarbabcock (www.youtube.com/user/skilarbabcock) & Nerrel
 - Kokiri Tunic Color:			GhostlyDark
 - Recolor Mask Forms:			ShadowOne333 & Garo-Mastah
@@ -232,7 +249,7 @@ Special Thanks:				Nokaubure, z64me, Ultra553, OoT Decomp
 - Admentus (Scripting and Assistance of all Options)
 
 --- Quality Assurance ---
-- Translations				GhostlyDark
+- Translations:				GhostlyDark
 
 --- Translations ---
 - Polish:				RPG (v1.1)

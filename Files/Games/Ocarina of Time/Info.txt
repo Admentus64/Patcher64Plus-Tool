@@ -25,6 +25,7 @@ Instructions:
 
 Documentation / Sources:
 - https://github.com/ShadowOne333/Zelda64-Redux-Documentation
+- https://docs.google.com/spreadsheets/d/1Ihccm8noxsfHZfN1E3Gkccov1F27WXXxl-rxOuManUk
 - www.youtube.com/user/skilarbabcock
 
 Information:

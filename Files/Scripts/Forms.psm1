@@ -4,16 +4,14 @@ function CreateForm([int]$X=0, [int]$Y=0, [int]$Width=0, [int]$Height=0, [String
     $Form.Size = New-Object System.Drawing.Size($Width, $Height)
     $Form.Location = New-Object System.Drawing.Size($X, $Y)
     if ( ($Tag -ne "") -or ($Tag -ne $null) ) { $Form.Tag = $Tag }
-    if (IsSet -Elem $AddTo) { $AddTo.Controls.Add($Form) }
+    if (IsSet $AddTo) { $AddTo.Controls.Add($Form) }
 
-    if ($IsGame -and (IsSet -Elem $Name) ) {
-        if (IsSet $Last.Extend) {
-            $Redux[$Last.Extend][$Name] = $Form
-            $Name = $Last.Extend + "." + $Name
-        }
-        else { $Redux[$Name] = $Form }
+    if (IsSet $Name) {
+        $Form.Name = $Name
+        if (IsSet $Last.Extend)   { Add-Member -InputObject $Form -NotePropertyMembers @{ Section = $Last.Extend } }
+        elseif (!$IsGame)         { Add-Member -InputObject $Form -NotePropertyMembers @{ Section = "Core" } }
+        if ($IsGame)              { $Redux[$Last.Extend][$Name] = $Form }
     }
-    if (IsSet -Elem $Name) { $Form.Name = $Name }
 
     return $Form
 
@@ -36,7 +34,7 @@ function CreateDialog([int]$Width=0, [int]$Height=0, [Object]$Icon) {
     $Dialog.AutoScaleMode = [System.Windows.Forms.AutoScaleMode]::Inherit
     $Dialog.FormBorderStyle = [System.Windows.Forms.FormBorderStyle]::FixedDialog
     $Dialog.StartPosition = "CenterScreen"
-    if (IsSet -Elem $Icon) { $Dialog.Icon = $Icon }
+    if (IsSet $Icon) { $Dialog.Icon = $Icon }
     return $Dialog
 
 }
@@ -49,23 +47,24 @@ function CreateColorDialog([String]$Color="000000", [String]$Name, [Switch]$IsGa
     $ColorDialog = New-Object System.Windows.Forms.ColorDialog
     $ColorDialog.Color = "#" + $Color
 
-    if ($IsGame -and (IsSet -Elem $Name) ) {
-        if (IsSet $Last.Extend) {
-            $Redux[$Last.Extend][$Name] = $ColorDialog
-            $Name = $Last.Extend + "." + $Name
-        }
-        else { $Redux[$Name] = $ColorDialog }
-    }
-    if (IsSet -Elem $Name) { $ColorDialog.Tag = $Name }
+    if ($IsGame -and (IsSet -Elem $Name) )   { $Redux[$Last.Extend][$Name] = $ColorDialog }
+    if (IsSet $Name)                   { $ColorDialog.Tag = $Name }
     
-    if (IsSet -Elem $ColorDialog.Tag) {
-        if ($IsGame)   { $mode = $GameType.mode }
-        else           { $mode = "Core" }
-        if (IsSet $Settings[$mode][$ColorDialog.Tag]) {
-            if ($Settings[$mode][$ColorDialog.Tag] -match "^[0-9A-F]+$")   { $ColorDialog.Color = "#" + $Settings[$mode][$ColorDialog.Tag] }
-            else                                                           { $ColorDialog.Color = $Settings[$mode][$ColorDialog.Tag] }
+    if (IsSet $ColorDialog.Tag) {
+        if ($IsGame) {
+            if (IsSet $GameSettings["Colors"][$ColorDialog.Tag]) {
+                if ($GameSettings["Colors"][$ColorDialog.Tag] -match "^[0-9A-F]+$")   { $ColorDialog.Color = "#" + $GameSettings["Colors"][$ColorDialog.Tag] }
+                else                                                                  { $ColorDialog.Color = $GameSettings["Colors"][$ColorDialog.Tag] }
+            }
+            else { $GameSettings["Colors"][$ColorDialog.Tag] = $ColorDialog.Color.Name }
         }
-        else { $Settings[$mode][$ColorDialog.Tag] = $ColorDialog.Color.Name }
+        else {
+            if (IsSet $Settings["Colors"][$ColorDialog.Tag]) {
+                if ($Settings["Colors"][$ColorDialog.Tag] -match "^[0-9A-F]+$")   { $ColorDialog.Color = "#" + $Settings["Colors"][$ColorDialog.Tag] }
+                else                                                              { $ColorDialog.Color = $Settings["Colors"][$ColorDialog.Tag] }
+            }
+            else { $Settings["Colors"][$ColorDialog.Tag] = $ColorDialog.Color.Name }
+        }
     }
 
     return $ColorDialog
@@ -79,7 +78,7 @@ function CreateGroupBox([int]$X, [int]$Y, [int]$Width, [int]$Height, [String]$Na
     
     $Last.Group = CreateForm -X $X -Y $Y -Width $Width -Height $Height -Name $Name -Tag $Tag -Object (New-Object System.Windows.Forms.GroupBox) -AddTo $AddTo
     $Last.Group.Font = $Fonts.Small
-    if (IsSet -Elem $Text) { $Last.Group.Text = (" " + $Text + " ") }
+    if (IsSet $Text) { $Last.Group.Text = (" " + $Text + " ") }
     $Last.GroupName = $Name
     return $Last.Group
 
@@ -121,12 +120,17 @@ function CreateTextBox([int]$X=0, [int]$Y=0, [int]$Width=0, [int]$Height=0, [int
         $TextBox.TabStop = $False
     }
 
-    if (IsSet -Elem $TextBox.Name) {
-        if ($IsGame)   { $TextBox.Tag = $GameType.mode }
-        else           { $TextBox.Tag = "Core" }
-        if (IsSet $Settings[$TextBox.Tag][$TextBox.Name])   { $TextBox.Text = $Settings[$TextBox.Tag][$TextBox.Name] }
-        else                                                { $Settings[$TextBox.Tag][$TextBox.Name] = $TextBox.Text }
-        $TextBox.Add_TextChanged({ $this.Tag; $Settings[$this.Tag][$this.Name] = $this.Text })
+    if (IsSet $TextBox.Name) {
+        if ($IsGame) {
+            if (IsSet $GameSettings[$TextBox.Section][$TextBox.Name])   { $TextBox.Text = $GameSettings[$TextBox.Section][$TextBox.Name] }
+            else                                                        { $GameSettings[$TextBox.Section][$TextBox.Name] = $TextBox.Text }
+            $TextBox.Add_TextChanged({ $GameSettings[$this.Section][$this.Name] = $this.Text })
+        }
+        else {
+            if (IsSet $Settings["Core"][$TextBox.Name])   { $TextBox.Text = $Settings["Core"][$TextBox.Name] }
+            else                                          { $Settings["Core"][$TextBox.Name] = $TextBox.Text }
+            $TextBox.Add_TextChanged({ $Settings["Core"][$this.Name] = $this.Text })
+        }
     }
     
     Add-Member -InputObject $TextBox -NotePropertyMembers @{ Default = $Text }
@@ -147,15 +151,17 @@ function CreateComboBox([int]$X=0, [int]$Y=0, [int]$Width=0, [int]$Height=0, [St
 
     if (IsSet -Elem $Items -HasInt) {
         $ComboBox.Items.AddRange($Items)
-        if (IsSet -Elem $ComboBox.Name) {
-            if ($IsGame)   { $ComboBox.Tag = $GameType.mode }
-            else           { $ComboBox.Tag = "Core" }
-            if (IsSet $Settings[$ComboBox.Tag][$ComboBox.Name]) {
-                if ([int]($Settings[$ComboBox.Tag][$ComboBox.Name]) -gt $ComboBox.Items.Count -or [int]($Settings[$ComboBox.Tag][$ComboBox.Name]) -lt 1) { $ComboBox.SelectedIndex = ($Default-1) }
-                else { $ComboBox.SelectedIndex = [int]($Settings[$ComboBox.Tag][$ComboBox.Name]-1) }
+        if (IsSet $ComboBox.Name) {
+            if ($IsGame) {
+                if (IsSet $GameSettings[$ComboBox.Section][$ComboBox.Name] -Max $ComboBox.Items.Count -HasInt)   { $ComboBox.SelectedIndex = ($GameSettings[$ComboBox.Section][$ComboBox.Name]-1) }
+                else                                                                                             { $GameSettings[$ComboBox.Section][$ComboBox.Name] = $Default }
+                $ComboBox.Add_SelectedIndexChanged({ $GameSettings[$this.Section][$this.Name] = ($this.SelectedIndex+1) })
             }
-            else { $Settings[$ComboBox.Tag][$ComboBox.Name] = $Default }
-            $ComboBox.Add_SelectedIndexChanged({ $Settings[$this.Tag][$this.Name] = ($this.SelectedIndex+1) })
+            else {
+                if (IsSet $Settings["Core"][$ComboBox.Name] -Max $ComboBox.Items.Count -HasInt)                  { $ComboBox.SelectedIndex = ($Settings[$ComboBox.Section][$ComboBox.Name]-1) }
+                else                                                                                             { $Settings["Core"][$ComboBox.Name] = $Default }
+                $ComboBox.Add_SelectedIndexChanged({ $Settings["Core"][$this.Name] = ($this.SelectedIndex+1) })
+            }
         }
         if ($ComboBox.SelectedIndex -lt 0) { $ComboBox.SelectedIndex = ($Default-1) }
     }
@@ -168,21 +174,43 @@ function CreateComboBox([int]$X=0, [int]$Y=0, [int]$Width=0, [int]$Height=0, [St
 
 
 #==============================================================================================================================================================================================
-function CreateCheckBox([int]$X=0, [int]$Y=0, [String]$Name, [String]$Tag, [Boolean]$Checked=$False, [Boolean]$Disable=$False, [Boolean]$IsRadio=$False, [String]$Info="", [Boolean]$IsGame=$False, [Boolean]$IsDebug=$False, [Object]$AddTo=$Last.Group) {
+function CreateCheckBox([int]$X=0, [int]$Y=0, [String]$Name, [int]$SaveAs=1, [String]$SaveTo, [int]$Max=1, [String]$Tag, [Boolean]$Checked=$False, [Boolean]$Disable=$False, [Boolean]$IsRadio=$False, [String]$Info="", [Boolean]$IsGame=$False, [Boolean]$IsDebug=$False, [Object]$AddTo=$Last.Group) {
     
-    if ($IsRadio)             { $CheckBox = CreateForm -X $X -Y $Y -Width 20 -Height 20 -Name $Name -Tag $Tag -IsGame $IsGame -Object (New-Object System.Windows.Forms.RadioButton) -AddTo $AddTo }
-    else                      { $CheckBox = CreateForm -X $X -Y $Y -Width 20 -Height 20 -Name $Name -Tag $Tag -IsGame $IsGame -Object (New-Object System.Windows.Forms.CheckBox)    -AddTo $AddTo }
+    if ($IsRadio) {
+        $CheckBox = CreateForm -X $X -Y $Y -Width 20 -Height 20 -Name $Name -Tag $Tag -IsGame $IsGame -Object (New-Object System.Windows.Forms.RadioButton) -AddTo $AddTo
+        Add-Member -InputObject $CheckBox -NotePropertyMembers @{ SaveAs = $SaveAs; SaveTo = $SaveTo }
+    }
+    else { $CheckBox = CreateForm -X $X -Y $Y -Width 20 -Height 20 -Name $Name -Tag $Tag -IsGame $IsGame -Object (New-Object System.Windows.Forms.CheckBox) -AddTo $AddTo }
     $ToolTip = CreateToolTip -Form $CheckBox -Info $Info
     $CheckBox.Enabled = !$Disable
 
-    if (IsSet -Elem $CheckBox.Name) {
-        if ($IsGame)        { $CheckBox.Tag = $GameType.mode }
-        elseif ($IsDebug)   { $CheckBox.Tag = "Debug" }
-        else                { $CheckBox.Tag = "Core" }
-        if (IsSet $Settings[$CheckBox.Tag][$CheckBox.Name])   { $CheckBox.Checked = $Settings[$CheckBox.Tag][$CheckBox.Name] -eq "True" }
-        else                                                  { $CheckBox.Checked = $Settings[$CheckBox.Tag][$CheckBox.Name] = $Checked }
-        if ($IsRadio)                                         { $CheckBox.Add_CheckedChanged({ $Settings[$this.Tag][$this.Name] = $this.Checked }) }
-        else                                                  { $CheckBox.Add_CheckStateChanged({ $Settings[$this.Tag][$this.Name] = $this.Checked }) }
+    if (IsSet $CheckBox.Name) {
+        if ($IsGame) {
+            if ($IsRadio) {
+                if (IsSet -Elem $GameSettings[$CheckBox.Section][$CheckBox.SaveTo] -Max $Max -HasInt)   { $CheckBox.Checked = $GameSettings[$CheckBox.Section][$CheckBox.SaveTo] -eq $Checkbox.SaveAs }
+                elseif ($Checked)                                                                       { $CheckBox.Checked = $True; $GameSettings[$CheckBox.Section][$CheckBox.SaveTo] = $CheckBox.SaveAs }
+                $CheckBox.Add_CheckedChanged({ $GameSettings[$this.Section][$this.SaveTo] = $this.SaveAs })
+            }
+            else {
+                if (IsSet $GameSettings[$CheckBox.Section][$CheckBox.Name])                             { $CheckBox.Checked = $GameSettings[$CheckBox.Section][$CheckBox.Name] -eq "True" }
+                else                                                                                    { $CheckBox.Checked = $GameSettings[$CheckBox.Section][$CheckBox.Name] = $Checked  }
+                $CheckBox.Add_CheckStateChanged({ $GameSettings[$this.Section][$this.Name] = $this.Checked })
+            }
+        }
+        else {
+            if ($IsDebug) { $CheckBox.Section = "Debug" }
+
+            if ($IsRadio) {
+                if (IsSet -Elem $Settings[$CheckBox.Section][$CheckBox.SaveTo] -Max $Max -HasInt)       { $CheckBox.Checked = $Settings[$CheckBox.Section][$CheckBox.SaveTo] -eq $Checkbox.SaveAs }
+                elseif ($Checked)                                                                       { $CheckBox.Checked = $True; $Settings[$CheckBox.Section][$CheckBox.SaveTo] = $CheckBox.SaveAs }
+                $CheckBox.Add_CheckedChanged({ $Settings[$this.Section][$this.SaveTo] = $this.SaveAs })
+            }
+            else {
+                if (IsSet $Settings[$CheckBox.Section][$CheckBox.Name])                      { $CheckBox.Checked = $Settings[$CheckBox.Section][$CheckBox.Name] -eq "True" }
+                else                                                                                    { $CheckBox.Checked = $Settings[$CheckBox.Section][$CheckBox.Name] = $Checked }
+                $CheckBox.Add_CheckStateChanged({ $Settings[$this.Section][$this.Name] = $this.Checked })
+            }
+        }
     }
     else { $CheckBox.Checked = $Checked }
 
@@ -197,8 +225,8 @@ function CreateCheckBox([int]$X=0, [int]$Y=0, [String]$Name, [String]$Tag, [Bool
 function CreateLabel([int]$X=0, [int]$Y=0, [String]$Name, [String]$Tag, [int]$Width=0, [int]$Height=0, [String]$Text="", [Object]$Font=$Fonts.Small, [String]$Info="", [Object]$AddTo=$Last.Group) {
     
     $Label = CreateForm -X $X -Y $Y -Width $Width -Height $Height -Name $Name -Tag $Tag -Object (New-Object System.Windows.Forms.Label) -AddTo $AddTo
-    if (IsSet -Elem $Text)      { $Label.Text = $Text }
-    if (!(IsSet -Elem $Width))  { $Label.AutoSize = $True }
+    if (IsSet $Text)      { $Label.Text = $Text }
+    if (!(IsSet $Width))  { $Label.AutoSize = $True }
     $Label.Font = $Font
     $ToolTip = CreateToolTip -Form $Label -Info $Info
     return $Label
@@ -211,11 +239,11 @@ function CreateLabel([int]$X=0, [int]$Y=0, [String]$Name, [String]$Tag, [int]$Wi
 function CreateButton([int]$X=0, [int]$Y=0, [String]$Name, [String]$Tag, [int]$Width=100, [int]$Height=20, [String]$ForeColor, [String]$BackColor, [String]$Text="", [Object]$Font=$Fonts.Small, [String]$Info="", [Object]$AddTo=$Last.Group) {
     
     $Button = CreateForm -X $X -Y $Y -Width $Width -Height $Height -Name $Name -Tag $Tag -Object (New-Object System.Windows.Forms.Button) -AddTo $AddTo
-    if (IsSet -Elem $Text)        { $Button.Text = $Text }
+    if (IsSet $Text)        { $Button.Text = $Text }
     $Button.Font = $Font
-    if (IsSet -Elem $ForeColor)   { $Button.ForeColor = $ForeColor }
-    if (IsSet -Elem $BackColor)   { $Button.BackColor = $BackColor }
-    if (IsSet -Elem $Info)        { $ToolTip = CreateToolTip -Form $Button -Info $Info }
+    if (IsSet $ForeColor)   { $Button.ForeColor = $ForeColor }
+    if (IsSet $BackColor)   { $Button.BackColor = $BackColor }
+    if (IsSet $Info)        { $ToolTip = CreateToolTip -Form $Button -Info $Info }
     return $Button
 
 }
@@ -225,11 +253,12 @@ function CreateButton([int]$X=0, [int]$Y=0, [String]$Name, [String]$Tag, [int]$W
 #==============================================================================================================================================================================================
 function CreateTabButtons([Array]$Tabs, [Object]$AddTo=$Redux.Panel) {
     
-    if ($GamePatch.redux.options -eq 1)     { $Tabs += "Redux" }
-    if (IsSet -Elem $GamePatch.languages)   { $Tabs += "Language" }
-    if ($Tabs.Length -ne 0)                 { $Tabs = ,"Main" + $Tabs }
+    if ($GamePatch.redux.options -eq 1 -and $Settings.Debug.LiteGUI -eq $False)   { $Tabs += "Redux" }
+    if ( (IsSet $GamePatch.languages) -and $Settings.Debug.LiteGUI -eq $False)    { $Tabs += "Language" }
+    if ($Tabs.Length -ne 0)                                                       { $Tabs = ,"Main" + $Tabs }
     $global:ReduxTabs = @()
     $Last.TabName = "Main"
+    if (!(IsSet $GameSettings.Core) -and $Tabs.Length -gt 0) { $GameSettings.Core  = @{} }
 
     # Create tabs
     for ($i=0; $i -lt $Tabs.Length; $i++) {
@@ -239,7 +268,7 @@ function CreateTabButtons([Array]$Tabs, [Object]$AddTo=$Redux.Panel) {
             $ReduxTabs.GetEnumerator()    | ForEach-Object { $_.BackColor = "Gray" }
             $Redux.Groups.GetEnumerator() | ForEach-Object { $_.Visible = $_.Name -eq $this.Name }
             $this.BackColor = "DarkGray"
-            $Settings[$GameType.mode]["LastTab"] = $this.Tag
+            $GameSettings["Core"]["LastTab"] = $this.Tag
         })
         $global:ReduxTabs += $Button
         $FunctionTitle = SetFunctionTitle -Function ($Tabs[$i] + $GameType.mode)
@@ -248,11 +277,21 @@ function CreateTabButtons([Array]$Tabs, [Object]$AddTo=$Redux.Panel) {
 
     # Restore last tab
     if ($Tabs.Length -gt 0) {
-        if (IsSet -Elem $Settings[$GameType.mode]["LastTab"]) {
-            $ReduxTabs[$Settings[$GameType.mode]["LastTab"]].BackColor = "DarkGray"
-            $Redux.Groups.GetEnumerator() | ForEach-Object { $_.Visible = $_.Name -eq $ReduxTabs[$Settings[$GameType.mode]["LastTab"]].Name }
+        if (IsSet $GameSettings["Core"]["LastTab"]) {
+
+            if ($ReduxTabs.Length -lt $GameSettings["Core"]["LastTab"]) {
+                $ReduxTabs[0].BackColor = "DarkGray"
+                $Redux.Groups.GetEnumerator() | ForEach-Object { $_.Visible = $_.Name -eq $ReduxTabs[0].Name }
+            }
+            else {
+                $ReduxTabs[$GameSettings["Core"]["LastTab"]].BackColor = "DarkGray"
+                $Redux.Groups.GetEnumerator() | ForEach-Object { $_.Visible = $_.Name -eq $ReduxTabs[$GameSettings["Core"]["LastTab"]].Name }
+            }
         }
-        else { $ReduxTabs[0].BackColor = "DarkGray" }
+        else {
+            $GameSettings["Core"]["LastTab"] = 0
+            $ReduxTabs[0].BackColor = "DarkGray"
+        }
     }
 
 }
@@ -262,8 +301,9 @@ function CreateTabButtons([Array]$Tabs, [Object]$AddTo=$Redux.Panel) {
 #==============================================================================================================================================================================================
 function CreateReduxPanel([Float]$Row=0, [Float]$Columns, [Float]$Rows=1,  [String]$Name, [String]$Tag, [Object]$AddTo=$Last.Group) {
     
-    if (IsSet -Elem $Columns -Min 0)   { $Width = 150 * $Columns }
-    else                               { $Width = $AddTo.Width - 20 }
+    $Last.Max = 0
+    if (IsSet $Columns -Min 0)   { $Width = 150 * $Columns }
+    else                         { $Width = $AddTo.Width - 20 }
     return CreatePanel -X $AddTo.Left -Y ($Row * 30 + 20) -Width $Width -Height (26.5 * $Rows) -Name $Name -Tag $Tag -AddTo $AddTo
 
 }
@@ -273,8 +313,9 @@ function CreateReduxPanel([Float]$Row=0, [Float]$Columns, [Float]$Rows=1,  [Stri
 function CreateReduxGroup([Float]$X=15, [Float]$Y=50, [Float]$Height=1, [String]$Name=$Last.TabName, [String]$Tag, [Switch]$Hide, [Boolean]$IsGame=$True, [String]$Text="", [Switch]$IsRedux, [Float]$Columns=0, [Object]$AddTo=$Redux.Panel) {
     
     $Width = ($AddTo.Width - 50)
+    $Last.Column = 1;
 
-    if (IsSet -Elem $Name) {
+    if (IsSet $Name) {
         if (!$Last.Half) {
             if ($Last.GroupName -eq $Name)     { $Y = $Last.Group.Bottom + 5}
             elseif ($ReduxTabs.length -gt 0)   { $Y = 80 }
@@ -294,18 +335,21 @@ function CreateReduxGroup([Float]$X=15, [Float]$Y=50, [Float]$Height=1, [String]
     }
 
     $Group = CreateGroupBox -X $X -Y $Y -Width $Width -Height ($Height * 30 + 20) -Name $Name -Tag $Tag -Text $Text -AddTo $AddTo
-    if ( (IsSet -Elem $Name) -and ($Name -ne "Main") )           { $Group.Visible = $False }
-    if (IsSet -Elem $Tag)                                        { $Group.Tag = $Tag }
-    if ( (IsSet -Elem $Tag) -and !(IsSet -Elem $Redux[$Tag]) )   { $Redux[$Tag] = @{} }
-    if (IsSet -Elem $Tag)                                        { $Last.Extend = $Tag }
-    else                                                         { $Last.Extend = $null }
+    if ( (IsSet $Name) -and ($Name -ne "Main") )     { $Group.Visible = $False }
+    if (IsSet $Tag)                                  { $Group.Tag = $Tag }
+    if ( (IsSet $Tag) -and !(IsSet $Redux[$Tag]) )   { $Redux[$Tag] = @{} }
+    if (IsSet $Tag)                                  { $Last.Extend = $Tag }
+    else                                             { $Last.Extend = $null }
     Add-Member -InputObject $Group -NotePropertyMembers @{
         IsRedux = $IsRedux -or $Name -eq "Redux"
         IsLanguage = $False
         Rows = $Height
     }
 
-    if ($IsGame) { $Redux.Groups += $Group }
+    if ($IsGame) {
+        $Redux.Groups += $Group
+        if (!(IsSet $GameSettings[$Tag])) { $GameSettings[$Tag] = @{} }
+    }
     return $Group
 
 }
@@ -346,15 +390,21 @@ function CreateReduxTextBox([Float]$Column=1, [Float]$Row=1, [int]$Length=2, [St
 
 
 #==============================================================================================================================================================================================
-function CreateReduxRadioButton([Float]$Column=1, [Float]$Row=1, [Switch]$Checked, [Switch]$Disable, [String]$Text="", [String]$Info="", [String]$Name, [String]$Tag, [Object]$AddTo=$Last.Panel) {
+function CreateReduxRadioButton([Float]$Column=$Last.Column, [Float]$Row=1, [Switch]$Checked, [Switch]$Disable, [String]$Text="", [String]$Info="", [String]$Name, [String]$SaveTo, [int]$Max, [String]$Tag, [Object]$AddTo=$Last.Panel) {
     
     if ($Disable) { $Disable = !$PatchReduxCheckBox.Checked }
-    $Radio = CreateCheckBox -X (($Column-1) * 165) -Y (($Row-1) * 30) -Checked $Checked -Disable $Disable  -IsRadio $True -Info $Info -IsGame $True -Name $Name -Tag $Tag -AddTo $AddTo
-    $Label = CreateLabel -X $Radio.Right -Y ($Radio.Top + 3) -Height 15 -Text $Text -Info $Info -AddTo $AddTo
+    $Last.Max++
+    $Radio = CreateCheckBox -X (($Column-1) * 165) -Y (($Row-1) * 30) -Checked $Checked -Disable $Disable -IsRadio $True -Info $Info -IsGame $True -Name $Name -SaveAs $Last.Max -SaveTo $SaveTo -Max $Max -Tag $Tag -AddTo $AddTo
+    
+    if (IsSet $Text) {
+        $Label = CreateLabel -X $Radio.Right -Y ($Radio.Top + 3) -Height 15 -Text $Text -Info $Info -AddTo $AddTo
+        Add-Member -InputObject $Label -NotePropertyMembers @{ CheckBox = $Radio }
+        $Label.Add_Click({
+            if ($this.CheckBox.Enabled) { $this.CheckBox.Checked = $True }
+        })
+    }
 
-    Add-Member -InputObject $Label -NotePropertyMembers @{ CheckBox = $Radio }
-    $Label.Add_Click({ $this.CheckBox.Checked = $True })
-
+    $Last.Column++;
     return $Radio
 
 }
@@ -362,15 +412,20 @@ function CreateReduxRadioButton([Float]$Column=1, [Float]$Row=1, [Switch]$Checke
 
 
 #==============================================================================================================================================================================================
-function CreateReduxCheckBox([Float]$Column=1, [Float]$Row=1, [Switch]$Checked, [Switch]$Disable, [String]$Text="", [String]$Info="", [String]$Name, [String]$Tag, [Object]$AddTo=$Last.Group) {
+function CreateReduxCheckBox([Float]$Column=$Last.Column, [Float]$Row=1, [Switch]$Checked, [Switch]$Disable, [String]$Text="", [String]$Info="", [String]$Name, [String]$Tag, [Object]$AddTo=$Last.Group) {
     
     if ($Disable) { $Disable = !$PatchReduxCheckBox.Checked }
     $CheckBox = CreateCheckBox -X (($Column-1) * 165 + 15) -Y ($Row * 30 - 10) -Checked $Checked -Disable $Disable -IsRadio $False -Info $Info -IsGame $True -Name $Name  -Tag $Tag -AddTo $AddTo
-    $Label = CreateLabel -X $CheckBox.Right -Y ($CheckBox.Top + 3) -Height 15 -Text $Text -Info $Info -AddTo $AddTo
+    
+    if (IsSet $Text) {
+        $Label = CreateLabel -X $CheckBox.Right -Y ($CheckBox.Top + 3) -Height 15 -Text $Text -Info $Info -AddTo $AddTo
+        Add-Member -InputObject $Label -NotePropertyMembers @{ CheckBox = $CheckBox }
+        $Label.Add_Click({
+            if ($this.CheckBox.Enabled) { $this.CheckBox.Checked = !$this.CheckBox.Checked }
+        })
+    }
 
-    Add-Member -InputObject $Label -NotePropertyMembers @{ CheckBox = $CheckBox }
-    $Label.Add_Click({ $this.CheckBox.Checked = !$this.CheckBox.Checked })
-
+    $Last.Column++;
     return $CheckBox
 
 }
@@ -380,9 +435,9 @@ function CreateReduxCheckBox([Float]$Column=1, [Float]$Row=1, [Switch]$Checked, 
 #==============================================================================================================================================================================================
 function CreateReduxComboBox([Float]$Column=1, [Float]$Row=1, [int]$Length=160, [int]$Shift=0, [Array]$Items, [int]$Default=1, [String]$Text, [String]$Info, [String]$Name, [String]$Tag, [Object]$AddTo=$Last.Group) {
     
-    if (IsSet -Elem $Text)   { $Width = (80 + $Shift) }
-    else                     { $Width = 0 }
-    if ($Items[($Default-1)] -ne "Default") {
+    if (IsSet $Text)   { $Width = (80 + $Shift) }
+    else               { $Width = 0 }
+    if ($Items[($Default-1)] -ne "Default" -and $Default -ne 0) {
         $Items = $Items.Clone()
         $Items[($Default-1)] += " (default)"
     }
@@ -398,7 +453,7 @@ function CreateReduxComboBox([Float]$Column=1, [Float]$Row=1, [int]$Length=160, 
 function CreateReduxColoredLabel([Object]$Link, [System.Drawing.Color]$Color, [String]$Name, [String]$Tag, [Object]$AddTo=$Last.Group) {
     
     $Label = CreateLabel -X ($Link.Right + 15) -Y $Link.Top -Width 40 -Height $Link.Height -Name $Name -Tag $Tag -AddTo $AddTo
-    if (IsSet -Elem $Color) { $Label.BackColor = $Color }
+    if (IsSet $Color) { $Label.BackColor = $Color }
     return $Label
 
 }
@@ -415,7 +470,6 @@ Export-ModuleMember -Function CreateLabel
 Export-ModuleMember -Function CreateGroupBox
 Export-ModuleMember -Function CreatePanel
 Export-ModuleMember -Function CreateButton
-Export-ModuleMember -Function CreateRadioButton
 Export-ModuleMember -Function CreateCheckBox
 Export-ModuleMember -Function CreateComboBox
 

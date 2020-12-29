@@ -61,13 +61,15 @@ function GetItemID([String]$Item) {
 
 
 #==============================================================================================================================================================================================
-function ShowModelPreview([Object]$Dropdown, [Object]$Box) {
-
-    if (Test-Path -LiteralPath ($GameFiles.previews + "\" + $Dropdown.selectedIndex + ".png") -PathType Leaf) {
-        $Box.Image  = [System.Drawing.Image]::Fromfile( ( Get-Item ($GameFiles.previews + "\" + $Dropdown.selectedIndex + ".png") ) )
-        if (Test-Path -LiteralPath ($GameFiles.previews + "\Credits.txt") -PathType Leaf) {
-            $item = (Get-Content -Path ($GameFiles.previews + "\Credits.txt") -TotalCount ($Dropdown.selectedIndex+1))[-1]
-            $PreviewToolTip.SetToolTip($Redux.Graphics.ModelsPreview, ([String]::Format($item, [Environment]::NewLine)))
+function ShowModelPreview([Object]$Dropdown, [Object]$Box, [String]$Path) {
+    
+    $Text = $Dropdown.Text.replace(" (default)", "")
+    if (TestFile ($Path + $Text + ".png")) {
+        $Box.Image = [System.Drawing.Image]::Fromfile( (Get-Item ($Path + $Text + ".png")) )
+        if (TestFile ($Path + "Credits.txt")) {
+            if ($Dropdown.selectedIndex -eq 0)   { $item = (Get-Content -Path ($Path + "Credits.txt") -TotalCount ($Dropdown.selectedIndex+1)) }
+            else                                 { $item = (Get-Content -Path ($Path + "Credits.txt") -TotalCount ($Dropdown.selectedIndex+1))[-1] }
+            $PreviewToolTip.SetToolTip($Box, ([String]::Format($item, [Environment]::NewLine)))
         }
         else { $PreviewToolTip.RemoveAll() }
     }
@@ -76,12 +78,94 @@ function ShowModelPreview([Object]$Dropdown, [Object]$Box) {
         $PreviewToolTip.RemoveAll()
     }
 
+}
 
-   #$global:PatchToolTip = CreateToolTip
-    
 
+
+#==============================================================================================================================================================================================
+function ChangeModelsDropdown() {
     
+    $Redux.Graphics.LinkModels.Visible     = ($Redux.Graphics.OriginalModels.Checked  -and !$Redux.Graphics.MMChildLink.Checked) -or ($Redux.Graphics.ListLinkModels.Checked -and !$Redux.Graphics.MMChildLink.Checked)
+    $Redux.Graphics.LinkModels.Enabled     = $Redux.Graphics.ListLinkModels.Checked -and !$Redux.Graphics.MMChildLink.Checked
+    $Redux.Graphics.LinkModelsPlus.Visible = ($Redux.Graphics.OriginalModels.Checked  -and $Redux.Graphics.MMChildLink.Checked)  -or ($Redux.Graphics.ListLinkModels.Checked -and $Redux.Graphics.MMChildLink.Checked)
+    $Redux.Graphics.LinkModelsPlus.Enabled = $Redux.Graphics.ListLinkModels.Checked -and $Redux.Graphics.MMChildLink.Checked
+    $Redux.Graphics.MaleModels.Visible     = $Redux.Graphics.MaleModels.Enabled = $Redux.Graphics.ListMaleModels.Checked
+    $Redux.Graphics.FemaleModels.Visible   = $Redux.Graphics.FemaleModels.Enabled = $Redux.Graphics.ListFemaleModels.Checked
+
+    $Redux.Graphics.MMChildLink.Enabled    = $Redux.Graphics.ListLinkModels.Checked
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function ChangeModelsSelection() {
     
+    # Events
+    $Redux.Graphics.OriginalModels.Add_CheckedChanged({
+        ChangeModelsDropdown
+        if (TestFile ($GameFiles.previews + "\Original.png")) {
+            $Redux.Graphics.ModelsPreview.Image = [System.Drawing.Image]::Fromfile( (Get-Item ($GameFiles.previews + "\Original.png")) )
+            if (TestFile ($GameFiles.previews + "\Credits.txt")) {
+                $item = (Get-Content -Path ($GameFiles.previews + "\Credits.txt"))
+                $PreviewToolTip.SetToolTip($Redux.Graphics.ModelsPreview, ([String]::Format($item, [Environment]::NewLine)))
+            }
+        }
+    })
+
+    $Redux.Graphics.ListLinkModels.Add_CheckedChanged({
+        ChangeModelsDropdown
+        if     (IsChecked -Elem $Redux.Graphics.MMChildLink)        { ShowModelPreview -Dropdown $Redux.Graphics.LinkModelsPlus -Box $Redux.Graphics.ModelsPreview -Path ($GameFiles.previews + "\Link+\") }
+        elseif (IsChecked -Elem $Redux.Graphics.MMChildLink -Not)   { ShowModelPreview -Dropdown $Redux.Graphics.LinkModels     -Box $Redux.Graphics.ModelsPreview -Path ($GameFiles.previews + "\Link\") }
+    })
+
+    $Redux.Graphics.ListMaleModels.Add_CheckedChanged({
+        ChangeModelsDropdown
+        ShowModelPreview -Dropdown $Redux.Graphics.MaleModels -Box $Redux.Graphics.ModelsPreview -Path ($GameFiles.previews + "\Male\")
+    })
+
+    $Redux.Graphics.ListFemaleModels.Add_CheckedChanged({
+        ChangeModelsDropdown
+        ShowModelPreview -Dropdown $Redux.Graphics.FemaleModels -Box $Redux.Graphics.ModelsPreview -Path ($GameFiles.previews + "\Female\")
+    })
+
+    $Redux.Graphics.LinkModels.Add_SelectedIndexChanged({
+        if (IsChecked -Elem $Redux.Graphics.ListLinkModels)     { ShowModelPreview -Dropdown $Redux.Graphics.LinkModels -Box $Redux.Graphics.ModelsPreview -Path ($GameFiles.previews + "\Link\") }
+    })
+    $Redux.Graphics.LinkModelsPlus.Add_SelectedIndexChanged({
+        if (IsChecked -Elem $Redux.Graphics.ListLinkModels)     { ShowModelPreview -Dropdown $Redux.Graphics.LinkModelsPlus -Box $Redux.Graphics.ModelsPreview -Path ($GameFiles.previews + "\Link+\") }
+    })
+    $Redux.Graphics.MaleModels.Add_SelectedIndexChanged({
+        if (IsChecked -Elem $Redux.Graphics.ListMaleModels)     { ShowModelPreview -Dropdown $Redux.Graphics.MaleModels -Box $Redux.Graphics.ModelsPreview -Path ($GameFiles.previews + "\Male\") }
+    })
+    $Redux.Graphics.FemaleModels.Add_SelectedIndexChanged({
+        if (IsChecked -Elem $Redux.Graphics.ListFemaleModels)   { ShowModelPreview -Dropdown $Redux.Graphics.FemaleModels -Box $Redux.Graphics.ModelsPreview -Path ($GameFiles.previews + "\Female\") }
+    })
+
+    $Redux.Graphics.MMChildLink.Add_CheckStateChanged({
+        ChangeModelsDropdown
+        if     ( (IsChecked -Elem $Redux.Graphics.ListLinkModels) -and (IsChecked -Elem $Redux.Graphics.MMChildLink) )        { ShowModelPreview -Dropdown $Redux.Graphics.LinkModelsPlus -Box $Redux.Graphics.ModelsPreview -Path ($GameFiles.previews + "\Link+\") }
+        elseif ( (IsChecked -Elem $Redux.Graphics.ListLinkModels) -and (IsChecked -Elem $Redux.Graphics.MMChildLink -Not) )   { ShowModelPreview -Dropdown $Redux.Graphics.LinkModels -Box $Redux.Graphics.ModelsPreview -Path ($GameFiles.previews + "\Link\") }
+    })
+
+
+
+    # Initial Run
+    if ($Redux.Graphics.OriginalModels.Checked) {
+        if (TestFile ($GameFiles.previews + "\Original.png")) {
+            $Redux.Graphics.ModelsPreview.Image = [System.Drawing.Image]::Fromfile( ( Get-Item ($GameFiles.previews + "\Original.png") ) )
+            if (TestFile ($GameFiles.previews + "\Credits.txt")) {
+                $item = (Get-Content -Path ($GameFiles.previews + "\Credits.txt"))
+                $PreviewToolTip.SetToolTip($Redux.Graphics.ModelsPreview, ([String]::Format($item, [Environment]::NewLine)))
+            }
+        }
+    }
+    elseif ( (IsChecked -Elem $Redux.Graphics.ListLinkModels) -and (IsChecked -Elem $Redux.Graphics.MMChildLink) )        { ShowModelPreview -Dropdown $Redux.Graphics.LinkModelsPlus -Box $Redux.Graphics.ModelsPreview -Path ($GameFiles.previews + "\Link+\") }
+    elseif ( (IsChecked -Elem $Redux.Graphics.ListLinkModels) -and (IsChecked -Elem $Redux.Graphics.MMChildLink -Not) )   { ShowModelPreview -Dropdown $Redux.Graphics.LinkModels -Box $Redux.Graphics.ModelsPreview -Path ($GameFiles.previews + "\Link\") }
+    elseif (IsChecked -Elem $Redux.Graphics.ListMaleModels)     { ShowModelPreview -Dropdown $Redux.Graphics.MaleModels   -Box $Redux.Graphics.ModelsPreview -Path ($GameFiles.previews + "\Male\") }
+    elseif (IsChecked -Elem $Redux.Graphics.ListFemaleModels)   { ShowModelPreview -Dropdown $Redux.Graphics.FemaleModels -Box $Redux.Graphics.ModelsPreview -Path ($GameFiles.previews + "\Female\") }
+
+    ChangeModelsDropdown
 
 }
 
@@ -110,11 +194,11 @@ function GetInstrumentID([String]$SFX) {
 
 
 #==============================================================================================================================================================================================
-function CreateButtonColorOptions() {
+function CreateButtonColorOptions($Default=1) {
     
     # BUTTON COLORS #
     CreateReduxGroup    -Tag  "Colors"  -Height 2 -Text "Button Colors"
-    CreateReduxComboBox -Name "Buttons" -Text "Button Colors:" -Items @("N64 OoT", "N64 MM", "GC OoT", "GC MM", "Randomized", "Custom") -Info ("Select a preset for the button colors`n" + '"Randomized" fully randomizes the colors each time the patcher is opened')
+    CreateReduxComboBox -Name "Buttons" -Text "Button Colors:" -Items @("N64 OoT", "N64 MM", "GC OoT", "GC MM", "Randomized", "Custom") -Default $Default -Info ("Select a preset for the button colors`n" + '"Randomized" fully randomizes the colors each time the patcher is opened')
 
     # Button Colors - Buttons
     $Buttons = @()
@@ -133,7 +217,7 @@ function CreateButtonColorOptions() {
     # Button Colors - Labels
     $Redux.Colors.ButtonLabels = @()
     for ($i=0; $i -lt $Buttons.length; $i++) {
-        $Buttons[$i].Add_Click({ $Redux.Colors.SetButtons[[int]$this.Tag].ShowDialog(); $Redux.Colors.Buttons.Text = "Custom"; $Redux.Colors.ButtonLabels[[int]$this.Tag].BackColor = $Redux.Colors.SetButtons[[int]$this.Tag].Color; $Settings[$GameType.mode][$Redux.Colors.SetButtons[[int]$this.Tag].Tag] = $Redux.Colors.SetButtons[[int]$this.Tag].Color.Name })
+        $Buttons[$i].Add_Click({ $Redux.Colors.SetButtons[[int]$this.Tag].ShowDialog(); $Redux.Colors.Buttons.Text = "Custom"; $Redux.Colors.ButtonLabels[[int]$this.Tag].BackColor = $Redux.Colors.SetButtons[[int]$this.Tag].Color; $GameSettings["Colors"][$Redux.Colors.SetButtons[[int]$this.Tag].Tag] = $Redux.Colors.SetButtons[[int]$this.Tag].Color.Name })
         $Redux.Colors.ButtonLabels += CreateReduxColoredLabel -Link $Buttons[$i]  -Color $Redux.Colors.SetButtons[$i].Color
     }
     
@@ -146,7 +230,7 @@ function CreateButtonColorOptions() {
 
 #==============================================================================================================================================================================================
 function CreateSpinAttackColorOptions() {
-
+    
     # SPIN ATTACK COLORS #
     CreateReduxGroup    -Tag  "Colors" -Text "Magic Spin Attack Colors" -Height 2
     $Items = @("Blue", "Red", "Green", "White", "Cyan", "Magenta", "Orange", "Gold", "Purple", "Pink", "Black", "Randomized", "Custom")
@@ -171,7 +255,7 @@ function CreateSpinAttackColorOptions() {
     $Redux.Colors.SpinAttackLabels = @()
     for ($i=0; $i -lt $Buttons.length; $i++) {
         $Buttons[$i].Add_Click({
-            $Redux.Colors.SetSpinAttack[[int]$this.Tag].ShowDialog(); $Redux.Colors.SpinAttackLabels[[int]$this.Tag].BackColor = $Redux.Colors.SetSpinAttack[[int]$this.Tag].Color; $Settings[$GameType.mode][$Redux.Colors.SetSpinAttack[[int]$this.Tag].Tag] = $Redux.Colors.SetSpinAttack[[int]$this.Tag].Color.Name
+            $Redux.Colors.SetSpinAttack[[int]$this.Tag].ShowDialog(); $Redux.Colors.SpinAttackLabels[[int]$this.Tag].BackColor = $Redux.Colors.SetSpinAttack[[int]$this.Tag].Color; $GameSettings["Colors"][$Redux.Colors.SetSpinAttack[[int]$this.Tag].Tag] = $Redux.Colors.SetSpinAttack[[int]$this.Tag].Color.Name
             if ($this.Tag -lt 2)   { $Redux.Colors.BlueSpinAttack.Text = "Custom" }
             else                   { $Redux.Colors.RedSpinAttack.Text  = "Custom" }
         })
@@ -234,7 +318,7 @@ function CreateFairyColorOptions([String]$Name, [String]$Second, [String]$Preset
     # Fairy Colors - Labels
     $Redux.Colors.FairyLabels = @()
     for ($i=0; $i -lt $Buttons.length; $i++) {
-        $Buttons[$i].Add_Click({ $Redux.Colors.SetFairy[[int]$this.Tag].ShowDialog(); $Redux.Colors.Fairy.Text = "Custom"; $Redux.Colors.FairyLabels[[int]$this.Tag].BackColor = $Redux.Colors.SetFairy[[int]$this.Tag].Color; $Settings[$GameType.mode][$Redux.Colors.SetFairy[[int]$this.Tag].Tag] = $Redux.Colors.SetFairy[[int]$this.Tag].Color.Name })
+        $Buttons[$i].Add_Click({ $Redux.Colors.SetFairy[[int]$this.Tag].ShowDialog(); $Redux.Colors.Fairy.Text = "Custom"; $Redux.Colors.FairyLabels[[int]$this.Tag].BackColor = $Redux.Colors.SetFairy[[int]$this.Tag].Color; $GameSettings["Colors"][$Redux.Colors.SetFairy[[int]$this.Tag].Tag] = $Redux.Colors.SetFairy[[int]$this.Tag].Color.Name })
         $Redux.Colors.FairyLabels += CreateReduxColoredLabel -Link $Buttons[$i] -Color $Redux.Colors.SetFairy[$i].Color
     }
 
@@ -262,7 +346,7 @@ function SetButtonColorsPreset([Object]$ComboBox) {
             $Colors += $Green + $Red + $Blue
             SetColor -Color ($Green + $Red + $Blue) -Dialog $Redux.Colors.SetButtons[$i] -Label $Redux.Colors.ButtonLabels[$i]
         }
-        if ($Settings.Debug.Console -eq $True) { Write-Host ("Randomize Button Colors: " + $Colors) }
+        if ($GameSettings.Debug.Console -eq $True) { Write-Host ("Randomize Button Colors: " + $Colors) }
     }
 
 }
@@ -312,14 +396,14 @@ function SetFairyColorsPreset([Object]$ComboBox, [Array]$Dialogs, [Array]$Labels
 #==============================================================================================================================================================================================
 function SetFairyColors([String]$Inner, [String]$Outer, [Array]$Dialogs, [Array]$Labels) {
     
-    $Settings[$GameType.mode][$Dialogs[0].Tag] = $Inner;   $Labels[0].BackColor = $Dialogs[0].Color = "#" + $Inner
-    $Settings[$GameType.mode][$Dialogs[1].Tag] = $Outer;   $Labels[1].BackColor = $Dialogs[1].Color = "#" + $Outer
-    $Settings[$GameType.mode][$Dialogs[2].Tag] = "00FF00"; $Labels[2].BackColor = $Dialogs[2].Color = "#00FF00"
-    $Settings[$GameType.mode][$Dialogs[3].Tag] = "00FF00"; $Labels[3].BackColor = $Dialogs[3].Color = "#00FF00"
-    $Settings[$GameType.mode][$Dialogs[4].Tag] = "9696FF"; $Labels[4].BackColor = $Dialogs[4].Color = "#9696FF"
-    $Settings[$GameType.mode][$Dialogs[5].Tag] = "9696FF"; $Labels[5].BackColor = $Dialogs[5].Color = "#9696FF"
-    $Settings[$GameType.mode][$Dialogs[6].Tag] = "FFFF00"; $Labels[6].BackColor = $Dialogs[6].Color = "#FFFF00"
-    $Settings[$GameType.mode][$Dialogs[7].Tag] = "C89B00"; $Labels[7].BackColor = $Dialogs[7].Color = "#C89B00"
+    $GameSettings["Colors"][$Dialogs[0].Tag] = $Inner;   $Labels[0].BackColor = $Dialogs[0].Color = "#" + $Inner
+    $GameSettings["Colors"][$Dialogs[1].Tag] = $Outer;   $Labels[1].BackColor = $Dialogs[1].Color = "#" + $Outer
+    $GameSettings["Colors"][$Dialogs[2].Tag] = "00FF00"; $Labels[2].BackColor = $Dialogs[2].Color = "#00FF00"
+    $GameSettings["Colors"][$Dialogs[3].Tag] = "00FF00"; $Labels[3].BackColor = $Dialogs[3].Color = "#00FF00"
+    $GameSettings["Colors"][$Dialogs[4].Tag] = "9696FF"; $Labels[4].BackColor = $Dialogs[4].Color = "#9696FF"
+    $GameSettings["Colors"][$Dialogs[5].Tag] = "9696FF"; $Labels[5].BackColor = $Dialogs[5].Color = "#9696FF"
+    $GameSettings["Colors"][$Dialogs[6].Tag] = "FFFF00"; $Labels[6].BackColor = $Dialogs[6].Color = "#FFFF00"
+    $GameSettings["Colors"][$Dialogs[7].Tag] = "C89B00"; $Labels[7].BackColor = $Dialogs[7].Color = "#C89B00"
 
 }
 
@@ -469,6 +553,32 @@ function SetMagicColorsPreset([Object]$ComboBox, [Object]$Dialog, [Object]$Label
 
 
 #==============================================================================================================================================================================================
+function SetMinimapColorsPreset([Object]$ComboBox, [Object]$Dialog, [Object]$Label) {
+    
+    $Text = $ComboBox.Text.replace(' (default)', "")
+    if     ($Text -eq "Cyan")       { SetColor -Color "00FFFF" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "Green")      { SetColor -Color "00FF00" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "Red")        { SetColor -Color "FF0000" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "Blue")       { SetColor -Color "0000FF" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "Gray")       { SetColor -Color "808080" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "Purple")     { SetColor -Color "B000FF" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "Pink")       { SetColor -Color "FF00C8" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "Yellow")     { SetColor -Color "FFFF00" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "White")      { SetColor -Color "FFFFFF" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "Black")      { SetColor -Color "000000" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "Randomized") {
+        $Green = Get8Bit -Value (Get-Random -Maximum 255)
+        $Red   = Get8Bit -Value (Get-Random -Maximum 255)
+        $Blue  = Get8Bit -Value (Get-Random -Maximum 255)
+        WriteToConsole ("Randomize Magic Color: " + ($Green + $Red + $Blue))
+        SetColor -Color ($Green + $Red + $Blue) -Dialog $Dialog -Label $Label
+    }
+
+}
+
+
+
+#==============================================================================================================================================================================================
 function SetSpinAttackColorsPreset([Object]$ComboBox, [Object]$Dialog, [Object]$Label) {
     
     $Text = $ComboBox.Text.replace(' (default)', "")
@@ -498,7 +608,7 @@ function SetSpinAttackColorsPreset([Object]$ComboBox, [Object]$Dialog, [Object]$
 #==============================================================================================================================================================================================
 function SetColor([String]$Color, [Object]$Dialog, [Object]$Label) {
     
-    $Settings[$GameType.mode][$Dialog.Tag] = $Color; $Label.BackColor = $Dialog.Color = "#" + $Color
+    $GameSettings["Colors"][$Dialog.Tag] = $Color; $Label.BackColor = $Dialog.Color = "#" + $Color
 
 }
 
@@ -508,7 +618,7 @@ function SetColor([String]$Color, [Object]$Dialog, [Object]$Label) {
 function SetColors([Array]$Colors, [Array]$Dialogs, [Array]$Labels) {
     
     for ($i=0; $i -lt $Colors.length; $i++) {
-        $Settings[$GameType.mode][$Dialogs[$i].Tag] = $Colors[$i]
+        $GameSettings["Colors"][$Dialogs[$i].Tag] = $Colors[$i]
         $Labels[$i].BackColor = $Dialogs[$i].Color = "#" + $Colors[$i]
     }
 
@@ -523,6 +633,7 @@ Export-ModuleMember -Function GetItemID
 Export-ModuleMember -Function GetInstrumentsID
 
 Export-ModuleMember -Function ShowModelPreview
+Export-ModuleMember -Function ChangeModelsSelection
 
 Export-ModuleMember -Function CreateButtonColorOptions
 Export-ModuleMember -Function CreateSpinAttackColorOptions
@@ -537,6 +648,7 @@ Export-ModuleMember -Function SetMirrorShieldFrameColorsPreset
 
 Export-ModuleMember -Function SetHeartsColorsPreset
 Export-ModuleMember -Function SetMagicColorsPreset
+Export-ModuleMember -Function SetMinimapColorsPreset
 Export-ModuleMember -Function SetSpinAttackColorsPreset
 
 Export-ModuleMember -Function SetColor

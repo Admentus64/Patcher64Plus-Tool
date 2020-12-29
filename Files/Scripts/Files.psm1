@@ -51,19 +51,29 @@ function SetFileParameters() {
     $Files.oot.master_quest                 = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\master_quest")
     $Files.oot.mm_pause_screen              = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\mm_pause_screen")
 
-    $Files.oot.male_model_child_link_mm     = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Models\male_model_child_link_mm")
-    $Files.oot.male_model_adult_link_mm     = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Models\male_model_adult_link_mm")
-    $Files.oot.male_model_adult_link_fd     = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Models\male_model_adult_link_fierce_deity")
-    $Files.oot.male_models_link_alttp       = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Models\male_models_link_alttp")
-    $Files.oot.male_models_salesman         = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Models\male_models_happy_mask_salesman")
-    $Files.oot.male_models_mega_man         = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Models\male_models_mega_man")
-    $Files.oot.female_models_zelda_alttp    = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Models\female_models_zelda_alttp")
-    $Files.oot.female_models_miku           = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Models\female_models_miku")
-    $Files.oot.female_models_malon_3d       = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Models\female_models_malon_3d")
-    $Files.oot.female_models_malon_thicc    = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Models\female_models_malon_thicc")
-    $Files.oot.female_models_saria          = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Models\female_models_saria")
-    $Files.oot.female_models_ruto           = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Models\female_models_ruto")
-    $Files.oot.female_models_aria           = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Models\female_models_aria_the_demon")
+    $Files.oot.link_models_3d               = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Models\Link\3d")
+    $Files.oot.link_model_adult_botw        = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Models\Link\adult_botw")
+    $Files.oot.link_model_adult_dark        = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Models\Link\adult_dark")
+    $Files.oot.link_model_adult_fd_64       = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Models\Link\adult_fd_64")
+    $Files.oot.link_model_adult_fd_remaster = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Models\Link\adult_fd_remastered")
+    $Files.oot.link_model_adult_la          = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Models\Link\adult_la")
+    $Files.oot.link_model_adult_mm          = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Models\Link\adult_mm")
+    $Files.oot.link_models_alttp            = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Models\Link\alttp")
+    $Files.oot.link_model_child_mm          = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Models\Link\child_mm")
+    $Files.oot.link_model_tp                = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Models\Link\tp")
+
+    $Files.oot.male_models_salesman         = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Models\Male\happy_mask_salesman")
+    $Files.oot.male_models_mega_man         = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Models\Male\mega_man")
+
+    $Files.oot.female_models_aria           = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Models\Female\aria_the_demon")
+    $Files.oot.female_models_miku_link      = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Models\Female\hatsune_miku_link")
+    $Files.oot.female_models_miku_vocaloid  = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Models\Female\hatsune_miku_vocaloid")
+    $Files.oot.female_models_malon_3d       = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Models\Female\malon_3d")
+    $Files.oot.female_models_malon_thicc    = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Models\Female\malon_thicc")
+    $Files.oot.female_models_zelda_alttp    = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Models\Female\princess_zelda_alttp")
+    $Files.oot.female_models_ruto           = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Models\Female\princess_ruto")
+    $Files.oot.female_models_roll           = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Models\Female\roll")
+    $Files.oot.female_models_saria          = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Models\Female\saria")
 
     $Files.oot.lens_of_truth                = $Paths.Games + "\Ocarina of Time\Textures\Lens of Truth.bin"
     $Files.oot.title_copyright              = $Paths.Games + "\Ocarina of Time\Textures\Logo\Master Quest Title Copyright.bin"
@@ -76,7 +86,7 @@ function SetFileParameters() {
 
     $Files.oot.file_select                  = $Paths.Games + "\Ocarina of Time\Binaries\File Select.bin"
     $Files.oot.message_table_restore_text   = $Paths.Games + "\Ocarina of Time\Binaries\Message\Table Restore Text.bin"
-   #$Files.oot.message_table_female_text    = $Paths.Games + "\Ocarina of Time\Binaries\Message\Table Female Pronouns.bin"
+    $Files.oot.message_table_female_text    = $Paths.Games + "\Ocarina of Time\Binaries\Message\Table Female Pronouns.bin"
     $Files.oot.message_songs                = $Paths.Games + "\Ocarina of Time\Binaries\Message\Songs.bin"
     $Files.oot.message_mq1                  = $Paths.Games + "\Ocarina of Time\Binaries\Message\MQ Navi Action.bin"
     $Files.oot.message_mq2                  = $Paths.Games + "\Ocarina of Time\Binaries\Message\MQ Navi Door.bin"
@@ -88,7 +98,7 @@ function SetFileParameters() {
     $Files.oot.theme_fire_temple            = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Export\audiobank_fire_temple")
     $Files.oot.restore_text                 = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Export\Message\restore_text")
     $Files.oot.redux_text                   = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Export\Message\redux")
-   #$Files.oot.female_pronouns_text         = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Export\Message\female_pronouns")
+    $Files.oot.female_pronouns_text         = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Export\Message\female_pronouns")
 
     $Files.oot.gerudo1                      = $Paths.Games + "\Ocarina of Time\Textures\Gerudo Symbols\crystal_switch.bin"
     $Files.oot.gerudo2                      = $Paths.Games + "\Ocarina of Time\Textures\Gerudo Symbols\floor_switch.bin"
@@ -185,12 +195,12 @@ function SetFileParameters() {
     CheckFilesExists $Files.json
     CheckFilesExists $Files.icon
 
-    $Files.flipscfg                         = $Paths.Master + "\Base\flipscfg.bin"
+    $Files.flipscfg                         = $Paths.Tools + "\Patching\flipscfg.bin"
     $Files.ckey                             = $Paths.Temp + "\common-key.bin"
     $Files.stackdump                        = $Paths.WiiVC + "\wadpacker.exe.stackdump"
     $Files.dmaTable                         = $Paths.Temp + "\dmaTable.dat"
     $Files.archive                          = $Paths.Temp + "\ARCHIVE.bin"
-    $Files.settings                         = $Paths.Base + "\Settings.ini"
+    $Files.settings                         = $Paths.Settings + "\Core.ini"
 
 
 
@@ -215,14 +225,14 @@ function SetGetROM() {
     $GetROM.masterQuest                     = $Paths.Temp + "\master-quest-decompressed"
     $GetROM.nes                             = $Paths.Temp + "\rom.nes"
 
-    if ($IsWiiVC -and (IsSet -Elem $WADFile) ) {
-        if (!(IsSet -Elem $WADFile.ROM)) { $WADFile.ROM = $GetROM.nes }
+    if ($IsWiiVC -and (IsSet $WADFile) ) {
+        if (!(IsSet $WADFile.ROM)) { $WADFile.ROM = $GetROM.nes }
         $GetROM.in            = $GetROM.patched = $WADFile.ROM
         $GetROM.keepConvert   = $WADFile.Convert
         $GetROM.keepDowngrade = $WADFile.Downgrade
         $GetROM.keepDecomp    = $WADFile.Decomp
     }
-    elseif (!$IsWiiVC -and (IsSet -Elem $ROMFile) ) {
+    elseif (!$IsWiiVC -and (IsSet $ROMFile) ) {
         $GetROM.in            = $ROMFile.ROM
         $GetROM.patched       = $ROMFile.Patched
         $GetROM.keepConvert   = $ROMFile.Convert
@@ -250,7 +260,7 @@ function CheckFilesExists([hashtable]$HashTable) {
     
     $FilesMissing = $False
     $HashTable.GetEnumerator() | ForEach-Object {
-        if ( !(Test-Path $_.value -PathType Leaf) -and (IsSet -Elem $_.value) ) {
+        if ( !(TestFile $_.value) -and (IsSet $_.value) ) {
             $FilesMissing = $True
             Write-Host "Missing file: " $_.value
         }
@@ -265,12 +275,12 @@ function CheckFilesExists([hashtable]$HashTable) {
 #==============================================================================================================================================================================================
 function CheckPatchExtension([String]$File) {
     
-    if (Test-Path ($File + ".bps")    -PathType Leaf)   { return $File + ".bps" }
-    if (Test-Path ($File + ".ips")    -PathType Leaf)   { return $File + ".ips" }
-    if (Test-Path ($File + ".ups")    -PathType Leaf)   { return $File + ".ups" }
-    if (Test-Path ($File + ".xdelta") -PathType Leaf)   { return $File + ".xdelta" }
-    if (Test-Path ($File + ".vcdiff") -PathType Leaf)   { return $File + ".vcdiff" }
-    if (Test-Path ($File + ".ppf")    -PathType Leaf)   { return $File + ".ppf" }
+    if (TestFile ($File + ".bps"))      { return $File + ".bps" }
+    if (TestFile ($File + ".ips"))      { return $File + ".ips" }
+    if (TestFile ($File + ".ups"))      { return $File + ".ups" }
+    if (TestFile ($File + ".xdelta"))   { return $File + ".xdelta" }
+    if (TestFile ($File + ".vcdiff"))   { return $File + ".vcdiff" }
+    if (TestFile ($File + ".ppf"))      { return $File + ".ppf" }
     return $File
 
 }

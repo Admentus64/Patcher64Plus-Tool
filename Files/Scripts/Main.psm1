@@ -157,8 +157,8 @@ function CreateMainDialog() {
         }
     })
 
-    $Files.json.consoles = SetJSONFile -File $Files.json.consoles
-    $Files.json.games    = SetJSONFile -File $Files.json.games
+    $Files.json.consoles = SetJSONFile $Files.json.consoles
+    $Files.json.games    = SetJSONFile $Files.json.games
 
 
 
@@ -242,15 +242,9 @@ function CreateMainDialog() {
                 if ( ($IsWiiVC -and $Item.console -eq "Wii VC") -or (!$IsWiiVC -and $Item.console -eq "Native") -or ($Item.console -eq "Both") ) {
                     $global:GamePatch = $Item
                     $PatchToolTip.SetToolTip($Patches.Button, ([String]::Format($Item.tooltip, [Environment]::NewLine)))
-                    
-                    # Create options content based on current game
-                    if ($GamePatch.options -eq 1) {
-                        $FunctionTitle = SetFunctionTitle -Function $GameType.mode
-                        if (Get-Command ("CreateOptions" + $FunctionTitle) -errorAction SilentlyContinue)   { &("CreateOptions" + $FunctionTitle) }
-                    }
                     DisablePatches
                     GetHeader
-                    [System.GC]::Collect() | Out-Null
+                    LoadAdditionalOptions
                 }
             }
         }
@@ -261,7 +255,7 @@ function CreateMainDialog() {
     $Patches.Options = CreateCheckBox -X $Patches.OptionsLabel.Right -Y ($Patches.OptionsLabel.Top - 2) -Width 20 -Height 20 -Info "Enable options in order to apply a customizable set of features and changes" -Name "Patches.Options" -Checked $True
     $Patches.Options.Add_CheckStateChanged({
         $Patches.OptionsButton.Enabled = $this.checked
-        if (!(IsSet -Elem $Redux.Groups)) { return }
+        if (!(IsSet $Redux.Groups)) { return }
         $Redux.Groups.GetEnumerator() | ForEach-Object {
             if ($_.IsRedux) { $_.Enabled = $this.Checked -and $Patches.Redux.Checked }
         }
@@ -272,7 +266,7 @@ function CreateMainDialog() {
     $Patches.ReduxLabel = CreateLabel -X ($Patches.Button.Right + 10) -Y ($Patches.OptionsLabel.Bottom + 15) -Width 85 -Height 15 -Text "Enable Redux:" -Info "Enable the Redux patch which improves game mechanics`nIncludes among other changes the inclusion of the D-Pad for dedicated item buttons"
     $Patches.Redux = CreateCheckBox -X $Patches.ReduxLabel.Right -Y ($Patches.ReduxLabel.Top - 2) -Width 20 -Height 20 -Info "Enable the Redux patch which improves game mechanics`nIncludes among other changes the inclusion of the D-Pad for dedicated item buttons" -Name "Patches.Redux" -Checked $True
     $Patches.Redux.Add_CheckStateChanged({
-        if (!(IsSet -Elem $Redux.Groups)) { return }
+        if (!(IsSet $Redux.Groups)) { return }
         $Redux.Groups.GetEnumerator() | ForEach-Object {
             if ($_.IsRedux) { $_.Enabled = $this.Checked -and $Patches.Options.Checked }
         }
@@ -406,13 +400,13 @@ function CreateMainDialog() {
 #==============================================================================================================================================================================================
 function SetJSONFile($File) {
 
-    if (Test-Path -LiteralPath $File) {
+    if (TestFile $File) {
         try { $File = Get-Content -Raw -Path $File | ConvertFrom-Json }
         catch { CreateErrorDialog -Error "Corrupted JSON" -Exit }
         return $File
     }
     else {
-        CreateErrorDialog -Error "Corrupted JSON"
+        CreateErrorDialog "Corrupted JSON"
         return $null
     }
 
@@ -425,15 +419,15 @@ function CheckVCOptions() {
     
     if (!$IsWiiVC) { return }
 
-    if     (IsChecked -Elem $VC.RemoveT64)      { $VC.PatchVCButton.Enabled = $True }
-    elseif (IsChecked -Elem $VC.ExpandMemory)   { $VC.PatchVCButton.Enabled = $True }
-    elseif (IsChecked -Elem $VC.RemoveFilter)   { $VC.PatchVCButton.Enabled = $True }
-    elseif (IsChecked -Elem $VC.RemapDPad)      { $VC.PatchVCButton.Enabled = $True }
-    elseif (IsChecked -Elem $VC.Downgrade)      { $VC.PatchVCButton.Enabled = $True }
-    elseif (IsChecked -Elem $VC.RemapCDown)     { $VC.PatchVCButton.Enabled = $True }
-    elseif (IsChecked -Elem $VC.RemapL)         { $VC.PatchVCButton.Enabled = $True }
-    elseif (IsChecked -Elem $VC.RemapZ)         { $VC.PatchVCButton.Enabled = $True }
-    elseif (IsChecked -Elem $VC.LeaveDPadUp)    { $VC.PatchVCButton.Enabled = $True }
+    if     (IsChecked $VC.RemoveT64)      { $VC.PatchVCButton.Enabled = $True }
+    elseif (IsChecked $VC.ExpandMemory)   { $VC.PatchVCButton.Enabled = $True }
+    elseif (IsChecked $VC.RemoveFilter)   { $VC.PatchVCButton.Enabled = $True }
+    elseif (IsChecked $VC.RemapDPad)      { $VC.PatchVCButton.Enabled = $True }
+    elseif (IsChecked $VC.Downgrade)      { $VC.PatchVCButton.Enabled = $True }
+    elseif (IsChecked $VC.RemapCDown)     { $VC.PatchVCButton.Enabled = $True }
+    elseif (IsChecked $VC.RemapL)         { $VC.PatchVCButton.Enabled = $True }
+    elseif (IsChecked $VC.RemapZ)         { $VC.PatchVCButton.Enabled = $True }
+    elseif (IsChecked $VC.LeaveDPadUp)    { $VC.PatchVCButton.Enabled = $True }
     else                                        { $VC.PatchVCButton.Enabled = $False }
 
 }
@@ -443,17 +437,32 @@ function CheckVCOptions() {
 #==============================================================================================================================================================================================
 function DisablePatches() {
     
-    $Patches.Redux.Visible = $Patches.ReduxLabel.Visible = (IsSet -Elem $GamePatch.redux.file)
+    $Patches.Redux.Visible = $Patches.ReduxLabel.Visible = (IsSet $GamePatch.redux.file) -and $Settings.Debug.LiteGUI -eq $False
     $Patches.Options.Visible = $Patches.OptionsLabel.Visible = $Patches.OptionsButton.Visible = $GamePatch.options
+    $Patches.DowngradeLabel.Visible = $Patches.Downgrade.Visible = (IsSet $GameType.downgrade) -and $Settings.Debug.LiteGUI -eq $False
 
     $VC.RemoveFilterLabel.Enabled = $VC.RemoveFilter.Enabled = !(StrLike -str $GamePatch.command -val "Patch Boot DOL")
 
     # Disable boxes if needed
     $Patches.OptionsButton.Enabled = $Patches.Options.Checked
-    if (IsSet -Elem $Redux) {
+    if (IsSet $Redux) {
         $Redux.Groups.GetEnumerator() | ForEach-Object {
             if ($_.IsRedux) { $_.Enabled = $Patches.Options.Checked -and $Patches.Redux.Checked }
         }
+    }
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function LoadAdditionalOptions(){
+
+    # Create options content based on current game
+    if ($GamePatch.options -eq 1) {
+        $FunctionTitle = SetFunctionTitle -Function $GameType.mode
+        if (Get-Command ("CreateOptions" + $FunctionTitle) -errorAction SilentlyContinue)   { &("CreateOptions" + $FunctionTitle) }
+        [System.GC]::Collect() | Out-Null
     }
 
 }
@@ -466,7 +475,7 @@ function GamePath_Button([Object]$TextBox, [String]$Description, [String[]]$File
     $SelectedPath = GetFileName -Path $Paths.Base -Description $Description -FileNames $FileNames
 
     # Make sure the path is not blank and also test that the path exists
-    if (($SelectedPath -ne '') -and (Test-Path -LiteralPath $SelectedPath)) {
+    if ($SelectedPath -ne '' -and (TestFile $SelectedPath)) {
         # Finish everything up
         $Settings["Core"][$this.name] = $SelectedPath
         GamePath_Finish -TextBox $TextBox -Path $SelectedPath
@@ -482,7 +491,7 @@ function InjectPath_Button([Object]$TextBox, [String]$Description, [String[]]$Fi
     $SelectedPath = GetFileName -Path $Paths.Base -Description $Description -FileNames $FileNames
 
     # Make sure the path is not blank and also test that the path exists
-    if (($SelectedPath -ne '') -and (Test-Path -LiteralPath $SelectedPath)) {
+    if ($SelectedPath -ne '' -and (TestFile $SelectedPath)) {
         # Finish everything up
         $Settings["Core"][$this.name] = $SelectedPath
         InjectPath_Finish -TextBox $TextBox -Path $SelectedPath
@@ -499,7 +508,7 @@ function PatchPath_Button([Object]$TextBox, [String]$Description, [String[]]$Fil
     $SelectedPath = GetFileName -Path $Paths.Base -Description $Description -FileNames $FileNames
 
     # Make sure the path is not blank and also test that the path exists
-    if (($SelectedPath -ne '') -and (Test-Path -LiteralPath $SelectedPath)) {
+    if ($SelectedPath -ne '' -and (TestFile $SelectedPath)) {
         # Finish everything up
         $Settings["Core"][$this.name] = $SelectedPath
         PatchPath_Finish -TextBox $TextBox -Path $SelectedPath
@@ -519,7 +528,7 @@ function GamePath_DragDrop() {
         $DroppedPath = [String]($_.Data.GetData([Windows.Forms.DataFormats]::FileDrop))
         
         # See if the dropped item is a file
-        if (Test-Path -LiteralPath $DroppedPath -PathType Leaf) {
+        if (TestFile $DroppedPath) {
             # Get the extension of the dropped file.
             $DroppedExtn = (Get-Item -LiteralPath $DroppedPath).Extension
 
@@ -544,7 +553,7 @@ function InjectPath_DragDrop() {
         $DroppedPath = [String]($_.Data.GetData([Windows.Forms.DataFormats]::FileDrop))
         
         # See if the dropped item is a file
-        if (Test-Path -LiteralPath $DroppedPath -PathType Leaf) {
+        if (TestFile $DroppedPath) {
             # Get the extension of the dropped file.
             $DroppedExtn = (Get-Item -LiteralPath $DroppedPath).Extension
 
@@ -569,7 +578,7 @@ function PatchPath_DragDrop() {
         $DroppedPath = [String]($_.Data.GetData([Windows.Forms.DataFormats]::FileDrop))
         
         # See if the dropped item is a file
-        if (Test-Path -LiteralPath $DroppedPath -PathType Leaf) {
+        if (TestFile $DroppedPath) {
             # Get the extension of the dropped file.
             $DroppedExtn = (Get-Item -LiteralPath $DroppedPath).Extension
 
@@ -590,3 +599,5 @@ function PatchPath_DragDrop() {
 
 Export-ModuleMember -Function CreateMainDialog
 Export-ModuleMember -Function CheckVCOptions
+Export-ModuleMember -Function DisablePatches
+Export-ModuleMember -Function LoadAdditionalOptions

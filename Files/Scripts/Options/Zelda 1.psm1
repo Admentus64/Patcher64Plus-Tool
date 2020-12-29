@@ -1,12 +1,12 @@
 function PatchOptionsTheLegendOfZelda() {
     
-    if (IsChecked -Elem $Redux.Graphics.LinksAwakeningGFX)   { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\links_awakening_gfx.ips" }
-    if (IsChecked -Elem $Redux.Graphics.RecoloredDungeons)   { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\recoloured_dungeons.ips" }
+    if (IsChecked $Redux.Graphics.LinksAwakeningGFX)   { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\links_awakening_gfx.ips" }
+    if (IsChecked $Redux.Graphics.RecoloredDungeons)   { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\recoloured_dungeons.ips" }
 
-    if (IsChecked -Elem $Redux.Sound.NoLowHPBeep)            { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\no_low_hp_beep.ips" }
+    if (IsChecked $Redux.Sound.NoLowHPBeep)            { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\no_low_hp_beep.ips" }
 
-    if (IsChecked -Elem $Redux.Gameplay.BombUpgrades)        { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\bomb_upgrades.ips" }
-    if (IsChecked -Elem $Redux.Gameplay.RearrangedBosses)    { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\rearranged_bosses.ips" }
+    if (IsChecked $Redux.Gameplay.BombUpgrades)        { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\bomb_upgrades.ips" }
+    if (IsChecked $Redux.Gameplay.RearrangedBosses)    { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\rearranged_bosses.ips" }
 
 }
 
@@ -15,8 +15,8 @@ function PatchOptionsTheLegendOfZelda() {
 #==============================================================================================================================================================================================
 function PatchReduxTheLegendOfZelda() {
     
-    if (IsChecked -Elem $Redux.Revert.NESGFX)                { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\Original\nes_gfx.ips" }
-    if (IsChecked -Elem $Redux.Revert.HiddenSecrets)         { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\Original\hidden_secrets.ips" }
+    if (IsChecked $Redux.Revert.NESGFX)                { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\Original\nes_gfx.ips" }
+    if (IsChecked $Redux.Revert.HiddenSecrets)         { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\Original\hidden_secrets.ips" }
     
 }
 
