@@ -619,7 +619,6 @@ function CreateTabAudiovisualMajorasMask() {
         $Info += "- Notebook screen stretched`n"
         $Info += "- Right arrow and stick in shop misaligned`n"
         $Info += "- Granny story pictures misaligned`n"
-        $Info += "- Cutscene effects are disabled"
         $Info += "`n`n--- KNOWN ISSUES REDUX ---`n"
         $Info += "- Magic Bar color not costumizable`n"
         $Info += "- Map arrow colors not customizable`n"
