@@ -1,9 +1,15 @@
+v10.0.1
+- Removed the Fierce Deity Remastered model
+- Fixed patching the Majora's Mask Child model exclusively
+- Fixed some remaining issues with the widescreen patches
+- Renamed some models
+
 v10.0.0
 - Rewrote the system for saving the last chosen settings
 - Added config presets, now you can keep track of multiple "Additional Options" configurations for each game
 - Added support for applying patches prior to patching in Redux
 - Revamped "Force Aspect Ratio Fix" into "Change Widescreen"
-- Added widescreen patches for MM in Native Mode
+- Added widescreen patches for MM in Native Mode (thank you GhostlyDark!)
 - Improved (dungeon map) the "16:9 Widescreen" option for MM in VC Mode
 - Added Lite GUI option, to only display compatible options for ex. OoT Randomizer
 - Added option to recolor the minimap for MM
@@ -11,7 +17,7 @@ v10.0.0
 - Redesigned the GUI for choosing custom models for OoT
 - Fixed default value for "Button Colors" for MM
 - Fixed shocked eyes of the Hatsune Miku model for OoT
-- Revived the "Female Pronouns" option as WIP for OoT
+- Revived the "Female Pronouns" option as WIP for OoT (thanks Mil!)
 - Fixed issues with incorrectly restoring settings which do not match
 - Rewrote and optimized several components
 - Some small bug fixes

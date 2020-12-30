@@ -11,11 +11,11 @@ function PatchOptionsOcarinaOfTime() {
         
         if     ($Text -like "*Ocarina of Time 3D*")                                    { ApplyPatch -File $GetROM.decomp -Patch "\Decompressed\Models\Link\3d.ppf" }
         elseif ($Text -like "*Breath of the Wild*")                                    { ApplyPatch -File $GetROM.decomp -Patch "\Decompressed\Models\Link\adult_botw.ppf" }
-        elseif ($Text -like "*Dark*")                                                  { ApplyPatch -File $GetROM.decomp -Patch "\Decompressed\Models\Link\adult_dark.ppf" }
-        elseif ($Text -like "*Fierce Deity 64*")                                       { ApplyPatch -File $GetROM.decomp -Patch "\Decompressed\Models\Link\adult_fd_64.ppf" }
-        elseif ($Text -like "*Fierce Deity Remastered*")                               { ApplyPatch -File $GetROM.decomp -Patch "\Decompressed\Models\Link\adult_fd_remastered.ppf" }
+        elseif ($Text -like "*Dark Link*")                                             { ApplyPatch -File $GetROM.decomp -Patch "\Decompressed\Models\Link\adult_dark.ppf" }
+        elseif ($Text -like "*Fierce Deity*")                                          { ApplyPatch -File $GetROM.decomp -Patch "\Decompressed\Models\Link\adult_fd.ppf" }
         elseif ($Text -like "*Link's Awakening*")                                      { ApplyPatch -File $GetROM.decomp -Patch "\Decompressed\Models\Link\adult_la.ppf" }
-        elseif ($Text -like "*Majora's Mask*")                                         { ApplyPatch -File $GetROM.decomp -Patch "\Decompressed\Models\Link\adult_mm.ppf" }
+        elseif ($Text -like "*Majora's Mask - Adult*")                                 { ApplyPatch -File $GetROM.decomp -Patch "\Decompressed\Models\Link\adult_mm.ppf" }
+        elseif ($Text -like "*Majora's Mask - Combo*")                                 { ApplyPatch -File $GetROM.decomp -Patch "\Decompressed\Models\Link\adult_mm.ppf" }
         elseif ($Text -like "*A Link to the Past*")                                    { ApplyPatch -File $GetROM.decomp -Patch "\Decompressed\Models\Link\alttp.ppf" }
         elseif ($Text -like "*Twilight Princess*")                                     { ApplyPatch -File $GetROM.decomp -Patch "\Decompressed\Models\Link\tp.ppf" }
     }
@@ -863,13 +863,13 @@ function CreateTabAudiovisualOcarinaOfTime() {
     CreateReduxRadioButton -Name "ListLinkModels"   -Max 4 -SaveTo "Models" -Column 2 -Row 1 -Text "Link Models"             -Info "List all male model replacements styled after Link to play as"
     CreateReduxRadioButton -Name "ListMaleModels"   -Max 4 -SaveTo "Models" -Column 3 -Row 1 -Text "Male Models"             -Info "List all male model replacements to play as"
     CreateReduxRadioButton -Name "ListFemaleModels" -Max 4 -SaveTo "Models" -Column 4 -Row 1 -Text "Female Models"           -Info "List all female model replacements to play as"
-    CreateReduxCheckBox    -Name "MMChildLink"      -Column 4 -Row 3 -Text "MM Child Model"          -Info "Include the MM Child Link Model"
+    CreateReduxCheckBox    -Name "MMChildLink" -Column 4 -Row 3 -Text "MM Child Model" -Info "Include the MM Child Link Model"
 
-    $Models = @("Majora's Mask", "Ocarina of Time 3D", "Twilight Princess", "A Link to the Past", "Link's Awakening", "Fierce Deity 64", "Fierce Deity Remastered", "Dark Link", "Breath of the Wild") | Sort-Object
-    CreateReduxComboBox -Name "LinkModels"     -Column 1 -Row 3 -Text "Player Models:" -Items $Models -Length 240 -Default ($Models.indexOf("Majora's Mask") + 1) -Info "Replace the model(s) used for Link`nOptions include models styled after Link`nContains combined (Child + Adult) or individual (Adult) models"
+    $Models = @("Majora's Mask - Adult", "Ocarina of Time 3D - Combo", "Twilight Princess - Combo", "A Link to the Past - Combo", "Link's Awakening - Adult", "Fierce Deity - Adult", "Dark Link - Adult", "Breath of the Wild - Adult") | Sort-Object
+    CreateReduxComboBox -Name "LinkModels"     -Column 1 -Row 3 -Text "Player Models:" -Items $Models -Length 240 -Default ($Models.indexOf("Majora's Mask - Adult") + 1) -Info "Replace the model(s) used for Link`nOptions include models styled after Link`nContains combined (Child + Adult) or individual (Adult) models"
 
-    $Models = @("Majora's Mask", "Majora's Mask Combo", "Link's Awakening", "Fierce Deity 64", "Fierce Deity Remastered", "Dark Link", "Breath of the Wild") | Sort-Object
-    CreateReduxComboBox -Name "LinkModelsPlus" -Column 1 -Row 3 -Text "Player Models:" -Items $Models -Length 240 -Default ($Models.indexOf("Majora's Mask Combo") + 1) -Info "Replace the models used for Link`nOptions include models styled after Link`nAll options include the Majora's Mask Child Model"
+    $Models = @("Majora's Mask - Child", "Majora's Mask - Combo", "Link's Awakening - Adult", "Fierce Deity - Adult", "Dark Link - Adult", "Breath of the Wild - Adult") | Sort-Object
+    CreateReduxComboBox -Name "LinkModelsPlus" -Column 1 -Row 3 -Text "Player Models:" -Items $Models -Length 240 -Default ($Models.indexOf("Majora's Mask - Combo") + 1) -Info "Replace the models used for Link`nOptions include models styled after Link`nAll options include the Majora's Mask Child Model"
 
     $Models = @("Happy Mask Salesman", "Mega Man") | Sort-Object
     CreateReduxComboBox -Name "MaleModels"     -Column 1 -Row 3 -Text "Player Models:" -Items $Models -Length 240 -Default ($Models.indexOf("Mega Man") + 1) -Info "Replace the models used for Link`nOptions include custom male models"
