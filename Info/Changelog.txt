@@ -1,3 +1,7 @@
+v10.0.3
+- Added another fix for the widescreen patches
+- Adjusted the DMA Table for the widescreen patches
+
 v10.0.2
 - Added another fix for the widescreen patches
 - Fixed the "Hide Credits" option for OoT

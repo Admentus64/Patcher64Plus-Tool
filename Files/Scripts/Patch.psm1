@@ -1015,7 +1015,7 @@ function PatchRedux([Boolean]$Decompress) {
         UpdateStatusLabel ("Patching " + $GameType.mode + " REDUX...")
 
         # Redux patch
-        if (IsWidescreen -Patched)                     { ApplyPatch -File $GetROM.decomp -Patch $GamePatch.redux.file_widescreen }
+        if (IsWidescreen -Patched)                   { ApplyPatch -File $GetROM.decomp -Patch $GamePatch.redux.file_widescreen }
         elseif (IsSet -Elem $GamePatch.redux.file)   { ApplyPatch -File $GetROM.decomp -Patch $GamePatch.redux.file }
 
         if ($GameType.decompress -eq 1 -and (IsSet -Elem $GameType.dmaTable) ) {

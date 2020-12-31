@@ -2,13 +2,16 @@ function PatchOptionsMajorasMask() {
     
     # ENHANCED 16:9 WIDESCREEN #
 
-    if (IsWidescreen)                                  { ApplyPatch -File $GetROM.decomp -Patch "\Decompressed\widescreen.ppf" }
+    if (IsWidescreen)                                   { ApplyPatch -File $GetROM.decomp -Patch "\Decompressed\widescreen.ppf" }
+    if ( (IsWidescreen) -or (IsWidescreen -Patched) )   { RemoveFile $Files.dmaTable }
+    if (IsWidescreen)                                   { Add-Content $Files.dmaTable "0 1 2 3 4 5 6 7 -8 -9 15 16 17 18 19 20 -21 22 -24 25 26 27 28 29 30 -652 1127 -1540 -1541 -1542 -1543 -1544 -1545 -1546 -1547 -1548 -1549 -1550 -1551 1552 1553 1554 1555 1556 1557 1558 1559 1560 1561 1562 1563 1564 1565 1566 1567" }
+    if (IsWidescreen -Patched)                          { Add-Content $Files.dmaTable "0 1 2 3 4 5 6 7 -8 -9 15 16 17 18 19 20 -21 22 -24 25 26 27 28 29 30 -652 1127 -1540 -1541 -1542 -1543 1544 1545 1546 1547 1548 1549 1550 -1551 1552 1553 1554 1555 1556 1557 1558 1559 1560 1561 1562 1563 1564 1565 1566 1567" }
 
 
 
     # MODELS #
 
-    if (IsChecked $Redux.Graphics.ImprovedLinkModel)   { ApplyPatch -File $GetROM.decomp -Patch "\Decompressed\improved_link_model.ppf" }
+    if (IsChecked $Redux.Graphics.ImprovedLinkModel)    { ApplyPatch -File $GetROM.decomp -Patch "\Decompressed\improved_link_model.ppf" }
 
 }
 
@@ -616,12 +619,7 @@ function CreateTabAudiovisualMajorasMask() {
     else {
         $Info = "Advanced native 16:9 Widescreen Display support with backgrounds and textures adjusted for widescreen"
         $Info += "`n`n--- KNOWN ISSUES ---`n"
-        $Info += "- Notebook screen stretched`n"
-        $Info += "- Granny story pictures misaligned`n"
-        $Info += "`n`n--- KNOWN ISSUES REDUX ---`n"
-        $Info += "- Magic Bar color not costumizable`n"
-        $Info += "- Map arrow colors not customizable`n"
-        $Info += "- D-Pad icon must be hidden"
+        $Info += "- Notebook screen stretched"
         $Info += "`n`n--- CHANGE WIDESCREEN ---`n"
         $Info += "Adjust the backgrounds and textures to fit in with 16:9 Widescreen`nUse GLideN64 " + '"adjust to fit"' + " option for 16:9 widescreen"
     }
