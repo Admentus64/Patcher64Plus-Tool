@@ -1,3 +1,7 @@
+v10.0.2
+- Added another fix for the widescreen patches
+- Fixed the "Hide Credits" option for OoT
+
 v10.0.1
 - Removed the Fierce Deity Remastered model
 - Fixed patching the Majora's Mask Child model exclusively
@@ -17,7 +21,7 @@ v10.0.0
 - Redesigned the GUI for choosing custom models for OoT
 - Fixed default value for "Button Colors" for MM
 - Fixed shocked eyes of the Hatsune Miku model for OoT
-- Revived the "Female Pronouns" option as WIP for OoT (thanks Mil!)
+- Revived the "Female Pronouns" option as WIP for OoT (thank you Mil!)
 - Fixed issues with incorrectly restoring settings which do not match
 - Rewrote and optimized several components
 - Some small bug fixes

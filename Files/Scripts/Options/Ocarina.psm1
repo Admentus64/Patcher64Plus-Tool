@@ -211,15 +211,12 @@ function ByteOptionsOcarinaOfTime() {
 
 
     # SOUNDS / VOICES #
-
-    if (IsText -Elem $Redux.Sounds.Voices -Compare "Majora's Mask") {
-        if (IsChecked $Redux.Restore.FireTemple)   { PatchBytes -Offset "19D920" -Patch "Voices\MM Link Voices.bin" }
-        else                                       { PatchBytes -Offset "18E1E0" -Patch "Voices\MM Link Voices.bin" }
+    if (IsIndex -Elem $Redux.Sounds.Voices -Not ) {
+        if (IsChecked $Redux.Restore.FireTemple)   { $Offset = "19D920" }
+        else                                       { $Offset = "18E1E0" }
     }
-    elseif (IsText -Elem $Redux.Sounds.Voices -Compare "Feminine") {
-        if (IsChecked $Redux.Restore.FireTemple)   { PatchBytes -Offset "19D920" -Patch "Voices\Feminine Link Voices.bin" }
-        else                                       { PatchBytes -Offset "18E1E0" -Patch "Voices\Feminine Link Voices.bin" }
-    }
+    if (IsText -Elem $Redux.Sounds.Voices -Compare "Majora's Mask")   { PatchBytes -Offset $Offset -Patch "Voices\MM Link Voices.bin" }
+    if (IsText -Elem $Redux.Sounds.Voices -Compare "Feminine")        { PatchBytes -Offset $Offset -Patch "Voices\Feminine Link Voices.bin" }
 
     if (IsIndex -Elem $Redux.Sounds.Instrument -Not) {
         ChangeBytes -Offset "B53C7B" -Values ($Redux.Sounds.Instrument.SelectedIndex+1); ChangeBytes -Offset "B4BF6F" -Values ($Redux.Sounds.Instrument.SelectedIndex+1)
@@ -902,7 +899,7 @@ function CreateTabAudiovisualOcarinaOfTime() {
 
     # SOUNDS / VOICES #
     CreateReduxGroup    -Tag  "Sounds" -Text "Sounds / Voices"
-    CreateReduxComboBox -Name "Voices"           -Column 1 -Text "Link's Voice:"       -Items @("Original", "Majora's Mask", "Feminine")  -Info "1. Replace the voices for Link with those used in Majora's Mask`n2. Replace the voices for Link to sound feminine"
+    CreateReduxComboBox -Name "Voices"           -Column 1 -Text "Link's Voice:"       -Items @("Original", "Majora's Mask", "Feminine")  -Info "1. Replace the voices for Link with those used in Majora's Mask`n2. Replace the voices for Link to sound feminine`n3. Replace the voices for Link to sound as Malon"
     if ($Settings.Debug.LiteGUI -eq $False) {
         CreateReduxComboBox -Name "Instrument"   -Column 3 -Text "Instrument:"         -Items @("Ocarina", "Female Voice", "Whistle", "Harp", "Grind-Organ", "Flute") -Info "Replace the sound used for playing the Ocarina of Time"
     }

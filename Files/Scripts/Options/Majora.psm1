@@ -617,7 +617,6 @@ function CreateTabAudiovisualMajorasMask() {
         $Info = "Advanced native 16:9 Widescreen Display support with backgrounds and textures adjusted for widescreen"
         $Info += "`n`n--- KNOWN ISSUES ---`n"
         $Info += "- Notebook screen stretched`n"
-        $Info += "- Right arrow and stick in shop misaligned`n"
         $Info += "- Granny story pictures misaligned`n"
         $Info += "`n`n--- KNOWN ISSUES REDUX ---`n"
         $Info += "- Magic Bar color not costumizable`n"
