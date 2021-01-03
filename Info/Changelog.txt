@@ -1,3 +1,9 @@
+v10.0.4
+- Removed the "A Link to the Past" Link model
+- Sorted out some credits
+- Replaced the preview images for the Majora's Mask Child Link model
+- Rewrote system for patching in new models to be dynamic
+
 v10.0.3
 - Added another fix for the widescreen patches
 - Adjusted the DMA Table for the widescreen patches

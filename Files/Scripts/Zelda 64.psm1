@@ -83,6 +83,22 @@ function ShowModelPreview([Object]$Dropdown, [Object]$Box, [String]$Path) {
 
 
 #==============================================================================================================================================================================================
+function LoadModelsList([String]$Category) {
+
+    $path = $GameFiles.previews + "\" + $Category + "\"
+    if (!(Test-Path -LiteralPath $path)) { return @("No models found?") } 
+
+    $list = @()
+    foreach ($file in Get-ChildItem -LiteralPath $path -Force) {
+        if ($file.Extension -eq ".png") { $list += $file.BaseName }
+    }
+    return $list
+
+}
+
+
+
+#==============================================================================================================================================================================================
 function ChangeModelsDropdown() {
     
     $Redux.Graphics.LinkModels.Visible     = ($Redux.Graphics.OriginalModels.Checked  -and !$Redux.Graphics.MMChildLink.Checked) -or ($Redux.Graphics.ListLinkModels.Checked -and !$Redux.Graphics.MMChildLink.Checked)
@@ -634,6 +650,7 @@ Export-ModuleMember -Function GetInstrumentsID
 
 Export-ModuleMember -Function ShowModelPreview
 Export-ModuleMember -Function ChangeModelsSelection
+Export-ModuleMember -Function LoadModelsList
 
 Export-ModuleMember -Function CreateButtonColorOptions
 Export-ModuleMember -Function CreateSpinAttackColorOptions

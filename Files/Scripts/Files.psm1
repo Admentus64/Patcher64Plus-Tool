@@ -51,28 +51,7 @@ function SetFileParameters() {
     $Files.oot.master_quest                 = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\master_quest")
     $Files.oot.mm_pause_screen              = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\mm_pause_screen")
 
-    $Files.oot.link_models_3d               = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Models\Link\3d")
-    $Files.oot.link_model_adult_botw        = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Models\Link\adult_botw")
-    $Files.oot.link_model_adult_dark        = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Models\Link\adult_dark")
-    $Files.oot.link_model_adult_fd          = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Models\Link\adult_fd")
-    $Files.oot.link_model_adult_la          = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Models\Link\adult_la")
-    $Files.oot.link_model_adult_mm          = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Models\Link\adult_mm")
-    $Files.oot.link_models_alttp            = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Models\Link\alttp")
-    $Files.oot.link_model_child_mm          = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Models\Link\child_mm")
-    $Files.oot.link_model_tp                = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Models\Link\tp")
-
-    $Files.oot.male_models_salesman         = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Models\Male\happy_mask_salesman")
-    $Files.oot.male_models_mega_man         = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Models\Male\mega_man")
-
-    $Files.oot.female_models_aria           = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Models\Female\aria_the_demon")
-    $Files.oot.female_models_miku_link      = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Models\Female\hatsune_miku_link")
-    $Files.oot.female_models_miku_vocaloid  = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Models\Female\hatsune_miku_vocaloid")
-    $Files.oot.female_models_malon_3d       = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Models\Female\malon_3d")
-    $Files.oot.female_models_malon_thicc    = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Models\Female\malon_thicc")
-    $Files.oot.female_models_zelda_alttp    = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Models\Female\princess_zelda_alttp")
-    $Files.oot.female_models_ruto           = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Models\Female\princess_ruto")
-    $Files.oot.female_models_roll           = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Models\Female\roll")
-    $Files.oot.female_models_saria          = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Models\Female\saria")
+    $Files.oot.link_model_child_mm          = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Models\mm_child")
 
     $Files.oot.lens_of_truth                = $Paths.Games + "\Ocarina of Time\Textures\Lens of Truth.bin"
     $Files.oot.title_copyright              = $Paths.Games + "\Ocarina of Time\Textures\Logo\Master Quest Title Copyright.bin"
