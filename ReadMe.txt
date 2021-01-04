@@ -5,6 +5,7 @@ Documentation and sources for Zelda 64 options can be found at:
 - https://github.com/ShadowOne333/Zelda64-Redux-Documentation (General)
 - https://docs.google.com/spreadsheets/d/1Ihccm8noxsfHZfN1E3Gkccov1F27WXXxl-rxOuManUk (Female Pronouns Script)
 - www.youtube.com/user/skilarbabcock (Model Replacements)
+- www.youtube.com/c/malonrose (Model Replacements)
 
 --- Support or visit me ---
 Discord:	https://discord.gg/P22GGzz
