@@ -1,0 +1,76 @@
+[
+
+	{
+		"name"		: "Breath of the Wild",
+		"adult_author"	: "Skilarbabcock",
+		"url"		: "https://www.youtube.com/user/skilarbabcock"
+	}, {
+		"name"		: "Dark Link",
+		"adult_author"	: "Nintendo",
+		"adult_porter"	: "CrookedPoe"
+	}, {
+		"name"		: "Fierce Deity",
+		"adult_author"	: "Nintendo",
+		"adult_porter"	: "CrookedPoe"
+	}, {
+		"name"		: "Majora's Mask",
+		"adult_author"	: "Skilarbabcock",
+		"url"		: "https://www.youtube.com/user/skilarbabcock"
+	}, {
+		"name"		: "Twilight Princess",
+		"author"	: "Skilarbabcock",
+		"url"		: "https://www.youtube.com/user/skilarbabcock"
+	}, {
+		"name"		: "Ocarina of Time 3D",
+		"author"	: "Skilarbabcock",
+		"url"		: "https://www.youtube.com/user/skilarbabcock"
+	}, {
+		"name"		: "Link's Awakening",
+		"adult_author"	: "Skilarbabcock",
+		"url"		: "https://www.youtube.com/user/skilarbabcock"
+	},
+	
+	
+	
+	{
+		"name"		: "Happy Mask Salesman",
+		"author"	: "Anubis-V1"
+	}, {
+		"name"		: "Mega Man",
+		"author"	: "Psi-Hate"
+	},
+	
+	
+	
+	{
+		"name"		: "Aria the Demon",
+		"author"	: "AriaHiro64"
+	}, {
+		"name"		: "Hatsune Miku - Link",
+		"author"	: "JanexLane"
+	}, {
+		"name"		: "Hatsune Miku - Vocaloid",
+		"author"	: "JanexLane"
+	}, {
+		"name"		: "Malon 3D",
+		"author"	: "Kimi-Stardust"
+	}, {
+		"name"		: "Malon Thicc",
+		"author"	: "Kimi-Stardust"
+	}, {
+		"name"		: "Princess Ruto",
+		"author"	: "Unesag"
+	}, {
+		"name"		: "Princess Zelda ALttP",
+		"child_author"	: "Unesag",
+		"adult_author"	: "Lopieloo"
+	}, {
+		"name"		: "Roll",
+		"author"	: "Psi-Hate"
+	}, {
+		"name"		: "Saria",
+		"author"	: "Malon Rose",
+		"url"		: "https://youtube.com/c/MalonRose"
+	}
+	
+]

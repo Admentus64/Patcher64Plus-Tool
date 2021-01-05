@@ -232,6 +232,7 @@ function ChangeGameMode() {
 
     $global:GameSettings = GetSettings (GetGameSettingsFile)
 
+    # Patches.json
     if (IsSet $GameType.patches) {
         if (TestFile $GameFiles.json) {
             try { $Files.json.patches = Get-Content -Raw -Path $GameFiles.json | ConvertFrom-Json }
@@ -239,6 +240,13 @@ function ChangeGameMode() {
         }
         else { CreateErrorDialog "Missing JSON" }
     }
+    
+    # Credits.json
+    if (TestFile ($GameFiles.previews + "\Credits.json")) {
+        try { $Files.json.models = Get-Content -Raw -Path ($GameFiles.previews + "\Credits.json") | ConvertFrom-Json }
+        catch { CreateErrorDialog "Corrupted JSON" }
+    }
+    else { $Files.json.models = $null }
 
     # Info
     if (TestFile $GameFiles.info)       { AddTextFileToTextbox -TextBox $Credits.Sections[0] -File $GameFiles.info }
@@ -468,6 +476,17 @@ function IsText([Object]$Elem, [String]$Compare, [Switch]$Active, [Switch]$Not) 
     if (!$Active -and !$Elem.Enabled)   { return $False }
     if ($Text -eq $Compare)             { return !$Not  }
     if ($Text -ne $Compare)             { return $Not   }
+    return $False
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function IsLangText([Object]$Elem, [String]$Compare, [int]$Lang=0) {
+    
+    if (!$Redux.Language[$Lang].Checked)        { return $False }
+    if (IsText -Elem $Elem -Compare $Compare)   { return $True  }
     return $False
 
 }
@@ -797,6 +816,7 @@ Export-ModuleMember -Function GetHeader
 Export-ModuleMember -Function IsChecked
 Export-ModuleMember -Function IsLanguage
 Export-ModuleMember -Function IsText
+Export-ModuleMember -Function IsLangText
 Export-ModuleMember -Function IsIndex
 Export-ModuleMember -Function IsSet
 Export-ModuleMember -Function AddTextFileToTextbox

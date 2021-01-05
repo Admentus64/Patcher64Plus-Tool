@@ -397,7 +397,7 @@ function ByteReduxMajorasMask() {
 #==============================================================================================================================================================================================
 function ByteLanguageMajorasMask() {
     
-    if ( (IsChecked $Redux.Text.Restore) -or (IsLanguage -Elem $Redux.Gameplay.RazorSword) -or (IsText -Elem $Redux.Colors.Fairy -Compare "Navi") -or (IsText -Elem $Redux.Colors.Fairy -Compare "Tael") ) {
+    if ( (IsChecked $Redux.Text.Restore) -or (IsLanguage -Elem $Redux.Gameplay.RazorSword) -or (IsLangText -Elem $Redux.Colors.Fairy -Compare "Navi") -or (IsLangText -Elem $Redux.Colors.Fairy -Compare "Tael") ) {
         $File = $GameFiles.extracted + "\message_data_static.bin"
         ExportBytes -Offset "AD1000" -Length "699F0" -Output $File -Force
     }
@@ -439,20 +439,20 @@ function ByteLanguageMajorasMask() {
         PatchBytes -File $File -Offset $Offset -Patch "Message\Razor Sword 2.bin"
     }
 
-    if (IsText -Elem $Redux.Colors.Fairy -Compare "Navi") {
+    if (IsLangText -Elem $Redux.Colors.Fairy -Compare "Navi") {
         do { # Navi
             $Offset = SearchBytes -File $File -Start $Offset -Values @("54", "61", "74", "6C")
             if ($Offset -ne -1) { ChangeBytes -File $File -Offset $Offset -Values @("4E", "61", "76", "69") }
         } while ($Offset -gt 0)
     }
-    elseif (IsText -Elem $Redux.Colors.Fairy -Compare "Tael") {
+    elseif (IsLangText -Elem $Redux.Colors.Fairy -Compare "Tael") {
         do { # Tael
             $Offset = SearchBytes -File $File -Start $Offset -Values @("54", "61", "74", "6C")
             if ($Offset -ne -1) { ChangeBytes -File $File -Offset $Offset -Values @("54", "61", "65", "6C") }
         } while ($Offset -gt 0)
     }
 
-    if ( (IsChecked $Redux.Text.Restore) -or (IsLanguage -Elem $Redux.Gameplay.RazorSword) -or (IsText -Elem $Redux.Colors.Fairy -Compare "Navi") -or (IsText -Elem $Redux.Colors.Fairy -Compare "Tael")  ) {
+    if ( (IsChecked $Redux.Text.Restore) -or (IsLanguage -Elem $Redux.Gameplay.RazorSword) -or (IsLangText -Elem $Redux.Colors.Fairy -Compare "Navi") -or (IsLangText -Elem $Redux.Colors.Fairy -Compare "Tael")  ) {
         PatchBytes -Offset "AD1000" -Patch "message_data_static.bin" -Extracted
     }
 

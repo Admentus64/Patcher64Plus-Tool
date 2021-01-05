@@ -10,7 +10,7 @@ function PatchOptionsOcarinaOfTime() {
         else { $Text = $Redux.Graphics.LinkModels.Text.replace(" (default)", "") }
         ApplyPatch -File $GetROM.decomp -Patch ("\Decompressed\Models\Link\" + $Text + ".ppf")
     }
-    elseif (IsChecked $Redux.Graphics.ListMaleModels)     { ApplyPatch -File $GetROM.decomp -Patch ("\Decompressed\Models\Male\" + $Redux.Graphics.MaleModels.Text.replace(" (default)", "") + ".ppf") }
+    elseif (IsChecked $Redux.Graphics.ListMaleModels)     { ApplyPatch -File $GetROM.decomp -Patch ("\Decompressed\Models\Male\"   + $Redux.Graphics.MaleModels.Text.replace(" (default)", "") + ".ppf") }
     elseif (IsChecked $Redux.Graphics.ListFemaleModels)   { ApplyPatch -File $GetROM.decomp -Patch ("\Decompressed\Models\Female\" + $Redux.Graphics.FemaleModels.Text.replace(" (default)", "") + ".ppf") }
     
 
@@ -287,6 +287,71 @@ function ByteOptionsOcarinaOfTime() {
     elseif (IsText -Elem $Redux.Hero.MagicUsage -Compare "3x Magic Usage")  { ChangeBytes -Offset "AE84FA" -Values @("2C","80") }
 
 
+
+    <#
+    if (IsText -Elem $Redux.Hero.BossHP -Compare "2x Boss HP") {
+        ChangeBytes -Offset "C44F2B" -Values "14" # Gohma           0xC44C30 -> 0xC4ABB0 (Length: 0x5F80) (ovl_Boss_Goma) (HP: 0A) (Mass: FF)
+        ChangeBytes -Offset "C3B9FF" -Values "18" # King Dodongo    0xC3B150 -> 0xC44C30 (Length: 0x9AE0) (ovl_Boss_Dodongo) (HP: 0C) (Mass: 00)
+        ChangeBytes -Offset "C91F8F" -Values "3C" # Phantom Ganon   0xC91AD0 -> 0xC96840 (Length: 0x4D70) (ovl_Boss_Ganondrof) (HP: 1E -> 18) (Mass: 32)
+        ChangeBytes -Offset "CE6D2F" -Values "30" # Volvagia        0xCE65F0 -> 0xCED920 (Length: 0x7330) (ovl_Boss_Fd) (Has HP) (HP: 18) (Mass: 32) / 0xD04790 -> 0xD084C0 (Length:0x3D30) (ovl_Boss_Fd2) (Has No HP, Forwards HP to Flying)
+        ChangeBytes -Offset "D3B4A7" -Values "28" # Morpha          0xD3ADF0 -> 0xD46390 (Length: 0xB5A0) (ovl_Boss_Mo) (HP: 14) (Mass: 00)
+
+        #ChangeBytes -Offset "C91B99" -Values "1D" # Phantom Ganon 2A
+        #ChangeBytes -Offset "C91C95" -Values "1D" # Phantom Ganon
+        #ChangeBytes -Offset "C922C3" -Values "1D" # Phantom Ganon
+        #ChangeBytes -Offset "C92399" -Values "1D" # Phantom Ganon
+        #ChangeBytes -Offset "C9263F" -Values "1D" # Phantom Ganon
+        #ChangeBytes -Offset "C9266B" -Values "1D" # Phantom Ganon
+        #ChangeBytes -Offset "C92AE7" -Values "1D" # Phantom Ganon
+
+        #ChangeBytes -Offset "C91BE1" -Values "1D" # Phantom Ganon
+        #ChangeBytes -Offset "C91C4B" -Values "1D" # Phantom Ganon
+        #ChangeBytes -Offset "C91C91" -Values "1D" # Phantom Ganon
+        #ChangeBytes -Offset "C91CCD" -Values "1D" # Phantom Ganon
+        #ChangeBytes -Offset "C91D2D" -Values "1D" # Phantom Ganon
+        #ChangeBytes -Offset "C91D8D" -Values "1D" # Phantom Ganon
+        #ChangeBytes -Offset "C91E9B" -Values "1D" # Phantom Ganon
+        #ChangeBytes -Offset "C91F83" -Values "1D" # Phantom Ganon
+        #ChangeBytes -Offset "C9200B" -Values "1D" # Phantom Ganon
+        #ChangeBytes -Offset "C920EB" -Values "1D" # Phantom Ganon
+        #ChangeBytes -Offset "C92123" -Values "1D" # Phantom Ganon
+        #ChangeBytes -Offset "C92177" -Values "1D" # Phantom Ganon
+        #ChangeBytes -Offset "C9219F" -Values "1D" # Phantom Ganon
+
+        # ChangeBytes -Offset "" -Values "08" # Barinade            0xD22360 -> 0xD30B50 (Length: 0xE7F0)(ovl_Boss_Va) (HP: 04 -> 03 -> 03) (Mass: 00)
+        # ChangeBytes -Offset "" -Values "06" # Barinade
+        # ChangeBytes -Offset "" -Values "48" # Bongo Bongo         0xDA1660 -> 0xDADB80 (Length: 0xC520) (ovl_Boss_Sst) (HP: 24) (Mass: C8)
+        # ChangeBytes -Offset "" -Values "30" # Twinrova            0xD612E0 -> 0xD74360 (Length: 0x13080) (ovl_Boss_Tw) (HP: 18) (Mass: FF)
+        # ChangeBytes -Offset "D7FDA3" -Values "50" # Ganondorf     0xD7F3F0 -> 0xDA1660 (Length: 0x22270) (ovl_Boss_Ganon) (HP: 28) (Mass: 32)
+        # ChangeBytes -Offset "" -Values "3C" # Ganon               0xE826C0 -> 0xE939B0 (Length: 0x112F0) (ovl_Boss_Ganon2) (HP: 1E) (Mass: FF)
+    }
+    elseif (IsText -Elem $Redux.Hero.BossHP -Compare "3x Boss HP") {
+        ChangeBytes -Offset "C44F2B" -Values "1E" # Gohma           0xC44C30 -> 0xC4ABB0 (Length: 0x5F80) (ovl_Boss_Goma) (HP: 0A) (Mass: FF)
+        ChangeBytes -Offset "C3B9FF" -Values "24" # King Dodongo    0xC3B150 -> 0xC44C30 (Length: 0x9AE0) (ovl_Boss_Dodongo) (HP: 0C) (Mass: 00)
+        ChangeBytes -Offset "C91F8F" -Values "5A" # Phantom Ganon   0xC91AD0 -> 0xC96840 (Length: 0x4D70) (ovl_Boss_Ganondrof) (HP: 1E -> 18) (Mass: 32)
+        ChangeBytes -Offset "CE6D2F" -Values "48" # Volvagia        0xCE65F0 -> 0xCED920 (Length: 0x7330) (ovl_Boss_Fd) (Has HP) (HP: 18) (Mass: 32) / 0xD04790 -> 0xD084C0 (Length:0x3D30) (ovl_Boss_Fd2) (Has No HP, Forwards HP to Flying)    
+        ChangeBytes -Offset "D3B4A7" -Values "3C" # Morpha          0xD3ADF0 -> 0xD46390 (Length: 0xB5A0) (ovl_Boss_Mo) (HP: 14) (Mass: 00)
+
+        # ChangeBytes -Offset "" -Values "0C" # Barinade            0xD22360 -> 0xD30B50 (Length: 0xE7F0)(ovl_Boss_Va) (HP: 04 -> 03 -> 03) (Mass: 00)
+        # ChangeBytes -Offset "" -Values "09" # Barinade
+        # ChangeBytes -Offset "" -Values "6C" # Bongo Bongo         0xDA1660 -> 0xDADB80 (Length: 0xC520) (ovl_Boss_Sst) (HP: 24) (Mass: C8)
+        # ChangeBytes -Offset "" -Values "48 # Twinrova            0xD612E0 -> 0xD74360 (Length: 0x13080) (ovl_Boss_Tw) (HP: 18) (Mass: FF)
+        # ChangeBytes -Offset "D7FDA3" -Values "78" # Ganondorf     0xD7F3F0 -> 0xDA1660 (Length: 0x22270) (ovl_Boss_Ganon) (HP: 28) (Mass: 32)
+        # ChangeBytes -Offset "" -Values "5A" # Ganon               0xE826C0 -> 0xE939B0 (Length: 0x112F0) (ovl_Boss_Ganon2) (HP: 1E) (Mass: FF)
+    }
+    #>
+
+
+    <#
+    if (IsText -Elem $Redux.MonsterHP -Compare "2x Monster HP") {
+        ChangeBytes -Offset "BFADAB" -Values("14") # Stalfos
+    }
+    elseif (IsText -Elem $Redux.MonsterHP -Compare "3x Monster HP") {
+        ChangeBytes -Offset "BFADC5" -Values("1E") # Stalfos
+    }
+    #>
+
+
     
     # EQUIPMENT COLORS #
 
@@ -537,7 +602,7 @@ function ByteReduxOcarinaOfTime() {
 #==============================================================================================================================================================================================
 function ByteLanguageOcarinaOfTime() {
     
-    if ( (IsChecked -Elem $Redux.Text.Vanilla -Not) -or (IsChecked -Elem $Redux.Text.Speed1x -Not) -or (IsChecked $Redux.Text.GCScheme) -or (IsLanguage $Redux.Unlock.Tunics) -or (IsText -Elem $Redux.Colors.Fairy -Compare "Tatl") -or (IsText -Elem $Redux.Colors.Fairy -Compare "Tael") ) {
+    if ( (IsChecked -Elem $Redux.Text.Vanilla -Not) -or (IsChecked -Elem $Redux.Text.Speed1x -Not) -or (IsChecked $Redux.Text.GCScheme) -or (IsLanguage $Redux.Unlock.Tunics) -or (IsLangText -Elem $Redux.Colors.Fairy -Compare "Tatl") -or (IsLangText -Elem $Redux.Colors.Fairy -Compare "Tael") ) {
         $File = $GameFiles.extracted + "\message_data_static.bin"
         ExportBytes -Offset "92D000" -Length "38130" -Output $File -Force
     }
@@ -666,14 +731,14 @@ function ByteLanguageOcarinaOfTime() {
         ChangeBytes -File $File -Offset ( Get24Bit ( (GetDecimal $Offset) + (GetDecimal "7A") ) ) -Values @("55", "6E", "69", "73", "69", "7A", "65", "2E", "20", "20", "20")
     }
 
-    if (IsText -Elem $Redux.Colors.Fairy -Compare "Tatl") {
+    if (IsLangText -Elem $Redux.Colors.Fairy -Compare "Tatl") {
         do { # Tatl
             $Offset = SearchBytes -File $File -Start $Offset -Values @("4E", "61", "76", "69")
             if ($Offset -ne -1) { ChangeBytes -File $File -Offset $Offset -Values @("54", "61", "74", "6C") }
         } while ($Offset -gt 0)
         PatchBytes -Offset "1A3EFC0" -Texture -Patch "HUD\Tatl.bin"
     }
-    elseif (IsText -Elem $Redux.Colors.Fairy -Compare "Tael") {
+    elseif (IsLangText -Elem $Redux.Colors.Fairy -Compare "Tael") {
         do { # Tael
             $Offset = SearchBytes -File $File -Start $Offset -Values @("4E", "61", "76", "69")
             if ($Offset -ne -1) { ChangeBytes -File $File -Offset $Offset -Values @("54", "61", "65", "6C") }
@@ -681,7 +746,7 @@ function ByteLanguageOcarinaOfTime() {
         PatchBytes -Offset "1A3EFC0" -Texture -Patch "HUD\Tael.bin"
     }
 
-    if ( (IsChecked -Elem $Redux.Text.Vanilla -Not) -or (IsChecked -Elem $Redux.Text.Speed1x -Not) -or (IsChecked $Redux.Text.GCScheme) -or (IsLanguage $Redux.Unlock.Tunics) -or (IsText -Elem $Redux.Colors.Fairy -Compare "Tatl") -or (IsText -Elem $Redux.Colors.Fairy -Compare "Tael") ) {
+    if ( (IsChecked -Elem $Redux.Text.Vanilla -Not) -or (IsChecked -Elem $Redux.Text.Speed1x -Not) -or (IsChecked $Redux.Text.GCScheme) -or (IsLanguage $Redux.Unlock.Tunics) -or (IsLangText -Elem $Redux.Colors.Fairy -Compare "Tatl") -or (IsLangText -Elem $Redux.Colors.Fairy -Compare "Tael") ) {
         PatchBytes -Offset "92D000" -Patch "message_data_static.bin" -Extracted
     }
 
@@ -911,12 +976,12 @@ function CreateTabAudiovisualOcarinaOfTime() {
 function CreateTabDifficultyOcarinaOfTime() {
     
     # HERO MODE #
-    CreateReduxGroup    -Tag  "Hero" -Text "Hero Mode"
+    CreateReduxGroup    -Tag  "Hero" -Text "Hero Mode" 
     CreateReduxComboBox -Name "Damage"     -Column 1 -Row 1 -Text "Damage:"      -Items @("1x Damage", "2x Damage", "4x Damage", "8x Damage", "OHKO Mode") -Info "Set the amount of damage you receive`nOHKO Mode = You die in one hit"
     CreateReduxComboBox -Name "Recovery"   -Column 3 -Row 1 -Text "Recovery:"    -Items @("1x Recovery", "1/2x Recovery", "1/4x Recovery", "0x Recovery")  -Info "Set the amount health you recovery from Recovery Hearts"
     CreateReduxComboBox -Name "MagicUsage" -Column 5 -Row 1 -Text "Magic Usage:" -Items @("1x Magic Usage", "2x Magic Usage", "3x Magic Usage")            -Info "Set the amount of times magic is consumed at"
-   #CreateReduxComboBox -Name "BossHP"     -Column 1 -Row 2 -Text "Boss HP:"     -Items @("1x Boss HP", "2x Boss HP", "3x Boss HP")                        -Info "Set the amount of health for bosses"
-   #CreateReduxComboBox -Name "MonsterHP"  -Column 3 -Row 2 -Text "Monster HP:"  -Items @("1x Monster HP", "2x Monster HP", "3x Monster HP")               -Info "Set the amount of health for monsters"
+  # CreateReduxComboBox -Name "BossHP"     -Column 1 -Row 2 -Text "Boss HP:"     -Items @("1x Boss HP", "2x Boss HP", "3x Boss HP")                        -Info "Set the amount of health for bosses"
+  # CreateReduxComboBox -Name "MonsterHP"  -Column 3 -Row 2 -Text "Monster HP:"  -Items @("1x Monster HP", "2x Monster HP", "3x Monster HP")               -Info "Set the amount of health for monsters"
 
    if ($Settings.Debug.LiteGUI -eq $True) { return }
 

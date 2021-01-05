@@ -967,7 +967,7 @@ function CompressROM([Boolean]$Decompress) {
     
     if (!$Decompress -or !(TestFile $GetROM.decomp)) { return }
 
-    if ($GameType.decompress -eq 1) {
+    if ($GameType.decompress -eq 1 -and $Settings.Debug.NoCompression -eq $False) {
         UpdateStatusLabel ("Compressing " + $GameType.mode + " ROM...")
 
         if ($Settings.Debug.KeepDecompressed -eq $True) { Copy-Item -LiteralPath $GetROM.decomp -Destination $GetROM.keepDecomp -Force }
@@ -983,7 +983,7 @@ function CompressROM([Boolean]$Decompress) {
         }
 
     }
-    elseif ($GameType.decompress -eq 2) { Move-Item -LiteralPath $GetROM.decomp -Destination $GetROM.patched -Force }
+    else { Move-Item -LiteralPath $GetROM.decomp -Destination $GetROM.patched -Force }
 
 }
 

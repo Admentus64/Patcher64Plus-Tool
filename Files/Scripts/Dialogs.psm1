@@ -120,7 +120,7 @@ function CreateCreditsDialog() {
 
     $Discord1Label = CreateLabel -X 10                   -Y ($SupportLabel.Bottom + 2)  -Width 150 -Height 15 -Font $Fonts.SmallBold      -Text ("Discord")                          -AddTo $Credits.Sections[3]
     $Discord2Label = CreateLabel -X $Discord1Label.Right -Y ($SupportLabel.Bottom + 2)  -Width 140 -Height 15 -Font $Fonts.SmallUnderline -Text ("https://discord.gg/P22GGzz")       -AddTo $Credits.Sections[3]
-    $GitHub1Label  = CreateLabel -X 10                   -Y ($Discord1Label.Bottom + 2) -Width 150 -Height 15 -Font $Fonts.SmallBold          -Text ("GitHub")                           -AddTo $Credits.Sections[3]
+    $GitHub1Label  = CreateLabel -X 10                   -Y ($Discord1Label.Bottom + 2) -Width 150 -Height 15 -Font $Fonts.SmallBold      -Text ("GitHub")                           -AddTo $Credits.Sections[3]
     $GitHub2Label  = CreateLabel -X $GitHub1Label.Right  -Y ($Discord1Label.Bottom + 2) -Width 180 -Height 15 -Font $Fonts.SmallUnderline -Text ("https://github.com/Admentus64")    -AddTo $Credits.Sections[3]
     
     $Patreon1Label = CreateLabel -X 10                   -Y ($GitHub1Label.Bottom + 2)  -Width 150 -Height 15 -Font $Fonts.SmallBold      -Text ("Patreon")                          -AddTo $Credits.Sections[3]
@@ -137,20 +137,24 @@ function CreateCreditsDialog() {
 
 
     # Documentation
-    $SourcesLabel = CreateLabel -X 10                  -Y ($PayPal2Label.Bottom + 10) -Width 150 -Height 15 -Font $Fonts.SmallBold       -Text ("--- Sources ---")                                                                  -AddTo $Credits.Sections[3]
+    $SourcesLabel = CreateLabel -X 10                  -Y ($PayPal2Label.Bottom + 10) -Width 150 -Height 15 -Font $Fonts.SmallBold       -Text ("--- Sources ---")                                                                    -AddTo $Credits.Sections[3]
     
-    $Shadow1Label = CreateLabel -X 10                  -Y ($SourcesLabel.Bottom + 2)  -Width 150 -Height 15 -Font $Fonts.SmallBold      -Text ("ShadowOne333's GitHub")                                                             -AddTo $Credits.Sections[3]
-    $Shadow2Label = CreateLabel -X $Shadow1Label.Right -Y ($SourcesLabel.Bottom + 2)  -Width 340 -Height 15 -Font $Fonts.SmallUnderline -Text ("https://github.com/ShadowOne333/Zelda64-Redux-Documentation")                       -AddTo $Credits.Sections[3]
+    $Shadow1Label = CreateLabel -X 10                  -Y ($SourcesLabel.Bottom + 2)  -Width 150 -Height 15 -Font $Fonts.SmallBold      -Text ("ShadowOne333's GitHub")                                                               -AddTo $Credits.Sections[3]
+    $Shadow2Label = CreateLabel -X $Shadow1Label.Right -Y ($SourcesLabel.Bottom + 2)  -Width 340 -Height 15 -Font $Fonts.SmallUnderline -Text ("https://github.com/ShadowOne333/Zelda64-Redux-Documentation")                         -AddTo $Credits.Sections[3]
     
     $Female1Label = CreateLabel -X 10                  -Y ($Shadow1Label.Bottom + 2)  -Width 150 -Height 35 -Font $Fonts.SmallBold      -Text ("Feminine Pronouns Script`nBy Mil") -AddTo $Credits.Sections[3]
-    $Female2Label = CreateLabel -X $Female1Label.Right -Y ($Shadow1Label.Bottom + 2)  -Width 300 -Height 35 -Font $Fonts.SmallUnderline -Text ("https://docs.google.com/document/d/1_`n1f2GzzGdtVqykNaKJrupoz5nBW386EwNQIPbMo042I") -AddTo $Credits.Sections[3]
+    $Female2Label = CreateLabel -X $Female1Label.Right -Y ($Shadow1Label.Bottom + 2)  -Width 300 -Height 35 -Font $Fonts.SmallUnderline -Text ("https://docs.google.com/spreadsheets/d/1Ihccm8noxsfHZfN1E3Gkccov1F27WXXxl-rxOuManUk") -AddTo $Credits.Sections[3]
 
-    $Skilar1Label = CreateLabel -X 10                  -Y ($Female1Label.Bottom + 2)  -Width 150 -Height 15 -Font $Fonts.SmallBold      -Text ("Skilarbabcock's YouTube")                                                           -AddTo $Credits.Sections[3]
-    $Skilar2Label = CreateLabel -X $Skilar1Label.Right -Y ($Female1Label.Bottom + 2)  -Width 225 -Height 15 -Font $Fonts.SmallUnderline -Text ("https://www.youtube.com/user/skilarbabcock")                                        -AddTo $Credits.Sections[3]
+    $Skilar1Label = CreateLabel -X 10                  -Y ($Female1Label.Bottom + 2)  -Width 150 -Height 15 -Font $Fonts.SmallBold      -Text ("Skilarbabcock's YouTube")                                                             -AddTo $Credits.Sections[3]
+    $Skilar2Label = CreateLabel -X $Skilar1Label.Right -Y ($Female1Label.Bottom + 2)  -Width 225 -Height 15 -Font $Fonts.SmallUnderline -Text ("https://www.youtube.com/user/skilarbabcock")                                          -AddTo $Credits.Sections[3]
+
+    $Malon1Label  = CreateLabel -X 10                  -Y ($Skilar1Label.Bottom + 2)  -Width 150 -Height 15 -Font $Fonts.SmallBold      -Text ("Malon Rose YouTube")                                                                  -AddTo $Credits.Sections[3]
+    $Malon2Label  = CreateLabel -X $Skilar1Label.Right -Y ($Skilar2Label.Bottom + 2)  -Width 225 -Height 15 -Font $Fonts.SmallUnderline -Text ("https://www.youtube.com/c/MalonRose")                                                 -AddTo $Credits.Sections[3]
 
     $Shadow2Label.add_Click({[system.Diagnostics.Process]::start("https://github.com/ShadowOne333/Zelda64-Redux-Documentation")})
-    $Female2Label.add_Click({[system.Diagnostics.Process]::start("https://docs.google.com/document/d/1_1f2GzzGdtVqykNaKJrupoz5nBW386EwNQIPbMo042I")})
+    $Female2Label.add_Click({[system.Diagnostics.Process]::start("https://docs.google.com/spreadsheets/d/1Ihccm8noxsfHZfN1E3Gkccov1F27WXXxl-rxOuManUk")})
     $Skilar2Label.add_Click({[system.Diagnostics.Process]::start("https://www.youtube.com/user/skilarbabcock")})
+    $Malon2Label.add_Click({[system.Diagnostics.Process]::start("https://www.youtube.com/c/MalonRose")})
     $Shadow2Label.ForeColor = $Skilar2Label.ForeColor = "Blue"
 
 
@@ -212,9 +216,10 @@ function CreateSettingsDialog() {
     $GeneralSettings.Box                 = CreateReduxGroup -Y ($GeneralSettings.Box.Bottom + 10) -IsGame $False -Height 2 -AddTo $SettingsDialog -Text "Debug Settings (Nintendo 64)"
     $GeneralSettings.KeepConverted       = CreateSettingsCheckbox -Name "KeepConverted"    -Column 1 -Row 1 -Text "Keep Converted"        -IsDebug -Info "Keep the converted patched ROM in the output folder"
     $GeneralSettings.KeepDecompressed    = CreateSettingsCheckbox -Name "KeepDecompressed" -Column 2 -Row 1 -Text "Keep Decompressed"     -IsDebug -Info "Keep the decompressed patched ROM in the output folder"
-    $GeneralSettings.NoConversion        = CreateSettingsCheckbox -Name "NoConversion"     -Column 3 -Row 1 -Text "No Conversion"         -IsDebug -Info "Do not attempt to convert the ROM to a proper format"
-    $GeneralSettings.NoCRCChange         = CreateSettingsCheckbox -Name "NoCRCChange"      -Column 1 -Row 2 -Text "No CRC Change"         -IsDebug -Info "Do not change the CRC of the ROM when patching is concluded"
-    $GeneralSettings.Rev0DungeonFiles    = CreateSettingsCheckbox -Name "Rev0DungeonFiles" -Column 2 -Row 2 -Text "Rev 0 Dungeon Files"   -IsDebug -Info "Extract the dungeon files from the Rev 0 US OoT ROM as well when extracting dungeon files"
+    $GeneralSettings.Rev0DungeonFiles    = CreateSettingsCheckbox -Name "Rev0DungeonFiles" -Column 3 -Row 1 -Text "Rev 0 Dungeon Files"   -IsDebug -Info "Extract the dungeon files from the Rev 0 US OoT ROM as well when extracting dungeon files"
+    $GeneralSettings.NoConversion        = CreateSettingsCheckbox -Name "NoConversion"     -Column 1 -Row 2 -Text "No Conversion"         -IsDebug -Info "Do not attempt to convert the ROM to a proper format"
+    $GeneralSettings.NoCRCChange         = CreateSettingsCheckbox -Name "NoCRCChange"      -Column 2 -Row 2 -Text "No CRC Change"         -IsDebug -Info "Do not change the CRC of the ROM when patching is concluded"
+    $GeneralSettings.NoCompression       = CreateSettingsCheckbox -Name "NoCompression"    -Column 3 -Row 2 -Text "No Compression"        -IsDebug -Info "Do not attempt to compress the ROM back again when patching is concluded"
 
     # Settings preset
     $GeneralSettings.Box                 = CreateReduxGroup -Y ($GeneralSettings.Box.Bottom + 10) -IsGame $False -Height 2 -AddTo $SettingsDialog -Text "Settings Presets"

@@ -1,3 +1,9 @@
+v10.0.5
+- Changed how the custom models preview parses it credits
+- Adjusted credits
+- Added new debug option
+- Minor bug fixes
+
 v10.0.4
 - Removed the "A Link to the Past" Link model
 - Sorted out some credits

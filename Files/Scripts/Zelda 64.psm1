@@ -61,22 +61,67 @@ function GetItemID([String]$Item) {
 
 
 #==============================================================================================================================================================================================
-function ShowModelPreview([Object]$Dropdown, [Object]$Box, [String]$Path) {
+function ShowModelPreview([Object]$Dropdown, [Object]$Box, [String]$Category) {
     
+    $Path = $GameFiles.previews + "\" + $Category + "\"
     $Text = $Dropdown.Text.replace(" (default)", "")
-    if (TestFile ($Path + $Text + ".png")) {
-        $Box.Image = [System.Drawing.Image]::Fromfile( (Get-Item ($Path + $Text + ".png")) )
-        if (TestFile ($Path + "Credits.txt")) {
-            if ($Dropdown.selectedIndex -eq 0)   { $item = (Get-Content -Path ($Path + "Credits.txt") -TotalCount ($Dropdown.selectedIndex+1)) }
-            else                                 { $item = (Get-Content -Path ($Path + "Credits.txt") -TotalCount ($Dropdown.selectedIndex+1))[-1] }
-            $PreviewToolTip.SetToolTip($Box, ([String]::Format($item, [Environment]::NewLine)))
+    
+    if (TestFile ($Path + $Text + ".png"))   { $Box.Image = [System.Drawing.Image]::Fromfile( (Get-Item ($Path + $Text + ".png")) ) }
+    else                                     { $Box.Image = $null }
+
+    if (IsSet $Files.json.models) {
+        $global:ModelCredits = $null
+        for ($i=0; $i -lt $Files.json.models.length; $i++) {
+            if ($Files.json.models[$i].name -eq $Text) {
+                $global:ModelCredits = $Files.json.models[$i]
+                break
+            }
         }
-        else { $PreviewToolTip.RemoveAll() }
+
+        $Credits = ""
+
+        if (IsChecked $Redux.Graphics.MMChildLink) { $Credits += "--- Majora's Mask ---{0}Child model made by:{0}Nintendo{0}{0}Child model ported by:{0}The3DDude{0}" }
+        if ( (IsChecked $Redux.Graphics.MMChildLink) -and (IsSet $ModelCredits.name) ) { $Credits += "{0}" }
+
+        if (IsSet $ModelCredits.name) { $Credits += "--- " + $ModelCredits.name + " ---{0}" }
+        if (IsSet $ModelCredits.author) {
+            $Credits += "Models made by:{0}" + $ModelCredits.author + "{0}"
+            if (IsSet $ModelCredits.porter) { $Credits += "{0}Models ported by:{0}" + $ModelCredits.porter + "{0}" }
+        }
+
+        if ( (IsSet $ModelCredits.child_author) -and !(IsSet $ModelCredits.author) -and !(IsChecked $Redux.Graphics.MMChildLink -Not) ) {
+            $Credits += "Child model made by:{0}" + $ModelCredits.child_author + "{0}"
+            if ( (IsSet $ModelCredits.child_porter) -and !(IsSet $ModelCredits.porter) ) { $Credits += "{0}Child model ported by:{0}" + $ModelCredits.child_porter + "{0}" }
+
+            if (IsSet $ModelCredits.adult_author) { $Credits += "{0}" }
+        }
+
+        if ( (IsSet $ModelCredits.adult_author) -and !(IsSet $ModelCredits.author) ) {
+            $Credits += "Adult model made by:{0}" + $ModelCredits.adult_author + "{0}"
+            if ( (IsSet $ModelCredits.adult_porter) -and !(IsSet $ModelCredits.porter) ) { $Credits += "{0}Adult model ported by:{0}" + $ModelCredits.adult_porter + "{0}" }
+        }
+
+        if ( (IsSet $ModelCredits.author) -or ( (IsSet $ModelCredits.adult_author) -and (IsChecked $Redux.Graphics.MMChildLink) ) -or ( (IsSet $ModelCredits.child_author) -and (IsSet $ModelCredits.adult_author) ) ) {
+            $Credits += "{0}- Child and Adult Combo"
+        }
+        elseif ( ( (IsSet $ModelCredits.child_author) -or (IsChecked $Redux.Graphics.MMChildLink) ) -and !(IsSet $ModelCredits.author) )   { $Credits += "{0}- Child only" }
+        elseif ( (IsSet $ModelCredits.adult_author) -and !(IsSet $ModelCredits.author) )   { $Credits += "{0}- Adult only" }
+
+        if (IsSet $Credits)   { $PreviewToolTip.SetToolTip($Box, ([String]::Format($Credits, [Environment]::NewLine))) }
+        else                  { $PreviewToolTip.RemoveAll() }
     }
-    else {
-        $Box.Image = $null
-        $PreviewToolTip.RemoveAll()
-    }
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function ShowOriginalModelPreview([Object]$Box) {
+    
+    $global:ModelCredits = $null
+    if (TestFile ($GameFiles.previews + "\Original.png"))   { $Box.Image = [System.Drawing.Image]::Fromfile( ( Get-Item ($GameFiles.previews + "\Original.png") ) ) }
+    else                                                    { $Box.Image = $null }
+    $PreviewToolTip.SetToolTip($Redux.Graphics.ModelsPreview, ([String]::Format("Original models by: Nintendo", [Environment]::NewLine)))
 
 }
 
@@ -92,6 +137,7 @@ function LoadModelsList([String]$Category) {
     foreach ($file in Get-ChildItem -LiteralPath $path -Force) {
         if ($file.Extension -eq ".png") { $list += $file.BaseName }
     }
+
     return $list
 
 }
@@ -99,7 +145,7 @@ function LoadModelsList([String]$Category) {
 
 
 #==============================================================================================================================================================================================
-function ChangeModelsDropdown() {
+function ChangeModelsDropdown($Dropdown) {
     
     $Redux.Graphics.LinkModels.Visible     = ($Redux.Graphics.OriginalModels.Checked  -and !$Redux.Graphics.MMChildLink.Checked) -or ($Redux.Graphics.ListLinkModels.Checked -and !$Redux.Graphics.MMChildLink.Checked)
     $Redux.Graphics.LinkModels.Enabled     = $Redux.Graphics.ListLinkModels.Checked -and !$Redux.Graphics.MMChildLink.Checked
@@ -120,68 +166,63 @@ function ChangeModelsSelection() {
     # Events
     $Redux.Graphics.OriginalModels.Add_CheckedChanged({
         ChangeModelsDropdown
-        if (TestFile ($GameFiles.previews + "\Original.png")) {
-            $Redux.Graphics.ModelsPreview.Image = [System.Drawing.Image]::Fromfile( (Get-Item ($GameFiles.previews + "\Original.png")) )
-            if (TestFile ($GameFiles.previews + "\Credits.txt")) {
-                $item = (Get-Content -Path ($GameFiles.previews + "\Credits.txt"))
-                $PreviewToolTip.SetToolTip($Redux.Graphics.ModelsPreview, ([String]::Format($item, [Environment]::NewLine)))
-            }
-        }
+        ShowOriginalModelPreview $Redux.Graphics.ModelsPreview
     })
 
     $Redux.Graphics.ListLinkModels.Add_CheckedChanged({
         ChangeModelsDropdown
-        if     (IsChecked -Elem $Redux.Graphics.MMChildLink)        { ShowModelPreview -Dropdown $Redux.Graphics.LinkModelsPlus -Box $Redux.Graphics.ModelsPreview -Path ($GameFiles.previews + "\Link+\") }
-        elseif (IsChecked -Elem $Redux.Graphics.MMChildLink -Not)   { ShowModelPreview -Dropdown $Redux.Graphics.LinkModels     -Box $Redux.Graphics.ModelsPreview -Path ($GameFiles.previews + "\Link\") }
+        if     (IsChecked -Elem $Redux.Graphics.MMChildLink)        { ShowModelPreview -Dropdown $Redux.Graphics.LinkModelsPlus -Box $Redux.Graphics.ModelsPreview -Category "Link+" }
+        elseif (IsChecked -Elem $Redux.Graphics.MMChildLink -Not)   { ShowModelPreview -Dropdown $Redux.Graphics.LinkModels     -Box $Redux.Graphics.ModelsPreview -Category "Link" }
     })
 
     $Redux.Graphics.ListMaleModels.Add_CheckedChanged({
         ChangeModelsDropdown
-        ShowModelPreview -Dropdown $Redux.Graphics.MaleModels -Box $Redux.Graphics.ModelsPreview -Path ($GameFiles.previews + "\Male\")
+        ShowModelPreview -Dropdown $Redux.Graphics.MaleModels -Box $Redux.Graphics.ModelsPreview -Category "\Male\"
     })
 
     $Redux.Graphics.ListFemaleModels.Add_CheckedChanged({
         ChangeModelsDropdown
-        ShowModelPreview -Dropdown $Redux.Graphics.FemaleModels -Box $Redux.Graphics.ModelsPreview -Path ($GameFiles.previews + "\Female\")
+        ShowModelPreview -Dropdown $Redux.Graphics.FemaleModels -Box $Redux.Graphics.ModelsPreview -Category "\Female\"
     })
 
     $Redux.Graphics.LinkModels.Add_SelectedIndexChanged({
-        if (IsChecked -Elem $Redux.Graphics.ListLinkModels)     { ShowModelPreview -Dropdown $Redux.Graphics.LinkModels -Box $Redux.Graphics.ModelsPreview -Path ($GameFiles.previews + "\Link\") }
+        if (IsChecked -Elem $Redux.Graphics.ListLinkModels)     { ShowModelPreview -Dropdown $Redux.Graphics.LinkModels -Box $Redux.Graphics.ModelsPreview -Category "Link" }
     })
     $Redux.Graphics.LinkModelsPlus.Add_SelectedIndexChanged({
-        if (IsChecked -Elem $Redux.Graphics.ListLinkModels)     { ShowModelPreview -Dropdown $Redux.Graphics.LinkModelsPlus -Box $Redux.Graphics.ModelsPreview -Path ($GameFiles.previews + "\Link+\") }
+        if (IsChecked -Elem $Redux.Graphics.ListLinkModels)     { ShowModelPreview -Dropdown $Redux.Graphics.LinkModelsPlus -Box $Redux.Graphics.ModelsPreview -Category "Link+" }
     })
     $Redux.Graphics.MaleModels.Add_SelectedIndexChanged({
-        if (IsChecked -Elem $Redux.Graphics.ListMaleModels)     { ShowModelPreview -Dropdown $Redux.Graphics.MaleModels -Box $Redux.Graphics.ModelsPreview -Path ($GameFiles.previews + "\Male\") }
+        if (IsChecked -Elem $Redux.Graphics.ListMaleModels)     { ShowModelPreview -Dropdown $Redux.Graphics.MaleModels -Box $Redux.Graphics.ModelsPreview -Category "Male" }
     })
     $Redux.Graphics.FemaleModels.Add_SelectedIndexChanged({
-        if (IsChecked -Elem $Redux.Graphics.ListFemaleModels)   { ShowModelPreview -Dropdown $Redux.Graphics.FemaleModels -Box $Redux.Graphics.ModelsPreview -Path ($GameFiles.previews + "\Female\") }
+        if (IsChecked -Elem $Redux.Graphics.ListFemaleModels)   { ShowModelPreview -Dropdown $Redux.Graphics.FemaleModels -Box $Redux.Graphics.ModelsPreview -Category "Female" }
     })
 
     $Redux.Graphics.MMChildLink.Add_CheckStateChanged({
         ChangeModelsDropdown
-        if     ( (IsChecked -Elem $Redux.Graphics.ListLinkModels) -and (IsChecked -Elem $Redux.Graphics.MMChildLink) )        { ShowModelPreview -Dropdown $Redux.Graphics.LinkModelsPlus -Box $Redux.Graphics.ModelsPreview -Path ($GameFiles.previews + "\Link+\") }
-        elseif ( (IsChecked -Elem $Redux.Graphics.ListLinkModels) -and (IsChecked -Elem $Redux.Graphics.MMChildLink -Not) )   { ShowModelPreview -Dropdown $Redux.Graphics.LinkModels -Box $Redux.Graphics.ModelsPreview -Path ($GameFiles.previews + "\Link\") }
+        if     ( (IsChecked -Elem $Redux.Graphics.ListLinkModels) -and (IsChecked -Elem $Redux.Graphics.MMChildLink) )        { ShowModelPreview -Dropdown $Redux.Graphics.LinkModelsPlus -Box $Redux.Graphics.ModelsPreview -Category "Link+" }
+        elseif ( (IsChecked -Elem $Redux.Graphics.ListLinkModels) -and (IsChecked -Elem $Redux.Graphics.MMChildLink -Not) )   { ShowModelPreview -Dropdown $Redux.Graphics.LinkModels -Box $Redux.Graphics.ModelsPreview -Category "Link" }
     })
 
 
 
     # Initial Run
-    if ($Redux.Graphics.OriginalModels.Checked) {
-        if (TestFile ($GameFiles.previews + "\Original.png")) {
-            $Redux.Graphics.ModelsPreview.Image = [System.Drawing.Image]::Fromfile( ( Get-Item ($GameFiles.previews + "\Original.png") ) )
-            if (TestFile ($GameFiles.previews + "\Credits.txt")) {
-                $item = (Get-Content -Path ($GameFiles.previews + "\Credits.txt"))
-                $PreviewToolTip.SetToolTip($Redux.Graphics.ModelsPreview, ([String]::Format($item, [Environment]::NewLine)))
-            }
-        }
-    }
-    elseif ( (IsChecked -Elem $Redux.Graphics.ListLinkModels) -and (IsChecked -Elem $Redux.Graphics.MMChildLink) )        { ShowModelPreview -Dropdown $Redux.Graphics.LinkModelsPlus -Box $Redux.Graphics.ModelsPreview -Path ($GameFiles.previews + "\Link+\") }
-    elseif ( (IsChecked -Elem $Redux.Graphics.ListLinkModels) -and (IsChecked -Elem $Redux.Graphics.MMChildLink -Not) )   { ShowModelPreview -Dropdown $Redux.Graphics.LinkModels -Box $Redux.Graphics.ModelsPreview -Path ($GameFiles.previews + "\Link\") }
-    elseif (IsChecked -Elem $Redux.Graphics.ListMaleModels)     { ShowModelPreview -Dropdown $Redux.Graphics.MaleModels   -Box $Redux.Graphics.ModelsPreview -Path ($GameFiles.previews + "\Male\") }
-    elseif (IsChecked -Elem $Redux.Graphics.ListFemaleModels)   { ShowModelPreview -Dropdown $Redux.Graphics.FemaleModels -Box $Redux.Graphics.ModelsPreview -Path ($GameFiles.previews + "\Female\") }
-
     ChangeModelsDropdown
+
+    if ($Redux.Graphics.OriginalModels.Checked) { ShowOriginalModelPreview $Redux.Graphics.ModelsPreview }
+    elseif ( (IsChecked -Elem $Redux.Graphics.ListLinkModels) -and (IsChecked -Elem $Redux.Graphics.MMChildLink) )        { ShowModelPreview -Dropdown $Redux.Graphics.LinkModelsPlus -Box $Redux.Graphics.ModelsPreview -Category "Link+" }
+    elseif ( (IsChecked -Elem $Redux.Graphics.ListLinkModels) -and (IsChecked -Elem $Redux.Graphics.MMChildLink -Not) )   { ShowModelPreview -Dropdown $Redux.Graphics.LinkModels -Box $Redux.Graphics.ModelsPreview -Category "Link" }
+    elseif (IsChecked -Elem $Redux.Graphics.ListMaleModels)     { ShowModelPreview -Dropdown $Redux.Graphics.MaleModels   -Box $Redux.Graphics.ModelsPreview -Category "Male" }
+    elseif (IsChecked -Elem $Redux.Graphics.ListFemaleModels)   { ShowModelPreview -Dropdown $Redux.Graphics.FemaleModels -Box $Redux.Graphics.ModelsPreview -Category "Female" }
+
+
+
+    # URL
+    $Redux.Graphics.ModelsPreview.add_Click({
+        if (IsSet $ModelCredits.url) {
+            [system.Diagnostics.Process]::start($ModelCredits.url)
+        }
+    })
 
 }
 
