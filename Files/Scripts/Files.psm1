@@ -20,10 +20,6 @@ function SetFileParameters() {
     $Files.tool.TabExt64                    = $Paths.Tools + "\Compression\TabExt64.exe"
     $Files.tool.TabExt32                    = $Paths.Tools + "\Compression\TabExt32.exe"
 
-    $Files.tool.inpout32                    = $Paths.Tools + "\Conversion\inpout32.dll"
-    $Files.tool.io                          = $Paths.Tools + "\Conversion\io.dll"
-    $Files.tool.ucon64                      = $Paths.Tools + "\Conversion\ucon64.exe"
-
     $Files.tool.flips                       = $Paths.Tools + "\Patching\flips.exe"
     $Files.tool.ups                         = $Paths.Tools + "\Patching\ups.exe"
     $Files.tool.xdelta                      = $Paths.Tools + "\Patching\xdelta.exe"

@@ -1,9 +1,13 @@
 --- Additional Options ---
 - 60 FPS (v2):			Kaze Emanuar
 - Free Cam:			Kaze Emanuar
-- Model:				Fnzmeatpopsicle, ElectroMew/P0PPY, Yoshi Milkman, Marshivolt
+- 16:9 Widescreen:			Theboy181 (RAM) & Admentus (ROM)
+- No Black Bars:			Theboy181 (RAM) & Admentus (ROM)
+- Extended Draw Distance:		Theboy181 (RAM) & Admentus (ROM)
+- Force Hires Mario Model:		Theboy181 (RAM) & Admentus (ROM)
 - GhostlyDark (documenting several offsets)
 - Admentus (Scripting and Assistance of all Options)
+- SM64 ROM Manager (several options which were backported)
 
 --- Multiplayer (v1.4.2) ---
 - Skelux

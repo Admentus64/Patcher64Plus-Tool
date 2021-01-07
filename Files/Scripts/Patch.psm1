@@ -561,7 +561,7 @@ function PatchVCEmulator([String]$Command) {
     # Games
     if ($GameType.mode -eq "Ocarina of Time") {
         if ($VC.ExpandMemory.Checked) {
-            ChangeBytes -File $WadFile.AppFile01 -Offset "2EB0" -Values @("60", "00", "00", "00")
+            ChangeBytes -File $WadFile.AppFile01 -Offset "2EB0"  -Values @("60", "00", "00", "00")
             ChangeBytes -File $WadFile.AppFile01 -Offset "5BF44" -Values @("3C", "80", "72", "00")
             ChangeBytes -File $WadFile.AppFile01 -Offset "5BFD7" -Values @("00")
         }
@@ -743,16 +743,23 @@ function ConvertROM([String]$Command) {
     if ($Ext -eq ".v64" -or $Ext -eq ".n64") {
         UpdateStatusLabel "Converting ROM to Big Endian..."
 
-        if ($Ext -eq ".v64") {
-            Push-Location $Paths.Temp
-            & $Files.tool.ucon64 --z64 $GetROM.run | Out-Host
-            Pop-Location
-            Move-Item -LiteralPath ($Paths.Temp + "\" + $Name + ".z64") -Destination ($Paths.Temp + "\converted") -Force
+        if ($Ext -eq ".v64" -or $Ext -eq ".n64") {
+            $array = [IO.File]::ReadAllBytes($GetROM.run)
+            if (Compare-Object -ReferenceObject $array[0..8] -DifferenceObject @(128, 55, 18, 64, 0, 0, 0, 15, 128) -IncludeEqual) {
+                WriteToConsole "ROM is already Big Endian?"
+                return
+            }
+
         }
 
-        if ($Ext -eq ".n64") {
-            $array = [IO.File]::ReadAllBytes($GetROM.run)
-
+        if ($Ext -eq ".v64") {
+            for ($i=0; $i -lt $array.length; $i+=2) {
+                $temp = @($array[$i], $array[$i + 1])
+                $array[$i]     = $temp[1]
+                $array[$i + 1] = $temp[0]
+            }
+        }
+        elseif ($Ext -eq ".n64") {
             for ($i=0; $i -lt $array.length; $i+=4) {
                 $temp = @($array[$i], $array[$i + 1], $array[$i + 2], $array[$i + 3])
                 $array[$i]     = $temp[3]
@@ -760,7 +767,9 @@ function ConvertROM([String]$Command) {
                 $array[$i + 2] = $temp[1]
                 $array[$i + 3] = $temp[0]
             }
+        }
 
+        if ($Ext -eq ".v64" -or $Ext -eq ".n64") {
             [IO.File]::WriteAllBytes($Paths.Temp + "\converted", $array)
             $array = $temp = $null
         }
@@ -1251,15 +1260,16 @@ function RepackWADFile([String]$GameID) {
 
 
 #==============================================================================================================================================================================================
-function IsWidescreen([Switch]$Patched) {
+function IsWidescreen([Switch]$Patched, [Switch]$Experimental) {
     
     if (IsChecked $Redux.Graphics.Widescreen -Not)                         { return $False }
-    if ($Settings.Debug.ChangeWidescreen -eq $True)                        { return $False }
     if ($IsWiiVC)                                                          { return $False }
     if ($Patched  -and !(IsSet -Elem $GamePatch.redux.file_widescreen) )   { return $False }
-    if ($Patched  -and (IsChecked -Elem $Patches.Redux -Active -Not) )     { return $False }
-    if (!$Patched -and (IsChecked -Elem $Patches.Redux -Active) )          { return $False }
-    return $True
+
+    if     (!$Patched -and !$Experimental)   { return ( (IsChecked -Elem $Patches.Redux -Active -Not) -and ($Settings.Debug.ChangeWidescreen -eq $False) ) }
+    elseif ( $Patched -and !$Experimental)   { return ( (IsChecked -Elem $Patches.Redux -Active)      -and ($Settings.Debug.ChangeWidescreen -eq $False) ) }
+    elseif (!$Patched -and  $Experimental)   { return ( (IsChecked -Elem $Patches.Redux -Active -Not) -and ($Settings.Debug.ChangeWidescreen -eq $True)  ) }
+    elseif ( $Patched -and  $Experimental)   { return ( (IsChecked -Elem $Patches.Redux -Active)      -and ($Settings.Debug.ChangeWidescreen -eq $True)  ) }
 
 }
 

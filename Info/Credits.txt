@@ -25,6 +25,7 @@
 --- Additional Options ---
 - Master Quest:				ShadowOne333
 - 16:9 Backgrounds & Textures:		GhostlyDark, ShadowOne333 & CYB3RTR0N
+- Enhanced 16:9 Widescreen:		gamemasterplc & GhostlyDark
 - Force Hires Link Model:		GhostlyDark
 - MM Link Voice:			Korey Cryderman & GhostlyDark
 - Feminine Link Voice:			theluigidude2007
@@ -292,9 +293,13 @@ Special Thanks:				Nokaubure, z64me, Ultra553, OoT Decomp
 --- Additional Options ---
 - 60 FPS (v2):				Kaze Emanuar
 - Free Cam:				Kaze Emanuar
-- Model:				Fnzmeatpopsicle, ElectroMew/P0PPY, Yoshi Milkman, Marshivolt
+- 16:9 Widescreen:			Theboy181 (RAM) & Admentus (ROM)
+- No Black Bars:			Theboy181 (RAM) & Admentus (ROM)
+- Extended Draw Distance:		Theboy181 (RAM) & Admentus (ROM)
+- Force Hires Mario Model:		Theboy181 (RAM) & Admentus (ROM)
 - GhostlyDark (documenting several offsets)
 - Admentus (Scripting and Assistance of all Options)
+- SM64 ROM Manager (several options which were backported)
 
 --- Multiplayer (v1.4.2) ---
 - Skelux
@@ -381,6 +386,13 @@ Special Thanks:				Nokaubure, z64me, Ultra553, OoT Decomp
 ==========================
 === A LINK TO THE PAST ===
 ==========================
+
+--- REDUX ---
+- Main Hacking:				ShadowOne333 & rainponcho
+- Hacking:				Con, qwertymodo, SCD, PuzzleDude, Kazuto
+
+--- Additional Options ---
+- Re-Wizardized Script:			Kyler Ashton
 
 --- Parallel Worlds ---
 - Directors:				Euclid, SePH, qwertymodo

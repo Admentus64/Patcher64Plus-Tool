@@ -96,29 +96,29 @@ function CreateOptionsSuperMario64() {
 
     # GRAPHICS #
     CreateReduxGroup    -Tag  "Graphics" -Text "Graphics"
-    CreateReduxCheckBox -Name "Widescreen"       -Column 1 -Row 1 -Text "16:9 Widescreen [!]"     -Info "Native 16:9 Widescreen Display support`n[!] Requires Dolphin's or GlideN64's internal Widescreen Hack"
-    CreateReduxCheckBox -Name "BlackBars"        -Column 2 -Row 1 -Text "No Black Bars"           -Info "Removes the black bars shown on the top and bottom of the screen"
-    CreateReduxCheckBox -Name "ExtendedDraw"     -Column 3 -Row 1 -Text "Extended Draw Distance"  -Info "Increases the game's draw distance for solid objects with collision`nIncludes coin formations as well"
-    CreateReduxCheckBox -Name "ForceHiresModel"  -Column 4 -Row 1 -Text "Force Hires Mario Model" -Info "Always use Mario's High Resolution Model when Mario is too far away"
+    CreateReduxCheckBox -Name "Widescreen"       -Column 1 -Row 1 -Text "16:9 Widescreen [!]"     -Info "Native 16:9 Widescreen Display support`n[!] Requires Dolphin's or GlideN64's internal Widescreen Hack"                                    -Credits "Theboy181 (RAM) & Admentus (ROM)"
+    CreateReduxCheckBox -Name "BlackBars"        -Column 2 -Row 1 -Text "No Black Bars"           -Info "Removes the black bars shown on the top and bottom of the screen"                                                                         -Credits "Theboy181 (RAM) & Admentus (ROM)"
+    CreateReduxCheckBox -Name "ExtendedDraw"     -Column 3 -Row 1 -Text "Extended Draw Distance"  -Info "Increases the game's draw distance for solid objects with collision`nIncludes coin formations as well"                                    -Credits "Theboy181 (RAM) & Admentus (ROM)"
+    CreateReduxCheckBox -Name "ForceHiresModel"  -Column 4 -Row 1 -Text "Force Hires Mario Model" -Info "Always use Mario's High Resolution Model when Mario is too far away"                                                                      -Credits "Theboy181 (RAM) & Admentus (ROM)"
 
     # GAMEPLAY #
     CreateReduxGroup    -Tag  "Gameplay" -Text "Gameplay"
-    CreateReduxCheckBox -Name "FPS"              -Column 1 -Row 1 -Text "60 FPS"                  -Info "Increases the FPS from 30 to 60`nWitness Super Mario 64 in glorious 60 FPS"
-    CreateReduxCheckBox -Name "FreeCam"          -Column 2 -Row 1 -Text "Analog Camera"           -Info "Enable full 360 degrees sideways analog camera`nEnable a second emulated controller and bind the Left / Right for the Analog stick"
-    CreateReduxCheckBox -Name "LagFix"           -Column 3 -Row 1 -Text "Lag Fix"                 -Info "Smoothens gameplay by reducing lag"
-    CreateReduxCheckBox -Name "ExitLevelAnytime" -Column 4 -Row 1 -Text "Exit Level Anytime"      -Info "Exit the level at any time without the need for standing still"
+    CreateReduxCheckBox -Name "FPS"              -Column 1 -Row 1 -Text "60 FPS"                  -Info "Increases the FPS from 30 to 60`nWitness Super Mario 64 in glorious 60 FPS"                                                               -Credits "Kaze Emanuar"
+    CreateReduxCheckBox -Name "FreeCam"          -Column 2 -Row 1 -Text "Analog Camera"           -Info "Enable full 360 degrees sideways analog camera`nEnable a second emulated controller and bind the Left / Right for the Analog stick"       -Credits "Kaze Emanuar"
+    CreateReduxCheckBox -Name "LagFix"           -Column 3 -Row 1 -Text "Lag Fix"                 -Info "Smoothens gameplay by reducing lag"                                                                                                       -Credits "Admentus"
+    CreateReduxCheckBox -Name "ExitLevelAnytime" -Column 4 -Row 1 -Text "Exit Level Anytime"      -Info "Exit the level at any time without the need for standing still"                                                                           -Credits "Ported from SM64 ROM Manager"
 
     # INTERFACE #
     CreateReduxGroup    -Tag  "UI"-Text "Interface"
-    CreateReduxCheckBox -Name "HideHUD"           -Column 1 -Row 1 -Text "Hide HUD"               -Info "Hide the HUD by default and press L to make it appear`nEnable the 'Remap L Button' VC option when patching a WAD"
+    CreateReduxCheckBox -Name "HideHUD"           -Column 1 -Row 1 -Text "Hide HUD"               -Info "Hide the HUD by default and press L to make it appear`nEnable the 'Remap L Button' VC option when patching a WAD"                         -Credits "Ported from SM64 ROM Manager"
 
     # SKIP #
     CreateReduxGroup    -Tag  "Skip" -Text "Skip" -Height 2
-    CreateReduxCheckBox -Name "Opening"          -Column 1 -Row 1 -Text "Skip Opening"           -Info "Skip the introduction cutscene sequence when starting a new save file"
-    CreateReduxCheckBox -Name "StarMessages"     -Column 2 -Row 1 -Text "Skip Star Messages"     -Info "Skip the messages displayed after collecting specific numbers of stars"
-    CreateReduxCheckBox -Name "TitleScreen"      -Column 3 -Row 1 -Text "Skip Title Screen"      -Info "Skip the title screen shown when booting the game`nThis option only works when modifying the vanilla Super Mario 64 game"
-    CreateReduxCheckBox -Name "MarioScreen"      -Column 4 -Row 1 -Text "Skip Mario Screen"      -Info "Skip the screen which displays Mario's face and the title in the background`nAlso applies to the screen displayed after losing all lives"
-    CreateReduxCheckBox -Name "BoosDialogue"     -Column 1 -Row 2 -Text "Remove Boos Dialogue"   -Info "Removes the dialogue for defeating Boos or when the Big Boo appears"
+    CreateReduxCheckBox -Name "Opening"          -Column 1 -Row 1 -Text "Skip Opening"            -Info "Skip the introduction cutscene sequence when starting a new save file"                                                                    -Credits "Ported from SM64 ROM Manager"
+    CreateReduxCheckBox -Name "StarMessages"     -Column 2 -Row 1 -Text "Skip Star Messages"      -Info "Skip the messages displayed after collecting specific numbers of stars"                                                                   -Credits "Ported from SM64 ROM Manager"
+    CreateReduxCheckBox -Name "TitleScreen"      -Column 3 -Row 1 -Text "Skip Title Screen"       -Info "Skip the title screen shown when booting the game`nThis option only works when modifying the vanilla Super Mario 64 game"                 -Credits "Ported from SM64 ROM Manager"
+    CreateReduxCheckBox -Name "MarioScreen"      -Column 4 -Row 1 -Text "Skip Mario Screen"       -Info "Skip the screen which displays Mario's face and the title in the background`nAlso applies to the screen displayed after losing all lives" -Credits "Ported from SM64 ROM Manager"
+    CreateReduxCheckBox -Name "BoosDialogue"     -Column 1 -Row 2 -Text "Remove Boos Dialogue"    -Info "Removes the dialogue for defeating Boos or when the Big Boo appears"                                                                      -Credits "Ported from SM64 ROM Manager"
 
 
 

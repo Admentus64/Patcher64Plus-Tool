@@ -6,6 +6,7 @@
 --- Additional Options ---
 - Master Quest:			ShadowOne333
 - 16:9 Backgrounds & Textures:	GhostlyDark, ShadowOne333 & CYB3RTR0N
+- Enhanced 16:9 Widescreen:	gamemasterplc & GhostlyDark
 - Force Hires Link Model:		GhostlyDark
 - MM Link Voice:			Korey Cryderman & GhostlyDark
 - Feminine Link Voice:		theluigidude2007

@@ -1,3 +1,11 @@
+v10.1.0
+- Added a widescreen patch for OoT. Sorry, no Redux support (still uses the old method)
+- Added new "Re-Wizardized Script" option for ALttP
+- Replaced .v64 to .z64 conversion through ucon with manual byte-patching
+- Rewrote and optimized when certain settings may refresh the "Additional Options" GUI
+- Added credits witin the "Additional Options" GUI
+- Some bug fixes
+
 v10.0.5
 - Changed how the custom models preview parses it credits
 - Adjusted credits

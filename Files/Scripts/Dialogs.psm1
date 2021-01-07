@@ -198,7 +198,7 @@ function CreateSettingsDialog() {
     $GeneralSettings.IgnoreChecksum      = CreateSettingsCheckbox -Name "IgnoreChecksum"   -Column 1 -Row 1 -Text "Ignore Input Checksum" -IsDebug -Info "Do not check the checksum of a ROM or WAD and patch it regardless`nDowngrade is no longer forced anymore if the checksum is different than the supported revision"
     $GeneralSettings.KeepLogo            = CreateSettingsCheckbox -Name "KeepLogo"         -Column 2 -Row 1 -Text "Keep Logo"             -IsDebug -Info "Keep the vanilla title logo instead of the Master Quest title logo"
     $GeneralSettings.ForceExtract        = CreateSettingsCheckbox -Name "ForceExtract"     -Column 3 -Row 1 -Text "Force Extract"         -IsDebug -Info "Always extract game data required for patching even if it was already extracted on a previous run"
-    $Info = "Changes how the widescreen option behaves for Majora's Mask in Native (N64) Mode`nOnly apply the 16:9 textures`nUse GLideN64 " + '"adjust to fit"' + " option for 16:9 widescreen"
+    $Info = "Changes how the widescreen option behaves for Ocarina of Time and Majora's Mask in Native (N64) Mode`n`n--- Ocarina of Time ---`nApply an experimental widescreen patch instead`n`n--- Majora's Mask ---`nOnly apply the 16:9 textures`nUse GLideN64 " + '"adjust to fit"' + " option for 16:9 widescreen"
     $GeneralSettings.ChangeWidescreen    = CreateSettingsCheckbox -Name "ChangeWidescreen" -Column 1 -Row 2 -Text "Change Widescreen"     -IsDebug -Info $Info
     $GeneralSettings.LiteGUI             = CreateSettingsCheckbox -Name "LiteGUI"          -Column 2 -Row 2 -Text "Lite Options GUI"      -IsDebug -Info "Only display and allow options which are highly compatible, such as with the Randomizer for Ocarina of Time"
 
@@ -235,13 +235,16 @@ function CreateSettingsDialog() {
     # Double Click
     $GeneralSettings.DoubleClick.Add_CheckStateChanged({ TogglePowerShellOpenWithClicks $this.Checked })
 
+    # Change Widescreen
+    $GeneralSettings.ChangeWidescreen.Add_CheckStateChanged({ LoadAdditionalOptions })
+
     # Console
     $GeneralSettings.Console.Add_CheckStateChanged({
         ShowPowerShellConsole $this.Checked
         $GeneralSettings.Stop.Enabled = $this.Checked
     })
     $GeneralSettings.Stop.Enabled = $GeneralSettings.Console.Checked
-
+    
     # Lite GUI
     $GeneralSettings.LiteGUI.Add_CheckStateChanged({
         LoadAdditionalOptions
@@ -249,7 +252,6 @@ function CreateSettingsDialog() {
     })
 
     # Presets
-
     $GeneralSettings.Presets | ForEach-Object {
         $_.Add_CheckedChanged({
             for ($i=0; $i -lt $GeneralSettings.Presets.length; $i++) {

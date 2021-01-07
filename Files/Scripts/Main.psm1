@@ -242,9 +242,9 @@ function CreateMainDialog() {
                 if ( ($IsWiiVC -and $Item.console -eq "Wii VC") -or (!$IsWiiVC -and $Item.console -eq "Native") -or ($Item.console -eq "Both") ) {
                     $global:GamePatch = $Item
                     $PatchToolTip.SetToolTip($Patches.Button, ([String]::Format($Item.tooltip, [Environment]::NewLine)))
-                    DisablePatches
                     GetHeader
                     LoadAdditionalOptions
+                    DisablePatches
                 }
             }
         }
@@ -266,6 +266,7 @@ function CreateMainDialog() {
     $Patches.ReduxLabel = CreateLabel -X ($Patches.Button.Right + 10) -Y ($Patches.OptionsLabel.Bottom + 15) -Width 85 -Height 15 -Text "Enable Redux:" -Info "Enable the Redux patch which improves game mechanics`nIncludes among other changes the inclusion of the D-Pad for dedicated item buttons"
     $Patches.Redux = CreateCheckBox -X $Patches.ReduxLabel.Right -Y ($Patches.ReduxLabel.Top - 2) -Width 20 -Height 20 -Info "Enable the Redux patch which improves game mechanics`nIncludes among other changes the inclusion of the D-Pad for dedicated item buttons" -Name "Patches.Redux" -Checked $True
     $Patches.Redux.Add_CheckStateChanged({
+        LoadAdditionalOptions
         if (!(IsSet $Redux.Groups)) { return }
         $Redux.Groups.GetEnumerator() | ForEach-Object {
             if ($_.IsRedux) { $_.Enabled = $this.Checked -and $Patches.Options.Checked }
