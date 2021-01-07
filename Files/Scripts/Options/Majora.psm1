@@ -471,8 +471,8 @@ function CreateOptionsMajorasMask() {
     }
 
     if (!$IsWiiVC) {
-        $Redux.Graphics.Widescreen.Add_CheckStateChanged({ EnableWidescreenGUI })
-        EnableWidescreenGUI
+        $Redux.Graphics.Widescreen.Add_CheckStateChanged({ EnableWidescreenGUIMajorasMask })
+        EnableWidescreenGUIMajorasMask
     }
 
 }
@@ -480,7 +480,7 @@ function CreateOptionsMajorasMask() {
 
 
 #==============================================================================================================================================================================================
-function EnableWidescreenGUI() {
+function EnableWidescreenGUIMajorasMask() {
 
     $Redux.Colors.Magic.Enabled = $Redux.Colors.BaseMagic.Enabled = $Redux.Colors.DoubleMagic.Enabled = (!(IsWidescreen -Patched))
     $Redux.DPad.Disable.Enabled = $Redux.DPad.Hide.Enabled = $Redux.DPad.LayoutLeft.Enabled = $Redux.DPad.LayoutRight.Enabled = (!(IsWidescreen -Patched))

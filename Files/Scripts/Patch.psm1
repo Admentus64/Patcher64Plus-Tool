@@ -1264,12 +1264,12 @@ function IsWidescreen([Switch]$Patched, [Switch]$Experimental) {
     
     if (IsChecked $Redux.Graphics.Widescreen -Not)                         { return $False }
     if ($IsWiiVC)                                                          { return $False }
-    if ($Patched  -and !(IsSet -Elem $GamePatch.redux.file_widescreen) )   { return $False }
+    if ($Patched -and !(IsSet -Elem $GamePatch.redux.file_widescreen) )    { return $False }
 
-    if     (!$Patched -and !$Experimental)   { return ( (IsChecked -Elem $Patches.Redux -Active -Not) -and ($Settings.Debug.ChangeWidescreen -eq $False) ) }
-    elseif ( $Patched -and !$Experimental)   { return ( (IsChecked -Elem $Patches.Redux -Active)      -and ($Settings.Debug.ChangeWidescreen -eq $False) ) }
-    elseif (!$Patched -and  $Experimental)   { return ( (IsChecked -Elem $Patches.Redux -Active -Not) -and ($Settings.Debug.ChangeWidescreen -eq $True)  ) }
-    elseif ( $Patched -and  $Experimental)   { return ( (IsChecked -Elem $Patches.Redux -Active)      -and ($Settings.Debug.ChangeWidescreen -eq $True)  ) }
+    if     (!$Patched -and !$Experimental)   { return ( !$Patches.Redux.Checked -and $Settings.Debug.ChangeWidescreen -eq $False) }
+    elseif ( $Patched -and !$Experimental)   { return (  $Patches.Redux.Checked -and $Settings.Debug.ChangeWidescreen -eq $False) }
+    elseif (!$Patched -and  $Experimental)   { return ( !$Patches.Redux.Checked -and $Settings.Debug.ChangeWidescreen -eq $True)  }
+    elseif ( $Patched -and  $Experimental)   { return (  $Patches.Redux.Checked -and $Settings.Debug.ChangeWidescreen -eq $True)  }
 
 }
 

@@ -770,6 +770,21 @@ function CreateOptionsOcarinaOfTime() {
         CreateOptionsDialog -Width 1060 -Height 400 -Tabs @("Audiovisual")
     }
 
+    if (!$IsWiiVC) {
+        $Redux.Graphics.Widescreen.Add_CheckStateChanged({ EnableWidescreenGUIOcarinaOfTime })
+        EnableWidescreenGUIOcarinaOfTime
+    }
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function EnableWidescreenGUIOcarinaOfTime() {
+
+    $Redux.UI.ButtonPositions.Enabled  = (!(IsWidescreen -Experimental))
+    $Redux.UI.CenterNaviPrompt.Enabled = (!(IsWidescreen -Experimental))
+
 }
 
 
