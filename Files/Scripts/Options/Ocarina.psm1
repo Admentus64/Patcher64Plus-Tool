@@ -94,7 +94,7 @@ function ByteOptionsOcarinaOfTime() {
         PatchBytes  -Offset "B896A0" -Patch "Fire Temple Theme\12AudioBankPointers.bin"
         PatchBytes  -Offset "B89AD0" -Patch "Fire Temple Theme\12AudioSeqPointers.bin"
         PatchBytes  -Offset "B8A1C0" -Patch "Fire Temple Theme\12AudioTablePointers.bin"
-        ExportAndPatch -Path "audiobank_fire_temple"  -Offset "D390" -Length "4CCBB0"
+        ExportAndPatch -Path "audiobank_fire_temple" -Offset "D390" -Length "4CCBB0"
     }
 
     if (IsChecked $Redux.Restore.CowNoseRing) { ChangeBytes -Offset "EF3E68" -Values @("00", "00") }
@@ -106,6 +106,7 @@ function ByteOptionsOcarinaOfTime() {
     if (IsChecked $Redux.Other.DebugMapSelect) {
         ChangeBytes -Offset "A94994" -Values @("00", "00", "00", "00", "AE", "08", "00", "14", "34", "84", "B9", "2C", "8E", "02", "00", "18", "24", "0B", "00", "00", "AC", "8B", "00", "00")
         ChangeBytes -Offset "B67395" -Values @("B9", "E4", "00", "00", "BA", "11", "60", "80", "80", "09", "C0", "80", "80", "37", "20", "80", "80", "1C", "14", "80", "80", "1C", "14", "80", "80", "1C", "08");
+        ExportAndPatch -Path "debug_map_select" -Offset "B9FD90" -Length "EC0"
     }
 
     if (IsChecked $Redux.Other.SubscreenDelayFix)    { ChangeBytes -Offset "B15DD0" -Values @("00", "00", "00", "00"); ChangeBytes -Offset "B12947" -Values @("03") }
@@ -366,15 +367,13 @@ function ByteOptionsOcarinaOfTime() {
     if (IsIndex -Elem $Redux.Colors.Equipment[2] -Index 3 -Not) { ChangeBytes -Offset "B6DA3E" -IsDec -Values @($Redux.Colors.SetEquipment[2].Color.R, $Redux.Colors.SetEquipment[2].Color.G, $Redux.Colors.SetEquipment[2].Color.B) } # Zora Tunic
     if (IsIndex -Elem $Redux.Colors.Equipment[3] -Index 1 -Not) { ChangeBytes -Offset "B6DA44" -IsDec -Values @($Redux.Colors.SetEquipment[3].Color.R, $Redux.Colors.SetEquipment[3].Color.G, $Redux.Colors.SetEquipment[3].Color.B) } # Silver Gauntlets
     if (IsIndex -Elem $Redux.Colors.Equipment[4] -Index 2 -Not) { ChangeBytes -Offset "B6DA47" -IsDec -Values @($Redux.Colors.SetEquipment[4].Color.R, $Redux.Colors.SetEquipment[4].Color.G, $Redux.Colors.SetEquipment[4].Color.B) } # Golden Gauntlets
-    if (IsIndex -Elem $Redux.Colors.Equipment[5] -Index 1 -Not) { # Mirror Shield Frame
-        if ( (IsIndex -Elem $Redux.Graphics.FemaleModels -Text "Saria" -Not) -or (IsIndex -Elem $Redux.Graphics.FemaleModels -Text "Hatsune Miku - Vocaloid" -Not) -or (IsIndex -Elem $Redux.Graphics.FemaleModels -Text "Princess Ruto" -Not) -or (IsIndex -Elem $Redux.Graphics.LinkModels -Text "Ocarina of Time 3D" -Not) -or (IsIndex -Elem $Redux.Graphics.LinkModels -Text "Link's Awakening" -Not) ) {
-            ChangeBytes -Offset "FA7274" -IsDec -Values @($Redux.Colors.SetEquipment[5].Color.R, $Redux.Colors.SetEquipment[5].Color.G, $Redux.Colors.SetEquipment[5].Color.B)
-            ChangeBytes -Offset "FA776C" -IsDec -Values @($Redux.Colors.SetEquipment[5].Color.R, $Redux.Colors.SetEquipment[5].Color.G, $Redux.Colors.SetEquipment[5].Color.B)
-            ChangeBytes -Offset "FAA27C" -IsDec -Values @($Redux.Colors.SetEquipment[5].Color.R, $Redux.Colors.SetEquipment[5].Color.G, $Redux.Colors.SetEquipment[5].Color.B)
-            ChangeBytes -Offset "FAC564" -IsDec -Values @($Redux.Colors.SetEquipment[5].Color.R, $Redux.Colors.SetEquipment[5].Color.G, $Redux.Colors.SetEquipment[5].Color.B)
-            ChangeBytes -Offset "FAC984" -IsDec -Values @($Redux.Colors.SetEquipment[5].Color.R, $Redux.Colors.SetEquipment[5].Color.G, $Redux.Colors.SetEquipment[5].Color.B)
-            ChangeBytes -Offset "FAEDD4" -IsDec -Values @($Redux.Colors.SetEquipment[5].Color.R, $Redux.Colors.SetEquipment[5].Color.G, $Redux.Colors.SetEquipment[5].Color.B)
-        }
+    if ( (IsIndex -Elem $Redux.Colors.Equipment[5] -Index 1 -Not) -and $ModelCredits.mirror_shield -ne 0) { # Mirror Shield Frame
+        ChangeBytes -Offset "FA7274" -IsDec -Values @($Redux.Colors.SetEquipment[5].Color.R, $Redux.Colors.SetEquipment[5].Color.G, $Redux.Colors.SetEquipment[5].Color.B)
+        ChangeBytes -Offset "FA776C" -IsDec -Values @($Redux.Colors.SetEquipment[5].Color.R, $Redux.Colors.SetEquipment[5].Color.G, $Redux.Colors.SetEquipment[5].Color.B)
+        ChangeBytes -Offset "FAA27C" -IsDec -Values @($Redux.Colors.SetEquipment[5].Color.R, $Redux.Colors.SetEquipment[5].Color.G, $Redux.Colors.SetEquipment[5].Color.B)
+        ChangeBytes -Offset "FAC564" -IsDec -Values @($Redux.Colors.SetEquipment[5].Color.R, $Redux.Colors.SetEquipment[5].Color.G, $Redux.Colors.SetEquipment[5].Color.B)
+        ChangeBytes -Offset "FAC984" -IsDec -Values @($Redux.Colors.SetEquipment[5].Color.R, $Redux.Colors.SetEquipment[5].Color.G, $Redux.Colors.SetEquipment[5].Color.B)
+        ChangeBytes -Offset "FAEDD4" -IsDec -Values @($Redux.Colors.SetEquipment[5].Color.R, $Redux.Colors.SetEquipment[5].Color.G, $Redux.Colors.SetEquipment[5].Color.B)
     }
 
 
@@ -498,8 +497,7 @@ function ByteOptionsOcarinaOfTime() {
         PatchBytes -Offset "7FD000"  -Texture -Patch "Gerudo Symbols\mirror_shield_icon.bin"
         PatchBytes -Offset "1456388" -Texture -Patch "Gerudo Symbols\mirror_shield_reflection.bin"
         PatchBytes -Offset "1616000" -Texture -Patch "Gerudo Symbols\mirror_shield_chest.bin"
-
-        if ( (IsIndex -Elem $Redux.Graphics.FemaleModels -Text "Saria" -Not) -or (IsIndex -Elem $Redux.Graphics.FemaleModels -Text "Hatsune Miku - Vocaloid" -Not) -or (IsIndex -Elem $Redux.Graphics.FemaleModels -Text "Princess Ruto" -Not) -or (IsIndex -Elem $Redux.Graphics.LinkModels -Text "Ocarina of Time 3D" -Not) -or (IsIndex -Elem $Redux.Graphics.LinkModels -Text "Link's Awakening" -Not) ) {
+        if ($ModelCredits.mirror_shield -ne 0) {
             $Offset = SearchBytes -Start "F86000" -End "FBD800" -Values @("90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90", "90")
             PatchBytes -Offset $Offset -Texture -Patch "Gerudo Symbols\mirror_shield.bin"
         }
@@ -770,17 +768,16 @@ function CreateOptionsOcarinaOfTime() {
         CreateOptionsDialog -Width 1060 -Height 400 -Tabs @("Audiovisual")
     }
 
-    if (!$IsWiiVC) {
-        $Redux.Graphics.Widescreen.Add_CheckStateChanged({ EnableWidescreenGUIOcarinaOfTime })
-        EnableWidescreenGUIOcarinaOfTime
-    }
+    if (!$IsWiiVC) { $Redux.Graphics.Widescreen.Add_CheckStateChanged({ AdjustGUIOcarinaOfTime }) }
 
 }
 
 
 
 #==============================================================================================================================================================================================
-function EnableWidescreenGUIOcarinaOfTime() {
+function AdjustGUIOcarinaOfTime() {
+    
+    if ($IsWiiVC) { return }
 
     $Redux.UI.ButtonPositions.Enabled  = (!(IsWidescreen -Experimental))
     $Redux.UI.CenterNaviPrompt.Enabled = (!(IsWidescreen -Experimental))
@@ -823,7 +820,7 @@ function CreateTabMainOcarinaOfTime() {
         CreateReduxCheckBox -Name "DefaultZTargeting"  -Text "Default Hold Z-Targeting"        -Info "Change the Default Z-Targeting option to Hold instead of Switch" -Credits "Ported from Redux"
         CreateReduxCheckBox -Name "HideCredits"        -Text "Hide Credits"                    -Info "Do not show the credits text during the credits sequence" -Credits "Admentus"
     }
-    CreateReduxCheckBox -Name "DebugMapSelect"         -Text "Debug Map Select"                -Info "Enable the Map Select menu like in the Debug ROM`nThe File Select menu now opens the Map Select menu instead`nA separate debug save file is used" -Credits "Jared Johnson"
+    CreateReduxCheckBox -Name "DebugMapSelect"         -Text "Debug Map Select"                -Info "Enable the Map Select menu like in the Debug ROM`nThe File Select menu now opens the Map Select menu instead`nA separate debug save file is used" -Credits "Jared Johnson (translated by Zelda Edit)"
 
 }
 
@@ -1228,6 +1225,8 @@ Export-ModuleMember -Function ByteReduxOcarinaOfTime
 Export-ModuleMember -Function ByteLanguageOcarinaOfTime
 
 Export-ModuleMember -Function CreateOptionsOcarinaOfTime
+Export-ModuleMember -Function AdjustGUIOcarinaOfTime
+
 Export-ModuleMember -Function CreateTabMainOcarinaOfTime
 Export-ModuleMember -Function CreateTabAudiovisualOcarinaOfTime
 Export-ModuleMember -Function CreateTabDifficultyOcarinaOfTime

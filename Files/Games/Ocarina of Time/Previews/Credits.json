@@ -23,11 +23,13 @@
 	}, {
 		"name"		: "Ocarina of Time 3D",
 		"author"	: "Skilarbabcock",
-		"url"		: "https://www.youtube.com/user/skilarbabcock"
+		"url"		: "https://www.youtube.com/user/skilarbabcock",
+		"mirror_shield"	: 0
 	}, {
 		"name"		: "Link's Awakening",
 		"adult_author"	: "Skilarbabcock",
-		"url"		: "https://www.youtube.com/user/skilarbabcock"
+		"url"		: "https://www.youtube.com/user/skilarbabcock",
+		"mirror_shield"	: 0
 	},
 	
 	
@@ -50,7 +52,8 @@
 		"author"	: "JanexLane"
 	}, {
 		"name"		: "Hatsune Miku - Vocaloid",
-		"author"	: "JanexLane"
+		"author"	: "JanexLane",
+		"mirror_shield"	: 0
 	}, {
 		"name"		: "Malon 3D",
 		"author"	: "Kimi-Stardust"
@@ -59,7 +62,8 @@
 		"author"	: "Kimi-Stardust"
 	}, {
 		"name"		: "Princess Ruto",
-		"author"	: "Unesag"
+		"author"	: "Unesag",
+		"mirror_shield"	: 0
 	}, {
 		"name"		: "Princess Zelda ALttP",
 		"child_author"	: "Unesag",
@@ -70,7 +74,8 @@
 	}, {
 		"name"		: "Saria",
 		"author"	: "Malon Rose",
-		"url"		: "https://youtube.com/c/MalonRose"
+		"url"		: "https://youtube.com/c/MalonRose",
+		"mirror_shield"	: 0
 	}
 	
 ]

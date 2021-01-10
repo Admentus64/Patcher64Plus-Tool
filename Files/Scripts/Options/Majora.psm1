@@ -23,7 +23,7 @@ function ByteOptionsMajorasMask() {
     # GAMEPLAY #
     
     if (IsChecked -Elem $Redux.Gameplay.PalaceRoute) {
-        CreateSubPath -Path ($GameFiles.extracted + "\Deku Palace")
+        CreateSubPath  -Path ($GameFiles.extracted + "\Deku Palace")
         ExportAndPatch -Path "Deku Palace\deku_palace_scene"  -Offset "2534000" -Length "D220"
         ExportAndPatch -Path "Deku Palace\deku_palace_room_0" -Offset "2542000" -Length "11A50"
         ExportAndPatch -Path "Deku Palace\deku_palace_room_1" -Offset "2554000" -Length "E950"  -NewLength "E9B0"  -TableOffset "1F6A7" -Values "B0"
@@ -470,17 +470,16 @@ function CreateOptionsMajorasMask() {
         CreateOptionsDialog -Width 1060 -Height 370 -Tabs @("Audiovisual")
     }
 
-    if (!$IsWiiVC) {
-        $Redux.Graphics.Widescreen.Add_CheckStateChanged({ EnableWidescreenGUIMajorasMask })
-        EnableWidescreenGUIMajorasMask
-    }
+    if ($IsWiiVC) { $Redux.Graphics.Widescreen.Add_CheckStateChanged({ AdjustGUIMajorasMask }) }
 
 }
 
 
 
 #==============================================================================================================================================================================================
-function EnableWidescreenGUIMajorasMask() {
+function AdjustGUIMajorasMask() {
+    
+    if ($IsWiiVC -or $Settings.Debug.LiteGUI -eq $True) { return }
 
     $Redux.Colors.Magic.Enabled = $Redux.Colors.BaseMagic.Enabled = $Redux.Colors.DoubleMagic.Enabled = (!(IsWidescreen -Patched))
     $Redux.DPad.Disable.Enabled = $Redux.DPad.Hide.Enabled = $Redux.DPad.LayoutLeft.Enabled = $Redux.DPad.LayoutRight.Enabled = (!(IsWidescreen -Patched))
@@ -813,6 +812,8 @@ Export-ModuleMember -Function ByteReduxMajorasMask
 Export-ModuleMember -Function ByteLanguageMajorasMask
 
 Export-ModuleMember -Function CreateOptionsMajorasMask
+Export-ModuleMember -Function AdjustGUIMajorasMask
+
 Export-ModuleMember -Function CreateTabMainMajorasMask
 Export-ModuleMember -Function CreateTabReduxMajorasMask
 Export-ModuleMember -Function CreateTabLanguageMajorasMask

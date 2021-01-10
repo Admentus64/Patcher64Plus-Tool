@@ -66,6 +66,7 @@
 - Polish:				RPG (v1.3)
 - Russian:			Zelda64rus (v2.32)
 - Chinese Simplified:		madcell (2009)
+- Debug Map Select:		Zelda Edit
 
 --- Dawn and Dusk ---
 - Lead Development and Music:	Captain Seedy-Eye

@@ -26,6 +26,10 @@ function CreateOptionsDialog([int]$Width, [int]$Height, [Array]$Tabs=@()) {
 
     CreateTabButtons $Tabs
 
+    # Lock GUI if needed
+    $FunctionTitle = SetFunctionTitle -Function $GameType.mode
+    if (Get-Command ("AdjustGUI" + $FunctionTitle) -errorAction SilentlyContinue) { &("AdjustGUI" + $FunctionTitle) }
+
 }
 
 
@@ -236,7 +240,10 @@ function CreateSettingsDialog() {
     $GeneralSettings.DoubleClick.Add_CheckStateChanged({ TogglePowerShellOpenWithClicks $this.Checked })
 
     # Change Widescreen
-    $GeneralSettings.ChangeWidescreen.Add_CheckStateChanged({ LoadAdditionalOptions })
+    $GeneralSettings.ChangeWidescreen.Add_CheckStateChanged({
+        $FunctionTitle = SetFunctionTitle -Function $GameType.mode
+        if (Get-Command ("AdjustGUI" + $FunctionTitle) -errorAction SilentlyContinue) { &("AdjustGUI" + $FunctionTitle) }
+    })
 
     # Console
     $GeneralSettings.Console.Add_CheckStateChanged({
