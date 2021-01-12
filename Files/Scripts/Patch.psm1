@@ -206,12 +206,16 @@ function MainFunctionPatch([String]$Command, [String[]]$Header, [String]$Patched
 
 #==============================================================================================================================================================================================
 function WriteDebug([String]$Command, [String[]]$Header, [String]$PatchedFileName, [Boolean]$Decompress) {
+    
+    if ($Settings.Debug.Stop -eq $False) { return $False }
 
     WriteToConsole
     WriteToConsole "--- Start Patch Info ---"
     WriteToConsole ("Header: " + $Header)
     WriteToConsole ("Patch File: " + (GetPatchFile))
     WriteToConsole ("Redux Patch: " + $GamePatch.redux.file)
+    WriteToConsole ("Additional Options: " +  (IsChecked -Elem $Patches.Options -Active))
+    WriteToConsole ("Redux: " +  (IsChecked -Elem $Patches.Redux -Active))
     WriteToConsole ("Language Patch: " + $LanguagePatch)
     WriteToConsole ("Patched File Name: " + $PatchedFileName)
     WriteToConsole ("Command: " + $Command)
@@ -229,7 +233,7 @@ function WriteDebug([String]$Command, [String[]]$Header, [String]$PatchedFileNam
     WriteToConsole "--- End Patch Info ---"
     WriteToConsole
 
-    return $Settings.Debug.Stop
+    return $True
 
 }
 
@@ -272,7 +276,7 @@ function GetPatchFile() {
 #==============================================================================================================================================================================================
 function PrePatchingAdditionalOptions() {
 
-    if ( !(IsSet -Elem $GamePatch.redux.file) -or (IsChecked -Elem $Patches.Redux -Active -Not) ) { return }
+    if ( !(IsSet -Elem $GamePatch.redux.file) -or !(IsChecked -Elem $Patches.Redux -Active) ) { return }
 
     if ( !$Decompress -and !(TestFile $GetROM.decomp) ) { Copy-Item -LiteralPath $GetROM.run -Destination $GetROM.decomp -Force }
     $FunctionTitle = SetFunctionTitle -Function $GameType.mode
@@ -290,7 +294,7 @@ function PrePatchingAdditionalOptions() {
 #==============================================================================================================================================================================================
 function PatchingAdditionalOptions() {
     
-    if ( ($GamePatch.options -eq 0) -or (IsChecked -Elem $Patches.Options -Active -Not) ) { return }
+    if ( ($GamePatch.options -eq 0) -or !(IsChecked -Elem $Patches.Options -Active) ) { return }
 
     if ( !$Decompress -and !(TestFile $GetROM.decomp) ) { Copy-Item -LiteralPath $GetROM.run -Destination $GetROM.decomp -Force }
     $FunctionTitle = SetFunctionTitle -Function $GameType.mode

@@ -1,3 +1,6 @@
+v10.2.1
+- Fixed regression with patching in Additional Options when they shouldn't
+
 v10.2.0
 - Adjusted how tabs are added
 - Fixed issues with applying a base patch to decompressed ROMs
