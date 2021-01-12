@@ -118,7 +118,7 @@ function ByteOptionsOcarinaOfTime() {
 
     # GRAPHICS #
 
-    if ( ( (IsChecked $Redux.Graphics.Widescreen) -and $IsWiiVC) -or (IsWidescreen -Experimental) ) {
+    if ( ( (IsChecked $Redux.Graphics.Widescreen) -and $IsWiiVC) -or ( (IsChecked $Redux.Graphics.Widescreen) -and !(IsWidescreen -Experimental) ) ) {
         # 16:9 Widescreen
         if ($IsWiiVC ) { ChangeBytes -Offset "B08038" -Values @("3C", "07", "3F", "E3") }
 
