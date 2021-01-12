@@ -7,6 +7,7 @@ v10.2.0
 - Added several more options for MM (thank you Marcelo20XX!)
 - Expanded the SM64 Additional Options GUI
 - Fixed regression with patching in Additional Options when they shouldn't
+- Fixed regression with patching in the OoT Experimental Widescreen patch when it shouldn't
 
 v10.1.1
 - Translated the "Debug Map Select" option into Engrish
