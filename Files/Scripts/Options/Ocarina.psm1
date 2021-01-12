@@ -762,10 +762,10 @@ function ByteLanguageOcarinaOfTime() {
 function CreateOptionsOcarinaOfTime() {
     
     if ($Settings.Debug.LiteGUI -eq $False) {
-        CreateOptionsDialog -Width 1060 -Height 515 -Tabs @("Audiovisual", "Difficulty", "Colors", "Equipment", "Cutscenes")
+        CreateOptionsDialog -Width 1060 -Height 515 -Tabs @("Main", "Audiovisual", "Difficulty", "Colors", "Equipment", "Cutscenes")
     }
     else {
-        CreateOptionsDialog -Width 1060 -Height 400 -Tabs @("Audiovisual")
+        CreateOptionsDialog -Width 1060 -Height 400 -Tabs @("Main", "Audiovisual")
     }
 
     if (!$IsWiiVC) { $Redux.Graphics.Widescreen.Add_CheckStateChanged({ AdjustGUIOcarinaOfTime }) }
@@ -1166,15 +1166,15 @@ function CreateTabEquipmentOcarinaOfTime() {
     CreateReduxGroup    -Tag  "Unlock" -Text "Unlock Child Restrictions"
     CreateReduxCheckBox -Name "Tunics"         -Column 1 -Text "Unlock Tunics"            -Info "Child Link is able to use the Goron Tunic and Zora Tunic`nSince you might want to walk around in style as well when you are young`nThe dialogue script will be adjusted to reflect this (only for English)" -Credits "GhostlyDark"
     CreateReduxCheckBox -Name "MasterSword"    -Column 2 -Text "Unlock Master Sword"      -Info "Child Link is able to use the Master Sword`nThe Master Sword does twice as much damage as the Kokiri Sword" -Credits "GhostlyDark"
-    CreateReduxCheckBox -Name "GiantsKnife"    -Column 3 -Text "Unlock Giant's Knife [!]" -Info "Child Link is able to use the Giant's Knife / Biggoron Sword`nThe Giant's Knife / Biggoron Sword does four times as much damage as the Kokiri Sword`nThe Giant's Knife / Biggoron Sword appears as if Link if thrusting the sword through the ground" -Credits "GhostlyDark"
-    CreateReduxCheckBox -Name "MirrorShield"   -Column 4 -Text "Unlock Mirror Shield [!]" -Info "Child Link is able to use the Mirror Shield`nThe Mirror Shield appears as invisible but can still reflect magic or sunlight" -Credits "GhostlyDark"
+    CreateReduxCheckBox -Name "GiantsKnife"    -Column 3 -Text "Unlock Giant's Knife [!]" -Info "Child Link is able to use the Giant's Knife / Biggoron Sword`nThe Giant's Knife / Biggoron Sword does four times as much damage as the Kokiri Sword`n[!] The Giant's Knife / Biggoron Sword appears as if Link if thrusting the sword through the ground" -Credits "GhostlyDark"
+    CreateReduxCheckBox -Name "MirrorShield"   -Column 4 -Text "Unlock Mirror Shield [!]" -Info "Child Link is able to use the Mirror Shield`n[!] The Mirror Shield appears as invisible but can still reflect magic or sunlight" -Credits "GhostlyDark"
     CreateReduxCheckBox -Name "Boots"          -Column 5 -Text "Unlock Boots [!]"         -Info "Child Link is able to use the Iron Boots and Hover Boots`n[!] The Iron and Hover Boots appears as the Kokiri Boots"          -Credits "GhostlyDark"
     CreateReduxCheckBox -Name "MegatonHammer"  -Column 6 -Text "Unlock Hammer [!]"        -Info "Child Link is able to use the Megaton Hammer`n[!] The Megaton Hammer appears as invisible"                                   -Credits "GhostlyDark"
 
     # UNLOCK ADULT RESTRICTIONS #
     CreateReduxGroup    -Tag  "Unlock" -Text "Unlock Adult Restrictions"
     CreateReduxCheckBox -Name "KokiriSword"    -Column 1 -Text "Unlock Kokiri Sword"      -Info "Adult Link is able to use the Kokiri Sword`nThe Kokiri Sword does half as much damage as the Master Sword"          -Credits "GhostlyDark"
-    CreateReduxCheckBox -Name "DekuShield"     -Column 2 -Text "Unlock Deku Shield [!]"   -Info "Adult Link is able to use the Deku Shield`nThe Deku Shield appears as invisible but can still be burned up by fire" -Credits "GhostlyDark"
+    CreateReduxCheckBox -Name "DekuShield"     -Column 2 -Text "Unlock Deku Shield [!]"   -Info "Adult Link is able to use the Deku Shield`n[!] The Deku Shield appears as invisible but can still be burned up by fire" -Credits "GhostlyDark"
     CreateReduxCheckBox -Name "FairySlingshot" -Column 3 -Text "Unlock Slingshot [!]"     -Info "Adult Link is able to use the Fairy Slingshot`n[!] The Fairy Slingshot appears as the Fairy Bow"                    -Credits "GhostlyDark"
     CreateReduxCheckBox -Name "Boomerang"      -Column 4 -Text "Unlock Boomerang [!]"     -Info "Adult Link is able to use the Boomerang`n[!] The Boomerang appears as invisible"                                    -Credits "GhostlyDark"
 

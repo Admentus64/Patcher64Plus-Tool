@@ -228,23 +228,26 @@ Special Thanks:				Nokaubure, z64me, Ultra553, OoT Decomp
 - Correct Rupee Colors:			GhostlyDark
 - Restore Cow Nose Ring:		ShadowOne333
 - Correct Romani Sign:			ShadowOne333
-- Correct Comma:			ShadowOne333
 - Restore Title:			ShadowOne333 & Garo-Mastah
 - Restore Skull Kid:			ShadowOne333
 - Restore Shop Music:			ShadowOne333
 - 4th Piece of Heart Sound:		fkualol
 - Move Bomber Kid:			ShadowOne333
-- Permanent Razor Sword:		darklord92
-- Set Capacity:				GhostlyDark
 - Fix Goht Cutscene:			ShadowOne333
 - Fix Mushroom Bottle:			ozidual
 - Fix Southern Swamp:			ShadowOne333
 - Fix Fairy Fountain:			Dybbles (fix) & ShadowOne333 (ROM / patch)
 - Always Best Ending:			Marcelo20XX
-- Restore Text:				ShadowOne333
-- Correct Circus Mask:			ShadowOne333
+- HUD Textures:				GhostlyDark
+- Hide HUD:				Marcelo20XX
 - Fairy Colors:				Dzeko
 - Spin Attack Colors:			Dzeko
+- Set Capacity:				GhostlyDark
+- Permanent Razor Sword:		darklord92
+- Restore Text:				ShadowOne333
+- Correct Circus Mask:			ShadowOne333
+- Correct Comma:			ShadowOne333
+- Skip Dialogue:			Marcelo20XX
 - Various offsets:			Chez Cousteau
 - Admentus (Scripting and Assistance of all Options)
 
@@ -298,9 +301,11 @@ Special Thanks:				Nokaubure, z64me, Ultra553, OoT Decomp
 - No Black Bars:			Theboy181 (RAM) & Admentus (ROM)
 - Extended Draw Distance:		Theboy181 (RAM) & Admentus (ROM)
 - Force Hires Mario Model:		Theboy181 (RAM) & Admentus (ROM)
+- No Game Over:				Kaze Emanuar
 - GhostlyDark (documenting several offsets)
 - Admentus (Scripting and Assistance of all Options)
 - SM64 ROM Manager (several options which were backported)
+- SM64 Tweaker (several options which were backported)
 
 --- Multiplayer (v1.4.2) ---
 - Skelux

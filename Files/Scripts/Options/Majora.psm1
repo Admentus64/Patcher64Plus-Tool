@@ -142,7 +142,84 @@ function ByteOptionsMajorasMask() {
     # INTERFACE #
 
     if (IsChecked -Elem $Redux.UI.HudTextures)            { PatchBytes  -Offset "1EBDF60" -Texture -Patch "HUD\OoT Button.bin" }
-    if (IsChecked -Elem $Redux.UI.Comma)                  { ChangeBytes -Offset "ACC660"  -Values @("00", "F3", "00", "00", "00", "00", "00", "00", "4F", "60", "00", "00", "00", "00", "00", "00", "24") }
+
+
+
+    # HIDE (Custom edits added by Marcelo - Hide Buttons) #
+
+    if (IsChecked -Elem $Redux.Hide.AButton) { 
+        ChangeBytes -Offset "BA55F8" -Values @("00", "00", "00", "00") # A Button
+        ChangeBytes -Offset "BA5608" -Values @("00", "00", "00", "00")
+        ChangeBytes -Offset "BA5A04" -Values @("00", "00", "00", "00")
+        ChangeBytes -Offset "BA5DA8" -Values @("00", "00", "00", "00")
+        ChangeBytes -Offset "BA5FE8" -Values @("00", "00", "00", "00")
+        ChangeBytes -Offset "BA60A0" -Values @("00", "00", "00", "00")
+		ChangeBytes -Offset "BA64F0" -Values @("00", "00", "00", "00")
+    }
+
+    if (IsChecked -Elem $Redux.Hide.BButton) { 
+        ChangeBytes -Offset "BA5528" -Values @("00", "00", "00", "00") # B Button
+        ChangeBytes -Offset "BA5544" -Values @("00", "00", "00", "00")
+        ChangeBytes -Offset "BA5CC4" -Values @("00", "00", "00", "00")
+        ChangeBytes -Offset "BA5DE8" -Values @("00", "00", "00", "00")
+        ChangeBytes -Offset "BA5FD8" -Values @("00", "00", "00", "00")
+        ChangeBytes -Offset "BA60B0" -Values @("00", "00", "00", "00")
+		ChangeBytes -Offset "BA6500" -Values @("00", "00", "00", "00")
+    }
+
+    if (IsChecked -Elem $Redux.Hide.CButtons) { 
+        ChangeBytes -Offset "BA5568" -Values @("00", "00", "00", "00") # C-Left
+        ChangeBytes -Offset "BA5578" -Values @("00", "00", "00", "00")
+        ChangeBytes -Offset "BA5FF8" -Values @("00", "00", "00", "00")
+        ChangeBytes -Offset "BA60C0" -Values @("00", "00", "00", "00")
+		
+        ChangeBytes -Offset "BA5598" -Values @("00", "00", "00", "00") # C-Down
+        ChangeBytes -Offset "BA55A8" -Values @("00", "00", "00", "00")
+        ChangeBytes -Offset "BA6008" -Values @("00", "00", "00", "00")
+        ChangeBytes -Offset "BA60D0" -Values @("00", "00", "00", "00")
+		
+        ChangeBytes -Offset "BA55C8" -Values @("00", "00", "00", "00") # C-Right
+        ChangeBytes -Offset "BA55D8" -Values @("00", "00", "00", "00")
+        ChangeBytes -Offset "BA6018" -Values @("00", "00", "00", "00")
+        ChangeBytes -Offset "BA60E4" -Values @("00", "00", "00", "00")
+    }
+
+    if (IsChecked -Elem $Redux.Hide.Hearts) { 
+        ChangeBytes -Offset "BA5B28" -Values @("00", "00", "00", "00") # Health
+        ChangeBytes -Offset "BA5BFC" -Values @("00", "00", "00", "00")
+        ChangeBytes -Offset "BA5A14" -Values @("00", "00", "00", "00")
+        ChangeBytes -Offset "BA603C" -Values @("00", "00", "00", "00")
+		ChangeBytes -Offset "BA6530" -Values @("00", "00", "00", "00")
+        ChangeBytes -Offset "BB787C" -Values @("00", "00", "00", "00")
+    }
+
+    if (IsChecked -Elem $Redux.Hide.Magic) { 
+        ChangeBytes -Offset "BA5A28" -Values @("00", "00", "00", "00") # Magic Meter and Rupees
+        ChangeBytes -Offset "BA5B3C" -Values @("00", "00", "00", "00")
+        ChangeBytes -Offset "BA5BE8" -Values @("00", "00", "00", "00")
+        ChangeBytes -Offset "BA6028" -Values @("00", "00", "00", "00")
+		ChangeBytes -Offset "BA6520" -Values @("00", "00", "00", "00")
+        ChangeBytes -Offset "BB788C" -Values @("00", "00", "00", "00")
+    }
+
+    if (IsChecked -Elem $Redux.Hide.AreaTitle) { 
+        ChangeBytes -Offset "B80A64" -Values @("10", "00", "01", "9E") # Disable Area Title Cards
+	    ChangeBytes -Offset "B842C0" -Values @("10", "00", "00", "04") # Disable Area Title Cards
+    }
+
+    if (IsChecked -Elem $Redux.Hide.Clock) { 
+        ChangeBytes -Offset "C5606D" -Values @("00") # Clock
+		ChangeBytes -Offset "BAFD5C" -Values @("00", "00", "00", "00")
+        ChangeBytes -Offset "BAFC48" -Values @("00", "00", "00", "00")
+        ChangeBytes -Offset "BAFDA8" -Values @("00", "00", "00", "00")
+		ChangeBytes -Offset "BAFD00" -Values @("00", "00", "00", "00")
+		ChangeBytes -Offset "BAFD98" -Values @("00", "00", "00", "00")
+    }
+
+    if (IsChecked -Elem $Redux.Hide.CountdownTimer) { 
+        ChangeBytes -Offset "BB169A" -Values @("01","FF") # Disable Countdown timer background
+	    ChangeBytes -Offset "C56180" -Values @("01","FF","01","FF","01","FF","01","FF","01","FF","01","FF","01","FF","01","FF") # Disable Countdown timer
+    }
 
 
 
@@ -289,6 +366,16 @@ function ByteOptionsMajorasMask() {
         ChangeBytes -Offset "CBA496" -Values @("00", "00") # Prevent losing hits
         ChangeBytes -Offset "BDA6B7" -Values "01"          # Keep sword after Song of Time
     }
+
+
+    # SCRIPT
+
+    if (IsChecked -Elem $Redux.Script.AutoSkip) {
+        ChangeBytes -Offset "BDDC14" -Values @("10", "00", "00", "13") # Auto skip all text
+        ChangeBytes -Offset "BEDE4C" -Values @("00", "00", "00", "00") # Auto skip text (Square)
+    }
+
+    if (IsChecked -Elem $Redux.Script.Comma) { ChangeBytes -Offset "ACC660"  -Values @("00", "F3", "00", "00", "00", "00", "00", "00", "4F", "60", "00", "00", "00", "00", "00", "00", "24") }
 
 }
 
@@ -464,10 +551,10 @@ function ByteLanguageMajorasMask() {
 function CreateOptionsMajorasMask() {
     
     if ($Settings.Debug.LiteGUI -eq $False) {
-        CreateOptionsDialog -Width 1060 -Height 485 -Tabs @("Audiovisual", "Difficulty", "Colors", "Equipment")
+        CreateOptionsDialog -Width 1060 -Height 485 -Tabs @("Main", "Audiovisual", "Difficulty", "Colors", "Equipment")
     }
     else {
-        CreateOptionsDialog -Width 1060 -Height 370 -Tabs @("Audiovisual")
+        CreateOptionsDialog -Width 1060 -Height 370 -Tabs @("Main", "Audiovisual")
     }
 
     if ($IsWiiVC) { $Redux.Graphics.Widescreen.Add_CheckStateChanged({ AdjustGUIMajorasMask }) }
@@ -574,12 +661,15 @@ function CreateTabLanguageMajorasMask() {
     
     CreateLanguageContent -Columns 3
 
-    # ENGLISH TEXT #    
-    $Redux.Box.Text = CreateReduxGroup -Tag "Text" -Text "English Text"
+    # ENGLISH TEXT OPTIONS #    
+    $Redux.Box.Text = CreateReduxGroup -Tag "Text" -Text "English Text Options"
     CreateReduxCheckBox -Name "Restore"      -Column 1 -Text "Restore Text"        -Info "Restores and fixes the following:`n- Restore the area titles cards for those that do not have any`n- Sound effects that do not play during dialogue`n- Grammar and typo fixes" -Credits "Redux"
     CreateReduxCheckBox -Name "OcarinaIcons" -Column 2 -Text "Ocarina Icons (WIP)" -Info "Restore the Ocarina Icons with their text when transformed like in the N64 Beta or 3DS version (Work-In-Progress)`nRequires the Restore Text option"                           -Credits "ShadowOne333"
     
-
+    # OTHER TEXT OPTIONS #    
+    $Redux.Box.Text = CreateReduxGroup -Tag "Script" -Text "Other Text Options"
+    CreateReduxCheckBox -Name "Comma"        -Column 1 -Text "Better Comma"           -Info "Make the comma not look as awful"                                                                                                                -Credits "ShadowOne333"
+    CreateReduxCheckBox -Name "AutoSkip"     -Column 2 -Text "Auto Skip Dialogue [!]" -Info "Automaticially advance to the next line or end it during dialogues`n[!] This option is recommended for speedrunners or experienced players only" -Credits "Marcelo20XX"
 
     $Redux.Text.Restore.Add_CheckedChanged({ $Redux.Text.OcarinaIcons.Enabled = $this.checked })
     for ($i=0; $i -lt $GamePatch.languages.Length; $i++) {
@@ -633,7 +723,17 @@ function CreateTabAudiovisualMajorasMask() {
     # INTERFACE #
     CreateReduxGroup    -Tag  "UI" -Text "Interface"
     CreateReduxCheckBox -Name "HudTextures"       -Column 1 -Row 1 -Text "OoT HUD Textures"          -Info "Replaces the HUD textures with those from Ocarina of Time"                                                            -Credits "Ported by GhostlyDark"
-    CreateReduxCheckBox -Name "Comma"             -Column 2 -Row 1 -Text "Better Comma"              -Info "Make the comma not look as awful"                                                                                     -Credits "ShadowOne333"
+
+    # HIDE #
+    CreateReduxGroup    -Tag  "Hide" -Text "Hide HUD" -Height 2
+    CreateReduxCheckBox -Name "AButton"           -Column 1 -Row 1 -Text "Hide A Button"             -Info "Hide the A Button"                                                                              -Credits "Marcelo20XX"
+    CreateReduxCheckBox -Name "BButton"           -Column 2 -Row 1 -Text "Hide B Button"             -Info "Hide the B Button"                                                                              -Credits "Marcelo20XX"
+    CreateReduxCheckBox -Name "CButtons"          -Column 3 -Row 1 -Text "Hide C Buttons"            -Info "Hide the C Buttons"                                                                             -Credits "Marcelo20XX"
+    CreateReduxCheckBox -Name "Hearts"            -Column 4 -Row 1 -Text "Hide Hearts"               -Info "Hide the Hearts display"                                                                        -Credits "Marcelo20XX"
+    CreateReduxCheckBox -Name "Magic"             -Column 5 -Row 1 -Text "Hide Magic and Rupees"     -Info "Hide the Magic and Rupees display"                                                              -Credits "Marcelo20XX"
+    CreateReduxCheckBox -Name "AreaTitle"         -Column 6 -Row 1 -Text "Hide Area Title Card"      -Info "Hide the area title that displays when entering a new area"                                     -Credits "Marcelo20XX"
+    CreateReduxCheckBox -Name "Clock"             -Column 1 -Row 2 -Text "Hide Clock"                -Info "Hide the Clock display"                                                                         -Credits "Marcelo20XX"
+    CreateReduxCheckBox -Name "CountdownTimer"    -Column 2 -Row 2 -Text "Hide Countdown Timer"      -Info "Hide the countdown timer that displays during the final hours before the Moon will hit Termina" -Credits "Marcelo20XX"
 
     if ($Settings.Debug.LiteGUI -eq $True) { return }
 

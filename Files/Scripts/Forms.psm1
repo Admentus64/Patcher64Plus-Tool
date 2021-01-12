@@ -253,11 +253,16 @@ function CreateButton([int]$X=0, [int]$Y=0, [String]$Name, [String]$Tag, [int]$W
 #==============================================================================================================================================================================================
 function CreateTabButtons([Array]$Tabs, [Object]$AddTo=$Redux.Panel) {
     
+    if (!(IsSet $Tabs)) {
+        if ( ($GamePatch.redux.options -eq 1 -or (IsSet $GamePatch.languages)) -and $Settings.Debug.LiteGUI -eq $False) {
+            $Tabs += "Main"
+            $Last.TabName = "Main"
+        }
+    }
+
     if ($GamePatch.redux.options -eq 1 -and $Settings.Debug.LiteGUI -eq $False)   { $Tabs += "Redux" }
     if ( (IsSet $GamePatch.languages) -and $Settings.Debug.LiteGUI -eq $False)    { $Tabs += "Language" }
-    if ($Tabs.Length -ne 0)                                                       { $Tabs = ,"Main" + $Tabs }
     $global:ReduxTabs = @()
-    $Last.TabName = "Main"
     if (!(IsSet $GameSettings.Core) -and $Tabs.Length -gt 0) { $GameSettings.Core  = @{} }
 
     # Create tabs
@@ -277,7 +282,7 @@ function CreateTabButtons([Array]$Tabs, [Object]$AddTo=$Redux.Panel) {
 
     # Restore last tab
     if ($Tabs.Length -gt 0) {
-        if (IsSet $GameSettings["Core"]["LastTab"]) {
+        if (IsSet -Elem $GameSettings["Core"]["LastTab"] -HasInt) {
 
             if ($ReduxTabs.Length -lt $GameSettings["Core"]["LastTab"]) {
                 $ReduxTabs[0].BackColor = "DarkGray"

@@ -256,7 +256,7 @@ function Cleanup() {
 
 #==============================================================================================================================================================================================
 function GetPatchFile() {
-
+    
     if ($GamePatch.patch -is [system.Array]) {
         foreach ($Patch in $GamePatch.patch) {
             if ($Patch.hash -eq $ROMHashSum) { return $Patch.file }
@@ -794,7 +794,7 @@ function CompareHashSums([String]$Command) {
     if ($ROMHashSum -eq $CheckHashSum) { return $True }
     elseif (IsSet -Elem $GameType.downgrade) {
         Foreach ($Item in $GameType.downgrade) {
-            if ($ROMHashSum -eq $Item.hash) { Write-Host "456";return $True }
+            if ($ROMHashSum -eq $Item.hash) { return $True }
         }
     }
     
@@ -807,8 +807,8 @@ function CompareHashSums([String]$Command) {
 
 #==============================================================================================================================================================================================
 function PatchDecompressedROM() {
-    
-    if (!(IsSet (GetPatchFile)) -or !(StrLike -str $PatchFile -val "\Decompressed")) { return $True }
+
+    if (!(StrLike -str (GetPatchFile) -val "\Decompressed")) { return $True }
     
     # Set the status label.
     UpdateStatusLabel ("Patching " + $GameType.mode + " ROM with patch file...")
@@ -825,7 +825,7 @@ function PatchDecompressedROM() {
 #==============================================================================================================================================================================================
 function PatchCompressedROM() {
     
-    if (!(IsSet (GetPatchFile)) -or !(StrLike -str (GetPatchFile) -val "\Compressed")) { return $True }
+    if (!(StrLike -str (GetPatchFile) -val "\Compressed")) { return $True }
     
     # Set the status label.
     UpdateStatusLabel ("Patching " + $GameType.mode + " ROM with patch file...")
