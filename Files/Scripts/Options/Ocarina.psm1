@@ -118,7 +118,7 @@ function ByteOptionsOcarinaOfTime() {
 
     # GRAPHICS #
 
-    if ( ( (IsChecked $Redux.Graphics.Widescreen) -and $IsWiiVC) -or ( (IsChecked $Redux.Graphics.Widescreen) -and !(IsWidescreen -Experimental) ) ) {
+    if ( (IsChecked $Redux.Graphics.Widescreen) -and ($IsWiiVC -or !(IsWidescreen -Experimental) ) ) {
         # 16:9 Widescreen
         if ($IsWiiVC ) { ChangeBytes -Offset "B08038" -Values @("3C", "07", "3F", "E3") }
 
@@ -779,8 +779,7 @@ function AdjustGUIOcarinaOfTime() {
     
     if ($IsWiiVC) { return }
 
-    $Redux.UI.ButtonPositions.Enabled  = (!(IsWidescreen -Experimental))
-    $Redux.UI.CenterNaviPrompt.Enabled = (!(IsWidescreen -Experimental))
+    EnableElem @($Redux.UI.ButtonPositions, $Redux.UI.CenterNaviPrompt)  -Active (!(IsWidescreen -Experimental))
 
 }
 
@@ -877,19 +876,19 @@ function CreateTabLanguageOcarinaOfTime() {
 function UnlockLanguageContent() {
     
     # English options
-    $Redux.Box.Dialogue.Controls.GetEnumerator() | ForEach-Object { $_.Enabled = $Redux.Language[0].Checked }
-    $Redux.Box.Text.Controls.GetEnumerator() | ForEach-Object { $_.Enabled = $Redux.Language[0].Checked }
+    $Redux.Box.Dialogue.Controls.GetEnumerator() | ForEach-Object { EnableElem -Elem $_ -Active $Redux.Language[0].Checked }
+    $Redux.Box.Text.Controls.GetEnumerator()     | ForEach-Object { EnableElem -Elem $_ -Active $Redux.Language[0].Checked }
 
     # Set max text speed in each language
     for ($i=0; $i -lt $GamePatch.languages.Length; $i++) {
         if ($Redux.Language[$i].checked) {
-            $Redux.Text.Speed1x.Enabled = $Redux.Text.Speed2x.Enabled = $Redux.Text.Speed3x.Enabled = $True
+            EnableElem -Elem @($Redux.Text.Speed1x, $Redux.Text.Speed2x, $Redux.Text.Speed3x) -Active $True
             if ($GamePatch.languages[$i].max_text_speed -lt 3) {
-                $Redux.Text.Speed3x.Enabled = $False
+                EnableElem -Elem $Redux.Text.Speed3x -Active $False
                 if ($Redux.Text.Speed3x.Checked) { $Redux.Text.Speed2x.checked = $True }
             }
             if ($GamePatch.languages[$i].max_text_speed -lt 2) {
-                $Redux.Text.Speed1x.Enabled = $Redux.Text.Speed2x.Enabled = $False
+                EnableElem -Elem @($Redux.Text.Speed1x, $Redux.Text.Speed2x) -Active $False
             }
         }
     }
@@ -1045,8 +1044,8 @@ function CreateTabDifficultyOcarinaOfTime() {
 
 
 
-    $Redux.Hero.Damage.Add_SelectedIndexChanged({ $Redux.Hero.Recovery.Enabled = $this.text -ne "OHKO Mode" })
-    $Redux.Hero.Recovery.Enabled = $Redux.Hero.Damage.text -ne "OHKO Mode"
+    $Redux.Hero.Damage.Add_SelectedIndexChanged({ EnableElem -Elem $Redux.Hero.Recovery -Active ($this.text -ne "OHKO Mode") })
+    EnableElem -Elem ($Redux.Hero.Recovery) -Active ($Redux.Hero.Damage.text -ne "OHKO Mode")
 
     $Redux.MQ.Minimum.Add_SelectedIndexChanged({
         if ($Redux.MQ.Maximum.SelectedIndex -lt $Redux.MQ.Minimum.SelectedIndex) { $Redux.MQ.Maximum.SelectedIndex = $Redux.MQ.Minimum.SelectedIndex }

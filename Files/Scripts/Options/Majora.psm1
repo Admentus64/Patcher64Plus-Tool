@@ -371,7 +371,8 @@ function ByteOptionsMajorasMask() {
     # SCRIPT
 
     if (IsChecked -Elem $Redux.Script.AutoSkip) {
-        ChangeBytes -Offset "BDDC14" -Values @("10", "00", "00", "13") # Auto skip all text
+        ChangeBytes -Offset "BDDC14" -Values @("08", "06", "BE", "DB") # Auto skip all text
+        ChangeBytes -Offset "C460AC" -Values @("34", "19", "00", "60", "11", "F9", "00", "09", "00", "00", "00", "00", "34", "19", "00", "61", "11", "F9", "00", "06", "00", "00", "00", "00", "34", "19", "00", "62", "11", "F9", "00", "03", "00", "00", "00", "00", "08", "05", "1D", "C9", "00", "00", "00", "00", "08", "05", "1D", "C0", "00", "0F", "C8", "20")
         ChangeBytes -Offset "BEDE4C" -Values @("00", "00", "00", "00") # Auto skip text (Square)
     }
 
@@ -568,11 +569,11 @@ function AdjustGUIMajorasMask() {
     
     if ($IsWiiVC -or $Settings.Debug.LiteGUI -eq $True) { return }
 
-    $Redux.Colors.Magic.Enabled = $Redux.Colors.BaseMagic.Enabled = $Redux.Colors.DoubleMagic.Enabled = (!(IsWidescreen -Patched))
-    $Redux.DPad.Disable.Enabled = $Redux.DPad.Hide.Enabled = $Redux.DPad.LayoutLeft.Enabled = $Redux.DPad.LayoutRight.Enabled = (!(IsWidescreen -Patched))
+    EnableElem -Elem @($Redux.Colors.Magic, $Redux.Colors.BaseMagic, $Redux.Colors.DoubleMagic) -Active (!(IsWidescreen -Patched))
+    EnableElem -Elem @($Redux.DPad.Disable, $Redux.DPad.Hide, $Redux.DPad.LayoutLeft, $Redux.DPad.LayoutRight) -Active (!(IsWidescreen -Patched))
     
-    if (IsWidescreen -Patched)             { $Redux.DPad.Up.Enabled = $Redux.DPad.Left.Enabled = $Redux.DPad.Right.Enabled = $Redux.DPad.Down.Enabled = $True }
-    elseif ($Redux.Dpad.Disable.Checked)   { $Redux.DPad.Up.Enabled = $Redux.DPad.Left.Enabled = $Redux.DPad.Right.Enabled = $Redux.DPad.Down.Enabled = $False }
+    if (IsWidescreen -Patched)             { EnableElem -Elem @($Redux.DPad.Up, $Redux.DPad.Left, $Redux.DPad.Right, $Redux.DPad.Down) -Active $True }
+    elseif ($Redux.Dpad.Disable.Checked)   { EnableElem -Elem @($Redux.DPad.Up, $Redux.DPad.Left, $Redux.DPad.Right, $Redux.DPad.Down) -Active $False }
 
 }
 
@@ -638,10 +639,8 @@ function CreateTabReduxMajorasMask() {
     $PictureBox.Height = $PictureBox.Image.Size.Height
     $Last.Group.controls.add($PictureBox)
     
-    $Redux.DPad.Up.Enabled = $Redux.DPad.Left.Enabled = $Redux.DPad.Right.Enabled = $Redux.DPad.Down.Enabled = $Redux.DPad.Reset.Enabled = !$Redux.DPad.Disable.Checked
-    $Redux.DPad.Disable.Add_CheckedChanged({
-        $Redux.DPad.Up.Enabled = $Redux.DPad.Left.Enabled = $Redux.DPad.Right.Enabled = $Redux.DPad.Down.Enabled = $Redux.DPad.Reset.Enabled = !$Redux.DPad.Disable.Checked
-    })
+    EnableElem -Elem @($Redux.DPad.Up, $Redux.DPad.Left, $Redux.DPad.Right, $Redux.DPad.Down, $Redux.DPad.Reset) -Active (!$Redux.DPad.Disable.Checked)
+    $Redux.DPad.Disable.Add_CheckedChanged({ EnableElem -Elem @($Redux.DPad.Up, $Redux.DPad.Left, $Redux.DPad.Right, $Redux.DPad.Down, $Redux.DPad.Reset) -Active (!$Redux.DPad.Disable.Checked) })
     $Redux.DPad.Reset.Add_Click({ $Redux.DPad.Up.SelectedIndex = 2; $Redux.DPad.Left.SelectedIndex = 3; $Redux.DPad.Right.SelectedIndex = 4; $Redux.DPad.Down.SelectedIndex = 1 })
 
     # GAMEPLAY #
@@ -671,7 +670,7 @@ function CreateTabLanguageMajorasMask() {
     CreateReduxCheckBox -Name "Comma"        -Column 1 -Text "Better Comma"           -Info "Make the comma not look as awful"                                                                                                                -Credits "ShadowOne333"
     CreateReduxCheckBox -Name "AutoSkip"     -Column 2 -Text "Auto Skip Dialogue [!]" -Info "Automaticially advance to the next line or end it during dialogues`n[!] This option is recommended for speedrunners or experienced players only" -Credits "Marcelo20XX"
 
-    $Redux.Text.Restore.Add_CheckedChanged({ $Redux.Text.OcarinaIcons.Enabled = $this.checked })
+    $Redux.Text.Restore.Add_CheckedChanged({ EnableElem -Elem $Redux.Text.OcarinaIcons -Active $this.checked })
     for ($i=0; $i -lt $GamePatch.languages.Length; $i++) {
         $Redux.Language[$i].Add_CheckedChanged({ UnlockLanguageContent })
     }
@@ -685,9 +684,9 @@ function CreateTabLanguageMajorasMask() {
 function UnlockLanguageContent() {
     
     # English options
-    $Redux.Box.Text.Enabled = $Patches.Options.Checked
-    $Redux.Text.Restore.Enabled = $Redux.Language[0].checked
-    $Redux.Text.OcarinaIcons.Enabled = $Redux.Language[0].checked -and $Redux.Text.Restore.Checked
+    EnableElem -Elem $Redux.Box.Text          -Active $Patches.Options.Checked
+    EnableElem -Elem $Redux.Text.Restore      -Active $Redux.Language[0].checked
+    EnableElem -Elem $Redux.Text.OcarinaIcons -Active ($Redux.Language[0].checked -and $Redux.Text.Restore.Checked)
 
 }
 
@@ -762,8 +761,8 @@ function CreateTabDifficultyMajorasMask() {
     
 
 
-    $Redux.Hero.Damage.Add_SelectedIndexChanged({ $Redux.Hero.Recovery.Enabled = $this.Text -ne "OHKO Mode" })
-    $Redux.Hero.Recovery.Enabled = $Redux.Hero.Damage.Text -ne "OHKO Mode"
+    $Redux.Hero.Damage.Add_SelectedIndexChanged({ EnableElem -Elem $Redux.Hero.Recovery -Active ($this.Text -ne "OHKO Mode") })
+    EnableElem -Elem $Redux.Hero.Recovery -Active ($Redux.Hero.Damage.Text -ne "OHKO Mode")
 
 }
 
@@ -787,9 +786,9 @@ function CreateTabColorsMajorasMask() {
     SetTunicColorsPreset -ComboBox $Redux.Colors.KokiriTunic -Dialog $Redux.Colors.SetKokiriTunic -Label $Redux.Colors.KokiriTunicLabel
 
     $Redux.Graphics.ImprovedLinkModel.Add_CheckedChanged({
-        $Redux.Colors.KokiriTunic.Enabled = $Redux.Colors.KokiriTunicButton.Enabled = !$this.checked
+        EnableElem -Elem @($Redux.Colors.KokiriTunic, $Redux.Colors.KokiriTunicButton) -Active (!$this.checked)
     })
-    $Redux.Colors.KokiriTunic.Enabled = $Redux.Colors.KokiriTunicButton.Enabled = !$Redux.Graphics.ImprovedLinkModel.Checked
+    EnableElem -Elem @($Redux.Colors.KokiriTunic, $Redux.Colors.KokiriTunicButton) -Active (!$Redux.Graphics.ImprovedLinkModel.Checked)
 
 
 

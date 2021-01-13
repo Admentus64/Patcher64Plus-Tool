@@ -271,23 +271,20 @@ function ChangeGameMode() {
 function SetVCPanel() {
     
     # Reset VC panel visibility
-    $VC.Group.Controls.GetEnumerator() | ForEach-Object { $_.visible = $False }
-    $VC.ActionsLabel.Visible = $VC.PatchVCButton.Visible = $VC.ExtractROMButton.Visible = $True
+    $VC.Group.Controls.GetEnumerator() | ForEach-Object { EnableElem -Elem $_ -Active $False -Hide }
+    EnableElem -Elem @($VC.ActionsLabel, $VC.PatchVCButton, $VC.ExtractROMButton) -Active $True -Hide
 
     # Enable VC panel visiblity
     if ($GameConsole.options_vc -gt 0) {
-        if ($GameConsole.t64 -eq 1)                                      { $VC.RemoveT64label.Visible = $VC.RemoveT64.Visible = $True }
+        if ($GameConsole.t64 -eq 1)                                      { EnableElem -Elem @($VC.RemoveT64, $VC.RemoveT64Label) -Active $True -Hide }
         if ($GameType.patches_vc -gt 0 -or $GameConsole.t64 -eq 1)       { $VC.CoreLabel.Visible = $True }
-        if ($GameType.patches_vc -eq 1 -or $GameType.patches_vc -eq 2)   { $VC.RemoveFilterLabel.Visible = $VC.RemoveFilter.Visible = $True }
-        if ($GameType.patches_vc -eq 2)                                  { $VC.RemapLLabel.Visible = $VC.RemapL.Visible = $True }
+        if ($GameType.patches_vc -eq 1 -or $GameType.patches_vc -eq 2)   { EnableElem -Elem @($VC.RemoveFilter,$VC.RemoveFilterLabel) -Active $True -Hide }
+        if ($GameType.patches_vc -eq 2)                                  { EnableElem -Elem @($VC.RemapL, $VC.RemapLLabel) -Active $True -Hide }
         if ($GameType.patches_vc -ge 3) {
-            $VC.ExpandMemoryLabel.Visible = $VC.ExpandMemory.Visible = $True
-            $VC.RemapDPadLabel.Visible = $VC.RemapDPad.Visible = $True
+            EnableElem -Elem @($VC.ExpandMemory, $VC.RemapDPad, $VC.RemapCDown, $VC.RemapZ, $VC.ExpandMemoryLabel, $VC.RemapDPadLabel, $VC.RemapCDownLabel, $VC.RemapZLabel) -Active $True -Hide
             $VC.MinimapLabel.Show() 
-            $VC.RemapCDownLabel.Visible = $VC.RemapCDown.Visible = $True
-            $VC.RemapZLabel.Visible = $VC.RemapZ.Visible = $True
         }
-        if ($GameType.patches_vc -eq 4) { $VC.LeaveDPadUpLabel.Visible = $VC.LeaveDPadUp.Visible = $True }
+        if ($GameType.patches_vc -eq 4) { EnableElem -Elem @($VC.LeaveDPadUp, $VC.LeaveDPadUpLabel) -Active $True -Hide }
     }
 
 }
@@ -443,13 +440,12 @@ function GetHeader() {
 
 
 #==============================================================================================================================================================================================
-function IsChecked([Object]$Elem, [Switch]$Active, [Switch]$Not) {
+function IsChecked([Object]$Elem, [Switch]$Not) {
     
-    if (!(IsSet $Elem))                 { return $False }
-    if ($Active -and !$Elem.Visible)    { return $False }
-    if (!$Active -and !$Elem.Enabled)   { return $False }
-    if ($Elem.Checked)                  { return !$Not  }
-    if (!$Elem.Checked)                 { return $Not   }
+    if (!(IsSet $Elem))   { return $False }
+    if (!$Elem.Active)    { return $False }
+    if ($Elem.Checked)    { return !$Not  }
+    if (!$Elem.Checked)   { return $Not   }
     return $False
 
 }
@@ -654,6 +650,24 @@ function EnableForm([Object]$Form, [Boolean]$Enable, [Switch]$Not) {
 
 
 #==============================================================================================================================================================================================
+function EnableElem([Object]$Elem, [Boolean]$Active=$True, [Switch]$Hide) {
+
+    if ($Elem -is [system.Array]) {
+        foreach ($Obj in $Elem) {
+            $Obj.Enabled = $Obj.Active = $Active
+            if ($Hide) { $Obj.Visible = $Active }
+        }
+    }
+    else {
+        $Elem.Enabled = $Elem.Active = $Active
+        if ($Hide) { $Elem.Visible = $Active }
+    }
+
+}
+
+
+
+#==============================================================================================================================================================================================
 function GetFileName([String]$Path, [String]$Description, [String[]]$FileNames) {
     
     $OpenFileDialog = New-Object System.Windows.Forms.OpenFileDialog
@@ -825,6 +839,7 @@ Export-ModuleMember -Function GetFilePaths
 Export-ModuleMember -Function RestoreCustomHeader
 Export-ModuleMember -Function EnableGUI
 Export-ModuleMember -Function EnableForm
+Export-ModuleMember -Function EnableElem
 
 Export-ModuleMember -Function GetFileName
 Export-ModuleMember -Function RemoveFile

@@ -27,7 +27,7 @@ function CreateOptionsSuperMetroid() {
     
     CreateOptionsDialog -Width 390 -Height 320
 
-    $Redux.Graphics.Widescreen.enabled = !$IsWiiVC
+    EnableCheckBox -Elem $Redux.Graphics.Widescreen -Enable !$IsWiiVC
 
 }
 

@@ -44,24 +44,24 @@ function CreateOptionsTheAdventureOfLink() {
     
     CreateOptionsDialog -Width 560 -Height 450
 
-    $Redux.Graphics.NewGFX.Add_CheckStateChanged({ $Redux.Graphics.RevilityEditionSprites.Enabled = !$this.Checked })
-    $Redux.Graphics.RevilityEditionSprites.Add_CheckStateChanged({ $Redux.Graphics.NewGFX.Enabled = !$this.Checked })
-    $Redux.Graphics.NewGFX.Enabled = !$Redux.Graphics.RevilityEditionSprites.Checked
-    $Redux.Graphics.RevilityEditionSprites.Enabled = !$Redux.Graphics.NewGFX.Checked
+    $Redux.Graphics.NewGFX.Add_CheckStateChanged(                 { EnableElem -Elem $Redux.Graphics.RevilityEditionSprites -Active (!$this.Checked) })
+    $Redux.Graphics.RevilityEditionSprites.Add_CheckStateChanged( { EnableElem -Elem $Redux.Graphics.NewGFX                 -Active (!$this.Checked) })
+    EnableElem -Elem $Redux.Graphics.NewGFX                 -Active (!$Redux.Graphics.RevilityEditionSprites.Checked)
+    EnableElem -Elem $Redux.Graphics.RevilityEditionSprites -Active (!$Redux.Graphics.NewGFX.Checked)
 
-    $Redux.Sound.ReduceTextSound.Add_CheckStateChanged({ $Redux.Sound.NoTextSound.Enabled = !$this.Checked })
-    $Redux.Sound.NoTextSound.Add_CheckStateChanged({ $Redux.Sound.ReduceTextSound.Enabled = !$this.Checked })
-    $Redux.Sound.ReduceTextSound.Enabled = !$Redux.Sound.NoTextSound.Checked
-    $Redux.Sound.NoTextSound.Enabled     = !$Redux.Sound.ReduceTextSound.Checked
+    $Redux.Sound.ReduceTextSound.Add_CheckStateChanged( { EnableElem -Elem $Redux.Sound.NoTextSound     -Active (!$this.Checked) })
+    $Redux.Sound.NoTextSound.Add_CheckStateChanged(     { EnableElem -Elem $Redux.Sound.ReduceTextSound -Active (!$this.Checked) })
+    EnableElem -Elem $Redux.Sound.ReduceTextSound -Active (!$Redux.Sound.NoTextSound.Checked)
+    EnableElem -Elem $Redux.Sound.NoTextSound     -Active (!$Redux.Sound.ReduceTextSound.Checked)
 
     $Redux.Gameplay.RestartSameScreen.Add_CheckStateChanged({
-        $Redux.Experience.KeepExpGameOver.Enabled = !$this.Checked
-        $Redux.Revert.RestartGameOver.Enabled     = !$this.Checked
+        EnableElem -Elem $Redux.Experience.KeepExpGameOver -Active (!$this.Checked)
+        EnableElem -Elem $Redux.Revert.RestartGameOver     -Active (!$this.Checked)
      })
-    $Redux.Revert.RestartGameOver.Add_CheckStateChanged({ $Redux.Gameplay.RestartSameScreen.Enabled = !$this.Checked })
-    $Redux.Experience.KeepExpGameOver.Enabled = !$Redux.Gameplay.RestartSameScreen.Checked
-    $Redux.Gameplay.RestartSameScreen.Enabled = !$Redux.Revert.RestartGameOver.Checked
-    $Redux.Revert.RestartGameOver.Enabled     = !$Redux.Gameplay.RestartSameScreen.Checked
+    $Redux.Revert.RestartGameOver.Add_CheckStateChanged({ EnableElem -Elem $Redux.Gameplay.RestartSameScreen -Active (!$this.Checked) })
+    EnableElem -Elem $Redux.Experience.KeepExpGameOver -Active (!$Redux.Gameplay.RestartSameScreen.Checked)
+    EnableElem -Elem $Redux.Gameplay.RestartSameScreen -Active (!$Redux.Revert.RestartGameOver.Checked)
+    EnableElem -Elem $Redux.Revert.RestartGameOver     -Active (!$Redux.Gameplay.RestartSameScreen.Checked)
 
 }
 

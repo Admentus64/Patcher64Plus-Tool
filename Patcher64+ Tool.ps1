@@ -23,8 +23,8 @@ Add-Type -AssemblyName 'System.Drawing'
 # Setup global variables
 
 $global:ScriptName = "Patcher64+ Tool"
-$global:VersionDate = "2021-01-12"
-$global:Version     = "v10.2.0"
+$global:VersionDate = "2021-01-13"
+$global:Version     = "v10.2.1"
 
 $global:GameConsole = $global:GameType = $global:GamePatch = $global:CheckHashSum = ""
 $global:GameFiles = $global:Settings = @{}

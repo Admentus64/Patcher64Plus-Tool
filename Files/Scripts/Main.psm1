@@ -432,7 +432,7 @@ function CheckVCOptions() {
     elseif (IsChecked $VC.RemapL)         { $VC.PatchVCButton.Enabled = $True }
     elseif (IsChecked $VC.RemapZ)         { $VC.PatchVCButton.Enabled = $True }
     elseif (IsChecked $VC.LeaveDPadUp)    { $VC.PatchVCButton.Enabled = $True }
-    else                                        { $VC.PatchVCButton.Enabled = $False }
+    else                                  { $VC.PatchVCButton.Enabled = $False }
 
 }
 
@@ -441,17 +441,17 @@ function CheckVCOptions() {
 #==============================================================================================================================================================================================
 function DisablePatches() {
     
-    $Patches.Redux.Visible = $Patches.ReduxLabel.Visible = (IsSet $GamePatch.redux.file) -and $Settings.Debug.LiteGUI -eq $False
-    $Patches.Options.Visible = $Patches.OptionsLabel.Visible = $Patches.OptionsButton.Visible = $GamePatch.options
-    $Patches.DowngradeLabel.Visible = $Patches.Downgrade.Visible = (IsSet $GameType.downgrade) -and $Settings.Debug.LiteGUI -eq $False
-
-    $VC.RemoveFilterLabel.Enabled = $VC.RemoveFilter.Enabled = !(StrLike -str $GamePatch.command -val "Patch Boot DOL")
+    EnableElem -Elem @($Patches.Redux, $Patches.ReduxLabel) -Active ((IsSet $GamePatch.redux.file) -and $Settings.Debug.LiteGUI -eq $False) -Hide
+    EnableElem -Elem @($Patches.Options, $Patches.OptionsLabel, $Patches.OptionsButton) -Active ($Patches.OptionsButton.Visible = $GamePatch.options) -Hide
+    EnableElem -Elem @($Patches.Downgrade, $Patches.DowngradeLabel) -Active ((IsSet $GameType.downgrade) -and $Settings.Debug.LiteGUI -eq $False) -Hide
+    #EnableElem -Elem @($VC.RemoveFilter, $VC.RemoveFilterLabel) -Active (!(StrLike -str $GamePatch.command -val "Patch Boot DOL"))
+    EnableElem -Elem @($VC.RemapL, $VC.RemapLLabel) -Active (!(StrLike -str $GamePatch.command -val "Multiplayer"))
 
     # Disable boxes if needed
-    $Patches.OptionsButton.Enabled = $Patches.Options.Checked
+    EnableElem -Elem $Patches.OptionsButton -Active $Patches.Options.Checked
     if (IsSet $Redux) {
         $Redux.Groups.GetEnumerator() | ForEach-Object {
-            if ($_.IsRedux) { $_.Enabled = $Patches.Options.Checked -and $Patches.Redux.Checked }
+            if ($_.IsRedux) {  EnableElem -Elem $_ -Active ($Patches.Options.Checked -and $Patches.Redux.Checked) }
         }
     }
 

@@ -12,6 +12,7 @@ function CreateForm([int]$X=0, [int]$Y=0, [int]$Width=0, [int]$Height=0, [String
         elseif (!$IsGame)         { Add-Member -InputObject $Form -NotePropertyMembers @{ Section = "Core" } }
         if ($IsGame)              { $Redux[$Last.Extend][$Name] = $Form }
     }
+    Add-Member -InputObject $Form -NotePropertyMembers @{ Active = $True }
 
     return $Form
 
@@ -206,7 +207,7 @@ function CreateCheckBox([int]$X=0, [int]$Y=0, [String]$Name, [int]$SaveAs=1, [St
                 $CheckBox.Add_CheckedChanged({ $Settings[$this.Section][$this.SaveTo] = $this.SaveAs })
             }
             else {
-                if (IsSet $Settings[$CheckBox.Section][$CheckBox.Name])                      { $CheckBox.Checked = $Settings[$CheckBox.Section][$CheckBox.Name] -eq "True" }
+                if (IsSet $Settings[$CheckBox.Section][$CheckBox.Name])                                 { $CheckBox.Checked = $Settings[$CheckBox.Section][$CheckBox.Name] -eq "True" }
                 else                                                                                    { $CheckBox.Checked = $Settings[$CheckBox.Section][$CheckBox.Name] = $Checked }
                 $CheckBox.Add_CheckStateChanged({ $Settings[$this.Section][$this.Name] = $this.Checked })
             }

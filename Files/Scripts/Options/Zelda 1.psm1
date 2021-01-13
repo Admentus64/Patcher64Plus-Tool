@@ -27,10 +27,10 @@ function CreateOptionsTheLegendOfZelda() {
     
     CreateOptionsDialog -Width 390 -Height 340
 
-    $Redux.Graphics.LinksAwakeningGFX.Add_CheckStateChanged({ $Redux.Revert.NESGFX.Enabled = !$this.Checked })
-    $Redux.Revert.NESGFX.Add_CheckStateChanged({ $Redux.Graphics.LinksAwakeningGFX.Enabled = !$this.Checked })
-    $Redux.Graphics.LinksAwakeningGFX.Enabled = !$Redux.Revert.NESGFX.Checked
-    $Redux.Revert.NESGFX.Enabled = !$Redux.Graphics.LinksAwakeningGFX.Checked
+    $Redux.Graphics.LinksAwakeningGFX.Add_CheckStateChanged( { EnableElem -Elem $Redux.Revert.NESGFX              -Active (!$this.Checked) })
+    $Redux.Revert.NESGFX.Add_CheckStateChanged(              { EnableElem -Elem $Redux.Graphics.LinksAwakeningGFX -Active (!$this.Checked) })
+    EnableElem -Elem $Redux.Graphics.LinksAwakeningGFX -Active (!$Redux.Revert.NESGFX.Checked)
+    EnableElem -Elem $Redux.Revert.NESGFX              -Active (!$Redux.Graphics.LinksAwakeningGFX.Checked)
 
 }
 

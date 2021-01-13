@@ -76,7 +76,7 @@ function ByteOptionsSuperMario64() {
     if (IsChecked $Redux.Gameplay.LagFix)                       { ChangeBytes -Offset "F0022" -Values "0D" }
     if (IsChecked $Redux.Gameplay.ExitLevelAnytime)             { ChangeBytes -Offset "97B74" -Values @("00", "00", "00", "00") }
     if (IsChecked $Redux.Gameplay.NoEndlessStairs)              { ChangeBytes -Offset "53AC"  -Values @("10", "00") }
-    if (IsText -Elem $Redux.Gameplay.Lives -Compare "4" -Not)   { ChangeBytes -Offset "1001B" -Values $Redux.Gameplay.Lives.Text -IsDec }
+    ChangeBytes -Offset "1001B" -Values $Redux.Gameplay.Lives.Text -IsDec
 
 
 
@@ -109,13 +109,16 @@ function CreateOptionsSuperMario64() {
     
     CreateOptionsDialog -Width 740 -Height 370 -Tabs @("Graphics", "Gameplay", "Skip")
 
-    $Redux.Gameplay.FPS.Add_CheckStateChanged({ $Redux.Gameplay.FreeCam.Enabled = !$this.Checked })
-    $Redux.Gameplay.FreeCam.Add_CheckStateChanged({ $Redux.Gameplay.FPS.Enabled = !$this.Checked })
-    $Redux.Gameplay.FPS.Enabled = !$Redux.FreeCam.Checked
-    $Redux.Gameplay.FreeCam.Enabled = !$Redux.Gameplay.FPS.Checked
+    $Redux.Gameplay.FPS.Add_CheckStateChanged(     { EnableElem -Elem $Redux.Gameplay.FreeCam -Active (!$this.Checked) })
+    $Redux.Gameplay.FreeCam.Add_CheckStateChanged( { EnableElem -Elem $Redux.Gameplay.FPS     -Active (!$this.Checked) })
+    EnableElem -Elem $Redux.Gameplay.FPS     -Active (!$Redux.FreeCam.Checked)
+    EnableElem -Elem $Redux.Gameplay.FreeCam -Active (!$Redux.Gameplay.FPS.Checked)
 
-    $Redux.Graphics.OptimizeMarioModel.Enabled = $GamePatch.title -eq "Super Mario 64"
-    $Redux.Skip.TitleScreen.Enabled = $GamePatch.title -eq "Super Mario 64"
+    EnableElem -Elem $Redux.Graphics.OptimizeMarioModel -Active ($GamePatch.title -eq "Super Mario 64")
+    EnableElem -Elem $Redux.Skip.TitleScreen            -Active ($GamePatch.title -eq "Super Mario 64")
+    EnableElem -Elem $Redux.Skip.MarioScreen            -Active ($GamePatch.title -eq "Super Mario 64")
+
+    #EnableElem -Elem $Redux.UI.HideHUD -Active ($GamePatch.title -notlike "*Super Mario 64: Multiplayer*")
 
 }
 
@@ -170,16 +173,16 @@ function CreateTabSkipSuperMario64() {
 
     # SKIP #
     CreateReduxGroup    -Tag  "Skip" -Text "Skip Intro"
-    CreateReduxCheckBox -Name "TitleScreen"        -Column 1 -Row 1 -Text "Skip Title Screen"     -Info "Skip the title screen shown when booting the game`nThis option only works when modifying the vanilla Super Mario 64 game" -Credits "Ported from SM64 ROM Manager"
-    CreateReduxCheckBox -Name "MarioScreen"        -Column 2 -Row 1 -Text "Skip Mario Screen"     -Info "Skip the screen which displays Mario's face and the title in the background"                                              -Credits "Ported from SM64 ROM Manager"
-    CreateReduxCheckBox -Name "GameOverScreen"     -Column 3 -Row 1 -Text "Skip Game-Over Screen" -Info "Skip the game-over screen shown when losing all lives"                                                                    -Credits "Ported from SM64 ROM Manager"
-    CreateReduxCheckBox -Name "PeachIntro"         -Column 4 -Row 1 -Text "Skip Peach Intro"      -Info "Skip the introduction cutscene sequence when starting a new save file"                                                    -Credits "Ported from SM64 ROM Manager"
+    CreateReduxCheckBox -Name "TitleScreen"        -Column 1 -Row 1 -Text "Skip Title Screen"     -Info "Skip the title screen shown when booting the game`nThis option only works when modifying the vanilla Super Mario 64 game"                           -Credits "Ported from SM64 ROM Manager"
+    CreateReduxCheckBox -Name "MarioScreen"        -Column 2 -Row 1 -Text "Skip Mario Screen"     -Info "Skip the screen which displays Mario's face and the title in the background`nThis option only works when modifying the vanilla Super Mario 64 game" -Credits "Ported from SM64 ROM Manager"
+    CreateReduxCheckBox -Name "GameOverScreen"     -Column 3 -Row 1 -Text "Skip Game-Over Screen" -Info "Skip the game-over screen shown when losing all lives"                                                                                              -Credits "Ported from SM64 ROM Manager"
+    CreateReduxCheckBox -Name "PeachIntro"         -Column 4 -Row 1 -Text "Skip Peach Intro"      -Info "Skip the introduction cutscene sequence when starting a new save file"                                                                              -Credits "Ported from SM64 ROM Manager"
 
     CreateReduxGroup    -Tag  "Skip" -Text "Skip In-Game"
-    CreateReduxCheckBox -Name "StarMessages"       -Column 1 -Row 1 -Text "Skip Star Messages"    -Info "Skip the messages displayed after collecting specific numbers of stars"                                                   -Credits "Ported from SM64 ROM Manager"
-    CreateReduxCheckBox -Name "BoosDialogue"       -Column 2 -Row 1 -Text "Remove Boos Dialogue"  -Info "Removes the dialogue for defeating Boos or when the Big Boo appears"                                                      -Credits "Ported from SM64 ROM Manager"
-    CreateReduxCheckBox -Name "Lakitu"             -Column 3 -Row 1 -Text "Skip Lakitu"           -Info "Skip the lakitu intro before entering the castle for the first time"                                                      -Credits "Ported from SM64 ROM Manager"
-    CreateReduxCheckBox -Name "StageIntro"         -Column 4 -Row 1 -Text "Skip Stage Intro"      -Info "Skip any messages that show up when entering a stage"                                                                     -Credits "Ported from SM64 ROM Manager"
+    CreateReduxCheckBox -Name "StarMessages"       -Column 1 -Row 1 -Text "Skip Star Messages"    -Info "Skip the messages displayed after collecting specific numbers of stars"                                                                             -Credits "Ported from SM64 ROM Manager"
+    CreateReduxCheckBox -Name "BoosDialogue"       -Column 2 -Row 1 -Text "Remove Boos Dialogue"  -Info "Removes the dialogue for defeating Boos or when the Big Boo appears"                                                                                -Credits "Ported from SM64 ROM Manager"
+    CreateReduxCheckBox -Name "Lakitu"             -Column 3 -Row 1 -Text "Skip Lakitu"           -Info "Skip the lakitu intro before entering the castle for the first time"                                                                                -Credits "Ported from SM64 ROM Manager"
+    CreateReduxCheckBox -Name "StageIntro"         -Column 4 -Row 1 -Text "Skip Stage Intro"      -Info "Skip any messages that show up when entering a stage"                                                                                               -Credits "Ported from SM64 ROM Manager"
 
 }
 
