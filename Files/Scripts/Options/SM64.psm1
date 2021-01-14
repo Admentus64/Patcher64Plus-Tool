@@ -118,8 +118,6 @@ function CreateOptionsSuperMario64() {
     EnableElem -Elem $Redux.Skip.TitleScreen            -Active ($GamePatch.title -eq "Super Mario 64")
     EnableElem -Elem $Redux.Skip.MarioScreen            -Active ($GamePatch.title -eq "Super Mario 64")
 
-    #EnableElem -Elem $Redux.UI.HideHUD -Active ($GamePatch.title -notlike "*Super Mario 64: Multiplayer*")
-
 }
 
 

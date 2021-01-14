@@ -558,7 +558,7 @@ function CreateOptionsMajorasMask() {
         CreateOptionsDialog -Width 1060 -Height 370 -Tabs @("Main", "Audiovisual")
     }
 
-    if ($IsWiiVC) { $Redux.Graphics.Widescreen.Add_CheckStateChanged({ AdjustGUIMajorasMask }) }
+    if (!$IsWiiVC) { $Redux.Graphics.Widescreen.Add_CheckStateChanged({ AdjustGUIMajorasMask }) }
 
 }
 
