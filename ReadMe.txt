@@ -1,17 +1,26 @@
 Patcher64+ Tool
 Join our Discord and feel free to contact us there.
 List of credits are accessible within the Patcher64+ Tool.
-Documentation and sources for Zelda 64 options can be found at:
-- https://github.com/ShadowOne333/Zelda64-Redux-Documentation (General)
-- https://docs.google.com/spreadsheets/d/1Ihccm8noxsfHZfN1E3Gkccov1F27WXXxl-rxOuManUk (Female Pronouns Script)
-- www.youtube.com/user/skilarbabcock (Model Replacements)
-- www.youtube.com/c/malonrose (Model Replacements)
 
 --- Support or visit me ---
 Discord:	https://discord.gg/P22GGzz
 GitHub:		https://github.com/Admentus64
 Patreon:	https://www.patreon.com/Admentus
 PayPal:		https://www.paypal.com/paypalme/Admentus/
+
+--- Zelda 64 Options Documentation & Sources ---
+- https://github.com/ShadowOne333/Zelda64-Redux-Documentation (General)
+- https://docs.google.com/spreadsheets/d/1Ihccm8noxsfHZfN1E3Gkccov1F27WXXxl-rxOuManUk (Female Pronouns Script)
+- www.youtube.com/user/skilarbabcock (Model Replacements)
+- www.youtube.com/c/malonrose (Model Replacements)
+
+--- Original Redux Sources ---
+- https://github.com/MarocZan/Ocarina-of-Time-REDUX (www.romhacking.net/hacks/5138)
+- https://github.com/MarocZan/Majora-s-Mask-REDUX (www.romhacking.net/hacks/5122)
+- www.romhacking.net/hacks/4963
+- www.romhacking.net/hacks/2594
+- www.romhacking.net/hacks/5440
+- www.romhacking.net/forum/index.php?topic=29403.0
 
 --- WARNING ---
 If you're upgrading from a previous version and are using the Files\Settings folder from the previous version, you may encounter some issues.
