@@ -178,10 +178,10 @@ function CreateComboBox([int]$X=0, [int]$Y=0, [int]$Width=0, [int]$Height=0, [St
 function CreateCheckBox([int]$X=0, [int]$Y=0, [String]$Name, [int]$SaveAs=1, [String]$SaveTo, [int]$Max=1, [String]$Tag, [Boolean]$Checked=$False, [Boolean]$Disable=$False, [Boolean]$IsRadio=$False, [String]$Info="", [Boolean]$IsGame=$False, [Boolean]$IsDebug=$False, [Object]$AddTo=$Last.Group) {
     
     if ($IsRadio) {
-        $CheckBox = CreateForm -X $X -Y $Y -Width 20 -Height 20 -Name $Name -Tag $Tag -IsGame $IsGame -Object (New-Object System.Windows.Forms.RadioButton) -AddTo $AddTo
+        $CheckBox = CreateForm -X $X -Y $Y -Width (DPISize 20) -Height (DPISize 20) -Name $Name -Tag $Tag -IsGame $IsGame -Object (New-Object System.Windows.Forms.RadioButton) -AddTo $AddTo
         Add-Member -InputObject $CheckBox -NotePropertyMembers @{ SaveAs = $SaveAs; SaveTo = $SaveTo }
     }
-    else { $CheckBox = CreateForm -X $X -Y $Y -Width 20 -Height 20 -Name $Name -Tag $Tag -IsGame $IsGame -Object (New-Object System.Windows.Forms.CheckBox) -AddTo $AddTo }
+    else { $CheckBox = CreateForm -X $X -Y $Y -Width (DPISize 20) -Height (DPISize 20) -Name $Name -Tag $Tag -IsGame $IsGame -Object (New-Object System.Windows.Forms.CheckBox) -AddTo $AddTo }
     $ToolTip = CreateToolTip -Form $CheckBox -Info $Info
     $CheckBox.Enabled = !$Disable
 
@@ -237,7 +237,7 @@ function CreateLabel([int]$X=0, [int]$Y=0, [String]$Name, [String]$Tag, [int]$Wi
 
 
 #==============================================================================================================================================================================================
-function CreateButton([int]$X=0, [int]$Y=0, [String]$Name, [String]$Tag, [int]$Width=100, [int]$Height=20, [String]$ForeColor, [String]$BackColor, [String]$Text="", [Object]$Font=$Fonts.Small, [String]$Info="", [Object]$AddTo=$Last.Group) {
+function CreateButton([int]$X=0, [int]$Y=0, [String]$Name, [String]$Tag, [int]$Width=(DPISize 100), [int]$Height=(DPISize 20), [String]$ForeColor, [String]$BackColor, [String]$Text="", [Object]$Font=$Fonts.Small, [String]$Info="", [Object]$AddTo=$Last.Group) {
     
     $Button = CreateForm -X $X -Y $Y -Width $Width -Height $Height -Name $Name -Tag $Tag -Object (New-Object System.Windows.Forms.Button) -AddTo $AddTo
     if (IsSet $Text)        { $Button.Text = $Text }
@@ -268,13 +268,13 @@ function CreateTabButtons([Array]$Tabs, [Object]$AddTo=$Redux.Panel) {
 
     # Create tabs
     for ($i=0; $i -lt $Tabs.Length; $i++) {
-        $Button = CreateButton -X (15 + (($Redux.Panel.width-50)/$Tabs.length*$i)) -Y 40 -Width (($Redux.Panel.width-50)/$Tabs.length) -Height 30 -ForeColor "White" -BackColor "Gray" -Name $Tabs[$i] -Tag $i -Text $Tabs[$i] -AddTo $AddTo
+        $Button = CreateButton -X ((DPISize 15) + (($Redux.Panel.width - (DPISize 50))/$Tabs.length*$i)) -Y (DPISize 40) -Width (($Redux.Panel.width - (DPISize 50))/$Tabs.length) -Height (DPISize 30) -ForeColor "White" -BackColor "Gray" -Name $Tabs[$i] -Tag $i -Text $Tabs[$i] -AddTo $AddTo
         $Last.TabName = $Tabs[$i]
         $Button.Add_Click({
             $ReduxTabs.GetEnumerator()    | ForEach-Object { $_.BackColor = "Gray" }
             $Redux.Groups.GetEnumerator() | ForEach-Object { $_.Visible = $_.Name -eq $this.Name }
-            $this.BackColor = "DarkGray"
             $GameSettings["Core"]["LastTab"] = $this.Tag
+            $this.BackColor = "DarkGray"
         })
         $global:ReduxTabs += $Button
         $FunctionTitle = SetFunctionTitle -Function ($Tabs[$i] + $GameType.mode)
@@ -295,6 +295,7 @@ function CreateTabButtons([Array]$Tabs, [Object]$AddTo=$Redux.Panel) {
             }
         }
         else {
+            $Redux.Groups.GetEnumerator() | ForEach-Object { $_.Visible = $_.Name -eq $ReduxTabs[0].Name }
             $GameSettings["Core"]["LastTab"] = 0
             $ReduxTabs[0].BackColor = "DarkGray"
         }
@@ -308,39 +309,39 @@ function CreateTabButtons([Array]$Tabs, [Object]$AddTo=$Redux.Panel) {
 function CreateReduxPanel([Float]$Row=0, [Float]$Columns, [Float]$Rows=1,  [String]$Name, [String]$Tag, [Object]$AddTo=$Last.Group) {
     
     $Last.Max = 0
-    if (IsSet $Columns -Min 0)   { $Width = 150 * $Columns }
-    else                         { $Width = $AddTo.Width - 20 }
-    return CreatePanel -X $AddTo.Left -Y ($Row * 30 + 20) -Width $Width -Height (26.5 * $Rows) -Name $Name -Tag $Tag -AddTo $AddTo
+    if (IsSet $Columns -Min 0)   { $Width = (DPISize 150) * $Columns }
+    else                         { $Width = $AddTo.Width - (DPISize 20) }
+    return CreatePanel -X $AddTo.Left -Y ($Row * (DPISize 30) + (DPISize 20)) -Width $Width -Height ((DPISize 26.5) * $Rows) -Name $Name -Tag $Tag -AddTo $AddTo
 
 }
 
 
 #==============================================================================================================================================================================================
-function CreateReduxGroup([Float]$X=15, [Float]$Y=50, [Float]$Height=1, [String]$Name=$Last.TabName, [String]$Tag, [Switch]$Hide, [Boolean]$IsGame=$True, [String]$Text="", [Switch]$IsRedux, [Float]$Columns=0, [Object]$AddTo=$Redux.Panel) {
+function CreateReduxGroup([Float]$X=(DPISize 15), [Float]$Y=(DPISize 50), [Float]$Height=1, [String]$Name=$Last.TabName, [String]$Tag, [Switch]$Hide, [Boolean]$IsGame=$True, [String]$Text="", [Switch]$IsRedux, [Float]$Columns=0, [Object]$AddTo=$Redux.Panel) {
     
-    $Width = ($AddTo.Width - 50)
+    $Width = ($AddTo.Width - (DPISize 50))
     $Last.Column = 1;
 
     if (IsSet $Name) {
         if (!$Last.Half) {
             if ($Last.GroupName -eq $Name)     { $Y = $Last.Group.Bottom + 5}
-            elseif ($ReduxTabs.length -gt 0)   { $Y = 80 }
-            else                               { $Y = 40 }
+            elseif ($ReduxTabs.length -gt 0)   { $Y = (DPISize 80) }
+            else                               { $Y = (DPISize 40) }
         }
         if ($Last.Half) {
-            $X = $Last.Group.Right + 5
+            $X = $Last.Group.Right + (DPISize 5)
             $Y = $Last.Group.Top
-            $Width = $AddTo.Width - $Last.Group.Right - 40
+            $Width = $AddTo.Width - $Last.Group.Right - (DPISize 40)
             $Height = $Last.Group.Rows
             $Last.Half = $False
         }
         if ($Columns -gt 0) {
-            $Width = 165 * $Columns
+            $Width = (DPISize 165) * $Columns
             $Last.Half = $True
         }
     }
 
-    $Group = CreateGroupBox -X $X -Y $Y -Width $Width -Height ($Height * 30 + 20) -Name $Name -Tag $Tag -Text $Text -AddTo $AddTo
+    $Group = CreateGroupBox -X $X -Y $Y -Width $Width -Height ($Height * (DPISize 30) + (DPISize 20)) -Name $Name -Tag $Tag -Text $Text -AddTo $AddTo
     if ( (IsSet $Name) -and ($Name -ne "Main") )     { $Group.Visible = $False }
     if (IsSet $Tag)                                  { $Group.Tag = $Tag }
     if ( (IsSet $Tag) -and !(IsSet $Redux[$Tag]) )   { $Redux[$Tag] = @{} }
@@ -366,7 +367,7 @@ function CreateReduxGroup([Float]$X=15, [Float]$Y=50, [Float]$Height=1, [String]
 function CreateReduxButton([Float]$Column=1, [Float]$Row=1, [int]$Width=150, [int]$Height=20, [String]$Name, [String]$Tag, [String]$Text="", [String]$Info="", [String]$Credits="", [Object]$AddTo=$Last.Group) {
     
     if ( (IsSet $Info ) -and (IsSet $Credits) ) { $Info += ("`n`n- Credits: " + $Credits) }
-    return CreateButton -X (($Column-1) * 165 + 15) -Y ($Row * 30 - 13) -Width $Width -Height $Height -Name $Name -Tag $Tag -Text $Text -Info $Info -AddTo $AddTo
+    return CreateButton -X (($Column-1) * (DPISize 165) + (DPISize 15)) -Y ($Row * (DPISize 30) - (DPISize 13)) -Width (DPISize $Width) -Height (DPISize $Height) -Name $Name -Tag $Tag -Text $Text -Info $Info -AddTo $AddTo
 
 }
 
@@ -377,8 +378,8 @@ function CreateReduxTextBox([Float]$Column=1, [Float]$Row=1, [int]$Length=2, [St
     
     if ( (IsSet $Info ) -and (IsSet $Credits) ) { $Info += ("`n`n- Credits: " + $Credits) }
 
-    $Label = CreateLabel -X (($Column-1) * 165 + 15) -Y ($Row * 30 - 10) -Width 100 -Height 15 -Text $Text -Info $Info -AddTo $AddTo
-    $TextBox = CreateTextBox -X $Label.Right -Y ($Label.Top - 3) -Width 30 -Height 15 -Length $Length -Text $Value -IsGame $True -Name $Name -Tag $Tag -AddTo $AddTo
+    $Label = CreateLabel -X (($Column-1) * (DPISize 165) + (DPISize 15)) -Y ($Row * (DPISize 30) - (DPISize 10)) -Width (DPISize 100) -Height (DPISize 15) -Text $Text -Info $Info -AddTo $AddTo
+    $TextBox = CreateTextBox -X $Label.Right -Y ($Label.Top - (DPISize 3)) -Width (DPISize 30) -Height (DPISize 15) -Length $Length -Text $Value -IsGame $True -Name $Name -Tag $Tag -AddTo $AddTo
 
     $TextBox.Add_TextChanged({
         if ($this.Text -cmatch "[^0-9]") {
@@ -406,10 +407,10 @@ function CreateReduxRadioButton([Float]$Column=$Last.Column, [Float]$Row=1, [Swi
     if ( (IsSet $Info ) -and (IsSet $Credits) ) { $Info += ("`n`n- Credits: " + $Credits) }
     $Last.Max++
 
-    $Radio = CreateCheckBox -X (($Column-1) * 165) -Y (($Row-1) * 30) -Checked $Checked -Disable $Disable -IsRadio $True -Info $Info -IsGame $True -Name $Name -SaveAs $Last.Max -SaveTo $SaveTo -Max $Max -Tag $Tag -AddTo $AddTo
+    $Radio = CreateCheckBox -X (($Column-1) * (DPISize 165)) -Y (($Row-1) * (DPISize 30)) -Checked $Checked -Disable $Disable -IsRadio $True -Info $Info -IsGame $True -Name $Name -SaveAs $Last.Max -SaveTo $SaveTo -Max $Max -Tag $Tag -AddTo $AddTo
     
     if (IsSet $Text) {
-        $Label = CreateLabel -X $Radio.Right -Y ($Radio.Top + 3) -Height 15 -Text $Text -Info $Info -AddTo $AddTo
+        $Label = CreateLabel -X $Radio.Right -Y ($Radio.Top + (DPISize 3)) -Height (DPISize 15) -Text $Text -Info $Info -AddTo $AddTo
         Add-Member -InputObject $Label -NotePropertyMembers @{ CheckBox = $Radio }
         $Label.Add_Click({
             if ($this.CheckBox.Enabled) { $this.CheckBox.Checked = $True }
@@ -429,10 +430,10 @@ function CreateReduxCheckBox([Float]$Column=$Last.Column, [Float]$Row=1, [Switch
     if ($Disable) { $Disable = !$PatchReduxCheckBox.Checked }
     if ( (IsSet $Info ) -and (IsSet $Credits) ) { $Info += ("`n`n- Credits: " + $Credits) }
 
-    $CheckBox = CreateCheckBox -X (($Column-1) * 165 + 15) -Y ($Row * 30 - 10) -Checked $Checked -Disable $Disable -IsRadio $False -Info $Info -IsGame $True -Name $Name  -Tag $Tag -AddTo $AddTo
+    $CheckBox = CreateCheckBox -X (($Column-1) * (DPISize 165) + (DPISize 15)) -Y ($Row * (DPISize 30) - (DPISize 10)) -Checked $Checked -Disable $Disable -IsRadio $False -Info $Info -IsGame $True -Name $Name  -Tag $Tag -AddTo $AddTo
     
     if (IsSet $Text) {
-        $Label = CreateLabel -X $CheckBox.Right -Y ($CheckBox.Top + 3) -Height 15 -Text $Text -Info $Info -AddTo $AddTo
+        $Label = CreateLabel -X $CheckBox.Right -Y ($CheckBox.Top + (DPISize 3)) -Height (DPISize 15) -Text $Text -Info $Info -AddTo $AddTo
         Add-Member -InputObject $Label -NotePropertyMembers @{ CheckBox = $CheckBox }
         $Label.Add_Click({
             if ($this.CheckBox.Enabled) { $this.CheckBox.Checked = !$this.CheckBox.Checked }
@@ -450,15 +451,15 @@ function CreateReduxCheckBox([Float]$Column=$Last.Column, [Float]$Row=1, [Switch
 function CreateReduxComboBox([Float]$Column=1, [Float]$Row=1, [int]$Length=160, [int]$Shift=0, [Array]$Items, [int]$Default=1, [String]$Text, [String]$Info, [String]$Credits="", [String]$Name, [String]$Tag, [Object]$AddTo=$Last.Group) {
     
     if ( (IsSet $Info ) -and (IsSet $Credits) ) { $Info += ("`n`n- Credits: " + $Credits) }
-    if (IsSet $Text)   { $Width = (80 + $Shift) }
+    if (IsSet $Text)   { $Width = (DPISize (80 + $Shift)) }
     else               { $Width = 0 }
     if ($Items[($Default-1)] -ne "Default" -and $Default -ne 0) {
         $Items = $Items.Clone()
         $Items[($Default-1)] += " (default)"
     }
 
-    $Label = CreateLabel -X (($Column-1) * 165 + 15) -Y ($Row * 30 - 10) -Width $Width -Height 15 -Text $Text -Info $Info -AddTo $AddTo
-    $ComboBox = CreateComboBox -X $Label.Right -Y ($Label.Top - 3) -Width ($Length - $Shift) -Height 20 -Items $Items -Default $Default -Info $Info -IsGame $True -Name $Name -Tag $Tag -AddTo $AddTo
+    $Label = CreateLabel -X (($Column-1) * (DPISize 165) + (DPISize 15)) -Y ($Row * (DPISize 30) - (DPISize 10)) -Width $Width -Height (DPISize 15) -Text $Text -Info $Info -AddTo $AddTo
+    $ComboBox = CreateComboBox -X $Label.Right -Y ($Label.Top - (DPISize 3)) -Width (DPISize ($Length - $Shift)) -Height (DPISize 20) -Items $Items -Default $Default -Info $Info -IsGame $True -Name $Name -Tag $Tag -AddTo $AddTo
 
     return $ComboBox
 
@@ -469,7 +470,7 @@ function CreateReduxComboBox([Float]$Column=1, [Float]$Row=1, [int]$Length=160, 
 #==============================================================================================================================================================================================
 function CreateReduxColoredLabel([Object]$Link, [System.Drawing.Color]$Color, [String]$Name, [String]$Tag, [Object]$AddTo=$Last.Group) {
     
-    $Label = CreateLabel -X ($Link.Right + 15) -Y $Link.Top -Width 40 -Height $Link.Height -Name $Name -Tag $Tag -AddTo $AddTo
+    $Label = CreateLabel -X ($Link.Right + (DPISize 15)) -Y $Link.Top -Width (DPISize 40) -Height $Link.Height -Name $Name -Tag $Tag -AddTo $AddTo
     if (IsSet $Color) { $Label.BackColor = $Color }
     return $Label
 

@@ -1,16 +1,18 @@
 function CreateOptionsDialog([int]$Width, [int]$Height, [Array]$Tabs=@()) {
     
     # Create Dialog
-    if ( (IsSet $Width) -and (IsSet $Height) )   { $global:OptionsDialog = CreateDialog -Width $Width -Height $Height }
-    else                                         { $global:OptionsDialog = CreateDialog -Width 900 -Height 640 }
+    if ( (IsSet $Width) -and (IsSet $Height) )   { $global:OptionsDialog = CreateDialog -Width (DPISize $Width) -Height (DPISize $Height) }
+    else                                         { $global:OptionsDialog = CreateDialog -Width (DPISize 900) -Height (DPISize 640) }
     $OptionsDialog.Icon = $Files.icon.additional
 
     # Close Button
-    $CloseButton = CreateButton -X ($OptionsDialog.Width / 2 - 40) -Y ($OptionsDialog.Height - 90) -Width 80 -Height 35 -Text "Close" -AddTo $OptionsDialog
+    $X = $OptionsDialog.Width / 2 - (DPISize 40)
+    $Y = $OptionsDialog.Height - (DPISize 90)
+    $CloseButton = CreateButton -X $X -Y $Y -Width (DPISize 80) -Height (DPISize 35) -Text "Close" -AddTo $OptionsDialog
     $CloseButton.Add_Click( {$OptionsDialog.Hide() })
 
     # Options Label
-    $global:OptionsLabel = CreateLabel -Y 15 -Width $OptionsDialog.width -Height 15 -Font $Fonts.SmallBold -Text ($GameType.mode + " - Additional Options") -AddTo $OptionsDialog
+    $global:OptionsLabel = CreateLabel -Y (DPISize 15) -Width $OptionsDialog.width -Height (DPISize 15) -Font $Fonts.SmallBold -Text ($GameType.mode + " - Additional Options") -AddTo $OptionsDialog
     $OptionsLabel.AutoSize = $True
     $OptionsLabel.Left = ([Math]::Floor($OptionsDialog.Width / 2) - [Math]::Floor($OptionsLabel.Width / 2))
 
@@ -71,28 +73,28 @@ function CreateLanguageContent($Columns=3) {
 function CreateCreditsDialog() {
     
     # Create Dialog
-    $global:CreditsDialog = CreateDialog -Width 650 -Height 550 -Icon $Files.icon.credits
-    $CloseButton = CreateButton -X ($CreditsDialog.Width / 2 - 40) -Y ($CreditsDialog.Height - 90) -Width 80 -Height 35 -Text "Close" -AddTo $CreditsDialog
+    $global:CreditsDialog = CreateDialog -Width (DPISize 650) -Height (DPISize 550) -Icon $Files.icon.credits
+    $CloseButton = CreateButton -X ($CreditsDialog.Width / 2 - (DPISize 40)) -Y ($CreditsDialog.Height - (DPISize 90)) -Width (DPISize 80) -Height (DPISize 35) -Text "Close" -AddTo $CreditsDialog
     $CloseButton.Add_Click({ $CreditsDialog.Hide() })
 
     # Create the current game label
-    $global:CreditsGameLabel = CreateLabel -X 40 -Y 50 -Width 200 -Height 15 -Font $Fonts.SmallBold -AddTo $CreditsDialog
+    $global:CreditsGameLabel = CreateLabel -X (DPISize 40) -Y (DPISize 50) -Width (DPISize 200) -Height (DPISize 15) -Font $Fonts.SmallBold -AddTo $CreditsDialog
 
     # Create Switch subpanel buttons
     $global:Credits = @{}
     $Credits.Buttons = @()
-    $Credits.Buttons += CreateButton -X 40  -Y 70 -Width 110 -Height 30 -ForeColor "White" -BackColor "Gray" -Text "Info" -Tag $Credits.Buttons.Count -Info "Check the info for this game" -AddTo $CreditsDialog
+    $Credits.Buttons += CreateButton -X (DPISize 40) -Y (DPISize 70) -Width (DPISize 110) -Height (DPISize 30) -ForeColor "White" -BackColor "Gray" -Text "Info" -Tag $Credits.Buttons.Count -Info "Check the info for this game" -AddTo $CreditsDialog
     $Credits.Buttons += CreateButton -X ($Credits.Buttons[0].Right) -Y $Credits.Buttons[0].Top -Width $Credits.Buttons[0].Width -Height $Credits.Buttons[0].Height -ForeColor "White" -BackColor "Gray" -Text "Credits"  -Tag $Credits.Buttons.Count -Info "Check the credits for this game" -AddTo $CreditsDialog
     $Credits.Buttons += CreateButton -X ($Credits.Buttons[1].Right) -Y $Credits.Buttons[0].Top -Width $Credits.Buttons[0].Width -Height $Credits.Buttons[0].Height -ForeColor "White" -BackColor "Gray" -Text "GameID's" -Tag $Credits.Buttons.Count -Info "Open the list with official and patched GameID's" -AddTo $CreditsDialog
     $Credits.Buttons += CreateButton -X ($Credits.Buttons[2].Right) -Y $Credits.Buttons[0].Top -Width $Credits.Buttons[0].Width -Height $Credits.Buttons[0].Height -ForeColor "White" -BackColor "Gray" -Text "Misc"     -Tag $Credits.Buttons.Count -Info "General credits and info in general" -AddTo $CreditsDialog
     $Credits.Buttons += CreateButton -X ($Credits.Buttons[3].Right) -Y $Credits.Buttons[0].Top -Width $Credits.Buttons[0].Width -Height $Credits.Buttons[0].Height -ForeColor "White" -BackColor "Gray" -Text "Checksum" -Tag $Credits.Buttons.Count -Info "General credits and info in general" -AddTo $CreditsDialog
     
     # Create the version number and script name label
-    $InfoLabel = CreateLabel -X ($CreditsDialog.Width / 2 - $String.Width - 100) -Y 10 -Width 200 -Height 15 -Font $Fonts.SmallBold -Text ($ScriptName + " " + $Version + " (" + $VersionDate + ")") -AddTo $CreditsDialog
+    $InfoLabel = CreateLabel -X ($CreditsDialog.Width / 2 - $String.Width - (DPISize 100)) -Y (DPISize 10) -Width (DPISize 200) -Height (DPISize 15) -Font $Fonts.SmallBold -Text ($ScriptName + " " + $Version + " (" + $VersionDate + ")") -AddTo $CreditsDialog
 
     # Create Text Box
     $Credits.Sections = @()
-    $Credits.Sections += CreateTextBox -X 40 -Y ($Credits.Buttons[0].Bottom + 10) -Width ($CreditsDialog.Width - 100) -Height ($CloseButton.Top - 120) -ReadOnly -Multiline -AddTo $CreditsDialog -Tag "Info"
+    $Credits.Sections += CreateTextBox -X (DPISize 40) -Y ($Credits.Buttons[0].Bottom + (DPISize 10)) -Width ($CreditsDialog.Width - (DPISize 100)) -Height ($CloseButton.Top - (DPISize 120)) -ReadOnly -Multiline -AddTo $CreditsDialog -Tag "Info"
     $Credits.Sections += CreateTextBox -X $Credits.Sections[0].Left -Y $Credits.Sections[0].Top -Width $Credits.Sections[0].Width -Height $Credits.Sections[0].Height -ReadOnly -Multiline -AddTo $CreditsDialog -Tag "Credits"
     $Credits.Sections += CreateTextBox -X $Credits.Sections[0].Left -Y $Credits.Sections[0].Top -Width $Credits.Sections[0].Width -Height $Credits.Sections[0].Height -ReadOnly -Multiline -AddTo $CreditsDialog -Tag "GameID's"
     AddTextFileToTextbox -TextBox $Credits.Sections[2] -File $Files.text.gameID
@@ -120,17 +122,17 @@ function CreateCreditsDialog() {
 
 
     # Support
-    $SupportLabel  = CreateLabel -X 10                   -Y 10                          -Width 200 -Height 15 -Font $Fonts.SmallBold      -Text ("--- Support or visit me at ---")   -AddTo $Credits.Sections[3]
+    $SupportLabel  = CreateLabel -X (DPISize 10)  -Y (DPISize 10)                          -Width (DPISize 200) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("--- Support or visit me at ---")   -AddTo $Credits.Sections[3]
 
-    $Discord1Label = CreateLabel -X 10                   -Y ($SupportLabel.Bottom + 2)  -Width 150 -Height 15 -Font $Fonts.SmallBold      -Text ("Discord")                          -AddTo $Credits.Sections[3]
-    $Discord2Label = CreateLabel -X $Discord1Label.Right -Y ($SupportLabel.Bottom + 2)  -Width 140 -Height 15 -Font $Fonts.SmallUnderline -Text ("https://discord.gg/P22GGzz")       -AddTo $Credits.Sections[3]
-    $GitHub1Label  = CreateLabel -X 10                   -Y ($Discord1Label.Bottom + 2) -Width 150 -Height 15 -Font $Fonts.SmallBold      -Text ("GitHub")                           -AddTo $Credits.Sections[3]
-    $GitHub2Label  = CreateLabel -X $GitHub1Label.Right  -Y ($Discord1Label.Bottom + 2) -Width 180 -Height 15 -Font $Fonts.SmallUnderline -Text ("https://github.com/Admentus64")    -AddTo $Credits.Sections[3]
+    $Discord1Label = CreateLabel -X (DPISize 10)  -Y ($SupportLabel.Bottom + (DPISize 2))  -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("Discord")                          -AddTo $Credits.Sections[3]
+    $Discord2Label = CreateLabel -X $Discord1Label.Right -Y ($SupportLabel.Bottom + (DPISize 2))  -Width (DPISize 140) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("https://discord.gg/P22GGzz")       -AddTo $Credits.Sections[3]
+    $GitHub1Label  = CreateLabel -X (DPISize 10)  -Y ($Discord1Label.Bottom + (DPISize 2)) -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("GitHub")                           -AddTo $Credits.Sections[3]
+    $GitHub2Label  = CreateLabel -X $GitHub1Label.Right  -Y ($Discord1Label.Bottom + (DPISize 2)) -Width (DPISize 180) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("https://github.com/Admentus64")    -AddTo $Credits.Sections[3]
     
-    $Patreon1Label = CreateLabel -X 10                   -Y ($GitHub1Label.Bottom + 2)  -Width 150 -Height 15 -Font $Fonts.SmallBold      -Text ("Patreon")                          -AddTo $Credits.Sections[3]
-    $Patreon2Label = CreateLabel -X $Patreon1Label.Right -Y ($GitHub1Label.Bottom + 2)  -Width 145 -Height 15 -Font $Fonts.SmallUnderline -Text ("www.patreon.com/Admentus")         -AddTo $Credits.Sections[3]
-    $PayPal1Label  = CreateLabel -X 10                   -Y ($Patreon1Label.Bottom + 2) -Width 150 -Height 15 -Font $Fonts.SmallBold      -Text ("PayPal")                           -AddTo $Credits.Sections[3]
-    $PayPal2Label  = CreateLabel -X $PayPal1Label.Right  -Y ($Patreon1Label.Bottom + 2) -Width 190 -Height 15 -Font $Fonts.SmallUnderline -Text ("www.paypal.com/paypalme/Admentus") -AddTo $Credits.Sections[3]
+    $Patreon1Label = CreateLabel -X (DPISize 10)  -Y ($GitHub1Label.Bottom + (DPISize 2))  -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("Patreon")                          -AddTo $Credits.Sections[3]
+    $Patreon2Label = CreateLabel -X $Patreon1Label.Right -Y ($GitHub1Label.Bottom + (DPISize 2))  -Width (DPISize 145) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("www.patreon.com/Admentus")         -AddTo $Credits.Sections[3]
+    $PayPal1Label  = CreateLabel -X (DPISize 10)  -Y ($Patreon1Label.Bottom + (DPISize 2)) -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("PayPal")                           -AddTo $Credits.Sections[3]
+    $PayPal2Label  = CreateLabel -X $PayPal1Label.Right  -Y ($Patreon1Label.Bottom + (DPISize 2)) -Width (DPISize 190) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("www.paypal.com/paypalme/Admentus") -AddTo $Credits.Sections[3]
 
     $Discord2Label.add_Click({[system.Diagnostics.Process]::start("https://discord.gg/P22GGzz")})
     $GitHub2Label.add_Click({[system.Diagnostics.Process]::start("https://github.com/Admentus64")})
@@ -141,19 +143,19 @@ function CreateCreditsDialog() {
 
 
     # Documentation
-    $SourcesLabel = CreateLabel -X 10                  -Y ($PayPal2Label.Bottom + 10) -Width 150 -Height 15 -Font $Fonts.SmallBold       -Text ("--- Sources ---")                                                                    -AddTo $Credits.Sections[3]
+    $SourcesLabel = CreateLabel -X (DPISize 10) -Y ($PayPal2Label.Bottom + (DPISize 10)) -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold       -Text ("--- Sources ---")                                                                    -AddTo $Credits.Sections[3]
     
-    $Shadow1Label = CreateLabel -X 10                  -Y ($SourcesLabel.Bottom + 2)  -Width 150 -Height 15 -Font $Fonts.SmallBold      -Text ("ShadowOne333's GitHub")                                                               -AddTo $Credits.Sections[3]
-    $Shadow2Label = CreateLabel -X $Shadow1Label.Right -Y ($SourcesLabel.Bottom + 2)  -Width 340 -Height 15 -Font $Fonts.SmallUnderline -Text ("https://github.com/ShadowOne333/Zelda64-Redux-Documentation")                         -AddTo $Credits.Sections[3]
+    $Shadow1Label = CreateLabel -X (DPISize 10) -Y ($SourcesLabel.Bottom + (DPISize 2))  -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("ShadowOne333's GitHub")                                                               -AddTo $Credits.Sections[3]
+    $Shadow2Label = CreateLabel -X $Shadow1Label.Right -Y ($SourcesLabel.Bottom + (DPISize 2))  -Width (DPISize 340) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("https://github.com/ShadowOne333/Zelda64-Redux-Documentation")                         -AddTo $Credits.Sections[3]
     
-    $Female1Label = CreateLabel -X 10                  -Y ($Shadow1Label.Bottom + 2)  -Width 150 -Height 35 -Font $Fonts.SmallBold      -Text ("Feminine Pronouns Script`nBy Mil") -AddTo $Credits.Sections[3]
-    $Female2Label = CreateLabel -X $Female1Label.Right -Y ($Shadow1Label.Bottom + 2)  -Width 300 -Height 35 -Font $Fonts.SmallUnderline -Text ("https://docs.google.com/spreadsheets/d/1Ihccm8noxsfHZfN1E3Gkccov1F27WXXxl-rxOuManUk") -AddTo $Credits.Sections[3]
+    $Female1Label = CreateLabel -X (DPISize 10) -Y ($Shadow1Label.Bottom + (DPISize 2))  -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("Feminine Pronouns Script`nBy Mil") -AddTo $Credits.Sections[3]
+    $Female2Label = CreateLabel -X $Female1Label.Right -Y ($Shadow1Label.Bottom + (DPISize 2))  -Width (DPISize 300) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("https://docs.google.com/spreadsheets/d/1Ihccm8noxsfHZfN1E3Gkccov1F27WXXxl-rxOuManUk") -AddTo $Credits.Sections[3]
 
-    $Skilar1Label = CreateLabel -X 10                  -Y ($Female1Label.Bottom + 2)  -Width 150 -Height 15 -Font $Fonts.SmallBold      -Text ("Skilarbabcock's YouTube")                                                             -AddTo $Credits.Sections[3]
-    $Skilar2Label = CreateLabel -X $Skilar1Label.Right -Y ($Female1Label.Bottom + 2)  -Width 225 -Height 15 -Font $Fonts.SmallUnderline -Text ("https://www.youtube.com/user/skilarbabcock")                                          -AddTo $Credits.Sections[3]
+    $Skilar1Label = CreateLabel -X (DPISize 10) -Y ($Female1Label.Bottom + (DPISize 2))  -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("Skilarbabcock's YouTube")                                                             -AddTo $Credits.Sections[3]
+    $Skilar2Label = CreateLabel -X $Skilar1Label.Right -Y ($Female1Label.Bottom + (DPISize 2))  -Width (DPISize 225) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("https://www.youtube.com/user/skilarbabcock")                                          -AddTo $Credits.Sections[3]
 
-    $Malon1Label  = CreateLabel -X 10                  -Y ($Skilar1Label.Bottom + 2)  -Width 150 -Height 15 -Font $Fonts.SmallBold      -Text ("Malon Rose YouTube")                                                                  -AddTo $Credits.Sections[3]
-    $Malon2Label  = CreateLabel -X $Skilar1Label.Right -Y ($Skilar2Label.Bottom + 2)  -Width 225 -Height 15 -Font $Fonts.SmallUnderline -Text ("https://www.youtube.com/c/MalonRose")                                                 -AddTo $Credits.Sections[3]
+    $Malon1Label  = CreateLabel -X (DPISize 10) -Y ($Skilar1Label.Bottom + (DPISize 2))  -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("Malon Rose YouTube")                                                                  -AddTo $Credits.Sections[3]
+    $Malon2Label  = CreateLabel -X $Skilar1Label.Right -Y ($Skilar2Label.Bottom + (DPISize 2))  -Width (DPISize 225) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("https://www.youtube.com/c/MalonRose")                                                 -AddTo $Credits.Sections[3]
 
     $Shadow2Label.add_Click({[system.Diagnostics.Process]::start("https://github.com/ShadowOne333/Zelda64-Redux-Documentation")})
     $Female2Label.add_Click({[system.Diagnostics.Process]::start("https://docs.google.com/spreadsheets/d/1Ihccm8noxsfHZfN1E3Gkccov1F27WXXxl-rxOuManUk")})
@@ -164,13 +166,13 @@ function CreateCreditsDialog() {
 
 
     # Hash
-    $HashSumROMLabel          = CreateLabel   -X 10 -Y 20 -Width 120 -Height 15 -Font $Fonts.SmallBold -Text "ROM Hashsum:" -AddTo $Credits.Sections[4]
-    $global:HashSumROMTextBox = CreateTextBox -X $HashSumROMLabel.Right -Y ($HashSumROMLabel.Top - 3) -Width ($Credits.Sections[4].Width -$HashSumROMLabel.Width - 100) -Height 50 -AddTo $Credits.Sections[4]
+    $HashSumROMLabel          = CreateLabel -X (DPISize 10) -Y (DPISize 20) -Width (DPISize 120) -Height (DPISize 15) -Font $Fonts.SmallBold -Text "ROM Hashsum:" -AddTo $Credits.Sections[4]
+    $global:HashSumROMTextBox = CreateTextBox -X $HashSumROMLabel.Right -Y ($HashSumROMLabel.Top - (DPISize 3)) -Width ($Credits.Sections[4].Width - $HashSumROMLabel.Width - (DPISize 100))  -Height (DPISize 50) -AddTo $Credits.Sections[4]
     $HashSumROMTextBox.ReadOnly = $True
 
     # Matching Hash
-    $MatchingROMLabel          = CreateLabel   -X 10 -Y ($HashSumROMTextBox.Bottom + 10) -Width 120 -Height 15 -Font $Fonts.SmallBold -Text "Current ROM:" -AddTo $Credits.Sections[4]
-    $global:MatchingROMTextBox = CreateTextBox -X $MatchingROMLabel.Right -Y ($MatchingROMLabel.Top - 3) -Width ($Credits.Sections[4].Width -$MatchingROMLabel.Width - 100) -Height 50 -Text "No ROM Selected" -AddTo $Credits.Sections[4]
+    $MatchingROMLabel          = CreateLabel -X (DPISize 10) -Y ($HashSumROMTextBox.Bottom + (DPISize 10)) -Width (DPISize 120) -Height (DPISize 15) -Font $Fonts.SmallBold -Text "Current ROM:" -AddTo $Credits.Sections[4]
+    $global:MatchingROMTextBox = CreateTextBox -X $MatchingROMLabel.Right -Y ($MatchingROMLabel.Top - (DPISize 3)) -Width ($Credits.Sections[4].Width - $MatchingROMLabel.Width - (DPISize 100)) -Height (DPISize 50) -Text "No ROM Selected" -AddTo $Credits.Sections[4]
     $MatchingROMTextBox.ReadOnly = $True
 
 }
@@ -181,22 +183,22 @@ function CreateCreditsDialog() {
 function CreateSettingsDialog() {
     
     # Create Dialog
-    $global:SettingsDialog = CreateDialog -Width 600 -Height 680 -Icon $Files.icon.settings
-    $CloseButton = CreateButton -X ($SettingsDialog.Width / 2 - 40) -Y ($SettingsDialog.Height - 90) -Width 80 -Height 35 -Text "Close" -AddTo $SettingsDialog
+    $global:SettingsDialog = CreateDialog -Width (DPISize 560) -Height (DPISize 680) -Icon $Files.icon.settings
+    $CloseButton = CreateButton -X ($SettingsDialog.Width / 2 - (DPISize 40)) -Y ($SettingsDialog.Height - (DPISize 90)) -Width (DPISize 80) -Height (DPISize 35) -Text "Close" -AddTo $SettingsDialog
     $CloseButton.Add_Click({ $SettingsDialog.Hide() })
 
     # Create the version number and script name label.
-    $InfoLabel = CreateLabel -X ($SettingsDialog.Width / 2 - $String.Width - 100) -Y 10 -Width 200 -Height 15 -Font $Fonts.SmallBold -Text ($ScriptName + " " + $Version + " (" + $VersionDate + ")") -AddTo $SettingsDialog
+    $InfoLabel = CreateLabel -X ($SettingsDialog.Width / 2 - $String.Width - (DPISize 100)) -Y (DPISize 10) -Width (DPISize 200) -Height (DPISize 15) -Font $Fonts.SmallBold -Text ($ScriptName + " " + $Version + " (" + $VersionDate + ")") -AddTo $SettingsDialog
 
     $global:GeneralSettings = @{}
 
     # General Settings
-    $GeneralSettings.Box                 = CreateReduxGroup -Y 40 -AddTo $SettingsDialog -IsGame $False -Text "General Settings"
+    $GeneralSettings.Box                 = CreateReduxGroup -Y (DPISize 40) -IsGame $False -AddTo $SettingsDialog -Text "General Settings"
     $GeneralSettings.Bit64               = CreateSettingsCheckbox -Name "Bit64"            -Column 1 -Row 1 -Text "Use 64-Bit Tools" -Checked ([Environment]::Is64BitOperatingSystem) -Info "Use 64-bit tools instead of 32-bit tools if available for patching ROMs"
     $GeneralSettings.DoubleClick         = CreateSettingsCheckbox                          -Column 2 -Row 1 -Text "Double Click"                                                      -Info "Allows a PowerShell file to be opened by double-clicking it"
     $GeneralSettings.DoubleClick.Checked = ((Get-ItemProperty -LiteralPath "HKLM:\Software\Classes\Microsoft.PowerShellScript.1\Shell").'(default)' -eq '0')
-    $GeneralSettings.ClearType           = CreateSettingsCheckbox -Name "ClearType"        -Column 3 -Row 1 -Text "Use ClearType Font" -Checked $True                                 -Info ('Use the ClearType font "Segoe UI" instead of the default font "Microsft Sans Serif"' + "`nThe option will only go in effect when opening the tool`nPlease restart the tool when changing this option")
-
+    $GeneralSettings.ClearType           = CreateSettingsCheckbox -Name "ClearType"        -Column 3 -Row 1 -Text "Use ClearType Font"  -Checked $True                                -Info ('Use the ClearType font "Segoe UI" instead of the default font "Microsft Sans Serif"' + "`nThe option will only go in effect when opening the tool`nPlease restart the tool when changing this option")
+    
     # Advanced Settings
     $GeneralSettings.Box                 = CreateReduxGroup -Y ($GeneralSettings.Box.Bottom + 10) -IsGame $False -Height 2 -AddTo $SettingsDialog -Text "Advanced Settings"
     $GeneralSettings.IgnoreChecksum      = CreateSettingsCheckbox -Name "IgnoreChecksum"   -Column 1 -Row 1 -Text "Ignore Input Checksum" -IsDebug -Info "Do not check the checksum of a ROM or WAD and patch it regardless`nDowngrade is no longer forced anymore if the checksum is different than the supported revision"
@@ -272,12 +274,12 @@ function CreateSettingsDialog() {
     }
 
     # Create a button to reset the tool.
-    $GeneralSettings.Box               = CreateReduxGroup -Y ($GeneralSettings.Box.Bottom + 10) -IsGame $False -Height 2 -AddTo $SettingsDialog -Text "Reset"
-    $GeneralSettings.ResetButton       = CreateReduxButton -Column 1 -Width 150 -Height 45 -AddTo $GeneralSettings.Box -Text "Reset All Settings" -Info ("Resets all settings stored in the " + $ScriptName)
+    $GeneralSettings.Box               = CreateReduxGroup -Y ($GeneralSettings.Box.Bottom + (DPISize 10)) -IsGame $False -Height 2 -AddTo $SettingsDialog -Text "Reset"
+    $GeneralSettings.ResetButton       = CreateReduxButton -Column 1 -Width 150 -Height 50 -AddTo $GeneralSettings.Box -Text "Reset All Settings" -Info ("Resets all settings stored in the " + $ScriptName)
     $GeneralSettings.ResetButton.Add_Click({ ResetTool })
-    $GeneralSettings.ResetGameButton   = CreateReduxButton -Column 2 -Width 150 -Height 45 -AddTo $GeneralSettings.Box -Text "Reset Current Game" -Info ("Resets all settings for the current game mode " + $GameType.mode)
+    $GeneralSettings.ResetGameButton   = CreateReduxButton -Column 2 -Width 150 -Height 50 -AddTo $GeneralSettings.Box -Text "Reset Current Game" -Info ("Resets all settings for the current game mode " + $GameType.mode)
     $GeneralSettings.ResetGameButton.Add_Click({ ResetGame })
-    $GeneralSettings.CleanupButton     = CreateReduxButton -Column 3 -Width 150 -Height 45 -AddTo $GeneralSettings.Box -Text "Cleanup Files"      -Info "Remove all temporary and extracted files`nThis process is automaticially done after patching a game"
+    $GeneralSettings.CleanupButton     = CreateReduxButton -Column 3 -Width 150 -Height 50 -AddTo $GeneralSettings.Box -Text "Cleanup Files"      -Info "Remove all temporary and extracted files`nThis process is automaticially done after patching a game"
     $GeneralSettings.CleanupButton.Add_Click({ CleanupFiles })
 
 }
@@ -377,8 +379,8 @@ function CleanupFiles() {
 #==============================================================================================================================================================================================
 function CreateSettingsCheckbox([int]$Column=1, [int]$Row=1, [Boolean]$Checked, [Switch]$Disable, [String]$Text="", [Object]$ToolTip, [String]$Info="", [String]$Name, [Switch]$IsDebug) {
     
-    $Checkbox = CreateCheckbox -X (($Column-1) * 165 + 15) -Y ($Row * 30 - 10) -Checked $Checked -Disable $Disable -IsRadio $False -Info $Info -IsDebug $IsDebug -Name $Name
-    if (IsSet $Text) { $Label = CreateLabel -X $CheckBox.Right -Y ($CheckBox.Top + 3) -Width 135 -Height 15 -Text $Text -Info $Info }
+    $Checkbox = CreateCheckbox -X (($Column-1) * (DPISize 165) + (DPISize 15)) -Y ($Row * (DPISize 30) - (DPISize 10)) -Checked $Checked -Disable $Disable -IsRadio $False -Info $Info -IsDebug $IsDebug -Name $Name
+    if (IsSet $Text) { $Label = CreateLabel -X $CheckBox.Right -Y ($CheckBox.Top + (DPISize 3)) -Width (DPISize 135) -Height (DPISize 15) -Text $Text -Info $Info }
     
     return $CheckBox
 
@@ -389,8 +391,8 @@ function CreateSettingsCheckbox([int]$Column=1, [int]$Row=1, [Boolean]$Checked, 
 #==============================================================================================================================================================================================
 function CreateSettingsRadioField([int]$Column=1, [int]$Row=1, [Boolean]$Checked, [Switch]$Disable, [String]$Text="", [Object]$ToolTip, [String]$Info="", [String]$Name, [int]$SaveAs, [int]$Max, [String]$NameTextbox, [Switch]$IsDebug) {
     
-    $Checkbox = CreateCheckbox -X (($Column-1) * 165 + 15) -Y ($Row * 30 - 10) -Checked $Checked -Disable $Disable -IsRadio $True -Info $Info -IsDebug $IsDebug -Name $Name -SaveAs $SaveAs -SaveTo $Name -Max $Max
-    $Textbox  = CreateTextBox  -X $Checkbox.Right -Y ($Checkbox.Top - 2) -Width 130 -Height 15 -Length 20 -Text $Text -IsDebug $IsDebug -Name $NameTextbox
+    $Checkbox = CreateCheckbox -X (($Column-1) * (DPISize 165) + (DPISize 15)) -Y ($Row * (DPISize 30) - (DPISize 10)) -Checked $Checked -Disable $Disable -IsRadio $True -Info $Info -IsDebug $IsDebug -Name $Name -SaveAs $SaveAs -SaveTo $Name -Max $Max
+    $Textbox  = CreateTextBox  -X $Checkbox.Right -Y $Checkbox.Top -Width (DPISize 130) -Height (DPISize 15) -Length 20 -Text $Text -IsDebug $IsDebug -Name $NameTextbox
 
     return $CheckBox
 
@@ -402,9 +404,9 @@ function CreateSettingsRadioField([int]$Column=1, [int]$Row=1, [Boolean]$Checked
 function CreateErrorDialog([String]$Error, [Switch]$Exit) {
     
     # Create Dialog
-    $ErrorDialog = CreateDialog -Width 300 -Height 200 -Icon $null
+    $ErrorDialog = CreateDialog -Width (DPISize 300) -Height (DPISize 200) -Icon $null
 
-    $CloseButton = CreateButton -X ($ErrorDialog.Width / 2 - 40) -Y ($ErrorDialog.Height - 90) -Width 80 -Height 35 -Text "Close" -AddTo $ErrorDialog
+    $CloseButton = CreateButton -X ($ErrorDialog.Width / 2 - (DPISize 40)) -Y ($ErrorDialog.Height - (DPISize 90)) -Width (DPISize 80) -Height (DPISize 35) -Text "Close" -AddTo $ErrorDialog
     $CloseButton.Add_Click({ $ErrorDialog.Hide() })
 
     # Create the string that will be displayed on the window.
@@ -423,7 +425,7 @@ function CreateErrorDialog([String]$Error, [Switch]$Exit) {
     $String = [String]::Format($String, [Environment]::NewLine)
 
     #Create Label
-    $Label = CreateLabel -X 10 -Y 10 -Width ($ErrorDialog.Width-10) -Height ($ErrorDialog.Height - 110) -Text $String -AddTo $ErrorDialog
+    $Label = CreateLabel -X (DPISize 10) -Y (DPISize 10) -Width ($ErrorDialog.Width - (DPISize 10)) -Height ($ErrorDialog.Height - (DPISize 110)) -Text $String -AddTo $ErrorDialog
 
     if (IsSet $MainDialog) { $MainDialog.Hide() }
     $ErrorDialog.ShowDialog() | Out-Null

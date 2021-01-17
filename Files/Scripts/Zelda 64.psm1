@@ -66,7 +66,7 @@ function ShowModelPreview([Object]$Dropdown, [Object]$Box, [String]$Category) {
     $Path = $GameFiles.previews + "\" + $Category + "\"
     $Text = $Dropdown.Text.replace(" (default)", "")
     
-    if (TestFile ($Path + $Text + ".png"))   { $Box.Image = [System.Drawing.Image]::Fromfile( (Get-Item ($Path + $Text + ".png")) ) }
+    if (TestFile ($Path + $Text + ".png"))   { SetBitMap -Path ($Path + $Text + ".png") -Box $Box }
     else                                     { $Box.Image = $null }
 
     if (IsSet $Files.json.models) {
@@ -121,7 +121,7 @@ function ShowModelPreview([Object]$Dropdown, [Object]$Box, [String]$Category) {
 function ShowOriginalModelPreview([Object]$Box) {
     
     $global:ModelCredits = $null
-    if (TestFile ($GameFiles.previews + "\Original.png"))   { $Box.Image = [System.Drawing.Image]::Fromfile( ( Get-Item ($GameFiles.previews + "\Original.png") ) ) }
+    if (TestFile ($GameFiles.previews + "\Original.png"))   { SetBitMap -Path ($GameFiles.previews + "\Original.png") -Box $Box }
     else                                                    { $Box.Image = $null }
     $PreviewToolTip.SetToolTip($Redux.Graphics.ModelsPreview, ([String]::Format("Original models by: Nintendo", [Environment]::NewLine)))
 

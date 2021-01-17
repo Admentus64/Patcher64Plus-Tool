@@ -1,3 +1,7 @@
+v11.0.0
+- Added Hi-DPI support for the Patcher64+ Tool GUI (thank you Bighead!)
+- Fixed issue with default tab being hidden
+
 v10.2.1
 - Added fix for the Auto Skip option for MM
 - Rewrote how checkboxes and elements are set inactive

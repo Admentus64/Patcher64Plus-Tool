@@ -770,6 +770,10 @@ function CreateOptionsOcarinaOfTime() {
 
     if (!$IsWiiVC) { $Redux.Graphics.Widescreen.Add_CheckStateChanged({ AdjustGUIOcarinaOfTime }) }
 
+    #$SomeEvent = { Write-Host "123" }
+    #$Redux.Graphics.Widescreen.Add_CheckStateChanged( $SomeEvent )
+    #$Redux.Graphics.Widescreen.Remove_CheckStateChanged( $SomeEvent )
+
 }
 
 
@@ -950,11 +954,11 @@ function CreateTabAudiovisualOcarinaOfTime() {
 
     # MODELS PREVIEW #
     CreateReduxGroup -Tag "Graphics" -Text "Models Preview"
-    $Last.Group.Height = 165
+    $Last.Group.Height = (DPISize 161)
     $Redux.Graphics.ModelsPreview = New-Object Windows.Forms.PictureBox
-    $Redux.Graphics.ModelsPreview.Location = New-object System.Drawing.Size(5, 15)
-    $Redux.Graphics.ModelsPreview.Width  = $Last.Group.Width - 10
-    $Redux.Graphics.ModelsPreview.Height = $Last.Group.Height - 20
+    $Redux.Graphics.ModelsPreview.Location = (DPISize (New-object System.Drawing.Size(5, 15)))
+    $Redux.Graphics.ModelsPreview.Width  = $Last.Group.Width - (DPISize 10)
+    $Redux.Graphics.ModelsPreview.Height = $Last.Group.Height - (DPISize 20)
     $Last.Group.controls.add($Redux.Graphics.ModelsPreview)
     $global:PreviewToolTip = CreateToolTip
     ChangeModelsSelection

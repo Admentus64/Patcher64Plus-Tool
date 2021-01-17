@@ -3,6 +3,6 @@
 
 --- Patcher64+ Tool ---
 - Admentus (Testing and Coding of Patcher64+ Tool)
-- Bighead (Initial PowerShell patcher)
+- Bighead (Initial PowerShell patcher, Hi-DPI Mode)
 - GhostlyDark (Testing and Assistance)
 - ShadowOne333 (Testing and Assistance)

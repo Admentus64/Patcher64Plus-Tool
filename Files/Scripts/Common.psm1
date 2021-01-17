@@ -3,9 +3,9 @@ function SetWiiVCMode([Boolean]$Enable) {
     if ( ($Enable -eq $IsWiiVC) -and $GameIsSelected) { return }
 
     $global:IsWiiVC = $Enable
-    if ($IsWiiVC)   { $CustomTitleTextBox.MaxLength = $VCTitleLength  }
+    if ($IsWiiVC)   { $CustomTitleTextBox.MaxLength = (DPISize $VCTitleLength) }
     else            { $CustomTitleTextBox.MaxLength = $GameConsole.rom_title_length }
-    
+
     EnablePatchButtons (IsSet $GamePath)
     GetHeader
     SetModeLabel
@@ -157,49 +157,49 @@ function SetMainScreenSize() {
     $VC.Panel.Visible = $IsWiiVC
 
     # Set Input Paths Sizes
-    $InputPaths.GamePanel.Location = $InputPaths.InjectPanel.Location = $InputPaths.PatchPanel.Location = New-Object System.Drawing.Size(10, 50)
+    $InputPaths.GamePanel.Location = $InputPaths.InjectPanel.Location = $InputPaths.PatchPanel.Location = DPISize (New-Object System.Drawing.Size(10, 50))
     if ($IsWiiVC) {
-        $InputPaths.InjectPanel.Top = $InputPaths.GamePanel.Bottom + 15
-        $InputPaths.PatchPanel.Top = $InputPaths.InjectPanel.Bottom + 15
+        $InputPaths.InjectPanel.Top = $InputPaths.GamePanel.Bottom + (DPISize 15)
+        $InputPaths.PatchPanel.Top = $InputPaths.InjectPanel.Bottom + (DPISize 15)
     }
     else {
-        $InputPaths.PatchPanel.Top = $InputPaths.GamePanel.Bottom + 15
+        $InputPaths.PatchPanel.Top = $InputPaths.GamePanel.Bottom + (DPISize 15)
     }
 
     # Positioning
-    if (IsSet $GamePath)   { $CurrentGamePanel.Location = New-Object System.Drawing.Size(10, ($InputPaths.PatchPanel.Bottom + 5)) }
-    else                   { $CurrentGamePanel.Location = New-Object System.Drawing.Size(10, ($InputPaths.GamePanel.Bottom + 5)) }
-    $CustomHeaderPanel.Location = New-Object System.Drawing.Size(10, ($CurrentGamePanel.Bottom + 5))
+    if (IsSet $GamePath)   { $CurrentGamePanel.Location = New-Object System.Drawing.Size((DPISize 10), ($InputPaths.PatchPanel.Bottom + (DPISize 5))) }
+    else                   { $CurrentGamePanel.Location = New-Object System.Drawing.Size((DPISize 10), ($InputPaths.GamePanel.Bottom + (DPISize 5))) }
+    $CustomHeaderPanel.Location = New-Object System.Drawing.Size((DPISize 10), ($CurrentGamePanel.Bottom + (DPISize 5)))
 
     # Set VC Panel Size
-    if ($GameConsole.options_vc -eq 0)                               { $VC.Panel.Height = $VC.Group.Height = 70 }
-    elseif ($GameType.patches_vc -gt 2)                              { $VC.Panel.Height = $VC.Group.Height = 105 }
-    elseif ($GameType.patches_vc -gt 0 -or $GameConsole.t64 -eq 1)   { $VC.Panel.Height = $VC.Group.Height = 90 }
-    else                                                             { $VC.Panel.Height = $VC.Group.Height = 70 }
+    if ($GameConsole.options_vc -eq 0)                               { $VC.Panel.Height = $VC.Group.Height = (DPISize 70) }
+    elseif ($GameType.patches_vc -gt 2)                              { $VC.Panel.Height = $VC.Group.Height = (DPISize 105) }
+    elseif ($GameType.patches_vc -gt 0 -or $GameConsole.t64 -eq 1)   { $VC.Panel.Height = $VC.Group.Height = (DPISize 90) }
+    else                                                             { $VC.Panel.Height = $VC.Group.Height = (DPISize 70) }
 
     # Arrange Panels
     if ($IsWiiVC) {
         if ($GameType.patches) {
-            $Patches.Panel.Location = New-Object System.Drawing.Size(10, ($CustomHeaderPanel.Bottom + 5))
-            $VC.Panel.Location = New-Object System.Drawing.Size(10, ($Patches.Panel.Bottom + 5))
+            $Patches.Panel.Location = New-Object System.Drawing.Size((DPISize 10), ($CustomHeaderPanel.Bottom + (DPISize 5)))
+            $VC.Panel.Location = New-Object System.Drawing.Size((DPISize 10), ($Patches.Panel.Bottom + (DPISize 5)))
         }
-        else { $VC.Panel.Location = New-Object System.Drawing.Size(10, ($CustomHeaderPanel.Bottom + 5)) }
-        $MiscPanel.Location = New-Object System.Drawing.Size(10, ($VC.Panel.Bottom + 5))
+        else { $VC.Panel.Location = New-Object System.Drawing.Size((DPISize 10), ($CustomHeaderPanel.Bottom + (DPISize 5))) }
+        $MiscPanel.Location = New-Object System.Drawing.Size((DPISize 10), ($VC.Panel.Bottom + (DPISize 5)))
     }
     else {
         if ( ($GameConsole.rom_title -eq 0) -and ($GameConsole.rom_gameID -eq 0) ) {
-            if ($GameType.patches) { $Patches.Panel.Location = New-Object System.Drawing.Size(10, ($CurrentGamePanel.Bottom + 5)) }
-            else                   { $MiscPanel.Location = New-Object System.Drawing.Size(10, ($CurrentGamePanel.Bottom + 5)) }
+            if ($GameType.patches) { $Patches.Panel.Location = New-Object System.Drawing.Size((DPISize 10), ($CurrentGamePanel.Bottom + (DPISize 5))) }
+            else                   { $MiscPanel.Location = New-Object System.Drawing.Size((DPISize 10), ($CurrentGamePanel.Bottom + (DPISize 5))) }
         }
         else {
-            if ($GameType.patches) { $Patches.Panel.Location = New-Object System.Drawing.Size(10, ($CustomHeaderPanel.Bottom + 5)) }
-            else                   { $MiscPanel.Location = New-Object System.Drawing.Size(10, ($CustomHeaderPanel.Bottom + 5)) }
+            if ($GameType.patches) { $Patches.Panel.Location = New-Object System.Drawing.Size((DPISize 10), ($CustomHeaderPanel.Bottom + (DPISize 5))) }
+            else                   { $MiscPanel.Location = New-Object System.Drawing.Size((DPISize 10), ($CustomHeaderPanel.Bottom + (DPISize 5))) }
         }
-        if ($GameType.patches)     { $MiscPanel.Location = New-Object System.Drawing.Size(10, ($Patches.Panel.Bottom + 5)) }
+        if ($GameType.patches)     { $MiscPanel.Location = New-Object System.Drawing.Size((DPISize 10), ($Patches.Panel.Bottom + (DPISize 5))) }
     }
     
-    $StatusPanel.Location = New-Object System.Drawing.Size(10, ($MiscPanel.Bottom + 5))
-    $MainDialog.Height = $StatusPanel.Bottom + 50
+    $StatusPanel.Location = New-Object System.Drawing.Size((DPISize 10), ($MiscPanel.Bottom + (DPISize 5)))
+    $MainDialog.Height = $StatusPanel.Bottom + (DPISize 50)
     
 }
 
@@ -807,6 +807,18 @@ function SetFunctionTitle([String]$Function) {
 
 
 
+#==================================================================================================================================================================================================================================================================
+function SetBitmap($Path, $Box) {
+
+    $ImgObject = [Drawing.Image]::FromFile( ( Get-Item $Path ) )
+    $ImgBitmap = New-Object Drawing.Bitmap($ImgObject, (DPISize $ImgObject.Width), (DPISize $ImgObject.Height))
+    $ImgObject.Dispose()
+    $Box.Image = $ImgBitmap
+
+}
+
+
+
 #==============================================================================================================================================================================================
 
 Export-ModuleMember -Function SetWiiVCMode
@@ -852,3 +864,4 @@ Export-ModuleMember -Function CreateSubPath
 Export-ModuleMember -Function ShowPowerShellConsole
 Export-ModuleMember -Function TogglePowerShellOpenWithClicks
 Export-ModuleMember -Function SetFunctionTitle
+Export-ModuleMember -Function SetBitmap
