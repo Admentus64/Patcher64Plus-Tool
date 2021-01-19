@@ -132,3 +132,10 @@ function InitializeHiDPIMode() {
     }
 
 }
+
+
+
+#==============================================================================================================================================================================================
+
+Export-ModuleMember -Function DPISize
+Export-ModuleMember -Function InitializeHiDPIMode

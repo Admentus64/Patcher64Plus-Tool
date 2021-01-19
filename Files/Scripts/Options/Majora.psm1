@@ -572,8 +572,11 @@ function AdjustGUIMajorasMask() {
     EnableElem -Elem @($Redux.Colors.Magic, $Redux.Colors.BaseMagic, $Redux.Colors.DoubleMagic) -Active (!(IsWidescreen -Patched))
     EnableElem -Elem @($Redux.DPad.Disable, $Redux.DPad.Hide, $Redux.DPad.LayoutLeft, $Redux.DPad.LayoutRight) -Active (!(IsWidescreen -Patched))
     
-    if (IsWidescreen -Patched)             { EnableElem -Elem @($Redux.DPad.Up, $Redux.DPad.Left, $Redux.DPad.Right, $Redux.DPad.Down) -Active $True }
-    elseif ($Redux.Dpad.Disable.Checked)   { EnableElem -Elem @($Redux.DPad.Up, $Redux.DPad.Left, $Redux.DPad.Right, $Redux.DPad.Down) -Active $False }
+    if (IsWidescreen -Patched) {
+        EnableElem -Elem @($Redux.DPad.Up, $Redux.DPad.Left, $Redux.DPad.Right, $Redux.DPad.Down) -Active $True
+        $Redux.Graphics.MotionBlur.Checked = $Redux.Graphics.FlashbackOverlay.Checked = $True
+    }
+    elseif ($Redux.Dpad.Disable.Checked) { EnableElem -Elem @($Redux.DPad.Up, $Redux.DPad.Left, $Redux.DPad.Right, $Redux.DPad.Down) -Active $False }
 
 }
 
@@ -698,7 +701,7 @@ function CreateTabAudiovisualMajorasMask() {
     # GRAPHICS #
     CreateReduxGroup    -Tag  "Graphics" -Text "Graphics" -Height 2
 
-    if ($WiiVC) {
+    if ($IsWiiVC) {
         $Info = "Native 16:9 Widescreen Display support with backgrounds and textures adjusted for widescreen"
         $Credits = "`nAspect Ratio Fix by Admentus`n16:9 backgrounds by GhostlyDark & ShadowOne333"
     }
@@ -716,8 +719,14 @@ function CreateTabAudiovisualMajorasMask() {
     CreateReduxCheckBox -Name "ExtendedDraw"      -Column 3 -Row 1 -Text "Extended Draw Distance"    -Info "Increases the game's draw distance for objects`nDoes not work on all objects"                                         -Credits "Admentus"
     CreateReduxCheckBox -Name "ImprovedLinkModel" -Column 4 -Row 1 -Text "Improved Link Model"       -Info "Improves the model used for Hylian Link`nCustom tunic colors are not supported with this option"                      -Credits "Skilarbabcock (www.youtube.com/user/skilarbabcock) & Nerrel"
     CreateReduxCheckBox -Name "PixelatedStars"    -Column 5 -Row 1 -Text "Disable Pixelated Stars"   -Info "Completely disable the stars at night-time, which are pixelated dots and do not have any textures for HD replacement" -Credits "Admentus"
-    CreateReduxCheckBox -Name "MotionBlur"        -Column 6 -Row 1 -Text "Disable Motion Blur"       -Info "Completely Disable the use of motion blur in-game"                -Checked                                            -Credits "GhostlyDark"
-    CreateReduxCheckBox -Name "FlashbackOverlay"  -Column 1 -Row 2 -Text "Disable Flashback Overlay" -Info "Disables the overlay shown during Princess Zelda flashback scene" -Checked                                            -Credits "GhostlyDark"
+    
+    if (!$IsWiiVC) {
+        $info = "`n`n--- WARNING ---`nDisabling cutscene effects fixes temporary issues with both Widescreen and Redux patched where garbage pixels at the edges of the screen or garbled text appears`nWorkaround: Resize the window when that happens"
+    }
+    else { $info = "" }
+    
+    CreateReduxCheckBox -Name "MotionBlur"        -Column 6 -Row 1 -Text "Disable Motion Blur"       -Info ("Completely Disable the use of motion blur in-game" + $info)                                                          -Credits "GhostlyDark"
+    CreateReduxCheckBox -Name "FlashbackOverlay"  -Column 1 -Row 2 -Text "Disable Flashback Overlay" -Info ("Disables the overlay shown during Princess Zelda flashback scene" + $info)                                           -Credits "GhostlyDark"
 
     # INTERFACE #
     CreateReduxGroup    -Tag  "UI" -Text "Interface"
