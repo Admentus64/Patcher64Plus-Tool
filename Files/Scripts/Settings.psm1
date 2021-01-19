@@ -2,24 +2,28 @@ function Get-IniContent ([String]$FilePath) {
 
     $ini = @{}
     switch -regex -file $FilePath {
+
         "^\[(.+)\]" # Section
         {
-            $section = $matches[1]
+            $section = $Matches[1]
             $ini[$section] = @{}
             $CommentCount = 0
         }
+
         "^(;.*)$"
         {
-            $value = $matches[1]
+            $value = $Matches[1]
             $CommentCount = $CommentCount + 1
             $name = "Comment" + $CommentCount
             $ini[$section][$name] = $value
         }
+
         "(.+?)\s*=(.*)" # Key
         {
-            $name,$value = $matches[1..2]
+            $name,$value = $Matches[1..2]
             $ini[$section][$name] = $value
         }
+
     }
     return $ini
 
