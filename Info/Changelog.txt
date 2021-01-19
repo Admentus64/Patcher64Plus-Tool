@@ -1,3 +1,9 @@
+v11.0.1
+- Added option to disable Hi-DPI Mode
+- Updated Hi-DPI Mode code (thank you Bighead!)
+- Small GUI corrections to keep Hi-DPI mode in mind
+- "Disable Motion Blur" and "Disable Flashback Overlay" are now checked by default for MM
+
 v11.0.0
 - Added Hi-DPI support for the Patcher64+ Tool GUI (thank you Bighead!)
 - Fixed issue with default tab being hidden

@@ -23,8 +23,8 @@ Add-Type -AssemblyName 'System.Drawing'
 # Setup global variables
 
 $global:ScriptName = "Patcher64+ Tool"
-$global:VersionDate = "2021-01-17"
-$global:Version     = "v11.0.0"
+$global:VersionDate = "2021-01-19"
+$global:Version     = "v11.0.1"
 
 $global:GameConsole = $global:GameType = $global:GamePatch = $global:CheckHashSum = ""
 $global:GameFiles = $global:Settings = @{}
@@ -148,6 +148,11 @@ function IsNumeric([String]$str) {
 $global:Settings = GetSettings ($Paths.Settings + "\Core.ini")
 if (!(IsSet $Settings.Core))   { $Settings.Core  = @{} }
 if (!(IsSet $Settings.Debug))  { $Settings.Debug = @{} }
+
+# Hi-DPI Mode
+if ($Settings.Core.HiDPIMode -eq $False)   { $global:DisableHighDPIMode = $True }
+else                                       { $global:DisableHighDPIMode = $False }
+InitializeHiDPIMode
 
 # Font
 if ($Settings.Core.ClearType -eq $True)   { $Font = "Segoe UI" }

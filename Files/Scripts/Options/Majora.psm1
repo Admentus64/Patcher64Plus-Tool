@@ -620,7 +620,7 @@ function CreateTabReduxMajorasMask() {
     
     # D-PAD ICONS LAYOUT #
     CreateReduxGroup -Tag  "DPad" -Text "D-Pad Layout" -Height 6 -Columns 4
-    CreateReduxPanel -Columns 0.8 -Rows 4
+    CreateReduxPanel -Columns 0.8 -Rows 4.1
     CreateReduxRadioButton -Name "Disable"     -SaveTo "Layout" -Column 1 -Row 1          -Text "Disable"    -Info "Completely disable the D-Pad"                      -Credits "Ported from Redux"
     CreateReduxRadioButton -Name "Hide"        -SaveTo "Layout" -Column 1 -Row 2          -Text "Hidden"     -Info "Hide the D-Pad icons, while they are still active" -Credits "Ported from Redux"
     CreateReduxRadioButton -Name "LayoutLeft"  -SaveTo "Layout" -Column 1 -Row 3          -Text "Left Side"  -Info "Show the D-Pad icons on the left side of the HUD"  -Credits "Ported from Redux"
@@ -714,10 +714,10 @@ function CreateTabAudiovisualMajorasMask() {
     CreateReduxCheckBox -Name "Widescreen"        -Column 1 -Row 1 -Text "16:9 Widescreen"           -Info $Info                                                                                                                  -Credits $Credits
     CreateReduxCheckBox -Name "BlackBars"         -Column 2 -Row 1 -Text "No Black Bars"             -Info "Removes the black bars shown on the top and bottom of the screen during Z-targeting and cutscenes"                    -Credits "Admentus"
     CreateReduxCheckBox -Name "ExtendedDraw"      -Column 3 -Row 1 -Text "Extended Draw Distance"    -Info "Increases the game's draw distance for objects`nDoes not work on all objects"                                         -Credits "Admentus"
-    CreateReduxCheckBox -Name "PixelatedStars"    -Column 4 -Row 1 -Text "Disable Pixelated Stars"   -Info "Completely disable the stars at night-time, which are pixelated dots and do not have any textures for HD replacement" -Credits "Admentus"
-    CreateReduxCheckBox -Name "MotionBlur"        -Column 5 -Row 1 -Text "Disable Motion Blur"       -Info "Completely Disable the use of motion blur in-game"                                                                    -Credits "GhostlyDark"
-    CreateReduxCheckBox -Name "ImprovedLinkModel" -Column 6 -Row 1 -Text "Improved Link Model"       -Info "Improves the model used for Hylian Link`nCustom tunic colors are not supported with this option"                      -Credits "Skilarbabcock (www.youtube.com/user/skilarbabcock) & Nerrel"
-    CreateReduxCheckBox -Name "FlashbackOverlay"  -Column 1 -Row 2 -Text "Disable Flashback Overlay" -Info "Disables the overlay shown during Princess Zelda flashback scene"                                                     -Credits "GhostlyDark"
+    CreateReduxCheckBox -Name "ImprovedLinkModel" -Column 4 -Row 1 -Text "Improved Link Model"       -Info "Improves the model used for Hylian Link`nCustom tunic colors are not supported with this option"                      -Credits "Skilarbabcock (www.youtube.com/user/skilarbabcock) & Nerrel"
+    CreateReduxCheckBox -Name "PixelatedStars"    -Column 5 -Row 1 -Text "Disable Pixelated Stars"   -Info "Completely disable the stars at night-time, which are pixelated dots and do not have any textures for HD replacement" -Credits "Admentus"
+    CreateReduxCheckBox -Name "MotionBlur"        -Column 6 -Row 1 -Text "Disable Motion Blur"       -Info "Completely Disable the use of motion blur in-game"                -Checked                                            -Credits "GhostlyDark"
+    CreateReduxCheckBox -Name "FlashbackOverlay"  -Column 1 -Row 2 -Text "Disable Flashback Overlay" -Info "Disables the overlay shown during Princess Zelda flashback scene" -Checked                                            -Credits "GhostlyDark"
 
     # INTERFACE #
     CreateReduxGroup    -Tag  "UI" -Text "Interface"
