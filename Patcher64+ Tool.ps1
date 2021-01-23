@@ -23,8 +23,11 @@ Add-Type -AssemblyName 'System.Drawing'
 # Setup global variables
 
 $global:ScriptName = "Patcher64+ Tool"
-$global:VersionDate = "2021-01-19"
-$global:Version     = "v11.0.1"
+$global:VersionDate = "2021-01-23"
+$global:Version     = "v11.1.0"
+
+$global:CommandType = $MyInvocation.MyCommand.CommandType.ToString()
+$global:Definition  = $MyInvocation.MyCommand.Definition.ToString()
 
 $global:GameConsole = $global:GameType = $global:GamePatch = $global:CheckHashSum = ""
 $global:GameFiles = $global:Settings = @{}
@@ -33,27 +36,36 @@ $global:VCTitleLength = 40
 $global:Bootup = $global:GameIsSelected = $global:IsActiveGameField = $False
 $global:Last = @{}
 $global:Fonts = @{}
+$global:FatalError = $False
 
 
 
 #==============================================================================================================================================================================================
 # Set file paths
 
+function GetScriptPath() {
+    
+    if ($CommandType -eq "ExternalScript") { # This is the command that should have been stored
+        $SplitDef  = $Definition.Split('\') # Split the path on every "\" and grab the last one
+        $InputFile = $SplitDef[$SplitDef.Count-1]
+        $global:ExternalScript = $True
+        return $Definition.Replace(($InputFile),'') # If it was, the definition will hold the full path to the script
+    }
+
+    $FullPath  = ([Environment]::GetCommandLineArgs()[0]).ToString() # Split the path on every "\" and grab the last one
+    $SplitDef  = $FullPath.Split('\')
+    $InputFile = $SplitDef[$SplitDef.Count-1].Substring(0, $SplitDef[$SplitDef.Count-1].Length - 4) + '.exe'
+    $global:ExternalScript = $False
+    if ($ScriptPath) { $ScriptPath = $FullPath.Replace(($InputFile),'') } else { $ScriptPath = "." } # If running via an executable, the command will be different so get the path through an argument
+    return $ScriptPath # Return whatever we got in the above.
+
+}
+
 # Create a hash table
 $global:Paths = @{}
 
-# The path this script is found in.
-if ($MyInvocation.MyCommand.CommandType -eq "ExternalScript") {
-    $Paths.Base = Split-Path -Parent -Path $MyInvocation.MyCommand.Definition
-    $global:ExternalScript = $True
-}
-else {
-    $Paths.Base = Split-Path -Parent -Path ([Environment]::GetCommandLineArgs()[0])
-    if (!$Paths.Base) { $Paths.Base = "." }
-    $global:ExternalScript = $False
-}
-
-# Set all other paths
+# Set all paths
+$Paths.Base            = GetScriptPath
 $Paths.Master          = $Paths.Base + "\Files"
 $Paths.Registry        = $Paths.Master + "\Registry"
 $Paths.Games           = $Paths.Master + "\Games"
@@ -84,12 +96,6 @@ foreach ($Script in Get-ChildItem -LiteralPath ($Paths.Scripts + "\Options") -Fo
     if ( !$Script.PSIsContainer -and $Script.Extension -eq ".psm1") { ImportModule -Name ("Options\" + $Script.BaseName) }
 }
 
-#$module = Get-Module -Name "Forms"
-#$publicFunctions = (Get-Command -Module $module.name).name
-#$privateFunctions = ($module.Invoke({Get-Command -module $module.name})).name | Where-Object { $_ -notin $publicFunctions }
-#Write-Host "Private Functions:" $privateFunctions
-#Write-Host (Get-PSCallStack)[1].Command
-
 
 
 #==============================================================================================================================================================================================
@@ -100,34 +106,6 @@ public static extern IntPtr GetConsoleWindow();
 public static extern bool ShowWindow(IntPtr hWnd, Int32 nCmdShow);
 "@
 Add-Type -Namespace Console -Name Window -MemberDefinition $HidePSConsole
-
-
-
-
-<#
-#==============================================================================================================================================================================================
-function ExtendString([String]$InputString, [int]$Length) {
-
-    # Count the number of characters in the input string.
-    $Count = ($InputString | Measure-Object -Character).Characters
-
-    # Check the number of characters against the desired amount.
-    if ($Count -lt $Length) {
-        # If the string is to be lengthened, find out by how much.
-        $AddLength = $Length - $Count
-        
-        # Loop until the string matches the desired number of characters.
-        for ($i = 1 ; $i -le $AddLength ; $i++) {
-            # Add an empty space to the end of the string.
-            $InputString += ' '
-        }
-    }
-
-    # Return the modified string.
-    return $InputString
-
-}
-#>
 
 
 
@@ -149,7 +127,7 @@ $global:Settings = GetSettings ($Paths.Settings + "\Core.ini")
 if (!(IsSet $Settings.Core))   { $Settings.Core  = @{} }
 if (!(IsSet $Settings.Debug))  { $Settings.Debug = @{} }
 
-# Hi-DPI Mode
+# Hi-DPI ModeLe
 if ($Settings.Core.HiDPIMode -eq $False)   { $global:DisableHighDPIMode = $True }
 else                                       { $global:DisableHighDPIMode = $False }
 InitializeHiDPIMode
@@ -178,18 +156,20 @@ ChangeConsolesList
 GetFilePaths
 
 # Restore Last Custom Title and GameID
-$CustomTitleTextBox.Add_TextChanged({                  if (IsChecked $CustomHeaderCheckbox)   { $Settings["Core"]["CustomTitle"] = $this.Text } })
-$CustomGameIDTextBox.Add_TextChanged({                 if (IsChecked $CustomHeaderCheckbox)   { $Settings["Core"]["CustomGameID"] = $this.Text } })
-$CustomRegionCodeComboBox.Add_SelectedIndexChanged({   if (IsChecked $CustomHeaderCheckbox)   { $Settings["Core"]["CustomRegionCode"] = $this.SelectedIndex } })
-$CustomHeaderCheckbox.Add_CheckedChanged({ RestoreCustomHeader })
+$CustomHeader.Title.Add_TextChanged({           if (IsChecked $CustomHeader.EnableHeader)   { $Settings["Core"]["CustomHeader.Title"]  = $this.Text } })
+$CustomHeader.GameID.Add_TextChanged({          if (IsChecked $CustomHeader.EnableHeader)   { $Settings["Core"]["CustomHeader.GameID"] = $this.Text } })
+$CustomHeader.Region.Add_SelectedIndexChanged({ if (IsChecked $CustomHeader.EnableRegion)   { $Settings["Core"]["CustomHeader.Region"] = $this.SelectedIndex } })
+$CustomHeader.EnableHeader.Add_CheckedChanged({ RestoreCustomHeader })
+$CustomHeader.EnableRegion.Add_CheckedChanged({ RestoreCustomRegion })
 RestoreCustomHeader
+RestoreCustomRegion
 
 # Restore VC Checkboxes
 CheckVCOptions
 if (!$GameIsSelected) { ChangePatchPanel }
 
 # Show the dialog to the user
-$MainDialog.ShowDialog() | Out-Null
+if (!$FatalError) { $MainDialog.ShowDialog() | Out-Null }
 
 # Exit
 Out-IniFile -FilePath $Files.settings -InputObject $Settings | Out-Null

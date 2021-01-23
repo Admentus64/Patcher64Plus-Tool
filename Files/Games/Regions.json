@@ -1,0 +1,553 @@
+[
+	{
+		"name"		: ["90 Minutes - European Prime Goal (Europe)", "90 Minutes - European Prime Goal (Europe) (Beta)"],
+		"hash"		: ["305d00418b1302139fa01fb1640e2c65", "d454032507d36283be629d6cddcbb19f"],
+		"offset"	: ["10789"],
+		"value"		: ["A9"]
+	}, {
+		"name"		: ["ActRaiser (Europe)", "ActRaiser (France)", "ActRaiser (Germany)"],
+		"hash"		: ["9b36075b53dec1a506b1f9334e670c63", "4d7084efdaac42131bf9c68fad358ebd", "fd56459aba757c35b9892aede9d24304"],
+		"offset"	: ["10179", "10491", "10803", "1080E", "10814", "1081C", "1082D", "10834", "10837", "10839", "10842", "10848", "10853", "10889", "1088E", "10894", "10897", "10899", "1089C", "108A7", "108AB", "108AD", "108C1", "10903", "1090E", "10914", "1091C", "1092D", "10934", "10937", "10939"],
+		"value"		: ["E605", "E605", "10131619", "3134", "42", "56", "74", "7B", "7D", "7E7E", "7E7E7D7D7C", "7B7A7978777675747271", "6E6C6B69676563615F5D5B59575452504D4B484543403D3B3835322F2C292724201D1A1714110E0B080502FEFBF8F5F2EFECE9E6", "DCD9", "CECBC8C5", "BD", "B5", "B0", "A9", "94", "8E", "8B8A8988878685848483838282", "8282828383848585868788898A8C8D8E9091939496989A9C9EA0A2A4A6A8AAADAFB2B4B7B9BCBEC1C4C7CACCCFD2D5D8DBDEE1E4E7EAEDF0F4F7FAFD00", "10131619", "3134", "42", "56", "74", "7B", "7D", "7E7E7F"]
+	}, {
+		"name"		: ["Actraiser 2 (Europe) (En,Fr,De)"],
+		"hash"		: ["177c67125038a6b0af1d5b47c9865e7e"],
+		"offset"	: ["E0D0", "2B0BB", "2B0C1", "2B0D5", "2B12E"],
+		"value"		: ["A9", "84", "05", "03", "13"]
+	}, {
+		"name"		: ["Adventures of Batman & Robin, The (Europe)"],
+		"hash"		: ["49775f5e46be05c1e245b26a70b6f756"],
+		"offset"	: ["108E2"],
+		"value"		: ["A9"]
+	}, {
+		"name"		: ["Adventures of Dr. Franken, The (Europe) (En,Fr,De,Es,It,Nl,Sv)"],
+		"hash"		: ["2a1e41a27c859e9dcbaea55a6611ffab"],
+		"offset"	: ["165", "2C622"],
+		"value"		: ["A9", "A9"]
+	}, {
+		"name"		: ["Adventures of Mighty Max, The (Europe)"],
+		"hash"		: ["dca672428cf983fa0a79ab9ec3b04285"],
+		"offset"	: ["1FAAA"],
+		"value"		: ["A9"]
+	}, {
+		"name"		: ["Animaniacs (Europe)"],
+		"hash"		: ["ce41fb926db8fcaad4665774f3731b7a"],
+		"offset"	: ["4E5"],
+		"value"		: ["A9"]
+	}, {
+		"name"		: ["Art of Fighting (Europe)"],
+		"hash"		: ["a29c0a3e8a340aaa7672b00b190be396"],
+		"offset"	: ["1597"],
+		"value"		: ["A9"]
+	}, {
+		"name"		: ["Asterix & Obelix (Europe) (En,Fr,De,Es)"],
+		"hash"		: ["77bf37a9a6779a1d7e109bc1a707ecd1"],
+		"offset"	: ["E707"],
+		"value"		: ["A9"]
+	}, {
+		"name"		: ["Batman Returns (Europe)"],
+		"hash"		: ["9f1f54ee804644b2f9c979e5f7ee69e0"],
+		"offset"	: ["73EE"],
+		"value"		: ["A9"]
+	}, {
+		"name"		: ["Biker Mice from Mars (Europe)"],
+		"hash"		: ["125822f25af8fa7ce219e9e6e503f144"],
+		"offset"	: ["622"],
+		"value"		: ["A9"]
+	}, {
+		"name"		: ["BioMetal (Europe)"],
+		"hash"		: ["43d393d1e6aeae259509dfea907dfb50"],
+		"offset"	: ["14B7"],
+		"value"		: ["A9"]
+	}, {
+		"name"		: ["California Games II (Europe) (En,Fr,De)"],
+		"hash"		: ["8609bf5beee058d2b7c5c0c8a0e0c7d7"],
+		"offset"	: ["FBC2"],
+		"value"		: ["A9"]
+	}, {
+		"name"		: ["Castlevania - Vampire's Kiss (Europe)"],
+		"hash"		: ["a62d08afd924004f11341f06a80d5f4a"],
+		"offset"	: ["18F"],
+		"value"		: ["A9"]
+	}, {
+		"name"		: ["Clay Fighter (Europe)"],
+		"hash"		: ["5d281dedab8bcb63624810b333da261a"],
+		"offset"	: ["1AF77C"],
+		"value"		: ["FF"]
+	}, {
+		"name"		: ["Claymates (Europe)"],
+		"hash"		: ["f7e716a3de695d65e85f920668f8e198"],
+		"offset"	: ["C8350"],
+		"value"		: ["A9"]
+	}, {
+		"name"		: ["Dirt Racer (Europe) (En,Fr,De)"],
+		"hash"		: ["4cca376f58dca81ae9cc977844276e5b"],
+		"offset"	: ["F36"],
+		"value"		: ["A9"]
+	}, {
+		"name"		: ["Donald in Maui Mallard (Europe)"],
+		"hash"		: ["dc886eda4c45ae4c7fde88e2b4b8cfc1"],
+		"offset"	: ["1070", "6419"],
+		"value"		: ["A9", "A9"]
+	}, {
+		"name"		: ["Donkey Kong Country (Europe) (En,Fr,De)"],
+		"hash"		: ["cd502daddcc7ea3fb2e86c1f0f8b93c8"],
+		"offset"	: ["E9EF"],
+		"value"		: ["00"]
+	}, {
+		"name"		: ["Donkey Kong Country (Europe) (En,Fr,De) (Rev 1)"],
+		"hash"		: ["00f0ba49b5b2f140b307afbed33c7997"],
+		"offset"	: ["E968"],
+		"value"		: ["00"]
+	}, {
+		"name"		: ["Donkey Kong Country 3 - Dixie Kong's Double Trouble! (Europe) (En,Fr,De)"],
+		"hash"		: ["fc3333af2f93d7dd0a4190a01d49a69e"],
+		"offset"	: ["811F"],
+		"value"		: ["A9"]
+	}, {
+		"name"		: ["Dragon - The Bruce Lee Story (Europe)"],
+		"hash"		: ["931c9baff50537c97c69f0b54dd2b3d5"],
+		"offset"	: ["92", "2695"],
+		"value"		: ["A9", "A9"]
+	}, {
+		"name"		: ["Eek! The Cat (Europe)"],
+		"hash"		: ["af7367f02a1aaff00816b7a833e59624"],
+		"offset"	: ["E5E3"],
+		"value"		: ["A9"]
+	}, {
+		"name"		: ["Eric Cantona Football Challenge (France) (En,Fr,De,Es,It,Nl,Sv)"],
+		"hash"		: ["159db76662232bf8f9560eb13191f7d5"],
+		"offset"	: ["356C"],
+		"value"		: ["A9"]
+	}, {
+		"name"		: ["Fatal Fury Special (Europe)", "Fatal Fury Special (Europe) (Beta)"],
+		"hash"		: ["93ecf7902ddfda6fc66a8edb1f4a51c1", "1314516eb82135210a977c8480797641"],
+		"offset"	: ["2011B"],
+		"value"		: ["A9"]
+	}, {
+		"name"		: ["Fever Pitch Soccer (Europe) (En,Fr,De,Es,It)"],
+		"hash"		: ["c2a0a1f3c9687e8c08e531986a8b2cb8"],
+		"offset"	: ["18A3"],
+		"value"		: ["A9"]
+	}, {
+		"name"		: ["Flintstones, The (Europe) (En,Fr,De,Es,It)", "Flintstones, The (Europe) (En,Fr,De,Es,It) (Beta)"],
+		"hash"		: ["5bff107357bede12a3d2d4d2ca9b7488", "3865edfc31b72c287dc202a404b381c0"],
+		"offset"	: ["20E"],
+		"value"		: ["A9"]
+	}, {
+		"name"		: ["Foreman for Real (Europe)"],
+		"hash"		: ["b92066b5a3bf1504836aac5ffa3421f2"],
+		"offset"	: ["1DE1C"],
+		"value"		: ["A9"]
+	}, {
+		"name"		: ["GP-1 (Europe)"],
+		"hash"		: ["a9eb00d00a4e94d79baf284c780241bb"],
+		"offset"	: ["DFA1"],
+		"value"		: ["A9"]
+	}, {
+		"name"		: ["Hebereke's Popoitto (Europe)"],
+		"hash"		: ["dd4524635be8ab4e73d74179da5b8416"],
+		"offset"	: ["15F"],
+		"value"		: ["A9"]
+	}, {
+		"name"		: ["Hebereke's Popoon (Europe)"],
+		"hash"		: ["258281e69023dfd4f76221c991bf9278"],
+		"offset"	: ["18FE6"],
+		"value"		: ["A9"]
+	}, {
+		"name"		: ["Illusion of Time (Europe)"],
+		"hash"		: ["a9d5368f701016d00003118a9616f1ce"],
+		"offset"	: ["BC937"],
+		"value"		: ["A9"]
+	}, {
+		"name"		: ["Illusion of Time (France)"],
+		"hash"		: ["45ef39d209af53eb7abccd763445f202"],
+		"offset"	: ["BC92E"],
+		"value"		: ["A9"]
+	}, {
+		"name"		: ["Illusion of Time (Germany)", "Illusion of Time (Germany) (Rev 1)"],
+		"hash"		: ["68e1492bddea04d457d77705c77c74e1", "da83e132213271fe3107bf4dbac7b939"],
+		"offset"	: ["BC932"],
+		"value"		: ["A9"]
+	}, {
+		"name"		: ["Illusion of Time (Spain)"],
+		"hash"		: ["faf4d7c79daf445d2ca286d8b2f81cab"],
+		"offset"	: ["BC934"],
+		"value"		: ["A9"]
+	}, {
+		"name"		: ["International Superstar Soccer (Europe)"],
+		"hash"		: ["5d1059e670e9a2a564a5d2520b0d50d8"],
+		"offset"	: ["342"],
+		"value"		: ["A9"]
+	}, {
+		"name"		: ["International Superstar Soccer Deluxe (Europe)"],
+		"hash"		: ["51da200d9c04bb26c3c3e55796d84f0c"],
+		"offset"	: ["3E2"],
+		"value"		: ["A9"]
+	}, {
+		"name"		: ["Joe & Mac 3 - Lost in the Tropics (Europe) (En,Fr,De)"],
+		"hash"		: ["e5b1841ea2437762d1dcf8416dd02713"],
+		"offset"	: ["27F95"],
+		"value"		: ["A9"]
+	}, {
+		"name"		: ["K.H. Rummenigge's Player Manager (Germany)", "K.H. Rummenigge's Player Manager (Germany) (Sample)"],
+		"hash"		: ["68c0c9314301b238b033f62d34e3b763", "88965d333f5a8f360e54aec5cdb19cbc"],
+		"offset"	: ["38682"],
+		"value"		: ["A9"]
+	}, {
+		"name"		: ["Kevin Keegan's Player Manager (Europe)"],
+		"hash"		: ["1c0d34fbc486fc9b9248b2bcfa02e962"],
+		"offset"	: ["38682"],
+		"value"		: ["A9"]
+	}, {
+		"name"		: ["Kevin Keegan's Player Manager (Europe) (Sample)"],
+		"hash"		: ["8ec6295e97fcefe45b6e045e1281c692"],
+		"offset"	: ["3867F"],
+		"value"		: ["A9"]
+	}, {
+		"name"		: ["Kick Off 3 - European Challenge (Europe) (En,Fr,De,Es,It)"],
+		"hash"		: ["211e9589db9c1c007771e25bab81198c"],
+		"offset"	: ["78019"],
+		"value"		: ["A9"]
+	}, {
+		"name"		: ["Kid Klown in Crazy Chase (Europe)"],
+		"hash"		: ["5a89fb48e20603ca989a8b8bee4c5299"],
+		"offset"	: ["3001B"],
+		"value"		: ["A9"]
+	}, {
+		"name"		: ["Kirby's Dream Course (Europe)"],
+		"hash"		: ["b757f3031fb7698925cf9eb8d3b343a1"],
+		"offset"	: ["139"],
+		"value"		: ["A9"]
+	}, {
+		"name"		: ["Kirby's Fun Pak (Europe)"],
+		"hash"		: ["88d635f8181ef5155cc34498584620a6"],
+		"offset"	: ["4CDA"],
+		"value"		: ["A9"]
+	}, {
+		"name"		: ["Kirby's Ghost Trap (Europe)"],
+		"hash"		: ["e872aaa6d946118a1a65aa7df08dc3f6"],
+		"offset"	: ["2332"],
+		"value"		: ["A9"]
+	}, {
+		"name"		: ["Lethal Enforcers (Europe)"],
+		"hash"		: ["42f3084ce3f529b46090b9e1d781717d"],
+		"offset"	: ["25CE"],
+		"value"		: ["A9"]
+	}, {
+		"name"		: ["Lothar Matthaeus Super Soccer (Germany)", "Manchester United Championship Soccer (Europe)"],
+		"hash"		: ["76c0d775af541f17ab7a1232f8836495", "bea29a6d71e2dee435e0b647b52b2462"],
+		"offset"	: ["B998", "B99F"],
+		"value"		: ["A9", "A9"]
+	}, {
+		"name"		: ["Lucky Luke (Europe) (En,Fr,De,Es)"],
+		"hash"		: ["466940840196f36a855668fcf84fb94b"],
+		"offset"	: ["155D7"],
+		"value"		: ["80"]
+	}, {
+		"name"		: ["Mario's Time Machine (Germany)"],
+		"hash"		: ["a2b37dcbc9729700137f2381553a25a6"],
+		"offset"	: ["9E0C"],
+		"value"		: ["A9"]
+	}, {
+		"name"		: ["Marko's Magic Football (Europe) (En,Fr,De,Es)"],
+		"hash"		: ["3982f2846969f59f19b02cb1238713f3"],
+		"offset"	: ["226"],
+		"value"		: ["A9"]
+	}, {
+		"name"		: ["Mega-lo-Mania (Europe) (En,Fr,De)"],
+		"hash"		: ["7a67d33f2cfc8c284f772cb681c411a2"],
+		"offset"	: ["1001A"],
+		"value"		: ["A9"]
+	}, {
+		"name"		: ["Metal Marines (Europe)"],
+		"hash"		: ["9d69898691e9e6a434abb10afa2e8782"],
+		"offset"	: ["2444"],
+		"value"		: ["A9"]
+	}, {
+		"name"		: ["NBA Give 'n Go (Europe)"],
+		"hash"		: ["4bf5287384ff382eb2e83269270e2114"],
+		"offset"	: ["596"],
+		"value"		: ["A9"]
+	}, {
+		"name"		: ["NBA Hang Time (Europe)"],
+		"hash"		: ["abc44359e784588692f6ed0bc5ef1f61"],
+		"offset"	: ["1C997", "30E05"],
+		"value"		: ["A9", "A9"]
+	}, {
+		"name"		: ["Nigel Mansell's World Championship Racing (Europe)"],
+		"hash"		: ["e3b0efde9da342ea567a0647b162162f"],
+		"offset"	: ["1AE5", "FFE10", "FFE17"],
+		"value"		: ["00", "00", "00"]
+	}, {
+		"name"		: ["Nigel Mansell's World Championship Racing (Europe) (Rev 1)"],
+		"hash"		: ["af96904815cd2f8811bf25e7841b651a"],
+		"offset"	: ["FFFF3", "FFFFA"],
+		"value"		: ["00", "00"]
+	}, {
+		"name"		: ["Pac-Attack (Europe)"],
+		"hash"		: ["28584f11a658883e23c01df728645023"],
+		"offset"	: ["EF"],
+		"value"		: ["A9"]
+	}, {
+		"name"		: ["Pac-In-Time (Europe)"],
+		"hash"		: ["78fa69ff44ee2f6aaf0808057ecf5b40"],
+		"offset"	: ["3F4"],
+		"value"		: ["A9"]
+	}, {
+		"name"		: ["Pac-Man 2 - The New Adventures (Europe)", "Pac-Man 2 - The New Adventures (France)", "Pac-Man 2 - The New Adventures (Germany)"],
+		"hash"		: ["91f73099d4117dddc93a435a5149f8f0", "7a59016e163998cc7a487d49be235417", "0e63f85594b7bb335f0676d624a5c01a"],
+		"offset"	: ["A07D"],
+		"value"		: ["A9"]
+	}, {
+		"name"		: ["Pinocchio (Europe)"],
+		"hash"		: ["65e80e5269cc964531289c7577ad92d5"],
+		"offset"	: ["1EB81"],
+		"value"		: ["A9"]
+	}, {
+		"name"		: ["Plok (Europe)"],
+		"hash"		: ["cb12e4fc8f2f0d3e2407284190ae39a0"],
+		"offset"	: ["5C17"],
+		"value"		: ["A9"]
+	}, {
+		"name"		: ["Plok (France) (En,Fr)"],
+		"hash"		: ["7bed3a10e8e42d47b542637313eb96fe"],
+		"offset"	: ["5C44"],
+		"value"		: ["A9"]
+	}, {
+		"name"		: ["Plok (Germany)"],
+		"hash"		: ["43560f356fb0534d7e0e25aba1ca31e5"],
+		"offset"	: ["5C3E"],
+		"value"		: ["A9"]
+	}, {
+		"name"		: ["Pop'n TwinBee (Europe)"],
+		"hash"		: ["ed9c32231cd480448f355c4ed54b1bae"],
+		"offset"	: ["15C8"],
+		"value"		: ["A9"]
+	}, {
+		"name"		: ["Pop'n TwinBee - Rainbow Bell Adventures (Europe)", "Pop'n TwinBee - Rainbow Bell Adventures (Germany) (En)"],
+		"hash"		: ["aa8d6780655a77652ca6e65c89befea3", "ae9fa79542609dd1561de3f44a9b997b"],
+		"offset"	: ["DBD"],
+		"value"		: ["A9"]
+	}, {
+		"name"		: ["Populous II - Trials of the Olympian Gods (Europe)", "Populous II - Trials of the Olympian Gods (Germany)"],
+		"hash"		: ["6ddce6fdbf50da1a3d8089844a7bdbf6", "7b93c4a184cd4d360c2cf7c9411f3644"],
+		"offset"	: ["1AA13"],
+		"value"		: ["EAEA"]
+	}, {
+		"name"		: ["Prehistorik Man (Europe) (En,Fr,De)"],
+		"hash"		: ["90c3bfef7e6d3c54b23521250d514c69"],
+		"offset"	: ["106F8"],
+		"value"		: ["00"]
+	}, {
+		"name"		: ["Revolution X (Europe)", "Revolution X (Germany)"],
+		"hash"		: ["e16c95dae29970e0bdb177fd1469139a", "b75dca377cebbae23e39820952ef59e7"],
+		"offset"	: ["F090"],
+		"value"		: ["A9"]
+	}, {
+		"name"		: ["R-Type III (Europe)", "R-Type III - The Third Lightning (Europe) (Beta)"],
+		"hash"		: ["cfbc0862e180bd09c7bcb155b8158992", "8dd2247e9f98284c800468d9bdb99c23"],
+		"offset"	: ["817C", "1B598C"],
+		"value"		: ["A9", "A9"]
+	}, {
+		"name"		: ["Samurai Shodown (Europe)"],
+		"hash"		: ["a09ebc96aac1680fd36029b768002d92"],
+		"offset"	: ["1F46F2"],
+		"value"		: ["A9"]
+	}, {
+		"name"		: ["Secret of Mana (Europe)", "Secret of Mana (Europe) (Rev 1)", "Secret of Mana (France)", "Secret of Mana (France) (Rev 1)", "Secret of Mana (France) (Rev 1) (Switch Version)", "Secret of Mana (Germany)", "Secret of Mana (Germany) (Switch Version)"],
+		"hash"		: ["0194f74c93b0edf3e4a7672a448572ad", "d273dd449b204a6eb90f611e5a72f80c", "35afb723a7a1166d894549519d78622c", "5e1602019d4e337b9c6a714a6224ba1d", "de712de1abcb0eb554911c374ef8919b", "b57303407986c0d28f2d78f931efc59c", "ff5790e984d6ab8109963c7b2f8a2a97"],
+		"offset"	: ["7B2E5"],
+		"value"		: ["A9"]
+	}, {
+		"name"		: ["Smash Tennis (Europe)"],
+		"hash"		: ["91e75245c75c1f498e345cd368309801"],
+		"offset"	: ["136"],
+		"value"		: ["A9"]
+	}, {
+		"name"		: ["Smurfs, The (Europe) (En,Fr,De,Es,It)"],
+		"hash"		: ["425d5643e470836b3ef0919811655813"],
+		"offset"	: ["BF7"],
+		"value"		: ["A9"]
+	}, {
+		"name"		: ["Soccer Kid (Europe) (En,Fr,De,Es,It)"],
+		"hash"		: ["5f0b2eb58fbda7f2ed56e9de5d3d7d64"],
+		"offset"	: ["50D3F"],
+		"value"		: ["A9"]
+	}, {
+		"name"		: ["Soccer Shootout (Europe)"],
+		"hash"		: ["0379b3f0d6d4358a9490c791bf6bb678"],
+		"offset"	: ["BA4C5"],
+		"value"		: ["A9"]
+	}, {
+		"name"		: ["Soul Blazer (France)"],
+		"hash"		: ["4063fd3e74f5c3d0ee433ef99b54b15c"],
+		"offset"	: ["E73E"],
+		"value"		: ["A9"]
+	}, {
+		"name"		: ["Soul Blazer (Germany)"],
+		"hash"		: ["5421e92fa9a070a2207d38832d07bd4f"],
+		"offset"	: ["E74C"],
+		"value"		: ["A9"]
+	}, {
+		"name"		: ["Sparkster (Europe)"],
+		"hash"		: ["cf3ce289a2c4f7255bb89d0f13caa605"],
+		"offset"	: ["3A0"],
+		"value"		: ["A9"]
+	}, {
+		"name"		: ["Speedy Gonzales in Los Gatos Bandidos (Europe) (Proto) (1995-03-02) (No. 04)", "Speedy Gonzales in Los Gatos Bandidos (Europe) (Proto) (No. 14)"],
+		"hash"		: ["e3a848abb88af29c2d8d0bd461c29881", "5f5dd66696417df957c549bf2bfd69c6"],
+		"offset"	: ["7486D"],
+		"value"		: ["80"]
+	}, {
+		"name"		: ["Spirou (Europe) (En,Fr,De,Es)"],
+		"hash"		: ["af9a48fc80b600539cc0f60ea6cdd1c5"],
+		"offset"	: ["230FB"],
+		"value"		: ["A9"]
+	}, {
+		"name"		: ["Star Trek - The Next Generation - Future's Past (Europe)"],
+		"hash"		: ["5ad7b8cc37618f350faaadbaf8a013cb"],
+		"offset"	: ["4F"],
+		"value"		: ["A9"]
+	}, {
+		"name"		: ["Striker (Europe) (En,Fr,De,Es,It,Nl,Sv)"],
+		"hash"		: ["0008d2a79fa3d7382800f3528afdd59e"],
+		"offset"	: ["3515"],
+		"value"		: ["A9"]
+	}, {
+		"name"		: ["Striker (Europe) (En,Fr,De,Es,It,Nl,Sv) (Beta 1)", "Striker (Europe) (En,Fr,De,Es,It,Nl,Sv) (Beta 2)"],
+		"hash"		: ["6cb73a9b84514a8fe6181c7647a62388", "0984c905ea77d86e716ec90c692ad161"],
+		"offset"	: ["3559"],
+		"value"		: ["A9"]
+	}, {
+		"name"		: ["Stunt Race FX (Europe)"],
+		"hash"		: ["4f5449c5a1db9eced78a9573affffed9"],
+		"offset"	: ["5AE0C"],
+		"value"		: ["A9"]
+	}, {
+		"name"		: ["Sunset Riders (Europe)"],
+		"hash"		: ["04694122095a5bf98965c57de25c1fa3"],
+		"offset"	: ["1251"],
+		"value"		: ["A9"]
+	}, {
+		"name"		: ["Super Conflict (Europe)"],
+		"hash"		: ["f49dfb1b3ad3945c57201eb720d156d6"],
+		"offset"	: ["7F05"],
+		"value"		: ["A9"]
+	}, {
+		"name"		: ["Super Ice Hockey (Europe)"],
+		"hash"		: ["ba0aab6f4e9cff302d4313041fcd6ee9"],
+		"offset"	: ["220B1"],
+		"value"		: ["A9"]
+	}, {
+		"name"		: ["Super International Cricket (Europe)", "Super International Cricket (Europe) (Beta)"],
+		"hash"		: ["6bd7b17989afa08e9a9855a1b8f7fe6e", "e593d216578c4d1e0206746c691a6a9d"],
+		"offset"	: ["A7A1E"],
+		"value"		: ["80"]
+	}, {
+		"name"		: ["Super Mario All-Stars (Europe)", "Super Mario All-Stars and Super Mario World (Europe)"],
+		"hash"		: ["669efc8aa7365b5854d3653ab5598dc9", "4941387e96ed2841ee3c2de6d1899509"],
+		"offset"	: ["30"],
+		"value"		: ["A9"]
+	}, {
+		"name"		: ["Super Mario World 2 - Yoshi's Island (Europe) (En,Fr,De)", "Super Mario World 2 - Yoshi's Island (Europe) (En,Fr,De) (Rev 1)"],
+		"hash"		: ["cef1055e9b4a2be56ea7810c07976c17", "9f235e4c17cf9762a49b83e82794d278"],
+		"offset"	: ["803DE"],
+		"value"		: ["A9"]
+	}, {
+		"name"		: ["Super Mario World 2 - Yoshi's Island (Europe) (En,Fr,De) (Rev 2)"],
+		"hash"		: ["8de2ee0b0bdbdde16aefedecfb837971"],
+		"offset"	: ["803DB"],
+		"value"		: ["A9"]
+	}, {
+		"name"		: ["Super Metroid (Europe) (En,Fr,De)"],
+		"hash"		: ["3d64f89499a403d17d530388854a7da5"],
+		"offset"	: ["60D", "617"],
+		"value"		: ["A9", "A9"]
+	}, {
+		"name"		: ["Super Pinball - Behind the Mask (Europe)"],
+		"hash"		: ["7431452f094a12e6ba0ab97deff27fd9"],
+		"offset"	: ["74C1", "74CA"],
+		"value"		: ["00", "00"]
+	}, {
+		"name"		: ["Super Putty (Europe)"],
+		"hash"		: ["b706034ede81b223bc69246f456355d6"],
+		"offset"	: ["E9FF"],
+		"value"		: ["A9"]
+	}, {
+		"name"		: ["Terranigma (Europe)", "Terranigma (France)", "Terranigma (Germany)", "Terranigma (Germany) (Rev 1)", "Terranigma (Spain)"],
+		"hash"		: ["d202156549f981f6dafc759575dd6e67", "8995ffe9fa821aa54a7c17bff7647f66", "2ff43498fbb957facf11c598dd8a6299", "4f3f3c5504a524a0716b965808709118", "5223853d5edc9856f2bf8a9f04d01d3a"],
+		"offset"	: ["797CC"],
+		"value"		: ["A9"]
+	}, {
+		"name"		: ["Tetris & Dr. Mario (Europe)"],
+		"hash"		: ["bcc6f990c2befba0f8af1fe5db95b3ec"],
+		"offset"	: ["3D94"],
+		"value"		: ["39"]
+	}, {
+		"name"		: ["Tetris 2 (Europe)"],
+		"hash"		: ["28d41f1b044aa415b094c48522afc7f1"],
+		"offset"	: ["53", "1110B", "12F1F", "20436", "221B4", "22BEE", "2454A", "F80DC"],
+		"value"		: ["A9", "A9", "A9", "A9", "A9", "A9", "A9", "A9"]
+	}, {
+		"name"		: ["Tetris Attack (Europe) (En,Ja)"],
+		"hash"		: ["90854fcf608034c654745ae24411ef7a"],
+		"offset"	: ["68D"],
+		"value"		: ["A9"]
+	}, {
+		"name"		: ["Tintin - Prisoners of the Sun (Europe) (En,Fr,De,Es)"],
+		"hash"		: ["beb9fd851586af3ad5172d07ae1a9103"],
+		"offset"	: ["1531D"],
+		"value"		: ["80"]
+	}, {
+		"name"		: ["Tintin in Tibet (Europe) (En,Es,Sv)", "Tintin in Tibet (Europe) (En,Fr,De,Nl)"],
+		"hash"		: ["e406f7225927ddce1b25aa0f1ab6e043", "5d6716d6793e9f9c456265d18cf763bc"],
+		"offset"	: ["1D053"],
+		"value"		: ["80"]
+	}, {
+		"name"		: ["Tiny Toon Adventures - Wild & Wacky Sports (Europe)", "Tiny Toon Adventures - Wild & Wacky Sports (Europe) (Rev 1)"],
+		"hash"		: ["b4c4d7760020444ae63dbe794e154aa1", "513443cbeb457a436350226d8e40ff08"],
+		"offset"	: ["365"],
+		"value"		: ["A9"]
+	}, {
+		"name"		: ["Top Gear 2 (Europe)"],
+		"hash"		: ["36d99b59148729f751b7231f93d034dc"],
+		"offset"	: ["F906", "F90D"],
+		"value"		: ["00", "00"]
+	}, {
+		"name"		: ["Tuff E Nuff ~ Fighting Spirit - Tuff E Nuff (Europe)"],
+		"hash"		: ["d442a95e842a44f89248a9132c870b2e"],
+		"offset"	: ["EC88"],
+		"value"		: ["A9"]
+	}, {
+		"name"		: ["WeaponLord (Europe)"],
+		"hash"		: ["8bbf9641d30c13012cf747e91c2565ab"],
+		"offset"	: ["2A4881"],
+		"value"		: ["A9"]
+	}, {
+		"name"		: ["Winter Gold (Europe)"],
+		"hash"		: ["5794995d6d7bb06bfc87fec2f40ccc80"],
+		"offset"	: ["1F2299"],
+		"value"		: ["A9"]
+	}, {
+		"name"		: ["Wolfenstein 3D (Europe)"],
+		"hash"		: ["e807372e95281d5268579283ec3d115f"],
+		"offset"	: ["7446"],
+		"value"		: ["00"]
+	}, {
+		"name"		: ["World Cup Striker (Europe) (En,Fr,De)"],
+		"hash"		: ["ae748774dcb36a05609310318e313dcc"],
+		"offset"	: ["2B6FF"],
+		"value"		: ["A9"]
+	}, {
+		"name"		: ["X-Kaliber 2097 (Europe)"],
+		"hash"		: ["78cde7862908bb0f7f525381f8dbf30c"],
+		"offset"	: ["4A9A"],
+		"value"		: ["A9"]
+	}, {
+		"name"		: ["Yoshi's Safari (Europe)"],
+		"hash"		: ["044d6d9860e635d55bbb6192b5cbb121"],
+		"offset"	: ["58"],
+		"value"		: ["A9"]
+	}
+]

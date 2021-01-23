@@ -130,9 +130,9 @@ function CreateCreditsDialog() {
     $GitHub2Label  = CreateLabel -X $GitHub1Label.Right  -Y ($Discord1Label.Bottom + (DPISize 2)) -Width (DPISize 180) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("https://github.com/Admentus64")    -AddTo $Credits.Sections[3]
     
     $Patreon1Label = CreateLabel -X (DPISize 10)         -Y ($GitHub1Label.Bottom + (DPISize 2))  -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold             -Text ("Patreon")                   -AddTo $Credits.Sections[3]
-    $Patreon2Label = CreateLabel -X $Patreon1Label.Right -Y ($GitHub1Label.Bottom + (DPISize 2))  -Width (DPISize 145) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("www.patreon.com/Admentus")         -AddTo $Credits.Sections[3]
+    $Patreon2Label = CreateLabel -X $Patreon1Label.Right -Y ($GitHub1Label.Bottom + (DPISize 2))  -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("www.patreon.com/Admentus")         -AddTo $Credits.Sections[3]
     $PayPal1Label  = CreateLabel -X (DPISize 10)         -Y ($Patreon1Label.Bottom + (DPISize 2)) -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold             -Text ("PayPal")                    -AddTo $Credits.Sections[3]
-    $PayPal2Label  = CreateLabel -X $PayPal1Label.Right  -Y ($Patreon1Label.Bottom + (DPISize 2)) -Width (DPISize 190) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("www.paypal.com/paypalme/Admentus") -AddTo $Credits.Sections[3]
+    $PayPal2Label  = CreateLabel -X $PayPal1Label.Right  -Y ($Patreon1Label.Bottom + (DPISize 2)) -Width (DPISize 200) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("www.paypal.com/paypalme/Admentus") -AddTo $Credits.Sections[3]
 
     $Discord2Label.add_Click({[system.Diagnostics.Process]::start("https://discord.gg/P22GGzz")})
     $GitHub2Label.add_Click({[system.Diagnostics.Process]::start("https://github.com/Admentus64")})
@@ -403,7 +403,7 @@ function CreateSettingsRadioField([int]$Column=1, [int]$Row=1, [Boolean]$Checked
 
 
 #==============================================================================================================================================================================================
-function CreateErrorDialog([String]$Error, [Switch]$Exit) {
+function CreateErrorDialog([String]$Error) {
     
     # Create Dialog
     $ErrorDialog = CreateDialog -Width (DPISize 300) -Height (DPISize 200) -Icon $null
@@ -429,9 +429,9 @@ function CreateErrorDialog([String]$Error, [Switch]$Exit) {
     #Create Label
     $Label = CreateLabel -X (DPISize 10) -Y (DPISize 10) -Width ($ErrorDialog.Width - (DPISize 10)) -Height ($ErrorDialog.Height - (DPISize 110)) -Text $String -AddTo $ErrorDialog
 
+    $global:FatalError = $True
     if (IsSet $MainDialog) { $MainDialog.Hide() }
     $ErrorDialog.ShowDialog() | Out-Null
-    if ($Exit -eq $True) { Exit }
 
 }
 

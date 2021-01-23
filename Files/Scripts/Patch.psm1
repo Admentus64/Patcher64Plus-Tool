@@ -1,8 +1,11 @@
 function MainFunction([String]$Command, [String]$PatchedFileName) {
     
     # Header
-    $Header = @($GameType.rom_title, $GameType.rom_gameID, $GameType.vc_title, $GameType.vc_gameID, $GameType.rom_region)
-    $Header = SetHeader -Header $Header -ROMTitle $GamePatch.rom_title -ROMGameID $GamePatch.rom_gameID -VCTitle $GamePatch.vc_title -VCGameID $GamePatch.vc_gameID -Region $GamePatch.rom_region
+    $Header = @($null) * 5
+    #$Header = SetHeader -Header $Header -ROMTitle $GameType.rom_title  -ROMGameID $GameType.rom_gameID  -VCTitle $GameType.vc_title  -VCGameID $GameType.vc_gameID  -Region $GameType.rom_region
+    if (!(StrLike -str $Command -val "Patch Header")) {
+        $Header = SetHeader -Header $Header -ROMTitle $GamePatch.rom_title -ROMGameID $GamePatch.rom_gameID -VCTitle $GamePatch.vc_title -VCGameID $GamePatch.vc_gameID -Region $GamePatch.rom_region
+    }
 
     # Hash
     if (IsSet $GamePatch.Hash)   { $global:CheckHashSum = $GamePatch.Hash }
@@ -44,18 +47,21 @@ function MainFunction([String]$Command, [String]$PatchedFileName) {
         }
     }
 
-    # GameID / Title
-    if ($CustomHeaderCheckbox.Checked) {
-        if ($CustomTitleTextBox.TextLength -gt 0)    { $Header[0 + [int]$IsWiiVC * 2] = $CustomTitleTextBox.Text }
-        if ($CustomGameIDTextbox.TextLength -eq 4)   { $Header[1 + [int]$IsWiiVC * 2] = $CustomGameIDTextBox.Text }
+    #  Title / GameID
+    if ($CustomHeader.EnableHeader.Checked) {
+        if ($CustomHeader.Title.TextLength -gt 0)    { $Header[0 + [int]$IsWiiVC * 2] = [String]$CustomHeader.Title.Text }
+        if ($CustomHeader.GameID.TextLength -eq 4)   { $Header[1 + [int]$IsWiiVC * 2] = [String]$CustomHeader.GameID.Text }
 
         if ( (IsSet $GamePatch.languages) -and (IsSet $Item) -and $IsWiiVC) {
             if (IsSet $GamePatch.languages[$Item].rom_gameID) {
-                $Header[1] = $Header[1].substring(0, 3)
-                $Header[1] += $GamePatch.languages[$Item].rom_gameID.substring(3, 1)
+                $Header[1] = [String]$Header[1].substring(0, 3)
+                $Header[1] += [String]$GamePatch.languages[$Item].rom_gameID.substring(3, 1)
             }
         }
     }
+
+    # Region
+    if ($CustomHeader.EnableRegion.Checked -and $GameConsole.rom_gameID -eq 2) { $Header[4] = [Byte]$CustomHeader.Region.SelectedIndex }
     
     # Decompress
     $Decompress = $False
@@ -91,13 +97,13 @@ function MainFunction([String]$Command, [String]$PatchedFileName) {
 
 
 #==============================================================================================================================================================================================
-function SetHeader([String[]]$Header, [String]$ROMTitle, [String]$ROMGameID, [String]$VCTitle, [String]$VCGameID, [int]$Region) {
+function SetHeader([Array]$Header, [String]$ROMTitle, [String]$ROMGameID, [String]$VCTitle, [String]$VCGameID, [Byte]$Region) {
     
-    if (IsSet $ROMTitle)    { $Header[0] = $ROMTitle }
-    if (IsSet $ROMGameID)   { $Header[1] = $ROMGameID }
-    if (IsSet $VCTitle)     { $Header[2] = $VCTitle }
-    if (IsSet $VCGameID)    { $Header[3] = $VCGameID }
-    if (IsSet $Region)      { $Header[4] = $Region }
+    if (IsSet $ROMTitle)                                       { $Header[0] = $ROMTitle }
+    if (IsSet $ROMGameID)                                      { $Header[1] = $ROMGameID }
+    if ($IsWiiVC -and (IsSet $VCTitle) )                       { $Header[2] = $VCTitle }
+    if ($IsWiiVC -and (IsSet $VCGameID) )                      { $Header[3] = $VCGameID }
+    if ($GameConsole.rom_gameID -eq 2 -and (IsSet $Region) )   { $Header[4] = $Region }
     return $Header
 
 }
@@ -105,7 +111,7 @@ function SetHeader([String[]]$Header, [String]$ROMTitle, [String]$ROMGameID, [St
 
 
 #==============================================================================================================================================================================================
-function MainFunctionPatch([String]$Command, [String[]]$Header, [String]$PatchedFileName, [Boolean]$Decompress) {
+function MainFunctionPatch([String]$Command, [Array]$Header, [String]$PatchedFileName, [Boolean]$Decompress) {
     
     if ($Settings.Debug.Console -eq $True) { if ( (WriteDebug -Command $Command -Header $Header -PatchedFileName $PatchedFileName -Decompress $Decompress) -eq $True) { return } }
 
@@ -172,8 +178,8 @@ function MainFunctionPatch([String]$Command, [String[]]$Header, [String]$Patched
     # Step 17: Update the .Z64 ROM CRC
     UpdateROMCRC
 
-    # Step 18: Hack the Game Title and GameID of a N64 ROM
-    HackROMGameTitle -Title $Header[0] -GameID $Header[1]
+    # Step 18: Hack the Game Title and GameID of a N64 ROM, remove the US region protection as well if applicable and neccesary
+    HackROMGameTitle -Title $Header[0] -GameID $Header[1] -Region $Header[4]
 
     # Step 19: Debug
     CreateDebugPatches
@@ -337,7 +343,10 @@ function PatchingAdditionalOptions() {
         &("ByteLanguage" + $FunctionTitle)
     }
 
-    if ( (Get-Command ("ByteOptions" + $FunctionTitle) -errorAction SilentlyContinue) -or (Get-Command ("ByteRedux" + $FunctionTitle) -errorAction SilentlyContinue) -or (Get-Command ("ByteLanguage" + $FunctionTitle) -errorAction SilentlyContinue) ) { [io.file]::WriteAllBytes($GetROM.decomp, $ByteArrayGame) }
+    if ( (Get-Command ("ByteOptions" + $FunctionTitle) -errorAction SilentlyContinue) -or (Get-Command ("ByteRedux" + $FunctionTitle) -errorAction SilentlyContinue) -or (Get-Command ("ByteLanguage" + $FunctionTitle) -errorAction SilentlyContinue) ) {
+        [io.file]::WriteAllBytes($GetROM.decomp, $ByteArrayGame)
+        $ByteArrayGame = $null
+    }
 
     if (!$Decompress) { Move-Item -LiteralPath $GetROM.decomp -Destination $GetROM.patched -Force }
 
@@ -950,7 +959,11 @@ function DecompressROM([Boolean]$Decompress) {
         UpdateStatusLabel ("Decompressing " + $GameType.mode + " ROM...")
 
         Push-Location $Paths.Temp
-        if ($ROMHashSum -ne $CheckHashSum -and (IsChecked $Patches.Downgrade))   {
+        if (IsSet $GamePatch.dmaTable) {
+            RemoveFile $Files.dmaTable
+            Add-Content $Files.dmaTable $GamePatch.dmaTable
+        }
+        elseif ($ROMHashSum -ne $CheckHashSum -and (IsChecked $Patches.Downgrade))   {
             RemoveFile $Files.dmaTable
             Add-Content $Files.dmaTable $GameType.dmaTable
         }
@@ -1097,9 +1110,10 @@ function CheckGameID() {
 
 
 #==============================================================================================================================================================================================
-function HackOpeningBNRTitle([String]$Title) {
+function HackOpeningBNRTitle($Title) {
     
-    if ($Settings.Debug.NoChannelChange -eq $True) { return }
+    if ($Settings.Debug.NoChannelChange -eq $True)   { return }
+    if ($Title -eq $null)                            { return }
 
     # Set the status label.
     UpdateStatusLabel "Hacking in Opening.bnr custom title..."
@@ -1139,50 +1153,98 @@ function HackOpeningBNRTitle([String]$Title) {
 
 
 #==============================================================================================================================================================================================
-function HackROMGameTitle([String]$Title, [String]$GameID) {
+function HackROMGameTitle($Title, $GameID, $Region) {
     
-    $offset = $null
-
+    if ($Title -eq $null -and $GameID -eq $null -and $Region -eq $null) { return }
     if ($Settings.Debug.NoHeaderChange -eq $True) { return }
     if (StrLike -str $Command -val "Patch Header") { Copy-Item -LiteralPath $GetROM.run -Destination $GetROM.patched -Force }
     if (!(TestFile $GetROM.patched)) { return }
 
     UpdateStatusLabel "Hacking in Custom Title and GameID..."
-    
-    if ( (IsSet -Elem $GameConsole.rom_title_offset) -and  (IsSet -Elem $GameConsole.rom_title_length -Min 1) -and ($GameConsole.rom_title -gt 0) ) {
-        $offset = $GameConsole.rom_title_offset
-        if ($GameConsole.mode -eq "SNES" -and (IsSet -Elem $GameConsole.rom_title_offset_2) ) {
-            if (CheckSNESHeader -Offset (GetDecimal -Hex $GameConsole.rom_title_offset_2) ) { $offset = $GameConsole.rom_title_offset_2 }
-        }
+
+    # Hi-ROM check and load in Game Array
+    $global:ByteArrayGame = [IO.File]::ReadAllBytes($GetROM.patched)
+    if ($GameConsole.mode -eq "SNES" -and (IsSet -Elem $GameConsole.rom_title_offset_2) ) { $hiROM = (IsHiROM -Offset (GetDecimal -Hex $GameConsole.rom_title_offset_2) -ROM $ByteArray) }
+
+    # Internal ROM Title
+    if ($Title -ne $null -and (IsSet $GameConsole.rom_title_offset) -and (IsSet -Elem $GameConsole.rom_title_length -Min 1) -and ($GameConsole.rom_title -gt 0) ) {
+        if ($hiROM) { $offset = $GameConsole.rom_title_offset_2 } else { $offset = $GameConsole.rom_title_offset }
         $emptyTitle = foreach ($i in 1..$GameConsole.rom_title_length) { 20 }
         if ($GameConsole.rom_title_uppercase -gt 0) { $Title = $Title.ToUpper() }
-        ChangeBytes -File $GetROM.patched -Offset $Offset -Values $emptyTitle
-        ChangeBytes -File $GetROM.patched -Offset $offset -Values ($Title.ToCharArray() | % { [uint32][char]$_ }) -IsDec
+        ChangeBytes -Offset $Offset -Values $emptyTitle
+        ChangeBytes -Offset $offset -Values ($Title.ToCharArray() | % { [uint32][char]$_ }) -IsDec
         $emptyTitle = $null
     }
 
-    if ( (IsSet -Elem $GameConsole.rom_gameID_offset) -and ($GameConsole.rom_gameID -eq 1)) { ChangeBytes -File $GetROM.patched -Offset $GameConsole.rom_gameID_offset -Values ($GameID.ToCharArray() | % { [uint32][char]$_ }) -IsDec }
-
-    elseif ( (IsSet -Elem $GameConsole.rom_title_offset) -and ($GameConsole.rom_gameID -eq 2) ) {
+    # GameID
+    if ($GameID -ne $null -and (IsSet -Elem $GameConsole.rom_gameID_offset) -and ($GameConsole.rom_gameID -eq 1)) { ChangeBytes -Offset $GameConsole.rom_gameID_offset -Values ($GameID.ToCharArray() | % { [uint32][char]$_ }) -IsDec }
+    elseif ($Region -ne $null -and $GameConsole.rom_gameID -eq 2) {
+        if ($hiROM) { $offset = $GameConsole.rom_title_offset_2 } else { $offset = $GameConsole.rom_title_offset }
         $offset = ( Get24Bit ( (GetDecimal $Offset) + (GetDecimal "19") ) )
-        ChangeBytes -File $GetROM.patched -Offset $Offset -Values $CustomRegionCodeComboBox.SelectedIndex -IsDec
+        if ($ByteArrayGame[(GetDecimal $offset)] -ne $Region) {
+            $ByteArrayGame[(GetDecimal $offset)] = $Region
+            WriteToConsole ("Changed region code: " + (Get8Bit $Region))
+            RemoveRegionProtection
+        }
+
     }
+
+    # Write to file and clear variables
+    [io.file]::WriteAllBytes($GetROM.patched, $ByteArrayGame)
+    $ByteArrayGame = $hiROM = $offset = $null
 
 }
 
 
 
 #==============================================================================================================================================================================================
-function CheckSNESHeader([int]$Offset) {
+function RemoveRegionProtection() {
     
-    $ROM = [IO.File]::ReadAllBytes($GetROM.patched)
-    for ($i=$Offset; $i -lt ($Offset + $GameConsole.rom_title_length); $i++) {
-        if ( ($ROM[$i] -lt 32) -or ($ROM[$i] -gt 122) ) { return $False }
+    # Return conditions
+    if ($GameConsole.remove_region_protection -ne 1)   { return }
+    if (!(IsChecked $CustomHeader.EnableRegion))       { return }
+    if (!$CustomHeader.Region.Visible)                 { return }
+
+    # Load in region protection database
+    $regions = SetJSONFile $Files.json.regions
+
+    # Remove region protection for game if applicable
+    $entry = $Null
+    for ($i=0; $i -lt $regions.Length; $i++) {
+
+        for ($j=0; $j -lt $regions.hash.Length; $j++) {
+            if ($regions[$i].hash[$j] -eq $ROMHashSum) {
+                $entry = $regions[$i]
+                break
+            }
+        }
     }
 
-    if (!(IsSet -Elem $ROM[$Offset + $GameConsole.rom_title_length] -Min 32 -Max 64)) { return $False }
-    if ($ROM[$Offset + $GameConsole.rom_title_length + 3] -gt 10) { return $False }
-    if ($ROM[$Offset + $GameConsole.rom_title_length + 4] -gt 10) { return $False }
+    if (IsSet $entry) {
+        for ($i=0; $i -lt $entry.offset.Length; $i++) {
+            $values = $entry.value[$i] -split '(.{2})' | ? {$_}
+            ChangeBytes -Offset $entry.offset[$i] -Values $values
+        }
+    }
+
+    # Reset variables
+    $regions = $entry = $null
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function IsHiROM([int]$Offset) {
+    
+    #$ROM = [IO.File]::ReadAllBytes($GetROM.patched)
+    for ($i=$Offset; $i -lt ($Offset + $GameConsole.rom_title_length); $i++) {
+        if ( ($ByteArrayGame[$i] -lt 32) -or ($ByteArrayGame[$i] -gt 122) ) { return $False }
+    }
+
+    if (!(IsSet -Elem $ROM[$Offset + $GameConsole.rom_title_length] -Min 32 -Max 64))   { return $False }
+    if ($ByteArrayGame[$Offset + $GameConsole.rom_title_length + 3] -gt 10)             { return $False }
+    if ($ByteArrayGame[$Offset + $GameConsole.rom_title_length + 4] -gt 10)             { return $False }
 
     return $True
 
@@ -1223,7 +1285,7 @@ function RepackU8AppFile() {
 
 
 #==============================================================================================================================================================================================
-function RepackWADFile([String]$GameID) {
+function RepackWADFile($GameID) {
     
     # Set the status label.
     UpdateStatusLabel "Repacking patched WAD file..."
@@ -1248,8 +1310,9 @@ function RepackWADFile([String]$GameID) {
     # We need to be in the same path as some files so just jump there.
     Push-Location $Paths.Temp
 
-    # Repack the WAD using the new files.
-    & $Files.tool.wadpacker $tik $tmd $cert $WadFile.Patched '-sign' '-i' $GameID
+    # Repack the WAD using the new files
+    if ($GameID -ne $null)   { & $Files.tool.wadpacker $tik $tmd $cert $WadFile.Patched '-sign' '-i' $GameID }
+    else                     { & $Files.tool.wadpacker $tik $tmd $cert $WadFile.Patched '-sign' }
 
     # If the patched file was created or could not be created.
     if (TestFile $WadFile.Patched) { 

@@ -254,7 +254,7 @@ function CreateButton([int]$X=0, [int]$Y=0, [String]$Name, [String]$Tag, [int]$W
 #==============================================================================================================================================================================================
 function CreateTabButtons([Array]$Tabs, [Object]$AddTo=$Redux.Panel) {
     
-    if (!(IsSet $Tabs)) {
+    if ($Tabs.Count -eq 0) {
         if ( ($GamePatch.redux.options -eq 1 -or (IsSet $GamePatch.languages)) -and $Settings.Debug.LiteGUI -eq $False) {
             $Tabs += "Main"
             $Last.TabName = "Main"
@@ -267,7 +267,7 @@ function CreateTabButtons([Array]$Tabs, [Object]$AddTo=$Redux.Panel) {
     if (!(IsSet $GameSettings.Core) -and $Tabs.Length -gt 0) { $GameSettings.Core  = @{} }
 
     # Create tabs
-    for ($i=0; $i -lt $Tabs.Length; $i++) {
+    for ($i=0; $i -lt $Tabs.Count; $i++) {
         $Button = CreateButton -X ((DPISize 15) + (($Redux.Panel.width - (DPISize 50))/$Tabs.length*$i)) -Y (DPISize 40) -Width (($Redux.Panel.width - (DPISize 50))/$Tabs.length) -Height (DPISize 30) -ForeColor "White" -BackColor "Gray" -Name $Tabs[$i] -Tag $i -Text $Tabs[$i] -AddTo $AddTo
         $Last.TabName = $Tabs[$i]
         $Button.Add_Click({
@@ -282,7 +282,7 @@ function CreateTabButtons([Array]$Tabs, [Object]$AddTo=$Redux.Panel) {
     }
 
     # Restore last tab
-    if ($Tabs.Length -gt 0) {
+    if ($Tabs.Count -gt 0) {
         if (IsSet -Elem $GameSettings["Core"]["LastTab"] -HasInt) {
 
             if ($ReduxTabs.Length -lt $GameSettings["Core"]["LastTab"]) {
@@ -300,6 +300,7 @@ function CreateTabButtons([Array]$Tabs, [Object]$AddTo=$Redux.Panel) {
             $ReduxTabs[0].BackColor = "DarkGray"
         }
     }
+    else { $Last.TabName = "Main" }
 
 }
 

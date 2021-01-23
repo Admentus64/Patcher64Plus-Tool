@@ -3,11 +3,12 @@ function SetWiiVCMode([Boolean]$Enable) {
     if ( ($Enable -eq $IsWiiVC) -and $GameIsSelected) { return }
 
     $global:IsWiiVC = $Enable
-    if ($IsWiiVC)   { $CustomTitleTextBox.MaxLength = (DPISize $VCTitleLength) }
-    else            { $CustomTitleTextBox.MaxLength = $GameConsole.rom_title_length }
+    if ($IsWiiVC)   { $CustomHeader.Title.MaxLength = (DPISize $VCTitleLength) }
+    else            { $CustomHeader.Title.MaxLength = $GameConsole.rom_title_length }
 
     EnablePatchButtons (IsSet $GamePath)
     GetHeader
+    GetRegion
     SetModeLabel
     ChangePatchPanel
 
@@ -68,7 +69,7 @@ function ChangeGamesList() {
 
     # Reset
     $CurrentGameComboBox.Items.Clear()
-    if (!$IsWiiVC) { $CustomTitleTextBox.MaxLength = $GameConsole.rom_title_length }
+    if (!$IsWiiVC) { $CustomHeader.Title.MaxLength = $GameConsole.rom_title_length }
 
     $Items = @()
     Foreach ($Game in $Files.json.games.game) {
@@ -140,19 +141,19 @@ function SetMainScreenSize() {
     
     # Show / Hide Custom Header
     if ($IsWiiVC) {
-        $CustomTitleTextBoxLabel.Text = "Channel Title:"
-        $CustomHeaderGroup.Text = " Custom Channel Title and GameID "
+        $CustomHeader.TitleLabel.Text = "Channel Title:"
+        $CustomHeader.Group.Text = " Custom Channel Title and GameID "
     }
     else {
-        $CustomTitleTextBoxLabel.Text = "Game Title:"
-        $CustomHeaderGroup.Text = " Custom Game Title and GameID "
+        $CustomHeader.TitleLabel.Text = "Game Title:"
+        $CustomHeader.Group.Text = " Custom Game Title and GameID "
     }
 
     # Custom Header Panel Visibility
-    $CustomHeaderPanel.Visible = ($GameConsole.rom_title -gt 0) -or ($GameConsole.rom_gameID -gt 0) -or $IsWiiVC
-    $CustomTitleTextBox.Visible = $CustomTitleTextBoxLabel.Visible = ($GameConsole.rom_title -gt 0) -or $IsWiiVC
-    $CustomGameIDTextBox.Visible = $CustomGameIDTextBoxLabel.Visible = ($GameConsole.rom_gameID -eq 1) -or $IsWiiVC
-    $CustomRegionCodeLabel.Visible = $CustomRegionCodeComboBox.Visible = ($GameConsole.rom_gameID -eq 2)
+    $CustomHeader.Panel.Visible = ($GameConsole.rom_title -gt 0) -or ($GameConsole.rom_gameID -gt 0) -or $IsWiiVC
+    $CustomHeader.Title.Visible = $CustomHeader.TitleLabel.Visible = ($GameConsole.rom_title -gt 0) -or $IsWiiVC
+    $CustomHeader.GameID.Visible = $CustomHeader.GameIDLabel.Visible = ($GameConsole.rom_gameID -eq 1) -or $IsWiiVC
+    $CustomHeader.Region.Visible = $CustomHeader.RegionLabel.Visible = $CustomHeader.EnableRegion.Visible = $CustomHeader.EnableRegionLabel.Visible = ($GameConsole.rom_gameID -eq 2)
     $InputPaths.InjectPanel.Visible = $IsWiiVC
     $VC.Panel.Visible = $IsWiiVC
 
@@ -169,7 +170,7 @@ function SetMainScreenSize() {
     # Positioning
     if (IsSet $GamePath)   { $CurrentGamePanel.Location = New-Object System.Drawing.Size((DPISize 10), ($InputPaths.PatchPanel.Bottom + (DPISize 5))) }
     else                   { $CurrentGamePanel.Location = New-Object System.Drawing.Size((DPISize 10), ($InputPaths.GamePanel.Bottom + (DPISize 5))) }
-    $CustomHeaderPanel.Location = New-Object System.Drawing.Size((DPISize 10), ($CurrentGamePanel.Bottom + (DPISize 5)))
+    $CustomHeader.Panel.Location = New-Object System.Drawing.Size((DPISize 10), ($CurrentGamePanel.Bottom + (DPISize 5)))
 
     # Set VC Panel Size
     if ($GameConsole.options_vc -eq 0)                               { $VC.Panel.Height = $VC.Group.Height = (DPISize 70) }
@@ -180,10 +181,10 @@ function SetMainScreenSize() {
     # Arrange Panels
     if ($IsWiiVC) {
         if ($GameType.patches) {
-            $Patches.Panel.Location = New-Object System.Drawing.Size((DPISize 10), ($CustomHeaderPanel.Bottom + (DPISize 5)))
+            $Patches.Panel.Location = New-Object System.Drawing.Size((DPISize 10), ($CustomHeader.Panel.Bottom + (DPISize 5)))
             $VC.Panel.Location = New-Object System.Drawing.Size((DPISize 10), ($Patches.Panel.Bottom + (DPISize 5)))
         }
-        else { $VC.Panel.Location = New-Object System.Drawing.Size((DPISize 10), ($CustomHeaderPanel.Bottom + (DPISize 5))) }
+        else { $VC.Panel.Location = New-Object System.Drawing.Size((DPISize 10), ($CustomHeader.Panel.Bottom + (DPISize 5))) }
         $MiscPanel.Location = New-Object System.Drawing.Size((DPISize 10), ($VC.Panel.Bottom + (DPISize 5)))
     }
     else {
@@ -192,8 +193,8 @@ function SetMainScreenSize() {
             else                   { $MiscPanel.Location = New-Object System.Drawing.Size((DPISize 10), ($CurrentGamePanel.Bottom + (DPISize 5))) }
         }
         else {
-            if ($GameType.patches) { $Patches.Panel.Location = New-Object System.Drawing.Size((DPISize 10), ($CustomHeaderPanel.Bottom + (DPISize 5))) }
-            else                   { $MiscPanel.Location = New-Object System.Drawing.Size((DPISize 10), ($CustomHeaderPanel.Bottom + (DPISize 5))) }
+            if ($GameType.patches) { $Patches.Panel.Location = New-Object System.Drawing.Size((DPISize 10), ($CustomHeader.Panel.Bottom + (DPISize 5))) }
+            else                   { $MiscPanel.Location = New-Object System.Drawing.Size((DPISize 10), ($CustomHeader.Panel.Bottom + (DPISize 5))) }
         }
         if ($GameType.patches)     { $MiscPanel.Location = New-Object System.Drawing.Size((DPISize 10), ($Patches.Panel.Bottom + (DPISize 5))) }
     }
@@ -232,21 +233,9 @@ function ChangeGameMode() {
 
     $global:GameSettings = GetSettings (GetGameSettingsFile)
 
-    # Patches.json
-    if (IsSet $GameType.patches) {
-        if (TestFile $GameFiles.json) {
-            try { $Files.json.patches = Get-Content -Raw -Path $GameFiles.json | ConvertFrom-Json }
-            catch { CreateErrorDialog "Corrupted JSON" }
-        }
-        else { CreateErrorDialog "Missing JSON" }
-    }
-    
-    # Credits.json
-    if (TestFile ($GameFiles.previews + "\Credits.json")) {
-        try { $Files.json.models = Get-Content -Raw -Path ($GameFiles.previews + "\Credits.json") | ConvertFrom-Json }
-        catch { CreateErrorDialog "Corrupted JSON" }
-    }
-    else { $Files.json.models = $null }
+    # JSON
+    if (IsSet $GameType.patches)                            { $Files.json.patches = SetJSONFile $GameFiles.json } else { $Files.json.patches = $null }
+    if (TestFile ($GameFiles.previews + "\Credits.json"))   { $Files.json.models  = SetJSONFile ($GameFiles.previews + "\Credits.json") } else { $Files.json.models = $null }
 
     # Info
     if (TestFile $GameFiles.info)       { AddTextFileToTextbox -TextBox $Credits.Sections[0] -File $GameFiles.info }
@@ -258,6 +247,10 @@ function ChangeGameMode() {
 
     $CreditsGameLabel.Text = "Current Game: " + $GameType.mode
     $Patches.Panel.Visible = $GameType.patches
+    if (!$Patches.Panel.Visible) {
+        GetHeader
+        GetRegion
+    }
 
     SetModeLabel
     if ($IsActiveGameField) { ChangePatchPanel }
@@ -303,7 +296,7 @@ function UpdateStatusLabel([String]$Text) {
 
 
 #==============================================================================================================================================================================================
-function WriteToConsole([String]$Text) { if ($Settings.Debug.Console -eq $True) { Write-Host $Text } }
+function WriteToConsole([String]$Text) { if ($Settings.Debug.Console -eq $True -and $ExternalScript) { Write-Host $Text } }
 
 
 
@@ -356,7 +349,7 @@ function GamePath_Finish([Object]$TextBox, [String]$Path) {
     ChangeGamesList
     $InputPaths.ClearGameButton.Enabled = $True
     $InputPaths.PatchPanel.Visible = $True
-    $CustomHeaderPatchButton.Enabled = $CustomHeaderCheckbox.checked
+    $CustomHeader.Patch.Enabled = $CustomHeader.EnableHeader.checked -or $CustomHeader.EnableRegion.checked
 
     # Calculate checksum if Native Mode
     if (!$IsWiiVC) {
@@ -421,19 +414,34 @@ function PatchPath_Finish([Object]$TextBox, [String]$Path) {
 function GetHeader() {
     
     if ($IsWiiVC) {
-        if (IsSet $GamePatch.vc_title)     { $CustomTitleTextBox.Text  = $GamePatch.vc_title }
-        else                               { $CustomTitleTextBox.Text  = $GameType.vc_title }
-        if (IsSet $GamePatch.vc_gameID)    { $CustomGameIDTextBox.Text = $GamePatch.vc_gameID }
-        else                               { $CustomGameIDTextBox.Text = $GameType.vc_gameID }
+        if     (IsSet $GamePatch.vc_title)     { $CustomHeader.Title.Text  = $GamePatch.vc_title }
+        elseif (IsSet $GameType.vc_title)      { $CustomHeader.Title.Text  = $GameType.vc_title }
+        else                                   { $CustomHeader.Title.Text  = "" }
+
+        if     (IsSet $GamePatch.vc_gameID)    { $CustomHeader.GameID.Text = $GamePatch.vc_gameID }
+        elseif (IsSet $GameType.vc_gameID)     { $CustomHeader.GameID.Text = $GameType.vc_gameID }
+        else                                   { $CustomHeader.GameID.Text = "" }
     }
     else {
-        if (IsSet $GamePatch.rom_title)    { $CustomTitleTextBox.Text  = $GamePatch.rom_title }
-        else                               { $CustomTitleTextBox.Text  = $GameType.rom_title }
-        if (IsSet $GamePatch.rom_gameID)   { $CustomGameIDTextBox.Text = $GamePatch.rom_gameID }
-        else                               { $CustomGameIDTextBox.Text = $GameType.rom_gameID }
-        if (IsSet $GamePatch.rom_region)   { $CustomRegionCodeComboBox.SelectedIndex = $GamePatch.rom_region }
-        else                               { $CustomRegionCodeComboBox.SelectedIndex = $GameType.rom_region }
+        if     (IsSet $GamePatch.rom_title)    { $CustomHeader.Title.Text  = $GamePatch.rom_title }
+        elseif (IsSet $GamePatch.rom_title)    { $CustomHeader.Title.Text  = $GameType.rom_title }
+        else                                   { $CustomHeader.Title.Text  = "" }
+
+        if     (IsSet $GamePatch.rom_gameID)   { $CustomHeader.GameID.Text = $GamePatch.rom_gameID }
+        elseif (IsSet $GameType.rom_gameID)    { $CustomHeader.GameID.Text = $GameType.rom_gameID }
+        else                                   { $CustomHeader.GameID.Text = "" }
     }
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function GetRegion() {
+    
+    if     (IsSet $GamePatch.rom_region)   { $CustomHeader.Region.SelectedIndex = $GamePatch.rom_region }
+    elseif (IsSet $GameType.rom_region)    { $CustomHeader.Region.SelectedIndex = $GameType.rom_region }
+    else                                   { $CustomHeader.Region.SelectedIndex = 1 }
 
 }
 
@@ -594,21 +602,35 @@ function GetFilePaths() {
 #==============================================================================================================================================================================================
 function RestoreCustomHeader() {
     
-    if (IsChecked $CustomHeaderCheckbox) {
-        if (IsSet $Settings["Core"]["CustomTitle"]) {
-            $CustomTitleTextBox.Text  = $Settings["Core"]["CustomTitle"]
+    if (IsChecked $CustomHeader.EnableHeader) {
+        if (IsSet $Settings["Core"]["CustomHeader.Title"]) {
+            $CustomHeader.Title.Text  = $Settings["Core"]["CustomHeader.Title"]
         }
-        if (IsSet $Settings["Core"]["CustomGameID"]) {
-            $CustomGameIDTextBox.Text = $Settings["Core"]["CustomGameID"]
-        }
-        if (IsSet $Settings["Core"]["CustomRegionCode"]) {
-            $CustomRegionCodeComboBox.SelectedIndex = $Settings["Core"]["CustomRegionCode"]
+        if (IsSet $Settings["Core"]["CustomHeader.GameID"]) {
+            $CustomHeader.GameID.Text = $Settings["Core"]["CustomHeader.GameID"]
         }
     }
     else { GetHeader }
 
-    $CustomGameIDTextBox.Enabled = $CustomTitleTextBox.Enabled = $CustomRegionCodeComboBox.Enabled = $CustomHeaderCheckbox.Checked
-    $CustomHeaderPatchButton.Enabled = (IsSet -Elem GamePath) -and $CustomHeaderCheckbox.Checked
+    $CustomHeader.Title.Enabled = $CustomHeader.GameID.Enabled = $CustomHeader.EnableHeader.Checked
+    $CustomHeader.Patch.Enabled = ( (IsSet -Elem GamePath) -and ($CustomHeader.EnableHeader.Checked -or $CustomHeader.EnableRegion.Checked) )
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function RestoreCustomRegion() {
+
+    if (IsChecked $CustomHeader.EnableRegion) {
+        if (IsSet $Settings["Core"]["CustomHeader.Region"]) {
+            $CustomHeader.Region.SelectedIndex = $Settings["Core"]["CustomHeader.Region"]
+        }
+    }
+    else { GetRegion }
+
+    $CustomHeader.Region.Enabled = $CustomHeader.EnableRegion.Checked
+    $CustomHeader.Patch.Enabled = ( (IsSet -Elem GamePath) -and ($CustomHeader.EnableHeader.Checked -or $CustomHeader.EnableRegion.Checked) )
 
 }
 
@@ -629,7 +651,7 @@ function StrLike([String]$Str, [String]$Val, [Switch]$Not) {
 function EnableGUI([Boolean]$Enable) {
     
     $InputPaths.GamePanel.Enabled = $InputPaths.InjectPanel.Enabled = $InputPaths.PatchPanel.Enabled = $Enable
-    $CurrentGamePanel.Enabled = $CustomHeaderPanel.Enabled = $Enable
+    $CurrentGamePanel.Enabled = $CustomHeader.Panel.Enabled = $Enable
     $Patches.Panel.Enabled = $MiscPanel.Enabled = $VC.Panel.Enabled = $Enable
 
 }
@@ -756,6 +778,8 @@ function CreateSubPath([String]$Path) {
 #==============================================================================================================================================================================================
 function ShowPowerShellConsole([bool]$Show) {
     
+    if (!$ExternalScript) { return }
+
     # Sshows or hide the console window
     switch ($Show) {
         $True   { [Console.Window]::ShowWindow([Console.Window]::GetConsoleWindow(), 5) | Out-Null }
@@ -839,6 +863,7 @@ Export-ModuleMember -Function InjectPath_Finish
 Export-ModuleMember -Function PatchPath_Finish
 
 Export-ModuleMember -Function GetHeader
+Export-ModuleMember -Function GetRegion
 Export-ModuleMember -Function IsChecked
 Export-ModuleMember -Function IsLanguage
 Export-ModuleMember -Function IsText
@@ -849,6 +874,7 @@ Export-ModuleMember -Function AddTextFileToTextbox
 Export-ModuleMember -Function StrLike
 Export-ModuleMember -Function GetFilePaths
 Export-ModuleMember -Function RestoreCustomHeader
+Export-ModuleMember -Function RestoreCustomRegion
 Export-ModuleMember -Function EnableGUI
 Export-ModuleMember -Function EnableForm
 Export-ModuleMember -Function EnableElem

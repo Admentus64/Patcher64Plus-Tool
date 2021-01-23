@@ -196,10 +196,6 @@
 	"console" : "All",
 	"patch_vc" : 1,
 	"console" : "All",
-	"checksum" : 0,
-	"rom_title" : "CUSTOM TITLE",
-	"rom_gameid" : "CUST",
-	"vc_title" : "Custom Channel",
-	"vc_gameid" : "CUST"
+	"checksum" : 0
 }
 ] }

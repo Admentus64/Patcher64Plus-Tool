@@ -11,42 +11,46 @@ Attributes lines that are not present are equivalent to 0 or just empty.
 
 
 --- Lines ---
-title			Console title as shown in the Patcher64+ Tool GUI.
+title				Console title as shown in the Patcher64+ Tool GUI.
 
-mode			Console mode which is used to link a game with, also used to read code with.
+mode				Console mode which is used to link a game with, also used to read code with.
 
-options_vc		If the Virtual Console supports options
-			0		Disable Virtual Console options
-			1		Allow Virtual Console options
+options_vc			If the Virtual Console supports options
+				0		Disable Virtual Console options
+				1		Allow Virtual Console options
 
-rom_title		If the Console supports a ROM title in native mode so it can be changed
-			0		ROM title is not supported in native mode
-			1		ROM title is supported in native mode
+rom_title			If the Console supports a ROM title in native mode so it can be changed
+				0		ROM title is not supported in native mode
+				1		ROM title is supported in native mode
 
-rom_title_length	Decimal value for how long the game title may be in the ROM
+rom_title_length		Decimal value for how long the game title may be in the ROM
 
-rom_title_offset	Hexadecimal value for where the game title can be found in the ROM
+rom_title_offset		Hexadecimal value for where the game title can be found in the ROM
 
-rom_title_offset_2	Alternative hexadecimal value for where the game title can be found in the ROM
+rom_title_offset_2		Alternative hexadecimal value for where the game title can be found in the ROM
 
-rom_title_uppercase	If the ROM title should be forced in uppercase
-			0		Uppercase for the ROM title is not forced
-			1		Uppercase for the ROM title is forced
+rom_title_uppercase		If the ROM title should be forced in uppercase
+				0		Uppercase for the ROM title is not forced
+				1		Uppercase for the ROM title is forced
 
-rom_gameID		If the Console supports a ROM GameID in native mode so it can be changed
-			0		ROM GameID and Region Code are not supported in native mode
-			1		ROM GameID is supported in native mode
-			2		ROM Region Code is supported in native mode
+rom_gameID			If the console supports a ROM GameID in native mode so it can be changed
+				0		ROM GameID and Region Code are not supported in native mode
+				1		ROM GameID is supported in native mode
+				2		ROM Region Code is supported in native mode
 
-rom_gameID_offset	Hexadecimal value for where the GameID can be found in the ROM
+rom_gameID_offset		Hexadecimal value for where the GameID can be found in the ROM
 
-appfile			The AppFile which should contain the ROM in the Virtual Console's WAD file
-			"00000001.app"	Used for NES ROMs, this is the VC emulator itself
-			"00000005.app"	Used for SNES/N64 ROMs, which is a container for the ROM and T64 files
+remove_region_protection	If the console supports the removal of the region protection
+				0		Region Protection removal is not supported
+				1		Region Protection removal is supported
 
-t64			If console contains T64 textures
-			0		Disable the "Remove All T64" checkbox
-			1		Allow the "Remove All T64" checkbox
+appfile				The AppFile which should contain the ROM in the Virtual Console's WAD file
+				"00000001.app"	Used for NES ROMs, this is the VC emulator itself
+				"00000005.app"	Used for SNES/N64 ROMs, which is a container for the ROM and T64 files
+
+t64				If console contains T64 textures
+				0		Disable the "Remove All T64" checkbox
+				1		Allow the "Remove All T64" checkbox
 
 
 
@@ -97,30 +101,30 @@ console		In which console mode the game is accessible, accepted values are defin
 
 downgrade	If the ROM is capable of downgrading and can contain multiple entries.
 		The following sub-attributes can be assigned to "downgrade"
-		"file"			Downgrade patch file path, Supports Decompression and Extension
-		"hash"			ROM Hash checksum to apply the downgrade patch on
-		"rev"			Revision title to show
+		"file"		Downgrade patch file path, Supports Decompression and Extension
+		"hash"		ROM Hash checksum to apply the downgrade patch on
+		"rev"		Revision title to show
 
 romc		Type of ROM in the VC WAD File
-		0			Regular uncompressed ROM
-		1			Super Smash Bros. / The Legend of Zelda: Majora's Mask compressed ROMC
-		2			Paper Mario compressed ROMC
+		0		Regular uncompressed ROM
+		1		Super Smash Bros. / The Legend of Zelda: Majora's Mask compressed ROMC
+		2		Paper Mario compressed ROMC
 
 patches_vc	Amount of Patch VC options which are available
-		0			No Patch VC Options are available
-		1			Only base Patch VC Options are available
-		2			More Patch VC Options are available (Super Mario 64)
-		3			More Patch VC Options are available (Majora's Mask)
-		4			All Patch VC Options are available (Ocarina of Time)
+		0		No Patch VC Options are available
+		1		Only base Patch VC Options are available
+		2		More Patch VC Options are available (Super Mario 64)
+		3		More Patch VC Options are available (Majora's Mask)
+		4		All Patch VC Options are available (Ocarina of Time)
 
 patches		If the Patch Options panel is shown
-		0			Hide Patch Options panel
-		1			Show Patch Options panel
+		0		Hide Patch Options panel
+		1		Show Patch Options panel
 
 decompress	If the ROM is capable of decompressing
-		0			ROM can not decompress
-		1			ROM can decompress (Zelda 64 only)
-		2			ROM can decompress (Super Mario 64 only)
+		0		ROM can not decompress
+		1		ROM can decompress (Zelda 64 only)
+		2		ROM can decompress (Super Mario 64 only)
 
 dmaTable	New dmatable to overwrite existing dmatable with
 
@@ -230,6 +234,8 @@ languages	If the patch supports multiple languages and can contain multiple entr
 rom_title	ROM game title for the patch, No more than 20 characters.
 
 rom_gameID	ROM GameID for the patch, requires 4 characters.
+
+rom_region	ROM region code for the patch, requires value between 0 and 20 (SNES only)
 
 vc_title	Wii VC WAD Channel Title for the patch, no more than 40 characters.
 

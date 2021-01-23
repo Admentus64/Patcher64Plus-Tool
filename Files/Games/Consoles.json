@@ -26,6 +26,7 @@
 	"rom_title_offset" : "7FC0",
 	"rom_title_offset_2" : "FFC0",
 	"rom_gameID" : 2,
+	"remove_region_protection" : 1,
 	"appfile": "00000005.app"
 }
 ] }

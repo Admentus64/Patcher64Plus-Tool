@@ -21,7 +21,7 @@ function CreateMainDialog() {
     $VersionLabel = CreateLabel -X (DPISize 15) -Y (DPISize 10) -Width (DPISize 120) -Height (DPISize 30) -Text ($Version + "`n(" + $VersionDate + ")") -Font $Fonts.SmallBold -AddTo $MainDialog
 
     # Create Arrays for groups
-    $global:InputPaths = @{}; $global:Patches = @{}; $global:VC = @{}
+    $global:InputPaths = @{}; $global:Patches = @{}; $global:VC = @{}; $global:CustomHeader = @{}
 
 
 
@@ -150,7 +150,7 @@ function CreateMainDialog() {
     $global:CurrentGameComboBox = CreateComboBox -X ($ConsoleComboBox.Right + (DPISize 5)) -Y (DPISize 20) -Width (DPISize 360) -Height (DPISize 30) -Name "Selected.Game"
     $CurrentGameComboBox.Add_SelectedIndexChanged({
         $Settings["Core"][$this.Name] = $this.SelectedIndex
-        if ($this.Text -ne $GameType.title) {
+        if ($this.Text -ne $GameType.title -or $GameType.console -like "*All*") {
             ChangeGameMode
             SetVCPanel
             SetMainScreenSize
@@ -167,15 +167,20 @@ function CreateMainDialog() {
     #################
 
     # Create the panel that holds the Custom Header.
-    $global:CustomHeaderPanel = CreatePanel -Width (DPISize 590) -Height (DPISize 80)
+    $CustomHeader.Panel = CreatePanel -Width (DPISize 590) -Height (DPISize 80)
 
     # Create the groupbox that holds the Custom Header.
-    $global:CustomHeaderGroup = CreateGroupBox -Width $CustomHeaderPanel.Width -Height $CustomHeaderPanel.Height -Text "Custom Channel Title and GameID"
+    $CustomHeader.Group = CreateGroupBox -Width $CustomHeader.Panel.Width -Height $CustomHeader.Panel.Height -Text "Custom Channel Title and GameID"
 
-    # Custom Channel Title
-    $global:CustomTitleTextBoxLabel = CreateLabel -X (DPISize 8) -Y (DPISize 22) -Width (DPISize 75) -Height (DPISize 15) -Text "Channel Title:" -Info "--- WARNING ---`nChanging the Game Title might causes issues with emulation for certain emulators and plugins, such as GlideN64"
-    $global:CustomTitleTextBox = CreateTextBox -X (DPISize 85) -Y (DPISize 20) -Width (DPISize 260) -Height (DPISize 22) -Info "--- WARNING ---`nChanging the Game Title might causes issues with emulation for certain emulators and plugins, such as GlideN64"
-    $CustomTitleTextBox.Add_TextChanged({
+    # Custom Title Checkbox
+    $CustomHeader.EnableHeaderLabel = CreateLabel    -X (DPISize 10) -Y (DPISize 22) -Width (DPISize 50) -Height (DPISize 15) -Text "Enable:"                                              -Info "Enable in order to change the Game ID and title of the ROM or WAD file"
+    $CustomHeader.EnableHeader      = CreateCheckBox -X ($CustomHeader.EnableHeaderLabel.Right) -Y (DPISize 20) -Width (DPISize 20) -Height (DPISize 20) -Name "CustomHeader.EnableHeader" -Info "Enable in order to change the Game ID and title of the ROM or WAD file"
+    $CustomHeader.EnableHeaderLabel.Add_Click({ $CustomHeader.EnableHeader.Checked = !$CustomHeader.EnableHeader.Checked })
+
+    # Custom Title
+    $CustomHeader.TitleLabel = CreateLabel   -X ($CustomHeader.EnableHeader.Right) -Y (DPISize 22) -Width (DPISize 75) -Height (DPISize 15) -Text "Channel Title:" -Info "--- WARNING ---`nChanging the Game Title might causes issues with emulation for certain emulators and plugins, such as GlideN64"
+    $CustomHeader.Title      = CreateTextBox -X ($CustomHeader.TitleLabel.Right)   -Y (DPISize 20) -Width (DPISize 250) -Height (DPISize 22)                       -Info "--- WARNING ---`nChanging the Game Title might causes issues with emulation for certain emulators and plugins, such as GlideN64"
+    $CustomHeader.Title.Add_TextChanged({
         if ($this.Text -match "[^a-z 0-9 \: \- \( \) \' \&] \.") {
             $cursorPos = $this.SelectionStart
             $this.Text = $this.Text -replace "[^a-z 0-9 \: \- \( \) \' \& \.]",''
@@ -185,9 +190,9 @@ function CreateMainDialog() {
     })
 
     # Custom GameID (N64 only)
-    $global:CustomGameIDTextBoxLabel = CreateLabel -X (DPISize 370) -Y (DPISize 22) -Width (DPISize 50) -Height (DPISize 15) -Text "GameID:" -Info "--- WARNING ---`nChanging the GameID causes Dolphin to recognize the VC title as a separate save file`nThe fourth character sets the region and refresh rate`n`n--- REGION CODES ---`nE = USA`nJ = Japan`nP = PAL`nK = Korea"
-    $global:CustomGameIDTextBox = CreateTextBox -X (DPISize 425) -Y (DPISize 20) -Width (DPISize 55) -Height (DPISize 22) -Length 4 -Info "--- WARNING ---`nChanging the GameID causes Dolphin to recognize the VC title as a separate save file`nThe fourth character sets the region and refresh rate`n`n--- REGION CODES ---`nE = USA`nJ = Japan`nP = PAL`nK = Korea"
-    $CustomGameIDTextBox.Add_TextChanged({
+    $CustomHeader.GameIDLabel = CreateLabel   -X ($CustomHeader.Title.Right + (DPISize 10)) -Y (DPISize 22) -Width (DPISize 50) -Height (DPISize 15) -Text "GameID:" -Info "--- WARNING ---`nChanging the GameID causes Dolphin to recognize the VC title as a separate save file`nThe fourth character sets the region and refresh rate`n`n--- REGION CODES ---`nE = USA`nJ = Japan`nP = PAL`nK = Korea"
+    $CustomHeader.GameID      = CreateTextBox -X ($CustomHeader.GameIDLabel.Right)          -Y (DPISize 20) -Width (DPISize 55) -Height (DPISize 22) -Length 4       -Info "--- WARNING ---`nChanging the GameID causes Dolphin to recognize the VC title as a separate save file`nThe fourth character sets the region and refresh rate`n`n--- REGION CODES ---`nE = USA`nJ = Japan`nP = PAL`nK = Korea"
+    $CustomHeader.GameID.Add_TextChanged({
         if ($this.Text -cmatch "[^A-Z 0-9]") {
             $this.Text = $this.Text.ToUpper() -replace "[^A-Z 0-9]",''
             $this.Select($this.Text.Length, $this.Text.Length)
@@ -198,20 +203,21 @@ function CreateMainDialog() {
         }
     })
 
-    # Custom Region (SNES only)
-    $global:CustomRegionCodeLabel = CreateLabel -X ($CustomTitleTextBoxLabel.Left) -Y (DPISize 50) -Width (DPISize 55) -Height (DPISize 15) -Text "Region:" -Info "--- WARNING ---`nChanging the Region Code can softlock the game"
-    $Items = @("Japan (NTSC)", "North America (NTSC)", "Europe (PAL)", "Sweden/Scandinavia (PAL)", "Finland (PAL)", "Denmark (PAL)", "France (SECAM)", "Netherlands (PAL)", "Spain (PAL)", "Germany (PAL)", "Italy (PAL)", "China (PAL)", "Indonesia (PAL)", "Kora (NTSC)", "Global", "Canada (NTSC)", "Brazil (PAL-M)", "Australia (PAL)", "Other (1)", "Other (2)", "Other (3)")
-    $global:CustomRegionCodeComboBox = CreateComboBox -X $CustomTitleTextBox.Left -Y ($CustomTitleTextBoxLabel.Bottom + 12) -Width $CustomTitleTextBox.Width -Height $CustomTitleTextBox.Height -Items $Items -Default 2
-    
-    # Custom Header Checkbox
-    $CustomHeaderLabel = CreateLabel -X (DPISize 510) -Y (DPISize 22) -Width (DPISize 50) -Height (DPISize 15) -Text "Enable:" -Info "Enable in order to change the Game ID and title of the ROM or WAD file"
-    $global:CustomHeaderCheckbox = CreateCheckBox -X (DPISize 560) -Y (DPISize 20) -Width (DPISize 20) -Height (DPISize 20) -Name "CustomHeader" -Info "Enable in order to change the Game ID and title of the ROM or WAD file"
-    $CustomHeaderLabel.Add_Click({ $CustomHeaderCheckbox.Checked = !$CustomHeaderCheckbox.Checked })
+    # Custom Region Checkbox (SNES Only)
+    $CustomHeader.EnableRegionLabel = CreateLabel    -X ($CustomHeader.EnableHeaderLabel.Left) -Y (DPISize 52) -Width (DPISize 50) -Height (DPISize 15) -Text "Enable:"                   -Info "Enable in order to change the Game ID and title of the ROM or WAD file"
+    $CustomHeader.EnableRegion      = CreateCheckBox -X ($CustomHeader.EnableHeader.Left)      -Y (DPISize 50) -Width (DPISize 20) -Height (DPISize 20) -Name "CustomHeader.EnableRegion" -Info "Enable in order to change the Game ID and title of the ROM or WAD file"
+    $CustomHeader.EnableRegionLabel.Add_Click({ $CustomHeader.EnableRegion.Checked = !$CustomHeader.EnableRegion.Checked })
 
+    # Custom Region (SNES only)
+    $CustomHeader.RegionLabel = CreateLabel -X ($CustomHeader.TitleLabel.Left) -Y (DPISize 50) -Width (DPISize 55) -Height (DPISize 15) -Text "Region:" -Info "--- WARNING ---`nChanging the Region Code can softlock the game"
+    $Items = @("Japan (NTSC)", "North America (NTSC)", "Europe (PAL)", "Sweden/Scandinavia (PAL)", "Finland (PAL)", "Denmark (PAL)", "France (SECAM)", "Netherlands (PAL)", "Spain (PAL)", "Germany (PAL)", "Italy (PAL)", "China (PAL)", "Indonesia (PAL)", "Kora (NTSC)", "Global", "Canada (NTSC)", "Brazil (PAL-M)", "Australia (PAL)", "Other (1)", "Other (2)", "Other (3)")
+    $CustomHeader.Region = CreateComboBox   -X $CustomHeader.Title.Left -Y ($CustomHeader.RegionLabel.Top) -Width $CustomHeader.Title.Width -Height $CustomHeader.Title.Height -Items $Items -Default 2
+    
     # Create a button to patch the header only
-    $global:CustomHeaderPatchButton = CreateButton -X ($InputPaths.ClearGameButton.Left) -Y ($CustomTitleTextBoxLabel.Bottom + (DPISize 12)) -Width ($InputPaths.ClearGameButton.Width) -Height (DPISize 22) -Text "Patch Header" -Info "Patch the header of the selected game only"
-    $CustomHeaderPatchButton.Add_Click({ MainFunction -Command "Patch Header" -PatchedFileName "_header_patched" })
-    $CustomHeaderPatchButton.Enabled = $False
+    $CustomHeader.Patch = CreateButton -X ($InputPaths.ClearGameButton.Left) -Y ($CustomHeader.EnableRegion.Top) -Width ($InputPaths.ClearGameButton.Width) -Height (DPISize 22) -Text "Patch Header" -Info "Patch the header of the selected game only"
+    $CustomHeader.Patch.Add_Click({ MainFunction -Command "Patch Header" -PatchedFileName "_header_patched" })
+    $CustomHeader.Patch.Enabled = $False
+
 
 
     ###############
@@ -242,6 +248,7 @@ function CreateMainDialog() {
                     $global:GamePatch = $Item
                     $PatchToolTip.SetToolTip($Patches.Button, ([String]::Format($Item.tooltip, [Environment]::NewLine)))
                     GetHeader
+                    GetRegion
                     LoadAdditionalOptions
                     DisablePatches
                 }
@@ -402,14 +409,18 @@ function CreateMainDialog() {
 
 #==============================================================================================================================================================================================
 function SetJSONFile($File) {
-
+    
     if (TestFile $File) {
         try { $File = Get-Content -Raw -Path $File | ConvertFrom-Json }
-        catch { CreateErrorDialog -Error "Corrupted JSON" -Exit }
+        catch {
+            Write-Host ("Corrupted JSON File: " + $File)
+            CreateErrorDialog -Error "Corrupted JSON"
+        }
         return $File
     }
     else {
-        CreateErrorDialog "Corrupted JSON"
+        Write-Host ("Missing JSON File: " + $File)
+        CreateErrorDialog "Missing JSON"
         return $null
     }
 
@@ -441,8 +452,9 @@ function CheckVCOptions() {
 function DisablePatches() {
     
     EnableElem -Elem @($Patches.Redux, $Patches.ReduxLabel) -Active ((IsSet $GamePatch.redux.file) -and $Settings.Debug.LiteGUI -eq $False) -Hide
-    EnableElem -Elem @($Patches.Options, $Patches.OptionsLabel, $Patches.OptionsButton) -Active ($Patches.OptionsButton.Visible = $GamePatch.options) -Hide
-    EnableElem -Elem @($Patches.Downgrade, $Patches.DowngradeLabel) -Active ((IsSet $GameType.downgrade) -and $Settings.Debug.LiteGUI -eq $False) -Hide
+    EnableElem -Elem @($Patches.Options, $Patches.OptionsLabel, $Patches.OptionsButton) -Active ($GamePatch.options -eq 1) -Hide
+    EnableElem -Elem @($Patches.Downgrade, $Patches.DowngradeLabel) -Active ($GameType.downgrade -eq 1 -and $Settings.Debug.LiteGUI -eq $False) -Hide
+
     #EnableElem -Elem @($VC.RemoveFilter, $VC.RemoveFilterLabel) -Active (!(StrLike -str $GamePatch.command -val "Patch Boot DOL"))
     EnableElem -Elem @($VC.RemapL, $VC.RemapLLabel) -Active (!(StrLike -str $GamePatch.command -val "Multiplayer"))
 
@@ -604,3 +616,4 @@ Export-ModuleMember -Function CreateMainDialog
 Export-ModuleMember -Function CheckVCOptions
 Export-ModuleMember -Function DisablePatches
 Export-ModuleMember -Function LoadAdditionalOptions
+Export-ModuleMember -Function SetJSONFile

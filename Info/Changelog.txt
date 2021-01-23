@@ -1,3 +1,18 @@
+v11.1.0
+- Added support for removing Region Protection for SNES ROMs if included in the database
+- Region Code patching (SNES) can now be toggled separately from regular Custom Header patching
+- Fixed console mode not properly switching in Free Mode
+- Fixed Patch Options not properly setting and getting stuck in there
+- Fixed the "Main" panel not being initialized in Additional Options" if included by default
+- Fixed the "Main" panel not being visible if it's the only panel when switching games
+- The "North America (NTSC)" region is now the default fallback in SNES mode
+- Fixed an issue with the error dialog incorrectly closing the tool
+- Optimized how the header and region code are patched in
+- The custom header and region code are no longer patched in by force (only when provided)
+- Free Mode no longer has a custom header or region code set by default
+- Some code optimizations
+- .exe support returns once more
+
 v11.0.1
 - Added option to disable Hi-DPI Mode
 - Updated Hi-DPI Mode code (thank you Bighead!)
