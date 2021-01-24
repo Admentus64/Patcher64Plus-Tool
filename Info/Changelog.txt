@@ -1,3 +1,6 @@
+v11.1.2
+- Start button is now correctly repositioned for the OoT WS patch
+
 v11.1.1
 - Added new option to toggle visual styles for the GUI
 - Fixed internal game title as showing as empty in native mode
