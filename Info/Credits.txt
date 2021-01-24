@@ -240,6 +240,7 @@ Special Thanks:				Nokaubure, z64me, Ultra553, OoT Decomp
 - Always Best Ending:			Marcelo20XX
 - HUD Textures:				GhostlyDark
 - Hide HUD:				Marcelo20XX
+- Disable SFX Effects:			Marcelo20XX
 - Fairy Colors:				Dzeko
 - Spin Attack Colors:			Dzeko
 - Set Capacity:				GhostlyDark
