@@ -141,22 +141,10 @@ function CreateMainDialog() {
 
     # Create a combobox with the list of supported consoles
     $global:ConsoleComboBox = CreateComboBox -X (DPISize 10) -Y (DPISize 20) -Width (DPISize 200) -Height (DPISize 30) -Name "Selected.Console"
-    $ConsoleComboBox.Add_SelectedIndexChanged({
-        $Settings["Core"][$this.Name] = $this.SelectedIndex
-        if ($this.Text -ne $GameConsole.title) { ChangeGamesList }
-    })
-
+    
     # Create a combobox with the list of supported games
     $global:CurrentGameComboBox = CreateComboBox -X ($ConsoleComboBox.Right + (DPISize 5)) -Y (DPISize 20) -Width (DPISize 360) -Height (DPISize 30) -Name "Selected.Game"
-    $CurrentGameComboBox.Add_SelectedIndexChanged({
-        $Settings["Core"][$this.Name] = $this.SelectedIndex
-        if ($this.Text -ne $GameType.title -or $GameType.console -like "*All*") {
-            ChangeGameMode
-            SetVCPanel
-            SetMainScreenSize
-        }
-    })
-
+    
     $Files.json.consoles = SetJSONFile $Files.json.consoles
     $Files.json.games    = SetJSONFile $Files.json.games
 
@@ -180,29 +168,11 @@ function CreateMainDialog() {
     # Custom Title
     $CustomHeader.TitleLabel = CreateLabel   -X ($CustomHeader.EnableHeader.Right) -Y (DPISize 22) -Width (DPISize 75) -Height (DPISize 15) -Text "Channel Title:" -Info "--- WARNING ---`nChanging the Game Title might causes issues with emulation for certain emulators and plugins, such as GlideN64"
     $CustomHeader.Title      = CreateTextBox -X ($CustomHeader.TitleLabel.Right)   -Y (DPISize 20) -Width (DPISize 250) -Height (DPISize 22)                       -Info "--- WARNING ---`nChanging the Game Title might causes issues with emulation for certain emulators and plugins, such as GlideN64"
-    $CustomHeader.Title.Add_TextChanged({
-        if ($this.Text -match "[^a-z 0-9 \: \- \( \) \' \&] \.") {
-            $cursorPos = $this.SelectionStart
-            $this.Text = $this.Text -replace "[^a-z 0-9 \: \- \( \) \' \& \.]",''
-            $this.SelectionStart = $cursorPos - 1
-            $this.SelectionLength = 0
-        }
-    })
 
     # Custom GameID (N64 only)
     $CustomHeader.GameIDLabel = CreateLabel   -X ($CustomHeader.Title.Right + (DPISize 10)) -Y (DPISize 22) -Width (DPISize 50) -Height (DPISize 15) -Text "GameID:" -Info "--- WARNING ---`nChanging the GameID causes Dolphin to recognize the VC title as a separate save file`nThe fourth character sets the region and refresh rate`n`n--- REGION CODES ---`nE = USA`nJ = Japan`nP = PAL`nK = Korea"
     $CustomHeader.GameID      = CreateTextBox -X ($CustomHeader.GameIDLabel.Right)          -Y (DPISize 20) -Width (DPISize 55) -Height (DPISize 22) -Length 4       -Info "--- WARNING ---`nChanging the GameID causes Dolphin to recognize the VC title as a separate save file`nThe fourth character sets the region and refresh rate`n`n--- REGION CODES ---`nE = USA`nJ = Japan`nP = PAL`nK = Korea"
-    $CustomHeader.GameID.Add_TextChanged({
-        if ($this.Text -cmatch "[^A-Z 0-9]") {
-            $this.Text = $this.Text.ToUpper() -replace "[^A-Z 0-9]",''
-            $this.Select($this.Text.Length, $this.Text.Length)
-        }
-        if ($this.Text -cmatch " ") {
-            $this.Text = $this.Text.ToUpper() -replace " ",''
-            $this.Select($this.Text.Length, $this.Text.Length)
-        }
-    })
-
+    
     # Custom Region Checkbox (SNES Only)
     $CustomHeader.EnableRegionLabel = CreateLabel    -X ($CustomHeader.EnableHeaderLabel.Left) -Y (DPISize 52) -Width (DPISize 50) -Height (DPISize 15) -Text "Enable:"                   -Info "Enable in order to change the Game ID and title of the ROM or WAD file"
     $CustomHeader.EnableRegion      = CreateCheckBox -X ($CustomHeader.EnableHeader.Left)      -Y (DPISize 50) -Width (DPISize 20) -Height (DPISize 20) -Name "CustomHeader.EnableRegion" -Info "Enable in order to change the Game ID and title of the ROM or WAD file"
@@ -238,49 +208,15 @@ function CreateMainDialog() {
     # Create combobox
     $Patches.ComboBox = CreateComboBox -X ($Patches.Button.Left) -Y ($Patches.Button.Top - (DPISize 25)) -Width ($Patches.Button.Width) -Height (DPISize 30) -Name "Selected.Patch"
     $global:PatchToolTip = CreateToolTip
-    $Patches.ComboBox.Add_SelectedIndexChanged( {
-        if (!$IsActiveGameField) { return }
-
-        $Settings["Core"][$this.Name] = $this.SelectedIndex
-        foreach ($Item in $Files.json.patches.patch) {
-            if ($Item.title -eq $Patches.ComboBox.Text) {
-                if ( ($IsWiiVC -and $Item.console -eq "Wii VC") -or (!$IsWiiVC -and $Item.console -eq "Native") -or ($Item.console -eq "Both") ) {
-                    $global:GamePatch = $Item
-                    $PatchToolTip.SetToolTip($Patches.Button, ([String]::Format($Item.tooltip, [Environment]::NewLine)))
-                    GetHeader
-                    GetRegion
-                    LoadAdditionalOptions
-                    DisablePatches
-                }
-            }
-        }
-    } )
 
     # Additional Options Checkbox
     $Patches.OptionsLabel = CreateLabel -X ($Patches.Button.Right + (DPISize 10)) -Y ($Patches.ComboBox.Top + (DPISize 5)) -Width (DPISize 85) -Height (DPISize 15) -Text "Enable Options:" -Info "Enable options in order to apply a customizable set of features and changes" 
     $Patches.Options = CreateCheckBox -X ($Patches.OptionsLabel.Right) -Y ($Patches.OptionsLabel.Top - (DPISize 2)) -Width (DPISize 20) -Height (DPISize 20) -Info "Enable options in order to apply a customizable set of features and changes" -Name "Patches.Options" -Checked $True
-    $Patches.Options.Add_CheckStateChanged({
-        $Patches.OptionsButton.Enabled = $this.checked
-        if (!(IsSet $Redux.Groups)) { return }
-        $Redux.Groups.GetEnumerator() | ForEach-Object {
-            if ($_.IsRedux) { $_.Enabled = $this.Checked -and $Patches.Redux.Checked }
-        }
-    })
     $Patches.OptionsLabel.Add_Click({ $Patches.Options.Checked = !$Patches.Options.Checked })
 
     # Redux Checkbox
     $Patches.ReduxLabel = CreateLabel -X ($Patches.Button.Right + (DPISize 10)) -Y ($Patches.OptionsLabel.Bottom + (DPISize 15)) -Width (DPISize 85) -Height (DPISize 15) -Text "Enable Redux:" -Info "Enable the Redux patch which improves game mechanics`nIncludes among other changes the inclusion of the D-Pad for dedicated item buttons"
     $Patches.Redux = CreateCheckBox -X ($Patches.ReduxLabel.Right) -Y ($Patches.ReduxLabel.Top - (DPISize 2)) -Width (DPISize 20) -Height (DPISize 20) -Info "Enable the Redux patch which improves game mechanics`nIncludes among other changes the inclusion of the D-Pad for dedicated item buttons" -Name "Patches.Redux" -Checked $True
-    $Patches.Redux.Add_CheckStateChanged({
-        if (!(IsSet $Redux.Groups)) { return }
-        $Redux.Groups.GetEnumerator() | ForEach-Object {
-            if ($_.IsRedux) { $_.Enabled = $this.Checked -and $Patches.Options.Checked }
-        }
-
-        $FunctionTitle = SetFunctionTitle -Function $GameType.mode
-        if (Get-Command ("AdjustGUI" + $FunctionTitle) -errorAction SilentlyContinue) { &("AdjustGUI" + $FunctionTitle) }
-
-    })
     $Patches.ReduxLabel.Add_Click({ $Patches.Redux.Checked = !$Patches.Redux.Checked })
 
     # Downgrade Checkbox
@@ -321,31 +257,26 @@ function CreateMainDialog() {
     # Remove T64 description
     $VC.RemoveT64Label = CreateLabel -X ($VC.CoreLabel.Right + (DPISize 20)) -Y ($VC.CoreLabel.Top) -Width (DPISize 95) -Height (DPISize 15) -Text "Remove All T64:" -Info "Remove all textures that the Virtual Console replaced in the ROM`nThese replaced textures are known as T64`nThese replaced textures maybe be censored or to make the game look darker more fitting for the Wii"
     $VC.RemoveT64 = CreateCheckBox -X ($VC.RemoveT64Label.Right) -Y ($VC.CoreLabel.Top - (DPISize 2)) -Width (DPISize 20) -Height (DPISize 20) -Checked $True -Info "Remove all textures that the Virtual Console replaced in the ROM`nThese replaced textures are known as T64`nThese replaced textures maybe be censored or to make the game look darker more fitting for the Wii" -Name "VC.RemoveT64"
-    $VC.RemoveT64.Add_CheckStateChanged({ CheckVCOptions })
     $VC.RemoveT64Label.Add_Click({ $VC.RemoveT64.Checked = !$VC.RemoveT64.Checked })
 
     # Expand Memory
     $VC.ExpandMemoryLabel = CreateLabel -X ($VC.RemoveT64.Right + (DPISize 10)) -Y ($VC.CoreLabel.Top) -Width (DPISize 95) -Height (DPISize 15) -Text "Expand Memory:" -Info "Expand the game's memory by 4MB"
     $VC.ExpandMemory = CreateCheckBox -X ($VC.ExpandMemoryLabel.Right) -Y ($VC.CoreLabel.Top - (DPISize 2)) -Width (DPISize 20) -Height (DPISize 20) -Info "Expand the game's memory by 4MB" -Name "VC.ExpandMemory"
-    $VC.ExpandMemory.Add_CheckStateChanged({ CheckVCOptions })
     $VC.ExpandMemoryLabel.Add_Click({ $VC.ExpandMemory.Checked = !$VC.ExpandMemory.Checked })
 
     # Remove Filter
     $VC.RemoveFilterLabel = CreateLabel -X ($VC.RemoveT64.Right + (DPISize 10)) -Y ($VC.CoreLabel.Top) -Width (DPISize 95) -Height (DPISize 15) -Text "Remove Filter:" -Info "Remove the dark overlay filter"
     $VC.RemoveFilter = CreateCheckBox -X ($VC.RemoveFilterLabel.Right) -Y ($VC.CoreLabel.Top - (DPISize 2)) -Width (DPISize 20) -Height (DPISize 20) -Checked $True -Info "Remove the dark overlay filter" -Name "VC.RemoveFilter"
-    $VC.RemoveFilter.Add_CheckStateChanged({ CheckVCOptions })
     $VC.RemoveFilterLabel.Add_Click({ $VC.RemoveFilter.Checked = !$VC.RemoveFilter.Checked })
 
     # Remap D-Pad
     $VC.RemapDPadLabel = CreateLabel -X ($VC.ExpandMemory.Right + (DPISize 10)) -Y ($VC.CoreLabel.Top) -Width (DPISize 95) -Height (DPISize 15) -Text "Remap D-Pad:" -Info "Remap the D-Pad to the actual four D-Pad directional buttons instead of toggling the minimap"
     $VC.RemapDPad = CreateCheckBox -X ($VC.RemapDPadLabel.Right) -Y ($VC.CoreLabel.Top - (DPISize 2)) -Width (DPISize 20) -Height (DPISize 20) -Info "Remap the D-Pad to the actual four D-Pad directional buttons instead of toggling the minimap" -Name "VC.RemapDPad"
-    $VC.RemapDPad.Add_CheckStateChanged({ CheckVCOptions })
     $VC.RemapDPadLabel.Add_Click({ $VC.RemapDPad.Checked = !$VC.RemapDPad.Checked })
 
     # Remap L
     $VC.RemapLLabel = CreateLabel -X ($VC.ExpandMemory.Right + (DPISize 10)) -Y ($VC.CoreLabel.Top) -Width (DPISize 95) -Height (DPISize 15) -Text "Remap L Button:" -Info "Remap the L button to the actual L button button"
     $VC.RemapL = CreateCheckBox -X ($VC.RemapDPadLabel.Right) -Y ($VC.CoreLabel.Top - (DPISize 2)) -Width (DPISize 20) -Height (DPISize 20) -Info "Remap the L button to the actual L button button" -Name "VC.RemapL"
-    $VC.RemapL.Add_CheckStateChanged({ CheckVCOptions })
     $VC.RemapLLabel.Add_Click({ $VC.RemapL.Checked = !$VC.RemapL.Checked })
 
     # Create a label for Minimap
@@ -354,19 +285,16 @@ function CreateMainDialog() {
     # Remap C-Down
     $VC.RemapCDownLabel = CreateLabel -X ($VC.MinimapLabel.Right + (DPISize 20)) -Y ($VC.MinimapLabel.Top) -Width (DPISize 95) -Height (DPISize 15) -Text "Remap C-Down:" -Info "Remap the C-Down button for toggling the minimap instead of using an item"
     $VC.RemapCDown = CreateCheckBox -X ($VC.RemapCDownLabel.Right) -Y ($VC.MinimapLabel.Top - (DPISize 2)) -Width (DPISize 20) -Height (DPISize 20) -Info "Remap the C-Down button for toggling the minimap instead of using an item" -Name "VC.RemapCDown"
-    $VC.RemapCDown.Add_CheckStateChanged({ CheckVCOptions })
     $VC.RemapCDownLabel.Add_Click({ $VC.RemapCDown.Checked = !$VC.RemapCDown.Checked })
 
     # Remap Z
     $VC.RemapZLabel = CreateLabel -X ($VC.RemapCDown.Right + (DPISize 10)) -Y ($VC.MinimapLabel.Top) -Width (DPISize 95) -Height (DPISize 15) -Text "Remap Z Button:" -Info "Remap the Z (GameCube) or ZL and ZR (Classic) buttons for toggling the minimap instead of using an item"
     $VC.RemapZ = CreateCheckBox -X ($VC.RemapZLabel.Right) -Y ($VC.MinimapLabel.Top - (DPISize 2)) -Width (DPISize 20) -Height (DPISize 20) -Info "Remap the Z (GameCube) or ZL and ZR (Classic) buttons for toggling the minimap instead of using an item" -Name "VC.RemapZ"
-    $VC.RemapZ.Add_CheckStateChanged({ CheckVCOptions })
     $VC.RemapZLabel.Add_Click({ $VC.RemapZ.Checked = !$VC.RemapZ.Checked })
 
     # Leave D-Pad Up
     $VC.LeaveDPadUpLabel = CreateLabel -X ($VC.RemapZ.Right + (DPISize 10)) -Y ($VC.MinimapLabel.Top) -Width (DPISize 95) -Height (DPISize 15) -Text "Leave D-Pad Up:" -Info "Leave the D-Pad untouched so it can be used to toggle the minimap"
     $VC.LeaveDPadUp = CreateCheckBox -X ($VC.LeaveDPadUpLabel.Right) -Y ($VC.MinimapLabel.Top - (DPISize 2)) -Width (DPISize 20) -Height (DPISize 20) -Info "Leave the D-Pad untouched so it can be used to toggle the minimap" -Name "VC.LeaveDPadUp"
-    $VC.LeaveDPadUp.Add_CheckStateChanged({ CheckVCOptions })
     $VC.LeaveDPadUpLabel.Add_Click({ $VC.LeaveDPadUp.Checked = !$VC.LeaveDPadUp.Checked })
 
 
@@ -402,6 +330,94 @@ function CreateMainDialog() {
     $global:StatusPanel = CreatePanel -Width (DPISize 625) -Height (DPISize 30)
     $global:StatusGroup = CreateGroupBox -Width (DPISize 590) -Height (DPISize 30)
     $global:StatusLabel = Createlabel -X (DPISize 8) -Y (DPISize 10) -Width (DPISize 570) -Height (DPISize 15)
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function InitializeEvents() {
+    
+    #Current Game
+    $ConsoleComboBox.Add_SelectedIndexChanged({
+        $Settings["Core"][$this.Name] = $this.SelectedIndex
+        if ($this.Text -ne $GameConsole.title) { ChangeGamesList }
+    })
+
+    $CurrentGameComboBox.Add_SelectedIndexChanged({
+        $Settings["Core"][$this.Name] = $this.SelectedIndex
+        if ($this.Text -ne $GameType.title -or $GameType.console -like "*All*") {
+            ChangeGameMode
+            SetVCPanel
+            SetMainScreenSize
+        }
+    })
+
+
+
+    # Custom Header
+    $CustomHeader.Title.Add_TextChanged({
+        if ($this.Text -match "[^a-z 0-9 \: \- \( \) \' \&] \.") {
+            $cursorPos = $this.SelectionStart
+            $this.Text = $this.Text -replace "[^a-z 0-9 \: \- \( \) \' \& \.]",''
+            $this.SelectionStart = $cursorPos - 1
+            $this.SelectionLength = 0
+        }
+    })
+
+    $CustomHeader.GameID.Add_TextChanged({
+        if ($this.Text -cmatch "[^A-Z 0-9]") {
+            $this.Text = $this.Text.ToUpper() -replace "[^A-Z 0-9]",''
+            $this.Select($this.Text.Length, $this.Text.Length)
+        }
+        if ($this.Text -cmatch " ") {
+            $this.Text = $this.Text.ToUpper() -replace " ",''
+            $this.Select($this.Text.Length, $this.Text.Length)
+        }
+    })
+
+
+
+    # Patch Options
+    $Patches.ComboBox.Add_SelectedIndexChanged( {
+        $Settings["Core"][$this.Name] = $this.SelectedIndex
+        foreach ($Item in $Files.json.patches.patch) {
+            if ($Item.title -eq $Patches.ComboBox.Text) {
+                if ( ($IsWiiVC -and $Item.console -eq "Wii VC") -or (!$IsWiiVC -and $Item.console -eq "Native") -or ($Item.console -eq "Both") ) {
+                    $global:GamePatch = $Item
+                    $PatchToolTip.SetToolTip($Patches.Button, ([String]::Format($Item.tooltip, [Environment]::NewLine)))
+                    GetHeader
+                    GetRegion
+                    LoadAdditionalOptions
+                    DisablePatches
+                }
+            }
+        }
+    } )
+
+    $Patches.Options.Add_CheckStateChanged({
+        $Patches.OptionsButton.Enabled = $this.checked
+        DisableReduxOptions
+    })
+
+    $Patches.Redux.Add_CheckStateChanged({
+        DisableReduxOptions
+        $FunctionTitle = SetFunctionTitle -Function $GameType.mode
+        if (Get-Command ("AdjustGUI" + $FunctionTitle) -errorAction SilentlyContinue) { &("AdjustGUI" + $FunctionTitle) }
+
+    })
+
+
+
+    # Patch VC Options
+    $VC.RemoveT64.Add_CheckStateChanged(    { CheckVCOptions } )
+    $VC.ExpandMemory.Add_CheckStateChanged( { CheckVCOptions } )
+    $VC.RemoveFilter.Add_CheckStateChanged( { CheckVCOptions } )
+    $VC.RemapDPad.Add_CheckStateChanged(    { CheckVCOptions } )
+    $VC.RemapL.Add_CheckStateChanged(       { CheckVCOptions } )
+    $VC.RemapCDown.Add_CheckStateChanged(   { CheckVCOptions } )
+    $VC.RemapZ.Add_CheckStateChanged(       { CheckVCOptions } )
+    $VC.LeaveDPadUp.Add_CheckStateChanged(  { CheckVCOptions } )
 
 }
 
@@ -460,14 +476,20 @@ function DisablePatches() {
 
     # Disable boxes if needed
     EnableElem -Elem $Patches.OptionsButton -Active $Patches.Options.Checked
-    if (IsSet $Redux) {
-        $Redux.Groups.GetEnumerator() | ForEach-Object {
-            if ($_.IsRedux) {  EnableElem -Elem $_ -Active ($Patches.Options.Checked -and $Patches.Redux.Checked) }
-        }
-    }
+    DisableReduxOptions
 
 }
 
+
+#==============================================================================================================================================================================================
+function DisableReduxOptions() {
+
+    if (!(IsSet $Redux.Groups)) { return }
+    $Redux.Groups.GetEnumerator() | ForEach-Object {
+        if ($_.IsRedux) { EnableElem -Elem $_ -Active ($Patches.Options.Checked -and $Patches.Redux.Checked) } # $_.Enabled = $this.Checked -and $Patches.Redux.Checked }
+    }
+
+}
 
 
 #==============================================================================================================================================================================================
@@ -613,7 +635,9 @@ function PatchPath_DragDrop() {
 #==============================================================================================================================================================================================
 
 Export-ModuleMember -Function CreateMainDialog
+Export-ModuleMember -Function InitializeEvents
 Export-ModuleMember -Function CheckVCOptions
 Export-ModuleMember -Function DisablePatches
 Export-ModuleMember -Function LoadAdditionalOptions
 Export-ModuleMember -Function SetJSONFile
+Export-ModuleMember -Function DisableReduxOptions

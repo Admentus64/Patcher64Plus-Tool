@@ -1,76 +1,76 @@
 --- REDUX ---
-- Hacking:			Maroc
-- Editing / Revision:		ShadowOne333, MattKimura
-- Original Hacking:		Roman971, TestRunnerSRL, AmazingAmpharos, fig02, krimtonz,
-				rlbond86, KevinPal, junglechief87
+- Hacking:				Maroc
+- Editing / Revision:			ShadowOne333, MattKimura
+- Original Hacking:			Roman971, TestRunnerSRL, AmazingAmpharos, fig02, krimtonz,
+					rlbond86, KevinPal, junglechief87
 --- Additional Options ---
-- Master Quest:			ShadowOne333
-- 16:9 Backgrounds & Textures:	GhostlyDark, ShadowOne333 & CYB3RTR0N
-- Enhanced 16:9 Widescreen:	gamemasterplc & GhostlyDark
+- Master Quest:				ShadowOne333
+- 16:9 Backgrounds & Textures:		GhostlyDark, ShadowOne333 & CYB3RTR0N
+- Enhanced 16:9 Widescreen:		gamemasterplc & GhostlyDark
 - Force Hires Link Model:		GhostlyDark
 - MM Link Voice:			Korey Cryderman & GhostlyDark
-- Feminine Link Voice:		theluigidude2007
-- MM HUD Textures:		GhostlyDark
-- MM Button Positions:		GhostlyDark
-- MM Pause Screen:		Garo-Mastah & CM
-- Easier Minigames:		ShadowOne333
-- Faster Block Pushing:		ShadowOne333
-- Correct Rupee Colors:		GhostlyDark
+- Feminine Link Voice:			theluigidude2007
+- MM HUD Textures:			GhostlyDark
+- MM Button Positions:			GhostlyDark
+- MM Pause Screen:			Garo-Mastah & CM
+- Easier Minigames:			ShadowOne333
+- Faster Block Pushing:			ShadowOne333
+- Correct Rupee Colors:			GhostlyDark
 - Restore Cow Nose Ring:		ShadowOne333
-- Restore Fire Temple:		ShadowOne333
-- Censor Blood			ShadowOne333
+- Restore Fire Temple:			ShadowOne333
+- Censor Blood				ShadowOne333
 - Censor Gerudo Textures:		GhostlyDark & ShadowOne333
 - Pause Screen Delay Fix		zel
-- Debug Map Select		Jared Johnson
-- Set Capacity:			GhostlyDark
+- Debug Map Select			Jared Johnson
+- Set Capacity:				GhostlyDark
 - Show File Select Icons:		ShadowOne333
 - Colors:				GhostlyDark
-- Restore Text:			ShadowOne333
-- Female Pronouns:		Mil
+- Restore Text:				ShadowOne333
+- Female Pronouns:			Mil
 - Various offsets:			Chez Cousteau
 - Admentus (Scripting and Maintaince of all Options)
 
 --- Custom Link Models ---
 - Breath of the Wild (Adult):		Skilarbabcock (www.youtube.com/user/skilarbabcock)
 - Dark Link (Adult):			CrookedPoe
-- Fierce Deity (Adult):		CrookedPoe
+- Fierce Deity (Adult):			CrookedPoe
 - Link's Awakening (Adult):		Skilarbabcock (www.youtube.com/user/skilarbabcock)
 - Majora's Mask (Child):		The3Dude
 - Majora's Mask (Adult):		Skilarbabcock (www.youtube.com/user/skilarbabcock)
-- Ocarina of Time 3D:		Skilarbabcock (www.youtube.com/skilarbabcock)
+- Ocarina of Time 3D:			Skilarbabcock (www.youtube.com/skilarbabcock)
 - Twilight Princess:			Skilarbabcock (www.youtube.com/user/skilarbabcock)
 
 --- Custom Male Models ---
-- Happy Mask Salesman:		Anubis-V1
-- Mega Man:			Megaman Legends
+- Happy Mask Salesman:			Anubis-V1
+- Mega Man:				Megaman Legends
 
 --- Custom Female Models ---
 - Aria the Demon:			AriaHiro64
-- Hatsune Miku - Link:		JanexLane
+- Hatsune Miku - Link:			JanexLane
 - Hatsune Miku - Vocaloid:		JanexLane
-- Malon 3D:			Kimi-Stardust
-- Malon Thicc:			Kimi-Stardust
+- Malon 3D:				Kimi-Stardust
+- Malon Thicc:				Kimi-Stardust
 - Princess Ruto:			Unesag
-- Princess Zelda ALttP (Child):	Unesag
+- Princess Zelda ALttP (Child):		Unesag
 - Princes Zelda ALttP (Adult):		Lopieloo
-- Roll:				Psi-Hate
+- Roll:					Psi-Hate
 - Saria:				Malon's Rose (www.youtube.com/c/MalonRose)
 
 
 --- Quality Assurance ---
-- Translations:			GhostlyDark
+- Translations:				GhostlyDark
 - Custom Models:			GhostlyDark
 
 --- Translations ---
-- Spanish:			eduardo_a2j (v2.2)
+- Spanish:				eduardo_a2j (v2.2)
 - Polish:				RPG (v1.3)
-- Russian:			Zelda64rus (v2.32)
-- Chinese Simplified:		madcell (2009)
-- Debug Map Select:		Zelda Edit
+- Russian:				Zelda64rus (v2.32)
+- Chinese Simplified:			madcell (2009)
+- Debug Map Select:			Zelda Edit
 
 --- Dawn and Dusk ---
-- Lead Development and Music:	Captain Seedy-Eye
-- 64DD Porting:			LuigiBlood
+- Lead Development and Music:		Captain Seedy-Eye
+- 64DD Porting:				LuigiBlood
 - Special Thanks:			PK-LOVE, BWIX, Hylian Modding
 - Testers:				Captain Seedy, LuigiBlood, Hard4Games, ZFG, Dry4Haz, fig02
 
@@ -99,16 +99,16 @@
 
 --- The Missing Link ---
 Director:				Kaze Emanuar
-3D Modelers:			CDi-Fails, /Zel/
-Composers:			Zerovolt0v, A6stringthing, Sauraen, Badub, DezZival
+3D Modelers:				CDi-Fails, /Zel/
+Composers:				Zerovolt0v, A6stringthing, Sauraen, Badub, DezZival
 Concept Artists:			Ty Anderson, Aurora-Xatu
 Testers:				Zerovolt0v, Sauraen, E-Gor, GTM, Collins, Ricar, Fig
-Level Designer:			Kaze Emanuar
-Programmers:			Kaze Emanuar, /Zel/
-Enemy Animator:			rankaisija
-Cinematographers:		Ostrealava02, CDi-Fails, /Zel/
+Level Designer:				Kaze Emanuar
+Programmers:				Kaze Emanuar, /Zel/
+Enemy Animator:				rankaisija
+Cinematographers:			Ostrealava02, CDi-Fails, /Zel/
 Writers:				CDi-Fails, /Zel/
-Special Thanks:			Nokaubure, z64me, Ultra553, OoT Decomp
+Special Thanks:				Nokaubure, z64me, Ultra553, OoT Decomp
 
 --- Master of Time ---
 - doncamilo

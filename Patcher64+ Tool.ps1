@@ -16,6 +16,7 @@ if ( (Get-ExecutionPolicy) -eq "Restricted") {
 #==============================================================================================================================================================================================
 Add-Type -AssemblyName 'System.Windows.Forms'
 Add-Type -AssemblyName 'System.Drawing'
+[Windows.Forms.Application]::EnableVisualStyles()
 
 
 
@@ -23,8 +24,8 @@ Add-Type -AssemblyName 'System.Drawing'
 # Setup global variables
 
 $global:ScriptName = "Patcher64+ Tool"
-$global:VersionDate = "2021-01-23"
-$global:Version     = "v11.1.0"
+$global:VersionDate = "2021-01-24"
+$global:Version     = "v11.1.1"
 
 $global:CommandType = $MyInvocation.MyCommand.CommandType.ToString()
 $global:Definition  = $MyInvocation.MyCommand.Definition.ToString()
@@ -127,7 +128,16 @@ $global:Settings = GetSettings ($Paths.Settings + "\Core.ini")
 if (!(IsSet $Settings.Core))   { $Settings.Core  = @{} }
 if (!(IsSet $Settings.Debug))  { $Settings.Debug = @{} }
 
-# Hi-DPI ModeLe
+# Visual Style
+SetModernVisualStyle ($Settings.Core.ModernStyle -eq $False)
+
+if ($Settings.Core.ModernStyle -eq $False) { [Windows.Forms.Application]::VisualStyleState = [Windows.Forms.VisualStyles.VisualStyleState]::NonClientAreaEnabled }
+else {
+    [Windows.Forms.Application]::EnableVisualStyles()
+    [Windows.Forms.Application]::VisualStyleState = [Windows.Forms.VisualStyles.VisualStyleState]::ClientAndNonClientAreasEnabled
+}
+
+# Hi-DPI Mode
 if ($Settings.Core.HiDPIMode -eq $False)   { $global:DisableHighDPIMode = $True }
 else                                       { $global:DisableHighDPIMode = $False }
 InitializeHiDPIMode
@@ -139,6 +149,7 @@ $Fonts.Medium         = New-Object System.Drawing.Font($Font, 12, [System.Drawin
 $Fonts.Small          = New-Object System.Drawing.Font($Font, 8,  [System.Drawing.FontStyle]::Regular)
 $Fonts.SmallBold      = New-Object System.Drawing.Font($Font, 8,  [System.Drawing.FontStyle]::Bold)
 $Fonts.SmallUnderline = New-Object System.Drawing.Font($Font, 8,  [System.Drawing.FontStyle]::Underline)
+$Fonts.TextFile       = New-Object System.Drawing.Font("Consolas", 8, [System.Drawing.FontStyle]::Regular)
 
 # Hide the PowerShell console from the user
 if ($Settings.Debug.Console -ne $True) { ShowPowerShellConsole $False }
@@ -164,9 +175,15 @@ $CustomHeader.EnableRegion.Add_CheckedChanged({ RestoreCustomRegion })
 RestoreCustomHeader
 RestoreCustomRegion
 
-# Restore VC Checkboxes
+# Active GUI events
+InitializeEvents
+
+# Restore last settings
+ChangeGameMode
+ChangePatchPanel
+SetMainScreenSize
+SetVCPanel
 CheckVCOptions
-if (!$GameIsSelected) { ChangePatchPanel }
 
 # Show the dialog to the user
 if (!$FatalError) { $MainDialog.ShowDialog() | Out-Null }

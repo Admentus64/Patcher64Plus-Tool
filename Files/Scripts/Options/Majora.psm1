@@ -225,6 +225,12 @@ function ByteOptionsMajorasMask() {
 
     # SOUNDS / SFX SOUND EFFECTS #
 
+    if (IsChecked -Elem $Redux.Sounds.DisableSFXEffect) {
+        ChangeBytes -Offset "C3560C" -Values @("08 ", "06 ", "BE ", "A6 ", "AF ", "BF ", "00 ", "1C ", "3C ", "0E ", "80 ", "1E ", "24 ", "E7 ", "B4 ", "B0") # Disable some sfx
+        ChangeBytes -Offset "C45FD8" -Values @("34 ", "09 ", "48 ", "02 ", "10 ", "89 ", "00 ", "0C ", "00 ", "00 ", "00 ", "00 ", "34 ", "09 ", "48 ", "07 ", "10 ", "89 ", "00 ", "09 ", "00 ", "00 ", "00 ", "00 ", "34 ", "09 ", "48 ", "2F ", "10 ", "89 ", "00 ",
+        "06 ", "00 ", "00 ", "00 ", "00 ", "00 ", "00 ", "00 ", "00 ", "00 ", "00 ","00 ", "00 ", "08 ", "06 ", "7C ", "35 ", "3C ", "07 ", "80 ", "1E ", "00 ", "00 ", "00 ", "00 ", "00 ", "00 ", "48 ", "25 ", "03 ", "E0 ", "00 ", "08 ", "27 ", "BD ", "00 ", "20")
+    }
+
     if (IsIndex -Elem $Redux.Sounds.LowHP -Not)                       { ChangeBytes -Offset "B97E2A" -Values (GetSFXID $Redux.Sounds.LowHP.Text) }
     if (IsIndex -Elem $Redux.Sounds.InstrumentHylian -Not -Index 1)   { ChangeBytes -Offset "51CBE"  -Values (GetInstrumentID $Redux.Sounds.InstrumentHylian.Text); ChangeBytes -Offset "C668DC" -Values (GetInstrumentID $Redux.Sounds.InstrumentHylian.Text) }
     if (IsIndex -Elem $Redux.Sounds.InstrumentDeku   -Not -Index 2)   { ChangeBytes -Offset "51CC6"  -Values (GetInstrumentID $Redux.Sounds.InstrumentDeku.Text);   ChangeBytes -Offset "C668DF" -Values (GetInstrumentID $Redux.Sounds.InstrumentDeku.Text)   }
@@ -747,13 +753,15 @@ function CreateTabAudiovisualMajorasMask() {
 
     # SOUNDS / SFX SOUND EFFECTS
     CreateReduxGroup    -Tag  "Sounds" -Text "Sounds / SFX Sound Effects" -Height 2
-    CreateReduxComboBox -Name "LowHP"             -Column 5 -Row 1 -Text "Low HP SFX:"                 -Items @("Default", "Disabled", "Soft Beep")  -Info "Set the sound effect for the low HP beeping"                   -Credits "Ported from Rando"
+    CreateReduxComboBox -Name "LowHP"             -Column 5 -Row 1 -Text "Low HP SFX:" -Items @("Default", "Disabled", "Soft Beep")  -Info "Set the sound effect for the low HP beeping" -Credits "Ported from Rando"
+    CreateReduxCheckBox -Name "DisableSFXEffect"  -Column 5 -Row 2 -Text "Disable SFX Effects" -Info "Remove the SFX Sound Effects for collecting rupees and solving puzzles" -Credits "Marcelo20XX"
+
     $SFX =  @("Ocarina", "Deku Pipes", "Goron Drums", "Zora Guitar", "Female Voice", "Bell", "Cathedral Bell", "Piano", "Soft Harp", "Harp", "Accordion", "Bass Guitar", "Flute", "Whistling Flute", "Gong", "Elder Goron Drums", "Choir", "Arguing", "Tatl", "Giants Singing", "Ikana King", "Frog Croak", "Beaver", "Eagle Seagull", "Dodongo")
     CreateReduxComboBox -Name "InstrumentHylian"  -Column 1 -Row 1 -Text "Instrument (Hylian):" -Default 1 -Shift 30 -Length 200 -Items $SFX -Info "Replace the sound used for playing the Ocarina of Time in Hylian Form" -Credits "Ported from Rando"
     CreateReduxComboBox -Name "InstrumentDeku"    -Column 3 -Row 1 -Text "Instrument (Deku):"   -Default 2 -Shift 30 -Length 200 -Items $SFX -Info "Replace the sound used for playing the Deku Pipes in Deku Form"        -Credits "Ported from Rando"
     CreateReduxComboBox -Name "InstrumentGoron"   -Column 1 -Row 2 -Text "Instrument (Goron):"  -Default 3 -Shift 30 -Length 200 -Items $SFX -Info "Replace the sound used for playing the Goron Drums in Goron Form"      -Credits "Ported from Rando"
     CreateReduxComboBox -Name "InstrumentZora"    -Column 3 -Row 2 -Text "Instrument (Zora):"   -Default 4 -Shift 30 -Length 200 -Items $SFX -Info "Replace the sound used for playing the Zora Guitar in Zora Form"       -Credits "Ported from Rando"
-
+        
 }
 
 

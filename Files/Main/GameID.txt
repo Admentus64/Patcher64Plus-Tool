@@ -3,10 +3,10 @@
 - NARE		Majora's Mask		(N64)
 - NAAE		Super Mario 64		(N64)
 - NAEE		Paper Mario		(N64)
-- NALE		Super Smash Bros.		(N64)
+- NALE		Super Smash Bros.	(N64)
 - NABE		Mario Kart 64		(N64)
 
-- JADE		A Link to the Past		(SNES)
+- JADE		A Link to the Past	(SNES)
 - JAAE		Super Mario World	(SNES)
 - JAVE		Super Metroid		(SNES)
 
@@ -32,13 +32,13 @@ Super Mario 64				(N64)
 Paper Mario				(N64)
 A722F8161FF489943191330BF8416496	(Rev 0)
 
-Super Smash Bros.				(N64)
+Super Smash Bros.			(N64)
 F7C52568A31AADF26E14DC2B6416B2ED	(Rev 0)
 
 Mario Kart 64				(N64)
 3A67D9986F54EB282924FCA4CD5F6DFF	(Rev 0)
 
-A Link to the Past				(SNES)
+A Link to the Past			(SNES)
 3F4D2B3C92B6308BEB1AF2CE15C29DEB	(Rev 0)
 
 Super Mario World			(SNES)

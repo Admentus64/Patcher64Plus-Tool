@@ -1,3 +1,11 @@
+v11.1.1
+- Added new option to toggle visual styles for the GUI
+- Fixed internal game title as showing as empty in native mode
+- Optimized boot-up flow
+- Credits & Info use a mono-styled font now for proper formatting
+- "Info / Credits" Window has been made wider to fit the new mono-styled font
+- Added new "Remove SFX Effects" option for MM (thank you Marcelo20XX!)
+
 v11.1.0
 - Added support for removing Region Protection for SNES ROMs if included in the database
 - Region Code patching (SNES) can now be toggled separately from regular Custom Header patching

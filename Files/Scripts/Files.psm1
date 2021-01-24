@@ -161,6 +161,7 @@ function SetFileParameters() {
     # Store text files
     $Files.text.credits                     = $Paths.Main + "\Credits.txt"
     $Files.text.gameID                      = $Paths.Main + "\GameID.txt"
+    $Files.text.mainCredits                 = $Paths.Base + "\Info\Credits.txt"
 
 
     # Check if all files so far exist

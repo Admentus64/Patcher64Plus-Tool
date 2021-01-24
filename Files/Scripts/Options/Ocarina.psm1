@@ -302,6 +302,7 @@ function ByteOptionsOcarinaOfTime() {
         ChangeBytes -Offset "C91F8F" -Values "3C" # Phantom Ganon   0xC91AD0 -> 0xC96840 (Length: 0x4D70) (ovl_Boss_Ganondrof) (HP: 1E -> 18) (Mass: 32)
         ChangeBytes -Offset "CE6D2F" -Values "30" # Volvagia        0xCE65F0 -> 0xCED920 (Length: 0x7330) (ovl_Boss_Fd) (Has HP) (HP: 18) (Mass: 32) / 0xD04790 -> 0xD084C0 (Length:0x3D30) (ovl_Boss_Fd2) (Has No HP, Forwards HP to Flying)
         ChangeBytes -Offset "D3B4A7" -Values "28" # Morpha          0xD3ADF0 -> 0xD46390 (Length: 0xB5A0) (ovl_Boss_Mo) (HP: 14) (Mass: 00)
+        ChangeBytes -Offset "DAC824" -Values "48" # Bongo Bongo     0xDA1660 -> 0xDADB80 (Length: 0xC520) (ovl_Boss_Sst) (HP: 24) (Mass: C8)
 
         #ChangeBytes -Offset "C91B99" -Values "1D" # Phantom Ganon 2A
         #ChangeBytes -Offset "C91C95" -Values "1D" # Phantom Ganon
@@ -327,7 +328,6 @@ function ByteOptionsOcarinaOfTime() {
 
         # ChangeBytes -Offset "" -Values "08" # Barinade            0xD22360 -> 0xD30B50 (Length: 0xE7F0)(ovl_Boss_Va) (HP: 04 -> 03 -> 03) (Mass: 00)
         # ChangeBytes -Offset "" -Values "06" # Barinade
-        # ChangeBytes -Offset "" -Values "48" # Bongo Bongo         0xDA1660 -> 0xDADB80 (Length: 0xC520) (ovl_Boss_Sst) (HP: 24) (Mass: C8)
         # ChangeBytes -Offset "" -Values "30" # Twinrova            0xD612E0 -> 0xD74360 (Length: 0x13080) (ovl_Boss_Tw) (HP: 18) (Mass: FF)
         # ChangeBytes -Offset "D7FDA3" -Values "50" # Ganondorf     0xD7F3F0 -> 0xDA1660 (Length: 0x22270) (ovl_Boss_Ganon) (HP: 28) (Mass: 32)
         # ChangeBytes -Offset "" -Values "3C" # Ganon               0xE826C0 -> 0xE939B0 (Length: 0x112F0) (ovl_Boss_Ganon2) (HP: 1E) (Mass: FF)
@@ -338,10 +338,10 @@ function ByteOptionsOcarinaOfTime() {
         ChangeBytes -Offset "C91F8F" -Values "5A" # Phantom Ganon   0xC91AD0 -> 0xC96840 (Length: 0x4D70) (ovl_Boss_Ganondrof) (HP: 1E -> 18) (Mass: 32)
         ChangeBytes -Offset "CE6D2F" -Values "48" # Volvagia        0xCE65F0 -> 0xCED920 (Length: 0x7330) (ovl_Boss_Fd) (Has HP) (HP: 18) (Mass: 32) / 0xD04790 -> 0xD084C0 (Length:0x3D30) (ovl_Boss_Fd2) (Has No HP, Forwards HP to Flying)    
         ChangeBytes -Offset "D3B4A7" -Values "3C" # Morpha          0xD3ADF0 -> 0xD46390 (Length: 0xB5A0) (ovl_Boss_Mo) (HP: 14) (Mass: 00)
+        ChangeBytes -Offset "DAC824" -Values "6C" # Bongo Bongo     0xDA1660 -> 0xDADB80 (Length: 0xC520) (ovl_Boss_Sst) (HP: 24) (Mass: C8)
 
         # ChangeBytes -Offset "" -Values "0C" # Barinade            0xD22360 -> 0xD30B50 (Length: 0xE7F0)(ovl_Boss_Va) (HP: 04 -> 03 -> 03) (Mass: 00)
         # ChangeBytes -Offset "" -Values "09" # Barinade
-        # ChangeBytes -Offset "" -Values "6C" # Bongo Bongo         0xDA1660 -> 0xDADB80 (Length: 0xC520) (ovl_Boss_Sst) (HP: 24) (Mass: C8)
         # ChangeBytes -Offset "" -Values "48 # Twinrova            0xD612E0 -> 0xD74360 (Length: 0x13080) (ovl_Boss_Tw) (HP: 18) (Mass: FF)
         # ChangeBytes -Offset "D7FDA3" -Values "78" # Ganondorf     0xD7F3F0 -> 0xDA1660 (Length: 0x22270) (ovl_Boss_Ganon) (HP: 28) (Mass: 32)
         # ChangeBytes -Offset "" -Values "5A" # Ganon               0xE826C0 -> 0xE939B0 (Length: 0x112F0) (ovl_Boss_Ganon2) (HP: 1E) (Mass: FF)

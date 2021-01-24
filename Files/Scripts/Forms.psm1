@@ -99,11 +99,12 @@ function CreatePanel([int]$X, [int]$Y, [int]$Width, [int]$Height, [String]$Name,
 
 
 #==============================================================================================================================================================================================
-function CreateTextBox([int]$X=0, [int]$Y=0, [int]$Width=0, [int]$Height=0, [int]$Length=10, [String]$Name, [String]$Tag, [Switch]$ReadOnly, [Switch]$Multiline, [String]$Text="", [Switch]$IsGame, [Object]$AddTo=$Last.Group) {
+function CreateTextBox([int]$X=0, [int]$Y=0, [int]$Width=0, [int]$Height=0, [int]$Length=10, [String]$Name, [String]$Tag, [Switch]$ReadOnly, [Switch]$Multiline, [String]$Text="", [Switch]$IsGame, [Switch]$TextFileFont, [Object]$AddTo=$Last.Group) {
     
     $TextBox = CreateForm -X $X -Y $Y -Width $Width -Height $Height -Name $Name -Tag $Tag -IsGame $IsGame -Object (New-Object System.Windows.Forms.TextBox) -AddTo $AddTo
     $TextBox.Text = $Text
-    $TextBox.Font = $Fonts.Small
+    if ($TextFileFont)   { $TextBox.Font = $Fonts.TextFile }
+    else                 { $TextBox.Font = $Fonts.Small }
     $TextBox.MaxLength = $Length
 
     if ($ReadOnly) {

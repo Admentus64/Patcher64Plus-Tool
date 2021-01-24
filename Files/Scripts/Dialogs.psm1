@@ -73,7 +73,9 @@ function CreateLanguageContent($Columns=3) {
 function CreateCreditsDialog() {
     
     # Create Dialog
-    $global:CreditsDialog = CreateDialog -Width (DPISize 650) -Height (DPISize 550) -Icon $Files.icon.credits
+
+    if ($DisableHighDPIMode) { $width = 730 } else { $width = 700 }
+    $global:CreditsDialog = CreateDialog -Width (DPISize $width) -Height (DPISize 550) -Icon $Files.icon.credits
     $CloseButton = CreateButton -X ($CreditsDialog.Width / 2 - (DPISize 40)) -Y ($CreditsDialog.Height - (DPISize 90)) -Width (DPISize 80) -Height (DPISize 35) -Text "Close" -AddTo $CreditsDialog
     $CloseButton.Add_Click({ $CreditsDialog.Hide() })
 
@@ -83,7 +85,7 @@ function CreateCreditsDialog() {
     # Create Switch subpanel buttons
     $global:Credits = @{}
     $Credits.Buttons = @()
-    $Credits.Buttons += CreateButton -X (DPISize 40) -Y (DPISize 70) -Width (DPISize 110) -Height (DPISize 30) -ForeColor "White" -BackColor "Gray" -Text "Info" -Tag $Credits.Buttons.Count -Info "Check the info for this game" -AddTo $CreditsDialog
+    $Credits.Buttons += CreateButton -X (DPISize 40) -Y (DPISize 70) -Width (DPISize 120) -Height (DPISize 30) -ForeColor "White" -BackColor "Gray" -Text "Info" -Tag $Credits.Buttons.Count -Info "Check the info for this game" -AddTo $CreditsDialog
     $Credits.Buttons += CreateButton -X ($Credits.Buttons[0].Right) -Y $Credits.Buttons[0].Top -Width $Credits.Buttons[0].Width -Height $Credits.Buttons[0].Height -ForeColor "White" -BackColor "Gray" -Text "Credits"  -Tag $Credits.Buttons.Count -Info "Check the credits for this game" -AddTo $CreditsDialog
     $Credits.Buttons += CreateButton -X ($Credits.Buttons[1].Right) -Y $Credits.Buttons[0].Top -Width $Credits.Buttons[0].Width -Height $Credits.Buttons[0].Height -ForeColor "White" -BackColor "Gray" -Text "GameID's" -Tag $Credits.Buttons.Count -Info "Open the list with official and patched GameID's" -AddTo $CreditsDialog
     $Credits.Buttons += CreateButton -X ($Credits.Buttons[2].Right) -Y $Credits.Buttons[0].Top -Width $Credits.Buttons[0].Width -Height $Credits.Buttons[0].Height -ForeColor "White" -BackColor "Gray" -Text "Misc"     -Tag $Credits.Buttons.Count -Info "General credits and info in general" -AddTo $CreditsDialog
@@ -94,9 +96,9 @@ function CreateCreditsDialog() {
 
     # Create Text Box
     $Credits.Sections = @()
-    $Credits.Sections += CreateTextBox -X (DPISize 40) -Y ($Credits.Buttons[0].Bottom + (DPISize 10)) -Width ($CreditsDialog.Width - (DPISize 100)) -Height ($CloseButton.Top - (DPISize 120)) -ReadOnly -Multiline -AddTo $CreditsDialog -Tag "Info"
-    $Credits.Sections += CreateTextBox -X $Credits.Sections[0].Left -Y $Credits.Sections[0].Top -Width $Credits.Sections[0].Width -Height $Credits.Sections[0].Height -ReadOnly -Multiline -AddTo $CreditsDialog -Tag "Credits"
-    $Credits.Sections += CreateTextBox -X $Credits.Sections[0].Left -Y $Credits.Sections[0].Top -Width $Credits.Sections[0].Width -Height $Credits.Sections[0].Height -ReadOnly -Multiline -AddTo $CreditsDialog -Tag "GameID's"
+    $Credits.Sections += CreateTextBox -X (DPISize 40) -Y ($Credits.Buttons[0].Bottom + (DPISize 10)) -Width ($CreditsDialog.Width - (DPISize 100)) -Height ($CloseButton.Top - (DPISize 120)) -ReadOnly -Multiline -AddTo $CreditsDialog -Tag "Info" -TextFileFont
+    $Credits.Sections += CreateTextBox -X $Credits.Sections[0].Left -Y $Credits.Sections[0].Top -Width $Credits.Sections[0].Width -Height $Credits.Sections[0].Height -ReadOnly -Multiline -AddTo $CreditsDialog -Tag "Credits"  -TextFileFont
+    $Credits.Sections += CreateTextBox -X $Credits.Sections[0].Left -Y $Credits.Sections[0].Top -Width $Credits.Sections[0].Width -Height $Credits.Sections[0].Height -ReadOnly -Multiline -AddTo $CreditsDialog -Tag "GameID's" -TextFileFont
     AddTextFileToTextbox -TextBox $Credits.Sections[2] -File $Files.text.gameID
     $Credits.Sections += CreatePanel   -X $Credits.Sections[0].Left -Y $Credits.Sections[0].Top -Width $Credits.Sections[0].Width -Height $Credits.Sections[0].Height -AddTo $CreditsDialog -Tag "Misc"
     $Credits.Sections += CreatePanel   -X $Credits.Sections[0].Left -Y $Credits.Sections[0].Top -Width $Credits.Sections[0].Width -Height $Credits.Sections[0].Height -AddTo $CreditsDialog -Tag "Checksum"
@@ -134,10 +136,10 @@ function CreateCreditsDialog() {
     $PayPal1Label  = CreateLabel -X (DPISize 10)         -Y ($Patreon1Label.Bottom + (DPISize 2)) -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold             -Text ("PayPal")                    -AddTo $Credits.Sections[3]
     $PayPal2Label  = CreateLabel -X $PayPal1Label.Right  -Y ($Patreon1Label.Bottom + (DPISize 2)) -Width (DPISize 200) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("www.paypal.com/paypalme/Admentus") -AddTo $Credits.Sections[3]
 
-    $Discord2Label.add_Click({[system.Diagnostics.Process]::start("https://discord.gg/P22GGzz")})
-    $GitHub2Label.add_Click({[system.Diagnostics.Process]::start("https://github.com/Admentus64")})
-    $Patreon2Label.add_Click({[system.Diagnostics.Process]::start("https://www.patreon.com/Admentus")})
-    $PayPal2Label.add_Click({[system.Diagnostics.Process]::start("https://www.paypal.com/paypalme/Admentus/")})
+    $Discord2Label.add_Click( { [system.Diagnostics.Process]::start("https://discord.gg/P22GGzz") } )
+    $GitHub2Label.add_Click(  { [system.Diagnostics.Process]::start("https://github.com/Admentus64") } )
+    $Patreon2Label.add_Click( { [system.Diagnostics.Process]::start("https://www.patreon.com/Admentus") } )
+    $PayPal2Label.add_Click(  { [system.Diagnostics.Process]::start("https://www.paypal.com/paypalme/Admentus/") } )
     $Discord2Label.ForeColor = $GitHub2Label.ForeColor = $Patreon2Label.ForeColor = $PayPal2Label.ForeColor = "Blue"
 
 
@@ -197,9 +199,9 @@ function CreateSettingsDialog() {
     $GeneralSettings.Bit64               = CreateSettingsCheckbox -Name "Bit64"            -Column 1 -Row 1 -Text "Use 64-Bit Tools" -Checked ([Environment]::Is64BitOperatingSystem) -Info "Use 64-bit tools instead of 32-bit tools if available for patching ROMs"
     $GeneralSettings.DoubleClick         = CreateSettingsCheckbox                          -Column 2 -Row 1 -Text "Double Click"                                                      -Info "Allows a PowerShell file to be opened by double-clicking it"
     $GeneralSettings.DoubleClick.Checked = ((Get-ItemProperty -LiteralPath "HKLM:\Software\Classes\Microsoft.PowerShellScript.1\Shell").'(default)' -eq '0')
-    $GeneralSettings.ClearType           = CreateSettingsCheckbox -Name "ClearType"        -Column 3 -Row 1 -Text "Use ClearType Font"  -Checked $True                                -Info ('Use the ClearType font "Segoe UI" instead of the default font "Microsft Sans Serif"' + "`nThe option will only go in effect when opening the tool`nPlease restart the tool when changing this option")
-    $GeneralSettings.HiDPIMode           = CreateSettingsCheckbox -Name "HiDPIMode"        -Column 1 -Row 2 -Text "Use Hi-DPI Mode"     -Checked $True                                -Info "Enables Hi-DPI Mode suitable for higher resolution displays`nThe option will only go in effect when opening the tool`nPlease restart the tool when changing this option"
-    
+    $GeneralSettings.ClearType           = CreateSettingsCheckbox -Name "ClearType"        -Column 3 -Row 1 -Text "Use ClearType Font" -Checked $True                                 -Info ('Use the ClearType font "Segoe UI" instead of the default font "Microsft Sans Serif"' + "`nThe option will only go in effect when opening the tool`nPlease restart the tool when changing this option")
+    $GeneralSettings.HiDPIMode           = CreateSettingsCheckbox -Name "HiDPIMode"        -Column 1 -Row 2 -Text "Use Hi-DPI Mode"    -Checked $True                                 -Info "Enables Hi-DPI Mode suitable for higher resolution displays`nThe option will only go in effect when opening the tool`nPlease restart the tool when changing this option"
+    $GeneralSettings.ModernStyle         = CreateSettingsCheckbox -Name "ModernStyle"      -Column 2 -Row 2 -Text "Use Modern Visual Style"                                           -Info "Use a modern-looking visual style for the whole interface of the tool"
 
     # Advanced Settings
     $GeneralSettings.Box                 = CreateReduxGroup -Y ($GeneralSettings.Box.Bottom + (DPISize 10)) -IsGame $False -Height 2 -AddTo $SettingsDialog -Text "Advanced Settings"
@@ -242,6 +244,7 @@ function CreateSettingsDialog() {
 
     # Double Click
     $GeneralSettings.DoubleClick.Add_CheckStateChanged({ TogglePowerShellOpenWithClicks $this.Checked })
+    $GeneralSettings.ModernStyle.Add_CheckStateChanged({ SetModernVisualStyle $this.checked })
 
     # Change Widescreen
     $GeneralSettings.ChangeWidescreen.Add_CheckStateChanged({
@@ -272,6 +275,7 @@ function CreateSettingsDialog() {
             }
             $global:GameSettings = GetSettings -File (GetGameSettingsFile) -IsGame
             LoadAdditionalOptions
+            DisableReduxOptions
         })
     }
 

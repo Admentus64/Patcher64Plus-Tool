@@ -424,7 +424,7 @@ function GetHeader() {
     }
     else {
         if     (IsSet $GamePatch.rom_title)    { $CustomHeader.Title.Text  = $GamePatch.rom_title }
-        elseif (IsSet $GamePatch.rom_title)    { $CustomHeader.Title.Text  = $GameType.rom_title }
+        elseif (IsSet $GameType.rom_title)     { $CustomHeader.Title.Text  = $GameType.rom_title }
         else                                   { $CustomHeader.Title.Text  = "" }
 
         if     (IsSet $GamePatch.rom_gameID)   { $CustomHeader.GameID.Text = $GamePatch.rom_gameID }
@@ -653,6 +653,7 @@ function EnableGUI([Boolean]$Enable) {
     $InputPaths.GamePanel.Enabled = $InputPaths.InjectPanel.Enabled = $InputPaths.PatchPanel.Enabled = $Enable
     $CurrentGamePanel.Enabled = $CustomHeader.Panel.Enabled = $Enable
     $Patches.Panel.Enabled = $MiscPanel.Enabled = $VC.Panel.Enabled = $Enable
+    SetModernVisualStyle $GeneralSettings.ModernStyle.Checked
 
 }
 
@@ -820,6 +821,15 @@ function TogglePowerShellOpenWithClicks([Boolean]$Enable) {
 
 
 #==================================================================================================================================================================================================================================================================
+function SetModernVisualStyle([Boolean]$Enable) {
+
+    if ($Enable)   { [Windows.Forms.Application]::VisualStyleState = [Windows.Forms.VisualStyles.VisualStyleState]::ClientAndNonClientAreasEnabled }
+    else           { [Windows.Forms.Application]::VisualStyleState = [Windows.Forms.VisualStyles.VisualStyleState]::NonClientAreaEnabled }
+
+}
+
+
+#==================================================================================================================================================================================================================================================================
 function SetFunctionTitle([String]$Function) {
 
     $Function = $Function -replace " ", ""
@@ -889,5 +899,6 @@ Export-ModuleMember -Function CreateSubPath
 
 Export-ModuleMember -Function ShowPowerShellConsole
 Export-ModuleMember -Function TogglePowerShellOpenWithClicks
+Export-ModuleMember -Function SetModernVisualStyle
 Export-ModuleMember -Function SetFunctionTitle
 Export-ModuleMember -Function SetBitmap
