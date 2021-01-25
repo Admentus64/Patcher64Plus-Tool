@@ -414,22 +414,26 @@ function PatchPath_Finish([Object]$TextBox, [String]$Path) {
 function GetHeader() {
     
     if ($IsWiiVC) {
-        if     (IsSet $GamePatch.vc_title)     { $CustomHeader.Title.Text  = $GamePatch.vc_title }
-        elseif (IsSet $GameType.vc_title)      { $CustomHeader.Title.Text  = $GameType.vc_title }
-        else                                   { $CustomHeader.Title.Text  = "" }
+        if ( (IsSet $GamePatch.redux.vc_title) -and (IsChecked $Patches.Redux) )     { $CustomHeader.Title.Text  = $GamePatch.redux.vc_title }
+        elseif (IsSet $GamePatch.vc_title)                                           { $CustomHeader.Title.Text  = $GamePatch.vc_title }
+        elseif (IsSet $GameType.vc_title)                                            { $CustomHeader.Title.Text  = $GameType.vc_title }
+        else                                                                         { $CustomHeader.Title.Text  = "" }
 
-        if     (IsSet $GamePatch.vc_gameID)    { $CustomHeader.GameID.Text = $GamePatch.vc_gameID }
-        elseif (IsSet $GameType.vc_gameID)     { $CustomHeader.GameID.Text = $GameType.vc_gameID }
-        else                                   { $CustomHeader.GameID.Text = "" }
+        if ( (IsSet $GamePatch.redux.vc_gameID) -and (IsChecked $Patches.Redux) )    { $CustomHeader.GameID.Text = $GamePatch.redux.vc_gameID }
+        elseif (IsSet $GamePatch.vc_gameID)                                          { $CustomHeader.GameID.Text = $GamePatch.vc_gameID }
+        elseif (IsSet $GameType.vc_gameID)                                           { $CustomHeader.GameID.Text = $GameType.vc_gameID }
+        else                                                                         { $CustomHeader.GameID.Text = "" }
     }
     else {
-        if     (IsSet $GamePatch.rom_title)    { $CustomHeader.Title.Text  = $GamePatch.rom_title }
-        elseif (IsSet $GameType.rom_title)     { $CustomHeader.Title.Text  = $GameType.rom_title }
-        else                                   { $CustomHeader.Title.Text  = "" }
+        if ( (IsSet $GamePatch.redux.rom_title) -and (IsChecked $Patches.Redux) )    { $CustomHeader.Title.Text  = $GamePatch.redux.rom_title }
+        elseif (IsSet $GamePatch.rom_title)                                          { $CustomHeader.Title.Text  = $GamePatch.rom_title }
+        elseif (IsSet $GameType.rom_title)                                           { $CustomHeader.Title.Text  = $GameType.rom_title }
+        else                                                                         { $CustomHeader.Title.Text  = "" }
 
-        if     (IsSet $GamePatch.rom_gameID)   { $CustomHeader.GameID.Text = $GamePatch.rom_gameID }
-        elseif (IsSet $GameType.rom_gameID)    { $CustomHeader.GameID.Text = $GameType.rom_gameID }
-        else                                   { $CustomHeader.GameID.Text = "" }
+        if ( (IsSet $GamePatch.redux.rom_gameID) -and (IsChecked $Patches.Redux) )   { $CustomHeader.GameID.Text = $GamePatch.redux.rom_gameID }
+        elseif (IsSet $GamePatch.rom_gameID)                                         { $CustomHeader.GameID.Text = $GamePatch.rom_gameID }
+        elseif (IsSet $GameType.rom_gameID)                                          { $CustomHeader.GameID.Text = $GameType.rom_gameID }
+        else                                                                         { $CustomHeader.GameID.Text = "" }
     }
 
 }

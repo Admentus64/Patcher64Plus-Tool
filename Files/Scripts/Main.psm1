@@ -401,6 +401,7 @@ function InitializeEvents() {
     })
 
     $Patches.Redux.Add_CheckStateChanged({
+        GetHeader
         DisableReduxOptions
         $FunctionTitle = SetFunctionTitle -Function $GameType.mode
         if (Get-Command ("AdjustGUI" + $FunctionTitle) -errorAction SilentlyContinue) { &("AdjustGUI" + $FunctionTitle) }

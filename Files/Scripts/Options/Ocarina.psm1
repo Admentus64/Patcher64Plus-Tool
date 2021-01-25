@@ -295,58 +295,39 @@ function ByteOptionsOcarinaOfTime() {
 
 
 
-    <#
     if (IsText -Elem $Redux.Hero.BossHP -Compare "2x Boss HP") {
         ChangeBytes -Offset "C44F2B" -Values "14" # Gohma           0xC44C30 -> 0xC4ABB0 (Length: 0x5F80) (ovl_Boss_Goma) (HP: 0A) (Mass: FF)
         ChangeBytes -Offset "C3B9FF" -Values "18" # King Dodongo    0xC3B150 -> 0xC44C30 (Length: 0x9AE0) (ovl_Boss_Dodongo) (HP: 0C) (Mass: 00)
-        ChangeBytes -Offset "C91F8F" -Values "3C" # Phantom Ganon   0xC91AD0 -> 0xC96840 (Length: 0x4D70) (ovl_Boss_Ganondrof) (HP: 1E -> 18) (Mass: 32)
+        ChangeBytes -Offset "C91F8F" -Values "3C" # Phantom Ganon   0xC91AD0 -> 0xC96840 (Length: 0x4D70) (ovl_Boss_Ganondrof) (HP: 1E) (Mass: 32)
+        ChangeBytes -Offset "C91F8F" -Values "30" # Phantom Ganon   (Phase 2) (HP: <19)
         ChangeBytes -Offset "CE6D2F" -Values "30" # Volvagia        0xCE65F0 -> 0xCED920 (Length: 0x7330) (ovl_Boss_Fd) (Has HP) (HP: 18) (Mass: 32) / 0xD04790 -> 0xD084C0 (Length:0x3D30) (ovl_Boss_Fd2) (Has No HP, Forwards HP to Flying)
         ChangeBytes -Offset "D3B4A7" -Values "28" # Morpha          0xD3ADF0 -> 0xD46390 (Length: 0xB5A0) (ovl_Boss_Mo) (HP: 14) (Mass: 00)
         ChangeBytes -Offset "DAC824" -Values "48" # Bongo Bongo     0xDA1660 -> 0xDADB80 (Length: 0xC520) (ovl_Boss_Sst) (HP: 24) (Mass: C8)
-
-        #ChangeBytes -Offset "C91B99" -Values "1D" # Phantom Ganon 2A
-        #ChangeBytes -Offset "C91C95" -Values "1D" # Phantom Ganon
-        #ChangeBytes -Offset "C922C3" -Values "1D" # Phantom Ganon
-        #ChangeBytes -Offset "C92399" -Values "1D" # Phantom Ganon
-        #ChangeBytes -Offset "C9263F" -Values "1D" # Phantom Ganon
-        #ChangeBytes -Offset "C9266B" -Values "1D" # Phantom Ganon
-        #ChangeBytes -Offset "C92AE7" -Values "1D" # Phantom Ganon
-
-        #ChangeBytes -Offset "C91BE1" -Values "1D" # Phantom Ganon
-        #ChangeBytes -Offset "C91C4B" -Values "1D" # Phantom Ganon
-        #ChangeBytes -Offset "C91C91" -Values "1D" # Phantom Ganon
-        #ChangeBytes -Offset "C91CCD" -Values "1D" # Phantom Ganon
-        #ChangeBytes -Offset "C91D2D" -Values "1D" # Phantom Ganon
-        #ChangeBytes -Offset "C91D8D" -Values "1D" # Phantom Ganon
-        #ChangeBytes -Offset "C91E9B" -Values "1D" # Phantom Ganon
-        #ChangeBytes -Offset "C91F83" -Values "1D" # Phantom Ganon
-        #ChangeBytes -Offset "C9200B" -Values "1D" # Phantom Ganon
-        #ChangeBytes -Offset "C920EB" -Values "1D" # Phantom Ganon
-        #ChangeBytes -Offset "C92123" -Values "1D" # Phantom Ganon
-        #ChangeBytes -Offset "C92177" -Values "1D" # Phantom Ganon
-        #ChangeBytes -Offset "C9219F" -Values "1D" # Phantom Ganon
+        ChangeBytes -Offset "D7FDA3" -Values "50" # Ganondorf       0xD7F3F0 -> 0xDA1660 (Length: 0x22270) (ovl_Boss_Ganon) (HP: 28) (Mass: 32)
+        ChangeBytes -Offset "E82AFB" -Values "3C" # Ganon           0xE826C0 -> 0xE939B0 (Length: 0x112F0) (ovl_Boss_Ganon2) (HP: 1E) (Mass: FF)
+        ChangeBytes -Offset "E87F2F" -Values "29" # Ganon           (Phase 2) (HP: <15)
 
         # ChangeBytes -Offset "" -Values "08" # Barinade            0xD22360 -> 0xD30B50 (Length: 0xE7F0)(ovl_Boss_Va) (HP: 04 -> 03 -> 03) (Mass: 00)
         # ChangeBytes -Offset "" -Values "06" # Barinade
         # ChangeBytes -Offset "" -Values "30" # Twinrova            0xD612E0 -> 0xD74360 (Length: 0x13080) (ovl_Boss_Tw) (HP: 18) (Mass: FF)
-        # ChangeBytes -Offset "D7FDA3" -Values "50" # Ganondorf     0xD7F3F0 -> 0xDA1660 (Length: 0x22270) (ovl_Boss_Ganon) (HP: 28) (Mass: 32)
-        # ChangeBytes -Offset "" -Values "3C" # Ganon               0xE826C0 -> 0xE939B0 (Length: 0x112F0) (ovl_Boss_Ganon2) (HP: 1E) (Mass: FF)
+        
     }
     elseif (IsText -Elem $Redux.Hero.BossHP -Compare "3x Boss HP") {
         ChangeBytes -Offset "C44F2B" -Values "1E" # Gohma           0xC44C30 -> 0xC4ABB0 (Length: 0x5F80) (ovl_Boss_Goma) (HP: 0A) (Mass: FF)
         ChangeBytes -Offset "C3B9FF" -Values "24" # King Dodongo    0xC3B150 -> 0xC44C30 (Length: 0x9AE0) (ovl_Boss_Dodongo) (HP: 0C) (Mass: 00)
-        ChangeBytes -Offset "C91F8F" -Values "5A" # Phantom Ganon   0xC91AD0 -> 0xC96840 (Length: 0x4D70) (ovl_Boss_Ganondrof) (HP: 1E -> 18) (Mass: 32)
-        ChangeBytes -Offset "CE6D2F" -Values "48" # Volvagia        0xCE65F0 -> 0xCED920 (Length: 0x7330) (ovl_Boss_Fd) (Has HP) (HP: 18) (Mass: 32) / 0xD04790 -> 0xD084C0 (Length:0x3D30) (ovl_Boss_Fd2) (Has No HP, Forwards HP to Flying)    
+        ChangeBytes -Offset "C91F8F" -Values "5A" # Phantom Ganon   0xC91AD0 -> 0xC96840 (Length: 0x4D70) (ovl_Boss_Ganondrof) (HP: 1E) (Mass: 32)
+        ChangeBytes -Offset "C91F8F" -Values "48" # Phantom Ganon   (Phase 2) (HP: <19)
+        ChangeBytes -Offset "CE6D2F" -Values "48" # Volvagia        0xCE65F0 -> 0xCED920 (Length: 0x7330) (ovl_Boss_Fd) (Has HP) (HP: 18) (Mass: 32) / 0xD04790 -> 0xD084C0 (Length:0x3D30) (ovl_Boss_Fd2) (Has No HP, Forwards HP to Flying)
         ChangeBytes -Offset "D3B4A7" -Values "3C" # Morpha          0xD3ADF0 -> 0xD46390 (Length: 0xB5A0) (ovl_Boss_Mo) (HP: 14) (Mass: 00)
         ChangeBytes -Offset "DAC824" -Values "6C" # Bongo Bongo     0xDA1660 -> 0xDADB80 (Length: 0xC520) (ovl_Boss_Sst) (HP: 24) (Mass: C8)
+        ChangeBytes -Offset "D7FDA3" -Values "78" # Ganondorf       0xD7F3F0 -> 0xDA1660 (Length: 0x22270) (ovl_Boss_Ganon) (HP: 28) (Mass: 32)
+        ChangeBytes -Offset "E82AFB" -Values "5A" # Ganon           0xE826C0 -> 0xE939B0 (Length: 0x112F0) (ovl_Boss_Ganon2) (HP: 1E) (Mass: FF)
+        ChangeBytes -Offset "E87F2F" -Values "3D" # Ganon           (Phase 2) (HP: <15)
 
         # ChangeBytes -Offset "" -Values "0C" # Barinade            0xD22360 -> 0xD30B50 (Length: 0xE7F0)(ovl_Boss_Va) (HP: 04 -> 03 -> 03) (Mass: 00)
         # ChangeBytes -Offset "" -Values "09" # Barinade
-        # ChangeBytes -Offset "" -Values "48 # Twinrova            0xD612E0 -> 0xD74360 (Length: 0x13080) (ovl_Boss_Tw) (HP: 18) (Mass: FF)
-        # ChangeBytes -Offset "D7FDA3" -Values "78" # Ganondorf     0xD7F3F0 -> 0xDA1660 (Length: 0x22270) (ovl_Boss_Ganon) (HP: 28) (Mass: 32)
-        # ChangeBytes -Offset "" -Values "5A" # Ganon               0xE826C0 -> 0xE939B0 (Length: 0x112F0) (ovl_Boss_Ganon2) (HP: 1E) (Mass: FF)
+        # ChangeBytes -Offset "" -Values "48" # Twinrova            0xD612E0 -> 0xD74360 (Length: 0x13080) (ovl_Boss_Tw) (HP: 18) (Mass: FF)
     }
-    #>
 
 
     <#
@@ -1009,11 +990,11 @@ function CreateTabAudiovisualOcarinaOfTime() {
 function CreateTabDifficultyOcarinaOfTime() {
     
     # HERO MODE #
-    CreateReduxGroup    -Tag  "Hero" -Text "Hero Mode" 
+    CreateReduxGroup    -Tag  "Hero" -Text "Hero Mode" # -Height 2
     CreateReduxComboBox -Name "Damage"     -Column 1 -Row 1 -Text "Damage:"      -Items @("1x Damage", "2x Damage", "4x Damage", "8x Damage", "OHKO Mode") -Info "Set the amount of damage you receive`nOHKO Mode = You die in one hit" -Credits "Admentus"
     CreateReduxComboBox -Name "Recovery"   -Column 3 -Row 1 -Text "Recovery:"    -Items @("1x Recovery", "1/2x Recovery", "1/4x Recovery", "0x Recovery")  -Info "Set the amount health you recovery from Recovery Hearts"              -Credits "Admentus"
     CreateReduxComboBox -Name "MagicUsage" -Column 5 -Row 1 -Text "Magic Usage:" -Items @("1x Magic Usage", "2x Magic Usage", "3x Magic Usage")            -Info "Set the amount of times magic is consumed at"                         -Credits "Admentus"
-  # CreateReduxComboBox -Name "BossHP"     -Column 1 -Row 2 -Text "Boss HP:"     -Items @("1x Boss HP", "2x Boss HP", "3x Boss HP")                        -Info "Set the amount of health for bosses"                                  -Credits "Admentus"
+  # CreateReduxComboBox -Name "BossHP"     -Column 1 -Row 2 -Text "Boss HP:"     -Items @("1x Boss HP", "2x Boss HP", "3x Boss HP")                        -Info "Set the amount of health for bosses"                                  -Credits "Admentus & Marcelo20XX"
   # CreateReduxComboBox -Name "MonsterHP"  -Column 3 -Row 2 -Text "Monster HP:"  -Items @("1x Monster HP", "2x Monster HP", "3x Monster HP")               -Info "Set the amount of health for monsters"                                -Credits "Admentus"
 
    if ($Settings.Debug.LiteGUI -eq $True) { return }
