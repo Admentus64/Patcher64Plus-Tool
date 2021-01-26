@@ -3,6 +3,7 @@ v11.1.2
 - Fixed "Kokiri Tunic Color" option not working for MM
 - The Custom Header is now properly shown when Redux is checked (if applicable)
 - Reworked "Mirror Shield Frame Color" option to dynamicially search for the mirror shield within the Adult model
+- Fixed Hero Mode for OoT
 
 v11.1.1
 - Added new option to toggle visual styles for the GUI
