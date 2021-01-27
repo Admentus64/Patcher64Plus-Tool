@@ -61,6 +61,20 @@ function GetItemID([String]$Item) {
 
 
 #==============================================================================================================================================================================================
+function ChangeStringIntoDigits([String]$File, [String]$Search, [String]$Value, [Switch]$Triple) {
+    
+    $Offset = SearchBytes -File $File -Values $Search
+    if ($Triple -and [int]$Value -lt 100)       { ChangeBytes -File $File -Offset $Offset -IsDec -Values (@("48")       + [System.Text.Encoding]::Default.GetBytes($Value)) }
+    elseif ($Triple -and [int]$Value -lt 10)    { ChangeBytes -File $File -Offset $Offset -IsDec -Values (@("48", "48") + [System.Text.Encoding]::Default.GetBytes($Value)) }
+    elseif (!$Triple -and [int]$Value -lt 10)   { ChangeBytes -File $File -Offset $Offset -IsDec -Values (@("48")       + [System.Text.Encoding]::Default.GetBytes($Value)) }
+    else                                        { ChangeBytes -File $File -Offset $Offset -IsDec -Values @([System.Text.Encoding]::Default.GetBytes($Value)) }
+    $offset = $Search = $Value = $Triple = $null
+
+}
+
+
+
+#==============================================================================================================================================================================================
 function ShowModelPreview([Object]$Dropdown, [Object]$Box, [String]$Category) {
     
     $Path = $GameFiles.previews + "\" + $Category + "\"
@@ -690,6 +704,7 @@ function SetColors([Array]$Colors, [Array]$Dialogs, [Array]$Labels) {
 Export-ModuleMember -Function GetSFXID
 Export-ModuleMember -Function GetItemID
 Export-ModuleMember -Function GetInstrumentsID
+Export-ModuleMember -Function ChangeStringIntoDigits
 
 Export-ModuleMember -Function ShowModelPreview
 Export-ModuleMember -Function ChangeModelsSelection

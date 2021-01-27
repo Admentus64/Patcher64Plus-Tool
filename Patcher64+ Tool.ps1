@@ -24,8 +24,8 @@ Add-Type -AssemblyName 'System.Drawing'
 # Setup global variables
 
 $global:ScriptName = "Patcher64+ Tool"
-$global:VersionDate = "2021-01-25"
-$global:Version     = "v11.1.2"
+$global:VersionDate = "2021-01-27"
+$global:Version     = "v11.2.0"
 
 $global:CommandType = $MyInvocation.MyCommand.CommandType.ToString()
 $global:Definition  = $MyInvocation.MyCommand.Definition.ToString()
@@ -67,7 +67,7 @@ $global:Paths = @{}
 
 # Set all paths
 $Paths.Base            = GetScriptPath
-$Paths.Master          = $Paths.Base + "\Files"
+$Paths.Master          = $Paths.Base   + "\Files"
 $Paths.Registry        = $Paths.Master + "\Registry"
 $Paths.Games           = $Paths.Master + "\Games"
 $Paths.Main            = $Paths.Master + "\Main"

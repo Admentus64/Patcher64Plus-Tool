@@ -1,3 +1,14 @@
+v11.2.0
+- The ChangeBytes command can now accept a regular string that contains a series of bytes as well
+- Updated ammo and wallet capacity values are now shown in the English dialogue script as well
+- Black Bars can now be disabled for Z-Targeting, Cutscenes or both for OoT
+- Fixed issue with creating ComboBox elements
+- Fixed issue with reading files from within the Patcher64+ Tool path
+- Rewrote how paths are read in order to make .exe support compatible
+- Fixed issue with recognizing SNES HiROM files
+- Fixed issue with Custom Header and Custom Region not properly refreshing
+- Patches list is now properly cleared when ganging game mode
+
 v11.1.2
 - Start button and Epona carrots are now correctly repositioned for the OoT WS patch
 - Fixed "Kokiri Tunic Color" option not working for MM

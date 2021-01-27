@@ -150,8 +150,8 @@ function CreateComboBox([int]$X=0, [int]$Y=0, [int]$Width=0, [int]$Height=0, [St
     $ComboBox.Font = $Fonts.Small
     $ToolTip = CreateToolTip -Form $ComboBox -Info $Info
     if ($Default -lt 1) { $Default = 1 }
-
-    if (IsSet -Elem $Items -HasInt) {
+    
+    if (IsSet -Elem $Items) {
         $ComboBox.Items.AddRange($Items)
         if (IsSet $ComboBox.Name) {
             if ($IsGame) {

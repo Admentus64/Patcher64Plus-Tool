@@ -1,5 +1,6 @@
-function ChangeBytes([String]$File, [String]$Offset, [Array]$Values, [int]$Interval=1, [Switch]$IsDec, [Switch]$Overflow) {
-
+function ChangeBytes([String]$File, [String]$Offset, [Object]$Values, [int]$Interval=1, [Switch]$IsDec, [Switch]$Overflow) {
+    
+    if ($Values -is [System.String]) { $Values = $Values -split ' ' }
     WriteToConsole ("Change values: " + $Values)
     if (IsSet $File) { $ByteArrayGame = [IO.File]::ReadAllBytes($File) }
     if ($Interval -lt 1) { $Interval = 1 }
@@ -123,8 +124,10 @@ function ExportBytes([String]$File, [String]$Offset, [String]$End, [String]$Leng
 
 
 #==============================================================================================================================================================================================
-function SearchBytes([String]$File, [String]$Start="0", [String]$End, [Array]$Values) {
+function SearchBytes([String]$File, [String]$Start="0", [String]$End, [Object]$Values) {
     
+    if ($values -is [System.String]) { $values = $values -split ' ' }
+
     if (IsSet $File) { $ByteArrayGame = [IO.File]::ReadAllBytes($File) }
 
     [uint32]$Start = GetDecimal $Start
@@ -168,8 +171,8 @@ function SearchBytes([String]$File, [String]$Start="0", [String]$End, [Array]$Va
 
 
 #==============================================================================================================================================================================================
-function ExportAndPatch([String]$Path, [String]$Offset, [String]$Length, [String]$NewLength, [String]$TableOffset, [Array]$Values) {
-
+function ExportAndPatch([String]$Path, [String]$Offset, [String]$Length, [String]$NewLength, [String]$TableOffset, [Object]$Values) {
+    
     $File = $GameFiles.extracted + "\" + $Path + ".bin"
     if ( !(TestFile $File) -or ($Settings.Debug.ForceExtract -eq $True) ) {
         ExportBytes -Offset $Offset -Length $Length -Output $File

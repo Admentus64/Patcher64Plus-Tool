@@ -242,6 +242,8 @@ function CreateSettingsDialog() {
     $GeneralSettings.Presets            += CreateSettingsRadioField -Name "Preset" -SaveAs 5 -Max 6 -NameTextbox "Preset.Label5" -Column 2 -Row 2                -Text "Preset 5" -Info ""
     $GeneralSettings.Presets            += CreateSettingsRadioField -Name "Preset" -SaveAs 6 -Max 6 -NameTextbox "Preset.Label6" -Column 3 -Row 2                -Text "Preset 6" -Info ""
 
+
+
     # Double Click
     $GeneralSettings.DoubleClick.Add_CheckStateChanged({ TogglePowerShellOpenWithClicks $this.Checked })
     $GeneralSettings.ModernStyle.Add_CheckStateChanged({ SetModernVisualStyle $this.checked })
@@ -253,6 +255,7 @@ function CreateSettingsDialog() {
     })
 
     # Console
+    $GeneralSettings.Console.Enabled = $ExternalScript
     $GeneralSettings.Console.Add_CheckStateChanged({
         ShowPowerShellConsole $this.Checked
         $GeneralSettings.Stop.Enabled = $this.Checked

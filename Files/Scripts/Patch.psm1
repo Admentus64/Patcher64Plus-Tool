@@ -267,7 +267,7 @@ function Cleanup() {
 #==============================================================================================================================================================================================
 function GetPatchFile() {
     
-    if ($GamePatch.patch -is [system.Array]) {
+    if ($GamePatch.patch -is [System.Array]) {
         foreach ($Patch in $GamePatch.patch) {
             if ($Patch.hash -eq $ROMHashSum) { return $Patch.file }
         }
@@ -359,11 +359,13 @@ function UpdateROMCRC() {
     
     if ($Settings.Debug.NoCRCChange -eq $True -or $GameConsole.mode -ne "N64") { return }
     if (!(TestFile $GetROM.patched)) { Copy-Item -LiteralPath $GetROM.run -Destination $GetROM.patched }
-    & $Files.tool.rn64crc $GetROM.patched -update | Out-Host
+    & $Files.tool.rn64crc $GetROM.patched -update | Out-Null
+    WriteToConsole ("Updated CRC hash for ROM: " + $GetROM.patched)
 
-    if ($Settings.Debug.KeepConverted -eq $True -and (TestFile $GetROM.keepConvert) )      { & $Files.tool.rn64crc $GetROM.keepConvert -update | Out-Host }
-    if ($Settings.Debug.KeepDowngraded -eq $True -and (TestFile $GetROM.keepDowngrade) )   { & $Files.tool.rn64crc $GetROM.keepDowngrade -update | Out-Host }
-    if ($Settings.Debug.KeepDecompressed -eq $True -and (TestFile $GetROM.keepDecomp) )    { & $Files.tool.rn64crc $GetROM.keepDecomp -update | Out-Host }
+    if ($Settings.Debug.KeepConverted -eq $True -and (TestFile $GetROM.keepConvert) )      { & $Files.tool.rn64crc $GetROM.keepConvert -update | Out-Null;   WriteToConsole ("Updated CRC hash for ROM: " + $GetROM.keepConvert) }
+    if ($Settings.Debug.KeepDowngraded -eq $True -and (TestFile $GetROM.keepDowngrade) )   { & $Files.tool.rn64crc $GetROM.keepDowngrade -update | Out-Null; WriteToConsole ("Updated CRC hash for ROM: " + $GetROM.keepDowngrade) }
+    if ($Settings.Debug.KeepDecompressed -eq $True -and (TestFile $GetROM.keepDecomp) )    { & $Files.tool.rn64crc $GetROM.keepDecomp -update | Out-Null;    WriteToConsole ("Updated CRC hash for ROM: " + $GetROM.keepDecomp) }
+
 
 }
 
@@ -373,8 +375,12 @@ function UpdateROMCRC() {
 function CreateDebugPatches() {
     
     if ($Settings.Debug.CreateBPS -ne $True) { return }
-    if ( (TestFile $GetROM.cleanDecomp) -and (TestFile $GetROM.decomp) ) { & $Files.tool.flips --create --bps $GetROM.cleanDecomp $GetROM.decomp $Files.decompBPS | Out-Host }
-    & $Files.tool.flips --create --bps $GetROM.clean $GetROM.patched $Files.compBPS | Out-Host
+    if ( (TestFile $GetROM.cleanDecomp) -and (TestFile $GetROM.decomp) ) {
+        & $Files.tool.flips --create --bps $GetROM.cleanDecomp $GetROM.decomp $Files.decompBPS | Out-Null 
+        WriteToConsole ("Created BPS Patch: " + $Files.decompBPS)
+    }
+    & $Files.tool.flips --create --bps $GetROM.clean $GetROM.patched $Files.compBPS | Out-Null
+    WriteToConsole ("Created BPS Patch: " + $Files.compBPS)
 
 }
 
@@ -469,9 +475,6 @@ function ExtractWADFile([String]$PatchedFileName) {
     # Set the status label
     UpdateStatusLabel "Extracting WAD file..."
 
-    # We need to be in the same path as some files so just jump there
-    Push-Location $Paths.Temp
-
     # Check if an extracted folder existed previously
     foreach($Folder in Get-ChildItem -LiteralPath $Paths.Temp -Force) {
         if ($Folder.PSIsContainer) { RemovePath $Folder }
@@ -479,11 +482,17 @@ function ExtractWADFile([String]$PatchedFileName) {
     
     [io.file]::WriteAllBytes($Files.ckey, @(235, 228, 42, 34, 94, 133, 147, 228, 72, 217, 197, 69, 115, 129, 170, 247)) | Out-Null
     
+    # We need to be in the same path as some files so just jump there
+    Push-Location $Paths.Temp
+
     # Run the program to extract the wad file
     $ErrorActionPreference = 'SilentlyContinue'
     try   { & $Files.tool.wadunpacker $GamePath | Out-Null }
     catch { }
     $ErrorActionPreference = 'Continue'
+
+    # Doesn't matter, but return to where we were
+    Pop-Location
 
     # Find the extracted folder by looping through all files in the folder.
     $FolderExists = $False
@@ -495,9 +504,6 @@ function ExtractWADFile([String]$PatchedFileName) {
             $global:WADFile = SetWADParameters -Path $GamePath -FolderName $Folder.Name -PatchedFileName $PatchedFileName
         }
     }
-
-    # Doesn't matter, but return to where we were
-    Pop-Location
 
     if (!$FolderExists) {
         UpdateStatusLabel "Failed! Could not extract Wii VC WAD. Try using a different filename."
@@ -560,7 +566,8 @@ function PatchVCEmulator([String]$Command) {
     # Applying LZSS decompression
     if ($GameType.lzss -gt 0) {
         if ( (StrLike -Str $Command -Val "Patch Boot DOL") -or $VC.ExpandMemory.Checked -or $VC.RemapDPad.Checked -or $VC.RemapCDown.Checked -or $VC.RemapZ.Checked) {
-            & $Files.tool.lzss -d $WADFile.AppFile01 | Out-Host
+            & $Files.tool.lzss -d $WADFile.AppFile01 | Out-Null
+            WriteToConsole ("Decompressed LZSS File: " + $WADFile.AppFile01)
         }
     }
 
@@ -642,7 +649,8 @@ function PatchVCEmulator([String]$Command) {
     # Applying LZSS compression
     if ($GameType.lzss -gt 0) {
         if ( (StrLike -Str $Command -Val "Patch Boot DOL") -or $VC.ExpandMemory.Checked -or $VC.RemapDPad.Checked -or $VC.RemapCDown.Checked -or $VC.RemapZ.Checked) {
-            & $Files.tool.lzss -evn $WADFile.AppFile01 | Out-Host
+            & $Files.tool.lzss -evn $WADFile.AppFile01 | Out-Null
+            WriteToConsole ("Compressed LZSS File: " + $WADFile.AppFile01)
         }
     }
 
@@ -914,12 +922,12 @@ function ApplyPatch([String]$File, [String]$Patch, [String]$New, [Switch]$FilesP
     WriteToConsole ("Applying patch: " + $Patch)
 
     if ($Patch -like "*.bps*" -or $Patch -like "*.ips*") {
-        if ($New.Length -gt 0) { & $Files.tool.flips --ignore-checksum --apply $Patch $File $New | Out-Host }
-        else { & $Files.tool.flips --ignore-checksum $Patch $File | Out-Host }
+        if ($New.Length -gt 0) { & $Files.tool.flips --ignore-checksum --apply $Patch $File $New | Out-Null }
+        else { & $Files.tool.flips --ignore-checksum $Patch $File | Out-Null }
     }
     elseif ($Patch -like "*.ups*") {
-        if ($New.Length -gt 0) { & $Files.tool.ups apply -b $File -p $Patch -o $New | Out-Host }
-        else { & $Files.tool.ups apply -b $File -p $Patch -o $File | Out-Host }
+        if ($New.Length -gt 0) { & $Files.tool.ups apply -b $File -p $Patch -o $New | Out-Null }
+        else { & $Files.tool.ups apply -b $File -p $Patch -o $File | Out-Null }
     }
     elseif ($Patch -like "*.xdelta*" -or $Patch -like "*.vcdiff*") {
         if ($Patch -like "*.xdelta*")       { $Tool = $Files.tool.xdelta }
@@ -927,23 +935,24 @@ function ApplyPatch([String]$File, [String]$Patch, [String]$New, [Switch]$FilesP
 
         if ($New.Length -gt 0) {
             RemoveFile $New
-            & $Tool -d -s $File $Patch $New | Out-Host
+            & $Tool -d -s $File $Patch $New | Out-Null
         }
         else {
-            & $Tool -d -s $File $Patch ($File + ".ext") | Out-Host
+            & $Tool -d -s $File $Patch ($File + ".ext") | Out-Null
             Move-Item -LiteralPath ($File + ".ext") -Destination $File -Force
         }
     }
     elseif ($Patch -like "*.ppf*") {
         if ($New.Length -gt 0) {
             Copy-Item -LiteralPath $File -Destination $New -Force
-            & $Files.tool.applyPPF3 a $New $Patch | Out-Host
+            & $Files.tool.applyPPF3 a $New $Patch | Out-Null
         }
-        else { & $Files.tool.applyPPF3 a $File $Patch | Out-Host }
+        else { & $Files.tool.applyPPF3 a $File $Patch | Out-Null }
     }
 
     else { return $False }
 
+    WriteToConsole ("Successfully applied Patch: " + $Patch)
     return $True
 
 }
@@ -967,9 +976,11 @@ function DecompressROM([Boolean]$Decompress) {
             RemoveFile $Files.dmaTable
             Add-Content $Files.dmaTable $GameType.dmaTable
         }
-        elseif ($Settings.Core.Bit64 -eq $True)                                       { & $Files.tool.TabExt64 $GetROM.run | Out-Host }
-        else                                                                          { & $Files.tool.TabExt32 $GetROM.run | Out-Host }
-        & $Files.tool.ndec $GetROM.run $GetROM.decomp | Out-Host
+        elseif ($Settings.Core.Bit64 -eq $True)                                       { & $Files.tool.TabExt64 $GetROM.run | Out-Null }
+        else                                                                          { & $Files.tool.TabExt32 $GetROM.run | Out-Null }
+        WriteToConsole ("Generated DMA Table from: " + $GetROM.run)
+        & $Files.tool.ndec $GetROM.run $GetROM.decomp | Out-Null
+        WriteToConsole ("Decompressed ROM: " + $GetROM.decomp)
         Pop-Location
 
         if ($Settings.Debug.CreateBPS -eq $True) { Copy-Item -LiteralPath $GetROM.decomp -Destination $GetROM.cleanDecomp -Force }
@@ -983,7 +994,7 @@ function DecompressROM([Boolean]$Decompress) {
             return $False
         }
 
-        & $Files.tool.sm64extend $GetROM.run -s $GamePatch.extend $GetROM.decomp | Out-Host
+        & $Files.tool.sm64extend $GetROM.run -s $GamePatch.extend $GetROM.decomp | Out-Null
     }
 
     if ($IsWiiVC) { RemoveFile $GetROM.run }
@@ -1007,6 +1018,7 @@ function CompressROM([Boolean]$Decompress) {
         Push-Location $Paths.Temp
         if ($Settings.Core.Bit64 -eq $True)   { & $Files.tool.Compress64 $GetROM.decomp $GetROM.patched | Out-Null }
         else                                  { & $Files.tool.Compress32 $GetROM.decomp $GetROM.patched | Out-Null }
+        WriteToConsole ("Compressed ROM: " + $GetROM.patched)
         Pop-Location
 
         if ($Patches.Downgrade.Checked -and (!$Patches.Redux.Checked -or !$Patches.Redux.Visible)) {
@@ -1237,14 +1249,13 @@ function RemoveRegionProtection() {
 #==============================================================================================================================================================================================
 function IsHiROM([int]$Offset) {
     
-    #$ROM = [IO.File]::ReadAllBytes($GetROM.patched)
     for ($i=$Offset; $i -lt ($Offset + $GameConsole.rom_title_length); $i++) {
         if ( ($ByteArrayGame[$i] -lt 32) -or ($ByteArrayGame[$i] -gt 122) ) { return $False }
     }
 
-    if (!(IsSet -Elem $ROM[$Offset + $GameConsole.rom_title_length] -Min 32 -Max 64))   { return $False }
-    if ($ByteArrayGame[$Offset + $GameConsole.rom_title_length + 3] -gt 10)             { return $False }
-    if ($ByteArrayGame[$Offset + $GameConsole.rom_title_length + 4] -gt 10)             { return $False }
+    if (!(IsSet -Elem $ByteArrayGame[$Offset + $GameConsole.rom_title_length] -Min 32 -Max 64))   { return $False }
+    if ($ByteArrayGame[$Offset + $GameConsole.rom_title_length + 3] -gt 10)                       { return $False }
+    if ($ByteArrayGame[$Offset + $GameConsole.rom_title_length + 4] -gt 10)                       { return $False }
 
     return $True
 
@@ -1301,9 +1312,9 @@ function RepackWADFile($GameID) {
         
         # Some files need to be fed into the tool so keep track of them.
         switch ($File.Extension) {
-            '.tik'  { $tik  = $Paths.Temp + '\' + $File.Name }
-            '.tmd'  { $tmd  = $Paths.Temp + '\' + $File.Name }
-            '.cert' { $cert = $Paths.Temp + '\' + $File.Name }
+            '.tik'  { $tik  = [System.String](Get-Location) + "\Files\Temp\" + $File.Name }
+            '.tmd'  { $tmd  = [System.String](Get-Location) + "\Files\Temp\" + $File.Name }
+            '.cert' { $cert = [System.String](Get-Location) + "\Files\Temp\" + $File.Name }
         }
     }
 
@@ -1314,6 +1325,9 @@ function RepackWADFile($GameID) {
     if ($GameID -ne $null)   { & $Files.tool.wadpacker $tik $tmd $cert $WadFile.Patched '-sign' '-i' $GameID }
     else                     { & $Files.tool.wadpacker $tik $tmd $cert $WadFile.Patched '-sign' }
 
+    # Doesn't matter, but return to where we were.
+    Pop-Location
+
     # If the patched file was created or could not be created.
     if (TestFile $WadFile.Patched) { 
         # [System.Media.SystemSounds]::Beep.Play()                                   # Play a sound when it is finished.
@@ -1323,9 +1337,6 @@ function RepackWADFile($GameID) {
 
     # Remove the folder the extracted files were in, and delete files
     RemovePath $WadFile.Folder
-
-    # Doesn't matter, but return to where we were.
-    Pop-Location
 
 }
 

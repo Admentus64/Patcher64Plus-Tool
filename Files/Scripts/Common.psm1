@@ -214,6 +214,7 @@ function ChangeGameMode() {
     Foreach ($Item in $Files.json.games.game) {
         if ($Item.title -eq $CurrentGameComboBox.text) {
             $global:GameType = $Item
+            $global:GamePatch = $null
             break
         }
     }
@@ -417,23 +418,23 @@ function GetHeader() {
         if ( (IsSet $GamePatch.redux.vc_title) -and (IsChecked $Patches.Redux) )     { $CustomHeader.Title.Text  = $GamePatch.redux.vc_title }
         elseif (IsSet $GamePatch.vc_title)                                           { $CustomHeader.Title.Text  = $GamePatch.vc_title }
         elseif (IsSet $GameType.vc_title)                                            { $CustomHeader.Title.Text  = $GameType.vc_title }
-        else                                                                         { $CustomHeader.Title.Text  = "" }
+        elseif (!$CustomHeader.EnableHeader.Checked)                                 { $CustomHeader.Title.Text  = "" }
 
         if ( (IsSet $GamePatch.redux.vc_gameID) -and (IsChecked $Patches.Redux) )    { $CustomHeader.GameID.Text = $GamePatch.redux.vc_gameID }
         elseif (IsSet $GamePatch.vc_gameID)                                          { $CustomHeader.GameID.Text = $GamePatch.vc_gameID }
         elseif (IsSet $GameType.vc_gameID)                                           { $CustomHeader.GameID.Text = $GameType.vc_gameID }
-        else                                                                         { $CustomHeader.GameID.Text = "" }
+        elseif (!$CustomHeader.EnableHeader.Checked)                                 { $CustomHeader.GameID.Text = "" }
     }
     else {
         if ( (IsSet $GamePatch.redux.rom_title) -and (IsChecked $Patches.Redux) )    { $CustomHeader.Title.Text  = $GamePatch.redux.rom_title }
         elseif (IsSet $GamePatch.rom_title)                                          { $CustomHeader.Title.Text  = $GamePatch.rom_title }
         elseif (IsSet $GameType.rom_title)                                           { $CustomHeader.Title.Text  = $GameType.rom_title }
-        else                                                                         { $CustomHeader.Title.Text  = "" }
+        elseif (!$CustomHeader.EnableHeader.Checked)                                 { $CustomHeader.Title.Text  = "" }
 
         if ( (IsSet $GamePatch.redux.rom_gameID) -and (IsChecked $Patches.Redux) )   { $CustomHeader.GameID.Text = $GamePatch.redux.rom_gameID }
         elseif (IsSet $GamePatch.rom_gameID)                                         { $CustomHeader.GameID.Text = $GamePatch.rom_gameID }
         elseif (IsSet $GameType.rom_gameID)                                          { $CustomHeader.GameID.Text = $GameType.rom_gameID }
-        else                                                                         { $CustomHeader.GameID.Text = "" }
+        elseif (!$CustomHeader.EnableHeader.Checked)                                 { $CustomHeader.GameID.Text = "" }
     }
 
 }
@@ -443,9 +444,9 @@ function GetHeader() {
 #==============================================================================================================================================================================================
 function GetRegion() {
     
-    if     (IsSet $GamePatch.rom_region)   { $CustomHeader.Region.SelectedIndex = $GamePatch.rom_region }
-    elseif (IsSet $GameType.rom_region)    { $CustomHeader.Region.SelectedIndex = $GameType.rom_region }
-    else                                   { $CustomHeader.Region.SelectedIndex = 1 }
+    if     (IsSet $GamePatch.rom_region)           { $CustomHeader.Region.SelectedIndex = $GamePatch.rom_region }
+    elseif (IsSet $GameType.rom_region)            { $CustomHeader.Region.SelectedIndex = $GameType.rom_region }
+    elseif (!$CustomHeader.EnableRegion.Checked)   { $CustomHeader.Region.SelectedIndex = 1 }
 
 }
 
@@ -528,9 +529,11 @@ function IsIndex([Object]$Elem, [int]$Index=1, [String]$Text, [Switch]$Active, [
 function IsSet([Object]$Elem, [int]$Min, [int]$Max, [int]$MinLength, [int]$MaxLength, [Switch]$HasInt) {
 
     if ($Elem -eq $null -or $Elem -eq "")                                               { return $False }
-    if (!$HasInt -and $Elem -eq 0)                                                      { return $False }
-    if ($Min -ne $null -and $Min -ne "" -and [int]$Elem -lt $Min)                       { return $False }
-    if ($Max -ne $null -and $Max -ne "" -and [int]$Elem -gt $Max)                       { return $False }
+    if ($HasInt) {
+        if ($Elem -NotMatch "^\d+$" )                                                   { return $False }
+        if ($Min -ne $null -and $Min -ne "" -and [int]$Elem -lt $Min)                   { return $False }
+        if ($Max -ne $null -and $Max -ne "" -and [int]$Elem -gt $Max)                   { return $False }
+    }
     if ($MinLength -ne $null -and $MinLength -ne "" -and $Elem.Length -lt $MinLength)   { return $False }
     if ($MaxLength -ne $null -and $MaxLength -ne "" -and $Elem.Length -gt $MaxLength)   { return $False }
 

@@ -31,23 +31,23 @@ function ByteOptionsMajorasMask() {
     }
 
     if (IsChecked -Elem $Redux.Gameplay.ZoraPhysics)         { PatchBytes  -Offset "65D000" -Patch "Zora Physics Fix.bin" }
-    if (IsChecked -Elem $Redux.Gameplay.DistantZTargeting)   { ChangeBytes -Offset "B4E924" -Values @("00", "00", "00", "00") }
+    if (IsChecked -Elem $Redux.Gameplay.DistantZTargeting)   { ChangeBytes -Offset "B4E924" -Values "00 00 00 00" }
 
 
 
     # RESTORE #
 
     if (IsChecked -Elem $Redux.Restore.RomaniSign)   { PatchBytes  -Offset "26A58C0" -Texture -Patch "Romani Sign.bin" }
-    if (IsChecked -Elem $Redux.Restore.Title)        { ChangeBytes -Offset "DE0C2E"  -Values @("FF", "C8", "36", "10", "98", "00") }
+    if (IsChecked -Elem $Redux.Restore.Title)        { ChangeBytes -Offset "DE0C2E"  -Values "FF C8 36 10 98 00" }
 
     if (IsChecked -Elem $Redux.Restore.RupeeColors) {
-        ChangeBytes -Offset "10ED020" -Values @("70", "6B", "BB", "3F", "FF", "FF", "EF", "3F", "68", "AD", "C3", "FD", "E6", "BF", "CD", "7F", "48", "9B", "91", "AF", "C3", "7D", "BB", "3D", "40", "0F", "58", "19", "88", "ED", "80", "AB") # Purple
-        ChangeBytes -Offset "10ED040" -Values @("D4", "C3", "F7", "49", "FF", "FF", "F7", "E1", "DD", "03", "EF", "89", "E7", "E3", "E7", "DD", "A3", "43", "D5", "C3", "DF", "85", "E7", "45", "7A", "43", "82", "83", "B4", "43", "CC", "83") # Gold
+        ChangeBytes -Offset "10ED020" -Values "70 6B BB 3F FF FF EF 3F 68 AD C3 FD E6 BF CD 7F 48 9B 91 AF C3 7D BB 3D 40 0F 58 19 88 ED 80 AB" # Purple
+        ChangeBytes -Offset "10ED040" -Values "D4 C3 F7 49 FF FF F7 E1 DD 03 EF 89 E7 E3 E7 DD A3 43 D5 C3 DF 85 E7 45 7A 43 82 83 B4 43 CC 83" # Gold
     }
 
     if (IsChecked -Elem $Redux.Restore.CowNoseRing) {
-        ChangeBytes -Offset "E10270"  -Values @("00", "00")
-        ChangeBytes -Offset "107F5C4" -Values @("00", "00")
+        ChangeBytes -Offset "E10270"  -Values "00 00"
+        ChangeBytes -Offset "107F5C4" -Values "00 00"
     }
 
     if (IsChecked -Elem $Redux.Restore.SkullKid) {
@@ -61,8 +61,8 @@ function ByteOptionsMajorasMask() {
     }
 
     if (IsChecked -Elem $Redux.Restore.ShopMusic)           { ChangeBytes -Offset "2678007" -Values "44" }
-    if (IsChecked -Elem $Redux.Restore.PieceOfHeartSound)   { ChangeBytes -Offset "BA94C8"  -Values @("10", "00") }
-    if (IsChecked -Elem $Redux.Restore.MoveBomberKid)       { ChangeBytes -Offset "2DE4396" -Values @("02", "C5", "01", "18", "FB", "55", "00", "07", "2D") }
+    if (IsChecked -Elem $Redux.Restore.PieceOfHeartSound)   { ChangeBytes -Offset "BA94C8"  -Values "10 00" }
+    if (IsChecked -Elem $Redux.Restore.MoveBomberKid)       { ChangeBytes -Offset "2DE4396" -Values "02 C5 01 18 FB 55 00 07 2D" }
 
 
 
@@ -71,25 +71,25 @@ function ByteOptionsMajorasMask() {
     if (IsChecked -Elem $Redux.Other.SouthernSwamp) {
         CreateSubPath  -Path ($GameFiles.extracted + "\Southern Swamp")
         ExportAndPatch -Path "Southern Swamp\southern_swamp_cleared_scene"  -Offset "1F0D000" -Length "10630"
-        ExportAndPatch -Path "Southern Swamp\southern_swamp_cleared_room_0" -Offset "1F1E000" -Length "1B240" -NewLength "1B4F0" -TableOffset "1EC26"  -Values @("94", "F0")
-        ExportAndPatch -Path "Southern Swamp\southern_swamp_cleared_room_2" -Offset "1F4D000" -Length "D0A0"  -NewLength "D1C0"  -TableOffset "1EC46"  -Values @("A1", "C0")
+        ExportAndPatch -Path "Southern Swamp\southern_swamp_cleared_room_0" -Offset "1F1E000" -Length "1B240" -NewLength "1B4F0" -TableOffset "1EC26"  -Values "94 F0"
+        ExportAndPatch -Path "Southern Swamp\southern_swamp_cleared_room_2" -Offset "1F4D000" -Length "D0A0"  -NewLength "D1C0"  -TableOffset "1EC46"  -Values "A1 C0"
     }
 
     if (IsChecked -Elem $Redux.Other.AlwaysBestEnding) {
-        ChangeBytes -Offset "B81CE0" -Values @("00", "00", "00", "00")
-        ChangeBytes -Offset "B81D48" -Values @("00", "00", "00", "00")
-        ChangeBytes -Offset "B81DB0" -Values @("00", "00", "00", "00")
-        ChangeBytes -Offset "B81E18" -Values @("00", "00", "00", "00")
-        ChangeBytes -Offset "B81E80" -Values @("00", "00", "00", "00")
-        ChangeBytes -Offset "B81EE8" -Values @("00", "00", "00", "00")
-        ChangeBytes -Offset "B81F84" -Values @("00", "00", "00", "00")
-        ChangeBytes -Offset "B81FEC" -Values @("00", "00", "00", "00")
-        ChangeBytes -Offset "B82054" -Values @("00", "00", "00", "00")
+        ChangeBytes -Offset "B81CE0" -Values "00 00 00 00"
+        ChangeBytes -Offset "B81D48" -Values "00 00 00 00"
+        ChangeBytes -Offset "B81DB0" -Values "00 00 00 00"
+        ChangeBytes -Offset "B81E18" -Values "00 00 00 00"
+        ChangeBytes -Offset "B81E80" -Values "00 00 00 00"
+        ChangeBytes -Offset "B81EE8" -Values "00 00 00 00"
+        ChangeBytes -Offset "B81F84" -Values "00 00 00 00"
+        ChangeBytes -Offset "B81FEC" -Values "00 00 00 00"
+        ChangeBytes -Offset "B82054" -Values "00 00 00 00"
     }
 
-    if (IsChecked -Elem $Redux.Other.GohtCutscene)       { ChangeBytes -Offset "F6DE89" -Values @("8D", "00", "02", "10", "00", "00", "0A") }
-    if (IsChecked -Elem $Redux.Other.MushroomBottle)     { ChangeBytes -Offset "CD7C48" -Values @("1E", "6B") }
-    if (IsChecked -Elem $Redux.Other.FairyFountain)      { ChangeBytes -Offset "B9133E" -Values @("01", "0F") }
+    if (IsChecked -Elem $Redux.Other.GohtCutscene)       { ChangeBytes -Offset "F6DE89" -Values "8D 00 02 10 00 00 0A" }
+    if (IsChecked -Elem $Redux.Other.MushroomBottle)     { ChangeBytes -Offset "CD7C48" -Values "1E 6B" }
+    if (IsChecked -Elem $Redux.Other.FairyFountain)      { ChangeBytes -Offset "B9133E" -Values "01 0F" }
     if (IsChecked -Elem $Redux.Other.HideCredits)        { PatchBytes  -Offset "B3B000" -Patch "Message\Credits.bin" }
 
 
@@ -98,8 +98,8 @@ function ByteOptionsMajorasMask() {
 
     if (IsChecked -Elem $Redux.Graphics.Widescreen) {
         if ($IsWiiVC) { # 16:9 Widescreen
-            ChangeBytes -Offset "BD5D74" -Values @("3C", "07", "3F", "E3")
-            ChangeBytes -Offset "CA58F5" -Values @("6C", "53", "6C", "84", "9E", "B7", "53", "6C") -Interval 2
+            ChangeBytes -Offset "BD5D74" -Values "3C 07 3F E3"
+            ChangeBytes -Offset "CA58F5" -Values "6C 53 6C 84 9E B7 53 6C" -Interval 2
 
             ChangeBytes -Offset "B9F2DF" -Values "1E" # Dungeon Map - Floors (1A -> 27)
             ChangeBytes -Offset "B9F2EF" -Values "18" # Dungeon Map - Floors (14 -> 21)
@@ -118,10 +118,10 @@ function ByteOptionsMajorasMask() {
 
             ChangeBytes -Offset "C9795B" -Values "1E" # Dungeon Map - Stray Fairy Slash (1C -> 29)
             ChangeBytes -Offset "C97993" -Values "1C" # Dungeon Map - Stray Fairy Slash (1A -> 27)
-            ChangeBytes -Offset "C981F3" -Values @("1A", "35", "EF", "82", "90", "3C", "19", "00", "12", "37", "39", "82", "30", "24", "4D", "00", "08", "AE", "0D", "02", "B0") # Dungeon Map - Stray Fairy Icon (22 35 EF 82 90 3C 19 00 1A 37 39 82 30 24 4D 00 08 AE 0D 02 B0)
+            ChangeBytes -Offset "C981F3" -Values "1A 35 EF 82 90 3C 19 00 12 37 39 82 30 24 4D 00 08 AE 0D 02 B0" # Dungeon Map - Stray Fairy Icon (22 35 EF 82 90 3C 19 00 1A 37 39 82 30 24 4D 00 08 AE 0D 02 B0)
 
-          # ChangeBytes -Offset "BAF2E0" -Values @("") # A Button
-          # ChangeBytes -Offset "C55F14" -Values @("") # B, C-Left, C-Down, C-Right Buttons
+          # ChangeBytes -Offset "BAF2E0" -Values "" # A Button
+          # ChangeBytes -Offset "C55F14" -Values "" # B, C-Left, C-Down, C-Right Buttons
         }
 
         if ($IsWiiVC -or $Settings.Debug.ChangeWidescreen -eq $True) { # 16:9 Textures
@@ -131,11 +131,11 @@ function ByteOptionsMajorasMask() {
         }
     }
 
-    if (IsChecked -Elem $Redux.Graphics.ExtendedDraw)     { ChangeBytes -Offset "B50874" -Values @("00", "00", "00", "00") }
-    if (IsChecked -Elem $Redux.Graphics.BlackBars)        { ChangeBytes -Offset "BF72A4" -Values @("00", "00", "00", "00") }
-    if (IsChecked -Elem $Redux.Graphics.PixelatedStars)   { ChangeBytes -Offset "B943FC" -Values @("10", "00") }
-    if (IsChecked -Elem $Redux.Graphics.MotionBlur)       { ChangeBytes -Offset "BFB9A0" -Values @("03", "E0", "00", "08", "00", "00", "00", "00", "00") }
-    if (IsChecked -Elem $Redux.Other.FlashbackOverlay)    { ChangeBytes -Offset "BFEB8C" -Values @("24", "0F", "00", "00") }
+    if (IsChecked -Elem $Redux.Graphics.ExtendedDraw)     { ChangeBytes -Offset "B50874" -Values "00 00 00 00" }
+    if (IsChecked -Elem $Redux.Graphics.BlackBars)        { ChangeBytes -Offset "BF72A4" -Values "00 00 00 00" }
+    if (IsChecked -Elem $Redux.Graphics.PixelatedStars)   { ChangeBytes -Offset "B943FC" -Values "10 00" }
+    if (IsChecked -Elem $Redux.Graphics.MotionBlur)       { ChangeBytes -Offset "BFB9A0" -Values "03 E0 00 08 00 00 00 00 00" }
+    if (IsChecked -Elem $Redux.Other.FlashbackOverlay)    { ChangeBytes -Offset "BFEB8C" -Values "24 0F 00 00" }
 
 
 
@@ -148,77 +148,77 @@ function ByteOptionsMajorasMask() {
     # HIDE (Custom edits added by Marcelo - Hide Buttons) #
 
     if (IsChecked -Elem $Redux.Hide.AButton) { 
-        ChangeBytes -Offset "BA55F8" -Values @("00", "00", "00", "00") # A Button
-        ChangeBytes -Offset "BA5608" -Values @("00", "00", "00", "00")
-        ChangeBytes -Offset "BA5A04" -Values @("00", "00", "00", "00")
-        ChangeBytes -Offset "BA5DA8" -Values @("00", "00", "00", "00")
-        ChangeBytes -Offset "BA5FE8" -Values @("00", "00", "00", "00")
-        ChangeBytes -Offset "BA60A0" -Values @("00", "00", "00", "00")
-		ChangeBytes -Offset "BA64F0" -Values @("00", "00", "00", "00")
+        ChangeBytes -Offset "BA55F8" -Values "00 00 00 00" # A Button
+        ChangeBytes -Offset "BA5608" -Values "00 00 00 00"
+        ChangeBytes -Offset "BA5A04" -Values "00 00 00 00"
+        ChangeBytes -Offset "BA5DA8" -Values "00 00 00 00"
+        ChangeBytes -Offset "BA5FE8" -Values "00 00 00 00"
+        ChangeBytes -Offset "BA60A0" -Values "00 00 00 00"
+		ChangeBytes -Offset "BA64F0" -Values "00 00 00 00"
     }
 
     if (IsChecked -Elem $Redux.Hide.BButton) { 
-        ChangeBytes -Offset "BA5528" -Values @("00", "00", "00", "00") # B Button
-        ChangeBytes -Offset "BA5544" -Values @("00", "00", "00", "00")
-        ChangeBytes -Offset "BA5CC4" -Values @("00", "00", "00", "00")
-        ChangeBytes -Offset "BA5DE8" -Values @("00", "00", "00", "00")
-        ChangeBytes -Offset "BA5FD8" -Values @("00", "00", "00", "00")
-        ChangeBytes -Offset "BA60B0" -Values @("00", "00", "00", "00")
-		ChangeBytes -Offset "BA6500" -Values @("00", "00", "00", "00")
+        ChangeBytes -Offset "BA5528" -Values "00 00 00 00" # B Button
+        ChangeBytes -Offset "BA5544" -Values "00 00 00 00"
+        ChangeBytes -Offset "BA5CC4" -Values "00 00 00 00"
+        ChangeBytes -Offset "BA5DE8" -Values "00 00 00 00"
+        ChangeBytes -Offset "BA5FD8" -Values "00 00 00 00"
+        ChangeBytes -Offset "BA60B0" -Values "00 00 00 00"
+		ChangeBytes -Offset "BA6500" -Values "00 00 00 00"
     }
 
     if (IsChecked -Elem $Redux.Hide.CButtons) { 
-        ChangeBytes -Offset "BA5568" -Values @("00", "00", "00", "00") # C-Left
-        ChangeBytes -Offset "BA5578" -Values @("00", "00", "00", "00")
-        ChangeBytes -Offset "BA5FF8" -Values @("00", "00", "00", "00")
-        ChangeBytes -Offset "BA60C0" -Values @("00", "00", "00", "00")
+        ChangeBytes -Offset "BA5568" -Values "00 00 00 00" # C-Left
+        ChangeBytes -Offset "BA5578" -Values "00 00 00 00"
+        ChangeBytes -Offset "BA5FF8" -Values "00 00 00 00"
+        ChangeBytes -Offset "BA60C0" -Values "00 00 00 00"
 		
-        ChangeBytes -Offset "BA5598" -Values @("00", "00", "00", "00") # C-Down
-        ChangeBytes -Offset "BA55A8" -Values @("00", "00", "00", "00")
-        ChangeBytes -Offset "BA6008" -Values @("00", "00", "00", "00")
-        ChangeBytes -Offset "BA60D0" -Values @("00", "00", "00", "00")
+        ChangeBytes -Offset "BA5598" -Values "00 00 00 00" # C-Down
+        ChangeBytes -Offset "BA55A8" -Values "00 00 00 00"
+        ChangeBytes -Offset "BA6008" -Values "00 00 00 00"
+        ChangeBytes -Offset "BA60D0" -Values "00 00 00 00"
 		
-        ChangeBytes -Offset "BA55C8" -Values @("00", "00", "00", "00") # C-Right
-        ChangeBytes -Offset "BA55D8" -Values @("00", "00", "00", "00")
-        ChangeBytes -Offset "BA6018" -Values @("00", "00", "00", "00")
-        ChangeBytes -Offset "BA60E4" -Values @("00", "00", "00", "00")
+        ChangeBytes -Offset "BA55C8" -Values "00 00 00 00" # C-Right
+        ChangeBytes -Offset "BA55D8" -Values "00 00 00 00"
+        ChangeBytes -Offset "BA6018" -Values "00 00 00 00"
+        ChangeBytes -Offset "BA60E4" -Values "00 00 00 00"
     }
 
     if (IsChecked -Elem $Redux.Hide.Hearts) { 
-        ChangeBytes -Offset "BA5B28" -Values @("00", "00", "00", "00") # Health
-        ChangeBytes -Offset "BA5BFC" -Values @("00", "00", "00", "00")
-        ChangeBytes -Offset "BA5A14" -Values @("00", "00", "00", "00")
-        ChangeBytes -Offset "BA603C" -Values @("00", "00", "00", "00")
-		ChangeBytes -Offset "BA6530" -Values @("00", "00", "00", "00")
-        ChangeBytes -Offset "BB787C" -Values @("00", "00", "00", "00")
+        ChangeBytes -Offset "BA5B28" -Values "00 00 00 00" # Health
+        ChangeBytes -Offset "BA5BFC" -Values "00 00 00 00"
+        ChangeBytes -Offset "BA5A14" -Values "00 00 00 00"
+        ChangeBytes -Offset "BA603C" -Values "00 00 00 00"
+		ChangeBytes -Offset "BA6530" -Values "00 00 00 00"
+        ChangeBytes -Offset "BB787C" -Values "00 00 00 00"
     }
 
     if (IsChecked -Elem $Redux.Hide.Magic) { 
-        ChangeBytes -Offset "BA5A28" -Values @("00", "00", "00", "00") # Magic Meter and Rupees
-        ChangeBytes -Offset "BA5B3C" -Values @("00", "00", "00", "00")
-        ChangeBytes -Offset "BA5BE8" -Values @("00", "00", "00", "00")
-        ChangeBytes -Offset "BA6028" -Values @("00", "00", "00", "00")
-		ChangeBytes -Offset "BA6520" -Values @("00", "00", "00", "00")
-        ChangeBytes -Offset "BB788C" -Values @("00", "00", "00", "00")
+        ChangeBytes -Offset "BA5A28" -Values "00 00 00 00" # Magic Meter and Rupees
+        ChangeBytes -Offset "BA5B3C" -Values "00 00 00 00"
+        ChangeBytes -Offset "BA5BE8" -Values "00 00 00 00"
+        ChangeBytes -Offset "BA6028" -Values "00 00 00 00"
+		ChangeBytes -Offset "BA6520" -Values "00 00 00 00"
+        ChangeBytes -Offset "BB788C" -Values "00 00 00 00"
     }
 
     if (IsChecked -Elem $Redux.Hide.AreaTitle) { 
-        ChangeBytes -Offset "B80A64" -Values @("10", "00", "01", "9E") # Disable Area Title Cards
-	    ChangeBytes -Offset "B842C0" -Values @("10", "00", "00", "04") # Disable Area Title Cards
+        ChangeBytes -Offset "B80A64" -Values "10 00 01 9E" # Disable Area Title Cards
+	    ChangeBytes -Offset "B842C0" -Values "10 00 00 04" # Disable Area Title Cards
     }
 
     if (IsChecked -Elem $Redux.Hide.Clock) { 
-        ChangeBytes -Offset "C5606D" -Values @("00") # Clock
-		ChangeBytes -Offset "BAFD5C" -Values @("00", "00", "00", "00")
-        ChangeBytes -Offset "BAFC48" -Values @("00", "00", "00", "00")
-        ChangeBytes -Offset "BAFDA8" -Values @("00", "00", "00", "00")
-		ChangeBytes -Offset "BAFD00" -Values @("00", "00", "00", "00")
-		ChangeBytes -Offset "BAFD98" -Values @("00", "00", "00", "00")
+        ChangeBytes -Offset "C5606D" -Values "00" # Clock
+		ChangeBytes -Offset "BAFD5C" -Values "00 00 00 00"
+        ChangeBytes -Offset "BAFC48" -Values "00 00 00 00"
+        ChangeBytes -Offset "BAFDA8" -Values "00 00 00 00"
+		ChangeBytes -Offset "BAFD00" -Values "00 00 00 00"
+		ChangeBytes -Offset "BAFD98" -Values "00 00 00 00"
     }
 
     if (IsChecked -Elem $Redux.Hide.CountdownTimer) { 
-        ChangeBytes -Offset "BB169A" -Values @("01","FF") # Disable Countdown timer background
-	    ChangeBytes -Offset "C56180" -Values @("01","FF","01","FF","01","FF","01","FF","01","FF","01","FF","01","FF","01","FF") # Disable Countdown timer
+        ChangeBytes -Offset "BB169A" -Values "01 FF" # Disable Countdown timer background
+	    ChangeBytes -Offset "C56180" -Values "01 FF 01 FF 01 FF 01 FF 01 FF 01 FF 01 FF 01 FF" # Disable Countdown timer
     }
 
 
@@ -226,9 +226,8 @@ function ByteOptionsMajorasMask() {
     # SOUNDS / SFX SOUND EFFECTS #
 
     if (IsChecked -Elem $Redux.Sounds.DisableSFXEffect) {
-        ChangeBytes -Offset "C3560C" -Values @("08 ", "06 ", "BE ", "A6 ", "AF ", "BF ", "00 ", "1C ", "3C ", "0E ", "80 ", "1E ", "24 ", "E7 ", "B4 ", "B0") # Disable some sfx
-        ChangeBytes -Offset "C45FD8" -Values @("34 ", "09 ", "48 ", "02 ", "10 ", "89 ", "00 ", "0C ", "00 ", "00 ", "00 ", "00 ", "34 ", "09 ", "48 ", "07 ", "10 ", "89 ", "00 ", "09 ", "00 ", "00 ", "00 ", "00 ", "34 ", "09 ", "48 ", "2F ", "10 ", "89 ", "00 ",
-        "06 ", "00 ", "00 ", "00 ", "00 ", "00 ", "00 ", "00 ", "00 ", "00 ", "00 ","00 ", "00 ", "08 ", "06 ", "7C ", "35 ", "3C ", "07 ", "80 ", "1E ", "00 ", "00 ", "00 ", "00 ", "00 ", "00 ", "48 ", "25 ", "03 ", "E0 ", "00 ", "08 ", "27 ", "BD ", "00 ", "20")
+        ChangeBytes -Offset "C3560C" -Values "08  06  BE  A6  AF  BF  00  1C  3C  0E  80  1E  24  E7  B4  B0" # Disable some sfx
+        ChangeBytes -Offset "C45FD8" -Values "34  09  48  02  10  89  00  0C  00  00  00  00  34  09  48  07  10  89  00  09  00  00  00  00  34  09  48  2F  10  89  00 06  00  00  00  00  00  00  00  00  00  00 ","00  00  08  06  7C  35  3C  07  80  1E  00  00  00  00  00  00  48  25  03  E0  00  08  27  BD  00  20"
     }
 
     if (IsIndex -Elem $Redux.Sounds.LowHP -Not)                       { ChangeBytes -Offset "B97E2A" -Values (GetSFXID $Redux.Sounds.LowHP.Text) }
@@ -242,43 +241,43 @@ function ByteOptionsMajorasMask() {
     # HERO MODE #
 
     if (IsText -Elem $Redux.Hero.Damage -Compare "OHKO Mode") {
-        ChangeBytes -Offset "BABE7F" -Values @("09", "04") -Interval 16
-        ChangeBytes -Offset "BABEA2" -Values @("2A", "00")
-        ChangeBytes -Offset "BABEA5" -Values @("00", "00", "00")
+        ChangeBytes -Offset "BABE7F" -Values "09 04" -Interval 16
+        ChangeBytes -Offset "BABEA2" -Values "2A 00"
+        ChangeBytes -Offset "BABEA5" -Values "00 00 00"
     }
     elseif ( (IsText -Elem $Redux.Hero.Damage -Compare "1x Damage" -Not) -or (IsText -Elem $Redux.Hero.Recovery -Compare "1x Recovery" -Not) ) {
-        ChangeBytes -Offset "BABE7F" -Values @("09", "04") -Interval 16
+        ChangeBytes -Offset "BABE7F" -Values "09 04" -Interval 16
         if         (IsText -Elem $Redux.Hero.Recovery -Compare "1x Recovery") {
-            if     (IsText -Elem $Redux.Hero.Damage -Compare "2x Damage")   { ChangeBytes -Offset "BABEA2" -Values @("28", "40") }
-            elseif (IsText -Elem $Redux.Hero.Damage -Compare "4x Damage")   { ChangeBytes -Offset "BABEA2" -Values @("28", "80") }
-            elseif (IsText -Elem $Redux.Hero.Damage -Compare "8x Damage")   { ChangeBytes -Offset "BABEA2" -Values @("28", "C0") }
-            ChangeBytes -Offset "BABEA5" -Values @("00", "00", "00")
+            if     (IsText -Elem $Redux.Hero.Damage -Compare "2x Damage")   { ChangeBytes -Offset "BABEA2" -Values "28 40" }
+            elseif (IsText -Elem $Redux.Hero.Damage -Compare "4x Damage")   { ChangeBytes -Offset "BABEA2" -Values "28 80" }
+            elseif (IsText -Elem $Redux.Hero.Damage -Compare "8x Damage")   { ChangeBytes -Offset "BABEA2" -Values "28 C0" }
+            ChangeBytes -Offset "BABEA5" -Values "00 00 00"
         }
         elseif     (IsText -Elem $Redux.Hero.Recovery -Compare "1/2x Recovery") {
-            if     (IsText -Elem $Redux.Hero.Damage -Compare "1x Damage")   { ChangeBytes -Offset "BABEA2" -Values @("28", "40") }
-            elseif (IsText -Elem $Redux.Hero.Damage -Compare "2x Damage")   { ChangeBytes -Offset "BABEA2" -Values @("28", "80") }
-            elseif (IsText -Elem $Redux.Hero.Damage -Compare "4x Damage")   { ChangeBytes -Offset "BABEA2" -Values @("28", "C0") }
-            elseif (IsText -Elem $Redux.Hero.Damage -Compare "8x Damage")   { ChangeBytes -Offset "BABEA2" -Values @("29", "00") }
-            ChangeBytes -Offset "BABEA5" -Values @("05", "28", "43")
+            if     (IsText -Elem $Redux.Hero.Damage -Compare "1x Damage")   { ChangeBytes -Offset "BABEA2" -Values "28 40" }
+            elseif (IsText -Elem $Redux.Hero.Damage -Compare "2x Damage")   { ChangeBytes -Offset "BABEA2" -Values "28 80" }
+            elseif (IsText -Elem $Redux.Hero.Damage -Compare "4x Damage")   { ChangeBytes -Offset "BABEA2" -Values "28 C0" }
+            elseif (IsText -Elem $Redux.Hero.Damage -Compare "8x Damage")   { ChangeBytes -Offset "BABEA2" -Values "29 00" }
+            ChangeBytes -Offset "BABEA5" -Values "05 28 43"
         }
         elseif     (IsText -Elem $Redux.Hero.Recovery -Compare "1/4x Recovery") {
-            if     (IsText -Elem $Redux.Hero.Damage -Compare "1x Damage")   { ChangeBytes -Offset "BABEA2" -Values @("28", "80") }
-            elseif (IsText -Elem $Redux.Hero.Damage -Compare "2x Damage")   { ChangeBytes -Offset "BABEA2" -Values @("28", "C0") }
-            elseif (IsText -Elem $Redux.Hero.Damage -Compare "4x Damage")   { ChangeBytes -Offset "BABEA2" -Values @("29", "00") }
-            elseif (IsText -Elem $Redux.Hero.Damage -Compare "8x Damage")   { ChangeBytes -Offset "BABEA2" -Values @("29", "40") }
-            ChangeBytes -Offset "BABEA5" -Values @("05", "28", "83")
+            if     (IsText -Elem $Redux.Hero.Damage -Compare "1x Damage")   { ChangeBytes -Offset "BABEA2" -Values "28 80" }
+            elseif (IsText -Elem $Redux.Hero.Damage -Compare "2x Damage")   { ChangeBytes -Offset "BABEA2" -Values "28 C0" }
+            elseif (IsText -Elem $Redux.Hero.Damage -Compare "4x Damage")   { ChangeBytes -Offset "BABEA2" -Values "29 00" }
+            elseif (IsText -Elem $Redux.Hero.Damage -Compare "8x Damage")   { ChangeBytes -Offset "BABEA2" -Values "29 40" }
+            ChangeBytes -Offset "BABEA5" -Values "05 28 83"
         }
         elseif     (IsText -Elem $Redux.Hero.Recovery -Compare "0x Recovery") {
-            if     (IsText -Elem $Redux.Hero.Damage -Compare "1x Damage")   { ChangeBytes -Offset "BABEA2" -Values @("29", "40") }
-            elseif (IsText -Elem $Redux.Hero.Damage -Compare "2x Damage")   { ChangeBytes -Offset "BABEA2" -Values @("29", "80") }
-            elseif (IsText -Elem $Redux.Hero.Damage -Compare "4x Damage")   { ChangeBytes -Offset "BABEA2" -Values @("29", "C0") }
-            elseif (IsText -Elem $Redux.Hero.Damage -Compare "8x Damage")   { ChangeBytes -Offset "BABEA2" -Values @("2A", "00") }
-            ChangeBytes -Offset "BABEA5" -Values @("05", "29", "43")
+            if     (IsText -Elem $Redux.Hero.Damage -Compare "1x Damage")   { ChangeBytes -Offset "BABEA2" -Values "29 40" }
+            elseif (IsText -Elem $Redux.Hero.Damage -Compare "2x Damage")   { ChangeBytes -Offset "BABEA2" -Values "29 80" }
+            elseif (IsText -Elem $Redux.Hero.Damage -Compare "4x Damage")   { ChangeBytes -Offset "BABEA2" -Values "29 C0" }
+            elseif (IsText -Elem $Redux.Hero.Damage -Compare "8x Damage")   { ChangeBytes -Offset "BABEA2" -Values "2A 00" }
+            ChangeBytes -Offset "BABEA5" -Values "05 29 43"
         }
     }
 
-    if     (IsText -Elem $Redux.Hero.MagicUsage -Compare "2x Magic Usage")  { ChangeBytes -Offset "BAC306" -Values @("2C","40") }
-    elseif (IsText -Elem $Redux.Hero.MagicUsage -Compare "3x Magic Usage")  { ChangeBytes -Offset "BAC306" -Values @("2C","80") }
+    if     (IsText -Elem $Redux.Hero.MagicUsage -Compare "2x Magic Usage")  { ChangeBytes -Offset "BAC306" -Values "2C","40" }
+    elseif (IsText -Elem $Redux.Hero.MagicUsage -Compare "3x Magic Usage")  { ChangeBytes -Offset "BAC306" -Values "2C","80" }
 
 
 
@@ -369,20 +368,20 @@ function ByteOptionsMajorasMask() {
     # EQUIPMENT #
 
     if (IsChecked -Elem $Redux.Gameplay.RazorSword) {
-        ChangeBytes -Offset "CBA496" -Values @("00", "00") # Prevent losing hits
-        ChangeBytes -Offset "BDA6B7" -Values "01"          # Keep sword after Song of Time
+        ChangeBytes -Offset "CBA496" -Values "00 00" # Prevent losing hits
+        ChangeBytes -Offset "BDA6B7" -Values "01"    # Keep sword after Song of Time
     }
 
 
     # SCRIPT
 
     if (IsChecked -Elem $Redux.Script.AutoSkip) {
-        ChangeBytes -Offset "BDDC14" -Values @("08", "06", "BE", "DB") # Auto skip all text
-        ChangeBytes -Offset "C460AC" -Values @("34", "19", "00", "60", "11", "F9", "00", "09", "00", "00", "00", "00", "34", "19", "00", "61", "11", "F9", "00", "06", "00", "00", "00", "00", "34", "19", "00", "62", "11", "F9", "00", "03", "00", "00", "00", "00", "08", "05", "1D", "C9", "00", "00", "00", "00", "08", "05", "1D", "C0", "00", "0F", "C8", "20")
-        ChangeBytes -Offset "BEDE4C" -Values @("00", "00", "00", "00") # Auto skip text (Square)
+        ChangeBytes -Offset "BDDC14" -Values "08 06 BE DB" # Auto skip all text
+        ChangeBytes -Offset "C460AC" -Values "34 19 00 60 11 F9 00 09 00 00 00 00 34 19 00 61 11 F9 00 06 00 00 00 00 34 19 00 62 11 F9 00 03 00 00 00 00 08 05 1D C9 00 00 00 00 08 05 1D C0 00 0F C8 20"
+        ChangeBytes -Offset "BEDE4C" -Values "00 00 00 00" # Auto skip text (Square)
     }
 
-    if (IsChecked -Elem $Redux.Script.Comma) { ChangeBytes -Offset "ACC660"  -Values @("00", "F3", "00", "00", "00", "00", "00", "00", "4F", "60", "00", "00", "00", "00", "00", "00", "24") }
+    if (IsChecked -Elem $Redux.Script.Comma) { ChangeBytes -Offset "ACC660"  -Values "00 F3 00 00 00 00 00 00 4F 60 00 00 00 00 00 00 24" }
 
 }
 
@@ -404,8 +403,8 @@ function ByteReduxMajorasMask() {
         ChangeBytes -Offset $Offset -Values $Array
 
         if (IsWidescreen -Patched) { $Offset = "380623C" } else { $Offset = "3806364" }
-        if (IsChecked -Elem $Redux.DPad.LayoutLeft)        { ChangeBytes -Offset $Offset -Values @("01", "01") }
-        elseif (IsChecked -Elem $Redux.DPad.LayoutRight)   { ChangeBytes -Offset $Offset -Values @("01", "02") }
+        if (IsChecked -Elem $Redux.DPad.LayoutLeft)        { ChangeBytes -Offset $Offset -Values "01 01" }
+        elseif (IsChecked -Elem $Redux.DPad.LayoutRight)   { ChangeBytes -Offset $Offset -Values "01 02" }
         else                                               { ChangeBytes -Offset $Offset -Values "01" }
     }
 
@@ -417,9 +416,9 @@ function ByteReduxMajorasMask() {
     # Always:    Arrow Cycling & Underwater ocarina
 
     if (IsWidescreen -Patched) { $Offset = "3806408" } else { $Offset = "3806530" }
-    if     ( (IsChecked -Elem $Redux.Gameplay.EasierMinigames -Not) -and (IsChecked -Elem $Redux.Gameplay.FasterBlockPushing) )   { ChangeBytes -Offset $Offset -Values @("9E", "45", "06", "2D", "57", "4B", "28", "62", "49", "87", "69", "FB", "0F", "79", "1B", "9F", "18", "30") }
-    elseif ( (IsChecked -Elem $Redux.Gameplay.EasierMinigames) -and (IsChecked -Elem $Redux.Gameplay.FasterBlockPushing -Not) )   { ChangeBytes -Offset $Offset -Values @("D2", "AD", "24", "8F", "0C", "58", "D0", "A8", "96", "55", "0E", "EE", "D2", "2B", "25", "EB", "08", "30") }
-    elseif ( (IsChecked -Elem $Redux.Gameplay.EasierMinigames) -and (IsChecked -Elem $Redux.Gameplay.FasterBlockPushing) )        { ChangeBytes -Offset $Offset -Values @("B7", "36", "99", "48", "85", "BF", "FF", "B1", "FB", "EB", "D8", "B1", "06", "C8", "A8", "3B", "18", "30") }
+    if     ( (IsChecked -Elem $Redux.Gameplay.EasierMinigames -Not) -and (IsChecked -Elem $Redux.Gameplay.FasterBlockPushing) )   { ChangeBytes -Offset $Offset -Values "9E 45 06 2D 57 4B 28 62 49 87 69 FB 0F 79 1B 9F 18 30" }
+    elseif ( (IsChecked -Elem $Redux.Gameplay.EasierMinigames) -and (IsChecked -Elem $Redux.Gameplay.FasterBlockPushing -Not) )   { ChangeBytes -Offset $Offset -Values "D2 AD 24 8F 0C 58 D0 A8 96 55 0E EE D2 2B 25 EB 08 30" }
+    elseif ( (IsChecked -Elem $Redux.Gameplay.EasierMinigames) -and (IsChecked -Elem $Redux.Gameplay.FasterBlockPushing) )        { ChangeBytes -Offset $Offset -Values "B7 36 99 48 85 BF FF B1 FB EB D8 B1 06 C8 A8 3B 18 30" }
 
 
 
@@ -491,13 +490,13 @@ function ByteReduxMajorasMask() {
 #==============================================================================================================================================================================================
 function ByteLanguageMajorasMask() {
     
-    if ( (IsChecked $Redux.Text.Restore) -or (IsLanguage -Elem $Redux.Gameplay.RazorSword) -or (IsLangText -Elem $Redux.Colors.Fairy -Compare "Navi") -or (IsLangText -Elem $Redux.Colors.Fairy -Compare "Tael") ) {
+    if ( (IsChecked $Redux.Text.Restore) -or (IsLanguage -Elem $Redux.Gameplay.RazorSword) -or (IsLangText -Elem $Redux.Colors.Fairy -Compare "Navi") -or (IsLangText -Elem $Redux.Colors.Fairy -Compare "Tael")  -or (IsLanguage $Redux.Capacity.EnableAmmo) -or (IsLanguage $Redux.Capacity.EnableWallet)  ) {
         $File = $GameFiles.extracted + "\message_data_static.bin"
         ExportBytes -Offset "AD1000" -Length "699F0" -Output $File -Force
     }
 
     if (IsChecked -Elem $Redux.Text.Restore) {
-        ChangeBytes -Offset "1A6D6"  -Values @("AC", "A0")
+        ChangeBytes -Offset "1A6D6"  -Values "AC A0"
         PatchBytes  -Offset "C5D0D8" -Patch "Message\Table Restore Text.bin"
         ApplyPatch -File $File -Patch "\Export\Message\restore_text.bps"
         PatchBytes -Offset "A2DDC4" -Length "26F" -Texture -Patch "Icons\Troupe Leader's Mask Text.yaz0" # Correct Circus Mask
@@ -512,41 +511,63 @@ function ByteLanguageMajorasMask() {
         PatchBytes -Offset "A2B2B4" -Length "230" -Texture -Pad -Patch "Icons\Zora Guitar Text.yaz0"
 
         # Pointer Deku Pipes icon
-        ChangeBytes -Offset "A36D80" -Values @("00", "00", "4A", "B0")
+        ChangeBytes -Offset "A36D80" -Values "00 00 4A B0"
 
         # Pointer Goron Drums Text
-        ChangeBytes -Offset "A27674" -Values @("00", "00", "2B", "A0")
-        ChangeBytes -Offset "A276D0" -Values @("00", "00", "09", "C0")
+        ChangeBytes -Offset "A27674" -Values "00 00 2B A0"
+        ChangeBytes -Offset "A276D0" -Values "00 00 09 C0"
     }
 
     if (IsLanguage -Elem $Redux.Gameplay.RazorSword) {
-        $Offset = SearchBytes -File $File -Values @("54", "68", "69", "73", "20", "6E", "65", "77", "2C", "20", "73", "68", "61", "72", "70", "65", "72", "20", "62", "6C", "61", "64", "65")
-        ChangeBytes -File $File -Offset ( Get24Bit ( (GetDecimal $Offset) + (GetDecimal "38") ) ) -Values @("61", "73", "20", "6D", "75", "63", "68", "11", "79", "6F", "75", "20", "77", "61", "6E", "74", "20")
+        $Offset = SearchBytes -File $File -Values "54 68 69 73 20 6E 65 77 2C 20 73 68 61 72 70 65 72 20 62 6C 61 64 65"
+        ChangeBytes -File $File -Offset ( Get24Bit ( (GetDecimal $Offset) + (GetDecimal "38") ) ) -Values "61 73 20 6D 75 63 68 11 79 6F 75 20 77 61 6E 74 20"
 
-        $Offset = SearchBytes -File $File -Values @("54", "68", "65", "20", "4B", "6F", "6B", "69", "72", "69", "20", "53", "77", "6F", "72", "64", "20", "72", "65", "66", "6F", "72", "67", "65", "64")
-        ChangeBytes -File $File -Offset ( Get24Bit ( (GetDecimal $Offset) + (GetDecimal "30") ) ) -Values @("61", "73", "20", "6D", "75", "63", "68", "20", "79", "6F", "75", "20", "77", "61", "6E", "74", "2E", "20")
+        $Offset = SearchBytes -File $File -Values "54 68 65 20 4B 6F 6B 69 72 69 20 53 77 6F 72 64 20 72 65 66 6F 72 67 65 64"
+        ChangeBytes -File $File -Offset ( Get24Bit ( (GetDecimal $Offset) + (GetDecimal "30") ) ) -Values "61 73 20 6D 75 63 68 20 79 6F 75 20 77 61 6E 74 2E 20"
 
-        $Offset = SearchBytes -File $File -Values @("4B", "65", "65", "70", "20", "69", "6E", "20", "6D", "69", "6E", "64", "20", "74", "68", "61", "74")
+        $Offset = SearchBytes -File $File -Values "4B 65 65 70 20 69 6E 20 6D 69 6E 64 20 74 68 61 74"
         PatchBytes -File $File -Offset $Offset -Patch "Message\Razor Sword 1.bin"
 
-        $Offset = SearchBytes -File $File -Values @("4E", "6F", "77", "20", "6B", "65", "65", "70", "20", "69", "6E", "20", "6D", "69", "6E", "64", "20", "74", "68", "61", "74")
+        $Offset = SearchBytes -File $File -Values "4E 6F 77 20 6B 65 65 70 20 69 6E 20 6D 69 6E 64 20 74 68 61 74"
         PatchBytes -File $File -Offset $Offset -Patch "Message\Razor Sword 2.bin"
     }
 
     if (IsLangText -Elem $Redux.Colors.Fairy -Compare "Navi") {
         do { # Navi
-            $Offset = SearchBytes -File $File -Start $Offset -Values @("54", "61", "74", "6C")
-            if ($Offset -ne -1) { ChangeBytes -File $File -Offset $Offset -Values @("4E", "61", "76", "69") }
+            $Offset = SearchBytes -File $File -Start $Offset -Values "54 61 74 6C"
+            if ($Offset -ne -1) { ChangeBytes -File $File -Offset $Offset -Values "4E 61 76 69" }
         } while ($Offset -gt 0)
     }
     elseif (IsLangText -Elem $Redux.Colors.Fairy -Compare "Tael") {
         do { # Tael
-            $Offset = SearchBytes -File $File -Start $Offset -Values @("54", "61", "74", "6C")
-            if ($Offset -ne -1) { ChangeBytes -File $File -Offset $Offset -Values @("54", "61", "65", "6C") }
+            $Offset = SearchBytes -File $File -Start $Offset -Values "54 61 74 6C"
+            if ($Offset -ne -1) { ChangeBytes -File $File -Offset $Offset -Values "54 61 65 6C" }
         } while ($Offset -gt 0)
     }
 
-    if ( (IsChecked $Redux.Text.Restore) -or (IsLanguage -Elem $Redux.Gameplay.RazorSword) -or (IsLangText -Elem $Redux.Colors.Fairy -Compare "Navi") -or (IsLangText -Elem $Redux.Colors.Fairy -Compare "Tael")  ) {
+    if (IsLanguage $Redux.Capacity.EnableAmmo) {
+        ChangeStringIntoDigits -File $File -Search "33 30 20 61 72 72 6F 77 73 00 2E" -Value $Redux.Capacity.Quiver1.Text
+        ChangeStringIntoDigits -File $File -Search "34 30 20 61 72 72 6F 77 73 00"    -Value $Redux.Capacity.Quiver2.Text
+        ChangeStringIntoDigits -File $File -Search "34 30 20 61 72 72 6F 77 73 00"    -Value $Redux.Capacity.Quiver2.Text
+        ChangeStringIntoDigits -File $File -Search "35 30 20 61 72 72 6F 77 73 00"    -Value $Redux.Capacity.Quiver3.Text
+        ChangeStringIntoDigits -File $File -Search "35 30 20 61 72 72 6F 77 73 00"    -Value $Redux.Capacity.Quiver3.Text
+
+        ChangeStringIntoDigits -File $File -Search "32 30 20 42 6F 6D 62 73 00 21 11" -Value $Redux.Capacity.BombBag1.Text
+        ChangeStringIntoDigits -File $File -Search "32 30 20 42 6F 6D 62 73 00 2E BF" -Value $Redux.Capacity.BombBag1.Text
+        ChangeStringIntoDigits -File $File -Search "33 30 20 42 6F 6D 62 73 00 2E BF" -Value $Redux.Capacity.BombBag2.Text
+        ChangeStringIntoDigits -File $File -Search "33 30 20 42 6F 6D 62 73 00 2E BF" -Value $Redux.Capacity.BombBag2.Text
+        ChangeStringIntoDigits -File $File -Search "34 30 20 62 6F 6D 62 73"          -Value $Redux.Capacity.BombBag3.Text
+        ChangeStringIntoDigits -File $File -Search "34 30 20 42 6F 6D 62 73"          -Value $Redux.Capacity.BombBag3.Text
+
+        ChangeStringIntoDigits -File $File -Search "31 30 2C 11 73 6F 20 75 73 65"    -Value $Redux.Capacity.DekuSticks1.Text
+    }
+
+    if (IsLanguage $Redux.Capacity.EnableWallet) {
+        ChangeStringIntoDigits -File $File -Search "32 30 30 20 00 6F 66 20 74 68 65 6D" -Value $Redux.Capacity.Wallet2.Text -Triple
+        ChangeStringIntoDigits -File $File -Search "35 30 30 20 52 75 70 65 65 73 00 2E" -Value $Redux.Capacity.Wallet3.Text -Triple
+    }
+
+    if ( (IsChecked $Redux.Text.Restore) -or (IsLanguage -Elem $Redux.Gameplay.RazorSword) -or (IsLangText -Elem $Redux.Colors.Fairy -Compare "Navi") -or (IsLangText -Elem $Redux.Colors.Fairy -Compare "Tael")  -or (IsLanguage $Redux.Capacity.EnableAmmo) -or (IsLanguage $Redux.Capacity.EnableWallet) ) {
         PatchBytes -Offset "AD1000" -Patch "message_data_static.bin" -Extracted
     }
 

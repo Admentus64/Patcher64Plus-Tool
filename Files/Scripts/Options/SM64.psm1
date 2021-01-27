@@ -19,29 +19,29 @@ function ByteOptionsSuperMario64() {
 
     # GRAPHICS #
     if (IsChecked $Redux.Graphics.WideScreen) {
-        ChangeBytes -Offset "3855E" -Values @("47", "40")
-        ChangeBytes -Offset "35456" -Values @("46", "C0")
+        ChangeBytes -Offset "3855E" -Values "47 40"
+        ChangeBytes -Offset "35456" -Values "46 C0"
     }
 
     if (IsChecked $Redux.Graphics.BlackBars) {
-        ChangeBytes -Offset "23A7" -Values @("BC", "00") -Interval 12
+        ChangeBytes -Offset "23A7" -Values "BC 00" -Interval 12
         ChangeBytes -Offset "248E" -Values "00"
-        ChangeBytes -Offset "2966" -Values @("00", "00") -Interval 48
+        ChangeBytes -Offset "2966" -Values "00 00" -Interval 48
         ChangeBytes -Offset "3646A" -Values "00"
         ChangeBytes -Offset "364AA" -Values "00"
         ChangeBytes -Offset "364F6" -Values "00"
         ChangeBytes -Offset "36582" -Values "00"
-        ChangeBytes -Offset "3799F" -Values @("BC", "00") -Interval 12
+        ChangeBytes -Offset "3799F" -Values "BC 00" -Interval 12
     }
 
     if (IsChecked $Redux.Graphics.ExtendedDraw) {
-        ChangeBytes -Offset "1007F0" -Values @("00", "00", "00", "00") # Solid objects
-        ChangeBytes -Offset "1008B8" -Values @("00", "00", "00", "00")
-        ChangeBytes -Offset "1008D0" -Values @("00", "00", "00", "00")  
-      # ChangeBytes -Offset "36D2C"  -Values @("95", "E9", "00", "22")
+        ChangeBytes -Offset "1007F0" -Values "00 00 00 00" # Solid objects
+        ChangeBytes -Offset "1008B8" -Values "00 00 00 00"
+        ChangeBytes -Offset "1008D0" -Values "00 00 00 00"  
+      # ChangeBytes -Offset "36D2C"  -Values "95 E9 00" 22"
 
-        ChangeBytes -Offset "66FE6"  -Values @("46", "9C", "44", "81", "50", "00") # Coin formations
-        ChangeBytes -Offset "66F56"  -Values @("46", "9C")
+        ChangeBytes -Offset "66FE6"  -Values "46 9C 44 81 50 00" # Coin formations
+        ChangeBytes -Offset "66F56"  -Values "46 9C"
     }
 
     if (IsChecked $Redux.Graphics.OptimizeMarioModel) {
@@ -49,14 +49,14 @@ function ByteOptionsSuperMario64() {
         PatchBytes  -Offset "1279B0" -Patch "Optimized Mario 2.bin"
     }
 
-    if (IsChecked $Redux.Graphics.ForceHiresModel)         { ChangeBytes -Offset "32184" -Values @("10", "00") }
+    if (IsChecked $Redux.Graphics.ForceHiresModel)         { ChangeBytes -Offset "32184" -Values "10 00" }
 
     
 
     # GAMEPLAY #
     if (IsChecked $Redux.Gameplay.NoFallDamage) {
         ChangeBytes -Offset "25044" -Values "10"
-        ChangeBytes -Offset "252F4" -Values @("10", "00", "00", "18")
+        ChangeBytes -Offset "252F4" -Values "10 00 00 18"
         ChangeBytes -Offset "25368" -Values "10"
     }
 
@@ -66,23 +66,23 @@ function ByteOptionsSuperMario64() {
     }
 
     if (IsChecked $Redux.Gameplay.NoGameOver) {
-        ChangeBytes -Offset "5B10"  -Values @("24", "08", "00", "01")
-        ChangeBytes -Offset "5B98"  -Values @("24", "0E", "00", "01")
-        ChangeBytes -Offset "98118" -Values @("00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00")
-        ChangeBytes -Offset "9EDB0" -Values @("00", "00") 
-        ChangeBytes -Offset "9813C" -Values @("3C", "08", "80", "34")
+        ChangeBytes -Offset "5B10"  -Values "24 08 00 01"
+        ChangeBytes -Offset "5B98"  -Values "24 0E 00 01"
+        ChangeBytes -Offset "98118" -Values "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+        ChangeBytes -Offset "9EDB0" -Values "00 00"
+        ChangeBytes -Offset "9813C" -Values "3C 08 80 34"
     }
 
     if (IsChecked $Redux.Gameplay.LagFix)                       { ChangeBytes -Offset "F0022" -Values "0D" }
-    if (IsChecked $Redux.Gameplay.ExitLevelAnytime)             { ChangeBytes -Offset "97B74" -Values @("00", "00", "00", "00") }
-    if (IsChecked $Redux.Gameplay.NoEndlessStairs)              { ChangeBytes -Offset "53AC"  -Values @("10", "00") }
+    if (IsChecked $Redux.Gameplay.ExitLevelAnytime)             { ChangeBytes -Offset "97B74" -Values "00 00 00 00" }
+    if (IsChecked $Redux.Gameplay.NoEndlessStairs)              { ChangeBytes -Offset "53AC"  -Values "10 00" }
     ChangeBytes -Offset "1001B" -Values $Redux.Gameplay.Lives.Text -IsDec
 
 
 
     # INTERFACE #
     if (IsChecked $Redux.UI.HideHUD) {
-        ChangeBytes -Offset "9EB69" -Values @("11", "80", "34", "82", "31", "AF", "A1", "24", "12", "00", "20", "16", "51", "00", "68", "00", "00", "00", "00")
+        ChangeBytes -Offset "9EB69" -Values "11 80 34 82 31 AF A1 24 12 00 20 16 51 00 68 00 00 00 00"
         PatchBytes  -Offset "9EDA0" -Patch "Hide HUD.bin"
     }
 
@@ -90,15 +90,15 @@ function ByteOptionsSuperMario64() {
 
     # SKIP #
 
-    if (IsChecked $Redux.Skip.MarioScreen)                 { ChangeBytes -Offset "269F18" -Values @("01", "10", "00", "14", "00", "26", "9E", "A0", "00", "26", "A3", "A0", "14", "00", "02", "0C") }
-    if (IsChecked $Redux.Skip.TitleScreen)                 { ChangeBytes -Offset "269ECC" -Values @("34", "04", "00", "00", "01", "10", "00", "14", "00", "26", "9E", "A0", "00", "26", "A3", "A0", "14", "00", "00", "78") }
-    if (IsChecked $Redux.Skip.GameOverScreen)              { ChangeBytes -Offset "269FA4" -Values @("01", "10", "00", "14", "00", "26", "9E", "A0", "00", "26", "A3", "A0", "14", "00", "02", "0C") }
-    if (IsChecked $Redux.Skip.PeachIntro)                  { ChangeBytes -Offset "6BD4"   -Values @("24", "00") }
+    if (IsChecked $Redux.Skip.MarioScreen)                 { ChangeBytes -Offset "269F18" -Values "01 10 00 14 00 26 9E A0 00 26 A3 A0 14 00 02 0C" }
+    if (IsChecked $Redux.Skip.TitleScreen)                 { ChangeBytes -Offset "269ECC" -Values "34 04 00 00 01 10 00 14 00 26 9E A0 00 26 A3 A0 14 00 00 78" }
+    if (IsChecked $Redux.Skip.GameOverScreen)              { ChangeBytes -Offset "269FA4" -Values "01 10 00 14 00 26 9E A0 00 26 A3 A0 14 00 02 0C" }
+    if (IsChecked $Redux.Skip.PeachIntro)                  { ChangeBytes -Offset "6BD4"   -Values "24 00" }
 
-    if (IsChecked $Redux.Skip.StarMessages)                { ChangeBytes -Offset "123F8"  -Values @("10", "00") }
-    if (IsChecked $Redux.Skip.BoosDialogue)                { ChangeBytes -Offset "7F774"  -Values @("A7", "20", "00", "74") }
-    if (IsChecked $Redux.Skip.Lakitu)                      { ChangeBytes -Offset "6D90"   -Values @("24", "10", "00", "00") }
-    if (IsChecked $Redux.Skip.StageIntro)                  { ChangeBytes -Offset "4924"   -Values @("10", "00"); ChangeBytes -Offset "4B7C" -Values @("24", "00") }
+    if (IsChecked $Redux.Skip.StarMessages)                { ChangeBytes -Offset "123F8"  -Values "10 00" }
+    if (IsChecked $Redux.Skip.BoosDialogue)                { ChangeBytes -Offset "7F774"  -Values "A7 20 00 74" }
+    if (IsChecked $Redux.Skip.Lakitu)                      { ChangeBytes -Offset "6D90"   -Values "24 10 00 00" }
+    if (IsChecked $Redux.Skip.StageIntro)                  { ChangeBytes -Offset "4924"   -Values "10 00"; ChangeBytes -Offset "4B7C" -Values "24 00" }
 
 }
 
