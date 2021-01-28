@@ -382,18 +382,7 @@ function InitializeEvents() {
     # Patch Options
     $Patches.ComboBox.Add_SelectedIndexChanged( {
         $Settings["Core"][$this.Name] = $this.SelectedIndex
-        foreach ($Item in $Files.json.patches.patch) {
-            if ($Item.title -eq $Patches.ComboBox.Text) {
-                if ( ($IsWiiVC -and $Item.console -eq "Wii VC") -or (!$IsWiiVC -and $Item.console -eq "Native") -or ($Item.console -eq "Both") ) {
-                    $global:GamePatch = $Item
-                    $PatchToolTip.SetToolTip($Patches.Button, ([String]::Format($Item.tooltip, [Environment]::NewLine)))
-                    GetHeader
-                    GetRegion
-                    LoadAdditionalOptions
-                    DisablePatches
-                }
-            }
-        }
+        ChangePatch
     } )
 
     $Patches.Options.Add_CheckStateChanged({
@@ -451,16 +440,15 @@ function CheckVCOptions() {
     
     if (!$IsWiiVC) { return }
 
-    if     (IsChecked $VC.RemoveT64)      { $VC.PatchVCButton.Enabled = $True }
-    elseif (IsChecked $VC.ExpandMemory)   { $VC.PatchVCButton.Enabled = $True }
-    elseif (IsChecked $VC.RemoveFilter)   { $VC.PatchVCButton.Enabled = $True }
-    elseif (IsChecked $VC.RemapDPad)      { $VC.PatchVCButton.Enabled = $True }
-    elseif (IsChecked $VC.Downgrade)      { $VC.PatchVCButton.Enabled = $True }
-    elseif (IsChecked $VC.RemapCDown)     { $VC.PatchVCButton.Enabled = $True }
-    elseif (IsChecked $VC.RemapL)         { $VC.PatchVCButton.Enabled = $True }
-    elseif (IsChecked $VC.RemapZ)         { $VC.PatchVCButton.Enabled = $True }
-    elseif (IsChecked $VC.LeaveDPadUp)    { $VC.PatchVCButton.Enabled = $True }
-    else                                  { $VC.PatchVCButton.Enabled = $False }
+    if     (IsChecked $VC.RemoveT64)        { $VC.PatchVCButton.Enabled = $True }
+    elseif (IsChecked $VC.ExpandMemory)     { $VC.PatchVCButton.Enabled = $True }
+    elseif (IsChecked $VC.RemoveFilter)     { $VC.PatchVCButton.Enabled = $True }
+    elseif (IsChecked $VC.RemapDPad)        { $VC.PatchVCButton.Enabled = $True }
+    elseif (IsChecked $VC.RemapCDown)       { $VC.PatchVCButton.Enabled = $True }
+    elseif (IsChecked $VC.RemapL)           { $VC.PatchVCButton.Enabled = $True }
+    elseif (IsChecked $VC.RemapZ)           { $VC.PatchVCButton.Enabled = $True }
+    elseif (IsChecked $VC.LeaveDPadUp)      { $VC.PatchVCButton.Enabled = $True }
+    else                                    { $VC.PatchVCButton.Enabled = $False }
 
 }
 
@@ -471,7 +459,7 @@ function DisablePatches() {
     
     EnableElem -Elem @($Patches.Redux, $Patches.ReduxLabel) -Active ((IsSet $GamePatch.redux.file) -and $Settings.Debug.LiteGUI -eq $False) -Hide
     EnableElem -Elem @($Patches.Options, $Patches.OptionsLabel, $Patches.OptionsButton) -Active ($GamePatch.options -eq 1) -Hide
-    EnableElem -Elem @($Patches.Downgrade, $Patches.DowngradeLabel) -Active ($GameType.downgrade -eq 1 -and $Settings.Debug.LiteGUI -eq $False) -Hide
+    EnableElem -Elem @($Patches.Downgrade, $Patches.DowngradeLabel) -Active ((IsSet $GameType.downgrade) -and $Settings.Debug.LiteGUI -eq $False) -Hide
 
     #EnableElem -Elem @($VC.RemoveFilter, $VC.RemoveFilterLabel) -Active (!(StrLike -str $GamePatch.command -val "Patch Boot DOL"))
     EnableElem -Elem @($VC.RemapL, $VC.RemapLLabel) -Active (!(StrLike -str $GamePatch.command -val "Multiplayer"))

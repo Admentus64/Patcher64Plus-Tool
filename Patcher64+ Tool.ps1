@@ -158,13 +158,13 @@ if ($Settings.Debug.Console -ne $True) { ShowPowerShellConsole $False }
 SetFileParameters
 
 # Create the dialogs to show to the user
-CreateMainDialog
-CreateCreditsDialog
-CreateSettingsDialog
+CreateMainDialog     | Out-Null
+CreateCreditsDialog  | Out-Null
+CreateSettingsDialog | Out-Null
 
 # Set default game mode
-ChangeConsolesList
-GetFilePaths
+ChangeConsolesList   | Out-Null
+GetFilePaths         | Out-Null
 
 # Restore Last Custom Title and GameID
 $CustomHeader.Title.Add_TextChanged({           if (IsChecked $CustomHeader.EnableHeader)   { $Settings["Core"]["CustomHeader.Title"]  = $this.Text } })
@@ -176,12 +176,13 @@ RestoreCustomHeader
 RestoreCustomRegion
 
 # Restore last settings
-if ($GameConsole -eq $null) { ChangeGamesList }
-ChangeGameMode
-ChangePatchPanel
-SetMainScreenSize
-SetVCPanel
-CheckVCOptions
+if ($GameConsole -eq $null) { ChangeGamesList | Out-Null }
+ChangeGameMode    | Out-Null
+ChangePatchPanel  | Out-Null
+ChangePatch       | Out-Null
+SetMainScreenSize | Out-Null
+SetVCPanel        | Out-Null
+CheckVCOptions    | Out-Null
 
 # Active GUI events
 InitializeEvents

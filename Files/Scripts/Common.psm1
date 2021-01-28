@@ -7,8 +7,6 @@ function SetWiiVCMode([Boolean]$Enable) {
     else            { $CustomHeader.Title.MaxLength = $GameConsole.rom_title_length }
 
     EnablePatchButtons (IsSet $GamePath)
-    GetHeader
-    GetRegion
     SetModeLabel
     ChangePatchPanel
 
@@ -247,14 +245,30 @@ function ChangeGameMode() {
 
     $CreditsGameLabel.Text = "Current Game: " + $GameType.mode
     $Patches.Panel.Visible = $GameType.patches
-    if (!$Patches.Panel.Visible) {
-        GetHeader
-        GetRegion
-    }
 
     SetModeLabel
     if ($IsActiveGameField) { ChangePatchPanel }
     $global:IsActiveGameField = $True
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function ChangePatch() {
+    
+    foreach ($Item in $Files.json.patches.patch) {
+        if ($Item.title -eq $Patches.ComboBox.Text) {
+            if ( ($IsWiiVC -and $Item.console -eq "Wii VC") -or (!$IsWiiVC -and $Item.console -eq "Native") -or ($Item.console -eq "Both") ) {
+                $global:GamePatch = $Item
+                $PatchToolTip.SetToolTip($Patches.Button, ([String]::Format($Item.tooltip, [Environment]::NewLine)))
+                GetHeader
+                GetRegion
+                LoadAdditionalOptions
+                DisablePatches
+            }
+        }
+    }
 
 }
 
@@ -870,6 +884,7 @@ Export-ModuleMember -Function ChangeGamesList
 Export-ModuleMember -Function ChangePatchPanel
 Export-ModuleMember -Function SetMainScreenSize
 Export-ModuleMember -Function ChangeGameMode
+Export-ModuleMember -Function ChangePatch
 Export-ModuleMember -Function UpdateStatusLabel
 Export-ModuleMember -Function WriteToConsole
 Export-ModuleMember -Function SetModeLabel
