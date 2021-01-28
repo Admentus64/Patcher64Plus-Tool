@@ -99,10 +99,9 @@ function ChangeGamesList() {
 
 #==============================================================================================================================================================================================
 function ChangePatchPanel() {
-    
+
     # Return is no GameType or game file is set
     if (!(IsSet $GameType)) { return }
-
 
     # Reset
     $Patches.Group.text = $GameType.mode + " - Patch Options"
@@ -321,6 +320,7 @@ function EnablePatchButtons([Boolean]$Enable) {
 
     # Enable patcher buttons.
     $Patches.Panel.Enabled = $Enable
+    $CustomHeader.Panel.Enabled = $Enable
 
     # Enable ROM extract
     $VC.ExtractROMButton.Enabled = $Enable

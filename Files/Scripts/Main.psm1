@@ -56,7 +56,7 @@ function CreateMainDialog() {
             $global:GamePath = $null
             $Settings["Core"][$InputPaths.GameTextBox.name] = ""
             $InputPaths.GameTextBox.Text = "Select or drag and drop your ROM or VC WAD file..."
-            $global:GameIsSelected = $Patches.Panel.Enabled = $InputPaths.ClearGameButton.Enabled = $InputPaths.PatchPanel.Visible = $False
+            $global:GameIsSelected = $Patches.Panel.Enabled = $CustomHeader.Panel.Enabled = $InputPaths.ClearGameButton.Enabled = $InputPaths.PatchPanel.Visible = $False
             if ($IsWiiVC) {
                 SetWiiVCMode $False
                 ChangeGamesList
@@ -156,6 +156,7 @@ function CreateMainDialog() {
 
     # Create the panel that holds the Custom Header.
     $CustomHeader.Panel = CreatePanel -Width (DPISize 590) -Height (DPISize 80)
+    $CustomHeader.Panel.Enabled = $False
 
     # Create the groupbox that holds the Custom Header.
     $CustomHeader.Group = CreateGroupBox -Width $CustomHeader.Panel.Width -Height $CustomHeader.Panel.Height -Text "Custom Channel Title and GameID"

@@ -24,13 +24,13 @@ Add-Type -AssemblyName 'System.Drawing'
 # Setup global variables
 
 $global:ScriptName = "Patcher64+ Tool"
-$global:VersionDate = "2021-01-27"
+$global:VersionDate = "2021-01-28"
 $global:Version     = "v11.2.0"
 
 $global:CommandType = $MyInvocation.MyCommand.CommandType.ToString()
 $global:Definition  = $MyInvocation.MyCommand.Definition.ToString()
 
-$global:GameConsole = $global:GameType = $global:GamePatch = $global:CheckHashSum = ""
+$global:GameConsole = $global:GameType = $global:GamePatch = $global:CheckHashSum = $null
 $global:GameFiles = $global:Settings = @{}
 $global:IsWiiVC = $global:MissingFiles = $False
 $global:VCTitleLength = 40
@@ -175,15 +175,16 @@ $CustomHeader.EnableRegion.Add_CheckedChanged({ RestoreCustomRegion })
 RestoreCustomHeader
 RestoreCustomRegion
 
-# Active GUI events
-InitializeEvents
-
 # Restore last settings
+if ($GameConsole -eq $null) { ChangeGamesList }
 ChangeGameMode
 ChangePatchPanel
 SetMainScreenSize
 SetVCPanel
 CheckVCOptions
+
+# Active GUI events
+InitializeEvents
 
 # Show the dialog to the user
 if (!$FatalError) { $MainDialog.ShowDialog() | Out-Null }
