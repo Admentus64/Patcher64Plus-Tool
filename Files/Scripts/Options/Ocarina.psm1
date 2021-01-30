@@ -559,7 +559,7 @@ function ByteLanguageOcarinaOfTime() {
         ApplyPatch -File $File -Patch "\Export\Message\female_pronouns.bps"
     }
 
-    if (IsChecked $Redux.TextSpeed2x) {
+    if (IsChecked $Redux.Text.Speed2x) {
         ChangeBytes -Offset "B5006F" -Values "02" # Text Speed
 
         if ($Redux.Language[0].checked) {
