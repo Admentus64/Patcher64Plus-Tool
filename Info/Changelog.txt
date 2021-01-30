@@ -1,3 +1,7 @@
+v11.2.1
+- Small hotfixes
+- Fixed softlock during Deku Tree opening with the Female Pronouns script
+
 v11.2.0
 - The ChangeBytes command can now accept a regular string that contains a series of bytes as well
 - Updated ammo and wallet capacity values are now shown in the English dialogue script as well
