@@ -1,6 +1,7 @@
 v11.2.1
 - Small hotfixes
 - Fixed softlock during Deku Tree opening with the Female Pronouns script
+- Fixed 2x Text Speed not working
 
 v11.2.0
 - The ChangeBytes command can now accept a regular string that contains a series of bytes as well
