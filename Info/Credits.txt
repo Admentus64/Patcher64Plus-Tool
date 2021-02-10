@@ -42,6 +42,7 @@
 - Pause Screen Delay Fix		zel
 - Debug Map Select			Jared Johnson
 - Set Capacity:				GhostlyDark
+- 4 Digits for Rupees:			CloudMax, VictorHale & CrookedPoe
 - Show File Select Icons:		ShadowOne333
 - Colors:				GhostlyDark
 - Restore Text:				ShadowOne333
@@ -221,6 +222,7 @@ Special Thanks:				Nokaubure, z64me, Ultra553, OoT Decomp
 - 16:9 Backgrounds & Textures:		GhostlyDark & ShadowOne333
 - Enhanced 16:9 Widescreen:		gamemasterplc & GhostlyDark
 - Improved Link Model:			Skilarbabcock (www.youtube.com/user/skilarbabcock) & Nerrel
+- Adult Epona:				Airikita
 - Kokiri Tunic Color:			GhostlyDark
 - Recolor Mask Forms:			ShadowOne333 & Garo-Mastah
 - Zora Physics:				ShadowOne333
@@ -453,6 +455,21 @@ Special Thanks:				Nokaubure, z64me, Ultra553, OoT Decomp
 - Widescreen:				ocesse
 - Save Stations Refill:			Adamf
 - ShadowOne333
+
+
+
+===========================
+=== DONKEY KONG COUNTRY ===
+===========================
+
+--- Boss Blitz ---
+- Mattrizzle
+
+--- Expert Edition ---
+- Q
+
+--- German 60 Hz ---
+- GhostlyDark
 
 
 

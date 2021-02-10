@@ -1,6 +1,5 @@
-function CreateForm([int]$X=0, [int]$Y=0, [int]$Width=0, [int]$Height=0, [String]$Name, [String]$Tag, [Object]$Object, [Boolean]$IsGame, [Object]$AddTo) {
+function CreateForm([uint16]$X=0, [uint16]$Y=0, [uint16]$Width=0, [uint16]$Height=0, [string]$Name, [string]$Tag, [object]$Form, [boolean]$IsGame, [object]$AddTo) {
     
-    $Form = $Object
     $Form.Size = New-Object System.Drawing.Size($Width, $Height)
     $Form.Location = New-Object System.Drawing.Size($X, $Y)
     if ( ($Tag -ne "") -or ($Tag -ne $null) ) { $Form.Tag = $Tag }
@@ -21,7 +20,7 @@ function CreateForm([int]$X=0, [int]$Y=0, [int]$Width=0, [int]$Height=0, [String
 
 
 #==============================================================================================================================================================================================
-function CreateDialog([int]$Width=0, [int]$Height=0, [Object]$Icon) {
+function CreateDialog([uint16]$Width=0, [uint16]$Height=0, [string]$Icon) {
     
     # Create the dialog that displays more info.
     $Dialog = New-Object System.Windows.Forms.Form
@@ -43,7 +42,7 @@ function CreateDialog([int]$Width=0, [int]$Height=0, [Object]$Icon) {
 
 
 #==============================================================================================================================================================================================
-function CreateColorDialog([String]$Color="000000", [String]$Name, [Switch]$IsGame) {
+function CreateColorDialog([string]$Color="000000", [string]$Name, [switch]$IsGame) {
     
     $ColorDialog = New-Object System.Windows.Forms.ColorDialog
     $ColorDialog.Color = "#" + $Color
@@ -75,9 +74,9 @@ function CreateColorDialog([String]$Color="000000", [String]$Name, [Switch]$IsGa
 
 
 #==============================================================================================================================================================================================
-function CreateGroupBox([int]$X, [int]$Y, [int]$Width, [int]$Height, [String]$Name, [String]$Tag, [String]$Text, [Object]$AddTo=$Last.Panel) {
+function CreateGroupBox([uint16]$X, [uint16]$Y, [uint16]$Width, [uint16]$Height, [string]$Name, [string]$Tag, [string]$Text, [object]$AddTo=$Last.Panel) {
     
-    $Last.Group = CreateForm -X $X -Y $Y -Width $Width -Height $Height -Name $Name -Tag $Tag -Object (New-Object System.Windows.Forms.GroupBox) -AddTo $AddTo
+    $Last.Group = CreateForm -X $X -Y $Y -Width $Width -Height $Height -Name $Name -Tag $Tag -Form (New-Object System.Windows.Forms.GroupBox) -AddTo $AddTo
     $Last.Group.Font = $Fonts.Small
     if (IsSet $Text) { $Last.Group.Text = (" " + $Text + " ") }
     $Last.GroupName = $Name
@@ -88,9 +87,9 @@ function CreateGroupBox([int]$X, [int]$Y, [int]$Width, [int]$Height, [String]$Na
 
 
 #==============================================================================================================================================================================================
-function CreatePanel([int]$X, [int]$Y, [int]$Width, [int]$Height, [String]$Name, [String]$Tag, [Boolean]$Hide, [Object]$AddTo=$MainDialog) {
+function CreatePanel([uint16]$X, [uint16]$Y, [uint16]$Width, [uint16]$Height, [string]$Name, [string]$Tag, [boolean]$Hide, [object]$AddTo=$MainDialog) {
     
-    $Last.Panel = CreateForm -X $X -Y $Y -Width $Width -Height $Height -Name $Name -Tag $Tag -Object (New-Object System.Windows.Forms.Panel) -AddTo $AddTo
+    $Last.Panel = CreateForm -X $X -Y $Y -Width $Width -Height $Height -Name $Name -Tag $Tag -Form (New-Object System.Windows.Forms.Panel) -AddTo $AddTo
     if ($Hide) { $Last.Panel.Hide() }
     return $Last.Panel
 
@@ -99,9 +98,9 @@ function CreatePanel([int]$X, [int]$Y, [int]$Width, [int]$Height, [String]$Name,
 
 
 #==============================================================================================================================================================================================
-function CreateTextBox([int]$X=0, [int]$Y=0, [int]$Width=0, [int]$Height=0, [int]$Length=10, [String]$Name, [String]$Tag, [Switch]$ReadOnly, [Switch]$Multiline, [String]$Text="", [Switch]$IsGame, [Switch]$TextFileFont, [Object]$AddTo=$Last.Group) {
+function CreateTextBox([uint16]$X=0, [uint16]$Y=0, [uint16]$Width=0, [uint16]$Height=0, [byte]$Length=10, [string]$Name, [string]$Tag, [switch]$ReadOnly, [switch]$Multiline, [string]$Text="", [string]$Info, [switch]$IsGame, [switch]$TextFileFont, [object]$AddTo=$Last.Group) {
     
-    $TextBox = CreateForm -X $X -Y $Y -Width $Width -Height $Height -Name $Name -Tag $Tag -IsGame $IsGame -Object (New-Object System.Windows.Forms.TextBox) -AddTo $AddTo
+    $TextBox = CreateForm -X $X -Y $Y -Width $Width -Height $Height -Name $Name -Tag $Tag -IsGame $IsGame -Form (New-Object System.Windows.Forms.TextBox) -AddTo $AddTo
     $TextBox.Text = $Text
     if ($TextFileFont)   { $TextBox.Font = $Fonts.TextFile }
     else                 { $TextBox.Font = $Fonts.Small }
@@ -136,6 +135,7 @@ function CreateTextBox([int]$X=0, [int]$Y=0, [int]$Width=0, [int]$Height=0, [int
     }
     
     Add-Member -InputObject $TextBox -NotePropertyMembers @{ Default = $Text }
+    $ToolTip = CreateToolTip -Form $TextBox -Info $Info
     return $TextBox
 
 }
@@ -143,9 +143,9 @@ function CreateTextBox([int]$X=0, [int]$Y=0, [int]$Width=0, [int]$Height=0, [int
 
 
 #==============================================================================================================================================================================================
-function CreateComboBox([int]$X=0, [int]$Y=0, [int]$Width=0, [int]$Height=0, [String]$Name, [String]$Tag, [Object]$Items, [int]$Default=1, [String]$Info, [Switch]$IsGame, [Object]$AddTo=$Last.Group) {
+function CreateComboBox([uint16]$X=0, [uint16]$Y=0, [uint16]$Width=0, [uint16]$Height=0, [string]$Name, [string]$Tag, [string[]]$Items, [byte]$Default=1, [string]$Info, [switch]$IsGame, [object]$AddTo=$Last.Group) {
     
-    $ComboBox = CreateForm -X $X -Y $Y -Width $Width -Height $Height -Name $Name -Tag $Tag -IsGame $IsGame -Object (New-Object System.Windows.Forms.ComboBox) -AddTo $AddTo
+    $ComboBox = CreateForm -X $X -Y $Y -Width $Width -Height $Height -Name $Name -Tag $Tag -IsGame $IsGame -Form (New-Object System.Windows.Forms.ComboBox) -AddTo $AddTo
     $ComboBox.DropDownStyle = "DropDownList"
     $ComboBox.Font = $Fonts.Small
     $ToolTip = CreateToolTip -Form $ComboBox -Info $Info
@@ -176,13 +176,13 @@ function CreateComboBox([int]$X=0, [int]$Y=0, [int]$Width=0, [int]$Height=0, [St
 
 
 #==============================================================================================================================================================================================
-function CreateCheckBox([int]$X=0, [int]$Y=0, [String]$Name, [int]$SaveAs=1, [String]$SaveTo, [int]$Max=1, [String]$Tag, [Boolean]$Checked=$False, [Boolean]$Disable=$False, [Boolean]$IsRadio=$False, [String]$Info="", [Boolean]$IsGame=$False, [Boolean]$IsDebug=$False, [Object]$AddTo=$Last.Group) {
+function CreateCheckBox([uint16]$X=0, [uint16]$Y=0, [string]$Name, [byte]$SaveAs=1, [string]$SaveTo, [byte]$Max=1, [string]$Tag, [boolean]$Checked=$False, [boolean]$Disable=$False, [boolean]$IsRadio=$False, [string]$Info="", [boolean]$IsGame=$False, [boolean]$IsDebug=$False, [object]$AddTo=$Last.Group) {
     
     if ($IsRadio) {
-        $CheckBox = CreateForm -X $X -Y $Y -Width (DPISize 20) -Height (DPISize 20) -Name $Name -Tag $Tag -IsGame $IsGame -Object (New-Object System.Windows.Forms.RadioButton) -AddTo $AddTo
+        $CheckBox = CreateForm -X $X -Y $Y -Width (DPISize 20) -Height (DPISize 20) -Name $Name -Tag $Tag -IsGame $IsGame -Form (New-Object System.Windows.Forms.RadioButton) -AddTo $AddTo
         Add-Member -InputObject $CheckBox -NotePropertyMembers @{ SaveAs = $SaveAs; SaveTo = $SaveTo }
     }
-    else { $CheckBox = CreateForm -X $X -Y $Y -Width (DPISize 20) -Height (DPISize 20) -Name $Name -Tag $Tag -IsGame $IsGame -Object (New-Object System.Windows.Forms.CheckBox) -AddTo $AddTo }
+    else { $CheckBox = CreateForm -X $X -Y $Y -Width (DPISize 20) -Height (DPISize 20) -Name $Name -Tag $Tag -IsGame $IsGame -Form (New-Object System.Windows.Forms.CheckBox) -AddTo $AddTo }
     $ToolTip = CreateToolTip -Form $CheckBox -Info $Info
     $CheckBox.Enabled = !$Disable
 
@@ -224,9 +224,9 @@ function CreateCheckBox([int]$X=0, [int]$Y=0, [String]$Name, [int]$SaveAs=1, [St
 
 
 #==============================================================================================================================================================================================
-function CreateLabel([int]$X=0, [int]$Y=0, [String]$Name, [String]$Tag, [int]$Width=0, [int]$Height=0, [String]$Text="", [Object]$Font=$Fonts.Small, [String]$Info="", [Object]$AddTo=$Last.Group) {
+function CreateLabel([uint16]$X=0, [uint16]$Y=0, [uint16]$Width=0, [uint16]$Height=0, [string]$Name, [string]$Tag, [string]$Text="", [System.Drawing.Font]$Font=$Fonts.Small, [string]$Info="", [object]$AddTo=$Last.Group) {
     
-    $Label = CreateForm -X $X -Y $Y -Width $Width -Height $Height -Name $Name -Tag $Tag -Object (New-Object System.Windows.Forms.Label) -AddTo $AddTo
+    $Label = CreateForm -X $X -Y $Y -Width $Width -Height $Height -Name $Name -Tag $Tag -Form (New-Object System.Windows.Forms.Label) -AddTo $AddTo
     if (IsSet $Text)      { $Label.Text = $Text }
     if (!(IsSet $Width))  { $Label.AutoSize = $True }
     $Label.Font = $Font
@@ -238,9 +238,9 @@ function CreateLabel([int]$X=0, [int]$Y=0, [String]$Name, [String]$Tag, [int]$Wi
 
 
 #==============================================================================================================================================================================================
-function CreateButton([int]$X=0, [int]$Y=0, [String]$Name, [String]$Tag, [int]$Width=(DPISize 100), [int]$Height=(DPISize 20), [String]$ForeColor, [String]$BackColor, [String]$Text="", [Object]$Font=$Fonts.Small, [String]$Info="", [Object]$AddTo=$Last.Group) {
+function CreateButton([uint16]$X=0, [uint16]$Y=0, [uint16]$Width=(DPISize 100), [uint16]$Height=(DPISize 20), [string]$Name, [string]$Tag, [string]$ForeColor, [string]$BackColor, [string]$Text="", [System.Drawing.Font]$Font=$Fonts.Small, [string]$Info="", [object]$AddTo=$Last.Group) {
     
-    $Button = CreateForm -X $X -Y $Y -Width $Width -Height $Height -Name $Name -Tag $Tag -Object (New-Object System.Windows.Forms.Button) -AddTo $AddTo
+    $Button = CreateForm -X $X -Y $Y -Width $Width -Height $Height -Name $Name -Tag $Tag -Form (New-Object System.Windows.Forms.Button) -AddTo $AddTo
     if (IsSet $Text)        { $Button.Text = $Text }
     $Button.Font = $Font
     if (IsSet $ForeColor)   { $Button.ForeColor = $ForeColor }
@@ -253,7 +253,7 @@ function CreateButton([int]$X=0, [int]$Y=0, [String]$Name, [String]$Tag, [int]$W
 
 
 #==============================================================================================================================================================================================
-function CreateTabButtons([Array]$Tabs, [Object]$AddTo=$Redux.Panel) {
+function CreateTabButtons([string[]]$Tabs, [object]$AddTo=$Redux.Panel) {
     
     if ($Tabs.Count -eq 0) {
         if ( ($GamePatch.redux.options -eq 1 -or (IsSet $GamePatch.languages)) -and $Settings.Debug.LiteGUI -eq $False) {
@@ -278,8 +278,7 @@ function CreateTabButtons([Array]$Tabs, [Object]$AddTo=$Redux.Panel) {
             $this.BackColor = "DarkGray"
         })
         $global:ReduxTabs += $Button
-        $FunctionTitle = SetFunctionTitle -Function ($Tabs[$i] + $GameType.mode)
-        if (Get-Command ("CreateTab" + $FunctionTitle) -errorAction SilentlyContinue) { &("CreateTab" + $FunctionTitle) }
+        if (Get-Command ("CreateTab" + $Tabs[$i]) -errorAction SilentlyContinue) { iex ("CreateTab" + $Tabs[$i]) }
     }
 
     # Restore last tab
@@ -308,7 +307,7 @@ function CreateTabButtons([Array]$Tabs, [Object]$AddTo=$Redux.Panel) {
 
 
 #==============================================================================================================================================================================================
-function CreateReduxPanel([Float]$Row=0, [Float]$Columns, [Float]$Rows=1,  [String]$Name, [String]$Tag, [Object]$AddTo=$Last.Group) {
+function CreateReduxPanel([single]$Row=0, [single]$Columns, [single]$Rows=1,  [string]$Name, [string]$Tag, [object]$AddTo=$Last.Group) {
     
     $Last.Max = 0
     if (IsSet $Columns -Min 0)   { $Width = (DPISize 150) * $Columns }
@@ -319,7 +318,7 @@ function CreateReduxPanel([Float]$Row=0, [Float]$Columns, [Float]$Rows=1,  [Stri
 
 
 #==============================================================================================================================================================================================
-function CreateReduxGroup([Float]$X=(DPISize 15), [Float]$Y=(DPISize 50), [Float]$Height=1, [String]$Name=$Last.TabName, [String]$Tag, [Switch]$Hide, [Boolean]$IsGame=$True, [String]$Text="", [Switch]$IsRedux, [Float]$Columns=0, [Object]$AddTo=$Redux.Panel) {
+function CreateReduxGroup([single]$X=(DPISize 15), [single]$Y=(DPISize 50), [single]$Height=1, [string]$Name=$Last.TabName, [string]$Tag, [switch]$Hide, [boolean]$IsGame=$True, [string]$Text="", [switch]$IsRedux, [single]$Columns=0, [object]$AddTo=$Redux.Panel) {
     
     $Width = ($AddTo.Width - (DPISize 50))
     $Last.Column = 1;
@@ -366,7 +365,7 @@ function CreateReduxGroup([Float]$X=(DPISize 15), [Float]$Y=(DPISize 50), [Float
 
 
 #==============================================================================================================================================================================================
-function CreateReduxButton([Float]$Column=1, [Float]$Row=1, [int]$Width=150, [int]$Height=20, [String]$Name, [String]$Tag, [String]$Text="", [String]$Info="", [String]$Credits="", [Object]$AddTo=$Last.Group) {
+function CreateReduxButton([single]$Column=1, [single]$Row=1, [int16]$Width=150, [int16]$Height=20, [string]$Name, [string]$Tag, [string]$Text="", [string]$Info="", [string]$Credits="", [object]$AddTo=$Last.Group) {
     
     if ( (IsSet $Info ) -and (IsSet $Credits) ) { $Info += ("`n`n- Credits: " + $Credits) }
     return CreateButton -X (($Column-1) * (DPISize 165) + (DPISize 15)) -Y ($Row * (DPISize 30) - (DPISize 13)) -Width (DPISize $Width) -Height (DPISize $Height) -Name $Name -Tag $Tag -Text $Text -Info $Info -AddTo $AddTo
@@ -376,12 +375,12 @@ function CreateReduxButton([Float]$Column=1, [Float]$Row=1, [int]$Width=150, [in
 
 
 #==============================================================================================================================================================================================
-function CreateReduxTextBox([Float]$Column=1, [Float]$Row=1, [int]$Length=2, [String]$Value=0, [String]$Text="", [String]$Info="", [String]$Credits="", [String]$Name, [String]$Tag, [Object]$AddTo=$Last.Group) {
+function CreateReduxTextBox([single]$Column=$Last.Column, [single]$Row=1, [byte]$Length=2, [string]$Value=0, [string]$Text="", [string]$Info="", [string]$Credits="", [string]$Name, [string]$Tag, [object]$AddTo=$Last.Group) {
     
     if ( (IsSet $Info ) -and (IsSet $Credits) ) { $Info += ("`n`n- Credits: " + $Credits) }
 
     $Label = CreateLabel -X (($Column-1) * (DPISize 165) + (DPISize 15)) -Y ($Row * (DPISize 30) - (DPISize 10)) -Width (DPISize 100) -Height (DPISize 15) -Text $Text -Info $Info -AddTo $AddTo
-    $TextBox = CreateTextBox -X $Label.Right -Y ($Label.Top - (DPISize 3)) -Width (DPISize 30) -Height (DPISize 15) -Length $Length -Text $Value -IsGame $True -Name $Name -Tag $Tag -AddTo $AddTo
+    $TextBox = CreateTextBox -X $Label.Right -Y ($Label.Top - (DPISize 3)) -Width (DPISize 35) -Height (DPISize 15) -Length $Length -Text $Value -IsGame $True -Name $Name -Tag $Tag -Info $Info -AddTo $AddTo
 
     $TextBox.Add_TextChanged({
         if ($this.Text -cmatch "[^0-9]") {
@@ -396,6 +395,8 @@ function CreateReduxTextBox([Float]$Column=1, [Float]$Row=1, [int]$Length=2, [St
         if ($this.Text -eq "") { $this.Text = 0 }
 
     })
+
+    $Last.Column++;
     return $TextBox
 
 }
@@ -403,7 +404,7 @@ function CreateReduxTextBox([Float]$Column=1, [Float]$Row=1, [int]$Length=2, [St
 
 
 #==============================================================================================================================================================================================
-function CreateReduxRadioButton([Float]$Column=$Last.Column, [Float]$Row=1, [Switch]$Checked, [Switch]$Disable, [String]$Text="", [String]$Info="", [String]$Credits="", [String]$Name, [String]$SaveTo, [int]$Max, [String]$Tag, [Object]$AddTo=$Last.Panel) {
+function CreateReduxRadioButton([single]$Column=$Last.Column, [single]$Row=1, [switch]$Checked, [switch]$Disable, [string]$Text="", [string]$Info="", [string]$Credits="", [string]$Name, [string]$SaveTo, [byte]$Max, [string]$Tag, [object]$AddTo=$Last.Panel) {
     
     if ($Disable) { $Disable = !$PatchReduxCheckBox.Checked }
     if ( (IsSet $Info ) -and (IsSet $Credits) ) { $Info += ("`n`n- Credits: " + $Credits) }
@@ -427,7 +428,7 @@ function CreateReduxRadioButton([Float]$Column=$Last.Column, [Float]$Row=1, [Swi
 
 
 #==============================================================================================================================================================================================
-function CreateReduxCheckBox([Float]$Column=$Last.Column, [Float]$Row=1, [Switch]$Checked, [Switch]$Disable, [String]$Text="", [String]$Info="", [String]$Credits="", [String]$Name, [String]$Tag, [Object]$AddTo=$Last.Group) {
+function CreateReduxCheckBox([single]$Column=$Last.Column, [single]$Row=1, [switch]$Checked, [switch]$Disable, [string]$Text="", [string]$Info="", [string]$Credits="", [string]$Name, [string]$Tag, [object]$AddTo=$Last.Group) {
     
     if ($Disable) { $Disable = !$PatchReduxCheckBox.Checked }
     if ( (IsSet $Info ) -and (IsSet $Credits) ) { $Info += ("`n`n- Credits: " + $Credits) }
@@ -450,7 +451,7 @@ function CreateReduxCheckBox([Float]$Column=$Last.Column, [Float]$Row=1, [Switch
 
 
 #==============================================================================================================================================================================================
-function CreateReduxComboBox([Float]$Column=1, [Float]$Row=1, [int]$Length=160, [int]$Shift=0, [Array]$Items, [int]$Default=1, [String]$Text, [String]$Info, [String]$Credits="", [String]$Name, [String]$Tag, [Object]$AddTo=$Last.Group) {
+function CreateReduxComboBox([single]$Column=$Last.Column, [single]$Row=1, [int16]$Length=160, [int]$Shift=0, [string[]]$Items, [byte]$Default=1, [string]$Text, [string]$Info, [string]$Credits="", [string]$Name, [string]$Tag, [object]$AddTo=$Last.Group) {
     
     if ( (IsSet $Info ) -and (IsSet $Credits) ) { $Info += ("`n`n- Credits: " + $Credits) }
     if (IsSet $Text)   { $Width = (DPISize (80 + $Shift)) }
@@ -463,6 +464,7 @@ function CreateReduxComboBox([Float]$Column=1, [Float]$Row=1, [int]$Length=160, 
     $Label = CreateLabel -X (($Column-1) * (DPISize 165) + (DPISize 15)) -Y ($Row * (DPISize 30) - (DPISize 10)) -Width $Width -Height (DPISize 15) -Text $Text -Info $Info -AddTo $AddTo
     $ComboBox = CreateComboBox -X $Label.Right -Y ($Label.Top - (DPISize 3)) -Width (DPISize ($Length - $Shift)) -Height (DPISize 20) -Items $Items -Default $Default -Info $Info -IsGame $True -Name $Name -Tag $Tag -AddTo $AddTo
 
+    $Last.Column++;
     return $ComboBox
 
 }
@@ -470,7 +472,7 @@ function CreateReduxComboBox([Float]$Column=1, [Float]$Row=1, [int]$Length=160, 
 
 
 #==============================================================================================================================================================================================
-function CreateReduxColoredLabel([Object]$Link, [System.Drawing.Color]$Color, [String]$Name, [String]$Tag, [Object]$AddTo=$Last.Group) {
+function CreateReduxColoredLabel([System.Windows.Forms.Button]$Link, [System.Drawing.Color]$Color, [string]$Name, [string]$Tag, [object]$AddTo=$Last.Group) {
     
     $Label = CreateLabel -X ($Link.Right + (DPISize 15)) -Y $Link.Top -Width (DPISize 40) -Height $Link.Height -Name $Name -Tag $Tag -AddTo $AddTo
     if (IsSet $Color) { $Label.BackColor = $Color }

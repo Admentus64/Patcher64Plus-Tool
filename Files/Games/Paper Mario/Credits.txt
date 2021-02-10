@@ -1,9 +1,0 @@
---- Hard Mode ---
-- Skelux (Extra Damage)
-
---- Hard Mode+ ---
-- Skelux (Extra Damage)
-- Knux5577 (Enemy HP)
-
---- Insane Mode ---
-- Skelux (Extra Damage)

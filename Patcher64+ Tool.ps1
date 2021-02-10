@@ -24,8 +24,8 @@ Add-Type -AssemblyName 'System.Drawing'
 # Setup global variables
 
 $global:ScriptName = "Patcher64+ Tool"
-$global:VersionDate = "2021-01-30"
-$global:Version     = "v11.2.1"
+$global:VersionDate = "2021-02-10"
+$global:Version     = "v11.3.0"
 
 $global:CommandType = $MyInvocation.MyCommand.CommandType.ToString()
 $global:Definition  = $MyInvocation.MyCommand.Definition.ToString()
@@ -35,8 +35,7 @@ $global:GameFiles = $global:Settings = @{}
 $global:IsWiiVC = $global:MissingFiles = $False
 $global:VCTitleLength = 40
 $global:Bootup = $global:GameIsSelected = $global:IsActiveGameField = $False
-$global:Last = @{}
-$global:Fonts = @{}
+$global:Last = $global:Fonts = @{}
 $global:FatalError = $False
 
 
@@ -83,7 +82,7 @@ $Paths.cygdrive        = $Paths.Master + "\cygdrive"
 #==============================================================================================================================================================================================
 # Import code
 
-function ImportModule([String]$Name) {
+function ImportModule([string]$Name) {
     
     if (Test-Path -LiteralPath ($Paths.Scripts + "\" + $Name + ".psm1") -PathType Leaf)   { Import-Module ($Paths.Scripts + "\" + $Name + ".psm1") }
     else                                                                                  { CreateErrorDialog -Error "Missing Modules" -Exit }
@@ -92,9 +91,6 @@ function ImportModule([String]$Name) {
 
 foreach ($Script in Get-ChildItem -LiteralPath $Paths.Scripts -Force) {
     if ( !$Script.PSIsContainer -and $Script.Extension -eq ".psm1") { ImportModule -Name $Script.BaseName }
-}
-foreach ($Script in Get-ChildItem -LiteralPath ($Paths.Scripts + "\Options") -Force) {
-    if ( !$Script.PSIsContainer -and $Script.Extension -eq ".psm1") { ImportModule -Name ("Options\" + $Script.BaseName) }
 }
 
 
@@ -111,7 +107,7 @@ Add-Type -Namespace Console -Name Window -MemberDefinition $HidePSConsole
 
 
 #==================================================================================================================================================================================================================================================================
-function IsNumeric([String]$str) {
+function IsNumeric([string]$str) {
     
     if ($Str -match "^\d+$") { return $True }
 
@@ -128,19 +124,18 @@ $global:Settings = GetSettings ($Paths.Settings + "\Core.ini")
 if (!(IsSet $Settings.Core))   { $Settings.Core  = @{} }
 if (!(IsSet $Settings.Debug))  { $Settings.Debug = @{} }
 
-# Visual Style
-SetModernVisualStyle ($Settings.Core.ModernStyle -eq $False)
-
-if ($Settings.Core.ModernStyle -eq $False) { [Windows.Forms.Application]::VisualStyleState = [Windows.Forms.VisualStyles.VisualStyleState]::NonClientAreaEnabled }
-else {
-    [Windows.Forms.Application]::EnableVisualStyles()
-    [Windows.Forms.Application]::VisualStyleState = [Windows.Forms.VisualStyles.VisualStyleState]::ClientAndNonClientAreasEnabled
-}
-
 # Hi-DPI Mode
-if ($Settings.Core.HiDPIMode -eq $False)   { $global:DisableHighDPIMode = $True }
-else                                       { $global:DisableHighDPIMode = $False }
+$global:DisableHighDPIMode = $Settings.Core.HiDPIMode -eq $False
 InitializeHiDPIMode
+
+# Set paths to all the files stored in the script
+SetFileParameters
+
+# Enable sounds
+LoadSoundEffects ($Settings.Core.EnableSounds -eq $True)
+
+# Visual Style
+SetModernVisualStyle ($Settings.Core.ModernStyle -eq $True)
 
 # Font
 if ($Settings.Core.ClearType -eq $True)   { $Font = "Segoe UI" }
@@ -152,10 +147,7 @@ $Fonts.SmallUnderline = New-Object System.Drawing.Font($Font, 8,  [System.Drawin
 $Fonts.TextFile       = New-Object System.Drawing.Font("Consolas", 8, [System.Drawing.FontStyle]::Regular)
 
 # Hide the PowerShell console from the user
-if ($Settings.Debug.Console -ne $True) { ShowPowerShellConsole $False }
-
-# Set paths to all the files stored in the script
-SetFileParameters
+ShowPowerShellConsole ($Settings.Debug.Console -eq $True)
 
 # Create the dialogs to show to the user
 CreateMainDialog     | Out-Null

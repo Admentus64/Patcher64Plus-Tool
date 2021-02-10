@@ -1,4 +1,4 @@
-function CreateOptionsDialog([int]$Width, [int]$Height, [Array]$Tabs=@()) {
+function CreateOptionsDialog([int32]$Width, [int32]$Height, [Array]$Tabs=@()) {
     
     # Create Dialog
     if ( (IsSet $Width) -and (IsSet $Height) )   { $global:OptionsDialog = CreateDialog -Width (DPISize $Width) -Height (DPISize $Height) }
@@ -29,24 +29,24 @@ function CreateOptionsDialog([int]$Width, [int]$Height, [Array]$Tabs=@()) {
     CreateTabButtons $Tabs
 
     # Lock GUI if needed
-    $FunctionTitle = SetFunctionTitle -Function $GameType.mode
-    if (Get-Command ("AdjustGUI" + $FunctionTitle) -errorAction SilentlyContinue) { &("AdjustGUI" + $FunctionTitle) }
+    if (Get-Command "AdjustGUI" -errorAction SilentlyContinue) { iex "AdjustGUI" }
 
 }
 
 
 
 #==============================================================================================================================================================================================
-function CreateLanguageContent($Columns=3) {
+function CreateLanguageContent($Columns=[byte][Math]::Round($Redux.Panel.Width / 300)) {
     
     # Box + Panel
-    CreateReduxGroup -Text "Languages" -Tag "Language"
+    $Rows = [Math]::Ceiling($GamePatch.languages.Count /  $Columns)
+    CreateReduxGroup -Text "Languages" -Tag "Language" -Height $Rows
     $Last.Group.IsLanguage = $True
-    CreateReduxPanel
+    CreateReduxPanel -Rows $Rows
 
     if (IsSet -Elem $GamePatch.languages -MinLength 0) {
         $Row = 0
-        for ($i=0; $i -lt $GamePatch.languages.Length; $i++) {
+        for ($i=0; $i -lt $GamePatch.languages.Count; $i++) {
             if ($i % $Columns -ne 0) { $Column += 1 }
             else {
                 $Column = 0
@@ -199,9 +199,10 @@ function CreateSettingsDialog() {
     $GeneralSettings.Bit64               = CreateSettingsCheckbox -Name "Bit64"            -Column 1 -Row 1 -Text "Use 64-Bit Tools" -Checked ([Environment]::Is64BitOperatingSystem) -Info "Use 64-bit tools instead of 32-bit tools if available for patching ROMs"
     $GeneralSettings.DoubleClick         = CreateSettingsCheckbox                          -Column 2 -Row 1 -Text "Double Click"                                                      -Info "Allows a PowerShell file to be opened by double-clicking it"
     $GeneralSettings.DoubleClick.Checked = ((Get-ItemProperty -LiteralPath "HKLM:\Software\Classes\Microsoft.PowerShellScript.1\Shell").'(default)' -eq '0')
-    $GeneralSettings.ClearType           = CreateSettingsCheckbox -Name "ClearType"        -Column 3 -Row 1 -Text "Use ClearType Font" -Checked $True                                 -Info ('Use the ClearType font "Segoe UI" instead of the default font "Microsft Sans Serif"' + "`nThe option will only go in effect when opening the tool`nPlease restart the tool when changing this option")
-    $GeneralSettings.HiDPIMode           = CreateSettingsCheckbox -Name "HiDPIMode"        -Column 1 -Row 2 -Text "Use Hi-DPI Mode"    -Checked $True                                 -Info "Enables Hi-DPI Mode suitable for higher resolution displays`nThe option will only go in effect when opening the tool`nPlease restart the tool when changing this option"
+    $GeneralSettings.ClearType           = CreateSettingsCheckbox -Name "ClearType"        -Column 3 -Row 1 -Text "Use ClearType Font"   -Checked $True                               -Info ('Use the ClearType font "Segoe UI" instead of the default font "Microsft Sans Serif"' + "`nThe option will only go in effect when opening the tool`nPlease restart the tool when changing this option")
+    $GeneralSettings.HiDPIMode           = CreateSettingsCheckbox -Name "HiDPIMode"        -Column 1 -Row 2 -Text "Use Hi-DPI Mode"      -Checked $True                               -Info "Enables Hi-DPI Mode suitable for higher resolution displays`nThe option will only go in effect when opening the tool`nPlease restart the tool when changing this option"
     $GeneralSettings.ModernStyle         = CreateSettingsCheckbox -Name "ModernStyle"      -Column 2 -Row 2 -Text "Use Modern Visual Style"                                           -Info "Use a modern-looking visual style for the whole interface of the tool"
+    $GeneralSettings.EnableSounds        = CreateSettingsCheckbox -Name "EnableSounds"     -Column 3 -Row 2 -Text "Enable Sound Effects" -Checked $True                               -Info "Enable the use of sound effects, for example when patching is concluded"
 
     # Advanced Settings
     $GeneralSettings.Box                 = CreateReduxGroup -Y ($GeneralSettings.Box.Bottom + (DPISize 10)) -IsGame $False -Height 2 -AddTo $SettingsDialog -Text "Advanced Settings"
@@ -245,13 +246,13 @@ function CreateSettingsDialog() {
 
 
     # Double Click
-    $GeneralSettings.DoubleClick.Add_CheckStateChanged({ TogglePowerShellOpenWithClicks $this.Checked })
-    $GeneralSettings.ModernStyle.Add_CheckStateChanged({ SetModernVisualStyle $this.checked })
+    $GeneralSettings.DoubleClick.Add_CheckStateChanged(  { TogglePowerShellOpenWithClicks $this.Checked } )
+    $GeneralSettings.ModernStyle.Add_CheckStateChanged(  { SetModernVisualStyle $this.checked } )
+    $GeneralSettings.EnableSounds.Add_CheckStateChanged( { LoadSoundEffects $this.checked } )
 
     # Change Widescreen
     $GeneralSettings.ChangeWidescreen.Add_CheckStateChanged({
-        $FunctionTitle = SetFunctionTitle -Function $GameType.mode
-        if (Get-Command ("AdjustGUI" + $FunctionTitle) -errorAction SilentlyContinue) { &("AdjustGUI" + $FunctionTitle) }
+        if (Get-Command ("AdjustGUI" + $FunctionTitle) -errorAction SilentlyContinue) { iex "AdjustGUI" }
     })
 
     # Console
@@ -386,7 +387,7 @@ function CleanupFiles() {
 
 
 #==============================================================================================================================================================================================
-function CreateSettingsCheckbox([int]$Column=1, [int]$Row=1, [Boolean]$Checked, [Switch]$Disable, [String]$Text="", [Object]$ToolTip, [String]$Info="", [String]$Name, [Switch]$IsDebug) {
+function CreateSettingsCheckbox([byte]$Column=1, [byte]$Row=1, [boolean]$Checked, [switch]$Disable, [string]$Text="", [object]$ToolTip, [string]$Info="", [string]$Name, [switch]$IsDebug) {
     
     $Checkbox = CreateCheckbox -X (($Column-1) * (DPISize 165) + (DPISize 15)) -Y ($Row * (DPISize 30) - (DPISize 10)) -Checked $Checked -Disable $Disable -IsRadio $False -Info $Info -IsDebug $IsDebug -Name $Name
     if (IsSet $Text) { $Label = CreateLabel -X $CheckBox.Right -Y ($CheckBox.Top + (DPISize 3)) -Width (DPISize 135) -Height (DPISize 15) -Text $Text -Info $Info }
@@ -398,7 +399,7 @@ function CreateSettingsCheckbox([int]$Column=1, [int]$Row=1, [Boolean]$Checked, 
 
 
 #==============================================================================================================================================================================================
-function CreateSettingsRadioField([int]$Column=1, [int]$Row=1, [Boolean]$Checked, [Switch]$Disable, [String]$Text="", [Object]$ToolTip, [String]$Info="", [String]$Name, [int]$SaveAs, [int]$Max, [String]$NameTextbox, [Switch]$IsDebug) {
+function CreateSettingsRadioField([byte]$Column=1, [byte]$Row=1, [boolean]$Checked, [switch]$Disable, [string]$Text="", [object]$ToolTip, [string]$Info="", [string]$Name, [int16]$SaveAs, [int16]$Max, [string]$NameTextbox, [switch]$IsDebug) {
     
     $Checkbox = CreateCheckbox -X (($Column-1) * (DPISize 165) + (DPISize 15)) -Y ($Row * (DPISize 30) - (DPISize 10)) -Checked $Checked -Disable $Disable -IsRadio $True -Info $Info -IsDebug $IsDebug -Name $Name -SaveAs $SaveAs -SaveTo $Name -Max $Max
     $Textbox  = CreateTextBox  -X $Checkbox.Right -Y $Checkbox.Top -Width (DPISize 130) -Height (DPISize 15) -Length 20 -Text $Text -IsDebug $IsDebug -Name $NameTextbox
@@ -410,7 +411,7 @@ function CreateSettingsRadioField([int]$Column=1, [int]$Row=1, [Boolean]$Checked
 
 
 #==============================================================================================================================================================================================
-function CreateErrorDialog([String]$Error) {
+function CreateErrorDialog([string]$Error) {
     
     # Create Dialog
     $ErrorDialog = CreateDialog -Width (DPISize 300) -Height (DPISize 200) -Icon $null
@@ -431,7 +432,7 @@ function CreateErrorDialog([String]$Error) {
     $String += "{0}"
     $String += "Please download the Patcher64+ Tool again."
 
-    $String = [String]::Format($String, [Environment]::NewLine)
+    $String = [string]::Format($String, [Environment]::NewLine)
 
     #Create Label
     $Label = CreateLabel -X (DPISize 10) -Y (DPISize 10) -Width ($ErrorDialog.Width - (DPISize 10)) -Height ($ErrorDialog.Height - (DPISize 110)) -Text $String -AddTo $ErrorDialog

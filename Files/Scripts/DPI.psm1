@@ -61,10 +61,17 @@ function DPISize($Value, [switch]$Round=$false, $Add=0, $AddX=0, $AddY=0) {
 
     # The type of variable will determine the calculation method.
     switch ($Value.GetType().ToString()) {
+        # 16-Bit Integer, Aliases: Int16
+        'System.Int16' {
+            if (!$Round)   { $Value = [int16][Math]::Truncate($Value * $DPIMultiplier) } 
+            else           { $Value = [int16][Math]::Round(($Value * $DPIMultiplier), $RMode) }
+            return         ( $Value + $Add + $AddX + $AddY )
+        }
+
         # 32-Bit Integer, Aliases: Int, Int32
         'System.Int32' {
-            if (!$Round)   { $Value = [int][Math]::Truncate($Value * $DPIMultiplier) } 
-            else           { $Value = [int][Math]::Round(($Value * $DPIMultiplier), $RMode) }
+            if (!$Round)   { $Value = [int32][Math]::Truncate($Value * $DPIMultiplier) } 
+            else           { $Value = [int32][Math]::Round(($Value * $DPIMultiplier), $RMode) }
             return         ( $Value + $Add + $AddX + $AddY )
         }
 
@@ -91,15 +98,15 @@ function DPISize($Value, [switch]$Round=$false, $Add=0, $AddX=0, $AddY=0) {
 
         # Drawing Size (Width, Height)
         'System.Drawing.Size' {
-            if (!$Round)   { $Value = New-Object Drawing.Size([int][Math]::Truncate($Value.Width * $DPIMultiplier), [int][Math]::Truncate($Value.Height * $DPIMultiplier)) }
-            else           { $Value = New-Object Drawing.Size([int][Math]::Round(($Value.Width * $DPIMultiplier), $RMode), [int][Math]::Round(($Value.Height * $DPIMultiplier), $RMode)) }
+            if (!$Round)   { $Value = New-Object Drawing.Size([int][Math]::Truncate($Value.Width * $DPIMultiplier), [int32][Math]::Truncate($Value.Height * $DPIMultiplier)) }
+            else           { $Value = New-Object Drawing.Size([int][Math]::Round(($Value.Width * $DPIMultiplier), $RMode), [int32][Math]::Round(($Value.Height * $DPIMultiplier), $RMode)) }
             return         ( New-Object Drawing.Size(($Value.Width + $Add + $AddX), ($Value.Height + $Add + $AddY)) )
         }
 
         # Drawing Point (X, Y)
         'System.Drawing.Point' {
-            if (!$Round)   { $Value = New-Object Drawing.Point([int][Math]::Truncate($Value.X * $DPIMultiplier), [int][Math]::Truncate($Value.Y * $DPIMultiplier)) }
-            else           { $Value = New-Object Drawing.Point([int][Math]::Round(($Value.X * $DPIMultiplier), $RMode), [int][Math]::Round(($Value.Y * $DPIMultiplier), $RMode)) }
+            if (!$Round)   { $Value = New-Object Drawing.Point([int][Math]::Truncate($Value.X * $DPIMultiplier), [int32][Math]::Truncate($Value.Y * $DPIMultiplier)) }
+            else           { $Value = New-Object Drawing.Point([int][Math]::Round(($Value.X * $DPIMultiplier), $RMode), [int32][Math]::Round(($Value.Y * $DPIMultiplier), $RMode)) }
             return         ( New-Object Drawing.Point(($Value.X + $Add + $AddX), ($Value.Y + $Add + $AddY)) )
         }
 

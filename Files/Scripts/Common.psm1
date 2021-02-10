@@ -1,4 +1,4 @@
-function SetWiiVCMode([Boolean]$Enable) {
+function SetWiiVCMode([boolean]$Enable) {
     
     if ( ($Enable -eq $IsWiiVC) -and $GameIsSelected) { return }
 
@@ -208,12 +208,22 @@ function ChangeGameMode() {
     
     if ($GameType.save -gt 0) { Out-IniFile -FilePath (GetGameSettingsFile) -InputObject $GameSettings | Out-Null }
 
+    if (IsSet $GameType.mode) {
+        if (Get-Module -Name $GameType.mode) { Remove-Module -Name $GameType.mode }
+    }
+
     Foreach ($Item in $Files.json.games.game) {
         if ($Item.title -eq $CurrentGameComboBox.text) {
             $global:GameType = $Item
             $global:GamePatch = $null
             break
         }
+    }
+
+    $Script = ($Paths.Scripts + "\Options\" + $GameType.mode + ".psm1")
+    if (TestFile $Script) {
+        Import-Module -Name $Script -Global
+        (Get-Command -Module $GameType.mode) | % { Export-ModuleMember $_ }
     }
 
     $GameFiles.base = $Paths.games + "\" + $GameType.mode
@@ -225,7 +235,6 @@ function ChangeGameMode() {
     $GameFiles.downgrade = $GameFiles.base + "\Downgrade"
     $GameFiles.textures = $GameFiles.base + "\Textures"
     $GameFiles.previews = $GameFiles.base + "\Previews"
-    $GameFiles.credits = $GameFiles.base + "\Credits.txt"
     $GameFiles.info = $GameFiles.base + "\Info.txt"
     $GameFiles.json = $GameFiles.base + "\Patches.json"
 
@@ -240,8 +249,13 @@ function ChangeGameMode() {
     else                                { AddTextFileToTextbox -TextBox $Credits.Sections[0] -File $null }
 
     # Credits
-    if (TestFile $Files.text.credits)   { AddTextFileToTextbox -TextBox $Credits.Sections[1] -File $Files.text.credits }
-    if (TestFile $GameFiles.credits)    { AddTextFileToTextbox -TextBox $Credits.Sections[1] -File $GameFiles.credits -Add -PreSpace 2 }
+    if (TestFile $Files.text.credits) {
+        if ($GameType.mode -ne "Free") {
+            AddTextFileToTextbox -TextBox $Credits.Sections[1] -File $Files.text.credits -MainCredits -PostSpace 4
+            AddTextFileToTextbox -TextBox $Credits.Sections[1] -File $Files.text.credits -GameCredits -Add
+        }
+        else { AddTextFileToTextbox -TextBox $Credits.Sections[1] -File $Files.text.credits -MainCredits }
+    }
 
     $CreditsGameLabel.Text = "Current Game: " + $GameType.mode
     $Patches.Panel.Visible = $GameType.patches
@@ -261,7 +275,7 @@ function ChangePatch() {
         if ($Item.title -eq $Patches.ComboBox.Text) {
             if ( ($IsWiiVC -and $Item.console -eq "Wii VC") -or (!$IsWiiVC -and $Item.console -eq "Native") -or ($Item.console -eq "Both") ) {
                 $global:GamePatch = $Item
-                $PatchToolTip.SetToolTip($Patches.Button, ([String]::Format($Item.tooltip, [Environment]::NewLine)))
+                $PatchToolTip.SetToolTip($Patches.Button, ([string]::Format($Item.tooltip, [Environment]::NewLine)))
                 GetHeader
                 GetRegion
                 LoadAdditionalOptions
@@ -299,7 +313,7 @@ function SetVCPanel() {
 
 
 #==============================================================================================================================================================================================
-function UpdateStatusLabel([String]$Text) {
+function UpdateStatusLabel([string]$Text) {
     
     WriteToConsole $Text
     $StatusLabel.Text = $Text
@@ -310,7 +324,7 @@ function UpdateStatusLabel([String]$Text) {
 
 
 #==============================================================================================================================================================================================
-function WriteToConsole([String]$Text) { if ($Settings.Debug.Console -eq $True -and $ExternalScript) { Write-Host $Text } }
+function WriteToConsole([string]$Text) { if ($Settings.Debug.Console -eq $True -and $ExternalScript) { Write-Host $Text } }
 
 
 
@@ -326,7 +340,7 @@ function SetModeLabel() {
 
 
 #==================================================================================================================================================================================================================================================================
-function EnablePatchButtons([Boolean]$Enable) {
+function EnablePatchButtons([boolean]$Enable) {
     
     # Set the status that we are ready to roll... Or not...
     if ($Enable)        { UpdateStatusLabel "Ready to patch!" }
@@ -344,7 +358,7 @@ function EnablePatchButtons([Boolean]$Enable) {
 
 
 #==================================================================================================================================================================================================================================================================
-function GamePath_Finish([Object]$TextBox, [String]$Path) {
+function GamePath_Finish([object]$TextBox, [string]$Path) {
     
     # Set the "GamePath" variable that tracks the path
     $global:GamePath = $Path
@@ -396,7 +410,7 @@ function GamePath_Finish([Object]$TextBox, [String]$Path) {
 
 
 #==================================================================================================================================================================================================================================================================
-function InjectPath_Finish([Object]$TextBox, [String]$Path) {
+function InjectPath_Finish([object]$TextBox, [string]$Path) {
     
     # Set the "InjectPath" variable that tracks the path
     $global:InjectPath = $Path
@@ -411,7 +425,7 @@ function InjectPath_Finish([Object]$TextBox, [String]$Path) {
 
 
 #==================================================================================================================================================================================================================================================================
-function PatchPath_Finish([Object]$TextBox, [String]$Path) {
+function PatchPath_Finish([object]$TextBox, [string]$Path) {
     
     # Set the "PatchPath" variable that tracks the path
     $global:PatchPath = $Path
@@ -467,7 +481,7 @@ function GetRegion() {
 
 
 #==============================================================================================================================================================================================
-function IsChecked([Object]$Elem, [Switch]$Not) {
+function IsChecked([object]$Elem, [switch]$Not) {
     
     if (!(IsSet $Elem))   { return $False }
     if (!$Elem.Active)    { return $False }
@@ -480,7 +494,7 @@ function IsChecked([Object]$Elem, [Switch]$Not) {
 
 
 #==============================================================================================================================================================================================
-function IsLanguage([Object]$Elem, [int]$Lang=0) {
+function IsLanguage([object]$Elem, [int16]$Lang=0) {
     
     if (!$Redux.Language[$Lang].Checked)   { return $False }
     if (IsChecked $Elem)                   { return $True  }
@@ -491,7 +505,7 @@ function IsLanguage([Object]$Elem, [int]$Lang=0) {
 
 
 #==============================================================================================================================================================================================
-function IsText([Object]$Elem, [String]$Compare, [Switch]$Active, [Switch]$Not) {
+function IsText([object]$Elem, [string]$Compare, [switch]$Active, [switch]$Not) {
     
     $Text = $Elem.Text.replace(" (default)", "")
     if (!(IsSet $Elem))                 { return $False }
@@ -506,7 +520,7 @@ function IsText([Object]$Elem, [String]$Compare, [Switch]$Active, [Switch]$Not) 
 
 
 #==============================================================================================================================================================================================
-function IsLangText([Object]$Elem, [String]$Compare, [int]$Lang=0) {
+function IsLangText([object]$Elem, [string]$Compare, [int16]$Lang=0) {
     
     if (!$Redux.Language[$Lang].Checked)        { return $False }
     if (IsText -Elem $Elem -Compare $Compare)   { return $True  }
@@ -517,7 +531,7 @@ function IsLangText([Object]$Elem, [String]$Compare, [int]$Lang=0) {
 
 
 #==============================================================================================================================================================================================
-function IsIndex([Object]$Elem, [int]$Index=1, [String]$Text, [Switch]$Active, [Switch]$Not) {
+function IsIndex([object]$Elem, [int16]$Index=1, [string]$Text, [switch]$Active, [switch]$Not) {
     
     if ($Index -lt 1) { $Index = 1 }
     if (!(IsSet $Elem))                       { return $False }
@@ -540,13 +554,13 @@ function IsIndex([Object]$Elem, [int]$Index=1, [String]$Text, [Switch]$Active, [
 
 
 #==============================================================================================================================================================================================
-function IsSet([Object]$Elem, [int]$Min, [int]$Max, [int]$MinLength, [int]$MaxLength, [Switch]$HasInt) {
+function IsSet([object]$Elem, [int16]$Min, [int16]$Max, [int16]$MinLength, [int16]$MaxLength, [switch]$HasInt) {
 
     if ($Elem -eq $null -or $Elem -eq "")                                               { return $False }
     if ($HasInt) {
         if ($Elem -NotMatch "^\d+$" )                                                   { return $False }
-        if ($Min -ne $null -and $Min -ne "" -and [int]$Elem -lt $Min)                   { return $False }
-        if ($Max -ne $null -and $Max -ne "" -and [int]$Elem -gt $Max)                   { return $False }
+        if ($Min -ne $null -and $Min -ne "" -and [int16]$Elem -lt $Min)                   { return $False }
+        if ($Max -ne $null -and $Max -ne "" -and [int16]$Elem -gt $Max)                   { return $False }
     }
     if ($MinLength -ne $null -and $MinLength -ne "" -and $Elem.Length -lt $MinLength)   { return $False }
     if ($MaxLength -ne $null -and $MaxLength -ne "" -and $Elem.Length -gt $MaxLength)   { return $False }
@@ -558,21 +572,50 @@ function IsSet([Object]$Elem, [int]$Min, [int]$Max, [int]$MinLength, [int]$MaxLe
 
 
 #==============================================================================================================================================================================================
-function AddTextFileToTextbox([Object]$TextBox, [String]$File, [Switch]$Add, [int]$PreSpace, [int]$PostSpace) {
+function AddTextFileToTextbox([object]$TextBox, [string]$File, [switch]$Add, [int16]$PreSpace, [int16]$PostSpace, [switch]$GameCredits, [switch]$MainCredits) {
     
     if (!(IsSet $File)) {
         $TextBox.Text = ""
         return
     }
 
+    if ($GameCredits -or $MainCredits)   { $Start = $False }
+    else                                 { $Start = $True }
+    $FinalLine = (Get-Content $File).Count
+
     if (TestFile $File) {
         $str = ""
-        for ($i=0; $i -lt (Get-Content $File).Count; $i++) {
-            if ((Get-Content $File)[$i] -ne "") {
-                $str += (Get-Content $File)[$i]
-                if ($i -lt  (Get-Content $File).Count-1) { $str += "{0}" }
+        for ($i=0; $i -lt $FinalLine; $i++) {
+            if (!$Start -and $GameCredits) {
+                if ((Get-Content $File)[$i] -like "*===*===*") {
+                    if ((Get-Content $File)[$i+1] -eq ("=== " + $GameType.mode + " ===")) {
+                        if ((Get-Content $File)[$i+2] -like "*===*===*") { $Start = $True }
+                    }
+                }
             }
-            else { $str += "{0}" }
+            elseif (!$Start -and $MainCredits) {
+                if ((Get-Content $File)[$i] -like "*===*===*") {
+                    if ((Get-Content $File)[$i+1] -eq ("=== PATCHER64+ TOOL ===")) {
+                        if ((Get-Content $File)[$i+2] -like "*===*===*") { $Start = $True }
+                    }
+                }
+            }
+
+            if ($Start -and ($GameCredits -or $MainCredits)) {
+                if ((Get-Content $File)[$i+4] -like "*===*===*") {
+                    if ((Get-Content $File)[$i+5] -ne ("=== " + $GameType.mode + " ===")) {
+                        if ((Get-Content $File)[$i+6] -like "*===*===*") { $FinalLine = $i }
+                    }
+                }
+            }
+
+            if ($Start) {
+                if ((Get-Content $File)[$i] -ne "") {
+                    $str += (Get-Content $File)[$i]
+                    if ($i -lt  $FinalLine-1) { $str += "{0}" }
+                }
+                else { $str += "{0}" }
+            }
         }
 
         if ($PreSpace -gt 0) {
@@ -582,7 +625,7 @@ function AddTextFileToTextbox([Object]$TextBox, [String]$File, [Switch]$Add, [in
             for ($i=0; $i -lt $PostSpace; $i++) { $str = $str + "{0}" }
         }
 
-        $str = [String]::Format($str, [Environment]::NewLine)
+        $str = [string]::Format($str, [Environment]::NewLine)
 
         if ($Add) { $TextBox.Text += $str }
         else      { $TextBox.Text = $str }
@@ -658,7 +701,7 @@ function RestoreCustomRegion() {
 
 
 #==============================================================================================================================================================================================
-function StrLike([String]$Str, [String]$Val, [Switch]$Not) {
+function StrLike([string]$Str, [string]$Val, [switch]$Not) {
     
     if     ($str.ToLower() -like "*"    + $val + "*")   { return !$Not }
     elseif ($str.ToLower() -notlike "*" + $val + "*")   { return $Not }
@@ -669,7 +712,7 @@ function StrLike([String]$Str, [String]$Val, [Switch]$Not) {
 
 
 #==============================================================================================================================================================================================
-function EnableGUI([Boolean]$Enable) {
+function EnableGUI([boolean]$Enable) {
     
     $InputPaths.GamePanel.Enabled = $InputPaths.InjectPanel.Enabled = $InputPaths.PatchPanel.Enabled = $Enable
     $CurrentGamePanel.Enabled = $CustomHeader.Panel.Enabled = $Enable
@@ -681,7 +724,7 @@ function EnableGUI([Boolean]$Enable) {
 
 
 #==============================================================================================================================================================================================
-function EnableForm([Object]$Form, [Boolean]$Enable, [Switch]$Not) {
+function EnableForm([object]$Form, [boolean]$Enable, [switch]$Not) {
     
     if ($Not) { $Enable = !$Enable }
     if ($Form.Controls.length -eq $True) {
@@ -694,7 +737,7 @@ function EnableForm([Object]$Form, [Boolean]$Enable, [Switch]$Not) {
 
 
 #==============================================================================================================================================================================================
-function EnableElem([Object]$Elem, [Boolean]$Active=$True, [Switch]$Hide) {
+function EnableElem([object]$Elem, [boolean]$Active=$True, [switch]$Hide) {
 
     if ($Elem -is [system.Array]) {
         foreach ($Obj in $Elem) {
@@ -712,7 +755,7 @@ function EnableElem([Object]$Elem, [Boolean]$Active=$True, [Switch]$Hide) {
 
 
 #==============================================================================================================================================================================================
-function GetFileName([String]$Path, [String]$Description, [String[]]$FileNames) {
+function GetFileName([string]$Path, [string]$Description, [String[]]$FileNames) {
     
     $OpenFileDialog = New-Object System.Windows.Forms.OpenFileDialog
     $OpenFileDialog.InitialDirectory = $Path
@@ -733,7 +776,7 @@ function GetFileName([String]$Path, [String]$Description, [String[]]$FileNames) 
 
 
 #==============================================================================================================================================================================================
-function RemovePath([String]$Path) {
+function RemovePath([string]$Path) {
     
     # Make sure the path isn't null to avoid errors
     if ($Path -ne '') {
@@ -749,7 +792,7 @@ function RemovePath([String]$Path) {
 
 
 #==============================================================================================================================================================================================
-function CreatePath([String]$Path) {
+function CreatePath([string]$Path) {
     
     # Make sure the path is not null to avoid errors
     if ($Path -ne '') {
@@ -768,7 +811,7 @@ function CreatePath([String]$Path) {
 
 
 #==============================================================================================================================================================================================
-function RemoveFile([String]$Path) {
+function RemoveFile([string]$Path) {
     
     if (TestFile $Path)   { Remove-Item -LiteralPath $Path -Force }
 
@@ -777,7 +820,7 @@ function RemoveFile([String]$Path) {
 
 
 #==============================================================================================================================================================================================
-function TestFile([String]$Path, [Switch]$Container) {
+function TestFile([string]$Path, [switch]$Container) {
     
     if ($Container)   { return Test-Path -LiteralPath $Path -PathType Container }
     else              { return Test-Path -LiteralPath $Path -PathType Leaf }
@@ -787,7 +830,7 @@ function TestFile([String]$Path, [Switch]$Container) {
 
 
 #==============================================================================================================================================================================================
-function CreateSubPath([String]$Path) {
+function CreateSubPath([string]$Path) {
 
     if (!(TestFile -Path $Path -Container)) {
         New-Item -Path $Path.substring(0, $Path.LastIndexOf('\')) -Name $Path.substring($Path.LastIndexOf('\') + 1) -ItemType Directory | Out-Null
@@ -802,7 +845,7 @@ function ShowPowerShellConsole([bool]$Show) {
     
     if (!$ExternalScript) { return }
 
-    # Sshows or hide the console window
+    # Shows or hide the console window
     switch ($Show) {
         $True   { [Console.Window]::ShowWindow([Console.Window]::GetConsoleWindow(), 5) | Out-Null }
         $False  { [Console.Window]::ShowWindow([Console.Window]::GetConsoleWindow(), 0) | Out-Null }
@@ -813,7 +856,7 @@ function ShowPowerShellConsole([bool]$Show) {
 
 
 #==================================================================================================================================================================================================================================================================
-function TogglePowerShellOpenWithClicks([Boolean]$Enable) {
+function TogglePowerShellOpenWithClicks([boolean]$Enable) {
     
     # Create a temporary folder to create the registry entry and and set the path to it
     RemovePath $Paths.Registry
@@ -842,21 +885,13 @@ function TogglePowerShellOpenWithClicks([Boolean]$Enable) {
 
 
 #==================================================================================================================================================================================================================================================================
-function SetModernVisualStyle([Boolean]$Enable) {
+function SetModernVisualStyle([boolean]$Enable) {
 
-    if ($Enable)   { [Windows.Forms.Application]::VisualStyleState = [Windows.Forms.VisualStyles.VisualStyleState]::ClientAndNonClientAreasEnabled }
-    else           { [Windows.Forms.Application]::VisualStyleState = [Windows.Forms.VisualStyles.VisualStyleState]::NonClientAreaEnabled }
-
-}
-
-
-#==================================================================================================================================================================================================================================================================
-function SetFunctionTitle([String]$Function) {
-
-    $Function = $Function -replace " ", ""
-    $Function = $Function -replace ",", ""
-    $Function = $Function -replace "'", ""
-    return $Function
+    if ($Enable) {
+        [Windows.Forms.Application]::EnableVisualStyles()
+        [Windows.Forms.Application]::VisualStyleState = [Windows.Forms.VisualStyles.VisualStyleState]::ClientAndNonClientAreasEnabled
+    }
+    else { [Windows.Forms.Application]::VisualStyleState = [Windows.Forms.VisualStyles.VisualStyleState]::NonClientAreaEnabled }
 
 }
 
@@ -922,5 +957,4 @@ Export-ModuleMember -Function CreateSubPath
 Export-ModuleMember -Function ShowPowerShellConsole
 Export-ModuleMember -Function TogglePowerShellOpenWithClicks
 Export-ModuleMember -Function SetModernVisualStyle
-Export-ModuleMember -Function SetFunctionTitle
 Export-ModuleMember -Function SetBitmap

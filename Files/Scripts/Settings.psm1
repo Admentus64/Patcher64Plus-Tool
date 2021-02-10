@@ -1,4 +1,4 @@
-function Get-IniContent ([String]$FilePath) {
+function Get-IniContent ([string]$FilePath) {
 
     $ini = @{}
     switch -regex -file $FilePath {
@@ -32,7 +32,7 @@ function Get-IniContent ([String]$FilePath) {
 
 
 #==============================================================================================================================================================================================
-function Out-IniFile([hashtable]$InputObject, [String]$FilePath) {
+function Out-IniFile([hashtable]$InputObject, [string]$FilePath) {
     
     if (!(TestFile -Path ($Paths.Settings) -Container)) { New-Item -Path $Paths.Master -Name "Settings" -ItemType Directory | Out-Null }
     RemoveFile $FilePath
@@ -56,7 +56,7 @@ function Out-IniFile([hashtable]$InputObject, [String]$FilePath) {
 
 
 #==============================================================================================================================================================================================
-function GetSettings([String]$File) {
+function GetSettings([string]$File) {
     
     if (TestFile $File)   { return Get-IniContent $File }
     else                  { return @{} }

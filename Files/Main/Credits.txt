@@ -1,8 +1,0 @@
---- Thanks to my past Patreons --
-- Leigh Pierce, Raim, Gicrax, Crypto Logiq, Moons (Luke), Ronald, Richard Moser
-
---- Patcher64+ Tool ---
-- Admentus (Testing and Coding of Patcher64+ Tool)
-- Bighead (Initial PowerShell patcher, Hi-DPI Mode)
-- GhostlyDark (Testing and Assistance)
-- ShadowOne333 (Testing and Assistance)

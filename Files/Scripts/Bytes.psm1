@@ -1,32 +1,37 @@
-function ChangeBytes([String]$File, [String]$Offset, [Object]$Values, [int]$Interval=1, [Switch]$IsDec, [Switch]$Overflow) {
+function ChangeBytes([string]$File, [string]$Offset, [object]$Values, [uint16]$Interval=1, [switch]$Add, [switch]$Subtract, [switch]$IsDec, [switch]$Overflow) {
     
     if ($Values -is [System.String]) { $Values = $Values -split ' ' }
     WriteToConsole ("Change values: " + $Values)
     if (IsSet $File) { $ByteArrayGame = [IO.File]::ReadAllBytes($File) }
     if ($Interval -lt 1) { $Interval = 1 }
-    [uint32]$Offset = GetDecimal $Offset
 
-    if ($Offset -lt 0) {
+    try { [uint32]$Offset = GetDecimal $Offset }
+    catch {
         WriteToConsole "Offset is negative!"
         return
     }
-    elseif ($Offset -gt $ByteArrayGame.Length) {
+    if ($Offset -gt $ByteArrayGame.Length) {
         WriteToConsole "Offset is too large for file!"
         return
     }
 
     for ($i=0; $i -lt $Values.Length; $i++) {
-        if ($IsDec)   {
+        if ($IsDec) {
             if     ($Values[$i] -lt 0   -and $Overflow)   { $Values[$i] = $Values[$i] + 255 }
             elseif ($Values[$i] -gt 255 -and $Overflow)   { $Values[$i] = $Values[$i] - 255 }
-            [Byte]$Value = $Values[$i]
+            [byte]$Value  = $Values[$i]
         }
         else {
-            if     ((GetDecimal $Values[$i]) -lt 0   -and $Overflow)   { $Values[$i] = Get8Bit ($Values[$i] + 255) }
-            elseif ((GetDecimal $Values[$i]) -gt 255 -and $Overflow)   { $Values[$i] = Get8Bit ($Values[$i] - 255) }
-            [Byte]$Value = GetDecimal $Values[$i]
+            try { [byte]$Value = GetDecimal $Values[$i] }
+            catch {
+                WriteToConsole "Value is negative!"
+                return
+            }
         }
-        $ByteArrayGame[$Offset + ($i * $Interval)] = $Value
+
+        if     ($Add)        { $ByteArrayGame[$Offset + ($i * $Interval)] += $Value }
+        elseif ($Subtract)   { $ByteArrayGame[$Offset + ($i * $Interval)] -= $Value }
+        else                 { $ByteArrayGame[$Offset + ($i * $Interval)]  = $Value }
     }
 
     if (IsSet $File) { [io.file]::WriteAllBytes($File, $ByteArrayGame) }
@@ -38,7 +43,7 @@ function ChangeBytes([String]$File, [String]$Offset, [Object]$Values, [int]$Inte
 
 
 #==============================================================================================================================================================================================
-function PatchBytes([String]$File, [String]$Offset, [String]$Length, [String]$Patch, [Switch]$Texture, [Switch]$Extracted, [Switch]$Pad) {
+function PatchBytes([string]$File, [string]$Offset, [string]$Length, [string]$Patch, [switch]$Texture, [switch]$Extracted, [switch]$Pad) {
     
     if (IsSet $File) { $ByteArrayGame = [IO.File]::ReadAllBytes($File) }
     if ($Texture) {
@@ -85,7 +90,7 @@ function PatchBytes([String]$File, [String]$Offset, [String]$Length, [String]$Pa
 
 
 #==============================================================================================================================================================================================
-function ExportBytes([String]$File, [String]$Offset, [String]$End, [String]$Length, [String]$Output, [Switch]$Force) {
+function ExportBytes([string]$File, [string]$Offset, [string]$End, [string]$Length, [string]$Output, [switch]$Force) {
     
     if ( (TestFile $Output) -and ($Settings.Debug.ForceExtract -eq $False) -and !$Force) { return }
 
@@ -124,7 +129,7 @@ function ExportBytes([String]$File, [String]$Offset, [String]$End, [String]$Leng
 
 
 #==============================================================================================================================================================================================
-function SearchBytes([String]$File, [String]$Start="0", [String]$End, [Object]$Values) {
+function SearchBytes([string]$File, [string]$Start="0", [string]$End, [object]$Values) {
     
     if ($values -is [System.String]) { $values = $values -split ' ' }
 
@@ -171,7 +176,7 @@ function SearchBytes([String]$File, [String]$Start="0", [String]$End, [Object]$V
 
 
 #==============================================================================================================================================================================================
-function ExportAndPatch([String]$Path, [String]$Offset, [String]$Length, [String]$NewLength, [String]$TableOffset, [Object]$Values) {
+function ExportAndPatch([string]$Path, [string]$Offset, [string]$Length, [string]$NewLength, [string]$TableOffset, [object]$Values) {
     
     $File = $GameFiles.extracted + "\" + $Path + ".bin"
     if ( !(TestFile $File) -or ($Settings.Debug.ForceExtract -eq $True) ) {
@@ -192,20 +197,20 @@ function ExportAndPatch([String]$Path, [String]$Offset, [String]$Length, [String
 
 
 #==================================================================================================================================================================================================================================================================
-function GetDecimal([String]$Hex) {
+function GetDecimal([string]$Hex) {
     
-    try { return [uint32]("0x" + $Hex) }
-    catch { return -1 }
+    try     { return [uint32]("0x" + $Hex) }
+    catch   { return -1 }
 
 }
 
 
 
 #==================================================================================================================================================================================================================================================================
-function Get8Bit($Value)            { return '{0:X2}' -f [int]$Value }
-function Get16Bit($Value)           { return '{0:X4}' -f [int]$Value }
-function Get24Bit($Value)           { return '{0:X6}' -f [int]$Value }
-function Get32Bit($Value)           { return '{0:X8}' -f [int]$Value }
+function Get8Bit([byte]$Value)      { return '{0:X2}' -f $Value }
+function Get16Bit([uint16]$Value)   { return '{0:X4}' -f $Value }
+function Get24Bit([uint32]$Value)   { return '{0:X6}' -f $Value }
+function Get32Bit([uint32]$Value)   { return '{0:X8}' -f $Value }
 
 
 

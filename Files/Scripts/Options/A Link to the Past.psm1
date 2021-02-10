@@ -1,16 +1,16 @@
-function PatchOptionsALinkToThePast() {
+function PatchOptions() {
     
-    if (IsChecked $Redux.Revert.PinkHairGFX)    { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\Original\pink_hair.ips" }
-    if (IsChecked $Redux.Revert.MenuGFX)        { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\Original\menu.ips" }
+    if (IsChecked $Redux.Revert.PinkHairGFX)    { ApplyPatch -Patch "\Compressed\Original\pink_hair.ips" }
+    if (IsChecked $Redux.Revert.MenuGFX)        { ApplyPatch -Patch "\Compressed\Original\menu.ips" }
     
-    if (IsChecked $Redux.Script.ReWizardized)   { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\rewizardized.ips" }
+    if (IsChecked $Redux.Script.ReWizardized)   { ApplyPatch -Patch "\Compressed\rewizardized.ips" }
 
 }
 
 
 
 #==============================================================================================================================================================================================
-function CreateOptionsALinkToThePast() {
+function CreateOptions() {
     
     CreateOptionsDialog -Width 390 -Height 250
 
@@ -23,11 +23,3 @@ function CreateOptionsALinkToThePast() {
     CreateReduxCheckBox -Name "ReWizardized" -Column 1 -Text "Re-Wizardized Script" -Info "Addresses some script changes, such as addressing Agahnim's role as 'Wizard' insteaf of 'Priest'" -Credits "Kyler Ashton"
 
 }
-
-
-
-#==============================================================================================================================================================================================
-
-Export-ModuleMember -Function PatchOptionsALinkToThePast
-
-Export-ModuleMember -Function CreateOptionsALinkToThePast

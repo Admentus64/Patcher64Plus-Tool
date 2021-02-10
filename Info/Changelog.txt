@@ -1,3 +1,27 @@
+v11.3.0
+- Added new "Boss HP" option for OoT
+- Added new "File Select Skybox" option for OoT
+- Wallet capacity values can now be set up to 9999 for OoT
+- Added the option to set the fourth unused wallet for OoT and MM
+- Added new "File Select Music" option for OoT and MM
+- Added new "Unsheath Sword" option for OoT and MM
+- Fixed "Disable Flashback" option not getting patched for MM
+- Fixed "Bomb Bag (3) being invisible for MM
+- New custom wallet fixes for MM
+- Removed "Optimize Mario Model" for SM64
+- Added new option to optionally extend the ROM (for SM64)
+- Added new game mode for SNES: Donkey Kong Country (DKC)
+- Fixed Super Metroid (SNES) to have the proper MD5 checksums (Rev0 & VC)
+- Rewrote how game modules are being read and utilized
+- Added sound beep effect when patching is concluded
+- Added tooltips for Text Fields
+- Some GUI optimizations
+- Solved issue with Hi-DPI settings not being initialized before displaying the error dialog
+- Optimized usage of variables
+- Changed how Games.json and Patches.json can assign a DMA Table (MM can be properly downgraded to Rev 0)
+- Credits are now read from the main credits file instead of multiple individual credit files
+- Various fixes
+
 v11.2.1
 - Small hotfixes
 - Fixed softlock during Deku Tree opening with the Female Pronouns script

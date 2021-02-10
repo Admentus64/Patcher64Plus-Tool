@@ -1,29 +1,29 @@
-function PatchOptionsTheLegendOfZelda() {
+function PatchOptions() {
     
-    if (IsChecked $Redux.Graphics.LinksAwakeningGFX)   { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\links_awakening_gfx.ips" }
-    if (IsChecked $Redux.Graphics.RecoloredDungeons)   { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\recoloured_dungeons.ips" }
+    if (IsChecked $Redux.Graphics.LinksAwakeningGFX)   { ApplyPatch -Patch "\Compressed\links_awakening_gfx.ips" }
+    if (IsChecked $Redux.Graphics.RecoloredDungeons)   { ApplyPatch -Patch "\Compressed\recoloured_dungeons.ips" }
 
-    if (IsChecked $Redux.Sound.NoLowHPBeep)            { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\no_low_hp_beep.ips" }
+    if (IsChecked $Redux.Sound.NoLowHPBeep)            { ApplyPatch -Patch "\Compressed\no_low_hp_beep.ips" }
 
-    if (IsChecked $Redux.Gameplay.BombUpgrades)        { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\bomb_upgrades.ips" }
-    if (IsChecked $Redux.Gameplay.RearrangedBosses)    { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\rearranged_bosses.ips" }
+    if (IsChecked $Redux.Gameplay.BombUpgrades)        { ApplyPatch -Patch "\Compressed\bomb_upgrades.ips" }
+    if (IsChecked $Redux.Gameplay.RearrangedBosses)    { ApplyPatch -Patch "\Compressed\rearranged_bosses.ips" }
 
 }
 
 
 
 #==============================================================================================================================================================================================
-function PatchReduxTheLegendOfZelda() {
+function PatchReduxOptions() {
     
-    if (IsChecked $Redux.Revert.NESGFX)                { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\Original\nes_gfx.ips" }
-    if (IsChecked $Redux.Revert.HiddenSecrets)         { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\Original\hidden_secrets.ips" }
+    if (IsChecked $Redux.Revert.NESGFX)                { ApplyPatch -Patch "\Compressed\Original\nes_gfx.ips" }
+    if (IsChecked $Redux.Revert.HiddenSecrets)         { ApplyPatch -Patch "\Compressed\Original\hidden_secrets.ips" }
     
 }
 
 
 
 #==============================================================================================================================================================================================
-function CreateOptionsTheLegendOfZelda() {
+function CreateOptions() {
     
     CreateOptionsDialog -Width 390 -Height 340
 
@@ -37,7 +37,7 @@ function CreateOptionsTheLegendOfZelda() {
 
 
 #==============================================================================================================================================================================================
-function CreateTabMainTheLegendOfZelda() {
+function CreateTabMain() {
 
     # GRAPHICS #
     CreateReduxGroup    -Tag "Graphics" -Text "Graphics"
@@ -58,7 +58,7 @@ function CreateTabMainTheLegendOfZelda() {
 
 
 #==============================================================================================================================================================================================
-function CreateTabReduxTheLegendOfZelda() {
+function CreateTabRedux() {
     
     # ORIGINAL #
     CreateReduxGroup    -Tag "Revert" -Text "Original (Revert)"
@@ -66,14 +66,3 @@ function CreateTabReduxTheLegendOfZelda() {
     CreateReduxCheckBox -Name "HiddenSecrets"      -Column 2 -Text "Hidden Secrets"       -Info "Revert back all hiden secrets like that Redux adjusted, for the orginal experience"                                                         -Credits "ShadowOne333"
 
 }
-
-
-
-#==============================================================================================================================================================================================
-
-Export-ModuleMember -Function PatchOptionsTheLegendOfZelda
-Export-ModuleMember -Function PatchReduxTheLegendOfZelda
-
-Export-ModuleMember -Function CreateOptionsTheLegendOfZelda
-Export-ModuleMember -Function CreateTabMainTheLegendOfZelda
-Export-ModuleMember -Function CreateTabReduxTheLegendOfZelda

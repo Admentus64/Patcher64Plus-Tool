@@ -1,14 +1,14 @@
-function PatchOptionsSuperMario64() {
+function PatchOptions() {
     
-    if (IsChecked $Redux.Gameplay.FPS)       { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\fps.ppf" }
-    if (IsChecked $Redux.Gameplay.FreeCam)   { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\cam.ppf" }
+    if (IsChecked $Redux.Gameplay.FPS)       { ApplyPatch -Patch "\Compressed\fps.ppf" }
+    if (IsChecked $Redux.Gameplay.FreeCam)   { ApplyPatch -Patch "\Compressed\cam.ppf" }
 
 }
 
 
 
 #==============================================================================================================================================================================================
-function ByteOptionsSuperMario64() {
+function ByteOptions() {
     
     # HERO MODE
 
@@ -42,11 +42,6 @@ function ByteOptionsSuperMario64() {
 
         ChangeBytes -Offset "66FE6"  -Values "46 9C 44 81 50 00" # Coin formations
         ChangeBytes -Offset "66F56"  -Values "46 9C"
-    }
-
-    if (IsChecked $Redux.Graphics.OptimizeMarioModel) {
-        PatchBytes  -Offset "823B70" -Patch "Optimized Mario 1.bin"
-        PatchBytes  -Offset "1279B0" -Patch "Optimized Mario 2.bin"
     }
 
     if (IsChecked $Redux.Graphics.ForceHiresModel)         { ChangeBytes -Offset "32184" -Values "10 00" }
@@ -105,7 +100,7 @@ function ByteOptionsSuperMario64() {
 
 
 #==============================================================================================================================================================================================
-function CreateOptionsSuperMario64() {
+function CreateOptions() {
     
     CreateOptionsDialog -Width 740 -Height 370 -Tabs @("Graphics", "Gameplay", "Skip")
 
@@ -123,15 +118,14 @@ function CreateOptionsSuperMario64() {
 
 
 #==============================================================================================================================================================================================
-function CreateTabGraphicsSuperMario64() {
+function CreateTabGraphics() {
 
     # GRAPHICS #
-    CreateReduxGroup    -Tag  "Graphics" -Text "Graphics" -Height 2
+    CreateReduxGroup    -Tag  "Graphics" -Text "Graphics"
     CreateReduxCheckBox -Name "Widescreen"         -Column 1 -Row 1 -Text "16:9 Widescreen [!]"     -Info "Native 16:9 Widescreen Display support`n[!] Requires Dolphin's or GlideN64's internal Widescreen Hack"                                -Credits "Theboy181 (RAM) & Admentus (ROM)"
     CreateReduxCheckBox -Name "BlackBars"          -Column 2 -Row 1 -Text "No Black Bars"           -Info "Removes the black bars shown on the top and bottom of the screen"                                                                     -Credits "Theboy181 (RAM) & Admentus (ROM)"
     CreateReduxCheckBox -Name "ExtendedDraw"       -Column 3 -Row 1 -Text "Extended Draw Distance"  -Info "Increases the game's draw distance for solid objects with collision`nIncludes coin formations as well"                                -Credits "Theboy181 (RAM) & Admentus (ROM)"
     CreateReduxCheckBox -Name "ForceHiresModel"    -Column 4 -Row 1 -Text "Force Hires Mario Model" -Info "Always use Mario's High Resolution Model when Mario is too far away"                                                                  -Credits "Theboy181 (RAM) & Admentus (ROM)"
-    CreateReduxCheckBox -Name "OptimizeMarioModel" -Column 1 -Row 2 -Text "Optimize Mario Model"    -Info "Optimize Mario's model by reducing it by roughly 100 vertexes`nThis option only works when modifying the vanilla Super Mario 64 game" -Credits "Ported from SM64 ROM Manager"
 
     # INTERFACE #
     CreateReduxGroup    -Tag  "UI"-Text "Interface"
@@ -142,7 +136,7 @@ function CreateTabGraphicsSuperMario64() {
 
 
 #==============================================================================================================================================================================================
-function CreateTabGameplaySuperMario64() {
+function CreateTabGameplay() {
     
     # HERO MODE #
     CreateReduxGroup    -Tag  "Hero" -Text "Hero Mode"
@@ -167,7 +161,7 @@ function CreateTabGameplaySuperMario64() {
 
 
 #==============================================================================================================================================================================================
-function CreateTabSkipSuperMario64() {
+function CreateTabSkip() {
 
     # SKIP #
     CreateReduxGroup    -Tag  "Skip" -Text "Skip Intro"
@@ -183,16 +177,3 @@ function CreateTabSkipSuperMario64() {
     CreateReduxCheckBox -Name "StageIntro"         -Column 4 -Row 1 -Text "Skip Stage Intro"      -Info "Skip any messages that show up when entering a stage"                                                                                               -Credits "Ported from SM64 ROM Manager"
 
 }
-
-
-
-#==============================================================================================================================================================================================
-
-Export-ModuleMember -Function PatchOptionsSuperMario64
-Export-ModuleMember -Function ByteOptionsSuperMario64
-
-Export-ModuleMember -Function CreateOptionsSuperMario64
-
-Export-ModuleMember -Function CreateTabGraphicsSuperMario64
-Export-ModuleMember -Function CreateTabGameplaySuperMario64
-Export-ModuleMember -Function CreateTabSkipSuperMario64

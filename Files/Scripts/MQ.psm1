@@ -19,7 +19,7 @@ function PatchDungeonsMQ() {
     }
 
     # Title
-    if ($Settings.Debug.KeepLogo -ne $True) {
+    if ($Settings.Debug.KeepLogo -ne $True -and $GameType.mode -eq "Ocarina of Time") {
         PatchBytes -Offset "1795300" -Length "19000" -Texture -Patch "Logo\Master Quest Title Logo.bin"
         PatchBytes -Offset "17AE380" -Length "700"   -Texture -Patch "Logo\Master Quest Title Copyright.bin"
         ChangeBytes -Offset "E6E266"  -Values @("64", "96", "34", "21", "FF") # THE LEGEND OF
@@ -128,7 +128,7 @@ function PatchDungeonsMQ() {
 
 
 #==============================================================================================================================================================================================
-function CheckDungeonData([String]$Path) {
+function CheckDungeonData([string]$Path) {
     
     if (!(TestFile -Path $Path -Container)) {
         WriteToConsole ('Error: "' + $Path + '" was not found')
@@ -141,7 +141,7 @@ function CheckDungeonData([String]$Path) {
 
 
 #==============================================================================================================================================================================================
-function ExtractMQData([Boolean]$Decompress) {
+function ExtractMQData([boolean]$Decompress) {
     
     if (!$Decompress) { return }
 
@@ -166,12 +166,12 @@ function ExtractMQData([Boolean]$Decompress) {
 
 
 #==============================================================================================================================================================================================
-function ExtractDungeon([String]$Path, [String]$Offset, [int]$Length) {
+function ExtractDungeon([string]$Path, [string]$Offset, [byte]$Length) {
     
     if ( (TestFile -Path $Path -Container) -and ($Settings.Debug.ForceExtract -eq $False) ) { return }
 
-    $Start = Get8Bit ( (GetDecimal $Offset) )
-    $End   = Get8Bit ( (GetDecimal $Start) + ($Length * 16) + 16)
+    $Start = Get16Bit ( (GetDecimal $Offset) )
+    $End   = Get16Bit ( (GetDecimal $Start) + ($Length * 16) + 16)
     $Table = $ByteArrayGame[(GetDecimal $Start)..(GetDecimal $End)]
     CreateSubPath $Path
 
@@ -189,7 +189,7 @@ function ExtractDungeon([String]$Path, [String]$Offset, [int]$Length) {
 
 
 #==============================================================================================================================================================================================
-function ExtractAllDungeons([String]$Path) {
+function ExtractAllDungeons([string]$Path) {
     
     if (!(TestFile -Path $Path -Container)) { CreateSubPath $Path }
     ExtractDungeon -Path ($Path + "\Inside the Deku Tree")     -Offset "BB40" -Length 12
@@ -210,7 +210,7 @@ function ExtractAllDungeons([String]$Path) {
 
 
 #==============================================================================================================================================================================================
-function PatchDungeon([String]$TableOffset, [String]$Path, [int]$Length, [String]$Scene) {
+function PatchDungeon([string]$TableOffset, [string]$Path, [byte]$Length, [string]$Scene) {
     
     if (!(CheckDungeonData -Path ($Gamefiles.extracted + "\" + $Path))) { return $False }
 
@@ -218,7 +218,7 @@ function PatchDungeon([String]$TableOffset, [String]$Path, [int]$Length, [String
     for ($i=0; $i -le $Length; $i++) {
         $Values = @()
         for ($j=0; $j -lt 12; $j++) { $Values += Get8Bit $Table[($i*16)+$j] }
-        $Offset = Get16Bit ( (GetDecimal $TableOffset) + ($i * 16) )
+        $Offset = Get24Bit ( (GetDecimal $TableOffset) + ($i * 16) )
         if ($i -eq 0)   {
             PatchDungeonFile -Offset $Offset -Values $Values -Patch ($Path + "scene.zscene")
             ChangeBytes -Offset $Scene -Values @($Values[0], $Values[1], $Values[2], $Values[3], $Values[4], $Values[5], $Values[6], $Values[7]) # Update Scene Table
@@ -233,7 +233,7 @@ function PatchDungeon([String]$TableOffset, [String]$Path, [int]$Length, [String
 
 
 #==============================================================================================================================================================================================
-function PatchDungeonFile([String]$Offset, [Array]$Values, [String]$Patch, [String]$Length) {
+function PatchDungeonFile([string]$Offset, [Array]$Values, [string]$Patch, [string]$Length) {
     
     ChangeBytes -Offset $Offset -Values $Values                                                                      # Update DMA Table
     PatchBytes  -Offset ($Values[0] + $Values[1] + $Values[2] + $Values[3]) -Length $Length -Patch $Patch -Extracted # Inject .zmap or .zscene

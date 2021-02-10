@@ -3,6 +3,7 @@ function SetFileParameters() {
     # Create a hash table
     $global:Files = @{}
     $Files.tool = @{}
+    $Files.sound = @{}
     $Files.oot = @{}
     $Files.mm = @{}
     $Files.sm64 = @{}
@@ -43,10 +44,15 @@ function SetFileParameters() {
 
 
 
+    # Store sound files
+    $Files.sound.done                       = [System.String](Get-Location) + "\Files\Main\Done.wav"
+
+
+
     # Store Ocarina of Time files
+    $Files.oot.widescreen                   = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\widescreen")
     $Files.oot.master_quest                 = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\master_quest")
     $Files.oot.mm_pause_screen              = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\mm_pause_screen")
-
     $Files.oot.link_model_child_mm          = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Models\mm_child")
 
     $Files.oot.lens_of_truth                = $Paths.Games + "\Ocarina of Time\Textures\Lens of Truth.bin"
@@ -108,7 +114,11 @@ function SetFileParameters() {
     $Files.mm.zora_guitar_icon              = $Paths.Games + "\Majora's Mask\Textures\Icons\Zora Guitar Icon.yaz0"
     $Files.mm.zora_guitar_text              = $Paths.Games + "\Majora's Mask\Textures\Icons\Zora Guitar Text.yaz0"
 
+    $Files.mm.widescreen                    = CheckPatchExtension ($Paths.Games + "\Majora's Mask\Decompressed\widescreen")
+    $Files.mm.improved_link_model           = CheckPatchExtension ($Paths.Games + "\Majora's Mask\Decompressed\improved_link_model")
+
     $Files.mm.hud_oot_button                = $Paths.Games + "\Majora's Mask\Textures\HUD\OoT Button.bin"
+    $Files.mm.hud_oot_hearts                = $Paths.Games + "\Majora's Mask\Textures\HUD\OoT Hearts.bin"
 
     $Files.mm.carnival_of_time              = $Paths.Games + "\Majora's Mask\Textures\Widescreen\Carnival of Time.bin"
     $Files.mm.four_giant                    = $Paths.Games + "\Majora's Mask\Textures\Widescreen\Four Giants.bin"
@@ -159,7 +169,7 @@ function SetFileParameters() {
 
 
     # Store text files
-    $Files.text.credits                     = $Paths.Main + "\Credits.txt"
+    $Files.text.credits                     = $Paths.Base +"\Info\Credits.txt"
     $Files.text.gameID                      = $Paths.Main + "\GameID.txt"
     $Files.text.mainCredits                 = $Paths.Base + "\Info\Credits.txt"
 
@@ -178,8 +188,6 @@ function SetFileParameters() {
     $Files.dmaTable                         = [System.String](Get-Location) + "\Files\Temp\dmaTable.dat"
     $Files.archive                          = [System.String](Get-Location) + "\Files\Temp\ARCHIVE.bin"
     $Files.settings                         = $Paths.Settings + "\Core.ini"
-
-
 
     # Clear data
     $Files.oot = $Files.mm = $Files.sm64 = $null
@@ -243,14 +251,14 @@ function CheckFilesExists([hashtable]$HashTable) {
         }
     }
 
-    if ($FilesMissing) { CreateErrorDialog -Error "Missing Files" -Exit }
+    if ($FilesMissing) { CreateErrorDialog -Error "Missing Files" }
 
 }
 
 
 
 #==============================================================================================================================================================================================
-function CheckPatchExtension([String]$File) {
+function CheckPatchExtension([string]$File) {
     
     if (TestFile ($File + ".bps"))      { return $File + ".bps" }
     if (TestFile ($File + ".ips"))      { return $File + ".ips" }
@@ -265,7 +273,35 @@ function CheckPatchExtension([String]$File) {
 
 
 #==============================================================================================================================================================================================
+function LoadSoundEffects([boolean]$Enable=$True) {
+    
+    if (!$Enable) {
+        $global:Sounds = $null
+        return
+    }
+    
+    $global:Sounds = @{}
+    
+    $Sounds.done = New-Object System.Media.SoundPlayer
+    $Sounds.done.SoundLocation = $Files.sound.done
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function PlaySound([System.Media.SoundPlayer]$Sound) {
+    
+    if ($Settings.Core.EnableSounds -eq $True) { $Sound.playsync() } 
+
+}
+
+
+
+#==============================================================================================================================================================================================
 
 Export-ModuleMember -Function SetFileParameters
 Export-ModuleMember -Function SetGetROM
 Export-ModuleMember -Function CheckPatchExtension
+Export-ModuleMember -Function LoadSoundEffects
+Export-ModuleMember -Function PlaySound

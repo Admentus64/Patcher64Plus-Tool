@@ -1,5 +1,5 @@
 function CreateMainDialog() {
-
+    
     # Create the main dialog that is shown to the user.
     $global:MainDialog = New-Object System.Windows.Forms.Form
     $MainDialog.Text = $ScriptName
@@ -215,6 +215,11 @@ function CreateMainDialog() {
     $Patches.Options = CreateCheckBox -X ($Patches.OptionsLabel.Right) -Y ($Patches.OptionsLabel.Top - (DPISize 2)) -Width (DPISize 20) -Height (DPISize 20) -Info "Enable options in order to apply a customizable set of features and changes" -Name "Patches.Options" -Checked $True
     $Patches.OptionsLabel.Add_Click({ $Patches.Options.Checked = !$Patches.Options.Checked })
 
+    # Extend Checkbox
+    $Patches.ExtendLabel = CreateLabel -X ($Patches.Button.Right + (DPISize 10)) -Y ($Patches.OptionsLabel.Bottom + (DPISize 15)) -Width (DPISize 85) -Height (DPISize 15) -Text "Allow Extend:" -Info "Allows extending the ROM beyond it's regular size`nSome patches will automaticially force an extend of the ROM"
+    $Patches.Extend = CreateCheckBox -X ($Patches.ExtendLabel.Right) -Y ($Patches.ExtendLabel.Top - (DPISize 2)) -Width (DPISize 20) -Height (DPISize 20) -Info "Allows extending the ROM beyond it's regular size`nSome patches will automaticially force an extend of the ROM" -Name "Patches.Redux"
+    $Patches.ExtendLabel.Add_Click({ $Patches.Extend.Checked = !$Patches.Extend.Checked })
+
     # Redux Checkbox
     $Patches.ReduxLabel = CreateLabel -X ($Patches.Button.Right + (DPISize 10)) -Y ($Patches.OptionsLabel.Bottom + (DPISize 15)) -Width (DPISize 85) -Height (DPISize 15) -Text "Enable Redux:" -Info "Enable the Redux patch which improves game mechanics`nIncludes among other changes the inclusion of the D-Pad for dedicated item buttons"
     $Patches.Redux = CreateCheckBox -X ($Patches.ReduxLabel.Right) -Y ($Patches.ReduxLabel.Top - (DPISize 2)) -Width (DPISize 20) -Height (DPISize 20) -Info "Enable the Redux patch which improves game mechanics`nIncludes among other changes the inclusion of the D-Pad for dedicated item buttons" -Name "Patches.Redux" -Checked $True
@@ -242,7 +247,7 @@ function CreateMainDialog() {
     $VC.Group = CreateGroupBox -Width $VC.Panel.Width -Height $VC.Panel.Height -Text "Virtual Console - Patch Options"
 
     # Create a label for Patch VC Buttons
-    $VC.ActionsLabel = CreateLabel -X (DPISize 10) -Y (DPISize 32) -Width (DPISize 50) -Height (DPISize 15) -Text "Actions" -Font $Fonts.SmallBold -AddTo $VC.Group
+    $VC.ActionsLabel = CreateLabel -X (DPISize 10) -Y (DPISize 32) -Width (DPISize 55) -Height (DPISize 15) -Text "Actions" -Font $Fonts.SmallBold -AddTo $VC.Group
 
     # Create a button to patch the VC
     $VC.PatchVCButton = CreateButton -X ($VC.ActionsLabel.Right + (DPISize 20)) -Y ($VC.ActionsLabel.Top - (DPISize 7)) -Width (DPISize 150) -Height (DPISize 30) -Text "Patch VC Emulator Only" -Info "Ignore any patches and only patches the Virtual Console emulator`nDowngrading and channing the Channel Title or GameID is still accepted"
@@ -253,7 +258,7 @@ function CreateMainDialog() {
     $VC.ExtractROMButton.Add_Click({ MainFunction -Command "Extract" -PatchedFileName "_extracted" })
 
     # Create a label for Core patches
-    $VC.CoreLabel = CreateLabel -X (DPISize 10) -Y (DPISize 62) -Width (DPISize 50) -Height (DPISize 15) -Text "Core" -Font $Fonts.SmallBold
+    $VC.CoreLabel = CreateLabel -X (DPISize 10) -Y (DPISize 62) -Width (DPISize 55) -Height (DPISize 15) -Text "Core" -Font $Fonts.SmallBold
 
     # Remove T64 description
     $VC.RemoveT64Label = CreateLabel -X ($VC.CoreLabel.Right + (DPISize 20)) -Y ($VC.CoreLabel.Top) -Width (DPISize 95) -Height (DPISize 15) -Text "Remove All T64:" -Info "Remove all textures that the Virtual Console replaced in the ROM`nThese replaced textures are known as T64`nThese replaced textures maybe be censored or to make the game look darker more fitting for the Wii"
@@ -281,7 +286,7 @@ function CreateMainDialog() {
     $VC.RemapLLabel.Add_Click({ $VC.RemapL.Checked = !$VC.RemapL.Checked })
 
     # Create a label for Minimap
-    $VC.MinimapLabel = CreateLabel -X (DPISize 10) -Y ($VC.CoreLabel.Bottom + (DPISize 5)) -Width (DPISize 50) -Height (DPISize 15) -Text "Minimap" -Font $Fonts.SmallBold -AddTo $VC.Group
+    $VC.MinimapLabel = CreateLabel -X (DPISize 10) -Y ($VC.CoreLabel.Bottom + (DPISize 5)) -Width (DPISize 55) -Height (DPISize 15) -Text "Minimap" -Font $Fonts.SmallBold -AddTo $VC.Group
 
     # Remap C-Down
     $VC.RemapCDownLabel = CreateLabel -X ($VC.MinimapLabel.Right + (DPISize 20)) -Y ($VC.MinimapLabel.Top) -Width (DPISize 95) -Height (DPISize 15) -Text "Remap C-Down:" -Info "Remap the C-Down button for toggling the minimap instead of using an item"
@@ -393,8 +398,7 @@ function InitializeEvents() {
     $Patches.Redux.Add_CheckStateChanged({
         GetHeader
         DisableReduxOptions
-        $FunctionTitle = SetFunctionTitle -Function $GameType.mode
-        if (Get-Command ("AdjustGUI" + $FunctionTitle) -errorAction SilentlyContinue) { &("AdjustGUI" + $FunctionTitle) }
+        if (Get-Command "AdjustGUI" -errorAction SilentlyContinue) { iex "AdjustGUI" }
 
     })
 
@@ -457,11 +461,10 @@ function CheckVCOptions() {
 #==============================================================================================================================================================================================
 function DisablePatches() {
     
+    EnableElem -Elem @($Patches.Extend, $Patches.ExtendLabel) -Active ((IsSet $GamePatch.allow_extend) -and $Settings.Debug.LiteGUI -eq $False) -Hide
     EnableElem -Elem @($Patches.Redux, $Patches.ReduxLabel) -Active ((IsSet $GamePatch.redux.file) -and $Settings.Debug.LiteGUI -eq $False) -Hide
     EnableElem -Elem @($Patches.Options, $Patches.OptionsLabel, $Patches.OptionsButton) -Active ($GamePatch.options -eq 1) -Hide
     EnableElem -Elem @($Patches.Downgrade, $Patches.DowngradeLabel) -Active ((IsSet $GameType.downgrade) -and $Settings.Debug.LiteGUI -eq $False) -Hide
-
-    #EnableElem -Elem @($VC.RemoveFilter, $VC.RemoveFilterLabel) -Active (!(StrLike -str $GamePatch.command -val "Patch Boot DOL"))
     EnableElem -Elem @($VC.RemapL, $VC.RemapLLabel) -Active (!(StrLike -str $GamePatch.command -val "Multiplayer"))
 
     # Disable boxes if needed
@@ -484,11 +487,10 @@ function DisableReduxOptions() {
 
 #==============================================================================================================================================================================================
 function LoadAdditionalOptions(){
-
+    
     # Create options content based on current game
     if ($GamePatch.options -eq 1) {
-        $FunctionTitle = SetFunctionTitle -Function $GameType.mode
-        if (Get-Command ("CreateOptions" + $FunctionTitle) -errorAction SilentlyContinue)   { &("CreateOptions" + $FunctionTitle) }
+        if (Get-Command "CreateOptions" -errorAction SilentlyContinue) { iex "CreateOptions" }
         [System.GC]::Collect() | Out-Null
     }
 
@@ -497,7 +499,7 @@ function LoadAdditionalOptions(){
 
 
 #==================================================================================================================================================================================================================================================================
-function GamePath_Button([Object]$TextBox, [String]$Description, [String[]]$FileNames) {
+function GamePath_Button([object]$TextBox, [string]$Description, [String[]]$FileNames) {
         # Allow the user to select a file
     $SelectedPath = GetFileName -Path $Paths.Base -Description $Description -FileNames $FileNames
 
@@ -513,7 +515,7 @@ function GamePath_Button([Object]$TextBox, [String]$Description, [String[]]$File
 
 
 #==================================================================================================================================================================================================================================================================
-function InjectPath_Button([Object]$TextBox, [String]$Description, [String[]]$FileNames) {
+function InjectPath_Button([object]$TextBox, [string]$Description, [String[]]$FileNames) {
         # Allow the user to select a file
     $SelectedPath = GetFileName -Path $Paths.Base -Description $Description -FileNames $FileNames
 
@@ -530,7 +532,7 @@ function InjectPath_Button([Object]$TextBox, [String]$Description, [String[]]$Fi
 
 
 #==================================================================================================================================================================================================================================================================
-function PatchPath_Button([Object]$TextBox, [String]$Description, [String[]]$FileNames) {
+function PatchPath_Button([object]$TextBox, [string]$Description, [String[]]$FileNames) {
         # Allow the user to select a file
     $SelectedPath = GetFileName -Path $Paths.Base -Description $Description -FileNames $FileNames
 
@@ -552,7 +554,7 @@ function GamePath_DragDrop() {
     # Check for drag and drop data
     if ($_.Data.GetDataPresent([Windows.Forms.DataFormats]::FileDrop)) {
         # Get the first item in the list.
-        $DroppedPath = [String]($_.Data.GetData([Windows.Forms.DataFormats]::FileDrop))
+        $DroppedPath = [string]($_.Data.GetData([Windows.Forms.DataFormats]::FileDrop))
         
         # See if the dropped item is a file
         if (TestFile $DroppedPath) {
@@ -577,7 +579,7 @@ function InjectPath_DragDrop() {
     # Check for drag and drop data
     if ($_.Data.GetDataPresent([Windows.Forms.DataFormats]::FileDrop)) {
         # Get the first item in the list.
-        $DroppedPath = [String]($_.Data.GetData([Windows.Forms.DataFormats]::FileDrop))
+        $DroppedPath = [string]($_.Data.GetData([Windows.Forms.DataFormats]::FileDrop))
         
         # See if the dropped item is a file
         if (TestFile $DroppedPath) {
@@ -602,7 +604,7 @@ function PatchPath_DragDrop() {
     # Check for drag and drop data
     if ($_.Data.GetDataPresent([Windows.Forms.DataFormats]::FileDrop)) {
         # Get the first item in the list.
-        $DroppedPath = [String]($_.Data.GetData([Windows.Forms.DataFormats]::FileDrop))
+        $DroppedPath = [string]($_.Data.GetData([Windows.Forms.DataFormats]::FileDrop))
         
         # See if the dropped item is a file
         if (TestFile $DroppedPath) {

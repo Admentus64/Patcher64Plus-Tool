@@ -1,29 +1,29 @@
-function PatchOptionsSuperMetroid() {
+function PatchOptions() {
     
-    if (IsChecked $Redux.Graphics.Widescreen)           { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\widescreen.ips" }
-    if (IsChecked $Redux.Graphics.RedesignedSamus)      { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\redesigned_samus.ips" }
+    if (IsChecked $Redux.Graphics.Widescreen)           { ApplyPatch -Patch "\Compressed\widescreen.ips" }
+    if (IsChecked $Redux.Graphics.RedesignedSamus)      { ApplyPatch -Patch "\Compressed\redesigned_samus.ips" }
 
-    if (IsChecked $Redux.Gameplay.FixedUnlockedDoors)   { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\fixed_tourian_unlocked_doors.ips" }
-    if (IsChecked $Redux.Gameplay.HeavyPhysics)         { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\heavy_physics.ips" }
-    if (IsChecked $Redux.Gameplay.SaveStationsRefill)   { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\save_stations_refill_everything.ips" }
-    if (IsChecked $Redux.Gameplay.SkipCeres)            { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\skip_ceres.ips" }
-
-}
-
-
-
-#==============================================================================================================================================================================================
-function PatchReduxSuperMetroid() {
-
-    if (IsChecked $Redux.Revert.Xray)                   { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\Original\x_ray.ips" }
-    if (IsChecked $Redux.Revert.ElevatorSpeed)          { ApplyPatch -File $GetROM.decomp -Patch "\Compressed\Original\elevator_speed.ips" }
+    if (IsChecked $Redux.Gameplay.FixedUnlockedDoors)   { ApplyPatch -Patch "\Compressed\fixed_tourian_unlocked_doors.ips" }
+    if (IsChecked $Redux.Gameplay.HeavyPhysics)         { ApplyPatch -Patch "\Compressed\heavy_physics.ips" }
+    if (IsChecked $Redux.Gameplay.SaveStationsRefill)   { ApplyPatch -Patch "\Compressed\save_stations_refill_everything.ips" }
+    if (IsChecked $Redux.Gameplay.SkipCeres)            { ApplyPatch -Patch "\Compressed\skip_ceres.ips" }
 
 }
 
 
 
 #==============================================================================================================================================================================================
-function CreateOptionsSuperMetroid() {
+function PatchReduxOptions() {
+
+    if (IsChecked $Redux.Revert.Xray)                   { ApplyPatch -Patch "\Compressed\Original\x_ray.ips" }
+    if (IsChecked $Redux.Revert.ElevatorSpeed)          { ApplyPatch -Patch "\Compressed\Original\elevator_speed.ips" }
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function CreateOptions() {
     
     CreateOptionsDialog -Width 390 -Height 320
     
@@ -33,7 +33,7 @@ function CreateOptionsSuperMetroid() {
 
 
 #==============================================================================================================================================================================================
-function CreateTabMainSuperMetroid() {
+function CreateTabMain() {
     
     # GRAPHICS #
     CreateReduxGroup    -Tag "Graphics" -Text "Graphics"
@@ -51,7 +51,7 @@ function CreateTabMainSuperMetroid() {
 
 
 #==============================================================================================================================================================================================
-function CreateTabReduxSuperMetroid() {
+function CreateTabRedux() {
     
     # ORIGINAL #
     CreateReduxGroup    -Tag "Revert" -Text "Original (Revert)"
@@ -59,14 +59,3 @@ function CreateTabReduxSuperMetroid() {
     CreateReduxCheckBox -Name "ElevatorSpeed"             -Column 2 -Row 1 -Text "Elevator Speed"     -Info "Restores the original Super Metroid elevator speeds"    -Credits "ShadowOne333 and this team"
 
 }
-
-
-
-#==============================================================================================================================================================================================
-
-Export-ModuleMember -Function PatchOptionsSuperMetroid
-Export-ModuleMember -Function PatchReduxSuperMetroid
-
-Export-ModuleMember -Function CreateOptionsSuperMetroid
-Export-ModuleMember -Function CreateTabMainSuperMetroid
-Export-ModuleMember -Function CreateTabReduxSuperMetroid

@@ -1,8 +1,8 @@
-function PatchOptionsOcarinaOfTime() {
+function PatchOptions() {
     
     # ENHANCED 16:9 WIDESCREEN #
 
-    if (IsWidescreen -Experimental)   { ApplyPatch -File $GetROM.decomp -Patch "\Decompressed\widescreen.ppf" }
+    if (IsWidescreen -Experimental)   { ApplyPatch -Patch "\Decompressed\widescreen.ppf" }
 
 
 
@@ -10,27 +10,27 @@ function PatchOptionsOcarinaOfTime() {
 
     if (IsChecked $Redux.Graphics.ListLinkModels) {
         if (IsChecked $Redux.Graphics.MMChildLink) {
-            ApplyPatch -File $GetROM.decomp -Patch "\Decompressed\Models\mm_child.ppf"
+            ApplyPatch -Patch "\Decompressed\Models\mm_child.ppf"
             $Text = $Redux.Graphics.LinkModelsPlus.Text.replace(" (default)", "")
         }
         else { $Text = $Redux.Graphics.LinkModels.Text.replace(" (default)", "") }
-        ApplyPatch -File $GetROM.decomp -Patch ("\Decompressed\Models\Link\" + $Text + ".ppf")
+        ApplyPatch -Patch ("\Decompressed\Models\Link\" + $Text + ".ppf")
     }
-    elseif (IsChecked $Redux.Graphics.ListMaleModels)     { ApplyPatch -File $GetROM.decomp -Patch ("\Decompressed\Models\Male\"   + $Redux.Graphics.MaleModels.Text.replace(" (default)", "") + ".ppf") }
-    elseif (IsChecked $Redux.Graphics.ListFemaleModels)   { ApplyPatch -File $GetROM.decomp -Patch ("\Decompressed\Models\Female\" + $Redux.Graphics.FemaleModels.Text.replace(" (default)", "") + ".ppf") }
-    
+    elseif (IsChecked $Redux.Graphics.ListMaleModels)     { ApplyPatch -Patch ("\Decompressed\Models\Male\"   + $Redux.Graphics.MaleModels.Text.replace(" (default)", "") + ".ppf") }
+    elseif (IsChecked $Redux.Graphics.ListFemaleModels)   { ApplyPatch -Patch ("\Decompressed\Models\Female\" + $Redux.Graphics.FemaleModels.Text.replace(" (default)", "") + ".ppf") }
 
 
-    # MM PAUSE SCREEN
 
-    if (IsChecked $Redux.Text.PauseScreen)   { ApplyPatch -File $GetROM.decomp -Patch "\Decompressed\mm_pause_screen.ppf" }
+    # MM PAUSE SCREEN #
+
+    if (IsChecked $Redux.Text.PauseScreen)   { ApplyPatch -Patch "\Decompressed\mm_pause_screen.ppf" }
     
 }
 
 
 
 #==============================================================================================================================================================================================
-function ByteOptionsOcarinaOfTime() {
+function ByteOptions() {
     
     # GAMEPLAY #
 
@@ -70,6 +70,7 @@ function ByteOptionsOcarinaOfTime() {
     if (IsChecked $Redux.Gameplay.ReturnChild)         { ChangeBytes -Offset "CB6844"  -Values "35"; ChangeBytes -Offset "253C0E2" -Values "03" }
     if (IsChecked $Redux.Gameplay.FixGraves)           { ChangeBytes -Offset "202039D" -Values "20"; ChangeBytes -Offset "202043C" -Values "24" }
     if (IsChecked $Redux.Gameplay.DistantZTargeting)   { ChangeBytes -Offset "A987AC"  -Values "00 00 00 00" }
+    if (IsChecked $Redux.Gameplay.UnsheathSword)       { ChangeBytes -Offset "BD04A0"  -Values "28 42 00 05 14 40 00 05 00 00 10 25" }
 
 
 
@@ -113,8 +114,8 @@ function ByteOptionsOcarinaOfTime() {
     if (IsChecked $Redux.Other.DisableNaviPrompts)   { ChangeBytes -Offset "DF8B84" -Values "00 00 00 00" }
     if (IsChecked $Redux.Other.DefaultZTargeting)    { ChangeBytes -Offset "B71E6D" -Values "01" }
     if (IsChecked $Redux.Other.HideCredits)          { PatchBytes  -Offset "966000" -Patch "Message\Credits.bin" }
-
     
+
 
     # GRAPHICS #
 
@@ -185,10 +186,10 @@ function ByteOptionsOcarinaOfTime() {
     }
 
     if (IsChecked $Redux.UI.ButtonPositions) {
-        ChangeBytes -Offset "B57EEF" -Values "A7"
-        ChangeBytes -Offset "B57F03" -Values "BE"
-        ChangeBytes -Offset "B586A7" -Values "17"
-        ChangeBytes -Offset "B589EB" -Values "9B"
+        ChangeBytes -Offset "B57F03" -Values "04" -Add # A Button / Text - X position (BA -> BE, +04)
+        ChangeBytes -Offset "B586A7" -Values "0E" -Add # A Button / Text - Y position (09 -> 17, +0E)
+        ChangeBytes -Offset "B57EEF" -Values "07" -Add # B Button - X position (A0 -> A7, +07)
+        ChangeBytes -Offset "B589EB" -Values "07" -Add # B Text   - X position (94 -> 9B, +07)
     }
 
     if (IsChecked $Redux.UI.CenterNaviPrompt) {
@@ -232,27 +233,34 @@ function ByteOptionsOcarinaOfTime() {
         ChangeBytes -Offset "C6B366" -Values (GetSFXID $Redux.SFX.Horse.Text);   ChangeBytes -Offset "C6B562" -Values (GetSFXID $Redux.SFX.Horse.Text)
     }
 
-    if (IsIndex -Elem $Redux.SFX.FileMenuCursor -Not) {
-        ChangeBytes -Offset "BA165E" -Values (GetSFXID $Redux.SFX.FileMenuCursor.Text);   ChangeBytes -Offset "BA1C1A" -Values (GetSFXID $Redux.SFX.FileMenuCursor.Text);   ChangeBytes -Offset "BA2406" -Values (GetSFXID $Redux.SFX.FileMenuCursor.Text);
-        ChangeBytes -Offset "BA327E" -Values (GetSFXID $Redux.SFX.FileMenuCursor.Text);   ChangeBytes -Offset "BA3936" -Values (GetSFXID $Redux.SFX.FileMenuCursor.Text);   ChangeBytes -Offset "BA77C2" -Values (GetSFXID $Redux.SFX.FileMenuCursor.Text);
-        ChangeBytes -Offset "BA7886" -Values (GetSFXID $Redux.SFX.FileMenuCursor.Text);   ChangeBytes -Offset "BA7A06" -Values (GetSFXID $Redux.SFX.FileMenuCursor.Text);   ChangeBytes -Offset "BA7A6E" -Values (GetSFXID $Redux.SFX.FileMenuCursor.Text);
-        ChangeBytes -Offset "BA7AE6" -Values (GetSFXID $Redux.SFX.FileMenuCursor.Text);   ChangeBytes -Offset "BA7D6A" -Values (GetSFXID $Redux.SFX.FileMenuCursor.Text);   ChangeBytes -Offset "BA8186" -Values (GetSFXID $Redux.SFX.FileMenuCursor.Text);
-        ChangeBytes -Offset "BA822E" -Values (GetSFXID $Redux.SFX.FileMenuCursor.Text);   ChangeBytes -Offset "BA82A2" -Values (GetSFXID $Redux.SFX.FileMenuCursor.Text);   ChangeBytes -Offset "BAA11E" -Values (GetSFXID $Redux.SFX.FileMenuCursor.Text);
-        ChangeBytes -Offset "BAE7C6" -Values (GetSFXID $Redux.SFX.FileMenuCursor.Text)
+    if (IsIndex -Elem $Redux.SFX.FileCursor -Not) {
+        ChangeBytes -Offset "BA165E" -Values (GetSFXID $Redux.SFX.FileCursor.Text);   ChangeBytes -Offset "BA1C1A" -Values (GetSFXID $Redux.SFX.FileCursor.Text);   ChangeBytes -Offset "BA2406" -Values (GetSFXID $Redux.SFX.FileCursor.Text);
+        ChangeBytes -Offset "BA327E" -Values (GetSFXID $Redux.SFX.FileCursor.Text);   ChangeBytes -Offset "BA3936" -Values (GetSFXID $Redux.SFX.FileCursor.Text);   ChangeBytes -Offset "BA77C2" -Values (GetSFXID $Redux.SFX.FileCursor.Text);
+        ChangeBytes -Offset "BA7886" -Values (GetSFXID $Redux.SFX.FileCursor.Text);   ChangeBytes -Offset "BA7A06" -Values (GetSFXID $Redux.SFX.FileCursor.Text);   ChangeBytes -Offset "BA7A6E" -Values (GetSFXID $Redux.SFX.FileCursor.Text);
+        ChangeBytes -Offset "BA7AE6" -Values (GetSFXID $Redux.SFX.FileCursor.Text);   ChangeBytes -Offset "BA7D6A" -Values (GetSFXID $Redux.SFX.FileCursor.Text);   ChangeBytes -Offset "BA8186" -Values (GetSFXID $Redux.SFX.FileCursor.Text);
+        ChangeBytes -Offset "BA822E" -Values (GetSFXID $Redux.SFX.FileCursor.Text);   ChangeBytes -Offset "BA82A2" -Values (GetSFXID $Redux.SFX.FileCursor.Text);   ChangeBytes -Offset "BAA11E" -Values (GetSFXID $Redux.SFX.FileCursor.Text);
+        ChangeBytes -Offset "BAE7C6" -Values (GetSFXID $Redux.SFX.FileCursor.Text)
     }
 
-    if (IsIndex -Elem $Redux.SFX.FileMenuSelect -Not) {
-        ChangeBytes -Offset "BA1BBE" -Values (GetSFXID $Redux.SFX.FileMenuSelect.Text);   ChangeBytes -Offset "BA23CE" -Values (GetSFXID $Redux.SFX.FileMenuSelect.Text);   ChangeBytes -Offset "BA2956" -Values (GetSFXID $Redux.SFX.FileMenuSelect.Text);
-        ChangeBytes -Offset "BA321A" -Values (GetSFXID $Redux.SFX.FileMenuSelect.Text);   ChangeBytes -Offset "BA72F6" -Values (GetSFXID $Redux.SFX.FileMenuSelect.Text);   ChangeBytes -Offset "BA8106" -Values (GetSFXID $Redux.SFX.FileMenuSelect.Text);
-        ChangeBytes -Offset "BA82EE" -Values (GetSFXID $Redux.SFX.FileMenuSelect.Text);   ChangeBytes -Offset "BA9DAE" -Values (GetSFXID $Redux.SFX.FileMenuSelect.Text);   ChangeBytes -Offset "BA9EAE" -Values (GetSFXID $Redux.SFX.FileMenuSelect.Text);
-        ChangeBytes -Offset "BA9FD2" -Values (GetSFXID $Redux.SFX.FileMenuSelect.Text);   ChangeBytes -Offset "BAE6D6" -Values (GetSFXID $Redux.SFX.FileMenuSelect.Text)
+    if (IsIndex -Elem $Redux.SFX.FileSelect -Not) {
+        ChangeBytes -Offset "BA1BBE" -Values (GetSFXID $Redux.SFX.FileSelect.Text);   ChangeBytes -Offset "BA23CE" -Values (GetSFXID $Redux.SFX.FileSelect.Text);   ChangeBytes -Offset "BA2956" -Values (GetSFXID $Redux.SFX.FileSelect.Text);
+        ChangeBytes -Offset "BA321A" -Values (GetSFXID $Redux.SFX.FileSelect.Text);   ChangeBytes -Offset "BA72F6" -Values (GetSFXID $Redux.SFX.FileSelect.Text);   ChangeBytes -Offset "BA8106" -Values (GetSFXID $Redux.SFX.FileSelect.Text);
+        ChangeBytes -Offset "BA82EE" -Values (GetSFXID $Redux.SFX.FileSelect.Text);   ChangeBytes -Offset "BA9DAE" -Values (GetSFXID $Redux.SFX.FileSelect.Text);   ChangeBytes -Offset "BA9EAE" -Values (GetSFXID $Redux.SFX.FileSelect.Text);
+        ChangeBytes -Offset "BA9FD2" -Values (GetSFXID $Redux.SFX.FileSelect.Text);   ChangeBytes -Offset "BAE6D6" -Values (GetSFXID $Redux.SFX.FileSelect.Text)
     }
 
     if (IsIndex -Elem $Redux.SFX.ZTarget    -Not)   { ChangeBytes -Offset "AE7EC6" -Values (GetSFXID $Redux.SFX.ZTarget.Text) }
     if (IsIndex -Elem $Redux.SFX.LowHP      -Not)   { ChangeBytes -Offset "ADBA1A" -Values (GetSFXID $Redux.SFX.LowHP.Text) }
     if (IsIndex -Elem $Redux.SFX.HoverBoots -Not)   { ChangeBytes -Offset "BDBD8A" -Values (GetSFXID $Redux.SFX.HoverBoots.Text) } 
 
+
+
+    # FILE SELECT
+
+    if (IsText -Elem $Redux.FileSelect.Music -Compare "File Select" -Not)   { ChangeBytes -Offset "BAFEE3" -Values (GetOoTMusicID -Music $Redux.FileSelect.Music.Text) }
+    if (IsIndex -Elem $Redux.FileSelect.Skybox -Index 4 -Not)               { ChangeBytes -Offset "B67722" -Values $Redux.FileSelect.Skybox.SelectedIndex }
     
+
 
     # HERO MODE #
 
@@ -294,6 +302,41 @@ function ByteOptionsOcarinaOfTime() {
 
     if (IsText -Elem $Redux.Hero.MagicUsage -Compare "2x Magic Usage")      { ChangeBytes -Offset "AE84FA" -Values "2C","40" }
     elseif (IsText -Elem $Redux.Hero.MagicUsage -Compare "3x Magic Usage")  { ChangeBytes -Offset "AE84FA" -Values "2C","80" }
+
+
+    
+    if (IsText -Elem $Redux.Hero.BossHP -Compare "2x Boss HP") {
+        ChangeBytes -Offset "C44F2B" -Values "14" # Gohma           0xC44C30 -> 0xC4ABB0 (Length: 0x5F80) (ovl_Boss_Goma) (HP: 0A) (Mass: FF)
+        ChangeBytes -Offset "C3B9FF" -Values "18" # King Dodongo    0xC3B150 -> 0xC44C30 (Length: 0x9AE0) (ovl_Boss_Dodongo) (HP: 0C) (Mass: 00)
+        ChangeBytes -Offset "D258BA" -Values "08" # Barinade        0xD22360 -> 0xD30B50 (Length: 0xE7F0)(ovl_Boss_Va) (HP: 04 -> 03 -> 03) (Mass: 00)
+        ChangeBytes -Offset "D25B0A" -Values "06" # Barinade
+        ChangeBytes -Offset "C91F8F" -Values "3C" # Phantom Ganon   0xC91AD0 -> 0xC96840 (Length: 0x4D70) (ovl_Boss_Ganondrof) (HP: 1E) (Mass: 32)
+        ChangeBytes -Offset "C91F8F" -Values "30" # Phantom Ganon   (Phase 2) (HP: <19)
+        ChangeBytes -Offset "CE6D2F" -Values "30" # Volvagia        0xCE65F0 -> 0xCED920 (Length: 0x7330) (ovl_Boss_Fd) (Has HP) (HP: 18) (Mass: 32) / 0xD04790 -> 0xD084C0 (Length:0x3D30) (ovl_Boss_Fd2) (Has No HP, Forwards HP to Flying)
+        ChangeBytes -Offset "D3B4A7" -Values "28" # Morpha          0xD3ADF0 -> 0xD46390 (Length: 0xB5A0) (ovl_Boss_Mo) (HP: 14) (Mass: 00)
+        ChangeBytes -Offset "DAC824" -Values "48" # Bongo Bongo     0xDA1660 -> 0xDADB80 (Length: 0xC520) (ovl_Boss_Sst) (HP: 24) (Mass: C8)
+        ChangeBytes -Offset "D7FDA3" -Values "50" # Ganondorf       0xD7F3F0 -> 0xDA1660 (Length: 0x22270) (ovl_Boss_Ganon) (HP: 28) (Mass: 32)
+        ChangeBytes -Offset "E82AFB" -Values "3C" # Ganon           0xE826C0 -> 0xE939B0 (Length: 0x112F0) (ovl_Boss_Ganon2) (HP: 1E) (Mass: FF)
+        ChangeBytes -Offset "E87F2F" -Values "29" # Ganon           (Phase 2) (HP: <15)
+        ChangeBytes -Offset "D64EFA" -Values "08" # Twinrova        (Phase 1) (Hit Counter: <4)
+        ChangeBytes -Offset "D6223E" -Values "30" # Twinrova        0xD612E0 -> 0xD74360 (Length: 0x13080) (ovl_Boss_Tw) (HP: 18) (Mass: FF)
+    }
+    elseif (IsText -Elem $Redux.Hero.BossHP -Compare "3x Boss HP") {
+        ChangeBytes -Offset "C44F2B" -Values "1E" # Gohma           0xC44C30 -> 0xC4ABB0 (Length: 0x5F80) (ovl_Boss_Goma) (HP: 0A) (Mass: FF)
+        ChangeBytes -Offset "C3B9FF" -Values "24" # King Dodongo    0xC3B150 -> 0xC44C30 (Length: 0x9AE0) (ovl_Boss_Dodongo) (HP: 0C) (Mass: 00)
+        ChangeBytes -Offset "D258BA" -Values "0C" # Barinade        0xD22360 -> 0xD30B50 (Length: 0xE7F0)(ovl_Boss_Va) (HP: 04 -> 03 -> 03) (Mass: 00)
+        ChangeBytes -Offset "D25B0A" -Values "09" # Barinade
+        ChangeBytes -Offset "C91F8F" -Values "5A" # Phantom Ganon   0xC91AD0 -> 0xC96840 (Length: 0x4D70) (ovl_Boss_Ganondrof) (HP: 1E) (Mass: 32)
+        ChangeBytes -Offset "C91F8F" -Values "48" # Phantom Ganon   (Phase 2) (HP: <19)
+        ChangeBytes -Offset "CE6D2F" -Values "48" # Volvagia        0xCE65F0 -> 0xCED920 (Length: 0x7330) (ovl_Boss_Fd) (Has HP) (HP: 18) (Mass: 32) / 0xD04790 -> 0xD084C0 (Length:0x3D30) (ovl_Boss_Fd2) (Has No HP, Forwards HP to Flying)
+        ChangeBytes -Offset "D3B4A7" -Values "3C" # Morpha          0xD3ADF0 -> 0xD46390 (Length: 0xB5A0) (ovl_Boss_Mo) (HP: 14) (Mass: 00)
+        ChangeBytes -Offset "DAC824" -Values "6C" # Bongo Bongo     0xDA1660 -> 0xDADB80 (Length: 0xC520) (ovl_Boss_Sst) (HP: 24) (Mass: C8)
+        ChangeBytes -Offset "D7FDA3" -Values "78" # Ganondorf       0xD7F3F0 -> 0xDA1660 (Length: 0x22270) (ovl_Boss_Ganon) (HP: 28) (Mass: 32)
+        ChangeBytes -Offset "E82AFB" -Values "5A" # Ganon           0xE826C0 -> 0xE939B0 (Length: 0x112F0) (ovl_Boss_Ganon2) (HP: 1E) (Mass: FF)
+        ChangeBytes -Offset "E87F2F" -Values "3D" # Ganon           (Phase 2) (HP: <15)
+        ChangeBytes -Offset "D64EFA" -Values "0C" # Twinrova        (Phase 1) (Hit Counter: <4)
+        ChangeBytes -Offset "D6223E" -Values "48" # Twinrova        0xD612E0 -> 0xD74360 (Length: 0x13080) (ovl_Boss_Tw) (HP: 18) (Mass: FF)
+    }
 
     
     
@@ -368,14 +411,26 @@ function ByteOptionsOcarinaOfTime() {
 
 
     # WALLET CAPACITY SELECTION #
-
+    
     if (IsChecked $Redux.Capacity.EnableWallet) {
-        $Wallet1 = Get16Bit ($Redux.Capacity.Wallet1.Text); $Wallet2 = Get16Bit ($Redux.Capacity.Wallet2.Text); $Wallet3 = Get16Bit ($Redux.Capacity.Wallet3.Text)
+        $Wallet1 = Get16Bit ($Redux.Capacity.Wallet1.Text); $Wallet2 = Get16Bit ($Redux.Capacity.Wallet2.Text); $Wallet3 = Get16Bit ($Redux.Capacity.Wallet3.Text); $Wallet4 = Get16Bit ($Redux.Capacity.Wallet4.Text)
         ChangeBytes -Offset "B6EC4C" -Values @($Wallet1.Substring(0, 2), $Wallet1.Substring(2) )
         ChangeBytes -Offset "B6EC4E" -Values @($Wallet2.Substring(0, 2), $Wallet2.Substring(2) )
         ChangeBytes -Offset "B6EC50" -Values @($Wallet3.Substring(0, 2), $Wallet3.Substring(2) )
-    }
+        ChangeBytes -Offset "B6EC52" -Values @($Wallet4.Substring(0, 2), $Wallet4.Substring(2) )
 
+        if ($Redux.Capacity.Wallet1.Text.Length -gt 3 -or $Redux.Capacity.Wallet2.Text.Length -gt 3 -or $Redux.Capacity.Wallet3.Text.Length -gt 3 -or $Redux.Capacity.Wallet4.Text.Length -gt 3) {
+            $Max = 4
+            ChangeBytes -Offset "AEBB60" -Values "FE E0 02 30 24 0B 00 00 00 00 00 00 86 AE 00 34 A6 EE 02 36 86 E2 02 36 28 41 03 E8 14 01 00 05 25 6B 00 01 24 42 FC 18 A6 E4 02 36 10 00 FF FA A6 EB 02 30"
+            ChangeBytes -Offset "AEBC23" -Values "30"
+        }
+        else { $Max = 3 }
+        ChangeBytes -Offset "B6D571" -Values @( ($Max - $Redux.Capacity.Wallet1.Text.Length), ($Max - $Redux.Capacity.Wallet2.Text.Length), ($Max - $Redux.Capacity.Wallet3.Text.Length), ($Max - $Redux.Capacity.Wallet4.Text.Length) ) -Interval 2
+        ChangeBytes -Offset "B6D579" -Values @($Redux.Capacity.Wallet1.Text.Length, $Redux.Capacity.Wallet2.Text.Length, $Redux.Capacity.Wallet3.Text.Length, $Redux.Capacity.Wallet4.Text.Length) -Interval 2
+
+        
+    }
+    
 
 
     # UNLOCK CHILD RESTRICTIONS #
@@ -462,7 +517,7 @@ function ByteOptionsOcarinaOfTime() {
 
 
 #==============================================================================================================================================================================================
-function ByteReduxOcarinaOfTime() {
+function ByteReduxOptions() {
     
     # INTERFACE ICONS #
 
@@ -540,7 +595,7 @@ function ByteReduxOcarinaOfTime() {
 
 
 #==============================================================================================================================================================================================
-function ByteLanguageOcarinaOfTime() {
+function ByteLanguageOptions() {
     
     if ( (IsChecked -Elem $Redux.Text.Vanilla -Not) -or (IsChecked -Elem $Redux.Text.Speed1x -Not) -or (IsChecked $Redux.Text.GCScheme) -or (IsLanguage $Redux.Unlock.Tunics) -or (IsLangText -Elem $Redux.Colors.Fairy -Compare "Tatl") -or (IsLangText -Elem $Redux.Colors.Fairy -Compare "Tael") -or (IsLanguage $Redux.Capacity.EnableAmmo) -or (IsLanguage $Redux.Capacity.EnableWallet) ) {
         $File = $GameFiles.extracted + "\message_data_static.bin"
@@ -706,8 +761,15 @@ function ByteLanguageOcarinaOfTime() {
     }
 
     if (IsLanguage $Redux.Capacity.EnableWallet) {
-        ChangeStringIntoDigits -File $File -Search "32 30 30 05 40 20 05 46 52 75 70 65 65 73" -Value $Redux.Capacity.Wallet2.Text -Triple
-        ChangeStringIntoDigits -File $File -Search "35 30 30 05 40 20 05 46 52 75 70 65 65 73" -Value $Redux.Capacity.Wallet3.Text -Triple
+        if ($Redux.Capacity.Wallet2.Text.Length -gt 3)   { $Text = "999" }
+        else                                             { $Text = $Redux.Capacity.Wallet2.Text }
+        ChangeStringIntoDigits -File $File -Search "32 30 30 05 40 20 05 46 52 75 70 65 65 73" -Value $Text -Triple
+
+        if ($Redux.Capacity.Wallet3.Text.Length -gt 3)   { $Text = "999" }
+        else                                             { $Text = $Redux.Capacity.Wallet3.Text }
+        ChangeStringIntoDigits -File $File -Search "35 30 30 05 40 20 05 46 52 75 70 65 65 73" -Value $Text -Triple
+
+        $Text = $null
     }
 
     if ( (IsChecked -Elem $Redux.Text.Vanilla -Not) -or (IsChecked -Elem $Redux.Text.Speed1x -Not) -or (IsChecked $Redux.Text.GCScheme) -or (IsLanguage $Redux.Unlock.Tunics) -or (IsLangText -Elem $Redux.Colors.Fairy -Compare "Tatl") -or (IsLangText -Elem $Redux.Colors.Fairy -Compare "Tael") -or (IsLanguage $Redux.Capacity.EnableAmmo) -or (IsLanguage $Redux.Capacity.EnableWallet) ) {
@@ -719,27 +781,23 @@ function ByteLanguageOcarinaOfTime() {
 
 
 #==============================================================================================================================================================================================
-function CreateOptionsOcarinaOfTime() {
+function CreateOptions() {
     
     if ($Settings.Debug.LiteGUI -eq $False) {
-        CreateOptionsDialog -Width 1060 -Height 515 -Tabs @("Main", "Audiovisual", "Difficulty", "Colors", "Equipment", "Cutscenes")
+        CreateOptionsDialog -Width 1060 -Height 560 -Tabs @("Main", "Audiovisual", "Difficulty", "Colors", "Equipment", "Cutscenes")
     }
     else {
-        CreateOptionsDialog -Width 1060 -Height 400 -Tabs @("Main", "Audiovisual")
+        CreateOptionsDialog -Width 1060 -Height 450 -Tabs @("Main", "Audiovisual")
     }
 
-    if (!$IsWiiVC) { $Redux.Graphics.Widescreen.Add_CheckStateChanged({ AdjustGUIOcarinaOfTime }) }
-
-    #$SomeEvent = { Write-Host "123" }
-    #$Redux.Graphics.Widescreen.Add_CheckStateChanged( $SomeEvent )
-    #$Redux.Graphics.Widescreen.Remove_CheckStateChanged( $SomeEvent )
+    if (!$IsWiiVC) { $Redux.Graphics.Widescreen.Add_CheckStateChanged({ AdjustGUI }) }
 
 }
 
 
 
 #==============================================================================================================================================================================================
-function AdjustGUIOcarinaOfTime() {
+function AdjustGUI() {
     
     if ($IsWiiVC) { return }
 
@@ -750,7 +808,7 @@ function AdjustGUIOcarinaOfTime() {
 
 
 #==============================================================================================================================================================================================
-function CreateTabMainOcarinaOfTime() {
+function CreateTabMain() {
 
     # GAMEPLAY #
     CreateReduxGroup        -Tag  "Gameplay" -Text "Gameplay" 
@@ -784,13 +842,13 @@ function CreateTabMainOcarinaOfTime() {
         CreateReduxCheckBox -Name "HideCredits"        -Text "Hide Credits"                    -Info "Do not show the credits text during the credits sequence" -Credits "Admentus"
     }
     CreateReduxCheckBox -Name "DebugMapSelect"         -Text "Debug Map Select"                -Info "Enable the Map Select menu like in the Debug ROM`nThe File Select menu now opens the Map Select menu instead`nA separate debug save file is used" -Credits "Jared Johnson (translated by Zelda Edit)"
-
+    
 }
 
 
 
 #==============================================================================================================================================================================================
-function CreateTabReduxOcarinaOfTime() {
+function CreateTabRedux() {
     
     # INTERFACE #
     CreateReduxGroup    -Tag  "UI" -Text "Interface Icons"
@@ -804,9 +862,9 @@ function CreateTabReduxOcarinaOfTime() {
 
 
 #==============================================================================================================================================================================================
-function CreateTabLanguageOcarinaOfTime() {
+function CreateTabLanguage() {
     
-    CreateLanguageContent -Columns 6
+    CreateLanguageContent
 
     # TEXT SPEED #
     CreateReduxGroup       -Tag  "Text" -Text "Text Speed"
@@ -862,7 +920,7 @@ function UnlockLanguageContent() {
 
 
 #==============================================================================================================================================================================================
-function CreateTabAudiovisualOcarinaOfTime() {
+function CreateTabAudiovisual() {
 
     
     # GRAPHICS #
@@ -942,7 +1000,7 @@ function CreateTabAudiovisualOcarinaOfTime() {
 
 
 
-    if ($Settings.Debug.LiteGUI -eq $True) { return }
+    if ($Settings.Debug.LiteGUI -ne $True) {
 
     # SFX SOUND EFFECTS #
     CreateReduxGroup    -Tag "SFX" -Text "SFX Sound Effects" -Height 3
@@ -958,23 +1016,36 @@ function CreateTabAudiovisualOcarinaOfTime() {
     $SFX = @("Default", "Disabled", "Soft Beep", "Bark", "Bomb Bounce", "Bongo Bongo High", "Bongo Bongo Low", "Bottle Cork", "Bow Twang", "Bubble Laugh", "Carrot Refill", "Change Item", "Child Pant", "Cluck", "Deku Baba", "Drawbridge Set", "Dusk Howl", "Fanfare (Light)", "Fanfare (Medium)", "Field Shrub", "Flare Dancer Startled",
     'Ganondorf "Teh"', "Gohma Larva Croak", "Gold Skull Token", "Goron Wake", "Guay", "Gunshot", "Hammer Bonk", "Horse Trot", "HP Low", "HP Recover", "Iron Boots", "Iron Knuckle", "Moo", "Mweep!", "Notification", "Phantom Ganon Laugh", "Plant Explode", "Pot Shattering", "Redead Moan", "Ribbit", "Rupee", "Rupee (Silver)", "Ruto Crash",
     "Ruto Lift", "Ruto Thrown", "Scrub Emerge", "Shabom Bounce", "Shabom Pop", "Shellblade", "Skulltula", "Spit Nut", "Switch", "Sword Bonk", 'Talon "Hmm"', "Talon Snore", "Talon WTF", "Tambourine", "Target Enemy", "Target Neutral", "Thunder", "Timer", "Zelda Gasp (Adult)")
-    CreateReduxComboBox -Name "FileMenuCursor"   -Column 1 -Row 3 -Text "File Cursor:" -Items $SFX -Info "Replace the sound used when moving the cursor in the File Select menu"   -Credits "Ported from Rando"
-    CreateReduxComboBox -Name "FileMenuSelect"   -Column 3 -Row 3 -Text "File Select:" -Items $SFX -Info "Replace the sound used when selecting something in the File Select menu" -Credits "Ported from Rando"
+    CreateReduxComboBox -Name "FileCursor"       -Column 1 -Row 3 -Text "File Cursor:" -Items $SFX -Info "Replace the sound used when moving the cursor in the File Select menu"   -Credits "Ported from Rando"
+    CreateReduxComboBox -Name "FileSelect"       -Column 3 -Row 3 -Text "File Select:" -Items $SFX -Info "Replace the sound used when selecting something in the File Select menu" -Credits "Ported from Rando"
+
+    }
+
+    # FILE SELECT #
+    CreateReduxGroup    -Tag "FileSelect" -Text "File Select"
+    $Music = @("None", "File Select", "Hyrule Field", "Market", "Kakariko Village (Child)", "Kakariko Village (Adult)", "Windmill Hut", "Hyrule Castle Courtyard", "Lon Lon Ranch", "Kokiri Forest", "Lost Woods", "Goron City", "Zora's Domain", "Gerudo Valley", "Chamber of the Sages", "Shop", "House", "Potion Shop",
+    "Inside the Deku Tree", "Dodongo's Cavern", "Inside Jabu-Jabu's Belly", "Forest Temple", "Fire Temple", "Water Temple", "Ice Cavern", "Shadow Temple", "Spirit Temple", "Ganon's Castle Under Ground",
+    "Battle", "Mini-Boss Battle", "Boss Battle", "Boss Battle 2", "Ganondorf Battle", "Ganon Battle", "End Credits I", "End Credits II", "End Credits III", "End Credits IV")
+    CreateReduxComboBox -Name "Music"  -Column 1 -Text "Music:"  -Default 2 -Items $Music -Info "Set the skybox music theme for the File Select menu" -Credits "Admentus"
+    CreateReduxComboBox -Name "Skybox" -Column 3 -Text "Skybox:" -Default 4 -Items @("Dawn", "Day", "Dusk", "Night", "Dawn", "Darkness (Day)", "Darkness (Dusk)", "Darkness (Night)") -Info "Set the skybox theme for the File Select menu" -Credits "Admentus"
+    
 
 }
 
 
 
 #==============================================================================================================================================================================================
-function CreateTabDifficultyOcarinaOfTime() {
+function CreateTabDifficulty() {
     
     # HERO MODE #
-    CreateReduxGroup    -Tag  "Hero" -Text "Hero Mode"
+    CreateReduxGroup    -Tag  "Hero" -Text "Hero Mode" -Height 2
     CreateReduxComboBox -Name "Damage"     -Column 1 -Row 1 -Text "Damage:"      -Items @("1x Damage", "2x Damage", "4x Damage", "8x Damage", "OHKO Mode") -Info "Set the amount of damage you receive`nOHKO Mode = You die in one hit" -Credits "Admentus"
     CreateReduxComboBox -Name "Recovery"   -Column 3 -Row 1 -Text "Recovery:"    -Items @("1x Recovery", "1/2x Recovery", "1/4x Recovery", "0x Recovery")  -Info "Set the amount health you recovery from Recovery Hearts"              -Credits "Admentus"
     CreateReduxComboBox -Name "MagicUsage" -Column 5 -Row 1 -Text "Magic Usage:" -Items @("1x Magic Usage", "2x Magic Usage", "3x Magic Usage")            -Info "Set the amount of times magic is consumed at"                         -Credits "Admentus"
-
-   if ($Settings.Debug.LiteGUI -eq $True) { return }
+    CreateReduxComboBox -Name "BossHP"     -Column 1 -Row 2 -Text "Boss HP:"     -Items @("1x Boss HP", "2x Boss HP", "3x Boss HP")                        -Info "Set the amount of health for bosses"                                  -Credits "Admentus & Marcelo20XX"
+  # CreateReduxComboBox -Name "MonsterHP"  -Column 3 -Row 2 -Text "Monster HP:"  -Items @("1x Monster HP", "2x Monster HP", "3x Monster HP")               -Info "Set the amount of health for monsters"                                -Credits "Admentus"
+    
+    if ($Settings.Debug.LiteGUI -eq $True) { return }
 
     # MASTER QUEST #
     CreateReduxGroup -Tag "MQ" -Text "Master Quest"
@@ -1027,7 +1098,7 @@ function CreateTabDifficultyOcarinaOfTime() {
 
 
 #==============================================================================================================================================================================================
-function CreateTabColorsOcarinaOfTime() {
+function CreateTabColors() {
 
     # EQUIPMENT COLORS #
     CreateReduxGroup -Tag "Colors" -Text "Equipment Colors" -Height 3
@@ -1062,7 +1133,7 @@ function CreateTabColorsOcarinaOfTime() {
     # Equipment Colors - Labels
     $Redux.Colors.EquipmentLabels = @()
     for ($i=0; $i -lt $Buttons.length; $i++) {
-        $Buttons[$i].Add_Click({ $Redux.Colors.SetEquipment[[int]$this.Tag].ShowDialog(); $Redux.Colors.Equipment[[int]$this.Tag].Text = "Custom"; $Redux.Colors.EquipmentLabels[[int]$this.Tag].BackColor = $Redux.Colors.SetEquipment[[int]$this.Tag].Color; $GameSettings["Colors"][$Redux.Colors.SetEquipment[[int]$this.Tag].Tag] = $Redux.Colors.SetEquipment[[int]$this.Tag].Color.Name })
+        $Buttons[$i].Add_Click({ $Redux.Colors.SetEquipment[[uint16]$this.Tag].ShowDialog(); $Redux.Colors.Equipment[[uint16]$this.Tag].Text = "Custom"; $Redux.Colors.EquipmentLabels[[uint16]$this.Tag].BackColor = $Redux.Colors.SetEquipment[[uint16]$this.Tag].Color; $GameSettings["Colors"][$Redux.Colors.SetEquipment[[uint16]$this.Tag].Tag] = $Redux.Colors.SetEquipment[[uint16]$this.Tag].Color.Name })
         $Redux.Colors.EquipmentLabels += CreateReduxColoredLabel -Link $Buttons[$i]  -Color $Redux.Colors.SetEquipment[$i].Color
     }
 
@@ -1092,12 +1163,16 @@ function CreateTabColorsOcarinaOfTime() {
 
 
 #==============================================================================================================================================================================================
-function CreateTabEquipmentOcarinaOfTime() {
+function CreateTabEquipment() {
 
     # CAPACITY SELECTION #
-    CreateReduxGroup    -Tag  "Capacity" -Text "Capacity Selection"
-    CreateReduxCheckBox -Name "EnableAmmo"   -Column 1 -Text "Change Ammo Capacity"   -Info "Enable changing the capacity values for ammo"
-    CreateReduxCheckBox -Name "EnableWallet" -Column 2 -Text "Change Wallet Capacity" -Info "Enable changing the capacity values for the wallets"
+    CreateReduxGroup    -Tag  "Capacity" -Text "Capacity Selection"  -Columns 5
+    CreateReduxCheckBox -Name "EnableAmmo"    -Column 1 -Text "Change Ammo Capacity"   -Info "Enable changing the capacity values for ammo"
+    CreateReduxCheckBox -Name "EnableWallet"  -Column 2 -Text "Change Wallet Capacity" -Info "Enable changing the capacity values for the wallets"
+
+    # GAMEPLAY
+    CreateReduxGroup    -Tag  "Gameplay" -Text "Gameplay"
+    CreateReduxCheckBox -Name "UnsheathSword" -Column 1 -Text "Unsheath Sword"         -Info "The sword is unsheathed first before immediately swinging it" -Credits "Admentus"
 
     # AMMO #
     $Redux.Box.Ammo = CreateReduxGroup -Tag "Capacity" -Text "Ammo Capacity Selection" -Height 3
@@ -1119,25 +1194,26 @@ function CreateTabEquipmentOcarinaOfTime() {
 
     # WALLET #
     $Redux.Box.Wallet = CreateReduxGroup -Tag "Capacity" -Text "Wallet Capacity Selection"
-    CreateReduxTextBox -Name "Wallet1"     -Column 1 -Row 1 -Length 3 -Text "Wallet (1)"      -Value 99  -Info "Set the capacity for the Wallet (Base)`nDefault = 99"           -Credits "GhostlyDark"
-    CreateReduxTextBox -Name "Wallet2"     -Column 2 -Row 1 -Length 3 -Text "Wallet (2)"      -Value 200 -Info "Set the capacity for the Wallet (Upgrade 1)`nDefault = 200"     -Credits "GhostlyDark"
-    CreateReduxTextBox -Name "Wallet3"     -Column 3 -Row 1 -Length 3 -Text "Wallet (3)"      -Value 500 -Info "Set the capacity for the Wallet (Upgrade 2)`nDefault = 500"     -Credits "GhostlyDark"
+    CreateReduxTextBox -Name "Wallet1" -Length 4 -Text "Wallet (1)"     -Value 99  -Info "Set the capacity for the Wallet (Base)`nDefault = 99"            -Credits "GhostlyDark"
+    CreateReduxTextBox -Name "Wallet2" -Length 4 -Text "Wallet (2)"     -Value 200 -Info "Set the capacity for the Wallet (Upgrade 1)`nDefault = 200"      -Credits "GhostlyDark"
+    CreateReduxTextBox -Name "Wallet3" -Length 4 -Text "Wallet (3)"     -Value 500 -Info "Set the capacity for the Wallet (Upgrade 2)`nDefault = 500"      -Credits "GhostlyDark"
+    CreateReduxTextBox -Name "Wallet4" -Length 4 -Text "Wallet (4) (U)" -Value 500 -Info "Set the capacity for the Wallet (Unused Upgrade)`nDefault = 500" -Credits "GhostlyDark"
 
     # UNLOCK CHILD RESTRICTIONS #
     CreateReduxGroup    -Tag  "Unlock" -Text "Unlock Child Restrictions"
-    CreateReduxCheckBox -Name "Tunics"         -Column 1 -Text "Unlock Tunics"            -Info "Child Link is able to use the Goron Tunic and Zora Tunic`nSince you might want to walk around in style as well when you are young`nThe dialogue script will be adjusted to reflect this (only for English)" -Credits "GhostlyDark"
-    CreateReduxCheckBox -Name "MasterSword"    -Column 2 -Text "Unlock Master Sword"      -Info "Child Link is able to use the Master Sword`nThe Master Sword does twice as much damage as the Kokiri Sword" -Credits "GhostlyDark"
-    CreateReduxCheckBox -Name "GiantsKnife"    -Column 3 -Text "Unlock Giant's Knife [!]" -Info "Child Link is able to use the Giant's Knife / Biggoron Sword`nThe Giant's Knife / Biggoron Sword does four times as much damage as the Kokiri Sword`n[!] The Giant's Knife / Biggoron Sword appears as if Link if thrusting the sword through the ground" -Credits "GhostlyDark"
-    CreateReduxCheckBox -Name "MirrorShield"   -Column 4 -Text "Unlock Mirror Shield [!]" -Info "Child Link is able to use the Mirror Shield`n[!] The Mirror Shield appears as invisible but can still reflect magic or sunlight" -Credits "GhostlyDark"
-    CreateReduxCheckBox -Name "Boots"          -Column 5 -Text "Unlock Boots [!]"         -Info "Child Link is able to use the Iron Boots and Hover Boots`n[!] The Iron and Hover Boots appears as the Kokiri Boots"              -Credits "GhostlyDark"
-    CreateReduxCheckBox -Name "MegatonHammer"  -Column 6 -Text "Unlock Hammer [!]"        -Info "Child Link is able to use the Megaton Hammer`n[!] The Megaton Hammer appears as invisible"                                       -Credits "GhostlyDark"
+    CreateReduxCheckBox -Name "Tunics"        -Text "Unlock Tunics"            -Info "Child Link is able to use the Goron Tunic and Zora Tunic`nSince you might want to walk around in style as well when you are young`nThe dialogue script will be adjusted to reflect this (only for English)" -Credits "GhostlyDark"
+    CreateReduxCheckBox -Name "MasterSword"   -Text "Unlock Master Sword"      -Info "Child Link is able to use the Master Sword`nThe Master Sword does twice as much damage as the Kokiri Sword" -Credits "GhostlyDark"
+    CreateReduxCheckBox -Name "GiantsKnife"   -Text "Unlock Giant's Knife [!]" -Info "Child Link is able to use the Giant's Knife / Biggoron Sword`nThe Giant's Knife / Biggoron Sword does four times as much damage as the Kokiri Sword`n[!] The Giant's Knife / Biggoron Sword appears as if Link if thrusting the sword through the ground" -Credits "GhostlyDark"
+    CreateReduxCheckBox -Name "MirrorShield"  -Text "Unlock Mirror Shield [!]" -Info "Child Link is able to use the Mirror Shield`n[!] The Mirror Shield appears as invisible but can still reflect magic or sunlight" -Credits "GhostlyDark"
+    CreateReduxCheckBox -Name "Boots"         -Text "Unlock Boots [!]"         -Info "Child Link is able to use the Iron Boots and Hover Boots`n[!] The Iron and Hover Boots appears as the Kokiri Boots"              -Credits "GhostlyDark"
+    CreateReduxCheckBox -Name "MegatonHammer" -Text "Unlock Hammer [!]"        -Info "Child Link is able to use the Megaton Hammer`n[!] The Megaton Hammer appears as invisible"                                       -Credits "GhostlyDark"
 
     # UNLOCK ADULT RESTRICTIONS #
     CreateReduxGroup    -Tag  "Unlock" -Text "Unlock Adult Restrictions"
-    CreateReduxCheckBox -Name "KokiriSword"    -Column 1 -Text "Unlock Kokiri Sword"      -Info "Adult Link is able to use the Kokiri Sword`nThe Kokiri Sword does half as much damage as the Master Sword"          -Credits "GhostlyDark"
-    CreateReduxCheckBox -Name "DekuShield"     -Column 2 -Text "Unlock Deku Shield [!]"   -Info "Adult Link is able to use the Deku Shield`n[!] The Deku Shield appears as invisible but can still be burned up by fire" -Credits "GhostlyDark"
-    CreateReduxCheckBox -Name "FairySlingshot" -Column 3 -Text "Unlock Slingshot [!]"     -Info "Adult Link is able to use the Fairy Slingshot`n[!] The Fairy Slingshot appears as the Fairy Bow"                    -Credits "GhostlyDark"
-    CreateReduxCheckBox -Name "Boomerang"      -Column 4 -Text "Unlock Boomerang [!]"     -Info "Adult Link is able to use the Boomerang`n[!] The Boomerang appears as invisible"                                    -Credits "GhostlyDark"
+    CreateReduxCheckBox -Name "KokiriSword"    -Text "Unlock Kokiri Sword"      -Info "Adult Link is able to use the Kokiri Sword`nThe Kokiri Sword does half as much damage as the Master Sword"          -Credits "GhostlyDark"
+    CreateReduxCheckBox -Name "DekuShield"     -Text "Unlock Deku Shield [!]"   -Info "Adult Link is able to use the Deku Shield`n[!] The Deku Shield appears as invisible but can still be burned up by fire" -Credits "GhostlyDark"
+    CreateReduxCheckBox -Name "FairySlingshot" -Text "Unlock Slingshot [!]"     -Info "Adult Link is able to use the Fairy Slingshot`n[!] The Fairy Slingshot appears as the Fairy Bow"                    -Credits "GhostlyDark"
+    CreateReduxCheckBox -Name "Boomerang"      -Text "Unlock Boomerang [!]"     -Info "Adult Link is able to use the Boomerang`n[!] The Boomerang appears as invisible"                                    -Credits "GhostlyDark"
 
 
 
@@ -1160,7 +1236,7 @@ function CreateTabEquipmentOcarinaOfTime() {
 
 
 #==============================================================================================================================================================================================
-function CreateTabCutscenesOcarinaOfTime() {
+function CreateTabCutscenes() {
     
     # SKIP CUTSCENES #
     CreateReduxGroup    -Tag  "Skip" -Text "Skip Cutscenes"
@@ -1175,24 +1251,3 @@ function CreateTabCutscenesOcarinaOfTime() {
     CreateReduxCheckBox -Name "ZeldasEscape"  -Column 3 -Text "Zelda's Escape" -Info "Speed-up Zelda escaping from Hyrule Castle"                  -Credits "Ported from Better OoT"      
 
 }
-
-
-
-#==============================================================================================================================================================================================
-
-Export-ModuleMember -Function PatchOptionsOcarinaOfTime
-Export-ModuleMember -Function ByteOptionsOcarinaOfTime
-Export-ModuleMember -Function ByteReduxOcarinaOfTime
-Export-ModuleMember -Function ByteLanguageOcarinaOfTime
-
-Export-ModuleMember -Function CreateOptionsOcarinaOfTime
-Export-ModuleMember -Function AdjustGUIOcarinaOfTime
-
-Export-ModuleMember -Function CreateTabMainOcarinaOfTime
-Export-ModuleMember -Function CreateTabAudiovisualOcarinaOfTime
-Export-ModuleMember -Function CreateTabDifficultyOcarinaOfTime
-Export-ModuleMember -Function CreateTabColorsOcarinaOfTime
-Export-ModuleMember -Function CreateTabEquipmentOcarinaOfTime
-Export-ModuleMember -Function CreateTabCutscenesOcarinaOfTime
-Export-ModuleMember -Function CreateTabReduxOcarinaOfTime
-Export-ModuleMember -Function CreateTabLanguageOcarinaOfTime
