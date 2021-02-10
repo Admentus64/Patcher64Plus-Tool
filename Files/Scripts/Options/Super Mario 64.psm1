@@ -109,7 +109,6 @@ function CreateOptions() {
     EnableElem -Elem $Redux.Gameplay.FPS     -Active (!$Redux.FreeCam.Checked)
     EnableElem -Elem $Redux.Gameplay.FreeCam -Active (!$Redux.Gameplay.FPS.Checked)
 
-    EnableElem -Elem $Redux.Graphics.OptimizeMarioModel -Active ($GamePatch.title -eq "Super Mario 64")
     EnableElem -Elem $Redux.Skip.TitleScreen            -Active ($GamePatch.title -eq "Super Mario 64")
     EnableElem -Elem $Redux.Skip.MarioScreen            -Active ($GamePatch.title -eq "Super Mario 64")
 
