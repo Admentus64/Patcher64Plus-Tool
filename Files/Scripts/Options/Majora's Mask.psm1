@@ -271,6 +271,36 @@ function ByteOptions() {
 
 
 
+    if (IsText -Elem $Redux.Hero.BossHP -Compare "2x Boss HP") {
+        ChangeBytes -Offset "E424E7" -Values "28" # Odolwa                           (HP: 14)   E41A50 -> E49F30 (Length: 84E0)  (ovl_Boss_01)
+        ChangeBytes -Offset "E50D33" -Values "14" # Gyorg                  (Phase 1) (HP: 0A)   E50180 -> E57260 (Length: 70E0)  (ovl_Boss_03)
+        ChangeBytes -Offset "E4A607" -Values "28" # Twinmold                         (HP: 14)   E49F30 -> E50180 (Length: 6250)  (ovl_Boss_04)
+        ChangeBytes -Offset "E60633" -Values "1C" # Majora's Mask          (Phase 1) (HP: 0E)   E5F570 -> E74630 (Length: 150C0) (ovl_Boss_07)
+        ChangeBytes -Offset "E6B20B" -Values "14" # Majora's Mask          (Summon)  (HP: 0A)
+        ChangeBytes -Offset "E60743" -Values "3C" # Majora's Incarnation   (Phase 2) (HP: 1E)
+        ChangeBytes -Offset "E606AB" -Values "50" # Majora's Wrath         (Phase 3) (HP: 28)
+        ChangeBytes -Offset "E6FA2F" -Values "0A" # Four Masks             (Assist)  (HP: 05)
+
+        # Unlocatable ?
+      # ChangeBytes -Offset "" -Values "3C" # Goht                         (Phase 1) (HP: 1E)   F6A5A0 -> F748F0 (Length: A350)  (ovl_Boss_hakugin)
+      # ChangeBytes -Offset "" -Values "28" # Goht                         (Phase 2) (HP: 14)
+      # ChangeBytes -Offset "" -Values "14" # Goht                         (Phase 3) (HP: 0A)
+      # ChangeBytes -Offset "" -Values "0C" # Gyorg                        (Phase 2) (HP: 06)
+    }
+    elseif (IsText -Elem $Redux.Hero.BossHP -Compare "3x Boss HP") {
+        ChangeBytes -Offset "E424E7" -Values "3C" # Odolwa                           (HP: 14)   E41A50 -> E49F30 (Length: 84E0)  (ovl_Boss_01)
+        ChangeBytes -Offset "E50D33" -Values "1E" # Gyorg                  (Phase 1) (HP: 0A)   E50180 -> E57260 (Length: 70E0)  (ovl_Boss_03)
+        ChangeBytes -Offset "E4A607" -Values "3C" # Twinmold                         (HP: 14)   E49F30 -> E50180 (Length: 6250)  (ovl_Boss_04)
+        ChangeBytes -Offset "E60633" -Values "2A" # Majora's Mask          (Phase 1) (HP: 0E)   E5F570 -> E74630 (Length: 150C0) (ovl_Boss_07)
+        ChangeBytes -Offset "E6B20B" -Values "1E" # Majora's Mask          (Summon)  (HP: 0A)
+        ChangeBytes -Offset "E60743" -Values "5A" # Majora's Incarnation   (Phase 2) (HP: 1E)
+        ChangeBytes -Offset "E606AB" -Values "78" # Majora's Wrath         (Phase 3) (HP: 28)
+        ChangeBytes -Offset "E6FA2F" -Values "0F" # Four Masks             (Assist)  (HP: 05)
+    }
+
+
+
+
     # TUNIC COLORS #
 
     if (IsIndex -Elem $Redux.Colors.KokiriTunic -Not) {
@@ -374,6 +404,12 @@ function ByteOptions() {
     }
 
     if (IsChecked $Redux.Script.Comma) { ChangeBytes -Offset "ACC660"  -Values "00 F3 00 00 00 00 00 00 4F 60 00 00 00 00 00 00 24" }
+
+
+
+    # MASTER QUEST #
+
+    PatchDungeonsMMMQ
 
 }
 
@@ -691,8 +727,8 @@ function CreateTabLanguage() {
     
     # OTHER TEXT OPTIONS #    
     $Redux.Box.Text = CreateReduxGroup -Tag "Script" -Text "Other Text Options"
-    CreateReduxCheckBox -Name "Comma"        -Column 1 -Text "Better Comma"           -Info "Make the comma not look as awful"                                                                                                                -Credits "ShadowOne333"
-    CreateReduxCheckBox -Name "AutoSkip"     -Column 2 -Text "Auto Skip Dialogue [!]" -Info "Automaticially advance to the next line or end it during dialogues`n[!] This option is recommended for speedrunners or experienced players only" -Credits "Marcelo20XX"
+    CreateReduxCheckBox -Name "Comma"        -Column 1 -Text "Better Comma"       -Info "Make the comma not look as awful"                                    -Credits "ShadowOne333"
+    CreateReduxCheckBox -Name "AutoSkip"     -Column 2 -Text "Auto Skip Dialogue" -Info "Automaticially advance to the next line or end it during dialogues " -Credits "Marcelo20XX" -Warning "This option is recommended for speedrunners or experienced players only"
 
     $Redux.Text.Restore.Add_CheckedChanged({ EnableElem -Elem $Redux.Text.OcarinaIcons -Active $this.checked })
     for ($i=0; $i -lt $GamePatch.languages.Length; $i++) {
@@ -769,23 +805,23 @@ function CreateTabAudiovisual() {
 
     # SOUNDS / SFX SOUND EFFECTS
     CreateReduxGroup    -Tag  "Sounds" -Text "Sounds / SFX Sound Effects" -Height 2
-    CreateReduxComboBox -Name "LowHP"             -Column 5 -Row 1 -Text "Low HP SFX:" -Items @("Default", "Disabled", "Soft Beep")  -Info "Set the sound effect for the low HP beeping" -Credits "Ported from Rando"
+    CreateReduxComboBox -Name "LowHP"             -Column 5 -Row 1 -Text "Low HP SFX" -Items @("Default", "Disabled", "Soft Beep")  -Info "Set the sound effect for the low HP beeping" -Credits "Ported from Rando"
     CreateReduxCheckBox -Name "DisableSFXEffect"  -Column 5 -Row 2 -Text "Disable SFX Effects" -Info "Remove the SFX Sound Effects for collecting rupees and solving puzzles" -Credits "Marcelo20XX"
 
     $SFX =  @("Ocarina", "Deku Pipes", "Goron Drums", "Zora Guitar", "Female Voice", "Bell", "Cathedral Bell", "Piano", "Soft Harp", "Harp", "Accordion", "Bass Guitar", "Flute", "Whistling Flute", "Gong", "Elder Goron Drums", "Choir", "Arguing", "Tatl", "Giants Singing", "Ikana King", "Frog Croak", "Beaver", "Eagle Seagull", "Dodongo")
-    CreateReduxComboBox -Name "InstrumentHylian"  -Column 1 -Row 1 -Text "Instrument (Hylian):" -Default 1 -Shift 30 -Length 200 -Items $SFX -Info "Replace the sound used for playing the Ocarina of Time in Hylian Form" -Credits "Ported from Rando"
-    CreateReduxComboBox -Name "InstrumentDeku"    -Column 3 -Row 1 -Text "Instrument (Deku):"   -Default 2 -Shift 30 -Length 200 -Items $SFX -Info "Replace the sound used for playing the Deku Pipes in Deku Form"        -Credits "Ported from Rando"
-    CreateReduxComboBox -Name "InstrumentGoron"   -Column 1 -Row 2 -Text "Instrument (Goron):"  -Default 3 -Shift 30 -Length 200 -Items $SFX -Info "Replace the sound used for playing the Goron Drums in Goron Form"      -Credits "Ported from Rando"
-    CreateReduxComboBox -Name "InstrumentZora"    -Column 3 -Row 2 -Text "Instrument (Zora):"   -Default 4 -Shift 30 -Length 200 -Items $SFX -Info "Replace the sound used for playing the Zora Guitar in Zora Form"       -Credits "Ported from Rando"
+    CreateReduxComboBox -Name "InstrumentHylian"  -Column 1 -Row 1 -Text "Instrument (Hylian)" -Default 1 -Shift 30 -Length 200 -Items $SFX -Info "Replace the sound used for playing the Ocarina of Time in Hylian Form" -Credits "Ported from Rando"
+    CreateReduxComboBox -Name "InstrumentDeku"    -Column 3 -Row 1 -Text "Instrument (Deku)"   -Default 2 -Shift 30 -Length 200 -Items $SFX -Info "Replace the sound used for playing the Deku Pipes in Deku Form"        -Credits "Ported from Rando"
+    CreateReduxComboBox -Name "InstrumentGoron"   -Column 1 -Row 2 -Text "Instrument (Goron)"  -Default 3 -Shift 30 -Length 200 -Items $SFX -Info "Replace the sound used for playing the Goron Drums in Goron Form"      -Credits "Ported from Rando"
+    CreateReduxComboBox -Name "InstrumentZora"    -Column 3 -Row 2 -Text "Instrument (Zora)"   -Default 4 -Shift 30 -Length 200 -Items $SFX -Info "Replace the sound used for playing the Zora Guitar in Zora Form"       -Credits "Ported from Rando"
     
     }
 
     # FILE SELECT #
     CreateReduxGroup    -Tag "FileSelect" -Text "File Select"
-    $Music = @("None", "File Select", "Clock Town Day 1", "Clock Town Day 2", "Clock Town Day 3", "Clock Town Cavern", "Astral Observatory", "Milk Bar Latte", "Shop", "House", "Final Hours", "Song of Healing", "Southern Swamp", "Woods of Mystery", "Court of the Deku King", "Mountain Village", "Goron Village", "Great Bay Coast",
-    "Zora Hall", "Pirate's Fortress", "Ikana Valley", "Music Box House", "Ikana Castle", "Romani Ranch" , "Woodfall Temple", "Snowhead Temple", "Great Bay Temple", "Stone Tower Temple", "Stone Tower Temple Inverted", "Battle", "Mini-Boss Battle", "Boss Battle", "Majora's Mask Battle", "Majora's Incarnation Battle",
-    "Majora's Wrath Battle", "Bass Practice", "Drums Practice", "Piano Practice", "The End/Credits I", "The End/Credits II")
-    CreateReduxComboBox -Name "Music" -Column 1 -Text "Music:" -Shift 30 -Length 200 -Default 2 -Items $Music -Info "Set the skybox music theme for the File Select menu" -Credits "Admentus"
+    $Music = @("None", "File Select", "Clock Town Day 1", "Clock Town Day 2", "Clock Town Day 3", "Clock Town Cavern", "Astral Observatory", "Milk Bar Latte", "Shop", "House", "Final Hours", "The Four Giants", "Song of Healing", "Southern Swamp", "Woods of Mystery", "Court of the Deku King", "Mountain Village", "Goron Village",
+    "Great Bay Coast", "Zora Hall", "Pirate's Fortress", "Ikana Valley", "Music Box House", "Ikana Castle", "Romani Ranch" , "Woodfall Temple", "Snowhead Temple", "Great Bay Temple", "Stone Tower Temple", "Stone Tower Temple Inverted", "Battle", "Mini-Boss Battle", "Boss Battle", "Majora's Mask Battle",
+    "Majora's Incarnation Battle", "Majora's Wrath Battle", "Bass Practice", "Drums Practice", "Piano Practice", "The End/Credits I", "The End/Credits II")
+    CreateReduxComboBox -Name "Music" -Column 1 -Text "Music" -Shift 30 -Length 200 -Default 2 -Items $Music -Info "Set the skybox music theme for the File Select menu" -Credits "Admentus"
 
 }
 
@@ -795,15 +831,52 @@ function CreateTabAudiovisual() {
 function CreateTabDifficulty() {
     
     # HERO MODE #
-    CreateReduxGroup    -Tag  "Hero" -Text "Hero Mode"
-    CreateReduxComboBox -Name "Damage"     -Column 1 -Row 1 -Text "Damage:"      -Items @("1x Damage", "2x Damage", "4x Damage", "8x Damage", "OHKO Mode") -Info "Set the amount of damage you receive`nOHKO Mode = You die in one hit" -Credits "Admentus"
-    CreateReduxComboBox -Name "Recovery"   -Column 3 -Row 1 -Text "Recovery:"    -Items @("1x Recovery", "1/2x Recovery", "1/4x Recovery", "0x Recovery")  -Info "Set the amount health you recovery from Recovery Hearts"              -Credits "Admentus"
-    CreateReduxComboBox -Name "MagicUsage" -Column 5 -Row 1 -Text "Magic Usage:" -Items @("1x Magic Usage", "2x Magic Usage", "3x Magic Usage")            -Info "Set the amount of times magic is consumed at"                         -Credits "Admentus"
+    CreateReduxGroup    -Tag  "Hero" -Text "Hero Mode" -Height 2
+    CreateReduxComboBox -Name "Damage"     -Column 1 -Row 1 -Shift 10 -Text "Damage"      -Items @("1x Damage", "2x Damage", "4x Damage", "8x Damage", "OHKO Mode") -Info "Set the amount of damage you receive`nOHKO Mode = You die in one hit" -Credits "Admentus"
+    CreateReduxComboBox -Name "Recovery"   -Column 3 -Row 1 -Shift 10 -Text "Recovery"    -Items @("1x Recovery", "1/2x Recovery", "1/4x Recovery", "0x Recovery")  -Info "Set the amount health you recovery from Recovery Hearts"              -Credits "Admentus"
+    CreateReduxComboBox -Name "MagicUsage" -Column 5 -Row 1 -Shift 10 -Text "Magic Usage" -Items @("1x Magic Usage", "2x Magic Usage", "3x Magic Usage")            -Info "Set the amount of times magic is consumed at"                         -Credits "Admentus"
+    CreateReduxComboBox -Name "BossHP"     -Column 1 -Row 2 -Shift 10 -Text "Boss HP"     -Items @("1x Boss HP", "2x Boss HP", "3x Boss HP")                        -Info "Set the amount of health for bosses`n"                                -Credits "Admentus" -Warning "Goht (phases 1-3) and Gyorg (phase 2) are missing"
     
+    # MASTER QUEST #
+    CreateReduxGroup -Tag "MQ" -Text "Master Quest"
+    CreateReduxPanel
+    CreateReduxRadioButton -Column 1 -Name "Disable"   -Max 3 -SaveTo "Dungeons" -Text "Disable" -Checked -Info "All dungeons remain vanilla"
+    CreateReduxRadioButton -Column 2 -Name "Select"    -Max 3 -SaveTo "Dungeons" -Text "Select"           -Info "Select which dungeons you want from Master Quest" -Credits "Admentus" -Warning "Chests on the dungeon map pause screen are not updated"
+    CreateReduxRadioButton -Column 3 -Name "Randomize" -Max 3 -SaveTo "Dungeons" -Text "Randomize"        -Info "Randomize the amount of Master Quest dungeons"    -Credits "Admentus" -Warning "Chests on the dungeon map pause screen are not updated"
+    
+    # MASTER QUEST DUNGEONS #
+    $Redux.Box.SelectMQ = CreateReduxGroup -Tag "MQ" -Text "Select - Master Quest Dungeons" -Height 2
+    CreateReduxCheckBox -Name "WoodfallTemple"       -Column 1 -Row 1 -Text "Woodfall Temple"         -Checked -Info "Patch Woodfall Temple to Master Quest"         -Credits "Admentus & DeathBasket" -Warning "Chests on the dungeon map pause screen are not updated"
+    CreateReduxCheckBox -Name "SnowheadTemple"       -Column 2 -Row 1 -Text "Snowhead Temple"         -Checked -Info "Patch Snowhead Temple to Master Quest"         -Credits "Admentus & DeathBasket" -Warning "Chests on the dungeon map pause screen are not updated"
+    CreateReduxCheckBox -Name "GreatBayTemple"       -Column 3 -Row 1 -Text "Great Bay Temple"        -Checked -Info "Patch Great Bay Temple to Master Quest"        -Credits "Admentus & DeathBasket" -Warning "Chests on the dungeon map pause screen are not updated"
+    CreateReduxCheckBox -Name "StoneTowerTemple"     -Column 4 -Row 1 -Text "Stone Tower Temple"      -Checked -Info "Patch Stone Tower Temple to Master Quest"      -Credits "Admentus & DeathBasket" -Warning "Chests on the dungeon map pause screen are not updated"
+    CreateReduxCheckBox -Name "PiratesFortress"      -Column 1 -Row 2 -Text "Pirates' Fortress"       -Checked -Info "Patch the Pirates' Fortress to Master Quest"   -Credits "Admentus & DeathBasket"
+    CreateReduxCheckBox -Name "BeneathTheWell"       -Column 2 -Row 2 -Text "Beneath the Well"        -Checked -Info "Patch Beneath the Well to Master Quest"        -Credits "Admentus & DeathBasket"
+    CreateReduxCheckBox -Name "AncientCastleOfIkana" -Column 3 -Row 2 -Text "Ancient Castle of Ikana" -Checked -Info "Patch Ancient Castle of Ikana to Master Quest" -Credits "Admentus & DeathBasket"
+
+    # RANDOMIZE MASTER QUEST DUNGEONS #
+    $Redux.Box.RandomizeMQ = CreateReduxGroup -Tag "MQ" -Text "Randomize - Master Quest Dungeons"
+    $Items = @("0", "1", "2", "3", "4", "5", "6", "7", "8")
+    CreateReduxComboBox -Name "Minimum" -Column 1 -Shift 10 -Text "Minimum" -Default 1            -Items $Items
+    CreateReduxComboBox -Name "Maximum" -Column 3 -Shift 10 -Text "Maximum" -Default $Items.Count -Items $Items
+
 
 
     $Redux.Hero.Damage.Add_SelectedIndexChanged({ EnableElem -Elem $Redux.Hero.Recovery -Active ($this.Text -ne "OHKO Mode") })
     EnableElem -Elem $Redux.Hero.Recovery -Active ($Redux.Hero.Damage.Text -ne "OHKO Mode")
+
+    $Redux.MQ.Minimum.Add_SelectedIndexChanged({
+        if ($Redux.MQ.Maximum.SelectedIndex -lt $Redux.MQ.Minimum.SelectedIndex) { $Redux.MQ.Maximum.SelectedIndex = $Redux.MQ.Minimum.SelectedIndex }
+    })
+    $Redux.MQ.Maximum.Add_SelectedIndexChanged({
+        if ($Redux.MQ.Maximum.SelectedIndex -lt $Redux.MQ.Minimum.SelectedIndex) { $Redux.MQ.Maximum.SelectedIndex = $Redux.MQ.Minimum.SelectedIndex }
+    })
+    if ($Redux.MQ.Maximum.SelectedIndex -lt $Redux.MQ.Minimum.SelectedIndex) { $Redux.MQ.Maximum.SelectedIndex = $Redux.MQ.Minimum.SelectedIndex }
+     
+    EnableForm -Form $Redux.Box.SelectMQ -Enable $Redux.MQ.Select.Checked
+    $Redux.MQ.Select.Add_CheckedChanged({ EnableForm -Form $Redux.Box.SelectMQ -Enable $Redux.MQ.Select.Checked })
+    EnableForm -Form $Redux.Box.RandomizeMQ -Enable $Redux.MQ.Randomize.Checked
+    $Redux.MQ.Randomize.Add_CheckedChanged({ EnableForm -Form $Redux.Box.RandomizeMQ -Enable $Redux.MQ.Randomize.Checked })
 
 }
 
@@ -815,7 +888,7 @@ function CreateTabColors() {
     # TUNIC COLORS #
     $Colors = @("Kokiri Green", "Goron Red", "Zora Blue", "Black", "White", "Azure Blue", "Vivid Cyan", "Light Red", "Fuchsia", "Purple", "Majora Purple", "Twitch Purple", "Persian Rose", "Dirty Yellow", "Blush Pink", "Hot Pink", "Rose Pink", "Orange", "Gray", "Gold", "Silver", "Beige", "Teal", "Blood Red", "Blood Orange", "Royal Blue", "Sonic Blue", "NES Green", "Dark Green", "Lumen", "Randomized", "Custom")
     CreateReduxGroup    -Tag  "Colors" -Text "Tunic Colors"
-    CreateReduxComboBox -Name "KokiriTunic" -Column 1 -Text "Kokiri Tunic Color:" -Length 230 -Shift 70 -Items $Colors -Info ("Select a color scheme for the Kokiri Tunic`n" + '"Randomized" fully randomizes the colors each time the patcher is opened') -Credits "Ported from Rando"
+    CreateReduxComboBox -Name "KokiriTunic" -Column 1 -Text "Kokiri Tunic Color" -Length 230 -Shift 70 -Items $Colors -Info ("Select a color scheme for the Kokiri Tunic`n" + '"Randomized" fully randomizes the colors each time the patcher is opened') -Credits "Ported from Rando"
     $Redux.Colors.KokiriTunicButton = CreateReduxButton -Column 3 -Text "Kokiri Tunic" -Width 100  -Info "Select the color you want for the Kokiri Tunic" -Credits "Ported from Rando"
     CreateReduxCheckBox -Name "MaskForms"   -Column 6 -Text "Recolor Mask Forms"       -Info "Recolor the clothing for Goron Link to appear in Red and Zora Link to appear in Blue" -Credits "ShadowOne333 & Garo-Mastah"
 
@@ -843,9 +916,9 @@ function CreateTabColors() {
 
     # HUD COLORS #
     CreateReduxGroup    -Tag  "Colors" -Text "HUD Colors" -Height 2 -IsRedux
-    CreateReduxComboBox -Name "Hearts"  -Column 1 -Text "Hearts Colors:"  -Length 185 -Shift 35 -Items @("Red", "Green", "Blue", "Yellow", "Randomized", "Custom") -Info ("Select a preset for the hearts colors`n" + '"Randomized" fully randomizes the colors each time the patcher is opened')
-    CreateReduxComboBox -Name "Magic"   -Column 3 -Text "Magic Colors:"   -Length 185 -Shift 35 -Items @("Green", "Red", "Blue", "Purple", "Pink", "Yellow", "White", "Randomized", "Custom") -Info ("Select a preset for the magic colors`n" + '"Randomized" fully randomizes the colors each time the patcher is opened')
-    CreateReduxComboBox -Name "Minimap" -Column 5 -Text "Minimap Colors:" -Length 185 -Shift 35 -Items @("Cyan", "Green", "Red", "Blue", "Gray", "Purple", "Pink", "Yellow", "White", "Black", "Randomized", "Custom") -Info ("Select a preset for the minimap colors`n" + '"Randomized" fully randomizes the colors each time the patcher is opened')
+    CreateReduxComboBox -Name "Hearts"  -Column 1 -Text "Hearts Colors"  -Length 185 -Shift 35 -Items @("Red", "Green", "Blue", "Yellow", "Randomized", "Custom") -Info ("Select a preset for the hearts colors`n" + '"Randomized" fully randomizes the colors each time the patcher is opened')
+    CreateReduxComboBox -Name "Magic"   -Column 3 -Text "Magic Colors"   -Length 185 -Shift 35 -Items @("Green", "Red", "Blue", "Purple", "Pink", "Yellow", "White", "Randomized", "Custom") -Info ("Select a preset for the magic colors`n" + '"Randomized" fully randomizes the colors each time the patcher is opened')
+    CreateReduxComboBox -Name "Minimap" -Column 5 -Text "Minimap Colors" -Length 185 -Shift 35 -Items @("Cyan", "Green", "Red", "Blue", "Gray", "Purple", "Pink", "Yellow", "White", "Black", "Randomized", "Custom") -Info ("Select a preset for the minimap colors`n" + '"Randomized" fully randomizes the colors each time the patcher is opened')
 
     # Heart / Magic Colors - Buttons
     $Buttons = @()
@@ -919,10 +992,10 @@ function CreateTabEquipment() {
 
     # WALLET #
     $Redux.Box.Wallet = CreateReduxGroup -Tag "Capacity" -Text "Wallet Capacity Selection"
-    CreateReduxTextBox -Name "Wallet1" -Length 3 -Text "Wallet (1)"     -Value 99  -Info "Set the capacity for the Wallet (Base)`nDefault = 99"            -Credits "GhostlyDark"
-    CreateReduxTextBox -Name "Wallet2" -Length 3 -Text "Wallet (2)"     -Value 200 -Info "Set the capacity for the Wallet (Upgrade 1)`nDefault = 200"      -Credits "GhostlyDark"
-    CreateReduxTextBox -Name "Wallet3" -Length 3 -Text "Wallet (3)"     -Value 500 -Info "Set the capacity for the Wallet (Upgrade 2)`nDefault = 500"      -Credits "GhostlyDark"
-    CreateReduxTextBox -Name "Wallet4" -Length 3 -Text "Wallet (4) (U)" -Value 500 -Info "Set the capacity for the Wallet (Unused Upgrade)`nDefault = 500" -Credits "GhostlyDark"
+    CreateReduxTextBox -Name "Wallet1" -Length 3 -Text "Wallet (1)"     -Value 99  -Info "Set the capacity for the Wallet (Base)`nDefault = 99"       -Credits "GhostlyDark"
+    CreateReduxTextBox -Name "Wallet2" -Length 3 -Text "Wallet (2)"     -Value 200 -Info "Set the capacity for the Wallet (Upgrade 1)`nDefault = 200" -Credits "GhostlyDark"
+    CreateReduxTextBox -Name "Wallet3" -Length 3 -Text "Wallet (3)"     -Value 500 -Info "Set the capacity for the Wallet (Upgrade 2)`nDefault = 500" -Credits "GhostlyDark"
+    CreateReduxTextBox -Name "Wallet4" -Length 3 -Text "Wallet (4)"     -Value 500 -Info "Set the capacity for the Wallet (Upgrade 3)`nDefault = 500" -Credits "GhostlyDark" -Warning "This wallet is not obtained through regular gameplay"
 
     # EQUIPMENT #
     CreateReduxGroup -Tag "Gameplay" -Text "Equipment"

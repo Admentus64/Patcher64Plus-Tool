@@ -1,9 +1,8 @@
 function ChangeBytes([string]$File, [string]$Offset, [object]$Values, [uint16]$Interval=1, [switch]$Add, [switch]$Subtract, [switch]$IsDec, [switch]$Overflow) {
     
-    if ($Values -is [System.String]) { $Values = $Values -split ' ' }
-    WriteToConsole ("Change values: " + $Values)
-    if (IsSet $File) { $ByteArrayGame = [IO.File]::ReadAllBytes($File) }
-    if ($Interval -lt 1) { $Interval = 1 }
+    if ($Values -is [System.String])   { $Values = $Values -split ' ' }
+    if (IsSet $File)                   { $ByteArrayGame = [IO.File]::ReadAllBytes($File) }
+    if ($Interval -lt 1)               { $Interval = 1 }
 
     try { [uint32]$Offset = GetDecimal $Offset }
     catch {
@@ -15,7 +14,17 @@ function ChangeBytes([string]$File, [string]$Offset, [object]$Values, [uint16]$I
         return
     }
 
-    for ($i=0; $i -lt $Values.Length; $i++) {
+    if ($IsDec) {
+        $arr = @()
+        foreach ($i in $Values) {
+            $arr += Get8Bit $i
+        }
+        WriteToConsole ("Change values: " + $arr)
+        $arr = $null
+    }
+    else { WriteToConsole ("Change values: " + $Values) }
+
+    foreach ($i in 0..($Values.Length-1)) {
         if ($IsDec) {
             if     ($Values[$i] -lt 0   -and $Overflow)   { $Values[$i] = $Values[$i] + 255 }
             elseif ($Values[$i] -gt 255 -and $Overflow)   { $Values[$i] = $Values[$i] - 255 }
@@ -72,14 +81,14 @@ function PatchBytes([string]$File, [string]$Offset, [string]$Length, [string]$Pa
 
     if (IsSet $Length) {
         [uint32]$Length = GetDecimal $Length
-        for ($i=0; $i -lt $Length; $i++) {
+        foreach ($i in 0..($Length-1)) {
             if ($i -le $PatchByteArray.Length)   { $ByteArrayGame[$Offset + $i] = $PatchByteArray[($i)] }
             elseif ($Pad)                        { $ByteArrayGame[$Offset + $i] = 255 }
             else                                 { $ByteArrayGame[$Offset + $i] = 0 }
         }
     }
     else {
-        for ($i=0; $i -lt $PatchByteArray.Length; $i++) { $ByteArrayGame[$Offset + $i] = $PatchByteArray[($i)] }
+        foreach ($i in 0..($PatchByteArray.Length-1)) { $ByteArrayGame[$Offset + $i] = $PatchByteArray[($i)] }
     }
 
     if (IsSet $File) { [io.file]::WriteAllBytes($File, $ByteArrayGame) }
@@ -152,9 +161,9 @@ function SearchBytes([string]$File, [string]$Start="0", [string]$End, [object]$V
         return
     }
 
-    for ($i=$Start; $i -lt $End; $i++) {
+    foreach ($i in $Start..($End-1)) {
         $Search = $True
-        for ($j=0; $j -lt $Values.Length; $j++) {
+        foreach ($j in 0..($Values.Length-1)) {
             if ($Values[$j] -ne "") {
                 if ($ByteArrayGame[$i + $j] -ne (GetDecimal $Values[$j]) ) {
                     $Search = $False

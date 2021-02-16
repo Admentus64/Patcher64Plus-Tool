@@ -272,8 +272,8 @@ function CreateTabButtons([string[]]$Tabs, [object]$AddTo=$Redux.Panel) {
         $Button = CreateButton -X ((DPISize 15) + (($Redux.Panel.width - (DPISize 50))/$Tabs.length*$i)) -Y (DPISize 40) -Width (($Redux.Panel.width - (DPISize 50))/$Tabs.length) -Height (DPISize 30) -ForeColor "White" -BackColor "Gray" -Name $Tabs[$i] -Tag $i -Text $Tabs[$i] -AddTo $AddTo
         $Last.TabName = $Tabs[$i]
         $Button.Add_Click({
-            $ReduxTabs.GetEnumerator()    | ForEach-Object { $_.BackColor = "Gray" }
-            $Redux.Groups.GetEnumerator() | ForEach-Object { $_.Visible = $_.Name -eq $this.Name }
+            foreach ($item in $ReduxTabs)      { $item.BackColor = "Gray" }
+            foreach ($item in $Redux.Groups)   { $item.Visible = $item.Name -eq $this.Name }
             $GameSettings["Core"]["LastTab"] = $this.Tag
             $this.BackColor = "DarkGray"
         })
@@ -287,15 +287,15 @@ function CreateTabButtons([string[]]$Tabs, [object]$AddTo=$Redux.Panel) {
 
             if ($ReduxTabs.Length -lt $GameSettings["Core"]["LastTab"]) {
                 $ReduxTabs[0].BackColor = "DarkGray"
-                $Redux.Groups.GetEnumerator() | ForEach-Object { $_.Visible = $_.Name -eq $ReduxTabs[0].Name }
+                foreach ($item in $Redux.Groups) { $item.Visible = $item.Name -eq $ReduxTabs[0].Name }
             }
             else {
                 $ReduxTabs[$GameSettings["Core"]["LastTab"]].BackColor = "DarkGray"
-                $Redux.Groups.GetEnumerator() | ForEach-Object { $_.Visible = $_.Name -eq $ReduxTabs[$GameSettings["Core"]["LastTab"]].Name }
+                foreach ($item in $Redux.Groups) { $item.Visible = $item.Name -eq $ReduxTabs[$GameSettings["Core"]["LastTab"]].Name }
             }
         }
         else {
-            $Redux.Groups.GetEnumerator() | ForEach-Object { $_.Visible = $_.Name -eq $ReduxTabs[0].Name }
+            foreach ($item in $Redux.Groups) { $item.Visible = $item.Name -eq $ReduxTabs[0].Name }
             $GameSettings["Core"]["LastTab"] = 0
             $ReduxTabs[0].BackColor = "DarkGray"
         }
@@ -375,8 +375,12 @@ function CreateReduxButton([single]$Column=1, [single]$Row=1, [int16]$Width=150,
 
 
 #==============================================================================================================================================================================================
-function CreateReduxTextBox([single]$Column=$Last.Column, [single]$Row=1, [byte]$Length=2, [string]$Value=0, [string]$Text="", [string]$Info="", [string]$Credits="", [string]$Name, [string]$Tag, [object]$AddTo=$Last.Group) {
+function CreateReduxTextBox([single]$Column=$Last.Column, [single]$Row=1, [byte]$Length=2, [string]$Value=0, [string]$Text, [string]$Info, [string]$Warning, [string]$Credits, [string]$Name, [string]$Tag, [object]$AddTo=$Last.Group) {
     
+    if (IsSet $Warning) {
+        if (IsSet $Info)   { $Info += ("`n[!] " + $Warning) }
+        if (IsSet $Text)   { $Text += " [!]" }
+    }
     if ( (IsSet $Info ) -and (IsSet $Credits) ) { $Info += ("`n`n- Credits: " + $Credits) }
 
     $Label = CreateLabel -X (($Column-1) * (DPISize 165) + (DPISize 15)) -Y ($Row * (DPISize 30) - (DPISize 10)) -Width (DPISize 100) -Height (DPISize 15) -Text $Text -Info $Info -AddTo $AddTo
@@ -404,9 +408,13 @@ function CreateReduxTextBox([single]$Column=$Last.Column, [single]$Row=1, [byte]
 
 
 #==============================================================================================================================================================================================
-function CreateReduxRadioButton([single]$Column=$Last.Column, [single]$Row=1, [switch]$Checked, [switch]$Disable, [string]$Text="", [string]$Info="", [string]$Credits="", [string]$Name, [string]$SaveTo, [byte]$Max, [string]$Tag, [object]$AddTo=$Last.Panel) {
+function CreateReduxRadioButton([single]$Column=$Last.Column, [single]$Row=1, [switch]$Checked, [switch]$Disable, [string]$Text, [string]$Warning, [string]$Info, [string]$Credits, [string]$Name, [string]$SaveTo, [byte]$Max, [string]$Tag, [object]$AddTo=$Last.Panel) {
     
     if ($Disable) { $Disable = !$PatchReduxCheckBox.Checked }
+    if (IsSet $Warning) {
+        if (IsSet $Info)   { $Info += ("`n[!] " + $Warning) }
+        if (IsSet $Text)   { $Text += " [!]" }
+    }
     if ( (IsSet $Info ) -and (IsSet $Credits) ) { $Info += ("`n`n- Credits: " + $Credits) }
     $Last.Max++
 
@@ -428,9 +436,13 @@ function CreateReduxRadioButton([single]$Column=$Last.Column, [single]$Row=1, [s
 
 
 #==============================================================================================================================================================================================
-function CreateReduxCheckBox([single]$Column=$Last.Column, [single]$Row=1, [switch]$Checked, [switch]$Disable, [string]$Text="", [string]$Info="", [string]$Credits="", [string]$Name, [string]$Tag, [object]$AddTo=$Last.Group) {
+function CreateReduxCheckBox([single]$Column=$Last.Column, [single]$Row=1, [switch]$Checked, [switch]$Disable, [string]$Text="", [string]$Info, [string]$Warning, [string]$Credits, [string]$Name, [string]$Tag, [object]$AddTo=$Last.Group) {
     
     if ($Disable) { $Disable = !$PatchReduxCheckBox.Checked }
+    if (IsSet $Warning) {
+        if (IsSet $Info)   { $Info += ("`n[!] " + $Warning) }
+        if (IsSet $Text)   { $Text += " [!]" }
+    }
     if ( (IsSet $Info ) -and (IsSet $Credits) ) { $Info += ("`n`n- Credits: " + $Credits) }
 
     $CheckBox = CreateCheckBox -X (($Column-1) * (DPISize 165) + (DPISize 15)) -Y ($Row * (DPISize 30) - (DPISize 10)) -Checked $Checked -Disable $Disable -IsRadio $False -Info $Info -IsGame $True -Name $Name  -Tag $Tag -AddTo $AddTo
@@ -451,10 +463,17 @@ function CreateReduxCheckBox([single]$Column=$Last.Column, [single]$Row=1, [swit
 
 
 #==============================================================================================================================================================================================
-function CreateReduxComboBox([single]$Column=$Last.Column, [single]$Row=1, [int16]$Length=160, [int]$Shift=0, [string[]]$Items, [byte]$Default=1, [string]$Text, [string]$Info, [string]$Credits="", [string]$Name, [string]$Tag, [object]$AddTo=$Last.Group) {
+function CreateReduxComboBox([single]$Column=$Last.Column, [single]$Row=1, [int16]$Length=160, [int]$Shift=0, [string[]]$Items, [byte]$Default=1, [string]$Text, [string]$Info, [string]$Warning, [string]$Credits, [string]$Name, [string]$Tag, [object]$AddTo=$Last.Group) {
     
+    if (IsSet $Warning) {
+        if (IsSet $Info)   { $Info += ("`n[!] " + $Warning) }
+        if (IsSet $Text)   { $Text += " [!]" }
+    }
     if ( (IsSet $Info ) -and (IsSet $Credits) ) { $Info += ("`n`n- Credits: " + $Credits) }
-    if (IsSet $Text)   { $Width = (DPISize (80 + $Shift)) }
+    if (IsSet $Text) {
+        $Text += ":"
+        $Width = (DPISize (80 + $Shift))
+    }
     else               { $Width = 0 }
     if ($Items[($Default-1)] -ne "Default" -and $Default -ne 0) {
         $Items = $Items.Clone()

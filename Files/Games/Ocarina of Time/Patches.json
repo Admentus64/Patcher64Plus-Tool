@@ -25,28 +25,28 @@
 		"rom_gameID" : "CZLJ",
 		"vc_title" : "Zelda: Ocarina (CHI)",
 		"vc_gameid" : "NACC",
-		"file" : "\\Decompressed\\chi.ppf",
+		"file" : "\\Decompressed\\Languages\\chi.ppf",
 		"output" : "_chinese_patched",
 		"max_text_speed" : 1
 	}, {
 		"title" : "Spanish",
 		"vc_title" : "Zelda: Ocarina (SPA)",
 		"vc_gameid" : "NACS",
-		"file" : "\\Decompressed\\spa.ppf",
+		"file" : "\\Decompressed\\Languages\\spa.ppf",
 		"output" : "_spanish_patched",
 		"max_text_speed" : 2
 	}, {
 		"title" : "Polish",
 		"vc_title" : "Zelda: Ocarina (POL)",
 		"vc_gameid" : "NACO",
-		"file" : "\\Decompressed\\pol.ppf",
+		"file" : "\\Decompressed\\Languages\\pol.ppf",
 		"output" : "_polish_patched",
 		"max_text_speed" : 2
 	}, {
 		"title" : "Russian",
 		"vc_title" : "Zelda: Ocarina (RUS)",
 		"vc_gameid" : "NACR",
-		"file" : "\\Decompressed\\rus.ppf",
+		"file" : "\\Decompressed\\Languages\\rus.ppf",
 		"output" : "_russian_patched",
 		"max_text_speed" : 2
 	} ],

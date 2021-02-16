@@ -37,20 +37,24 @@ function ChangeConsolesList() {
     $ConsoleComboBox.Items.Clear()
 
     $Items = @()
-    Foreach ($Console in $Files.json.consoles.console) {
-        $Items += $Console.title
+    foreach ($item in $Files.json.consoles.console) {
+        $Items += $item.title
     }
 
     $ConsoleComboBox.Items.AddRange($Items)
 
     # Reset last index
-    For ($i=0; $i -lt $Items.Length; $i++) {
-        if ($GameConsole.title -eq $Items[$i]) { $ConsoleComboBox.SelectedIndex = $i }
+    foreach ($i in 0..($Items.length-1)) {
+        if ($GameConsole.title -eq $Items[$i]) {
+            $ConsoleComboBox.SelectedIndex = $i
+            Write-Host $i
+            break
+        }
     }
 
     if ($Items.Length -gt 0 -and $ConsoleComboBox.SelectedIndex -eq -1) {
-        try { $ConsoleComboBox.SelectedIndex = $Settings["Core"][$ConsoleComboBox.Name] }
-        catch { $ConsoleComboBox.SelectedIndex = 0 }
+        try     { $ConsoleComboBox.SelectedIndex = $Settings["Core"][$ConsoleComboBox.Name] }
+        catch   { $ConsoleComboBox.SelectedIndex = 0 }
     }
 
 }
@@ -61,8 +65,11 @@ function ChangeConsolesList() {
 function ChangeGamesList() {
     
     # Set console
-    foreach ($Item in $Files.json.consoles.console) {
-        if ($Item.title -eq $ConsoleComboBox.Text) { $global:GameConsole = $Item }
+    foreach ($item in $Files.json.consoles.console) {
+        if ($item.title -eq $ConsoleComboBox.Text) {
+            $global:GameConsole = $item
+            break
+        }
     }
 
     # Reset
@@ -70,18 +77,21 @@ function ChangeGamesList() {
     if (!$IsWiiVC) { $CustomHeader.Title.MaxLength = $GameConsole.rom_title_length }
 
     $Items = @()
-    Foreach ($Game in $Files.json.games.game) {
-        if ( ($ConsoleComboBox.text -eq $GameConsole.title) -and ($GameConsole.mode -contains $Game.console) ) {
-            if ( ( $IsWiiVC -and $Game.support_vc -eq 1) -or (!$IsWiiVC) ) { $Items += $Game.title }
+    foreach ($item in $Files.json.games.game) {
+        if ( ($ConsoleComboBox.text -eq $GameConsole.title) -and ($GameConsole.mode -contains $item.console) ) {
+            if ( ( $IsWiiVC -and $item.support_vc -eq 1) -or (!$IsWiiVC) ) { $Items += $item.title }
         }
-        elseif ($Game.console -contains "All") { $Items += $Game.title }
+        elseif ($item.console -contains "All") { $Items += $item.title }
     }
 
     $CurrentGameComboBox.Items.AddRange($Items)
 
     # Reset last index
-    For ($i=0; $i -lt $Items.Length; $i++) {
-        if ($GameType.title -eq $Items[$i]) { $CurrentGameComboBox.SelectedIndex = $i }
+    foreach ($i in 0..($Items.Length-1)) {
+        if ($GameType.title -eq $Items[$i]) {
+            $CurrentGameComboBox.SelectedIndex = $i
+            break
+        }
     }
 
     if ($Items.Length -gt 0 -and $CurrentGameComboBox.SelectedIndex -eq -1) {
@@ -107,19 +117,22 @@ function ChangePatchPanel() {
 
     # Set combobox for patches
     $Items = @()
-    foreach ($i in $Files.json.patches.patch) {
-        if ( ($IsWiiVC -and $i.console -eq "Wii VC") -or (!$IsWiiVC -and $i.console -eq "Native") -or ($i.console -eq "Both") ) {
-            $Items += $i.title
-            if (!(IsSet $FirstItem)) { $FirstItem = $i }
+    foreach ($item in $Files.json.patches.patch) {
+        if ( ($IsWiiVC -and $item.console -eq "Wii VC") -or (!$IsWiiVC -and $item.console -eq "Native") -or ($item.console -eq "Both") ) {
+            $Items += $item.title
+            if (!(IsSet $FirstItem)) { $FirstItem = $item }
         }
     }
 
     $Patches.ComboBox.Items.AddRange($Items)
 
     # Reset last index
-    For ($i=0; $i -lt $Items.Length; $i++) {
-        Foreach ($Item in $Files.json.patches.patch) {
-            if ($Item.title -eq $GamePatch.title -and $Item.title -eq $Items[$i]) { $Patches.ComboBox.SelectedIndex = $i }
+    foreach ($i in 0..($Items.Length-1)) {
+        foreach ($item in $Files.json.patches.patch) {
+            if ($item.title -eq $GamePatch.title -and $item.title -eq $Items[$i]) {
+                $Patches.ComboBox.SelectedIndex = $i
+                break
+            }
         }
     }
 
@@ -212,9 +225,9 @@ function ChangeGameMode() {
         if (Get-Module -Name $GameType.mode) { Remove-Module -Name $GameType.mode }
     }
 
-    Foreach ($Item in $Files.json.games.game) {
-        if ($Item.title -eq $CurrentGameComboBox.text) {
-            $global:GameType = $Item
+    foreach ($item in $Files.json.games.game) {
+        if ($item.title -eq $CurrentGameComboBox.text) {
+            $global:GameType = $item
             $global:GamePatch = $null
             break
         }
@@ -226,7 +239,7 @@ function ChangeGameMode() {
         (Get-Command -Module $GameType.mode) | % { Export-ModuleMember $_ }
     }
 
-    $GameFiles.base = $Paths.games + "\" + $GameType.mode
+    $GameFiles.base = $Paths.Games + "\" + $GameType.mode
     $GameFiles.binaries = $GameFiles.base + "\Binaries"
     $GameFiles.extracted = $GameFiles.base + "\Extracted"
     $GameFiles.export = $GameFiles.base + "\Export"
@@ -251,7 +264,7 @@ function ChangeGameMode() {
     # Credits
     if (TestFile $Files.text.credits) {
         if ($GameType.mode -ne "Free") {
-            AddTextFileToTextbox -TextBox $Credits.Sections[1] -File $Files.text.credits -MainCredits -PostSpace 4
+            AddTextFileToTextbox -TextBox $Credits.Sections[1] -File $Files.text.credits -MainCredits
             AddTextFileToTextbox -TextBox $Credits.Sections[1] -File $Files.text.credits -GameCredits -Add
         }
         else { AddTextFileToTextbox -TextBox $Credits.Sections[1] -File $Files.text.credits -MainCredits }
@@ -271,15 +284,16 @@ function ChangeGameMode() {
 #==============================================================================================================================================================================================
 function ChangePatch() {
     
-    foreach ($Item in $Files.json.patches.patch) {
-        if ($Item.title -eq $Patches.ComboBox.Text) {
-            if ( ($IsWiiVC -and $Item.console -eq "Wii VC") -or (!$IsWiiVC -and $Item.console -eq "Native") -or ($Item.console -eq "Both") ) {
-                $global:GamePatch = $Item
-                $PatchToolTip.SetToolTip($Patches.Button, ([string]::Format($Item.tooltip, [Environment]::NewLine)))
+    foreach ($item in $Files.json.patches.patch) {
+        if ($item.title -eq $Patches.ComboBox.Text) {
+            if ( ($IsWiiVC -and $item.console -eq "Wii VC") -or (!$IsWiiVC -and $item.console -eq "Native") -or ($item.console -eq "Both") ) {
+                $global:GamePatch = $item
+                $PatchToolTip.SetToolTip($Patches.Button, ([string]::Format($item.tooltip, [Environment]::NewLine)))
                 GetHeader
                 GetRegion
                 LoadAdditionalOptions
                 DisablePatches
+                break
             }
         }
     }
@@ -292,7 +306,7 @@ function ChangePatch() {
 function SetVCPanel() {
     
     # Reset VC panel visibility
-    $VC.Group.Controls.GetEnumerator() | ForEach-Object { EnableElem -Elem $_ -Active $False -Hide }
+    foreach ($item in $VC.Group.Controls) { EnableElem -Elem $item -Active $False -Hide }
     EnableElem -Elem @($VC.ActionsLabel, $VC.PatchVCButton, $VC.ExtractROMButton) -Active $True -Hide
 
     # Enable VC panel visiblity
@@ -387,14 +401,14 @@ function GamePath_Finish([object]$TextBox, [string]$Path) {
 
         # Verify ROM
         $MatchingROMTextBox.Text = "No Valid ROM Selected"
-        Foreach ($Item in $Files.json.games.game) {
-            if ($HashSumROMTextBox.Text -eq $Item.hash) {
-              $MatchingROMTextBox.Text = $Item.title + " (Rev 0)"
-              break
+        foreach ($item in $Files.json.games.game) {
+            if ($HashSumROMTextBox.Text -eq $item.hash) {
+                $MatchingROMTextBox.Text = $item.title + " (Rev 0)"
+                break
             }
-            for ($i = 0; $i -lt $Item.downgrade.length; $i++) {
-              if ($HashSumROMTextBox.Text -eq $Item.downgrade[$i].hash) {
-                   $MatchingROMTextBox.Text = $Item.title + " (" +  $Item.downgrade[$i].rev + ")"
+            foreach ($subitem in $item.downgrade) {
+                if ($HashSumROMTextBox.Text -eq $subitem.hash) {
+                    $MatchingROMTextBox.Text = $item.title + " (" +  $subitem.rev + ")"
                     break
                 }
             }
@@ -572,64 +586,47 @@ function IsSet([object]$Elem, [int16]$Min, [int16]$Max, [int16]$MinLength, [int1
 
 
 #==============================================================================================================================================================================================
-function AddTextFileToTextbox([object]$TextBox, [string]$File, [switch]$Add, [int16]$PreSpace, [int16]$PostSpace, [switch]$GameCredits, [switch]$MainCredits) {
+function AddTextFileToTextbox([object]$TextBox, [string]$File, [switch]$Add, [switch]$GameCredits, [switch]$MainCredits) {
     
-    if (!(IsSet $File)) {
+    if (!(IsSet $File) -or !(TestFile $File)) {
         $TextBox.Text = ""
         return
     }
-
+    
     if ($GameCredits -or $MainCredits)   { $Start = $False }
     else                                 { $Start = $True }
-    $FinalLine = (Get-Content $File).Count
+    $content = (Get-Content $File -Raw)
 
-    if (TestFile $File) {
-        $str = ""
-        for ($i=0; $i -lt $FinalLine; $i++) {
-            if (!$Start -and $GameCredits) {
-                if ((Get-Content $File)[$i] -like "*===*===*") {
-                    if ((Get-Content $File)[$i+1] -eq ("=== " + $GameType.mode + " ===")) {
-                        if ((Get-Content $File)[$i+2] -like "*===*===*") { $Start = $True }
-                    }
-                }
-            }
-            elseif (!$Start -and $MainCredits) {
-                if ((Get-Content $File)[$i] -like "*===*===*") {
-                    if ((Get-Content $File)[$i+1] -eq ("=== PATCHER64+ TOOL ===")) {
-                        if ((Get-Content $File)[$i+2] -like "*===*===*") { $Start = $True }
-                    }
-                }
-            }
-
-            if ($Start -and ($GameCredits -or $MainCredits)) {
-                if ((Get-Content $File)[$i+4] -like "*===*===*") {
-                    if ((Get-Content $File)[$i+5] -ne ("=== " + $GameType.mode + " ===")) {
-                        if ((Get-Content $File)[$i+6] -like "*===*===*") { $FinalLine = $i }
-                    }
-                }
-            }
-
-            if ($Start) {
-                if ((Get-Content $File)[$i] -ne "") {
-                    $str += (Get-Content $File)[$i]
-                    if ($i -lt  $FinalLine-1) { $str += "{0}" }
-                }
-                else { $str += "{0}" }
-            }
-        }
-
-        if ($PreSpace -gt 0) {
-            for ($i=0; $i -lt $PreSpace; $i++) { $str = "{0}" + $str }
-        }
-        if ($PostSpace -gt 0) {
-            for ($i=0; $i -lt $PostSpace; $i++) { $str = $str + "{0}" }
-        }
-
-        $str = [string]::Format($str, [Environment]::NewLine)
-
-        if ($Add) { $TextBox.Text += $str }
-        else      { $TextBox.Text = $str }
+    if ($GameCredits) {
+        if (!(IsSet $GameType.mode)) { return }
+        $match = "<<< " + $GameType.mode.ToUpper() + " >>>"
     }
+    elseif ($MainCredits) { $match = "<<< PATCHER64+ TOOL >>>" }
+    if ($GameCredits -or $MainCredits) {
+        # Start
+        $start = $content.indexOf($match)
+        $content = $content.substring($start)
+
+        # End
+        $match = "======"
+        $end = $content.indexOf($match)
+        if ($end -gt 0) { $content = $content.substring(0, $end) }
+    }
+    if ($GameCredits) {
+        if ( ([int]$content[$content.length-2]) -eq 13 -and ([int]$content[$content.length-1]) -eq 10) {
+            if ( ([int]$content[$content.length-4]) -eq 13 -and ([int]$content[$content.length-3]) -eq 10) {
+                if ( ([int]$content[$content.length-6]) -eq 13 -and ([int]$content[$content.length-5]) -eq 10) {
+                    if ( ([int]$content[$content.length-8]) -eq 13 -and ([int]$content[$content.length-7]) -eq 10) {
+                        $content = $content.substring(0, $content.length-8)
+                    }
+                }
+            }
+        }
+    }
+
+    $content = [string]::Format($content, [Environment]::NewLine)
+    if ($Add) { $TextBox.Text += $content }
+    else      { $TextBox.Text  = $content }
 
 }
 
@@ -728,7 +725,7 @@ function EnableForm([object]$Form, [boolean]$Enable, [switch]$Not) {
     
     if ($Not) { $Enable = !$Enable }
     if ($Form.Controls.length -eq $True) {
-        $Form.Controls.GetEnumerator() | ForEach-Object { $_.Enabled = $Enable }
+        foreach ($item in $Form.Controls) { $item.Enabled = $Enable }
     }
     else { $Form.Enabled = $Enable }
 
@@ -740,9 +737,9 @@ function EnableForm([object]$Form, [boolean]$Enable, [switch]$Not) {
 function EnableElem([object]$Elem, [boolean]$Active=$True, [switch]$Hide) {
 
     if ($Elem -is [system.Array]) {
-        foreach ($Obj in $Elem) {
-            $Obj.Enabled = $Obj.Active = $Active
-            if ($Hide) { $Obj.Visible = $Active }
+        foreach ($item in $Elem) {
+            $item.Enabled = $item.Active = $Active
+            if ($Hide) { $item.Visible = $Active }
         }
     }
     else {
@@ -761,7 +758,7 @@ function GetFileName([string]$Path, [string]$Description, [String[]]$FileNames) 
     $OpenFileDialog.InitialDirectory = $Path
     
     $FilterString = $Description + "|"
-    for($i = 0; $i -lt $FileNames.Count; $i++) {
+    foreach ($i in 0..($FileNames.Count-1)) {
         $FilterString += $FileNames[$i] + ';'
     }
     $FilterString += "|All Files|(*.*)"

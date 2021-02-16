@@ -278,8 +278,8 @@ function LoadModelsList([string]$Category) {
     if (!(Test-Path -LiteralPath $path)) { return @("No models found?") } 
 
     $list = @()
-    foreach ($file in Get-ChildItem -LiteralPath $path -Force) {
-        if ($file.Extension -eq ".png") { $list += $file.BaseName }
+    foreach ($item in Get-ChildItem -LiteralPath $path -Force) {
+        if ($item.Extension -eq ".png") { $list += $item.BaseName }
     }
 
     return $list
@@ -377,7 +377,7 @@ function CreateButtonColorOptions($Default=1) {
     
     # BUTTON COLORS #
     CreateReduxGroup    -Tag  "Colors"  -Height 2 -Text "Button Colors"
-    CreateReduxComboBox -Name "Buttons" -Text "Button Colors:" -Items @("N64 OoT", "N64 MM", "GC OoT", "GC MM", "Randomized", "Custom") -Default $Default -Info ("Select a preset for the button colors`n" + '"Randomized" fully randomizes the colors each time the patcher is opened') -Credits "GhostlyDark (ported from Redux)"
+    CreateReduxComboBox -Name "Buttons" -Text "Button Colors" -Items @("N64 OoT", "N64 MM", "GC OoT", "GC MM", "Randomized", "Custom") -Default $Default -Info ("Select a preset for the button colors`n" + '"Randomized" fully randomizes the colors each time the patcher is opened') -Credits "GhostlyDark (ported from Redux)"
 
     # Button Colors - Buttons
     $Buttons = @()
@@ -413,8 +413,8 @@ function CreateSpinAttackColorOptions() {
     # SPIN ATTACK COLORS #
     CreateReduxGroup    -Tag  "Colors" -Text "Magic Spin Attack Colors" -Height 2
     $Items = @("Blue", "Red", "Green", "White", "Cyan", "Magenta", "Orange", "Gold", "Purple", "Pink", "Black", "Randomized", "Custom")
-    CreateReduxComboBox -Name "BlueSpinAttack" -Column 1 -Text "Blue Spin Attack Colors:" -Length 230 -Shift 70 -Items $Items -Default 1 -Info ("Select a preset for the blue spin attack colors`n" + '"Randomized" fully randomizes the colors each time the patcher is opened') -Credits "Chez Cousteau"
-    CreateReduxComboBox -Name "RedSpinAttack"  -Column 4 -Text "Red Spin Attack Colors:"  -Length 230 -Shift 70 -Items $Items -Default 2 -Info ("Select a preset for the red spin attack colors`n" + '"Randomized" fully randomizes the colors each time the patcher is opened')  -Credits "Chez Cousteau"
+    CreateReduxComboBox -Name "BlueSpinAttack" -Column 1 -Text "Blue Spin Attack Colors" -Length 230 -Shift 70 -Items $Items -Default 1 -Info ("Select a preset for the blue spin attack colors`n" + '"Randomized" fully randomizes the colors each time the patcher is opened') -Credits "Chez Cousteau"
+    CreateReduxComboBox -Name "RedSpinAttack"  -Column 4 -Text "Red Spin Attack Colors"  -Length 230 -Shift 70 -Items $Items -Default 2 -Info ("Select a preset for the red spin attack colors`n" + '"Randomized" fully randomizes the colors each time the patcher is opened')  -Credits "Chez Cousteau"
 
     # Spin Attack Colors - Buttons
     $Buttons = @()
@@ -461,7 +461,7 @@ function CreateFairyColorOptions([string]$Name, [string]$Second, [string]$Preset
     # FAIRY COLORS #
     CreateReduxGroup    -Tag  "Colors" -Text "Fairy Colors" -Height 2
     $Items = @($Name, $Second, "Tael", "Gold", "Green", "Light Blue", "Yellow", "Red", "Magenta", "Black", "Fi", "Ciela", "Epona", "Ezlo", "King of Red Lions", "Linebeck", "Loftwing", "Midna", "Phantom Zelda", "Randomized", "Custom")
-    CreateReduxComboBox -Name "Fairy" -Length 230 -Shift 70 -Items $Items -Text ($name + " Colors:") -Info ("Select a color scheme for " + $name + $Presets + "`n" + '"Randomized" fully randomizes the colors each time the patcher is opened') -Credits "Ported from Rando"
+    CreateReduxComboBox -Name "Fairy" -Length 230 -Shift 70 -Items $Items -Text ($name + " Colors") -Info ("Select a color scheme for " + $name + $Presets + "`n" + '"Randomized" fully randomizes the colors each time the patcher is opened') -Credits "Ported from Rando"
 
     # Fairy Colors - Buttons
     $Buttons = @()

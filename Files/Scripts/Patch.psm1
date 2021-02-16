@@ -88,6 +88,7 @@ function MainFunction([string]$Command, [string]$PatchedFileName) {
     elseif ($Patches.Downgrade.Visible -and (StrLike -str $Command -val "No Downgrade") )                                                    { $Patches.Downgrade.Checked = $False }
 
     # GO!
+    if ($Settings.NoCleanup.Checked -ne $True -and $IsWiiVC) { RemovePath $Paths.Temp } # Remove the temp folder first to avoid issues
     MainFunctionPatch -Command $Command -Header $Header -PatchedFileName $PatchedFileName -Decompress $Decompress
     EnableGUI $True
     Cleanup
@@ -116,25 +117,25 @@ function MainFunctionPatch([string]$Command, [Array]$Header, [string]$PatchedFil
     
     if ($Settings.Debug.Console -eq $True) { if ( (WriteDebug -Command $Command -Header $Header -PatchedFileName $PatchedFileName -Decompress $Decompress) -eq $True) { return } }
 
-    # Step 01: Disable the main dialog, allow patching and delete files if they still exist.
+    # Step 01: Disable the main dialog, allow patching and delete files if they still exist
     EnableGUI $False
     CreatePath $Paths.Temp
 
-    # Only continue with these steps in VC WAD mode. Otherwise ignore these steps.
+    # Only continue with these steps in VC WAD mode, otherwise ignore these steps
     if ($IsWiiVC) {
-        # Step 02: Extract the contents of the WAD file.
+        # Step 02: Extract the contents of the WAD file
         if (!(ExtractWADFile $PatchedFileName)) { return }
 
-        # Step 03: Check the GameID to be vanilla.
+        # Step 03: Check the GameID to be vanilla
         if (!(CheckGameID)) { return }
 
-        # Step 04: Extract "00000005.app" file to get the ROM.
+        # Step 04: Extract "00000005.app" file to get the ROM
         ExtractU8AppFile $Command
 
-        # Step 05: Do some initial patching stuff for the ROM for VC WAD files.
+        # Step 05: Do some initial patching stuff for the ROM for VC WAD files
         if (!(PatchVCROM $Command)) { return }
 
-        # Step 06: Replace the Virtual Console emulator within the WAD file.
+        # Step 06: Replace the Virtual Console emulator within the WAD file
         PatchVCEmulator $Command
     }
 
@@ -185,12 +186,12 @@ function MainFunctionPatch([string]$Command, [Array]$Header, [string]$PatchedFil
     # Step 19: Debug
     CreateDebugPatches
 
-    # Only continue with these steps in VC WAD mode. Otherwise ignore these steps.
+    # Only continue with these steps in VC WAD mode, otherwise ignore these steps
     if ($IsWiiVC) {
         # Step 20: Extend a ROM if it is neccesary for the Virtual Console. Mostly applies to decompressed ROMC files
         ExtendROM
 
-        # Step 21: Compress the ROMC again if possible.
+        # Step 21: Compress the ROMC again if possible
         CompressROMC
 
         # Step 22: Hack the Channel Title.
@@ -199,7 +200,7 @@ function MainFunctionPatch([string]$Command, [Array]$Header, [string]$PatchedFil
         # Step 23: Repack the "00000005.app" with the updated ROM file 
         RepackU8AppFile
         
-        # Step 24: Repack the WAD file with the updated APP file.
+        # Step 24: Repack the WAD file with the updated APP file
         RepackWADFile $Header[3]
     }
 
@@ -250,7 +251,6 @@ function WriteDebug([string]$Command, [String[]]$Header, [string]$PatchedFileNam
 function Cleanup() {
     
     if ($Settings.NoCleanup.Checked -eq $True) { return }
-
     WriteToConsole "Cleaning up files..."
 
     $global:ByteArrayGame = $global:ROMFile = $global:WADFile = $global:CheckHashSum = $global:ROMHashSum = $null
@@ -271,8 +271,8 @@ function Cleanup() {
 function GetPatchFile() {
     
     if ($GamePatch.patch -is [System.Array]) {
-        foreach ($Patch in $GamePatch.patch) {
-            if ($Patch.hash -eq $ROMHashSum) { return $Patch.file }
+        foreach ($item in $GamePatch.patch) {
+            if ($item.hash -eq $ROMHashSum) { return $item.file }
         }
         return $GamePatch.patch[0].file
     }
@@ -441,12 +441,12 @@ function SetROMParameters([string]$Path, [string]$PatchedFileName) {
     $ROMItem = Get-Item -LiteralPath $Path
     
     # Store some stuff about the ROM to reference
-    $ROMFile.Name    = $ROMItem.BaseName
-    $ROMFile.Path    = $ROMItem.DirectoryName
+    $ROMFile.Name      = $ROMItem.BaseName
+    $ROMFile.Path      = $ROMItem.DirectoryName
     
     $ROMFile.Extension = GetROMExtension
 
-    $ROMFile.ROM     = $Path
+    $ROMFile.ROM       = $Path
     $ROMFile.Patched   = $ROMFile.Path + "\" + $ROMFile.Name + $PatchedFileName + $ROMFile.Extension
     $ROMFile.Convert   = $ROMFile.Path + "\" + $ROMFile.Name + "_converted"     + $ROMFile.Extension
     $ROMFile.Downgrade = $ROMFile.Path + "\" + $ROMFile.Name + "_downgraded"    + $ROMFile.Extension
@@ -478,8 +478,8 @@ function ExtractWADFile([string]$PatchedFileName) {
     UpdateStatusLabel "Extracting WAD file..."
 
     # Check if an extracted folder existed previously
-    foreach($Folder in Get-ChildItem -LiteralPath $Paths.Temp -Force) {
-        if ($Folder.PSIsContainer) { RemovePath $Folder }
+    foreach ($item in Get-ChildItem -LiteralPath $Paths.Temp -Force) {
+        if ($item.PSIsContainer) { RemovePath $item }
     }
     
     [io.file]::WriteAllBytes($Files.ckey, @(235, 228, 42, 34, 94, 133, 147, 228, 72, 217, 197, 69, 115, 129, 170, 247)) | Out-Null
@@ -498,12 +498,12 @@ function ExtractWADFile([string]$PatchedFileName) {
 
     # Find the extracted folder by looping through all files in the folder.
     $FolderExists = $False
-    foreach ($Folder in Get-ChildItem -LiteralPath $Paths.Temp -Force) {
+    foreach ($item in Get-ChildItem -LiteralPath $Paths.Temp -Force) {
         # There will only be one folder, the one we want.
-        if ($Folder.PSIsContainer) {
+        if ($item.PSIsContainer) {
             $FolderExists = $True
             # Remember the path to this folder
-            $global:WADFile = SetWADParameters -Path $GamePath -FolderName $Folder.Name -PatchedFileName $PatchedFileName
+            $global:WADFile = SetWADParameters -Path $GamePath -FolderName $item.Name -PatchedFileName $PatchedFileName
         }
     }
 
@@ -531,9 +531,9 @@ function ExtractU8AppFile([string]$Command) {
         }
 
         # Reference ROM in unpacked AppFile
-        Get-ChildItem $WADFile.AppPath05 | Foreach-Object {
-            if ($_ -match "rom") {
-                $WADFile.ROM = $_.FullName
+        foreach ($item in Get-ChildItem $WADFile.AppPath05) {
+            if ($item -match "rom") {
+                $WADFile.ROM = $item.FullName
                 SetGetROM
             }
         }
@@ -741,9 +741,9 @@ function DowngradeROM([boolean]$Decompress) {
 
     if ($Decompress) { $GetROM.run = $GetROM.decomp }
     
-    foreach ($Item in $GameType.downgrade) {
-        if ($ROMHashSum -eq $Item.hash) {
-            if (!(ApplyPatch -File $GetROM.run -Patch ("\Downgrade\" + $Item.file))) {
+    foreach ($item in $GameType.downgrade) {
+        if ($ROMHashSum -eq $item.hash) {
+            if (!(ApplyPatch -File $GetROM.run -Patch ("\Downgrade\" + $item.file))) {
                 WriteToConsole "Could not apply downgrade patch"
                 return
             }
@@ -821,8 +821,8 @@ function CompareHashSums([string]$Command) {
 
     if ($ROMHashSum -eq $CheckHashSum) { return $True }
     elseif (IsSet -Elem $GameType.downgrade) {
-        Foreach ($Item in $GameType.downgrade) {
-            if ($ROMHashSum -eq $Item.hash) { return $True }
+        foreach ($item in $GameType.downgrade) {
+            if ($ROMHashSum -eq $item.hash) { return $True }
         }
     }
 
@@ -1296,19 +1296,19 @@ function RepackWADFile($GameID) {
     UpdateStatusLabel "Repacking patched WAD file..."
     
     # Loop through all files in the extracted WAD folder.
-    foreach($File in Get-ChildItem -LiteralPath $WadFile.Folder -Force) {
+    foreach ($item in Get-ChildItem -LiteralPath $WadFile.Folder -Force) {
         # Move the file to the same folder as the unpacker tool.
-        RemoveFile ($Paths.Temp + "\" + $File.Name)
-        Move-Item -LiteralPath $File.FullName -Destination $Paths.Temp
+        RemoveFile ($Paths.Temp + "\" + $item.Name)
+        Move-Item -LiteralPath $item.FullName -Destination $Paths.Temp
         
         # Create an entry for the database.
-        $ListEntry = $RepackPath + '\' + $File.Name
+        $ListEntry = $RepackPath + '\' + $item.Name
         
         # Some files need to be fed into the tool so keep track of them.
-        switch ($File.Extension) {
-            '.tik'  { $tik  = [System.String](Get-Location) + "\Files\Temp\" + $File.Name }
-            '.tmd'  { $tmd  = [System.String](Get-Location) + "\Files\Temp\" + $File.Name }
-            '.cert' { $cert = [System.String](Get-Location) + "\Files\Temp\" + $File.Name }
+        switch ($item.Extension) {
+            '.tik'  { $tik  = [System.String](Get-Location) + "\Files\Temp\" + $item.Name }
+            '.tmd'  { $tmd  = [System.String](Get-Location) + "\Files\Temp\" + $item.Name }
+            '.cert' { $cert = [System.String](Get-Location) + "\Files\Temp\" + $item.Name }
         }
     }
 

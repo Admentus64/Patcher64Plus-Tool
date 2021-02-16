@@ -304,38 +304,137 @@ function ByteOptions() {
     elseif (IsText -Elem $Redux.Hero.MagicUsage -Compare "3x Magic Usage")  { ChangeBytes -Offset "AE84FA" -Values "2C","80" }
 
 
+
+    # Monsters
+    if (IsText -Elem $Redux.Hero.MonsterHP -Compare "2x Monster HP") {
+        ChangeBytes -Offset "C11177" -Values "08" # Dodongo                      (HP: 04)   C10BB0 -> C13950 (Length: 2DA0) (ovl_En_Dodongo)
+        ChangeBytes -Offset "C2B183" -Values "04" # Tektite         (Red)        (HP: 02)   C2B0C0 -> C2DE60 (Length: 2DA0) (ovl_En_Tite)
+        ChangeBytes -Offset "C2B1F7" -Values "08" # Tektite         (Blue)       (HP: 04)
+        ChangeBytes -Offset "D76A07" -Values "08" # Tentacle                     (HP: 04)   D76880 -> D78750 (Length: 1ED0) (ovl_En_Ba)
+        ChangeBytes -Offset "CD724F" -Values "10" # ReDead          (ReDead)     (HP: 08)   CD71B0 -> CD9A60 (Length: 28B0) (ovl_En_Rd)
+        ChangeBytes -Offset "EDC597" -Values "04" # Stalchild       (Small)      (HP: 02)   EDC370 -> EDDC60 (Length: 18F0) (ovl_En_Skb)
+        ChangeBytes -Offset "CD582C" -Values "08" # Floormaster                  (HP: 04)   CD28C0 -> CD5CA0 (Length: 33E0) (ovl_En_Floormas)
+        ChangeBytes -Offset "C6471B" -Values "0C" # Torch Slug                   (HP: 06)   C64670 -> C679D0 (Length: 3360) (ovl_En_Bw)
+        ChangeBytes -Offset "C51A9F" -Values "04" # Gohma Larva                  (HP: 02)   C51860 -> C544F0 (Length: 2C90) (ovl_En_Goma)
+        ChangeBytes -Offset "D74393" -Values "08" # Like-Like                    (HP: 04)   D74360 -> D76880 (Length: 2520) (ovl_En_Rr)
+        ChangeBytes -Offset "C2F97F" -Values "0C" # Peehat                       (HP: 06)   C2F8D0 -> C32FD0 (Length: 3700) (ovl_En_Peehat)
+        ChangeBytes -Offset "C2DEE7" -Values "08" # Leever          (Green)      (HP: 04)   C2DE60 -> C2F8D0 (Length: 1A70) (ovl_En_Reeba)
+        ChangeBytes -Offset "C2DF4B" -Values "28" # Leever          (Purple)     (HP: 14)
+        ChangeBytes -Offset "C836AB" -Values "0C" # Moblin          (Club)       (HP: 06)   C83500 -> C87640 (Length: 4140) (ovl_En_Mb)
+        ChangeBytes -Offset "DADBAF" -Values "04" # Spike                        (HP: 02)   DADB80 -> DAF4B0 (Length: 1930) (ovl_En_Ny)
+
+        # Incomplete
+      # ChangeBytes -Offset "" -Values "04" # Skullkid                           (HP: ??)   DEF3E0 -> DF2D10 (Length: 3930) (ovl_En_Skj)
+      # ChangeBytes -Offset "" -Values "04" # Skullwalltula         (Regular)    (HP: 02)   CE2E80 -> CE65F0 (Length: 3770) (ovl_En_Sw)
+      # ChangeBytes -Offset "" -Values "" # Shell Blade                          (HP: ??)   D46390 -> D477D0 (Length: 1440) (ovl_En_Sb)
+      # ChangeBytes -Offset "" -Values "" # Octorok                              (HP: ??)   C0BCF0 -> C0E2D0 (Length: 25E0) (ovl_En_Okuta)
+      # ChangeBytes -Offset "" -Values "08" # Wallmaster                         (HP: 04)   C0F1A0 -> C10BB0 (Length: 1A10) (ovl_En_Wallmas)
+      # ChangeBytes -Offset "" -Values "" # Baby Dodongo                         (HP: ??)   C57E90 -> C59D30 (Length: 1EA0) (ovl_En_Dodojr)
+      # ChangeBytes -Offset "" -Values "04" # Bubble                             (HP: 02)   CB1620 -> CB52F0 (Length: 3CD0) (ovl_En_Bb)
+      # ChangeBytes -Offset "" -Values "04" # Guay                               (HP: 02)   EEE2F0 -> EEF990 (Length: 16A0) (ovl_En_Crow)
+      # ChangeBytes -Offset "" -Values "02" # Keese                              (HP: 02)   C13950 -> C15AC0 (Length: 2170) (ovl_En_Firefly)
+      # ChangeBytes -Offset "" -Values "04" # Mad Scrub                          (HP: 02)   CA6FA0 -> CA87A0 (Length: 1800) (ovl_En_Dekunuts)
+      # ChangeBytes -Offset "" -Values "" # Biri                                 (HP: ??)   C5D8E0 -> C5FBB0 (Length: 22D0) (ovl_En_Bili)
+      # ChangeBytes -Offset "" -Values "" # Bari                                 (HP: ??)   CA8DC0 -> CAB460 (Length: 26A0) (ovl_En_Vali)
+      # ChangeBytes -Offset "" -Values "" # Shabom                               (HP: ??)   C547F0 -> C55C10 (Length: 1420) (ovl_En_Bubble)
+      # ChangeBytes -Offset "" -Values "" # Tailpasaran                          (HP: ??)   C5FBB0 -> C61A00 (Length: 1E50) (ovl_En_Tp)
+
+        # Duplicates?
+      # ChangeBytes -Offset "" -Values "04" # StalChild             (Large)      (HP: 02)
+      # ChangeBytes -Offset "" -Values "10" # ReDead                (Gibdo)      (HP: 08)
+      # ChangeBytes -Offset "" -Values "04" # Skullwalltula         (Gold)       (HP: 02)
+      # ChangeBytes -Offset "" -Values "" # Moblin                  (Spear)      (HP: ??)
+
+        # Unlocatable / Impossible?
+      # ChangeBytes -Offset "" -Values "" # Big Skulltula                        (HP: 02)   C61A00 -> C64670 (Length: 2C70) (ovl_En_St)
+      # ChangeBytes -Offset "" -Values "" # Poe                                  (HP: 04)   C07B60 -> C0BCF0 (Length: 4190) (ovl_En_Poh)
+      # ChangeBytes -Offset "" -Values "" # Big Poe                              (HP: ??)   E75040 -> E78A20 (Length: 39E0) (ovl_En_Po_Field)
+      # ChangeBytes -Offset "" -Values "" # Anubis                               (HP: ??)   D79240 -> D7A4F0 (Length: 12B0) (ovl_En_Anubice)
+      # ChangeBytes -Offset "" -Values "" # Beamos                               (HP: ??)   CC6B80 -> CC8430 (Length: 18B0) (ovl_En_Vm)
+      # ChangeBytes -Offset "DFC9A3" -Values "0C" # Freezard                     (HP: 06)   DFC970 -> DFE980 (Length: 2010) (ovl_En_Fz)
+    }
+    elseif (IsText -Elem $Redux.Hero.MonsterHP -Compare "3x Monster HP") {
+        ChangeBytes -Offset "C11177" -Values "0C" # Dodongo                      (HP: 04)   C10BB0 -> C13950 (Length: 2DA0) (ovl_En_Dodongo)
+        ChangeBytes -Offset "C2B183" -Values "06" # Tektite         (Red)        (HP: 02)   C2B0C0 -> C2DE60 (Length: 2DA0) (ovl_En_Tite)
+        ChangeBytes -Offset "C2B1F7" -Values "0C" # Tektite         (Blue)       (HP: 04)
+        ChangeBytes -Offset "D76A07" -Values "0C" # Tentacle                     (HP: 04)   D76880 -> D78750 (Length: 1ED0) (ovl_En_Ba)
+        ChangeBytes -Offset "CD724F" -Values "18" # ReDead          (ReDead)     (HP: 08)   CD71B0 -> CD9A60 (Length: 28B0) (ovl_En_Rd)
+        ChangeBytes -Offset "EDC597" -Values "06" # Stalchild       (Small)      (HP: 02)   EDC370 -> EDDC60 (Length: 18F0) (ovl_En_Skb)
+        ChangeBytes -Offset "CD582C" -Values "0C" # Floormaster                  (HP: 04)   CD28C0 -> CD5CA0 (Length: 33E0) (ovl_En_Floormas)
+        ChangeBytes -Offset "C6471B" -Values "12" # Torch Slug                   (HP: 06)   C64670 -> C679D0 (Length: 3360) (ovl_En_Bw)
+        ChangeBytes -Offset "C51A9F" -Values "06" # Gohma Larva                  (HP: 02)   C51860 -> C544F0 (Length: 2C90) (ovl_En_Goma)
+        ChangeBytes -Offset "D74393" -Values "0C" # Like-Like                    (HP: 04)   D74360 -> D76880 (Length: 2520) (ovl_En_Rr)
+        ChangeBytes -Offset "C2F97F" -Values "12" # Peehat                       (HP: 06)   C2F8D0 -> C32FD0 (Length: 3700) (ovl_En_Peehat)
+        ChangeBytes -Offset "C2DEE7" -Values "0C" # Leever          (Green)      (HP: 04)   C2DE60 -> C2F8D0 (Length: 1A70) (ovl_En_Reeba)
+        ChangeBytes -Offset "C2DF4B" -Values "3C" # Leever          (Purple)     (HP: 14)
+        ChangeBytes -Offset "C836AB" -Values "12" # Moblin          (Club)       (HP: 06)   C83500 -> C87640 (Length: 4140) (ovl_En_Mb)
+        ChangeBytes -Offset "DADBAF" -Values "06" # Spike                        (HP: 02)   DADB80 -> DAF4B0 (Length: 1930) (ovl_En_Ny)
+    }
+
+    # Mini-Bosses
+    if (IsText -Elem $Redux.Hero.MiniBossHP -Compare "2x Mini-Boss HP") {
+        ChangeBytes -Offset "C3452F" -Values "0C" # Lizalfos                     (HP: 06)   C340D0 -> C3ABC0 (Length: 6AF0) (ovl_En_Zf)
+        ChangeBytes -Offset "C3453B" -Values "18" # Dinolfos                     (HP: 0C)   C340D0 -> C3ABC0 (Length: 6AF0) (ovl_En_Zf)
+        ChangeBytes -Offset "ED80EB" -Values "10" # Wolfos          (Both)       (HP: 08)   ED8060 -> EDC370 (Length: 6AF0) (ovl_En_Wf)
+        ChangeBytes -Offset "BFADAB" -Values "10" # Stalfos                      (HP: 0A)   BFAC30 -> C004E0 (Length: 58B0) (ovl_En_Test)
+        ChangeBytes -Offset "D09283" -Values "1C" # Dead Hand                    (HP: 0E)   D091D0 -> D0ACA0 (Length: 1AD0) (ovl_En_Dh)
+        ChangeBytes -Offset "DE9A1B" -Values "01" # Iron Knuckle    (Phase 1)    (HP: 1E)   DE98A0 -> DEDED0 (Length: 4630) (ovl_En_Ik)
+        ChangeBytes -Offset "DEB34F" -Values "15" # Iron Knuckle    (Phase 2)    (HP: 0B)
+        ChangeBytes -Offset "EBC8B7" -Values "28" # Gerudo Fighter               (HP: 14)   EBC840 -> EC1BF0 (Length: 53B0) (ovl_En_GeldB)
+        ChangeBytes -Offset "CF2667" -Values "0A" # Flare Dancer                 (HP: 08)   CF25E0 -> CF52A0 (Length: 2CC0) (ovl_En_Fd)
+        ChangeBytes -Offset "CDE1FC" -Values "14" # Poe Sisters                  (HP: 0A)   CD9A60 -> CDE750 (Length: 4CF0) (ovl_En_Po_Sisters)
+
+        # Unlocatable ?
+      # ChangeBytes -Offset "" -Values "" # Big Octo                             (HP: 04)   D477D0 -> D4A2E0 (Length: 2B10) (ovl_En_Bigokuta)
+      # ChangeBytes -Offset "" -Values "" # Dark Link                            (HP: xx)   C5B180 -> C5D8E0 (Length: 2760) (ovl_En_Torch2)
+    }
+    elseif (IsText -Elem $Redux.Hero.MiniBossHP -Compare "3x Mini-Boss HP") {
+        ChangeBytes -Offset "C3452F" -Values "12" # Lizalfos                     (HP: 06)   C340D0 -> C3ABC0 (Length: 6AF0) (ovl_En_Zf)
+        ChangeBytes -Offset "C3453B" -Values "24" # Dinolfos                     (HP: 0C)   C340D0 -> C3ABC0 (Length: 6AF0) (ovl_En_Zf)
+        ChangeBytes -Offset "ED80EB" -Values "18" # Wolfos          (Both)       (HP: 08)   ED8060 -> EDC370 (Length: 6AF0) (ovl_En_Wf)
+        ChangeBytes -Offset "BFADAB" -Values "1E" # Stalfos                      (HP: 0A)   BFAC30 -> C004E0 (Length: 58B0) (ovl_En_Test)
+        ChangeBytes -Offset "D09283" -Values "2A" # Dead Hand                    (HP: 0E)   D091D0 -> D0ACA0 (Length: 1AD0) (ovl_En_Dh)
+        ChangeBytes -Offset "DE9A1B" -Values "5A" # Iron Knuckle    (Phase 1)    (HP: 1E)   DE98A0 -> DEDED0 (Length: 4630) (ovl_En_Ik)
+        ChangeBytes -Offset "DEB34F" -Values "1F" # Iron Knuckle    (Phase 2)    (HP: 0B)
+        ChangeBytes -Offset "EBC8B7" -Values "3C" # Gerudo Fighter               (HP: 14)   EBC840 -> EC1BF0 (Length: 53B0) (ovl_En_GeldB)
+        ChangeBytes -Offset "CF2667" -Values "0C" # Flare Dancer                 (HP: 08)   CF25E0 -> CF52A0 (Length: 2CC0) (ovl_En_Fd)
+        ChangeBytes -Offset "CDE1FC" -Values "1E" # Poe Sisters                  (HP: 0A)   CD9A60 -> CDE750 (Length: 4CF0) (ovl_En_Po_Sisters)
+    }
     
+    # Bosses
     if (IsText -Elem $Redux.Hero.BossHP -Compare "2x Boss HP") {
-        ChangeBytes -Offset "C44F2B" -Values "14" # Gohma           0xC44C30 -> 0xC4ABB0 (Length: 0x5F80) (ovl_Boss_Goma) (HP: 0A) (Mass: FF)
-        ChangeBytes -Offset "C3B9FF" -Values "18" # King Dodongo    0xC3B150 -> 0xC44C30 (Length: 0x9AE0) (ovl_Boss_Dodongo) (HP: 0C) (Mass: 00)
-        ChangeBytes -Offset "D258BA" -Values "08" # Barinade        0xD22360 -> 0xD30B50 (Length: 0xE7F0)(ovl_Boss_Va) (HP: 04 -> 03 -> 03) (Mass: 00)
-        ChangeBytes -Offset "D25B0A" -Values "06" # Barinade
-        ChangeBytes -Offset "C91F8F" -Values "3C" # Phantom Ganon   0xC91AD0 -> 0xC96840 (Length: 0x4D70) (ovl_Boss_Ganondrof) (HP: 1E) (Mass: 32)
-        ChangeBytes -Offset "C91F8F" -Values "30" # Phantom Ganon   (Phase 2) (HP: <19)
-        ChangeBytes -Offset "CE6D2F" -Values "30" # Volvagia        0xCE65F0 -> 0xCED920 (Length: 0x7330) (ovl_Boss_Fd) (Has HP) (HP: 18) (Mass: 32) / 0xD04790 -> 0xD084C0 (Length:0x3D30) (ovl_Boss_Fd2) (Has No HP, Forwards HP to Flying)
-        ChangeBytes -Offset "D3B4A7" -Values "28" # Morpha          0xD3ADF0 -> 0xD46390 (Length: 0xB5A0) (ovl_Boss_Mo) (HP: 14) (Mass: 00)
-        ChangeBytes -Offset "DAC824" -Values "48" # Bongo Bongo     0xDA1660 -> 0xDADB80 (Length: 0xC520) (ovl_Boss_Sst) (HP: 24) (Mass: C8)
-        ChangeBytes -Offset "D7FDA3" -Values "50" # Ganondorf       0xD7F3F0 -> 0xDA1660 (Length: 0x22270) (ovl_Boss_Ganon) (HP: 28) (Mass: 32)
-        ChangeBytes -Offset "E82AFB" -Values "3C" # Ganon           0xE826C0 -> 0xE939B0 (Length: 0x112F0) (ovl_Boss_Ganon2) (HP: 1E) (Mass: FF)
-        ChangeBytes -Offset "E87F2F" -Values "29" # Ganon           (Phase 2) (HP: <15)
-        ChangeBytes -Offset "D64EFA" -Values "08" # Twinrova        (Phase 1) (Hit Counter: <4)
-        ChangeBytes -Offset "D6223E" -Values "30" # Twinrova        0xD612E0 -> 0xD74360 (Length: 0x13080) (ovl_Boss_Tw) (HP: 18) (Mass: FF)
+        ChangeBytes -Offset "C44F2B" -Values "14" # Gohma                        (HP: 0A)   C44C30 -> C4ABB0 (Length: 5F80)  (ovl_Boss_Goma)
+        ChangeBytes -Offset "C486CC" -Values "00 00 00 00" # Spawn all three Gohma Larva at once
+        ChangeBytes -Offset "C3B9FF" -Values "18" # King Dodongo                 (HP: 0C)   C3B150 -> C44C30 (Length: 9AE0)  (ovl_Boss_Dodongo)
+        ChangeBytes -Offset "D258BB" -Values "08" # Barinade        (Phase 1)    (HP: 04)   D22360 -> D30B50 (Length: E7F0)  (ovl_Boss_Va)
+        ChangeBytes -Offset "D25B0B" -Values "06" # Barinade        (Phases 4-6) (HP: 03)
+        ChangeBytes -Offset "C91F8F" -Values "3C" # Phantom Ganon   (Phase 1)    (HP: 1E)   C91AD0 -> C96840 (Length: 4D70)  (ovl_Boss_Ganondrof)
+        ChangeBytes -Offset "CAFF33" -Values "31" # Phantom Ganon   (Phase 2)    (HP: 19)
+        ChangeBytes -Offset "CE6D2F" -Values "30" # Volvagia                     (HP: 18)   CE65F0 -> CED920 (Length: 7330)  (ovl_Boss_Fd)
+        ChangeBytes -Offset "D3B4A7" -Values "28" # Morpha                       (HP: 14)   D3ADF0 -> D46390 (Length: B5A0)  (ovl_Boss_Mo)
+        ChangeBytes -Offset "DAC824" -Values "48" # Bongo Bongo                  (HP: 24)   DA1660 -> DADB80 (Length: C520)  (ovl_Boss_Sst)
+        ChangeBytes -Offset "D64EFB" -Values "08" # Twinrova        (Phase 1)    (HP: 04)   D612E0 -> D74360 (Length: 13080) (ovl_Boss_Tw)
+        ChangeBytes -Offset "D6223F" -Values "30" # Twinrova        (Phase 2)    (HP: 18)
+        ChangeBytes -Offset "D7FDA3" -Values "50" # Ganondorf                    (HP: 28)   D7F3F0 -> DA1660 (Length: 22270) (ovl_Boss_Ganon)
+        ChangeBytes -Offset "E82AFB" -Values "3C" # Ganon           (Phase 1)    (HP: 1E)   E826C0 -> E939B0 (Length: 112F0) (ovl_Boss_Ganon2)
+        ChangeBytes -Offset "E87F2F" -Values "29" # Ganon           (Phase 2)    (HP: 15)
     }
     elseif (IsText -Elem $Redux.Hero.BossHP -Compare "3x Boss HP") {
-        ChangeBytes -Offset "C44F2B" -Values "1E" # Gohma           0xC44C30 -> 0xC4ABB0 (Length: 0x5F80) (ovl_Boss_Goma) (HP: 0A) (Mass: FF)
-        ChangeBytes -Offset "C3B9FF" -Values "24" # King Dodongo    0xC3B150 -> 0xC44C30 (Length: 0x9AE0) (ovl_Boss_Dodongo) (HP: 0C) (Mass: 00)
-        ChangeBytes -Offset "D258BA" -Values "0C" # Barinade        0xD22360 -> 0xD30B50 (Length: 0xE7F0)(ovl_Boss_Va) (HP: 04 -> 03 -> 03) (Mass: 00)
-        ChangeBytes -Offset "D25B0A" -Values "09" # Barinade
-        ChangeBytes -Offset "C91F8F" -Values "5A" # Phantom Ganon   0xC91AD0 -> 0xC96840 (Length: 0x4D70) (ovl_Boss_Ganondrof) (HP: 1E) (Mass: 32)
-        ChangeBytes -Offset "C91F8F" -Values "48" # Phantom Ganon   (Phase 2) (HP: <19)
-        ChangeBytes -Offset "CE6D2F" -Values "48" # Volvagia        0xCE65F0 -> 0xCED920 (Length: 0x7330) (ovl_Boss_Fd) (Has HP) (HP: 18) (Mass: 32) / 0xD04790 -> 0xD084C0 (Length:0x3D30) (ovl_Boss_Fd2) (Has No HP, Forwards HP to Flying)
-        ChangeBytes -Offset "D3B4A7" -Values "3C" # Morpha          0xD3ADF0 -> 0xD46390 (Length: 0xB5A0) (ovl_Boss_Mo) (HP: 14) (Mass: 00)
-        ChangeBytes -Offset "DAC824" -Values "6C" # Bongo Bongo     0xDA1660 -> 0xDADB80 (Length: 0xC520) (ovl_Boss_Sst) (HP: 24) (Mass: C8)
-        ChangeBytes -Offset "D7FDA3" -Values "78" # Ganondorf       0xD7F3F0 -> 0xDA1660 (Length: 0x22270) (ovl_Boss_Ganon) (HP: 28) (Mass: 32)
-        ChangeBytes -Offset "E82AFB" -Values "5A" # Ganon           0xE826C0 -> 0xE939B0 (Length: 0x112F0) (ovl_Boss_Ganon2) (HP: 1E) (Mass: FF)
-        ChangeBytes -Offset "E87F2F" -Values "3D" # Ganon           (Phase 2) (HP: <15)
-        ChangeBytes -Offset "D64EFA" -Values "0C" # Twinrova        (Phase 1) (Hit Counter: <4)
-        ChangeBytes -Offset "D6223E" -Values "48" # Twinrova        0xD612E0 -> 0xD74360 (Length: 0x13080) (ovl_Boss_Tw) (HP: 18) (Mass: FF)
+        ChangeBytes -Offset "C44F2B" -Values "1E" # Gohma                        (HP: 0A)   C44C30 -> C4ABB0 (Length: 5F80)  (ovl_Boss_Goma)
+        ChangeBytes -Offset "C486CC" -Values "00 00 00 00" # Spawn all three Gohma Larva at once
+        ChangeBytes -Offset "C3B9FF" -Values "24" # King Dodongo                 (HP: 0C)   C3B150 -> C44C30 (Length: 9AE0)  (ovl_Boss_Dodongo)
+        ChangeBytes -Offset "D258BB" -Values "0C" # Barinade        (Phase 1)    (HP: 04)   D22360 -> D30B50 (Length: E7F0)  (ovl_Boss_Va)
+        ChangeBytes -Offset "D25B0B" -Values "09" # Barinade        (Phases 4-6) (HP: 03)
+        ChangeBytes -Offset "C91F8F" -Values "5A" # Phantom Ganon   (Phase 1)    (HP: 1E)   C91AD0 -> C96840 (Length: 4D70)  (ovl_Boss_Ganondrof)
+        ChangeBytes -Offset "CAFF33" -Values "49" # Phantom Ganon   (Phase 2)    (HP: 19)
+        ChangeBytes -Offset "CE6D2F" -Values "48" # Volvagia                     (HP: 18)   CE65F0 -> CED920 (Length: 7330)  (ovl_Boss_Fd)
+        ChangeBytes -Offset "D3B4A7" -Values "3C" # Morpha                       (HP: 14)   D3ADF0 -> D46390 (Length: B5A0)  (ovl_Boss_Mo)
+        ChangeBytes -Offset "DAC824" -Values "6C" # Bongo Bongo                  (HP: 24)   DA1660 -> DADB80 (Length: C520)  (ovl_Boss_Sst)
+        ChangeBytes -Offset "D64EFB" -Values "0C" # Twinrova        (Phase 1)    (HP: 04)   D612E0 -> D74360 (Length: 13080) (ovl_Boss_Tw)
+        ChangeBytes -Offset "D6223F" -Values "48" # Twinrova        (Phase 2)    (HP: 18)
+        ChangeBytes -Offset "D7FDA3" -Values "78" # Ganondorf                    (HP: 28)   D7F3F0 -> DA1660 (Length: 22270) (ovl_Boss_Ganon)
+        ChangeBytes -Offset "E82AFB" -Values "5A" # Ganon           (Phase 1)    (HP: 1E)   E826C0 -> E939B0 (Length: 112F0) (ovl_Boss_Ganon2)
+        ChangeBytes -Offset "E87F2F" -Values "3D" # Ganon           (Phase 2)    (HP: 15)
     }
 
     
@@ -466,7 +565,7 @@ function ByteOptions() {
 
     # MASTER QUEST #
 
-    PatchDungeonsMQ
+    PatchDungeonsOoTMQ
 
 
 
@@ -898,8 +997,8 @@ function CreateTabLanguage() {
 function UnlockLanguageContent() {
     
     # English options
-    $Redux.Box.Dialogue.Controls.GetEnumerator() | ForEach-Object { EnableElem -Elem $_ -Active $Redux.Language[0].Checked }
-    $Redux.Box.Text.Controls.GetEnumerator()     | ForEach-Object { EnableElem -Elem $_ -Active $Redux.Language[0].Checked }
+    foreach ($item in $Redux.Box.Dialogue.Controls)   { EnableElem -Elem $item -Active $Redux.Language[0].Checked }
+    foreach ($item in $Redux.Box.Text.Controls)       { EnableElem -Elem $item -Active $Redux.Language[0].Checked }
 
     # Set max text speed in each language
     for ($i=0; $i -lt $GamePatch.languages.Length; $i++) {
@@ -954,19 +1053,16 @@ function CreateTabAudiovisual() {
     CreateReduxRadioButton -Name "ListMaleModels"   -Max 4 -SaveTo "Models" -Column 3 -Row 1 -Text "Male Models"             -Info "List all male model replacements to play as"
     CreateReduxRadioButton -Name "ListFemaleModels" -Max 4 -SaveTo "Models" -Column 4 -Row 1 -Text "Female Models"           -Info "List all female model replacements to play as"
     CreateReduxCheckBox    -Name "MMChildLink"  -Column 3 -Row 3 -Text "MM Child Model" -Info "Include the MM Child Link Model"
-    CreateReduxCheckBox -Name "ForceHiresModel" -Column 4 -Row 3 -Text "Force Hires Link Model" -Info "Always use Link's High Resolution Model when Link is too far away"                                 -Credits "GhostlyDark"
+    CreateReduxCheckBox -Name "ForceHiresModel" -Column 4 -Row 3 -Text "Force Hires Link Model" -Info "Always use Link's High Resolution Model when Link is too far away" -Credits "GhostlyDark"
 
-    $Models = LoadModelsList "Link" | Sort-Object
-    CreateReduxComboBox -Name "LinkModels"     -Column 1 -Row 3 -Text "Player Models:" -Items $Models -Length 240 -Default ($Models.indexOf("Majora's Mask") + 1) -Info "Replace the model(s) used for Link`nOptions include models styled after Link`nContains combined (Child + Adult) or individual (Adult) models"
-
-    $Models = LoadModelsList "Link+" | Sort-Object
-    CreateReduxComboBox -Name "LinkModelsPlus" -Column 1 -Row 3 -Text "Player Models:" -Items $Models -Length 240 -Default ($Models.indexOf("Majora's Mask") + 1) -Info "Replace the models used for Link`nOptions include models styled after Link`nAll options include the Majora's Mask Child Model"
-
-    $Models = LoadModelsList "Male" | Sort-Object
-    CreateReduxComboBox -Name "MaleModels"     -Column 1 -Row 3 -Text "Player Models:" -Items $Models -Length 240 -Default ($Models.indexOf("Mega Man") + 1) -Info "Replace the models used for Link`nOptions include custom male models"
-
+    $Models = LoadModelsList "Link"   | Sort-Object
+    CreateReduxComboBox -Name "LinkModels"      -Column 1 -Row 3 -Text "Player Models" -Items $Models -Length 240 -Default ($Models.indexOf("Majora's Mask") + 1)       -Info "Replace the model(s) used for Link`nOptions include models styled after Link`nContains combined (Child + Adult) or individual (Adult) models"
+    $Models = LoadModelsList "Link+"  | Sort-Object
+    CreateReduxComboBox -Name "LinkModelsPlus"  -Column 1 -Row 3 -Text "Player Models" -Items $Models -Length 240 -Default ($Models.indexOf("Majora's Mask") + 1)       -Info "Replace the models used for Link`nOptions include models styled after Link`nAll options include the Majora's Mask Child Model"
+    $Models = LoadModelsList "Male"   | Sort-Object
+    CreateReduxComboBox -Name "MaleModels"      -Column 1 -Row 3 -Text "Player Models" -Items $Models -Length 240 -Default ($Models.indexOf("Mega Man") + 1)            -Info "Replace the models used for Link`nOptions include custom male models"
     $Models = LoadModelsList "Female" | Sort-Object
-    CreateReduxComboBox -Name "FemaleModels"   -Column 1 -Row 3 -Text "Player Models:" -Items $Models -Length 240 -Default ($Models.indexOf("Hatsune Miku - Link") + 1) -Info "Replace the models used for Link`nOptions include custom female models"
+    CreateReduxComboBox -Name "FemaleModels"    -Column 1 -Row 3 -Text "Player Models" -Items $Models -Length 240 -Default ($Models.indexOf("Hatsune Miku - Link") + 1) -Info "Replace the models used for Link`nOptions include custom female models"
 
     
 
@@ -993,9 +1089,9 @@ function CreateTabAudiovisual() {
 
     # SOUNDS / VOICES #
     CreateReduxGroup    -Tag  "Sounds" -Text "Sounds / Voices"
-    CreateReduxComboBox -Name "Voices"           -Column 1 -Text "Link's Voice:"       -Items @("Original", "Majora's Mask", "Feminine")  -Info "1. Keep the original voices for Link`n2. Replace the voices for Link with those used in Majora's Mask`n2. Replace the voices for Link to sound feminine" -Credits "`nMajora's Mask: Ported by Korey Cryderman and corrected by GhostlyDark`nFeminine: theluigidude2007"
+    CreateReduxComboBox -Name "Voices"         -Column 1 -Text "Link's Voice" -Items @("Original", "Majora's Mask", "Feminine")  -Info "1. Keep the original voices for Link`n2. Replace the voices for Link with those used in Majora's Mask`n2. Replace the voices for Link to sound feminine" -Credits "`nMajora's Mask: Ported by Korey Cryderman and corrected by GhostlyDark`nFeminine: theluigidude2007"
     if ($Settings.Debug.LiteGUI -eq $False) {
-        CreateReduxComboBox -Name "Instrument"   -Column 3 -Text "Instrument:"         -Items @("Ocarina", "Female", "Voice", "Whistle Harp", "Grind-Organ", "Flute") -Info "Replace the sound used for playing the Ocarina of Time" -Credits "Ported from Rando"
+        CreateReduxComboBox -Name "Instrument" -Column 3 -Text "Instrument"   -Items @("Ocarina", "Female", "Voice", "Whistle Harp", "Grind-Organ", "Flute") -Info "Replace the sound used for playing the Ocarina of Time" -Credits "Ported from Rando"
     }
 
 
@@ -1005,19 +1101,19 @@ function CreateTabAudiovisual() {
     # SFX SOUND EFFECTS #
     CreateReduxGroup    -Tag "SFX" -Text "SFX Sound Effects" -Height 3
     $SFX = @("Default", "Disabled", "Soft Beep", "Bark", "Bomb Bounce", "Bongo Bongo Low", "Bow Twang", "Business Scrub", "Carrot Refill", "Cluck", "Drawbridge Set", "Guay", "Horse Trot", "HP Recover", "Iron Boots", "Moo", "Mweep!", 'Navi "Hey!"', "Navi Random", "Notification", "Pot Shattering", "Ribbit", "Rupee (Silver)", "Switch", "Sword Bonk", "Tambourine", "Timer", "Zelda Gasp (Adult)")
-    CreateReduxComboBox -Name "LowHP"            -Column 1 -Row 1 -Text "Low HP:"      -Items $SFX -Info "Set the sound effect for the low HP beeping"                      -Credits "Ported from Rando"
+    CreateReduxComboBox -Name "LowHP"      -Column 1 -Row 1 -Text "Low HP"      -Items $SFX -Info "Set the sound effect for the low HP beeping"                      -Credits "Ported from Rando"
     $SFX = @("Default",  "Disabled", "Soft Beep", "Bark", "Business Scrub", "Carrot Refill", "Cluck", "Cockadoodledoo", "Dusk Howl", "Exploding Crate", "Explosion", "Great Fairy", "Guay", "Horse Neigh", "HP Low", "HP Recover", "Ice Shattering", "Moo", "Meweep!", 'Navi "Hello!"', "Notification", "Pot Shattering", "Redead Scream", "Ribbit", "Ruto Giggle", "Skulltula", "Tambourine", "Timer", "Zelda Gasp (Adult)")
-    CreateReduxComboBox -Name "Navi"             -Column 3 -Row 1 -Text "Navi:"        -Items $SFX -Info "Replace the sound used for Navi when she wants to tell something" -Credits "Ported from Rando"
-    CreateReduxComboBox -Name "ZTarget"          -Column 5 -Row 1 -Text "Z-Target:"    -Items $SFX -Info "Replace the sound used for Z-Targeting enemies"                   -Credits "Ported from Rando"
+    CreateReduxComboBox -Name "Navi"       -Column 3 -Row 1 -Text "Navi"        -Items $SFX -Info "Replace the sound used for Navi when she wants to tell something" -Credits "Ported from Rando"
+    CreateReduxComboBox -Name "ZTarget"    -Column 5 -Row 1 -Text "Z-Target"    -Items $SFX -Info "Replace the sound used for Z-Targeting enemies"                   -Credits "Ported from Rando"
 
-    CreateReduxComboBox -Name "HoverBoots"       -Column 1 -Row 2 -Text "Hover Boots:" -Items @("Default", "Disabled", "Bark", "Cartoon Fall", "Flare Dancer Laugh", "Mweep!", "Shabom Pop", "Tambourine") -Info "Replace the sound used for the Hover Boots"                              -Credits "Ported from Rando"
-    CreateReduxComboBox -Name "Horse"            -Column 3 -Row 2 -Text "Horse Neigh:" -Items @("Default", "Disabled", "Armos", "Child Scream", "Great Fairy", "Moo", "Mweep!", "Redead Scream", "Ruto Wiggle", "Stalchild Attack") -Info "Replace the sound for horses when neighing"     -Credits "Ported from Rando"
-    CreateReduxComboBox -Name "Nightfall"        -Column 5 -Row 2 -Text "Nightfall:"   -Items @("Default", "Disabled", "Cockadoodledoo", "Gold Skull Token", "Great Fairy", "Moo", "Mweep!", "Redead Moan", "Talon Snore", "Thunder") -Info "Replace the sound used when Nightfall occurs" -Credits "Ported from Rando"
+    CreateReduxComboBox -Name "HoverBoots" -Column 1 -Row 2 -Text "Hover Boots" -Items @("Default", "Disabled", "Bark", "Cartoon Fall", "Flare Dancer Laugh", "Mweep!", "Shabom Pop", "Tambourine")                            -Info "Replace the sound used for the Hover Boots"   -Credits "Ported from Rando"
+    CreateReduxComboBox -Name "Horse"      -Column 3 -Row 2 -Text "Horse Neigh" -Items @("Default", "Disabled", "Armos", "Child Scream", "Great Fairy", "Moo", "Mweep!", "Redead Scream", "Ruto Wiggle", "Stalchild Attack")   -Info "Replace the sound for horses when neighing"   -Credits "Ported from Rando"
+    CreateReduxComboBox -Name "Nightfall"  -Column 5 -Row 2 -Text "Nightfall"   -Items @("Default", "Disabled", "Cockadoodledoo", "Gold Skull Token", "Great Fairy", "Moo", "Mweep!", "Redead Moan", "Talon Snore", "Thunder") -Info "Replace the sound used when Nightfall occurs" -Credits "Ported from Rando"
     $SFX = @("Default", "Disabled", "Soft Beep", "Bark", "Bomb Bounce", "Bongo Bongo High", "Bongo Bongo Low", "Bottle Cork", "Bow Twang", "Bubble Laugh", "Carrot Refill", "Change Item", "Child Pant", "Cluck", "Deku Baba", "Drawbridge Set", "Dusk Howl", "Fanfare (Light)", "Fanfare (Medium)", "Field Shrub", "Flare Dancer Startled",
     'Ganondorf "Teh"', "Gohma Larva Croak", "Gold Skull Token", "Goron Wake", "Guay", "Gunshot", "Hammer Bonk", "Horse Trot", "HP Low", "HP Recover", "Iron Boots", "Iron Knuckle", "Moo", "Mweep!", "Notification", "Phantom Ganon Laugh", "Plant Explode", "Pot Shattering", "Redead Moan", "Ribbit", "Rupee", "Rupee (Silver)", "Ruto Crash",
     "Ruto Lift", "Ruto Thrown", "Scrub Emerge", "Shabom Bounce", "Shabom Pop", "Shellblade", "Skulltula", "Spit Nut", "Switch", "Sword Bonk", 'Talon "Hmm"', "Talon Snore", "Talon WTF", "Tambourine", "Target Enemy", "Target Neutral", "Thunder", "Timer", "Zelda Gasp (Adult)")
-    CreateReduxComboBox -Name "FileCursor"       -Column 1 -Row 3 -Text "File Cursor:" -Items $SFX -Info "Replace the sound used when moving the cursor in the File Select menu"   -Credits "Ported from Rando"
-    CreateReduxComboBox -Name "FileSelect"       -Column 3 -Row 3 -Text "File Select:" -Items $SFX -Info "Replace the sound used when selecting something in the File Select menu" -Credits "Ported from Rando"
+    CreateReduxComboBox -Name "FileCursor" -Column 1 -Row 3 -Text "File Cursor" -Items $SFX -Info "Replace the sound used when moving the cursor in the File Select menu"   -Credits "Ported from Rando"
+    CreateReduxComboBox -Name "FileSelect" -Column 3 -Row 3 -Text "File Select" -Items $SFX -Info "Replace the sound used when selecting something in the File Select menu" -Credits "Ported from Rando"
 
     }
 
@@ -1026,8 +1122,8 @@ function CreateTabAudiovisual() {
     $Music = @("None", "File Select", "Hyrule Field", "Market", "Kakariko Village (Child)", "Kakariko Village (Adult)", "Windmill Hut", "Hyrule Castle Courtyard", "Lon Lon Ranch", "Kokiri Forest", "Lost Woods", "Goron City", "Zora's Domain", "Gerudo Valley", "Chamber of the Sages", "Shop", "House", "Potion Shop",
     "Inside the Deku Tree", "Dodongo's Cavern", "Inside Jabu-Jabu's Belly", "Forest Temple", "Fire Temple", "Water Temple", "Ice Cavern", "Shadow Temple", "Spirit Temple", "Ganon's Castle Under Ground",
     "Battle", "Mini-Boss Battle", "Boss Battle", "Boss Battle 2", "Ganondorf Battle", "Ganon Battle", "End Credits I", "End Credits II", "End Credits III", "End Credits IV")
-    CreateReduxComboBox -Name "Music"  -Column 1 -Text "Music:"  -Default 2 -Items $Music -Info "Set the skybox music theme for the File Select menu" -Credits "Admentus"
-    CreateReduxComboBox -Name "Skybox" -Column 3 -Text "Skybox:" -Default 4 -Items @("Dawn", "Day", "Dusk", "Night", "Dawn", "Darkness (Day)", "Darkness (Dusk)", "Darkness (Night)") -Info "Set the skybox theme for the File Select menu" -Credits "Admentus"
+    CreateReduxComboBox -Name "Music"  -Column 1 -Text "Music"  -Default 2 -Items $Music -Info "Set the skybox music theme for the File Select menu" -Credits "Admentus"
+    CreateReduxComboBox -Name "Skybox" -Column 3 -Text "Skybox" -Default 4 -Items @("Dawn", "Day", "Dusk", "Night", "Dawn", "Darkness (Day)", "Darkness (Dusk)", "Darkness (Night)") -Info "Set the skybox theme for the File Select menu" -Credits "Admentus"
     
 
 }
@@ -1039,11 +1135,12 @@ function CreateTabDifficulty() {
     
     # HERO MODE #
     CreateReduxGroup    -Tag  "Hero" -Text "Hero Mode" -Height 2
-    CreateReduxComboBox -Name "Damage"     -Column 1 -Row 1 -Text "Damage:"      -Items @("1x Damage", "2x Damage", "4x Damage", "8x Damage", "OHKO Mode") -Info "Set the amount of damage you receive`nOHKO Mode = You die in one hit" -Credits "Admentus"
-    CreateReduxComboBox -Name "Recovery"   -Column 3 -Row 1 -Text "Recovery:"    -Items @("1x Recovery", "1/2x Recovery", "1/4x Recovery", "0x Recovery")  -Info "Set the amount health you recovery from Recovery Hearts"              -Credits "Admentus"
-    CreateReduxComboBox -Name "MagicUsage" -Column 5 -Row 1 -Text "Magic Usage:" -Items @("1x Magic Usage", "2x Magic Usage", "3x Magic Usage")            -Info "Set the amount of times magic is consumed at"                         -Credits "Admentus"
-    CreateReduxComboBox -Name "BossHP"     -Column 1 -Row 2 -Text "Boss HP:"     -Items @("1x Boss HP", "2x Boss HP", "3x Boss HP")                        -Info "Set the amount of health for bosses"                                  -Credits "Admentus & Marcelo20XX"
-  # CreateReduxComboBox -Name "MonsterHP"  -Column 3 -Row 2 -Text "Monster HP:"  -Items @("1x Monster HP", "2x Monster HP", "3x Monster HP")               -Info "Set the amount of health for monsters"                                -Credits "Admentus"
+    CreateReduxComboBox -Name "Damage"     -Column 1 -Row 1 -Shift 10 -Text "Damage"       -Items @("1x Damage", "2x Damage", "4x Damage", "8x Damage", "OHKO Mode") -Info "Set the amount of damage you receive`nOHKO Mode = You die in one hit" -Credits "Admentus"
+    CreateReduxComboBox -Name "Recovery"   -Column 3 -Row 1 -Shift 10 -Text "Recovery"     -Items @("1x Recovery", "1/2x Recovery", "1/4x Recovery", "0x Recovery")  -Info "Set the amount health you recovery from Recovery Hearts"              -Credits "Admentus"
+    CreateReduxComboBox -Name "MagicUsage" -Column 5 -Row 1 -Shift 10 -Text "Magic Usage"  -Items @("1x Magic Usage", "2x Magic Usage", "3x Magic Usage")            -Info "Set the amount of times magic is consumed at"                         -Credits "Admentus"
+    CreateReduxComboBox -Name "MonsterHP"  -Column 5 -Row 2 -Shift 10 -Text "Monster HP"   -Items @("1x Monster HP", "2x Monster HP", "3x Monster HP")               -Info "Set the amount of health for monsters"                                -Credits "Admentus" -Warning "Half of the enemies are missing"
+    CreateReduxComboBox -Name "MiniBossHP" -Column 3 -Row 2 -Shift 10 -Text "Mini-Boss HP" -Items @("1x Mini-Boss HP", "2x Mini-Boss HP", "3x Mini-Boss HP")         -Info "Set the amount of health for elite monsters and mini-bosses"          -Credits "Admentus" -Warning "Big Octo and Dark Link are missing"
+    CreateReduxComboBox -Name "BossHP"     -Column 1 -Row 2 -Shift 10 -Text "Boss HP"      -Items @("1x Boss HP", "2x Boss HP", "3x Boss HP")                        -Info "Set the amount of health for bosses"                                  -Credits "Admentus & Marcelo20XX"
     
     if ($Settings.Debug.LiteGUI -eq $True) { return }
 
@@ -1072,8 +1169,8 @@ function CreateTabDifficulty() {
     # RANDOMIZE MASTER QUEST DUNGEONS #
     $Redux.Box.RandomizeMQ = CreateReduxGroup -Tag "MQ" -Text "Randomize - Master Quest Dungeons"
     $Items = @("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12")
-    CreateReduxComboBox -Name "Minimum" -Column 1 -Text "Minimum:" -Default 1  -Items $Items
-    CreateReduxComboBox -Name "Maximum" -Column 3 -Text "Maximum:" -Default 13 -Items $Items
+    CreateReduxComboBox -Name "Minimum" -Column 1 -Shift 10 -Text "Minimum" -Default 1            -Items $Items
+    CreateReduxComboBox -Name "Maximum" -Column 3 -Shift 10 -Text "Maximum" -Default $Items.Count -Items $Items
 
 
 
@@ -1104,13 +1201,13 @@ function CreateTabColors() {
     CreateReduxGroup -Tag "Colors" -Text "Equipment Colors" -Height 3
     $Redux.Colors.Equipment = @()
     $Colors = @("Kokiri Green", "Goron Red", "Zora Blue", "Black", "White", "Azure Blue", "Vivid Cyan", "Light Red", "Fuchsia", "Purple", "Majora Purple", "Twitch Purple", "Persian Rose", "Dirty Yellow", "Blush Pink", "Hot Pink", "Rose Pink", "Orange", "Gray", "Gold", "Silver", "Beige", "Teal", "Blood Red", "Blood Orange", "Royal Blue", "Sonic Blue", "NES Green", "Dark Green", "Lumen", "Randomized", "Custom")
-    $Redux.Colors.Equipment += CreateReduxComboBox -Name "KokiriTunic"       -Column 1 -Row 1 -Text "Kokiri Tunic Color:"        -Default 1 -Length 230 -Shift 70 -Items $Colors -Info ("Select a color scheme for the Kokiri Tunic`n" + '"Randomized" fully randomizes the colors each time the patcher is opened') -Credits "Ported from Rando"
-    $Redux.Colors.Equipment += CreateReduxComboBox -Name "GoronTunic"        -Column 1 -Row 2 -Text "Goron Tunic Color:"         -Default 2 -Length 230 -Shift 70 -Items $Colors -Info ("Select a color scheme for the Goron Tunic`n" + '"Randomized" fully randomizes the colors each time the patcher is opened')  -Credits "Ported from Rando"
-    $Redux.Colors.Equipment += CreateReduxComboBox -Name "ZoraTunic"         -Column 1 -Row 3 -Text "Zora Tunic Color:"          -Default 3 -Length 230 -Shift 70 -Items $Colors -Info ("Select a color scheme for the Zora Tunic`n" + '"Randomized" fully randomizes the colors each time the patcher is opened')   -Credits "Ported from Rando"
+    $Redux.Colors.Equipment += CreateReduxComboBox -Name "KokiriTunic"       -Column 1 -Row 1 -Text "Kokiri Tunic Color"        -Default 1 -Length 230 -Shift 70 -Items $Colors -Info ("Select a color scheme for the Kokiri Tunic`n" + '"Randomized" fully randomizes the colors each time the patcher is opened') -Credits "Ported from Rando"
+    $Redux.Colors.Equipment += CreateReduxComboBox -Name "GoronTunic"        -Column 1 -Row 2 -Text "Goron Tunic Color"         -Default 2 -Length 230 -Shift 70 -Items $Colors -Info ("Select a color scheme for the Goron Tunic`n" + '"Randomized" fully randomizes the colors each time the patcher is opened')  -Credits "Ported from Rando"
+    $Redux.Colors.Equipment += CreateReduxComboBox -Name "ZoraTunic"         -Column 1 -Row 3 -Text "Zora Tunic Color"          -Default 3 -Length 230 -Shift 70 -Items $Colors -Info ("Select a color scheme for the Zora Tunic`n" + '"Randomized" fully randomizes the colors each time the patcher is opened')   -Credits "Ported from Rando"
     $Colors = @("Silver", "Gold", "Black", "Green", "Blue", "Bronze", "Red", "Sky Blue", "Pink", "Magenta", "Orange", "Lime", "Purple", "Randomized", "Custom")
-    $Redux.Colors.Equipment += CreateReduxComboBox -Name "SilverGauntlets"   -Column 4 -Row 1 -Text "Silver Gauntlets Color:"    -Default 1 -Length 230 -Shift 70 -Items $Colors -Info ("Select a color scheme for the Silver Gauntlets`n" + '"Randomized" fully randomizes the colors each time the patcher is opened') -Credits "Ported from Rando"
-    $Redux.Colors.Equipment += CreateReduxComboBox -Name "GoldenGauntlets"   -Column 4 -Row 2 -Text "Golden Gauntlets Color:"    -Default 2 -Length 230 -Shift 70 -Items $Colors -Info ("Select a color scheme for the Golden Gauntlets`n" + '"Randomized" fully randomizes the colors each time the patcher is opened') -Credits "Ported from Rando"
-    $Redux.Colors.Equipment += CreateReduxComboBox -Name "MirrorShieldFrame" -Column 4 -Row 3 -Text "Mirror Shield Frame Color:" -Default 1 -Length 230 -Shift 70 -Items @("Red", "Green", "Blue", "Yellow", "Cyan", "Magenta", "Orange", "Gold", "Purple", "Pink", "Randomized", "Custom") -Info "Select a color scheme for the Mirror Shield Frame`n- This option might not work for every custom player model" -Credits "Ported from Rando"
+    $Redux.Colors.Equipment += CreateReduxComboBox -Name "SilverGauntlets"   -Column 4 -Row 1 -Text "Silver Gauntlets Color"    -Default 1 -Length 230 -Shift 70 -Items $Colors -Info ("Select a color scheme for the Silver Gauntlets`n" + '"Randomized" fully randomizes the colors each time the patcher is opened') -Credits "Ported from Rando"
+    $Redux.Colors.Equipment += CreateReduxComboBox -Name "GoldenGauntlets"   -Column 4 -Row 2 -Text "Golden Gauntlets Color"    -Default 2 -Length 230 -Shift 70 -Items $Colors -Info ("Select a color scheme for the Golden Gauntlets`n" + '"Randomized" fully randomizes the colors each time the patcher is opened') -Credits "Ported from Rando"
+    $Redux.Colors.Equipment += CreateReduxComboBox -Name "MirrorShieldFrame" -Column 4 -Row 3 -Text "Mirror Shield Frame Color" -Default 1 -Length 230 -Shift 70 -Items @("Red", "Green", "Blue", "Yellow", "Cyan", "Magenta", "Orange", "Gold", "Purple", "Pink", "Randomized", "Custom") -Info "Select a color scheme for the Mirror Shield Frame`n- This option might not work for every custom player model" -Credits "Ported from Rando"
 
     # Equipment Colors - Buttons
     $Buttons = @()
@@ -1194,26 +1291,26 @@ function CreateTabEquipment() {
 
     # WALLET #
     $Redux.Box.Wallet = CreateReduxGroup -Tag "Capacity" -Text "Wallet Capacity Selection"
-    CreateReduxTextBox -Name "Wallet1" -Length 4 -Text "Wallet (1)"     -Value 99  -Info "Set the capacity for the Wallet (Base)`nDefault = 99"            -Credits "GhostlyDark"
-    CreateReduxTextBox -Name "Wallet2" -Length 4 -Text "Wallet (2)"     -Value 200 -Info "Set the capacity for the Wallet (Upgrade 1)`nDefault = 200"      -Credits "GhostlyDark"
-    CreateReduxTextBox -Name "Wallet3" -Length 4 -Text "Wallet (3)"     -Value 500 -Info "Set the capacity for the Wallet (Upgrade 2)`nDefault = 500"      -Credits "GhostlyDark"
-    CreateReduxTextBox -Name "Wallet4" -Length 4 -Text "Wallet (4) (U)" -Value 500 -Info "Set the capacity for the Wallet (Unused Upgrade)`nDefault = 500" -Credits "GhostlyDark"
+    CreateReduxTextBox -Name "Wallet1" -Length 4 -Text "Wallet (1)" -Value 99  -Info "Set the capacity for the Wallet (Base)`nDefault = 99"       -Credits "GhostlyDark"
+    CreateReduxTextBox -Name "Wallet2" -Length 4 -Text "Wallet (2)" -Value 200 -Info "Set the capacity for the Wallet (Upgrade 1)`nDefault = 200" -Credits "GhostlyDark"
+    CreateReduxTextBox -Name "Wallet3" -Length 4 -Text "Wallet (3)" -Value 500 -Info "Set the capacity for the Wallet (Upgrade 2)`nDefault = 500" -Credits "GhostlyDark"
+    CreateReduxTextBox -Name "Wallet4" -Length 4 -Text "Wallet (4)" -Value 500 -Info "Set the capacity for the Wallet (Upgrade 3)`nDefault = 500" -Credits "GhostlyDark" -Warning "This wallet is not obtained through regular gameplay"
 
     # UNLOCK CHILD RESTRICTIONS #
     CreateReduxGroup    -Tag  "Unlock" -Text "Unlock Child Restrictions"
-    CreateReduxCheckBox -Name "Tunics"        -Text "Unlock Tunics"            -Info "Child Link is able to use the Goron Tunic and Zora Tunic`nSince you might want to walk around in style as well when you are young`nThe dialogue script will be adjusted to reflect this (only for English)" -Credits "GhostlyDark"
-    CreateReduxCheckBox -Name "MasterSword"   -Text "Unlock Master Sword"      -Info "Child Link is able to use the Master Sword`nThe Master Sword does twice as much damage as the Kokiri Sword" -Credits "GhostlyDark"
-    CreateReduxCheckBox -Name "GiantsKnife"   -Text "Unlock Giant's Knife [!]" -Info "Child Link is able to use the Giant's Knife / Biggoron Sword`nThe Giant's Knife / Biggoron Sword does four times as much damage as the Kokiri Sword`n[!] The Giant's Knife / Biggoron Sword appears as if Link if thrusting the sword through the ground" -Credits "GhostlyDark"
-    CreateReduxCheckBox -Name "MirrorShield"  -Text "Unlock Mirror Shield [!]" -Info "Child Link is able to use the Mirror Shield`n[!] The Mirror Shield appears as invisible but can still reflect magic or sunlight" -Credits "GhostlyDark"
-    CreateReduxCheckBox -Name "Boots"         -Text "Unlock Boots [!]"         -Info "Child Link is able to use the Iron Boots and Hover Boots`n[!] The Iron and Hover Boots appears as the Kokiri Boots"              -Credits "GhostlyDark"
-    CreateReduxCheckBox -Name "MegatonHammer" -Text "Unlock Hammer [!]"        -Info "Child Link is able to use the Megaton Hammer`n[!] The Megaton Hammer appears as invisible"                                       -Credits "GhostlyDark"
+    CreateReduxCheckBox -Name "Tunics"        -Text "Unlock Tunics"        -Info "Child Link is able to use the Goron Tunic and Zora Tunic`nSince you might want to walk around in style as well when you are young`nThe dialogue script will be adjusted to reflect this (only for English)" -Credits "GhostlyDark"
+    CreateReduxCheckBox -Name "MasterSword"   -Text "Unlock Master Sword"  -Info "Child Link is able to use the Master Sword`nThe Master Sword does twice as much damage as the Kokiri Sword" -Credits "GhostlyDark"
+    CreateReduxCheckBox -Name "GiantsKnife"   -Text "Unlock Giant's Knife" -Info "Child Link is able to use the Giant's Knife / Biggoron Sword`nThe Giant's Knife / Biggoron Sword does four times as much damage as the Kokiri Sword" -Credits "GhostlyDark" -Warning "The Giant's Knife / Biggoron Sword appears as if Link if thrusting the sword through the ground"
+    CreateReduxCheckBox -Name "MirrorShield"  -Text "Unlock Mirror Shield" -Info "Child Link is able to use the Mirror Shield"              -Credits "GhostlyDark" -Warning "The Mirror Shield appears as invisible but can still reflect magic or sunlight"
+    CreateReduxCheckBox -Name "Boots"         -Text "Unlock Boots"         -Info "Child Link is able to use the Iron Boots and Hover Boots" -Credits "GhostlyDark" -Warning "The Iron and Hover Boots appears as the Kokiri Boots"
+    CreateReduxCheckBox -Name "MegatonHammer" -Text "Unlock Hammer"        -Info "Child Link is able to use the Megaton Hammer"             -Credits "GhostlyDark" -Warning "The Megaton Hammer appears as invisible"
 
     # UNLOCK ADULT RESTRICTIONS #
     CreateReduxGroup    -Tag  "Unlock" -Text "Unlock Adult Restrictions"
-    CreateReduxCheckBox -Name "KokiriSword"    -Text "Unlock Kokiri Sword"      -Info "Adult Link is able to use the Kokiri Sword`nThe Kokiri Sword does half as much damage as the Master Sword"          -Credits "GhostlyDark"
-    CreateReduxCheckBox -Name "DekuShield"     -Text "Unlock Deku Shield [!]"   -Info "Adult Link is able to use the Deku Shield`n[!] The Deku Shield appears as invisible but can still be burned up by fire" -Credits "GhostlyDark"
-    CreateReduxCheckBox -Name "FairySlingshot" -Text "Unlock Slingshot [!]"     -Info "Adult Link is able to use the Fairy Slingshot`n[!] The Fairy Slingshot appears as the Fairy Bow"                    -Credits "GhostlyDark"
-    CreateReduxCheckBox -Name "Boomerang"      -Text "Unlock Boomerang [!]"     -Info "Adult Link is able to use the Boomerang`n[!] The Boomerang appears as invisible"                                    -Credits "GhostlyDark"
+    CreateReduxCheckBox -Name "KokiriSword"    -Text "Unlock Kokiri Sword"  -Info "Adult Link is able to use the Kokiri Sword`nThe Kokiri Sword does half as much damage as the Master Sword" -Credits "GhostlyDark"
+    CreateReduxCheckBox -Name "DekuShield"     -Text "Unlock Deku Shield"   -Info "Adult Link is able to use the Deku Shield"     -Credits "GhostlyDark" -Warning "The Deku Shield appears as invisible but can still be burned up by fire"
+    CreateReduxCheckBox -Name "FairySlingshot" -Text "Unlock Slingshot"     -Info "Adult Link is able to use the Fairy Slingshot" -Credits "GhostlyDark" -Warning "The Fairy Slingshot appears as the Fairy Bow"
+    CreateReduxCheckBox -Name "Boomerang"      -Text "Unlock Boomerang"     -Info "Adult Link is able to use the Boomerang"       -Credits "GhostlyDark" -Warning "The Boomerang appears as invisible"
 
 
 

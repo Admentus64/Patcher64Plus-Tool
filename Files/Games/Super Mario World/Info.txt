@@ -20,7 +20,6 @@ Instructions:
 
 Information:
 - Original SFC ROM or VC WAD is preserved
-- Redux should be compatible with existing AR/Gecko Codes
 - The VC WAD forces "Downgrade" to Rev 0
     
 Programs:

@@ -223,17 +223,17 @@ function SetGetROM() {
         $GetROM.keepConvert   = $ROMFile.Convert
         $GetROM.keepDowngrade = $ROMFile.Downgrade
         $GetROM.keepDecomp    = $ROMFile.Decomp
+        $GetROM.input         
     }
 
     if ($GetROM.in -ne $null) {
         $GetROM.run = $GetROM.in
-        $Paths.Input =  [System.IO.Path]::GetDirectoryName($GetROM.in)
         $global:ROMHashSum = (Get-FileHash -Algorithm MD5 $GetROM.in).Hash
     }
 
     if ($Settings.Debug.CreateBPS -eq $True) {
-        $Files.compBPS   = $Paths.Input + "\compressed.bps"
-        $Files.decompBPS = $Paths.Input + "\decompressed.bps"
+        $Files.compBPS   = [System.IO.Path]::GetDirectoryName($GetROM.in) + "\" + [System.IO.Path]::GetFileNameWithoutExtension($GetROM.in) + "_compressed.bps"
+        $Files.decompBPS = [System.IO.Path]::GetDirectoryName($GetROM.in) + "\" + [System.IO.Path]::GetFileNameWithoutExtension($GetROM.in) + "_decompressed.bps"
     }
 
 }
@@ -244,7 +244,7 @@ function SetGetROM() {
 function CheckFilesExists([hashtable]$HashTable) {
     
     $FilesMissing = $False
-    $HashTable.GetEnumerator() | ForEach-Object {
+    $HashTable.GetEnumerator() | foreach {
         if ( !(TestFile $_.value) -and (IsSet $_.value) ) {
             $FilesMissing = $True
             Write-Host "Missing file: " $_.value

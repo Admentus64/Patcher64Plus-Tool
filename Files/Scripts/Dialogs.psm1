@@ -36,17 +36,17 @@ function CreateOptionsDialog([int32]$Width, [int32]$Height, [Array]$Tabs=@()) {
 
 
 #==============================================================================================================================================================================================
-function CreateLanguageContent($Columns=[byte][Math]::Round($Redux.Panel.Width / 300)) {
+function CreateLanguageContent($Columns=[byte][Math]::Round($Redux.Panel.Width / 340)) {
     
     # Box + Panel
-    $Rows = [Math]::Ceiling($GamePatch.languages.Count /  $Columns)
+    $Rows = [Math]::Ceiling($GamePatch.languages.length /  $Columns)
     CreateReduxGroup -Text "Languages" -Tag "Language" -Height $Rows
     $Last.Group.IsLanguage = $True
     CreateReduxPanel -Rows $Rows
 
     if (IsSet -Elem $GamePatch.languages -MinLength 0) {
-        $Row = 0
-        for ($i=0; $i -lt $GamePatch.languages.Count; $i++) {
+        $Row = $Column = 0
+        for ($i=0; $i -lt $GamePatch.languages.length; $i++) {
             if ($i % $Columns -ne 0) { $Column += 1 }
             else {
                 $Column = 0
@@ -56,7 +56,7 @@ function CreateLanguageContent($Columns=[byte][Math]::Round($Redux.Panel.Width /
         }
     
         $HasDefault = $False
-        for ($i=0; $i -lt $GamePatch.languages.Length; $i++) {
+        foreach ($i in 0..($GamePatch.languages.Length-1)) {
             if ($Redux.Language[$i].Checked) {
                 $HasDefault = $True
                 break
@@ -85,11 +85,11 @@ function CreateCreditsDialog() {
     # Create Switch subpanel buttons
     $global:Credits = @{}
     $Credits.Buttons = @()
-    $Credits.Buttons += CreateButton -X (DPISize 40) -Y (DPISize 70) -Width (DPISize 120) -Height (DPISize 30) -ForeColor "White" -BackColor "Gray" -Text "Info" -Tag $Credits.Buttons.Count -Info "Check the info for this game" -AddTo $CreditsDialog
-    $Credits.Buttons += CreateButton -X ($Credits.Buttons[0].Right) -Y $Credits.Buttons[0].Top -Width $Credits.Buttons[0].Width -Height $Credits.Buttons[0].Height -ForeColor "White" -BackColor "Gray" -Text "Credits"  -Tag $Credits.Buttons.Count -Info "Check the credits for this game" -AddTo $CreditsDialog
-    $Credits.Buttons += CreateButton -X ($Credits.Buttons[1].Right) -Y $Credits.Buttons[0].Top -Width $Credits.Buttons[0].Width -Height $Credits.Buttons[0].Height -ForeColor "White" -BackColor "Gray" -Text "GameID's" -Tag $Credits.Buttons.Count -Info "Open the list with official and patched GameID's" -AddTo $CreditsDialog
-    $Credits.Buttons += CreateButton -X ($Credits.Buttons[2].Right) -Y $Credits.Buttons[0].Top -Width $Credits.Buttons[0].Width -Height $Credits.Buttons[0].Height -ForeColor "White" -BackColor "Gray" -Text "Misc"     -Tag $Credits.Buttons.Count -Info "General credits and info in general" -AddTo $CreditsDialog
-    $Credits.Buttons += CreateButton -X ($Credits.Buttons[3].Right) -Y $Credits.Buttons[0].Top -Width $Credits.Buttons[0].Width -Height $Credits.Buttons[0].Height -ForeColor "White" -BackColor "Gray" -Text "Checksum" -Tag $Credits.Buttons.Count -Info "General credits and info in general" -AddTo $CreditsDialog
+    $Credits.Buttons += CreateButton -X (DPISize 40) -Y (DPISize 70) -Width (DPISize 120) -Height (DPISize 30) -ForeColor "White" -BackColor "Gray" -Text "Info" -Tag $Credits.Buttons.length -Info "Check the info for this game" -AddTo $CreditsDialog
+    $Credits.Buttons += CreateButton -X ($Credits.Buttons[0].Right) -Y $Credits.Buttons[0].Top -Width $Credits.Buttons[0].Width -Height $Credits.Buttons[0].Height -ForeColor "White" -BackColor "Gray" -Text "Credits"  -Tag $Credits.Buttons.length -Info "Check the credits for this game" -AddTo $CreditsDialog
+    $Credits.Buttons += CreateButton -X ($Credits.Buttons[1].Right) -Y $Credits.Buttons[0].Top -Width $Credits.Buttons[0].Width -Height $Credits.Buttons[0].Height -ForeColor "White" -BackColor "Gray" -Text "GameID's" -Tag $Credits.Buttons.length -Info "Open the list with official and patched GameID's" -AddTo $CreditsDialog
+    $Credits.Buttons += CreateButton -X ($Credits.Buttons[2].Right) -Y $Credits.Buttons[0].Top -Width $Credits.Buttons[0].Width -Height $Credits.Buttons[0].Height -ForeColor "White" -BackColor "Gray" -Text "Misc"     -Tag $Credits.Buttons.length -Info "General credits and info in general" -AddTo $CreditsDialog
+    $Credits.Buttons += CreateButton -X ($Credits.Buttons[3].Right) -Y $Credits.Buttons[0].Top -Width $Credits.Buttons[0].Width -Height $Credits.Buttons[0].Height -ForeColor "White" -BackColor "Gray" -Text "Checksum" -Tag $Credits.Buttons.length -Info "General credits and info in general" -AddTo $CreditsDialog
     
     # Create the version number and script name label
     $InfoLabel = CreateLabel -X ($CreditsDialog.Width / 2 - $String.Width - (DPISize 100)) -Y (DPISize 10) -Width (DPISize 200) -Height (DPISize 15) -Font $Fonts.SmallBold -Text ($ScriptName + " " + $Version + " (" + $VersionDate + ")") -AddTo $CreditsDialog
@@ -104,10 +104,10 @@ function CreateCreditsDialog() {
     $Credits.Sections += CreatePanel   -X $Credits.Sections[0].Left -Y $Credits.Sections[0].Top -Width $Credits.Sections[0].Width -Height $Credits.Sections[0].Height -AddTo $CreditsDialog -Tag "Checksum"
 
     # Initialize Button Events
-    for ($i=0; $i -lt $Credits.Buttons.length; $i++) {
+    foreach ($i in 0..($Credits.Buttons.length-1)) {
         $Credits.Buttons[$i].Add_Click({
-            $Credits.Buttons.GetEnumerator()  | ForEach-Object { $_.BackColor = "Gray" }
-            $Credits.Sections.GetEnumerator() | ForEach-Object { $_.Visible = $_.Tag -eq $this.Text }
+            foreach ($item in $Credits.Buttons)    { $item.BackColor = "Gray" }
+            foreach ($item in $Credits.Sections)   { $item.Visible = $item.Tag -eq $this.Text }
             $this.BackColor = "DarkGray"
             $Settings["Core"]["LastTab"] = $this.Tag
         })
@@ -117,7 +117,7 @@ function CreateCreditsDialog() {
     # Set last tab
     if (IsSet -Elem $Settings["Core"]["LastTab"]) {
         $Credits.Buttons[$Settings["Core"]["LastTab"]].BackColor = "DarkGray"
-        $Credits.Sections.GetEnumerator() | ForEach-Object { $_.Visible = $_.Tag -eq $Credits.Buttons[$Settings["Core"]["LastTab"]].Text }
+        foreach ($item in $Credits.Sections) { $item.Visible = $item.Tag -eq $Credits.Buttons[$Settings["Core"]["LastTab"]].Text }
     }
     else { $Credits.Buttons[0].BackColor = "DarkGray" }
 
@@ -227,7 +227,7 @@ function CreateSettingsDialog() {
     $GeneralSettings.Box                 = CreateReduxGroup -Y ($GeneralSettings.Box.Bottom + (DPISize 10)) -IsGame $False -Height 2 -AddTo $SettingsDialog -Text "Debug Settings (Nintendo 64)"
     $GeneralSettings.KeepConverted       = CreateSettingsCheckbox -Name "KeepConverted"    -Column 1 -Row 1 -Text "Keep Converted"        -IsDebug -Info "Keep the converted patched ROM in the output folder"
     $GeneralSettings.KeepDecompressed    = CreateSettingsCheckbox -Name "KeepDecompressed" -Column 2 -Row 1 -Text "Keep Decompressed"     -IsDebug -Info "Keep the decompressed patched ROM in the output folder"
-    $GeneralSettings.Rev0DungeonFiles    = CreateSettingsCheckbox -Name "Rev0DungeonFiles" -Column 3 -Row 1 -Text "Rev 0 Dungeon Files"   -IsDebug -Info "Extract the dungeon files from the Rev 0 US OoT ROM as well when extracting dungeon files"
+    $GeneralSettings.Rev0DungeonFiles    = CreateSettingsCheckbox -Name "Rev0DungeonFiles" -Column 3 -Row 1 -Text "Rev 0 Dungeon Files"   -IsDebug -Info "Extract the dungeon files from the OoT ROM (Rev 0 US) or MM ROM (Rev 0 US) as well when extracting dungeon files"
     $GeneralSettings.NoConversion        = CreateSettingsCheckbox -Name "NoConversion"     -Column 1 -Row 2 -Text "No Conversion"         -IsDebug -Info "Do not attempt to convert the ROM to a proper format"
     $GeneralSettings.NoCRCChange         = CreateSettingsCheckbox -Name "NoCRCChange"      -Column 2 -Row 2 -Text "No CRC Change"         -IsDebug -Info "Do not change the CRC of the ROM when patching is concluded"
     $GeneralSettings.NoCompression       = CreateSettingsCheckbox -Name "NoCompression"    -Column 3 -Row 2 -Text "No Compression"        -IsDebug -Info "Do not attempt to compress the ROM back again when patching is concluded"
@@ -270,9 +270,9 @@ function CreateSettingsDialog() {
     })
 
     # Presets
-    $GeneralSettings.Presets | ForEach-Object {
-        $_.Add_CheckedChanged({
-            for ($i=0; $i -lt $GeneralSettings.Presets.length; $i++) {
+    foreach ($item in $GeneralSettings.Presets) {
+        $item.Add_CheckedChanged({
+            foreach ($i in 0..($GeneralSettings.Presets.length-1)) {
                 if (!$this.checked -and $GeneralSettings.Presets[$i] -eq $this) {
                     if ($GameType.save -gt 0) { Out-IniFile -FilePath ($Paths.Settings + "\" + $GameType.mode + " - " + ($i+1) + ".ini") -InputObject $GameSettings }
                 }
@@ -303,12 +303,12 @@ function ResetTool() {
     $InputPaths.InjectTextBox.Text = "Select or drag and drop your NES, SNES or N64 ROM..."
     $InputPaths.PatchTextBox.Text = "Select or drag and drop your BPS, IPS, Xdelta or VCDiff Patch File..."
 
-    $GeneralSettings.GetEnumerator() | ForEach-Object {
-        if ($_.value.GetType() -eq [System.Windows.Forms.CheckBox]) { $_.value.Checked = $_.value.Default }
+    foreach ($item in $GeneralSettings) {
+        if ($item.value.GetType() -eq [System.Windows.Forms.CheckBox]) { $item.value.Checked = $item.value.Default }
     }
 
-    $VC.GetEnumerator() | ForEach-Object {
-        if ($_.value.GetType() -eq [System.Windows.Forms.CheckBox]) { $_.value.Checked = $_.value.Default }
+    foreach ($item in $VC.GetEnumerator) {
+        if ($item.value.GetType() -eq [System.Windows.Forms.CheckBox]) { $item.value.Checked = $item.value.Default }
     }
 
     $Patches.Downgrade.Checked = $Patches.Downgrade.Default
@@ -343,19 +343,19 @@ function ResetGame() {
     
     if (!(IsSet $Redux.Groups)) { return }
 
-    $Redux.Groups.GetEnumerator() | ForEach-Object {
-        ForEach ($Form in $_.controls) {
-            if     ($Form.GetType() -eq [System.Windows.Forms.CheckBox])      { $Form.Checked       = $Form.Default }
-            elseif ($Form.GetType() -eq [System.Windows.Forms.RadioButton])   { $Form.Checked       = $Form.Default }
-            elseif ($Form.GetType() -eq [System.Windows.Forms.ComboBox])      { $Form.SelectedIndex = $Form.Default }
-            elseif ($Form.GetType() -eq [System.Windows.Forms.TextBox])       { $Form.Text          = $Form.Default }
+    foreach ($item in $Redux.Groups) {
+        foreach ($form in $item.controls) {
+            if     ($form.GetType() -eq [System.Windows.Forms.CheckBox])      { $form.Checked       = $form.Default }
+            elseif ($form.GetType() -eq [System.Windows.Forms.RadioButton])   { $form.Checked       = $form.Default }
+            elseif ($form.GetType() -eq [System.Windows.Forms.ComboBox])      { $form.SelectedIndex = $form.Default }
+            elseif ($form.GetType() -eq [System.Windows.Forms.TextBox])       { $form.Text          = $form.Default }
 
-            elseif ($Form.GetType() -eq [System.Windows.Forms.Panel]) {
-                forEach ($Subform in $Form.controls) {
-                    if     ($Subform.GetType() -eq [System.Windows.Forms.CheckBox])      { $Subform.Checked       = $Subform.Default }
-                    elseif ($Subform.GetType() -eq [System.Windows.Forms.RadioButton])   { $Subform.Checked       = $Subform.Default }
-                    elseif ($Subform.GetType() -eq [System.Windows.Forms.ComboBox])      { $Subform.SelectedIndex = $Subform.Default }
-                    elseif ($Subform.GetType() -eq [System.Windows.Forms.TextBox])       { $Subform.Text          = $Subform.Default }
+            elseif ($form.GetType() -eq [System.Windows.Forms.Panel]) {
+                foreach ($subform in $form.controls) {
+                    if     ($subform.GetType() -eq [System.Windows.Forms.CheckBox])      { $subform.Checked       = $subform.Default }
+                    elseif ($subform.GetType() -eq [System.Windows.Forms.RadioButton])   { $subform.Checked       = $subform.Default }
+                    elseif ($subform.GetType() -eq [System.Windows.Forms.ComboBox])      { $subform.SelectedIndex = $subform.Default }
+                    elseif ($subform.GetType() -eq [System.Windows.Forms.TextBox])       { $subform.Text          = $subform.Default }
                 }
             }
         }
@@ -371,8 +371,8 @@ function ResetGame() {
 #==============================================================================================================================================================================================
 function CleanupFiles() {
     
-    $Files.json.games.game.GetEnumerator() | ForEach-Object {
-        RemovePath ($Paths.Games + "\" + $_.mode + "\Extracted")
+    foreach ($item in $Files.json.games.game) {
+        RemovePath ($Paths.Games + "\" + $item.mode + "\Extracted")
     }
 
     RemovePath $Paths.cygdrive

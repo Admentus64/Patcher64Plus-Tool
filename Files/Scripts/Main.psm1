@@ -478,8 +478,8 @@ function DisablePatches() {
 function DisableReduxOptions() {
 
     if (!(IsSet $Redux.Groups)) { return }
-    $Redux.Groups.GetEnumerator() | ForEach-Object {
-        if ($_.IsRedux) { EnableElem -Elem $_ -Active ($Patches.Options.Checked -and $Patches.Redux.Checked) } # $_.Enabled = $this.Checked -and $Patches.Redux.Checked }
+    foreach ($item in $Redux.Groups) {
+        if ($item.IsRedux) { EnableElem -Elem $item -Active ($Patches.Options.Checked -and $Patches.Redux.Checked) }
     }
 
 }

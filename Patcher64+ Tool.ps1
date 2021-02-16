@@ -24,8 +24,8 @@ Add-Type -AssemblyName 'System.Drawing'
 # Setup global variables
 
 $global:ScriptName = "Patcher64+ Tool"
-$global:VersionDate = "2021-02-10"
-$global:Version     = "v11.3.0"
+$global:VersionDate = "2021-02-16"
+$global:Version     = "v12.0.0"
 
 $global:CommandType = $MyInvocation.MyCommand.CommandType.ToString()
 $global:Definition  = $MyInvocation.MyCommand.Definition.ToString()
@@ -175,6 +175,7 @@ ChangePatch       | Out-Null
 SetMainScreenSize | Out-Null
 SetVCPanel        | Out-Null
 CheckVCOptions    | Out-Null
+ChangeGamesList
 
 # Active GUI events
 InitializeEvents

@@ -9,6 +9,7 @@
 - JADE		A Link to the Past	(SNES)
 - JAAE		Super Mario World	(SNES)
 - JAVE		Super Metroid		(SNES)
+- JAEE		Donkey Kong Country	(SNES)
 
 - FAKE		The Legend of Zelda	(NES)
 - FA9E		The Adventure of Link	(NES)
@@ -47,6 +48,12 @@ CDD3C8C37322978CA8669B34BC89C804	(Rev 0)
 
 Super Metroid				(SNES)
 C2E63A2CA2A46411DDBF758AB017F398	(Rev 0)
+
+Donkey Kong Country			(SNES)
+30C5F292FF4CBBFCC00FD8FA96C2DE3B	(Rev 0)
+323A37CCBA32104BEEF7FF7DFC7CE894	(Rev 1)
+2E604BC12FB8F9467765C807C24877FA	(Rev 2)
+8F77B601C1F37033A47DFAA13FB1059A	(VC)
 
 The Legend of Zelda			(NES)
 337BD6F1A1163DF31BF2633665589AB0	(Rev 0)
@@ -97,6 +104,10 @@ D21D31E0EB0E666E9224954F312E915C	(VC)
 - JAA3		Kaizo Mario World 3
 
 - JAV0		Super Metroid REDUX
+
+- JAE0		Donkey Kong Country: Boss Blitz
+- JAE1		Donkey Kong Country: Expert Edition
+- JAED		Donkey Kong Country (German)
 
 - FAK0		The Legend of Zelda REDUX
 
