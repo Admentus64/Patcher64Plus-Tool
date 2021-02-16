@@ -1,6 +1,5 @@
 =======================
-=== PATCHER64+ TOOL ===
-=======================
+<<< PATCHER64+ TOOL >>>
 
 --- Thanks to my past Patreons --
 - Leigh Pierce, Raim, Gicrax, Crypto Logiq, Moons (Luke), Ronald, Richard Moser
@@ -14,8 +13,7 @@
 
 
 =======================
-=== OCARINA OF TIME ===
-=======================
+<<< OCARINA OF TIME >>>
 
 --- REDUX ---
 - Hacking:				Maroc
@@ -211,18 +209,17 @@ Special Thanks:				Nokaubure, z64me, Ultra553, OoT Decomp
 
 
 =====================
-=== MAJORA'S MASK ===
-=====================
+<<< MAJORA'S MASK >>>
 
 --- REDUX ---
 - Hacking:				Maroc
 - Original Hacking:			Saneki
 
 --- Additional Options ---
+- Master Quest:				Admentus (porting) & DeathBasket (maps / patch)
 - 16:9 Backgrounds & Textures:		GhostlyDark & ShadowOne333
 - Enhanced 16:9 Widescreen:		gamemasterplc & GhostlyDark
 - Improved Link Model:			Skilarbabcock (www.youtube.com/user/skilarbabcock) & Nerrel
-- Adult Epona:				Airikita
 - Kokiri Tunic Color:			GhostlyDark
 - Recolor Mask Forms:			ShadowOne333 & Garo-Mastah
 - Zora Physics:				ShadowOne333
@@ -294,8 +291,7 @@ Special Thanks:				Nokaubure, z64me, Ultra553, OoT Decomp
 
 
 ======================
-=== SUPER MARIO 64 ===
-======================
+<<< SUPER MARIO 64 >>>
 
 --- Additional Options ---
 - 60 FPS (v2):				Kaze Emanuar
@@ -346,8 +342,7 @@ Special Thanks:				Nokaubure, z64me, Ultra553, OoT Decomp
 
 
 ===================
-=== PAPER MARIO ===
-===================
+<<< PAPER MARIO >>>
 
 --- Hard Mode ---
 - Skelux (Extra Damage)
@@ -362,8 +357,7 @@ Special Thanks:				Nokaubure, z64me, Ultra553, OoT Decomp
 
 
 ============================
-=== SUPER SMASH BROTHERS ===
-============================
+<<< SUPER SMASH BROTHERS >>>
 
 --- Remix ---
 - The_Smashfather
@@ -384,8 +378,7 @@ Special Thanks:				Nokaubure, z64me, Ultra553, OoT Decomp
 
 
 =====================
-=== MARIO KART 64 ===
-=====================
+<<< MARIO KART 64 >>>
 
 --- CPUs use human items including shells ---
 - triclon
@@ -393,8 +386,7 @@ Special Thanks:				Nokaubure, z64me, Ultra553, OoT Decomp
 
 
 ==========================
-=== A LINK TO THE PAST ===
-==========================
+<<< A LINK TO THE PAST >>>
 
 --- REDUX ---
 - Main Hacking:				ShadowOne333 & rainponcho
@@ -423,8 +415,7 @@ Special Thanks:				Nokaubure, z64me, Ultra553, OoT Decomp
 
 
 =========================
-=== SUPER MARIO WORLD ===
-=========================
+<<< SUPER MARIO WORLD >>>
 
 --- Kaizo Mario World 1/2/3 ---
 - T. Takemoto
@@ -438,11 +429,8 @@ Special Thanks:				Nokaubure, z64me, Ultra553, OoT Decomp
 					WorldPeace, Lui37, Masterlink, Crew, S.N.N., Sinister Pixel, Pinci,
 					DanTheVP, aCrowned, MaxodeX, Crispy, LadiesMan217, Amphobius
 
-
-
 =====================
-=== SUPER METROID ===
-=====================
+<<< SUPER METROID >>>
 
 --- REDUX ---
 - Main Hacking:				ShadowOne333
@@ -459,8 +447,7 @@ Special Thanks:				Nokaubure, z64me, Ultra553, OoT Decomp
 
 
 ===========================
-=== DONKEY KONG COUNTRY ===
-===========================
+<<< DONKEY KONG COUNTRY >>>
 
 --- Boss Blitz ---
 - Mattrizzle
@@ -474,8 +461,7 @@ Special Thanks:				Nokaubure, z64me, Ultra553, OoT Decomp
 
 
 ===========================
-=== THE LEGEND OF ZELDA ===
-===========================
+<<< THE LEGEND OF ZELDA >>>
 
 --- REDUX ---
 - Main Hacking:				ShadowOne333
@@ -491,8 +477,7 @@ Special Thanks:				Nokaubure, z64me, Ultra553, OoT Decomp
 
 
 =============================
-=== THE ADVENTURE OF LINK ===
-=============================
+<<< THE ADVENTURE OF LINK >>>
 
 --- REDUX ---
 - Main Hacking:				ShadowOne333
