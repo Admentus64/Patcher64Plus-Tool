@@ -1,3 +1,17 @@
+v12.0.0
+- Added new "Master Quest - Dungeons" options for MM
+- Added new "Monster HP" and "Mini-Boss HP" options for OoT (still incomplete)
+- Added new "Boss HP" option for MM (still incomplete)
+- Added "The Four Giants" music track as a File Select background music option for MM
+- Fixed issue with generating BPS patches being stored in the temp folder (which got deleted...)
+- Optimized the "master_quest.bps" patch for OoT
+- Vanilla MM Dungeon Files can now also be extracted with the "Rev 0 Dungeons Files" option
+- Fixed issues with increasing the HP for several bosses with the "Boss HP" option
+- Fixed randomizing dungeons
+- Improved performance in several situations
+- Reworked text file reading for improved performance
+- Various small fixes
+
 v11.3.0
 - Added new "Boss HP" option for OoT
 - Added new "File Select Skybox" option for OoT
