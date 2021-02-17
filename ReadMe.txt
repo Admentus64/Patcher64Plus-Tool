@@ -13,6 +13,7 @@ PayPal:		https://www.paypal.com/paypalme/Admentus/
 - https://docs.google.com/spreadsheets/d/1Ihccm8noxsfHZfN1E3Gkccov1F27WXXxl-rxOuManUk (Female Pronouns Script)
 - www.youtube.com/user/skilarbabcock (Model Replacements)
 - www.youtube.com/c/malonrose (Model Replacements)
+- www.youtube.com/channel/UC3071imQKR5cEIobsFHLW9Q (voices / patches)
 
 --- Original Redux Sources ---
 - https://github.com/MarocZan/Ocarina-of-Time-REDUX (www.romhacking.net/hacks/5138)
