@@ -405,12 +405,6 @@ function ByteOptions() {
 
     if (IsChecked $Redux.Script.Comma) { ChangeBytes -Offset "ACC660"  -Values "00 F3 00 00 00 00 00 00 4F 60 00 00 00 00 00 00 24" }
 
-
-
-    # MASTER QUEST #
-
-    PatchDungeonsMMMQ
-
 }
 
 
@@ -837,46 +831,10 @@ function CreateTabDifficulty() {
     CreateReduxComboBox -Name "MagicUsage" -Column 5 -Row 1 -Shift 10 -Text "Magic Usage" -Items @("1x Magic Usage", "2x Magic Usage", "3x Magic Usage")            -Info "Set the amount of times magic is consumed at"                         -Credits "Admentus"
     CreateReduxComboBox -Name "BossHP"     -Column 1 -Row 2 -Shift 10 -Text "Boss HP"     -Items @("1x Boss HP", "2x Boss HP", "3x Boss HP")                        -Info "Set the amount of health for bosses`n"                                -Credits "Admentus" -Warning "Goht (phases 1-3) and Gyorg (phase 2) are missing"
     
-    # MASTER QUEST #
-    CreateReduxGroup -Tag "MQ" -Text "Master Quest"
-    CreateReduxPanel
-    CreateReduxRadioButton -Column 1 -Name "Disable"   -Max 3 -SaveTo "Dungeons" -Text "Disable" -Checked -Info "All dungeons remain vanilla"
-    CreateReduxRadioButton -Column 2 -Name "Select"    -Max 3 -SaveTo "Dungeons" -Text "Select"           -Info "Select which dungeons you want from Master Quest" -Credits "Admentus" -Warning "Chests on the dungeon map pause screen are not updated"
-    CreateReduxRadioButton -Column 3 -Name "Randomize" -Max 3 -SaveTo "Dungeons" -Text "Randomize"        -Info "Randomize the amount of Master Quest dungeons"    -Credits "Admentus" -Warning "Chests on the dungeon map pause screen are not updated"
-    
-    # MASTER QUEST DUNGEONS #
-    $Redux.Box.SelectMQ = CreateReduxGroup -Tag "MQ" -Text "Select - Master Quest Dungeons" -Height 2
-    CreateReduxCheckBox -Name "WoodfallTemple"       -Column 1 -Row 1 -Text "Woodfall Temple"         -Checked -Info "Patch Woodfall Temple to Master Quest"         -Credits "Admentus & DeathBasket" -Warning "Chests on the dungeon map pause screen are not updated"
-    CreateReduxCheckBox -Name "SnowheadTemple"       -Column 2 -Row 1 -Text "Snowhead Temple"         -Checked -Info "Patch Snowhead Temple to Master Quest"         -Credits "Admentus & DeathBasket" -Warning "Chests on the dungeon map pause screen are not updated"
-    CreateReduxCheckBox -Name "GreatBayTemple"       -Column 3 -Row 1 -Text "Great Bay Temple"        -Checked -Info "Patch Great Bay Temple to Master Quest"        -Credits "Admentus & DeathBasket" -Warning "Chests on the dungeon map pause screen are not updated"
-    CreateReduxCheckBox -Name "StoneTowerTemple"     -Column 4 -Row 1 -Text "Stone Tower Temple"      -Checked -Info "Patch Stone Tower Temple to Master Quest"      -Credits "Admentus & DeathBasket" -Warning "Chests on the dungeon map pause screen are not updated"
-    CreateReduxCheckBox -Name "PiratesFortress"      -Column 1 -Row 2 -Text "Pirates' Fortress"       -Checked -Info "Patch the Pirates' Fortress to Master Quest"   -Credits "Admentus & DeathBasket"
-    CreateReduxCheckBox -Name "BeneathTheWell"       -Column 2 -Row 2 -Text "Beneath the Well"        -Checked -Info "Patch Beneath the Well to Master Quest"        -Credits "Admentus & DeathBasket"
-    CreateReduxCheckBox -Name "AncientCastleOfIkana" -Column 3 -Row 2 -Text "Ancient Castle of Ikana" -Checked -Info "Patch Ancient Castle of Ikana to Master Quest" -Credits "Admentus & DeathBasket"
-
-    # RANDOMIZE MASTER QUEST DUNGEONS #
-    $Redux.Box.RandomizeMQ = CreateReduxGroup -Tag "MQ" -Text "Randomize - Master Quest Dungeons"
-    $Items = @("0", "1", "2", "3", "4", "5", "6", "7", "8")
-    CreateReduxComboBox -Name "Minimum" -Column 1 -Shift 10 -Text "Minimum" -Default 1            -Items $Items
-    CreateReduxComboBox -Name "Maximum" -Column 3 -Shift 10 -Text "Maximum" -Default $Items.Count -Items $Items
-
 
 
     $Redux.Hero.Damage.Add_SelectedIndexChanged({ EnableElem -Elem $Redux.Hero.Recovery -Active ($this.Text -ne "OHKO Mode") })
     EnableElem -Elem $Redux.Hero.Recovery -Active ($Redux.Hero.Damage.Text -ne "OHKO Mode")
-
-    $Redux.MQ.Minimum.Add_SelectedIndexChanged({
-        if ($Redux.MQ.Maximum.SelectedIndex -lt $Redux.MQ.Minimum.SelectedIndex) { $Redux.MQ.Maximum.SelectedIndex = $Redux.MQ.Minimum.SelectedIndex }
-    })
-    $Redux.MQ.Maximum.Add_SelectedIndexChanged({
-        if ($Redux.MQ.Maximum.SelectedIndex -lt $Redux.MQ.Minimum.SelectedIndex) { $Redux.MQ.Maximum.SelectedIndex = $Redux.MQ.Minimum.SelectedIndex }
-    })
-    if ($Redux.MQ.Maximum.SelectedIndex -lt $Redux.MQ.Minimum.SelectedIndex) { $Redux.MQ.Maximum.SelectedIndex = $Redux.MQ.Minimum.SelectedIndex }
-     
-    EnableForm -Form $Redux.Box.SelectMQ -Enable $Redux.MQ.Select.Checked
-    $Redux.MQ.Select.Add_CheckedChanged({ EnableForm -Form $Redux.Box.SelectMQ -Enable $Redux.MQ.Select.Checked })
-    EnableForm -Form $Redux.Box.RandomizeMQ -Enable $Redux.MQ.Randomize.Checked
-    $Redux.MQ.Randomize.Add_CheckedChanged({ EnableForm -Form $Redux.Box.RandomizeMQ -Enable $Redux.MQ.Randomize.Checked })
 
 }
 

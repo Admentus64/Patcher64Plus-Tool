@@ -1,3 +1,6 @@
+v12.0.1
+- Temporary removed the "Master Quest - Dungeons" options for MM
+
 v12.0.0
 - Added new "Master Quest - Dungeons" options for MM
 - Added new "Monster HP" and "Mini-Boss HP" options for OoT (still incomplete)

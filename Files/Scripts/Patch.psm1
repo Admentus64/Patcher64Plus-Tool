@@ -39,13 +39,15 @@ function MainFunction([string]$Command, [string]$PatchedFileName) {
         $LanguagePatch = $null
         if ( (IsSet -Elem $GamePatch.languages -MinLength 1) -and $Settings.Debug.LiteGUI -eq $False) {
             for ($i=0; $i -lt $GamePatch.languages.Length; $i++) {
-                if ($Redux.Language[$i].checked) { $Item = $i }
+                if ($Redux.Language[$i].checked) { $item = $i }
             }
-            $Header = SetHeader -Header $Header -ROMTitle $GamePatch.languages[$Item].rom_title -ROMGameID $GamePatch.languages[$Item].rom_gameID -VCTitle $GamePatch.languages[$Item].vc_title -VCGameID $GamePatch.languages[$Item].vc_gameID -Region $GamePatch.rom_region
+            $Header = SetHeader -Header $Header -ROMTitle $GamePatch.languages[$item].rom_title -ROMGameID $GamePatch.languages[$item].rom_gameID -VCTitle $GamePatch.languages[$item].vc_title -VCGameID $GamePatch.languages[$item].vc_gameID -Region $GamePatch.rom_region
             if (IsSet $GamePatch.languages[$Item].output) { $PatchedFileName = $GamePatch.languages[$Item].output }
             $LanguagePatch = $GamePatch.languages[$Item].file
         }
     }
+
+    Write-Host $Header
 
     #  Title / GameID
     if ($CustomHeader.EnableHeader.Checked) {

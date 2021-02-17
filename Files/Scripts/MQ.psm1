@@ -113,61 +113,6 @@ function PatchDungeonsOoTMQ() {
 
 
 #==============================================================================================================================================================================================
-function PatchDungeonsMMMQ() {
-    
-    $dungeons = PatchDungeonsMQ
-    if (!$dungeons) { return }
-
-    # Woodfall Temple
-    if ($dungeons -Contains "Woodfall Temple") {
-        UpdateStatusLabel "Patching MQ Dungeon: Woodfall Temple"
-        if (!(PatchDungeon -TableOffset "1F080" -Path "Master Quest\Woodfall Temple\"               -Length 13 -Scene "C5A390")) { return }
-    }
-
-    # Snowhead Temple
-    if ($dungeons -Contains "Snowhead Temple") {
-        UpdateStatusLabel "Patching MQ Dungeon: Snowhead Temple Temple"
-        if (!(PatchDungeon -TableOffset "1F290" -Path "Master Quest\Snowhead Temple\"               -Length 14 -Scene "C5A3F0")) { return }
-    }
-
-    # Great Bay Temple
-    if ($dungeons -Contains "Great Bay Temple") {
-        UpdateStatusLabel "Patching MQ Dungeon: Great Bay Temple"
-        if (!(PatchDungeon -TableOffset "1FA90" -Path "Master Quest\Great Bay Temple\"              -Length 16 -Scene "C5A670")) { return }
-    }
-
-    # Stone Tower Temple
-    if ($dungeons -Contains "Stone Tower Temple") {
-        UpdateStatusLabel "Patching MQ Dungeon: Stone Tower Temple"
-        if (!(PatchDungeon -TableOffset "1EE70" -Path "Master Quest\Stone Tower Temple\"            -Length 12 -Scene "C5A340")) { return }
-        if (!(PatchDungeon -TableOffset "1EF60" -Path "Master Quest\Stone Tower Temple - Inverted\" -Length 12 -Scene "C5A360")) { return }
-    }
-
-    # Pirates' Fortress
-    if ($dungeons -Contains "Pirates' Fortress") {
-        UpdateStatusLabel "Patching MQ Dungeon: Pirates' Fortress"
-        if (!(PatchDungeon -TableOffset "1F880" -Path "Master Quest\Pirates' Fortress - Exterior\"  -Length 1  -Scene "C5A590")) { return }
-        if (!(PatchDungeon -TableOffset "1F3A0" -Path "Master Quest\Pirates' Fortress - Interior\"  -Length 15 -Scene "C5A410")) { return }
-    }
-
-    # Beneath the Well
-    if ($dungeons -Contains "Beneath the Well") {
-        UpdateStatusLabel "Patching MQ Dungeon: Beneath the Well"
-        if (!(PatchDungeon -TableOffset "1FBC0" -Path "Master Quest\Beneath the Well\"              -Length 14 -Scene "C5A690")) { return }
-    }
-
-    # Ancient Castle of Ikana
-    if ($dungeons -Contains "Ancient Castle of Ikana") {
-        UpdateStatusLabel "Patching MQ Dungeon: Ancient Castle of Ikana"
-        if (!(PatchDungeon -TableOffset "1F180" -Path "Master Quest\Ancient Castle of Ikana\"       -Length 10 -Scene "C5A3B0")) { return }
-    }
-
-
-}
-
-
-
-#==============================================================================================================================================================================================
 function PatchDungeonsMQ() {
     
     # BYTE PATCHING MASTER QUEST DUNGEONS
@@ -233,7 +178,7 @@ function ExtractMQData([boolean]$Decompress) {
     if (!$Decompress) { return }
 
     # EXTRACT MQ DATA #
-    if ($GameType.mode -eq "Ocarina of Time" -or $GameType.mode -eq "Majora's Mask") {
+    if ($GameType.mode -eq "Ocarina of Time") {
         $Path = $GameFiles.extracted + "\Master Quest"
         if ( (IsChecked -Elem $Redux.MQ.Disable -Not) -and (IsChecked -Elem $Patches.Options -Active) ) { # EXTRACT MQ DUNGEON DATA #
             if ( !(TestFile -Path $Path -Container) -or ($Settings.Debug.ForceExtract -eq $True) ) {
@@ -296,17 +241,6 @@ function ExtractAllDungeons([string]$Path) {
         ExtractDungeon -Path ($Path + "\Gerudo Training Ground")        -Offset "C230" -Length 11
         ExtractDungeon -Path ($Path + "\Inside Ganon's Castle")         -Offset "CCC0" -Length 20
     }
-    elseif ($GameType.mode -eq "Majora's Mask") {
-        ExtractDungeon -Path ($Path + "\Woodfall Temple")               -Offset "1F080" -Length 13
-        ExtractDungeon -Path ($Path + "\Snowhead Temple")               -Offset "1F290" -Length 14
-        ExtractDungeon -Path ($Path + "\Great Bay Temple")              -Offset "1FA90" -Length 16
-        ExtractDungeon -Path ($Path + "\Stone Tower Temple")            -Offset "1EE70" -Length 12
-        ExtractDungeon -Path ($Path + "\Stone Tower Temple - Inverted") -Offset "1EF60" -Length 12
-        ExtractDungeon -Path ($Path + "\Pirates' Fortress - Exterior")  -Offset "1F880" -Length 1
-        ExtractDungeon -Path ($Path + "\Pirates' Fortress - Interior")  -Offset "1F3A0" -Length 15
-        ExtractDungeon -Path ($Path + "\Beneath the Well")              -Offset "1FBC0" -Length 14
-        ExtractDungeon -Path ($Path + "\Ancient Castle of Ikana")       -Offset "1F180" -Length 10
-    }
 
 }
 
@@ -348,5 +282,4 @@ function PatchDungeonFile([string]$Offset, [Array]$Values, [string]$Patch, [stri
 #==============================================================================================================================================================================================
 
 Export-ModuleMember -Function PatchDungeonsOoTMQ
-Export-ModuleMember -Function PatchDungeonsMMMQ
 Export-ModuleMember -Function ExtractMQData
