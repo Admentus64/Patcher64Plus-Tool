@@ -24,8 +24,8 @@ Add-Type -AssemblyName 'System.Drawing'
 # Setup global variables
 
 $global:ScriptName = "Patcher64+ Tool"
-$global:VersionDate = "2021-02-17"
-$global:Version     = "v12.0.1"
+$global:VersionDate = "2021-03-10"
+$global:Version     = "v13.0.0"
 
 $global:CommandType = $MyInvocation.MyCommand.CommandType.ToString()
 $global:Definition  = $MyInvocation.MyCommand.Definition.ToString()
@@ -127,6 +127,7 @@ if (!(IsSet $Settings.Debug))  { $Settings.Debug = @{} }
 # Hi-DPI Mode
 $global:DisableHighDPIMode = $Settings.Core.HiDPIMode -eq $False
 InitializeHiDPIMode
+$global:ColumnWidth = DPISize 180
 
 # Set paths to all the files stored in the script
 SetFileParameters

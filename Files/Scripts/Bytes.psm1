@@ -19,10 +19,10 @@ function ChangeBytes([string]$File, [string]$Offset, [object]$Values, [uint16]$I
         foreach ($i in $Values) {
             $arr += Get8Bit $i
         }
-        WriteToConsole ("Change values: " + $arr)
+        WriteToConsole ( (Get32Bit $Offset) + " -> Change values: " + $arr)
         $arr = $null
     }
-    else { WriteToConsole ("Change values: " + $Values) }
+    else { WriteToConsole ( (Get32Bit $Offset) + " -> Change values: " + $Values) }
 
     foreach ($i in 0..($Values.Length-1)) {
         if ($IsDec) {
@@ -44,8 +44,6 @@ function ChangeBytes([string]$File, [string]$Offset, [object]$Values, [uint16]$I
     }
 
     if (IsSet $File) { [io.file]::WriteAllBytes($File, $ByteArrayGame) }
-    $File = $Offset = $Interval = $Value = $null
-    $Values = $null
 
 }
 
@@ -92,7 +90,6 @@ function PatchBytes([string]$File, [string]$Offset, [string]$Length, [string]$Pa
     }
 
     if (IsSet $File) { [io.file]::WriteAllBytes($File, $ByteArrayGame) }
-    $File = $Offset = $Length = $Patch = $PatchByteArray = $null
 
 }
 
@@ -131,8 +128,6 @@ function ExportBytes([string]$File, [string]$Offset, [string]$End, [string]$Leng
         [io.file]::WriteAllBytes($Output, $ByteArrayGame[$Offset..($Offset + $Length - 1)])
     }
 
-    $File = $Offset = $Length = $Output = $NewArray = $null
-
 }
 
 
@@ -165,7 +160,7 @@ function SearchBytes([string]$File, [string]$Start="0", [string]$End, [object]$V
         $Search = $True
         foreach ($j in 0..($Values.Length-1)) {
             if ($Values[$j] -ne "") {
-                if ($ByteArrayGame[$i + $j] -ne (GetDecimal $Values[$j]) ) {
+                if ($ByteArrayGame[$i + $j] -ne (GetDecimal $Values[$j]) -and $Values[$j] -ne "xx") {
                     $Search = $False
                     break
                 }

@@ -1,9 +1,7 @@
-{ "patch" : [ {
-	"title" : "CPUs use human items including shells (v2.5)",
-	"console" : "Both",
-	"patch" : "\\Compressed\\cpu_items.bps",
-	"output" : "_cpu_items_patched",
-	"tooltip" : "CPU's can use the same items as human players can{0}- Supported: Rev 0 (US)"
-
-}
-] }
+[ {
+	"title"		: "CPUs use human items including shells (v2.5)",
+	"console"	: "Both",
+	"patch"		: "\\Compressed\\cpu_items.bps",
+	"output"	: "_cpu_items_patched",
+	"tooltip"	: "CPU's can use the same items as human players can{0}- Supported: Rev 0 (US)"
+} ]

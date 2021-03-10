@@ -1,153 +1,222 @@
-{ "patch" : [ {
-	"title" : "Ocarina of Time",
-	"console" : "Both",
-	"command" : "Force Downgrade",
+[ {
+	"title"				: "Ocarina of Time",
+	"console"			: "Both",
+	"command"			: "Force Downgrade",
 	"redux" : {
-		"options" : 1,
-		"vc_title" : "Redux: Ocarina",
-		"vc_gameid" : "NAC0",
-		"file" : "\\Decompressed\\redux.bps",
-		"output" : "_redux_patched"
+		"options"		: 1,
+		"remap_dpad"		: 1,
+		"expand_memory"		: 1,
+		"vc_title"		: "Redux: Ocarina",
+		"vc_gameid"		: "NAC0",
+		"file"			: "\\Decompressed\\redux.bps",
+		"output"		: "_redux_patched"
 	},
 	"options" : 1,
 	"languages" : [ {
-		"title" : "English",
-		"max_text_speed" : 3
+		"title"			: "English",
+		"script_start"		: "92D000",
+		"script_length"		: "38130",
+		"l_target"		: "\\GameCube\\L Targeting English.bin",
+		"max_text_speed"	: 3
 	}, {
-		"title" : "Japanese",
-		"rom_gameID" : "CZLJ",
-		"vc_title" : "Zelda: Ocarina (JAP)",
-		"vc_gameid" : "NACJ",
-		"output" : "_japanese_patched",
-		"max_text_speed" : 1
+		"title"			: "German",
+		"vc_title"		: "Zelda: Ocarina (GER)",
+		"vc_gameid"		: "NACG",
+		"file"			: "\\Decompressed\\Languages\\ger.ppf",
+		"script_start"		: "348E070",
+		"script_length"		: "3B9C0",
+		"l_target"		: "\\GameCube\\L Targeting German.bin",
+		"max_text_speed"	: 2,
+		"output"		: "_german_patched",
+		"credits"		: "Admentus, GhostlyDark & Ticamus (ported)"
+	}, {
+		"title"			: "French",
+		"vc_title"		: "Zelda: Ocarina (FRE)",
+		"vc_gameid"		: "NACF",
+		"file"			: "\\Decompressed\\Languages\\fre.ppf",
+		"script_start"		: "92D000",
+		"script_length"		: "371C0",
+		"l_target"		: "\\GameCube\\L Targeting French.bin",
+		"max_text_speed"	: 2,
+		"output"		: "_french_patched",
+		"credits"		: "Admentus & GhostlyDark (ported)"
+	}, {
+		"title"			: "Spanish",
+		"vc_title"		: "Zelda: Ocarina (SPA)",
+		"vc_gameid"		: "NACS",
+		"file"			: "\\Decompressed\\Languages\\spa.ppf",
+		"script_start"		: "92D000",
+		"script_length"		: "38130",
+		"l_target"		: "\\GameCube\\L Targeting Spanish.bin",
+		"max_text_speed"	: 2,
+		"output"		: "_spanish_patched",
+		"credits"		: "eduardo_aj2 (v2.2)"
+	}, {
+		"title"			: "Brazilian",
+		"vc_title"		: "Zelda: Ocarina (BRA)",
+		"vc_gameid"		: "NACB",
+		"file"			: "\\Decompressed\\Languages\\bra.ppf",
+		"script_start"		: "92D000",
+		"script_length"		: "38130",
+		"l_target"		: "\\GameCube\\L Targeting English.bin",
+		"output"		: "_brazilian_patched",
+		"max_text_speed"	: 2,
+		"credits"		: "Fserve (v1.7a)",
+		"warning"		: "This fan-translation is not completed yet{0}[!] Graphical edits are completed for about 50%, but all text is translated"
+	}, {
+		"title"			: "Italian",
+		"vc_title"		: "Zelda: Ocarina (ITA)",
+		"vc_gameid"		: "NACI",
+		"file"			: "\\Decompressed\\Languages\\ita.ppf",
+		"script_start"		: "92D000",
+		"script_length"		: "38130",
+		"l_target"		: "\\GameCube\\L Targeting Italian.bin",
+		"max_text_speed"	: 2,
+		"output"		: "_italian_patched",
+		"credits"		: "Ruleless, xxcentury & Brisma (translation) & GhostlyDark (ported / improvements)"
+	}, {
+		"title"			: "Polish",
+		"vc_title"		: "Zelda: Ocarina (POL)",
+		"vc_gameid"		: "NACO",
+		"file"			: "\\Decompressed\\Languages\\pol.ppf",
+		"script_start"		: "92D000",
+		"script_length"		: "38130",
+		"l_target"		: "\\GameCube\\L Targeting Polish.bin",
+		"max_text_speed"	: 2,
+		"output"		: "_polish_patched",
+		"credits"		: "RPG (v1.3)"
+	}, {
+		"title"			: "Russian",
+		"vc_title"		: "Zelda: Ocarina (RUS)",
+		"vc_gameid"		: "NACR",
+		"file"			: "\\Decompressed\\Languages\\rus.ppf",
+		"script_start"		: "92D000",
+		"script_length"		: "34390",
+		"l_target"		: "\\GameCube\\L Targeting Russian.bin",
+		"max_text_speed"	: 2,
+		"output"		: "_russian_patched",
+		"credits"		: "Zelda64rus (v2.32)"
+	}, {
+		"title"			: "Japanese",
+		"rom_gameID"		: "CZLJ",
+		"vc_title"		: "Zelda: Ocarina (JAP)",
+		"vc_gameid"		: "NACJ",
+		"script_start"		: "8EB000",
+		"script_length"		: "3A350",
+		"l_target_jpn"		: "\\GameCube\\L Targeting Japanese.bin",
+		"max_text_speed"	: 1,
+		"output"		: "_japanese_patched"
 	}, {
 		"title" : "Chinese",
-		"rom_gameID" : "CZLJ",
-		"vc_title" : "Zelda: Ocarina (CHI)",
-		"vc_gameid" : "NACC",
-		"file" : "\\Decompressed\\Languages\\chi.ppf",
-		"output" : "_chinese_patched",
-		"max_text_speed" : 1
-	}, {
-		"title" : "Spanish",
-		"vc_title" : "Zelda: Ocarina (SPA)",
-		"vc_gameid" : "NACS",
-		"file" : "\\Decompressed\\Languages\\spa.ppf",
-		"output" : "_spanish_patched",
-		"max_text_speed" : 2
-	}, {
-		"title" : "Polish",
-		"vc_title" : "Zelda: Ocarina (POL)",
-		"vc_gameid" : "NACO",
-		"file" : "\\Decompressed\\Languages\\pol.ppf",
-		"output" : "_polish_patched",
-		"max_text_speed" : 2
-	}, {
-		"title" : "Russian",
-		"vc_title" : "Zelda: Ocarina (RUS)",
-		"vc_gameid" : "NACR",
-		"file" : "\\Decompressed\\Languages\\rus.ppf",
-		"output" : "_russian_patched",
-		"max_text_speed" : 2
+		"rom_gameID"		: "CZLJ",
+		"vc_title"		: "Zelda: Ocarina (CHI)",
+		"vc_gameid"		: "NACC",
+		"file"			: "\\Decompressed\\Languages\\chi.ppf",
+		"script_start"		: "8EB000",
+		"script_length"		: "3A350",
+		"l_target_jpn"		: "\\GameCube\\L Targeting Chinese.bin",
+		"max_text_speed"	: 1,
+		"output"		: "_chinese_patched",
+		"credits"		: "madcell (2009)"
 	} ],
-	"tooltip" : "The regular Ocarina of Time experience{0}With support for languages, redux and additional options{0}- Supported: Rev 0 (US)"
+	"tooltip"			: "The regular Ocarina of Time experience{0}With support for languages, redux and additional options{0}- Supported: Rev 0 (US)"
 }, {
-	"title" : "GZ Practice ROM",
-	"console" : "Wii VC",
-	"command" : "Force Remap D-Pad No Expand Memory Patch Boot DOL",
-	"vc_title" : "Zelda: GZ Practice ROM",
-	"vc_gameid" : "NZCE",
+	"title"				: "GZ Practice ROM",
+	"console"			: "Wii VC",
+	"command"			: "Force Remap D-Pad No Expand Memory Patch Boot DOL",
+	"vc_title"			: "Zelda: GZ Practice ROM",
+	"vc_gameid"			: "NZCE",
 	"patch" : [ {
-		"file" : "\\Compressed\\GZ Practice\\gz_practice_rev0_vc.bps",
-		"hash" : "5BD1FE107BF8106B2AB6650ABECD54D6"
+		"file"			: "\\Compressed\\GZ Practice\\gz_practice_rev0_vc.bps",
+		"hash"			: "5BD1FE107BF8106B2AB6650ABECD54D6"
 	}, {
-		"file" : "\\Compressed\\GZ Practice\\gz_practice_rev2_vc.bps",
-		"hash" : "57A9719AD547C516342E1A15D5C28C3D"
+		"file"			: "\\Compressed\\GZ Practice\\gz_practice_rev2_vc.bps",
+		"hash"			: "57A9719AD547C516342E1A15D5C28C3D"
 	} ],
-	"output" : "_gz_practice_patched",
-	"tooltip" : "A trainer / practice / testing utility for The Legend of Zelda: Ocarina of Time{0}Formally known by its codename 'gz', but generally referred to as 'The Practice ROM'{0}- Supported: Rev 2 (US)"
+	"output"			: "_gz_practice_patched",
+	"tooltip"			: "A trainer / practice / testing utility for The Legend of Zelda: Ocarina of Time{0}Formally known by its codename 'gz', but generally referred to as 'The Practice ROM'{0}- Supported: Rev 2 (US)"
 }, {
-	"title" : "GZ Practice ROM",
-	"console" : "Native",
+	"title"				: "GZ Practice ROM",
+	"console"			: "Native",
 	"patch" : [ {
-		"file" : "\\Compressed\\GZ Practice\\gz_practice_rev0.bps",
-		"hash" : "5BD1FE107BF8106B2AB6650ABECD54D6"
+		"file"			: "\\Compressed\\GZ Practice\\gz_practice_rev0.bps",
+		"hash"			: "5BD1FE107BF8106B2AB6650ABECD54D6"
 	}, {
-		"file" : "\\Compressed\\GZ Practice\\gz_practice_rev1.bps",
-		"hash" : "721FDCC6F5F34BE55C43A807F2A16AF4"
+		"file"			: "\\Compressed\\GZ Practice\\gz_practice_rev1.bps",
+		"hash"			: "721FDCC6F5F34BE55C43A807F2A16AF4"
 	}, {
-		"file" : "\\Compressed\\GZ Practice\\gz_practice_rev2.bps",
-		"hash" : "57A9719AD547C516342E1A15D5C28C3D"
+		"file"			: "\\Compressed\\GZ Practice\\gz_practice_rev2.bps",
+		"hash"			: "57A9719AD547C516342E1A15D5C28C3D"
 	}, {
-		"file" : "\\Compressed\\GZ Practice\\gz_practice_rev_gc.bps",
-		"hash" : "CD09029EDCFB7C097AC01986A0F83D3F"
+		"file"			: "\\Compressed\\GZ Practice\\gz_practice_rev_gc.bps",
+		"hash"			: "CD09029EDCFB7C097AC01986A0F83D3F"
 	}, {
-		"file" : "\\Compressed\\GZ Practice\\gz_practice_rev_gc_mq.bps",
-		"hash" : "DA35577FE54579F6A266931CC75F512D"
+		"file"			: "\\Compressed\\GZ Practice\\gz_practice_rev_gc_mq.bps",
+		"hash"			: "DA35577FE54579F6A266931CC75F512D"
 	} ],
-	"output" : "_gz_practice_patched",
-	"tooltip" : "A trainer / practice / testing utility for The Legend of Zelda: Ocarina of Time{0}Formally known by its codename 'gz', but generally referred to as 'The Practice ROM'{0}- Supported: Rev 0 (US), Rev 1 (US), Rev 2 (US), Rev GC (US) & Rev MQ (US)"
+	"output"			: "_gz_practice_patched",
+	"tooltip"			: "A trainer / practice / testing utility for The Legend of Zelda: Ocarina of Time{0}Formally known by its codename 'gz', but generally referred to as 'The Practice ROM'{0}- Supported: Rev 0 (US), Rev 1 (US), Rev 2 (US), Rev GC (US) & Rev MQ (US)"
 }, {
-	"title" : "The Legend of Zelda: The Missing Link (v1.4)",
-	"console" : "Both",
-	"command" : "Force Expand Memory Force Downgrade",
-	"vc_title" : "Zelda: The Missing Link",
-	"vc_gameid" : "NAC1",
-	"patch" : "\\Compressed\\the_missing_link.bps",
-	"output" : "_the_missing_link_patched",
-	"tooltip" : "A small-sized ROM hack in a completely new setting{0}- Supported: Rev 0 (US)"
+	"title"				: "The Legend of Zelda: The Missing Link (v1.4)",
+	"console"			: "Both",
+	"command"			: "Force Downgrade",
+	"expand_memory"			: 1,
+	"vc_title"			: "Zelda: The Missing Link",
+	"vc_gameid"			: "NAC1",
+	"patch"				: "\\Compressed\\the_missing_link.bps",
+	"output"			: "_the_missing_link_patched",
+	"tooltip"			: "A small-sized ROM hack in a completely new setting{0}- Supported: Rev 0 (US)"
 }, {
-	"title" : "The Legend of Zelda: Dawn & Dusk (v2.0)",
-	"console" : "Both",
-	"vc_title" : "Zelda: Dawn & Dusk",
+	"title"				: "The Legend of Zelda: Dawn & Dusk (v2.0)",
+	"console"			: "Both",
+	"vc_title"			: "Zelda: Dawn & Dusk",
 	"vc_gameid" : "NAC2",
 	"patch" : [ {
-		"file" : "\\Compressed\\Dawn & Dusk\\dawn_rev0.bps",
-		"hash" : "5BD1FE107BF8106B2AB6650ABECD54D6"
+		"file"			: "\\Compressed\\Dawn & Dusk\\dawn_rev0.bps",
+		"hash"			: "5BD1FE107BF8106B2AB6650ABECD54D6"
 	}, {
-		"file" : "\\Compressed\\Dawn & Dusk\\dawn_rev1.bps",
-		"hash" : "721FDCC6F5F34BE55C43A807F2A16AF4"
+		"file"			: "\\Compressed\\Dawn & Dusk\\dawn_rev1.bps",
+		"hash"			: "721FDCC6F5F34BE55C43A807F2A16AF4"
 	}, {
-		"file" : "\\Compressed\\Dawn & Dusk\\dawn_rev2.bps",
-		"hash" : "57A9719AD547C516342E1A15D5C28C3D"
+		"file"			: "\\Compressed\\Dawn & Dusk\\dawn_rev2.bps",
+		"hash"			: "57A9719AD547C516342E1A15D5C28C3D"
 	} ],
-	"output" : "_dawn_&_dusk_patched",
-	"tooltip" : "A small-sized ROM hack in a completely new setting{0}- Supported: Rev 0 (US), Rev 1 (US) & Rev 2 (US)"
+	"output"			: "_dawn_&_dusk_patched",
+	"tooltip"			: "A small-sized ROM hack in a completely new setting{0}- Supported: Rev 0 (US), Rev 1 (US) & Rev 2 (US)"
 }, {
-	"title" : "The Legend of Zelda: Master of Time",
-	"console" : "Both",
-	"command" : "Force Downgrade",
-	"vc_title" : "Zelda: Master of Time",
-	"vc_gameid" : "NAC3",
-	"patch" : "\\Compressed\\master_of_time.bps",
-	"output" : "_master_of_time_patched",
-	"tooltip" : "A small-sized ROM hack in a completely new setting{0}- Supported: Rev 0 (US)"
+	"title"				: "The Legend of Zelda: Master of Time",
+	"console"			: "Both",
+	"command"			: "Force Downgrade",
+	"vc_title"			: "Zelda: Master of Time",
+	"vc_gameid"			: "NAC3",
+	"patch"				: "\\Compressed\\master_of_time.bps",
+	"output"			: "_master_of_time_patched",
+	"tooltip"			: "A small-sized ROM hack in a completely new setting{0}- Supported: Rev 0 (US)"
 }, {
-	"title" : "The Legend of Zelda: Nimpize Adventure",
-	"console" : "Both",
-	"command" : "Force Downgrade",
-	"vc_title" : "Zelda: Nimpize",
-	"vc_gameid" : "NAC4",
-	"patch" : "\\Decompressed\\nimpize.bps",
-	"output" : "_nimpize_patched",
-	"tooltip" : "A reworked and harder version of Ocarina of Time with remixed dungeons{0}- Supported: Rev 0 (US)"
+	"title"				: "The Legend of Zelda: Nimpize Adventure",
+	"console"			: "Both",
+	"command"			: "Force Downgrade",
+	"vc_title"			: "Zelda: Nimpize",
+	"vc_gameid"			: "NAC4",
+	"patch"				: "\\Decompressed\\nimpize.bps",
+	"output"			: "_nimpize_patched",
+	"tooltip"			: "A reworked and harder version of Ocarina of Time with remixed dungeons{0}- Supported: Rev 0 (US)"
 }, {
-	"title" : "The Legend of Zelda: The Fate of the Bombiwa (v1.0.3)",
-	"console" : "Both",
-	"command" : "Force Downgrade",
-	"vc_title" : "Zelda: Bombiwa",
-	"vc_gameid" : "NAC5",
-	"patch" : "\\Decompressed\\bombiwa.bps",
-	"output" : "_bombiwa_patched",
-	"tooltip" : "A small-sized ROM hack in a completely new setting, and extremely tricky and difficult{0}- Supported: Rev 0 (US)"
+	"title"				: "The Legend of Zelda: The Fate of the Bombiwa (v1.0.3)",
+	"console"			: "Both",
+	"command"			: "Force Downgrade",
+	"vc_title"			: "Zelda: Bombiwa",
+	"vc_gameid"			: "NAC5",
+	"patch"				: "\\Decompressed\\bombiwa.bps",
+	"output"			: "_bombiwa_patched",
+	"tooltip"			: "A small-sized ROM hack in a completely new setting, and extremely tricky and difficult{0}- Supported: Rev 0 (US)"
 }, {
-	"title" : "Ocarina of Time Puzzling (v1.1.2)",
-	"console" : "Both",
-	"command" : "Force Downgrade",
-	"vc_title" : "Zelda: Puzzling",
-	"vc_gameid" : "NAC6",
-	"patch" : "\\Compressed\\puzzling.bps",
-	"output" : "_puzzling_patched",
-	"tooltip" : "A small-sized ROM hack that focuses on puzzling your way through{0}- Supported: Rev 0 (US)"
-}
-] }
+	"title"				: "Ocarina of Time Puzzling (v1.1.2)",
+	"console"			: "Both",
+	"command"			: "Force Downgrade",
+	"vc_title"			: "Zelda: Puzzling",
+	"vc_gameid"			: "NAC6",
+	"patch"				: "\\Compressed\\puzzling.bps",
+	"output"			: "_puzzling_patched",
+	"tooltip"			: "A small-sized ROM hack that focuses on puzzling your way through{0}- Supported: Rev 0 (US)"
+} ]

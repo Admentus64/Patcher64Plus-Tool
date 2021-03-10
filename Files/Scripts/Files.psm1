@@ -16,6 +16,7 @@ function SetFileParameters() {
     # Store all tool files
     $Files.tool.Compress64                  = [System.String](Get-Location) + "\Files\Tools\Compression\Compress64.exe"
     $Files.tool.Compress32                  = [System.String](Get-Location) + "\Files\Tools\Compression\Compress32.exe"
+    $Files.tool.Decompress                  = [System.String](Get-Location) + "\Files\Tools\Compression\Decompress.exe"
     $Files.tool.ndec                        = [System.String](Get-Location) + "\Files\Tools\Compression\ndec.exe"
     $Files.tool.sm64extend                  = [System.String](Get-Location) + "\Files\Tools\Compression\sm64extend.exe"
     $Files.tool.TabExt64                    = [System.String](Get-Location) + "\Files\Tools\Compression\TabExt64.exe"
@@ -64,9 +65,12 @@ function SetFileParameters() {
     $Files.oot.hud_tatl                     = $Paths.Games + "\Ocarina of Time\Textures\HUD\Tatl.bin"
     $Files.oot.hud_tael                     = $Paths.Games + "\Ocarina of Time\Textures\HUD\Tael.bin"
 
+    $Files.oot.l_target_button              = $Paths.Games + "\Ocarina of Time\Textures\GameCube\L Pause Screen Button.bin"
+    $Files.oot.l_target_icon                = $Paths.Games + "\Ocarina of Time\Textures\GameCube\L Text Icon.bin"
+
     $Files.oot.file_select                  = $Paths.Games + "\Ocarina of Time\Binaries\File Select.bin"
-    $Files.oot.message_table_restore_text   = $Paths.Games + "\Ocarina of Time\Binaries\Message\Table Restore Text.bin"
-    $Files.oot.message_table_female_text    = $Paths.Games + "\Ocarina of Time\Binaries\Message\Table Female Pronouns.bin"
+    $Files.oot.message_table_restore_text   = $Paths.Games + "\Ocarina of Time\Binaries\Message\Table Restore Text.tbl"
+    $Files.oot.message_table_female_text    = $Paths.Games + "\Ocarina of Time\Binaries\Message\Table Female Pronouns.tbl"
     $Files.oot.message_songs                = $Paths.Games + "\Ocarina of Time\Binaries\Message\Songs.bin"
     $Files.oot.message_mq1                  = $Paths.Games + "\Ocarina of Time\Binaries\Message\MQ Navi Action.bin"
     $Files.oot.message_mq2                  = $Paths.Games + "\Ocarina of Time\Binaries\Message\MQ Navi Door.bin"
@@ -116,9 +120,13 @@ function SetFileParameters() {
 
     $Files.mm.widescreen                    = CheckPatchExtension ($Paths.Games + "\Majora's Mask\Decompressed\widescreen")
     $Files.mm.improved_link_model           = CheckPatchExtension ($Paths.Games + "\Majora's Mask\Decompressed\improved_link_model")
+    $Files.mm.mq_remix                      = CheckPatchExtension ($Paths.Games + "\Majora's Mask\Decompressed\master_quest_remix")
 
     $Files.mm.hud_oot_button                = $Paths.Games + "\Majora's Mask\Textures\HUD\OoT Button.bin"
     $Files.mm.hud_oot_hearts                = $Paths.Games + "\Majora's Mask\Textures\HUD\OoT Hearts.bin"
+
+    $Files.mm.l_target_button               = $Paths.Games + "\Majora's Mask\Textures\GameCube\L Pause Screen Button.yaz0"
+    $Files.mm.l_target_button               = $Paths.Games + "\Majora's Mask\Textures\GameCube\L Text Icon.bin"
 
     $Files.mm.carnival_of_time              = $Paths.Games + "\Majora's Mask\Textures\Widescreen\Carnival of Time.bin"
     $Files.mm.four_giant                    = $Paths.Games + "\Majora's Mask\Textures\Widescreen\Four Giants.bin"
@@ -133,7 +141,7 @@ function SetFileParameters() {
 
     $Files.mm.zora_physics_fix              = $Paths.Games + "\Majora's Mask\Binaries\Zora Physics Fix.bin"
 
-    $Files.mm.message_table_restore_text    = $Paths.Games + "\Majora's Mask\Binaries\Message\Table Restore Text.bin"
+    $Files.mm.message_table_restore_text    = $Paths.Games + "\Majora's Mask\Binaries\Message\Table Restore Text.tbl"
     $Files.mm.message_razor1                = $Paths.Games + "\Majora's Mask\Binaries\Message\Razor Sword 1.bin"
     $Files.mm.message_razor2                = $Paths.Games + "\Majora's Mask\Binaries\Message\Razor Sword 2.bin"
 
@@ -145,6 +153,7 @@ function SetFileParameters() {
     $Files.mm.deku_palace_1                 = CheckPatchExtension ($Paths.Games + "\Majora's Mask\Export\Deku Palace\deku_palace_room_1")
     $Files.mm.deku_palace_2                 = CheckPatchExtension ($Paths.Games + "\Majora's Mask\Export\Deku Palace\deku_palace_room_2")
     $Files.mm.restore_text                  = CheckPatchExtension ($Paths.Games + "\Majora's Mask\Export\Message\restore_text")
+
 
 
     # Store Super Mario 64 files

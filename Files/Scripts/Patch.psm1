@@ -2,12 +2,12 @@ function MainFunction([string]$Command, [string]$PatchedFileName) {
 
     # Header
     $Header = @($null) * 5
-    #$Header = SetHeader -Header $Header -ROMTitle $GameType.rom_title  -ROMGameID $GameType.rom_gameID  -VCTitle $GameType.vc_title  -VCGameID $GameType.vc_gameID  -Region $GameType.rom_region
     if (!(StrLike -str $Command -val "Patch Header")) {
         $Header = SetHeader -Header $Header -ROMTitle $GamePatch.rom_title -ROMGameID $GamePatch.rom_gameID -VCTitle $GamePatch.vc_title -VCGameID $GamePatch.vc_gameID -Region $GamePatch.rom_region
     }
 
     # Hash
+    $global:ROMHashSum = (Get-FileHash -Algorithm MD5 $GamePath).Hash
     if (IsSet $GamePatch.Hash)   { $global:CheckHashSum = $GamePatch.Hash }
     else                         { $global:CheckHashSum = $GameType.Hash }
 
@@ -15,39 +15,50 @@ function MainFunction([string]$Command, [string]$PatchedFileName) {
     if (!(IsSet $PatchedFileName)) { $PatchedFileName = "_patched" }
     
     # Expand Memory, Remap D-Pad
-    if ($IsWiiVC) {
-        if ($GameType.patches_vc -ge 3) {
-            if ($VC.ExpandMemory.Visible -and (StrLike -str $Command -val "Force Expand Memory") )    { $VC.ExpandMemory.Checked = $True }
-            elseif ($VC.ExpandMemory.Visible -and (StrLike -str $Command -val "No Expand Memory") )   { $VC.ExpandMemory.Checked = $False }
-    
-            if ($VC.RemapDPad.Visible -and (StrLike -str $Command -val "Force Remap D-Pad") )         { $VC.RemapDPad.Checked = $True }
-            elseif ($VC.RemapDPad.Visible -and (StrLike -str $Command -val "No Remap D-Pad") )        { $VC.RemapDPad.Checked = $False }
-        }
-    }
+    if     ($VC.ExpandMemory.Active -and ( (StrLike -str $Command -val "Force Expand Memory") -or $GamePatch.expand_memory -eq  1 ) )       { $VC.ExpandMemory.Checked = $True }
+    elseif ($VC.ExpandMemory.Active -and ( (StrLike -str $Command -val "No Expand Memory")    -or $GamePatch.expand_memory -eq -1 ) )       { $VC.ExpandMemory.Checked = $False }
+    if     ($VC.RemapDPad.Active    -and ( (StrLike -str $Command -val "Force Remap D-Pad")   -or $GamePatch.expand_memory -eq  1 ) )       { $VC.RemapDPad.Checked    = $True }
+    elseif ($VC.RemapDPad.Active    -and ( (StrLike -str $Command -val "No Remap D-Pad")      -or $GamePatch.expand_memory -eq -1 ) )       { $VC.RemapDPad.Checked    = $False }
+
+    # Downgrade
+    if (!$IsWiiVC -and $ROMHashSum -eq $CheckHashSum)                                                                                       { $Patches.Downgrade.Checked = $False }
+    elseif ($Patches.Downgrade.Active -and (StrLike -str $Command -val "Force Downgrade") -and $Settings.Debug.IgnoreChecksum -eq $False)   { $Patches.Downgrade.Checked = $True }
+    elseif ($Patches.Downgrade.Active -and (StrLike -str $Command -val "No Downgrade") )                                                    { $Patches.Downgrade.Checked = $False }
+
+    # Finalize
+    $Finalize = $True
+    if     (IsChecked $Patches.Options)          { $Finalize = $False }
+    if     (IsChecked $Patches.Downgrade -Not)   { $Finalize = $False }
+    if     ($GamePatch.finalize -eq 0)           { $Finalize = $False }
+    elseif ($GamePatch.finalize -eq 1)           { $Finalize = $True }
 
     if ( !(StrLike -str $Command -val "Inject") -and !(StrLike -str $Command -val "Patch Header") -and !(StrLike -str $Command -val "Apply Patch") -and !(StrLike -str $Command -val "Patch VC") -and !(StrLike -str $Command -val "Extract") ) {
         # Redux
         if ( (IsChecked $Patches.Redux) -and (IsSet $GamePatch.redux.file)) {
-            $VC.RemapDPad.Checked = $True
-            if ($GameType.patches_vc -eq 4) { $VC.ExpandMemory.Checked = $True }
             $Header = SetHeader -Header $Header -ROMTitle $GamePatch.redux.rom_title -ROMGameID $GamePatch.redux.rom_gameID -VCTitle $GamePatch.redux.vc_title -VCGameID $GamePatch.redux.vc_gameID -Region $GamePatch.rom_region
-            if (IsSet -Elem $GamePatch.redux.output) { $PatchedFileName = $GamePatch.redux.output }
-            if (StrLike -str $Command -val "Inject") { $PatchedFileName += "_injected" }
+            if     ($VC.RemapDPad.Active    -and $GamePatch.redux.remap_dpad    -eq  1)   { $VC.RemapDPad.Checked    = $True }
+            elseif ($VC.RemapDPad.Active    -and $GamePatch.redux.remap_dpad    -eq -1)   { $VC.RemapDPad.Checked    = $False }
+            if     ($VC.ExpandMemory.Active -and $GamePatch.redux.expand_memory -eq  1)   { $VC.ExpandMemory.Checked = $True }
+            elseif ($VC.ExpandMemory.Active -and $GamePatch.redux.expand_memory -eq -1)   { $VC.ExpandMemory.Checked = $False }
+            if     (IsSet -Elem $GamePatch.redux.output)   { $PatchedFileName = $GamePatch.redux.output }
+            if     ($GamePatch.redux.finalize -eq 0)       { $Finalize = $False }
+            elseif ($GamePatch.redux.finalize -eq 1)       { $Finalize = $True }
+            $Finalize = $False
         }
 
         # Language Patch
-        $LanguagePatch = $null
-        if ( (IsSet -Elem $GamePatch.languages -MinLength 1) -and $Settings.Debug.LiteGUI -eq $False) {
+        $global:LanguagePatch = $null
+        if ( (IsSet -Elem $GamePatch.languages -MinLength 1) -and $Settings.Debug.LiteGUI -eq $False -and (IsChecked $Patches.Options) ) {
             for ($i=0; $i -lt $GamePatch.languages.Length; $i++) {
                 if ($Redux.Language[$i].checked) { $item = $i }
             }
-            $Header = SetHeader -Header $Header -ROMTitle $GamePatch.languages[$item].rom_title -ROMGameID $GamePatch.languages[$item].rom_gameID -VCTitle $GamePatch.languages[$item].vc_title -VCGameID $GamePatch.languages[$item].vc_gameID -Region $GamePatch.rom_region
-            if (IsSet $GamePatch.languages[$Item].output) { $PatchedFileName = $GamePatch.languages[$Item].output }
-            $LanguagePatch = $GamePatch.languages[$Item].file
+            $global:LanguagePatch = $GamePatch.languages[$item]
+            $Header = SetHeader -Header $Header -ROMTitle $LanguagePatch.rom_title -ROMGameID $LanguagePatch.rom_gameID -VCTitle $LanguagePatch.vc_title -VCGameID $LanguagePatch.vc_gameID -Region $LanguagePatch.rom_region
+            if     (IsSet $LanguagePatch.output)     { $PatchedFileName = $LanguagePatch.output }
+            if     ($LanguagePatch.finalize -eq 0)   { $Finalize = $False }
+            elseif ($LanguagePatch.finalize -eq 1)   { $Finalize = $True }
         }
     }
-
-    Write-Host $Header
 
     #  Title / GameID
     if ($CustomHeader.EnableHeader.Checked) {
@@ -68,9 +79,9 @@ function MainFunction([string]$Command, [string]$PatchedFileName) {
     # Decompress
     $Decompress = $False
     if ($GameType.decompress -gt 0) {
-        if     ((GetPatchFile) -like "*\Decompressed\*")       { $Decompress = $True }
-        elseif ($LanguagePatch -like "*\Decompressed\*")       { $Decompress = $True }
-        elseif (IsChecked $Patches.Downgrade)                  { $Decompress = $True }
+        if     ((GetPatchFile) -like "*\Decompressed\*")        { $Decompress = $True }
+        elseif ($LanguagePatch.file -like "*\Decompressed\*")   { $Decompress = $True }
+        elseif (IsChecked $Patches.Downgrade)                   { $Decompress = $True }
         elseif ($GameType.decompress -eq 1 -and !(StrLike -str $Command -val "Inject") -and !(StrLike -str $Command -val "Patch Header") -and !(StrLike -str $Command -val "Apply Patch") -and !(StrLike -str $Command -val "Patch VC") -and !(StrLike -str $Command -val "Extract") ) {
             if ( (IsChecked $Patches.Options) -or (IsChecked $Patches.Redux) )   { $Decompress = $True }
         }
@@ -84,14 +95,9 @@ function MainFunction([string]$Command, [string]$PatchedFileName) {
         SetGetROM
     }
 
-    # Downgrade
-    if (!$IsWiiVC -and $ROMHashSum -eq $CheckHashSum)                                                                                        { $Patches.Downgrade.Checked = $False }
-    elseif ($Patches.Downgrade.Visible -and (StrLike -str $Command -val "Force Downgrade") -and $Settings.Debug.IgnoreChecksum -eq $False)   { $Patches.Downgrade.Checked = $True }
-    elseif ($Patches.Downgrade.Visible -and (StrLike -str $Command -val "No Downgrade") )                                                    { $Patches.Downgrade.Checked = $False }
-
     # GO!
     if ($Settings.NoCleanup.Checked -ne $True -and $IsWiiVC) { RemovePath $Paths.Temp } # Remove the temp folder first to avoid issues
-    MainFunctionPatch -Command $Command -Header $Header -PatchedFileName $PatchedFileName -Decompress $Decompress
+    MainFunctionPatch -Command $Command -Header $Header -PatchedFileName $PatchedFileName -Decompress $Decompress -Finalize $Finalize
     EnableGUI $True
     Cleanup
     PlaySound $Sounds.done # Play a sound when it is finished
@@ -115,9 +121,9 @@ function SetHeader([Array]$Header, [string]$ROMTitle, [string]$ROMGameID, [strin
 
 
 #==============================================================================================================================================================================================
-function MainFunctionPatch([string]$Command, [Array]$Header, [string]$PatchedFileName, [boolean]$Decompress) {
+function MainFunctionPatch([string]$Command, [Array]$Header, [string]$PatchedFileName, [boolean]$Decompress, [boolean]$Finalize) {
     
-    if ($Settings.Debug.Console -eq $True) { if ( (WriteDebug -Command $Command -Header $Header -PatchedFileName $PatchedFileName -Decompress $Decompress) -eq $True) { return } }
+    if ($Settings.Debug.Console -eq $True) { if ( (WriteDebug -Command $Command -Header $Header -PatchedFileName $PatchedFileName -Decompress $Decompress -Finalize $Finalize) -eq $True) { return } }
 
     # Step 01: Disable the main dialog, allow patching and delete files if they still exist
     EnableGUI $False
@@ -168,14 +174,14 @@ function MainFunctionPatch([string]$Command, [Array]$Header, [string]$PatchedFil
         if (!(PatchDecompressedROM)) { return }
 
         # Step 14: Compress the decompressed ROM if required
-        CompressROM $Decompress
+        CompressROM -Decompress $Decompress -Finalize $Finalize
 
         # Step 15: Patch and extend the ROM file with the patch through Floating IPS
         if (!(PatchCompressedROM)) { return }
     }
     elseif (StrLike -str $Command -val "Apply Patch") {
         # Step 16: Compress if needed and apply provided BPS Patch
-        CompressROM  $Decompress
+        CompressROM -Decompress $Decompress -Finalize $Finalize
         if (!(ApplyPatchROM $Decompress)) { return }
     }
 
@@ -215,7 +221,7 @@ function MainFunctionPatch([string]$Command, [Array]$Header, [string]$PatchedFil
 
 
 #==============================================================================================================================================================================================
-function WriteDebug([string]$Command, [String[]]$Header, [string]$PatchedFileName, [boolean]$Decompress) {
+function WriteDebug([string]$Command, [String[]]$Header, [string]$PatchedFileName, [boolean]$Decompress, [boolean]$Finalize) {
     
     if ($Settings.Debug.Stop -eq $False) { return $False }
 
@@ -226,11 +232,11 @@ function WriteDebug([string]$Command, [String[]]$Header, [string]$PatchedFileNam
     WriteToConsole ("Redux Patch: " + $GamePatch.redux.file)
     WriteToConsole ("Additional Options: " +  (IsChecked $Patches.Options))
     WriteToConsole ("Redux: " +  (IsChecked $Patches.Redux))
-    WriteToConsole ("Language Patch: " + $LanguagePatch)
+    WriteToConsole ("Language Patch: " + $LanguagePatch.file)
     WriteToConsole ("Patched File Name: " + $PatchedFileName)
     WriteToConsole ("Command: " + $Command)
     WriteToConsole ("Downgrade: " + $Patches.Downgrade.Checked)
-    WriteToConsole ("Finalize Downgrade: " + ($Patches.Downgrade.Checked -and (!$Patches.Redux.Checked -or !$Patches.Redux.Visible)))
+    WriteToConsole ("Finalize Downgrade: " + $Finalize)
     WriteToConsole ("Decompress: " + $Decompress)
     WriteToConsole ("ROM Hash: " + $ROMHashSum)
     WriteToConsole ("Game Type Hash: " + $GameType.Hash)
@@ -252,10 +258,10 @@ function WriteDebug([string]$Command, [String[]]$Header, [string]$PatchedFileNam
 #==============================================================================================================================================================================================
 function Cleanup() {
     
-    if ($Settings.NoCleanup.Checked -eq $True) { return }
+    if ($Settings.debug.NoCleanup -eq $True) { return }
     WriteToConsole "Cleaning up files..."
-
-    $global:ByteArrayGame = $global:ROMFile = $global:WADFile = $global:CheckHashSum = $global:ROMHashSum = $null
+    
+    $global:ByteArrayGame = $global:ROMFile = $global:WADFile = $global:CheckHashSum = $global:ROMHashSum = $global:LanguagePatch = $null
 
     RemovePath $WADFile.Folder
     RemovePath $Paths.cygdrive
@@ -287,9 +293,8 @@ function GetPatchFile() {
 #==============================================================================================================================================================================================
 function PrePatchingAdditionalOptions() {
 
-    if ( !(IsSet -Elem $GamePatch.redux.file) -or !(IsChecked $Patches.Redux) ) { return }
-
-    if ( !$Decompress -and !(TestFile $GetROM.decomp) ) { Copy-Item -LiteralPath $GetROM.run -Destination $GetROM.decomp -Force }
+    if (!(IsSet $GamePatch.options) -or !$Patches.Options.Checked -or !$Patches.Options.Visible)   { return }
+    if (!$Decompress -and !(TestFile $GetROM.decomp) )                                             { Copy-Item -LiteralPath $GetROM.run -Destination $GetROM.decomp -Force }
 
     # BPS - Pre-Redux Options
     if ( (Get-Command "PrePatchReduxOptions" -errorAction SilentlyContinue) -and (IsChecked $Patches.Redux) -and (IsSet $GamePatch.redux.file) ) {
@@ -304,15 +309,13 @@ function PrePatchingAdditionalOptions() {
 #==============================================================================================================================================================================================
 function PatchingAdditionalOptions() {
     
-    if ( ($GamePatch.options -eq 0) -or !(IsChecked $Patches.Options) ) { return }
-
-    if ( !$Decompress -and !(TestFile $GetROM.decomp) ) { Copy-Item -LiteralPath $GetROM.run -Destination $GetROM.decomp -Force }
-    #$FunctionTitle = SetFunctionTitle -Function $GameType.mode
-        
-    # Language patch
-    if (IsSet -Elem $LanguagePatch) { # Language
+    if (!(IsSet $GamePatch.options) -or !$Patches.Options.Checked -or !$Patches.Options.Visible)   { return }
+    if (!$Decompress -and !(TestFile $GetROM.decomp) )                                             { Copy-Item -LiteralPath $GetROM.run -Destination $GetROM.decomp -Force }
+    
+    # Language patches
+    if (IsSet -Elem $LanguagePatch.file) {
         UpdateStatusLabel ("Patching " + $GameType.mode + " Language...")
-        ApplyPatch -File $GetROM.decomp -Patch $LanguagePatch
+        ApplyPatch -File $GetROM.decomp -Patch $LanguagePatch.file
     }
 
     # BPS - Additional Options
@@ -484,14 +487,14 @@ function ExtractWADFile([string]$PatchedFileName) {
         if ($item.PSIsContainer) { RemovePath $item }
     }
     
-    [io.file]::WriteAllBytes($Files.ckey, @(235, 228, 42, 34, 94, 133, 147, 228, 72, 217, 197, 69, 115, 129, 170, 247)) | Out-Null
+    [IO.File]::WriteAllBytes($Files.ckey, @(235, 228, 42, 34, 94, 133, 147, 228, 72, 217, 197, 69, 115, 129, 170, 247))
     
     # We need to be in the same path as some files so just jump there
     Push-Location $Paths.Temp
 
     # Run the program to extract the wad file
     $ErrorActionPreference = 'SilentlyContinue'
-    try   { & $Files.tool.wadunpacker $GamePath | Out-Null }
+    try   { (& $Files.tool.wadunpacker $GamePath) | Out-Null }
     catch { }
     $ErrorActionPreference = 'Continue'
 
@@ -568,9 +571,11 @@ function PatchVCEmulator([string]$Command) {
     UpdateStatusLabel ("Patching " + $GameType.mode + " VC Emulator...")
 
     # Applying LZSS decompression
-    if ($GameType.lzss -gt 0) {
-        if ( (StrLike -Str $Command -Val "Patch Boot DOL") -or $VC.ExpandMemory.Checked -or $VC.RemapDPad.Checked -or $VC.RemapCDown.Checked -or $VC.RemapZ.Checked) {
+    $array = [IO.File]::ReadAllBytes($WADFile.AppFile01)
+    if ($array[0] -eq (GetDecimal "10") -and (Get-Item $WADFile.AppFile01).length/1MB -lt 1) {
+        if ( (StrLike -Str $Command -Val "Patch Boot DOL") -or (IsChecked $VC.ExpandMemory) -or (IsChecked $VC.RemapDPad) -or (IsChecked $VC.RemapCDown) -or (IsChecked $VC.RemapZ) ) {
             & $Files.tool.lzss -d $WADFile.AppFile01 | Out-Null
+            $DecompressedApp = $True
             WriteToConsole ("Decompressed LZSS File: " + $WADFile.AppFile01)
         }
     }
@@ -584,78 +589,87 @@ function PatchVCEmulator([string]$Command) {
 
     # Games
     if ($GameType.mode -eq "Ocarina of Time") {
-        if ($VC.ExpandMemory.Checked) {
-            ChangeBytes -File $WadFile.AppFile01 -Offset "2EB0"  -Values @("60", "00", "00", "00")
-            ChangeBytes -File $WadFile.AppFile01 -Offset "5BF44" -Values @("3C", "80", "72", "00")
-            ChangeBytes -File $WadFile.AppFile01 -Offset "5BFD7" -Values @("00")
+        if (IsChecked  $VC.ExpandMemory) {
+            ChangeBytes -File $WadFile.AppFile01 -Offset "5BF44" -Values "3C 80 72 00"
+            ChangeBytes -File $WadFile.AppFile01 -Offset "5BFD7" -Values "00"
         }
 
-        if ($VC.RemapDPad.Checked) {
-            $Offset = SearchBytes -File $WadFile.AppFile01 -Start "16BA20" -End "17C6F0" -Values ("00", "20", "00", "00", "00", "20", "00", "00", "00", "20", "00", "00", "00", "20", "00", "00")
+        if (IsChecked $VC.RemapDPad) {
+            $Offset = SearchBytes -File $WadFile.AppFile01 -Start "16BA20" -End "17C6F0" -Values "00 20 00 00 00 20 00 00 00 20 00 00 00 20 00 00"
             # Vanilla D-Pad: 0x16BAF0, 0x16BAF4, 0x16BAF8, 0x16BAFC
-            if (!$VC.LeaveDPadUp.Checked) { ChangeBytes -File $WadFile.AppFile01 -Offset $Offset -Values @("08", "00") }
-            ChangeBytes -File $WadFile.AppFile01 -Offset ( Get24Bit ( (GetDecimal $Offset) + (GetDecimal "04") ) ) -Values @("04", "00")
-            ChangeBytes -File $WadFile.AppFile01 -Offset ( Get24Bit ( (GetDecimal $Offset) + (GetDecimal "08") ) ) -Values @("02", "00")
-            ChangeBytes -File $WadFile.AppFile01 -Offset ( Get24Bit ( (GetDecimal $Offset) + (GetDecimal "0C") ) ) -Values @("01", "00")
+            if (!$VC.LeaveDPadUp.Checked) { ChangeBytes -File $WadFile.AppFile01 -Offset $Offset -Values "08 00" }
+            ChangeBytes -File $WadFile.AppFile01 -Offset ( Get24Bit ( (GetDecimal $Offset) + (GetDecimal "04") ) ) -Values "04 00"
+            ChangeBytes -File $WadFile.AppFile01 -Offset ( Get24Bit ( (GetDecimal $Offset) + (GetDecimal "08") ) ) -Values "02 00"
+            ChangeBytes -File $WadFile.AppFile01 -Offset ( Get24Bit ( (GetDecimal $Offset) + (GetDecimal "0C") ) ) -Values "01 00"
         }
 
-        if ($VC.RemapCDown.Checked) {
-            $Offset = SearchBytes -File $WadFile.AppFile01 -Start "16BA20" -End "17C6F0" -Values ("00", "08", "00", "00", "00", "04", "00", "00", "00", "02", "00", "00", "00", "01", "00", "00", "80", "00", "00", "00", "40", "00", "00", "00", "20", "00", "00", "00", "20", "00", "00", "00")
+        if (IsChecked $VC.RemapCDown) {
+            $Offset = SearchBytes -File $WadFile.AppFile01 -Start "16BA20" -End "17C6F0" -Values "00 08 00 00 00 04 00 00 00 02 00 00 00 01 00 00 80 00 00 00 40 00 00 00 20 00 00 00 20 00 00 00"
             # Vanilla C-Down: 0x16BB04
-            ChangeBytes -File $WadFile.AppFile01 -Offset ( Get24Bit ( (GetDecimal $Offset) + (GetDecimal "04") ) ) -Values @("00", "20")
+            ChangeBytes -File $WadFile.AppFile01 -Offset ( Get24Bit ( (GetDecimal $Offset) + (GetDecimal "04") ) ) -Values "00 20"
         }
 
-        if ($VC.RemapZ.Checked) {
-            $Offset = SearchBytes -File $WadFile.AppFile01 -Start "16BA20" -End "17C6F0" -Values ("20", "00", "00", "00", "00", "10", "00", "00", "00", "04", "00", "00", "10", "00", "00", "00")
+        if (IsChecked $VC.RemapZ) {
+            $Offset = SearchBytes -File $WadFile.AppFile01 -Start "16BA20" -End "17C6F0" -Values "20 00 00 00 00 10 00 00 00 04 00 00 10 00 00 00"
             # Vanilla Z: 0x16BAD8
-            ChangeBytes -File $WadFile.AppFile01 -Offset ( Get24Bit ( (GetDecimal $Offset) + (GetDecimal "08") ) ) -Values @("00", "20")
+            ChangeBytes -File $WadFile.AppFile01 -Offset ( Get24Bit ( (GetDecimal $Offset) + (GetDecimal "08") ) ) -Values "00 20"
         }
     }
     elseif ($GameType.mode -eq "Majora's Mask") {
-        if ($VC.ExpandMemory.Checked) {
-            ChangeBytes -File $WadFile.AppFile01 -Offset "10B58" -Values @("3C", "80", "00", "C0")
-            ChangeBytes -File $WadFile.AppFile01 -Offset "4BD20" -Values @("67", "E4", "70", "00")
-            ChangeBytes -File $WadFile.AppFile01 -Offset "4BC80" -Values @("3C", "A0", "01", "00")
+        if (IsChecked $VC.ExpandMemory) {
+            ChangeBytes -File $WadFile.AppFile01 -Offset "10B58" -Values "3C 80 00 C0"
+            ChangeBytes -File $WadFile.AppFile01 -Offset "4BD20" -Values "67 E4 70 00"
+            ChangeBytes -File $WadFile.AppFile01 -Offset "4BC80" -Values "3C A0 01 00"
         }
 
-        if ($VC.RemapDPad.Checked) {
-            $Offset = SearchBytes -File $WadFile.AppFile01 -Start "148430" -End "15DA0F" -Values ("00", "00", "00", "00", "00", "20", "00", "00", "00", "20", "00", "00", "00", "20", "00", "00")
+        if (IsChecked $VC.RemapDPad) {
+            $Offset = SearchBytes -File $WadFile.AppFile01 -Start "148430" -End "15DA0F" -Values "00 00 00 00 00 20 00 00 00 20 00 00 00 20 00 00"
             # Vanilla D-Pad: 0x148514, 0x148518, 0x14851C, 0x148520
-            ChangeBytes -File $WadFile.AppFile01 -Offset ( Get24Bit ( (GetDecimal $Offset) + (GetDecimal "04") ) ) -Values @("08", "00")
-            ChangeBytes -File $WadFile.AppFile01 -Offset ( Get24Bit ( (GetDecimal $Offset) + (GetDecimal "08") ) ) -Values @("04", "00")
-            ChangeBytes -File $WadFile.AppFile01 -Offset ( Get24Bit ( (GetDecimal $Offset) + (GetDecimal "0C") ) ) -Values @("02", "00")
-            ChangeBytes -File $WadFile.AppFile01 -Offset ( Get24Bit ( (GetDecimal $Offset) + (GetDecimal "10") ) ) -Values @("01", "00")
+            ChangeBytes -File $WadFile.AppFile01 -Offset ( Get24Bit ( (GetDecimal $Offset) + (GetDecimal "04") ) ) -Values "08 00"
+            ChangeBytes -File $WadFile.AppFile01 -Offset ( Get24Bit ( (GetDecimal $Offset) + (GetDecimal "08") ) ) -Values "04 00"
+            ChangeBytes -File $WadFile.AppFile01 -Offset ( Get24Bit ( (GetDecimal $Offset) + (GetDecimal "0C") ) ) -Values "02 00"
+            ChangeBytes -File $WadFile.AppFile01 -Offset ( Get24Bit ( (GetDecimal $Offset) + (GetDecimal "10") ) ) -Values "01 00"
         }
 
-        if ($VC.RemapCDown.Checked) {
-            $Offset = SearchBytes -File $WadFile.AppFile01 -Start "148430" -End "15DA0F" -Values ("00", "20", "00", "00", "00", "08", "00", "00", "00", "04", "00", "00", "00", "02", "00", "00")
+        if (IsChecked $VC.RemapCDown) {
+            $Offset = SearchBytes -File $WadFile.AppFile01 -Start "148430" -End "15DA0F" -Values "00 20 00 00 00 08 00 00 00 04 00 00 00 02 00 00"
             # Vanilla C-Down: 0x148528
-            ChangeBytes -File $WadFile.AppFile01 -Offset ( Get24Bit ( (GetDecimal $Offset) + (GetDecimal "08") ) ) -Values @("00", "20") }
+            ChangeBytes -File $WadFile.AppFile01 -Offset ( Get24Bit ( (GetDecimal $Offset) + (GetDecimal "08") ) ) -Values "00 20" }
 
-        if ($VC.RemapZ.Checked) {
-            $Offset = SearchBytes -File $WadFile.AppFile01 -Start "148430" -End "15DA0F" -Values ("20", "00", "00", "00", "00", "10", "00", "00", "00", "04", "00", "00", "10", "00", "00", "00")
+        if (IsChecked $VC.RemapZ) {
+            $Offset = SearchBytes -File $WadFile.AppFile01 -Start "148430" -End "15DA0F" -Values "20 00 00 00 00 10 00 00 00 04 00 00 10 00 00 00"
             # Vanilla Z: 0x1484F8
-            ChangeBytes -File $WadFile.AppFile01 -Offset ( Get24Bit ( (GetDecimal $Offset) + (GetDecimal "08") ) ) -Values @("00", "20")
+            ChangeBytes -File $WadFile.AppFile01 -Offset ( Get24Bit ( (GetDecimal $Offset) + (GetDecimal "08") ) ) -Values "00 20"
         }
 
     }
     elseif ($GameType.mode -eq "Super Mario 64") {
         if (IsChecked $VC.RemapL) {
-            #$Offset = SearchBytes -File $WadFile.AppFile01 -Start "168000" -End "180000" -Values ("20", "00", "00", "00", "00", "10", "00", "00", "20", "00", "00", "00", "10", "00", "00", "00")
-            #ChangeBytes -File $WadFile.AppFile01 -Offset $Offset -Values @("00", "20")
-            ChangeBytes -File $WadFile.AppFile01 -Offset "168628" -Values @("00", "20") # L -> 0x168628, D-Pad -> 0x168648, 0x16864C, 0x168650, 0x168654
-        } 
+            #$Offset = SearchBytes -File $WadFile.AppFile01 -Start "168000" -End "180000" -Values "20 00 00 00 00 10 00 00 20 00 00 00 10 00 00 00"
+            #ChangeBytes -File $WadFile.AppFile01 -Offset $Offset -Values "00 20"
+            ChangeBytes -File $WadFile.AppFile01 -Offset "168628" -Values "00 20" # L -> 0x168628, D-Pad -> 0x168648, 0x16864C, 0x168650, 0x168654
+        }
+    }
 
-        if ( (IsChecked $VC.RemoveFilter) -and (StrLike -str $Command -val "Multiplayer") )   { ChangeBytes -File $WadFile.AppFile01 -Offset "53124" -Values @("60", "00", "00", "00") }
-        elseif (IsChecked $VC.RemoveFilter)                                                   { ChangeBytes -File $WadFile.AppFile01 -Offset "46210" -Values @("4E", "80", "00", "20") }
+    # Expand Memory
+    if ( (IsChecked $VC.ExpandMemory) -and $GameType.mode -ne "Majora's Mask") {
+        $offset = SearchBytes -File $WadFile.AppFile01 -Start "2000" -End "9999" -Values "41 82 00 08 3C 80 00 80"
+        if ($offset -gt 0)   { ChangeBytes -File $WadFile.AppFile01 -Offset $offset  -Values "60 00 00 00" }
+        else                 { WriteToConsole "Game Memory could not be expanded" }
+        # SM64: 5AD4 / MK64: 5C28 / SF: 2EF4 / PM: 2EE4 / OoT: 2EB0 / MM: ?? / Smash: 3094 / Sin: 3028
+    }
+
+    if (IsChecked $VC.RemoveFilter) {
+        $offset = SearchBytes -File $WadFile.AppFile01 -Start "40000" -End "60000" -Values "38 21 00 xx 4E 80 00 20 94 21 FF E0 7C 08 02 A6 3C 80 80 xx 90 01 00 24"
+        if ($offset -gt 0)   { ChangeBytes -File $WadFile.AppFile01 -Offset ( Get24Bit ( (GetDecimal $Offset) + (GetDecimal "08") ) )  -Values "4E 80 00 20" }
+        else                 { WriteToConsole "Dark filter overlay could not be removed" }
+        # SM64: 46210 / MK64: 46DB8 / SF: 451C8 / PM: 44A54 / OoT: 455FC / MM: 4A248 / Smash: 46DC4 / Sin: 53124 or 45B94
     }
 
     # Applying LZSS compression
-    if ($GameType.lzss -gt 0) {
-        if ( (StrLike -Str $Command -Val "Patch Boot DOL") -or $VC.ExpandMemory.Checked -or $VC.RemapDPad.Checked -or $VC.RemapCDown.Checked -or $VC.RemapZ.Checked) {
-            & $Files.tool.lzss -evn $WADFile.AppFile01 | Out-Null
-            WriteToConsole ("Compressed LZSS File: " + $WADFile.AppFile01)
-        }
+    if ($DecompressedApp) {
+        & $Files.tool.lzss -evn $WADFile.AppFile01 | Out-Null
+        WriteToConsole ("Compressed LZSS File: " + $WADFile.AppFile01)
     }
 
 }
@@ -719,8 +733,6 @@ function PatchVCROM([string]$Command) {
     
     # Fill the entire array with junk data. The patched ROM is slightly smaller than 8MB but we need an 8MB ROM.
     for ($i=0; $i-lt $ByteArray.Length; $i++) { $NewByteArray[$i] = 255 }
-
-    $ByteArray = $null
 
     return $True
 
@@ -798,11 +810,7 @@ function ConvertROM([string]$Command) {
                 $array[$i + 3] = $temp[0]
             }
         }
-
-        if ($Ext -eq ".v64" -or $Ext -eq ".n64") {
-            [IO.File]::WriteAllBytes($Paths.Temp + "\converted", $array)
-            $array = $temp = $null
-        }
+        if ($Ext -eq ".v64" -or $Ext -eq ".n64") { [IO.File]::WriteAllBytes($Paths.Temp + "\converted", $array) }
 
         $GetROM.run =  $Paths.Temp + "\converted"
         $global:ROMHashSum = (Get-FileHash -Algorithm MD5 $GetROM.run).Hash
@@ -828,8 +836,6 @@ function CompareHashSums([string]$Command) {
         }
     }
 
-    Write-Host $ROMHashSum
-    
     UpdateStatusLabel "Failed! The ROM has an incorrect version or is not proper."
     return $False
 
@@ -981,7 +987,12 @@ function DecompressROM([boolean]$Decompress) {
         else                                                                                                           { & $Files.tool.TabExt32 $GetROM.run | Out-Null }
 
         WriteToConsole ("Generated DMA Table from: " + $GetROM.run)
-        & $Files.tool.ndec $GetROM.run $GetROM.decomp | Out-Null
+        if ($Settings.Debug.AltDecompress -eq $True) {
+            Copy-Item -Path $GetROM.run -Destination $GetROM.decomp -Force
+            & $Files.tool.Decompress $GetROM.decomp | Out-Null
+            Move-Item -Path ($GetROM.decomp + "-decomp.z64") -Destination $GetROM.decomp -Force
+        }
+        else { & $Files.tool.ndec $GetROM.run $GetROM.decomp | Out-Null }
         WriteToConsole ("Decompressed ROM: " + $GetROM.decomp)
         Pop-Location
 
@@ -1006,7 +1017,7 @@ function DecompressROM([boolean]$Decompress) {
 
 
 #==============================================================================================================================================================================================
-function CompressROM([boolean]$Decompress) {
+function CompressROM([boolean]$Decompress, [boolean]$Finalize) {
     
     if (!$Decompress -or !(TestFile $GetROM.decomp)) { return }
 
@@ -1022,10 +1033,7 @@ function CompressROM([boolean]$Decompress) {
         WriteToConsole ("Compressed ROM: " + $GetROM.patched)
         Pop-Location
 
-        if ($Patches.Downgrade.Checked -and (!$Patches.Redux.Checked -or !$Patches.Redux.Visible)) {
-            if (TestFile ($GameFiles.downgrade + "\finalize_rev0.bps")) { ApplyPatch -File $GetROM.patched -Patch "\Downgrade\finalize_rev0.bps" }
-        }
-
+        if ($Finalize -and (TestFile ($GameFiles.downgrade + "\finalize_rev0.bps"))) { ApplyPatch -File $GetROM.patched -Patch "\Downgrade\finalize_rev0.bps" }
     }
     else { Move-Item -LiteralPath $GetROM.decomp -Destination $GetROM.patched -Force }
 
@@ -1059,7 +1067,9 @@ function PatchRedux([boolean]$Decompress) {
         UpdateStatusLabel ("Patching " + $GameType.mode + " REDUX...")
 
         # Redux patch
-        if (IsWidescreen -Patched)                   { ApplyPatch -File $GetROM.decomp -Patch $GamePatch.redux.file_widescreen }
+        if ($Patches.Options.Checked -and (IsWidescreen -Patched) ) {
+            if (IsSet -Elem $GamePatch.redux.file_widescreen) { ApplyPatch -File $GetROM.decomp -Patch $GamePatch.redux.file_widescreen }
+        }
         elseif (IsSet -Elem $GamePatch.redux.file)   { ApplyPatch -File $GetROM.decomp -Patch $GamePatch.redux.file }
     }
 
@@ -1071,12 +1081,9 @@ function PatchRedux([boolean]$Decompress) {
 function ExtendROM() {
     
     if ($GameType.romc -ne 1) { return }
-
     $Bytes = @(08, 00, 00, 00)
     $ByteArray = [IO.File]::ReadAllBytes($GetROM.run)
     [io.file]::WriteAllBytes($GetROM.run, $Bytes + $ByteArray)
-
-    $ByteArray = $null
 
 }
 
@@ -1108,9 +1115,6 @@ function CheckGameID() {
         }
     }
 
-    $CompareArray = $null
-    $CompareAgainst = $null
-
     return $True
 
 }
@@ -1131,9 +1135,7 @@ function HackOpeningBNRTitle($Title) {
 
     # Initially assume the two chunks of data are identical.
     $Identical = $True
-
     $Start = 0
-
     $CompareArray = $ByteArray[(GetDecimal -Hex "F1")..((GetDecimal -Hex "F1") + $VCTitleLength)]
 
     # Scan only the contents of the IMET header within the file.
@@ -1154,7 +1156,6 @@ function HackOpeningBNRTitle($Title) {
 
     # Overwrite the patch file with the extended file.
     [IO.File]::WriteAllBytes($WadFile.AppFile00, $ByteArray)
-    $ByteArray = $null
 
 }
 
@@ -1199,7 +1200,6 @@ function HackROMGameTitle($Title, $GameID, $Region) {
 
     # Write to file and clear variables
     [io.file]::WriteAllBytes($GetROM.patched, $ByteArrayGame)
-    $ByteArrayGame = $hiROM = $offset = $null
 
 }
 
@@ -1217,9 +1217,7 @@ function RemoveRegionProtection() {
     $regions = SetJSONFile $Files.json.regions
 
     # Remove region protection for game if applicable
-    $entry = $Null
     for ($i=0; $i -lt $regions.Length; $i++) {
-
         for ($j=0; $j -lt $regions.hash.Length; $j++) {
             if ($regions[$i].hash[$j] -eq $ROMHashSum) {
                 $entry = $regions[$i]
@@ -1234,9 +1232,6 @@ function RemoveRegionProtection() {
             ChangeBytes -Offset $entry.offset[$i] -Values $values
         }
     }
-
-    # Reset variables
-    $regions = $entry = $null
 
 }
 
@@ -1278,13 +1273,8 @@ function RepackU8AppFile() {
         UpdateStatusLabel 'Re-injecting ROM into "00000001.app" file...'     # Set the status label
         $ByteArrayROM = [IO.File]::ReadAllBytes($GetROM.patched)
         $ByteArrayApp = [IO.File]::ReadAllBytes($WADFile.AppFile01)
-
-        for ($i=0; $i -lt (GetDecimal -Hex $WADFile.Length); $i++) {
-            $ByteArrayApp[$i + (GetDecimal -Hex $WADFile.Offset)] = $ByteArrayROM[($i)]
-        }
-
+        for ($i=0; $i -lt (GetDecimal -Hex $WADFile.Length); $i++) { $ByteArrayApp[$i + (GetDecimal -Hex $WADFile.Offset)] = $ByteArrayROM[($i)] }
         [io.file]::WriteAllBytes($WADFile.AppFile01, $ByteArrayApp)
-        $ByteArrayROM = $ByteArrayApp = $null
     }
 
 }
@@ -1347,6 +1337,16 @@ function IsWidescreen([switch]$Patched, [switch]$Experimental) {
     elseif ( $Patched -and !$Experimental)   { return (  $Patches.Redux.Checked -and $Settings.Debug.ChangeWidescreen -eq $False) }
     elseif (!$Patched -and  $Experimental)   { return ( !$Patches.Redux.Checked -and $Settings.Debug.ChangeWidescreen -eq $True)  }
     elseif ( $Patched -and  $Experimental)   { return (  $Patches.Redux.Checked -and $Settings.Debug.ChangeWidescreen -eq $True)  }
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function IsReduxOnly() {
+    
+    if ($Patches.Redux.Checked -and !(IsWidescreen -Patched)) { return $True }
+    return $False
 
 }
 

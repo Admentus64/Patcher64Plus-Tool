@@ -16,10 +16,10 @@ function CreateOptions() {
 
     # GRAPHICS #
     CreateReduxGroup    -Tag "Revert" -Text "Original (Revert)"
-    CreateReduxCheckBox -Name "PinkHairGFX"  -Column 1 -Text "Pink Hair GFX"        -Info "Restores the Pink Hair for Link to that of the original game"                                     -Credits "ShadowOne333"
-    CreateReduxCheckBox -Name "MenuGFX"      -Column 2 -Text "Menu GFX"             -Info "Restores the menu to that of the original game"                                                   -Credits "ShadowOne333"
+    CreateReduxCheckBox -Name "PinkHairGFX"  -Text "Pink Hair GFX"        -Info "Restores the Pink Hair for Link to that of the original game"                                     -Credits "ShadowOne333"
+    CreateReduxCheckBox -Name "MenuGFX"      -Text "Menu GFX"             -Info "Restores the menu to that of the original game"                                                   -Credits "ShadowOne333"
 
     CreateReduxGroup    -Tag "Script" -Text "Script"
-    CreateReduxCheckBox -Name "ReWizardized" -Column 1 -Text "Re-Wizardized Script" -Info "Addresses some script changes, such as addressing Agahnim's role as 'Wizard' insteaf of 'Priest'" -Credits "Kyler Ashton"
+    CreateReduxCheckBox -Name "ReWizardized" -Text "Re-Wizardized Script" -Info "Addresses some script changes, such as addressing Agahnim's role as 'Wizard' insteaf of 'Priest'" -Credits "Kyler Ashton"
 
 }

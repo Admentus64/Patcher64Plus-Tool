@@ -1,58 +1,57 @@
-{ "patch" : [ {
-	"title" : "Donkey Kong Country: Boss Blitz (1.5)",
-	"console" : "Both",
-	"command" : "Force Downgrade",
-	"vc_title" : "Donkey Kong Country: Boss Blitz",
-	"vc_gameID" : "JAE0",
-	"patch" : "\\Compressed\\boss_blitz.ips",
-	"output" : "_boss_blitz_patched",
-	"tooltip" : "Transforms the game into a boss rush mode with all 7 bosses{0}Only recommended for hardcore players!{0}- Supported: Rev 0 (US)"
+[ {
+	"title"		: "Donkey Kong Country: Boss Blitz (1.5)",
+	"console"	: "Both",
+	"command"	: "Force Downgrade",
+	"vc_title"	: "Donkey Kong Country: Boss Blitz",
+	"vc_gameID"	: "JAE0",
+	"patch"		: "\\Compressed\\boss_blitz.ips",
+	"output"	: "_boss_blitz_patched",
+	"tooltip"	: "Transforms the game into a boss rush mode with all 7 bosses{0}Only recommended for hardcore players!{0}- Supported: Rev 0 (US)"
 }, {
-	"title" : "Donkey Kong Country: Expert Edition",
-	"console" : "Both",
-	"command" : "Force Downgrade",
-	"vc_title" : "Donkey Kong Country: Expert Edition",
-	"vc_gameID" : "JAE1",
-	"patch" : "\\Compressed\\expert_edition.ips",
-	"output" : "_expert_edition_patched",
-	"tooltip" : "Removes the DK Barrels, Star Barrels, and Warp Barrels to make the game more challenging{0}Only recommended for hardcore players!{0}- Supported: Rev 0 (US)"
+	"title"		: "Donkey Kong Country: Expert Edition",
+	"console"	: "Both",
+	"command"	: "Force Downgrade",
+	"vc_title"	: "Donkey Kong Country: Expert Edition",
+	"vc_gameID"	: "JAE1",
+	"patch"		: "\\Compressed\\expert_edition.ips",
+	"output"	: "_expert_edition_patched",
+	"tooltip"	: "Removes the DK Barrels, Star Barrels, and Warp Barrels to make the game more challenging{0}Only recommended for hardcore players!{0}- Supported: Rev 0 (US)"
 }, {
-	"title" : "Donkey Kong Country: German 60 Hz",
-	"console" : "Native",
-	"patch" : [ {
-		"file" : "\\Compressed\\German Native\\german_rev0.ips",
-		"hash" : "30C5F292FF4CBBFCC00FD8FA96C2DE3B"
+	"title"		: "Donkey Kong Country: German 60 Hz",
+	"console"	: "Native",
+	"patch"	: [ {
+		"file"	: "\\Compressed\\German Native\\german_rev0.ips",
+		"hash"	: "30C5F292FF4CBBFCC00FD8FA96C2DE3B"
 	}, {
-		"file" : "\\Compressed\\German Native\\german_rev1.ips",
-		"hash" : "323A37CCBA32104BEEF7FF7DFC7CE894"
+		"file"	: "\\Compressed\\German Native\\german_rev1.ips",
+		"hash"	: "323A37CCBA32104BEEF7FF7DFC7CE894"
 	}, {
-		"file" : "\\Compressed\\German Native\\german_rev2.ips",
-		"hash" : "2E604BC12FB8F9467765C807C24877FA"
+		"file"	: "\\Compressed\\German Native\\german_rev2.ips",
+		"hash"	: "2E604BC12FB8F9467765C807C24877FA"
 	}, {
-		"file" : "\\Compressed\\German Native\\german_vc.ips",
-		"hash" : "8F77B601C1F37033A47DFAA13FB1059A"
+		"file"	: "\\Compressed\\German Native\\german_vc.ips",
+		"hash"	: "8F77B601C1F37033A47DFAA13FB1059A"
 	} ],
-	"output" : "_german_patched",
-	"tooltip" : "Forces the game into the German language with typo fixes included{0}- Supported: Rev 0 (US), Rev 1 (US), Rev 2 (US) & Rev VC (US)"
+	"output"	: "_german_patched",
+	"tooltip"	: "Forces the game into the German language with typo fixes included{0}- Supported: Rev 0 (US), Rev 1 (US), Rev 2 (US) & Rev VC (US)"
 }, {
-	"title" : "Donkey Kong Country: German 60 Hz",
-	"console" : "Wii VC",
-	"vc_title" : "Donkey Kong Country (German)",
-	"vc_gameID" : "JAED",
-	"patch" : [ {
-		"file" : "\\Compressed\\German Wii VC\\german_rev0.ips",
-		"hash" : "30C5F292FF4CBBFCC00FD8FA96C2DE3B"
+	"title"		: "Donkey Kong Country: German 60 Hz",
+	"console"	: "Wii VC",
+	"vc_title"	: "Donkey Kong Country (German)",
+	"vc_gameID"	: "JAEG",
+	"patch"	: [ {
+		"file"	: "\\Compressed\\German Wii VC\\german_rev0.ips",
+		"hash"	: "30C5F292FF4CBBFCC00FD8FA96C2DE3B"
 	}, {
-		"file" : "\\Compressed\\German Wii VC\\german_rev1.ips",
-		"hash" : "323A37CCBA32104BEEF7FF7DFC7CE894"
+		"file"	: "\\Compressed\\German Wii VC\\german_rev1.ips",
+		"hash"	: "323A37CCBA32104BEEF7FF7DFC7CE894"
 	}, {
-		"file" : "\\Compressed\\German Wii VC\\german_rev2.ips",
-		"hash" : "2E604BC12FB8F9467765C807C24877FA"
+		"file"	: "\\Compressed\\German Wii VC\\german_rev2.ips",
+		"hash"	: "2E604BC12FB8F9467765C807C24877FA"
 	}, {
-		"file" : "\\Compressed\\German Wii VC\\german_vc.ips",
-		"hash" : "8F77B601C1F37033A47DFAA13FB1059A"
+		"file"	: "\\Compressed\\German Wii VC\\german_vc.ips",
+		"hash"	: "8F77B601C1F37033A47DFAA13FB1059A"
 	} ],
-	"output" : "_german_patched",
-	"tooltip" : "Forces the game into the German language with typo fixes included{0}- Supported: Rev 0 (US), Rev 1 (US), Rev 2 (US) & Rev VC (US)"
-}
-] }
+	"output"	: "_german_patched",
+	"tooltip"	: "Forces the game into the German language with typo fixes included{0}- Supported: Rev 0 (US), Rev 1 (US), Rev 2 (US) & Rev VC (US)"
+} ]

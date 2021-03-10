@@ -1,3 +1,36 @@
+v13.0.0
+- Returned the "Master Quest" dungeons option for MM
+- Added German and French ported localizations for OoT (thanks GhostlyDark & Ticamus!)
+- Added German, French and Spanish ported localizations for MM (thanks GhostlyDark & Ticamus!)
+- Added Italian fan-translation (which got fixed by GhostlyDark!)
+- Added Brazilian fan-translation (graphical edits are only 50% done)
+- Added more Cutscene Speed-Up options for OoT
+- Added options for restoring beta animations for OoT
+- Added more monsters for the "Monster HP" option (includes 2x Iron Knuckle fix)
+- Added phase 1 and phase 2 HP values for Goht for MM
+- Added "Manual Jump" option for OoT & MM
+- Added "Sword Beam Attack" option for MM
+- Added "Sword Trail" color (plus duration) options for OoT
+- Added restore beta "Opening Cutscene" option for OoT
+- Added "Navi Beta Colors" option for OoT
+- Added "GC Scheme" option for MM
+- Added "L Targeting" textures for other languages for the "GC Scheme" option for OoT
+- Added "Rename Tatl" option for MM
+- Added advanced option to enable an alternative Nintendo 64 ROM decompressor
+- Added universal "Expand Memory" and "Remove Filter" for all Wii VC WADs
+- Improved "Female Pronouns" option for OoT
+- Improved code instructions for patching text-related options
+- Improved positioning and layout of options
+- Improved text-related options so that they are determined through Patches.json instead
+- Improved decompressing & compress the 0000001.app file through auto-detection
+- Improved applying the "Expand Memory" and "Remove Filter" through auto-detection
+- Fixed downgrading a downgraded ROM
+- Fixed applying language patches if "Additional Options" is unchecked
+- Fixed applying Widescreen Redux patch if "Additional Options" is unchecked
+- Fixed patching "Additional Options" if disabled
+- Fixed trading the "Ocean Title Deed" in MM with the Redux + Widescreen option
+- Various small fixes
+
 v12.0.1
 - Temporary removed the "Master Quest - Dungeons" options for MM
 

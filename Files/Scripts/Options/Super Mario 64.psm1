@@ -104,11 +104,6 @@ function CreateOptions() {
     
     CreateOptionsDialog -Width 740 -Height 370 -Tabs @("Graphics", "Gameplay", "Skip")
 
-    $Redux.Gameplay.FPS.Add_CheckStateChanged(     { EnableElem -Elem $Redux.Gameplay.FreeCam -Active (!$this.Checked) })
-    $Redux.Gameplay.FreeCam.Add_CheckStateChanged( { EnableElem -Elem $Redux.Gameplay.FPS     -Active (!$this.Checked) })
-    EnableElem -Elem $Redux.Gameplay.FPS     -Active (!$Redux.FreeCam.Checked)
-    EnableElem -Elem $Redux.Gameplay.FreeCam -Active (!$Redux.Gameplay.FPS.Checked)
-
     EnableElem -Elem $Redux.Skip.TitleScreen            -Active ($GamePatch.title -eq "Super Mario 64")
     EnableElem -Elem $Redux.Skip.MarioScreen            -Active ($GamePatch.title -eq "Super Mario 64")
 
@@ -121,14 +116,14 @@ function CreateTabGraphics() {
 
     # GRAPHICS #
     CreateReduxGroup    -Tag  "Graphics" -Text "Graphics"
-    CreateReduxCheckBox -Name "Widescreen"      -Column 1 -Row 1 -Text "16:9 Widescreen"         -Info "Native 16:9 Widescreen Display support" -Warning "Requires Dolphin's or GlideN64's internal Widescreen Hack"      -Credits "Theboy181 (RAM) & Admentus (ROM)"
-    CreateReduxCheckBox -Name "BlackBars"       -Column 2 -Row 1 -Text "No Black Bars"           -Info "Removes the black bars shown on the top and bottom of the screen"                                                 -Credits "Theboy181 (RAM) & Admentus (ROM)"
-    CreateReduxCheckBox -Name "ExtendedDraw"    -Column 3 -Row 1 -Text "Extended Draw Distance"  -Info "Increases the game's draw distance for solid objects with collision`nIncludes coin formations as well"            -Credits "Theboy181 (RAM) & Admentus (ROM)"
-    CreateReduxCheckBox -Name "ForceHiresModel" -Column 4 -Row 1 -Text "Force Hires Mario Model" -Info "Always use Mario's High Resolution Model when Mario is too far away"                                              -Credits "Theboy181 (RAM) & Admentus (ROM)"
+    CreateReduxCheckBox -Name "Widescreen"      -Text "16:9 Widescreen"         -Info "Native 16:9 Widescreen Display support" -Warning "Requires Dolphin's or GlideN64's internal Widescreen Hack"      -Credits "Theboy181 (RAM) & Admentus (ROM)"
+    CreateReduxCheckBox -Name "BlackBars"       -Text "No Black Bars"           -Info "Removes the black bars shown on the top and bottom of the screen"                                                 -Credits "Theboy181 (RAM) & Admentus (ROM)"
+    CreateReduxCheckBox -Name "ExtendedDraw"    -Text "Extended Draw Distance"  -Info "Increases the game's draw distance for solid objects with collision`nIncludes coin formations as well"            -Credits "Theboy181 (RAM) & Admentus (ROM)"
+    CreateReduxCheckBox -Name "ForceHiresModel" -Text "Force Hires Mario Model" -Info "Always use Mario's High Resolution Model when Mario is too far away"                                              -Credits "Theboy181 (RAM) & Admentus (ROM)"
 
     # INTERFACE #
     CreateReduxGroup    -Tag  "UI"-Text "Interface"
-    CreateReduxCheckBox -Name "HideHUD"         -Column 1 -Row 1 -Text "Hide HUD"                -Info "Hide the HUD by default and press L to make it appear`nEnable the 'Remap L Button' VC option when patching a WAD" -Credits "Ported from SM64 ROM Manager"
+    CreateReduxCheckBox -Name "HideHUD"         -Text "Hide HUD"                -Info "Hide the HUD by default and press L to make it appear`nEnable the 'Remap L Button' VC option when patching a WAD" -Credits "Ported from SM64 ROM Manager"
 
 }
 
@@ -139,21 +134,21 @@ function CreateTabGameplay() {
     
     # HERO MODE #
     CreateReduxGroup    -Tag  "Hero" -Text "Hero Mode"
-    CreateReduxComboBox -Name "Damage"           -Column 1 -Row 1 -Items @("1x Damage", "2x Damage", "3x Damage") -Text "Damage" -Info "Set the amount of damage you receive"
+    CreateReduxComboBox -Name "Damage"           -Items @("1x Damage", "2x Damage", "3x Damage") -Text "Damage" -Info "Set the amount of damage you receive"
 
     # GAMEPLAY #
     CreateReduxGroup    -Tag  "Gameplay" -Text "Gameplay" -Height 2
-    CreateReduxCheckBox -Name "FPS"              -Column 1 -Row 1 -Text "60 FPS"             -Info "Increases the FPS from 30 to 60`nWitness Super Mario 64 in glorious 60 FPS"                                                         -Credits "Kaze Emanuar"
-    CreateReduxCheckBox -Name "FreeCam"          -Column 2 -Row 1 -Text "Analog Camera"      -Info "Enable full 360 degrees sideways analog camera`nEnable a second emulated controller and bind the Left / Right for the Analog stick" -Credits "Kaze Emanuar"
-    CreateReduxCheckBox -Name "LagFix"           -Column 3 -Row 1 -Text "Lag Fix"            -Info "Smoothens gameplay by reducing lag"                                                                                                 -Credits "Admentus"
-    CreateReduxCheckBox -Name "ExitLevelAnytime" -Column 4 -Row 1 -Text "Exit Level Anytime" -Info "Exit the level at any time without the need for standing still"                                                                     -Credits "Ported from SM64 Tweaker"
-    CreateReduxCheckBox -Name "NoEndlessStairs"  -Column 1 -Row 2 -Text "No Endless Stairs"  -Info "The endless stairs to reach the the Bowser in the Sky stage is disabled"                                                            -Credits "Ported from SM64 Tweaker"
-    CreateReduxCheckBox -Name "NoFallDamage"     -Column 2 -Row 2 -Text "No Fall Damage"     -Info "Mario will not lose any health when falling from height too far"                                                                    -Credits "Ported from SM64 Tweaker"
-    CreateReduxCheckBox -Name "CanNotLoseCap"    -Column 3 -Row 2 -Text "Can Not Lose Cap"   -Info "Mario will not lose his cap anymore"                                                                                                -Credits "Ported from SM64 ROM Manager"
+    CreateReduxCheckBox -Name "FPS"              -Text "60 FPS"             -Info "Increases the FPS from 30 to 60`nWitness Super Mario 64 in glorious 60 FPS"                                                         -Credits "Kaze Emanuar"
+    CreateReduxCheckBox -Name "FreeCam"          -Text "Analog Camera"      -Info "Enable full 360 degrees sideways analog camera`nEnable a second emulated controller and bind the Left / Right for the Analog stick" -Credits "Kaze Emanuar" -Link $Redux.Gameplay.FPS
+    CreateReduxCheckBox -Name "LagFix"           -Text "Lag Fix"            -Info "Smoothens gameplay by reducing lag"                                                                                                 -Credits "Admentus"
+    CreateReduxCheckBox -Name "ExitLevelAnytime" -Text "Exit Level Anytime" -Info "Exit the level at any time without the need for standing still"                                                                     -Credits "Ported from SM64 Tweaker"
+    CreateReduxCheckBox -Name "NoEndlessStairs"  -Text "No Endless Stairs"  -Info "The endless stairs to reach the the Bowser in the Sky stage is disabled"                                                            -Credits "Ported from SM64 Tweaker"
+    CreateReduxCheckBox -Name "NoFallDamage"     -Text "No Fall Damage"     -Info "Mario will not lose any health when falling from height too far"                                                                    -Credits "Ported from SM64 Tweaker"
+    CreateReduxCheckBox -Name "CanNotLoseCap"    -Text "Can Not Lose Cap"   -Info "Mario will not lose his cap anymore"                                                                                                -Credits "Ported from SM64 ROM Manager"
 
     CreateReduxGroup    -Tag  "Gameplay" -Text "Lives"
-    CreateReduxTextBox  -Name "Lives"            -Column 1 -Row 1 -Text "Lives" -Value 4     -Info "Set the amount of lives Mario starts with when opening the save file`nDefault = 4"                                                  -Credits "Ported from SM64 Tweaker"
-    CreateReduxCheckBox -Name "NoGameOver"       -Column 2 -Row 1 -Text "No Game Over"       -Info "The game won't end if Mario's lives reaches below 0"                                                                                -Credits "Kaze Emanuar"
+    CreateReduxTextBox  -Name "Lives"            -Text "Lives" -Value 4     -Info "Set the amount of lives Mario starts with when opening the save file`nDefault = 4"                                                  -Credits "Ported from SM64 Tweaker"
+    CreateReduxCheckBox -Name "NoGameOver"       -Text "No Game Over"       -Info "The game won't end if Mario's lives reaches below 0"                                                                                -Credits "Kaze Emanuar"
 
 }
 
@@ -164,15 +159,15 @@ function CreateTabSkip() {
 
     # SKIP #
     CreateReduxGroup    -Tag  "Skip" -Text "Skip Intro"
-    CreateReduxCheckBox -Name "TitleScreen"    -Column 1 -Row 1 -Text "Skip Title Screen"     -Info "Skip the title screen shown when booting the game`nThis option only works when modifying the vanilla Super Mario 64 game"                           -Credits "Ported from SM64 ROM Manager"
-    CreateReduxCheckBox -Name "MarioScreen"    -Column 2 -Row 1 -Text "Skip Mario Screen"     -Info "Skip the screen which displays Mario's face and the title in the background`nThis option only works when modifying the vanilla Super Mario 64 game" -Credits "Ported from SM64 ROM Manager"
-    CreateReduxCheckBox -Name "GameOverScreen" -Column 3 -Row 1 -Text "Skip Game-Over Screen" -Info "Skip the game-over screen shown when losing all lives"                                                                                              -Credits "Ported from SM64 ROM Manager"
-    CreateReduxCheckBox -Name "PeachIntro"     -Column 4 -Row 1 -Text "Skip Peach Intro"      -Info "Skip the introduction cutscene sequence when starting a new save file"                                                                              -Credits "Ported from SM64 ROM Manager"
+    CreateReduxCheckBox -Name "TitleScreen"    -Text "Skip Title Screen"     -Info "Skip the title screen shown when booting the game`nThis option only works when modifying the vanilla Super Mario 64 game"                           -Credits "Ported from SM64 ROM Manager"
+    CreateReduxCheckBox -Name "MarioScreen"    -Text "Skip Mario Screen"     -Info "Skip the screen which displays Mario's face and the title in the background`nThis option only works when modifying the vanilla Super Mario 64 game" -Credits "Ported from SM64 ROM Manager"
+    CreateReduxCheckBox -Name "GameOverScreen" -Text "Skip Game-Over Screen" -Info "Skip the game-over screen shown when losing all lives"                                                                                              -Credits "Ported from SM64 ROM Manager"
+    CreateReduxCheckBox -Name "PeachIntro"     -Text "Skip Peach Intro"      -Info "Skip the introduction cutscene sequence when starting a new save file"                                                                              -Credits "Ported from SM64 ROM Manager"
 
     CreateReduxGroup    -Tag  "Skip" -Text "Skip In-Game"
-    CreateReduxCheckBox -Name "StarMessages"   -Column 1 -Row 1 -Text "Skip Star Messages"    -Info "Skip the messages displayed after collecting specific numbers of stars"                                                                             -Credits "Ported from SM64 ROM Manager"
-    CreateReduxCheckBox -Name "BoosDialogue"   -Column 2 -Row 1 -Text "Remove Boos Dialogue"  -Info "Removes the dialogue for defeating Boos or when the Big Boo appears"                                                                                -Credits "Ported from SM64 ROM Manager"
-    CreateReduxCheckBox -Name "Lakitu"         -Column 3 -Row 1 -Text "Skip Lakitu"           -Info "Skip the lakitu intro before entering the castle for the first time"                                                                                -Credits "Ported from SM64 ROM Manager"
-    CreateReduxCheckBox -Name "StageIntro"     -Column 4 -Row 1 -Text "Skip Stage Intro"      -Info "Skip any messages that show up when entering a stage"                                                                                               -Credits "Ported from SM64 ROM Manager"
+    CreateReduxCheckBox -Name "StarMessages"   -Text "Skip Star Messages"    -Info "Skip the messages displayed after collecting specific numbers of stars"                                                                             -Credits "Ported from SM64 ROM Manager"
+    CreateReduxCheckBox -Name "BoosDialogue"   -Text "Remove Boos Dialogue"  -Info "Removes the dialogue for defeating Boos or when the Big Boo appears"                                                                                -Credits "Ported from SM64 ROM Manager"
+    CreateReduxCheckBox -Name "Lakitu"         -Text "Skip Lakitu"           -Info "Skip the lakitu intro before entering the castle for the first time"                                                                                -Credits "Ported from SM64 ROM Manager"
+    CreateReduxCheckBox -Name "StageIntro"     -Text "Skip Stage Intro"      -Info "Skip any messages that show up when entering a stage"                                                                                               -Credits "Ported from SM64 ROM Manager"
 
 }

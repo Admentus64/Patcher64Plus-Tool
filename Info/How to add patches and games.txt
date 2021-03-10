@@ -52,6 +52,14 @@ t64				If console contains T64 textures.
 				0		Disable the "Remove All T64" checkbox
 				1		Allow the "Remove All T64" checkbox
 
+expand_memory			If console supports expanding the Expansion Pak (larger RAM memory).
+				0		Disable the "Expand Memory" checkbox
+				1		Allow the "Expand Memory" checkbox
+
+remove_filter			If console supports removing the dark filter overlay.
+				0		Disable the "Remove Filter" checkbox
+				1		Allow the "Remove Filter" checkbox
+
 
 
 --- Example Console ---
@@ -78,6 +86,7 @@ Each game consists of attributes in the JSON format. The main object is "game".
 When adding a new entry, make sure to add a new folder in Files with the same name as the "mode" attribute.
 Each game folder should contain an icon (Icon.ico), credits (Credits.txt), information (Info.txt) and a set of patches (Patches.json).
 Patches can be added Patches.json file.
+LZSS (de)compression for the "00000001.app" is auto-detected.
 
 Attributes lines that are not present are equivalent to 0 or just empty.
 
@@ -193,22 +202,21 @@ console		In which console mode the patch is accessible, accepted values are: "Na
 
 command		Special command for patches. Commands can be mixed. Uppercase or lowercase does not matter.
 		""			Empty, no command given
-		"Force Downgrade"	Downgrade OoT Rev 1 or OoT Rev 2 ROM file to Rev 0
-		"No Downgrade"		Prevent downgrading OoT to a Rev 0 ROM File
-		"Force Remap D-Pad"	Remap the D-Pad for OoT or MM
-		"Patch Boot DOL" 	For Super Mario 64, patch the Boot DOL File in the VC WAD
-		"Multiplayer" 		For Super Mario 64, allows byte-patching the modified MP Boot DOL File in the VC WAD
-		"No FPS"		Disable the 60 FPS patch for Super Mario 64 in "Additional Options"
-		"No Free Cam"		Disable the Analog Camera patch for Super Mario 64 in "Additional Options"
+		"Force Downgrade"	Downgrade the ROM to Rev 0
+		"No Downgrade"		Prevent downgrading the ROM to a Rev 0 ROM File
+		"Force Remap D-Pad"	Remap the D-Pad for the ROM
+		"No Remap D-Pad"	Prevent remapping the D-Pad for the ROM
+		"Patch Boot DOL" 	Patch the Boot DOL File in the VC WAD (uses the patch file name for the Boot DOL patch)
 		"Extract"		Extract .Z64 ROM from Wii VC .WAD only
 		"Inject"		Inject .Z64 ROM into Wii VC .WAD File
 		"Patch VC"		Patch Wii VC .WAD File with "Patch VC Options" only
 		"Apply Patch"		Apply custom provided .bps, .ips, .xdelta or .vcdiff patch file
 		
-
 redux		If the patch supports Redux. Redux is only supported by OoT and MM.
 		The following sub-attributes can be assigned to "redux" as well. These attributes overwrite the regular attributes
 		"options"		If Redux supports additional options
+		"expand_memory"		
+		"remap_dpad"		
 		"dmaTable"		New Redux specific dmatable to overwrite existing dmatable with
 		"rom_title"		ROM game title, no more than the amount of characters defined for the console
 		"rom_gameID"		ROM GameID, requires 4 characters
@@ -232,8 +240,27 @@ languages	If the patch supports multiple languages and can contain multiple entr
 		"vc_title"		Wii VC WAD channel title, no more than 40 characters
 		"vc_gameID"		Wii VC WAD GameID, requires 4 characters
 		"file"			Patch file path, supports Decompression and Extension
-		"output"		Output file name extension
+		"script_start"		Start of the script file in ROM, useful for OoT / MM and is required for script edit options
+		"script_length"		Length of the script file in ROM, useful for OoT / MM and is required for script edit options
+		"l_target"		International L Targeting menu option texture file to replace for OoT / MM
+		"l_target_jpn"		Japanese L Targeting menu option texture file to replace for OoT
+		"l_target_search"	Z Targeting dialogue to search for replacing, useful for OoT / MM
+		"l_target_replace"	L Targeting dialogue to replace, useful for OoT / MM
+		"tatl"			"Tatl" texture file to replace for MM
+		"tatl_search"		"Tatl" dialogue to search for replacing, useful for MM
+		"tatl_replace"		"Tatl" dialogue to replace, useful for MM
 		"max_text_speed"	Allow the max text speed for a language, can be set to 1, 2 or 3
+		"output"		Output file name extension
+
+expand_memory	If the "Expand Memory" option should be forced or not
+		-1			"Expand Memory" is forced to be not used
+		 0			"Expand Memory" can be set freely
+		 1			"Expand Memory" is forced to be used
+
+remap_dpad	If the "Remap D-Pad" option should be forced or not
+		-1			"Remap D-Pad" is forced to be not used
+		 0			"Remap D-Pad" can be set freely
+		 1			"Remap D-Pad" is forced to be used
 
 rom_title	ROM game title for the patch, No more than 20 characters.
 

@@ -1,6 +1,9 @@
 =======================
 <<< PATCHER64+ TOOL >>>
 
+--- Thanks to my Patreons ---
+- Teutonicknight2
+
 --- Thanks to my past Patreons --
 - Leigh Pierce, Raim, Gicrax, Crypto Logiq, Moons (Luke), Ronald, Richard Moser
 
@@ -18,15 +21,18 @@
 --- REDUX ---
 - Hacking:				Maroc
 - Editing / Revision:			ShadowOne333, MattKimura
-- Original Hacking:			Roman971, TestRunnerSRL, AmazingAmpharos, fig02, krimtonz, rlbond86, KevinPal, junglechief87
+- Original Hacking:			Roman971, TestRunnerSRL, AmazingAmpharos, fig02,
+					krimtonz, rlbond86, KevinPal, junglechief87
 
 --- Additional Options ---
 - Master Quest:				ShadowOne333
+- Manual Jump:				Admentus (ROM) & CloudModding (GameShark)
 - 16:9 Backgrounds & Textures:		GhostlyDark, ShadowOne333 & CYB3RTR0N
 - Enhanced 16:9 Widescreen:		gamemasterplc & GhostlyDark
 - Force Hires Link Model:		GhostlyDark
-- MM Link Voice:			Korey Cryderman & GhostlyDark
-- Feminine Link Voice:			theluigidude2007
+- MM Link Voices:			Korey Cryderman (ported) & GhostlyDark (corrected)
+- Feminine Link Voices:			theluigidude2007
+- Peach Link Voices:			theluigidude2007
 - MM HUD Textures:			GhostlyDark
 - MM Button Positions:			GhostlyDark
 - MM Pause Screen:			Garo-Mastah & CM
@@ -66,8 +72,8 @@
 - Aria the Demon:			AriaHiro64
 - Hatsune Miku - Link:			JanexLane
 - Hatsune Miku - Vocaloid:		JanexLane
-- Malon 3D:				Kimi-Stardust
-- Malon Thicc:				Kimi-Stardust
+- Malon 3D:				Kimi-Stardust / Celestial Clarity / Karicyan
+- Malon Thicc:				Kimi-Stardust / Celestial Clarity / Karicyan
 - Princess Ruto:			Unesag
 - Princess Zelda ALttP (Child):		Unesag
 - Princes Zelda ALttP (Adult):		Lopieloo
@@ -79,7 +85,11 @@
 - Custom Models:			GhostlyDark
 
 --- Translations ---
+- German:				Admentus, GhostlyDark & Ticamus (ported)
+- French:				Admentus & GhostlyDark (ported)
 - Spanish:				eduardo_a2j (v2.2)
+- Brazilian:				Fserve (v1.7a)
+- Italian:				Ruleless, xxcentury & Brisma (translation) & GhostlyDark (ported / improvements)
 - Polish:				RPG (v1.3)
 - Russian:				Zelda64rus (v2.32)
 - Chinese Simplified:			madcell (2009)
@@ -89,7 +99,8 @@
 - Lead Development and Music:		Captain Seedy-Eye
 - 64DD Porting:				LuigiBlood
 - Special Thanks:			PK-LOVE, BWIX, Hylian Modding
-- Testers:				Captain Seedy, LuigiBlood, Hard4Games, ZFG, Dry4Haz, fig02
+- Testers:				Captain Seedy, LuigiBlood, Hard4Games, ZFG, Dry4Haz,
+					fig02
 
 --- The Fate of the Bombiwa ---
 - DezZiBao
@@ -216,12 +227,12 @@ Special Thanks:				Nokaubure, z64me, Ultra553, OoT Decomp
 - Original Hacking:			Saneki
 
 --- Additional Options ---
-- Master Quest:				Admentus (porting) & DeathBasket (maps / patch)
+- Master Quest Remix:			Admentus (porting) & DeathBasket (maps / patch)
 - 16:9 Backgrounds & Textures:		GhostlyDark & ShadowOne333
 - Enhanced 16:9 Widescreen:		gamemasterplc & GhostlyDark
 - Improved Link Model:			Skilarbabcock (www.youtube.com/user/skilarbabcock) & Nerrel
 - Kokiri Tunic Color:			GhostlyDark
-- Recolor Mask Forms:			ShadowOne333 & Garo-Mastah
+- Recolor Mask Forms:			Admentus, ShadowOne333 & Garo-Mastah
 - Zora Physics:				ShadowOne333
 - Restore Palace Route:			ShadowOne333
 - Correct Rupee Colors:			GhostlyDark
@@ -255,6 +266,9 @@ Special Thanks:				Nokaubure, z64me, Ultra553, OoT Decomp
 - Translations:				GhostlyDark
 
 --- Translations ---
+- German:				Ticamus (ported)
+- French:				Ticamus (ported)
+- Spanish:				Ticamus (ported)
 - Polish:				RPG (v1.1)
 - Russian:				Zelda64rus (v2.0 Beta)
 
@@ -357,7 +371,7 @@ Special Thanks:				Nokaubure, z64me, Ultra553, OoT Decomp
 
 
 ============================
-<<< SUPER SMASH BROTHERS >>>
+<<< SUPER SMASH BROS >>>
 
 --- Remix ---
 - The_Smashfather

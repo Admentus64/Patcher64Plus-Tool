@@ -70,6 +70,7 @@ function ByteOptions() {
     if (IsChecked $Redux.Gameplay.ReturnChild)         { ChangeBytes -Offset "CB6844"  -Values "35"; ChangeBytes -Offset "253C0E2" -Values "03" }
     if (IsChecked $Redux.Gameplay.FixGraves)           { ChangeBytes -Offset "202039D" -Values "20"; ChangeBytes -Offset "202043C" -Values "24" }
     if (IsChecked $Redux.Gameplay.DistantZTargeting)   { ChangeBytes -Offset "A987AC"  -Values "00 00 00 00" }
+    if (IsChecked $Redux.Gameplay.ManualJump)          { ChangeBytes -Offset "BD78C0" -Values "04 C1"; ChangeBytes -Offset "BD78E3" -Values "01" }
     if (IsChecked $Redux.Gameplay.UnsheathSword)       { ChangeBytes -Offset "BD04A0"  -Values "28 42 00 05 14 40 00 05 00 00 10 25" }
 
 
@@ -111,8 +112,10 @@ function ByteOptions() {
     }
 
     if (IsChecked $Redux.Other.SubscreenDelayFix)    { ChangeBytes -Offset "B15DD0" -Values "00 00 00 00"; ChangeBytes -Offset "B12947" -Values "03" }
-    if (IsChecked $Redux.Other.DisableNaviPrompts)   { ChangeBytes -Offset "DF8B84" -Values "00 00 00 00" }
+    if (IsChecked $Redux.Other.PoacherSawFix)        { ChangeBytes -Offset "AE72CC" -Values "00 00 00 00" }
+    if (IsChecked $Redux.Other.RemoveNaviPrompts)    { ChangeBytes -Offset "DF8B84" -Values "00 00 00 00" }
     if (IsChecked $Redux.Other.DefaultZTargeting)    { ChangeBytes -Offset "B71E6D" -Values "01" }
+    if (IsChecked $Redux.Other.InstantClaimCheck)    { ChangeBytes -Offset "ED4470" -Values "00 00 00 00"; ChangeBytes -Offset "ED4498" -Values "00 00 00 00" }
     if (IsChecked $Redux.Other.HideCredits)          { PatchBytes  -Offset "966000" -Patch "Message\Credits.bin" }
     
 
@@ -193,7 +196,16 @@ function ByteOptions() {
     }
 
     if (IsChecked $Redux.UI.CenterNaviPrompt) {
-        ChangeBytes -Offset "B582DF" -Values "F6"
+        if (IsWidescreen -Experimental)   { ChangeBytes -Offset "B582DF" -Values "5E" }
+        else                              { ChangeBytes -Offset "B582DF" -Values "F6" }
+    }
+
+    if (IsChecked $Redux.UI.GCScheme) {
+        # Z to L textures
+        PatchBytes -Offset "844540"  -Texture -Patch "GameCube\L Pause Screen Button.bin"
+        PatchBytes -Offset "92C200"  -Texture -Patch "GameCube\L Text Icon.bin"
+        if (IsSet $LanguagePatch.l_target)     { PatchBytes -Offset "1A35680" -Texture -Patch $LanguagePatch.l_target }
+        if (IsSet $LanguagePatch.l_target_jpn) { PatchBytes -Offset "1A0B300" -Texture -Patch $LanguagePatch.l_target.jpn }
     }
 
 
@@ -297,13 +309,12 @@ function ByteOptions() {
             elseif (IsText -Elem $Redux.Hero.Damage -Compare "4x Damage")   { ChangeBytes -Offset "AE8096" -Values "81 C0" }
             elseif (IsText -Elem $Redux.Hero.Damage -Compare "8x Damage")   { ChangeBytes -Offset "AE8096" -Values "82 00" }
             ChangeBytes -Offset "AE8099" -Values "10 81 43"
+            ChangeBytes -Offset "A895B7" -Values "2E" # No Heart Drops
         }
     }
 
     if (IsText -Elem $Redux.Hero.MagicUsage -Compare "2x Magic Usage")      { ChangeBytes -Offset "AE84FA" -Values "2C","40" }
     elseif (IsText -Elem $Redux.Hero.MagicUsage -Compare "3x Magic Usage")  { ChangeBytes -Offset "AE84FA" -Values "2C","80" }
-
-
 
     # Monsters
     if (IsText -Elem $Redux.Hero.MonsterHP -Compare "2x Monster HP") {
@@ -311,8 +322,9 @@ function ByteOptions() {
         ChangeBytes -Offset "C2B183" -Values "04" # Tektite         (Red)        (HP: 02)   C2B0C0 -> C2DE60 (Length: 2DA0) (ovl_En_Tite)
         ChangeBytes -Offset "C2B1F7" -Values "08" # Tektite         (Blue)       (HP: 04)
         ChangeBytes -Offset "D76A07" -Values "08" # Tentacle                     (HP: 04)   D76880 -> D78750 (Length: 1ED0) (ovl_En_Ba)
-        ChangeBytes -Offset "CD724F" -Values "10" # ReDead          (ReDead)     (HP: 08)   CD71B0 -> CD9A60 (Length: 28B0) (ovl_En_Rd)
+        ChangeBytes -Offset "CD724F" -Values "10" # ReDead          (Both)       (HP: 08)   CD71B0 -> CD9A60 (Length: 28B0) (ovl_En_Rd)
         ChangeBytes -Offset "EDC597" -Values "04" # Stalchild       (Small)      (HP: 02)   EDC370 -> EDDC60 (Length: 18F0) (ovl_En_Skb)
+        ChangeBytes -Offset "C1097C" -Values "08" # Wallmaster                   (HP: 04)   C0F1A0 -> C10BB0 (Length: 1A10) (ovl_En_Wallmas)
         ChangeBytes -Offset "CD582C" -Values "08" # Floormaster                  (HP: 04)   CD28C0 -> CD5CA0 (Length: 33E0) (ovl_En_Floormas)
         ChangeBytes -Offset "C6471B" -Values "0C" # Torch Slug                   (HP: 06)   C64670 -> C679D0 (Length: 3360) (ovl_En_Bw)
         ChangeBytes -Offset "C51A9F" -Values "04" # Gohma Larva                  (HP: 02)   C51860 -> C544F0 (Length: 2C90) (ovl_En_Goma)
@@ -321,36 +333,32 @@ function ByteOptions() {
         ChangeBytes -Offset "C2DEE7" -Values "08" # Leever          (Green)      (HP: 04)   C2DE60 -> C2F8D0 (Length: 1A70) (ovl_En_Reeba)
         ChangeBytes -Offset "C2DF4B" -Values "28" # Leever          (Purple)     (HP: 14)
         ChangeBytes -Offset "C836AB" -Values "0C" # Moblin          (Club)       (HP: 06)   C83500 -> C87640 (Length: 4140) (ovl_En_Mb)
-        ChangeBytes -Offset "DADBAF" -Values "04" # Spike                        (HP: 02)   DADB80 -> DAF4B0 (Length: 1930) (ovl_En_Ny)
+        ChangeBytes -Offset "CAAF9C" -Values "04" # Bari                         (HP: 02)   CA8DC0 -> CAB460 (Length: 26A0) (ovl_En_Vali)
+        ChangeBytes -Offset "C693CC" -Values "04" # Stinger (Land)               (HP: 02)   C679D0 -> C69630 (Length: 1C60) (ovl_En_Eiyer)
 
         # Incomplete
-      # ChangeBytes -Offset "" -Values "04" # Skullkid                           (HP: ??)   DEF3E0 -> DF2D10 (Length: 3930) (ovl_En_Skj)
-      # ChangeBytes -Offset "" -Values "04" # Skullwalltula         (Regular)    (HP: 02)   CE2E80 -> CE65F0 (Length: 3770) (ovl_En_Sw)
-      # ChangeBytes -Offset "" -Values "" # Shell Blade                          (HP: ??)   D46390 -> D477D0 (Length: 1440) (ovl_En_Sb)
-      # ChangeBytes -Offset "" -Values "" # Octorok                              (HP: ??)   C0BCF0 -> C0E2D0 (Length: 25E0) (ovl_En_Okuta)
-      # ChangeBytes -Offset "" -Values "08" # Wallmaster                         (HP: 04)   C0F1A0 -> C10BB0 (Length: 1A10) (ovl_En_Wallmas)
-      # ChangeBytes -Offset "" -Values "" # Baby Dodongo                         (HP: ??)   C57E90 -> C59D30 (Length: 1EA0) (ovl_En_Dodojr)
       # ChangeBytes -Offset "" -Values "04" # Bubble                             (HP: 02)   CB1620 -> CB52F0 (Length: 3CD0) (ovl_En_Bb)
-      # ChangeBytes -Offset "" -Values "04" # Guay                               (HP: 02)   EEE2F0 -> EEF990 (Length: 16A0) (ovl_En_Crow)
-      # ChangeBytes -Offset "" -Values "02" # Keese                              (HP: 02)   C13950 -> C15AC0 (Length: 2170) (ovl_En_Firefly)
-      # ChangeBytes -Offset "" -Values "04" # Mad Scrub                          (HP: 02)   CA6FA0 -> CA87A0 (Length: 1800) (ovl_En_Dekunuts)
-      # ChangeBytes -Offset "" -Values "" # Biri                                 (HP: ??)   C5D8E0 -> C5FBB0 (Length: 22D0) (ovl_En_Bili)
-      # ChangeBytes -Offset "" -Values "" # Bari                                 (HP: ??)   CA8DC0 -> CAB460 (Length: 26A0) (ovl_En_Vali)
-      # ChangeBytes -Offset "" -Values "" # Shabom                               (HP: ??)   C547F0 -> C55C10 (Length: 1420) (ovl_En_Bubble)
-      # ChangeBytes -Offset "" -Values "" # Tailpasaran                          (HP: ??)   C5FBB0 -> C61A00 (Length: 1E50) (ovl_En_Tp)
-
-        # Duplicates?
-      # ChangeBytes -Offset "" -Values "04" # StalChild             (Large)      (HP: 02)
-      # ChangeBytes -Offset "" -Values "10" # ReDead                (Gibdo)      (HP: 08)
+      # ChangeBytes -Offset "" -Values "02" # Guay                               (HP: 01)   EEE2F0 -> EEF990 (Length: 16A0) (ovl_En_Crow)
+      # ChangeBytes -Offset "" -Values "02" # Keese                              (HP: 01)   C13950 -> C15AC0 (Length: 2170) (ovl_En_Firefly)
+      # ChangeBytes -Offset "" -Values "02" # Spike                              (HP: 01)   DADB80 -> DAF4B0 (Length: 1930) (ovl_En_Ny)
+      # ChangeBytes -Offset "" -Values "02" # Mad Scrub                          (HP: 01)   CA6FA0 -> CA87A0 (Length: 1800) (ovl_En_Dekunuts)
+      # ChangeBytes -Offset "" -Values "02" # Biri                               (HP: 01)   C5D8E0 -> C5FBB0 (Length: 22D0) (ovl_En_Bili)
+      # ChangeBytes -Offset "" -Values "02" # Stinger (Water)                    (HP: 01)   EB6140 -> EB7B40 (Length: 1A00) (ovl_En_Weiyer)
+      # ChangeBytes -Offset "" -Values "02" # Peehat Larva                       (HP: 01)   C2F8D0 -> C32FD0 (Length: 3700) (ovl_En_Peehat)
+      # ChangeBytes -Offset "" -Values "01" # Shell Blade                        (HP: 01)   D46390 -> D477D0 (Length: 1440) (ovl_En_Sb)
+      # ChangeBytes -Offset "" -Values "04" # Skulltula                          (HP: 02)   C61A00 -> C64670 (Length: 2C70) (ovl_En_St)
+      # ChangeBytes -Offset "" -Values "02" # Skullwalltula         (Regular)    (HP: 01)   CE2E80 -> CE65F0 (Length: 3770) (ovl_En_Sw)
       # ChangeBytes -Offset "" -Values "04" # Skullwalltula         (Gold)       (HP: 02)
-      # ChangeBytes -Offset "" -Values "" # Moblin                  (Spear)      (HP: ??)
-
-        # Unlocatable / Impossible?
-      # ChangeBytes -Offset "" -Values "" # Big Skulltula                        (HP: 02)   C61A00 -> C64670 (Length: 2C70) (ovl_En_St)
-      # ChangeBytes -Offset "" -Values "" # Poe                                  (HP: 04)   C07B60 -> C0BCF0 (Length: 4190) (ovl_En_Poh)
-      # ChangeBytes -Offset "" -Values "" # Big Poe                              (HP: ??)   E75040 -> E78A20 (Length: 39E0) (ovl_En_Po_Field)
-      # ChangeBytes -Offset "" -Values "" # Anubis                               (HP: ??)   D79240 -> D7A4F0 (Length: 12B0) (ovl_En_Anubice)
-      # ChangeBytes -Offset "" -Values "" # Beamos                               (HP: ??)   CC6B80 -> CC8430 (Length: 18B0) (ovl_En_Vm)
+      # ChangeBytes -Offset "" -Values "04" # Moblin                (Spear)      (HP: 02)
+      # ChangeBytes -Offset "" -Values "08" # Poe                                (HP: 04)   C07B60 -> C0BCF0 (Length: 4190) (ovl_En_Poh)
+      # ChangeBytes -Offset "" -Values "02" # Shabom                             (HP: 01)   C547F0 -> C55C10 (Length: 1420) (ovl_En_Bubble)
+      # ChangeBytes -Offset "" -Values "02" # Tailpasaran                        (HP: 01)   C5FBB0 -> C61A00 (Length: 1E50) (ovl_En_Tp)
+      # ChangeBytes -Offset "" -Values "02" # Baby Dodongo                       (HP: 01)   C57E90 -> C59D30 (Length: 1EA0) (ovl_En_Dodojr)
+      # ChangeBytes -Offset "" -Values "02" # Octorok                            (HP: 01)   C0BCF0 -> C0E2D0 (Length: 25E0) (ovl_En_Okuta)
+      # ChangeBytes -Offset "" -Values "04" # Big Poe                            (HP: 04)   E75040 -> E78A20 (Length: 39E0) (ovl_En_Po_Field)
+      # ChangeBytes -Offset "" -Values "02" # Anubis                             (HP: 01)   D79240 -> D7A4F0 (Length: 12B0) (ovl_En_Anubice)
+      # ChangeBytes -Offset "" -Values "02" # Beamos                             (HP: 01)   CC6B80 -> CC8430 (Length: 18B0) (ovl_En_Vm)
+      # ChangeBytes -Offset "" -Values "04" # Armos                              (HP: 02)   C96840 -> C98C40 (Length: 2400) (ovl_En_Am)
       # ChangeBytes -Offset "DFC9A3" -Values "0C" # Freezard                     (HP: 06)   DFC970 -> DFE980 (Length: 2010) (ovl_En_Fz)
     }
     elseif (IsText -Elem $Redux.Hero.MonsterHP -Compare "3x Monster HP") {
@@ -358,8 +366,9 @@ function ByteOptions() {
         ChangeBytes -Offset "C2B183" -Values "06" # Tektite         (Red)        (HP: 02)   C2B0C0 -> C2DE60 (Length: 2DA0) (ovl_En_Tite)
         ChangeBytes -Offset "C2B1F7" -Values "0C" # Tektite         (Blue)       (HP: 04)
         ChangeBytes -Offset "D76A07" -Values "0C" # Tentacle                     (HP: 04)   D76880 -> D78750 (Length: 1ED0) (ovl_En_Ba)
-        ChangeBytes -Offset "CD724F" -Values "18" # ReDead          (ReDead)     (HP: 08)   CD71B0 -> CD9A60 (Length: 28B0) (ovl_En_Rd)
+        ChangeBytes -Offset "CD724F" -Values "18" # ReDead          (Both)       (HP: 08)   CD71B0 -> CD9A60 (Length: 28B0) (ovl_En_Rd)
         ChangeBytes -Offset "EDC597" -Values "06" # Stalchild       (Small)      (HP: 02)   EDC370 -> EDDC60 (Length: 18F0) (ovl_En_Skb)
+        ChangeBytes -Offset "C1097C" -Values "0C" # Wallmaster                   (HP: 04)   C0F1A0 -> C10BB0 (Length: 1A10) (ovl_En_Wallmas)
         ChangeBytes -Offset "CD582C" -Values "0C" # Floormaster                  (HP: 04)   CD28C0 -> CD5CA0 (Length: 33E0) (ovl_En_Floormas)
         ChangeBytes -Offset "C6471B" -Values "12" # Torch Slug                   (HP: 06)   C64670 -> C679D0 (Length: 3360) (ovl_En_Bw)
         ChangeBytes -Offset "C51A9F" -Values "06" # Gohma Larva                  (HP: 02)   C51860 -> C544F0 (Length: 2C90) (ovl_En_Goma)
@@ -368,7 +377,8 @@ function ByteOptions() {
         ChangeBytes -Offset "C2DEE7" -Values "0C" # Leever          (Green)      (HP: 04)   C2DE60 -> C2F8D0 (Length: 1A70) (ovl_En_Reeba)
         ChangeBytes -Offset "C2DF4B" -Values "3C" # Leever          (Purple)     (HP: 14)
         ChangeBytes -Offset "C836AB" -Values "12" # Moblin          (Club)       (HP: 06)   C83500 -> C87640 (Length: 4140) (ovl_En_Mb)
-        ChangeBytes -Offset "DADBAF" -Values "06" # Spike                        (HP: 02)   DADB80 -> DAF4B0 (Length: 1930) (ovl_En_Ny)
+        ChangeBytes -Offset "CAAF9C" -Values "06" # Bari                         (HP: 02)   CA8DC0 -> CAB460 (Length: 26A0) (ovl_En_Vali)
+        ChangeBytes -Offset "C693CC" -Values "06" # Stinger (Land)               (HP: 02)   C679D0 -> C69630 (Length: 1C60) (ovl_En_Eiyer)
     }
 
     # Mini-Bosses
@@ -378,14 +388,15 @@ function ByteOptions() {
         ChangeBytes -Offset "ED80EB" -Values "10" # Wolfos          (Both)       (HP: 08)   ED8060 -> EDC370 (Length: 6AF0) (ovl_En_Wf)
         ChangeBytes -Offset "BFADAB" -Values "10" # Stalfos                      (HP: 0A)   BFAC30 -> C004E0 (Length: 58B0) (ovl_En_Test)
         ChangeBytes -Offset "D09283" -Values "1C" # Dead Hand                    (HP: 0E)   D091D0 -> D0ACA0 (Length: 1AD0) (ovl_En_Dh)
-        ChangeBytes -Offset "DE9A1B" -Values "01" # Iron Knuckle    (Phase 1)    (HP: 1E)   DE98A0 -> DEDED0 (Length: 4630) (ovl_En_Ik)
+        ChangeBytes -Offset "DE9A1B" -Values "3C" # Iron Knuckle    (Phase 1)    (HP: 1E)   DE98A0 -> DEDED0 (Length: 4630) (ovl_En_Ik)
         ChangeBytes -Offset "DEB34F" -Values "15" # Iron Knuckle    (Phase 2)    (HP: 0B)
         ChangeBytes -Offset "EBC8B7" -Values "28" # Gerudo Fighter               (HP: 14)   EBC840 -> EC1BF0 (Length: 53B0) (ovl_En_GeldB)
         ChangeBytes -Offset "CF2667" -Values "0A" # Flare Dancer                 (HP: 08)   CF25E0 -> CF52A0 (Length: 2CC0) (ovl_En_Fd)
         ChangeBytes -Offset "CDE1FC" -Values "14" # Poe Sisters                  (HP: 0A)   CD9A60 -> CDE750 (Length: 4CF0) (ovl_En_Po_Sisters)
+        ChangeBytes -Offset "DEF87F" -Values "14" # Skullkid                     (HP: 0A)   DEF3E0 -> DF2D10 (Length: 3930) (ovl_En_Skj)
 
         # Unlocatable ?
-      # ChangeBytes -Offset "" -Values "" # Big Octo                             (HP: 04)   D477D0 -> D4A2E0 (Length: 2B10) (ovl_En_Bigokuta)
+      # ChangeBytes -Offset "" -Values "08" # Big Octo                           (HP: 04)   D477D0 -> D4A2E0 (Length: 2B10) (ovl_En_Bigokuta)
       # ChangeBytes -Offset "" -Values "" # Dark Link                            (HP: xx)   C5B180 -> C5D8E0 (Length: 2760) (ovl_En_Torch2)
     }
     elseif (IsText -Elem $Redux.Hero.MiniBossHP -Compare "3x Mini-Boss HP") {
@@ -399,6 +410,7 @@ function ByteOptions() {
         ChangeBytes -Offset "EBC8B7" -Values "3C" # Gerudo Fighter               (HP: 14)   EBC840 -> EC1BF0 (Length: 53B0) (ovl_En_GeldB)
         ChangeBytes -Offset "CF2667" -Values "0C" # Flare Dancer                 (HP: 08)   CF25E0 -> CF52A0 (Length: 2CC0) (ovl_En_Fd)
         ChangeBytes -Offset "CDE1FC" -Values "1E" # Poe Sisters                  (HP: 0A)   CD9A60 -> CDE750 (Length: 4CF0) (ovl_En_Po_Sisters)
+        ChangeBytes -Offset "DEF87F" -Values "1E" # Skullkid                     (HP: 0A)   DEF3E0 -> DF2D10 (Length: 3930) (ovl_En_Skj)
     }
     
     # Bosses
@@ -468,11 +480,22 @@ function ByteOptions() {
         ChangeBytes -Offset "F16154" -IsDec -Values @($Redux.Colors.SetSpinAttack[3].Color.R, $Redux.Colors.SetSpinAttack[3].Color.G, $Redux.Colors.SetSpinAttack[3].Color.B)
     }
 
+
+
+    # SWORD TRAIL COLORS #
+
+    if (IsIndex -Elem $Redux.Colors.SwordTrail -Not) {
+        ChangeBytes -Offset "BEFF7C" -IsDec -Values @($Redux.Colors.SetSwordTrail[0].Color.R, $Redux.Colors.SetSwordTrail[0].Color.G, $Redux.Colors.SetSwordTrail[0].Color.B)
+        ChangeBytes -Offset "BEFF84" -IsDec -Values @($Redux.Colors.SetSwordTrail[1].Color.R, $Redux.Colors.SetSwordTrail[1].Color.G, $Redux.Colors.SetSwordTrail[1].Color.B)
+    }
+    if (IsIndex -Elem $Redux.Colors.SwordTrailDuration -Not) { ChangeBytes -Offset "BEFF8C" -IsDec -Values (($Redux.Colors.SwordTrailDuration.SelectedIndex+1) * 5) }
+
     
 
     # FAIRY COLORS #
 
-    if (IsIndex -Elem $Redux.Colors.Fairy -Not) {
+    if (IsChecked -Elem $Redux.Colors.BetaNavi) { ChangeBytes -Offset "A96110" -Values "34 0F 00 60" }
+    elseif (IsIndex -Elem $Redux.Colors.Fairy -Not) {
         # Idle
         ChangeBytes -Offset "B5E184" -IsDec -Values @($Redux.Colors.SetFairy[0].Color.R, $Redux.Colors.SetFairy[0].Color.G, $Redux.Colors.SetFairy[0].Color.B, 255, $Redux.Colors.SetFairy[1].Color.R, $Redux.Colors.SetFairy[1].Color.G, $Redux.Colors.SetFairy[1].Color.B, 0)
 
@@ -554,12 +577,196 @@ function ByteOptions() {
 
     # CUTSCENES #
 
-    if (IsChecked $Redux.Skip.IntroSequence)         { ChangeBytes -Offset "B06BBA"  -Values "00 00" }
-    if (IsChecked $Redux.Skip.AllMedallions)         { ChangeBytes -Offset "ACA409"  -Values "AD"; ChangeBytes -Offset "ACA49D"  -Values "CE" }
+    if (IsChecked $Redux.Skip.RegularSongs) {
+        # Zelda's Lullaby
+        ChangeBytes -Offset "2E8E90C" -Values "00 00 03 E8 00 00 00 01 00 73 00 3B 00 3C 00 3C"
+        ChangeBytes -Offset "2E8E91C" -Values "00 00 00 13 00 00 00 0C 00 17 00 00 00 10 00 02 08 8B FF FF 00 D4 00 11 00 20 00 00 FF FF FF FF"
+
+        # Sun's Song
+        ChangeBytes -Offset "332A4A4" -Values "00 00 00 3C"
+        ChangeBytes -Offset "332A868" -Values "00 00 00 13 00 00 00 08 00 18 00 00 00 10 00 02 08 8B FF FF 00 D3 00 11 00 20 00 00 FF FF FF FF"
+
+        # Saria's Song
+        ChangeBytes -Offset "20B1734" -Values "00 00 00 3C"
+        ChangeBytes -Offset "20B1DA8" -Values "00 00 00 13 00 00 00 0C 00 15 00 00 00 10 00 02 08 8B FF FF 00 D1 00 11 00 20 00 00 FF FF FF FF"
+        ChangeBytes -Offset "20B19C0" -Values "00 00 00 0A 00 00 00 06"; ChangeBytes -Offset "20B19C8" -Values "00 11 00 00 00 10 00 00"
+        ChangeBytes -Offset "20B19F8" -Values "00 3E 00 11 00 20 00 00 80 00 00 00 00 00 00 00 00 00 01 D4 FF FF F7 31 00 00 00 00 00 00 01 D4 FF FF F7 12"
+
+        # Epona's Song
+        ChangeBytes -Offset "29BEF60" -Values "00 00 03 E8 00 00 00 01 00 5E 00 0A 00 0B 00 0B"
+        ChangeBytes -Offset "29BECB0" -Values "00 00 00 13 00 00 00 02 00 D2 00 00 00 09 00 00 FF FF FF FF FF FF 00 0A 00 3C FF FF FF FF FF FF"
+
+        # Song of Time
+        ChangeBytes -Offset "252FB98" -Values "00 00 03 E8 00 00 00 01 00 35 00 3B 00 3C 00 3C"
+        ChangeBytes -Offset "252FC80" -Values "00 00 00 13 00 00 00 0C 00 19 00 00 00 10 00 02 08 8B FF FF 00 D5 00 11 00 20 00 00 FF FF FF FF"
+        ChangeBytes -Offset "1FC3B84" -Values "FF FF FF FF"
+
+        # Song of Storms
+        ChangeBytes -Offset "3041084" -Values "00 00 00 0A"
+        ChangeBytes -Offset "3041088" -Values "00 00 00 13 00 00 00 02 00 D6 00 00 00 09 00 00 FF FF FF FF FF FF 00 BE 00 C8 FF FF FF FF FF FF"
+    }
+
+    if (IsChecked $Redux.Skip.WarpSongs) {
+        # Minuet of Forest
+        ChangeBytes -Offset "20AFF84" -Values "00 00 00 3C"
+        ChangeBytes -Offset "20B0800" -Values "00 00 00 13 00 00 00 0A 00 0F 00 00 00 10 00 02 08 8B FF FF 00 73 00 11 00 20 00 00 FF FF FF FF"
+        ChangeBytes -Offset "20AFF88" -Values "00 00 00 0A 00 00 00 05"; ChangeBytes -Offset "20AFF90" -Values "00 11 00 00 00 10 00 00"; ChangeBytes -Offset "20AFFC1" -Values "00 3E 00 11 00 20 00 00"
+
+        # Bolero of Fire
+        ChangeBytes -Offset "224B5D4" -Values "00 00 00 3C"
+        ChangeBytes -Offset "224D7E8" -Values "00 00 00 13 00 00 00 0A 00 10 00 00 00 10 00 02 08 8B FF FF 00 74 00 11 00 20 00 00 FF FF FF FF"
+        ChangeBytes -Offset "224B5D8" -Values "00 00 00 0A 00 00 00 0B"; ChangeBytes -Offset "224B5E0" -Values "00 11 00 00 00 10 00 00"
+        ChangeBytes -Offset "224B610" -Values "00 3E 00 11 00 20 00 00"; ChangeBytes -Offset "224B7F0" -Values "00 00 00 2F 00 00 00 0E"
+        ChangeBytes -Offset "224B7F8" -Values "00 00";                   ChangeBytes -Offset "224B828" -Values "00 00"
+        ChangeBytes -Offset "224B858" -Values "00 00";                   ChangeBytes -Offset "224B888" -Values "00 00"
+
+        # Serenade of Water
+        ChangeBytes -Offset "2BEB254" -Values "00 00 00 3C"
+        ChangeBytes -Offset "2BEC880" -Values "00 00 00 13 00 00 00 10 00 11 00 00 00 10 00 02 08 8B FF FF 00 75 00 11 00 20 00 00 FF FF FF FF"
+        ChangeBytes -Offset "2BEB258" -Values "00 00 00 0A 00 00 00 0F"; ChangeBytes -Offset "2BEB260" -Values "00 11 00 00 00 10 00 00"
+        ChangeBytes -Offset "2BEB290" -Values "00 3E 00 11 00 20 00 00"; ChangeBytes -Offset "2BEB530" -Values "00 00 00 2F 00 00 00 06"
+        ChangeBytes -Offset "2BEB538" -Values "00 00 00 00 01 8A 00 00 1B BB 00 00 FF FF FB 10 80 00 01 1A 00 00 03 30 FF FF FB 10 80 00 01 1A 00 00 03 30"
+        ChangeBytes -Offset "2BEC848" -Values "00000056 00000001 0059 0021 0022 0000"
+
+        # Nocturne of Shadow
+        ChangeBytes -Offset "1FFE458" -Values "00 00 03 E8 00 00 00 01 00 2F 00 01 00 02 00 02"
+        ChangeBytes -Offset "1FFFDF4" -Values "00 00 00 3C"
+        ChangeBytes -Offset "2000FD8" -Values "00 00 00 13 00 00 00 0E 00 13 00 00 00 10 00 02 08 8B FF FF 00 77 00 11 00 20 00 00 FF FF FF FF"
+        ChangeBytes -Offset "2000128" -Values "00 00 03 E8 00 00 00 01 00 32 00 3A 00 3B 00 3B"
+
+        # Requiem of Spirit
+        ChangeBytes -Offset "218AF14" -Values "02 18 AF 14"
+        ChangeBytes -Offset "218C574" -Values "00 00 00 13 00 00 00 08 00 12 00 00 00 10 00 02 08 8B FF FF 00 76 00 11 00 20 00 00 FF FF FF FF"
+        ChangeBytes -Offset "218B478" -Values "00 00 03 E8 00 00 00 01 00 30 00 3A 00 3B 00 3B"
+        ChangeBytes -Offset "218AF18" -Values "00 00 00 0A 00 00 00 0B"
+        ChangeBytes -Offset "218AF20" -Values "00 11 00 00 00 10 00 00 40 00 00 00 FF FF FA F9 00 00 00 08 00 00 00 01 FF FF FA F9 00 00 00 08 00 00 00 01 0F 67 14 08 00 00 00 00 00 00 00 01"
+        ChangeBytes -Offset "218AF50" -Values "00 3E 00 11 00 20 00 00"
+
+        # Prelude of Light
+        ChangeBytes -Offset "252FD24" -Values "00 00 00 4A"
+        ChangeBytes -Offset "2531320" -Values "00 00 00 13 00 00 00 0E 00 14 00 00 00 10 00 02 08 8B FF FF 00 78 00 11 00 20 00 00 FF FF FF FF"
+        ChangeBytes -Offset "252FF10" -Values "00 00 00 2F 00 00 00 09"; ChangeBytes -Offset "252FF18" -Values "00 06 00 00 00 00 00 00"
+        ChangeBytes -Offset "25313D0" -Values "00 00 00 56 00 00 00 01 00 3B 00 21 00 22 00 00"
+    }
+
+    if (IsChecked $Redux.Skip.DungeonOutro) {
+        # Inside the Deku Tree
+        ChangeBytes -Offset "2077E20" -Values "00 07 00 01 00 02 00 02"; ChangeBytes -Offset "2078A10" -Values "00 0E 00 1F 00 20 00 20"; ChangeBytes -Offset "2079570" -Values "00 80 00 00 00 1E 00 00 FF FF FF FF FF FF 00 1E 00 28 FF FF FF FF FF FF"
+
+        # Dodongo's Cavern
+        ChangeBytes -Offset "2221E88" -Values "00 0C 00 3B 00 3C 00 3C"; ChangeBytes -Offset "2223308" -Values "00 81 00 00 00 3A 00 00"
+
+        # Inside Jabu-Jabu's Belly
+        ChangeBytes -Offset "CA3530"  -Values "00 00 00 00";             ChangeBytes -Offset "2113340" -Values "00 0D 00 3B 00 3C 00 3C"; ChangeBytes -Offset "2113C18" -Values "00 82 00 00 00 3A 00 00"
+        ChangeBytes -Offset "21131D0" -Values "00 01 00 00 00 3C 00 3C"
+
+        # Forest Temple
+        ChangeBytes -Offset "D4ED68"  -Values "00 45 00 3B 00 3C 00 3C"; ChangeBytes -Offset "D4ED78"  -Values "00 3E 00 00 00 3A 00 00"; ChangeBytes -Offset "207B9D4" -Values "FF FF FF FF"
+
+        # Fire Temple
+        ChangeBytes -Offset "2001848" -Values "00 1E 00 01 00 02 00 02"; ChangeBytes -Offset "D100B4"  -Values "00 62 00 3B 00 3C 00 3C"; ChangeBytes -Offset "D10134"  -Values "00 3C 00 00 00 3A 00 00"
+
+        # Water Temple
+        ChangeBytes -Offset "D5A458"  -Values "00 15 00 3B 00 3C 00 3C"; ChangeBytes -Offset "D5A3A8"  -Values "00 3D 00 00 00 3A 00 00"; ChangeBytes -Offset "20D0D20" -Values "00 29 00 C7 00 C8 00 C8"
+
+        # Shadow Temple
+        ChangeBytes -Offset "D13EC8"  -Values "00 61 00 3B 00 3C 00 3C"; ChangeBytes -Offset "D13E18"  -Values "00 41 00 00 00 3A 00 00"
+
+        # Spirit Temple
+        ChangeBytes -Offset "D3A0A8"  -Values "00 60 00 3B 00 3C 00 3C"; ChangeBytes -Offset "D39FF0"  -Values "00 3F 00 00 00 3A 00 00"
+    }
+
+    if (IsChecked $Redux.Skip.Bosses) {
+        # Phantom Ganon
+        ChangeBytes -Offset "C944D8" -Values "00 00 00 00";  ChangeBytes -Offset "C94548" -Values "00 00 00 00";  ChangeBytes -Offset "C94730" -Values "00 00 00 00"
+        ChangeBytes -Offset "C945A8" -Values "00 00 00 00";  ChangeBytes -Offset "C94594" -Values "00 00 00 00"
+
+        # Nabooru
+        ChangeBytes -Offset "2F5AF84" -Values "00 00 00 05"; ChangeBytes -Offset "2F5C7DA" -Values "00 01 00 02"; ChangeBytes -Offset "2F5C7A2" -Values "00 03 00 04"
+        ChangeBytes -Offset "2F5B369" -Values "09";          ChangeBytes -Offset "2F5B491" -Values "04";          ChangeBytes -Offset "2F5B559" -Values "04"
+        ChangeBytes -Offset "2F5B621" -Values "04";          ChangeBytes -Offset "2F5B761" -Values "07";          ChangeBytes -Offset "2F5B840" -Values "00 05 00 01 00 05 00 05" # Shorten white flash
+
+        # Twinrova
+        ChangeBytes -Offset "D67BA4" -Values "10 00";        ChangeBytes -Offset "D678CC" -Values "24 01 03 A2 A6 01 01 42"
+
+        # Ganondorf
+        ChangeBytes -Offset "D82047" -Values "09"
+
+        # Zelda Descend
+        ChangeBytes -Offset "D82AB3" -Values "66";           ChangeBytes -Offset "D82FAF" -Values "65";           ChangeBytes -Offset "D82D2E" -Values "04 1F"
+        ChangeBytes -Offset "D83142" -Values "00 6B";        ChangeBytes -Offset "D82DD8" -Values "00 00 00 00";  ChangeBytes -Offset "D82ED4" -Values "00 00 00 00"
+        ChangeBytes -Offset "D82FDF" -Values "33"
+
+        # After Tower Collapse
+        ChangeBytes -Offset "E82E0F" -Values "04"
+
+        # Ganon Intro
+        ChangeBytes -Offset "E83D28" -Values "00 00 00 00";  ChangeBytes -Offset "E83B5C" -Values "00 00 00 00";  ChangeBytes -Offset "E84C80" -Values "10 00"
+    }
+
+    if (IsChecked $Redux.Skip.LightArrow) {
+        ChangeBytes -Offset "2531B40" -Values "00 28 00 01 00 02 00 02"; ChangeBytes -Offset "2532FBC" -Values "00 75";          ChangeBytes -Offset "2532FEA" -Values "00 75 00 80"
+        ChangeBytes -Offset "2533115" -Values "05";                      ChangeBytes -Offset "2533141" -Values "06 00 06 00 10"; ChangeBytes -Offset "2533171" -Values "0F 00 11 00 40"
+        ChangeBytes -Offset "25331A1" -Values "07 00 41 00 65";          ChangeBytes -Offset "2533642" -Values "00 50";          ChangeBytes -Offset "253389D" -Values "74"
+        ChangeBytes -Offset "25338A4" -Values "00 72 00 75 00 79";       ChangeBytes -Offset "25338BC" -Values "FF FF";          ChangeBytes -Offset "25338C2" -Values "FF FF FF FF FF FF"
+        ChangeBytes -Offset "25339C2" -Values "00 75 00 76";             ChangeBytes -Offset "2533830" -Values "00 31 00 81 00 82 00 82"
+    }
+    
+    if (IsChecked $Redux.Skip.RainbowBridge) {
+        ChangeBytes -Offset "292D644" -Values "00 00 00 A0"; ChangeBytes -Offset "292D680" -Values "00 02 00 0A 00 6C 00 00"; ChangeBytes -Offset "292D6E8" -Values "00 27"
+        ChangeBytes -Offset "292D718" -Values "00 32";       ChangeBytes -Offset "292D810" -Values "00 02 00 3C";             ChangeBytes -Offset "292D924" -Values "FF FF 00 14 00 96 FF FF"
+    }
+
+    if (IsChecked $Redux.Skip.FairyOcarina) {
+        ChangeBytes -Offset "2151230" -Values "00 72 00 3C 00 3D 00 3D"
+        ChangeBytes -Offset "2151240" -Values "00 4A 00 00 00 3A 00 00 FF FF FF FF FF FF 00 3C 00 81 FF FF"
+        ChangeBytes -Offset "2150E20" -Values "FF FF FA 4C"
+    }
+
+    if (IsChecked $Redux.Skip.RoyalTomb) {
+        ChangeBytes -Offset "2025026" -Values "00 01"; ChangeBytes -Offset "2025159" -Values "02"
+        ChangeBytes -Offset "2023C86" -Values "00 01"; ChangeBytes -Offset "2023E19" -Values "02"
+    }
+
+    if (IsChecked $Redux.Skip.GanonTrials) {
+        ChangeBytes -Offset "31A8090" -Values "00 6B 00 01 00 02 00 02"; ChangeBytes -Offset "31A9E00" -Values "00 6E 00 01 00 02 00 02"; ChangeBytes -Offset "31A8B18" -Values "00 6C 00 01 00 02 00 02"
+        ChangeBytes -Offset "31A9430" -Values "00 6D 00 01 00 02 00 02"; ChangeBytes -Offset "31AB200" -Values "00 70 00 01 00 02 00 02"; ChangeBytes -Offset "31AA830" -Values "00 6F 00 01 00 02 00 02"
+    }
+    
+    if (IsChecked $Redux.Skip.DekuSeedBag) {
+        ChangeBytes -Offset "ECA900" -Values "24 03 C0 00"; ChangeBytes -Offset "ECAE90" -Values "27 18 FD 04"; ChangeBytes -Offset "ECB618" -Values "25 6B 00 D4"
+        ChangeBytes -Offset "ECAE70" -Values "00 00 00 00"; ChangeBytes -Offset "E5972C" -Values "24 08 00 01"
+    }
+
+    if (IsChecked $Redux.Skip.OpeningCutscene)       { ChangeBytes -Offset "B06BBA"  -Values "00 00" }
     if (IsChecked $Redux.Skip.DaruniaDance)          { ChangeBytes -Offset "22769E4" -Values "FF FF FF FF" }
     if (IsChecked $Redux.Skip.OpeningChests)         { ChangeBytes -Offset "BDA2E8"  -Values "24 0A FF FF" }
     if (IsChecked $Redux.Skip.KingZora)              { ChangeBytes -Offset "E56924"  -Values "00 00 00 00" }
-    if (IsChecked $Redux.Skip.ZeldasEscape)          { ChangeBytes -Offset "1FC0CF8" -Values "00 00 00 01 00 21 00 01 00 02 00 02" }
+    if (IsChecked $Redux.Skip.ZeldaEscape)           { ChangeBytes -Offset "1FC0CF8" -Values "00 00 00 01 00 21 00 01 00 02 00 02" }
+    if (IsChecked $Redux.Skip.JabuJabu)              { ChangeBytes -Offset "CA0784"  -Values "00 18 00 01 00 02 00 02" }
+    if (IsChecked $Redux.Skip.GanonTower)            { ChangeBytes -Offset "33FB328" -Values "00 76 00 01 00 02 00 02" }
+    if (IsChecked $Redux.Skip.Medallions)            { ChangeBytes -Offset "2512680" -Values "00 76 00 01 00 02 00 02" }
+    if (IsChecked $Redux.Skip.AllMedallions)         { ChangeBytes -Offset "ACA409"  -Values "AD";                      ChangeBytes -Offset "ACA49D"  -Values "CE" }
+    if (IsChecked $Redux.Skip.EponaRace)             { ChangeBytes -Offset "29BE984" -Values "00 00 00 02";             ChangeBytes -Offset "29BE9CA" -Values "00 01 00 02" }
+    if (IsChecked $Redux.Skip.HorsebackArchery)      { ChangeBytes -Offset "21B2064" -Values "00 00 00 02";             ChangeBytes -Offset "21B20AA" -Values "00 01 00 02" }
+    if (IsChecked $Redux.Skip.DoorOfTime)            { ChangeBytes -Offset "E0A176"  -Values "00 02";                   ChangeBytes -Offset "E0A35A"  -Values "00 01 00 02" }
+    if (IsChecked $Redux.Skip.DrainingTheWell)       { ChangeBytes -Offset "E0A010"  -Values "00 2A 00 01 00 02 00 02"; ChangeBytes -Offset "2001110" -Values "00 2B 00 B7 00 B8 00 B8" }
+    
+
+
+    # RESTORE CUTSCENES #
+
+    if (IsChecked $Redux.Restore.OpeningCutscene)   { ChangeBytes -Offset "1FB8076" -Values "23 40" }
+
+
+
+    # ANIMATIONS #
+
+    if     (IsChecked $Redux.Animation.WeaponIdle)     { ChangeBytes -Offset "BEF5F2" -Values "34 28" }
+    if     (IsChecked $Redux.Animation.WeaponCrouch)   { ChangeBytes -Offset "BEF38A" -Values "2A 10" }
+    if     (IsChecked $Redux.Animation.WeaponAttack)   { ChangeBytes -Offset "BEFB62" -Values "2B D8"; ChangeBytes -Offset "BEFB66" -Values "2B E0"; ChangeBytes -Offset "BEFB6A" -Values "2B E0" }
+    if     (IsChecked $Redux.Animation.Backflip)       { ChangeBytes -Offset "BEFB12" -Values "29 D0" }
+    elseif (IsChecked $Redux.Animation.Frontflip)      { ChangeBytes -Offset "BEFB12" -Values "2A 60" }
 
 
 
@@ -696,20 +903,24 @@ function ByteReduxOptions() {
 #==============================================================================================================================================================================================
 function ByteLanguageOptions() {
     
-    if ( (IsChecked -Elem $Redux.Text.Vanilla -Not) -or (IsChecked -Elem $Redux.Text.Speed1x -Not) -or (IsChecked $Redux.Text.GCScheme) -or (IsLanguage $Redux.Unlock.Tunics) -or (IsLangText -Elem $Redux.Colors.Fairy -Compare "Tatl") -or (IsLangText -Elem $Redux.Colors.Fairy -Compare "Tael") -or (IsLanguage $Redux.Capacity.EnableAmmo) -or (IsLanguage $Redux.Capacity.EnableWallet) ) {
-        $File = $GameFiles.extracted + "\message_data_static.bin"
-        ExportBytes -Offset "92D000" -Length "38130" -Output $File -Force
+    if ( (IsChecked -Elem $Redux.Text.Vanilla -Not) -or (IsChecked -Elem $Redux.Text.Speed1x -Not) -or (IsLanguage $Redux.UI.GCScheme) -or (IsLanguage $Redux.Unlock.Tunics) -or (IsText -Elem $Redux.Colors.Fairy -Compare "Tatl") -or (IsText -Elem $Redux.Colors.Fairy -Compare "Tael") -or (IsLanguage $Redux.Capacity.EnableAmmo) -or (IsLanguage $Redux.Capacity.EnableWallet) ) {
+        if ( (IsSet $LanguagePatch.script_start) -and (IsSet $LanguagePatch.script_length) ) {
+            $File = $GameFiles.extracted + "\message_data_static.bin"
+            ExportBytes -Offset $LanguagePatch.script_start -Length $LanguagePatch.script_length -Output $File -Force
+        }
+        else  { return }
     }
+    else { return }
 
     if (IsChecked $Redux.Text.Redux) { ApplyPatch -File $File -Patch "\Export\Message\redux.bps" }
     elseif (IsChecked $Redux.Text.Restore) {
         ChangeBytes -Offset "7596" -Values "52 40"
-        PatchBytes  -Offset "B849EC" -Patch "Message\Table Restore Text.bin"
+        PatchBytes  -Offset "B849EC" -Patch "Message\Table Restore Text.tbl"
         ApplyPatch -File $File -Patch "\Export\Message\restore_text.bps"
     }
     elseif (IsChecked $Redux.Text.FemalePronouns) {
         ChangeBytes -Offset "7596" -Values "52 40"
-        PatchBytes  -Offset "B849EC" -Patch "Message\Table Female Pronouns.bin"
+        PatchBytes  -Offset "B849EC" -Patch "Message\Table Female Pronouns.tbl"
         ApplyPatch -File $File -Patch "\Export\Message\female_pronouns.bps"
     }
 
@@ -746,12 +957,7 @@ function ByteLanguageOptions() {
         ChangeBytes -File $File -Offset ( Get24Bit ( (GetDecimal $Offset) + (GetDecimal "BA") ) ) -Values "70"
     }
         
-    if (IsChecked $Redux.Text.GCScheme) {
-        # Z to L textures
-        PatchBytes -Offset "844540"  -Texture -Patch "GameCube\L Menu.bin"
-        PatchBytes -Offset "1A35680" -Texture -Patch "GameCube\L Targeting.bin"
-        PatchBytes -Offset "92C200"  -Texture -Patch "GameCube\L Text.bin"
-
+    if (IsLanguage $Redux.UI.GCScheme) {
         # Hole of Z
         $Offset = SearchBytes -File $File -Values "48 6F 6C 65 20 6F 66 20 22 5A 22"
         ChangeBytes -File $File -Offset $Offset -Values "48 6F 6C 65 20 6F 66 20 22 4C 22"
@@ -774,7 +980,7 @@ function ByteLanguageOptions() {
 
         $Offset = "0"
         do { # A button
-            $Offset = SearchBytes -File $File -Start $Offset -Values "05 43 9F  05 40"
+            $Offset = SearchBytes -File $File -Start $Offset -Values "05 43 9F 05 40"
             if ($Offset -ne -1) { ChangeBytes -File $File -Offset $Offset -Values "05 42" }
         } while ($Offset -gt 0)
 
@@ -825,14 +1031,14 @@ function ByteLanguageOptions() {
         ChangeBytes -File $File -Offset ( Get24Bit ( (GetDecimal $Offset) + (GetDecimal "7A") ) ) -Values "55 6E 69 73 69 7A 65 2E 20 20 20"
     }
 
-    if (IsLangText -Elem $Redux.Colors.Fairy -Compare "Tatl") {
+    if (IsText -Elem $Redux.Colors.Fairy -Compare "Tatl") {
         do { # Tatl
             $Offset = SearchBytes -File $File -Start $Offset -Values "4E 61 76 69"
             if ($Offset -ne -1) { ChangeBytes -File $File -Offset $Offset -Values "54 61 74 6C" }
         } while ($Offset -gt 0)
         PatchBytes -Offset "1A3EFC0" -Texture -Patch "HUD\Tatl.bin"
     }
-    elseif (IsLangText -Elem $Redux.Colors.Fairy -Compare "Tael") {
+    elseif (IsText -Elem $Redux.Colors.Fairy -Compare "Tael") {
         do { # Tael
             $Offset = SearchBytes -File $File -Start $Offset -Values "4E 61 76 69"
             if ($Offset -ne -1) { ChangeBytes -File $File -Offset $Offset -Values "54 61 65 6C" }
@@ -871,9 +1077,7 @@ function ByteLanguageOptions() {
         $Text = $null
     }
 
-    if ( (IsChecked -Elem $Redux.Text.Vanilla -Not) -or (IsChecked -Elem $Redux.Text.Speed1x -Not) -or (IsChecked $Redux.Text.GCScheme) -or (IsLanguage $Redux.Unlock.Tunics) -or (IsLangText -Elem $Redux.Colors.Fairy -Compare "Tatl") -or (IsLangText -Elem $Redux.Colors.Fairy -Compare "Tael") -or (IsLanguage $Redux.Capacity.EnableAmmo) -or (IsLanguage $Redux.Capacity.EnableWallet) ) {
-        PatchBytes -Offset "92D000" -Patch "message_data_static.bin" -Extracted
-    }
+    PatchBytes -Offset $LanguagePatch.script_start -Patch "message_data_static.bin" -Extracted
 
 }
 
@@ -883,10 +1087,10 @@ function ByteLanguageOptions() {
 function CreateOptions() {
     
     if ($Settings.Debug.LiteGUI -eq $False) {
-        CreateOptionsDialog -Width 1060 -Height 560 -Tabs @("Main", "Audiovisual", "Difficulty", "Colors", "Equipment", "Cutscenes")
+        CreateOptionsDialog -Width 1060 -Height 560 -Tabs @("Main", "Audiovisual", "Difficulty", "Colors", "Equipment", "Animations")
     }
     else {
-        CreateOptionsDialog -Width 1060 -Height 450 -Tabs @("Main", "Audiovisual")
+        CreateOptionsDialog -Width 1060 -Height 450 -Tabs @("Main", "Audiovisual", "Difficulty")
     }
 
     if (!$IsWiiVC) { $Redux.Graphics.Widescreen.Add_CheckStateChanged({ AdjustGUI }) }
@@ -900,7 +1104,7 @@ function AdjustGUI() {
     
     if ($IsWiiVC) { return }
 
-    EnableElem @($Redux.UI.ButtonPositions, $Redux.UI.CenterNaviPrompt)  -Active (!(IsWidescreen -Experimental))
+    EnableElem @($Redux.UI.ButtonPositions)  -Active (!(IsWidescreen -Experimental))
 
 }
 
@@ -918,8 +1122,8 @@ function CreateTabMain() {
         CreateReduxCheckBox -Name "Medallions"                  -Text "Require All Medallions" -Info "All six medallions are required for the Rainbow Bridge to appear before Ganon's Castle`nThe vanilla requirements were the Shadow and Spirit Medallions and the Light Arrows" -Credits "Ported from Rando"
         CreateReduxCheckBox -Name "FixGraves"                   -Text "Fix Graves"             -Info "The grave holes in Kakariko Graveyard behave as in the Rev 1 revision`nThe edges no longer force Link to grab or jump over them when trying to enter" -Credits "Ported from Rando"
     }
-    CreateReduxCheckBox     -Name "DistantZTargeting"           -Text "Distant Z-Targeting"    -Info "Allow to use Z-Targeting on enemies, objects and NPC's from any distance" -Credits "Admentus"
-   
+    CreateReduxCheckBox     -Name "DistantZTargeting"           -Text "Distant Z-Targeting"    -Info "Allow to use Z-Targeting on enemies, objects and NPC's from any distance"                                    -Credits "Admentus"
+    CreateReduxCheckBox     -Name "ManualJump"                  -Text "Manual Jump"            -Info "Press Z + A to do a manual jump instead of a jump attack`nPress B mid-air after jumping to do a jump attack" -Credits "Admentus (ROM hack) & CloudModding (GameShark)"
 
     # RESTORE #
     CreateReduxGroup        -Tag  "Restore" -Text "Restore / Correct / Censor"
@@ -934,11 +1138,13 @@ function CreateTabMain() {
     
     # OTHER #
     CreateReduxGroup        -Tag  "Other" -Text "Other"
-    CreateReduxCheckBox     -Name "SubscreenDelayFix"  -Text "Pause Screen Delay Fix"          -Info "Removes the delay when opening the Pause Screen" -Credits "zel"
+    CreateReduxCheckBox     -Name "SubscreenDelayFix"  -Text "Pause Screen Delay Fix" -Checked -Info "Removes the delay when opening the Pause Screen" -Credits "zel"
     if ($Settings.Debug.LiteGUI -eq $False) {
-        CreateReduxCheckBox -Name "DisableNaviPrompts" -Text "Remove Navi Prompts"             -Info "Navi will no longer interupt your during the first dungeon with mandatory textboxes" -Credits "Ported from Redux"
-        CreateReduxCheckBox -Name "DefaultZTargeting"  -Text "Default Hold Z-Targeting"        -Info "Change the Default Z-Targeting option to Hold instead of Switch" -Credits "Ported from Redux"
-        CreateReduxCheckBox -Name "HideCredits"        -Text "Hide Credits"                    -Info "Do not show the credits text during the credits sequence" -Credits "Admentus"
+        CreateReduxCheckBox -Name "PoacherSawFix"      -Text "Poacher's Saw Fix" -Checked      -Info "Obtaining the Poacher's Saw no longer prevents Link from obtaining the second Deku Nut upgrade" -Credits "Ported from Rando"
+        CreateReduxCheckBox -Name "RemoveNaviPrompts"  -Text "Remove Navi Prompts"             -Info "Navi will no longer interupt your during the first dungeon with mandatory textboxes"            -Credits "Ported from Redux"
+        CreateReduxCheckBox -Name "DefaultZTargeting"  -Text "Default Hold Z-Targeting"        -Info "Change the Default Z-Targeting option to Hold instead of Switch"                                -Credits "Ported from Redux"
+        CreateReduxCheckBox -Name "InstantClaimCheck"  -Text "Instant Claim Check"             -Info "Remove the check for waiting until the Biggoron Sword can be claimed through the Claim Check"   -Credits "Ported from Rando"
+        CreateReduxCheckBox -Name "HideCredits"        -Text "Hide Credits"                    -Info "Do not show the credits text during the credits sequence"                                       -Credits "Admentus"
     }
     CreateReduxCheckBox -Name "DebugMapSelect"         -Text "Debug Map Select"                -Info "Enable the Map Select menu like in the Debug ROM`nThe File Select menu now opens the Map Select menu instead`nA separate debug save file is used" -Credits "Jared Johnson (translated by Zelda Edit)"
     
@@ -951,8 +1157,8 @@ function CreateTabRedux() {
     
     # INTERFACE #
     CreateReduxGroup    -Tag  "UI" -Text "Interface Icons"
-    CreateReduxCheckBox -Name "ShowFileSelectIcons" -Column 1 -Checked -Text "Show File Select Icons" -Info "Show icons on the File Select screen to display your save file progress" -Credits "ShadowOne333"
-    CreateReduxCheckBox -Name "DPadLayoutShow"      -Column 2 -Checked -Text "Show D-Pad Icon"        -Info "Show the D-Pad icons ingame that display item shortcuts"                 -Credits "Ported from Redux"
+    CreateReduxCheckBox -Name "ShowFileSelectIcons" -Checked -Text "Show File Select Icons" -Info "Show icons on the File Select screen to display your save file progress" -Credits "ShadowOne333"
+    CreateReduxCheckBox -Name "DPadLayoutShow"      -Checked -Text "Show D-Pad Icon"        -Info "Show the D-Pad icons ingame that display item shortcuts"                 -Credits "Ported from Redux"
 
     CreateButtonColorOptions
 
@@ -968,21 +1174,20 @@ function CreateTabLanguage() {
     # TEXT SPEED #
     CreateReduxGroup       -Tag  "Text" -Text "Text Speed"
     CreateReduxPanel
-    CreateReduxRadioButton -Name "Speed1x" -Max 3 -SaveTo "Speed" -Column 1 -Checked -Text "1x Text Speed"   -Info "Leave the dialogue text speed at normal"
-    CreateReduxRadioButton -Name "Speed2x" -Max 3 -SaveTo "Speed" -Column 2          -Text "2x Text Speed"   -Info "Set the dialogue text speed to be twice as fast"       -Credits "Ported from Redux"
-    CreateReduxRadioButton -Name "Speed3x" -Max 3 -SaveTo "Speed" -Column 3          -Text "3x Text Speed"   -Info "Set the dialogue text speed to be three times as fast" -Credits "Ported from Redux"
+    CreateReduxRadioButton -Name "Speed1x" -Max 3 -SaveTo "Speed" -Checked -Text "1x Text Speed"   -Info "Leave the dialogue text speed at normal"
+    CreateReduxRadioButton -Name "Speed2x" -Max 3 -SaveTo "Speed"          -Text "2x Text Speed"   -Info "Set the dialogue text speed to be twice as fast"       -Credits "Ported from Redux"
+    CreateReduxRadioButton -Name "Speed3x" -Max 3 -SaveTo "Speed"          -Text "3x Text Speed"   -Info "Set the dialogue text speed to be three times as fast" -Credits "Ported from Redux"
     
     # ENGLISH TEXT #
-    $Redux.Box.Dialogue = CreateReduxGroup -Tag  "Text" -Text "English Dialogue"
+    $Redux.Box.Dialogue = CreateReduxGroup -Tag "Text" -Text "English Dialogue"
     CreateReduxPanel
-    CreateReduxRadioButton -Name "Vanilla"        -Max 4 -SaveTo "Dialogue" -Column 1          -Text "Vanilla Text"          -Info "Keep the text as it is"
-    CreateReduxRadioButton -Name "Redux"          -Max 4 -SaveTo "Dialogue" -Column 2 -Checked -Text "Redux Text"            -Info "Include the changes from the Redux script such as being able to move during the Gold Skulltula Token textboxes" -Credits "Redux"
-    CreateReduxRadioButton -Name "Restore"        -Max 4 -SaveTo "Dialogue" -Column 3          -Text "Restore Text"          -Info ("Restores the text used from the GC revision and applies grammar and typo fixes`nAlso corrects some icons in the text`n" + 'Includes the changes from "Redux Text" as well') -Credits "Redux"
-    CreateReduxRadioButton -Name "FemalePronouns" -Max 4 -SaveTo "Dialogue" -Column 4          -Text "Female Pronouns (WIP)" -Info "Refer to Link as a female character`nWork in Progress: Not all dialogue is fully altered yet" -Credits "Mil`n(includes Restore Text by ShadowOne)"
+    CreateReduxRadioButton -Name "Vanilla"        -Max 4 -SaveTo "Dialogue"          -Text "Vanilla Text"    -Info "Keep the text as it is"
+    CreateReduxRadioButton -Name "Redux"          -Max 4 -SaveTo "Dialogue" -Checked -Text "Redux Text"      -Info "Include the changes from the Redux script such as being able to move during the Gold Skulltula Token textboxes" -Credits "Redux"
+    CreateReduxRadioButton -Name "Restore"        -Max 4 -SaveTo "Dialogue"          -Text "Restore Text"    -Info ("Restores the text used from the GC revision and applies grammar and typo fixes`nAlso corrects some icons in the text`n" + 'Includes the changes from "Redux Text" as well') -Credits "Redux"
+    CreateReduxRadioButton -Name "FemalePronouns" -Max 4 -SaveTo "Dialogue"          -Text "Female Pronouns" -Info "Refer to Link as a female character`nWork in Progress: Not all dialogue is fully altered yet" -Credits "Mil`n(includes Restore Text by ShadowOne)"
 
     $Redux.Box.Text = CreateReduxGroup -Tag  "Text" -Text "Other English Options"
-    CreateReduxCheckBox    -Name "GCScheme"       -Column 1 -Text "GC Scheme"                -Info "Set the Textures and Text Dialogue Colors to match the GameCube's scheme" -Credits "Admentus & ShadowOne333"
-    CreateReduxCheckBox    -Name "PauseScreen"    -Column 2 -Text "MM Pause Screen"          -Info "Replaces the Pause Screen textures to be styled like Majora's Mask"       -Credits "Garo-Mastah & CM"
+    CreateReduxCheckBox    -Name "PauseScreen" -Text "MM Pause Screen" -Info "Replaces the Pause Screen textures to be styled like Majora's Mask" -Credits "Garo-Mastah & CM"
 
     for ($i=0; $i -lt $GamePatch.languages.Length; $i++) {
         $Redux.Language[$i].Add_CheckedChanged({ UnlockLanguageContent })
@@ -997,8 +1202,11 @@ function CreateTabLanguage() {
 function UnlockLanguageContent() {
     
     # English options
-    foreach ($item in $Redux.Box.Dialogue.Controls)   { EnableElem -Elem $item -Active $Redux.Language[0].Checked }
-    foreach ($item in $Redux.Box.Text.Controls)       { EnableElem -Elem $item -Active $Redux.Language[0].Checked }
+    EnableElem -Elem $Redux.Text.Vanilla        -Active $Redux.Language[0].Checked
+    EnableElem -Elem $Redux.Text.Redux          -Active $Redux.Language[0].Checked
+    EnableElem -Elem $Redux.Text.Restore        -Active $Redux.Language[0].Checked
+    EnableElem -Elem $Redux.Text.FemalePronouns -Active $Redux.Language[0].Checked
+    EnableElem -Elem $Redux.Text.PauseScreen    -Active $Redux.Language[0].Checked
 
     # Set max text speed in each language
     for ($i=0; $i -lt $GamePatch.languages.Length; $i++) {
@@ -1023,7 +1231,7 @@ function CreateTabAudiovisual() {
 
     
     # GRAPHICS #
-    CreateReduxGroup    -Tag  "Graphics" -Text "Graphics" -Columns 4 -Height 3
+    CreateReduxGroup -Tag  "Graphics" -Text "Graphics" -Columns 4
 
     if ($WiiVC) {
         $Info = "Native 16:9 Widescreen Display support with backgrounds and textures adjusted for widescreen"
@@ -1040,9 +1248,9 @@ function CreateTabAudiovisual() {
     }
 
 
-    CreateReduxCheckBox -Name "Widescreen"   -Column 1 -Row 1 -Text "16:9 Widescreen"        -Info $Info                                                                          -Credits $Credits
-    CreateReduxCheckBox -Name "ExtendedDraw" -Column 2 -Row 1 -Text "Extended Draw Distance" -Info "Increases the game's draw distance for objects`nDoes not work on all objects" -Credits "Admentus"
-    CreateReduxComboBox -Name "BlackBars"    -Column 3 -Row 1 -Text "No Black Bars" -Items @("Always enabled", "Disable for Z-Targeting only", "Disable for cutscenes only", "Always disabled") -Info "Removes the black bars shown on the top and bottom of the screen during Z-targeting and cutscenes" -Credits "Admentus"
+    CreateReduxCheckBox -Name "Widescreen"   -Text "16:9 Widescreen"        -Info $Info                                                                          -Credits $Credits
+    CreateReduxCheckBox -Name "ExtendedDraw" -Text "Extended Draw Distance" -Info "Increases the game's draw distance for objects`nDoes not work on all objects" -Credits "Admentus"
+    CreateReduxComboBox -Name "BlackBars"    -Text "No Black Bars" -Items @("Always enabled", "Disable for Z-Targeting only", "Disable for cutscenes only", "Always disabled") -Info "Removes the black bars shown on the top and bottom of the screen during Z-targeting and cutscenes" -Credits "Admentus"
     
 
 
@@ -1083,9 +1291,10 @@ function CreateTabAudiovisual() {
     CreateReduxGroup    -Tag  "UI" -Text "Interface"
     $Last.Group.Width = $Redux.Groups[$Redux.Groups.Length-3].Width
     $Last.Group.Top = $Redux.Groups[$Redux.Groups.Length-3].Bottom + 5
-    CreateReduxCheckBox -Name "HudTextures"      -Text "MM HUD Textures"     -Info "Replaces the HUD textures with those from Majora's Mask" -Credits "Ported by GhostlyDark"
-    CreateReduxCheckBox -Name "ButtonPositions"  -Text "MM Button Positions" -Info "Positions the A and B buttons like in Majora's Mask"     -Credits "Ported by GhostlyDark"
-    CreateReduxCheckBox -Name "CenterNaviPrompt" -Text "Center Navi Prompt"  -Info 'Centers the "Navi" prompt shown in the C-Up button'      -Credits "Ported by GhostlyDark"
+    CreateReduxCheckBox -Name "HudTextures"      -Text "MM HUD Textures"     -Info "Replaces the HUD textures with those from Majora's Mask"                                  -Credits "Ported by GhostlyDark"
+    CreateReduxCheckBox -Name "ButtonPositions"  -Text "MM Button Positions" -Info "Positions the A and B buttons like in Majora's Mask"                                      -Credits "Ported by GhostlyDark"
+    CreateReduxCheckBox -Name "CenterNaviPrompt" -Text "Center Navi Prompt"  -Info 'Centers the "Navi" prompt shown in the C-Up button'                                       -Credits "Ported by GhostlyDark"
+    CreateReduxCheckBox -Name "GCScheme"         -Text "GC Scheme"           -Info "Replace and change the textures, dialogue and text colors to match the GameCube's scheme" -Credits "Admentus, GhostlyDark & ShadowOne333" -Warning "Dialogue changes are only available for the English language"
 
     # SOUNDS / VOICES #
     CreateReduxGroup    -Tag  "Sounds" -Text "Sounds / Voices"
@@ -1099,7 +1308,7 @@ function CreateTabAudiovisual() {
     if ($Settings.Debug.LiteGUI -ne $True) {
 
     # SFX SOUND EFFECTS #
-    CreateReduxGroup    -Tag "SFX" -Text "SFX Sound Effects" -Height 3
+    CreateReduxGroup    -Tag "SFX" -Text "SFX Sound Effects"
     $SFX = @("Default", "Disabled", "Soft Beep", "Bark", "Bomb Bounce", "Bongo Bongo Low", "Bow Twang", "Business Scrub", "Carrot Refill", "Cluck", "Drawbridge Set", "Guay", "Horse Trot", "HP Recover", "Iron Boots", "Moo", "Mweep!", 'Navi "Hey!"', "Navi Random", "Notification", "Pot Shattering", "Ribbit", "Rupee (Silver)", "Switch", "Sword Bonk", "Tambourine", "Timer", "Zelda Gasp (Adult)")
     CreateReduxComboBox -Name "LowHP"      -Column 1 -Row 1 -Text "Low HP"      -Items $SFX -Info "Set the sound effect for the low HP beeping"                      -Credits "Ported from Rando"
     $SFX = @("Default",  "Disabled", "Soft Beep", "Bark", "Business Scrub", "Carrot Refill", "Cluck", "Cockadoodledoo", "Dusk Howl", "Exploding Crate", "Explosion", "Great Fairy", "Guay", "Horse Neigh", "HP Low", "HP Recover", "Ice Shattering", "Moo", "Meweep!", 'Navi "Hello!"', "Notification", "Pot Shattering", "Redead Scream", "Ribbit", "Ruto Giggle", "Skulltula", "Tambourine", "Timer", "Zelda Gasp (Adult)")
@@ -1134,48 +1343,46 @@ function CreateTabAudiovisual() {
 function CreateTabDifficulty() {
     
     # HERO MODE #
-    CreateReduxGroup    -Tag  "Hero" -Text "Hero Mode" -Height 2
-    CreateReduxComboBox -Name "Damage"     -Column 1 -Row 1 -Shift 10 -Text "Damage"       -Items @("1x Damage", "2x Damage", "4x Damage", "8x Damage", "OHKO Mode") -Info "Set the amount of damage you receive`nOHKO Mode = You die in one hit" -Credits "Admentus"
-    CreateReduxComboBox -Name "Recovery"   -Column 3 -Row 1 -Shift 10 -Text "Recovery"     -Items @("1x Recovery", "1/2x Recovery", "1/4x Recovery", "0x Recovery")  -Info "Set the amount health you recovery from Recovery Hearts"              -Credits "Admentus"
-    CreateReduxComboBox -Name "MagicUsage" -Column 5 -Row 1 -Shift 10 -Text "Magic Usage"  -Items @("1x Magic Usage", "2x Magic Usage", "3x Magic Usage")            -Info "Set the amount of times magic is consumed at"                         -Credits "Admentus"
-    CreateReduxComboBox -Name "MonsterHP"  -Column 5 -Row 2 -Shift 10 -Text "Monster HP"   -Items @("1x Monster HP", "2x Monster HP", "3x Monster HP")               -Info "Set the amount of health for monsters"                                -Credits "Admentus" -Warning "Half of the enemies are missing"
-    CreateReduxComboBox -Name "MiniBossHP" -Column 3 -Row 2 -Shift 10 -Text "Mini-Boss HP" -Items @("1x Mini-Boss HP", "2x Mini-Boss HP", "3x Mini-Boss HP")         -Info "Set the amount of health for elite monsters and mini-bosses"          -Credits "Admentus" -Warning "Big Octo and Dark Link are missing"
-    CreateReduxComboBox -Name "BossHP"     -Column 1 -Row 2 -Shift 10 -Text "Boss HP"      -Items @("1x Boss HP", "2x Boss HP", "3x Boss HP")                        -Info "Set the amount of health for bosses"                                  -Credits "Admentus & Marcelo20XX"
-    
+    CreateReduxGroup    -Tag  "Hero" -Text "Hero Mode" 
+    CreateReduxComboBox -Name "Damage"     -Column 1 -Row 1 -Shift 10 -Text "Damage"       -Items @("1x Damage", "2x Damage", "4x Damage", "8x Damage", "OHKO Mode") -Info "Set the amount of damage you receive`nOHKO Mode = You die in one hit"                                   -Credits "Admentus"
+    CreateReduxComboBox -Name "Recovery"   -Column 3 -Row 1 -Shift 10 -Text "Recovery"     -Items @("1x Recovery", "1/2x Recovery", "1/4x Recovery", "0x Recovery")  -Info "Set the amount health you recovery from Recovery Hearts`nRecovery Heart drops are removed if set to 0x" -Credits "Admentus & Rando (No Heart Drops)"
+    CreateReduxComboBox -Name "MagicUsage" -Column 5 -Row 1 -Shift 10 -Text "Magic Usage"  -Items @("1x Magic Usage", "2x Magic Usage", "3x Magic Usage")            -Info "Set the amount of times magic is consumed at"                                                           -Credits "Admentus"
+    CreateReduxComboBox -Name "MonsterHP"  -Column 1 -Row 2 -Shift 10 -Text "Monster HP"   -Items @("1x Monster HP", "2x Monster HP", "3x Monster HP")               -Info "Set the amount of health for monsters"                                                                  -Credits "Admentus" -Warning "Half of the enemies are missing"
+    CreateReduxComboBox -Name "MiniBossHP" -Column 3 -Row 2 -Shift 10 -Text "Mini-Boss HP" -Items @("1x Mini-Boss HP", "2x Mini-Boss HP", "3x Mini-Boss HP")         -Info "Set the amount of health for elite monsters and mini-bosses"                                            -Credits "Admentus" -Warning "Big Octo and Dark Link are missing"
+    CreateReduxComboBox -Name "BossHP"     -Column 5 -Row 2 -Shift 10 -Text "Boss HP"      -Items @("1x Boss HP", "2x Boss HP", "3x Boss HP")                        -Info "Set the amount of health for bosses"                                                                    -Credits "Admentus & Marcelo20XX"
+
+    $Redux.Hero.Damage.Add_SelectedIndexChanged({ EnableElem -Elem $Redux.Hero.Recovery -Active ($this.text -ne "OHKO Mode") })
+    EnableElem -Elem ($Redux.Hero.Recovery) -Active ($Redux.Hero.Damage.text -ne "OHKO Mode")
+
     if ($Settings.Debug.LiteGUI -eq $True) { return }
 
     # MASTER QUEST #
     CreateReduxGroup -Tag "MQ" -Text "Master Quest"
     CreateReduxPanel
-    CreateReduxRadioButton -Column 1 -Name "Disable"   -Max 3 -SaveTo "Dungeons" -Text "Disable" -Checked -Info "All dungeons remain vanilla"
-    CreateReduxRadioButton -Column 2 -Name "Select"    -Max 3 -SaveTo "Dungeons" -Text "Select"           -Info "Select which dungeons you want from Master Quest" -Credits "ShadowOne333"
-    CreateReduxRadioButton -Column 3 -Name "Randomize" -Max 3 -SaveTo "Dungeons" -Text "Randomize"        -Info "Randomize the amount of Master Quest dungeons"    -Credits "ShadowOne333"
+    CreateReduxRadioButton -Name "Disable"   -Max 3 -SaveTo "Dungeons" -Text "Disable" -Checked -Info "All dungeons remain vanilla"
+    CreateReduxRadioButton -Name "Select"    -Max 3 -SaveTo "Dungeons" -Text "Select"           -Info "Select which dungeons you want from Master Quest" -Credits "ShadowOne333"
+    CreateReduxRadioButton -Name "Randomize" -Max 3 -SaveTo "Dungeons" -Text "Randomize"        -Info "Randomize the amount of Master Quest dungeons"    -Credits "ShadowOne333"
 
     # MASTER QUEST DUNGEONS #
-    $Redux.Box.SelectMQ = CreateReduxGroup -Tag "MQ" -Text "Select - Master Quest Dungeons" -Height 2
-    CreateReduxCheckBox -Name "InsideTheDekuTree"    -Column 1 -Row 1 -Text "Inside the Deku Tree"     -Checked -Info "Patch Inside the Deku Tree to Master Quest"     -Credits "ShadowOne333"
-    CreateReduxCheckBox -Name "DodongosCavern"       -Column 2 -Row 1 -Text "Dodongo's Cavern"         -Checked -Info "Patch Dodongo's Cavern to Master Quest"         -Credits "ShadowOne333"
-    CreateReduxCheckBox -Name "InsideJabuJabusBelly" -Column 3 -Row 1 -Text "Inside Jabu-Jabu's Belly" -Checked -Info "Patch Inside Jabu-Jabu's Belly to Master Quest" -Credits "ShadowOne333"
-    CreateReduxCheckBox -Name "ForestTemple"         -Column 4 -Row 1 -Text "Forest Temple"            -Checked -Info "Patch Forest Temple to Master Quest"            -Credits "ShadowOne333"
-    CreateReduxCheckBox -Name "FireTemple"           -Column 5 -Row 1 -Text "Fire Temple"              -Checked -Info "Patch Fire Temple to Master Quest"              -Credits "ShadowOne333"
-    CreateReduxCheckBox -Name "WaterTemple"          -Column 6 -Row 1 -Text "Water Temple"             -Checked -Info "Patch Water Temple to Master Quest"             -Credits "ShadowOne333"
-    CreateReduxCheckBox -Name "ShadowTemple"         -Column 1 -Row 2 -Text "Shadow Temple"            -Checked -Info "Patch Shadow Temple to Master Quest"            -Credits "ShadowOne333"
-    CreateReduxCheckBox -Name "SpiritTemple"         -Column 2 -Row 2 -Text "Spirit Temple"            -Checked -Info "Patch Spirit Temple to Master Quest"            -Credits "ShadowOne333"
-    CreateReduxCheckBox -Name "IceCavern"            -Column 3 -Row 2 -Text "Ice Cavern"               -Checked -Info "Patch Ice Cavern to Master Quest"               -Credits "ShadowOne333"
-    CreateReduxCheckBox -Name "BottomOfTheWell"      -Column 4 -Row 2 -Text "Bottom of the Well"       -Checked -Info "Patch Bottom of the Well to Master Quest"       -Credits "ShadowOne333"
-    CreateReduxCheckBox -Name "GerudoTrainingGround" -Column 5 -Row 2 -Text "Gerudo Training Ground"   -Checked -Info "Patch Gerudo Training Ground to Master Quest"   -Credits "ShadowOne333"
-    CreateReduxCheckBox -Name "InsideGanonsCastle"   -Column 6 -Row 2 -Text "Inside Ganon's Castle"    -Checked -Info "Patch Inside Ganon's Castle to Master Quest"    -Credits "ShadowOne333"
+    $Redux.Box.SelectMQ = CreateReduxGroup -Tag "MQ" -Text "Select - Master Quest Dungeons"
+    CreateReduxCheckBox -Name "InsideTheDekuTree"    -Text "Inside the Deku Tree"     -Checked -Info "Patch Inside the Deku Tree to Master Quest"     -Credits "ShadowOne333"
+    CreateReduxCheckBox -Name "DodongosCavern"       -Text "Dodongo's Cavern"         -Checked -Info "Patch Dodongo's Cavern to Master Quest"         -Credits "ShadowOne333"
+    CreateReduxCheckBox -Name "InsideJabuJabusBelly" -Text "Inside Jabu-Jabu's Belly" -Checked -Info "Patch Inside Jabu-Jabu's Belly to Master Quest" -Credits "ShadowOne333"
+    CreateReduxCheckBox -Name "ForestTemple"         -Text "Forest Temple"            -Checked -Info "Patch Forest Temple to Master Quest"            -Credits "ShadowOne333"
+    CreateReduxCheckBox -Name "FireTemple"           -Text "Fire Temple"              -Checked -Info "Patch Fire Temple to Master Quest"              -Credits "ShadowOne333"
+    CreateReduxCheckBox -Name "WaterTemple"          -Text "Water Temple"             -Checked -Info "Patch Water Temple to Master Quest"             -Credits "ShadowOne333"
+    CreateReduxCheckBox -Name "ShadowTemple"         -Text "Shadow Temple"            -Checked -Info "Patch Shadow Temple to Master Quest"            -Credits "ShadowOne333"
+    CreateReduxCheckBox -Name "SpiritTemple"         -Text "Spirit Temple"            -Checked -Info "Patch Spirit Temple to Master Quest"            -Credits "ShadowOne333"
+    CreateReduxCheckBox -Name "IceCavern"            -Text "Ice Cavern"               -Checked -Info "Patch Ice Cavern to Master Quest"               -Credits "ShadowOne333"
+    CreateReduxCheckBox -Name "BottomOfTheWell"      -Text "Bottom of the Well"       -Checked -Info "Patch Bottom of the Well to Master Quest"       -Credits "ShadowOne333"
+    CreateReduxCheckBox -Name "GerudoTrainingGround" -Text "Gerudo Training Ground"   -Checked -Info "Patch Gerudo Training Ground to Master Quest"   -Credits "ShadowOne333"
+    CreateReduxCheckBox -Name "InsideGanonsCastle"   -Text "Inside Ganon's Castle"    -Checked -Info "Patch Inside Ganon's Castle to Master Quest"    -Credits "ShadowOne333"
 
     # RANDOMIZE MASTER QUEST DUNGEONS #
     $Redux.Box.RandomizeMQ = CreateReduxGroup -Tag "MQ" -Text "Randomize - Master Quest Dungeons"
     $Items = @("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12")
     CreateReduxComboBox -Name "Minimum" -Column 1 -Shift 10 -Text "Minimum" -Default 1            -Items $Items
     CreateReduxComboBox -Name "Maximum" -Column 3 -Shift 10 -Text "Maximum" -Default $Items.Count -Items $Items
-
-
-
-    $Redux.Hero.Damage.Add_SelectedIndexChanged({ EnableElem -Elem $Redux.Hero.Recovery -Active ($this.text -ne "OHKO Mode") })
-    EnableElem -Elem ($Redux.Hero.Recovery) -Active ($Redux.Hero.Damage.text -ne "OHKO Mode")
 
     $Redux.MQ.Minimum.Add_SelectedIndexChanged({
         if ($Redux.MQ.Maximum.SelectedIndex -lt $Redux.MQ.Minimum.SelectedIndex) { $Redux.MQ.Maximum.SelectedIndex = $Redux.MQ.Minimum.SelectedIndex }
@@ -1198,15 +1405,15 @@ function CreateTabDifficulty() {
 function CreateTabColors() {
 
     # EQUIPMENT COLORS #
-    CreateReduxGroup -Tag "Colors" -Text "Equipment Colors" -Height 3
+    CreateReduxGroup -Tag "Colors" -Text "Equipment Colors"
     $Redux.Colors.Equipment = @()
     $Colors = @("Kokiri Green", "Goron Red", "Zora Blue", "Black", "White", "Azure Blue", "Vivid Cyan", "Light Red", "Fuchsia", "Purple", "Majora Purple", "Twitch Purple", "Persian Rose", "Dirty Yellow", "Blush Pink", "Hot Pink", "Rose Pink", "Orange", "Gray", "Gold", "Silver", "Beige", "Teal", "Blood Red", "Blood Orange", "Royal Blue", "Sonic Blue", "NES Green", "Dark Green", "Lumen", "Randomized", "Custom")
-    $Redux.Colors.Equipment += CreateReduxComboBox -Name "KokiriTunic"       -Column 1 -Row 1 -Text "Kokiri Tunic Color"        -Default 1 -Length 230 -Shift 70 -Items $Colors -Info ("Select a color scheme for the Kokiri Tunic`n" + '"Randomized" fully randomizes the colors each time the patcher is opened') -Credits "Ported from Rando"
-    $Redux.Colors.Equipment += CreateReduxComboBox -Name "GoronTunic"        -Column 1 -Row 2 -Text "Goron Tunic Color"         -Default 2 -Length 230 -Shift 70 -Items $Colors -Info ("Select a color scheme for the Goron Tunic`n" + '"Randomized" fully randomizes the colors each time the patcher is opened')  -Credits "Ported from Rando"
-    $Redux.Colors.Equipment += CreateReduxComboBox -Name "ZoraTunic"         -Column 1 -Row 3 -Text "Zora Tunic Color"          -Default 3 -Length 230 -Shift 70 -Items $Colors -Info ("Select a color scheme for the Zora Tunic`n" + '"Randomized" fully randomizes the colors each time the patcher is opened')   -Credits "Ported from Rando"
-    $Colors = @("Silver", "Gold", "Black", "Green", "Blue", "Bronze", "Red", "Sky Blue", "Pink", "Magenta", "Orange", "Lime", "Purple", "Randomized", "Custom")
+    $Redux.Colors.Equipment += CreateReduxComboBox -Name "KokiriTunic"       -Column 1 -Row 1 -Text "Kokiri Tunic Color"        -Default 1 -Length 230 -Shift 70 -Items $Colors -Info ("Select a color scheme for the Kokiri Tunic`n" + '"Randomized" fully randomizes the colors each time the patcher is opened')     -Credits "Ported from Rando"
+    $Redux.Colors.Equipment += CreateReduxComboBox -Name "GoronTunic"        -Column 1 -Row 2 -Text "Goron Tunic Color"         -Default 2 -Length 230 -Shift 70 -Items $Colors -Info ("Select a color scheme for the Goron Tunic`n" + '"Randomized" fully randomizes the colors each time the patcher is opened')      -Credits "Ported from Rando"
+    $Redux.Colors.Equipment += CreateReduxComboBox -Name "ZoraTunic"         -Column 1 -Row 3 -Text "Zora Tunic Color"          -Default 3 -Length 230 -Shift 70 -Items $Colors -Info ("Select a color scheme for the Zora Tunic`n" + '"Randomized" fully randomizes the colors each time the patcher is opened')       -Credits "Ported from Rando"
     $Redux.Colors.Equipment += CreateReduxComboBox -Name "SilverGauntlets"   -Column 4 -Row 1 -Text "Silver Gauntlets Color"    -Default 1 -Length 230 -Shift 70 -Items $Colors -Info ("Select a color scheme for the Silver Gauntlets`n" + '"Randomized" fully randomizes the colors each time the patcher is opened') -Credits "Ported from Rando"
     $Redux.Colors.Equipment += CreateReduxComboBox -Name "GoldenGauntlets"   -Column 4 -Row 2 -Text "Golden Gauntlets Color"    -Default 2 -Length 230 -Shift 70 -Items $Colors -Info ("Select a color scheme for the Golden Gauntlets`n" + '"Randomized" fully randomizes the colors each time the patcher is opened') -Credits "Ported from Rando"
+    $Colors = @("Silver", "Gold", "Black", "Green", "Blue", "Bronze", "Red", "Sky Blue", "Pink", "Magenta", "Orange", "Lime", "Purple", "Randomized", "Custom")
     $Redux.Colors.Equipment += CreateReduxComboBox -Name "MirrorShieldFrame" -Column 4 -Row 3 -Text "Mirror Shield Frame Color" -Default 1 -Length 230 -Shift 70 -Items @("Red", "Green", "Blue", "Yellow", "Cyan", "Magenta", "Orange", "Gold", "Purple", "Pink", "Randomized", "Custom") -Info "Select a color scheme for the Mirror Shield Frame`n- This option might not work for every custom player model" -Credits "Ported from Rando"
 
     # Equipment Colors - Buttons
@@ -1252,8 +1459,15 @@ function CreateTabColors() {
     # SPIN ATTACK COLORS #
     CreateSpinAttackColorOptions
 
+    # SWORD TRAIL COLORS #
+    CreateSwordTrailColorOptions
+
     # FAIRY COLORS #
     CreateFairyColorOptions -Name "Navi" -Second "Tatl" -Preset ("`n" + 'Selecting the presets "Tatl" or "Tael" will also change the references for "Navi" in the dialogue')
+    CreateReduxCheckBox -Name "BetaNavi" -Text "Beta Navi Colors" -Info "Use the Beta colors for Navi" -Column 1 -Row 2
+
+    $Redux.Colors.BetaNavi.Add_CheckedChanged({ EnableElem -Elem $Redux.Colors.Fairy -Active (!$this.checked) })
+    EnableElem -Elem $Redux.Colors.Fairy -Active (!$Redux.Colors.BetaNavi.Checked)
 
 }
 
@@ -1263,31 +1477,31 @@ function CreateTabColors() {
 function CreateTabEquipment() {
 
     # CAPACITY SELECTION #
-    CreateReduxGroup    -Tag  "Capacity" -Text "Capacity Selection"  -Columns 5
-    CreateReduxCheckBox -Name "EnableAmmo"    -Column 1 -Text "Change Ammo Capacity"   -Info "Enable changing the capacity values for ammo"
-    CreateReduxCheckBox -Name "EnableWallet"  -Column 2 -Text "Change Wallet Capacity" -Info "Enable changing the capacity values for the wallets"
+    CreateReduxGroup    -Tag  "Capacity" -Text "Capacity Selection" -Columns 5
+    CreateReduxCheckBox -Name "EnableAmmo"    -Text "Change Ammo Capacity"   -Info "Enable changing the capacity values for ammo"
+    CreateReduxCheckBox -Name "EnableWallet"  -Text "Change Wallet Capacity" -Info "Enable changing the capacity values for the wallets"
 
     # GAMEPLAY
     CreateReduxGroup    -Tag  "Gameplay" -Text "Gameplay"
-    CreateReduxCheckBox -Name "UnsheathSword" -Column 1 -Text "Unsheath Sword"         -Info "The sword is unsheathed first before immediately swinging it" -Credits "Admentus"
+    CreateReduxCheckBox -Name "UnsheathSword" -Text "Unsheath Sword"         -Info "The sword is unsheathed first before immediately swinging it" -Credits "Admentus"
 
     # AMMO #
-    $Redux.Box.Ammo = CreateReduxGroup -Tag "Capacity" -Text "Ammo Capacity Selection" -Height 3
-    CreateReduxTextBox -Name "Quiver1"     -Column 1 -Row 1           -Text "Quiver (1)"      -Value 30  -Info "Set the capacity for the Quiver (Base)`nDefault = 30"           -Credits "GhostlyDark"
-    CreateReduxTextBox -Name "Quiver2"     -Column 2 -Row 1           -Text "Quiver (2)"      -Value 40  -Info "Set the capacity for the Quiver (Upgrade 1)`nDefault = 40"      -Credits "GhostlyDark"
-    CreateReduxTextBox -Name "Quiver3"     -Column 3 -Row 1           -Text "Quiver (3)"      -Value 50  -Info "Set the capacity for the Quiver (Upgrade 2)`nDefault = 50"      -Credits "GhostlyDark"
-    CreateReduxTextBox -Name "BombBag1"    -Column 4 -Row 1           -Text "Bomb Bag (1)"    -Value 20  -Info "Set the capacity for the Bomb Bag (Base)`nDefault = 20"         -Credits "GhostlyDark"
-    CreateReduxTextBox -Name "BombBag2"    -Column 5 -Row 1           -Text "Bomb Bag (2)"    -Value 30  -Info "Set the capacity for the Bomb Bag (Upgrade 1)`nDefault = 30"    -Credits "GhostlyDark"
-    CreateReduxTextBox -Name "BombBag3"    -Column 6 -Row 1           -Text "Bomb Bag (3)"    -Value 40  -Info "Set the capacity for the Bomb Bag (Upgrade 2)`nDefault = 40"    -Credits "GhostlyDark"
-    CreateReduxTextBox -Name "BulletBag1"  -Column 1 -Row 2           -Text "Bullet Bag (1)"  -Value 30  -Info "Set the capacity for the Bullet Bag (Base)`nDefault = 30"       -Credits "GhostlyDark"
-    CreateReduxTextBox -Name "BulletBag2"  -Column 2 -Row 2           -Text "Bullet Bag (2)"  -Value 40  -Info "Set the capacity for the Bullet Bag (Upgrade 1)`nDefault = 40"  -Credits "GhostlyDark"
-    CreateReduxTextBox -Name "BulletBag3"  -Column 3 -Row 2           -Text "Bullet Bag (3)"  -Value 50  -Info "Set the capacity for the Bullet Bag (Upgrade 2)`nDefault = 50"  -Credits "GhostlyDark"
-    CreateReduxTextBox -Name "DekuSticks1" -Column 4 -Row 2           -Text "Deku Sticks (1)" -Value 10  -Info "Set the capacity for the Deku Sticks (Base)`nDefault = 10"      -Credits "GhostlyDark"
-    CreateReduxTextBox -Name "DekuSticks2" -Column 5 -Row 2           -Text "Deku Sticks (2)" -Value 20  -Info "Set the capacity for the Deku Sticks (Upgrade 1)`nDefault = 20" -Credits "GhostlyDark"
-    CreateReduxTextBox -Name "DekuSticks3" -Column 6 -Row 2           -Text "Deku Sticks (3)" -Value 30  -Info "Set the capacity for the Deku Sticks (Upgrade 2)`nDefault = 30" -Credits "GhostlyDark"
-    CreateReduxTextBox -Name "DekuNuts1"   -Column 1 -Row 3           -Text "Deku Nuts (1)"   -Value 20  -Info "Set the capacity for the Deku Nuts (Base)`nDefault = 20"        -Credits "GhostlyDark"
-    CreateReduxTextBox -Name "DekuNuts2"   -Column 2 -Row 3           -Text "Deku Nuts (2)"   -Value 30  -Info "Set the capacity for the Deku Nuts (Upgrade 1)`nDefault = 30"   -Credits "GhostlyDark"
-    CreateReduxTextBox -Name "DekuNuts3"   -Column 3 -Row 3           -Text "Deku Nuts (3)"   -Value 40  -Info "Set the capacity for the Deku Nuts (Upgrade 2)`nDefault = 40"   -Credits "GhostlyDark"
+    $Redux.Box.Ammo = CreateReduxGroup -Tag "Capacity" -Text "Ammo Capacity Selection"
+    CreateReduxTextBox -Name "Quiver1"     -Text "Quiver (1)"      -Value 30  -Info "Set the capacity for the Quiver (Base)`nDefault = 30"           -Credits "GhostlyDark"
+    CreateReduxTextBox -Name "Quiver2"     -Text "Quiver (2)"      -Value 40  -Info "Set the capacity for the Quiver (Upgrade 1)`nDefault = 40"      -Credits "GhostlyDark"
+    CreateReduxTextBox -Name "Quiver3"     -Text "Quiver (3)"      -Value 50  -Info "Set the capacity for the Quiver (Upgrade 2)`nDefault = 50"      -Credits "GhostlyDark"
+    CreateReduxTextBox -Name "BombBag1"    -Text "Bomb Bag (1)"    -Value 20  -Info "Set the capacity for the Bomb Bag (Base)`nDefault = 20"         -Credits "GhostlyDark"
+    CreateReduxTextBox -Name "BombBag2"    -Text "Bomb Bag (2)"    -Value 30  -Info "Set the capacity for the Bomb Bag (Upgrade 1)`nDefault = 30"    -Credits "GhostlyDark"
+    CreateReduxTextBox -Name "BombBag3"    -Text "Bomb Bag (3)"    -Value 40  -Info "Set the capacity for the Bomb Bag (Upgrade 2)`nDefault = 40"    -Credits "GhostlyDark"
+    CreateReduxTextBox -Name "BulletBag1"  -Text "Bullet Bag (1)"  -Value 30  -Info "Set the capacity for the Bullet Bag (Base)`nDefault = 30"       -Credits "GhostlyDark"
+    CreateReduxTextBox -Name "BulletBag2"  -Text "Bullet Bag (2)"  -Value 40  -Info "Set the capacity for the Bullet Bag (Upgrade 1)`nDefault = 40"  -Credits "GhostlyDark"
+    CreateReduxTextBox -Name "BulletBag3"  -Text "Bullet Bag (3)"  -Value 50  -Info "Set the capacity for the Bullet Bag (Upgrade 2)`nDefault = 50"  -Credits "GhostlyDark"
+    CreateReduxTextBox -Name "DekuSticks1" -Text "Deku Sticks (1)" -Value 10  -Info "Set the capacity for the Deku Sticks (Base)`nDefault = 10"      -Credits "GhostlyDark"
+    CreateReduxTextBox -Name "DekuSticks2" -Text "Deku Sticks (2)" -Value 20  -Info "Set the capacity for the Deku Sticks (Upgrade 1)`nDefault = 20" -Credits "GhostlyDark"
+    CreateReduxTextBox -Name "DekuSticks3" -Text "Deku Sticks (3)" -Value 30  -Info "Set the capacity for the Deku Sticks (Upgrade 2)`nDefault = 30" -Credits "GhostlyDark"
+    CreateReduxTextBox -Name "DekuNuts1"   -Text "Deku Nuts (1)"   -Value 20  -Info "Set the capacity for the Deku Nuts (Base)`nDefault = 20"        -Credits "GhostlyDark"
+    CreateReduxTextBox -Name "DekuNuts2"   -Text "Deku Nuts (2)"   -Value 30  -Info "Set the capacity for the Deku Nuts (Upgrade 1)`nDefault = 30"   -Credits "GhostlyDark"
+    CreateReduxTextBox -Name "DekuNuts3"   -Text "Deku Nuts (3)"   -Value 40  -Info "Set the capacity for the Deku Nuts (Upgrade 2)`nDefault = 40"   -Credits "GhostlyDark"
 
     # WALLET #
     $Redux.Box.Wallet = CreateReduxGroup -Tag "Capacity" -Text "Wallet Capacity Selection"
@@ -1307,10 +1521,10 @@ function CreateTabEquipment() {
 
     # UNLOCK ADULT RESTRICTIONS #
     CreateReduxGroup    -Tag  "Unlock" -Text "Unlock Adult Restrictions"
-    CreateReduxCheckBox -Name "KokiriSword"    -Text "Unlock Kokiri Sword"  -Info "Adult Link is able to use the Kokiri Sword`nThe Kokiri Sword does half as much damage as the Master Sword" -Credits "GhostlyDark"
-    CreateReduxCheckBox -Name "DekuShield"     -Text "Unlock Deku Shield"   -Info "Adult Link is able to use the Deku Shield"     -Credits "GhostlyDark" -Warning "The Deku Shield appears as invisible but can still be burned up by fire"
-    CreateReduxCheckBox -Name "FairySlingshot" -Text "Unlock Slingshot"     -Info "Adult Link is able to use the Fairy Slingshot" -Credits "GhostlyDark" -Warning "The Fairy Slingshot appears as the Fairy Bow"
-    CreateReduxCheckBox -Name "Boomerang"      -Text "Unlock Boomerang"     -Info "Adult Link is able to use the Boomerang"       -Credits "GhostlyDark" -Warning "The Boomerang appears as invisible"
+    CreateReduxCheckBox -Name "KokiriSword"    -Text "Unlock Kokiri Sword" -Info "Adult Link is able to use the Kokiri Sword`nThe Kokiri Sword does half as much damage as the Master Sword" -Credits "GhostlyDark"
+    CreateReduxCheckBox -Name "DekuShield"     -Text "Unlock Deku Shield"  -Info "Adult Link is able to use the Deku Shield"     -Credits "GhostlyDark" -Warning "The Deku Shield appears as invisible but can still be burned up by fire"
+    CreateReduxCheckBox -Name "FairySlingshot" -Text "Unlock Slingshot"    -Info "Adult Link is able to use the Fairy Slingshot" -Credits "GhostlyDark" -Warning "The Fairy Slingshot appears as the Fairy Bow"
+    CreateReduxCheckBox -Name "Boomerang"      -Text "Unlock Boomerang"    -Info "Adult Link is able to use the Boomerang"       -Credits "GhostlyDark" -Warning "The Boomerang appears as invisible"
 
 
 
@@ -1333,18 +1547,47 @@ function CreateTabEquipment() {
 
 
 #==============================================================================================================================================================================================
-function CreateTabCutscenes() {
+function CreateTabAnimations() {
     
     # SKIP CUTSCENES #
-    CreateReduxGroup    -Tag  "Skip" -Text "Skip Cutscenes"
-    CreateReduxCheckBox -Name "IntroSequence" -Column 1 -Text "Intro Sequence" -Info "Skip the intro sequence, so you can start playing immediately"                    -Credits "Ported from Better OoT"
-    CreateReduxCheckBox -Name "AllMedallions" -Column 2 -Text "All Medallions" -Info "Cutscene for all medallions never triggers when leaving shadow or spirit temples" -Credits "Ported from Better OoT"
-    CreateReduxCheckBox -Name "DaruniaDance"  -Column 3 -Text "Darunia Dance"  -Info "Darunia will not dance"                                                           -Credits "Ported from Better OoT"
+    CreateReduxGroup    -Tag  "Skip"             -Text "Skip Cutscenes"
+    CreateReduxCheckBox -Name "OpeningCutscene"  -Text "Opening Cutscene"       -Info "Skip the introduction cutscene, so you can start playing immediately"            -Credits "Ported from Better OoT"
+    CreateReduxCheckBox -Name "AllMedallions"    -Text "All Medallions"         -Info "Cutscene for all medallions never triggers when leaving Shadow or Spirit Temple" -Credits "Ported from Better OoT"
+    CreateReduxCheckBox -Name "DaruniaDance"     -Text "Darunia Dance"          -Info "Darunia will not dance"                                                          -Credits "Ported from Better OoT"
+    CreateReduxCheckBox -Name "ZeldaEscape"      -Text "Zelda's Escape"         -Info "Skip the sequence where Zelda is escaping from Hyrule Castle"                    -Credits "Ported from Better OoT"
+    CreateReduxCheckBox -Name "DungeonOutro"     -Text "Dungeon Outro"          -Info "Skip the sequence after clearing a dungeon"                                      -Credits "Ported from Rando"
+    CreateReduxCheckBox -Name "LightArrow"       -Text "Light Arrow"            -Info "Skip the sequence where Link obtains the Light Arrow"                            -Credits "Ported from Rando"
+    CreateReduxCheckBox -Name "RegularSongs"     -Text "Regular Songs"          -Info "Skip the cutscenes for learning regular songs"                                   -Credits "Ported from Rando"
+    CreateReduxCheckBox -Name "WarpSongs"        -Text "Warp Songs"             -Info "Skip the cutscenes for learning warp songs"                                      -Credits "Ported from Rando"
+    CreateReduxCheckBox -Name "RoyalTomb"        -Text "Royal Tomb"             -Info "Skip the destruction scene of the Royal Tomb entrance"                           -Credits "Ported from Rando"
+    CreateReduxCheckBox -Name "ChamberOfSages"   -Text "Chamber of Sages"       -Info "Skip the Chamber of Sages after each temple"                                     -Credits "Ported from Rando"
+    CreateReduxCheckBox -Name "JabuJabu"         -Text "Jabu-Jabu"              -Info "Skip the sequence where the Jabu-Jabu swallows Link"                             -Credits "Ported from Rando"
+    CreateReduxCheckBox -Name "GanonTower"       -Text "Ganon's Tower"          -Info "Skip the collapse of Ganon's Tower"                                              -Credits "Ported from Rando"
+    CreateReduxCheckBox -Name "DekuSeedBag"      -Text "Deku Seed Bag"          -Info "Skip the sequence after obtaining the Deku Seed Bag upgrade in the Lost Woods"   -Credits "Ported from Rando"
 
     # SPEEDUP CUTSCENES #
-    CreateReduxGroup    -Tag  "Skip" -Text "Speed-Up Cutscenes"
-    CreateReduxCheckBox -Name "OpeningChests" -Column 1 -Text "Opening Chests" -Info "Make all chest opening animations fast by kicking them open" -Credits "Ported from Better OoT"
-    CreateReduxCheckBox -Name "KingZora"      -Column 2 -Text "King Zora"      -Info "King Zora moves quickly"                                     -Credits "Ported from Better OoT"
-    CreateReduxCheckBox -Name "ZeldasEscape"  -Column 3 -Text "Zelda's Escape" -Info "Speed-up Zelda escaping from Hyrule Castle"                  -Credits "Ported from Better OoT"      
+    CreateReduxGroup    -Tag  "Skip"             -Text "Speed-Up Cutscenes"
+    CreateReduxCheckBox -Name "OpeningChests"    -Text "Opening Chests"         -Info "Make all chest opening animations fast by kicking them open"                     -Credits "Ported from Better OoT"
+    CreateReduxCheckBox -Name "KingZora"         -Text "King Zora"              -Info "King Zora moves quickly"                                                         -Credits "Ported from Better OoT"
+    CreateReduxCheckBox -Name "EponaRace"        -Text "Epona Race"             -Info "The Epona race with Ingo starts faster"                                          -Credits "Ported from Rando"
+    CreateReduxCheckBox -Name "HorsebackArchery" -Text "Horseback Archery"      -Info "The Horseback Archery mini starts and ends faster"                               -Credits "Ported from Rando"
+    CreateReduxCheckBox -Name "DoorOfTime"       -Text "Door of Time"           -Info "The Door of Time in the Temple of Time opens much faster"                        -Credits "Ported from Rando"
+    CreateReduxCheckBox -Name "DrainingTheWell"  -Text "Draining the Well"      -Info "The well in Kakariko Village drains much faster"                                 -Credits "Ported from Rando"
+    CreateReduxCheckBox -Name "Bosses"           -Text "Bosses"                 -Info "Speed-up sequences related to some dungeon bosses"                               -Credits "Ported from Rando"
+    CreateReduxCheckBox -Name "RainbowBridge"    -Text "Rainbow Bridge"         -Info "Speed-up the sequence where the Rainbow Bridge appears"                          -Credits "Ported from Rando"
+    CreateReduxCheckBox -Name "FairyOcarina"     -Text "Fairy Ocarina"          -Info "Speed-up the sequence where Link obtains the Fairy Ocarina"                      -Credits "Ported from Rando"
+    CreateReduxCheckBox -Name "GanonTrials"      -Text "Ganon's Trials"         -Info "Skip the completion sequence of the Ganon's Castle trials"                       -Credits "Ported from Rando"
+    
+    # Restore CUTSCENES #
+    CreateReduxGroup    -Tag  "Restore"          -Text "Restore Cutscenes"
+    CreateReduxCheckBox -Name "OpeningCutscene"  -Text "Opening Cutscene"       -Info "Restore the Beta introduction cutscene" -Link $Redux.Skip.OpeningCutscene        -Credits "Admentus (ROM hack) & CloudModding (GameShark)"
 
+    # ANIMATIONS #
+    CreateReduxGroup    -Tag  "Animation"        -Text "Link Animations"
+    $weapons = "`n`nAffected weapons:`n- Giant's Knife`n- Giant's Knife (Broken)`n- Biggoron Sword`n- Deku Stick`n- Megaton Hammer"
+    CreateReduxCheckBox -Name "WeaponIdle"       -Text "2-handed Weapon Idle"   -Info ("Restore the beta animation when idly holding a two-handed weapon" + $weapons)   -Credits "Admentus"
+    CreateReduxCheckBox -Name "WeaponCrouch"     -Text "2-handed Weapon Crouch" -Info ("Restore the beta animation when crouching with a two-handed weapon" + $weapons) -Credits "Admentus"
+    CreateReduxCheckBox -Name "WeaponAttack"     -Text "2-handed Weapon Attack" -Info ("Restore the beta animation when attacking with a two-handed weapon" + $weapons) -Credits "Admentus"
+    CreateReduxCheckBox -Name "Backflip"         -Text "Backflip Jumpslash"     -Info "Restore the beta animation to turn the jump attack into a backflip attack"       -Credits "Admentus"
+    CreateReduxCheckBox -Name "Frontflip"        -Text "Frontflip Jumpslash"    -Info "Restore the beta animation to turn the jump attack into a frontflip attack"      -Credits "Admentus" -Link $Redux.Animation.Backflip
 }

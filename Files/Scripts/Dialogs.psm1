@@ -36,7 +36,7 @@ function CreateOptionsDialog([int32]$Width, [int32]$Height, [Array]$Tabs=@()) {
 
 
 #==============================================================================================================================================================================================
-function CreateLanguageContent($Columns=[byte][Math]::Round($Redux.Panel.Width / 340)) {
+function CreateLanguageContent($Columns=[byte][Math]::Round($Redux.Panel.Width / $ColumnWidth)) {
     
     # Box + Panel
     $Rows = [Math]::Ceiling($GamePatch.languages.length /  $Columns)
@@ -52,7 +52,9 @@ function CreateLanguageContent($Columns=[byte][Math]::Round($Redux.Panel.Width /
                 $Column = 0
                 $Row += 1
             }
-            $Redux.Language[$i] = CreateReduxRadioButton -Column ($Column+1) -Row $Row -Text $GamePatch.languages[$i].title -Info ("Play the game in " + $GamePatch.languages[$i].title) -Name $GamePatch.languages[$i].title -SaveTo "Translation"
+            if (IsSet $GamePatch.languages[$i].warning)   { $warning = ([string]::Format($GamePatch.languages[$i].warning, [Environment]::NewLine)) }
+            else                                          { $warning = $null }
+            $Redux.Language[$i] = CreateReduxRadioButton -Column ($Column+1) -Row $Row -Text $GamePatch.languages[$i].title -Info ("Play the game in " + $GamePatch.languages[$i].title) -Warning $warning -Name $GamePatch.languages[$i].title -Credits $GamePatch.languages[$i].credits -SaveTo "Translation"
         }
     
         $HasDefault = $False
@@ -142,10 +144,19 @@ function CreateCreditsDialog() {
     $PayPal2Label.add_Click(  { [system.Diagnostics.Process]::start("https://www.paypal.com/paypalme/Admentus/") } )
     $Discord2Label.ForeColor = $GitHub2Label.ForeColor = $Patreon2Label.ForeColor = $PayPal2Label.ForeColor = "Blue"
 
+    # Support Me QR
+    $SwishLabel = CreateLabel -X (DPISize 470) -Y (DPISize 10) -Height (DPISize 15) -Font $Fonts.SmallBold -Text ("Swish") -AddTo $Credits.Sections[3]
+    $PictureBox = New-Object Windows.Forms.PictureBox
+    $PictureBox.Location = New-object System.Drawing.Size($SwishLabel.Left, ($SwishLabel.Bottom + (DPISize 5)))
+    SetBitmap -Path ($Paths.Main + "\qr.png") -Box $PictureBox -Width 125 -Height 125
+    $PictureBox.Width  = $PictureBox.Image.Size.Width
+    $PictureBox.Height = $PictureBox.Image.Size.Height
+    $Credits.Sections[3].controls.add($PictureBox)
+
 
 
     # Documentation
-    $SourcesLabel = CreateLabel -X (DPISize 10)        -Y ($PayPal2Label.Bottom + (DPISize 10)) -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("--- Sources ---")                                                                     -AddTo $Credits.Sections[3]
+    $SourcesLabel = CreateLabel -X (DPISize 10)        -Y ($PayPal2Label.Bottom + (DPISize 80)) -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("--- Sources ---")                                                                     -AddTo $Credits.Sections[3]
     
     $Shadow1Label = CreateLabel -X (DPISize 10)        -Y ($SourcesLabel.Bottom + (DPISize 2))  -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("ShadowOne333's GitHub")                                                               -AddTo $Credits.Sections[3]
     $Shadow2Label = CreateLabel -X $Shadow1Label.Right -Y ($SourcesLabel.Bottom + (DPISize 2))  -Width (DPISize 340) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("https://github.com/ShadowOne333/Zelda64-Redux-Documentation")                         -AddTo $Credits.Sections[3]
@@ -159,11 +170,15 @@ function CreateCreditsDialog() {
     $Malon1Label  = CreateLabel -X (DPISize 10)        -Y ($Skilar1Label.Bottom + (DPISize 2))  -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("Malon Rose YouTube")                                                                  -AddTo $Credits.Sections[3]
     $Malon2Label  = CreateLabel -X $Skilar1Label.Right -Y ($Skilar2Label.Bottom + (DPISize 2))  -Width (DPISize 225) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("https://www.youtube.com/c/MalonRose")                                                 -AddTo $Credits.Sections[3]
 
+    $Luigi1Label  = CreateLabel -X (DPISize 10)        -Y ($Malon1Label.Bottom  + (DPISize 2))  -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("theluigidude2007 YouTube")                                                            -AddTo $Credits.Sections[3]
+    $Luigi2Label  = CreateLabel -X $Malon1Label.Right  -Y ($Malon2Label.Bottom  + (DPISize 2))  -Width (DPISize 225) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("www.youtube.com/channel/UC3071imQKR5cEIobsFHLW9Q")                                    -AddTo $Credits.Sections[3]
+
     $Shadow2Label.add_Click( { [system.Diagnostics.Process]::start("https://github.com/ShadowOne333/Zelda64-Redux-Documentation") } )
     $Female2Label.add_Click( { [system.Diagnostics.Process]::start("https://docs.google.com/spreadsheets/d/1Ihccm8noxsfHZfN1E3Gkccov1F27WXXxl-rxOuManUk") } )
     $Skilar2Label.add_Click( { [system.Diagnostics.Process]::start("https://www.youtube.com/user/skilarbabcock") } )
     $Malon2Label.add_Click(  { [system.Diagnostics.Process]::start("https://www.youtube.com/c/MalonRose") } )
-    $Shadow2Label.ForeColor = $Female2Label.ForeColor = $Skilar2Label.ForeColor = $Malon2Label.ForeColor = "Blue"
+    $Luigi2Label.add_Click(  { [system.Diagnostics.Process]::start("www.youtube.com/channel/UC3071imQKR5cEIobsFHLW9Q") } )
+    $Shadow2Label.ForeColor = $Female2Label.ForeColor = $Skilar2Label.ForeColor = $Malon2Label.ForeColor = $Luigi2Label.ForeColor = "Blue"
 
 
 
@@ -185,7 +200,7 @@ function CreateCreditsDialog() {
 function CreateSettingsDialog() {
     
     # Create Dialog
-    $global:SettingsDialog = CreateDialog -Width (DPISize 560) -Height (DPISize 700) -Icon $Files.icon.settings
+    $global:SettingsDialog = CreateDialog -Width (DPISize 560) -Height (DPISize 730) -Icon $Files.icon.settings
     $CloseButton = CreateButton -X ($SettingsDialog.Width / 2 - (DPISize 40)) -Y ($SettingsDialog.Height - (DPISize 90)) -Width (DPISize 80) -Height (DPISize 35) -Text "Close" -AddTo $SettingsDialog
     $CloseButton.Add_Click({ $SettingsDialog.Hide() })
 
@@ -224,13 +239,14 @@ function CreateSettingsDialog() {
     $GeneralSettings.KeepDowngraded      = CreateSettingsCheckbox -Name "KeepDowngraded"   -Column 1 -Row 3 -Text "Keep Downgraded"       -IsDebug -Info "Keep the downgraded patched ROM in the output folder"
 
     # Debug Settings (Nintendo 64)
-    $GeneralSettings.Box                 = CreateReduxGroup -Y ($GeneralSettings.Box.Bottom + (DPISize 10)) -IsGame $False -Height 2 -AddTo $SettingsDialog -Text "Debug Settings (Nintendo 64)"
+    $GeneralSettings.Box                 = CreateReduxGroup -Y ($GeneralSettings.Box.Bottom + (DPISize 10)) -IsGame $False -Height 3 -AddTo $SettingsDialog -Text "Debug Settings (Nintendo 64)"
     $GeneralSettings.KeepConverted       = CreateSettingsCheckbox -Name "KeepConverted"    -Column 1 -Row 1 -Text "Keep Converted"        -IsDebug -Info "Keep the converted patched ROM in the output folder"
     $GeneralSettings.KeepDecompressed    = CreateSettingsCheckbox -Name "KeepDecompressed" -Column 2 -Row 1 -Text "Keep Decompressed"     -IsDebug -Info "Keep the decompressed patched ROM in the output folder"
     $GeneralSettings.Rev0DungeonFiles    = CreateSettingsCheckbox -Name "Rev0DungeonFiles" -Column 3 -Row 1 -Text "Rev 0 Dungeon Files"   -IsDebug -Info "Extract the dungeon files from the OoT ROM (Rev 0 US) or MM ROM (Rev 0 US) as well when extracting dungeon files"
     $GeneralSettings.NoConversion        = CreateSettingsCheckbox -Name "NoConversion"     -Column 1 -Row 2 -Text "No Conversion"         -IsDebug -Info "Do not attempt to convert the ROM to a proper format"
     $GeneralSettings.NoCRCChange         = CreateSettingsCheckbox -Name "NoCRCChange"      -Column 2 -Row 2 -Text "No CRC Change"         -IsDebug -Info "Do not change the CRC of the ROM when patching is concluded"
     $GeneralSettings.NoCompression       = CreateSettingsCheckbox -Name "NoCompression"    -Column 3 -Row 2 -Text "No Compression"        -IsDebug -Info "Do not attempt to compress the ROM back again when patching is concluded"
+    $GeneralSettings.AltDecompress       = CreateSettingsCheckbox -Name "AltDecompress"    -Column 1 -Row 3 -Text "Switch Decompressor"   -IsDebug -Info "Use Decompress.exe instead of ndec.exe for decompressing Nintendo 64 titles"
 
     # Settings preset
     $GeneralSettings.Box                 = CreateReduxGroup -Y ($GeneralSettings.Box.Bottom + (DPISize 10)) -IsGame $False -Height 2 -AddTo $SettingsDialog -Text "Settings Presets"
@@ -302,19 +318,20 @@ function ResetTool() {
     $InputPaths.GameTextBox.Text = "Select or drag and drop your ROM or VC WAD file..."
     $InputPaths.InjectTextBox.Text = "Select or drag and drop your NES, SNES or N64 ROM..."
     $InputPaths.PatchTextBox.Text = "Select or drag and drop your BPS, IPS, Xdelta or VCDiff Patch File..."
-
+    
     foreach ($item in $GeneralSettings) {
-        if ($item.value.GetType() -eq [System.Windows.Forms.CheckBox]) { $item.value.Checked = $item.value.Default }
+        if ($item.GetType() -eq [System.Windows.Forms.CheckBox]) { $item.Checked = $item.Default }
     }
 
     foreach ($item in $VC.GetEnumerator) {
-        if ($item.value.GetType() -eq [System.Windows.Forms.CheckBox]) { $item.value.Checked = $item.value.Default }
+        if ($item.GetType() -eq [System.Windows.Forms.CheckBox]) { $item.Checked = $item.Default }
     }
 
     $Patches.Downgrade.Checked = $Patches.Downgrade.Default
     $Patches.Redux.Checked = $Patches.Redux.Default
     $Patches.Options.Checked = $Patches.Options.Default
-    $CustomHeaderCheckbox.Checked = $CustomHeaderCheckbox.Default
+    $CustomHeader.EnableHeader.Checked = $CustomHeader.EnableHeader.Default
+    $CustomHeader.EnableRegion.Checked = $CustomHeader.EnableRegion.Default
     
     $ConsoleComboBox.SelectedIndex = $ConsoleComboBox.Default
     $CurrentGameComboBox.SelectedIndex = $CurrentGameComboBox.Default
@@ -361,6 +378,7 @@ function ResetGame() {
         }
     }
 
+    WriteToConsole "Current selected game options have been reset"
     [System.GC]::Collect() | Out-Null
 
 }
@@ -371,7 +389,7 @@ function ResetGame() {
 #==============================================================================================================================================================================================
 function CleanupFiles() {
     
-    foreach ($item in $Files.json.games.game) {
+    foreach ($item in $Files.json.games) {
         RemovePath ($Paths.Games + "\" + $item.mode + "\Extracted")
     }
 
@@ -380,6 +398,7 @@ function CleanupFiles() {
     RemoveFile $Files.flipscfg
     RemoveFile $Files.stackdump
 
+    WriteToConsole "All extracted files have been deleted"
     [System.GC]::Collect() | Out-Null
 
 }
@@ -390,8 +409,15 @@ function CleanupFiles() {
 function CreateSettingsCheckbox([byte]$Column=1, [byte]$Row=1, [boolean]$Checked, [switch]$Disable, [string]$Text="", [object]$ToolTip, [string]$Info="", [string]$Name, [switch]$IsDebug) {
     
     $Checkbox = CreateCheckbox -X (($Column-1) * (DPISize 165) + (DPISize 15)) -Y ($Row * (DPISize 30) - (DPISize 10)) -Checked $Checked -Disable $Disable -IsRadio $False -Info $Info -IsDebug $IsDebug -Name $Name
-    if (IsSet $Text) { $Label = CreateLabel -X $CheckBox.Right -Y ($CheckBox.Top + (DPISize 3)) -Width (DPISize 135) -Height (DPISize 15) -Text $Text -Info $Info }
-    
+    if (IsSet $Text) {  
+        $Label = CreateLabel -X $CheckBox.Right -Y ($CheckBox.Top + (DPISize 3)) -Width (DPISize 135) -Height (DPISize 15) -Text $Text -Info $Info
+        Add-Member -InputObject $Label    -NotePropertyMembers @{ CheckBox = $CheckBox }
+        Add-Member -InputObject $CheckBox -NotePropertyMembers @{ Label    = $Text }
+        $Label.Add_Click({
+            if ($this.CheckBox.Enabled) { $this.CheckBox.Checked = !$this.CheckBox.Checked }
+        })
+    }
+
     return $CheckBox
 
 }

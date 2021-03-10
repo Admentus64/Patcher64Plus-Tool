@@ -180,7 +180,7 @@ function ExtractMQData([boolean]$Decompress) {
     # EXTRACT MQ DATA #
     if ($GameType.mode -eq "Ocarina of Time") {
         $Path = $GameFiles.extracted + "\Master Quest"
-        if ( (IsChecked -Elem $Redux.MQ.Disable -Not) -and (IsChecked -Elem $Patches.Options -Active) ) { # EXTRACT MQ DUNGEON DATA #
+        if ( ( (IsChecked -Elem $Redux.MQ.Select) -or (IsChecked -Elem $Redux.MQ.Randomize) ) -and (IsChecked $Patches.Options) ) { # EXTRACT MQ DUNGEON DATA #
             if ( !(TestFile -Path $Path -Container) -or ($Settings.Debug.ForceExtract -eq $True) ) {
                 if (TestFile -Path ($GameFiles.decompressed + "\master_quest.bps") ) {
                     ApplyPatch -File $GetROM.decomp -Patch "\Decompressed\master_quest.bps" -New $GetROM.masterQuest

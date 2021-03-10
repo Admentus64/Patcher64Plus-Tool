@@ -195,7 +195,7 @@ function ChangeStringIntoDigits([string]$File, [string]$Search, [string]$Value, 
     if ($Triple -and [int16]$Value -lt 100)       { ChangeBytes -File $File -Offset $Offset -IsDec -Values (@("48")       + [System.Text.Encoding]::Default.GetBytes($Value)) }
     elseif ($Triple -and [int16]$Value -lt 10)    { ChangeBytes -File $File -Offset $Offset -IsDec -Values (@("48", "48") + [System.Text.Encoding]::Default.GetBytes($Value)) }
     elseif (!$Triple -and [int16]$Value -lt 10)   { ChangeBytes -File $File -Offset $Offset -IsDec -Values (@("48")       + [System.Text.Encoding]::Default.GetBytes($Value)) }
-    else                                        { ChangeBytes -File $File -Offset $Offset -IsDec -Values @([System.Text.Encoding]::Default.GetBytes($Value)) }
+    else                                          { ChangeBytes -File $File -Offset $Offset -IsDec -Values @([System.Text.Encoding]::Default.GetBytes($Value)) }
     $offset = $Search = $Value = $Triple = $null
 
 }
@@ -441,15 +441,58 @@ function CreateSpinAttackColorOptions() {
         $Redux.Colors.SpinAttackLabels += CreateReduxColoredLabel -Link $Buttons[$i]  -Color $Redux.Colors.SetSpinAttack[$i].Color
     }
 
-    $Redux.Colors.BlueSpinAttack.Add_SelectedIndexChanged({ SetSpinAttackColorsPreset -ComboBox $Redux.Colors.BlueSpinAttack -Dialog $Redux.Colors.SetSpinAttack[0] -Label $Redux.Colors.SpinAttackLabels[0] })
-    SetSpinAttackColorsPreset -ComboBox $Redux.Colors.BlueSpinAttack -Dialog $Redux.Colors.SetSpinAttack[0] -Label $Redux.Colors.SpinAttackLabels[0]
-    $Redux.Colors.BlueSpinAttack.Add_SelectedIndexChanged({ SetSpinAttackColorsPreset -ComboBox $Redux.Colors.BlueSpinAttack -Dialog $Redux.Colors.SetSpinAttack[1] -Label $Redux.Colors.SpinAttackLabels[1] })
-    SetSpinAttackColorsPreset -ComboBox $Redux.Colors.BlueSpinAttack -Dialog $Redux.Colors.SetSpinAttack[0] -Label $Redux.Colors.SpinAttackLabels[1]
+    $Redux.Colors.BlueSpinAttack.Add_SelectedIndexChanged({ SetSwordColorsPreset -ComboBox $Redux.Colors.BlueSpinAttack -Dialog $Redux.Colors.SetSpinAttack[0] -Label $Redux.Colors.SpinAttackLabels[0] })
+    SetSwordColorsPreset -ComboBox $Redux.Colors.BlueSpinAttack -Dialog $Redux.Colors.SetSpinAttack[0] -Label $Redux.Colors.SpinAttackLabels[0]
+    $Redux.Colors.BlueSpinAttack.Add_SelectedIndexChanged({ SetSwordColorsPreset -ComboBox $Redux.Colors.BlueSpinAttack -Dialog $Redux.Colors.SetSpinAttack[1] -Label $Redux.Colors.SpinAttackLabels[1] })
+    SetSwordColorsPreset -ComboBox $Redux.Colors.BlueSpinAttack -Dialog $Redux.Colors.SetSpinAttack[0] -Label $Redux.Colors.SpinAttackLabels[1]
 
-    $Redux.Colors.RedSpinAttack.Add_SelectedIndexChanged({ SetSpinAttackColorsPreset -ComboBox $Redux.Colors.RedSpinAttack -Dialog $Redux.Colors.SetSpinAttack[2] -Label $Redux.Colors.SpinAttackLabels[2] })
-    SetSpinAttackColorsPreset -ComboBox $Redux.Colors.RedSpinAttack -Dialog $Redux.Colors.SetSpinAttack[2] -Label $Redux.Colors.SpinAttackLabels[2]
-    $Redux.Colors.RedSpinAttack.Add_SelectedIndexChanged({ SetSpinAttackColorsPreset -ComboBox $Redux.Colors.RedSpinAttack -Dialog $Redux.Colors.SetSpinAttack[3] -Label $Redux.Colors.SpinAttackLabels[3] })
-    SetSpinAttackColorsPreset -ComboBox $Redux.Colors.RedSpinAttack -Dialog $Redux.Colors.SetSpinAttack[3] -Label $Redux.Colors.SpinAttackLabels[3]
+    $Redux.Colors.RedSpinAttack.Add_SelectedIndexChanged({ SetSwordColorsPreset -ComboBox $Redux.Colors.RedSpinAttack -Dialog $Redux.Colors.SetSpinAttack[2] -Label $Redux.Colors.SpinAttackLabels[2] })
+    SetSwordColorsPreset -ComboBox $Redux.Colors.RedSpinAttack -Dialog $Redux.Colors.SetSpinAttack[2] -Label $Redux.Colors.SpinAttackLabels[2]
+    $Redux.Colors.RedSpinAttack.Add_SelectedIndexChanged({ SetSwordColorsPreset -ComboBox $Redux.Colors.RedSpinAttack -Dialog $Redux.Colors.SetSpinAttack[3] -Label $Redux.Colors.SpinAttackLabels[3] })
+    SetSwordColorsPreset -ComboBox $Redux.Colors.RedSpinAttack -Dialog $Redux.Colors.SetSpinAttack[3] -Label $Redux.Colors.SpinAttackLabels[3]
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function CreateSwordTrailColorOptions() {
+    
+    # SWORD TRAIL COLORS #
+    CreateReduxGroup    -Tag  "Colors" -Text "Sword Trail Colors"
+    $Items = @("White", "Red", "Green", "Blue", "Cyan", "Magenta", "Orange", "Gold", "Purple", "Pink", "Randomized", "Custom")
+    CreateReduxComboBox -Name "SwordTrail"         -Column 1 -Text "Sword Trail Color"    -Length 230 -Shift 70 -Items $Items -Default 1 -Info ("Select a preset for the sword trail color`n" + '"Randomized" fully randomizes the colors each time the patcher is opened') -Credits "Ported from Rando"
+    CreateReduxComboBox -Name "SwordTrailDuration" -Column 5 -Text "Sword Trail Duration" -Length 230 -Shift 70 -Items @("Short", "Long", "Very Long", "Lightsaber") -Default 1 -Info ("Select the duration for sword trail") -Credits "Ported from Rando"
+
+    # Sword Trail Colors - Buttons
+    $Buttons = @()
+    $Buttons += CreateReduxButton -Column 3 -Row 1 -Width 100 -Tag $Buttons.Count -Text "Trail (Inner)" -Info "Select the inner color you want for the sword trail" -Credits "Ported from Rando"
+    $Buttons += CreateReduxButton -Column 4 -Row 1 -Width 100 -Tag $Buttons.Count -Text "Trail (Outer)" -Info "Select the outer color you want for the sword trail" -Credits "Ported from Rando"
+
+    # Sword Trail Colors - Dialogs
+    $Redux.Colors.SetSwordTrail = @()
+    $Redux.Colors.SetSwordTrail += CreateColorDialog -Color "FFFFFF" -Name "SetInnerSwordTrail" -IsGame
+    $Redux.Colors.SetSwordTrail += CreateColorDialog -Color "FFFFFF" -Name "SetOuterSwordTrail" -IsGame
+
+    # Sword Trail Colors - Labels
+    $Redux.Colors.SwordTrailLabels = @()
+    for ($i=0; $i -lt $Buttons.length; $i++) {
+        $Buttons[$i].Add_Click({
+            $Redux.Colors.SetSwordTrail[[int16]$this.Tag].ShowDialog(); $Redux.Colors.SwordTrailLabels[[int16]$this.Tag].BackColor = $Redux.Colors.SetSwordTrail[[int16]$this.Tag].Color; $GameSettings["Colors"][$Redux.Colors.SetSwordTrail[[int16]$this.Tag].Tag] = $Redux.Colors.SetSwordTrail[[int16]$this.Tag].Color.Name
+            $Redux.Colors.SwordTrail.Text  = "Custom"
+        })
+        $Redux.Colors.SwordTrailLabels += CreateReduxColoredLabel -Link $Buttons[$i]  -Color $Redux.Colors.SetSwordTrail[$i].Color
+    }
+
+    $Redux.Colors.SwordTrail.Add_SelectedIndexChanged({
+        if ($Redux.Colors.SwordTrail.text -ne "Custom") { SetColor -Color "FFFFFF" -Dialog $Redux.Colors.SetSwordTrail[1] -Label $Redux.Colors.SwordTrailLabels[1] }
+        SetSwordColorsPreset -ComboBox $Redux.Colors.SwordTrail -Dialog $Redux.Colors.SetSwordTrail[0] -Label $Redux.Colors.SwordTrailLabels[0]
+    })
+    if ($Redux.Colors.SwordTrail.text -ne "Custom") { SetColor -Color "FFFFFF" -Dialog $Redux.Colors.SetSwordTrail[1] -Label $Redux.Colors.SwordTrailLabels[1] }
+    SetSwordColorsPreset -ComboBox $Redux.Colors.SwordTrail -Dialog $Redux.Colors.SetSwordTrail[0] -Label $Redux.Colors.SwordTrailLabels[0]
+    
+    #$Redux.Colors.SwordTrail.Add_SelectedIndexChanged({ SetSwordColorsPreset -ComboBox $Redux.Colors.SwordTrail -Dialog $Redux.Colors.SetSwordTrail[1] -Label $Redux.Colors.SwordTrailLabels[1] })
+    #SetSwordColorsPreset -ComboBox $Redux.Colors.SwordTrail -Dialog $Redux.Colors.SetSwordTrail[1] -Label $Redux.Colors.SwordTrailLabels[1]
 
 }
 
@@ -537,7 +580,6 @@ function SetFairyColorsPreset([object]$ComboBox, [Array]$Dialogs, [Array]$Labels
     
     $Text = $ComboBox.Text.replace(' (default)', "")
     if     ($Text -eq "Navi")                { SetFairyColors -Inner "FFFFFF" -Outer "0000FF" -Dialogs $Dialogs -Labels $Labels }
-   #elseif ($Text -eq "Tatl")                { SetFairyColors -Inner "FFFFFF" -Outer "C89800" -Dialogs $Dialogs -Labels $Labels }
     elseif ($Text -eq "Tatl")                { SetFairyColors -Inner "FFFFE6" -Outer "DCA050" -Dialogs $Dialogs -Labels $Labels }
     elseif ($Text -eq "Tael")                { SetFairyColors -Inner "49146C" -Outer "FF0000" -Dialogs $Dialogs -Labels $Labels }
     elseif ($Text -eq "Gold")                { SetFairyColors -Inner "FECC3C" -Outer "FEC007" -Dialogs $Dialogs -Labels $Labels }
@@ -758,7 +800,7 @@ function SetMinimapColorsPreset([object]$ComboBox, [object]$Dialog, [object]$Lab
 
 
 #==============================================================================================================================================================================================
-function SetSpinAttackColorsPreset([object]$ComboBox, [object]$Dialog, [object]$Label) {
+function SetSwordColorsPreset([object]$ComboBox, [object]$Dialog, [object]$Label) {
     
     $Text = $ComboBox.Text.replace(' (default)', "")
     if     ($Text -eq "Black")      { SetColor -Color "000000" -Dialog $Dialog -Label $Label }
@@ -821,6 +863,7 @@ Export-ModuleMember -Function LoadModelsList
 
 Export-ModuleMember -Function CreateButtonColorOptions
 Export-ModuleMember -Function CreateSpinAttackColorOptions
+Export-ModuleMember -Function CreateSwordTrailColorOptions
 Export-ModuleMember -Function CreateFairyColorOptions
 
 Export-ModuleMember -Function SetButtonColorsPreset
@@ -833,7 +876,7 @@ Export-ModuleMember -Function SetMirrorShieldFrameColorsPreset
 Export-ModuleMember -Function SetHeartsColorsPreset
 Export-ModuleMember -Function SetMagicColorsPreset
 Export-ModuleMember -Function SetMinimapColorsPreset
-Export-ModuleMember -Function SetSpinAttackColorsPreset
+Export-ModuleMember -Function SetSwordColorsPreset
 
 Export-ModuleMember -Function SetColor
 Export-ModuleMember -Function SetColors

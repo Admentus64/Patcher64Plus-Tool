@@ -1,24 +1,25 @@
-{ "patch" : [ {
-	"title" : "Smash Remix (v0.9.5)",
-	"console" : "Native",
-	"patch" : "\\Compressed\\remix.bps",
-	"output" : "_remix_patched",
-	"tooltip" : "Remixes the whole of Super Smash Bros.{0}Contains new stages and characters to use.{0}- Supported: Rev 0 (US)"
+[ {
+	"title"		: "Smash Remix (v0.9.5)",
+	"console"	: "Native",
+	"patch"		: "\\Compressed\\remix.bps",
+	"output"	: "_remix_patched",
+	"tooltip"	: "Remixes the whole of Super Smash Bros.{0}Contains new stages and characters to use.{0}- Supported: Rev 0 (US)"
 }, {
-	"title" : "Super Smash Bros: More Stages Edition (v0.5.1)",
-	"console" : "Both",
-	"vc_title" : "Super Smash Bros: MSE",
-	"vc_gameID" : "NAL0",
-	"patch" : "\\Compressed\\SSBMSE.xdelta",
-	"output" : "_ssbmse_patched",
-	"tooltip" : "Add new stages from the newer Super Smash Bros. entries.{0}- Supported: Rev 0 (US)"
+	"title"		: "Super Smash Bros: More Stages Edition (v0.5.1)",
+	"console"	: "Both",
+	"expand_memory"	: -1,
+	"vc_title"	: "Super Smash Bros: MSE",
+	"vc_gameID"	: "NAL0",
+	"patch"		: "\\Compressed\\SSBMSE.xdelta",
+	"output"	: "_ssbmse_patched",
+	"tooltip"	: "Add new stages from the newer Super Smash Bros. entries.{0}- Supported: Rev 0 (US)"
 }, {
-	"title" : "Widescreen",
-	"console" : "Both",
-	"vc_title" : "Super Smash Bros. WS",
-	"vc_gameID" : "NAL1",
-	"patch" : "\\Compressed\\widescreen.xdelta",
-	"output" : "_widescreen_patched",
-	"tooltip" : "Add widescreen support to Super Smash Bros.{0}- Supported: Rev 0 (US)"
-}
-] }
+	"title"		: "Widescreen",
+	"console"	: "Both",
+	"expand_memory"	: -1,
+	"vc_title"	: "Super Smash Bros. WS",
+	"vc_gameID"	: "NAL1",
+	"patch"		: "\\Compressed\\widescreen.xdelta",
+	"output"	: "_widescreen_patched",
+	"tooltip"	: "Add widescreen support to Super Smash Bros.{0}- Supported: Rev 0 (US)"
+} ]

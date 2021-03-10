@@ -37,7 +37,7 @@ function ChangeConsolesList() {
     $ConsoleComboBox.Items.Clear()
 
     $Items = @()
-    foreach ($item in $Files.json.consoles.console) {
+    foreach ($item in $Files.json.consoles) {
         $Items += $item.title
     }
 
@@ -65,7 +65,7 @@ function ChangeConsolesList() {
 function ChangeGamesList() {
     
     # Set console
-    foreach ($item in $Files.json.consoles.console) {
+    foreach ($item in $Files.json.consoles) {
         if ($item.title -eq $ConsoleComboBox.Text) {
             $global:GameConsole = $item
             break
@@ -77,7 +77,7 @@ function ChangeGamesList() {
     if (!$IsWiiVC) { $CustomHeader.Title.MaxLength = $GameConsole.rom_title_length }
 
     $Items = @()
-    foreach ($item in $Files.json.games.game) {
+    foreach ($item in $Files.json.games) {
         if ( ($ConsoleComboBox.text -eq $GameConsole.title) -and ($GameConsole.mode -contains $item.console) ) {
             if ( ( $IsWiiVC -and $item.support_vc -eq 1) -or (!$IsWiiVC) ) { $Items += $item.title }
         }
@@ -117,7 +117,7 @@ function ChangePatchPanel() {
 
     # Set combobox for patches
     $Items = @()
-    foreach ($item in $Files.json.patches.patch) {
+    foreach ($item in $Files.json.patches) {
         if ( ($IsWiiVC -and $item.console -eq "Wii VC") -or (!$IsWiiVC -and $item.console -eq "Native") -or ($item.console -eq "Both") ) {
             $Items += $item.title
             if (!(IsSet $FirstItem)) { $FirstItem = $item }
@@ -128,7 +128,7 @@ function ChangePatchPanel() {
 
     # Reset last index
     foreach ($i in 0..($Items.Length-1)) {
-        foreach ($item in $Files.json.patches.patch) {
+        foreach ($item in $Files.json.patches) {
             if ($item.title -eq $GamePatch.title -and $item.title -eq $Items[$i]) {
                 $Patches.ComboBox.SelectedIndex = $i
                 break
@@ -160,53 +160,51 @@ function SetMainScreenSize() {
     }
 
     # Custom Header Panel Visibility
-    $CustomHeader.Panel.Visible = ($GameConsole.rom_title -gt 0) -or ($GameConsole.rom_gameID -gt 0) -or $IsWiiVC
-    $CustomHeader.Title.Visible = $CustomHeader.TitleLabel.Visible = ($GameConsole.rom_title -gt 0) -or $IsWiiVC
+    $CustomHeader.Panel.Visible  = ($GameConsole.rom_title -gt 0) -or ($GameConsole.rom_gameID -gt 0)  -or $IsWiiVC
+    $CustomHeader.Title.Visible  = $CustomHeader.TitleLabel.Visible  = ($GameConsole.rom_title -gt 0)  -or $IsWiiVC
     $CustomHeader.GameID.Visible = $CustomHeader.GameIDLabel.Visible = ($GameConsole.rom_gameID -eq 1) -or $IsWiiVC
     $CustomHeader.Region.Visible = $CustomHeader.RegionLabel.Visible = $CustomHeader.EnableRegion.Visible = $CustomHeader.EnableRegionLabel.Visible = ($GameConsole.rom_gameID -eq 2)
     $InputPaths.InjectPanel.Visible = $IsWiiVC
     $VC.Panel.Visible = $IsWiiVC
 
     # Set Input Paths Sizes
-    $InputPaths.GamePanel.Location = $InputPaths.InjectPanel.Location = $InputPaths.PatchPanel.Location = DPISize (New-Object System.Drawing.Size(10, 50))
+    $InputPaths.GamePanel.Location    = $InputPaths.InjectPanel.Location = $InputPaths.PatchPanel.Location = DPISize (New-Object System.Drawing.Size(10, 50))
     if ($IsWiiVC) {
-        $InputPaths.InjectPanel.Top = $InputPaths.GamePanel.Bottom + (DPISize 15)
-        $InputPaths.PatchPanel.Top = $InputPaths.InjectPanel.Bottom + (DPISize 15)
+        $InputPaths.InjectPanel.Top   = $InputPaths.GamePanel.Bottom   + (DPISize 15)
+        $InputPaths.PatchPanel.Top    = $InputPaths.InjectPanel.Bottom + (DPISize 15)
     }
-    else {
-        $InputPaths.PatchPanel.Top = $InputPaths.GamePanel.Bottom + (DPISize 15)
-    }
+    else { $InputPaths.PatchPanel.Top = $InputPaths.GamePanel.Bottom   + (DPISize 15) }
 
     # Positioning
     if (IsSet $GamePath)   { $CurrentGamePanel.Location = New-Object System.Drawing.Size((DPISize 10), ($InputPaths.PatchPanel.Bottom + (DPISize 5))) }
-    else                   { $CurrentGamePanel.Location = New-Object System.Drawing.Size((DPISize 10), ($InputPaths.GamePanel.Bottom + (DPISize 5))) }
+    else                   { $CurrentGamePanel.Location = New-Object System.Drawing.Size((DPISize 10), ($InputPaths.GamePanel.Bottom  + (DPISize 5))) }
     $CustomHeader.Panel.Location = New-Object System.Drawing.Size((DPISize 10), ($CurrentGamePanel.Bottom + (DPISize 5)))
 
     # Set VC Panel Size
-    if ($GameConsole.options_vc -eq 0)                               { $VC.Panel.Height = $VC.Group.Height = (DPISize 70) }
-    elseif ($GameType.patches_vc -gt 2)                              { $VC.Panel.Height = $VC.Group.Height = (DPISize 105) }
-    elseif ($GameType.patches_vc -gt 0 -or $GameConsole.t64 -eq 1)   { $VC.Panel.Height = $VC.Group.Height = (DPISize 90) }
-    else                                                             { $VC.Panel.Height = $VC.Group.Height = (DPISize 70) }
+    if ($GameConsole.options_vc -eq 0)                                                                                                         { $VC.Panel.Height = $VC.Group.Height = (DPISize 70) }
+    elseif ($GameType.patches_vc -gt 1)                                                                                                        { $VC.Panel.Height = $VC.Group.Height = (DPISize 105) }
+    elseif ($GameType.patches_vc -gt 0 -or $GameConsole.t64 -eq 1 -or $GameConsole.expand_memory -eq 1 -or $GameConsole.remove_filter -eq 1)   { $VC.Panel.Height = $VC.Group.Height = (DPISize 90) }
+    else                                                                                                                                       { $VC.Panel.Height = $VC.Group.Height = (DPISize 70) }
 
     # Arrange Panels
     if ($IsWiiVC) {
         if ($GameType.patches) {
             $Patches.Panel.Location = New-Object System.Drawing.Size((DPISize 10), ($CustomHeader.Panel.Bottom + (DPISize 5)))
-            $VC.Panel.Location = New-Object System.Drawing.Size((DPISize 10), ($Patches.Panel.Bottom + (DPISize 5)))
+            $VC.Panel.Location      = New-Object System.Drawing.Size((DPISize 10), ($Patches.Panel.Bottom      + (DPISize 5)))
         }
-        else { $VC.Panel.Location = New-Object System.Drawing.Size((DPISize 10), ($CustomHeader.Panel.Bottom + (DPISize 5))) }
-        $MiscPanel.Location = New-Object System.Drawing.Size((DPISize 10), ($VC.Panel.Bottom + (DPISize 5)))
+        else { $VC.Panel.Location = New-Object System.Drawing.Size((DPISize 10), ($CustomHeader.Panel.Bottom   + (DPISize 5))) }
+        $MiscPanel.Location       = New-Object System.Drawing.Size((DPISize 10), ($VC.Panel.Bottom             + (DPISize 5)))
     }
     else {
         if ( ($GameConsole.rom_title -eq 0) -and ($GameConsole.rom_gameID -eq 0) ) {
-            if ($GameType.patches) { $Patches.Panel.Location = New-Object System.Drawing.Size((DPISize 10), ($CurrentGamePanel.Bottom + (DPISize 5))) }
-            else                   { $MiscPanel.Location = New-Object System.Drawing.Size((DPISize 10), ($CurrentGamePanel.Bottom + (DPISize 5))) }
+            if ($GameType.patches) { $Patches.Panel.Location = New-Object System.Drawing.Size((DPISize 10), ($CurrentGamePanel.Bottom   + (DPISize 5))) }
+            else                   { $MiscPanel.Location     = New-Object System.Drawing.Size((DPISize 10), ($CurrentGamePanel.Bottom   + (DPISize 5))) }
         }
         else {
             if ($GameType.patches) { $Patches.Panel.Location = New-Object System.Drawing.Size((DPISize 10), ($CustomHeader.Panel.Bottom + (DPISize 5))) }
-            else                   { $MiscPanel.Location = New-Object System.Drawing.Size((DPISize 10), ($CustomHeader.Panel.Bottom + (DPISize 5))) }
+            else                   { $MiscPanel.Location     = New-Object System.Drawing.Size((DPISize 10), ($CustomHeader.Panel.Bottom + (DPISize 5))) }
         }
-        if ($GameType.patches)     { $MiscPanel.Location = New-Object System.Drawing.Size((DPISize 10), ($Patches.Panel.Bottom + (DPISize 5))) }
+        if ($GameType.patches)     { $MiscPanel.Location     = New-Object System.Drawing.Size((DPISize 10), ($Patches.Panel.Bottom      + (DPISize 5))) }
     }
     
     $StatusPanel.Location = New-Object System.Drawing.Size((DPISize 10), ($MiscPanel.Bottom + (DPISize 5)))
@@ -225,7 +223,7 @@ function ChangeGameMode() {
         if (Get-Module -Name $GameType.mode) { Remove-Module -Name $GameType.mode }
     }
 
-    foreach ($item in $Files.json.games.game) {
+    foreach ($item in $Files.json.games) {
         if ($item.title -eq $CurrentGameComboBox.text) {
             $global:GameType = $item
             $global:GamePatch = $null
@@ -284,7 +282,7 @@ function ChangeGameMode() {
 #==============================================================================================================================================================================================
 function ChangePatch() {
     
-    foreach ($item in $Files.json.patches.patch) {
+    foreach ($item in $Files.json.patches) {
         if ($item.title -eq $Patches.ComboBox.Text) {
             if ( ($IsWiiVC -and $item.console -eq "Wii VC") -or (!$IsWiiVC -and $item.console -eq "Native") -or ($item.console -eq "Both") ) {
                 $global:GamePatch = $item
@@ -310,16 +308,18 @@ function SetVCPanel() {
     EnableElem -Elem @($VC.ActionsLabel, $VC.PatchVCButton, $VC.ExtractROMButton) -Active $True -Hide
 
     # Enable VC panel visiblity
+    
     if ($GameConsole.options_vc -gt 0) {
-        if ($GameConsole.t64 -eq 1)                                      { EnableElem -Elem @($VC.RemoveT64, $VC.RemoveT64Label) -Active $True -Hide }
-        if ($GameType.patches_vc -gt 0 -or $GameConsole.t64 -eq 1)       { $VC.CoreLabel.Visible = $True }
-        if ($GameType.patches_vc -eq 1 -or $GameType.patches_vc -eq 2)   { EnableElem -Elem @($VC.RemoveFilter,$VC.RemoveFilterLabel) -Active $True -Hide }
-        if ($GameType.patches_vc -eq 2)                                  { EnableElem -Elem @($VC.RemapL, $VC.RemapLLabel) -Active $True -Hide }
-        if ($GameType.patches_vc -ge 3) {
-            EnableElem -Elem @($VC.ExpandMemory, $VC.RemapDPad, $VC.RemapCDown, $VC.RemapZ, $VC.ExpandMemoryLabel, $VC.RemapDPadLabel, $VC.RemapCDownLabel, $VC.RemapZLabel) -Active $True -Hide
+        if ($GameConsole.t64 -eq 1 -or $GameConsole.expand_memory -eq 1 -or $GameConsole.remove_filter -eq 1) { $VC.CoreLabel.Visible = $True }
+        if ($GameConsole.t64 -eq 1)             { EnableElem -Elem @($VC.RemoveT64, $VC.RemoveT64Label)       -Active $True -Hide }
+        if ($GameConsole.expand_memory -eq 1)   { EnableElem -Elem @($VC.ExpandMemory, $VC.ExpandMemoryLabel) -Active $True -Hide }
+        if ($GameConsole.remove_filter -eq 1)   { EnableElem -Elem @($VC.RemoveFilter, $VC.RemoveFilterLabel) -Active $True -Hide }
+        if ($GameType.patches_vc -eq 1)         { EnableElem -Elem @($VC.RemapL, $VC.RemapLLabel)             -Active $True -Hide }
+        if ($GameType.patches_vc -ge 2) {
+            EnableElem -Elem @($VC.RemapDPad, $VC.RemapCDown, $VC.RemapZ, $VC.RemapDPadLabel, $VC.RemapCDownLabel, $VC.RemapZLabel) -Active $True -Hide
             $VC.MinimapLabel.Show() 
         }
-        if ($GameType.patches_vc -eq 4) { EnableElem -Elem @($VC.LeaveDPadUp, $VC.LeaveDPadUpLabel) -Active $True -Hide }
+        if ($GameType.patches_vc -eq 3)         { EnableElem -Elem @($VC.LeaveDPadUp, $VC.LeaveDPadUpLabel)   -Active $True -Hide }
     }
 
 }
@@ -401,7 +401,7 @@ function GamePath_Finish([object]$TextBox, [string]$Path) {
 
         # Verify ROM
         $MatchingROMTextBox.Text = "No Valid ROM Selected"
-        foreach ($item in $Files.json.games.game) {
+        foreach ($item in $Files.json.games) {
             if ($HashSumROMTextBox.Text -eq $item.hash) {
                 $MatchingROMTextBox.Text = $item.title + " (Rev 0)"
                 break
@@ -456,6 +456,8 @@ function PatchPath_Finish([object]$TextBox, [string]$Path) {
 #==============================================================================================================================================================================================
 function GetHeader() {
     
+    if (IsChecked $CustomHeader.EnableHeader) { return }
+
     if ($IsWiiVC) {
         if ( (IsSet $GamePatch.redux.vc_title) -and (IsChecked $Patches.Redux) )     { $CustomHeader.Title.Text  = $GamePatch.redux.vc_title }
         elseif (IsSet $GamePatch.vc_title)                                           { $CustomHeader.Title.Text  = $GamePatch.vc_title }
@@ -500,7 +502,7 @@ function IsChecked([object]$Elem, [switch]$Not) {
     if (!(IsSet $Elem))   { return $False }
     if (!$Elem.Active)    { return $False }
     if ($Elem.Checked)    { return !$Not  }
-    if (!$Elem.Checked)   { return $Not   }
+    if (!$Elem.Checked)   { return $Not  }
     return $False
 
 }
@@ -508,10 +510,11 @@ function IsChecked([object]$Elem, [switch]$Not) {
 
 
 #==============================================================================================================================================================================================
-function IsLanguage([object]$Elem, [int16]$Lang=0) {
+function IsLanguage([object]$Elem, [int]$Lang=0, [switch]$Not) {
     
     if (!$Redux.Language[$Lang].Checked)   { return $False }
-    if (IsChecked $Elem)                   { return $True  }
+    if (IsChecked $Elem)                   { return !$Not  }
+    if (IsChecked $Elem -Not)              { return $Not   }
     return $False
 
 }
@@ -521,8 +524,8 @@ function IsLanguage([object]$Elem, [int16]$Lang=0) {
 #==============================================================================================================================================================================================
 function IsText([object]$Elem, [string]$Compare, [switch]$Active, [switch]$Not) {
     
-    $Text = $Elem.Text.replace(" (default)", "")
     if (!(IsSet $Elem))                 { return $False }
+    $Text = $Elem.Text.replace(" (default)", "")
     if ($Active -and !$Elem.Visible)    { return $False }
     if (!$Active -and !$Elem.Enabled)   { return $False }
     if ($Text -eq $Compare)             { return !$Not  }
@@ -534,10 +537,11 @@ function IsText([object]$Elem, [string]$Compare, [switch]$Active, [switch]$Not) 
 
 
 #==============================================================================================================================================================================================
-function IsLangText([object]$Elem, [string]$Compare, [int16]$Lang=0) {
+function IsLangText([object]$Elem, [string]$Compare, [int16]$Lang=0, [switch]$Not) {
     
-    if (!$Redux.Language[$Lang].Checked)        { return $False }
-    if (IsText -Elem $Elem -Compare $Compare)   { return $True  }
+    if (!$Redux.Language[$Lang].Checked)             { return $False }
+    if (IsText -Elem $Elem -Compare $Compare)        { return !$Not  }
+    if (IsText -Elem $Elem -Compare $Compare -Not)   { return $Not   }
     return $False
 
 }
@@ -735,7 +739,7 @@ function EnableForm([object]$Form, [boolean]$Enable, [switch]$Not) {
 
 #==============================================================================================================================================================================================
 function EnableElem([object]$Elem, [boolean]$Active=$True, [switch]$Hide) {
-
+    
     if ($Elem -is [system.Array]) {
         foreach ($item in $Elem) {
             $item.Enabled = $item.Active = $Active
@@ -895,12 +899,18 @@ function SetModernVisualStyle([boolean]$Enable) {
 
 
 #==================================================================================================================================================================================================================================================================
-function SetBitmap($Path, $Box) {
+function SetBitmap($Path, $Box, [int]$Width, [int]$Height) {
 
-    $ImgObject = [Drawing.Image]::FromFile( ( Get-Item $Path ) )
-    $ImgBitmap = New-Object Drawing.Bitmap($ImgObject, (DPISize $ImgObject.Width), (DPISize $ImgObject.Height))
-    $ImgObject.Dispose()
-    $Box.Image = $ImgBitmap
+    $imgObject = [Drawing.Image]::FromFile( ( Get-Item $Path ) )
+
+    if (!(IsSet $Width))    { $Width  = (DPISize $imgObject.Width) }
+    else                    { $Width  = (DPISize $Width) }
+    if (!(IsSet $Height))   { $Height = (DPISize $imgObject.Height) }
+    else                    { $Height = (DPISize $Height) }
+
+    $imgBitmap = New-Object Drawing.Bitmap($imgObject, $Width, $Height)
+    $imgObject.Dispose()
+    $Box.Image = $imgBitmap
 
 }
 

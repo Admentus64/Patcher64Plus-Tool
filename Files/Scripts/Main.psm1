@@ -266,22 +266,22 @@ function CreateMainDialog() {
     $VC.RemoveT64Label.Add_Click({ $VC.RemoveT64.Checked = !$VC.RemoveT64.Checked })
 
     # Expand Memory
-    $VC.ExpandMemoryLabel = CreateLabel -X ($VC.RemoveT64.Right + (DPISize 10)) -Y ($VC.CoreLabel.Top) -Width (DPISize 95) -Height (DPISize 15) -Text "Expand Memory:" -Info "Expand the game's memory by 4MB"
-    $VC.ExpandMemory = CreateCheckBox -X ($VC.ExpandMemoryLabel.Right) -Y ($VC.CoreLabel.Top - (DPISize 2)) -Width (DPISize 20) -Height (DPISize 20) -Info "Expand the game's memory by 4MB" -Name "VC.ExpandMemory"
+    $VC.ExpandMemoryLabel = CreateLabel -X ($VC.RemoveT64.Right + (DPISize 10)) -Y ($VC.CoreLabel.Top) -Width (DPISize 95) -Height (DPISize 15) -Text "Expand Memory:" -Info "Expand the game's memory by 4MB`n`n[!] For some games / patches it can cause the VC emulator to fail to boot"
+    $VC.ExpandMemory = CreateCheckBox -X ($VC.ExpandMemoryLabel.Right) -Y ($VC.CoreLabel.Top - (DPISize 2)) -Width (DPISize 20) -Height (DPISize 20) -Info "Expand the game's memory by 4MB`n`n[!] For some games / patches it can cause the VC emulator to fail to boot" -Name "VC.ExpandMemory"
     $VC.ExpandMemoryLabel.Add_Click({ $VC.ExpandMemory.Checked = !$VC.ExpandMemory.Checked })
 
     # Remove Filter
-    $VC.RemoveFilterLabel = CreateLabel -X ($VC.RemoveT64.Right + (DPISize 10)) -Y ($VC.CoreLabel.Top) -Width (DPISize 95) -Height (DPISize 15) -Text "Remove Filter:" -Info "Remove the dark overlay filter"
+    $VC.RemoveFilterLabel = CreateLabel -X ($VC.ExpandMemory.Right + (DPISize 10)) -Y ($VC.CoreLabel.Top) -Width (DPISize 95) -Height (DPISize 15) -Text "Remove Filter:" -Info "Remove the dark overlay filter"
     $VC.RemoveFilter = CreateCheckBox -X ($VC.RemoveFilterLabel.Right) -Y ($VC.CoreLabel.Top - (DPISize 2)) -Width (DPISize 20) -Height (DPISize 20) -Checked $True -Info "Remove the dark overlay filter" -Name "VC.RemoveFilter"
     $VC.RemoveFilterLabel.Add_Click({ $VC.RemoveFilter.Checked = !$VC.RemoveFilter.Checked })
 
     # Remap D-Pad
-    $VC.RemapDPadLabel = CreateLabel -X ($VC.ExpandMemory.Right + (DPISize 10)) -Y ($VC.CoreLabel.Top) -Width (DPISize 95) -Height (DPISize 15) -Text "Remap D-Pad:" -Info "Remap the D-Pad to the actual four D-Pad directional buttons instead of toggling the minimap"
+    $VC.RemapDPadLabel = CreateLabel -X ($VC.RemoveFilter.Right + (DPISize 10)) -Y ($VC.CoreLabel.Top) -Width (DPISize 95) -Height (DPISize 15) -Text "Remap D-Pad:" -Info "Remap the D-Pad to the actual four D-Pad directional buttons instead of toggling the minimap"
     $VC.RemapDPad = CreateCheckBox -X ($VC.RemapDPadLabel.Right) -Y ($VC.CoreLabel.Top - (DPISize 2)) -Width (DPISize 20) -Height (DPISize 20) -Info "Remap the D-Pad to the actual four D-Pad directional buttons instead of toggling the minimap" -Name "VC.RemapDPad"
     $VC.RemapDPadLabel.Add_Click({ $VC.RemapDPad.Checked = !$VC.RemapDPad.Checked })
 
     # Remap L
-    $VC.RemapLLabel = CreateLabel -X ($VC.ExpandMemory.Right + (DPISize 10)) -Y ($VC.CoreLabel.Top) -Width (DPISize 95) -Height (DPISize 15) -Text "Remap L Button:" -Info "Remap the L button to the actual L button button"
+    $VC.RemapLLabel = CreateLabel -X ($VC.RemoveFilter.Right + (DPISize 10)) -Y ($VC.CoreLabel.Top) -Width (DPISize 95) -Height (DPISize 15) -Text "Remap L Button:" -Info "Remap the L button to the actual L button button"
     $VC.RemapL = CreateCheckBox -X ($VC.RemapDPadLabel.Right) -Y ($VC.CoreLabel.Top - (DPISize 2)) -Width (DPISize 20) -Height (DPISize 20) -Info "Remap the L button to the actual L button button" -Name "VC.RemapL"
     $VC.RemapLLabel.Add_Click({ $VC.RemapL.Checked = !$VC.RemapL.Checked })
 

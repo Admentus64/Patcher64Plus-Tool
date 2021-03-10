@@ -176,7 +176,7 @@ function CreateComboBox([uint16]$X=0, [uint16]$Y=0, [uint16]$Width=0, [uint16]$H
 
 
 #==============================================================================================================================================================================================
-function CreateCheckBox([uint16]$X=0, [uint16]$Y=0, [string]$Name, [byte]$SaveAs=1, [string]$SaveTo, [byte]$Max=1, [string]$Tag, [boolean]$Checked=$False, [boolean]$Disable=$False, [boolean]$IsRadio=$False, [string]$Info="", [boolean]$IsGame=$False, [boolean]$IsDebug=$False, [object]$AddTo=$Last.Group) {
+function CreateCheckBox([uint16]$X=0, [uint16]$Y=0, [string]$Name, [byte]$SaveAs=1, [string]$SaveTo, [byte]$Max=1, [string]$Tag, [boolean]$Checked=$False, [boolean]$Disable=$False, [boolean]$IsRadio=$False, [string]$Info="", [boolean]$IsGame=$False, [boolean]$IsDebug=$False, [object]$AddTo=$Last.Group, [object]$Link) {
     
     if ($IsRadio) {
         $CheckBox = CreateForm -X $X -Y $Y -Width (DPISize 20) -Height (DPISize 20) -Name $Name -Tag $Tag -IsGame $IsGame -Form (New-Object System.Windows.Forms.RadioButton) -AddTo $AddTo
@@ -215,6 +215,18 @@ function CreateCheckBox([uint16]$X=0, [uint16]$Y=0, [string]$Name, [byte]$SaveAs
         }
     }
     else { $CheckBox.Checked = $Checked }
+
+    if (IsSet $Link) {
+        Add-Member -InputObject $Checkbox -NotePropertyMembers @{ Link = $Link }
+        Add-Member -InputObject $Link     -NotePropertyMembers @{ Link = $Checkbox }
+
+        if ($Checkbox.GetType() -eq "System.Windows.Forms.Checkbox")   { $Checkbox.Add_CheckStateChanged( { EnableElem -Elem $this.link -Active (!$this.Checked) }) }
+        else                                                           { $Checkbox.Add_CheckedChanged(    { EnableElem -Elem $this.link -Active (!$this.Checked) }) }
+        if ($Link.GetType() -eq "System.Windows.Forms.Checkbox")       { $Link.Add_CheckStateChanged(     { EnableElem -Elem $this.link -Active (!$this.Checked) }) }
+        else                                                           { $Link.Add_CheckedChanged(        { EnableElem -Elem $this.link -Active (!$this.Checked) }) }
+        EnableElem -Elem $Checkbox -Active (!$Checkbox.link.Checked)
+        EnableElem -Elem $Link     -Active (!$Link.link.Checked)
+    }
 
     Add-Member -InputObject $CheckBox -NotePropertyMembers @{ Default = $Checked }
     return $CheckBox
@@ -318,10 +330,19 @@ function CreateReduxPanel([single]$Row=0, [single]$Columns, [single]$Rows=1,  [s
 
 
 #==============================================================================================================================================================================================
-function CreateReduxGroup([single]$X=(DPISize 15), [single]$Y=(DPISize 50), [single]$Height=1, [string]$Name=$Last.TabName, [string]$Tag, [switch]$Hide, [boolean]$IsGame=$True, [string]$Text="", [switch]$IsRedux, [single]$Columns=0, [object]$AddTo=$Redux.Panel) {
+function CreateReduxGroup([single]$X=(DPISize 15), [single]$Y=(DPISize 50), [single]$Height, [string]$Name=$Last.TabName, [string]$Tag, [switch]$Hide, [boolean]$IsGame=$True, [string]$Text="", [switch]$IsRedux, [single]$Columns=0, [object]$AddTo=$Redux.Panel) {
     
     $Width = ($AddTo.Width - (DPISize 50))
-    $Last.Column = 1;
+    $Last.Column = $Last.Row = 1
+
+    if ($Columns -eq 0)   { $Last.Width = [byte][Math]::Round($Redux.Panel.Width / $ColumnWidth) }
+    else                  { $Last.Width = [byte]$Columns }
+
+    if (IsSet $Height) { $Last.Flexible = $False }
+    else {
+        $Last.Flexible = $True
+        $Height = 1
+    }
 
     if (IsSet $Name) {
         if (!$Last.Half) {
@@ -335,6 +356,7 @@ function CreateReduxGroup([single]$X=(DPISize 15), [single]$Y=(DPISize 50), [sin
             $Width = $AddTo.Width - $Last.Group.Right - (DPISize 40)
             $Height = $Last.Group.Rows
             $Last.Half = $False
+            $Last.Flexible = $False
         }
         if ($Columns -gt 0) {
             $Width = (DPISize 165) * $Columns
@@ -375,7 +397,7 @@ function CreateReduxButton([single]$Column=1, [single]$Row=1, [int16]$Width=150,
 
 
 #==============================================================================================================================================================================================
-function CreateReduxTextBox([single]$Column=$Last.Column, [single]$Row=1, [byte]$Length=2, [string]$Value=0, [string]$Text, [string]$Info, [string]$Warning, [string]$Credits, [string]$Name, [string]$Tag, [object]$AddTo=$Last.Group) {
+function CreateReduxTextBox([single]$Column=$Last.Column, [single]$Row=$Last.Row, [byte]$Length=2, [string]$Value=0, [string]$Text, [string]$Info, [string]$Warning, [string]$Credits, [string]$Name, [string]$Tag, [object]$AddTo=$Last.Group) {
     
     if (IsSet $Warning) {
         if (IsSet $Info)   { $Info += ("`n[!] " + $Warning) }
@@ -401,6 +423,12 @@ function CreateReduxTextBox([single]$Column=$Last.Column, [single]$Row=1, [byte]
     })
 
     $Last.Column++;
+    if ($Column -ge $Last.Width) {
+        $Last.Column = 1
+        $Last.Row++
+    }
+    if ($Last.Flexible) { $Last.Group.Height = ($Row * (DPISize 30) + (DPISize 20)) }
+
     return $TextBox
 
 }
@@ -408,7 +436,7 @@ function CreateReduxTextBox([single]$Column=$Last.Column, [single]$Row=1, [byte]
 
 
 #==============================================================================================================================================================================================
-function CreateReduxRadioButton([single]$Column=$Last.Column, [single]$Row=1, [switch]$Checked, [switch]$Disable, [string]$Text, [string]$Warning, [string]$Info, [string]$Credits, [string]$Name, [string]$SaveTo, [byte]$Max, [string]$Tag, [object]$AddTo=$Last.Panel) {
+function CreateReduxRadioButton([single]$Column=$Last.Column, [single]$Row=$Last.Row, [switch]$Checked, [switch]$Disable, [string]$Text, [string]$Info, [string]$Warning, [string]$Credits, [string]$Name, [object]$Link, [string]$SaveTo, [byte]$Max, [string]$Tag, [object]$AddTo=$Last.Panel) {
     
     if ($Disable) { $Disable = !$PatchReduxCheckBox.Checked }
     if (IsSet $Warning) {
@@ -418,17 +446,24 @@ function CreateReduxRadioButton([single]$Column=$Last.Column, [single]$Row=1, [s
     if ( (IsSet $Info ) -and (IsSet $Credits) ) { $Info += ("`n`n- Credits: " + $Credits) }
     $Last.Max++
 
-    $Radio = CreateCheckBox -X (($Column-1) * (DPISize 165)) -Y (($Row-1) * (DPISize 30)) -Checked $Checked -Disable $Disable -IsRadio $True -Info $Info -IsGame $True -Name $Name -SaveAs $Last.Max -SaveTo $SaveTo -Max $Max -Tag $Tag -AddTo $AddTo
+    $Radio = CreateCheckBox -X (($Column-1) * (DPISize 165)) -Y (($Row-1) * (DPISize 30)) -Checked $Checked -Disable $Disable -IsRadio $True -Info $Info -IsGame $True -Name $Name -SaveAs $Last.Max -SaveTo $SaveTo -Max $Max -Tag $Tag -AddTo $AddTo -Link $Link
     
     if (IsSet $Text) {
         $Label = CreateLabel -X $Radio.Right -Y ($Radio.Top + (DPISize 3)) -Height (DPISize 15) -Text $Text -Info $Info -AddTo $AddTo
         Add-Member -InputObject $Label -NotePropertyMembers @{ CheckBox = $Radio }
+        Add-Member -InputObject $Radio -NotePropertyMembers @{ Label    = $Text }
         $Label.Add_Click({
             if ($this.CheckBox.Enabled) { $this.CheckBox.Checked = $True }
         })
     }
 
     $Last.Column++;
+    if ($Column -ge $Last.Width) {
+        $Last.Column = 1
+        $Last.Row++
+    }
+    if ($Last.Flexible) { $Last.Group.Height = ($Row * (DPISize 30) + (DPISize 20)) }
+
     return $Radio
 
 }
@@ -436,7 +471,7 @@ function CreateReduxRadioButton([single]$Column=$Last.Column, [single]$Row=1, [s
 
 
 #==============================================================================================================================================================================================
-function CreateReduxCheckBox([single]$Column=$Last.Column, [single]$Row=1, [switch]$Checked, [switch]$Disable, [string]$Text="", [string]$Info, [string]$Warning, [string]$Credits, [string]$Name, [string]$Tag, [object]$AddTo=$Last.Group) {
+function CreateReduxCheckBox([single]$Column=$Last.Column, [single]$Row=$Last.Row, [switch]$Checked, [switch]$Disable, [string]$Text="", [string]$Info, [string]$Warning, [string]$Credits, [string]$Name, [object]$Link, [string]$Tag, [object]$AddTo=$Last.Group) {
     
     if ($Disable) { $Disable = !$PatchReduxCheckBox.Checked }
     if (IsSet $Warning) {
@@ -445,17 +480,24 @@ function CreateReduxCheckBox([single]$Column=$Last.Column, [single]$Row=1, [swit
     }
     if ( (IsSet $Info ) -and (IsSet $Credits) ) { $Info += ("`n`n- Credits: " + $Credits) }
 
-    $CheckBox = CreateCheckBox -X (($Column-1) * (DPISize 165) + (DPISize 15)) -Y ($Row * (DPISize 30) - (DPISize 10)) -Checked $Checked -Disable $Disable -IsRadio $False -Info $Info -IsGame $True -Name $Name  -Tag $Tag -AddTo $AddTo
+    $CheckBox = CreateCheckBox -X (($Column-1) * (DPISize 165) + (DPISize 15)) -Y ($Row * (DPISize 30) - (DPISize 10)) -Checked $Checked -Disable $Disable -IsRadio $False -Info $Info -IsGame $True -Name $Name  -Tag $Tag -AddTo $AddTo -Link $Link
     
     if (IsSet $Text) {
         $Label = CreateLabel -X $CheckBox.Right -Y ($CheckBox.Top + (DPISize 3)) -Height (DPISize 15) -Text $Text -Info $Info -AddTo $AddTo
-        Add-Member -InputObject $Label -NotePropertyMembers @{ CheckBox = $CheckBox }
+        Add-Member -InputObject $Label    -NotePropertyMembers @{ CheckBox = $CheckBox }
+        Add-Member -InputObject $CheckBox -NotePropertyMembers @{ Label    = $Text }
         $Label.Add_Click({
             if ($this.CheckBox.Enabled) { $this.CheckBox.Checked = !$this.CheckBox.Checked }
         })
     }
 
     $Last.Column++;
+    if ($Column -ge $Last.Width) {
+        $Last.Column = 1
+        $Last.Row++
+    }
+    if ($Last.Flexible) { $Last.Group.Height = ($Row * (DPISize 30) + (DPISize 20)) }
+
     return $CheckBox
 
 }
@@ -463,7 +505,7 @@ function CreateReduxCheckBox([single]$Column=$Last.Column, [single]$Row=1, [swit
 
 
 #==============================================================================================================================================================================================
-function CreateReduxComboBox([single]$Column=$Last.Column, [single]$Row=1, [int16]$Length=160, [int]$Shift=0, [string[]]$Items, [byte]$Default=1, [string]$Text, [string]$Info, [string]$Warning, [string]$Credits, [string]$Name, [string]$Tag, [object]$AddTo=$Last.Group) {
+function CreateReduxComboBox([single]$Column=$Last.Column, [single]$Row=$Last.Row, [int16]$Length=160, [int]$Shift=0, [string[]]$Items, [byte]$Default=1, [string]$Text, [string]$Info, [string]$Warning, [string]$Credits, [string]$Name, [string]$Tag, [object]$AddTo=$Last.Group) {
     
     if (IsSet $Warning) {
         if (IsSet $Info)   { $Info += ("`n[!] " + $Warning) }
@@ -484,6 +526,12 @@ function CreateReduxComboBox([single]$Column=$Last.Column, [single]$Row=1, [int1
     $ComboBox = CreateComboBox -X $Label.Right -Y ($Label.Top - (DPISize 3)) -Width (DPISize ($Length - $Shift)) -Height (DPISize 20) -Items $Items -Default $Default -Info $Info -IsGame $True -Name $Name -Tag $Tag -AddTo $AddTo
 
     $Last.Column++;
+    if ($Column -ge $Last.Width - 1) {
+        $Last.Column = 1
+        $Last.Row++
+    }
+    if ($Last.Flexible) { $Last.Group.Height = ($Row * (DPISize 30) + (DPISize 20)) }
+
     return $ComboBox
 
 }
