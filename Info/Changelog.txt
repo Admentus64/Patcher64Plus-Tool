@@ -1,3 +1,7 @@
+v13.0.1
+- Fixed King Zora's dialogue after unfreezing when using Redux
+- Fixed updating wallet sizes in dialogue when Adult Wallet is set to 500
+
 v13.0.0
 - Returned the "Master Quest" dungeons option for MM
 - Added German and French ported localizations for OoT (thanks GhostlyDark & Ticamus!)

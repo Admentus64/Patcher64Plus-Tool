@@ -1068,11 +1068,11 @@ function ByteLanguageOptions() {
     if (IsLanguage $Redux.Capacity.EnableWallet) {
         if ($Redux.Capacity.Wallet2.Text.Length -gt 3)   { $Text = "999" }
         else                                             { $Text = $Redux.Capacity.Wallet2.Text }
-        ChangeStringIntoDigits -File $File -Search "32 30 30 05 40 20 05 46 52 75 70 65 65 73" -Value $Text -Triple
+        ChangeStringIntoDigits -File $File -Search "32 30 30 05 40 20 05 46 52 75 70 65 65 73 05 40 2E 02 00" -Value $Text -Triple
 
         if ($Redux.Capacity.Wallet3.Text.Length -gt 3)   { $Text = "999" }
         else                                             { $Text = $Redux.Capacity.Wallet3.Text }
-        ChangeStringIntoDigits -File $File -Search "35 30 30 05 40 20 05 46 52 75 70 65 65 73" -Value $Text -Triple
+        ChangeStringIntoDigits -File $File -Search "35 30 30 05 40 20 05 46 52 75 70 65 65 73 05 40 2E 02 13" -Value $Text -Triple
 
         $Text = $null
     }
