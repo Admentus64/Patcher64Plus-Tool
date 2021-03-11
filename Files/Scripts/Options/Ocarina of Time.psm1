@@ -1184,7 +1184,7 @@ function CreateTabLanguage() {
     CreateReduxRadioButton -Name "Vanilla"        -Max 4 -SaveTo "Dialogue"          -Text "Vanilla Text"    -Info "Keep the text as it is"
     CreateReduxRadioButton -Name "Redux"          -Max 4 -SaveTo "Dialogue" -Checked -Text "Redux Text"      -Info "Include the changes from the Redux script such as being able to move during the Gold Skulltula Token textboxes" -Credits "Redux"
     CreateReduxRadioButton -Name "Restore"        -Max 4 -SaveTo "Dialogue"          -Text "Restore Text"    -Info ("Restores the text used from the GC revision and applies grammar and typo fixes`nAlso corrects some icons in the text`n" + 'Includes the changes from "Redux Text" as well') -Credits "Redux"
-    CreateReduxRadioButton -Name "FemalePronouns" -Max 4 -SaveTo "Dialogue"          -Text "Female Pronouns" -Info "Refer to Link as a female character`nWork in Progress: Not all dialogue is fully altered yet" -Credits "Mil`n(includes Restore Text by ShadowOne)"
+    CreateReduxRadioButton -Name "FemalePronouns" -Max 4 -SaveTo "Dialogue"          -Text "Female Pronouns" -Info "Refer to Link as a female character" -Credits "Admentus & Mil`n(includes Restore Text by ShadowOne)"
 
     $Redux.Box.Text = CreateReduxGroup -Tag  "Text" -Text "Other English Options"
     CreateReduxCheckBox    -Name "PauseScreen" -Text "MM Pause Screen" -Info "Replaces the Pause Screen textures to be styled like Majora's Mask" -Credits "Garo-Mastah & CM"
@@ -1332,7 +1332,7 @@ function CreateTabAudiovisual() {
     "Inside the Deku Tree", "Dodongo's Cavern", "Inside Jabu-Jabu's Belly", "Forest Temple", "Fire Temple", "Water Temple", "Ice Cavern", "Shadow Temple", "Spirit Temple", "Ganon's Castle Under Ground",
     "Battle", "Mini-Boss Battle", "Boss Battle", "Boss Battle 2", "Ganondorf Battle", "Ganon Battle", "End Credits I", "End Credits II", "End Credits III", "End Credits IV")
     CreateReduxComboBox -Name "Music"  -Column 1 -Text "Music"  -Default 2 -Items $Music -Info "Set the skybox music theme for the File Select menu" -Credits "Admentus"
-    CreateReduxComboBox -Name "Skybox" -Column 3 -Text "Skybox" -Default 4 -Items @("Dawn", "Day", "Dusk", "Night", "Dawn", "Darkness (Day)", "Darkness (Dusk)", "Darkness (Night)") -Info "Set the skybox theme for the File Select menu" -Credits "Admentus"
+    CreateReduxComboBox -Name "Skybox" -Column 3 -Text "Skybox" -Default 4 -Items @("Dawn", "Day", "Dusk", "Night", "Darkness (Dawn)", "Darkness (Day)", "Darkness (Dusk)", "Darkness (Night)") -Info "Set the skybox theme for the File Select menu" -Credits "Admentus"
     
 
 }

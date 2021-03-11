@@ -50,7 +50,7 @@
 - Show File Select Icons:		ShadowOne333
 - Colors:				GhostlyDark
 - Restore Text:				ShadowOne333
-- Female Pronouns:			Mil
+- Female Pronouns:			Admentus & Mil
 - Various offsets:			Chez Cousteau
 - Admentus (Scripting and Maintaince of all Options)
 
