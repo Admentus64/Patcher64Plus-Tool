@@ -1,3 +1,6 @@
+v13.0.2
+- Fixed "Silver Gauntlets" and "Golden Gauntlets" color preset options
+
 v13.0.1
 - Fixed King Zora's dialogue after unfreezing when using Redux
 - Fixed updating wallet sizes in dialogue when Adult Wallet is set to 500
