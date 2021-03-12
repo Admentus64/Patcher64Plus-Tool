@@ -1,157 +1,176 @@
 [ {
-	"title" : "The Legend of Zelda: Ocarina of Time",
-	"mode" : "Ocarina of Time",
-	"save": 1,
-	"support_vc" : 1,
-	"console" : "N64",
+	"title"			: "The Legend of Zelda: Ocarina of Time",
+	"mode"			: "Ocarina of Time",
+	"save"			: 1,
+	"support_vc"		: 1,
+	"console"		: "N64",
 	"downgrade" : [ {
-		"file" : "rev1_to_rev0.bps",
-		"hash" : "721FDCC6F5F34BE55C43A807F2A16AF4",
-		"rev" : "Rev 1"
+		"file"		: "rev1_to_rev0.bps",
+		"hash"		: "721FDCC6F5F34BE55C43A807F2A16AF4",
+		"rev"		: "Rev 1"
 	}, {
-		"file" : "rev2_to_rev0.bps",
-		"hash" : "57A9719AD547C516342E1A15D5C28C3D",
-		"rev" : "Rev 2"
+		"file"		: "rev2_to_rev0.bps",
+		"hash"		: "57A9719AD547C516342E1A15D5C28C3D",
+		"rev"		: "Rev 2"
 	}, {
-		"file" : "gc_to_rev0.bps",
-		"hash" : "CD09029EDCFB7C097AC01986A0F83D3F",
-		"rev" : "GC"
+		"file"		: "gc_to_rev0.bps",
+		"hash"		: "CD09029EDCFB7C097AC01986A0F83D3F",
+		"rev"		: "GC"
 	}, {
-		"file" : "gc_mq_to_rev0.bps",
-		"hash" : "DA35577FE54579F6A266931CC75F512D",
-		"rev" : "GC MQ"
+		"file"		: "gc_mq_to_rev0.bps",
+		"hash"		: "DA35577FE54579F6A266931CC75F512D",
+		"rev"		: "GC MQ"
 	} ],
-	"patches_vc" : 3,
-	"patches" : 1,
-	"decompress" : 1,
-	"dmaTable" : "0 1 2 3 4 5 6 7 8 9 15 16 17 18 19 20 21 22 23 24 25 26 942 944 946 948 950 952 954 956 958 960 962 964 966 968 970 972 974 976 978 980 982 984 986 988 990 992 994 996 998 1000 1002 1004 1510 1511 1512 1513 1514 1515 1516 1517 1518 1519 1520 1521 1522 1523 1524 1525",	
-	"rom_title" : "THE LEGEND OF ZELDA",
-	"rom_gameID" : "CZLE",
-	"vc_title" : "Zelda: Ocarina",
-	"vc_gameID" : "NACE",
-	"hash" : "5BD1FE107BF8106B2AB6650ABECD54D6"
+	"patches_vc"		: 3,
+	"patches"		: 1,
+	"decompress"		: 1,
+	"dmaTable"		: "0 1 2 3 4 5 6 7 8 9 15 16 17 18 19 20 21 22 23 24 25 26 942 944 946 948 950 952 954 956 958 960 962 964 966 968 970 972 974 976 978 980 982 984 986 988 990 992 994 996 998 1000 1002 1004 1510 1511 1512 1513 1514 1515 1516 1517 1518 1519 1520 1521 1522 1523 1524 1525",	
+	"rom_title"		: "THE LEGEND OF ZELDA",
+	"rom_gameID"		: "CZLE",
+	"vc_title"		: "Zelda: Ocarina",
+	"vc_gameID"		: "NACE",
+	"default_values" : {
+		"a_button"	: "5A5AFF",
+		"b_button"	: "009600",
+		"c_buttons"	: "FFA000",
+		"s_button"	: "C80000",
+		"fairy_option1"	: "Navi",
+		"fairy_option2"	: "Tatl",
+		"fairy_idle1"	: "FFFFFF",
+		"fairy_idle2"	: "0000FF"
+	},
+	"hash"			: "5BD1FE107BF8106B2AB6650ABECD54D6"
 }, {
-	"title" : "The Legend of Zelda: Majora's Mask",
-	"mode" : "Majora's Mask",
-	"save": 1,
-	"support_vc" : 1,
-	"console" : "N64",
+	"title"			: "The Legend of Zelda: Majora's Mask",
+	"mode"			: "Majora's Mask",
+	"save"			: 1,
+	"support_vc"		: 1,
+	"console"		: "N64",
+	"downgrade"		: [ {
+		"file"		: "gc_to_rev0.bps",
+		"hash"		: "AC0751DBC23AB2EC0C3144203ACA0003",
+		"rev"		: "GC"
+	} ],
+	"romc"			: 1,
+	"patches_vc"		: 2,
+	"patches"		: 1,
+	"decompress"		: 1,
+	"dmaTable"		: "0 1 2 3 4 5 6 7 -8 -9 15 16 17 18 19 20 -21 22 25 26 27 28 29 30 -652 1127 -1539 -1540 -1541 -1542 -1543 -1544 -1545 -1546 -1547 -1548 -1549 -1550 -1551 1552 1553 1554 1555 1556 1557 1558 1559 1560 1561 1562 1563 1564 1565 1566 1567",
+	"rom_title"		: "ZELDA MAJORA'S MASK",
+	"rom_gameID"		: "NZSE",
+	"vc_title"		: "Zelda: Majora's",
+	"vc_gameID"		: "NARE",
+	"default_values" : {
+		"a_button"	: "64C8FF",
+		"b_button"	: "64FF78",
+		"c_buttons"	: "FFF000",
+		"s_button"	: "FF823C",
+		"fairy_option1"	: "Tatl",
+		"fairy_option2"	: "Navi",
+		"fairy_idle1"	: "FFFFE6",
+		"fairy_idle2"	: "DCA050"
+	},
+	"hash"			: "2A0A8ACB61538235BC1094D297FB6556"
+}, {
+	"title"			: "Super Mario 64",
+	"mode"			: "Super Mario 64",
+	"save"			: 1,
+	"support_vc"		: 1,
+	"console"		: "N64",
+	"patches_vc"		: 1,
+	"patches"		: 1,
+	"decompress"		: 2,
+	"rom_title"		: "SUPER MARIO 64",
+	"rom_gameID"		: "NSME",
+	"vc_title"		: "Super Mario 64",
+	"vc_gameID"		: "NAAE",
+	"hash"			: "20B854B239203BAF6C961B850A4A51A2"
+}, {
+	"title"			: "Paper Mario",
+	"mode"			: "Paper Mario",
+	"support_vc"		: 1,
+	"console"		: "N64",
+	"romc"			: 2,
+	"patches"		: 1,
+	"rom_title"		: "PAPER MARIO",
+	"rom_gameID"		: "NMQE",
+	"vc_title"		: "Paper Mario",
+	"vc_gameID"		: "NAEE",
+	"hash"			: "A722F8161FF489943191330BF8416496"
+}, {
+	"title"			: "Super Smash Bros.",
+	"mode"			: "Super Smash Bros",
+	"support_vc"		: 1,
+	"console"		: "N64",
+	"romc"			: 1,
+	"patches"		: 1,
+	"rom_title"		: "SMASH BROTHERS",
+	"rom_gameid"		: "NALE",
+	"vc_title"		: "Super Smash Bros.",
+	"vc_gameid"		: "NALE",
+	"hash"			: "F7C52568A31AADF26E14DC2B6416B2ED"
+}, {
+	"title"			: "Mario Kart 64",
+	"mode"			: "Mario Kart 64",
+	"support_vc"		: 1,
+	"console"		: "N64",
+	"romc"			: 0,
+	"patches"		: 1,
+	"rom_title"		: "MARIOKART64",
+	"rom_gameid"		: "NKTE",
+	"vc_title"		: "Mario Kart 64",
+	"vc_gameid"		: "NABE",
+	"hash"			: "3A67D9986F54EB282924FCA4CD5F6DFF"
+}, {
+	"title"			: "The Legend of Zelda: A Link to the Past",
+	"mode"			: "A Link to the Past",
+	"save"			: 1,
+	"support_vc"		: 1,
+	"console"		: "SNES",
+	"patches"		: 1,
+	"rom_title"		: "THE LEGEND OF ZELDA",
+	"rom_region"		: 1,
+	"vc_title"		: "The Legend of Zelda",
+	"vc_gameid"		: "JADE",
+	"hash"			: "3F4D2B3C92B6308BEB1AF2CE15C29DEB"
+}, {
+	"title"			: "Super Mario World",
+	"mode"			: "Super Mario World",
+	"support_vc"		: 1,
+	"console"		: "SNES",
 	"downgrade" : [ {
-		"file" : "gc_to_rev0.bps",
-		"hash" : "AC0751DBC23AB2EC0C3144203ACA0003",
-		"rev" : "GC"
+		"file"		: "vc_to_rev0.bps",
+		"hash"		: "679698A7D92E4BE3B8019C075E74594D",
+		"rev"		: "VC"
 	} ],
-	"romc" : 1,
-	"patches_vc" : 2,
-	"patches" : 1,
-	"decompress" : 1,
-	"dmaTable" : "0 1 2 3 4 5 6 7 -8 -9 15 16 17 18 19 20 -21 22 25 26 27 28 29 30 -652 1127 -1539 -1540 -1541 -1542 -1543 -1544 -1545 -1546 -1547 -1548 -1549 -1550 -1551 1552 1553 1554 1555 1556 1557 1558 1559 1560 1561 1562 1563 1564 1565 1566 1567",
-	"rom_title" : "ZELDA MAJORA'S MASK",
-	"rom_gameID" : "NZSE",
-	"vc_title" : "Zelda: Majora's",
-	"vc_gameID" : "NARE",
-	"hash" : "2A0A8ACB61538235BC1094D297FB6556"
+	"patches"		: 1,
+	"rom_title"		: "SUPER MARIOWORLD",
+	"rom_region"		: 1,
+	"vc_title"		: "Super Mario World",
+	"vc_gameid"		: "JAAE",
+	"hash"			: "CDD3C8C37322978CA8669B34BC89C804"
 }, {
-	"title" : "Super Mario 64",
-	"mode" : "Super Mario 64",
-	"save": 1,
-	"support_vc" : 1,
-	"console" : "N64",
-	"patches_vc" : 1,
-	"patches" : 1,
-	"decompress" : 2,
-	"rom_title" : "SUPER MARIO 64",
-	"rom_gameID" : "NSME",
-	"vc_title" : "Super Mario 64",
-	"vc_gameID" : "NAAE",
-	"hash" : "20B854B239203BAF6C961B850A4A51A2"
-}, {
-	"title" : "Paper Mario",
-	"mode" : "Paper Mario",
-	"support_vc" : 1,
-	"console" : "N64",
-	"romc" : 2,
-	"patches" : 1,
-	"rom_title" : "PAPER MARIO",
-	"rom_gameID" : "NMQE",
-	"vc_title" : "Paper Mario",
-	"vc_gameID" : "NAEE",
-	"hash" : "A722F8161FF489943191330BF8416496"
-}, {
-	"title" : "Super Smash Bros.",
-	"mode" : "Super Smash Bros",
-	"support_vc" : 1,
-	"console" : "N64",
-	"romc" : 1,
-	"patches" : 1,
-	"rom_title" : "SMASH BROTHERS",
-	"rom_gameid" : "NALE",
-	"vc_title" : "Super Smash Bros.",
-	"vc_gameid" : "NALE",
-	"hash" : "F7C52568A31AADF26E14DC2B6416B2ED"
-}, {
-	"title" : "Mario Kart 64",
-	"mode" : "Mario Kart 64",
-	"support_vc" : 1,
-	"console" : "N64",
-	"romc" : 0,
-	"patches" : 1,
-	"rom_title" : "MARIOKART64",
-	"rom_gameid" : "NKTE",
-	"vc_title" : "Mario Kart 64",
-	"vc_gameid" : "NABE",
-	"hash" : "3A67D9986F54EB282924FCA4CD5F6DFF"
-}, {
-	"title" : "The Legend of Zelda: A Link to the Past",
-	"mode" : "A Link to the Past",
-	"save": 1,
-	"support_vc" : 1,
-	"console" : "SNES",
-	"patches" : 1,
-	"rom_title" : "THE LEGEND OF ZELDA",
-	"rom_region" : 1,
-	"vc_title" : "The Legend of Zelda",
-	"vc_gameid" : "JADE",
-	"hash" : "3F4D2B3C92B6308BEB1AF2CE15C29DEB"
-}, {
-	"title" : "Super Mario World",
-	"mode" : "Super Mario World",
-	"support_vc" : 1,
-	"console" : "SNES",
+	"title"			: "Super Metroid",
+	"mode"			: "Super Metroid",
+	"save"			: 1,
+	"support_vc"		: 1,
+	"console"		: "SNES",
 	"downgrade" : [ {
-		"file" : "vc_to_rev0.bps",
-		"hash" : "679698A7D92E4BE3B8019C075E74594D",
-		"rev" : "VC"
+		"file"		: "vc_to_rev0.bps",
+		"hash"		: "C2E63A2CA2A46411DDBF758AB017F398",
+		"rev"		: "VC"
 	} ],
-	"patches" : 1,
-	"rom_title" : "SUPER MARIOWORLD",
-	"rom_region" : 1,
-	"vc_title" : "Super Mario World",
-	"vc_gameid" : "JAAE",
-	"hash" : "CDD3C8C37322978CA8669B34BC89C804"
+	"patches"		: 1,
+	"rom_title"		: "Super Metroid",
+	"rom_region"		: 1,
+	"vc_title"		: "Super Metroid",
+	"vc_gameid"		: "JAVE",
+	"hash"			: "21F3E98DF4780EE1C667B84E57D88675"
 }, {
-	"title" : "Super Metroid",
-	"mode" : "Super Metroid",
-	"save": 1,
-	"support_vc" : 1,
-	"console" : "SNES",
-	"downgrade" : [ {
-		"file" : "vc_to_rev0.bps",
-		"hash" : "C2E63A2CA2A46411DDBF758AB017F398",
-		"rev" : "VC"
-	} ],
-	"patches" : 1,
-	"rom_title" : "Super Metroid",
-	"rom_region" : 1,
-	"vc_title" : "Super Metroid",
-	"vc_gameid" : "JAVE",
-	"hash" : "21F3E98DF4780EE1C667B84E57D88675"
-}, {
-	"title" : "Donkey Kong Country",
-	"mode" : "Donkey Kong Country",
-	"save": 1,
-	"support_vc" : 1,
-	"console" : "SNES",
+	"title"			: "Donkey Kong Country",
+	"mode"			: "Donkey Kong Country",
+	"support_vc"		: 1,
+	"console"		: "SNES",
 	"downgrade" : [ {
 		"file" : "rev1_to_rev0.bps",
 		"hash" : "323A37CCBA32104BEEF7FF7DFC7CE894",
@@ -165,62 +184,62 @@
 		"hash" : "8F77B601C1F37033A47DFAA13FB1059A",
 		"rev" : "VC"
 	} ],
-	"patches" : 1,
-	"rom_title" : "DONKEY KONG COUNTRY",
-	"rom_region" : 1,
-	"vc_title" : "Donkey Kong Country",
-	"vc_gameid" : "JAEE",
-	"hash" : "30C5F292FF4CBBFCC00FD8FA96C2DE3B"
+	"patches"		: 1,
+	"rom_title"		: "DONKEY KONG COUNTRY",
+	"rom_region"		: 1,
+	"vc_title"		: "Donkey Kong Country",
+	"vc_gameid"		: "JAEE",
+	"hash"			: "30C5F292FF4CBBFCC00FD8FA96C2DE3B"
 }, {
-	"title" : "The Legend of Zelda",
-	"mode" : "The Legend of Zelda",
-	"save": 1,
-	"support_vc" : 1,
-	"console" : "NES",
+	"title"			: "The Legend of Zelda",
+	"mode"			: "The Legend of Zelda",
+	"save"			: 1,
+	"support_vc"		: 1,
+	"console"		: "NES",
 	"downgrade" : [ {
-		"file" : "rev1_to_rev0.bps",
-		"hash" : "F4095791987351BE68674A9355B266BC",
-		"rev" : "Rev 1"
+		"file"		: "rev1_to_rev0.bps",
+		"hash"		: "F4095791987351BE68674A9355B266BC",
+		"rev"		: "Rev 1"
 	}, {
-		"file" : "vc_to_rev0.bps",
-		"hash" : "F6DE506F3019B88F35D62BFE4FF41FE2",
-		"rev" : "VC"
+		"file"		: "vc_to_rev0.bps",
+		"hash"		: "F6DE506F3019B88F35D62BFE4FF41FE2",
+		"rev"		: "VC"
 	}, {
-		"file" : "gc_to_rev0.bps",
-		"hash" : "DA78C49364D9739E406B4AEFA46FAB03",
-		"rev" : "GC"
+		"file"		: "gc_to_rev0.bps",
+		"hash"		: "DA78C49364D9739E406B4AEFA46FAB03",
+		"rev"		: "GC"
 	} ],
-	"patches" : 1,
-	"rom_title" : "The Legend of Zelda",
-	"vc_title" : "The Legend of Zelda",
-	"vc_gameid" : "FAKE",
-	"hash" : "337BD6F1A1163DF31BF2633665589AB0"
+	"patches"		: 1,
+	"rom_title"		: "The Legend of Zelda",
+	"vc_title"		: "The Legend of Zelda",
+	"vc_gameid"		: "FAKE",
+	"hash"			: "337BD6F1A1163DF31BF2633665589AB0"
 }, {
-	"title" : "Zelda II: The Adventure of Link",
-	"mode" : "The Adventure of Link",
-	"save": 1,
-	"support_vc" : 1,
-	"console" : "NES",
-	"downgrade" : [ {
-		"file" : "vc_to_rev0.bps",
-		"hash" : "D21D31E0EB0E666E9224954F312E915C",
-		"rev" : "VC"
+	"title"			: "Zelda II: The Adventure of Link",
+	"mode"			: "The Adventure of Link",
+	"save"			: 1,
+	"support_vc"		: 1,
+	"console"		: "NES",
+	"downgrade"		: [ {
+		"file"		: "vc_to_rev0.bps",
+		"hash"		: "D21D31E0EB0E666E9224954F312E915C",
+		"rev"		: "VC"
 	}, {
-		"file" : "gc_to_rev0.bps",
-		"hash" : "6587C65FAACEBECCABAC13CFA5C5078A",
-		"rev" : "GC"
+		"file"		: "gc_to_rev0.bps",
+		"hash"		: "6587C65FAACEBECCABAC13CFA5C5078A",
+		"rev"		: "GC"
 	} ],
-	"patches" : 1,
-	"rom_title" : "The Adventure of Link",
-	"vc_title" : "The Adventure of Link",
-	"vc_gameid" : "FA9E",
-	"hash" : "764D36FA8A2450834DA5E8194281035A"
+	"patches"		: 1,
+	"rom_title"		: "The Adventure of Link",
+	"vc_title"		: "The Adventure of Link",
+	"vc_gameid"		: "FA9E",
+	"hash"			: "764D36FA8A2450834DA5E8194281035A"
 }, {
-	"title" : "Free Game Selection",
-	"mode" : "Free",
-	"support_vc" : 1,
-	"console" : "All",
-	"patch_vc" : 1,
-	"console" : "All",
-	"checksum" : 0
+	"title"			: "Free Game Selection",
+	"mode"			: "Free",
+	"support_vc"		: 1,
+	"console"		: "All",
+	"patch_vc"		: 1,
+	"console"		: "All",
+	"checksum"		: 0
 } ]
