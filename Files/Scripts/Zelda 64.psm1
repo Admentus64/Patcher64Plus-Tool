@@ -388,10 +388,10 @@ function CreateButtonColorOptions($Default=1) {
 
     # Button Colors - Dialogs
     $Redux.Colors.SetButtons = @()
-    $Redux.Colors.SetButtons += CreateColorDialog -Color "5A5AFF" -Name "SetAButton"  -IsGame
-    $Redux.Colors.SetButtons += CreateColorDialog -Color "009600" -Name "SetBButton"  -IsGame
-    $Redux.Colors.SetButtons += CreateColorDialog -Color "FFA000" -Name "SetCButtons" -IsGame
-    $Redux.Colors.SetButtons += CreateColorDialog -Color "C80000" -Name "SetSButton"  -IsGame
+    $Redux.Colors.SetButtons += CreateColorDialog -Color $GameType.default_values.a_button  -Name "SetAButton"  -IsGame -Button $Buttons[0]
+    $Redux.Colors.SetButtons += CreateColorDialog -Color $GameType.default_values.b_button  -Name "SetBButton"  -IsGame -Button $Buttons[1]
+    $Redux.Colors.SetButtons += CreateColorDialog -Color $GameType.default_values.c_buttons -Name "SetCButtons" -IsGame -Button $Buttons[2]
+    $Redux.Colors.SetButtons += CreateColorDialog -Color $GameType.default_values.s_button  -Name "SetSButton"  -IsGame -Button $Buttons[3]
 
     # Button Colors - Labels
     $Redux.Colors.ButtonLabels = @()
@@ -425,10 +425,10 @@ function CreateSpinAttackColorOptions() {
 
     # Spin Attack Colors - Dialogs
     $Redux.Colors.SetSpinAttack = @()
-    $Redux.Colors.SetSpinAttack += CreateColorDialog -Color "0000FF" -Name "SetInnerBlueSpinAttack" -IsGame
-    $Redux.Colors.SetSpinAttack += CreateColorDialog -Color "0064FF" -Name "SetOuterBlueSpinAttack" -IsGame
-    $Redux.Colors.SetSpinAttack += CreateColorDialog -Color "FF0000" -Name "SetInnerRedSpinAttack"  -IsGame
-    $Redux.Colors.SetSpinAttack += CreateColorDialog -Color "FF6400" -Name "SetOuterRedSpinAttack"  -IsGame
+    $Redux.Colors.SetSpinAttack += CreateColorDialog -Color "0000FF" -Name "SetInnerBlueSpinAttack" -IsGame -Button $Buttons[0]
+    $Redux.Colors.SetSpinAttack += CreateColorDialog -Color "0064FF" -Name "SetOuterBlueSpinAttack" -IsGame -Button $Buttons[1]
+    $Redux.Colors.SetSpinAttack += CreateColorDialog -Color "FF0000" -Name "SetInnerRedSpinAttack"  -IsGame -Button $Buttons[2]
+    $Redux.Colors.SetSpinAttack += CreateColorDialog -Color "FF6400" -Name "SetOuterRedSpinAttack"  -IsGame -Button $Buttons[3]
 
     # Spin Attack Colors - Labels
     $Redux.Colors.SpinAttackLabels = @()
@@ -443,13 +443,21 @@ function CreateSpinAttackColorOptions() {
 
     $Redux.Colors.BlueSpinAttack.Add_SelectedIndexChanged({ SetSwordColorsPreset -ComboBox $Redux.Colors.BlueSpinAttack -Dialog $Redux.Colors.SetSpinAttack[0] -Label $Redux.Colors.SpinAttackLabels[0] })
     SetSwordColorsPreset -ComboBox $Redux.Colors.BlueSpinAttack -Dialog $Redux.Colors.SetSpinAttack[0] -Label $Redux.Colors.SpinAttackLabels[0]
-    $Redux.Colors.BlueSpinAttack.Add_SelectedIndexChanged({ SetSwordColorsPreset -ComboBox $Redux.Colors.BlueSpinAttack -Dialog $Redux.Colors.SetSpinAttack[1] -Label $Redux.Colors.SpinAttackLabels[1] })
-    SetSwordColorsPreset -ComboBox $Redux.Colors.BlueSpinAttack -Dialog $Redux.Colors.SetSpinAttack[0] -Label $Redux.Colors.SpinAttackLabels[1]
+    $Redux.Colors.BlueSpinAttack.Add_SelectedIndexChanged({
+        SetSwordColorsPreset -ComboBox $Redux.Colors.BlueSpinAttack -Dialog $Redux.Colors.SetSpinAttack[1] -Label $Redux.Colors.SpinAttackLabels[1]
+        if (IsIndex $Redux.Colors.BlueSpinAttack) { SetColor -Color "0064FF" -Dialog $Redux.Colors.SetSpinAttack[1] -Label $Redux.Colors.SpinAttackLabels[1] }
+    })
+    SetSwordColorsPreset -ComboBox $Redux.Colors.BlueSpinAttack -Dialog $Redux.Colors.SetSpinAttack[1] -Label $Redux.Colors.SpinAttackLabels[1]
+    if (IsIndex $Redux.Colors.BlueSpinAttack) { SetColor -Color "0064FF" -Dialog $Redux.Colors.SetSpinAttack[1] -Label $Redux.Colors.SpinAttackLabels[1] }
 
     $Redux.Colors.RedSpinAttack.Add_SelectedIndexChanged({ SetSwordColorsPreset -ComboBox $Redux.Colors.RedSpinAttack -Dialog $Redux.Colors.SetSpinAttack[2] -Label $Redux.Colors.SpinAttackLabels[2] })
     SetSwordColorsPreset -ComboBox $Redux.Colors.RedSpinAttack -Dialog $Redux.Colors.SetSpinAttack[2] -Label $Redux.Colors.SpinAttackLabels[2]
-    $Redux.Colors.RedSpinAttack.Add_SelectedIndexChanged({ SetSwordColorsPreset -ComboBox $Redux.Colors.RedSpinAttack -Dialog $Redux.Colors.SetSpinAttack[3] -Label $Redux.Colors.SpinAttackLabels[3] })
+    $Redux.Colors.RedSpinAttack.Add_SelectedIndexChanged({
+        SetSwordColorsPreset -ComboBox $Redux.Colors.RedSpinAttack -Dialog $Redux.Colors.SetSpinAttack[3] -Label $Redux.Colors.SpinAttackLabels[3]
+        if (IsIndex $Redux.Colors.RedSpinAttack -Index 2) { SetColor -Color "FF6400" -Dialog $Redux.Colors.SetSpinAttack[3] -Label $Redux.Colors.SpinAttackLabels[3] }
+    })
     SetSwordColorsPreset -ComboBox $Redux.Colors.RedSpinAttack -Dialog $Redux.Colors.SetSpinAttack[3] -Label $Redux.Colors.SpinAttackLabels[3]
+    if (IsIndex $Redux.Colors.RedSpinAttack -Index 2) { SetColor -Color "FF6400" -Dialog $Redux.Colors.SetSpinAttack[3] -Label $Redux.Colors.SpinAttackLabels[3] }
 
 }
 
@@ -471,8 +479,8 @@ function CreateSwordTrailColorOptions() {
 
     # Sword Trail Colors - Dialogs
     $Redux.Colors.SetSwordTrail = @()
-    $Redux.Colors.SetSwordTrail += CreateColorDialog -Color "FFFFFF" -Name "SetInnerSwordTrail" -IsGame
-    $Redux.Colors.SetSwordTrail += CreateColorDialog -Color "FFFFFF" -Name "SetOuterSwordTrail" -IsGame
+    $Redux.Colors.SetSwordTrail += CreateColorDialog -Color "FFFFFF" -Name "SetInnerSwordTrail" -IsGame -Button $Buttons[0]
+    $Redux.Colors.SetSwordTrail += CreateColorDialog -Color "FFFFFF" -Name "SetOuterSwordTrail" -IsGame -Button $Buttons[1]
 
     # Sword Trail Colors - Labels
     $Redux.Colors.SwordTrailLabels = @()
@@ -496,43 +504,35 @@ function CreateSwordTrailColorOptions() {
 
 
 #==============================================================================================================================================================================================
-function CreateFairyColorOptions([string]$Name, [string]$Second, [string]$Presets="") {
+function CreateFairyColorOptions() {
 
     # FAIRY COLORS #
     CreateReduxGroup    -Tag  "Colors" -Text "Fairy Colors" -Height 2
-    $Items = @($Name, $Second, "Tael", "Gold", "Green", "Light Blue", "Yellow", "Red", "Magenta", "Black", "Fi", "Ciela", "Epona", "Ezlo", "King of Red Lions", "Linebeck", "Loftwing", "Midna", "Phantom Zelda", "Randomized", "Custom")
+    $Items = @($GameType.default_values.fairy_option1, $GameType.default_values.fairy_option2, "Tael", "Gold", "Green", "Light Blue", "Yellow", "Red", "Magenta", "Black", "Fi", "Ciela", "Epona", "Ezlo", "King of Red Lions", "Linebeck", "Loftwing", "Midna", "Phantom Zelda", "Randomized", "Custom")
+    $Presets = ("`n" + 'Selecting the presets ' + '"' + $GameType.default_values.fairy_option1 + '"' + ' or "Tael" will also change the references for ' + '"' + $GameType.default_values.fairy_option1 + '"' + ' in the dialogue')
     CreateReduxComboBox -Name "Fairy" -Length 230 -Shift 70 -Items $Items -Text ($name + " Colors") -Info ("Select a color scheme for " + $name + $Presets + "`n" + '"Randomized" fully randomizes the colors each time the patcher is opened') -Credits "Ported from Rando"
 
     # Fairy Colors - Buttons
     $Buttons = @()
     $Buttons += CreateReduxButton -Column 3 -Row 1 -Width 100 -Tag $Buttons.Count -Text "Idle (Inner)"     -Info ("Select the color you want for the Inner Idle stance for " + $name)  -Credits "Ported from Rando"
     $Buttons += CreateReduxButton -Column 3 -Row 2 -Width 100 -Tag $Buttons.Count -Text "Idle (Outer)"     -Info ("Select the color you want for the Outer Idle stance for " + $name)  -Credits "Ported from Rando"
-
     $Buttons += CreateReduxButton -Column 4 -Row 1 -Width 100 -Tag $Buttons.Count -Text "Interact (Inner)" -Info ("Select the color you want for the Inner Other stance for " + $name) -Credits "Ported from Rando"
     $Buttons += CreateReduxButton -Column 4 -Row 2 -Width 100 -Tag $Buttons.Count -Text "Interact (Outer)" -Info ("Select the color you want for the Outer Other stance for " + $name) -Credits "Ported from Rando"
-
     $Buttons += CreateReduxButton -Column 5 -Row 1 -Width 100 -Tag $Buttons.Count -Text "NPC (Inner)"      -Info ("Select the color you want for the Inner NPC stance for " + $name)   -Credits "Ported from Rando"
     $Buttons += CreateReduxButton -Column 5 -Row 2 -Width 100 -Tag $Buttons.Count -Text "NPC (Outer)"      -Info ("Select the color you want for the Outer NPC stance for " + $name)   -Credits "Ported from Rando"
-
     $Buttons += CreateReduxButton -Column 6 -Row 1 -Width 100 -Tag $Buttons.Count -Text "Enemy (Inner)"    -Info ("Select the color you want for the Inner Enemy stance for " + $name) -Credits "Ported from Rando"
     $Buttons += CreateReduxButton -Column 6 -Row 2 -Width 100 -Tag $Buttons.Count -Text "Enemy (Outer)"    -Info ("Select the color you want for the Outer Enemy stance for " + $name) -Credits "Ported from Rando"
 
-    # Fairy Colors - Info Label
-    #CreateLabel -X ($Buttons[0].Left + 5) -Y ($Buttons[0].Top - 20) -Width 100 -Height 15 -Text "Inner " + $name + " Color" -Font $Fonts.SmallBold -AddTo $Last.Group
-    #CreateLabel -X ($Buttons[1].Left + 5) -Y ($Buttons[0].Top - 20) -Width 100 -Height 15 -Text "Outer " + $name + " Color" -Font $Fonts.SmallBold -AddTo $Last.Group
-    #CreateLabel -X ($Buttons[2].Left + 5) -Y ($Buttons[0].Top - 20) -Width 100 -Height 15 -Text "Inner " + $name + " Color" -Font $Fonts.SmallBold -AddTo $Last.Group
-    #CreateLabel -X ($Buttons[3].Left + 5) -Y ($Buttons[0].Top - 20) -Width 100 -Height 15 -Text "Outer " + $name + " Color" -Font $Fonts.SmallBold -AddTo $Last.Group
-
     # Fairy Colors - Dialogs
     $Redux.Colors.SetFairy = @()
-    $Redux.Colors.SetFairy += CreateColorDialog -Color "FFFFFF" -Name "SetFairyIdleInner"     -IsGame
-    $Redux.Colors.SetFairy += CreateColorDialog -Color "0000FF" -Name "SetFairyIdleOuter"     -IsGame
-    $Redux.Colors.SetFairy += CreateColorDialog -Color "FFFFFF" -Name "SetFairyInteractInner" -IsGame
-    $Redux.Colors.SetFairy += CreateColorDialog -Color "0000FF" -Name "SetFairyInteractOuter" -IsGame
-    $Redux.Colors.SetFairy += CreateColorDialog -Color "FFFFFF" -Name "SetFairyNPCInner"      -IsGame
-    $Redux.Colors.SetFairy += CreateColorDialog -Color "0000FF" -Name "SetFairyNPCOuter"      -IsGame
-    $Redux.Colors.SetFairy += CreateColorDialog -Color "FFFFFF" -Name "SetFairyEnemyInner"    -IsGame
-    $Redux.Colors.SetFairy += CreateColorDialog -Color "0000FF" -Name "SetFairyEnemyOuter"    -IsGame
+    $Redux.Colors.SetFairy += CreateColorDialog -Color $GameType.default_values.fairy_idle1 -Name "SetFairyIdleInner"     -IsGame -Button $Buttons[0]
+    $Redux.Colors.SetFairy += CreateColorDialog -Color $GameType.default_values.fairy_idle2 -Name "SetFairyIdleOuter"     -IsGame -Button $Buttons[1]
+    $Redux.Colors.SetFairy += CreateColorDialog -Color "00FF00"                             -Name "SetFairyInteractInner" -IsGame -Button $Buttons[2]
+    $Redux.Colors.SetFairy += CreateColorDialog -Color "00FF00"                             -Name "SetFairyInteractOuter" -IsGame -Button $Buttons[3]
+    $Redux.Colors.SetFairy += CreateColorDialog -Color "9696FF"                             -Name "SetFairyNPCInner"      -IsGame -Button $Buttons[4]
+    $Redux.Colors.SetFairy += CreateColorDialog -Color "9696FF"                             -Name "SetFairyNPCOuter"      -IsGame -Button $Buttons[5]
+    $Redux.Colors.SetFairy += CreateColorDialog -Color "FFFF00"                             -Name "SetFairyEnemyInner"    -IsGame -Button $Buttons[6]
+    $Redux.Colors.SetFairy += CreateColorDialog -Color "C89B00"                             -Name "SetFairyEnemyOuter"    -IsGame -Button $Buttons[7]
 
     # Fairy Colors - Labels
     $Redux.Colors.FairyLabels = @()

@@ -1,3 +1,8 @@
+v13.0.3
+- Fixed infinite looping when patching "Mirror Shield Frame Color" with Red as Custom
+- Rewrote how colors are being applied
+- Fixed bug with set custom color values for the MM HUD
+
 v13.0.2
 - Fixed "Silver Gauntlets" and "Golden Gauntlets" color preset options
 

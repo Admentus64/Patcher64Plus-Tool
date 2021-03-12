@@ -42,7 +42,7 @@ function CreateDialog([uint16]$Width=0, [uint16]$Height=0, [string]$Icon) {
 
 
 #==============================================================================================================================================================================================
-function CreateColorDialog([string]$Color="000000", [string]$Name, [switch]$IsGame) {
+function CreateColorDialog([string]$Color="000000", [string]$Name, [switch]$IsGame, [object]$Button) {
     
     $ColorDialog = New-Object System.Windows.Forms.ColorDialog
     $ColorDialog.Color = "#" + $Color
@@ -67,6 +67,8 @@ function CreateColorDialog([string]$Color="000000", [string]$Name, [switch]$IsGa
         }
     }
 
+    Add-Member -InputObject $ColorDialog -NotePropertyMembers @{ Default = $Color }
+    Add-Member -InputObject $ColorDialog -NotePropertyMembers @{ Button  = $Button }
     return $ColorDialog
 
 }

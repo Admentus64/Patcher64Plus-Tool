@@ -7,22 +7,21 @@ function ChangeBytes([string]$File, [string]$Offset, [object]$Values, [uint16]$I
     try { [uint32]$Offset = GetDecimal $Offset }
     catch {
         WriteToConsole "Offset is negative!"
-        return
+        return $False
     }
     if ($Offset -gt $ByteArrayGame.Length) {
         WriteToConsole "Offset is too large for file!"
-        return
+        return $False
     }
 
     if ($IsDec) {
         $arr = @()
-        foreach ($i in $Values) {
-            $arr += Get8Bit $i
-        }
+        foreach ($i in $Values) { $arr += Get8Bit $i }
         WriteToConsole ( (Get32Bit $Offset) + " -> Change values: " + $arr)
-        $arr = $null
     }
     else { WriteToConsole ( (Get32Bit $Offset) + " -> Change values: " + $Values) }
+
+    $arr = $null
 
     foreach ($i in 0..($Values.Length-1)) {
         if ($IsDec) {
@@ -31,10 +30,12 @@ function ChangeBytes([string]$File, [string]$Offset, [object]$Values, [uint16]$I
             [byte]$Value  = $Values[$i]
         }
         else {
-            try { [byte]$Value = GetDecimal $Values[$i] }
+            try {
+                [byte]$Value = GetDecimal $Values[$i]
+            }
             catch {
                 WriteToConsole "Value is negative!"
-                return
+                return $False
             }
         }
 
@@ -44,6 +45,7 @@ function ChangeBytes([string]$File, [string]$Offset, [object]$Values, [uint16]$I
     }
 
     if (IsSet $File) { [io.file]::WriteAllBytes($File, $ByteArrayGame) }
+    return $True
 
 }
 

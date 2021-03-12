@@ -502,7 +502,7 @@ function IsChecked([object]$Elem, [switch]$Not) {
     if (!(IsSet $Elem))   { return $False }
     if (!$Elem.Active)    { return $False }
     if ($Elem.Checked)    { return !$Not  }
-    if (!$Elem.Checked)   { return $Not  }
+    if (!$Elem.Checked)   { return  $Not  }
     return $False
 
 }
@@ -514,7 +514,7 @@ function IsLanguage([object]$Elem, [int]$Lang=0, [switch]$Not) {
     
     if (!$Redux.Language[$Lang].Checked)   { return $False }
     if (IsChecked $Elem)                   { return !$Not  }
-    if (IsChecked $Elem -Not)              { return $Not   }
+    if (IsChecked $Elem -Not)              { return  $Not  }
     return $False
 
 }
@@ -529,7 +529,7 @@ function IsText([object]$Elem, [string]$Compare, [switch]$Active, [switch]$Not) 
     if ($Active -and !$Elem.Visible)    { return $False }
     if (!$Active -and !$Elem.Enabled)   { return $False }
     if ($Text -eq $Compare)             { return !$Not  }
-    if ($Text -ne $Compare)             { return $Not   }
+    if ($Text -ne $Compare)             { return  $Not  }
     return $False
 
 }
@@ -541,7 +541,7 @@ function IsLangText([object]$Elem, [string]$Compare, [int16]$Lang=0, [switch]$No
     
     if (!$Redux.Language[$Lang].Checked)             { return $False }
     if (IsText -Elem $Elem -Compare $Compare)        { return !$Not  }
-    if (IsText -Elem $Elem -Compare $Compare -Not)   { return $Not   }
+    if (IsText -Elem $Elem -Compare $Compare -Not)   { return  $Not  }
     return $False
 
 }
@@ -559,12 +559,40 @@ function IsIndex([object]$Elem, [int16]$Index=1, [string]$Text, [switch]$Active,
     if (IsSet $Text) {
         $Text = $Text.replace(" (default)", "")
         if ($Elem.indexOf($Text))             { return !$Not  }
-        if (!$Elem.indexOf($Text))            { return $Not   }
+        if (!$Elem.indexOf($Text))            { return  $Not  }
     }
 
     if ($Elem.SelectedIndex -eq ($Index-1))   { return !$Not  }
-    if ($Elem.SelectedIndex -ne ($Index-1))   { return $Not   }
+    if ($Elem.SelectedIndex -ne ($Index-1))   { return  $Not  }
 
+    return $False
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function IsColor([System.Windows.Forms.ColorDialog]$Elem, [string]$Color, [switch]$Not) {
+    
+    if (!(IsSet $Elem))         { return $False }
+    if (!$Elem.Button.Active)   { return $False }
+    $C = (Get8Bit $Elem.Color.R) + (Get8Bit $Elem.Color.G) + (Get8Bit $Elem.Color.B)
+    if ($C -eq $Color)          { return !$Not  }
+    if ($C -ne $Color)          { return  $Not  }
+    return $False
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function IsDefaultColor([System.Windows.Forms.ColorDialog]$Elem, [switch]$Not) {
+    
+    if (!(IsSet $Elem))         { return $False }
+    if (!$Elem.Button.Active)   { return $False }
+    $C = (Get8Bit $Elem.Color.R) + (Get8Bit $Elem.Color.G) + (Get8Bit $Elem.Color.B)
+    if ($C -eq $Elem.Default)   { return !$Not  }
+    if ($C -ne $Elem.Default)   { return  $Not  }
     return $False
 
 }
@@ -943,6 +971,8 @@ Export-ModuleMember -Function IsLanguage
 Export-ModuleMember -Function IsText
 Export-ModuleMember -Function IsLangText
 Export-ModuleMember -Function IsIndex
+Export-ModuleMember -Function IsColor
+Export-ModuleMember -Function IsDefaultColor
 Export-ModuleMember -Function IsSet
 Export-ModuleMember -Function AddTextFileToTextbox
 Export-ModuleMember -Function StrLike
