@@ -2,7 +2,7 @@ function PatchOptions() {
     
     # ENHANCED 16:9 WIDESCREEN #
 
-    if (IsWidescreen -Experimental)   { ApplyPatch -Patch "\Decompressed\widescreen.ppf" }
+    if (IsWidescreen -Experimental) { ApplyPatch -Patch "\Decompressed\widescreen.ppf" }
 
 
 
@@ -21,9 +21,15 @@ function PatchOptions() {
 
 
 
+    # DIFFICULTY #
+
+    if (IsChecked $Redux.Hero.HarderChildBosses) { ApplyPatch -Patch "\Decompressed\harder_child_bosses.ppf" }
+
+
+
     # MM PAUSE SCREEN #
 
-    if (IsChecked $Redux.Text.PauseScreen)   { ApplyPatch -Patch "\Decompressed\mm_pause_screen.ppf" }
+    if (IsChecked $Redux.Text.PauseScreen) { ApplyPatch -Patch "\Decompressed\mm_pause_screen.ppf" }
     
 }
 
@@ -1342,13 +1348,14 @@ function CreateTabAudiovisual() {
 function CreateTabDifficulty() {
     
     # HERO MODE #
-    CreateReduxGroup    -Tag  "Hero" -Text "Hero Mode" 
+    CreateReduxGroup    -Tag  "Hero" -Text "Hero Mode"
     CreateReduxComboBox -Name "Damage"     -Column 1 -Row 1 -Shift 10 -Text "Damage"       -Items @("1x Damage", "2x Damage", "4x Damage", "8x Damage", "OHKO Mode") -Info "Set the amount of damage you receive`nOHKO Mode = You die in one hit"                                   -Credits "Admentus"
     CreateReduxComboBox -Name "Recovery"   -Column 3 -Row 1 -Shift 10 -Text "Recovery"     -Items @("1x Recovery", "1/2x Recovery", "1/4x Recovery", "0x Recovery")  -Info "Set the amount health you recovery from Recovery Hearts`nRecovery Heart drops are removed if set to 0x" -Credits "Admentus & Rando (No Heart Drops)"
     CreateReduxComboBox -Name "MagicUsage" -Column 5 -Row 1 -Shift 10 -Text "Magic Usage"  -Items @("1x Magic Usage", "2x Magic Usage", "3x Magic Usage")            -Info "Set the amount of times magic is consumed at"                                                           -Credits "Admentus"
     CreateReduxComboBox -Name "MonsterHP"  -Column 1 -Row 2 -Shift 10 -Text "Monster HP"   -Items @("1x Monster HP", "2x Monster HP", "3x Monster HP")               -Info "Set the amount of health for monsters"                                                                  -Credits "Admentus" -Warning "Half of the enemies are missing"
     CreateReduxComboBox -Name "MiniBossHP" -Column 3 -Row 2 -Shift 10 -Text "Mini-Boss HP" -Items @("1x Mini-Boss HP", "2x Mini-Boss HP", "3x Mini-Boss HP")         -Info "Set the amount of health for elite monsters and mini-bosses"                                            -Credits "Admentus" -Warning "Big Octo and Dark Link are missing"
     CreateReduxComboBox -Name "BossHP"     -Column 5 -Row 2 -Shift 10 -Text "Boss HP"      -Items @("1x Boss HP", "2x Boss HP", "3x Boss HP")                        -Info "Set the amount of health for bosses"                                                                    -Credits "Admentus & Marcelo20XX"
+    CreateReduxCheckBox -Name "HarderChildBosses" -Column 1 -Row 3 -Text "Harder Child Bosses" -Info "Replace objects in the Child Dungeon Boss arenas with additional monsters" -Credits "BilonFullHDemon"
 
     $Redux.Hero.Damage.Add_SelectedIndexChanged({ EnableElem -Elem $Redux.Hero.Recovery -Active ($this.text -ne "OHKO Mode") })
     EnableElem -Elem ($Redux.Hero.Recovery) -Active ($Redux.Hero.Damage.text -ne "OHKO Mode")

@@ -232,11 +232,12 @@ function CreateSettingsDialog() {
     $GeneralSettings.Box                 = CreateReduxGroup -Y ($GeneralSettings.Box.Bottom + (DPISize 10)) -IsGame $False -Height 3 -AddTo $SettingsDialog -Text "Debug Settings"
     $GeneralSettings.Console             = CreateSettingsCheckbox -Name "Console"          -Column 1 -Row 1 -Text "Console"               -IsDebug -Info "Show the console log"
     $GeneralSettings.Stop                = CreateSettingsCheckbox -Name "Stop"             -Column 2 -Row 1 -Text "Stop Patching"         -IsDebug -Info "Do not start the patching process and instead show debug information for the console log"
-    $GeneralSettings.CreateBPS           = CreateSettingsCheckbox -Name "CreateBPS"        -Column 3 -Row 1 -Text "Create BPS"            -IsDebug -Info "Create compressed and decompressed BPS patches when patching is concluded"
-    $GeneralSettings.NoCleanup           = CreateSettingsCheckbox -Name "NoCleanup"        -Column 1 -Row 2 -Text "No Cleanup"            -IsDebug -Info "Do not clean up the files after the patching process fails or succeeds"
-    $GeneralSettings.NoHeaderChange      = CreateSettingsCheckbox -Name "NoHeaderChange"   -Column 2 -Row 2 -Text "No Header Change"      -IsDebug -Info "Do not change the title header of the ROM when patching is concluded"
-    $GeneralSettings.NoChannelChange     = CreateSettingsCheckbox -Name "NoChannelChange"  -Column 3 -Row 2 -Text "No Channel Change"     -IsDebug -Info "Do not change the channel title and channel GameID of the WAD when patching is concluded"
-    $GeneralSettings.KeepDowngraded      = CreateSettingsCheckbox -Name "KeepDowngraded"   -Column 1 -Row 3 -Text "Keep Downgraded"       -IsDebug -Info "Keep the downgraded patched ROM in the output folder"
+    $GeneralSettings.Logging             = CreateSettingsCheckbox -Name "Logging"          -Column 3 -Row 1 -Text "Logging"               -IsDebug -Info "Write all events of Patcher64+ into log files`nThe .exe only supports basic logging`nComplete logging requires the .ps1 script instead" -Checked $True
+    $GeneralSettings.CreateBPS           = CreateSettingsCheckbox -Name "CreateBPS"        -Column 1 -Row 2 -Text "Create BPS"            -IsDebug -Info "Create compressed and decompressed BPS patches when patching is concluded"
+    $GeneralSettings.NoCleanup           = CreateSettingsCheckbox -Name "NoCleanup"        -Column 2 -Row 2 -Text "No Cleanup"            -IsDebug -Info "Do not clean up the files after the patching process fails or succeeds"
+    $GeneralSettings.NoHeaderChange      = CreateSettingsCheckbox -Name "NoHeaderChange"   -Column 3 -Row 2 -Text "No Header Change"      -IsDebug -Info "Do not change the title header of the ROM when patching is concluded"
+    $GeneralSettings.NoChannelChange     = CreateSettingsCheckbox -Name "NoChannelChange"  -Column 1 -Row 3 -Text "No Channel Change"     -IsDebug -Info "Do not change the channel title and channel GameID of the WAD when patching is concluded"
+    $GeneralSettings.KeepDowngraded      = CreateSettingsCheckbox -Name "KeepDowngraded"   -Column 2 -Row 3 -Text "Keep Downgraded"       -IsDebug -Info "Keep the downgraded patched ROM in the output folder"
 
     # Debug Settings (Nintendo 64)
     $GeneralSettings.Box                 = CreateReduxGroup -Y ($GeneralSettings.Box.Bottom + (DPISize 10)) -IsGame $False -Height 3 -AddTo $SettingsDialog -Text "Debug Settings (Nintendo 64)"
@@ -259,35 +260,44 @@ function CreateSettingsDialog() {
     $GeneralSettings.Presets            += CreateSettingsRadioField -Name "Preset" -SaveAs 5 -Max 6 -NameTextbox "Preset.Label5" -Column 2 -Row 2                -Text "Preset 5" -Info ""
     $GeneralSettings.Presets            += CreateSettingsRadioField -Name "Preset" -SaveAs 6 -Max 6 -NameTextbox "Preset.Label6" -Column 3 -Row 2                -Text "Preset 6" -Info ""
 
+    # Reset buttons
+    $GeneralSettings.Box               = CreateReduxGroup -Y ($GeneralSettings.Box.Bottom + (DPISize 10)) -IsGame $False -Height 2 -AddTo $SettingsDialog -Text "Reset"
+    $GeneralSettings.ResetButton       = CreateReduxButton -Column 1 -Width 150 -Height 50 -AddTo $GeneralSettings.Box -Text "Reset All Settings" -Info ("Resets all settings stored in the " + $ScriptName)
+    $GeneralSettings.ResetGameButton   = CreateReduxButton -Column 2 -Width 150 -Height 50 -AddTo $GeneralSettings.Box -Text "Reset Current Game" -Info ("Resets all settings for the current game mode " + $GameType.mode)
+    $GeneralSettings.CleanupButton     = CreateReduxButton -Column 3 -Width 150 -Height 50 -AddTo $GeneralSettings.Box -Text "Cleanup Files"      -Info "Remove all temporary and extracted files`nThis process is automaticially done after patching a game"
 
 
-    # Double Click
+
     $GeneralSettings.DoubleClick.Add_CheckStateChanged(  { TogglePowerShellOpenWithClicks $this.Checked } )
     $GeneralSettings.ModernStyle.Add_CheckStateChanged(  { SetModernVisualStyle $this.checked } )
     $GeneralSettings.EnableSounds.Add_CheckStateChanged( { LoadSoundEffects $this.checked } )
+    $GeneralSettings.Logging.Add_CheckStateChanged(      { SetLogging $this.checked } )
+    $GeneralSettings.ResetButton.Add_Click(              { ResetTool } )
+    $GeneralSettings.ResetGameButton.Add_Click(          { ResetGame } )
+    $GeneralSettings.CleanupButton.Add_Click(            { CleanupFiles } )
 
     # Change Widescreen
-    $GeneralSettings.ChangeWidescreen.Add_CheckStateChanged({
+    $GeneralSettings.ChangeWidescreen.Add_CheckStateChanged( {
         if (Get-Command ("AdjustGUI" + $FunctionTitle) -errorAction SilentlyContinue) { iex "AdjustGUI" }
-    })
+    } )
 
     # Console
     $GeneralSettings.Console.Enabled = $ExternalScript
-    $GeneralSettings.Console.Add_CheckStateChanged({
+    $GeneralSettings.Console.Add_CheckStateChanged( {
         ShowPowerShellConsole $this.Checked
         $GeneralSettings.Stop.Enabled = $this.Checked
-    })
+    } )
     $GeneralSettings.Stop.Enabled = $GeneralSettings.Console.Checked
     
     # Lite GUI
-    $GeneralSettings.LiteGUI.Add_CheckStateChanged({
+    $GeneralSettings.LiteGUI.Add_CheckStateChanged( {
         LoadAdditionalOptions
         DisablePatches
-    })
+    } )
 
     # Presets
     foreach ($item in $GeneralSettings.Presets) {
-        $item.Add_CheckedChanged({
+        $item.Add_CheckedChanged( {
             foreach ($i in 0..($GeneralSettings.Presets.length-1)) {
                 if (!$this.checked -and $GeneralSettings.Presets[$i] -eq $this) {
                     if ($GameType.save -gt 0) { Out-IniFile -FilePath ($Paths.Settings + "\" + $GameType.mode + " - " + ($i+1) + ".ini") -InputObject $GameSettings }
@@ -296,17 +306,8 @@ function CreateSettingsDialog() {
             $global:GameSettings = GetSettings -File (GetGameSettingsFile) -IsGame
             LoadAdditionalOptions
             DisableReduxOptions
-        })
+        } )
     }
-
-    # Create a button to reset the tool.
-    $GeneralSettings.Box               = CreateReduxGroup -Y ($GeneralSettings.Box.Bottom + (DPISize 10)) -IsGame $False -Height 2 -AddTo $SettingsDialog -Text "Reset"
-    $GeneralSettings.ResetButton       = CreateReduxButton -Column 1 -Width 150 -Height 50 -AddTo $GeneralSettings.Box -Text "Reset All Settings" -Info ("Resets all settings stored in the " + $ScriptName)
-    $GeneralSettings.ResetButton.Add_Click({ ResetTool })
-    $GeneralSettings.ResetGameButton   = CreateReduxButton -Column 2 -Width 150 -Height 50 -AddTo $GeneralSettings.Box -Text "Reset Current Game" -Info ("Resets all settings for the current game mode " + $GameType.mode)
-    $GeneralSettings.ResetGameButton.Add_Click({ ResetGame })
-    $GeneralSettings.CleanupButton     = CreateReduxButton -Column 3 -Width 150 -Height 50 -AddTo $GeneralSettings.Box -Text "Cleanup Files"      -Info "Remove all temporary and extracted files`nThis process is automaticially done after patching a game"
-    $GeneralSettings.CleanupButton.Add_Click({ CleanupFiles })
 
 }
 

@@ -26,6 +26,7 @@
 
 --- Additional Options ---
 - Master Quest:				ShadowOne333
+- Harder Child Bosses:			BilonFullHDemon
 - Manual Jump:				Admentus (ROM) & CloudModding (GameShark)
 - 16:9 Backgrounds & Textures:		GhostlyDark, ShadowOne333 & CYB3RTR0N
 - Enhanced 16:9 Widescreen:		gamemasterplc & GhostlyDark

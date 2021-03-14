@@ -24,8 +24,8 @@ Add-Type -AssemblyName 'System.Drawing'
 # Setup global variables
 
 $global:ScriptName = "Patcher64+ Tool"
-$global:VersionDate = "2021-03-12"
-$global:Version     = "v13.0.3"
+$global:VersionDate = "2021-03-14"
+$global:Version     = "v13.0.4"
 
 $global:CommandType = $MyInvocation.MyCommand.CommandType.ToString()
 $global:Definition  = $MyInvocation.MyCommand.Definition.ToString()
@@ -75,6 +75,7 @@ $Paths.WiiVC           = $Paths.Tools  + "\Wii VC"
 $Paths.Scripts         = $Paths.Master + "\Scripts"
 $Paths.Temp            = $Paths.Master + "\Temp"
 $Paths.Settings        = $Paths.Master + "\Settings"
+$Paths.Logs            = $Paths.Master + "\Logs"
 $Paths.cygdrive        = $Paths.Master + "\cygdrive"
 
 
@@ -123,6 +124,10 @@ function IsNumeric([string]$str) {
 $global:Settings = GetSettings ($Paths.Settings + "\Core.ini")
 if (!(IsSet $Settings.Core))   { $Settings.Core  = @{} }
 if (!(IsSet $Settings.Debug))  { $Settings.Debug = @{} }
+
+# Logging
+if (!$ExternalScript) { $global:TranscriptTime = Get-Date -Format yyyy-mm-dd-hh-mm-ss }
+SetLogging ($Settings.Debug.Logging -eq $True)
 
 # Hi-DPI Mode
 $global:DisableHighDPIMode = $Settings.Core.HiDPIMode -eq $False
@@ -189,4 +194,5 @@ Out-IniFile -FilePath $Files.settings -InputObject $Settings | Out-Null
 if ($GameType.save -gt 0) { Out-IniFile -FilePath (GetGameSettingsFile) -InputObject $GameSettings | Out-Null }
 RemovePath $Paths.Registry
 [System.GC]::Collect() | Out-Null
+SetLogging $False
 Exit

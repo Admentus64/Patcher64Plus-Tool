@@ -147,6 +147,8 @@ vc_title	Default channel title for the Wii VC WAD, no more than 40 characters.
 
 vc_gameID	Default GameID for Wii VC WAD, requires 4 character.
 
+default_values	Set default values for several patching options, which is useful when multiple games share similar components with with different values
+
 hash		Default MD5 hash checksum for ROM files.
 
 

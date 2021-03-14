@@ -902,12 +902,17 @@ function ApplyPatchROM([boolean]$Decompress) {
 
 #==============================================================================================================================================================================================
 function ApplyPatch([string]$File=$GetROM.decomp, [string]$Patch, [string]$New, [switch]$FilesPath, [switch]$FullPath) {
+    
+    # File Parameter Check
+    if ( !(IsSet -Elem $File) -or !(IsSet -Elem $Patch) ) {
+        WriteToConsole "No file or patch file is provided"
+        return $True
+    }
 
-    if ( !(IsSet -Elem $File) -or !(IsSet -Elem $Patch) ) { return $True }
-
-    # File
+    # File Exists
     if (!(TestFile $File)) {
         UpdateStatusLabel "Failed! Could not find file."
+        WriteToConsole ("Missing file: " + $File)
         return $False
     }
 
@@ -924,9 +929,9 @@ function ApplyPatch([string]$File=$GetROM.decomp, [string]$Patch, [string]$New, 
     if (TestFile ($Patch + ".ppf"))      { $Patch + ".ppf" }
 
     if (TestFile $Patch) { $Patch = Get-Item -LiteralPath $Patch }
-    else {
+    else { # Patch File does not exist
         UpdateStatusLabel "Failed! Could not find patch file."
-        WriteToConsole ("Patch file is missing from: " + $Patch)
+        WriteToConsole ("Missing patch file: " + $Patch)
         return $False
     }
 

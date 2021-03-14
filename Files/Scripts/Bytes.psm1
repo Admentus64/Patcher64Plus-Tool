@@ -4,9 +4,10 @@ function ChangeBytes([string]$File, [string]$Offset, [object]$Values, [uint16]$I
     if (IsSet $File)                   { $ByteArrayGame = [IO.File]::ReadAllBytes($File) }
     if ($Interval -lt 1)               { $Interval = 1 }
 
+    # Offset
     try { [uint32]$Offset = GetDecimal $Offset }
     catch {
-        WriteToConsole "Offset is negative!"
+        WriteToConsole "Offset is negative, too large or not an integer!"
         return $False
     }
     if ($Offset -gt $ByteArrayGame.Length) {
@@ -14,15 +15,16 @@ function ChangeBytes([string]$File, [string]$Offset, [object]$Values, [uint16]$I
         return $False
     }
 
+    # Convert to Byte if needed
     if ($IsDec) {
         $arr = @()
         foreach ($i in $Values) { $arr += Get8Bit $i }
         WriteToConsole ( (Get32Bit $Offset) + " -> Change values: " + $arr)
     }
     else { WriteToConsole ( (Get32Bit $Offset) + " -> Change values: " + $Values) }
-
     $arr = $null
 
+    # Patch
     foreach ($i in 0..($Values.Length-1)) {
         if ($IsDec) {
             if     ($Values[$i] -lt 0   -and $Overflow)   { $Values[$i] = $Values[$i] + 255 }
@@ -44,6 +46,7 @@ function ChangeBytes([string]$File, [string]$Offset, [object]$Values, [uint16]$I
         else                 { $ByteArrayGame[$Offset + ($i * $Interval)]  = $Value }
     }
 
+    # Write to File
     if (IsSet $File) { [io.file]::WriteAllBytes($File, $ByteArrayGame) }
     return $True
 
@@ -54,31 +57,42 @@ function ChangeBytes([string]$File, [string]$Offset, [object]$Values, [uint16]$I
 #==============================================================================================================================================================================================
 function PatchBytes([string]$File, [string]$Offset, [string]$Length, [string]$Patch, [switch]$Texture, [switch]$Extracted, [switch]$Pad) {
     
-    if (IsSet $File) { $ByteArrayGame = [IO.File]::ReadAllBytes($File) }
-    if ($Texture) {
-        $PatchByteArray = [IO.File]::ReadAllBytes($GameFiles.textures + "\" + $Patch)
-        WriteToConsole ("Patch file from: " + $GameFiles.textures + "\" + $Patch)
-    }
-    elseif ($Extracted) {
-        $PatchByteArray = [IO.File]::ReadAllBytes($GameFiles.extracted + "\" + $Patch)
-        WriteToConsole ("Patch file from: " + $GameFiles.extracted + "\" + $Patch)
-    }
-    else {
-        $PatchByteArray = [IO.File]::ReadAllBytes($GameFiles.binaries + "\" + $Patch)
-        WriteToConsole ("Patch file from: " + $GameFiles.binaries + "\" + $Patch)
-    }
-
-    [uint32]$Offset = GetDecimal $Offset
-
-    if ($Offset -lt 0) {
-        WriteToConsole "Offset is negative!"
+    # Binary Patch File Parameter Check
+    if (!(IsSet -Elem $Patch) ) {
+        WriteToConsole "No binary patch file is provided"
         return
     }
-    elseif ($Offset -gt $ByteArrayGame.Length) {
+
+    # Binary Patch File Path
+    if     ($Texture)     { $Patch = $GameFiles.textures  + "\" + $Patch }
+    elseif ($Extracted)   { $Patch = $GameFiles.extracted + "\" + $Patch }
+    else                  { $Patch = $GameFiles.binaries  + "\" + $Patch }
+
+    # Binary Patch File Exists
+    if (!(TestFile $Patch)) {
+        WriteToConsole ("Missing binary patch file: " + $Patch)
+        return
+    }
+
+    # Read File and Patch File
+    if (IsSet $File) { $ByteArrayGame = [IO.File]::ReadAllBytes($File) }
+    $PatchByteArray = [IO.File]::ReadAllBytes($Patch)
+
+    # Offset
+    try { [uint32]$Offset = GetDecimal $Offset }
+    catch {
+        WriteToConsole "Offset is negative, too large or not an integer!"
+        return
+    }
+    if ($Offset -gt $ByteArrayGame.Length) {
         WriteToConsole "Offset is too large for file!"
         return
     }
 
+    # Info
+    WriteToConsole ( (Get32Bit $Offset) + " -> Patch file from: " + $Patch)
+
+    # Patch
     if (IsSet $Length) {
         [uint32]$Length = GetDecimal $Length
         foreach ($i in 0..($Length-1)) {
@@ -91,6 +105,7 @@ function PatchBytes([string]$File, [string]$Offset, [string]$Length, [string]$Pa
         foreach ($i in 0..($PatchByteArray.Length-1)) { $ByteArrayGame[$Offset + $i] = $PatchByteArray[($i)] }
     }
 
+    # Write to File
     if (IsSet $File) { [io.file]::WriteAllBytes($File, $ByteArrayGame) }
 
 }

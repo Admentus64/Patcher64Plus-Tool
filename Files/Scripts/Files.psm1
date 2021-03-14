@@ -54,6 +54,7 @@ function SetFileParameters() {
     $Files.oot.widescreen                   = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\widescreen")
     $Files.oot.master_quest                 = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\master_quest")
     $Files.oot.mm_pause_screen              = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\mm_pause_screen")
+    $Files.oot.harder_child_bosses          = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\harder_child_bosses")
     $Files.oot.link_model_child_mm          = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Models\mm_child")
 
     $Files.oot.lens_of_truth                = $Paths.Games + "\Ocarina of Time\Textures\Lens of Truth.bin"

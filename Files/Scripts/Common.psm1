@@ -47,7 +47,6 @@ function ChangeConsolesList() {
     foreach ($i in 0..($Items.length-1)) {
         if ($GameConsole.title -eq $Items[$i]) {
             $ConsoleComboBox.SelectedIndex = $i
-            Write-Host $i
             break
         }
     }
@@ -338,7 +337,15 @@ function UpdateStatusLabel([string]$Text) {
 
 
 #==============================================================================================================================================================================================
-function WriteToConsole([string]$Text) { if ($Settings.Debug.Console -eq $True -and $ExternalScript) { Write-Host $Text } }
+function WriteToConsole([string]$Text) {
+
+    if ($Settings.Debug.Console -eq $True -and $ExternalScript) { Write-Host $Text }
+    if ($Settings.Debug.Logging -eq $True -and !$ExternalScript) {
+        if (!(TestFile -Path $Paths.Logs -Container)) { CreatePath $Paths.Logs }
+        Add-Content -Path ($Paths.Logs + "\" + $TranscriptTime + ".log") -Value $Text
+    }
+
+}
 
 
 
@@ -926,6 +933,27 @@ function SetModernVisualStyle([boolean]$Enable) {
 
 
 
+#==============================================================================================================================================================================================
+function SetLogging([boolean]$Enable) {
+    
+    if (!$ExternalScript) { return }
+
+    if ($Enable) {
+        $global:TranscriptTime = Get-Date -Format yyyy-mm-dd-hh-mm-ss
+        if (!(TestFile -Path $Paths.Logs -Container)) { CreatePath $Paths.Logs }
+        Start-Transcript -Path ($Paths.Logs + "\" + $TranscriptTime + ".log")
+    }
+    else {
+        if ($TranscriptTime -ne $null) {
+            Stop-Transcript
+            $global:TranscriptTime = $null
+        }
+    }
+
+}
+
+
+
 #==================================================================================================================================================================================================================================================================
 function SetBitmap($Path, $Box, [int]$Width, [int]$Height) {
 
@@ -994,4 +1022,5 @@ Export-ModuleMember -Function CreateSubPath
 Export-ModuleMember -Function ShowPowerShellConsole
 Export-ModuleMember -Function TogglePowerShellOpenWithClicks
 Export-ModuleMember -Function SetModernVisualStyle
+Export-ModuleMember -Function SetLogging
 Export-ModuleMember -Function SetBitmap

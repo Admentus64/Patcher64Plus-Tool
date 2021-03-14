@@ -1,3 +1,8 @@
+v13.0.4
+- Further completed the "Female Pronouns" option (thanks Mil!)
+- Added "Harder Child Bosses" option for OoT (thanks BilonFullHDemon!)
+- Implemented logs for sharing error reports
+
 v13.0.3
 - Fixed infinite looping when patching "Mirror Shield Frame Color" with Red as Custom
 - Rewrote how colors are being applied
