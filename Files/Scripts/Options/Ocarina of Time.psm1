@@ -1128,7 +1128,7 @@ function CreateTabMain() {
         CreateReduxCheckBox -Name "FixGraves"                   -Text "Fix Graves"             -Info "The grave holes in Kakariko Graveyard behave as in the Rev 1 revision`nThe edges no longer force Link to grab or jump over them when trying to enter" -Credits "Ported from Rando"
     }
     CreateReduxCheckBox     -Name "DistantZTargeting"           -Text "Distant Z-Targeting"    -Info "Allow to use Z-Targeting on enemies, objects and NPC's from any distance"                                    -Credits "Admentus"
-    CreateReduxCheckBox     -Name "ManualJump"                  -Text "Manual Jump"            -Info "Press Z + A to do a manual jump instead of a jump attack`nPress B mid-air after jumping to do a jump attack" -Credits "Admentus (ROM hack) & CloudModding (GameShark)"
+    CreateReduxCheckBox     -Name "ManualJump"                  -Text "Manual Jump"            -Info "Press Z + A to do a Manual Jump instead of a Jump Attack`nPress B mid-air after jumping to do a Jump Attack" -Credits "Admentus (ROM hack) & CloudModding (GameShark)"
 
     # RESTORE #
     CreateReduxGroup        -Tag  "Restore" -Text "Restore / Correct / Censor"
@@ -1586,7 +1586,7 @@ function CreateTabAnimations() {
     
     # Restore CUTSCENES #
     CreateReduxGroup    -Tag  "Restore"          -Text "Restore Cutscenes"
-    CreateReduxCheckBox -Name "OpeningCutscene"  -Text "Opening Cutscene"       -Info "Restore the Beta introduction cutscene" -Link $Redux.Skip.OpeningCutscene        -Credits "Admentus (ROM hack) & CloudModding (GameShark)"
+    CreateReduxCheckBox -Name "OpeningCutscene"  -Text "Opening Cutscene"       -Info "Restore the beta introduction cutscene" -Link $Redux.Skip.OpeningCutscene        -Credits "Admentus (ROM hack) & CloudModding (GameShark)"
 
     # ANIMATIONS #
     CreateReduxGroup    -Tag  "Animation"        -Text "Link Animations"
@@ -1594,6 +1594,6 @@ function CreateTabAnimations() {
     CreateReduxCheckBox -Name "WeaponIdle"       -Text "2-handed Weapon Idle"   -Info ("Restore the beta animation when idly holding a two-handed weapon" + $weapons)   -Credits "Admentus"
     CreateReduxCheckBox -Name "WeaponCrouch"     -Text "2-handed Weapon Crouch" -Info ("Restore the beta animation when crouching with a two-handed weapon" + $weapons) -Credits "Admentus"
     CreateReduxCheckBox -Name "WeaponAttack"     -Text "2-handed Weapon Attack" -Info ("Restore the beta animation when attacking with a two-handed weapon" + $weapons) -Credits "Admentus"
-    CreateReduxCheckBox -Name "Backflip"         -Text "Backflip Jumpslash"     -Info "Restore the beta animation to turn the jump attack into a backflip attack"       -Credits "Admentus"
-    CreateReduxCheckBox -Name "Frontflip"        -Text "Frontflip Jumpslash"    -Info "Restore the beta animation to turn the jump attack into a frontflip attack"      -Credits "Admentus" -Link $Redux.Animation.Backflip
+    CreateReduxCheckBox -Name "Backflip"         -Text "Backflip Jump Attack"   -Info "Restore the beta animation to turn the Jump Attack into a Backflip Jump Attack"  -Credits "Admentus"
+    CreateReduxCheckBox -Name "Frontflip"        -Text "Frontflip Jump Attack"  -Info "Restore the beta animation to turn the Jump Attack into a Frontflip Jump Attack" -Credits "Admentus" -Link $Redux.Animation.Backflip
 }

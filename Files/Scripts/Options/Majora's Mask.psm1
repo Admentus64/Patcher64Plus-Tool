@@ -780,7 +780,7 @@ function CreateTabMain() {
     CreateReduxGroup    -Tag  "Gameplay" -Text "Gameplay" 
     CreateReduxCheckBox -Name "ZoraPhysics"       -Text "Zora Physics"         -Info "Change the Zora physics when using the boomerang`nZora Link will take a step forward instead of staying on his spot" -Credits "ShadowOne333"
     CreateReduxCheckBox -Name "DistantZTargeting" -Text "Distant Z-Targeting"  -Info "Allow to use Z-Targeting on enemies, objects and NPC's from any distance"                                            -Credits "Admentus"
-    CreateReduxCheckBox -Name "ManualJump"        -Text "Manual Jump"          -Info "Press Z + A to do a manual jump instead of a jump attack`nPress B mid-air after jumping to do a jump attack"         -Credits "Admentus"
+    CreateReduxCheckBox -Name "ManualJump"        -Text "Manual Jump"          -Info "Press Z + A to do a Manual Jump instead of a Jump Attack`nPress B mid-air after jumping to do a Jump Attack"         -Credits "Admentus"
     CreateReduxCheckBox -Name "SwordBeamAttack"   -Text "Sword Beam Attack"    -Info "Charging the Spin Attack will launch a Sword Beam Attack instead`nYou can still execute the Quick Spin Attack"       -Credits "Admentus (ROM hack) & CloudModding (GameShark)"
 
     # RESTORE #
@@ -842,7 +842,7 @@ function CreateTabRedux() {
     # GAMEPLAY #
     CreateReduxGroup        -Tag  "Gameplay" -Text "Gameplay"
     CreateReduxCheckBox     -Name "FasterBlockPushing" -Checked -Text "Faster Block Pushing" -Info "All blocks are pushed faster" -Credits "Ported from Redux"
-    CreateReduxCheckBox     -Name "EasierMinigames"             -Text "Easier Minigames"     -Info "Certain minigames are made easier and faster`n- Dampe's Digging Game always has two Ghost Flames on the ground and one up the ladder`n- The Gold Dog always wins the Doggy Racetrack race if you have the Mask of Truth`nOnly one fish has to be feeded in the Marine Research Lab" -Credits "Ported from Rando"
+    CreateReduxCheckBox     -Name "EasierMinigames"             -Text "Easier Minigames"     -Info "Certain minigames are made easier and faster`n- Dampe's Digging Game always has two Ghost Flames on the ground and one up the ladder`n- The Gold Dog always wins the Doggy Racetrack race if you have the Mask of Truth`n- Only one fish has to be feeded in the Marine Research Lab" -Credits "Ported from Rando"
     
     # BUTTON COLORS #
     CreateButtonColorOptions -Default 2
@@ -979,15 +979,13 @@ function CreateTabDifficulty() {
   # CreateReduxComboBox -Name "MiniBossHP" -Column 3 -Row 2 -Shift 10 -Text "Mini-Boss HP" -Items @("1x Mini-Boss HP", "2x Mini-Boss HP", "3x Mini-Boss HP")         -Info "Set the amount of health for elite monsters and mini-bosses"          -Credits "Admentus" -Warning "Mini-bosses are missing"
     CreateReduxComboBox -Name "BossHP"     -Column 1 -Row 2 -Shift 10 -Text "Boss HP"      -Items @("1x Boss HP", "2x Boss HP", "3x Boss HP")                        -Info "Set the amount of health for bosses"                                  -Credits "Admentus" -Warning "Goht (phases 3) and Gyorg (phase 2) are missing"
     
+    $Redux.Hero.Damage.Add_SelectedIndexChanged({ EnableElem -Elem $Redux.Hero.Recovery -Active ($this.Text -ne "OHKO Mode") })
+    EnableElem -Elem $Redux.Hero.Recovery -Active ($Redux.Hero.Damage.Text -ne "OHKO Mode")
+
     if ($Settings.Debug.LiteGUI -eq $True) { return }
 
     CreateReduxCheckBox -Name "MasterQuest" -Column 1 -Row 3 -Text "Master Quest"         -Info "Use all areas and dungeons from the Master Quest ROM hack`nThis is for advanced players who like a higher challenge`nThe structure of the walkthrough is completely re-arranged" -Credits "Admentus (ported) & DeathBasket (ROM hack)"
     CreateReduxCheckBox -Name "PalaceRoute" -Column 2 -Row 3 -Text "Restore Palace Route" -Info "Restore the route to the Bean Seller within the Deku Palace as seen in the Japanese release" -Credits "ShadowOne"
-
-
-
-    $Redux.Hero.Damage.Add_SelectedIndexChanged({ EnableElem -Elem $Redux.Hero.Recovery -Active ($this.Text -ne "OHKO Mode") })
-    EnableElem -Elem $Redux.Hero.Recovery -Active ($Redux.Hero.Damage.Text -ne "OHKO Mode")
 
 }
 

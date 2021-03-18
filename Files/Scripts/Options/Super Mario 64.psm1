@@ -38,7 +38,7 @@ function ByteOptions() {
         ChangeBytes -Offset "1007F0" -Values "00 00 00 00" # Solid objects
         ChangeBytes -Offset "1008B8" -Values "00 00 00 00"
         ChangeBytes -Offset "1008D0" -Values "00 00 00 00"  
-      # ChangeBytes -Offset "36D2C"  -Values "95 E9 00" 22"
+        ChangeBytes -Offset "36D2C"  -Values "95 E9 00 22"
 
         ChangeBytes -Offset "66FE6"  -Values "46 9C 44 81 50 00" # Coin formations
         ChangeBytes -Offset "66F56"  -Values "46 9C"

@@ -1,3 +1,14 @@
+v13.0.5
+- Added two "Low-Poly Promo Model" patches for SM64
+- Added max ROM size check prior to ROM patching
+- Added support for header removal of SNES ROMs
+- Rewrote N64 ROM conversion
+- Fixed custom game title syntax separately for Native and Wii VC mode
+- Fixed issue when downgrading a non-decompressed ROM overwrites the original ROM
+- Fixed issue with not properly applying patch to downgraded ROM
+- Fixed issue that attempting to downgrade is always run
+- Fixed special characters for ROM name not being recognized for checksum verification
+
 v13.0.4
 - Further completed the "Female Pronouns" option (thanks Mil!)
 - Added "Harder Child Bosses" option for OoT (thanks BilonFullHDemon!)

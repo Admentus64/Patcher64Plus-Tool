@@ -217,6 +217,7 @@ function SetGetROM() {
     $GetROM.clean                           = [System.String](Get-Location) + "\Files\Temp\clean"
     $GetROM.cleanDecomp                     = [System.String](Get-Location) + "\Files\Temp\clean-decompressed"
     $GetROM.decomp                          = [System.String](Get-Location) + "\Files\Temp\decompressed"
+    $GetROM.downgrade                       = [System.String](Get-Location) + "\Files\Temp\downgraded"
     $GetROM.masterQuest                     = [System.String](Get-Location) + "\Files\Temp\master-quest-decompressed"
     $GetROM.nes                             = [System.String](Get-Location) + "\Files\Temp\rom.nes"
 

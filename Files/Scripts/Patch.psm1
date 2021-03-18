@@ -147,7 +147,8 @@ function MainFunctionPatch([string]$Command, [Array]$Header, [string]$PatchedFil
         PatchVCEmulator $Command
     }
 
-    # Step 07: Convert and compare the hashsum of the ROM
+    # Step 07: Convert, compare the hashsum of the ROM and check if the maximum size is allowed
+    if (!(GetMaxSize)) { return }
     ConvertROM $Command
     if (!(CompareHashSums $Command)) { return }
 
@@ -419,7 +420,7 @@ function SetWADParameters([string]$Path, [string]$FolderName, [string]$PatchedFi
     $WADFile.tmd          = $WADFile.Folder + "\" + $FolderName + ".tmd"
     $WADFile.trailer      = $WADFile.Folder + "\" + $FolderName + ".trailer"
     
-    $WADFile.Extension = GetROMExtension
+    $WADFile.Extension = $GameConsole.extension
 
     $WADFile.Patched      = $WADItem.DirectoryName + "\" + $WADFile.Name + $PatchedFileName + ".wad"
     $WADFile.Extracted    = $WADItem.DirectoryName + "\" + $WADFile.Name + "_extracted"     + $WADFile.Extension
@@ -449,7 +450,7 @@ function SetROMParameters([string]$Path, [string]$PatchedFileName) {
     $ROMFile.Name      = $ROMItem.BaseName
     $ROMFile.Path      = $ROMItem.DirectoryName
     
-    $ROMFile.Extension = GetROMExtension
+    $ROMFile.Extension = $GameConsole.extension
 
     $ROMFile.ROM       = $Path
     $ROMFile.Patched   = $ROMFile.Path + "\" + $ROMFile.Name + $PatchedFileName + $ROMFile.Extension
@@ -460,17 +461,6 @@ function SetROMParameters([string]$Path, [string]$PatchedFileName) {
 
     # Set it to a global value
     return $ROMFile
-
-}
-
-
-
-#==============================================================================================================================================================================================
-function GetROMExtension() {
-    
-    if ($GameConsole.mode -eq "N64")        { return ".z64" }
-    elseif ($GameConsole.mode -eq "SNES")   { return ".sfc" }
-    elseif ($GameConsole.mode -eq "NES")    { return ".nes" }
 
 }
 
@@ -743,7 +733,7 @@ function PatchVCROM([string]$Command) {
 #==============================================================================================================================================================================================
 function DowngradeROM([boolean]$Decompress) {
     
-    if (IsChecked $Patches.Downgrade -Not) { return }
+    if (!(IsChecked $Patches.Downgrade)) { return }
 
     # Downgrade a ROM if it is required first
     UpdateStatusLabel "Downgrading ROM..."
@@ -754,6 +744,10 @@ function DowngradeROM([boolean]$Decompress) {
     }
 
     if ($Decompress) { $GetROM.run = $GetROM.decomp }
+    else {
+        Copy-Item -LiteralPath $GetROM.run -Destination $GetROM.downgrade -Force
+        $GetROM.run = $GetROM.downgrade
+    }
     
     foreach ($item in $GameType.downgrade) {
         if ($ROMHashSum -eq $item.hash) {
@@ -774,34 +768,50 @@ function DowngradeROM([boolean]$Decompress) {
 
 
 #==============================================================================================================================================================================================
+function GetMaxSize() {
+
+    if ($Settings.Debug.IgnoreChecksum -eq $True) { return $True }
+
+    $maxSize = ($GameConsole.max_size) + "MB"
+    if ((Get-Item $GamePath).length/$maxSize -gt 1) {
+        UpdateStatusLabel ("The ROM is too large! The max allowed size is " + $maxSize) + "!"
+        return $False
+    }
+
+    return $True
+
+}
+
+
+
+#==============================================================================================================================================================================================
 function ConvertROM([string]$Command) {
     
     if ($Settings.Debug.NoConversion -eq $True) { return }
     if ( (StrLike -str $Command -val "Inject") -or (StrLike -str $Command -val "Patch Header") -or (StrLike -str $Command -val "Patch VC") ) { return }
 
-    # Converse ROM if needed
-    $Name = [System.IO.Path]::GetFileNameWithoutExtension($GetROM.run)
-    $Ext =  [System.IO.Path]::GetExtension($GetROM.run)
-    if ($Ext -eq ".v64" -or $Ext -eq ".n64") {
-        UpdateStatusLabel "Converting ROM to Big Endian..."
+    $array = [IO.File]::ReadAllBytes($GetROM.run)
 
-        if ($Ext -eq ".v64" -or $Ext -eq ".n64") {
-            $array = [IO.File]::ReadAllBytes($GetROM.run)
-            if (Compare-Object -ReferenceObject $array[0..8] -DifferenceObject @(128, 55, 18, 64, 0, 0, 0, 15, 128) -IncludeEqual) {
-                WriteToConsole "ROM is already Big Endian?"
-                return
-            }
-
+    # Convert ROM if needed
+    if ($GameConsole.mode -eq "SNES") {
+        if ((Get-Item $GamePath).length/1KB % 2 -ne 0) {
+            UpdateStatusLabel "Removing header from ROM..."
+            $array = $array[512..$array.length]
         }
-
-        if ($Ext -eq ".v64") {
+        else { return }
+    }
+    elseif ($GameConsole.mode -eq "N64") {
+        if (CompareArray -Elem $array[0..7] -Compare @(128, 55, 18, 64, 0, 0, 0, 15)) { return }
+        elseif (CompareArray -Elem $array[0..7] -Compare @(55, 128, 64, 18, 0, 0, 15, 0)) {
+            UpdateStatusLabel "Converting ROM from Byteswapped to Big Endian..."
             for ($i=0; $i -lt $array.length; $i+=2) {
                 $temp = @($array[$i], $array[$i + 1])
                 $array[$i]     = $temp[1]
                 $array[$i + 1] = $temp[0]
             }
         }
-        elseif ($Ext -eq ".n64") {
+        elseif (CompareArray -Elem $array[0..7] -Compare @(64, 18, 55, 128, 15, 0, 0, 0)) {
+            UpdateStatusLabel "Converting ROM from Little Endian to Big Endian..."
             for ($i=0; $i -lt $array.length; $i+=4) {
                 $temp = @($array[$i], $array[$i + 1], $array[$i + 2], $array[$i + 3])
                 $array[$i]     = $temp[3]
@@ -810,13 +820,14 @@ function ConvertROM([string]$Command) {
                 $array[$i + 3] = $temp[0]
             }
         }
-        if ($Ext -eq ".v64" -or $Ext -eq ".n64") { [IO.File]::WriteAllBytes($Paths.Temp + "\converted", $array) }
-
-        $GetROM.run =  $Paths.Temp + "\converted"
-        $global:ROMHashSum = (Get-FileHash -Algorithm MD5 $GetROM.run).Hash
-        if ($Settings.Debug.KeepConverted -eq $True) { Copy-Item -LiteralPath $GetROM.run -Destination $GetROM.keepConvert -Force }
-        GetPatchFile
     }
+    else { return }
+
+    [IO.File]::WriteAllBytes($Paths.Temp + "\converted", $array)
+    $GetROM.run =  $Paths.Temp + "\converted"
+    $global:ROMHashSum = (Get-FileHash -Algorithm MD5 $GetROM.run).Hash
+    if ($Settings.Debug.KeepConverted -eq $True) { Copy-Item -LiteralPath $GetROM.run -Destination $GetROM.keepConvert -Force }
+    GetPatchFile
 
 }
 
@@ -845,7 +856,7 @@ function CompareHashSums([string]$Command) {
 
 #==============================================================================================================================================================================================
 function PatchDecompressedROM() {
-
+    
     if (!(StrLike -str (GetPatchFile) -val "\Decompressed")) { return $True }
     
     # Set the status label.
@@ -869,7 +880,7 @@ function PatchCompressedROM() {
     UpdateStatusLabel ("Patching " + $GameType.mode + " ROM with patch file...")
 
     # Apply the selected patch to the ROM, if it is provided
-    if ($IsWiiVC)        { if (!(ApplyPatch -File $GetROM.patched -Patch (GetPatchFile)))                    { return $False } }
+    if     ( $IsWiiVC)   { if (!(ApplyPatch -File $GetROM.patched -Patch (GetPatchFile)))                    { return $False } }
     elseif (!$IsWiiVC)   { if (!(ApplyPatch -File $GetROM.run -Patch (GetPatchFile) -New $GetROM.patched))   { return $False } }
 
     return $True
@@ -967,7 +978,8 @@ function ApplyPatch([string]$File=$GetROM.decomp, [string]$Patch, [string]$New, 
 
     else { return $False }
 
-    WriteToConsole ("Applied patch: " + $Patch)
+    if (IsSet $New)   { WriteToConsole ("Applied patch: " + $Patch + " from " + $File + " to " + $New) }
+    else              { WriteToConsole ("Applied patch: " + $Patch + " to " + $File) }
     return $True
 
 }
@@ -1041,6 +1053,8 @@ function CompressROM([boolean]$Decompress, [boolean]$Finalize) {
         if ($Finalize -and (TestFile ($GameFiles.downgrade + "\finalize_rev0.bps"))) { ApplyPatch -File $GetROM.patched -Patch "\Downgrade\finalize_rev0.bps" }
     }
     else { Move-Item -LiteralPath $GetROM.decomp -Destination $GetROM.patched -Force }
+
+    $GetROM.run = $GetROM.patched
 
 }
 
@@ -1178,25 +1192,32 @@ function HackROMGameTitle($Title, $GameID, $Region) {
 
     # Hi-ROM check and load in Game Array
     $global:ByteArrayGame = [IO.File]::ReadAllBytes($GetROM.patched)
-    if ($GameConsole.mode -eq "SNES" -and (IsSet -Elem $GameConsole.rom_title_offset_2) ) { $hiROM = (IsHiROM -Offset (GetDecimal -Hex $GameConsole.rom_title_offset_2) -ROM $ByteArray) }
+    if ($GameConsole.mode -eq "SNES" -and (IsSet -Elem $GameConsole.rom_title_offset_hi) ) { $hiROM = (IsHiROM -Offset (GetDecimal -Hex $GameConsole.rom_title_offset_hi) -ROM $ByteArray) }
 
     # Internal ROM Title
     if ($Title -ne $null -and (IsSet $GameConsole.rom_title_offset) -and (IsSet -Elem $GameConsole.rom_title_length -Min 1) -and ($GameConsole.rom_title -gt 0) ) {
-        if ($hiROM) { $offset = $GameConsole.rom_title_offset_2 } else { $offset = $GameConsole.rom_title_offset }
+        if ($hiROM) { $offset = $GameConsole.rom_title_offset_hi } else { $offset = $GameConsole.rom_title_offset }
         $emptyTitle = foreach ($i in 1..$GameConsole.rom_title_length) { 20 }
         if ($GameConsole.rom_title_uppercase -gt 0) { $Title = $Title.ToUpper() }
         ChangeBytes -Offset $Offset -Values $emptyTitle
         ChangeBytes -Offset $offset -Values ($Title.ToCharArray() | % { [uint32][char]$_ }) -IsDec
+
+        if ($GameConsole.mode -eq "SNES" -and (Get-Item $GamePath).length/4MB -gt 1) {
+            ChangeBytes -Offset (Get32Bit ( (GetDecimal $offset) + (GetDecimal "400000") ) ) -Values $emptyTitle
+            ChangeBytes -Offset (Get32Bit ( (GetDecimal $offset) + (GetDecimal "400000") ) ) -Values ($Title.ToCharArray() | % { [uint32][char]$_ }) -IsDec
+        }
+
         $emptyTitle = $null
     }
 
     # GameID
     if ($GameID -ne $null -and (IsSet -Elem $GameConsole.rom_gameID_offset) -and ($GameConsole.rom_gameID -eq 1)) { ChangeBytes -Offset $GameConsole.rom_gameID_offset -Values ($GameID.ToCharArray() | % { [uint32][char]$_ }) -IsDec }
     elseif ($Region -ne $null -and $GameConsole.rom_gameID -eq 2) {
-        if ($hiROM) { $offset = $GameConsole.rom_title_offset_2 } else { $offset = $GameConsole.rom_title_offset }
+        if ($hiROM) { $offset = $GameConsole.rom_title_offset_hi } else { $offset = $GameConsole.rom_title_offset }
         $offset = ( Get24Bit ( (GetDecimal $Offset) + (GetDecimal "19") ) )
         if ($ByteArrayGame[(GetDecimal $offset)] -ne $Region) {
             $ByteArrayGame[(GetDecimal $offset)] = $Region
+            if ((Get-Item $GamePath).length/4MB -gt 1) { $ByteArrayGame[(GetDecimal $offset) + (GetDecimal "400000")] = $Region }
             WriteToConsole ("Changed region code: " + (Get8Bit $Region))
             RemoveRegionProtection
         }

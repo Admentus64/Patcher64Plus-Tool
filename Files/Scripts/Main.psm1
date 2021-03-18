@@ -359,18 +359,8 @@ function InitializeEvents() {
         }
     })
 
-
-
     # Custom Header
-    $CustomHeader.Title.Add_TextChanged({
-        if ($this.Text -match "[^a-z 0-9 \: \- \( \) \' \&] \.") {
-            $cursorPos = $this.SelectionStart
-            $this.Text = $this.Text -replace "[^a-z 0-9 \: \- \( \) \' \& \.]",''
-            $this.SelectionStart = $cursorPos - 1
-            $this.SelectionLength = 0
-        }
-    })
-
+    $CustomHeader.Title.Add_TextChanged({ RunCustomTitleSyntax })
     $CustomHeader.GameID.Add_TextChanged({
         if ($this.Text -cmatch "[^A-Z 0-9]") {
             $this.Text = $this.Text.ToUpper() -replace "[^A-Z 0-9]",''
@@ -381,8 +371,6 @@ function InitializeEvents() {
             $this.Select($this.Text.Length, $this.Text.Length)
         }
     })
-
-
 
     # Patch Options
     $Patches.ComboBox.Add_SelectedIndexChanged( {
@@ -402,8 +390,6 @@ function InitializeEvents() {
 
     })
 
-
-
     # Patch VC Options
     $VC.RemoveT64.Add_CheckStateChanged(    { CheckVCOptions } )
     $VC.ExpandMemory.Add_CheckStateChanged( { CheckVCOptions } )
@@ -416,6 +402,24 @@ function InitializeEvents() {
 
 }
 
+
+
+#==============================================================================================================================================================================================
+function RunCustomTitleSyntax() {
+    
+    if (!$CustomHeader.EnableHeader.Checked -or !$CustomHeader.EnableHeader.Visible) { return }
+
+    if ($IsWiiVC)   { $syntax = "[^a-z 0-9 \: \- \( \) \' \& \. \!]" }
+    else            { $syntax = "[^a-z 0-9]" }
+
+    if ($CustomHeader.Title.Text -match $syntax) {
+        $cursorPos = $CustomHeader.Title.SelectionStart
+        $CustomHeader.Title.Text = $CustomHeader.Title.Text -replace $syntax, ''
+        $CustomHeader.Title.SelectionStart = $cursorPos - 1
+        $CustomHeader.Title.SelectionLength = 0
+    }
+
+}
 
 
 #==============================================================================================================================================================================================
@@ -628,6 +632,7 @@ function PatchPath_DragDrop() {
 
 Export-ModuleMember -Function CreateMainDialog
 Export-ModuleMember -Function InitializeEvents
+Export-ModuleMember -Function RunCustomTitleSyntax
 Export-ModuleMember -Function CheckVCOptions
 Export-ModuleMember -Function DisablePatches
 Export-ModuleMember -Function LoadAdditionalOptions

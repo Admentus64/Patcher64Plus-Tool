@@ -321,6 +321,9 @@ Special Thanks:				Nokaubure, z64me, Ultra553, OoT Decomp
 - SM64 ROM Manager (several options which were backported)
 - SM64 Tweaker (several options which were backported)
 
+--- Lowpoly Promo Mario / Luigi Model ---
+- fznmeatpopsicle
+
 --- Multiplayer (v1.4.2) ---
 - Skelux
 

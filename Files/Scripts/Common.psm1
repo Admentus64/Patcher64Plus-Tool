@@ -9,6 +9,7 @@ function SetWiiVCMode([boolean]$Enable) {
     EnablePatchButtons (IsSet $GamePath)
     SetModeLabel
     ChangePatchPanel
+    RunCustomTitleSyntax
 
 }
 
@@ -77,7 +78,7 @@ function ChangeGamesList() {
 
     $Items = @()
     foreach ($item in $Files.json.games) {
-        if ( ($ConsoleComboBox.text -eq $GameConsole.title) -and ($GameConsole.mode -contains $item.console) ) {
+        if ( ($ConsoleComboBox.Text -eq $GameConsole.title) -and ($GameConsole.mode -contains $item.console) ) {
             if ( ( $IsWiiVC -and $item.support_vc -eq 1) -or (!$IsWiiVC) ) { $Items += $item.title }
         }
         elseif ($item.console -contains "All") { $Items += $item.title }
@@ -111,7 +112,7 @@ function ChangePatchPanel() {
     if (!(IsSet $GameType)) { return }
 
     # Reset
-    $Patches.Group.text = $GameType.mode + " - Patch Options"
+    $Patches.Group.Text = $GameType.mode + " - Patch Options"
     $Patches.ComboBox.Items.Clear()
 
     # Set combobox for patches
@@ -223,7 +224,7 @@ function ChangeGameMode() {
     }
 
     foreach ($item in $Files.json.games) {
-        if ($item.title -eq $CurrentGameComboBox.text) {
+        if ($item.title -eq $CurrentGameComboBox.Text) {
             $global:GameType = $item
             $global:GamePatch = $null
             break
@@ -243,7 +244,7 @@ function ChangeGameMode() {
     $GameFiles.compressed = $GameFiles.base + "\Compressed"
     $GameFiles.decompressed = $GameFiles.base + "\Decompressed"
     $GameFiles.downgrade = $GameFiles.base + "\Downgrade"
-    $GameFiles.textures = $GameFiles.base + "\Textures"
+    $GameFiles.Textures = $GameFiles.base + "\Textures"
     $GameFiles.previews = $GameFiles.base + "\Previews"
     $GameFiles.info = $GameFiles.base + "\Info.txt"
     $GameFiles.json = $GameFiles.base + "\Patches.json"
@@ -259,12 +260,12 @@ function ChangeGameMode() {
     else                                { AddTextFileToTextbox -TextBox $Credits.Sections[0] -File $null }
 
     # Credits
-    if (TestFile $Files.text.credits) {
+    if (TestFile $Files.Text.credits) {
         if ($GameType.mode -ne "Free") {
-            AddTextFileToTextbox -TextBox $Credits.Sections[1] -File $Files.text.credits -MainCredits
-            AddTextFileToTextbox -TextBox $Credits.Sections[1] -File $Files.text.credits -GameCredits -Add
+            AddTextFileToTextbox -TextBox $Credits.Sections[1] -File $Files.Text.credits -MainCredits
+            AddTextFileToTextbox -TextBox $Credits.Sections[1] -File $Files.Text.credits -GameCredits -Add
         }
-        else { AddTextFileToTextbox -TextBox $Credits.Sections[1] -File $Files.text.credits -MainCredits }
+        else { AddTextFileToTextbox -TextBox $Credits.Sections[1] -File $Files.Text.credits -MainCredits }
     }
 
     $CreditsGameLabel.Text = "Current Game: " + $GameType.mode
@@ -382,13 +383,13 @@ function EnablePatchButtons([boolean]$Enable) {
 function GamePath_Finish([object]$TextBox, [string]$Path) {
     
     # Set the "GamePath" variable that tracks the path
-    $global:GamePath = $Path
+    $global:GamePath = (Get-Item -LiteralPath $Path)
 
     # Update the textbox with the current game
     $TextBox.Text = $GamePath
 
     # Check if the game is a WAD
-    $DroppedExtn = (Get-Item -LiteralPath $GamePath).Extension
+    $DroppedExtn = $GamePath.Extension
 
     if ( ($DroppedExtn -eq '.wad') -and !$IsWiiVC)              { SetWiiVCMode $True }
     elseif ( ($DroppedExtn -ne '.wad') -and $IsWiiVC)           { SetWiiVCMode $False }
@@ -404,7 +405,7 @@ function GamePath_Finish([object]$TextBox, [string]$Path) {
     # Calculate checksum if Native Mode
     if (!$IsWiiVC) {
         # Update hash
-        $HashSumROMTextBox.Text = (Get-FileHash -Algorithm MD5 $GamePath).Hash
+        $HashSumROMTextBox.Text = (Get-FileHash -Algorithm MD5 -LiteralPath $GamePath).Hash
 
         # Verify ROM
         $MatchingROMTextBox.Text = "No Valid ROM Selected"
@@ -612,11 +613,27 @@ function IsSet([object]$Elem, [int16]$Min, [int16]$Max, [int16]$MinLength, [int1
     if ($Elem -eq $null -or $Elem -eq "")                                               { return $False }
     if ($HasInt) {
         if ($Elem -NotMatch "^\d+$" )                                                   { return $False }
-        if ($Min -ne $null -and $Min -ne "" -and [int16]$Elem -lt $Min)                   { return $False }
-        if ($Max -ne $null -and $Max -ne "" -and [int16]$Elem -gt $Max)                   { return $False }
+        if ($Min -ne $null -and $Min -ne "" -and [int16]$Elem -lt $Min)                 { return $False }
+        if ($Max -ne $null -and $Max -ne "" -and [int16]$Elem -gt $Max)                 { return $False }
     }
     if ($MinLength -ne $null -and $MinLength -ne "" -and $Elem.Length -lt $MinLength)   { return $False }
     if ($MaxLength -ne $null -and $MaxLength -ne "" -and $Elem.Length -gt $MaxLength)   { return $False }
+
+    return $True
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function CompareArray([array]$Elem, [array]$Compare) {
+    
+    if ($Elem.length -eq 0 -or $Compare.length -eq 0)   { return $False }
+    if ($Elem.length -ne $Compare.length)               { return }
+
+    foreach ($i in 0..($Elem.length-1)) {
+        if ($Elem[$i] -ne $Compare[$i]) { return $False }
+    }
 
     return $True
 
@@ -1002,6 +1019,7 @@ Export-ModuleMember -Function IsIndex
 Export-ModuleMember -Function IsColor
 Export-ModuleMember -Function IsDefaultColor
 Export-ModuleMember -Function IsSet
+Export-ModuleMember -Function CompareArray
 Export-ModuleMember -Function AddTextFileToTextbox
 Export-ModuleMember -Function StrLike
 Export-ModuleMember -Function GetFilePaths

@@ -1,6 +1,7 @@
 [ {
 	"title"				: "Nintendo 64",
 	"mode"				: "N64",
+	"extension"			: ".z64",
 	"options_vc"			: 1,
 	"rom_title"			: 1,
 	"rom_title_length"		: 20,
@@ -8,6 +9,7 @@
 	"rom_title_uppercase"		: 1,
 	"rom_gameID"			: 1,
 	"rom_gameID_offset"		: "3B",
+	"max_size"			: "64",
 	"appfile"			: "00000005.app",
 	"t64"				: 1,
 	"expand_memory"			: 1,
@@ -15,13 +17,16 @@
 }, {
 	"title"				: "Nintendo Entertainment System",
 	"mode"				: "NES",
+	"extension"			: ".nes",
 	"options_vc"			: 0,
 	"rom_title"			: 0,
 	"rom_gameID"			: 0,
+	"max_size"			: "1",
 	"appfile"			: "00000001.app"
 }, {
 	"title"				: "Super Nintendo",
 	"mode"				: "SNES",
+	"extension"			: ".sfc",
 	"options_vc"			: 0,
 	"rom_title"			: 1,
 	"rom_title_length"		: 21,
@@ -29,5 +34,6 @@
 	"rom_title_offset_2"		: "FFC0",
 	"rom_gameID"			: 2,
 	"remove_region_protection"	: 1,
+	"max_size"			: "8",
 	"appfile"			: "00000005.app"
 } ]
