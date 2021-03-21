@@ -147,7 +147,7 @@ function MainFunctionPatch([string]$Command, [Array]$Header, [string]$PatchedFil
         if (!(PatchVCROM $Command)) { return }
 
         # Step 06: Replace the Virtual Console emulator within the WAD file
-        PatchVCEmulator $Command
+        if (!(PatchVCEmulator $Command)) { return }
     }
 
     # Step 07: Convert, compare the hashsum of the ROM and check if the maximum size is allowed
