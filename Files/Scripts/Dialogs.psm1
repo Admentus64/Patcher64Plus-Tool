@@ -285,9 +285,9 @@ function CreateSettingsDialog() {
     $GeneralSettings.Console.Enabled = $ExternalScript
     $GeneralSettings.Console.Add_CheckStateChanged( {
         ShowPowerShellConsole $this.Checked
-        $GeneralSettings.Stop.Enabled = $this.Checked
+        EnableElem -Elem $GeneralSettings.Stop -Active $this.Checked
     } )
-    $GeneralSettings.Stop.Enabled = $GeneralSettings.Console.Checked
+    EnableElem -Elem $GeneralSettings.Stop -Active $GeneralSettings.Console.Checked
     
     # Lite GUI
     $GeneralSettings.LiteGUI.Add_CheckStateChanged( {
@@ -451,14 +451,11 @@ function CreateErrorDialog([string]$Error) {
 
     ShowPowerShellConsole $True
 
-    if ($Error -eq "Missing Files")         { $String += "Neccessary files are missing.{0}" }
-    elseif ($Error -eq "Missing JSON")      { $String += ".JSON files are missing.{0}" }
-    elseif ($Error -eq "Corrupted JSON")    { $String += ".JSON files are corrupted.{0}" }
-    elseif ($Error -eq "Missing Modules")   { $String += ".PSM1 module files are missing for import.{0}" }
-
-    $String += "{0}"
-    $String += "Please download the Patcher64+ Tool again."
-
+    if     ($Error -eq "Missing Files")     { $String += "Neccessary files are missing.{0}{0}Please download the Patcher64+ Tool again." }
+    elseif ($Error -eq "Missing JSON")      { $String += ".JSON files are missing.{0}{0}Please download the Patcher64+ Tool again." }
+    elseif ($Error -eq "Corrupted JSON")    { $String += ".JSON files are corrupted.{0}{0}Please download the Patcher64+ Tool again." }
+    elseif ($Error -eq "Missing Modules")   { $String += ".PSM1 module files are missing for import.{0}{0}Please download the Patcher64+ Tool again." }
+    elseif ($Error -eq "Restricted")        { $String += "Patcher64+ Tool is being run from a restricted folder:{0}" + $Paths.FullBase + "{0}{0}Please move the Patcher64+ Tool to another folder{0}and run it again." }
     $String = [string]::Format($String, [Environment]::NewLine)
 
     #Create Label

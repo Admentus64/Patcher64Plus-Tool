@@ -1,3 +1,10 @@
+v13.0.6
+- Added more warnings and added more output for the log writer
+- Added restrictions to patching and running the tool from any Admin-protected folders
+- Fixed date for the log
+- Fixed issues with logging
+- Fixed new warning display after patching is concluded if non-fatal errors occured
+
 v13.0.5
 - Added two "Low-Poly Promo Model" patches for SM64
 - Added max ROM size check prior to ROM patching

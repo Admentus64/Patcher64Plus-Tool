@@ -8,10 +8,12 @@ function ChangeBytes([string]$File, [string]$Offset, [object]$Values, [uint16]$I
     try { [uint32]$Offset = GetDecimal $Offset }
     catch {
         WriteToConsole "Offset is negative, too large or not an integer!"
+        $global:WarningError = $True
         return $False
     }
     if ($Offset -gt $ByteArrayGame.Length) {
         WriteToConsole "Offset is too large for file!"
+        $global:WarningError = $True
         return $False
     }
 
@@ -60,6 +62,7 @@ function PatchBytes([string]$File, [string]$Offset, [string]$Length, [string]$Pa
     # Binary Patch File Parameter Check
     if (!(IsSet -Elem $Patch) ) {
         WriteToConsole "No binary patch file is provided"
+        $global:WarningError = $True
         return
     }
 
@@ -71,6 +74,7 @@ function PatchBytes([string]$File, [string]$Offset, [string]$Length, [string]$Pa
     # Binary Patch File Exists
     if (!(TestFile $Patch)) {
         WriteToConsole ("Missing binary patch file: " + $Patch)
+        $global:WarningError = $True
         return
     }
 
@@ -82,10 +86,12 @@ function PatchBytes([string]$File, [string]$Offset, [string]$Length, [string]$Pa
     try { [uint32]$Offset = GetDecimal $Offset }
     catch {
         WriteToConsole "Offset is negative, too large or not an integer!"
+        $global:WarningError = $True
         return
     }
     if ($Offset -gt $ByteArrayGame.Length) {
         WriteToConsole "Offset is too large for file!"
+        $global:WarningError = $True
         return
     }
 
@@ -117,16 +123,18 @@ function ExportBytes([string]$File, [string]$Offset, [string]$End, [string]$Leng
     
     if ( (TestFile $Output) -and ($Settings.Debug.ForceExtract -eq $False) -and !$Force) { return }
 
-    WriteToConsole ("Write file to: " + $Output)
     if (IsSet $File) { $ByteArrayGame = [IO.File]::ReadAllBytes($File) }
     [uint32]$Offset = GetDecimal $Offset
+    WriteToConsole ("Write file to: " + $Output)
 
     if ($Offset -lt 0) {
         WriteToConsole "Offset is negative!"
+        $global:WarningError = $True
         return
     }
     elseif ($Offset -gt $ByteArrayGame.Length) {
         WriteToConsole "Offset is too large for file!"
+        $global:WarningError = $True
         return
     }
 
@@ -162,14 +170,17 @@ function SearchBytes([string]$File, [string]$Start="0", [string]$End, [object]$V
 
     if ($Start -lt 0 -or $End -lt 0) {
         WriteToConsole "Start or end offset is negative!"
+        $global:WarningError = $True
         return
     }
     elseif ($Start -gt $ByteArrayGame.Length -or $End -gt $ByteArrayGame.Length) {
         WriteToConsole "Start or end offset is too large for file!"
+        $global:WarningError = $True
         return
     }
     elseif ($Start -gt $End) {
         Write-Host "Start offset can not be greater than end offset"
+        $global:WarningError = $True
         return
     }
 

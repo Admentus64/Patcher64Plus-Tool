@@ -340,10 +340,10 @@ function UpdateStatusLabel([string]$Text) {
 #==============================================================================================================================================================================================
 function WriteToConsole([string]$Text) {
 
-    if ($Settings.Debug.Console -eq $True -and $ExternalScript) { Write-Host $Text }
+    if ( ($Settings.Debug.Console -eq $True -or $Settings.Debug.Logging -eq $True) -and $ExternalScript) { Write-Host $Text }
     if ($Settings.Debug.Logging -eq $True -and !$ExternalScript) {
         if (!(TestFile -Path $Paths.Logs -Container)) { CreatePath $Paths.Logs }
-        Add-Content -Path ($Paths.Logs + "\" + $TranscriptTime + ".log") -Value $Text
+        Add-Content -LiteralPath ($Paths.Logs + "\" + $TranscriptTime + ".log") -Value $Text
     }
 
 }
@@ -382,6 +382,12 @@ function EnablePatchButtons([boolean]$Enable) {
 #==================================================================================================================================================================================================================================================================
 function GamePath_Finish([object]$TextBox, [string]$Path) {
     
+    if (IsRestrictedFolder (Get-Item -LiteralPath $Path).DirectoryName) {
+        if ($IsWiiVC)   { UpdateStatusLabel "Can not select a WAD from a restrictive folder. Please move the file somewhere else before patching." }
+        else            { UpdateStatusLabel "Can not select a ROM from a restrictive folder. Please move the file somewhere else before patching." }
+        return
+    }
+
     # Set the "GamePath" variable that tracks the path
     $global:GamePath = (Get-Item -LiteralPath $Path)
 
@@ -849,11 +855,7 @@ function CreatePath([string]$Path) {
     
     # Make sure the path is not null to avoid errors
     if ($Path -ne '') {
-        # Check to see if the path does not exist
-        if (!(TestFile -Path $Path -Container)) {
-            # Create the path.
-            New-Item -Path $Path -ItemType 'Directory' | Out-Null
-        }
+        if (!(TestFile -Path $Path -Container)) { New-Item -Path $Path -ItemType 'Directory' | Out-Null } # Check to see if the path does not exist, then create the path
     }
 
     # Return the path so it can be set to a variable when creating
@@ -866,7 +868,7 @@ function CreatePath([string]$Path) {
 #==============================================================================================================================================================================================
 function RemoveFile([string]$Path) {
     
-    if (TestFile $Path)   { Remove-Item -LiteralPath $Path -Force }
+    if (TestFile $Path) { Remove-Item -LiteralPath $Path -Force }
 
 }
 
@@ -956,9 +958,9 @@ function SetLogging([boolean]$Enable) {
     if (!$ExternalScript) { return }
 
     if ($Enable) {
-        $global:TranscriptTime = Get-Date -Format yyyy-mm-dd-hh-mm-ss
+        $global:TranscriptTime = Get-Date -Format yyyy-MM-dd-hh-mm-ss
         if (!(TestFile -Path $Paths.Logs -Container)) { CreatePath $Paths.Logs }
-        Start-Transcript -Path ($Paths.Logs + "\" + $TranscriptTime + ".log")
+        Start-Transcript -LiteralPath ($Paths.Logs + "\" + $TranscriptTime + ".log")
     }
     else {
         if ($TranscriptTime -ne $null) {
@@ -986,6 +988,26 @@ function SetBitmap($Path, $Box, [int]$Width, [int]$Height) {
     $Box.Image = $imgBitmap
 
 }
+
+
+
+#==================================================================================================================================================================================================================================================================
+function IsRestrictedFolder([string]$Path) {
+    
+    if ($Path -eq    "C:\")                        { return $True }
+    if ($Path -like "*C:\Users\*")                 { return $True }
+    if ($Path -like "*C:\Program Files\*")         { return $True }
+    if ($Path -like "*C:\Program Files (x86)\*")   { return $True }
+    if ($Path -like "*C:\ProgramData\*")           { return $True }
+    if ($Path -like "*C:\Windows\*")               { return $True }
+    return $False
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function GetCommand([string]$Command) { return (Get-Command $Command -errorAction SilentlyContinue) }
 
 
 
@@ -1042,3 +1064,5 @@ Export-ModuleMember -Function TogglePowerShellOpenWithClicks
 Export-ModuleMember -Function SetModernVisualStyle
 Export-ModuleMember -Function SetLogging
 Export-ModuleMember -Function SetBitmap
+Export-ModuleMember -Function IsRestrictedFolder
+Export-ModuleMember -Function GetCommand

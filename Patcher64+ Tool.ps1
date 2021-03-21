@@ -21,11 +21,22 @@ Add-Type -AssemblyName 'System.Drawing'
 
 
 #==============================================================================================================================================================================================
+$HidePSConsole = @"
+[DllImport("Kernel32.dll")]
+public static extern IntPtr GetConsoleWindow();
+[DllImport("user32.dll")]
+public static extern bool ShowWindow(IntPtr hWnd, Int32 nCmdShow);
+"@
+Add-Type -Namespace Console -Name Window -MemberDefinition $HidePSConsole
+
+
+
+#==============================================================================================================================================================================================
 # Setup global variables
 
 $global:ScriptName = "Patcher64+ Tool"
-$global:VersionDate = "2021-03-18"
-$global:Version     = "v13.0.5"
+$global:VersionDate = "2021-03-21"
+$global:Version     = "v13.0.6"
 
 $global:CommandType = $MyInvocation.MyCommand.CommandType.ToString()
 $global:Definition  = $MyInvocation.MyCommand.Definition.ToString()
@@ -36,36 +47,53 @@ $global:IsWiiVC = $global:MissingFiles = $False
 $global:VCTitleLength = 40
 $global:Bootup = $global:GameIsSelected = $global:IsActiveGameField = $False
 $global:Last = $global:Fonts = @{}
-$global:FatalError = $False
+$global:FatalError = $global:WarningError = $False
 
 
 
 #==============================================================================================================================================================================================
-# Set file paths
-
 function GetScriptPath() {
     
     if ($CommandType -eq "ExternalScript") { # This is the command that should have been stored
         $SplitDef  = $Definition.Split('\') # Split the path on every "\" and grab the last one
         $InputFile = $SplitDef[$SplitDef.Count-1]
         $global:ExternalScript = $True
-        return $Definition.Replace(($InputFile),'') # If it was, the definition will hold the full path to the script
+        $Path = $Definition.Replace(($InputFile), '')
+        $Path = $Path.substring(0, $Path.length-1)
+        return $Path # If it was, the definition will hold the full path to the script
     }
 
     $FullPath  = ([Environment]::GetCommandLineArgs()[0]).ToString() # Split the path on every "\" and grab the last one
     $SplitDef  = $FullPath.Split('\')
     $InputFile = $SplitDef[$SplitDef.Count-1].Substring(0, $SplitDef[$SplitDef.Count-1].Length - 4) + '.exe'
     $global:ExternalScript = $False
-    if ($ScriptPath) { $ScriptPath = $FullPath.Replace(($InputFile),'') } else { $ScriptPath = "." } # If running via an executable, the command will be different so get the path through an argument
+    if ($ScriptPath) { $ScriptPath = $FullPath.Replace(($InputFile), '') } else { $ScriptPath = "." } # If running via an executable, the command will be different so get the path through an argument
+    $Paths.FullBase = $FullPath.Replace(($InputFile), '')
+    $Paths.FullBase = $Paths.Fullbase.substring(0, $Paths.Fullbase.length-1)
     return $ScriptPath # Return whatever we got in the above.
 
 }
 
-# Create a hash table
+
+
+#==============================================================================================================================================================================================
+function ImportModule([string]$Name) {
+    
+    if (Test-Path -LiteralPath ($Paths.Scripts + "\" + $Name + ".psm1") -PathType Leaf)   { Import-Module ($Paths.Scripts + "\" + $Name + ".psm1") }
+    else                                                                                  { CreateErrorDialog -Error "Missing Modules" -Exit }
+
+}
+
+
+
+#==================================================================================================================================================================================================================================================================
+# Paths
+
 $global:Paths = @{}
 
 # Set all paths
 $Paths.Base            = GetScriptPath
+if ($Paths.FullBase -eq $null) { $Paths.FullBase = $Paths.Base }
 $Paths.Master          = $Paths.Base   + "\Files"
 $Paths.Registry        = $Paths.Master + "\Registry"
 $Paths.Games           = $Paths.Master + "\Games"
@@ -80,59 +108,30 @@ $Paths.cygdrive        = $Paths.Master + "\cygdrive"
 
 
 
-#==============================================================================================================================================================================================
-# Import code
-
-function ImportModule([string]$Name) {
-    
-    if (Test-Path -LiteralPath ($Paths.Scripts + "\" + $Name + ".psm1") -PathType Leaf)   { Import-Module ($Paths.Scripts + "\" + $Name + ".psm1") }
-    else                                                                                  { CreateErrorDialog -Error "Missing Modules" -Exit }
-
-}
+#==================================================================================================================================================================================================================================================================
+# Load modules
 
 foreach ($Script in Get-ChildItem -LiteralPath $Paths.Scripts -Force) {
-    if ( !$Script.PSIsContainer -and $Script.Extension -eq ".psm1") { ImportModule -Name $Script.BaseName }
+    if ( !$Script.PSIsContainer -and $Script.Extension -eq ".psm1") { ImportModule $Script.BaseName }
 }
 
 
 
 #==============================================================================================================================================================================================
-$HidePSConsole = @"
-[DllImport("Kernel32.dll")]
-public static extern IntPtr GetConsoleWindow();
-[DllImport("user32.dll")]
-public static extern bool ShowWindow(IntPtr hWnd, Int32 nCmdShow);
-"@
-Add-Type -Namespace Console -Name Window -MemberDefinition $HidePSConsole
-
-
-
-#==================================================================================================================================================================================================================================================================
-function IsNumeric([string]$str) {
-    
-    if ($Str -match "^\d+$") { return $True }
-
-    return $False
-
-}
-
-
-
-#==============================================================================================================================================================================================
+# Run Patcher64+ Tool
 
 # Retrieve settings
 $global:Settings = GetSettings ($Paths.Settings + "\Core.ini")
 if (!(IsSet $Settings.Core))   { $Settings.Core  = @{} }
 if (!(IsSet $Settings.Debug))  { $Settings.Debug = @{} }
 
-# Logging
-if (!$ExternalScript) { $global:TranscriptTime = Get-Date -Format yyyy-mm-dd-hh-mm-ss }
-SetLogging ($Settings.Debug.Logging -eq $True)
-
 # Hi-DPI Mode
 $global:DisableHighDPIMode = $Settings.Core.HiDPIMode -eq $False
 InitializeHiDPIMode
 $global:ColumnWidth = DPISize 180
+
+# Check if restricted
+if (IsRestrictedFolder $Paths.FullBase) { CreateErrorDialog -Error "Restricted" -Exit }
 
 # Set paths to all the files stored in the script
 SetFileParameters
@@ -159,6 +158,10 @@ ShowPowerShellConsole ($Settings.Debug.Console -eq $True)
 CreateMainDialog     | Out-Null
 CreateCreditsDialog  | Out-Null
 CreateSettingsDialog | Out-Null
+
+# Logging
+if (!$ExternalScript) { $global:TranscriptTime = Get-Date -Format yyyy-MM-dd-hh-mm-ss }
+SetLogging (IsChecked $GeneralSettings.Logging)
 
 # Set default game mode
 ChangeConsolesList   | Out-Null
