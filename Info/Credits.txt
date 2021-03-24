@@ -47,9 +47,12 @@
 - Pause Screen Delay Fix		zel
 - Debug Map Select			Jared Johnson
 - Set Capacity:				GhostlyDark
+- Iron Shield textures:			ZombieBrainySnack
+- Fireproof Deku Shield:		Three Pendants
 - 4 Digits for Rupees:			CloudMax, VictorHale & CrookedPoe
 - Show File Select Icons:		ShadowOne333
 - Colors:				GhostlyDark
+- Frontflip Jump / Somarsault Jump:	SoulofDeity
 - Restore Text:				ShadowOne333
 - Female Pronouns:			Admentus & Mil
 - Various offsets:			Chez Cousteau
@@ -235,6 +238,7 @@ Special Thanks:				Nokaubure, z64me, Ultra553, OoT Decomp
 - Kokiri Tunic Color:			GhostlyDark
 - Recolor Mask Forms:			Admentus, ShadowOne333 & Garo-Mastah
 - Zora Physics:				ShadowOne333
+- Frontflip Jump / Jump Attack:		SoulofDeity
 - Restore Palace Route:			ShadowOne333
 - Correct Rupee Colors:			GhostlyDark
 - Restore Cow Nose Ring:		ShadowOne333

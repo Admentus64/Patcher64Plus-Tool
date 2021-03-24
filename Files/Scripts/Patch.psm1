@@ -574,7 +574,7 @@ function PatchVCEmulator([string]$Command) {
     # Applying LZSS decompression
     $array = [IO.File]::ReadAllBytes($WADFile.AppFile01)
     if ($array[0] -eq (GetDecimal "10") -and (Get-Item $WADFile.AppFile01).length/1MB -lt 1) {
-        if ( (StrLike -Str $Command -Val "Patch Boot DOL") -or (IsChecked $VC.ExpandMemory) -or (IsChecked $VC.RemapDPad) -or (IsChecked $VC.RemapCDown) -or (IsChecked $VC.RemapZ) ) {
+        if ( (StrLike -Str $Command -Val "Patch Boot DOL") -or (IsChecked $VC.ExpandMemory) -or (IsChecked $VC.RemoveFilter) -or (IsChecked $VC.RemapDPad) -or (IsChecked $VC.RemapCDown) -or (IsChecked $VC.RemapZ) ) {
             & $Files.tool.lzss -d $WADFile.AppFile01 | Out-Null
             $DecompressedApp = $True
             WriteToConsole ("Decompressed LZSS File: " + $WADFile.AppFile01)

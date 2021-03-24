@@ -8,6 +8,7 @@ function PatchOptions() {
 
     # MODELS #
 
+    if ( (IsChecked $Redux.Graphics.OriginalModels) -and (IsChecked $Redux.Equipment.RazorSword) ) { ApplyPatch -Patch "\Decompressed\Models\razor_sword_vanilla_child.ppf" }
     if (IsChecked $Redux.Graphics.ListLinkModels) {
         if (IsChecked $Redux.Graphics.MMChildLink) {
             ApplyPatch -Patch "\Decompressed\Models\mm_child.ppf"
@@ -580,8 +581,19 @@ function ByteOptions() {
 
     # EQUIPMENT #
     
+    if ( (IsChecked $Redux.Equipment.RazorSword) -and ($ModelCredits.razor_sword -eq 1 -or (IsChecked $Redux.Graphics.OriginalModels) ) ) {
+        PatchBytes -Offset "7F8000" -Texture -Patch "Razor Sword\icon.bin"
+        PatchBytes -Offset "7FB000" -Texture -Patch "Hero's Shield\icon.bin"
+      # PatchBytes -Offset "7FC000" -Texture -Patch "Hero's Shield\icon.bin"
+        if (IsSet $LanguagePatch.hero_shield) {
+            PatchBytes -Offset "8AD800" -Texture -Patch $LanguagePatch.razor_sword
+            PatchBytes -Offset "8AE400" -Texture -Patch $LanguagePatch.hero_shield
+          # PatchBytes -Offset "8AE800" -Texture -Patch $LanguagePatch.hero_shield
+        }
+    }
+
     if (IsChecked $Redux.Equipment.IronShield -and $ModelCredits.deku_shield -ne 0) {
-        ChangeBytes -Offset "BD3C58" -Values "00 00 00 00"
+        ChangeBytes -Offset "BD3C58" -Values "00 00 00 00" # Fireproof
         if ($ModelCredits.stone_shield -ne 0) {
             $Offset = SearchBytes -Start "FBE000" -End "FEAF80" -Values "CC 99 E5 E5 DD A3 EE 2B DD A5 E6 29 DD A5 D4 DB"
             PatchBytes -Offset $Offset  -Texture -Patch "Iron Shield\front.bin" # Vanilla: FC5E88
@@ -1545,14 +1557,15 @@ function CreateTabColors() {
 function CreateTabEquipment() {
 
     # CAPACITY SELECTION #
-    CreateReduxGroup    -Tag  "Capacity" -Text "Capacity Selection" -Columns 3
+    CreateReduxGroup    -Tag  "Capacity" -Text "Capacity Selection" -Columns 2
     CreateReduxCheckBox -Name "EnableAmmo"    -Text "Change Ammo Capacity"   -Info "Enable changing the capacity values for ammo"
     CreateReduxCheckBox -Name "EnableWallet"  -Text "Change Wallet Capacity" -Info "Enable changing the capacity values for the wallets"
 
     # EQUIPMENT #
     CreateReduxGroup    -Tag  "Equipment" -Text "Equipment Adjustments"
-    CreateReduxCheckBox -Name "UnsheathSword" -Text "Unsheath Sword" -Info "The sword is unsheathed first before immediately swinging it"                                                                                                                         -Credits "Admentus"
-    CreateReduxCheckBox -Name "IronShield"    -Text "Iron Shield"    -Info "Replace the Deku Shield with the Iron Shield, which will not burn up anymore" -Warning "Some custom models do not support the new textures, but will still keep the fireproof shield" -Credits "Admentus (ported), ZombieBrainySnack (textures) & Three Pendants (Debug fireproof ROM patch)"
+    CreateReduxCheckBox -Name "UnsheathSword" -Text "Unsheath Sword" -Info "The sword is unsheathed first before immediately swinging it" -Credits "Admentus"
+    CreateReduxCheckBox -Name "RazorSword"    -Text "Razor Sword"    -Info "Replace the Kokiri Sword with the Razor Sword and the Deku Shield with the Hero's Shield from Majora's Mask`nThe replaced Deku Shield will not burn up anymore" -Warning "This option only works for the Vanilla Child Link model" -Credits "DeadSubiter (ported) & issuelink, Zeldaboy14 and Flotonic (Debug ROM patch)"
+    CreateReduxCheckBox -Name "IronShield"    -Text "Iron Shield"    -Info "Replace the Deku Shield with the Iron Shield, which will not burn up anymore" -Warning "Some custom models do not support the new textures, but will still keep the fireproof shield" -Credits "Admentus (ported), ZombieBrainySnack (textures) & Three Pendants (Debug fireproof ROM patch)" -Link $Redux.Equipment.RazorSword
     CreateReduxCheckBox -Name "HeroShield"    -Text "Hero's Shield"  -Info "Replace the Hylian Shield with the Hero's Shield"                             -Warning "Some custom models do not support this option"                                                -Credits "SoulofDeity"
 
     # AMMO #
