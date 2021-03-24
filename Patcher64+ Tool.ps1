@@ -178,7 +178,7 @@ if (!(IsSet $Settings.Debug))  { $Settings.Debug = @{} }
 
 # Logging
 if (!$ExternalScript) { $global:TranscriptTime = $SystemDate }
-SetLogging (IsChecked $Settings.Debug.Logging -eq $True)
+SetLogging ($Settings.Debug.Logging -eq $True)
 
 # Temp
 if ($Settings.Core.LocalTempFolder -eq $True)   { $Paths.Temp = $Paths.LocalTemp }
