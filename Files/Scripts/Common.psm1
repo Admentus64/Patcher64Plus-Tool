@@ -239,7 +239,6 @@ function ChangeGameMode() {
 
     $GameFiles.base = $Paths.Games + "\" + $GameType.mode
     $GameFiles.binaries = $GameFiles.base + "\Binaries"
-    $GameFiles.extracted = $GameFiles.base + "\Extracted"
     $GameFiles.export = $GameFiles.base + "\Export"
     $GameFiles.compressed = $GameFiles.base + "\Compressed"
     $GameFiles.decompressed = $GameFiles.base + "\Decompressed"
@@ -340,11 +339,9 @@ function UpdateStatusLabel([string]$Text) {
 #==============================================================================================================================================================================================
 function WriteToConsole([string]$Text) {
 
-    if ( ($Settings.Debug.Console -eq $True -or $Settings.Debug.Logging -eq $True) -and $ExternalScript) { Write-Host $Text }
-    if ($Settings.Debug.Logging -eq $True -and !$ExternalScript) {
-        if (!(TestFile -Path $Paths.Logs -Container)) { CreatePath $Paths.Logs }
-        Add-Content -LiteralPath ($Paths.Logs + "\" + $TranscriptTime + ".log") -Value $Text
-    }
+    if     ($ExternalScript)                                            { Write-Host $Text }
+    if     ($Settings.Debug.Logging -eq $True  -and !$ExternalScript)   { Add-Content -LiteralPath ($Paths.Logs + "\" + $TranscriptTime + ".log") -Value $Text }
+    elseif ($Settings.Debug.Logging -eq $False -and !$ExternalScript)   { $global:ConsoleHistory += $Text }
 
 }
 
@@ -382,12 +379,6 @@ function EnablePatchButtons([boolean]$Enable) {
 #==================================================================================================================================================================================================================================================================
 function GamePath_Finish([object]$TextBox, [string]$Path) {
     
-    if (IsRestrictedFolder (Get-Item -LiteralPath $Path).DirectoryName) {
-        if ($IsWiiVC)   { UpdateStatusLabel "Can not select a WAD from a restrictive folder. Please move the file somewhere else before patching." }
-        else            { UpdateStatusLabel "Can not select a ROM from a restrictive folder. Please move the file somewhere else before patching." }
-        return
-    }
-
     # Set the "GamePath" variable that tracks the path
     $global:GamePath = (Get-Item -LiteralPath $Path)
 
@@ -402,6 +393,9 @@ function GamePath_Finish([object]$TextBox, [string]$Path) {
     elseif ( ($DroppedExtn -ne '.wad') -and !$GameIsSelected)   { SetWiiVCMode $False }
     SetMainScreenSize
     $global:GameIsSelected = $True
+
+    if ($IsWiiVC)   { WriteToConsole ("WAD Path:      " + $GamePath) }
+    else            { WriteToConsole ("ROM Path:      " + $GamePath) }
 
     ChangeGamesList
     $InputPaths.ClearGameButton.Enabled = $True
@@ -442,6 +436,7 @@ function InjectPath_Finish([object]$TextBox, [string]$Path) {
     
     # Set the "InjectPath" variable that tracks the path
     $global:InjectPath = $Path
+    WriteToConsole ("Inject Path:   " + $InjectPath)
 
     # Update the textbox to the current injection ROM
     $TextBox.Text = $InjectPath
@@ -457,6 +452,7 @@ function PatchPath_Finish([object]$TextBox, [string]$Path) {
     
     # Set the "PatchPath" variable that tracks the path
     $global:PatchPath = $Path
+    WriteToConsole ("Patch Path:    " + $PatchPath)
 
     # Update the textbox to the current patch
     $TextBox.Text = $PatchPath
@@ -955,7 +951,14 @@ function SetModernVisualStyle([boolean]$Enable) {
 #==============================================================================================================================================================================================
 function SetLogging([boolean]$Enable) {
     
-    if (!$ExternalScript) { return }
+    if (!$ExternalScript) {
+        if ($Enable -and $ConsoleHistory.length -gt 0) {
+            if (!(TestFile -Path $Paths.Logs -Container)) { CreatePath $Paths.Logs }
+            foreach ($entry in $ConsoleHistory) { Add-Content -LiteralPath ($Paths.Logs + "\" + $TranscriptTime + ".log") -Value $entry }
+            $global:ConsoleHistory = @()
+        }
+        return
+    }
 
     if ($Enable) {
         $global:TranscriptTime = Get-Date -Format yyyy-MM-dd-hh-mm-ss
@@ -994,6 +997,7 @@ function SetBitmap($Path, $Box, [int]$Width, [int]$Height) {
 #==================================================================================================================================================================================================================================================================
 function IsRestrictedFolder([string]$Path) {
     
+    if ($Path -like $env:APPDATA)                  { return $False }
     if ($Path -eq    "C:\")                        { return $True }
     if ($Path -like "*C:\Users\*")                 { return $True }
     if ($Path -like "*C:\Program Files\*")         { return $True }

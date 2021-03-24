@@ -35,8 +35,9 @@ Add-Type -Namespace Console -Name Window -MemberDefinition $HidePSConsole
 # Setup global variables
 
 $global:ScriptName = "Patcher64+ Tool"
-$global:VersionDate = "2021-03-21"
-$global:Version     = "v13.0.6"
+$global:VersionDate = "2021-03-24"
+$global:Version     = "v13.1.0"
+$global:SystemDate  = Get-Date -Format yyyy-MM-dd-hh-mm-ss
 
 $global:CommandType = $MyInvocation.MyCommand.CommandType.ToString()
 $global:Definition  = $MyInvocation.MyCommand.Definition.ToString()
@@ -48,6 +49,8 @@ $global:VCTitleLength = 40
 $global:Bootup = $global:GameIsSelected = $global:IsActiveGameField = $False
 $global:Last = $global:Fonts = @{}
 $global:FatalError = $global:WarningError = $False
+$global:ConsoleHistory = @()
+
 
 
 
@@ -86,6 +89,45 @@ function ImportModule([string]$Name) {
 
 
 
+#==============================================================================================================================================================================================
+function CheckScripts() {
+    
+    $string  = $ScriptName + " " + $Version + " (" + $VersionDate + ")" + "{0}{0}"
+    $string += "Fatal Error: Script files are missing{0}"
+
+    if (!(Test-Path -PathType Leaf -LiteralPath ($Paths.Scripts + "\Bytes.psm1")))      { $FatalError = $True; $string += "{0}" + $Paths.Scripts + "\Bytes.psm1" }
+    if (!(Test-Path -PathType Leaf -LiteralPath ($Paths.Scripts + "\Common.psm1")))     { $FatalError = $True; $string += "{0}" + $Paths.Scripts + "\Common.psm1" }
+    if (!(Test-Path -PathType Leaf -LiteralPath ($Paths.Scripts + "\Dialogs.psm1")))    { $FatalError = $True; $string += "{0}" + $Paths.Scripts + "\Dialogs.psm1" }
+    if (!(Test-Path -PathType Leaf -LiteralPath ($Paths.Scripts + "\DPI.psm1")))        { $FatalError = $True; $string += "{0}" + $Paths.Scripts + "\DPI.psm1" }
+    if (!(Test-Path -PathType Leaf -LiteralPath ($Paths.Scripts + "\Files.psm1")))      { $FatalError = $True; $string += "{0}" + $Paths.Scripts + "\Files.psm1" }
+    if (!(Test-Path -PathType Leaf -LiteralPath ($Paths.Scripts + "\Forms.psm1")))      { $FatalError = $True; $string += "{0}" + $Paths.Scripts + "\Forms.psm1" }
+    if (!(Test-Path -PathType Leaf -LiteralPath ($Paths.Scripts + "\Main.psm1")))       { $FatalError = $True; $string += "{0}" + $Paths.Scripts + "\Main.psm1" }
+    if (!(Test-Path -PathType Leaf -LiteralPath ($Paths.Scripts + "\MQ.psm1")))         { $FatalError = $True; $string += "{0}" + $Paths.Scripts + "\MQ.psm1" }
+    if (!(Test-Path -PathType Leaf -LiteralPath ($Paths.Scripts + "\Patch.psm1")))      { $FatalError = $True; $string += "{0}" + $Paths.Scripts + "\Patch.psm1" }
+    if (!(Test-Path -PathType Leaf -LiteralPath ($Paths.Scripts + "\Settings.psm1")))   { $FatalError = $True; $string += "{0}" + $Paths.Scripts + "\Settings.psm1" }
+    if (!(Test-Path -PathType Leaf -LiteralPath ($Paths.Scripts + "\Zelda 64.psm1")))   { $FatalError = $True; $string += "{0}" + $Paths.Scripts + "\Zelda 64.psm1" }
+
+    if (!$FatalError) { return }
+    
+    $Dialog = New-Object System.Windows.Forms.Form
+    $Dialog.Text = $ScriptName
+    $Dialog.AutoSize = $True
+    $Dialog.StartPosition = "CenterScreen"
+    $Dialog.FormBorderStyle = [System.Windows.Forms.FormBorderStyle]::FixedDialog
+
+    $Label = New-Object System.Windows.Forms.Label
+    $Label.AutoSize = $True
+    $Label.Location = New-Object System.Drawing.Size(10, 10)
+    $Label.Text = [string]::Format($String, [Environment]::NewLine)
+
+    $Dialog.Controls.Add($Label)
+    $Dialog.ShowDialog() | Out-Null
+    Exit
+
+}
+
+
+
 #==================================================================================================================================================================================================================================================================
 # Paths
 
@@ -101,10 +143,19 @@ $Paths.Main            = $Paths.Master + "\Main"
 $Paths.Tools           = $Paths.Master + "\Tools"
 $Paths.WiiVC           = $Paths.Tools  + "\Wii VC"
 $Paths.Scripts         = $Paths.Master + "\Scripts"
-$Paths.Temp            = $Paths.Master + "\Temp"
+$Paths.LocalTemp       = $Paths.FullBase + "\Files\Temp"
+$Paths.AppData         = $env:APPDATA + "\Patcher64+ Tool"
+$Paths.UserTemp        = $Paths.AppData + "\Temp"
+$Paths.Temp            = $Paths.Local
 $Paths.Settings        = $Paths.Master + "\Settings"
 $Paths.Logs            = $Paths.Master + "\Logs"
 $Paths.cygdrive        = $Paths.Master + "\cygdrive"
+
+
+
+#==================================================================================================================================================================================================================================================================
+# Check if neccessary functions are imported
+CheckScripts
 
 
 
@@ -125,22 +176,27 @@ $global:Settings = GetSettings ($Paths.Settings + "\Core.ini")
 if (!(IsSet $Settings.Core))   { $Settings.Core  = @{} }
 if (!(IsSet $Settings.Debug))  { $Settings.Debug = @{} }
 
+# Logging
+if (!$ExternalScript) { $global:TranscriptTime = $SystemDate }
+SetLogging (IsChecked $Settings.Debug.Logging -eq $True)
+
+# Temp
+if ($Settings.Core.LocalTempFolder -eq $True)   { $Paths.Temp = $Paths.LocalTemp }
+else                                            { $Paths.Temp = $Paths.UserTemp }
+
 # Hi-DPI Mode
 $global:DisableHighDPIMode = $Settings.Core.HiDPIMode -eq $False
 InitializeHiDPIMode
 $global:ColumnWidth = DPISize 180
 
-# Check if restricted
-if (IsRestrictedFolder $Paths.FullBase) { CreateErrorDialog -Error "Restricted" -Exit }
+# Visual Style
+SetModernVisualStyle ($Settings.Core.ModernStyle -eq $True)
 
 # Set paths to all the files stored in the script
 SetFileParameters
 
 # Enable sounds
 LoadSoundEffects ($Settings.Core.EnableSounds -eq $True)
-
-# Visual Style
-SetModernVisualStyle ($Settings.Core.ModernStyle -eq $True)
 
 # Font
 if ($Settings.Core.ClearType -eq $True)   { $Font = "Segoe UI" }
@@ -159,9 +215,19 @@ CreateMainDialog     | Out-Null
 CreateCreditsDialog  | Out-Null
 CreateSettingsDialog | Out-Null
 
-# Logging
-if (!$ExternalScript) { $global:TranscriptTime = Get-Date -Format yyyy-MM-dd-hh-mm-ss }
-SetLogging (IsChecked $GeneralSettings.Logging)
+# Check if restricted
+if (IsRestrictedFolder $Paths.FullBase) {
+    $GeneralSettings.LocalTempFolder.Checked = $False
+    $GeneralSettings.LocalTempFolder.Enabled = $False
+    SetTempFileParameters
+}
+
+# Critical info
+WriteToConsole ("Version:       " + $Version)
+WriteToConsole ("Version Date:  " + $VersionDate)
+WriteToConsole ("Full Path:     " + $Paths.FullBase)
+WriteToConsole ("System Date:   " + $SystemDate)
+WriteToConsole ("Temp Folder:   " + $Paths.Temp)
 
 # Set default game mode
 ChangeConsolesList   | Out-Null
@@ -193,9 +259,13 @@ InitializeEvents
 if (!$FatalError) { $MainDialog.ShowDialog() | Out-Null }
 
 # Exit
-Out-IniFile -FilePath $Files.settings -InputObject $Settings | Out-Null
-if ($GameType.save -gt 0) { Out-IniFile -FilePath (GetGameSettingsFile) -InputObject $GameSettings | Out-Null }
-RemovePath $Paths.Registry
-[System.GC]::Collect() | Out-Null
-SetLogging $False
+if (!$FatalError) {
+    Out-IniFile -FilePath $Files.settings -InputObject $Settings | Out-Null
+    if ($GameType.save -gt 0) { Out-IniFile -FilePath (GetGameSettingsFile) -InputObject $GameSettings | Out-Null }
+    RemovePath $Paths.Registry
+    [System.GC]::Collect() | Out-Null
+    SetLogging $False
+    $global:ConsoleHistory = $null
+}
+$null = $Host.UI.RawUI.ReadKey('NoEcho,IncludeKeyDown')
 Exit

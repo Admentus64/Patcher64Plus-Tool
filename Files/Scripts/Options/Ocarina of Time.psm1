@@ -76,8 +76,13 @@ function ByteOptions() {
     if (IsChecked $Redux.Gameplay.ReturnChild)         { ChangeBytes -Offset "CB6844"  -Values "35"; ChangeBytes -Offset "253C0E2" -Values "03" }
     if (IsChecked $Redux.Gameplay.FixGraves)           { ChangeBytes -Offset "202039D" -Values "20"; ChangeBytes -Offset "202043C" -Values "24" }
     if (IsChecked $Redux.Gameplay.DistantZTargeting)   { ChangeBytes -Offset "A987AC"  -Values "00 00 00 00" }
-    if (IsChecked $Redux.Gameplay.ManualJump)          { ChangeBytes -Offset "BD78C0" -Values "04 C1"; ChangeBytes -Offset "BD78E3" -Values "01" }
-    if (IsChecked $Redux.Gameplay.UnsheathSword)       { ChangeBytes -Offset "BD04A0"  -Values "28 42 00 05 14 40 00 05 00 00 10 25" }
+    if (IsChecked $Redux.Gameplay.ManualJump)          { ChangeBytes -Offset "BD78C0"  -Values "04 C1"; ChangeBytes -Offset "BD78E3" -Values "01" }
+
+    <#if (IsChecked $Redux.Gameplay.SwordBeamAttack) {
+        ChangeBytes -Offset "D280"   -Values "03 47 E0 00 03 47 FA B0 03 47 E0 00"; ChangeBytes -Offset "B5EF7E" -Values "9B 70"; ChangeBytes -Offset "BEFBF0"  -Values "0C"
+        ChangeBytes -Offset "B5EF70" -Values "03 47 E0 00 03 47 FA B0";             ChangeBytes -Offset "B5EF86" -Values "09 20"; ChangeBytes -Offset "BEFBF4"  -Values "0C"
+        ChangeBytes -Offset "F17F00" -Values "00";                                  ChangeBytes -Offset "F17F04" -Values "00";    PatchBytes  -Offset "347E000" -Patch "Sword Beam Attack.bin"
+    }#>
 
 
 
@@ -208,8 +213,8 @@ function ByteOptions() {
 
     if (IsChecked $Redux.UI.GCScheme) {
         # Z to L textures
-        PatchBytes -Offset "844540"  -Texture -Patch "GameCube\L Pause Screen Button.bin"
-        PatchBytes -Offset "92C200"  -Texture -Patch "GameCube\L Text Icon.bin"
+        PatchBytes -Offset "844540"  -Texture -Patch "GameCube\l_pause_screen_button.bin"
+        PatchBytes -Offset "92C200"  -Texture -Patch "GameCube\l_text_icon.bin"
         if (IsSet $LanguagePatch.l_target)     { PatchBytes -Offset "1A35680" -Texture -Patch $LanguagePatch.l_target }
         if (IsSet $LanguagePatch.l_target_jpn) { PatchBytes -Offset "1A0B300" -Texture -Patch $LanguagePatch.l_target.jpn }
     }
@@ -459,9 +464,21 @@ function ByteOptions() {
     
     # EQUIPMENT COLORS #
 
-    if (IsDefaultColor -Elem $Redux.Colors.SetEquipment[0] -Not)   { ChangeBytes -Offset "B6DA38" -IsDec -Values @($Redux.Colors.SetEquipment[0].Color.R, $Redux.Colors.SetEquipment[0].Color.G, $Redux.Colors.SetEquipment[0].Color.B) } # Kokiri Tunic
-    if (IsDefaultColor -Elem $Redux.Colors.SetEquipment[1] -Not)   { ChangeBytes -Offset "B6DA3B" -IsDec -Values @($Redux.Colors.SetEquipment[1].Color.R, $Redux.Colors.SetEquipment[1].Color.G, $Redux.Colors.SetEquipment[1].Color.B) } # Goron Tunic
-    if (IsDefaultColor -Elem $Redux.Colors.SetEquipment[2] -Not)   { ChangeBytes -Offset "B6DA3E" -IsDec -Values @($Redux.Colors.SetEquipment[2].Color.R, $Redux.Colors.SetEquipment[2].Color.G, $Redux.Colors.SetEquipment[2].Color.B) } # Zora Tunic
+    if (IsDefaultColor -Elem $Redux.Colors.SetEquipment[0] -Not) { # Kokiri Tunic
+        ChangeBytes -Offset "B6DA38" -IsDec -Values @($Redux.Colors.SetEquipment[0].Color.R, $Redux.Colors.SetEquipment[0].Color.G, $Redux.Colors.SetEquipment[0].Color.B)
+        if ( (IsText -Elem $Redux.Colors.Equipment[0] -Compare "Randomized" -Not) -or (IsText -Elem $Redux.Colors.Equipment[0] -Compare "Custom" -Not) ) { PatchBytes -Offset "7FE000"  -Texture -Patch ("Tunic\" + $Redux.Colors.Equipment[0].text + ".bin") }
+    }
+
+    if (IsDefaultColor -Elem $Redux.Colors.SetEquipment[1] -Not) { # Goron Tunic
+        ChangeBytes -Offset "B6DA3B" -IsDec -Values @($Redux.Colors.SetEquipment[1].Color.R, $Redux.Colors.SetEquipment[1].Color.G, $Redux.Colors.SetEquipment[1].Color.B)
+        if ( (IsText -Elem $Redux.Colors.Equipment[1] -Compare "Randomized" -Not) -or (IsText -Elem $Redux.Colors.Equipment[1] -Compare "Custom" -Not) ) { PatchBytes -Offset "7FF000"  -Texture -Patch ("Tunic\" + $Redux.Colors.Equipment[1].text + ".bin") }
+    }
+
+    if (IsDefaultColor -Elem $Redux.Colors.SetEquipment[2] -Not) { # Zora Tunic
+        ChangeBytes -Offset "B6DA3E" -IsDec -Values @($Redux.Colors.SetEquipment[2].Color.R, $Redux.Colors.SetEquipment[2].Color.G, $Redux.Colors.SetEquipment[2].Color.B)
+        if ( (IsText -Elem $Redux.Colors.Equipment[2] -Compare "Randomized" -Not) -or (IsText -Elem $Redux.Colors.Equipment[2] -Compare "Custom" -Not) ) { PatchBytes -Offset "800000"  -Texture -Patch ("Tunic\" + $Redux.Colors.Equipment[2].text + ".bin") }
+    }
+
     if (IsDefaultColor -Elem $Redux.Colors.SetEquipment[3] -Not)   { ChangeBytes -Offset "B6DA44" -IsDec -Values @($Redux.Colors.SetEquipment[3].Color.R, $Redux.Colors.SetEquipment[3].Color.G, $Redux.Colors.SetEquipment[3].Color.B) } # Silver Gauntlets
     if (IsDefaultColor -Elem $Redux.Colors.SetEquipment[4] -Not)   { ChangeBytes -Offset "B6DA47" -IsDec -Values @($Redux.Colors.SetEquipment[4].Color.R, $Redux.Colors.SetEquipment[4].Color.G, $Redux.Colors.SetEquipment[4].Color.B) } # Golden Gauntlets
     if ( (IsDefaultColor -Elem $Redux.Colors.SetEquipment[5] -Not) -and $ModelCredits.mirror_shield -ne 0) { # Mirror Shield Frame
@@ -558,7 +575,31 @@ function ByteOptions() {
 
         
     }
+
+
+
+    # EQUIPMENT #
     
+    if (IsChecked $Redux.Equipment.IronShield -and $ModelCredits.deku_shield -ne 0) {
+        ChangeBytes -Offset "BD3C58" -Values "00 00 00 00"
+        if ($ModelCredits.stone_shield -ne 0) {
+            $Offset = SearchBytes -Start "FBE000" -End "FEAF80" -Values "CC 99 E5 E5 DD A3 EE 2B DD A5 E6 29 DD A5 D4 DB"
+            PatchBytes -Offset $Offset  -Texture -Patch "Iron Shield\front.bin" # Vanilla: FC5E88
+            $Offset = SearchBytes -Start "FBE000" -End "FEAF80" -Values "DC 11 F5 17 F5 19 DC 57 D4 59 E4 DB E4 DB DC 97"
+            PatchBytes -Offset $Offset  -Texture -Patch "Iron Shield\back.bin"  # Vanilla: FC5688
+            PatchBytes -Offset "7FB000" -Texture -Patch "Iron Shield\icon.bin"
+            if (IsSet $LanguagePatch.iron_shield) { PatchBytes -Offset "8AE400" -Texture -Patch $LanguagePatch.iron_shield }
+        }
+    }
+
+    if (IsChecked $Redux.Equipment.HeroShield -and $ModelCredits.hylian_shield -ne 0) {
+        PatchBytes -Offset "F03400" -Texture -Patch "Hero's Shield\front.bin"
+        PatchBytes -Offset "7FC000" -Texture -Patch "Hero's Shield\icon.bin"
+        if (IsSet $LanguagePatch.hero_shield) { PatchBytes -Offset "8AE800" -Texture -Patch $LanguagePatch.hero_shield }
+    }
+
+    if (IsChecked $Redux.Equipment.UnsheathSword)    { ChangeBytes -Offset "BD04A0"  -Values "28 42 00 05 14 40 00 05 00 00 10 25" }
+
 
 
     # UNLOCK CHILD RESTRICTIONS #
@@ -768,11 +809,13 @@ function ByteOptions() {
 
     # ANIMATIONS #
 
-    if     (IsChecked $Redux.Animation.WeaponIdle)     { ChangeBytes -Offset "BEF5F2" -Values "34 28" }
-    if     (IsChecked $Redux.Animation.WeaponCrouch)   { ChangeBytes -Offset "BEF38A" -Values "2A 10" }
-    if     (IsChecked $Redux.Animation.WeaponAttack)   { ChangeBytes -Offset "BEFB62" -Values "2B D8"; ChangeBytes -Offset "BEFB66" -Values "2B E0"; ChangeBytes -Offset "BEFB6A" -Values "2B E0" }
-    if     (IsChecked $Redux.Animation.Backflip)       { ChangeBytes -Offset "BEFB12" -Values "29 D0" }
-    elseif (IsChecked $Redux.Animation.Frontflip)      { ChangeBytes -Offset "BEFB12" -Values "2A 60" }
+    if     (IsChecked $Redux.Animation.WeaponIdle)        { ChangeBytes -Offset "BEF5F2" -Values "34 28" }
+    if     (IsChecked $Redux.Animation.WeaponCrouch)      { ChangeBytes -Offset "BEF38A" -Values "2A 10" }
+    if     (IsChecked $Redux.Animation.WeaponAttack)      { ChangeBytes -Offset "BEFB62" -Values "2B D8"; ChangeBytes -Offset "BEFB66" -Values "2B E0"; ChangeBytes -Offset "BEFB6A" -Values "2B E0" }
+    if     (IsChecked $Redux.Animation.BackflipAttack)    { ChangeBytes -Offset "BEFB12" -Values "29 D0" }
+    elseif (IsChecked $Redux.Animation.FrontflipAttack)   { ChangeBytes -Offset "BEFB12" -Values "2A 60" }
+    if     (IsChecked $Redux.Animation.FrontflipJump)     { PatchBytes -Offset "70BB00" -Patch "Jumps\Frontflip.bin" }
+    elseif (IsChecked $Redux.Animation.SomarsaultJump)    { PatchBytes -Offset "70BB00" -Patch "Jumps\Somarsault.bin"; ChangeBytes -Offset "F06149" -Values "0E"  }
 
 
 
@@ -908,7 +951,7 @@ function ByteReduxOptions() {
 #==============================================================================================================================================================================================
 function ByteLanguageOptions() {
     
-    if ( (IsChecked -Elem $Redux.Text.Vanilla -Not) -or (IsChecked -Elem $Redux.Text.Speed1x -Not) -or (IsLanguage $Redux.UI.GCScheme) -or (IsLanguage $Redux.Unlock.Tunics) -or (IsText -Elem $Redux.Colors.Fairy -Compare "Tatl") -or (IsText -Elem $Redux.Colors.Fairy -Compare "Tael") -or (IsLanguage $Redux.Capacity.EnableAmmo) -or (IsLanguage $Redux.Capacity.EnableWallet) ) {
+    if ( (IsChecked -Elem $Redux.Text.Vanilla -Not) -or (IsChecked -Elem $Redux.Text.Speed1x -Not) -or (IsLanguage $Redux.UI.GCScheme) -or (IsLanguage $Redux.Unlock.Tunics) -or (IsText -Elem $Redux.Colors.Fairy -Compare "Tatl") -or (IsText -Elem $Redux.Colors.Fairy -Compare "Tael") -or (IsLanguage $Redux.Capacity.EnableAmmo) -or (IsLanguage $Redux.Capacity.EnableWallet)-or (IsLanguage $Redux.Equipment.IronShield -and $ModelCredits.deku_shield -ne 0) -or (IsLanguage $Redux.Equipment.HeroShield -and $ModelCredits.hylian_shield -ne 0) ) {
         if ( (IsSet $LanguagePatch.script_start) -and (IsSet $LanguagePatch.script_length) ) {
             $File = $GameFiles.extracted + "\message_data_static.bin"
             ExportBytes -Offset $LanguagePatch.script_start -Length $LanguagePatch.script_length -Output $File -Force
@@ -977,49 +1020,49 @@ function ByteLanguageOptions() {
         $Offset = SearchBytes -File $File -Values "62 6C 75 65 20 69 63 6F 6E 20 61 74 20 74 68 65"
         PatchBytes  -File $File -Offset $Offset -Patch "Message\MQ Navi Action.bin"
 
-        $Offset = "0"
+        $Offset = 0
         do { # A button
             $Offset = SearchBytes -File $File -Start $Offset -Values "05 43 9F 05"
             if ($Offset -ne -1) { ChangeBytes -File $File -Offset $Offset -Values "05 42" }
         } while ($Offset -gt 0)
 
-        $Offset = "0"
+        $Offset = 0
         do { # A button
             $Offset = SearchBytes -File $File -Start $Offset -Values "05 43 9F 05 40"
             if ($Offset -ne -1) { ChangeBytes -File $File -Offset $Offset -Values "05 42" }
         } while ($Offset -gt 0)
 
-        $Offset = "0"
+        $Offset = 0
         do { # A button
             $Offset = SearchBytes -File $File -Start $Offset -Values "05 43 20 9F 05 44"
             if ($Offset -ne -1) { ChangeBytes -File $File -Offset $Offset -Values "05 42" }
         } while ($Offset -gt 0)
 
-        $Offset = "0"
+        $Offset = 0
         do { # A button
             $Offset = SearchBytes -File $File -Start $Offset -Values "05 43 41 63 74 69 6F 6E"
             if ($Offset -ne -1) { ChangeBytes -File $File -Offset $Offset -Values "05 42" }
         } while ($Offset -gt 0)
 
-        $Offset = "0"
+        $Offset = 0
         do { # B button
             $Offset = SearchBytes -File $File -Start $Offset -Values "05 42 A0 05 40"
             if ($Offset -ne -1) { ChangeBytes -File $File -Offset $Offset -Values "05 41" }
         } while ($Offset -gt 0)
 
-        $Offset = "0"
+        $Offset = 0
         do { # B button
             $Offset = SearchBytes -File $File -Start $Offset -Values "05 42 A0 20 05 40"
             if ($Offset -ne -1) { ChangeBytes -File $File -Offset $Offset -Values "05 41" }
         } while ($Offset -gt 0)
 
-        $Offset = "0"
+        $Offset = 0
         do { # Start button
             $Offset = SearchBytes -File $File -Start $Offset -Values "05 41 53 54 41 52 54 05 40"
             if ($Offset -ne -1) { ChangeBytes -File $File -Offset $Offset -Values "05 44" }
         } while ($Offset -gt 0)
 
-        $Offset = "0"
+        $Offset = 0
         do { # Start button
             $Offset = SearchBytes -File $File -Start $Offset -Values "05 41 53 54 41 52 54 20 05 40"
             if ($Offset -ne -1) { ChangeBytes -File $File -Offset $Offset -Values "05 44" }
@@ -1037,14 +1080,16 @@ function ByteLanguageOptions() {
     }
 
     if (IsText -Elem $Redux.Colors.Fairy -Compare "Tatl") {
-        do { # Tatl
+        $Offset = 0
+        do { # Navi -> Tatl
             $Offset = SearchBytes -File $File -Start $Offset -Values "4E 61 76 69"
             if ($Offset -ne -1) { ChangeBytes -File $File -Offset $Offset -Values "54 61 74 6C" }
         } while ($Offset -gt 0)
         PatchBytes -Offset "1A3EFC0" -Texture -Patch "HUD\Tatl.bin"
     }
     elseif (IsText -Elem $Redux.Colors.Fairy -Compare "Tael") {
-        do { # Tael
+        $Offset = 0
+        do { # Navi -> Tael
             $Offset = SearchBytes -File $File -Start $Offset -Values "4E 61 76 69"
             if ($Offset -ne -1) { ChangeBytes -File $File -Offset $Offset -Values "54 61 65 6C" }
         } while ($Offset -gt 0)
@@ -1080,6 +1125,22 @@ function ByteLanguageOptions() {
         ChangeStringIntoDigits -File $File -Search "35 30 30 05 40 20 05 46 52 75 70 65 65 73 05 40 2E 02 13" -Value $Text -Triple
 
         $Text = $null
+    }
+
+    if (IsLanguage $Redux.Equipment.IronShield -and $ModelCredits.deku_shield -ne 0) {
+        $Offset = 0
+        do { # Deku Shield -> Iron Shield
+            $Offset = SearchBytes -File $File -Start $Offset -Values "44 65 6B 75 20 53 68 69 65 6C 64"
+            if ($Offset -ne -1) { ChangeBytes -File $File -Offset $Offset -Values "49 72 6F 6E 20 53 68 69 65 6C 64" }
+        } while ($Offset -gt 0)
+    }
+
+    if (IsLanguage $Redux.Equipment.HeroShield -and $ModelCredits.hylian_shield -ne 0) {
+        $Offset = 0
+        do { # Hylian Shield -> Hero's Shield
+            $Offset = SearchBytes -File $File -Start $Offset -Values "48 79 6C 69 61 6E 20 53 68 69 65 6C 64"
+            if ($Offset -ne -1) { ChangeBytes -File $File -Offset $Offset -Values "48 65 72 6F 27 73 20 53 68 69 65 6C 64" }
+        } while ($Offset -gt 0)
     }
 
     PatchBytes -Offset $LanguagePatch.script_start -Patch "message_data_static.bin" -Extracted
@@ -1127,9 +1188,10 @@ function CreateTabMain() {
         CreateReduxCheckBox -Name "Medallions"                  -Text "Require All Medallions" -Info "All six medallions are required for the Rainbow Bridge to appear before Ganon's Castle`nThe vanilla requirements were the Shadow and Spirit Medallions and the Light Arrows" -Credits "Ported from Rando"
         CreateReduxCheckBox -Name "FixGraves"                   -Text "Fix Graves"             -Info "The grave holes in Kakariko Graveyard behave as in the Rev 1 revision`nThe edges no longer force Link to grab or jump over them when trying to enter" -Credits "Ported from Rando"
     }
-    CreateReduxCheckBox     -Name "DistantZTargeting"           -Text "Distant Z-Targeting"    -Info "Allow to use Z-Targeting on enemies, objects and NPC's from any distance"                                    -Credits "Admentus"
-    CreateReduxCheckBox     -Name "ManualJump"                  -Text "Manual Jump"            -Info "Press Z + A to do a Manual Jump instead of a Jump Attack`nPress B mid-air after jumping to do a Jump Attack" -Credits "Admentus (ROM hack) & CloudModding (GameShark)"
-
+    CreateReduxCheckBox     -Name "DistantZTargeting"           -Text "Distant Z-Targeting"    -Info "Allow to use Z-Targeting on enemies, objects and NPC's from any distance"                                      -Credits "Admentus"
+    CreateReduxCheckBox     -Name "ManualJump"                  -Text "Manual Jump"            -Info "Press Z + A to do a Manual Jump instead of a Jump Attack`nPress B mid-air after jumping to do a Jump Attack"   -Credits "Admentus (ROM hack) & CloudModding (GameShark)"
+  # CreateReduxCheckBox     -Name "SwordBeamAttack"             -Text "Sword Beam Attack"      -Info "Charging the Spin Attack will launch a Sword Beam Attack instead`nYou can still execute the Quick Spin Attack" -Credits "fkualol"
+    
     # RESTORE #
     CreateReduxGroup        -Tag  "Restore" -Text "Restore / Correct / Censor"
     CreateReduxCheckBox     -Name "RupeeColors"        -Text "Correct Rupee Colors"            -Info "Corrects the colors for the Purple (50) and Golden (200) Rupees"         -Credits "GhostlyDark"
@@ -1483,13 +1545,15 @@ function CreateTabColors() {
 function CreateTabEquipment() {
 
     # CAPACITY SELECTION #
-    CreateReduxGroup    -Tag  "Capacity" -Text "Capacity Selection" -Columns 5
+    CreateReduxGroup    -Tag  "Capacity" -Text "Capacity Selection" -Columns 3
     CreateReduxCheckBox -Name "EnableAmmo"    -Text "Change Ammo Capacity"   -Info "Enable changing the capacity values for ammo"
     CreateReduxCheckBox -Name "EnableWallet"  -Text "Change Wallet Capacity" -Info "Enable changing the capacity values for the wallets"
 
-    # GAMEPLAY
-    CreateReduxGroup    -Tag  "Gameplay" -Text "Gameplay"
-    CreateReduxCheckBox -Name "UnsheathSword" -Text "Unsheath Sword"         -Info "The sword is unsheathed first before immediately swinging it" -Credits "Admentus"
+    # EQUIPMENT #
+    CreateReduxGroup    -Tag  "Equipment" -Text "Equipment Adjustments"
+    CreateReduxCheckBox -Name "UnsheathSword" -Text "Unsheath Sword" -Info "The sword is unsheathed first before immediately swinging it"                                                                                                                         -Credits "Admentus"
+    CreateReduxCheckBox -Name "IronShield"    -Text "Iron Shield"    -Info "Replace the Deku Shield with the Iron Shield, which will not burn up anymore" -Warning "Some custom models do not support the new textures, but will still keep the fireproof shield" -Credits "Admentus (ported), ZombieBrainySnack (textures) & Three Pendants (Debug fireproof ROM patch)"
+    CreateReduxCheckBox -Name "HeroShield"    -Text "Hero's Shield"  -Info "Replace the Hylian Shield with the Hero's Shield"                             -Warning "Some custom models do not support this option"                                                -Credits "SoulofDeity"
 
     # AMMO #
     $Redux.Box.Ammo = CreateReduxGroup -Tag "Capacity" -Text "Ammo Capacity Selection"
@@ -1594,6 +1658,9 @@ function CreateTabAnimations() {
     CreateReduxCheckBox -Name "WeaponIdle"       -Text "2-handed Weapon Idle"   -Info ("Restore the beta animation when idly holding a two-handed weapon" + $weapons)   -Credits "Admentus"
     CreateReduxCheckBox -Name "WeaponCrouch"     -Text "2-handed Weapon Crouch" -Info ("Restore the beta animation when crouching with a two-handed weapon" + $weapons) -Credits "Admentus"
     CreateReduxCheckBox -Name "WeaponAttack"     -Text "2-handed Weapon Attack" -Info ("Restore the beta animation when attacking with a two-handed weapon" + $weapons) -Credits "Admentus"
-    CreateReduxCheckBox -Name "Backflip"         -Text "Backflip Jump Attack"   -Info "Restore the beta animation to turn the Jump Attack into a Backflip Jump Attack"  -Credits "Admentus"
-    CreateReduxCheckBox -Name "Frontflip"        -Text "Frontflip Jump Attack"  -Info "Restore the beta animation to turn the Jump Attack into a Frontflip Jump Attack" -Credits "Admentus" -Link $Redux.Animation.Backflip
+    CreateReduxCheckBox -Name "BackflipAttack"   -Text "Backflip Jump Attack"   -Info "Restore the beta animation to turn the Jump Attack into a Backflip Jump Attack"  -Credits "Admentus"
+    CreateReduxCheckBox -Name "FrontflipAttack"  -Text "Frontflip Jump Attack"  -Info "Restore the beta animation to turn the Jump Attack into a Frontflip Jump Attack" -Credits "Admentus" -Link $Redux.Animation.BackflipAttack
+    CreateReduxCheckBox -Name "FrontflipJump"    -Text "Frontflip Jump"         -Info "Replace the jumps with frontflip jumps"  -Credits "SoulofDeity"
+    CreateReduxCheckBox -Name "SomarsaultJump"   -Text "Somarsault Jump"        -Info "Replace the jumps with somarsault jumps" -Credits "SoulofDeity" -Link $Redux.Animation.FrontflipJump
+
 }

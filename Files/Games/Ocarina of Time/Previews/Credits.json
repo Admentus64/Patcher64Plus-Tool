@@ -1,5 +1,4 @@
 [
-
 	{
 		"name"		: "Breath of the Wild",
 		"adult_author"	: "Skilarbabcock",
@@ -24,11 +23,15 @@
 		"name"		: "Ocarina of Time 3D",
 		"author"	: "Skilarbabcock",
 		"url"		: "https://www.youtube.com/user/skilarbabcock",
+		"deku_shield"	: 0,
+		"hylian_shield"	: 0,
 		"mirror_shield"	: 0
 	}, {
 		"name"		: "Link's Awakening",
 		"adult_author"	: "Skilarbabcock",
 		"url"		: "https://www.youtube.com/user/skilarbabcock",
+		"deku_shield"	: 0,
+		"hylian_shield"	: 0,
 		"mirror_shield"	: 0
 	},
 	
@@ -53,6 +56,8 @@
 	}, {
 		"name"		: "Hatsune Miku - Vocaloid",
 		"author"	: "JanexLane",
+		"deku_shield"	: 0,
+		"hylian_shield"	: 0,
 		"mirror_shield"	: 0
 	}, {
 		"name"		: "Malon 3D",
@@ -63,6 +68,8 @@
 	}, {
 		"name"		: "Princess Ruto",
 		"author"	: "Unesag",
+		"deku_shield"	: 0,
+		"hylian_shield"	: 0,
 		"mirror_shield"	: 0
 	}, {
 		"name"		: "Princess Zelda ALttP",
@@ -75,7 +82,8 @@
 		"name"		: "Saria",
 		"author"	: "Malon Rose",
 		"url"		: "https://youtube.com/c/MalonRose",
+		"deku_shield"	: 0,
+		"hylian_shield"	: 0,
 		"mirror_shield"	: 0
 	}
-	
 ]

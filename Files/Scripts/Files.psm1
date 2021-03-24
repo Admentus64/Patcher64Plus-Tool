@@ -1,3 +1,14 @@
+function SetTempFileParameters() {
+    
+    $Files.ckey                             = $Paths.Temp + "\common-key.bin"
+    $Files.dmaTable                         = $Paths.Temp + "\dmaTable.dat"
+    $Files.archive                          = $Paths.Temp + "\ARCHIVE.bin"
+
+}
+
+
+
+#==============================================================================================================================================================================================
 function SetFileParameters() {
     
     # Create a hash table
@@ -65,11 +76,17 @@ function SetFileParameters() {
     $Files.oot.hud_mm_key_rupee             = $Paths.Games + "\Ocarina of Time\Textures\HUD\MM Key & Rupee.bin"
     $Files.oot.hud_tatl                     = $Paths.Games + "\Ocarina of Time\Textures\HUD\Tatl.bin"
     $Files.oot.hud_tael                     = $Paths.Games + "\Ocarina of Time\Textures\HUD\Tael.bin"
-
-    $Files.oot.l_target_button              = $Paths.Games + "\Ocarina of Time\Textures\GameCube\L Pause Screen Button.bin"
-    $Files.oot.l_target_icon                = $Paths.Games + "\Ocarina of Time\Textures\GameCube\L Text Icon.bin"
+    $Files.oot.hero_shield_front            = $Paths.Games + "\Ocarina of Time\Textures\Hero's Shield\front.bin"
+    $Files.oot.hero_shield_icon             = $Paths.Games + "\Ocarina of Time\Textures\Hero's Shield\icon.bin"
+    $Files.oot.stone_shield_front           = $Paths.Games + "\Ocarina of Time\Textures\Iron Shield\front.bin"
+    $Files.oot.stone_shield_front           = $Paths.Games + "\Ocarina of Time\Textures\Iron Shield\back.bin"
+    $Files.oot.stone_shield_icon            = $Paths.Games + "\Ocarina of Time\Textures\Iron Shield\icon.bin"
+    $Files.oot.l_target_button              = $Paths.Games + "\Ocarina of Time\Textures\GameCube\l_pause_screen_button.bin"
+    $Files.oot.l_target_icon                = $Paths.Games + "\Ocarina of Time\Textures\GameCube\l_text_icon.bin"
 
     $Files.oot.file_select                  = $Paths.Games + "\Ocarina of Time\Binaries\File Select.bin"
+    $Files.oot.frontflip_jump               = $Paths.Games + "\Ocarina of Time\Binaries\Jumps\Frontflip.bin"
+    $Files.oot.somarsault_jump              = $Paths.Games + "\Ocarina of Time\Binaries\Jumps\Somarsault.bin"
     $Files.oot.message_table_restore_text   = $Paths.Games + "\Ocarina of Time\Binaries\Message\Table Restore Text.tbl"
     $Files.oot.message_table_female_text    = $Paths.Games + "\Ocarina of Time\Binaries\Message\Table Female Pronouns.tbl"
     $Files.oot.message_songs                = $Paths.Games + "\Ocarina of Time\Binaries\Message\Songs.bin"
@@ -80,6 +97,7 @@ function SetFileParameters() {
     $Files.oot.fire_temple_bank             = $Paths.Games + "\Ocarina of Time\Binaries\Fire Temple Theme\12AudioBankPointers.bin"
     $Files.oot.fire_temple_seq              = $Paths.Games + "\Ocarina of Time\Binaries\Fire Temple Theme\12AudioSeqPointers.bin"
     $Files.oot.fire_temple_table            = $Paths.Games + "\Ocarina of Time\Binaries\Fire Temple Theme\12AudioTablePointers.bin"
+
     $Files.oot.theme_fire_temple            = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Export\audiobank_fire_temple")
     $Files.oot.debug_map_select             = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Export\debug_map_select")
     $Files.oot.restore_text                 = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Export\Message\restore_text")
@@ -126,8 +144,8 @@ function SetFileParameters() {
     $Files.mm.hud_oot_button                = $Paths.Games + "\Majora's Mask\Textures\HUD\OoT Button.bin"
     $Files.mm.hud_oot_hearts                = $Paths.Games + "\Majora's Mask\Textures\HUD\OoT Hearts.bin"
 
-    $Files.mm.l_target_button               = $Paths.Games + "\Majora's Mask\Textures\GameCube\L Pause Screen Button.yaz0"
-    $Files.mm.l_target_button               = $Paths.Games + "\Majora's Mask\Textures\GameCube\L Text Icon.bin"
+    $Files.mm.l_target_button               = $Paths.Games + "\Majora's Mask\Textures\GameCube\l_pause_screen_button.yaz0"
+    $Files.mm.l_target_button               = $Paths.Games + "\Majora's Mask\Textures\GameCube\l_text_icon.bin"
 
     $Files.mm.carnival_of_time              = $Paths.Games + "\Majora's Mask\Textures\Widescreen\Carnival of Time.bin"
     $Files.mm.four_giant                    = $Paths.Games + "\Majora's Mask\Textures\Widescreen\Four Giants.bin"
@@ -141,6 +159,7 @@ function SetFileParameters() {
     $Files.mm.skull_kid_beak                = $Paths.Games + "\Majora's Mask\Textures\Skull Kid Beak.bin"
 
     $Files.mm.zora_physics_fix              = $Paths.Games + "\Majora's Mask\Binaries\Zora Physics Fix.bin"
+    $Files.mm.frontflip_jump_attack         = $Paths.Games + "\Majora's Mask\Binaries\Frontflip Jump Attack.bin"
 
     $Files.mm.message_table_restore_text    = $Paths.Games + "\Majora's Mask\Binaries\Message\Table Restore Text.tbl"
     $Files.mm.message_razor1                = $Paths.Games + "\Majora's Mask\Binaries\Message\Razor Sword 1.bin"
@@ -193,11 +212,10 @@ function SetFileParameters() {
     CheckFilesExists $Files.icon
 
     $Files.flipscfg                         = [System.String](Get-Location) + "\Files\Tools\Patching\flipscfg.bin"
-    $Files.ckey                             = [System.String](Get-Location) + "\Files\Temp\common-key.bin"
     $Files.stackdump                        = [System.String](Get-Location) + "\Files\Tools\Wii VC\wadpacker.exe.stackdump"
-    $Files.dmaTable                         = [System.String](Get-Location) + "\Files\Temp\dmaTable.dat"
-    $Files.archive                          = [System.String](Get-Location) + "\Files\Temp\ARCHIVE.bin"
     $Files.settings                         = $Paths.Settings + "\Core.ini"
+
+    SetTempFileParameters
 
     # Clear data
     $Files.oot = $Files.mm = $Files.sm64 = $null
@@ -213,13 +231,13 @@ function SetGetROM() {
     CreatePath $Paths.Temp
 
     $global:GetROM = @{}
-    $GetROM.romc                            = [System.String](Get-Location) + "\Files\Temp\romc"
-    $GetROM.clean                           = [System.String](Get-Location) + "\Files\Temp\clean"
-    $GetROM.cleanDecomp                     = [System.String](Get-Location) + "\Files\Temp\clean-decompressed"
-    $GetROM.decomp                          = [System.String](Get-Location) + "\Files\Temp\decompressed"
-    $GetROM.downgrade                       = [System.String](Get-Location) + "\Files\Temp\downgraded"
-    $GetROM.masterQuest                     = [System.String](Get-Location) + "\Files\Temp\master-quest-decompressed"
-    $GetROM.nes                             = [System.String](Get-Location) + "\Files\Temp\rom.nes"
+    $GetROM.romc                            = $Paths.Temp + "\romc"
+    $GetROM.clean                           = $Paths.Temp + "\clean"
+    $GetROM.cleanDecomp                     = $Paths.Temp + "\clean-decompressed"
+    $GetROM.decomp                          = $Paths.Temp + "\decompressed"
+    $GetROM.downgrade                       = $Paths.Temp + "\downgraded"
+    $GetROM.masterQuest                     = $Paths.Temp + "\master-quest-decompressed"
+    $GetROM.nes                             = $Paths.Temp + "\rom.nes"
 
     if ($IsWiiVC -and (IsSet $WADFile) ) {
         if (!(IsSet $WADFile.ROM)) { $WADFile.ROM = $GetROM.nes }
@@ -311,6 +329,7 @@ function PlaySound([System.Media.SoundPlayer]$Sound) {
 
 #==============================================================================================================================================================================================
 
+Export-ModuleMember -Function SetTempFileParameters
 Export-ModuleMember -Function SetFileParameters
 Export-ModuleMember -Function SetGetROM
 Export-ModuleMember -Function CheckPatchExtension

@@ -128,8 +128,13 @@ function MainFunctionPatch([string]$Command, [Array]$Header, [string]$PatchedFil
     
     if ($Settings.Debug.Console -eq $True) { if ( (WriteDebug -Command $Command -Header $Header -PatchedFileName $PatchedFileName -Decompress $Decompress -Finalize $Finalize) -eq $True) { return } }
 
-    # Step 01: Disable the main dialog, allow patching and delete files if they still exist
+    # Step 01: Disable the main dialog, allow patching and delete files if they still exist and redirect to the neccesary folders
     EnableGUI $False
+    if ($Settings.Core.LocalTempFolder -ne $True) {
+        CreatePath $Paths.AppData
+        $GameFiles.extracted = $Paths.AppData + "\" + $GameType.mode + "\Extracted"
+    }
+    else { $GameFiles.extracted = $GameFiles.base + "\Extracted" }
     CreatePath $Paths.Temp
 
     # Only continue with these steps in VC WAD mode, otherwise ignore these steps
@@ -1340,9 +1345,9 @@ function RepackWADFile($GameID) {
         
         # Some files need to be fed into the tool so keep track of them.
         switch ($item.Extension) {
-            '.tik'  { $tik  = [System.String](Get-Location) + "\Files\Temp\" + $item.Name }
-            '.tmd'  { $tmd  = [System.String](Get-Location) + "\Files\Temp\" + $item.Name }
-            '.cert' { $cert = [System.String](Get-Location) + "\Files\Temp\" + $item.Name }
+            '.tik'  { $tik  = $Paths.Temp + "\" + $item.Name }
+            '.tmd'  { $tmd  = $Paths.Temp + "\" + $item.Name }
+            '.cert' { $cert = $Paths.Temp + "\" + $item.Name }
         }
     }
 

@@ -16,7 +16,9 @@
 		"title"			: "English",
 		"script_start"		: "92D000",
 		"script_length"		: "38130",
-		"l_target"		: "\\GameCube\\L Targeting English.bin",
+		"l_target"		: "\\GameCube\\l_targeting_english.bin",
+		"iron_shield"		: "\\Iron Shield\\label_english.bin",
+		"hero_shield"		: "\\Hero's Shield\\label_english.bin",
 		"max_text_speed"	: 3
 	}, {
 		"title"			: "German",
@@ -25,7 +27,7 @@
 		"file"			: "\\Decompressed\\Languages\\ger.ppf",
 		"script_start"		: "348E070",
 		"script_length"		: "3B9C0",
-		"l_target"		: "\\GameCube\\L Targeting German.bin",
+		"l_target"		: "\\GameCube\\l_targeting_german.bin",
 		"max_text_speed"	: 2,
 		"output"		: "_german_patched",
 		"credits"		: "Admentus, GhostlyDark & Ticamus (ported)"
@@ -36,7 +38,7 @@
 		"file"			: "\\Decompressed\\Languages\\fre.ppf",
 		"script_start"		: "92D000",
 		"script_length"		: "371C0",
-		"l_target"		: "\\GameCube\\L Targeting French.bin",
+		"l_target"		: "\\GameCube\\l_targeting_french.bin",
 		"max_text_speed"	: 2,
 		"output"		: "_french_patched",
 		"credits"		: "Admentus & GhostlyDark (ported)"
@@ -47,7 +49,7 @@
 		"file"			: "\\Decompressed\\Languages\\spa.ppf",
 		"script_start"		: "92D000",
 		"script_length"		: "38130",
-		"l_target"		: "\\GameCube\\L Targeting Spanish.bin",
+		"l_target"		: "\\GameCube\\l_targeting_spanish.bin",
 		"max_text_speed"	: 2,
 		"output"		: "_spanish_patched",
 		"credits"		: "eduardo_aj2 (v2.2)"
@@ -58,7 +60,7 @@
 		"file"			: "\\Decompressed\\Languages\\bra.ppf",
 		"script_start"		: "92D000",
 		"script_length"		: "38130",
-		"l_target"		: "\\GameCube\\L Targeting English.bin",
+		"l_target"		: "\\GameCube\\l_targeting_brazilian.bin",
 		"output"		: "_brazilian_patched",
 		"max_text_speed"	: 2,
 		"credits"		: "Fserve (v1.7a)",
@@ -70,7 +72,7 @@
 		"file"			: "\\Decompressed\\Languages\\ita.ppf",
 		"script_start"		: "92D000",
 		"script_length"		: "38130",
-		"l_target"		: "\\GameCube\\L Targeting Italian.bin",
+		"l_target"		: "\\GameCube\\l_targeting_italian.bin",
 		"max_text_speed"	: 2,
 		"output"		: "_italian_patched",
 		"credits"		: "Ruleless, xxcentury & Brisma (translation) & GhostlyDark (ported / improvements)"
@@ -81,7 +83,7 @@
 		"file"			: "\\Decompressed\\Languages\\pol.ppf",
 		"script_start"		: "92D000",
 		"script_length"		: "38130",
-		"l_target"		: "\\GameCube\\L Targeting Polish.bin",
+		"l_target"		: "\\GameCube\\l_targeting_polish.bin",
 		"max_text_speed"	: 2,
 		"output"		: "_polish_patched",
 		"credits"		: "RPG (v1.3)"
@@ -92,7 +94,7 @@
 		"file"			: "\\Decompressed\\Languages\\rus.ppf",
 		"script_start"		: "92D000",
 		"script_length"		: "34390",
-		"l_target"		: "\\GameCube\\L Targeting Russian.bin",
+		"l_target"		: "\\GameCube\\l_targeting_russian.bin",
 		"max_text_speed"	: 2,
 		"output"		: "_russian_patched",
 		"credits"		: "Zelda64rus (v2.32)"
@@ -103,7 +105,7 @@
 		"vc_gameid"		: "NACJ",
 		"script_start"		: "8EB000",
 		"script_length"		: "3A350",
-		"l_target_jpn"		: "\\GameCube\\L Targeting Japanese.bin",
+		"l_target_jpn"		: "\\GameCube\\l_targeting_japanese.bin",
 		"max_text_speed"	: 1,
 		"output"		: "_japanese_patched"
 	}, {
@@ -114,7 +116,7 @@
 		"file"			: "\\Decompressed\\Languages\\chi.ppf",
 		"script_start"		: "8EB000",
 		"script_length"		: "3A350",
-		"l_target_jpn"		: "\\GameCube\\L Targeting Chinese.bin",
+		"l_target_jpn"		: "\\GameCube\\l_targeting_chinese.bin",
 		"max_text_speed"	: 1,
 		"output"		: "_chinese_patched",
 		"credits"		: "madcell (2009)"

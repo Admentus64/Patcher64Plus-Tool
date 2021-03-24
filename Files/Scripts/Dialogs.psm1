@@ -227,6 +227,7 @@ function CreateSettingsDialog() {
     $Info = "Changes how the widescreen option behaves for Ocarina of Time and Majora's Mask in Native (N64) Mode`n`n--- Ocarina of Time ---`nApply an experimental widescreen patch instead`n`n--- Majora's Mask ---`nOnly apply the 16:9 textures`nUse GLideN64 " + '"adjust to fit"' + " option for 16:9 widescreen"
     $GeneralSettings.ChangeWidescreen    = CreateSettingsCheckbox -Name "ChangeWidescreen" -Column 1 -Row 2 -Text "Change Widescreen"     -IsDebug -Info $Info
     $GeneralSettings.LiteGUI             = CreateSettingsCheckbox -Name "LiteGUI"          -Column 2 -Row 2 -Text "Lite Options GUI"      -IsDebug -Info "Only display and allow options which are highly compatible, such as with the Randomizer for Ocarina of Time"
+    $GeneralSettings.LocalTempFolder     = CreateSettingsCheckbox -Name "LocalTempFolder"  -Column 3 -Row 2 -Text "Use Local Temp Folder" -Checked $True -Info "Store all temporary and extracted files within the local Patcher64+ Tool folder`nIf unchecked the temporary and extracted files are kept in the Patcher64+ Tool folder in %AppData%"
 
     # Debug Settings
     $GeneralSettings.Box                 = CreateReduxGroup -Y ($GeneralSettings.Box.Bottom + (DPISize 10)) -IsGame $False -Height 3 -AddTo $SettingsDialog -Text "Debug Settings"
@@ -268,13 +269,19 @@ function CreateSettingsDialog() {
 
 
 
-    $GeneralSettings.DoubleClick.Add_CheckStateChanged(  { TogglePowerShellOpenWithClicks $this.Checked } )
-    $GeneralSettings.ModernStyle.Add_CheckStateChanged(  { SetModernVisualStyle $this.checked } )
-    $GeneralSettings.EnableSounds.Add_CheckStateChanged( { LoadSoundEffects $this.checked } )
-    $GeneralSettings.Logging.Add_CheckStateChanged(      { SetLogging $this.checked } )
-    $GeneralSettings.ResetButton.Add_Click(              { ResetTool } )
-    $GeneralSettings.ResetGameButton.Add_Click(          { ResetGame } )
-    $GeneralSettings.CleanupButton.Add_Click(            { CleanupFiles } )
+    $GeneralSettings.DoubleClick.Add_CheckStateChanged(     { TogglePowerShellOpenWithClicks $this.Checked } )
+    $GeneralSettings.ModernStyle.Add_CheckStateChanged(     { SetModernVisualStyle $this.checked } )
+    $GeneralSettings.EnableSounds.Add_CheckStateChanged(    { LoadSoundEffects $this.checked } )
+    $GeneralSettings.Logging.Add_CheckStateChanged(         { SetLogging $this.checked } )
+    $GeneralSettings.ResetButton.Add_Click(                 { ResetTool } )
+    $GeneralSettings.ResetGameButton.Add_Click(             { ResetGame } )
+    $GeneralSettings.CleanupButton.Add_Click(               { CleanupFiles } )
+    
+    # Local Temp Folder
+    $GeneralSettings.LocalTempFolder.Add_CheckStateChanged( {
+        if ($this.checked) { $Paths.Temp = $Paths.LocalTemp } else { $Paths.Temp = $Paths.UserTemp }
+        SetTempFileParameters
+    } )
 
     # Change Widescreen
     $GeneralSettings.ChangeWidescreen.Add_CheckStateChanged( {
@@ -438,10 +445,10 @@ function CreateSettingsRadioField([byte]$Column=1, [byte]$Row=1, [boolean]$Check
 
 
 #==============================================================================================================================================================================================
-function CreateErrorDialog([string]$Error) {
+function CreateErrorDialog([string]$Error, [boolean]$Fatal=$True, [boolean]$Once=$False) {
     
     # Create Dialog
-    $ErrorDialog = CreateDialog -Width (DPISize 300) -Height (DPISize 200) -Icon $null
+    $ErrorDialog = CreateDialog -Width (DPISize 400) -Height (DPISize 220) -Icon $null
 
     $CloseButton = CreateButton -X ($ErrorDialog.Width / 2 - (DPISize 40)) -Y ($ErrorDialog.Height - (DPISize 90)) -Width (DPISize 80) -Height (DPISize 35) -Text "Close" -AddTo $ErrorDialog
     $CloseButton.Add_Click({ $ErrorDialog.Hide() })
@@ -455,14 +462,19 @@ function CreateErrorDialog([string]$Error) {
     elseif ($Error -eq "Missing JSON")      { $String += ".JSON files are missing.{0}{0}Please download the Patcher64+ Tool again." }
     elseif ($Error -eq "Corrupted JSON")    { $String += ".JSON files are corrupted.{0}{0}Please download the Patcher64+ Tool again." }
     elseif ($Error -eq "Missing Modules")   { $String += ".PSM1 module files are missing for import.{0}{0}Please download the Patcher64+ Tool again." }
-    elseif ($Error -eq "Restricted")        { $String += "Patcher64+ Tool is being run from a restricted folder:{0}" + $Paths.FullBase + "{0}{0}Please move the Patcher64+ Tool to another folder{0}and run it again." }
+    elseif ($Error -eq "Restricted")        { $String += "Patcher64+ Tool is being run from a restricted folder:{0}" + $Paths.FullBase + "{0}{0}Please move the Patcher64+ Tool to another folder and run it again.{0}Locations such as Desktop, Downloads or My Documents are restricted.{0}{0}No assistance is given when this warning is shown." }
     $String = [string]::Format($String, [Environment]::NewLine)
 
     #Create Label
     $Label = CreateLabel -X (DPISize 10) -Y (DPISize 10) -Width ($ErrorDialog.Width - (DPISize 10)) -Height ($ErrorDialog.Height - (DPISize 110)) -Text $String -AddTo $ErrorDialog
 
-    $global:FatalError = $True
-    if (IsSet $MainDialog) { $MainDialog.Hide() }
+    if ($Once) { $Settings.Core.DisplayedWarning = $True }
+    if ($Fatal) {
+        $global:FatalError = $True
+        if (IsSet $MainDialog) { $MainDialog.Hide() }
+        WriteToConsole "Error Level: Fatal"
+    }
+    else { WriteToConsole "Error Level: Non-Fatal" }
     $ErrorDialog.ShowDialog() | Out-Null
 
 }

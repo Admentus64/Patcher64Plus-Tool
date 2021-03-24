@@ -1,3 +1,12 @@
+v13.1.0
+- Added "Frontflip Jump" and "Sommarsault Jump" options for OoT
+- Added "Frontflip Jump Attack" and "Force Frontflip Jump" options for MM
+- Added "Iron Shield" and "Hero's Shield" options for OoT (thanks ZombieBrainySnack for the Iron Shield textures!)
+- Added new tunic icons for all 31 preset colors for OoT
+- Added new option to store temporary and extracted files in %AppData%\Roaming
+- Added new missing scripts check
+- Rewrote and expanded upon the console log and restricted paths
+
 v13.0.6
 - Added more warnings and added more output for the log writer
 - Added restrictions to patching and running the tool from any Admin-protected folders

@@ -27,11 +27,13 @@ function PatchOptions() {
 function ByteOptions() {
     
     # GAMEPLAY #
-    if (IsChecked $Redux.Gameplay.ZoraPhysics)         { PatchBytes  -Offset "65D000" -Patch "Zora Physics Fix.bin" }
-    if (IsChecked $Redux.Gameplay.DistantZTargeting)   { ChangeBytes -Offset "B4E924" -Values "00 00 00 00" }
-    if (IsChecked $Redux.Gameplay.ManualJump)          { ChangeBytes -Offset "CB4008" -Values "04 C1"; ChangeBytes -Offset "CB402B" -Values "01"  }
-    if (IsChecked $Redux.Gameplay.SwordBeamAttack)     { ChangeBytes -Offset "CD73F0" -Values "00 00"; ChangeBytes -Offset "CD73F4" -Values "00 00"  }
-    if (IsChecked $Redux.Gameplay.UnsheathSword)       { ChangeBytes -Offset "CC2CE8" -Values "28 42 00 05 14 40 00 05 00 00 10 25" }
+    if (IsChecked $Redux.Gameplay.ZoraPhysics)         { PatchBytes  -Offset "65D000"  -Patch "Zora Physics Fix.bin" }
+    if (IsChecked $Redux.Gameplay.DistantZTargeting)   { ChangeBytes -Offset "B4E924"  -Values "00 00 00 00" }
+    if (IsChecked $Redux.Gameplay.ManualJump)          { ChangeBytes -Offset "CB4008"  -Values "04 C1"; ChangeBytes -Offset "CB402B" -Values "01" }
+    if (IsChecked $Redux.Gameplay.SwordBeamAttack)     { ChangeBytes -Offset "CD73F0"  -Values "00 00"; ChangeBytes -Offset "CD73F4" -Values "00 00" }
+    if (IsChecked $Redux.Gameplay.FrontflipAttack)     { ChangeBytes -Offset "1098721" -Values "0B";    PatchBytes  -Offset "75F1B0" -Patch "Frontflip Jump Attack.bin" }
+    if (IsChecked $Redux.Gameplay.FrontflipJump)       { ChangeBytes -Offset "1098E4D" -Values "23 34 D0" }
+    if (IsChecked $Redux.Gameplay.UnsheathSword)       { ChangeBytes -Offset "CC2CE8"  -Values "28 42 00 05 14 40 00 05 00 00 10 25" }
 
 
 
@@ -182,8 +184,8 @@ function ByteOptions() {
 
     if (IsChecked $Redux.UI.GCScheme) {
         # Z to L textures
-        PatchBytes -Offset "A7B7CC"  -Texture -Patch "GameCube\L Pause Screen Button.yaz0"
-        PatchBytes -Offset "AD0A80"  -Texture -Patch "GameCube\L Text Icon.bin"
+        PatchBytes -Offset "A7B7CC"  -Texture -Patch "GameCube\l_pause_screen_button.yaz0"
+        PatchBytes -Offset "AD0A80"  -Texture -Patch "GameCube\l_text_icon.bin"
         if (IsSet $LanguagePatch.l_target) { PatchBytes -Offset "1E90D00" -Texture -Patch $LanguagePatch.l_target }
     }
 
@@ -661,7 +663,7 @@ function ByteLanguageOptions() {
 
     if (IsChecked $Redux.UI.GCScheme) {
         if ( (IsSet  $LanguagePatch.l_target_seach) -and (IsSet  $LanguagePatch.l_target_replace) ) {
-            $Offset = "0"
+            $Offset = 0
             do { # Z Targeting
                 $Offset = SearchBytes -File $File -Start $Offset -Values $LanguagePatch.l_target_search
                 if ($Offset -ne -1) { ChangeBytes -File $File -Offset $Offset -Values $LanguagePatch.l_target_replace }
@@ -686,7 +688,7 @@ function ByteLanguageOptions() {
     if ( (IsChecked $Redux.Script.RenameTatl)) {
         if (IsSet $LanguagePatch.tatl) { PatchBytes -Offset "1EBFAE0" -Texture -Patch $LanguagePatch.tatl }
         if ( (IsSet  $LanguagePatch.tatl_search) -and (IsSet  $LanguagePatch.tatl_replace) ) {
-            $Offset = "0"
+            $Offset = 0
             do { # Tatl -> Taya
                 $Offset = SearchBytes -File $File -Start $Offset -Values $LanguagePatch.tatl_search
                 if ($Offset -ne -1) { ChangeBytes -File $File -Offset $Offset -Values $LanguagePatch.tatl_replace }
@@ -695,7 +697,7 @@ function ByteLanguageOptions() {
     }
     elseif (IsText -Elem $Redux.Colors.Fairy -Compare "Navi") {
         PatchBytes -Offset "1EBFAE0" -Texture -Patch "HUD\Navi.bin"
-        $Offset = "0"
+        $Offset = 0
         do { # Tatl -> Navi
             $Offset = SearchBytes -File $File -Start $Offset -Values "54 61 74 6C"
             if ($Offset -ne -1) { ChangeBytes -File $File -Offset $Offset -Values "4E 61 76 69" }
@@ -703,7 +705,7 @@ function ByteLanguageOptions() {
     }
     elseif (IsText -Elem $Redux.Colors.Fairy -Compare "Tael") {
         PatchBytes -Offset "1EBFAE0" -Texture -Patch "HUD\Tael.bin"
-        $Offset = "0"
+        $Offset = 0
         do { # Tatl -> Tael
             $Offset = SearchBytes -File $File -Start $Offset -Values "54 61 74 6C"
             if ($Offset -ne -1) { ChangeBytes -File $File -Offset $Offset -Values "54 61 65 6C" }
@@ -778,10 +780,12 @@ function CreateTabMain() {
 
     # GAMEPLAY #
     CreateReduxGroup    -Tag  "Gameplay" -Text "Gameplay" 
-    CreateReduxCheckBox -Name "ZoraPhysics"       -Text "Zora Physics"         -Info "Change the Zora physics when using the boomerang`nZora Link will take a step forward instead of staying on his spot" -Credits "ShadowOne333"
-    CreateReduxCheckBox -Name "DistantZTargeting" -Text "Distant Z-Targeting"  -Info "Allow to use Z-Targeting on enemies, objects and NPC's from any distance"                                            -Credits "Admentus"
-    CreateReduxCheckBox -Name "ManualJump"        -Text "Manual Jump"          -Info "Press Z + A to do a Manual Jump instead of a Jump Attack`nPress B mid-air after jumping to do a Jump Attack"         -Credits "Admentus"
-    CreateReduxCheckBox -Name "SwordBeamAttack"   -Text "Sword Beam Attack"    -Info "Charging the Spin Attack will launch a Sword Beam Attack instead`nYou can still execute the Quick Spin Attack"       -Credits "Admentus (ROM hack) & CloudModding (GameShark)"
+    CreateReduxCheckBox -Name "ZoraPhysics"       -Text "Zora Physics"          -Info "Change the Zora physics when using the boomerang`nZora Link will take a step forward instead of staying on his spot" -Credits "ShadowOne333"
+    CreateReduxCheckBox -Name "DistantZTargeting" -Text "Distant Z-Targeting"   -Info "Allow to use Z-Targeting on enemies, objects and NPC's from any distance"                                            -Credits "Admentus"
+    CreateReduxCheckBox -Name "ManualJump"        -Text "Manual Jump"           -Info "Press Z + A to do a Manual Jump instead of a Jump Attack`nPress B mid-air after jumping to do a Jump Attack"         -Credits "Admentus"
+    CreateReduxCheckBox -Name "SwordBeamAttack"   -Text "Sword Beam Attack"     -Info "Charging the Spin Attack will launch a Sword Beam Attack instead`nYou can still execute the Quick Spin Attack"       -Credits "Admentus (ROM hack) & CloudModding (GameShark)"
+    CreateReduxCheckBox -Name "FrontflipAttack"   -Text "Frontflip Jump Attack" -Info "Restores the Frontflip Jump Attack animation from the Beta"                                                          -Credits "SoulofDeity"
+    CreateReduxCheckBox -Name "FrontflipJump"     -Text "Force Frontflip Jump"  -Info "Link will always use the frontflip animation when jumping"                                                           -Credits "SoulofDeity"
 
     # RESTORE #
     CreateReduxGroup    -Tag  "Restore" -Text "Restore / Correct"
