@@ -267,5 +267,4 @@ if (!$FatalError) {
     SetLogging $False
     $global:ConsoleHistory = $null
 }
-$null = $Host.UI.RawUI.ReadKey('NoEcho,IncludeKeyDown')
 Exit
