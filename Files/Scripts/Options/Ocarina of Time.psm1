@@ -593,7 +593,7 @@ function ByteOptions() {
     }
 
     if (IsChecked $Redux.Equipment.IronShield -and $ModelCredits.deku_shield -ne 0) {
-        ChangeBytes -Offset "BD3C58" -Values "00 00 00 00" # Fireproof
+        ChangeBytes -Offset "BD3C5B" -Values "00" # Fireproof
         if ($ModelCredits.stone_shield -ne 0) {
             $Offset = SearchBytes -Start "FBE000" -End "FEAF80" -Values "CC 99 E5 E5 DD A3 EE 2B DD A5 E6 29 DD A5 D4 DB"
             PatchBytes -Offset $Offset  -Texture -Patch "Iron Shield\front.bin" # Vanilla: FC5E88
