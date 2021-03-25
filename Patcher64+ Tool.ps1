@@ -37,7 +37,7 @@ Add-Type -Namespace Console -Name Window -MemberDefinition $HidePSConsole
 $global:ScriptName = "Patcher64+ Tool"
 $global:VersionDate = "2021-03-25"
 $global:Version     = "v13.1.0"
-$global:SystemDate  = Get-Date -Format yyyy-MM-dd-hh-mm-ss
+$global:SystemDate  = Get-Date -Format yyyy-MM-dd-HH-mm-ss
 
 $global:CommandType = $MyInvocation.MyCommand.CommandType.ToString()
 $global:Definition  = $MyInvocation.MyCommand.Definition.ToString()
@@ -145,7 +145,7 @@ $Paths.WiiVC           = $Paths.Tools  + "\Wii VC"
 $Paths.Scripts         = $Paths.Master + "\Scripts"
 $Paths.LocalTemp       = $Paths.FullBase + "\Files\Temp"
 $Paths.AppData         = $env:APPDATA + "\Patcher64+ Tool"
-$Paths.UserTemp        = $Paths.AppData + "\Temp"
+$Paths.AppDataTemp     = $Paths.AppData + "\Temp"
 $Paths.Temp            = $Paths.Local
 $Paths.Settings        = $Paths.Master + "\Settings"
 $Paths.Logs            = $Paths.Master + "\Logs"
@@ -182,7 +182,7 @@ SetLogging ($Settings.Debug.Logging -eq $True)
 
 # Temp
 if ($Settings.Core.LocalTempFolder -eq $True)   { $Paths.Temp = $Paths.LocalTemp }
-else                                            { $Paths.Temp = $Paths.UserTemp }
+else                                            { $Paths.Temp = $Paths.AppDataTemp }
 
 # Hi-DPI Mode
 $global:DisableHighDPIMode = $Settings.Core.HiDPIMode -eq $False

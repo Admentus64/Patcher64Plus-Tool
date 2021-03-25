@@ -134,11 +134,11 @@ function MainFunctionPatch([string]$Command, [Array]$Header, [string]$PatchedFil
 
     # Step 01: Disable the main dialog, allow patching and delete files if they still exist and redirect to the neccesary folders
     EnableGUI $False
-    if ($Settings.Core.LocalTempFolder -ne $True) {
+    if ($Settings.Core.LocalTempFolder -eq $True) { $GameFiles.extracted = $GameFiles.base + "\Extracted" }
+    else {
         CreatePath $Paths.AppData
         $GameFiles.extracted = $Paths.AppData + "\" + $GameType.mode + "\Extracted"
     }
-    else { $GameFiles.extracted = $GameFiles.base + "\Extracted" }
     CreatePath $Paths.Temp
 
     # Only continue with these steps in VC WAD mode, otherwise ignore these steps

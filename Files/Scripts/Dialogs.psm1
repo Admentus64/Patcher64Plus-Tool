@@ -279,7 +279,7 @@ function CreateSettingsDialog() {
     
     # Local Temp Folder
     $GeneralSettings.LocalTempFolder.Add_CheckStateChanged( {
-        if ($this.checked) { $Paths.Temp = $Paths.LocalTemp } else { $Paths.Temp = $Paths.UserTemp }
+        if ($this.checked) { $Paths.Temp = $Paths.LocalTemp } else { $Paths.Temp = $Paths.AppDataTemp }
         SetTempFileParameters
     } )
 

@@ -463,6 +463,14 @@ function ByteOptions() {
 
 
 
+    # SWORD TRAIL COLORS #
+
+   # if (IsDefaultColor -Elem $Redux.Colors.SetSwordTrail[0] -Not)   { ChangeBytes -Offset "" -IsDec -Values @($Redux.Colors.SetSwordTrail[0].Color.R, $Redux.Colors.SetSwordTrail[0].Color.G, $Redux.Colors.SetSwordTrail[0].Color.B) }
+   # if (IsDefaultColor -Elem $Redux.Colors.SetSwordTrail[1] -Not)   { ChangeBytes -Offset "" -IsDec -Values @($Redux.Colors.SetSwordTrail[1].Color.R, $Redux.Colors.SetSwordTrail[1].Color.G, $Redux.Colors.SetSwordTrail[1].Color.B) }
+   # if (IsIndex -Elem $Redux.Colors.SwordTrailDuration -Not)        { ChangeBytes -Offset "" -IsDec -Values (($Redux.Colors.SwordTrailDuration.SelectedIndex+1) * 5) }
+
+
+
     # FAIRY COLORS #
 
     if ( (IsDefaultColor -Elem $Redux.Colors.SetFairy[0] -Not) -or (IsDefaultColor -Elem $Redux.Colors.SetFairy[1] -Not) ) { # Idle
@@ -1017,6 +1025,9 @@ function CreateTabColors() {
 
     # SPIN ATTACK COLORS #
     CreateSpinAttackColorOptions
+
+    # SWORD TRAIL COLORS #
+  # CreateSwordTrailColorOptions
 
     # FAIRY COLORS #
     CreateFairyColorOptions

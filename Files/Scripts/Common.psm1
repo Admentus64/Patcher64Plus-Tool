@@ -971,7 +971,7 @@ function SetLogging([boolean]$Enable) {
     }
 
     if ($Enable) {
-        $global:TranscriptTime = Get-Date -Format yyyy-MM-dd-hh-mm-ss
+        $global:TranscriptTime = Get-Date -Format yyyy-MM-dd-HH-mm-ss
         if (!(TestFile -Path $Paths.Logs -Container)) { CreatePath $Paths.Logs }
         Start-Transcript -LiteralPath ($Paths.Logs + "\" + $TranscriptTime + ".log")
     }

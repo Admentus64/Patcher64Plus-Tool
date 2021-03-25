@@ -57,7 +57,7 @@ function SetFileParameters() {
 
 
     # Store sound files
-    $Files.sound.done                       = [System.String](Get-Location) + "\Files\Main\Done.wav"
+    $Files.sound.done                       = $Paths.FullBase + "\Files\Main\Done.wav"
 
 
 
@@ -322,7 +322,7 @@ function LoadSoundEffects([boolean]$Enable=$True) {
 #==============================================================================================================================================================================================
 function PlaySound([System.Media.SoundPlayer]$Sound) {
     
-    if ($Settings.Core.EnableSounds -eq $True) { $Sound.playsync() } 
+    if ($Settings.Core.EnableSounds -eq $True -and $Sound -ne $null) { $Sound.playsync() } 
 
 }
 
