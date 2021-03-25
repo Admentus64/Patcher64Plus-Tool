@@ -232,7 +232,7 @@ function CreateSettingsDialog() {
     # Debug Settings
     $GeneralSettings.Box                 = CreateReduxGroup -Y ($GeneralSettings.Box.Bottom + (DPISize 10)) -IsGame $False -Height 3 -AddTo $SettingsDialog -Text "Debug Settings"
     $GeneralSettings.Console             = CreateSettingsCheckbox -Name "Console"          -Column 1 -Row 1 -Text "Console"               -IsDebug -Info "Show the console log"
-    $GeneralSettings.Stop                = CreateSettingsCheckbox -Name "Stop"             -Column 2 -Row 1 -Text "Stop Patching"         -IsDebug -Info "Do not start the patching process and instead show debug information for the console log"
+    $GeneralSettings.Stop                = CreateSettingsCheckbox -Name "Stop"             -Column 2 -Row 1 -Text "Stop Patching"         -IsDebug -Info "Do not start the patching process and only show the debug information for the console log or log file"
     $GeneralSettings.Logging             = CreateSettingsCheckbox -Name "Logging"          -Column 3 -Row 1 -Text "Logging"               -IsDebug -Info "Write all events of Patcher64+ into log files`nThe .exe only supports basic logging`nComplete logging requires the .ps1 script instead" -Checked $True
     $GeneralSettings.CreateBPS           = CreateSettingsCheckbox -Name "CreateBPS"        -Column 1 -Row 2 -Text "Create BPS"            -IsDebug -Info "Create compressed and decompressed BPS patches when patching is concluded"
     $GeneralSettings.NoCleanup           = CreateSettingsCheckbox -Name "NoCleanup"        -Column 2 -Row 2 -Text "No Cleanup"            -IsDebug -Info "Do not clean up the files after the patching process fails or succeeds"
@@ -290,11 +290,7 @@ function CreateSettingsDialog() {
 
     # Console
     $GeneralSettings.Console.Enabled = $ExternalScript
-    $GeneralSettings.Console.Add_CheckStateChanged( {
-        ShowPowerShellConsole $this.Checked
-        EnableElem -Elem $GeneralSettings.Stop -Active $this.Checked
-    } )
-    EnableElem -Elem $GeneralSettings.Stop -Active $GeneralSettings.Console.Checked
+    $GeneralSettings.Console.Add_CheckStateChanged( { ShowPowerShellConsole $this.Checked } )
     
     # Lite GUI
     $GeneralSettings.LiteGUI.Add_CheckStateChanged( {

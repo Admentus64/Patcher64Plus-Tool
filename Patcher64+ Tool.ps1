@@ -35,7 +35,7 @@ Add-Type -Namespace Console -Name Window -MemberDefinition $HidePSConsole
 # Setup global variables
 
 $global:ScriptName = "Patcher64+ Tool"
-$global:VersionDate = "2021-03-24"
+$global:VersionDate = "2021-03-25"
 $global:Version     = "v13.1.0"
 $global:SystemDate  = Get-Date -Format yyyy-MM-dd-hh-mm-ss
 

@@ -881,6 +881,16 @@ function TestFile([string]$Path, [switch]$Container) {
 
 
 #==============================================================================================================================================================================================
+function CountFiles([string]$Path) {
+    
+    if (!(TestFile -Path $Path -Container)) { return -1 }
+    return (Get-ChildItem -Recurse -File -LiteralPath $Path | Measure-Object).Count
+
+}
+
+
+
+#==============================================================================================================================================================================================
 function CreateSubPath([string]$Path) {
 
     if (!(TestFile -Path $Path -Container)) {
@@ -1061,6 +1071,7 @@ Export-ModuleMember -Function RemovePath
 Export-ModuleMember -Function CreatePath
 Export-ModuleMember -Function RemoveFile
 Export-ModuleMember -Function TestFile
+Export-ModuleMember -Function CountFiles
 Export-ModuleMember -Function CreateSubPath
 
 Export-ModuleMember -Function ShowPowerShellConsole

@@ -126,7 +126,11 @@ function SetHeader([Array]$Header, [string]$ROMTitle, [string]$ROMGameID, [strin
 #==============================================================================================================================================================================================
 function MainFunctionPatch([string]$Command, [Array]$Header, [string]$PatchedFileName, [boolean]$Decompress, [boolean]$Finalize) {
     
-    if ($Settings.Debug.Console -eq $True) { if ( (WriteDebug -Command $Command -Header $Header -PatchedFileName $PatchedFileName -Decompress $Decompress -Finalize $Finalize) -eq $True) { return } }
+    # Step 00: Prepare for patching
+    WriteDebug -Command $Command -Header $Header -PatchedFileName $PatchedFileName -Decompress $Decompress -Finalize $Finalize
+    if ($Settings.Debug.Stop -eq $True) { return $False }
+    WriteToConsole "START PATCHING PROCESS OF SELECTED GAME"
+    WriteToConsole
 
     # Step 01: Disable the main dialog, allow patching and delete files if they still exist and redirect to the neccesary folders
     EnableGUI $False
@@ -238,33 +242,31 @@ function MainFunctionPatch([string]$Command, [Array]$Header, [string]$PatchedFil
 #==============================================================================================================================================================================================
 function WriteDebug([string]$Command, [String[]]$Header, [string]$PatchedFileName, [boolean]$Decompress, [boolean]$Finalize) {
     
-    if ($Settings.Debug.Stop -eq $False) { return $False }
-
     WriteToConsole
     WriteToConsole "--- Start Patch Info ---"
-    WriteToConsole ("Header: " + $Header)
-    WriteToConsole ("Patch File: " + (GetPatchFile))
-    WriteToConsole ("Redux Patch: " + $GamePatch.redux.file)
-    WriteToConsole ("Additional Options: " +  (IsChecked $Patches.Options))
-    WriteToConsole ("Redux: " +  (IsChecked $Patches.Redux))
-    WriteToConsole ("Language Patch: " + $LanguagePatch.file)
-    WriteToConsole ("Patched File Name: " + $PatchedFileName)
-    WriteToConsole ("Command: " + $Command)
-    WriteToConsole ("Downgrade: " + $Patches.Downgrade.Checked)
-    WriteToConsole ("Finalize Downgrade: " + $Finalize)
-    WriteToConsole ("Decompress: " + $Decompress)
-    WriteToConsole ("ROM Hash: " + $ROMHashSum)
-    WriteToConsole ("Game Type Hash: " + $GameType.Hash)
-    WriteToConsole ("Patch Hash: " + $GamePatch.Hash)
-    WriteToConsole ("Wii VC: " + $IsWiiVC)
-    WriteToConsole ("Console: " + $GameConsole.Mode)
-    WriteToConsole ("Game File Path: " + $GamePath)
-    WriteToConsole ("Injection File Path: " + $InjectPath)
-    WriteToConsole ("Patch File Path: " + $PatchPath)
+    WriteToConsole ("Game Mode:     " + $GameType.mode)
+    WriteToConsole ("Console Mode:  " + $GameConsole.Mode)
+    WriteToConsole ("Patch Options: " + $GamePatch.title)
+    WriteToConsole ("Custom Header: " + $Header)
+    WriteToConsole ("Patch File:    " + (GetPatchFile))
+    WriteToConsole ("Use Options:   " + (IsChecked $Patches.Options))
+    WriteToConsole ("Use Redux:     " + (IsChecked $Patches.Redux))
+    WriteToConsole ("Redux File:    " + $GamePatch.redux.file)
+    WriteToConsole ("Language File: " + $LanguagePatch.file)
+    WriteToConsole ("Output Name:   " + $PatchedFileName)
+    WriteToConsole ("Command:       " + $Command)
+    WriteToConsole ("Downgrade:     " + $Patches.Downgrade.Checked)
+    WriteToConsole ("Finalize:      " + $Finalize)
+    WriteToConsole ("Decompress:    " + $Decompress)
+    WriteToConsole ("ROM Hash:      " + $ROMHashSum)
+    WriteToConsole ("No-Intro Hash: " + $GameType.Hash)
+    WriteToConsole ("Patch Hash:    " + $GamePatch.Hash)
+    WriteToConsole ("Wii VC Mode:   " + $IsWiiVC)
+    WriteToConsole ("ROM Path:      " + $GamePath)
+    WriteToConsole ("Inject Path:   " + $InjectPath)
+    WriteToConsole ("Patch Path:    " + $PatchPath)
     WriteToConsole "--- End Patch Info ---"
     WriteToConsole
-
-    return $True
 
 }
 
