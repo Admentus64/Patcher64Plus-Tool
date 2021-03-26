@@ -773,7 +773,7 @@ function DowngradeROM([boolean]$Decompress) {
     
     foreach ($item in $GameType.downgrade) {
         if ($ROMHashSum -eq $item.hash) {
-            if (!(ApplyPatch -File $GetROM.run -Patch ("\Downgrade\" + $item.file))) {
+            if (!(ApplyPatch -File $GetROM.run -Patch ("Downgrade\" + $item.file))) {
                 WriteToConsole "Could not apply downgrade patch"
                 return
             }
@@ -849,7 +849,6 @@ function ConvertROM([string]$Command) {
     $GetROM.run =  $Paths.Temp + "\converted"
     $global:ROMHashSum = (Get-FileHash -Algorithm MD5 $GetROM.run).Hash
     if ($Settings.Debug.KeepConverted -eq $True) { Copy-Item -LiteralPath $GetROM.run -Destination $GetROM.keepConvert -Force }
-    GetPatchFile
 
 }
 
@@ -880,7 +879,7 @@ function CompareHashSums([string]$Command) {
 #==============================================================================================================================================================================================
 function PatchDecompressedROM() {
     
-    if (!(StrLike -str (GetPatchFile) -val "\Decompressed")) { return $True }
+    if (!(StrLike -str (GetPatchFile) -val "Decompressed\")) { return $True }
     
     # Set the status label.
     UpdateStatusLabel ("Patching " + $GameType.mode + " ROM with patch file...")
@@ -897,7 +896,7 @@ function PatchDecompressedROM() {
 #==============================================================================================================================================================================================
 function PatchCompressedROM() {
     
-    if (!(StrLike -str (GetPatchFile) -val "\Compressed")) { return $True }
+    if (!(StrLike -str (GetPatchFile) -val "Compressed\")) { return $True }
     
     # Set the status label.
     UpdateStatusLabel ("Patching " + $GameType.mode + " ROM with patch file...")
@@ -952,8 +951,8 @@ function ApplyPatch([string]$File=$GetROM.decomp, [string]$Patch, [string]$New, 
 
     # Patch File
     if ($FullPath)         {  }
-    elseif ($FilesPath)    { $Patch = $Paths.Master + $Patch }
-    else                   { $Patch = $GameFiles.base + $Patch }
+    elseif ($FilesPath)    { $Patch = $Paths.Master + "\" + $Patch }
+    else                   { $Patch = $GameFiles.base + "\" + $Patch }
 
     if (TestFile ($Patch + ".bps"))      { $Patch + ".bps" }
     if (TestFile ($Patch + ".ips"))      { $Patch + ".ips" }
@@ -1073,7 +1072,7 @@ function CompressROM([boolean]$Decompress, [boolean]$Finalize) {
         WriteToConsole ("Compressed ROM: " + $GetROM.patched)
         Pop-Location
 
-        if ($Finalize -and (TestFile ($GameFiles.downgrade + "\finalize_rev0.bps"))) { ApplyPatch -File $GetROM.patched -Patch "\Downgrade\finalize_rev0.bps" }
+        if ($Finalize -and (TestFile ($GameFiles.downgrade + "\finalize_rev0.bps"))) { ApplyPatch -File $GetROM.patched -Patch "Downgrade\finalize_rev0.bps" }
     }
     else { Move-Item -LiteralPath $GetROM.decomp -Destination $GetROM.patched -Force }
 

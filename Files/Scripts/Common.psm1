@@ -339,9 +339,12 @@ function UpdateStatusLabel([string]$Text) {
 #==============================================================================================================================================================================================
 function WriteToConsole([string]$Text) {
     
-    if     ($ExternalScript)                                            { Write-Host $Text }
-    if     ($Settings.Debug.Logging -eq $True  -and !$ExternalScript)   { Add-Content -LiteralPath ($Paths.Logs + "\" + $TranscriptTime + ".log") -Value $Text }
-    elseif ($Settings.Debug.Logging -eq $False -and !$ExternalScript)   { $global:ConsoleHistory += $Text }
+    if ($ExternalScript) { Write-Host $Text }
+    if ($Settings.Debug.Logging -eq $True  -and !$ExternalScript) {
+        if (!(TestFile -Path $Paths.Logs -Container)) { CreatePath $Paths.Logs }
+        Add-Content -LiteralPath ($Paths.Logs + "\" + $TranscriptTime + ".log") -Value $Text
+    }
+    elseif ($Settings.Debug.Logging -eq $False -and !$ExternalScript) { $global:ConsoleHistory += $Text }
 
 }
 

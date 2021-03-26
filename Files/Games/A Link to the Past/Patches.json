@@ -4,7 +4,7 @@
 	"options"	: 1,
 	"vc_title"	: "ALTTP Redux",
 	"vc_gameID"	: "JAD0",
-	"patch"		: "\\Compressed\\redux.ips",
+	"patch"		: "Compressed\\redux.ips",
 	"output"	: "_redux_patched",
 	"tooltip"	: "A Redux adjusted version of the vanilla game that offers Quality-of-Life (QoL) tweaks{0}- Supported: Rev 0 (US)"
 }, {
@@ -12,7 +12,7 @@
 	"console"	: "Both",
 	"vc_title"	: "Parallel Worlds",
 	"vc_gameID"	: "JAD1",
-	"patch"		: "\\Compressed\\parallel_worlds.ips",
+	"patch"		: "Compressed\\parallel_worlds.ips",
 	"output"	: "_parallel_worlds_patched",
 	"tooltip"	: "A full-sized ROM hack in a completely new setting, which can be quite difficult{0}- Supported: Rev 0 (US)"
 }, {
@@ -20,7 +20,7 @@
 	"console"	: "Both",
 	"vc_title"	: "Parallel Remodel",
 	"vc_gameID"	: "JAD2",
-	"patch"		: "\\Compressed\\parallel_remodel.ips",
+	"patch"		: "Compressed\\parallel_remodel.ips",
 	"output"	: "_parallel_remodel_patched",
 	"tooltip"	: "An easier and more vanilla-like balanced version of the Parallel Worlds ROM hack{0}- Supported: Rev 0 (US)"
 } ]

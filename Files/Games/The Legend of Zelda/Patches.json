@@ -6,7 +6,7 @@
 		"options"	: 1,
 		"vc_title"	: "The Legend of Zelda Redux",
 		"vc_gameid"	: "FAK0",
-		"file"		: "\\Compressed\\redux.ips",
+		"file"		: "Compressed\\redux.ips",
 		"output"	: "_redux_patched"
 	},
 	"options"		: 1,

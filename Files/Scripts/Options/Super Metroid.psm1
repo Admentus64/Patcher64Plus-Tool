@@ -1,12 +1,12 @@
 function PatchOptions() {
     
-    if (IsChecked $Redux.Graphics.Widescreen)           { ApplyPatch -Patch "\Compressed\widescreen.ips" }
-    if (IsChecked $Redux.Graphics.RedesignedSamus)      { ApplyPatch -Patch "\Compressed\redesigned_samus.ips" }
+    if (IsChecked $Redux.Graphics.Widescreen)           { ApplyPatch -Patch "Compressed\widescreen.ips" }
+    if (IsChecked $Redux.Graphics.RedesignedSamus)      { ApplyPatch -Patch "Compressed\redesigned_samus.ips" }
 
-    if (IsChecked $Redux.Gameplay.FixedUnlockedDoors)   { ApplyPatch -Patch "\Compressed\fixed_tourian_unlocked_doors.ips" }
-    if (IsChecked $Redux.Gameplay.HeavyPhysics)         { ApplyPatch -Patch "\Compressed\heavy_physics.ips" }
-    if (IsChecked $Redux.Gameplay.SaveStationsRefill)   { ApplyPatch -Patch "\Compressed\save_stations_refill_everything.ips" }
-    if (IsChecked $Redux.Gameplay.SkipCeres)            { ApplyPatch -Patch "\Compressed\skip_ceres.ips" }
+    if (IsChecked $Redux.Gameplay.FixedUnlockedDoors)   { ApplyPatch -Patch "Compressed\fixed_tourian_unlocked_doors.ips" }
+    if (IsChecked $Redux.Gameplay.HeavyPhysics)         { ApplyPatch -Patch "Compressed\heavy_physics.ips" }
+    if (IsChecked $Redux.Gameplay.SaveStationsRefill)   { ApplyPatch -Patch "Compressed\save_stations_refill_everything.ips" }
+    if (IsChecked $Redux.Gameplay.SkipCeres)            { ApplyPatch -Patch "Compressed\skip_ceres.ips" }
 
 }
 
@@ -15,8 +15,8 @@ function PatchOptions() {
 #==============================================================================================================================================================================================
 function PatchReduxOptions() {
 
-    if (IsChecked $Redux.Revert.Xray)                   { ApplyPatch -Patch "\Compressed\Original\x_ray.ips" }
-    if (IsChecked $Redux.Revert.ElevatorSpeed)          { ApplyPatch -Patch "\Compressed\Original\elevator_speed.ips" }
+    if (IsChecked $Redux.Revert.Xray)                   { ApplyPatch -Patch "Compressed\Original\x_ray.ips" }
+    if (IsChecked $Redux.Revert.ElevatorSpeed)          { ApplyPatch -Patch "Compressed\Original\elevator_speed.ips" }
 
 }
 

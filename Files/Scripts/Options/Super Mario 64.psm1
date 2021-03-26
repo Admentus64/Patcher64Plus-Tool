@@ -1,7 +1,7 @@
 function PatchOptions() {
     
-    if (IsChecked $Redux.Gameplay.FPS)       { ApplyPatch -Patch "\Compressed\fps.ppf" }
-    if (IsChecked $Redux.Gameplay.FreeCam)   { ApplyPatch -Patch "\Compressed\cam.ppf" }
+    if (IsChecked $Redux.Gameplay.FPS)       { ApplyPatch -Patch "Compressed\fps.ppf" }
+    if (IsChecked $Redux.Gameplay.FreeCam)   { ApplyPatch -Patch "Compressed\cam.ppf" }
 
 }
 

@@ -1,12 +1,12 @@
 function PatchOptions() {
     
-    if (IsChecked $Redux.Graphics.LinksAwakeningGFX)   { ApplyPatch -Patch "\Compressed\links_awakening_gfx.ips" }
-    if (IsChecked $Redux.Graphics.RecoloredDungeons)   { ApplyPatch -Patch "\Compressed\recoloured_dungeons.ips" }
+    if (IsChecked $Redux.Graphics.LinksAwakeningGFX)   { ApplyPatch -Patch "Compressed\links_awakening_gfx.ips" }
+    if (IsChecked $Redux.Graphics.RecoloredDungeons)   { ApplyPatch -Patch "Compressed\recoloured_dungeons.ips" }
 
-    if (IsChecked $Redux.Sound.NoLowHPBeep)            { ApplyPatch -Patch "\Compressed\no_low_hp_beep.ips" }
+    if (IsChecked $Redux.Sound.NoLowHPBeep)            { ApplyPatch -Patch "Compressed\no_low_hp_beep.ips" }
 
-    if (IsChecked $Redux.Gameplay.BombUpgrades)        { ApplyPatch -Patch "\Compressed\bomb_upgrades.ips" }
-    if (IsChecked $Redux.Gameplay.RearrangedBosses)    { ApplyPatch -Patch "\Compressed\rearranged_bosses.ips" }
+    if (IsChecked $Redux.Gameplay.BombUpgrades)        { ApplyPatch -Patch "Compressed\bomb_upgrades.ips" }
+    if (IsChecked $Redux.Gameplay.RearrangedBosses)    { ApplyPatch -Patch "Compressed\rearranged_bosses.ips" }
 
 }
 
@@ -15,8 +15,8 @@ function PatchOptions() {
 #==============================================================================================================================================================================================
 function PatchReduxOptions() {
     
-    if (IsChecked $Redux.Revert.NESGFX)                { ApplyPatch -Patch "\Compressed\Original\nes_gfx.ips" }
-    if (IsChecked $Redux.Revert.HiddenSecrets)         { ApplyPatch -Patch "\Compressed\Original\hidden_secrets.ips" }
+    if (IsChecked $Redux.Revert.NESGFX)                { ApplyPatch -Patch "Compressed\Original\nes_gfx.ips" }
+    if (IsChecked $Redux.Revert.HiddenSecrets)         { ApplyPatch -Patch "Compressed\Original\hidden_secrets.ips" }
     
 }
 

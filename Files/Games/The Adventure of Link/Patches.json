@@ -6,7 +6,7 @@
 		"options"	: 1,
 		"vc_title"	: "The Adventure of Link Redux",
 		"vc_gameid"	: "FA90",
-		"file"		: "\\Compressed\\redux.ips",
+		"file"		: "Compressed\\redux.ips",
 		"output"	: "_redux_patched"
 	},
 	"options"		: 1,

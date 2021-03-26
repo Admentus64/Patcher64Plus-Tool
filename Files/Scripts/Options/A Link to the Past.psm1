@@ -1,9 +1,9 @@
 function PatchOptions() {
     
-    if (IsChecked $Redux.Revert.PinkHairGFX)    { ApplyPatch -Patch "\Compressed\Original\pink_hair.ips" }
-    if (IsChecked $Redux.Revert.MenuGFX)        { ApplyPatch -Patch "\Compressed\Original\menu.ips" }
+    if (IsChecked $Redux.Revert.PinkHairGFX)    { ApplyPatch -Patch "Compressed\Original\pink_hair.ips" }
+    if (IsChecked $Redux.Revert.MenuGFX)        { ApplyPatch -Patch "Compressed\Original\menu.ips" }
     
-    if (IsChecked $Redux.Script.ReWizardized)   { ApplyPatch -Patch "\Compressed\rewizardized.ips" }
+    if (IsChecked $Redux.Script.ReWizardized)   { ApplyPatch -Patch "Compressed\rewizardized.ips" }
 
 }
 

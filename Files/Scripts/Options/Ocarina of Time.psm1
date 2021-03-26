@@ -2,35 +2,35 @@ function PatchOptions() {
     
     # ENHANCED 16:9 WIDESCREEN #
 
-    if (IsWidescreen -Experimental) { ApplyPatch -Patch "\Decompressed\widescreen.ppf" }
+    if (IsWidescreen -Experimental) { ApplyPatch -Patch "Decompressed\widescreen.ppf" }
 
 
 
     # MODELS #
 
-    if ( (IsChecked $Redux.Graphics.OriginalModels) -and (IsChecked $Redux.Equipment.RazorSword) ) { ApplyPatch -Patch "\Decompressed\Models\razor_sword_vanilla_child.ppf" }
+    if ( (IsChecked $Redux.Graphics.OriginalModels) -and (IsChecked $Redux.Equipment.RazorSword) ) { ApplyPatch -Patch "Decompressed\Models\razor_sword_vanilla_child.ppf" }
     if (IsChecked $Redux.Graphics.ListLinkModels) {
         if (IsChecked $Redux.Graphics.MMChildLink) {
-            ApplyPatch -Patch "\Decompressed\Models\mm_child.ppf"
+            ApplyPatch -Patch "Decompressed\Models\mm_child.ppf"
             $Text = $Redux.Graphics.LinkModelsPlus.Text.replace(" (default)", "")
         }
         else { $Text = $Redux.Graphics.LinkModels.Text.replace(" (default)", "") }
-        ApplyPatch -Patch ("\Decompressed\Models\Link\" + $Text + ".ppf")
+        ApplyPatch -Patch ("Decompressed\Models\Link\" + $Text + ".ppf")
     }
-    elseif (IsChecked $Redux.Graphics.ListMaleModels)     { ApplyPatch -Patch ("\Decompressed\Models\Male\"   + $Redux.Graphics.MaleModels.Text.replace(" (default)", "") + ".ppf") }
-    elseif (IsChecked $Redux.Graphics.ListFemaleModels)   { ApplyPatch -Patch ("\Decompressed\Models\Female\" + $Redux.Graphics.FemaleModels.Text.replace(" (default)", "") + ".ppf") }
+    elseif (IsChecked $Redux.Graphics.ListMaleModels)     { ApplyPatch -Patch ("Decompressed\Models\Male\"   + $Redux.Graphics.MaleModels.Text.replace(" (default)", "") + ".ppf") }
+    elseif (IsChecked $Redux.Graphics.ListFemaleModels)   { ApplyPatch -Patch ("Decompressed\Models\Female\" + $Redux.Graphics.FemaleModels.Text.replace(" (default)", "") + ".ppf") }
 
 
 
     # DIFFICULTY #
 
-    if (IsChecked $Redux.Hero.HarderChildBosses) { ApplyPatch -Patch "\Decompressed\harder_child_bosses.ppf" }
+    if (IsChecked $Redux.Hero.HarderChildBosses) { ApplyPatch -Patch "Decompressed\harder_child_bosses.ppf" }
 
 
 
     # MM PAUSE SCREEN #
 
-    if (IsChecked $Redux.Text.PauseScreen) { ApplyPatch -Patch "\Decompressed\mm_pause_screen.ppf" }
+    if (IsChecked $Redux.Text.PauseScreen) { ApplyPatch -Patch "Decompressed\mm_pause_screen.ppf" }
     
 }
 
@@ -582,31 +582,23 @@ function ByteOptions() {
     # EQUIPMENT #
     
     if ( (IsChecked $Redux.Equipment.RazorSword) -and ($ModelCredits.razor_sword -eq 1 -or (IsChecked $Redux.Graphics.OriginalModels) ) ) {
-        PatchBytes -Offset "7F8000" -Texture -Patch "Razor Sword\icon.bin"
-        PatchBytes -Offset "7FB000" -Texture -Patch "Hero's Shield\icon.bin"
-      # PatchBytes -Offset "7FC000" -Texture -Patch "Hero's Shield\icon.bin"
-        if (IsSet $LanguagePatch.hero_shield) {
-            PatchBytes -Offset "8AD800" -Texture -Patch $LanguagePatch.razor_sword
-            PatchBytes -Offset "8AE400" -Texture -Patch $LanguagePatch.hero_shield
-          # PatchBytes -Offset "8AE800" -Texture -Patch $LanguagePatch.hero_shield
-        }
+        ChangeBytes -Offset "BD3C5B" -Values "00" # Fireproof
+        PatchBytes -Offset "7F8000" -Texture -Patch "Razor Sword\icon.bin"; PatchBytes -Offset "7FB000" -Texture -Patch "Hero's Shield\icon.bin" #; PatchBytes -Offset "7FC000" -Texture -Patch "Hero's Shield\icon.bin"
+        if (IsSet $LanguagePatch.hero_shield) { PatchBytes -Offset "8AD800" -Texture -Patch $LanguagePatch.razor_sword; PatchBytes -Offset "8AE400" -Texture -Patch $LanguagePatch.hero_shield } #; PatchBytes -Offset "8AE800" -Texture -Patch $LanguagePatch.hero_shield
     }
 
     if (IsChecked $Redux.Equipment.IronShield -and $ModelCredits.deku_shield -ne 0) {
         ChangeBytes -Offset "BD3C5B" -Values "00" # Fireproof
         if ($ModelCredits.stone_shield -ne 0) {
-            $Offset = SearchBytes -Start "FBE000" -End "FEAF80" -Values "CC 99 E5 E5 DD A3 EE 2B DD A5 E6 29 DD A5 D4 DB"
-            PatchBytes -Offset $Offset  -Texture -Patch "Iron Shield\front.bin" # Vanilla: FC5E88
-            $Offset = SearchBytes -Start "FBE000" -End "FEAF80" -Values "DC 11 F5 17 F5 19 DC 57 D4 59 E4 DB E4 DB DC 97"
-            PatchBytes -Offset $Offset  -Texture -Patch "Iron Shield\back.bin"  # Vanilla: FC5688
+            $Offset = SearchBytes -Start "FBE000" -End "FEAF80" -Values "CC 99 E5 E5 DD A3 EE 2B DD A5 E6 29 DD A5 D4 DB"; PatchBytes -Offset $Offset  -Texture -Patch "Iron Shield\front.bin" # Vanilla: FC5E88
+            $Offset = SearchBytes -Start "FBE000" -End "FEAF80" -Values "DC 11 F5 17 F5 19 DC 57 D4 59 E4 DB E4 DB DC 97"; PatchBytes -Offset $Offset  -Texture -Patch "Iron Shield\back.bin"  # Vanilla: FC5688
             PatchBytes -Offset "7FB000" -Texture -Patch "Iron Shield\icon.bin"
             if (IsSet $LanguagePatch.iron_shield) { PatchBytes -Offset "8AE400" -Texture -Patch $LanguagePatch.iron_shield }
         }
     }
 
     if (IsChecked $Redux.Equipment.HeroShield -and $ModelCredits.hylian_shield -ne 0) {
-        PatchBytes -Offset "F03400" -Texture -Patch "Hero's Shield\front.bin"
-        PatchBytes -Offset "7FC000" -Texture -Patch "Hero's Shield\icon.bin"
+        PatchBytes -Offset "F03400" -Texture -Patch "Hero's Shield\front.bin"; PatchBytes -Offset "7FC000" -Texture -Patch "Hero's Shield\icon.bin"
         if (IsSet $LanguagePatch.hero_shield) { PatchBytes -Offset "8AE800" -Texture -Patch $LanguagePatch.hero_shield }
     }
 

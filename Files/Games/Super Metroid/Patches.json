@@ -6,7 +6,7 @@
 		"rom_title"	: "Super Metroid Redux",
 		"vc_title"	: "Super Metroid Redux",
 		"vc_gameid"	: "JAV0",
-		"file"		: "\\Compressed\\redux.ips",
+		"file"		: "Compressed\\redux.ips",
 		"output"	: "_redux_patched"
 	},
 	"options"		: 1,

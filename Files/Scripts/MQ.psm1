@@ -184,7 +184,7 @@ function ExtractMQData([boolean]$Decompress) {
             if ( (CountFiles $Path) -ne $GameType.mq_files -or $Settings.Debug.ForceExtract -eq $True) {
                 if (TestFile -Path ($GameFiles.decompressed + "\master_quest.bps") ) {
                     WriteToConsole "Extracting Master Quest dungeon files"
-                    ApplyPatch -File $GetROM.decomp -Patch "\Decompressed\master_quest.bps" -New $GetROM.masterQuest
+                    ApplyPatch -File $GetROM.decomp -Patch "Decompressed\master_quest.bps" -New $GetROM.masterQuest
                     $global:ByteArrayGame = [IO.File]::ReadAllBytes($GetROM.masterQuest)
                     ExtractAllDungeons $Path
                 }
