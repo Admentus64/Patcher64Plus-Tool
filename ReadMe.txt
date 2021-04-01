@@ -8,6 +8,15 @@ GitHub:		https://github.com/Admentus64
 Patreon:	https://www.patreon.com/Admentus
 PayPal:		https://www.paypal.com/paypalme/Admentus/
 
+--- Setup ---
+If you are using Windows 10, skip to step 5.
+For those using Windows 7 or 8.1, please following the instructions below:
+1) Click here: https://mega.nz/folder/Z2Rk1ZLK#mcOTLlJH6B3IxLIeJYUmDg
+2) Download the PowerShell .msi installer and the WMT 5.1 package for your coressponding OS. If you are a 32-bit user, go into the 32-bit folder before downloading any files.
+3) Install WMT 5.1 first. You'll have to reboot your system.
+4) Install PowerShell 7.
+5) You should now be able to launch the .ps1 file doing a right click -> Run with PowerShell.
+
 --- Zelda 64 Options Documentation & Sources ---
 - https://github.com/ShadowOne333/Zelda64-Redux-Documentation (General)
 - https://docs.google.com/spreadsheets/d/1Ihccm8noxsfHZfN1E3Gkccov1F27WXXxl-rxOuManUk (Female Pronouns Script)
