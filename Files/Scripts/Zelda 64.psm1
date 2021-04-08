@@ -154,9 +154,24 @@ function GetMMMusicID([string]$Music) {
 function GetMMItemID([string]$Item) {
     
     $Item = $Item.replace(' (default)', "")
-    if     ($Item -eq "None" -or $Item -eq "Disabled")       { return "FF" }
-    elseif ($Item -eq "Ocarina of Time")   { return "00" }   elseif ($Item -eq "Deku Mask")             { return "32" }   elseif ($Item -eq "Goron Mask")   { return "33" }
-    elseif ($Item -eq "Zora Mask")         { return "34" }   elseif ($Item -eq "Fierce Deity's Mask")   { return "35" }
+    if     ($Item -eq "None" -or $Item -eq "Disabled")   { return "FF" }
+    elseif ($Item -eq "Ocarina of Time")                 { return "00" }   elseif ($Item -eq "Hero's Bow")               { return "01" }   elseif ($Item -eq "Fire Arrow")                 { return "02" }
+    elseif ($Item -eq "Ice Arrow")                       { return "03" }   elseif ($Item -eq "Light Arrow")              { return "04" }   elseif ($Item -eq "Fairy Ocarina")              { return "05" }
+    elseif ($Item -eq "Bomb")                            { return "06" }   elseif ($Item -eq "Bombchu")                  { return "07" }   elseif ($Item -eq "Deku Stick")                 { return "08" }
+    elseif ($Item -eq "Deku Nut")                        { return "09" }   elseif ($Item -eq "Magic Beans")              { return "0A" }   elseif ($Item -eq "Fairy Slingshot")            { return "0B" }
+    elseif ($Item -eq "Powder Keg")                      { return "0C" }   elseif ($Item -eq "Pictograph Box")           { return "0D" }   elseif ($Item -eq "Lens of Truth")              { return "0E" }
+    elseif ($Item -eq "Hookshot")                        { return "0F" }   elseif ($Item -eq "Great Fairy's Sword")      { return "10" }   elseif ($Item -eq "OoT Hookshot")               { return "11" }
+    elseif ($Item -eq "Deku Mask")                       { return "32" }   elseif ($Item -eq "Goron Mask")               { return "33" }   elseif ($Item -eq "Zora Mask")                  { return "34" }
+    elseif ($Item -eq "Fierce Deity's Mask")             { return "35" }   elseif ($Item -eq "Mask of Truth")            { return "36" }   elseif ($Item -eq "Kafei's Mask")               { return "37" }
+    elseif ($Item -eq "All-Night Mask")                  { return "38" }   elseif ($Item -eq "Bunny Hood")               { return "39" }   elseif ($Item -eq "Keaton Mask")                { return "3A" }
+    elseif ($Item -eq "Garo's Mask")                     { return "3B" }   elseif ($Item -eq "Romani's Mask")            { return "3C" }   elseif ($Item -eq "Circus Leader's Mask")       { return "3D" }
+    elseif ($Item -eq "Postman's Hat")                   { return "3E" }   elseif ($Item -eq "Couple's Mask")            { return "3F" }   elseif ($Item -eq "Great Fairy's Mask")         { return "40" }
+    elseif ($Item -eq "Gibdo Mask")                      { return "41" }   elseif ($Item -eq "Don Gero's Mask")          { return "42" }   elseif ($Item -eq "Kamaro's Mask")              { return "43" }
+    elseif ($Item -eq "Captain's hat")                   { return "44" }   elseif ($Item -eq "Stone Mask")               { return "45" }   elseif ($Item -eq "Bremen Mask")                { return "46" }
+    elseif ($Item -eq "Blast Mask")                      { return "47" }   elseif ($Item -eq "Mask of Scents")           { return "48" }   elseif ($Item -eq "Giant's Mask")               { return "49" }
+    elseif ($Item -eq "Hero's Bow + Fire Arrow")         { return "4A" }   elseif ($Item -eq "Hero's Bow + Ice Arrow")   { return "4B" }   elseif ($Item -eq "Hero's Bow + Light Arrow")   { return "4C" }
+    elseif ($Item -eq "Kokiri Sword")                    { return "4D" }   elseif ($Item -eq "Razor Sword")              { return "4E" }   elseif ($Item -eq "Gilded Sword")               { return "4F" }
+    elseif ($Item -eq "Double Helix Sword")              { return "50" }   elseif ($Item -eq "Hero's Shield")            { return "51" }   elseif ($Item -eq "Mirror Shield")              { return "52" }
     else {
         WriteToConsole ("Could not find item ID for : " + $Item)
         return -1
@@ -212,10 +227,10 @@ function ShowModelPreview([object]$Dropdown, [object]$Box, [string]$Category) {
     else                                     { $Box.Image = $null }
 
     if (IsSet $Files.json.models) {
-        $global:ModelCredits = $null
+        $global:CustomModels = $null
         for ($i=0; $i -lt $Files.json.models.length; $i++) {
             if ($Files.json.models[$i].name -eq $Text) {
-                $global:ModelCredits = $Files.json.models[$i]
+                $global:CustomModels = $Files.json.models[$i]
                 break
             }
         }
@@ -223,33 +238,33 @@ function ShowModelPreview([object]$Dropdown, [object]$Box, [string]$Category) {
         $Credits = ""
 
         if (IsChecked $Redux.Graphics.MMChildLink) { $Credits += "--- Majora's Mask ---{0}Child model made by:{0}Nintendo{0}{0}Child model ported by:{0}The3DDude{0}" }
-        if ( (IsChecked $Redux.Graphics.MMChildLink) -and (IsSet $ModelCredits.name) ) { $Credits += "{0}" }
+        if ( (IsChecked $Redux.Graphics.MMChildLink) -and (IsSet $CustomModels.name) ) { $Credits += "{0}" }
 
-        if (IsSet $ModelCredits.name) { $Credits += "--- " + $ModelCredits.name + " ---{0}" }
-        if (IsSet $ModelCredits.author) {
-            $Credits += "Models made by:{0}" + $ModelCredits.author + "{0}"
-            if (IsSet $ModelCredits.porter) { $Credits += "{0}Models ported by:{0}" + $ModelCredits.porter + "{0}" }
+        if (IsSet $CustomModels.name) { $Credits += "--- " + $CustomModels.name + " ---{0}" }
+        if (IsSet $CustomModels.author) {
+            $Credits += "Models made by:{0}" + $CustomModels.author + "{0}"
+            if (IsSet $CustomModels.porter) { $Credits += "{0}Models ported by:{0}" + $CustomModels.porter + "{0}" }
         }
 
-        if ( (IsSet $ModelCredits.child_author) -and !(IsSet $ModelCredits.author) -and !(IsChecked $Redux.Graphics.MMChildLink -Not) ) {
-            $Credits += "Child model made by:{0}" + $ModelCredits.child_author + "{0}"
-            if ( (IsSet $ModelCredits.child_porter) -and !(IsSet $ModelCredits.porter) ) { $Credits += "{0}Child model ported by:{0}" + $ModelCredits.child_porter + "{0}" }
+        if ( (IsSet $CustomModels.child_author) -and !(IsSet $CustomModels.author) -and !(IsChecked $Redux.Graphics.MMChildLink -Not) ) {
+            $Credits += "Child model made by:{0}" + $CustomModels.child_author + "{0}"
+            if ( (IsSet $CustomModels.child_porter) -and !(IsSet $CustomModels.porter) ) { $Credits += "{0}Child model ported by:{0}" + $CustomModels.child_porter + "{0}" }
 
-            if (IsSet $ModelCredits.adult_author) { $Credits += "{0}" }
+            if (IsSet $CustomModels.adult_author) { $Credits += "{0}" }
         }
 
-        if ( (IsSet $ModelCredits.adult_author) -and !(IsSet $ModelCredits.author) ) {
-            $Credits += "Adult model made by:{0}" + $ModelCredits.adult_author + "{0}"
-            if ( (IsSet $ModelCredits.adult_porter) -and !(IsSet $ModelCredits.porter) ) { $Credits += "{0}Adult model ported by:{0}" + $ModelCredits.adult_porter + "{0}" }
+        if ( (IsSet $CustomModels.adult_author) -and !(IsSet $CustomModels.author) ) {
+            $Credits += "Adult model made by:{0}" + $CustomModels.adult_author + "{0}"
+            if ( (IsSet $CustomModels.adult_porter) -and !(IsSet $CustomModels.porter) ) { $Credits += "{0}Adult model ported by:{0}" + $CustomModels.adult_porter + "{0}" }
         }
 
-        if ( (IsSet $ModelCredits.author) -or ( (IsSet $ModelCredits.adult_author) -and (IsChecked $Redux.Graphics.MMChildLink) ) -or ( (IsSet $ModelCredits.child_author) -and (IsSet $ModelCredits.adult_author) ) ) {
+        if ( (IsSet $CustomModels.author) -or ( (IsSet $CustomModels.adult_author) -and (IsChecked $Redux.Graphics.MMChildLink) ) -or ( (IsSet $CustomModels.child_author) -and (IsSet $CustomModels.adult_author) ) ) {
             $Credits += "{0}- Child and Adult Combo"
         }
-        elseif ( ( (IsSet $ModelCredits.child_author) -or (IsChecked $Redux.Graphics.MMChildLink) ) -and !(IsSet $ModelCredits.author) )   { $Credits += "{0}- Child only" }
-        elseif ( (IsSet $ModelCredits.adult_author) -and !(IsSet $ModelCredits.author) )   { $Credits += "{0}- Adult only" }
+        elseif ( ( (IsSet $CustomModels.child_author) -or (IsChecked $Redux.Graphics.MMChildLink) ) -and !(IsSet $CustomModels.author) )   { $Credits += "{0}- Child only" }
+        elseif ( (IsSet $CustomModels.adult_author) -and !(IsSet $CustomModels.author) )   { $Credits += "{0}- Adult only" }
 
-        if (IsSet $ModelCredits.url) { $Credits += "{0}{0}Click to visit the modder's homepage" }
+        if (IsSet $CustomModels.url) { $Credits += "{0}{0}Click to visit the modder's homepage" }
 
         if (IsSet $Credits)   { $PreviewToolTip.SetToolTip($Box, ([string]::Format($Credits, [Environment]::NewLine))) }
         else                  { $PreviewToolTip.RemoveAll() }
@@ -262,7 +277,7 @@ function ShowModelPreview([object]$Dropdown, [object]$Box, [string]$Category) {
 #==============================================================================================================================================================================================
 function ShowOriginalModelPreview([object]$Box) {
     
-    $global:ModelCredits = $null
+    $global:CustomModels = $null
     if (TestFile ($GameFiles.previews + "\Original.png"))   { SetBitMap -Path ($GameFiles.previews + "\Original.png") -Box $Box }
     else                                                    { $Box.Image = $null }
     $PreviewToolTip.SetToolTip($Redux.Graphics.ModelsPreview, ([string]::Format("Original models by: Nintendo", [Environment]::NewLine)))
@@ -363,8 +378,8 @@ function ChangeModelsSelection() {
 
     # URL
     $Redux.Graphics.ModelsPreview.add_Click({
-        if (IsSet $ModelCredits.url) {
-            [system.Diagnostics.Process]::start($ModelCredits.url)
+        if (IsSet $CustomModels.url) {
+            [system.Diagnostics.Process]::start($CustomModels.url)
         }
     })
 
@@ -470,7 +485,7 @@ function CreateSwordTrailColorOptions() {
     CreateReduxGroup    -Tag  "Colors" -Text "Sword Trail Colors"
     $Items = @("White", "Red", "Green", "Blue", "Cyan", "Magenta", "Orange", "Gold", "Purple", "Pink", "Randomized", "Custom")
     CreateReduxComboBox -Name "SwordTrail"         -Column 1 -Text "Sword Trail Color"    -Length 230 -Shift 70 -Items $Items -Default 1 -Info ("Select a preset for the sword trail color`n" + '"Randomized" fully randomizes the colors each time the patcher is opened') -Credits "Ported from Rando"
-    CreateReduxComboBox -Name "SwordTrailDuration" -Column 5 -Text "Sword Trail Duration" -Length 230 -Shift 70 -Items @("Short", "Long", "Very Long", "Lightsaber") -Default 1 -Info ("Select the duration for sword trail") -Credits "Ported from Rando"
+    CreateReduxComboBox -Name "SwordTrailDuration" -Column 5 -Text "Sword Trail Duration" -Length 230 -Shift 70 -Items @("Disabled", "Short", "Long", "Very Long", "Lightsaber") -Default 2 -Info ("Select the duration for sword trail") -Credits "Ported from Rando"
 
     # Sword Trail Colors - Buttons
     $Buttons = @()
@@ -558,13 +573,7 @@ function SetButtonColorsPreset([object]$ComboBox) {
     elseif ($Text -eq "GC MM")        { SetColors -Colors @("64FF78", "FF6464", "FFF000", "787878") -Dialogs $Redux.Colors.SetButtons -Labels $Redux.Colors.ButtonLabels }
     elseif ($Text -eq "Randomized")   {
         $Colors = @()
-        for ($i=0; $i -lt $Redux.Colors.SetButtons.length; $i++) {
-            $Green = Get8Bit -Value (Get-Random -Maximum 255)
-            $Red   = Get8Bit -Value (Get-Random -Maximum 255)
-            $Blue  = Get8Bit -Value (Get-Random -Maximum 255)
-            $Colors += $Green + $Red + $Blue
-            SetColor -Color ($Green + $Red + $Blue) -Dialog $Redux.Colors.SetButtons[$i] -Label $Redux.Colors.ButtonLabels[$i]
-        }
+        for ($i=0; $i -lt $Redux.Colors.SetButtons.length; $i++) { $Colors += SetRandomColor -Dialog $Redux.Colors.SetButtons[$i] -Label $Redux.Colors.ButtonLabels[$i] }
         if ($GameSettings.Debug.Console -eq $True) { Write-Host ("Randomize Button Colors: " + $Colors) }
     }
 
@@ -597,13 +606,7 @@ function SetFairyColorsPreset([object]$ComboBox, [Array]$Dialogs, [Array]$Labels
     elseif ($Text -eq "Phantom Zelda")       { SetFairyColors -Inner "977A6C" -Outer "6F4667" -Dialogs $Dialogs -Labels $Labels }
     elseif ($Text -eq "Randomized") {
         $Colors = @()
-        for ($i=0; $i -lt $Dialogs.length; $i++) {
-            $Green = Get8Bit -Value (Get-Random -Maximum 255)
-            $Red   = Get8Bit -Value (Get-Random -Maximum 255)
-            $Blue  = Get8Bit -Value (Get-Random -Maximum 255)
-            $Colors += $Green + $Red + $Blue
-            SetColor -Color ($Green + $Red + $Blue) -Dialog $Dialogs[$i] -Label $Labels[$i]
-        }
+        for ($i=0; $i -lt $Dialogs.length; $i++) { $Colors += SetRandomColor -Dialog $Dialogs[$i] -Label $Labels[$i] }
         WriteToConsole ("Randomize Navi Colors: " + $Colors)
     }
 
@@ -626,48 +629,43 @@ function SetFairyColors([string]$Inner, [string]$Outer, [Array]$Dialogs, [Array]
 }
 
 
+
 #==============================================================================================================================================================================================
 function SetTunicColorsPreset([object]$ComboBox, [object]$Dialog, [object]$Label) {
     
-    $Text = $ComboBox.Text.replace(' (default)', "")
-    if     ($Text -eq "Kokiri Green")    { SetColor -Color "1E691B" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "Goron Red")       { SetColor -Color "641400" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "Zora Blue")       { SetColor -Color "003C64" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "Black")           { SetColor -Color "303030" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "White")           { SetColor -Color "F0F0FF" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "Azure Blue")      { SetColor -Color "139ED8" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "Vivid Cyan")      { SetColor -Color "13E9D8" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "Light Red")       { SetColor -Color "F87C6D" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "Fuchsia")         { SetColor -Color "FF00FF" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "Purple")          { SetColor -Color "953080" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "Majora Purple")   { SetColor -Color "400040" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "Twitch Purple")   { SetColor -Color "6441A5" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "Purple Heart")    { SetColor -Color "8A2BE2" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "Persian Rose")    { SetColor -Color "FF1493" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "Dirty Yellow")    { SetColor -Color "E0D860" -Dialog $Dialog -Label $Label }
+    $text = $ComboBox.Text.replace(' (default)', "")
+    if     ($text -eq "Kokiri Green")    { SetColor -Color "1E691B" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Goron Red")       { SetColor -Color "641400" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Zora Blue")       { SetColor -Color "003C64" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Black")           { SetColor -Color "303030" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "White")           { SetColor -Color "F0F0FF" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Azure Blue")      { SetColor -Color "139ED8" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Vivid Cyan")      { SetColor -Color "13E9D8" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Light Red")       { SetColor -Color "F87C6D" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Fuchsia")         { SetColor -Color "FF00FF" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Purple")          { SetColor -Color "953080" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Majora Purple")   { SetColor -Color "400040" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Twitch Purple")   { SetColor -Color "6441A5" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Purple Heart")    { SetColor -Color "8A2BE2" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Persian Rose")    { SetColor -Color "FF1493" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Dirty Yellow")    { SetColor -Color "E0D860" -Dialog $Dialog -Label $Label }
     elseif ($Text -eq "Blush Pink")      { SetColor -Color "F86CF8" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "Hot Pink")        { SetColor -Color "FF69B4" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "Rose Pink")       { SetColor -Color "FF90B3" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "Orange")          { SetColor -Color "E07940" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "Gray")            { SetColor -Color "A0A0B0" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "Gold")            { SetColor -Color "D8B060" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "Silver")          { SetColor -Color "D0F0FF" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "Beige")           { SetColor -Color "C0A0A0" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "Teal")            { SetColor -Color "30D0B0" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "Blood Red")       { SetColor -Color "830303" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "Blood Orange")    { SetColor -Color "FE4B03" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "Royal Blue")      { SetColor -Color "400090" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "Sonic Blue")      { SetColor -Color "5090E0" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "NES Green")       { SetColor -Color "00D000" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "Dark Green")      { SetColor -Color "002518" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "Lumen")           { SetColor -Color "508CF0" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "Randomized") {
-        $Green = Get8Bit -Value (Get-Random -Maximum 255)
-        $Red   = Get8Bit -Value (Get-Random -Maximum 255)
-        $Blue  = Get8Bit -Value (Get-Random -Maximum 255)
-        WriteToConsole ("Randomize Tunic Color: " + ($Green + $Red + $Blue))
-        SetColor -Color ($Green + $Red + $Blue) -Dialog $Dialog -Label $Label
-    }
+    elseif ($text -eq "Hot Pink")        { SetColor -Color "FF69B4" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Rose Pink")       { SetColor -Color "FF90B3" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Orange")          { SetColor -Color "E07940" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Gray")            { SetColor -Color "A0A0B0" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Gold")            { SetColor -Color "D8B060" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Silver")          { SetColor -Color "D0F0FF" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Beige")           { SetColor -Color "C0A0A0" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Teal")            { SetColor -Color "30D0B0" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Blood Red")       { SetColor -Color "830303" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Blood Orange")    { SetColor -Color "FE4B03" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Royal Blue")      { SetColor -Color "400090" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Sonic Blue")      { SetColor -Color "5090E0" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "NES Green")       { SetColor -Color "00D000" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Dark Green")      { SetColor -Color "002518" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Lumen")           { SetColor -Color "508CF0" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Randomized")      { SetRandomColor -Dialog $Dialog -Label $Label -Message "Randomize Tunic Color" }
 
 }
 
@@ -677,26 +675,20 @@ function SetTunicColorsPreset([object]$ComboBox, [object]$Dialog, [object]$Label
 function SetGauntletsColorsPreset([object]$ComboBox, [object]$Dialog, [object]$Label) {
     
     $Text = $ComboBox.Text.replace(' (default)', "")
-    if     ($Text -eq "Silver")     { SetColor -Color "FFFFFF" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "Gold")       { SetColor -Color "FECF0F" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "Black")      { SetColor -Color "000006" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "Green")      { SetColor -Color "025918" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "Blue")       { SetColor -Color "06025A" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "Bronze")     { SetColor -Color "600602" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "Red")        { SetColor -Color "FF0000" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "Sky Blue")   { SetColor -Color "025DB0" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "Pink")       { SetColor -Color "FA6A90" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "Magenta")    { SetColor -Color "FF00FF" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "Orange")     { SetColor -Color "DA3800" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "Lime")       { SetColor -Color "5BA806" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "Purple")     { SetColor -Color "800080" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "Randomized") {
-        $Green = Get8Bit -Value (Get-Random -Maximum 255)
-        $Red   = Get8Bit -Value (Get-Random -Maximum 255)
-        $Blue  = Get8Bit -Value (Get-Random -Maximum 255)
-        WriteToConsole ("Randomize Gauntlets Color: " + ($Green + $Red + $Blue))
-        SetColor -Color ($Green + $Red + $Blue) -Dialog $Dialog -Label $Label
-    }
+    if     ($text -eq "Silver")       { SetColor -Color "FFFFFF" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Gold")         { SetColor -Color "FECF0F" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Black")        { SetColor -Color "000006" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Green")        { SetColor -Color "025918" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Blue")         { SetColor -Color "06025A" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Bronze")       { SetColor -Color "600602" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Red")          { SetColor -Color "FF0000" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Sky Blue")     { SetColor -Color "025DB0" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Pink")         { SetColor -Color "FA6A90" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Magenta")      { SetColor -Color "FF00FF" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Orange")       { SetColor -Color "DA3800" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Lime")         { SetColor -Color "5BA806" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Purple")       { SetColor -Color "800080" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Randomized")   { SetRandomColor -Dialog $Dialog -Label $Label -Message "Randomize Gauntlets Color" }
 
 }
 
@@ -705,23 +697,17 @@ function SetGauntletsColorsPreset([object]$ComboBox, [object]$Dialog, [object]$L
 function SetMirrorShieldFrameColorsPreset([object]$ComboBox, [object]$Dialog, [object]$Label) {
     
     $Text = $ComboBox.Text.replace(' (default)', "")
-    if     ($Text -eq "Red")        { SetColor -Color "D70000" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "Green")      { SetColor -Color "00FF00" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "Blue")       { SetColor -Color "0040D8" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "Yellow")     { SetColor -Color "FFFF64" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "Cyan")       { SetColor -Color "00FFFF" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "Magenta")    { SetColor -Color "FF00FF" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "Orange")     { SetColor -Color "FFA500" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "Gold")       { SetColor -Color "FFD700" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "Purple")     { SetColor -Color "800080" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "Pink")       { SetColor -Color "FF69B4" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "Randomized") {
-        $Green = Get8Bit -Value (Get-Random -Maximum 255)
-        $Red   = Get8Bit -Value (Get-Random -Maximum 255)
-        $Blue  = Get8Bit -Value (Get-Random -Maximum 255)
-        WriteToConsole ("Randomize Mirror Shield Frame Color: " + ($Green + $Red + $Blue))
-        SetColor -Color ($Green + $Red + $Blue) -Dialog $Dialog -Label $Label
-    }
+    if     ($Text -eq "Red")          { SetColor -Color "D70000" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "Green")        { SetColor -Color "00FF00" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "Blue")         { SetColor -Color "0040D8" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "Yellow")       { SetColor -Color "FFFF64" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "Cyan")         { SetColor -Color "00FFFF" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "Magenta")      { SetColor -Color "FF00FF" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "Orange")       { SetColor -Color "FFA500" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "Gold")         { SetColor -Color "FFD700" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "Purple")       { SetColor -Color "800080" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "Pink")         { SetColor -Color "FF69B4" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Randomized")   { SetRandomColor -Dialog $Dialog -Label $Label -Message "Randomize Mirror Shield Frame Color" }
 
 }
 
@@ -730,18 +716,12 @@ function SetMirrorShieldFrameColorsPreset([object]$ComboBox, [object]$Dialog, [o
 #==============================================================================================================================================================================================
 function SetHeartsColorsPreset([object]$ComboBox, [object]$Dialog, [object]$Label) {
     
-    $Text = $ComboBox.Text.replace(' (default)', "")
-    if     ($Text -eq "Red")        { SetColor -Color "FF4632" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "Green")      { SetColor -Color "46C832" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "Blue")       { SetColor -Color "3246FF" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "Yellow")     { SetColor -Color "FFE000" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "Randomized") {
-        $Green = Get8Bit -Value (Get-Random -Maximum 255)
-        $Red   = Get8Bit -Value (Get-Random -Maximum 255)
-        $Blue  = Get8Bit -Value (Get-Random -Maximum 255)
-        WriteToConsole ("Randomize Hearts Color: " + ($Green + $Red + $Blue))
-        SetColor -Color ($Green + $Red + $Blue) -Dialog $Dialog -Label $Label
-    }
+    $text = $ComboBox.Text.replace(' (default)', "")
+    if     ($text -eq "Red")          { SetColor -Color "FF4632" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Green")        { SetColor -Color "46C832" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Blue")         { SetColor -Color "3246FF" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Yellow")       { SetColor -Color "FFE000" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Randomized")   { SetRandomColor -Dialog $Dialog -Label $Label -Message "Randomize Hearts Color" }
 
 }
 
@@ -750,21 +730,15 @@ function SetHeartsColorsPreset([object]$ComboBox, [object]$Dialog, [object]$Labe
 #==============================================================================================================================================================================================
 function SetMagicColorsPreset([object]$ComboBox, [object]$Dialog, [object]$Label) {
     
-    $Text = $ComboBox.Text.replace(' (default)', "")
-    if     ($Text -eq "Green")      { SetColor -Color "00C800" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "Red")        { SetColor -Color "C80000" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "Blue")       { SetColor -Color "0030FF" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "Purple")     { SetColor -Color "B000FF" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "Pink")       { SetColor -Color "FF00C8" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "Yellow")     { SetColor -Color "FFFF00" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "White")      { SetColor -Color "FFFFFF" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "Randomized") {
-        $Green = Get8Bit -Value (Get-Random -Maximum 255)
-        $Red   = Get8Bit -Value (Get-Random -Maximum 255)
-        $Blue  = Get8Bit -Value (Get-Random -Maximum 255)
-        WriteToConsole ("Randomize Magic Color: " + ($Green + $Red + $Blue))
-        SetColor -Color ($Green + $Red + $Blue) -Dialog $Dialog -Label $Label
-    }
+    $text = $ComboBox.Text.replace(' (default)', "")
+    if     ($text -eq "Green")        { SetColor -Color "00C800" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Red")          { SetColor -Color "C80000" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Blue")         { SetColor -Color "0030FF" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Purple")       { SetColor -Color "B000FF" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Pink")         { SetColor -Color "FF00C8" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Yellow")       { SetColor -Color "FFFF00" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "White")        { SetColor -Color "FFFFFF" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Randomized")   { SetRandomColor -Dialog $Dialog -Label $Label -Message "Randomize Magic Color" }
 
 }
 
@@ -773,24 +747,18 @@ function SetMagicColorsPreset([object]$ComboBox, [object]$Dialog, [object]$Label
 #==============================================================================================================================================================================================
 function SetMinimapColorsPreset([object]$ComboBox, [object]$Dialog, [object]$Label) {
     
-    $Text = $ComboBox.Text.replace(' (default)', "")
-    if     ($Text -eq "Cyan")       { SetColor -Color "00FFFF" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "Green")      { SetColor -Color "00FF00" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "Red")        { SetColor -Color "FF0000" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "Blue")       { SetColor -Color "0000FF" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "Gray")       { SetColor -Color "808080" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "Purple")     { SetColor -Color "B000FF" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "Pink")       { SetColor -Color "FF00C8" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "Yellow")     { SetColor -Color "FFFF00" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "White")      { SetColor -Color "FFFFFF" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "Black")      { SetColor -Color "000000" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "Randomized") {
-        $Green = Get8Bit -Value (Get-Random -Maximum 255)
-        $Red   = Get8Bit -Value (Get-Random -Maximum 255)
-        $Blue  = Get8Bit -Value (Get-Random -Maximum 255)
-        WriteToConsole ("Randomize Magic Color: " + ($Green + $Red + $Blue))
-        SetColor -Color ($Green + $Red + $Blue) -Dialog $Dialog -Label $Label
-    }
+    $text = $ComboBox.Text.replace(' (default)', "")
+    if     ($text -eq "Cyan")         { SetColor -Color "00FFFF" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Green")        { SetColor -Color "00FF00" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Red")          { SetColor -Color "FF0000" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Blue")         { SetColor -Color "0000FF" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Gray")         { SetColor -Color "808080" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Purple")       { SetColor -Color "B000FF" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Pink")         { SetColor -Color "FF00C8" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Yellow")       { SetColor -Color "FFFF00" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "White")        { SetColor -Color "FFFFFF" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Black")        { SetColor -Color "000000" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Randomized")   { SetRandomColor -Dialog $Dialog -Label $Label -Message "Randomize Minimap Color" }
 
 }
 
@@ -799,25 +767,19 @@ function SetMinimapColorsPreset([object]$ComboBox, [object]$Dialog, [object]$Lab
 #==============================================================================================================================================================================================
 function SetSwordColorsPreset([object]$ComboBox, [object]$Dialog, [object]$Label) {
     
-    $Text = $ComboBox.Text.replace(' (default)', "")
-    if     ($Text -eq "Black")      { SetColor -Color "000000" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "White")      { SetColor -Color "FFFFFF" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "Red")        { SetColor -Color "FF0000" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "Green")      { SetColor -Color "00FF00" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "Blue")       { SetColor -Color "0000FF" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "Cyan")       { SetColor -Color "00FFFF" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "Magenta")    { SetColor -Color "FF00FF" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "Orange")     { SetColor -Color "FFA500" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "Gold")       { SetColor -Color "FFD700" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "Purple")     { SetColor -Color "800080" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "Pink")       { SetColor -Color "FF69B4" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "Randomized") {
-        $Green = Get8Bit -Value (Get-Random -Maximum 255)
-        $Red   = Get8Bit -Value (Get-Random -Maximum 255)
-        $Blue  = Get8Bit -Value (Get-Random -Maximum 255)
-        WriteToConsole ("Randomize Spin Attack Color: " + ($Green + $Red + $Blue))
-        SetColor -Color ($Green + $Red + $Blue) -Dialog $Dialog -Label $Label
-    }
+    $text = $ComboBox.Text.replace(' (default)', "")
+    if     ($text -eq "Black")        { SetColor -Color "000000" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "White")        { SetColor -Color "FFFFFF" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Red")          { SetColor -Color "FF0000" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Green")        { SetColor -Color "00FF00" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Blue")         { SetColor -Color "0000FF" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Cyan")         { SetColor -Color "00FFFF" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Magenta")      { SetColor -Color "FF00FF" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Orange")       { SetColor -Color "FFA500" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Gold")         { SetColor -Color "FFD700" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Purple")       { SetColor -Color "800080" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Pink")         { SetColor -Color "FF69B4" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Randomized")   { SetRandomColor -Dialog $Dialog -Label $Label -Message "Randomize Spin Attack Color" }
 
 }
 
@@ -833,12 +795,41 @@ function SetColor([string]$Color, [object]$Dialog, [object]$Label) {
 
 
 #==============================================================================================================================================================================================
+function SetRandomColor([object]$Dialog, [object]$Label, [string]$Message) {
+
+    $green = Get8Bit -Value (Get-Random -Maximum 255)
+    $red   = Get8Bit -Value (Get-Random -Maximum 255)
+    $blue  = Get8Bit -Value (Get-Random -Maximum 255)
+    if (IsSet $Message) { WriteToConsole ($Message + ": " + ($green + $red + $blue)) }
+    SetColor -Color ($green + $red + $blue) -Dialog $Dialog -Label $Label
+    return ($green + $red + $blue)
+
+}
+
+
+
+#==============================================================================================================================================================================================
 function SetColors([Array]$Colors, [Array]$Dialogs, [Array]$Labels) {
     
     for ($i=0; $i -lt $Colors.length; $i++) {
         $GameSettings["Colors"][$Dialogs[$i].Tag] = $Colors[$i]
         $Labels[$i].BackColor = $Dialogs[$i].Color = "#" + $Colors[$i]
     }
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function SetFormColorLabel([object]$ComboBox, [object]$Label) {
+    
+    $text = $ComboBox.Text.replace(' (default)', "")
+    if ($text -eq "Green")            { $Label.BackColor = [System.Drawing.Color]::FromArgb(30,  105, 27 ) } # 1E691B
+    if ($text -eq "Red")              { $Label.BackColor = [System.Drawing.Color]::FromArgb(105, 30,  27 ) } # 961E1B
+    if ($text -eq "Blue")             { $Label.BackColor = [System.Drawing.Color]::FromArgb(30,  27,  105) } # 1E1B96
+    if ($text -eq "Mustard Yellow")   { $Label.BackColor = [System.Drawing.Color]::FromArgb(131, 126, 75 ) } # 837E4B
+    if ($text -eq "Autumn Yellow")    { $Label.BackColor = [System.Drawing.Color]::FromArgb(105, 90,  27 ) } # 695A1B
+    if ($text -eq "Dull Green")       { $Label.BackColor = [System.Drawing.Color]::FromArgb(90,  105, 27 ) } # 5A691B
 
 }
 
@@ -877,3 +868,4 @@ Export-ModuleMember -Function SetSwordColorsPreset
 
 Export-ModuleMember -Function SetColor
 Export-ModuleMember -Function SetColors
+Export-ModuleMember -Function SetFormColorLabel

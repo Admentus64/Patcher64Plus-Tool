@@ -1,8 +1,30 @@
+v13.2.0
+- Added new texture alternatives for the Hylian Shield
+- Added "Weapon Hitbox" options for OoT and MM
+- Added "Red Ice" option for MM
+- Added "No Blue Bubble Respawn" option for MM
+- Added additional item options for the D-Pad (Redux only) for MM
+- Added slider support for GUI elements
+- Added Floating Point to Hexadecimal conversion (and vice versa)
+- Added warning when trying to patch a ROM not part of the selected console mode (free patching in Wii VC mode can now abort if stuck)
+- Added support for setting a Dropdown menu index by name rather than index number
+- Cleaned up several language patches for OoT & MM
+- Updated Masked Quest (MM) to v4.3.0 (thanks Garo-Mastah!)
+- Changed Use Modern Visual Style" as the default option
+- Fixed several patches not being applied due to failing checks
+- Fixed several issues with "Inject ROM", "Extract ROM Only", "Patch VC Emulator Only" and "Free Game Selection"
+- Fixed "Patch VC Emulator Only" being visible when it shouldn't
+- Rewrote tunic colors options for OoT to be selected from available files instead of hardcoded
+- Rewrote patching in colors and Redux content for MM (which is now searched dynamicially within the ROM rather than fixed offsets)
+- Rewrote "Recolor Mask Forms" options into individual dropdown menus for Deku Link, Goron Link and Zora Link for MM (with new colors for Deku Link)
+- Rewrote file paths to patches
+- Refactored most binary and texture file names
+
 v13.1.0
 - Added "Frontflip Jump" and "Sommarsault Jump" options for OoT
 - Added "Frontflip Jump Attack" and "Force Frontflip Jump" options for MM
+- Added "Razor Sword" option for OoT (thanks DeadSubiter)
 - Added "Iron Shield" and "Hero's Shield" options for OoT (thanks ZombieBrainySnack for the Iron Shield textures!)
-- Added "Razor Sword" option for OoT (thanks DeadSubitler)
 - Added new tunic icons for all 31 preset colors for OoT
 - Added new option to store temporary and extracted files in %AppData%\Roaming
 - Added new missing scripts check

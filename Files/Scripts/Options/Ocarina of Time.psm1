@@ -8,7 +8,7 @@ function PatchOptions() {
 
     # MODELS #
 
-    if ( (IsChecked $Redux.Graphics.OriginalModels) -and (IsChecked $Redux.Equipment.RazorSword) ) { ApplyPatch -Patch "Decompressed\Models\razor_sword_vanilla_child.ppf" }
+    if ( (IsChecked $Redux.Graphics.OriginalModels) -and (IsChecked $Redux.Equipment.UpgradeEquipment) ) { ApplyPatch -Patch "Decompressed\Models\upgrade_vanilla_child.ppf" }
     if (IsChecked $Redux.Graphics.ListLinkModels) {
         if (IsChecked $Redux.Graphics.MMChildLink) {
             ApplyPatch -Patch "Decompressed\Models\mm_child.ppf"
@@ -100,14 +100,14 @@ function ByteOptions() {
     }
 
     if (IsChecked $Redux.Restore.FireTemple) {
-        ChangeBytes -Offset "7465"   -Values "03 91 30"                         # DMA Table, Pointer to AudioBank
-        ChangeBytes -Offset "7471"   -Values "03 91 30 00 08 8B B0 00 03 91 30" # DMA Table, Pointer to AudioSeq
-        ChangeBytes -Offset "7481"   -Values "08 8B B0 00 4D 9F 40 00 08 8B B0" # DMA Table, Pointer to AudioTable
-        ChangeBytes -Offset "B2E82F" -Values "04 24 A5 91 30"                   # MIPS assembly that loads AudioSeq
-        ChangeBytes -Offset "B2E857" -Values "09 24 A5 8B B0"                   # MIPS assembly that loads AudioTable
-        PatchBytes  -Offset "B896A0" -Patch "Fire Temple Theme\12AudioBankPointers.bin"
-        PatchBytes  -Offset "B89AD0" -Patch "Fire Temple Theme\12AudioSeqPointers.bin"
-        PatchBytes  -Offset "B8A1C0" -Patch "Fire Temple Theme\12AudioTablePointers.bin"
+        ChangeBytes -Offset "7465"   -Values "03 91 30"                         # DMA Table, Pointer to Audiobank
+        ChangeBytes -Offset "7471"   -Values "03 91 30 00 08 8B B0 00 03 91 30" # DMA Table, Pointer to Audioseq
+        ChangeBytes -Offset "7481"   -Values "08 8B B0 00 4D 9F 40 00 08 8B B0" # DMA Table, Pointer to Audiotable
+        ChangeBytes -Offset "B2E82F" -Values "04 24 A5 91 30"                   # MIPS assembly that loads Audioseq
+        ChangeBytes -Offset "B2E857" -Values "09 24 A5 8B B0"                   # MIPS assembly that loads Audiotable
+        PatchBytes  -Offset "B896A0" -Patch "Fire Temple Theme\audiobank_pointers.bin"
+        PatchBytes  -Offset "B89AD0" -Patch "Fire Temple Theme\audioseq_pointers.bin"
+        PatchBytes  -Offset "B8A1C0" -Patch "Fire Temple Theme\audiotable_pointers.bin"
         ExportAndPatch -Path "audiobank_fire_temple" -Offset "D390" -Length "4CCBB0"
     }
 
@@ -128,7 +128,7 @@ function ByteOptions() {
     if (IsChecked $Redux.Other.RemoveNaviPrompts)    { ChangeBytes -Offset "DF8B84" -Values "00 00 00 00" }
     if (IsChecked $Redux.Other.DefaultZTargeting)    { ChangeBytes -Offset "B71E6D" -Values "01" }
     if (IsChecked $Redux.Other.InstantClaimCheck)    { ChangeBytes -Offset "ED4470" -Values "00 00 00 00"; ChangeBytes -Offset "ED4498" -Values "00 00 00 00" }
-    if (IsChecked $Redux.Other.HideCredits)          { PatchBytes  -Offset "966000" -Patch "Message\Credits.bin" }
+    if (IsChecked $Redux.Other.HideCredits)          { PatchBytes  -Offset "966000" -Patch "Message\credits.bin" }
     
 
 
@@ -139,42 +139,42 @@ function ByteOptions() {
         if ($IsWiiVC ) { ChangeBytes -Offset "B08038" -Values "3C 07 3F E3" }
 
         # 16:9 Textures
-        PatchBytes -Offset "28E7FB0" -Length "3A57" -Texture -Patch "Backgrounds\Bazaar.jpeg"
-        PatchBytes -Offset "2DDB160" -Length "38B8" -Texture -Patch "Backgrounds\Bombchu Shop.jpeg"
-        PatchBytes -Offset "2D339D0" -Length "3934" -Texture -Patch "Backgrounds\Goron Shop.jpeg"
-        PatchBytes -Offset "2CD0DA0" -Length "37CF" -Texture -Patch "Backgrounds\Gravekeeper's Hut.jpeg"
-        PatchBytes -Offset "3412E40" -Length "4549" -Texture -Patch "Backgrounds\Happy Mask Shop.jpeg"
-        PatchBytes -Offset "2E30EF0" -Length "4313" -Texture -Patch "Backgrounds\Impa's House.jpeg"
-        PatchBytes -Offset "300CD80" -Length "43AC" -Texture -Patch "Backgrounds\Kakariko House 3.jpeg"
-        PatchBytes -Offset "2C8A7C0" -Length "31C6" -Texture -Patch "Backgrounds\Kakariko House.jpeg"
-        PatchBytes -Offset "2D89660" -Length "3E49" -Texture -Patch "Backgrounds\Kakariko Potion Shop.jpeg"
-        PatchBytes -Offset "268D430" -Length "5849" -Texture -Patch "Backgrounds\Kokiri Know-It-All-Brothers' House.jpeg"
-        PatchBytes -Offset "2592490" -Length "410F" -Texture -Patch "Backgrounds\Kokiri Shop.jpeg"
-        PatchBytes -Offset "2AA90C0" -Length "5D69" -Texture -Patch "Backgrounds\Kokiri Twins' House.jpeg"
-        PatchBytes -Offset "2560480" -Length "5B1E" -Texture -Patch "Backgrounds\Link's House.jpeg"
-        PatchBytes -Offset "2C5DA50" -Length "4B12" -Texture -Patch "Backgrounds\Lon Lon Ranch Stables.jpeg"
-        PatchBytes -Offset "2E037A0" -Length "3439" -Texture -Patch "Backgrounds\Mamamu Yan's House.jpeg"
-        PatchBytes -Offset "2946120" -Length "4554" -Texture -Patch "Backgrounds\Market Back Alley 1 Day.jpeg"
-        PatchBytes -Offset "2A2A110" -Length "2F31" -Texture -Patch "Backgrounds\Market Back Alley 1 Night.jpeg"
-        PatchBytes -Offset "296B920" -Length "41ED" -Texture -Patch "Backgrounds\Market Back Alley 2 Day.jpeg"
-        PatchBytes -Offset "2A4F910" -Length "3015" -Texture -Patch "Backgrounds\Market Back Alley 2 Night.jpeg"
-        PatchBytes -Offset "2991120" -Length "4AC4" -Texture -Patch "Backgrounds\Market Back Alley 3 Day.jpeg"
-        PatchBytes -Offset "2A75110" -Length "366B" -Texture -Patch "Backgrounds\Market Back Alley 3 Night.jpeg"
-        PatchBytes -Offset "2718370" -Length "62CE" -Texture -Patch "Backgrounds\Market Entrance Day.jpeg"
-        PatchBytes -Offset "2A02360" -Length "54CC" -Texture -Patch "Backgrounds\Market Entrance Future.jpeg"
-        PatchBytes -Offset "29DB370" -Length "4144" -Texture -Patch "Backgrounds\Market Entrance Night.jpeg"
-        PatchBytes -Offset "2DB1430" -Length "39DF" -Texture -Patch "Backgrounds\Market Potion Shop.jpeg"
-        PatchBytes -Offset "2F7B0F0" -Length "669B" -Texture -Patch "Backgrounds\Mido's House.jpeg"
-        PatchBytes -Offset "2FB60E0" -Length "5517" -Texture -Patch "Backgrounds\Saria's House.jpeg"
-        PatchBytes -Offset "307EAF0" -Length "428D" -Texture -Patch "Backgrounds\Temple of Time Entrance Day.jpeg"
-        PatchBytes -Offset "3142AF0" -Length "3222" -Texture -Patch "Backgrounds\Temple of Time Entrance Future.jpeg"
-        PatchBytes -Offset "30EDB10" -Length "2C02" -Texture -Patch "Backgrounds\Temple of Time Entrance Night.jpeg"
-        PatchBytes -Offset "30A42F0" -Length "5328" -Texture -Patch "Backgrounds\Temple of Time Path Day.jpeg"
-        PatchBytes -Offset "31682F0" -Length "3860" -Texture -Patch "Backgrounds\Temple of Time Path Future.jpeg"
-        PatchBytes -Offset "3113310" -Length "3BC7" -Texture -Patch "Backgrounds\Temple of Time Path Night.jpeg"
-        PatchBytes -Offset "2E65EA0" -Length "49E0" -Texture -Patch "Backgrounds\Tent.jpeg"
-        PatchBytes -Offset "2D5B9E0" -Length "4119" -Texture -Patch "Backgrounds\Zora Shop.jpeg"
-        PatchBytes -Offset "F21810"  -Length "1000" -Texture -Patch "Lens of Truth.bin"
+        PatchBytes -Offset "28E7FB0" -Length "3A57" -Texture -Patch "Widescreen\bazaar.jpeg"
+        PatchBytes -Offset "2DDB160" -Length "38B8" -Texture -Patch "Widescreen\bombchu_shop.jpeg"
+        PatchBytes -Offset "2D339D0" -Length "3934" -Texture -Patch "Widescreen\goron_shop.jpeg"
+        PatchBytes -Offset "2CD0DA0" -Length "37CF" -Texture -Patch "Widescreen\gravekeepers_hut.jpeg"
+        PatchBytes -Offset "3412E40" -Length "4549" -Texture -Patch "Widescreen\happy_mask_shop.jpeg"
+        PatchBytes -Offset "2E30EF0" -Length "4313" -Texture -Patch "Widescreen\impas_house.jpeg"
+        PatchBytes -Offset "2C8A7C0" -Length "31C6" -Texture -Patch "Widescreen\kakariko_house.jpeg"
+        PatchBytes -Offset "300CD80" -Length "43AC" -Texture -Patch "Widescreen\kakariko_house_3.jpeg"
+        PatchBytes -Offset "2D89660" -Length "3E49" -Texture -Patch "Widescreen\kakariko_potion_shop.jpeg"
+        PatchBytes -Offset "268D430" -Length "5849" -Texture -Patch "Widescreen\kokiri_know_it_all_brothers_house.jpeg"
+        PatchBytes -Offset "2592490" -Length "410F" -Texture -Patch "Widescreen\kokiri_shop.jpeg"
+        PatchBytes -Offset "2AA90C0" -Length "5D69" -Texture -Patch "Widescreen\kokiri_twins_House.jpeg"
+        PatchBytes -Offset "2560480" -Length "5B1E" -Texture -Patch "Widescreen\links_house.jpeg"
+        PatchBytes -Offset "2C5DA50" -Length "4B12" -Texture -Patch "Widescreen\lon_lon_ranch_stables.jpeg"
+        PatchBytes -Offset "2E037A0" -Length "3439" -Texture -Patch "Widescreen\mamamu_yans_house.jpeg"
+        PatchBytes -Offset "2946120" -Length "4554" -Texture -Patch "Widescreen\market_back_alley_1_day.jpeg"
+        PatchBytes -Offset "2A2A110" -Length "2F31" -Texture -Patch "Widescreen\market_back_alley_1_night.jpeg"
+        PatchBytes -Offset "296B920" -Length "41ED" -Texture -Patch "Widescreen\market_back_alley_2_day.jpeg"
+        PatchBytes -Offset "2A4F910" -Length "3015" -Texture -Patch "Widescreen\market_back_alley_2_night.jpeg"
+        PatchBytes -Offset "2991120" -Length "4AC4" -Texture -Patch "Widescreen\market_back_alley_3_day.jpeg"
+        PatchBytes -Offset "2A75110" -Length "366B" -Texture -Patch "Widescreen\market_back_alley_3_night.jpeg"
+        PatchBytes -Offset "2718370" -Length "62CE" -Texture -Patch "Widescreen\market_entrance_day.jpeg"
+        PatchBytes -Offset "2A02360" -Length "54CC" -Texture -Patch "Widescreen\market_entrance_future.jpeg"
+        PatchBytes -Offset "29DB370" -Length "4144" -Texture -Patch "Widescreen\market_entrance_night.jpeg"
+        PatchBytes -Offset "2DB1430" -Length "39DF" -Texture -Patch "Widescreen\market_potion_shop.jpeg"
+        PatchBytes -Offset "2F7B0F0" -Length "669B" -Texture -Patch "Widescreen\midos_house.jpeg"
+        PatchBytes -Offset "2FB60E0" -Length "5517" -Texture -Patch "Widescreen\sarias_house.jpeg"
+        PatchBytes -Offset "307EAF0" -Length "428D" -Texture -Patch "Widescreen\temple_of_time_entrance_day.jpeg"
+        PatchBytes -Offset "3142AF0" -Length "3222" -Texture -Patch "Widescreen\temple_of_time_entrance_future.jpeg"
+        PatchBytes -Offset "30EDB10" -Length "2C02" -Texture -Patch "Widescreen\temple_of_time_entrance_night.jpeg"
+        PatchBytes -Offset "30A42F0" -Length "5328" -Texture -Patch "Widescreen\temple_of_time_path_day.jpeg"
+        PatchBytes -Offset "31682F0" -Length "3860" -Texture -Patch "Widescreen\temple_of_time_path_future.jpeg"
+        PatchBytes -Offset "3113310" -Length "3BC7" -Texture -Patch "Widescreen\temple_of_time_path_night.jpeg"
+        PatchBytes -Offset "2E65EA0" -Length "49E0" -Texture -Patch "Widescreen\tent.jpeg"
+        PatchBytes -Offset "2D5B9E0" -Length "4119" -Texture -Patch "Widescreen\zora_shop.jpeg"
+        PatchBytes -Offset "F21810"  -Length "1000" -Texture -Patch "Widescreen\lens_of_truth.bin"
     }
 
     if ( (IsIndex -Elem $Redux.Graphics.BlackBars -Index 2) -or (IsIndex -Elem $Redux.Graphics.BlackBars -Index 4) ) {
@@ -195,9 +195,9 @@ function ByteOptions() {
     # INTERFACE #
 
     if (IsChecked $Redux.UI.HudTextures) {
-        PatchBytes  -Offset "1A3CA00" -Texture -Patch "HUD\MM Button.bin"
-        PatchBytes  -Offset "1A3C100" -Texture -Patch "HUD\MM Hearts.bin"
-        PatchBytes  -Offset "1A3DE00" -Texture -Patch "HUD\MM Key & Rupee.bin"
+        PatchBytes  -Offset "1A3CA00" -Texture -Patch "HUD\mm_button.bin"
+        PatchBytes  -Offset "1A3C100" -Texture -Patch "HUD\mm_heart.bin"
+        PatchBytes  -Offset "1A3DE00" -Texture -Patch "HUD\mm_key_rupee.bin"
     }
 
     if (IsChecked $Redux.UI.ButtonPositions) {
@@ -217,7 +217,7 @@ function ByteOptions() {
         PatchBytes -Offset "844540"  -Texture -Patch "GameCube\l_pause_screen_button.bin"
         PatchBytes -Offset "92C200"  -Texture -Patch "GameCube\l_text_icon.bin"
         if (IsSet $LanguagePatch.l_target)     { PatchBytes -Offset "1A35680" -Texture -Patch $LanguagePatch.l_target }
-        if (IsSet $LanguagePatch.l_target_jpn) { PatchBytes -Offset "1A0B300" -Texture -Patch $LanguagePatch.l_target.jpn }
+        if (IsSet $LanguagePatch.l_target_jpn) { PatchBytes -Offset "1A0B300" -Texture -Patch $LanguagePatch.l_target_jpn }
     }
 
 
@@ -227,8 +227,8 @@ function ByteOptions() {
         if (IsChecked $Redux.Restore.FireTemple)   { $Offset = "19D920" }
         else                                       { $Offset = "18E1E0" }
     }
-    if (IsText -Elem $Redux.Sounds.Voices -Compare "Majora's Mask")   { PatchBytes -Offset $Offset -Patch "Voices\MM Link Voices.bin" }
-    if (IsText -Elem $Redux.Sounds.Voices -Compare "Feminine")        { PatchBytes -Offset $Offset -Patch "Voices\Feminine Link Voices.bin" }
+    if (IsText -Elem $Redux.Sounds.Voices -Compare "Majora's Mask")   { PatchBytes -Offset $Offset -Patch "Voices\majora.bin" }
+    if (IsText -Elem $Redux.Sounds.Voices -Compare "Feminine")        { PatchBytes -Offset $Offset -Patch "Voices\feminine.bin" }
 
     if (IsIndex -Elem $Redux.Sounds.Instrument -Not) {
         ChangeBytes -Offset "B53C7B" -Values ($Redux.Sounds.Instrument.SelectedIndex+1); ChangeBytes -Offset "B4BF6F" -Values ($Redux.Sounds.Instrument.SelectedIndex+1)
@@ -296,30 +296,30 @@ function ByteOptions() {
     elseif ( (IsText -Elem $Redux.Hero.Damage -Compare "1x Damage" -Not) -or (IsText -Elem $Redux.Hero.Recovery -Compare "1x Recovery" -Not) ) {
         ChangeBytes -Offset "AE8073" -Values "09 04" -Interval 16
         if         (IsText -Elem $Redux.Hero.Recovery -Compare "1x Recovery") {                
-            if     (IsText -Elem $Redux.Hero.Damage -Compare "2x Damage")   { ChangeBytes -Offset "AE8096" -Values "80 40" }
-            elseif (IsText -Elem $Redux.Hero.Damage -Compare "4x Damage")   { ChangeBytes -Offset "AE8096" -Values "80 80" }
-            elseif (IsText -Elem $Redux.Hero.Damage -Compare "8x Damage")   { ChangeBytes -Offset "AE8096" -Values "80 C0" }
+            if     (IsText -Elem $Redux.Hero.Damage   -Compare "2x Damage")   { ChangeBytes -Offset "AE8096" -Values "80 40" }
+            elseif (IsText -Elem $Redux.Hero.Damage   -Compare "4x Damage")   { ChangeBytes -Offset "AE8096" -Values "80 80" }
+            elseif (IsText -Elem $Redux.Hero.Damage   -Compare "8x Damage")   { ChangeBytes -Offset "AE8096" -Values "80 C0" }
             ChangeBytes -Offset "AE8099" -Values "00 00 00"
         }
         elseif     (IsText -Elem $Redux.Hero.Recovery -Compare "1/2x Recovery") {               
-            if     (IsText -Elem $Redux.Hero.Damage -Compare "1x Damage")   { ChangeBytes -Offset "AE8096" -Values "80 40" }
-            elseif (IsText -Elem $Redux.Hero.Damage -Compare "2x Damage")   { ChangeBytes -Offset "AE8096" -Values "80 80" }
-            elseif (IsText -Elem $Redux.Hero.Damage -Compare "4x Damage")   { ChangeBytes -Offset "AE8096" -Values "80 C0" }
-            elseif (IsText -Elem $Redux.Hero.Damage -Compare "8x Damage")   { ChangeBytes -Offset "AE8096" -Values "81 00" }
+            if     (IsText -Elem $Redux.Hero.Damage   -Compare "1x Damage")   { ChangeBytes -Offset "AE8096" -Values "80 40" }
+            elseif (IsText -Elem $Redux.Hero.Damage   -Compare "2x Damage")   { ChangeBytes -Offset "AE8096" -Values "80 80" }
+            elseif (IsText -Elem $Redux.Hero.Damage   -Compare "4x Damage")   { ChangeBytes -Offset "AE8096" -Values "80 C0" }
+            elseif (IsText -Elem $Redux.Hero.Damage   -Compare "8x Damage")   { ChangeBytes -Offset "AE8096" -Values "81 00" }
             ChangeBytes -Offset "AE8099" -Values "10 80 43"
         }
         elseif     (IsText -Elem $Redux.Hero.Recovery -Compare "1/4x Recovery") {                
-            if     (IsText -Elem $Redux.Hero.Damage -Compare "1x Damage")   { ChangeBytes -Offset "AE8096" -Values "80 80" }
-            elseif (IsText -Elem $Redux.Hero.Damage -Compare "2x Damage")   { ChangeBytes -Offset "AE8096" -Values "80 C0" }
-            elseif (IsText -Elem $Redux.Hero.Damage -Compare "4x Damage")   { ChangeBytes -Offset "AE8096" -Values "81 00" }
-            elseif (IsText -Elem $Redux.Hero.Damage -Compare "8x Damage")   { ChangeBytes -Offset "AE8096" -Values "81 40" }
+            if     (IsText -Elem $Redux.Hero.Damage   -Compare "1x Damage")   { ChangeBytes -Offset "AE8096" -Values "80 80" }
+            elseif (IsText -Elem $Redux.Hero.Damage   -Compare "2x Damage")   { ChangeBytes -Offset "AE8096" -Values "80 C0" }
+            elseif (IsText -Elem $Redux.Hero.Damage   -Compare "4x Damage")   { ChangeBytes -Offset "AE8096" -Values "81 00" }
+            elseif (IsText -Elem $Redux.Hero.Damage   -Compare "8x Damage")   { ChangeBytes -Offset "AE8096" -Values "81 40" }
             ChangeBytes -Offset "AE8099" -Values "10 80 83"
         }
         elseif     (IsText -Elem $Redux.Hero.Recovery -Compare "0x Recovery") {                
-            if     (IsText -Elem $Redux.Hero.Damage -Compare "1x Damage")   { ChangeBytes -Offset "AE8096" -Values "81 40" }
-            elseif (IsText -Elem $Redux.Hero.Damage -Compare "2x Damage")   { ChangeBytes -Offset "AE8096" -Values "81 80" }
-            elseif (IsText -Elem $Redux.Hero.Damage -Compare "4x Damage")   { ChangeBytes -Offset "AE8096" -Values "81 C0" }
-            elseif (IsText -Elem $Redux.Hero.Damage -Compare "8x Damage")   { ChangeBytes -Offset "AE8096" -Values "82 00" }
+            if     (IsText -Elem $Redux.Hero.Damage   -Compare "1x Damage")   { ChangeBytes -Offset "AE8096" -Values "81 40" }
+            elseif (IsText -Elem $Redux.Hero.Damage   -Compare "2x Damage")   { ChangeBytes -Offset "AE8096" -Values "81 80" }
+            elseif (IsText -Elem $Redux.Hero.Damage   -Compare "4x Damage")   { ChangeBytes -Offset "AE8096" -Values "81 C0" }
+            elseif (IsText -Elem $Redux.Hero.Damage   -Compare "8x Damage")   { ChangeBytes -Offset "AE8096" -Values "82 00" }
             ChangeBytes -Offset "AE8099" -Values "10 81 43"
             ChangeBytes -Offset "A895B7" -Values "2E" # No Heart Drops
         }
@@ -330,25 +330,17 @@ function ByteOptions() {
 
     # Monsters
     if (IsText -Elem $Redux.Hero.MonsterHP -Compare "2x Monster HP") {
-        ChangeBytes -Offset "C11177" -Values "08" # Dodongo                      (HP: 04)   C10BB0 -> C13950 (Length: 2DA0) (ovl_En_Dodongo)
-        ChangeBytes -Offset "C2B183" -Values "04" # Tektite         (Red)        (HP: 02)   C2B0C0 -> C2DE60 (Length: 2DA0) (ovl_En_Tite)
-        ChangeBytes -Offset "C2B1F7" -Values "08" # Tektite         (Blue)       (HP: 04)
-        ChangeBytes -Offset "D76A07" -Values "08" # Tentacle                     (HP: 04)   D76880 -> D78750 (Length: 1ED0) (ovl_En_Ba)
-        ChangeBytes -Offset "CD724F" -Values "10" # ReDead          (Both)       (HP: 08)   CD71B0 -> CD9A60 (Length: 28B0) (ovl_En_Rd)
-        ChangeBytes -Offset "EDC597" -Values "04" # Stalchild       (Small)      (HP: 02)   EDC370 -> EDDC60 (Length: 18F0) (ovl_En_Skb)
-        ChangeBytes -Offset "C1097C" -Values "08" # Wallmaster                   (HP: 04)   C0F1A0 -> C10BB0 (Length: 1A10) (ovl_En_Wallmas)
-        ChangeBytes -Offset "CD582C" -Values "08" # Floormaster                  (HP: 04)   CD28C0 -> CD5CA0 (Length: 33E0) (ovl_En_Floormas)
-        ChangeBytes -Offset "C6471B" -Values "0C" # Torch Slug                   (HP: 06)   C64670 -> C679D0 (Length: 3360) (ovl_En_Bw)
-        ChangeBytes -Offset "C51A9F" -Values "04" # Gohma Larva                  (HP: 02)   C51860 -> C544F0 (Length: 2C90) (ovl_En_Goma)
-        ChangeBytes -Offset "D74393" -Values "08" # Like-Like                    (HP: 04)   D74360 -> D76880 (Length: 2520) (ovl_En_Rr)
-        ChangeBytes -Offset "C2F97F" -Values "0C" # Peehat                       (HP: 06)   C2F8D0 -> C32FD0 (Length: 3700) (ovl_En_Peehat)
-        ChangeBytes -Offset "C2DEE7" -Values "08" # Leever          (Green)      (HP: 04)   C2DE60 -> C2F8D0 (Length: 1A70) (ovl_En_Reeba)
-        ChangeBytes -Offset "C2DF4B" -Values "28" # Leever          (Purple)     (HP: 14)
-        ChangeBytes -Offset "C836AB" -Values "0C" # Moblin          (Club)       (HP: 06)   C83500 -> C87640 (Length: 4140) (ovl_En_Mb)
-        ChangeBytes -Offset "CAAF9C" -Values "04" # Bari                         (HP: 02)   CA8DC0 -> CAB460 (Length: 26A0) (ovl_En_Vali)
-        ChangeBytes -Offset "C693CC" -Values "04" # Stinger (Land)               (HP: 02)   C679D0 -> C69630 (Length: 1C60) (ovl_En_Eiyer)
-
-        # Incomplete
+        ChangeBytes -Offset "CAAF9C" -Values "04"; ChangeBytes -Offset "C693CC" -Values "04"; ChangeBytes -Offset "D76A07" -Values "08" # Bari, Stinger (Land), Tentacle
+        ChangeBytes -Offset "C2B183" -Values "04"; ChangeBytes -Offset "C2B1F7" -Values "08" # Tektite (Red / Blue)
+        ChangeBytes -Offset "CD724F" -Values "10"; ChangeBytes -Offset "EDC597" -Values "04" # ReDead, Stalchild
+        ChangeBytes -Offset "C1097C" -Values "08"; ChangeBytes -Offset "CD582C" -Values "08" # Wallmaster, Floormaster
+        ChangeBytes -Offset "C2DEE7" -Values "08"; ChangeBytes -Offset "C2DF4B" -Values "28" # Leever (Green / Purple)
+        ChangeBytes -Offset "C11177" -Values "08" # Dodongo
+        ChangeBytes -Offset "C6471B" -Values "0C" # Torch Slug
+        ChangeBytes -Offset "C51A9F" -Values "04" # Gohma Larva
+        ChangeBytes -Offset "D74393" -Values "08" # Like-Like 
+        ChangeBytes -Offset "C2F97F" -Values "0C" # Peehat
+        ChangeBytes -Offset "C836AB" -Values "0C" # Moblin (Club)
       # ChangeBytes -Offset "" -Values "04" # Bubble                             (HP: 02)   CB1620 -> CB52F0 (Length: 3CD0) (ovl_En_Bb)
       # ChangeBytes -Offset "" -Values "02" # Guay                               (HP: 01)   EEE2F0 -> EEF990 (Length: 16A0) (ovl_En_Crow)
       # ChangeBytes -Offset "" -Values "02" # Keese                              (HP: 01)   C13950 -> C15AC0 (Length: 2170) (ovl_En_Firefly)
@@ -374,91 +366,71 @@ function ByteOptions() {
       # ChangeBytes -Offset "DFC9A3" -Values "0C" # Freezard                     (HP: 06)   DFC970 -> DFE980 (Length: 2010) (ovl_En_Fz)
     }
     elseif (IsText -Elem $Redux.Hero.MonsterHP -Compare "3x Monster HP") {
-        ChangeBytes -Offset "C11177" -Values "0C" # Dodongo                      (HP: 04)   C10BB0 -> C13950 (Length: 2DA0) (ovl_En_Dodongo)
-        ChangeBytes -Offset "C2B183" -Values "06" # Tektite         (Red)        (HP: 02)   C2B0C0 -> C2DE60 (Length: 2DA0) (ovl_En_Tite)
-        ChangeBytes -Offset "C2B1F7" -Values "0C" # Tektite         (Blue)       (HP: 04)
-        ChangeBytes -Offset "D76A07" -Values "0C" # Tentacle                     (HP: 04)   D76880 -> D78750 (Length: 1ED0) (ovl_En_Ba)
-        ChangeBytes -Offset "CD724F" -Values "18" # ReDead          (Both)       (HP: 08)   CD71B0 -> CD9A60 (Length: 28B0) (ovl_En_Rd)
-        ChangeBytes -Offset "EDC597" -Values "06" # Stalchild       (Small)      (HP: 02)   EDC370 -> EDDC60 (Length: 18F0) (ovl_En_Skb)
-        ChangeBytes -Offset "C1097C" -Values "0C" # Wallmaster                   (HP: 04)   C0F1A0 -> C10BB0 (Length: 1A10) (ovl_En_Wallmas)
-        ChangeBytes -Offset "CD582C" -Values "0C" # Floormaster                  (HP: 04)   CD28C0 -> CD5CA0 (Length: 33E0) (ovl_En_Floormas)
-        ChangeBytes -Offset "C6471B" -Values "12" # Torch Slug                   (HP: 06)   C64670 -> C679D0 (Length: 3360) (ovl_En_Bw)
-        ChangeBytes -Offset "C51A9F" -Values "06" # Gohma Larva                  (HP: 02)   C51860 -> C544F0 (Length: 2C90) (ovl_En_Goma)
-        ChangeBytes -Offset "D74393" -Values "0C" # Like-Like                    (HP: 04)   D74360 -> D76880 (Length: 2520) (ovl_En_Rr)
-        ChangeBytes -Offset "C2F97F" -Values "12" # Peehat                       (HP: 06)   C2F8D0 -> C32FD0 (Length: 3700) (ovl_En_Peehat)
-        ChangeBytes -Offset "C2DEE7" -Values "0C" # Leever          (Green)      (HP: 04)   C2DE60 -> C2F8D0 (Length: 1A70) (ovl_En_Reeba)
-        ChangeBytes -Offset "C2DF4B" -Values "3C" # Leever          (Purple)     (HP: 14)
-        ChangeBytes -Offset "C836AB" -Values "12" # Moblin          (Club)       (HP: 06)   C83500 -> C87640 (Length: 4140) (ovl_En_Mb)
-        ChangeBytes -Offset "CAAF9C" -Values "06" # Bari                         (HP: 02)   CA8DC0 -> CAB460 (Length: 26A0) (ovl_En_Vali)
-        ChangeBytes -Offset "C693CC" -Values "06" # Stinger (Land)               (HP: 02)   C679D0 -> C69630 (Length: 1C60) (ovl_En_Eiyer)
+        ChangeBytes -Offset "CAAF9C" -Values "06"; ChangeBytes -Offset "C693CC" -Values "06"; ChangeBytes -Offset "D76A07" -Values "0C" # Bari, Stringer (Land), Tentacle
+        ChangeBytes -Offset "C2B183" -Values "06"; ChangeBytes -Offset "C2B1F7" -Values "0C" # Tektite (Red / Blue)
+        ChangeBytes -Offset "CD724F" -Values "18"; ChangeBytes -Offset "EDC597" -Values "06" # ReDead, Stalchild
+        ChangeBytes -Offset "C1097C" -Values "0C"; ChangeBytes -Offset "CD582C" -Values "0C" # Wallmaster, Floormaster
+        ChangeBytes -Offset "C2DEE7" -Values "0C"; ChangeBytes -Offset "C2DF4B" -Values "3C" # Leever (Green / Purple)
+        ChangeBytes -Offset "C11177" -Values "0C" # Dodongo
+        ChangeBytes -Offset "C6471B" -Values "12" # Torch Slug
+        ChangeBytes -Offset "C51A9F" -Values "06" # Gohma Larva
+        ChangeBytes -Offset "D74393" -Values "0C" # Like-Like
+        ChangeBytes -Offset "C2F97F" -Values "12" # Peehat
+        ChangeBytes -Offset "C836AB" -Values "12" # Moblin (Club)
     }
 
     # Mini-Bosses
     if (IsText -Elem $Redux.Hero.MiniBossHP -Compare "2x Mini-Boss HP") {
-        ChangeBytes -Offset "C3452F" -Values "0C" # Lizalfos                     (HP: 06)   C340D0 -> C3ABC0 (Length: 6AF0) (ovl_En_Zf)
-        ChangeBytes -Offset "C3453B" -Values "18" # Dinolfos                     (HP: 0C)   C340D0 -> C3ABC0 (Length: 6AF0) (ovl_En_Zf)
-        ChangeBytes -Offset "ED80EB" -Values "10" # Wolfos          (Both)       (HP: 08)   ED8060 -> EDC370 (Length: 6AF0) (ovl_En_Wf)
-        ChangeBytes -Offset "BFADAB" -Values "10" # Stalfos                      (HP: 0A)   BFAC30 -> C004E0 (Length: 58B0) (ovl_En_Test)
-        ChangeBytes -Offset "D09283" -Values "1C" # Dead Hand                    (HP: 0E)   D091D0 -> D0ACA0 (Length: 1AD0) (ovl_En_Dh)
-        ChangeBytes -Offset "DE9A1B" -Values "3C" # Iron Knuckle    (Phase 1)    (HP: 1E)   DE98A0 -> DEDED0 (Length: 4630) (ovl_En_Ik)
-        ChangeBytes -Offset "DEB34F" -Values "15" # Iron Knuckle    (Phase 2)    (HP: 0B)
-        ChangeBytes -Offset "EBC8B7" -Values "28" # Gerudo Fighter               (HP: 14)   EBC840 -> EC1BF0 (Length: 53B0) (ovl_En_GeldB)
-        ChangeBytes -Offset "CF2667" -Values "0A" # Flare Dancer                 (HP: 08)   CF25E0 -> CF52A0 (Length: 2CC0) (ovl_En_Fd)
-        ChangeBytes -Offset "CDE1FC" -Values "14" # Poe Sisters                  (HP: 0A)   CD9A60 -> CDE750 (Length: 4CF0) (ovl_En_Po_Sisters)
-        ChangeBytes -Offset "DEF87F" -Values "14" # Skullkid                     (HP: 0A)   DEF3E0 -> DF2D10 (Length: 3930) (ovl_En_Skj)
-
-        # Unlocatable ?
-      # ChangeBytes -Offset "" -Values "08" # Big Octo                           (HP: 04)   D477D0 -> D4A2E0 (Length: 2B10) (ovl_En_Bigokuta)
-      # ChangeBytes -Offset "" -Values "" # Dark Link                            (HP: xx)   C5B180 -> C5D8E0 (Length: 2760) (ovl_En_Torch2)
+        ChangeBytes -Offset "BFADAB" -Values "10"; ChangeBytes -Offset "D09283" -Values "1C"; ChangeBytes -Offset "CDE1FC" -Values "14" # Stalfos, Dead Hand, Poe Sisters
+        ChangeBytes -Offset "C3452F" -Values "0C"; ChangeBytes -Offset "C3453B" -Values "18" # Lizalfos, Dinolfos
+        ChangeBytes -Offset "ED80EB" -Values "10" # Wolfos 
+        ChangeBytes -Offset "DE9A1B" -Values "3C"; ChangeBytes -Offset "DEB34F" -Values "15" # Iron Knuckle
+        ChangeBytes -Offset "EBC8B7" -Values "28" # Gerudo Fighter
+        ChangeBytes -Offset "CF2667" -Values "0A" # Flare Dancer
+        ChangeBytes -Offset "DEF87F" -Values "14" # Skullkid
+      # ChangeBytes -Offset "xxxxxx" -Values "08"; ChangeBytes -Offset "xxxxxx" -Values "xx" # # Big Octo, Dark Link
     }
     elseif (IsText -Elem $Redux.Hero.MiniBossHP -Compare "3x Mini-Boss HP") {
-        ChangeBytes -Offset "C3452F" -Values "12" # Lizalfos                     (HP: 06)   C340D0 -> C3ABC0 (Length: 6AF0) (ovl_En_Zf)
-        ChangeBytes -Offset "C3453B" -Values "24" # Dinolfos                     (HP: 0C)   C340D0 -> C3ABC0 (Length: 6AF0) (ovl_En_Zf)
-        ChangeBytes -Offset "ED80EB" -Values "18" # Wolfos          (Both)       (HP: 08)   ED8060 -> EDC370 (Length: 6AF0) (ovl_En_Wf)
-        ChangeBytes -Offset "BFADAB" -Values "1E" # Stalfos                      (HP: 0A)   BFAC30 -> C004E0 (Length: 58B0) (ovl_En_Test)
-        ChangeBytes -Offset "D09283" -Values "2A" # Dead Hand                    (HP: 0E)   D091D0 -> D0ACA0 (Length: 1AD0) (ovl_En_Dh)
-        ChangeBytes -Offset "DE9A1B" -Values "5A" # Iron Knuckle    (Phase 1)    (HP: 1E)   DE98A0 -> DEDED0 (Length: 4630) (ovl_En_Ik)
-        ChangeBytes -Offset "DEB34F" -Values "1F" # Iron Knuckle    (Phase 2)    (HP: 0B)
-        ChangeBytes -Offset "EBC8B7" -Values "3C" # Gerudo Fighter               (HP: 14)   EBC840 -> EC1BF0 (Length: 53B0) (ovl_En_GeldB)
-        ChangeBytes -Offset "CF2667" -Values "0C" # Flare Dancer                 (HP: 08)   CF25E0 -> CF52A0 (Length: 2CC0) (ovl_En_Fd)
-        ChangeBytes -Offset "CDE1FC" -Values "1E" # Poe Sisters                  (HP: 0A)   CD9A60 -> CDE750 (Length: 4CF0) (ovl_En_Po_Sisters)
-        ChangeBytes -Offset "DEF87F" -Values "1E" # Skullkid                     (HP: 0A)   DEF3E0 -> DF2D10 (Length: 3930) (ovl_En_Skj)
+        ChangeBytes -Offset "BFADAB" -Values "1E"; ChangeBytes -Offset "D09283" -Values "2A"; ChangeBytes -Offset "CDE1FC" -Values "1E" # Stalfos, Dead Hand, Poe Sisters
+        ChangeBytes -Offset "C3452F" -Values "12"; ChangeBytes -Offset "C3453B" -Values "24" # Lizalfos, Dinolfos
+        ChangeBytes -Offset "ED80EB" -Values "18" # Wolfos
+        ChangeBytes -Offset "DE9A1B" -Values "5A"; ChangeBytes -Offset "DEB34F" -Values "1F" # Iron Knuckle    (Phase 2)    (HP: 0B)
+        ChangeBytes -Offset "EBC8B7" -Values "3C" # Gerudo Fighter
+        ChangeBytes -Offset "CF2667" -Values "0C" # Flare Dancer
+        ChangeBytes -Offset "DEF87F" -Values "1E" # Skullkid 
     }
     
     # Bosses
     if (IsText -Elem $Redux.Hero.BossHP -Compare "2x Boss HP") {
-        ChangeBytes -Offset "C44F2B" -Values "14" # Gohma                        (HP: 0A)   C44C30 -> C4ABB0 (Length: 5F80)  (ovl_Boss_Goma)
-        ChangeBytes -Offset "C486CC" -Values "00 00 00 00" # Spawn all three Gohma Larva at once
-        ChangeBytes -Offset "C3B9FF" -Values "18" # King Dodongo                 (HP: 0C)   C3B150 -> C44C30 (Length: 9AE0)  (ovl_Boss_Dodongo)
-        ChangeBytes -Offset "D258BB" -Values "08" # Barinade        (Phase 1)    (HP: 04)   D22360 -> D30B50 (Length: E7F0)  (ovl_Boss_Va)
-        ChangeBytes -Offset "D25B0B" -Values "06" # Barinade        (Phases 4-6) (HP: 03)
-        ChangeBytes -Offset "C91F8F" -Values "3C" # Phantom Ganon   (Phase 1)    (HP: 1E)   C91AD0 -> C96840 (Length: 4D70)  (ovl_Boss_Ganondrof)
-        ChangeBytes -Offset "CAFF33" -Values "31" # Phantom Ganon   (Phase 2)    (HP: 19)
-        ChangeBytes -Offset "CE6D2F" -Values "30" # Volvagia                     (HP: 18)   CE65F0 -> CED920 (Length: 7330)  (ovl_Boss_Fd)
-        ChangeBytes -Offset "D3B4A7" -Values "28" # Morpha                       (HP: 14)   D3ADF0 -> D46390 (Length: B5A0)  (ovl_Boss_Mo)
-        ChangeBytes -Offset "DAC824" -Values "48" # Bongo Bongo                  (HP: 24)   DA1660 -> DADB80 (Length: C520)  (ovl_Boss_Sst)
-        ChangeBytes -Offset "D64EFB" -Values "08" # Twinrova        (Phase 1)    (HP: 04)   D612E0 -> D74360 (Length: 13080) (ovl_Boss_Tw)
-        ChangeBytes -Offset "D6223F" -Values "30" # Twinrova        (Phase 2)    (HP: 18)
-        ChangeBytes -Offset "D7FDA3" -Values "50" # Ganondorf                    (HP: 28)   D7F3F0 -> DA1660 (Length: 22270) (ovl_Boss_Ganon)
-        ChangeBytes -Offset "E82AFB" -Values "3C" # Ganon           (Phase 1)    (HP: 1E)   E826C0 -> E939B0 (Length: 112F0) (ovl_Boss_Ganon2)
-        ChangeBytes -Offset "E87F2F" -Values "29" # Ganon           (Phase 2)    (HP: 15)
+        ChangeBytes -Offset "C44F2B" -Values "14"; ChangeBytes -Offset "C486CC" -Values "00 00 00 00" # Gohma
+        ChangeBytes -Offset "C3B9FF" -Values "18" # King Dodongo
+        ChangeBytes -Offset "D258BB" -Values "08"; ChangeBytes -Offset "D25B0B" -Values "06" # Barinade
+        ChangeBytes -Offset "C91F8F" -Values "3C"; ChangeBytes -Offset "CAFF33" -Values "31" # Phantom Ganon 
+        ChangeBytes -Offset "CE6D2F" -Values "30" # Volvagia
+        ChangeBytes -Offset "D3B4A7" -Values "28" # Morpha
+        ChangeBytes -Offset "DAC824" -Values "48" # Bongo Bongo
+        ChangeBytes -Offset "D64EFB" -Values "08"; ChangeBytes -Offset "D6223F" -Values "30" # Twinrova
+        ChangeBytes -Offset "D7FDA3" -Values "50" # Ganondorf
+        ChangeBytes -Offset "E82AFB" -Values "3C"; ChangeBytes -Offset "E87F2F" -Values "29" # Ganon
     }
     elseif (IsText -Elem $Redux.Hero.BossHP -Compare "3x Boss HP") {
-        ChangeBytes -Offset "C44F2B" -Values "1E" # Gohma                        (HP: 0A)   C44C30 -> C4ABB0 (Length: 5F80)  (ovl_Boss_Goma)
-        ChangeBytes -Offset "C486CC" -Values "00 00 00 00" # Spawn all three Gohma Larva at once
-        ChangeBytes -Offset "C3B9FF" -Values "24" # King Dodongo                 (HP: 0C)   C3B150 -> C44C30 (Length: 9AE0)  (ovl_Boss_Dodongo)
-        ChangeBytes -Offset "D258BB" -Values "0C" # Barinade        (Phase 1)    (HP: 04)   D22360 -> D30B50 (Length: E7F0)  (ovl_Boss_Va)
-        ChangeBytes -Offset "D25B0B" -Values "09" # Barinade        (Phases 4-6) (HP: 03)
-        ChangeBytes -Offset "C91F8F" -Values "5A" # Phantom Ganon   (Phase 1)    (HP: 1E)   C91AD0 -> C96840 (Length: 4D70)  (ovl_Boss_Ganondrof)
-        ChangeBytes -Offset "CAFF33" -Values "49" # Phantom Ganon   (Phase 2)    (HP: 19)
-        ChangeBytes -Offset "CE6D2F" -Values "48" # Volvagia                     (HP: 18)   CE65F0 -> CED920 (Length: 7330)  (ovl_Boss_Fd)
-        ChangeBytes -Offset "D3B4A7" -Values "3C" # Morpha                       (HP: 14)   D3ADF0 -> D46390 (Length: B5A0)  (ovl_Boss_Mo)
-        ChangeBytes -Offset "DAC824" -Values "6C" # Bongo Bongo                  (HP: 24)   DA1660 -> DADB80 (Length: C520)  (ovl_Boss_Sst)
-        ChangeBytes -Offset "D64EFB" -Values "0C" # Twinrova        (Phase 1)    (HP: 04)   D612E0 -> D74360 (Length: 13080) (ovl_Boss_Tw)
-        ChangeBytes -Offset "D6223F" -Values "48" # Twinrova        (Phase 2)    (HP: 18)
-        ChangeBytes -Offset "D7FDA3" -Values "78" # Ganondorf                    (HP: 28)   D7F3F0 -> DA1660 (Length: 22270) (ovl_Boss_Ganon)
-        ChangeBytes -Offset "E82AFB" -Values "5A" # Ganon           (Phase 1)    (HP: 1E)   E826C0 -> E939B0 (Length: 112F0) (ovl_Boss_Ganon2)
-        ChangeBytes -Offset "E87F2F" -Values "3D" # Ganon           (Phase 2)    (HP: 15)
+        ChangeBytes -Offset "C44F2B" -Values "1E"; ChangeBytes -Offset "C486CC" -Values "00 00 00 00" # Gohma
+        ChangeBytes -Offset "C3B9FF" -Values "24" # King Dodongo
+        ChangeBytes -Offset "D258BB" -Values "0C"; ChangeBytes -Offset "D25B0B" -Values "09" # Barinade
+        ChangeBytes -Offset "C91F8F" -Values "5A"; ChangeBytes -Offset "CAFF33" -Values "49" # Phantom Ganon
+        ChangeBytes -Offset "CE6D2F" -Values "48" # Volvagia
+        ChangeBytes -Offset "D3B4A7" -Values "3C" # Morpha
+        ChangeBytes -Offset "DAC824" -Values "6C" # Bongo Bongo
+        ChangeBytes -Offset "D64EFB" -Values "0C"; ChangeBytes -Offset "D6223F" -Values "48" # Twinrova
+        ChangeBytes -Offset "D7FDA3" -Values "78" # Ganondorf 
+        ChangeBytes -Offset "E82AFB" -Values "5A"; ChangeBytes -Offset "E87F2F" -Values "3D" # Ganon
+    }
+
+    if (IsChecked $Redux.Hero.GraveyardKeese) {
+        ChangeBytes -Offset "202F389" -Values "0E"; ChangeBytes -Offset "202F3BB" -Values "0D"; ChangeBytes -Offset "202F3DD" -Values "13"; ChangeBytes -Offset "202F3EB" -Values "03"; ChangeBytes -Offset "202F3ED" -Values "13"; ChangeBytes -Offset "202F3FB" -Values "03"
+        ChangeBytes -Offset "202F3FD" -Values "13"; ChangeBytes -Offset "202F40B" -Values "03"; ChangeBytes -Offset "202F40D" -Values "13"; ChangeBytes -Offset "202F41B" -Values "03"; ChangeBytes -Offset "202F41D" -Values "13"; ChangeBytes -Offset "202F42B" -Values "03"
+        ChangeBytes -Offset "202F779" -Values "0E"; ChangeBytes -Offset "202F7AB" -Values "0D"; ChangeBytes -Offset "202F7CD" -Values "13"; ChangeBytes -Offset "202F7DB" -Values "03"; ChangeBytes -Offset "202F7DD" -Values "13"; ChangeBytes -Offset "202F7EB" -Values "03"
+        ChangeBytes -Offset "202F7ED" -Values "13"; ChangeBytes -Offset "202F7FB" -Values "03"; ChangeBytes -Offset "202F7FD" -Values "13"; ChangeBytes -Offset "202F80B" -Values "03"; ChangeBytes -Offset "202F80D" -Values "13"; ChangeBytes -Offset "202F81B" -Values "03"
     }
 
     
@@ -482,7 +454,7 @@ function ByteOptions() {
 
     if (IsDefaultColor -Elem $Redux.Colors.SetEquipment[3] -Not)   { ChangeBytes -Offset "B6DA44" -IsDec -Values @($Redux.Colors.SetEquipment[3].Color.R, $Redux.Colors.SetEquipment[3].Color.G, $Redux.Colors.SetEquipment[3].Color.B) } # Silver Gauntlets
     if (IsDefaultColor -Elem $Redux.Colors.SetEquipment[4] -Not)   { ChangeBytes -Offset "B6DA47" -IsDec -Values @($Redux.Colors.SetEquipment[4].Color.R, $Redux.Colors.SetEquipment[4].Color.G, $Redux.Colors.SetEquipment[4].Color.B) } # Golden Gauntlets
-    if ( (IsDefaultColor -Elem $Redux.Colors.SetEquipment[5] -Not) -and $ModelCredits.mirror_shield -ne 0) { # Mirror Shield Frame
+    if ( (IsDefaultColor -Elem $Redux.Colors.SetEquipment[5] -Not) -and $CustomModels.mirror_shield -ne 0) { # Mirror Shield Frame
         $Offset = "F86000"
         do {
             $Offset = SearchBytes -Start $Offset -End "FBD800" -Values "FA 00 00 00 D7 00 00"
@@ -506,9 +478,9 @@ function ByteOptions() {
 
     # SWORD TRAIL COLORS #
 
-    if (IsDefaultColor -Elem $Redux.Colors.SetSwordTrail[0] -Not)   { ChangeBytes -Offset "BEFF7C" -IsDec -Values @($Redux.Colors.SetSwordTrail[0].Color.R, $Redux.Colors.SetSwordTrail[0].Color.G, $Redux.Colors.SetSwordTrail[0].Color.B) }
-    if (IsDefaultColor -Elem $Redux.Colors.SetSwordTrail[1] -Not)   { ChangeBytes -Offset "BEFF84" -IsDec -Values @($Redux.Colors.SetSwordTrail[1].Color.R, $Redux.Colors.SetSwordTrail[1].Color.G, $Redux.Colors.SetSwordTrail[1].Color.B) }
-    if (IsIndex -Elem $Redux.Colors.SwordTrailDuration -Not)        { ChangeBytes -Offset "BEFF8C" -IsDec -Values (($Redux.Colors.SwordTrailDuration.SelectedIndex+1) * 5) }
+    if (IsDefaultColor -Elem $Redux.Colors.SetSwordTrail[0] -Not)       { ChangeBytes -Offset "BEFF7C" -IsDec -Values @($Redux.Colors.SetSwordTrail[0].Color.R, $Redux.Colors.SetSwordTrail[0].Color.G, $Redux.Colors.SetSwordTrail[0].Color.B) }
+    if (IsDefaultColor -Elem $Redux.Colors.SetSwordTrail[1] -Not)       { ChangeBytes -Offset "BEFF84" -IsDec -Values @($Redux.Colors.SetSwordTrail[1].Color.R, $Redux.Colors.SetSwordTrail[1].Color.G, $Redux.Colors.SetSwordTrail[1].Color.B) }
+    if (IsIndex -Elem $Redux.Colors.SwordTrailDuration -Not -Index 2)   { ChangeBytes -Offset "BEFF8C" -IsDec -Values (($Redux.Colors.SwordTrailDuration.SelectedIndex) * 5) }
 
     
 
@@ -578,18 +550,18 @@ function ByteOptions() {
     }
 
 
-
+    0
     # EQUIPMENT #
     
-    if ( (IsChecked $Redux.Equipment.RazorSword) -and ($ModelCredits.razor_sword -eq 1 -or (IsChecked $Redux.Graphics.OriginalModels) ) ) {
+    if ( (IsChecked $Redux.Equipment.UpgradeEquipment) -and ( ($CustomModels.upgrade_equipment -eq 1 -or (IsChecked $Redux.Graphics.OriginalModels) ) ) ) {
         ChangeBytes -Offset "BD3C5B" -Values "00" # Fireproof
-        PatchBytes -Offset "7F8000" -Texture -Patch "Razor Sword\icon.bin"; PatchBytes -Offset "7FB000" -Texture -Patch "Hero's Shield\icon.bin" #; PatchBytes -Offset "7FC000" -Texture -Patch "Hero's Shield\icon.bin"
-        if (IsSet $LanguagePatch.hero_shield) { PatchBytes -Offset "8AD800" -Texture -Patch $LanguagePatch.razor_sword; PatchBytes -Offset "8AE400" -Texture -Patch $LanguagePatch.hero_shield } #; PatchBytes -Offset "8AE800" -Texture -Patch $LanguagePatch.hero_shield
+        PatchBytes -Offset "7F8000" -Texture -Patch "Razor Sword\icon.bin"; PatchBytes -Offset "7FB000" -Texture -Patch "Hero's Shield\icon.bin" # 7FC000 -> Hylian Shield icon
+        if (IsSet $LanguagePatch.heros_shield) { PatchBytes -Offset "8AD800" -Texture -Patch $LanguagePatch.razor_sword; PatchBytes -Offset "8AE400" -Texture -Patch $LanguagePatch.heros_shield } # 8AE800 -> Hylian Shield label
     }
 
-    if (IsChecked $Redux.Equipment.IronShield -and $ModelCredits.deku_shield -ne 0) {
+    if (IsChecked $Redux.Equipment.IronShield) {
         ChangeBytes -Offset "BD3C5B" -Values "00" # Fireproof
-        if ($ModelCredits.stone_shield -ne 0) {
+        if ($CustomModels.deku_shield -ne 0) {
             $Offset = SearchBytes -Start "FBE000" -End "FEAF80" -Values "CC 99 E5 E5 DD A3 EE 2B DD A5 E6 29 DD A5 D4 DB"; PatchBytes -Offset $Offset  -Texture -Patch "Iron Shield\front.bin" # Vanilla: FC5E88
             $Offset = SearchBytes -Start "FBE000" -End "FEAF80" -Values "DC 11 F5 17 F5 19 DC 57 D4 59 E4 DB E4 DB DC 97"; PatchBytes -Offset $Offset  -Texture -Patch "Iron Shield\back.bin"  # Vanilla: FC5688
             PatchBytes -Offset "7FB000" -Texture -Patch "Iron Shield\icon.bin"
@@ -597,32 +569,36 @@ function ByteOptions() {
         }
     }
 
-    if (IsChecked $Redux.Equipment.HeroShield -and $ModelCredits.hylian_shield -ne 0) {
-        PatchBytes -Offset "F03400" -Texture -Patch "Hero's Shield\front.bin"; PatchBytes -Offset "7FC000" -Texture -Patch "Hero's Shield\icon.bin"
-        if (IsSet $LanguagePatch.hero_shield) { PatchBytes -Offset "8AE800" -Texture -Patch $LanguagePatch.hero_shield }
-    }
+    if (IsChecked $Redux.Equipment.UnsheathSword)                                               { ChangeBytes -Offset "BD04A0"  -Values "28 42 00 05 14 40 00 05 00 00 10 25" }
+    if ( (IsIndex $Redux.Equipment.HylianShield -Not) -and $CustomModels.hylian_shield -ne 0)   { PatchBytes -Offset "F03400" -Texture -Patch ("Hylian Shield\" + $Redux.Equipment.HylianShield.text + ".bin") }
 
-    if (IsChecked $Redux.Equipment.UnsheathSword)    { ChangeBytes -Offset "BD04A0"  -Values "28 42 00 05 14 40 00 05 00 00 10 25" }
+
+
+    # HITBOX #
+    if (IsValue -Elem $Redux.Hitbox.KokiriSword       -Not)   { ChangeBytes -Offset "B6DB18" -Values (ConvertFloatToHex $Redux.Hitbox.KokiriSword.Value) }
+    if (IsValue -Elem $Redux.Hitbox.MasterSword       -Not)   { ChangeBytes -Offset "B6DB14" -Values (ConvertFloatToHex $Redux.Hitbox.MasterSword.Value) }
+    if (IsValue -Elem $Redux.Hitbox.GiantsKnife       -Not)   { ChangeBytes -Offset "B6DB1C" -Values (ConvertFloatToHex $Redux.Hitbox.GiantsKnife.Value) }
+    if (IsValue -Elem $Redux.Hitbox.BrokenGiantsKnife -Not)   { ChangeBytes -Offset "B7E8CC" -Values (ConvertFloatToHex $Redux.Hitbox.BrokenGiantsKnife.Value) }
+    if (IsValue -Elem $Redux.Hitbox.MegatonHammer     -Not)   { ChangeBytes -Offset "B6DB24" -Values (ConvertFloatToHex $Redux.Hitbox.MegatonHammer.Value) }
 
 
 
     # UNLOCK CHILD RESTRICTIONS #
-
-    if (IsChecked $Redux.Unlock.Tunics)              { ChangeBytes -Offset "BC77B6" -Values "09 09"; ChangeBytes -Offset "BC77FE" -Values "09 09" }
-    if (IsChecked $Redux.Unlock.MasterSword)         { ChangeBytes -Offset "BC77AE" -Values "09 09" -Interval 74 }
-    if (IsChecked $Redux.Unlock.GiantsKnife)         { ChangeBytes -Offset "BC77AF" -Values "09 09" -Interval 74 }
-    if (IsChecked $Redux.Unlock.MirrorShield)        { ChangeBytes -Offset "BC77B3" -Values "09 09" -Interval 73 }
-    if (IsChecked $Redux.Unlock.Boots)               { ChangeBytes -Offset "BC77BA" -Values "09 09"; ChangeBytes -Offset "BC7801" -Values "09 09" }
-    if (IsChecked $Redux.Unlock.MegatonHammer)       { ChangeBytes -Offset "BC77A3" -Values "09 09" -Interval 42 }
+    if (IsChecked $Redux.Unlock.Tunics)          { ChangeBytes -Offset "BC77B6" -Values "09 09"; ChangeBytes -Offset "BC77FE" -Values "09 09" }
+    if (IsChecked $Redux.Unlock.MasterSword)     { ChangeBytes -Offset "BC77AE" -Values "09 09" -Interval 74 }
+    if (IsChecked $Redux.Unlock.GiantsKnife)     { ChangeBytes -Offset "BC77AF" -Values "09 09" -Interval 74 }
+    if (IsChecked $Redux.Unlock.MirrorShield)    { ChangeBytes -Offset "BC77B3" -Values "09 09" -Interval 73 }
+    if (IsChecked $Redux.Unlock.Boots)           { ChangeBytes -Offset "BC77BA" -Values "09 09"; ChangeBytes -Offset "BC7801" -Values "09 09" }
+    if (IsChecked $Redux.Unlock.MegatonHammer)   { ChangeBytes -Offset "BC77A3" -Values "09 09" -Interval 42 }
     
 
     
     # UNLOCK ADULT RESTRICTIONS #
     
-    if (IsChecked $Redux.Unlock.KokiriSword)         { ChangeBytes -Offset "BC77AD" -Values "09 09" -Interval 74 }
-    if (IsChecked $Redux.Unlock.DekuShield)          { ChangeBytes -Offset "BC77B1" -Values "09 09" -Interval 73 }
-    if (IsChecked $Redux.Unlock.FairySlingshot)      { ChangeBytes -Offset "BC779A" -Values "09 09" -Interval 40 }
-    if (IsChecked $Redux.Unlock.Boomerang)           { ChangeBytes -Offset "BC77A0" -Values "09 09" -Interval 42 }
+    if (IsChecked $Redux.Unlock.KokiriSword)      { ChangeBytes -Offset "BC77AD" -Values "09 09" -Interval 74 }
+    if (IsChecked $Redux.Unlock.DekuShield)       { ChangeBytes -Offset "BC77B1" -Values "09 09" -Interval 73 }
+    if (IsChecked $Redux.Unlock.FairySlingshot)   { ChangeBytes -Offset "BC779A" -Values "09 09" -Interval 40 }
+    if (IsChecked $Redux.Unlock.Boomerang)        { ChangeBytes -Offset "BC77A0" -Values "09 09" -Interval 42 }
 
 
 
@@ -818,8 +794,8 @@ function ByteOptions() {
     if     (IsChecked $Redux.Animation.WeaponAttack)      { ChangeBytes -Offset "BEFB62" -Values "2B D8"; ChangeBytes -Offset "BEFB66" -Values "2B E0"; ChangeBytes -Offset "BEFB6A" -Values "2B E0" }
     if     (IsChecked $Redux.Animation.BackflipAttack)    { ChangeBytes -Offset "BEFB12" -Values "29 D0" }
     elseif (IsChecked $Redux.Animation.FrontflipAttack)   { ChangeBytes -Offset "BEFB12" -Values "2A 60" }
-    if     (IsChecked $Redux.Animation.FrontflipJump)     { PatchBytes -Offset "70BB00" -Patch "Jumps\Frontflip.bin" }
-    elseif (IsChecked $Redux.Animation.SomarsaultJump)    { PatchBytes -Offset "70BB00" -Patch "Jumps\Somarsault.bin"; ChangeBytes -Offset "F06149" -Values "0E"  }
+    if     (IsChecked $Redux.Animation.FrontflipJump)     { PatchBytes -Offset "70BB00" -Patch "Jumps\frontflip.bin" }
+    elseif (IsChecked $Redux.Animation.SomarsaultJump)    { PatchBytes -Offset "70BB00" -Patch "Jumps\somarsault.bin"; ChangeBytes -Offset "F06149" -Values "0E"  }
 
 
 
@@ -847,7 +823,7 @@ function ByteOptions() {
         PatchBytes -Offset "7FD000"  -Texture -Patch "Gerudo Symbols\mirror_shield_icon.bin"
         PatchBytes -Offset "1456388" -Texture -Patch "Gerudo Symbols\mirror_shield_reflection.bin"
         PatchBytes -Offset "1616000" -Texture -Patch "Gerudo Symbols\mirror_shield_chest.bin"
-        if ($ModelCredits.mirror_shield -ne 0) {
+        if ($CustomModels.mirror_shield -ne 0) {
             $Offset = SearchBytes -Start "F86000" -End "FBD800" -Values "90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90"
             PatchBytes -Offset $Offset -Texture -Patch "Gerudo Symbols\mirror_shield.bin"
         }
@@ -880,7 +856,7 @@ function ByteReduxOptions() {
     
     # INTERFACE ICONS #
 
-    if (IsChecked $Redux.UI.ShowFileSelectIcons)   { PatchBytes  -Offset "BAF738" -Patch "File Select.bin" }
+    if (IsChecked $Redux.UI.ShowFileSelectIcons)   { PatchBytes  -Offset "BAF738" -Patch "file_select.bin" }
     if (IsChecked $Redux.UI.DPadLayoutShow)        { ChangeBytes -Offset "348086E" -Values "01" }
 
 
@@ -955,7 +931,7 @@ function ByteReduxOptions() {
 #==============================================================================================================================================================================================
 function ByteLanguageOptions() {
     
-    if ( (IsChecked -Elem $Redux.Text.Vanilla -Not) -or (IsChecked -Elem $Redux.Text.Speed1x -Not) -or (IsLanguage $Redux.UI.GCScheme) -or (IsLanguage $Redux.Unlock.Tunics) -or (IsText -Elem $Redux.Colors.Fairy -Compare "Tatl") -or (IsText -Elem $Redux.Colors.Fairy -Compare "Tael") -or (IsLanguage $Redux.Capacity.EnableAmmo) -or (IsLanguage $Redux.Capacity.EnableWallet)-or (IsLanguage $Redux.Equipment.IronShield -and $ModelCredits.deku_shield -ne 0) -or (IsLanguage $Redux.Equipment.HeroShield -and $ModelCredits.hylian_shield -ne 0) ) {
+    if ( (IsChecked -Elem $Redux.Text.Vanilla -Not) -or (IsChecked -Elem $Redux.Text.Speed1x -Not) -or (IsLanguage $Redux.UI.GCScheme) -or (IsLanguage $Redux.Unlock.Tunics) -or (IsText -Elem $Redux.Colors.Fairy -Compare "Tatl") -or (IsText -Elem $Redux.Colors.Fairy -Compare "Tael") -or (IsLanguage $Redux.Capacity.EnableAmmo) -or (IsLanguage $Redux.Capacity.EnableWallet)-or (IsLanguage $Redux.Equipment.IronShield -and $CustomModels.deku_shield -ne 0) ) {
         if ( (IsSet $LanguagePatch.script_start) -and (IsSet $LanguagePatch.script_length) ) {
             $File = $GameFiles.extracted + "\message_data_static.bin"
             ExportBytes -Offset $LanguagePatch.script_start -Length $LanguagePatch.script_length -Output $File -Force
@@ -967,12 +943,12 @@ function ByteLanguageOptions() {
     if (IsChecked $Redux.Text.Redux) { ApplyPatch -File $File -Patch "\Export\Message\redux.bps" }
     elseif (IsChecked $Redux.Text.Restore) {
         ChangeBytes -Offset "7596" -Values "52 40"
-        PatchBytes  -Offset "B849EC" -Patch "Message\Table Restore Text.tbl"
-        ApplyPatch -File $File -Patch "\Export\Message\restore_text.bps"
+        PatchBytes  -Offset "B849EC" -Patch "Message\restore.tbl"
+        ApplyPatch -File $File -Patch "\Export\Message\restore.bps"
     }
     elseif (IsChecked $Redux.Text.FemalePronouns) {
         ChangeBytes -Offset "7596" -Values "52 40"
-        PatchBytes  -Offset "B849EC" -Patch "Message\Table Female Pronouns.tbl"
+        PatchBytes  -Offset "B849EC" -Patch "Message\female_pronouns.tbl"
         ApplyPatch -File $File -Patch "\Export\Message\female_pronouns.bps"
     }
 
@@ -982,7 +958,7 @@ function ByteLanguageOptions() {
         if ($Redux.Language[0].checked) {
             # Correct Ruto Confession Textboxes
             $Offset = SearchBytes -File $File -Values "1A 41 73 20 61 20 72 65 77 61 72 64 2E 2E 2E 01"
-            PatchBytes -File $File -Offset $Offset -Patch "Message\Ruto Confession.bin"
+            PatchBytes -File $File -Offset $Offset -Patch "Message\ruto_confession.bin"
 
             # Correct Phantom Ganon Defeat Textboxes
             $Offset = SearchBytes -File $File -Values "0C 3C 42 75 74 20 79 6F 75 20 68 61 76 65 20 64"
@@ -996,11 +972,11 @@ function ByteLanguageOptions() {
 
         # Correct Learning Song Textboxes
         $Offset = SearchBytes -File $File -Values "08 06 3C 50 6C 61 79 20 75 73 69 6E 67 20 05"
-        PatchBytes -File $File -Offset $Offset -Patch "Message\Songs.bin"
+        PatchBytes -File $File -Offset $Offset -Patch "Message\songs.bin"
 
         # Correct Ruto Confession Textboxes
         $Offset = SearchBytes -File $File -Values "1A 41 73 20 61 20 72 65 77 61 72 64 2E 2E 2E 01"
-        PatchBytes -File $File -Offset $Offset -Patch "Message\Ruto Confession.bin"
+        PatchBytes -File $File -Offset $Offset -Patch "Message\ruto_confession.bin"
         
         # Correct Phantom Ganon Defeat Textboxes
         $Offset = SearchBytes -File $File -Values "0C 3C 42 75 74 20 79 6F 75 20 68 61 76 65 20 64"
@@ -1019,10 +995,10 @@ function ByteLanguageOptions() {
         ChangeBytes -File $File -Offset $Offset -Values "67 72 65 65 6E 20 69 63 6F 6E 05 40 02"
             
         $Offset = SearchBytes -File $File -Values "1A 05 44 59 6F 75 20 63 61 6E 20 6F 70 65 6E 20"
-        PatchBytes  -File $File -Offset $Offset -Patch "Message\MQ Navi Door.bin"
+        PatchBytes  -File $File -Offset $Offset -Patch "Message\mq_navi_door.bin"
             
         $Offset = SearchBytes -File $File -Values "62 6C 75 65 20 69 63 6F 6E 20 61 74 20 74 68 65"
-        PatchBytes  -File $File -Offset $Offset -Patch "Message\MQ Navi Action.bin"
+        PatchBytes  -File $File -Offset $Offset -Patch "Message\mq_navi_action.bin"
 
         $Offset = 0
         do { # A button
@@ -1089,7 +1065,7 @@ function ByteLanguageOptions() {
             $Offset = SearchBytes -File $File -Start $Offset -Values "4E 61 76 69"
             if ($Offset -ne -1) { ChangeBytes -File $File -Offset $Offset -Values "54 61 74 6C" }
         } while ($Offset -gt 0)
-        PatchBytes -Offset "1A3EFC0" -Texture -Patch "HUD\Tatl.bin"
+        PatchBytes -Offset "1A3EFC0" -Texture -Patch "HUD\tatl.bin"
     }
     elseif (IsText -Elem $Redux.Colors.Fairy -Compare "Tael") {
         $Offset = 0
@@ -1097,7 +1073,7 @@ function ByteLanguageOptions() {
             $Offset = SearchBytes -File $File -Start $Offset -Values "4E 61 76 69"
             if ($Offset -ne -1) { ChangeBytes -File $File -Offset $Offset -Values "54 61 65 6C" }
         } while ($Offset -gt 0)
-        PatchBytes -Offset "1A3EFC0" -Texture -Patch "HUD\Tael.bin"
+        PatchBytes -Offset "1A3EFC0" -Texture -Patch "HUD\tael.bin"
     }
 
     if (IsLanguage $Redux.Capacity.EnableAmmo) {
@@ -1131,19 +1107,11 @@ function ByteLanguageOptions() {
         $Text = $null
     }
 
-    if (IsLanguage $Redux.Equipment.IronShield -and $ModelCredits.deku_shield -ne 0) {
+    if (IsLanguage $Redux.Equipment.IronShield -and $CustomModels.deku_shield -ne 0) {
         $Offset = 0
         do { # Deku Shield -> Iron Shield
             $Offset = SearchBytes -File $File -Start $Offset -Values "44 65 6B 75 20 53 68 69 65 6C 64"
             if ($Offset -ne -1) { ChangeBytes -File $File -Offset $Offset -Values "49 72 6F 6E 20 53 68 69 65 6C 64" }
-        } while ($Offset -gt 0)
-    }
-
-    if (IsLanguage $Redux.Equipment.HeroShield -and $ModelCredits.hylian_shield -ne 0) {
-        $Offset = 0
-        do { # Hylian Shield -> Hero's Shield
-            $Offset = SearchBytes -File $File -Start $Offset -Values "48 79 6C 69 61 6E 20 53 68 69 65 6C 64"
-            if ($Offset -ne -1) { ChangeBytes -File $File -Offset $Offset -Values "48 65 72 6F 27 73 20 53 68 69 65 6C 64" }
         } while ($Offset -gt 0)
     }
 
@@ -1157,7 +1125,7 @@ function ByteLanguageOptions() {
 function CreateOptions() {
     
     if ($Settings.Debug.LiteGUI -eq $False) {
-        CreateOptionsDialog -Width 1060 -Height 560 -Tabs @("Main", "Audiovisual", "Difficulty", "Colors", "Equipment", "Animations")
+        CreateOptionsDialog -Width 1060 -Height 605 -Tabs @("Main", "Audiovisual", "Difficulty", "Colors", "Equipment", "Animations")
     }
     else {
         CreateOptionsDialog -Width 1060 -Height 450 -Tabs @("Main", "Audiovisual", "Difficulty")
@@ -1421,7 +1389,8 @@ function CreateTabDifficulty() {
     CreateReduxComboBox -Name "MonsterHP"  -Column 1 -Row 2 -Shift 10 -Text "Monster HP"   -Items @("1x Monster HP", "2x Monster HP", "3x Monster HP")               -Info "Set the amount of health for monsters"                                                                  -Credits "Admentus" -Warning "Half of the enemies are missing"
     CreateReduxComboBox -Name "MiniBossHP" -Column 3 -Row 2 -Shift 10 -Text "Mini-Boss HP" -Items @("1x Mini-Boss HP", "2x Mini-Boss HP", "3x Mini-Boss HP")         -Info "Set the amount of health for elite monsters and mini-bosses"                                            -Credits "Admentus" -Warning "Big Octo and Dark Link are missing"
     CreateReduxComboBox -Name "BossHP"     -Column 5 -Row 2 -Shift 10 -Text "Boss HP"      -Items @("1x Boss HP", "2x Boss HP", "3x Boss HP")                        -Info "Set the amount of health for bosses"                                                                    -Credits "Admentus & Marcelo20XX"
-    CreateReduxCheckBox -Name "HarderChildBosses" -Column 1 -Row 3 -Text "Harder Child Bosses" -Info "Replace objects in the Child Dungeon Boss arenas with additional monsters" -Credits "BilonFullHDemon"
+    CreateReduxCheckBox -Name "HarderChildBosses" -Column 1 -Row 3 -Text "Harder Child Bosses" -Info "Replace objects in the Child Dungeon Boss arenas with additional monsters"   -Credits "BilonFullHDemon"
+    CreateReduxCheckBox -Name "GraveyardKeese"    -Column 2 -Row 3 -Text "Graveyard Keese"     -Info "Extends the object list for Adult Link so the Keese appear at the Graveyard" -Credits "salvador235"
 
     $Redux.Hero.Damage.Add_SelectedIndexChanged({ EnableElem -Elem $Redux.Hero.Recovery -Active ($this.text -ne "OHKO Mode") })
     EnableElem -Elem ($Redux.Hero.Recovery) -Active ($Redux.Hero.Damage.text -ne "OHKO Mode")
@@ -1479,14 +1448,15 @@ function CreateTabColors() {
     # EQUIPMENT COLORS #
     CreateReduxGroup -Tag "Colors" -Text "Equipment Colors"
     $Redux.Colors.Equipment = @()
-    $Colors = @("Kokiri Green", "Goron Red", "Zora Blue", "Black", "White", "Azure Blue", "Vivid Cyan", "Light Red", "Fuchsia", "Purple", "Majora Purple", "Twitch Purple", "Persian Rose", "Dirty Yellow", "Blush Pink", "Hot Pink", "Rose Pink", "Orange", "Gray", "Gold", "Silver", "Beige", "Teal", "Blood Red", "Blood Orange", "Royal Blue", "Sonic Blue", "NES Green", "Dark Green", "Lumen", "Randomized", "Custom")
-    $Redux.Colors.Equipment += CreateReduxComboBox -Name "KokiriTunic"       -Column 1 -Row 1 -Text "Kokiri Tunic Color"        -Default 1 -Length 230 -Shift 70 -Items $Colors -Info ("Select a color scheme for the Kokiri Tunic`n" + '"Randomized" fully randomizes the colors each time the patcher is opened')     -Credits "Ported from Rando"
-    $Redux.Colors.Equipment += CreateReduxComboBox -Name "GoronTunic"        -Column 1 -Row 2 -Text "Goron Tunic Color"         -Default 2 -Length 230 -Shift 70 -Items $Colors -Info ("Select a color scheme for the Goron Tunic`n" + '"Randomized" fully randomizes the colors each time the patcher is opened')      -Credits "Ported from Rando"
-    $Redux.Colors.Equipment += CreateReduxComboBox -Name "ZoraTunic"         -Column 1 -Row 3 -Text "Zora Tunic Color"          -Default 3 -Length 230 -Shift 70 -Items $Colors -Info ("Select a color scheme for the Zora Tunic`n" + '"Randomized" fully randomizes the colors each time the patcher is opened')       -Credits "Ported from Rando"
-    $Colors = @("Silver", "Gold", "Black", "Green", "Blue", "Bronze", "Red", "Sky Blue", "Pink", "Magenta", "Orange", "Lime", "Purple", "Randomized", "Custom")
-    $Redux.Colors.Equipment += CreateReduxComboBox -Name "SilverGauntlets"   -Column 4 -Row 1 -Text "Silver Gauntlets Color"    -Default 1 -Length 230 -Shift 70 -Items $Colors -Info ("Select a color scheme for the Silver Gauntlets`n" + '"Randomized" fully randomizes the colors each time the patcher is opened') -Credits "Ported from Rando"
-    $Redux.Colors.Equipment += CreateReduxComboBox -Name "GoldenGauntlets"   -Column 4 -Row 2 -Text "Golden Gauntlets Color"    -Default 2 -Length 230 -Shift 70 -Items $Colors -Info ("Select a color scheme for the Golden Gauntlets`n" + '"Randomized" fully randomizes the colors each time the patcher is opened') -Credits "Ported from Rando"
-    $Redux.Colors.Equipment += CreateReduxComboBox -Name "MirrorShieldFrame" -Column 4 -Row 3 -Text "Mirror Shield Frame Color" -Default 1 -Length 230 -Shift 70 -Items @("Red", "Green", "Blue", "Yellow", "Cyan", "Magenta", "Orange", "Gold", "Purple", "Pink", "Randomized", "Custom") -Info "Select a color scheme for the Mirror Shield Frame`n- This option might not work for every custom player model" -Credits "Ported from Rando"
+    $Items = @("Kokiri Green", "Goron Red", "Zora Blue"); $PostItems = @("Randomized", "Custom"); $Files = ($GameFiles.Textures + "\Tunic"); $Randomize = '"Randomized" fully randomizes the colors each time the patcher is opened'
+    $Redux.Colors.Equipment += CreateReduxComboBox -Name "KokiriTunic" -Column 1 -Row 1 -Text "Kokiri Tunic Color" -Default 1 -Length 230 -Shift 70 -Items $Items -PostItems $PostItems -FilePath $Files -Info ("Select a color scheme for the Kokiri Tunic`n" + $Randomize) -Credits "Ported from Rando"
+    $Redux.Colors.Equipment += CreateReduxComboBox -Name "GoronTunic"  -Column 1 -Row 2 -Text "Goron Tunic Color"  -Default 2 -Length 230 -Shift 70 -Items $Items -PostItems $PostItems -FilePath $Files -Info ("Select a color scheme for the Goron Tunic`n" + $Randomize)  -Credits "Ported from Rando"
+    $Redux.Colors.Equipment += CreateReduxComboBox -Name "ZoraTunic"   -Column 1 -Row 3 -Text "Zora Tunic Color"   -Default 3 -Length 230 -Shift 70 -Items $Items -PostItems $PostItems -FilePath $Files -Info ("Select a color scheme for the Zora Tunic`n" + $Randomize)   -Credits "Ported from Rando"
+    $Items = @("Silver", "Gold", "Black", "Green", "Blue", "Bronze", "Red", "Sky Blue", "Pink", "Magenta", "Orange", "Lime", "Purple", "Randomized", "Custom")
+    $Redux.Colors.Equipment += CreateReduxComboBox -Name "SilverGauntlets"   -Column 4 -Row 1 -Text "Silver Gauntlets Color"    -Default 1 -Length 230 -Shift 70 -Items $Items -Info ("Select a color scheme for the Silver Gauntlets`n" + $Randomize) -Credits "Ported from Rando"
+    $Redux.Colors.Equipment += CreateReduxComboBox -Name "GoldenGauntlets"   -Column 4 -Row 2 -Text "Golden Gauntlets Color"    -Default 2 -Length 230 -Shift 70 -Items $Items -Info ("Select a color scheme for the Golden Gauntlets`n" + $Randomize) -Credits "Ported from Rando"
+    $Items =  @("Red", "Green", "Blue", "Yellow", "Cyan", "Magenta", "Orange", "Gold", "Purple", "Pink", "Randomized", "Custom")
+    $Redux.Colors.Equipment += CreateReduxComboBox -Name "MirrorShieldFrame" -Column 4 -Row 3 -Text "Mirror Shield Frame Color" -Default 1 -Length 230 -Shift 70 -Items $Items -Info ("Select a color scheme for the Mirror Shield Frame`n" + $Randomize) -Warning "This option might not work for every custom player model" -Credits "Ported from Rando"
 
     # Equipment Colors - Buttons
     $Buttons = @()
@@ -1555,10 +1525,18 @@ function CreateTabEquipment() {
 
     # EQUIPMENT #
     CreateReduxGroup    -Tag  "Equipment" -Text "Equipment Adjustments"
-    CreateReduxCheckBox -Name "UnsheathSword" -Text "Unsheath Sword" -Info "The sword is unsheathed first before immediately swinging it" -Credits "Admentus"
-    CreateReduxCheckBox -Name "RazorSword"    -Text "Razor Sword"    -Info "Replace the Kokiri Sword with the Razor Sword and the Deku Shield with the Hero's Shield from Majora's Mask`nThe replaced Deku Shield will not burn up anymore" -Warning "This option only works for the Vanilla Child Link model" -Credits "DeadSubiter (ported) & issuelink, Zeldaboy14 and Flotonic (Debug ROM patch)"
-    CreateReduxCheckBox -Name "IronShield"    -Text "Iron Shield"    -Info "Replace the Deku Shield with the Iron Shield, which will not burn up anymore" -Warning "Some custom models do not support the new textures, but will still keep the fireproof shield" -Credits "Admentus (ported), ZombieBrainySnack (textures) & Three Pendants (Debug fireproof ROM patch)" -Link $Redux.Equipment.RazorSword
-    CreateReduxCheckBox -Name "HeroShield"    -Text "Hero's Shield"  -Info "Replace the Hylian Shield with the Hero's Shield"                             -Warning "Some custom models do not support this option"                                                -Credits "SoulofDeity"
+    CreateReduxCheckBox -Name "UnsheathSword"    -Text "Unsheath Sword"    -Info "The sword is unsheathed first before immediately swinging it" -Credits "Admentus"
+    CreateReduxCheckBox -Name "UpgradeEquipment" -Text "Upgrade Equipment" -Info "Replace the Kokiri Sword with an sword from Majora's Mask and the Deku Shield with the Hero's Shield from Majora's Mask`nThe replaced Deku Shield will not burn up anymore" -Warning "This option only works for the Vanilla or Majora's Mask Child Link model" -Credits "DeadSubiter (ported) & issuelink, Zeldaboy14 and Flotonic (Debug ROM patch)"
+    CreateReduxCheckBox -Name "IronShield"       -Text "Iron Shield"       -Info "Replace the Deku Shield with the Iron Shield, which will not burn up anymore" -Warning "Some custom models do not support the new textures, but will still keep the fireproof shield" -Credits "Admentus (ported), ZombieBrainySnack (textures) & Three Pendants (Debug fireproof ROM patch)" -Link $Redux.Equipment.UpgradeEquipment
+    CreateReduxComboBox -Name "HylianShield"     -Text "Hylian Shield" -Column 3.6 -Length 140 -Items @("Hylian Shield") -FilePath ($GameFiles.Textures + "\Hylian Shield") -Info "Select an alternative for the appearence of the Hylian Shield" -Credits "Admentus (injects), GhostlyDark (injects) & sanguinetti (Beta / Red Shield textures)"
+
+    # HITBOX #
+    CreateReduxGroup  -Tag  "Hitbox" -Text "Weapon Hitboxes" -Height 2.7
+    CreateReduxSlider -Name "KokiriSword"       -Column 1 -Row 1 -Default 3000 -Min 512 -Max 8192 -Freq 512 -Small 256 -Large 512 -Text "Kokiri Sword"   -Info "Set the length of the hitbox of the Kokiri Sword"                   -Credits "Aria Hiroshi 64"
+    CreateReduxSlider -Name "MasterSword"       -Column 3 -Row 1 -Default 4000 -Min 512 -Max 8192 -Freq 512 -Small 256 -Large 512 -Text "Master Sword"   -Info "Set the length of the hitbox of the Master Sword"                   -Credits "Aria Hiroshi 64"
+    CreateReduxSlider -Name "GiantsKnife"       -Column 5 -Row 1 -Default 5500 -Min 512 -Max 8192 -Freq 512 -Small 256 -Large 512 -Text "Giant's Knife"  -Info "Set the length of the hitbox of the Giant's Knife / Biggoron Sword" -Credits "Aria Hiroshi 64"
+    CreateReduxSlider -Name "BrokenGiantsKnife" -Column 1 -Row 2 -Default 1500 -Min 512 -Max 8192 -Freq 512 -Small 256 -Large 512 -Text "Broken Knife"   -Info "Set the length of the hitbox of the Broken Giant's Knife"           -Credits "Aria Hiroshi 64"
+    CreateReduxSlider -Name "MegatonHammer"     -Column 3 -Row 2 -Default 2500 -Min 512 -Max 8192 -Freq 512 -Small 256 -Large 512 -Text "Megaton Hammer" -Info "Set the length of the hitbox of the Megaton Hammer"                 -Credits "Aria Hiroshi 64"
 
     # AMMO #
     $Redux.Box.Ammo = CreateReduxGroup -Tag "Capacity" -Text "Ammo Capacity Selection"

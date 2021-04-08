@@ -239,23 +239,36 @@ function GetDecimal([string]$Hex) {
 
 
 #==================================================================================================================================================================================================================================================================
-function Get8Bit([byte]$Value)      { return '{0:X2}' -f $Value }
-function Get16Bit([uint16]$Value)   { return '{0:X4}' -f $Value }
-function Get24Bit([uint32]$Value)   { return '{0:X6}' -f $Value }
-function Get32Bit([uint32]$Value)   { return '{0:X8}' -f $Value }
+function ConvertFloatToHex([string]$Float) {
+
+    $bytes = [BitConverter]::GetBytes([single]$Float)
+    $bytes = $bytes | Foreach-Object { ("{0:X2}" -f $_) }
+    [array]::Reverse($bytes)
+    return $bytes
+
+}
+
+
+
+#==================================================================================================================================================================================================================================================================
+function ConvertHexToFloat([string]$Hex) {
+    
+    try     { return ([BitConverter]::ToSingle([BitConverter]::GetBytes([uint32]("0x" + $Hex)), 0)) }
+    catch   { return -1 }
+
+}
+
+
+
+#==================================================================================================================================================================================================================================================================
+function Get8Bit([byte]$Value)                     { return '{0:X2}' -f $Value }
+function Get16Bit([uint16]$Value)                  { return '{0:X4}' -f $Value }
+function Get24Bit([uint32]$Value)                  { return '{0:X6}' -f $Value }
+function Get32Bit([uint32]$Value)                  { return '{0:X8}' -f $Value }
+function AddToOffset([string]$Hex, [string]$Add)   { return (Get32Bit ( (GetDecimal $Hex) + (GetDecimal $Add) ) ) }
 
 
 
 #==============================================================================================================================================================================================
 
-Export-ModuleMember -Function ChangeBytes
-Export-ModuleMember -Function PatchBytes
-Export-ModuleMember -Function ExportBytes
-Export-ModuleMember -Function SearchBytes
-Export-ModuleMember -Function ExportAndPatch
-
-Export-ModuleMember -Function GetDecimal
-Export-ModuleMember -Function Get8Bit
-Export-ModuleMember -Function Get16Bit
-Export-ModuleMember -Function Get24Bit
-Export-ModuleMember -Function Get32Bit
+(Get-Command -Module "Bytes") | % { Export-ModuleMember $_ }

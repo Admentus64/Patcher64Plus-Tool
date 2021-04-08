@@ -19,7 +19,7 @@
 		"l_target"		: "GameCube\\l_targeting_english.bin",
 		"razor_sword"		: "Razor Sword\\label_english.bin",
 		"iron_shield"		: "Iron Shield\\label_english.bin",
-		"hero_shield"		: "Hero's Shield\\label_english.bin",
+		"heros_shield"		: "Hero's Shield\\label_english.bin",
 		"max_text_speed"	: 3
 	}, {
 		"title"			: "German",

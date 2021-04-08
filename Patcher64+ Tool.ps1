@@ -21,22 +21,11 @@ Add-Type -AssemblyName 'System.Drawing'
 
 
 #==============================================================================================================================================================================================
-$HidePSConsole = @"
-[DllImport("Kernel32.dll")]
-public static extern IntPtr GetConsoleWindow();
-[DllImport("user32.dll")]
-public static extern bool ShowWindow(IntPtr hWnd, Int32 nCmdShow);
-"@
-Add-Type -Namespace Console -Name Window -MemberDefinition $HidePSConsole
-
-
-
-#==============================================================================================================================================================================================
 # Setup global variables
 
 $global:ScriptName = "Patcher64+ Tool"
-$global:VersionDate = "2021-03-26"
-$global:Version     = "v13.1.0"
+$global:VersionDate = "2021-04-08"
+$global:Version     = "v13.2.0"
 $global:SystemDate  = Get-Date -Format yyyy-MM-dd-HH-mm-ss
 
 $global:CommandType = $MyInvocation.MyCommand.CommandType.ToString()
@@ -51,6 +40,16 @@ $global:Last = $global:Fonts = @{}
 $global:FatalError = $global:WarningError = $False
 $global:ConsoleHistory = @()
 
+
+
+#==============================================================================================================================================================================================
+$HidePSConsole = @"
+[DllImport("Kernel32.dll")]
+public static extern IntPtr GetConsoleWindow();
+[DllImport("user32.dll")]
+public static extern bool ShowWindow(IntPtr hWnd, Int32 nCmdShow);
+"@
+Add-Type -Namespace Console -Name Window -MemberDefinition $HidePSConsole
 
 
 
@@ -229,31 +228,33 @@ WriteToConsole ("Full Path:     " + $Paths.FullBase)
 WriteToConsole ("System Date:   " + $SystemDate)
 WriteToConsole ("Temp Folder:   " + $Paths.Temp)
 
-# Set default game mode
-ChangeConsolesList   | Out-Null
-GetFilePaths         | Out-Null
+if (!$FatalError) { 
+    # Set default game mode
+    ChangeConsolesList   | Out-Null
+    GetFilePaths         | Out-Null
 
-# Restore Last Custom Title and GameID
-$CustomHeader.Title.Add_TextChanged({           if (IsChecked $CustomHeader.EnableHeader)   { $Settings["Core"]["CustomHeader.Title"]  = $this.Text } })
-$CustomHeader.GameID.Add_TextChanged({          if (IsChecked $CustomHeader.EnableHeader)   { $Settings["Core"]["CustomHeader.GameID"] = $this.Text } })
-$CustomHeader.Region.Add_SelectedIndexChanged({ if (IsChecked $CustomHeader.EnableRegion)   { $Settings["Core"]["CustomHeader.Region"] = $this.SelectedIndex } })
-$CustomHeader.EnableHeader.Add_CheckedChanged({ RestoreCustomHeader })
-$CustomHeader.EnableRegion.Add_CheckedChanged({ RestoreCustomRegion })
-RestoreCustomHeader
-RestoreCustomRegion
+    # Restore Last Custom Title and GameID
+    $CustomHeader.Title.Add_TextChanged({           if (IsChecked $CustomHeader.EnableHeader)   { $Settings["Core"]["CustomHeader.Title"]  = $this.Text } })
+    $CustomHeader.GameID.Add_TextChanged({          if (IsChecked $CustomHeader.EnableHeader)   { $Settings["Core"]["CustomHeader.GameID"] = $this.Text } })
+    $CustomHeader.Region.Add_SelectedIndexChanged({ if (IsChecked $CustomHeader.EnableRegion)   { $Settings["Core"]["CustomHeader.Region"] = $this.SelectedIndex } })
+    $CustomHeader.EnableHeader.Add_CheckedChanged({ RestoreCustomHeader })
+    $CustomHeader.EnableRegion.Add_CheckedChanged({ RestoreCustomRegion })
+    RestoreCustomHeader
+    RestoreCustomRegion
 
-# Restore last settings
-if ($GameConsole -eq $null) { ChangeGamesList | Out-Null }
-ChangeGameMode    | Out-Null
-ChangePatchPanel  | Out-Null
-ChangePatch       | Out-Null
-SetMainScreenSize | Out-Null
-SetVCPanel        | Out-Null
-CheckVCOptions    | Out-Null
-ChangeGamesList
+    # Restore last settings
+    if ($GameConsole -eq $null) { ChangeGamesList | Out-Null }
+    ChangeGameMode    | Out-Null
+    ChangePatchPanel  | Out-Null
+    ChangePatch       | Out-Null
+    SetMainScreenSize | Out-Null
+    SetVCPanel        | Out-Null
+    CheckVCOptions    | Out-Null
+    ChangeGamesList
 
-# Active GUI events
-InitializeEvents
+    # Active GUI events
+    InitializeEvents
+}
 
 # Show the dialog to the user
 if (!$FatalError) { $MainDialog.ShowDialog() | Out-Null }

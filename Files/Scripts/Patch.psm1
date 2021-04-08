@@ -82,9 +82,9 @@ function MainFunction([string]$Command, [string]$PatchedFileName) {
     # Decompress
     $Decompress = $False
     if ($GameType.decompress -gt 0) {
-        if     ((GetPatchFile) -like "*\Decompressed\*")        { $Decompress = $True }
-        elseif ($LanguagePatch.file -like "*\Decompressed\*")   { $Decompress = $True }
-        elseif (IsChecked $Patches.Downgrade)                   { $Decompress = $True }
+        if     (StrStarts -Str (GetPatchFile) -Val "Decompressed\")        { $Decompress = $True }
+        elseif (StrStarts -Str $LanguagePatch.file -Val "Decompressed\")   { $Decompress = $True }
+        elseif (IsChecked $Patches.Downgrade)                              { $Decompress = $True }
         elseif ($GameType.decompress -eq 1 -and !(StrLike -str $Command -val "Inject") -and !(StrLike -str $Command -val "Patch Header") -and !(StrLike -str $Command -val "Apply Patch") -and !(StrLike -str $Command -val "Patch VC") -and !(StrLike -str $Command -val "Extract") ) {
             if ( (IsChecked $Patches.Options) -or (IsChecked $Patches.Redux) )   { $Decompress = $True }
         }
@@ -150,11 +150,11 @@ function MainFunctionPatch([string]$Command, [Array]$Header, [string]$PatchedFil
         if (!(CheckGameID)) { return }
 
         # Step 04: Extract "00000005.app" file to get the ROM
-        ExtractU8AppFile $Command
+        if (!(ExtractU8AppFile $Command)) { return }
 
         # Step 05: Do some initial patching stuff for the ROM for VC WAD files
         if (!(PatchVCROM $Command)) { return }
-
+        
         # Step 06: Replace the Virtual Console emulator within the WAD file
         if (!(PatchVCEmulator $Command)) { return }
     }
@@ -169,7 +169,7 @@ function MainFunctionPatch([string]$Command, [Array]$Header, [string]$PatchedFil
         if (!(DecompressROM $Decompress)) { return }
         DowngradeROM $Decompress
     }
-
+    
     if ( !(StrLike -str $Command -val "Inject") -and !(StrLike -str $Command -val "Patch Header") -and !(StrLike -str $Command -val "Apply Patch") -and !(StrLike -str $Command -val "Patch VC") -and !(StrLike -str $Command -val "Extract") ) {
         # Step 09: Extract MQ dungeon data for OoT
         ExtractMQData $Decompress
@@ -197,7 +197,7 @@ function MainFunctionPatch([string]$Command, [Array]$Header, [string]$PatchedFil
         CompressROM -Decompress $Decompress -Finalize $Finalize
         if (!(ApplyPatchROM $Decompress)) { return }
     }
-
+    
     # Step 17: Update the .Z64 ROM CRC
     UpdateROMCRC
 
@@ -249,8 +249,8 @@ function WriteDebug([string]$Command, [String[]]$Header, [string]$PatchedFileNam
     WriteToConsole ("Patch Options: " + $GamePatch.title)
     WriteToConsole ("Custom Header: " + $Header)
     WriteToConsole ("Patch File:    " + (GetPatchFile))
-    WriteToConsole ("Use Options:   " + (IsChecked $Patches.Options))
-    WriteToConsole ("Use Redux:     " + (IsChecked $Patches.Redux))
+    WriteToConsole ("Use Options:   " + ( (IsSet $GamePatch.options) -and $Patches.Options.Checked -and $Patches.Options.Visible) )
+    WriteToConsole ("Use Redux:     " + ( (IsChecked $Patches.Redux) -and (IsSet $GamePatch.redux.file) ) )
     WriteToConsole ("Redux File:    " + $GamePatch.redux.file)
     WriteToConsole ("Language File: " + $LanguagePatch.file)
     WriteToConsole ("Output Name:   " + $PatchedFileName)
@@ -531,13 +531,14 @@ function ExtractWADFile([string]$PatchedFileName) {
 #==============================================================================================================================================================================================
 function ExtractU8AppFile([string]$Command) {
     
+    if (StrLike -str $Command -val "Patch VC") { return $True }
+
     # ROM is within the "0000005.app" file
     if ($GameConsole.appfile -eq "00000005.app") {
         UpdateStatusLabel 'Extracting "00000005.app" file...'                           # Set the status label
         & $Files.tool.wszst 'X' $WADFile.AppFile05 '-d' $WADFile.AppPath05 | Out-Null   # Unpack the file using wszst
 
         if ($VC.RemoveT64.Checked) { Get-ChildItem $WADFile.AppPath05 -Include *.T64 -Recurse | Remove-Item } # Remove all .T64 files when selected
-
         # Reference ROM in unpacked AppFile
         foreach ($item in Get-ChildItem $WADFile.AppPath05) {
             if ($item -match "rom") {
@@ -558,8 +559,15 @@ function ExtractU8AppFile([string]$Command) {
             $arr = [IO.File]::ReadAllBytes($WADFile.AppFile01)
             $WADFile.Length = Get24Bit (16 + ($arr[(GetDecimal $WADFile.Offset) + 4] * 16384) + ($arr[(GetDecimal $WADFile.Offset) + 5] * 8192))
             ExportBytes -File $WADFile.AppFile01 -Offset $WADFile.Offset -Length $WADFile.Length -Output $WADFile.ROM
+            $global:ROMHashSum = (Get-FileHash -Algorithm MD5 $GetROM.nes).Hash
         }
     }
+
+    if (!(TestFile $GetROM.run)) {
+        UpdateStatusLabel ('ROM could not be extracted. Is this a proper ' + $GameConsole.mode + ' ROM?')
+        return $False
+    }
+    return $True
 
 }
 
@@ -793,9 +801,10 @@ function DowngradeROM([boolean]$Decompress) {
 function GetMaxSize() {
 
     if ($Settings.Debug.IgnoreChecksum -eq $True) { return $True }
+    if ( (StrLike -str $Command -val "Inject") -or (StrLike -str $Command -val "Patch VC") ) { return $True }
 
     $maxSize = ($GameConsole.max_size) + "MB"
-    if ((Get-Item -LiteralPath $GamePath).length/$maxSize -gt 1) {
+    if ((Get-Item -LiteralPath $GetROM.run).length/$maxSize -gt 1) {
         UpdateStatusLabel ("The ROM is too large! The max allowed size is " + $maxSize) + "!"
         return $False
     }
@@ -879,14 +888,14 @@ function CompareHashSums([string]$Command) {
 #==============================================================================================================================================================================================
 function PatchDecompressedROM() {
     
-    if (!(StrLike -str (GetPatchFile) -val "Decompressed\")) { return $True }
+    if (StrStarts -Str (GetPatchFile) -Val "Decompressed\" -Not) { return $True }
     
     # Set the status label.
     UpdateStatusLabel ("Patching " + $GameType.mode + " ROM with patch file...")
-
+    
     # Apply the selected patch to the ROM, if it is provided
     if (!(ApplyPatch -File $GetROM.decomp -Patch (GetPatchFile))) { return $False }
-
+    
     return $True
 
 }
@@ -896,7 +905,7 @@ function PatchDecompressedROM() {
 #==============================================================================================================================================================================================
 function PatchCompressedROM() {
     
-    if (!(StrLike -str (GetPatchFile) -val "Compressed\")) { return $True }
+    if (StrStarts -Str (GetPatchFile) -Val "Compressed\" -Not) { return $True }
     
     # Set the status label.
     UpdateStatusLabel ("Patching " + $GameType.mode + " ROM with patch file...")
@@ -1305,6 +1314,8 @@ function IsHiROM([uint32]$Offset) {
 #==============================================================================================================================================================================================
 function RepackU8AppFile() {
     
+    if (StrLike -str $Command -val "Patch VC") { return }
+
     # The ROM is located witin the "00000005.app" file
     if ($GameConsole.appFile -eq "00000005.app") {
         UpdateStatusLabel 'Repacking "00000005.app" file...'                 # Set the status label

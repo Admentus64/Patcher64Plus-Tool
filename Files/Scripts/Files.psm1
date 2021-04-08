@@ -67,17 +67,16 @@ function SetFileParameters() {
     $Files.oot.mm_pause_screen              = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\mm_pause_screen")
     $Files.oot.harder_child_bosses          = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\harder_child_bosses")
     $Files.oot.link_model_child_mm          = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Models\mm_child")
-    $Files.oot.link_model_razor_child       = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Models\razor_sword_vanilla_child")
+    $Files.oot.link_model_upgrade_child     = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Models\upgrade_vanilla_child")
 
-    $Files.oot.lens_of_truth                = $Paths.Games + "\Ocarina of Time\Textures\Lens of Truth.bin"
-    $Files.oot.title_copyright              = $Paths.Games + "\Ocarina of Time\Textures\Logo\Master Quest Title Copyright.bin"
-    $Files.oot.title_master_quest           = $Paths.Games + "\Ocarina of Time\Textures\Logo\Master Quest Title Logo.bin"
-    $Files.oot.hud_mm_hearts                = $Paths.Games + "\Ocarina of Time\Textures\HUD\MM Hearts.bin"
-    $Files.oot.hud_mm_button                = $Paths.Games + "\Ocarina of Time\Textures\HUD\MM Button.bin"
-    $Files.oot.hud_mm_key_rupee             = $Paths.Games + "\Ocarina of Time\Textures\HUD\MM Key & Rupee.bin"
-    $Files.oot.hud_tatl                     = $Paths.Games + "\Ocarina of Time\Textures\HUD\Tatl.bin"
-    $Files.oot.hud_tael                     = $Paths.Games + "\Ocarina of Time\Textures\HUD\Tael.bin"
-    $Files.oot.hero_shield_front            = $Paths.Games + "\Ocarina of Time\Textures\Hero's Shield\front.bin"
+    $Files.oot.lens_of_truth                = $Paths.Games + "\Ocarina of Time\Textures\widescreen\lens_of_truth.bin"
+    $Files.oot.title_copyright              = $Paths.Games + "\Ocarina of Time\Textures\Logo\mq_copyright.bin"
+    $Files.oot.title_master_quest           = $Paths.Games + "\Ocarina of Time\Textures\Logo\mq_logo.bin"
+    $Files.oot.hud_mm_heart                 = $Paths.Games + "\Ocarina of Time\Textures\HUD\mm_heart.bin"
+    $Files.oot.hud_mm_button                = $Paths.Games + "\Ocarina of Time\Textures\HUD\mm_button.bin"
+    $Files.oot.hud_mm_key_rupee             = $Paths.Games + "\Ocarina of Time\Textures\HUD\mm_key_rupee.bin"
+    $Files.oot.hud_tatl                     = $Paths.Games + "\Ocarina of Time\Textures\HUD\tatl.bin"
+    $Files.oot.hud_tael                     = $Paths.Games + "\Ocarina of Time\Textures\HUD\tael.bin"
     $Files.oot.hero_shield_icon             = $Paths.Games + "\Ocarina of Time\Textures\Hero's Shield\icon.bin"
     $Files.oot.stone_shield_front           = $Paths.Games + "\Ocarina of Time\Textures\Iron Shield\front.bin"
     $Files.oot.stone_shield_front           = $Paths.Games + "\Ocarina of Time\Textures\Iron Shield\back.bin"
@@ -85,23 +84,25 @@ function SetFileParameters() {
     $Files.oot.l_target_button              = $Paths.Games + "\Ocarina of Time\Textures\GameCube\l_pause_screen_button.bin"
     $Files.oot.l_target_icon                = $Paths.Games + "\Ocarina of Time\Textures\GameCube\l_text_icon.bin"
 
-    $Files.oot.file_select                  = $Paths.Games + "\Ocarina of Time\Binaries\File Select.bin"
-    $Files.oot.frontflip_jump               = $Paths.Games + "\Ocarina of Time\Binaries\Jumps\Frontflip.bin"
-    $Files.oot.somarsault_jump              = $Paths.Games + "\Ocarina of Time\Binaries\Jumps\Somarsault.bin"
-    $Files.oot.message_table_restore_text   = $Paths.Games + "\Ocarina of Time\Binaries\Message\Table Restore Text.tbl"
-    $Files.oot.message_table_female_text    = $Paths.Games + "\Ocarina of Time\Binaries\Message\Table Female Pronouns.tbl"
-    $Files.oot.message_songs                = $Paths.Games + "\Ocarina of Time\Binaries\Message\Songs.bin"
-    $Files.oot.message_mq1                  = $Paths.Games + "\Ocarina of Time\Binaries\Message\MQ Navi Action.bin"
-    $Files.oot.message_mq2                  = $Paths.Games + "\Ocarina of Time\Binaries\Message\MQ Navi Door.bin"
-    $Files.oot.mm_link_voices               = $Paths.Games + "\Ocarina of Time\Binaries\Voices\MM Link Voices.bin"
-    $Files.oot.feminine_link_voices         = $Paths.Games + "\Ocarina of Time\Binaries\Voices\Feminine Link Voices.bin"
-    $Files.oot.fire_temple_bank             = $Paths.Games + "\Ocarina of Time\Binaries\Fire Temple Theme\12AudioBankPointers.bin"
-    $Files.oot.fire_temple_seq              = $Paths.Games + "\Ocarina of Time\Binaries\Fire Temple Theme\12AudioSeqPointers.bin"
-    $Files.oot.fire_temple_table            = $Paths.Games + "\Ocarina of Time\Binaries\Fire Temple Theme\12AudioTablePointers.bin"
+    $Files.oot.file_select                  = $Paths.Games + "\Ocarina of Time\Binaries\file_select.bin"
+    $Files.oot.frontflip_jump               = $Paths.Games + "\Ocarina of Time\Binaries\Jumps\frontflip.bin"
+    $Files.oot.somarsault_jump              = $Paths.Games + "\Ocarina of Time\Binaries\Jumps\somarsault.bin"
+    $Files.oot.message_credits              = $Paths.Games + "\Ocarina of Time\Binaries\Message\credits.bin"
+    $Files.oot.message_female_pronouns      = $Paths.Games + "\Ocarina of Time\Binaries\Message\female_pronouns.tbl"
+    $Files.oot.message_mq1                  = $Paths.Games + "\Ocarina of Time\Binaries\Message\mq_navi_action.bin"
+    $Files.oot.message_mq2                  = $Paths.Games + "\Ocarina of Time\Binaries\Message\mq_navi_door.bin"
+    $Files.oot.message_restore              = $Paths.Games + "\Ocarina of Time\Binaries\Message\restore.tbl"
+    $Files.oot.message_ruto_confession      = $Paths.Games + "\Ocarina of Time\Binaries\Message\ruto_confession.bin"
+    $Files.oot.message_songs                = $Paths.Games + "\Ocarina of Time\Binaries\Message\songs.bin"
+    $Files.oot.mm_link_voices               = $Paths.Games + "\Ocarina of Time\Binaries\Voices\majora.bin"
+    $Files.oot.feminine_link_voices         = $Paths.Games + "\Ocarina of Time\Binaries\Voices\feminine.bin"
+    $Files.oot.fire_temple_bank             = $Paths.Games + "\Ocarina of Time\Binaries\Fire Temple Theme\audiobank_pointers.bin"
+    $Files.oot.fire_temple_seq              = $Paths.Games + "\Ocarina of Time\Binaries\Fire Temple Theme\audioseq_pointers.bin"
+    $Files.oot.fire_temple_table            = $Paths.Games + "\Ocarina of Time\Binaries\Fire Temple Theme\audiotable_pointers.bin"
 
     $Files.oot.theme_fire_temple            = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Export\audiobank_fire_temple")
     $Files.oot.debug_map_select             = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Export\debug_map_select")
-    $Files.oot.restore_text                 = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Export\Message\restore_text")
+    $Files.oot.restore_text                 = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Export\Message\restore")
     $Files.oot.redux_text                   = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Export\Message\redux")
     $Files.oot.female_pronouns_text         = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Export\Message\female_pronouns")
 
@@ -130,41 +131,42 @@ function SetFileParameters() {
 
 
     # Store Majora's Mask files
-    $Files.mm.troupe_leaders_mask_text      = $Paths.Games + "\Majora's Mask\Textures\Icons\Troupe Leader's Mask Text.yaz0"
-    $Files.mm.deku_pipes_icon               = $Paths.Games + "\Majora's Mask\Textures\Icons\Deku Pipes Icon.yaz0"
-    $Files.mm.deku_pipes_Text               = $Paths.Games + "\Majora's Mask\Textures\Icons\Deku Pipes Text.yaz0"
-    $Files.mm.goron_drums_icon              = $Paths.Games + "\Majora's Mask\Textures\Icons\Goron Drums Icon.yaz0"
-    $Files.mm.goron_drums_text              = $Paths.Games + "\Majora's Mask\Textures\Icons\Goron Drums Text.yaz0"
-    $Files.mm.zora_guitar_icon              = $Paths.Games + "\Majora's Mask\Textures\Icons\Zora Guitar Icon.yaz0"
-    $Files.mm.zora_guitar_text              = $Paths.Games + "\Majora's Mask\Textures\Icons\Zora Guitar Text.yaz0"
+    $Files.mm.troupe_leaders_mask_text      = $Paths.Games + "\Majora's Mask\Textures\Icons\troupe_leaders_mask_text.yaz0"
+    $Files.mm.deku_pipes_icon               = $Paths.Games + "\Majora's Mask\Textures\Icons\deku_pipes_icon.yaz0"
+    $Files.mm.deku_pipes_Text               = $Paths.Games + "\Majora's Mask\Textures\Icons\deku_pipes_text.yaz0"
+    $Files.mm.goron_drums_icon              = $Paths.Games + "\Majora's Mask\Textures\Icons\goron_drums_icon.yaz0"
+    $Files.mm.goron_drums_text              = $Paths.Games + "\Majora's Mask\Textures\Icons\goron_drums_text.yaz0"
+    $Files.mm.zora_guitar_icon              = $Paths.Games + "\Majora's Mask\Textures\Icons\zora_guitar_icon.yaz0"
+    $Files.mm.zora_guitar_text              = $Paths.Games + "\Majora's Mask\Textures\Icons\zora_guitar_text.yaz0"
 
     $Files.mm.widescreen                    = CheckPatchExtension ($Paths.Games + "\Majora's Mask\Decompressed\widescreen")
     $Files.mm.improved_link_model           = CheckPatchExtension ($Paths.Games + "\Majora's Mask\Decompressed\improved_link_model")
     $Files.mm.mq_remix                      = CheckPatchExtension ($Paths.Games + "\Majora's Mask\Decompressed\master_quest_remix")
 
-    $Files.mm.hud_oot_button                = $Paths.Games + "\Majora's Mask\Textures\HUD\OoT Button.bin"
-    $Files.mm.hud_oot_hearts                = $Paths.Games + "\Majora's Mask\Textures\HUD\OoT Hearts.bin"
+    $Files.mm.hud_navi                      = $Paths.Games + "\Majora's Mask\Textures\HUD\navi.bin"
+    $Files.mm.hud_oot_button                = $Paths.Games + "\Majora's Mask\Textures\HUD\oot_button.bin"
+    $Files.mm.hud_oot_heart                 = $Paths.Games + "\Majora's Mask\Textures\HUD\oot_heart.bin"
+    $Files.mm.hud_tael                      = $Paths.Games + "\Majora's Mask\Textures\HUD\tael.bin"
+    $Files.mm.hud_tatl                      = $Paths.Games + "\Majora's Mask\Textures\HUD\tatl.bin"
+    $Files.mm.hud_taya                      = $Paths.Games + "\Majora's Mask\Textures\HUD\taya.bin"
 
     $Files.mm.l_target_button               = $Paths.Games + "\Majora's Mask\Textures\GameCube\l_pause_screen_button.yaz0"
     $Files.mm.l_target_button               = $Paths.Games + "\Majora's Mask\Textures\GameCube\l_text_icon.bin"
 
-    $Files.mm.carnival_of_time              = $Paths.Games + "\Majora's Mask\Textures\Widescreen\Carnival of Time.bin"
-    $Files.mm.four_giant                    = $Paths.Games + "\Majora's Mask\Textures\Widescreen\Four Giants.bin"
-    $Files.mm.lens_of_truth                 = $Paths.Games + "\Majora's Mask\Textures\Widescreen\Lens of Truth.bin"
+    $Files.mm.carnival_of_time              = $Paths.Games + "\Majora's Mask\Textures\Widescreen\carnival_of_time.bin"
+    $Files.mm.four_giant                    = $Paths.Games + "\Majora's Mask\Textures\Widescreen\four_giants.bin"
+    $Files.mm.lens_of_truth                 = $Paths.Games + "\Majora's Mask\Textures\Widescreen\lens_of_truth.bin"
 
-    $Files.mm.goron_red_runic               = $Paths.Games + "\Majora's Mask\Textures\Recolor\Goron Red Tunic.bin"
-    $Files.mm.zora_blue_gradient            = $Paths.Games + "\Majora's Mask\Textures\Recolor\Zora Blue Gradient.bin"
-    $Files.mm.zora_blue_palette             = $Paths.Games + "\Majora's Mask\Textures\Recolor\Zora Blue Palette.bin"
+    $Files.mm.romani_ranch                  = $Paths.Games + "\Majora's Mask\Textures\romani_sign.bin"
+    $Files.mm.skull_kid_beak                = $Paths.Games + "\Majora's Mask\Textures\skull_kid_beak.bin"
 
-    $Files.mm.romani_ranch                  = $Paths.Games + "\Majora's Mask\Textures\Romani Sign.bin"
-    $Files.mm.skull_kid_beak                = $Paths.Games + "\Majora's Mask\Textures\Skull Kid Beak.bin"
+    $Files.mm.zora_physics_fix              = $Paths.Games + "\Majora's Mask\Binaries\zora_physics_fix.bin"
+    $Files.mm.frontflip_jump_attack         = $Paths.Games + "\Majora's Mask\Binaries\frontflip_jump_attack.bin"
 
-    $Files.mm.zora_physics_fix              = $Paths.Games + "\Majora's Mask\Binaries\Zora Physics Fix.bin"
-    $Files.mm.frontflip_jump_attack         = $Paths.Games + "\Majora's Mask\Binaries\Frontflip Jump Attack.bin"
-
-    $Files.mm.message_table_restore_text    = $Paths.Games + "\Majora's Mask\Binaries\Message\Table Restore Text.tbl"
-    $Files.mm.message_razor1                = $Paths.Games + "\Majora's Mask\Binaries\Message\Razor Sword 1.bin"
-    $Files.mm.message_razor2                = $Paths.Games + "\Majora's Mask\Binaries\Message\Razor Sword 2.bin"
+    $Files.mm.message_credits               = $Paths.Games + "\Majora's Mask\Binaries\Message\credits.bin"
+    $Files.mm.message_razor_sword_1         = $Paths.Games + "\Majora's Mask\Binaries\Message\razor_sword_1.bin"
+    $Files.mm.message_razorsword_2          = $Paths.Games + "\Majora's Mask\Binaries\Message\razor_sword_2.bin"
+    $Files.mm.message_restore               = $Paths.Games + "\Majora's Mask\Binaries\Message\restore.tbl"
 
     $Files.mm.southern_swamp_cleared        = CheckPatchExtension ($Paths.Games + "\Majora's Mask\Export\Southern Swamp\southern_swamp_cleared_scene")
     $Files.mm.southern_swamp_cleared_0      = CheckPatchExtension ($Paths.Games + "\Majora's Mask\Export\Southern Swamp\southern_swamp_cleared_room_0")
@@ -173,7 +175,7 @@ function SetFileParameters() {
     $Files.mm.deku_palace_0                 = CheckPatchExtension ($Paths.Games + "\Majora's Mask\Export\Deku Palace\deku_palace_room_0")
     $Files.mm.deku_palace_1                 = CheckPatchExtension ($Paths.Games + "\Majora's Mask\Export\Deku Palace\deku_palace_room_1")
     $Files.mm.deku_palace_2                 = CheckPatchExtension ($Paths.Games + "\Majora's Mask\Export\Deku Palace\deku_palace_room_2")
-    $Files.mm.restore_text                  = CheckPatchExtension ($Paths.Games + "\Majora's Mask\Export\Message\restore_text")
+    $Files.mm.restore_text                  = CheckPatchExtension ($Paths.Games + "\Majora's Mask\Export\Message\restore")
 
 
 
@@ -256,10 +258,8 @@ function SetGetROM() {
         $GetROM.input         
     }
 
-    if ($GetROM.in -ne $null) {
-        $GetROM.run = $GetROM.in
-        $global:ROMHashSum = (Get-FileHash -Algorithm MD5 $GetROM.in).Hash
-    }
+    if ($GetROM.in -ne $null)   { $GetROM.run = $GetROM.in }
+    if (TestFile $GetROM.in )   { $global:ROMHashSum = (Get-FileHash -Algorithm MD5 $GetROM.in).Hash }
 
     if ($Settings.Debug.CreateBPS -eq $True) {
         $Files.compBPS   = [System.IO.Path]::GetDirectoryName($GetROM.in) + "\" + [System.IO.Path]::GetFileNameWithoutExtension($GetROM.in) + "_compressed.bps"

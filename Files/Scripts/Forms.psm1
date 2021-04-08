@@ -145,39 +145,6 @@ function CreateTextBox([uint16]$X=0, [uint16]$Y=0, [uint16]$Width=0, [uint16]$He
 
 
 #==============================================================================================================================================================================================
-function CreateComboBox([uint16]$X=0, [uint16]$Y=0, [uint16]$Width=0, [uint16]$Height=0, [string]$Name, [string]$Tag, [string[]]$Items, [byte]$Default=1, [string]$Info, [switch]$IsGame, [object]$AddTo=$Last.Group) {
-    
-    $ComboBox = CreateForm -X $X -Y $Y -Width $Width -Height $Height -Name $Name -Tag $Tag -IsGame $IsGame -Form (New-Object System.Windows.Forms.ComboBox) -AddTo $AddTo
-    $ComboBox.DropDownStyle = "DropDownList"
-    $ComboBox.Font = $Fonts.Small
-    $ToolTip = CreateToolTip -Form $ComboBox -Info $Info
-    if ($Default -lt 1) { $Default = 1 }
-    
-    if (IsSet -Elem $Items) {
-        $ComboBox.Items.AddRange($Items)
-        if (IsSet $ComboBox.Name) {
-            if ($IsGame) {
-                if (IsSet $GameSettings[$ComboBox.Section][$ComboBox.Name] -Max $ComboBox.Items.Count -HasInt)   { $ComboBox.SelectedIndex = ($GameSettings[$ComboBox.Section][$ComboBox.Name]-1) }
-                else                                                                                             { $GameSettings[$ComboBox.Section][$ComboBox.Name] = $Default }
-                $ComboBox.Add_SelectedIndexChanged({ $GameSettings[$this.Section][$this.Name] = ($this.SelectedIndex+1) })
-            }
-            else {
-                if (IsSet $Settings["Core"][$ComboBox.Name] -Max $ComboBox.Items.Count -HasInt)                  { $ComboBox.SelectedIndex = ($Settings[$ComboBox.Section][$ComboBox.Name]-1) }
-                else                                                                                             { $Settings["Core"][$ComboBox.Name] = $Default }
-                $ComboBox.Add_SelectedIndexChanged({ $Settings["Core"][$this.Name] = ($this.SelectedIndex+1) })
-            }
-        }
-        if ($ComboBox.SelectedIndex -lt 0) { $ComboBox.SelectedIndex = ($Default-1) }
-    }
-
-    Add-Member -InputObject $ComboBox -NotePropertyMembers @{ Default = ($Default-1) }
-    return $ComboBox
-
-}
-
-
-
-#==============================================================================================================================================================================================
 function CreateCheckBox([uint16]$X=0, [uint16]$Y=0, [string]$Name, [byte]$SaveAs=1, [string]$SaveTo, [byte]$Max=1, [string]$Tag, [boolean]$Checked=$False, [boolean]$Disable=$False, [boolean]$IsRadio=$False, [string]$Info="", [boolean]$IsGame=$False, [boolean]$IsDebug=$False, [object]$AddTo=$Last.Group, [object]$Link) {
     
     if ($IsRadio) {
@@ -232,6 +199,75 @@ function CreateCheckBox([uint16]$X=0, [uint16]$Y=0, [string]$Name, [byte]$SaveAs
 
     Add-Member -InputObject $CheckBox -NotePropertyMembers @{ Default = $Checked }
     return $CheckBox
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function CreateComboBox([uint16]$X=0, [uint16]$Y=0, [uint16]$Width=0, [uint16]$Height=0, [string]$Name, [string]$Tag, [string[]]$Items, [byte]$Default=1, [string]$Info, [switch]$IsGame, [object]$AddTo=$Last.Group) {
+    
+    $ComboBox = CreateForm -X $X -Y $Y -Width $Width -Height $Height -Name $Name -Tag $Tag -IsGame $IsGame -Form (New-Object System.Windows.Forms.ComboBox) -AddTo $AddTo
+    $ComboBox.DropDownStyle = "DropDownList"
+    $ComboBox.Font = $Fonts.Small
+    $ToolTip = CreateToolTip -Form $ComboBox -Info $Info
+    if ($Default -lt 1) { $Default = 1 }
+    
+    if (IsSet -Elem $Items) {
+        $ComboBox.Items.AddRange($Items)
+        if (IsSet $ComboBox.Name) {
+            if ($IsGame) {
+                if (IsSet $GameSettings[$ComboBox.Section][$ComboBox.Name] -Max $ComboBox.Items.Count -HasInt)   { $ComboBox.SelectedIndex = ($GameSettings[$ComboBox.Section][$ComboBox.Name]-1) }
+                else                                                                                             { $GameSettings[$ComboBox.Section][$ComboBox.Name] = $Default }
+                $ComboBox.Add_SelectedIndexChanged({ $GameSettings[$this.Section][$this.Name] = ($this.SelectedIndex+1) })
+            }
+            else {
+                if (IsSet $Settings["Core"][$ComboBox.Name] -Max $ComboBox.Items.Count -HasInt)                  { $ComboBox.SelectedIndex = ($Settings[$ComboBox.Section][$ComboBox.Name]-1) }
+                else                                                                                             { $Settings["Core"][$ComboBox.Name] = $Default }
+                $ComboBox.Add_SelectedIndexChanged({ $Settings["Core"][$this.Name] = ($this.SelectedIndex+1) })
+            }
+        }
+        if ($ComboBox.SelectedIndex -lt 0) { $ComboBox.SelectedIndex = ($Default-1) }
+    }
+
+    Add-Member -InputObject $ComboBox -NotePropertyMembers @{ Default = ($Default-1) }
+    return $ComboBox
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function CreateSlider([uint16]$X=0, [uint16]$Y=0, [uint16]$Width=0, [uint16]$Height=0, [int16]$Default=0, [int16]$Min=0, [int16]$Max=255, [int16]$Freq=5, [int16]$Small=2, [int16]$Large=3, [string]$Name, [string]$Tag, [string]$Info, [switch]$IsGame, [object]$AddTo=$Last.Group) {
+    
+    $Slider = CreateForm -X $X -Y $Y -Width $Width -Height $Height -Name $Name -Tag $Tag -IsGame $IsGame -Form (New-Object System.Windows.Forms.TrackBar) -AddTo $AddTo
+    $ToolTip = CreateToolTip -Form $Slider -Info $Info
+
+    $Slider.Minimum       = $Min
+    $Slider.Maximum       = $Max
+    $Slider.TickFrequency = $Freq
+    $Slider.SmallChange   = $Small
+    $Slider.LargeChange   = $Large
+
+    if (IsSet $Slider.Name) {
+        if ($IsGame) {
+            if (!(IsSet $GameSettings[$Slider.Section][$Slider.Name] -Min $Min -Max $Max -HasInt)) { $GameSettings[$Slider.Section][$Slider.Name] = $Default }
+            $Slider.Add_ValueChanged({ $GameSettings[$this.Section][$this.Name] = $this.value })
+            $Slider.value = $GameSettings[$Slider.Section][$Slider.Name]
+        }
+        else {
+            if (!(IsSet $Settings["Core"][$Slider.Name] -Min $Min -Max $Max -HasInt)) { $Settings["Core"][$Slider.Name] = $Minimum }
+            $Slider.Add_ValueChanged({ $Settings["Core"][$this.Name] = $this.value })
+            $Slider.value = $Settings[$Slider.Section][$Slider.Name]
+        }
+    }
+
+    Add-Member -InputObject $Slider -NotePropertyMembers @{ Default = $Default }
+    $Slider.Add_MouseClick({
+        if ($_.Button -eq "Right") { $this.value = $this.Default }
+    })
+
+    return $Slider
 
 }
 
@@ -329,6 +365,7 @@ function CreateReduxPanel([single]$Row=0, [single]$Columns, [single]$Rows=1,  [s
     return CreatePanel -X $AddTo.Left -Y ($Row * (DPISize 30) + (DPISize 20)) -Width $Width -Height ((DPISize 26.5) * $Rows) -Name $Name -Tag $Tag -AddTo $AddTo
 
 }
+
 
 
 #==============================================================================================================================================================================================
@@ -507,7 +544,7 @@ function CreateReduxCheckBox([single]$Column=$Last.Column, [single]$Row=$Last.Ro
 
 
 #==============================================================================================================================================================================================
-function CreateReduxComboBox([single]$Column=$Last.Column, [single]$Row=$Last.Row, [int16]$Length=160, [int]$Shift=0, [string[]]$Items, [byte]$Default=1, [string]$Text, [string]$Info, [string]$Warning, [string]$Credits, [string]$Name, [string]$Tag, [object]$AddTo=$Last.Group) {
+function CreateReduxComboBox([single]$Column=$Last.Column, [single]$Row=$Last.Row, [int16]$Length=160, [int]$Shift=0, [string[]]$Items=$null, [string[]]$PostItems=$null, [string]$FilePath, $Default=1, [string]$Text, [string]$Info, [string]$Warning, [string]$Credits, [string]$Name, [string]$Tag, [object]$AddTo=$Last.Group) {
     
     if (IsSet $Warning) {
         if (IsSet $Info)   { $Info += ("`n[!] " + $Warning) }
@@ -518,13 +555,25 @@ function CreateReduxComboBox([single]$Column=$Last.Column, [single]$Row=$Last.Ro
         $Text += ":"
         $Width = (DPISize (80 + $Shift))
     }
-    else               { $Width = 0 }
-    if ($Items[($Default-1)] -ne "Default" -and $Default -ne 0) {
-        $Items = $Items.Clone()
-        $Items[($Default-1)] += " (default)"
+    else { $Width = 0 }
+
+    if (IsSet $FilePath)                                  { $Items = $Items + (Get-ChildItem $FilePath).BaseName }
+    if ($Items.Count -gt 0 -and $PostItems.Count -gt 0)   { $Items = $Items + $PostItems }
+
+    if ($Items.Count -gt 0) {
+        $Items = $Items | select -Unique
+        if ($Default.GetType().Name -eq "String") {
+            foreach ($i in 0..($Items.length-1)) { if ($Items[$i] -eq $Default) { $Default = ($i +1) } }
+            if ($Default.GetType().Name -eq "String") { $Default = 0 }
+        }
+        if ($Items[($Default-1)] -ne "Default" -and $Default -gt 0) {
+            $Items = $Items.Clone()
+            $Items[($Default-1)] += " (default)"
+        }
     }
 
-    $Label = CreateLabel -X (($Column-1) * (DPISize 165) + (DPISize 15)) -Y ($Row * (DPISize 30) - (DPISize 10)) -Width $Width -Height (DPISize 15) -Text $Text -Info $Info -AddTo $AddTo
+    $Default = [byte]$Default
+    $Label = CreateLabel -X (($Column-1) * (DPISize 165) + (DPISize 15)) -Y ($Row * (DPISize 30) - (DPISize 7)) -Width $Width -Height (DPISize 15) -Text $Text -Info $Info -AddTo $AddTo
     $ComboBox = CreateComboBox -X $Label.Right -Y ($Label.Top - (DPISize 3)) -Width (DPISize ($Length - $Shift)) -Height (DPISize 20) -Items $Items -Default $Default -Info $Info -IsGame $True -Name $Name -Tag $Tag -AddTo $AddTo
 
     $Last.Column++;
@@ -535,6 +584,34 @@ function CreateReduxComboBox([single]$Column=$Last.Column, [single]$Row=$Last.Ro
     if ($Last.Flexible) { $Last.Group.Height = ($Row * (DPISize 30) + (DPISize 20)) }
 
     return $ComboBox
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function CreateReduxSlider([single]$Column=$Last.Column, [single]$Row=$Last.Row, $Default, $Min, $Max, $Freq, $Small, $Large, [string]$Text, [string]$Info, [string]$Warning, [string]$Credits, [string]$Name, [object]$Link, [string]$Tag, [object]$AddTo=$Last.Group) {
+    
+    if ($Default.GetType().Name -eq "String")   { $Default = GetDecimal $Default }
+    if ($Min.GetType().Name -eq "String")       { $Min     = GetDecimal $Min }
+    if ($Max.GetType().Name -eq "String")       { $Max     = GetDecimal $Max }
+    if ($Freq.GetType().Name -eq "String")      { $Freq    = GetDecimal $Freq }
+    if ($Small.GetType().Name -eq "String")     { $Small   = GetDecimal $Small }
+    if ($Large.GetType().Name -eq "String")     { $Large   = GetDecimal $Large }
+
+    $Info = "Right click to reset to default value`n`n" + $Info
+    if ( (IsSet $Info ) -and (IsSet $Credits) ) { $Info += ("`n`n- Credits: " + $Credits) }
+    if (IsSet $Text) { $Text += ":" }
+
+    $Label  = CreateLabel  -X (($Column-1) * (DPISize 165) + (DPISize 15)) -Y ($Row * (DPISize 45) - (DPISize 25)) -Width (DPISize 105) -Height (DPISize 15) -Text $Text -Info $Info -AddTo $AddTo
+    $Slider = CreateSlider -X $Label.Right -Y ($Label.Top - (DPISize 10)) -Width (DPISize 200) -Height (DPISize 10) -Default $Default -Min $Min -Max $Max -Freq $Freq -Small $Small -Large $Large -Info $Info -IsGame $True -Name $Name -Tag $Tag -AddTo $AddTo
+
+    Add-Member -InputObject $Label -NotePropertyMembers @{ Slider = $Slider }
+    $Label.Add_MouseClick({
+        if ($_.Button -eq "Right") { $this.Slider.value = $this.Slider.Default }
+    })
+
+    return $Slider
 
 }
 
@@ -563,6 +640,7 @@ Export-ModuleMember -Function CreatePanel
 Export-ModuleMember -Function CreateButton
 Export-ModuleMember -Function CreateCheckBox
 Export-ModuleMember -Function CreateComboBox
+Export-ModuleMember -Function CreateSlider
 
 Export-ModuleMember -Function CreateTabButton
 Export-ModuleMember -Function CreateTabButtons
@@ -574,4 +652,5 @@ Export-ModuleMember -Function CreateReduxTextBox
 Export-ModuleMember -Function CreateReduxRadioButton
 Export-ModuleMember -Function CreateReduxCheckBox
 Export-ModuleMember -Function CreateReduxComboBox
+Export-ModuleMember -Function CreateReduxSlider
 Export-ModuleMember -Function CreateReduxColoredLabel

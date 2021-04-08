@@ -237,22 +237,22 @@ function ChangeGameMode() {
         (Get-Command -Module $GameType.mode) | % { Export-ModuleMember $_ }
     }
 
-    $GameFiles.base = $Paths.Games + "\" + $GameType.mode
-    $GameFiles.binaries = $GameFiles.base + "\Binaries"
-    $GameFiles.export = $GameFiles.base + "\Export"
-    $GameFiles.compressed = $GameFiles.base + "\Compressed"
-    $GameFiles.decompressed = $GameFiles.base + "\Decompressed"
-    $GameFiles.downgrade = $GameFiles.base + "\Downgrade"
-    $GameFiles.Textures = $GameFiles.base + "\Textures"
-    $GameFiles.previews = $GameFiles.base + "\Previews"
-    $GameFiles.info = $GameFiles.base + "\Info.txt"
-    $GameFiles.json = $GameFiles.base + "\Patches.json"
+    $GameFiles.Base         = $Paths.Games + "\" + $GameType.mode
+    $GameFiles.Binaries     = $GameFiles.Base + "\Binaries"
+    $GameFiles.Export       = $GameFiles.Base + "\Export"
+    $GameFiles.Compressed   = $GameFiles.Base + "\Compressed"
+    $GameFiles.Decompressed = $GameFiles.Base + "\Decompressed"
+    $GameFiles.Downgrade    = $GameFiles.Base + "\Downgrade"
+    $GameFiles.Textures     = $GameFiles.Base + "\Textures"
+    $GameFiles.Previews     = $GameFiles.Base + "\Previews"
+    $GameFiles.info         = $GameFiles.Base + "\Info.txt"
+    $GameFiles.json         = $GameFiles.Base + "\Patches.json"
 
     $global:GameSettings = GetSettings (GetGameSettingsFile)
 
     # JSON
-    if (IsSet $GameType.patches)                            { $Files.json.patches = SetJSONFile $GameFiles.json } else { $Files.json.patches = $null }
-    if (TestFile ($GameFiles.previews + "\Credits.json"))   { $Files.json.models  = SetJSONFile ($GameFiles.previews + "\Credits.json") } else { $Files.json.models = $null }
+    if (IsSet $GameType.patches)                           { $Files.json.patches = SetJSONFile $GameFiles.json } else { $Files.json.patches = $null }
+    if (TestFile ($GameFiles.previews + "\Models.json"))   { $Files.json.models  = SetJSONFile ($GameFiles.previews + "\Models.json") } else { $Files.json.models = $null }
 
     # Info
     if (TestFile $GameFiles.info)       { AddTextFileToTextbox -TextBox $Credits.Sections[0] -File $GameFiles.info }
@@ -305,9 +305,9 @@ function SetVCPanel() {
     # Reset VC panel visibility
     foreach ($item in $VC.Group.Controls) { EnableElem -Elem $item -Active $False -Hide }
     EnableElem -Elem @($VC.ActionsLabel, $VC.PatchVCButton, $VC.ExtractROMButton) -Active $True -Hide
+    CheckVCOptions
 
     # Enable VC panel visiblity
-    
     if ($GameConsole.options_vc -gt 0) {
         if ($GameConsole.t64 -eq 1 -or $GameConsole.expand_memory -eq 1 -or $GameConsole.remove_filter -eq 1) { $VC.CoreLabel.Visible = $True }
         if ($GameConsole.t64 -eq 1)             { EnableElem -Elem @($VC.RemoveT64, $VC.RemoveT64Label)       -Active $True -Hide }
@@ -562,6 +562,20 @@ function IsLangText([object]$Elem, [string]$Compare, [int16]$Lang=0, [switch]$No
 
 
 #==============================================================================================================================================================================================
+function IsValue([object]$Elem,[int16]$Value, [switch]$Active, [switch]$Not) {
+    
+    if (!(IsSet $Value))                 { $Value = $Elem.Default }
+    if ($Active -and !$Elem.Visible)     { return $False }
+    if (!$Active -and !$Elem.Enabled)    { return $False }
+    if ([int16]$Elem.value -eq $Value)   { return !$Not  }
+    if ([int16]$Elem.value -ne $Value)   { return  $Not  }
+    return $False
+
+}
+
+
+
+#==============================================================================================================================================================================================
 function IsIndex([object]$Elem, [int16]$Index=1, [string]$Text, [switch]$Active, [switch]$Not) {
     
     if ($Index -lt 1) { $Index = 1 }
@@ -761,8 +775,20 @@ function RestoreCustomRegion() {
 #==============================================================================================================================================================================================
 function StrLike([string]$Str, [string]$Val, [switch]$Not) {
     
-    if     ($str.ToLower() -like "*"    + $val + "*")   { return !$Not }
-    elseif ($str.ToLower() -notlike "*" + $val + "*")   { return $Not }
+    if     (!$Not -and $str.ToLower() -like "*"    + $val + "*")   { return $True }
+    elseif ( $Not -and $str.ToLower() -notlike "*" + $val + "*")   { return $True }
+    return $False
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function StrStarts([string]$Str, [string]$Val, [switch]$Not) {
+    
+    if ($str -eq $null)                                    { return $False }
+    if     (!$Not -and  $str.ToLower().StartsWith($val))   { return $True }
+    elseif ( $Not -and !$str.ToLower().StartsWith($val))   { return $True }
     return $False
 
 }
@@ -876,8 +902,9 @@ function RemoveFile([string]$Path) {
 #==============================================================================================================================================================================================
 function TestFile([string]$Path, [switch]$Container) {
     
-    if ($Container)   { return Test-Path -LiteralPath $Path -PathType Container }
-    else              { return Test-Path -LiteralPath $Path -PathType Leaf }
+    if ($Path -eq "")   { return $False }
+    if ($Container)     { return Test-Path -LiteralPath $Path -PathType Container }
+    else                { return Test-Path -LiteralPath $Path -PathType Leaf }
 
 }
 
@@ -1054,6 +1081,7 @@ Export-ModuleMember -Function IsChecked
 Export-ModuleMember -Function IsLanguage
 Export-ModuleMember -Function IsText
 Export-ModuleMember -Function IsLangText
+Export-ModuleMember -Function IsValue
 Export-ModuleMember -Function IsIndex
 Export-ModuleMember -Function IsColor
 Export-ModuleMember -Function IsDefaultColor
@@ -1061,6 +1089,7 @@ Export-ModuleMember -Function IsSet
 Export-ModuleMember -Function CompareArray
 Export-ModuleMember -Function AddTextFileToTextbox
 Export-ModuleMember -Function StrLike
+Export-ModuleMember -Function StrStarts
 Export-ModuleMember -Function GetFilePaths
 Export-ModuleMember -Function RestoreCustomHeader
 Export-ModuleMember -Function RestoreCustomRegion
