@@ -25,34 +25,34 @@ function SetFileParameters() {
 
 
     # Store all tool files
-    $Files.tool.Compress64                  = [System.String](Get-Location) + "\Files\Tools\Compression\Compress64.exe"
-    $Files.tool.Compress32                  = [System.String](Get-Location) + "\Files\Tools\Compression\Compress32.exe"
-    $Files.tool.Decompress                  = [System.String](Get-Location) + "\Files\Tools\Compression\Decompress.exe"
-    $Files.tool.ndec                        = [System.String](Get-Location) + "\Files\Tools\Compression\ndec.exe"
-    $Files.tool.sm64extend                  = [System.String](Get-Location) + "\Files\Tools\Compression\sm64extend.exe"
-    $Files.tool.TabExt64                    = [System.String](Get-Location) + "\Files\Tools\Compression\TabExt64.exe"
-    $Files.tool.TabExt32                    = [System.String](Get-Location) + "\Files\Tools\Compression\TabExt32.exe"
+    $Files.tool.Compress64                  = (GetFilePath) + "\Files\Tools\Compression\Compress64.exe"
+    $Files.tool.Compress32                  = (GetFilePath) + "\Files\Tools\Compression\Compress32.exe"
+    $Files.tool.Decompress                  = (GetFilePath) + "\Files\Tools\Compression\Decompress.exe"
+    $Files.tool.ndec                        = (GetFilePath) + "\Files\Tools\Compression\ndec.exe"
+    $Files.tool.sm64extend                  = (GetFilePath) + "\Files\Tools\Compression\sm64extend.exe"
+    $Files.tool.TabExt64                    = (GetFilePath) + "\Files\Tools\Compression\TabExt64.exe"
+    $Files.tool.TabExt32                    = (GetFilePath) + "\Files\Tools\Compression\TabExt32.exe"
 
-    $Files.tool.flips                       = [System.String](Get-Location) + "\Files\Tools\Patching\flips.exe"
-    $Files.tool.ups                         = [System.String](Get-Location) + "\Files\Tools\Patching\ups.exe"
-    $Files.tool.xdelta                      = [System.String](Get-Location) + "\Files\Tools\Patching\xdelta.exe"
-    $Files.tool.xdelta3                     = [System.String](Get-Location) + "\Files\Tools\Patching\xdelta3.exe"
-    $Files.tool.applyPPF3                   = [System.String](Get-Location) + "\Files\Tools\Patching\ApplyPPF3.exe"
+    $Files.tool.flips                       = (GetFilePath) + "\Files\Tools\Patching\flips.exe"
+    $Files.tool.ups                         = (GetFilePath) + "\Files\Tools\Patching\ups.exe"
+    $Files.tool.xdelta                      = (GetFilePath) + "\Files\Tools\Patching\xdelta.exe"
+    $Files.tool.xdelta3                     = (GetFilePath) + "\Files\Tools\Patching\xdelta3.exe"
+    $Files.tool.applyPPF3                   = (GetFilePath) + "\Files\Tools\Patching\ApplyPPF3.exe"
 
-    $Files.tool.rn64crc                     = [System.String](Get-Location) + "\Files\Tools\Verification\rn64crc.exe"
+    $Files.tool.rn64crc                     = (GetFilePath) + "\Files\Tools\Verification\rn64crc.exe"
 
-    $Files.tool.wadpacker                   = [System.String](Get-Location) + "\Files\Tools\Wii VC\wadpacker.exe"
-    $Files.tool.wadunpacker                 = [System.String](Get-Location) + "\Files\Tools\Wii VC\wadunpacker.exe"
-    $Files.tool.wszst                       = [System.String](Get-Location) + "\Files\Tools\Wii VC\wszst.exe"
-    $Files.tool.cygcrypto                   = [System.String](Get-Location) + "\Files\Tools\Wii VC\cygcrypto-0.9.8.dll"
-    $Files.tool.cyggccs1                    = [System.String](Get-Location) + "\Files\Tools\Wii VC\cyggcc_s-1.dll"
-    $Files.tool.cygncursesw10               = [System.String](Get-Location) + "\Files\Tools\Wii VC\cygncursesw-10.dll"
-    $Files.tool.cygpng1616                  = [System.String](Get-Location) + "\Files\Tools\Wii VC\cygpng16-16.dll"
-    $Files.tool.cygwin1                     = [System.String](Get-Location) + "\Files\Tools\Wii VC\cygwin1.dll"
-    $Files.tool.cygz                        = [System.String](Get-Location) + "\Files\Tools\Wii VC\cygz.dll"
-    $Files.tool.lzss                        = [System.String](Get-Location) + "\Files\Tools\Wii VC\lzss.exe"
-    $Files.tool.romc                        = [System.String](Get-Location) + "\Files\Tools\Wii VC\romc.exe"
-    $Files.tool.romchu                      = [System.String](Get-Location) + "\Files\Tools\Wii VC\romchu.exe"
+    $Files.tool.wadpacker                   = (GetFilePath) + "\Files\Tools\Wii VC\wadpacker.exe"
+    $Files.tool.wadunpacker                 = (GetFilePath) + "\Files\Tools\Wii VC\wadunpacker.exe"
+    $Files.tool.wszst                       = (GetFilePath) + "\Files\Tools\Wii VC\wszst.exe"
+    $Files.tool.cygcrypto                   = (GetFilePath) + "\Files\Tools\Wii VC\cygcrypto-0.9.8.dll"
+    $Files.tool.cyggccs1                    = (GetFilePath) + "\Files\Tools\Wii VC\cyggcc_s-1.dll"
+    $Files.tool.cygncursesw10               = (GetFilePath) + "\Files\Tools\Wii VC\cygncursesw-10.dll"
+    $Files.tool.cygpng1616                  = (GetFilePath) + "\Files\Tools\Wii VC\cygpng16-16.dll"
+    $Files.tool.cygwin1                     = (GetFilePath) + "\Files\Tools\Wii VC\cygwin1.dll"
+    $Files.tool.cygz                        = (GetFilePath) + "\Files\Tools\Wii VC\cygz.dll"
+    $Files.tool.lzss                        = (GetFilePath) + "\Files\Tools\Wii VC\lzss.exe"
+    $Files.tool.romc                        = (GetFilePath) + "\Files\Tools\Wii VC\romc.exe"
+    $Files.tool.romchu                      = (GetFilePath) + "\Files\Tools\Wii VC\romchu.exe"
 
 
 
@@ -214,8 +214,8 @@ function SetFileParameters() {
     CheckFilesExists $Files.json
     CheckFilesExists $Files.icon
 
-    $Files.flipscfg                         = [System.String](Get-Location) + "\Files\Tools\Patching\flipscfg.bin"
-    $Files.stackdump                        = [System.String](Get-Location) + "\Files\Tools\Wii VC\wadpacker.exe.stackdump"
+    $Files.flipscfg                         = (GetFilePath) + "\Files\Tools\Patching\flipscfg.bin"
+    $Files.stackdump                        = (GetFilePath) + "\Files\Tools\Wii VC\wadpacker.exe.stackdump"
     $Files.settings                         = $Paths.Settings + "\Core.ini"
 
     SetTempFileParameters
@@ -265,6 +265,16 @@ function SetGetROM() {
         $Files.compBPS   = [System.IO.Path]::GetDirectoryName($GetROM.in) + "\" + [System.IO.Path]::GetFileNameWithoutExtension($GetROM.in) + "_compressed.bps"
         $Files.decompBPS = [System.IO.Path]::GetDirectoryName($GetROM.in) + "\" + [System.IO.Path]::GetFileNameWithoutExtension($GetROM.in) + "_decompressed.bps"
     }
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function GetFilePath() {
+    
+    if ($ExternalScript)   { return $Paths.FullBase }
+    else                   { return [System.String](Get-Location) }
 
 }
 

@@ -650,7 +650,7 @@ function ByteLanguageOptions() {
     }
 
     if (IsChecked $Redux.Text.OcarinaIcons) {
-        PatchBytes -Offset "A3B9BC" -Length "850" -Texture -Pad -Patch "Icons\deku_Pppes_icon.yaz0"  # Slingshot, ID: 0x0B
+        PatchBytes -Offset "A3B9BC" -Length "850" -Texture -Pad -Patch "Icons\deku_pipes_icon.yaz0"  # Slingshot, ID: 0x0B
         PatchBytes -Offset "A28AF4" -Length "1AF" -Texture -Pad -Patch "Icons\deku_pipes_text.yaz0"
         PatchBytes -Offset "A44BFC" -Length "A69" -Texture -Pad -Patch "Icons\goron_drums_icon.yaz0" # Blue Fire, ID: 0x1C
         PatchBytes -Offset "A28204" -Length "26F" -Texture -Pad -Patch "Icons\goron_drums_text.yaz0"

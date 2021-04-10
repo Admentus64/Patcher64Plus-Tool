@@ -1,3 +1,7 @@
+v13.2.1
+- Fixed issue with file paths not being recognized properly
+- Fixed issue with "Ocarina Icons" option for MM not properly being patched
+
 v13.2.0
 - Added new texture alternatives for the Hylian Shield
 - Added "Weapon Hitbox" options for OoT and MM
