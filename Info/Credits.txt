@@ -28,11 +28,12 @@
 - Manual Jump:				Admentus (ROM) & CloudModding (GameShark)
 - Restore Cow Nose Ring:		ShadowOne333
 - Restore Fire Temple:			ShadowOne333
-- Censor Blood				ShadowOne333
+- Censor Blood:				ShadowOne333
 - Restore Gerudo Textures:		GhostlyDark & ShadowOne333
-- Pause Screen Delay Fix		zel
-- Debug Map Select			Jared Johnson
-- Remove CRC Check			Drahsid
+- Pause Screen Delay Fix:		zel
+- Visible Gerudo Tent:			Chez Cousteau
+- Debug Map Select:			Jared Johnson
+- Remove CRC Check:			Drahsid
 - Master Quest:				ShadowOne333
 - Harder Child Bosses:			BilonFullHDemon
 - Graveyard Keese:			salvador235
@@ -234,7 +235,6 @@ Special Thanks:				Nokaubure, z64me, Ultra553, OoT Decomp
 - Original Hacking:			Saneki
 
 --- Additional Options ---
-- Remove CRC Check			Drahsid
 - Master Quest Remix:			Admentus (porting) & DeathBasket (maps / patch)
 - 16:9 Backgrounds & Textures:		GhostlyDark & ShadowOne333
 - Enhanced 16:9 Widescreen:		gamemasterplc & GhostlyDark

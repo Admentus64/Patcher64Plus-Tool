@@ -1,3 +1,7 @@
+v13.2.2
+- Added "Visible Gerudo Tent" option for OoT
+- Fixed "Upgrade Equipment" tooltip for OoT
+
 v13.2.1
 - Fixed issue with file paths not being recognized properly
 - Fixed issue with "Ocarina Icons" option for MM not properly being patched

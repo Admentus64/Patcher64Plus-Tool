@@ -124,6 +124,7 @@ function ByteOptions() {
     }
 
     if (IsChecked $Redux.Other.SubscreenDelayFix)    { ChangeBytes -Offset "B15DD0" -Values "00 00 00 00"; ChangeBytes -Offset "B12947" -Values "03" }
+    if (IsChecked $Redux.Other.VisibleGerudoTent)    { ChangeBytes -Offset "D215CB" -Values "11" }
     if (IsChecked $Redux.Other.PoacherSawFix)        { ChangeBytes -Offset "AE72CC" -Values "00 00 00 00" }
     if (IsChecked $Redux.Other.RemoveNaviPrompts)    { ChangeBytes -Offset "DF8B84" -Values "00 00 00 00" }
     if (IsChecked $Redux.Other.DefaultZTargeting)    { ChangeBytes -Offset "B71E6D" -Values "01" }
@@ -550,7 +551,7 @@ function ByteOptions() {
     }
 
 
-    0
+    
     # EQUIPMENT #
     
     if ( (IsChecked $Redux.Equipment.UpgradeEquipment) -and ( ($CustomModels.upgrade_equipment -eq 1 -or (IsChecked $Redux.Graphics.OriginalModels) ) ) ) {
@@ -1179,11 +1180,12 @@ function CreateTabMain() {
     CreateReduxGroup        -Tag  "Other" -Text "Other"
     CreateReduxCheckBox     -Name "SubscreenDelayFix"  -Text "Pause Screen Delay Fix" -Checked -Info "Removes the delay when opening the Pause Screen" -Credits "zel"
     if ($Settings.Debug.LiteGUI -eq $False) {
-        CreateReduxCheckBox -Name "PoacherSawFix"      -Text "Poacher's Saw Fix" -Checked      -Info "Obtaining the Poacher's Saw no longer prevents Link from obtaining the second Deku Nut upgrade" -Credits "Ported from Rando"
-        CreateReduxCheckBox -Name "RemoveNaviPrompts"  -Text "Remove Navi Prompts"             -Info "Navi will no longer interupt your during the first dungeon with mandatory textboxes"            -Credits "Ported from Redux"
-        CreateReduxCheckBox -Name "DefaultZTargeting"  -Text "Default Hold Z-Targeting"        -Info "Change the Default Z-Targeting option to Hold instead of Switch"                                -Credits "Ported from Redux"
-        CreateReduxCheckBox -Name "InstantClaimCheck"  -Text "Instant Claim Check"             -Info "Remove the check for waiting until the Biggoron Sword can be claimed through the Claim Check"   -Credits "Ported from Rando"
-        CreateReduxCheckBox -Name "HideCredits"        -Text "Hide Credits"                    -Info "Do not show the credits text during the credits sequence"                                       -Credits "Admentus"
+        CreateReduxCheckBox -Name "PoacherSawFix"      -Text "Poacher's Saw Fix" -Checked      -Info "Obtaining the Poacher's Saw no longer prevents Link from obtaining the second Deku Nut upgrade"                  -Credits "Ported from Rando"
+        CreateReduxCheckBox -Name "VisibleGerudoTent"  -Text "Visible Gerudo Tent"             -Info "Make the tent in the Gerudo Valley during the Child era visible`nThe tent was always accessible, just invisible" -Credits "Chez Cousteau"
+        CreateReduxCheckBox -Name "RemoveNaviPrompts"  -Text "Remove Navi Prompts"             -Info "Navi will no longer interupt your during the first dungeon with mandatory textboxes"                             -Credits "Ported from Redux"
+        CreateReduxCheckBox -Name "DefaultZTargeting"  -Text "Default Hold Z-Targeting"        -Info "Change the Default Z-Targeting option to Hold instead of Switch"                                                 -Credits "Ported from Redux"
+        CreateReduxCheckBox -Name "InstantClaimCheck"  -Text "Instant Claim Check"             -Info "Remove the check for waiting until the Biggoron Sword can be claimed through the Claim Check"                    -Credits "Ported from Rando"
+        CreateReduxCheckBox -Name "HideCredits"        -Text "Hide Credits"                    -Info "Do not show the credits text during the credits sequence"                                                        -Credits "Admentus"
     }
     CreateReduxCheckBox -Name "DebugMapSelect"         -Text "Debug Map Select"                -Info "Enable the Map Select menu like in the Debug ROM`nThe File Select menu now opens the Map Select menu instead`nA separate debug save file is used" -Credits "Jared Johnson (translated by Zelda Edit)"
     
@@ -1526,7 +1528,7 @@ function CreateTabEquipment() {
     # EQUIPMENT #
     CreateReduxGroup    -Tag  "Equipment" -Text "Equipment Adjustments"
     CreateReduxCheckBox -Name "UnsheathSword"    -Text "Unsheath Sword"    -Info "The sword is unsheathed first before immediately swinging it" -Credits "Admentus"
-    CreateReduxCheckBox -Name "UpgradeEquipment" -Text "Upgrade Equipment" -Info "Replace the Kokiri Sword with an sword from Majora's Mask and the Deku Shield with the Hero's Shield from Majora's Mask`nThe replaced Deku Shield will not burn up anymore" -Warning "This option only works for the Vanilla or Majora's Mask Child Link model" -Credits "DeadSubiter (ported) & issuelink, Zeldaboy14 and Flotonic (Debug ROM patch)"
+    CreateReduxCheckBox -Name "UpgradeEquipment" -Text "Upgrade Equipment" -Info "Replace the Kokiri Sword with an sword from Majora's Mask and the Deku Shield with the Hero's Shield from Majora's Mask`nThe replaced Deku Shield will not burn up anymore" -Warning "This option only works for the Vanilla Child Link model" -Credits "DeadSubiter (ported) & issuelink, Zeldaboy14 and Flotonic (Debug ROM patch)"
     CreateReduxCheckBox -Name "IronShield"       -Text "Iron Shield"       -Info "Replace the Deku Shield with the Iron Shield, which will not burn up anymore" -Warning "Some custom models do not support the new textures, but will still keep the fireproof shield" -Credits "Admentus (ported), ZombieBrainySnack (textures) & Three Pendants (Debug fireproof ROM patch)" -Link $Redux.Equipment.UpgradeEquipment
     CreateReduxComboBox -Name "HylianShield"     -Text "Hylian Shield" -Column 3.6 -Length 140 -Items @("Hylian Shield") -FilePath ($GameFiles.Textures + "\Hylian Shield") -Info "Select an alternative for the appearence of the Hylian Shield" -Credits "Admentus (injects), GhostlyDark (injects) & sanguinetti (Beta / Red Shield textures)"
 
