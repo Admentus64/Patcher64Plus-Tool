@@ -786,9 +786,9 @@ function StrLike([string]$Str, [string]$Val, [switch]$Not) {
 #==============================================================================================================================================================================================
 function StrStarts([string]$Str, [string]$Val, [switch]$Not) {
     
-    if ($str -eq $null)                                    { return $False }
-    if     (!$Not -and  $str.ToLower().StartsWith($val))   { return $True }
-    elseif ( $Not -and !$str.ToLower().StartsWith($val))   { return $True }
+    if ($str -eq $null)                                              { return $False }
+    if     (!$Not -and  $str.ToLower().StartsWith($val.toLower()))   { return $True }
+    elseif ( $Not -and !$str.ToLower().StartsWith($val.toLower()))   { return $True }
     return $False
 
 }

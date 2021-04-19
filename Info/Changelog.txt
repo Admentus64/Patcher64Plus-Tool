@@ -1,3 +1,6 @@
+v13.2.3
+- Fixed issue with patches not properly applying
+
 v13.2.2
 - Added "Visible Gerudo Tent" option for OoT
 - Fixed "Upgrade Equipment" tooltip for OoT
