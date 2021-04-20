@@ -888,7 +888,7 @@ function CompareHashSums([string]$Command) {
 #==============================================================================================================================================================================================
 function PatchDecompressedROM() {
     
-    if (StrStarts -Str (GetPatchFile) -Val "Decompressed\" -Not) { return $True }
+    if (!(StrStarts -Str (GetPatchFile) -Val "Decompressed\")) { return $True }
     
     # Set the status label.
     UpdateStatusLabel ("Patching " + $GameType.mode + " ROM with patch file...")
@@ -905,7 +905,7 @@ function PatchDecompressedROM() {
 #==============================================================================================================================================================================================
 function PatchCompressedROM() {
     
-    if (StrStarts -Str (GetPatchFile) -Val "Compressed\" -Not) { return $True }
+    if (!(StrStarts -Str (GetPatchFile) -Val "Compressed\")) { return $True }
     
     # Set the status label.
     UpdateStatusLabel ("Patching " + $GameType.mode + " ROM with patch file...")
