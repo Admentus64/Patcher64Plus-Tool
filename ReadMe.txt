@@ -17,6 +17,21 @@ For those using Windows 7 or 8.1, please following the instructions below:
 4) Install PowerShell 7.
 5) You should now be able to launch the .ps1 file doing a right click -> Run with PowerShell.
 
+--- Rules for Posting Bug Reports / Issues --
+- Confirm issue on Project64/Mupen64Plus with GlideN64 or Dolphin, no custom Frontends which interfere with the emulation such as ModLoader64
+- Always use latest build
+- Expansion Pak is enabled when needed, both in WAD or emulator
+- Post console log file
+- Post step-by-step replication of bug
+- Post used settings
+- Point out which specific option or component is broken or causing conflicts of Patcher64+
+- One issue at a time, keep focused
+- Must use proper US Rev0 ROM
+- No ROM injection or custom patches, we can't confirm sources outside of Patcher64+
+- Non-supported features are NOT bugs, if it doesn't exist it likely does so for a reason
+- Confirm latest working Patcher64+ version if applicable
+
+
 --- Zelda 64 Options Documentation & Sources ---
 - https://github.com/ShadowOne333/Zelda64-Redux-Documentation (General)
 - https://docs.google.com/spreadsheets/d/1Ihccm8noxsfHZfN1E3Gkccov1F27WXXxl-rxOuManUk (Female Pronouns Script)
