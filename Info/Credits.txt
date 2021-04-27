@@ -40,6 +40,8 @@
 - 16:9 Backgrounds & Textures:		GhostlyDark, ShadowOne333 & CYB3RTR0N
 - Enhanced 16:9 Widescreen:		gamemasterplc & GhostlyDark
 - Force Hires Link Model:		GhostlyDark
+- Feminine Animations:			GhostlyDark (ported) & AriaHiro64 (model)
+- Hide Equipment:			XModxGodX
 - MM Link Voices:			Korey Cryderman (ported) & GhostlyDark (corrected)
 - Feminine Link Voices:			theluigidude2007
 - Peach Link Voices:			theluigidude2007
@@ -83,8 +85,9 @@
 - Malon 3D:				Kimi-Stardust / Celestial Clarity / Karicyan
 - Malon Thicc:				Kimi-Stardust / Celestial Clarity / Karicyan
 - Princess Ruto:			Unesag
+- Princess Zelda 3D:			Hailey
 - Princess Zelda ALttP (Child):		Unesag
-- Princes Zelda ALttP (Adult):		Lopieloo
+- Princess Zelda ALttP (Adult):		Lopieloo
 - Roll:					Psi-Hate
 - Saria:				Malon's Rose (www.youtube.com/c/MalonRose)
 
@@ -96,7 +99,7 @@
 - German:				Admentus, GhostlyDark & Ticamus (ported)
 - French:				Admentus & GhostlyDark (ported)
 - Spanish:				eduardo_a2j (v2.2)
-- Brazilian:				Fserve (v1.7a)
+- Brazilian Portuguese:			Fserve (v1.7a)
 - Italian:				Ruleless, xxcentury & Brisma (translation) & GhostlyDark (ported / improvements)
 - Polish:				RPG (v1.3)
 - Russian:				Zelda64rus (v2.32)
@@ -275,9 +278,10 @@ Special Thanks:				Nokaubure, z64me, Ultra553, OoT Decomp
 - Translations:				GhostlyDark
 
 --- Translations ---
-- German:				Ticamus (ported)
-- French:				Ticamus (ported)
-- Spanish:				Ticamus (ported)
+- German:				GhostlyDark & Ticamus (ported)
+- French:				GhostlyDark & Ticamus (ported)
+- Spanish:				GhostlyDark & Ticamus (ported)
+- Brazilian Portuguese:			Projeto BR (v1.1c) & GhostlyDark (ported)
 - Polish:				RPG (v1.1)
 - Russian:				Zelda64rus (v2.0 Beta)
 

@@ -1,3 +1,7 @@
+v13.2.4
+- Added "Hide Equipment" option for OoT (thanks XModxGodX!)
+- Removed the "Upgrade Equipment" option from OoT
+
 v13.2.3
 - Fixed issue with patches not properly applying
 

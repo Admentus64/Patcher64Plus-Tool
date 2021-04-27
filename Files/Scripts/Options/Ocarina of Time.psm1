@@ -8,7 +8,6 @@ function PatchOptions() {
 
     # MODELS #
 
-    if ( (IsChecked $Redux.Graphics.OriginalModels) -and (IsChecked $Redux.Equipment.UpgradeEquipment) ) { ApplyPatch -Patch "Decompressed\Models\upgrade_vanilla_child.ppf" }
     if (IsChecked $Redux.Graphics.ListLinkModels) {
         if (IsChecked $Redux.Graphics.MMChildLink) {
             ApplyPatch -Patch "Decompressed\Models\mm_child.ppf"
@@ -19,6 +18,8 @@ function PatchOptions() {
     }
     elseif (IsChecked $Redux.Graphics.ListMaleModels)     { ApplyPatch -Patch ("Decompressed\Models\Male\"   + $Redux.Graphics.MaleModels.Text.replace(" (default)", "") + ".ppf") }
     elseif (IsChecked $Redux.Graphics.ListFemaleModels)   { ApplyPatch -Patch ("Decompressed\Models\Female\" + $Redux.Graphics.FemaleModels.Text.replace(" (default)", "") + ".ppf") }
+
+    if (IsChecked $Redux.Equipment.HideEquipment)         { ApplyPatch -Patch "Decompressed\hide_equipment.ppf" }
 
 
 
@@ -554,12 +555,6 @@ function ByteOptions() {
     
     # EQUIPMENT #
     
-    if ( (IsChecked $Redux.Equipment.UpgradeEquipment) -and ( ($CustomModels.upgrade_equipment -eq 1 -or (IsChecked $Redux.Graphics.OriginalModels) ) ) ) {
-        ChangeBytes -Offset "BD3C5B" -Values "00" # Fireproof
-        PatchBytes -Offset "7F8000" -Texture -Patch "Razor Sword\icon.bin"; PatchBytes -Offset "7FB000" -Texture -Patch "Hero's Shield\icon.bin" # 7FC000 -> Hylian Shield icon
-        if (IsSet $LanguagePatch.heros_shield) { PatchBytes -Offset "8AD800" -Texture -Patch $LanguagePatch.razor_sword; PatchBytes -Offset "8AE400" -Texture -Patch $LanguagePatch.heros_shield } # 8AE800 -> Hylian Shield label
-    }
-
     if (IsChecked $Redux.Equipment.IronShield) {
         ChangeBytes -Offset "BD3C5B" -Values "00" # Fireproof
         if ($CustomModels.deku_shield -ne 0) {
@@ -1528,7 +1523,7 @@ function CreateTabEquipment() {
     # EQUIPMENT #
     CreateReduxGroup    -Tag  "Equipment" -Text "Equipment Adjustments"
     CreateReduxCheckBox -Name "UnsheathSword"    -Text "Unsheath Sword"    -Info "The sword is unsheathed first before immediately swinging it" -Credits "Admentus"
-    CreateReduxCheckBox -Name "UpgradeEquipment" -Text "Upgrade Equipment" -Info "Replace the Kokiri Sword with an sword from Majora's Mask and the Deku Shield with the Hero's Shield from Majora's Mask`nThe replaced Deku Shield will not burn up anymore" -Warning "This option only works for the Vanilla Child Link model" -Credits "DeadSubiter (ported) & issuelink, Zeldaboy14 and Flotonic (Debug ROM patch)"
+    CreateReduxCheckBox -Name "HideEquipment"    -Text "Hide Equipmment"   -Info "Hide the equipment when it is sheathed"                       -Credits "XModxGodX"
     CreateReduxCheckBox -Name "IronShield"       -Text "Iron Shield"       -Info "Replace the Deku Shield with the Iron Shield, which will not burn up anymore" -Warning "Some custom models do not support the new textures, but will still keep the fireproof shield" -Credits "Admentus (ported), ZombieBrainySnack (textures) & Three Pendants (Debug fireproof ROM patch)" -Link $Redux.Equipment.UpgradeEquipment
     CreateReduxComboBox -Name "HylianShield"     -Text "Hylian Shield" -Column 3.6 -Length 140 -Items @("Hylian Shield") -FilePath ($GameFiles.Textures + "\Hylian Shield") -Info "Select an alternative for the appearence of the Hylian Shield" -Credits "Admentus (injects), GhostlyDark (injects) & sanguinetti (Beta / Red Shield textures)"
 
