@@ -1523,7 +1523,7 @@ function CreateTabEquipment() {
     # EQUIPMENT #
     CreateReduxGroup    -Tag  "Equipment" -Text "Equipment Adjustments"
     CreateReduxCheckBox -Name "UnsheathSword"    -Text "Unsheath Sword"    -Info "The sword is unsheathed first before immediately swinging it" -Credits "Admentus"
-    CreateReduxCheckBox -Name "HideEquipment"    -Text "Hide Equipmment"   -Info "Hide the equipment when it is sheathed"                       -Credits "XModxGodX"
+    CreateReduxCheckBox -Name "HideEquipment"    -Text "Hide Equipment"    -Info "Hide the equipment when it is sheathed"                       -Credits "XModxGodX"
     CreateReduxCheckBox -Name "IronShield"       -Text "Iron Shield"       -Info "Replace the Deku Shield with the Iron Shield, which will not burn up anymore" -Warning "Some custom models do not support the new textures, but will still keep the fireproof shield" -Credits "Admentus (ported), ZombieBrainySnack (textures) & Three Pendants (Debug fireproof ROM patch)" -Link $Redux.Equipment.UpgradeEquipment
     CreateReduxComboBox -Name "HylianShield"     -Text "Hylian Shield" -Column 3.6 -Length 140 -Items @("Hylian Shield") -FilePath ($GameFiles.Textures + "\Hylian Shield") -Info "Select an alternative for the appearence of the Hylian Shield" -Credits "Admentus (injects), GhostlyDark (injects) & sanguinetti (Beta / Red Shield textures)"
 
