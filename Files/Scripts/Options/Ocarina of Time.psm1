@@ -8,23 +8,12 @@ function PatchOptions() {
 
     # MODELS #
 
-    if (IsChecked $Redux.Graphics.ListChildMaleModels) {
-        $file = "\Child Male\" + $Redux.Graphics.ChildMaleModels.Text.replace(" (default)", "") + ".ppf"
-        if (TestFile ($GameFiles.models + $file)) { ApplyPatch -Patch ("Models" + $file) }
-    }
-    elseif (IsChecked $Redux.Graphics.ListChildFemaleModels) {
-        $file = "\Child Female\" + $Redux.Graphics.ChildFemaleModels.Text.replace(" (default)", "") + ".ppf"
-        if (TestFile ($GameFiles.models + $file)) { ApplyPatch -Patch ("Models" + $file) }
-    }
-    
-    if (IsChecked $Redux.Graphics.ListAdultMaleModels) {
-        $file = "\Adult Male\" + $Redux.Graphics.AdultMaleModels.Text.replace(" (default)", "") + ".ppf"
-        if (TestFile ($GameFiles.models + $file)) { ApplyPatch -Patch ("Models" + $file) }
-    }
-    elseif (IsChecked $Redux.Graphics.ListAdultFemaleModels) {
-        $file = "\Adult Female\" + $Redux.Graphics.AdultFemaleModels.Text.replace(" (default)", "") + ".ppf"
-        if (TestFile ($GameFiles.models + $file)) { ApplyPatch -Patch ("Models" + $file) }
-    }
+    if     (IsChecked $Redux.Graphics.ListChildMaleModels)     { $file = "\Child Male\" + $Redux.Graphics.ChildMaleModels.Text.replace(" (default)", "") + ".ppf" }
+    elseif (IsChecked $Redux.Graphics.ListChildFemaleModels)   { $file = "\Child Female\" + $Redux.Graphics.ChildFemaleModels.Text.replace(" (default)", "") + ".ppf" }
+    if (TestFile ($GameFiles.models + $file)) { ApplyPatch -Patch ("Models" + $file) }
+    if     (IsChecked $Redux.Graphics.ListAdultMaleModels)     { $file = "\Adult Male\" + $Redux.Graphics.AdultMaleModels.Text.replace(" (default)", "") + ".ppf" }
+    elseif (IsChecked $Redux.Graphics.ListAdultFemaleModels)   { $file = "\Adult Female\" + $Redux.Graphics.AdultFemaleModels.Text.replace(" (default)", "") + ".ppf" }
+    if (TestFile ($GameFiles.models + $file)) { ApplyPatch -Patch ("Models" + $file) }
 
     if (IsChecked $Redux.Graphics.FeminineAnimations)   { ApplyPatch -Patch "Decompressed\feminine_animations.ppf" }
     if (IsChecked $Redux.Graphics.HideEquipment)        { ApplyPatch -Patch "Decompressed\hide_equipment.ppf" }
