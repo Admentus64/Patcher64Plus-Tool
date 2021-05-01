@@ -466,7 +466,7 @@ function DisableReduxOptions() {
 function LoadAdditionalOptions(){
     
     # Create options content based on current game
-    if ($GamePatch.options -eq 1) {
+    if ($GamePatch.options -eq 1 -or $Settings.Debug.ForceOptions -ne $False) {
         if (Get-Command "CreateOptions" -errorAction SilentlyContinue) { iex "CreateOptions" }
         [System.GC]::Collect() | Out-Null
     }
