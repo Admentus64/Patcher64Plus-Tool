@@ -216,71 +216,49 @@ function ChangeStringIntoDigits([string]$File, [string]$Search, [string]$Value, 
 }
 
 
-
 #==============================================================================================================================================================================================
-function ShowModelPreview([object]$Dropdown, [object]$Box, [string]$Category) {
+function ShowModelsPreview([switch]$Child, [switch]$Adult, [object]$Dropdown, [string]$Category) {
     
-    $Path = $GameFiles.previews + "\" + $Category + "\"
+    if (!(IsSet $Files.json.models)) { return }
+
+    $Path = $GameFiles.models + "\" + $Category + "\"
     $Text = $Dropdown.Text.replace(" (default)", "")
-    
-    if (TestFile ($Path + $Text + ".png"))   { SetBitMap -Path ($Path + $Text + ".png") -Box $Box }
-    else                                     { $Box.Image = $null }
 
-    if (IsSet $Files.json.models) {
-        $global:CustomModels = $null
-        for ($i=0; $i -lt $Files.json.models.length; $i++) {
-            if ($Files.json.models[$i].name -eq $Text) {
-                $global:CustomModels = $Files.json.models[$i]
-                break
-            }
+    $global:CustomModels = $null
+    for ($i=0; $i -lt $Files.json.models.length; $i++) {
+        if ($Files.json.models[$i].name -eq $Text) {
+            $global:CustomModels = $Files.json.models[$i]
+            break
         }
-
-        $Credits = ""
-
-        if (IsChecked $Redux.Graphics.MMChildLink) { $Credits += "--- Majora's Mask ---{0}Child model made by:{0}Nintendo{0}{0}Child model ported by:{0}The3DDude{0}" }
-        if ( (IsChecked $Redux.Graphics.MMChildLink) -and (IsSet $CustomModels.name) ) { $Credits += "{0}" }
-
-        if (IsSet $CustomModels.name) { $Credits += "--- " + $CustomModels.name + " ---{0}" }
-        if (IsSet $CustomModels.author) {
-            $Credits += "Models made by:{0}" + $CustomModels.author + "{0}"
-            if (IsSet $CustomModels.porter) { $Credits += "{0}Models ported by:{0}" + $CustomModels.porter + "{0}" }
-        }
-
-        if ( (IsSet $CustomModels.child_author) -and !(IsSet $CustomModels.author) -and !(IsChecked $Redux.Graphics.MMChildLink -Not) ) {
-            $Credits += "Child model made by:{0}" + $CustomModels.child_author + "{0}"
-            if ( (IsSet $CustomModels.child_porter) -and !(IsSet $CustomModels.porter) ) { $Credits += "{0}Child model ported by:{0}" + $CustomModels.child_porter + "{0}" }
-
-            if (IsSet $CustomModels.adult_author) { $Credits += "{0}" }
-        }
-
-        if ( (IsSet $CustomModels.adult_author) -and !(IsSet $CustomModels.author) ) {
-            $Credits += "Adult model made by:{0}" + $CustomModels.adult_author + "{0}"
-            if ( (IsSet $CustomModels.adult_porter) -and !(IsSet $CustomModels.porter) ) { $Credits += "{0}Adult model ported by:{0}" + $CustomModels.adult_porter + "{0}" }
-        }
-
-        if ( (IsSet $CustomModels.author) -or ( (IsSet $CustomModels.adult_author) -and (IsChecked $Redux.Graphics.MMChildLink) ) -or ( (IsSet $CustomModels.child_author) -and (IsSet $CustomModels.adult_author) ) ) {
-            $Credits += "{0}- Child and Adult Combo"
-        }
-        elseif ( ( (IsSet $CustomModels.child_author) -or (IsChecked $Redux.Graphics.MMChildLink) ) -and !(IsSet $CustomModels.author) )   { $Credits += "{0}- Child only" }
-        elseif ( (IsSet $CustomModels.adult_author) -and !(IsSet $CustomModels.author) )   { $Credits += "{0}- Adult only" }
-
-        if (IsSet $CustomModels.url) { $Credits += "{0}{0}Click to visit the modder's homepage" }
-
-        if (IsSet $Credits)   { $PreviewToolTip.SetToolTip($Box, ([string]::Format($Credits, [Environment]::NewLine))) }
-        else                  { $PreviewToolTip.RemoveAll() }
     }
+
+    if ($Child)   { ShowModelPreview -Box $Redux.Graphics.ModelsPreviewChild -Path $Path -Text $Text -Author $CustomModels.child_author -Porter $CustomModels.child_porter -WIP $CustomModels.child_wip -Url $CustomModels.child_url }
+    if ($Adult)   { ShowModelPreview -Box $Redux.Graphics.ModelsPreviewAdult -Path $Path -Text $Text -Author $CustomModels.adult_author -Porter $CustomModels.adult_porter -WIP $CustomModels.adult_wip -Url $CustomModels.adult_url }
 
 }
 
 
 
 #==============================================================================================================================================================================================
-function ShowOriginalModelPreview([object]$Box) {
+function ShowModelPreview([object]$Box, [string]$Path, [string]$Text, [string]$Author, [string]$Porter, [string]$WIP, [string]$Url) {
     
-    $global:CustomModels = $null
-    if (TestFile ($GameFiles.previews + "\Original.png"))   { SetBitMap -Path ($GameFiles.previews + "\Original.png") -Box $Box }
-    else                                                    { $Box.Image = $null }
-    $PreviewToolTip.SetToolTip($Redux.Graphics.ModelsPreview, ([string]::Format("Original models by: Nintendo", [Environment]::NewLine)))
+    if (!(IsSet $Files.json.models)) { return }
+
+    if (TestFile ($Path + $Text + ".png"))       { SetBitMap -Path ($Path + $Text + ".png") -Box $Box -Width 125 -Height 170 }
+    elseif (TestFile ($Path + "Original.png"))   { SetBitMap -Path ($Path + "Original.png") -Box $Box -Width 125 -Height 170 }
+    else                                         { $Box.Image = $null }
+
+    $Credits = ""
+
+    if (IsSet $CustomModels.name)   { $Credits += "--- " + $CustomModels.name + " ---{0}" }
+    if (IsSet $Author)              { $Credits += "{0}Model made by: "   + $Author }
+    if (IsSet $Porter)              { $Credits += "{0}Model ported by: " + $Porter }
+    if ($WIP -eq 1)                 { $Credits += "{0}This model is still Work-In-Progress" }
+    if ($WIP -eq 2)                 { $Credits += "{0}This model is a demonstration of the final version" }
+    if (IsSet $Url)                 { $Credits += "{0}{0}Click to visit the modder's homepage" }
+
+    if (IsSet $Credits)   { $PreviewToolTip.SetToolTip($Box, ([string]::Format($Credits, [Environment]::NewLine))) }
+    else                  { $PreviewToolTip.RemoveAll() }
 
 }
 
@@ -288,16 +266,14 @@ function ShowOriginalModelPreview([object]$Box) {
 
 #==============================================================================================================================================================================================
 function LoadModelsList([string]$Category) {
-
-    $path = $GameFiles.previews + "\" + $Category + "\"
-    if (!(Test-Path -LiteralPath $path)) { return @("No models found?") } 
-
+    
     $list = @()
-    foreach ($item in Get-ChildItem -LiteralPath $path -Force) {
-        if ($item.Extension -eq ".png") { $list += $item.BaseName }
-    }
 
-    return $list
+    $path = $GameFiles.models + "\" + $Category
+    if (!(TestFile -Container $path)) { return @("No models found?") } 
+    foreach ($item in Get-ChildItem -LiteralPath $path -Force) { if ($item.Extension -eq ".ppf") { $list += $item.BaseName } }
+
+    return $list | Sort-Object | select -Unique
 
 }
 
@@ -306,14 +282,10 @@ function LoadModelsList([string]$Category) {
 #==============================================================================================================================================================================================
 function ChangeModelsDropdown($Dropdown) {
     
-    $Redux.Graphics.LinkModels.Visible     = ($Redux.Graphics.OriginalModels.Checked  -and !$Redux.Graphics.MMChildLink.Checked) -or ($Redux.Graphics.ListLinkModels.Checked -and !$Redux.Graphics.MMChildLink.Checked)
-    $Redux.Graphics.LinkModels.Enabled     = $Redux.Graphics.ListLinkModels.Checked -and !$Redux.Graphics.MMChildLink.Checked
-    $Redux.Graphics.LinkModelsPlus.Visible = ($Redux.Graphics.OriginalModels.Checked  -and $Redux.Graphics.MMChildLink.Checked)  -or ($Redux.Graphics.ListLinkModels.Checked -and $Redux.Graphics.MMChildLink.Checked)
-    $Redux.Graphics.LinkModelsPlus.Enabled = $Redux.Graphics.ListLinkModels.Checked -and $Redux.Graphics.MMChildLink.Checked
-    $Redux.Graphics.MaleModels.Visible     = $Redux.Graphics.MaleModels.Enabled = $Redux.Graphics.ListMaleModels.Checked
-    $Redux.Graphics.FemaleModels.Visible   = $Redux.Graphics.FemaleModels.Enabled = $Redux.Graphics.ListFemaleModels.Checked
-
-    $Redux.Graphics.MMChildLink.Enabled    = $Redux.Graphics.ListLinkModels.Checked
+    $Redux.Graphics.ChildMaleModels.Visible   = $Redux.Graphics.ChildMaleModels.Enabled   = $Redux.Graphics.ListChildMaleModels.Checked
+    $Redux.Graphics.ChildFemaleModels.Visible = $Redux.Graphics.ChildFemaleModels.Enabled = $Redux.Graphics.ListChildFemaleModels.Checked
+    $Redux.Graphics.AdultMaleModels.Visible   = $Redux.Graphics.AdultMaleModels.Enabled   = $Redux.Graphics.ListAdultMaleModels.Checked
+    $Redux.Graphics.AdultFemaleModels.Visible = $Redux.Graphics.AdultFemaleModels.Enabled = $Redux.Graphics.ListAdultFemaleModels.Checked
 
 }
 
@@ -323,65 +295,26 @@ function ChangeModelsDropdown($Dropdown) {
 function ChangeModelsSelection() {
     
     # Events
-    $Redux.Graphics.OriginalModels.Add_CheckedChanged({
-        ChangeModelsDropdown
-        ShowOriginalModelPreview $Redux.Graphics.ModelsPreview
-    })
+    $Redux.Graphics.ListChildMaleModels.Add_CheckedChanged(   { ChangeModelsDropdown; ShowModelsPreview -Child -Dropdown $Redux.Graphics.ChildMaleModels   -Category "Child Male" })
+    $Redux.Graphics.ListChildFemaleModels.Add_CheckedChanged( { ChangeModelsDropdown; ShowModelsPreview -Child -Dropdown $Redux.Graphics.ChildFemaleModels -Category "Child Female" })
+    $Redux.Graphics.ListAdultMaleModels.Add_CheckedChanged(   { ChangeModelsDropdown; ShowModelsPreview -Adult -Dropdown $Redux.Graphics.AdultMaleModels   -Category "Adult Male" })
+    $Redux.Graphics.ListAdultFemaleModels.Add_CheckedChanged( { ChangeModelsDropdown; ShowModelsPreview -Adult -Dropdown $Redux.Graphics.AdultFemaleModels -Category "Adult Female" })
 
-    $Redux.Graphics.ListLinkModels.Add_CheckedChanged({
-        ChangeModelsDropdown
-        if     (IsChecked -Elem $Redux.Graphics.MMChildLink)        { ShowModelPreview -Dropdown $Redux.Graphics.LinkModelsPlus -Box $Redux.Graphics.ModelsPreview -Category "Link+" }
-        elseif (IsChecked -Elem $Redux.Graphics.MMChildLink -Not)   { ShowModelPreview -Dropdown $Redux.Graphics.LinkModels     -Box $Redux.Graphics.ModelsPreview -Category "Link" }
-    })
-
-    $Redux.Graphics.ListMaleModels.Add_CheckedChanged({
-        ChangeModelsDropdown
-        ShowModelPreview -Dropdown $Redux.Graphics.MaleModels -Box $Redux.Graphics.ModelsPreview -Category "\Male\"
-    })
-
-    $Redux.Graphics.ListFemaleModels.Add_CheckedChanged({
-        ChangeModelsDropdown
-        ShowModelPreview -Dropdown $Redux.Graphics.FemaleModels -Box $Redux.Graphics.ModelsPreview -Category "\Female\"
-    })
-
-    $Redux.Graphics.LinkModels.Add_SelectedIndexChanged({
-        if (IsChecked -Elem $Redux.Graphics.ListLinkModels)     { ShowModelPreview -Dropdown $Redux.Graphics.LinkModels -Box $Redux.Graphics.ModelsPreview -Category "Link" }
-    })
-    $Redux.Graphics.LinkModelsPlus.Add_SelectedIndexChanged({
-        if (IsChecked -Elem $Redux.Graphics.ListLinkModels)     { ShowModelPreview -Dropdown $Redux.Graphics.LinkModelsPlus -Box $Redux.Graphics.ModelsPreview -Category "Link+" }
-    })
-    $Redux.Graphics.MaleModels.Add_SelectedIndexChanged({
-        if (IsChecked -Elem $Redux.Graphics.ListMaleModels)     { ShowModelPreview -Dropdown $Redux.Graphics.MaleModels -Box $Redux.Graphics.ModelsPreview -Category "Male" }
-    })
-    $Redux.Graphics.FemaleModels.Add_SelectedIndexChanged({
-        if (IsChecked -Elem $Redux.Graphics.ListFemaleModels)   { ShowModelPreview -Dropdown $Redux.Graphics.FemaleModels -Box $Redux.Graphics.ModelsPreview -Category "Female" }
-    })
-
-    $Redux.Graphics.MMChildLink.Add_CheckStateChanged({
-        ChangeModelsDropdown
-        if     ( (IsChecked -Elem $Redux.Graphics.ListLinkModels) -and (IsChecked -Elem $Redux.Graphics.MMChildLink) )        { ShowModelPreview -Dropdown $Redux.Graphics.LinkModelsPlus -Box $Redux.Graphics.ModelsPreview -Category "Link+" }
-        elseif ( (IsChecked -Elem $Redux.Graphics.ListLinkModels) -and (IsChecked -Elem $Redux.Graphics.MMChildLink -Not) )   { ShowModelPreview -Dropdown $Redux.Graphics.LinkModels -Box $Redux.Graphics.ModelsPreview -Category "Link" }
-    })
-
-
+    $Redux.Graphics.ChildMaleModels.Add_SelectedIndexChanged(   { if (IsChecked -Elem $Redux.Graphics.ListChildMaleModels)     { ShowModelsPreview -Child -Dropdown $Redux.Graphics.ChildMaleModels   -Category "Child Male" } })
+    $Redux.Graphics.ChildFemaleModels.Add_SelectedIndexChanged( { if (IsChecked -Elem $Redux.Graphics.ListChildFemaleModels)   { ShowModelsPreview -Child -Dropdown $Redux.Graphics.ChildFemaleModels -Category "Child Female" } })
+    $Redux.Graphics.AdultMaleModels.Add_SelectedIndexChanged(   { if (IsChecked -Elem $Redux.Graphics.ListAdultMaleModels)     { ShowModelsPreview -Adult -Dropdown $Redux.Graphics.AdultMaleModels   -Category "Adult Male" } })
+    $Redux.Graphics.AdultFemaleModels.Add_SelectedIndexChanged( { if (IsChecked -Elem $Redux.Graphics.ListAdultFemaleModels)   { ShowModelsPreview -Adult -Dropdown $Redux.Graphics.AdultFemaleModels -Category "Adult Female" } })
 
     # Initial Run
     ChangeModelsDropdown
-
-    if ($Redux.Graphics.OriginalModels.Checked) { ShowOriginalModelPreview $Redux.Graphics.ModelsPreview }
-    elseif ( (IsChecked -Elem $Redux.Graphics.ListLinkModels) -and (IsChecked -Elem $Redux.Graphics.MMChildLink) )        { ShowModelPreview -Dropdown $Redux.Graphics.LinkModelsPlus -Box $Redux.Graphics.ModelsPreview -Category "Link+" }
-    elseif ( (IsChecked -Elem $Redux.Graphics.ListLinkModels) -and (IsChecked -Elem $Redux.Graphics.MMChildLink -Not) )   { ShowModelPreview -Dropdown $Redux.Graphics.LinkModels -Box $Redux.Graphics.ModelsPreview -Category "Link" }
-    elseif (IsChecked -Elem $Redux.Graphics.ListMaleModels)     { ShowModelPreview -Dropdown $Redux.Graphics.MaleModels   -Box $Redux.Graphics.ModelsPreview -Category "Male" }
-    elseif (IsChecked -Elem $Redux.Graphics.ListFemaleModels)   { ShowModelPreview -Dropdown $Redux.Graphics.FemaleModels -Box $Redux.Graphics.ModelsPreview -Category "Female" }
-
-
+    if     (IsChecked -Elem $Redux.Graphics.ListChildMaleModels)     { ShowModelsPreview -Child -Dropdown $Redux.Graphics.ChildMaleModels   -Category "Child Male" }
+    elseif (IsChecked -Elem $Redux.Graphics.ListChildFemaleModels)   { ShowModelsPreview -Child -Dropdown $Redux.Graphics.ChildFemaleModels -Category "Child Female" }
+    if     (IsChecked -Elem $Redux.Graphics.ListAdultMaleModels)     { ShowModelsPreview -Adult -Dropdown $Redux.Graphics.AdultMaleModels   -Category "Adult Male" }
+    elseif (IsChecked -Elem $Redux.Graphics.ListAdultFemaleModels)   { ShowModelsPreview -Adult -Dropdown $Redux.Graphics.AdultFemaleModels -Category "Adult Female" }
 
     # URL
-    $Redux.Graphics.ModelsPreview.add_Click({
-        if (IsSet $CustomModels.url) {
-            [system.Diagnostics.Process]::start($CustomModels.url)
-        }
-    })
+    $Redux.Graphics.ModelsPreviewChild.add_Click({ if (IsSet $CustomModels.child_url) { [system.Diagnostics.Process]::start($CustomModels.child_url) } })
+    $Redux.Graphics.ModelsPreviewAdult.add_Click({ if (IsSet $CustomModels.adult_url) { [system.Diagnostics.Process]::start($CustomModels.adult_url) } })
 
 }
 
@@ -845,7 +778,6 @@ Export-ModuleMember -Function GetMMInstrumentID
 
 Export-ModuleMember -Function ChangeStringIntoDigits
 
-Export-ModuleMember -Function ShowModelPreview
 Export-ModuleMember -Function ChangeModelsSelection
 Export-ModuleMember -Function LoadModelsList
 

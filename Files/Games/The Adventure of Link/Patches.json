@@ -1,11 +1,9 @@
 [ {
 	"title"			: "The Adventure of Link",
-	"console"		: "Both",
-	"command"		: "Force Downgrade",
 	"redux" : {
 		"options"	: 1,
 		"vc_title"	: "The Adventure of Link Redux",
-		"vc_gameid"	: "FA90",
+		"vc_gameID"	: "FA90",
 		"file"		: "Compressed\\redux.ips",
 		"output"	: "_redux_patched"
 	},

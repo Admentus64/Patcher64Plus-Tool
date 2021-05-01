@@ -1,0 +1,39 @@
+[ {
+	"offsets" : {
+		"a"		: "168618",
+		"b"		: "16861C",
+		"x"		: "168620",
+		"y"		: "168624",
+		"l"		: "168628",
+		"r"		: "16862C",
+		"z"		: "168630",
+		"start"		: "168634",
+		"dpadup"	: "168648",
+		"dpaddown"	: "16864C",
+		"dpadright"	: "168650",
+		"dpadleft"	: "168654",
+		"cup"		: "168658",
+		"cdown"		: "16865C",
+		"cleft"		: "168660",
+		"cright"	: "168664"
+	},
+	"presets" : [ {
+		"title"		: "Vanilla",
+		"a"		: "A",
+		"b"		: "B",
+		"start"		: "Start",
+		"l"		: "Z",
+		"r"		: "R",
+		"z"		: "C-Down",
+		"x"		: "Disabled",
+		"y"		: "Disabled",
+		"cup"		: "C-Up",
+		"cright"	: "C-Right",
+		"cdown"		: "C-Down",
+		"cleft"		: "C-Left",
+		"dpadup"	: "D-Pad Up",
+		"dpadright"	: "D-Pad Right",
+		"dpaddown"	: "D-Pad Down",
+		"dpadleft"	: "D-Pad Left"
+	} ]
+} ]

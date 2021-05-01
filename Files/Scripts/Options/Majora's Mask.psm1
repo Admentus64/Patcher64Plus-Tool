@@ -169,6 +169,7 @@ function ByteOptions() {
                     elseif ($Redux.Language[$i].label -eq "German" )                                              { $Taya = $True  }
                     elseif ($Redux.Language[$i].label -eq "French" )                                              { $Taya = $True  }
                     elseif ($Redux.Language[$i].label -eq "Spanish")                                              { $Taya = $True  }
+                    elseif ($Redux.Language[$i].label -eq "Brazilian Portuguese")                                 { $Taya = $True  }
                     elseif ($Redux.Language[$i].label -eq "Russian")                                              { $Taya = $True  }
                     else                                                                                          { $Taya = $False }
                 }
@@ -184,7 +185,7 @@ function ByteOptions() {
         # Z to L textures
         PatchBytes -Offset "A7B7CC"  -Texture -Patch "GameCube\l_pause_screen_button.yaz0"
         PatchBytes -Offset "AD0A80"  -Texture -Patch "GameCube\l_text_icon.bin"
-        if (IsSet $LanguagePatch.l_target) { PatchBytes -Offset "1E90D00" -Texture -Patch $LanguagePatch.l_target }
+        if (TestFile ($GameFiles.textures + "\GameCube\l_targeting_" + $LanguagePatch.code + ".bin")) { PatchBytes -Offset "1E90D00" -Texture -Patch ("GameCube\l_targeting_" + $LanguagePatch.code + ".bin") }
     }
 
     
@@ -876,9 +877,7 @@ function CreateTabLanguage() {
     CreateReduxCheckBox -Name "AutoSkip"     -Text "Auto Skip Dialogue" -Info "Automaticially advance to the next line or end it during dialogues "       -Credits "Marcelo20XX" -Warning "This option is recommended for speedrunners or experienced players only"
 
     $Redux.Text.Restore.Add_CheckedChanged({ EnableElem -Elem $Redux.Text.OcarinaIcons -Active $this.checked })
-    for ($i=0; $i -lt $GamePatch.languages.Length; $i++) {
-        $Redux.Language[$i].Add_CheckedChanged({ UnlockLanguageContent })
-    }
+    foreach ($i in 0.. ($Files.json.languages.length-1)) { $Redux.Language[$i].Add_CheckedChanged({ UnlockLanguageContent }) }
     UnlockLanguageContent
 
 }

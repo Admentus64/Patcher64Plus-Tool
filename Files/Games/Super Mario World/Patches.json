@@ -1,6 +1,8 @@
 [ {
+	"title"		: "Super Mario World",
+	"tooltip"	: "The regular Super Mario World experience{0}- Supported: Rev 0 (US)"
+}, {
 	"title"		: "Kaizo Mario World",
-	"console"	: "Both",
 	"command"	: "Force Downgrade",
 	"vc_title"	: "Kaizo Mario World",
 	"vc_gameID"	: "JAA1",
@@ -10,7 +12,6 @@
 	"tooltip"	: "A full-sized ROM hack in a completely new setting, which is extremely difficult{0}Only recommended for hardcore players!{0}- Supported: Rev 0 (US)"
 }, {
 	"title"		: "Kaizo Mario World 2",
-	"console"	: "Both",
 	"command"	: "Force Downgrade",
 	"vc_title"	: "Kaizo Mario World 2",
 	"vc_gameID"	: "JAA2",
@@ -20,7 +21,6 @@
 	"tooltip"	: "A full-sized ROM hack in a completely new setting, which is extremely difficult{0}Only recommended for hardcore players and sequel to Kaizo Mario World!{0}- Supported: Rev 0 (US)"
 }, {
 	"title"		: "Kaizo Mario World 3",
-	"console"	: "Both",
 	"command"	: "Force Downgrade",
 	"vc_title"	: "Kaizo Mario World 3",
 	"vc_gameID"	: "JAA3",

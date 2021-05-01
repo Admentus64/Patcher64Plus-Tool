@@ -1,11 +1,10 @@
 [ {
 	"title"			: "Super Metroid",
-	"console"		: "Both",
 	"redux" : {
 		"options"	: 1,
 		"rom_title"	: "Super Metroid Redux",
 		"vc_title"	: "Super Metroid Redux",
-		"vc_gameid"	: "JAV0",
+		"vc_gameID"	: "JAV0",
 		"file"		: "Compressed\\redux.ips",
 		"output"	: "_redux_patched"
 	},

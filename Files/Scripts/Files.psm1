@@ -33,11 +33,11 @@ function SetFileParameters() {
     $Files.tool.TabExt64                    = (GetFilePath) + "\Files\Tools\Compression\TabExt64.exe"
     $Files.tool.TabExt32                    = (GetFilePath) + "\Files\Tools\Compression\TabExt32.exe"
 
+    $Files.tool.applyPPF3                   = (GetFilePath) + "\Files\Tools\Patching\ApplyPPF3.exe"
     $Files.tool.flips                       = (GetFilePath) + "\Files\Tools\Patching\flips.exe"
     $Files.tool.ups                         = (GetFilePath) + "\Files\Tools\Patching\ups.exe"
     $Files.tool.xdelta                      = (GetFilePath) + "\Files\Tools\Patching\xdelta.exe"
     $Files.tool.xdelta3                     = (GetFilePath) + "\Files\Tools\Patching\xdelta3.exe"
-    $Files.tool.applyPPF3                   = (GetFilePath) + "\Files\Tools\Patching\ApplyPPF3.exe"
 
     $Files.tool.rn64crc                     = (GetFilePath) + "\Files\Tools\Verification\rn64crc.exe"
 
@@ -66,8 +66,8 @@ function SetFileParameters() {
     $Files.oot.master_quest                 = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\master_quest")
     $Files.oot.mm_pause_screen              = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\mm_pause_screen")
     $Files.oot.harder_child_bosses          = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\harder_child_bosses")
-    $Files.oot.link_model_child_mm          = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Models\mm_child")
-    $Files.oot.hide_equipment               = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\hide_equipment.ppf")
+    $Files.oot.feminine_animations          = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\feminine_animations")
+    $Files.oot.hide_equipment               = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\hide_equipment")
 
     $Files.oot.lens_of_truth                = $Paths.Games + "\Ocarina of Time\Textures\widescreen\lens_of_truth.bin"
     $Files.oot.title_copyright              = $Paths.Games + "\Ocarina of Time\Textures\Logo\mq_copyright.bin"
@@ -77,7 +77,6 @@ function SetFileParameters() {
     $Files.oot.hud_mm_key_rupee             = $Paths.Games + "\Ocarina of Time\Textures\HUD\mm_key_rupee.bin"
     $Files.oot.hud_tatl                     = $Paths.Games + "\Ocarina of Time\Textures\HUD\tatl.bin"
     $Files.oot.hud_tael                     = $Paths.Games + "\Ocarina of Time\Textures\HUD\tael.bin"
-    $Files.oot.hero_shield_icon             = $Paths.Games + "\Ocarina of Time\Textures\Hero's Shield\icon.bin"
     $Files.oot.stone_shield_front           = $Paths.Games + "\Ocarina of Time\Textures\Iron Shield\front.bin"
     $Files.oot.stone_shield_front           = $Paths.Games + "\Ocarina of Time\Textures\Iron Shield\back.bin"
     $Files.oot.stone_shield_icon            = $Paths.Games + "\Ocarina of Time\Textures\Iron Shield\icon.bin"
@@ -94,8 +93,6 @@ function SetFileParameters() {
     $Files.oot.message_restore              = $Paths.Games + "\Ocarina of Time\Binaries\Message\restore.tbl"
     $Files.oot.message_ruto_confession      = $Paths.Games + "\Ocarina of Time\Binaries\Message\ruto_confession.bin"
     $Files.oot.message_songs                = $Paths.Games + "\Ocarina of Time\Binaries\Message\songs.bin"
-    $Files.oot.mm_link_voices               = $Paths.Games + "\Ocarina of Time\Binaries\Voices\majora.bin"
-    $Files.oot.feminine_link_voices         = $Paths.Games + "\Ocarina of Time\Binaries\Voices\feminine.bin"
     $Files.oot.fire_temple_bank             = $Paths.Games + "\Ocarina of Time\Binaries\Fire Temple Theme\audiobank_pointers.bin"
     $Files.oot.fire_temple_seq              = $Paths.Games + "\Ocarina of Time\Binaries\Fire Temple Theme\audioseq_pointers.bin"
     $Files.oot.fire_temple_table            = $Paths.Games + "\Ocarina of Time\Binaries\Fire Temple Theme\audiotable_pointers.bin"

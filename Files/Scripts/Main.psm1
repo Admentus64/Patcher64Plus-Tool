@@ -39,24 +39,26 @@ function CreateMainDialog() {
     $InputPaths.GameGroup.Add_DragDrop({ GamePath_DragDrop })
 
     # Create a textbox to display the selected WAD
-    $InputPaths.GameTextBox = CreateTextBox -X (DPISize 10) -Y (DPISize 20) -Width (DPISize 420) -Height (DPISize 22) -Text "Select or drag and drop your ROM or VC WAD file..." -Name "Path.Game" -ReadOnly $True
+    $InputPaths.GameTextBox = CreateTextBox -X (DPISize 10) -Y (DPISize 20) -Width (DPISize 420) -Height (DPISize 22) -Text "Select your ROM or VC WAD file..." -Name "Path.Game" -ReadOnly $True
     $InputPaths.GameTextBox.AllowDrop = $True
     $InputPaths.GameTextBox.Add_DragEnter({ $_.Effect = [Windows.Forms.DragDropEffects]::Copy })
     $InputPaths.GameTextBox.Add_DragDrop({ GamePath_DragDrop })
 
     # Create a button to allow manually selecting a ROM or WAD
-    $InputPaths.GameButton = CreateButton -X ($InputPaths.GameTextBox.Right + (DPISize 6)) -Y (DPISize 18) -Width (DPISize 24) -Height (DPISize 22) -Text "..." -Info "Select your ROM or VC WAD using file explorer"
+    $InputPaths.GameButton = CreateButton -X ($InputPaths.GameTextBox.Right + (DPISize 6)) -Y (DPISize 18) -Width (DPISize 24) -Height (DPISize 22) -Text "..." -Info "Select your ROM or Wii VC WAD using file explorer"
     $InputPaths.GameButton.Add_Click({ GamePath_Button -TextBox $InputPaths.GameTextBox -Description "ROM/WAD Files" -FileNames @('*.wad', '*.z64', '*.n64', '*.v64', '*.sfc', '*.smc', '*.nes') })
     #"Image Files(*.BMP;*.JPG;*.GIF)|*.BMP;*.JPG;*.GIF|All files (*.*)|*.*"
 
     # Create a button to clear the WAD Path
-    $InputPaths.ClearGameButton = CreateButton -X ($InputPaths.GameButton.Right + (DPISize 15)) -Y (DPISize 18) -Width ($InputPaths.GameGroup.Right - $InputPaths.GameButton.Right - (DPISize 30)) -Height (DPISize 22) -Text "Clear" -Info "Clear the selected ROM or VC WAD file"
+    $InputPaths.ClearGameButton = CreateButton -X ($InputPaths.GameButton.Right + (DPISize 15)) -Y (DPISize 18) -Width ($InputPaths.GameGroup.Right - $InputPaths.GameButton.Right - (DPISize 30)) -Height (DPISize 22) -Text "Clear" -Info "Clear the selected paths (ROM / Wii VC WAD), ROM injection and custom patch"
     $InputPaths.ClearGameButton.Add_Click({
         if (IsSet -Elem $GamePath -MinLength 1) {
-            $global:GamePath = $null
-            $Settings["Core"][$InputPaths.GameTextBox.name] = ""
-            $InputPaths.GameTextBox.Text = "Select or drag and drop your ROM or VC WAD file..."
-            $global:GameIsSelected = $Patches.Panel.Enabled = $CustomHeader.Panel.Enabled = $InputPaths.ClearGameButton.Enabled = $InputPaths.PatchPanel.Visible = $False
+            $global:GamePath = $global:InjectPath = $global:PatchPath = $null
+            $Settings["Core"][$InputPaths.GameTextBox.name] = $Settings["Core"][$InputPaths.InjectTextBox.name] = $Settings["Core"][$InputPaths.PatchTextBox.name] = ""
+            $InputPaths.GameTextBox.Text = "Select your ROM or Wii VC WAD file..."
+            $InputPaths.InjectTextBox.Text = "Select your ROM for injection..."
+            $InputPaths.PatchTextBox.Text = "Select your custom patch file..."
+            $global:GameIsSelected = $Patches.Panel.Enabled = $CustomHeader.Panel.Enabled = $InputPaths.ClearGameButton.Enabled = $InputPaths.ApplyInjectButton.Enabled = $InputPaths.ApplyPatchButton.Enabled = $InputPaths.PatchPanel.Visible = $False
             if ($IsWiiVC) {
                 SetWiiVCMode $False
                 ChangeGamesList
@@ -82,7 +84,7 @@ function CreateMainDialog() {
     $InputPaths.InjectGroup.Add_DragDrop({ InjectPath_DragDrop })
 
     # Create a textbox to display the selected ROM
-    $InputPaths.InjectTextBox = CreateTextBox -X (DPISize 10) -Y (DPISize 20) -Width (DPISize 420) -Height (DPISize 22) -Text "Select or drag and drop your NES, SNES or N64 ROM..." -Name "Path.Inject" -ReadOnly $True
+    $InputPaths.InjectTextBox = CreateTextBox -X (DPISize 10) -Y (DPISize 20) -Width (DPISize 420) -Height (DPISize 22) -Text "Select your ROM for injection..." -Name "Path.Inject" -ReadOnly $True
     $InputPaths.InjectTextBox.AllowDrop = $True
     $InputPaths.InjectTextBox.Add_DragEnter({ $_.Effect = [Windows.Forms.DragDropEffects]::Copy })
     $InputPaths.InjectTextBox.Add_DragDrop({ InjectPath_DragDrop })
@@ -113,14 +115,14 @@ function CreateMainDialog() {
     $InputPaths.PatchGroup.Add_DragDrop({ PatchPath_DragDrop })
     
     # Create a textbox to display the selected BPS.
-    $InputPaths.PatchTextBox = CreateTextBox -X (DPISize 10) -Y (DPISize 20) -Width (DPISize 420) -Height (DPISize 22) -Text "Select or drag and drop your BPS, IPS, UPS, Xdelta, VCDiff or PPF Patch File..." -Name "Path.Patch" -ReadOnly $True
+    $InputPaths.PatchTextBox = CreateTextBox -X (DPISize 10) -Y (DPISize 20) -Width (DPISize 420) -Height (DPISize 22) -Text "Select your custom patch file..." -Name "Path.Patch" -ReadOnly $True
     $InputPaths.PatchTextBox.AllowDrop = $True
     $InputPaths.PatchTextBox.Add_DragEnter({ $_.Effect = [Windows.Forms.DragDropEffects]::Copy })
     $InputPaths.PatchTextBox.Add_DragDrop({ PatchPath_DragDrop })
 
     # Create a button to allow manually selecting a ROM.
-    $InputPaths.PatchButton = CreateButton -X ($InputPaths.PatchTextBox.Right + (DPISize 6)) -Y (DPISize 18) -Width (DPISize 24) -Height (DPISize 22) -Text "..." -Info "Select your BPS, IPS, UPS, Xdelta or VCDiff Patch File using file explorer"
-    $InputPaths.PatchButton.Add_Click({ PatchPath_Button -TextBox $InputPaths.PatchTextBox -Description "Patch Files" -FileNames @('*.bps', '*.ips', '*.ups' ,'*.xdelta', '*.vcdiff') })
+    $InputPaths.PatchButton = CreateButton -X ($InputPaths.PatchTextBox.Right + (DPISize 6)) -Y (DPISize 18) -Width (DPISize 24) -Height (DPISize 22) -Text "..." -Info "Select your BPS, IPS, UPS, PPF, Xdelta or VCDiff Patch File using file explorer"
+    $InputPaths.PatchButton.Add_Click({ PatchPath_Button -TextBox $InputPaths.PatchTextBox -Description "Patch Files" -FileNames @('*.bps', '*.ips', '*.ups' , '*.ppf' , '*.xdelta', '*.vcdiff') })
     
     # Create a button to allow patch the WAD with a BPS file.
     $InputPaths.ApplyPatchButton = CreateButton -X ($InputPaths.PatchButton.Right + (DPISize 15)) -Y (DPISize 18) -Width ($InputPaths.PatchGroup.Right - $InputPaths.PatchButton.Right - (DPISize 30)) -Height (DPISize 22) -Text "Apply Patch" -Info "Patch the ROM with your selected BPS, IPS, UPS, Xdelta or VCDiff Patch File"
@@ -159,35 +161,38 @@ function CreateMainDialog() {
     $CustomHeader.Panel.Enabled = $False
 
     # Create the groupbox that holds the Custom Header.
-    $CustomHeader.Group = CreateGroupBox -Width $CustomHeader.Panel.Width -Height $CustomHeader.Panel.Height -Text "Custom Channel Title and GameID"
+    $CustomHeader.Group = CreateGroupBox -Width $CustomHeader.Panel.Width -Height $CustomHeader.Panel.Height -Text "Custom Game Title and GameID"
 
     # Custom Title Checkbox
     $CustomHeader.EnableHeaderLabel = CreateLabel    -X (DPISize 10) -Y (DPISize 22) -Width (DPISize 50) -Height (DPISize 15) -Text "Enable:"                                              -Info "Enable in order to change the Game ID and title of the ROM or WAD file"
     $CustomHeader.EnableHeader      = CreateCheckBox -X ($CustomHeader.EnableHeaderLabel.Right) -Y (DPISize 20) -Width (DPISize 20) -Height (DPISize 20) -Name "CustomHeader.EnableHeader" -Info "Enable in order to change the Game ID and title of the ROM or WAD file"
     $CustomHeader.EnableHeaderLabel.Add_Click({ $CustomHeader.EnableHeader.Checked = !$CustomHeader.EnableHeader.Checked })
 
-    # Custom Title
-    $CustomHeader.TitleLabel = CreateLabel   -X ($CustomHeader.EnableHeader.Right) -Y (DPISize 22) -Width (DPISize 75) -Height (DPISize 15) -Text "Channel Title:" -Info "--- WARNING ---`nChanging the Game Title might causes issues with emulation for certain emulators and plugins, such as GlideN64"
-    $CustomHeader.Title      = CreateTextBox -X ($CustomHeader.TitleLabel.Right)   -Y (DPISize 20) -Width (DPISize 250) -Height (DPISize 22)                       -Info "--- WARNING ---`nChanging the Game Title might causes issues with emulation for certain emulators and plugins, such as GlideN64"
+    # Custom ROM Title
+    $CustomHeader.ROMTitleLabel = CreateLabel   -X ($CustomHeader.EnableHeader.Right)  -Y (DPISize 22) -Width (DPISize 75)  -Height (DPISize 15) -Text "ROM Title:" -Info "--- WARNING ---`nChanging the Game Title might causes issues with emulation for certain emulators and plugins, such as GlideN64"
+    $CustomHeader.ROMTitle      = CreateTextBox -X ($CustomHeader.ROMTitleLabel.Right) -Y (DPISize 20) -Width (DPISize 250) -Height (DPISize 22) -Length 20         -Info "--- WARNING ---`nChanging the Game Title might causes issues with emulation for certain emulators and plugins, such as GlideN64"
 
-    # Custom GameID (N64 only)
-    $CustomHeader.GameIDLabel = CreateLabel   -X ($CustomHeader.Title.Right + (DPISize 10)) -Y (DPISize 22) -Width (DPISize 50) -Height (DPISize 15) -Text "GameID:" -Info "--- WARNING ---`nChanging the GameID causes Dolphin to recognize the VC title as a separate save file`nThe fourth character sets the region and refresh rate`n`n--- REGION CODES ---`nE = USA`nJ = Japan`nP = PAL`nK = Korea"
-    $CustomHeader.GameID      = CreateTextBox -X ($CustomHeader.GameIDLabel.Right)          -Y (DPISize 20) -Width (DPISize 55) -Height (DPISize 22) -Length 4       -Info "--- WARNING ---`nChanging the GameID causes Dolphin to recognize the VC title as a separate save file`nThe fourth character sets the region and refresh rate`n`n--- REGION CODES ---`nE = USA`nJ = Japan`nP = PAL`nK = Korea"
+    # Custom ROM GameID (N64 only)
+    $CustomHeader.ROMGameIDLabel = CreateLabel   -X ($CustomHeader.ROMTitle.Right + (DPISize 10)) -Y (DPISize 22) -Width (DPISize 50) -Height (DPISize 15) -Text "GameID:" -Info "--- WARNING ---`nRequires four characters for acceptance`nThe fourth character sets the region and refresh rate`n`n--- REGION CODES ---`nE = USA`nJ = Japan`nP = PAL`nK = Korea"
+    $CustomHeader.ROMGameID      = CreateTextBox -X ($CustomHeader.ROMGameIDLabel.Right)          -Y (DPISize 20) -Width (DPISize 55) -Height (DPISize 22) -Length 4       -Info "--- WARNING ---`nRequires four characters for acceptance`nThe fourth character sets the region and refresh rate`n`n--- REGION CODES ---`nE = USA`nJ = Japan`nP = PAL`nK = Korea"
     
+    # Custom VC Title 
+    $CustomHeader.VCTitleLabel = CreateLabel   -X ($CustomHeader.EnableHeader.Right) -Y (DPISize 22) -Width (DPISize 75)  -Height (DPISize 15) -Text "Channel Title:"
+    $CustomHeader.VCTitle      = CreateTextBox -X ($CustomHeader.VCTitleLabel.Right) -Y (DPISize 20) -Width (DPISize 250) -Height (DPISize 22) -Length 40
+
+    # Custom VC GameID (N64 only)
+    $CustomHeader.VCGameIDLabel = CreateLabel   -X ($CustomHeader.VCTitle.Right + (DPISize 10)) -Y (DPISize 22) -Width (DPISize 50) -Height (DPISize 15) -Text "GameID:" -Info "--- WARNING ---`nRequires four characters for acceptance`nChanging the GameID causes Dolphin to recognize the VC title as a separate save file`n`n--- REGION CODES ---`nE = USA`nJ = Japan`nP = PAL`nK = Korea"
+    $CustomHeader.VCGameID      = CreateTextBox -X ($CustomHeader.VCGameIDLabel.Right)          -Y (DPISize 20) -Width (DPISize 55) -Height (DPISize 22) -Length 4       -Info "--- WARNING ---`nRequires four characters for acceptance`nChanging the GameID causes Dolphin to recognize the VC title as a separate save file`n`n--- REGION CODES ---`nE = USA`nJ = Japan`nP = PAL`nK = Korea"
+
     # Custom Region Checkbox (SNES Only)
     $CustomHeader.EnableRegionLabel = CreateLabel    -X ($CustomHeader.EnableHeaderLabel.Left) -Y (DPISize 52) -Width (DPISize 50) -Height (DPISize 15) -Text "Enable:"                   -Info "Enable in order to change the Game ID and title of the ROM or WAD file"
     $CustomHeader.EnableRegion      = CreateCheckBox -X ($CustomHeader.EnableHeader.Left)      -Y (DPISize 50) -Width (DPISize 20) -Height (DPISize 20) -Name "CustomHeader.EnableRegion" -Info "Enable in order to change the Game ID and title of the ROM or WAD file"
     $CustomHeader.EnableRegionLabel.Add_Click({ $CustomHeader.EnableRegion.Checked = !$CustomHeader.EnableRegion.Checked })
 
     # Custom Region (SNES only)
-    $CustomHeader.RegionLabel = CreateLabel -X ($CustomHeader.TitleLabel.Left) -Y (DPISize 50) -Width (DPISize 55) -Height (DPISize 15) -Text "Region:" -Info "--- WARNING ---`nChanging the Region Code can softlock the game"
+    $CustomHeader.RegionLabel = CreateLabel -X ($CustomHeader.ROMTitleLabel.Left) -Y (DPISize 50) -Width (DPISize 55) -Height (DPISize 15) -Text "Region:" -Info "--- WARNING ---`nChanging the Region Code can softlock the game"
     $Items = @("Japan (NTSC)", "North America (NTSC)", "Europe (PAL)", "Sweden/Scandinavia (PAL)", "Finland (PAL)", "Denmark (PAL)", "France (SECAM)", "Netherlands (PAL)", "Spain (PAL)", "Germany (PAL)", "Italy (PAL)", "China (PAL)", "Indonesia (PAL)", "Kora (NTSC)", "Global", "Canada (NTSC)", "Brazil (PAL-M)", "Australia (PAL)", "Other (1)", "Other (2)", "Other (3)")
-    $CustomHeader.Region = CreateComboBox   -X $CustomHeader.Title.Left -Y ($CustomHeader.RegionLabel.Top) -Width $CustomHeader.Title.Width -Height $CustomHeader.Title.Height -Items $Items -Default 2
-    
-    # Create a button to patch the header only
-    $CustomHeader.Patch = CreateButton -X ($InputPaths.ClearGameButton.Left) -Y ($CustomHeader.EnableRegion.Top) -Width ($InputPaths.ClearGameButton.Width) -Height (DPISize 22) -Text "Patch Header" -Info "Patch the header of the selected game only"
-    $CustomHeader.Patch.Add_Click({ MainFunction -Command "Patch Header" -PatchedFileName "_header_patched" })
-    $CustomHeader.Patch.Enabled = $False
+    $CustomHeader.Region = CreateComboBox   -X $CustomHeader.ROMTitle.Left -Y ($CustomHeader.RegionLabel.Top) -Width $CustomHeader.ROMTitle.Width -Height $CustomHeader.ROMTitle.Height -Items $Items -Default 2
 
 
 
@@ -249,59 +254,38 @@ function CreateMainDialog() {
     # Create a label for Patch VC Buttons
     $VC.ActionsLabel = CreateLabel -X (DPISize 10) -Y (DPISize 32) -Width (DPISize 55) -Height (DPISize 15) -Text "Actions" -Font $Fonts.SmallBold -AddTo $VC.Group
 
-    # Create a button to patch the VC
-    $VC.PatchVCButton = CreateButton -X ($VC.ActionsLabel.Right + (DPISize 20)) -Y ($VC.ActionsLabel.Top - (DPISize 7)) -Width (DPISize 150) -Height (DPISize 30) -Text "Patch VC Emulator Only" -Info "Ignore any patches and only patches the Virtual Console emulator`nDowngrading and channing the Channel Title or GameID is still accepted"
-    $VC.PatchVCButton.Add_Click({ MainFunction -Command "Patch VC" -PatchedFileName "_vc_patched" })
-
     # Create a button to extract the ROM
-    $VC.ExtractROMButton = CreateButton -X ($VC.PatchVCButton.Right + (DPISize 10)) -Y ($VC.ActionsLabel.Top - (DPISize 7)) -Width (DPISize 150) -Height (DPISize 30) -Text "Extract ROM Only" -Info "Only extract the ROM from the WAD file`nUseful for native N64 emulators"
+    $VC.ExtractROMButton = CreateButton -X ($VC.ActionsLabel.Right + (DPISize 10)) -Y ($VC.ActionsLabel.Top - (DPISize 7)) -Width (DPISize 150) -Height (DPISize 30) -Text "Extract ROM Only" -Info "Only extract the ROM from the WAD file`nUseful for native N64 emulators"
     $VC.ExtractROMButton.Add_Click({ MainFunction -Command "Extract" -PatchedFileName "_extracted" })
 
+    # Create a button to show the global settings panel
+    $VC.RemapControlsButton = CreateButton -X ($VC.ExtractROMButton.Right + (DPISize 10)) -Y ($VC.ActionsLabel.Top - (DPISize 7)) -Width (DPISize 150) -Height (DPISize 30) -Text "Remap VC Controls" -Info "Open the Virtual Console remap settings panel"
+    $VC.RemapControlsButton.Add_Click({ $VCRemapDialog.ShowDialog() | Out-Null })
+
     # Create a label for Core patches
-    $VC.CoreLabel = CreateLabel -X (DPISize 10) -Y (DPISize 62) -Width (DPISize 55) -Height (DPISize 15) -Text "Core" -Font $Fonts.SmallBold
+    $VC.OptionsLabel = CreateLabel -X (DPISize 10) -Y (DPISize 62) -Width (DPISize 55) -Height (DPISize 15) -Text "Options" -Font $Fonts.SmallBold
 
     # Remove T64 description
-    $VC.RemoveT64Label = CreateLabel -X ($VC.CoreLabel.Right + (DPISize 20)) -Y ($VC.CoreLabel.Top) -Width (DPISize 95) -Height (DPISize 15) -Text "Remove All T64:" -Info "Remove all textures that the Virtual Console replaced in the ROM`nThese replaced textures are known as T64`nThese replaced textures maybe be censored or to make the game look darker more fitting for the Wii"
-    $VC.RemoveT64 = CreateCheckBox -X ($VC.RemoveT64Label.Right) -Y ($VC.CoreLabel.Top - (DPISize 2)) -Width (DPISize 20) -Height (DPISize 20) -Checked $True -Info "Remove all textures that the Virtual Console replaced in the ROM`nThese replaced textures are known as T64`nThese replaced textures maybe be censored or to make the game look darker more fitting for the Wii" -Name "VC.RemoveT64"
+    $VC.RemoveT64Label = CreateLabel    -X ($VC.OptionsLabel.Right + (DPISize 20)) -Y ($VC.OptionsLabel.Top) -Width (DPISize 95) -Height (DPISize 15) -Text "Remove All T64:" -Info "Remove all textures that the Virtual Console replaced in the ROM`nThese replaced textures are known as T64`nThese replaced textures maybe be censored or to make the game look darker more fitting for the Wii"
+    $VC.RemoveT64      = CreateCheckBox -X ($VC.RemoveT64Label.Right) -Y ($VC.OptionsLabel.Top - (DPISize 2)) -Width (DPISize 20) -Height (DPISize 20) -Checked $True -Info "Remove all textures that the Virtual Console replaced in the ROM`nThese replaced textures are known as T64`nThese replaced textures maybe be censored or to make the game look darker more fitting for the Wii" -Name "VC.RemoveT64"
     $VC.RemoveT64Label.Add_Click({ $VC.RemoveT64.Checked = !$VC.RemoveT64.Checked })
 
     # Expand Memory
-    $VC.ExpandMemoryLabel = CreateLabel -X ($VC.RemoveT64.Right + (DPISize 10)) -Y ($VC.CoreLabel.Top) -Width (DPISize 95) -Height (DPISize 15) -Text "Expand Memory:" -Info "Expand the game's memory by 4MB`n`n[!] For some games / patches it can cause the VC emulator to fail to boot"
-    $VC.ExpandMemory = CreateCheckBox -X ($VC.ExpandMemoryLabel.Right) -Y ($VC.CoreLabel.Top - (DPISize 2)) -Width (DPISize 20) -Height (DPISize 20) -Info "Expand the game's memory by 4MB`n`n[!] For some games / patches it can cause the VC emulator to fail to boot" -Name "VC.ExpandMemory"
+    $VC.ExpandMemoryLabel = CreateLabel    -X ($VC.RemoveT64.Right + (DPISize 10)) -Y ($VC.OptionsLabel.Top) -Width (DPISize 95) -Height (DPISize 15) -Text "Expand Memory:" -Info "Expand the game's memory by 4MB`n`n[!] For some games / patches it can cause the VC emulator to fail to boot"
+    $VC.ExpandMemory      = CreateCheckBox -X ($VC.ExpandMemoryLabel.Right) -Y ($VC.OptionsLabel.Top - (DPISize 2)) -Width (DPISize 20) -Height (DPISize 20) -Info "Expand the game's memory by 4MB`n`n[!] For some games / patches it can cause the VC emulator to fail to boot" -Name "VC.ExpandMemory"
     $VC.ExpandMemoryLabel.Add_Click({ $VC.ExpandMemory.Checked = !$VC.ExpandMemory.Checked })
 
     # Remove Filter
-    $VC.RemoveFilterLabel = CreateLabel -X ($VC.ExpandMemory.Right + (DPISize 10)) -Y ($VC.CoreLabel.Top) -Width (DPISize 95) -Height (DPISize 15) -Text "Remove Filter:" -Info "Remove the dark overlay filter"
-    $VC.RemoveFilter = CreateCheckBox -X ($VC.RemoveFilterLabel.Right) -Y ($VC.CoreLabel.Top - (DPISize 2)) -Width (DPISize 20) -Height (DPISize 20) -Checked $True -Info "Remove the dark overlay filter" -Name "VC.RemoveFilter"
+    $VC.RemoveFilterLabel = CreateLabel    -X ($VC.ExpandMemory.Right + (DPISize 10)) -Y ($VC.OptionsLabel.Top) -Width (DPISize 95) -Height (DPISize 15) -Text "Remove Filter:" -Info "Remove the dark overlay filter"
+    $VC.RemoveFilter      = CreateCheckBox -X ($VC.RemoveFilterLabel.Right) -Y ($VC.OptionsLabel.Top - (DPISize 2)) -Width (DPISize 20) -Height (DPISize 20) -Checked $True -Info "Remove the dark overlay filter" -Name "VC.RemoveFilter"
     $VC.RemoveFilterLabel.Add_Click({ $VC.RemoveFilter.Checked = !$VC.RemoveFilter.Checked })
 
-    # Remap D-Pad
-    $VC.RemapDPadLabel = CreateLabel -X ($VC.RemoveFilter.Right + (DPISize 10)) -Y ($VC.CoreLabel.Top) -Width (DPISize 95) -Height (DPISize 15) -Text "Remap D-Pad:" -Info "Remap the D-Pad to the actual four D-Pad directional buttons instead of toggling the minimap"
-    $VC.RemapDPad = CreateCheckBox -X ($VC.RemapDPadLabel.Right) -Y ($VC.CoreLabel.Top - (DPISize 2)) -Width (DPISize 20) -Height (DPISize 20) -Info "Remap the D-Pad to the actual four D-Pad directional buttons instead of toggling the minimap" -Name "VC.RemapDPad"
-    $VC.RemapDPadLabel.Add_Click({ $VC.RemapDPad.Checked = !$VC.RemapDPad.Checked })
-
-    # Remap L
-    $VC.RemapLLabel = CreateLabel -X ($VC.RemoveFilter.Right + (DPISize 10)) -Y ($VC.CoreLabel.Top) -Width (DPISize 95) -Height (DPISize 15) -Text "Remap L Button:" -Info "Remap the L button to the actual L button button"
-    $VC.RemapL = CreateCheckBox -X ($VC.RemapDPadLabel.Right) -Y ($VC.CoreLabel.Top - (DPISize 2)) -Width (DPISize 20) -Height (DPISize 20) -Info "Remap the L button to the actual L button button" -Name "VC.RemapL"
-    $VC.RemapLLabel.Add_Click({ $VC.RemapL.Checked = !$VC.RemapL.Checked })
-
-    # Create a label for Minimap
-    $VC.MinimapLabel = CreateLabel -X (DPISize 10) -Y ($VC.CoreLabel.Bottom + (DPISize 5)) -Width (DPISize 55) -Height (DPISize 15) -Text "Minimap" -Font $Fonts.SmallBold -AddTo $VC.Group
-
-    # Remap C-Down
-    $VC.RemapCDownLabel = CreateLabel -X ($VC.MinimapLabel.Right + (DPISize 20)) -Y ($VC.MinimapLabel.Top) -Width (DPISize 95) -Height (DPISize 15) -Text "Remap C-Down:" -Info "Remap the C-Down button for toggling the minimap instead of using an item"
-    $VC.RemapCDown = CreateCheckBox -X ($VC.RemapCDownLabel.Right) -Y ($VC.MinimapLabel.Top - (DPISize 2)) -Width (DPISize 20) -Height (DPISize 20) -Info "Remap the C-Down button for toggling the minimap instead of using an item" -Name "VC.RemapCDown"
-    $VC.RemapCDownLabel.Add_Click({ $VC.RemapCDown.Checked = !$VC.RemapCDown.Checked })
-
-    # Remap Z
-    $VC.RemapZLabel = CreateLabel -X ($VC.RemapCDown.Right + (DPISize 10)) -Y ($VC.MinimapLabel.Top) -Width (DPISize 95) -Height (DPISize 15) -Text "Remap Z Button:" -Info "Remap the Z (GameCube) or ZL and ZR (Classic) buttons for toggling the minimap instead of using an item"
-    $VC.RemapZ = CreateCheckBox -X ($VC.RemapZLabel.Right) -Y ($VC.MinimapLabel.Top - (DPISize 2)) -Width (DPISize 20) -Height (DPISize 20) -Info "Remap the Z (GameCube) or ZL and ZR (Classic) buttons for toggling the minimap instead of using an item" -Name "VC.RemapZ"
-    $VC.RemapZLabel.Add_Click({ $VC.RemapZ.Checked = !$VC.RemapZ.Checked })
-
-    # Leave D-Pad Up
-    $VC.LeaveDPadUpLabel = CreateLabel -X ($VC.RemapZ.Right + (DPISize 10)) -Y ($VC.MinimapLabel.Top) -Width (DPISize 95) -Height (DPISize 15) -Text "Leave D-Pad Up:" -Info "Leave the D-Pad untouched so it can be used to toggle the minimap"
-    $VC.LeaveDPadUp = CreateCheckBox -X ($VC.LeaveDPadUpLabel.Right) -Y ($VC.MinimapLabel.Top - (DPISize 2)) -Width (DPISize 20) -Height (DPISize 20) -Info "Leave the D-Pad untouched so it can be used to toggle the minimap" -Name "VC.LeaveDPadUp"
-    $VC.LeaveDPadUpLabel.Add_Click({ $VC.LeaveDPadUp.Checked = !$VC.LeaveDPadUp.Checked })
+    # Remove Filter
+    $VC.RemapControlsLabel = CreateLabel    -X ($VC.RemoveFilter.Right + (DPISize 10)) -Y ($VC.OptionsLabel.Top) -Width (DPISize 95) -Height (DPISize 15) -Text "Remap Controls:" -Info "Allow the remapping of controls"
+    $VC.RemapControls      = CreateCheckBox -X ($VC.RemapControlsLabel.Right) -Y ($VC.OptionsLabel.Top - (DPISize 2)) -Width (DPISize 20) -Height (DPISize 20) -Checked $True -Info "Allow the remapping of controls" -Name "VC.RemapControls"
+    $VC.RemapControlsLabel.Add_Click({ $VC.RemapControls.Checked = !$VC.RemapControls.Checked })
+    $VC.RemapControls.Add_CheckStateChanged({ $VC.RemapControlsButton.Enabled = $this.Checked })
+    $VC.RemapControlsButton.Enabled = $VC.RemapControls.Checked
 
 
 
@@ -360,17 +344,11 @@ function InitializeEvents() {
     })
 
     # Custom Header
-    $CustomHeader.Title.Add_TextChanged({ RunCustomTitleSyntax })
-    $CustomHeader.GameID.Add_TextChanged({
-        if ($this.Text -cmatch "[^A-Z 0-9]") {
-            $this.Text = $this.Text.ToUpper() -replace "[^A-Z 0-9]",''
-            $this.Select($this.Text.Length, $this.Text.Length)
-        }
-        if ($this.Text -cmatch " ") {
-            $this.Text = $this.Text.ToUpper() -replace " ",''
-            $this.Select($this.Text.Length, $this.Text.Length)
-        }
-    })
+    $CustomHeader.ROMTitle.Add_TextChanged(  { RunCustomTitleSyntax  -Syntax "[^a-z 0-9]" } )
+    $CustomHeader.VCTitle.Add_TextChanged(   { RunCustomTitleSyntax  -Syntax "[^a-z 0-9 \: \- \( \) \' \& \. \!]" } )
+
+    $CustomHeader.RomGameID.Add_TextChanged( { RunCustomGameIDSyntax -Syntax "[^A-Z 0-9]" } )
+    $CustomHeader.VCGameID.Add_TextChanged(  { RunCustomGameIDSyntax -Syntax "[^A-Z 0-9]" } )
 
     # Patch Options
     $Patches.ComboBox.Add_SelectedIndexChanged( {
@@ -390,36 +368,42 @@ function InitializeEvents() {
 
     })
 
-    # Patch VC Options
-    $VC.RemoveT64.Add_CheckStateChanged(    { CheckVCOptions } )
-    $VC.ExpandMemory.Add_CheckStateChanged( { CheckVCOptions } )
-    $VC.RemoveFilter.Add_CheckStateChanged( { CheckVCOptions } )
-    $VC.RemapDPad.Add_CheckStateChanged(    { CheckVCOptions } )
-    $VC.RemapL.Add_CheckStateChanged(       { CheckVCOptions } )
-    $VC.RemapCDown.Add_CheckStateChanged(   { CheckVCOptions } )
-    $VC.RemapZ.Add_CheckStateChanged(       { CheckVCOptions } )
-    $VC.LeaveDPadUp.Add_CheckStateChanged(  { CheckVCOptions } )
+}
+
+
+
+#==============================================================================================================================================================================================
+function RunCustomTitleSyntax([string]$Syntax) {
+    
+    if (!$CustomHeader.EnableHeader.Checked -or !$CustomHeader.EnableHeader.Visible) { return }
+
+    if ($this.Text -match $Syntax) {
+        $cursorPos = $this.SelectionStart
+        $this.Text = $this.Text -replace $Syntax, ''
+        $this.SelectionStart = $cursorPos - 1
+        $this.SelectionLength = 0
+    }
 
 }
 
 
 
 #==============================================================================================================================================================================================
-function RunCustomTitleSyntax() {
+function RunCustomGameIDSyntax([string]$Syntax) {
     
     if (!$CustomHeader.EnableHeader.Checked -or !$CustomHeader.EnableHeader.Visible) { return }
 
-    if ($IsWiiVC)   { $syntax = "[^a-z 0-9 \: \- \( \) \' \& \. \!]" }
-    else            { $syntax = "[^a-z 0-9]" }
-
-    if ($CustomHeader.Title.Text -match $syntax) {
-        $cursorPos = $CustomHeader.Title.SelectionStart
-        $CustomHeader.Title.Text = $CustomHeader.Title.Text -replace $syntax, ''
-        $CustomHeader.Title.SelectionStart = $cursorPos - 1
-        $CustomHeader.Title.SelectionLength = 0
+    if ($this.Text -cmatch $Syntax) {
+        $this.Text = $this.Text.ToUpper() -replace $Syntax,''
+        $this.Select($this.Text.Length, $this.Text.Length)
+    }
+    if ($this.Text -cmatch " ") {
+        $this.Text = $this.Text.ToUpper() -replace " ",''
+        $this.Select($this.Text.Length, $this.Text.Length)
     }
 
 }
+
 
 
 #==============================================================================================================================================================================================
@@ -444,36 +428,25 @@ function SetJSONFile($File) {
 
 
 #==============================================================================================================================================================================================
-function CheckVCOptions() {
+function DisablePatches() {
     
-    if (!$IsWiiVC) { return }
-
-    if     (IsChecked $VC.RemoveT64)        { $VC.PatchVCButton.Enabled = $True }
-    elseif (IsChecked $VC.ExpandMemory)     { $VC.PatchVCButton.Enabled = $True }
-    elseif (IsChecked $VC.RemoveFilter)     { $VC.PatchVCButton.Enabled = $True }
-    elseif (IsChecked $VC.RemapDPad)        { $VC.PatchVCButton.Enabled = $True }
-    elseif (IsChecked $VC.RemapCDown)       { $VC.PatchVCButton.Enabled = $True }
-    elseif (IsChecked $VC.RemapL)           { $VC.PatchVCButton.Enabled = $True }
-    elseif (IsChecked $VC.RemapZ)           { $VC.PatchVCButton.Enabled = $True }
-    elseif (IsChecked $VC.LeaveDPadUp)      { $VC.PatchVCButton.Enabled = $True }
-    else                                    { $VC.PatchVCButton.Enabled = $False }
+    # Disable boxes if needed
+    EnableElem -Elem @($Patches.Extend,    $Patches.ExtendLabel)                          -Active ((IsSet $GamePatch.allow_extend) -and $Settings.Debug.LiteGUI -eq $False) -Hide
+    EnableElem -Elem @($Patches.Redux,     $Patches.ReduxLabel)                           -Active ((IsSet $GamePatch.redux.file) -and $Settings.Debug.LiteGUI -eq $False) -Hide
+    EnableElem -Elem @($Patches.Options,   $Patches.OptionsLabel, $Patches.OptionsButton) -Active ((TestFile $GameFiles.script) -and ($GamePatch.options -eq 1 -or $Settings.Debug.ForceOptions -ne $False)) -Hide
+    EnableElem -Elem @($Patches.Downgrade, $Patches.DowngradeLabel)                       -Active ((CheckDowngradable) -and $Settings.Debug.LiteGUI -eq $False) -Hide
+    EnableElem -Elem $Patches.OptionsButton                                               -Active $Patches.Options.Checked
+    DisableReduxOptions
 
 }
 
 
 
-#==============================================================================================================================================================================================
-function DisablePatches() {
-    
-    EnableElem -Elem @($Patches.Extend, $Patches.ExtendLabel) -Active ((IsSet $GamePatch.allow_extend) -and $Settings.Debug.LiteGUI -eq $False) -Hide
-    EnableElem -Elem @($Patches.Redux, $Patches.ReduxLabel) -Active ((IsSet $GamePatch.redux.file) -and $Settings.Debug.LiteGUI -eq $False) -Hide
-    EnableElem -Elem @($Patches.Options, $Patches.OptionsLabel, $Patches.OptionsButton) -Active ($GamePatch.options -eq 1) -Hide
-    EnableElem -Elem @($Patches.Downgrade, $Patches.DowngradeLabel) -Active ((IsSet $GameType.downgrade) -and $Settings.Debug.LiteGUI -eq $False) -Hide
-    EnableElem -Elem @($VC.RemapL, $VC.RemapLLabel) -Active (!(StrLike -str $GamePatch.command -val "Multiplayer"))
+#=========================================================================================================================================================================================
+function CheckDowngradable() {
 
-    # Disable boxes if needed
-    EnableElem -Elem $Patches.OptionsButton -Active $Patches.Options.Checked
-    DisableReduxOptions
+    foreach ($item in $GameType.version) { if (IsSet $item.file) { return $True } }
+    return $False
 
 }
 
@@ -615,8 +588,8 @@ function PatchPath_DragDrop() {
             # Get the extension of the dropped file.
             $DroppedExtn = (Get-Item -LiteralPath $DroppedPath).Extension
 
-            # Make sure it is a BPS File
-            if ($DroppedExtn -eq '.bps' -or $DroppedExtn -eq '.ips' -or $DroppedExtn -eq '.ups' -or $DroppedExtn -eq '.xdelta' -or $DroppedExtn -eq '.vcdiff') {
+            # Make sure it is a patch File
+            if ($DroppedExtn -eq '.bps' -or $DroppedExtn -eq '.ips' -or $DroppedExtn -eq '.ups' -or $DroppedExtn -eq '.ppf' -or $DroppedExtn -eq '.xdelta' -or $DroppedExtn -eq '.vcdiff') {
                 # Finish everything up.
                 $Settings["Core"][$this.name] = $DroppedPath
                 PatchPath_Finish -TextBox $InputPaths.PatchTextBox -Path $DroppedPath
@@ -632,8 +605,6 @@ function PatchPath_DragDrop() {
 
 Export-ModuleMember -Function CreateMainDialog
 Export-ModuleMember -Function InitializeEvents
-Export-ModuleMember -Function RunCustomTitleSyntax
-Export-ModuleMember -Function CheckVCOptions
 Export-ModuleMember -Function DisablePatches
 Export-ModuleMember -Function LoadAdditionalOptions
 Export-ModuleMember -Function SetJSONFile

@@ -1,11 +1,9 @@
 [ {
 	"title"			: "The Legend of Zelda",
-	"console" 		: "Both",
-	"command"		: "Force Downgrade",
 	"redux" : {
 		"options"	: 1,
 		"vc_title"	: "The Legend of Zelda Redux",
-		"vc_gameid"	: "FAK0",
+		"vc_gameID"	: "FAK0",
 		"file"		: "Compressed\\redux.ips",
 		"output"	: "_redux_patched"
 	},

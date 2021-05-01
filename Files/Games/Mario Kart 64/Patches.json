@@ -1,4 +1,7 @@
 [ {
+	"title"		: "Mario Kart 64",
+	"tooltip"	: "The regular Mario Kart 64 experience{0}- Supported: Rev 0 (US)"
+}, {
 	"title"		: "CPUs use human items including shells (v2.5)",
 	"console"	: "Both",
 	"patch"		: "Compressed\\cpu_items.bps",

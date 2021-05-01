@@ -1,0 +1,101 @@
+[ {
+	"title"			: "English",
+	"code"			: "en",
+	"script_start"		: "92D000",
+	"script_length"		: "38130",
+	"max_text_speed"	: 3
+}, {
+	"title"			: "German",
+	"code"			: "de",
+	"vc_title"		: "Zelda: Ocarina (de)",
+	"vc_gameID"		: "NACD",
+	"script_start"		: "348E070",
+	"script_length"		: "3B9C0",
+	"max_text_speed"	: 2,
+	"output"		: "_de_patched",
+	"credits"		: "Admentus, GhostlyDark & Ticamus (ported)"
+}, {
+	"title"			: "French",
+	"code"			: "fr",
+	"vc_title"		: "Zelda: Ocarina (fr)",
+	"vc_gameID"		: "NACF",
+	"script_start"		: "92D000",
+	"script_length"		: "371C0",
+	"max_text_speed"	: 2,
+	"output"		: "_fr_patched",
+	"credits"		: "Admentus & GhostlyDark (ported)"
+}, {
+	"title"			: "Spanish",
+	"code"			: "es",
+	"vc_title"		: "Zelda: Ocarina (es)",
+	"vc_gameID"		: "NACS",
+	"script_start"		: "92D000",
+	"script_length"		: "38130",
+	"max_text_speed"	: 2,
+	"output"		: "_es_patched",
+	"credits"		: "eduardo_aj2 (v2.2)"
+}, {
+	"title"			: "Brazilian Portuguese",
+	"code"			: "pt-BR",
+	"vc_title"		: "Zelda: Ocarina (pt-BR)",
+	"vc_gameID"		: "NACT",
+	"script_start"		: "92D000",
+	"script_length"		: "38130",
+	"output"		: "_pt-BR_patched",
+	"max_text_speed"	: 2,
+	"credits"		: "Fserve (v1.7a)",
+	"warning"		: "This fan-translation is not completed yet{0}[!] Graphical edits are completed for about 50%, but all text is translated"
+}, {
+	"title"			: "Italian",
+	"code"			: "it",
+	"vc_title"		: "Zelda: Ocarina (it)",
+	"vc_gameID"		: "NACI",
+	"script_start"		: "92D000",
+	"script_length"		: "38130",
+	"max_text_speed"	: 2,
+	"output"		: "_it_patched",
+	"credits"		: "Ruleless, xxcentury & Brisma (translation) & GhostlyDark (ported / improvements)"
+}, {
+	"title"			: "Polish",
+	"code"			: "pl",
+	"vc_title"		: "Zelda: Ocarina (pl)",
+	"vc_gameID"		: "NACL",
+	"script_start"		: "92D000",
+	"script_length"		: "38130",
+	"max_text_speed"	: 2,
+	"output"		: "_pl_patched",
+	"credits"		: "RPG (v1.3)"
+}, {
+	"title"			: "Russian",
+	"code"			: "ru",
+	"vc_title"		: "Zelda: Ocarina (ru)",
+	"vc_gameID"		: "NACR",
+	"script_start"		: "92D000",
+	"script_length"		: "34390",
+	"max_text_speed"	: 2,
+	"output"		: "_ru_patched",
+	"credits"		: "Zelda64rus (v2.32)"
+}, {
+	"title"			: "Japanese",
+	"code"			: "ja",
+	"region"		: "J",
+	"vc_title"		: "Zelda: Ocarina (ja)",
+	"vc_gameID"		: "NACJ",
+	"script_start"		: "8EB000",
+	"script_length"		: "3A350",
+	"l_target_jpn"		: 1,
+	"max_text_speed"	: 1,
+	"output"		: "_ja_patched"
+}, {
+	"title" 		: "Simplified Chinese",
+	"code"			: "zh-CN",
+	"region"		: "J",
+	"vc_title"		: "Zelda: Ocarina (zh-CN)",
+	"vc_gameID"		: "NACZ",
+	"script_start"		: "8EB000",
+	"script_length"		: "3A350",
+	"l_target_jpn"		: 1,
+	"max_text_speed"	: 1,
+	"output"		: "_zh-CN_patched",
+	"credits"		: "madcell (2009)"
+} ]

@@ -1,3 +1,33 @@
+v14.0.0
+- Added full VC remapping support for supported N64 VC titles, with presets
+- Added Brazilian Portuguese fan translation for MM
+- Added "Princess Zelda 3D" custom model for OoT (thanks Hailey!)
+- Added "Amara" Link voices for OoT (thanks theluigidude2007!)
+- Added "Amara" female adult model for OoT (thanks Amara!)
+- Added "Feminine Animations" option for OoT
+- Added hashsum checks for PAL, NTSC-J, CHN and TWN, for more detailed feedback
+- Added Wii VC GameID check for PAL and NTSC-J, for more detailed feedback
+- Added advanced option to force showing the "Additional Options" checkbox if available
+- Updated "Improved Link Model" patch for MM
+- Updated "Ocarina of Time 3D" model patch for OoT
+- Updated several fan translation patches
+- Updated all Model previews in true UHD
+- Updated "Checksum" tab with extra information about the ROM
+- Updated the patching process with additional console log information
+- Changed how several options retrieve their values from present files
+- Changed languages into their own .json files
+- Changed how models are patched in (mix and match all male and female models for child and adult)
+- Changed how languages and their patching files are now indicated by their language code
+- Changed and split the specifications for several JSON files, including into new JSON files
+- Changed how several labels are displayed to clarify info a bit more
+- Changed how hashsums are checked
+- Changed that "Clear" button now also clears all paths instead of only the ROM
+- Changed how the header is patched and shown
+- Fixed "Custom Patch" path now also accepting .PPF patch files
+- Fixed romc not being decompressed after extraction (still requires correct game mode)
+- Fixed logging not activating on first run
+- Fixed slider bars not resetting when using the "Reset Game" option
+
 v13.2.4
 - Added "Hide Equipment" option for OoT (thanks XModxGodX!)
 - Removed the "Upgrade Equipment" option from OoT

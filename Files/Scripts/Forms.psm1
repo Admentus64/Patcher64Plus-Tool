@@ -306,14 +306,14 @@ function CreateButton([uint16]$X=0, [uint16]$Y=0, [uint16]$Width=(DPISize 100), 
 function CreateTabButtons([string[]]$Tabs, [object]$AddTo=$Redux.Panel) {
     
     if ($Tabs.Count -eq 0) {
-        if ( ($GamePatch.redux.options -eq 1 -or (IsSet $GamePatch.languages)) -and $Settings.Debug.LiteGUI -eq $False) {
+        if ( ($GamePatch.redux.options -eq 1 -or (IsSet $Files.json.languages)) -and $Settings.Debug.LiteGUI -eq $False) {
             $Tabs += "Main"
             $Last.TabName = "Main"
         }
     }
 
-    if ($GamePatch.redux.options -eq 1 -and $Settings.Debug.LiteGUI -eq $False)   { $Tabs += "Redux" }
-    if ( (IsSet $GamePatch.languages) -and $Settings.Debug.LiteGUI -eq $False)    { $Tabs += "Language" }
+    if ($GamePatch.redux.options -eq 1 -and $Settings.Debug.LiteGUI -eq $False)    { $Tabs += "Redux" }
+    if ( (IsSet $Files.json.languages) -and $Settings.Debug.LiteGUI -eq $False)    { $Tabs += "Language" }
     $global:ReduxTabs = @()
     if (!(IsSet $GameSettings.Core) -and $Tabs.Length -gt 0) { $GameSettings.Core  = @{} }
 
@@ -323,7 +323,7 @@ function CreateTabButtons([string[]]$Tabs, [object]$AddTo=$Redux.Panel) {
         $Last.TabName = $Tabs[$i]
         $Button.Add_Click({
             foreach ($item in $ReduxTabs)      { $item.BackColor = "Gray" }
-            foreach ($item in $Redux.Groups)   { $item.Visible = $item.Name -eq $this.Name }
+            foreach ($item in $Redux.Groups)   { if (!$item.ShowAlways) { $item.Visible = $item.Name -eq $this.Name } }
             $GameSettings["Core"]["LastTab"] = $this.Tag
             $this.BackColor = "DarkGray"
         })
@@ -334,18 +334,17 @@ function CreateTabButtons([string[]]$Tabs, [object]$AddTo=$Redux.Panel) {
     # Restore last tab
     if ($Tabs.Count -gt 0) {
         if (IsSet -Elem $GameSettings["Core"]["LastTab"] -HasInt) {
-
             if ($ReduxTabs.Length -lt $GameSettings["Core"]["LastTab"]) {
                 $ReduxTabs[0].BackColor = "DarkGray"
-                foreach ($item in $Redux.Groups) { $item.Visible = $item.Name -eq $ReduxTabs[0].Name }
+                foreach ($item in $Redux.Groups) { if (!$item.ShowAlways) { $item.Visible = $item.Name -eq $ReduxTabs[0].Name } }
             }
             else {
                 $ReduxTabs[$GameSettings["Core"]["LastTab"]].BackColor = "DarkGray"
-                foreach ($item in $Redux.Groups) { $item.Visible = $item.Name -eq $ReduxTabs[$GameSettings["Core"]["LastTab"]].Name }
+                foreach ($item in $Redux.Groups) { if (!$item.ShowAlways) { $item.Visible = $item.Name -eq $ReduxTabs[$GameSettings["Core"]["LastTab"]].Name } }
             }
         }
         else {
-            foreach ($item in $Redux.Groups) { $item.Visible = $item.Name -eq $ReduxTabs[0].Name }
+            foreach ($item in $Redux.Groups) { if (!$item.ShowAlways) { $item.Visible = $item.Name -eq $ReduxTabs[0].Name } }
             $GameSettings["Core"]["LastTab"] = 0
             $ReduxTabs[0].BackColor = "DarkGray"
         }
@@ -369,7 +368,7 @@ function CreateReduxPanel([single]$Row=0, [single]$Columns, [single]$Rows=1,  [s
 
 
 #==============================================================================================================================================================================================
-function CreateReduxGroup([single]$X=(DPISize 15), [single]$Y=(DPISize 50), [single]$Height, [string]$Name=$Last.TabName, [string]$Tag, [switch]$Hide, [boolean]$IsGame=$True, [string]$Text="", [switch]$IsRedux, [single]$Columns=0, [object]$AddTo=$Redux.Panel) {
+function CreateReduxGroup([single]$X=(DPISize 15), [single]$Y=(DPISize 50), [single]$Height, [string]$Name=$Last.TabName, [string]$Tag, [switch]$ShowAlways, [boolean]$IsGame=$True, [string]$Text="", [switch]$IsRedux, [single]$Columns=0, [object]$AddTo=$Redux.Panel) {
     
     $Width = ($AddTo.Width - (DPISize 50))
     $Last.Column = $Last.Row = 1
@@ -404,15 +403,16 @@ function CreateReduxGroup([single]$X=(DPISize 15), [single]$Y=(DPISize 50), [sin
     }
 
     $Group = CreateGroupBox -X $X -Y $Y -Width $Width -Height ($Height * (DPISize 30) + (DPISize 20)) -Name $Name -Tag $Tag -Text $Text -AddTo $AddTo
-    if ( (IsSet $Name) -and ($Name -ne "Main") )     { $Group.Visible = $False }
-    if (IsSet $Tag)                                  { $Group.Tag = $Tag }
-    if ( (IsSet $Tag) -and !(IsSet $Redux[$Tag]) )   { $Redux[$Tag] = @{} }
-    if (IsSet $Tag)                                  { $Last.Extend = $Tag }
-    else                                             { $Last.Extend = $null }
+    if ( (IsSet $Name) -and ($Name -ne "Main") -and !$ShowAlways )   { $Group.Visible = $False }
+    if (IsSet $Tag)                                                  { $Group.Tag = $Tag }
+    if ( (IsSet $Tag) -and !(IsSet $Redux[$Tag]) )                   { $Redux[$Tag] = @{} }
+    if (IsSet $Tag)                                                  { $Last.Extend = $Tag }
+    else                                                             { $Last.Extend = $null }
     Add-Member -InputObject $Group -NotePropertyMembers @{
         IsRedux = $IsRedux -or $Name -eq "Redux"
         IsLanguage = $False
         Rows = $Height
+        ShowAlways = $ShowAlways
     }
 
     if ($IsGame) {
@@ -544,7 +544,7 @@ function CreateReduxCheckBox([single]$Column=$Last.Column, [single]$Row=$Last.Ro
 
 
 #==============================================================================================================================================================================================
-function CreateReduxComboBox([single]$Column=$Last.Column, [single]$Row=$Last.Row, [int16]$Length=160, [int]$Shift=0, [string[]]$Items=$null, [string[]]$PostItems=$null, [string]$FilePath, $Default=1, [string]$Text, [string]$Info, [string]$Warning, [string]$Credits, [string]$Name, [string]$Tag, [object]$AddTo=$Last.Group) {
+function CreateReduxComboBox([single]$Column=$Last.Column, [single]$Row=$Last.Row, [int16]$Length=160, [int]$Shift=0, [string[]]$Items=$null, [string[]]$PostItems=$null, [string]$FilePath, $Default=1, [switch]$NoDefault, [string]$Text, [string]$Info, [string]$Warning, [string]$Credits, [string]$Name, [string]$Tag, [object]$AddTo=$Last.Group) {
     
     if (IsSet $Warning) {
         if (IsSet $Info)   { $Info += ("`n[!] " + $Warning) }
@@ -566,7 +566,7 @@ function CreateReduxComboBox([single]$Column=$Last.Column, [single]$Row=$Last.Ro
             foreach ($i in 0..($Items.length-1)) { if ($Items[$i] -eq $Default) { $Default = ($i +1) } }
             if ($Default.GetType().Name -eq "String") { $Default = 0 }
         }
-        if ($Items[($Default-1)] -ne "Default" -and $Default -gt 0) {
+        if ($Items[($Default-1)] -ne "Default" -and $Default -gt 0 -and !$NoDefault) {
             $Items = $Items.Clone()
             $Items[($Default-1)] += " (default)"
         }

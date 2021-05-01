@@ -2,7 +2,7 @@
 <<< PATCHER64+ TOOL >>>
 
 --- Thanks to my Patreons ---
-- Teutonicknight2
+- Amara
 
 --- Thanks to my past Patreons --
 - Leigh Pierce, Raim, Gicrax, Crypto Logiq, Moons (Luke), Ronald, Richard Moser
@@ -42,9 +42,6 @@
 - Force Hires Link Model:		GhostlyDark
 - Feminine Animations:			GhostlyDark (ported) & AriaHiro64 (model)
 - Hide Equipment:			XModxGodX
-- MM Link Voices:			Korey Cryderman (ported) & GhostlyDark (corrected)
-- Feminine Link Voices:			theluigidude2007
-- Peach Link Voices:			theluigidude2007
 - MM HUD Textures:			GhostlyDark
 - MM Button Positions:			GhostlyDark
 - MM Pause Screen:			Garo-Mastah & CM
@@ -64,7 +61,13 @@
 - Various offsets:			Chez Cousteau
 - Admentus (Scripting and Maintaince of all Options)
 
---- Custom Link Models ---
+--- Link Voices ---
+- MM Link Voices:			Korey Cryderman (ported) & GhostlyDark (corrected)
+- Melee Zelda Link Voices:		Thiago Alcântara 6 & theluigidude2007
+- Amara Link Voices:			Amara & theluigidude2007
+- Peach Link Voices:			theluigidude2007
+
+--- Custom Male Models ---
 - Breath of the Wild (Adult):		Skilarbabcock (www.youtube.com/user/skilarbabcock)
 - Dark Link (Adult):			CrookedPoe
 - Fierce Deity (Adult):			CrookedPoe
@@ -73,23 +76,22 @@
 - Majora's Mask (Adult):		Skilarbabcock (www.youtube.com/user/skilarbabcock)
 - Ocarina of Time 3D:			Skilarbabcock (www.youtube.com/user/skilarbabcock)
 - Twilight Princess:			Skilarbabcock (www.youtube.com/user/skilarbabcock)
-
---- Custom Male Models ---
 - Happy Mask Salesman:			Anubis-V1
 - Mega Man:				Megaman Legends
 
 --- Custom Female Models ---
+- Amara:				Amara & Karicyan
 - Aria the Demon:			AriaHiro64
 - Hatsune Miku - Link:			JanexLane
 - Hatsune Miku - Vocaloid:		JanexLane
-- Malon 3D:				Kimi-Stardust / Celestial Clarity / Karicyan
-- Malon Thicc:				Kimi-Stardust / Celestial Clarity / Karicyan
+- Malon 3D:				Karicyan
+- Malon Thicc:				Karicyan
 - Princess Ruto:			Unesag
 - Princess Zelda 3D:			Hailey
 - Princess Zelda ALttP (Child):		Unesag
 - Princess Zelda ALttP (Adult):		Lopieloo
 - Roll:					Psi-Hate
-- Saria:				Malon's Rose (www.youtube.com/c/MalonRose)
+- Saria:				Malon Rose (www.youtube.com/c/MalonRose)
 
 --- Quality Assurance ---
 - Translations:				GhostlyDark

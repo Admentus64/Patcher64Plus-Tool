@@ -24,8 +24,8 @@ Add-Type -AssemblyName 'System.Drawing'
 # Setup global variables
 
 $global:ScriptName = "Patcher64+ Tool"
-$global:VersionDate = "2021-04-27"
-$global:Version     = "v13.2.4"
+$global:VersionDate = "2021-05-01"
+$global:Version     = "v14.0.0"
 $global:SystemDate  = Get-Date -Format yyyy-MM-dd-HH-mm-ss
 
 $global:CommandType = $MyInvocation.MyCommand.CommandType.ToString()
@@ -34,11 +34,11 @@ $global:Definition  = $MyInvocation.MyCommand.Definition.ToString()
 $global:GameConsole = $global:GameType = $global:GamePatch = $global:CheckHashSum = $null
 $global:GameFiles = $global:Settings = @{}
 $global:IsWiiVC = $global:MissingFiles = $False
-$global:VCTitleLength = 40
 $global:Bootup = $global:GameIsSelected = $global:IsActiveGameField = $False
 $global:Last = $global:Fonts = @{}
 $global:FatalError = $global:WarningError = $False
 $global:ConsoleHistory = @()
+$global:DialogUpdateRateMS = 50
 
 
 
@@ -177,7 +177,7 @@ if (!(IsSet $Settings.Debug))  { $Settings.Debug = @{} }
 
 # Logging
 if (!$ExternalScript) { $global:TranscriptTime = $SystemDate }
-SetLogging ($Settings.Debug.Logging -eq $True)
+SetLogging ($Settings.Debug.Logging -ne $False)
 
 # Temp
 if ($Settings.Core.LocalTempFolder -eq $True)   { $Paths.Temp = $Paths.LocalTemp }
@@ -189,7 +189,7 @@ InitializeHiDPIMode
 $global:ColumnWidth = DPISize 180
 
 # Visual Style
-SetModernVisualStyle ($Settings.Core.ModernStyle -eq $True)
+SetModernVisualStyle ($Settings.Core.ModernStyle -ne $False)
 
 # Set paths to all the files stored in the script
 SetFileParameters
@@ -234,9 +234,11 @@ if (!$FatalError) {
     GetFilePaths         | Out-Null
 
     # Restore Last Custom Title and GameID
-    $CustomHeader.Title.Add_TextChanged({           if (IsChecked $CustomHeader.EnableHeader)   { $Settings["Core"]["CustomHeader.Title"]  = $this.Text } })
-    $CustomHeader.GameID.Add_TextChanged({          if (IsChecked $CustomHeader.EnableHeader)   { $Settings["Core"]["CustomHeader.GameID"] = $this.Text } })
-    $CustomHeader.Region.Add_SelectedIndexChanged({ if (IsChecked $CustomHeader.EnableRegion)   { $Settings["Core"]["CustomHeader.Region"] = $this.SelectedIndex } })
+    $CustomHeader.ROMTitle.Add_TextChanged({        if (IsChecked $CustomHeader.EnableHeader)   { $Settings["Core"]["CustomHeader.ROMTitle"]  = $this.Text } })
+    $CustomHeader.ROMGameID.Add_TextChanged({       if (IsChecked $CustomHeader.EnableHeader)   { $Settings["Core"]["CustomHeader.ROMGameID"] = $this.Text } })
+    $CustomHeader.VCTitle.Add_TextChanged({         if (IsChecked $CustomHeader.EnableHeader)   { $Settings["Core"]["CustomHeader.VCTitle"]   = $this.Text } })
+    $CustomHeader.VCGameID.Add_TextChanged({        if (IsChecked $CustomHeader.EnableHeader)   { $Settings["Core"]["CustomHeader.VCGameID"]  = $this.Text } })
+    $CustomHeader.Region.Add_SelectedIndexChanged({ if (IsChecked $CustomHeader.EnableRegion)   { $Settings["Core"]["CustomHeader.Region"]    = $this.SelectedIndex } })
     $CustomHeader.EnableHeader.Add_CheckedChanged({ RestoreCustomHeader })
     $CustomHeader.EnableRegion.Add_CheckedChanged({ RestoreCustomRegion })
     RestoreCustomHeader
@@ -249,7 +251,6 @@ if (!$FatalError) {
     ChangePatch       | Out-Null
     SetMainScreenSize | Out-Null
     SetVCPanel        | Out-Null
-    CheckVCOptions    | Out-Null
     ChangeGamesList
 
     # Active GUI events
@@ -264,8 +265,9 @@ if (!$FatalError) {
     Out-IniFile -FilePath $Files.settings -InputObject $Settings | Out-Null
     if ($GameType.save -gt 0) { Out-IniFile -FilePath (GetGameSettingsFile) -InputObject $GameSettings | Out-Null }
     RemovePath $Paths.Registry
-    [System.GC]::Collect() | Out-Null
     SetLogging $False
-    $global:ConsoleHistory = $null
+    $global:ConsoleHistory = $global:Redux = $global:Settings = $global:GeneralSettings = $global:MainDialog = $global:InputPaths = $global:Patches = $global:VC = $global:CustomHeader = $null
 }
+
+[System.GC]::Collect() | Out-Null
 Exit

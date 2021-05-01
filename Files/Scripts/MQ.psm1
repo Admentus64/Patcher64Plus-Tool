@@ -19,93 +19,93 @@ function PatchDungeonsOoTMQ() {
     # Inside the Deku Tree
     if ($dungeons -Contains "Inside the Deku Tree") { 
         UpdateStatusLabel "Patching MQ Dungeon: Inside the Deku Tree"
-        if (!(PatchDungeon -TableOffset "BB40" -Path "Master Quest\Inside the Deku Tree\"           -Length 12 -Scene "B71440")) { return }
-        PatchBytes -Offset ( Get24Bit ( (GetDecimal "BC7E00") + (GetDecimal "0") ) )                -Patch "Master Quest Chests\Inside the Deku Tree\mainmap_chests.bin"
-        PatchBytes -Offset ( Get24Bit ( (GetDecimal "BF40D0") + (GetDecimal "0") ) )                -Patch "Master Quest Chests\Inside the Deku Tree\minimap_chests.bin"
+        if (!(PatchDungeon -TableOffset "BB40" -Path "Master Quest\Inside the Deku Tree\"     -Length 12 -Scene "B71440")) { return }
+        PatchBytes -Offset ( Get24Bit ( (GetDecimal "BC7E00") + (GetDecimal "0") ) )          -Patch "Master Quest Chests\Inside the Deku Tree\mainmap_chests.bin"
+        PatchBytes -Offset ( Get24Bit ( (GetDecimal "BF40D0") + (GetDecimal "0") ) )          -Patch "Master Quest Chests\Inside the Deku Tree\minimap_chests.bin"
     }
 
     # Dodongo's Cavern
     if ($dungeons -Contains "Dodongo's Cavern") {
         UpdateStatusLabel "Patching MQ Dungeon: Dodongo's Cavern"
-        if (!(PatchDungeon -TableOffset "B320" -Path "Master Quest\Dodongo's Cavern\"               -Length 17 -Scene "B71454")) { return }
-        PatchBytes -Offset ( Get24Bit ( (GetDecimal "BC7E00") + (GetDecimal "99C") ) )              -Patch "Master Quest Chests\Dodongo's Cavern\mainmap_chests.bin"
-        PatchBytes -Offset ( Get24Bit ( (GetDecimal "BF40D0") + (GetDecimal "5CC") ) )              -Patch "Master Quest Chests\Dodongo's Cavern\minimap_chests.bin"
+        if (!(PatchDungeon -TableOffset "B320" -Path "Master Quest\Dodongo's Cavern\"         -Length 17 -Scene "B71454")) { return }
+        PatchBytes -Offset ( Get24Bit ( (GetDecimal "BC7E00") + (GetDecimal "99C") ) )        -Patch "Master Quest Chests\Dodongo's Cavern\mainmap_chests.bin"
+        PatchBytes -Offset ( Get24Bit ( (GetDecimal "BF40D0") + (GetDecimal "5CC") ) )        -Patch "Master Quest Chests\Dodongo's Cavern\minimap_chests.bin"
     }
 
     # Inside Jabu-Jabu's Belly
     if ($dungeons -Contains "Inside Jabu-Jabu's Belly") {
         UpdateStatusLabel "Patching MQ Dungeon: Inside Jabu-Jabu's Belly"
-        if (!(PatchDungeon -TableOffset "BF50" -Path "Master Quest\Inside Jabu-Jabu's Belly\"       -Length 16 -Scene "B71468")) { return }
-        PatchBytes -Offset ( Get24Bit ( (GetDecimal "BC7E00") + (GetDecimal "D74") ) )              -Patch "Master Quest Chests\Inside Jabu-Jabu's Belly\mainmap_chests.bin"
-        PatchBytes -Offset ( Get24Bit ( (GetDecimal "BF40D0") + (GetDecimal "E44") ) )              -Patch "Master Quest Chests\Inside Jabu-Jabu's Belly\minimap_chests.bin"
+        if (!(PatchDungeon -TableOffset "BF50" -Path "Master Quest\Inside Jabu-Jabu's Belly\" -Length 16 -Scene "B71468")) { return }
+        PatchBytes -Offset ( Get24Bit ( (GetDecimal "BC7E00") + (GetDecimal "D74") ) )        -Patch "Master Quest Chests\Inside Jabu-Jabu's Belly\mainmap_chests.bin"
+        PatchBytes -Offset ( Get24Bit ( (GetDecimal "BF40D0") + (GetDecimal "E44") ) )        -Patch "Master Quest Chests\Inside Jabu-Jabu's Belly\minimap_chests.bin"
     }
 
     # Forest Temple
     if ($dungeons -Contains "Forest Temple") {
         UpdateStatusLabel "Patching MQ Dungeon: Forest Temple"
-        if (!(PatchDungeon -TableOffset "B9C0" -Path "Master Quest\Forest Temple\"                  -Length 23 -Scene "B7147C")) { return }
-        PatchBytes -Offset ( Get24Bit ( (GetDecimal "BC7E00") + (GetDecimal "114C") ) )             -Patch "Master Quest Chests\Forest Temple\mainmap_chests.bin"
-        PatchBytes -Offset ( Get24Bit ( (GetDecimal "BF40D0") + (GetDecimal "15D8") ) )             -Patch "Master Quest Chests\Forest Temple\minimap_chests.bin"
+        if (!(PatchDungeon -TableOffset "B9C0" -Path "Master Quest\Forest Temple\"            -Length 23 -Scene "B7147C")) { return }
+        PatchBytes -Offset ( Get24Bit ( (GetDecimal "BC7E00") + (GetDecimal "114C") ) )       -Patch "Master Quest Chests\Forest Temple\mainmap_chests.bin"
+        PatchBytes -Offset ( Get24Bit ( (GetDecimal "BF40D0") + (GetDecimal "15D8") ) )       -Patch "Master Quest Chests\Forest Temple\minimap_chests.bin"
     }
 
     # Fire Temple
     if ($dungeons -Contains "Fire Temple") {
         UpdateStatusLabel "Patching MQ Dungeon: Fire Temple"
-        if (!(PatchDungeon -TableOffset "B800" -Path "Master Quest\Fire Temple\"                    -Length 27 -Scene "B71490")) { return }
-        PatchBytes -Offset ( Get24Bit ( (GetDecimal "BC7E00") + (GetDecimal "18FC") ) )             -Patch "Master Quest Chests\Fire Temple\mainmap_chests.bin"
-        PatchBytes -Offset ( Get24Bit ( (GetDecimal "BF40D0") + (GetDecimal "21E0") ) )             -Patch "Master Quest Chests\Fire Temple\minimap_chests.bin"
+        if (!(PatchDungeon -TableOffset "B800" -Path "Master Quest\Fire Temple\"              -Length 27 -Scene "B71490")) { return }
+        PatchBytes -Offset ( Get24Bit ( (GetDecimal "BC7E00") + (GetDecimal "18FC") ) )       -Patch "Master Quest Chests\Fire Temple\mainmap_chests.bin"
+        PatchBytes -Offset ( Get24Bit ( (GetDecimal "BF40D0") + (GetDecimal "21E0") ) )       -Patch "Master Quest Chests\Fire Temple\minimap_chests.bin"
     }
 
     # Water Temple
     if ($dungeons -Contains "Water Temple") {
         UpdateStatusLabel "Patching MQ Dungeon: Water Temple"
-        if (!(PatchDungeon -TableOffset "BCA0" -Path "Master Quest\Water Temple\"                   -Length 23 -Scene "B714A4")) { return }
-        PatchBytes -Offset ( Get24Bit ( (GetDecimal "BC7E00") + (GetDecimal "2298") ) )             -Patch "Master Quest Chests\Water Temple\mainmap_chests.bin"
-        PatchBytes -Offset ( Get24Bit ( (GetDecimal "BF40D0") + (GetDecimal "32CC") ) )             -Patch "Master Quest Chests\Water Temple\minimap_chests.bin"
+        if (!(PatchDungeon -TableOffset "BCA0" -Path "Master Quest\Water Temple\"             -Length 23 -Scene "B714A4")) { return }
+        PatchBytes -Offset ( Get24Bit ( (GetDecimal "BC7E00") + (GetDecimal "2298") ) )       -Patch "Master Quest Chests\Water Temple\mainmap_chests.bin"
+        PatchBytes -Offset ( Get24Bit ( (GetDecimal "BF40D0") + (GetDecimal "32CC") ) )       -Patch "Master Quest Chests\Water Temple\minimap_chests.bin"
     }
 
     # Shadow Temple
     if ($dungeons -Contains "Shadow Temple") {
         UpdateStatusLabel "Patching MQ Dungeon: Shadow Temple"
-        if (!(PatchDungeon -TableOffset "C060" -Path "Master Quest\Shadow Temple\"                  -Length 23 -Scene "B714CC")) { return }
-        PatchBytes -Offset ( Get24Bit ( (GetDecimal "BC7E00") + (GetDecimal "31F8") ) )             -Patch "Master Quest Chests\Shadow Temple\mainmap_chests.bin"
-        PatchBytes -Offset ( Get24Bit ( (GetDecimal "BF40D0") + (GetDecimal "5518") ) )             -Patch "Master Quest Chests\Shadow Temple\minimap_chests.bin"
+        if (!(PatchDungeon -TableOffset "C060" -Path "Master Quest\Shadow Temple\"            -Length 23 -Scene "B714CC")) { return }
+        PatchBytes -Offset ( Get24Bit ( (GetDecimal "BC7E00") + (GetDecimal "31F8") ) )       -Patch "Master Quest Chests\Shadow Temple\mainmap_chests.bin"
+        PatchBytes -Offset ( Get24Bit ( (GetDecimal "BF40D0") + (GetDecimal "5518") ) )       -Patch "Master Quest Chests\Shadow Temple\minimap_chests.bin"
     }
     
     # Spirit Temple
     if ($dungeons -Contains "Spirit Temple") {
         UpdateStatusLabel "Patching MQ Dungeon: Spirit Temple"
-        if (!(PatchDungeon -TableOffset "C450" -Path "Master Quest\Spirit Temple\"                  -Length 29 -Scene "B714B8")) { return }
-        PatchBytes -Offset ( Get24Bit ( (GetDecimal "BC7E00") + (GetDecimal "2A48") ) )             -Patch "Master Quest Chests\Spirit Temple\mainmap_chests.bin"
-        PatchBytes -Offset ( Get24Bit ( (GetDecimal "BF40D0") + (GetDecimal "4664") ) )             -Patch "Master Quest Chests\Spirit Temple\minimap_chests.bin"
+        if (!(PatchDungeon -TableOffset "C450" -Path "Master Quest\Spirit Temple\"            -Length 29 -Scene "B714B8")) { return }
+        PatchBytes -Offset ( Get24Bit ( (GetDecimal "BC7E00") + (GetDecimal "2A48") ) )       -Patch "Master Quest Chests\Spirit Temple\mainmap_chests.bin"
+        PatchBytes -Offset ( Get24Bit ( (GetDecimal "BF40D0") + (GetDecimal "4664") ) )       -Patch "Master Quest Chests\Spirit Temple\minimap_chests.bin"
     }
 
     # Ice Cavern
     if ($dungeons -Contains "Ice Cavern") {
         UpdateStatusLabel "Patching MQ Dungeon: Ice Cavern"
-        if (!(PatchDungeon -TableOffset "C630" -Path "Master Quest\Ice Cavern\"                     -Length 12 -Scene "B714F4")) { return }
-        PatchBytes -Offset ( Get24Bit ( (GetDecimal "BC7E00") + (GetDecimal "3F6C") ) )             -Patch "Master Quest Chests\Ice Cavern\mainmap_chests.bin"
-        PatchBytes -Offset ( Get24Bit ( (GetDecimal "BF40D0") + (GetDecimal "6594") ) )             -Patch "Master Quest Chests\Ice Cavern\minimap_chests.bin"
+        if (!(PatchDungeon -TableOffset "C630" -Path "Master Quest\Ice Cavern\"               -Length 12 -Scene "B714F4")) { return }
+        PatchBytes -Offset ( Get24Bit ( (GetDecimal "BC7E00") + (GetDecimal "3F6C") ) )       -Patch "Master Quest Chests\Ice Cavern\mainmap_chests.bin"
+        PatchBytes -Offset ( Get24Bit ( (GetDecimal "BF40D0") + (GetDecimal "6594") ) )       -Patch "Master Quest Chests\Ice Cavern\minimap_chests.bin"
     }
 
     # Bottom of the Well
     if ($dungeons -Contains "Bottom of the Well") { 
         UpdateStatusLabel "Patching MQ Dungeon: Bottom of the Well"
-        if (!(PatchDungeon -TableOffset "CEA0" -Path "Master Quest\Bottom of the Well\"             -Length 7 -Scene "B714E0")) { return }
-        PatchBytes -Offset ( Get24Bit ( (GetDecimal "BC7E00") + (GetDecimal "39A8") ) )             -Patch "Master Quest Chests\Bottom of the Well\mainmap_chests.bin"
-        PatchBytes -Offset ( Get24Bit ( (GetDecimal "BF40D0") + (GetDecimal "6120") ) )             -Patch "Master Quest Chests\Bottom of the Well\minimap_chests.bin"
+        if (!(PatchDungeon -TableOffset "CEA0" -Path "Master Quest\Bottom of the Well\"       -Length 7 -Scene "B714E0")) { return }
+        PatchBytes -Offset ( Get24Bit ( (GetDecimal "BC7E00") + (GetDecimal "39A8") ) )       -Patch "Master Quest Chests\Bottom of the Well\mainmap_chests.bin"
+        PatchBytes -Offset ( Get24Bit ( (GetDecimal "BF40D0") + (GetDecimal "6120") ) )       -Patch "Master Quest Chests\Bottom of the Well\minimap_chests.bin"
     }
 
     # Gerudo Training Ground
     if ($dungeons -Contains "Gerudo Training Ground") {
         UpdateStatusLabel "Patching MQ Dungeon: Gerudo Training Ground"
-        if (!(PatchDungeon -TableOffset "C230" -Path "Master Quest\Gerudo Training Ground\"         -Length 11 -Scene "B7151C")) { return }
+        if (!(PatchDungeon -TableOffset "C230" -Path "Master Quest\Gerudo Training Ground\"   -Length 11 -Scene "B7151C")) { return }
     }
      
     # Inside Ganon's Castle
     if ($dungeons -Contains "Inside Ganon's Castle") {
         UpdateStatusLabel "Patching MQ Dungeon: Inside Ganon's Castle"
-        if (!(PatchDungeon -TableOffset "CCC0" -Path "Master Quest\Inside Ganon's Castle\"          -Length 20 -Scene "B71544")) { return }
+        if (!(PatchDungeon -TableOffset "CCC0" -Path "Master Quest\Inside Ganon's Castle\"    -Length 20 -Scene "B71544")) { return }
     }
 
 }

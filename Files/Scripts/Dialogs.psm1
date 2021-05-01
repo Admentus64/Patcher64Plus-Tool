@@ -16,16 +16,8 @@ function CreateOptionsDialog([int32]$Width, [int32]$Height, [Array]$Tabs=@()) {
     $OptionsLabel.AutoSize = $True
     $OptionsLabel.Left = ([Math]::Floor($OptionsDialog.Width / 2) - [Math]::Floor($OptionsLabel.Width / 2))
 
-    # Options
-    $global:Redux = @{}
-    $Redux.Box = @{}
-    $Redux.Groups = @()
+    # Reset Options
     $Redux.Panel = CreatePanel -Width $OptionsDialog.Width -Height $OptionsDialog.Height -AddTo $OptionsDialog
-
-    # Reset
-    $Last.Group = $Last.Panel = $Last.GroupName = $null
-    $Last.Half = $False
-
     CreateTabButtons $Tabs
 
     # Lock GUI if needed
@@ -38,27 +30,29 @@ function CreateOptionsDialog([int32]$Width, [int32]$Height, [Array]$Tabs=@()) {
 #==============================================================================================================================================================================================
 function CreateLanguageContent($Columns=[byte][Math]::Round($Redux.Panel.Width / $ColumnWidth)) {
     
+    $file = $Files.json.languages
+
     # Box + Panel
-    $Rows = [Math]::Ceiling($GamePatch.languages.length /  $Columns)
+    $Rows = [Math]::Ceiling($file.length / $Columns)
     CreateReduxGroup -Text "Languages" -Tag "Language" -Height $Rows
     $Last.Group.IsLanguage = $True
     CreateReduxPanel -Rows $Rows
 
-    if (IsSet -Elem $GamePatch.languages -MinLength 0) {
+    if (IsSet $file) {
         $Row = $Column = 0
-        for ($i=0; $i -lt $GamePatch.languages.length; $i++) {
+        for ($i=0; $i -lt $file.length; $i++) {
             if ($i % $Columns -ne 0) { $Column += 1 }
             else {
                 $Column = 0
                 $Row += 1
             }
-            if (IsSet $GamePatch.languages[$i].warning)   { $warning = ([string]::Format($GamePatch.languages[$i].warning, [Environment]::NewLine)) }
-            else                                          { $warning = $null }
-            $Redux.Language[$i] = CreateReduxRadioButton -Column ($Column+1) -Row $Row -Text $GamePatch.languages[$i].title -Info ("Play the game in " + $GamePatch.languages[$i].title) -Warning $warning -Name $GamePatch.languages[$i].title -Credits $GamePatch.languages[$i].credits -SaveTo "Translation"
+            if (IsSet $file[$i].warning)   { $warning = ([string]::Format($file[$i].warning, [Environment]::NewLine)) }
+            else                           { $warning = $null }
+            $Redux.Language[$i] = CreateReduxRadioButton -Column ($Column+1) -Row $Row -Text $file[$i].title -Info ("Play the game in " + $file[$i].title) -Warning $warning -Name $file[$i].title -Credits $file[$i].credits -SaveTo "Translation"
         }
     
         $HasDefault = $False
-        foreach ($i in 0..($GamePatch.languages.Length-1)) {
+        foreach ($i in 0..($file.Length-1)) {
             if ($Redux.Language[$i].Checked) {
                 $HasDefault = $True
                 break
@@ -123,7 +117,7 @@ function CreateCreditsDialog() {
     }
     else { $Credits.Buttons[0].BackColor = "DarkGray" }
 
-
+    
 
     # Support
     $SupportLabel  = CreateLabel -X (DPISize 10)         -Y (DPISize 10)                          -Width (DPISize 200) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("--- Support or visit me at ---")   -AddTo $Credits.Sections[3]
@@ -181,17 +175,30 @@ function CreateCreditsDialog() {
     $Shadow2Label.ForeColor = $Female2Label.ForeColor = $Skilar2Label.ForeColor = $Malon2Label.ForeColor = $Luigi2Label.ForeColor = "Blue"
 
 
-
+    
     # Hash
-    $HashSumROMLabel          = CreateLabel -X (DPISize 10) -Y (DPISize 20) -Width (DPISize 120) -Height (DPISize 15) -Font $Fonts.SmallBold -Text "ROM Hashsum:" -AddTo $Credits.Sections[4]
-    $global:HashSumROMTextBox = CreateTextBox -X $HashSumROMLabel.Right -Y ($HashSumROMLabel.Top - (DPISize 3)) -Width ($Credits.Sections[4].Width - $HashSumROMLabel.Width - (DPISize 100))  -Height (DPISize 50) -AddTo $Credits.Sections[4]
-    $HashSumROMTextBox.ReadOnly = $True
+    $global:VerificationInfo = @{}
 
-    # Matching Hash
-    $MatchingROMLabel          = CreateLabel -X (DPISize 10) -Y ($HashSumROMTextBox.Bottom + (DPISize 10)) -Width (DPISize 120) -Height (DPISize 15) -Font $Fonts.SmallBold -Text "Current ROM:" -AddTo $Credits.Sections[4]
-    $global:MatchingROMTextBox = CreateTextBox -X $MatchingROMLabel.Right -Y ($MatchingROMLabel.Top - (DPISize 3)) -Width ($Credits.Sections[4].Width - $MatchingROMLabel.Width - (DPISize 100)) -Height (DPISize 50) -Text "No ROM Selected" -AddTo $Credits.Sections[4]
-    $MatchingROMTextBox.ReadOnly = $True
+    $VerificationInfo.HashText              = CreateLabel -X (DPISize 10) -Y (DPISize 20) -Width (DPISize 120) -Height (DPISize 15) -Font $Fonts.SmallBold -Text "ROM Hashsum:" -AddTo $Credits.Sections[4]
+    $VerificationInfo.HashField             = CreateTextBox -X $VerificationInfo.HashText.Right -Y ($VerificationInfo.HashText.Top - (DPISize 3)) -Width ($Credits.Sections[4].Width - $VerificationInfo.HashText.Width - (DPISize 100))  -Height (DPISize 50) -AddTo $Credits.Sections[4]
+    $VerificationInfo.HashField.ReadOnly    = $True
 
+    $VerificationInfo.GameText              = CreateLabel -X (DPISize 10) -Y ($VerificationInfo.HashField.Bottom + (DPISize 10)) -Width (DPISize 120) -Height (DPISize 15) -Font $Fonts.SmallBold -Text "Current Game:" -AddTo $Credits.Sections[4]
+    $VerificationInfo.GameField             = CreateTextBox -X $VerificationInfo.GameText.Right -Y ($VerificationInfo.GameText.Top - (DPISize 3)) -Width ($Credits.Sections[4].Width - $VerificationInfo.GameText.Width - (DPISize 100)) -Height (DPISize 50) -Text "No ROM Selected" -AddTo $Credits.Sections[4]
+    $VerificationInfo.GameField.ReadOnly    = $True
+
+    $VerificationInfo.RegionText            = CreateLabel -X (DPISize 10) -Y ($VerificationInfo.GameField.Bottom + (DPISize 10)) -Width (DPISize 120) -Height (DPISize 15) -Font $Fonts.SmallBold -Text "Current Region:" -AddTo $Credits.Sections[4]
+    $VerificationInfo.RegionField           = CreateTextBox -X $VerificationInfo.RegionText.Right -Y ($VerificationInfo.RegionText.Top - (DPISize 3)) -Width ($Credits.Sections[4].Width - $VerificationInfo.RegionText.Width - (DPISize 100)) -Height (DPISize 50) -Text "No ROM Selected" -AddTo $Credits.Sections[4]
+    $VerificationInfo.RegionField.ReadOnly  = $True
+
+    $VerificationInfo.RevText               = CreateLabel -X (DPISize 10) -Y ($VerificationInfo.RegionField.Bottom + (DPISize 10)) -Width (DPISize 120) -Height (DPISize 15) -Font $Fonts.SmallBold -Text "Current Revision:" -AddTo $Credits.Sections[4]
+    $VerificationInfo.RevField              = CreateTextBox -X $VerificationInfo.RevText.Right -Y ($VerificationInfo.RevText.Top - (DPISize 3)) -Width ($Credits.Sections[4].Width - $VerificationInfo.RevText.Width - (DPISize 100)) -Height (DPISize 50) -Text "No ROM Selected" -AddTo $Credits.Sections[4]
+    $VerificationInfo.RevField.ReadOnly     = $True
+    
+    $VerificationInfo.SupportText           = CreateLabel -X (DPISize 10) -Y ($VerificationInfo.RevField.Bottom + (DPISize 10)) -Width (DPISize 120) -Height (DPISize 15) -Font $Fonts.SmallBold -Text "Supported ROM:" -AddTo $Credits.Sections[4]
+    $VerificationInfo.SupportField          = CreateTextBox -X $VerificationInfo.SupportText.Right -Y ($VerificationInfo.SupportText.Top - (DPISize 3)) -Width ($Credits.Sections[4].Width - $VerificationInfo.SupportText.Width - (DPISize 100)) -Height (DPISize 50) -Text "No ROM Selected" -AddTo $Credits.Sections[4]
+    $VerificationInfo.SupportField.ReadOnly = $True
+    
 }
 
 
@@ -200,11 +207,11 @@ function CreateCreditsDialog() {
 function CreateSettingsDialog() {
     
     # Create Dialog
-    $global:SettingsDialog = CreateDialog -Width (DPISize 560) -Height (DPISize 705) -Icon $Files.icon.settings
+    $global:SettingsDialog = CreateDialog -Width (DPISize 560) -Height (DPISize 730) -Icon $Files.icon.settings
     $CloseButton = CreateButton -X ($SettingsDialog.Width / 2 - (DPISize 40)) -Y ($SettingsDialog.Height - (DPISize 90)) -Width (DPISize 80) -Height (DPISize 35) -Text "Close" -AddTo $SettingsDialog
     $CloseButton.Add_Click({ $SettingsDialog.Hide() })
 
-    # Create the version number and script name label.
+    # Create the version number and script name label
     $InfoLabel = CreateLabel -X ($SettingsDialog.Width / 2 - $String.Width - (DPISize 100)) -Y (DPISize 10) -Width (DPISize 200) -Height (DPISize 15) -Font $Fonts.SmallBold -Text ($ScriptName + " " + $Version + " (" + $VersionDate + ")") -AddTo $SettingsDialog
 
     $global:GeneralSettings = @{}
@@ -220,14 +227,15 @@ function CreateSettingsDialog() {
     $GeneralSettings.EnableSounds        = CreateSettingsCheckbox -Name "EnableSounds"     -Column 3 -Row 2 -Text "Enable Sound Effects"    -Checked $True                            -Info "Enable the use of sound effects, for example when patching is concluded"
 
     # Advanced Settings
-    $GeneralSettings.Box                 = CreateReduxGroup -Y ($GeneralSettings.Box.Bottom + (DPISize 10)) -IsGame $False -Height 2 -AddTo $SettingsDialog -Text "Advanced Settings"
-    $GeneralSettings.IgnoreChecksum      = CreateSettingsCheckbox -Name "IgnoreChecksum"   -Column 1 -Row 1 -Text "Ignore Input Checksum" -IsDebug -Info "Do not check the checksum of a ROM or WAD and patch it regardless`nDowngrade is no longer forced anymore if the checksum is different than the supported revision`nThis option also skips the maximum ROM size verification"
-    $GeneralSettings.KeepLogo            = CreateSettingsCheckbox -Name "KeepLogo"         -Column 2 -Row 1 -Text "Keep Logo"             -IsDebug -Info "Keep the vanilla title logo instead of the Master Quest title logo"
+    $GeneralSettings.Box                 = CreateReduxGroup -Y ($GeneralSettings.Box.Bottom + (DPISize 10)) -IsGame $False -Height 3 -AddTo $SettingsDialog -Text "Advanced Settings"
+    $GeneralSettings.IgnoreChecksum      = CreateSettingsCheckbox -Name "IgnoreChecksum"   -Column 1 -Row 1 -Text "Ignore Input Checksum" -IsDebug -Info "Do not check the checksum of a ROM or WAD and patch it regardless`nDowngrade is no longer forced anymore if the checksum is different than the supported revision`nThis option also skips the maximum ROM size verification`n`nDO NOT REPORT ANY BUGS IF THIS OPTION IS ENABLED!"
+    $GeneralSettings.KeepLogo            = CreateSettingsCheckbox -Name "KeepLogo"         -Column 2 -Row 1 -Text "Keep Logo"             -IsDebug -Info "Keep the vanilla title logo instead of the Master Quest title logo if Master Quest is being patched in"
     $GeneralSettings.ForceExtract        = CreateSettingsCheckbox -Name "ForceExtract"     -Column 3 -Row 1 -Text "Force Extract"         -IsDebug -Info "Always extract game data required for patching even if it was already extracted on a previous run"
     $Info = "Changes how the widescreen option behaves for Ocarina of Time and Majora's Mask in Native (N64) Mode`n`n--- Ocarina of Time ---`nApply an experimental widescreen patch instead`n`n--- Majora's Mask ---`nOnly apply the 16:9 textures`nUse GLideN64 " + '"adjust to fit"' + " option for 16:9 widescreen"
     $GeneralSettings.ChangeWidescreen    = CreateSettingsCheckbox -Name "ChangeWidescreen" -Column 1 -Row 2 -Text "Change Widescreen"     -IsDebug -Info $Info
-    $GeneralSettings.LiteGUI             = CreateSettingsCheckbox -Name "LiteGUI"          -Column 2 -Row 2 -Text "Lite Options GUI"      -IsDebug -Info "Only display and allow options which are highly compatible, such as with the Randomizer for Ocarina of Time"
+    $GeneralSettings.LiteGUI             = CreateSettingsCheckbox -Name "LiteGUI"          -Column 2 -Row 2 -Text "Lite Options GUI"      -IsDebug -Info "Only display and allow options which are highly compatible, such as with the Randomizer for Ocarina of Time and Majora's Mask"
     $GeneralSettings.LocalTempFolder     = CreateSettingsCheckbox -Name "LocalTempFolder"  -Column 3 -Row 2 -Text "Use Local Temp Folder" -Checked $True -Info "Store all temporary and extracted files within the local Patcher64+ Tool folder`nIf unchecked the temporary and extracted files are kept in the Patcher64+ Tool folder in %AppData%"
+    $GeneralSettings.ForceOptions        = CreateSettingsCheckbox -Name "ForceOptions"     -Column 1 -Row 3 -Text "Force Show Options"    -IsDebug -Info ("Always show the " + '"Additional Options"' + " checkbox if it can be supported`n`nDO NOT REPORT ANY BUGS IF THIS OPTION IS ENABLED!")
 
     # Debug Settings
     $GeneralSettings.Box                 = CreateReduxGroup -Y ($GeneralSettings.Box.Bottom + (DPISize 10)) -IsGame $False -Height 3 -AddTo $SettingsDialog -Text "Debug Settings"
@@ -248,7 +256,7 @@ function CreateSettingsDialog() {
     $GeneralSettings.NoConversion        = CreateSettingsCheckbox -Name "NoConversion"     -Column 3 -Row 1 -Text "No Conversion"         -IsDebug -Info "Do not attempt to convert the ROM to a proper format"
     $GeneralSettings.NoCRCChange         = CreateSettingsCheckbox -Name "NoCRCChange"      -Column 1 -Row 2 -Text "No CRC Change"         -IsDebug -Info "Do not change the CRC of the ROM when patching is concluded"
     $GeneralSettings.NoCompression       = CreateSettingsCheckbox -Name "NoCompression"    -Column 2 -Row 2 -Text "No Compression"        -IsDebug -Info "Do not attempt to compress the ROM back again when patching is concluded"
-    $GeneralSettings.AltDecompress       = CreateSettingsCheckbox -Name "AltDecompress"    -Column 3 -Row 2 -Text "Switch Decompressor"   -IsDebug -Info "Use Decompress.exe instead of ndec.exe for decompressing Nintendo 64 titles"
+    $GeneralSettings.AltDecompress       = CreateSettingsCheckbox -Name "AltDecompress"    -Column 3 -Row 2 -Text "Switch Decompressor"   -IsDebug -Info "Use Decompress.exe instead of ndec.exe for decompressing Nintendo 64 titles`n`nDO NOT REPORT ANY BUGS IF THIS OPTION IS ENABLED!"
 
     # Settings preset
     $GeneralSettings.Box                 = CreateReduxGroup -Y ($GeneralSettings.Box.Bottom + (DPISize 10)) -IsGame $False -Height 2 -AddTo $SettingsDialog -Text "Settings Presets"
@@ -271,12 +279,16 @@ function CreateSettingsDialog() {
 
     $GeneralSettings.DoubleClick.Add_CheckStateChanged(     { TogglePowerShellOpenWithClicks $this.Checked } )
     $GeneralSettings.ModernStyle.Add_CheckStateChanged(     { SetModernVisualStyle $this.checked } )
+    $GeneralSettings.ForceOptions.Add_CheckStateChanged(    { DisablePatches } )
     $GeneralSettings.EnableSounds.Add_CheckStateChanged(    { LoadSoundEffects $this.checked } )
     $GeneralSettings.Logging.Add_CheckStateChanged(         { SetLogging $this.checked } )
     $GeneralSettings.ResetButton.Add_Click(                 { ResetTool } )
     $GeneralSettings.ResetGameButton.Add_Click(             { ResetGame } )
     $GeneralSettings.CleanupButton.Add_Click(               { CleanupFiles } )
     
+
+    
+
     # Local Temp Folder
     $GeneralSettings.LocalTempFolder.Add_CheckStateChanged( {
         if ($this.checked) { $Paths.Temp = $Paths.LocalTemp } else { $Paths.Temp = $Paths.AppDataTemp }
@@ -370,6 +382,7 @@ function ResetGame() {
             elseif ($form.GetType() -eq [System.Windows.Forms.RadioButton])   { $form.Checked       = $form.Default }
             elseif ($form.GetType() -eq [System.Windows.Forms.ComboBox])      { $form.SelectedIndex = $form.Default }
             elseif ($form.GetType() -eq [System.Windows.Forms.TextBox])       { $form.Text          = $form.Default }
+            elseif ($form.GetType() -eq [System.Windows.Forms.TrackBar])      { $form.Value         = $form.Default }
 
             elseif ($form.GetType() -eq [System.Windows.Forms.Panel]) {
                 foreach ($subform in $form.controls) {
@@ -377,6 +390,7 @@ function ResetGame() {
                     elseif ($subform.GetType() -eq [System.Windows.Forms.RadioButton])   { $subform.Checked       = $subform.Default }
                     elseif ($subform.GetType() -eq [System.Windows.Forms.ComboBox])      { $subform.SelectedIndex = $subform.Default }
                     elseif ($subform.GetType() -eq [System.Windows.Forms.TextBox])       { $subform.Text          = $subform.Default }
+                    elseif ($subform.GetType() -eq [System.Windows.Forms.TrackBar])      { $subform.Value         = $subform.Default }
                 }
             }
         }
@@ -410,7 +424,7 @@ function CleanupFiles() {
 
 
 #==============================================================================================================================================================================================
-function CreateSettingsCheckbox([byte]$Column=1, [byte]$Row=1, [boolean]$Checked, [switch]$Disable, [string]$Text="", [object]$ToolTip, [string]$Info="", [string]$Name, [switch]$IsDebug) {
+function CreateSettingsCheckbox([byte]$Column=1, [byte]$Row=1, [boolean]$Checked, [switch]$Disable, [string]$Text="", [string]$Info="", [string]$Name, [switch]$IsDebug) {
     
     $Checkbox = CreateCheckbox -X (($Column-1) * (DPISize 165) + (DPISize 15)) -Y ($Row * (DPISize 30) - (DPISize 10)) -Checked $Checked -Disable $Disable -IsRadio $False -Info $Info -IsDebug $IsDebug -Name $Name
     if (IsSet $Text) {  
@@ -429,7 +443,7 @@ function CreateSettingsCheckbox([byte]$Column=1, [byte]$Row=1, [boolean]$Checked
 
 
 #==============================================================================================================================================================================================
-function CreateSettingsRadioField([byte]$Column=1, [byte]$Row=1, [boolean]$Checked, [switch]$Disable, [string]$Text="", [object]$ToolTip, [string]$Info="", [string]$Name, [int16]$SaveAs, [int16]$Max, [string]$NameTextbox, [switch]$IsDebug) {
+function CreateSettingsRadioField([byte]$Column=1, [byte]$Row=1, [boolean]$Checked, [switch]$Disable, [string]$Text="", [string]$Info="", [string]$Name, [int16]$SaveAs, [int16]$Max, [string]$NameTextbox, [switch]$IsDebug) {
     
     $Checkbox = CreateCheckbox -X (($Column-1) * (DPISize 165) + (DPISize 15)) -Y ($Row * (DPISize 30) - (DPISize 10)) -Checked $Checked -Disable $Disable -IsRadio $True -Info $Info -IsDebug $IsDebug -Name $Name -SaveAs $SaveAs -SaveTo $Name -Max $Max
     $Textbox  = CreateTextBox  -X $Checkbox.Right -Y $Checkbox.Top -Width (DPISize 130) -Height (DPISize 15) -Length 20 -Text $Text -IsDebug $IsDebug -Name $NameTextbox

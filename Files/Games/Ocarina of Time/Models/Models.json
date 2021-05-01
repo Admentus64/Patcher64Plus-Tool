@@ -1,0 +1,103 @@
+[ {
+	"name"		: "Original",
+	"child_author"	: "Nintendo",
+	"adult_author"	: "Nintendo"
+}, {
+	"name"		: "Breath of the Wild",
+	"adult_author"	: "Skilarbabcock",
+	"adult_url"	: "https://www.youtube.com/user/skilarbabcock"
+}, {
+	"name"		: "Dark Link",
+	"adult_author"	: "Nintendo",
+	"adult_porter"	: "CrookedPoe"
+}, {
+	"name"		: "Fierce Deity",
+	"adult_author"	: "Nintendo",
+	"adult_porter"	: "CrookedPoe"
+}, {
+	"name"		: "Majora's Mask",
+	"child_author"	: "Nintendo",
+	"child_porter"	: "The3DDude",
+	"adult_author"	: "Skilarbabcock",
+	"adult_url"	: "https://www.youtube.com/user/skilarbabcock"
+}, {
+	"name"		: "Twilight Princess",
+	"child_author"	: "Skilarbabcock",
+	"adult_author"	: "Skilarbabcock",
+	"adult_url"	: "https://www.youtube.com/user/skilarbabcock",
+	"child_url"	: "https://www.youtube.com/user/skilarbabcock"
+}, {
+	"name"		: "Ocarina of Time 3D",
+	"child_author"	: "Skilarbabcock",
+	"adult_author"	: "Skilarbabcock",
+	"child_url"	: "https://www.youtube.com/user/skilarbabcock",
+	"adult_url"	: "https://www.youtube.com/user/skilarbabcock",
+	"deku_shield"	: 0,
+	"mirror_shield"	: 0
+}, {
+	"name"		: "Link's Awakening",
+	"adult_author"	: "Skilarbabcock",
+	"adult_url"	: "https://www.youtube.com/user/skilarbabcock",
+	"deku_shield"	: 0,
+	"mirror_shield"	: 0
+}, {
+	"name"		: "Happy Mask Salesman",
+	"child_author"	: "Anubis-V1",
+	"adult_author"	: "Anubis-V1"
+}, {
+	"name"		: "Mega Man",
+	"child_author"	: "Psi-Hate",
+	"adult_author"	: "Psi-Hate"
+}, {
+	"name"		: "Amara (Demo)",
+	"adult_author"	: "Amara & Karicyan",
+	"adult_wip"	: 2
+}, {
+	"name"		: "Aria the Demon",
+	"child_author"	: "AriaHiro64",
+	"adult_author"	: "AriaHiro64"
+}, {
+	"name"		: "Hatsune Miku - Link",
+	"child_author"	: "JanexLane",
+	"adult_author"	: "JanexLane"
+}, {
+	"name"		: "Hatsune Miku - Vocaloid",
+	"child_author"	: "JanexLane",
+	"adult_author"	: "JanexLane",
+	"deku_shield"	: 0,
+	"mirror_shield"	: 0
+}, {
+	"name"		: "Malon 3D",
+	"child_author"	: "Karicyan",
+	"adult_author"	: "Karicyan"
+}, {
+	"name"		: "Malon Thicc",
+	"child_author"	: "Karicyan",
+	"adult_author"	: "Karicyan"
+}, {
+	"name"		: "Princess Ruto",
+	"child_author"	: "Unesag",
+	"adult_author"	: "Unesag",
+	"deku_shield"	: 0,
+	"mirror_shield"	: 0
+}, {
+	"name"		: "Princess Zelda 3D",
+	"child_author"	: "Hailey",
+	"adult_author"	: "Hailey"
+}, {
+	"name"		: "Princess Zelda ALttP",
+	"child_author"	: "Unesag",
+	"adult_author"	: "Lopieloo"
+}, {
+	"name"		: "Roll",
+	"child_author"	: "Psi-Hate",
+	"adult_author"	: "Psi-Hate"
+}, {
+	"name"		: "Saria",
+	"child_author"	: "Malon Rose",
+	"adult_author"	: "Malon Rose",
+	"child_url"	: "https://youtube.com/c/MalonRose",
+	"adult_url"	: "https://youtube.com/c/MalonRose",
+	"deku_shield"	: 0,
+	"mirror_shield"	: 0
+} ]

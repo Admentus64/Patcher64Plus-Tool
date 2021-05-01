@@ -1,7 +1,7 @@
 function ChangeBytes([string]$File, [string]$Offset, [object]$Values, [uint16]$Interval=1, [switch]$Add, [switch]$Subtract, [switch]$IsDec, [switch]$Overflow) {
     
     if ($Values -is [System.String])   { $Values = $Values -split ' ' }
-    if (IsSet $File)                   { $ByteArrayGame = [IO.File]::ReadAllBytes($File) }
+    if (IsSet $File)                   { $ByteArrayGame = [System.IO.File]::ReadAllBytes($File) }
     if ($Interval -lt 1)               { $Interval = 1 }
 
     # Offset
@@ -49,7 +49,7 @@ function ChangeBytes([string]$File, [string]$Offset, [object]$Values, [uint16]$I
     }
 
     # Write to File
-    if (IsSet $File) { [io.file]::WriteAllBytes($File, $ByteArrayGame) }
+    if (IsSet $File) { [System.IO.File]::WriteAllBytes($File, $ByteArrayGame) }
     return $True
 
 }

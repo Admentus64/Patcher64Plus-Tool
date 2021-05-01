@@ -1,25 +1,21 @@
 [ {
 	"title"		: "Super Mario 64",
-	"console"	: "Both",
 	"options"	: 1,
 	"allow_extend"	: 1,
 	"extend"	: 64,
 	"tooltip"	: "The regular Super Mario 64 experience{0}With support for additional options{0}- Supported: Rev 0 (US)"
 }, {
 	"title"		: "Super Mario 64 (Lowpoly Promo Mario Model)",
-	"console"	: "Both",
 	"patch"		: "Compressed\\promo_mario.bps",
 	"output"	: "_promo_mario_patched",
 	"tooltip"	: "Replaces Mario's model with the promo model for Mario{0}- Supported: Rev 0 (US)"
 }, {
 	"title"		: "Super Mario 64 (Lowpoly Promo Luigi Model)",
-	"console"	: "Both",
 	"patch"		: "Compressed\\promo_luigi.bps",
 	"output"	: "_promo_luigi_patched",
 	"tooltip"	: "Replaces Mario's model with the promo model for Luigi{0}- Supported: Rev 0 (US)"
 }, {
 	"title"		: "Super Mario 64: Multiplayer (v1.4.2)",
-	"console"	: "Both",
 	"command"	: "Patch Boot DOL",
 	"expand_memory"	: -1,
 	"options"	: 1,

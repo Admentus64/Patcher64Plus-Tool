@@ -1,15 +1,11 @@
 function SetWiiVCMode([boolean]$Enable) {
     
     if ( ($Enable -eq $IsWiiVC) -and $GameIsSelected) { return }
-
     $global:IsWiiVC = $Enable
-    if ($IsWiiVC)   { $CustomHeader.Title.MaxLength = (DPISize $VCTitleLength) }
-    else            { $CustomHeader.Title.MaxLength = $GameConsole.rom_title_length }
 
     EnablePatchButtons (IsSet $GamePath)
     SetModeLabel
     ChangePatchPanel
-    RunCustomTitleSyntax
 
 }
 
@@ -74,7 +70,7 @@ function ChangeGamesList() {
 
     # Reset
     $CurrentGameComboBox.Items.Clear()
-    if (!$IsWiiVC) { $CustomHeader.Title.MaxLength = $GameConsole.rom_title_length }
+    if (!$IsWiiVC) { $CustomHeader.ROMTitle.MaxLength = $GameConsole.rom_title_length }
 
     $Items = @()
     foreach ($item in $Files.json.games) {
@@ -118,7 +114,7 @@ function ChangePatchPanel() {
     # Set combobox for patches
     $Items = @()
     foreach ($item in $Files.json.patches) {
-        if ( ($IsWiiVC -and $item.console -eq "Wii VC") -or (!$IsWiiVC -and $item.console -eq "Native") -or ($item.console -eq "Both") ) {
+        if ( ($IsWiiVC -and $item.console -eq "Wii VC") -or (!$IsWiiVC -and $item.console -eq "Native") -or ($item.console -eq "Both") -or !(IsSet $item.console) ) {
             $Items += $item.title
             if (!(IsSet $FirstItem)) { $FirstItem = $item }
         }
@@ -150,20 +146,15 @@ function ChangePatchPanel() {
 function SetMainScreenSize() {
     
     # Show / Hide Custom Header
-    if ($IsWiiVC) {
-        $CustomHeader.TitleLabel.Text = "Channel Title:"
-        $CustomHeader.Group.Text = " Custom Channel Title and GameID "
-    }
-    else {
-        $CustomHeader.TitleLabel.Text = "Game Title:"
-        $CustomHeader.Group.Text = " Custom Game Title and GameID "
-    }
+    if ($IsWiiVC)   { $CustomHeader.Group.Text = " Custom Channel Title and GameID " }
+    else            { $CustomHeader.Group.Text = " Custom Game Title and GameID " }
 
     # Custom Header Panel Visibility
-    $CustomHeader.Panel.Visible  = ($GameConsole.rom_title -gt 0) -or ($GameConsole.rom_gameID -gt 0)  -or $IsWiiVC
-    $CustomHeader.Title.Visible  = $CustomHeader.TitleLabel.Visible  = ($GameConsole.rom_title -gt 0)  -or $IsWiiVC
-    $CustomHeader.GameID.Visible = $CustomHeader.GameIDLabel.Visible = ($GameConsole.rom_gameID -eq 1) -or $IsWiiVC
-    $CustomHeader.Region.Visible = $CustomHeader.RegionLabel.Visible = $CustomHeader.EnableRegion.Visible = $CustomHeader.EnableRegionLabel.Visible = ($GameConsole.rom_gameID -eq 2)
+    $CustomHeader.Panel.Visible     = ($GameConsole.rom_title -gt 0) -or ($GameConsole.rom_gameID -gt 0)  -or $IsWiiVC
+    $CustomHeader.ROMTitle.Visible  = $CustomHeader.ROMTitleLabel.Visible  = ($GameConsole.rom_title -gt 0)  -and !$IsWiiVC
+    $CustomHeader.ROMGameID.Visible = $CustomHeader.ROMGameIDLabel.Visible = ($GameConsole.rom_gameID -eq 1) -and !$IsWiiVC
+    $CustomHeader.VCTitle.Visible   = $CustomHeader.VCTitleLabel.Visible   = $CustomHeader.VCGameID.Visible     = $CustomHeader.VCGameIDLabel.Visible     = $IsWiiVC
+    $CustomHeader.Region.Visible    = $CustomHeader.RegionLabel.Visible    = $CustomHeader.EnableRegion.Visible = $CustomHeader.EnableRegionLabel.Visible = ($GameConsole.rom_gameID -eq 2)
     $InputPaths.InjectPanel.Visible = $IsWiiVC
     $VC.Panel.Visible = $IsWiiVC
 
@@ -179,12 +170,10 @@ function SetMainScreenSize() {
     if (IsSet $GamePath)   { $CurrentGamePanel.Location = New-Object System.Drawing.Size((DPISize 10), ($InputPaths.PatchPanel.Bottom + (DPISize 5))) }
     else                   { $CurrentGamePanel.Location = New-Object System.Drawing.Size((DPISize 10), ($InputPaths.GamePanel.Bottom  + (DPISize 5))) }
     $CustomHeader.Panel.Location = New-Object System.Drawing.Size((DPISize 10), ($CurrentGamePanel.Bottom + (DPISize 5)))
-
+    
     # Set VC Panel Size
-    if ($GameConsole.options_vc -eq 0)                                                                                                         { $VC.Panel.Height = $VC.Group.Height = (DPISize 70) }
-    elseif ($GameType.patches_vc -gt 1)                                                                                                        { $VC.Panel.Height = $VC.Group.Height = (DPISize 105) }
-    elseif ($GameType.patches_vc -gt 0 -or $GameConsole.t64 -eq 1 -or $GameConsole.expand_memory -eq 1 -or $GameConsole.remove_filter -eq 1)   { $VC.Panel.Height = $VC.Group.Height = (DPISize 90) }
-    else                                                                                                                                       { $VC.Panel.Height = $VC.Group.Height = (DPISize 70) }
+    if ($GameConsole.t64 -eq 1 -or $GameConsole.expand_memory -eq 1 -or $GameConsole.remove_filter -eq 1 -or (IsSet $Files.json.controls) )   { $VC.Panel.Height = $VC.Group.Height = (DPISize 90) }
+    else                                                                                                                                      { $VC.Panel.Height = $VC.Group.Height = (DPISize 70) }
 
     # Arrange Panels
     if ($IsWiiVC) {
@@ -231,28 +220,39 @@ function ChangeGameMode() {
         }
     }
 
-    $Script = ($Paths.Scripts + "\Options\" + $GameType.mode + ".psm1")
-    if (TestFile $Script) {
-        Import-Module -Name $Script -Global
-        (Get-Command -Module $GameType.mode) | % { Export-ModuleMember $_ }
-    }
+    # Reset Options
+    $global:Redux = @{}
+    $Redux.Box = @{}
+    $Redux.Groups = @()
+    $Last.Group = $Last.Panel = $Last.GroupName = $null
+    $Last.Half = $False
 
-    $GameFiles.Base         = $Paths.Games + "\" + $GameType.mode
-    $GameFiles.Binaries     = $GameFiles.Base + "\Binaries"
-    $GameFiles.Export       = $GameFiles.Base + "\Export"
-    $GameFiles.Compressed   = $GameFiles.Base + "\Compressed"
-    $GameFiles.Decompressed = $GameFiles.Base + "\Decompressed"
-    $GameFiles.Downgrade    = $GameFiles.Base + "\Downgrade"
-    $GameFiles.Textures     = $GameFiles.Base + "\Textures"
-    $GameFiles.Previews     = $GameFiles.Base + "\Previews"
+    $GameFiles.base         = $Paths.Games + "\" + $GameType.mode
+    $GameFiles.binaries     = $GameFiles.Base + "\Binaries"
+    $GameFiles.export       = $GameFiles.Base + "\Export"
+    $GameFiles.compressed   = $GameFiles.Base + "\Compressed"
+    $GameFiles.decompressed = $GameFiles.Base + "\Decompressed"
+    $GameFiles.languages    = $GameFiles.Base + "\Languages"
+    $GameFiles.models       = $GameFiles.Base + "\Models"
+    $GameFiles.downgrade    = $GameFiles.Base + "\Downgrade"
+    $GameFiles.textures     = $GameFiles.Base + "\Textures"
     $GameFiles.info         = $GameFiles.Base + "\Info.txt"
-    $GameFiles.json         = $GameFiles.Base + "\Patches.json"
+    $GameFiles.patches      = $GameFiles.Base + "\Patches.json"
+    $GameFiles.controls     = $GameFiles.Base + "\Controls.json"
+    $GameFiles.script       = ($Paths.Scripts + "\Options\" + $GameType.mode + ".psm1")
 
+    if (TestFile $GameFiles.script) { Import-Module -Name $GameFiles.script -Global } #(Get-Command -Module $GameType.mode) | % { Export-ModuleMember $_ }
     $global:GameSettings = GetSettings (GetGameSettingsFile)
 
-    # JSON
-    if (IsSet $GameType.patches)                           { $Files.json.patches = SetJSONFile $GameFiles.json } else { $Files.json.patches = $null }
-    if (TestFile ($GameFiles.previews + "\Models.json"))   { $Files.json.models  = SetJSONFile ($GameFiles.previews + "\Models.json") } else { $Files.json.models = $null }
+    # JSON Files
+    if (IsSet $GameType.patches)                               { $Files.json.patches   = SetJSONFile $GameFiles.patches }                           else { $Files.json.patches   = $null }
+    if (TestFile ($GameFiles.languages + "\Languages.json"))   { $Files.json.languages = SetJSONFile ($GameFiles.languages + "\Languages.json") }   else { $Files.json.languages = $null }
+    if (TestFile ($GameFiles.models + "\Models.json"))         { $Files.json.models    = SetJSONFile ($GameFiles.models + "\Models.json") }         else { $Files.json.models    = $null }
+    if (TestFile $GameFiles.controls)                          {
+        $Files.json.controls  = SetJSONFile $GameFiles.controls
+        if ($IsWiiVC) { CreateVCRemapDialog } # Create VC remap settings
+    }
+    else { $Files.json.controls  = $null }
 
     # Info
     if (TestFile $GameFiles.info)       { AddTextFileToTextbox -TextBox $Credits.Sections[0] -File $GameFiles.info }
@@ -283,7 +283,7 @@ function ChangePatch() {
     
     foreach ($item in $Files.json.patches) {
         if ($item.title -eq $Patches.ComboBox.Text) {
-            if ( ($IsWiiVC -and $item.console -eq "Wii VC") -or (!$IsWiiVC -and $item.console -eq "Native") -or ($item.console -eq "Both") ) {
+            if ( ($IsWiiVC -and $item.console -eq "Wii VC") -or (!$IsWiiVC -and $item.console -eq "Native") -or ($item.console -eq "Both") -or !(IsSet $item.console) ) {
                 $global:GamePatch = $item
                 $PatchToolTip.SetToolTip($Patches.Button, ([string]::Format($item.tooltip, [Environment]::NewLine)))
                 GetHeader
@@ -304,22 +304,14 @@ function SetVCPanel() {
     
     # Reset VC panel visibility
     foreach ($item in $VC.Group.Controls) { EnableElem -Elem $item -Active $False -Hide }
-    EnableElem -Elem @($VC.ActionsLabel, $VC.PatchVCButton, $VC.ExtractROMButton) -Active $True -Hide
-    CheckVCOptions
-
+    EnableElem -Elem @($VC.ActionsLabel, $VC.ExtractROMButton) -Active $True -Hide
+    
     # Enable VC panel visiblity
-    if ($GameConsole.options_vc -gt 0) {
-        if ($GameConsole.t64 -eq 1 -or $GameConsole.expand_memory -eq 1 -or $GameConsole.remove_filter -eq 1) { $VC.CoreLabel.Visible = $True }
-        if ($GameConsole.t64 -eq 1)             { EnableElem -Elem @($VC.RemoveT64, $VC.RemoveT64Label)       -Active $True -Hide }
-        if ($GameConsole.expand_memory -eq 1)   { EnableElem -Elem @($VC.ExpandMemory, $VC.ExpandMemoryLabel) -Active $True -Hide }
-        if ($GameConsole.remove_filter -eq 1)   { EnableElem -Elem @($VC.RemoveFilter, $VC.RemoveFilterLabel) -Active $True -Hide }
-        if ($GameType.patches_vc -eq 1)         { EnableElem -Elem @($VC.RemapL, $VC.RemapLLabel)             -Active $True -Hide }
-        if ($GameType.patches_vc -ge 2) {
-            EnableElem -Elem @($VC.RemapDPad, $VC.RemapCDown, $VC.RemapZ, $VC.RemapDPadLabel, $VC.RemapCDownLabel, $VC.RemapZLabel) -Active $True -Hide
-            $VC.MinimapLabel.Show() 
-        }
-        if ($GameType.patches_vc -eq 3)         { EnableElem -Elem @($VC.LeaveDPadUp, $VC.LeaveDPadUpLabel)   -Active $True -Hide }
-    }
+    if ($GameConsole.t64 -eq 1)             { EnableElem -Elem @($VC.OptionsLabel, $VC.RemoveT64,     $VC.RemoveT64Label)                              -Active $True -Hide }
+    if ($GameConsole.expand_memory -eq 1)   { EnableElem -Elem @($VC.OptionsLabel, $VC.ExpandMemory,  $VC.ExpandMemoryLabel)                           -Active $True -Hide }
+    if ($GameConsole.remove_filter -eq 1)   { EnableElem -Elem @($VC.OptionsLabel, $VC.RemoveFilter,  $VC.RemoveFilterLabel)                           -Active $True -Hide }
+    if (IsSet $Files.json.controls)         { EnableElem -Elem @($VC.OptionsLabel, $VC.RemapControls, $VC.RemapControlsLabel, $VC.RemapControlsButton) -Active $True -Hide }
+    $VC.RemapControlsButton.Enabled = $VC.RemapControls.checked -and $VC.RemapControls.Active
 
 }
 
@@ -366,14 +358,10 @@ function EnablePatchButtons([boolean]$Enable) {
     
     # Set the status that we are ready to roll... Or not...
     if ($Enable)        { UpdateStatusLabel "Ready to patch!" }
-    else                { UpdateStatusLabel "Select your ROM or VC WAD file to continue." }
+    else                { UpdateStatusLabel "Select your ROM or Wii VC WAD file to continue." }
 
-    # Enable patcher buttons.
-    $Patches.Panel.Enabled = $Enable
-    $CustomHeader.Panel.Enabled = $Enable
-
-    # Enable ROM extract
-    $VC.ExtractROMButton.Enabled = $Enable
+    # Enable patcher buttons
+    $Patches.Panel.Enabled = $CustomHeader.Panel.Enabled = $VC.ExtractROMButton.Enabled = $Enable
 
 }
 
@@ -403,31 +391,33 @@ function GamePath_Finish([object]$TextBox, [string]$Path) {
     ChangeGamesList
     $InputPaths.ClearGameButton.Enabled = $True
     $InputPaths.PatchPanel.Visible = $True
-    $CustomHeader.Patch.Enabled = $CustomHeader.EnableHeader.checked -or $CustomHeader.EnableRegion.checked
+    $CustomHeader.EnableHeader.checked -or $CustomHeader.EnableRegion.checked
 
     # Calculate checksum if Native Mode
     if (!$IsWiiVC) {
         # Update hash
-        $HashSumROMTextBox.Text = (Get-FileHash -Algorithm MD5 -LiteralPath $GamePath).Hash
+        $VerificationInfo.HashField.Text = (Get-FileHash -Algorithm MD5 -LiteralPath $GamePath).Hash
 
         # Verify ROM
-        $MatchingROMTextBox.Text = "No Valid ROM Selected"
+        $VerificationInfo.GameField.Text = $VerificationInfo.RegionField.Text = $VerificationInfo.RevField.Text = $VerificationInfo.SupportField.Text = "No Valid ROM Selected"
         foreach ($item in $Files.json.games) {
-            if ($HashSumROMTextBox.Text -eq $item.hash) {
-                $MatchingROMTextBox.Text = $item.title + " (Rev 0)"
-                break
-            }
-            foreach ($subitem in $item.downgrade) {
-                if ($HashSumROMTextBox.Text -eq $subitem.hash) {
-                    $MatchingROMTextBox.Text = $item.title + " (" +  $subitem.rev + ")"
+            foreach ($subitem in $item.version) {
+                if ($VerificationInfo.HashField.Text -eq $subitem.hash) {
+                    $VerificationInfo.GameField.Text   = $item.title
+                    $VerificationInfo.RegionField.Text = $subitem.region
+                    $VerificationInfo.RevField.Text    = $subitem.rev
+                    if ($subitem.supported -ne 0) { $VerificationInfo.SupportField.Text = "This ROM is supported" } else { $VerificationInfo.SupportField.Text = "This ROM is NOT supported! Please use a different ROM that is supported!"}
                     break
                 }
             }
         }
     }
     else {
-        $HashSumROMTextBox.Text = ""
-        $MatchingROMTextBox.Text = "No checksums for WAD files"
+        $VerificationInfo.HashField.Text    = ""
+        $VerificationInfo.GameField.Text    = "No validation for WAD files"
+        $VerificationInfo.RegionField.Text  = "No validation for WAD files"
+        $VerificationInfo.RevField.Text     = "No validation for WAD files"
+        $VerificationInfo.SupportField.Text = "No validation for WAD files"
     }
 
 }
@@ -467,43 +457,13 @@ function PatchPath_Finish([object]$TextBox, [string]$Path) {
 
 
 #==============================================================================================================================================================================================
-function GetHeader() {
+function IsDefault([object]$Elem, [switch]$Not, $Default) {
     
-    if (IsChecked $CustomHeader.EnableHeader) { return }
-
-    if ($IsWiiVC) {
-        if ( (IsSet $GamePatch.redux.vc_title) -and (IsChecked $Patches.Redux) )     { $CustomHeader.Title.Text  = $GamePatch.redux.vc_title }
-        elseif (IsSet $GamePatch.vc_title)                                           { $CustomHeader.Title.Text  = $GamePatch.vc_title }
-        elseif (IsSet $GameType.vc_title)                                            { $CustomHeader.Title.Text  = $GameType.vc_title }
-        elseif (!$CustomHeader.EnableHeader.Checked)                                 { $CustomHeader.Title.Text  = "" }
-
-        if ( (IsSet $GamePatch.redux.vc_gameID) -and (IsChecked $Patches.Redux) )    { $CustomHeader.GameID.Text = $GamePatch.redux.vc_gameID }
-        elseif (IsSet $GamePatch.vc_gameID)                                          { $CustomHeader.GameID.Text = $GamePatch.vc_gameID }
-        elseif (IsSet $GameType.vc_gameID)                                           { $CustomHeader.GameID.Text = $GameType.vc_gameID }
-        elseif (!$CustomHeader.EnableHeader.Checked)                                 { $CustomHeader.GameID.Text = "" }
-    }
-    else {
-        if ( (IsSet $GamePatch.redux.rom_title) -and (IsChecked $Patches.Redux) )    { $CustomHeader.Title.Text  = $GamePatch.redux.rom_title }
-        elseif (IsSet $GamePatch.rom_title)                                          { $CustomHeader.Title.Text  = $GamePatch.rom_title }
-        elseif (IsSet $GameType.rom_title)                                           { $CustomHeader.Title.Text  = $GameType.rom_title }
-        elseif (!$CustomHeader.EnableHeader.Checked)                                 { $CustomHeader.Title.Text  = "" }
-
-        if ( (IsSet $GamePatch.redux.rom_gameID) -and (IsChecked $Patches.Redux) )   { $CustomHeader.GameID.Text = $GamePatch.redux.rom_gameID }
-        elseif (IsSet $GamePatch.rom_gameID)                                         { $CustomHeader.GameID.Text = $GamePatch.rom_gameID }
-        elseif (IsSet $GameType.rom_gameID)                                          { $CustomHeader.GameID.Text = $GameType.rom_gameID }
-        elseif (!$CustomHeader.EnableHeader.Checked)                                 { $CustomHeader.GameID.Text = "" }
-    }
-
-}
-
-
-
-#==============================================================================================================================================================================================
-function GetRegion() {
-    
-    if     (IsSet $GamePatch.rom_region)           { $CustomHeader.Region.SelectedIndex = $GamePatch.rom_region }
-    elseif (IsSet $GameType.rom_region)            { $CustomHeader.Region.SelectedIndex = $GameType.rom_region }
-    elseif (!$CustomHeader.EnableRegion.Checked)   { $CustomHeader.Region.SelectedIndex = 1 }
+    if (!(IsSet $Elem))               { return $False }
+    if (!$Elem.Active)                { return $False }
+    if ($Elem.Default -eq $Default)   { return !$Not  }
+    if ($Elem.Default -ne $Default)   { return  $Not  }
+    return $False
 
 }
 
@@ -714,22 +674,66 @@ function GetFilePaths() {
         if (TestFile $Settings["Core"][$InputPaths.GameTextBox.Name]) {
             GamePath_Finish $InputPaths.GameTextBox -VarName $InputPaths.GameTextBox.Name -Path $Settings["Core"][$InputPaths.GameTextBox.Name]
         }
-        else { $InputPaths.GameTextBox.Text = "Select or drag and drop your ROM or VC WAD file..." }
+        else { $InputPaths.GameTextBox.Text = "Select your ROM or Wii VC WAD file..." }
     }
 
     if (IsSet $Settings["Core"][$InputPaths.InjectTextBox.Name]) {
         if (TestFile $Settings["Core"][$InputPaths.InjectTextBox.Name]) {
             InjectPath_Finish $InputPaths.InjectTextBox -VarName $InputPaths.InjectTextBox.Name -Path $Settings["Core"][$InputPaths.InjectTextBox.Name]
         }
-        else { $InputPaths.InjectTextBox.Text = "Select or drag and drop your NES, SNES or N64 ROM..." }
+        else { $InputPaths.InjectTextBox.Text = "Select your ROM for injection..." }
     }
 
     if (IsSet $Settings["Core"][$InputPaths.PatchTextBox.Name]) {
         if (TestFile $Settings["Core"][$InputPaths.PatchTextBox.Name]) {	
             PatchPath_Finish $InputPaths.PatchTextBox -VarName $InputPaths.PatchTextBox.Name -Path $Settings["Core"][$InputPaths.PatchTextBox.Name]
         }
-        else { $InputPaths.PatchTextBox.Text = "Select or drag and drop your BPS, IPS, Xdelta, VCDiff or PPF Patch File..." }
+        else { $InputPaths.PatchTextBox.Text = "Select your custom patch file..." }
     }
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function GetHeader() {
+    
+    if (IsChecked $CustomHeader.EnableHeader) { return }
+
+    # ROM Title
+    if ( (IsSet $GamePatch.redux.rom_title) -and (IsChecked $Patches.Redux) )    { $CustomHeader.ROMTitle.Text  = $GamePatch.redux.rom_title }
+    elseif (IsSet $GamePatch.rom_title)                                          { $CustomHeader.ROMTitle.Text  = $GamePatch.rom_title }
+    elseif (IsSet $GameType.rom_title)                                           { $CustomHeader.ROMTitle.Text  = $GameType.rom_title }
+    else                                                                         { $CustomHeader.ROMTitle.Text  = "" }
+
+    # ROM GameID
+    if ( (IsSet $GamePatch.redux.rom_gameID) -and (IsChecked $Patches.Redux) )   { $CustomHeader.ROMGameID.Text = $GamePatch.redux.rom_gameID }
+    elseif (IsSet $GamePatch.rom_gameID)                                         { $CustomHeader.ROMGameID.Text = $GamePatch.rom_gameID }
+    elseif (IsSet $GameType.rom_gameID)                                          { $CustomHeader.ROMGameID.Text = $GameType.rom_gameID }
+    else                                                                         { $CustomHeader.ROMGameID.Text = "" }
+
+    # VC Title
+    if ( (IsSet $GamePatch.redux.vc_title) -and (IsChecked $Patches.Redux) )     { $CustomHeader.VCTitle.Text   = $GamePatch.redux.vc_title }
+    elseif (IsSet $GamePatch.vc_title)                                           { $CustomHeader.VCTitle.Text   = $GamePatch.vc_title }
+    elseif (IsSet $GameType.vc_title)                                            { $CustomHeader.VCTitle.Text   = $GameType.vc_title }
+    else                                                                         { $CustomHeader.VCTitle.Text   = "" }
+
+    # VC GameID
+    if ( (IsSet $GamePatch.redux.vc_gameID) -and (IsChecked $Patches.Redux) )    { $CustomHeader.VCGameID.Text  = $GamePatch.redux.vc_gameID }
+    elseif (IsSet $GamePatch.vc_gameID)                                          { $CustomHeader.VCGameID.Text  = $GamePatch.vc_gameID }
+    elseif (IsSet $GameType.vc_gameID)                                           { $CustomHeader.VCGameID.Text  = $GameType.vc_gameID }
+    else                                                                         { $CustomHeader.VCGameID.Text  = "" }
+    
+}
+
+
+
+#==============================================================================================================================================================================================
+function GetRegion() {
+    
+    if     (IsSet $GamePatch.rom_region)           { $CustomHeader.Region.SelectedIndex = $GamePatch.rom_region }
+    elseif (IsSet $GameType.rom_region)            { $CustomHeader.Region.SelectedIndex = $GameType.rom_region }
+    elseif (!$CustomHeader.EnableRegion.Checked)   { $CustomHeader.Region.SelectedIndex = 1 }
 
 }
 
@@ -739,17 +743,14 @@ function GetFilePaths() {
 function RestoreCustomHeader() {
     
     if (IsChecked $CustomHeader.EnableHeader) {
-        if (IsSet $Settings["Core"]["CustomHeader.Title"]) {
-            $CustomHeader.Title.Text  = $Settings["Core"]["CustomHeader.Title"]
-        }
-        if (IsSet $Settings["Core"]["CustomHeader.GameID"]) {
-            $CustomHeader.GameID.Text = $Settings["Core"]["CustomHeader.GameID"]
-        }
+        if (IsSet $Settings["Core"]["CustomHeader.ROMTitle"])    { $CustomHeader.ROMTitle.Text  = $Settings["Core"]["CustomHeader.ROMTitle"] }
+        if (IsSet $Settings["Core"]["CustomHeader.ROMGameID"])   { $CustomHeader.ROMGameID.Text = $Settings["Core"]["CustomHeader.ROMGameID"] }
+        if (IsSet $Settings["Core"]["CustomHeader.VCTitle"])     { $CustomHeader.VCTitle.Text   = $Settings["Core"]["CustomHeader.VCTitle"] }
+        if (IsSet $Settings["Core"]["CustomHeader.VCGameID"])    { $CustomHeader.VCGameID.Text  = $Settings["Core"]["CustomHeader.VCGameID"] }
     }
     else { GetHeader }
 
-    $CustomHeader.Title.Enabled = $CustomHeader.GameID.Enabled = $CustomHeader.EnableHeader.Checked
-    $CustomHeader.Patch.Enabled = ( (IsSet -Elem GamePath) -and ($CustomHeader.EnableHeader.Checked -or $CustomHeader.EnableRegion.Checked) )
+    $CustomHeader.ROMTitle.Enabled = $CustomHeader.ROMGameID.Enabled = $CustomHeader.VCTitle.Enabled = $CustomHeader.VCGameID.Enabled = $CustomHeader.EnableHeader.Checked
 
 }
 
@@ -766,7 +767,6 @@ function RestoreCustomRegion() {
     else { GetRegion }
 
     $CustomHeader.Region.Enabled = $CustomHeader.EnableRegion.Checked
-    $CustomHeader.Patch.Enabled = ( (IsSet -Elem GamePath) -and ($CustomHeader.EnableHeader.Checked -or $CustomHeader.EnableRegion.Checked) )
 
 }
 
@@ -775,8 +775,8 @@ function RestoreCustomRegion() {
 #==============================================================================================================================================================================================
 function StrLike([string]$Str, [string]$Val, [switch]$Not) {
     
-    if     (!$Not -and $str.ToLower() -like "*"    + $val + "*")   { return $True }
-    elseif ( $Not -and $str.ToLower() -notlike "*" + $val + "*")   { return $True }
+    if     (!$Not -and $str.ToLower() -like "*"    + $val.ToLower() + "*")   { return $True }
+    elseif ( $Not -and $str.ToLower() -notlike "*" + $val.ToLower() + "*")   { return $True }
     return $False
 
 }
@@ -786,9 +786,9 @@ function StrLike([string]$Str, [string]$Val, [switch]$Not) {
 #==============================================================================================================================================================================================
 function StrStarts([string]$Str, [string]$Val, [switch]$Not) {
     
-    if ($str -eq $null -or $str -eq "")                              { return $False }
-    if     (!$Not -and  $str.ToLower().StartsWith($val.toLower()))   { return $True }
-    elseif ( $Not -and !$str.ToLower().StartsWith($val.toLower()))   { return $True }
+    if ($Str -eq $null -or $Str -eq "")                              { return $False }
+    if     (!$Not -and  $Str.ToLower().StartsWith($Val.ToLower()))   { return $True }
+    elseif ( $Not -and !$Str.ToLower().StartsWith($Val.ToLower()))   { return $True }
     return $False
 
 }
@@ -1050,6 +1050,42 @@ function IsRestrictedFolder([string]$Path) {
 
 
 
+#==================================================================================================================================================================================================================================================================
+function StartJobLoop([string]$Name, [string]$Program = '', [switch]$Silent=$False) {
+    
+    if (!$Silent) { Write-Host ('--- Job Loop Started (' + $Program + ')') }
+
+    RunJobLoop -Name $Name -Silent:$Silent
+
+    Stop-Job -Name $Name
+    Remove-Job -Name $Name
+
+    if (!$Silent) { Write-Host "--- Job Loop Ended" }
+
+}
+
+
+
+#==================================================================================================================================================================================================================================================================
+function RunJobLoop([string]$Name, [switch]$Silent=$False) {
+
+    $JobStatus = (Get-Job -Name $Name).State
+
+    while ($JobStatus -ne 'Completed') {
+        Start-Sleep -m $DialogUpdateRateMS
+        $JobStatus = (Get-Job -Name $Name).State
+
+        if (!$Silent) { Write-Host "<< Job Loop Iteration >>" }
+
+        $JobFeedback = (Receive-Job -Name $Name)
+
+        [Windows.Forms.Application]::DoEvents()
+    }
+
+}
+
+
+
 #==============================================================================================================================================================================================
 function GetCommand([string]$Command) { return (Get-Command $Command -errorAction SilentlyContinue) }
 
@@ -1075,8 +1111,7 @@ Export-ModuleMember -Function GamePath_Finish
 Export-ModuleMember -Function InjectPath_Finish
 Export-ModuleMember -Function PatchPath_Finish
 
-Export-ModuleMember -Function GetHeader
-Export-ModuleMember -Function GetRegion
+Export-ModuleMember -Function IsDefault
 Export-ModuleMember -Function IsChecked
 Export-ModuleMember -Function IsLanguage
 Export-ModuleMember -Function IsText
@@ -1086,13 +1121,18 @@ Export-ModuleMember -Function IsIndex
 Export-ModuleMember -Function IsColor
 Export-ModuleMember -Function IsDefaultColor
 Export-ModuleMember -Function IsSet
+
 Export-ModuleMember -Function CompareArray
 Export-ModuleMember -Function AddTextFileToTextbox
 Export-ModuleMember -Function StrLike
 Export-ModuleMember -Function StrStarts
 Export-ModuleMember -Function GetFilePaths
+
+Export-ModuleMember -Function GetHeader
+Export-ModuleMember -Function GetRegion
 Export-ModuleMember -Function RestoreCustomHeader
 Export-ModuleMember -Function RestoreCustomRegion
+
 Export-ModuleMember -Function EnableGUI
 Export-ModuleMember -Function EnableForm
 Export-ModuleMember -Function EnableElem
@@ -1113,3 +1153,6 @@ Export-ModuleMember -Function SetLogging
 Export-ModuleMember -Function SetBitmap
 Export-ModuleMember -Function IsRestrictedFolder
 Export-ModuleMember -Function GetCommand
+
+Export-ModuleMember -Function StartJobLoop
+Export-ModuleMember -Function RunJobLoop

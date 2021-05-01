@@ -8,18 +8,26 @@ function PatchOptions() {
 
     # MODELS #
 
-    if (IsChecked $Redux.Graphics.ListLinkModels) {
-        if (IsChecked $Redux.Graphics.MMChildLink) {
-            ApplyPatch -Patch "Decompressed\Models\mm_child.ppf"
-            $Text = $Redux.Graphics.LinkModelsPlus.Text.replace(" (default)", "")
-        }
-        else { $Text = $Redux.Graphics.LinkModels.Text.replace(" (default)", "") }
-        ApplyPatch -Patch ("Decompressed\Models\Link\" + $Text + ".ppf")
+    if (IsChecked $Redux.Graphics.ListChildMaleModels) {
+        $file = "\Child Male\" + $Redux.Graphics.ChildMaleModels.Text.replace(" (default)", "") + ".ppf"
+        if (TestFile ($GameFiles.models + $file)) { ApplyPatch -Patch ("Models" + $file) }
     }
-    elseif (IsChecked $Redux.Graphics.ListMaleModels)     { ApplyPatch -Patch ("Decompressed\Models\Male\"   + $Redux.Graphics.MaleModels.Text.replace(" (default)", "") + ".ppf") }
-    elseif (IsChecked $Redux.Graphics.ListFemaleModels)   { ApplyPatch -Patch ("Decompressed\Models\Female\" + $Redux.Graphics.FemaleModels.Text.replace(" (default)", "") + ".ppf") }
+    elseif (IsChecked $Redux.Graphics.ListChildFemaleModels) {
+        $file = "\Child Female\" + $Redux.Graphics.ChildFemaleModels.Text.replace(" (default)", "") + ".ppf"
+        if (TestFile ($GameFiles.models + $file)) { ApplyPatch -Patch ("Models" + $file) }
+    }
+    
+    if (IsChecked $Redux.Graphics.ListAdultMaleModels) {
+        $file = "\Adult Male\" + $Redux.Graphics.AdultMaleModels.Text.replace(" (default)", "") + ".ppf"
+        if (TestFile ($GameFiles.models + $file)) { ApplyPatch -Patch ("Models" + $file) }
+    }
+    elseif (IsChecked $Redux.Graphics.ListAdultFemaleModels) {
+        $file = "\Adult Female\" + $Redux.Graphics.AdultFemaleModels.Text.replace(" (default)", "") + ".ppf"
+        if (TestFile ($GameFiles.models + $file)) { ApplyPatch -Patch ("Models" + $file) }
+    }
 
-    if (IsChecked $Redux.Equipment.HideEquipment)         { ApplyPatch -Patch "Decompressed\hide_equipment.ppf" }
+    if (IsChecked $Redux.Graphics.FeminineAnimations)   { ApplyPatch -Patch "Decompressed\feminine_animations.ppf" }
+    if (IsChecked $Redux.Graphics.HideEquipment)        { ApplyPatch -Patch "Decompressed\hide_equipment.ppf" }
 
 
 
@@ -42,6 +50,21 @@ function ByteOptions() {
     
     # GAMEPLAY #
 
+    if (IsChecked $Redux.Gameplay.FasterBlockPushing) {
+        ChangeBytes -Offset "DD2B87" -Values "80"          # Block Speed
+        ChangeBytes -Offset "DD2D27" -Values "03"          # Block Delay
+        ChangeBytes -Offset "DD9683" -Values "80"          # Milk Crate Speed
+        ChangeBytes -Offset "DD981F" -Values "03"          # Milk Crate Delay
+        ChangeBytes -Offset "CE1BD0" -Values "40 80 00 00" # Amy Puzzle Speed
+        ChangeBytes -Offset "CE0F0F" -Values "03"          # Amy Puzzle Delay
+        ChangeBytes -Offset "C77CA8" -Values "40 80 00 00" # Fire Block Speed
+        ChangeBytes -Offset "C770C3" -Values "01"          # Fire Block Delay
+        ChangeBytes -Offset "CC5DBF" -Values "01"          # Forest Basement Puzzle Delay
+        ChangeBytes -Offset "DBCF73" -Values "01"          # spirit Cobra Mirror Delay
+        ChangeBytes -Offset "DBA233" -Values "19"          # Truth Spinner Speed
+        ChangeBytes -Offset "DBA3A7" -Values "00"          # Truth Spinner Delay
+    }
+
     if (IsChecked $Redux.Gameplay.EasierMinigames) {
         ChangeBytes -Offset "CC4024" -Values "00 00 00 00" # Dampe's Digging Game
 
@@ -59,21 +82,6 @@ function ByteOptions() {
         ChangeBytes -Offset "E2D440" -Values "24 19 00 00" # Fixed Bombchu Bowling item order
     }
 
-    if (IsChecked $Redux.Gameplay.FasterBlockPushing) {
-        ChangeBytes -Offset "DD2B87" -Values "80"          # Block Speed
-        ChangeBytes -Offset "DD2D27" -Values "03"          # Block Delay
-        ChangeBytes -Offset "DD9683" -Values "80"          # Milk Crate Speed
-        ChangeBytes -Offset "DD981F" -Values "03"          # Milk Crate Delay
-        ChangeBytes -Offset "CE1BD0" -Values "40 80 00 00" # Amy Puzzle Speed
-        ChangeBytes -Offset "CE0F0F" -Values "03"          # Amy Puzzle Delay
-        ChangeBytes -Offset "C77CA8" -Values "40 80 00 00" # Fire Block Speed
-        ChangeBytes -Offset "C770C3" -Values "01"          # Fire Block Delay
-        ChangeBytes -Offset "CC5DBF" -Values "01"          # Forest Basement Puzzle Delay
-        ChangeBytes -Offset "DBCF73" -Values "01"          # spirit Cobra Mirror Delay
-        ChangeBytes -Offset "DBA233" -Values "19"          # Truth Spinner Speed
-        ChangeBytes -Offset "DBA3A7" -Values "00"          # Truth Spinner Delay
-    }
-    
     if (IsChecked $Redux.Gameplay.Medallions)          { ChangeBytes -Offset "E2B454"  -Values "80 EA 00 A7 24 01 00 3F 31 4A 00 3F 00 00 00 00" }
     if (IsChecked $Redux.Gameplay.ReturnChild)         { ChangeBytes -Offset "CB6844"  -Values "35"; ChangeBytes -Offset "253C0E2" -Values "03" }
     if (IsChecked $Redux.Gameplay.FixGraves)           { ChangeBytes -Offset "202039D" -Values "20"; ChangeBytes -Offset "202043C" -Values "24" }
@@ -114,7 +122,7 @@ function ByteOptions() {
 
     if (IsChecked $Redux.Restore.CowNoseRing) { ChangeBytes -Offset "EF3E68" -Values "00 00" }
 
-
+    
 
     # OTHER #
 
@@ -132,7 +140,7 @@ function ByteOptions() {
     if (IsChecked $Redux.Other.InstantClaimCheck)    { ChangeBytes -Offset "ED4470" -Values "00 00 00 00"; ChangeBytes -Offset "ED4498" -Values "00 00 00 00" }
     if (IsChecked $Redux.Other.HideCredits)          { PatchBytes  -Offset "966000" -Patch "Message\credits.bin" }
     
-
+    
 
     # GRAPHICS #
 
@@ -179,10 +187,10 @@ function ByteOptions() {
         PatchBytes -Offset "F21810"  -Length "1000" -Texture -Patch "Widescreen\lens_of_truth.bin"
     }
 
-    if ( (IsIndex -Elem $Redux.Graphics.BlackBars -Index 2) -or (IsIndex -Elem $Redux.Graphics.BlackBars -Index 4) ) {
+    if ( (IsIndex -Elem $Redux.UI.BlackBars -Index 2) -or (IsIndex -Elem $Redux.UI.BlackBars -Index 4) ) {
         ChangeBytes -Offset "B0F680" -Values "00 00 00 00"
     }
-    if ( (IsIndex -Elem $Redux.Graphics.BlackBars -Index 3) -or (IsIndex -Elem $Redux.Graphics.BlackBars -Index 4) ) {
+    if ( (IsIndex -Elem $Redux.UI.BlackBars -Index 3) -or (IsIndex -Elem $Redux.UI.BlackBars -Index 4) ) {
         ChangeBytes -Offset "B0F5A4" -Values "00 00 00 00"
         ChangeBytes -Offset "B0F5D4" -Values "00 00 00 00"
         ChangeBytes -Offset "B0F5E4" -Values "00 00 00 00"
@@ -218,19 +226,23 @@ function ByteOptions() {
         # Z to L textures
         PatchBytes -Offset "844540"  -Texture -Patch "GameCube\l_pause_screen_button.bin"
         PatchBytes -Offset "92C200"  -Texture -Patch "GameCube\l_text_icon.bin"
-        if (IsSet $LanguagePatch.l_target)     { PatchBytes -Offset "1A35680" -Texture -Patch $LanguagePatch.l_target }
-        if (IsSet $LanguagePatch.l_target_jpn) { PatchBytes -Offset "1A0B300" -Texture -Patch $LanguagePatch.l_target_jpn }
+        if (TestFile ($GameFiles.textures + "\GameCube\l_targeting_" + $LanguagePatch.code + ".bin")) {
+            if ($LanguagePatch.l_target_jpn -eq 1)   { $offset = "1A0B300" }
+            else                                     { $offset = "1A35680" }
+            PatchBytes -Offset $offset -Texture -Patch ("GameCube\l_targeting_" + $LanguagePatch.code + ".bin")
+        }
     }
 
 
 
     # SOUNDS / VOICES #
-    if (IsIndex -Elem $Redux.Sounds.Voices -Not ) {
-        if (IsChecked $Redux.Restore.FireTemple)   { $Offset = "19D920" }
-        else                                       { $Offset = "18E1E0" }
-    }
-    if (IsText -Elem $Redux.Sounds.Voices -Compare "Majora's Mask")   { PatchBytes -Offset $Offset -Patch "Voices\majora.bin" }
-    if (IsText -Elem $Redux.Sounds.Voices -Compare "Feminine")        { PatchBytes -Offset $Offset -Patch "Voices\feminine.bin" }
+    if (IsChecked $Redux.Restore.FireTemple) { $offset = "1EF340" } else { $offset = "1DFC00" }
+    $file = "Voices Child\" + $Redux.Sounds.ChildVoices.Text.replace(" (default)", "") + ".bin"
+    if (TestFile ($GameFiles.binaries + "\" + $file)) { PatchBytes -Offset $offset -Patch ($file) }
+
+    if (IsChecked $Redux.Restore.FireTemple) { $offset = "19D920" } else { $offset = "18E1E0" }
+    $file = "Voices Adult\" + $Redux.Sounds.AdultVoices.Text.replace(" (default)", "") + ".bin"
+    if (TestFile ($GameFiles.binaries + "\" + $file)) { PatchBytes -Offset $offset -Patch ($file) }
 
     if (IsIndex -Elem $Redux.Sounds.Instrument -Not) {
         ChangeBytes -Offset "B53C7B" -Values ($Redux.Sounds.Instrument.SelectedIndex+1); ChangeBytes -Offset "B4BF6F" -Values ($Redux.Sounds.Instrument.SelectedIndex+1)
@@ -467,7 +479,7 @@ function ByteOptions() {
         } while ($Offset -gt 0)
     }
 
-
+    
 
     # MAGIC SPIN ATTACK COLORS #
 
@@ -554,20 +566,25 @@ function ByteOptions() {
 
     
     # EQUIPMENT #
-    
+
     if (IsChecked $Redux.Equipment.IronShield) {
         ChangeBytes -Offset "BD3C5B" -Values "00" # Fireproof
         if ($CustomModels.deku_shield -ne 0) {
-            $Offset = SearchBytes -Start "FBE000" -End "FEAF80" -Values "CC 99 E5 E5 DD A3 EE 2B DD A5 E6 29 DD A5 D4 DB"; PatchBytes -Offset $Offset  -Texture -Patch "Iron Shield\front.bin" # Vanilla: FC5E88
-            $Offset = SearchBytes -Start "FBE000" -End "FEAF80" -Values "DC 11 F5 17 F5 19 DC 57 D4 59 E4 DB E4 DB DC 97"; PatchBytes -Offset $Offset  -Texture -Patch "Iron Shield\back.bin"  # Vanilla: FC5688
+            $Offset = SearchBytes -Start "FBE000" -End "FEAF80" -Values "CC 99 E5 E5 DD A3 EE 2B DD A5 E6 29 DD A5 D4 DB"; PatchBytes -Offset $Offset -Texture -Patch "Iron Shield\front.bin" # Vanilla: FC5E88
+            $Offset = SearchBytes -Start "FBE000" -End "FEAF80" -Values "DC 11 F5 17 F5 19 DC 57 D4 59 E4 DB E4 DB DC 97"; PatchBytes -Offset $Offset -Texture -Patch "Iron Shield\back.bin"  # Vanilla: FC5688
             PatchBytes -Offset "7FB000" -Texture -Patch "Iron Shield\icon.bin"
-            if (IsSet $LanguagePatch.iron_shield) { PatchBytes -Offset "8AE400" -Texture -Patch $LanguagePatch.iron_shield }
+            if (TestFile $GameFiles.textures + "\Iron Shield\label_" + $LanguagePatch.code + ".bin") { PatchBytes -Offset "8AE400" -Texture -Patch ("Iron Shield\label_" + $LanguagePatch.code + ".bin") }
         }
     }
 
-    if (IsChecked $Redux.Equipment.UnsheathSword)                                               { ChangeBytes -Offset "BD04A0"  -Values "28 42 00 05 14 40 00 05 00 00 10 25" }
-    if ( (IsIndex $Redux.Equipment.HylianShield -Not) -and $CustomModels.hylian_shield -ne 0)   { PatchBytes -Offset "F03400" -Texture -Patch ("Hylian Shield\" + $Redux.Equipment.HylianShield.text + ".bin") }
+    if (IsIndex $Redux.Equipment.HylianShield -Not) {
+        PatchBytes -Offset "F03400" -Texture -Patch ("Hylian Shield\" + $Redux.Equipment.HylianShield.text + ".bin")
+        $Offset = SearchBytes -Start "FBE000" -End "FEAF80" -Values "BE 35 BE 77 C6 B9 CE FB D6 FD D7 3D DF 3F DF 7F"
+        if ($Offset -gt 0) { PatchBytes -Offset $Offset -Texture -Patch ("Hylian Shield\" + $Redux.Equipment.HylianShield.text + ".bin") }
+    }
 
+    if (IsChecked $Redux.Equipment.UnsheathSword) { ChangeBytes -Offset "BD04A0" -Values "28 42 00 05 14 40 00 05 00 00 10 25" }
+    
 
 
     # HITBOX #
@@ -1158,7 +1175,6 @@ function CreateTabMain() {
     }
     CreateReduxCheckBox     -Name "DistantZTargeting"           -Text "Distant Z-Targeting"    -Info "Allow to use Z-Targeting on enemies, objects and NPC's from any distance"                                      -Credits "Admentus"
     CreateReduxCheckBox     -Name "ManualJump"                  -Text "Manual Jump"            -Info "Press Z + A to do a Manual Jump instead of a Jump Attack`nPress B mid-air after jumping to do a Jump Attack"   -Credits "Admentus (ROM hack) & CloudModding (GameShark)"
-  # CreateReduxCheckBox     -Name "SwordBeamAttack"             -Text "Sword Beam Attack"      -Info "Charging the Spin Attack will launch a Sword Beam Attack instead`nYou can still execute the Quick Spin Attack" -Credits "fkualol"
     
     # RESTORE #
     CreateReduxGroup        -Tag  "Restore" -Text "Restore / Correct / Censor"
@@ -1225,9 +1241,7 @@ function CreateTabLanguage() {
     $Redux.Box.Text = CreateReduxGroup -Tag  "Text" -Text "Other English Options"
     CreateReduxCheckBox    -Name "PauseScreen" -Text "MM Pause Screen" -Info "Replaces the Pause Screen textures to be styled like Majora's Mask" -Credits "Garo-Mastah & CM"
 
-    for ($i=0; $i -lt $GamePatch.languages.Length; $i++) {
-        $Redux.Language[$i].Add_CheckedChanged({ UnlockLanguageContent })
-    }
+    foreach ($i in 0.. ($Files.json.languages.length-1)) { $Redux.Language[$i].Add_CheckedChanged({ UnlockLanguageContent }) }
     UnlockLanguageContent
 
 }
@@ -1245,14 +1259,14 @@ function UnlockLanguageContent() {
     EnableElem -Elem $Redux.Text.PauseScreen    -Active $Redux.Language[0].Checked
 
     # Set max text speed in each language
-    for ($i=0; $i -lt $GamePatch.languages.Length; $i++) {
+    foreach ($i in 0.. ($Files.json.languages.length-1)) {
         if ($Redux.Language[$i].checked) {
             EnableElem -Elem @($Redux.Text.Speed1x, $Redux.Text.Speed2x, $Redux.Text.Speed3x) -Active $True
-            if ($GamePatch.languages[$i].max_text_speed -lt 3) {
+            if ($Files.json.languages[$i].max_text_speed -lt 3) {
                 EnableElem -Elem $Redux.Text.Speed3x -Active $False
                 if ($Redux.Text.Speed3x.Checked) { $Redux.Text.Speed2x.checked = $True }
             }
-            if ($GamePatch.languages[$i].max_text_speed -lt 2) {
+            if ($Files.json.languages[$i].max_text_speed -lt 2) {
                 EnableElem -Elem @($Redux.Text.Speed1x, $Redux.Text.Speed2x) -Active $False
             }
         }
@@ -1283,41 +1297,48 @@ function CreateTabAudiovisual() {
         $Credits = "`nAspect Ratio Fix by Admentus`n16:9 backgrounds by GhostlyDark, ShadowOne333 & CYB3RTRON`nWidescreen Patch by gamemasterplc and corrected by GhostlyDark"
     }
 
-
-    CreateReduxCheckBox -Name "Widescreen"   -Text "16:9 Widescreen"        -Info $Info                                                                          -Credits $Credits
-    CreateReduxCheckBox -Name "ExtendedDraw" -Text "Extended Draw Distance" -Info "Increases the game's draw distance for objects`nDoes not work on all objects" -Credits "Admentus"
-    CreateReduxComboBox -Name "BlackBars"    -Text "No Black Bars" -Items @("Always enabled", "Disable for Z-Targeting only", "Disable for cutscenes only", "Always disabled") -Info "Removes the black bars shown on the top and bottom of the screen during Z-targeting and cutscenes" -Credits "Admentus"
-    
+    CreateReduxCheckBox -Name "Widescreen"         -Text "16:9 Widescreen"        -Info $Info                                                                                              -Credits $Credits
+    CreateReduxCheckBox -Name "ExtendedDraw"       -Text "Extended Draw Distance" -Info "Increases the game's draw distance for objects`nDoes not work on all objects"                     -Credits "Admentus"
+    CreateReduxCheckBox -Name "ForceHiresModel"    -Text "Force Hires Link Model" -Info "Always use Link's High Resolution Model when Link is too far away"                                -Credits "GhostlyDark"
+    CreateReduxCheckBox -Name "FeminineAnimations" -Text "Feminine Animations"    -Info "Use feminine animations for Link`nThis applies to both models`nIt works best with the Aria model" -Credits "GhostlyDark (ported) & AriaHiro64 (model)" -Column 4 -Row 2
+    CreateReduxCheckBox -Name "HideEquipment"      -Text "Hide Equipment"         -Info "Hide the equipment when it is sheathed"                                                           -Credits "XModxGodX"                                 -Column 4 -Row 3
 
 
     # MODELS #
-    CreateReduxPanel -Columns 4 -Rows 1 -Row 1
-    CreateReduxRadioButton -Name "OriginalModels"   -Max 4 -SaveTo "Models" -Column 1 -Row 1 -Text "Vanilla Models" -Checked -Info "Do not change the models for Link"
-    CreateReduxRadioButton -Name "ListLinkModels"   -Max 4 -SaveTo "Models" -Column 2 -Row 1 -Text "Link Models"             -Info "List all male model replacements styled after Link to play as"
-    CreateReduxRadioButton -Name "ListMaleModels"   -Max 4 -SaveTo "Models" -Column 3 -Row 1 -Text "Male Models"             -Info "List all male model replacements to play as"
-    CreateReduxRadioButton -Name "ListFemaleModels" -Max 4 -SaveTo "Models" -Column 4 -Row 1 -Text "Female Models"           -Info "List all female model replacements to play as"
-    CreateReduxCheckBox    -Name "MMChildLink"  -Column 3 -Row 3 -Text "MM Child Model" -Info "Include the MM Child Link Model"
-    CreateReduxCheckBox -Name "ForceHiresModel" -Column 4 -Row 3 -Text "Force Hires Link Model" -Info "Always use Link's High Resolution Model when Link is too far away" -Credits "GhostlyDark"
-
-    $Models = LoadModelsList "Link"   | Sort-Object
-    CreateReduxComboBox -Name "LinkModels"      -Column 1 -Row 3 -Text "Player Models" -Items $Models -Length 240 -Default ($Models.indexOf("Majora's Mask") + 1)       -Info "Replace the model(s) used for Link`nOptions include models styled after Link`nContains combined (Child + Adult) or individual (Adult) models"
-    $Models = LoadModelsList "Link+"  | Sort-Object
-    CreateReduxComboBox -Name "LinkModelsPlus"  -Column 1 -Row 3 -Text "Player Models" -Items $Models -Length 240 -Default ($Models.indexOf("Majora's Mask") + 1)       -Info "Replace the models used for Link`nOptions include models styled after Link`nAll options include the Majora's Mask Child Model"
-    $Models = LoadModelsList "Male"   | Sort-Object
-    CreateReduxComboBox -Name "MaleModels"      -Column 1 -Row 3 -Text "Player Models" -Items $Models -Length 240 -Default ($Models.indexOf("Mega Man") + 1)            -Info "Replace the models used for Link`nOptions include custom male models"
-    $Models = LoadModelsList "Female" | Sort-Object
-    CreateReduxComboBox -Name "FemaleModels"    -Column 1 -Row 3 -Text "Player Models" -Items $Models -Length 240 -Default ($Models.indexOf("Hatsune Miku - Link") + 1) -Info "Replace the models used for Link`nOptions include custom female models"
+    CreateReduxPanel -Columns 2 -Rows 1 -Row 1
+    CreateReduxRadioButton -Name "ListChildMaleModels"   -Max 2 -SaveTo "ChildModels" -Column 1 -Row 1 -Text "Male Child Models" -Checked -Info "List all male child model replacements to play as"
+    CreateReduxRadioButton -Name "ListChildFemaleModels" -Max 2 -SaveTo "ChildModels" -Column 2 -Row 1 -Text "Female Child Models"        -Info "List all female child model replacements to play as"
+    $Models = LoadModelsList -Category "Child Male"
+    CreateReduxComboBox -Name "ChildMaleModels"   -Column 2.9 -Row 2 -Items  (@("Original") + $Models) -Default "Original" -Info "Replace the child model used for Link`nOptions include custom Male models"
+    $Models = LoadModelsList -Category "Child Female"
+    CreateReduxComboBox -Name "ChildFemaleModels" -Column 2.9 -Row 2 -Items $Models -Default "Hatsune Miku - Link"         -Info "Replace the child model used for Link`nOptions include custom Female models"
+    
+    CreateReduxPanel -Columns 2 -Rows 1 -Row 2
+    CreateReduxRadioButton -Name "ListAdultMaleModels"   -Max 2 -SaveTo "AdultModels" -Column 1 -Row 1 -Text "Male Adult Models" -Checked -Info "List all male adult model replacements to play as"
+    CreateReduxRadioButton -Name "ListAdultFemaleModels" -Max 2 -SaveTo "AdultModels" -Column 2 -Row 1 -Text "Female Adult Models"        -Info "List all female adult model replacements to play as"
+    $Models = LoadModelsList -Category "Adult Male"
+    CreateReduxComboBox -Name "AdultMaleModels"   -Column 2.9 -Row 3 -Items (@("Original") + $Models) -Default "Original" -Info "Replace the adult model used for Link`nOptions include custom Male models"
+    $Models = LoadModelsList -Category "Adult Female"
+    CreateReduxComboBox -Name "AdultFemaleModels" -Column 2.9 -Row 3 -Items $Models -Default "Hatsune Miku - Link"        -Info "Replace the adult model used for Link`nOptions include custom Female models"
 
     
 
     # MODELS PREVIEW #
-    CreateReduxGroup -Tag "Graphics" -Text "Models Preview"
-    $Last.Group.Height = (DPISize 161)
-    $Redux.Graphics.ModelsPreview = New-Object Windows.Forms.PictureBox
-    $Redux.Graphics.ModelsPreview.Location = (DPISize (New-object System.Drawing.Size(5, 15)))
-    $Redux.Graphics.ModelsPreview.Width  = $Last.Group.Width - (DPISize 10)
-    $Redux.Graphics.ModelsPreview.Height = $Last.Group.Height - (DPISize 20)
-    $Last.Group.controls.add($Redux.Graphics.ModelsPreview)
+    CreateReduxGroup -Tag "Graphics" -Text "Model Previews"
+    $Last.Group.Height = (DPISize 192)
+
+    $Redux.Graphics.ModelsPreviewChild = New-Object Windows.Forms.PictureBox
+    $Redux.Graphics.ModelsPreviewChild.Location = (DPISize (New-object System.Drawing.Size(43, 15)))
+    $Redux.Graphics.ModelsPreviewChild.Width  = (DPISize 147)
+    $Redux.Graphics.ModelsPreviewChild.Height = $Last.Group.Height - (DPISize 20)
+    $Last.Group.controls.add($Redux.Graphics.ModelsPreviewChild)
+
+    $Redux.Graphics.ModelsPreviewAdult = New-Object Windows.Forms.PictureBox
+    $Redux.Graphics.ModelsPreviewAdult.Location = New-object System.Drawing.Size($Redux.Graphics.ModelsPreviewChild.Right, $Redux.Graphics.ModelsPreviewChild.Top)
+    $Redux.Graphics.ModelsPreviewAdult.Width  = $Redux.Graphics.ModelsPreviewChild.Width
+    $Redux.Graphics.ModelsPreviewAdult.Height = $Redux.Graphics.ModelsPreviewChild.Height
+    $Last.Group.controls.add($Redux.Graphics.ModelsPreviewAdult)
+
     $global:PreviewToolTip = CreateToolTip
     ChangeModelsSelection
     
@@ -1331,12 +1352,15 @@ function CreateTabAudiovisual() {
     CreateReduxCheckBox -Name "ButtonPositions"  -Text "MM Button Positions" -Info "Positions the A and B buttons like in Majora's Mask"                                      -Credits "Ported by GhostlyDark"
     CreateReduxCheckBox -Name "CenterNaviPrompt" -Text "Center Navi Prompt"  -Info 'Centers the "Navi" prompt shown in the C-Up button'                                       -Credits "Ported by GhostlyDark"
     CreateReduxCheckBox -Name "GCScheme"         -Text "GC Scheme"           -Info "Replace and change the textures, dialogue and text colors to match the GameCube's scheme" -Credits "Admentus, GhostlyDark & ShadowOne333" -Warning "Dialogue changes are only available for the English language"
+    CreateReduxComboBox -Name "BlackBars" -Column 1 -Row 2 -Text "No Black Bars" -Items @("Always enabled", "Disable for Z-Targeting only", "Disable for cutscenes only", "Always disabled") -Info "Removes the black bars shown on the top and bottom of the screen during Z-targeting and cutscenes" -Credits "Admentus"
+    
 
     # SOUNDS / VOICES #
     CreateReduxGroup    -Tag  "Sounds" -Text "Sounds / Voices"
-    CreateReduxComboBox -Name "Voices"         -Column 1 -Text "Link's Voice" -Items @("Original", "Majora's Mask", "Feminine")  -Info "1. Keep the original voices for Link`n2. Replace the voices for Link with those used in Majora's Mask`n2. Replace the voices for Link to sound feminine" -Credits "`nMajora's Mask: Ported by Korey Cryderman and corrected by GhostlyDark`nFeminine: theluigidude2007"
+    CreateReduxComboBox -Name "ChildVoices"    -Column 1 -Text "Child Voice" -Items @("Original") -FilePath ($GameFiles.binaries + "\Voices Child") -Default "Original" -Info "Replace the voice used for the Child Link Model" -Credits "`nMajora's Mask: Korey Cryderman (ported) & GhostlyDark (corrected)`nMelee Zelda: Thiago Alcântara 6 & theluigidude2007 (edits)`nAmara: Amara (ripping) & theluigidude2007 (edits)"
+    CreateReduxComboBox -Name "AdultVoices"    -Column 3 -Text "Adult Voice" -Items @("Original") -FilePath ($GameFiles.binaries + "\Voices Adult") -Default "Original" -Info "Replace the voice used for the Adult Link Model" -Credits "`nMajora's Mask: Korey Cryderman (ported) & GhostlyDark (corrected)`nMelee Zelda: Thiago Alcântara 6 & theluigidude2007 (edits)`nAmara: Amara (ripping) & theluigidude2007`nPeach: theluigidude2007"
     if ($Settings.Debug.LiteGUI -eq $False) {
-        CreateReduxComboBox -Name "Instrument" -Column 3 -Text "Instrument"   -Items @("Ocarina", "Female", "Voice", "Whistle Harp", "Grind-Organ", "Flute") -Info "Replace the sound used for playing the Ocarina of Time" -Credits "Ported from Rando"
+        CreateReduxComboBox -Name "Instrument" -Column 5 -Text "Instrument"   -Items @("Ocarina", "Female", "Voice", "Whistle Harp", "Grind-Organ", "Flute") -Info "Replace the sound used for playing the Ocarina of Time" -Credits "Ported from Rando"
     }
 
 
@@ -1523,9 +1547,8 @@ function CreateTabEquipment() {
     # EQUIPMENT #
     CreateReduxGroup    -Tag  "Equipment" -Text "Equipment Adjustments"
     CreateReduxCheckBox -Name "UnsheathSword"    -Text "Unsheath Sword"    -Info "The sword is unsheathed first before immediately swinging it" -Credits "Admentus"
-    CreateReduxCheckBox -Name "HideEquipment"    -Text "Hide Equipment"    -Info "Hide the equipment when it is sheathed"                       -Credits "XModxGodX"
-    CreateReduxCheckBox -Name "IronShield"       -Text "Iron Shield"       -Info "Replace the Deku Shield with the Iron Shield, which will not burn up anymore" -Warning "Some custom models do not support the new textures, but will still keep the fireproof shield" -Credits "Admentus (ported), ZombieBrainySnack (textures) & Three Pendants (Debug fireproof ROM patch)" -Link $Redux.Equipment.UpgradeEquipment
-    CreateReduxComboBox -Name "HylianShield"     -Text "Hylian Shield" -Column 3.6 -Length 140 -Items @("Hylian Shield") -FilePath ($GameFiles.Textures + "\Hylian Shield") -Info "Select an alternative for the appearence of the Hylian Shield" -Credits "Admentus (injects), GhostlyDark (injects) & sanguinetti (Beta / Red Shield textures)"
+    CreateReduxCheckBox -Name "IronShield"       -Text "Iron Shield"       -Info "Replace the Deku Shield with the Iron Shield, which will not burn up anymore" -Warning "Some custom models do not support the new textures, but will still keep the fireproof shield" -Credits "Admentus (ported), ZombieBrainySnack (textures) & Three Pendants (Debug fireproof ROM patch)"
+    CreateReduxComboBox -Name "HylianShield"     -Text "Hylian Shield" -Column 2.6 -Length 140 -Items @("Hylian Shield") -FilePath ($GameFiles.Textures + "\Hylian Shield") -Info "Select an alternative for the appearence of the Hylian Shield" -Credits "Admentus (injects), GhostlyDark (injects) & sanguinetti (Beta / Red Shield textures)"
 
     # HITBOX #
     CreateReduxGroup  -Tag  "Hitbox" -Text "Weapon Hitboxes" -Height 2.7
