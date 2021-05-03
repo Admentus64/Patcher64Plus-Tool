@@ -1,3 +1,7 @@
+v14.0.1
+- Fixed "Additional Options" panel not opening when "Force Show Options" is used
+- Fixed trying to patch in custom tunic icons when using "Randomized" or "Custom" for OoT
+
 v14.0.0
 - Added full VC remapping support for supported N64 VC titles, with presets
 - Added Brazilian Portuguese fan translation for MM
