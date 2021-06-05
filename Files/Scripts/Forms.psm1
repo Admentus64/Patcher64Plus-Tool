@@ -438,6 +438,7 @@ function CreateReduxButton([single]$Column=1, [single]$Row=1, [int16]$Width=150,
 #==============================================================================================================================================================================================
 function CreateReduxTextBox([single]$Column=$Last.Column, [single]$Row=$Last.Row, [byte]$Length=2, [string]$Value=0, [string]$Text, [string]$Info, [string]$Warning, [string]$Credits, [string]$Name, [string]$Tag, [object]$AddTo=$Last.Group) {
     
+    if (IsSet $Info) { $Info += "`nDefault value: " + $Value }
     if (IsSet $Warning) {
         if (IsSet $Info)   { $Info += ("`n[!] " + $Warning) }
         if (IsSet $Text)   { $Text += " [!]" }
@@ -557,8 +558,10 @@ function CreateReduxComboBox([single]$Column=$Last.Column, [single]$Row=$Last.Ro
     }
     else { $Width = 0 }
 
-    if (IsSet $FilePath)                                  { $Items = $Items + (Get-ChildItem $FilePath).BaseName }
-    if ($Items.Count -gt 0 -and $PostItems.Count -gt 0)   { $Items = $Items + $PostItems }
+    if (IsSet $FilePath) {
+        foreach ($item in Get-ChildItem $FilePath) { if ($item.extension -eq ".bin") { $Items += $item.BaseName } }
+    }
+    if ($Items.Count -gt 0 -and $PostItems.Count -gt 0) { $Items = $Items + $PostItems }
 
     if ($Items.Count -gt 0) {
         $Items = $Items | select -Unique

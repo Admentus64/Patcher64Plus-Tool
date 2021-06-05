@@ -73,7 +73,7 @@
 	"output"			: "_dawn_&_dusk_patched",
 	"tooltip"			: "A small-sized ROM hack in a completely new setting{0}- Supported: Rev 0 (US), Rev 1 (US) & Rev 2 (US)"
 }, {
-	"title"				: "The Legend of Zelda: Master of Time",
+	"title"				: "The Legend of Zelda: Master of Time (v1.0.9)",
 	"command"			: "Force Downgrade",
 	"vc_title"			: "Zelda: Master of Time",
 	"vc_gameID"			: "NAC3",

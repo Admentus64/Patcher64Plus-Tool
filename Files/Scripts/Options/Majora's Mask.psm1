@@ -30,12 +30,10 @@ function ByteOptions() {
     if (IsChecked $Redux.Gameplay.ZoraPhysics)         { PatchBytes  -Offset "65D000"  -Patch "zora_physics_fix.bin" }
     if (IsChecked $Redux.Gameplay.DistantZTargeting)   { ChangeBytes -Offset "B4E924"  -Values "00 00 00 00" }
     if (IsChecked $Redux.Gameplay.ManualJump)          { ChangeBytes -Offset "CB4008"  -Values "04 C1"; ChangeBytes -Offset "CB402B" -Values "01" }
-    if (IsChecked $Redux.Gameplay.SwordBeamAttack)     { ChangeBytes -Offset "CD73F0"  -Values "00 00"; ChangeBytes -Offset "CD73F4" -Values "00 00" }
     if (IsChecked $Redux.Gameplay.FrontflipAttack)     { ChangeBytes -Offset "1098721" -Values "0B";    PatchBytes  -Offset "75F1B0" -Patch "frontflip_jump_attack.bin" }
     if (IsChecked $Redux.Gameplay.FrontflipJump)       { ChangeBytes -Offset "1098E4D" -Values "23 34 D0" }
-    if (IsChecked $Redux.Gameplay.UnsheathSword)       { ChangeBytes -Offset "CC2CE8"  -Values "28 42 00 05 14 40 00 05 00 00 10 25" }
 
-
+    
 
     # RESTORE #
 
@@ -77,6 +75,11 @@ function ByteOptions() {
         ExportAndPatch -Path "Southern Swamp\southern_swamp_cleared_room_2" -Offset "1F4D000" -Length "D0A0"  -NewLength "D1C0"  -TableOffset "1EC46"  -Values "A1 C0"
     }
 
+    if (IsChecked $Redux.Other.DebugMapSelect) {
+        # ChangeBytes -Offset "C53F44" -Values "00 C7 AD F0 00 C7 E2 D0 80 80 09 10 80 80 3D F0 00 00 00 00 80 80 1B 4C 80 80 1B 28"
+        ExportAndPatch -Path "debug_map_select" -Offset "C7C870" -Length "13C8"
+    }
+
     if (IsChecked $Redux.Other.AlwaysBestEnding) {
         ChangeBytes -Offset "B81CE0" -Values "00 00 00 00"
         ChangeBytes -Offset "B81D48" -Values "00 00 00 00"
@@ -89,11 +92,12 @@ function ByteOptions() {
         ChangeBytes -Offset "B82054" -Values "00 00 00 00"
     }
 
-    if (IsChecked $Redux.Other.GohtCutscene)     { ChangeBytes -Offset "F6DE89" -Values "8D 00 02 10 00 00 0A" }
-    if (IsChecked $Redux.Other.MushroomBottle)   { ChangeBytes -Offset "CD7C48" -Values "1E 6B" }
-    if (IsChecked $Redux.Other.FairyFountain)    { ChangeBytes -Offset "B9133E" -Values "01 0F" }
-    if (IsChecked $Redux.Other.HideCredits)      { PatchBytes  -Offset "B3B000" -Patch "Message\credits.bin" }
-    if (IsChecked $Redux.Other.DebugMapSelect)   { ChangeBytes -Offset "C53F44" -Values "00 C7 AD F0 00 C7 E2 D0 80 80 09 10 80 80 3D F0 00 00 00 00 80 80 1B 4C 80 80 1B 28" }
+    if (IsChecked $Redux.Other.PictoboxDelayFix)   { ChangeBytes -Offset "BFC368" -Values "00 00 00 00" }
+    if (IsChecked $Redux.Other.GohtCutscene)       { ChangeBytes -Offset "F6DE89" -Values "8D 00 02 10 00 00 0A" }
+    if (IsChecked $Redux.Other.MushroomBottle)     { ChangeBytes -Offset "CD7C48" -Values "1E 6B" }
+    if (IsChecked $Redux.Other.FairyFountain)      { ChangeBytes -Offset "B9133E" -Values "01 0F" }
+    if (IsChecked $Redux.Other.HideCredits)        { PatchBytes  -Offset "B3B000" -Patch "Message\credits.bin" }
+    if (IsChecked $Redux.Other.DebugItemSelect)    { ExportAndPatch -Path "debug_item_select" -Offset "CA6370" -Length "1E0" }
 
 
 
@@ -400,6 +404,26 @@ function ByteOptions() {
         ExportAndPatch -Path "Deku Palace\deku_palace_room_2" -Offset "2563000" -Length "124F0" -NewLength "124B0" -TableOffset "1F6B7" -Values "B0"
     }
 
+    if (IsIndex -Elem $Redux.Hero.DamageEffect -Not) {
+        ChangeBytes -Offset "B79A48" -Values "24"
+        ChangeBytes -Offset "B79A4B" -Values $Redux.Hero.DamageEffect.SelectedIndex
+    }
+
+    if (IsIndex -Elem $Redux.Hero.ClockSpeed -Not) {
+            ChangeBytes -Offset "0BC6674" -Values "3C 01"; ChangeBytes -Offset "0BC6677" -Values "01 14 E2";                ChangeBytes -Offset "0BC667B" -Values "02 00 26 08 21 24 02 00 00"
+            ChangeBytes -Offset "0BC6685" -Values "40";    ChangeBytes -Offset "0BC6687" -Values "02 00 00 00 00 24 02 00"; ChangeBytes -Offset "0BC6691" -Values "22"
+            if     ($Redux.Hero.ClockSpeed.SelectedIndex -eq 1) { ChangeBytes -Offset "BB005E" -Values "00 00"; ChangeBytes -Offset "BC668F" -Values "01"; ChangeBytes -Offset "BEDB8E" -Values "00 00" }
+            elseif ($Redux.Hero.ClockSpeed.SelectedIndex -eq 2) { ChangeBytes -Offset "BB005E" -Values "FF FF"; ChangeBytes -Offset "BC668F" -Values "02"; ChangeBytes -Offset "BEDB8E" -Values "FF FF" }
+            elseif ($Redux.Hero.ClockSpeed.SelectedIndex -eq 3) { ChangeBytes -Offset "BB005E" -Values "FF FC"; ChangeBytes -Offset "BC668F" -Values "06"; ChangeBytes -Offset "BEDB8E" -Values "FF FC" }
+            elseif ($Redux.Hero.ClockSpeed.SelectedIndex -eq 4) { ChangeBytes -Offset "BB005E" -Values "FF FA"; ChangeBytes -Offset "BC668F" -Values "09"; ChangeBytes -Offset "BEDB8E" -Values "FF FA" }
+            elseif ($Redux.Hero.ClockSpeed.SelectedIndex -eq 5) { ChangeBytes -Offset "BB005E" -Values "FF F4"; ChangeBytes -Offset "BC668F" -Values "12"; ChangeBytes -Offset "BEDB8E" -Values "FF F4" }
+    }
+
+    if (IsChecked $Redux.Hero.DeathIsMoonCrash) {
+        ChangeBytes -Offset "0C40DF8" -Values "8F A2 00 18 24 0E 54 C0"; ChangeBytes -Offset "0C40E08" -Values "3C 01 00 02 00 22 08 21"
+        ChangeBytes -Offset "0C40E14" -Values "A4 2E 88 7A";             ChangeBytes -Offset "0C40E1D" -Values "0E 00 14 A0 2E 88 75 A0 2C 88 7F"
+    }
+
 
 
     # EASY MODE #
@@ -512,13 +536,77 @@ function ByteOptions() {
         ChangeBytes -Offset "BDA6B7" -Values "01"    # Keep sword after Song of Time
     }
 
+    if (IsChecked $Redux.Gameplay.UnsheathSword)       { ChangeBytes -Offset "CC2CE8"  -Values "28 42 00 05 14 40 00 05 00 00 10 25" }
+    if (IsChecked $Redux.Gameplay.SwordBeamAttack)     { ChangeBytes -Offset "CD73F0"  -Values "00 00"; ChangeBytes -Offset "CD73F4" -Values "00 00" }
+    if (IsChecked $Redux.Gameplay.FixEponaSword)       { ChangeBytes -Offset "BA885C"  -Values "24 18"; ChangeBytes -Offset "BA885F"  -Values "01" }
+
 
 
     # HITBOX #
-    if (IsValue -Elem $Redux.Hitbox.KokiriSword      -Not)   { ChangeBytes -Offset "C572BC" -Values (ConvertFloatToHex $Redux.Hitbox.KokiriSword.Value) }
-    if (IsValue -Elem $Redux.Hitbox.RazorSword       -Not)   { ChangeBytes -Offset "C572C0" -Values (ConvertFloatToHex $Redux.Hitbox.RazorSword.Value) }
-    if (IsValue -Elem $Redux.Hitbox.GildedSword      -Not)   { ChangeBytes -Offset "C572C4" -Values (ConvertFloatToHex $Redux.Hitbox.GildedSword.Value) }
-    if (IsValue -Elem $Redux.Hitbox.GreatFairysSword -Not)   { ChangeBytes -Offset "C572C8" -Values (ConvertFloatToHex $Redux.Hitbox.GreatFairysSword.Value) }
+    if (IsValue -Elem $Redux.Equipment.KokiriSword      -Not)   { ChangeBytes -Offset "C572BC" -Values (ConvertFloatToHex $Redux.Equipment.KokiriSword.Value) }
+    if (IsValue -Elem $Redux.Equipment.RazorSword       -Not)   { ChangeBytes -Offset "C572C0" -Values (ConvertFloatToHex $Redux.Equipment.RazorSword.Value) }
+    if (IsValue -Elem $Redux.Equipment.GildedSword      -Not)   { ChangeBytes -Offset "C572C4" -Values (ConvertFloatToHex $Redux.Equipment.GildedSword.Value) }
+    if (IsValue -Elem $Redux.Equipment.GreatFairysSword -Not)   { ChangeBytes -Offset "C572C8" -Values (ConvertFloatToHex $Redux.Equipment.GreatFairysSword.Value) }
+    if (IsValue -Elem $Redux.Equipment.BlastMask        -Not)   { $blast = (Get16Bit $Redux.Equipment.BlastMask.Value); ChangeBytes -Offset "CAA666" -Values @($blast.Substring(0, 2), $blast.Substring(2)) }
+
+
+
+    # SKIP #
+
+    if (IsChecked $Redux.Skip.BossCutscenes) {
+        ChangeBytes -Offset "E425EC" -Values "00 00 00 00"                                                                                                                            # Odolwa
+        ChangeBytes -Offset "F6A90C" -Values "00 00 00 00"                                                                                                                            # Goht
+        ChangeBytes -Offset "E50DF0" -Values "00 00 00 00"                                                                                                                            # Gyorg
+        ChangeBytes -Offset "E4A478" -Values "10 00"                                                                                                                                  # Twinmold
+        ChangeBytes -Offset "E60288" -Values "00 00 00 00"; ChangeBytes -Offset "E60564"  -Values "00 00 00 00"                                                                       # Majora
+        ChangeBytes -Offset "E575A8" -Values "00 00 00 00"; ChangeBytes -Offset "101B9FC" -Values "00 00 00 00"                                                                       # Wart
+        ChangeBytes -Offset "E25924" -Values "8D 08 33 1C"; ChangeBytes -Offset "E25930"  -Values "00 00 00 00 15 00"; ChangeBytes -Offset "E5D4C8" -Values "00 00 00 00 00 00 00 00" # Igos Du Ikana
+        ChangeBytes -Offset "D3F2BC" -Values "10 00";       ChangeBytes -Offset "D3F3F4"  -Values "00 00 00 00";       ChangeBytes -Offset "D4438C" -Values "00 00 00 00"             # Gomess
+
+    }
+
+    if (IsChecked $Redux.Skip.TatlInterrupts) {
+        ChangeBytes -Offset "DA1158" -Values "00 00 00 00"; ChangeBytes -Offset "E96988" -Values "00 00 00 00"
+        ChangeBytes -Offset "F6279C" -Values "00 00 00 00"; ChangeBytes -Offset "F62DAC" -Values "00 00 00 00"
+    }
+
+
+
+    # SPEEDUP #
+
+    if (IsChecked $Redux.Speedup.LabFish) {
+        ChangeBytes -Offset "F8D904" -Values "00 00"; ChangeBytes -Offset "F8D907" -Values "00";    ChangeBytes -Offset "F8D91C" -Values "00 00";          ChangeBytes -Offset "F8D91F" -Values "00 00 00"
+        ChangeBytes -Offset "F8D923" -Values "00";    ChangeBytes -Offset "F8D934" -Values "00";    ChangeBytes -Offset "F8D937" -Values "00 00 00 00 00"; ChangeBytes -Offset "F8D958" -Values "00 00"
+        ChangeBytes -Offset "F8D95B" -Values "00";    ChangeBytes -Offset "F8D96C" -Values "00 00"; ChangeBytes -Offset "F8D96F" -Values "00 00 00";       ChangeBytes -Offset "F8D973" -Values "00"
+        ChangeBytes -Offset "F8D984" -Values "00 00"; ChangeBytes -Offset "F8D987" -Values "00 00 00 00 00"
+    }
+
+    if (IsChecked $Redux.Speedup.Dampe) {
+        ChangeBytes -Offset "FC86CC" -Values "00 00 00 00 00 00 00 00 00"; ChangeBytes -Offset "FC86D6" -Values "00 00 00 00 00"
+        ChangeBytes -Offset "FC86DC" -Values "24 08";                      ChangeBytes -Offset "FC86DF" -Values "08"
+    }
+
+    if (IsChecked $Redux.Speedup.DogRace) {
+        ChangeBytes -Offset "0E34608" -Values "3C 18 80 1F 83 18 F7 08 07"; ChangeBytes -Offset "0E34613" -Values "04 24 18";             ChangeBytes -Offset "0E34617" -Values "09 24 07 00 0D 53 05"; ChangeBytes -Offset "0E3461F" -Values "01 24 07"
+        ChangeBytes -Offset "0E34624" -Values "30 B8";                      ChangeBytes -Offset "0E34627" -Values "01 13 00 00 0D 00 00"; ChangeBytes -Offset "0E3462F" -Values "00";                   ChangeBytes -Offset "0E34631" -Values "05"
+    }
+
+    if (IsText -Elem $Redux.Speedup.Bank1 -Compare $Redux.Speedup.Bank1.default -Not) {
+        $Bank1 = Get16Bit ($Redux.Speedup.Bank1.Text)
+        ChangeBytes -Offset "ECCA56" -Values @($Bank1.Substring(0, 2), $Bank1.Substring(2) ); ChangeBytes -Offset "ECCA66" -Values @($Bank1.Substring(0, 2), $Bank1.Substring(2) )
+    }
+
+    if (IsText -Elem $Redux.Speedup.Bank2 -Compare $Redux.Speedup.Bank2.default -Not) {
+        $Bank2 = Get16Bit ($Redux.Speedup.Bank2.Text)
+        ChangeBytes -Offset "ECCA5E" -Values @($Bank2.Substring(0, 2), $Bank2.Substring(2) ); ChangeBytes -Offset "ECCA6E" -Values @($Bank2.Substring(0, 2), $Bank2.Substring(2) )
+        ChangeBytes -Offset "ECCAA2" -Values @($Bank2.Substring(0, 2), $Bank2.Substring(2) ); ChangeBytes -Offset "ECCAB2" -Values @($Bank2.Substring(0, 2), $Bank2.Substring(2) )
+    }
+
+    if (IsText -Elem $Redux.Speedup.Bank3 -Compare $Redux.Speedup.Bank3.default -Not) {
+        $Bank3 = Get16Bit ($Redux.Speedup.Bank3.Text)
+        ChangeBytes -Offset "ECCAAA" -Values @($Bank3.Substring(0, 2), $Bank3.Substring(2) ); ChangeBytes -Offset "ECCABA" -Values @($Bank3.Substring(0, 2), $Bank3.Substring(2) )
+        ChangeBytes -Offset "ECCAEE" -Values @($Bank3.Substring(0, 2), $Bank3.Substring(2) ); ChangeBytes -Offset "ECCD2A" -Values @($Bank3.Substring(0, 2), $Bank3.Substring(2) )
+    }
 
 
 
@@ -565,9 +653,10 @@ function ByteReduxOptions() {
     # Always:    Arrow Cycling & Underwater Ocarina
     $Offset = SearchBytes -Start "3800000" -End "380F000" -Values "4D 49 53 43"
     $Offset = AddToOffset -Hex $offset -Add "8"
-    if     ( (IsChecked $Redux.Gameplay.EasierMinigames -Not) -and (IsChecked $Redux.Gameplay.FasterBlockPushing) )   { ChangeBytes -Offset $Offset -Values "9E 45 06 2D 57 4B 28 62 49 87 69 FB 0F 79 1B 9F 18 30" }
-    elseif ( (IsChecked $Redux.Gameplay.EasierMinigames) -and (IsChecked $Redux.Gameplay.FasterBlockPushing -Not) )   { ChangeBytes -Offset $Offset -Values "D2 AD 24 8F 0C 58 D0 A8 96 55 0E EE D2 2B 25 EB 08 30" }
-    elseif ( (IsChecked $Redux.Gameplay.EasierMinigames) -and (IsChecked $Redux.Gameplay.FasterBlockPushing) )        { ChangeBytes -Offset $Offset -Values "B7 36 99 48 85 BF FF B1 FB EB D8 B1 06 C8 A8 3B 18 30" }
+    if (IsChecked $Redux.Gameplay.FasterBlockPushing) { ChangeBytes -Offset $Offset -Values "9E 45 06 2D 57 4B 28 62 49 87 69 FB 0F 79 1B 9F 18 30" }
+    #if     ( (IsChecked $Redux.Gameplay.EasierMinigames -Not) -and (IsChecked $Redux.Gameplay.FasterBlockPushing) )   { ChangeBytes -Offset $Offset -Values "9E 45 06 2D 57 4B 28 62 49 87 69 FB 0F 79 1B 9F 18 30" }
+    #elseif ( (IsChecked $Redux.Gameplay.EasierMinigames) -and (IsChecked $Redux.Gameplay.FasterBlockPushing -Not) )   { ChangeBytes -Offset $Offset -Values "D2 AD 24 8F 0C 58 D0 A8 96 55 0E EE D2 2B 25 EB 08 30" }
+    #elseif ( (IsChecked $Redux.Gameplay.EasierMinigames) -and (IsChecked $Redux.Gameplay.FasterBlockPushing) )        { ChangeBytes -Offset $Offset -Values "B7 36 99 48 85 BF FF B1 FB EB D8 B1 06 C8 A8 3B 18 30" }
 
 
 
@@ -749,10 +838,10 @@ function ByteLanguageOptions() {
 function CreateOptions() {
     
     if ($Settings.Debug.LiteGUI -eq $False) {
-        CreateOptionsDialog -Width 1060 -Height 530 -Tabs @("Main", "Audiovisual", "Difficulty", "Colors", "Equipment")
+        CreateOptionsDialog -Width 1060 -Height 530 -Tabs @("Main", "Audiovisual", "Difficulty", "Colors", "Equipment", "Speedup")
     }
     else {
-        CreateOptionsDialog -Width 1060 -Height 450 -Tabs @("Main", "Audiovisual", "Difficulty")
+        CreateOptionsDialog -Width 1060 -Height 450 -Tabs @("Main", "Audiovisual", "Difficulty", "Speedup")
     }
 
     if (!$IsWiiVC) { $Redux.Graphics.Widescreen.Add_CheckStateChanged({ AdjustGUI }) }
@@ -788,7 +877,6 @@ function CreateTabMain() {
     CreateReduxCheckBox -Name "ZoraPhysics"       -Text "Zora Physics"          -Info "Change the Zora physics when using the boomerang`nZora Link will take a step forward instead of staying on his spot" -Credits "ShadowOne333"
     CreateReduxCheckBox -Name "DistantZTargeting" -Text "Distant Z-Targeting"   -Info "Allow to use Z-Targeting on enemies, objects and NPC's from any distance"                                            -Credits "Admentus"
     CreateReduxCheckBox -Name "ManualJump"        -Text "Manual Jump"           -Info "Press Z + A to do a Manual Jump instead of a Jump Attack`nPress B mid-air after jumping to do a Jump Attack"         -Credits "Admentus"
-    CreateReduxCheckBox -Name "SwordBeamAttack"   -Text "Sword Beam Attack"     -Info "Charging the Spin Attack will launch a Sword Beam Attack instead`nYou can still execute the Quick Spin Attack"       -Credits "Admentus (ROM hack) & CloudModding (GameShark)"
     CreateReduxCheckBox -Name "FrontflipAttack"   -Text "Frontflip Jump Attack" -Info "Restores the Frontflip Jump Attack animation from the Beta"                                                          -Credits "SoulofDeity"
     CreateReduxCheckBox -Name "FrontflipJump"     -Text "Force Frontflip Jump"  -Info "Link will always use the frontflip animation when jumping"                                                           -Credits "SoulofDeity"
 
@@ -805,16 +893,18 @@ function CreateTabMain() {
 
     # OTHER #
     CreateReduxGroup    -Tag  "Other" -Text "Other"
-    CreateReduxCheckBox -Name "GohtCutscene"     -Text "Fix Goht Cutscene"         -Info "Fix Goht's awakening cutscene so that Link no longer gets run over"                                                                                         -Credits "ShadowOne333"
-    CreateReduxCheckBox -Name "MushroomBottle"   -Text "Fix Mushroom Bottle"       -Info "Fix the item reference when collecting Magical Mushrooms as Link puts away the bottle automatically due to an error"                                        -Credits "ozidual"
-    CreateReduxCheckBox -Name "SouthernSwamp"    -Text "Fix Southern Swamp"        -Info "Fix a misplaced door after Woodfall has been cleared and you return to the Potion Shop`nThe door is slightly pushed forward after Odolwa has been defeated" -Credits "ShadowOne333"
-    CreateReduxCheckBox -Name "FairyFountain"    -Text "Fix Fairy Fountain"        -Info "Fix the Ikana Canyon Fairy Fountain area not displaying the correct color"                                                                                  -Credits "Dybbles (fix) & ShadowOne333 (patch)"
-    CreateReduxCheckBox -Name "AlwaysBestEnding" -Text "Always Best Ending"        -Info "The credits sequence always includes the best ending, regardless of actual ingame progression"                                                              -Credits "Marcelo20XX"
+    CreateReduxCheckBox -Name "PictoboxDelayFix"  -Text "Pictograph Box Delay Fix"  -Info "Photos are taken instantly with the Pictograph Box by removing the Anti-Aliasing" -Checked                                                                  -Credits "Ported from Rando"
+    CreateReduxCheckBox -Name "GohtCutscene"      -Text "Fix Goht Cutscene"         -Info "Fix Goht's awakening cutscene so that Link no longer gets run over"                                                                                         -Credits "ShadowOne333"
+    CreateReduxCheckBox -Name "MushroomBottle"    -Text "Fix Mushroom Bottle"       -Info "Fix the item reference when collecting Magical Mushrooms as Link puts away the bottle automatically due to an error"                                        -Credits "ozidual"
+    CreateReduxCheckBox -Name "SouthernSwamp"     -Text "Fix Southern Swamp"        -Info "Fix a misplaced door after Woodfall has been cleared and you return to the Potion Shop`nThe door is slightly pushed forward after Odolwa has been defeated" -Credits "ShadowOne333"
+    CreateReduxCheckBox -Name "FairyFountain"     -Text "Fix Fairy Fountain"        -Info "Fix the Ikana Canyon Fairy Fountain area not displaying the correct color"                                                                                  -Credits "Dybbles (fix) & ShadowOne333 (patch)"
+    CreateReduxCheckBox -Name "AlwaysBestEnding"  -Text "Always Best Ending"        -Info "The credits sequence always includes the best ending, regardless of actual ingame progression"                                                              -Credits "Marcelo20XX"
     if ($Settings.Debug.LiteGUI -eq $False) {
-        CreateReduxCheckBox -Name "HideCredits"  -Text "Hide Credits"              -Info "Do not show the credits text during the credits sequence"                                                                                                   -Credits "Admentus"
+        CreateReduxCheckBox -Name "HideCredits"   -Text "Hide Credits"              -Info "Do not show the credits text during the credits sequence"                                                                                                   -Credits "Admentus"
     }
-  # CreateReduxCheckBox -Name "DebugMapSelect"   -Text "Debug Map Select"          -Info "Enable the Map Select menu like in the Debug ROM`nThe File Select menu now opens the Map Select menu instead`nA separate debug save file is used"           -Credits "Admentus"
-
+    CreateReduxCheckBox -Name "DebugMapSelect"    -Text "Debug Map Select"          -Info "Translates the Debug Map Select menu into English"                                                                                                          -Credits "GhostlyDark"
+    CreateReduxCheckBox -Name "DebugItemSelect"   -Text "Debug Item Select"         -Info "Translates the Debug Inventory Select menu into English"                                                                                                    -Credits "GhostlyDark"
+    
 }
 
 
@@ -851,7 +941,7 @@ function CreateTabRedux() {
     # GAMEPLAY #
     CreateReduxGroup        -Tag  "Gameplay" -Text "Gameplay"
     CreateReduxCheckBox     -Name "FasterBlockPushing" -Checked -Text "Faster Block Pushing" -Info "All blocks are pushed faster" -Credits "Ported from Redux"
-    CreateReduxCheckBox     -Name "EasierMinigames"             -Text "Easier Minigames"     -Info "Certain minigames are made easier and faster`n- Dampe's Digging Game always has two Ghost Flames on the ground and one up the ladder`n- The Gold Dog always wins the Doggy Racetrack race if you have the Mask of Truth`n- Only one fish has to be feeded in the Marine Research Lab" -Credits "Ported from Rando"
+  # CreateReduxCheckBox     -Name "EasierMinigames"             -Text "Easier Minigames"     -Info "Certain minigames are made easier and faster`n- Dampe's Digging Game always has two Ghost Flames on the ground and one up the ladder`n- The Gold Dog always wins the Doggy Racetrack race if you have the Mask of Truth`n- Only one fish has to be feeded in the Marine Research Lab" -Credits "Ported from Rando"
     
     # BUTTON COLORS #
     CreateButtonColorOptions -Default 2
@@ -991,8 +1081,11 @@ function CreateTabDifficulty() {
 
     if ($Settings.Debug.LiteGUI -eq $True) { return }
 
-    CreateReduxCheckBox -Name "MasterQuest" -Column 1 -Row 3 -Text "Master Quest"         -Info "Use all areas and dungeons from the Master Quest ROM hack`nThis is for advanced players who like a higher challenge`nThe structure of the walkthrough is completely re-arranged" -Credits "Admentus (ported) & DeathBasket (ROM hack)"
-    CreateReduxCheckBox -Name "PalaceRoute" -Column 2 -Row 3 -Text "Restore Palace Route" -Info "Restore the route to the Bean Seller within the Deku Palace as seen in the Japanese release" -Credits "ShadowOne"
+    CreateReduxComboBox -Name "DamageEffect"     -Column 1 -Row 3 -Shift 10 -Text "Damage Effect" -Items @("Default", "Burn", "Freeze", "Shock", "Knockdown") -Info "Add an effect when damaged"                 -Credits "Ported from Rando"
+    CreateReduxComboBox -Name "ClockSpeed"       -Column 3 -Row 3 -Shift 10 -Text "Clock Speed"   -Items @("Default", "1/3", "2/3", "2x", "3x", "6x")         -Info "Set the speed at which time is progressing" -Credits "Ported from Rando"
+    CreateReduxCheckBox -Name "MasterQuest"      -Column 1 -Row 4 -Text "Master Quest"         -Info "Use all areas and dungeons from the Master Quest ROM hack`nThis is for advanced players who like a higher challenge`nThe structure of the walkthrough is completely re-arranged" -Credits "Admentus (ported) & DeathBasket (ROM hack)"
+    CreateReduxCheckBox -Name "PalaceRoute"      -Column 2 -Row 4 -Text "Restore Palace Route" -Info "Restore the route to the Bean Seller within the Deku Palace as seen in the Japanese release" -Credits "ShadowOne"
+    CreateReduxCheckBox -Name "DeathIsMoonCrash" -Column 3 -Row 4 -Text "Death is Moon Crash"   -Info "If you die, the moon will crash`nThere are no continues anymore"                                                  -Credits "Ported from Rando"
 
     # EASY MODE #
     CreateReduxGroup    -Tag  "EasyMode" -Text "Easy Mode"
@@ -1121,38 +1214,41 @@ function CreateTabColors() {
 function CreateTabEquipment() {
     
     # CAPACITY SELECTION #
-    CreateReduxGroup    -Tag  "Capacity" -Text "Capacity Selection" -Columns 5
+    CreateReduxGroup    -Tag  "Capacity" -Text "Capacity Selection" -Columns 3
     CreateReduxCheckBox -Name "EnableAmmo"    -Text "Change Ammo Capacity"   -Info "Enable changing the capacity values for ammo"
     CreateReduxCheckBox -Name "EnableWallet"  -Text "Change Wallet Capacity" -Info "Enable changing the capacity values for the wallets"
 
     # GAMEPLAY #
     CreateReduxGroup    -Tag  "Gameplay" -Text "Gameplay"
     CreateReduxCheckBox -Name "UnsheathSword" -Text "Unsheath Sword"         -Info "The sword is unsheathed first before immediately swinging it" -Credits "Admentus"
+    CreateReduxCheckBox -Name "SwordBeamAttack"   -Text "Sword Beam Attack"     -Info "Charging the Spin Attack will launch a Sword Beam Attack instead`nYou can still execute the Quick Spin Attack"       -Credits "Admentus (ROM hack) & CloudModding (GameShark)"
+    CreateReduxCheckBox -Name "FixEponaSword"     -Text "Fix Epona Sword"       -Info "Change Epona's B button behaviour to prevent you from losing your sword if you don't have the Hero's Bow"            -Credits "Ported from Rando"
 
     # HITBOX #
-    CreateReduxGroup  -Tag  "Hitbox" -Text "Weapon Hitboxes" -Height 2.7
+    CreateReduxGroup  -Tag  "Equipment" -Text "Sliders" -Height 2.7
     CreateReduxSlider -Name "KokiriSword"      -Column 1 -Row 1 -Default 3000 -Min 512 -Max 8192 -Freq 512 -Small 256 -Large 512 -Text "Kokiri Sword"        -Info "Set the length of the hitbox of the Kokiri Sword"              -Credits "Aria Hiroshi 64"
     CreateReduxSlider -Name "RazorSword"       -Column 3 -Row 1 -Default 3000 -Min 512 -Max 8192 -Freq 512 -Small 256 -Large 512 -Text "Razor Sword"         -Info "Set the length of the hitbox of the Razor Sword"               -Credits "Aria Hiroshi 64"
     CreateReduxSlider -Name "GildedSword"      -Column 5 -Row 1 -Default 4000 -Min 512 -Max 8192 -Freq 512 -Small 256 -Large 512 -Text "Gilded Sword"        -Info "Set the length of the hitbox of the Gilded Sword"              -Credits "Aria Hiroshi 64"
     CreateReduxSlider -Name "GreatFairysSword" -Column 1 -Row 2 -Default 5500 -Min 512 -Max 8192 -Freq 512 -Small 256 -Large 512 -Text "Great Fairy's Sword" -Info "Set the length of the hitbox of the Great Fairy's Sword Knife" -Credits "Aria Hiroshi 64"
+    CreateReduxSlider -Name "BlastMask"        -Column 3 -Row 2 -Default 310  -Min 1   -Max 1024 -Freq 64  -Small 32  -Large 64  -Text "Blast Mask"          -Info "Set the cooldown duration of the Blast Mask"                   -Credits "Ported from Rando"
 
     # AMMO #
     $Redux.Box.Ammo = CreateReduxGroup -Tag "Capacity" -Text "Ammo Capacity Selection"
-    CreateReduxTextBox -Name "Quiver1"     -Text "Quiver (1)"      -Value 30  -Info "Set the capacity for the Quiver (Base)`nDefault = 30"        -Credits "GhostlyDark"
-    CreateReduxTextBox -Name "Quiver2"     -Text "Quiver (2)"      -Value 40  -Info "Set the capacity for the Quiver (Upgrade 1)`nDefault = 40"   -Credits "GhostlyDark"
-    CreateReduxTextBox -Name "Quiver3"     -Text "Quiver (3)"      -Value 50  -Info "Set the capacity for the Quiver (Upgrade 2)`nDefault = 50"   -Credits "GhostlyDark"
-    CreateReduxTextBox -Name "BombBag1"    -Text "Bomb Bag (1)"    -Value 20  -Info "Set the capacity for the Bomb Bag (Base)`nDefault = 20"      -Credits "GhostlyDark" 
-    CreateReduxTextBox -Name "BombBag2"    -Text "Bomb Bag (2)"    -Value 30  -Info "Set the capacity for the Bomb Bag (Upgrade 1)`nDefault = 30" -Credits "GhostlyDark"
-    CreateReduxTextBox -Name "BombBag3"    -Text "Bomb Bag (3)"    -Value 40  -Info "Set the capacity for the Bomb Bag (Upgrade 2)`nDefault = 40" -Credits "GhostlyDark"
-    CreateReduxTextBox -Name "DekuSticks1" -Text "Deku Sticks (1)" -Value 10  -Info "Set the capacity for the Deku Sticks (Base)`nDefault = 10"   -Credits "GhostlyDark"
-    CreateReduxTextBox -Name "DekuNuts1"   -Text "Deku Nuts (1)"   -Value 20  -Info "Set the capacity for the Deku Nuts (Base)`nDefault = 20"     -Credits "GhostlyDark"
+    CreateReduxTextBox -Name "Quiver1"     -Text "Quiver (1)"      -Value 30  -Info "Set the capacity for the Quiver (Base)"        -Credits "GhostlyDark"
+    CreateReduxTextBox -Name "Quiver2"     -Text "Quiver (2)"      -Value 40  -Info "Set the capacity for the Quiver (Upgrade 1)"   -Credits "GhostlyDark"
+    CreateReduxTextBox -Name "Quiver3"     -Text "Quiver (3)"      -Value 50  -Info "Set the capacity for the Quiver (Upgrade 2)"   -Credits "GhostlyDark"
+    CreateReduxTextBox -Name "BombBag1"    -Text "Bomb Bag (1)"    -Value 20  -Info "Set the capacity for the Bomb Bag (Base)"      -Credits "GhostlyDark" 
+    CreateReduxTextBox -Name "BombBag2"    -Text "Bomb Bag (2)"    -Value 30  -Info "Set the capacity for the Bomb Bag (Upgrade 1)" -Credits "GhostlyDark"
+    CreateReduxTextBox -Name "BombBag3"    -Text "Bomb Bag (3)"    -Value 40  -Info "Set the capacity for the Bomb Bag (Upgrade 2)" -Credits "GhostlyDark"
+    CreateReduxTextBox -Name "DekuSticks1" -Text "Deku Sticks (1)" -Value 10  -Info "Set the capacity for the Deku Sticks (Base)"   -Credits "GhostlyDark"
+    CreateReduxTextBox -Name "DekuNuts1"   -Text "Deku Nuts (1)"   -Value 20  -Info "Set the capacity for the Deku Nuts (Base)"     -Credits "GhostlyDark"
 
     # WALLET #
     $Redux.Box.Wallet = CreateReduxGroup -Tag "Capacity" -Text "Wallet Capacity Selection"
-    CreateReduxTextBox -Name "Wallet1" -Length 3 -Text "Wallet (1)"     -Value 99  -Info "Set the capacity for the Wallet (Base)`nDefault = 99"       -Credits "GhostlyDark"
-    CreateReduxTextBox -Name "Wallet2" -Length 3 -Text "Wallet (2)"     -Value 200 -Info "Set the capacity for the Wallet (Upgrade 1)`nDefault = 200" -Credits "GhostlyDark"
-    CreateReduxTextBox -Name "Wallet3" -Length 3 -Text "Wallet (3)"     -Value 500 -Info "Set the capacity for the Wallet (Upgrade 2)`nDefault = 500" -Credits "GhostlyDark"
-    CreateReduxTextBox -Name "Wallet4" -Length 3 -Text "Wallet (4)"     -Value 500 -Info "Set the capacity for the Wallet (Upgrade 3)`nDefault = 500" -Credits "GhostlyDark" -Warning "This wallet is not obtained through regular gameplay"
+    CreateReduxTextBox -Name "Wallet1" -Length 3 -Text "Wallet (1)"     -Value 99  -Info "Set the capacity for the Wallet (Base)"      -Credits "GhostlyDark"
+    CreateReduxTextBox -Name "Wallet2" -Length 3 -Text "Wallet (2)"     -Value 200 -Info "Set the capacity for the Wallet (Upgrade 1)" -Credits "GhostlyDark"
+    CreateReduxTextBox -Name "Wallet3" -Length 3 -Text "Wallet (3)"     -Value 500 -Info "Set the capacity for the Wallet (Upgrade 2)" -Credits "GhostlyDark"
+    CreateReduxTextBox -Name "Wallet4" -Length 3 -Text "Wallet (4)"     -Value 500 -Info "Set the capacity for the Wallet (Upgrade 3)" -Credits "GhostlyDark" -Warning "This wallet is not obtained through regular gameplay"
 
     # EQUIPMENT #
     CreateReduxGroup -Tag "Gameplay" -Text "Equipment"
@@ -1173,5 +1269,29 @@ function CreateTabEquipment() {
             $this.SelectionLength = 0
         }
     })
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function CreateTabSpeedup() {
+    
+    # SKIP #
+    CreateReduxGroup    -Tag  "Skip" -Text "Skip"
+    CreateReduxCheckBox -Name "BossCutscenes"  -Text "Skip Boss Cutscenes" -Info "Skip the cutscenes that play during bosses and mini-bosses" -Credits "Ported from Rando"
+    CreateReduxCheckBox -Name "TatlInterrupts" -Text "Skip Tatl Interrupts" -Info "Skip the cutscenes that are triggered by Tatl"             -Credits "Ported from Rando"
+
+    # SPEEDUP #
+    CreateReduxGroup    -Tag  "Speedup" -Text "Speedup"
+    CreateReduxCheckBox -Name "LabFish" -Text "Faster Lab Fish"   -Info "Only one fish has to be feeded in the Marine Research Lab"                            -Credits "Ported from Rando"
+    CreateReduxCheckBox -Name "Dampe"   -Text "Good Dampé RNG"    -Info "Dampe's Digging Game always has two Ghost Flames on the ground and one up the ladder" -Credits "Ported from Rando"
+    CreateReduxCheckBox -Name "DogRace" -Text "Good Dog Race RNG" -Info "The Gold Dog always wins the Doggy Racetrack race if you have the Mask of Truth"      -Credits "Ported from Rando"
+
+    # WALLET #
+    CreateReduxGroup   -Tag  "Speedup" -Text "Bank Deposit Rewards"
+    CreateReduxTextBox -Name "Bank1" -Length 4 -Text "First Reward"  -Value 200  -Info "Set the amount of Rupees required to deposit for the first reward"                                                                               -Credits "Ported from Rando"
+    CreateReduxTextBox -Name "Bank2" -Length 4 -Text "Second Reward" -Value 1000 -Info "Set the amount of Rupees required to deposit for the second reward"                                                                              -Credits "Ported from Rando"
+    CreateReduxTextBox -Name "Bank3" -Length 4 -Text "Final Reward"  -Value 5000 -Info "Set the amount of Rupees required to deposit for the final reward`nThis value also changes the maximum amount that can be deposited to the bank" -Credits "Ported from Rando"
 
 }

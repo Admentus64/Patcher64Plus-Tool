@@ -57,7 +57,7 @@ function ChangeBytes([string]$File, [string]$Offset, [object]$Values, [uint16]$I
 
 
 #==============================================================================================================================================================================================
-function PatchBytes([string]$File, [string]$Offset, [string]$Length, [string]$Patch, [switch]$Texture, [switch]$Extracted, [switch]$Pad) {
+function PatchBytes([string]$File, [string]$Offset, [string]$Length, [string]$Patch, [switch]$Texture, [switch]$Models, [switch]$Extracted, [switch]$Pad) {
     
     # Binary Patch File Parameter Check
     if (!(IsSet -Elem $Patch) ) {
@@ -68,6 +68,7 @@ function PatchBytes([string]$File, [string]$Offset, [string]$Length, [string]$Pa
 
     # Binary Patch File Path
     if     ($Texture)     { $Patch = $GameFiles.textures  + "\" + $Patch }
+    elseif  ($Models)     { $Patch = $GameFiles.models    + "\" + $Patch }
     elseif ($Extracted)   { $Patch = $GameFiles.extracted + "\" + $Patch }
     else                  { $Patch = $GameFiles.binaries  + "\" + $Patch }
 

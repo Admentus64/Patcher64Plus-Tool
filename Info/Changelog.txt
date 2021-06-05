@@ -1,3 +1,28 @@
+v14.1.0
+- Added new "Hylian Shield" alternative for OoT
+- Added new "Master Sword (Beta)" option for OoT
+- Added new "Pictograph Box Delay Fix" option for MM
+- Added new "Damage Effect" option for MM
+- Added new "Clock Speed" option for MM
+- Added new "Death is Moon Crash" option for MM
+- Added new "Fix Epona Sword" option for MM
+- Added new "Blast Mask" duration option for MM
+- Added new Skip and Speedup options for MM
+- Added new "Bank Deposit Rewards" options for MM
+- Added new Debug Menu English translation options for OoT and MM
+- Added new "No Kill Flash" option for OoT
+- Added custom equipment icons support for Custom Adult Models and the "Hylian Shield" option for OoT
+- Added "Kafei" model for OoT (thanks Malon Rose!)
+- Added 32-bit version of ndec
+- Updated ndec
+- Updated "Master of Time" to v1.0.9
+- Updated "Smash Remix" to v0.9.7
+- Split the "Keaton Mask Fix" from Redux into it's own checkbox for OoT
+- Split "Easier Minigames" into individual checkboxes for MM
+- Re-arranged several options in more fitting categories for MM
+- Rewrote how models are read in from the JSON
+- Fixed "Serenade of Water" skip for OoT
+
 v14.0.1
 - Fixed "Additional Options" panel not opening when "Force Show Options" is used
 - Fixed trying to patch in custom tunic icons when using "Randomized" or "Custom" for OoT

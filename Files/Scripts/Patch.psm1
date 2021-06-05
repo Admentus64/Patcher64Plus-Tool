@@ -789,7 +789,10 @@ function DecompressROM([boolean]$Decompress) {
             & $Files.tool.Decompress $GetROM.decomp | Out-Null
             Move-Item -LiteralPath ($GetROM.decomp + "-decomp.z64") -Destination $GetROM.decomp -Force
         }
-        else { & $Files.tool.ndec $GetROM.run $GetROM.decomp | Out-Null }
+        else {
+            if ($Settings.Core.Bit64 -eq $True)   { & $Files.tool.ndec64 $GetROM.run $GetROM.decomp | Out-Null }
+            else                                  { & $Files.tool.ndec32 $GetROM.run $GetROM.decomp | Out-Null }
+        }
         WriteToConsole ("Decompressed ROM: " + $GetROM.decomp)
         Pop-Location
 

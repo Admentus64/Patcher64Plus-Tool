@@ -224,38 +224,48 @@ function ShowModelsPreview([switch]$Child, [switch]$Adult, [object]$Dropdown, [s
     $Path = $GameFiles.models + "\" + $Category + "\"
     $Text = $Dropdown.Text.replace(" (default)", "")
 
-    $global:CustomModels = $null
-    for ($i=0; $i -lt $Files.json.models.length; $i++) {
-        if ($Files.json.models[$i].name -eq $Text) {
-            $global:CustomModels = $Files.json.models[$i]
-            break
+    if ($Child) {
+        $global:ChildModel = $null
+        for ($i=0; $i -lt $Files.json.models.child.length; $i++) {
+            if ($Files.json.models.child[$i].name -eq $Text) {
+                $global:ChildModel = $Files.json.models.child[$i]
+                break
+            }   
         }
+        ShowModelPreview -Box $Redux.Graphics.ModelsPreviewChild -Path $Path -Text $Text -Type $ChildModel
     }
 
-    if ($Child)   { ShowModelPreview -Box $Redux.Graphics.ModelsPreviewChild -Path $Path -Text $Text -Author $CustomModels.child_author -Porter $CustomModels.child_porter -WIP $CustomModels.child_wip -Url $CustomModels.child_url }
-    if ($Adult)   { ShowModelPreview -Box $Redux.Graphics.ModelsPreviewAdult -Path $Path -Text $Text -Author $CustomModels.adult_author -Porter $CustomModels.adult_porter -WIP $CustomModels.adult_wip -Url $CustomModels.adult_url }
+    if ($Adult) {
+        $global:AdultModel = $null
+        for ($i=0; $i -lt $Files.json.models.adult.length; $i++) {
+            if ($Files.json.models.adult[$i].name -eq $Text) {
+                $global:AdultModel = $Files.json.models.adult[$i]
+                break
+            }   
+        }
+        ShowModelPreview -Box $Redux.Graphics.ModelsPreviewAdult -Path $Path -Text $Text -Type $AdultModel
+    }
 
 }
 
 
 
 #==============================================================================================================================================================================================
-function ShowModelPreview([object]$Box, [string]$Path, [string]$Text, [string]$Author, [string]$Porter, [string]$WIP, [string]$Url) {
-    
-    if (!(IsSet $Files.json.models)) { return }
+function ShowModelPreview([object]$Box, [string]$Path, [string]$Text, $Type) {
 
-    if (TestFile ($Path + $Text + ".png"))       { SetBitMap -Path ($Path + $Text + ".png") -Box $Box -Width 125 -Height 170 }
-    elseif (TestFile ($Path + "Original.png"))   { SetBitMap -Path ($Path + "Original.png") -Box $Box -Width 125 -Height 170 }
-    else                                         { $Box.Image = $null }
+    if (!(IsSet $Files.json.models)) {return }
+
+    if (TestFile ($Path + $Text + ".png"))   { SetBitMap -Path ($Path + $Text + ".png") -Box $Box -Width 125 -Height 170 }
+    else                                     { $Box.Image = $null }
 
     $Credits = ""
 
-    if (IsSet $CustomModels.name)   { $Credits += "--- " + $CustomModels.name + " ---{0}" }
-    if (IsSet $Author)              { $Credits += "{0}Model made by: "   + $Author }
-    if (IsSet $Porter)              { $Credits += "{0}Model ported by: " + $Porter }
-    if ($WIP -eq 1)                 { $Credits += "{0}This model is still Work-In-Progress" }
-    if ($WIP -eq 2)                 { $Credits += "{0}This model is a demonstration of the final version" }
-    if (IsSet $Url)                 { $Credits += "{0}{0}Click to visit the modder's homepage" }
+    if (IsSet $Type.name)     { $Credits += "--- " + $Type.name + " ---{0}" }
+    if (IsSet $Type.author)   { $Credits += "{0}Model made by: "   + $Type.author }
+    if (IsSet $Type.porter)   { $Credits += "{0}Model ported by: " + $Type.porter }
+    if ($Type.WIP -eq 1)      { $Credits += "{0}This model is still Work-In-Progress" }
+    if ($Type.WIP -eq 2)      { $Credits += "{0}This model is a demonstration of the final version" }
+    if (IsSet $Type.url)      { $Credits += "{0}{0}Click to visit the modder's homepage" }
 
     if (IsSet $Credits)   { $PreviewToolTip.SetToolTip($Box, ([string]::Format($Credits, [Environment]::NewLine))) }
     else                  { $PreviewToolTip.RemoveAll() }
@@ -313,8 +323,18 @@ function ChangeModelsSelection() {
     elseif (IsChecked -Elem $Redux.Graphics.ListAdultFemaleModels)   { ShowModelsPreview -Adult -Dropdown $Redux.Graphics.AdultFemaleModels -Category "Adult Female" }
 
     # URL
-    $Redux.Graphics.ModelsPreviewChild.add_Click({ if (IsSet $CustomModels.child_url) { [system.Diagnostics.Process]::start($CustomModels.child_url) } })
-    $Redux.Graphics.ModelsPreviewAdult.add_Click({ if (IsSet $CustomModels.adult_url) { [system.Diagnostics.Process]::start($CustomModels.adult_url) } })
+    $Redux.Graphics.ModelsPreviewChild.add_Click({ if (IsSet $ChildModel.url) {
+        $url = $ChildModel.url.Split("{0}")
+        foreach ($item in $url) {
+            if ($item.length -gt 0) { [system.Diagnostics.Process]::start($item) } }
+        }
+    })
+    $Redux.Graphics.ModelsPreviewAdult.add_Click({ if (IsSet $AdultModel.url) {
+        $url = $AdultModel.url.Split("{0}")
+        foreach ($item in $url) {
+            if ($item.length -gt 0) { [system.Diagnostics.Process]::start($item) } }
+        }
+    })
 
 }
 

@@ -2,7 +2,7 @@
 <<< PATCHER64+ TOOL >>>
 
 --- Thanks to my Patreons ---
-- Amara
+- Amara, Yang
 
 --- Thanks to my past Patreons --
 - Leigh Pierce, Raim, Gicrax, Crypto Logiq, Moons (Luke), Ronald, Richard Moser
@@ -50,6 +50,9 @@
 - Correct Rupee Colors:			GhostlyDark
 - Iron Shield textures:			ZombieBrainySnack
 - Fireproof Deku Shield:		Three Pendants
+- Master Sword (Beta Icon):		CYB3RTR0N
+- Hylian Shield alternatives:		Admentus (injects), GhostlyDark (injects),
+					CYB3RTR0N (icons) & sanguinetti (shield textures)
 - Sword Hitboxes:			Aria Hiroshi 64
 - Set Capacity:				GhostlyDark
 - 4 Digits for Rupees:			CloudMax, VictorHale & CrookedPoe
@@ -68,6 +71,8 @@
 - Peach Link Voices:			theluigidude2007
 
 --- Custom Male Models ---
+- Kafei:				Malon Rose (www.patreon.com/MalonRose
+					& www.youtube.com/c/MalonRose)
 - Breath of the Wild (Adult):		Skilarbabcock (www.youtube.com/user/skilarbabcock)
 - Dark Link (Adult):			CrookedPoe
 - Fierce Deity (Adult):			CrookedPoe
@@ -91,7 +96,8 @@
 - Princess Zelda ALttP (Child):		Unesag
 - Princess Zelda ALttP (Adult):		Lopieloo
 - Roll:					Psi-Hate
-- Saria:				Malon Rose (www.youtube.com/c/MalonRose)
+- Saria:				Malon Rose (www.patreon.com/MalonRose
+					& www.youtube.com/c/MalonRose)
 
 --- Quality Assurance ---
 - Translations:				GhostlyDark
@@ -102,7 +108,8 @@
 - French:				Admentus & GhostlyDark (ported)
 - Spanish:				eduardo_a2j (v2.2)
 - Brazilian Portuguese:			Fserve (v1.7a)
-- Italian:				Ruleless, xxcentury & Brisma (translation) & GhostlyDark (ported / improvements)
+- Italian:				Ruleless, xxcentury & Brisma (translation)
+					& GhostlyDark (ported / improvements)
 - Polish:				RPG (v1.3)
 - Russian:				Zelda64rus (v2.32)
 - Chinese Simplified:			madcell (2009)
@@ -152,6 +159,7 @@ Writers:				CDi-Fails, /Zel/
 Special Thanks:				Nokaubure, z64me, Ultra553, OoT Decomp
 
 --- Master of Time ---
+- Aegiker
 - doncamilo
 - Zel
 - Nokaubure

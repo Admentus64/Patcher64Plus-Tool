@@ -522,7 +522,7 @@ function IsLangText([object]$Elem, [string]$Compare, [int16]$Lang=0, [switch]$No
 
 
 #==============================================================================================================================================================================================
-function IsValue([object]$Elem,[int16]$Value, [switch]$Active, [switch]$Not) {
+function IsValue([object]$Elem, [int16]$Value, [switch]$Active, [switch]$Not) {
     
     if (!(IsSet $Value))                 { $Value = $Elem.Default }
     if ($Active -and !$Elem.Visible)     { return $False }
