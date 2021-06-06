@@ -104,7 +104,7 @@ function MainFunction([string]$Command, [string]$PatchedFileName) {
     }
 
     # Check if ROM is getting patched
-    if ( (IsChecked $Patches.Options) -or (IsChecked $Patches.Redux) -or (IsChecked $Patches.Downgrade) -or (IsSet $GamePatch.file) ) { $PatchROM = $True } else { $PatchROM = $False }
+    if ( (IsChecked $Patches.Options) -or (IsChecked $Patches.Redux) -or (IsChecked $Patches.Downgrade) -or (IsSet $GamePatch.patch) ) { $PatchROM = $True } else { $PatchROM = $False }
 
     # GO!
     if ($Settings.NoCleanup.Checked -ne $True -and $IsWiiVC) { RemovePath $Paths.Temp } # Remove the temp folder first to avoid issues
@@ -281,12 +281,12 @@ function WriteDebug([string]$Command, [String[]]$Header, [string]$PatchedFileNam
     WriteToConsole
     WriteToConsole
     WriteToConsole "--- Start Misc Settings Info ---"
-    WriteToConsole ("Ignore Input Checksum: " + $GeneralSettings.IgnoreChecksum)
-    WriteToConsole ("Lite Options GUI:      " + $GeneralSettings.LiteGUI)
-    WriteToConsole ("Force Show Options:    " + $GeneralSettings.ForceOptions)
-    WriteToConsole ("Use Local Temp Folder: " + $GeneralSettings.LocalTempFolder)
-    WriteToConsole ("Change Widescreen:     " + $GeneralSettings.ChangeWidescreen)
-    WriteToConsole ("Switch Decompressor:   " + $GeneralSettings.AltDecompress)
+    WriteToConsole ("Ignore Input Checksum: " + $GeneralSettings.IgnoreChecksum.Checked)
+    WriteToConsole ("Lite Options GUI:      " + $GeneralSettings.LiteGUI.Checked)
+    WriteToConsole ("Force Show Options:    " + $GeneralSettings.ForceOptions.Checked)
+    WriteToConsole ("Use Local Temp Folder: " + $GeneralSettings.LocalTempFolder.Checked)
+    WriteToConsole ("Change Widescreen:     " + $GeneralSettings.ChangeWidescreen.Checked)
+    WriteToConsole ("Switch Decompressor:   " + $GeneralSettings.AltDecompress.Checked)
     WriteToConsole "--- End Misc Settings Info ---"
     WriteToConsole
     WriteToConsole
@@ -553,7 +553,7 @@ function ConvertROM([string]$Command) {
 
     # Convert ROM if needed
     if ($GameConsole.mode -eq "SNES") {
-        if ((Get-Item -LiteralPath $GamePath).length/1KB % 2 -ne 0) {
+        if ((Get-Item -LiteralPath $GetROM.run).length/1KB % 2 -ne 0) {
             UpdateStatusLabel "Removing header from ROM..."
             $array = $array[512..$array.length]
         }

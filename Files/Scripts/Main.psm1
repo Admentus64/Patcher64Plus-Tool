@@ -178,7 +178,7 @@ function CreateMainDialog() {
     
     # Custom VC Title 
     $CustomHeader.VCTitleLabel = CreateLabel   -X ($CustomHeader.EnableHeader.Right) -Y (DPISize 22) -Width (DPISize 75)  -Height (DPISize 15) -Text "Channel Title:"
-    $CustomHeader.VCTitle      = CreateTextBox -X ($CustomHeader.VCTitleLabel.Right) -Y (DPISize 20) -Width (DPISize 250) -Height (DPISize 22) -Length 40
+    $CustomHeader.VCTitle      = CreateTextBox -X ($CustomHeader.VCTitleLabel.Right) -Y (DPISize 20) -Width (DPISize 250) -Height (DPISize 22) -Length $VCTitleLength
 
     # Custom VC GameID (N64 only)
     $CustomHeader.VCGameIDLabel = CreateLabel   -X ($CustomHeader.VCTitle.Right + (DPISize 10)) -Y (DPISize 22) -Width (DPISize 50) -Height (DPISize 15) -Text "GameID:" -Info "--- WARNING ---`nRequires four characters for acceptance`nChanging the GameID causes Dolphin to recognize the VC title as a separate save file`n`n--- REGION CODES ---`nE = USA`nJ = Japan`nP = PAL`nK = Korea"

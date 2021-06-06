@@ -24,13 +24,14 @@ Add-Type -AssemblyName 'System.Drawing'
 # Setup global variables
 
 $global:ScriptName = "Patcher64+ Tool"
-$global:VersionDate = "2021-06-05"
+$global:VersionDate = "2021-06-06"
 $global:Version     = "v14.1.0"
 $global:SystemDate  = Get-Date -Format yyyy-MM-dd-HH-mm-ss
 
 $global:CommandType = $MyInvocation.MyCommand.CommandType.ToString()
 $global:Definition  = $MyInvocation.MyCommand.Definition.ToString()
 
+$global:VCTitleLength = 40
 $global:GameConsole = $global:GameType = $global:GamePatch = $global:CheckHashSum = $null
 $global:GameFiles = $global:Settings = @{}
 $global:IsWiiVC = $global:MissingFiles = $False

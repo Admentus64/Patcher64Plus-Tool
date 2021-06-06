@@ -397,10 +397,10 @@ function ExtractWADFile([string]$PatchedFileName) {
     Push-Location $Paths.Temp
 
     # Run the program to extract the wad file
-    $ErrorActionPreference = 'SilentlyContinue'
+    $ErrorActionPreference = $WarningPreference = 'SilentlyContinue'
     try   { (& $Files.tool.wadunpacker $GamePath) | Out-Null }
     catch { }
-    $ErrorActionPreference = 'Continue'
+    $ErrorActionPreference = $WarningPreference = 'Continue'
 
     # Doesn't matter, but return to where we were
     Pop-Location
