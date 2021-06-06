@@ -1,5 +1,6 @@
 v14.1.1
 - Fixed issue with "A Link to the Past" hashsums
+- Fixed issue with "A Link to the Past" Redux patch being headered
 - Fixed issue with VC SNES titles removing the header when they shouldn't
 - Fixed issue with custom titles for Wii VC mode
 - Fixed issue with patches not applying
