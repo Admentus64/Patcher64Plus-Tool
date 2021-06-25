@@ -25,14 +25,10 @@ function SetFileParameters() {
 
 
     # Store all tool files
-    $Files.tool.Compress64                  = (GetFilePath) + "\Files\Tools\Compression\Compress64.exe"
-    $Files.tool.Compress32                  = (GetFilePath) + "\Files\Tools\Compression\Compress32.exe"
-    $Files.tool.Decompress                  = (GetFilePath) + "\Files\Tools\Compression\Decompress.exe"
-    $Files.tool.ndec64                      = (GetFilePath) + "\Files\Tools\Compression\ndec64.exe"
-    $Files.tool.ndec32                      = (GetFilePath) + "\Files\Tools\Compression\ndec32.exe"
+    $Files.tool.Compress                    = (GetFilePath) + "\Files\Tools\Compression\Compress.exe"
+    $Files.tool.ndec                        = (GetFilePath) + "\Files\Tools\Compression\ndec.exe"
     $Files.tool.sm64extend                  = (GetFilePath) + "\Files\Tools\Compression\sm64extend.exe"
-    $Files.tool.TabExt64                    = (GetFilePath) + "\Files\Tools\Compression\TabExt64.exe"
-    $Files.tool.TabExt32                    = (GetFilePath) + "\Files\Tools\Compression\TabExt32.exe"
+    $Files.tool.TabExt                      = (GetFilePath) + "\Files\Tools\Compression\TabExt.exe"
 
     $Files.tool.applyPPF3                   = (GetFilePath) + "\Files\Tools\Patching\ApplyPPF3.exe"
     $Files.tool.flips                       = (GetFilePath) + "\Files\Tools\Patching\flips.exe"
@@ -81,7 +77,6 @@ function SetFileParameters() {
     $Files.oot.iron_shield_front            = $Paths.Games + "\Ocarina of Time\Textures\Iron Shield\front.bin"
     $Files.oot.iron_shield_front            = $Paths.Games + "\Ocarina of Time\Textures\Iron Shield\back.bin"
     $Files.oot.iron_shield_icon             = $Paths.Games + "\Ocarina of Time\Textures\Iron Shield\icon.bin"
-    $Files.oot.master_sword_icon            = $Paths.Games + "\Ocarina of Time\Textures\Master Sword\beta_master_sword.icon"
     $Files.oot.l_target_button              = $Paths.Games + "\Ocarina of Time\Textures\GameCube\l_pause_screen_button.bin"
     $Files.oot.l_target_icon                = $Paths.Games + "\Ocarina of Time\Textures\GameCube\l_text_icon.bin"
     $Files.oot.keaton_mask                  = $Paths.Games + "\Ocarina of Time\Textures\Keaton Mask\keaton_mask.bin"
@@ -115,10 +110,6 @@ function SetFileParameters() {
     $Files.oot.gerudo7                      = $Paths.Games + "\Ocarina of Time\Textures\Gerudo Symbols\gerudo_training_ground_room_5.bin"
     $Files.oot.gerudo8                      = $Paths.Games + "\Ocarina of Time\Textures\Gerudo Symbols\gerudo_valley.bin"
     $Files.oot.gerudo9                      = $Paths.Games + "\Ocarina of Time\Textures\Gerudo Symbols\golden_gauntlets_pillar.bin"
-    $Files.oot.gerudo10                     = $Paths.Games + "\Ocarina of Time\Textures\Gerudo Symbols\mirror_shield.bin"
-    $Files.oot.gerudo11                     = $Paths.Games + "\Ocarina of Time\Textures\Gerudo Symbols\mirror_shield_chest.bin"
-    $Files.oot.gerudo12                     = $Paths.Games + "\Ocarina of Time\Textures\Gerudo Symbols\mirror_shield_icon.bin"
-    $Files.oot.gerudo13                     = $Paths.Games + "\Ocarina of Time\Textures\Gerudo Symbols\mirror_shield_reflection.bin"
     $Files.oot.gerudo14                     = $Paths.Games + "\Ocarina of Time\Textures\Gerudo Symbols\pushing_block.bin"
     $Files.oot.gerudo15                     = $Paths.Games + "\Ocarina of Time\Textures\Gerudo Symbols\rusted_floor_switch.bin"
     $Files.oot.gerudo16                     = $Paths.Games + "\Ocarina of Time\Textures\Gerudo Symbols\shadow_temple_room_0.bin"

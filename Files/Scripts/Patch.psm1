@@ -251,7 +251,7 @@ function MainFunctionPatch([string]$Command, [Array]$Header, [string]$PatchedFil
 
 
 #==============================================================================================================================================================================================
-function WriteDebug([string]$Command, [String[]]$Header, [string]$PatchedFileName, [boolean]$Decompress, [boolean]$Finalize, [boolean]$PatchROM) {
+function WriteDebug([string]$Command, [string[]]$Header, [string]$PatchedFileName, [boolean]$Decompress, [boolean]$Finalize, [boolean]$PatchROM) {
     
     WriteToConsole
     WriteToConsole "--- Start Patch Info ---"
@@ -526,7 +526,7 @@ function DowngradeROM([boolean]$Decompress) {
 
 
 #==============================================================================================================================================================================================
-function GetMaxSize([String]$Command) {
+function GetMaxSize([string]$Command) {
 
     if ($Settings.Debug.IgnoreChecksum -eq $True) { return $True }
     if ( (StrLike -str $Command -val "Inject") ) { return $True }
@@ -780,19 +780,10 @@ function DecompressROM([boolean]$Decompress) {
         if     ( (IsSet $GamePatch.redux.dmaTable) -and (IsChecked $Patches.Redux) )                                   { RemoveFile $Files.dmaTable; Add-Content $Files.dmaTable $GamePatch.redux.dmaTable }
         elseif (IsSet $GamePatch.dmaTable)                                                                             { RemoveFile $Files.dmaTable; Add-Content $Files.dmaTable $GamePatch.dmaTable }
         elseif ( (IsSet $GameType.dmaTable) -and $ROMHashSum -ne $CheckHashSum -and (IsChecked $Patches.Downgrade) )   { RemoveFile $Files.dmaTable; Add-Content $Files.dmaTable $GameType.dmaTable }
-        elseif ($Settings.Core.Bit64 -eq $True)                                                                        { & $Files.tool.TabExt64 $GetROM.run | Out-Null }
-        else                                                                                                           { & $Files.tool.TabExt32 $GetROM.run | Out-Null }
+        else                                                                                                           { & $Files.tool.TabExt $GetROM.run | Out-Null }
 
         WriteToConsole ("Generated DMA Table from: " + $GetROM.run)
-        if ($Settings.Debug.AltDecompress -eq $True) {
-            Copy-Item -LiteralPath $GetROM.run -Destination $GetROM.decomp -Force
-            & $Files.tool.Decompress $GetROM.decomp | Out-Null
-            Move-Item -LiteralPath ($GetROM.decomp + "-decomp.z64") -Destination $GetROM.decomp -Force
-        }
-        else {
-            if ($Settings.Core.Bit64 -eq $True)   { & $Files.tool.ndec64 $GetROM.run $GetROM.decomp | Out-Null }
-            else                                  { & $Files.tool.ndec32 $GetROM.run $GetROM.decomp | Out-Null }
-        }
+        & $Files.tool.ndec $GetROM.run $GetROM.decomp | Out-Null
         WriteToConsole ("Decompressed ROM: " + $GetROM.decomp)
         Pop-Location
 
@@ -828,8 +819,7 @@ function CompressROM([boolean]$Decompress, [boolean]$Finalize) {
         RemoveFile $Files.archive
         
         Push-Location -LiteralPath $Paths.Temp
-        if ($Settings.Core.Bit64 -eq $True)   { & $Files.tool.Compress64 $GetROM.decomp $GetROM.patched | Out-Null }
-        else                                  { & $Files.tool.Compress32 $GetROM.decomp $GetROM.patched | Out-Null }
+        & $Files.tool.Compress $GetROM.decomp $GetROM.patched | Out-Null
         WriteToConsole ("Compressed ROM: " + $GetROM.patched)
         Pop-Location
 

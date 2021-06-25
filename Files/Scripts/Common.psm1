@@ -236,6 +236,7 @@ function ChangeGameMode() {
     $GameFiles.models       = $GameFiles.Base + "\Models"
     $GameFiles.downgrade    = $GameFiles.Base + "\Downgrade"
     $GameFiles.textures     = $GameFiles.Base + "\Textures"
+    $GameFiles.editor       = $GameFiles.Base + "\Editor"
     $GameFiles.info         = $GameFiles.Base + "\Info.txt"
     $GameFiles.patches      = $GameFiles.Base + "\Patches.json"
     $GameFiles.controls     = $GameFiles.Base + "\Controls.json"
@@ -839,7 +840,7 @@ function EnableElem([object]$Elem, [boolean]$Active=$True, [switch]$Hide) {
 
 
 #==============================================================================================================================================================================================
-function GetFileName([string]$Path, [string]$Description, [String[]]$FileNames) {
+function GetFileName([string]$Path, [string]$Description, [string[]]$FileNames) {
     
     $OpenFileDialog = New-Object System.Windows.Forms.OpenFileDialog
     $OpenFileDialog.InitialDirectory = $Path

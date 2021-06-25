@@ -109,6 +109,11 @@
 		"name"		: "Mega Man",
 		"author"	: "Psi-Hate"
 	}, {
+		"name"		: "Sunny",
+		"author"	: "Unesag & Amara",
+		"hylian_shield"	: 0,
+		"mirror_shield" : 0
+	}, {
 		"name"		: "Amara (Demo)",
 		"author"	: "Amara & Karicyan",
 		"wip"		: 2

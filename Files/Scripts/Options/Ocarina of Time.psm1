@@ -76,7 +76,7 @@ function ByteOptions() {
     if (IsChecked $Redux.Gameplay.FixGraves)           { ChangeBytes -Offset "202039D" -Values "20"; ChangeBytes -Offset "202043C" -Values "24" }
     if (IsChecked $Redux.Gameplay.DistantZTargeting)   { ChangeBytes -Offset "A987AC"  -Values "00 00 00 00" }
     if (IsChecked $Redux.Gameplay.ManualJump)          { ChangeBytes -Offset "BD78C0"  -Values "04 C1"; ChangeBytes -Offset "BD78E3" -Values "01" }
-    if (IsChecked $Redux.Gameplay.NoFlashKill)         { ChangeBytes -Offset "B11C33"  -Values "00" }
+    if (IsChecked $Redux.Gameplay.NoKillFlash)         { ChangeBytes -Offset "B11C33"  -Values "00" }
 
     <#if (IsChecked $Redux.Gameplay.SwordBeamAttack) {
         ChangeBytes -Offset "D280"   -Values "03 47 E0 00 03 47 FA B0 03 47 E0 00"; ChangeBytes -Offset "B5EF7E" -Values "9B 70"; ChangeBytes -Offset "BEFBF0"  -Values "0C"
@@ -187,7 +187,8 @@ function ByteOptions() {
         ChangeBytes -Offset "B0F688" -Values "00 00 00 00"
     }
 
-    if (IsChecked $Redux.Graphics.ExtendedDraw)      { ChangeBytes -Offset "A9A970" -Values "00 01" }
+    if (IsChecked $Redux.Graphics.ExtendedDraw)      { ChangeBytes -Offset "ABECDE" -Values "3E 80"; ChangeBytes -Offset "ABED0A" -Values "3E 80" }
+  # if (IsChecked $Redux.Graphics.ExtendedDraw)      { ChangeBytes -Offset "A9A970" -Values "00 01" }
     if (IsChecked $Redux.Graphics.ForceHiresModel)   { ChangeBytes -Offset "BE608B" -Values "00" }
 
 
@@ -205,6 +206,87 @@ function ByteOptions() {
         ChangeBytes -Offset "B586A7" -Values "0E" -Add # A Button / Text - Y position (09 -> 17, +0E)
         ChangeBytes -Offset "B57EEF" -Values "07" -Add # B Button - X position (A0 -> A7, +07)
         ChangeBytes -Offset "B589EB" -Values "07" -Add # B Text   - X position (94 -> 9B, +07)
+
+        <# X POSITION
+        B57F02 # A Button              - X Position (00 BA) - GS: 801C7947
+        B57F02 # A Button Text         - X Position (00 BA) - GS: 801C794D
+        
+        B57EEE # B Button Icon         - Y Position (00 A0) - GS: 801C76C9
+        B57EEE # B Button              - X Position (00 A0) - GS: 801C76B1
+        B57EFE # B Button Ammo         - X Position (00 A2) - GS: 801C7E25
+        B589EA # B Button Text         - X Position (00 94) - GS: 
+
+        B584EF # Start Button          - X Position (00 84) - GS: 801C76AD
+        B58492 # Start Button Japanese - X Position (00 7A) - GS: 801C7693
+        B5849E # Start Button English  - X Position (00 78) - GS: 801C7695
+
+        B582DE # C-Up Button Navi Text - X Position (00 F7) - GS: 801C73D5
+        B584C2 # C-Up Button           - X Position (00 FE) - GS: 801C76A1
+
+        B58506 # C-Left Button         - X Position (00 E3) - GS: 801C76B3
+        B5857B # C-Left Button Icon    - X Position (00 E3) - GS: 801C76CB
+        B58DC6 # C-Down Button Ammo    - X Position (00 E4) - GS: 801C7E27
+
+        B58512 # C-Down Button         - X Position (00 F9) - GS: 801C76B5
+        B5858A # C-Down Button Icon    - X Position (00 F9) - GS: 801C76CD
+        B58C42 # C-Down Button Ammo    - X Position (00 FA) - GS: 801C7E29
+
+        B5851E # C-Right Button        - X Position (01 0F) - GS: 811C76B6
+        B58596 # C-Right Button Icon   - X Position (01 0F) - GS: 811C76CE
+        B58DE2 # C-Right Button Ammo   - X Position (01 10) - GS: 811C7E2A
+        #>
+
+        <# Y POSITION
+        B586A6 # A Button              - Y Position (00 09) - GS: 801C7945
+        B586A6 # A Button Text         - Y Position (00 09) - GS: 801C794B
+
+        B5852A # B Button Icon         - Y Position (00 11) - GS: 801C76D1
+        B585A2 # B Button              - Y Position (00 11) - GS: 801C76B9
+        B58C52 # B Button Ammo         - Y Position (00 23) - GS: 801C7E2D
+        ?????? # B Button Text         - Y Position (?? ??) - GS: 
+
+        B584FA # Start Button          - Y Position (00 11) - GS: 801C76AF
+        B58476 # Start Button Japanese - Y Position (00 15) - GS: 801C768F 
+        B5802B # Start Button English  - Y Position (00 14) - GS: 801C7691
+
+        B5802A # C-Up Button Navi Text - Y Position (00 14) - GS: 801C73D7
+        B58046 # C-Up Button           - Y Position (00 10) - GS: 801C76A3
+
+        B54D36 # C-Left Button         - Y Position (00 12) - GS: 801C76BB
+        B54D36 # C-Left Button Icon    - Y Position (00 12) - GS: 801C76D3
+        B58C52 # C-Left Button Ammo    - Y Position (00 23) - GS: 801C7E2F
+
+        B58536 # C-Down Button         - Y Position (00 22) - GS: 801C76BD
+        B585AE # C-Down Button Icon    - Y Position (00 22) - GS: 801C76D5
+        B58DFE # C-Down Button Ammo    - Y Position (00 33) - GS: 801C7E31
+
+        B54D36 # C-Right Button        - Y Position (00 12) - GS: 801C76BF
+        B54D36 # C-Right Button Icon   - Y Position (00 12) - GS: 801C76D7
+        B58C52 # C-Right Button Ammo   - Y Position (00 23) - GS: 801C7E33
+        #>
+
+        <# SCALE
+        B586B2 # A Button              -   Scale (FE 84) - GS: 811C7948
+        B5804E # A Button Icon         - X Scale (00 30) - GS: 801C794F
+        B58046 # A Button Icon         - Y Scale (00 10) - GS: 801C795D
+
+        B5854A # B Button              -   Scale (02 3F) - GS: 801C76C0
+        B585C2 # B Button Icon         -   Scale (02 26) - GS: 801C76D8
+
+        ?????? # Start Button          -   Scale (?? ??) - GS: 
+        B5803E # Start Button Text     -   Scale (00 64) - GS: 801C7689
+
+        ?????? # C-Up Button           -   Scale (?? ??) - GS:
+
+        B58556 # C-Left Button         -   Scale (02 6C) - GS: 801C76C2
+        B585CE # C-Left Button Icon    -   Scale (02 A8) - GS: 801C76DA
+
+        B5856A # C-Down Button         -   Scale (02 6C) - GS: 801C76C4
+        B585E2 # C-Down Button Icon    -   Scale (02 A8) - GS: 801C76DC
+
+        B58556 # C-Right Button        -   Scale (02 6C) - GS: 801C76C6
+        B585CE # C-Right Button Icon   -   Scale (02 A8) - GS: 801C76DE
+        #>
     }
 
     if (IsChecked $Redux.UI.CenterNaviPrompt) {
@@ -406,7 +488,7 @@ function ByteOptions() {
         ChangeBytes -Offset "BFADAB" -Values "10"; ChangeBytes -Offset "D09283" -Values "1C"; ChangeBytes -Offset "CDE1FC" -Values "14" # Stalfos, Dead Hand, Poe Sisters
         ChangeBytes -Offset "C3452F" -Values "0C"; ChangeBytes -Offset "C3453B" -Values "18" # Lizalfos, Dinolfos
         ChangeBytes -Offset "ED80EB" -Values "10" # Wolfos 
-        ChangeBytes -Offset "DE9A1B" -Values "3C"; ChangeBytes -Offset "DEB34F" -Values "15" # Iron Knuckle
+        ChangeBytes -Offset "DE9A1B" -Values "3C"; ChangeBytes -Offset "DEB34F" -Values "15"; ChangeBytes -Offset "DEB367" -Values "15" # Iron Knuckle
         ChangeBytes -Offset "EBC8B7" -Values "28" # Gerudo Fighter
         ChangeBytes -Offset "CF2667" -Values "0A" # Flare Dancer
         ChangeBytes -Offset "DEF87F" -Values "14" # Skullkid
@@ -416,7 +498,7 @@ function ByteOptions() {
         ChangeBytes -Offset "BFADAB" -Values "1E"; ChangeBytes -Offset "D09283" -Values "2A"; ChangeBytes -Offset "CDE1FC" -Values "1E" # Stalfos, Dead Hand, Poe Sisters
         ChangeBytes -Offset "C3452F" -Values "12"; ChangeBytes -Offset "C3453B" -Values "24" # Lizalfos, Dinolfos
         ChangeBytes -Offset "ED80EB" -Values "18" # Wolfos
-        ChangeBytes -Offset "DE9A1B" -Values "5A"; ChangeBytes -Offset "DEB34F" -Values "1F" # Iron Knuckle    (Phase 2)    (HP: 0B)
+        ChangeBytes -Offset "DE9A1B" -Values "5A"; ChangeBytes -Offset "DEB34F" -Values "1F"; ChangeBytes -Offset "DEB367" -Values "1F" # Iron Knuckle
         ChangeBytes -Offset "EBC8B7" -Values "3C" # Gerudo Fighter
         ChangeBytes -Offset "CF2667" -Values "0C" # Flare Dancer
         ChangeBytes -Offset "DEF87F" -Values "1E" # Skullkid 
@@ -572,7 +654,6 @@ function ByteOptions() {
     }
 
 
-    
     # EQUIPMENT #
 
     if (IsChecked $Redux.Equipment.IronShield) {
@@ -585,26 +666,41 @@ function ByteOptions() {
         }
     }
 
+    if (IsChecked $Redux.Equipment.UnsheathSword)     { ChangeBytes -Offset "BD04A0" -Values "28 42 00 05 14 40 00 05 00 00 10 25" }
+
+
+
+    
+    # SWORDS AND SHIELDS #
+
+    if (TestFile ($GameFiles.textures + "\Master Sword\" + $Redux.Equipment.MasterSword.text + ".icon"))                                  { PatchBytes -Offset "7F9000" -Texture -Patch ("Master Sword\" + $Redux.Equipment.MasterSword.text + ".icon") }
+    if (TestFile ($GameFiles.textures + "\Master Sword\" + $Redux.Equipment.MasterSword.text + "." + $LanguagePatch.code + ".label"))     { PatchBytes -Offset "8DC800" -Texture -Patch ("Master Sword\" + $Redux.Equipment.MasterSword.text + "." + $LanguagePatch.code + ".label") }
+
     if ($ChildModel.hylian_shield -ne 0 -and $AdultModel.hylian_shield -ne 0 -and (TestFile ($GameFiles.textures + "\Hylian Shield\" + $Redux.Equipment.HylianShield.text + ".bin"))) {
         PatchBytes -Offset "F03400" -Texture -Patch ("Hylian Shield\" + $Redux.Equipment.HylianShield.text + ".bin")
         $Offset = SearchBytes -Start "FBE000" -End "FEAF80" -Values "BE 35 BE 77 C6 B9 CE FB D6 FD D7 3D DF 3F DF 7F"
-        if ($Offset -gt 0)                                                                                                                    { PatchBytes -Offset $Offset  -Texture -Patch ("Hylian Shield\" + $Redux.Equipment.HylianShield.text + ".bin") }
-        if (TestFile ($GameFiles.textures + "\Hylian Shield\" + $Redux.Equipment.HylianShield.text + ".icon"))                                { PatchBytes -Offset "7FC000" -Texture -Patch ("Hylian Shield\" + $Redux.Equipment.HylianShield.text + ".icon") }
-        if (TestFile ($GameFiles.textures + "\Hylian Shield\" + $Redux.Equipment.HylianShield.text + "." + $LanguagePatch.code + ".label"))   { PatchBytes -Offset "8AE800" -Texture -Patch ("Hylian Shield\" + $Redux.Equipment.HylianShield.text + "." + $LanguagePatch.code + ".label") }
-
-        ChangeBytes -Offset "BC77B2" -Values "00 00" -Interval 73 # Lock Hylian Shield
+        if ($Offset -gt 0)                                                                                                                { PatchBytes -Offset $Offset  -Texture -Patch ("Hylian Shield\" + $Redux.Equipment.HylianShield.text + ".bin") }
     }
+    if (TestFile ($GameFiles.textures + "\Hylian Shield\" + $Redux.Equipment.HylianShield.text + ".icon"))                                { PatchBytes -Offset "7FC000" -Texture -Patch ("Hylian Shield\" + $Redux.Equipment.HylianShield.text + ".icon") }
+    if (TestFile ($GameFiles.textures + "\Hylian Shield\" + $Redux.Equipment.HylianShield.text + "." + $LanguagePatch.code + ".label"))   { PatchBytes -Offset "8AE800" -Texture -Patch ("Hylian Shield\" + $Redux.Equipment.HylianShield.text + "." + $LanguagePatch.code + ".label") }
+    # ChangeBytes -Offset "BC77B2" -Values "00 00" -Interval 73 # Lock Hylian Shield
+
+    if ($AdultModel.mirror_shield -ne 0 -and (TestFile ($GameFiles.textures + "\Mirror Shield\" + $Redux.Equipment.MirrorShield.text + ".bin"))) {
+        $Offset = SearchBytes -Start "F86000" -End "FBD800" -Values "90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90"
+        PatchBytes -Offset $Offset -Texture -Patch ("Mirror Shield\" + $Redux.Equipment.MirrorShield.text + ".bin")
+        if (TestFile ($GameFiles.textures + "\Mirror Shield\" + $Redux.Equipment.MirrorShield.text + ".chest"))                           { PatchBytes -Offset "1616000" -Texture -Patch ("Mirror Shield\" + $Redux.Equipment.MirrorShield.text + ".chest") }
+        if (TestFile ($GameFiles.textures + "\Mirror Shield\" + $Redux.Equipment.MirrorShield.text + ".reflection"))                      { PatchBytes -Offset "1456388" -Texture -Patch ("Mirror Shield\" + $Redux.Equipment.MirrorShield.text + ".reflection") }
+    }
+    if (TestFile ($GameFiles.textures + "\Mirror Shield\" + $Redux.Equipment.MirrorShield.text + ".icon"))                                { PatchBytes -Offset "7FD000"  -Texture -Patch ("Mirror Shield\" + $Redux.Equipment.MirrorShield.text + ".icon") }
+    if (TestFile ($GameFiles.textures + "\Mirror Shield\" + $Redux.Equipment.MirrorShield.text + "." + $LanguagePatch.code + ".label"))   { PatchBytes -Offset "8AEC00"  -Texture -Patch ("Mirror Shield\" + $Redux.Equipment.MirrorShield.text + "." + $LanguagePatch.code + ".label") }
 
     if     (IsChecked $Redux.Graphics.ListAdultMaleModels)            { $file = "Adult Male\"   + $Redux.Graphics.AdultMaleModels.Text.replace(" (default)", "")   }
     elseif (IsChecked $Redux.Graphics.ListAdultFeMaleModels)          { $file = "Adult Female\" + $Redux.Graphics.AdultFemaleModels.Text.replace(" (default)", "") }
     if     (TestFile ($GameFiles.models + "\" + $file + ".master"))   { PatchBytes -Offset "7F9000" -Models -Patch ($file + ".master") }
-    if     (TestFile ($GameFiles.models + "\" + $file + ".master"))   { PatchBytes -Offset "7FC000" -Models -Patch ($file + ".hylian") }
+    if     (TestFile ($GameFiles.models + "\" + $file + ".hylian"))   { PatchBytes -Offset "7FC000" -Models -Patch ($file + ".hylian") }
     if     (TestFile ($GameFiles.models + "\" + $file + ".mirror"))   { PatchBytes -Offset "7FD000" -Models -Patch ($file + ".mirror") }
 
-    if (IsChecked $Redux.Equipment.UnsheathSword)     { ChangeBytes -Offset "BD04A0" -Values "28 42 00 05 14 40 00 05 00 00 10 25" }
-    if (IsChecked $Redux.Equipment.BetaMasterSword)   { PatchBytes -Offset "7F9000" -Texture -Patch "Master Sword\beta_master_sword.icon" }
-
-
+    
 
     # HITBOX #
     if (IsValue -Elem $Redux.Hitbox.KokiriSword       -Not)   { ChangeBytes -Offset "B6DB18" -Values (ConvertFloatToHex $Redux.Hitbox.KokiriSword.Value) }
@@ -852,13 +948,13 @@ function ByteOptions() {
         PatchBytes -Offset "F80CB0"  -Texture -Patch "Gerudo Symbols\crystal_switch.bin"
         
         # Mirror Shield
-        PatchBytes -Offset "7FD000"  -Texture -Patch "Gerudo Symbols\mirror_shield_icon.bin"
-        PatchBytes -Offset "1456388" -Texture -Patch "Gerudo Symbols\mirror_shield_reflection.bin"
-        PatchBytes -Offset "1616000" -Texture -Patch "Gerudo Symbols\mirror_shield_chest.bin"
-        if ($AdultModel.mirror_shield -ne 0) {
+        # PatchBytes -Offset "7FD000"  -Texture -Patch "Gerudo Symbols\mirror_shield_icon.bin"
+        # PatchBytes -Offset "1456388" -Texture -Patch "Gerudo Symbols\mirror_shield_reflection.bin"
+        # PatchBytes -Offset "1616000" -Texture -Patch "Gerudo Symbols\mirror_shield_chest.bin"
+        <# if ($AdultModel.mirror_shield -ne 0) {
             $Offset = SearchBytes -Start "F86000" -End "FBD800" -Values "90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90"
             PatchBytes -Offset $Offset -Texture -Patch "Gerudo Symbols\mirror_shield.bin"
-        }
+        } #>
 
         # Dungeons / Areas
         PatchBytes -Offset "21B8678" -Texture -Patch "Gerudo Symbols\gerudo_valley.bin"
@@ -902,8 +998,6 @@ function ByteReduxOptions() {
      # BUTTON COLORS #
 
      if (IsDefaultColor -Elem $Redux.Colors.SetButtons[0] -Not) { # A Button
-        #ChangeBytes -Offset "348085F" -Values "FF 00 50" # Cursor
-        #ChangeBytes -Offset "3480859" -Values "C8 00 50" # Cursor
         ChangeBytes -Offset "3480845" -IsDec -Values @($Redux.Colors.SetButtons[0].Color.R, $Redux.Colors.SetButtons[0].Color.G, $Redux.Colors.SetButtons[0].Color.B) -Interval 2
         ChangeBytes -Offset "3480863" -IsDec -Values @($Redux.Colors.SetButtons[0].Color.R, $Redux.Colors.SetButtons[0].Color.G, $Redux.Colors.SetButtons[0].Color.B) -Interval 2 # Note Button
 
@@ -960,6 +1054,15 @@ function ByteReduxOptions() {
     if (IsDefaultColor -Elem $Redux.Colors.SetButtons[3] -Not) { # Start Button
         ChangeBytes -Offset "AE9EC6" -IsDec -Values @($Redux.Colors.SetButtons[3].Color.R, $Redux.Colors.SetButtons[3].Color.G) # Red + Green
         ChangeBytes -Offset "AE9ED8" -IsDec -Values @("53", "238", $Redux.Colors.SetButtons[3].Color.B) # Blue
+    }
+
+
+
+    # HUD COLORS #
+
+    if (IsChecked $Redux.Colors.GreenTextCursor) {
+        ChangeBytes -Offset "348085F" -Values "FF 00 50" # Cursor
+        ChangeBytes -Offset "3480859" -Values "C8 00 50" # Cursor
     }
 
 }
@@ -1163,7 +1266,7 @@ function ByteLanguageOptions() {
 function CreateOptions() {
     
     if ($Settings.Debug.LiteGUI -eq $False) {
-        CreateOptionsDialog -Width 1060 -Height 605 -Tabs @("Main", "Audiovisual", "Difficulty", "Colors", "Equipment", "Animations")
+        CreateOptionsDialog -Width 1060 -Height 655 -Tabs @("Main", "Audiovisual", "Difficulty", "Colors", "Equipment", "Animations")
     }
     else {
         CreateOptionsDialog -Width 1060 -Height 450 -Tabs @("Main", "Audiovisual", "Difficulty")
@@ -1200,7 +1303,7 @@ function CreateTabMain() {
     }
     CreateReduxCheckBox     -Name "DistantZTargeting"           -Text "Distant Z-Targeting"    -Info "Allow to use Z-Targeting on enemies, objects and NPC's from any distance"                                      -Credits "Admentus"
     CreateReduxCheckBox     -Name "ManualJump"                  -Text "Manual Jump"            -Info "Press Z + A to do a Manual Jump instead of a Jump Attack`nPress B mid-air after jumping to do a Jump Attack"   -Credits "Admentus (ROM hack) & CloudModding (GameShark)"
-    CreateReduxCheckBox     -Name "NoFlashKill"                 -Text "No Flash Kill"          -Info "Disable the flash effect when killing certain enemies such as the Guay or Skullwalltula"                       -Credits "Chez Cousteau"
+    CreateReduxCheckBox     -Name "NoKillFlash"                 -Text "No Kill Flash"          -Info "Disable the flash effect when killing certain enemies such as the Guay or Skullwalltula"                       -Credits "Chez Cousteau"
     
     # RESTORE #
     CreateReduxGroup        -Tag  "Restore" -Text "Restore / Correct / Censor"
@@ -1239,7 +1342,12 @@ function CreateTabRedux() {
     CreateReduxCheckBox -Name "ShowFileSelectIcons" -Checked -Text "Show File Select Icons" -Info "Show icons on the File Select screen to display your save file progress" -Credits "ShadowOne333"
     CreateReduxCheckBox -Name "DPadLayoutShow"      -Checked -Text "Show D-Pad Icon"        -Info "Show the D-Pad icons ingame that display item shortcuts"                 -Credits "Ported from Redux"
 
+    # BUTTON COLORS #
     CreateButtonColorOptions
+
+    # HUD COLORS #
+    CreateReduxGroup    -Tag  "Colors" -Text "HUD Colors"
+    CreateReduxCheckBox -Name "GreenTextCursor"               -Text "Green Text Cursor"     -Info "Change the color for the text cursor from blue to green"                 -Credits "Ported from Redux"
 
 }
 
@@ -1284,6 +1392,7 @@ function UnlockLanguageContent() {
     EnableElem -Elem $Redux.Text.Redux          -Active $Redux.Language[0].Checked
     EnableElem -Elem $Redux.Text.Restore        -Active $Redux.Language[0].Checked
     EnableElem -Elem $Redux.Text.FemalePronouns -Active $Redux.Language[0].Checked
+    EnableElem -Elem $Redux.Text.KeatonMaskFix  -Active $Redux.Language[0].Checked
     EnableElem -Elem $Redux.Text.PauseScreen    -Active $Redux.Language[0].Checked
 
     # Set max text speed in each language
@@ -1575,10 +1684,14 @@ function CreateTabEquipment() {
 
     # EQUIPMENT #
     CreateReduxGroup    -Tag  "Equipment" -Text "Equipment Adjustments"
-    CreateReduxCheckBox -Name "UnsheathSword"    -Text "Unsheath Sword"      -Column 1.0 -Info "The sword is unsheathed first before immediately swinging it" -Credits "Admentus"
-    CreateReduxCheckBox -Name "IronShield"       -Text "Iron Shield"         -Column 1.75 -Info "Replace the Deku Shield with the Iron Shield, which will not burn up anymore" -Warning "Some custom models do not support the new textures, but will still keep the fireproof shield" -Credits "Admentus (ported), ZombieBrainySnack (textures) & Three Pendants (Debug fireproof ROM patch)"
-    CreateReduxCheckBox -Name "BetaMasterSword"  -Text "Master Sword (Beta)" -Column 2.50 -Info "Replace the Master Sword icon with that from the beta" -Credits "CYB3RTR0N"
-    CreateReduxComboBox -Name "HylianShield"     -Text "Hylian Shield"       -Column 3.50 -Items @("Hylian Shield") -FilePath ($GameFiles.Textures + "\Hylian Shield") -Info "Select an alternative for the appearence of the Hylian Shield" -Credits "Admentus (injects), GhostlyDark (injects), CYB3RTR0N (icons) & sanguinetti (Beta / Red Shield textures)"
+    CreateReduxCheckBox -Name "UnsheathSword" -Text "Unsheath Sword" -Column 1 -Info "The sword is unsheathed first before immediately swinging it" -Credits "Admentus"
+    CreateReduxCheckBox -Name "IronShield"    -Text "Iron Shield"    -Column 2 -Info "Replace the Deku Shield with the Iron Shield, which will not burn up anymore" -Warning "Some custom models do not support the new textures, but will still keep the fireproof shield" -Credits "Admentus (ported), ZombieBrainySnack (textures) & Three Pendants (Debug fireproof ROM patch)"
+    
+    CreateReduxGroup    -Tag  "Equipment" -Text "Swords and Shields"
+    CreateReduxComboBox -Name "MasterSword"   -Text "Master Sword"   -Column 1 -Items @("Master Sword")  -FilePath ($GameFiles.Textures + "\Master Sword")  -Ext @("icon", "bin") -Info "Select an alternative for the appearence of the Master Sword"  -Credits "Admentus & GhostlyDark (injects) & CYB3RTR0N (beta icon)"
+    CreateReduxComboBox -Name "HylianShield"  -Text "Hylian Shield"  -Column 3 -Items @("Hylian Shield") -FilePath ($GameFiles.Textures + "\Hylian Shield") -Ext @("icon", "bin") -Info "Select an alternative for the appearence of the Hylian Shield" -Credits "Admentus & GhostlyDark (injects), CYB3RTR0N (icons) & sanguinetti (Beta / Red Shield textures)"
+    CreateReduxComboBox -Name "MirrorShield"  -Text "Mirror Shield"  -Column 5 -Items @("Mirror Shield") -FilePath ($GameFiles.Textures + "\Mirror Shield") -Ext @("icon", "bin") -Info "Select an alternative for the appearence of the Mirror Shield" -Credits "Admentus & GhostlyDark (injects)"
+
 
     # HITBOX #
     CreateReduxGroup  -Tag  "Hitbox" -Text "Weapon Hitboxes" -Height 2.7

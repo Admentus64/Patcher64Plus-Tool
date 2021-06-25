@@ -1,3 +1,19 @@
+v14.1.3
+- Added custom "Sunny" model for OoT
+- Added missing Beta / Debug revisions for OoT in the database
+- Added "Green Text Cursor" option for OoT
+- Added new dropdown menus to select icons / models for the Master Sword and Mirror Shield
+- Changed "No Flash Kill" option for OoT to "No Kill Flash"
+- Changed equipment dropdown menus to allow icon / text label changes regardless of model compatbility
+- Changed 3D equipment icons into the dropdown menus instead of being applied with the 3D model
+- Removed "Switch Decompressor" option
+- Removed support for 32-bit tools
+- Fixed issue with swapped 32-bit and 64-bit version for ndec
+- Corrected version number
+
+v14.1.2
+- Fixed increasing HP for second phase of Iron Knuckle
+
 v14.1.1
 - Fixed issue with "A Link to the Past" hashsums
 - Fixed issue with "A Link to the Past" Redux patch being headered

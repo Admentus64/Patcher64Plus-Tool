@@ -545,7 +545,7 @@ function CreateReduxCheckBox([single]$Column=$Last.Column, [single]$Row=$Last.Ro
 
 
 #==============================================================================================================================================================================================
-function CreateReduxComboBox([single]$Column=$Last.Column, [single]$Row=$Last.Row, [int16]$Length=160, [int]$Shift=0, [string[]]$Items=$null, [string[]]$PostItems=$null, [string]$FilePath, $Default=1, [switch]$NoDefault, [string]$Text, [string]$Info, [string]$Warning, [string]$Credits, [string]$Name, [string]$Tag, [object]$AddTo=$Last.Group) {
+function CreateReduxComboBox([single]$Column=$Last.Column, [single]$Row=$Last.Row, [int16]$Length=160, [int]$Shift=0, [string[]]$Items=$null, [string[]]$PostItems=$null, [string]$FilePath, $Ext="bin", $Default=1, [switch]$NoDefault, [string]$Text, [string]$Info, [string]$Warning, [string]$Credits, [string]$Name, [string]$Tag, [object]$AddTo=$Last.Group) {
     
     if (IsSet $Warning) {
         if (IsSet $Info)   { $Info += ("`n[!] " + $Warning) }
@@ -559,7 +559,14 @@ function CreateReduxComboBox([single]$Column=$Last.Column, [single]$Row=$Last.Ro
     else { $Width = 0 }
 
     if (IsSet $FilePath) {
-        foreach ($item in Get-ChildItem $FilePath) { if ($item.extension -eq ".bin") { $Items += $item.BaseName } }
+        foreach ($item in Get-ChildItem $FilePath) {
+            if ($Ext -is [system.Array]) {
+                foreach ($i in $Ext) {
+                    if ($item.extension -eq ("." + $i)) { $Items += $item.BaseName }
+                }
+            }
+            elseif ($item.extension -eq ("." + $Ext)) { $Items += $item.BaseName }
+        }
     }
     if ($Items.Count -gt 0 -and $PostItems.Count -gt 0) { $Items = $Items + $PostItems }
 

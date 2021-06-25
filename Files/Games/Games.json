@@ -54,13 +54,18 @@
 		"region"	: "Europe / PAL",
 		"supported"	: 0
 	}, {
+		"hash"		: "21F7B4A4FF463464BFC23498C1AB9DA1",
+		"rev"		: "Beta 0.9",
+		"region"	: "North American / NTSC-U",
+		"supported"	: 0
+	}, {
 		"hash"		: "AB1CA59D0039E3B34D82DB650B54D7B9",
-		"rev"		: "Debug (Revision 0)",
+		"rev"		: "Debug Beta (GameCube)",
 		"region"	: "Europe / PAL",
 		"supported"	: 0
 	}, {
 		"hash"		: "3C10B67A76616AE2C162DEF7528724CF",
-		"rev"		: "Debug (Revision 1)",
+		"rev"		: "Debug (GameCube)",
 		"region"	: "Europe / PAL",
 		"supported"	: 0
 	}, {

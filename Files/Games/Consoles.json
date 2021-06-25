@@ -33,4 +33,20 @@
 	"remove_region_protection"	: 1,
 	"max_size"			: "8",
 	"appfile"			: "00000005.app"
+}, {
+	"title"				: "Sega Master System",
+	"mode"				: "SMS",
+	"extension"			: ".sms",
+	"rom_title"			: 0,
+	"game_gameID"			: 0,
+	"max_size"			: "1",
+	"appfile"			: "00000005.app"
+}, {
+	"title"				: "Sega Genesis / Sega Mega Drive",
+	"mode"				: "SMD",
+	"extension"			: ".smd",
+	"rom_title"			: 0,
+	"game_gameID"			: 0,
+	"max_size"			: "8",
+	"appfile"			: "00000005.app"
 } ]
