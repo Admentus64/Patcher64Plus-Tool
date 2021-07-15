@@ -47,9 +47,11 @@ function MainFunction([string]$Command, [string]$PatchedFileName) {
             $Finalize = $False
         }
 
+
+
         # Language Patch
         $global:LanguagePatch = $global:LanguagePatchFile = $null
-        if ( (IsSet $Files.json.languages) -and $Settings.Debug.LiteGUI -eq $False -and (IsChecked $Patches.Options) -and (IsSet $Redux.Languages) ) {
+        if ( (IsSet $Files.json.languages) -and $Settings.Debug.LiteGUI -eq $False -and (IsChecked $Patches.Options) -and (IsSet $Redux.Language) ) {
             for ($i=0; $i -lt $Files.json.languages.Length; $i++) {
                 if ($Redux.Language[$i].checked) {
                     $global:LanguagePatch = $Files.json.languages[$i]
