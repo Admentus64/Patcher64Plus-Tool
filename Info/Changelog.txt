@@ -1,3 +1,12 @@
+v14.2.0
+- Added support for patching multiple revisions
+- Added three debug revisions for OoT with "Additional Options" support
+- Added initial Zelda Text Editor features
+- Added OoT voices for Child Link for MM
+- Added new ROM hack: Dark Hyrule Fantasy (Demo) for the Debug MQ GC ROM
+- Fixed console log printouts for used checkboxes
+- Fixed bug with VC Controls window not opening
+
 v14.1.3
 - Added custom "Sunny" model for OoT
 - Added missing Beta / Debug revisions for OoT in the database

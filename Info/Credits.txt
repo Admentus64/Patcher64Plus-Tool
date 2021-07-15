@@ -64,11 +64,16 @@
 - Various offsets:			Chez Cousteau
 - Admentus (Scripting and Maintaince of all Options)
 
+--- Debug ROM Options ---
+- Various offsets:			Cooliscool, DeathBasket, Airikita, CloudMax, Jason777,
+					ChriisTiian
+- Ported to other Debug ROMs:		GhostlyDark
+
 --- Link Voices ---
-- MM Link Voices:			Korey Cryderman (ported) & GhostlyDark (corrected)
-- Melee Zelda Link Voices:		Thiago Alcântara 6 & theluigidude2007
-- Amara Link Voices:			Amara & theluigidude2007
-- Peach Link Voices:			theluigidude2007
+- Majora's Mask Link:			Korey Cryderman (ported) & GhostlyDark (corrected)
+- Melee Zelda:				Thiago Alcântara 6 & theluigidude2007
+- Amara:				Amara & theluigidude2007
+- Peach:				theluigidude2007
 
 --- Custom Male Models ---
 - Kafei:				Malon Rose (www.patreon.com/MalonRose
@@ -146,17 +151,17 @@
 - DezZiBao
 
 --- The Missing Link ---
-Director:				Kaze Emanuar
-3D Modelers:				CDi-Fails, /Zel/
-Composers:				Zerovolt0v, A6stringthing, Sauraen, Badub, DezZival
-Concept Artists:			Ty Anderson, Aurora-Xatu
-Testers:				Zerovolt0v, Sauraen, E-Gor, GTM, Collins, Ricar, Fig
-Level Designer:				Kaze Emanuar
-Programmers:				Kaze Emanuar, /Zel/
-Enemy Animator:				rankaisija
-Cinematographers:			Ostrealava02, CDi-Fails, /Zel/
-Writers:				CDi-Fails, /Zel/
-Special Thanks:				Nokaubure, z64me, Ultra553, OoT Decomp
+- Director:				Kaze Emanuar
+- 3D Modelers:				CDi-Fails, /Zel/
+- Composers:				Zerovolt0v, A6stringthing, Sauraen, Badub, DezZival
+- Concept Artists:			Ty Anderson, Aurora-Xatu
+- Testers:				Zerovolt0v, Sauraen, E-Gor, GTM, Collins, Ricar, Fig
+- Level Designer:			Kaze Emanuar
+- Programmers:				Kaze Emanuar, /Zel/
+- Enemy Animator:			rankaisija
+- Cinematographers:			Ostrealava02, CDi-Fails, /Zel/
+- Writers:				CDi-Fails, /Zel/
+- Special Thanks:			Nokaubure, z64me, Ultra553, OoT Decomp
 
 --- Master of Time ---
 - Aegiker
@@ -176,6 +181,11 @@ Special Thanks:				Nokaubure, z64me, Ultra553, OoT Decomp
 - Nighttime71
 - Rogue_Millipede
 - DezZival
+
+--- Dark Hyrule Fantasy ---
+- Lead Development:			E-Gor, Spire, Ostrealava, Badub
+- Special Thanks:			MelonSpeedruns, CDi-Fails, Psi-Hate, Zel, Ultra553,
+					Dr. Disco, Nokaubure
 
 --- Randomizer ---
 - Roman971
@@ -283,6 +293,9 @@ Special Thanks:				Nokaubure, z64me, Ultra553, OoT Decomp
 - Skip Dialogue:			Marcelo20XX
 - Various offsets:			Chez Cousteau
 - Admentus (Scripting and Assistance of all Options)
+
+--- Link Voices ---
+- Ocarina of Time Link:			Phantom Natsu
 
 --- Quality Assurance ---
 - Translations:				GhostlyDark

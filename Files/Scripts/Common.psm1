@@ -5,7 +5,13 @@ function SetWiiVCMode([boolean]$Enable) {
 
     EnablePatchButtons (IsSet $GamePath)
     SetModeLabel
-    ChangePatchPanel
+    ChangeGameRev
+
+    if ( (TestFile $GameFiles.controls) -and $IsWiiVC) {
+        $Files.json.controls  = SetJSONFile $GameFiles.controls
+        CreateVCRemapDialog # Create VC remap settings
+    }
+    else { $Files.json.controls  = $null }
 
 }
 
@@ -31,26 +37,26 @@ function CreateToolTip($Form, $Info) {
 function ChangeConsolesList() {
     
     # Reset
-    $ConsoleComboBox.Items.Clear()
+    $CurrentGame.Console.Items.Clear()
 
     $Items = @()
     foreach ($item in $Files.json.consoles) {
         $Items += $item.title
     }
 
-    $ConsoleComboBox.Items.AddRange($Items)
+    $CurrentGame.Console.Items.AddRange($Items)
 
     # Reset last index
     foreach ($i in 0..($Items.length-1)) {
         if ($GameConsole.title -eq $Items[$i]) {
-            $ConsoleComboBox.SelectedIndex = $i
+            $CurrentGame.Console.SelectedIndex = $i
             break
         }
     }
 
-    if ($Items.Length -gt 0 -and $ConsoleComboBox.SelectedIndex -eq -1) {
-        try     { $ConsoleComboBox.SelectedIndex = $Settings["Core"][$ConsoleComboBox.Name] }
-        catch   { $ConsoleComboBox.SelectedIndex = 0 }
+    if ($Items.Length -gt 0 -and $CurrentGame.Console.SelectedIndex -eq -1) {
+        try     { $CurrentGame.Console.SelectedIndex = $Settings["Core"][$CurrentGame.Console.Name] }
+        catch   { $CurrentGame.Console.SelectedIndex = 0 }
     }
 
 }
@@ -62,40 +68,70 @@ function ChangeGamesList() {
     
     # Set console
     foreach ($item in $Files.json.consoles) {
-        if ($item.title -eq $ConsoleComboBox.Text) {
+        if ($item.title -eq $CurrentGame.Console.Text) {
             $global:GameConsole = $item
             break
         }
     }
 
     # Reset
-    $CurrentGameComboBox.Items.Clear()
+    $CurrentGame.Game.Items.Clear()
     if (!$IsWiiVC) { $CustomHeader.ROMTitle.MaxLength = $GameConsole.rom_title_length }
 
-    $Items = @()
+    $items = @()
     foreach ($item in $Files.json.games) {
-        if ( ($ConsoleComboBox.Text -eq $GameConsole.title) -and ($GameConsole.mode -contains $item.console) ) {
-            if ( ( $IsWiiVC -and $item.support_vc -eq 1) -or (!$IsWiiVC) ) { $Items += $item.title }
+        if ( ($CurrentGame.Console.Text -eq $GameConsole.title) -and ($GameConsole.mode -contains $item.console) ) {
+            if ( ( $IsWiiVC -and $item.support_vc -eq 1) -or (!$IsWiiVC) ) { $items += $item.title }
         }
-        elseif ($item.console -contains "All") { $Items += $item.title }
+        elseif ($item.console -contains "All") { $items += $item.title }
     }
 
-    $CurrentGameComboBox.Items.AddRange($Items)
+    $CurrentGame.Game.Items.AddRange($items)
 
     # Reset last index
     foreach ($i in 0..($Items.Length-1)) {
-        if ($GameType.title -eq $Items[$i]) {
-            $CurrentGameComboBox.SelectedIndex = $i
+        if ($GameType.title -eq $items[$i]) {
+            $CurrentGame.Game.SelectedIndex = $i
             break
         }
     }
 
-    if ($Items.Length -gt 0 -and $CurrentGameComboBox.SelectedIndex -eq -1) {
-        try { $CurrentGameComboBox.SelectedIndex = $Settings["Core"][$CurrentGameComboBox.Name] }
-        catch { $CurrentGameComboBox.SelectedIndex = 0 }
+    if ($items.Length -gt 0 -and $CurrentGame.Game.SelectedIndex -eq -1) {
+        try { $CurrentGame.Game.SelectedIndex = $Settings["Core"][$CurrentGame.Game.Name] }
+        catch { $CurrentGame.Game.SelectedIndex = 0 }
     }
 
     SetVCPanel
+
+}
+
+
+#==============================================================================================================================================================================================
+function ChangeRevList() {
+    
+    $CurrentGame.Rev.Items.Clear()
+
+    # Add compatible revisions
+    $items = @()
+    foreach ($item in $GameType.version) {
+        if (IsSet $item.list) { $items += $item.list }
+    }
+
+    if ($items.count -eq 0) { $items += "Rev 0 (US)" }
+    $CurrentGame.Rev.Items.AddRange($items)
+    
+    # Reset last index
+    foreach ($i in 0..($items.Length-1)) {
+        if ($GameRev.list -eq $items[$i]) {
+            $CurrentGame.Rev.SelectedIndex = $i
+            break
+        }
+    }
+
+    if ($items.Length -gt 0 -and $CurrentGame.Rev.SelectedIndex -eq -1) {
+        try { $CurrentGame.Rev.SelectedIndex = $Settings["Core"][$CurrentGame.Rev.Name] }
+        catch { $CurrentGame.rev.SelectedIndex = 0 }
+    }
 
 }
 
@@ -109,33 +145,43 @@ function ChangePatchPanel() {
 
     # Reset
     $Patches.Group.Text = $GameType.mode + " - Patch Options"
-    $Patches.ComboBox.Items.Clear()
+    $Patches.Type.Items.Clear()
 
     # Set combobox for patches
-    $Items = @()
+    $items = @()
     foreach ($item in $Files.json.patches) {
         if ( ($IsWiiVC -and $item.console -eq "Wii VC") -or (!$IsWiiVC -and $item.console -eq "Native") -or ($item.console -eq "Both") -or !(IsSet $item.console) ) {
-            $Items += $item.title
-            if (!(IsSet $FirstItem)) { $FirstItem = $item }
+            if (IsSet $item.rev) {
+                foreach ($i in $item.rev) {
+                    if ($i -eq $GameRev.hash) {
+                        $items += $item.title
+                        if (!(IsSet $FirstItem)) { $FirstItem = $item }
+                    }
+                }
+            }
+            else {
+                $items += $item.title
+                if (!(IsSet $FirstItem)) { $FirstItem = $item }
+            }
         }
     }
 
-    $Patches.ComboBox.Items.AddRange($Items)
+    $Patches.Type.Items.AddRange($items)
 
     # Reset last index
-    foreach ($i in 0..($Items.Length-1)) {
+    foreach ($i in 0..($items.Length-1)) {
         foreach ($item in $Files.json.patches) {
-            if ($item.title -eq $GamePatch.title -and $item.title -eq $Items[$i]) {
-                $Patches.ComboBox.SelectedIndex = $i
+            if ($item.title -eq $GamePatch.title -and $item.title -eq $items[$i]) {
+                $Patches.Type.SelectedIndex = $i
                 break
             }
         }
     }
 
     if ($InputPaths.GameTextBox.Text -notlike '*:\*') { $global:IsActiveGameField = $True }
-    if ($Items.Length -gt 0 -and $Patches.ComboBox.SelectedIndex -eq -1) {
-        try { $Patches.ComboBox.SelectedIndex = $Settings["Core"][$Patches.ComboBox.Name] }
-        catch { $Patches.ComboBox.SelectedIndex = 0 }
+    if ($items.Length -gt 0 -and $Patches.Type.SelectedIndex -eq -1) {
+        try { $Patches.Type.SelectedIndex = $Settings["Core"][$Patches.Type.Name] }
+        catch { $Patches.Type.SelectedIndex = 0 }
     }
     
 }
@@ -167,9 +213,9 @@ function SetMainScreenSize() {
     else { $InputPaths.PatchPanel.Top = $InputPaths.GamePanel.Bottom   + (DPISize 15) }
 
     # Positioning
-    if (IsSet $GamePath)   { $CurrentGamePanel.Location = New-Object System.Drawing.Size((DPISize 10), ($InputPaths.PatchPanel.Bottom + (DPISize 5))) }
-    else                   { $CurrentGamePanel.Location = New-Object System.Drawing.Size((DPISize 10), ($InputPaths.GamePanel.Bottom  + (DPISize 5))) }
-    $CustomHeader.Panel.Location = New-Object System.Drawing.Size((DPISize 10), ($CurrentGamePanel.Bottom + (DPISize 5)))
+    if (IsSet $GamePath)   { $CurrentGame.Panel.Location = New-Object System.Drawing.Size((DPISize 10), ($InputPaths.PatchPanel.Bottom + (DPISize 5))) }
+    else                   { $CurrentGame.Panel.Location = New-Object System.Drawing.Size((DPISize 10), ($InputPaths.GamePanel.Bottom  + (DPISize 5))) }
+    $CustomHeader.Panel.Location = New-Object System.Drawing.Size((DPISize 10), ($CurrentGame.Panel.Bottom + (DPISize 5)))
     
     # Set VC Panel Size
     if ($GameConsole.t64 -eq 1 -or $GameConsole.expand_memory -eq 1 -or $GameConsole.remove_filter -eq 1 -or (IsSet $Files.json.controls) )   { $VC.Panel.Height = $VC.Group.Height = (DPISize 90) }
@@ -186,8 +232,8 @@ function SetMainScreenSize() {
     }
     else {
         if ( ($GameConsole.rom_title -eq 0) -and ($GameConsole.rom_gameID -eq 0) ) {
-            if ($GameType.patches) { $Patches.Panel.Location = New-Object System.Drawing.Size((DPISize 10), ($CurrentGamePanel.Bottom   + (DPISize 5))) }
-            else                   { $MiscPanel.Location     = New-Object System.Drawing.Size((DPISize 10), ($CurrentGamePanel.Bottom   + (DPISize 5))) }
+            if ($GameType.patches) { $Patches.Panel.Location = New-Object System.Drawing.Size((DPISize 10), ($CurrentGame.Panel.Bottom   + (DPISize 5))) }
+            else                   { $MiscPanel.Location     = New-Object System.Drawing.Size((DPISize 10), ($CurrentGame.Panel.Bottom   + (DPISize 5))) }
         }
         else {
             if ($GameType.patches) { $Patches.Panel.Location = New-Object System.Drawing.Size((DPISize 10), ($CustomHeader.Panel.Bottom + (DPISize 5))) }
@@ -198,7 +244,7 @@ function SetMainScreenSize() {
     
     $StatusPanel.Location = New-Object System.Drawing.Size((DPISize 10), ($MiscPanel.Bottom + (DPISize 5)))
     $MainDialog.Height = $StatusPanel.Bottom + (DPISize 50)
-    
+
 }
 
 
@@ -208,12 +254,8 @@ function ChangeGameMode() {
     
     if ($GameType.save -gt 0) { Out-IniFile -FilePath (GetGameSettingsFile) -InputObject $GameSettings | Out-Null }
 
-    if (IsSet $GameType.mode) {
-        if (Get-Module -Name $GameType.mode) { Remove-Module -Name $GameType.mode }
-    }
-
     foreach ($item in $Files.json.games) {
-        if ($item.title -eq $CurrentGameComboBox.Text) {
+        if ($item.title -eq $CurrentGame.Game.Text) {
             $global:GameType = $item
             $global:GamePatch = $null
             break
@@ -240,18 +282,16 @@ function ChangeGameMode() {
     $GameFiles.info         = $GameFiles.Base + "\Info.txt"
     $GameFiles.patches      = $GameFiles.Base + "\Patches.json"
     $GameFiles.controls     = $GameFiles.Base + "\Controls.json"
-    $GameFiles.script       = ($Paths.Scripts + "\Options\" + $GameType.mode + ".psm1")
 
-    if (TestFile $GameFiles.script) { Import-Module -Name $GameFiles.script -Global } #(Get-Command -Module $GameType.mode) | % { Export-ModuleMember $_ }
     $global:GameSettings = GetSettings (GetGameSettingsFile)
 
     # JSON Files
     if (IsSet $GameType.patches)                               { $Files.json.patches   = SetJSONFile $GameFiles.patches }                           else { $Files.json.patches   = $null }
     if (TestFile ($GameFiles.languages + "\Languages.json"))   { $Files.json.languages = SetJSONFile ($GameFiles.languages + "\Languages.json") }   else { $Files.json.languages = $null }
     if (TestFile ($GameFiles.models + "\Models.json"))         { $Files.json.models    = SetJSONFile ($GameFiles.models + "\Models.json") }         else { $Files.json.models    = $null }
-    if (TestFile $GameFiles.controls)                          {
+    if ( (TestFile $GameFiles.controls) -and $IsWiiVC) {
         $Files.json.controls  = SetJSONFile $GameFiles.controls
-        if ($IsWiiVC) { CreateVCRemapDialog } # Create VC remap settings
+        CreateVCRemapDialog # Create VC remap settings
     }
     else { $Files.json.controls  = $null }
 
@@ -272,7 +312,42 @@ function ChangeGameMode() {
     $Patches.Panel.Visible = $GameType.patches
 
     SetModeLabel
-    if ($IsActiveGameField) { ChangePatchPanel }
+    ChangeRevList
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function ChangeGameRev() {
+    
+    if (!(IsSet $GameType)) { return }
+
+    if (IsSet $GameRev.script)   { if (Get-Module -Name $GameRev.script)   { Remove-Module -Name $GameRev.script } }
+    else                         { if (Get-Module -Name $GameType.mode)    { Remove-Module -Name $GameType.mode  } }
+
+    $global:GameRev = @{}
+    foreach ($item in $GameType.version) {
+        if ($item.list -eq $CurrentGame.Rev.Text) {
+            $global:GameRev = $item
+            break
+        }
+    }
+
+    $Redux.Box = @{}
+    $Redux.Groups = @()
+    $Last.Group = $Last.Panel = $Last.GroupName = $null
+    $Last.Half = $False
+
+    if (IsSet $GameRev.script)   { $GameFiles.script = ($Paths.Scripts + "\Options\" + $GameRev.script + ".psm1") }
+    else                         { $GameFiles.script = ($Paths.Scripts + "\Options\" + $GameType.mode + ".psm1") }
+
+    if (TestFile $GameFiles.script) {
+        Import-Module -Name $GameFiles.script -Global
+        LoadAdditionalOptions
+    }
+
+    ChangePatchPanel
     $global:IsActiveGameField = $True
 
 }
@@ -283,13 +358,13 @@ function ChangeGameMode() {
 function ChangePatch() {
     
     foreach ($item in $Files.json.patches) {
-        if ($item.title -eq $Patches.ComboBox.Text) {
+        if ($item.title -eq $Patches.Type.Text) {
             if ( ($IsWiiVC -and $item.console -eq "Wii VC") -or (!$IsWiiVC -and $item.console -eq "Native") -or ($item.console -eq "Both") -or !(IsSet $item.console) ) {
                 $global:GamePatch = $item
                 $PatchToolTip.SetToolTip($Patches.Button, ([string]::Format($item.tooltip, [Environment]::NewLine)))
                 GetHeader
                 GetRegion
-                LoadAdditionalOptions
+                if (Get-Command "AdjustGUI" -errorAction SilentlyContinue) { iex "AdjustGUI" }
                 DisablePatches
                 break
             }
@@ -458,12 +533,12 @@ function PatchPath_Finish([object]$TextBox, [string]$Path) {
 
 
 #==============================================================================================================================================================================================
-function IsDefault([object]$Elem, [switch]$Not, $Default) {
+function IsDefault([object]$Elem, [switch]$Not, $Value) {
     
-    if (!(IsSet $Elem))               { return $False }
-    if (!$Elem.Active)                { return $False }
-    if ($Elem.Default -eq $Default)   { return !$Not  }
-    if ($Elem.Default -ne $Default)   { return  $Not  }
+    if (!(IsSet $Elem))             { return $False }
+    if (!$Elem.Active)              { return $False }
+    if ($Elem.Default -eq $Value)   { return !$Not  }
+    if ($Elem.Default -ne $Value)   { return  $Not  }
     return $False
 
 }
@@ -800,7 +875,7 @@ function StrStarts([string]$Str, [string]$Val, [switch]$Not) {
 function EnableGUI([boolean]$Enable) {
     
     $InputPaths.GamePanel.Enabled = $InputPaths.InjectPanel.Enabled = $InputPaths.PatchPanel.Enabled = $Enable
-    $CurrentGamePanel.Enabled = $CustomHeader.Panel.Enabled = $Enable
+    $CurrentGame.Panel.Enabled = $CustomHeader.Panel.Enabled = $Enable
     $Patches.Panel.Enabled = $MiscPanel.Enabled = $VC.Panel.Enabled = $Enable
     SetModernVisualStyle $GeneralSettings.ModernStyle.Checked
 
@@ -1099,9 +1174,11 @@ Export-ModuleMember -Function SetVCPanel
 Export-ModuleMember -Function CreateToolTip
 Export-ModuleMember -Function ChangeConsolesList
 Export-ModuleMember -Function ChangeGamesList
+Export-ModuleMember -Function ChangeRevList
 Export-ModuleMember -Function ChangePatchPanel
 Export-ModuleMember -Function SetMainScreenSize
 Export-ModuleMember -Function ChangeGameMode
+Export-ModuleMember -Function ChangeGameRev
 Export-ModuleMember -Function ChangePatch
 Export-ModuleMember -Function UpdateStatusLabel
 Export-ModuleMember -Function WriteToConsole

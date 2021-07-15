@@ -104,8 +104,15 @@ function CreateOptions() {
     
     CreateOptionsDialog -Width 740 -Height 370 -Tabs @("Graphics", "Gameplay", "Skip")
 
-    EnableElem -Elem $Redux.Skip.TitleScreen            -Active ($GamePatch.title -eq "Super Mario 64")
-    EnableElem -Elem $Redux.Skip.MarioScreen            -Active ($GamePatch.title -eq "Super Mario 64")
+}
+
+
+
+#==============================================================================================================================================================================================
+function AdjustGUI() {
+    
+    EnableElem -Elem $Redux.Skip.TitleScreen -Active ($GamePatch.title -eq "Super Mario 64")
+    EnableElem -Elem $Redux.Skip.MarioScreen -Active ($GamePatch.title -eq "Super Mario 64")
 
 }
 

@@ -238,7 +238,7 @@ function ByteOptions() {
 
 
 
-    # SOUNDS / SFX SOUND EFFECTS #
+    # SOUNDS / VOICES / SFX SOUND EFFECTS #
 
     if (IsChecked $Redux.Sounds.DisableSFXEffect) {
         ChangeBytes -Offset "C3560C" -Values "08  06  BE  A6  AF  BF  00  1C  3C  0E  80  1E  24  E7  B4  B0" # Disable some sfx
@@ -251,6 +251,11 @@ function ByteOptions() {
     if (IsIndex -Elem $Redux.Sounds.InstrumentGoron  -Not -Index 3)   { ChangeBytes -Offset "51CC4"  -Values (GetMMInstrumentID $Redux.Sounds.InstrumentGoron.Text);  ChangeBytes -Offset "C668DD" -Values (GetMMInstrumentID $Redux.Sounds.InstrumentGoron.Text)  }
     if (IsIndex -Elem $Redux.Sounds.InstrumentZora   -Not -Index 4)   { ChangeBytes -Offset "51CC5"  -Values (GetMMInstrumentID $Redux.Sounds.InstrumentZora.Text);   ChangeBytes -Offset "C668DE" -Values (GetMMInstrumentID $Redux.Sounds.InstrumentZora.Text)   }
 
+    $file = "Voices Child\" + $Redux.Sounds.ChildVoices.Text.replace(" (default)", "") + ".bin"
+    if (TestFile ($GameFiles.binaries + "\" + $file)) { PatchBytes -Offset "1FA5A0" -Patch ($file) }
+
+    $file = "Voices Fierce Deity\" + $Redux.Sounds.FierceDeityVoices.Text.replace(" (default)", "") + ".bin"
+    if (TestFile ($GameFiles.binaries + "\" + $file)) { PatchBytes -Offset "1BA2E0" -Patch ($file) }
 
 
     # FILE SELECT #
@@ -838,7 +843,7 @@ function ByteLanguageOptions() {
 function CreateOptions() {
     
     if ($Settings.Debug.LiteGUI -eq $False) {
-        CreateOptionsDialog -Width 1060 -Height 530 -Tabs @("Main", "Audiovisual", "Difficulty", "Colors", "Equipment", "Speedup")
+        CreateOptionsDialog -Width 1060 -Height 560 -Tabs @("Main", "Audiovisual", "Difficulty", "Colors", "Equipment", "Speedup")
     }
     else {
         CreateOptionsDialog -Width 1060 -Height 450 -Tabs @("Main", "Audiovisual", "Difficulty", "Speedup")
@@ -1040,8 +1045,8 @@ function CreateTabAudiovisual() {
 
     if ($Settings.Debug.LiteGUI -ne $True) {
 
-    # SOUNDS / SFX SOUND EFFECTS
-    CreateReduxGroup    -Tag  "Sounds" -Text "Sounds / SFX Sound Effects" -Height 2
+    # SOUNDS / VOICES / SFX SOUND EFFECTS
+    CreateReduxGroup    -Tag  "Sounds" -Text "Sounds / VOICES / SFX Sound Effects" -Height 3
     CreateReduxComboBox -Name "LowHP"             -Column 5 -Row 1 -Text "Low HP SFX" -Items @("Default", "Disabled", "Soft Beep")  -Info "Set the sound effect for the low HP beeping" -Credits "Ported from Rando"
     CreateReduxCheckBox -Name "DisableSFXEffect"  -Column 5 -Row 2 -Text "Disable SFX Effects" -Info "Remove the SFX Sound Effects for collecting rupees and solving puzzles" -Credits "Marcelo20XX"
 
@@ -1051,6 +1056,9 @@ function CreateTabAudiovisual() {
     CreateReduxComboBox -Name "InstrumentGoron"   -Column 1 -Row 2 -Text "Instrument (Goron)"  -Default 3 -Shift 30 -Length 200 -Items $SFX -Info "Replace the sound used for playing the Goron Drums in Goron Form"      -Credits "Ported from Rando"
     CreateReduxComboBox -Name "InstrumentZora"    -Column 3 -Row 2 -Text "Instrument (Zora)"   -Default 4 -Shift 30 -Length 200 -Items $SFX -Info "Replace the sound used for playing the Zora Guitar in Zora Form"       -Credits "Ported from Rando"
     
+    CreateReduxComboBox -Name "ChildVoices"       -Column 1 -Row 3 -Text "Child Voice"        -Shift 30 -Length 200 -Items @("Original") -FilePath ($GameFiles.binaries + "\Voices Child")        -Default "Original" -Info "Replace the voice used for the Child Link Model"        -Credits "`nOcarina of Time: Phantom Natsu"
+    CreateReduxComboBox -Name "FierceDeityVoices" -Column 3 -Row 3 -Text "Fierce Deity Voice" -Shift 30 -Length 200 -Items @("Original") -FilePath ($GameFiles.binaries + "\Voices Fierce Deity") -Default "Original" -Info "Replace the voice used for the Fierce Deity Link Model" -Credits "`nOcarina of Time: Phantom Natsu"
+
     }
 
     # FILE SELECT #

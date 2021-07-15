@@ -348,9 +348,9 @@ function ResetTool() {
     $CustomHeader.EnableHeader.Checked = $CustomHeader.EnableHeader.Default
     $CustomHeader.EnableRegion.Checked = $CustomHeader.EnableRegion.Default
     
-    $ConsoleComboBox.SelectedIndex = $ConsoleComboBox.Default
-    $CurrentGameComboBox.SelectedIndex = $CurrentGameComboBox.Default
-    $Patches.ComboBox.SelectedIndex = $Patches.ComboBox.Default
+    $CurrentGame.Console.SelectedIndex = $CurrentGame.Console.Default
+    $CurrentGame.Game.SelectedIndex = $CurrentGame.Game.Default
+    $Patches.Type.SelectedIndex = $Patches.Type.Default
     $InputPaths.ApplyInjectButton.Enabled = $InputPaths.ApplyPatchButton.Enabled = $False
 
     RemoveFile ($Paths.Settings)

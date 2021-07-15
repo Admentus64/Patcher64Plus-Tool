@@ -4,7 +4,7 @@ function CreateMainDialog() {
     $global:MainDialog = New-Object System.Windows.Forms.Form
     $MainDialog.Text = $ScriptName
     $MainDialog.Size = DPISize (New-Object System.Drawing.Size(625, 745))
-    $MainDialog.MaximizeBox = $false
+  # $MainDialog.MaximizeBox = $False
     $MainDialog.AutoScale = $True
     $MainDialog.AutoScaleMode = [Windows.Forms.AutoScaleMode]::None
     $MainDialog.FormBorderStyle = [System.Windows.Forms.FormBorderStyle]::FixedDialog
@@ -21,7 +21,7 @@ function CreateMainDialog() {
     $VersionLabel = CreateLabel -X (DPISize 15) -Y (DPISize 10) -Width (DPISize 120) -Height (DPISize 30) -Text ($Version + "`n(" + $VersionDate + ")") -Font $Fonts.SmallBold -AddTo $MainDialog
 
     # Create Arrays for groups
-    $global:InputPaths = @{}; $global:Patches = @{}; $global:VC = @{}; $global:CustomHeader = @{}
+    $global:InputPaths = @{}; $global:Patches = @{}; $global:CurrentGame = @{}; $global:VC = @{}; $global:CustomHeader = @{}
 
 
 
@@ -136,17 +136,22 @@ function CreateMainDialog() {
     ################
 
     # Create the panel that holds the current selected game.
-    $global:CurrentGamePanel = CreatePanel -Width (DPISize 590) -Height (DPISize 50)
+    $CurrentGame.Panel = CreatePanel -Width (DPISize 590) -Height (DPISize 50)
 
     # Create the groupbox that holds the current game options
-    $CurrentGameGroup = CreateGroupBox -Width $CurrentGamePanel.Width -Height $CurrentGamePanel.Height -Text "Current Game Mode"
+    $CurrentGame.Group = CreateGroupBox -Width $CurrentGame.Panel.Width -Height $CurrentGame.Panel.Height -Text "Current Game Mode"
 
     # Create a combobox with the list of supported consoles
-    $global:ConsoleComboBox = CreateComboBox -X (DPISize 10) -Y (DPISize 20) -Width (DPISize 200) -Height (DPISize 30) -Name "Selected.Console"
+    $CurrentGame.Console = CreateComboBox -X (DPISize 10) -Y (DPISize 20) -Width (DPISize 180) -Height (DPISize 30) -Name "Selected.Console"
     
     # Create a combobox with the list of supported games
-    $global:CurrentGameComboBox = CreateComboBox -X ($ConsoleComboBox.Right + (DPISize 5)) -Y (DPISize 20) -Width (DPISize 360) -Height (DPISize 30) -Name "Selected.Game"
+    $CurrentGame.Game = CreateComboBox -X ($CurrentGame.Console.Right + (DPISize 5)) -Y (DPISize 20) -Width (DPISize 250) -Height (DPISize 30) -Name "Selected.Game"
     
+    # Create combobox
+    $CurrentGame.Rev = CreateComboBox -X ($CurrentGame.Game.Right + (DPISize 5)) -Y (DPISize 20) -Width (DPISize 125) -Height (DPISize 30) -Name "Selected.Rev"
+
+    $global:PatchToolTip = CreateToolTip
+
     $Files.json.consoles = SetJSONFile $Files.json.consoles
     $Files.json.games    = SetJSONFile $Files.json.games
 
@@ -208,25 +213,32 @@ function CreateMainDialog() {
     $Patches.Group = CreateGroupBox -Width $Patches.Panel.Width -Height $Patches.Panel.Height
 
     # Create patch button
-    $Patches.Button = CreateButton -X (DPISize 10) -Y (DPISize 45) -Width (DPISize 300) -Height (DPISize 35) -Text "Patch Selected Option"
+    $Patches.Button = CreateButton -X (DPISize 10) -Y (DPISize 45) -Width (DPISize 200) -Height (DPISize 35) -Text "Patch Selected Option"
     $Patches.Button.Add_Click( { MainFunction -Command $GamePatch.command -PatchedFileName $GamePatch.output } )
 
-    # Create combobox
-    $Patches.ComboBox = CreateComboBox -X ($Patches.Button.Left) -Y ($Patches.Button.Top - (DPISize 25)) -Width ($Patches.Button.Width) -Height (DPISize 30) -Name "Selected.Patch"
+    # Create patch button
+    $Patches.Editor = CreateButton -X ($Patches.Button.right + (DPISize 5)) -Y $Patches.Button.top -Width (DPISize 95) -Height (DPISize 35) -Text "Open Editor" -Info "Open the text editor for adjusting the dialogue of the game"
+    $Patches.Editor.Add_Click( {
+        if ($global:Editor -eq $null) { CreateEditorDialog -Width 900 -Height 800  }
+        $Editor.Dialog.ShowDialog()
+    } )
+
+    # Create Patches ComboBox
+    $Patches.Type = CreateComboBox -X $Patches.Button.Left -Y ($Patches.Button.Top - (DPISize 25)) -Width ($Patches.Editor.Right - (DPISize 10)) -Height (DPISize 30) -Name "Selected.Patch"
     $global:PatchToolTip = CreateToolTip
 
     # Additional Options Checkbox
-    $Patches.OptionsLabel = CreateLabel -X ($Patches.Button.Right + (DPISize 10)) -Y ($Patches.ComboBox.Top + (DPISize 5)) -Width (DPISize 85) -Height (DPISize 15) -Text "Enable Options:" -Info "Enable options in order to apply a customizable set of features and changes" 
+    $Patches.OptionsLabel = CreateLabel -X ($Patches.Editor.Right + (DPISize 10)) -Y ($Patches.Type.Top + (DPISize 5)) -Width (DPISize 85) -Height (DPISize 15) -Text "Enable Options:" -Info "Enable options in order to apply a customizable set of features and changes" 
     $Patches.Options = CreateCheckBox -X ($Patches.OptionsLabel.Right) -Y ($Patches.OptionsLabel.Top - (DPISize 2)) -Width (DPISize 20) -Height (DPISize 20) -Info "Enable options in order to apply a customizable set of features and changes" -Name "Patches.Options" -Checked $True
     $Patches.OptionsLabel.Add_Click({ $Patches.Options.Checked = !$Patches.Options.Checked })
 
     # Extend Checkbox
-    $Patches.ExtendLabel = CreateLabel -X ($Patches.Button.Right + (DPISize 10)) -Y ($Patches.OptionsLabel.Bottom + (DPISize 15)) -Width (DPISize 85) -Height (DPISize 15) -Text "Allow Extend:" -Info "Allows extending the ROM beyond it's regular size`nSome patches will automaticially force an extend of the ROM"
+    $Patches.ExtendLabel = CreateLabel -X ($Patches.Editor.Right + (DPISize 10)) -Y ($Patches.OptionsLabel.Bottom + (DPISize 15)) -Width (DPISize 85) -Height (DPISize 15) -Text "Allow Extend:" -Info "Allows extending the ROM beyond it's regular size`nSome patches will automaticially force an extend of the ROM"
     $Patches.Extend = CreateCheckBox -X ($Patches.ExtendLabel.Right) -Y ($Patches.ExtendLabel.Top - (DPISize 2)) -Width (DPISize 20) -Height (DPISize 20) -Info "Allows extending the ROM beyond it's regular size`nSome patches will automaticially force an extend of the ROM" -Name "Patches.Extend"
     $Patches.ExtendLabel.Add_Click({ $Patches.Extend.Checked = !$Patches.Extend.Checked })
 
     # Redux Checkbox
-    $Patches.ReduxLabel = CreateLabel -X ($Patches.Button.Right + (DPISize 10)) -Y ($Patches.OptionsLabel.Bottom + (DPISize 15)) -Width (DPISize 85) -Height (DPISize 15) -Text "Enable Redux:" -Info "Enable the Redux patch which improves game mechanics`nIncludes among other changes the inclusion of the D-Pad for dedicated item buttons"
+    $Patches.ReduxLabel = CreateLabel -X ($Patches.Editor.Right + (DPISize 10)) -Y ($Patches.OptionsLabel.Bottom + (DPISize 15)) -Width (DPISize 85) -Height (DPISize 15) -Text "Enable Redux:" -Info "Enable the Redux patch which improves game mechanics`nIncludes among other changes the inclusion of the D-Pad for dedicated item buttons"
     $Patches.Redux = CreateCheckBox -X ($Patches.ReduxLabel.Right) -Y ($Patches.ReduxLabel.Top - (DPISize 2)) -Width (DPISize 20) -Height (DPISize 20) -Info "Enable the Redux patch which improves game mechanics`nIncludes among other changes the inclusion of the D-Pad for dedicated item buttons" -Name "Patches.Redux" -Checked $True
     $Patches.ReduxLabel.Add_Click({ $Patches.Redux.Checked = !$Patches.Redux.Checked })
 
@@ -328,19 +340,25 @@ function CreateMainDialog() {
 #==============================================================================================================================================================================================
 function InitializeEvents() {
     
-    #Current Game
-    $ConsoleComboBox.Add_SelectedIndexChanged({
+    # Current Game
+    $CurrentGame.Console.Add_SelectedIndexChanged({
         $Settings["Core"][$this.Name] = $this.SelectedIndex
         if ($this.Text -ne $GameConsole.title) { ChangeGamesList }
     })
 
-    $CurrentGameComboBox.Add_SelectedIndexChanged({
+    $CurrentGame.Game.Add_SelectedIndexChanged({
         $Settings["Core"][$this.Name] = $this.SelectedIndex
         if ($this.Text -ne $GameType.title -or $GameType.console -like "*All*") {
             ChangeGameMode
+            ChangeRevList
             SetVCPanel
             SetMainScreenSize
         }
+    })
+
+    $CurrentGame.Rev.Add_SelectedIndexChanged({
+        $Settings["Core"][$this.Name] = $this.SelectedIndex
+        ChangeGameRev
     })
 
     # Custom Header
@@ -351,7 +369,7 @@ function InitializeEvents() {
     $CustomHeader.VCGameID.Add_TextChanged(  { RunCustomGameIDSyntax -Syntax "[^A-Z 0-9]" } )
 
     # Patch Options
-    $Patches.ComboBox.Add_SelectedIndexChanged( {
+    $Patches.Type.Add_SelectedIndexChanged( {
         $Settings["Core"][$this.Name] = $this.SelectedIndex
         ChangePatch
     } )
@@ -431,12 +449,17 @@ function SetJSONFile($File) {
 function DisablePatches() {
     
     # Disable boxes if needed
-    EnableElem -Elem @($Patches.Extend,    $Patches.ExtendLabel)                          -Active ((IsSet $GamePatch.allow_extend) -and $Settings.Debug.LiteGUI -eq $False) -Hide
-    EnableElem -Elem @($Patches.Redux,     $Patches.ReduxLabel)                           -Active ((IsSet $GamePatch.redux.file) -and $Settings.Debug.LiteGUI -eq $False) -Hide
-    EnableElem -Elem @($Patches.Options,   $Patches.OptionsLabel, $Patches.OptionsButton) -Active ((TestFile $GameFiles.script) -and ($GamePatch.options -eq 1 -or $Settings.Debug.ForceOptions -ne $False)) -Hide
+    EnableElem -Elem @($Patches.Extend,    $Patches.ExtendLabel)                          -Active ((IsSet $GamePatch.allow_extend) -and $Settings.Debug.LiteGUI -eq $False -and $GameRev.extend -ne 0) -Hide
+    EnableElem -Elem @($Patches.Redux,     $Patches.ReduxLabel)                           -Active ((IsSet $GamePatch.redux.file)   -and $Settings.Debug.LiteGUI -eq $False -and $GameRev.redux  -ne 0) -Hide
+    EnableElem -Elem @($Patches.Options,   $Patches.OptionsLabel, $Patches.OptionsButton) -Active ((TestFile $GameFiles.script)    -and ($GamePatch.options -eq 1 -or $Settings.Debug.ForceOptions -ne $False) -and $GameRev.options -ne 0) -Hide
     EnableElem -Elem @($Patches.Downgrade, $Patches.DowngradeLabel)                       -Active ((CheckDowngradable) -and $Settings.Debug.LiteGUI -eq $False) -Hide
     EnableElem -Elem $Patches.OptionsButton                                               -Active $Patches.Options.Checked
     DisableReduxOptions
+
+    # Editor
+    EnableElem -Elem $Patches.Editor -Active ($GameType.editor -eq 1 -and $GameRev.editor -ne 0) -Hide
+    if ($GameType.editor -eq 1 -and $GameRev.editor -ne 0)   { $Patches.Button.Width = (DPISize 200) }
+    else                                                     { $Patches.Button.Width = (DPISize 300) }
 
 }
 
@@ -466,10 +489,8 @@ function DisableReduxOptions() {
 function LoadAdditionalOptions(){
     
     # Create options content based on current game
-    if ($GamePatch.options -eq 1 -or $Settings.Debug.ForceOptions -ne $False) {
-        if (Get-Command "CreateOptions" -errorAction SilentlyContinue) { iex "CreateOptions" }
-        [System.GC]::Collect() | Out-Null
-    }
+    if (Get-Command "CreateOptions" -errorAction SilentlyContinue) { iex "CreateOptions" }
+    [System.GC]::Collect() | Out-Null
 
 }
 

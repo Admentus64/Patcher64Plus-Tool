@@ -49,7 +49,7 @@ function MainFunction([string]$Command, [string]$PatchedFileName) {
 
         # Language Patch
         $global:LanguagePatch = $global:LanguagePatchFile = $null
-        if ( (IsSet $Files.json.languages) -and $Settings.Debug.LiteGUI -eq $False -and (IsChecked $Patches.Options) ) {
+        if ( (IsSet $Files.json.languages) -and $Settings.Debug.LiteGUI -eq $False -and (IsChecked $Patches.Options) -and (IsSet $Redux.Languages) ) {
             for ($i=0; $i -lt $Files.json.languages.Length; $i++) {
                 if ($Redux.Language[$i].checked) {
                     $global:LanguagePatch = $Files.json.languages[$i]
@@ -276,6 +276,7 @@ function WriteDebug([string]$Command, [string[]]$Header, [string]$PatchedFileNam
     WriteToConsole ("Inject Path:   " + $InjectPath)
     WriteToConsole ("Patch Path:    " + $PatchPath)
     WriteToConsole ("Patch ROM:     " + $PatchROM)
+    WriteToConsole ("ROM Size:      " + (((Get-Item -LiteralPath $GamePath).length)/1MB).tostring("#.#") + "MB")
     WriteToConsole "--- End Patch Info ---"
     WriteToConsole
     WriteToConsole
@@ -288,6 +289,9 @@ function WriteDebug([string]$Command, [string[]]$Header, [string]$PatchedFileNam
     WriteToConsole ("Change Widescreen:     " + $GeneralSettings.ChangeWidescreen.Checked)
     WriteToConsole ("Switch Decompressor:   " + $GeneralSettings.AltDecompress.Checked)
     WriteToConsole "--- End Misc Settings Info ---"
+
+    if (!$Patches.Downgrade.Checked) { return }
+
     WriteToConsole
     WriteToConsole
     WriteToConsole
@@ -295,14 +299,14 @@ function WriteDebug([string]$Command, [string[]]$Header, [string]$PatchedFileNam
     
     foreach ($item in $Redux.Groups) {
         foreach ($form in $item.controls) {
-            if     ($form.GetType() -eq [System.Windows.Forms.CheckBox])      { if (IsDefault $form -Not $form.checked)                              { WriteToConsole ($item.text + ". " + $form.name) } }
+            if     ($form.GetType() -eq [System.Windows.Forms.CheckBox])      { if (IsChecked $form)                                                 { WriteToConsole ($item.text + ". " + $form.name) } }
             elseif ($form.GetType() -eq [System.Windows.Forms.RadioButton])   { if ( (IsDefault $form -Not $form.checked) -and (IsChecked $form) )   { WriteToConsole ($item.text + ". " + $form.name) } }
             elseif ($form.GetType() -eq [System.Windows.Forms.ComboBox])      { if (IsDefault $form -Not $form.selectedIndex)                        { WriteToConsole ($item.text + ". " + $form.name + " -> " + $form.text) } }
             elseif ($form.GetType() -eq [System.Windows.Forms.TrackBar])      { if (IsDefault $form -Not $form.value)                                { WriteToConsole ($item.text + ". " + $form.name + " -> " + $form.value) } }
 
             elseif ($form.GetType() -eq [System.Windows.Forms.Panel]) {
                 foreach ($subform in $form.controls) {
-                    if     ($subform.GetType() -eq [System.Windows.Forms.CheckBox])      { if (IsDefault $subform -Not $subform.checked)                                 { WriteToConsole ($item.text + ". " + $subform.name) } }
+                    if     ($subform.GetType() -eq [System.Windows.Forms.CheckBox])      { if (IsChecked $subform)                                                       { WriteToConsole ($item.text + ". " + $subform.name) } }
                     elseif ($subform.GetType() -eq [System.Windows.Forms.RadioButton])   { if ( (IsDefault $subform -Not $subform.checked) -and (IsChecked $subform) )   { WriteToConsole ($item.text + ". " + $subform.name) } }
                     elseif ($subform.GetType() -eq [System.Windows.Forms.ComboBox])      { if (IsDefault $subform -Not $subform.selectedIndex)                           { WriteToConsole ($item.text + ". " + $subform.name + " -> " + $subform.text) } }
                     elseif ($subform.GetType() -eq [System.Windows.Forms.TrackBar])      { if (IsDefault $subform -Not $subform.value)                                   { WriteToConsole ($item.text + ". " + $subform.name + " -> " + $subform.value) } }
@@ -771,6 +775,15 @@ function DecompressROM([boolean]$Decompress) {
     
     if (!$Decompress) { return $True }
     
+    # ROM is already decompressed, but is still recognized as decompressed for patching
+    if (((Get-Item -LiteralPath $GetROM.run).length)/1MB -ge $GameConsole.max_size) {
+        Copy-Item -LiteralPath $GetROM.run -Destination $GetROM.decomp -Force
+        RemoveFile $Files.dmaTable
+        Add-Content $Files.dmaTable $GameRev.dmaTable
+        if ($IsWiiVC) { RemoveFile $GetROM.run }
+        return $True
+    }
+
     if ($GameType.decompress -eq 1) {
         UpdateStatusLabel ("Decompressing " + $GameType.mode + " ROM...")
 
@@ -810,7 +823,7 @@ function DecompressROM([boolean]$Decompress) {
 #==============================================================================================================================================================================================
 function CompressROM([boolean]$Decompress, [boolean]$Finalize) {
     
-    if (!$Decompress -or !(TestFile $GetROM.decomp)) { return }
+    if (!$Decompress -or !(TestFile $GetROM.decomp) -or $GamePatch.compress -eq 0) { return }
 
     if ($GameType.decompress -eq 1 -and $Settings.Debug.NoCompression -eq $False) {
         UpdateStatusLabel ("Compressing " + $GameType.mode + " ROM...")
@@ -983,7 +996,7 @@ function IsReduxOnly() {
 #==============================================================================================================================================================================================
 function GetROMVersion() {
 
-    foreach ($item in $GameType.version) { if ($ROMHashSum -eq $item.hash) { return $item } }
+    foreach ($item in $GameType.version) { if ($ROMHashSum -eq $item.hash -and $item.list -eq $GameRev.list) { return $item } }
     return $null
 
 }

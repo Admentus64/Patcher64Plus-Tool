@@ -25,7 +25,8 @@
 		"hash"			: "57A9719AD547C516342E1A15D5C28C3D"
 	} ],
 	"output"			: "_gz_practice_patched",
-	"tooltip"			: "A trainer / practice / testing utility for The Legend of Zelda: Ocarina of Time{0}Formally known by its codename 'gz', but generally referred to as 'The Practice ROM'{0}- Supported: Rev 2 (US)"
+	"tooltip"			: "A trainer / practice / testing utility for The Legend of Zelda: Ocarina of Time{0}Formally known by its codename 'gz', but generally referred to as 'The Practice ROM'{0}- Supported: Rev 2 (US)",
+	"rev" 				: ["5BD1FE107BF8106B2AB6650ABECD54D6"]
 }, {
 	"title"				: "GZ Practice ROM",
 	"console"			: "Native",
@@ -46,7 +47,8 @@
 		"hash"			: "DA35577FE54579F6A266931CC75F512D"
 	} ],
 	"output"			: "_gz_practice_patched",
-	"tooltip"			: "A trainer / practice / testing utility for The Legend of Zelda: Ocarina of Time{0}Formally known by its codename 'gz', but generally referred to as 'The Practice ROM'{0}- Supported: Rev 0 (US), Rev 1 (US), Rev 2 (US), Rev GC (US) & Rev MQ (US)"
+	"tooltip"			: "A trainer / practice / testing utility for The Legend of Zelda: Ocarina of Time{0}Formally known by its codename 'gz', but generally referred to as 'The Practice ROM'{0}- Supported: Rev 0 (US), Rev 1 (US), Rev 2 (US), Rev GC (US) & Rev MQ (US)",
+	"rev" 				: ["5BD1FE107BF8106B2AB6650ABECD54D6"]
 }, {
 	"title"				: "The Legend of Zelda: The Missing Link (v1.4)",
 	"command"			: "Force Downgrade",
@@ -55,7 +57,8 @@
 	"vc_gameID"			: "NAC1",
 	"patch"				: "Compressed\\the_missing_link.bps",
 	"output"			: "_the_missing_link_patched",
-	"tooltip"			: "A small-sized ROM hack in a completely new setting{0}- Supported: Rev 0 (US)"
+	"tooltip"			: "A small-sized ROM hack in a completely new setting{0}- Supported: Rev 0 (US)",
+	"rev" 				: ["5BD1FE107BF8106B2AB6650ABECD54D6"]
 }, {
 	"title"				: "The Legend of Zelda: Dawn & Dusk (v2.0)",
 	"vc_title"			: "Zelda: Dawn & Dusk",
@@ -71,7 +74,8 @@
 		"hash"			: "57A9719AD547C516342E1A15D5C28C3D"
 	} ],
 	"output"			: "_dawn_&_dusk_patched",
-	"tooltip"			: "A small-sized ROM hack in a completely new setting{0}- Supported: Rev 0 (US), Rev 1 (US) & Rev 2 (US)"
+	"tooltip"			: "A small-sized ROM hack in a completely new setting{0}- Supported: Rev 0 (US), Rev 1 (US) & Rev 2 (US)",
+	"rev" 				: ["5BD1FE107BF8106B2AB6650ABECD54D6"]
 }, {
 	"title"				: "The Legend of Zelda: Master of Time (v1.0.9)",
 	"command"			: "Force Downgrade",
@@ -79,7 +83,8 @@
 	"vc_gameID"			: "NAC3",
 	"patch"				: "Compressed\\master_of_time.bps",
 	"output"			: "_master_of_time_patched",
-	"tooltip"			: "A small-sized ROM hack in a completely new setting{0}- Supported: Rev 0 (US)"
+	"tooltip"			: "A small-sized ROM hack in a completely new setting{0}- Supported: Rev 0 (US)",
+	"rev" 				: ["5BD1FE107BF8106B2AB6650ABECD54D6"]
 }, {
 	"title"				: "The Legend of Zelda: Nimpize Adventure",
 	"command"			: "Force Downgrade",
@@ -87,7 +92,8 @@
 	"vc_gameID"			: "NAC4",
 	"patch"				: "Decompressed\\nimpize.bps",
 	"output"			: "_nimpize_patched",
-	"tooltip"			: "A reworked and harder version of Ocarina of Time with remixed dungeons{0}- Supported: Rev 0 (US)"
+	"tooltip"			: "A reworked and harder version of Ocarina of Time with remixed dungeons{0}- Supported: Rev 0 (US)",
+	"rev" 				: ["5BD1FE107BF8106B2AB6650ABECD54D6"]
 }, {
 	"title"				: "The Legend of Zelda: The Fate of the Bombiwa (v1.0.3)",
 	"command"			: "Force Downgrade",
@@ -95,7 +101,8 @@
 	"vc_gameID"			: "NAC5",
 	"patch"				: "Decompressed\\bombiwa.bps",
 	"output"			: "_bombiwa_patched",
-	"tooltip"			: "A small-sized ROM hack in a completely new setting, and extremely tricky and difficult{0}- Supported: Rev 0 (US)"
+	"tooltip"			: "A small-sized ROM hack in a completely new setting, and extremely tricky and difficult{0}- Supported: Rev 0 (US)",
+	"rev" 				: ["5BD1FE107BF8106B2AB6650ABECD54D6"]
 }, {
 	"title"				: "Ocarina of Time Puzzling (v1.1.2)",
 	"command"			: "Force Downgrade",
@@ -103,5 +110,16 @@
 	"vc_gameID"			: "NAC6",
 	"patch"				: "Compressed\\puzzling.bps",
 	"output"			: "_puzzling_patched",
-	"tooltip"			: "A small-sized ROM hack that focuses on puzzling your way through{0}- Supported: Rev 0 (US)"
+	"tooltip"			: "A small-sized ROM hack that focuses on puzzling your way through{0}- Supported: Rev 0 (US)",
+	"rev" 				: ["5BD1FE107BF8106B2AB6650ABECD54D6"]
+}, {
+	"title"				: "Dark Hyrule Fantasy (Demo)",
+	"finalize"			: 0,
+	"compress"			: 0,
+	"vc_title"			: "Dark Hyrule Fantasy",
+	"vc_gameID"			: "NAC7",
+	"patch"				: "Decompressed\\dark_hyrule_fantasy.bps",
+	"output"			: "_dark_hyrule_fantasy_patched",
+	"tooltip"			: "A small-sized ROM hack in a completely new setting{0}- Supported: Debug GC MQ (PAL)",
+	"rev" 				: ["8CA71E87DE4CE5E9F6EC916202A623E9"]
 } ]

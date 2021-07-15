@@ -24,8 +24,8 @@ Add-Type -AssemblyName 'System.Drawing'
 # Setup global variables
 
 $global:ScriptName = "Patcher64+ Tool"
-$global:VersionDate = "2021-06-25"
-$global:Version     = "v14.1.3"
+$global:VersionDate = "2021-07-14"
+$global:Version     = "v14.2.0"
 $global:SystemDate  = Get-Date -Format yyyy-MM-dd-HH-mm-ss
 
 $global:CommandType = $MyInvocation.MyCommand.CommandType.ToString()
@@ -99,6 +99,7 @@ function CheckScripts() {
     if (!(Test-Path -PathType Leaf -LiteralPath ($Paths.Scripts + "\Common.psm1")))     { $FatalError = $True; $string += "{0}" + $Paths.Scripts + "\Common.psm1" }
     if (!(Test-Path -PathType Leaf -LiteralPath ($Paths.Scripts + "\Dialogs.psm1")))    { $FatalError = $True; $string += "{0}" + $Paths.Scripts + "\Dialogs.psm1" }
     if (!(Test-Path -PathType Leaf -LiteralPath ($Paths.Scripts + "\DPI.psm1")))        { $FatalError = $True; $string += "{0}" + $Paths.Scripts + "\DPI.psm1" }
+    if (!(Test-Path -PathType Leaf -LiteralPath ($Paths.Scripts + "\Editor.psm1")))     { $FatalError = $True; $string += "{0}" + $Paths.Scripts + "\Editor.psm1" }
     if (!(Test-Path -PathType Leaf -LiteralPath ($Paths.Scripts + "\Files.psm1")))      { $FatalError = $True; $string += "{0}" + $Paths.Scripts + "\Files.psm1" }
     if (!(Test-Path -PathType Leaf -LiteralPath ($Paths.Scripts + "\Forms.psm1")))      { $FatalError = $True; $string += "{0}" + $Paths.Scripts + "\Forms.psm1" }
     if (!(Test-Path -PathType Leaf -LiteralPath ($Paths.Scripts + "\Main.psm1")))       { $FatalError = $True; $string += "{0}" + $Paths.Scripts + "\Main.psm1" }
@@ -206,6 +207,7 @@ $Fonts.Small          = New-Object System.Drawing.Font($Font, 8,  [System.Drawin
 $Fonts.SmallBold      = New-Object System.Drawing.Font($Font, 8,  [System.Drawing.FontStyle]::Bold)
 $Fonts.SmallUnderline = New-Object System.Drawing.Font($Font, 8,  [System.Drawing.FontStyle]::Underline)
 $Fonts.TextFile       = New-Object System.Drawing.Font("Consolas", 8, [System.Drawing.FontStyle]::Regular)
+$Fonts.Editor         = New-Object System.Drawing.Font("Consolas", 16, [System.Drawing.FontStyle]::Regular)
 
 # Hide the PowerShell console from the user
 ShowPowerShellConsole ($Settings.Debug.Console -eq $True)
@@ -248,15 +250,24 @@ if (!$FatalError) {
     # Restore last settings
     if ($GameConsole -eq $null) { ChangeGamesList | Out-Null }
     ChangeGameMode    | Out-Null
+    ChangeGameRev     | Out-Null
     ChangePatchPanel  | Out-Null
     ChangePatch       | Out-Null
     SetMainScreenSize | Out-Null
     SetVCPanel        | Out-Null
-    ChangeGamesList
+    ChangeGamesList   | Out-Null
+    ChangeRevList     | Out-Null
 
     # Active GUI events
     InitializeEvents
 }
+
+#Write-Host (GetMessage -ID "000A")
+#$output = GetMessage -ID "000A" -HexOutput
+#Write-Host $output
+#Write-Host (GetMessageOffset -ID "000A")
+#SetMessage -ID "000A" -Old "Biggoron's Sword" -New "Biggoron's Blade" -ASCII
+
 
 # Show the dialog to the user
 if (!$FatalError) { $MainDialog.ShowDialog() | Out-Null }
