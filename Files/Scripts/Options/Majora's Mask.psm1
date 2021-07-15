@@ -969,7 +969,7 @@ function CreateTabLanguage() {
     $Redux.Box.Text = CreateReduxGroup -Tag "Script" -Text "Other Text Options"
     CreateReduxCheckBox -Name "RenameTatl"   -Text "Rename Tatl"        -Info "Rename Tatl to Taya (English) or Taya to Tatl (German, French or Spanish)" -Credits "Admentus & GhostlyDark"
     CreateReduxCheckBox -Name "Comma"        -Text "Better Comma"       -Info "Make the comma not look as awful"                                          -Credits "ShadowOne333"
-    CreateReduxCheckBox -Name "AutoSkip"     -Text "Auto Skip Dialogue" -Info "Automaticially advance to the next line or end it during dialogues "       -Credits "Marcelo20XX" -Warning "This option is recommended for speedrunners or experienced players only"
+    CreateReduxCheckBox -Name "AutoSkip"     -Text "Auto Skip Dialogue" -Info "Automatically advance to the next line or end it during dialogues "        -Credits "Marcelo20XX" -Warning "This option is recommended for speedrunners or experienced players only"
 
     $Redux.Text.Restore.Add_CheckedChanged({ EnableElem -Elem $Redux.Text.OcarinaIcons -Active $this.checked })
     foreach ($i in 0.. ($Files.json.languages.length-1)) { $Redux.Language[$i].Add_CheckedChanged({ UnlockLanguageContent }) }
@@ -1097,7 +1097,7 @@ function CreateTabDifficulty() {
 
     # EASY MODE #
     CreateReduxGroup    -Tag  "EasyMode" -Text "Easy Mode"
-    CreateReduxCheckbox -Name "NoBlueBubbleRespawn" -Text "No Blue Bubble Respawn" -Info "Removes the respawn of the Blue Bubble monsters (until you re-enter the room)" -Credits "Garoh-Mastah"
+    CreateReduxCheckbox -Name "NoBlueBubbleRespawn" -Text "No Blue Bubble Respawn" -Info "Removes the respawn of the Blue Bubble monsters (until you re-enter the room)" -Credits "Garo-Mastah"
 
 }
 

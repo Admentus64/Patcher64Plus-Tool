@@ -995,8 +995,14 @@ function IsReduxOnly() {
 
 #==============================================================================================================================================================================================
 function GetROMVersion() {
+    
+    foreach ($item in $GameType.version) {
+        if ($ROMHashSum -eq $item.hash) {
+            if     ( (IsSet $item.file) -and $CurrentGame.Rev.SelectedIndex -eq 0)   { return $GameRev }
+            elseif ($item.list -eq $GameRev.list)                                    { return $item }
+        }
+    }
 
-    foreach ($item in $GameType.version) { if ($ROMHashSum -eq $item.hash -and $item.list -eq $GameRev.list) { return $item } }
     return $null
 
 }

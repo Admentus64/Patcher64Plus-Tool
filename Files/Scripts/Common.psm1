@@ -342,11 +342,6 @@ function ChangeGameRev() {
     if (IsSet $GameRev.script)   { $GameFiles.script = ($Paths.Scripts + "\Options\" + $GameRev.script + ".psm1") }
     else                         { $GameFiles.script = ($Paths.Scripts + "\Options\" + $GameType.mode + ".psm1") }
 
-    if (TestFile $GameFiles.script) {
-        Import-Module -Name $GameFiles.script -Global
-        LoadAdditionalOptions
-    }
-
     ChangePatchPanel
     $global:IsActiveGameField = $True
 
@@ -364,8 +359,12 @@ function ChangePatch() {
                 $PatchToolTip.SetToolTip($Patches.Button, ([string]::Format($item.tooltip, [Environment]::NewLine)))
                 GetHeader
                 GetRegion
-                if (Get-Command "AdjustGUI" -errorAction SilentlyContinue) { iex "AdjustGUI" }
                 DisablePatches
+                if ( (TestFile $GameFiles.script) -and $GamePatch.options -eq 1) {
+                    Import-Module -Name $GameFiles.script -Global
+                    LoadAdditionalOptions
+                    if (Get-Command "AdjustGUI" -errorAction SilentlyContinue) { iex "AdjustGUI" }
+                }
                 break
             }
         }
