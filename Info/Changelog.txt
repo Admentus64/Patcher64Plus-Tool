@@ -2,6 +2,7 @@ v14.2.1
 - Fixed several typos
 - Fixed Redux options not showing up
 - Fixed ROM not downgrading
+- Fixed languages not patching in
 
 v14.2.0
 - Added support for patching multiple revisions
