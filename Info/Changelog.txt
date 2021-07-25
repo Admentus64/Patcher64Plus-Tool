@@ -1,3 +1,6 @@
+v14.2.2
+- Fixed Credits and Bazaar crash issues with German & French in OoT
+
 v14.2.1
 - Fixed several typos
 - Fixed Redux options not showing up
