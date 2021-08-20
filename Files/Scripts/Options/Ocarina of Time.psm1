@@ -187,7 +187,7 @@ function ByteOptions() {
         ChangeBytes -Offset "B589EB" -Values "07" -Add # B Text   - X position (94 -> 9B, +07)
     }
 
-    if (IsChecked $Redux.UI.CenterNaviPrompt) { ChangeBytes -Offset "B582DF" -Values "5E" }
+    if (IsChecked $Redux.UI.CenterNaviPrompt) { ChangeBytes -Offset "B582DF" -Values "01" -Add }
 
     if (IsChecked $Redux.UI.GCScheme) { # Z to L textures
         PatchBytes -Offset "844540"  -Texture -Patch "GameCube\l_pause_screen_button.bin"
