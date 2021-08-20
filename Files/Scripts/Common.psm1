@@ -139,7 +139,7 @@ function ChangeRevList() {
 
 #==============================================================================================================================================================================================
 function ChangePatchPanel() {
-
+    
     # Return is no GameType or game file is set
     if (!(IsSet $GameType)) { return }
 
@@ -205,7 +205,7 @@ function SetMainScreenSize() {
     $VC.Panel.Visible = $IsWiiVC
 
     # Set Input Paths Sizes
-    $InputPaths.GamePanel.Location    = $InputPaths.InjectPanel.Location = $InputPaths.PatchPanel.Location = DPISize (New-Object System.Drawing.Size(10, 50))
+    $InputPaths.GamePanel.Location    = $InputPaths.InjectPanel.Location = $InputPaths.PatchPanel.Location = DPISize (New-Object System.Drawing.Size(10, 70))
     if ($IsWiiVC) {
         $InputPaths.InjectPanel.Top   = $InputPaths.GamePanel.Bottom   + (DPISize 15)
         $InputPaths.PatchPanel.Top    = $InputPaths.InjectPanel.Bottom + (DPISize 15)
@@ -228,21 +228,20 @@ function SetMainScreenSize() {
             $VC.Panel.Location      = New-Object System.Drawing.Size((DPISize 10), ($Patches.Panel.Bottom      + (DPISize 5)))
         }
         else { $VC.Panel.Location = New-Object System.Drawing.Size((DPISize 10), ($CustomHeader.Panel.Bottom   + (DPISize 5))) }
-        $MiscPanel.Location       = New-Object System.Drawing.Size((DPISize 10), ($VC.Panel.Bottom             + (DPISize 5)))
+        $StatusPanel.Location       = New-Object System.Drawing.Size((DPISize 10), ($VC.Panel.Bottom             + (DPISize 5)))
     }
     else {
         if ( ($GameConsole.rom_title -eq 0) -and ($GameConsole.rom_gameID -eq 0) ) {
             if ($GameType.patches) { $Patches.Panel.Location = New-Object System.Drawing.Size((DPISize 10), ($CurrentGame.Panel.Bottom   + (DPISize 5))) }
-            else                   { $MiscPanel.Location     = New-Object System.Drawing.Size((DPISize 10), ($CurrentGame.Panel.Bottom   + (DPISize 5))) }
+            else                   { $StatusPanel.Location   = New-Object System.Drawing.Size((DPISize 10), ($CurrentGame.Panel.Bottom   + (DPISize 5))) }
         }
         else {
             if ($GameType.patches) { $Patches.Panel.Location = New-Object System.Drawing.Size((DPISize 10), ($CustomHeader.Panel.Bottom + (DPISize 5))) }
-            else                   { $MiscPanel.Location     = New-Object System.Drawing.Size((DPISize 10), ($CustomHeader.Panel.Bottom + (DPISize 5))) }
+            else                   { $StatusPanel.Location   = New-Object System.Drawing.Size((DPISize 10), ($CustomHeader.Panel.Bottom + (DPISize 5))) }
         }
-        if ($GameType.patches)     { $MiscPanel.Location     = New-Object System.Drawing.Size((DPISize 10), ($Patches.Panel.Bottom      + (DPISize 5))) }
+        if ($GameType.patches)     { $StatusPanel.Location   = New-Object System.Drawing.Size((DPISize 10), ($Patches.Panel.Bottom      + (DPISize 5))) }
     }
     
-    $StatusPanel.Location = New-Object System.Drawing.Size((DPISize 10), ($MiscPanel.Bottom + (DPISize 5)))
     $MainDialog.Height = $StatusPanel.Bottom + (DPISize 50)
 
 }
@@ -288,7 +287,9 @@ function ChangeGameMode() {
     # JSON Files
     if (IsSet $GameType.patches)                               { $Files.json.patches   = SetJSONFile $GameFiles.patches }                           else { $Files.json.patches   = $null }
     if (TestFile ($GameFiles.languages + "\Languages.json"))   { $Files.json.languages = SetJSONFile ($GameFiles.languages + "\Languages.json") }   else { $Files.json.languages = $null }
-    if (TestFile ($GameFiles.models + "\Models.json"))         { $Files.json.models    = SetJSONFile ($GameFiles.models + "\Models.json") }         else { $Files.json.models    = $null }
+    if (TestFile ($GameFiles.models    + "\Models.json"))      { $Files.json.models    = SetJSONFile ($GameFiles.models    + "\Models.json") }      else { $Files.json.models    = $null }
+    if (TestFile ($GameFiles.base      + "\Music.json"))       { $Files.json.music     = SetJSONFile ($GameFiles.base      + "\Music.json") }       else { $Files.json.music     = $null }
+
     if ( (TestFile $GameFiles.controls) -and $IsWiiVC) {
         $Files.json.controls  = SetJSONFile $GameFiles.controls
         CreateVCRemapDialog # Create VC remap settings
@@ -308,7 +309,6 @@ function ChangeGameMode() {
         else { AddTextFileToTextbox -TextBox $Credits.Sections[1] -File $Files.Text.credits -MainCredits }
     }
 
-    $CreditsGameLabel.Text = "Current Game: " + $GameType.mode
     $Patches.Panel.Visible = $GameType.patches
 
     SetModeLabel
@@ -363,7 +363,6 @@ function ChangePatch() {
                 if ( (TestFile $GameFiles.script) -and $GamePatch.options -eq 1) {
                     Import-Module -Name $GameFiles.script -Global
                     LoadAdditionalOptions
-                    if (Get-Command "AdjustGUI" -errorAction SilentlyContinue) { iex "AdjustGUI" }
                 }
                 break
             }
@@ -422,7 +421,7 @@ function SetModeLabel() {
 	
     $CurrentModeLabel.Text = "Current  Mode  :  " + $GameType.mode
     if ($IsWiiVC) { $CurrentModeLabel.Text += "  (Wii  VC)" } else { $CurrentModeLabel.Text += "  (" + $GameConsole.Mode + ")" }
-    $CurrentModeLabel.Location = New-Object System.Drawing.Size(([Math]::Floor($MainDialog.Width / 2) - [Math]::Floor($CurrentModeLabel.Width / 2)), 10)
+    $CurrentModeLabel.Location = New-Object System.Drawing.Size(([Math]::Floor($MainDialog.Width / 2) - [Math]::Floor($CurrentModeLabel.Width / 2)), 50)
 
 }
 
@@ -436,7 +435,7 @@ function EnablePatchButtons([boolean]$Enable) {
     else                { UpdateStatusLabel "Select your ROM or Wii VC WAD file to continue." }
 
     # Enable patcher buttons
-    $Patches.Panel.Enabled = $CustomHeader.Panel.Enabled = $VC.ExtractROMButton.Enabled = $Enable
+    $Patches.Button.Enabled = $CustomHeader.Panel.Enabled = $VC.ExtractROMButton.Enabled = $Enable
 
 }
 
@@ -620,8 +619,8 @@ function IsIndex([object]$Elem, [int16]$Index=1, [string]$Text, [switch]$Active,
 
     if (IsSet $Text) {
         $Text = $Text.replace(" (default)", "")
-        if ($Elem.indexOf($Text))             { return !$Not  }
-        if (!$Elem.indexOf($Text))            { return  $Not  }
+        if ($Elem.Text -eq $Text)             { return !$Not  }
+        if ($Elem.Text -ne $Text)             { return  $Not  }
     }
 
     if ($Elem.SelectedIndex -eq ($Index-1))   { return !$Not  }
@@ -875,7 +874,7 @@ function EnableGUI([boolean]$Enable) {
     
     $InputPaths.GamePanel.Enabled = $InputPaths.InjectPanel.Enabled = $InputPaths.PatchPanel.Enabled = $Enable
     $CurrentGame.Panel.Enabled = $CustomHeader.Panel.Enabled = $Enable
-    $Patches.Panel.Enabled = $MiscPanel.Enabled = $VC.Panel.Enabled = $Enable
+    $Patches.Panel.Enabled = $VC.Panel.Enabled = $Enable
     SetModernVisualStyle $GeneralSettings.ModernStyle.Checked
 
 }
@@ -1125,42 +1124,6 @@ function IsRestrictedFolder([string]$Path) {
 
 
 
-#==================================================================================================================================================================================================================================================================
-function StartJobLoop([string]$Name, [string]$Program = '', [switch]$Silent=$False) {
-    
-    if (!$Silent) { Write-Host ('--- Job Loop Started (' + $Program + ')') }
-
-    RunJobLoop -Name $Name -Silent:$Silent
-
-    Stop-Job -Name $Name
-    Remove-Job -Name $Name
-
-    if (!$Silent) { Write-Host "--- Job Loop Ended" }
-
-}
-
-
-
-#==================================================================================================================================================================================================================================================================
-function RunJobLoop([string]$Name, [switch]$Silent=$False) {
-
-    $JobStatus = (Get-Job -Name $Name).State
-
-    while ($JobStatus -ne 'Completed') {
-        Start-Sleep -m $DialogUpdateRateMS
-        $JobStatus = (Get-Job -Name $Name).State
-
-        if (!$Silent) { Write-Host "<< Job Loop Iteration >>" }
-
-        $JobFeedback = (Receive-Job -Name $Name)
-
-        [Windows.Forms.Application]::DoEvents()
-    }
-
-}
-
-
-
 #==============================================================================================================================================================================================
 function GetCommand([string]$Command) { return (Get-Command $Command -errorAction SilentlyContinue) }
 
@@ -1230,6 +1193,3 @@ Export-ModuleMember -Function SetLogging
 Export-ModuleMember -Function SetBitmap
 Export-ModuleMember -Function IsRestrictedFolder
 Export-ModuleMember -Function GetCommand
-
-Export-ModuleMember -Function StartJobLoop
-Export-ModuleMember -Function RunJobLoop

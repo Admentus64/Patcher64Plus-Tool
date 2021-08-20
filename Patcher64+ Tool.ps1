@@ -17,6 +17,7 @@ if ( (Get-ExecutionPolicy) -eq "Restricted") {
 Add-Type -AssemblyName 'System.Windows.Forms'
 Add-Type -AssemblyName 'System.Drawing'
 [Windows.Forms.Application]::EnableVisualStyles()
+#Write-Host $((Get-PSCallStack)[1]).Command
 
 
 
@@ -24,8 +25,8 @@ Add-Type -AssemblyName 'System.Drawing'
 # Setup global variables
 
 $global:ScriptName = "Patcher64+ Tool"
-$global:VersionDate = "2021-07-25"
-$global:Version     = "v14.2.2"
+$global:VersionDate = "2021-08-20"
+$global:Version     = "v14.3.0"
 $global:SystemDate  = Get-Date -Format yyyy-MM-dd-HH-mm-ss
 
 $global:CommandType = $MyInvocation.MyCommand.CommandType.ToString()
@@ -106,8 +107,9 @@ function CheckScripts() {
     if (!(Test-Path -PathType Leaf -LiteralPath ($Paths.Scripts + "\MQ.psm1")))         { $FatalError = $True; $string += "{0}" + $Paths.Scripts + "\MQ.psm1" }
     if (!(Test-Path -PathType Leaf -LiteralPath ($Paths.Scripts + "\Patch.psm1")))      { $FatalError = $True; $string += "{0}" + $Paths.Scripts + "\Patch.psm1" }
     if (!(Test-Path -PathType Leaf -LiteralPath ($Paths.Scripts + "\Settings.psm1")))   { $FatalError = $True; $string += "{0}" + $Paths.Scripts + "\Settings.psm1" }
+    if (!(Test-Path -PathType Leaf -LiteralPath ($Paths.Scripts + "\VC.psm1")))         { $FatalError = $True; $string += "{0}" + $Paths.Scripts + "\VC.psm1" }
     if (!(Test-Path -PathType Leaf -LiteralPath ($Paths.Scripts + "\Zelda 64.psm1")))   { $FatalError = $True; $string += "{0}" + $Paths.Scripts + "\Zelda 64.psm1" }
-
+    
     if (!$FatalError) { return }
     
     $Dialog = New-Object System.Windows.Forms.Form
@@ -261,13 +263,6 @@ if (!$FatalError) {
     # Active GUI events
     InitializeEvents
 }
-
-#Write-Host (GetMessage -ID "000A")
-#$output = GetMessage -ID "000A" -HexOutput
-#Write-Host $output
-#Write-Host (GetMessageOffset -ID "000A")
-#SetMessage -ID "000A" -Old "Biggoron's Sword" -New "Biggoron's Blade" -ASCII
-
 
 # Show the dialog to the user
 if (!$FatalError) { $MainDialog.ShowDialog() | Out-Null }

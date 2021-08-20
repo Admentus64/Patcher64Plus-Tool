@@ -1,3 +1,23 @@
+v14.3.0
+- Added "No HUD" option for OoT
+- Added "Button Size" options for OoT and MM
+- Added "Mute Music" options for OoT and MM
+- Added invidual list to mute music per track for OoT and MM
+- Added support for adding option-ready List Boxes
+- Added support for dynamically reading in music tracks from JSON
+- Added menu bar support for the patcher (replaces several window buttons)
+- Removed "Change Widescreen" option in settings (alternative WS option is now an extra checkbox in the OoT and MM graphics panel)
+- Changed "Audiovisual" tab into "Graphics" and "Audio" tabs for OoT and MM
+- Changed phrasing for the "Black Bars" option for OoT
+- Changed locked state of GUI when no ROM is selected
+- Fixed console log not properly printing out selected options for patching
+- Fixed double loading the GUI
+- Fixed "Extended Draw" option for OoT? Again?
+- Fixed Stray Fairies dialogue for German, Spanish and French languages for Majora's Mask (by GhostlyDark)
+- Fixed crash with OoT WS patch (by GhostlyDark)
+- Fixed several typos
+- Fixed missed Gerudo Membership Card censored texture
+
 v14.2.2
 - Fixed Credits and Bazaar crash issues with German & French in OoT
 

@@ -274,6 +274,37 @@ function CreateSlider([uint16]$X=0, [uint16]$Y=0, [uint16]$Width=0, [uint16]$Hei
 
 
 #==============================================================================================================================================================================================
+function CreateListBox([uint16]$X=0, [uint16]$Y=0, [uint16]$Width=0, [uint16]$Height=0, [string[]]$Items, [string]$Name, [string]$Tag, [string]$Info, [switch]$IsGame, [object]$AddTo=$Last.Group, [object]$Link) {
+
+    $listBox = CreateForm -X $X -Y $Y -Width $Width -Height $Height -Name $Name -Tag $Tag -IsGame $IsGame -Form (New-Object System.Windows.Forms.Listbox) -AddTo $AddTo
+    $listBox.SelectionMode = 'MultiSimple'
+
+    foreach ($item in $items) {
+        $listBox.Items.Add($Item)
+        #$listBox.SetSelected($listBox.Items.count-1, $True)
+    }
+
+    if (IsSet $listBox.Name) {
+        if ($IsGame) {
+            if ($GameSettings[$listBox.Section][$listBox.Name] -ne "" -and $GameSettings[$listBox.Section][$listBox.Name] -ne $null) {
+                $load = $GameSettings[$listBox.Section][$listBox.Name].ToCharArray()
+                foreach ($i in 0..($listBox.items.count-1)) { if ($load[$i] -eq "1") { $listBox.SetSelected($i, 1) } }
+            }
+            
+            $listBox.Add_SelectedIndexChanged({
+                $save = ""
+                foreach ($i in 0..($this.items.count-1)) { if ($this.getSelected($i) -eq $True) { $save += "1" } else { $save += "0" } }
+                $GameSettings[$this.Section][$this.Name] = $save
+            })
+        }
+    }
+
+    return $listBox
+
+}
+
+
+#==============================================================================================================================================================================================
 function CreateLabel([uint16]$X=0, [uint16]$Y=0, [uint16]$Width=0, [uint16]$Height=0, [string]$Name, [string]$Tag, [string]$Text="", [System.Drawing.Font]$Font=$Fonts.Small, [string]$Info="", [object]$AddTo=$Last.Group) {
     
     $Label = CreateForm -X $X -Y $Y -Width $Width -Height $Height -Name $Name -Tag $Tag -Form (New-Object System.Windows.Forms.Label) -AddTo $AddTo
@@ -356,12 +387,12 @@ function CreateTabButtons([string[]]$Tabs, [object]$AddTo=$Redux.Panel) {
 
 
 #==============================================================================================================================================================================================
-function CreateReduxPanel([single]$Row=0, [single]$Columns, [single]$Rows=1,  [string]$Name, [string]$Tag, [object]$AddTo=$Last.Group) {
+function CreateReduxPanel([single]$X=$Last.Group.Left, [single]$Row=0, [single]$Columns, [single]$Rows=1,  [string]$Name, [string]$Tag, [object]$AddTo=$Last.Group) {
     
     $Last.Max = 0
     if (IsSet $Columns -Min 0)   { $Width = (DPISize 150) * $Columns }
     else                         { $Width = $AddTo.Width - (DPISize 20) }
-    return CreatePanel -X $AddTo.Left -Y ($Row * (DPISize 30) + (DPISize 20)) -Width $Width -Height ((DPISize 26.5) * $Rows) -Name $Name -Tag $Tag -AddTo $AddTo
+    return CreatePanel -X $X -Y ($Row * (DPISize 30) + (DPISize 20)) -Width $Width -Height ((DPISize 26.5) * $Rows) -Name $Name -Tag $Tag -AddTo $AddTo
 
 }
 
@@ -600,7 +631,7 @@ function CreateReduxComboBox([single]$Column=$Last.Column, [single]$Row=$Last.Ro
 
 
 #==============================================================================================================================================================================================
-function CreateReduxSlider([single]$Column=$Last.Column, [single]$Row=$Last.Row, $Default, $Min, $Max, $Freq, $Small, $Large, [string]$Text, [string]$Info, [string]$Warning, [string]$Credits, [string]$Name, [object]$Link, [string]$Tag, [object]$AddTo=$Last.Group) {
+function CreateReduxSlider([single]$Column=$Last.Column, [single]$Row=$Last.Row, $Default, $Min, $Max, $Freq, $Small, $Large, [string]$Text, [string]$Info, [string]$Warning, [string]$Credits, [string]$Name, [string]$Tag, [object]$AddTo=$Last.Group) {
     
     if ($Default.GetType().Name -eq "String")   { $Default = GetDecimal $Default }
     if ($Min.GetType().Name -eq "String")       { $Min     = GetDecimal $Min }
@@ -622,6 +653,16 @@ function CreateReduxSlider([single]$Column=$Last.Column, [single]$Row=$Last.Row,
     })
 
     return $Slider
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function CreateReduxListBox([single]$Column=$Last.Column, [single]$Row=$Last.Row, [string[]]$Items, $Default=$null, [string]$Text, [string]$Info, [string]$Warning, [string]$Credits, [string]$Name, [object]$Link, [string]$Tag, [object]$AddTo=$Last.Group) {
+    
+    $listBox  = CreateListBox -X (($Column-1) * (DPISize 165) + (DPISize 15)) -Y ($Row * (DPISize 45) - (DPISize 25)) -Width (DPISize 300) -Height (DPISize 175) -Items $Items -Default $Default -Info $Info -IsGame $True -Name $Name -Tag $Tag -AddTo $AddTo
+    return $listBox
 
 }
 
@@ -651,6 +692,7 @@ Export-ModuleMember -Function CreateButton
 Export-ModuleMember -Function CreateCheckBox
 Export-ModuleMember -Function CreateComboBox
 Export-ModuleMember -Function CreateSlider
+Export-ModuleMember -Function CreateListBox
 
 Export-ModuleMember -Function CreateTabButton
 Export-ModuleMember -Function CreateTabButtons
@@ -663,4 +705,5 @@ Export-ModuleMember -Function CreateReduxRadioButton
 Export-ModuleMember -Function CreateReduxCheckBox
 Export-ModuleMember -Function CreateReduxComboBox
 Export-ModuleMember -Function CreateReduxSlider
+Export-ModuleMember -Function CreateReduxListBox
 Export-ModuleMember -Function CreateReduxColoredLabel

@@ -45,112 +45,6 @@ function GetSFXID([string]$SFX) {
 
 
 #==============================================================================================================================================================================================
-function GetOoTMusicID([string]$Music) {
-    
-    $Music = $Music.replace(' (default)', "")
-    if     ($Music -eq "None" -or $Music -eq "Disabled")   { return "00" }
-    elseif ($Music -eq "Hyrule Field")                     { return "02" }   elseif ($Music -eq "Hyrule Field - Initial")        { return "03" }   elseif ($Music -eq "Hyrule Field - 1")             { return "04" }
-    elseif ($Music -eq "Hyrule Field - 2")                 { return "05" }   elseif ($Music -eq "Hyrule Field - 3")              { return "06" }   elseif ($Music -eq "Hyrule Field - 4")             { return "07" }
-    elseif ($Music -eq "Hyrule Field - 5")                 { return "08" }   elseif ($Music -eq "Hyrule Field - 6")              { return "09" }   elseif ($Music -eq "Hyrule Field - 7")             { return "0A" }
-    elseif ($Music -eq "Hyrule Field - 8")                 { return "0B" }   elseif ($Music -eq "Hyrule Field - 9")              { return "0C" }   elseif ($Music -eq "Hyrule Field - 10")            { return "0D" }
-    elseif ($Music -eq "Hyrule Field - 11")                { return "0E" }   elseif ($Music -eq "Hyrule Field - Enemy")          { return "0F" }   elseif ($Music -eq "Hyrule Field - Enemy 1")       { return "10" }
-    elseif ($Music -eq "Hyrule Field - Enemy 2")           { return "11" }   elseif ($Music -eq "Hyrule Field - Enemy 3")        { return "12" }   elseif ($Music -eq "Hyrule Field - Enemy 4")       { return "13" }
-    elseif ($Music -eq "Hyrule Field - Standing 1")        { return "14" }   elseif ($Music -eq "Hyrule Field - Standing 2")     { return "15" }   elseif ($Music -eq "Hyrule Field - Standing 3")    { return "16" }
-    elseif ($Music -eq "Hyrule Field - Standing 4")        { return "17" }   elseif ($Music -eq "Dodongo's Cavern")              { return "18" }   elseif ($Music -eq "Kakariko Village (Adult)")     { return "19" }
-    elseif ($Music -eq "Battle")                           { return "1A" }   elseif ($Music -eq "Boss Battle")                   { return "1B" }   elseif ($Music -eq "Inside the Deku Tree")         { return "1C" }
-    elseif ($Music -eq "Market")                           { return "1D" }   elseif ($Music -eq "Title Theme")                   { return "1E" }   elseif ($Music -eq "House")                        { return "1F" }
-    elseif ($Music -eq "Game Over")                        { return "20" }   elseif ($Music -eq "Boss Clear")                    { return "21" }   elseif ($Music -eq "Obtain Item")                  { return "22" }
-    elseif ($Music -eq "Enter Ganondorf")                  { return "23" }   elseif ($Music -eq "Obtain Heart Container")        { return "24" }   elseif ($Music -eq "Prelude of Light")             { return "25" }
-    elseif ($Music -eq "Inside Jabu-Jabu's Belly")         { return "26" }   elseif ($Music -eq "Kakariko Village (Child)")      { return "27" }   elseif ($Music -eq "Great Fairy's Fountain")       { return "28" }
-    elseif ($Music -eq "Zelda's Theme")                    { return "29" }   elseif ($Music -eq "Fire Temple")                   { return "2A" }   elseif ($Music -eq "Open Treasure Chest")          { return "2B" }
-    elseif ($Music -eq "Forest Temple")                    { return "2C" }   elseif ($Music -eq "Hyrule Castle Courtyard")       { return "2D" }   elseif ($Music -eq "Ganondorf's Theme")            { return "2E" }
-    elseif ($Music -eq "Lon Lon Ranch")                    { return "2F" }   elseif ($Music -eq "Goron City")                    { return "30" }   elseif ($Music -eq "Hyrule Field Morning Theme")   { return "31" }
-    elseif ($Music -eq "Spiritual Stone Get")              { return "32" }   elseif ($Music -eq "Bolero of Fire")                { return "33" }   elseif ($Music -eq "Minuet of Woods")              { return "34" }
-    elseif ($Music -eq "Serenade of Water")                { return "35" }   elseif ($Music -eq "Requiem of Spirit")             { return "36" }   elseif ($Music -eq "Nocturne of Shadow")           { return "37" }
-    elseif ($Music -eq "Mini-Boss Battle")                 { return "38" }   elseif ($Music -eq "Obtain Small Item")             { return "39" }   elseif ($Music -eq "Temple of Time")               { return "3A" }
-    elseif ($Music -eq "Escape from Lon Lon Ranch")        { return "3B" }   elseif ($Music -eq "Kokiri Forest")                 { return "3C" }   elseif ($Music -eq "Obtain Fairy Ocarina")         { return "3D" }
-    elseif ($Music -eq "Lost Woods")                       { return "3E" }   elseif ($Music -eq "Spirit Temple")                 { return "3F" }   elseif ($Music -eq "Horse Race")                   { return "40" }
-    elseif ($Music -eq "Horse Race Goal")                  { return "41" }   elseif ($Music -eq "Ingo's Theme")                  { return "42" }   elseif ($Music -eq "Obtain Medallion")             { return "43" }
-    elseif ($Music -eq "Ocarina Saria's Song")             { return "44" }   elseif ($Music -eq "Ocarina Epona's Song")          { return "45" }   elseif ($Music -eq "Ocarina Zelda's Lullaby")      { return "46" }
-    elseif ($Music -eq "Ocarina Sun's Song")               { return "47" }   elseif ($Music -eq "Ocarina Song of Time")          { return "48" }   elseif ($Music -eq "Ocarina Song of Storms")       { return "49" }
-    elseif ($Music -eq "Fairy Flying")                     { return "4A" }   elseif ($Music -eq "Deku Tree")                     { return "4B" }   elseif ($Music -eq "Windmill Hut")                 { return "4C" }
-    elseif ($Music -eq "Legend of Hyrule")                 { return "4D" }   elseif ($Music -eq "Shooting Gallery")              { return "4E" }   elseif ($Music -eq "Sheik's Theme")                { return "4F" }
-    elseif ($Music -eq "Zora's Domain")                    { return "50" }   elseif ($Music -eq "Enter Zelda")                   { return "51" }   elseif ($Music -eq "Goodbye to Zelda")             { return "52" }
-    elseif ($Music -eq "Master Sword")                     { return "53" }   elseif ($Music -eq "Ganon Intro")                   { return "54" }   elseif ($Music -eq "Shop")                         { return "55" }
-    elseif ($Music -eq "Chamber of the Sages")             { return "56" }   elseif ($Music -eq "File Select")                   { return "57" }   elseif ($Music -eq "Ice Cavern")                   { return "58" }
-    elseif ($Music -eq "Open Door of Temple of Time")      { return "59" }   elseif ($Music -eq "Kaepora Gaebora's Theme")       { return "5A" }   elseif ($Music -eq "Shadow Temple")                { return "5B" }
-    elseif ($Music -eq "Water Temple")                     { return "5C" }   elseif ($Music -eq "Ganon's Castle Bridge")         { return "5D" }   elseif ($Music -eq "Ocarina of Time")              { return "5E" }
-    elseif ($Music -eq "Gerudo Valley")                    { return "5F" }   elseif ($Music -eq "Potion Shop")                   { return "60" }   elseif ($Music -eq "Kotake & Koume's Theme")       { return "61" }
-    elseif ($Music -eq "Escape from Ganon's Castle")       { return "62" }   elseif ($Music -eq "Ganon's Castle Under Ground")   { return "63" }   elseif ($Music -eq "Ganondorf Battle")             { return "64" }
-    elseif ($Music -eq "Ganon Battle")                     { return "65" }   elseif ($Music -eq "	Seal of Six Sages")          { return "66" }   elseif ($Music -eq "End Credits I")                { return "67" }
-    elseif ($Music -eq "End Credits II")                   { return "68" }   elseif ($Music -eq "End Credits III")               { return "69" }   elseif ($Music -eq "End Credits IV")               { return "6A" }
-    elseif ($Music -eq "Boss Battle 2")                    { return "6B" }   elseif ($Music -eq "Mini Game")                     { return "6C" }
-    else {
-        WriteToConsole ("Could not find music ID for: " + $Music)
-        return -1
-    }
-
-}
-
-
-
-#==============================================================================================================================================================================================
-function GetMMMusicID([string]$Music) {
-    
-    $Music = $Music.replace(' (default)', "")
-    if     ($Music -eq "None" -or $Music -eq "Disabled")   { return "00" }
-    elseif ($Music -eq "Termina Field")                    { return "02" }   elseif ($Music -eq "Forest Theme")                  { return "03" }   elseif ($Music -eq "Majora's Theme")                   { return "04" }
-    elseif ($Music -eq "The Clock Tower")                  { return "05" }   elseif ($Music -eq "Stone Tower Temple")            { return "06" }   elseif ($Music -eq "Stone Tower Temple Inverted")      { return "07" }
-    elseif ($Music -eq "Missed Event 1")                   { return "08" }   elseif ($Music -eq "Title")                         { return "09" }   elseif ($Music -eq "Mask Salesman")                    { return "0A" }
-    elseif ($Music -eq "Song of Healing")                  { return "0B" }   elseif ($Music -eq "Southern Swamp")                { return "0C" }   elseif ($Music -eq "Ghost Attack")                     { return "0D" }
-    elseif ($Music -eq "Mini Game")                        { return "0E" }   elseif ($Music -eq "Sharp's Curse")                 { return "0F" }   elseif ($Music -eq "Great Bay Coast")                  { return "10" }
-    elseif ($Music -eq "Ikana Valley")                     { return "11" }   elseif ($Music -eq "Court of the Deku King")        { return "12" }   elseif ($Music -eq "Mountain Village")                 { return "13" }
-    elseif ($Music -eq "Pirates' Fortress")                { return "14" }   elseif ($Music -eq "Clock Town Day 1")              { return "15" }   elseif ($Music -eq "Clock Town Day 2")                 { return "16" }
-    elseif ($Music -eq "Clock Town Day 3")                 { return "17" }   elseif ($Music -eq "File Select")                   { return "18" }   elseif ($Music -eq "Event Clear")                      { return "19" }
-    elseif ($Music -eq "Battle")                           { return "1A" }   elseif ($Music -eq "Boss Battle")                   { return "1B" }   elseif ($Music -eq "Woodfall Temple")                  { return "1C" }
-    elseif ($Music -eq "Clock Town Day 1")                 { return "1D" }   elseif ($Music -eq "Forest Ambush")                 { return "1E" }   elseif ($Music -eq "House")                            { return "1F" }
-    elseif ($Music -eq "Game Over")                        { return "20" }   elseif ($Music -eq "Boss Clear")                    { return "21" }   elseif ($Music -eq "Item Catch")                       { return "22" }
-    elseif ($Music -eq "Clock Town Day 2")                 { return "23" }   elseif ($Music -eq "Complete a Heart Piece")        { return "24" }   elseif ($Music -eq "Playing Minigame")                 { return "25" }
-    elseif ($Music -eq "Goron Race")                       { return "26" }   elseif ($Music -eq "Music Box House")               { return "27" }   elseif ($Music -eq "Fairy's Fountain")                 { return "28" }
-    elseif ($Music -eq "Zelda's Lullaby")                  { return "29" }   elseif ($Music -eq "Rosa Sisters' Dance")           { return "2A" }   elseif ($Music -eq "Open Chest")                       { return "2B" }
-    elseif ($Music -eq "Marine Research Laboratory")       { return "2C" }   elseif ($Music -eq "The Four Giants")               { return "2D" }   elseif ($Music -eq "Guru-Guru's Song")                 { return "2E" }
-    elseif ($Music -eq "Romani Ranch")                     { return "2F" }   elseif ($Music -eq "Goron Village")                 { return "30" }   elseif ($Music -eq "Mayor Dotour")                     { return "31" }
-    elseif ($Music -eq "Ocarina Epona's Song")             { return "32" }   elseif ($Music -eq "Ocarina Sun's Song")            { return "33" }   elseif ($Music -eq "Ocarina Song of Time")             { return "34" }
-    elseif ($Music -eq "Ocarina Song of Storms")           { return "35" }   elseif ($Music -eq "Zora Hall")                     { return "36" }   elseif ($Music -eq "A New Mask")                       { return "37" }
-    elseif ($Music -eq "Mini-Boss Battle")                 { return "38" }   elseif ($Music -eq "Small Item Catch")              { return "39" }   elseif ($Music -eq "Astral Observatory")               { return "3A" }
-    elseif ($Music -eq "Clock Town Cavern")                { return "3B" }   elseif ($Music -eq "Milk Bar Latte")                { return "3C" }   elseif ($Music -eq "Meet Zelda (OoT)")                 { return "3D" }
-    elseif ($Music -eq "Woods of Mystery")                 { return "3E" }   elseif ($Music -eq "Goron Race Goal")               { return "3F" }   elseif ($Music -eq "Gorman Race")                      { return "40" }
-    elseif ($Music -eq "Race Finish")                      { return "41" }   elseif ($Music -eq "Gorman Bros.")                  { return "42" }   elseif ($Music -eq "Kotake's Potion Shop")             { return "43" }
-    elseif ($Music -eq "Shop")                             { return "44" }   elseif ($Music -eq "Gaebora's Theme")               { return "45" }   elseif ($Music -eq "Target Practice")                  { return "46" }
-    elseif ($Music -eq "Ocarina Song of Soaring")          { return "47" }   elseif ($Music -eq "Ocarina Song of Healing")       { return "48" }   elseif ($Music -eq "Inverted Song of Time")            { return "49" }
-    elseif ($Music -eq "Song of Double Time")              { return "4A" }   elseif ($Music -eq "Sonata of Awakening")           { return "4B" }   elseif ($Music -eq "Goron Lullaby")                    { return "4C" }
-    elseif ($Music -eq "New Wave Bossa Nova")              { return "4D" }   elseif ($Music -eq "Elegy of Emptiness")            { return "4E" }   elseif ($Music -eq "Oath to Order")                    { return "4F" }
-    elseif ($Music -eq "Sword Training")                   { return "50" }   elseif ($Music -eq "Ocarina Goron Lullaby Intro")   { return "51" }   elseif ($Music -eq "New Song")                         { return "52" }
-    elseif ($Music -eq "Bremen March")                     { return "53" }   elseif ($Music -eq "Ballad of the Wind Fish")       { return "54" }   elseif ($Music -eq "Song of Soaring")                  { return "55" }
-    elseif ($Music -eq "Milk Bar Latte")                   { return "56" }   elseif ($Music -eq "Final Hours")                   { return "57" }   elseif ($Music -eq "Mikau's Tale")                     { return "58" }
-    elseif ($Music -eq "Mikau's Tale (Fin)")               { return "59" }   elseif ($Music -eq "Don Gero's Song")               { return "5A" }   elseif ($Music -eq "Ocarina Sonata of Awakening")      { return "5B" }
-    elseif ($Music -eq "Ocarina Goron Lullaby")            { return "5C" }   elseif ($Music -eq "Ocarina New Wave Bossa Nova")   { return "5D" }   elseif ($Music -eq "Ocarina Elegy of Emptiness")       { return "5E" }
-    elseif ($Music -eq "Ocarina Oath to Order")            { return "5F" }   elseif ($Music -eq "The Moon")                      { return "60" }   elseif ($Music -eq "Bass and Guitar Session (Half)")   { return "61" }
-    elseif ($Music -eq "Bass and Guitar Session")          { return "62" }   elseif ($Music -eq "Piano Solo")                    { return "63" }   elseif ($Music -eq "The Indigo-Go's Rehearsal")        { return "64" }
-    elseif ($Music -eq "Snowhead Temple")                  { return "65" }   elseif ($Music -eq "Great Bay Temple")              { return "66" }   elseif ($Music -eq "New Wave Bosa Nova (Guitar)")      { return "67" }
-    elseif ($Music -eq "New Wave Bosa Nova (Singing)")     { return "68" }   elseif ($Music -eq "Majora's Wrath Battle")         { return "69" }   elseif ($Music -eq "Majora's Incarnation Battle")      { return "6A" }
-    elseif ($Music -eq "Majora's Mask Battle")             { return "6B" }   elseif ($Music -eq "Bass Practice")                 { return "6C" }   elseif ($Music -eq "Drums Practice")                   { return "6D" }
-    elseif ($Music -eq "Piano Practice")                   { return "6E" }   elseif ($Music -eq "Ikana Castle")                  { return "6F" }   elseif ($Music -eq "Calling the Four Giants")          { return "70" }
-    elseif ($Music -eq "Kamaro's Dance")                   { return "71" }   elseif ($Music -eq "Cremia's Carriage")             { return "72" }   elseif ($Music -eq "Keaton")                           { return "73" }
-    elseif ($Music -eq "The End/Credits I")                { return "74" }   elseif ($Music -eq "Forest Ambush")                 { return "75" }   elseif ($Music -eq "Title Screen")                     { return "76" }
-    elseif ($Music -eq "Surfacing of Woodfall")            { return "77" }   elseif ($Music -eq "Woodfall Clear")                { return "78" }   elseif ($Music -eq "Snowhead Clear")                   { return "79" }
-                                                                             elseif ($Music -eq "To the Moon")                   { return "7B" }   elseif ($Music -eq "Goodbye Giants")                   { return "7C" }
-    elseif ($Music -eq "Tatl and Tael")                    { return "7D" }   elseif ($Music -eq "Moon's Destruction")            { return "7E" }   elseif ($Music -eq "The End/Credits II")               { return "7F" }
-    else {
-        WriteToConsole ("Could not find music ID for: " + $Music)
-        return -1
-    }
-
-}
-
-
-
-#==============================================================================================================================================================================================
 function GetMMItemID([string]$Item) {
     
     $Item = $Item.replace(' (default)', "")
@@ -200,6 +94,53 @@ function GetMMInstrumentID([string]$SFX) {
     }
 
 }
+
+
+
+#==============================================================================================================================================================================================
+function MuteMusic([string]$SequenceTable, [string]$Sequence, [byte]$Length) {
+    
+    if ( (IsChecked $Redux.Music.MuteSelected -Not) -and (IsChecked $Redux.Music.MuteAreaOnly -Not) -and (IsChecked $Redux.Music.MuteAll -Not) ) { return }
+
+    $include = $force = @()
+    foreach ($i in 0..($Files.json.music.Count-1)) {
+        if     (IsChecked $Redux.Music.MuteSelected)   { if ($Redux.Music.SelectMuteTracks.GetSelected($i))   { foreach ($id in $Files.json.music[$i].id) { $include += (GetDecimal $id) } } }
+        elseif (IsChecked $Redux.Music.MuteAreaOnly)   { if ($Files.json.music[$i].event -ne 1)               { foreach ($id in $Files.json.music[$i].id) { $include += (GetDecimal $id) } } }
+        elseif (IsChecked $Redux.Music.MuteAll)                                                               { foreach ($id in $Files.json.music[$i].id) { $include += (GetDecimal $id) } }
+        #if     ($Files.json.music[$i].force -eq 1)     { $force += (GetDecimal $Files.json.music[$i].id) }
+    }
+
+    $tableStart = GetDecimal $SequenceTable
+    for ($i=1; $i -le $Length; $i++) { if ($include -contains $i) { ChangeBytes -Offset (Get24Bit ($tableStart + $i * 16) ) -Values "00 00 00 00 00 00 00 00 00 00" } }
+  # MuteMusicTracks -SequenceTable $SequenceTable -Sequence $Sequence -Length $Length -Include $include -Force $force
+
+}
+
+
+
+#==============================================================================================================================================================================================
+<#function MuteMusicTracks([byte]$Start=0, [string]$SequenceTable, [string]$Sequence, [byte]$Length, [byte[]]$Include, [byte[]]$Force) {
+    
+    $tableStart    = GetDecimal $SequenceTable
+    $sequenceStart = GetDecimal $Sequence
+    $end           = (GetDecimal $SequenceTable) + 16 * $Length
+
+    for ($i=$Start; $i -le $Length; $i++) {
+        if ($Include -contains $i) {
+            $tableIndex    = (Get8Bit $ByteArrayGame[$tableStart+($i*16)+0]) + (Get8Bit $ByteArrayGame[$tableStart+($i*16)+1]) + (Get8Bit $ByteArrayGame[$tableStart+($i*16)+2]) + (Get8Bit $ByteArrayGame[$tableStart+($i*16)+3])
+            $sequenceIndex = Get24Bit ( (GetDecimal $sequence) + (GetDecimal $tableIndex) )
+            $stop          = Get24Bit ( (GetDecimal $SequenceIndex) + 80 )
+            $songType      = (GetDecimal $sequenceIndex) + 1
+        
+            if ($ByteArrayGame[$songType] -eq 32) {
+                $volume = SearchBytes -Start $sequenceIndex -End $stop -Values "DB"
+                if ($volume -ne -1) { ChangeBytes -Offset (Get24Bit ( (GetDecimal $volume) + 1 ) ) -Values "00" }
+            }
+            if ($Force -contains $i) { ChangeBytes -Offset (Get24Bit ($tableStart + $i * 16) ) -Values "00 00 00 00 00 00 00 00 00 00" }
+        }
+    }
+
+}#>
 
 
 
@@ -796,6 +737,7 @@ Export-ModuleMember -Function GetMMMusicID
 Export-ModuleMember -Function GetMMItemID
 Export-ModuleMember -Function GetMMInstrumentID
 
+Export-ModuleMember -Function MuteMusic
 Export-ModuleMember -Function ChangeStringIntoDigits
 
 Export-ModuleMember -Function ChangeModelsSelection

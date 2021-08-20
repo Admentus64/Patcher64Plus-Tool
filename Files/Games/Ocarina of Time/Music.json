@@ -1,0 +1,241 @@
+[ {
+	"title"		: "Hyrule Field",
+	"id"		: ["02", "03", "04", "05", "06", "07", "08", "09", "0A", "0B", "0C", "0D", "0E", "0F", "10", "11", "12", "13", "14", "15", "16", "17"]
+}, {
+	"title"		: "Dodongo's Cavern",
+	"id"		: "18"
+}, {
+	"title"		: "Kakariko Village (Adult)",
+	"id"		: "19"
+}, {
+	"title"		: "Battle",
+	"id"		: "1A"
+}, {
+	"title"		: "Boss Battle",
+	"id"		: "1B"
+}, {
+	"title"		: "Inside the Deku Tree",
+	"id"		: "1C"
+}, {
+	"title"		: "Market",
+	"id"		: "1D"
+}, {
+	"title"		: "Title Theme",
+	"id"		: "1E"
+}, {
+	"title"		: "House",
+	"id"		: "1F"
+}, {
+	"title"		: "Game Over",
+	"id"		: "20",
+	"event"		: 1
+}, {
+	"title"		: "Boss Clear",
+	"id"		: "21",
+	"event"		: 1
+}, {
+	"title"		: "Obtain Item",
+	"id"		: "22",
+	"event"		: 1
+}, {
+	"title"		: "Enter Ganondorf",
+	"id"		: "23"
+}, {
+	"title"		: "Obtain Heart Container",
+	"id"		: "24",
+	"event"		: 1
+}, {
+	"title"		: "Inside Jabu-Jabu's Belly",
+	"id"		: "26"
+}, {
+	"title"		: "Kakariko Village (Child)",
+	"id"		: "27"
+}, {
+	"title"		: "Great Fairy's Fountain",
+	"id"		: "28"
+}, {
+	"title"		: "Zelda's Theme",
+	"id"		: "29"
+}, {
+	"title"		: "Fire Temple",
+	"id"		: "2A"
+}, {
+	"title"		: "Open Treasure Chest",
+	"id"		: "2B",
+	"event"		: 1
+}, {
+	"title"		: "Forest Temple",
+	"id"		: "2C"
+}, {
+	"title"		: "Hyrule Castle Courtyard",
+	"id"		: "2D"
+}, {
+	"title"		: "Ganondorf's Theme",
+	"id"		: "2E"
+}, {
+	"title"		: "Lon Lon Ranch",
+	"id"		: "2F"
+}, {
+	"title"		: "Goron City",
+	"id"		: "30"
+}, {
+	"title"		: "Hyrule Field Morning Theme",
+	"id"		: "31"
+}, {
+	"title"		: "Spiritual Stone Get",
+	"id"		: "32",
+	"event"		: 1
+}, {
+	"title"		: "Mini-Boss Battle",
+	"id"		: "38"
+}, {
+	"title"		: "Obtain Small Item",
+	"id"		: "39",
+	"event"		: 1
+}, {
+	"title"		: "Temple of Time",
+	"id"		: "3A"
+}, {
+	"title"		: "Escape from Lon Lon Ranch",
+	"id"		: "3B",
+	"event"		: 1
+}, {
+	"title"		: "Kokiri Forest",
+	"id"		: "3C"
+}, {
+	"title"		: "Obtain Fairy Ocarina",
+	"id"		: "3D",
+	"event"		: 1
+}, {
+	"title"		: "Lost Woods",
+	"id"		: "3E"
+}, {
+	"title"		: "Spirit Temple",
+	"id"		: "3F"
+}, {
+	"title"		: "Horse Race",
+	"id"		: "40"
+}, {
+	"title"		: "Horse Race Goal",
+	"id"		: "41",
+	"event"		: 1
+}, {
+	"title"		: "Ingo's Theme",
+	"id"		: "42"
+}, {
+	"title"		: "Obtain Medallion",
+	"id"		: "43",
+	"event"		: 1
+}, {
+	"title"		: "Fairy Flying",
+	"id"		: "4A"
+}, {
+	"title"		: "Deku Tree",
+	"id"		: "4B"
+}, {
+	"title"		: "Windmill Hut",
+	"id"		: "4C"
+}, {
+	"title"		: "Legend of Hyrule",
+	"id"		: "4D"
+}, {
+	"title"		: "Shooting Gallery",
+	"id"		: "4E"
+}, {
+	"title"		: "Sheik's Theme",
+	"id"		: "4F"
+}, {
+	"title"		: "Zora's Domain",
+	"id"		: "50"
+}, {
+	"title"		: "Enter Zelda",
+	"id"		: "51"
+}, {
+	"title"		: "Goodbye to Zelda",
+	"id"		: "52"
+}, {
+	"title"		: "Master Sword",
+	"id"		: "53",
+	"event"		: 1
+}, {
+	"title"		: "Ganon",
+	"id"		: "54"
+}, {
+	"title"		: "Shop",
+	"id"		: "55"
+}, {
+	"title"		: "Chamber of the Sages",
+	"id"		: "56"
+}, {
+	"title"		: "File Select",
+	"id"		: "57",
+	"force"		: 1
+}, {
+	"title"		: "Ice Cavern",
+	"id"		: "58"
+}, {
+	"title"		: "Open Door of Temple of Time",
+	"id"		: "59",
+	"event"		: 1
+}, {
+	"title"		: "Kaepora Gaebora's Theme",
+	"id"		: "5A"
+}, {
+	"title"		: "Shadow Temple",
+	"id"		: "5B"
+}, {
+	"title"		: "Water Temple",
+	"id"		: "5C"
+}, {
+	"title"		: "Ganon's Castle Bridge",
+	"id"		: "5D"
+}, {
+	"title"		: "Ocarina of Time",
+	"id"		: "5E"
+}, {
+	"title"		: "Gerudo Valley",
+	"id"		: "5F"
+}, {
+	"title"		: "Potion Shop",
+	"id"		: "60"
+}, {
+	"title"		: "Kotake & Koume's Theme",
+	"id"		: "61"
+}, {
+	"title"		: "Escape from Ganon's Castle",
+	"id"		: "62"
+}, {
+	"title"		: "Ganon's Castle Under Ground",
+	"id"		: "63"
+}, {
+	"title"		: "Ganondorf Battle",
+	"id"		: "64"
+}, {
+	"title"		: "Ganon Battle",
+	"id"		: "65"
+}, {
+	"title"		: "Seal of Six Sages",
+	"id"		: "66"
+}, {
+	"title"		: "End Credits I",
+	"id"		: "67",
+	"event"		: 1
+}, {
+	"title"		: "End Credits II",
+	"id"		: "68",
+	"event"		: 1
+}, {
+	"title"		: "End Credits III",
+	"id"		: "69",
+	"event"		: 1
+}, {
+	"title"		: "End Credits IV",
+	"id"		: "6A",
+	"event"		: 1
+}, {
+	"title"		: "King Dodongo & Volvagia Boss Battle",
+	"id"		: "6B"
+}, {
+	"title"		: "Mini-Game",
+	"id"		: "6C"
+} ]

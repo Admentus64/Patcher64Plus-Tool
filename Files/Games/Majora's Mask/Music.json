@@ -1,0 +1,285 @@
+[ {
+	"title"		: "Termina Field",
+	"id"		: "02",
+	"force"		: 1
+}, {
+	"title"		: "Forest Chase",
+	"id"		: "03"
+}, {
+	"title"		: "Majora's Theme",
+	"id"		: "04"
+}, {
+	"title"		: "The Clock Tower",
+	"id"		: "05"
+}, {
+	"title"		: "Stone Tower Temple",
+	"id"		: "06"
+}, {
+	"title"		: "Stone Tower Temple Inverted",
+	"id"		: "07"
+}, {
+	"title"		: "Missed Event 1",
+	"id"		: "08",
+	"event"		: 1
+}, {
+	"title"		: "Title",
+	"id"		: "09"
+}, {
+	"title"		: "Mask Salesman",
+	"id"		: "0A"
+}, {
+	"title"		: "Song of Healing",
+	"id"		: "0B"
+}, {
+	"title"		: "Southern Swamp",
+	"id"		: "0C"
+}, {
+	"title"		: "Ghost Attack",
+	"id"		: "0D"
+}, {
+	"title"		: "Mini Game",
+	"id"		: "0E"
+}, {
+	"title"		: "Sharp's Curse",
+	"id"		: "0F"
+}, {
+	"title"		: "Great Bay Coast",
+	"id"		: "10"
+}, {
+	"title"		: "Ikana Valley",
+	"id"		: "11"
+}, {
+	"title"		: "Court of the Deku King",
+	"id"		: "12"
+}, {
+	"title"		: "Mountain Village",
+	"id"		: "13"
+}, {
+	"title"		: "Pirates' Fortress",
+	"id"		: "14"
+}, {
+	"title"		: "Clock Town Day 1",
+	"id"		: "15"
+}, {
+	"title"		: "Clock Town Day 2",
+	"id"		: "16"
+}, {
+	"title"		: "Clock Town Day 3",
+	"id"		: "17"
+}, {
+	"title"		: "File Select",
+	"id"		: "18"
+}, {
+	"title"		: "Event Clear",
+	"id"		: "19",
+	"event"		: 1
+}, {
+	"title"		: "Battle",
+	"id"		: "1A"
+}, {
+	"title"		: "Boss Battle",
+	"id"		: "1B"
+}, {
+	"title"		: "Woodfall Temple",
+	"id"		: "1C"
+}, {
+	"title"		: "Forest Ambush",
+	"id"		: "1E"
+}, {
+	"title"		: "House",
+	"id"		: "1F"
+}, {
+	"title"		: "Game Over",
+	"id"		: "20",
+	"event"		: 1
+}, {
+	"title"		: "Boss Clear",
+	"id"		: "21",
+	"event"		: 1
+}, {
+	"title"		: "Item Catch",
+	"id"		: "22",
+	"event"		: 1
+}, {
+	"title"		: "Complete a Heart Piece",
+	"id"		: "24",
+	"event"		: 1
+}, {
+	"title"		: "Playing Minigame",
+	"id"		: "25"
+}, {
+	"title"		: "Goron Race",
+	"id"		: "26"
+}, {
+	"title"		: "Music Box House",
+	"id"		: "27"
+}, {
+	"title"		: "Fairy's Fountain",
+	"id"		: "28"
+}, {
+	"title"		: "Zelda's Lullaby",
+	"id"		: "29"
+}, {
+	"title"		: "Rosa Sister' Dance",
+	"id"		: "2A",
+	"event"		: 1
+}, {
+	"title"		: "Open Chest",
+	"id"		: "2B",
+	"event"		: 1
+}, {
+	"title"		: "Marine Research Laboratory",
+	"id"		: "2C"
+}, {
+	"title"		: "The Four Giants",
+	"id"		: "2D"
+}, {
+	"title"		: "Guru-Guru's Song",
+	"id"		: "2E",
+	"event"		: 1
+}, {
+	"title"		: "Romani Ranch",
+	"id"		: "2F"
+}, {
+	"title"		: "Goron Village",
+	"id"		: "30"
+}, {
+	"title"		: "Mayor Dotour",
+	"id"		: "31"
+}, {
+	"title"		: "Zora Hall",
+	"id"		: "36"
+}, {
+	"title"		: "A New Mask",
+	"id"		: "37",
+	"event"		: 1
+}, {
+	"title"		: "Mini Boss",
+	"id"		: "38"
+}, {
+	"title"		: "Small Item Catch",
+	"id"		: "39",
+	"event"		: 1
+}, {
+	"title"		: "Astral Observatory",
+	"id"		: "3A"
+}, {
+	"title"		: "Clock Town Cavern",
+	"id"		: "3B"
+}, {
+	"title"		: "Milk Bar Latte",
+	"id"		: "3C"
+}, {
+	"title"		: "Meet Zelda (OoT)",
+	"id"		: "3D"
+}, {
+	"title"		: "Woods of Mystery",
+	"id"		: "3E"
+}, {
+	"title"		: "Goron Race Goal",
+	"id"		: "3F",
+	"event"		: 1
+}, {
+	"title"		: "Gorman Race",
+	"id"		: "40"
+}, {
+	"title"		: "Race Finish",
+	"id"		: "41",
+	"event"		: 1
+}, {
+	"title"		: "Gorman Bros.",
+	"id"		: "42"
+}, {
+	"title"		: "Kotake's Potion Shop",
+	"id"		: "43"
+}, {
+	"title"		: "Store",
+	"id"		: "44"
+}, {
+	"title"		: "Gaebora's Theme",
+	"id"		: "45"
+}, {
+	"title"		: "Target Practice",
+	"id"		: "46"
+}, {
+	"title"		: "Sword Training",
+	"id"		: "50"
+}, {
+	"title"		: "Final Hours",
+	"id"		: "57"
+}, {
+	"title"		: "Mikau's Tale",
+	"id"		: "58"
+}, {
+	"title"		: "Don Gero's Song",
+	"id"		: "5A"
+}, {
+	"title"		: "Last Dungeon",
+	"id"		: "60"
+}, {
+	"title"		: "Snowhead Temple",
+	"id"		: "65"
+}, {
+	"title"		: "Great Bay Temple",
+	"id"		: "66"
+}, {
+	"title"		: "Majora's Wrath",
+	"id"		: "69"
+}, {
+	"title"		: "Majora's Incarnation",
+	"id"		: "6A"
+}, {
+	"title"		: "Majora's Mask Battle",
+	"id"		: "6B"
+}, {
+	"title"		: "Ikana Castle",
+	"id"		: "6F"
+}, {
+	"title"		: "Calling the Four Giants",
+	"id"		: "70"
+}, {
+	"title"		: "Kamaro's Dance",
+	"id"		: "71",
+	"event"		: 1
+}, {
+	"title"		: "Cremia's Carriage",
+	"id"		: "72"
+}, {
+	"title"		: "Keaton",
+	"id"		: "73"
+}, {
+	"title"		: "The End/Credits I",
+	"id"		: "74",
+	"event"		: 1
+}, {
+	"title"		: "Title Screen",
+	"id"		: "76"
+}, {
+	"title"		: "Surfacing of Woodfall",
+	"id"		: "77",
+	"event"		: 1
+}, {
+	"title"		: "Woodfall Clear",
+	"id"		: "78",
+	"event"		: 1
+}, {
+	"title"		: "Snowhead Clear",
+	"id"		: "79",
+	"event"		: 1
+}, {
+	"title"		: "To the Moon",
+	"id"		: "7B"
+}, {
+	"title"		: "Goodbye Giant",
+	"id"		: "7C"
+}, {
+	"title"		: "Tatl and Tael",
+	"id"		: "7D"
+}, {
+	"title"		: "Moon's Destruction",
+	"id"		: "7E"
+}, {
+	"title"		: "The End/Credits II",
+	"id"		: "7F",
+	"event"		: 1
+} ]

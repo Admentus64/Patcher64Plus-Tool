@@ -63,6 +63,7 @@ function SetFileParameters() {
     $Files.oot.master_quest                 = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\master_quest")
     $Files.oot.mm_pause_screen              = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\mm_pause_screen")
     $Files.oot.harder_child_bosses          = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\harder_child_bosses")
+    $Files.oot.eyes_mm                      = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\eyes_mm")
     $Files.oot.feminine_animations          = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\feminine_animations")
     $Files.oot.hide_equipment               = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\hide_equipment")
 
@@ -71,6 +72,10 @@ function SetFileParameters() {
     $Files.oot.title_master_quest           = $Paths.Games + "\Ocarina of Time\Textures\Logo\mq_logo.bin"
     $Files.oot.hud_mm_heart                 = $Paths.Games + "\Ocarina of Time\Textures\HUD\mm_heart.bin"
     $Files.oot.hud_mm_button                = $Paths.Games + "\Ocarina of Time\Textures\HUD\mm_button.bin"
+    $Files.oot.hud_mm_button_full           = $Paths.Games + "\Ocarina of Time\Textures\HUD\mm_button_full.bin"
+    $Files.oot.hud_mm_button_small          = $Paths.Games + "\Ocarina of Time\Textures\HUD\mm_button_small.bin"
+    $Files.oot.hud_oot_button_full          = $Paths.Games + "\Ocarina of Time\Textures\HUD\oot_button_full.bin"
+    $Files.oot.hud_oot_button_small         = $Paths.Games + "\Ocarina of Time\Textures\HUD\oot_button_small.bin"
     $Files.oot.hud_mm_key_rupee             = $Paths.Games + "\Ocarina of Time\Textures\HUD\mm_key_rupee.bin"
     $Files.oot.hud_tatl                     = $Paths.Games + "\Ocarina of Time\Textures\HUD\tatl.bin"
     $Files.oot.hud_tael                     = $Paths.Games + "\Ocarina of Time\Textures\HUD\tael.bin"
@@ -106,18 +111,19 @@ function SetFileParameters() {
     $Files.oot.gerudo3                      = $Paths.Games + "\Ocarina of Time\Textures\Gerudo Symbols\forest_temple_room_11_block.bin"
     $Files.oot.gerudo4                      = $Paths.Games + "\Ocarina of Time\Textures\Gerudo Symbols\forest_temple_room_11_hole.bin"
     $Files.oot.gerudo5                      = $Paths.Games + "\Ocarina of Time\Textures\Gerudo Symbols\ganondorf_cape.bin"
-    $Files.oot.gerudo6                      = $Paths.Games + "\Ocarina of Time\Textures\Gerudo Symbols\gerudo_training_ground_door.bin"
-    $Files.oot.gerudo7                      = $Paths.Games + "\Ocarina of Time\Textures\Gerudo Symbols\gerudo_training_ground_room_5.bin"
-    $Files.oot.gerudo8                      = $Paths.Games + "\Ocarina of Time\Textures\Gerudo Symbols\gerudo_valley.bin"
-    $Files.oot.gerudo9                      = $Paths.Games + "\Ocarina of Time\Textures\Gerudo Symbols\golden_gauntlets_pillar.bin"
-    $Files.oot.gerudo14                     = $Paths.Games + "\Ocarina of Time\Textures\Gerudo Symbols\pushing_block.bin"
-    $Files.oot.gerudo15                     = $Paths.Games + "\Ocarina of Time\Textures\Gerudo Symbols\rusted_floor_switch.bin"
-    $Files.oot.gerudo16                     = $Paths.Games + "\Ocarina of Time\Textures\Gerudo Symbols\shadow_temple_room_0.bin"
-    $Files.oot.gerudo17                     = $Paths.Games + "\Ocarina of Time\Textures\Gerudo Symbols\silver_gauntlets_block.bin"
-    $Files.oot.gerudo18                     = $Paths.Games + "\Ocarina of Time\Textures\Gerudo Symbols\spirit_temple_boss.bin"
-    $Files.oot.gerudo19                     = $Paths.Games + "\Ocarina of Time\Textures\Gerudo Symbols\spirit_temple_room_0_elevator.bin"
-    $Files.oot.gerudo20                     = $Paths.Games + "\Ocarina of Time\Textures\Gerudo Symbols\spirit_temple_room_0_pillars.bin"
-    $Files.oot.gerudo21                     = $Paths.Games + "\Ocarina of Time\Textures\Gerudo Symbols\spirit_temple_room_10.bin"
+    $Files.oot.gerudo6                      = $Paths.Games + "\Ocarina of Time\Textures\Gerudo Symbols\gerudo_membership_card.bin"
+    $Files.oot.gerudo7                      = $Paths.Games + "\Ocarina of Time\Textures\Gerudo Symbols\gerudo_training_ground_door.bin"
+    $Files.oot.gerudo8                      = $Paths.Games + "\Ocarina of Time\Textures\Gerudo Symbols\gerudo_training_ground_room_5.bin"
+    $Files.oot.gerudo9                      = $Paths.Games + "\Ocarina of Time\Textures\Gerudo Symbols\gerudo_valley.bin"
+    $Files.oot.gerudo10                     = $Paths.Games + "\Ocarina of Time\Textures\Gerudo Symbols\golden_gauntlets_pillar.bin"
+    $Files.oot.gerudo11                     = $Paths.Games + "\Ocarina of Time\Textures\Gerudo Symbols\pushing_block.bin"
+    $Files.oot.gerudo12                     = $Paths.Games + "\Ocarina of Time\Textures\Gerudo Symbols\rusted_floor_switch.bin"
+    $Files.oot.gerudo13                     = $Paths.Games + "\Ocarina of Time\Textures\Gerudo Symbols\shadow_temple_room_0.bin"
+    $Files.oot.gerudo14                     = $Paths.Games + "\Ocarina of Time\Textures\Gerudo Symbols\silver_gauntlets_block.bin"
+    $Files.oot.gerudo15                     = $Paths.Games + "\Ocarina of Time\Textures\Gerudo Symbols\spirit_temple_boss.bin"
+    $Files.oot.gerudo16                     = $Paths.Games + "\Ocarina of Time\Textures\Gerudo Symbols\spirit_temple_room_0_elevator.bin"
+    $Files.oot.gerudo17                     = $Paths.Games + "\Ocarina of Time\Textures\Gerudo Symbols\spirit_temple_room_0_pillars.bin"
+    $Files.oot.gerudo18                     = $Paths.Games + "\Ocarina of Time\Textures\Gerudo Symbols\spirit_temple_room_10.bin"
 
 
 
@@ -135,7 +141,12 @@ function SetFileParameters() {
     $Files.mm.mq_remix                      = CheckPatchExtension ($Paths.Games + "\Majora's Mask\Decompressed\master_quest_remix")
 
     $Files.mm.hud_navi                      = $Paths.Games + "\Majora's Mask\Textures\HUD\navi.bin"
+    
+    $Files.mm.hud_mm_button_full            = $Paths.Games + "\Majora's Mask\Textures\HUD\mm_button_full.bin"
+    $Files.mm.hud_mm_button_small           = $Paths.Games + "\Majora's Mask\Textures\HUD\mm_button_small.bin"
     $Files.mm.hud_oot_button                = $Paths.Games + "\Majora's Mask\Textures\HUD\oot_button.bin"
+    $Files.mm.hud_oot_button_full           = $Paths.Games + "\Majora's Mask\Textures\HUD\oot_button_full.bin"
+    $Files.mm.hud_oot_button_small          = $Paths.Games + "\Majora's Mask\Textures\HUD\oot_button_small.bin"
     $Files.mm.hud_oot_heart                 = $Paths.Games + "\Majora's Mask\Textures\HUD\oot_heart.bin"
     $Files.mm.hud_tael                      = $Paths.Games + "\Majora's Mask\Textures\HUD\tael.bin"
     $Files.mm.hud_tatl                      = $Paths.Games + "\Majora's Mask\Textures\HUD\tatl.bin"

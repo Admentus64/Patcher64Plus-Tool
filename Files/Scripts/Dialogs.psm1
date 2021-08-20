@@ -71,53 +71,26 @@ function CreateCreditsDialog() {
     # Create Dialog
 
     if ($DisableHighDPIMode) { $width = 730 } else { $width = 700 }
-    $global:CreditsDialog = CreateDialog -Width (DPISize $width) -Height (DPISize 550) -Icon $Files.icon.credits
+    $global:CreditsDialog = CreateDialog -Width (DPISize $width) -Height (DPISize 500) -Icon $Files.icon.credits
     $CloseButton = CreateButton -X ($CreditsDialog.Width / 2 - (DPISize 40)) -Y ($CreditsDialog.Height - (DPISize 90)) -Width (DPISize 80) -Height (DPISize 35) -Text "Close" -AddTo $CreditsDialog
     $CloseButton.Add_Click({ $CreditsDialog.Hide() })
 
-    # Create the current game label
-    $global:CreditsGameLabel = CreateLabel -X (DPISize 40) -Y (DPISize 50) -Width (DPISize 200) -Height (DPISize 15) -Font $Fonts.SmallBold -AddTo $CreditsDialog
-
     # Create Switch subpanel buttons
     $global:Credits = @{}
-    $Credits.Buttons = @()
-    $Credits.Buttons += CreateButton -X (DPISize 40) -Y (DPISize 70) -Width (DPISize 120) -Height (DPISize 30) -ForeColor "White" -BackColor "Gray" -Text "Info" -Tag $Credits.Buttons.length -Info "Check the info for this game" -AddTo $CreditsDialog
-    $Credits.Buttons += CreateButton -X ($Credits.Buttons[0].Right) -Y $Credits.Buttons[0].Top -Width $Credits.Buttons[0].Width -Height $Credits.Buttons[0].Height -ForeColor "White" -BackColor "Gray" -Text "Credits"  -Tag $Credits.Buttons.length -Info "Check the credits for this game" -AddTo $CreditsDialog
-    $Credits.Buttons += CreateButton -X ($Credits.Buttons[1].Right) -Y $Credits.Buttons[0].Top -Width $Credits.Buttons[0].Width -Height $Credits.Buttons[0].Height -ForeColor "White" -BackColor "Gray" -Text "GameID's" -Tag $Credits.Buttons.length -Info "Open the list with official and patched GameID's" -AddTo $CreditsDialog
-    $Credits.Buttons += CreateButton -X ($Credits.Buttons[2].Right) -Y $Credits.Buttons[0].Top -Width $Credits.Buttons[0].Width -Height $Credits.Buttons[0].Height -ForeColor "White" -BackColor "Gray" -Text "Misc"     -Tag $Credits.Buttons.length -Info "General credits and info in general" -AddTo $CreditsDialog
-    $Credits.Buttons += CreateButton -X ($Credits.Buttons[3].Right) -Y $Credits.Buttons[0].Top -Width $Credits.Buttons[0].Width -Height $Credits.Buttons[0].Height -ForeColor "White" -BackColor "Gray" -Text "Checksum" -Tag $Credits.Buttons.length -Info "General credits and info in general" -AddTo $CreditsDialog
-    
+
     # Create the version number and script name label
     $InfoLabel = CreateLabel -X ($CreditsDialog.Width / 2 - $String.Width - (DPISize 100)) -Y (DPISize 10) -Width (DPISize 200) -Height (DPISize 15) -Font $Fonts.SmallBold -Text ($ScriptName + " " + $Version + " (" + $VersionDate + ")") -AddTo $CreditsDialog
 
     # Create Text Box
     $Credits.Sections = @()
-    $Credits.Sections += CreateTextBox -X (DPISize 40) -Y ($Credits.Buttons[0].Bottom + (DPISize 10)) -Width ($CreditsDialog.Width - (DPISize 100)) -Height ($CloseButton.Top - (DPISize 120)) -ReadOnly -Multiline -AddTo $CreditsDialog -Tag "Info" -TextFileFont
+    $Credits.Sections += CreateTextBox -X (DPISize 40) -Y (DPISize 30) -Width ($CreditsDialog.Width - (DPISize 100)) -Height ($CloseButton.Top - (DPISize 40)) -ReadOnly -Multiline -AddTo $CreditsDialog -Tag "Info" -TextFileFont
     $Credits.Sections += CreateTextBox -X $Credits.Sections[0].Left -Y $Credits.Sections[0].Top -Width $Credits.Sections[0].Width -Height $Credits.Sections[0].Height -ReadOnly -Multiline -AddTo $CreditsDialog -Tag "Credits"  -TextFileFont
     $Credits.Sections += CreateTextBox -X $Credits.Sections[0].Left -Y $Credits.Sections[0].Top -Width $Credits.Sections[0].Width -Height $Credits.Sections[0].Height -ReadOnly -Multiline -AddTo $CreditsDialog -Tag "GameID's" -TextFileFont
     AddTextFileToTextbox -TextBox $Credits.Sections[2] -File $Files.text.gameID
     $Credits.Sections += CreatePanel   -X $Credits.Sections[0].Left -Y $Credits.Sections[0].Top -Width $Credits.Sections[0].Width -Height $Credits.Sections[0].Height -AddTo $CreditsDialog -Tag "Misc"
     $Credits.Sections += CreatePanel   -X $Credits.Sections[0].Left -Y $Credits.Sections[0].Top -Width $Credits.Sections[0].Width -Height $Credits.Sections[0].Height -AddTo $CreditsDialog -Tag "Checksum"
 
-    # Initialize Button Events
-    foreach ($i in 0..($Credits.Buttons.length-1)) {
-        $Credits.Buttons[$i].Add_Click({
-            foreach ($item in $Credits.Buttons)    { $item.BackColor = "Gray" }
-            foreach ($item in $Credits.Sections)   { $item.Visible = $item.Tag -eq $this.Text }
-            $this.BackColor = "DarkGray"
-            $Settings["Core"]["LastTab"] = $this.Tag
-        })
-        if ($i -gt 0) { $Credits.Sections[$i].Visible = $False }
-    }
 
-    # Set last tab
-    if (IsSet -Elem $Settings["Core"]["LastTab"]) {
-        $Credits.Buttons[$Settings["Core"]["LastTab"]].BackColor = "DarkGray"
-        foreach ($item in $Credits.Sections) { $item.Visible = $item.Tag -eq $Credits.Buttons[$Settings["Core"]["LastTab"]].Text }
-    }
-    else { $Credits.Buttons[0].BackColor = "DarkGray" }
-
-    
 
     # Support
     $SupportLabel  = CreateLabel -X (DPISize 10)         -Y (DPISize 10)                          -Width (DPISize 200) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("--- Support or visit me at ---")   -AddTo $Credits.Sections[3]
@@ -198,7 +171,7 @@ function CreateCreditsDialog() {
     $VerificationInfo.SupportText           = CreateLabel -X (DPISize 10) -Y ($VerificationInfo.RevField.Bottom + (DPISize 10)) -Width (DPISize 120) -Height (DPISize 15) -Font $Fonts.SmallBold -Text "Supported ROM:" -AddTo $Credits.Sections[4]
     $VerificationInfo.SupportField          = CreateTextBox -X $VerificationInfo.SupportText.Right -Y ($VerificationInfo.SupportText.Top - (DPISize 3)) -Width ($Credits.Sections[4].Width - $VerificationInfo.SupportText.Width - (DPISize 100)) -Height (DPISize 50) -Text "No ROM Selected" -AddTo $Credits.Sections[4]
     $VerificationInfo.SupportField.ReadOnly = $True
-    
+
 }
 
 
@@ -207,7 +180,7 @@ function CreateCreditsDialog() {
 function CreateSettingsDialog() {
     
     # Create Dialog
-    $global:SettingsDialog = CreateDialog -Width (DPISize 560) -Height (DPISize 700) -Icon $Files.icon.settings
+    $global:SettingsDialog = CreateDialog -Width (DPISize 560) -Height (DPISize 610) -Icon $Files.icon.settings
     $CloseButton = CreateButton -X ($SettingsDialog.Width / 2 - (DPISize 40)) -Y ($SettingsDialog.Height - (DPISize 90)) -Width (DPISize 80) -Height (DPISize 35) -Text "Close" -AddTo $SettingsDialog
     $CloseButton.Add_Click({ $SettingsDialog.Hide() })
 
@@ -232,10 +205,8 @@ function CreateSettingsDialog() {
     $GeneralSettings.IgnoreChecksum      = CreateSettingsCheckbox -Name "IgnoreChecksum"   -Column 1 -Row 1 -Text "Ignore Input Checksum" -IsDebug -Info "Do not check the checksum of a ROM or WAD and patch it regardless`nDowngrade is no longer forced anymore if the checksum is different than the supported revision`nThis option also skips the maximum ROM size verification`n`nDO NOT REPORT ANY BUGS IF THIS OPTION IS ENABLED!"
     $GeneralSettings.KeepLogo            = CreateSettingsCheckbox -Name "KeepLogo"         -Column 2 -Row 1 -Text "Keep Logo"             -IsDebug -Info "Keep the vanilla title logo instead of the Master Quest title logo if Master Quest is being patched in"
     $GeneralSettings.ForceExtract        = CreateSettingsCheckbox -Name "ForceExtract"     -Column 3 -Row 1 -Text "Force Extract"         -IsDebug -Info "Always extract game data required for patching even if it was already extracted on a previous run"
-    $Info = "Changes how the widescreen option behaves for Ocarina of Time and Majora's Mask in Native (N64) Mode`n`n--- Ocarina of Time ---`nApply an experimental widescreen patch instead`n`n--- Majora's Mask ---`nOnly apply the 16:9 textures`nUse GLideN64 " + '"adjust to fit"' + " option for 16:9 widescreen"
-    $GeneralSettings.ChangeWidescreen    = CreateSettingsCheckbox -Name "ChangeWidescreen" -Column 1 -Row 2 -Text "Change Widescreen"     -IsDebug -Info $Info
-    $GeneralSettings.LiteGUI             = CreateSettingsCheckbox -Name "LiteGUI"          -Column 2 -Row 2 -Text "Lite Options GUI"      -IsDebug -Info "Only display and allow options which are highly compatible, such as with the Randomizer for Ocarina of Time and Majora's Mask"
-    $GeneralSettings.ForceOptions        = CreateSettingsCheckbox -Name "ForceOptions"     -Column 3 -Row 2 -Text "Force Show Options"    -IsDebug -Info ("Always show the " + '"Additional Options"' + " checkbox if it can be supported`n`nDO NOT REPORT ANY BUGS IF THIS OPTION IS ENABLED!")
+    $GeneralSettings.LiteGUI             = CreateSettingsCheckbox -Name "LiteGUI"          -Column 1 -Row 2 -Text "Lite Options GUI"      -IsDebug -Info "Only display and allow options which are highly compatible, such as with the Randomizer for Ocarina of Time and Majora's Mask"
+    $GeneralSettings.ForceOptions        = CreateSettingsCheckbox -Name "ForceOptions"     -Column 2 -Row 2 -Text "Force Show Options"    -IsDebug -Info ("Always show the " + '"Additional Options"' + " checkbox if it can be supported`n`nDO NOT REPORT ANY BUGS IF THIS OPTION IS ENABLED!")
 
     # Debug Settings
     $GeneralSettings.Box                 = CreateReduxGroup -Y ($GeneralSettings.Box.Bottom + (DPISize 10)) -IsGame $False -Height 3 -AddTo $SettingsDialog -Text "Debug Settings"
@@ -268,35 +239,16 @@ function CreateSettingsDialog() {
     $GeneralSettings.Presets            += CreateSettingsRadioField -Name "Preset" -SaveAs 5 -Max 6 -NameTextbox "Preset.Label5" -Column 2 -Row 2                -Text "Preset 5" -Info ""
     $GeneralSettings.Presets            += CreateSettingsRadioField -Name "Preset" -SaveAs 6 -Max 6 -NameTextbox "Preset.Label6" -Column 3 -Row 2                -Text "Preset 6" -Info ""
 
-    # Reset buttons
-    $GeneralSettings.Box               = CreateReduxGroup -Y ($GeneralSettings.Box.Bottom + (DPISize 10)) -IsGame $False -Height 2 -AddTo $SettingsDialog -Text "Reset"
-    $GeneralSettings.ResetButton       = CreateReduxButton -Column 1 -Width 150 -Height 50 -AddTo $GeneralSettings.Box -Text "Reset All Settings" -Info ("Resets all settings stored in the " + $ScriptName)
-    $GeneralSettings.ResetGameButton   = CreateReduxButton -Column 2 -Width 150 -Height 50 -AddTo $GeneralSettings.Box -Text "Reset Current Game" -Info ("Resets all settings for the current game mode " + $GameType.mode)
-    $GeneralSettings.CleanupButton     = CreateReduxButton -Column 3 -Width 150 -Height 50 -AddTo $GeneralSettings.Box -Text "Cleanup Files"      -Info "Remove all temporary and extracted files`nThis process is automaticially done after patching a game"
-
-
-
     $GeneralSettings.DoubleClick.Add_CheckStateChanged(     { TogglePowerShellOpenWithClicks $this.Checked } )
     $GeneralSettings.ModernStyle.Add_CheckStateChanged(     { SetModernVisualStyle $this.checked } )
     $GeneralSettings.ForceOptions.Add_CheckStateChanged(    { DisablePatches } )
     $GeneralSettings.EnableSounds.Add_CheckStateChanged(    { LoadSoundEffects $this.checked } )
     $GeneralSettings.Logging.Add_CheckStateChanged(         { SetLogging $this.checked } )
-    $GeneralSettings.ResetButton.Add_Click(                 { ResetTool } )
-    $GeneralSettings.ResetGameButton.Add_Click(             { ResetGame } )
-    $GeneralSettings.CleanupButton.Add_Click(               { CleanupFiles } )
-    
-
-    
 
     # Local Temp Folder
     $GeneralSettings.LocalTempFolder.Add_CheckStateChanged( {
         if ($this.checked) { $Paths.Temp = $Paths.LocalTemp } else { $Paths.Temp = $Paths.AppDataTemp }
         SetTempFileParameters
-    } )
-
-    # Change Widescreen
-    $GeneralSettings.ChangeWidescreen.Add_CheckStateChanged( {
-        if (Get-Command ("AdjustGUI" + $FunctionTitle) -errorAction SilentlyContinue) { iex "AdjustGUI" }
     } )
 
     # Console
@@ -499,3 +451,7 @@ Export-ModuleMember -Function CreateCreditsDialog
 Export-ModuleMember -Function CreateSettingsDialog
 Export-ModuleMember -Function CreateErrorDialog
 Export-ModuleMember -Function CreateLanguageContent
+
+Export-ModuleMember -Function ResetTool
+Export-ModuleMember -Function ResetGame
+Export-ModuleMember -Function CleanupFiles

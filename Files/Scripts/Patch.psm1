@@ -292,7 +292,7 @@ function WriteDebug([string]$Command, [string[]]$Header, [string]$PatchedFileNam
     WriteToConsole ("Switch Decompressor:   " + $GeneralSettings.AltDecompress.Checked)
     WriteToConsole "--- End Misc Settings Info ---"
 
-    if (!$Patches.Downgrade.Checked) { return }
+    if (!$Patches.Options.Checked) { return }
 
     WriteToConsole
     WriteToConsole
@@ -301,17 +301,17 @@ function WriteDebug([string]$Command, [string[]]$Header, [string]$PatchedFileNam
     
     foreach ($item in $Redux.Groups) {
         foreach ($form in $item.controls) {
-            if     ($form.GetType() -eq [System.Windows.Forms.CheckBox])      { if (IsChecked $form)                                                 { WriteToConsole ($item.text + ". " + $form.name) } }
-            elseif ($form.GetType() -eq [System.Windows.Forms.RadioButton])   { if ( (IsDefault $form -Not $form.checked) -and (IsChecked $form) )   { WriteToConsole ($item.text + ". " + $form.name) } }
-            elseif ($form.GetType() -eq [System.Windows.Forms.ComboBox])      { if (IsDefault $form -Not $form.selectedIndex)                        { WriteToConsole ($item.text + ". " + $form.name + " -> " + $form.text) } }
-            elseif ($form.GetType() -eq [System.Windows.Forms.TrackBar])      { if (IsDefault $form -Not $form.value)                                { WriteToConsole ($item.text + ". " + $form.name + " -> " + $form.value) } }
+            if     ($form.GetType() -eq [System.Windows.Forms.CheckBox] -and $form.enabled)      { if (IsChecked $form)                                                 { WriteToConsole ($item.text + ". " + $form.name) } }
+            elseif ($form.GetType() -eq [System.Windows.Forms.RadioButton] -and $form.enabled)   { if ( (IsDefault $form -Not $form.checked) -and (IsChecked $form) )   { WriteToConsole ($item.text + ". " + $form.name) } }
+            elseif ($form.GetType() -eq [System.Windows.Forms.ComboBox] -and $form.enabled)      { if (IsDefault $form -Not $form.selectedIndex)                        { WriteToConsole ($item.text + ". " + $form.name + " -> " + $form.text) } }
+            elseif ($form.GetType() -eq [System.Windows.Forms.TrackBar] -and $form.enabled)      { if (IsDefault $form -Not $form.value)                                { WriteToConsole ($item.text + ". " + $form.name + " -> " + $form.value) } }
 
             elseif ($form.GetType() -eq [System.Windows.Forms.Panel]) {
                 foreach ($subform in $form.controls) {
-                    if     ($subform.GetType() -eq [System.Windows.Forms.CheckBox])      { if (IsChecked $subform)                                                       { WriteToConsole ($item.text + ". " + $subform.name) } }
-                    elseif ($subform.GetType() -eq [System.Windows.Forms.RadioButton])   { if ( (IsDefault $subform -Not $subform.checked) -and (IsChecked $subform) )   { WriteToConsole ($item.text + ". " + $subform.name) } }
-                    elseif ($subform.GetType() -eq [System.Windows.Forms.ComboBox])      { if (IsDefault $subform -Not $subform.selectedIndex)                           { WriteToConsole ($item.text + ". " + $subform.name + " -> " + $subform.text) } }
-                    elseif ($subform.GetType() -eq [System.Windows.Forms.TrackBar])      { if (IsDefault $subform -Not $subform.value)                                   { WriteToConsole ($item.text + ". " + $subform.name + " -> " + $subform.value) } }
+                    if     ($subform.GetType() -eq [System.Windows.Forms.CheckBox] -and $form.enabled)      { if (IsChecked $subform)                                                       { WriteToConsole ($item.text + ". " + $subform.name) } }
+                    elseif ($subform.GetType() -eq [System.Windows.Forms.RadioButton] -and $form.enabled)   { if ( (IsDefault $subform -Not $subform.checked) -and (IsChecked $subform) )   { WriteToConsole ($item.text + ". " + $subform.name) } }
+                    elseif ($subform.GetType() -eq [System.Windows.Forms.ComboBox] -and $form.enabled)      { if (IsDefault $subform -Not $subform.selectedIndex)                           { WriteToConsole ($item.text + ". " + $subform.name + " -> " + $subform.text) } }
+                    elseif ($subform.GetType() -eq [System.Windows.Forms.TrackBar] -and $form.enabled)      { if (IsDefault $subform -Not $subform.value)                                   { WriteToConsole ($item.text + ". " + $subform.name + " -> " + $subform.value) } }
                 }
             }
         }
@@ -859,10 +859,8 @@ function PatchRedux([boolean]$Decompress) {
         UpdateStatusLabel ("Patching " + $GameType.mode + " REDUX...")
 
         # Redux patch
-        if ($Patches.Options.Checked -and (IsWidescreen -Patched) ) {
-            if (IsSet -Elem $GamePatch.redux.file_widescreen) { ApplyPatch -File $GetROM.decomp -Patch $GamePatch.redux.file_widescreen }
-        }
-        elseif (IsSet -Elem $GamePatch.redux.file)   { ApplyPatch -File $GetROM.decomp -Patch $GamePatch.redux.file }
+        if ( (IsChecked $Redux.Graphics.Widescreen) -and (IsSet -Elem $GamePatch.redux.file_widescreen) )   { ApplyPatch -File $GetROM.decomp -Patch $GamePatch.redux.file_widescreen }
+        elseif (IsSet -Elem $GamePatch.redux.file)                                                          { ApplyPatch -File $GetROM.decomp -Patch $GamePatch.redux.file }
     }
 
 }
@@ -969,23 +967,6 @@ function IsHiROM([uint32]$Offset) {
 
 
 #==============================================================================================================================================================================================
-function IsWidescreen([switch]$Patched, [switch]$Experimental) {
-    
-    if (IsChecked $Redux.Graphics.Widescreen -Not)                         { return $False }
-    if ($IsWiiVC)                                                          { return $False }
-    if ($Patched -and !(IsSet -Elem $GamePatch.redux.file_widescreen) )    { return $False }
-    if ($Settings.Debug.LiteGUI -eq $True)                                 { return $False }
-
-    if     (!$Patched -and !$Experimental)   { return ( !$Patches.Redux.Checked -and $Settings.Debug.ChangeWidescreen -eq $False) }
-    elseif ( $Patched -and !$Experimental)   { return (  $Patches.Redux.Checked -and $Settings.Debug.ChangeWidescreen -eq $False) }
-    elseif (!$Patched -and  $Experimental)   { return ( !$Patches.Redux.Checked -and $Settings.Debug.ChangeWidescreen -eq $True)  }
-    elseif ( $Patched -and  $Experimental)   { return (  $Patches.Redux.Checked -and $Settings.Debug.ChangeWidescreen -eq $True)  }
-
-}
-
-
-
-#==============================================================================================================================================================================================
 function IsReduxOnly() {
     
     if ($Patches.Redux.Checked -and !(IsWidescreen -Patched)) { return $True }
@@ -1016,4 +997,3 @@ function GetROMVersion() {
 Export-ModuleMember -Function MainFunction
 Export-ModuleMember -Function ApplyPatch
 Export-ModuleMember -Function Cleanup
-Export-ModuleMember -Function IsWidescreen

@@ -2,10 +2,9 @@ function PatchOptions() {
     
     # ENHANCED 16:9 WIDESCREEN #
 
-    if (IsWidescreen)                                   { ApplyPatch -Patch "Decompressed\widescreen.ppf" }
-    if ( (IsWidescreen) -or (IsWidescreen -Patched) )   { RemoveFile $Files.dmaTable }
-    if (IsWidescreen)                                   { Add-Content $Files.dmaTable "0 1 2 3 4 5 6 7 -8 -9 15 16 17 18 19 20 -21 22 -24 25 26 27 28 29 30 -652 1127 -1540 -1541 -1542 -1543 -1544 -1545 -1546 -1547 -1548 -1549 -1550 -1551 1552 1553 1554 1555 1556 1557 1558 1559 1560 1561 1562 1563 1564 1565 1566 1567" }
-    if (IsWidescreen -Patched)                          { Add-Content $Files.dmaTable "0 1 2 3 4 5 6 7 -8 -9 15 16 17 18 19 20 -21 22 -24 25 26 27 28 29 30 -652 1127 -1540 -1541 -1542 -1543 1544 1545 1546 1547 1548 1549 1550 -1551 1552 1553 1554 1555 1556 1557 1558 1559 1560 1561 1562 1563 1564 1565 1566 1567" }
+    if ( (IsChecked $Redux.Graphics.Widescreen) -and !$Patches.Redux.Checked)   { ApplyPatch -Patch "Decompressed\widescreen.ppf"; RemoveFile $Files.dmaTable }
+    if ( (IsChecked $Redux.Graphics.Widescreen) -and !$Patches.Redux.Checked)   { Add-Content $Files.dmaTable "0 1 2 3 4 5 6 7 -8 -9 15 16 17 18 19 20 -21 22 -24 25 26 27 28 29 30 -652 1127 -1540 -1541 -1542 -1543 -1544 -1545 -1546 -1547 -1548 -1549 -1550 -1551 1552 1553 1554 1555 1556 1557 1558 1559 1560 1561 1562 1563 1564 1565 1566 1567" }
+    if ( (IsChecked $Redux.Graphics.Widescreen) -and  $Patches.Redux.Checked)   { Add-Content $Files.dmaTable "0 1 2 3 4 5 6 7 -8 -9 15 16 17 18 19 20 -21 22 -24 25 26 27 28 29 30 -652 1127 -1540 -1541 -1542 -1543 1544 1545 1546 1547 1548 1549 1550 -1551 1552 1553 1554 1555 1556 1557 1558 1559 1560 1561 1562 1563 1564 1565 1566 1567" }
 
 
 
@@ -96,14 +95,13 @@ function ByteOptions() {
     if (IsChecked $Redux.Other.GohtCutscene)       { ChangeBytes -Offset "F6DE89" -Values "8D 00 02 10 00 00 0A" }
     if (IsChecked $Redux.Other.MushroomBottle)     { ChangeBytes -Offset "CD7C48" -Values "1E 6B" }
     if (IsChecked $Redux.Other.FairyFountain)      { ChangeBytes -Offset "B9133E" -Values "01 0F" }
-    if (IsChecked $Redux.Other.HideCredits)        { PatchBytes  -Offset "B3B000" -Patch "Message\credits.bin" }
     if (IsChecked $Redux.Other.DebugItemSelect)    { ExportAndPatch -Path "debug_item_select" -Offset "CA6370" -Length "1E0" }
 
 
 
     # GRAPHICS #
 
-    if (IsChecked $Redux.Graphics.Widescreen) {
+    if (IsChecked $Redux.Graphics.WidescreenAlt) {
         if ($IsWiiVC) { # 16:9 Widescreen
             ChangeBytes -Offset "BD5D74" -Values "3C 07 3F E3"
             ChangeBytes -Offset "CA58F5" -Values "6C 53 6C 84 9E B7 53 6C" -Interval 2
@@ -131,29 +129,29 @@ function ByteOptions() {
           # ChangeBytes -Offset "C55F14" -Values "" # B, C-Left, C-Down, C-Right Buttons
         }
 
-        if ($IsWiiVC -or $Settings.Debug.ChangeWidescreen -eq $True) { # 16:9 Textures
-            PatchBytes -Offset "A9A000" -Length "12C00" -Texture -Patch "Widescreen\carnival_of_time.bin"
-            PatchBytes -Offset "AACC00" -Length "12C00" -Texture -Patch "Widescreen\four_giants.bin"
-            PatchBytes -Offset "C74DD0" -Length "800"   -Texture -Patch "Widescreen\lens_of_truth.bin"
-        }
+        PatchBytes -Offset "A9A000" -Length "12C00" -Texture -Patch "Widescreen\carnival_of_time.bin"
+        PatchBytes -Offset "AACC00" -Length "12C00" -Texture -Patch "Widescreen\four_giants.bin"
+        PatchBytes -Offset "C74DD0" -Length "800"   -Texture -Patch "Widescreen\lens_of_truth.bin"
     }
 
     if (IsChecked $Redux.Graphics.ExtendedDraw)       { ChangeBytes -Offset "B50874" -Values "00 00 00 00" }
     if (IsChecked $Redux.Graphics.BlackBars)          { ChangeBytes -Offset "BF72A4" -Values "00 00 00 00" }
     if (IsChecked $Redux.Graphics.PixelatedStars)     { ChangeBytes -Offset "B943FC" -Values "10 00" }
-    if (IsChecked $Redux.Graphics.MotionBlur)         { ChangeBytes -Offset "BFB9A0" -Values "03 E0 00 08 00 00 00 00 00" }
-    if (IsChecked $Redux.Graphics.FlashbackOverlay)   { ChangeBytes -Offset "BFEB8C" -Values "24 0F 00 00" }
+    if ( (IsChecked $Redux.Graphics.MotionBlur)       -or (IsChecked $Redux.Graphics.Widescreen) )   { ChangeBytes -Offset "BFB9A0" -Values "03 E0 00 08 00 00 00 00 00" }
+    if ( (IsChecked $Redux.Graphics.FlashbackOverlay) -or (IsChecked $Redux.Graphics.Widescreen) )   { ChangeBytes -Offset "BFEB8C" -Values "24 0F 00 00" }
 
 
 
     # INTERFACE #
 
-    if (IsChecked $Redux.UI.HudTextures) {
-        PatchBytes -Offset "1EBDF60" -Texture -Patch "HUD\oot_button.bin"
-        PatchBytes -Offset "1EBD100" -Texture -Patch "HUD\oot_heart.bin"
-    }
+    if (IsChecked $Redux.UI.HudTextures)                                                                             { PatchBytes -Offset "1EBD100" -Texture -Patch "HUD\oot_heart.bin" }
+    if ( (IsChecked $Redux.UI.HudTextures -Not) -and (IsIndex -Elem $Redux.UI.ButtonSize -Text "Small"))             { PatchBytes -Offset "1EBDF60" -Texture -Patch "HUD\mm_button_small.bin" }
+    if ( (IsChecked $Redux.UI.HudTextures -Not) -and (IsIndex -Elem $Redux.UI.ButtonSize -Text "Full Size"))         { PatchBytes -Offset "1EBDF60" -Texture -Patch "HUD\mm_button_full.bin" }
+    if ( (IsChecked $Redux.UI.HudTextures)      -and (IsIndex -Elem $Redux.UI.ButtonSize -Text "Small"))             { PatchBytes -Offset "1EBDF60" -Texture -Patch "HUD\oot_button_small.bin" }
+    if ( (IsChecked $Redux.UI.HudTextures)      -and (IsIndex -Elem $Redux.UI.ButtonSize -Text "Normal"))            { PatchBytes -Offset "1EBDF60" -Texture -Patch "HUD\oot_button.bin" }
+    if ( (IsChecked $Redux.UI.HudTextures)      -and (IsIndex -Elem $Redux.UI.ButtonSize -Text "Full Size"))         { PatchBytes -Offset "1EBDF60" -Texture -Patch "HUD\oot_button_full.bin" }
 
-    if (IsChecked $Redux.UI.ButtonPositions) {
+    <#if (IsChecked $Redux.UI.ButtonPositions) {
         ChangeBytes -Offset "BAF2E3" -Values "04"       -Subtract # A Button - X position (BE -> BA, -04)
         ChangeBytes -Offset "BAF393" -Values "04"       -Subtract # A Text   - X position (BE -> BA, -04)
 
@@ -162,11 +160,10 @@ function ByteOptions() {
 
         ChangeBytes -Offset "C55F15" -Values "07"       -Subtract # B Button - X position (A7 -> A0, -07)
         ChangeBytes -Offset "C55F05" -Values "07 00 07" -Subtract # B Text   - X position (9B -> 94, -07)
-    }
+    }#>
 
     if (IsChecked $Redux.UI.CenterTatlPrompt) {
-        if ( (IsWidescreen) -or (IsWidescreen -Patched) )   {
-            
+        if (IsChecked $Redux.Graphics.Widescreen) {
             foreach ($i in 0..($GamePatch.Languages.Length-1)) {
                 if (IsChecked $Redux.Language[$i]) {
                     if     ($Redux.Language[$i].label -eq "English" -and (IsChecked $Redux.Script.RenameTatl) )   { $Taya = $True  }
@@ -222,19 +219,14 @@ function ByteOptions() {
         ChangeBytes -Offset "BA6028" -Values "00 00 00 00"; ChangeBytes -Offset "BA6520" -Values "00 00 00 00"; ChangeBytes -Offset "BB788C" -Values "00 00 00 00"
     }
 
-    if (IsChecked $Redux.Hide.AreaTitle) { # Disable Area Title Cards
-        ChangeBytes -Offset "B80A64" -Values "10 00 01 9E"; ChangeBytes -Offset "B842C0" -Values "10 00 00 04"
-    }
-
     if (IsChecked $Redux.Hide.Clock) { # Clock
-		ChangeBytes -Offset "BAFD5C" -Values "00 00 00 00"; ChangeBytes -Offset "BAFC48" -Values "00 00 00 00"; ChangeBytes -Offset "BAFDA8" -Values "00 00 00 00"; ChangeBytes -Offset "BAFD00" -Values "00 00 00 00"
-		ChangeBytes -Offset "BAFD98" -Values "00 00 00 00"; ChangeBytes -Offset "C5606D" -Values "00"
+		ChangeBytes -Offset "BAFD5C" -Values "00 00 00 00"; ChangeBytes -Offset "BAFC48" -Values "00 00 00 00"; ChangeBytes -Offset "BAFDA8" -Values "00 00 00 00"
+		ChangeBytes -Offset "BAFD00" -Values "00 00 00 00"; ChangeBytes -Offset "BAFD98" -Values "00 00 00 00"; ChangeBytes -Offset "C5606D" -Values "00"
     }
 
-    if (IsChecked $Redux.Hide.CountdownTimer) { 
-        ChangeBytes -Offset "BB169A" -Values "01 FF" # Disable Countdown timer background
-	    ChangeBytes -Offset "C56180" -Values "01 FF 01 FF 01 FF 01 FF 01 FF 01 FF 01 FF 01 FF" # Disable Countdown timer
-    }
+    if (IsChecked $Redux.Hide.CountdownTimer)   { ChangeBytes -Offset "BB169A" -Values "01 FF";     ChangeBytes -Offset "C56180" -Values "01 FF 01 FF 01 FF 01 FF 01 FF 01 FF 01 FF 01 FF" }      # Disable Countdown timer background / Disable Countdown timer
+    if (IsChecked $Redux.Hide.AreaTitle)        { ChangeBytes -Offset "B80A64" -Values "10 00 01 9E"; ChangeBytes -Offset "B842C0" -Values "10 00 00 04" } # Disable Area Title Cards
+    if (IsChecked $Redux.Hide.Credits)          { PatchBytes  -Offset "B3B000" -Patch "Message\credits.bin" }
 
 
 
@@ -258,9 +250,19 @@ function ByteOptions() {
     if (TestFile ($GameFiles.binaries + "\" + $file)) { PatchBytes -Offset "1BA2E0" -Patch ($file) }
 
 
-    # FILE SELECT #
 
-    if (IsText -Elem $Redux.FileSelect.Music -Compare "File Select" -Not) { ChangeBytes -Offset "C8E2AB" -Values (GetMMMusicID -Music $Redux.FileSelect.Music.Text) }
+    # MUSIC #
+
+    MuteMusic -SequenceTable "C77B80" -Sequence "46AF0" -Length 127
+
+    if (IsText -Elem $Redux.Music.FileSelect -Compare "File Select" -Not) {
+        foreach ($track in $Files.json.music) {
+            if ($Redux.Music.FileSelect.Text -eq $track.title) {
+                ChangeBytes -Offset "C8E2AB" -Values $track.id
+                break
+            }
+        }
+    }
 
 
 
@@ -634,7 +636,7 @@ function ByteReduxOptions() {
     
     # D-PAD #
 
-    if ( (IsChecked $Redux.DPad.Hide) -or (IsChecked $Redux.DPad.LayoutLeft) -or (IsChecked $Redux.DPad.LayoutRight) -or (IsWidescreen -Patched) ) {
+    if ( (IsChecked $Redux.DPad.Hide) -or (IsChecked $Redux.DPad.LayoutLeft) -or (IsChecked $Redux.DPad.LayoutRight) -or ( (IsChecked $Redux.Graphics.Widescreen) -and  $Patches.Redux.Checked) ) {
         $Array = @()
         $Array += GetMMItemID -Item $Redux.DPad.Up.Text
         $Array += GetMMItemID -Item $Redux.DPad.Right.Text
@@ -843,13 +845,14 @@ function ByteLanguageOptions() {
 function CreateOptions() {
     
     if ($Settings.Debug.LiteGUI -eq $False) {
-        CreateOptionsDialog -Width 1060 -Height 560 -Tabs @("Main", "Audiovisual", "Difficulty", "Colors", "Equipment", "Speedup")
+        CreateOptionsDialog -Width 1060 -Height 530 -Tabs @("Main", "Graphics", "Audio", "Difficulty", "Colors", "Equipment", "Speedup")
     }
     else {
-        CreateOptionsDialog -Width 1060 -Height 450 -Tabs @("Main", "Audiovisual", "Difficulty", "Speedup")
+        CreateOptionsDialog -Width 1060 -Height 450 -Tabs @("Main", "Graphics", "Audio", "Difficulty", "Speedup")
     }
 
-    if (!$IsWiiVC) { $Redux.Graphics.Widescreen.Add_CheckStateChanged({ AdjustGUI }) }
+    $Redux.Graphics.Widescreen.Add_CheckStateChanged(    { AdjustGUI } )
+    $Redux.Graphics.WidescreenAlt.Add_CheckStateChanged( { AdjustGUI } )
 
 }
 
@@ -858,16 +861,19 @@ function CreateOptions() {
 #==============================================================================================================================================================================================
 function AdjustGUI() {
     
-    if ($IsWiiVC -or $Settings.Debug.LiteGUI -eq $True) { return }
+    EnableElem $Redux.Graphics.Widescreen    -Active (!$Redux.Graphics.WidescreenAlt.Checked -and !$ISwiiVC)
+    EnableElem $Redux.Graphics.WidescreenAlt -Active (!$Redux.Graphics.Widescreen.Checked)
 
-    EnableElem -Elem @($Redux.Colors.Magic, $Redux.Colors.BaseMagic, $Redux.Colors.InfiniteMagic) -Active (!(IsWidescreen -Patched))
-    EnableElem -Elem @($Redux.DPad.Disable, $Redux.DPad.Hide, $Redux.DPad.LayoutLeft, $Redux.DPad.LayoutRight) -Active (!(IsWidescreen -Patched))
+    if ($Redux.Graphics.Widescreen.Enabled -eq $False -and $Redux.Graphics.WidescreenAlt.Enabled -eq $False) { EnableElem $Redux.Graphics.WidescreenAlt -Active $True }
+    if (!$Redux.Graphics.Widescreen.Enabled)      { $Redux.Graphics.Widescreen.Checked    = $False }
+    if (!$Redux.Graphics.WidescreenAlt.Enabled)   { $Redux.Graphics.WidescreenAlt.Checked = $False }
+
+    EnableElem -Elem @($Redux.Colors.Magic, $Redux.Colors.BaseMagic, $Redux.Colors.InfiniteMagic) -Active (!( (IsChecked $Redux.Graphics.Widescreen) -and $Patches.Redux.Checked))
+    EnableElem -Elem @($Redux.DPad.Disable, $Redux.DPad.Hide, $Redux.DPad.LayoutLeft, $Redux.DPad.LayoutRight) -Active (!( (IsChecked $Redux.Graphics.Widescreen) -and $Patches.Redux.Checked))
+    EnableElem -Elem @($Redux.Graphics.MotionBlur, $Redux.Graphics.FlashbackOverlay) -Active (!(IsChecked $Redux.Graphics.Widescreen))
     
-    if (IsWidescreen -Patched) {
-        EnableElem -Elem @($Redux.DPad.Up, $Redux.DPad.Left, $Redux.DPad.Right, $Redux.DPad.Down) -Active $True
-        $Redux.Graphics.MotionBlur.Checked = $Redux.Graphics.FlashbackOverlay.Checked = $True
-    }
-    elseif ($Redux.Dpad.Disable.Checked) { EnableElem -Elem @($Redux.DPad.Up, $Redux.DPad.Left, $Redux.DPad.Right, $Redux.DPad.Down) -Active $False }
+    if ( (IsChecked $Redux.Graphics.Widescreen) -and $Patches.Redux.Checked)   { EnableElem -Elem @($Redux.DPad.Up, $Redux.DPad.Left, $Redux.DPad.Right, $Redux.DPad.Down) -Active $True }
+    elseif ($Redux.Dpad.Disable.Checked)                                       { EnableElem -Elem @($Redux.DPad.Up, $Redux.DPad.Left, $Redux.DPad.Right, $Redux.DPad.Down) -Active $False }
 
 }
 
@@ -878,6 +884,7 @@ function AdjustGUI() {
 function CreateTabMain() {
     
     # GAMEPLAY #
+
     CreateReduxGroup    -Tag  "Gameplay" -Text "Gameplay" 
     CreateReduxCheckBox -Name "ZoraPhysics"       -Text "Zora Physics"          -Info "Change the Zora physics when using the boomerang`nZora Link will take a step forward instead of staying on his spot" -Credits "ShadowOne333"
     CreateReduxCheckBox -Name "DistantZTargeting" -Text "Distant Z-Targeting"   -Info "Allow to use Z-Targeting on enemies, objects and NPC's from any distance"                                            -Credits "Admentus"
@@ -885,7 +892,10 @@ function CreateTabMain() {
     CreateReduxCheckBox -Name "FrontflipAttack"   -Text "Frontflip Jump Attack" -Info "Restores the Frontflip Jump Attack animation from the Beta"                                                          -Credits "SoulofDeity"
     CreateReduxCheckBox -Name "FrontflipJump"     -Text "Force Frontflip Jump"  -Info "Link will always use the frontflip animation when jumping"                                                           -Credits "SoulofDeity"
 
+
+
     # RESTORE #
+
     CreateReduxGroup    -Tag  "Restore" -Text "Restore / Correct"
     CreateReduxCheckBox -Name "RupeeColors"       -Text "Correct Rupee Colors"     -Info "Corrects the colors for the Purple (50) and Golden (200) Rupees"                                           -Credits "GhostlyDark"
     CreateReduxCheckBox -Name "CowNoseRing"       -Text "Restore Cow Nose Ring"    -Info "Restore the rings in the noses for Cows as seen in the Japanese release"                                   -Credits "ShadowOne333"
@@ -896,7 +906,10 @@ function CreateTabMain() {
     CreateReduxCheckBox -Name "PieceOfHeartSound" -Text "4th Piece of Heart Sound" -Info "Restore the sound effect when collecting the fourth Piece of Heart that grants Link a new Heart Container" -Credits "ShadowOne333"
     CreateReduxCheckBox -Name "MoveBomberKid"     -Text "Move Bomber Kid"          -Info "Moves the Bomber at the top of the Stock Pot Inn to be behind the bell like in the original Japanese ROM"  -Credits "ShadowOne333"
 
+
+
     # OTHER #
+
     CreateReduxGroup    -Tag  "Other" -Text "Other"
     CreateReduxCheckBox -Name "PictoboxDelayFix"  -Text "Pictograph Box Delay Fix"  -Info "Photos are taken instantly with the Pictograph Box by removing the Anti-Aliasing" -Checked                                                                  -Credits "Ported from Rando"
     CreateReduxCheckBox -Name "GohtCutscene"      -Text "Fix Goht Cutscene"         -Info "Fix Goht's awakening cutscene so that Link no longer gets run over"                                                                                         -Credits "ShadowOne333"
@@ -904,9 +917,6 @@ function CreateTabMain() {
     CreateReduxCheckBox -Name "SouthernSwamp"     -Text "Fix Southern Swamp"        -Info "Fix a misplaced door after Woodfall has been cleared and you return to the Potion Shop`nThe door is slightly pushed forward after Odolwa has been defeated" -Credits "ShadowOne333"
     CreateReduxCheckBox -Name "FairyFountain"     -Text "Fix Fairy Fountain"        -Info "Fix the Ikana Canyon Fairy Fountain area not displaying the correct color"                                                                                  -Credits "Dybbles (fix) & ShadowOne333 (patch)"
     CreateReduxCheckBox -Name "AlwaysBestEnding"  -Text "Always Best Ending"        -Info "The credits sequence always includes the best ending, regardless of actual ingame progression"                                                              -Credits "Marcelo20XX"
-    if ($Settings.Debug.LiteGUI -eq $False) {
-        CreateReduxCheckBox -Name "HideCredits"   -Text "Hide Credits"              -Info "Do not show the credits text during the credits sequence"                                                                                                   -Credits "Admentus"
-    }
     CreateReduxCheckBox -Name "DebugMapSelect"    -Text "Debug Map Select"          -Info "Translates the Debug Map Select menu into English"                                                                                                          -Credits "GhostlyDark"
     CreateReduxCheckBox -Name "DebugItemSelect"   -Text "Debug Item Select"         -Info "Translates the Debug Inventory Select menu into English"                                                                                                    -Credits "GhostlyDark"
     
@@ -918,6 +928,7 @@ function CreateTabMain() {
 function CreateTabRedux() {
     
     # D-PAD ICONS LAYOUT #
+
     CreateReduxGroup -Tag  "DPad" -Text "D-Pad Layout" -Height 6 -Columns 4
     CreateReduxPanel -Columns 0.8 -Rows 4.1
     CreateReduxRadioButton -Name "Disable"     -SaveTo "Layout" -Column 1 -Row 1          -Text "Disable"    -Info "Completely disable the D-Pad"                      -Credits "Ported from Redux"
@@ -931,7 +942,10 @@ function CreateTabRedux() {
     CreateReduxComboBox    -Name "Down"        -Column 2.8 -Row 6   -Length 160 -Items $Items -Default "Ocarina of Time" -Info "Set the quick slot item for the D-Pad Down button"  -Credits "Ported from Redux"
     $Redux.DPad.Reset = CreateReduxButton      -Column 1 -Row 5 -Height 30 -Text "Reset Layout" -Info "Reset the layout for the D-Pad"
 
+
+
     # D-Pad Buttons Customization - Image #
+
     $PictureBox = New-Object Windows.Forms.PictureBox
     $PictureBox.Location = New-object System.Drawing.Size( ($Redux.DPad.Left.Right + 30), $Redux.DPad.Up.Bottom)
     SetBitmap -Path ($Paths.Main + "\D-Pad.png") -Box $PictureBox
@@ -943,12 +957,17 @@ function CreateTabRedux() {
     $Redux.DPad.Disable.Add_CheckedChanged({ EnableElem -Elem @($Redux.DPad.Up, $Redux.DPad.Left, $Redux.DPad.Right, $Redux.DPad.Down, $Redux.DPad.Reset) -Active (!$Redux.DPad.Disable.Checked) })
     $Redux.DPad.Reset.Add_Click({ $Redux.DPad.Up.SelectedIndex = 2; $Redux.DPad.Left.SelectedIndex = 3; $Redux.DPad.Right.SelectedIndex = 4; $Redux.DPad.Down.SelectedIndex = 1 })
 
+
+
     # GAMEPLAY #
+
     CreateReduxGroup        -Tag  "Gameplay" -Text "Gameplay"
     CreateReduxCheckBox     -Name "FasterBlockPushing" -Checked -Text "Faster Block Pushing" -Info "All blocks are pushed faster" -Credits "Ported from Redux"
-  # CreateReduxCheckBox     -Name "EasierMinigames"             -Text "Easier Minigames"     -Info "Certain minigames are made easier and faster`n- Dampe's Digging Game always has two Ghost Flames on the ground and one up the ladder`n- The Gold Dog always wins the Doggy Racetrack race if you have the Mask of Truth`n- Only one fish has to be feeded in the Marine Research Lab" -Credits "Ported from Rando"
-    
+
+
+
     # BUTTON COLORS #
+
     CreateButtonColorOptions -Default 2
     
 }
@@ -960,12 +979,18 @@ function CreateTabLanguage() {
     
     CreateLanguageContent
 
-    # ENGLISH TEXT OPTIONS #    
+
+
+    # ENGLISH TEXT OPTIONS #
+     
     $Redux.Box.Text = CreateReduxGroup -Tag "Text" -Text "English Text Options"
     CreateReduxCheckBox -Name "Restore"      -Text "Restore Text"        -Info "Restores and fixes the following:`n- Restore the area titles cards for those that do not have any`n- Sound effects that do not play during dialogue`n- Grammar and typo fixes" -Credits "Redux"
     CreateReduxCheckBox -Name "OcarinaIcons" -Text "Ocarina Icons (WIP)" -Info "Restore the Ocarina Icons with their text when transformed like in the N64 Beta or 3DS version (Work-In-Progress)`nRequires the Restore Text option"                           -Credits "ShadowOne333"
     
-    # OTHER TEXT OPTIONS #    
+
+
+    # OTHER TEXT OPTIONS #
+
     $Redux.Box.Text = CreateReduxGroup -Tag "Script" -Text "Other Text Options"
     CreateReduxCheckBox -Name "RenameTatl"   -Text "Rename Tatl"        -Info "Rename Tatl to Taya (English) or Taya to Tatl (German, French or Spanish)" -Credits "Admentus & GhostlyDark"
     CreateReduxCheckBox -Name "Comma"        -Text "Better Comma"       -Info "Make the comma not look as awful"                                          -Credits "ShadowOne333"
@@ -992,25 +1017,19 @@ function UnlockLanguageContent() {
 
 
 #==============================================================================================================================================================================================
-function CreateTabAudiovisual() {
+function CreateTabGraphics() {
     
     # GRAPHICS #
-    CreateReduxGroup    -Tag  "Graphics" -Text "Graphics"
+    CreateReduxGroup -Tag  "Graphics" -Text "Graphics"
 
-    if ($IsWiiVC) {
-        $Info = "Native 16:9 Widescreen Display support with backgrounds and textures adjusted for widescreen"
-        $Credits = "`nAspect Ratio Fix by Admentus`n16:9 backgrounds by GhostlyDark & ShadowOne333"
-    }
-    else {
-        $Info  = "Advanced native 16:9 Widescreen Display support with backgrounds and textures adjusted for widescreen"
-        $Info += "`n`n--- KNOWN ISSUES ---`n"
-        $Info += "- Notebook screen stretched"
-        $Info += "`n`n--- CHANGE WIDESCREEN ---`n"
-        $Info += "Adjust the backgrounds and textures to fit in with 16:9 Widescreen`nUse GLideN64 " + '"adjust to fit"' + " option for 16:9 widescreen"
-        $Credits = "`nAspect Ratio Fix by Admentus`n16:9 backgrounds by GhostlyDark & ShadowOne333`nWidescreen Patch by gamemasterplc and corrected by GhostlyDark"
-    }
-   
-    CreateReduxCheckBox -Name "Widescreen"        -Text "16:9 Widescreen"           -Info $Info                                                                                                                  -Credits $Credits
+    $Info  = "Patch the game to be in true 16:9 widescreen with the HUD pushed to the edges."
+    $Info += "`n`nKnown Issues:"
+    $Info += "`n- Notebook screen stretched"
+    $Info += "`n- Text corruption if combined with Redux during and after cutscenes with blur/sepia effect (disabled by default)"
+    $Info += "`n- D-Pad icons causing issues if combined with Redux (force hidden)"
+
+    CreateReduxCheckBox -Name "Widescreen"         -Text "16:9 Widescreen"          -Info $Info                                                                                                                  -Credits "Granny Story images by Nerrel, Widescreen Patch by gamemasterplc, enhanced and ported by GhostlyDark"
+    CreateReduxCheckBox -Name "WidescreenAlt"      -Text "16:9 Widescreen (Alt)"    -Info "Apply 16:9 Widescreen adjusted backgrounds and textures (as well as 16:9 Widescreen for the Wii VC)"                  -Credits "Aspect Ratio Fix by Admentus`n16:9 backgrounds by GhostlyDark & ShadowOne333"
     CreateReduxCheckBox -Name "BlackBars"         -Text "No Black Bars"             -Info "Removes the black bars shown on the top and bottom of the screen during Z-targeting and cutscenes"                    -Credits "Admentus"
     CreateReduxCheckBox -Name "ExtendedDraw"      -Text "Extended Draw Distance"    -Info "Increases the game's draw distance for objects`nDoes not work on all objects"                                         -Credits "Admentus"
     CreateReduxCheckBox -Name "ImprovedLinkModel" -Text "Improved Link Model"       -Info "Improves the model used for Hylian Link`nCustom tunic colors are not supported with this option"                      -Credits "Skilarbabcock (www.youtube.com/user/skilarbabcock) & Nerrel"
@@ -1024,15 +1043,18 @@ function CreateTabAudiovisual() {
     CreateReduxCheckBox -Name "MotionBlur"        -Text "Disable Motion Blur"       -Info ("Completely Disable the use of motion blur in-game" + $info)                                                          -Credits "GhostlyDark"
     CreateReduxCheckBox -Name "FlashbackOverlay"  -Text "Disable Flashback Overlay" -Info ("Disables the overlay shown during Princess Zelda flashback scene" + $info)                                           -Credits "GhostlyDark"
 
+
+
     # INTERFACE #
     CreateReduxGroup    -Tag  "UI" -Text "Interface"
     CreateReduxCheckBox -Name "HudTextures"      -Text "OoT HUD Textures"     -Info "Replaces the HUD textures with those from Ocarina of Time" -Credits "Ported by GhostlyDark"
-  # CreateReduxCheckBox -Name "ButtonPositions"  -Text "OoT Button Positions" -Info "Positions the A and B buttons like in Ocarina of Time"     -Credits "Ported by GhostlyDark"
     CreateReduxCheckBox -Name "CenterTatlPrompt" -Text "Center Tatl Prompt"   -Info 'Centers the "Tatl" prompt shown in the C-Up button'        -Credits "Ported by GhostlyDark"
     CreateReduxCheckBox -Name "GCScheme"         -Text "GC Scheme"            -Info "Replace the textures to match the GameCube's scheme"       -Credits "Admentus & GhostlyDark"
+    CreateReduxComboBox -Name "ButtonSize" -Column 5 -Text "HUD Size" -Items @("Small", "Normal", "Full Size") -Default "Normal" -Info "Set the size of the A, B, C and Start buttons" -Credits "Admentus & GhostlyDark"
 
 
-    # HIDE #
+
+    # HIDE HUD #
     CreateReduxGroup    -Tag  "Hide" -Text "Hide HUD"
     CreateReduxCheckBox -Name "AButton"        -Text "Hide A Button"         -Info "Hide the A Button"                                                                              -Credits "Marcelo20XX"
     CreateReduxCheckBox -Name "BButton"        -Text "Hide B Button"         -Info "Hide the B Button"                                                                              -Credits "Marcelo20XX"
@@ -1042,13 +1064,24 @@ function CreateTabAudiovisual() {
     CreateReduxCheckBox -Name "AreaTitle"      -Text "Hide Area Title Card"  -Info "Hide the area title that displays when entering a new area"                                     -Credits "Marcelo20XX"
     CreateReduxCheckBox -Name "Clock"          -Text "Hide Clock"            -Info "Hide the Clock display"                                                                         -Credits "Marcelo20XX"
     CreateReduxCheckBox -Name "CountdownTimer" -Text "Hide Countdown Timer"  -Info "Hide the countdown timer that displays during the final hours before the Moon will hit Termina" -Credits "Marcelo20XX"
+    
+    if ($Settings.Debug.LiteGUI -eq $True) { return }
+    
+    CreateReduxCheckBox -Name "Credits"       -Text "Hide Credits"              -Info "Do not show the credits text during the credits sequence"                                    -Credits "Admentus"
+    
+}
 
-    if ($Settings.Debug.LiteGUI -ne $True) {
 
-    # SOUNDS / VOICES / SFX SOUND EFFECTS
-    CreateReduxGroup    -Tag  "Sounds" -Text "Sounds / VOICES / SFX Sound Effects" -Height 3
+
+#==============================================================================================================================================================================================
+function CreateTabAudio() {
+    
+    # SOUNDS / VOICES / SFX SOUND EFFECTS #
+
+    CreateReduxGroup    -Tag  "Sounds" -Text "Sounds / Voices / SFX Sound Effects" -Height 3
     CreateReduxComboBox -Name "LowHP"             -Column 5 -Row 1 -Text "Low HP SFX" -Items @("Default", "Disabled", "Soft Beep")  -Info "Set the sound effect for the low HP beeping" -Credits "Ported from Rando"
     CreateReduxCheckBox -Name "DisableSFXEffect"  -Column 5 -Row 2 -Text "Disable SFX Effects" -Info "Remove the SFX Sound Effects for collecting rupees and solving puzzles" -Credits "Marcelo20XX"
+    
 
     $SFX =  @("Ocarina", "Deku Pipes", "Goron Drums", "Zora Guitar", "Female Voice", "Bell", "Cathedral Bell", "Piano", "Soft Harp", "Harp", "Accordion", "Bass Guitar", "Flute", "Whistling Flute", "Gong", "Elder Goron Drums", "Choir", "Arguing", "Tatl", "Giants Singing", "Ikana King", "Frog Croak", "Beaver", "Eagle Seagull", "Dodongo")
     CreateReduxComboBox -Name "InstrumentHylian"  -Column 1 -Row 1 -Text "Instrument (Hylian)" -Default 1 -Shift 30 -Length 200 -Items $SFX -Info "Replace the sound used for playing the Ocarina of Time in Hylian Form" -Credits "Ported from Rando"
@@ -1059,14 +1092,27 @@ function CreateTabAudiovisual() {
     CreateReduxComboBox -Name "ChildVoices"       -Column 1 -Row 3 -Text "Child Voice"        -Shift 30 -Length 200 -Items @("Original") -FilePath ($GameFiles.binaries + "\Voices Child")        -Default "Original" -Info "Replace the voice used for the Child Link Model"        -Credits "`nOcarina of Time: Phantom Natsu"
     CreateReduxComboBox -Name "FierceDeityVoices" -Column 3 -Row 3 -Text "Fierce Deity Voice" -Shift 30 -Length 200 -Items @("Original") -FilePath ($GameFiles.binaries + "\Voices Fierce Deity") -Default "Original" -Info "Replace the voice used for the Fierce Deity Link Model" -Credits "`nOcarina of Time: Phantom Natsu"
 
-    }
 
-    # FILE SELECT #
-    CreateReduxGroup    -Tag "FileSelect" -Text "File Select"
-    $Music = @("None", "File Select", "Clock Town Day 1", "Clock Town Day 2", "Clock Town Day 3", "Clock Town Cavern", "Astral Observatory", "Milk Bar Latte", "Shop", "House", "Final Hours", "The Four Giants", "Song of Healing", "Southern Swamp", "Woods of Mystery", "Court of the Deku King", "Mountain Village", "Goron Village",
-    "Great Bay Coast", "Zora Hall", "Pirate's Fortress", "Ikana Valley", "Music Box House", "Ikana Castle", "Romani Ranch" , "Woodfall Temple", "Snowhead Temple", "Great Bay Temple", "Stone Tower Temple", "Stone Tower Temple Inverted", "Battle", "Mini-Boss Battle", "Boss Battle", "Majora's Mask Battle",
-    "Majora's Incarnation Battle", "Majora's Wrath Battle", "Bass Practice", "Drums Practice", "Piano Practice", "The End/Credits I", "The End/Credits II")
-    CreateReduxComboBox -Name "Music" -Column 1 -Text "Music" -Shift 30 -Length 200 -Default 2 -Items $Music -Info "Set the skybox music theme for the File Select menu" -Credits "Admentus"
+
+    # MUSIC #
+
+    $tracks = @()
+    foreach ($track in $Files.json.music) { $tracks += $track.title }
+
+    CreateReduxGroup   -Tag  "Music" -Text "Mute Music Tracks" -Columns 1.97 -Height 6
+    CreateReduxListBox -Name "SelectMuteTracks" -Items $tracks
+
+    CreateReduxGroup    -Tag "Music" -Text "Music"
+    CreateReduxComboBox -Name "FileSelect"-Text "File Select"  -Default "File Select" -Shift 30 -Length 200 -Items $tracks -Info "Set the skybox music theme for the File Select menu" -Credits "Admentus"
+    
+    CreateReduxPanel -X 25 -Row 1
+    CreateReduxRadioButton -Name "EnableAll"    -Column 1 -Max 4 -SaveTo "Mute" -Checked -Text "Enable All Music"     -Info "Keep the music as it is"                           -Credits "Admentus"
+    CreateReduxRadioButton -Name "MuteSelected" -Column 2 -Max 4 -SaveTo "Mute"          -Text "Mute Selected Music"  -Info "Mute the selected music from the list in the game" -Credits "Admentus"
+    CreateReduxRadioButton -Name "MuteAreaOnly" -Column 3 -Max 4 -SaveTo "Mute"          -Text "Mute Area Music Only" -Info "Mute only the area music in the game"              -Credits "Admentus"
+    CreateReduxRadioButton -Name "MuteAll"      -Column 4 -Max 4 -SaveTo "Mute"          -Text "Mute All Music"       -Info "Mute all the music in the game"                    -Credits "Admentus"
+
+    EnableForm -Form $Redux.Music.SelectMuteTracks -Enable $Redux.Music.MuteSelected.Checked
+    $Redux.Music.MuteSelected.Add_CheckedChanged({ EnableForm -Form $Redux.Music.SelectMuteTracks -Enable $this.Checked })
 
 }
 
@@ -1076,6 +1122,7 @@ function CreateTabAudiovisual() {
 function CreateTabDifficulty() {
     
     # HERO MODE #
+
     CreateReduxGroup    -Tag  "Hero" -Text "Hero Mode"
     CreateReduxComboBox -Name "Damage"     -Column 1 -Row 1 -Shift 10 -Text "Damage"       -Items @("1x Damage", "2x Damage", "4x Damage", "8x Damage", "OHKO Mode") -Info "Set the amount of damage you receive`nOHKO Mode = You die in one hit" -Credits "Admentus"
     CreateReduxComboBox -Name "Recovery"   -Column 3 -Row 1 -Shift 10 -Text "Recovery"     -Items @("1x Recovery", "1/2x Recovery", "1/4x Recovery", "0x Recovery")  -Info "Set the amount health you recovery from Recovery Hearts"              -Credits "Admentus"
@@ -1095,7 +1142,10 @@ function CreateTabDifficulty() {
     CreateReduxCheckBox -Name "PalaceRoute"      -Column 2 -Row 4 -Text "Restore Palace Route" -Info "Restore the route to the Bean Seller within the Deku Palace as seen in the Japanese release" -Credits "ShadowOne"
     CreateReduxCheckBox -Name "DeathIsMoonCrash" -Column 3 -Row 4 -Text "Death is Moon Crash"   -Info "If you die, the moon will crash`nThere are no continues anymore"                                                  -Credits "Ported from Rando"
 
+
+
     # EASY MODE #
+
     CreateReduxGroup    -Tag  "EasyMode" -Text "Easy Mode"
     CreateReduxCheckbox -Name "NoBlueBubbleRespawn" -Text "No Blue Bubble Respawn" -Info "Removes the respawn of the Blue Bubble monsters (until you re-enter the room)" -Credits "Garo-Mastah"
 
@@ -1107,6 +1157,7 @@ function CreateTabDifficulty() {
 function CreateTabColors() {
     
     # TUNIC COLORS #
+
     CreateReduxGroup    -Tag  "Colors" -Text "Tunic Colors" -Columns 5
     $Colors = @("Kokiri Green", "Goron Red", "Zora Blue", "Black", "White", "Azure Blue", "Vivid Cyan", "Light Red", "Fuchsia", "Purple", "Majora Purple", "Twitch Purple", "Persian Rose", "Dirty Yellow", "Blush Pink", "Hot Pink", "Rose Pink", "Orange", "Gray", "Gold", "Silver", "Beige", "Teal", "Blood Red", "Blood Orange", "Royal Blue", "Sonic Blue", "NES Green", "Dark Green", "Lumen", "Randomized", "Custom")
     CreateReduxComboBox -Name "KokiriTunic" -Column 1 -Text "Kokiri Tunic Color" -Length 230 -Shift 70 -Items $Colors -Info ("Select a color scheme for the Kokiri Tunic`n" + '"Randomized" fully randomizes the colors each time the patcher is opened') -Credits "Ported from Rando"
@@ -1121,13 +1172,17 @@ function CreateTabColors() {
     $Redux.Graphics.ImprovedLinkModel.Add_CheckedChanged({ EnableElem -Elem @($Redux.Colors.KokiriTunic, $Redux.Colors.KokiriTunicButton) -Active (!$this.checked) })
     EnableElem -Elem @($Redux.Colors.KokiriTunic, $Redux.Colors.KokiriTunicButton) -Active (!$Redux.Graphics.ImprovedLinkModel.Checked)
 
+
+
     # MISC COLORS #
+
     CreateReduxGroup    -Tag  "Colors" -Text "Misc Colors"
     CreateReduxCheckBox -Name "RedIce" -Text "Red Ice" -Info "Recolors the ice blocks which can be unfrozen from blue to red" -Credits "Garo-Mastah"
 
 
 
     # FORM COLORS #
+
     CreateReduxGroup    -Tag  "Colors" -Text "Mask Form Colors"
     CreateReduxComboBox -Name "DekuLink"  -Column 1 -Text "Deku Link Color"  -Length 170 -Shift 30 -Items @("Green") -FilePath ($GameFiles.Textures + "\Color - Deku Link")         -Info "Select a color scheme for Deku Link"  -Credits "Admentus, ShadowOne333 & Garo-Mastah"
     CreateReduxComboBox -Name "GoronLink" -Column 3 -Text "Goron Link Color" -Length 170 -Shift 30 -Items @("Green") -FilePath ($GameFiles.Textures + "\Color - Goron Link")        -Info "Select a color scheme for Goron Link" -Credits "Admentus, ShadowOne333 & Garo-Mastah"
@@ -1148,16 +1203,19 @@ function CreateTabColors() {
 
 
     # SPIN ATTACK COLORS #
+
     CreateSpinAttackColorOptions
 
 
 
     # FAIRY COLORS #
+
     CreateFairyColorOptions
 
 
 
     # HUD COLORS #
+
     CreateReduxGroup    -Tag  "Colors" -Text "HUD Colors" -IsRedux -Height 2
     CreateReduxComboBox -Name "Hearts"  -Column 1 -Text "Hearts Colors"  -Length 185 -Shift 35 -Items @("Red", "Green", "Blue", "Yellow", "Randomized", "Custom") -Info ("Select a preset for the hearts colors`n" + '"Randomized" fully randomizes the colors each time the patcher is opened')
     CreateReduxComboBox -Name "Magic"   -Column 3 -Text "Magic Colors"   -Length 185 -Shift 35 -Items @("Green", "Red", "Blue", "Purple", "Pink", "Yellow", "White", "Randomized", "Custom") -Info ("Select a preset for the magic colors`n" + '"Randomized" fully randomizes the colors each time the patcher is opened')
@@ -1222,17 +1280,24 @@ function CreateTabColors() {
 function CreateTabEquipment() {
     
     # CAPACITY SELECTION #
+
     CreateReduxGroup    -Tag  "Capacity" -Text "Capacity Selection" -Columns 3
     CreateReduxCheckBox -Name "EnableAmmo"    -Text "Change Ammo Capacity"   -Info "Enable changing the capacity values for ammo"
     CreateReduxCheckBox -Name "EnableWallet"  -Text "Change Wallet Capacity" -Info "Enable changing the capacity values for the wallets"
 
+
+
     # GAMEPLAY #
+
     CreateReduxGroup    -Tag  "Gameplay" -Text "Gameplay"
-    CreateReduxCheckBox -Name "UnsheathSword" -Text "Unsheath Sword"         -Info "The sword is unsheathed first before immediately swinging it" -Credits "Admentus"
-    CreateReduxCheckBox -Name "SwordBeamAttack"   -Text "Sword Beam Attack"     -Info "Charging the Spin Attack will launch a Sword Beam Attack instead`nYou can still execute the Quick Spin Attack"       -Credits "Admentus (ROM hack) & CloudModding (GameShark)"
-    CreateReduxCheckBox -Name "FixEponaSword"     -Text "Fix Epona Sword"       -Info "Change Epona's B button behaviour to prevent you from losing your sword if you don't have the Hero's Bow"            -Credits "Ported from Rando"
+    CreateReduxCheckBox -Name "UnsheathSword"   -Text "Unsheath Sword"    -Info "The sword is unsheathed first before immediately swinging it" -Credits "Admentus"
+    CreateReduxCheckBox -Name "SwordBeamAttack" -Text "Sword Beam Attack" -Info "Replaces the Spin Attack with the Sword Beam Attack`nYou can still perform the Quick Spin Attack"         -Credits "Admentus (ROM hack) & CloudModding (GameShark)"
+    CreateReduxCheckBox -Name "FixEponaSword"   -Text "Fix Epona Sword"   -Info "Change Epona's B button behaviour to prevent you from losing your sword if you don't have the Hero's Bow" -Credits "Ported from Rando"
+
+
 
     # HITBOX #
+
     CreateReduxGroup  -Tag  "Equipment" -Text "Sliders" -Height 2.7
     CreateReduxSlider -Name "KokiriSword"      -Column 1 -Row 1 -Default 3000 -Min 512 -Max 8192 -Freq 512 -Small 256 -Large 512 -Text "Kokiri Sword"        -Info "Set the length of the hitbox of the Kokiri Sword"              -Credits "Aria Hiroshi 64"
     CreateReduxSlider -Name "RazorSword"       -Column 3 -Row 1 -Default 3000 -Min 512 -Max 8192 -Freq 512 -Small 256 -Large 512 -Text "Razor Sword"         -Info "Set the length of the hitbox of the Razor Sword"               -Credits "Aria Hiroshi 64"
@@ -1240,7 +1305,10 @@ function CreateTabEquipment() {
     CreateReduxSlider -Name "GreatFairysSword" -Column 1 -Row 2 -Default 5500 -Min 512 -Max 8192 -Freq 512 -Small 256 -Large 512 -Text "Great Fairy's Sword" -Info "Set the length of the hitbox of the Great Fairy's Sword Knife" -Credits "Aria Hiroshi 64"
     CreateReduxSlider -Name "BlastMask"        -Column 3 -Row 2 -Default 310  -Min 1   -Max 1024 -Freq 64  -Small 32  -Large 64  -Text "Blast Mask"          -Info "Set the cooldown duration of the Blast Mask"                   -Credits "Ported from Rando"
 
+
+
     # AMMO #
+
     $Redux.Box.Ammo = CreateReduxGroup -Tag "Capacity" -Text "Ammo Capacity Selection"
     CreateReduxTextBox -Name "Quiver1"     -Text "Quiver (1)"      -Value 30  -Info "Set the capacity for the Quiver (Base)"        -Credits "GhostlyDark"
     CreateReduxTextBox -Name "Quiver2"     -Text "Quiver (2)"      -Value 40  -Info "Set the capacity for the Quiver (Upgrade 1)"   -Credits "GhostlyDark"
@@ -1251,14 +1319,20 @@ function CreateTabEquipment() {
     CreateReduxTextBox -Name "DekuSticks1" -Text "Deku Sticks (1)" -Value 10  -Info "Set the capacity for the Deku Sticks (Base)"   -Credits "GhostlyDark"
     CreateReduxTextBox -Name "DekuNuts1"   -Text "Deku Nuts (1)"   -Value 20  -Info "Set the capacity for the Deku Nuts (Base)"     -Credits "GhostlyDark"
 
+
+
     # WALLET #
+
     $Redux.Box.Wallet = CreateReduxGroup -Tag "Capacity" -Text "Wallet Capacity Selection"
     CreateReduxTextBox -Name "Wallet1" -Length 3 -Text "Wallet (1)"     -Value 99  -Info "Set the capacity for the Wallet (Base)"      -Credits "GhostlyDark"
     CreateReduxTextBox -Name "Wallet2" -Length 3 -Text "Wallet (2)"     -Value 200 -Info "Set the capacity for the Wallet (Upgrade 1)" -Credits "GhostlyDark"
     CreateReduxTextBox -Name "Wallet3" -Length 3 -Text "Wallet (3)"     -Value 500 -Info "Set the capacity for the Wallet (Upgrade 2)" -Credits "GhostlyDark"
     CreateReduxTextBox -Name "Wallet4" -Length 3 -Text "Wallet (4)"     -Value 500 -Info "Set the capacity for the Wallet (Upgrade 3)" -Credits "GhostlyDark" -Warning "This wallet is not obtained through regular gameplay"
 
+
+
     # EQUIPMENT #
+
     CreateReduxGroup -Tag "Gameplay" -Text "Equipment"
     CreateReduxCheckBox -Name "RazorSword" -Text "Permanent Razor Sword" -Info "The Razor Sword won't get destroyed after 100 hits`nYou can also keep the Razor Sword when traveling back in time" -Credits "darklord92"
 
@@ -1286,17 +1360,24 @@ function CreateTabEquipment() {
 function CreateTabSpeedup() {
     
     # SKIP #
+
     CreateReduxGroup    -Tag  "Skip" -Text "Skip"
     CreateReduxCheckBox -Name "BossCutscenes"  -Text "Skip Boss Cutscenes" -Info "Skip the cutscenes that play during bosses and mini-bosses" -Credits "Ported from Rando"
     CreateReduxCheckBox -Name "TatlInterrupts" -Text "Skip Tatl Interrupts" -Info "Skip the cutscenes that are triggered by Tatl"             -Credits "Ported from Rando"
 
+
+
     # SPEEDUP #
+
     CreateReduxGroup    -Tag  "Speedup" -Text "Speedup"
     CreateReduxCheckBox -Name "LabFish" -Text "Faster Lab Fish"   -Info "Only one fish has to be feeded in the Marine Research Lab"                            -Credits "Ported from Rando"
     CreateReduxCheckBox -Name "Dampe"   -Text "Good Dampé RNG"    -Info "Dampe's Digging Game always has two Ghost Flames on the ground and one up the ladder" -Credits "Ported from Rando"
     CreateReduxCheckBox -Name "DogRace" -Text "Good Dog Race RNG" -Info "The Gold Dog always wins the Doggy Racetrack race if you have the Mask of Truth"      -Credits "Ported from Rando"
 
+
+
     # WALLET #
+
     CreateReduxGroup   -Tag  "Speedup" -Text "Bank Deposit Rewards"
     CreateReduxTextBox -Name "Bank1" -Length 4 -Text "First Reward"  -Value 200  -Info "Set the amount of Rupees required to deposit for the first reward"                                                                               -Credits "Ported from Rando"
     CreateReduxTextBox -Name "Bank2" -Length 4 -Text "Second Reward" -Value 1000 -Info "Set the amount of Rupees required to deposit for the second reward"                                                                              -Credits "Ported from Rando"

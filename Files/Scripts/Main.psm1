@@ -13,12 +13,47 @@ function CreateMainDialog() {
     $MainDialog.Add_Shown({ $MainDialog.Activate() })
     $MainDialog.Icon = $Files.icon.main
 
+    # Menu bar
+    $menuBarMain      = New-Object System.Windows.Forms.MenuStrip; $MainDialog.Controls.Add($menuBarMain)
+
+    $menuBarFile      = New-Object System.Windows.Forms.ToolStripMenuItem; $menuBarFile.Text = "File"; $menuBarMain.Items.Add($menuBarFile)
+    $menuBarEdit      = New-Object System.Windows.Forms.ToolStripMenuItem; $menuBarEdit.Text = "Edit"; $menuBarMain.Items.Add($menuBarEdit)
+    $menuBarHelp      = New-Object System.Windows.Forms.ToolStripMenuItem; $menuBarHelp.Text = "Help"; $menuBarMain.Items.Add($menuBarHelp)
+
+    $menuBarChecksum  = New-Object System.Windows.Forms.ToolStripButton; $menuBarChecksum.Text  = "Checksum";           $menuBarFile.DropDownItems.Add($menuBarChecksum)
+    $menuBarExit      = New-Object System.Windows.Forms.ToolStripButton; $menuBarExit.Text      = "Exit";               $menuBarFile.DropDownItems.Add($menuBarExit)
+
+    $menuBarSettings  = New-Object System.Windows.Forms.ToolStripButton; $menuBarSettings.Text  = "Settings";           $menuBarEdit.DropDownItems.Add($menuBarSettings)
+    $menuBarResetAll  = New-Object System.Windows.Forms.ToolStripButton; $menuBarResetAll.Text  = "Reset All Settings"; $menuBarEdit.DropDownItems.Add($menuBarResetAll)
+    $menuBarResetGame = New-Object System.Windows.Forms.ToolStripButton; $menuBarResetGame.Text = "Reset Current Game"; $menuBarEdit.DropDownItems.Add($menuBarResetGame)
+    $menuBarCleanup   = New-Object System.Windows.Forms.ToolStripButton; $menuBarCleanup.Text   = "Cleanup Files";      $menuBarEdit.DropDownItems.Add($menuBarCleanup)
+
+    $menuBarInfo      = New-Object System.Windows.Forms.ToolStripButton; $menuBarInfo.Text      = "Info";               $menuBarHelp.DropDownItems.Add($menuBarInfo)
+    $menuBarLinks     = New-Object System.Windows.Forms.ToolStripButton; $menuBarLinks.Text     = "Links";              $menuBarHelp.DropDownItems.Add($menuBarLinks)
+    $menuBarCredits   = New-Object System.Windows.Forms.ToolStripButton; $menuBarCredits.Text   = "Credits";            $menuBarHelp.DropDownItems.Add($menuBarCredits)
+    $menuBarGameID    = New-Object System.Windows.Forms.ToolStripButton; $menuBarGameID.Text    = "GameID";             $menuBarHelp.DropDownItems.Add($menuBarGameID)
+
+    $menuBarChecksum.Add_Click(  { foreach ($item in $Credits.Sections) { $item.Visible = $False }; $Credits.Sections[4].Visible = $True; $CreditsDialog.ShowDialog() } )
+    $menuBarExit.Add_Click(      { $MainDialog.Close() } )
+
+    $menuBarSettings.Add_Click(  { $SettingsDialog.ShowDialog() } )
+    $menuBarResetAll.Add_Click(  { ResetTool } )
+    $menuBarResetGame.Add_Click( { ResetGame } )
+    $menuBarCleanup.Add_Click(   { CleanupFiles } )
+
+    $menuBarInfo.Add_Click(      { foreach ($item in $Credits.Sections) { $item.Visible = $False }; $Credits.Sections[0].Visible = $True; $CreditsDialog.ShowDialog() } )
+    $menuBarLinks.Add_Click(     { foreach ($item in $Credits.Sections) { $item.Visible = $False }; $Credits.Sections[3].Visible = $True; $CreditsDialog.ShowDialog() } )
+    $menuBarCredits.Add_Click(   { foreach ($item in $Credits.Sections) { $item.Visible = $False }; $Credits.Sections[1].Visible = $True; $CreditsDialog.ShowDialog() } )
+    $menuBarGameID.Add_Click(    { foreach ($item in $Credits.Sections) { $item.Visible = $False }; $Credits.Sections[2].Visible = $True; $CreditsDialog.ShowDialog() } )
+
+
+
     # Create a label to show current mode.
     $global:CurrentModeLabel = CreateLabel -Font $Fonts.Medium -AddTo $MainDialog
     $CurrentModeLabel.AutoSize = $True
 
     # Create a label to show current version.
-    $VersionLabel = CreateLabel -X (DPISize 15) -Y (DPISize 10) -Width (DPISize 120) -Height (DPISize 30) -Text ($Version + "`n(" + $VersionDate + ")") -Font $Fonts.SmallBold -AddTo $MainDialog
+    $VersionLabel = CreateLabel -X (DPISize 15) -Y (DPISize 30) -Width (DPISize 120) -Height (DPISize 30) -Text ($Version + "`n(" + $VersionDate + ")") -Font $Fonts.SmallBold -AddTo $MainDialog
 
     # Create Arrays for groups
     $global:InputPaths = @{}; $global:Patches = @{}; $global:CurrentGame = @{}; $global:VC = @{}; $global:CustomHeader = @{}
@@ -58,7 +93,7 @@ function CreateMainDialog() {
             $InputPaths.GameTextBox.Text = "Select your ROM or Wii VC WAD file..."
             $InputPaths.InjectTextBox.Text = "Select your ROM for injection..."
             $InputPaths.PatchTextBox.Text = "Select your custom patch file..."
-            $global:GameIsSelected = $Patches.Panel.Enabled = $CustomHeader.Panel.Enabled = $InputPaths.ClearGameButton.Enabled = $InputPaths.ApplyInjectButton.Enabled = $InputPaths.ApplyPatchButton.Enabled = $InputPaths.PatchPanel.Visible = $False
+            $global:GameIsSelected = $Patches.Button.Enabled = $CustomHeader.Panel.Enabled = $InputPaths.ClearGameButton.Enabled = $InputPaths.ApplyInjectButton.Enabled = $InputPaths.ApplyPatchButton.Enabled = $InputPaths.PatchPanel.Visible = $False
             if ($IsWiiVC) {
                 SetWiiVCMode $False
                 ChangeGamesList
@@ -207,7 +242,6 @@ function CreateMainDialog() {
 
     # Create a panel to contain everything for patches.
     $Patches.Panel = CreatePanel -Width (DPISize 590) -Height (DPISize 90)
-    $Patches.Panel.Enabled = $False
 
     # Create a groupbox to show the patching buttons.
     $Patches.Group = CreateGroupBox -Width $Patches.Panel.Width -Height $Patches.Panel.Height
@@ -215,8 +249,9 @@ function CreateMainDialog() {
     # Create patch button
     $Patches.Button = CreateButton -X (DPISize 10) -Y (DPISize 45) -Width (DPISize 200) -Height (DPISize 35) -Text "Patch Selected Option"
     $Patches.Button.Add_Click( { MainFunction -Command $GamePatch.command -PatchedFileName $GamePatch.output } )
+    $Patches.Button.Enabled = $False
 
-    # Create patch button
+    # Create editor button
     $Patches.Editor = CreateButton -X ($Patches.Button.right + (DPISize 5)) -Y $Patches.Button.top -Width (DPISize 95) -Height (DPISize 35) -Text "Open Editor" -Info "Open the text editor for adjusting the dialogue of the game"
     $Patches.Editor.Add_Click( {
         if ($global:Editor -eq $null) { CreateEditorDialog -Width 900 -Height 800  }
@@ -301,33 +336,9 @@ function CreateMainDialog() {
 
 
 
-    ##############
-    # Misc Panel #
-    ##############
-
-    # Create a panel to contain everything for other.
-    $global:MiscPanel = CreatePanel -Width (DPISize 590) -Height (DPISize 75)
-
-    # Create a groupbox to show the misc buttons.
-    $global:MiscGroup = CreateGroupBox -Width ($MiscPanel.Width) -Height ($MiscPanel.Height) -Text "Other Buttons"
-
-    # Create a button to show information about the patches.
-    $CreditsButton = CreateButton -X (DPISize 10) -Y (DPISize 25) -Width (DPISize 180) -Height (DPISize 35) -Text "Info / Credits" -Info ("Open the list with credits and info of all of patches involved and those who helped with the " + $ScriptName)
-    $CreditsButton.Add_Click({ $CreditsDialog.ShowDialog() | Out-Null })
-
-    # Create a button to show the global settings panel
-    $SettingsButton = CreateButton -X ($CreditsButton.Right + (DPISize 10)) -Y ($CreditsButton.Top) -Width ($CreditsButton.Width) -Height ($CreditsButton.Height) -Text "Settings" -Info "Open the global settings panel"
-    $SettingsButton.Add_Click({ $SettingsDialog.ShowDialog() | Out-Null })
-
-    # Create a button to close the dialog.
-    $global:ExitButton = CreateButton -X  ($SettingsButton.Right + (DPISize 10)) -Y ($CreditsButton.Top) -Width ($CreditsButton.Width) -Height ($CreditsButton.Height) -Text "Exit" -Info ("Save all settings and close the " + $ScriptName)
-    $ExitButton.Add_Click({ $MainDialog.Close() })
-
-
-
-    ##############
-    # Misc Panel #
-    ##############
+    ################
+    # Status Panel #
+    ################
 
     $global:StatusPanel = CreatePanel -Width (DPISize 625) -Height (DPISize 30)
     $global:StatusGroup = CreateGroupBox -Width (DPISize 590) -Height (DPISize 30)
@@ -350,7 +361,6 @@ function InitializeEvents() {
         $Settings["Core"][$this.Name] = $this.SelectedIndex
         if ($this.Text -ne $GameType.title -or $GameType.console -like "*All*") {
             ChangeGameMode
-            ChangeRevList
             SetVCPanel
             SetMainScreenSize
         }
