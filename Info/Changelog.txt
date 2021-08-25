@@ -1,5 +1,6 @@
 v14.3.1
 - Fixed Widescreen for MM when using Redux
+- Fixed the "Skybox" option for the OoT File Select
 
 v14.3.0
 - Added "No HUD" option for OoT

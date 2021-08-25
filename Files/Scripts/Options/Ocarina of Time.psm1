@@ -291,7 +291,7 @@ function ByteOptions() {
 
     # MENU #
 
-    if (IsIndex -Elem $Redux.Menu.Skybox -Index 4 -Not)   { ChangeBytes -Offset "B67722" -Values $Redux.FileSelect.Skybox.SelectedIndex }
+    if (IsIndex -Elem $Redux.Menu.Skybox -Index 4 -Not)   { ChangeBytes -Offset "B67722" -Values $Redux.Menu.Skybox.SelectedIndex }
 
 
 
