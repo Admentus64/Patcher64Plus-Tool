@@ -1,3 +1,6 @@
+v14.3.1
+- Fixed Widescreen for MM when using Redux
+
 v14.3.0
 - Added "No HUD" option for OoT
 - Added "Button Size" options for OoT and MM
