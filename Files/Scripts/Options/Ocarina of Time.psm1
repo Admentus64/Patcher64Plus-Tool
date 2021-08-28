@@ -1261,7 +1261,7 @@ function CreateOptions() {
 function AdjustGUI() {
     
     EnableElem $Redux.Graphics.Widescreen    -Active (!$Redux.Graphics.WidescreenAlt.Checked -and !$Patches.Redux.Checked -and !$ISwiiVC)
-    EnableElem ($Redux.Graphics.WidescreenAlt) -Active (!$Redux.Graphics.Widescreen.Checked)
+    EnableElem $Redux.Graphics.WidescreenAlt -Active (!$Redux.Graphics.Widescreen.Checked)
 
     if ($Redux.Graphics.Widescreen.Enabled -eq $False -and $Redux.Graphics.WidescreenAlt.Enabled -eq $False) { EnableElem $Redux.Graphics.WidescreenAlt -Active $True }
     if (!$Redux.Graphics.Widescreen.Enabled)      { $Redux.Graphics.Widescreen.Checked    = $False }

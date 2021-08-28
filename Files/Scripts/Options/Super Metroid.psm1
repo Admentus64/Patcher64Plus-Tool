@@ -1,6 +1,6 @@
 function PatchOptions() {
     
-    if (IsChecked $Redux.Graphics.Widescreen)           { ApplyPatch -Patch "Compressed\widescreen.ips" }
+    if (IsChecked $Redux.Graphics.Widescreen)           { ApplyPatch -Patch "Compressed\widescreen.ips"; Copy-Item -LiteralPath ($GameFiles.compressed + "\widescreen.bso") -Destination ($ROMFile.Patched.replace($ROMFile.Extension, ".bso")) -Force }
     if (IsChecked $Redux.Graphics.RedesignedSamus)      { ApplyPatch -Patch "Compressed\redesigned_samus.ips" }
 
     if (IsChecked $Redux.Gameplay.FixedUnlockedDoors)   { ApplyPatch -Patch "Compressed\fixed_tourian_unlocked_doors.ips" }

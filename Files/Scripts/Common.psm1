@@ -251,6 +251,9 @@ function SetMainScreenSize() {
 #==============================================================================================================================================================================================
 function ChangeGameMode() {
     
+    if (IsSet $GameRev.script)   { if (Get-Module -Name $GameRev.script)   { Remove-Module -Name $GameRev.script } }
+    if (IsSet $GameType.mode)    { if (Get-Module -Name $GameType.mode)    { Remove-Module -Name $GameType.mode  } }
+
     if ($GameType.save -gt 0) { Out-IniFile -FilePath (GetGameSettingsFile) -InputObject $GameSettings | Out-Null }
 
     foreach ($item in $Files.json.games) {
@@ -321,10 +324,10 @@ function ChangeGameMode() {
 #==============================================================================================================================================================================================
 function ChangeGameRev() {
     
-    if (!(IsSet $GameType)) { return }
-
     if (IsSet $GameRev.script)   { if (Get-Module -Name $GameRev.script)   { Remove-Module -Name $GameRev.script } }
-    else                         { if (Get-Module -Name $GameType.mode)    { Remove-Module -Name $GameType.mode  } }
+    if (IsSet $GameType.mode)    { if (Get-Module -Name $GameType.mode)    { Remove-Module -Name $GameType.mode  } }
+
+    if (!(IsSet $GameType)) { return }
 
     $global:GameRev = @{}
     foreach ($item in $GameType.version) {

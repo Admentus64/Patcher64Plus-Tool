@@ -1,3 +1,9 @@
+v14.3.2
+- Updated some options for Super Metroid Redux
+- Fixed "Debug Item Select" option for OoT
+- Fixed issue with unloading "Additional Options" from the previous selected game
+- Removed "Multiplayer" (N64 mode only), "Star Road Multiplayer" and "Ocarina of Time" patches for SM64
+
 v14.3.1
 - Fixed Widescreen for MM when using Redux
 - Fixed the "Skybox" option for the OoT File Select
