@@ -167,7 +167,9 @@ function SetFileParameters() {
 
     $Files.mm.message_credits               = $Paths.Games + "\Majora's Mask\Binaries\Message\credits.bin"
     $Files.mm.message_razor_sword_1         = $Paths.Games + "\Majora's Mask\Binaries\Message\razor_sword_1.bin"
-    $Files.mm.message_razorsword_2          = $Paths.Games + "\Majora's Mask\Binaries\Message\razor_sword_2.bin"
+    $Files.mm.message_razor_sword_2         = $Paths.Games + "\Majora's Mask\Binaries\Message\razor_sword_2.bin"
+    $Files.mm.message_razor_sword_3         = $Paths.Games + "\Majora's Mask\Binaries\Message\razor_sword_3.bin"
+    $Files.mm.message_razor_sword_4         = $Paths.Games + "\Majora's Mask\Binaries\Message\razor_sword_4.bin"
     $Files.mm.message_restore               = $Paths.Games + "\Majora's Mask\Binaries\Message\restore.tbl"
 
     $Files.mm.southern_swamp_cleared        = CheckPatchExtension ($Paths.Games + "\Majora's Mask\Export\Southern Swamp\southern_swamp_cleared_scene")

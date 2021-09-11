@@ -79,6 +79,7 @@
 }, {
 	"title"				: "The Legend of Zelda: Master of Time (v1.0.9)",
 	"command"			: "Force Downgrade",
+	"options"			: 1,
 	"vc_title"			: "Zelda: Master of Time",
 	"vc_gameID"			: "NAC3",
 	"patch"				: "Compressed\\master_of_time.bps",

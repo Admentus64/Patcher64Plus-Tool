@@ -1,3 +1,10 @@
+v14.3.3
+- Added new "Ammo Usage" option for MM
+- Added new "Boomerang Fix" option for OoT
+- Changed English script for "Permanent Razor Sword"
+- Fixed incorrect description for the "Magic Usage" codes, and added a new 8x option
+- Fixed Dungeon Map display not centered for Widescreen Wii VC mode for MM
+
 v14.3.2
 - Updated some options for Super Metroid Redux
 - Fixed "Debug Item Select" option for OoT

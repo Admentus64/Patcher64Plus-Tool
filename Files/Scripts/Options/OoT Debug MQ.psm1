@@ -47,6 +47,7 @@ function ByteOptions() {
     # FIXES #
 
     if (IsChecked $Redux.DebugFix.SubscreenDelay)          { ChangeBytes -Offset "B36B6B"  -Values "03"; ChangeBytes -Offset "B3A994" -Values "00 00 00 00" }
+    if (IsChecked $Redux.DebugFix.BoomerangFix)            { ChangeBytes -Offset "F6A718"  -Values "FC 41 C7 FF FF FF FE 38" }
     if (IsChecked $Redux.DebugFix.QuiverIcon)              { ChangeBytes -Offset "8C8EF2"  -Values "4C"; ChangeBytes -Offset "901C4E" -Values "4C"; ChangeBytes -Offset "93DD56" -Values "4C" }
     if (IsChecked $Redux.DebugFix.CreditsCrash)            { ChangeBytes -Offset "B33FF8"  -Values "10 00" }
     if (IsChecked $Redux.DebugFix.CenterNaviPrompt)        { ChangeBytes -Offset "B884E3"  -Values "F6" }
@@ -116,6 +117,7 @@ function CreateOptions() {
 
     CreateReduxGroup    -Tag  "DebugFix" -Text "Fixes"
     CreateReduxCheckBox -Name "SubscreenDelay"        -Text "Subscreen Delay "          -Checked -Info "Removes the delay when opening the Pause Screen, which fixes crash issues on emulator when ROM is decompressed" -Credits "ChriisTiian"
+    CreateReduxCheckBox -Name "BoomerangFix"          -Text "Boomerang Fix"                      -Info "Fix the gem color on the thrown boomerang"                                                                      -Credits "Aria"
     CreateReduxCheckBox -Name "QuiverIcon"            -Text "Quiver Icon"                        -Info "Properly display the Largest Quiver icon in dialogue when obtaining it"                                         -Credits "GhostlyDark"
     CreateReduxCheckBox -Name "CreditsCrash"          -Text "Credits Crash"             -Checked -Info "Use the ingame scene for playing the credits rather than the prerendered credits video"                         -Credits "ChriisTiian"
     CreateReduxCheckBox -Name "CenterNaviPrompt"      -Text "Center Navi Prompt"                 -Info 'Centers the "Navi" prompt shown in the C-Up button'                                                             -Credits "Ported by GhostlyDark"

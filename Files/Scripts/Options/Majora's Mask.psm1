@@ -113,6 +113,7 @@ function ByteOptions() {
             ChangeBytes -Offset "B9F573" -Values "18" # Dungeon Map - Offscreen Current Floor (14 -> 21)
             ChangeBytes -Offset "B9F4BB" -Values "7B" # Dungeon Map - Current Floor (6B -> 9F)
             ChangeBytes -Offset "B9F4CB" -Values "5F" # Dungeon Map - Current Floor (4F -> 83)
+            ChangeBytes -Offset "B9F88B" -Values "80" # Dungeon Map - Map Display (90 -> C4)
             
 
             ChangeBytes -Offset "C98467" -Values "4F" # Dungeon Map - Link Icon (3E -> 72)
@@ -305,8 +306,12 @@ function ByteOptions() {
         }
     }
 
-    if     (IsText -Elem $Redux.Hero.MagicUsage -Compare "2x Magic Usage")  { ChangeBytes -Offset "BAC306" -Values "2C","40" }
-    elseif (IsText -Elem $Redux.Hero.MagicUsage -Compare "3x Magic Usage")  { ChangeBytes -Offset "BAC306" -Values "2C","80" }
+    if     (IsText -Elem $Redux.Hero.MagicUsage -Compare "2x Magic Usage")   { ChangeBytes -Offset "BAC306" -Values "2C","40" }
+    elseif (IsText -Elem $Redux.Hero.MagicUsage -Compare "4x Magic Usage")   { ChangeBytes -Offset "BAC306" -Values "2C","80" }
+    elseif (IsText -Elem $Redux.Hero.MagicUsage -Compare "8x Magic Usage")   { ChangeBytes -Offset "BAC306" -Values "2C","C0" }
+    if     (IsText -Elem $Redux.Hero.MagicUsage -Compare "2x Item Usage")    { ChangeBytes -Offset "BABF5E" -Values "2C","40" }
+    elseif (IsText -Elem $Redux.Hero.MagicUsage -Compare "4x Item Usage")    { ChangeBytes -Offset "BABF5E" -Values "2C","80" }
+    elseif (IsText -Elem $Redux.Hero.MagicUsage -Compare "8x Item Usage")    { ChangeBytes -Offset "BABF5E" -Values "2C","C0" }
 
 
     # Monsters
@@ -774,17 +779,10 @@ function ByteLanguageOptions() {
     }
 
     if (IsLanguage -Elem $Redux.Gameplay.RazorSword) {
-        $Offset = SearchBytes -File $File -Values "54 68 69 73 20 6E 65 77 2C 20 73 68 61 72 70 65 72 20 62 6C 61 64 65"
-        ChangeBytes -File $File -Offset ( Get24Bit ( (GetDecimal $Offset) + (GetDecimal "38") ) ) -Values "61 73 20 6D 75 63 68 11 79 6F 75 20 77 61 6E 74 20"
-
-        $Offset = SearchBytes -File $File -Values "54 68 65 20 4B 6F 6B 69 72 69 20 53 77 6F 72 64 20 72 65 66 6F 72 67 65 64"
-        ChangeBytes -File $File -Offset ( Get24Bit ( (GetDecimal $Offset) + (GetDecimal "30") ) ) -Values "61 73 20 6D 75 63 68 20 79 6F 75 20 77 61 6E 74 2E 20"
-
-        $Offset = SearchBytes -File $File -Values "4B 65 65 70 20 69 6E 20 6D 69 6E 64 20 74 68 61 74"
-        PatchBytes -File $File -Offset $Offset -Patch "Message\razor_sword_1.bin"
-
-        $Offset = SearchBytes -File $File -Values "4E 6F 77 20 6B 65 65 70 20 69 6E 20 6D 69 6E 64 20 74 68 61 74"
-        PatchBytes -File $File -Offset $Offset -Patch "Message\razor_sword_2.bin"
+        $Offset = SearchBytes -File $File -Values "4B 65 65 70 20 69 6E 20 6D 69 6E 64 20 74 68 61 74 20 61 66 74 65 72";          PatchBytes -File $File -Offset $Offset -Patch "Message\razor_sword_1.bin"
+        $Offset = SearchBytes -File $File -Values "4E 6F 77 20 6B 65 65 70 20 69 6E 20 6D 69 6E 64 20 74 68 61 74";                PatchBytes -File $File -Offset $Offset -Patch "Message\razor_sword_2.bin"
+        $Offset = SearchBytes -File $File -Values "54 68 69 73 20 6E 65 77 2C 20 73 68 61 72 70 65 72 20 62 6C 61 64 65";          PatchBytes -File $File -Offset $Offset -Patch "Message\razor_sword_3.bin"
+        $Offset = SearchBytes -File $File -Values "54 68 65 20 4B 6F 6B 69 72 69 20 53 77 6F 72 64 20 72 65 66 6F 72 67 65 64";    PatchBytes -File $File -Offset $Offset -Patch "Message\razor_sword_4.bin"
     }
 
     if ( (IsChecked $Redux.Script.RenameTatl)) {
@@ -1125,23 +1123,25 @@ function CreateTabDifficulty() {
     # HERO MODE #
 
     CreateReduxGroup    -Tag  "Hero" -Text "Hero Mode"
-    CreateReduxComboBox -Name "Damage"     -Column 1 -Row 1 -Shift 10 -Text "Damage"       -Items @("1x Damage", "2x Damage", "4x Damage", "8x Damage", "OHKO Mode") -Info "Set the amount of damage you receive`nOHKO Mode = You die in one hit" -Credits "Admentus"
-    CreateReduxComboBox -Name "Recovery"   -Column 3 -Row 1 -Shift 10 -Text "Recovery"     -Items @("1x Recovery", "1/2x Recovery", "1/4x Recovery", "0x Recovery")  -Info "Set the amount health you recovery from Recovery Hearts"              -Credits "Admentus"
-    CreateReduxComboBox -Name "MagicUsage" -Column 5 -Row 1 -Shift 10 -Text "Magic Usage"  -Items @("1x Magic Usage", "2x Magic Usage", "3x Magic Usage")            -Info "Set the amount of times magic is consumed at"                         -Credits "Admentus"
-  # CreateReduxComboBox -Name "MonsterHP"  -Column 1 -Row 2 -Shift 10 -Text "Monster HP"   -Items @("1x Monster HP", "2x Monster HP", "3x Monster HP")               -Info "Set the amount of health for monsters"                                -Credits "Admentus" -Warning "Most enemies are missing"
-  # CreateReduxComboBox -Name "MiniBossHP" -Column 3 -Row 2 -Shift 10 -Text "Mini-Boss HP" -Items @("1x Mini-Boss HP", "2x Mini-Boss HP", "3x Mini-Boss HP")         -Info "Set the amount of health for elite monsters and mini-bosses"          -Credits "Admentus" -Warning "Mini-bosses are missing"
-    CreateReduxComboBox -Name "BossHP"     -Column 1 -Row 2 -Shift 10 -Text "Boss HP"      -Items @("1x Boss HP", "2x Boss HP", "3x Boss HP")                        -Info "Set the amount of health for bosses"                                  -Credits "Admentus" -Warning "Goht (phases 3) and Gyorg (phase 2) are missing"
+    CreateReduxComboBox -Name "Damage"     -Column 1 -Row 1 -Shift 10 -Text "Damage"       -Items @("1x Damage", "2x Damage", "4x Damage", "8x Damage", "OHKO Mode")        -Info "Set the amount of damage you receive`nOHKO Mode = You die in one hit" -Credits "Admentus"
+    CreateReduxComboBox -Name "Recovery"   -Column 3 -Row 1 -Shift 10 -Text "Recovery"     -Items @("1x Recovery", "1/2x Recovery", "1/4x Recovery", "0x Recovery")         -Info "Set the amount health you recovery from Recovery Hearts"              -Credits "Admentus"
+    CreateReduxComboBox -Name "MagicUsage" -Column 5 -Row 1 -Shift 10 -Text "Magic Usage"  -Items @("1x Magic Usage", "2x Magic Usage", "4x Magic Usage", "8x Magic Usage") -Info "Set the amount of times magic is consumed at"                         -Credits "Admentus"
+  # CreateReduxComboBox -Name "MonsterHP"  -Column 1 -Row 2 -Shift 10 -Text "Monster HP"   -Items @("1x Monster HP", "2x Monster HP", "3x Monster HP")                      -Info "Set the amount of health for monsters"                                -Credits "Admentus" -Warning "Most enemies are missing"
+  # CreateReduxComboBox -Name "MiniBossHP" -Column 3 -Row 2 -Shift 10 -Text "Mini-Boss HP" -Items @("1x Mini-Boss HP", "2x Mini-Boss HP", "3x Mini-Boss HP")                -Info "Set the amount of health for elite monsters and mini-bosses"          -Credits "Admentus" -Warning "Mini-bosses are missing"
+    CreateReduxComboBox -Name "BossHP"     -Column 1 -Row 2 -Shift 10 -Text "Boss HP"      -Items @("1x Boss HP", "2x Boss HP", "3x Boss HP")                               -Info "Set the amount of health for bosses"                                  -Credits "Admentus" -Warning "Goht (phases 3) and Gyorg (phase 2) are missing"
     
     $Redux.Hero.Damage.Add_SelectedIndexChanged({ EnableElem -Elem $Redux.Hero.Recovery -Active ($this.Text -ne "OHKO Mode") })
     EnableElem -Elem $Redux.Hero.Recovery -Active ($Redux.Hero.Damage.Text -ne "OHKO Mode")
 
+    CreateReduxComboBox -Name "Ammo"             -Column 1 -Row 3 -Shift 10 -Text "Ammo Usage" -Items @("1x Ammo Usage", "2x Ammo Usage", "4x Ammo Usage", "8x Ammo Usage") -Info "Set the amount of times ammo is consumed at" -Credits "Admentus"
+
     if ($Settings.Debug.LiteGUI -eq $True) { return }
 
-    CreateReduxComboBox -Name "DamageEffect"     -Column 1 -Row 3 -Shift 10 -Text "Damage Effect" -Items @("Default", "Burn", "Freeze", "Shock", "Knockdown") -Info "Add an effect when damaged"                 -Credits "Ported from Rando"
-    CreateReduxComboBox -Name "ClockSpeed"       -Column 3 -Row 3 -Shift 10 -Text "Clock Speed"   -Items @("Default", "1/3", "2/3", "2x", "3x", "6x")         -Info "Set the speed at which time is progressing" -Credits "Ported from Rando"
+    CreateReduxComboBox -Name "DamageEffect"     -Column 3 -Row 3 -Shift 10 -Text "Damage Effect" -Items @("Default", "Burn", "Freeze", "Shock", "Knockdown") -Info "Add an effect when damaged"                 -Credits "Ported from Rando"
+    CreateReduxComboBox -Name "ClockSpeed"       -Column 5 -Row 3 -Shift 10 -Text "Clock Speed"   -Items @("Default", "1/3", "2/3", "2x", "3x", "6x")         -Info "Set the speed at which time is progressing" -Credits "Ported from Rando"
     CreateReduxCheckBox -Name "MasterQuest"      -Column 1 -Row 4 -Text "Master Quest"         -Info "Use all areas and dungeons from the Master Quest ROM hack`nThis is for advanced players who like a higher challenge`nThe structure of the walkthrough is completely re-arranged" -Credits "Admentus (ported) & DeathBasket (ROM hack)"
-    CreateReduxCheckBox -Name "PalaceRoute"      -Column 2 -Row 4 -Text "Restore Palace Route" -Info "Restore the route to the Bean Seller within the Deku Palace as seen in the Japanese release" -Credits "ShadowOne"
-    CreateReduxCheckBox -Name "DeathIsMoonCrash" -Column 3 -Row 4 -Text "Death is Moon Crash"   -Info "If you die, the moon will crash`nThere are no continues anymore"                                                  -Credits "Ported from Rando"
+    CreateReduxCheckBox -Name "PalaceRoute"      -Column 2 -Row 4 -Text "Restore Palace Route" -Info "Restore the route to the Bean Seller within the Deku Palace as seen in the Japanese release"               -Credits "ShadowOne"
+    CreateReduxCheckBox -Name "DeathIsMoonCrash" -Column 3 -Row 4 -Text "Death is Moon Crash"   -Info "If you die, the moon will crash`nThere are no continues anymore"                                          -Credits "Ported from Rando"
 
 
 
