@@ -65,7 +65,7 @@ function CreateMainDialog() {
     #############
 
     # Create the panel that holds the game path
-    $InputPaths.GamePanel = CreatePanel -Width (DPISize 590) -Height (DPISize 50)
+    $InputPaths.GamePanel = CreatePanel -X (DPISize 10) -Width (DPISize 590) -Height (DPISize 50)
 
     # Create the groupbox that holds the WAD path
     $InputPaths.GameGroup = CreateGroupBox -Width $InputPaths.GamePanel.Width -Height $InputPaths.GamePanel.Height -Text "Game Path"
@@ -110,7 +110,7 @@ function CreateMainDialog() {
     ###############
 
     # Create the panel that holds the inject path
-    $InputPaths.InjectPanel = CreatePanel -Width (DPISize 590) -Height (DPISize 50)
+    $InputPaths.InjectPanel = CreatePanel -X (DPISize 10) -Width (DPISize 590) -Height (DPISize 50)
 
     # Create the groupbox that holds the ROM path
     $InputPaths.InjectGroup = CreateGroupBox -Width $InputPaths.InjectPanel.Width -Heigh $InputPaths.InjectPanel.Height -Text "Inject ROM Path"
@@ -140,7 +140,7 @@ function CreateMainDialog() {
     ##############
     
     # Create the panel that holds the patch path.
-    $InputPaths.PatchPanel = CreatePanel -Width (DPISize 590) -Height (DPISize 50)
+    $InputPaths.PatchPanel = CreatePanel -X (DPISize 10) -Width (DPISize 590) -Height (DPISize 50)
     $InputPaths.PatchPanel.Visible = $False
     
     # Create the groupbox that holds the BPS path.
@@ -247,7 +247,8 @@ function CreateMainDialog() {
     $Patches.Group = CreateGroupBox -Width $Patches.Panel.Width -Height $Patches.Panel.Height
 
     # Create patch button
-    $Patches.Button = CreateButton -X (DPISize 10) -Y (DPISize 45) -Width (DPISize 200) -Height (DPISize 35) -Text "Patch Selected Option"
+    $Patches.Button = CreateButton -X (DPISize 10) -Y (DPISize 45) -Width (DPISize 200) -Height (DPISize 35) -Text "Patch Selected Options"
+    $Patches.Button.Font = $Fonts.SmallBold
     $Patches.Button.Add_Click( { MainFunction -Command $GamePatch.command -PatchedFileName $GamePatch.output } )
     $Patches.Button.Enabled = $False
 

@@ -1,3 +1,15 @@
+v14.3.4
+- Updated Smash Remix to v1.0.0
+- Updated patches for Super Metroid
+- Updated Inventory Editor translations for OoT and MM
+- Removed Ocarina of Time 3D Link models for OoT
+- Removed Expand Memory for incompatible N64 titles
+- Changed Majoras's Mask Eyes option for OoT into a custom model option instead of a checkbox
+- Changed "Patch Selected Option" text to plural in bold
+- Changed the "Inject ROM Path" and "Custom Patch Path" textfields to Free Game Selection only
+- Fixed issue with the "Majora's Mask Eyes" option for OoT still getting patched it when disabled but checked
+- Fixed MD5 Checksum for Super Metroid in the GameID referral
+
 v14.3.3
 - Added new "Ammo Usage" option for MM
 - Added new "Boomerang Fix" option for OoT

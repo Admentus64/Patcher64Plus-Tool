@@ -3,23 +3,27 @@
 		"name"		: "Original",
 		"author"	: "Nintendo"
 	}, {
+		"name"		: "Original - Majora's Mask Eyes",
+		"author"	: "Nintendo",
+		"porter"	: "GhostlyDark"
+	}, {
+		"name"		: "Majora's Mask",
+		"author"	: "Nintendo",
+		"porter"	: "The3DDude"
+	}, {
 		"name"		: "Kafei",
 		"author"	: "Nintendo & Malon Rose",
 		"url"		: "https://youtube.com/c/MalonRose{0}https://www.patreon.com/MalonRose",
 		"deku_shield"	: 0,
 		"hylian_shield"	: 0
 	}, {
-		"name"		: "Majora's Mask",
-		"author"	: "Nintendo",
-		"porter"	: "The3DDude"
-	}, {
 		"name"		: "Twilight Princess",
 		"author"	: "Skilarbabcock",
 		"url"		: "https://www.youtube.com/user/skilarbabcock"
 	}, {
-		"name"		: "Ocarina of Time 3D",
-		"author"	: "Skilarbabcock",
-		"url"		: "https://www.youtube.com/user/skilarbabcock",
+		"name"		: "A Link to the Past",
+		"author"	: "Oni 3D-Arts",
+		"url"		: "https://github.com/hylian-modding/Z64-CustomPlayerModels",
 		"deku_shield"	: 0
 	}, {
 		"name"		: "Happy Mask Salesman",
@@ -64,6 +68,11 @@
 		"name"		: "Original",
 		"author"	: "Nintendo"
 	}, {
+		"name"		: "Majora's Mask",
+		"author"	: "Skilarbabcock",
+		"url"		: "https://www.youtube.com/user/skilarbabcock",
+		"hylian_shield"	: 0
+	}, {
 		"name"		: "Kafei",
 		"author"	: "Malon Rose",
 		"url"		: "https://youtube.com/c/MalonRose{0}https://www.patreon.com/MalonRose",
@@ -82,24 +91,19 @@
 		"author"	: "Nintendo",
 		"porter"	: "CrookedPoe"
 	}, {
-		"name"		: "Majora's Mask",
-		"author"	: "Skilarbabcock",
-		"url"		: "https://www.youtube.com/user/skilarbabcock",
-		"hylian_shield"	: 0
-	}, {
 		"name"		: "Twilight Princess",
 		"author"	: "Skilarbabcock",
 		"url"		: "https://www.youtube.com/user/skilarbabcock"
 	}, {
-		"name"		: "Ocarina of Time 3D",
+		"name"		: "Link's Awakening",
 		"author"	: "Skilarbabcock",
 		"url"		: "https://www.youtube.com/user/skilarbabcock",
 		"hylian_shield"	: 0,
 		"mirror_shield"	: 0
 	}, {
-		"name"		: "Link's Awakening",
-		"author"	: "Skilarbabcock",
-		"url"		: "https://www.youtube.com/user/skilarbabcock",
+		"name"		: "A Link to the Past",
+		"author"	: "Oni 3D-Arts",
+		"url"		: "https://github.com/hylian-modding/Z64-CustomPlayerModels",
 		"hylian_shield"	: 0,
 		"mirror_shield"	: 0
 	}, {

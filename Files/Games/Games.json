@@ -162,6 +162,7 @@
 	"save"			: 1,
 	"editor"		: 0,
 	"support_vc"		: 1,
+	"expansion_pak"		: 0,
 	"console"		: "N64",
 	"version" : [ {
 		"hash"		: "2A0A8ACB61538235BC1094D297FB6556",
@@ -290,6 +291,7 @@
 	"mode"			: "Super Smash Bros",
 	"save"			: 1,
 	"support_vc"		: 1,
+	"expansion_pak"		: 0,
 	"console"		: "N64",
 	"version" : [ {
 		"hash"		: "F7C52568A31AADF26E14DC2B6416B2ED",
@@ -307,6 +309,7 @@
 	"mode"			: "Mario Kart 64",
 	"save"			: 1,
 	"support_vc"		: 1,
+	"expansion_pak"		: 0,
 	"console"		: "N64",
 	"version" : [ {
 		"hash"		: "3A67D9986F54EB282924FCA4CD5F6DFF",
@@ -473,6 +476,8 @@
 	"console"		: "All",
 	"patches"		: 1,
 	"patch_vc"		: 1,
+	"inject"		: 1,
+	"custom_patch"		: 1,
 	"console"		: "All",
 	"checksum"		: 0
 } ]

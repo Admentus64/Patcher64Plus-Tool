@@ -2,7 +2,7 @@
 	"title"		: "Super Smash Bros.",
 	"tooltip"	: "The regular Super Smash Bros. experience{0}- Supported: Rev 0 (US)"
 }, {
-	"title"		: "Smash Remix (v0.9.7)",
+	"title"		: "Smash Remix (v1.0.0)",
 	"console"	: "Native",
 	"patch"		: "Compressed\\remix.bps",
 	"output"	: "_remix_patched",

@@ -195,6 +195,13 @@ function SetMainScreenSize() {
     if ($IsWiiVC)   { $CustomHeader.Group.Text = " Custom Channel Title and GameID " }
     else            { $CustomHeader.Group.Text = " Custom Game Title and GameID " }
 
+    # Set Paths Panels Visibility and sizes
+    if ($GameType.inject -eq 1 -and $IsWiiVC)   { $InputPaths.InjectPanel.Visible = $True; $InputPaths.InjectPanel.Height = (DPISize 50) }   else   { $InputPaths.InjectPanel.Visible = $False; $InputPaths.InjectPanel.Height = 0 }
+    if ($GameType.custom_patch -eq 1)           { $InputPaths.PatchPanel.Visible  = $True; $InputPaths.PatchPanel.Height  = (DPISize 50) }   else   { $InputPaths.PatchPanel.Visible  = $False; $InputPaths.PatchPanel.Height  = 0 }
+    $InputPaths.GamePanel.Top   = (DPISize 70)
+    $InputPaths.InjectPanel.Top = $InputPaths.GamePanel.Bottom   + ((DPISize 15) * [boolean]$InputPaths.InjectPanel.Visible)
+    $InputPaths.PatchPanel.Top  = $InputPaths.InjectPanel.Bottom + ((DPISize 15) * [boolean]$InputPaths.PatchPanel.Visible)
+
     # Custom Header Panel Visibility
     $CustomHeader.Panel.Visible     = ($GameConsole.rom_title -gt 0) -or ($GameConsole.rom_gameID -gt 0)  -or $IsWiiVC
     $CustomHeader.ROMTitle.Visible  = $CustomHeader.ROMTitleLabel.Visible  = ($GameConsole.rom_title -gt 0)  -and !$IsWiiVC
@@ -203,14 +210,6 @@ function SetMainScreenSize() {
     $CustomHeader.Region.Visible    = $CustomHeader.RegionLabel.Visible    = $CustomHeader.EnableRegion.Visible = $CustomHeader.EnableRegionLabel.Visible = ($GameConsole.rom_gameID -eq 2)
     $InputPaths.InjectPanel.Visible = $IsWiiVC
     $VC.Panel.Visible = $IsWiiVC
-
-    # Set Input Paths Sizes
-    $InputPaths.GamePanel.Location    = $InputPaths.InjectPanel.Location = $InputPaths.PatchPanel.Location = DPISize (New-Object System.Drawing.Size(10, 70))
-    if ($IsWiiVC) {
-        $InputPaths.InjectPanel.Top   = $InputPaths.GamePanel.Bottom   + (DPISize 15)
-        $InputPaths.PatchPanel.Top    = $InputPaths.InjectPanel.Bottom + (DPISize 15)
-    }
-    else { $InputPaths.PatchPanel.Top = $InputPaths.GamePanel.Bottom   + (DPISize 15) }
 
     # Positioning
     if (IsSet $GamePath)   { $CurrentGame.Panel.Location = New-Object System.Drawing.Size((DPISize 10), ($InputPaths.PatchPanel.Bottom + (DPISize 5))) }
@@ -384,10 +383,10 @@ function SetVCPanel() {
     EnableElem -Elem @($VC.ActionsLabel, $VC.ExtractROMButton) -Active $True -Hide
     
     # Enable VC panel visiblity
-    if ($GameConsole.t64 -eq 1)             { EnableElem -Elem @($VC.OptionsLabel, $VC.RemoveT64,     $VC.RemoveT64Label)                              -Active $True -Hide }
-    if ($GameConsole.expand_memory -eq 1)   { EnableElem -Elem @($VC.OptionsLabel, $VC.ExpandMemory,  $VC.ExpandMemoryLabel)                           -Active $True -Hide }
-    if ($GameConsole.remove_filter -eq 1)   { EnableElem -Elem @($VC.OptionsLabel, $VC.RemoveFilter,  $VC.RemoveFilterLabel)                           -Active $True -Hide }
-    if (IsSet $Files.json.controls)         { EnableElem -Elem @($VC.OptionsLabel, $VC.RemapControls, $VC.RemapControlsLabel, $VC.RemapControlsButton) -Active $True -Hide }
+    if ($GameConsole.t64 -eq 1)                                                { EnableElem -Elem @($VC.OptionsLabel, $VC.RemoveT64,     $VC.RemoveT64Label)                              -Active $True -Hide }
+    if ($GameConsole.expand_memory -eq 1 -and $GameType.expansion_pak -ne 0)   { EnableElem -Elem @($VC.OptionsLabel, $VC.ExpandMemory,  $VC.ExpandMemoryLabel)                           -Active $True -Hide }
+    if ($GameConsole.remove_filter -eq 1)                                      { EnableElem -Elem @($VC.OptionsLabel, $VC.RemoveFilter,  $VC.RemoveFilterLabel)                           -Active $True -Hide }
+    if (IsSet $Files.json.controls)                                            { EnableElem -Elem @($VC.OptionsLabel, $VC.RemapControls, $VC.RemapControlsLabel, $VC.RemapControlsButton) -Active $True -Hide }
     $VC.RemapControlsButton.Enabled = $VC.RemapControls.checked -and $VC.RemapControls.Active
 
 }

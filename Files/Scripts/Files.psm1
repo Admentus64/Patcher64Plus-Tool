@@ -63,7 +63,6 @@ function SetFileParameters() {
     $Files.oot.master_quest                 = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\master_quest")
     $Files.oot.mm_pause_screen              = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\mm_pause_screen")
     $Files.oot.harder_child_bosses          = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\harder_child_bosses")
-    $Files.oot.eyes_mm                      = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\eyes_mm")
     $Files.oot.feminine_animations          = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\feminine_animations")
     $Files.oot.hide_equipment               = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\hide_equipment")
 

@@ -6,8 +6,8 @@ function ByteOptions() {
     if (IsChecked $Redux.Debug.DefaultZTargeting)       { ChangeBytes -Offset "BA16AD"  -Values "01" }
     if (IsChecked $Redux.Debug.ForceHiresModel)         { ChangeBytes -Offset "C194F3"  -Values "00" }
     if (IsChecked $Redux.Debug.CowNoseRing)             { ChangeBytes -Offset "D96C58"  -Values "00 00" }
-    if (IsChecked $Redux.Debug.TranslateItemSelect)     { ExportAndPatch -Path "debug_item_select"  -Offset "BFE3F4" -Length "C8" }
-    if (IsChecked $Redux.Debug.TranslateMapSelect)      { ExportAndPatch -Path "debug_map_select_3" -Offset "BD1558" -Length "F16" }
+    if (IsChecked $Redux.Debug.TranslateItemSelect)     { ExportAndPatch -Path "inventory_editor" -Offset "BFE3F4" -Length "C8" }
+    if (IsChecked $Redux.Debug.TranslateMapSelect)      { ExportAndPatch -Path "debug_map_select" -Offset "BD1558" -Length "F16" }
 
 
 

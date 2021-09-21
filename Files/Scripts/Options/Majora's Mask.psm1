@@ -77,7 +77,7 @@ function ByteOptions() {
 
     if (IsChecked $Redux.Other.DebugMapSelect) {
         # ChangeBytes -Offset "C53F44" -Values "00 C7 AD F0 00 C7 E2 D0 80 80 09 10 80 80 3D F0 00 00 00 00 80 80 1B 4C 80 80 1B 28"
-        ExportAndPatch -Path "debug_map_select" -Offset "C7C870" -Length "13C8"
+        ExportAndPatch -Path "map_select" -Offset "C7C870" -Length "13C8"
     }
 
     if (IsChecked $Redux.Other.AlwaysBestEnding) {
@@ -96,7 +96,7 @@ function ByteOptions() {
     if (IsChecked $Redux.Other.GohtCutscene)       { ChangeBytes -Offset "F6DE89" -Values "8D 00 02 10 00 00 0A" }
     if (IsChecked $Redux.Other.MushroomBottle)     { ChangeBytes -Offset "CD7C48" -Values "1E 6B" }
     if (IsChecked $Redux.Other.FairyFountain)      { ChangeBytes -Offset "B9133E" -Values "01 0F" }
-    if (IsChecked $Redux.Other.DebugItemSelect)    { ExportAndPatch -Path "debug_item_select" -Offset "CA6370" -Length "1E0" }
+    if (IsChecked $Redux.Other.DebugItemSelect)    { ExportAndPatch -Path "inventory_editor" -Offset "CA6370" -Length "1E0" }
 
 
 

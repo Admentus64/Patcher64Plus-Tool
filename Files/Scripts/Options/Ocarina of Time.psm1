@@ -115,7 +115,7 @@ function ByteOptions() {
     if (IsChecked $Redux.Other.DebugMapSelect) {
         ChangeBytes -Offset "A94994" -Values "00 00 00 00 AE 08 00 14 34 84 B9 2C 8E 02 00 18 24 0B 00 00 AC 8B 00 00"
         ChangeBytes -Offset "B67395" -Values "B9 E4 00 00 BA 11 60 80 80 09 C0 80 80 37 20 80 80 1C 14 80 80 1C 14 80 80 1C 08"
-        ExportAndPatch -Path "debug_map_select" -Offset "B9FD90" -Length "EC0"
+        ExportAndPatch -Path "map_select" -Offset "B9FD90" -Length "EC0"
     }
 
     if (IsChecked $Redux.Other.SubscreenDelayFix)    { ChangeBytes -Offset "B15DD0" -Values "00 00 00 00"; ChangeBytes -Offset "B12947" -Values "03" }
@@ -125,7 +125,7 @@ function ByteOptions() {
     if (IsChecked $Redux.Other.DefaultZTargeting)    { ChangeBytes -Offset "B71E6D" -Values "01" }
     if (IsChecked $Redux.Other.InstantClaimCheck)    { ChangeBytes -Offset "ED4470" -Values "00 00 00 00"; ChangeBytes -Offset "ED4498" -Values "00 00 00 00" }
     if (IsChecked $Redux.Other.BoomerangFix)         { ChangeBytes -Offset "F0F718" -Values "FC 41 C7 FF FF FF FE 38" }
-    if (IsChecked $Redux.Other.DebugItemSelect)      { ExportAndPatch -Path "debug_item_select" -Offset "BCBF64" -Length "C8" }
+    if (IsChecked $Redux.Other.DebugItemSelect)      { ExportAndPatch -Path "inventory_editor" -Offset "BCBF64" -Length "C8" }
     
 
 
@@ -1438,8 +1438,7 @@ function CreateTabGraphics() {
     CreateReduxCheckBox -Name "WidescreenAlt"      -Text "16:9 Widescreen (Alt)"  -Info "Apply 16:9 Widescreen adjusted backgrounds and textures (as well as 16:9 Widescreen for the Wii VC)" -Credits "Aspect Ratio Fix by Admentus`n16:9 backgrounds by GhostlyDark, ShadowOne333 & CYB3RTRON"
     CreateReduxCheckBox -Name "ExtendedDraw"       -Text "Extended Draw Distance" -Info "Increases the game's draw distance for objects`nDoes not work on all objects"                        -Credits "Admentus"
     CreateReduxCheckBox -Name "ForceHiresModel"    -Text "Force Hires Link Model" -Info "Always use Link's High Resolution Model when Link is too far away"                                   -Credits "GhostlyDark"
-    CreateReduxCheckBox -Name "EyesMM"             -Text "Majora's Mask Eyes"     -Info "Replace the eyes for Vanilla Child Link with those from Majora's Mask"                               -Credits "GhostlyDark" -Column 4 -Row 2
-    CreateReduxCheckBox -Name "HideEquipment"      -Text "Hide Equipment"         -Info "Hide the equipment when it is sheathed"                                                              -Credits "XModxGodX"   -Column 4 -Row 3
+    CreateReduxCheckBox -Name "HideEquipment"      -Text "Hide Equipment"         -Info "Hide the equipment when it is sheathed"                                                              -Credits "XModxGodX"   -Column 4 -Row 2
 
 
 
@@ -1460,10 +1459,6 @@ function CreateTabGraphics() {
     CreateReduxComboBox -Name "AdultMaleModels"   -Column 2.9 -Row 3 -Items (@("Original") + $Models) -Default "Original" -Info "Replace the adult model used for Link`nOptions include custom Male models"
     $Models = LoadModelsList -Category "Adult Female"
     CreateReduxComboBox -Name "AdultFemaleModels" -Column 2.9 -Row 3 -Items $Models -Default "Hatsune Miku - Link"        -Info "Replace the adult model used for Link`nOptions include custom Female models"
-
-    EnableForm -Form $Redux.Graphics.EyesMM -Enable ($Redux.Graphics.ChildMaleModels.SelectedIndex -eq 0 -and $Redux.Graphics.ListChildMaleModels.Checked)
-    $Redux.Graphics.ChildMaleModels.Add_SelectedIndexChanged( { EnableForm -Form $Redux.Graphics.EyesMM -Enable ($Redux.Graphics.ChildMaleModels.SelectedIndex -eq 0 -and $Redux.Graphics.ListChildMaleModels.Checked) } )
-    $Redux.Graphics.ListChildMaleModels.Add_CheckedChanged(   { EnableForm -Form $Redux.Graphics.EyesMM -Enable ($Redux.Graphics.ChildMaleModels.SelectedIndex -eq 0 -and $Redux.Graphics.ListChildMaleModels.Checked) } )
     
 
 
