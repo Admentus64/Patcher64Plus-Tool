@@ -1434,11 +1434,11 @@ function CreateTabGraphics() {
     $Info += "`n- Backgrounds are 4:3 and centered showing collisions at the sides."
     $Info += "`n- Not compatible with Redux."
 
-    CreateReduxCheckBox -Name "Widescreen"         -Text "16:9 Widescreen"        -Info $Info                                                                                                 -Credits "Widescreen Patch by gamemasterplc, enhanced and ported by GhostlyDark"
-    CreateReduxCheckBox -Name "WidescreenAlt"      -Text "16:9 Widescreen (Alt)"  -Info "Apply 16:9 Widescreen adjusted backgrounds and textures (as well as 16:9 Widescreen for the Wii VC)" -Credits "Aspect Ratio Fix by Admentus`n16:9 backgrounds by GhostlyDark, ShadowOne333 & CYB3RTRON"
-    CreateReduxCheckBox -Name "ExtendedDraw"       -Text "Extended Draw Distance" -Info "Increases the game's draw distance for objects`nDoes not work on all objects"                        -Credits "Admentus"
-    CreateReduxCheckBox -Name "ForceHiresModel"    -Text "Force Hires Link Model" -Info "Always use Link's High Resolution Model when Link is too far away"                                   -Credits "GhostlyDark"
-    CreateReduxCheckBox -Name "HideEquipment"      -Text "Hide Equipment"         -Info "Hide the equipment when it is sheathed"                                                              -Credits "XModxGodX"   -Column 4 -Row 2
+    CreateReduxCheckBox -Name "Widescreen"         -Text "16:9 Widescreen (Advanced)"   -Info $Info                                                                                                 -Credits "Widescreen Patch by gamemasterplc, enhanced and ported by GhostlyDark"
+    CreateReduxCheckBox -Name "WidescreenAlt"      -Text "16:9 Widescreen (Simplified)" -Info "Apply 16:9 Widescreen adjusted backgrounds and textures (as well as 16:9 Widescreen for the Wii VC)" -Credits "Aspect Ratio Fix by Admentus`n16:9 backgrounds by GhostlyDark, ShadowOne333 & CYB3RTRON"
+    CreateReduxCheckBox -Name "ExtendedDraw"       -Text "Extended Draw Distance"       -Info "Increases the game's draw distance for objects`nDoes not work on all objects"                        -Credits "Admentus"
+    CreateReduxCheckBox -Name "ForceHiresModel"    -Text "Force Hires Link Model"       -Info "Always use Link's High Resolution Model when Link is too far away"                                   -Credits "GhostlyDark"
+    CreateReduxCheckBox -Name "HideEquipment"      -Text "Hide Equipment"               -Info "Hide the equipment when it is sheathed"                                                              -Credits "XModxGodX"   -Column 4 -Row 2
 
 
 

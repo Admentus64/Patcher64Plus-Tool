@@ -25,8 +25,8 @@ Add-Type -AssemblyName 'System.Drawing'
 # Setup global variables
 
 $global:ScriptName = "Patcher64+ Tool"
-$global:VersionDate = "2021-09-21"
-$global:Version     = "v14.3.4"
+$global:VersionDate = "2021-09-26"
+$global:Version     = "v14.3.5"
 $global:SystemDate  = Get-Date -Format yyyy-MM-dd-HH-mm-ss
 
 $global:CommandType = $MyInvocation.MyCommand.CommandType.ToString()

@@ -794,6 +794,7 @@ function DecompressROM([boolean]$Decompress) {
         # Get the correct DMA table for the ROM
         if     ( (IsSet $GamePatch.redux.dmaTable) -and (IsChecked $Patches.Redux) )                                   { RemoveFile $Files.dmaTable; Add-Content $Files.dmaTable $GamePatch.redux.dmaTable }
         elseif (IsSet $GamePatch.dmaTable)                                                                             { RemoveFile $Files.dmaTable; Add-Content $Files.dmaTable $GamePatch.dmaTable }
+        elseif (IsSet $LanguagePatch.dmaTable)                                                                         { RemoveFile $Files.dmaTable; Add-Content $Files.dmaTable $LanguagePatch.dmaTable }
         elseif ( (IsSet $GameType.dmaTable) -and $ROMHashSum -ne $CheckHashSum -and (IsChecked $Patches.Downgrade) )   { RemoveFile $Files.dmaTable; Add-Content $Files.dmaTable $GameType.dmaTable }
         else                                                                                                           { & $Files.tool.TabExt $GetROM.run | Out-Null }
 
@@ -834,6 +835,7 @@ function CompressROM([boolean]$Decompress, [boolean]$Finalize) {
         RemoveFile $Files.archive
         
         Push-Location -LiteralPath $Paths.Temp
+        WriteToConsole ("Used DMA Table: " + (Get-Content $Files.dmaTable))
         & $Files.tool.Compress $GetROM.decomp $GetROM.patched | Out-Null
         WriteToConsole ("Compressed ROM: " + $GetROM.patched)
         Pop-Location

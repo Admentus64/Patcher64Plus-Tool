@@ -1,3 +1,9 @@
+v14.3.5
+- Changed names for the Widescreen options for OoT and MM (no functional change)
+- Changed D-Pad radio buttons behaviour for when Redux + Advanced Widescreen is used for MM
+- Fixed typo issue with English "Permanent Razor Sword" dialogue for MM
+- Fixed German, French and Spanish not working without Redux for MM
+
 v14.3.4
 - Updated Smash Remix to v1.0.0
 - Updated patches for Super Metroid

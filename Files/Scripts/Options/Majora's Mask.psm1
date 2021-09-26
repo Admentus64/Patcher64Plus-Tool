@@ -642,7 +642,7 @@ function ByteReduxOptions() {
     
     # D-PAD #
 
-    if ( (IsChecked $Redux.DPad.Hide) -or (IsChecked $Redux.DPad.LayoutLeft) -or (IsChecked $Redux.DPad.LayoutRight) -or ( (IsChecked $Redux.Graphics.Widescreen) -and  $Patches.Redux.Checked) ) {
+    if ( (IsChecked $Redux.DPad.Hide) -or (IsChecked $Redux.DPad.LayoutLeft) -or (IsChecked $Redux.DPad.LayoutRight) ) {
         $Array = @()
         $Array += GetMMItemID -Item $Redux.DPad.Up.Text
         $Array += GetMMItemID -Item $Redux.DPad.Right.Text
@@ -653,7 +653,7 @@ function ByteReduxOptions() {
         ChangeBytes -Offset $Offset -Values $Array
 
         $offset = AddToOffset -Hex $offset -Add "10"
-        if (IsChecked $Redux.DPad.LayoutLeft)        { ChangeBytes -Offset $offset -Values "01 01" }
+        if     (IsChecked $Redux.DPad.LayoutLeft)    { ChangeBytes -Offset $offset -Values "01 01" }
         elseif (IsChecked $Redux.DPad.LayoutRight)   { ChangeBytes -Offset $offset -Values "01 02" }
         else                                         { ChangeBytes -Offset $offset -Values "01" }
     }
@@ -868,11 +868,13 @@ function AdjustGUI() {
     if (!$Redux.Graphics.WidescreenAlt.Enabled)   { $Redux.Graphics.WidescreenAlt.Checked = $False }
 
     EnableElem -Elem @($Redux.Colors.Magic, $Redux.Colors.BaseMagic, $Redux.Colors.InfiniteMagic) -Active (!( (IsChecked $Redux.Graphics.Widescreen) -and $Patches.Redux.Checked))
-    EnableElem -Elem @($Redux.DPad.Disable, $Redux.DPad.Hide, $Redux.DPad.LayoutLeft, $Redux.DPad.LayoutRight) -Active (!( (IsChecked $Redux.Graphics.Widescreen) -and $Patches.Redux.Checked))
-    EnableElem -Elem @($Redux.Graphics.MotionBlur, $Redux.Graphics.FlashbackOverlay) -Active (!(IsChecked $Redux.Graphics.Widescreen))
+    EnableElem -Elem @($Redux.DPad.LayoutLeft, $Redux.DPad.LayoutRight)                           -Active (!( (IsChecked $Redux.Graphics.Widescreen) -and $Patches.Redux.Checked))
+    EnableElem -Elem @($Redux.Graphics.MotionBlur, $Redux.Graphics.FlashbackOverlay)              -Active (!(IsChecked $Redux.Graphics.Widescreen))
     
     if ( (IsChecked $Redux.Graphics.Widescreen) -and $Patches.Redux.Checked)   { EnableElem -Elem @($Redux.DPad.Up, $Redux.DPad.Left, $Redux.DPad.Right, $Redux.DPad.Down) -Active $True }
     elseif ($Redux.Dpad.Disable.Checked)                                       { EnableElem -Elem @($Redux.DPad.Up, $Redux.DPad.Left, $Redux.DPad.Right, $Redux.DPad.Down) -Active $False }
+
+    if ( (IsChecked $Redux.Graphics.Widescreen) -and $Patches.Redux.Checked -and ($Redux.DPad.LayoutLeft.Checked -or $Redux.DPad.LayoutRight.Checked) ) { $Redux.DPad.Hide.Checked = $True }
 
 }
 
@@ -1027,12 +1029,12 @@ function CreateTabGraphics() {
     $Info += "`n- Text corruption if combined with Redux during and after cutscenes with blur/sepia effect (disabled by default)"
     $Info += "`n- D-Pad icons causing issues if combined with Redux (force hidden)"
 
-    CreateReduxCheckBox -Name "Widescreen"         -Text "16:9 Widescreen"          -Info $Info                                                                                                                  -Credits "Granny Story images by Nerrel, Widescreen Patch by gamemasterplc, enhanced and ported by GhostlyDark"
-    CreateReduxCheckBox -Name "WidescreenAlt"      -Text "16:9 Widescreen (Alt)"    -Info "Apply 16:9 Widescreen adjusted backgrounds and textures (as well as 16:9 Widescreen for the Wii VC)"                  -Credits "Aspect Ratio Fix by Admentus`n16:9 backgrounds by GhostlyDark & ShadowOne333"
-    CreateReduxCheckBox -Name "BlackBars"         -Text "No Black Bars"             -Info "Removes the black bars shown on the top and bottom of the screen during Z-targeting and cutscenes"                    -Credits "Admentus"
-    CreateReduxCheckBox -Name "ExtendedDraw"      -Text "Extended Draw Distance"    -Info "Increases the game's draw distance for objects`nDoes not work on all objects"                                         -Credits "Admentus"
-    CreateReduxCheckBox -Name "ImprovedLinkModel" -Text "Improved Link Model"       -Info "Improves the model used for Hylian Link`nCustom tunic colors are not supported with this option"                      -Credits "Skilarbabcock (www.youtube.com/user/skilarbabcock) & Nerrel"
-    CreateReduxCheckBox -Name "PixelatedStars"    -Text "Disable Pixelated Stars"   -Info "Completely disable the stars at night-time, which are pixelated dots and do not have any textures for HD replacement" -Credits "Admentus"
+    CreateReduxCheckBox -Name "Widescreen"         -Text "16:9 Widescreen (Advanced)"   -Info $Info                                                                                                                  -Credits "Granny Story images by Nerrel, Widescreen Patch by gamemasterplc, enhanced and ported by GhostlyDark"
+    CreateReduxCheckBox -Name "WidescreenAlt"      -Text "16:9 Widescreen (Simplified)" -Info "Apply 16:9 Widescreen adjusted backgrounds and textures (as well as 16:9 Widescreen for the Wii VC)"                  -Credits "Aspect Ratio Fix by Admentus`n16:9 backgrounds by GhostlyDark & ShadowOne333"
+    CreateReduxCheckBox -Name "BlackBars"         -Text "No Black Bars"                 -Info "Removes the black bars shown on the top and bottom of the screen during Z-targeting and cutscenes"                    -Credits "Admentus"
+    CreateReduxCheckBox -Name "ExtendedDraw"      -Text "Extended Draw Distance"        -Info "Increases the game's draw distance for objects`nDoes not work on all objects"                                         -Credits "Admentus"
+    CreateReduxCheckBox -Name "ImprovedLinkModel" -Text "Improved Link Model"           -Info "Improves the model used for Hylian Link`nCustom tunic colors are not supported with this option"                      -Credits "Skilarbabcock (www.youtube.com/user/skilarbabcock) & Nerrel"
+    CreateReduxCheckBox -Name "PixelatedStars"    -Text "Disable Pixelated Stars"       -Info "Completely disable the stars at night-time, which are pixelated dots and do not have any textures for HD replacement" -Credits "Admentus"
     
     if (!$IsWiiVC) {
         $info = "`n`n--- WARNING ---`nDisabling cutscene effects fixes temporary issues with both Widescreen and Redux patched where garbage pixels at the edges of the screen or garbled text appears`nWorkaround: Resize the window when that happens"
