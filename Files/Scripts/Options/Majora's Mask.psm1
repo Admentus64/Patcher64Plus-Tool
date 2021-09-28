@@ -270,7 +270,10 @@ function ByteOptions() {
 
     # HERO MODE #
 
-    if (IsChecked $Redux.Hero.MasterQuest) { ChangeBytes -Offset "BEBA03" -Values "49" }
+    if (IsChecked $Redux.Hero.MasterQuest) {
+        ChangeBytes -Offset "BEBA03" -Values "49" # Elegy of Emptiness -> Great Bay Temple
+        ChangeBytes -Offset "E936D0" -Values "54 02 00 02 34 0A 00 02 34 0A 00 01 10 00 00 22 AF AA 00 2C" # Gears -> Great Bay Temple
+    }
 
     if (IsText -Elem $Redux.Hero.Damage -Compare "OHKO Mode") {
         ChangeBytes -Offset "BABE7F" -Values "09 04" -Interval 16
