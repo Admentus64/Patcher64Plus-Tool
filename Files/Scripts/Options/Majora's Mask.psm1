@@ -270,6 +270,15 @@ function ByteOptions() {
 
     # HERO MODE #
 
+    if (IsChecked $Redux.Hero.MasterQuest) {
+        ChangeBytes -Offset "BA6DD8" -Values "08 02 96 94 00 00 00 00"; ChangeBytes -Offset "BABE84" -Values "08 02 96 7C 24 84 F6 70"; ChangeBytes -Offset "BC852C" -Values "00 00 00 00 10 00 00 0A 00 00 00 00"
+        ChangeBytes -Offset "BC8558" -Values "00 00 00 00";             ChangeBytes -Offset "BC85F8" -Values "50 02 00 5F 32 38 00 FF 10 00 00 5C 24 11 00 FF"
+        ChangeBytes -Offset "BEBA03" -Values "49"; ChangeBytes -Offset "C5CBFE" -Values "0C"; ChangeBytes -Offset "C5E9B7" -Values "98"
+        ChangeBytes -Offset "C66157" -Values "30"; ChangeBytes -Offset "C6615F" -Values "34"; ChangeBytes -Offset "C66167" -Values "A8"
+    }
+
+
+
     if (IsText -Elem $Redux.Hero.Damage -Compare "OHKO Mode") {
         ChangeBytes -Offset "BABE7F" -Values "09 04" -Interval 16
         ChangeBytes -Offset "BABEA2" -Values "2A 00"

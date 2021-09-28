@@ -1,3 +1,6 @@
+v14.3.6
+- Fixed issues with the Master Quest option for MM (not standalone patch)
+
 v14.3.5
 - Changed names for the Widescreen options for OoT and MM (no functional change)
 - Changed D-Pad radio buttons behaviour for when Redux + Advanced Widescreen is used for MM
