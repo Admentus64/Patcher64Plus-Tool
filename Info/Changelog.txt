@@ -1,3 +1,7 @@
+v14.3.7
+- Updated Smash Remix to v1.0.1
+- Fixed issues with the French localization for MM
+
 v14.3.6
 - Fixed issues with the Master Quest option for MM (not standalone patch)
 
