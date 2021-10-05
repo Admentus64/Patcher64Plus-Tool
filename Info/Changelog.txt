@@ -1,6 +1,5 @@
 v14.3.8
-- Added new "Original - Belt" model for OoT
-- Updated D-Pad icon for GU
+- Updated D-Pad icon for GUI (by GhostlyDark)
 - Fixed issue with missing pronouns for the "Female Pronouns" option for OoT
 
 v14.3.7
