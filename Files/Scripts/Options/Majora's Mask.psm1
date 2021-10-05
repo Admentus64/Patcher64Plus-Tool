@@ -953,7 +953,7 @@ function CreateTabRedux() {
     # D-Pad Buttons Customization - Image #
 
     $PictureBox = New-Object Windows.Forms.PictureBox
-    $PictureBox.Location = New-object System.Drawing.Size( ($Redux.DPad.Left.Right + 30), $Redux.DPad.Up.Bottom)
+    $PictureBox.Location = New-object System.Drawing.Size( ($Redux.DPad.Left.Right + 40), $Redux.DPad.Up.Bottom)
     SetBitmap -Path ($Paths.Main + "\D-Pad.png") -Box $PictureBox
     $PictureBox.Width  = $PictureBox.Image.Size.Width
     $PictureBox.Height = $PictureBox.Image.Size.Height

@@ -2,6 +2,10 @@
 	"child" : [ {
 		"name"		: "Original",
 		"author"	: "Nintendo"
+		}, {
+		"name"		: "Original - Belt",
+		"author"	: "Nintendo",
+		"porter"	: "AriaHiro64"
 	}, {
 		"name"		: "Original - Majora's Mask Eyes",
 		"author"	: "Nintendo",

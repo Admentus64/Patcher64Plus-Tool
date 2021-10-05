@@ -1,3 +1,8 @@
+v14.3.8
+- Added new "Original - Belt" model for OoT
+- Updated D-Pad icon for GU
+- Fixed issue with missing pronouns for the "Female Pronouns" option for OoT
+
 v14.3.7
 - Updated Smash Remix to v1.0.1
 - Fixed issues with the French localization for MM
