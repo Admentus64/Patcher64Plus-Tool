@@ -146,12 +146,12 @@ function ByteOptions() {
 
     # INTERFACE #
 
-    if (IsChecked $Redux.UI.HudTextures)                                                                             { PatchBytes -Offset "1EBD100" -Texture -Patch "HUD\oot_heart.bin" }
-    if ( (IsChecked $Redux.UI.HudTextures -Not) -and (IsIndex -Elem $Redux.UI.ButtonSize -Text "Small"))             { PatchBytes -Offset "1EBDF60" -Texture -Patch "HUD\mm_button_small.bin" }
-    if ( (IsChecked $Redux.UI.HudTextures -Not) -and (IsIndex -Elem $Redux.UI.ButtonSize -Text "Full Size"))         { PatchBytes -Offset "1EBDF60" -Texture -Patch "HUD\mm_button_full.bin" }
-    if ( (IsChecked $Redux.UI.HudTextures)      -and (IsIndex -Elem $Redux.UI.ButtonSize -Text "Small"))             { PatchBytes -Offset "1EBDF60" -Texture -Patch "HUD\oot_button_small.bin" }
-    if ( (IsChecked $Redux.UI.HudTextures)      -and (IsIndex -Elem $Redux.UI.ButtonSize -Text "Normal"))            { PatchBytes -Offset "1EBDF60" -Texture -Patch "HUD\oot_button.bin" }
-    if ( (IsChecked $Redux.UI.HudTextures)      -and (IsIndex -Elem $Redux.UI.ButtonSize -Text "Full Size"))         { PatchBytes -Offset "1EBDF60" -Texture -Patch "HUD\oot_button_full.bin" }
+    if       (IsChecked $Redux.UI.HudTextures)                                                                     { PatchBytes -Offset "1EBD100" -Texture -Patch "HUD\oot_heart.bin" }
+    if     ( (IsChecked $Redux.UI.HudTextures -Not) -and (IsIndex -Elem $Redux.UI.ButtonSize -Text "Small"))       { PatchBytes -Offset "1EBDF60" -Texture -Patch "HUD\mm_button_small.bin" }
+    elseif ( (IsChecked $Redux.UI.HudTextures -Not) -and (IsIndex -Elem $Redux.UI.ButtonSize -Text "Full Size"))   { PatchBytes -Offset "1EBDF60" -Texture -Patch "HUD\mm_button_full.bin" }
+    elseif ( (IsChecked $Redux.UI.HudTextures)      -and (IsIndex -Elem $Redux.UI.ButtonSize -Text "Small"))       { PatchBytes -Offset "1EBDF60" -Texture -Patch "HUD\oot_button_small.bin" }
+    elseif ( (IsChecked $Redux.UI.HudTextures)      -and (IsIndex -Elem $Redux.UI.ButtonSize -Text "Normal"))      { PatchBytes -Offset "1EBDF60" -Texture -Patch "HUD\oot_button.bin" }
+    elseif ( (IsChecked $Redux.UI.HudTextures)      -and (IsIndex -Elem $Redux.UI.ButtonSize -Text "Full Size"))   { PatchBytes -Offset "1EBDF60" -Texture -Patch "HUD\oot_button_full.bin" }
 
     <#if (IsChecked $Redux.UI.ButtonPositions) {
         ChangeBytes -Offset "BAF2E3" -Values "04"       -Subtract # A Button - X position (BE -> BA, -04)

@@ -1,3 +1,7 @@
+v14.3.9
+- Adding missing Gerudo censored symbols (by GhostlyDark)
+- Fixed issue with patching in the normal size HUD
+
 v14.3.8
 - Updated D-Pad icon for GUI (by GhostlyDark)
 - Fixed issue with missing pronouns for the "Female Pronouns" option for OoT

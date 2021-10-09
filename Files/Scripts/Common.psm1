@@ -620,9 +620,8 @@ function IsIndex([object]$Elem, [int16]$Index=1, [string]$Text, [switch]$Active,
     if (!$Active -and !$Elem.Enabled)         { return $False }
 
     if (IsSet $Text) {
-        $Text = $Text.replace(" (default)", "")
-        if ($Elem.Text -eq $Text)             { return !$Not  }
-        if ($Elem.Text -ne $Text)             { return  $Not  }
+        if ($Elem.Text.replace(" (default)", "") -eq $Text)   { return !$Not  }
+        if ($Elem.Text.replace(" (default)", "") -ne $Text)   { return  $Not  }
     }
 
     if ($Elem.SelectedIndex -eq ($Index-1))   { return !$Not  }

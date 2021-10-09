@@ -200,12 +200,12 @@ function ByteOptions() {
         }
     }
 
-    if (IsChecked $Redux.UI.HudTextures)                                                                             { PatchBytes -Offset "1A3C100" -Texture -Patch "HUD\mm_heart.bin"; PatchBytes -Offset "1A3DE00" -Texture -Patch "HUD\mm_key_rupee.bin" }
-    if ( (IsChecked $Redux.UI.HudTextures -Not) -and (IsIndex -Elem $Redux.UI.ButtonSize -Text "Small"))             { PatchBytes -Offset "1A3CA00" -Texture -Patch "HUD\oot_button_small.bin" }
-    if ( (IsChecked $Redux.UI.HudTextures -Not) -and (IsIndex -Elem $Redux.UI.ButtonSize -Text "Full Size"))         { PatchBytes -Offset "1A3CA00" -Texture -Patch "HUD\oot_button_full.bin" }
-    if ( (IsChecked $Redux.UI.HudTextures)      -and (IsIndex -Elem $Redux.UI.ButtonSize -Text "Small"))             { PatchBytes -Offset "1A3CA00" -Texture -Patch "HUD\mm_button_small.bin" }
-    if ( (IsChecked $Redux.UI.HudTextures)      -and (IsIndex -Elem $Redux.UI.ButtonSize -Text "Normal"))            { PatchBytes -Offset "1A3CA00" -Texture -Patch "HUD\mm_button.bin" }
-    if ( (IsChecked $Redux.UI.HudTextures)      -and (IsIndex -Elem $Redux.UI.ButtonSize -Text "Full Size"))         { PatchBytes -Offset "1A3CA00" -Texture -Patch "HUD\mm_button_full.bin" }
+    if       (IsChecked $Redux.UI.HudTextures)                                                                     { PatchBytes -Offset "1A3C100" -Texture -Patch "HUD\mm_heart.bin"; PatchBytes -Offset "1A3DE00" -Texture -Patch "HUD\mm_key_rupee.bin" }
+    if     ( (IsChecked $Redux.UI.HudTextures -Not) -and (IsIndex -Elem $Redux.UI.ButtonSize -Text "Small"))       { PatchBytes -Offset "1A3CA00" -Texture -Patch "HUD\oot_button_small.bin" }
+    elseif ( (IsChecked $Redux.UI.HudTextures -Not) -and (IsIndex -Elem $Redux.UI.ButtonSize -Text "Full Size"))   { PatchBytes -Offset "1A3CA00" -Texture -Patch "HUD\oot_button_full.bin" }
+    elseif ( (IsChecked $Redux.UI.HudTextures)      -and (IsIndex -Elem $Redux.UI.ButtonSize -Text "Small"))       { Write-Host "123"; PatchBytes -Offset "1A3CA00" -Texture -Patch "HUD\mm_button_small.bin" }
+    elseif ( (IsChecked $Redux.UI.HudTextures)      -and (IsIndex -Elem $Redux.UI.ButtonSize -Text "Normal"))      { Write-Host "456"; PatchBytes -Offset "1A3CA00" -Texture -Patch "HUD\mm_button.bin" }
+    elseif ( (IsChecked $Redux.UI.HudTextures)      -and (IsIndex -Elem $Redux.UI.ButtonSize -Text "Full Size"))   { PatchBytes -Offset "1A3CA00" -Texture -Patch "HUD\mm_button_full.bin" }
 
     if ( (IsIndex -Elem $Redux.UI.BlackBars -Index 2) -or (IsIndex -Elem $Redux.UI.BlackBars -Index 4) ) { ChangeBytes -Offset "B0F680" -Values "00 00 00 00" }
     if ( (IsIndex -Elem $Redux.UI.BlackBars -Index 3) -or (IsIndex -Elem $Redux.UI.BlackBars -Index 4) ) {
@@ -937,6 +937,7 @@ function ByteOptions() {
         } #>
 
         # Dungeons / Areas
+        PatchBytes -Offset "3045248" -Texture -Patch "Gerudo Symbols\dampe.bin"
         PatchBytes -Offset "21B8678" -Texture -Patch "Gerudo Symbols\gerudo_valley.bin"
         PatchBytes -Offset "F71350"  -Texture -Patch "Gerudo Symbols\forest_temple_room_11_block.bin"
         PatchBytes -Offset "2464D88" -Texture -Patch "Gerudo Symbols\forest_temple_room_11_hole.bin"
@@ -947,6 +948,7 @@ function ByteOptions() {
         PatchBytes -Offset "2B9BDB8" -Texture -Patch "Gerudo Symbols\spirit_temple_room_10.bin"
         PatchBytes -Offset "2BE7920" -Texture -Patch "Gerudo Symbols\spirit_temple_room_10.bin"
         PatchBytes -Offset "1636940" -Texture -Patch "Gerudo Symbols\spirit_temple_room_0_elevator.bin"
+        PatchBytes -Offset "289CA90" -Texture -Patch "Gerudo Symbols\gerudo_training_ground_ceiling_frame.bin"
         PatchBytes -Offset "28BBCD8" -Texture -Patch "Gerudo Symbols\gerudo_training_ground_room_5.bin"
         PatchBytes -Offset "28CA728" -Texture -Patch "Gerudo Symbols\gerudo_training_ground_room_5.bin"
         PatchBytes -Offset "11FB000" -Texture -Patch "Gerudo Symbols\gerudo_training_ground_door.bin"
