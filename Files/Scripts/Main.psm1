@@ -53,7 +53,7 @@ function CreateMainDialog() {
     $CurrentModeLabel.AutoSize = $True
 
     # Create a label to show current version.
-    $VersionLabel = CreateLabel -X (DPISize 15) -Y (DPISize 30) -Width (DPISize 120) -Height (DPISize 30) -Text ($Version + "`n(" + $VersionDate + ")") -Font $Fonts.SmallBold -AddTo $MainDialog
+    $VersionLabel = CreateLabel -X (DPISize 15) -Y (DPISize 30) -Width (DPISize 130) -Height (DPISize 30) -Text ($Version + "`n(" + $VersionDate + ")") -Font $Fonts.SmallBold -AddTo $MainDialog
 
     # Create Arrays for groups
     $global:InputPaths = @{}; $global:Patches = @{}; $global:CurrentGame = @{}; $global:VC = @{}; $global:CustomHeader = @{}

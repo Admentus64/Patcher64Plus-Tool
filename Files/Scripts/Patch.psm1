@@ -8,7 +8,7 @@ function MainFunction([string]$Command, [string]$PatchedFileName) {
     $Header = SetHeader -Header $Header -ROMTitle $GamePatch.rom_title -ROMGameID $GamePatch.rom_gameID -VCTitle $GamePatch.vc_title -VCGameID $GamePatch.vc_gameID -Region $GamePatch.rom_region
 
     # Hash
-    $global:ROMHashSum = (Get-FileHash -Algorithm MD5 $GamePath).Hash
+    $global:ROMHashSum = (Get-FileHash -Algorithm MD5 -LiteralPath $GamePath).Hash
     $global:CheckHashSum = $GameType.version[0].hash
 
     # Output
@@ -590,7 +590,7 @@ function ConvertROM([string]$Command) {
 
     [IO.File]::WriteAllBytes($Paths.Temp + "\converted", $array)
     $GetROM.run =  $Paths.Temp + "\converted"
-    $global:ROMHashSum = (Get-FileHash -Algorithm MD5 $GetROM.run).Hash
+    $global:ROMHashSum = (Get-FileHash -Algorithm MD5 -LiteralPath $GetROM.run).Hash
     if ($Settings.Debug.KeepConverted -eq $True) { Copy-Item -LiteralPath $GetROM.run -Destination $GetROM.keepConvert -Force }
 
 }
@@ -678,12 +678,12 @@ function PatchCompressedROM() {
 #==============================================================================================================================================================================================
 function ApplyPatchROM([boolean]$Decompress) {
 
-    $HashSum1 = (Get-FileHash -Algorithm MD5 $GetROM.run).Hash
+    $HashSum1 = (Get-FileHash -Algorithm MD5 -LiteralPath $GetROM.run).Hash
     if ($Decompress)   { $File = $GetROM.patched }
     else               { $File = $GetROM.run }
 
     if (!(ApplyPatch -File $File -Patch $PatchPath -New $GetROM.patched -FullPath)) { return $False }
-    $HashSum2 = (Get-FileHash -Algorithm MD5 $GetROM.patched).Hash
+    $HashSum2 = (Get-FileHash -Algorithm MD5 -LiteralPath $GetROM.patched).Hash
     if ($HashSum1 -eq $HashSum2) {
         if ($IsWiiVC -and $GameType.downgrade -and !(IsChecked $Patches.Downgrade) )      { UpdateStatusLabel "Failed! Patch file does not match source. ROM has left unchanged. Enable Downgrade?" }
         elseif ($IsWiiVC -and $GameType.downgrade -and (IsChecked $Patches.Downgrade) )   { UpdateStatusLabel "Failed! Patch file does not match source. ROM has left unchanged. Disable Downgrade?" }

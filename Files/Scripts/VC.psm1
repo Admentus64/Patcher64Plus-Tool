@@ -133,7 +133,7 @@ function PatchVCROM([string]$Command, [boolean]$PatchROM) {
         if     ($GameType.romc -eq 1)   { & $Files.tool.romchu $GetROM.run $GetROM.romc | Out-Null }
         elseif ($GameType.romc -eq 2)   { & $Files.tool.romc d $GetROM.run $GetROM.romc | Out-Null }
         Move-Item -LiteralPath $GetROM.romc -Destination $GetROM.run -Force
-        $global:ROMHashSum = (Get-FileHash -Algorithm MD5 $GetROM.run).Hash
+        $global:ROMHashSum = (Get-FileHash -Algorithm MD5 -LiteralPath $GetROM.run).Hash
     }
 
     # $ByteArray = [IO.File]::ReadAllBytes($GetROM.run)                       # Get the file as a byte array so the size can be analyzed
@@ -497,7 +497,7 @@ function ExtractU8AppFile([string]$Command) {
             $arr = [IO.File]::ReadAllBytes($WADFile.AppFile01)
             $WADFile.Length = Get24Bit (16 + ($arr[(GetDecimal $WADFile.Offset) + 4] * 16384) + ($arr[(GetDecimal $WADFile.Offset) + 5] * 8192))
             ExportBytes -File $WADFile.AppFile01 -Offset $WADFile.Offset -Length $WADFile.Length -Output $WADFile.ROM
-            $global:ROMHashSum = (Get-FileHash -Algorithm MD5 $GetROM.nes).Hash
+            $global:ROMHashSum = (Get-FileHash -Algorithm MD5 -LiteralPath $GetROM.nes).Hash
         }
     }
 

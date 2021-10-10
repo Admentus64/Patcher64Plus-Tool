@@ -264,7 +264,7 @@ function SetGetROM() {
     }
 
     if ($GetROM.in -ne $null)   { $GetROM.run = $GetROM.in }
-    if (TestFile $GetROM.in )   { $global:ROMHashSum = (Get-FileHash -Algorithm MD5 $GetROM.in).Hash }
+    if (TestFile $GetROM.in )   { $global:ROMHashSum = (Get-FileHash -Algorithm MD5 -LiteralPath $GetROM.in).Hash }
 
     if ($Settings.Debug.CreateBPS -eq $True) {
         $Files.compBPS   = [System.IO.Path]::GetDirectoryName($GetROM.in) + "\" + [System.IO.Path]::GetFileNameWithoutExtension($GetROM.in) + "_compressed.bps"
