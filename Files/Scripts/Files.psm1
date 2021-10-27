@@ -69,13 +69,7 @@ function SetFileParameters() {
     $Files.oot.lens_of_truth                = $Paths.Games + "\Ocarina of Time\Textures\widescreen\lens_of_truth.bin"
     $Files.oot.title_copyright              = $Paths.Games + "\Ocarina of Time\Textures\Logo\mq_copyright.bin"
     $Files.oot.title_master_quest           = $Paths.Games + "\Ocarina of Time\Textures\Logo\mq_logo.bin"
-    $Files.oot.hud_mm_heart                 = $Paths.Games + "\Ocarina of Time\Textures\HUD\mm_heart.bin"
-    $Files.oot.hud_mm_button                = $Paths.Games + "\Ocarina of Time\Textures\HUD\mm_button.bin"
-    $Files.oot.hud_mm_button_full           = $Paths.Games + "\Ocarina of Time\Textures\HUD\mm_button_full.bin"
-    $Files.oot.hud_mm_button_small          = $Paths.Games + "\Ocarina of Time\Textures\HUD\mm_button_small.bin"
-    $Files.oot.hud_oot_button_full          = $Paths.Games + "\Ocarina of Time\Textures\HUD\oot_button_full.bin"
-    $Files.oot.hud_oot_button_small         = $Paths.Games + "\Ocarina of Time\Textures\HUD\oot_button_small.bin"
-    $Files.oot.hud_mm_key_rupee             = $Paths.Games + "\Ocarina of Time\Textures\HUD\mm_key_rupee.bin"
+    
     $Files.oot.hud_tatl                     = $Paths.Games + "\Ocarina of Time\Textures\HUD\tatl.bin"
     $Files.oot.hud_tael                     = $Paths.Games + "\Ocarina of Time\Textures\HUD\tael.bin"
     $Files.oot.iron_shield_front            = $Paths.Games + "\Ocarina of Time\Textures\Iron Shield\front.bin"
@@ -142,13 +136,6 @@ function SetFileParameters() {
     $Files.mm.mq_remix                      = CheckPatchExtension ($Paths.Games + "\Majora's Mask\Decompressed\master_quest_remix")
 
     $Files.mm.hud_navi                      = $Paths.Games + "\Majora's Mask\Textures\HUD\navi.bin"
-    
-    $Files.mm.hud_mm_button_full            = $Paths.Games + "\Majora's Mask\Textures\HUD\mm_button_full.bin"
-    $Files.mm.hud_mm_button_small           = $Paths.Games + "\Majora's Mask\Textures\HUD\mm_button_small.bin"
-    $Files.mm.hud_oot_button                = $Paths.Games + "\Majora's Mask\Textures\HUD\oot_button.bin"
-    $Files.mm.hud_oot_button_full           = $Paths.Games + "\Majora's Mask\Textures\HUD\oot_button_full.bin"
-    $Files.mm.hud_oot_button_small          = $Paths.Games + "\Majora's Mask\Textures\HUD\oot_button_small.bin"
-    $Files.mm.hud_oot_heart                 = $Paths.Games + "\Majora's Mask\Textures\HUD\oot_heart.bin"
     $Files.mm.hud_tael                      = $Paths.Games + "\Majora's Mask\Textures\HUD\tael.bin"
     $Files.mm.hud_tatl                      = $Paths.Games + "\Majora's Mask\Textures\HUD\tatl.bin"
     $Files.mm.hud_taya                      = $Paths.Games + "\Majora's Mask\Textures\HUD\taya.bin"

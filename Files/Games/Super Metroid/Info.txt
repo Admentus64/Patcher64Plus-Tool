@@ -17,8 +17,8 @@ Instructions:
 - Select SFC ROM or VC WAD
 - Select patch
 - Enable optional "Enable Redux" or "Enable Options" checkboxes
-- Customize your patch within "Select Options" and "Redux"
-- Press "Patch Selected Option"
+- Customize your patch within "Select Options"
+- Press "Patch Selected Options"
 
 Information:
 - Original SFC ROM or VC WAD is preserved

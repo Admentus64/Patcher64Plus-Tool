@@ -102,7 +102,7 @@ function ByteOptions() {
 #==============================================================================================================================================================================================
 function CreateOptions() {
     
-    CreateOptionsDialog -Width 740 -Height 370 -Tabs @("Graphics", "Gameplay", "Skip")
+    CreateOptionsDialog -Columns 4 -Height 370 -Tabs @("Graphics", "Gameplay", "Skip")
 
 }
 

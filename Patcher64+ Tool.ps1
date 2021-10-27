@@ -25,8 +25,8 @@ Add-Type -AssemblyName 'System.Drawing'
 # Setup global variables
 
 $global:ScriptName = "Patcher64+ Tool"
-$global:VersionDate = "2021-10-10"
-$global:Version     = "v14.3.10"
+$global:VersionDate = "2021-10-27"
+$global:Version     = "v15.0.0"
 $global:SystemDate  = Get-Date -Format yyyy-MM-dd-HH-mm-ss
 
 $global:CommandType = $MyInvocation.MyCommand.CommandType.ToString()
@@ -142,6 +142,7 @@ if ($Paths.FullBase -eq $null) { $Paths.FullBase = $Paths.Base }
 $Paths.Master          = $Paths.Base   + "\Files"
 $Paths.Registry        = $Paths.Master + "\Registry"
 $Paths.Games           = $Paths.Master + "\Games"
+$Paths.Shared          = $Paths.Master + "\Games\Shared"
 $Paths.Main            = $Paths.Master + "\Main"
 $Paths.Tools           = $Paths.Master + "\Tools"
 $Paths.WiiVC           = $Paths.Tools  + "\Wii VC"
@@ -190,7 +191,9 @@ else                                            { $Paths.Temp = $Paths.AppDataTe
 # Hi-DPI Mode
 $global:DisableHighDPIMode = $Settings.Core.HiDPIMode -eq $False
 InitializeHiDPIMode
-$global:ColumnWidth = DPISize 180
+$global:ColumnWidth  = DPISize 180
+$global:FormDistance = DPISize 185
+$global:DialogSize   = 185
 
 # Visual Style
 SetModernVisualStyle ($Settings.Core.ModernStyle -ne $False)

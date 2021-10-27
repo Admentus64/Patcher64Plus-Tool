@@ -11,8 +11,8 @@ function PatchOptions() {
 
 #==============================================================================================================================================================================================
 function CreateOptions() {
-    
-    CreateOptionsDialog -Width 390 -Height 250
+3
+    CreateOptionsDialog -Columns 2 -Height 250
 
     # GRAPHICS #
     CreateReduxGroup    -Tag "Revert" -Text "Original (Revert)"

@@ -439,10 +439,11 @@ function RunCustomGameIDSyntax([string]$Syntax) {
 function SetJSONFile($File) {
     
     if (TestFile $File) {
-        try { $File = Get-Content -Raw -Path $File | ConvertFrom-Json }
+        try { $File = Get-Content -Raw -LiteralPath $File | ConvertFrom-Json }
         catch {
             Write-Host ("Corrupted JSON File: " + $File)
             CreateErrorDialog -Error "Corrupted JSON"
+            return
         }
         return $File
     }

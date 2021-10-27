@@ -25,7 +25,7 @@ function PatchReduxOptions() {
 #==============================================================================================================================================================================================
 function CreateOptions() {
     
-    CreateOptionsDialog -Width 390 -Height 320
+    CreateOptionsDialog -Columns 2 -Height 320
     
     EnableElem -Elem $Redux.Graphics.Widescreen -Active (!$IsWiiVC)
 

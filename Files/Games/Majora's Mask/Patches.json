@@ -7,7 +7,9 @@
 		"vc_title"		: "Redux: Majora's",
 		"vc_gameID"		: "NAR0",
 		"file"			: "Decompressed\\redux.bps",
+		"file_v2"		: "Decompressed\\redux_v2.bps",
 		"file_widescreen"	: "Decompressed\\redux_widescreen.bps",
+		"file_widescreen_v2"	: "Decompressed\\redux_widescreen_v2.bps",
 		"output"		: "_redux_patched"
 	},
 	"options"			: 1,

@@ -119,32 +119,6 @@ function MuteMusic([string]$SequenceTable, [string]$Sequence, [byte]$Length) {
 
 
 #==============================================================================================================================================================================================
-<#function MuteMusicTracks([byte]$Start=0, [string]$SequenceTable, [string]$Sequence, [byte]$Length, [byte[]]$Include, [byte[]]$Force) {
-    
-    $tableStart    = GetDecimal $SequenceTable
-    $sequenceStart = GetDecimal $Sequence
-    $end           = (GetDecimal $SequenceTable) + 16 * $Length
-
-    for ($i=$Start; $i -le $Length; $i++) {
-        if ($Include -contains $i) {
-            $tableIndex    = (Get8Bit $ByteArrayGame[$tableStart+($i*16)+0]) + (Get8Bit $ByteArrayGame[$tableStart+($i*16)+1]) + (Get8Bit $ByteArrayGame[$tableStart+($i*16)+2]) + (Get8Bit $ByteArrayGame[$tableStart+($i*16)+3])
-            $sequenceIndex = Get24Bit ( (GetDecimal $sequence) + (GetDecimal $tableIndex) )
-            $stop          = Get24Bit ( (GetDecimal $SequenceIndex) + 80 )
-            $songType      = (GetDecimal $sequenceIndex) + 1
-        
-            if ($ByteArrayGame[$songType] -eq 32) {
-                $volume = SearchBytes -Start $sequenceIndex -End $stop -Values "DB"
-                if ($volume -ne -1) { ChangeBytes -Offset (Get24Bit ( (GetDecimal $volume) + 1 ) ) -Values "00" }
-            }
-            if ($Force -contains $i) { ChangeBytes -Offset (Get24Bit ($tableStart + $i * 16) ) -Values "00 00 00 00 00 00 00 00 00 00" }
-        }
-    }
-
-}#>
-
-
-
-#==============================================================================================================================================================================================
 function ChangeStringIntoDigits([string]$File, [string]$Search, [string]$Value, [switch]$Triple) {
     
     $Offset = SearchBytes -File $File -Values $Search
@@ -155,6 +129,28 @@ function ChangeStringIntoDigits([string]$File, [string]$Search, [string]$Value, 
     $offset = $Search = $Value = $Triple = $null
 
 }
+
+
+
+#==============================================================================================================================================================================================
+function ShowHudPreview([switch]$IsOoT) {
+
+    $path = ($Paths.shared + "\Buttons\" + $Redux.UI.ButtonSize.Text.replace(" (default)", "") + "\" + $Redux.UI.ButtonStyle.Text.replace(" (default)", "") + ".png")
+    if (TestFile $Path)   { SetBitMap -Path $path -Box $Redux.UI.ButtonPreview -Width 90 -Height 90 }
+    else                  { $Redux.UI.ButtonPreview.Image = $null }
+
+    $path = $null
+    if       ( (IsChecked $Redux.UI.Display)      -and  $IsOoT)   { $path = $Paths.Shared + "\HUD\MM\"  }
+    elseif   ( (IsChecked $Redux.UI.Display)      -and !$IsOoT)   { $path = $Paths.Shared + "\HUD\OoT\" }
+    elseif   ( (IsChecked $Redux.UI.Display -Not) -and  $IsOoT)   { $path = $Paths.Shared + "\HUD\OoT\" }    elseif   ( (IsChecked $Redux.UI.Display -Not) -and !$IsOoT)   { $path = $Paths.Shared + "\HUD\MM\"  }
+
+    if (TestFile ($path + "heart.png"))   { SetBitMap -Path ($path + "heart.png") -Box $Redux.UI.HeartPreview -Width 40  -Height 40 } else { $Redux.UI.HeartPreview.Image = $null }
+    if (TestFile ($path + "key.png"))     { SetBitMap -Path ($path + "key.png")   -Box $Redux.UI.KeyPreview   -Width 40  -Height 40 } else { $Redux.UI.KeyPreview.Image   = $null }
+    if (TestFile ($path + "rupee.png"))   { SetBitMap -Path ($path + "rupee.png") -Box $Redux.UI.RupeePreview -Width 40  -Height 40 } else { $Redux.UI.RupeePreview.Image = $null }
+    if (TestFile ($path + "magic.png"))   { SetBitMap -Path ($path + "magic.png") -Box $Redux.UI.MagicPreview -Width 200 -Height 40 } else { $Redux.UI.MagicPreview.Image = $null }
+
+}
+
 
 
 #==============================================================================================================================================================================================
@@ -322,8 +318,8 @@ function CreateSpinAttackColorOptions() {
     # SPIN ATTACK COLORS #
     CreateReduxGroup    -Tag  "Colors" -Text "Magic Spin Attack Colors" -Height 2
     $Items = @("Blue", "Red", "Green", "White", "Cyan", "Magenta", "Orange", "Gold", "Purple", "Pink", "Black", "Randomized", "Custom")
-    CreateReduxComboBox -Name "BlueSpinAttack" -Column 1 -Text "Blue Spin Attack Colors" -Length 230 -Shift 70 -Items $Items -Default 1 -Info ("Select a preset for the blue spin attack colors`n" + '"Randomized" fully randomizes the colors each time the patcher is opened') -Credits "Chez Cousteau"
-    CreateReduxComboBox -Name "RedSpinAttack"  -Column 4 -Text "Red Spin Attack Colors"  -Length 230 -Shift 70 -Items $Items -Default 2 -Info ("Select a preset for the red spin attack colors`n" + '"Randomized" fully randomizes the colors each time the patcher is opened')  -Credits "Chez Cousteau"
+    CreateReduxComboBox -Name "BlueSpinAttack" -Column 1 -Text "Blue Spin Attack Colors" -Length 230 -Shift 40 -Items $Items -Default 1 -Info ("Select a preset for the blue spin attack colors`n" + '"Randomized" fully randomizes the colors each time the patcher is opened') -Credits "Chez Cousteau"
+    CreateReduxComboBox -Name "RedSpinAttack"  -Column 4 -Text "Red Spin Attack Colors"  -Length 230 -Shift 40 -Items $Items -Default 2 -Info ("Select a preset for the red spin attack colors`n" + '"Randomized" fully randomizes the colors each time the patcher is opened')  -Credits "Chez Cousteau"
 
     # Spin Attack Colors - Buttons
     $Buttons = @()
@@ -378,8 +374,8 @@ function CreateSwordTrailColorOptions() {
     # SWORD TRAIL COLORS #
     CreateReduxGroup    -Tag  "Colors" -Text "Sword Trail Colors"
     $Items = @("White", "Red", "Green", "Blue", "Cyan", "Magenta", "Orange", "Gold", "Purple", "Pink", "Randomized", "Custom")
-    CreateReduxComboBox -Name "SwordTrail"         -Column 1 -Text "Sword Trail Color"    -Length 230 -Shift 70 -Items $Items -Default 1 -Info ("Select a preset for the sword trail color`n" + '"Randomized" fully randomizes the colors each time the patcher is opened') -Credits "Ported from Rando"
-    CreateReduxComboBox -Name "SwordTrailDuration" -Column 5 -Text "Sword Trail Duration" -Length 230 -Shift 70 -Items @("Disabled", "Short", "Long", "Very Long", "Lightsaber") -Default 2 -Info ("Select the duration for sword trail") -Credits "Ported from Rando"
+    CreateReduxComboBox -Name "SwordTrail"         -Column 1 -Text "Sword Trail Color"    -Length 230 -Shift 40 -Items $Items -Default 1 -Info ("Select a preset for the sword trail color`n" + '"Randomized" fully randomizes the colors each time the patcher is opened') -Credits "Ported from Rando"
+    CreateReduxComboBox -Name "SwordTrailDuration" -Column 5 -Text "Sword Trail Duration" -Length 230 -Shift 40 -Items @("Disabled", "Short", "Long", "Very Long", "Lightsaber") -Default 2 -Info ("Select the duration for sword trail") -Credits "Ported from Rando"
 
     # Sword Trail Colors - Buttons
     $Buttons = @()
@@ -419,7 +415,7 @@ function CreateFairyColorOptions() {
     CreateReduxGroup    -Tag  "Colors" -Text "Fairy Colors" -Height 2
     $Items = @($GameType.default_values.fairy_option1, $GameType.default_values.fairy_option2, "Tael", "Gold", "Green", "Light Blue", "Yellow", "Red", "Magenta", "Black", "Fi", "Ciela", "Epona", "Ezlo", "King of Red Lions", "Linebeck", "Loftwing", "Midna", "Phantom Zelda", "Randomized", "Custom")
     $Presets = ("`n" + 'Selecting the presets ' + '"' + $GameType.default_values.fairy_option1 + '"' + ' or "Tael" will also change the references for ' + '"' + $GameType.default_values.fairy_option1 + '"' + ' in the dialogue')
-    CreateReduxComboBox -Name "Fairy" -Length 230 -Shift 70 -Items $Items -Text ($name + " Colors") -Info ("Select a color scheme for " + $name + $Presets + "`n" + '"Randomized" fully randomizes the colors each time the patcher is opened') -Credits "Ported from Rando"
+    CreateReduxComboBox -Name "Fairy" -Length 230 -Shift 40 -Items $Items -Text ($name + " Colors") -Info ("Select a color scheme for " + $name + $Presets + "`n" + '"Randomized" fully randomizes the colors each time the patcher is opened') -Credits "Ported from Rando"
 
     # Fairy Colors - Buttons
     $Buttons = @()
@@ -740,6 +736,7 @@ Export-ModuleMember -Function GetMMInstrumentID
 Export-ModuleMember -Function MuteMusic
 Export-ModuleMember -Function ChangeStringIntoDigits
 
+Export-ModuleMember -Function ShowHudPreview
 Export-ModuleMember -Function ChangeModelsSelection
 Export-ModuleMember -Function LoadModelsList
 

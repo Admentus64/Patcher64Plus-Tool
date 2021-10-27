@@ -1,8 +1,8 @@
-function CreateOptionsDialog([int32]$Width, [int32]$Height, [Array]$Tabs=@()) {
+function CreateOptionsDialog([byte]$Columns, [int32]$Height, [Array]$Tabs=@()) {
     
     # Create Dialog
-    if ( (IsSet $Width) -and (IsSet $Height) )   { $global:OptionsDialog = CreateDialog -Width (DPISize $Width) -Height (DPISize $Height) }
-    else                                         { $global:OptionsDialog = CreateDialog -Width (DPISize 900) -Height (DPISize 640) }
+    if ( (IsSet $Columns) -and (IsSet $Height) )   { $global:OptionsDialog = CreateDialog -Width ($FormDistance * $Columns + (DPISize 60)) -Height (DPISize $Height) }
+    else                                           { $global:OptionsDialog = CreateDialog -Width ($FormDistance * 4        + (DPISize 60)) -Height (DPISize 640) }
     $OptionsDialog.Icon = $Files.icon.additional
 
     # Close Button
@@ -70,7 +70,7 @@ function CreateCreditsDialog() {
     
     # Create Dialog
 
-    if ($DisableHighDPIMode) { $width = 730 } else { $width = 700 }
+    if ($DisableHighDPIMode) { $width = 830 } else { $width = 810 }
     $global:CreditsDialog = CreateDialog -Width (DPISize $width) -Height (DPISize 500) -Icon $Files.icon.credits
     $CloseButton = CreateButton -X ($CreditsDialog.Width / 2 - (DPISize 40)) -Y ($CreditsDialog.Height - (DPISize 90)) -Width (DPISize 80) -Height (DPISize 35) -Text "Close" -AddTo $CreditsDialog
     $CloseButton.Add_Click({ $CreditsDialog.Hide() })
@@ -188,11 +188,11 @@ function CreateSettingsDialog() {
     $InfoLabel = CreateLabel -X ($SettingsDialog.Width / 2 - $String.Width - (DPISize 100)) -Y (DPISize 10) -Width (DPISize 220) -Height (DPISize 15) -Font $Fonts.SmallBold -Text ($ScriptName + " " + $Version + " (" + $VersionDate + ")") -AddTo $SettingsDialog
 
     $global:GeneralSettings = @{}
-
+    
     # General Settings
     $GeneralSettings.Box                 = CreateReduxGroup -Y (DPISize 40) -IsGame $False -Height 2 -AddTo $SettingsDialog -Text "General Settings"
-    $GeneralSettings.DoubleClick         = CreateSettingsCheckbox                          -Column 1 -Row 1 -Text "Double Click"                           -Info "Allows a PowerShell file to be opened by double-clicking it"
-    $GeneralSettings.DoubleClick.Checked = ((Get-ItemProperty -LiteralPath "HKLM:\Software\Classes\Microsoft.PowerShellScript.1\Shell").'(default)' -eq '0')
+    $GeneralSettings.DoubleClick         = CreateSettingsCheckbox                          -Column 1 -Row 1 -Text "Double Click" -Disable ((GetWindowsVersion) -ge 11) -Info "Allows a PowerShell file to be opened by double-clicking it"
+    if ((GetWindowsVersion) -lt 11) { $GeneralSettings.DoubleClick.Checked = ((Get-ItemProperty -LiteralPath "HKLM:\Software\Classes\Microsoft.PowerShellScript.1\Shell").'(default)' -eq '0') }
     $GeneralSettings.ClearType           = CreateSettingsCheckbox -Name "ClearType"        -Column 2 -Row 1 -Text "Use ClearType Font"      -Checked $True -Info ('Use the ClearType font "Segoe UI" instead of the default font "Microsft Sans Serif"' + "`nThe option will only go in effect when opening the tool`nPlease restart the tool when changing this option")
     $GeneralSettings.HiDPIMode           = CreateSettingsCheckbox -Name "HiDPIMode"        -Column 3 -Row 1 -Text "Use Hi-DPI Mode"         -Checked $True -Info "Enables Hi-DPI Mode suitable for higher resolution displays`nThe option will only go in effect when opening the tool`nPlease restart the tool when changing this option"
     $GeneralSettings.ModernStyle         = CreateSettingsCheckbox -Name "ModernStyle"      -Column 1 -Row 2 -Text "Use Modern Visual Style" -Checked $True -Info "Use a modern-looking visual style for the whole interface of the tool"
@@ -226,7 +226,7 @@ function CreateSettingsDialog() {
     $GeneralSettings.Rev0DungeonFiles    = CreateSettingsCheckbox -Name "Rev0DungeonFiles" -Column 2 -Row 1 -Text "Rev 0 Dungeon Files"   -IsDebug -Info "Extract the dungeon files from the OoT ROM (Rev 0 US) or MM ROM (Rev 0 US) as well when extracting dungeon files"
     $GeneralSettings.NoConversion        = CreateSettingsCheckbox -Name "NoConversion"     -Column 3 -Row 1 -Text "No Conversion"         -IsDebug -Info "Do not attempt to convert the ROM to a proper format"
     $GeneralSettings.NoCRCChange         = CreateSettingsCheckbox -Name "NoCRCChange"      -Column 1 -Row 2 -Text "No CRC Change"         -IsDebug -Info "Do not change the CRC of the ROM when patching is concluded"
-    $GeneralSettings.NoCompression       = CreateSettingsCheckbox -Name "NoCompression"    -Column 2 -Row 2 -Text "No Compression"        -IsDebug -Info "Do not attempt to compress the ROM back again when patching is concluded"
+    $GeneralSettings.NoCompression       = CreateSettingsCheckbox -Name "NoCompression"    -Column 2 -Row 2 -Text "No Compression"        -IsDebug -Info "Do not attempt to compress the ROM back again when patching is concluded`nThis can cause Wii VC WADs to freeze"
 
     # Settings preset
     $GeneralSettings.Box                 = CreateReduxGroup -Y ($GeneralSettings.Box.Bottom + (DPISize 10)) -IsGame $False -Height 2 -AddTo $SettingsDialog -Text "Settings Presets"
@@ -239,7 +239,7 @@ function CreateSettingsDialog() {
     $GeneralSettings.Presets            += CreateSettingsRadioField -Name "Preset" -SaveAs 5 -Max 6 -NameTextbox "Preset.Label5" -Column 2 -Row 2                -Text "Preset 5" -Info ""
     $GeneralSettings.Presets            += CreateSettingsRadioField -Name "Preset" -SaveAs 6 -Max 6 -NameTextbox "Preset.Label6" -Column 3 -Row 2                -Text "Preset 6" -Info ""
 
-    $GeneralSettings.DoubleClick.Add_CheckStateChanged(     { TogglePowerShellOpenWithClicks $this.Checked } )
+    if ((GetWindowsVersion) -lt 11) { $GeneralSettings.DoubleClick.Add_CheckStateChanged( { TogglePowerShellOpenWithClicks $this.Checked } ) }
     $GeneralSettings.ModernStyle.Add_CheckStateChanged(     { SetModernVisualStyle $this.checked } )
     $GeneralSettings.ForceOptions.Add_CheckStateChanged(    { DisablePatches } )
     $GeneralSettings.EnableSounds.Add_CheckStateChanged(    { LoadSoundEffects $this.checked } )
@@ -375,7 +375,7 @@ function CleanupFiles() {
 
 
 #==============================================================================================================================================================================================
-function CreateSettingsCheckbox([byte]$Column=1, [byte]$Row=1, [boolean]$Checked, [switch]$Disable, [string]$Text="", [string]$Info="", [string]$Name, [switch]$IsDebug) {
+function CreateSettingsCheckbox([byte]$Column=1, [byte]$Row=1, [boolean]$Checked=$False, [boolean]$Disable=$False, [string]$Text="", [string]$Info="", [string]$Name, [switch]$IsDebug) {
     
     $Checkbox = CreateCheckbox -X (($Column-1) * (DPISize 165) + (DPISize 15)) -Y ($Row * (DPISize 30) - (DPISize 10)) -Checked $Checked -Disable $Disable -IsRadio $False -Info $Info -IsDebug $IsDebug -Name $Name
     if (IsSet $Text) {  

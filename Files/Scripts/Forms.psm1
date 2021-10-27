@@ -238,7 +238,7 @@ function CreateComboBox([uint16]$X=0, [uint16]$Y=0, [uint16]$Width=0, [uint16]$H
 
 
 #==============================================================================================================================================================================================
-function CreateSlider([uint16]$X=0, [uint16]$Y=0, [uint16]$Width=0, [uint16]$Height=0, [int16]$Default=0, [int16]$Min=0, [int16]$Max=255, [int16]$Freq=5, [int16]$Small=2, [int16]$Large=3, [string]$Name, [string]$Tag, [string]$Info, [switch]$IsGame, [object]$AddTo=$Last.Group) {
+function CreateSlider([uint16]$X=0, [uint16]$Y=0, [uint16]$Width=0, [uint16]$Height=0, [uint16]$Default=0, [uint16]$Min=0, [uint16]$Max=255, [uint16]$Freq=5, [uint16]$Small=2, [uint16]$Large=3, [string]$Name, [string]$Tag, [string]$Info, [switch]$IsGame, [object]$AddTo=$Last.Group) {
     
     $Slider = CreateForm -X $X -Y $Y -Width $Width -Height $Height -Name $Name -Tag $Tag -IsGame $IsGame -Form (New-Object System.Windows.Forms.TrackBar) -AddTo $AddTo
     $ToolTip = CreateToolTip -Form $Slider -Info $Info
@@ -308,7 +308,7 @@ function CreateListBox([uint16]$X=0, [uint16]$Y=0, [uint16]$Width=0, [uint16]$He
 function CreateLabel([uint16]$X=0, [uint16]$Y=0, [uint16]$Width=0, [uint16]$Height=0, [string]$Name, [string]$Tag, [string]$Text="", [System.Drawing.Font]$Font=$Fonts.Small, [string]$Info="", [object]$AddTo=$Last.Group) {
     
     $Label = CreateForm -X $X -Y $Y -Width $Width -Height $Height -Name $Name -Tag $Tag -Form (New-Object System.Windows.Forms.Label) -AddTo $AddTo
-    if (IsSet $Text)      { $Label.Text = $Text }
+    if (  IsSet $Text)    { $Label.Text     = $Text }
     if (!(IsSet $Width))  { $Label.AutoSize = $True }
     $Label.Font = $Font
     $ToolTip = CreateToolTip -Form $Label -Info $Info
@@ -390,8 +390,8 @@ function CreateTabButtons([string[]]$Tabs, [object]$AddTo=$Redux.Panel) {
 function CreateReduxPanel([single]$X=$Last.Group.Left, [single]$Row=0, [single]$Columns, [single]$Rows=1,  [string]$Name, [string]$Tag, [object]$AddTo=$Last.Group) {
     
     $Last.Max = 0
-    if (IsSet $Columns -Min 0)   { $Width = (DPISize 150) * $Columns }
-    else                         { $Width = $AddTo.Width - (DPISize 20) }
+    if (IsSet $Columns -Min 0)   { $Width = $FormDistance * $Columns }
+    else                         { $Width = $AddTo.Width * 0.9 }
     return CreatePanel -X $X -Y ($Row * (DPISize 30) + (DPISize 20)) -Width $Width -Height ((DPISize 26.5) * $Rows) -Name $Name -Tag $Tag -AddTo $AddTo
 
 }
@@ -428,7 +428,7 @@ function CreateReduxGroup([single]$X=(DPISize 15), [single]$Y=(DPISize 50), [sin
             $Last.Flexible = $False
         }
         if ($Columns -gt 0) {
-            $Width = (DPISize 165) * $Columns
+            $Width = $FormDistance * $Columns
             $Last.Half = $True
         }
     }
@@ -460,7 +460,7 @@ function CreateReduxGroup([single]$X=(DPISize 15), [single]$Y=(DPISize 50), [sin
 function CreateReduxButton([single]$Column=1, [single]$Row=1, [int16]$Width=150, [int16]$Height=20, [string]$Name, [string]$Tag, [string]$Text="", [string]$Info="", [string]$Credits="", [object]$AddTo=$Last.Group) {
     
     if ( (IsSet $Info ) -and (IsSet $Credits) ) { $Info += ("`n`n- Credits: " + $Credits) }
-    return CreateButton -X (($Column-1) * (DPISize 165) + (DPISize 15)) -Y ($Row * (DPISize 30) - (DPISize 13)) -Width (DPISize $Width) -Height (DPISize $Height) -Name $Name -Tag $Tag -Text $Text -Info $Info -AddTo $AddTo
+    return CreateButton -X (($Column-1) * $FormDistance + (DPISize 15)) -Y ($Row * (DPISize 30) - (DPISize 13)) -Width (DPISize $Width) -Height (DPISize $Height) -Name $Name -Tag $Tag -Text $Text -Info $Info -AddTo $AddTo
 
 }
 
@@ -476,7 +476,7 @@ function CreateReduxTextBox([single]$Column=$Last.Column, [single]$Row=$Last.Row
     }
     if ( (IsSet $Info ) -and (IsSet $Credits) ) { $Info += ("`n`n- Credits: " + $Credits) }
 
-    $Label = CreateLabel -X (($Column-1) * (DPISize 165) + (DPISize 15)) -Y ($Row * (DPISize 30) - (DPISize 10)) -Width (DPISize 100) -Height (DPISize 15) -Text $Text -Info $Info -AddTo $AddTo
+    $Label   = CreateLabel   -X (($Column-1) * $FormDistance + (DPISize 15)) -Y ($Row * (DPISize 30) - (DPISize 10)) -Width (DPISize 100) -Height (DPISize 15) -Text $Text -Info $Info -AddTo $AddTo
     $TextBox = CreateTextBox -X $Label.Right -Y ($Label.Top - (DPISize 3)) -Width (DPISize 35) -Height (DPISize 15) -Length $Length -Text $Value -IsGame $True -Name $Name -Tag $Tag -Info $Info -AddTo $AddTo
 
     $TextBox.Add_TextChanged({
@@ -517,7 +517,7 @@ function CreateReduxRadioButton([single]$Column=$Last.Column, [single]$Row=$Last
     if ( (IsSet $Info ) -and (IsSet $Credits) ) { $Info += ("`n`n- Credits: " + $Credits) }
     $Last.Max++
 
-    $Radio = CreateCheckBox -X (($Column-1) * (DPISize 165)) -Y (($Row-1) * (DPISize 30)) -Checked $Checked -Disable $Disable -IsRadio $True -Info $Info -IsGame $True -Name $Name -SaveAs $Last.Max -SaveTo $SaveTo -Max $Max -Tag $Tag -AddTo $AddTo -Link $Link
+    $Radio = CreateCheckBox -X (($Column-1) * $FormDistance) -Y (($Row-1) * (DPISize 30)) -Checked $Checked -Disable $Disable -IsRadio $True -Info $Info -IsGame $True -Name $Name -SaveAs $Last.Max -SaveTo $SaveTo -Max $Max -Tag $Tag -AddTo $AddTo -Link $Link
     
     if (IsSet $Text) {
         $Label = CreateLabel -X $Radio.Right -Y ($Radio.Top + (DPISize 3)) -Height (DPISize 15) -Text $Text -Info $Info -AddTo $AddTo
@@ -551,7 +551,7 @@ function CreateReduxCheckBox([single]$Column=$Last.Column, [single]$Row=$Last.Ro
     }
     if ( (IsSet $Info ) -and (IsSet $Credits) ) { $Info += ("`n`n- Credits: " + $Credits) }
 
-    $CheckBox = CreateCheckBox -X (($Column-1) * (DPISize 165) + (DPISize 15)) -Y ($Row * (DPISize 30) - (DPISize 10)) -Checked $Checked -Disable $Disable -IsRadio $False -Info $Info -IsGame $True -Name $Name  -Tag $Tag -AddTo $AddTo -Link $Link
+    $CheckBox = CreateCheckBox -X (($Column-1) * $FormDistance + (DPISize 15)) -Y ($Row * (DPISize 30) - (DPISize 10)) -Checked $Checked -Disable $Disable -IsRadio $False -Info $Info -IsGame $True -Name $Name  -Tag $Tag -AddTo $AddTo -Link $Link
     
     if (IsSet $Text) {
         $Label = CreateLabel -X $CheckBox.Right -Y ($CheckBox.Top + (DPISize 3)) -Height (DPISize 15) -Text $Text -Info $Info -AddTo $AddTo
@@ -576,7 +576,7 @@ function CreateReduxCheckBox([single]$Column=$Last.Column, [single]$Row=$Last.Ro
 
 
 #==============================================================================================================================================================================================
-function CreateReduxComboBox([single]$Column=$Last.Column, [single]$Row=$Last.Row, [int16]$Length=160, [int]$Shift=0, [string[]]$Items=$null, [string[]]$PostItems=$null, [string]$FilePath, $Ext="bin", $Default=1, [switch]$NoDefault, [string]$Text, [string]$Info, [string]$Warning, [string]$Credits, [string]$Name, [string]$Tag, [object]$AddTo=$Last.Group) {
+function CreateReduxComboBox([single]$Column=$Last.Column, [single]$Row=$Last.Row, [int16]$Length=170, [int]$Shift=0, [string[]]$Items=$null, [string[]]$PostItems=$null, [string]$FilePath, $Ext="bin", $Default=1, [switch]$NoDefault, [string]$Text, [string]$Info, [string]$Warning, [string]$Credits, [string]$Name, [string]$Tag, [object]$AddTo=$Last.Group) {
     
     if (IsSet $Warning) {
         if (IsSet $Info)   { $Info += ("`n[!] " + $Warning) }
@@ -585,7 +585,7 @@ function CreateReduxComboBox([single]$Column=$Last.Column, [single]$Row=$Last.Ro
     if ( (IsSet $Info ) -and (IsSet $Credits) ) { $Info += ("`n`n- Credits: " + $Credits) }
     if (IsSet $Text) {
         $Text += ":"
-        $Width = (DPISize (80 + $Shift))
+        $Width = (DPISize (120 + $Shift))
     }
     else { $Width = 0 }
 
@@ -596,7 +596,7 @@ function CreateReduxComboBox([single]$Column=$Last.Column, [single]$Row=$Last.Ro
                     if ($item.extension -eq ("." + $i)) { $Items += $item.BaseName }
                 }
             }
-            elseif ($item.extension -eq ("." + $Ext)) { $Items += $item.BaseName }
+            elseif ($item.extension -eq ("." + $Ext) -or $Ext -eq $null) { $Items += $item.BaseName }
         }
     }
     if ($Items.Count -gt 0 -and $PostItems.Count -gt 0) { $Items = $Items + $PostItems }
@@ -613,8 +613,8 @@ function CreateReduxComboBox([single]$Column=$Last.Column, [single]$Row=$Last.Ro
         }
     }
 
-    $Default = [byte]$Default
-    $Label = CreateLabel -X (($Column-1) * (DPISize 165) + (DPISize 15)) -Y ($Row * (DPISize 30) - (DPISize 7)) -Width $Width -Height (DPISize 15) -Text $Text -Info $Info -AddTo $AddTo
+    $Default  = [byte]$Default
+    $Label    = CreateLabel -X (($Column-1) * $FormDistance + (DPISize 15)) -Y ($Row * (DPISize 30) - (DPISize 7)) -Width $Width -Height (DPISize 15) -Text $Text -Info $Info -AddTo $AddTo
     $ComboBox = CreateComboBox -X $Label.Right -Y ($Label.Top - (DPISize 3)) -Width (DPISize ($Length - $Shift)) -Height (DPISize 20) -Items $Items -Default $Default -Info $Info -IsGame $True -Name $Name -Tag $Tag -AddTo $AddTo
 
     $Last.Column++;
@@ -644,7 +644,7 @@ function CreateReduxSlider([single]$Column=$Last.Column, [single]$Row=$Last.Row,
     if ( (IsSet $Info ) -and (IsSet $Credits) ) { $Info += ("`n`n- Credits: " + $Credits) }
     if (IsSet $Text) { $Text += ":" }
 
-    $Label  = CreateLabel  -X (($Column-1) * (DPISize 165) + (DPISize 15)) -Y ($Row * (DPISize 45) - (DPISize 25)) -Width (DPISize 105) -Height (DPISize 15) -Text $Text -Info $Info -AddTo $AddTo
+    $Label  = CreateLabel  -X (($Column-1) * $FormDistance + (DPISize 15)) -Y ($Row * (DPISize 45) - (DPISize 25)) -Width (DPISize 105) -Height (DPISize 15) -Text $Text -Info $Info -AddTo $AddTo
     $Slider = CreateSlider -X $Label.Right -Y ($Label.Top - (DPISize 10)) -Width (DPISize 200) -Height (DPISize 10) -Default $Default -Min $Min -Max $Max -Freq $Freq -Small $Small -Large $Large -Info $Info -IsGame $True -Name $Name -Tag $Tag -AddTo $AddTo
 
     Add-Member -InputObject $Label -NotePropertyMembers @{ Slider = $Slider }
@@ -661,7 +661,7 @@ function CreateReduxSlider([single]$Column=$Last.Column, [single]$Row=$Last.Row,
 #==============================================================================================================================================================================================
 function CreateReduxListBox([single]$Column=$Last.Column, [single]$Row=$Last.Row, [string[]]$Items, $Default=$null, [string]$Text, [string]$Info, [string]$Warning, [string]$Credits, [string]$Name, [object]$Link, [string]$Tag, [object]$AddTo=$Last.Group) {
     
-    $listBox  = CreateListBox -X (($Column-1) * (DPISize 165) + (DPISize 15)) -Y ($Row * (DPISize 45) - (DPISize 25)) -Width (DPISize 300) -Height (DPISize 175) -Items $Items -Default $Default -Info $Info -IsGame $True -Name $Name -Tag $Tag -AddTo $AddTo
+    $listBox  = CreateListBox -X (($Column-1) * $FormDistance + (DPISize 15)) -Y ($Row * (DPISize 45) - (DPISize 25)) -Width (DPISize 300) -Height (DPISize 175) -Items $Items -Default $Default -Info $Info -IsGame $True -Name $Name -Tag $Tag -AddTo $AddTo
     return $listBox
 
 }

@@ -79,7 +79,7 @@ function ByteOptions() {
 #==============================================================================================================================================================================================
 function CreateOptions() {
     
-    CreateOptionsDialog -Width 1050 -Height 470
+    CreateOptionsDialog -Columns 6 -Height 470
     
     # OTHER #
     CreateReduxGroup    -Tag  "Debug" -Text "Misc" 

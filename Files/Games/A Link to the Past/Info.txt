@@ -19,7 +19,7 @@ Instructions:
 - Select patch
 - Enable optional "Enable Options" checkbox
 - Customize your patch within "Select Options"
-- Press "Patch Select Option"
+- Press "Patch Select Options"
 
 Information:
 - Original SFC ROM or VC WAD is preserved

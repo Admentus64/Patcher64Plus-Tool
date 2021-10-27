@@ -323,6 +323,19 @@
 	"vc_title"		: "Mario Kart 64",
 	"vc_gameID"		: "NABE"
 }, {
+	"title"			: "Donkey Kong 64",
+	"mode"			: "Donkey Kong 64",
+	"save"			: 1,
+	"console"		: "N64",
+	"version" : [ {
+		"hash"		: "9EC41ABF2519FC386CADD0731F6E868C",
+		"rev"		: "Revision 0",
+		"region"	: "North America / NTSC-U"
+	} ],
+	"patches"		: 1,
+	"rom_title"		: "DONKEY KONG 64",
+	"rom_gameID"		: "NDOE"
+}, {
 	"title"			: "The Legend of Zelda: A Link to the Past",
 	"mode"			: "A Link to the Past",
 	"save"			: 1,

@@ -3,17 +3,40 @@
 		"name"		: "Original",
 		"author"	: "Nintendo"
 	}, {
-		"name"		: "Original - Majora's Mask Eyes",
+		"name"		: "Majora's Mask Eyes",
 		"author"	: "Nintendo",
+		"porter"	: "GhostlyDark"
+	}, {
+		"name"		: "Sashed",
+		"author"	: "Nintendo & AriaHiro64"
+	}, {
+		"name"		: "MM Eyes + Sashed",
+		"author"	: "Nintendo & AriaHiro64",
 		"porter"	: "GhostlyDark"
 	}, {
 		"name"		: "Majora's Mask",
 		"author"	: "Nintendo",
 		"porter"	: "The3DDude"
 	}, {
+		"name"		: "1996 Link",
+		"author"	: "Ikey Ilex",
+		"deku_shield"	: 0,
+		"hylian_shield"	: 0
+	}, {
+		"name"		: "Dark Link",
+		"author"	: "Mikus64",
+		"deku_shield"	: 0,
+		"hylian_shield"	: 0
+	}, {
 		"name"		: "Kafei",
 		"author"	: "Nintendo & Malon Rose",
 		"url"		: "https://youtube.com/c/MalonRose{0}https://www.patreon.com/MalonRose",
+		"deku_shield"	: 0,
+		"hylian_shield"	: 0
+	}, {
+		"name"		: "A Link to the Past",
+		"author"	: "Oni 3D Arts",
+		"url"		: "https://github.com/hylian-modding/Z64-CustomPlayerModels",
 		"deku_shield"	: 0,
 		"hylian_shield"	: 0
 	}, {
@@ -68,10 +91,18 @@
 		"name"		: "Original",
 		"author"	: "Nintendo"
 	}, {
+		"name"		: "Sashed",
+		"author"	: "Nintendo & AriaHiro64"
+	}, {
 		"name"		: "Majora's Mask",
 		"author"	: "Skilarbabcock",
 		"url"		: "https://www.youtube.com/user/skilarbabcock",
 		"hylian_shield"	: 0
+	}, {
+		"name"		: "1996 Link",
+		"author"	: "Ikey Ilex",
+		"hylian_shield"	: 0,
+		"mirror_shield" : 0
 	}, {
 		"name"		: "Kafei",
 		"author"	: "Malon Rose",
@@ -83,13 +114,24 @@
 		"author"	: "Skilarbabcock",
 		"url"		: "https://www.youtube.com/user/skilarbabcock"
 	}, {
-		"name"		: "Dark Link",
+		"name"		: "Dark Link - Enemy",
 		"author"	: "Nintendo",
 		"porter"	: "CrookedPoe"
+	}, {
+		"name"		: "Dark Link",
+		"author"	: "Mikus64",
+		"hylian_shield"	: 0,
+		"mirror_shield"	: 0
 	}, {
 		"name"		: "Fierce Deity",
 		"author"	: "Nintendo",
 		"porter"	: "CrookedPoe"
+	}, {
+		"name"		: "A Link to the Past",
+		"author"	: "Oni 3D Arts",
+		"url"		: "https://github.com/hylian-modding/Z64-CustomPlayerModels/blob/master/LICENSE",
+		"hylian_shield"	: 0,
+		"mirror_shield"	: 0
 	}, {
 		"name"		: "Twilight Princess",
 		"author"	: "Skilarbabcock",
@@ -112,6 +154,10 @@
 	}, {
 		"name"		: "Mega Man",
 		"author"	: "Psi-Hate"
+	}, {
+		"name"		: "Skyward Sword",
+		"author"	: "Skilarbabcock",
+		"url"		: "https://www.youtube.com/user/skilarbabcock"
 	}, {
 		"name"		: "Sunny",
 		"author"	: "Unesag & Amara",
@@ -151,6 +197,10 @@
 	}, {
 		"name"		: "Roll",
 		"author"	: "Psi-Hate"
+	}, {
+		"name"		: "Nabooru",
+		"author"	: "Hailey",
+		"hylian_shield"	: 0
 	}, {
 		"name"		: "Saria",
 		"author"	: "Malon Rose",

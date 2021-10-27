@@ -21,8 +21,8 @@
 --- REDUX ---
 - Hacking:				Maroc
 - Editing / Revision:			ShadowOne333, MattKimura
-- Original Hacking:			Roman971, TestRunnerSRL, AmazingAmpharos, fig02,
-					krimtonz, rlbond86, KevinPal, junglechief87
+- Original Hacking:			Roman971, TestRunnerSRL, AmazingAmpharos, fig02, krimtonz, rlbond86,
+					KevinPal, junglechief87
 
 --- Additional Options ---
 - Manual Jump:				Admentus (ROM) & CloudModding (GameShark)
@@ -42,8 +42,10 @@
 - Force Hires Link Model:		GhostlyDark
 - Feminine Animations:			GhostlyDark (ported) & AriaHiro64 (model)
 - Hide Equipment:			XModxGodX
-- MM HUD Textures:			GhostlyDark
+- MM HUD Icons:				GhostlyDark (ported)
 - MM Button Positions:			GhostlyDark
+- Buttons Size:				GhostlyDark
+- Button Styles:			GhostlyDark (ported), Djipi, Community, Nerrel, Federelli
 - MM Pause Screen:			Garo-Mastah & CM
 - HUD Size:				Admentus & GhostlyDark
 - Easier Minigames:			ShadowOne333
@@ -52,8 +54,7 @@
 - Iron Shield textures:			ZombieBrainySnack
 - Fireproof Deku Shield:		Three Pendants
 - Master Sword (Beta Icon):		CYB3RTR0N
-- Hylian Shield alternatives:		Admentus (injects), GhostlyDark (injects),
-					CYB3RTR0N (icons) & sanguinetti (shield textures)
+- Hylian Shield alternatives:		Admentus & GhostlyDark (injects), CYB3RTR0N (icons), sanguinetti (shields)
 - Sword Hitboxes:			Aria Hiroshi 64
 - Set Capacity:				GhostlyDark
 - 4 Digits for Rupees:			CloudMax, VictorHale & CrookedPoe
@@ -76,36 +77,44 @@
 - Amara:				Amara & theluigidude2007
 - Peach:				theluigidude2007
 
+- Hylian Modding Models License:	https://github.com/hylian-modding/Z64-CustomPlayerModels
+					GNU General Public License v3.0 (GPL-3.0 License)
+
 --- Custom Male Models ---
-- Breath of the Wild (Adult):		Skilarbabcock (www.youtube.com/user/skilarbabcock)
-- Dark Link (Adult):			CrookedPoe
-- Fierce Deity (Adult):			CrookedPoe
+- 1996 Link:				Ikey Ilex
+- A Link to the Past			Oni 3D-Arts
+- Breath of the Wild:			Skilarbabcock (www.youtube.com/user/skilarbabcock)
+- Dark Link - Enemy:			CrookedPoe
+- Dark Link				Mikus64
+- Fierce Deity:				CrookedPoe
 - Happy Mask Salesman:			Anubis-V1
-- Kafei:				Malon Rose (www.patreon.com/MalonRose
-					& www.youtube.com/c/MalonRose)
-- Link's Awakening (Adult):		Skilarbabcock (www.youtube.com/user/skilarbabcock)
-- Majora's Mask (Child):		The3Dude
+- Kafei:				Malon Rose (www.patreon.com/MalonRose & www.youtube.com/c/MalonRose)
+- Link's Awakening:			Skilarbabcock (www.youtube.com/user/skilarbabcock)
+- Majora's Mask (Child):		The3Dude (ported)
 - Majora's Mask (Adult):		Skilarbabcock (www.youtube.com/user/skilarbabcock)
+- Majora's Mask Eyes:			GhostlyDark (ported)
 - Mega Man:				Megaman Legends
-- Majora's Mask Eyes (Child):		GhostlyDark
+- MM Eyes + Sashed:			GhostlyDark (ported), Nintendo, AriaHiro64
+- Sashed:				Nintendo, AriaHiro64
+- Original:				Nintendo
+- Skyward Sword:			Skilarbabcock (www.youtube.com/user/skilarbabcock)
+- Sunny:				Unesag & Amara
 - Twilight Princess:			Skilarbabcock (www.youtube.com/user/skilarbabcock)
 
-
-
 --- Custom Female Models ---
-- Amara:				Amara & Karicyan
+- Amara:				Amara, Karicyan
 - Aria the Demon:			AriaHiro64
 - Hatsune Miku - Link:			JanexLane
 - Hatsune Miku - Vocaloid:		JanexLane
 - Malon 3D:				Karicyan
 - Malon Thicc:				Karicyan
+- Nabooru:				Hailey
 - Princess Ruto:			Unesag
 - Princess Zelda 3D:			Hailey
 - Princess Zelda ALttP (Child):		Unesag
 - Princess Zelda ALttP (Adult):		Lopieloo
 - Roll:					Psi-Hate
-- Saria:				Malon Rose (www.patreon.com/MalonRose
-					& www.youtube.com/c/MalonRose)
+- Saria:				Malon Rose (www.patreon.com/MalonRose & www.youtube.com/c/MalonRose)
 
 --- Quality Assurance ---
 - Translations:				GhostlyDark
@@ -127,8 +136,7 @@
 - Lead Development and Music:		Captain Seedy-Eye
 - 64DD Porting:				LuigiBlood
 - Special Thanks:			PK-LOVE, BWIX, Hylian Modding
-- Testers:				Captain Seedy, LuigiBlood, Hard4Games, ZFG, Dry4Haz,
-					fig02
+- Testers:				Captain Seedy, LuigiBlood, Hard4Games, ZFG, Dry4Haz, fig02
 
 --- The Fate of the Bombiwa ---
 - DezZiBao
@@ -187,8 +195,7 @@
 
 --- Dark Hyrule Fantasy ---
 - Lead Development:			E-Gor, Spire, Ostrealava, Badub
-- Special Thanks:			MelonSpeedruns, CDi-Fails, Psi-Hate, Zel, Ultra553,
-					Dr. Disco, Nokaubure
+- Special Thanks:			MelonSpeedruns, CDi-Fails, Psi-Hate, Zel, Ultra553, Dr. Disco, Nokaubure
 
 --- Randomizer ---
 - Roman971
@@ -259,6 +266,8 @@
 --- REDUX ---
 - Hacking:				Maroc
 - Original Hacking:			Saneki
+- Fixes:				Admentus & GhostlyDark
+- Improvements:				GhostlyDark
 
 --- Additional Options ---
 - Master Quest Remix:			Admentus (porting) & DeathBasket (maps / patch)
@@ -283,8 +292,9 @@
 - Fix Southern Swamp:			ShadowOne333
 - Fix Fairy Fountain:			Dybbles (fix) & ShadowOne333 (ROM / patch)
 - Always Best Ending:			Marcelo20XX
-- HUD Textures:				GhostlyDark
-- HUD Size:				Admentus & GhostlyDark
+- OoT HUD Icons:			GhostlyDark (ported)
+- Buttons Size:				GhostlyDark (ported)
+- Button Styles:			GhostlyDark (ported), Djipi, Community, Nerrel, Federelli
 - Hide HUD:				Marcelo20XX
 - Disable SFX Effects:			Marcelo20XX
 - Fairy Colors:				Dzeko
@@ -294,7 +304,6 @@
 - Restore Text:				ShadowOne333
 - Correct Circus Mask:			ShadowOne333
 - Correct Comma:			ShadowOne333
-- Skip Dialogue:			Marcelo20XX
 - Various offsets:			Chez Cousteau
 - Admentus (Scripting and Assistance of all Options)
 
@@ -413,7 +422,7 @@
 
 
 
-============================
+========================
 <<< SUPER SMASH BROS >>>
 
 --- Remix ---
@@ -439,6 +448,16 @@
 
 --- CPUs use human items including shells ---
 - triclon
+
+
+
+======================
+<<< DONKEY KONG 64 >>>
+
+--- Tag Anywhere ---
+- Isotarge (Primary hacking & ASM work)
+- Tom Ballaam, Kaze Emanuar (Tag anywhere implementation)
+- runehero123 (ROM Map)
 
 
 

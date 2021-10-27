@@ -18,10 +18,10 @@ Requirements:
 Instructions:
 - Select Z64 ROM or VC WAD
 - Select patch
-- Customize "Virtual Console - Patch Options" checkboxes
+- Customize Virtual Console options
 - Enable optional "Enable Redux" or "Enable Options" checkboxes
-- Customize your patch within "Select Options", "Redux" and "Language"
-- Press "Patch Select Option"
+- Customize your patch within "Select Options"
+- Press "Patch Select Options"
 
 Documentation / Sources:
 - https://github.com/ShadowOne333/Zelda64-Redux-Documentation

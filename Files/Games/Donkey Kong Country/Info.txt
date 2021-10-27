@@ -16,7 +16,7 @@ Requirements:
 Instructions:
 - Select SFC ROM or VC WAD
 - Select patch
-- Press "Patch Selected Option"
+- Press "Patch Selected Options"
 
 Information:
 - Original SFC ROM or VC WAD is preserved

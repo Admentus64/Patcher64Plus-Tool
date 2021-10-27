@@ -1125,6 +1125,29 @@ function IsRestrictedFolder([string]$Path) {
 
 
 
+#==================================================================================================================================================================================================================================================================
+function GetWindowsVersion() {
+
+    # Get the current version of windows
+    $getWinVersion = ([Environment]::OSVersion.Version).ToString().Split('.')
+    $getWinVersion = $GetWinVersion[0] + '.' + $GetWinVersion[1]
+
+    switch ($getWinVersion) { # Set the version of windows, shared versions for Vista/7 and for 8/8.1
+        '6.0'   { return 7 } # Windows Vista
+        '6.1'   { return 7 } # Windows 7
+        '6.2'   { return 8 } # Windows 8
+        '6.3'   { return 8 } # Windows 8.1
+        '10.0'  {            # Windows 10 / 11
+            $WinTitle = ((Get-CimInstance -ClassName CIM_OperatingSystem).Caption).Split(' ') # Get the full name of the operating system and split on the spaces
+            return [int]($WinTitle[2])                                                        # Get the version from the split string
+        }
+        default { return 50 }  # Any other future version
+    }
+
+}
+
+
+
 #==============================================================================================================================================================================================
 function GetCommand([string]$Command) { return (Get-Command $Command -errorAction SilentlyContinue) }
 
@@ -1194,3 +1217,4 @@ Export-ModuleMember -Function SetLogging
 Export-ModuleMember -Function SetBitmap
 Export-ModuleMember -Function IsRestrictedFolder
 Export-ModuleMember -Function GetCommand
+Export-ModuleMember -Function GetWindowsVersion

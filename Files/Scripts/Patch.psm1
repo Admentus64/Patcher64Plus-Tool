@@ -685,9 +685,9 @@ function ApplyPatchROM([boolean]$Decompress) {
     if (!(ApplyPatch -File $File -Patch $PatchPath -New $GetROM.patched -FullPath)) { return $False }
     $HashSum2 = (Get-FileHash -Algorithm MD5 -LiteralPath $GetROM.patched).Hash
     if ($HashSum1 -eq $HashSum2) {
-        if ($IsWiiVC -and $GameType.downgrade -and !(IsChecked $Patches.Downgrade) )      { UpdateStatusLabel "Failed! Patch file does not match source. ROM has left unchanged. Enable Downgrade?" }
-        elseif ($IsWiiVC -and $GameType.downgrade -and (IsChecked $Patches.Downgrade) )   { UpdateStatusLabel "Failed! Patch file does not match source. ROM has left unchanged. Disable Downgrade?" }
-        else                                                                              { UpdateStatusLabel "Failed! Patch file does not match source. ROM has left unchanged." }
+        if ($IsWiiVC -and $GameType.downgrade -and !(IsChecked $Patches.Downgrade) -and $Patches.Options.Checked -or $Patches.Options.Visible )   { UpdateStatusLabel "Failed! Patch file does not match source. ROM has left unchanged. Enable Downgrade?" }
+        elseif ($IsWiiVC -and $GameType.downgrade -and (IsChecked $Patches.Downgrade) )                                                           { UpdateStatusLabel "Failed! Patch file does not match source. ROM has left unchanged. Disable Downgrade?" }
+        else                                                                                                                                      { UpdateStatusLabel "Failed! Patch file does not match source. ROM has left unchanged." }
         return $False
     }
 
@@ -861,8 +861,10 @@ function PatchRedux([boolean]$Decompress) {
         UpdateStatusLabel ("Patching " + $GameType.mode + " REDUX...")
 
         # Redux patch
-        if ( (IsChecked $Redux.Graphics.Widescreen) -and (IsSet -Elem $GamePatch.redux.file_widescreen) )   { ApplyPatch -File $GetROM.decomp -Patch $GamePatch.redux.file_widescreen }
-        elseif (IsSet -Elem $GamePatch.redux.file)                                                          { ApplyPatch -File $GetROM.decomp -Patch $GamePatch.redux.file }
+        if     ( (IsChecked $Redux.Graphics.Widescreen) -and (IsChecked $Redux.Gameplay.NewRedux) -and (IsSet -Elem $GamePatch.redux.file_widescreen_v2) )   { ApplyPatch -File $GetROM.decomp -Patch $GamePatch.redux.file_widescreen_v2 }
+        elseif ( (IsChecked $Redux.Gameplay.NewRedux)   -and (IsSet -Elem $GamePatch.redux.file_v2) )                                                        { ApplyPatch -File $GetROM.decomp -Patch $GamePatch.redux.file_v2 }
+        elseif ( (IsChecked $Redux.Graphics.Widescreen) -and (IsSet -Elem $GamePatch.redux.file_widescreen) )                                                { ApplyPatch -File $GetROM.decomp -Patch $GamePatch.redux.file_widescreen }
+        elseif (IsSet -Elem $GamePatch.redux.file)                                                                                                           { ApplyPatch -File $GetROM.decomp -Patch $GamePatch.redux.file }
     }
 
 }

@@ -5,7 +5,7 @@ Patches for Mario Kart 64:
 	* Extract ROM Only
 2. Apply Patch (requires a patch file)
 3. Patch Header
-4. One ROM hacks
+4. One ROM hack
 
 Known Issues:
 - Unknown
@@ -16,7 +16,7 @@ Requirements:
 Instructions:
 - Select Z64 ROM or VC WAD
 - Select patch
-- Press "Patch Select Option"
+- Press "Patch Selected Options"
 
 Information:
 - Original Z64 ROM or VC WAD is preserved

@@ -20,10 +20,10 @@ Requirements:
 Instructions:
 - Select Z64 ROM or VC WAD
 - Select patch
-- Customize "Virtual Console - Patch Options" checkboxes
+- Customize Virtual Console options
 - Enable optional "Enable Options" checkbox
 - Customize your patch within "Select Options"
-- Press "Patch Select Option"
+- Press "Patch Select Options"
 
 Information:
 - Original Z64 ROM or VC WAD is preserved

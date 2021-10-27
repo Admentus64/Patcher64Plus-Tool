@@ -1,3 +1,30 @@
+v15.0.0
+- Added new .exe Launcher to open up the Patcher64+ Tool with
+- Added new alternative updated Redux version for MM (by GhostlyDark)
+- Added "No Shield Recoil" checkbox and "Shield Recoil" distance slider for OoT and MM
+- Added new "Unlock Gauntlets", "Unlock Crawl Hole" and "Hold Shield Out" options for OoT
+- Added new "Elegy of Emptiness Speedup" and "Fierce Deity Anywhere" options for New Redux MM
+- Added several new models for OoT (ported and organized by GhostlyDark)
+- Added new buttons styles and sizes for OoT and MM (ported and organized by GhostlyDark)
+- Added preview images for the HUD for OoT and MM
+- Added new "Donkey Kong 64" Game Mode (no VC support)
+- Added shared assets
+- Updated Credits window
+- Updated "Additional Options" screen to be wider
+- Updated "Remap VC Controls" screen
+- Updated info for Game Modes
+- Updated tooltip for custom models for OoT
+- Changed default settings for MM Redux, including without Additional Options selected
+- Changed Additional Options GUI width to be determined by columns
+- Changed HUD buttons to be dynamically recognized
+- Changed HUD options for OoT and MM into one checkbox and two dropdown menus
+- Changed some option and model names to fit better in the GUI
+- Changed the "Double Click" option to be disabled for Windows 11 and newer
+- Removed "Autoskip" option for MM
+- Fixed issue with Woodfall Temple crashing when entering doors with the Master Quest option
+- Fixed Restored Text issue with Gorman Brothers racing for MM (by ShadowOne333)
+- Fixed Bomb Bag 1 values causing to fail obtain bag upgrade (minimum value is now 20)
+
 v14.3.10
 - Fixed issue with recognizing filepaths for ROMs and WADs
 
