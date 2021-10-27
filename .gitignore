@@ -1,7 +1,6 @@
 Files/Settings/*.ini
 Files/Logs/*.log
-Patcher64+ Tool Launcher.exe
-Patcher64+ Tool.exe
+*.exe
 *.7z
 *.htm
 *.html
