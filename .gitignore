@@ -1,5 +1,7 @@
 Files/Settings/*.ini
 Files/Logs/*.log
+Files/Tools/Patching/flipscfg.bin
+Files/Tools/cygdrive
 Files/Games/Ocarina of Time/Extracted/*.bin
 Files/Games/Ocarina of Time/Extracted/*.tbl
 Files/Games/Ocarina of Time/Custom Text/*.bin
