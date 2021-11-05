@@ -1,5 +1,13 @@
 Files/Settings/*.ini
 Files/Logs/*.log
+Files/Games/Ocarina of Time/Extracted/*.bin
+Files/Games/Ocarina of Time/Extracted/*.tbl
+Files/Games/Ocarina of Time/Custom Text/*.bin
+Files/Games/Ocarina of Time/Custom Text/*.tbl
+Files/Games/Majora's Mask/Extracted/*.bin
+Files/Games/Majora's Mask/Extracted/*.tbl
+Files/Games/Majora's Mask/Custom Text/*.bin
+Files/Games/Majora's Mask/Custom Text/*.tbl
 *.exe
 *.7z
 *.htm
