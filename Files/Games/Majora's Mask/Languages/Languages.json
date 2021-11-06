@@ -73,7 +73,7 @@
 	"script_start"		: "AD1000",
 	"script_length"		: "699F0",
 	"output"		: "_pl_patched",
-	"credits"		: "RPG (v1.1)"
+	"credits"		: "RPG (v1.1) & GhostlyDark (improvements)"
 }, {
 	"title"			: "Russian",
 	"code"			: "ru",
@@ -82,5 +82,5 @@
 	"script_start"		: "AD1000",
 	"script_length"		: "65EB0",
 	"output"		: "_ru_patched",
-	"credits"		: "Zelda64rus (v2.0 Beta)"
+	"credits"		: "Zelda64rus (v2.0 Beta) & GhostlyDark (improvements)"
 } ]

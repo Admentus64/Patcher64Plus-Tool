@@ -280,6 +280,7 @@ function ChangeGameMode() {
     $GameFiles.downgrade    = $GameFiles.Base + "\Downgrade"
     $GameFiles.textures     = $GameFiles.Base + "\Textures"
     $GameFiles.editor       = $GameFiles.Base + "\Editor"
+    $GameFiles.customText   = $GameFiles.Base + "\Custom Text"
     $GameFiles.info         = $GameFiles.Base + "\Info.txt"
     $GameFiles.patches      = $GameFiles.Base + "\Patches.json"
     $GameFiles.controls     = $GameFiles.Base + "\Controls.json"

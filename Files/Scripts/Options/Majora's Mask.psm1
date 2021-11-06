@@ -146,8 +146,8 @@ function ByteOptions() {
     if (IsChecked $Redux.Graphics.ExtendedDraw)       { ChangeBytes -Offset "B50874" -Values "00 00 00 00" }
     if (IsChecked $Redux.Graphics.BlackBars)          { ChangeBytes -Offset "BF72A4" -Values "00 00 00 00" }
     if (IsChecked $Redux.Graphics.PixelatedStars)     { ChangeBytes -Offset "B943FC" -Values "10 00" }
-    if ( (IsChecked $Redux.Graphics.MotionBlur)       -or (IsChecked $Redux.Graphics.Widescreen) )   { ChangeBytes -Offset "BFB9A0" -Values "03 E0 00 08 00 00 00 00 00" }
-    if ( (IsChecked $Redux.Graphics.FlashbackOverlay) -or (IsChecked $Redux.Graphics.Widescreen) )   { ChangeBytes -Offset "BFEB8C" -Values "24 0F 00 00" }
+    if (IsChecked $Redux.Graphics.MotionBlur)         { ChangeBytes -Offset "BFB9A0" -Values "03 E0 00 08 00 00 00 00 00" }
+    if (IsChecked $Redux.Graphics.FlashbackOverlay)   { ChangeBytes -Offset "BFEB8C" -Values "24 0F 00 00" }
 
 
 
@@ -198,6 +198,7 @@ function ByteOptions() {
     if (IsChecked $Redux.UI.GCScheme) {
         # Z to L textures
         PatchBytes -Offset "A7B7CC"  -Texture -Patch "GameCube\l_pause_screen_button.yaz0"
+        PatchBytes -Offset "AD0980"  -Texture -Patch "GameCube\dpad_text_icon.bin"
         PatchBytes -Offset "AD0A80"  -Texture -Patch "GameCube\l_text_icon.bin"
         if (TestFile ($GameFiles.textures + "\GameCube\l_targeting_" + $LanguagePatch.code + ".bin")) { PatchBytes -Offset "1E90D00" -Texture -Patch ("GameCube\l_targeting_" + $LanguagePatch.code + ".bin") }
     }
@@ -245,11 +246,6 @@ function ByteOptions() {
 
     # SOUNDS / VOICES / SFX SOUND EFFECTS #
 
-    if (IsChecked $Redux.Sounds.DisableSFXEffect) {
-        ChangeBytes -Offset "C3560C" -Values "08  06  BE  A6  AF  BF  00  1C  3C  0E  80  1E  24  E7  B4  B0" # Disable some sfx
-        ChangeBytes -Offset "C45FD8" -Values "34  09  48  02  10  89  00  0C  00  00  00  00  34  09  48  07  10  89  00  09  00  00  00  00  34  09  48  2F  10  89  00 06  00  00  00  00  00  00  00  00  00  00 ","00  00  08  06  7C  35  3C  07  80  1E  00  00  00  00  00  00  48  25  03  E0  00  08  27  BD  00  20"
-    }
-
     if (IsIndex -Elem $Redux.Sounds.LowHP -Not)                       { ChangeBytes -Offset "B97E2A" -Values (GetSFXID $Redux.Sounds.LowHP.Text) }
     if (IsIndex -Elem $Redux.Sounds.InstrumentHylian -Not -Index 1)   { ChangeBytes -Offset "51CBE"  -Values (GetMMInstrumentID $Redux.Sounds.InstrumentHylian.Text); ChangeBytes -Offset "C668DC" -Values (GetMMInstrumentID $Redux.Sounds.InstrumentHylian.Text) }
     if (IsIndex -Elem $Redux.Sounds.InstrumentDeku   -Not -Index 2)   { ChangeBytes -Offset "51CC6"  -Values (GetMMInstrumentID $Redux.Sounds.InstrumentDeku.Text);   ChangeBytes -Offset "C668DF" -Values (GetMMInstrumentID $Redux.Sounds.InstrumentDeku.Text)   }
@@ -280,12 +276,6 @@ function ByteOptions() {
 
 
     # HERO MODE #
-
-    if (IsChecked $Redux.Hero.MasterQuest) {
-        ChangeBytes -Offset "4E30"   -Values "00 00 00 00 00 00 00 00 00 00 00 00"                         # Softlocks when entering doors after curing water -> Woodfall Temple (boot)
-        ChangeBytes -Offset "BEBA03" -Values "49"                                                          # Elegy of Emptiness -> Great Bay Temple (code)
-        ChangeBytes -Offset "E936D0" -Values "54 02 00 02 34 0A 00 02 34 0A 00 01 10 00 00 22 AF AA 00 2C" # Gears -> Great Bay Temple (Bg_Dblue_Movebg)
-    }
 
     if (IsText -Elem $Redux.Hero.Damage -Compare "OHKO Mode") {
         ChangeBytes -Offset "BABE7F" -Values "09 04" -Interval 16
@@ -452,6 +442,11 @@ function ByteOptions() {
     if (IsChecked $Redux.Hero.DeathIsMoonCrash) {
         ChangeBytes -Offset "0C40DF8" -Values "8F A2 00 18 24 0E 54 C0"; ChangeBytes -Offset "0C40E08" -Values "3C 01 00 02 00 22 08 21"
         ChangeBytes -Offset "0C40E14" -Values "A4 2E 88 7A";             ChangeBytes -Offset "0C40E1D" -Values "0E 00 14 A0 2E 88 75 A0 2C 88 7F"
+    }
+
+    if (IsChecked $Redux.Hero.CloseBombShop) {
+        ChangeBytes -Offset "2CB10DA" -Values "03 60";      ChangeBytes -Offset "2CB1212" -Values "03 60"                                                          # Move Bomb Bag to Stock Pot Inn
+        ChangeBytes -Offset "E76F38" -Values "00 00 00 00"; ChangeBytes -Offset "E772DC" -Values "24 05 06 4A"; ChangeBytes -Offset "E77CCC" -Values "24 05 06 4A" # Disable Bomb Shop
     }
 
 
@@ -775,20 +770,42 @@ function ByteReduxOptions() {
 #==============================================================================================================================================================================================
 function ByteLanguageOptions() {
     
-    if ( (IsChecked $Redux.Text.Restore) -or (IsLanguage $Redux.Gameplay.RazorSword) -or (IsChecked $Redux.UI.GCScheme) -or (IsChecked -Elem $Redux.Script.RenameTatl) -or (IsText -Elem $Redux.Colors.Fairy -Compare "Navi") -or (IsText -Elem $Redux.Colors.Fairy -Compare "Tael")  -or (IsLanguage $Redux.Capacity.EnableAmmo) -or (IsLanguage $Redux.Capacity.EnableWallet)  ) {
+    if ( (IsChecked $Redux.Text.Restore) -or (IsChecked $Redux.Text.MasterQuest) -or (IsLanguage $Redux.Gameplay.RazorSword) -or (IsChecked $Redux.UI.GCScheme) -or (IsChecked -Elem $Redux.Script.RenameTatl) -or (IsText -Elem $Redux.Colors.Fairy -Compare "Navi") -or (IsText -Elem $Redux.Colors.Fairy -Compare "Tael")  -or (IsLanguage $Redux.Capacity.EnableAmmo) -or (IsLanguage $Redux.Capacity.EnableWallet)  ) {
         if ( (IsSet $LanguagePatch.script_start) -and (IsSet $LanguagePatch.script_length) ) {
-            $File = $GameFiles.extracted + "\message_data_static.bin"
-            ExportBytes -Offset $LanguagePatch.script_start -Length $LanguagePatch.script_length -Output $File -Force
+            $script = $GameFiles.extracted + "\message_data_static.bin"
+            $table  = $GameFiles.extracted + "\message_data.tbl"
+            ExportBytes -Offset $LanguagePatch.script_start -Length $LanguagePatch.script_length -Output $script -Force
+            ExportBytes -Offset "1A6D6" -Length "8F70" -Output $table -Force
+            $lengthDifference = (Get-Item ($GameFiles.extracted + "\message_data_static.bin")).length
         }
         else  { return }
     }
     else { return }
 
     if (IsChecked $Redux.Text.Restore) {
-        ChangeBytes -Offset "1A6D6"  -Values "AC A0"
-        PatchBytes  -Offset "C5D0D8" -Patch "Message\restore.tbl"
-        ApplyPatch -File $File -Patch "\Export\Message\restore.bps"
-        PatchBytes -Offset "A2DDC4" -Length "26F" -Texture -Patch "Icons\troupe_leaders_mask_text.yaz0" # Correct Circus Mask
+        ApplyPatch  -File $script -Patch "\Export\Message\restore_static.bps"
+        ApplyPatch -File $table   -Patch "\Export\Message\restore_table.bps"
+        PatchBytes  -Offset "A2DDC4" -Length "26F" -Texture -Patch "Icons\troupe_leaders_mask_text.yaz0" # Correct Circus Mask
+    }
+    elseif (IsChecked $Redux.Text.MasterQuest) {
+        ApplyPatch -File $script -Patch "\Export\Message\master_quest_static.bps"
+        ApplyPatch -File $table  -Patch "\Export\Message\master_quest_table.bps"
+    }
+    elseif (IsChecked $Redux.Text.Custom) {
+        if ( (TestFile ($Gamefiles.customText + "\message_data_static.bin") ) -and (TestFile ($Gamefiles.customText + "\message_data.tbl") ) ) {
+            Copy-Item -LiteralPath ($Gamefiles.customText + "\message_data_static.bin") -Destination ($GameFiles.extracted + "\message_data_static.bin") -Force
+            Copy-Item -LiteralPath ($Gamefiles.customText + "\message_data.tbl")        -Destination ($GameFiles.extracted + "\message_data.tbl")        -Force
+        }
+        else {
+            WriteToConsole "Custom Text could not be found. All text changes will be discarded."
+            return   
+        }
+    }
+
+    $lengthDifference = (Get-Item ($GameFiles.extracted + "\message_data_static.bin")).length - $lengthDifference
+    if ($lengthDifference -ne 0) {
+        $newDma = (Get16Bit ((GetDecimal "A9F0") + $lengthDifference)) -split '(..)' -ne ''
+        ChangeBytes -Offset "1A6D6" -Values $newDma
     }
 
     if (IsChecked $Redux.Text.OcarinaIcons) {
@@ -811,17 +828,17 @@ function ByteLanguageOptions() {
         if ( (IsSet  $LanguagePatch.l_target_seach) -and (IsSet  $LanguagePatch.l_target_replace) ) {
             $Offset = 0
             do { # Z Targeting
-                $Offset = SearchBytes -File $File -Start $Offset -Values $LanguagePatch.l_target_search
-                if ($Offset -ne -1) { ChangeBytes -File $File -Offset $Offset -Values $LanguagePatch.l_target_replace }
+                $Offset = SearchBytes -File $script -Start $Offset -Values $LanguagePatch.l_target_search
+                if ($Offset -ne -1) { ChangeBytes -File $script -Offset $Offset -Values $LanguagePatch.l_target_replace }
             } while ($Offset -gt 0)
         }
     }
 
     if (IsLanguage -Elem $Redux.Gameplay.RazorSword) {
-        $Offset = SearchBytes -File $File -Values "4B 65 65 70 20 69 6E 20 6D 69 6E 64 20 74 68 61 74 20 61 66 74 65 72";          PatchBytes -File $File -Offset $Offset -Patch "Message\razor_sword_1.bin"
-        $Offset = SearchBytes -File $File -Values "4E 6F 77 20 6B 65 65 70 20 69 6E 20 6D 69 6E 64 20 74 68 61 74";                PatchBytes -File $File -Offset $Offset -Patch "Message\razor_sword_2.bin"
-        $Offset = SearchBytes -File $File -Values "54 68 69 73 20 6E 65 77 2C 20 73 68 61 72 70 65 72 20 62 6C 61 64 65";          PatchBytes -File $File -Offset $Offset -Patch "Message\razor_sword_3.bin"
-        $Offset = SearchBytes -File $File -Values "54 68 65 20 4B 6F 6B 69 72 69 20 53 77 6F 72 64 20 72 65 66 6F 72 67 65 64";    PatchBytes -File $File -Offset $Offset -Patch "Message\razor_sword_4.bin"
+        $Offset = SearchBytes -File $script -Values "4B 65 65 70 20 69 6E 20 6D 69 6E 64 20 74 68 61 74 20 61 66 74 65 72";          PatchBytes -File $script -Offset $Offset -Patch "Message\razor_sword_1.bin"
+        $Offset = SearchBytes -File $script -Values "4E 6F 77 20 6B 65 65 70 20 69 6E 20 6D 69 6E 64 20 74 68 61 74";                PatchBytes -File $script -Offset $Offset -Patch "Message\razor_sword_2.bin"
+        $Offset = SearchBytes -File $script -Values "54 68 69 73 20 6E 65 77 2C 20 73 68 61 72 70 65 72 20 62 6C 61 64 65";          PatchBytes -File $script -Offset $Offset -Patch "Message\razor_sword_3.bin"
+        $Offset = SearchBytes -File $script -Values "54 68 65 20 4B 6F 6B 69 72 69 20 53 77 6F 72 64 20 72 65 66 6F 72 67 65 64";    PatchBytes -File $script -Offset $Offset -Patch "Message\razor_sword_4.bin"
     }
 
     if ( (IsChecked $Redux.Script.RenameTatl)) {
@@ -829,8 +846,8 @@ function ByteLanguageOptions() {
         if ( (IsSet  $LanguagePatch.tatl_search) -and (IsSet  $LanguagePatch.tatl_replace) ) {
             $Offset = 0
             do { # Tatl -> Taya
-                $Offset = SearchBytes -File $File -Start $Offset -Values $LanguagePatch.tatl_search
-                if ($Offset -ne -1) { ChangeBytes -File $File -Offset $Offset -Values $LanguagePatch.tatl_replace }
+                $Offset = SearchBytes -File $script -Start $Offset -Values $LanguagePatch.tatl_search
+                if ($Offset -ne -1) { ChangeBytes -File $script -Offset $Offset -Values $LanguagePatch.tatl_replace }
             } while ($Offset -gt 0)
         }
     }
@@ -838,42 +855,43 @@ function ByteLanguageOptions() {
         PatchBytes -Offset "1EBFAE0" -Texture -Patch "HUD\navi.bin"
         $Offset = 0
         do { # Tatl -> Navi
-            $Offset = SearchBytes -File $File -Start $Offset -Values "54 61 74 6C"
-            if ($Offset -ne -1) { ChangeBytes -File $File -Offset $Offset -Values "4E 61 76 69" }
+            $Offset = SearchBytes -File $script -Start $Offset -Values "54 61 74 6C"
+            if ($Offset -ne -1) { ChangeBytes -File $script -Offset $Offset -Values "4E 61 76 69" }
         } while ($Offset -gt 0)
     }
     elseif (IsText -Elem $Redux.Colors.Fairy -Compare "Tael") {
         PatchBytes -Offset "1EBFAE0" -Texture -Patch "HUD\tael.bin"
         $Offset = 0
         do { # Tatl -> Tael
-            $Offset = SearchBytes -File $File -Start $Offset -Values "54 61 74 6C"
-            if ($Offset -ne -1) { ChangeBytes -File $File -Offset $Offset -Values "54 61 65 6C" }
+            $Offset = SearchBytes -File $script -Start $Offset -Values "54 61 74 6C"
+            if ($Offset -ne -1) { ChangeBytes -File $script -Offset $Offset -Values "54 61 65 6C" }
         } while ($Offset -gt 0)
     }
 
     if (IsLanguage $Redux.Capacity.EnableAmmo) {
-        ChangeStringIntoDigits -File $File -Search "33 30 20 61 72 72 6F 77 73 00 2E" -Value $Redux.Capacity.Quiver1.Text
-        ChangeStringIntoDigits -File $File -Search "34 30 20 61 72 72 6F 77 73 00"    -Value $Redux.Capacity.Quiver2.Text
-        ChangeStringIntoDigits -File $File -Search "34 30 20 61 72 72 6F 77 73 00"    -Value $Redux.Capacity.Quiver2.Text
-        ChangeStringIntoDigits -File $File -Search "35 30 20 61 72 72 6F 77 73 00"    -Value $Redux.Capacity.Quiver3.Text
-        ChangeStringIntoDigits -File $File -Search "35 30 20 61 72 72 6F 77 73 00"    -Value $Redux.Capacity.Quiver3.Text
+        ChangeStringIntoDigits -File $script -Search "33 30 20 61 72 72 6F 77 73 00 2E" -Value $Redux.Capacity.Quiver1.Text
+        ChangeStringIntoDigits -File $script -Search "34 30 20 61 72 72 6F 77 73 00"    -Value $Redux.Capacity.Quiver2.Text
+        ChangeStringIntoDigits -File $script -Search "34 30 20 61 72 72 6F 77 73 00"    -Value $Redux.Capacity.Quiver2.Text
+        ChangeStringIntoDigits -File $script -Search "35 30 20 61 72 72 6F 77 73 00"    -Value $Redux.Capacity.Quiver3.Text
+        ChangeStringIntoDigits -File $script -Search "35 30 20 61 72 72 6F 77 73 00"    -Value $Redux.Capacity.Quiver3.Text
 
-        ChangeStringIntoDigits -File $File -Search "32 30 20 42 6F 6D 62 73 00 21 11" -Value $Redux.Capacity.BombBag1.Text
-        ChangeStringIntoDigits -File $File -Search "32 30 20 42 6F 6D 62 73 00 2E BF" -Value $Redux.Capacity.BombBag1.Text
-        ChangeStringIntoDigits -File $File -Search "33 30 20 42 6F 6D 62 73 00 2E BF" -Value $Redux.Capacity.BombBag2.Text
-        ChangeStringIntoDigits -File $File -Search "33 30 20 42 6F 6D 62 73 00 2E BF" -Value $Redux.Capacity.BombBag2.Text
-        ChangeStringIntoDigits -File $File -Search "34 30 20 62 6F 6D 62 73"          -Value $Redux.Capacity.BombBag3.Text
-        ChangeStringIntoDigits -File $File -Search "34 30 20 42 6F 6D 62 73"          -Value $Redux.Capacity.BombBag3.Text
+        ChangeStringIntoDigits -File $script -Search "32 30 20 42 6F 6D 62 73 00 21 11" -Value $Redux.Capacity.BombBag1.Text
+        ChangeStringIntoDigits -File $script -Search "32 30 20 42 6F 6D 62 73 00 2E BF" -Value $Redux.Capacity.BombBag1.Text
+        ChangeStringIntoDigits -File $script -Search "33 30 20 42 6F 6D 62 73 00 2E BF" -Value $Redux.Capacity.BombBag2.Text
+        ChangeStringIntoDigits -File $script -Search "33 30 20 42 6F 6D 62 73 00 2E BF" -Value $Redux.Capacity.BombBag2.Text
+        ChangeStringIntoDigits -File $script -Search "34 30 20 62 6F 6D 62 73"          -Value $Redux.Capacity.BombBag3.Text
+        ChangeStringIntoDigits -File $script -Search "34 30 20 42 6F 6D 62 73"          -Value $Redux.Capacity.BombBag3.Text
 
-        ChangeStringIntoDigits -File $File -Search "31 30 2C 11 73 6F 20 75 73 65"    -Value $Redux.Capacity.DekuSticks1.Text
+        ChangeStringIntoDigits -File $script -Search "31 30 2C 11 73 6F 20 75 73 65"    -Value $Redux.Capacity.DekuSticks1.Text
     }
 
     if (IsLanguage $Redux.Capacity.EnableWallet) {
-        ChangeStringIntoDigits -File $File -Search "32 30 30 20 00 6F 66 20 74 68 65 6D" -Value $Redux.Capacity.Wallet2.Text -Triple
-        ChangeStringIntoDigits -File $File -Search "35 30 30 20 52 75 70 65 65 73 00 2E" -Value $Redux.Capacity.Wallet3.Text -Triple
+        ChangeStringIntoDigits -File $script -Search "32 30 30 20 00 6F 66 20 74 68 65 6D" -Value $Redux.Capacity.Wallet2.Text -Triple
+        ChangeStringIntoDigits -File $script -Search "35 30 30 20 52 75 70 65 65 73 00 2E" -Value $Redux.Capacity.Wallet3.Text -Triple
     }
 
     PatchBytes -Offset $LanguagePatch.script_start -Patch "message_data_static.bin" -Extracted
+    PatchBytes -Offset "C5D0D8"                    -Patch "message_data.tbl"        -Extracted
 
 }
 
@@ -908,12 +926,13 @@ function AdjustGUI() {
 
     EnableElem -Elem @($Redux.Colors.Magic, $Redux.Colors.BaseMagic, $Redux.Colors.InfiniteMagic) -Active (!( (IsChecked $Redux.Graphics.Widescreen) -and $Patches.Redux.Checked))
     EnableElem -Elem @($Redux.DPad.LayoutLeft, $Redux.DPad.LayoutRight)                           -Active (!( (IsChecked $Redux.Graphics.Widescreen) -and $Patches.Redux.Checked))
-    EnableElem -Elem @($Redux.Graphics.MotionBlur, $Redux.Graphics.FlashbackOverlay)              -Active (!(IsChecked $Redux.Graphics.Widescreen))
     
     if ( (IsChecked $Redux.Graphics.Widescreen) -and $Patches.Redux.Checked)   { EnableElem -Elem @($Redux.DPad.Up, $Redux.DPad.Left, $Redux.DPad.Right, $Redux.DPad.Down) -Active $True }
     elseif ($Redux.Dpad.Disable.Checked)                                       { EnableElem -Elem @($Redux.DPad.Up, $Redux.DPad.Left, $Redux.DPad.Right, $Redux.DPad.Down) -Active $False }
 
     if ( (IsChecked $Redux.Graphics.Widescreen) -and $Patches.Redux.Checked -and ($Redux.DPad.LayoutLeft.Checked -or $Redux.DPad.LayoutRight.Checked) ) { $Redux.DPad.Hide.Checked = $True }
+
+    
 
 }
 
@@ -1003,7 +1022,7 @@ function CreateTabRedux() {
     # GAMEPLAY #
 
     CreateReduxGroup    -Tag  "Gameplay" -Text "Gameplay"
-    CreateReduxCheckBox -Name "NewRedux"           -Row 1 -Column 1          -Text "New Redux"                  -Info "Uses an updated version of Redux"                                                   -Credits "Maroc (fixed by GhostlyDark, adjusted by Admentus)" -Warning "Only use this updated version if you run into issues with the older Redux version"
+    CreateReduxCheckBox -Name "NewRedux"           -Row 1 -Column 1 -Checked -Text "New Redux"                  -Info "Uses an updated version of Redux"                                                   -Credits "Maroc (fixed by GhostlyDark, adjusted by Admentus)" -Warning "Only use this updated version if you run into issues with the older Redux version"
     CreateReduxCheckBox -Name "FasterBlockPushing" -Row 1 -Column 2 -Checked -Text "Faster Block Pushing"       -Info "All blocks are pushed faster"                                                       -Credits "Ported from Redux"
     CreateReduxCheckBox -Name "ElegySpeedup"       -Row 2 -Column 1 -Checked -Text "Elegy of Emptiness Speedup" -Info "The Elegy of Emptiness statue summoning cutscene is skipped after playing the song" -Credits "Ported from Redux"
     CreateReduxCheckBox -Name "FierceDeity"        -Row 2 -Column 2          -Text "Fierce Deity Anywhere"      -Info "The Fierce Deity Mask can be used anywhere now"                                     -Credits "Ported from Redux"
@@ -1031,8 +1050,13 @@ function CreateTabLanguage() {
     # ENGLISH TEXT OPTIONS #
      
     $Redux.Box.Text = CreateReduxGroup -Tag "Text" -Text "English Text Options"
-    CreateReduxCheckBox -Name "Restore"      -Text "Restore Text"        -Info "Restores and fixes the following:`n- Restore the area titles cards for those that do not have any`n- Sound effects that do not play during dialogue`n- Grammar and typo fixes" -Credits "Redux"
-    CreateReduxCheckBox -Name "OcarinaIcons" -Text "Ocarina Icons (WIP)" -Info "Restore the Ocarina Icons with their text when transformed like in the N64 Beta or 3DS version (Work-In-Progress)`nRequires the Restore Text option"                           -Credits "ShadowOne333"
+    CreateReduxPanel -Columns 4
+    CreateReduxRadioButton -Name "Vanilla" -Checked -Max 4 -SaveTo "Dialogue" -Text "Vanilla Text"      -Info "Keep the text as it is"
+    CreateReduxRadioButton -Name "Restore"          -Max 4 -SaveTo "Dialogue" -Text "Restore Text"      -Info "Restores and fixes the following:`n- Restore the area titles cards for those that do not have any`n- Sound effects that do not play during dialogue`n- Grammar and typo fixes" -Credits "Redux"
+    CreateReduxRadioButton -Name "MasterQuest"      -Max 4 -SaveTo "Dialogue" -Text "Master Quest Text" -Info "Uses the script from the Master Quest ROM hack`nAlso disables buying items from the Bomb Shop`nBest used along with the Master Quest difficulty option" -Credits "Admentus (ported) & DeathBasket (ROM hack)"
+    CreateReduxRadioButton -Name "Custom"           -Max 4 -SaveTo "Dialogue" -Text "Custom"            -Info ('Insert custom dialogue found from "..\Patcher64+ Tool\Files\Games\Majora' + "'" + 's Mask\Custom Text"') -Warning "Make sure your custom script is proper and correct, or your ROM will crash`n[!] No edit will be made if the custom script is missing"
+
+    CreateReduxCheckBox -Column 5 -Name "OcarinaIcons" -Text "Ocarina Icons (WIP)" -Info "Restore the Ocarina Icons with their text when transformed like in the N64 Beta or 3DS version (Work-In-Progress)`nRequires the Restore Text option" -Credits "ShadowOne333"
     
 
 
@@ -1055,7 +1079,10 @@ function UnlockLanguageContent() {
     
     # English options
     EnableElem -Elem $Redux.Box.Text          -Active $Patches.Options.Checked
+    EnableElem -Elem $Redux.Text.Vanilla      -Active $Redux.Language[0].Checked
     EnableElem -Elem $Redux.Text.Restore      -Active $Redux.Language[0].checked
+    EnableElem -Elem $Redux.Text.MasterQuest  -Active $Redux.Language[0].checked
+    EnableElem -Elem $Redux.Text.Custom       -Active $Redux.Language[0].checked
     EnableElem -Elem $Redux.Text.OcarinaIcons -Active ($Redux.Language[0].checked -and $Redux.Text.Restore.Checked)
 
 }
@@ -1085,8 +1112,7 @@ function CreateTabGraphics() {
         $info = "`n`n--- WARNING ---`nDisabling cutscene effects fixes temporary issues with both Widescreen and Redux patched where garbage pixels at the edges of the screen or garbled text appears`nWorkaround: Resize the window when that happens"
     }
     else { $info = "" }
-    
-    CreateReduxCheckBox -Name "MotionBlur"        -Text "Disable Motion Blur"       -Info ("Completely Disable the use of motion blur in-game" + $info)                -Credits "GhostlyDark"
+    CreateReduxCheckBox -Name "MotionBlur"        -Text "Disable Motion Blur"       -Info ("Completely d isable the use of motion blur in-game" + $info)                -Credits "GhostlyDark"
     CreateReduxCheckBox -Name "FlashbackOverlay"  -Text "Disable Flashback Overlay" -Info ("Disables the overlay shown during Princess Zelda flashback scene" + $info) -Credits "GhostlyDark"
 
 
@@ -1158,7 +1184,6 @@ function CreateTabAudio() {
 
     CreateReduxGroup    -Tag  "Sounds" -Text "Sounds / Voices / SFX Sound Effects" -Height 3
     CreateReduxComboBox -Name "LowHP"             -Column 5 -Row 1 -Text "Low HP SFX" -Items @("Default", "Disabled", "Soft Beep")  -Info "Set the sound effect for the low HP beeping" -Credits "Ported from Rando"
-    CreateReduxCheckBox -Name "DisableSFXEffect"  -Column 5 -Row 2 -Text "Disable SFX Effects" -Info "Remove the SFX Sound Effects for collecting rupees and solving puzzles" -Credits "Marcelo20XX"
     
 
     $SFX =  @("Ocarina", "Deku Pipes", "Goron Drums", "Zora Guitar", "Female Voice", "Bell", "Cathedral Bell", "Piano", "Soft Harp", "Harp", "Accordion", "Bass Guitar", "Flute", "Whistling Flute", "Gong", "Elder Goron Drums", "Choir", "Arguing", "Tatl", "Giants Singing", "Ikana King", "Frog Croak", "Beaver", "Eagle Seagull", "Dodongo")
@@ -1216,11 +1241,19 @@ function CreateTabDifficulty() {
 
     if ($Settings.Debug.LiteGUI -eq $True) { return }
 
-    CreateReduxComboBox -Name "DamageEffect"     -Column 3 -Row 3 -Text "Damage Effect" -Items @("Default", "Burn", "Freeze", "Shock", "Knockdown") -Info "Add an effect when damaged"                 -Credits "Ported from Rando"
-    CreateReduxComboBox -Name "ClockSpeed"       -Column 5 -Row 3 -Text "Clock Speed"   -Items @("Default", "1/3", "2/3", "2x", "3x", "6x")         -Info "Set the speed at which time is progressing" -Credits "Ported from Rando"
+    CreateReduxComboBox -Name "DamageEffect"     -Column 3 -Row 3 -Text "Damage Effect" -Items @("Default", "Burn", "Freeze", "Shock", "Knockdown") -Info "Add an effect when damaged"                                    -Credits "Ported from Rando"
+    CreateReduxComboBox -Name "ClockSpeed"       -Column 5 -Row 3 -Text "Clock Speed"   -Items @("Default", "1/3", "2/3", "2x", "3x", "6x")         -Info "Set the speed at which time is progressing"                    -Credits "Ported from Rando"
     CreateReduxCheckBox -Name "MasterQuest"      -Column 1 -Row 4 -Text "Master Quest"         -Info "Use all areas and dungeons from the Master Quest ROM hack`nThis is for advanced players who like a higher challenge`nThe structure of the walkthrough is completely re-arranged" -Credits "Admentus (ported) & DeathBasket (ROM hack)"
-    CreateReduxCheckBox -Name "PalaceRoute"      -Column 2 -Row 4 -Text "Restore Palace Route" -Info "Restore the route to the Bean Seller within the Deku Palace as seen in the Japanese release"               -Credits "ShadowOne"
-    CreateReduxCheckBox -Name "DeathIsMoonCrash" -Column 3 -Row 4 -Text "Death is Moon Crash"   -Info "If you die, the moon will crash`nThere are no continues anymore"                                          -Credits "Ported from Rando"
+    CreateReduxCheckBox -Name "PalaceRoute"      -Column 2 -Row 4 -Text "Restore Palace Route" -Info "Restore the route to the Bean Seller within the Deku Palace as seen in the Japanese release"                        -Credits "ShadowOne"
+    CreateReduxCheckBox -Name "DeathIsMoonCrash" -Column 3 -Row 4 -Text "Death is Moon Crash"  -Info "If you die, the moon will crash`nThere are no continues anymore"                                                    -Credits "Ported from Rando"
+    CreateReduxCheckBox -Name "CloseBombShop"    -Column 4 -Row 4 -Text "Close Bomb Shop"      -Info "The bomb shop is now closed just like in the Master Quest ROM hack`nThe first bomb bag is now found somewhere else" -Credits "Admentus (ported) & DeathBasket (ROM hack)"
+
+    $Redux.Hero.MasterQuest.Add_CheckStateChanged({
+        if ($Redux.Hero.MasterQuest.Checked) {
+            $Redux.Hero.CloseBombShop.Checked = $True
+            $Redux.Text.MasterQuest.Checked   = $True
+        }
+    })
 
 
 

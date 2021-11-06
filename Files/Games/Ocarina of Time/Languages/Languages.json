@@ -43,8 +43,7 @@
 	"script_length"		: "38130",
 	"output"		: "_pt-BR_patched",
 	"max_text_speed"	: 2,
-	"credits"		: "Fserve (v1.7a)",
-	"warning"		: "This fan-translation is not completed yet{0}[!] Graphical edits are completed for about 50%, but all text is translated"
+	"credits"		: "Fserve (v1.7a), Mex Maximus BR, Projeto BR (MM v1.1c) & GhostlyDark"
 }, {
 	"title"			: "Italian",
 	"code"			: "it",
@@ -64,7 +63,7 @@
 	"script_length"		: "38130",
 	"max_text_speed"	: 2,
 	"output"		: "_pl_patched",
-	"credits"		: "RPG (v1.3)"
+	"credits"		: "RPG (v1.3) & GhostlyDark (improvements)"
 }, {
 	"title"			: "Russian",
 	"code"			: "ru",
@@ -74,7 +73,7 @@
 	"script_length"		: "34390",
 	"max_text_speed"	: 2,
 	"output"		: "_ru_patched",
-	"credits"		: "Zelda64rus (v2.32)"
+	"credits"		: "Zelda64rus (v2.32) & GhostlyDark (improvements)"
 }, {
 	"title"			: "Japanese",
 	"code"			: "ja",
@@ -97,5 +96,5 @@
 	"l_target_jpn"		: 1,
 	"max_text_speed"	: 1,
 	"output"		: "_zh-CN_patched",
-	"credits"		: "madcell (2009)"
+	"credits"		: "madcell (2009) & GhostlyDark (improvements)"
 } ]

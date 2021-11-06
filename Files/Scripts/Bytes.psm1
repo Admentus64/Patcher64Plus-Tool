@@ -1,5 +1,6 @@
-function ChangeBytes([string]$File, [string]$Offset, [object]$Values, [uint16]$Interval=1, [switch]$Add, [switch]$Subtract, [switch]$IsDec, [switch]$Overflow) {
+function ChangeBytes([string]$File, [string]$Offset, [object]$Match=$null, [object]$Values, [uint16]$Interval=1, [switch]$Add, [switch]$Subtract, [switch]$IsDec, [switch]$Overflow) {
     
+    if ($Match  -is [System.String])   { $Match  = $Match  -split ' ' }
     if ($Values -is [System.String])   { $Values = $Values -split ' ' }
     if (IsSet $File)                   { $ByteArrayGame = [System.IO.File]::ReadAllBytes($File) }
     if ($Interval -lt 1)               { $Interval = 1 }
@@ -17,6 +18,18 @@ function ChangeBytes([string]$File, [string]$Offset, [object]$Values, [uint16]$I
         return $False
     }
 
+    # Match
+    if ($Match -ne $null) {
+        foreach ($i in 0..($Match.Length-1)) {
+            try { [byte]$value = GetDecimal $Match[$i] }
+            catch {
+                WriteToConsole "Match value is negative!"
+                return $False
+            }
+            if ($ByteArrayGame[$Offset + $i] -ne $value) { return $True }
+        }
+    }
+
     # Convert to Byte if needed
     if ($IsDec) {
         $arr = @()
@@ -31,21 +44,19 @@ function ChangeBytes([string]$File, [string]$Offset, [object]$Values, [uint16]$I
         if ($IsDec) {
             if     ($Values[$i] -lt 0   -and $Overflow)   { $Values[$i] = $Values[$i] + 255 }
             elseif ($Values[$i] -gt 255 -and $Overflow)   { $Values[$i] = $Values[$i] - 255 }
-            [byte]$Value  = $Values[$i]
+            [byte]$value  = $Values[$i]
         }
         else {
-            try {
-                [byte]$Value = GetDecimal $Values[$i]
-            }
+            try { [byte]$value = GetDecimal $Values[$i] }
             catch {
                 WriteToConsole "Value is negative!"
                 return $False
             }
         }
 
-        if     ($Add)        { $ByteArrayGame[$Offset + ($i * $Interval)] += $Value }
-        elseif ($Subtract)   { $ByteArrayGame[$Offset + ($i * $Interval)] -= $Value }
-        else                 { $ByteArrayGame[$Offset + ($i * $Interval)]  = $Value }
+        if     ($Add)        { $ByteArrayGame[$Offset + ($i * $Interval)] += $value }
+        elseif ($Subtract)   { $ByteArrayGame[$Offset + ($i * $Interval)] -= $value }
+        else                 { $ByteArrayGame[$Offset + ($i * $Interval)]  = $value }
     }
 
     # Write to File
@@ -160,7 +171,7 @@ function ExportBytes([string]$File, [string]$Offset, [string]$End, [string]$Leng
 
 
 #==============================================================================================================================================================================================
-function SearchBytes([string]$File, [string]$Start="0", [string]$End, [object]$Values) {
+function SearchBytes([string]$File, [string]$Start="0", [string]$End, [object]$Values, [switch]$Suppress) {
     
     if ($values -is [System.String]) { $values = $values -split ' ' }
 
@@ -197,12 +208,12 @@ function SearchBytes([string]$File, [string]$Start="0", [string]$End, [object]$V
             }
         }
         if ($Search -eq $True) {
-            WriteToConsole ("Found values at: " + (Get32Bit $i))
+            if (!$Suppress) { WriteToConsole ("Found values at: " + (Get32Bit $i)) }
             return Get32Bit $i
         }
     }
 
-    WriteToConsole "Did not find searched values"
+    if (!$Suppress) { WriteToConsole "Did not find searched values" }
     return -1;
 
 }

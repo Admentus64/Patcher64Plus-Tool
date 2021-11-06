@@ -23,11 +23,6 @@
 		"deku_shield"	: 0,
 		"hylian_shield"	: 0
 	}, {
-		"name"		: "Dark Link",
-		"author"	: "Mikus64",
-		"deku_shield"	: 0,
-		"hylian_shield"	: 0
-	}, {
 		"name"		: "Kafei",
 		"author"	: "Nintendo & Malon Rose",
 		"url"		: "https://youtube.com/c/MalonRose{0}https://www.patreon.com/MalonRose",
@@ -39,6 +34,15 @@
 		"url"		: "https://github.com/hylian-modding/Z64-CustomPlayerModels",
 		"deku_shield"	: 0,
 		"hylian_shield"	: 0
+	}, {
+		"name"		: "Twilight Princess",
+		"author"	: "Skilarbabcock",
+		"url"		: "https://www.youtube.com/user/skilarbabcock"
+	}, {
+		"name"		: "Ocarina of Time 3D",
+		"author"	: "Skilarbabcock",
+		"url"		: "https://www.youtube.com/user/skilarbabcock",
+		"deku_shield"	: 0
 	}, {
 		"name"		: "Twilight Princess",
 		"author"	: "Skilarbabcock",
@@ -136,6 +140,12 @@
 		"name"		: "Twilight Princess",
 		"author"	: "Skilarbabcock",
 		"url"		: "https://www.youtube.com/user/skilarbabcock"
+	}, {
+		"name"		: "Ocarina of Time 3D",
+		"author"	: "Skilarbabcock",
+		"url"		: "https://www.youtube.com/user/skilarbabcock",
+		"hylian_shield"	: 0,
+		"mirror_shield"	: 0
 	}, {
 		"name"		: "Link's Awakening",
 		"author"	: "Skilarbabcock",

@@ -1,0 +1,9 @@
+Drop the following files in here, with these names:
+
+1. Message Data Static File as "message_data_static.bin"
+2. Message Data Table  File as "message_data.tbl"
+
+If any of these files missed, nothing happens.
+Make sure these files are correct, otherwise your ROM will crash!
+
+Select the "Custom" option for "English Dialogue" using the English language

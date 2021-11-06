@@ -175,6 +175,16 @@ function ByteOptions() {
         PatchBytes -Offset "F21810"  -Length "1000" -Texture -Patch "Widescreen\lens_of_truth.bin"
     }
 
+    if (IsChecked $Redux.Graphics.OverworldSkyboxes) {
+        ChangeBytes -Offset "206F054" -Values "01"; ChangeBytes -Offset "207BC4C" -Values "01"; ChangeBytes -Offset "207BF5C" -Values "01"; ChangeBytes -Offset "207C264" -Values "01"; ChangeBytes -Offset "207C394" -Values "01" # Kokiri Forest
+        ChangeBytes -Offset "207C4B4" -Values "01"; ChangeBytes -Offset "207C5DC" -Values "01"; ChangeBytes -Offset "207C78C" -Values "01"; ChangeBytes -Offset "207C93C" -Values "01"; ChangeBytes -Offset "207CAE4" -Values "01" # Kokiri Forest
+        ChangeBytes -Offset "207CBC4" -Values "01"; ChangeBytes -Offset "207CCA4" -Values "01"; ChangeBytes -Offset "207CE74" -Values "01"                                                                                         # Kokiri Forest
+        ChangeBytes -Offset "214604C" -Values "01"; ChangeBytes -Offset "2151D4C" -Values "01"; ChangeBytes -Offset "21520E4" -Values "01"                                                                                         # Lost Woods
+        ChangeBytes -Offset "20AC044" -Values "01"; ChangeBytes -Offset "20B2814" -Values "01"; ChangeBytes -Offset "20B2A3C" -Values "01"; ChangeBytes -Offset "20B2B1C" -Values "01"                                             # Sacred Meadow
+        ChangeBytes -Offset "2110044" -Values "01"; ChangeBytes -Offset "21143AC" -Values "01"; ChangeBytes -Offset "211458C" -Values "01"                                                                                         # Zora's Fountain
+        ChangeBytes -Offset "21DC04C" -Values "03"                                                                                                                                                                                 # Haunted Wasteland
+    }
+
     if (IsChecked $Redux.Graphics.ExtendedDraw)      { ChangeBytes -Offset "A9A970" -Values "00 01" }
     if (IsChecked $Redux.Graphics.ForceHiresModel)   { ChangeBytes -Offset "BE608B" -Values "00" }
 
@@ -191,8 +201,9 @@ function ByteOptions() {
 
     if (IsChecked $Redux.UI.CenterNaviPrompt) { ChangeBytes -Offset "B582DF" -Values "01" -Subtract }
 
-    if (IsChecked $Redux.UI.GCScheme) { # Z to L textures
+    if (IsChecked $Redux.UI.GCScheme) { # Z to L + L to D-Pad textures
         PatchBytes -Offset "844540"  -Texture -Patch "GameCube\l_pause_screen_button.bin"
+        PatchBytes -Offset "92C100"  -Texture -Patch "GameCube\dpad_text_icon.bin"
         PatchBytes -Offset "92C200"  -Texture -Patch "GameCube\l_text_icon.bin"
         if (TestFile ($GameFiles.textures + "\GameCube\l_targeting_" + $LanguagePatch.code + ".bin")) {
             if ($LanguagePatch.l_target_jpn -eq 1)   { $offset = "1A0B300" }
@@ -520,6 +531,9 @@ function ByteOptions() {
         ChangeBytes -Offset "202F779" -Values "0E"; ChangeBytes -Offset "202F7AB" -Values "0D"; ChangeBytes -Offset "202F7CD" -Values "13"; ChangeBytes -Offset "202F7DB" -Values "03"; ChangeBytes -Offset "202F7DD" -Values "13"; ChangeBytes -Offset "202F7EB" -Values "03"
         ChangeBytes -Offset "202F7ED" -Values "13"; ChangeBytes -Offset "202F7FB" -Values "03"; ChangeBytes -Offset "202F7FD" -Values "13"; ChangeBytes -Offset "202F80B" -Values "03"; ChangeBytes -Offset "202F80D" -Values "13"; ChangeBytes -Offset "202F81B" -Values "03"
     }
+
+    if     (IsChecked $Redux.Hero.Arwing)   { ChangeBytes -Offset "2081086" -Values "00 02"; ChangeBytes -Offset "2081114" -Values "01 3B"; ChangeBytes -Offset "2081122" -Values "00 00" }
+    elseif (IsChecked $Redux.Hero.LikeLike) { ChangeBytes -Offset "2081086" -Values "00 D4"; ChangeBytes -Offset "2081114" -Values "00 DD"; ChangeBytes -Offset "2081122" -Values "00 00" }
 
     
     
@@ -912,6 +926,7 @@ function ByteOptions() {
     if     (IsChecked $Redux.Animation.WeaponCrouch)      { ChangeBytes -Offset "BEF38A" -Values "2A 10" }
     if     (IsChecked $Redux.Animation.WeaponAttack)      { ChangeBytes -Offset "BEFB62" -Values "2B D8"; ChangeBytes -Offset "BEFB66" -Values "2B E0"; ChangeBytes -Offset "BEFB6A" -Values "2B E0" }
     if     (IsChecked $Redux.Animation.HoldShieldOut)     { ChangeBytes -Offset "B6D6D7" -Values "02 0A 0A 10" }
+    if     (IsChecked $Redux.Animation.BombBag)           { ChangeBytes -Offset "BEF3DA" -Values "25 00"; ChangeBytes -Offset "BEF3F2" -Values "25 08" }
     if     (IsChecked $Redux.Animation.BackflipAttack)    { ChangeBytes -Offset "BEFB12" -Values "29 D0" }
     elseif (IsChecked $Redux.Animation.FrontflipAttack)   { ChangeBytes -Offset "BEFB12" -Values "2A 60" }
     if     (IsChecked $Redux.Animation.FrontflipJump)     { PatchBytes -Offset "70BB00" -Patch "Jumps\frontflip.bin" }
@@ -1055,7 +1070,7 @@ function ByteReduxOptions() {
 
     # HUD COLORS #
 
-    if (IsChecked $Redux.Colors.GreenTextCursor) {
+    if (IsChecked $Redux.UI.GCScheme) {
         ChangeBytes -Offset "348085F" -Values "FF 00 50" # Cursor
         ChangeBytes -Offset "3480859" -Values "C8 00 50" # Cursor
     }
@@ -1067,25 +1082,44 @@ function ByteReduxOptions() {
 #==============================================================================================================================================================================================
 function ByteLanguageOptions() {
     
-    if ( (IsChecked -Elem $Redux.Text.Vanilla -Not) -or (IsChecked -Elem $Redux.Text.Speed1x -Not) -or (IsLanguage $Redux.UI.GCScheme) -or (IsLanguage $Redux.Unlock.Tunics) -or (IsText -Elem $Redux.Colors.Fairy -Compare "Tatl") -or (IsText -Elem $Redux.Colors.Fairy -Compare "Tael") -or (IsLanguage $Redux.Capacity.EnableAmmo) -or (IsLanguage $Redux.Capacity.EnableWallet)-or (IsLanguage $Redux.Equipment.IronShield -and $ChildModel.deku_shield -ne 0) ) {
+    if ( (IsChecked -Elem $Redux.Text.Vanilla -Not) -or (IsChecked -Elem $Redux.Text.Speed1x -Not) -or (IsChecked $Redux.UI.GCScheme) -or (IsLanguage $Redux.Unlock.Tunics) -or (IsText -Elem $Redux.Colors.Fairy -Compare "Tatl") -or (IsText -Elem $Redux.Colors.Fairy -Compare "Tael") -or (IsLanguage $Redux.Capacity.EnableAmmo) -or (IsLanguage $Redux.Capacity.EnableWallet)-or (IsLanguage $Redux.Equipment.IronShield -and $ChildModel.deku_shield -ne 0) ) {
         if ( (IsSet $LanguagePatch.script_start) -and (IsSet $LanguagePatch.script_length) ) {
-            $File = $GameFiles.extracted + "\message_data_static.bin"
-            ExportBytes -Offset $LanguagePatch.script_start -Length $LanguagePatch.script_length -Output $File -Force
+            $script = $GameFiles.extracted + "\message_data_static.bin"
+            $table  = $GameFiles.extracted + "\message_data.tbl"
+            ExportBytes -Offset $LanguagePatch.script_start -Length $LanguagePatch.script_length -Output $script -Force
+            ExportBytes -Offset "B849EC" -Length "43A8" -Output $table -Force
+            $lengthDifference = (Get-Item ($GameFiles.extracted + "\message_data_static.bin")).length
         }
         else  { return }
     }
     else { return }
 
-    if (IsChecked $Redux.Text.Redux) { ApplyPatch -File $File -Patch "\Export\Message\redux.bps" }
+    if (IsChecked $Redux.Text.Redux) { ApplyPatch -File $script -Patch "\Export\Message\redux_static.bps" }
     elseif (IsChecked $Redux.Text.Restore) {
         ChangeBytes -Offset "7596" -Values "52 40"
-        PatchBytes  -Offset "B849EC" -Patch "Message\restore.tbl"
-        ApplyPatch -File $File -Patch "\Export\Message\restore.bps"
+        ApplyPatch -File $script -Patch "\Export\Message\restore_static.bps"
+        ApplyPatch -File $table  -Patch "\Export\Message\restore_table.bps"
     }
     elseif (IsChecked $Redux.Text.FemalePronouns) {
         ChangeBytes -Offset "7596" -Values "52 40"
-        PatchBytes  -Offset "B849EC" -Patch "Message\female_pronouns.tbl"
-        ApplyPatch -File $File -Patch "\Export\Message\female_pronouns.bps"
+        ApplyPatch -File $script -Patch "\Export\Message\female_pronouns_static.bps"
+        ApplyPatch -File $table  -Patch "\Export\Message\female_pronouns_table.bps"
+    }
+    elseif (IsChecked $Redux.Text.Custom) {
+        if ( (TestFile ($Gamefiles.customText + "\message_data_static.bin") ) -and (TestFile ($Gamefiles.customText + "\message_data.tbl") ) ) {
+            Copy-Item -LiteralPath ($Gamefiles.customText + "\message_data_static.bin") -Destination ($GameFiles.extracted + "\message_data_static.bin") -Force
+            Copy-Item -LiteralPath ($Gamefiles.customText + "\message_data.tbl")        -Destination ($GameFiles.extracted + "\message_data.tbl")        -Force
+        }
+        else {
+            WriteToConsole "Custom Text could not be found. All text changes will be discarded."
+            return   
+        }
+    }
+
+    $lengthDifference = (Get-Item ($GameFiles.extracted + "\message_data_static.bin")).length - $lengthDifference
+    if ($lengthDifference -ne 0) {
+        $newDma = (Get16Bit ((GetDecimal "5130") + $lengthDifference)) -split '(..)' -ne ''
+        ChangeBytes -Offset "7596" -Values $newDma
     }
 
     if (IsChecked $Redux.Text.Speed2x) {
@@ -1093,153 +1127,120 @@ function ByteLanguageOptions() {
 
         if ($Redux.Language[0].checked) {
             # Correct Ruto Confession Textboxes
-            $Offset = SearchBytes -File $File -Values "1A 41 73 20 61 20 72 65 77 61 72 64 2E 2E 2E 01"
-            PatchBytes -File $File -Offset $Offset -Patch "Message\ruto_confession.bin"
+            $Offset = SearchBytes -File $script -Values "1A 41 73 20 61 20 72 65 77 61 72 64 2E 2E 2E 01"
+            PatchBytes -File $script -Offset $Offset -Patch "Message\ruto_confession.bin"
 
             # Correct Phantom Ganon Defeat Textboxes
-            $Offset = SearchBytes -File $File -Values "0C 3C 42 75 74 20 79 6F 75 20 68 61 76 65 20 64"
-            ChangeBytes -File $File -Offset ( Get24Bit ( (GetDecimal $Offset) + (GetDecimal "01") ) ) -Values "66"
-            ChangeBytes -File $File -Offset ( Get24Bit ( (GetDecimal $Offset) + (GetDecimal "5D") ) ) -Values "66"
-            ChangeBytes -File $File -Offset ( Get24Bit ( (GetDecimal $Offset) + (GetDecimal "BA") ) ) -Values "60"
+            $Offset = SearchBytes -File $script -Values "0C 3C 42 75 74 20 79 6F 75 20 68 61 76 65 20 64"
+            ChangeBytes -File $script -Offset ( Get24Bit ( (GetDecimal $Offset) + (GetDecimal "01") ) ) -Values "66"
+            ChangeBytes -File $script -Offset ( Get24Bit ( (GetDecimal $Offset) + (GetDecimal "5D") ) ) -Values "66"
+            ChangeBytes -File $script -Offset ( Get24Bit ( (GetDecimal $Offset) + (GetDecimal "BA") ) ) -Values "60"
         }
     }
     elseif (IsChecked $Redux.Text.Speed3x) {
         ChangeBytes -Offset "B5006F" -Values "03" # Text Speed
 
         # Correct Learning Song Textboxes
-        $Offset = SearchBytes -File $File -Values "08 06 3C 50 6C 61 79 20 75 73 69 6E 67 20 05"
-        PatchBytes -File $File -Offset $Offset -Patch "Message\songs.bin"
+        $Offset = SearchBytes -File $script -Values "08 06 3C 50 6C 61 79 20 75 73 69 6E 67 20 05"
+        PatchBytes -File $script -Offset $Offset -Patch "Message\songs.bin"
 
         # Correct Ruto Confession Textboxes
-        $Offset = SearchBytes -File $File -Values "1A 41 73 20 61 20 72 65 77 61 72 64 2E 2E 2E 01"
-        PatchBytes -File $File -Offset $Offset -Patch "Message\ruto_confession.bin"
+        $Offset = SearchBytes -File $script -Values "1A 41 73 20 61 20 72 65 77 61 72 64 2E 2E 2E 01"
+        PatchBytes -File $script -Offset $Offset -Patch "Message\ruto_confession.bin"
         
         # Correct Phantom Ganon Defeat Textboxes
-        $Offset = SearchBytes -File $File -Values "0C 3C 42 75 74 20 79 6F 75 20 68 61 76 65 20 64"
-        ChangeBytes -File $File -Offset ( Get24Bit ( (GetDecimal $Offset) + (GetDecimal "01") ) ) -Values "76"
-        ChangeBytes -File $File -Offset ( Get24Bit ( (GetDecimal $Offset) + (GetDecimal "5D") ) ) -Values "76"
-        ChangeBytes -File $File -Offset ( Get24Bit ( (GetDecimal $Offset) + (GetDecimal "BA") ) ) -Values "70"
+        $Offset = SearchBytes -File $script -Values "0C 3C 42 75 74 20 79 6F 75 20 68 61 76 65 20 64"
+        ChangeBytes -File $script -Offset ( Get24Bit ( (GetDecimal $Offset) + (GetDecimal "01") ) ) -Values "76"
+        ChangeBytes -File $script -Offset ( Get24Bit ( (GetDecimal $Offset) + (GetDecimal "5D") ) ) -Values "76"
+        ChangeBytes -File $script -Offset ( Get24Bit ( (GetDecimal $Offset) + (GetDecimal "BA") ) ) -Values "70"
     }
         
-    if (IsLanguage $Redux.UI.GCScheme) {
-        # Hole of Z
-        $Offset = SearchBytes -File $File -Values "48 6F 6C 65 20 6F 66 20 22 5A 22"
-        ChangeBytes -File $File -Offset $Offset -Values "48 6F 6C 65 20 6F 66 20 22 4C 22"
+    if (IsChecked $Redux.UI.GCScheme) {
+        if (IsChecked $Redux.Language[0]) { # English only
+            # Hole of Z
+            $Offset = SearchBytes -File $script -Values "48 6F 6C 65 20 6F 66 20 22 5A 22"
+            ChangeBytes -File $script -Offset $Offset -Values "48 6F 6C 65 20 6F 66 20 22 4C 22"
 
-        # GC Colors
-        $Offset = SearchBytes -File $File -Values "62 6C 75 65 20 69 63 6F 6E 05 40 02 00 00 54 68"
-        ChangeBytes -File $File -Offset $Offset -Values "67 72 65 65 6E 20 69 63 6F 6E 05 40 02"
+            # GC Colors
+            $Offset = SearchBytes -File $script -Values "62 6C 75 65 20 69 63 6F 6E 05 40 02 00 00 54 68"
+            ChangeBytes -File $script -Offset $Offset -Values "67 72 65 65 6E 20 69 63 6F 6E 05 40 02"
             
-        $Offset = SearchBytes -File $File -Values "1A 05 44 59 6F 75 20 63 61 6E 20 6F 70 65 6E 20"
-        PatchBytes  -File $File -Offset $Offset -Patch "Message\mq_navi_door.bin"
+            $Offset = SearchBytes -File $script -Values "1A 05 44 59 6F 75 20 63 61 6E 20 6F 70 65 6E 20"
+            PatchBytes  -File $script -Offset $Offset -Patch "Message\mq_navi_door.bin"
             
-        $Offset = SearchBytes -File $File -Values "62 6C 75 65 20 69 63 6F 6E 20 61 74 20 74 68 65"
-        PatchBytes  -File $File -Offset $Offset -Patch "Message\mq_navi_action.bin"
+            $Offset = SearchBytes -File $script -Values "62 6C 75 65 20 69 63 6F 6E 20 61 74 20 74 68 65"
+            PatchBytes  -File $script -Offset $Offset -Patch "Message\mq_navi_action.bin"
+        }
 
-        $Offset = 0
-        do { # A button
-            $Offset = SearchBytes -File $File -Start $Offset -Values "05 43 9F 05"
-            if ($Offset -ne -1) { ChangeBytes -File $File -Offset $Offset -Values "05 42" }
-        } while ($Offset -gt 0)
-
-        $Offset = 0
-        do { # A button
-            $Offset = SearchBytes -File $File -Start $Offset -Values "05 43 9F 05 40"
-            if ($Offset -ne -1) { ChangeBytes -File $File -Offset $Offset -Values "05 42" }
-        } while ($Offset -gt 0)
-
-        $Offset = 0
-        do { # A button
-            $Offset = SearchBytes -File $File -Start $Offset -Values "05 43 20 9F 05 44"
-            if ($Offset -ne -1) { ChangeBytes -File $File -Offset $Offset -Values "05 42" }
-        } while ($Offset -gt 0)
-
-        $Offset = 0
-        do { # A button
-            $Offset = SearchBytes -File $File -Start $Offset -Values "05 43 41 63 74 69 6F 6E"
-            if ($Offset -ne -1) { ChangeBytes -File $File -Offset $Offset -Values "05 42" }
-        } while ($Offset -gt 0)
-
-        $Offset = 0
-        do { # B button
-            $Offset = SearchBytes -File $File -Start $Offset -Values "05 42 A0 05 40"
-            if ($Offset -ne -1) { ChangeBytes -File $File -Offset $Offset -Values "05 41" }
-        } while ($Offset -gt 0)
-
-        $Offset = 0
-        do { # B button
-            $Offset = SearchBytes -File $File -Start $Offset -Values "05 42 A0 20 05 40"
-            if ($Offset -ne -1) { ChangeBytes -File $File -Offset $Offset -Values "05 41" }
-        } while ($Offset -gt 0)
-
-        $Offset = 0
-        do { # Start button
-            $Offset = SearchBytes -File $File -Start $Offset -Values "05 41 53 54 41 52 54 05 40"
-            if ($Offset -ne -1) { ChangeBytes -File $File -Offset $Offset -Values "05 44" }
-        } while ($Offset -gt 0)
-
-        $Offset = 0
-        do { # Start button
-            $Offset = SearchBytes -File $File -Start $Offset -Values "05 41 53 54 41 52 54 20 05 40"
-            if ($Offset -ne -1) { ChangeBytes -File $File -Offset $Offset -Values "05 44" }
+        $offset = 0
+        do { # # Color codes
+            $offset = SearchBytes -File $script -Start $offset -Values "05" -Suppress
+            if ($offset -ne -1) {
+                ChangeBytes -File $script -Offset $offset -Match "05 43 9F"                -Values "05 42" # A Button icon
+                ChangeBytes -File $script -Offset $offset -Match "05 43 20 9F"             -Values "05 42" # A Button icon
+                ChangeBytes -File $script -Offset $offset -Match "05 43 41 63 74 69 6F 6E" -Values "05 42" # Action Button text
+                ChangeBytes -File $script -Offset $offset -Match "05 42 A0"                -Values "05 41" # B Button icon
+                ChangeBytes -File $script -Offset $offset -Match "05 41 53 54 41 52 54"    -Values "05 44" # Start Button text
+                $offset = AddToOffset -Hex $offset -Add "1"
+            }
         } while ($Offset -gt 0)
     }
 
     if (IsLanguage $Redux.Unlock.Tunics) {
-        $Offset = SearchBytes -File $File -Values "59 6F 75 20 67 6F 74 20 61 20 05 41 47 6F 72 6F 6E 20 54 75 6E 69 63"
-        ChangeBytes -File $File -Offset ( Get24Bit ( (GetDecimal $Offset) + (GetDecimal "39") ) ) -Values "75 6E 69 73 69 7A 65 2C 20 73 6F 20 69 74 20 66 69 74 73 20 61 64 75 6C 74 20 61 6E 64"
-        ChangeBytes -File $File -Offset ( Get24Bit ( (GetDecimal $Offset) + (GetDecimal "B3") ) ) -Values "75 6E 69 73 69 7A 65 2C 01 73 6F 20 69 74 20 66 69 74 73 20 61 64 75 6C 74 20 61 6E 64"
+        $Offset = SearchBytes -File $script -Values "59 6F 75 20 67 6F 74 20 61 20 05 41 47 6F 72 6F 6E 20 54 75 6E 69 63"
+        ChangeBytes -File $script -Offset ( Get24Bit ( (GetDecimal $Offset) + (GetDecimal "39") ) ) -Values "75 6E 69 73 69 7A 65 2C 20 73 6F 20 69 74 20 66 69 74 73 20 61 64 75 6C 74 20 61 6E 64"
+        ChangeBytes -File $script -Offset ( Get24Bit ( (GetDecimal $Offset) + (GetDecimal "B3") ) ) -Values "75 6E 69 73 69 7A 65 2C 01 73 6F 20 69 74 20 66 69 74 73 20 61 64 75 6C 74 20 61 6E 64"
 
-        $Offset = SearchBytes -File $File -Values "41 20 74 75 6E 69 63 20 6D 61 64 65 20 62 79 20 47 6F 72 6F 6E 73"
-        ChangeBytes -File $File -Offset ( Get24Bit ( (GetDecimal $Offset) + (GetDecimal "18") ) ) -Values "55 6E 69 2D 20"
-        ChangeBytes -File $File -Offset ( Get24Bit ( (GetDecimal $Offset) + (GetDecimal "7A") ) ) -Values "55 6E 69 73 69 7A 65 2E 20 20 20"
+        $Offset = SearchBytes -File $script -Values "41 20 74 75 6E 69 63 20 6D 61 64 65 20 62 79 20 47 6F 72 6F 6E 73"
+        ChangeBytes -File $script -Offset ( Get24Bit ( (GetDecimal $Offset) + (GetDecimal "18") ) ) -Values "55 6E 69 2D 20"
+        ChangeBytes -File $script -Offset ( Get24Bit ( (GetDecimal $Offset) + (GetDecimal "7A") ) ) -Values "55 6E 69 73 69 7A 65 2E 20 20 20"
     }
 
     if (IsText -Elem $Redux.Colors.Fairy -Compare "Tatl") {
         $Offset = 0
         do { # Navi -> Tatl
-            $Offset = SearchBytes -File $File -Start $Offset -Values "4E 61 76 69"
-            if ($Offset -ne -1) { ChangeBytes -File $File -Offset $Offset -Values "54 61 74 6C" }
+            $Offset = SearchBytes -File $script -Start $Offset -Values "4E 61 76 69"
+            if ($Offset -ne -1) { ChangeBytes -File $script -Offset $Offset -Values "54 61 74 6C" }
         } while ($Offset -gt 0)
         PatchBytes -Offset "1A3EFC0" -Texture -Patch "HUD\tatl.bin"
     }
     elseif (IsText -Elem $Redux.Colors.Fairy -Compare "Tael") {
         $Offset = 0
         do { # Navi -> Tael
-            $Offset = SearchBytes -File $File -Start $Offset -Values "4E 61 76 69"
-            if ($Offset -ne -1) { ChangeBytes -File $File -Offset $Offset -Values "54 61 65 6C" }
+            $Offset = SearchBytes -File $script -Start $Offset -Values "4E 61 76 69"
+            if ($Offset -ne -1) { ChangeBytes -File $script -Offset $Offset -Values "54 61 65 6C" }
         } while ($Offset -gt 0)
         PatchBytes -Offset "1A3EFC0" -Texture -Patch "HUD\tael.bin"
     }
 
     if (IsLanguage $Redux.Capacity.EnableAmmo) {
-        ChangeStringIntoDigits -File $File -Search "34 30 20 05 40 69 6E 20 74 6F 74 61 6C"    -Value $Redux.Capacity.Quiver2.Text
-        ChangeStringIntoDigits -File $File -Search "35 30 05 40 21 02 00 00 1A 13"             -Value $Redux.Capacity.Quiver3.Text
+        ChangeStringIntoDigits -File $script -Search "34 30 20 05 40 69 6E 20 74 6F 74 61 6C"    -Value $Redux.Capacity.Quiver2.Text
+        ChangeStringIntoDigits -File $script -Search "35 30 05 40 21 02 00 00 1A 13"             -Value $Redux.Capacity.Quiver3.Text
 
         if ([int]$Redux.Capacity.BombBag1.Text -ge 20) {
-        ChangeStringIntoDigits -File $File -Search "32 30 20 42 6F 6D 62 73"                   -Value $Redux.Capacity.BombBag1.Text }
-        ChangeStringIntoDigits -File $File -Search "33 30 05 40 21 02 00 1A 13"                -Value $Redux.Capacity.BombBag2.Text
-        ChangeStringIntoDigits -File $File -Search "34 30 05 40 20 42 6F 6D 62 73"             -Value $Redux.Capacity.BombBag3.Text
+        ChangeStringIntoDigits -File $script -Search "32 30 20 42 6F 6D 62 73"                   -Value $Redux.Capacity.BombBag1.Text }
+        ChangeStringIntoDigits -File $script -Search "33 30 05 40 21 02 00 1A 13"                -Value $Redux.Capacity.BombBag2.Text
+        ChangeStringIntoDigits -File $script -Search "34 30 05 40 20 42 6F 6D 62 73"             -Value $Redux.Capacity.BombBag3.Text
 
-        ChangeStringIntoDigits -File $File -Search "34 30 05 40 01 73 6C 69 6E 67 73 68 6F 74" -Value $Redux.Capacity.BulletBag2.Text
-        ChangeStringIntoDigits -File $File -Search "35 30 05 41 20 05 40 62 75 6C 6C 65 74 73" -Value $Redux.Capacity.BulletBag3.Text
+        ChangeStringIntoDigits -File $script -Search "34 30 05 40 01 73 6C 69 6E 67 73 68 6F 74" -Value $Redux.Capacity.BulletBag2.Text
+        ChangeStringIntoDigits -File $script -Search "35 30 05 41 20 05 40 62 75 6C 6C 65 74 73" -Value $Redux.Capacity.BulletBag3.Text
 
-        ChangeStringIntoDigits -File $File -Search "31 30 20 73 74 69 63 6B 73"                -Value $Redux.Capacity.DekuSticks1.Text
-        ChangeStringIntoDigits -File $File -Search "32 30 05 40 20 6F 66 20 74 68 65 6D"       -Value $Redux.Capacity.DekuSticks2.Text
-        ChangeStringIntoDigits -File $File -Search "33 30 05 40 20 6F 66 20 74 68 65 6D"       -Value $Redux.Capacity.DekuSticks3.Text
+        ChangeStringIntoDigits -File $script -Search "31 30 20 73 74 69 63 6B 73"                -Value $Redux.Capacity.DekuSticks1.Text
+        ChangeStringIntoDigits -File $script -Search "32 30 05 40 20 6F 66 20 74 68 65 6D"       -Value $Redux.Capacity.DekuSticks2.Text
+        ChangeStringIntoDigits -File $script -Search "33 30 05 40 20 6F 66 20 74 68 65 6D"       -Value $Redux.Capacity.DekuSticks3.Text
 
-        ChangeStringIntoDigits -File $File -Search "33 30 05 40 20 6E 75 74 73"                -Value $Redux.Capacity.DekuNuts2.Text
-        ChangeStringIntoDigits -File $File -Search "34 30 05 41 20 05 40 6E 75 74 73"          -Value $Redux.Capacity.DekuNuts3.Text
+        ChangeStringIntoDigits -File $script -Search "33 30 05 40 20 6E 75 74 73"                -Value $Redux.Capacity.DekuNuts2.Text
+        ChangeStringIntoDigits -File $script -Search "34 30 05 41 20 05 40 6E 75 74 73"          -Value $Redux.Capacity.DekuNuts3.Text
     }
 
     if (IsLanguage $Redux.Capacity.EnableWallet) {
         if ($Redux.Capacity.Wallet2.Text.Length -gt 3)   { $Text = "999" }
         else                                             { $Text = $Redux.Capacity.Wallet2.Text }
-        ChangeStringIntoDigits -File $File -Search "32 30 30 05 40 20 05 46 52 75 70 65 65 73 05 40 2E 02 00" -Value $Text -Triple
+        ChangeStringIntoDigits -File $script -Search "32 30 30 05 40 20 05 46 52 75 70 65 65 73 05 40 2E 02 00" -Value $Text -Triple
 
         if ($Redux.Capacity.Wallet3.Text.Length -gt 3)   { $Text = "999" }
         else                                             { $Text = $Redux.Capacity.Wallet3.Text }
-        ChangeStringIntoDigits -File $File -Search "35 30 30 05 40 20 05 46 52 75 70 65 65 73 05 40 2E 02 13" -Value $Text -Triple
+        ChangeStringIntoDigits -File $script -Search "35 30 30 05 40 20 05 46 52 75 70 65 65 73 05 40 2E 02 13" -Value $Text -Triple
 
         $Text = $null
     }
@@ -1247,12 +1248,13 @@ function ByteLanguageOptions() {
     if (IsLanguage $Redux.Equipment.IronShield -and $ChildModel.deku_shield -ne 0) {
         $Offset = 0
         do { # Deku Shield -> Iron Shield
-            $Offset = SearchBytes -File $File -Start $Offset -Values "44 65 6B 75 20 53 68 69 65 6C 64"
-            if ($Offset -ne -1) { ChangeBytes -File $File -Offset $Offset -Values "49 72 6F 6E 20 53 68 69 65 6C 64" }
+            $Offset = SearchBytes -File $script -Start $Offset -Values "44 65 6B 75 20 53 68 69 65 6C 64"
+            if ($Offset -ne -1) { ChangeBytes -File $script -Offset $Offset -Values "49 72 6F 6E 20 53 68 69 65 6C 64" }
         } while ($Offset -gt 0)
     }
 
     PatchBytes -Offset $LanguagePatch.script_start -Patch "message_data_static.bin" -Extracted
+    PatchBytes -Offset "B849EC"                    -Patch "message_data.tbl"        -Extracted
 
 }
 
@@ -1305,7 +1307,7 @@ function CreateTabMain() {
     CreateReduxCheckBox     -Name "DistantZTargeting"           -Text "Distant Z-Targeting"    -Info "Allow to use Z-Targeting on enemies, objects and NPC's from any distance"                                    -Credits "Admentus"
     CreateReduxCheckBox     -Name "ManualJump"                  -Text "Manual Jump"            -Info "Press Z + A to do a Manual Jump instead of a Jump Attack`nPress B mid-air after jumping to do a Jump Attack" -Credits "Admentus (ROM hack) & CloudModding (GameShark)"
     CreateReduxCheckBox     -Name "NoKillFlash"                 -Text "No Kill Flash"          -Info "Disable the flash effect when killing certain enemies such as the Guay or Skullwalltula"                     -Credits "Chez Cousteau"
-    CreateReduxCheckBox     -Name "NoShieldRecoil"              -Text "No Shield Recoil"       -Info "Disable the recoil when being hit while shielding"                                                           -Credits "Admentus (ROM hack) & Aegiker (GameShark)"
+    CreateReduxCheckBox     -Name "NoShieldRecoil"              -Text "No Shield Recoil"       -Info "Disable the recoil when being hit while shielding"                                                           -Credits "Admentus (ROM) & Aegiker (GameShark)"
     
 
 
@@ -1359,13 +1361,6 @@ function CreateTabRedux() {
 
     CreateButtonColorOptions
 
-
-
-    # HUD COLORS #
-
-    CreateReduxGroup    -Tag  "Colors" -Text "HUD Colors"
-    CreateReduxCheckBox -Name "GreenTextCursor"               -Text "Green Text Cursor"     -Info "Change the color for the text cursor from blue to green"                 -Credits "Ported from Redux"
-
 }
 
 
@@ -1391,10 +1386,11 @@ function CreateTabLanguage() {
 
     $Redux.Box.Dialogue = CreateReduxGroup -Tag "Text" -Text "English Dialogue"
     CreateReduxPanel
-    CreateReduxRadioButton -Name "Vanilla"        -Max 4 -SaveTo "Dialogue"          -Text "Vanilla Text"    -Info "Keep the text as it is"
-    CreateReduxRadioButton -Name "Redux"          -Max 4 -SaveTo "Dialogue" -Checked -Text "Redux Text"      -Info "Include the changes from the Redux script such as being able to move during the Gold Skulltula Token textboxes" -Credits "Redux"
-    CreateReduxRadioButton -Name "Restore"        -Max 4 -SaveTo "Dialogue"          -Text "Restore Text"    -Info ("Restores the text used from the GC revision and applies grammar and typo fixes`nAlso corrects some icons in the text`n" + 'Includes the changes from "Redux Text" as well') -Credits "Redux"
-    CreateReduxRadioButton -Name "FemalePronouns" -Max 4 -SaveTo "Dialogue"          -Text "Female Pronouns" -Info "Refer to Link as a female character" -Credits "Admentus & Mil`n(includes Restore Text by ShadowOne)"
+    CreateReduxRadioButton -Name "Vanilla"        -Max 5 -SaveTo "Dialogue"          -Text "Vanilla Text"    -Info "Keep the text as it is"
+    CreateReduxRadioButton -Name "Redux"          -Max 5 -SaveTo "Dialogue" -Checked -Text "Redux Text"      -Info "Include the changes from the Redux script such as being able to move during the Gold Skulltula Token textboxes" -Credits "Redux"
+    CreateReduxRadioButton -Name "Restore"        -Max 5 -SaveTo "Dialogue"          -Text "Restore Text"    -Info ("Restores the text used from the GC revision and applies grammar and typo fixes`nAlso corrects some icons in the text`n" + 'Includes the changes from "Redux Text" as well') -Credits "Redux"
+    CreateReduxRadioButton -Name "FemalePronouns" -Max 5 -SaveTo "Dialogue"          -Text "Female Pronouns" -Info "Refer to Link as a female character" -Credits "Admentus & Mil`n(includes Restore Text by ShadowOne)"
+    CreateReduxRadioButton -Name "Custom"         -Max 5 -SaveTo "Dialogue"          -Text "Custom"          -Info 'Insert custom dialogue found from "..\Patcher64+ Tool\Files\Games\Ocarina of Time\Custom Text"' -Warning "Make sure your custom script is proper and correct, or your ROM will crash`n[!] No edit will be made if the custom script is missing"
 
 
 
@@ -1417,6 +1413,7 @@ function UnlockLanguageContent() {
     EnableElem -Elem $Redux.Text.Redux          -Active $Redux.Language[0].Checked
     EnableElem -Elem $Redux.Text.Restore        -Active $Redux.Language[0].Checked
     EnableElem -Elem $Redux.Text.FemalePronouns -Active $Redux.Language[0].Checked
+    EnableElem -Elem $Redux.Text.Custom         -Active $Redux.Language[0].Checked
     EnableElem -Elem $Redux.Text.KeatonMaskFix  -Active $Redux.Language[0].Checked
     EnableElem -Elem $Redux.Text.PauseScreen    -Active $Redux.Language[0].Checked
 
@@ -1455,7 +1452,8 @@ function CreateTabGraphics() {
     CreateReduxCheckBox -Name "WidescreenAlt"      -Text "16:9 Widescreen (Simplified)" -Info "Apply 16:9 Widescreen adjusted backgrounds and textures (as well as 16:9 Widescreen for the Wii VC)" -Credits "Aspect Ratio Fix by Admentus`n16:9 backgrounds by GhostlyDark, ShadowOne333 & CYB3RTRON"
     CreateReduxCheckBox -Name "ExtendedDraw"       -Text "Extended Draw Distance"       -Info "Increases the game's draw distance for objects`nDoes not work on all objects"                        -Credits "Admentus"
     CreateReduxCheckBox -Name "ForceHiresModel"    -Text "Force Hires Link Model"       -Info "Always use Link's High Resolution Model when Link is too far away"                                   -Credits "GhostlyDark"
-    CreateReduxCheckBox -Name "HideEquipment"      -Text "Hide Equipment"               -Info "Hide the equipment when it is sheathed"                                                              -Credits "XModxGodX"   -Column 4 -Row 2
+    CreateReduxCheckBox -Name "HideEquipment"      -Text "Hide Equipment"               -Info "Hide the equipment when it is sheathed"                                                              -Credits "XModxGodX"                               -Column 4 -Row 2
+    CreateReduxCheckBox -Name "OverworldSkyboxes"  -Text "Overworld Skyboxes"           -Info "Use day and night skyboxes for all overworld areas lacking one"                                      -Credits "Admentus (ported) & BrianMp16 (AR Code)" -Column 4 -Row 3
 
 
 
@@ -1507,7 +1505,7 @@ function CreateTabGraphics() {
     CreateReduxCheckBox -Name "Display"          -Text "MM Display"          -Info "Replace the rupees, keys, magic bar and hearts HUD display with those from Majora's Mask" -Credits "Ported by GhostlyDark"
     CreateReduxCheckBox -Name "ButtonPositions"  -Text "MM Button Positions" -Info "Positions the A and B buttons like in Majora's Mask"                                      -Credits "Ported by GhostlyDark"
     CreateReduxCheckBox -Name "CenterNaviPrompt" -Text "Center Navi Prompt"  -Info 'Centers the "Navi" prompt shown in the C-Up button'                                       -Credits "Ported by GhostlyDark"
-    CreateReduxCheckBox -Name "GCScheme"         -Text "GC Scheme"           -Info "Replace and change the textures, dialogue and text colors to match the GameCube's scheme" -Credits "Admentus, GhostlyDark & ShadowOne333" -Warning "Dialogue changes are only available for the English language"
+    CreateReduxCheckBox -Name "GCScheme"         -Text "GC Scheme"           -Info "Replace and change the textures, dialogue and text colors to match the GameCube's scheme" -Credits "Admentus, GhostlyDark, ShadowOne333 & Ported from Redux" -Warning "Dialogue changes are only available for the English language`n[!] Changing the textbox cursor color requires Redux to be enabled"
     CreateReduxComboBox -Name "ButtonSize"  -Column 1 -Row 2 -Text "HUD Buttons" -FilePath ($Paths.shared + "\Buttons")  -Ext $null -Default "Normal"                         -Info "Set the size for the HUD buttons"  -Credits "GhostlyDark (ported)"
     $path = $Paths.shared + "\Buttons" + "\" + $Redux.UI.ButtonSize.Text.replace(" (default)", "")
     CreateReduxComboBox -Name "ButtonStyle" -Column 3 -Row 2 -Text "HUD Buttons" -Items @("Ocarina of Time") -FilePath $path -Ext "bin" -Default "Ocarina of Time"            -Info "Set the style for the HUD buttons" -Credits "GhostlyDark (ported), Djipi, Community, Nerrel, Federelli"
@@ -1650,6 +1648,8 @@ function CreateTabDifficulty() {
     CreateReduxComboBox -Name "BossHP"     -Column 5 -Row 2 -Text "Boss HP"      -Items @("1x Boss HP", "2x Boss HP", "3x Boss HP")                               -Info "Set the amount of health for bosses"                                                                    -Credits "Admentus & Marcelo20XX"
     CreateReduxCheckBox -Name "HarderChildBosses" -Column 1 -Row 3 -Text "Harder Child Bosses" -Info "Replace objects in the Child Dungeon Boss arenas with additional monsters"   -Credits "BilonFullHDemon"
     CreateReduxCheckBox -Name "GraveyardKeese"    -Column 2 -Row 3 -Text "Graveyard Keese"     -Info "Extends the object list for Adult Link so the Keese appear at the Graveyard" -Credits "salvador235"
+    CreateReduxCheckBox -Name "Arwing"            -Column 3 -Row 3 -Text "Arwing"              -Info "Replaces the Rock-Lifting Kokiri Kid with an Arwing in Kokiri Forest"        -Credits "Admentus"
+    CreateReduxCheckBox -Name "LikeLike"          -Column 4 -Row 3 -Text "Like-Like"           -Info "Replaces the Rock-Lifting Kokiri Kid with a Like-Like in Kokiri Forest"      -Credits "Admentus" -Link $Redux.Hero.Arwing
 
     $Redux.Hero.Damage.Add_SelectedIndexChanged({ EnableElem -Elem $Redux.Hero.Recovery -Active ($this.text -ne "OHKO Mode") })
     EnableElem -Elem ($Redux.Hero.Recovery) -Active ($Redux.Hero.Damage.text -ne "OHKO Mode")
@@ -1828,7 +1828,7 @@ function CreateTabEquipment() {
     CreateReduxSlider -Name "GiantsKnife"       -Column 5 -Row 1 -Default 5500  -Min 512 -Max 8192 -Freq 512 -Small 256 -Large 512   -Text "Giant's Knife"  -Info "Set the length of the hitbox of the Giant's Knife / Biggoron Sword" -Credits "Aria Hiroshi 64"
     CreateReduxSlider -Name "BrokenGiantsKnife" -Column 1 -Row 2 -Default 1500  -Min 512 -Max 8192 -Freq 512 -Small 256 -Large 512   -Text "Broken Knife"   -Info "Set the length of the hitbox of the Broken Giant's Knife"           -Credits "Aria Hiroshi 64"
     CreateReduxSlider -Name "MegatonHammer"     -Column 3 -Row 2 -Default 2500  -Min 512 -Max 8192 -Freq 512 -Small 256 -Large 512   -Text "Megaton Hammer" -Info "Set the length of the hitbox of the Megaton Hammer"                 -Credits "Aria Hiroshi 64"
-    CreateReduxSlider -Name "ShieldRecoil"      -Column 5 -Row 2 -Default 4552  -Min 0   -Max 8248 -Freq 512 -Small 256 -Large 512   -Text "Shield Recoil"  -Info "Set the pushback distance when getting hit while shielding"         -Credits "Admentus (ROM hack) & Aegiker (GameShark)"
+    CreateReduxSlider -Name "ShieldRecoil"      -Column 5 -Row 2 -Default 4552  -Min 0   -Max 8248 -Freq 512 -Small 256 -Large 512   -Text "Shield Recoil"  -Info "Set the pushback distance when getting hit while shielding"         -Credits "Admentus (ROM) & Aegiker (GameShark)"
 
 
 
@@ -1872,7 +1872,7 @@ function CreateTabEquipment() {
     CreateReduxCheckBox -Name "MirrorShield"  -Text "Unlock Mirror Shield" -Info "Child Link is able to use the Mirror Shield"               -Credits "GhostlyDark" -Warning "The Mirror Shield appears as invisible but can still reflect magic or sunlight"
     CreateReduxCheckBox -Name "Boots"         -Text "Unlock Boots"         -Info "Child Link is able to use the Iron Boots and Hover Boots"  -Credits "GhostlyDark" -Warning "The Iron and Hover Boots appears as the Kokiri Boots"
     CreateReduxCheckBox -Name "MegatonHammer" -Text "Unlock Hammer"        -Info "Child Link is able to use the Megaton Hammer"              -Credits "GhostlyDark" -Warning "The Megaton Hammer appears as invisible"
-    CreateReduxCheckBox -Name "Gauntlets"     -Text "Unlock Gauntlets"     -Info "Child Link is able to use the Silver and Golden Gauntlets" -Credits "Admentus (ROM hack) & Aegiker (GameShark)"
+    CreateReduxCheckBox -Name "Gauntlets"     -Text "Unlock Gauntlets"     -Info "Child Link is able to use the Silver and Golden Gauntlets" -Credits "Admentus (ROM) & Aegiker (GameShark)"
 
 
 
@@ -1883,7 +1883,7 @@ function CreateTabEquipment() {
     CreateReduxCheckBox -Name "DekuShield"     -Text "Unlock Deku Shield"  -Info "Adult Link is able to use the Deku Shield"     -Credits "GhostlyDark" -Warning "The Deku Shield appears as invisible but can still be burned up by fire"
     CreateReduxCheckBox -Name "FairySlingshot" -Text "Unlock Slingshot"    -Info "Adult Link is able to use the Fairy Slingshot" -Credits "GhostlyDark" -Warning "The Fairy Slingshot appears as the Fairy Bow"
     CreateReduxCheckBox -Name "Boomerang"      -Text "Unlock Boomerang"    -Info "Adult Link is able to use the Boomerang"       -Credits "GhostlyDark" -Warning "The Boomerang appears as invisible"
-    CreateReduxCheckBox -Name "CrawlHole"      -Text "Unlock Crawl Hole"   -Info "Adult Link can now crawl through holes"        -Credits "Admentus (ROM hack) & Aegiker (GameShark)" -Warning "Likely crashes on Dolphin or Wii when getting in proximity of a crawl hole"
+    CreateReduxCheckBox -Name "CrawlHole"      -Text "Unlock Crawl Hole"   -Info "Adult Link can now crawl through holes"        -Credits "Admentus" -Warning "Likely crashes on Dolphin or Wii when getting in proximity of a crawl hole"
 
 
 
@@ -1946,7 +1946,7 @@ function CreateTabAnimations() {
     # Restore CUTSCENES #
 
     CreateReduxGroup    -Tag  "Restore"          -Text "Restore Cutscenes"
-    CreateReduxCheckBox -Name "OpeningCutscene"  -Text "Opening Cutscene"       -Info "Restore the beta introduction cutscene" -Link $Redux.Skip.OpeningCutscene        -Credits "Admentus (ROM hack) & CloudModding (GameShark)"
+    CreateReduxCheckBox -Name "OpeningCutscene"  -Text "Opening Cutscene"       -Info "Restore the beta introduction cutscene" -Link $Redux.Skip.OpeningCutscene        -Credits "Admentus (ROM) & CloudModding (GameShark)"
 
 
 
@@ -1958,7 +1958,8 @@ function CreateTabAnimations() {
     CreateReduxCheckBox -Name "WeaponIdle"       -Text "2-handed Weapon Idle"   -Info ("Restore the beta animation when idly holding a two-handed weapon" + $weapons)                       -Credits "Admentus"
     CreateReduxCheckBox -Name "WeaponCrouch"     -Text "2-handed Weapon Crouch" -Info ("Restore the beta animation when crouching with a two-handed weapon" + $weapons)                     -Credits "Admentus"
     CreateReduxCheckBox -Name "WeaponAttack"     -Text "2-handed Weapon Attack" -Info ("Restore the beta animation when attacking with a two-handed weapon" + $weapons)                     -Credits "Admentus"
-    CreateReduxCheckBox -Name "HoldShieldOut"    -Text "Hold Shield Out"        -Info "Restored the beta animation for Link to always holds his shield out even when his sword is sheathed" -Credits "Admentus (ROM hack) & Aegiker (GameShark)"
+    CreateReduxCheckBox -Name "HoldShieldOut"    -Text "Hold Shield Out"        -Info "Restore the beta animation for Link to always holds his shield out even when his sword is sheathed"  -Credits "Admentus"
+    CreateReduxCheckBox -Name "BombBag"          -Text "Bomb Bag"               -Info "Restore the beta animation for the bomb bag"                                                         -Credits "Admentus (ROM) & Aegiker (GameShark)"
     CreateReduxCheckBox -Name "BackflipAttack"   -Text "Backflip Jump Attack"   -Info "Restore the beta animation to turn the Jump Attack into a Backflip Jump Attack"                      -Credits "Admentus"
     CreateReduxCheckBox -Name "FrontflipAttack"  -Text "Frontflip Jump Attack"  -Info "Restore the beta animation to turn the Jump Attack into a Frontflip Jump Attack"                     -Credits "Admentus" -Link $Redux.Animation.BackflipAttack
     CreateReduxCheckBox -Name "FrontflipJump"    -Text "Frontflip Jump"         -Info "Replace the jumps with frontflip jumps"                                                              -Credits "SoulofDeity"

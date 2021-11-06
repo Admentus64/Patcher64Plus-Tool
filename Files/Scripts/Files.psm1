@@ -83,10 +83,8 @@ function SetFileParameters() {
     $Files.oot.frontflip_jump               = $Paths.Games + "\Ocarina of Time\Binaries\Jumps\frontflip.bin"
     $Files.oot.somarsault_jump              = $Paths.Games + "\Ocarina of Time\Binaries\Jumps\somarsault.bin"
     $Files.oot.message_credits              = $Paths.Games + "\Ocarina of Time\Binaries\Message\credits.bin"
-    $Files.oot.message_female_pronouns      = $Paths.Games + "\Ocarina of Time\Binaries\Message\female_pronouns.tbl"
     $Files.oot.message_mq1                  = $Paths.Games + "\Ocarina of Time\Binaries\Message\mq_navi_action.bin"
     $Files.oot.message_mq2                  = $Paths.Games + "\Ocarina of Time\Binaries\Message\mq_navi_door.bin"
-    $Files.oot.message_restore              = $Paths.Games + "\Ocarina of Time\Binaries\Message\restore.tbl"
     $Files.oot.message_ruto_confession      = $Paths.Games + "\Ocarina of Time\Binaries\Message\ruto_confession.bin"
     $Files.oot.message_songs                = $Paths.Games + "\Ocarina of Time\Binaries\Message\songs.bin"
     $Files.oot.fire_temple_bank             = $Paths.Games + "\Ocarina of Time\Binaries\Fire Temple Theme\audiobank_pointers.bin"
@@ -95,9 +93,11 @@ function SetFileParameters() {
 
     $Files.oot.theme_fire_temple            = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Export\audiobank_fire_temple")
     $Files.oot.debug_map_select             = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Export\debug_map_select")
-    $Files.oot.restore_text                 = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Export\Message\restore")
-    $Files.oot.redux_text                   = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Export\Message\redux")
-    $Files.oot.female_pronouns_text         = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Export\Message\female_pronouns")
+    $Files.oot.restore_text_static          = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Export\Message\restore_static")
+    $Files.oot.restore_text_table           = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Export\Message\restore_table")
+    $Files.oot.redux_text_static            = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Export\Message\redux_static")
+    $Files.oot.female_pronouns_text_static  = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Export\Message\female_pronouns_static")
+    $Files.oot.female_pronouns_text_table   = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Export\Message\female_pronouns_table")
 
     $Files.oot.gerudo1                      = $Paths.Games + "\Ocarina of Time\Textures\Gerudo Symbols\crystal_switch.bin"
     $Files.oot.gerudo2                      = $Paths.Games + "\Ocarina of Time\Textures\Gerudo Symbols\dampe.bin"
@@ -158,7 +158,6 @@ function SetFileParameters() {
     $Files.mm.message_razor_sword_2         = $Paths.Games + "\Majora's Mask\Binaries\Message\razor_sword_2.bin"
     $Files.mm.message_razor_sword_3         = $Paths.Games + "\Majora's Mask\Binaries\Message\razor_sword_3.bin"
     $Files.mm.message_razor_sword_4         = $Paths.Games + "\Majora's Mask\Binaries\Message\razor_sword_4.bin"
-    $Files.mm.message_restore               = $Paths.Games + "\Majora's Mask\Binaries\Message\restore.tbl"
 
     $Files.mm.southern_swamp_cleared        = CheckPatchExtension ($Paths.Games + "\Majora's Mask\Export\Southern Swamp\southern_swamp_cleared_scene")
     $Files.mm.southern_swamp_cleared_0      = CheckPatchExtension ($Paths.Games + "\Majora's Mask\Export\Southern Swamp\southern_swamp_cleared_room_0")
@@ -167,7 +166,10 @@ function SetFileParameters() {
     $Files.mm.deku_palace_0                 = CheckPatchExtension ($Paths.Games + "\Majora's Mask\Export\Deku Palace\deku_palace_room_0")
     $Files.mm.deku_palace_1                 = CheckPatchExtension ($Paths.Games + "\Majora's Mask\Export\Deku Palace\deku_palace_room_1")
     $Files.mm.deku_palace_2                 = CheckPatchExtension ($Paths.Games + "\Majora's Mask\Export\Deku Palace\deku_palace_room_2")
-    $Files.mm.restore_text                  = CheckPatchExtension ($Paths.Games + "\Majora's Mask\Export\Message\restore")
+    $Files.mm.text_master_quest_static      = CheckPatchExtension ($Paths.Games + "\Majora's Mask\Export\Message\master_quest_static")
+    $Files.mm.text_master_quest_table       = CheckPatchExtension ($Paths.Games + "\Majora's Mask\Export\Message\master_quest_table")
+    $Files.mm.text_restore_static           = CheckPatchExtension ($Paths.Games + "\Majora's Mask\Export\Message\restore_static")
+    $Files.mm.text_restore_table            = CheckPatchExtension ($Paths.Games + "\Majora's Mask\Export\Message\restore_table")
 
 
 
