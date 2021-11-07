@@ -1,3 +1,27 @@
+v15.1.0
+- Added new "A Link to the Past" model (by ONI-3D Arts) (GNU 3.0 License)
+- Added "Ocarina of Time 3D" model back again
+- Added new "Overworld Skyboxes" option for OoT
+- Added new "Arwing" and "Like-Like" options for OoT
+- Added new "Close Bomb Shop" option for MM
+- Added new "Custom" dialogue option for OoT and MM, import your own dialogue!
+- Rewrote .exe Launcher in C# (by Bighead)
+- Removed "Dark Link" child model for OoT
+- Removed "Disable SFX Effects" option for MM
+- Updated "Brazilian Portuguese" for OoT, L-Targeting replacement option included
+- Updated Old Redux + Advanced Widescreen patch for MM
+- Updated "GC Scheme" option with D-Pad icons for OoT and MM
+- Updated "GC Scheme" option for OoT to process much faster and cover other languages partially too
+- Updated several model preview renders
+- Updated base Master Quest Remix patch for MM
+- Changed how dialogue is patched in for OoT and MM
+- Changed "Disable Motion Blur" and "Disable Flashback Overlay" options for MM when using Redux with Advanced Widescreen
+- Changed the "Green Text Cursor" option to be merged within the "GC Scheme" option for OoT (still requires Redux)
+- Changed English Dialogue options into a radio button set for MM, added new "Master Quest" dialogue option
+- Corrected several credits
+- Fixed missing A button dialog color codes for the "GC Scheme" option for OoT
+- Fixed issue with Woodfall Temple when entering boss door with the Master Quest option
+
 v15.0.0
 - Added new .exe Launcher to open up the Patcher64+ Tool with
 - Added new alternative updated Redux version for MM (by GhostlyDark)

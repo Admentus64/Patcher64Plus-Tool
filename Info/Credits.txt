@@ -2,10 +2,10 @@
 <<< PATCHER64+ TOOL >>>
 
 --- Thanks to my Patreons ---
-- Amara, David Pyne, Gagrecco, GONZA, Tommy Naugle, Yang
+- Amara, David Pyne, Gagrecco, Tommy Naugle, Yang
 
 --- Thanks to my past Patreons --
-- Crypto Logiq, Gicrax, Leigh Pierce, Moons / Luke, Raim, Richard Moser, Ronald
+- Crypto Logiq, Gicrax, Leigh Pierce, Moons Moons, Raim, Richard Moser
 
 --- Patcher64+ Tool ---
 - Admentus (Testing and Coding of Patcher64+ Tool)
@@ -25,11 +25,12 @@
 					KevinPal, junglechief87
 
 --- Additional Options ---
-- Manual Jump:				Admentus (ROM) & CloudModding (GameShark)
+- Manual Jump:				Admentus (ROM), CloudModding (GameShark)
+- No Shield Recoil:			Admentus (ROM), Aegiker (GameShark)
 - Restore Cow Nose Ring:		ShadowOne333
 - Restore Fire Temple:			ShadowOne333
 - Censor Blood:				ShadowOne333
-- Restore Gerudo Textures:		GhostlyDark & ShadowOne333
+- Restore Gerudo Textures:		GhostlyDark, ShadowOne333
 - Pause Screen Delay Fix:		zel
 - Visible Gerudo Tent:			Chez Cousteau
 - Debug Map Select:			Jared Johnson
@@ -37,11 +38,12 @@
 - Master Quest:				ShadowOne333
 - Harder Child Bosses:			BilonFullHDemon
 - Graveyard Keese:			salvador235
-- 16:9 Backgrounds & Textures:		GhostlyDark, ShadowOne333 & CYB3RTR0N
-- Enhanced 16:9 Widescreen:		gamemasterplc & GhostlyDark
+- 16:9 Backgrounds & Textures:		GhostlyDark, ShadowOne333, CYB3RTR0N
+- Enhanced 16:9 Widescreen:		gamemasterplc, GhostlyDark
 - Force Hires Link Model:		GhostlyDark
-- Feminine Animations:			GhostlyDark (ported) & AriaHiro64 (model)
+- Feminine Animations:			GhostlyDark (ported), AriaHiro64 (model)
 - Hide Equipment:			XModxGodX
+- Overworld Skyboxes:			Admentus (ported), BrianMp16 (AR code)
 - MM HUD Icons:				GhostlyDark (ported)
 - MM Button Positions:			GhostlyDark
 - Buttons Size:				GhostlyDark
@@ -55,20 +57,21 @@
 - Fireproof Deku Shield:		Three Pendants
 - Master Sword (Beta Icon):		CYB3RTR0N
 - Hylian Shield alternatives:		Admentus & GhostlyDark (injects), CYB3RTR0N (icons), sanguinetti (shields)
-- Sword Hitboxes:			Aria Hiroshi 64
+- Hitboxes:				Admentus & Aria Hiroshi 64 (ROM), Aegiker (Shield Recoil GameShark)
 - Set Capacity:				GhostlyDark
 - 4 Digits for Rupees:			CloudMax, VictorHale & CrookedPoe
+- Unlock Equipment:			Admentus (ROM), GhostlyGark (RAM offsets), Aegiker (gauntlets GameShark)
 - Show File Select Icons:		ShadowOne333
 - Colors:				GhostlyDark
 - Frontflip Jump / Somarsault Jump:	SoulofDeity
+- Bomb Bag Beta Animation:		Admentus (ROM), Aegiker (GameShark)
 - Restore Text:				ShadowOne333
 - Female Pronouns:			Admentus & Mil
 - Various offsets:			Chez Cousteau
 - Admentus (Scripting and Maintaince of all Options)
 
 --- Debug ROM Options ---
-- Various offsets:			Cooliscool, DeathBasket, Airikita, CloudMax, Jason777,
-					ChriisTiian
+- Various offsets:			Cooliscool, DeathBasket, Airikita, CloudMax, Jason777, ChriisTiian
 - Ported to other Debug ROMs:		GhostlyDark
 
 --- Link Voices ---
@@ -81,6 +84,7 @@
 					GNU General Public License v3.0 (GPL-3.0 License)
 
 --- Custom Male Models ---
+- Original:				Nintendo
 - 1996 Link:				Ikey Ilex
 - A Link to the Past			Oni 3D-Arts
 - Breath of the Wild:			Skilarbabcock (www.youtube.com/user/skilarbabcock)
@@ -95,8 +99,8 @@
 - Majora's Mask Eyes:			GhostlyDark (ported)
 - Mega Man:				Megaman Legends
 - MM Eyes + Sashed:			GhostlyDark (ported), Nintendo, AriaHiro64
+- Ocarina of Time 3D:			Skilarbabcock (www.youtube.com/user/skilarbabcock)
 - Sashed:				Nintendo, AriaHiro64
-- Original:				Nintendo
 - Skyward Sword:			Skilarbabcock (www.youtube.com/user/skilarbabcock)
 - Sunny:				Unesag & Amara
 - Twilight Princess:			Skilarbabcock (www.youtube.com/user/skilarbabcock)
@@ -124,12 +128,12 @@
 - German:				Admentus, GhostlyDark & Ticamus (ported)
 - French:				Admentus & GhostlyDark (ported)
 - Spanish:				eduardo_a2j (v2.2)
-- Brazilian Portuguese:			Fserve (v1.7a)
+- Brazilian Portuguese:			Fserve (v1.7a), Mex Maximus BR, Projeto BR (MM v1.1c) & GhostlyDark
 - Italian:				Ruleless, xxcentury & Brisma (translation)
 					& GhostlyDark (ported / improvements)
-- Polish:				RPG (v1.3)
-- Russian:				Zelda64rus (v2.32)
-- Chinese Simplified:			madcell (2009)
+- Polish:				RPG (v1.3) & GhostlyDark (improvements)
+- Russian:				Zelda64rus (v2.32) & GhostlyDark (improvements)
+- Chinese Simplified:			madcell (2009) & GhostlyDark (improvements)
 - Debug Map Select:			Zelda Edit
 
 --- Dawn and Dusk ---
@@ -318,8 +322,8 @@
 - French:				GhostlyDark & Ticamus (ported)
 - Spanish:				GhostlyDark & Ticamus (ported)
 - Brazilian Portuguese:			Projeto BR (v1.1c) & GhostlyDark (ported)
-- Polish:				RPG (v1.1)
-- Russian:				Zelda64rus (v2.0 Beta)
+- Polish:				RPG (v1.1) & GhostlyDark (improvements)
+- Russian:				Zelda64rus (v2.0 Beta) & GhostlyDark (improvements)
 
 --- Masked Quest ---
 - Garo-Mastah
