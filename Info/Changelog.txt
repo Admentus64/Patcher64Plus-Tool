@@ -1,3 +1,8 @@
+v15.1.1
+- Updated "Brazilian Portuguese" for OoT again (fixed alignment issue)
+- Fixed critical issue with patching in scripts for MM
+- Fixed "Lite GUI" window size for OoT
+
 v15.1.0
 - Added new "A Link to the Past" model (by ONI-3D Arts) (GNU 3.0 License)
 - Added "Ocarina of Time 3D" model back again

@@ -1267,7 +1267,7 @@ function CreateOptions() {
         CreateOptionsDialog -Columns 6 -Height 685 -Tabs @("Main", "Graphics", "Audio", "Difficulty", "Colors", "Equipment", "Animations")
     }
     else {
-        CreateOptionsDialog -Columns 6 -Height 450 -Tabs @("Main", "Graphics", "Audio", "Difficulty")
+        CreateOptionsDialog -Columns 6 -Height 600 -Tabs @("Main", "Graphics", "Audio", "Difficulty")
     }
 
     $Redux.Graphics.Widescreen.Add_CheckStateChanged(    { AdjustGUI } )

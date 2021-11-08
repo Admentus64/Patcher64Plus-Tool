@@ -775,7 +775,7 @@ function ByteLanguageOptions() {
             $script = $GameFiles.extracted + "\message_data_static.bin"
             $table  = $GameFiles.extracted + "\message_data.tbl"
             ExportBytes -Offset $LanguagePatch.script_start -Length $LanguagePatch.script_length -Output $script -Force
-            ExportBytes -Offset "1A6D6" -Length "8F70" -Output $table -Force
+            ExportBytes -Offset "C5D0D8" -Length "8F70" -Output $table -Force
             $lengthDifference = (Get-Item ($GameFiles.extracted + "\message_data_static.bin")).length
         }
         else  { return }
