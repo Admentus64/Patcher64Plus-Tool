@@ -58,6 +58,9 @@
 		"name"		: "Mega Man",
 		"author"	: "Psi-Hate"
 	}, {
+		"name"		: "Amara (Valkyrie)",
+		"author"	: "Amara & Karicyan"
+	}, {
 		"name"		: "Aria the Demon",
 		"author"	: "AriaHiro64"
 	}, {
@@ -173,9 +176,11 @@
 		"hylian_shield"	: 0,
 		"mirror_shield" : 0
 	}, {
-		"name"		: "Amara (Demo)",
-		"author"	: "Amara & Karicyan",
-		"wip"		: 2
+		"name"		: "Amara",
+		"author"	: "Amara & Karicyan"
+	}, {
+		"name"		: "Amara (Valkyrie)",
+		"author"	: "Amara & Karicyan"
 	}, {
 		"name"		: "Aria the Demon",
 		"author"	: "AriaHiro64"

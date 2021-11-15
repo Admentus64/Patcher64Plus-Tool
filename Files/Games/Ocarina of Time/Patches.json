@@ -50,7 +50,7 @@
 	"tooltip"			: "A trainer / practice / testing utility for The Legend of Zelda: Ocarina of Time{0}Formally known by its codename 'gz', but generally referred to as 'The Practice ROM'{0}- Supported: Rev 0 (US), Rev 1 (US), Rev 2 (US), Rev GC (US) & Rev MQ (US)",
 	"rev" 				: ["5BD1FE107BF8106B2AB6650ABECD54D6"]
 }, {
-	"title"				: "The Legend of Zelda: The Missing Link (v1.4)",
+	"title"				: "The Legend of Zelda: The Missing Link (v2.0)",
 	"command"			: "Force Downgrade",
 	"expand_memory"			: 1,
 	"vc_title"			: "Zelda: The Missing Link",

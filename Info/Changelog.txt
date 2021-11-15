@@ -1,3 +1,11 @@
+v15.1.2
+- Added new "Amara (Valkyrie)" model for OoT
+- Added new "Sun's Song" and "Saria's Song" options for MM
+- Updated "Restore" text for MM with Sun's Song and Saria's Song
+- Updated "The Missing Link" to v2.0
+- Updated HUD buttons preview
+- Fixed "Custom" text not patching for MM
+
 v15.1.1
 - Updated "Brazilian Portuguese" for OoT again (fixed alignment issue)
 - Fixed critical issue with patching in scripts for MM

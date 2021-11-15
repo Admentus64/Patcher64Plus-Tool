@@ -39,6 +39,8 @@ function ByteOptions() {
     if (IsChecked $Redux.Gameplay.FrontflipAttack)     { ChangeBytes -Offset "1098721" -Values "0B";    PatchBytes  -Offset "75F1B0" -Patch "frontflip_jump_attack.bin" }
     if (IsChecked $Redux.Gameplay.FrontflipJump)       { ChangeBytes -Offset "1098E4D" -Values "23 34 D0" }
     if (IsChecked $Redux.Gameplay.NoShieldRecoil)      { ChangeBytes -Offset "CAEDD0"  -Values "24 00" }
+    if (IsChecked $Redux.Gameplay.SunSong)             { ChangeBytes -Offset "C5CE71"  -Values "02" }
+    if (IsChecked $Redux.Gameplay.SariaSong)           { ChangeBytes -Offset "C5CE72"  -Values "08" }
 
     
 
@@ -770,7 +772,7 @@ function ByteReduxOptions() {
 #==============================================================================================================================================================================================
 function ByteLanguageOptions() {
     
-    if ( (IsChecked $Redux.Text.Restore) -or (IsChecked $Redux.Text.MasterQuest) -or (IsLanguage $Redux.Gameplay.RazorSword) -or (IsChecked $Redux.UI.GCScheme) -or (IsChecked -Elem $Redux.Script.RenameTatl) -or (IsText -Elem $Redux.Colors.Fairy -Compare "Navi") -or (IsText -Elem $Redux.Colors.Fairy -Compare "Tael")  -or (IsLanguage $Redux.Capacity.EnableAmmo) -or (IsLanguage $Redux.Capacity.EnableWallet)  ) {
+    if ( (IsChecked -Elem $Redux.Text.Vanilla -Not) -or (IsLanguage $Redux.Gameplay.RazorSword) -or (IsChecked $Redux.UI.GCScheme) -or (IsChecked -Elem $Redux.Script.RenameTatl) -or (IsText -Elem $Redux.Colors.Fairy -Compare "Navi") -or (IsText -Elem $Redux.Colors.Fairy -Compare "Tael")  -or (IsLanguage $Redux.Capacity.EnableAmmo) -or (IsLanguage $Redux.Capacity.EnableWallet)  ) {
         if ( (IsSet $LanguagePatch.script_start) -and (IsSet $LanguagePatch.script_length) ) {
             $script = $GameFiles.extracted + "\message_data_static.bin"
             $table  = $GameFiles.extracted + "\message_data.tbl"
@@ -951,6 +953,8 @@ function CreateTabMain() {
     CreateReduxCheckBox -Name "FrontflipAttack"   -Text "Frontflip Jump Attack" -Info "Restores the Frontflip Jump Attack animation from the Beta"                                                          -Credits "SoulofDeity"
     CreateReduxCheckBox -Name "FrontflipJump"     -Text "Force Frontflip Jump"  -Info "Link will always use the frontflip animation when jumping"                                                           -Credits "SoulofDeity"
     CreateReduxCheckBox -Name "NoShieldRecoil"    -Text "No Shield Recoil"      -Info "Disable the recoil when being hit while shielding"                                                                   -Credits "Admentus"
+    CreateReduxCheckBox -Name "SunSong"           -Text "Sun's Song"            -Info "Unlocks the Sun's Song when creating a new save file, which skips time to the next day or night"                     -Credits "Ported from Rando"
+    CreateReduxCheckBox -Name "SariaSong"         -Text "Saria's Song"          -Info "Unlocks Saria's Song when creating a new save file, which plays the Final Hours music theme until the next area"     -Credits "Ported from Rando"
 
 
 
