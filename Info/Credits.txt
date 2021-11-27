@@ -2,7 +2,7 @@
 <<< PATCHER64+ TOOL >>>
 
 --- Thanks to my Patreons ---
-- Amara, David Pyne, Gagrecco, Tommy Naugle, Yang
+- Amara, Craig, David Pyne, Gagrecco, Tommy Naugle, Yang
 
 --- Thanks to my past Patreons --
 - Crypto Logiq, Gicrax, Leigh Pierce, Moons Moons, Raim, Richard Moser
@@ -32,10 +32,14 @@
 - Censor Blood:				ShadowOne333
 - Restore Gerudo Textures:		GhostlyDark, ShadowOne333
 - Pause Screen Delay Fix:		zel
+- Temple of Time Door:			Chez Cousteau
+- Navi Targettable Spots:		Chez Cousteau
 - Visible Gerudo Tent:			Chez Cousteau
 - Debug Map Select:			Jared Johnson
+- Skip Intro:				Aegiker
 - Remove CRC Check:			Drahsid
 - Master Quest:				ShadowOne333
+- No Item Drops:			Admentus & BilonFullHDemon
 - Harder Child Bosses:			BilonFullHDemon
 - Graveyard Keese:			salvador235
 - 16:9 Backgrounds & Textures:		GhostlyDark, ShadowOne333, CYB3RTR0N
@@ -281,7 +285,9 @@
 - Kokiri Tunic Color:			GhostlyDark
 - Recolor Mask Forms:			Admentus, ShadowOne333 & Garo-Mastah
 - Zora Physics:				ShadowOne333
-- Frontflip Jump / Jump Attack:		SoulofDeity
+- Frontflip Jump:			SoulofDeity
+- Jump Attack:				Admentus (ported), SoulofDeity & Aegiker
+- No Item Drops:			Admentus & BilonFullHDemon
 - Restore Palace Route:			ShadowOne333
 - Correct Rupee Colors:			GhostlyDark
 - Restore Cow Nose Ring:		ShadowOne333

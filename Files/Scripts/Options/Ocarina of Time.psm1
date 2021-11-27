@@ -73,14 +73,16 @@ function ByteOptions() {
         ChangeBytes -Offset "E2D440" -Values "24 19 00 00" # Fixed Bombchu Bowling item order
     }
 
-    if (IsChecked $Redux.Gameplay.Medallions)          { ChangeBytes -Offset "E2B454"  -Values "80 EA 00 A7 24 01 00 3F 31 4A 00 3F 00 00 00 00" }
-    if (IsChecked $Redux.Gameplay.ReturnChild)         { ChangeBytes -Offset "CB6844"  -Values "35"; ChangeBytes -Offset "253C0E2" -Values "03" }
-    if (IsChecked $Redux.Gameplay.FixGraves)           { ChangeBytes -Offset "202039D" -Values "20"; ChangeBytes -Offset "202043C" -Values "24" }
-    if (IsChecked $Redux.Gameplay.DistantZTargeting)   { ChangeBytes -Offset "A987AC"  -Values "00 00 00 00" }
-    if (IsChecked $Redux.Gameplay.ManualJump)          { ChangeBytes -Offset "BD78C0"  -Values "04 C1"; ChangeBytes -Offset "BD78E3" -Values "01" }
-    if (IsChecked $Redux.Gameplay.NoKillFlash)         { ChangeBytes -Offset "B11C33"  -Values "00" }
-    if (IsChecked $Redux.Gameplay.NoShieldRecoil)      { ChangeBytes -Offset "BD416C"  -Values "24 00" }
-    
+    if (IsChecked $Redux.Gameplay.Medallions)               { ChangeBytes -Offset "E2B454" -Values "80 EA 00 A7 24 01 00 3F 31 4A 00 3F 00 00 00 00" }
+    if (IsChecked $Redux.Gameplay.ReturnChild)              { ChangeBytes -Offset "CB6844" -Values "35"; ChangeBytes -Offset "253C0E2" -Values "03" }
+    if (IsChecked $Redux.Gameplay.DistantZTargeting)        { ChangeBytes -Offset "A987AC" -Values "00 00 00 00" }
+    if (IsChecked $Redux.Gameplay.ManualJump)               { ChangeBytes -Offset "BD78C0" -Values "04 C1"; ChangeBytes -Offset "BD78E3" -Values "01" }
+    if (IsChecked $Redux.Gameplay.NoKillFlash)              { ChangeBytes -Offset "B11C33" -Values "00" }
+    if (IsChecked $Redux.Gameplay.NoShieldRecoil)           { ChangeBytes -Offset "BD416C" -Values "24 00" }
+    if (IsChecked $Redux.Gameplay.RunWhileShielding)        { ChangeBytes -Offset "BD7DA0" -Values "10 00 00 55"; ChangeBytes -Offset "BD01D4" -Values "10 00 00 55" }
+    if (IsChecked $Redux.Gameplay.PushbackAttackingWalls)   { ChangeBytes -Offset "BDEAE0" -Values "26 24 00 00 24 85 00 00" }
+    if (IsChecked $Redux.Gameplay.FasterClimbing)           { ChangeBytes -Offset "B01994" -Values "46 0A 32 02 46 0D 42 02" }
+
 
 
     # RESTORE #
@@ -109,24 +111,55 @@ function ByteOptions() {
 
     if (IsChecked $Redux.Restore.CowNoseRing) { ChangeBytes -Offset "EF3E68" -Values "00 00" }
 
+
+
+    # OTHER #
+
+    if (IsChecked $Redux.Fixes.TimeDoor) {
+        ChangeBytes -Offset "25540C6" -Values "FF FC"; ChangeBytes -Offset "2554226" -Values "FF FC"; ChangeBytes -Offset "255429A" -Values "FF FC"; ChangeBytes -Offset "2554326" -Values "FF FC"; ChangeBytes -Offset "2554446" -Values "FF FC"; ChangeBytes -Offset "25544CE" -Values "FF FC"
+        ChangeBytes -Offset "255458E" -Values "FF FC"; ChangeBytes -Offset "255463E" -Values "FF FC"; ChangeBytes -Offset "25546EE" -Values "FF FC"; ChangeBytes -Offset "25547A2" -Values "FF FC"; ChangeBytes -Offset "2554862" -Values "FF FC"; ChangeBytes -Offset "2554902" -Values "FF FC"
+    }
+
+    if (IsChecked $Redux.Fixes.NaviTarget) {
+        $Offset = SearchBytes -Start "2ADE000" -End "2BEAA20" -Values "61 00 06 00 05 00 00 3C 24 01 11 FD A8 01 4D FB"; ChangeBytes -Offset $offset -Values "7E" # Spirit Temple
+        ChangeBytes -Offset "283B14B" -Values "5C FA F3 FD AC"       # Shadow Temple
+        ChangeBytes -Offset "236C059" -Values "4B FD 31 00 1E 00 16" # Fire Temple
+        ChangeBytes -Offset "2C1906D" -Values "18 00 00 00 00"       # Ice Cavern
+    }
+
+    if (IsChecked $Redux.Fixes.WaterTemple) {
+        ChangeBytes -Offset "263507C" -Values "03 5C"; ChangeBytes -Offset "263508C" -Values "03 5C"; ChangeBytes -Offset "263509C" -Values "03 5C" # Three out of bounds pots
+        ChangeBytes -Offset "25C7221" -Values "0B";    ChangeBytes -Offset "25C7231" -Values "0B" # Unreachable hookshot spot in room 22
+
+        ChangeBytes -Offset "25CE07A" -Values "FE 39 03 0C FE 51"; ChangeBytes -Offset "25CE082" -Values "00"; ChangeBytes -Offset "25CE055" -Values "0D" # Restore two keese in room 1
+        ChangeBytes -Offset "25CE08A" -Values "00 4A 03 0C";       ChangeBytes -Offset "25CE08F" -Values "51"; ChangeBytes -Offset "25CE092" -Values "00"
+    }
+
+    if (IsChecked $Redux.Fixes.SubscreenDelay)      { ChangeBytes -Offset "B15DD0" -Values "00 00 00 00"; ChangeBytes -Offset "B12947" -Values "03" }
+    if (IsChecked $Redux.Fixes.Graves)              { ChangeBytes -Offset "202039D" -Values "20"; ChangeBytes -Offset "202043C" -Values "24"; } 
+    if (IsChecked $Redux.Other.VisibleGerudoTent)   { ChangeBytes -Offset "D215CB" -Values "11" }
+    if (IsChecked $Redux.Fixes.PoacherSaw)          { ChangeBytes -Offset "AE72CC" -Values "00 00 00 00" }
+    if (IsChecked $Redux.Fixes.Boomerang)           { ChangeBytes -Offset "F0F718" -Values "FC 41 C7 FF FF FF FE 38" }
+    if (IsChecked $Redux.Fixes.FortressMinimap)     { CopyBytes -Start "974600" -Length "D48" -Offset "96E068" }
+
     
 
     # OTHER #
 
-    if (IsChecked $Redux.Other.DebugMapSelect) {
+    if ( (IsIndex -Elem $Redux.Other.MapSelect -Text "Translate Only") -or (IsIndex $Redux.Other.MapSelect -Text "Translate and Enable") ) { ExportAndPatch -Path "map_select" -Offset "B9FD90" -Length "EC0" }
+    if ( (IsIndex -Elem $Redux.Other.MapSelect -Text "Enable Only")    -or (IsIndex $Redux.Other.MapSelect -Text "Translate and Enable") ) {
         ChangeBytes -Offset "A94994" -Values "00 00 00 00 AE 08 00 14 34 84 B9 2C 8E 02 00 18 24 0B 00 00 AC 8B 00 00"
         ChangeBytes -Offset "B67395" -Values "B9 E4 00 00 BA 11 60 80 80 09 C0 80 80 37 20 80 80 1C 14 80 80 1C 14 80 80 1C 08"
-        ExportAndPatch -Path "map_select" -Offset "B9FD90" -Length "EC0"
     }
-
-    if (IsChecked $Redux.Other.SubscreenDelayFix)    { ChangeBytes -Offset "B15DD0" -Values "00 00 00 00"; ChangeBytes -Offset "B12947" -Values "03" }
-    if (IsChecked $Redux.Other.VisibleGerudoTent)    { ChangeBytes -Offset "D215CB" -Values "11" }
-    if (IsChecked $Redux.Other.PoacherSawFix)        { ChangeBytes -Offset "AE72CC" -Values "00 00 00 00" }
+    
     if (IsChecked $Redux.Other.RemoveNaviPrompts)    { ChangeBytes -Offset "DF8B84" -Values "00 00 00 00" }
     if (IsChecked $Redux.Other.DefaultZTargeting)    { ChangeBytes -Offset "B71E6D" -Values "01" }
     if (IsChecked $Redux.Other.InstantClaimCheck)    { ChangeBytes -Offset "ED4470" -Values "00 00 00 00"; ChangeBytes -Offset "ED4498" -Values "00 00 00 00" }
-    if (IsChecked $Redux.Other.BoomerangFix)         { ChangeBytes -Offset "F0F718" -Values "FC 41 C7 FF FF FF FE 38" }
-    if (IsChecked $Redux.Other.DebugItemSelect)      { ExportAndPatch -Path "inventory_editor" -Offset "BCBF64" -Length "C8" }
+    if (IsChecked $Redux.Other.ItemSelect)           { ExportAndPatch -Path "inventory_editor" -Offset "BCBF64" -Length "C8" }
+
+    
+    if ( (IsIndex -Elem $Redux.Other.SkipIntro -Text "Skip Logo")         -or (IsIndex -Elem $Redux.Other.SkipIntro -Text "Skip Logo and Title Screen") )   { ChangeBytes -Offset "B9DAAC" -Values "00 00 00 00" }
+    if ( (IsIndex -Elem $Redux.Other.SkipIntro -Text "Skip Title Screen") -or (IsIndex -Elem $Redux.Other.SkipIntro -Text "Skip Logo and Title Screen") )   { ChangeBytes -Offset "B17237" -Values "30" }
     
 
 
@@ -532,8 +565,15 @@ function ByteOptions() {
         ChangeBytes -Offset "202F7ED" -Values "13"; ChangeBytes -Offset "202F7FB" -Values "03"; ChangeBytes -Offset "202F7FD" -Values "13"; ChangeBytes -Offset "202F80B" -Values "03"; ChangeBytes -Offset "202F80D" -Values "13"; ChangeBytes -Offset "202F81B" -Values "03"
     }
 
-    if     (IsChecked $Redux.Hero.Arwing)   { ChangeBytes -Offset "2081086" -Values "00 02"; ChangeBytes -Offset "2081114" -Values "01 3B"; ChangeBytes -Offset "2081122" -Values "00 00" }
-    elseif (IsChecked $Redux.Hero.LikeLike) { ChangeBytes -Offset "2081086" -Values "00 D4"; ChangeBytes -Offset "2081114" -Values "00 DD"; ChangeBytes -Offset "2081122" -Values "00 00" }
+    if (IsChecked $Redux.Hero.NoItemDrops) {
+        $Values = @()
+        for ($i=0; $i -lt 80; $i++) { $Values += 0 }
+        ChangeBytes -Offset "B5D6B0" -Values $Values
+    }
+
+    if     (IsChecked $Redux.Hero.NoRecoveryHearts)   { ChangeBytes -Offset "A895B7" -Values "2E" }
+    if     (IsChecked $Redux.Hero.Arwing)             { ChangeBytes -Offset "2081086" -Values "00 02"; ChangeBytes -Offset "2081114" -Values "01 3B"; ChangeBytes -Offset "2081122" -Values "00 00" }
+    elseif (IsChecked $Redux.Hero.LikeLike)           { ChangeBytes -Offset "2081086" -Values "00 D4"; ChangeBytes -Offset "2081114" -Values "00 DD"; ChangeBytes -Offset "2081122" -Values "00 00" }
 
     
     
@@ -1298,17 +1338,19 @@ function CreateTabMain() {
 
     CreateReduxGroup        -Tag  "Gameplay" -Text "Gameplay" 
     if ($Settings.Debug.LiteGUI -eq $False) {
-        CreateReduxCheckBox -Name "FasterBlockPushing" -Checked -Text "Faster Block Pushing"   -Info "All blocks are pushed faster" -Credits "GhostlyDark (Ported from Redux)"
-        CreateReduxCheckBox -Name "EasierMinigames"             -Text "Easier Minigames"       -Info "Certain minigames are made easier and faster`n- Dampe's Digging Game is first try always`n- Fishing is less random and has less demanding requirements`n-Bombchu Bowling prizes now appear in fixed order instead of random" -Credits "Ported from Rando"
-        CreateReduxCheckBox -Name "ReturnChild"                 -Text "Can Always Return"      -Info "You can always go back to being a child again before clearing the boss of the Forest Temple`nOut of the way Sheik!" -Credits "Ported from Redux"
-        CreateReduxCheckBox -Name "Medallions"                  -Text "Require All Medallions" -Info "All six medallions are required for the Rainbow Bridge to appear before Ganon's Castle`nThe vanilla requirements were the Shadow and Spirit Medallions and the Light Arrows" -Credits "Ported from Rando"
-        CreateReduxCheckBox -Name "FixGraves"                   -Text "Fix Graves"             -Info "The grave holes in Kakariko Graveyard behave as in the Rev 1 revision`nThe edges no longer force Link to grab or jump over them when trying to enter" -Credits "Ported from Rando"
+        CreateReduxCheckBox -Name "FasterBlockPushing" -Checked -Text "Faster Block Pushing"     -Info "All blocks are pushed faster" -Credits "GhostlyDark (Ported from Redux)"
+        CreateReduxCheckBox -Name "EasierMinigames"             -Text "Easier Minigames"         -Info "Certain minigames are made easier and faster`n- Dampe's Digging Game is first try always`n- Fishing is less random and has less demanding requirements`n-Bombchu Bowling prizes now appear in fixed order instead of random" -Credits "Ported from Rando"
+        CreateReduxCheckBox -Name "ReturnChild"                 -Text "Can Always Return"        -Info "You can always go back to being a child again before clearing the boss of the Forest Temple`nOut of the way Sheik!" -Credits "Ported from Redux"
+        CreateReduxCheckBox -Name "Medallions"                  -Text "Require All Medallions"   -Info "All six medallions are required for the Rainbow Bridge to appear before Ganon's Castle`nThe vanilla requirements were the Shadow and Spirit Medallions and the Light Arrows" -Credits "Ported from Rando"
     }
-    CreateReduxCheckBox     -Name "DistantZTargeting"           -Text "Distant Z-Targeting"    -Info "Allow to use Z-Targeting on enemies, objects and NPC's from any distance"                                    -Credits "Admentus"
-    CreateReduxCheckBox     -Name "ManualJump"                  -Text "Manual Jump"            -Info "Press Z + A to do a Manual Jump instead of a Jump Attack`nPress B mid-air after jumping to do a Jump Attack" -Credits "Admentus (ROM hack) & CloudModding (GameShark)"
-    CreateReduxCheckBox     -Name "NoKillFlash"                 -Text "No Kill Flash"          -Info "Disable the flash effect when killing certain enemies such as the Guay or Skullwalltula"                     -Credits "Chez Cousteau"
-    CreateReduxCheckBox     -Name "NoShieldRecoil"              -Text "No Shield Recoil"       -Info "Disable the recoil when being hit while shielding"                                                           -Credits "Admentus (ROM) & Aegiker (GameShark)"
-    
+    CreateReduxCheckBox     -Name "DistantZTargeting"           -Text "Distant Z-Targeting"      -Info "Allow to use Z-Targeting on enemies, objects and NPC's from any distance"                                    -Credits "Admentus"
+    CreateReduxCheckBox     -Name "ManualJump"                  -Text "Manual Jump"              -Info "Press Z + A to do a Manual Jump instead of a Jump Attack`nPress B mid-air after jumping to do a Jump Attack" -Credits "Admentus (ROM hack) & CloudModding (GameShark)"
+    CreateReduxCheckBox     -Name "NoKillFlash"                 -Text "No Kill Flash"            -Info "Disable the flash effect when killing certain enemies such as the Guay or Skullwalltula"                     -Credits "Chez Cousteau"
+    CreateReduxCheckBox     -Name "NoShieldRecoil"              -Text "No Shield Recoil"         -Info "Disable the recoil when being hit while shielding"                                                           -Credits "Admentus (ROM) & Aegiker (GameShark)"
+    CreateReduxCheckBox     -Name "RunWhileShielding"           -Text "Run While Shielding"      -Info "Disable the recoil when being hit while shielding"                                                           -Credits "Admentus (ported) & Aegiker (Debug)"
+    CreateReduxCheckBox     -Name "PushbackAttackingWalls"      -Text "Pushback Attacking Walls" -Info "Disable the recoil when being hit while shielding"                                                           -Credits "Admentus (ported) & Aegiker (Debug)"
+    CreateReduxCheckBox     -Name "FasterClimbing"              -Text "Faster Climbing"          -Info "Link climbes up vines much faster"                                                                           -Credits "Admentus"
+
 
 
     # RESTORE #
@@ -1325,20 +1367,32 @@ function CreateTabMain() {
     
 
 
+    # FIXES #
+
+    CreateReduxGroup    -Tag  "Fixes" -Text "Fixes"
+    CreateReduxCheckBox -Name "SubscreenDelay"    -Text "Pause Screen Delay" -Checked -Info "Removes the delay when opening the Pause Screen by removing the anti-aliasing"                                                                        -Credits "zel"
+    CreateReduxCheckBox -Name "Graves"            -Text "Graveyard Graves"            -Info "The grave holes in Kakariko Graveyard behave as in the Rev 1 revision`nThe edges no longer force Link to grab or jump over them when trying to enter" -Credits "Ported from Rando"
+    CreateReduxCheckBox -Name "VisibleGerudoTent" -Text "Visible Gerudo Tent"         -Info "Make the tent in the Gerudo Valley during the Child era visible`nThe tent was always accessible, just invisible"                                      -Credits "Chez Cousteau"
+    CreateReduxCheckBox -Name "PoacherSaw"        -Text "Poacher's Saw"      -Checked -Info "Obtaining the Poacher's Saw no longer prevents Link from obtaining the second Deku Nut upgrade"                                                       -Credits "Ported from Rando"
+    CreateReduxCheckBox -Name "Boomerang"         -Text "Boomerang"                   -Info "Fix the gem color on the thrown boomerang"                                                                                                            -Credits "Aria"
+    CreateReduxCheckBox -Name "TimeDoor"          -Text "Temple of Time Door"         -Info "Fix the positioning of the Temple of Time door, so you can not skip past it"                                                                          -Credits "Chez Cousteau"
+    CreateReduxCheckBox -Name "NaviTarget"        -Text "Navi Targettable Spots"      -Info "Fix several spots in dungeons which Navi could not target for Link"                                                                                   -Credits "Chez Cousteau"
+    CreateReduxCheckBox -Name "WaterTemple"       -Text "Water Temple"                -Info "Restore and fix several actors in the Water Temple`nUnreachable hookshot spot in room 22, three out of bounds pots, restore two Keese in room 1"      -Credits "Chez Cousteau"
+    CreateReduxCheckBox -Name "FortressMinimap"   -Text "Gerudo Fortress Minimap"     -Info "Display the complete minimap for the Gerudo Fortress during the Child era"                                                                            -Credits "GhostlyDark"
+
+
+
     # OTHER #
 
     CreateReduxGroup        -Tag  "Other" -Text "Other"
-    CreateReduxCheckBox     -Name "SubscreenDelayFix"  -Text "Pause Screen Delay Fix" -Checked -Info "Removes the delay when opening the Pause Screen by removing the anti-aliasing"                                   -Credits "zel"
     if ($Settings.Debug.LiteGUI -eq $False) {
-        CreateReduxCheckBox -Name "PoacherSawFix"      -Text "Poacher's Saw Fix" -Checked      -Info "Obtaining the Poacher's Saw no longer prevents Link from obtaining the second Deku Nut upgrade"                  -Credits "Ported from Rando"
-        CreateReduxCheckBox -Name "VisibleGerudoTent"  -Text "Visible Gerudo Tent"             -Info "Make the tent in the Gerudo Valley during the Child era visible`nThe tent was always accessible, just invisible" -Credits "Chez Cousteau"
-        CreateReduxCheckBox -Name "RemoveNaviPrompts"  -Text "Remove Navi Prompts"             -Info "Navi will no longer interrupt you with text boxes in the first dungeon"                                          -Credits "Ported from Redux"
-        CreateReduxCheckBox -Name "DefaultZTargeting"  -Text "Default Hold Z-Targeting"        -Info "Change the Default Z-Targeting option to Hold instead of Switch"                                                 -Credits "Ported from Redux"
-        CreateReduxCheckBox -Name "InstantClaimCheck"  -Text "Instant Claim Check"             -Info "Remove the check for waiting until the Biggoron Sword can be claimed through the Claim Check"                    -Credits "Ported from Rando"
+        CreateReduxCheckBox -Name "RemoveNaviPrompts" -Text "Remove Navi Prompts"           -Info "Navi will no longer interrupt you with text boxes in the first dungeon"                                                                         -Credits "Ported from Redux"
+        CreateReduxCheckBox -Name "DefaultZTargeting" -Text "Default Hold Z-Targeting"      -Info "Change the Default Z-Targeting option to Hold instead of Switch"                                                                                -Credits "Ported from Redux"
+        CreateReduxCheckBox -Name "InstantClaimCheck" -Text "Instant Claim Check"           -Info "Remove the check for waiting until the Biggoron Sword can be claimed through the Claim Check"                                                   -Credits "Ported from Rando"
     }
-    CreateReduxCheckBox -Name "BoomerangFix"           -Text "Boomerang Fix"                   -Info "Fix the gem color on the thrown boomerang"                                                                       -Credits "Aria"
-    CreateReduxCheckBox -Name "DebugMapSelect"         -Text "Debug Map Select"                -Info "Enable the Map Select menu like in the Debug ROM`nThe File Select menu now opens the Map Select menu instead`nA separate debug save file is used" -Credits "Jared Johnson (translated by Zelda Edit)"
-    CreateReduxCheckBox -Name "DebugItemSelect"        -Text "Debug Item Select"               -Info "Translates the Debug Inventory Select menu into English"                                                                                          -Credits "GhostlyDark"
+    CreateReduxCheckBox -Name "ItemSelect"                 -Text "Translate Item Select" -Info "Translates the Debug Inventory Select menu into English"                                                                                                                                                                                        -Credits "GhostlyDark"
+    CreateReduxComboBox -Name "MapSelect" -Column 1 -Row 2 -Text "Enable Map Select" -Items @("Disable", "Translate Only", "Enable Only", "Translate and Enable")           -Default 1 -Info "Enable the Map Select menu like in the Debug ROM`nThe File Select menu now opens the Map Select menu instead`nA separate debug save file is used" -Credits "Jared Johnson (translated by Zelda Edit)"
+    CreateReduxComboBox -Name "SkipIntro" -Column 3 -Row 2 -Text "Skip Intro"        -Items @("Don't Skip", "Skip Logo", "Skip Title Screen", "Skip Logo and Title Screen") -Default 1 -Info "Skip the logo, title screen or both"                                                                                                              -Credits "Aegiker"
     
 }
 
@@ -1646,10 +1700,12 @@ function CreateTabDifficulty() {
     CreateReduxComboBox -Name "MonsterHP"  -Column 1 -Row 2 -Text "Monster HP"   -Items @("1x Monster HP", "2x Monster HP", "3x Monster HP")                      -Info "Set the amount of health for monsters"                                                                  -Credits "Admentus" -Warning "Half of the enemies are missing"
     CreateReduxComboBox -Name "MiniBossHP" -Column 3 -Row 2 -Text "Mini-Boss HP" -Items @("1x Mini-Boss HP", "2x Mini-Boss HP", "3x Mini-Boss HP")                -Info "Set the amount of health for elite monsters and mini-bosses"                                            -Credits "Admentus" -Warning "Big Octo and Dark Link are missing"
     CreateReduxComboBox -Name "BossHP"     -Column 5 -Row 2 -Text "Boss HP"      -Items @("1x Boss HP", "2x Boss HP", "3x Boss HP")                               -Info "Set the amount of health for bosses"                                                                    -Credits "Admentus & Marcelo20XX"
-    CreateReduxCheckBox -Name "HarderChildBosses" -Column 1 -Row 3 -Text "Harder Child Bosses" -Info "Replace objects in the Child Dungeon Boss arenas with additional monsters"   -Credits "BilonFullHDemon"
-    CreateReduxCheckBox -Name "GraveyardKeese"    -Column 2 -Row 3 -Text "Graveyard Keese"     -Info "Extends the object list for Adult Link so the Keese appear at the Graveyard" -Credits "salvador235"
-    CreateReduxCheckBox -Name "Arwing"            -Column 3 -Row 3 -Text "Arwing"              -Info "Replaces the Rock-Lifting Kokiri Kid with an Arwing in Kokiri Forest"        -Credits "Admentus"
-    CreateReduxCheckBox -Name "LikeLike"          -Column 4 -Row 3 -Text "Like-Like"           -Info "Replaces the Rock-Lifting Kokiri Kid with a Like-Like in Kokiri Forest"      -Credits "Admentus" -Link $Redux.Hero.Arwing
+    CreateReduxCheckBox -Name "NoRecoveryHearts"  -Column 1 -Row 3 -Text "No Recovery Heart Drops" -Info "Disable Recovery Hearts from spawning from item drops"                       -Credits "Ported from Rando"
+    CreateReduxCheckBox -Name "NoItemDrops"       -Column 2 -Row 3 -Text "No Item Drops"           -Info "Disable all items from spawning"                                             -Credits "Admentus & BilonFullHDemon"
+    CreateReduxCheckBox -Name "HarderChildBosses" -Column 3 -Row 3 -Text "Harder Child Bosses"     -Info "Replace objects in the Child Dungeon Boss arenas with additional monsters"   -Credits "BilonFullHDemon"
+    CreateReduxCheckBox -Name "GraveyardKeese"    -Column 4 -Row 3 -Text "Graveyard Keese"         -Info "Extends the object list for Adult Link so the Keese appear at the Graveyard" -Credits "salvador235"
+    CreateReduxCheckBox -Name "Arwing"            -Column 5 -Row 3 -Text "Arwing"                  -Info "Replaces the Rock-Lifting Kokiri Kid with an Arwing in Kokiri Forest"        -Credits "Admentus"
+    CreateReduxCheckBox -Name "LikeLike"          -Column 6 -Row 3 -Text "Like-Like"               -Info "Replaces the Rock-Lifting Kokiri Kid with a Like-Like in Kokiri Forest"      -Credits "Admentus" -Link $Redux.Hero.Arwing
 
     $Redux.Hero.Damage.Add_SelectedIndexChanged({ EnableElem -Elem $Redux.Hero.Recovery -Active ($this.text -ne "OHKO Mode") })
     EnableElem -Elem ($Redux.Hero.Recovery) -Active ($Redux.Hero.Damage.text -ne "OHKO Mode")

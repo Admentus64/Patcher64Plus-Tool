@@ -184,22 +184,25 @@ function PatchVCEmulator([string]$Command) {
 
     # Controls
     if (IsChecked $VC.RemapControls) {
-        ChangeBytes -File $WadFile.AppFile01 -Offset $Files.json.controls.offsets.a         -Values (GetControlsValue $Redux.Controls.A)
-        ChangeBytes -File $WadFile.AppFile01 -Offset $Files.json.controls.offsets.b         -Values (GetControlsValue $Redux.Controls.B)
-        ChangeBytes -File $WadFile.AppFile01 -Offset $Files.json.controls.offsets.x         -Values (GetControlsValue $Redux.Controls.X)
-        ChangeBytes -File $WadFile.AppFile01 -Offset $Files.json.controls.offsets.y         -Values (GetControlsValue $Redux.Controls.Y)
-        ChangeBytes -File $WadFile.AppFile01 -Offset $Files.json.controls.offsets.l         -Values (GetControlsValue $Redux.Controls.L)
-        ChangeBytes -File $WadFile.AppFile01 -Offset $Files.json.controls.offsets.r         -Values (GetControlsValue $Redux.Controls.R)
-        ChangeBytes -File $WadFile.AppFile01 -Offset $Files.json.controls.offsets.z         -Values (GetControlsValue $Redux.Controls.Z)
-        ChangeBytes -File $WadFile.AppFile01 -Offset $Files.json.controls.offsets.start     -Values (GetControlsValue $Redux.Controls.Start)
-        ChangeBytes -File $WadFile.AppFile01 -Offset $Files.json.controls.offsets.dpadup    -Values (GetControlsValue $Redux.Controls.DPadUp)
-        ChangeBytes -File $WadFile.AppFile01 -Offset $Files.json.controls.offsets.dpaddown  -Values (GetControlsValue $Redux.Controls.DPadDown)
-        ChangeBytes -File $WadFile.AppFile01 -Offset $Files.json.controls.offsets.dpadleft  -Values (GetControlsValue $Redux.Controls.DPadLeft)
-        ChangeBytes -File $WadFile.AppFile01 -Offset $Files.json.controls.offsets.dpadright -Values (GetControlsValue $Redux.Controls.DPadRight)
-        ChangeBytes -File $WadFile.AppFile01 -Offset $Files.json.controls.offsets.cup       -Values (GetControlsValue $Redux.Controls.CUp)
-        ChangeBytes -File $WadFile.AppFile01 -Offset $Files.json.controls.offsets.cdown     -Values (GetControlsValue $Redux.Controls.CDown)
-        ChangeBytes -File $WadFile.AppFile01 -Offset $Files.json.controls.offsets.cleft     -Values (GetControlsValue $Redux.Controls.CLeft)
-        ChangeBytes -File $WadFile.AppFile01 -Offset $Files.json.controls.offsets.cright    -Values (GetControlsValue $Redux.Controls.CRight)
+        if (StrLike -Str $Command -Val "Patch Boot DOL")   { $controls = $Files.json.controls.$("offsets_" + [System.IO.Path]::GetFileNameWithoutExtension((GetPatchFile))); }
+        else                                               { $controls = $Files.json.controls.offsets; }
+
+        ChangeBytes -File $WadFile.AppFile01 -Offset $controls.a         -Values (GetControlsValue $Redux.Controls.A)
+        ChangeBytes -File $WadFile.AppFile01 -Offset $controls.b         -Values (GetControlsValue $Redux.Controls.B)
+        ChangeBytes -File $WadFile.AppFile01 -Offset $controls.x         -Values (GetControlsValue $Redux.Controls.X)
+        ChangeBytes -File $WadFile.AppFile01 -Offset $controls.y         -Values (GetControlsValue $Redux.Controls.Y)
+        ChangeBytes -File $WadFile.AppFile01 -Offset $controls.l         -Values (GetControlsValue $Redux.Controls.L)
+        ChangeBytes -File $WadFile.AppFile01 -Offset $controls.r         -Values (GetControlsValue $Redux.Controls.R)
+        ChangeBytes -File $WadFile.AppFile01 -Offset $controls.z         -Values (GetControlsValue $Redux.Controls.Z)
+        ChangeBytes -File $WadFile.AppFile01 -Offset $controls.start     -Values (GetControlsValue $Redux.Controls.Start)
+        ChangeBytes -File $WadFile.AppFile01 -Offset $controls.dpadup    -Values (GetControlsValue $Redux.Controls.DPadUp)
+        ChangeBytes -File $WadFile.AppFile01 -Offset $controls.dpaddown  -Values (GetControlsValue $Redux.Controls.DPadDown)
+        ChangeBytes -File $WadFile.AppFile01 -Offset $controls.dpadleft  -Values (GetControlsValue $Redux.Controls.DPadLeft)
+        ChangeBytes -File $WadFile.AppFile01 -Offset $controls.dpadright -Values (GetControlsValue $Redux.Controls.DPadRight)
+        ChangeBytes -File $WadFile.AppFile01 -Offset $controls.cup       -Values (GetControlsValue $Redux.Controls.CUp)
+        ChangeBytes -File $WadFile.AppFile01 -Offset $controls.cdown     -Values (GetControlsValue $Redux.Controls.CDown)
+        ChangeBytes -File $WadFile.AppFile01 -Offset $controls.cleft     -Values (GetControlsValue $Redux.Controls.CLeft)
+        ChangeBytes -File $WadFile.AppFile01 -Offset $controls.cright    -Values (GetControlsValue $Redux.Controls.CRight)
     }
 
     # Expand Memory

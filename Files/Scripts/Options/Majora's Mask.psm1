@@ -31,12 +31,22 @@ function PatchOptions() {
 
 #==============================================================================================================================================================================================
 function ByteOptions() {
-    
+
     # GAMEPLAY #
+
+    if     (IsIndex -Elem $Redux.Gameplay.LinkJumpAttack  -Text "Frontflip")       { ChangeBytes -Offset "1098721" -Values "0B"; PatchBytes  -Offset "75F1B0" -Patch "frontflip_jump_attack.bin" }
+    elseif (IsIndex -Elem $Redux.Gameplay.LinkJumpAttack -Text "Beta Frontflip")   { ChangeBytes -Offset "CD72B2"  -Values "D8 50" }
+    elseif (IsIndex -Elem $Redux.Gameplay.LinkJumpAttack -Text "Beta Backflip")    { ChangeBytes -Offset "CD72B2"  -Values "D7 F0" }
+    elseif (IsIndex -Elem $Redux.Gameplay.LinkJumpAttack -Text "Spin Slash")       { ChangeBytes -Offset "CD72B2"  -Values "D7 E0" }
+    elseif (IsIndex -Elem $Redux.Gameplay.LinkJumpAttack -Text "Zora Jumpslash")   { ChangeBytes -Offset "CD72B2"  -Values "E3 F0" }
+
+    if     (IsIndex -Elem $Redux.Gameplay.ZoraJumpAttack -Text "Beta Frontflip")   { ChangeBytes -Offset "CD72B2"  -Values "D8 50" }
+    elseif (IsIndex -Elem $Redux.Gameplay.ZoraJumpAttack -Text "Beta Backflip")    { ChangeBytes -Offset "CD72B2"  -Values "D7 F0" }
+    elseif (IsIndex -Elem $Redux.Gameplay.ZoraJumpAttack -Text "Spin Slash")       { ChangeBytes -Offset "CD72B2"  -Values "D7 E0" }
+    
     if (IsChecked $Redux.Gameplay.ZoraPhysics)         { PatchBytes  -Offset "65D000"  -Patch "zora_physics_fix.bin" }
     if (IsChecked $Redux.Gameplay.DistantZTargeting)   { ChangeBytes -Offset "B4E924"  -Values "00 00 00 00" }
     if (IsChecked $Redux.Gameplay.ManualJump)          { ChangeBytes -Offset "CB4008"  -Values "04 C1"; ChangeBytes -Offset "CB402B" -Values "01" }
-    if (IsChecked $Redux.Gameplay.FrontflipAttack)     { ChangeBytes -Offset "1098721" -Values "0B";    PatchBytes  -Offset "75F1B0" -Patch "frontflip_jump_attack.bin" }
     if (IsChecked $Redux.Gameplay.FrontflipJump)       { ChangeBytes -Offset "1098E4D" -Values "23 34 D0" }
     if (IsChecked $Redux.Gameplay.NoShieldRecoil)      { ChangeBytes -Offset "CAEDD0"  -Values "24 00" }
     if (IsChecked $Redux.Gameplay.SunSong)             { ChangeBytes -Offset "C5CE71"  -Values "02" }
@@ -106,6 +116,11 @@ function ByteOptions() {
     if (IsChecked $Redux.Other.MushroomBottle)     { ChangeBytes -Offset "CD7C48" -Values "1E 6B" }
     if (IsChecked $Redux.Other.FairyFountain)      { ChangeBytes -Offset "B9133E" -Values "01 0F" }
     if (IsChecked $Redux.Other.DebugItemSelect)    { ExportAndPatch -Path "inventory_editor" -Offset "CA6370" -Length "1E0" }
+
+    if (IsChecked $Redux.Other.GiantsCutscene) {
+        ChangeBytes -Offset "2D91403" -Values "08"; ChangeBytes -Offset "2D91463" -Values "08"; ChangeBytes -Offset "2D914C3" -Values "08"; ChangeBytes -Offset "2D91523" -Values "08"
+        ChangeBytes -Offset "2D91583" -Values "08"; ChangeBytes -Offset "2D915E3" -Values "08"; ChangeBytes -Offset "2D91647" -Values "08"
+    }
 
 
 
@@ -418,14 +433,6 @@ function ByteOptions() {
         ChangeBytes -Offset "E6FA2F" -Values "0F" # Four Remains
     }
 
-    if (IsChecked $Redux.Hero.PalaceRoute) {
-        CreateSubPath  -Path ($GameFiles.extracted + "\Deku Palace")
-        ExportAndPatch -Path "Deku Palace\deku_palace_scene"  -Offset "2534000" -Length "D220"
-        ExportAndPatch -Path "Deku Palace\deku_palace_room_0" -Offset "2542000" -Length "11A50"
-        ExportAndPatch -Path "Deku Palace\deku_palace_room_1" -Offset "2554000" -Length "E950"  -NewLength "E9B0"  -TableOffset "1F6A7" -Values "B0"
-        ExportAndPatch -Path "Deku Palace\deku_palace_room_2" -Offset "2563000" -Length "124F0" -NewLength "124B0" -TableOffset "1F6B7" -Values "B0"
-    }
-
     if (IsIndex -Elem $Redux.Hero.DamageEffect -Not) {
         ChangeBytes -Offset "B79A48" -Values "24"
         ChangeBytes -Offset "B79A4B" -Values $Redux.Hero.DamageEffect.SelectedIndex
@@ -439,6 +446,20 @@ function ByteOptions() {
             elseif ($Redux.Hero.ClockSpeed.SelectedIndex -eq 3) { ChangeBytes -Offset "BB005E" -Values "FF FC"; ChangeBytes -Offset "BC668F" -Values "06"; ChangeBytes -Offset "BEDB8E" -Values "FF FC" }
             elseif ($Redux.Hero.ClockSpeed.SelectedIndex -eq 4) { ChangeBytes -Offset "BB005E" -Values "FF FA"; ChangeBytes -Offset "BC668F" -Values "09"; ChangeBytes -Offset "BEDB8E" -Values "FF FA" }
             elseif ($Redux.Hero.ClockSpeed.SelectedIndex -eq 5) { ChangeBytes -Offset "BB005E" -Values "FF F4"; ChangeBytes -Offset "BC668F" -Values "12"; ChangeBytes -Offset "BEDB8E" -Values "FF F4" }
+    }
+
+    if (IsChecked $Redux.Hero.NoItemDrops) {
+        $Values = @()
+        for ($i=0; $i -lt 80; $i++) { $Values += 0 }
+        ChangeBytes -Offset "C44400" -Values $Values
+    }
+
+    if (IsChecked $Redux.Hero.PalaceRoute) {
+        CreateSubPath  -Path ($GameFiles.extracted + "\Deku Palace")
+        ExportAndPatch -Path "Deku Palace\deku_palace_scene"  -Offset "2534000" -Length "D220"
+        ExportAndPatch -Path "Deku Palace\deku_palace_room_0" -Offset "2542000" -Length "11A50"
+        ExportAndPatch -Path "Deku Palace\deku_palace_room_1" -Offset "2554000" -Length "E950"  -NewLength "E9B0"  -TableOffset "1F6A7" -Values "B0"
+        ExportAndPatch -Path "Deku Palace\deku_palace_room_2" -Offset "2563000" -Length "124F0" -NewLength "124B0" -TableOffset "1F6B7" -Values "B0"
     }
 
     if (IsChecked $Redux.Hero.DeathIsMoonCrash) {
@@ -950,11 +971,13 @@ function CreateTabMain() {
     CreateReduxCheckBox -Name "ZoraPhysics"       -Text "Zora Physics"          -Info "Change the Zora physics when using the boomerang`nZora Link will take a step forward instead of staying on his spot" -Credits "ShadowOne333"
     CreateReduxCheckBox -Name "DistantZTargeting" -Text "Distant Z-Targeting"   -Info "Allow to use Z-Targeting on enemies, objects and NPC's from any distance"                                            -Credits "Admentus"
     CreateReduxCheckBox -Name "ManualJump"        -Text "Manual Jump"           -Info "Press Z + A to do a Manual Jump instead of a Jump Attack`nPress B mid-air after jumping to do a Jump Attack"         -Credits "Admentus"
-    CreateReduxCheckBox -Name "FrontflipAttack"   -Text "Frontflip Jump Attack" -Info "Restores the Frontflip Jump Attack animation from the Beta"                                                          -Credits "SoulofDeity"
     CreateReduxCheckBox -Name "FrontflipJump"     -Text "Force Frontflip Jump"  -Info "Link will always use the frontflip animation when jumping"                                                           -Credits "SoulofDeity"
     CreateReduxCheckBox -Name "NoShieldRecoil"    -Text "No Shield Recoil"      -Info "Disable the recoil when being hit while shielding"                                                                   -Credits "Admentus"
     CreateReduxCheckBox -Name "SunSong"           -Text "Sun's Song"            -Info "Unlocks the Sun's Song when creating a new save file, which skips time to the next day or night"                     -Credits "Ported from Rando"
     CreateReduxCheckBox -Name "SariaSong"         -Text "Saria's Song"          -Info "Unlocks Saria's Song when creating a new save file, which plays the Final Hours music theme until the next area"     -Credits "Ported from Rando"
+
+    CreateReduxComboBox -Name "LinkJumpAttack"              -Text "Link Jump Attack" -Default 1 -Items @("Jumpslash", "Frontflip", "Beta Frontflip", "Beta Backflip", "Spin Slash", "Zora Jumpslash") -Info "Set the Jump Attack animation for Link in his Hylian Form" -Credits "Admentus (ported), SoulofDeity & Aegiker"
+    CreateReduxComboBox -Name "ZoraJumpAttack"    -Column 4 -Text "Zora Jump Attack" -Default 1 -Items @("Zora Jumpslash", "Beta Frontflip", "Beta Backflip", "Spin Slash")                           -Info "Set the Jump Attack animation for Link in his Zora Form"   -Credits "Admentus (ported) & Aegiker"
 
 
 
@@ -977,6 +1000,7 @@ function CreateTabMain() {
     CreateReduxGroup    -Tag  "Other" -Text "Other"
     CreateReduxCheckBox -Name "PictoboxDelayFix"  -Text "Pictograph Box Delay Fix"  -Info "Photos are taken instantly with the Pictograph Box by removing the Anti-Aliasing" -Checked                                                                  -Credits "Ported from Rando"
     CreateReduxCheckBox -Name "GohtCutscene"      -Text "Fix Goht Cutscene"         -Info "Fix Goht's awakening cutscene so that Link no longer gets run over"                                                                                         -Credits "ShadowOne333"
+    CreateReduxCheckBox -Name "GiantsCutscene"    -Text "Fix Giant's Cutscene"      -Info "Fix the Giants in the unused Giant's Realm cutscene "                                                                                                       -Credits "Chez Cousteau"
     CreateReduxCheckBox -Name "MushroomBottle"    -Text "Fix Mushroom Bottle"       -Info "Fix the item reference when collecting Magical Mushrooms as Link puts away the bottle automatically due to an error"                                        -Credits "ozidual"
     CreateReduxCheckBox -Name "SouthernSwamp"     -Text "Fix Southern Swamp"        -Info "Fix a misplaced door after Woodfall has been cleared and you return to the Potion Shop`nThe door is slightly pushed forward after Odolwa has been defeated" -Credits "ShadowOne333"
     CreateReduxCheckBox -Name "FairyFountain"     -Text "Fix Fairy Fountain"        -Info "Fix the Ikana Canyon Fairy Fountain area not displaying the correct color"                                                                                  -Credits "Dybbles (fix) & ShadowOne333 (patch)"
@@ -1248,9 +1272,10 @@ function CreateTabDifficulty() {
     CreateReduxComboBox -Name "DamageEffect"     -Column 3 -Row 3 -Text "Damage Effect" -Items @("Default", "Burn", "Freeze", "Shock", "Knockdown") -Info "Add an effect when damaged"                                    -Credits "Ported from Rando"
     CreateReduxComboBox -Name "ClockSpeed"       -Column 5 -Row 3 -Text "Clock Speed"   -Items @("Default", "1/3", "2/3", "2x", "3x", "6x")         -Info "Set the speed at which time is progressing"                    -Credits "Ported from Rando"
     CreateReduxCheckBox -Name "MasterQuest"      -Column 1 -Row 4 -Text "Master Quest"         -Info "Use all areas and dungeons from the Master Quest ROM hack`nThis is for advanced players who like a higher challenge`nThe structure of the walkthrough is completely re-arranged" -Credits "Admentus (ported) & DeathBasket (ROM hack)"
-    CreateReduxCheckBox -Name "PalaceRoute"      -Column 2 -Row 4 -Text "Restore Palace Route" -Info "Restore the route to the Bean Seller within the Deku Palace as seen in the Japanese release"                        -Credits "ShadowOne"
-    CreateReduxCheckBox -Name "DeathIsMoonCrash" -Column 3 -Row 4 -Text "Death is Moon Crash"  -Info "If you die, the moon will crash`nThere are no continues anymore"                                                    -Credits "Ported from Rando"
-    CreateReduxCheckBox -Name "CloseBombShop"    -Column 4 -Row 4 -Text "Close Bomb Shop"      -Info "The bomb shop is now closed just like in the Master Quest ROM hack`nThe first bomb bag is now found somewhere else" -Credits "Admentus (ported) & DeathBasket (ROM hack)"
+    CreateReduxCheckBox -Name "NoItemDrops"      -Column 2 -Row 4 -Text "No Item Drops"        -Info "Disable all items from spawning"                                                                                    -Credits "Admentus & BilonFullHDemon"
+    CreateReduxCheckBox -Name "PalaceRoute"      -Column 3 -Row 4 -Text "Restore Palace Route" -Info "Restore the route to the Bean Seller within the Deku Palace as seen in the Japanese release"                        -Credits "ShadowOne"
+    CreateReduxCheckBox -Name "DeathIsMoonCrash" -Column 4 -Row 4 -Text "Death is Moon Crash"  -Info "If you die, the moon will crash`nThere are no continues anymore"                                                    -Credits "Ported from Rando"
+    CreateReduxCheckBox -Name "CloseBombShop"    -Column 5 -Row 4 -Text "Close Bomb Shop"      -Info "The bomb shop is now closed just like in the Master Quest ROM hack`nThe first bomb bag is now found somewhere else" -Credits "Admentus (ported) & DeathBasket (ROM hack)"
 
     $Redux.Hero.MasterQuest.Add_CheckStateChanged({
         if ($Redux.Hero.MasterQuest.Checked) {

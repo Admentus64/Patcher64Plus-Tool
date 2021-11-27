@@ -1,3 +1,22 @@
+v15.1.4
+- Added new "Gerudo Fortress Minimap" fix option for OoT (by GhostlyDark)
+- Added new "Run While Shielding", "Attack Wall Pushback" and "Faster Climbing" options for OoT
+- Added new Jump Attack animation alternatives for MM
+- Added new CopyBytes function for Patcher64+ Tool
+- Updated "Water Temple" fix option for OoT (by Chez Cousteau)
+- Fixed "Master Quest" option for MM (Great Bay Temple Turbine Room)
+
+
+v15.1.3
+- Added new fix options for OoT (by Chez Cousteau)
+- Added "Skip Intro" option for OoT (by Aegiker)
+- Added "No Item Drop" options for OoT and MM
+- Added "No Recovery Hearts" option for OoT
+- Added new "Fix Giant's Cutscene" option for MM (by Chez Cousteau)
+- Fixed bug with applying AppFile01 patches for Wii VC mode
+- Fixed Remap Controls for patched AppFile01 (GZ Practice ROM)
+
+
 v15.1.2
 - Added new "Amara (Valkyrie)" model for OoT
 - Added new "Sun's Song" and "Saria's Song" options for MM

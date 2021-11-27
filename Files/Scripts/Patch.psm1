@@ -265,7 +265,7 @@ function WriteDebug([string]$Command, [string[]]$Header, [string]$PatchedFileNam
     WriteToConsole ("Use Options:   " + ( (IsSet $GamePatch.options) -and $Patches.Options.Checked -and $Patches.Options.Visible) )
     WriteToConsole ("Use Redux:     " + ( (IsChecked $Patches.Redux) -and (IsSet $GamePatch.redux.file) ) )
     WriteToConsole ("Redux File:    " + $GamePatch.redux.file)
-    WriteToConsole ("Language File: " + $LanguagePatchFile)
+    WriteToConsole ("Language File: " + $LanguagePatchFile + " (" + $LanguagePatch.code + ")")
     WriteToConsole ("Output Name:   " + $PatchedFileName)
     WriteToConsole ("Command:       " + $Command)
     WriteToConsole ("Downgrade:     " + $Patches.Downgrade.Checked)
@@ -1001,3 +1001,4 @@ function GetROMVersion() {
 Export-ModuleMember -Function MainFunction
 Export-ModuleMember -Function ApplyPatch
 Export-ModuleMember -Function Cleanup
+Export-ModuleMember -Function GetPatchFile

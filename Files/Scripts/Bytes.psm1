@@ -68,6 +68,42 @@ function ChangeBytes([string]$File, [string]$Offset, [object]$Match=$null, [obje
 
 
 #==============================================================================================================================================================================================
+function CopyBytes([string]$File, [string]$Start, [string]$Length, [string]$Offset) {
+    
+    if (IsSet $File) { $ByteArrayGame = [System.IO.File]::ReadAllBytes($File) }
+
+    # Offset
+    try {
+        [uint32]$Start  = GetDecimal $Start
+        [uint32]$Length = GetDecimal $Length
+        [uint32]$Offset = GetDecimal $Offset
+    }
+    catch {
+        WriteToConsole "Offsets are negative, too large or not an integer!"
+        $global:WarningError = $True
+        return $False
+    }
+    if ($Start -gt $ByteArrayGame.Length -or $Offset -gt $ByteArrayGame.Length) {
+        WriteToConsole "Offsets are too large for file!"
+        $global:WarningError = $True
+        return $False
+    }
+
+    # Patch
+    WriteToConsole ( (Get32Bit $Offset) + " -> Copying values: from " + (Get32Bit $Start))
+    foreach ($i in 0..($Length-1)) {
+        $ByteArrayGame[$Offset + $i]  = $ByteArrayGame[$Start + $i]
+    }
+
+    # Write to File
+    if (IsSet $File) { [System.IO.File]::WriteAllBytes($File, $ByteArrayGame) }
+    return $True
+
+}
+
+
+
+#==============================================================================================================================================================================================
 function PatchBytes([string]$File, [string]$Offset, [string]$Length, [string]$Patch, [switch]$Texture, [switch]$Shared, [switch]$Models, [switch]$Extracted, [switch]$Pad) {
     
     # Binary Patch File Parameter Check
