@@ -139,15 +139,64 @@ function ShowHudPreview([switch]$IsOoT) {
     if (TestFile $Path)   { SetBitMap -Path $path -Box $Redux.UI.ButtonPreview -Width 90 -Height 90 }
     else                  { $Redux.UI.ButtonPreview.Image = $null }
 
-    $path = $null
-    if       ( (IsChecked $Redux.UI.Display)      -and  $IsOoT)   { $path = $Paths.Shared + "\HUD\MM\"  }
-    elseif   ( (IsChecked $Redux.UI.Display)      -and !$IsOoT)   { $path = $Paths.Shared + "\HUD\OoT\" }
-    elseif   ( (IsChecked $Redux.UI.Display -Not) -and  $IsOoT)   { $path = $Paths.Shared + "\HUD\OoT\" }    elseif   ( (IsChecked $Redux.UI.Display -Not) -and !$IsOoT)   { $path = $Paths.Shared + "\HUD\MM\"  }
+    $path = ($Paths.shared + "\HUD\Magic\" + $Redux.UI.MagicBar.Text.replace(" (default)", "") + ".png")
+    if (TestFile $Path)   { SetBitMap -Path $path -Box $Redux.UI.MagicPreview -Width 200 -Height 40 }
+    else                  { $Redux.UI.MagicPreview.Image = $null }
 
-    if (TestFile ($path + "heart.png"))   { SetBitMap -Path ($path + "heart.png") -Box $Redux.UI.HeartPreview -Width 40  -Height 40 } else { $Redux.UI.HeartPreview.Image = $null }
-    if (TestFile ($path + "key.png"))     { SetBitMap -Path ($path + "key.png")   -Box $Redux.UI.KeyPreview   -Width 40  -Height 40 } else { $Redux.UI.KeyPreview.Image   = $null }
-    if (TestFile ($path + "rupee.png"))   { SetBitMap -Path ($path + "rupee.png") -Box $Redux.UI.RupeePreview -Width 40  -Height 40 } else { $Redux.UI.RupeePreview.Image = $null }
-    if (TestFile ($path + "magic.png"))   { SetBitMap -Path ($path + "magic.png") -Box $Redux.UI.MagicPreview -Width 200 -Height 40 } else { $Redux.UI.MagicPreview.Image = $null }
+    $file = $null
+    if       ( (IsChecked $Redux.UI.Rupees)      -and  $IsOoT)        { $file = "Majora's Mask"   }
+    elseif   ( (IsChecked $Redux.UI.Rupees)      -and !$IsOoT)        { $file = "Ocarina of Time" }
+    elseif   ( (IsChecked $Redux.UI.Rupees -Not) -and  $IsOoT)        { $file = "Ocarina of Time" }    elseif   ( (IsChecked $Redux.UI.Rupees -Not) -and !$IsOoT)        { $file = "Majora's Mask"   }
+    if (TestFile ($Paths.Shared + "\HUD\Rupee\" + $file + ".png"))    { SetBitMap -Path ($Paths.Shared + "\HUD\Rupee\" + $file + ".png") -Box $Redux.UI.RupeesPreview } else { $Redux.UI.RupeesPreview.Image = $null }
+
+    $file = $null
+    if       ( (IsChecked $Redux.UI.DungeonKeys)      -and  $IsOoT)   { $file = "Majora's Mask"   }
+    elseif   ( (IsChecked $Redux.UI.DungeonKeys)      -and !$IsOoT)   { $file = "Ocarina of Time" }
+    elseif   ( (IsChecked $Redux.UI.DungeonKeys -Not) -and  $IsOoT)   { $file = "Ocarina of Time" }    elseif   ( (IsChecked $Redux.UI.DungeonKeys -Not) -and !$IsOoT)   { $file = "Majora's Mask"   }
+    if (TestFile ($Paths.Shared + "\HUD\Key\"   + $file + ".png"))    { SetBitMap -Path ($Paths.Shared + "\HUD\Key\"   + $file + ".png") -Box $Redux.UI.DungeonKeysPreview } else { $Redux.UI.DungeonKeysPreview.Image = $null }
+
+    $file = $null
+    if       ( (IsChecked $Redux.UI.Hearts)      -and  $IsOoT)        { $file = "Majora's Mask"   }
+    elseif   ( (IsChecked $Redux.UI.Hearts)      -and !$IsOoT)        { $file = "Ocarina of Time" }
+    elseif   ( (IsChecked $Redux.UI.Hearts -Not) -and  $IsOoT)        { $file = "Ocarina of Time" }    elseif   ( (IsChecked $Redux.UI.Hearts -Not) -and !$IsOoT)        { $file = "Majora's Mask"   }
+    if (TestFile ($Paths.Shared + "\HUD\Heart\" + $file + ".png"))    { SetBitMap -Path ($Paths.Shared + "\HUD\Heart\" + $file + ".png") -Box $Redux.UI.HeartsPreview } else { $Redux.UI.HeartsPreview.Image = $null }
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function ShowEquipmentPreview() {
+    
+    if (IsChecked $Redux.Equipment.IronShield)   { $path = ($Paths.shared + "\Equipment\Deku Shield\Iron Shield Icon.png") }
+    else                                         { $path = ($Paths.shared + "\Equipment\Deku Shield\Deku Shield Icon.png") }
+    if (TestFile $Path)   { SetBitMap -Path $path -Box $Redux.Equipment.DekuShieldIconPreview }
+    else                  { $Redux.Equipment.DekuShieldIconPreview.Image = $null }
+
+    if (IsChecked $Redux.Equipment.IronShield)   { $path = ($Paths.shared + "\Equipment\Deku Shield\Iron Shield.png") }
+    else                                         { $path = ($Paths.shared + "\Equipment\Deku Shield\Deku Shield.png") }
+    if (TestFile $Path)   { SetBitMap -Path $path -Box $Redux.Equipment.DekuShieldPreview }
+    else                  { $Redux.Equipment.DekuShieldPreview.Image = $null }
+
+    $path = ($Paths.shared + "\Equipment\Hylian Shield\" + $Redux.Equipment.HylianShield.Text.replace(" (default)", "") + " Icon.png")
+    if (TestFile $Path)   { SetBitMap -Path $path -Box $Redux.Equipment.HylianShieldIconPreview }
+    else                  { $Redux.Equipment.HylianShieldIconPreview.Image = $null }
+
+    $path = ($Paths.shared + "\Equipment\Hylian Shield\" + $Redux.Equipment.HylianShield.Text.replace(" (default)", "") + ".png")
+    if (TestFile $Path)   { SetBitMap -Path $path -Box $Redux.Equipment.HylianShieldPreview }
+    else                  { $Redux.Equipment.HylianShieldPreview.Image = $null }
+
+    $path = ($Paths.shared + "\Equipment\Mirror Shield\" + $Redux.Equipment.MirrorShield.Text.replace(" (default)", "") + " Icon.png")
+    if (TestFile $Path)   { SetBitMap -Path $path -Box $Redux.Equipment.MirrorShieldIconPreview }
+    else                  { $Redux.Equipment.MirrorShieldIconPreview.Image = $null }
+
+    $path = ($Paths.shared + "\Equipment\Mirror Shield\" + $Redux.Equipment.MirrorShield.Text.replace(" (default)", "") + ".png")
+    if (TestFile $Path)   { SetBitMap -Path $path -Box $Redux.Equipment.MirrorShieldPreview }
+    else                  { $Redux.Equipment.MirrorShieldPreview.Image = $null }
+
+    $path = ($Paths.shared + "\Equipment\Master Sword\" + $Redux.Equipment.MasterSword.Text.replace(" (default)", "") + " Icon.png")
+    if (TestFile $Path)   { SetBitMap -Path $path -Box $Redux.Equipment.MasterSwordIconPreview }
+    else                  { $Redux.Equipment.MasterSwordIconPreview.Image = $null }
 
 }
 
@@ -162,7 +211,7 @@ function ShowModelsPreview([switch]$Child, [switch]$Adult, [object]$Dropdown, [s
     $Text = $Dropdown.Text.replace(" (default)", "")
 
     if ($Child) {
-        $global:ChildModel = $null
+        $global:ChildModel = @{}
         for ($i=0; $i -lt $Files.json.models.child.length; $i++) {
             if ($Files.json.models.child[$i].name -eq $Text) {
                 $global:ChildModel = $Files.json.models.child[$i]
@@ -170,10 +219,11 @@ function ShowModelsPreview([switch]$Child, [switch]$Adult, [object]$Dropdown, [s
             }   
         }
         ShowModelPreview -Box $Redux.Graphics.ModelsPreviewChild -Path $Path -Text $Text -Type $ChildModel
+
     }
 
     if ($Adult) {
-        $global:AdultModel = $null
+        $global:AdultModel = @{}
         for ($i=0; $i -lt $Files.json.models.adult.length; $i++) {
             if ($Files.json.models.adult[$i].name -eq $Text) {
                 $global:AdultModel = $Files.json.models.adult[$i]
@@ -192,17 +242,21 @@ function ShowModelPreview([object]$Box, [string]$Path, [string]$Text, $Type) {
 
     if (!(IsSet $Files.json.models)) {return }
 
-    if (TestFile ($Path + $Text + ".png"))   { SetBitMap -Path ($Path + $Text + ".png") -Box $Box -Width 125 -Height 170 }
+    if (TestFile ($Path + $Text + ".png"))   { SetBitMap -Path ($Path + $Text + ".png") -Box $Box }
     else                                     { $Box.Image = $null }
 
     $Credits = ""
 
-    if (IsSet $Type.name)     { $Credits += "--- " + $Type.name + " ---{0}" }
-    if (IsSet $Type.author)   { $Credits += "{0}Model made by: "   + $Type.author }
-    if (IsSet $Type.porter)   { $Credits += "{0}Model ported by: " + $Type.porter }
-    if ($Type.WIP -eq 1)      { $Credits += "{0}This model is still Work-In-Progress" }
-    if ($Type.WIP -eq 2)      { $Credits += "{0}This model is a demonstration of the final version" }
-    if (IsSet $Type.url)      { $Credits += "{0}{0}Click to visit the modder's homepage" }
+    if     (!(IsSet $Type.name))                                { $Credits += "--- Model with missing license ---{0}" }
+    else                                                        { $Credits += "--- " + $Type.name + " ---{0}" }
+    if       ($Type.author -eq 0)                               { }
+    elseif   (IsSet $Type.author)                               { $Credits += "{0}Made by: " + $Type.author }
+    else                                                        { $Credits += "{0}Made by: Unknown" }
+    if       (IsSet $Type.source)                               { $Credits += "{0}Source: "  + $Type.source }
+    if       ($Type.WIP -eq 1)                                  { $Credits += "{0}This model is still Work-In-Progress" }
+    if       ($Type.WIP -eq 2)                                  { $Credits += "{0}This model is a demonstration of the final version" }
+    if     ( (IsSet $Type.url) -and !(IsSet $Type.author) )     { $Credits += "{0}{0}Click to visit the source of the model" }
+    elseif ( (IsSet $Type.url) -and  (IsSet $Type.author) )     { $Credits += "{0}{0}Click to visit the modder's homepage" }
 
     if (IsSet $Credits)   { $PreviewToolTip.SetToolTip($Box, ([string]::Format($Credits, [Environment]::NewLine))) }
     else                  { $PreviewToolTip.RemoveAll() }
@@ -227,51 +281,30 @@ function LoadModelsList([string]$Category) {
 
 
 #==============================================================================================================================================================================================
-function ChangeModelsDropdown($Dropdown) {
-    
-    $Redux.Graphics.ChildMaleModels.Visible   = $Redux.Graphics.ChildMaleModels.Enabled   = $Redux.Graphics.ListChildMaleModels.Checked
-    $Redux.Graphics.ChildFemaleModels.Visible = $Redux.Graphics.ChildFemaleModels.Enabled = $Redux.Graphics.ListChildFemaleModels.Checked
-    $Redux.Graphics.AdultMaleModels.Visible   = $Redux.Graphics.AdultMaleModels.Enabled   = $Redux.Graphics.ListAdultMaleModels.Checked
-    $Redux.Graphics.AdultFemaleModels.Visible = $Redux.Graphics.AdultFemaleModels.Enabled = $Redux.Graphics.ListAdultFemaleModels.Checked
-
-}
-
-
-
-#==============================================================================================================================================================================================
 function ChangeModelsSelection() {
-    
-    # Events
-    $Redux.Graphics.ListChildMaleModels.Add_CheckedChanged(   { ChangeModelsDropdown; ShowModelsPreview -Child -Dropdown $Redux.Graphics.ChildMaleModels   -Category "Child Male" })
-    $Redux.Graphics.ListChildFemaleModels.Add_CheckedChanged( { ChangeModelsDropdown; ShowModelsPreview -Child -Dropdown $Redux.Graphics.ChildFemaleModels -Category "Child Female" })
-    $Redux.Graphics.ListAdultMaleModels.Add_CheckedChanged(   { ChangeModelsDropdown; ShowModelsPreview -Adult -Dropdown $Redux.Graphics.AdultMaleModels   -Category "Adult Male" })
-    $Redux.Graphics.ListAdultFemaleModels.Add_CheckedChanged( { ChangeModelsDropdown; ShowModelsPreview -Adult -Dropdown $Redux.Graphics.AdultFemaleModels -Category "Adult Female" })
 
-    $Redux.Graphics.ChildMaleModels.Add_SelectedIndexChanged(   { if (IsChecked -Elem $Redux.Graphics.ListChildMaleModels)     { ShowModelsPreview -Child -Dropdown $Redux.Graphics.ChildMaleModels   -Category "Child Male" } })
-    $Redux.Graphics.ChildFemaleModels.Add_SelectedIndexChanged( { if (IsChecked -Elem $Redux.Graphics.ListChildFemaleModels)   { ShowModelsPreview -Child -Dropdown $Redux.Graphics.ChildFemaleModels -Category "Child Female" } })
-    $Redux.Graphics.AdultMaleModels.Add_SelectedIndexChanged(   { if (IsChecked -Elem $Redux.Graphics.ListAdultMaleModels)     { ShowModelsPreview -Adult -Dropdown $Redux.Graphics.AdultMaleModels   -Category "Adult Male" } })
-    $Redux.Graphics.AdultFemaleModels.Add_SelectedIndexChanged( { if (IsChecked -Elem $Redux.Graphics.ListAdultFemaleModels)   { ShowModelsPreview -Adult -Dropdown $Redux.Graphics.AdultFemaleModels -Category "Adult Female" } })
-
-    # Initial Run
-    ChangeModelsDropdown
-    if     (IsChecked -Elem $Redux.Graphics.ListChildMaleModels)     { ShowModelsPreview -Child -Dropdown $Redux.Graphics.ChildMaleModels   -Category "Child Male" }
-    elseif (IsChecked -Elem $Redux.Graphics.ListChildFemaleModels)   { ShowModelsPreview -Child -Dropdown $Redux.Graphics.ChildFemaleModels -Category "Child Female" }
-    if     (IsChecked -Elem $Redux.Graphics.ListAdultMaleModels)     { ShowModelsPreview -Adult -Dropdown $Redux.Graphics.AdultMaleModels   -Category "Adult Male" }
-    elseif (IsChecked -Elem $Redux.Graphics.ListAdultFemaleModels)   { ShowModelsPreview -Adult -Dropdown $Redux.Graphics.AdultFemaleModels -Category "Adult Female" }
+    if (IsSet $Redux.Graphics.ChildModels) {
+        ShowModelsPreview -Child -Dropdown $Redux.Graphics.ChildModels -Category "Child"
+        $Redux.Graphics.ChildModels.Add_SelectedIndexChanged( { ShowModelsPreview -Child -Dropdown $Redux.Graphics.ChildModels -Category "Child" } )
+    }
+    if (IsSet $Redux.Graphics.AdultModels) {
+        ShowModelsPreview -Adult -Dropdown $Redux.Graphics.AdultModels -Category "Adult"
+        $Redux.Graphics.AdultModels.Add_SelectedIndexChanged( { ShowModelsPreview -Adult -Dropdown $Redux.Graphics.AdultModels -Category "Adult" } )
+    }
 
     # URL
-    $Redux.Graphics.ModelsPreviewChild.add_Click({ if (IsSet $ChildModel.url) {
+    if (IsSet $Redux.Graphics.ModelsPreviewChild) { $Redux.Graphics.ModelsPreviewChild.add_Click({ if (IsSet $ChildModel.url) {
         $url = $ChildModel.url.Split("{0}")
         foreach ($item in $url) {
             if ($item.length -gt 0) { [system.Diagnostics.Process]::start($item) } }
         }
-    })
-    $Redux.Graphics.ModelsPreviewAdult.add_Click({ if (IsSet $AdultModel.url) {
+    }) }
+    if (IsSet $Redux.Graphics.ModelsPreviewAdult) { $Redux.Graphics.ModelsPreviewAdult.add_Click({ if (IsSet $AdultModel.url) {
         $url = $AdultModel.url.Split("{0}")
         foreach ($item in $url) {
             if ($item.length -gt 0) { [system.Diagnostics.Process]::start($item) } }
         }
-    })
+    }) }
 
 }
 
@@ -409,7 +442,7 @@ function CreateSwordTrailColorOptions() {
 
 
 #==============================================================================================================================================================================================
-function CreateFairyColorOptions() {
+function CreateFairyColorOptions($name) {
 
     # FAIRY COLORS #
     CreateReduxGroup    -Tag  "Colors" -Text "Fairy Colors" -Height 2
@@ -737,6 +770,7 @@ Export-ModuleMember -Function MuteMusic
 Export-ModuleMember -Function ChangeStringIntoDigits
 
 Export-ModuleMember -Function ShowHudPreview
+Export-ModuleMember -Function ShowEquipmentPreview
 Export-ModuleMember -Function ChangeModelsSelection
 Export-ModuleMember -Function LoadModelsList
 

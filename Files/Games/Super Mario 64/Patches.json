@@ -15,6 +15,16 @@
 	"output"	: "_promo_luigi_patched",
 	"tooltip"	: "Replaces Mario's model with the promo model for Luigi{0}- Supported: Rev 0 (US)"
 }, {
+	"title"		: "Super Mario 64 (render96 Mario Model)",
+	"patch"		: "Compressed\\render96_mario.bps",
+	"output"	: "_render96_mario_patched",
+	"tooltip"	: "render96 patch with the Mario model with 3D models and promo styles for several objects{0}Both widescreen (stretched HUD) and puppycam can be enabled/disabled in the pause menu{0}- Supported: Rev 0 (US)"
+}, {
+	"title"		: "Super Mario 64 (render96 Luigi Model)",
+	"patch"		: "Compressed\\render96_luigi.bps",
+	"output"	: "_render96_luigi_patched",
+	"tooltip"	: "render96 patch with the Luigi model with 3D models and promo styles for several objects{0}Both widescreen (stretched HUD) and puppycam can be enabled/disabled in the pause menu{0}- Supported: Rev 0 (US)"
+}, {
 	"title"		: "Super Mario 64: Multiplayer (v1.4.2)",
 	"console"	: "Wii VC",
 	"command"	: "Patch Boot DOL",

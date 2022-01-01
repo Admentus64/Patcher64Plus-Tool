@@ -51,7 +51,7 @@ function MainFunction([string]$Command, [string]$PatchedFileName) {
 
         # Language Patch
         $global:LanguagePatch = $global:LanguagePatchFile = $null
-        if ( (IsSet $Files.json.languages) -and $Settings.Debug.LiteGUI -eq $False -and (IsChecked $Patches.Options) -and (IsSet $Redux.Language) ) {
+        if ( (IsSet $Files.json.languages) -and $Settings.Core.Interface -ne 2 -and (IsChecked $Patches.Options) -and (IsSet $Redux.Language) ) {
             for ($i=0; $i -lt $Files.json.languages.Length; $i++) {
                 if ($Redux.Language[$i].checked) {
                     $global:LanguagePatch = $Files.json.languages[$i]
@@ -95,7 +95,8 @@ function MainFunction([string]$Command, [string]$PatchedFileName) {
         elseif ($GameType.decompress -eq 1 -and !(StrLike -str $Command -val "Inject") -and !(StrLike -str $Command -val "Apply Patch") -and !(StrLike -str $Command -val "Extract") ) {
             if ( (IsChecked $Patches.Options) -or (IsChecked $Patches.Redux) )   { $Decompress = $True }
         }
-        elseif ($GameType.decompress -eq 2 -and (IsChecked $Patches.Extend)) { $Decompress = $True }
+        elseif ($GameType.decompress -eq 2 -and (IsChecked $Patches.Extend))   { $Decompress = $True }
+        elseif ($GameType.decompress -eq 3 -and (IsChecked $Patches.Extend))   { $Decompress = $True }
     }
 
     # Set ROM
@@ -285,7 +286,7 @@ function WriteDebug([string]$Command, [string[]]$Header, [string]$PatchedFileNam
     WriteToConsole
     WriteToConsole "--- Start Misc Settings Info ---"
     WriteToConsole ("Ignore Input Checksum: " + $GeneralSettings.IgnoreChecksum.Checked)
-    WriteToConsole ("Lite Options GUI:      " + $GeneralSettings.LiteGUI.Checked)
+    WriteToConsole ("Interace GUI Mode:     " + $Settings.Core.Interface)
     WriteToConsole ("Force Show Options:    " + $GeneralSettings.ForceOptions.Checked)
     WriteToConsole ("Use Local Temp Folder: " + $GeneralSettings.LocalTempFolder.Checked)
     WriteToConsole ("Change Widescreen:     " + $GeneralSettings.ChangeWidescreen.Checked)
@@ -606,7 +607,7 @@ function CompareHashSums([string]$Command) {
 
     $item = GetROMVersion
     if ($item -eq $null) {
-        UpdateStatusLabel "Failed! The ROM has an incorrect version or is broken."
+        UpdateStatusLabel "Failed! The ROM is an incorrect version or is broken."
         WriteToConsole ("ROM hash is:  " + $ROMHashSum + ". The correct ROM should be: " + $CheckHashSum)
         return $False
     }
@@ -815,6 +816,10 @@ function DecompressROM([boolean]$Decompress) {
 
         & $Files.tool.sm64extend $GetROM.run -s $GamePatch.extend $GetROM.decomp | Out-Null
     }
+    elseif ($GameType.decompress -eq 3) {
+        UpdateStatusLabel ("Extending " + $GameType.mode + " ROM...")
+        ApplyPatch -Patch "extender.bps" -File $GetROM.run -New $GetROM.decomp
+    }
 
     if ($IsWiiVC) { RemoveFile $GetROM.run }
     return $True
@@ -861,8 +866,8 @@ function PatchRedux([boolean]$Decompress) {
         UpdateStatusLabel ("Patching " + $GameType.mode + " REDUX...")
 
         # Redux patch
-        if     ( (IsChecked $Redux.Graphics.Widescreen) -and (IsChecked $Redux.Gameplay.NewRedux) -and (IsSet -Elem $GamePatch.redux.file_widescreen_v2) )   { ApplyPatch -File $GetROM.decomp -Patch $GamePatch.redux.file_widescreen_v2 }
-        elseif ( (IsChecked $Redux.Gameplay.NewRedux)   -and (IsSet -Elem $GamePatch.redux.file_v2) )                                                        { ApplyPatch -File $GetROM.decomp -Patch $GamePatch.redux.file_v2 }
+        if     ( (IsChecked $Redux.Graphics.Widescreen) -and (IsChecked $Redux.Gameplay.AltRedux) -and (IsSet -Elem $GamePatch.redux.file_widescreen_v2) )   { ApplyPatch -File $GetROM.decomp -Patch $GamePatch.redux.file_widescreen_v2 }
+        elseif ( (IsChecked $Redux.Gameplay.AltRedux)   -and (IsSet -Elem $GamePatch.redux.file_v2) )                                                        { ApplyPatch -File $GetROM.decomp -Patch $GamePatch.redux.file_v2 }
         elseif ( (IsChecked $Redux.Graphics.Widescreen) -and (IsSet -Elem $GamePatch.redux.file_widescreen) )                                                { ApplyPatch -File $GetROM.decomp -Patch $GamePatch.redux.file_widescreen }
         elseif (IsSet -Elem $GamePatch.redux.file)                                                                                                           { ApplyPatch -File $GetROM.decomp -Patch $GamePatch.redux.file }
     }

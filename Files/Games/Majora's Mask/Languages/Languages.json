@@ -6,6 +6,7 @@
 	"l_target_search"	: "5A 20 54 61 72 67 65 74 69 6E 67",
 	"l_target_replace"	: "4C 20 54 61 72 67 65 74 69 6E 67",
 	"tatl"			: "HUD\\taya.bin",
+	"tatl_name"		: "Tatl",
 	"tatl_search"		: "54 61 74 6C",
 	"tatl_replace"		: "54 61 79 61"
 }, {
@@ -17,6 +18,7 @@
 	"script_start"		: "3571510",
 	"script_length"		: "74DF0",
 	"tatl"			: "HUD\\tatl.bin",
+	"tatl_name"		: "Taya",
 	"tatl_search"		: "54 61 79 61",
 	"tatl_replace"		: "54 61 74 6C",
 	"output"		: "_de_patched",
@@ -32,6 +34,7 @@
 	"l_target_search"	: "56 69 73 9D 65 20 5A",
 	"l_target_replace"	: "56 69 73 9D 65 20 4C",
 	"tatl"			: "HUD\\tatl.bin",
+	"tatl_name"		: "Taya",
 	"tatl_search"		: "54 61 79 61",
 	"tatl_replace"		: "54 61 74 6C",
 	"output"		: "_fr_patched",
@@ -47,6 +50,7 @@
 	"l_target_search"	: "42 6C 61 6E 63 6F 20 63 6F 6E 20 5A",
 	"l_target_replace"	: "42 6C 61 6E 63 6F 20 63 6F 6E 20 4C",
 	"tatl"			: "HUD\\tatl.bin",
+	"tatl_name"		: "Taya",
 	"tatl_search"		: "54 61 79 61",
 	"tatl_replace"		: "54 61 74 6C",
 	"output"		: "_es_patched",
@@ -61,6 +65,7 @@
 	"l_target_search"	: "42 6C 61 6E 63 6F 20 63 6F 6E 20 5A",
 	"l_target_replace"	: "42 6C 61 6E 63 6F 20 63 6F 6E 20 4C",
 	"tatl"			: "HUD\\tatl.bin",
+	"tatl_name"		: "Taya",
 	"tatl_search"		: "54 61 79 61",
 	"tatl_replace"		: "54 61 74 6C",
 	"output"		: "_pt-BR_patched",
@@ -72,6 +77,7 @@
 	"vc_gameID"		: "NARL",
 	"script_start"		: "AD1000",
 	"script_length"		: "699F0",
+	"tatl_name"		: "Taya",
 	"output"		: "_pl_patched",
 	"credits"		: "RPG (v1.1) & GhostlyDark (improvements)"
 }, {
@@ -81,6 +87,7 @@
 	"vc_gameID"		: "NARR",
 	"script_start"		: "AD1000",
 	"script_length"		: "65EB0",
+	"tatl_name"		: "Taya",
 	"output"		: "_ru_patched",
 	"credits"		: "Zelda64rus (v2.0 Beta) & GhostlyDark (improvements)"
 } ]

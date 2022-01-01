@@ -2,10 +2,10 @@
 <<< PATCHER64+ TOOL >>>
 
 --- Thanks to my Patreons ---
-- Amara, Craig, David Pyne, Gagrecco, Tommy Naugle, Yang
+- Amara, Craig, Gagrecco, Tommy Naugle, Yang
 
 --- Thanks to my past Patreons --
-- Crypto Logiq, Gicrax, Leigh Pierce, Moons Moons, Raim, Richard Moser
+- Crypto Logiq, David Pyne, Gicrax, Leigh Pierce, Moons Moons, Raim, Richard Moser
 
 --- Patcher64+ Tool ---
 - Admentus (Testing and Coding of Patcher64+ Tool)
@@ -18,7 +18,7 @@
 =======================
 <<< OCARINA OF TIME >>>
 
---- REDUX ---
+--- Redux ---
 - Hacking:				Maroc
 - Editing / Revision:			ShadowOne333, MattKimura
 - Original Hacking:			Roman971, TestRunnerSRL, AmazingAmpharos, fig02, krimtonz, rlbond86,
@@ -32,16 +32,17 @@
 - Censor Blood:				ShadowOne333
 - Restore Gerudo Textures:		GhostlyDark, ShadowOne333
 - Pause Screen Delay Fix:		zel
+- Graveyard Keese:			salvador235
+- Visible Gerudo Tent:			Chez Cousteau
 - Temple of Time Door:			Chez Cousteau
 - Navi Targettable Spots:		Chez Cousteau
-- Visible Gerudo Tent:			Chez Cousteau
+- Remove Owls:				Chez Cousteau
 - Debug Map Select:			Jared Johnson
 - Skip Intro:				Aegiker
 - Remove CRC Check:			Drahsid
 - Master Quest:				ShadowOne333
 - No Item Drops:			Admentus & BilonFullHDemon
 - Harder Child Bosses:			BilonFullHDemon
-- Graveyard Keese:			salvador235
 - 16:9 Backgrounds & Textures:		GhostlyDark, ShadowOne333, CYB3RTR0N
 - Enhanced 16:9 Widescreen:		gamemasterplc, GhostlyDark
 - Force Hires Link Model:		GhostlyDark
@@ -50,8 +51,9 @@
 - Overworld Skyboxes:			Admentus (ported), BrianMp16 (AR code)
 - MM HUD Icons:				GhostlyDark (ported)
 - MM Button Positions:			GhostlyDark
-- Buttons Size:				GhostlyDark
-- Button Styles:			GhostlyDark (ported), Djipi, Community, Nerrel, Federelli
+- Button Sizes:				GhostlyDark
+- Button Styles:			GhostlyDark, Djipi, Community, Nerrel, Federelli
+- Magic Meter Styles:			GhostlyDark, azred, Nerrel
 - MM Pause Screen:			Garo-Mastah & CM
 - HUD Size:				Admentus & GhostlyDark
 - Easier Minigames:			ShadowOne333
@@ -94,7 +96,7 @@
 - Breath of the Wild:			Skilarbabcock (www.youtube.com/user/skilarbabcock)
 - Dark Link - Enemy:			CrookedPoe
 - Dark Link				Mikus64
-- Fierce Deity:				CrookedPoe
+- Fierce Deity:				UltIMa647 (child) & CrookedPoe (ported adult)
 - Happy Mask Salesman:			Anubis-V1
 - Kafei:				Malon Rose (www.patreon.com/MalonRose & www.youtube.com/c/MalonRose)
 - Link's Awakening:			Skilarbabcock (www.youtube.com/user/skilarbabcock)
@@ -108,10 +110,12 @@
 - Skyward Sword:			Skilarbabcock (www.youtube.com/user/skilarbabcock)
 - Sunny:				Unesag & Amara
 - Twilight Princess:			Skilarbabcock (www.youtube.com/user/skilarbabcock)
+- Zora Link:				spyfoxgames
 
 --- Custom Female Models ---
 - Amara:				Amara, Karicyan
 - Aria the Demon:			AriaHiro64
+- Hat Kid:				Hailey
 - Hatsune Miku - Link:			JanexLane
 - Hatsune Miku - Vocaloid:		JanexLane
 - Malon 3D:				Karicyan
@@ -122,6 +126,7 @@
 - Princess Zelda ALttP (Child):		Unesag
 - Princess Zelda ALttP (Adult):		Lopieloo
 - Roll:					Psi-Hate
+- Ruby Rose:				Malon Rose (www.patreon.com/MalonRose & www.youtube.com/c/MalonRose)
 - Saria:				Malon Rose (www.patreon.com/MalonRose & www.youtube.com/c/MalonRose)
 
 --- Quality Assurance ---
@@ -169,6 +174,9 @@
 --- Ocarina of Time Puzzling ---
 - DezZiBao
 
+--- Ocarina of Time with Pots Challenge Mod ---
+- Aegiker (https://www.youtube.com/watch?v=tdlaoypbkyk)
+
 --- The Missing Link ---
 - Director:				Kaze Emanuar
 - 3D Modelers:				CDi-Fails, /Zel/
@@ -201,9 +209,25 @@
 - Rogue_Millipede
 - DezZival
 
+--- Spaceworld ´97 Experience ---
+- Main Programming:			Zel, Fig, MrCheeze
+- Additional Programming:		Tharo, louist103, Aegiker, CDi-Fails, Rankaisija, MelonSpeedruns
+- Assets:				ZeeRoX, Zel, Porcino, CDi-Fails, Lurondor
+- Research & Planning:			Xiartic, Porcino, CDi-Fails, GlitterBerri, ZeeRoX
+- Translation:				GlitterBerri
+- Debugging:				Xiartic, Fig
+- Bugtesters:				Zeth Ryder, Dark Linkaël, Syeo, xShawnxP, MutantAura, FantaTanked, Timato,
+					AverageGreg, PaintSkate8, Phlori, xwillmarktheplace, Link11, jfm, Noface,
+					CountLG
+- Special Thanks:			xDaniel, z64me, Steven Tyler Sean Herr, Forest of Illusion, CloudModding
+
 --- Dark Hyrule Fantasy ---
 - Lead Development:			E-Gor, Spire, Ostrealava, Badub
 - Special Thanks:			MelonSpeedruns, CDi-Fails, Psi-Hate, Zel, Ultra553, Dr. Disco, Nokaubure
+
+--- The Helix Blade ---
+- Design:				Core Pride
+- Music:				Green Ocarina
 
 --- Randomizer ---
 - Roman971
@@ -271,7 +295,7 @@
 =====================
 <<< MAJORA'S MASK >>>
 
---- REDUX ---
+--- Redux ---
 - Hacking:				Maroc
 - Original Hacking:			Saneki
 - Fixes:				Admentus & GhostlyDark
@@ -281,7 +305,6 @@
 - Master Quest Remix:			Admentus (porting) & DeathBasket (maps / patch)
 - 16:9 Backgrounds & Textures:		GhostlyDark & ShadowOne333
 - Enhanced 16:9 Widescreen:		gamemasterplc & GhostlyDark
-- Improved Link Model:			Skilarbabcock (www.youtube.com/user/skilarbabcock) & Nerrel
 - Kokiri Tunic Color:			GhostlyDark
 - Recolor Mask Forms:			Admentus, ShadowOne333 & Garo-Mastah
 - Zora Physics:				ShadowOne333
@@ -297,14 +320,16 @@
 - Restore Shop Music:			ShadowOne333
 - 4th Piece of Heart Sound:		fkualol
 - Move Bomber Kid:			ShadowOne333
-- Fix Goht Cutscene:			ShadowOne333
 - Fix Mushroom Bottle:			ozidual
 - Fix Southern Swamp:			ShadowOne333
+- Goht Awakening:			ShadowOne333
+- Unused Cutscenes:			Chez Cousteau
 - Fix Fairy Fountain:			Dybbles (fix) & ShadowOne333 (ROM / patch)
 - Always Best Ending:			Marcelo20XX
 - OoT HUD Icons:			GhostlyDark (ported)
-- Buttons Size:				GhostlyDark (ported)
-- Button Styles:			GhostlyDark (ported), Djipi, Community, Nerrel, Federelli
+- Button Sizes:				GhostlyDark
+- Button Styles:			GhostlyDark, Djipi, Community, Nerrel, Federelli
+- Magic Meter Styles:			GhostlyDark, azred, Nerrel
 - Hide HUD:				Marcelo20XX
 - Disable SFX Effects:			Marcelo20XX
 - Fairy Colors:				Dzeko
@@ -312,10 +337,18 @@
 - Set Capacity:				GhostlyDark
 - Permanent Razor Sword:		darklord92
 - Restore Text:				ShadowOne333
+- Adult Pronouns:			Skilarbabcock (www.youtube.com/user/skilarbabcock)
 - Correct Circus Mask:			ShadowOne333
 - Correct Comma:			ShadowOne333
 - Various offsets:			Chez Cousteau
 - Admentus (Scripting and Assistance of all Options)
+
+--- Hylian Link Models ---
+- Ocarina of Time Eyes:			GhostlyDark
+- Adult Link:				Skilarbabcock (www.youtube.com/user/skilarbabcock)
+- Fierce Deity Link:			XModxGodX (ported) & UltIMa647
+- Improved Link:			Skilarbabcock (www.youtube.com/user/skilarbabcock) & Nerrel
+- Princess Zelda:			Unesag
 
 --- Link Voices ---
 - Ocarina of Time Link:			Phantom Natsu
@@ -339,6 +372,7 @@
 - VictorHale
 - Ideka
 - Saneki
+- SpiceyWolf (v4.3 Textpointer Fix)
 
 --- Master Quest ---
 - DeathBasket
@@ -466,20 +500,63 @@
 
 --- Tag Anywhere ---
 - Isotarge (Primary hacking & ASM work)
-- Tom Ballaam, Kaze Emanuar (Tag anywhere implementation)
+- Tom Ballaam & Kaze Emanuar (Tag anywhere implementation)
 - runehero123 (ROM Map)
+
+
+
+=====================
+<<< BANJO-KAZOOIE >>>
+
+--- Banjo-Dreamie ---
+- Loggo
+
+--- Banjo-Kazooie Returns ---
+- SuperZambezi
+
+--- Banjo-Kazooie: Cut-Throat Coast ---
+- Retronuva
+- BanjoCheat64
+- Cool Music Guy
+- Loggo
+- bynine
+
+--- Banjo-Kazooie: World Collide ---
+- Author:				bynine
+- Beta Testers:				Banjofreak, Xekonm, Davey, Fadida, Dad & Kiz, Snooplax
+- Special Thanks:			Banjo's Backback + Discord,  VGMusic, Rare
+
+--- Banjo-Kazooie: The Jiggies of Time ---
+- Kurkomark
+- bynine
+- SpaceOmage5000
+
+--- Banjo-Kazooie: The Legend of the Crystal Jiggy ---
+- JacksonG13
+
+--- Banjo-Kazooie: The Night-Bear Before Christmas ---
+- Kurkomark
+
+--- Banjo-Kazooie: Gruntilda's Mask ---
+- Kurkomark
+- bynine (proof-reading)
+
+--- Snow Glow Village ---
+- KBM
+- Skill
 
 
 
 ==========================
 <<< A LINK TO THE PAST >>>
 
---- REDUX ---
+--- Redux ---
 - Main Hacking:				ShadowOne333 & rainponcho
 - Hacking:				Con, qwertymodo, SCD, PuzzleDude, Kazuto
 
 --- Additional Options ---
 - Re-Wizardized Script:			Kyler Ashton
+- Kakariko Shortcut:			PowerPanda
 
 --- Parallel Worlds ---
 - Directors:				Euclid, SePH, qwertymodo
@@ -518,7 +595,7 @@
 =====================
 <<< SUPER METROID >>>
 
---- REDUX ---
+--- Redux ---
 - Main Hacking:				ShadowOne333
 - Hacking:				Adamf, Bregrimed, Kejardon, PHOSPHOTiDYL, Scyzer, Sylandro,
 					DC, Sadiztyk, Dmit Ryaz, Matt Kimura, samsamcmoi
@@ -549,9 +626,10 @@
 ===========================
 <<< THE LEGEND OF ZELDA >>>
 
---- REDUX ---
+--- Redux ---
 - Main Hacking:				ShadowOne333
-- Hacking:				BogaaBogaa, DarkSamus993, Stratoform, snarfblam, gzip, abw
+- Hacking:				bogaabogaa, DarkSamus993, stratoform, snarfblam, gzip,
+					Fiskbit, frantik, minucce
 - Disassembly:				Trax
 
 --- Additional Options ---
@@ -565,9 +643,9 @@
 =============================
 <<< THE ADVENTURE OF LINK >>>
 
---- REDUX ---
+--- Redux ---
 - Main Hacking:				ShadowOne333
-- Hacking:				the_icepenguin, DarkSamus993, njosro
+- Hacking:				the_icepenguin, DarkSamus993, njosro, Cyneprepou4uk, minucce
 - Disassembly:				Trax
 - Overworld Animation:			JaSp, Trax
 
@@ -575,3 +653,20 @@
 - Restart at Palace:			njosro
 - New GFX:				darthvaderx
 - the_icepenguin
+
+
+
+===========================
+<<< LINK'S AWAKENING DX >>>
+
+--- Redux ---
+- Main Hacking:				ShadowOne333
+- Variable Width Font:			toruzz
+- Font Improvement:			Tzepish
+
+--- Additional Options ---
+- Remove Printer-Photo Overlay:		vince94
+- Remove THIEF Downsides:		the_icepenguin
+- Save Button Combo:			ShadowOne333
+- Restore Low Health Beep:		ShadowOne333
+- Restore Powerup Messages:		the_icepenguin

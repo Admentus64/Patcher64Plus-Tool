@@ -38,21 +38,12 @@ function CreateVCRemapDialog() {
     CreateReduxComboBox -Items $items -NoDefault -Shift -60 -Length 40 -Name "DPadDown"  -Column 3.625 -Row 10                   -Info "Remap the D-Pad Down button"
     CreateReduxComboBox -Items $items -NoDefault -Shift -60 -Length 40 -Name "DPadLeft"  -Column 3     -Row 7.5                  -Info "Remap the D-Pad Left button"
 
-    # C Buttons Customization - Image #
-    $PictureBox = New-Object Windows.Forms.PictureBox
-    $PictureBox.Location = New-object System.Drawing.Size($Redux.Controls.CLeft.Right, $Redux.Controls.CUp.Bottom)
+    # Images #
+    $PictureBox = CreateImageBox -x 115 -y 155 -w 128 -h 128
     SetBitmap -Path ($Paths.Main + "\C.png") -Box $PictureBox
-    $PictureBox.Width  = $PictureBox.Image.Size.Width
-    $PictureBox.Height = $PictureBox.Image.Size.Height
-    $Last.Group.controls.add($PictureBox)
 
-    # D-Pad Buttons Customization - Image #
-    $PictureBox = New-Object Windows.Forms.PictureBox
-    $PictureBox.Location = New-object System.Drawing.Size($Redux.Controls.DPadLeft.Right, $Redux.Controls.DPadUp.Bottom)
+    $PictureBox = CreateImageBox -x 485 -y 160 -w 128 -h 128
     SetBitmap -Path ($Paths.Main + "\D-Pad.png") -Box $PictureBox
-    $PictureBox.Width  = $PictureBox.Image.Size.Width
-    $PictureBox.Height = $PictureBox.Image.Size.Height
-    $Last.Group.controls.add($PictureBox)
 
     $Redux.Controls.Preset.Add_SelectedIndexChanged({ SetPreset -ComboBox $Redux.Controls.Preset -Text $Redux.Controls.Preset.Text })
     SetPreset -ComboBox $Redux.Controls.Preset -Text $Redux.Controls.Preset.Text
@@ -172,18 +163,25 @@ function PatchVCEmulator([string]$Command) {
     }
 
     # Games
-    if ($GameType.mode -eq "Ocarina of Time" -and (IsChecked  $VC.ExpandMemory) ) {
+    if ($GameType.mode -eq "Ocarina of Time" -and ( (IsChecked $VC.ExpandMemory) -or ($Patches.Redux.Checked -and $Settings.Core.Interface -eq 1 -and $VC.ExpandMemory.Active) ) ) {
         ChangeBytes -File $WadFile.AppFile01 -Offset "5BF44" -Values "3C 80 72 00"
         ChangeBytes -File $WadFile.AppFile01 -Offset "5BFD7" -Values "00"
     }
-    elseif ($GameType.mode -eq "Majora's Mask" -and (IsChecked $VC.ExpandMemory) ) {
+    elseif ($GameType.mode -eq "Majora's Mask" -and (IsChecked $VC.ExpandMemory) -and $Redux.Core.Interface -ne 1 ) {
         ChangeBytes -File $WadFile.AppFile01 -Offset "10B58" -Values "3C 80 00 C0"
         ChangeBytes -File $WadFile.AppFile01 -Offset "4BD20" -Values "67 E4 70 00"
         ChangeBytes -File $WadFile.AppFile01 -Offset "4BC80" -Values "3C A0 01 00"
     }
 
     # Controls
-    if (IsChecked $VC.RemapControls) {
+    if ($Patches.Redux.Checked -and $Settings.Core.Interface -eq 1-and $VC.RemapControls.Active) {
+        $Redux.Controls.Preset.SelectedIndex = 0
+        foreach ($item in $Redux.Controls.Preset.Items) {
+            if ($item -eq "Redux") { $Redux.Controls.Preset.Text = $item }
+        }
+    }
+
+    if ( (IsChecked $VC.RemapControls) -or ($Patches.Redux.Checked -and $Settings.Core.Interface -eq 1 -and $VC.RemapControls.Active) ) {
         if (StrLike -Str $Command -Val "Patch Boot DOL")   { $controls = $Files.json.controls.$("offsets_" + [System.IO.Path]::GetFileNameWithoutExtension((GetPatchFile))); }
         else                                               { $controls = $Files.json.controls.offsets; }
 
@@ -206,7 +204,7 @@ function PatchVCEmulator([string]$Command) {
     }
 
     # Expand Memory
-    if ( (IsChecked $VC.ExpandMemory) -and $GameType.mode -ne "Majora's Mask") {
+    if ( ( (IsChecked $VC.ExpandMemory) -or ($Patches.Redux.Checked -and $Settings.Core.Interface -eq 1 -and $VC.ExpandMemory.Active) ) -and $GameType.mode -ne "Majora's Mask") {
         $offset = SearchBytes -File $WadFile.AppFile01 -Start "2000" -End "9999" -Values "41 82 00 08 3C 80 00 80"
         if ($offset -gt 0) {
             ChangeBytes -File $WadFile.AppFile01 -Offset $offset  -Values "60 00 00 00"
@@ -219,7 +217,7 @@ function PatchVCEmulator([string]$Command) {
         # SM64: 5AD4 / MK64: 5C28 / SF: 2EF4 / PM: 2EE4 / OoT: 2EB0 / MM: ?? / Smash: 3094 / Sin: 3028
     }
 
-    if (IsChecked $VC.RemoveFilter) {
+    if ( (IsChecked $VC.RemoveFilter) -or ($Settings.Core.Interface -eq 1 -and $VC.RemoveFilter.Active) ) {
         $offset = SearchBytes -File $WadFile.AppFile01 -Start "40000" -End "60000" -Values "38 21 00 xx 4E 80 00 20 94 21 FF E0 7C 08 02 A6 3C 80 80 xx 90 01 00 24"
         if ($offset -gt 0) {
             ChangeBytes -File $WadFile.AppFile01 -Offset ( Get24Bit ( (GetDecimal $Offset) + (GetDecimal "08") ) )  -Values "4E 80 00 20"
@@ -315,10 +313,11 @@ function HackOpeningBNRTitle($Title) {
     # Initially assume the two chunks of data are identical.
     $Identical = $True
     $Start = 0
-    $CompareArray = $ByteArray[(GetDecimal -Hex "F1")..((GetDecimal -Hex "F1") + $VCTitleLength)]
+    $CompareArray = $ByteArray[241..(241 + $VCTitleLength)]
+    WriteToConsole $CompareArray
 
     # Scan only the contents of the IMET header within the file.
-    for ($i=(GetDecimal -Hex "80"); $i-lt (GetDecimal -Hex "62F"); $i++) {
+    for ($i=128; $i-lt 1584; $i++) {
         $CompareAgainst = $ByteArray[$i..($i + $VCTitleLength)]
 
         $Matches = $True
@@ -327,8 +326,8 @@ function HackOpeningBNRTitle($Title) {
         }
 
         if ($Matches -eq $True) {
-            for ($j=0; $j-lt $VCTitleLength; $j++) { $ByteArray[$i + ($j*2)] = 0 }
-            for ($j=0; $j-lt $Title.Length; $j++) { $ByteArray[$i + ($j*2)] = [uint32][char]$Title.Substring($j, 1) }
+            for ($j=0; $j-lt $VCTitleLength*2; $j++)   { $ByteArray[$i + $j] = 0 }
+            for ($j=0; $j-lt $Title.Length;    $j++)   { $ByteArray[$i + ($j*2)] = [uint32][char]$Title.Substring($j, 1) }
             $i += $VCTitleLength
         }        
     }
@@ -480,7 +479,7 @@ function ExtractU8AppFile([string]$Command) {
     if ($GameConsole.appfile -eq "00000005.app") {
         UpdateStatusLabel 'Extracting "00000005.app" file...'                                                 # Set the status label
         & $Files.tool.wszst 'X' $WADFile.AppFile05 '-d' $WADFile.AppPath05 | Out-Null                         # Unpack the file using wszst
-        if ($VC.RemoveT64.Checked) { Get-ChildItem $WADFile.AppPath05 -Include *.T64 -Recurse | Remove-Item } # Remove all .T64 files when selected
+        if ($VC.RemoveT64.Checked -and $Settings.Core.Interface -ne 1) { Get-ChildItem $WADFile.AppPath05 -Include *.T64 -Recurse | Remove-Item } # Remove all .T64 files when selected
         foreach ($item in Get-ChildItem $WADFile.AppPath05) {                                                 # Reference ROM in unpacked AppFile
             if ($item -match "rom") {
                 $WADFile.ROM = $item.FullName

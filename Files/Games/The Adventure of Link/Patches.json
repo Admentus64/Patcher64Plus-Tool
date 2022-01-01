@@ -1,13 +1,12 @@
 [ {
-	"title"			: "The Adventure of Link",
+	"title"			: "Zelda II: The Adventure of Link",
 	"redux" : {
 		"options"	: 1,
-		"vc_title"	: "The Adventure of Link Redux",
+		"vc_title"	: "Zelda II: The Adventure of Link Redux",
 		"vc_gameID"	: "FA90",
 		"file"		: "Compressed\\redux.ips",
 		"output"	: "_redux_patched"
 	},
 	"options"		: 1,
-	"output"		: "_redux_patched",
-	"tooltip"		: "The regular Zelda II: The Adventure of Link experience{0}With support for redux and additional options{0}- Supported: Rev 0 (US)"
+	"tooltip"		: "The regular Zelda II: The Adventure of Link experience{0}With support for redux and additional options{0}Redux version: 3.0{0}- Supported: Rev 0 (US)"
 } ]

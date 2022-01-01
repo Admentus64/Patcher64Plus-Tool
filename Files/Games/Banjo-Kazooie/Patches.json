@@ -1,0 +1,46 @@
+[ {
+	"title"		: "Banjo-Dreamie",
+	"patch"		: "Decompressed\\banjo_dreamie.bps",
+	"output"	: "_banjo_dreamie_patched",
+	"tooltip"	: "A full-sized ROM hack in a completely new setting{0}Features 8 worlds, 160 notes & no jiggies with an average length of 10 hours{0}- Supported: Rev 0 (US)"
+}, {
+	"title"		: "Banjo-Kazooie Returns (Demo v1.2)",
+	"patch"		: "Decompressed\\banjo_kazooie_returns.bps",
+	"output"	: "_banjo_kazooie_returns_patched",
+	"tooltip"	: "A small-sized ROM hack in a completely new setting{0}Currently available as a Demo{0}- Supported: Rev 0 (US)"
+}, {
+	"title"		: "Banjo-Kazooie: Cut-Throat Coast (v1.4)",
+	"patch"		: "Decompressed\\cut_throat_coast.bps",
+	"output"	: "_cut_throat_coast_patched",
+	"tooltip"	: "A small-sized ROM hack in a completely new setting{0}Features 1 world, 100 notes & 10 jiggies with an average length of 1-2 hours{0}- Supported: Rev 0 (US)"
+}, {
+	"title"		: "Banjo-Kazooie: Worlds Collide (v2.0)",
+	"patch"		: "Decompressed\\worlds_collide.bps",
+	"output"	: "_worlds_collide_patched",
+	"tooltip"	: "A medium-sized ROM hack in a completely new setting{0}Features 8 worlds, 80 notes & no jiggies with an average length of 3 hours{0}- Supported: Rev 0 (US)"
+}, {
+	"title"		: "Banjo-Kazooie: The Jiggies of Time (v1.3)",
+	"patch"		: "Decompressed\\jiggies_of_time.bps",
+	"output"	: "_jiggies_of_time_patched",
+	"tooltip"	: "A full-sized ROM hack in a completely new setting{0}Features 9 worlds, 900 notes & 100 jiggies with an average length of 8 hours{0}- Supported: Rev 0 (US)"
+}, {
+	"title"		: "Banjo-Kazooie: The Legend of the Crystal Jiggy",
+	"patch"		: "Decompressed\\crystal_jiggy.bps",
+	"output"	: "_crystal_jiggy_patched",
+	"tooltip"	: "A full-sized ROM hack in a completely new setting{0}Features 9 worlds & 90 jiggies with an average length of 5 hours{0}- Supported: Rev 0 (US)"
+}, {
+	"title"		: "Banjo-Kazooie: The Night-Bear Before Christmas (v1.0)",
+	"patch"		: "Decompressed\\night_bear_before_christmas.bps",
+	"output"	: "_night_bear_before_christmas_patched",
+	"tooltip"	: "A small-sized ROM hack in a completely new setting{0}Features 2 worlds, 200 notes & 10 jiggies with an average length of 2 hours{0}- Supported: Rev 0 (US)"
+}, {
+	"title"		: "Banjo-Kazooie: Gruntilda's Mask (v1.2)",
+	"patch"		: "Decompressed\\gruntildas_mask.bps",
+	"output"	: "_gruntildas_mask_patched",
+	"tooltip"	: "A small-sized ROM hack in a completely new setting{0}Features 2 worlds, 100 notes & 20 jiggies with an average length of 3 hours{0}- Supported: Rev 0 (US)"
+}, {
+	"title"		: "Snow Glow Village",
+	"patch"		: "Compressed\\snow_glow_village.bps",
+	"output"	: "_snow_glow_village_patched",
+	"tooltip"	: "A small-sized ROM hack in a completely new setting{0}Features 1 world with an average length of 1 hours{0}- Supported: Rev 0 (US)"
+} ]

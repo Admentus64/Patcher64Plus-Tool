@@ -5,8 +5,8 @@ Patches for A Link to the Past:
 	* Extract ROM Only
 2. Apply Patch (requires a patch file)
 3. Patch Header
-4. Three ROM hacks
-5. Additional Options
+4. Two ROM hacks
+5. Redux and Additional Options
 
 Known Issues:
 - Unknown
@@ -17,7 +17,7 @@ Requirements:
 Instructions:
 - Select SFC ROM or VC WAD
 - Select patch
-- Enable optional "Enable Options" checkbox
+- Enable optional "Enable Redux" or "Enable Options" checkboxes
 - Customize your patch within "Select Options"
 - Press "Patch Select Options"
 

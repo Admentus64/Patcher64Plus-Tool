@@ -1,0 +1,22 @@
+Patches for Banjo-Kazooie:
+1. Free Patching (requires .IPS, .BPS, .XDELTA, .VCDIFF or .PPF File)
+2. Nine ROM hacks
+
+Known Issues:
+- Unknown
+
+Requirements:
+- Banjo-Kazooie Rev 0 US Z64 ROM
+
+Instructions:
+- Select Z64 ROM
+- Select patch
+- Press "Patch Select Options"
+
+Information:
+- Original ROM is preserved
+    
+Programs:
+- Floating IPS
+- Romc Tool
+- RN64CRC

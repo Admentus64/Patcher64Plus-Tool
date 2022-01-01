@@ -16,22 +16,27 @@ function CreateMainDialog() {
     # Menu bar
     $menuBarMain      = New-Object System.Windows.Forms.MenuStrip; $MainDialog.Controls.Add($menuBarMain)
 
-    $menuBarFile      = New-Object System.Windows.Forms.ToolStripMenuItem; $menuBarFile.Text = "File"; $menuBarMain.Items.Add($menuBarFile)
-    $menuBarEdit      = New-Object System.Windows.Forms.ToolStripMenuItem; $menuBarEdit.Text = "Edit"; $menuBarMain.Items.Add($menuBarEdit)
-    $menuBarHelp      = New-Object System.Windows.Forms.ToolStripMenuItem; $menuBarHelp.Text = "Help"; $menuBarMain.Items.Add($menuBarHelp)
+    $menuBarFile      = New-Object System.Windows.Forms.ToolStripMenuItem;     $menuBarFile.Text      = "File";               $menuBarMain.Items.Add($menuBarFile)
+    $menuBarEdit      = New-Object System.Windows.Forms.ToolStripMenuItem;     $menuBarEdit.Text      = "Edit";               $menuBarMain.Items.Add($menuBarEdit)
+    $menuBarInterface = New-Object System.Windows.Forms.ToolStripMenuItem;     $menuBarInterface.Text = "Interface";          $menuBarMain.Items.Add($menuBarInterface)
+    $menuBarHelp      = New-Object System.Windows.Forms.ToolStripMenuItem;     $menuBarHelp.Text      = "Help";               $menuBarMain.Items.Add($menuBarHelp)
 
-    $menuBarChecksum  = New-Object System.Windows.Forms.ToolStripButton; $menuBarChecksum.Text  = "Checksum";           $menuBarFile.DropDownItems.Add($menuBarChecksum)
-    $menuBarExit      = New-Object System.Windows.Forms.ToolStripButton; $menuBarExit.Text      = "Exit";               $menuBarFile.DropDownItems.Add($menuBarExit)
+    $menuBarChecksum  = New-Object System.Windows.Forms.ToolStripButton;       $menuBarChecksum.Text  = "Checksum";           $menuBarFile.DropDownItems.Add($menuBarChecksum)
+    $menuBarExit      = New-Object System.Windows.Forms.ToolStripButton;       $menuBarExit.Text      = "Exit";               $menuBarFile.DropDownItems.Add($menuBarExit)
 
-    $menuBarSettings  = New-Object System.Windows.Forms.ToolStripButton; $menuBarSettings.Text  = "Settings";           $menuBarEdit.DropDownItems.Add($menuBarSettings)
-    $menuBarResetAll  = New-Object System.Windows.Forms.ToolStripButton; $menuBarResetAll.Text  = "Reset All Settings"; $menuBarEdit.DropDownItems.Add($menuBarResetAll)
-    $menuBarResetGame = New-Object System.Windows.Forms.ToolStripButton; $menuBarResetGame.Text = "Reset Current Game"; $menuBarEdit.DropDownItems.Add($menuBarResetGame)
-    $menuBarCleanup   = New-Object System.Windows.Forms.ToolStripButton; $menuBarCleanup.Text   = "Cleanup Files";      $menuBarEdit.DropDownItems.Add($menuBarCleanup)
+    $menuBarSettings  = New-Object System.Windows.Forms.ToolStripButton;       $menuBarSettings.Text  = "Settings";           $menuBarEdit.DropDownItems.Add($menuBarSettings)
+    $menuBarResetAll  = New-Object System.Windows.Forms.ToolStripButton;       $menuBarResetAll.Text  = "Reset All Settings"; $menuBarEdit.DropDownItems.Add($menuBarResetAll)
+    $menuBarResetGame = New-Object System.Windows.Forms.ToolStripButton;       $menuBarResetGame.Text = "Reset Current Game"; $menuBarEdit.DropDownItems.Add($menuBarResetGame)
+    $menuBarCleanup   = New-Object System.Windows.Forms.ToolStripButton;       $menuBarCleanup.Text   = "Cleanup Files";      $menuBarEdit.DropDownItems.Add($menuBarCleanup)
 
-    $menuBarInfo      = New-Object System.Windows.Forms.ToolStripButton; $menuBarInfo.Text      = "Info";               $menuBarHelp.DropDownItems.Add($menuBarInfo)
-    $menuBarLinks     = New-Object System.Windows.Forms.ToolStripButton; $menuBarLinks.Text     = "Links";              $menuBarHelp.DropDownItems.Add($menuBarLinks)
-    $menuBarCredits   = New-Object System.Windows.Forms.ToolStripButton; $menuBarCredits.Text   = "Credits";            $menuBarHelp.DropDownItems.Add($menuBarCredits)
-    $menuBarGameID    = New-Object System.Windows.Forms.ToolStripButton; $menuBarGameID.Text    = "GameID";             $menuBarHelp.DropDownItems.Add($menuBarGameID)
+    $global:menuBarBeginner = New-Object System.Windows.Forms.ToolStripButton; $menuBarBeginner.Text  = "Beginner";           $menuBarInterface.DropDownItems.Add($menuBarBeginner)
+    $global:menuBarLite     = New-Object System.Windows.Forms.ToolStripButton; $menuBarLite.Text      = "Lite";               $menuBarInterface.DropDownItems.Add($menuBarLite)
+    $global:menuBarAdvanced = New-Object System.Windows.Forms.ToolStripButton; $menuBarAdvanced.Text  = "Advanced";           $menuBarInterface.DropDownItems.Add($menuBarAdvanced)
+
+    $menuBarInfo      = New-Object System.Windows.Forms.ToolStripButton;       $menuBarInfo.Text      = "Info";               $menuBarHelp.DropDownItems.Add($menuBarInfo)
+    $menuBarLinks     = New-Object System.Windows.Forms.ToolStripButton;       $menuBarLinks.Text     = "Links";              $menuBarHelp.DropDownItems.Add($menuBarLinks)
+    $menuBarCredits   = New-Object System.Windows.Forms.ToolStripButton;       $menuBarCredits.Text   = "Credits";            $menuBarHelp.DropDownItems.Add($menuBarCredits)
+    $menuBarGameID    = New-Object System.Windows.Forms.ToolStripButton;       $menuBarGameID.Text    = "GameID";             $menuBarHelp.DropDownItems.Add($menuBarGameID)
 
     $menuBarChecksum.Add_Click(  { foreach ($item in $Credits.Sections) { $item.Visible = $False }; $Credits.Sections[4].Visible = $True; $CreditsDialog.ShowDialog() } )
     $menuBarExit.Add_Click(      { $MainDialog.Close() } )
@@ -40,6 +45,15 @@ function CreateMainDialog() {
     $menuBarResetAll.Add_Click(  { ResetTool } )
     $menuBarResetGame.Add_Click( { ResetGame } )
     $menuBarCleanup.Add_Click(   { CleanupFiles } )
+
+    if     ($Settings.Core.Interface -eq 1)   { $menuBarBeginner.BackColor = "#D3D3D3" }
+    elseif ($Settings.Core.Interface -eq 2)   { $menuBarLite.BackColor     = "#D3D3D3" }
+    elseif ($Settings.Core.Interface -eq 3)   { $menuBarAdvanced.BackColor = "#D3D3D3" }
+    else                                      { $menuBarBeginner.BackColor = "#D3D3D3"; $Settings.Core.Interface = 1 }
+    $menuBarBeginner.Add_Click(  { $Settings.Core.Interface = 1; $menuBarBeginner.BackColor = "#D3D3D3"; $menuBarLite.BackColor = "White";   $menuBarAdvanced.BackColor = "White";   ResetReduxSettings; LoadAdditionalOptions; DisablePatches; SetMainScreenSize } )
+    $menuBarLite.Add_Click(      { $Settings.Core.Interface = 2; $menuBarBeginner.BackColor = "White";   $menuBarLite.BackColor = "#D3D3D3"; $menuBarAdvanced.BackColor = "White";   ResetReduxSettings; LoadAdditionalOptions; DisablePatches; SetMainScreenSize } )
+    $menuBarAdvanced.Add_Click(  { $Settings.Core.Interface = 3; $menuBarBeginner.BackColor = "White";   $menuBarLite.BackColor = "White";   $menuBarAdvanced.BackColor = "#D3D3D3"; ResetReduxSettings; LoadAdditionalOptions; DisablePatches; SetMainScreenSize } )
+
 
     $menuBarInfo.Add_Click(      { foreach ($item in $Credits.Sections) { $item.Visible = $False }; $Credits.Sections[0].Visible = $True; $CreditsDialog.ShowDialog() } )
     $menuBarLinks.Add_Click(     { foreach ($item in $Credits.Sections) { $item.Visible = $False }; $Credits.Sections[3].Visible = $True; $CreditsDialog.ShowDialog() } )
@@ -81,7 +95,7 @@ function CreateMainDialog() {
 
     # Create a button to allow manually selecting a ROM or WAD
     $InputPaths.GameButton = CreateButton -X ($InputPaths.GameTextBox.Right + (DPISize 6)) -Y (DPISize 18) -Width (DPISize 24) -Height (DPISize 22) -Text "..." -Info "Select your ROM or Wii VC WAD using file explorer"
-    $InputPaths.GameButton.Add_Click({ GamePath_Button -TextBox $InputPaths.GameTextBox -Description "ROM/WAD Files" -FileNames @('*.wad', '*.z64', '*.n64', '*.v64', '*.sfc', '*.smc', '*.nes') })
+    $InputPaths.GameButton.Add_Click({ GamePath_Button -TextBox $InputPaths.GameTextBox -Description "ROM/WAD Files" -FileNames @('*.wad', '*.z64', '*.n64', '*.v64', '*.sfc', '*.smc', '*.nes', '*.gbc') })
     #"Image Files(*.BMP;*.JPG;*.GIF)|*.BMP;*.JPG;*.GIF|All files (*.*)|*.*"
 
     # Create a button to clear the WAD Path
@@ -126,7 +140,7 @@ function CreateMainDialog() {
 
     # Create a button to allow manually selecting a ROM
     $InputPaths.InjectButton = CreateButton -X ($InputPaths.InjectTextBox.Right + (DPISize 6)) -Y (DPISize 18) -Width (DPISize 24) -Height (DPISize 22) -Text "..." -Info "Select your N64, SNES or NES ROM File using file explorer"
-    $InputPaths.InjectButton.Add_Click({ InjectPath_Button -TextBox $InputPaths.InjectTextBox -Description "ROM Files" -FileNames @('*.z64', '*.n64', '*.v64', '*.sfc', '*.smc', '*.nes') })
+    $InputPaths.InjectButton.Add_Click({ InjectPath_Button -TextBox $InputPaths.InjectTextBox -Description "ROM Files" -FileNames @('*.z64', '*.n64', '*.v64', '*.sfc', '*.smc', '*.nes', '*.gbc') })
 
     # Create a button to allow patch the WAD with a ROM file
     $InputPaths.ApplyInjectButton = CreateButton -X ($InputPaths.InjectButton.Right + (DPISize 15)) -Y (DPISize 18) -Width ($InputPaths.InjectGroup.Right - $InputPaths.InjectButton.Right - (DPISize 30)) -Height (DPISize 22) -Text "Inject ROM" -Info "Replace the ROM in your selected WAD File with your selected injection file"
@@ -385,6 +399,7 @@ function InitializeEvents() {
         ChangePatch
     } )
 
+    DisableReduxOptions
     $Patches.Options.Add_CheckStateChanged({
         $Patches.OptionsButton.Enabled = $this.checked
         DisableReduxOptions
@@ -461,10 +476,10 @@ function SetJSONFile($File) {
 function DisablePatches() {
     
     # Disable boxes if needed
-    EnableElem -Elem @($Patches.Extend,    $Patches.ExtendLabel)                          -Active ((IsSet $GamePatch.allow_extend) -and $Settings.Debug.LiteGUI -eq $False -and $GameRev.extend -ne 0) -Hide
-    EnableElem -Elem @($Patches.Redux,     $Patches.ReduxLabel)                           -Active ((IsSet $GamePatch.redux.file)   -and $Settings.Debug.LiteGUI -eq $False -and $GameRev.redux  -ne 0) -Hide
+    EnableElem -Elem @($Patches.Extend,    $Patches.ExtendLabel)                          -Active ((IsSet $GamePatch.allow_extend) -and $Settings.Core.Interface -ne 2 -and $GameRev.extend -ne 0) -Hide
+    EnableElem -Elem @($Patches.Redux,     $Patches.ReduxLabel)                           -Active ((IsSet $GamePatch.redux.file)   -and $Settings.Core.Interface -ne 2 -and $GameRev.redux  -ne 0) -Hide
     EnableElem -Elem @($Patches.Options,   $Patches.OptionsLabel, $Patches.OptionsButton) -Active ((TestFile $GameFiles.script)    -and ($GamePatch.options -eq 1 -or $Settings.Debug.ForceOptions -ne $False) -and $GameRev.options -ne 0) -Hide
-    EnableElem -Elem @($Patches.Downgrade, $Patches.DowngradeLabel)                       -Active ((CheckDowngradable) -and $Settings.Debug.LiteGUI -eq $False) -Hide
+    EnableElem -Elem @($Patches.Downgrade, $Patches.DowngradeLabel)                       -Active ((CheckDowngradable) -and $Settings.Core.Interface -ne 2 ) -Hide
     EnableElem -Elem $Patches.OptionsButton                                               -Active $Patches.Options.Checked
     DisableReduxOptions
 
@@ -572,7 +587,7 @@ function GamePath_DragDrop() {
             $DroppedExtn = (Get-Item -LiteralPath $DroppedPath).Extension
 
             # Make sure it is a ROM or WAD file
-            if ($DroppedExtn -eq '.wad' -or $DroppedExtn -eq '.z64' -or $DroppedExtn -eq '.n64' -or $DroppedExtn -eq '.v64' -or $DroppedExtn -eq '.sfc' -or $DroppedExtn -eq '.smc' -or $DroppedExtn -eq '.nes') {
+            if ($DroppedExtn -eq '.wad' -or $DroppedExtn -eq '.z64' -or $DroppedExtn -eq '.n64' -or $DroppedExtn -eq '.v64' -or $DroppedExtn -eq '.sfc' -or $DroppedExtn -eq '.smc' -or $DroppedExtn -eq '.nes' -or $DroppedExtn -eq '.gbc') {
                 $Settings["Core"][$this.name] = $DroppedPath
                 GamePath_Finish -TextBox $InputPaths.GameTextBox -Path $DroppedPath
             }
@@ -597,7 +612,7 @@ function InjectPath_DragDrop() {
             $DroppedExtn = (Get-Item -LiteralPath $DroppedPath).Extension
 
             # Make sure it is a ROM
-            if ($DroppedExtn -eq '.z64' -or $DroppedExtn -eq '.n64' -or $DroppedExtn -eq '.v64' -or $DroppedExtn -eq '.sfc' -or $DroppedExtn -eq '.smc' -or $DroppedExtn -eq '.nes') {
+            if ($DroppedExtn -eq '.z64' -or $DroppedExtn -eq '.n64' -or $DroppedExtn -eq '.v64' -or $DroppedExtn -eq '.sfc' -or $DroppedExtn -eq '.smc' -or $DroppedExtn -eq '.nes' -or $DroppedExtn -eq '.gbc') {
                 $Settings["Core"][$this.name] = $DroppedPath
                 InjectPath_Finish -TextBox $InputPaths.InjectTextBox -Path $DroppedPath
             }

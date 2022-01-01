@@ -336,6 +336,27 @@
 	"rom_title"		: "DONKEY KONG 64",
 	"rom_gameID"		: "NDOE"
 }, {
+	"title"			: "Banjo-Kazooie",
+	"mode"			: "Banjo-Kazooie",
+	"save"			: 1,
+	"console"		: "N64",
+	"version" : [ {
+		"hash"		: "B29599651A13F681C9923D69354BF4A3",
+		"rev"		: "Revision 0",
+		"region"	: "North America / NTSC-U"
+	}, {
+		"file"		: "rev1_to_rev0.bps",
+		"hash"		: "B11F476D4BC8E039355241E871DC08CF",
+		"rev"		: "Revision 1",
+		"region"	: "North America / NTSC-U",
+		"supported"	: 0
+	} ],
+	"patches"		: 1,
+	"decompress"		: 3,
+	"rom_title"		: "Banjo-Kazooie",
+	"rom_gameID"		: "NBKE"
+
+}, {
 	"title"			: "The Legend of Zelda: A Link to the Past",
 	"mode"			: "A Link to the Past",
 	"save"			: 1,
@@ -454,7 +475,6 @@
 		"region"	: "North America / NTSC-U"
 	} ],
 	"patches"		: 1,
-	"rom_title"		: "The Legend of Zelda",
 	"vc_title"		: "The Legend of Zelda",
 	"vc_gameID"		: "FAKE"
 }, {
@@ -479,9 +499,48 @@
 		"region"	: "North America / NTSC-U"
 	} ],
 	"patches"		: 1,
-	"rom_title"		: "The Adventure of Link",
-	"vc_title"		: "The Adventure of Link",
+	"vc_title"		: "Zelda II: The Adventure of Link",
 	"vc_gameID"		: "FA9E"
+}, {
+	"title"			: "The Legend of Zelda: Link's Awakening DX",
+	"mode"			: "Link's Awakening DX",
+	"save"			: 1,
+	"support_vc"		: 0,
+	"console"		: "GBC",
+	"version" : [ {
+		"hash"		: "7351DAA3C0A91D8F6FE2FBCCA6182478",
+		"rev"		: "Revision 2",
+		"region"	: "North America / NTSC-U & Europe / PAL",
+		"list"		: "Rev 2 (US / PAL)"
+	} ],
+	"patches"		: 1,
+	"rom_title"		: "ZELDA"
+}, {
+	"title"			: "The Legend of Zelda: Oracle of Ages",
+	"mode"			: "Oracle of Ages",
+	"save"			: 1,
+	"support_vc"		: 0,
+	"console"		: "GBC",
+	"version" : [ {
+		"hash"		: "C4639CC61C049E5A085526BB6CAC03BB",
+		"rev"		: "Revision 2",
+		"region"	: "North America / NTSC-U"
+	} ],
+	"patches"		: 1,
+	"rom_title"		: "ZELDA"
+}, {
+	"title"			: "The Legend of Zelda: Oracle of Seasons",
+	"mode"			: "Oracle of Seasons",
+	"save"			: 1,
+	"support_vc"		: 0,
+	"console"		: "GBC",
+	"version" : [ {
+		"hash"		: "F2DC6C4E093E4F8C6CBEA80E8DBD62CB",
+		"rev"		: "Revision 2",
+		"region"	: "North America / NTSC-U"
+	} ],
+	"patches"		: 1,
+	"rom_title"		: "ZELDA"
 }, {
 	"title"			: "Free Game Selection",
 	"mode"			: "Free",

@@ -196,24 +196,45 @@ function SetMainScreenSize() {
     else            { $CustomHeader.Group.Text = " Custom Game Title and GameID " }
 
     # Set Paths Panels Visibility and sizes
-    if ($GameType.inject -eq 1 -and $IsWiiVC)   { $InputPaths.InjectPanel.Visible = $True; $InputPaths.InjectPanel.Height = (DPISize 50) }   else   { $InputPaths.InjectPanel.Visible = $False; $InputPaths.InjectPanel.Height = 0 }
-    if ($GameType.custom_patch -eq 1)           { $InputPaths.PatchPanel.Visible  = $True; $InputPaths.PatchPanel.Height  = (DPISize 50) }   else   { $InputPaths.PatchPanel.Visible  = $False; $InputPaths.PatchPanel.Height  = 0 }
-    $InputPaths.GamePanel.Top   = (DPISize 70)
-    $InputPaths.InjectPanel.Top = $InputPaths.GamePanel.Bottom   + ((DPISize 15) * [boolean]$InputPaths.InjectPanel.Visible)
-    $InputPaths.PatchPanel.Top  = $InputPaths.InjectPanel.Bottom + ((DPISize 15) * [boolean]$InputPaths.PatchPanel.Visible)
+    $InputPaths.GamePanel.Top = (DPISize 70)
 
-    # Custom Header Panel Visibility
+    if ($GameType.inject -eq 1 -and $IsWiiVC) {
+        $InputPaths.InjectPanel.Visible = $True
+        $InputPaths.InjectPanel.Height  = (DPISize 50)
+        $InputPaths.InjectPanel.Top     = $InputPaths.GamePanel.Bottom + (DPISize 5)
+    }
+    else {
+        $InputPaths.InjectPanel.Visible = $False
+        $InputPaths.InjectPanel.Height  = 0
+    }
+
+    if ($GameType.custom_patch -eq 1) {
+        $InputPaths.PatchPanel.Visible = $True;
+        $InputPaths.PatchPanel.Height  = (DPISize 50)
+        if ($InputPaths.InjectPanel.Visible)   { $InputPaths.PatchPanel.Top = $InputPaths.InjectPanel.Bottom + (DPISize 5) }
+        else                                   { $InputPaths.PatchPanel.Top = $InputPaths.GamePanel.Bottom   + (DPISize 5) }
+    }
+    else {
+        $InputPaths.PatchPanel.Visible = $False
+        $InputPaths.PatchPanel.Height  = 0
+    }
+
+    # Custom Header Panel Visibility and Size
     $CustomHeader.Panel.Visible     = ($GameConsole.rom_title -gt 0) -or ($GameConsole.rom_gameID -gt 0)  -or $IsWiiVC
     $CustomHeader.ROMTitle.Visible  = $CustomHeader.ROMTitleLabel.Visible  = ($GameConsole.rom_title -gt 0)  -and !$IsWiiVC
     $CustomHeader.ROMGameID.Visible = $CustomHeader.ROMGameIDLabel.Visible = ($GameConsole.rom_gameID -eq 1) -and !$IsWiiVC
     $CustomHeader.VCTitle.Visible   = $CustomHeader.VCTitleLabel.Visible   = $CustomHeader.VCGameID.Visible     = $CustomHeader.VCGameIDLabel.Visible     = $IsWiiVC
     $CustomHeader.Region.Visible    = $CustomHeader.RegionLabel.Visible    = $CustomHeader.EnableRegion.Visible = $CustomHeader.EnableRegionLabel.Visible = ($GameConsole.rom_gameID -eq 2)
     $InputPaths.InjectPanel.Visible = $IsWiiVC
-    $VC.Panel.Visible = $IsWiiVC
+    $VC.Panel.Visible = $IsWiiVC -and $Settings.Core.Interface -ne 1
+
+    if ($GameConsole.rom_gameID -eq 2)   { $CustomHeader.Panel.Height = (DPISize 80) }
+    else                                 { $CustomHeader.Panel.Height = (DPISize 50) }
+    $CustomHeader.Group.Height = $CustomHeader.Panel.Height
 
     # Positioning
-    if (IsSet $GamePath)   { $CurrentGame.Panel.Location = New-Object System.Drawing.Size((DPISize 10), ($InputPaths.PatchPanel.Bottom + (DPISize 5))) }
-    else                   { $CurrentGame.Panel.Location = New-Object System.Drawing.Size((DPISize 10), ($InputPaths.GamePanel.Bottom  + (DPISize 5))) }
+    if ($GameType.custom_patch -eq 1)   { $CurrentGame.Panel.Location = New-Object System.Drawing.Size((DPISize 10), ($InputPaths.PatchPanel.Bottom + (DPISize 5))) }
+    else                                { $CurrentGame.Panel.Location = New-Object System.Drawing.Size((DPISize 10), ($InputPaths.GamePanel.Bottom  + (DPISize 5))) }
     $CustomHeader.Panel.Location = New-Object System.Drawing.Size((DPISize 10), ($CurrentGame.Panel.Bottom + (DPISize 5)))
     
     # Set VC Panel Size
@@ -221,7 +242,7 @@ function SetMainScreenSize() {
     else                                                                                                                                      { $VC.Panel.Height = $VC.Group.Height = (DPISize 70) }
 
     # Arrange Panels
-    if ($IsWiiVC) {
+    if ($IsWiiVC -and $Settings.Core.Interface -ne 1) {
         if ($GameType.patches) {
             $Patches.Panel.Location = New-Object System.Drawing.Size((DPISize 10), ($CustomHeader.Panel.Bottom + (DPISize 5)))
             $VC.Panel.Location      = New-Object System.Drawing.Size((DPISize 10), ($Patches.Panel.Bottom      + (DPISize 5)))
@@ -243,6 +264,36 @@ function SetMainScreenSize() {
     
     $MainDialog.Height = $StatusPanel.Bottom + (DPISize 50)
 
+    # Lock Console if not VC-supported in Wii VC mode
+    if ($IsWiiVC -and $GameConsole.support_vc -eq 0) {
+        $Patches.Panel.Enabled = $VC.Panel.Enabled = $False
+        $Patches.Button.Text = "Patching is not supported in Wii VC Mode"
+    }
+    else {
+        $Patches.Panel.Enabled = $VC.Panel.Enabled = $True
+        $Patches.Button.Text = "Patch Selected Options"
+    }
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function ResetReduxSettings() {
+    
+    # Reset Options
+    $global:Redux = @{}
+    $Redux.Box = @{}
+    $Redux.Groups = @()
+    $Last.Group = $Last.Panel = $Last.GroupName = $null
+    $Last.Half = $False
+
+    if ( (TestFile $GameFiles.controls) -and $IsWiiVC) {
+        $Files.json.controls  = SetJSONFile $GameFiles.controls
+        CreateVCRemapDialog # Create VC remap settings
+    }
+    else { $Files.json.controls  = $null }
+
 }
 
 
@@ -262,13 +313,6 @@ function ChangeGameMode() {
             break
         }
     }
-
-    # Reset Options
-    $global:Redux = @{}
-    $Redux.Box = @{}
-    $Redux.Groups = @()
-    $Last.Group = $Last.Panel = $Last.GroupName = $null
-    $Last.Half = $False
 
     $GameFiles.base         = $Paths.Games + "\" + $GameType.mode
     $GameFiles.binaries     = $GameFiles.Base + "\Binaries"
@@ -290,14 +334,10 @@ function ChangeGameMode() {
     # JSON Files
     if (IsSet $GameType.patches)                               { $Files.json.patches   = SetJSONFile $GameFiles.patches }                           else { $Files.json.patches   = $null }
     if (TestFile ($GameFiles.languages + "\Languages.json"))   { $Files.json.languages = SetJSONFile ($GameFiles.languages + "\Languages.json") }   else { $Files.json.languages = $null }
-    if (TestFile ($GameFiles.models    + "\Models.json"))      { $Files.json.models    = SetJSONFile ($GameFiles.models    + "\Models.json") }      else { $Files.json.models    = $null }
+    if (TestFile ($Paths.shared        + "\Models.json"))      { $Files.json.models    = SetJSONFile ($Paths.shared        + "\Models.json") }      else { $Files.json.models    = $null }
     if (TestFile ($GameFiles.base      + "\Music.json"))       { $Files.json.music     = SetJSONFile ($GameFiles.base      + "\Music.json") }       else { $Files.json.music     = $null }
 
-    if ( (TestFile $GameFiles.controls) -and $IsWiiVC) {
-        $Files.json.controls  = SetJSONFile $GameFiles.controls
-        CreateVCRemapDialog # Create VC remap settings
-    }
-    else { $Files.json.controls  = $null }
+    ResetReduxSettings
 
     # Info
     if (TestFile $GameFiles.info)       { AddTextFileToTextbox -TextBox $Credits.Sections[0] -File $GameFiles.info }
@@ -1097,9 +1137,9 @@ function SetBitmap($Path, $Box, [int]$Width, [int]$Height) {
 
     $imgObject = [Drawing.Image]::FromFile( ( Get-Item $Path ) )
 
-    if (!(IsSet $Width))    { $Width  = (DPISize $imgObject.Width) }
+    if (!(IsSet $Width))    { $Width  = $Box.Width }
     else                    { $Width  = (DPISize $Width) }
-    if (!(IsSet $Height))   { $Height = (DPISize $imgObject.Height) }
+    if (!(IsSet $Height))   { $Height = $Box.Height }
     else                    { $Height = (DPISize $Height) }
 
     $imgBitmap = New-Object Drawing.Bitmap($imgObject, $Width, $Height)
@@ -1164,6 +1204,7 @@ Export-ModuleMember -Function ChangeGamesList
 Export-ModuleMember -Function ChangeRevList
 Export-ModuleMember -Function ChangePatchPanel
 Export-ModuleMember -Function SetMainScreenSize
+Export-ModuleMember -Function ResetReduxSettings
 Export-ModuleMember -Function ChangeGameMode
 Export-ModuleMember -Function ChangeGameRev
 Export-ModuleMember -Function ChangePatch

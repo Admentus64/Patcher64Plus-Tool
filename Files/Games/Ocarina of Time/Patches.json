@@ -114,13 +114,39 @@
 	"tooltip"			: "A small-sized ROM hack that focuses on puzzling your way through{0}- Supported: Rev 0 (US)",
 	"rev" 				: ["5BD1FE107BF8106B2AB6650ABECD54D6"]
 }, {
-	"title"				: "Dark Hyrule Fantasy (Demo)",
+	"title"				: "Pots Challenge",
+	"command"			: "Force Downgrade",
+	"vc_title"			: "Zelda: Pots Challenge",
+	"vc_gameID"			: "NAC7",
+	"patch"				: "Compressed\\pots_challenge.bps",
+	"output"			: "_pots_challenge_patched",
+	"tooltip"			: "Replay though the original Ocarina of Time by throwing pots only at your targets{0}- Supported: Rev 0 (US)",
+	"rev" 				: ["5BD1FE107BF8106B2AB6650ABECD54D6"]
+}, {
+	"title"				: "The Helix Blade (Demo)",
+	"console"			: "Native",
 	"finalize"			: 0,
 	"compress"			: 0,
-	"vc_title"			: "Dark Hyrule Fantasy",
-	"vc_gameID"			: "NAC7",
+	"patch"				: "Decompressed\\the_helix_blade.bps",
+	"output"			: "_the_helix_blade_patched",
+	"tooltip"			: "A small-sized ROM hack in a completely new setting{0}- Supported: Rev 0 (US)",
+	"rev" 				: ["5BD1FE107BF8106B2AB6650ABECD54D6"]
+}, {
+	"title"				: "Dark Hyrule Fantasy (Demo)",
+	"console"			: "Native",
+	"finalize"			: 0,
+	"compress"			: 0,
 	"patch"				: "Decompressed\\dark_hyrule_fantasy.bps",
 	"output"			: "_dark_hyrule_fantasy_patched",
 	"tooltip"			: "A small-sized ROM hack in a completely new setting{0}- Supported: Debug GC MQ (PAL)",
+	"rev" 				: ["8CA71E87DE4CE5E9F6EC916202A623E9"]
+}, {
+	"title"				: "Spaceworld ´97 Experience",
+	"console"			: "Native",
+	"finalize"			: 0,
+	"compress"			: 0,
+	"patch"				: "Decompressed\\spaceworld.bps",
+	"output"			: "_spaceworld_patched",
+	"tooltip"			: "A recreation of the demo of Ocarina of Time shown at Spaceworld in 1997{0}- Supported: Debug GC MQ (PAL)",
 	"rev" 				: ["8CA71E87DE4CE5E9F6EC916202A623E9"]
 } ]

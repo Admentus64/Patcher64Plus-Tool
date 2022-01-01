@@ -34,6 +34,14 @@
 	"max_size"			: "8",
 	"appfile"			: "00000005.app"
 }, {
+	"title"				: "GameBoy Color",
+	"mode"				: "GBC",
+	"extension"			: ".gbc",
+	"support_vc"			: 0,
+	"rom_title"			: 0,
+	"rom_gameID"			: 0,
+	"max_size"			: "1"
+}, {
 	"title"				: "Sega Master System",
 	"mode"				: "SMS",
 	"extension"			: ".sms",

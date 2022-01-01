@@ -7,9 +7,9 @@ function CreateForm([uint16]$X=0, [uint16]$Y=0, [uint16]$Width=0, [uint16]$Heigh
 
     if (IsSet $Name) {
         $Form.Name = $Name
-        if (IsSet $Last.Extend)   { Add-Member -InputObject $Form -NotePropertyMembers @{ Section = $Last.Extend } }
-        elseif (!$IsGame)         { Add-Member -InputObject $Form -NotePropertyMembers @{ Section = "Core" } }
-        if ($IsGame)              { $Redux[$Last.Extend][$Name] = $Form }
+        if     (IsSet $Last.Extend)   { Add-Member -InputObject $Form -NotePropertyMembers @{ Section = $Last.Extend } }
+        elseif (!$IsGame)             { Add-Member -InputObject $Form -NotePropertyMembers @{ Section = "Core" } }
+        if      ($IsGame)             { $Redux[$Last.Extend][$Name] = $Form }
     }
     Add-Member -InputObject $Form -NotePropertyMembers @{ Active = $True }
 
@@ -48,7 +48,7 @@ function CreateColorDialog([string]$Color="000000", [string]$Name, [switch]$IsGa
     $ColorDialog.Color = "#" + $Color
 
     if ($IsGame -and (IsSet -Elem $Name) )   { $Redux[$Last.Extend][$Name] = $ColorDialog }
-    if (IsSet $Name)                   { $ColorDialog.Tag = $Name }
+    if (IsSet $Name)                         { $ColorDialog.Tag = $Name }
     
     if (IsSet $ColorDialog.Tag) {
         if ($IsGame) {
@@ -79,6 +79,7 @@ function CreateColorDialog([string]$Color="000000", [string]$Name, [switch]$IsGa
 function CreateGroupBox([uint16]$X, [uint16]$Y, [uint16]$Width, [uint16]$Height, [string]$Name, [string]$Tag, [string]$Text, [object]$AddTo=$Last.Panel) {
     
     $Last.Group = CreateForm -X $X -Y $Y -Width $Width -Height $Height -Name $Name -Tag $Tag -Form (New-Object System.Windows.Forms.GroupBox) -AddTo $AddTo
+    $Last.Hide  = $False
     $Last.Group.Font = $Fonts.Small
     if (IsSet $Text) { $Last.Group.Text = (" " + $Text + " ") }
     $Last.GroupName = $Name
@@ -305,7 +306,7 @@ function CreateListBox([uint16]$X=0, [uint16]$Y=0, [uint16]$Width=0, [uint16]$He
 
 
 #==============================================================================================================================================================================================
-function CreateLabel([uint16]$X=0, [uint16]$Y=0, [uint16]$Width=0, [uint16]$Height=0, [string]$Name, [string]$Tag, [string]$Text="", [System.Drawing.Font]$Font=$Fonts.Small, [string]$Info="", [object]$AddTo=$Last.Group) {
+function CreateLabel([uint16]$X=0, [uint16]$Y=0, [uint16]$Width=0, [uint16]$Height=20, [string]$Name, [string]$Tag, [string]$Text="", [System.Drawing.Font]$Font=$Fonts.Small, [string]$Info="", [object]$AddTo=$Last.Group) {
     
     $Label = CreateForm -X $X -Y $Y -Width $Width -Height $Height -Name $Name -Tag $Tag -Form (New-Object System.Windows.Forms.Label) -AddTo $AddTo
     if (  IsSet $Text)    { $Label.Text     = $Text }
@@ -337,14 +338,14 @@ function CreateButton([uint16]$X=0, [uint16]$Y=0, [uint16]$Width=(DPISize 100), 
 function CreateTabButtons([string[]]$Tabs, [object]$AddTo=$Redux.Panel) {
     
     if ($Tabs.Count -eq 0) {
-        if ( (($GamePatch.redux.options -eq 1 -and $GameRev.redux -ne 0) -or ((IsSet $Files.json.languages) -and $GameRev.languages -ne 0)) -and $Settings.Debug.LiteGUI -eq $False) {
+        if ( (($GamePatch.redux.options -eq 1 -and $GameRev.redux -ne 0) -or ((IsSet $Files.json.languages) -and $GameRev.languages -ne 0)) -and $Settings.Core.Interface -ne 2) {
             $Tabs += "Main"
             $Last.TabName = "Main"
         }
     }
 
-    if ($GamePatch.redux.options -eq 1 -and $GameRev.redux     -ne 0 -and $Settings.Debug.LiteGUI -eq $False)    { $Tabs += "Redux" }
-    if ( (IsSet $Files.json.languages) -and $GameRev.languages -ne 0 -and $Settings.Debug.LiteGUI -eq $False)    { $Tabs += "Language" }
+    if ($GamePatch.redux.options -eq 1 -and $GameRev.redux     -ne 0 -and $Settings.Core.Interface -ne 2)    { $Tabs += "Redux" }
+    if ( (IsSet $Files.json.languages) -and $GameRev.languages -ne 0 -and $Settings.Core.Interface -ne 2)    { $Tabs += "Language" }
     $global:ReduxTabs = @()
     if (!(IsSet $GameSettings.Core) -and $Tabs.Length -gt 0) { $GameSettings.Core  = @{} }
 
@@ -387,9 +388,12 @@ function CreateTabButtons([string[]]$Tabs, [object]$AddTo=$Redux.Panel) {
 
 
 #==============================================================================================================================================================================================
-function CreateReduxPanel([single]$X=$Last.Group.Left, [single]$Row=0, [single]$Columns, [single]$Rows=1,  [string]$Name, [string]$Tag, [object]$AddTo=$Last.Group) {
+function CreateReduxPanel([single]$X=$Last.Group.Left, [single]$Row=0, [single]$Columns, [single]$Rows=1,  [string]$Name, [string]$Tag, [object]$AddTo=$Last.Group, [switch]$Beginner, [switch]$Lite, [switch]$Advanced) {
     
+    if (!(CheckInterfaceMode -Beginner $Beginner -Lite $Lite -Advanced $Advanced) -or $Last.Hide) { return $null }
+
     $Last.Max = 0
+    $Last.Column = $Last.Row = 1
     if (IsSet $Columns -Min 0)   { $Width = $FormDistance * $Columns }
     else                         { $Width = $AddTo.Width * 0.9 }
     return CreatePanel -X $X -Y ($Row * (DPISize 30) + (DPISize 20)) -Width $Width -Height ((DPISize 26.5) * $Rows) -Name $Name -Tag $Tag -AddTo $AddTo
@@ -399,14 +403,19 @@ function CreateReduxPanel([single]$X=$Last.Group.Left, [single]$Row=0, [single]$
 
 
 #==============================================================================================================================================================================================
-function CreateReduxGroup([single]$X=(DPISize 15), [single]$Y=(DPISize 50), [single]$Height, [string]$Name=$Last.TabName, [string]$Tag, [switch]$ShowAlways, [boolean]$IsGame=$True, [string]$Text="", [switch]$IsRedux, [single]$Columns=0, [object]$AddTo=$Redux.Panel) {
+function CreateReduxGroup([single]$X=(DPISize 15), [single]$Y=(DPISize 50), [single]$Height, [string]$Name=$Last.TabName, [string]$Tag, [switch]$ShowAlways, [boolean]$IsGame=$True, [string]$Text="", [switch]$IsRedux, [single]$Columns=0, [object]$AddTo=$Redux.Panel, [switch]$Beginner, [switch]$Lite, [switch]$Advanced) {
     
+    if (!(CheckInterfaceMode -Beginner $Beginner -Lite $Lite -Advanced $Advanced)) {
+        $Last.Hide = $True
+        return $null
+    }
+
     $Width = ($AddTo.Width - (DPISize 50))
     $Last.Column = $Last.Row = 1
 
     if ($Columns -eq 0)   { $Last.Width = [byte][Math]::Round($Redux.Panel.Width / $ColumnWidth) }
     else                  { $Last.Width = [byte]$Columns }
-
+    
     if (IsSet $Height) { $Last.Flexible = $False }
     else {
         $Last.Flexible = $True
@@ -457,8 +466,10 @@ function CreateReduxGroup([single]$X=(DPISize 15), [single]$Y=(DPISize 50), [sin
 
 
 #==============================================================================================================================================================================================
-function CreateReduxButton([single]$Column=1, [single]$Row=1, [int16]$Width=150, [int16]$Height=20, [string]$Name, [string]$Tag, [string]$Text="", [string]$Info="", [string]$Credits="", [object]$AddTo=$Last.Group) {
+function CreateReduxButton([single]$Column=1, [single]$Row=1, [int16]$Width=150, [int16]$Height=20, [string]$Name, [string]$Tag, [string]$Text="", [string]$Info="", [string]$Credits="", [object]$AddTo=$Last.Group, [switch]$Beginner, [switch]$Lite, [switch]$Advanced) {
     
+    if (!(CheckInterfaceMode -Beginner $Beginner -Lite $Lite -Advanced $Advanced) -or $Last.Hide) { return $null }
+
     if ( (IsSet $Info ) -and (IsSet $Credits) ) { $Info += ("`n`n- Credits: " + $Credits) }
     return CreateButton -X (($Column-1) * $FormDistance + (DPISize 15)) -Y ($Row * (DPISize 30) - (DPISize 13)) -Width (DPISize $Width) -Height (DPISize $Height) -Name $Name -Tag $Tag -Text $Text -Info $Info -AddTo $AddTo
 
@@ -467,8 +478,10 @@ function CreateReduxButton([single]$Column=1, [single]$Row=1, [int16]$Width=150,
 
 
 #==============================================================================================================================================================================================
-function CreateReduxTextBox([single]$Column=$Last.Column, [single]$Row=$Last.Row, [byte]$Length=2, [string]$Value=0, [string]$Text, [string]$Info, [string]$Warning, [string]$Credits, [string]$Name, [string]$Tag, [object]$AddTo=$Last.Group) {
+function CreateReduxTextBox([single]$Column=$Last.Column, [single]$Row=$Last.Row, [byte]$Length=2, [string]$Value=0, [string]$Text, [string]$Info, [string]$Warning, [string]$Credits, [string]$Name, [string]$Tag, [object]$AddTo=$Last.Group, [switch]$Beginner, [switch]$Lite, [switch]$Advanced) {
     
+    if (!(CheckInterfaceMode -Beginner $Beginner -Lite $Lite -Advanced $Advanced) -or $Last.Hide) { return $null }
+
     if (IsSet $Info) { $Info += "`nDefault value: " + $Value }
     if (IsSet $Warning) {
         if (IsSet $Info)   { $Info += ("`n[!] " + $Warning) }
@@ -493,7 +506,8 @@ function CreateReduxTextBox([single]$Column=$Last.Column, [single]$Row=$Last.Row
 
     })
 
-    $Last.Column++;
+    $Last.Column = $column + 1;
+    $Last.Row = $row;
     if ($Column -ge $Last.Width) {
         $Last.Column = 1
         $Last.Row++
@@ -507,8 +521,10 @@ function CreateReduxTextBox([single]$Column=$Last.Column, [single]$Row=$Last.Row
 
 
 #==============================================================================================================================================================================================
-function CreateReduxRadioButton([single]$Column=$Last.Column, [single]$Row=$Last.Row, [switch]$Checked, [switch]$Disable, [string]$Text, [string]$Info, [string]$Warning, [string]$Credits, [string]$Name, [object]$Link, [string]$SaveTo, [byte]$Max, [string]$Tag, [object]$AddTo=$Last.Panel) {
+function CreateReduxRadioButton([single]$Column=$Last.Column, [single]$Row=$Last.Row, [switch]$Checked, [switch]$Disable, [string]$Text, [string]$Info, [string]$Warning, [string]$Credits, [string]$Name, [object]$Link, [string]$SaveTo, [byte]$Max, [string]$Tag, [object]$AddTo=$Last.Panel, [switch]$Beginner, [switch]$Lite, [switch]$Advanced) {
     
+    if (!(CheckInterfaceMode -Beginner $Beginner -Lite $Lite -Advanced $Advanced) -or $Last.Hide) { return $null }
+
     if ($Disable) { $Disable = !$PatchReduxCheckBox.Checked }
     if (IsSet $Warning) {
         if (IsSet $Info)   { $Info += ("`n[!] " + $Warning) }
@@ -528,7 +544,8 @@ function CreateReduxRadioButton([single]$Column=$Last.Column, [single]$Row=$Last
         })
     }
 
-    $Last.Column++;
+    $Last.Column = $column + 1;
+    $Last.Row = $row;
     if ($Column -ge $Last.Width) {
         $Last.Column = 1
         $Last.Row++
@@ -542,8 +559,10 @@ function CreateReduxRadioButton([single]$Column=$Last.Column, [single]$Row=$Last
 
 
 #==============================================================================================================================================================================================
-function CreateReduxCheckBox([single]$Column=$Last.Column, [single]$Row=$Last.Row, [switch]$Checked, [switch]$Disable, [string]$Text="", [string]$Info, [string]$Warning, [string]$Credits, [string]$Name, [object]$Link, [string]$Tag, [object]$AddTo=$Last.Group) {
+function CreateReduxCheckBox([single]$Column=$Last.Column, [single]$Row=$Last.Row, [switch]$Checked, [switch]$Disable, [string]$Text="", [string]$Info, [string]$Warning, [string]$Credits, [string]$Name, [object]$Link, [string]$Tag, [object]$AddTo=$Last.Group, [switch]$Beginner, [switch]$Lite, [switch]$Advanced) {
     
+    if (!(CheckInterfaceMode -Beginner $Beginner -Lite $Lite -Advanced $Advanced) -or $Last.Hide) { return $null }
+
     if ($Disable) { $Disable = !$PatchReduxCheckBox.Checked }
     if (IsSet $Warning) {
         if (IsSet $Info)   { $Info += ("`n[!] " + $Warning) }
@@ -551,7 +570,7 @@ function CreateReduxCheckBox([single]$Column=$Last.Column, [single]$Row=$Last.Ro
     }
     if ( (IsSet $Info ) -and (IsSet $Credits) ) { $Info += ("`n`n- Credits: " + $Credits) }
 
-    $CheckBox = CreateCheckBox -X (($Column-1) * $FormDistance + (DPISize 15)) -Y ($Row * (DPISize 30) - (DPISize 10)) -Checked $Checked -Disable $Disable -IsRadio $False -Info $Info -IsGame $True -Name $Name  -Tag $Tag -AddTo $AddTo -Link $Link
+    $CheckBox = CreateCheckBox -X (($Column-1) * $FormDistance + (DPISize 15)) -Y ($Row * (DPISize 30) - (DPISize 10)) -Checked $Checked -Disable $Disable -IsRadio $False -Info $Info -IsGame $True -Name $Name -Tag $Tag -AddTo $AddTo -Link $Link
     
     if (IsSet $Text) {
         $Label = CreateLabel -X $CheckBox.Right -Y ($CheckBox.Top + (DPISize 3)) -Height (DPISize 15) -Text $Text -Info $Info -AddTo $AddTo
@@ -562,7 +581,8 @@ function CreateReduxCheckBox([single]$Column=$Last.Column, [single]$Row=$Last.Ro
         })
     }
 
-    $Last.Column++;
+    $Last.Column = $column + 1;
+    $Last.Row = $row;
     if ($Column -ge $Last.Width) {
         $Last.Column = 1
         $Last.Row++
@@ -576,8 +596,10 @@ function CreateReduxCheckBox([single]$Column=$Last.Column, [single]$Row=$Last.Ro
 
 
 #==============================================================================================================================================================================================
-function CreateReduxComboBox([single]$Column=$Last.Column, [single]$Row=$Last.Row, [int16]$Length=170, [int]$Shift=0, [string[]]$Items=$null, [string[]]$PostItems=$null, [string]$FilePath, $Ext="bin", $Default=1, [switch]$NoDefault, [string]$Text, [string]$Info, [string]$Warning, [string]$Credits, [string]$Name, [string]$Tag, [object]$AddTo=$Last.Group) {
+function CreateReduxComboBox([single]$Column=$Last.Column, [single]$Row=$Last.Row, [int16]$Length=170, [int]$Shift=0, [string[]]$Items=$null, [string[]]$PostItems=$null, [string]$FilePath, $Ext="bin", $Default=1, [switch]$NoDefault, [string]$Text, [string]$Info, [string]$Warning, [string]$Credits, [string]$Name, [string]$Tag, [object]$AddTo=$Last.Group, [switch]$Beginner, [switch]$Lite, [switch]$Advanced) {
     
+    if (!(CheckInterfaceMode -Beginner $Beginner -Lite $Lite -Advanced $Advanced) -or $Last.Hide) { return $null }
+
     if (IsSet $Warning) {
         if (IsSet $Info)   { $Info += ("`n[!] " + $Warning) }
         if (IsSet $Text)   { $Text += " [!]" }
@@ -614,10 +636,12 @@ function CreateReduxComboBox([single]$Column=$Last.Column, [single]$Row=$Last.Ro
     }
 
     $Default  = [byte]$Default
-    $Label    = CreateLabel -X (($Column-1) * $FormDistance + (DPISize 15)) -Y ($Row * (DPISize 30) - (DPISize 7)) -Width $Width -Height (DPISize 15) -Text $Text -Info $Info -AddTo $AddTo
+    $Label    = CreateLabel    -X (($Column-1) * $FormDistance + (DPISize 15)) -Y ($Row * (DPISize 30) - (DPISize 7)) -Width $Width -Height (DPISize 15) -Text $Text -Info $Info -AddTo $AddTo
     $ComboBox = CreateComboBox -X $Label.Right -Y ($Label.Top - (DPISize 3)) -Width (DPISize ($Length - $Shift)) -Height (DPISize 20) -Items $Items -Default $Default -Info $Info -IsGame $True -Name $Name -Tag $Tag -AddTo $AddTo
 
-    $Last.Column++;
+    $Last.Column = $column + 2;
+    $Last.Row = $row;
+
     if ($Column -ge $Last.Width - 1) {
         $Last.Column = 1
         $Last.Row++
@@ -631,8 +655,10 @@ function CreateReduxComboBox([single]$Column=$Last.Column, [single]$Row=$Last.Ro
 
 
 #==============================================================================================================================================================================================
-function CreateReduxSlider([single]$Column=$Last.Column, [single]$Row=$Last.Row, $Default, $Min, $Max, $Freq, $Small, $Large, [string]$Text, [string]$Info, [string]$Warning, [string]$Credits, [string]$Name, [string]$Tag, [object]$AddTo=$Last.Group) {
+function CreateReduxSlider([single]$Column=$Last.Column, [single]$Row=$Last.Row, $Default, $Min, $Max, $Freq, $Small, $Large, [string]$Text, [string]$Info, [string]$Warning, [string]$Credits, [string]$Name, [string]$Tag, [object]$AddTo=$Last.Group, [switch]$Beginner, [switch]$Lite, [switch]$Advanced) {
     
+    if (!(CheckInterfaceMode -Beginner $Beginner -Lite $Lite -Advanced $Advanced) -or $Last.Hide) { return $null }
+
     if ($Default.GetType().Name -eq "String")   { $Default = GetDecimal $Default }
     if ($Min.GetType().Name -eq "String")       { $Min     = GetDecimal $Min }
     if ($Max.GetType().Name -eq "String")       { $Max     = GetDecimal $Max }
@@ -659,8 +685,10 @@ function CreateReduxSlider([single]$Column=$Last.Column, [single]$Row=$Last.Row,
 
 
 #==============================================================================================================================================================================================
-function CreateReduxListBox([single]$Column=$Last.Column, [single]$Row=$Last.Row, [string[]]$Items, $Default=$null, [string]$Text, [string]$Info, [string]$Warning, [string]$Credits, [string]$Name, [object]$Link, [string]$Tag, [object]$AddTo=$Last.Group) {
+function CreateReduxListBox([single]$Column=$Last.Column, [single]$Row=$Last.Row, [string[]]$Items, $Default=$null, [string]$Text, [string]$Info, [string]$Warning, [string]$Credits, [string]$Name, [object]$Link, [string]$Tag, [object]$AddTo=$Last.Group, [switch]$Beginner, [switch]$Lite, [switch]$Advanced) {
     
+    if (!(CheckInterfaceMode -Beginner $Beginner -Lite $Lite -Advanced $Advanced) -or $Last.Hide) { return $null }
+
     $listBox  = CreateListBox -X (($Column-1) * $FormDistance + (DPISize 15)) -Y ($Row * (DPISize 45) - (DPISize 25)) -Width (DPISize 300) -Height (DPISize 175) -Items $Items -Default $Default -Info $Info -IsGame $True -Name $Name -Tag $Tag -AddTo $AddTo
     return $listBox
 
@@ -669,11 +697,54 @@ function CreateReduxListBox([single]$Column=$Last.Column, [single]$Row=$Last.Row
 
 
 #==============================================================================================================================================================================================
-function CreateReduxColoredLabel([System.Windows.Forms.Button]$Link, [System.Drawing.Color]$Color, [string]$Name, [string]$Tag, [object]$AddTo=$Last.Group) {
+function CreateReduxColoredLabel([System.Windows.Forms.Button]$Link, [System.Drawing.Color]$Color, [string]$Name, [string]$Tag, [object]$AddTo=$Last.Group, [switch]$Beginner, [switch]$Lite, [switch]$Advanced) {
+
+    if (!(CheckInterfaceMode -Beginner $Beginner -Lite $Lite -Advanced $Advanced) -or $Last.Hide) { return $null }
+
+    $label = CreateLabel -X ($Link.Right + (DPISize 15)) -Y $Link.Top -Width (DPISize 40) -Height $Link.Height -Name $Name -Tag $Tag -AddTo $AddTo
+    if (IsSet $Color) { $label.BackColor = $Color }
+    return $label
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function CreateImageBox([int]$x, [int]$y, [int]$w, [int]$h, [boolean]$IsGame=$True, [string]$Name, [string]$Tag, [object]$AddTo=$Last.Group, [switch]$Beginner, [switch]$Lite, [switch]$Advanced) {
     
-    $Label = CreateLabel -X ($Link.Right + (DPISize 15)) -Y $Link.Top -Width (DPISize 40) -Height $Link.Height -Name $Name -Tag $Tag -AddTo $AddTo
-    if (IsSet $Color) { $Label.BackColor = $Color }
-    return $Label
+    if (!(CheckInterfaceMode -Beginner $Beginner -Lite $Lite -Advanced $Advanced) -or $Last.Hide) { return $null }
+
+    $image          = CreateForm -X $X -Y $Y -Width $Width -Height $Height -IsGame $IsGame -Name $Name -Tag $Tag -Form (New-Object Windows.Forms.PictureBox) -AddTo $AddTo 
+    $image.Location = (DPISize (New-object System.Drawing.Size($x, $y)))
+    $image.Size     = (DPISize (New-object System.Drawing.Size($w, $h)))
+
+    return $image
+
+}
+
+
+
+
+#==============================================================================================================================================================================================
+function CheckInterfaceMode([boolean]$Beginner=$False, [boolean]$Lite=$False, [boolean]$Advanced=$False) {
+    
+    if (!$Beginner -and !$Lite -and !$Advanced)   { return $True }
+    if ( $Beginner  -and $Lite  -and $Advanced)   { return $True }
+
+    if ($Beginner -and $Settings.Core.Interface -eq 1)   { return $True }
+    if ($Lite     -and $Settings.Core.Interface -eq 2)   { return $True }
+    if ($Advanced -and $Settings.Core.Interface -eq 3)   { return $True }
+
+    if ($Beginner -and $Lite     -and $Settings.Core.Interface -eq 1)   { return $True }
+    if ($Beginner -and $Advanced -and $Settings.Core.Interface -eq 1)   { return $True }
+
+    if ($Lite -and $Beginner     -and $Settings.Core.Interface -eq 2)   { return $True }
+    if ($Lite -and $Advanced     -and $Settings.Core.Interface -eq 2)   { return $True }
+
+    if ($Advanced -and $Beginner -and $Settings.Core.Interface -eq 3)   { return $True }
+    if ($Advanced -and $Lite     -and $Settings.Core.Interface -eq 3)   { return $True }
+
+    return $False
 
 }
 
@@ -681,29 +752,4 @@ function CreateReduxColoredLabel([System.Windows.Forms.Button]$Link, [System.Dra
 
 #==============================================================================================================================================================================================
 
-Export-ModuleMember -Function CreateForm
-Export-ModuleMember -Function CreateDialog
-Export-ModuleMember -Function CreateColorDialog
-Export-ModuleMember -Function CreateTextBox
-Export-ModuleMember -Function CreateLabel
-Export-ModuleMember -Function CreateGroupBox
-Export-ModuleMember -Function CreatePanel
-Export-ModuleMember -Function CreateButton
-Export-ModuleMember -Function CreateCheckBox
-Export-ModuleMember -Function CreateComboBox
-Export-ModuleMember -Function CreateSlider
-Export-ModuleMember -Function CreateListBox
-
-Export-ModuleMember -Function CreateTabButton
-Export-ModuleMember -Function CreateTabButtons
-
-Export-ModuleMember -Function CreateReduxGroup
-Export-ModuleMember -Function CreateReduxPanel
-Export-ModuleMember -Function CreateReduxButton
-Export-ModuleMember -Function CreateReduxTextBox
-Export-ModuleMember -Function CreateReduxRadioButton
-Export-ModuleMember -Function CreateReduxCheckBox
-Export-ModuleMember -Function CreateReduxComboBox
-Export-ModuleMember -Function CreateReduxSlider
-Export-ModuleMember -Function CreateReduxListBox
-Export-ModuleMember -Function CreateReduxColoredLabel
+(Get-Command -Module "Forms") | % { Export-ModuleMember $_ }

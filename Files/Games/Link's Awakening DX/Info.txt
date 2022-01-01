@@ -1,0 +1,22 @@
+Patch Options for Link's Awakening:
+1. Apply Patch (requires a patch file)
+2. Redux and Additional Options
+
+Known Issues:
+- Unknown
+
+Requirements:
+- US/PAL GBC ROM for Link's Awakening
+
+Instructions:
+- Select GBC ROM
+- Select patch
+- Enable optional "Enable Redux" or "Enable Options" checkboxes
+- Customize your patch within "Select Options"
+- Press "Patch Selected Options"
+
+Information:
+- Original GBC ROM is preserved
+    
+Programs:
+- Floating IPS

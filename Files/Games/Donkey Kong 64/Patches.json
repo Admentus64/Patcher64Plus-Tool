@@ -1,9 +1,6 @@
 [ {
-	"title"		: "Donkey Kong 64",
-	"tooltip"	: "The regular Donkey Kong 64 experience{0}- Supported: Rev 0 (US)"
-},{
-	"title"		: "Tag Anywhere",
-	"patch"		: "Compressed\\tag_anywhere.ips",
+	"title"		: "Tag Anywhere (v5.0)",
+	"patch"		: "Compressed\\tag_anywhere.bps",
 	"output"	: "_tag_anywhere_patched",
 	"tooltip"	: "Use the D-Pad to switch between Kongs{0}- Supported: Rev 0 (US)"
 } ]

@@ -40,7 +40,7 @@
 	"output"			: "_master_quest_patched",
 	"tooltip"			: "A Master Quest style romhack for Majora's Mask, offering a higher difficulty{0}- Supported: Rev 0 (US)"
 }, {
-	"title"				: "Majora's Mask: Masked Quest",
+	"title"				: "Majora's Mask: Masked Quest (v4.3)",
 	"command"			: "Force Remap D-Pad Force Downgrade",
 	"vc_title"			: "Zelda: Masked Quest",
 	"vc_gameID"			: "NURE",

@@ -25,8 +25,8 @@ Add-Type -AssemblyName 'System.Drawing'
 # Setup global variables
 
 $global:ScriptName = "Patcher64+ Tool"
-$global:VersionDate = "2021-11-27"
-$global:Version     = "v15.1.4"
+$global:VersionDate = "2022-01-01"
+$global:Version     = "v16.0.0"
 $global:SystemDate  = Get-Date -Format yyyy-MM-dd-HH-mm-ss
 
 $global:CommandType = $MyInvocation.MyCommand.CommandType.ToString()
@@ -153,7 +153,7 @@ $Paths.AppDataTemp     = $Paths.AppData + "\Temp"
 $Paths.Temp            = $Paths.Local
 $Paths.Settings        = $Paths.Master + "\Settings"
 $Paths.Logs            = $Paths.Master + "\Logs"
-$Paths.cygdrive        = $Paths.Master + "\cygdrive"
+$Paths.cygdrive        = $Paths.Master + "\Tools\cygdrive"
 
 
 
@@ -217,6 +217,28 @@ $Fonts.Editor         = New-Object System.Drawing.Font("Consolas", 16, [System.D
 # Hide the PowerShell console from the user
 ShowPowerShellConsole ($Settings.Debug.Console -eq $True)
 
+# Ask for default interface mode on first time use
+ if ($Settings.Core.Interface -ne 1 -and $Settings.Core.Interface -ne 2 -and $Settings.Core.Interface -ne 3 -and !$FatalError) {
+    $global:PopupDialog = New-Object System.Windows.Forms.Form
+    $PopupDialog.Size = DPISize (New-Object System.Drawing.Size(390, 150))
+    $PopupDialog.Text = $ScriptName
+    $PopupDialog.FormBorderStyle = [System.Windows.Forms.FormBorderStyle]::FixedDialog
+    $PopupDialog.StartPosition = "CenterScreen"
+    $PopupDialog.Icon = $Files.icon.main
+
+    $label   = CreateLabel  -x (DPISize 20)  -Y (DPISize 10) -Text "Select Your Default Interface Mode:" -Font $Fonts.Medium -AddTo $PopupDialog
+    $hud1Btn = CreateButton -X (DPISize 20)  -Y (DPISize 50)  -Width (DPISize 100) -Height (DPISize 50) -AddTo $PopupDialog -Text "Beginner Mode" -Info "Hide advanced options"
+    $hud2Btn = CreateButton -X (DPISize 140) -Y (DPISize 50)  -Width (DPISize 100) -Height (DPISize 50) -AddTo $PopupDialog -Text "Lite Mode"     -Info "Hide options that are likely incompatible with various ROM hacks"
+    $hud3Btn = CreateButton -X (DPISize 260) -Y (DPISize 50)  -Width (DPISize 100) -Height (DPISize 50) -AddTo $PopupDialog -Text "Advanced Mode" -Info "Show all options"
+    
+    $hud1Btn.Add_Click( { $Settings.Core.Interface = 1; $PopupDialog.Close() } )
+    $hud2Btn.Add_Click( { $Settings.Core.Interface = 2; $PopupDialog.Close() } )
+    $hud3Btn.Add_Click( { $Settings.Core.Interface = 3; $PopupDialog.Close() } )
+
+    $PopupDialog.ShowDialog() | Out-Null
+    $global:PopupDialog = $label = $hud1Btn = $Hud2Btn = $Hud3Btn = $null
+}
+
 # Create the dialogs to show to the user
 CreateMainDialog     | Out-Null
 CreateCreditsDialog  | Out-Null
@@ -236,7 +258,8 @@ WriteToConsole ("Full Path:     " + $Paths.FullBase)
 WriteToConsole ("System Date:   " + $SystemDate)
 WriteToConsole ("Temp Folder:   " + $Paths.Temp)
 
-if (!$FatalError) { 
+if (!$FatalError) {
+    
     # Set default game mode
     ChangeConsolesList   | Out-Null
     GetFilePaths         | Out-Null

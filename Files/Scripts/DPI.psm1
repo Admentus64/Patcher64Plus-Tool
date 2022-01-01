@@ -1,10 +1,26 @@
 #==============================================================================================================================================================================================
-#  ADD THE REQUIRED ASSEMBLY
+#  DPI AWARENESS
 #==============================================================================================================================================================================================
-#  This framework allows disabling auto-scaling the GUI with the filter Windows applies.
+#  Makes the form "DPI Aware" so it can recognize when the DPI is changed.
 #----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Add-Type -AssemblyName 'PresentationFramework'
+$Source = @"
+using System;
+using System.Runtime.InteropServices;
+public class DPI
+{
+  [DllImport("user32.dll")]
+  public static extern bool SetProcessDPIAware();
+  public static void SetProcessAware()
+  {
+    SetProcessDPIAware();
+  }
+}
+"@
+
+# Add the code as a type definition in C# language so we can make use of it.
+$RefAssem = "System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"
+Add-Type -TypeDefinition $Source -ReferencedAssemblies $RefAssem -Language 'CSharp' | Out-Null
 
 
 
@@ -15,35 +31,6 @@ Add-Type -AssemblyName 'PresentationFramework'
 #----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 # $global:DisableHighDPIMode = $False
-
-
-
-#==============================================================================================================================================================================================
-#  DISABLE WINDOWS AUTO-SCALE FOR HIGH DPI
-#==============================================================================================================================================================================================
-#  Some weird code I accidentally discovered long ago that sets forms to use WPF style that allows higher DPI. This bypasses windows trying to auto-scale 
-#  forms using some kind of upscaling filter. This also allows forms to still be created from winforms functions in the "forms" namespace. The drawback is
-#  one size does not fit all DPI scaling. Every DPI setting needs a brand new set of values for every single dialog item (buttons, textboxes, groups, etc).
-#----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-function DisableWindowsScaling() {
-    
-    # Create a dummy WPF window.
-    [xml]$Xaml = @"
-    <Window
-      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      x:Name="Window">
-    </Window>
-"@
-    
-    # This does some stuff that makes it not auto-scale for some reason.
-    $Reader = (New-Object System.Xml.XmlNodeReader $Xaml)
-    $Window = [Windows.Markup.XamlReader]::Load($Reader)
-
-}
-
-
 
 #==============================================================================================================================================================================================
 #  FUNCTION TO ADJUST ACCORDING TO DPI SCALING
@@ -56,11 +43,31 @@ function DPISize($Value, [switch]$Round=$false, $Add=0, $AddX=0, $AddY=0) {
     # Immediately return the value if scaling is disabled.
     if ($DisableHighDPIMode) { return $Value }
 
+    # Get the variable type so we know what to do with it.
+    $ValueType = $Value.GetType().ToString()
+
     # Shorten this massive blob of text with a variable.
     $RMode = [System.MidpointRounding]::AwayFromZero
 
+    # If the value fed was a string, convert it to an integer.
+    if ($ValueType -eq "System.String")
+    {
+      # If there is a period, try to parse it as an integer.
+      if (($ValueType -like "*.*") -and ($Value -as [decimal] -is [decimal]))
+      {
+          $Value = [Convert]::ToDecimal($Value)
+          $ValueType = "System.Decimal"
+      }  
+      # Try to parse it as an integer.
+      elseif ($Value -as [int] -is [int])
+      {
+          $Value = [Convert]::ToInt32($Value)
+          $ValueType = "System.Int32"
+      }
+    }
     # The type of variable will determine the calculation method.
-    switch ($Value.GetType().ToString()) {
+    switch ($ValueType) {
+
         # 16-Bit Integer, Aliases: Int16
         'System.Int16' {
             if (!$Round)   { $Value = [int16][Math]::Truncate($Value * $DPIMultiplier) } 
@@ -96,6 +103,13 @@ function DPISize($Value, [switch]$Round=$false, $Add=0, $AddX=0, $AddY=0) {
             return         ( $Value + $Add + $AddX + $AddY )
         }
 
+        # Decimal
+        'System.Decimal' {
+            if (!$Round)   { $Value = [decimal]($Value * $DPIMultiplier) }
+            else           { $Value = [decimal][Math]::Round(($Value * $DPIMultiplier), $RMode) }
+            return         ( $Value + $Add + $AddX + $AddY )
+        }
+
         # Drawing Size (Width, Height)
         'System.Drawing.Size' {
             if (!$Round)   { $Value = New-Object Drawing.Size([int][Math]::Truncate($Value.Width * $DPIMultiplier), [int32][Math]::Truncate($Value.Height * $DPIMultiplier)) }
@@ -123,21 +137,26 @@ function DPISize($Value, [switch]$Round=$false, $Add=0, $AddX=0, $AddY=0) {
 #----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 function InitializeHiDPIMode() {
-    
-    # Current DPI of the monitor is pulled from the registry.
-    $MonitorDPI = (Get-ItemProperty 'HKCU:\Control Panel\Desktop\WindowMetrics' -Name AppliedDPI).AppliedDPI
-    
+
     # Check to see if high DPI is disabled.
     if (!$DisableHighDPIMode) {
-        
-        # Disable auto-scaling the GUI.
-        DisableWindowsScaling
 
-         # Get the multiplier derived from the DPI setting.
-        $global:DPIMultiplier = ($MonitorDPI / 24) * 0.25
+        # Make the application DPI Aware.
+        [DPI]::SetProcessAware()
+    }
+    # Create a form that we can pull the DPI from.
+    $DPI_Form = New-Object Windows.Forms.Form
+    $Graphics = $DPI_Form.CreateGraphics();
+    $DPIValue = [Convert]::ToInt32($Graphics.DpiX)
+    $DPI_Form.Dispose();
+
+    # Check to see if high DPI is disabled.
+    if (!$DisableHighDPIMode) {
+
+        # Get the multiplier derived from the DPI setting.
+        $global:DPIMultiplier = ($DPIValue / 24) * 0.25
 
     }
-
 }
 
 

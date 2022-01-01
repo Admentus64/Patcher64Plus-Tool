@@ -126,11 +126,11 @@ function PatchDungeonsMQ() {
     UpdateStatusLabel ("Patching " + $GameType.mode + " Master Quest Dungeons...")
     $dungeons = @()
 
-    if (IsChecked $Redux.MQ.Select) {
+    if ( (IsChecked $Redux.MQ.Select) -or (IsChecked $Redux.MQ.EnableAll)) {
         foreach ($item in $Redux.Box.SelectMQ) {
             foreach ($label in $item.controls) {
                 if ($label.GetType() -eq [System.Windows.Forms.Label]) {
-                    if ($label.checkbox.checked) {
+                    if ( ($label.checkbox.checked -and (IsChecked $Redux.MQ.Select) ) -or (IsChecked $Redux.MQ.EnableAll) ) {
                         $text = $label.Text.replace(" [!]", "")
                         $dungeons += $text;
                     }
@@ -180,7 +180,7 @@ function ExtractMQData([boolean]$Decompress) {
     # EXTRACT MQ DATA #
     if ($GameType.mode -eq "Ocarina of Time") {
         $Path = $GameFiles.extracted + "\Master Quest"
-        if ( ( (IsChecked -Elem $Redux.MQ.Select) -or (IsChecked -Elem $Redux.MQ.Randomize) ) -and (IsChecked $Patches.Options) ) { # EXTRACT MQ DUNGEON DATA #
+        if ( ( (IsChecked -Elem $Redux.MQ.Select) -or (IsChecked -Elem $Redux.MQ.EnableAll) -or (IsChecked -Elem $Redux.MQ.Randomize) ) -and (IsChecked $Patches.Options) ) { # EXTRACT MQ DUNGEON DATA #
             if ( (CountFiles $Path) -ne $GameType.mq_files -or $Settings.Debug.ForceExtract -eq $True) {
                 if (TestFile -Path ($GameFiles.decompressed + "\master_quest.bps") ) {
                     WriteToConsole "Extracting Master Quest dungeon files"

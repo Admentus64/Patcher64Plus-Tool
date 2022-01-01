@@ -1,3 +1,41 @@
+v16.0.0
+- Added & updated Redux and several options for Zelda 1, Zelda 2 and ALttP
+- Added new "GBC" console mode (no Wii VC)
+- Added new "Banjo-Kazooie" game mode with nine ROM hacks for N64 mode
+- Added new "Link's Awakening DX", "Oracle of Ages" & "Oracle of Seasons" game modes for GBC mode
+- Added new GUI Interface modes
+- Added Equipment previews for OoT
+- Added new "Read Action Prompt" option for the German patch for OoT
+- Added three new ROM hacks for OoT
+- Added new cutscenes fix section and options for MM
+- Added new button style for OoT and MM
+- Added new muted voices for MM
+- Added new models for OoT (Child / Adult)
+- Added new Hylian Link models for MM
+- Added new Magic Bar styles for OoT and MM
+- Added "Adult Pronouns" option for MM (English only)
+- Added option to patch in all MQ dungeons at once for OoT
+- Added render96 patches for SM64
+- Updated "Tag Anywhere" patch for DK64
+- Updated "Female Pronouns" script with missing pronoun and text box fixes
+- Updated SD HUD preview icons with HD assets
+- Updated normal size HUD buttons for Oot and MM
+- Updated the Additional Options GUI to be smarter
+- Updated the "Amara (Valkyrie)" model for OoT
+- Updated "Masked Quest" to v4.3 (includes textpointer crash fix, by SpiceyWolf)
+- Updated Form generation functions
+- Updated DPI code (by Bighead)
+- Changed "HUD Display" options into individual checkboxes for each icon
+- Changed "Master Quest" for MM to require Redux
+- Changed "Dark Hyrule Fantasy" ROM Hack to not be compatible with Wii VC
+- Changed "New Redux" for MM to be the default Redux patch
+- Fixed Redux options being accessible when Redux is not checked on startup
+- Fixed several tooltip/description issues and typos
+- Fixed translation issue with Map Select for MM
+- Fixed main window GUI display alignments
+- Fixed crash with using the "Water Temple" fix option when using the Master Quest layout
+- Fixed issue with changing Virtual Console channel titles
+
 v15.1.4
 - Added new "Gerudo Fortress Minimap" fix option for OoT (by GhostlyDark)
 - Added new "Run While Shielding", "Attack Wall Pushback" and "Faster Climbing" options for OoT
