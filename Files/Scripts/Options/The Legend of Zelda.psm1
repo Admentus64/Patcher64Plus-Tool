@@ -21,7 +21,7 @@ function PatchOptions() {
 #==============================================================================================================================================================================================
 function PatchReduxOptions() {
     
-    if (IsChecked $Redux.Graphics.AnimatedTiles)          { ApplyPatch -Patch "Compressed\Optional\animated_tiles.ips" }
+    if (IsChecked $Redux.Graphics.AnimatedTiles)          { ApplyPatch -Patch "Compressed\Optional\animated_tiles.bps" }
 
     if (IsChecked $Redux.Revert.HiddenSecrets)            { ApplyPatch -Patch "Compressed\Original\hidden_secrets.ips" }
     if (IsChecked $Redux.Revert.DisableDiagionalSword)    { ApplyPatch -Patch "Compressed\Original\disable_diagonal_sword.ips" }
