@@ -6,7 +6,7 @@ function PatchOptions() {
     
     if (IsChecked $Redux.Sound.NoLowHPBeep)                 { ApplyPatch -Patch "Compressed\Optional\no_low_hp_beep.ips" }
     if (IsChecked $Redux.Sound.ChangeMinorItemSFX)          { ApplyPatch -Patch "Compressed\Optional\change_minor_item_sfx.ips" }
-    if (IsChecked $Redux.Sound.ReduceTextSound)             { ApplyPatch -Patch "Compressed\reduce_text_sound.ips" }
+    if (IsChecked $Redux.Sound.ReduceTextSound)             { ApplyPatch -Patch "Compressed\Optional\reduce_text_sound.ips" }
     elseif (IsChecked $Redux.Sound.NoTextSound)             { ApplyPatch -Patch "Compressed\Optional\no_text_sound.ips" }
     
     if (IsChecked $Redux.Gameplay.RestartSameScreen)        { ApplyPatch -Patch "Compressed\Optional\restart_same_screen.ips" }
@@ -33,7 +33,8 @@ function PatchReduxOptions() {
     if (IsChecked $Redux.Revert.LinkDolls)                  { ApplyPatch -Patch "Compressed\Original\link_dolls.ips" }
     if (IsChecked $Redux.Revert.SpellMagicConsumption)      { ApplyPatch -Patch "Compressed\Original\spell_magic_consumption.ips" }
     if (IsChecked $Redux.Revert.NESGFX)                     { ApplyPatch -Patch "Compressed\Original\nes_gfx.ips" }
-    if (IsChecked $Redux.Music.RandomBattleTheme)           { ApplyPatch -Patch "Compressed\random_battle_theme.ips" }
+
+    if (IsChecked $Redux.Music.RandomBattleTheme)           { ApplyPatch -Patch "Compressed\Optional\random_battle_theme.ips" }
 
     if   ( (IsChecked $Redux.Revert.TitleScreenPalette) -and (IsChecked $Redux.Revert.TitleScreenSword) ) { ApplyPatch -Patch "Compressed\Original\title_screen.ips" }
     elseif (IsChecked $Redux.Revert.TitleScreenPalette)     { ApplyPatch -Patch "Compressed\Original\title_screen_palette.ips" }
