@@ -2,7 +2,7 @@ function PatchOptions() {
     
     # ENHANCED 16:9 WIDESCREEN #
 
-    if (IsChecked $Redux.Graphics.Widescreen) { ApplyPatch -Patch "Decompressed\widescreen.ppf" }
+    if (IsChecked $Redux.Graphics.Widescreen) { ApplyPatch -Patch "Decompressed\Optional\widescreen.ppf" }
     
 
 
@@ -18,20 +18,20 @@ function PatchOptions() {
         if     (TestFile ($GameFiles.models + $file))   { ApplyPatch -Patch ("Models" + $file) }
     }
 
-    if (IsChecked $Redux.Animations.Feminine)           { ApplyPatch -Patch "Decompressed\feminine_animations.ppf" }
-    if (IsChecked $Redux.Graphics.HideEquipment)        { ApplyPatch -Patch "Decompressed\hide_equipment.ppf" }
+    if (IsChecked $Redux.Animation.Feminine)            { ApplyPatch -Patch "Decompressed\Optional\feminine_animations.ppf" }
+    if (IsChecked $Redux.Graphics.HideEquipment)        { ApplyPatch -Patch "Decompressed\Optional\hide_equipment.ppf" }
 
 
 
     # DIFFICULTY #
 
-    if (IsChecked $Redux.Hero.HarderChildBosses)        { ApplyPatch -Patch "Decompressed\harder_child_bosses.ppf" }
+    if (IsChecked $Redux.Hero.HarderChildBosses)        { ApplyPatch -Patch "Decompressed\Optional\harder_child_bosses.ppf" }
     
 
 
     # MM PAUSE SCREEN #
 
-    if (IsChecked $Redux.Text.PauseScreen)              { ApplyPatch -Patch "Decompressed\mm_pause_screen.ppf" }
+    if (IsChecked $Redux.Text.PauseScreen)              { ApplyPatch -Patch "Decompressed\Optional\mm_pause_screen.ppf" }
     
 }
 
