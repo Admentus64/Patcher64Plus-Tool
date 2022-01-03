@@ -59,12 +59,12 @@ function SetFileParameters() {
 
 
     # Store Ocarina of Time files
-    $Files.oot.widescreen                   = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\widescreen")
     $Files.oot.master_quest                 = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\master_quest")
-    $Files.oot.mm_pause_screen              = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\mm_pause_screen")
-    $Files.oot.harder_child_bosses          = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\harder_child_bosses")
-    $Files.oot.feminine_animations          = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\feminine_animations")
-    $Files.oot.hide_equipment               = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\hide_equipment")
+    $Files.oot.widescreen                   = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Optional\widescreen")
+    $Files.oot.mm_pause_screen              = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Optional\mm_pause_screen")
+    $Files.oot.harder_child_bosses          = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Optional\harder_child_bosses")
+    $Files.oot.feminine_animations          = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Optional\feminine_animations")
+    $Files.oot.hide_equipment               = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Optional\hide_equipment")
 
     $Files.oot.lens_of_truth                = $Paths.Games + "\Ocarina of Time\Textures\widescreen\lens_of_truth.bin"
     $Files.oot.title_copyright              = $Paths.Games + "\Ocarina of Time\Textures\Logo\mq_copyright.bin"
