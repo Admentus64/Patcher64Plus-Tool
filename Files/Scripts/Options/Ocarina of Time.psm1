@@ -82,7 +82,7 @@ function ByteOptions() {
     if (IsChecked $Redux.Gameplay.NoShieldRecoil)           { ChangeBytes -Offset "BD416C" -Values "24 00" }
     if (IsChecked $Redux.Gameplay.RunWhileShielding)        { ChangeBytes -Offset "BD7DA0" -Values "10 00 00 55"; ChangeBytes -Offset "BD01D4" -Values "00 00 00 00" }
     if (IsChecked $Redux.Gameplay.PushbackAttackingWalls)   { ChangeBytes -Offset "BDEAE0" -Values "26 24 00 00 24 85 00 00" }
-    if (IsChecked $Redux.Gameplay.FasterClimbing)           { ChangeBytes -Offset "B01998" -Values "46 0A 32 02 46 0D 42 02" }
+    if (IsChecked $Redux.Gameplay.FasterClimbing)           { ChangeBytes -Offset "B01994" -Values "46 0A 32 02 46 0D 42 02" }
 
 
 
