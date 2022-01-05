@@ -1,7 +1,8 @@
 v16.0.0 #4
+- Updated Redux for Zelda 1
 - Fixed issue with patching "Feminine Animations", "Faster Climbing" and "Run While Shielding" for OoT
+- Fixed issue with patching options for Zelda 1 & 2
 - Fixed issue with logging not working
-- Fixed issue with Free Mode patching and GUI
 
 v16.0.0
 - Added & updated Redux and several options for Zelda 1, Zelda 2 and ALttP
