@@ -1,4 +1,4 @@
-v16.0.0 #4
+v16.0.0 #5
 - Updated Redux for Zelda 1
 - Fixed issue with patching "Feminine Animations", "Faster Climbing" and "Run While Shielding" for OoT
 - Fixed issue with patching options for Zelda 1 & 2

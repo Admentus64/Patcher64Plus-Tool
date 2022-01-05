@@ -89,45 +89,48 @@
 - Hylian Modding Models License:	https://github.com/hylian-modding/Z64-CustomPlayerModels
 					GNU General Public License v3.0 (GPL-3.0 License)
 
---- Custom Male Models ---
-- Original:				Nintendo
+--- Custom Models ---
 - 1996 Link:				Ikey Ilex
 - A Link to the Past			Oni 3D-Arts
+- Amara:				Amara & Karicyan
+- Amara Valkyrie:			Amara & Karicyan
+- Aria the Demon:			AriaHiro64
 - Breath of the Wild:			Skilarbabcock (www.youtube.com/user/skilarbabcock)
-- Dark Link - Enemy:			CrookedPoe
-- Dark Link				Mikus64
+- Dark Link:				CrookedPoe (adult)
+- Dark Link Smash:			Mikus64
+- Elegy of Emptiness:			JerryWester
 - Fierce Deity:				UltIMa647 (child) & CrookedPoe (ported adult)
+- Game and Watch:			unesag
+- Gerudo Link:				Oni 3D-Arts
 - Happy Mask Salesman:			Anubis-V1
+- Hat Kid:				Hailey
+- Hatsune Miku Link:			JanexLane
+- Hatsune Miku Vocaloid:		JanexLane
 - Kafei:				Malon Rose (www.patreon.com/MalonRose & www.youtube.com/c/MalonRose)
 - Link's Awakening:			Skilarbabcock (www.youtube.com/user/skilarbabcock)
-- Majora's Mask (Child):		The3Dude (ported)
-- Majora's Mask (Adult):		Skilarbabcock (www.youtube.com/user/skilarbabcock)
-- Majora's Mask Eyes:			GhostlyDark (ported)
+- Majora's Mask:			The3Dude (child) & Skilarbabcock (adult)
+- Majora's Mask + OoT Eyes:		The3Dude (model) & GhostlyDark (eyes)
+- Majora's Mask Eyes:			GhostlyDark (eyes)
+- Majora's Mask Eyes + Sashed:		AriaHiro (model) & GhostlyDark (eyes)
+- Malon 3D:				Karicyan
+- Malon Thicc:				Karicyan
 - Mega Man:				Megaman Legends
-- MM Eyes + Sashed:			GhostlyDark (ported), Nintendo, AriaHiro64
+- Nabooru:				Hailey
 - Ocarina of Time 3D:			Skilarbabcock (www.youtube.com/user/skilarbabcock)
-- Sashed:				Nintendo, AriaHiro64
+- Princess Ruto:			Unesag
+- Princess Zelda 3D:			Hailey
+- Princess Zelda ALttP:			Unesag (child) & Lopieloo (adult)
+- Roll:					Psi-Hate
+- Ruby Rose:				Malon Rose (www.patreon.com/MalonRose & www.youtube.com/c/MalonRose)
+- Sans:					Ganondork & AeroArtwork
+- Saria:				Malon Rose (www.patreon.com/MalonRose & www.youtube.com/c/MalonRose)
+- Sashed:				AriaHiro64
 - Skyward Sword:			Skilarbabcock (www.youtube.com/user/skilarbabcock)
 - Sunny:				Unesag & Amara
 - Twilight Princess:			Skilarbabcock (www.youtube.com/user/skilarbabcock)
 - Zora Link:				spyfoxgames
-
---- Custom Female Models ---
-- Amara:				Amara, Karicyan
-- Aria the Demon:			AriaHiro64
-- Hat Kid:				Hailey
-- Hatsune Miku - Link:			JanexLane
-- Hatsune Miku - Vocaloid:		JanexLane
-- Malon 3D:				Karicyan
-- Malon Thicc:				Karicyan
-- Nabooru:				Hailey
-- Princess Ruto:			Unesag
-- Princess Zelda 3D:			Hailey
-- Princess Zelda ALttP (Child):		Unesag
-- Princess Zelda ALttP (Adult):		Lopieloo
-- Roll:					Psi-Hate
-- Ruby Rose:				Malon Rose (www.patreon.com/MalonRose & www.youtube.com/c/MalonRose)
-- Saria:				Malon Rose (www.patreon.com/MalonRose & www.youtube.com/c/MalonRose)
+- Everything else:			HylianModding Holiday Assets
+					(https://github.com/Admentus64/OcarinaofTimeOnline-HolidayAssets)
 
 --- Quality Assurance ---
 - Translations:				GhostlyDark
@@ -344,11 +347,24 @@
 - Admentus (Scripting and Assistance of all Options)
 
 --- Hylian Link Models ---
-- Ocarina of Time Eyes:			GhostlyDark
-- Adult Link:				Skilarbabcock (www.youtube.com/user/skilarbabcock)
-- Fierce Deity Link:			XModxGodX (ported) & UltIMa647
+- Adult Link (MM):			Skilarbabcock (www.youtube.com/user/skilarbabcock)
+- Diddy Kong:				Ikey Ilex
+- Elegy of Emptiness:			JerryWester
+- Fierce Deity Link:			UltIMa647
+- Game and Watch:			unesag
+- Glover:				Unesag
+- Hat Kid:				Hailey
 - Improved Link:			Skilarbabcock (www.youtube.com/user/skilarbabcock) & Nerrel
+- Improved Link + OoT Eyes:		Skilarbabcock (model), Nerrel (owner) & GhostlyDark (eyes)
+- Kristina Olivine:			Ikey Ilex	
+- Majora's Mask + OoT Eyes:		GhostlyDark (eyes)
 - Princess Zelda:			Unesag
+- Ocarina of Time:			Rando
+- Ocarina of Time + MM Eyes		Rando (model) & GhostlyDark (eyes)
+- Ocarina of Time Eyes:			GhostlyDark
+- Sans:					Ganondork & AeroArtwork
+- Everything else:			HylianModding Holiday Assets
+					(https://github.com/Admentus64/OcarinaofTimeOnline-HolidayAssets)
 
 --- Link Voices ---
 - Ocarina of Time Link:			Phantom Natsu

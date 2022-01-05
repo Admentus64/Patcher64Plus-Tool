@@ -9,7 +9,7 @@
 		"hylian_shield"	: 0
 	}, {
 		"name"		: "A Link to the Past",
-		"author"	: "Oni 3D Arts",
+		"author"	: "Oni 3D-Arts",
 		"url"		: "https://github.com/hylian-modding/Z64-CustomPlayerModels/blob/master/LICENSE",
 		"deku_shield"	: 0,
 		"hylian_shield"	: 0
@@ -136,7 +136,8 @@
 	}, {
 		"name"		: "Dark Link",
 		"source"	: "HylianModding Holiday Assets",
-		"url"		: "https://github.com/Admentus64/OcarinaofTimeOnline-HolidayAssets"
+		"url"		: "https://github.com/Admentus64/OcarinaofTimeOnline-HolidayAssets",
+		"deku_shield"	: 0
 	}, {
 		"name"		: "Day of the Dead",
 		"source"	: "HylianModding Holiday Assets",
@@ -155,6 +156,7 @@
 		"url"		: "https://github.com/Admentus64/OcarinaofTimeOnline-HolidayAssets"
 	}, {
 		"name"		: "Game and Watch",
+		"author"	: "unesag",
 		"source"	: "HylianModding Holiday Assets",
 		"url"		: "https://github.com/Admentus64/OcarinaofTimeOnline-HolidayAssets"
 	}, {
@@ -163,6 +165,7 @@
 		"url"		: "https://github.com/Admentus64/OcarinaofTimeOnline-HolidayAssets"
 	}, {
 		"name"		: "Gerudo Link",
+		"author"	: "Oni 3D-Arts",
 		"source"	: "HylianModding Holiday Assets",
 		"url"		: "https://github.com/Admentus64/OcarinaofTimeOnline-HolidayAssets"
 	}, {
@@ -238,7 +241,7 @@
 		"mirror_shield" : 0
 	}, {
 		"name"		: "A Link to the Past",
-		"author"	: "Oni 3D Arts",
+		"author"	: "Oni 3D-Arts",
 		"url"		: "https://github.com/hylian-modding/Z64-CustomPlayerModels/blob/master/LICENSE",
 		"hylian_shield"	: 0,
 		"mirror_shield"	: 0
@@ -386,6 +389,7 @@
 		"url"		: "https://github.com/Admentus64/OcarinaofTimeOnline-HolidayAssets"
 	}, {
 		"name"		: "Gerudo Link",
+		"author"	: "Oni-3D Arts",
 		"source"	: "HylianModding Holiday Assets",
 		"url"		: "https://github.com/Admentus64/OcarinaofTimeOnline-HolidayAssets"
 	}, {
