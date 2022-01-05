@@ -129,8 +129,6 @@
 - Sunny:				Unesag & Amara
 - Twilight Princess:			Skilarbabcock (www.youtube.com/user/skilarbabcock)
 - Zora Link:				spyfoxgames
-- Everything else:			HylianModding Holiday Assets
-					(https://github.com/Admentus64/OcarinaofTimeOnline-HolidayAssets)
 
 --- Quality Assurance ---
 - Translations:				GhostlyDark
@@ -363,8 +361,6 @@
 - Ocarina of Time + MM Eyes		Rando (model) & GhostlyDark (eyes)
 - Ocarina of Time Eyes:			GhostlyDark
 - Sans:					Ganondork & AeroArtwork
-- Everything else:			HylianModding Holiday Assets
-					(https://github.com/Admentus64/OcarinaofTimeOnline-HolidayAssets)
 
 --- Link Voices ---
 - Ocarina of Time Link:			Phantom Natsu

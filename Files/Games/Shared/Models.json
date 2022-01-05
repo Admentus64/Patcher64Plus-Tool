@@ -129,107 +129,7 @@
 		"name"		: "Twilight Princess",
 		"author"	: "Skilarbabcock",
 		"url"		: "https://www.youtube.com/user/skilarbabcock"
-	}, {
-		"name"		: "Alien Abducted Link",
-		"source"	: "HylianModding Holiday Assets",
-		"url"		: "https://github.com/Admentus64/OcarinaofTimeOnline-HolidayAssets"
-	}, {
-		"name"		: "Dark Link",
-		"source"	: "HylianModding Holiday Assets",
-		"url"		: "https://github.com/Admentus64/OcarinaofTimeOnline-HolidayAssets",
-		"deku_shield"	: 0
-	}, {
-		"name"		: "Day of the Dead",
-		"source"	: "HylianModding Holiday Assets",
-		"url"		: "https://github.com/Admentus64/OcarinaofTimeOnline-HolidayAssets"
-	}, {
-		"name"		: "Deprived Link",
-		"source"	: "HylianModding Holiday Assets",
-		"url"		: "https://github.com/Admentus64/OcarinaofTimeOnline-HolidayAssets"
-	}, {
-		"name"		: "Eevee Link",
-		"source"	: "HylianModding Holiday Assets",
-		"url"		: "https://github.com/Admentus64/OcarinaofTimeOnline-HolidayAssets"
-	}, {
-		"name"		: "Faux Hero",
-		"source"	: "HylianModding Holiday Assets",
-		"url"		: "https://github.com/Admentus64/OcarinaofTimeOnline-HolidayAssets"
-	}, {
-		"name"		: "Game and Watch",
-		"author"	: "unesag",
-		"source"	: "HylianModding Holiday Assets",
-		"url"		: "https://github.com/Admentus64/OcarinaofTimeOnline-HolidayAssets"
-	}, {
-		"name"		: "Garo Link",
-		"source"	: "HylianModding Holiday Assets",
-		"url"		: "https://github.com/Admentus64/OcarinaofTimeOnline-HolidayAssets"
-	}, {
-		"name"		: "Gerudo Link",
-		"author"	: "Oni 3D-Arts",
-		"source"	: "HylianModding Holiday Assets",
-		"url"		: "https://github.com/Admentus64/OcarinaofTimeOnline-HolidayAssets"
-	}, {
-		"name"		: "Ghost Link",
-		"source"	: "HylianModding Holiday Assets",
-		"url"		: "https://github.com/Admentus64/OcarinaofTimeOnline-HolidayAssets"
-	}, {
-		"name"		: "Mage Link",
-		"source"	: "HylianModding Holiday Assets",
-		"url"		: "https://github.com/Admentus64/OcarinaofTimeOnline-HolidayAssets"
-	}, {
-		"name"		: "Malon Christmas",
-		"source"	: "HylianModding Holiday Assets",
-		"url"		: "https://github.com/Admentus64/OcarinaofTimeOnline-HolidayAssets",
-		"deku_shield"	: 0
-	}, {
-		"name"		: "Ness",
-		"source"	: "HylianModding Holiday Assets",
-		"url"		: "https://github.com/Admentus64/OcarinaofTimeOnline-HolidayAssets"
-	}, {
-		"name"		: "Pikachu Link",
-		"source"	: "HylianModding Holiday Assets",
-		"url"		: "https://github.com/Admentus64/OcarinaofTimeOnline-HolidayAssets"
-	}, {
-		"name"		: "Princess Ruto Christmas",
-		"source"	: "HylianModding Holiday Assets",
-		"url"		: "https://github.com/Admentus64/OcarinaofTimeOnline-HolidayAssets"
-	}, {
-		"name"		: "Princess Zelda Christmas",
-		"source"	: "HylianModding Holiday Assets",
-		"url"		: "https://github.com/Admentus64/OcarinaofTimeOnline-HolidayAssets"
-	}, {
-		"name"		: "Pumpkin Link",
-		"source"	: "HylianModding Holiday Assets",
-		"url"		: "https://github.com/Admentus64/OcarinaofTimeOnline-HolidayAssets"
-	}, {
-		"name"		: "Robin",
-		"source"	: "HylianModding Holiday Assets",
-		"url"		: "https://github.com/Admentus64/OcarinaofTimeOnline-HolidayAssets"
-	}, {
-		"name"		: "Santa Link",
-		"author"	: "HylianModding Holiday Assets Repository",
-		"url"		: "https://github.com/Admentus64/OcarinaofTimeOnline-HolidayAssets"
-	}, {
-		"name"		: "Saria Christmas",
-		"source"	: "HylianModding Holiday Assets",
-		"url"		: "https://github.com/Admentus64/OcarinaofTimeOnline-HolidayAssets"
-	}, {
-		"name"		: "Waluigi Christmas",
-		"source"	: "HylianModding Holiday Assets",
-		"url"		: "https://github.com/Admentus64/OcarinaofTimeOnline-HolidayAssets"
-	}, {
-		"name"		: "Winter Link",
-		"source"	: "HylianModding Holiday Assets",
-		"url"		: "https://github.com/Admentus64/OcarinaofTimeOnline-HolidayAssets"
-	}, {
-		"name"		: "Wolf",
-		"source"	: "HylianModding Holiday Assets",
-		"url"		: "https://github.com/Admentus64/OcarinaofTimeOnline-HolidayAssets"
-	}, {
-		"name"		: "Wolf Link Kigurumi",
-		"source"	: "HylianModding Holiday Assets",
-		"url"		: "https://github.com/Admentus64/OcarinaofTimeOnline-HolidayAssets"
-	} ],
+	}],
 	
 	"adult" : [ {
 		"name"		: "Original",
@@ -258,11 +158,6 @@
 		"name"		: "Breath of the Wild",
 		"author"	: "Skilarbabcock",
 		"url"		: "https://www.youtube.com/user/skilarbabcock"
-	}, {
-		"name"		: "Dark Hyrule Fantasy",
-		"author"	: "E-Gor & Spire",
-		"hylian_shield"	: 0,
-		"mirror_shield"	: 0
 	}, {
 		"name"		: "Dark Link",
 		"author"	: "CrookedPoe"
@@ -329,9 +224,6 @@
 		"name"		: "Princess Zelda 3D",
 		"author"	: "Hailey"
 	}, {
-		"name"		: "Princess Zelda Christmas",
-		"author"	: "Hailey"
-	}, {
 		"name"		: "Princess Zelda ALttP",
 		"author"	: "Lopieloo"
 	}, {
@@ -345,12 +237,6 @@
 		"mirror_shield"	: 0
 	}, {
 		"name"		: "Saria",
-		"author"	: "Malon Rose",
-		"url"		: "https://youtube.com/c/MalonRose{0}https://www.patreon.com/MalonRose",
-		"hylian_shield"	: 0,
-		"mirror_shield"	: 0
-	}, {
-		"name"		: "Saria Nostalgic",
 		"author"	: "Malon Rose",
 		"url"		: "https://youtube.com/c/MalonRose{0}https://www.patreon.com/MalonRose",
 		"hylian_shield"	: 0,
@@ -375,94 +261,5 @@
 		"name"		: "Zora Link",
 		"author"	: "spyfoxgames",
 		"hylian_shield"	: 0
-	}, {
-		"name"		: "Batman",
-		"source"	: "HylianModding Holiday Assets",
-		"url"		: "https://github.com/Admentus64/OcarinaofTimeOnline-HolidayAssets"
-	}, {
-		"name"		: "Day of the Dead",
-		"source"	: "HylianModding Holiday Assets",
-		"url"		: "https://github.com/Admentus64/OcarinaofTimeOnline-HolidayAssets"
-	}, {
-		"name"		: "Flareon Link",
-		"source"	: "HylianModding Holiday Assets",
-		"url"		: "https://github.com/Admentus64/OcarinaofTimeOnline-HolidayAssets"
-	}, {
-		"name"		: "Gerudo Link",
-		"author"	: "Oni-3D Arts",
-		"source"	: "HylianModding Holiday Assets",
-		"url"		: "https://github.com/Admentus64/OcarinaofTimeOnline-HolidayAssets"
-	}, {
-		"name"		: "Glaceon Link",
-		"source"	: "HylianModding Holiday Assets",
-		"url"		: "https://github.com/Admentus64/OcarinaofTimeOnline-HolidayAssets"
-	}, {
-		"name"		: "Goku Super Saiyan 4",
-		"source"	: "HylianModding Holiday Assets",
-		"url"		: "https://github.com/Admentus64/OcarinaofTimeOnline-HolidayAssets"
-	}, {
-		"name"		: "Jolteon Link",
-		"source"	: "HylianModding Holiday Assets",
-		"url"		: "https://github.com/Admentus64/OcarinaofTimeOnline-HolidayAssets"
-	}, {
-		"name"		: "Kangaskhan Carrying Link",
-		"source"	: "HylianModding Holiday Assets",
-		"url"		: "https://github.com/Admentus64/OcarinaofTimeOnline-HolidayAssets"
-	}, {
-		"name"		: "Leon Kennedy",
-		"source"	: "HylianModding Holiday Assets",
-		"url"		: "https://github.com/Admentus64/OcarinaofTimeOnline-HolidayAssets"
-	}, {
-		"name"		: "Luigi Link",
-		"source"	: "HylianModding Holiday Assets",
-		"url"		: "https://github.com/Admentus64/OcarinaofTimeOnline-HolidayAssets"
-	}, {
-		"name"		: "Marin",
-		"source"	: "HylianModding Holiday Assets",
-		"url"		: "https://github.com/Admentus64/OcarinaofTimeOnline-HolidayAssets"
-	}, {
-		"name"		: "Princess Zelda CDI",
-		"source"	: "HylianModding Holiday Assets",
-		"url"		: "https://github.com/Admentus64/OcarinaofTimeOnline-HolidayAssets"
-	}, {
-		"name"		: "Santa Link",
-		"source"	: "HylianModding Holiday Assets",
-		"url"		: "https://github.com/Admentus64/OcarinaofTimeOnline-HolidayAssets"
-	}, {
-		"name"		: "Sephiroth",
-		"source"	: "HylianModding Holiday Assets",
-		"url"		: "https://github.com/Admentus64/OcarinaofTimeOnline-HolidayAssets"
-	}, {
-		"name"		: "Smash 64",
-		"source"	: "HylianModding Holiday Assets",
-		"url"		: "https://github.com/Admentus64/OcarinaofTimeOnline-HolidayAssets"
-	}, {
-		"name"		: "Snow Hunter",
-		"source"	: "HylianModding Holiday Assets",
-		"url"		: "https://github.com/Admentus64/OcarinaofTimeOnline-HolidayAssets"
-	}, {
-		"name"		: "Spider-Link",
-		"source"	: "HylianModding Holiday Assets",
-		"url"		: "https://github.com/Admentus64/OcarinaofTimeOnline-HolidayAssets"
-	}, {
-		"name"		: "Sylveon Link",
-		"source"	: "HylianModding Holiday Assets",
-		"url"		: "https://github.com/Admentus64/OcarinaofTimeOnline-HolidayAssets"
-	}, {
-		"name"		: "Symbiote Link",
-		"source"	: "HylianModding Holiday Assets",
-		"url"		: "https://github.com/Admentus64/OcarinaofTimeOnline-HolidayAssets"
-	}, {
-		"name"		: "Tron Bonne",
-		"source"	: "HylianModding Holiday Assets",
-		"url"		: "https://github.com/Admentus64/OcarinaofTimeOnline-HolidayAssets"
-	}, {
-		"name"		: "Vaporeon Link",
-		"source"	: "HylianModding Holiday Assets",
-		"url"		: "https://github.com/Admentus64/OcarinaofTimeOnline-HolidayAssets"
-	}, {
-		"name"		: "Woody Link",
-		"source"	: "HylianModding Holiday Assets",
-		"url"		: "https://github.com/Admentus64/OcarinaofTimeOnline-HolidayAssets"
 	} ]
 } ]
