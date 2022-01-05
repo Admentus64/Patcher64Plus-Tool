@@ -100,8 +100,6 @@
 - Dark Link Smash:			Mikus64
 - Elegy of Emptiness:			JerryWester
 - Fierce Deity:				UltIMa647 (child) & CrookedPoe (ported adult)
-- Game and Watch:			unesag
-- Gerudo Link:				Oni 3D-Arts
 - Happy Mask Salesman:			Anubis-V1
 - Hat Kid:				Hailey
 - Hatsune Miku Link:			JanexLane
@@ -349,7 +347,6 @@
 - Diddy Kong:				Ikey Ilex
 - Elegy of Emptiness:			JerryWester
 - Fierce Deity Link:			UltIMa647
-- Game and Watch:			unesag
 - Glover:				Unesag
 - Hat Kid:				Hailey
 - Improved Link:			Skilarbabcock (www.youtube.com/user/skilarbabcock) & Nerrel
