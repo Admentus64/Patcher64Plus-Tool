@@ -14,3 +14,11 @@ Files/Games/Majora's Mask/Custom Text/*.tbl
 *.7z
 *.htm
 *.html
+*.nes
+*.sfc
+*.smc
+*.gbc
+*.n64
+*.v64
+*.z64
+*.wad
