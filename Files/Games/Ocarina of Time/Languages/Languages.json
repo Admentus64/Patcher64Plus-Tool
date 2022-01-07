@@ -1,5 +1,6 @@
 [ {
 	"title"			: "English",
+	"default"		: 1,
 	"code"			: "en",
 	"script_start"		: "92D000",
 	"script_length"		: "38130",
