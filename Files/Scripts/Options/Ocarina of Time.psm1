@@ -319,9 +319,9 @@ function ByteOptions() {
         ChangeBytes -Offset "B6CA20" -Values "03" # Dungeon Icon - Shadow Temple        ChangeBytes -Offset "B6CA22" -Values "03" # Dungeon Icon - Water Temple               ChangeBytes -Offset "B6CA26" -Values "03" # Dungeon Icon - ?
     }#>
 
-    if ( (IsChecked $Redux.Hide.Rupees) -or (IsChecked $Redux.Hide.Interface) )        { ChangeBytes -Offset "AEB7B0" -Values "24 0C 03 1A" } # Rupees - Icon; ChangeBytes -Offset "AEBC48" -Values "24 0D 01 CE" # Rupees - Text (Y pos)
-    if ( (IsChecked $Redux.Hide.DungeonKeys) -or (IsChecked $Redux.Hide.Interface) )   { ChangeBytes -Offset "AEB8AC" -Values "24 0F 03 1A" } # Key - Icon; ChangeBytes -Offset "AEBA00" -Values "24 19 01 BE" # Key - Text (Y pos)
-    if ( (IsChecked $Redux.Hide.Credits) -or (IsChecked $Redux.Hide.Interface) )       { PatchBytes  -Offset "966000" -Patch "Message\credits.bin" }
+    if ( (IsChecked $Redux.Hide.Rupees)      -or (IsChecked $Redux.Hide.Interface) )   { ChangeBytes -Offset "AEB7B0" -Values "24 0C 03 1A"; ChangeBytes -Offset "AEBC48" -Values "24 0D 01 CE" } # Rupees - Icon / Rupees - Text (Y pos)
+    if ( (IsChecked $Redux.Hide.DungeonKeys) -or (IsChecked $Redux.Hide.Interface) )   { ChangeBytes -Offset "AEB8AC" -Values "24 0F 03 1A"; ChangeBytes -Offset "AEBA00" -Values "24 19 01 BE" } # Key    - Icon / Key    - Text (Y pos)
+    if ( (IsChecked $Redux.Hide.Credits)     -or (IsChecked $Redux.Hide.Interface) )   { PatchBytes  -Offset "966000" -Patch "Message\credits.bin" }
 
 
 
