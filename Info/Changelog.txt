@@ -1,7 +1,8 @@
-v16.0.0 #6
+v16.0.0 #7
 - Updated languages patches for OoT & MM
 - Updated Redux for Zelda 1
 - Fixed issue with patching "Feminine Animations", "Faster Climbing", "Run While Shielding" & hide HUD options for OoT
+- Fixed issue with "Zora Jump Attack" for MM
 - Fixed issue with patching options for Zelda 1 & 2
 - Fixed issue with logging not working
 

@@ -301,16 +301,10 @@
 - Improvements:				GhostlyDark
 
 --- Additional Options ---
-- Master Quest Remix:			Admentus (porting) & DeathBasket (maps / patch)
-- 16:9 Backgrounds & Textures:		GhostlyDark & ShadowOne333
-- Enhanced 16:9 Widescreen:		gamemasterplc & GhostlyDark
-- Kokiri Tunic Color:			GhostlyDark
-- Recolor Mask Forms:			Admentus, ShadowOne333 & Garo-Mastah
 - Zora Physics:				ShadowOne333
-- Frontflip Jump:			SoulofDeity
+- Use Items With Mask Forms:		Firebreather
 - Jump Attack:				Admentus (ported), SoulofDeity & Aegiker
-- No Item Drops:			Admentus & BilonFullHDemon
-- Restore Palace Route:			ShadowOne333
+- Frontflip Jump:			SoulofDeity
 - Correct Rupee Colors:			GhostlyDark
 - Restore Cow Nose Ring:		ShadowOne333
 - Correct Romani Sign:			ShadowOne333
@@ -321,20 +315,27 @@
 - Move Bomber Kid:			ShadowOne333
 - Fix Mushroom Bottle:			ozidual
 - Fix Southern Swamp:			ShadowOne333
-- Goht Awakening:			ShadowOne333
-- Unused Cutscenes:			Chez Cousteau
 - Fix Fairy Fountain:			Dybbles (fix) & ShadowOne333 (ROM / patch)
 - Always Best Ending:			Marcelo20XX
+- Map Select & Item Select:		GhostlyDark
+- Goht Awakening:			ShadowOne333
+- Unused Cutscenes:			Chez Cousteau
+- 16:9 Widescreen (Advanced):		gamemasterplc & GhostlyDark
+- 16:9 Backgrounds & Textures:		GhostlyDark & ShadowOne333
 - OoT HUD Icons:			GhostlyDark (ported)
 - Button Sizes:				GhostlyDark
 - Button Styles:			GhostlyDark, Djipi, Community, Nerrel, Federelli
 - Magic Meter Styles:			GhostlyDark, azred, Nerrel
 - Hide HUD:				Marcelo20XX
-- Disable SFX Effects:			Marcelo20XX
+- No Item Drops:			Admentus & BilonFullHDemon
+- Restore Palace Route:			ShadowOne333
+- Kokiri Tunic Color:			GhostlyDark
+- Recolor Mask Forms:			Admentus, ShadowOne333 & Garo-Mastah
 - Fairy Colors:				Dzeko
 - Spin Attack Colors:			Dzeko
 - Set Capacity:				GhostlyDark
 - Permanent Razor Sword:		darklord92
+- Master Quest Remix:			Admentus (porting) & DeathBasket (maps / patch)
 - Restore Text:				ShadowOne333
 - Adult Pronouns:			Skilarbabcock (www.youtube.com/user/skilarbabcock)
 - Correct Circus Mask:			ShadowOne333
