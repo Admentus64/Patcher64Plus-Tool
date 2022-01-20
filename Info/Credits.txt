@@ -98,7 +98,6 @@
 - Breath of the Wild:			Skilarbabcock (www.youtube.com/user/skilarbabcock)
 - Dark Link:				CrookedPoe (adult)
 - Dark Link Smash:			Mikus64
-- Elegy of Emptiness:			JerryWester
 - Fierce Deity:				UltIMa647 (child) & CrookedPoe (ported adult)
 - Happy Mask Salesman:			Anubis-V1
 - Hat Kid:				Hailey
@@ -357,7 +356,6 @@
 - Ocarina of Time:			Rando
 - Ocarina of Time + MM Eyes		Rando (model) & GhostlyDark (eyes)
 - Ocarina of Time Eyes:			GhostlyDark
-- Sans:					Ganondork & AeroArtwork
 
 --- Link Voices ---
 - Ocarina of Time Link:			Phantom Natsu
