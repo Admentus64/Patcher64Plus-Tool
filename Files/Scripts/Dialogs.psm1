@@ -1,4 +1,4 @@
-function CreateOptionsDialog([byte]$Columns, [int32]$Height, [Array]$Tabs=@()) {
+﻿function CreateOptionsDialog([byte]$Columns, [int32]$Height, [Array]$Tabs=@()) {
     
     # Create Dialog
     if ( (IsSet $Columns) -and (IsSet $Height) )   { $global:OptionsDialog = CreateDialog -Width ($FormDistance * $Columns + (DPISize 60)) -Height (DPISize $Height) }
@@ -9,7 +9,8 @@ function CreateOptionsDialog([byte]$Columns, [int32]$Height, [Array]$Tabs=@()) {
     $X = $OptionsDialog.Width / 2 - (DPISize 40)
     $Y = $OptionsDialog.Height - (DPISize 90)
     $CloseButton = CreateButton -X $X -Y $Y -Width (DPISize 80) -Height (DPISize 35) -Text "Close" -AddTo $OptionsDialog
-    $CloseButton.Add_Click( {$OptionsDialog.Hide() })
+
+    $CloseButton.Add_Click( { StopJobs; $OptionsDialog.Hide() })
 
     # Options Label
     $global:OptionsLabel = CreateLabel -Y (DPISize 15) -Width $OptionsDialog.width -Height (DPISize 15) -Font $Fonts.SmallBold -Text ($GameType.mode + " - Additional Options") -AddTo $OptionsDialog
@@ -52,7 +53,8 @@ function CreateLanguageContent($Columns=[byte][Math]::Round($Redux.Panel.Width /
             }
             if (IsSet $file[$i].warning)   { $warning = ([string]::Format($file[$i].warning, [Environment]::NewLine)) }
             else                           { $warning = $null }
-            $Redux.Language[$i] = CreateReduxRadioButton -Column ($Column+1) -Row $Row -Text $file[$i].title -Info ("Play the game in " + $file[$i].title) -Warning $warning -Name $file[$i].title -Credits $file[$i].credits -SaveTo "Translation"
+            if ($file[$i].default -eq 1)   { $Redux.Language[$i] = CreateReduxRadioButton -Column ($Column+1) -Row $Row -Text $file[$i].title -Info ("Play the game in " + $file[$i].title) -Warning $warning -Name $file[$i].title -Credits $file[$i].credits -SaveTo "Translation" -Checked }
+            else                           { $Redux.Language[$i] = CreateReduxRadioButton -Column ($Column+1) -Row $Row -Text $file[$i].title -Info ("Play the game in " + $file[$i].title) -Warning $warning -Name $file[$i].title -Credits $file[$i].credits -SaveTo "Translation" }
         }
     
         $HasDefault = $False
@@ -94,8 +96,6 @@ function CreateCreditsDialog() {
     $Credits.Sections += CreatePanel   -X $Credits.Sections[0].Left -Y $Credits.Sections[0].Top -Width $Credits.Sections[0].Width -Height $Credits.Sections[0].Height -AddTo $CreditsDialog -Tag "Misc"
     $Credits.Sections += CreatePanel   -X $Credits.Sections[0].Left -Y $Credits.Sections[0].Top -Width $Credits.Sections[0].Width -Height $Credits.Sections[0].Height -AddTo $CreditsDialog -Tag "Checksum"
 
-
-
     # Support
     $SupportLabel  = CreateLabel -X (DPISize 10)         -Y (DPISize 10)                          -Width (DPISize 200) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("--- Support or visit me at ---")   -AddTo $Credits.Sections[3]
 
@@ -127,29 +127,42 @@ function CreateCreditsDialog() {
 
 
     # Documentation
-    $SourcesLabel = CreateLabel -X (DPISize 10)        -Y ($PayPal2Label.Bottom + (DPISize 80)) -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("--- Sources ---")                                                                     -AddTo $Credits.Sections[3]
+    $SourcesLabel    = CreateLabel -X (DPISize 10)        -Y ($PayPal2Label.Bottom + (DPISize 80)) -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("--- Sources ---")                                                                     -AddTo $Credits.Sections[3]
     
-    $Shadow1Label = CreateLabel -X (DPISize 10)        -Y ($SourcesLabel.Bottom + (DPISize 2))  -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("ShadowOne333's GitHub")                                                               -AddTo $Credits.Sections[3]
-    $Shadow2Label = CreateLabel -X $Shadow1Label.Right -Y ($SourcesLabel.Bottom + (DPISize 2))  -Width (DPISize 340) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("https://github.com/ShadowOne333/Zelda64-Redux-Documentation")                         -AddTo $Credits.Sections[3]
+    $Shadow1Label    = CreateLabel -X (DPISize 10)        -Y ($SourcesLabel.Bottom  + (DPISize 2)) -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("ShadowOne333's GitHub")                                                               -AddTo $Credits.Sections[3]
+    $Shadow2Label    = CreateLabel -X $Shadow1Label.Right -Y ($SourcesLabel.Bottom  + (DPISize 2)) -Width (DPISize 340) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("https://github.com/ShadowOne333/Zelda64-Redux-Documentation")                         -AddTo $Credits.Sections[3]
     
-    $Female1Label = CreateLabel -X (DPISize 10)        -Y ($Shadow1Label.Bottom + (DPISize 2))  -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("Feminine Pronouns Script`nBy Mil") -AddTo $Credits.Sections[3]
-    $Female2Label = CreateLabel -X $Female1Label.Right -Y ($Shadow1Label.Bottom + (DPISize 2))  -Width (DPISize 300) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("https://docs.google.com/spreadsheets/d/1Ihccm8noxsfHZfN1E3Gkccov1F27WXXxl-rxOuManUk") -AddTo $Credits.Sections[3]
+    $Female1Label    = CreateLabel -X (DPISize 10)        -Y ($Shadow1Label.Bottom  + (DPISize 2)) -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("Feminine Pronouns Script`nBy Mil")                                                    -AddTo $Credits.Sections[3]
+    $Female2Label    = CreateLabel -X $Female1Label.Right -Y ($Shadow1Label.Bottom  + (DPISize 2)) -Width (DPISize 470) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("https://docs.google.com/spreadsheets/d/1Ihccm8noxsfHZfN1E3Gkccov1F27WXXxl-rxOuManUk") -AddTo $Credits.Sections[3]
 
-    $Skilar1Label = CreateLabel -X (DPISize 10)        -Y ($Female1Label.Bottom + (DPISize 2))  -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("Skilarbabcock's YouTube")                                                             -AddTo $Credits.Sections[3]
-    $Skilar2Label = CreateLabel -X $Skilar1Label.Right -Y ($Female1Label.Bottom + (DPISize 2))  -Width (DPISize 225) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("https://www.youtube.com/user/skilarbabcock")                                          -AddTo $Credits.Sections[3]
+    $Skilar1Label    = CreateLabel -X (DPISize 10)        -Y ($Female1Label.Bottom  + (DPISize 2)) -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("Skilarbabcock's YouTube")                                                             -AddTo $Credits.Sections[3]
+    $Skilar2Label    = CreateLabel -X $Skilar1Label.Right -Y ($Female1Label.Bottom  + (DPISize 2)) -Width (DPISize 225) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("https://www.youtube.com/user/skilarbabcock")                                          -AddTo $Credits.Sections[3]
 
-    $Malon1Label  = CreateLabel -X (DPISize 10)        -Y ($Skilar1Label.Bottom + (DPISize 2))  -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("Malon Rose YouTube")                                                                  -AddTo $Credits.Sections[3]
-    $Malon2Label  = CreateLabel -X $Skilar1Label.Right -Y ($Skilar2Label.Bottom + (DPISize 2))  -Width (DPISize 225) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("https://www.youtube.com/c/MalonRose")                                                 -AddTo $Credits.Sections[3]
+    $Malon1Label     = CreateLabel -X (DPISize 10)        -Y ($Skilar1Label.Bottom  + (DPISize 2)) -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("Malon Rose YouTube")                                                                  -AddTo $Credits.Sections[3]
+    $Malon2Label     = CreateLabel -X $Skilar1Label.Right -Y ($Skilar2Label.Bottom  + (DPISize 2)) -Width (DPISize 225) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("https://www.youtube.com/c/MalonRose")                                                 -AddTo $Credits.Sections[3]
 
-    $Luigi1Label  = CreateLabel -X (DPISize 10)        -Y ($Malon1Label.Bottom  + (DPISize 2))  -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("theluigidude2007 YouTube")                                                            -AddTo $Credits.Sections[3]
-    $Luigi2Label  = CreateLabel -X $Malon1Label.Right  -Y ($Malon2Label.Bottom  + (DPISize 2))  -Width (DPISize 225) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("www.youtube.com/channel/UC3071imQKR5cEIobsFHLW9Q")                                    -AddTo $Credits.Sections[3]
+    $Luigi1Label     = CreateLabel -X (DPISize 10)        -Y ($Malon1Label.Bottom   + (DPISize 2)) -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("theluigidude2007 YouTube")                                                            -AddTo $Credits.Sections[3]
+    $Luigi2Label     = CreateLabel -X $Malon1Label.Right  -Y ($Malon2Label.Bottom   + (DPISize 2)) -Width (DPISize 300) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("www.youtube.com/channel/UC3071imQKR5cEIobsFHLW9Q")                                    -AddTo $Credits.Sections[3]
 
-    $Shadow2Label.add_Click( { [system.Diagnostics.Process]::start("https://github.com/ShadowOne333/Zelda64-Redux-Documentation") } )
-    $Female2Label.add_Click( { [system.Diagnostics.Process]::start("https://docs.google.com/spreadsheets/d/1Ihccm8noxsfHZfN1E3Gkccov1F27WXXxl-rxOuManUk") } )
-    $Skilar2Label.add_Click( { [system.Diagnostics.Process]::start("https://www.youtube.com/user/skilarbabcock") } )
-    $Malon2Label.add_Click(  { [system.Diagnostics.Process]::start("https://www.youtube.com/c/MalonRose") } )
-    $Luigi2Label.add_Click(  { [system.Diagnostics.Process]::start("www.youtube.com/channel/UC3071imQKR5cEIobsFHLW9Q") } )
-    $Shadow2Label.ForeColor = $Female2Label.ForeColor = $Skilar2Label.ForeColor = $Malon2Label.ForeColor = $Luigi2Label.ForeColor = "Blue"
+    $Darunia1Label   = CreateLabel -X (DPISize 10)        -Y ($Luigi1Label.Bottom   + (DPISize 2)) -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("Darunias Joy GitHub")                                                                 -AddTo $Credits.Sections[3]
+    $Darunia2Label   = CreateLabel -X $Malon1Label.Right  -Y ($Luigi2Label.Bottom   + (DPISize 2)) -Width (DPISize 275) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("https://github.com/DaruniasJoy/OoT-Custom-Sequences")                                 -AddTo $Credits.Sections[3]
+
+    $Fish1Label      = CreateLabel -X (DPISize 10)        -Y ($Darunia1Label.Bottom + (DPISize 2)) -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("Fish-waffle64's GitHub")                                                              -AddTo $Credits.Sections[3]
+    $Fish2Label      = CreateLabel -X $Malon1Label.Right  -Y ($Darunia2Label.Bottom + (DPISize 2)) -Width (DPISize 260) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("https://github.com/Fish-waffle64/Feeshs-MM-Music")                                    -AddTo $Credits.Sections[3]
+
+    $LuigiHero1Label = CreateLabel -X (DPISize 10)        -Y ($Fish1Label.Bottom    + (DPISize 2)) -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("LuigiXHero's GitHub")                                                                 -AddTo $Credits.Sections[3]
+    $LuigiHero2Label = CreateLabel -X $Malon1Label.Right  -Y ($Fish2Label.Bottom    + (DPISize 2)) -Width (DPISize 300) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("https://github.com/LuigiXHero/OoT-Randomizer-Music-Pack")                             -AddTo $Credits.Sections[3]
+
+    $Shadow2Label.add_Click(    { [system.Diagnostics.Process]::start("https://github.com/ShadowOne333/Zelda64-Redux-Documentation") } )
+    $Female2Label.add_Click(    { [system.Diagnostics.Process]::start("https://docs.google.com/spreadsheets/d/1Ihccm8noxsfHZfN1E3Gkccov1F27WXXxl-rxOuManUk") } )
+    $Skilar2Label.add_Click(    { [system.Diagnostics.Process]::start("https://www.youtube.com/user/skilarbabcock") } )
+    $Malon2Label.add_Click(     { [system.Diagnostics.Process]::start("https://www.youtube.com/c/MalonRose") } )
+    $Luigi2Label.add_Click(     { [system.Diagnostics.Process]::start("https://www.youtube.com/channel/UC3071imQKR5cEIobsFHLW9Q") } )
+    $Darunia2Label.add_Click(   { [system.Diagnostics.Process]::start("https://github.com/DaruniasJoy/OoT-Custom-Sequences") } )
+    $Fish2Label.add_Click(      { [system.Diagnostics.Process]::start("https://github.com/Fish-waffle64/Feeshs-MM-Music") } )
+    $LuigiHero2Label.add_Click( { [system.Diagnostics.Process]::start("https://github.com/LuigiXHero/OoT-Randomizer-Music-Pack") } )
+
+    $Shadow2Label.ForeColor = $Female2Label.ForeColor = $Skilar2Label.ForeColor = $Malon2Label.ForeColor = $Luigi2Label.ForeColor = $Darunia2Label.ForeColor = $Fish2Label.ForeColor = $LuigiHero2Label.ForeColor = "Blue"
 
 
     
@@ -176,6 +189,9 @@ function CreateCreditsDialog() {
     $VerificationInfo.SupportField          = CreateTextBox -X $VerificationInfo.SupportText.Right -Y ($VerificationInfo.SupportText.Top - (DPISize 3)) -Width ($Credits.Sections[4].Width - $VerificationInfo.SupportText.Width - (DPISize 100)) -Height (DPISize 50) -Text "No ROM Selected" -AddTo $Credits.Sections[4]
     $VerificationInfo.SupportField.ReadOnly = $True
 
+    SetCreditsSections
+    CalculateHashSum
+
 }
 
 
@@ -184,7 +200,7 @@ function CreateCreditsDialog() {
 function CreateSettingsDialog() {
     
     # Create Dialog
-    $global:SettingsDialog = CreateDialog -Width (DPISize 560) -Height (DPISize 610) -Icon $Files.icon.settings
+    $global:SettingsDialog = CreateDialog -Width (DPISize 560) -Height (DPISize 580) -Icon $Files.icon.settings
     $CloseButton = CreateButton -X ($SettingsDialog.Width / 2 - (DPISize 40)) -Y ($SettingsDialog.Height - (DPISize 90)) -Width (DPISize 80) -Height (DPISize 35) -Text "Close" -AddTo $SettingsDialog
     $CloseButton.Add_Click({ $SettingsDialog.Hide() })
 
@@ -205,11 +221,10 @@ function CreateSettingsDialog() {
     
 
     # Advanced Settings
-    $GeneralSettings.Box                 = CreateReduxGroup -Y ($GeneralSettings.Box.Bottom + (DPISize 10)) -IsGame $False -Height 2 -AddTo $SettingsDialog -Text "Advanced Settings"
+    $GeneralSettings.Box                 = CreateReduxGroup -Y ($GeneralSettings.Box.Bottom + (DPISize 10)) -IsGame $False -Height 1 -AddTo $SettingsDialog -Text "Advanced Settings"
     $GeneralSettings.IgnoreChecksum      = CreateSettingsCheckbox -Name "IgnoreChecksum"   -Column 1 -Row 1 -Text "Ignore Input Checksum" -IsDebug -Info "Do not check the checksum of a ROM or WAD and patch it regardless`nDowngrade is no longer forced anymore if the checksum is different than the supported revision`nThis option also skips the maximum ROM size verification`n`nDO NOT REPORT ANY BUGS IF THIS OPTION IS ENABLED!"
-    $GeneralSettings.KeepLogo            = CreateSettingsCheckbox -Name "KeepLogo"         -Column 2 -Row 1 -Text "Keep Logo"             -IsDebug -Info "Keep the vanilla title logo instead of the Master Quest title logo if Master Quest is being patched in"
-    $GeneralSettings.ForceExtract        = CreateSettingsCheckbox -Name "ForceExtract"     -Column 3 -Row 1 -Text "Force Extract"         -IsDebug -Info "Always extract game data required for patching even if it was already extracted on a previous run"
-    $GeneralSettings.ForceOptions        = CreateSettingsCheckbox -Name "ForceOptions"     -Column 1 -Row 2 -Text "Force Show Options"    -IsDebug -Info ("Always show the " + '"Additional Options"' + " checkbox if it can be supported`n`nDO NOT REPORT ANY BUGS IF THIS OPTION IS ENABLED!")
+    $GeneralSettings.ForceExtract        = CreateSettingsCheckbox -Name "ForceExtract"     -Column 2 -Row 1 -Text "Force Extract"         -IsDebug -Info "Always extract game data required for patching even if it was already extracted on a previous run"
+    $GeneralSettings.ForceOptions        = CreateSettingsCheckbox -Name "ForceOptions"     -Column 3 -Row 1 -Text "Force Show Options"    -IsDebug -Info ("Always show the " + '"Additional Options"' + " checkbox if it can be supported`n`nDO NOT REPORT ANY BUGS IF THIS OPTION IS ENABLED!")
 
     # Debug Settings
     $GeneralSettings.Box                 = CreateReduxGroup -Y ($GeneralSettings.Box.Bottom + (DPISize 10)) -IsGame $False -Height 3 -AddTo $SettingsDialog -Text "Debug Settings"
@@ -406,9 +421,9 @@ function CreateSettingsRadioField([byte]$Column=1, [byte]$Row=1, [switch]$Checke
 function CreateErrorDialog([string]$Error, [boolean]$Fatal=$True, [boolean]$Once=$False) {
     
     # Create Dialog
-    $ErrorDialog = CreateDialog -Width (DPISize 400) -Height (DPISize 220) -Icon $null
+    $ErrorDialog = CreateDialog -Width 900 -Height 700 -Icon $null
 
-    $CloseButton = CreateButton -X ($ErrorDialog.Width / 2 - (DPISize 40)) -Y ($ErrorDialog.Height - (DPISize 90)) -Width (DPISize 80) -Height (DPISize 35) -Text "Close" -AddTo $ErrorDialog
+    $CloseButton = CreateButton -X ($ErrorDialog.Width / 2 - 80) -Y ($ErrorDialog.Height - 170) -Width 160 -Height 80 -Text "Close" -AddTo $ErrorDialog
     $CloseButton.Add_Click({ $ErrorDialog.Hide() })
 
     # Create the string that will be displayed on the window.
@@ -421,10 +436,12 @@ function CreateErrorDialog([string]$Error, [boolean]$Fatal=$True, [boolean]$Once
     elseif ($Error -eq "Corrupted JSON")    { $String += ".JSON files are corrupted.{0}{0}Please download the Patcher64+ Tool again." }
     elseif ($Error -eq "Missing Modules")   { $String += ".PSM1 module files are missing for import.{0}{0}Please download the Patcher64+ Tool again." }
     elseif ($Error -eq "Restricted")        { $String += "Patcher64+ Tool is being run from a restricted folder:{0}" + $Paths.FullBase + "{0}{0}Please move the Patcher64+ Tool to another folder and run it again.{0}Locations such as Desktop, Downloads or My Documents are restricted.{0}{0}No assistance is given when this warning is shown." }
+    elseif ($Error -eq "Forbidden Path")    { $String += "The filepath to the Patcher64+ Tool is illegal.{0}{0}Remove any special symbol characters from the filepath leading to the Patcher64+ Tool and try again.{0}{0}Only letters and numbers are allowed." }
     $String = [string]::Format($String, [Environment]::NewLine)
 
     #Create Label
-    $Label = CreateLabel -X (DPISize 10) -Y (DPISize 10) -Width ($ErrorDialog.Width - (DPISize 10)) -Height ($ErrorDialog.Height - (DPISize 110)) -Text $String -AddTo $ErrorDialog
+    $ErrorFont = New-Object System.Drawing.Font("Segoe UI", 16, [System.Drawing.FontStyle]::Regular)
+    $Label = CreateLabel -X 10 -Y 10 -Width ($ErrorDialog.Width - 10) -Height ($ErrorDialog.Height - 110) -Text $String -AddTo $ErrorDialog -Font $ErrorFont
 
     if ($Once) { $Settings.Core.DisplayedWarning = $True }
     if ($Fatal) {

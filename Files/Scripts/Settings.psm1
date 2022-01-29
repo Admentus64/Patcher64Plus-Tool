@@ -1,31 +1,35 @@
-function Get-IniContent ([string]$FilePath) {
-
+﻿function Get-IniContent ([string]$FilePath) {
+    
     $ini = @{}
-    switch -regex -file $FilePath {
 
-        "^\[(.+)\]" # Section
-        {
-            $section = $Matches[1]
-            $ini[$section] = @{}
-            $CommentCount = 0
+    $file = Get-Item -LiteralPath $FilePath
+
+    try {
+        switch -Regex -File $file {
+
+            "^\[(.+)\]" { # Section
+                $section = $Matches[1]
+                $ini[$section] = @{}
+                $CommentCount = 0
+            }
+
+            "^(;.*)$" {
+                $value = $Matches[1]
+                $CommentCount = $CommentCount + 1
+                $name = "Comment" + $CommentCount
+                $ini[$section][$name] = $value
+            }
+
+            "(.+?)\s*=(.*)" { # Key
+                $name,$value = $Matches[1..2]
+                $ini[$section][$name] = $value
+            }
+
         }
 
-        "^(;.*)$"
-        {
-            $value = $Matches[1]
-            $CommentCount = $CommentCount + 1
-            $name = "Comment" + $CommentCount
-            $ini[$section][$name] = $value
-        }
-
-        "(.+?)\s*=(.*)" # Key
-        {
-            $name,$value = $Matches[1..2]
-            $ini[$section][$name] = $value
-        }
-
+        return $ini
     }
-    return $ini
+    catch { CreateErrorDialog -Error "Forbidden Path" }
 
 }
 

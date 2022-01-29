@@ -1,4 +1,4 @@
-function SetTempFileParameters() {
+﻿function SetTempFileParameters() {
     
     $Files.ckey                             = $Paths.Temp + "\common-key.bin"
     $Files.dmaTable                         = $Paths.Temp + "\dmaTable.dat"
@@ -51,6 +51,8 @@ function SetFileParameters() {
     $Files.tool.romc                        = (GetFilePath) + "\Files\Tools\Wii VC\romc.exe"
     $Files.tool.romchu                      = (GetFilePath) + "\Files\Tools\Wii VC\romchu.exe"
 
+    $Files.tool.playSMF                     = (GetFilePath) + "\Files\Tools\playsmf.exe"
+
 
 
     # Store sound files
@@ -59,6 +61,7 @@ function SetFileParameters() {
 
 
     # Store Ocarina of Time files
+    $Files.oot.ura_quest                    = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\ura_quest")
     $Files.oot.master_quest                 = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\master_quest")
     $Files.oot.widescreen                   = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Optional\widescreen")
     $Files.oot.mm_pause_screen              = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Optional\mm_pause_screen")
@@ -72,12 +75,12 @@ function SetFileParameters() {
     
     $Files.oot.hud_tatl                     = $Paths.Games + "\Ocarina of Time\Textures\HUD\tatl.bin"
     $Files.oot.hud_tael                     = $Paths.Games + "\Ocarina of Time\Textures\HUD\tael.bin"
-    $Files.oot.iron_shield_front            = $Paths.Games + "\Ocarina of Time\Textures\Iron Shield\front.bin"
-    $Files.oot.iron_shield_front            = $Paths.Games + "\Ocarina of Time\Textures\Iron Shield\back.bin"
-    $Files.oot.iron_shield_icon             = $Paths.Games + "\Ocarina of Time\Textures\Iron Shield\icon.bin"
-    $Files.oot.l_target_button              = $Paths.Games + "\Ocarina of Time\Textures\GameCube\l_pause_screen_button.bin"
+    $Files.oot.iron_shield_front            = $Paths.Games + "\Ocarina of Time\Textures\Equipment\Iron Shield\front.bin"
+    $Files.oot.iron_shield_front            = $Paths.Games + "\Ocarina of Time\Textures\Equipment\Iron Shield\back.bin"
+    $Files.oot.iron_shield_icon             = $Paths.Games + "\Ocarina of Time\Textures\Equipment\Iron Shield\icon.bin"
+    $Files.oot.l_pause_button               = $Paths.Games + "\Ocarina of Time\Textures\GameCube\l_pause_screen_button.bin"
+    $Files.oot.l_pause_button_mm            = $Paths.Games + "\Ocarina of Time\Textures\GameCube\l_pause_screen_button_mm.bin"
     $Files.oot.l_target_icon                = $Paths.Games + "\Ocarina of Time\Textures\GameCube\l_text_icon.bin"
-    $Files.oot.keaton_mask                  = $Paths.Games + "\Ocarina of Time\Textures\Keaton Mask\keaton_mask.bin"
 
     $Files.oot.file_select                  = $Paths.Games + "\Ocarina of Time\Binaries\file_select.bin"
     $Files.oot.frontflip_jump               = $Paths.Games + "\Ocarina of Time\Binaries\Jumps\frontflip.bin"
@@ -93,11 +96,13 @@ function SetFileParameters() {
 
     $Files.oot.theme_fire_temple            = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Export\audiobank_fire_temple")
     $Files.oot.debug_map_select             = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Export\debug_map_select")
-    $Files.oot.restore_text_static          = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Export\Message\restore_static")
-    $Files.oot.restore_text_table           = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Export\Message\restore_table")
-    $Files.oot.redux_text_static            = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Export\Message\redux_static")
     $Files.oot.female_pronouns_text_static  = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Export\Message\female_pronouns_static")
     $Files.oot.female_pronouns_text_table   = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Export\Message\female_pronouns_table")
+    $Files.oot.redux_text_static            = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Export\Message\redux_static")
+    $Files.oot.restore_text_static          = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Export\Message\restore_static")
+    $Files.oot.restore_text_table           = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Export\Message\restore_table")
+    $Files.oot.ura_text_static              = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Export\Message\ura_static")
+    $Files.oot.ura_text_table               = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Export\Message\ura_table")
 
     $Files.oot.gerudo1                      = $Paths.Games + "\Ocarina of Time\Textures\Gerudo Symbols\crystal_switch.bin"
     $Files.oot.gerudo2                      = $Paths.Games + "\Ocarina of Time\Textures\Gerudo Symbols\dampe.bin"
@@ -251,8 +256,7 @@ function SetGetROM() {
         $GetROM.input         
     }
 
-    if ($GetROM.in -ne $null)   { $GetROM.run = $GetROM.in }
-    if (TestFile $GetROM.in )   { $global:ROMHashSum = (Get-FileHash -Algorithm MD5 -LiteralPath $GetROM.in).Hash }
+    if ($GetROM.in -ne $null) { $GetROM.run = $GetROM.in }
 
     if ($Settings.Debug.CreateBPS -eq $True) {
         $Files.compBPS   = [System.IO.Path]::GetDirectoryName($GetROM.in) + "\" + [System.IO.Path]::GetFileNameWithoutExtension($GetROM.in) + "_compressed.bps"

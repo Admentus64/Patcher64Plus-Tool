@@ -1,4 +1,4 @@
-function GetSFXID([string]$SFX) {
+﻿function GetSFXID([string]$SFX) {
     
     $SFX = $SFX.replace(' (default)', "")
     if     ($SFX -eq "None" -or $SFX -eq "Disabled")   { return "00 00" }
@@ -98,21 +98,268 @@ function GetMMInstrumentID([string]$SFX) {
 
 
 #==============================================================================================================================================================================================
-function MuteMusic([string]$SequenceTable, [string]$Sequence, [byte]$Length) {
+function PatchMuteMusic([string]$SequenceTable, [string]$Sequence, [byte]$Length) {
     
     if ( (IsChecked $Redux.Music.MuteSelected -Not) -and (IsChecked $Redux.Music.MuteAreaOnly -Not) -and (IsChecked $Redux.Music.MuteAll -Not) ) { return }
 
+    UpdateStatusLabel "Muting Music Sequences"
+
     $include = $force = @()
     foreach ($i in 0..($Files.json.music.Count-1)) {
-        if     (IsChecked $Redux.Music.MuteSelected)   { if ($Redux.Music.SelectMuteTracks.GetSelected($i))   { foreach ($id in $Files.json.music[$i].id) { $include += (GetDecimal $id) } } }
-        elseif (IsChecked $Redux.Music.MuteAreaOnly)   { if ($Files.json.music[$i].event -ne 1)               { foreach ($id in $Files.json.music[$i].id) { $include += (GetDecimal $id) } } }
-        elseif (IsChecked $Redux.Music.MuteAll)                                                               { foreach ($id in $Files.json.music[$i].id) { $include += (GetDecimal $id) } }
-        #if     ($Files.json.music[$i].force -eq 1)     { $force += (GetDecimal $Files.json.music[$i].id) }
+        if ( ( (!(IsSet $GameSettings["ReplaceMusic"][$Files.json.music[$i].title]) -or $GameSettings["ReplaceMusic"][$Files.json.music[$i].title] -eq "Default") -and (IsChecked $Redux.Music.EnableReplace) ) -or (IsChecked -Elem $Redux.Music.EnableReplace -Not) ) {
+            if     (IsChecked $Redux.Music.MuteSelected)   { if ($Redux.MuteMusic.Tracks.GetSelected($i))   { foreach ($id in $Files.json.music[$i].id) { $include += (GetDecimal $id) }; foreach ($id in $Files.json.music[$i].muteId) { $include += (GetDecimal $id) } } }
+            elseif (IsChecked $Redux.Music.MuteAreaOnly)   { if ($Files.json.music[$i].event -ne 1)         { foreach ($id in $Files.json.music[$i].id) { $include += (GetDecimal $id) }; foreach ($id in $Files.json.music[$i].muteId) { $include += (GetDecimal $id) } } }
+            elseif (IsChecked $Redux.Music.MuteAll)                                                         { foreach ($id in $Files.json.music[$i].id) { $include += (GetDecimal $id) }; foreach ($id in $Files.json.music[$i].muteId) { $include += (GetDecimal $id) } }
+        }
     }
 
     $tableStart = GetDecimal $SequenceTable
     for ($i=1; $i -le $Length; $i++) { if ($include -contains $i) { ChangeBytes -Offset (Get24Bit ($tableStart + $i * 16) ) -Values "00 00 00 00 00 00 00 00 00 00" } }
-  # MuteMusicTracks -SequenceTable $SequenceTable -Sequence $Sequence -Length $Length -Include $include -Force $force
+
+}
+
+
+
+    
+#==============================================================================================================================================================================================
+function PatchReplaceMusic([string]$BankPointerTableStart, [string]$BankPointerTableEnd, [string]$PointerTableStart, [string]$PointerTableEnd, [string]$SeqStart, [string]$SeqEnd, [string]$Ext) {
+
+    if (IsChecked -Elem $Redux.Music.EnableReplace -Not) { return }
+
+    UpdateStatusLabel "Patching Music Sequences"
+
+    $bankPointerTable = $GameFiles.extracted + "\AudiobankPointerTable.bin"; ExportBytes -Offset $BankPointerTableStart  -End $BankPointerTableEnd -Output $bankPointerTable -Force
+    $pointerTable     = $GameFiles.extracted + "\AudioPointerTable.bin";     ExportBytes -Offset $PointerTableStart      -End $PointerTableEnd     -Output $pointerTable     -Force
+    $seq              = $GameFiles.extracted + "\Audioseq.bin";              ExportBytes -Offset $SeqStart               -End $SeqEnd              -Output $seq              -Force
+
+    $bankPointerTableArray = [System.IO.File]::ReadAllBytes($bankPointerTable)
+    $pointerTableArray     = [System.IO.File]::ReadAllBytes($pointerTable)
+
+    foreach ($track in $Files.json.music) {
+        if (IsSet $GameSettings["ReplaceMusic"][$track.title]) {
+            if ($GameSettings["ReplaceMusic"][$track.title] -ne "Default") {
+                
+                # Music File
+                foreach ($item in (Get-ChildItem -LiteralPath $GameFiles.Music -Directory)) {
+                    if (TestFile ($GameFiles.Music + "\" + $item.BaseName + "\" + $GameSettings["ReplaceMusic"][$track.title] + $Ext)) {
+                        $file = $item.BaseName + "\" + $GameSettings["ReplaceMusic"][$track.title]
+                        break
+                    }
+                }
+
+                # Sequence
+                foreach ($id in $track.id) {
+                    $tableOffset = ((GetDecimal $id) * 16)
+                    $offset   = (Get8Bit $pointerTableArray[$tableOffset]) + (Get8Bit $pointerTableArray[$tableOffset+1]) + (Get8Bit $pointerTableArray[$tableOffset+2]) + (Get8Bit $pointerTableArray[$tableOffset+3])
+                    PatchBytes -File $seq -Offset $offset -Length $track.size -Patch ($file + $Ext) -Music
+                
+                    # Size
+                    $value = Get16Bit ( (Get-Item -LiteralPath ($GameFiles.music + "\" + $file + $Ext)).length )
+                    [string[]]$value = $value -split '(..)' -ne ''
+                    $tableOffset = (Get16Bit (((GetDecimal $id) * 16) + 6))
+                    ChangeBytes -File $pointerTable -Offset $tableOffset -Values $value
+
+                    # Bank
+                    if (TestFile ($GameFiles.music + "\" + $file + ".meta")) {
+                        $value = (Get-Content -Path ($GameFiles.music + "\" + $file + ".meta"))[1]
+                        $value = $value.replace("0x", "")
+                    }
+                    else {
+                        $value = $file.Substring(($file.IndexOf('_')+1))
+                        $value = $value.split("_")
+                        $value = $value[0]
+                    }
+                    $offset = (Get16Bit ( (GetDecimal $id) * 2 + 2) )
+                    ChangeBytes -File $bankPointerTable -Offset $offset -Values $value
+                }
+            }
+        }
+    }
+
+    PatchBytes -Offset $BankPointerTableStart -Patch "AudiobankPointerTable.bin" -Extracted
+    PatchBytes -Offset $PointerTableStart     -Patch "AudioPointerTable.bin"     -Extracted
+    PatchBytes -Offset $SeqStart              -Patch "Audioseq.bin"              -Extracted
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function MusicOptions([string]$Default="File Select") {
+    
+    $tracks = @()
+    foreach ($track in $Files.json.music) { $tracks += $track.title }
+
+
+
+    # MUSIC #
+
+    CreateReduxGroup    -Tag "Music" -Text "Music" -Columns 2 -Height 8
+    CreateReduxComboBox -Name "FileSelect"-Text "File Select Theme"  -Default $Default -Items $tracks -Info "Set the music theme for the File Select menu" -Credits "Admentus"
+    
+    CreateReduxPanel -X 25 -Row 1 -Columns 1.9 -Rows 2
+    CreateReduxRadioButton -Name "EnableAll"    -Column 1 -Row 1 -Max 4 -SaveTo "Mute" -Checked -Text "Enable All Music"     -Info "Keep the music as it is"                           -Credits "Admentus"
+    CreateReduxRadioButton -Name "MuteSelected" -Column 2 -Row 1 -Max 4 -SaveTo "Mute"          -Text "Mute Selected Music"  -Info "Mute the selected music from the list in the game" -Credits "Admentus"
+    CreateReduxRadioButton -Name "MuteAreaOnly" -Column 1 -Row 2 -Max 4 -SaveTo "Mute"          -Text "Mute Area Music Only" -Info "Mute only the area music in the game"              -Credits "Admentus"
+    CreateReduxRadioButton -Name "MuteAll"      -Column 2 -Row 2 -Max 4 -SaveTo "Mute"          -Text "Mute All Music"       -Info "Mute all the music in the game"                    -Credits "Admentus"
+    
+    CreateReduxComboBox    -Name "SelectReplace" -Text "Select Replace Track" -Info "Select the ingame track that should be replaced" -Items $tracks -NoDefault -Row 5
+    CreateReduxCheckBox    -Name "EnableReplace" -Text "Enable Replace Music" -Info "Enables patching in music replacements"
+    $Redux.Music.Reset   = CreateReduxButton -Text "Reset Replacements" -Row 6 -Column 2
+
+
+
+    # MUTE MUSIC #
+
+    CreateReduxGroup   -Tag  "MuteMusic" -Text "Mute Music Tracks" -Columns 2 -Height 6
+    CreateReduxListBox -Name "Tracks" -Items $tracks -MultiSelect
+
+    EnableForm -Form $Redux.MuteMusic.Tracks -Enable $Redux.Music.MuteSelected.Checked
+    $Redux.Music.MuteSelected.Add_CheckedChanged({ EnableForm -Form $Redux.MuteMusic.Tracks -Enable $this.Checked })
+
+
+
+    # REPLACE MUSIC #
+
+    CreateReduxGroup   -Tag  "ReplaceMusic" -Text "Replace Music Tracks"
+    $Redux.ReplaceMusic.Tracks = CreateReduxListBox
+
+    EnableForm -Form $Redux.ReplaceMusic.Tracks -Enable $Redux.Music.EnableReplace.Checked
+    $Redux.Music.EnableReplace.Add_CheckedChanged({ EnableForm -Form $Redux.ReplaceMusic.Tracks -Enable $this.Checked })
+
+    $Redux.Music.Preview = CreateReduxButton -Text "Start Music Preview" -Height 50 -Row 7 -Column 2
+    $Redux.Music.AuthorName = CreateLabel -X 10 -Y $Redux.Music.Preview.Top                  -Text "Nintendo" -Font $Fonts.Medium
+    $Redux.Music.AuthorLink = CreateLabel -X 10 -Y ($Redux.Music.Preview.Top + (DPISize 30)) -Text "URL Link" -Font $Fonts.Medium
+    
+    GetReplacementTracks
+
+    CheckAuthor
+    $Redux.ReplaceMusic.Tracks.Add_SelectedIndexChanged({ CheckAuthor })
+    $Redux.Music.AuthorLink.add_Click({ if (IsSet $Redux.Music.AuthorURL) { [system.Diagnostics.Process]::start($Redux.Music.AuthorURL) } })
+    $Redux.Music.AuthorLink.ForeColor = "Blue"
+
+
+
+    # RESET #
+
+    $Redux.Music.Reset.Add_Click({
+
+        $Redux.ReplaceMusic.Tracks.text = "Default"
+        foreach ($track in $Files.json.music) { $GameSettings["ReplaceMusic"][$track.title] = "Default" }
+
+    })
+
+
+
+    # PREVIEW #
+
+    $Redux.Music.SelectReplace.Add_SelectedIndexChanged( { GetReplacementTracks })
+    $Redux.ReplaceMusic.Tracks.Add_SelectedIndexChanged( { $GameSettings["ReplaceMusic"][$Redux.Music.SelectReplace.text] = $Redux.ReplaceMusic.Tracks.text } )
+
+    $Redux.Music.Preview.BackColor = "Green"
+    $Redux.Music.Preview.ForeColor = "White"
+
+    $Redux.Music.Preview.Add_Click({
+        if ($this.text -eq "Start Music Preview") {
+            $midiScript = {
+                Param ([string]$toolFile, [string]$midiFile)
+                $task = & $toolFile $midiFile | Out-Null
+            }
+
+            $midiFile = $null
+            foreach ($item in (Get-ChildItem -LiteralPath $GameFiles.Music -Directory)) {
+                if (TestFile ($GameFiles.Music + "\" + $item.BaseName + "\" + $Redux.ReplaceMusic.Tracks.SelectedItems + ".mid")) {
+                    $midiFile = $GameFiles.music + "\" + $item.BaseName + "\" + $Redux.ReplaceMusic.Tracks.SelectedItems + ".mid"
+                }
+            }
+            if (IsSet $midiFile) {
+                $this.Text      = "Stop Music Preview"
+                $this.BackColor = "Red"
+                Start-Job -Name 'MidiPlayer' -Scriptblock $midiScript -ArgumentList @($Files.tool.playSMF, $midiFile)
+                $jobStatus = (Get-Job -Name "MidiPlayer").State
+
+                $check = $false
+                while ([bool](Get-Job -Name "MidiPlayer" -ea SilentlyContinue) -and $jobStatus -ne "Completed") {
+                    $jobStatus = (Get-Job -Name "MidiPlayer").State
+                    [Windows.Forms.Application]::DoEvents()
+                    Start-Sleep -m 25
+                    if (!$check) {
+                        $MainDialog.Activate()
+                        $OptionsDialog.Activate()
+                        $Check = $true
+                    }
+                }
+                StopJobs
+                $this.Text      = "Start Music Preview"
+                $this.BackColor = "Green"
+            }
+        }
+        else {
+            StopJobs
+            $this.Text      = "Start Music Preview"
+            $this.BackColor = "Green"
+        }
+    })
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function CheckAuthor() {
+
+    if ($Redux.ReplaceMusic.Tracks.Text -eq "Default") {
+        $Redux.Music.AuthorName.Text = "Nintendo"
+        $Redux.Music.AuthorURL = $null
+        EnableElem -Elem $Redux.Music.AuthorLink -Active $False -Hide
+        return
+    }
+
+    foreach ($item in (Get-ChildItem -LiteralPath $GameFiles.Music -Directory)) {
+        if ( (TestFile ($GameFiles.Music + "\" + $item.BaseName + "\" + $Redux.ReplaceMusic.Tracks.Text + ".seq")) -or (TestFile ($GameFiles.Music + "\" + $item.BaseName + "\" + $Redux.ReplaceMusic.Tracks.Text + ".zseq")) ) {
+            $Redux.Music.AuthorName.Text = $item.BaseName
+            $Redux.Music.AuthorURL = $null
+            EnableElem -Elem $Redux.Music.AuthorLink -Active $False -Hide
+            foreach ($i in $Files.json.sequences) {
+                if ($i.author -eq $item.BaseName) {
+                    $Redux.Music.AuthorURL = $i.url
+                    EnableElem -Elem $Redux.Music.AuthorLink -Active $True -Hide
+                    break
+                }
+            }
+
+            return
+        }
+    }
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function GetReplacementTracks() {
+    
+    $Redux.ReplaceMusic.Tracks.items.Clear()
+    $items = @()
+    foreach ($track in $Files.json.music)  {
+        if ($track.title -eq $Redux.Music.SelectReplace.text) {
+            foreach ($item in Get-ChildItem -LiteralPath $GameFiles.music -Recurse) {
+                if ($item.extension -eq ".zseq" -or $item.extension -eq ".seq") {
+                    if ( $item.length -lt (GetDecimal $track.size) ) { $items += $item.BaseName }
+                }
+            }
+            break
+        }
+    }
+    
+    $Redux.ReplaceMusic.Tracks.Items.AddRange($items)
+    $Redux.ReplaceMusic.Tracks.Sorted = $True
+    $Redux.ReplaceMusic.Tracks.Sorted = $False
+    $Redux.ReplaceMusic.Tracks.Items.Insert(0, "Default")
+
+
+    if (IsSet $GameSettings["ReplaceMusic"][$Redux.Music.SelectReplace.text])   { $Redux.ReplaceMusic.Tracks.text = $GameSettings["ReplaceMusic"][$Redux.Music.SelectReplace.text] }
+    else                                                                        { $Redux.ReplaceMusic.Tracks.selectedIndex = 0 }
 
 }
 
@@ -144,23 +391,22 @@ function ShowHudPreview([switch]$IsOoT) {
     else                  { $Redux.UI.MagicPreview.Image = $null }
 
     $file = $null
-    if       ( (IsChecked $Redux.UI.Rupees)      -and  $IsOoT)        { $file = "Majora's Mask"   }
-    elseif   ( (IsChecked $Redux.UI.Rupees)      -and !$IsOoT)        { $file = "Ocarina of Time" }
-    elseif   ( (IsChecked $Redux.UI.Rupees -Not) -and  $IsOoT)        { $file = "Ocarina of Time" }    elseif   ( (IsChecked $Redux.UI.Rupees -Not) -and !$IsOoT)        { $file = "Majora's Mask"   }
+    if       ( ( (IsChecked $Redux.UI.Hearts)      -or (IsChecked $Redux.UI.HUD) )      -and  $IsOoT)        { $file = "Majora's Mask"   }
+    elseif   ( ( (IsChecked $Redux.UI.Hearts)      -or (IsChecked $Redux.UI.HUD) )      -and !$IsOoT)        { $file = "Ocarina of Time" }
+    elseif   ( ( (IsChecked $Redux.UI.Hearts -Not) -or (IsChecked $Redux.UI.HUD -Not) ) -and  $IsOoT)        { $file = "Ocarina of Time" }    elseif   ( ( (IsChecked $Redux.UI.Hearts -Not) -or (IsChecked $Redux.UI.HUD -Not) ) -and !$IsOoT)        { $file = "Majora's Mask"   }
+    if (TestFile ($Paths.Shared + "\HUD\Heart\" + $file + ".png"))    { SetBitMap -Path ($Paths.Shared + "\HUD\Heart\" + $file + ".png") -Box $Redux.UI.HeartsPreview } else { $Redux.UI.HeartsPreview.Image = $null }
+
+    $file = $null
+    if       ( ( (IsChecked $Redux.UI.Rupees)      -or (IsChecked $Redux.UI.HUD) )      -and  $IsOoT)        { $file = "Majora's Mask"   }
+    elseif   ( ( (IsChecked $Redux.UI.Rupees)      -or (IsChecked $Redux.UI.HUD) )      -and !$IsOoT)        { $file = "Ocarina of Time" }
+    elseif   ( ( (IsChecked $Redux.UI.Rupees -Not) -or (IsChecked $Redux.UI.HUD -Not) ) -and  $IsOoT)        { $file = "Ocarina of Time" }    elseif   ( ( (IsChecked $Redux.UI.Rupees -Not) -or (IsChecked $Redux.UI.HUD -Not) ) -and !$IsOoT)        { $file = "Majora's Mask"   }
     if (TestFile ($Paths.Shared + "\HUD\Rupee\" + $file + ".png"))    { SetBitMap -Path ($Paths.Shared + "\HUD\Rupee\" + $file + ".png") -Box $Redux.UI.RupeesPreview } else { $Redux.UI.RupeesPreview.Image = $null }
 
     $file = $null
-    if       ( (IsChecked $Redux.UI.DungeonKeys)      -and  $IsOoT)   { $file = "Majora's Mask"   }
-    elseif   ( (IsChecked $Redux.UI.DungeonKeys)      -and !$IsOoT)   { $file = "Ocarina of Time" }
-    elseif   ( (IsChecked $Redux.UI.DungeonKeys -Not) -and  $IsOoT)   { $file = "Ocarina of Time" }    elseif   ( (IsChecked $Redux.UI.DungeonKeys -Not) -and !$IsOoT)   { $file = "Majora's Mask"   }
+    if       ( ( (IsChecked $Redux.UI.DungeonKeys)      -or (IsChecked $Redux.UI.HUD) )      -and  $IsOoT)        { $file = "Majora's Mask"   }
+    elseif   ( ( (IsChecked $Redux.UI.DungeonKeys)      -or (IsChecked $Redux.UI.HUD) )      -and !$IsOoT)        { $file = "Ocarina of Time" }
+    elseif   ( ( (IsChecked $Redux.UI.DungeonKeys -Not) -or (IsChecked $Redux.UI.HUD -Not) ) -and  $IsOoT)        { $file = "Ocarina of Time" }    elseif   ( ( (IsChecked $Redux.UI.DungeonKeys -Not) -or (IsChecked $Redux.UI.HUD -Not) ) -and !$IsOoT)        { $file = "Majora's Mask"   }
     if (TestFile ($Paths.Shared + "\HUD\Key\"   + $file + ".png"))    { SetBitMap -Path ($Paths.Shared + "\HUD\Key\"   + $file + ".png") -Box $Redux.UI.DungeonKeysPreview } else { $Redux.UI.DungeonKeysPreview.Image = $null }
-
-    $file = $null
-    if       ( (IsChecked $Redux.UI.Hearts)      -and  $IsOoT)        { $file = "Majora's Mask"   }
-    elseif   ( (IsChecked $Redux.UI.Hearts)      -and !$IsOoT)        { $file = "Ocarina of Time" }
-    elseif   ( (IsChecked $Redux.UI.Hearts -Not) -and  $IsOoT)        { $file = "Ocarina of Time" }    elseif   ( (IsChecked $Redux.UI.Hearts -Not) -and !$IsOoT)        { $file = "Majora's Mask"   }
-    if (TestFile ($Paths.Shared + "\HUD\Heart\" + $file + ".png"))    { SetBitMap -Path ($Paths.Shared + "\HUD\Heart\" + $file + ".png") -Box $Redux.UI.HeartsPreview } else { $Redux.UI.HeartsPreview.Image = $null }
-
 }
 
 
@@ -193,6 +439,10 @@ function ShowEquipmentPreview() {
     $path = ($Paths.shared + "\Equipment\Mirror Shield\" + $Redux.Equipment.MirrorShield.Text.replace(" (default)", "") + ".png")
     if (TestFile $Path)   { SetBitMap -Path $path -Box $Redux.Equipment.MirrorShieldPreview }
     else                  { $Redux.Equipment.MirrorShieldPreview.Image = $null }
+
+    $path = ($Paths.shared + "\Equipment\Kokiri Sword\" + $Redux.Equipment.KokiriSword.Text.replace(" (default)", "") + " Icon.png")
+    if (TestFile $Path)   { SetBitMap -Path $path -Box $Redux.Equipment.KokiriSwordIconPreview }
+    else                  { $Redux.Equipment.KokiriSwordIconPreview.Image = $null }
 
     $path = ($Paths.shared + "\Equipment\Master Sword\" + $Redux.Equipment.MasterSword.Text.replace(" (default)", "") + " Icon.png")
     if (TestFile $Path)   { SetBitMap -Path $path -Box $Redux.Equipment.MasterSwordIconPreview }
@@ -766,7 +1016,10 @@ Export-ModuleMember -Function GetMMMusicID
 Export-ModuleMember -Function GetMMItemID
 Export-ModuleMember -Function GetMMInstrumentID
 
-Export-ModuleMember -Function MuteMusic
+Export-ModuleMember -Function PatchMuteMusic
+Export-ModuleMember -Function PatchReplaceMusic
+Export-ModuleMember -Function MusicOptions
+Export-ModuleMember -Function GetReplacementTracks
 Export-ModuleMember -Function ChangeStringIntoDigits
 
 Export-ModuleMember -Function ShowHudPreview

@@ -1,5 +1,6 @@
 [ {
 	"title"		: "Super Smash Bros.",
+	"options"	: 1,
 	"tooltip"	: "The regular Super Smash Bros. experience{0}- Supported: Rev 0 (US)"
 }, {
 	"title"		: "Smash Remix (v1.0.1)",
@@ -9,18 +10,17 @@
 	"tooltip"	: "Remixes the whole of Super Smash Bros.{0}Contains new stages and characters to use.{0}- Supported: Rev 0 (US)"
 }, {
 	"title"		: "Super Smash Bros: More Stages Edition (v0.5.1)",
+	"options"	: 1,
 	"expand_memory"	: -1,
 	"vc_title"	: "Super Smash Bros: MSE",
 	"vc_gameID"	: "NAL0",
-	"patch"		: "Compressed\\SSBMSE.xdelta",
+	"patch"		: "Compressed\\SSBMSE.bps",
 	"output"	: "_ssbmse_patched",
 	"tooltip"	: "Add new stages from the newer Super Smash Bros. entries.{0}- Supported: Rev 0 (US)"
 }, {
-	"title"		: "Widescreen",
+	"title"		: "16:9 Widescreen",
 	"expand_memory"	: -1,
-	"vc_title"	: "Super Smash Bros. WS",
-	"vc_gameID"	: "NAL1",
-	"patch"		: "Compressed\\widescreen.xdelta",
+	"patch"		: "Compressed\\widescreen.bps",
 	"output"	: "_widescreen_patched",
-	"tooltip"	: "Add widescreen support to Super Smash Bros.{0}- Supported: Rev 0 (US)"
+	"tooltip"	: "Adds proper 16:9 widescreen support to Super Smash Bros.{0}- Supported: Rev 0 (US)"
 } ]

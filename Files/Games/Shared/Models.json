@@ -67,6 +67,14 @@
 		"deku_shield"	: 0,
 		"hylian_shield"	: 0
 	}, {
+		"name"		: "Kristin",
+		"author"	: "Ikey Ilex"
+	}, {
+		"name"		: "Lorna Rissa",
+		"author"	: "JanexLane",
+		"deku_shield"	: 0,
+		"hylian_shield" : 0
+	}, {
 		"name"		: "Kristina Olivine",
 		"author"	: "Ikey Ilex"
 	}, {
@@ -182,6 +190,14 @@
 		"author"	: "Malon Rose",
 		"url"		: "https://youtube.com/c/MalonRose{0}https://www.patreon.com/MalonRose",
 		"hylian_shield"	: 0,
+		"mirror_shield"	: 0
+	}, {
+		"name"		: "Kristin",
+		"author"	: "Ikey Ilex"
+	}, {
+		"name"		: "Lorna Rissa",
+		"author"	: "JanexLane",
+		"hylian_shield" : 0,
 		"mirror_shield"	: 0
 	}, {
 		"name"		: "Link's Awakening",

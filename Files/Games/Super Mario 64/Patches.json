@@ -100,4 +100,12 @@
 	"extend"	: 64,
 	"output"	: "_odyssey_patched",
 	"tooltip"	: "A brand new world for Super Mario 64 with new stages and 80 stars to collect{0}- Supported: Rev 0 (US)"
+}, {
+	"title"		: "Super Mario 64 Internal Plexus: Build 3313 (v0.7)",
+	"console"	: "Native",
+	"rom_title"	: "SM64 B3313",
+	"patch"		: "Decompressed\\internal_plexus.bps",
+	"extend"	: 64,
+	"output"	: "_internal_plexus_patched",
+	"tooltip"	: "A brand new beta-based world for Super Mario 64 with new stages and 142 stars to collect{0}- Supported: Rev 0 (US)"
 } ]

@@ -131,7 +131,7 @@ function CreateOptions() {
     CreateReduxCheckBox -Name "WaterTempleKeyFlag"    -Text "Water Temple Key Flag"              -Info "Fix the small key bug during the Water Temple"                                                                  -Credits "GhostlyDark"
     CreateReduxCheckBox -Name "BottleDupe"            -Text "Bottle Dupe and Ocarina"            -Info "Fixes the Bottle Dupe Glitch and Ocarina Glitch"                                                                -Credits "ChriisTiian"
     CreateReduxCheckBox -Name "SwordlessEpona"        -Text "Swordless Epona"                    -Info "Fixes the Swordless Epona Glitch"                                                                               -Credits "ChriisTiian"
-    CreateReduxCheckBox -Name "InfiniteSword"         -Text "Infnite Sword"                      -Info "Fixes the Infinite Sword Glitch"                                                                                -Credits "ChriisTiian"
+    CreateReduxCheckBox -Name "InfiniteSword"         -Text "Infinite Sword"                     -Info "Fixes the Infinite Sword Glitch"                                                                                -Credits "ChriisTiian"
 
 
 

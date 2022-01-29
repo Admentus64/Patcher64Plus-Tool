@@ -1,4 +1,4 @@
-function CreateEditorDialog([int32]$Width, [int32]$Height) {
+﻿function CreateEditorDialog([int32]$Width, [int32]$Height) {
     
     $global:Editor = @{}
 

@@ -1,4 +1,4 @@
-function ChangeBytes([string]$File, [string]$Offset, [object]$Match=$null, [object]$Values, [uint16]$Interval=1, [switch]$Add, [switch]$Subtract, [switch]$IsDec, [switch]$Overflow) {
+﻿function ChangeBytes([string]$File, [string]$Offset, [object]$Match=$null, [object]$Values, [uint16]$Interval=1, [switch]$Add, [switch]$Subtract, [switch]$IsDec, [switch]$Overflow) {
     
     if ($Match  -is [System.String])   { $Match  = $Match  -split ' ' }
     if ($Values -is [System.String])   { $Values = $Values -split ' ' }
@@ -104,7 +104,7 @@ function CopyBytes([string]$File, [string]$Start, [string]$Length, [string]$Offs
 
 
 #==============================================================================================================================================================================================
-function PatchBytes([string]$File, [string]$Offset, [string]$Length, [string]$Patch, [switch]$Texture, [switch]$Shared, [switch]$Models, [switch]$Extracted, [switch]$Pad) {
+function PatchBytes([string]$File, [string]$Offset, [string]$Length, [string]$Patch, [switch]$Texture, [switch]$Shared, [switch]$Models, [switch]$Extracted, [switch]$Music, [switch]$Pad) {
     
     # Binary Patch File Parameter Check
     if (!(IsSet -Elem $Patch) ) {
@@ -117,6 +117,7 @@ function PatchBytes([string]$File, [string]$Offset, [string]$Length, [string]$Pa
     if     ($Texture)     { $Patch = $GameFiles.textures  + "\" + $Patch }
     elseif ($Models)      { $Patch = $GameFiles.models    + "\" + $Patch }
     elseif ($Extracted)   { $Patch = $GameFiles.extracted + "\" + $Patch }
+    elseif ($Music)       { $Patch = $GameFiles.music     + "\" + $Patch }
     elseif ($Shared)      { $Patch = $Paths.Shared        + "\" + $Patch }
     else                  { $Patch = $GameFiles.binaries  + "\" + $Patch }
 

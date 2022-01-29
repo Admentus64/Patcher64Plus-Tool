@@ -1,0 +1,22 @@
+Patches for Banjo-Tooie:
+1. Free Patching (requires .IPS, .BPS, .XDELTA, .VCDIFF or .PPF File)
+2. Patch Header
+3. One ROM hack
+
+Known Issues:
+- Unknown
+
+Requirements:
+- US Z64 ROM for Banjo-Tooie
+
+Instructions:
+- Select Z64 ROM
+- Select patch
+- Press "Patch Selected Options"
+
+Information:
+- Original Z64 ROM is preserved
+     
+Programs:
+- Floating IPS
+- RN64CRC

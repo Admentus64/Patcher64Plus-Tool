@@ -1,0 +1,22 @@
+Patches for Diddy Kong Racing:
+1. Apply Patch (requires a patch file)
+2. Patch Header
+3. One ROM hack
+
+Known Issues:
+- Unknown
+
+Requirements:
+- US Z64 ROM for Diddy Kong Racing
+
+Instructions:
+- Select Z64 ROM
+- Select patch
+- Press "Patch Selected Options"
+
+Information:
+- Original Z64 ROM is preserved
+     
+Programs:
+- Floating IPS
+- RN64CRC

@@ -26,7 +26,11 @@
 
 --- Additional Options ---
 - Manual Jump:				Admentus (ROM), CloudModding (GameShark)
+- No Kill Flash:			Chez Cousteau
 - No Shield Recoil:			Admentus (ROM), Aegiker (GameShark)
+- Run While Shielding:			Admentus (ROM), Aegiker (GameShark)
+- Pushback Attacing Walls:		Admentus (ROM), Aegiker (GameShark)
+- Enable Disk Drive Saves:		ZethN64, Sakura, Frostclaw, Steve(ToCoool) & GhostlyDark (ported)
 - Restore Cow Nose Ring:		ShadowOne333
 - Restore Fire Temple:			ShadowOne333
 - Censor Blood:				ShadowOne333
@@ -36,11 +40,15 @@
 - Visible Gerudo Tent:			Chez Cousteau
 - Temple of Time Door:			Chez Cousteau
 - Navi Targettable Spots:		Chez Cousteau
+- Add Water Temple Actors:		Chez Cousteau
+- Add Lost Woods Octorok:		Chez Cousteau
+- Gerudo Fortress Minimap:		GhostlyDark
 - Remove Owls:				Chez Cousteau
 - Debug Map Select:			Jared Johnson
 - Skip Intro:				Aegiker
 - Remove CRC Check:			Drahsid
 - Master Quest:				ShadowOne333
+- Ura Quest:				ZethN64, Sakura, Frostclaw, Steve(ToCoool) & Admentus (clean port)
 - No Item Drops:			Admentus & BilonFullHDemon
 - Harder Child Bosses:			BilonFullHDemon
 - 16:9 Backgrounds & Textures:		GhostlyDark, ShadowOne333, CYB3RTR0N
@@ -54,15 +62,15 @@
 - Button Sizes:				GhostlyDark
 - Button Styles:			GhostlyDark, Djipi, Community, Nerrel, Federelli
 - Magic Meter Styles:			GhostlyDark, azred, Nerrel
-- MM Pause Screen:			Garo-Mastah & CM
+- MM Pause Screen:			CM & GhostlyDark
+- MM Pause Screen Colors:		Garo-Mastah
 - HUD Size:				Admentus & GhostlyDark
 - Easier Minigames:			ShadowOne333
 - Faster Block Pushing:			ShadowOne333
 - Correct Rupee Colors:			GhostlyDark
 - Iron Shield textures:			ZombieBrainySnack
 - Fireproof Deku Shield:		Three Pendants
-- Master Sword (Beta Icon):		CYB3RTR0N
-- Hylian Shield alternatives:		Admentus & GhostlyDark (injects), CYB3RTR0N (icons), sanguinetti (shields)
+- Equipment icons & alternatives:	Admentus, GhostlyDark (injects), CYB3RTR0N (icons), sanguinetti (shields)
 - Hitboxes:				Admentus & Aria Hiroshi 64 (ROM), Aegiker (Shield Recoil GameShark)
 - Set Capacity:				GhostlyDark
 - 4 Digits for Rupees:			CloudMax, VictorHale & CrookedPoe
@@ -104,6 +112,8 @@
 - Hatsune Miku Link:			JanexLane
 - Hatsune Miku Vocaloid:		JanexLane
 - Kafei:				Malon Rose (www.patreon.com/MalonRose & www.youtube.com/c/MalonRose)
+- Kristin:				Ikey Ilex
+- Lorna Rissa:				JanexLane
 - Link's Awakening:			Skilarbabcock (www.youtube.com/user/skilarbabcock)
 - Majora's Mask:			The3Dude (child) & Skilarbabcock (adult)
 - Majora's Mask + OoT Eyes:		The3Dude (model) & GhostlyDark (eyes)
@@ -125,6 +135,25 @@
 - Sunny:				Unesag & Amara
 - Twilight Princess:			Skilarbabcock (www.youtube.com/user/skilarbabcock)
 - Zora Link:				spyfoxgames
+
+--- Music Track Sequence Replacements ---
+- Apasher		(17 sequences)
+- Bluwiikoon		( 1 sequence )
+- DKDavid		( 2 sequences)
+- Fish-waffle64		(41 sequences)		https://github.com/Fish-waffle64/Feeshs-MM-Music
+- FQef94		(23 sequences)
+- Joshua8600		(55 sequences)
+- Kirox			(21 sequences)
+- Liamnajor		(30 sequences)
+- LuigiXHero		(35 sequences)		https://github.com/LuigiXHero/OoT-Randomizer-Music-Pack
+- MrMario7788		(10 sequences)
+- SlyryD		( 8 sequences)
+- SonicRPika		(17 sequences)
+- The Sound Defense	(12 sequences)
+- Volcove		( 1 sequence )
+- Zeldaboy14		( 1 sequence )
+- Zeraphyr		( 1 sequence )
+https://github.com/DaruniasJoy/OoT-Custom-Sequences
 
 --- Quality Assurance ---
 - Translations:				GhostlyDark
@@ -311,9 +340,12 @@
 - Restore Shop Music:			ShadowOne333
 - 4th Piece of Heart Sound:		fkualol
 - Move Bomber Kid:			ShadowOne333
+- On The Moon Intro:			Chez Cousteau
 - Fix Mushroom Bottle:			ozidual
+- Fix South Clock Town:			Linkz
 - Fix Southern Swamp:			ShadowOne333
 - Fix Fairy Fountain:			Dybbles (fix) & ShadowOne333 (ROM / patch)
+- Fix Out-of-Bounds Rupee:		Chez Cousteau
 - Always Best Ending:			Marcelo20XX
 - Map Select & Item Select:		GhostlyDark
 - Goht Awakening:			ShadowOne333
@@ -350,12 +382,28 @@
 - Hat Kid:				Hailey
 - Improved Link:			Skilarbabcock (www.youtube.com/user/skilarbabcock) & Nerrel
 - Improved Link + OoT Eyes:		Skilarbabcock (model), Nerrel (owner) & GhostlyDark (eyes)
+- Kristin:				Ikey Ilex
 - Kristina Olivine:			Ikey Ilex	
 - Majora's Mask + OoT Eyes:		GhostlyDark (eyes)
 - Princess Zelda:			Unesag
 - Ocarina of Time:			Rando
 - Ocarina of Time + MM Eyes		Rando (model) & GhostlyDark (eyes)
 - Ocarina of Time Eyes:			GhostlyDark
+
+--- Music Track Sequence Replacements ---
+- Asra			(347 sequences)
+- Darkychao             ( 83 sequences)
+- Fish-waffle64		( 57 sequences)		https://github.com/Fish-waffle64/Feeshs-MM-Music
+- Isghj			( 29 sequences)
+- Joshua8600		( 59 sequences)
+- Kolipoki		( 14 sequences)
+- Nika			( 28 sequences)
+- Rokon			(  2 sequences)
+- Senate		(139 sequences)
+- sillyhorseradish	(  1 sequence )
+- SlickYoshi		( 25 sequences)
+- Yaruzu		(  8 sequences)
+- Zeraphyr		(  6 sequences)
 
 --- Link Voices ---
 - Ocarina of Time Link:			Phantom Natsu
@@ -456,10 +504,16 @@
 --- Super Mario Odyssey 64
 - Kaze Emanuar
 
+--- Super Mario 64 Internal Plexus: Build 3313 (v0.7) ---
+- Christopher Rios Lillo
+
 
 
 ===================
 <<< PAPER MARIO >>>
+
+--- 16:9 Widescreen ---
+- gamemasterplc
 
 --- Hard Mode ---
 - Skelux (Extra Damage)
@@ -476,6 +530,9 @@
 ========================
 <<< SUPER SMASH BROS >>>
 
+--- 16:9 Widescreen ---
+- gamemasterplc
+
 --- Remix ---
 - The_Smashfather
 - JSsixtyfour
@@ -489,16 +546,50 @@
 - Carnivorous
 - SubDrag
 
---- Widescreen ---
-- gamemasterplc
-
 
 
 =====================
 <<< MARIO KART 64 >>>
 
+--- 16:9 Widescreen ---
+- gamemasterplc
+
 --- CPUs use human items including shells ---
 - triclon
+
+--- Amped Up ---
+- Production:				Litronom
+- Tarmac64 Modding Tools:		DeadHamster
+- Music Guidance & Advice:		MidiGuyDP
+- Track Transcribing:			PablosCorner
+- Feedback & Help:			OverKart 64 Discord Server
+
+--- Battle Kart 64 ---
+- triclon
+
+--- OverKart 4 ---
+- Litronom, DeadHamster
+
+--- Hooting Time ---
+- Production:				DeadHamster
+- Music:				Litronom
+- Translation:				triclon
+
+
+
+======================
+<<< BOMBERMAN HERO >>>
+
+--- 16:9 Widescreen ---
+- gamemasterplc
+
+
+
+=========================
+<<< DIDDY KONG RACING >>>
+
+--- 16:9 Widescreen ---
+- gamemasterplc
 
 
 
@@ -514,6 +605,9 @@
 
 =====================
 <<< BANJO-KAZOOIE >>>
+
+--- 16:9 Widescreen ---
+- gamemasterplc
 
 --- Banjo-Dreamie ---
 - Loggo

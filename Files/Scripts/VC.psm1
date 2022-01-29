@@ -1,4 +1,4 @@
-function CreateVCRemapDialog() {
+﻿function CreateVCRemapDialog() {
     
     # Create Dialog
     $global:VCRemapDialog = CreateDialog -Width (DPISize 800) -Height (DPISize 520) -Icon $Files.icon.settings
@@ -86,10 +86,10 @@ function CheckVCGameID() {
 
 
 #==============================================================================================================================================================================================
-function PatchVCROM([string]$Command, [boolean]$PatchROM) {
+function PatchVCROM([string]$Command) {
 
     # Set the status label.
-    UpdateStatusLabel ("Initial patching of " + $GameType.mode + " ROM...")
+    UpdateStatusLabel ("Patching " + $GameType.mode + " VC ROM...")
     
     # Stuck, since ROM does not exist
     if (!(TestFile $GetROM.run)) {
@@ -99,13 +99,24 @@ function PatchVCROM([string]$Command, [boolean]$PatchROM) {
         return $False
     }
 
+    # Determine if ROM is ROMC and what kind of ROMC
+    $romFile  = [System.IO.File]::ReadAllBytes($GetROM.run)
+    $romData  = $romFile[0..3]
+    $romCheck = @(128, 55, 18, 64)
+    $global:romcType = 0;
+    if ($GameConsole.has_romc -eq 1) {
+        foreach ($i in 0..($romData.length-1)) {
+            if ($romData[$i] -ne $romCheck[$i]) { $global:romcType = $romData[3] }
+        }
+    }
+
     # Extract ROM if required
     if (StrLike -str $Command -val "Extract") {
-        if     ($GameType.romc -eq 1)   { & $Files.tool.romchu $GetROM.run $GetROM.romc | Out-Null }
-        elseif ($GameType.romc -eq 2)   { & $Files.tool.romc d $GetROM.run $GetROM.romc | Out-Null }
-        if     ($GameType.romc -ge 1)   { Move-Item -LiteralPath $GetROM.romc -Destination $WADFile.Extracted -Force }
-        else                            { Move-Item -LiteralPath $GetROM.run  -Destination $WADFile.Extracted -Force }
-        UpdateStatusLabel ("Successfully extracted " + $GameType.mode + " ROM.")
+        if     ($romcType -eq 1)   { & $Files.tool.romc d $GetROM.run $GetROM.romc | Out-Null }
+        elseif ($romcType -eq 2)   { & $Files.tool.romchu $GetROM.run $GetROM.romc | Out-Null }
+        if     ($romcType -ge 1)   { Move-Item -LiteralPath $GetROM.romc -Destination $WADFile.Extracted -Force }
+        else                       { Move-Item -LiteralPath $GetROM.run  -Destination $WADFile.Extracted -Force }
+        UpdateStatusLabel ("Successfully extracted " + $GameType.mode + " ROM with " + (Get-Item -LiteralPath $Files.tool.romc).BaseName + ".")
         return $False
     }
 
@@ -119,12 +130,12 @@ function PatchVCROM([string]$Command, [boolean]$PatchROM) {
     }
 
     # Decompress romc if needed
-    elseif ($PatchROM -and $GameType.romc -ge 1) {  
+    elseif ($PatchInfo.run -and $romcType -ge 1) {
         RemoveFile $GetROM.romc
-        if     ($GameType.romc -eq 1)   { & $Files.tool.romchu $GetROM.run $GetROM.romc | Out-Null }
-        elseif ($GameType.romc -eq 2)   { & $Files.tool.romc d $GetROM.run $GetROM.romc | Out-Null }
+        if     ($romcType -eq 1)   { & $Files.tool.romc d $GetROM.run $GetROM.romc | Out-Null }
+        elseif ($romcType -eq 2)   { & $Files.tool.romchu $GetROM.run $GetROM.romc | Out-Null }
         Move-Item -LiteralPath $GetROM.romc -Destination $GetROM.run -Force
-        $global:ROMHashSum = (Get-FileHash -Algorithm MD5 -LiteralPath $GetROM.run).Hash
+        UpdateStatusLabel ("Successfully decompressed " + $GameType.mode + " ROMC with " + (Get-Item -LiteralPath $Files.tool.romc).BaseName + ".")
     }
 
     # $ByteArray = [IO.File]::ReadAllBytes($GetROM.run)                       # Get the file as a byte array so the size can be analyzed
@@ -274,10 +285,8 @@ function GetControlsValue([object]$Control) {
 #==============================================================================================================================================================================================
 function CompressROMC() {
     
-    if ($GameType.romc -ne 2) { return }
-
+    if ($romcType -ne 1) { return }
     UpdateStatusLabel ("Compressing " + $GameType.mode + " VC ROM...")
-
     RemoveFile $GetROM.romc
     & $Files.tool.romc e $GetROM.run $GetROM.romc | Out-Null
     Move-Item -LiteralPath $GetROM.romc -Destination $GetROM.run -Force
@@ -289,7 +298,7 @@ function CompressROMC() {
 #==============================================================================================================================================================================================
 function ExtendROM() {
     
-    if ($GameType.romc -ne 1) { return }
+    if ($romcType -ne 2) { return }
     $Bytes = @(08, 00, 00, 00)
     $ByteArray = [IO.File]::ReadAllBytes($GetROM.run)
     [io.file]::WriteAllBytes($GetROM.run, $Bytes + $ByteArray)
@@ -487,7 +496,7 @@ function ExtractU8AppFile([string]$Command) {
             }
         }
     }
-    
+
     # ROM is within "00000001.app" VC emulator file, but extract it only
     elseif ($GameConsole.appfile -eq "00000001.app") {
         UpdateStatusLabel 'Extracting ROM from "00000001.app" file...'                  # Set the status label

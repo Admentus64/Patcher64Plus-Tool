@@ -10,7 +10,8 @@
 		"output"		: "_redux_patched"
 	},
 	"options"			: 1,
-	"tooltip"			: "The regular Ocarina of Time experience{0}With support for languages, redux and additional options{0}- Supported: Rev 0 (US)"
+	"tooltip"			: "The regular Ocarina of Time experience{0}With support for languages, redux and additional options{0}- Supported: Rev 0 (US)",
+	"rev"				: [ "5BD1FE107BF8106B2AB6650ABECD54D6", "3C10B67A76616AE2C162DEF7528724CF", "AB1CA59D0039E3B34D82DB650B54D7B9", "8CA71E87DE4CE5E9F6EC916202A623E9" ]
 }, {
 	"title"				: "GZ Practice ROM",
 	"console"			: "Wii VC",
@@ -18,135 +19,151 @@
 	"vc_title"			: "Zelda: GZ Practice ROM",
 	"vc_gameID"			: "NZCE",
 	"patch" : [ {
-		"file"			: "Compressed\\GZ Practice\\gz_practice_rev0_vc.bps",
-		"hash"			: "5BD1FE107BF8106B2AB6650ABECD54D6"
-	}, {
-		"file"			: "Compressed\\GZ Practice\\gz_practice_rev2_vc.bps",
-		"hash"			: "57A9719AD547C516342E1A15D5C28C3D"
-	} ],
-	"output"			: "_gz_practice_patched",
-	"tooltip"			: "A trainer / practice / testing utility for The Legend of Zelda: Ocarina of Time{0}Formally known by its codename 'gz', but generally referred to as 'The Practice ROM'{0}- Supported: Rev 2 (US)",
-	"rev" 				: ["5BD1FE107BF8106B2AB6650ABECD54D6"]
-}, {
-	"title"				: "GZ Practice ROM",
-	"console"			: "Native",
-	"patch" : [ {
 		"file"			: "Compressed\\GZ Practice\\gz_practice_rev0.bps",
-		"hash"			: "5BD1FE107BF8106B2AB6650ABECD54D6"
+		"rev"			: "5BD1FE107BF8106B2AB6650ABECD54D6",
+		"console"		: "Native"
 	}, {
 		"file"			: "Compressed\\GZ Practice\\gz_practice_rev1.bps",
-		"hash"			: "721FDCC6F5F34BE55C43A807F2A16AF4"
+		"rev"			: "721FDCC6F5F34BE55C43A807F2A16AF4",
+		"console"		: "Native"
 	}, {
 		"file"			: "Compressed\\GZ Practice\\gz_practice_rev2.bps",
-		"hash"			: "57A9719AD547C516342E1A15D5C28C3D"
+		"rev"			: "57A9719AD547C516342E1A15D5C28C3D",
+		"console"		: "Native"
 	}, {
 		"file"			: "Compressed\\GZ Practice\\gz_practice_rev_gc.bps",
-		"hash"			: "CD09029EDCFB7C097AC01986A0F83D3F"
+		"rev"			: "CD09029EDCFB7C097AC01986A0F83D3F",
+		"console"		: "Native"
 	}, {
 		"file"			: "Compressed\\GZ Practice\\gz_practice_rev_gc_mq.bps",
-		"hash"			: "DA35577FE54579F6A266931CC75F512D"
+		"rev"			: "DA35577FE54579F6A266931CC75F512D",
+		"console"		: "Native"
+	}, {
+		"file"			: "Compressed\\GZ Practice\\gz_practice_rev0_vc.bps",
+		"rev"			: "5BD1FE107BF8106B2AB6650ABECD54D6",
+		"console"		: "Wii VC"
+	}, {
+		"file"			: "Compressed\\GZ Practice\\gz_practice_rev2_vc.bps",
+		"rev"			: "57A9719AD547C516342E1A15D5C28C3D",
+		"console"		: "Wii VC"
 	} ],
 	"output"			: "_gz_practice_patched",
-	"tooltip"			: "A trainer / practice / testing utility for The Legend of Zelda: Ocarina of Time{0}Formally known by its codename 'gz', but generally referred to as 'The Practice ROM'{0}- Supported: Rev 0 (US), Rev 1 (US), Rev 2 (US), Rev GC (US) & Rev MQ (US)",
-	"rev" 				: ["5BD1FE107BF8106B2AB6650ABECD54D6"]
+	"tooltip"			: "A trainer / practice / testing utility for The Legend of Zelda: Ocarina of Time{0}Formally known by its codename 'gz', but generally referred to as 'The Practice ROM'"
 }, {
 	"title"				: "The Legend of Zelda: The Missing Link (v2.0)",
 	"command"			: "Force Downgrade",
 	"expand_memory"			: 1,
 	"vc_title"			: "Zelda: The Missing Link",
 	"vc_gameID"			: "NAC1",
-	"patch"				: "Compressed\\the_missing_link.bps",
+	"patch" : [{
+		"file"			: "Compressed\\the_missing_link.bps",
+		"rev" 			: "5BD1FE107BF8106B2AB6650ABECD54D6"
+	} ],
 	"output"			: "_the_missing_link_patched",
-	"tooltip"			: "A small-sized ROM hack in a completely new setting{0}- Supported: Rev 0 (US)",
-	"rev" 				: ["5BD1FE107BF8106B2AB6650ABECD54D6"]
+	"tooltip"			: "A small-sized ROM hack in a completely new setting"
+	
 }, {
 	"title"				: "The Legend of Zelda: Dawn & Dusk (v2.0)",
 	"vc_title"			: "Zelda: Dawn & Dusk",
 	"vc_gameID" 			: "NAC2",
 	"patch" : [ {
-		"file"			: "Compressed\\Dawn & Dusk\\dawn_rev0.bps",
-		"hash"			: "5BD1FE107BF8106B2AB6650ABECD54D6"
+		"file"			: "Decompressed\\Dawn & Dusk\\dawn_rev0.bps",
+		"rev"			: "5BD1FE107BF8106B2AB6650ABECD54D6"
 	}, {
-		"file"			: "Compressed\\Dawn & Dusk\\dawn_rev1.bps",
-		"hash"			: "721FDCC6F5F34BE55C43A807F2A16AF4"
+		"file"			: "Decompressed\\Dawn & Dusk\\dawn_rev.bps",
+		"rev"			: "721FDCC6F5F34BE55C43A807F2A16AF4"
 	}, {
-		"file"			: "Compressed\\Dawn & Dusk\\dawn_rev2.bps",
-		"hash"			: "57A9719AD547C516342E1A15D5C28C3D"
+		"file"			: "Decompressed\\Dawn & Dusk\\dawn_rev2.bps",
+		"rev"			: "57A9719AD547C516342E1A15D5C28C3D"
 	} ],
 	"output"			: "_dawn_&_dusk_patched",
-	"tooltip"			: "A small-sized ROM hack in a completely new setting{0}- Supported: Rev 0 (US), Rev 1 (US) & Rev 2 (US)",
-	"rev" 				: ["5BD1FE107BF8106B2AB6650ABECD54D6"]
+	"tooltip"			: "A small-sized ROM hack in a completely new setting"
 }, {
 	"title"				: "The Legend of Zelda: Master of Time (v1.0.9)",
 	"command"			: "Force Downgrade",
-	"options"			: 1,
 	"vc_title"			: "Zelda: Master of Time",
 	"vc_gameID"			: "NAC3",
-	"patch"				: "Compressed\\master_of_time.bps",
+	"patch" : [ {
+		"file"			: "Compressed\\master_of_time.bps",
+		"rev" 			: "5BD1FE107BF8106B2AB6650ABECD54D6"
+	} ],
 	"output"			: "_master_of_time_patched",
-	"tooltip"			: "A small-sized ROM hack in a completely new setting{0}- Supported: Rev 0 (US)",
-	"rev" 				: ["5BD1FE107BF8106B2AB6650ABECD54D6"]
+	"tooltip"			: "A small-sized ROM hack in a completely new setting"
 }, {
 	"title"				: "The Legend of Zelda: Nimpize Adventure",
 	"command"			: "Force Downgrade",
 	"vc_title"			: "Zelda: Nimpize",
 	"vc_gameID"			: "NAC4",
-	"patch"				: "Decompressed\\nimpize.bps",
+	"patch"	: [ {
+		"file"			: "Decompressed\\nimpize.bps",
+		"rev"			: "5BD1FE107BF8106B2AB6650ABECD54D6"
+	} ],
 	"output"			: "_nimpize_patched",
-	"tooltip"			: "A reworked and harder version of Ocarina of Time with remixed dungeons{0}- Supported: Rev 0 (US)",
-	"rev" 				: ["5BD1FE107BF8106B2AB6650ABECD54D6"]
+	"tooltip"			: "A reworked and harder version of Ocarina of Time with remixed dungeons"
 }, {
 	"title"				: "The Legend of Zelda: The Fate of the Bombiwa (v1.0.3)",
 	"command"			: "Force Downgrade",
 	"vc_title"			: "Zelda: Bombiwa",
 	"vc_gameID"			: "NAC5",
-	"patch"				: "Decompressed\\bombiwa.bps",
+	"patch" : [ {
+		"file"			: "Decompressed\\bombiwa.bps",
+		"rev"			: "5BD1FE107BF8106B2AB6650ABECD54D6"
+	} ],
 	"output"			: "_bombiwa_patched",
-	"tooltip"			: "A small-sized ROM hack in a completely new setting, and extremely tricky and difficult{0}- Supported: Rev 0 (US)",
-	"rev" 				: ["5BD1FE107BF8106B2AB6650ABECD54D6"]
+	"tooltip"			: "A small-sized ROM hack in a completely new setting, and extremely tricky and difficult"
 }, {
 	"title"				: "Ocarina of Time Puzzling (v1.1.2)",
 	"command"			: "Force Downgrade",
 	"vc_title"			: "Zelda: Puzzling",
 	"vc_gameID"			: "NAC6",
-	"patch"				: "Compressed\\puzzling.bps",
+	"patch"	: [ {
+		"file"			: "Compressed\\puzzling.bps",
+		"rev" 			: "5BD1FE107BF8106B2AB6650ABECD54D6"
+	} ],
 	"output"			: "_puzzling_patched",
-	"tooltip"			: "A small-sized ROM hack that focuses on puzzling your way through{0}- Supported: Rev 0 (US)",
-	"rev" 				: ["5BD1FE107BF8106B2AB6650ABECD54D6"]
+	"tooltip"			: "A small-sized ROM hack that focuses on puzzling your way through"
 }, {
 	"title"				: "Pots Challenge",
 	"command"			: "Force Downgrade",
 	"vc_title"			: "Zelda: Pots Challenge",
 	"vc_gameID"			: "NAC7",
-	"patch"				: "Compressed\\pots_challenge.bps",
+	"patch" : [ {
+		"file"			: "Compressed\\pots_challenge.bps",
+		"rev"			: "5BD1FE107BF8106B2AB6650ABECD54D6"
+	} ],
 	"output"			: "_pots_challenge_patched",
-	"tooltip"			: "Replay though the original Ocarina of Time by throwing pots only at your targets{0}- Supported: Rev 0 (US)",
-	"rev" 				: ["5BD1FE107BF8106B2AB6650ABECD54D6"]
+	"tooltip"			: "Replay though the original Ocarina of Time by throwing pots only at your targets"
 }, {
 	"title"				: "The Helix Blade (Demo)",
 	"console"			: "Native",
 	"finalize"			: 0,
 	"compress"			: 0,
-	"patch"				: "Decompressed\\the_helix_blade.bps",
+	"patch"	: [ {
+		"file"			: "Decompressed\\the_helix_blade.bps",
+		"rev"			: "5BD1FE107BF8106B2AB6650ABECD54D6"
+	} ],
 	"output"			: "_the_helix_blade_patched",
-	"tooltip"			: "A small-sized ROM hack in a completely new setting{0}- Supported: Rev 0 (US)",
-	"rev" 				: ["5BD1FE107BF8106B2AB6650ABECD54D6"]
+	"tooltip"			: "A small-sized ROM hack in a completely new setting"
 }, {
 	"title"				: "Dark Hyrule Fantasy (Demo)",
 	"console"			: "Native",
 	"finalize"			: 0,
 	"compress"			: 0,
-	"patch"				: "Decompressed\\dark_hyrule_fantasy.bps",
+	"patch"	: [ {
+		"file"			: "Decompressed\\dark_hyrule_fantasy.bps",
+		"rev"			: "8CA71E87DE4CE5E9F6EC916202A623E9"
+	} ],
 	"output"			: "_dark_hyrule_fantasy_patched",
-	"tooltip"			: "A small-sized ROM hack in a completely new setting{0}- Supported: Debug GC MQ (PAL)",
-	"rev" 				: ["8CA71E87DE4CE5E9F6EC916202A623E9"]
+	"tooltip"			: "A small-sized ROM hack in a completely new setting"
 }, {
-	"title"				: "Spaceworld ´97 Experience",
+	"title"				: "Spaceworld 1997 Experience",
 	"console"			: "Native",
 	"finalize"			: 0,
 	"compress"			: 0,
-	"patch"				: "Decompressed\\spaceworld.bps",
+	"patch"	: [ {
+		"file"			: "Decompressed\\spaceworld.bps",
+		"rev"			: "8CA71E87DE4CE5E9F6EC916202A623E9"
+	} ],
 	"output"			: "_spaceworld_patched",
-	"tooltip"			: "A recreation of the demo of Ocarina of Time shown at Spaceworld in 1997{0}- Supported: Debug GC MQ (PAL)",
-	"rev" 				: ["8CA71E87DE4CE5E9F6EC916202A623E9"]
+	"tooltip"			: "A recreation of the demo of Ocarina of Time shown at Spaceworld in 1997"
 } ]

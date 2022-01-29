@@ -13,7 +13,7 @@
 		"output"		: "_redux_patched"
 	},
 	"options"			: 1,
-	"tooltip"			: "The regular Majora's Mask experience{0}With support for languages, redux and additional options{0}- Supported: Rev 0 (US)"
+	"tooltip"			: "The regular Majora's Mask experience{0}With support for languages, redux and additional options"
 }, {
 	"title"				: "KZ Practice ROM",
 	"console"			: "Wii VC",
@@ -22,7 +22,7 @@
 	"vc_gameID"			: "NG2E",
 	"patch"				: "Compressed\\KZ Practice\\kz_practice.bps",
 	"output"			: "_kz_practice_patched",
-	"tooltip"			: "A trainer / practice / testing utility for The Legend of Zelda: Majora's Mask{0}Formally known by its codename 'kz', but generally referred to as 'The Practice ROM'{0}- Supported: Rev 0 (US)"
+	"tooltip"			: "A trainer / practice / testing utility for The Legend of Zelda: Majora's Mask{0}Formally known by its codename 'kz', but generally referred to as 'The Practice ROM'"
 }, {
 	"title"				: "KZ Practice ROM (Lite)",
 	"command"			: "Force Remap D-Pad No Expand Memory Force Downgrade Patch Boot DOL",
@@ -30,7 +30,7 @@
 	"vc_gameID"			: "NG2E",
 	"patch"				: "Compressed\\KZ Practice\\kz_practice_lite.bps",
 	"output"			: "_kz_practice_lite_patched",
-	"tooltip"			: "A trainer / practice / testing utility for The Legend of Zelda: Majora's Mask{0}Formally known by its codename 'kz', but generally referred to as 'The Practice ROM'{0}The lite version has a very limited amount of memory and is more prone to crashing{0}- Supported: Rev 0 (US)"
+	"tooltip"			: "A trainer / practice / testing utility for The Legend of Zelda: Majora's Mask{0}Formally known by its codename 'kz', but generally referred to as 'The Practice ROM'{0}The lite version has a very limited amount of memory and is more prone to crashing"
 }, {
 	"title"				: "Majora's Mask: Master Quest",
 	"command"			: "Force Downgrade",
@@ -38,13 +38,14 @@
 	"vc_gameID"			: "NAR1",
 	"patch"				: "Compressed\\master_quest.bps",
 	"output"			: "_master_quest_patched",
-	"tooltip"			: "A Master Quest style romhack for Majora's Mask, offering a higher difficulty{0}- Supported: Rev 0 (US)"
+	"tooltip"			: "A Master Quest style romhack for Majora's Mask, offering a higher difficulty"
 }, {
 	"title"				: "Majora's Mask: Masked Quest (v4.3)",
+	"finalize"			: 0,
 	"command"			: "Force Remap D-Pad Force Downgrade",
 	"vc_title"			: "Zelda: Masked Quest",
 	"vc_gameID"			: "NURE",
-	"patch"				: "Compressed\\masked_quest.bps",
+	"patch"				: "Decompressed\\masked_quest.bps",
 	"output"			: "_masked_quest_patched",
-	"tooltip"			: "A Master Quest style romhack for Majora's Mask, offering a higher difficulty{0}The patch contains major changes to where progress is obtained throughout the overworld and dungeons{0}Includes some of the changes featured in the Redux / Randomizer patches like D-Pad support{0}- Supported: Rev 0 (US)"
+	"tooltip"			: "A Master Quest style romhack for Majora's Mask, offering a higher difficulty{0}The patch contains major changes to where progress is obtained throughout the overworld and dungeons{0}Includes some of the changes featured in the Redux / Randomizer patches like D-Pad support"
 } ]

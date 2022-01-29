@@ -1,10 +1,11 @@
-function SetWiiVCMode([boolean]$Enable) {
+﻿function SetWiiVCMode([boolean]$Enable) {
     
     if ( ($Enable -eq $IsWiiVC) -and $GameIsSelected) { return }
     $global:IsWiiVC = $Enable
 
     EnablePatchButtons (IsSet $GamePath)
     SetModeLabel
+    ChangeRevList
     ChangeGameRev
 
     if ( (TestFile $GameFiles.controls) -and $IsWiiVC) {
@@ -114,7 +115,7 @@ function ChangeRevList() {
     # Add compatible revisions
     $items = @()
     foreach ($item in $GameType.version) {
-        if (IsSet $item.list) { $items += $item.list }
+        if ( (IsSet $item.list) -and ( ($IsWiiVC -and $item.native -ne 1) -or !$IsWiiVC) ) { $items += $item.list }
     }
 
     if ($items.count -eq 0) { $items += "Rev 0 (US)" }
@@ -150,22 +151,33 @@ function ChangePatchPanel() {
     # Set combobox for patches
     $items = @()
     foreach ($item in $Files.json.patches) {
-        if ( ($IsWiiVC -and $item.console -eq "Wii VC") -or (!$IsWiiVC -and $item.console -eq "Native") -or ($item.console -eq "Both") -or !(IsSet $item.console) ) {
-            if (IsSet $item.rev) {
-                foreach ($i in $item.rev) {
-                    if ($i -eq $GameRev.hash) {
-                        $items += $item.title
-                        if (!(IsSet $FirstItem)) { $FirstItem = $item }
-                    }
+        if (!(IsSet $item.patch) -and (IsSet $item.rev)) {
+            foreach ($i in $item.rev) {
+                if ($i -eq $GameRev.hash) {
+                    $items += $item.title
+                    if (!(IsSet $FirstItem)) { $FirstItem = $item }
                 }
             }
-            else {
+        }
+        elseif (!(IsSet $item.patch)) {
+            $items += $item.title
+            if (!(IsSet $FirstItem)) { $FirstItem = $item }
+        }
+        elseif ($item.patch -isnot [array]) {
+            if ( ( ($IsWiiVC -and $item.console -eq "Wii VC") -or (!$IsWiiVC -and $item.console -eq "Native") -or ($item.console -eq "Both") -or !(IsSet $item.console) ) ) {
                 $items += $item.title
                 if (!(IsSet $FirstItem)) { $FirstItem = $item }
             }
         }
+        else {
+            foreach ($i in $item.patch) {
+                if ($i.rev -eq $GameRev.hash -and ( ($IsWiiVC -and $i.console -eq "Wii VC") -or (!$IsWiiVC -and $i.console -eq "Native") -or ($i.console -eq "Both") -or !(IsSet $i.console) ) ) {
+                    $items += $item.title
+                    if (!(IsSet $FirstItem)) { $FirstItem = $item }
+                }
+            }
+        }
     }
-
     $Patches.Type.Items.AddRange($items)
 
     # Reset last index
@@ -211,8 +223,8 @@ function SetMainScreenSize() {
     if ($GameType.custom_patch -eq 1) {
         $InputPaths.PatchPanel.Visible = $True;
         $InputPaths.PatchPanel.Height  = (DPISize 50)
-        if ($InputPaths.InjectPanel.Visible)   { $InputPaths.PatchPanel.Top = $InputPaths.InjectPanel.Bottom + (DPISize 5) }
-        else                                   { $InputPaths.PatchPanel.Top = $InputPaths.GamePanel.Bottom   + (DPISize 5) }
+        if ($GameType.inject -eq 1 -and $IsWiiVC)   { $InputPaths.PatchPanel.Top = $InputPaths.InjectPanel.Bottom + (DPISize 5) }
+        else                                        { $InputPaths.PatchPanel.Top = $InputPaths.GamePanel.Bottom   + (DPISize 5) }
     }
     else {
         $InputPaths.PatchPanel.Visible = $False
@@ -220,17 +232,21 @@ function SetMainScreenSize() {
     }
 
     # Custom Header Panel Visibility and Size
-    $CustomHeader.Panel.Visible     = ($GameConsole.rom_title -gt 0) -or ($GameConsole.rom_gameID -gt 0)  -or $IsWiiVC
-    $CustomHeader.ROMTitle.Visible  = $CustomHeader.ROMTitleLabel.Visible  = ($GameConsole.rom_title -gt 0)  -and !$IsWiiVC
-    $CustomHeader.ROMGameID.Visible = $CustomHeader.ROMGameIDLabel.Visible = ($GameConsole.rom_gameID -eq 1) -and !$IsWiiVC
-    $CustomHeader.VCTitle.Visible   = $CustomHeader.VCTitleLabel.Visible   = $CustomHeader.VCGameID.Visible     = $CustomHeader.VCGameIDLabel.Visible     = $IsWiiVC
-    $CustomHeader.Region.Visible    = $CustomHeader.RegionLabel.Visible    = $CustomHeader.EnableRegion.Visible = $CustomHeader.EnableRegionLabel.Visible = ($GameConsole.rom_gameID -eq 2)
+    if ($Settings.Core.Interface -eq 2 -or $Settings.Core.Interface -eq 3) {
+        $CustomHeader.Panel.Visible     = ($GameConsole.rom_title -gt 0) -or ($GameConsole.rom_gameID -gt 0)  -or $IsWiiVC
+        $CustomHeader.ROMTitle.Visible  = $CustomHeader.ROMTitleLabel.Visible  = ($GameConsole.rom_title -gt 0)  -and !$IsWiiVC
+        $CustomHeader.ROMGameID.Visible = $CustomHeader.ROMGameIDLabel.Visible = ($GameConsole.rom_gameID -eq 1) -and !$IsWiiVC
+        $CustomHeader.VCTitle.Visible   = $CustomHeader.VCTitleLabel.Visible   = $CustomHeader.VCGameID.Visible     = $CustomHeader.VCGameIDLabel.Visible     = $IsWiiVC
+        $CustomHeader.Region.Visible    = $CustomHeader.RegionLabel.Visible    = $CustomHeader.EnableRegion.Visible = $CustomHeader.EnableRegionLabel.Visible = ($GameConsole.rom_gameID -eq 2)
+
+        if ($GameConsole.rom_gameID -eq 2)   { $CustomHeader.Panel.Height = (DPISize 80) }
+        else                                 { $CustomHeader.Panel.Height = (DPISize 50) }
+        $CustomHeader.Group.Height = $CustomHeader.Panel.Height
+    }
+    else { $CustomHeader.Group.Height = $CustomHeader.Panel.Height = 0 }
+
     $InputPaths.InjectPanel.Visible = $IsWiiVC
     $VC.Panel.Visible = $IsWiiVC -and $Settings.Core.Interface -ne 1
-
-    if ($GameConsole.rom_gameID -eq 2)   { $CustomHeader.Panel.Height = (DPISize 80) }
-    else                                 { $CustomHeader.Panel.Height = (DPISize 50) }
-    $CustomHeader.Group.Height = $CustomHeader.Panel.Height
 
     # Positioning
     if ($GameType.custom_patch -eq 1)   { $CurrentGame.Panel.Location = New-Object System.Drawing.Size((DPISize 10), ($InputPaths.PatchPanel.Bottom + (DPISize 5))) }
@@ -321,6 +337,7 @@ function ChangeGameMode() {
     $GameFiles.decompressed = $GameFiles.Base + "\Decompressed"
     $GameFiles.languages    = $GameFiles.Base + "\Languages"
     $GameFiles.models       = $GameFiles.Base + "\Models"
+    $GameFiles.music        = $GameFiles.Base + "\Music"
     $GameFiles.downgrade    = $GameFiles.Base + "\Downgrade"
     $GameFiles.textures     = $GameFiles.Base + "\Textures"
     $GameFiles.editor       = $GameFiles.Base + "\Editor"
@@ -335,13 +352,30 @@ function ChangeGameMode() {
     if (IsSet $GameType.patches)                               { $Files.json.patches   = SetJSONFile $GameFiles.patches }                           else { $Files.json.patches   = $null }
     if (TestFile ($GameFiles.languages + "\Languages.json"))   { $Files.json.languages = SetJSONFile ($GameFiles.languages + "\Languages.json") }   else { $Files.json.languages = $null }
     if (TestFile ($Paths.shared        + "\Models.json"))      { $Files.json.models    = SetJSONFile ($Paths.shared        + "\Models.json") }      else { $Files.json.models    = $null }
+    if (TestFile ($Paths.shared        + "\Sequences.json"))   { $Files.json.sequences = SetJSONFile ($Paths.shared        + "\Sequences.json") }   else { $Files.json.sequences  = $null }
     if (TestFile ($GameFiles.base      + "\Music.json"))       { $Files.json.music     = SetJSONFile ($GameFiles.base      + "\Music.json") }       else { $Files.json.music     = $null }
 
     ResetReduxSettings
+    SetCreditsSections
+   
 
-    # Info
-    if (TestFile $GameFiles.info)       { AddTextFileToTextbox -TextBox $Credits.Sections[0] -File $GameFiles.info }
-    else                                { AddTextFileToTextbox -TextBox $Credits.Sections[0] -File $null }
+    $Patches.Panel.Visible = $GameType.patches
+
+    SetModeLabel
+    ChangeRevList
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function SetCreditsSections() {
+
+    if (!(IsSet $CreditsDialog)) { return }
+
+     # Info
+     if (TestFile $GameFiles.info)   { AddTextFileToTextbox -TextBox $Credits.Sections[0] -File $GameFiles.info }
+     else                            { AddTextFileToTextbox -TextBox $Credits.Sections[0] -File $null }
 
     # Credits
     if (TestFile $Files.Text.credits) {
@@ -351,11 +385,6 @@ function ChangeGameMode() {
         }
         else { AddTextFileToTextbox -TextBox $Credits.Sections[1] -File $Files.Text.credits -MainCredits }
     }
-
-    $Patches.Panel.Visible = $GameType.patches
-
-    SetModeLabel
-    ChangeRevList
 
 }
 
@@ -397,7 +426,6 @@ function ChangePatch() {
     
     foreach ($item in $Files.json.patches) {
         if ($item.title -eq $Patches.Type.Text) {
-            if ( ($IsWiiVC -and $item.console -eq "Wii VC") -or (!$IsWiiVC -and $item.console -eq "Native") -or ($item.console -eq "Both") -or !(IsSet $item.console) ) {
                 $global:GamePatch = $item
                 $PatchToolTip.SetToolTip($Patches.Button, ([string]::Format($item.tooltip, [Environment]::NewLine)))
                 GetHeader
@@ -408,7 +436,6 @@ function ChangePatch() {
                     LoadAdditionalOptions
                 }
                 break
-            }
         }
     }
 
@@ -426,7 +453,7 @@ function SetVCPanel() {
     # Enable VC panel visiblity
     if ($GameConsole.t64 -eq 1)                                                { EnableElem -Elem @($VC.OptionsLabel, $VC.RemoveT64,     $VC.RemoveT64Label)                              -Active $True -Hide }
     if ($GameConsole.expand_memory -eq 1 -and $GameType.expansion_pak -ne 0)   { EnableElem -Elem @($VC.OptionsLabel, $VC.ExpandMemory,  $VC.ExpandMemoryLabel)                           -Active $True -Hide }
-    if ($GameConsole.remove_filter -eq 1)                                      { EnableElem -Elem @($VC.OptionsLabel, $VC.RemoveFilter,  $VC.RemoveFilterLabel)                           -Active $True -Hide }
+    if ($GameConsole.remove_filter -eq 1 -and $GameType.filter        -ne 0)   { EnableElem -Elem @($VC.OptionsLabel, $VC.RemoveFilter,  $VC.RemoveFilterLabel)                           -Active $True -Hide }
     if (IsSet $Files.json.controls)                                            { EnableElem -Elem @($VC.OptionsLabel, $VC.RemapControls, $VC.RemapControlsLabel, $VC.RemapControlsButton) -Active $True -Hide }
     $VC.RemapControlsButton.Enabled = $VC.RemapControls.checked -and $VC.RemapControls.Active
 
@@ -510,6 +537,17 @@ function GamePath_Finish([object]$TextBox, [string]$Path) {
     $InputPaths.PatchPanel.Visible = $True
     $CustomHeader.EnableHeader.checked -or $CustomHeader.EnableRegion.checked
 
+    CalculateHashSum
+
+}
+
+
+
+#==================================================================================================================================================================================================================================================================
+function CalculateHashSum() {
+    
+    if (!(IsSet $CreditsDialog)) { return }
+    
     # Calculate checksum if Native Mode
     if (!$IsWiiVC) {
         # Update hash
@@ -926,6 +964,8 @@ function EnableGUI([boolean]$Enable) {
 #==============================================================================================================================================================================================
 function EnableForm([object]$Form, [boolean]$Enable, [switch]$Not) {
     
+    if (!(IsSet $Form)) { return }
+
     if ($Not) { $Enable = !$Enable }
     if ($Form.Controls.length -eq $True) {
         foreach ($item in $Form.Controls) { $item.Enabled = $Enable }
@@ -939,6 +979,8 @@ function EnableForm([object]$Form, [boolean]$Enable, [switch]$Not) {
 #==============================================================================================================================================================================================
 function EnableElem([object]$Elem, [boolean]$Active=$True, [switch]$Hide) {
     
+    if (!(IsSet $Elem)) { return }
+
     if ($Elem -is [system.Array]) {
         foreach ($item in $Elem) {
             $item.Enabled = $item.Active = $Active
@@ -1189,6 +1231,18 @@ function GetWindowsVersion() {
 
 
 
+#==================================================================================================================================================================================================================================================================
+function StopJobs() {
+    
+    if ( (Get-Process "playsmf" -ea SilentlyContinue) -ne $null) { Stop-Process -Name "playsmf" }
+    Get-Job | Stop-Job
+    Get-Job | Remove-Job
+    [System.GC]::Collect() | Out-Null
+
+}
+
+
+
 #==============================================================================================================================================================================================
 function GetCommand([string]$Command) { return (Get-Command $Command -errorAction SilentlyContinue) }
 
@@ -1206,6 +1260,7 @@ Export-ModuleMember -Function ChangePatchPanel
 Export-ModuleMember -Function SetMainScreenSize
 Export-ModuleMember -Function ResetReduxSettings
 Export-ModuleMember -Function ChangeGameMode
+Export-ModuleMember -Function SetCreditsSections
 Export-ModuleMember -Function ChangeGameRev
 Export-ModuleMember -Function ChangePatch
 Export-ModuleMember -Function UpdateStatusLabel
@@ -1214,6 +1269,7 @@ Export-ModuleMember -Function SetModeLabel
 Export-ModuleMember -Function EnablePatchButtons
 
 Export-ModuleMember -Function GamePath_Finish
+Export-ModuleMember -Function CalculateHashSum
 Export-ModuleMember -Function InjectPath_Finish
 Export-ModuleMember -Function PatchPath_Finish
 
@@ -1259,4 +1315,5 @@ Export-ModuleMember -Function SetLogging
 Export-ModuleMember -Function SetBitmap
 Export-ModuleMember -Function IsRestrictedFolder
 Export-ModuleMember -Function GetCommand
+Export-ModuleMember -Function StopJobs
 Export-ModuleMember -Function GetWindowsVersion

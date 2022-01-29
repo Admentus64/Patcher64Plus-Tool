@@ -1,25 +1,5 @@
 [ {
 	"title"		: "Paper Mario",
+	"options"	: 1,
 	"tooltip"	: "The regular Paper Mario experience{0}- Supported: Rev 0 (US)"
-},{
-	"title"		: "Hard Mode",
-	"vc_title"	: "Paper Mario: Hard Mode",
-	"vc_gameID"	: "NAE0",
-	"patch"		: "Compressed\\hard_mode.bps",
-	"output"	: "_hard_mode_patched",
-	"tooltip"	: "Increases the damage dealt by enemies by 1.5x{0}- Supported: Rev 0 (US)"
-}, {
-	"title"		: "Hard Mode+",
-	"vc_title"	: "Paper Mario: Hard Mode+",
-	"vc_gameID"	: "NAE1",
-	"patch"		: "Compressed\\hard_mode_plus.bps",
-	"output"	: "_hard_mode_plus_patched",
-	"tooltip"	: "Increases the damage dealt by enemies by 1.5x{0}Also increases the HP of enemies{0}- Supported: Rev 0 (US)"
-}, {
-	"title"		: "Insane Mode",
-	"vc_title"	: "Paper Mario: Insane Mode",
-	"vc_gameID"	: "NAE2",
-	"patch"		: "Compressed\\insane_mode.bps",
-	"output"	: "_insane_mode_patched",
-	"tooltip"	: "Increases the damage dealt by enemies by 2x{0}- Supported: Rev 0 (US)"
 } ]

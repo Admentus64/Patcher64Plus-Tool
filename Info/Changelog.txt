@@ -1,3 +1,27 @@
+v17.0.0
+- Added new Ura Quest dungeons option for OoT
+- Added new Music Replacement patching for OoT & MM
+- Added new "Additional Options" for OoT & MM
+- Added new ROM hack for SM64
+- Added two new models for OoT and one new model for MM (by Ikey Ilex & JanexLane)
+- Added "Additional Options" support and new ROM hacks for MK64
+- Added "Additional Options" support for BK (WS hack)
+- Added new game mode for Diddy Kong Racing (DKC) with WS hack
+- Added new game mode for Banjo-Tooie (BT) with 60 FPS hack
+- Added new game mode for Bomberman Hero with WS hack
+- Updated Adult "Majora's Mask" model for OoT (by Skilar)
+- Changed "Unlock Megaton Hammer" option to also allow displaying the hammer object
+- Changed Master Quest dungeon patching and extraction
+- Changed romc detection to be automatic
+- Changed downgrading to be automatic
+- Changed JSON specifications for Patches and Games
+- Optimized patching process
+- Split patches supporting different revisions into their own revision tab
+- Fixed issue with patching Advanced Widescreen with languages (no Redux) for MM
+- Fixed issue with Free Mode patching and GUI
+- Fixed issue when an illegal filepath is used (shows error dialog and closes properly)
+- Fixed broken custom tunic color for MM by disabling it when using custom models
+
 v16.0.1
 - Updated languages patches for OoT & MM
 - Updated Redux for Zelda 1
@@ -31,7 +55,7 @@ v16.0.0
 - Updated "Tag Anywhere" patch for DK64
 - Updated "Female Pronouns" script with missing pronoun and text box fixes
 - Updated SD HUD preview icons with HD assets
-- Updated normal size HUD buttons for Oot and MM
+- Updated normal size HUD buttons for OoT and MM
 - Updated the Additional Options GUI to be smarter
 - Updated the "Amara (Valkyrie)" model for OoT
 - Updated "Masked Quest" to v4.3 (includes textpointer crash fix, by SpiceyWolf)

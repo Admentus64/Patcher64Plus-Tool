@@ -120,7 +120,7 @@ function CreateOptions() {
     CreateReduxGroup    -Tag  "DebugGlitch" -Text "Glitch Fixes"
     CreateReduxCheckBox -Name "BottleDupe"            -Text "Bottle Dupe and Ocarina"            -Info "Fixes the Bottle Dupe Glitch and Ocarina Glitch"                                                                -Credits "ChriisTiian & Ported by GhostlyDark"
     CreateReduxCheckBox -Name "SwordlessEpona"        -Text "Swordless Epona"                    -Info "Fixes the Swordless Epona Glitch"                                                                               -Credits "ChriisTiian & Ported by GhostlyDark"
-    CreateReduxCheckBox -Name "InfiniteSword"         -Text "Infnite Sword"                      -Info "Fixes the Infinite Sword Glitch"                                                                                -Credits "ChriisTiian & Ported by GhostlyDark"
+    CreateReduxCheckBox -Name "InfiniteSword"         -Text "Infinite Sword"                     -Info "Fixes the Infinite Sword Glitch"                                                                                -Credits "ChriisTiian & Ported by GhostlyDark"
 
 
 

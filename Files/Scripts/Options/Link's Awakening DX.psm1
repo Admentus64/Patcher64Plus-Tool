@@ -20,15 +20,15 @@ function PatchReduxOptions() {
 #==============================================================================================================================================================================================
 function ByteOptions() {
     
-    if     (IsIndex -Elem $Redux.Gameplay.SaveButtonCombo -Text "Start + Select")   { $offset = SearchBytes -Start "E00" -End "F00" -Values "24 F0 CB FE"; $offset = AddToOffset -Hex $offset -Add "4"; ChangeBytes -Offset $offset -Values "C0"; }
-    elseif (IsIndex -Elem $Redux.Gameplay.SaveButtonCombo -Text "A + Start")        { $offset = SearchBytes -Start "E00" -End "F00" -Values "24 F0 CB FE"; $offset = AddToOffset -Hex $offset -Add "4"; ChangeBytes -Offset $offset -Values "90"; }
-    elseif (IsIndex -Elem $Redux.Gameplay.SaveButtonCombo -Text "A + Select")       { $offset = SearchBytes -Start "E00" -End "F00" -Values "24 F0 CB FE"; $offset = AddToOffset -Hex $offset -Add "4"; ChangeBytes -Offset $offset -Values "50"; }
-    elseif (IsIndex -Elem $Redux.Gameplay.SaveButtonCombo -Text "B + Start")        { $offset = SearchBytes -Start "E00" -End "F00" -Values "24 F0 CB FE"; $offset = AddToOffset -Hex $offset -Add "4"; ChangeBytes -Offset $offset -Values "A0"; }
-    elseif (IsIndex -Elem $Redux.Gameplay.SaveButtonCombo -Text "B + Select")       { $offset = SearchBytes -Start "E00" -End "F00" -Values "24 F0 CB FE"; $offset = AddToOffset -Hex $offset -Add "4"; ChangeBytes -Offset $offset -Values "60"; }
-    elseif (IsIndex -Elem $Redux.Gameplay.SaveButtonCombo -Text "Up + Start")       { $offset = SearchBytes -Start "E00" -End "F00" -Values "24 F0 CB FE"; $offset = AddToOffset -Hex $offset -Add "4"; ChangeBytes -Offset $offset -Values "84"; }
-    elseif (IsIndex -Elem $Redux.Gameplay.SaveButtonCombo -Text "Up + Select")      { $offset = SearchBytes -Start "E00" -End "F00" -Values "24 F0 CB FE"; $offset = AddToOffset -Hex $offset -Add "4"; ChangeBytes -Offset $offset -Values "44"; }
-    elseif (IsIndex -Elem $Redux.Gameplay.SaveButtonCombo -Text "Down + Start")     { $offset = SearchBytes -Start "E00" -End "F00" -Values "24 F0 CB FE"; $offset = AddToOffset -Hex $offset -Add "4"; ChangeBytes -Offset $offset -Values "88"; }
-    elseif (IsIndex -Elem $Redux.Gameplay.SaveButtonCombo -Text "Down + Select")    { $offset = SearchBytes -Start "E00" -End "F00" -Values "24 F0 CB FE"; $offset = AddToOffset -Hex $offset -Add "4"; ChangeBytes -Offset $offset -Values "48"; }
+    if     (IsIndex -Elem $Redux.Gameplay.SaveButtonCombo -Text "Start + Select")   { $offset = SearchBytes -Start "E00" -End "F00" -Values "24 F0 CB FE"; $offset = AddToOffset -Hex $offset -Add "4"; ChangeBytes -Offset $offset -Values "C0" }
+    elseif (IsIndex -Elem $Redux.Gameplay.SaveButtonCombo -Text "A + Start")        { $offset = SearchBytes -Start "E00" -End "F00" -Values "24 F0 CB FE"; $offset = AddToOffset -Hex $offset -Add "4"; ChangeBytes -Offset $offset -Values "90" }
+    elseif (IsIndex -Elem $Redux.Gameplay.SaveButtonCombo -Text "A + Select")       { $offset = SearchBytes -Start "E00" -End "F00" -Values "24 F0 CB FE"; $offset = AddToOffset -Hex $offset -Add "4"; ChangeBytes -Offset $offset -Values "50" }
+    elseif (IsIndex -Elem $Redux.Gameplay.SaveButtonCombo -Text "B + Start")        { $offset = SearchBytes -Start "E00" -End "F00" -Values "24 F0 CB FE"; $offset = AddToOffset -Hex $offset -Add "4"; ChangeBytes -Offset $offset -Values "A0" }
+    elseif (IsIndex -Elem $Redux.Gameplay.SaveButtonCombo -Text "B + Select")       { $offset = SearchBytes -Start "E00" -End "F00" -Values "24 F0 CB FE"; $offset = AddToOffset -Hex $offset -Add "4"; ChangeBytes -Offset $offset -Values "60" }
+    elseif (IsIndex -Elem $Redux.Gameplay.SaveButtonCombo -Text "Up + Start")       { $offset = SearchBytes -Start "E00" -End "F00" -Values "24 F0 CB FE"; $offset = AddToOffset -Hex $offset -Add "4"; ChangeBytes -Offset $offset -Values "84" }
+    elseif (IsIndex -Elem $Redux.Gameplay.SaveButtonCombo -Text "Up + Select")      { $offset = SearchBytes -Start "E00" -End "F00" -Values "24 F0 CB FE"; $offset = AddToOffset -Hex $offset -Add "4"; ChangeBytes -Offset $offset -Values "44" }
+    elseif (IsIndex -Elem $Redux.Gameplay.SaveButtonCombo -Text "Down + Start")     { $offset = SearchBytes -Start "E00" -End "F00" -Values "24 F0 CB FE"; $offset = AddToOffset -Hex $offset -Add "4"; ChangeBytes -Offset $offset -Values "88" }
+    elseif (IsIndex -Elem $Redux.Gameplay.SaveButtonCombo -Text "Down + Select")    { $offset = SearchBytes -Start "E00" -End "F00" -Values "24 F0 CB FE"; $offset = AddToOffset -Hex $offset -Add "4"; ChangeBytes -Offset $offset -Values "48" }
 
 }
 

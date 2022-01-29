@@ -1,4 +1,4 @@
-function CreateMainDialog() {
+﻿function CreateMainDialog() {
     
     # Create the main dialog that is shown to the user.
     $global:MainDialog = New-Object System.Windows.Forms.Form
@@ -38,7 +38,7 @@ function CreateMainDialog() {
     $menuBarCredits   = New-Object System.Windows.Forms.ToolStripButton;       $menuBarCredits.Text   = "Credits";            $menuBarHelp.DropDownItems.Add($menuBarCredits)
     $menuBarGameID    = New-Object System.Windows.Forms.ToolStripButton;       $menuBarGameID.Text    = "GameID";             $menuBarHelp.DropDownItems.Add($menuBarGameID)
 
-    $menuBarChecksum.Add_Click(  { foreach ($item in $Credits.Sections) { $item.Visible = $False }; $Credits.Sections[4].Visible = $True; $CreditsDialog.ShowDialog() } )
+    $menuBarChecksum.Add_Click(  { If (!(IsSet $CreditsDialog)) { CreateCreditsDialog | Out-Null }; foreach ($item in $Credits.Sections) { $item.Visible = $False }; $Credits.Sections[4].Visible = $True; $CreditsDialog.ShowDialog() } )
     $menuBarExit.Add_Click(      { $MainDialog.Close() } )
 
     $menuBarSettings.Add_Click(  { $SettingsDialog.ShowDialog() } )
@@ -55,10 +55,10 @@ function CreateMainDialog() {
     $menuBarAdvanced.Add_Click(  { $Settings.Core.Interface = 3; $menuBarBeginner.BackColor = "White";   $menuBarLite.BackColor = "White";   $menuBarAdvanced.BackColor = "#D3D3D3"; ResetReduxSettings; LoadAdditionalOptions; DisablePatches; SetMainScreenSize } )
 
 
-    $menuBarInfo.Add_Click(      { foreach ($item in $Credits.Sections) { $item.Visible = $False }; $Credits.Sections[0].Visible = $True; $CreditsDialog.ShowDialog() } )
-    $menuBarLinks.Add_Click(     { foreach ($item in $Credits.Sections) { $item.Visible = $False }; $Credits.Sections[3].Visible = $True; $CreditsDialog.ShowDialog() } )
-    $menuBarCredits.Add_Click(   { foreach ($item in $Credits.Sections) { $item.Visible = $False }; $Credits.Sections[1].Visible = $True; $CreditsDialog.ShowDialog() } )
-    $menuBarGameID.Add_Click(    { foreach ($item in $Credits.Sections) { $item.Visible = $False }; $Credits.Sections[2].Visible = $True; $CreditsDialog.ShowDialog() } )
+    $menuBarInfo.Add_Click(    { If (!(IsSet $CreditsDialog)) { CreateCreditsDialog | Out-Null }; foreach ($item in $Credits.Sections) { $item.Visible = $False }; $Credits.Sections[0].Visible = $True; $CreditsDialog.ShowDialog() } )
+    $menuBarLinks.Add_Click(   { If (!(IsSet $CreditsDialog)) { CreateCreditsDialog | Out-Null }; foreach ($item in $Credits.Sections) { $item.Visible = $False }; $Credits.Sections[3].Visible = $True; $CreditsDialog.ShowDialog() } )
+    $menuBarCredits.Add_Click( { If (!(IsSet $CreditsDialog)) { CreateCreditsDialog | Out-Null }; foreach ($item in $Credits.Sections) { $item.Visible = $False }; $Credits.Sections[1].Visible = $True; $CreditsDialog.ShowDialog() } )
+    $menuBarGameID.Add_Click(  { If (!(IsSet $CreditsDialog)) { CreateCreditsDialog | Out-Null }; foreach ($item in $Credits.Sections) { $item.Visible = $False }; $Credits.Sections[2].Visible = $True; $CreditsDialog.ShowDialog() } )
 
 
 
@@ -292,11 +292,6 @@ function CreateMainDialog() {
     $Patches.Redux = CreateCheckBox -X ($Patches.ReduxLabel.Right) -Y ($Patches.ReduxLabel.Top - (DPISize 2)) -Width (DPISize 20) -Height (DPISize 20) -Info "Enable the Redux patch which improves game mechanics`nIncludes among other changes the inclusion of the D-Pad for dedicated item buttons" -Name "Patches.Redux" -Checked $True
     $Patches.ReduxLabel.Add_Click({ $Patches.Redux.Checked = !$Patches.Redux.Checked })
 
-    # Downgrade Checkbox
-    $Patches.DowngradeLabel = CreateLabel -X ($Patches.OptionsLabel.Right + (DPISize 50)) -Y ($Patches.ReduxLabel.Top) -Width (DPISize 85) -Height (DPISize 15) -Text "Downgrade:" -Info "Downgrade the ROM to the first original revision"
-    $Patches.Downgrade = CreateCheckBox -X ($Patches.DowngradeLabel.Right) -Y ($Patches.DowngradeLabel.Top - (DPISize 2)) -Width (DPISize 20) -Height (DPISize 20) -Info "Downgrade the ROM to the first original revision" -Name "Patches.Downgrade"
-    $Patches.DowngradeLabel.Add_Click({ $Patches.Downgrade.Checked = !$Patches.Downgrade.Checked })
-
     # Patch Options
     $Patches.OptionsButton = CreateButton -X ($Patches.Group.Right - (DPISize 15) - (DPISize 145)) -Y ($Patches.Options.Top - (DPISize 3)) -Width (DPISize 145) -Height (DPISize 25) -Text "Select Options" -Info 'Open the "Additional Options" panel to change preferences'
     $Patches.OptionsButton.Add_Click( { $OptionsDialog.ShowDialog() } )
@@ -479,7 +474,6 @@ function DisablePatches() {
     EnableElem -Elem @($Patches.Extend,    $Patches.ExtendLabel)                          -Active ((IsSet $GamePatch.allow_extend) -and $Settings.Core.Interface -ne 2 -and $GameRev.extend -ne 0) -Hide
     EnableElem -Elem @($Patches.Redux,     $Patches.ReduxLabel)                           -Active ((IsSet $GamePatch.redux.file)   -and $Settings.Core.Interface -ne 2 -and $GameRev.redux  -ne 0) -Hide
     EnableElem -Elem @($Patches.Options,   $Patches.OptionsLabel, $Patches.OptionsButton) -Active ((TestFile $GameFiles.script)    -and ($GamePatch.options -eq 1 -or $Settings.Debug.ForceOptions -ne $False) -and $GameRev.options -ne 0) -Hide
-    EnableElem -Elem @($Patches.Downgrade, $Patches.DowngradeLabel)                       -Active ((CheckDowngradable) -and $Settings.Core.Interface -ne 2 ) -Hide
     EnableElem -Elem $Patches.OptionsButton                                               -Active $Patches.Options.Checked
     DisableReduxOptions
 
@@ -501,6 +495,7 @@ function CheckDowngradable() {
 }
 
 
+
 #==============================================================================================================================================================================================
 function DisableReduxOptions() {
 
@@ -510,6 +505,7 @@ function DisableReduxOptions() {
     }
 
 }
+
 
 
 #==============================================================================================================================================================================================

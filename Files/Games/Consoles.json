@@ -12,7 +12,8 @@
 	"appfile"			: "00000005.app",
 	"t64"				: 1,
 	"expand_memory"			: 1,
-	"remove_filter"			: 1
+	"remove_filter"			: 1,
+	"has_romc"			: 1
 }, {
 	"title"				: "Nintendo Entertainment System",
 	"mode"				: "NES",

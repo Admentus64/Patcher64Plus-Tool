@@ -8,9 +8,8 @@ Patches for Super Smash Bros:
 Known Issues:
 - Training Mode crashes (Widescreen patch for Virtual Console)
 
-Requirements (one of(:
-- Super Smash Bros. US VC WAD
-- Super Smash Bros. US Z64 ROM
+Requirements:
+- US Z64 ROM or US VC WAD for Super Smash Bros.
 
 Instructions:
 - Select VC WAD or Z64 ROM

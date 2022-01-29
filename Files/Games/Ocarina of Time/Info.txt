@@ -3,7 +3,7 @@ Patch Options for Ocarina of Time:
 	* Inject ROM (requires Z64 ROM)
 	* Patch VC Emulator Only
 	* Extract ROM Only
-2. Apply Patch (requires a patch file)
+2. Free Patching (requires .IPS, .BPS, .XDELTA, .VCDIFF or .PPF File)
 3. Patch Header
 4. Six ROM hacks
 5. Four fan translations (Spanish, Polish, Russian, Chinese)

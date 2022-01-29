@@ -1,4 +1,4 @@
-#=============================================================================================================================================================================================
+﻿#=============================================================================================================================================================================================
 # Patcher By     :  Admentus
 # Concept By     :  Bighead
 # Testing By     :  Admentus, GhostlyDark
@@ -25,8 +25,8 @@ Add-Type -AssemblyName 'System.Drawing'
 # Setup global variables
 
 $global:ScriptName = "Patcher64+ Tool"
-$global:VersionDate = "2022-01-20"
-$global:Version     = "v16.0.1"
+$global:VersionDate = "2022-01-29"
+$global:Version     = "v17.0.0"
 $global:SystemDate  = Get-Date -Format yyyy-MM-dd-HH-mm-ss
 
 $global:CommandType = $MyInvocation.MyCommand.CommandType.ToString()
@@ -175,10 +175,12 @@ foreach ($Script in Get-ChildItem -LiteralPath $Paths.Scripts -Force) {
 #==============================================================================================================================================================================================
 # Run Patcher64+ Tool
 
+Clear-Host
+
 # Retrieve settings
 $global:Settings = GetSettings ($Paths.Settings + "\Core.ini")
-if (!(IsSet $Settings.Core))   { $Settings.Core  = @{} }
-if (!(IsSet $Settings.Debug))  { $Settings.Debug = @{} }
+if (!(IsSet $Settings.Core)  -and !$FatalError)   { $Settings.Core  = @{} }
+if (!(IsSet $Settings.Debug) -and !$FatalError)   { $Settings.Debug = @{} }
 
 # Logging
 if (!$ExternalScript) { $global:TranscriptTime = $SystemDate }
@@ -241,7 +243,6 @@ ShowPowerShellConsole ($Settings.Debug.Console -eq $True)
 
 # Create the dialogs to show to the user
 CreateMainDialog     | Out-Null
-CreateCreditsDialog  | Out-Null
 CreateSettingsDialog | Out-Null
 
 # Check if restricted
@@ -302,5 +303,5 @@ if (!$FatalError) {
     $global:ConsoleHistory = $global:Redux = $global:Settings = $global:GeneralSettings = $global:MainDialog = $global:InputPaths = $global:Patches = $global:VC = $global:CustomHeader = $null
 }
 
-[System.GC]::Collect() | Out-Null
+StopJobs
 Exit
