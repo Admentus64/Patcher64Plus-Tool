@@ -11,6 +11,7 @@ Files/Games/Majora's Mask/Extracted/*.tbl
 Files/Games/Majora's Mask/Custom Text/*.bin
 Files/Games/Majora's Mask/Custom Text/*.tbl
 *.exe
+!Files/Tools/*.exe
 *.7z
 *.htm
 *.html
