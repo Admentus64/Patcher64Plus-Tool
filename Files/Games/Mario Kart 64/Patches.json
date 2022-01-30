@@ -1,5 +1,24 @@
 [ {
-	"title"		: "Bomberman Hero",
-	"tooltip"	: "The regular Bomberman Hero experience{0}- Supported: Rev 0 (US)",
+	"title"		: "Mario Kart 64",
+	"tooltip"	: "The regular Mario Kart 64 experience{0}- Supported: Rev 0 (US)",
 	"options"	: 1
+}, {
+	"title"		: "MarioKart 64: Amped Up (v2.0)",
+	"console"	: "Native",
+	"patch"		: "Compressed\\amped_up.bps",
+	"tooltip"	: "ROM hack of Mario Kart 64 with custom tracks{0}Features 12 custom tracks with custom music and a new game mode{0}- Supported: Rev 0 (US)"
+}, {
+	"title"		: "OverKart (v4 DLC)",
+	"console"	: "Native",
+	"patch"		: "Compressed\\overkart.bps",
+	"tooltip"	: "ROM hack of Mario Kart 64 with custom tracks{0}Features 24 custom tracks{0}- Supported: Rev 0 (US)"
+}, {
+	"title"		: "Battle Kart 64 (v2.0)"
+	"console"	: "Native",
+	"patch"		: "Compressed\\battle_kart_64.bps",
+	"tooltip"	: "ROM hack of Mario Kart 64 that overhauls Battle Mode{0}Features new game modes and settings{0}- Supported: Rev 0 (US)"
+}, {
+	"title"		: "Hooting Time",
+	"patch"		: "Compressed\\hooting_time.bps",
+	"tooltip"	: "Overhauls the HUD and various options and gameplay changes for Mario Kart 64{0}- Supported: Rev 0 (US)"
 } ]
