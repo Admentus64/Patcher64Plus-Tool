@@ -392,6 +392,7 @@ https://github.com/DaruniasJoy/OoT-Custom-Sequences
 
 --- Music Track Sequence Replacements ---
 - Asra			(347 sequences)
+- BigBomba88		( 23 sequences)
 - Darkychao             ( 83 sequences)
 - Fish-waffle64		( 57 sequences)		https://github.com/Fish-waffle64/Feeshs-MM-Music
 - Isghj			( 29 sequences)
