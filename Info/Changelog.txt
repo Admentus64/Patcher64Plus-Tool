@@ -1,5 +1,5 @@
 v17.1.0
-- Added new Custom Music Sequence replacemements for MM (by BigBomba88)
+- Added new Custom Music Sequence replacemements for MM (by BigBomba88 & Nyxael)
 - Added new Music Sequences by previous contributors
 - Added new geometry fixes for MM (by Linkz)
 - Added new "No Recovery Hearts" option for MM
