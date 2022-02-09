@@ -1,4 +1,5 @@
 [ {
-	"title"		: "Free Mode",
-	"tooltip"	: "For patching any game you want, without restrictions"
+	"title"		: "Wii VC Emulator",
+	"tooltip"	: "For patching the Wii VC emulator",
+	"console"	: "Wii VC"
 } ]

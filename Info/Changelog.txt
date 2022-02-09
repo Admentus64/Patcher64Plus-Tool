@@ -1,3 +1,20 @@
+v17.1.0
+- Added new Custom Music Sequence replacemements for MM (by BigBomba88)
+- Added new Music Sequences by previous contributors
+- Added new geometry fixes for MM (by Linkz)
+- Added new "No Recovery Hearts" option for MM
+- Added new "Raise Research Lab Platform" option for MM (by Linkz)
+- Added increased Health for Enemies and Mini-Bosses for MM
+- Updated Redux to v9.2 for ALttP
+- Improved Custom Music Sequence replacement
+- Changed patching increased Health for Enemies, Mini-Bosses and Bosses for OoT & MM
+- Changed Custom Music Sequences to be available for both OoT & MM
+- Changed available Custom Music Sequences for event and non-event music tracks
+- Prevent "No Shield Recoil" from being used if "Run While Shielding" is active for OoT
+- Fixed "Out of Bounds Rupee" option for MM
+- Fixed patches for MK64
+- Fixed typos
+
 v17.0.0
 - Added new Ura Quest dungeons option for OoT
 - Added new Music Replacement patching for OoT & MM

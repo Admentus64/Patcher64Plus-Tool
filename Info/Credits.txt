@@ -137,22 +137,37 @@
 - Zora Link:				spyfoxgames
 
 --- Music Track Sequence Replacements ---
-- Apasher		(17 sequences)
-- Bluwiikoon		( 1 sequence )
-- DKDavid		( 2 sequences)
-- Fish-waffle64		(41 sequences)		https://github.com/Fish-waffle64/Feeshs-MM-Music
-- FQef94		(23 sequences)
-- Joshua8600		(55 sequences)
-- Kirox			(21 sequences)
-- Liamnajor		(30 sequences)
-- LuigiXHero		(35 sequences)		https://github.com/LuigiXHero/OoT-Randomizer-Music-Pack
-- MrMario7788		(10 sequences)
-- SlyryD		( 8 sequences)
-- SonicRPika		(17 sequences)
-- The Sound Defense	(12 sequences)
-- Volcove		( 1 sequence )
-- Zeldaboy14		( 1 sequence )
-- Zeraphyr		( 1 sequence )
+- Apasher		( 17 sequences)
+- Asra			(341 sequences)
+- BigBomba88		( 23 sequences)
+- Bluwiikoon		(  1 sequence )
+- Darkychao		(125 sequences)
+- DKDavid		(  2 sequences)
+- Fish-waffle64		( 68 sequences)		https://github.com/Fish-waffle64/Feeshs-MM-Music
+- FQef94		( 23 sequences)
+- Isghj			( 53 sequences)
+- Joshua8600		( 62 sequences)
+- Kirox			( 22 sequences)
+- Kolipoki		( 14 sequences)
+- Liamnajor		( 30 sequences)
+- LuigiXHero		( 35 sequences)		https://github.com/LuigiXHero/OoT-Randomizer-Music-Pack
+- MM			( 69 sequences)		Nintendo
+- MM Rando		( 97 sequences)		https://github.com/ZoeyZolotova/mm-rando
+- MrMario7788		( 10 sequences)
+- Nika			( 31 sequences)
+- Nyxael		( 51 sequences)
+- OoT			( 29 sequences)		Nintendo
+- Rokon			(  2 sequences)
+- Senate		(138 sequences)
+- sillyhorseradish	(  1 sequence )
+- SlickYoshi		( 25 sequences)
+- SlyryD		(  8 sequences)
+- SonicRPika		( 17 sequences)
+- The Sound Defense	( 12 sequences)
+- Volcove		(  1 sequence )
+- Yaruzu		( 11 sequences)
+- Zeldaboy14		(  1 sequence )
+- Zeraphyr		(  7 sequences)
 https://github.com/DaruniasJoy/OoT-Custom-Sequences
 
 --- Quality Assurance ---
@@ -338,12 +353,14 @@ https://github.com/DaruniasJoy/OoT-Custom-Sequences
 - Restore Title:			ShadowOne333 & Garo-Mastah
 - Restore Skull Kid:			ShadowOne333
 - Restore Shop Music:			ShadowOne333
+- Restore Ikana Castle:			Linkz
 - 4th Piece of Heart Sound:		fkualol
 - Move Bomber Kid:			ShadowOne333
 - On The Moon Intro:			Chez Cousteau
 - Fix Mushroom Bottle:			ozidual
-- Fix South Clock Town:			Linkz
+- Fix Clock Town			Linkz
 - Fix Southern Swamp:			ShadowOne333
+- Fix Great Bay:			Links
 - Fix Fairy Fountain:			Dybbles (fix) & ShadowOne333 (ROM / patch)
 - Fix Out-of-Bounds Rupee:		Chez Cousteau
 - Always Best Ending:			Marcelo20XX
@@ -359,6 +376,7 @@ https://github.com/DaruniasJoy/OoT-Custom-Sequences
 - Hide HUD:				Marcelo20XX
 - No Item Drops:			Admentus & BilonFullHDemon
 - Restore Palace Route:			ShadowOne333
+- Raised Research Lab Platform:		Linkz
 - Kokiri Tunic Color:			GhostlyDark
 - Recolor Mask Forms:			Admentus, ShadowOne333 & Garo-Mastah
 - Fairy Colors:				Dzeko
@@ -391,20 +409,38 @@ https://github.com/DaruniasJoy/OoT-Custom-Sequences
 - Ocarina of Time Eyes:			GhostlyDark
 
 --- Music Track Sequence Replacements ---
-- Asra			(347 sequences)
+- Apasher		( 17 sequences)
+- Asra			(341 sequences)
 - BigBomba88		( 23 sequences)
-- Darkychao             ( 83 sequences)
-- Fish-waffle64		( 57 sequences)		https://github.com/Fish-waffle64/Feeshs-MM-Music
-- Isghj			( 29 sequences)
-- Joshua8600		( 59 sequences)
+- Bluwiikoon		(  1 sequence )
+- Darkychao		(125 sequences)
+- DKDavid		(  2 sequences)
+- Fish-waffle64		( 68 sequences)		https://github.com/Fish-waffle64/Feeshs-MM-Music
+- FQef94		( 23 sequences)
+- Isghj			( 53 sequences)
+- Joshua8600		( 62 sequences)
+- Kirox			( 22 sequences)
 - Kolipoki		( 14 sequences)
-- Nika			( 28 sequences)
+- Liamnajor		( 30 sequences)
+- LuigiXHero		( 35 sequences)		https://github.com/LuigiXHero/OoT-Randomizer-Music-Pack
+- MM			( 69 sequences)		Nintendo
+- MM Rando		( 97 sequences)		https://github.com/ZoeyZolotova/mm-rando
+- MrMario7788		( 10 sequences)
+- Nika			( 31 sequences)
+- Nyxael		( 51 sequences)
+- OoT			( 29 sequences)		Nintendo
 - Rokon			(  2 sequences)
-- Senate		(139 sequences)
+- Senate		(138 sequences)
 - sillyhorseradish	(  1 sequence )
 - SlickYoshi		( 25 sequences)
-- Yaruzu		(  8 sequences)
-- Zeraphyr		(  6 sequences)
+- SlyryD		(  8 sequences)
+- SonicRPika		( 17 sequences)
+- The Sound Defense	( 12 sequences)
+- Volcove		(  1 sequence )
+- Yaruzu		( 11 sequences)
+- Zeldaboy14		(  1 sequence )
+- Zeraphyr		(  7 sequences)
+https://github.com/DaruniasJoy/OoT-Custom-Sequences
 
 --- Link Voices ---
 - Ocarina of Time Link:			Phantom Natsu

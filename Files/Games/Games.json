@@ -612,7 +612,7 @@
 	"mode"			: "Free",
 	"support_vc"		: 1,
 	"console"		: "All",
-	"patches"		: 1,
+	"patches"		: 2,
 	"patch_vc"		: 1,
 	"inject"		: 1,
 	"custom_patch"		: 1,

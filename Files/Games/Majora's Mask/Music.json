@@ -1,4 +1,51 @@
-[ {
+{
+"conversion" : {
+	"ext"			: ".seq",
+	"bank" : [ {
+		"original"	: "03",
+		"replace"	: "03"
+	}, {
+		"original"	: "05",
+		"replace"	: "04"
+	}, {
+		"original"	: "08",
+		"replace"	: "05"
+	}, {
+		"original"	: "09",
+		"replace"	: "06"
+	}, {
+		"original"	: "0D",
+		"replace"	: "07"
+	}, {
+		"original"	: "11",
+		"replace"	: "08"
+	}, {
+		"original"	: "12",
+		"replace"	: "09"
+	}, {
+		"original"	: "14",
+		"replace"	: "0A"
+	}, {
+		"original"	: "15",
+		"replace"	: "0B"
+	}, {
+		"original"	: "16",
+		"replace"	: "0C"
+	}, {
+		"original"	: "1C",
+		"replace"	: "0D"
+	}, {
+		"original"	: "1D",
+		"replace"	: "0E"
+	}, {
+		"original"	: "23",
+		"replace"	: "0F"
+	}, {
+		"original"	: "24",
+		"replace"	: "10"
+	} ]
+},
+"tracks" : [ {
 	"title"		: "Termina Field",
 	"id"		: "02",
 	"force"		: 1,
@@ -320,7 +367,7 @@
 }, {
 	"title"		: "The End/Credits I",
 	"id"		: "74",
-	"event"		: 1,
+	"event"		: 2,
 	"size"		: "2360"
 }, {
 	"title"		: "Title Screen",
@@ -360,6 +407,6 @@
 }, {
 	"title"		: "The End/Credits II",
 	"id"		: "7F",
-	"event"		: 1,
+	"event"		: 2,
 	"size"		: "3260"
-} ]
+} ] }

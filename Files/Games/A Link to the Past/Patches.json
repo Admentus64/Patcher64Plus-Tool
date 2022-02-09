@@ -2,14 +2,14 @@
 	"title"		: "A Link to the Past",
 	"redux" : {
 		"options"	: 1,
-		"vc_title"	: "ALTTP Redux",
+		"vc_title"	: "ALTTP Redux (v9.2)",
 		"vc_gameID"	: "JAD0",
 		"file"		: "Compressed\\redux.ips",
 		"file_v2"	: "Compressed\\redux_new_gfx.ips",
 		"output"	: "_redux_patched"
 	},
 	"options"	: 1,
-	"tooltip"	: "The regular A Link to the Past experience{0}With support for redux and additional options{0}Redux version: 9.1{0}- Supported: Rev 0 (US)"
+	"tooltip"	: "The regular A Link to the Past experience{0}With support for redux and additional options{0}- Supported: Rev 0 (US)"
 }, {
 	"title"		: "The Legend of Zelda: Parallel Worlds (v1.23)",
 	"vc_title"	: "Parallel Worlds",

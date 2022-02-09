@@ -1,4 +1,51 @@
-[ {
+{
+"conversion" : {
+	"ext"			: ".zseq",
+	"bank" : [ {
+		"original"	: "03",
+		"replace"	: "03"
+	}, {
+		"original"	: "04",
+		"replace"	: "05"
+	}, {
+		"original"	: "05",
+		"replace"	: "08"
+	}, {
+		"original"	: "06",
+		"replace"	: "09"
+	}, {
+		"original"	: "07",
+		"replace"	: "0D"
+	}, {
+		"original"	: "08",
+		"replace"	: "11"
+	}, {
+		"original"	: "09",
+		"replace"	: "12"
+	}, {
+		"original"	: "0A",
+		"replace"	: "14"
+	}, {
+		"original"	: "0B",
+		"replace"	: "15"
+	}, {
+		"original"	: "0C",
+		"replace"	: "16"
+	}, {
+		"original"	: "0D",
+		"replace"	: "1C"
+	}, {
+		"original"	: "0E",
+		"replace"	: "1D"
+	}, {
+		"original"	: "0F",
+		"replace"	: "23"
+	}, {
+		"original"	: "10",
+		"replace"	: "24"
+	} ]
+},
+"tracks" : [ {
 	"title"		: "Hyrule Field",
 	"id"		: "02",
 	"muteId"	: ["03", "04", "05", "06", "07", "08", "09", "0A", "0B", "0C", "0D", "0E", "0F", "10", "11", "12", "13", "14", "15", "16", "17"],
@@ -283,22 +330,22 @@
 }, {
 	"title"		: "End Credits I",
 	"id"		: "67",
-	"event"		: 1,
+	"event"		: 2,
 	"size"		: "2610"
 }, {
 	"title"		: "End Credits II",
 	"id"		: "68",
-	"event"		: 1,
+	"event"		: 2,
 	"size"		: "34A0"
 }, {
 	"title"		: "End Credits III",
 	"id"		: "69",
-	"event"		: 1,
+	"event"		: 2,
 	"size"		: "18B0"
 }, {
 	"title"		: "End Credits IV",
 	"id"		: "6A",
-	"event"		: 1,
+	"event"		: 2,
 	"size"		: "08A0"
 }, {
 	"title"		: "King Dodongo & Volvagia Boss Battle",
@@ -308,4 +355,4 @@
 	"title"		: "Mini-Game",
 	"id"		: "6C",
 	"size"		: "08A0"
-} ]
+} ] }
