@@ -7,6 +7,7 @@ v17.1.1
 - Changed behaviour for the default value for dropdown menus
 - Updated Smash Remix to v1.1.0
 - Updated Info window for several N64 titles
+- Updated MQ logo for OoT
 - Removed HP modification for the Armos for OoT & MM
 - Fixed issue with the "Unlock Hammer" option for OoT
 - Fixed typo with the "Female Pronouns" option for OoT
