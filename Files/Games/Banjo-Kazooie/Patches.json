@@ -81,6 +81,15 @@
 	"output"	: "_gruntildas_mask_patched",
 	"tooltip"	: "A small-sized ROM hack in a completely new setting{0}Features 2 worlds, 100 notes & 20 jiggies with an average length of 3 hours{0}- Supported: Rev 0 (US)"
 }, {
+	"title"		: "Banjo-Kazooie: Quest for Cake",
+	"patch" : [ {
+		"file"	: "Decompressed\\quest_for_cake.bps",
+		"rev"	: "B29599651A13F681C9923D69354BF4A3"
+	} ],
+	"options"	: 1,
+	"output"	: "_quest_for_cake_patched",
+	"tooltip"	: "A medium-sized ROM hack in a completely new setting{0}Features 5 worlds, 500 notes and 50 jiggies with an average length of 2-3 hours{0}- Supported: Rev 0 (US)"
+}, {
 	"title"		: "Snow Glow Village",
 	"patch" : [ {
 		"file"	: "Compressed\\snow_glow_village.bps",

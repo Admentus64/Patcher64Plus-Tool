@@ -1,6 +1,6 @@
 v17.1.1
 - Added pre-compiled Redux patches for OoT and MM
-- Added two new ROM hacks for Paper Mario
+- Added two new ROM hacks for PM and one new ROM hack for BK
 - Added more blood options for OoT
 - Added new "Point Filtering" option for OoT
 - Changed "The Helix Blade" ROM hack for OoT into a native patch for the Debug GC MQ ROM instead of Rev 0

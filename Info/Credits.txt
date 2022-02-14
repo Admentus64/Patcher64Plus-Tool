@@ -686,6 +686,9 @@ https://github.com/DaruniasJoy/OoT-Custom-Sequences
 - Kurkomark
 - bynine (proof-reading)
 
+--- Banjo-Kazooie: Quest for Cake ---
+- JacksonG13
+
 --- Snow Glow Village ---
 - KBM
 - Skill
