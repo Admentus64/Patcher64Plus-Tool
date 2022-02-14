@@ -226,7 +226,6 @@ function RunAutoUpdate() {
     
     $path   = $Paths.Base
     $master = $Paths.Base + "\master.zip"
-    if (TestFile $master) { RemoveFile $master }
     Invoke-WebRequest -Uri "https://github.com/Admentus64/Patcher64Plus-Tool/archive/refs/heads/master.zip" -OutFile $master
 
     if (!(TestFile $master)) {
@@ -304,6 +303,7 @@ $Fonts.SmallUnderline = New-Object System.Drawing.Font($Font, 8,  [System.Drawin
 $Fonts.TextFile       = New-Object System.Drawing.Font("Consolas", 8, [System.Drawing.FontStyle]::Regular)
 $Fonts.Editor         = New-Object System.Drawing.Font("Consolas", 16, [System.Drawing.FontStyle]::Regular)
 
+if (TestFile $master) { RemoveFile $master }
 AutoUpdate
 
 # Hide the PowerShell console from the user
