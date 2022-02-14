@@ -303,7 +303,7 @@ $Fonts.SmallUnderline = New-Object System.Drawing.Font($Font, 8,  [System.Drawin
 $Fonts.TextFile       = New-Object System.Drawing.Font("Consolas", 8, [System.Drawing.FontStyle]::Regular)
 $Fonts.Editor         = New-Object System.Drawing.Font("Consolas", 16, [System.Drawing.FontStyle]::Regular)
 
-if (TestFile $master) { RemoveFile $master }
+if (TestFile ($Paths.Base + "\master.zip")) { RemoveFile ($Paths.Base + "\master.zip") }
 AutoUpdate
 
 # Hide the PowerShell console from the user
