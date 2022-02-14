@@ -248,13 +248,13 @@ function RunAutoUpdate() {
     RemovePath $Paths.Base + "\Info"
 
     $newFolder = $Paths.base + "\Patcher64Plus-Tool-master\"
-    Move-Item -LiteralPath ($newFolder + "Files\Games")         -Destination $Paths.Games
-    Move-Item -LiteralPath ($newFolder + "Files\Tools")         -Destination $Paths.Tools
-    Move-Item -LiteralPath ($newFolder + "Files\Main")          -Destination $Paths.Main
-    Move-Item -LiteralPath ($newFolder + "Files\Scripts")       -Destination $Paths.Scripts
-    Move-Item -LiteralPath ($newFolder + "Info")                -Destination ($Paths.Base + "\Info")
-    Move-Item -LiteralPath ($newFolder + "Patcher64+ Tool.ps1") -Destination $Paths.Base
-    Move-Item -LiteralPath ($newFolder + "Files\version.txt")   -Destination ($Paths.Master + "\version.txt")
+    Move-Item -LiteralPath ($newFolder + "Files\Games")         -Destination $Paths.Games                     -Force
+    Move-Item -LiteralPath ($newFolder + "Files\Tools")         -Destination $Paths.Tools                     -Force
+    Move-Item -LiteralPath ($newFolder + "Files\Main")          -Destination $Paths.Main                      -Force
+    Move-Item -LiteralPath ($newFolder + "Files\Scripts")       -Destination $Paths.Scripts                   -Force
+    Move-Item -LiteralPath ($newFolder + "Info")                -Destination ($Paths.Base + "\Info")          -Force
+    Move-Item -LiteralPath ($newFolder + "Patcher64+ Tool.ps1") -Destination $Paths.Base                      -Force
+    Move-Item -LiteralPath ($newFolder + "Files\version.txt")   -Destination ($Paths.Master + "\version.txt") -Force
 
     RemovePath $newFolder
 
