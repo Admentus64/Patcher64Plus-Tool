@@ -187,6 +187,11 @@ if (TestFile $versionFile) {
 
 function AutoUpdate() {
     
+    if ($Version -eq "Version Missing" -or $VersionDate -eq "Date Missing") {
+        UpdateStatusLabel "Current version is missing! Could not update!"
+        return
+    }
+
     $update = $false
     $file = $Paths.base + "\version.txt"
     try {
@@ -200,7 +205,7 @@ function AutoUpdate() {
 
         
     }
-    catch { UpdateStatusLabel "Could not run the auto-updater" }
+    catch { UpdateStatusLabel "Could not run the auto-updater!" }
     
     if ($update) {
         $UpdateDialog = New-Object System.Windows.Forms.Form
@@ -229,7 +234,7 @@ function RunAutoUpdate() {
     Invoke-WebRequest -Uri "https://github.com/Admentus64/Patcher64Plus-Tool/archive/refs/heads/master.zip" -OutFile $master
 
     if (!(TestFile $master)) {
-        UpdateStatusLabel "Could not extract new update"
+        UpdateStatusLabel "Could not extract new update!"
         return
     }
 
@@ -249,7 +254,7 @@ function RunAutoUpdate() {
     Move-Item -LiteralPath ($newFolder + "Files\Scripts")       -Destination $Paths.Scripts
     Move-Item -LiteralPath ($newFolder + "Info")                -Destination ($Paths.Base + "\Info")
     Move-Item -LiteralPath ($newFolder + "Patcher64+ Tool.ps1") -Destination $Paths.Base
-    Move-Item -LiteralPath ($newFolder + "Files\version.txt")   -Destination $Paths.Master
+    Move-Item -LiteralPath ($newFolder + "Files\version.txt")   -Destination ($Paths.Master + "\version.txt")
 
     RemovePath $newFolder
 
