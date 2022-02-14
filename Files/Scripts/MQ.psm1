@@ -12,8 +12,9 @@
         ChangeBytes -Offset "E6C9F0" -Values "3C 01 BF B0 C4 44 62 D4 44 81 80 00 C4 4A 62 E0 46 06 22 00 84 4E 62 CA 26 01 7F FF 46 10 54 80 E4 48 62 D4 25 CF FF FF E4 52 62 E0"
         ChangeBytes -Offset "E6CA48" -Values "3C 01 43 48 44 81 40 00 26 01 7F FF E4 46 62 D4 E4 48 62 E0"
     }
-    elseif (IsChecked $Redux.MQ.UraQuestLogo) { # Ura Title
-        PatchBytes -Offset "1795300" -Texture -Patch "Logo\ura_logo.bin"
+    elseif ( (IsChecked $Redux.MQ.UraQuestLogo) -or (IsChecked $Redux.MQ.UraQuestSubtitleLogo) ) { # Ura Title
+        if     (IsChecked $Redux.MQ.UraQuestLogo)           { PatchBytes -Offset "1795300" -Texture -Patch "Logo\ura_logo.bin"          } # Ura Title
+        elseif (IsChecked $Redux.MQ.UraQuestSubtitleLogo)   { PatchBytes -Offset "1795300" -Texture -Patch "Logo\ura_subtitle_logo.bin" } # Ura Title + Subtitle
         PatchBytes -Offset "17AE300" -Texture -Patch "Logo\ura_copyright.bin"
         ChangeBytes -Offset "E6E266" -Values "C8 96 34 21 C8" # THE LEGEND OF + OCARINA OF TIME
         ChangeBytes -Offset "E6E2A6" -Values "64 32 35 8C 64" # Overlay Title color

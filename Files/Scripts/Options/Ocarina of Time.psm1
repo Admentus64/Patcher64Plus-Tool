@@ -1733,9 +1733,10 @@ function CreateTabDifficulty() {
 
     CreateReduxGroup -Tag "MQ" -Text "Title Screen Logo" -Beginner -Advanced
     CreateReduxPanel
-    CreateReduxRadioButton -Name "VanillaLogo"          -Max 3 -SaveTo "Logo" -Text "Vanilla" -Checked     -Info "Keep the original title screen logo"
-    CreateReduxRadioButton -Name "MasterQuestLogo"      -Max 3 -SaveTo "Logo" -Text "Master Quest"         -Info "Use the Master Quest title screen logo" -Credits "ShadowOne333, GhostlyDark & Admentus"
-    CreateReduxRadioButton -Name "UraQuestLogo"         -Max 3 -SaveTo "Logo" -Text "Ura Quest"            -Info "Use the Ura Quest title screen logo"    -Credits "ZethN64, Sakura, Frostclaw, Steve(ToCoool), GhostlyDark & Admentus"
+    CreateReduxRadioButton -Name "VanillaLogo"          -Max 4 -SaveTo "Logo" -Text "Vanilla" -Checked     -Info "Keep the original title screen logo"
+    CreateReduxRadioButton -Name "MasterQuestLogo"      -Max 4 -SaveTo "Logo" -Text "Master Quest"         -Info "Use the Master Quest title screen logo"            -Credits "ShadowOne333, GhostlyDark & Admentus"
+    CreateReduxRadioButton -Name "UraQuestLogo"         -Max 4 -SaveTo "Logo" -Text "Ura Quest"            -Info "Use the Ura Quest title screen logo"               -Credits "ZethN64, Sakura, Frostclaw, Steve(ToCoool), GhostlyDark & Admentus"
+    CreateReduxRadioButton -Name "UraQuestSubtitleLogo" -Max 4 -SaveTo "Logo" -Text "Ura Quest + Subtitle" -Info "Use the Ura Quest title screen logo with subtitle" -Credits "ZethN64, Sakura, Frostclaw, Steve(ToCoool), GhostlyDark, Admentus & ShadowOne"
 
 
 
