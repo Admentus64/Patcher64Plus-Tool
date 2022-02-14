@@ -1,3 +1,6 @@
+v17.2.0
+- Added new Auto-Updater feature
+
 v17.1.1
 - Added pre-compiled Redux patches for OoT and MM
 - Added two new ROM hacks for PM and one new ROM hack for BK

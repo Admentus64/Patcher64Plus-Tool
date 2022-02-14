@@ -25,8 +25,8 @@ Add-Type -AssemblyName 'System.Drawing'
 # Setup global variables
 
 $global:ScriptName = "Patcher64+ Tool"
-$global:VersionDate = "2022-02-14"
-$global:Version     = "v17.1.1"
+$global:VersionDate = "Date Missing"
+$global:Version     = "Version Missing"
 $global:SystemDate  = Get-Date -Format yyyy-MM-dd-HH-mm-ss
 
 $global:CommandType = $MyInvocation.MyCommand.CommandType.ToString()
@@ -172,6 +172,93 @@ foreach ($Script in Get-ChildItem -LiteralPath $Paths.Scripts -Force) {
 
 
 
+#==================================================================================================================================================================================================================================================================
+# Read version data
+
+$versionFile = $Paths.Master + "\Version.txt"
+if (TestFile $versionFile) {
+    $global:Version     = (Get-Content -LiteralPath $versionFile)[0]
+    $global:VersionDate = (Get-Content -LiteralPath $versionFile)[1]
+}
+
+
+#==================================================================================================================================================================================================================================================================
+# Auto-Updater
+
+function AutoUpdate() {
+    
+    $update = $false
+    $file = $Paths.base + "\version.txt"
+    try {
+        Invoke-WebRequest -Uri "https://raw.githubusercontent.com/Admentus64/Patcher64Plus-Tool/master/Files/version.txt" -OutFile $file
+        $newVersion = (Get-Content -LiteralPath $file)[0]
+        $newDate    = (Get-Content -LiteralPath $file)[1]
+        RemoveFile $file
+
+        if ($Version -lt $newVersion)                                { $update = $true }
+        elseif ( (Get-Date $VersionDate) -lt (Get-Date $newDate) )   { $update = $true }
+
+        
+    }
+    catch { UpdateStatusLabel "Could not run the auto-updater" }
+    
+    if ($update) {
+        $UpdateDialog = New-Object System.Windows.Forms.Form
+        $UpdateDialog.Size = DPISize (New-Object System.Drawing.Size(360, 180))
+        $UpdateDialog.Text = $ScriptName
+        $UpdateDialog.FormBorderStyle = [System.Windows.Forms.FormBorderStyle]::FixedDialog
+        $UpdateDialog.StartPosition = "CenterScreen"
+        $UpdateDialog.Icon = $Files.icon.main
+
+        $label   = CreateLabel -x (DPISize 20)  -Y (DPISize 10) -Text ("Would you like to update Patcher64+?`n" + "New Version: " + $newVersion) -Font $Fonts.Medium -AddTo $UpdateDialog
+        $yesBtn  = CreateButton -X (DPISize 60)  -Y (DPISize 80)  -Width (DPISize 100) -Height (DPISize 50) -AddTo $UpdateDialog -Text "Yes"
+        $noBtn   = CreateButton  -X (DPISize 200) -Y (DPISize 80)  -Width (DPISize 100) -Height (DPISize 50) -AddTo $UpdateDialog -Text "No"
+    
+        $yesBtn.Add_Click( { $UpdateDialog.Close(); RunAutoUpdate } )
+        $noBtn.Add_Click(  { $UpdateDialog.Close() } )
+
+        $UpdateDialog.ShowDialog() | Out-Null
+        $UpdateDialog = $label = $yesBtn = $noBtn = $null
+    }
+}
+
+function RunAutoUpdate() {
+
+    $path   = $Paths.base
+    $master = $Paths.Base + "\master.zip"
+    Invoke-WebRequest -Uri "https://github.com/Admentus64/Patcher64Plus-Tool/archive/refs/heads/master.zip" -OutFile $master
+
+    if (!(TestFile $master)) {
+        UpdateStatusLabel "Could not extract new update"
+        return
+    }
+
+    Expand-Archive -LiteralPath ".\master.zip" -DestinationPath $path
+    RemoveFile ".\master.zip"
+
+    RemovePath $Paths.Games
+    RemovePath $Paths.Tools
+    RemovePath $Paths.Main
+    RemovePath $Paths.Scripts
+    RemovePath $Paths.Base + "\Info"
+
+    $newFolder = $Paths.base + "\Patcher64Plus-Tool-master\"
+    Move-Item -LiteralPath ($newFolder + "Files\Games")         -Destination $Paths.Games
+    Move-Item -LiteralPath ($newFolder + "Files\Tools")         -Destination $Paths.Tools
+    Move-Item -LiteralPath ($newFolder + "Files\Main")          -Destination $Paths.Main
+    Move-Item -LiteralPath ($newFolder + "Files\Scripts")       -Destination $Paths.Scripts
+    Move-Item -LiteralPath ($newFolder + "Info")                -Destination ($Paths.Base + "\Info")
+    Move-Item -LiteralPath ($newFolder + "Patcher64+ Tool.ps1") -Destination $Paths.Base
+    Move-Item -LiteralPath ($newFolder + "Files\version.txt")   -Destination $Paths.Master
+
+    RemovePath $newFolder
+
+    $global:FatalError = $True
+
+}
+
+
+
 #==============================================================================================================================================================================================
 # Run Patcher64+ Tool
 
@@ -215,6 +302,8 @@ $Fonts.SmallBold      = New-Object System.Drawing.Font($Font, 8,  [System.Drawin
 $Fonts.SmallUnderline = New-Object System.Drawing.Font($Font, 8,  [System.Drawing.FontStyle]::Underline)
 $Fonts.TextFile       = New-Object System.Drawing.Font("Consolas", 8, [System.Drawing.FontStyle]::Regular)
 $Fonts.Editor         = New-Object System.Drawing.Font("Consolas", 16, [System.Drawing.FontStyle]::Regular)
+
+AutoUpdate
 
 # Hide the PowerShell console from the user
 ShowPowerShellConsole ($Settings.Debug.Console -eq $True)
@@ -260,7 +349,6 @@ WriteToConsole ("System Date:   " + $SystemDate)
 WriteToConsole ("Temp Folder:   " + $Paths.Temp)
 
 if (!$FatalError) {
-    
     # Set default game mode
     ChangeConsolesList   | Out-Null
     GetFilePaths         | Out-Null
@@ -291,17 +379,19 @@ if (!$FatalError) {
     InitializeEvents
 }
 
+if (!(TestFile $versionFile)) { UpdateStatusLabel "Could not read version and date of the patcher" }
+
 # Show the dialog to the user
 if (!$FatalError) { $MainDialog.ShowDialog() | Out-Null }
 
 # Exit
 if (!$FatalError) {
-    Out-IniFile -FilePath $Files.settings -InputObject $Settings | Out-Null
-    if ($GameType.save -gt 0) { Out-IniFile -FilePath (GetGameSettingsFile) -InputObject $GameSettings | Out-Null }
-    RemovePath $Paths.Registry
-    SetLogging $False
-    $global:ConsoleHistory = $global:Redux = $global:Settings = $global:GeneralSettings = $global:MainDialog = $global:InputPaths = $global:Patches = $global:VC = $global:CustomHeader = $null
-}
+        Out-IniFile -FilePath $Files.settings -InputObject $Settings | Out-Null
+        if ($GameType.save -gt 0) { Out-IniFile -FilePath (GetGameSettingsFile) -InputObject $GameSettings | Out-Null }
+        RemovePath $Paths.Registry
+        SetLogging $False
+        $global:ConsoleHistory = $global:Redux = $global:Settings = $global:GeneralSettings = $global:MainDialog = $global:InputPaths = $global:Patches = $global:VC = $global:CustomHeader = $null
+    }
 
 StopJobs
 Exit
