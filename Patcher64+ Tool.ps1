@@ -223,9 +223,10 @@ function AutoUpdate() {
 }
 
 function RunAutoUpdate() {
-
-    $path   = $Paths.base
+    
+    $path   = $Paths.Base
     $master = $Paths.Base + "\master.zip"
+    if (TestFile $master) { RemoveFile $master }
     Invoke-WebRequest -Uri "https://github.com/Admentus64/Patcher64Plus-Tool/archive/refs/heads/master.zip" -OutFile $master
 
     if (!(TestFile $master)) {
@@ -233,8 +234,8 @@ function RunAutoUpdate() {
         return
     }
 
-    Expand-Archive -LiteralPath ".\master.zip" -DestinationPath $path
-    RemoveFile ".\master.zip"
+    Expand-Archive -LiteralPath $master -DestinationPath $path
+    RemoveFile $master
 
     RemovePath $Paths.Games
     RemovePath $Paths.Tools
