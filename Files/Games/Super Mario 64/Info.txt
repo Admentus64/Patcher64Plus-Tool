@@ -38,6 +38,7 @@ Programs:
 - Wad Packer/Wad Unpacker
 - Wiimm's 'wszst' Tool
 - Floating IPS
+- PPF3
 - Xdelta3
 - sm64extend Tool
 - RN64CRC

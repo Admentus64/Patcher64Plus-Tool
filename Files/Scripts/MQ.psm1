@@ -19,13 +19,6 @@
         ChangeBytes -Offset "E6E2A6" -Values "64 32 35 8C 64" # Overlay Title color
         ChangeBytes -Offset "E6DE2E" -Values "96" # Title Flames color
     }
-    elseif (IsChecked $Redux.MQ.UraQuestSubtitleLogo) { # Ura Title with Subtitle
-        PatchBytes -Offset "1795300" -Texture -Patch "Logo\ura_subtitle_logo.bin"
-        PatchBytes -Offset "17AE300" -Texture -Patch "Logo\ura_copyright.bin"
-        ChangeBytes -Offset "E6E266" -Values "C8 96 34 21 C8" # THE LEGEND OF + OCARINA OF TIME
-        ChangeBytes -Offset "E6E2A6" -Values "64 32 35 8C 64" # Overlay Title color
-        ChangeBytes -Offset "E6DE2E" -Values "96" # Title Flames color
-    }
 
     if (IsChecked $Redux.MQ.Disable) { return }
     $dungeons = PatchDungeonsMQ

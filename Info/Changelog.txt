@@ -1,3 +1,19 @@
+v17.1.1
+- Added pre-compiled Redux patches for OoT and MM
+- Added two new ROM hacks for Paper Mario
+- Added more blood options for OoT
+- Added new "Point Filtering" option for OoT
+- Changed "The Helix Blade" ROM hack for OoT into a native patch for the Debug GC MQ ROM instead of Rev 0
+- Changed behaviour for the default value for dropdown menus
+- Updated Smash Remix to v1.1.0
+- Updated Info window for several N64 titles
+- Removed "Ura Quest + Subtitle" logo option for OoT
+- Removed HP modification for the Armos for OoT & MM
+- Fixed issue with the "Unlock Hammer" option for OoT
+- Fixed typo with the "Female Pronouns" option for OoT
+- Fixed issue with broken HP for Iron Knuckles in 1 HP mode for OoT
+- Fixed issue with crashing when entering a room with an Armos in it when using 1 HP for Monsters
+
 v17.1.0
 - Added new Custom Music Sequence replacemements for MM (by BigBomba88 & Nyxael)
 - Added new Music Sequences by previous contributors

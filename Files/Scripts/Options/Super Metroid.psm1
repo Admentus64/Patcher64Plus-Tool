@@ -26,8 +26,6 @@ function PatchReduxOptions() {
 function CreateOptions() {
     
     CreateOptionsDialog -Columns 2 -Height 320
-    
-    EnableElem -Elem $Redux.Graphics.Widescreen -Active (!$IsWiiVC)
 
 }
 
@@ -37,7 +35,7 @@ function CreateTabMain() {
     
     # GRAPHICS #
     CreateReduxGroup    -Tag "Graphics" -Text "Graphics"
-    CreateReduxCheckBox -Name "Widescreen"                -Text "16:9 Widescreen [!]"  -Info "16:9 Widescreen display`n[!] Only works with the BSNES / Higan Widescreen feature, and will thus not cause a change in Dolphin"  -Credits "ocesse"
+    CreateReduxCheckBox -Name "Widescreen"                -Text "16:9 Widescreen [!]"  -Info "16:9 Widescreen display`n[!] Only works with the BSNES / Higan Widescreen feature, and will thus not cause a change in Dolphin"  -Credits "ocesse" -Native
     CreateReduxCheckBox -Name "RedesignedSamus"           -Text "Redesigned Samus"     -Info "Change the appearence of Samus"                                                                                                  -Credits "Dmit Ryaz"
 
     # GAMEPLAY #

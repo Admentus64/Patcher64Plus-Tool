@@ -2,8 +2,8 @@ function PrePatchLanguageOptions() {
 
     # ENHANCED 16:9 WIDESCREEN #
 
-    if ( (IsChecked $Redux.Graphics.Widescreen) -and !$Patches.Redux.Checked)   { ApplyPatch -Patch "Decompressed\widescreen.ppf"; }
-    if ( (IsSet $LanguagePatch.DmaTable) -and !$Patches.Redux.Checked) { return }
+    if ( (IsChecked $Redux.Graphics.Widescreen) -and !$Patches.Redux.Checked)   { ApplyPatch -Patch "Decompressed\optional\widescreen.ppf"; }
+    if ( (IsSet $LanguagePatch.DmaTable)        -and !$Patches.Redux.Checked)   { return }
 
     if   (IsChecked $Redux.Graphics.Widescreen)                                 { RemoveFile $Files.dmaTable }
     if ( (IsChecked $Redux.Graphics.Widescreen) -and !$Patches.Redux.Checked)   { Add-Content $Files.dmaTable "0 1 2 3 4 5 6 7 -8 -9 15 16 17 18 19 20 -21 22 -24 25 26 27 28 29 30 -652 1127 -1540 -1541 -1542 -1543 -1544 -1545 -1546 -1547 -1548 -1549 -1550 -1551 1552 1553 1554 1555 1556 1557 1558 1559 1560 1561 1562 1563 1564 1565 1566 1567" }
@@ -27,14 +27,14 @@ function PatchOptions() {
 
     # DIFFICULTY #
 
-    if (IsChecked $Redux.Hero.MasterQuest)                     { ApplyPatch -Patch "Decompressed\master_quest_remix.ppf"           }
-    if (IsChecked $Redux.Hero.RaisedResearchLabPlatform)       { ApplyPatch -Patch "Decompressed\raised_research_lab_platform.ppf" }
+    if (IsChecked $Redux.Hero.MasterQuest)                     { ApplyPatch -Patch "Decompressed\optional\master_quest_remix.ppf"           }
+    if (IsChecked $Redux.Hero.RaisedResearchLabPlatform)       { ApplyPatch -Patch "Decompressed\optional\raised_research_lab_platform.ppf" }
 
 
 
     # GAMEPLAY #
 
-    if (IsChecked $Redux.Gameplay.FierceDeity)                 { ApplyPatch -Patch "Decompressed\fda.ppf" }
+    if (IsChecked $Redux.Gameplay.FierceDeity)                 { ApplyPatch -Patch "Decompressed\optional\fda.ppf" }
 
 }
 
@@ -381,7 +381,7 @@ function ByteOptions() {
         ChangeBytes -Offset "E0336B" -Values $multiplier -Multiply -IsDec; ChangeBytes -Offset "E07028" -Values $multiplier -Multiply -IsDec # Wolfos
         ChangeBytes -Offset "D3D9DC" -Values $multiplier -Multiply -IsDec; ChangeBytes -Offset "D3AFBC" -Values $multiplier -Multiply -IsDec # Blue Bubble, Red Bubble
         ChangeBytes -Offset "D2F07C" -Values $multiplier -Multiply -IsDec; ChangeBytes -Offset "D6CFB8" -Values $multiplier -Multiply -IsDec # Deku Baba, Wilted Deku Baba
-        ChangeBytes -Offset "D2B2F8" -Values $multiplier -Multiply -IsDec; ChangeBytes -Offset "D47754" -Values $multiplier -Multiply -IsDec # Armos (alt: D2B29E), Beamos
+        ChangeBytes -Offset "D47754" -Values $multiplier -Multiply -IsDec # Beamos
         ChangeBytes -Offset "D76388" -Values $multiplier -Multiply -IsDec # Like-Like
         ChangeBytes -Offset "D4E07F" -Values $multiplier -Multiply -IsDec # ReDead, Gibdo
         ChangeBytes -Offset "F94A00" -Values $multiplier -Multiply -IsDec # Poe
@@ -409,8 +409,10 @@ function ByteOptions() {
       # ChangeBytes -Offset "" -Values $multiplier -Multiply -IsDec # Hiploop                             (HP: ??)   F831B0 -> F86E00 (Length: 3C50) (ovl_En_Pp)
       # ChangeBytes -Offset "" -Values $multiplier -Multiply -IsDec # Deep Python                         (HP: ??)   FC3A10 -> FC5C50 (Length: 2240) (ovl_En_Dragon)
       # ChangeBytes -Offset "" -Values $multiplier -Multiply -IsDec # Bio Deku Baba                       (HP: ??)   E596F0 -> E5D320 (Length: 3C30) (ovl_Boss_05)
+
       # ChangeBytes -Offset "DA556F" -Values $multiplier -Multiply -IsDec; ChangeBytes -Offset "DA6E67" -Values $multiplier -Multiply -IsDec # Freezard
       # ChangeBytes -Offset "D21870" -Values $multiplier -Multiply -IsDec # Skulltula
+      # ChangeBytes -Offset "D2B2F8" -Values $multiplier -Multiply -IsDec # Armos (alt: D2B29E)
     }
 
     if (IsIndex -Elem $Redux.Hero.MiniBossHP -Index 3 -Not) { # Mini-Bosses

@@ -1,8 +1,9 @@
 function PatchOptions() {
     
-    # ENHANCED 16:9 WIDESCREEN #
+    # GRAPHICS #
 
-    if (IsChecked $Redux.Graphics.Widescreen) { ApplyPatch -Patch "Decompressed\Optional\widescreen.ppf" }
+    if (IsChecked $Redux.Graphics.Widescreen)       { ApplyPatch -Patch "Decompressed\Optional\widescreen.ppf"      }
+    if (IsChecked $Redux.Graphics.PointFiltering)   { ApplyPatch -Patch "Decompressed\Optional\point_filtering.ppf" }
     
 
 
@@ -23,7 +24,7 @@ function PatchOptions() {
     }
 
     if (IsChecked $Redux.Animation.Feminine)            { ApplyPatch -Patch "Decompressed\Optional\feminine_animations.ppf" }
-    if (IsChecked $Redux.Graphics.HideEquipment)        { ApplyPatch -Patch "Decompressed\Optional\hide_equipment.ppf" }
+    if (IsChecked $Redux.Graphics.HideEquipment)        { ApplyPatch -Patch "Decompressed\Optional\hide_equipment.ppf"      }
 
 
 
@@ -43,7 +44,7 @@ function PatchOptions() {
 
 #==============================================================================================================================================================================================
 function ByteOptions() {
-
+    
     # GAMEPLAY #
 
     if (IsChecked $Redux.Gameplay.FasterBlockPushing) {
@@ -100,9 +101,15 @@ function ByteOptions() {
         ExportAndPatch -Path "audiobank_fire_temple" -Offset "D390" -Length "4CCBB0"
     }
 
-    if (IsChecked $Redux.Restore.CowNoseRing)   { ChangeBytes -Offset "EF3E68" -Values "00 00" }
-    if (IsChecked $Redux.Restore.Blood)         { ChangeBytes -Offset "D8D590" -Values "00 78 00 FF 00 78 00 FF"; ChangeBytes -Offset "E8C424" -Values "00 78 00 FF 00 78 00 FF" }
+    if ( (IsIndex -Elem $Redux.Restore.Blood -Index 2) -or (IsIndex -Elem $Redux.Restore.Blood -Index 4) ) {
+        ChangeBytes -Offset "B65A40" -Values "04"; ChangeBytes -Offset "B65A44" -Values "04"; ChangeBytes -Offset "B65A4C" -Values "04"; ChangeBytes -Offset "B65A50" -Values "04"
+    }
+    if ( (IsIndex -Elem $Redux.Restore.Blood -Index 3) -or (IsIndex -Elem $Redux.Restore.Blood -Index 4) ) {
+        ChangeBytes -Offset "D8D590" -Values "00 78 00 FF 00 78 00 FF"; ChangeBytes -Offset "E8C424" -Values "00 78 00 FF 00 78 00 FF"
+    }
 
+    if (IsChecked $Redux.Restore.CowNoseRing) { ChangeBytes -Offset "EF3E68" -Values "00 00" }
+    
 
 
     # OTHER #
@@ -137,13 +144,14 @@ function ByteOptions() {
         ChangeBytes -Offset "217F031" -Values "0C"; ChangeBytes -Offset "217F06F" -Values "07"; ChangeBytes -Offset "217F161" -Values "07"; ChangeBytes -Offset "2182031" -Values "0C"; ChangeBytes -Offset "218206F" -Values "07"; ChangeBytes -Offset "21820F1" -Values "07" # Adult
     }
 
-    if (IsChecked $Redux.Fixes.SubscreenDelay)        { ChangeBytes -Offset "B15DD0"  -Values "00 00 00 00"; ChangeBytes -Offset "B12947"  -Values "03" }
-    if (IsChecked $Redux.Fixes.Graves)                { ChangeBytes -Offset "202039D" -Values "20";          ChangeBytes -Offset "202043C" -Values "24" } 
+    if (IsChecked $Redux.Fixes.PauseScreenDelay)      { ChangeBytes -Offset "B15DD0" -Values "00 00 00 00"              } # Pause Screen Anti-Aliasing
+    if (IsChecked $Redux.Fixes.PauseScreenCrash)      { ChangeBytes -Offset "B12947" -Values "03"                       } # Pause Screen Delay Speed
+    if (IsChecked $Redux.Fixes.Graves)                { ChangeBytes -Offset "202039D" -Values "20"; ChangeBytes -Offset "202043C" -Values "24" } 
     if (IsChecked $Redux.Other.VisibleGerudoTent)     { ChangeBytes -Offset "D215CB"  -Values "11"                      }
     if (IsChecked $Redux.Fixes.PoacherSaw)            { ChangeBytes -Offset "AE72CC"  -Values "00 00 00 00"             }
     if (IsChecked $Redux.Fixes.Boomerang)             { ChangeBytes -Offset "F0F718"  -Values "FC 41 C7 FF FF FF FE 38" }
     if (IsChecked $Redux.Fixes.FortressMinimap)       { CopyBytes   -Offset "96E068"  -Length "D48" -Start "974600"     }
-    if (IsChecked $Redux.Fixes.SpiritTempleMirrors)   { ChangeBytes -Offset "0E45678" -Values "00 00";       ChangeBytes -Offset "0E4567B" -Values "00"  }
+    if (IsChecked $Redux.Fixes.SpiritTempleMirrors)   { ChangeBytes -Offset "0E45678" -Values "00 00"; ChangeBytes -Offset "0E4567B" -Values "00"  }
     
 
     # OTHER #
@@ -226,7 +234,7 @@ function ByteOptions() {
     }
 
     if (IsChecked $Redux.Graphics.ExtendedDraw)      { ChangeBytes -Offset "A9A970" -Values "00 01" }
-    if (IsChecked $Redux.Graphics.ForceHiresModel)   { ChangeBytes -Offset "BE608B" -Values "00" }
+    if (IsChecked $Redux.Graphics.ForceHiresModel)   { ChangeBytes -Offset "BE608B" -Values "00"    }
 
 
 
@@ -463,7 +471,6 @@ function ByteOptions() {
         ChangeBytes -Offset "C1097C" -Values $multiplier -Multiply -IsDec; ChangeBytes -Offset "CD582C" -Values $multiplier -Multiply -IsDec # Wallmaster, Floormaster
         ChangeBytes -Offset "C2DEE7" -Values $multiplier -Multiply -IsDec; ChangeBytes -Offset "C2DF4B" -Values $multiplier -Multiply -IsDec # Leever (Green / Purple)
         ChangeBytes -Offset "CC6CA7" -Values $multiplier -Multiply -IsDec; ChangeBytes -Offset "CC6CAB" -Values $multiplier -Multiply -IsDec # Beamos
-        ChangeBytes -Offset "C96A5B" -Values $multiplier -Multiply -IsDec; ChangeBytes -Offset "C96B0C" -Values $multiplier -Multiply -IsDec # Armos
         ChangeBytes -Offset "C15814" -Values $multiplier -Multiply -IsDec; ChangeBytes -Offset "EEF780" -Values $multiplier -Multiply -IsDec # Keese, Guay
         ChangeBytes -Offset "C11177" -Values $multiplier -Multiply -IsDec; ChangeBytes -Offset "C599BC" -Values $multiplier -Multiply -IsDec # Dodongo, Baby Dodongo
         ChangeBytes -Offset "CE60C4" -Values $multiplier -Multiply -IsDec #; ChangeBytes -Offset "CE39AF" -Values "80" # Skullwalltula (Regular & Gold), Gold HP Multiplier
@@ -476,15 +483,17 @@ function ByteOptions() {
         ChangeBytes -Offset "CA85DC" -Values $multiplier -Multiply -IsDec # Mad Scrub
         ChangeBytes -Offset "DADBAF" -Values $multiplier -Multiply -IsDec # Spike
         ChangeBytes -Offset "D463BF" -Values $multiplier -Multiply -IsDec # Shell Blade
-
+        
         if ($multiplier -ge 2) {
             ChangeBytes -Offset "B65660" -Values "10 01 01 01 10 02 01 01 01 01 01 02 02 02 00 00 00 01 01 00 00 00 01 01 01 01 01 01 00 00 00 00" # Skulltula
-            ChangeBytes -Offset "DFE767" -Values "F1 F0 F0 F1 F1 F0 F1 F2 22 F0 F0 F0 F0 F0 22 00 00 00 00 F0 F2 F1 F0 F4 F2"       # Freezard
+            ChangeBytes -Offset "DFE767" -Values "F1 F0 F0 F1 F1 F0 F1 F2 22 F0 F0 F0 F0 F0 22 00 00 00 00 F0 F2 F1 F0 F4 F2"                      # Freezard
+            
         }
 
       # ChangeBytes -Offset "" -Values $multiplier -Multiply -IsDec # Peehat Larva                       (HP: 01)   C2F8D0 -> C32FD0 (Length: 3700) (ovl_En_Peehat)
       # ChangeBytes -Offset "" -Values $multiplier -Multiply -IsDec # Anubis                             (HP: 01)   D79240 -> D7A4F0 (Length: 12B0) (ovl_En_Anubice)
       # ChangeBytes -Offset "DFC9A3" -Values $multiplier -Multiply -IsDec; ChangeBytes -Offset "DFDE43" -Values $multiplier -Multiply -IsDec # Freezard
+      # ChangeBytes -Offset "C96A5B" -Values $multiplier -Multiply -IsDec; ChangeBytes -Offset "C96B0C" -Values $multiplier -Multiply -IsDec # Armos
       # ChangeBytes -Offset "C6417C" -Values $multiplier -Multiply -IsDec # Skulltula
     }
 
@@ -505,7 +514,7 @@ function ByteOptions() {
             $value = $ByteArrayGame[(GetDecimal "DEB367")]; $value--; $value *= $multiplier; $value++;
             ChangeBytes -Offset "DEB367" -Values $value -IsDec; ChangeBytes -Offset "DEB34F" -Values $value -IsDec # Iron Knuckle (phase 2)
         }
-        else { ChangeBytes -Offset "DE9A1B" -Values "01"; ChangeBytes -Offset "DEB367" -Values "01" -IsDec; ChangeBytes -Offset "01" } # Iron Knuckle (phase 1), Iron Knuckle (phase 2)
+        else { ChangeBytes -Offset "DE9A1B" -Values "01"; ChangeBytes -Offset "DEB367" -Values "01" -IsDec; ChangeBytes -Offset "DEB34F" -Values "01" } # Iron Knuckle (phase 1), Iron Knuckle (phase 2)
     }
     
     if (IsIndex -Elem $Redux.Hero.BossHP -Index 3 -Not) { # Bosses
@@ -1340,10 +1349,7 @@ function CreateOptions() {
 
 #==============================================================================================================================================================================================
 function AdjustGUI() {
-    
-    EnableElem -Elem $Redux.Gameplay.FasterClimbing -Active (!$IswiiVC)
-    EnableElem -Elem $Redux.Unlock.CrawlHole        -Active (!$IswiiVC)
-
+   
     if (CheckInterfaceMode -Lite $True) { return }
 
     EnableElem -Elem $Redux.Graphics.Widescreen    -Active (!$Redux.Graphics.WidescreenAlt.Checked -and !$Patches.Redux.Checked -and !$IswiiVC)
@@ -1364,7 +1370,7 @@ function CreateTabMain() {
 
     CreateReduxGroup    -Tag  "Gameplay" -Text "Gameplay" 
     CreateReduxCheckBox -Name "FasterBlockPushing" -Checked -Text "Faster Block Pushing"  -Beginner -Advanced -Info "All blocks are pushed faster" -Credits "GhostlyDark (Ported from Redux)"
-    CreateReduxCheckBox -Name "EasierMinigames"             -Text "Easier Minigames"      -Beginner -Advanced -Info "Certain minigames are made easier and faster`n- Dampe's Digging Game is first try always`n- Fishing is less random and has less demanding requirements`n-Bombchu Bowling prizes now appear in fixed order instead of random" -Credits "Ported from Rando"
+    CreateReduxCheckBox -Name "EasierMinigames"             -Text "Easier Minigames"      -Beginner -Advanced -Info "Certain minigames are made easier and faster`n- Dampe's Digging Game is first try always`n- Fishing is less random and has less demanding requirements`n- Bombchu Bowling prizes now appear in fixed order instead of random" -Credits "Ported from Rando"
     CreateReduxCheckBox -Name "ReturnChild"                 -Text "Can Always Return"     -Beginner -Advanced -Info "You can always go back to being a child again before clearing the boss of the Forest Temple`nOut of the way Sheik!"            -Credits "Ported from Redux"
     CreateReduxCheckBox -Name "Medallions"                  -Text "Require All Medallions"          -Advanced -Info "All six medallions are required for the Rainbow Bridge to appear before Ganon's Castle`nThe vanilla requirements were the Shadow and Spirit Medallions and the Light Arrows" -Credits "Ported from Rando"
     CreateReduxCheckBox -Name "RutoNeverDisappears"         -Text "Ruto Never Disappears" -Beginner -Advanced -Info "Ruto never disappears in Jabu Jabu's Belly and will remain in place when leaving the room"                                     -Credits "Ported from Rando"
@@ -1375,7 +1381,7 @@ function CreateTabMain() {
     CreateReduxCheckBox -Name "NoShieldRecoil"              -Text "No Shield Recoil"          -Lite -Advanced -Info "Disable the recoil when being hit while shielding"                                                                             -Credits "Admentus (ROM) & Aegiker (GameShark)"
     CreateReduxCheckBox -Name "RunWhileShielding"           -Text "Run While Shielding"       -Lite -Advanced -Info "Press R to shield will no longer prevent Link from moving around" -Link $Redux.Gameplay.NoShieldRecoil                         -Credits "Admentus (ported) & Aegiker (Debug)"
     CreateReduxCheckBox -Name "PushbackAttackingWalls"      -Text "Pushback Attacking Walls"  -Lite -Advanced -Info "Link is getting pushed back a bit when hitting the wall with the sword"                                                        -Credits "Admentus (ported) & Aegiker (Debug)"
-    CreateReduxCheckBox -Name "FasterClimbing"              -Text "Faster Climbing"                           -Info "Link climbes up vines much faster"                                                                                             -Credits "Admentus"
+    CreateReduxCheckBox -Name "FasterClimbing"              -Text "Faster Climbing"           -Native         -Info "Link climbes up vines much faster"                                                                                             -Credits "Admentus"
     CreateReduxCheckBox -Name "SpawnLinksHouse"             -Text "Adult Spawns in Link's House"              -Info "Saving the game anywhere outside of a dungeon will make Adult start the session in Link's House instead of the Temple of Time" -Credits "GhostlyDark"
     CreateReduxCheckBox -Name "AllowWarpSongs"              -Text "Allow Warp Songs"      -Beginner -Advanced -Info "Allow warp songs in Gerudo Training Ground and Ganon's Castle"                                                                 -Credits "Ported from Rando"
     CreateReduxCheckBox -Name "AllowFaroreWind"             -Text "Allow Farore's Wind"   -Beginner -Advanced -Info "Allow Farore's Wind in Gerudo Training Ground and Ganon's Castle"                                                              -Credits "Ported from Rando"
@@ -1388,14 +1394,15 @@ function CreateTabMain() {
     CreateReduxCheckBox -Name "CowNoseRing"    -Text "Restore Cow Nose Ring"            -Info "Restore the rings in the noses for Cows as seen in the Japanese release" -Credits "ShadowOne333"
     CreateReduxCheckBox -Name "FireTemple"     -Text "Censor Fire Temple"     -Advanced -Info "Censor Fire Temple theme as used in the Rev 2 ROM" -Credits "ShadowOne333"
     CreateReduxCheckBox -Name "GerudoTextures" -Text "Censor Gerudo Textures" -Advanced -Info "Censor Gerudo symbol textures used in the GameCube / Virtual Console releases`n- Disable the option to uncensor the Gerudo Texture used in the Master Quest dungeons`n- Player model textures such as the Mirror Shield might not get restored for specific custom models" -Credits "GhostlyDark & ShadowOne333"
-    CreateReduxCheckBox -Name "Blood"          -Text "Censor Blood"     -Lite -Advanced -Info "Censor the green blood for Ganondorf and Ganon as used in the Rev 2 ROM" -Credits "ShadowOne333"
+    CreateReduxComboBox -Name "Blood"          -Text "Blood Color"      -Lite -Advanced -Info "Change the color of blood used for several monsters, Ganondorf and Ganon" -Items @("Default", "Red blood for monsters", "Green blood for Ganondorf/Ganon", "Change both") -Credits "ShadowOne333 & Admentus"
     
 
 
     # FIXES #
 
     CreateReduxGroup    -Tag  "Fixes" -Text "Fixes"
-    CreateReduxCheckBox -Name "SubscreenDelay"       -Text "Pause Screen Delay"      -Checked        -Info "Removes the delay when opening the Pause Screen by removing the anti-aliasing"                                                                        -Credits "zel"
+    CreateReduxCheckBox -Name "PauseScreenDelay"     -Text "Pause Screen Delay"      -Checked        -Info "Removes the delay when opening the Pause Screen by removing the anti-aliasing" -Native                                                                -Credits "zel"
+    CreateReduxCheckBox -Name "PauseScreenCrash"     -Text "Pause Screen Crash Fix"  -Checked        -Info "Prevents the game from randomly crashing emulating a decompressed ROM upon pausing"                                                                   -Credits "zel"
     CreateReduxCheckBox -Name "Graves"               -Text "Graveyard Graves"                        -Info "The grave holes in Kakariko Graveyard behave as in the Rev 1 revision`nThe edges no longer force Link to grab or jump over them when trying to enter" -Credits "Ported from Rando"
     CreateReduxCheckBox -Name "VisibleGerudoTent"    -Text "Visible Gerudo Tent"     -Lite -Advanced -Info "Make the tent in the Gerudo Valley during the Child era visible`nThe tent was always accessible, just invisible"                                      -Credits "Chez Cousteau"
     CreateReduxCheckBox -Name "PoacherSaw"           -Text "Poacher's Saw"           -Checked        -Info "Obtaining the Poacher's Saw no longer prevents Link from obtaining the second Deku Nut upgrade"                                                       -Credits "Ported from Rando"
@@ -1554,6 +1561,7 @@ function CreateTabGraphics() {
     CreateReduxCheckBox -Name "ForceHiresModel"    -Text "Force Hires Link Model"       -Info "Always use Link's High Resolution Model when Link is too far away"                                   -Credits "GhostlyDark"
     CreateReduxCheckBox -Name "HideEquipment"      -Text "Hide Equipment"               -Info "Hide the equipment when it is sheathed"                                                              -Credits "XModxGodX"
     CreateReduxCheckBox -Name "OverworldSkyboxes"  -Text "Overworld Skyboxes"           -Info "Use day and night skyboxes for all overworld areas lacking one" -Lite -Advanced                      -Credits "Admentus (ported) & BrianMp16 (AR Code)"
+    CreateReduxCheckBox -Name "PointFiltering"     -Text "Point Filtering"              -Info "Use point filtering instead of the 3-point bilinear filtering"        -Advanced -Native              -Credits "Admentus" -Warning "This option will make the game look worse and more like a PlayStation 1 title"
 
     $Models = LoadModelsList -Category "Child"
     CreateReduxComboBox -Name "ChildModels" -Text "Child Model" -Items (@("Original") + $Models) -Default "Original" -Info "Replace the child model used for Link" -Row 3 -Column 1
@@ -1725,10 +1733,9 @@ function CreateTabDifficulty() {
 
     CreateReduxGroup -Tag "MQ" -Text "Title Screen Logo" -Beginner -Advanced
     CreateReduxPanel
-    CreateReduxRadioButton -Name "VanillaLogo"          -Max 4 -SaveTo "Logo" -Text "Vanilla" -Checked     -Info "Keep the original title screen logo"
-    CreateReduxRadioButton -Name "MasterQuestLogo"      -Max 4 -SaveTo "Logo" -Text "Master Quest"         -Info "Use the Master Quest title screen logo" -Credits "ShadowOne333, GhostlyDark & Admentus"
-    CreateReduxRadioButton -Name "UraQuestLogo"         -Max 4 -SaveTo "Logo" -Text "Ura Quest"            -Info "Use the Ura Quest title screen logo"    -Credits "ZethN64, Sakura, Frostclaw, Steve(ToCoool), GhostlyDark & Admentus"
-    CreateReduxRadioButton -Name "UraQuestSubtitleLogo" -Max 4 -SaveTo "Logo" -Text "Ura Quest + Subtitle" -Info "Use the Ura Quest title screen logo"    -Credits "ZethN64, Sakura, Frostclaw, Steve(ToCoool), ShadowOne333, GhostlyDark & Admentus"
+    CreateReduxRadioButton -Name "VanillaLogo"          -Max 3 -SaveTo "Logo" -Text "Vanilla" -Checked     -Info "Keep the original title screen logo"
+    CreateReduxRadioButton -Name "MasterQuestLogo"      -Max 3 -SaveTo "Logo" -Text "Master Quest"         -Info "Use the Master Quest title screen logo" -Credits "ShadowOne333, GhostlyDark & Admentus"
+    CreateReduxRadioButton -Name "UraQuestLogo"         -Max 3 -SaveTo "Logo" -Text "Ura Quest"            -Info "Use the Ura Quest title screen logo"    -Credits "ZethN64, Sakura, Frostclaw, Steve(ToCoool), GhostlyDark & Admentus"
 
 
 
@@ -1924,7 +1931,7 @@ function CreateTabEquipment() {
     CreateReduxCheckBox -Name "DekuShield"     -Text "Unlock Deku Shield"  -Info "Adult Link is able to use the Deku Shield"     -Credits "GhostlyDark" -Lite -Advanced -Warning "The Deku Shield appears as invisible but can still be burned up by fire"
     CreateReduxCheckBox -Name "FairySlingshot" -Text "Unlock Slingshot"    -Info "Adult Link is able to use the Fairy Slingshot" -Credits "GhostlyDark" -Lite -Advanced -Warning "The Fairy Slingshot appears as the Fairy Bow"
     CreateReduxCheckBox -Name "Boomerang"      -Text "Unlock Boomerang"    -Info "Adult Link is able to use the Boomerang"       -Credits "GhostlyDark" -Lite -Advanced -Warning "The Boomerang appears as invisible"
-    CreateReduxCheckBox -Name "CrawlHole"      -Text "Unlock Crawl Hole"   -Info "Adult Link can now crawl through holes"        -Credits "Admentus"          -Advanced
+    CreateReduxCheckBox -Name "CrawlHole"      -Text "Unlock Crawl Hole"   -Info "Adult Link can now crawl through holes"        -Credits "Admentus"          -Advanced -Native
     CreateReduxComboBox -Name "DekuSticks"     -Text "Unlock Deku Sticks"  -Info "Adult Link is able to use the Deku Sticks"     -Credits "GhostlyDark"       -Advanced -Warning "The Deku Sticks appears as invisible for both Child and Adult Link with this option" -Items @("Disabled", "Crash Fix Only", "Crash Fix and Unlock")
 
 

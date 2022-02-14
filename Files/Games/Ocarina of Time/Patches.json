@@ -1,12 +1,40 @@
 [ {
-	"title"				: "Ocarina of Time",
+	"title"				: "Redux Plus",
+	"vc_title"			: "Redux: Ocarina of Time",
+	"patch" : [ {
+		"file"			: "Decompressed\\Redux\\redux_plus.bps",
+		"rev"			: "5BD1FE107BF8106B2AB6650ABECD54D6",
+		"console"		: "Native"
+	}, {
+		"file"			: "Decompressed\\Redux\\redux_plus_vc.bps",
+		"rev"			: "5BD1FE107BF8106B2AB6650ABECD54D6",
+		"console"		: "Wii VC"
+	} ],
+	"output"			: "_redux_plus_patched",	
+	"tooltip"			: "The definitive Ocarina of Time experience{0}Includes Redux with a series of Quality of Life changes and fixes"
+}, {
+	"title"				: "Redux Plus (Master Quest)",
+	"vc_title"			: "Redux: Ocarina of Time",
+	"patch" : [ {
+		"file"			: "Decompressed\\Redux\\redux_plus_mq.bps",
+		"rev"			: "5BD1FE107BF8106B2AB6650ABECD54D6",
+		"console"		: "Native"
+	}, {
+		"file"			: "Decompressed\\Redux\\redux_plus_mq_vc.bps",
+		"rev"			: "5BD1FE107BF8106B2AB6650ABECD54D6",
+		"console"		: "Wii VC"
+	} ],
+	"output"			: "_redux_plus_patched",
+	"tooltip"			: "The definitive Ocarina of Time experience{0}Includes Redux with a series of Quality of Life changes and fixes{0}Includes the Master Quest dungeons"
+}, {
+	"title"				: "Ocarina of Time - Additional Options & Redux",
 	"redux" : {
 		"options"		: 1,
 		"remap_controls"	: 1,
 		"expand_memory"		: 1,
 		"vc_title"		: "Redux: Ocarina",
 		"vc_gameID"		: "NAC0",
-		"file"			: "Decompressed\\redux.bps",
+		"file"			: "Decompressed\\Redux\\redux.bps",
 		"output"		: "_redux_patched"
 	},
 	"options"			: 1,
@@ -140,7 +168,7 @@
 	"compress"			: 0,
 	"patch"	: [ {
 		"file"			: "Decompressed\\the_helix_blade.bps",
-		"rev"			: "5BD1FE107BF8106B2AB6650ABECD54D6"
+		"rev"			: "8CA71E87DE4CE5E9F6EC916202A623E9"
 	} ],
 	"output"			: "_the_helix_blade_patched",
 	"tooltip"			: "A small-sized ROM hack in a completely new setting"
