@@ -81,6 +81,7 @@
 - Bomb Bag Beta Animation:		Admentus (ROM), Aegiker (GameShark)
 - Restore Text:				ShadowOne333
 - Female Pronouns:			Admentus & Mil
+- Add Navi Prompt:			Aegiker & GhostlyDark (texture fix)
 - Various offsets:			Chez Cousteau
 - Admentus (Scripting and Maintaince of all Options)
 

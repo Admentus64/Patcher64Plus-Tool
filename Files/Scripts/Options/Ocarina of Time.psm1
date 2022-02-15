@@ -1033,7 +1033,8 @@ function ByteOptions() {
     }
 
     if (IsChecked $Redux.Text.CheckPrompt)   { PatchBytes -Offset "8E2D00" -Texture -Patch "Action Prompts\check_de.bin" }
-    if (IsChecked $Redux.Text.DivePrompt)    { PatchBytes -Offset "8E3600" -Texture -Patch "Action Prompts\dive_de.bin" }
+    if (IsChecked $Redux.Text.DivePrompt)    { PatchBytes -Offset "8E3600" -Texture -Patch "Action Prompts\dive_de.bin"  }
+    if (IsChecked $Redux.Text.NaviPrompt)    { PatchBytes -Offset "8E3A80" -Texture -Patch "Action Prompts\navi.bin"; ChangeBytes -Offset "AE7CD8" -Values "00 00 00 00" }
 
 }
 
@@ -1496,6 +1497,12 @@ function CreateTabLanguage() {
     $Redux.Box.Text = CreateReduxGroup -Tag  "Text" -Text "Other German Options"
     CreateReduxCheckBox -Name "CheckPrompt" -Text "Read Action Prompt" -Info 'Replace the "Lesen" Action Prompt with "Ansehen"'     -Credits "Admentus, GhostlyDark & Ticamus"
     CreateReduxCheckBox -Name "DivePrompt"  -Text "Dive Action Prompt" -Info 'Replace the "Tauchen" Action Prompt with "Abtauchen"' -Credits "Admentus, GhostlyDark & Ticamus"
+
+
+    # OTHER TEXT OPTIONS #
+
+    $Redux.Box.Text = CreateReduxGroup -Tag "Text" -Text "Other Text Options"
+    CreateReduxCheckBox -Name "NaviPrompt" -Text "Add Navi Prompt" -Info "Empty action prompt for calling Navi turned visible" -Credits "Aegiker & GhostlyDark (texture fix)"
 
 
 
