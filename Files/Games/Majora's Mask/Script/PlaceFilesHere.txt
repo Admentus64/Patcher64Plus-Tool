@@ -1,9 +1,0 @@
-Drop the following files in here, with these names:
-
-1. Message Table File as "script.tbl"
-2. Message Data File as "script.bin"
-
-If any of these files missed, nothing happens.
-Make sure these files are correct, otherwise your ROM will crash!
-
-Select the "Custom" option for "English Dialogue" using the English language
