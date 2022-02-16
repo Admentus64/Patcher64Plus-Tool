@@ -11,9 +11,9 @@ function InvokeWebRequest([string]$Uri, [String]$OutFile) {
 #==============================================================================================================================================================================================
 function ExpandArchive([string]$LiteralPath, [String]$DestinationPath) {
     
-    $ProgressPreference = 'SilentlyContinue'
+    $global:ProgressPreference = 'SilentlyContinue'
     Expand-Archive -LiteralPath $LiteralPath -DestinationPath $DestinationPath
-    $ProgressPreference = 'Continue'
+    $global:ProgressPreference = 'Continue'
 
 }
 
