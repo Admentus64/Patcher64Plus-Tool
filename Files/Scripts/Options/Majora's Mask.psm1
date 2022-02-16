@@ -369,8 +369,8 @@ function ByteOptions() {
     elseif (IsText -Elem $Redux.Hero.MagicUsage -Compare "8x Item Usage")    { ChangeBytes -Offset "BABF5E" -Values "2C","C0" }
 
     if (IsIndex -Elem $Redux.Hero.MonsterHP -Index 3 -Not) { # Monsters
-        if (IsIndex -Elem $Redux.Hero.MiniBossHP)   { $multiplier = 0   }
-        else                                        { [float]$multiplier = [float]$Redux.Hero.MiniBossHP.text.split('x')[0] }
+        if (IsIndex -Elem $Redux.Hero.MonsterHP)   { $multiplier = 0   }
+        else                                       { [float]$multiplier = [float]$Redux.Hero.MiniBossHP.text.split('x')[0] }
 
         ChangeBytes -Offset "CF56BC" -Values $multiplier -Multiply -IsDec; ChangeBytes -Offset "EAE53C" -Values $multiplier -Multiply -IsDec; ChangeBytes -Offset "E0EE24" -Values $multiplier -Multiply -IsDec # Keese, Bad Bat, Guay
         ChangeBytes -Offset "D55BDC" -Values $multiplier -Multiply -IsDec; ChangeBytes -Offset "D55C08" -Values $multiplier -Multiply -IsDec # Skullwalltula, Golden Skullwalltula
@@ -439,8 +439,8 @@ function ByteOptions() {
     }
 
     if (IsIndex -Elem $Redux.Hero.BossHP -Index 3 -Not) { # Bosses
-        if (IsIndex -Elem $Redux.Hero.MiniBossHP)   { $multiplier = 0   }
-        else                                        { [float]$multiplier = [float]$Redux.Hero.MiniBossHP.text.split('x')[0] }
+        if (IsIndex -Elem $Redux.Hero.BossHP)   { $multiplier = 0   }
+        else                                    { [float]$multiplier = [float]$Redux.Hero.MiniBossHP.text.split('x')[0] }
 
         ChangeBytes -Offset "F73D90" -Values $multiplier -Multiply -IsDec; ChangeBytes -Offset "F6BF37" -Values $multiplier -Multiply -IsDec # Goht (phase 3 missing, file: Boss_Hakugin)
         ChangeBytes -Offset "E60633" -Values $multiplier -Multiply -IsDec; ChangeBytes -Offset "E6B20B" -Values $multiplier -Multiply -IsDec # Majora's Mask (phase 1), Majora's Mask (phase 2)

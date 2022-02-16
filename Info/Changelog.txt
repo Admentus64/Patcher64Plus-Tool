@@ -1,6 +1,7 @@
 v17.2.0
 - Added new Auto-Updater feature
 - Added new "Add Navi Prompt" for OoT
+- Fixed enemy HP modifiers for MM
 
 v17.1.1
 - Added pre-compiled Redux patches for OoT and MM
