@@ -231,14 +231,14 @@ $Fonts.SmallUnderline = New-Object System.Drawing.Font($Font, 8,  [System.Drawin
 $Fonts.TextFile       = New-Object System.Drawing.Font("Consolas", 8, [System.Drawing.FontStyle]::Regular)
 $Fonts.Editor         = New-Object System.Drawing.Font("Consolas", 16, [System.Drawing.FontStyle]::Regular)
 
+# Hide the PowerShell console from the user
+ShowPowerShellConsole ($Settings.Debug.Console -eq $True)
+
 if ($Settings.Core.DisableUpdates -ne $True) { AutoUpdate }
 if ($Settings.Core.DisableAddons -ne $True) {
     UpdateAddon -Repo "https://raw.githubusercontent.com/Admentus64/Patcher64Plus-Tool-Music/main/Files/Addons/Music/lastUpdate.txt"   -Master "https://github.com/Admentus64/Patcher64Plus-Tool-Music/archive/refs/heads/main.zip"  -AddonPath $Paths.Music  -Addon "music"
     UpdateAddon -Repo "https://raw.githubusercontent.com/Admentus64/Patcher64Plus-Tool-Models/main/Files/Addons/Models/lastUpdate.txt" -Master "https://github.com/Admentus64/Patcher64Plus-Tool-Models/archive/refs/heads/main.zip" -AddonPath $Paths.Models -Addon "models"
 }
-
-# Hide the PowerShell console from the user
-ShowPowerShellConsole ($Settings.Debug.Console -eq $True)
 
 # Ask for default interface mode on first time use
 if ($Settings.Core.Interface -ne 1 -and $Settings.Core.Interface -ne 2 -and $Settings.Core.Interface -ne 3 -and !$FatalError) {

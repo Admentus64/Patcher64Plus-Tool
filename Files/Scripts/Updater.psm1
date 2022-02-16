@@ -1,3 +1,25 @@
+function InvokeWebRequest([string]$Uri, [String]$OutFile) {
+    
+    $ProgressPreference = 'SilentlyContinue'
+    Invoke-WebRequest -Uri $Uri -OutFile $outFile
+    $ProgressPreference = 'Continue'
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function ExpandArchive([string]$LiteralPath, [String]$DestinationPath) {
+    
+    $ProgressPreference = 'SilentlyContinue'
+    Expand-Archive -LiteralPath $LiteralPath -DestinationPath $DestinationPath
+    $ProgressPreference = 'Continue'
+
+}
+
+
+
+#==============================================================================================================================================================================================
 function AutoUpdate([switch]$Close) {
     
     if ($Version -eq "Version Missing" -or $VersionDate -eq "Date Missing") {
@@ -11,7 +33,7 @@ function AutoUpdate([switch]$Close) {
         else                                            { CreateSubPath $Paths.AppDataTemp; $file = $Paths.AppDataTemp + "\version.txt" }
 
         $versionURL = (Get-Content -LiteralPath ($Paths.Master + "\version.txt"))[3]
-        Invoke-WebRequest -Uri $versionURL -OutFile $file
+        InvokeWebRequest -Uri $versionURL -OutFile $file
         $newVersion = (Get-Content -LiteralPath $file)[0]
         $newDate    = (Get-Content -LiteralPath $file)[1]
         RemoveFile $file
@@ -76,42 +98,45 @@ function ShowUpdateDialog {
 #==============================================================================================================================================================================================
 function RunUpdate() {
     
-    ShowPowerShellConsole $True
-
     $updateURL = (Get-Content -LiteralPath ($Paths.Master + "\version.txt"))[2]
     if ($Settings.Core.LocalTempFolder -eq $True)   { $path = $Paths.LocalTemp   }
     else                                            { $path = $Paths.AppDataTemp }
-    $master = $path + "\master.zip"
+    CreateSubPath $Path
+    $Path = $Path + "\updater"
+    CreateSubPath $Path
 
-    Invoke-WebRequest -Uri $updateURL -OutFile $master
+    $zip = $path + "\master.zip"
+    Get-ChildItem -Path $path -Directory | ForEach-Object { RemovePath ($path + "\" + $_) }
+    RemoveFile $zip
 
-    if (!(TestFile $master)) {
+    try { InvokeWebRequest -Uri $updateURL -OutFile $zip }
+    catch {
+        RemovePath $path
+        WriteToConsole "Could not download new update!"
+        return
+    }
+
+    if (!(TestFile $zip)) {
+        RemovePath $path
         WriteToConsole "Could not extract new update!"
         return
     }
 
-    Expand-Archive -LiteralPath $master -DestinationPath $path
-    RemoveFile $master
+    ExpandArchive -LiteralPath $zip -DestinationPath $path
 
     RemovePath $Paths.Games
     RemovePath $Paths.Tools
     RemovePath $Paths.Main
     RemovePath $Paths.Scripts
-    RemovePath $Paths.Base + "\Info"
+    RemovePath ($Paths.Base + "\Info")
 
-    if ($Settings.Core.LocalTempFolder -eq $True)   { $newFolder = $Paths.LocalTemp   + "\Patcher64Plus-Tool-master" }
-    else                                            { $newFolder = $Paths.AppDataTemp + "\Patcher64Plus-Tool-master" }
+    Get-ChildItem -Path $path   -Directory | ForEach-Object { $folder = $path + "\" + $_ }
+    Get-ChildItem -Path $folder -Directory | ForEach-Object { Copy-Item -LiteralPath ($folder + "\" + $_) -Destination $Paths.Base -Force -Recurse }
+    Move-Item -LiteralPath ($folder + "\Patcher64+ Tool.ps1") -Destination ($Paths.Base + "\Patcher64+ Tool.ps1") -Force
+    Move-Item -LiteralPath ($folder + "\Readme.txt")          -Destination ($Paths.Base + "\ReadMe.txt")          -Force
+    Move-Item -LiteralPath ($folder + "\Files\version.txt")   -Destination ($Paths.Master + "\version.txt")       -Force
 
-    Move-Item -LiteralPath ($newFolder + "Files\Games")         -Destination $Paths.Games                           -Force
-    Move-Item -LiteralPath ($newFolder + "Files\Tools")         -Destination $Paths.Tools                           -Force
-    Move-Item -LiteralPath ($newFolder + "Files\Main")          -Destination $Paths.Main                            -Force
-    Move-Item -LiteralPath ($newFolder + "Files\Scripts")       -Destination $Paths.Scripts                         -Force
-    Move-Item -LiteralPath ($newFolder + "Info")                -Destination ($Paths.Base + "\Info")                -Force
-    Move-Item -LiteralPath ($newFolder + "Patcher64+ Tool.ps1") -Destination ($Paths.Base + "\Patcher64+ Tool.ps1") -Force
-    Move-Item -LiteralPath ($newFolder + "Files\version.txt")   -Destination ($Paths.Master + "\version.txt")       -Force
-
-    RemovePath $newFolder
-
+    RemovePath $path
     $global:FatalError = $True
     $global:Relaunch   = $True
 
@@ -132,7 +157,7 @@ function UpdateAddon([string]$Repo, [string]$Master, [string]$AddonPath, [string
     if (TestFile ($AddonPath + "\lastUpdate.txt")) {
         try {
             $file = $Path + "\lastUpdate.txt"
-            Invoke-WebRequest -Uri $Repo -OutFile $file
+            InvokeWebRequest -Uri $Repo -OutFile $file
             $oldVersion = (Get-Content -LiteralPath ($AddonPath + "\lastUpdate.txt"))[0]
             $newVersion = (Get-Content -LiteralPath $file)[0]
             if ( (Get-Date $oldVersion) -lt (Get-Date $newVersion) ) { $update = $true }
@@ -157,7 +182,7 @@ function UpdateAddon([string]$Repo, [string]$Master, [string]$AddonPath, [string
         Get-ChildItem -Path $path -Directory | ForEach-Object { RemovePath ($path + "\" + $_) }
         RemoveFile $zip
 
-        try { Invoke-WebRequest -Uri $Master -OutFile $zip }
+        try { InvokeWebRequest -Uri $Master -OutFile $zip }
         catch {
             RemovePath $path
             WriteToConsole ("Could not download lastest version for " + $Addon + "!")
@@ -170,8 +195,7 @@ function UpdateAddon([string]$Repo, [string]$Master, [string]$AddonPath, [string
             return
         }
 
-        Expand-Archive -LiteralPath $zip -DestinationPath $path -Force
-        RemoveFile $zip
+        ExpandArchive -LiteralPath $zip -DestinationPath $path -Force
         RemovePath $AddonPath
         Get-ChildItem -Path $path -Directory | ForEach-Object { $folder = $path + "\" + $_ }
         CreateSubPath $Paths.Addons
