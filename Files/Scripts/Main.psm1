@@ -22,6 +22,7 @@
     $menuBarHelp      = New-Object System.Windows.Forms.ToolStripMenuItem;     $menuBarHelp.Text      = "Help";               $menuBarMain.Items.Add($menuBarHelp)
 
     $menuBarChecksum  = New-Object System.Windows.Forms.ToolStripButton;       $menuBarChecksum.Text  = "Checksum";           $menuBarFile.DropDownItems.Add($menuBarChecksum)
+    $menuBarUpdate    = New-Object System.Windows.Forms.ToolStripButton;       $menuBarUpdate.Text    = "Update Tool";        $menuBarFile.DropDownItems.Add($menuBarUpdate)
     $menuBarExit      = New-Object System.Windows.Forms.ToolStripButton;       $menuBarExit.Text      = "Exit";               $menuBarFile.DropDownItems.Add($menuBarExit)
 
     $menuBarSettings  = New-Object System.Windows.Forms.ToolStripButton;       $menuBarSettings.Text  = "Settings";           $menuBarEdit.DropDownItems.Add($menuBarSettings)
@@ -40,6 +41,7 @@
 
     $menuBarChecksum.Add_Click(  { If (!(IsSet $CreditsDialog)) { CreateCreditsDialog | Out-Null }; foreach ($item in $Credits.Sections) { $item.Visible = $False }; $Credits.Sections[4].Visible = $True; $CreditsDialog.ShowDialog() } )
     $menuBarExit.Add_Click(      { $MainDialog.Close() } )
+    $menuBarUpdate.Add_Click(    { AutoUpdate -Close } )
 
     $menuBarSettings.Add_Click(  { $SettingsDialog.ShowDialog() } )
     $menuBarResetAll.Add_Click(  { ResetTool } )

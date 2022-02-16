@@ -41,6 +41,7 @@ $global:Last = $global:Fonts = @{}
 $global:FatalError = $global:WarningError = $False
 $global:ConsoleHistory = @()
 $global:DialogUpdateRateMS = 50
+$global:Relaunch = $False
 
 
 
@@ -154,6 +155,9 @@ $Paths.Temp            = $Paths.Local
 $Paths.Settings        = $Paths.Master + "\Settings"
 $Paths.Logs            = $Paths.Master + "\Logs"
 $Paths.cygdrive        = $Paths.Master + "\Tools\cygdrive"
+$Paths.Addons          = $Paths.Master + "\Addons"
+$Paths.Models          = $Paths.Addons + "\Models"
+$Paths.Music           = $Paths.Addons + "\Music"
 
 
 
@@ -179,87 +183,6 @@ $versionFile = $Paths.Master + "\Version.txt"
 if (TestFile $versionFile) {
     $global:Version     = (Get-Content -LiteralPath $versionFile)[0]
     $global:VersionDate = (Get-Content -LiteralPath $versionFile)[1]
-}
-
-
-#==================================================================================================================================================================================================================================================================
-# Auto-Updater
-
-function AutoUpdate() {
-    
-    if ($Version -eq "Version Missing" -or $VersionDate -eq "Date Missing") {
-        UpdateStatusLabel "Current version is missing! Could not update!"
-        return
-    }
-
-    $update = $false
-    $file = $Paths.base + "\version.txt"
-    try {
-        Invoke-WebRequest -Uri "https://raw.githubusercontent.com/Admentus64/Patcher64Plus-Tool/master/Files/version.txt" -OutFile $file
-        $newVersion = (Get-Content -LiteralPath $file)[0]
-        $newDate    = (Get-Content -LiteralPath $file)[1]
-        RemoveFile $file
-
-        if ($Version -lt $newVersion)                                { $update = $true }
-        elseif ( (Get-Date $VersionDate) -lt (Get-Date $newDate) )   { $update = $true }
-
-        
-    }
-    catch { UpdateStatusLabel "Could not run the auto-updater!" }
-    
-    if ($update) {
-        $UpdateDialog = New-Object System.Windows.Forms.Form
-        $UpdateDialog.Size = DPISize (New-Object System.Drawing.Size(360, 180))
-        $UpdateDialog.Text = $ScriptName
-        $UpdateDialog.FormBorderStyle = [System.Windows.Forms.FormBorderStyle]::FixedDialog
-        $UpdateDialog.StartPosition = "CenterScreen"
-        $UpdateDialog.Icon = $Files.icon.main
-
-        $label   = CreateLabel -x (DPISize 20)  -Y (DPISize 10) -Text ("Would you like to update Patcher64+?`n" + "New Version: " + $newVersion) -Font $Fonts.Medium -AddTo $UpdateDialog
-        $yesBtn  = CreateButton -X (DPISize 60)  -Y (DPISize 80)  -Width (DPISize 100) -Height (DPISize 50) -AddTo $UpdateDialog -Text "Yes"
-        $noBtn   = CreateButton  -X (DPISize 200) -Y (DPISize 80)  -Width (DPISize 100) -Height (DPISize 50) -AddTo $UpdateDialog -Text "No"
-    
-        $yesBtn.Add_Click( { $UpdateDialog.Close(); RunAutoUpdate } )
-        $noBtn.Add_Click(  { $UpdateDialog.Close() } )
-
-        $UpdateDialog.ShowDialog() | Out-Null
-        $UpdateDialog = $label = $yesBtn = $noBtn = $null
-    }
-}
-
-function RunAutoUpdate() {
-    
-    $path   = $Paths.Base
-    $master = $Paths.Base + "\master.zip"
-    Invoke-WebRequest -Uri "https://github.com/Admentus64/Patcher64Plus-Tool/archive/refs/heads/master.zip" -OutFile $master
-
-    if (!(TestFile $master)) {
-        UpdateStatusLabel "Could not extract new update!"
-        return
-    }
-
-    Expand-Archive -LiteralPath $master -DestinationPath $path
-    RemoveFile $master
-
-    RemovePath $Paths.Games
-    RemovePath $Paths.Tools
-    RemovePath $Paths.Main
-    RemovePath $Paths.Scripts
-    RemovePath $Paths.Base + "\Info"
-
-    $newFolder = $Paths.base + "\Patcher64Plus-Tool-master\"
-    Move-Item -LiteralPath ($newFolder + "Files\Games")         -Destination $Paths.Games                           -Force
-    Move-Item -LiteralPath ($newFolder + "Files\Tools")         -Destination $Paths.Tools                           -Force
-    Move-Item -LiteralPath ($newFolder + "Files\Main")          -Destination $Paths.Main                            -Force
-    Move-Item -LiteralPath ($newFolder + "Files\Scripts")       -Destination $Paths.Scripts                         -Force
-    Move-Item -LiteralPath ($newFolder + "Info")                -Destination ($Paths.Base + "\Info")                -Force
-    Move-Item -LiteralPath ($newFolder + "Patcher64+ Tool.ps1") -Destination ($Paths.Base + "\Patcher64+ Tool.ps1") -Force
-    Move-Item -LiteralPath ($newFolder + "Files\version.txt")   -Destination ($Paths.Master + "\version.txt")       -Force
-
-    RemovePath $newFolder
-
-    $global:FatalError = $True
-
 }
 
 
@@ -308,15 +231,17 @@ $Fonts.SmallUnderline = New-Object System.Drawing.Font($Font, 8,  [System.Drawin
 $Fonts.TextFile       = New-Object System.Drawing.Font("Consolas", 8, [System.Drawing.FontStyle]::Regular)
 $Fonts.Editor         = New-Object System.Drawing.Font("Consolas", 16, [System.Drawing.FontStyle]::Regular)
 
-RemoveFile ($Paths.Base + "\master.zip")
-RemovePath ($Paths.Base + "\Patcher64Plus-Tool-master")
-AutoUpdate
+if ($Settings.Core.DisableUpdates -ne $True) { AutoUpdate }
+if ($Settings.Core.DisableAddons -ne $True) {
+    UpdateAddon -Repo "https://raw.githubusercontent.com/Admentus64/Patcher64Plus-Tool-Music/main/Files/Addons/Music/lastUpdate.txt"   -Master "https://github.com/Admentus64/Patcher64Plus-Tool-Music/archive/refs/heads/main.zip"  -AddonPath $Paths.Music  -Addon "music"
+    UpdateAddon -Repo "https://raw.githubusercontent.com/Admentus64/Patcher64Plus-Tool-Models/main/Files/Addons/Models/lastUpdate.txt" -Master "https://github.com/Admentus64/Patcher64Plus-Tool-Models/archive/refs/heads/main.zip" -AddonPath $Paths.Models -Addon "models"
+}
 
 # Hide the PowerShell console from the user
 ShowPowerShellConsole ($Settings.Debug.Console -eq $True)
 
 # Ask for default interface mode on first time use
- if ($Settings.Core.Interface -ne 1 -and $Settings.Core.Interface -ne 2 -and $Settings.Core.Interface -ne 3 -and !$FatalError) {
+if ($Settings.Core.Interface -ne 1 -and $Settings.Core.Interface -ne 2 -and $Settings.Core.Interface -ne 3 -and !$FatalError) {
     $global:PopupDialog = New-Object System.Windows.Forms.Form
     $PopupDialog.Size = DPISize (New-Object System.Drawing.Size(390, 150))
     $PopupDialog.Text = $ScriptName
@@ -401,4 +326,8 @@ if (!$FatalError) {
     }
 
 StopJobs
+if ($Relaunch) {
+    Get-ChildItem -Path ".\" -Filter "*.ps1" -File -Name| ForEach-Object { $scriptPath = $Paths.Base + "\" + ([System.IO.Path]::GetFileName($_)) }
+    Start-Process -FilePath powershell.exe -ArgumentList @("-File `"$ScriptPath`" $arg")
+}
 Exit

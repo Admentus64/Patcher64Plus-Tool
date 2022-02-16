@@ -200,7 +200,7 @@ function CreateCreditsDialog() {
 function CreateSettingsDialog() {
     
     # Create Dialog
-    $global:SettingsDialog = CreateDialog -Width (DPISize 560) -Height (DPISize 580) -Icon $Files.icon.settings
+    $global:SettingsDialog = CreateDialog -Width (DPISize 560) -Height (DPISize 610) -Icon $Files.icon.settings
     $CloseButton = CreateButton -X ($SettingsDialog.Width / 2 - (DPISize 40)) -Y ($SettingsDialog.Height - (DPISize 90)) -Width (DPISize 80) -Height (DPISize 35) -Text "Close" -AddTo $SettingsDialog
     $CloseButton.Add_Click({ $SettingsDialog.Hide() })
 
@@ -210,7 +210,7 @@ function CreateSettingsDialog() {
     $global:GeneralSettings = @{}
     
     # General Settings
-    $GeneralSettings.Box                 = CreateReduxGroup -Y (DPISize 40) -IsGame $False -Height 2 -AddTo $SettingsDialog -Text "General Settings"
+    $GeneralSettings.Box                 = CreateReduxGroup -Y (DPISize 40) -IsGame $False -Height 3 -AddTo $SettingsDialog -Text "General Settings"
     $GeneralSettings.DoubleClick         = CreateSettingsCheckbox                          -Column 1 -Row 1 -Text "Double Click" -Disable ((GetWindowsVersion) -ge 11) -Info "Allows a PowerShell file to be opened by double-clicking it"
     if ((GetWindowsVersion) -lt 11) { $GeneralSettings.DoubleClick.Checked = ((Get-ItemProperty -LiteralPath "HKLM:\Software\Classes\Microsoft.PowerShellScript.1\Shell").'(default)' -eq '0') }
     $GeneralSettings.ClearType           = CreateSettingsCheckbox -Name "ClearType"        -Column 2 -Row 1 -Text "Use ClearType Font"      -Checked -Info ('Use the ClearType font "Segoe UI" instead of the default font "Microsft Sans Serif"' + "`nThe option will only go in effect when opening the tool`nThis change requires the tool to restart to be applied")
@@ -218,7 +218,9 @@ function CreateSettingsDialog() {
     $GeneralSettings.ModernStyle         = CreateSettingsCheckbox -Name "ModernStyle"      -Column 1 -Row 2 -Text "Use Modern Visual Style" -Checked -Info "Use a modern-looking visual style for the whole interface of the tool"
     $GeneralSettings.EnableSounds        = CreateSettingsCheckbox -Name "EnableSounds"     -Column 2 -Row 2 -Text "Enable Sound Effects"    -Checked -Info "Enable the use of sound effects, for example when patching is concluded"
     $GeneralSettings.LocalTempFolder     = CreateSettingsCheckbox -Name "LocalTempFolder"  -Column 3 -Row 2 -Text "Use Local Temp Folder"   -Checked -Info "Store all temporary and extracted files within the local Patcher64+ Tool folder`nIf unchecked the temporary and extracted files are kept in the Patcher64+ Tool folder in %AppData%"
-    
+    $GeneralSettings.DisableUpdates      = CreateSettingsCheckbox -Name "DisableUpdates"   -Column 1 -Row 3 -Text "Disable Auto-Updater"             -Info "Disable the Auto-Updater that runs when starting the Patcher64+ Tool"
+    $GeneralSettings.DisableAddons       = CreateSettingsCheckbox -Name "DisableAddons "   -Column 2 -Row 3 -Text "Disable Addons Updater"           -Info "Disable automatically updating addons (music, models, etc) when starting the Patcher64+ Tool"
+
 
     # Advanced Settings
     $GeneralSettings.Box                 = CreateReduxGroup -Y ($GeneralSettings.Box.Bottom + (DPISize 10)) -IsGame $False -Height 1 -AddTo $SettingsDialog -Text "Advanced Settings"

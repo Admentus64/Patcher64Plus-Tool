@@ -126,7 +126,7 @@ function PatchBytes([string]$File, [string]$Offset, [string]$Length, [string]$Pa
     if     ($Texture)     { $Patch = $GameFiles.textures  + "\" + $Patch }
     elseif ($Models)      { $Patch = $GameFiles.models    + "\" + $Patch }
     elseif ($Extracted)   { $Patch = $GameFiles.extracted + "\" + $Patch }
-    elseif ($Music)       { $Patch = $GameFiles.music     + "\" + $Patch }
+    elseif ($Music)       { $Patch = $Paths.Music         + "\" + $Patch }
     elseif ($Shared)      { $Patch = $Paths.Shared        + "\" + $Patch }
     else                  { $Patch = $GameFiles.binaries  + "\" + $Patch }
 

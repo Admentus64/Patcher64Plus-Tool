@@ -11,12 +11,12 @@ function PatchOptions() {
 
     if (IsIndex -Elem $Redux.Graphics.ChildModels -Text "Original" -Not) {
         $file = "\Child\" + $Redux.Graphics.ChildModels.Text.replace(" (default)", "") + ".ppf" 
-        if     (TestFile ($GameFiles.models + $file))   { ApplyPatch -Patch ("Models" + $file) }
+        if (TestFile ($GameFiles.models + $file))       { ApplyPatch -Patch ($GameFiles.models + $file) -FullPath }
     }
 
     if (IsIndex -Elem $Redux.Graphics.AdultModels -Text "Original" -Not) {
         $file = "\Adult\" + $Redux.Graphics.AdultModels.Text.replace(" (default)", "") + ".ppf"
-        if     (TestFile ($GameFiles.models + $file))   { ApplyPatch -Patch ("Models" + $file) }
+        if (TestFile ($GameFiles.models + $file))       { ApplyPatch -Patch ($GameFiles.models + $file) -FullPath }
     }
 
     if ( ( (IsIndex -Elem $Redux.Graphics.ChildModels -Text "Original") -or (IsIndex -Elem $Redux.Graphics.ChildModels -Text "Majora's Mask Eyes") ) -and ( (IsIndex -Elem $Redux.Unlock.MegatonHammer -Index 3) -or (IsIndex -Elem $Redux.Unlock.MegatonHammer -Index 4) ) ) {

@@ -336,7 +336,7 @@ function ChangeGameMode() {
     $GameFiles.compressed   = $GameFiles.Base + "\Compressed"
     $GameFiles.decompressed = $GameFiles.Base + "\Decompressed"
     $GameFiles.languages    = $GameFiles.Base + "\Languages"
-    $GameFiles.models       = $GameFiles.Base + "\Models"
+    $GameFiles.models       = $Paths.Models + "\" + $GameType.mode
     $GameFiles.downgrade    = $GameFiles.Base + "\Downgrade"
     $GameFiles.textures     = $GameFiles.Base + "\Textures"
     $GameFiles.editor       = $GameFiles.Base + "\Editor"
@@ -350,7 +350,7 @@ function ChangeGameMode() {
     # JSON Files
     if ( ($GameType.patches -eq 1) -or ($GameType.patches -eq 2 -and $IsWiiVC) )   { $Files.json.patches   = SetJSONFile $GameFiles.patches }                           else { $Files.json.patches   = $null }
     if (TestFile ($GameFiles.languages + "\Languages.json"))                       { $Files.json.languages = SetJSONFile ($GameFiles.languages + "\Languages.json") }   else { $Files.json.languages = $null }
-    if (TestFile ($Paths.shared        + "\Models.json"))                          { $Files.json.models    = SetJSONFile ($Paths.shared        + "\Models.json") }      else { $Files.json.models    = $null }
+    if (TestFile ($Paths.Models        + "\Models.json"))                          { $Files.json.models    = SetJSONFile ($Paths.Models        + "\Models.json") }      else { $Files.json.models    = $null }
     if (TestFile ($Paths.shared        + "\Sequences.json"))                       { $Files.json.sequences = SetJSONFile ($Paths.shared        + "\Sequences.json") }   else { $Files.json.sequences  = $null }
     if (TestFile ($GameFiles.base      + "\Music.json"))                           { $Files.json.music     = SetJSONFile ($GameFiles.base      + "\Music.json") }       else { $Files.json.music     = $null }
 

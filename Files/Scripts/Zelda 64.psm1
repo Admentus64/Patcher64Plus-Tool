@@ -139,14 +139,14 @@ function PatchReplaceMusic([string]$BankPointerTableStart, [string]$BankPointerT
         if (IsSet $GameSettings["ReplaceMusic"][$track.title]) {
             if ($GameSettings["ReplaceMusic"][$track.title] -ne "Default") {
                 # Music File
-                foreach ($item in (Get-ChildItem -LiteralPath ($Paths.shared + "\Music") -Directory)) {
-                    if (TestFile ($Paths.shared + "\Music\" + $item.BaseName + "\" + $GameSettings["ReplaceMusic"][$track.title] + ".seq")) { # .seq
-                        $file = "Music\" + $item.BaseName + "\" + $GameSettings["ReplaceMusic"][$track.title]
+                foreach ($item in (Get-ChildItem -LiteralPath $Paths.Music -Directory)) {
+                    if (TestFile ($Paths.Music + "\" + $item.BaseName + "\" + $GameSettings["ReplaceMusic"][$track.title] + ".seq")) { # .seq
+                        $file = $item.BaseName + "\" + $GameSettings["ReplaceMusic"][$track.title]
                         $ext = ".seq"
                         break
                     }
-                    elseif (TestFile ($Paths.shared + "\Music\" + $item.BaseName + "\" + $GameSettings["ReplaceMusic"][$track.title] + ".zseq")) { # .zseq
-                        $file = "Music\" + $item.BaseName + "\" + $GameSettings["ReplaceMusic"][$track.title]
+                    elseif (TestFile ($Paths.Music + "\" + $item.BaseName + "\" + $GameSettings["ReplaceMusic"][$track.title] + ".zseq")) { # .zseq
+                        $file = $item.BaseName + "\" + $GameSettings["ReplaceMusic"][$track.title]
                         $ext = ".zseq"
                         break
                     }
@@ -156,16 +156,16 @@ function PatchReplaceMusic([string]$BankPointerTableStart, [string]$BankPointerT
                 foreach ($id in $track.id) {
                     $tableOffset = ((GetDecimal $id) * 16)
                     $offset   = (Get8Bit $pointerTableArray[$tableOffset]) + (Get8Bit $pointerTableArray[$tableOffset+1]) + (Get8Bit $pointerTableArray[$tableOffset+2]) + (Get8Bit $pointerTableArray[$tableOffset+3])
-                    PatchBytes -File $seq -Offset $offset -Length $track.size -Patch ($file + $ext) -Shared
-                
+                    PatchBytes -File $seq -Offset $offset -Length $track.size -Patch ($file + $ext) -Music
+
                     # Size
-                    $value = Get16Bit ( (Get-Item -LiteralPath ($Paths.shared + "\" + $file + $ext)).length )
+                    $value = Get16Bit ( (Get-Item -LiteralPath ($Paths.Music + "\" + $file + $ext)).length )
                     [string[]]$value = $value -split '(..)' -ne ''
                     $tableOffset = (Get16Bit (((GetDecimal $id) * 16) + 6))
                     ChangeBytes -File $pointerTable -Offset $tableOffset -Values $value
 
                     # Bank
-                    if (TestFile ($Paths.shared + "\" + $file + ".meta"))   { $value = (Get-Content -Path ($Paths.shared + "\" + $file + ".meta"))[1].replace("0x", "") } # Meta
+                    if (TestFile ($Paths.Music + "\" + $file + ".meta"))   { $value = (Get-Content -Path ($Paths.Music + "\" + $file + ".meta"))[1].replace("0x", "") } # Meta
                     else                                                    { $value = ($file.Substring(($file.IndexOf('_')+1))).split("_")[0] }                          # Filename
                     if ($ext -eq $Files.json.music.conversion.ext) {
                         foreach ($conversion in $Files.json.music.conversion.bank) {
@@ -273,9 +273,9 @@ function MusicOptions([string]$Default="File Select") {
             }
 
             $midiFile = $null
-            foreach ($item in (Get-ChildItem -LiteralPath ($Paths.shared + "\Music") -Directory)) {
-                if (TestFile ($Paths.shared + "\Music\" + $item.BaseName + "\" + $Redux.ReplaceMusic.Tracks.SelectedItems + ".mid")) {
-                    $midiFile = $Paths.shared + "\Music\" + $item.BaseName + "\" + $Redux.ReplaceMusic.Tracks.SelectedItems + ".mid"
+            foreach ($item in (Get-ChildItem -LiteralPath $Paths.Music -Directory)) {
+                if (TestFile ($Paths.Music + "\" + $item.BaseName + "\" + $Redux.ReplaceMusic.Tracks.SelectedItems + ".mid")) {
+                    $midiFile = $Paths.Music + "\" + $item.BaseName + "\" + $Redux.ReplaceMusic.Tracks.SelectedItems + ".mid"
                 }
             }
             if (IsSet $midiFile) {
@@ -321,8 +321,8 @@ function CheckAuthor() {
         return
     }
 
-    foreach ($item in (Get-ChildItem -LiteralPath ($Paths.shared + "\Music") -Directory)) {
-        if ( (TestFile ($Paths.shared + "\Music\" + $item.BaseName + "\" + $Redux.ReplaceMusic.Tracks.Text + ".seq")) -or (TestFile ($Paths.shared + "\Music\" + $item.BaseName + "\" + $Redux.ReplaceMusic.Tracks.Text + ".zseq")) ) {
+    foreach ($item in (Get-ChildItem -LiteralPath $Paths.Music -Directory)) {
+        if ( (TestFile ($Paths.Music + "\" + $item.BaseName + "\" + $Redux.ReplaceMusic.Tracks.Text + ".seq")) -or (TestFile ($Paths.Music + "\" + $item.BaseName + "\" + $Redux.ReplaceMusic.Tracks.Text + ".zseq")) ) {
             $Redux.Music.AuthorName.Text = $item.BaseName
             $Redux.Music.AuthorURL = $null
             EnableElem -Elem $Redux.Music.AuthorLink -Active $False -Hide
@@ -349,7 +349,7 @@ function GetReplacementTracks() {
     $items = @()
     foreach ($track in $Files.json.music.tracks)  {
         if ($track.title -eq $Redux.Music.SelectReplace.text) {
-            foreach ($item in Get-ChildItem -LiteralPath ($Paths.shared + "\Music") -Recurse) {
+            foreach ($item in Get-ChildItem -LiteralPath $Paths.Music -Recurse) {
                 if ($item.extension -eq ".zseq" -or $item.extension -eq ".seq") {
                     if ($item.length -lt (GetDecimal $track.size) ) {
                         $event = $False
