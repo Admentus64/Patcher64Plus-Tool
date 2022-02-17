@@ -1,4 +1,2 @@
 17.2.0
-2022-02-16
-https://github.com/Admentus64/Patcher64Plus-Tool/archive/refs/heads/master.zip
-https://raw.githubusercontent.com/Admentus64/Patcher64Plus-Tool/master/Files/version.txt
+2022-02-17

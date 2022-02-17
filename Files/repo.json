@@ -1,0 +1,13 @@
+{
+	"uri"		:	"https://github.com/Admentus64/Patcher64Plus-Tool/archive/refs/heads/master.zip",
+	"version"	:	"https://raw.githubusercontent.com/Admentus64/Patcher64Plus-Tool/master/Files/version.txt",
+	"addons"	: [ {
+		"title"	:	"Music",
+		"uri"		:	"https://github.com/Admentus64/Patcher64Plus-Tool-Music/archive/refs/heads/main.zip",
+		"version"	:	"https://raw.githubusercontent.com/Admentus64/Patcher64Plus-Tool-Music/main/Files/Addons/Music/lastUpdate.txt"
+	}, {
+		"title"	:	"Models",
+		"uri"		:	"https://github.com/Admentus64/Patcher64Plus-Tool-Models/archive/refs/heads/main.zip",
+		"version"	:	"https://raw.githubusercontent.com/Admentus64/Patcher64Plus-Tool-Models/main/Files/Addons/Models/lastUpdate.txt"
+	} ]
+}

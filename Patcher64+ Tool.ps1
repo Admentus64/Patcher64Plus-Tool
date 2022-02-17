@@ -234,10 +234,10 @@ $Fonts.Editor         = New-Object System.Drawing.Font("Consolas", 16, [System.D
 # Hide the PowerShell console from the user
 ShowPowerShellConsole ($Settings.Debug.Console -eq $True)
 
+$Files.json.repo = SetJSONFile ($Paths.Master + "\repo.json")
 if ($Settings.Core.DisableUpdates -ne $True) { AutoUpdate }
 if ($Settings.Core.DisableAddons -ne $True) {
-    UpdateAddon -Repo "https://raw.githubusercontent.com/Admentus64/Patcher64Plus-Tool-Music/main/Files/Addons/Music/lastUpdate.txt"   -Master "https://github.com/Admentus64/Patcher64Plus-Tool-Music/archive/refs/heads/main.zip"  -AddonPath $Paths.Music  -Addon "music"
-    UpdateAddon -Repo "https://raw.githubusercontent.com/Admentus64/Patcher64Plus-Tool-Models/main/Files/Addons/Models/lastUpdate.txt" -Master "https://github.com/Admentus64/Patcher64Plus-Tool-Models/archive/refs/heads/main.zip" -AddonPath $Paths.Models -Addon "models"
+    foreach ($addon in $Files.json.repo.addons) { UpdateAddon -Title $addon.title -Uri $addon.uri -Version $addon.version }
 }
 
 # Ask for default interface mode on first time use

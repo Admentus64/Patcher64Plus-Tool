@@ -23,7 +23,7 @@ function ExpandArchive([string]$LiteralPath, [String]$DestinationPath) {
 function AutoUpdate([switch]$Close) {
     
     if ($Version -eq "Version Missing" -or $VersionDate -eq "Date Missing") {
-        UpdateStatusLabel "Current version is missing! Could not update!"
+        WriteToConsole "Current version is missing! Could not update!"
         return
     }
 
@@ -32,8 +32,7 @@ function AutoUpdate([switch]$Close) {
         if ($Settings.Core.LocalTempFolder -eq $True)   { CreateSubPath $Paths.LocalTemp;   $file = $Paths.LocalTemp   + "\version.txt" }
         else                                            { CreateSubPath $Paths.AppDataTemp; $file = $Paths.AppDataTemp + "\version.txt" }
 
-        $versionURL = (Get-Content -LiteralPath ($Paths.Master + "\version.txt"))[3]
-        InvokeWebRequest -Uri $versionURL -OutFile $file
+        InvokeWebRequest -Uri $Files.json.repo.version -OutFile $file
         $newVersion = (Get-Content -LiteralPath $file)[0]
         $newDate    = (Get-Content -LiteralPath $file)[1]
         RemoveFile $file
@@ -54,7 +53,7 @@ function AutoUpdate([switch]$Close) {
         $Settings.Core.LastUpdateVersionCheck = $newVersion
         $Settings.Core.LastUpdateDateCheck    = $newDate
     }
-    catch { UpdateStatusLabel "Could not update Patcher64+ Tool" }
+    catch { WriteToConsole "Could not update Patcher64+ Tool" }
     
     if ($update) {
         ShowUpdateDialog
@@ -98,7 +97,6 @@ function ShowUpdateDialog {
 #==============================================================================================================================================================================================
 function RunUpdate() {
     
-    $updateURL = (Get-Content -LiteralPath ($Paths.Master + "\version.txt"))[2]
     if ($Settings.Core.LocalTempFolder -eq $True)   { $path = $Paths.LocalTemp   }
     else                                            { $path = $Paths.AppDataTemp }
     CreateSubPath $Path
@@ -109,7 +107,7 @@ function RunUpdate() {
     Get-ChildItem -Path $path -Directory | ForEach-Object { RemovePath ($path + "\" + $_) }
     RemoveFile $zip
 
-    try { InvokeWebRequest -Uri $updateURL -OutFile $zip }
+    try { InvokeWebRequest -Uri $Files.json.repo.uri -OutFile $zip }
     catch {
         RemovePath $path
         WriteToConsole "Could not download new update!"
@@ -145,20 +143,21 @@ function RunUpdate() {
 
 
 #==============================================================================================================================================================================================
-function UpdateAddon([string]$Repo, [string]$Master, [string]$AddonPath, [string]$Addon) {
+function UpdateAddon([string]$Uri, [string]$Version, [string]$Title) {
     
     $update = $false
+    $addonPath = ($Paths.Addons + "\" + $Title)
     if ($Settings.Core.LocalTempFolder -eq $True)   { $path = $Paths.LocalTemp   }
     else                                            { $path = $Paths.AppDataTemp }
     CreateSubPath $Path
-    $Path = $Path + "\updater-" + $Addon
+    $Path = $Path + "\updater-" + $Title.ToLower()
     CreateSubPath $Path
 
-    if (TestFile ($AddonPath + "\lastUpdate.txt")) {
+    if (TestFile ($addonPath + "\lastUpdate.txt")) {
         try {
             $file = $Path + "\lastUpdate.txt"
-            InvokeWebRequest -Uri $Repo -OutFile $file
-            $oldVersion = (Get-Content -LiteralPath ($AddonPath + "\lastUpdate.txt"))[0]
+            InvokeWebRequest -Uri $Version -OutFile $file
+            $oldVersion = (Get-Content -LiteralPath ($addonPath + "\lastUpdate.txt"))[0]
             $newVersion = (Get-Content -LiteralPath $file)[0]
             if ( (Get-Date $oldVersion) -lt (Get-Date $newVersion) ) { $update = $true }
             else {
@@ -168,38 +167,37 @@ function UpdateAddon([string]$Repo, [string]$Master, [string]$AddonPath, [string
         }
         catch {
             RemovePath $path
-            WriteToConsole ("Could not retrieve last version info for " + $Addon + "!")
+            WriteToConsole ("Could not retrieve last version info for " + $Title + "!")
             return
         }
     }
     else {
-        WriteToConsole ("Could not find last update for " + $Addon + "! Downloading now!")
+        WriteToConsole ("Could not find last update for " + $Title + "! Downloading now!")
         $update = $true
     }
 
     if ($update) {
-        $zip = $path + "\" + $Addon + ".zip"
+        $zip = $path + "\" + $Title.ToLower() + ".zip"
         Get-ChildItem -Path $path -Directory | ForEach-Object { RemovePath ($path + "\" + $_) }
         RemoveFile $zip
 
-        try { InvokeWebRequest -Uri $Master -OutFile $zip }
+        try { InvokeWebRequest -Uri $Uri -OutFile $zip }
         catch {
             RemovePath $path
-            WriteToConsole ("Could not download lastest version for " + $Addon + "!")
+            WriteToConsole ("Could not download lastest version for " + $Title + "!")
             return
         }
 
         if (!(TestFile $zip)) {
             RemovePath $path
-            WriteToConsole ("Could not extract new " + $Addon + "!")
+            WriteToConsole ("Could not extract new " + $Title + "!")
             return
         }
 
         ExpandArchive -LiteralPath $zip -DestinationPath $path -Force
-        RemovePath $AddonPath
+        RemovePath $addonPath
         Get-ChildItem -Path $path -Directory | ForEach-Object { $folder = $path + "\" + $_ }
-        CreateSubPath $Paths.Addons
-        Move-Item -LiteralPath ($folder + "\Files\Addons\" + $Addon) -Destination $AddonPath -Force
+        Copy-Item -LiteralPath ($folder + "\Files") -Destination $Paths.Base -Force -Recurse
         RemovePath $path
     }
 

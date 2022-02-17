@@ -313,6 +313,8 @@ function MusicOptions([string]$Default="File Select") {
 
 #==============================================================================================================================================================================================
 function CheckAuthor() {
+    
+    if (!(TestFile -Path $Paths.Music -Container)) { return; }
 
     if ($Redux.ReplaceMusic.Tracks.Text -eq "Default") {
         $Redux.Music.AuthorName.Text = "Nintendo"
@@ -345,6 +347,11 @@ function CheckAuthor() {
 #==============================================================================================================================================================================================
 function GetReplacementTracks() {
     
+    if (!(TestFile -Path $Paths.Music -Container)) {
+        WriteToConsole "Music sequence files are missing"
+        return;
+    }
+
     $Redux.ReplaceMusic.Tracks.items.Clear()
     $items = @()
     foreach ($track in $Files.json.music.tracks)  {

@@ -190,9 +190,10 @@ function SetFileParameters() {
 
 
     # Store JSON files
-    $Files.json.consoles                    = $Paths.Games + "\Consoles.json"
-    $Files.json.games                       = $Paths.Games + "\Games.json"
-    $Files.json.regions                     = $Paths.Games + "\Regions.json"
+    $Files.json.repo                        = $Paths.Master + "\repo.json"
+    $Files.json.consoles                    = $Paths.Games  + "\Consoles.json"
+    $Files.json.games                       = $Paths.Games  + "\Games.json"
+    $Files.json.regions                     = $Paths.Games  + "\Regions.json"
 
 
 
