@@ -414,6 +414,19 @@
 	"rom_title"		: "BANJO TOOIE",
 	"rom_gameID"		: "NB7E"
 }, {
+	"title"			: "GoldenEye 007",
+	"mode"			: "GoldenEye 007",
+	"save"			: 1,
+	"console"		: "N64",
+	"version" : [ {
+		"hash"		: "70C525880240C1E838B8B1BE35666C3B",
+		"rev"		: "Revision 0",
+		"region"	: "North America / NTSC-U"
+	} ],
+	"patches"		: 1,
+	"rom_title"		: "GOLDENEYE",
+	"rom_gameID"		: "NGEE"
+}, {
 	"title"			: "The Legend of Zelda: A Link to the Past",
 	"mode"			: "A Link to the Past",
 	"save"			: 1,

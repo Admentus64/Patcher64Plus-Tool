@@ -438,11 +438,11 @@ function ChangeStringIntoDigits([string]$File, [string]$Search, [string]$Value, 
 function ShowHudPreview([switch]$IsOoT) {
 
     $path = ($Paths.shared + "\Buttons\" + $Redux.UI.ButtonSize.Text.replace(" (default)", "") + "\" + $Redux.UI.ButtonStyle.Text.replace(" (default)", "") + ".png")
-    if (TestFile $Path)   { SetBitMap -Path $path -Box $Redux.UI.ButtonPreview -Width 90 -Height 90 }
+    if (TestFile $path)   { SetBitMap -Path $path -Box $Redux.UI.ButtonPreview -Width 90 -Height 90 }
     else                  { $Redux.UI.ButtonPreview.Image = $null }
 
     $path = ($Paths.shared + "\HUD\Magic\" + $Redux.UI.MagicBar.Text.replace(" (default)", "") + ".png")
-    if (TestFile $Path)   { SetBitMap -Path $path -Box $Redux.UI.MagicPreview -Width 200 -Height 40 }
+    if (TestFile $path)   { SetBitMap -Path $path -Box $Redux.UI.MagicPreview -Width 200 -Height 40 }
     else                  { $Redux.UI.MagicPreview.Image = $null }
 
     $file = $null

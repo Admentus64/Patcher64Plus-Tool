@@ -1,5 +1,6 @@
 v17.2.0
 - Added new Auto-Updater feature
+- Added new game mode for GoldenEye 007 (GE) with Additional Options
 - Added new "Add Navi Prompt" for OoT
 - Fixed enemy HP modifiers for MM
 

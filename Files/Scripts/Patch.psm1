@@ -48,7 +48,10 @@
                 }
             }
 
-            if (TestFile ($GameFiles.languages + "\" + $LanguagePatch.code + ".ppf") ) { $global:LanguagePatchFile = "Languages\" + $LanguagePatch.code + ".ppf" }
+            if (TestFile (CheckPatchExtension ($GameFiles.languages + "\" + $LanguagePatch.code) ) ) {
+                $Ext = (Get-Item (CheckPatchExtension ($GameFiles.languages + "\" + $LanguagePatch.code) ) ).Extension
+                $global:LanguagePatchFile = "Languages\" + $LanguagePatch.code + $Ext
+            }
             $Header = SetHeader -Header $Header -ROMTitle $LanguagePatch.rom_title -ROMGameID $LanguagePatch.rom_gameID -VCTitle $LanguagePatch.vc_title -VCGameID $LanguagePatch.vc_gameID -Region $LanguagePatch.rom_region
             if     (IsSet $LanguagePatch.output)     { $PatchedFileName = $LanguagePatch.output }
             if     ($LanguagePatch.finalize -eq 0)   { $PatchInfo.finalize  = $False }

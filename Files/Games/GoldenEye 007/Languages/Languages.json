@@ -1,0 +1,15 @@
+[ {
+	"title"			: "English",
+	"default"		: 1,
+	"code"			: "en"
+}, {
+	"title"			: "French",
+	"code"			: "fr",
+	"output"		: "_fr_patched",
+	"credits"		: "Corrigo (v1.0)"
+}, {
+	"title"			: "Spanish",
+	"code"			: "es",
+	"output"		: "_es_patched",
+	"credits"		: "Sogun (v2.0)"
+} ]

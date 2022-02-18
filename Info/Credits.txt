@@ -696,6 +696,26 @@ https://github.com/DaruniasJoy/OoT-Custom-Sequences
 
 
 
+===================
+<<< BANJO-TOOIE >>>
+
+--- 60 FPS ---
+- retroben
+
+
+
+=====================
+<<< GOLDENEYE 007 >>>
+
+--- Additional Options ---
+- Cursors:				GhostlyDark (injects) & Intermission (HD assets)
+
+--- Translations ---
+- French:				Corrigo (v1,0)
+- Spanish:				Sogun (v2.0)
+
+
+
 ==========================
 <<< A LINK TO THE PAST >>>
 
