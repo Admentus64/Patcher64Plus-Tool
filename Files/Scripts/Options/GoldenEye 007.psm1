@@ -1,6 +1,6 @@
 function ByteOptions() {
     
-    $offset = SearchBytes -Start "B4E000" -End "B58000" -Values "00 02 02 04 B6 00 10 7C 03 F4 65 BF FF F8 07 FF 00 FF E0 1F C4 09 95 FE 00 91 0C A7 9B ED F8 F7 6D 23 00 DF CA 0D DC FF 7F B4 9A 6F F6 53 FD FE"
+    $offset = SearchBytes -Start "B4E000" -End "B59000" -Values "00 02 02 04 B6 00 10 7C 03 F4 65 BF FF F8 07 FF 00 FF E0 1F C4 09 95 FE 00 91 0C A7 9B ED F8 F7 6D 23 00 DF CA 0D DC FF 7F B4 9A 6F F6 53 FD FE"
     PatchBytes -Offset $offset -Patch ("Cursors\" + $Redux.HUD.Cursors.Text.replace(" (default)", "") + ".bin") -Texture
 
 }
