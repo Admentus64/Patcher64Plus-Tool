@@ -708,7 +708,14 @@ https://github.com/DaruniasJoy/OoT-Custom-Sequences
 <<< GOLDENEYE 007 >>>
 
 --- Additional Options ---
-- Cursors:				GhostlyDark (injects) & Intermission (HD assets)
+- Dual Eyes Cooperative:		Rucksack Gamer, pavarini, SubDrag & Zoinkity		
+- N64 Mouse:				Carnivorous
+- Unlock Levels:			Elfor
+- Disable Content:			Coockie1173
+- Cursor:				GhostlyDark (injects) & Intermission (HD assets)
+- Show Crosshair:			Coockie1173
+- Mission Timer:			Carnivorous
+- Briefing Time:			Carnivorous
 
 --- Translations ---
 - French:				Corrigo (v1,0)

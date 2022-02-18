@@ -20,6 +20,13 @@ function ByteOptions() {
     if (IsChecked $Redux.Main.Levels) { ChangeBytes -Offset "C5B44" -Values "34 02 00 01" } # Unlock Levels
     
 
+    # DISABLE CONTENT #
+
+    if (IsChecked $Redux.Disable.Cheats)         { ChangeBytes -Offset "9F128" -Values "00"          } # Disable Cheats
+    if (IsChecked $Redux.Disable.Singleplayer)   { ChangeBytes -Offset "9F128" -Values "20 0B FF FF" } # Disable Singleplayer
+    if (IsChecked $Redux.Disable.Multiplayer)    { ChangeBytes -Offset "9F128" -Values "20 10 00 01" } # Disable Multiplayer
+
+
 
     # HUD #
 
@@ -54,7 +61,7 @@ function ByteOptions() {
 #==============================================================================================================================================================================================
 function CreateOptions() {
     
-    CreateOptionsDialog -Columns 3 -Height 460
+    CreateOptionsDialog -Columns 3 -Height 510
 
     $Redux.Main.DualEyes.Add_CheckedChanged( { LockOptions })
     LockOptions
@@ -69,7 +76,13 @@ function CreateTabMain() {
     CreateReduxGroup    -Tag  "Main" -Text "Main"
     CreateReduxCheckBox -Name "DualEyes" -Text "Dual Eyes Cooperative" -Info "Adds cooperative support to GoldenEye`nVersion 2.0"                                                                    -Credits "Rucksack Gamer, pavarini, SubDrag & Zoinkity"
     CreateReduxCheckBox -Name "Mouse"    -Text "N64 Mouse"             -Info "Enable N64 mouse for port 2`nIn-game controls are hardcoded to 1.2 scheme`nUse Controller in port 1 to navigate menus" -Credits "Carnivorous"
-    CreateReduxCheckBox -Name "Levels"   -Text "Unlock Levels"         -Info "Unlock all singleplayer and multiplayer levels"                                                                        -Credits "Elfor & Carnivorous"
+    CreateReduxCheckBox -Name "Levels"   -Text "Unlock Levels"         -Info "Unlock all singleplayer and multiplayer levels"                                                                        -Credits "Elfor"
+
+    CreateReduxGroup    -Tag  "Disable"      -Text "Disable Content"
+    CreateReduxCheckBox -Name "Cheats"       -Text "Disable Cheats"       -Info "Make cheats inaccessible"            -Credits "Coockie1173"
+    CreateReduxCheckBox -Name "Singleplayer" -Text "Disable Singleplayer" -Info "Disable access to Singleplayer mode" -Credits "Coockie1173"
+    CreateReduxCheckBox -Name "Multiplayer"  -Text "Disable Multiplayer"  -Info "UDisable access to Multiplayer mode" -Credits "Coockie1173" -Link $Redux.Disable.Singleplayer
+
 
     CreateReduxGroup    -Tag  "HUD" -Text "HUD"
     CreateReduxComboBox -Name "Cursor"        -Text "Cursor" -Items @("GoldenEye") -FilePath ($GameFiles.textures + "\Cursors") -Ext "bin" -Default "GoldenEye" -Info "Set the style for the cursor" -Credits "GhostlyDark (injects) & Intermission (HD assets)"
