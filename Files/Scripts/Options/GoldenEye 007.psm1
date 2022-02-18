@@ -1,7 +1,7 @@
 function PatchOptions() {
 
-    if (IsChecked $Redux.Main.DualEyes)   { ApplyPatch -Patch "Compressed\Optional\dual_eyes.bps" } # Dual Eyes Cooperative
-    if (IsChecked $Redux.Main.Mouse)      { ApplyPatch -Patch "Compressed\Optional\n64_mouse.ips" } # N64 Mouse
+    if (IsChecked $Redux.Main.DualEyes)   { ApplyPatch -Patch "Compressed\Optional\dual_eyes_cooperative.bps" } # Dual Eyes Cooperative
+    if (IsChecked $Redux.Main.Mouse)      { ApplyPatch -Patch "Compressed\Optional\n64_mouse.ips"             } # N64 Mouse
 
 }
 
@@ -24,8 +24,8 @@ function ByteOptions() {
     # HUD #
 
     if (IsIndex $Redux.HUD.Cursor -Not) { # Cursor
-        $offset = SearchBytes -Start "B4EF00" -End "B69000" -Values "00 02 02 04 B6 00 10 7C 03 F4 65 BF FF F8 07 FF 00 FF E0 1F C4 09 95 FE 00 91 0C A7 9B ED F8 F7 6D 23 00 DF CA 0D DC FF 7F B4 9A 6F F6 53 FD FE"
-        PatchBytes -Offset $offset -Patch ("Cursors\" + $Redux.HUD.Cursors.Text.replace(" (default)", "") + ".bin") -Texture
+        $offset = SearchBytes -Start "B4EF00" -End "B69100" -Values "00 02 02 04 B6 00 10 7C 03 F4 65 BF FF F8 07 FF 00 FF E0 1F C4 09 95 FE 00 91 0C A7 9B ED F8 F7 6D 23 00 DF CA 0D DC FF 7F B4 9A 6F F6 53 FD FE"
+        PatchBytes -Offset $offset -Patch ("Cursors\" + $Redux.HUD.Cursor.Text.replace(" (default)", "") + ".bin") -Texture
     }
 
     if (IsChecked $Redux.HUD.ShowCrosshair) { ChangeBytes -Offset "9F128" -Values "20 0E 00 00" } # Always Show Crosshair
