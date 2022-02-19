@@ -57,8 +57,8 @@ function AutoUpdate([switch]$Manual) {
         $newVersion      = $newContent[0]
         try     { $Patcher.Date = Get-Date -Format $Patcher.DateFormat -Date $oldContent[1] }
         catch   { $Patcher.Date = Get-Date -Format $Patcher.DateFormat -Date "1970-01-01"; WriteToConsole ("Could not read current version date info for " + $Title + "!") }
-        try     { $newDate = Get-Date -Format $Patcher.DateFormat -Date $newContent[1] }
-        catch   { $newDate = Get-Date -Format $Patcher.DateFormat -Date "1970-01-01"; WriteToConsole ("Could not read latest version date info for " + $Title + "!")  }
+        try     { $newDate      = Get-Date -Format $Patcher.DateFormat -Date $newContent[1] }
+        catch   { $newDate      = Get-Date -Format $Patcher.DateFormat -Date "1970-01-01"; WriteToConsole ("Could not read latest version date info for " + $Title + "!")  }
         if ($oldContent.Count -gt 2) { try { [byte]$Patcher.Hotfix = $oldContent[2] } catch { [byte]$Patcher.Hotfix = 0 } } else { [byte]$Patcher.Hotfix = 0}
         if ($newContent.Count -gt 2) { try { [byte]$newHotfix      = $newContent[2] } catch { [byte]$newHotfix      = 0 } } else { [byte]$newHotifx      = 0}
 
