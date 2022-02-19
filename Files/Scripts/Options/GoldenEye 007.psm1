@@ -141,6 +141,9 @@ function LockOptions() {
     
     EnableElem -Elem @($Redux.Main.Mouse, $Redux.Main.MouseRemap, $Redux.Disable.Singleplayer, $Redux.Disable.Multiplayer) -Active (!$Redux.Main.DualEyes.Checked)
     EnableForm -Form $Redux.Main.MouseRemap -Enable ($Redux.Main.Mouse.Checked -and $Redux.Main.Mouse.Active)
-    for ($i=0; $i -lt $Redux.Language.Count/2; $i++) { EnableForm -Form $Redux.Language[$i] -Enable (!$Redux.Main.DualEyes.Checked -and !$Redux.Main.RestoreBlood.Checked) }
+    for ($i=0; $i -lt $Redux.Language.Count/2; $i++) {
+        EnableForm -Form $Redux.Language[$i] -Enable (!$Redux.Main.DualEyes.Checked -and !$Redux.Main.RestoreBlood.Checked)
+        EnableElem -Elem $Redux.Language[$i] -Active (!$Redux.Main.DualEyes.Checked -and !$Redux.Main.RestoreBlood.Checked)
+    }
 
 }
