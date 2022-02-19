@@ -24,7 +24,7 @@ function CreateDialog([uint16]$Width=0, [uint16]$Height=0, [string]$Icon) {
     
     # Create the dialog that displays more info.
     $Dialog = New-Object System.Windows.Forms.Form
-    $Dialog.Text = $ScriptName
+    $Dialog.Text = $Patcher.Title
     $Dialog.Size = New-Object System.Drawing.Size($Width, $Height)
     $Dialog.MaximumSize = $Dialog.Size
     $Dialog.MinimumSize = $Dialog.Size

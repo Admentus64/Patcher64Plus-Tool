@@ -1,7 +1,8 @@
 function PatchOptions() {
 
-    if (IsChecked $Redux.Main.DualEyes)   { ApplyPatch -Patch "Compressed\Optional\dual_eyes_cooperative.bps" } # Dual Eyes Cooperative
-    if (IsChecked $Redux.Main.Mouse)      { ApplyPatch -Patch "Compressed\Optional\n64_mouse.ips"             } # N64 Mouse
+    if (IsChecked $Redux.Main.DualEyes)        { ApplyPatch -Patch "Compressed\Optional\dual_eyes_cooperative.bps" } # Dual Eyes Cooperative
+    if (IsChecked $Redux.Main.Mouse)           { ApplyPatch -Patch "Compressed\Optional\n64_mouse.ips"             } # N64 Mouse
+    if (IsChecked $Redux.Main.RestoredBlood)   { ApplyPatch -Patch "Compressed\Optional\restored_blood.ppf"        } # Restored Blood
 
 }
 
@@ -12,13 +13,19 @@ function ByteOptions() {
     
     # MAIN #
     
-    if (IsChecked $Redux.Main.Mouse) { # N64 Mouse
-        $offset = SearchBytes -Values "00 10 03 E0 00 08 01 65 10 24 AD 20 AD C8 3C 09"
-        ChangeBytes -Offset $offset -Values "40 00"
-    }
+    if (IsChecked $Redux.Main.MouseRemap)      { ChangeBytes -Offset "B9AE"  -Values "40 00"       } # N64 Mouse Remap
+    if (IsChecked $Redux.Main.Levels)          { ChangeBytes -Offset "C5B44" -Values "34 02 00 01" } # Unlock Levels
+    if (IsChecked $Redux.Main.SameCharacter)   { ChangeBytes -Offset "46744" -Values "10"          } # Same Character
 
-    if (IsChecked $Redux.Main.Levels) { ChangeBytes -Offset "C5B44" -Values "34 02 00 01" } # Unlock Levels
-    
+
+
+    # SPEEDUPS AND SKIPS #
+
+    if (IsChecked $Redux.Skip.LegalScreen)   { ChangeBytes -Offset "3F26B" -Values "02"          } # Shorten Legal Screen
+    if (IsChecked $Redux.Skip.Intro)         { ChangeBytes -Offset "3F884" -Values "20 08 00 00" } # Skippable Intro
+    if (IsChecked $Redux.Skip.Demo)          { ChangeBytes -Offset "3FF0C" -Values "20 0A 00 01" } # Skip Demo
+
+
 
     # DISABLE CONTENT #
 
@@ -31,7 +38,7 @@ function ByteOptions() {
     # HUD #
 
     if (IsIndex $Redux.HUD.Cursor -Not) { # Cursor
-        $offset = SearchBytes -Start "B4EF00" -End "B69100" -Values "00 02 02 04 B6 00 10 7C 03 F4 65 BF FF F8 07 FF 00 FF E0 1F C4 09 95 FE 00 91 0C A7 9B ED F8 F7 6D 23 00 DF CA 0D DC FF 7F B4 9A 6F F6 53 FD FE"
+        $offset = SearchBytes -Start "B4E300" -End "B69100" -Values "00 02 02 04 B6 00 10 7C 03 F4 65 BF FF F8 07 FF 00 FF E0 1F C4 09 95 FE 00 91 0C A7 9B ED F8 F7 6D 23 00 DF CA 0D DC FF 7F B4 9A 6F F6 53 FD FE"
         PatchBytes -Offset $offset -Patch ("Cursors\" + $Redux.HUD.Cursor.Text.replace(" (default)", "") + ".bin") -Texture
     }
 
@@ -61,10 +68,16 @@ function ByteOptions() {
 #==============================================================================================================================================================================================
 function CreateOptions() {
     
-    CreateOptionsDialog -Columns 3 -Height 510
+    $Redux.ImageSize = 100
+
+    CreateOptionsDialog -Columns 5 -Height 450
 
     $Redux.Main.DualEyes.Add_CheckedChanged( { LockOptions })
+    $Redux.Main.Mouse.Add_CheckedChanged(    { EnableForm -Form $Redux.Main.MouseRemap -Enable $Redux.Main.Mouse.Checked })
     LockOptions
+
+    $Redux.HUD.Cursor.Add_SelectedIndexChanged( { SetImage } )
+    SetImage
 
 }
 
@@ -73,34 +86,32 @@ function CreateOptions() {
 #==============================================================================================================================================================================================
 function CreateTabMain() {
     
-    CreateReduxGroup    -Tag  "Main" -Text "Main"
-    CreateReduxCheckBox -Name "DualEyes" -Text "Dual Eyes Cooperative" -Info "Adds cooperative support to GoldenEye`nVersion 2.0"                                                                    -Credits "Rucksack Gamer, pavarini, SubDrag & Zoinkity"
-    CreateReduxCheckBox -Name "Mouse"    -Text "N64 Mouse"             -Info "Enable N64 mouse for port 2`nIn-game controls are hardcoded to 1.2 scheme`nUse Controller in port 1 to navigate menus" -Credits "Carnivorous"
-    CreateReduxCheckBox -Name "Levels"   -Text "Unlock Levels"         -Info "Unlock all singleplayer and multiplayer levels"                                                                        -Credits "Elfor"
+    CreateReduxGroup    -Tag  "Main"          -Text "Main"
+    CreateReduxCheckBox -Name "DualEyes"      -Text "Dual Eyes Cooperative" -Info "Adds cooperative support to GoldenEye`nVersion 2.0"                                                                    -Credits "Rucksack Gamer, pavarini, SubDrag & Zoinkity"
+    CreateReduxCheckBox -Name "RestoreBlood"  -Text "Restore Blood"         -Info "Restores the gore and blood removed to fit the ESRB rating"                                                            -Credits "Wreck" -Link $Redux.Main.DualEyes
+    CreateReduxCheckBox -Name "Mouse"         -Text "N64 Mouse"             -Info "Enable N64 mouse for port 2`nIn-game controls are hardcoded to 1.2 scheme`nUse Controller in port 1 to navigate menus" -Credits "Carnivorous"
+    CreateReduxCheckBox -Name "MouseRemap"    -Text "N64 Mouse Remap"       -Info "Remap mouse right click to B (reload/activate) instead of aim`nRequires the N64 Mouse Option"                          -Credits "Carnivorous"
+    CreateReduxCheckBox -Name "Levels"        -Text "Unlock Levels"         -Info "Unlock all singleplayer and multiplayer levels"                                                                        -Credits "Elfor"
+    CreateReduxCheckBox -Name "SameCharacter" -Text "Same Character"        -Info "Allow selecting the same character in multiplayer"                                                                     -Credits "GhostlyDark"
+
+    CreateReduxGroup    -Tag  "Skip"        -Text "Speedups and Skips"
+    CreateReduxCheckBox -Name "LegalScreen" -Text "Shorten Legal Screen" -Info "Shorten the initial legal screen to disappear almost instantly"           -Credits "Coockie1173"
+    CreateReduxCheckBox -Name "Intro"       -Text "Skippable Intro"      -Info "Pressing a button on the Nintendo logo skips the entire intro sequence"   -Credits "Coockie1173"
+    CreateReduxCheckBox -Name "Demo"        -Text "Skip Demo"            -Info "Skip the character showcase and gameplay demos as part of the game intro" -Credits "Coockie1173"
 
     CreateReduxGroup    -Tag  "Disable"      -Text "Disable Content"
     CreateReduxCheckBox -Name "Cheats"       -Text "Disable Cheats"       -Info "Make cheats inaccessible"            -Credits "Coockie1173"
     CreateReduxCheckBox -Name "Singleplayer" -Text "Disable Singleplayer" -Info "Disable access to Singleplayer mode" -Credits "Coockie1173"
-    CreateReduxCheckBox -Name "Multiplayer"  -Text "Disable Multiplayer"  -Info "UDisable access to Multiplayer mode" -Credits "Coockie1173" -Link $Redux.Disable.Singleplayer
+    CreateReduxCheckBox -Name "Multiplayer"  -Text "Disable Multiplayer"  -Info "Disable access to Multiplayer mode"  -Credits "Coockie1173" -Link $Redux.Disable.Singleplayer
 
-
-    CreateReduxGroup    -Tag  "HUD" -Text "HUD"
+    CreateReduxGroup    -Tag  "HUD" -Text "HUD" -Columns 4
     CreateReduxComboBox -Name "Cursor"        -Text "Cursor" -Items @("GoldenEye") -FilePath ($GameFiles.textures + "\Cursors") -Ext "bin" -Default "GoldenEye" -Info "Set the style for the cursor" -Credits "GhostlyDark (injects) & Intermission (HD assets)"
     CreateReduxCheckBox -Name "ShowCrosshair" -Text "Always Show Crosshair" -Info "Always show crosshair"                            -Credits "Coockie1173"
     CreateReduxCheckBox -Name "MissionTimer"  -Text "Mission Timer"         -Info "Display in-game mission timer"                    -Credits "Carnivorous"
     CreateReduxCheckBox -Name "BriefingTime"  -Text "Briefing Time"         -Info "Add milliseconds to the end results of a mission" -Credits "Carnivorous"
 
-    CreateReduxGroup -Tag "HUD" -Text "Cursor Previews"    $Last.Group.Height = (DPISize 140)
-    CreateImageBox -x 40 -y 30 -w 90 -h 90 -Name "CursorPreview"
-
-    $Redux.HUD.Cursor.Add_SelectedIndexChanged( {
-        $path = ($GameFiles.textures + "\Cursors\" + $Redux.HUD.Cursor.Text.replace(" (default)", "") + ".png")
-        if (TestFile $path)   { SetBitMap -Path $path -Box $Redux.HUD.CursorPreview -Width 90 -Height 90 }
-        else                  { $Redux.HUD.CursorPreview.Image = $null }
-    } )
-    $path = ($GameFiles.textures + "\Cursors\" + $Redux.HUD.Cursor.Text.replace(" (default)", "") + ".png")
-    if (TestFile $path)   { SetBitMap -Path $path -Box $Redux.HUD.CursorPreview -Width 90 -Height 90 }
-    else                  { $Redux.HUD.CursorPreview.Image = $null }
+    CreateReduxGroup -Tag "HUD" -Text "Cursor Previews"    $Last.Group.Height = (DPISize ($Redux.ImageSize + 30))
+    CreateImageBox -x 50 -y 20 -w $Redux.ImageSize -h $Redux.ImageSize -Name "CursorPreview"
 
 }
 
@@ -115,9 +126,20 @@ function CreateTabLanguage() {
 
 
 #==============================================================================================================================================================================================
+function SetImage() {
+
+    $path = ($GameFiles.textures + "\Cursors\" + $Redux.HUD.Cursor.Text.replace(" (default)", "") + ".png")
+    if (TestFile $path)   { SetBitMap -Path $path -Box $Redux.HUD.CursorPreview -Width $Redux.ImageSize -Height $Redux.ImageSize }
+    else                  { $Redux.HUD.CursorPreview.Image = $null }
+
+}
+
+
+#==============================================================================================================================================================================================
 function LockOptions() {
     
-    EnableForm -Form $Redux.Main.Mouse   -Enable (!$Redux.Main.DualEyes.Checked)
-    for ($i=0; $i -lt $Redux.Language.Count/2; $i++) { EnableForm -Form $Redux.Language[$i] -Enable (!$Redux.Main.DualEyes.Checked) }
+    EnableElem -Elem @($Redux.Main.Mouse, $Redux.Main.MouseRemap) -Active (!$Redux.Main.DualEyes.Checked)
+    EnableForm -Form $Redux.Main.MouseRemap -Enable ($Redux.Main.Mouse.Checked -and $Redux.Main.Mouse.Active)
+    for ($i=0; $i -lt $Redux.Language.Count/2; $i++) { EnableForm -Form $Redux.Language[$i] -Enable (!$Redux.Main.DualEyes.Active -and !$Redux.Main.RestoreBlood.Active) }
 
 }

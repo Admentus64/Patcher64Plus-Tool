@@ -20,44 +20,64 @@ function ExpandArchive([string]$LiteralPath, [String]$DestinationPath) {
 
 
 #==============================================================================================================================================================================================
-function AutoUpdate([switch]$Close) {
+function AutoUpdate([switch]$Manual) {
     
-    if ($Version -eq "Version Missing" -or $VersionDate -eq "Date Missing") {
-        WriteToConsole "Current version is missing! Could not update!"
-        return
-    }
+    $versionFile = $Paths.Master + "\Version.txt"
+    if ($Settings.Core.LocalTempFolder -eq $True)   { CreateSubPath $Paths.LocalTemp;   $file = $Paths.LocalTemp   + "\version.txt" }
+    else                                            { CreateSubPath $Paths.AppDataTemp; $file = $Paths.AppDataTemp + "\version.txt" }
 
-    $update = $false
-    try {
-        if ($Settings.Core.LocalTempFolder -eq $True)   { CreateSubPath $Paths.LocalTemp;   $file = $Paths.LocalTemp   + "\version.txt" }
-        else                                            { CreateSubPath $Paths.AppDataTemp; $file = $Paths.AppDataTemp + "\version.txt" }
+    $update = $False
+    $newVersion = $newDate = $newHotfix = $null
 
-        InvokeWebRequest -Uri $Files.json.repo.version -OutFile $file
-        $newVersion = (Get-Content -LiteralPath $file)[0]
-        $newDate    = (Get-Content -LiteralPath $file)[1]
+    if (TestFile $versionFile) {
+        try { InvokeWebRequest -Uri $Files.json.repo.version -OutFile $file }
+        catch {
+            WriteToConsole "Could not retrieve Patcher version info!"
+            return
+        }
+
+        try { $newVersion = (Get-Content -LiteralPath $file)[0] }
+        catch {
+            WriteToConsole ("Could not read version for newest update for" + $Patcher.Title)
+            return
+        }
+        try { $newDate = (Get-Date -Format $Patcher.DateFormat -Date (Get-Content -LiteralPath $file)[1]) }
+        catch {
+            WriteToConsole ("Could not read version date for newest update for" + $Patcher.Title)
+            return
+        }
+        try   { [byte]$newHotfix = (Get-Content -LiteralPath $file)[2] }
+        catch { [byte]$newHotfix = 0 }
         RemoveFile $file
 
-        if ($Settings.Core.SkipUpdate -eq $True) {
+        if ($Settings.Core.SkipUpdate -eq $True -and !$Manual) {
             try {
-                if ($Settings.Core.LastUpdateVersionCheck -eq $newVersion -and (Get-Date $Settings.Core.LastUpdateDateCheck) -eq (Get-Date $newDate) ) { return }
+                if ($Settings.Core.LastUpdateVersionCheck -le $newVersion -and $Settings.Core.LastUpdateDateCheck -le $newDate) { return }
                 else {
                     $Settings.Core.SkipUpdate = $False
                     Out-IniFile -FilePath $Files.settings -InputObject $Settings | Out-Null
                 }
             }
-            catch { return }
+            catch {
+                WriteToConsole "Could not save preference to skip this update!"
+                return
+            }
         }
 
-        if     ($Version -lt $newVersion)                            { $update = $true }
-        elseif ( (Get-Date $VersionDate) -lt (Get-Date $newDate) )   { $update = $true }
+        if     ($Patcher.Version -lt $newVersion)                        { $update = $True }
+        elseif ($Patcher.Date    -lt $newDate)                           { $update = $True }
+        elseif ($Patcher.Hotfix  -lt $newHotfix -and $newHotfix -ne 0)   { $update = $True }
         $Settings.Core.LastUpdateVersionCheck = $newVersion
         $Settings.Core.LastUpdateDateCheck    = $newDate
     }
-    catch { WriteToConsole "Could not update Patcher64+ Tool" }
+    else {
+        $update = $True
+        WriteToConsole "Could not find version info! Downloading latest update now!"
+    }
     
     if ($update) {
-        ShowUpdateDialog
-        if ($close) { $MainDialog.Close() }
+        ShowUpdateDialog -Version $NewVersion -Date $NewDate -Hotfix $NewHotfix
+        if ($Manual) { $MainDialog.Close() }
     }
 
 }
@@ -65,19 +85,22 @@ function AutoUpdate([switch]$Close) {
 
 
 #==============================================================================================================================================================================================
-function ShowUpdateDialog {
+function ShowUpdateDialog([String]$Version, [String]$Date, [String]$Hotfix) {
 
     $UpdateDialog = New-Object System.Windows.Forms.Form
-    $UpdateDialog.Size = DPISize (New-Object System.Drawing.Size(440, 180))
-    $UpdateDialog.Text = $ScriptName
+    $UpdateDialog.Size = DPISize (New-Object System.Drawing.Size(440, 200))
+    $UpdateDialog.Text = $Patcher.Title
     $UpdateDialog.FormBorderStyle = [System.Windows.Forms.FormBorderStyle]::FixedDialog
     $UpdateDialog.StartPosition = "CenterScreen"
     $UpdateDialog.Icon = $Files.icon.main
 
-    $label   = CreateLabel -x (DPISize 20)  -Y (DPISize 10) -Text ("Would you like to update Patcher64+?`n" + "New Version: " + $newVersion + " (" + $newDate + ")") -Font $Fonts.Medium -AddTo $UpdateDialog
-    $yesBtn  = CreateButton -X (DPISize 20)  -Y (DPISize 80)  -Width (DPISize 100) -Height (DPISize 50) -AddTo $UpdateDialog -Text "Yes"
-    $noBtn   = CreateButton -X (DPISize 160) -Y (DPISize 80)  -Width (DPISize 100) -Height (DPISize 50) -AddTo $UpdateDialog -Text "No"
-    $skipBtn = CreateButton -X (DPISize 300) -Y (DPISize 80)  -Width (DPISize 100) -Height (DPISize 50) -AddTo $UpdateDialog -Text "Skip Version"
+    $text = "Would you like to update Patcher64+?`n" + "New Version: " + $version + " (" + $date + ")"
+    if ($Hotfix -ne 0) { $text += "`nHotfix: #" + $Hotfix }
+
+    $label   = CreateLabel -x (DPISize 20)  -Y (DPISize 10) -Text $Text -Font $Fonts.Medium -AddTo $UpdateDialog
+    $yesBtn  = CreateButton -X (DPISize 20)  -Y (DPISize 100)  -Width (DPISize 100) -Height (DPISize 50) -AddTo $UpdateDialog -Text "Yes"
+    $noBtn   = CreateButton -X (DPISize 160) -Y (DPISize 100)  -Width (DPISize 100) -Height (DPISize 50) -AddTo $UpdateDialog -Text "No"
+    $skipBtn = CreateButton -X (DPISize 300) -Y (DPISize 100)  -Width (DPISize 100) -Height (DPISize 50) -AddTo $UpdateDialog -Text "Skip Version"
     
     $yesBtn.Add_Click(  { $UpdateDialog.Close(); RunUpdate } )
     $noBtn.Add_Click(   { $UpdateDialog.Close()            } )
@@ -157,17 +180,34 @@ function UpdateAddon([string]$Uri, [string]$Version, [string]$Title) {
         try {
             $file = $Path + "\lastUpdate.txt"
             InvokeWebRequest -Uri $Version -OutFile $file
-            $oldVersion = (Get-Content -LiteralPath ($addonPath + "\lastUpdate.txt"))[0]
-            $newVersion = (Get-Content -LiteralPath $file)[0]
-            if ( (Get-Date $oldVersion) -lt (Get-Date $newVersion) ) { $update = $true }
-            else {
-                RemovePath $path
-                return
-            }
         }
         catch {
             RemovePath $path
             WriteToConsole ("Could not retrieve last version info for " + $Title + "!")
+            return
+        }
+
+        try { $oldDate = (Get-Date -Format $Patcher.DateFormat -Date (Get-Content -LiteralPath ($addonPath + "\lastUpdate.txt"))[0]) }
+        catch {
+            $oldDate = (Get-Date -Format $Patcher.DateFormat -Date "1970-01-01")
+            WriteToConsole ("Could not read current version date info for " + $Title)
+        }
+        try { $newDate = (Get-Date -Format $Patcher.DateFormat -Date (Get-Content -LiteralPath $file)[0]) }
+        catch {
+            RemovePath $path
+            WriteToConsole ("Could not read newest version date info for " + $Title + "!")
+            return
+        }
+
+        try   { [byte]$oldHotfix = (Get-Content -LiteralPath ($addonPath + "\lastUpdate.txt"))[1] }
+        catch { [byte]$oldHotfix = 0 }
+        try   { [byte]$newHotfix = (Get-Content -LiteralPath $file)[1] }
+        catch { [byte]$newHotfix = 0 }
+
+        if     ($oldVersion -lt $newVersion)                        { $update = $true }
+        elseif ($oldHotfix  -lt $newHotfix -and $newHotfix -ne 0)   { $update = $true }
+        else {
+            RemovePath $path
             return
         }
     }

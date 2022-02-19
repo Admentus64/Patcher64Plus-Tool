@@ -24,24 +24,28 @@ Add-Type -AssemblyName 'System.Drawing'
 #==============================================================================================================================================================================================
 # Setup global variables
 
-$global:ScriptName = "Patcher64+ Tool"
-$global:VersionDate = "Date Missing"
-$global:Version     = "Version Missing"
-$global:SystemDate  = Get-Date -Format yyyy-MM-dd-HH-mm-ss
+$global:Patcher  = @{}
+$Patcher.Title      = "Patcher64+ Tool"
+$Patcher.Date       = "Date Missing"
+$Patcher.DateFormat = "yyyy-MM-dd"
+$Patcher.Version    = "Version Missing"
+$Patcher.Hotfix     = 0
+
 
 $global:CommandType = $MyInvocation.MyCommand.CommandType.ToString()
 $global:Definition  = $MyInvocation.MyCommand.Definition.ToString()
 
-$global:VCTitleLength = 40
-$global:GameConsole = $global:GameType = $global:GamePatch = $global:CheckHashSum = $null
-$global:GameFiles = $global:Settings = @{}
-$global:IsWiiVC = $global:MissingFiles = $False
-$global:Bootup = $global:GameIsSelected = $global:IsActiveGameField = $False
-$global:Last = $global:Fonts = @{}
-$global:FatalError = $global:WarningError = $False
-$global:ConsoleHistory = @()
+$global:GameConsole        = $global:GameType       = $global:GamePatch         = $global:CheckHashSum = $null
+$global:Bootup             = $global:GameIsSelected = $global:IsActiveGameField = $False
+$global:GameFiles          = $global:Settings       = @{}
+$global:IsWiiVC            = $global:MissingFiles   = $False
+$global:Last               = $global:Fonts          = @{}
+$global:FatalError         = $global:WarningError   = $False
+$global:SystemDate         = Get-Date -Format yyyy-MM-dd-HH-mm-ss
+$global:ConsoleHistory     = @()
+$global:VCTitleLength      = 40
 $global:DialogUpdateRateMS = 50
-$global:Relaunch = $False
+$global:Relaunch           = $False
 
 
 
@@ -94,7 +98,7 @@ function ImportModule([string]$Name) {
 #==============================================================================================================================================================================================
 function CheckScripts() {
     
-    $string  = $ScriptName + " " + $Version + " (" + $VersionDate + ")" + "{0}{0}"
+    $string  = $Patcher.Title + " " + $Patcher.Version + " (" + $Patcher.Date + ")" + "{0}{0}"
     $string += "Fatal Error: Script files are missing{0}"
 
     if (!(Test-Path -PathType Leaf -LiteralPath ($Paths.Scripts + "\Bytes.psm1")))      { $FatalError = $True; $string += "{0}" + $Paths.Scripts + "\Bytes.psm1" }
@@ -114,7 +118,7 @@ function CheckScripts() {
     if (!$FatalError) { return }
     
     $Dialog = New-Object System.Windows.Forms.Form
-    $Dialog.Text = $ScriptName
+    $Dialog.Text = $Patcher.Title
     $Dialog.AutoSize = $True
     $Dialog.StartPosition = "CenterScreen"
     $Dialog.FormBorderStyle = [System.Windows.Forms.FormBorderStyle]::FixedDialog
@@ -181,8 +185,14 @@ foreach ($Script in Get-ChildItem -LiteralPath $Paths.Scripts -Force) {
 
 $versionFile = $Paths.Master + "\Version.txt"
 if (TestFile $versionFile) {
-    $global:Version     = (Get-Content -LiteralPath $versionFile)[0]
-    $global:VersionDate = (Get-Content -LiteralPath $versionFile)[1]
+    $Patcher.Version    = (Get-Content -LiteralPath $versionFile)[0]
+    try { $Patcher.Date = (Get-Date -Format $Patcher.DateFormat -Date (Get-Content -LiteralPath $versionFile)[1]) }
+    catch {
+        $Patcher.Date = (Get-Date -Format $Patcher.DateFormat -Date "1970-01-01")
+        WriteToConsole ("Could not read version date for current update for" + $Patcher.Title)
+    }
+    try   { [byte]$Patcher.Hotfix = (Get-Content -LiteralPath $versionFile)[2] }
+    catch { [byte]$Patcher.Hotfix = 0 }
 }
 
 
@@ -244,7 +254,7 @@ if ($Settings.Core.DisableAddons -ne $True) {
 if ($Settings.Core.Interface -ne 1 -and $Settings.Core.Interface -ne 2 -and $Settings.Core.Interface -ne 3 -and !$FatalError) {
     $global:PopupDialog = New-Object System.Windows.Forms.Form
     $PopupDialog.Size = DPISize (New-Object System.Drawing.Size(390, 150))
-    $PopupDialog.Text = $ScriptName
+    $PopupDialog.Text = $Patcher.Title
     $PopupDialog.FormBorderStyle = [System.Windows.Forms.FormBorderStyle]::FixedDialog
     $PopupDialog.StartPosition = "CenterScreen"
     $PopupDialog.Icon = $Files.icon.main

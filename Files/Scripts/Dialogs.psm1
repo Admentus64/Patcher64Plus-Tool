@@ -85,7 +85,7 @@ function CreateCreditsDialog() {
     $global:Credits = @{}
 
     # Create the version number and script name label
-    $InfoLabel = CreateLabel -X ($CreditsDialog.Width / 2 - $String.Width - (DPISize 100)) -Y (DPISize 10) -Width (DPISize 200) -Height (DPISize 15) -Font $Fonts.SmallBold -Text ($ScriptName + " " + $Version + " (" + $VersionDate + ")") -AddTo $CreditsDialog
+    $InfoLabel = CreateLabel -X ($CreditsDialog.Width / 2 - $String.Width - (DPISize 100)) -Y (DPISize 10) -Width (DPISize 200) -Height (DPISize 15) -Font $Fonts.SmallBold -Text ($Patcher.Title + " " + $Patcher.Version + " (" + $Patcher.Date + ")") -AddTo $CreditsDialog
 
     # Create Text Box
     $Credits.Sections = @()
@@ -205,7 +205,7 @@ function CreateSettingsDialog() {
     $CloseButton.Add_Click({ $SettingsDialog.Hide() })
 
     # Create the version number and script name label
-    $InfoLabel = CreateLabel -X ($SettingsDialog.Width / 2 - $String.Width - (DPISize 100)) -Y (DPISize 10) -Width (DPISize 220) -Height (DPISize 15) -Font $Fonts.SmallBold -Text ($ScriptName + " " + $Version + " (" + $VersionDate + ")") -AddTo $SettingsDialog
+    $InfoLabel = CreateLabel -X ($SettingsDialog.Width / 2 - $String.Width - (DPISize 100)) -Y (DPISize 10) -Width (DPISize 220) -Height (DPISize 15) -Font $Fonts.SmallBold -Text ($Patcher.Title + " " + $Patcher.Version + " (" + $Patcher.Date + ")") -AddTo $SettingsDialog
 
     $global:GeneralSettings = @{}
     
@@ -429,7 +429,7 @@ function CreateErrorDialog([string]$Error, [boolean]$Fatal=$True, [boolean]$Once
     $CloseButton.Add_Click({ $ErrorDialog.Hide() })
 
     # Create the string that will be displayed on the window.
-    $String = $ScriptName + " " + $Version + " (" + $VersionDate + ")" + "{0}{0}"
+    $String = $Patcher.Title + " " + $Patcher.Version + " (" + $Patcher.Date + ")" + "{0}{0}"
 
     ShowPowerShellConsole $True
 

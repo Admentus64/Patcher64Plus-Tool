@@ -13,14 +13,15 @@ function SetFileParameters() {
     
     # Create a hash table
     $global:Files = @{}
-    $Files.tool = @{}
-    $Files.sound = @{}
-    $Files.oot = @{}
-    $Files.mm = @{}
-    $Files.sm64 = @{}
-    $Files.json = @{}
-    $Files.icon = @{}
-    $Files.text = @{}
+    $Files.tool   = @{}
+    $Files.sound  = @{}
+    $Files.oot    = @{}
+    $Files.mm     = @{}
+    $Files.sm64   = @{}
+    $Files.ge007  = @{}
+    $Files.json   = @{}
+    $Files.icon   = @{}
+    $Files.text   = @{}
 
 
 
@@ -189,6 +190,13 @@ function SetFileParameters() {
 
 
 
+    # Store GoldenEye 007 files
+    $Files.ge007.cam                       = CheckPatchExtension ($Paths.Games + "\GoldenEye 007\Compressed\Optional\dual_eyes_cooperative")
+    $Files.ge007.fps                       = CheckPatchExtension ($Paths.Games + "\GoldenEye 007\Compressed\Optional\n64_mouse")
+    $Files.ge007.cam                       = CheckPatchExtension ($Paths.Games + "\GoldenEye 007\Compressed\Optional\restored_blood")
+
+
+
     # Store JSON files
     $Files.json.repo                        = $Paths.Master + "\repo.json"
     $Files.json.consoles                    = $Paths.Games  + "\Consoles.json"
@@ -216,6 +224,7 @@ function SetFileParameters() {
     CheckFilesExists $Files.oot
     CheckFilesExists $Files.mm
     CheckFilesExists $Files.sm64
+    CheckFilesExists $Files.ge007
     CheckFilesExists $Files.json
     CheckFilesExists $Files.icon
 

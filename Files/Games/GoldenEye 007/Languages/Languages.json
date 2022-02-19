@@ -12,4 +12,9 @@
 	"code"			: "es",
 	"output"		: "_es_patched",
 	"credits"		: "Sogun (v2.0)"
+}, {
+	"title"			: "Brazilian Portuguese",
+	"code"			: "pt-BR",
+	"output"		: "_pt-BR_patched",
+	"credits"		: "Marquitos (v1.0)"
 } ]

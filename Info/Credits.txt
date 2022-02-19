@@ -711,6 +711,7 @@ https://github.com/DaruniasJoy/OoT-Custom-Sequences
 - Dual Eyes Cooperative:		Rucksack Gamer, pavarini, SubDrag & Zoinkity		
 - N64 Mouse:				Carnivorous
 - Unlock Levels:			Elfor
+- Speedups and Skips:			Coockie1173
 - Disable Content:			Coockie1173
 - Cursor:				GhostlyDark (injects) & Intermission (HD assets)
 - Show Crosshair:			Coockie1173
@@ -720,6 +721,7 @@ https://github.com/DaruniasJoy/OoT-Custom-Sequences
 --- Translations ---
 - French:				Corrigo (v1,0)
 - Spanish:				Sogun (v2.0)
+- Brazilian Portuguese:			Marquitos (v1.0)
 
 
 

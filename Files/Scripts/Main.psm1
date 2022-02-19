@@ -1,17 +1,17 @@
 ﻿function CreateMainDialog() {
     
     # Create the main dialog that is shown to the user.
-    $global:MainDialog = New-Object System.Windows.Forms.Form
-    $MainDialog.Text = $ScriptName
-    $MainDialog.Size = DPISize (New-Object System.Drawing.Size(625, 745))
-  # $MainDialog.MaximizeBox = $False
-    $MainDialog.AutoScale = $True
-    $MainDialog.AutoScaleMode = [Windows.Forms.AutoScaleMode]::None
+    $global:MainDialog          = New-Object System.Windows.Forms.Form
+    $MainDialog.Text            = $Patcher.Title
+    $MainDialog.Size            = DPISize (New-Object System.Drawing.Size(625, 745))
+  # $MainDialog.MaximizeBox     = $False
+    $MainDialog.AutoScale       = $True
+    $MainDialog.AutoScaleMode   = [Windows.Forms.AutoScaleMode]::None
     $MainDialog.FormBorderStyle = [System.Windows.Forms.FormBorderStyle]::FixedDialog
-    $MainDialog.StartPosition = "CenterScreen"
-    $MainDialog.KeyPreview = $True
+    $MainDialog.StartPosition   = "CenterScreen"
+    $MainDialog.KeyPreview      = $True
+    $MainDialog.Icon            = $Files.icon.main
     $MainDialog.Add_Shown({ $MainDialog.Activate() })
-    $MainDialog.Icon = $Files.icon.main
 
     # Menu bar
     $menuBarMain      = New-Object System.Windows.Forms.MenuStrip; $MainDialog.Controls.Add($menuBarMain)
@@ -41,7 +41,7 @@
 
     $menuBarChecksum.Add_Click(  { If (!(IsSet $CreditsDialog)) { CreateCreditsDialog | Out-Null }; foreach ($item in $Credits.Sections) { $item.Visible = $False }; $Credits.Sections[4].Visible = $True; $CreditsDialog.ShowDialog() } )
     $menuBarExit.Add_Click(      { $MainDialog.Close() } )
-    $menuBarUpdate.Add_Click(    { AutoUpdate -Close } )
+    $menuBarUpdate.Add_Click(    { AutoUpdate -Manual } )
 
     $menuBarSettings.Add_Click(  { $SettingsDialog.ShowDialog() } )
     $menuBarResetAll.Add_Click(  { ResetTool } )
@@ -69,7 +69,7 @@
     $CurrentModeLabel.AutoSize = $True
 
     # Create a label to show current version.
-    $VersionLabel = CreateLabel -X (DPISize 15) -Y (DPISize 30) -Width (DPISize 130) -Height (DPISize 30) -Text ($Version + "`n(" + $VersionDate + ")") -Font $Fonts.SmallBold -AddTo $MainDialog
+    $VersionLabel = CreateLabel -X (DPISize 15) -Y (DPISize 30) -Width (DPISize 130) -Height (DPISize 30) -Text ($Patcher.Version + "`n(" + $Patcher.Date + ")") -Font $Fonts.SmallBold -AddTo $MainDialog
 
     # Create Arrays for groups
     $global:InputPaths = @{}; $global:Patches = @{}; $global:CurrentGame = @{}; $global:VC = @{}; $global:CustomHeader = @{}
