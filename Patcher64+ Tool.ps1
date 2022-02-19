@@ -284,11 +284,12 @@ if (IsRestrictedFolder $Paths.FullBase) {
 }
 
 # Critical info
-WriteToConsole ("Version:       " + $Version)
-WriteToConsole ("Version Date:  " + $VersionDate)
-WriteToConsole ("Full Path:     " + $Paths.FullBase)
-WriteToConsole ("System Date:   " + $SystemDate)
-WriteToConsole ("Temp Folder:   " + $Paths.Temp)
+WriteToConsole ("Version:        " + $Patcher.Version)
+WriteToConsole ("Version Date:   " + $Patcher.Date)
+WriteToConsole ("Version Hotfix: #" + $Patcher.Hotfix)
+WriteToConsole ("Full Path:      " + $Paths.FullBase)
+WriteToConsole ("System Date:    " + $SystemDate)
+WriteToConsole ("Temp Folder:    " + $Paths.Temp)
 
 if (!$FatalError) {
     # Set default game mode
