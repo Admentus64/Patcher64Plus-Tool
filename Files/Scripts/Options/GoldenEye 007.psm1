@@ -2,7 +2,7 @@ function PatchOptions() {
 
     if (IsChecked $Redux.Main.DualEyes)       { ApplyPatch -Patch "Compressed\Optional\dual_eyes_cooperative.bps" } # Dual Eyes Cooperative
     if (IsChecked $Redux.Main.Mouse)          { ApplyPatch -Patch "Compressed\Optional\n64_mouse.ips"             } # N64 Mouse
-    if (IsChecked $Redux.Main.RestoreBlood)   { ApplyPatch -Patch "Compressed\Optional\restored_blood.ppf"        } # Restore Blood
+    if (IsChecked $Redux.Main.RestoreBlood)   { ApplyPatch -Patch "Compressed\Optional\restore_blood.ppf"         } # Restore Blood
 
 }
 

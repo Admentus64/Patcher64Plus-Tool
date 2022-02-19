@@ -42,7 +42,7 @@
         $global:LanguagePatch = $global:LanguagePatchFile = $null
         if ( (IsSet $Files.json.languages) -and $Settings.Core.Interface -ne 2 -and (IsChecked $Patches.Options) -and (IsSet $Redux.Language) ) {
             for ($i=0; $i -lt $Files.json.languages.Length; $i++) {
-                if ($Redux.Language[$i].checked) {
+                if (IsChecked $Redux.Language[$i]) {
                     $global:LanguagePatch = $Files.json.languages[$i]
                     break
                 }
