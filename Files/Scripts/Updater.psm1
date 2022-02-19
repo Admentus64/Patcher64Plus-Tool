@@ -27,14 +27,65 @@ function AutoUpdate([switch]$Manual) {
     else                                            { CreateSubPath $Paths.AppDataTemp; $file = $Paths.AppDataTemp + "\version.txt" }
 
     $update = $False
-    $newVersion = $newDate = $newHotfix = $null
+    $oldContent = $newContent = $newVersion = $newDate = $newHotfix = $null
 
     if (TestFile $versionFile) {
+        # Download version info
         try { InvokeWebRequest -Uri $Files.json.repo.version -OutFile $file }
         catch {
             WriteToConsole "Could not retrieve Patcher version info!"
             return
         }
+
+        # Load content
+        $oldContent = $newContent = $null
+        try { [array]$oldContent = Get-Content -LiteralPath ($addonPath + "\lastUpdate.txt") }
+        catch {
+            RemovePath $path
+            WriteToConsole ("Could not read current version info for " + $Title + "!")
+            return
+        }
+        try { [array]$newContent = Get-Content -LiteralPath $file }
+        catch {
+            RemovePath $path
+            WriteToConsole ("Could not read latest version info for " + $Title + "!")
+            return
+        }
+        
+        # Parse content
+        $Patcher.Version = $oldContent[0]
+        $newVersion      = $newContent[0]
+        try     { $Patcher.Date = Get-Date -Format $Patcher.DateFormat -Date $oldContent[1] }
+        catch   { $Patcher.Date = Get-Date -Format $Patcher.DateFormat -Date "1970-01-01"; WriteToConsole ("Could not read current version date info for " + $Title + "!") }
+        try     { $newDate = Get-Date -Format $Patcher.DateFormat -Date $newContent[1] }
+        catch   { $newDate = Get-Date -Format $Patcher.DateFormat -Date "1970-01-01"; WriteToConsole ("Could not read latest version date info for " + $Title + "!")  }
+        if ($oldContent.Count -gt 2) { try { [byte]$Patcher.Hotfix = $oldContent[2] } catch { [byte]$Patcher.Hotfix = 0 } } else { [byte]$Patcher.Hotfix = 0}
+        if ($newContent.Count -gt 2) { try { [byte]$newHotfix      = $newContent[2] } catch { [byte]$newHotfix      = 0 } } else { [byte]$newHotifx      = 0}
+
+        # Skip update
+        if ($Settings.Core.SkipUpdate -eq $True -and !$Manual) {
+            try {
+                if ($Settings.Core.LastUpdateVersionCheck -le $newVersion -and $Settings.Core.LastUpdateDateCheck -le $newDate) { return }
+                else {
+                    $Settings.Core.SkipUpdate = $False
+                    Out-IniFile -FilePath $Files.settings -InputObject $Settings | Out-Null
+                }
+            }
+            catch {
+                WriteToConsole "Could not save preference to skip this update!"
+                return
+            }
+        }
+
+        # Compare content
+        if     ($Patcher.Version -lt $newVersion)                        { $update = $True }
+        elseif ($Patcher.Date    -lt $newDate)                           { $update = $True }
+        elseif ($Patcher.Hotfix  -lt $newHotfix -and $newHotfix -ne 0)   { $update = $True }
+        $Settings.Core.LastUpdateVersionCheck = $newVersion
+        $Settings.Core.LastUpdateDateCheck    = $newDate
+
+
+
 
         try { $newVersion = (Get-Content -LiteralPath $file)[0] }
         catch {
@@ -50,25 +101,9 @@ function AutoUpdate([switch]$Manual) {
         catch { [byte]$newHotfix = 0 }
         RemoveFile $file
 
-        if ($Settings.Core.SkipUpdate -eq $True -and !$Manual) {
-            try {
-                if ($Settings.Core.LastUpdateVersionCheck -le $newVersion -and $Settings.Core.LastUpdateDateCheck -le $newDate) { return }
-                else {
-                    $Settings.Core.SkipUpdate = $False
-                    Out-IniFile -FilePath $Files.settings -InputObject $Settings | Out-Null
-                }
-            }
-            catch {
-                WriteToConsole "Could not save preference to skip this update!"
-                return
-            }
-        }
+        
 
-        if     ($Patcher.Version -lt $newVersion)                        { $update = $True }
-        elseif ($Patcher.Date    -lt $newDate)                           { $update = $True }
-        elseif ($Patcher.Hotfix  -lt $newHotfix -and $newHotfix -ne 0)   { $update = $True }
-        $Settings.Core.LastUpdateVersionCheck = $newVersion
-        $Settings.Core.LastUpdateDateCheck    = $newDate
+        
     }
     else {
         $update = $True
@@ -176,7 +211,10 @@ function UpdateAddon([string]$Uri, [string]$Version, [string]$Title) {
     $Path = $Path + "\updater-" + $Title.ToLower()
     CreateSubPath $Path
 
+    $oldContent = $newContent = $oldDate = $oldHotfix = $newDate = $newHotfix = $null
+
     if (TestFile ($addonPath + "\lastUpdate.txt")) {
+        # Download version info
         try {
             $file = $Path + "\lastUpdate.txt"
             InvokeWebRequest -Uri $Version -OutFile $file
@@ -187,29 +225,32 @@ function UpdateAddon([string]$Uri, [string]$Version, [string]$Title) {
             return
         }
 
-        try { $oldDate = (Get-Date -Format $Patcher.DateFormat -Date (Get-Content -LiteralPath ($addonPath + "\lastUpdate.txt"))[0]) }
-        catch {
-            $oldDate = (Get-Date -Format $Patcher.DateFormat -Date "1970-01-01")
-            WriteToConsole ("Could not read current version date info for " + $Title)
-        }
-        try { $newDate = (Get-Date -Format $Patcher.DateFormat -Date (Get-Content -LiteralPath $file)[0]) }
+        # Load content
+        try { [array]$oldContent = Get-Content -LiteralPath ($addonPath + "\lastUpdate.txt") }
         catch {
             RemovePath $path
-            WriteToConsole ("Could not read newest version date info for " + $Title + "!")
+            WriteToConsole ("Could not read current version info for " + $Title + "!")
             return
         }
+        try { [array]$newContent = Get-Content -LiteralPath $file }
+        catch {
+            RemovePath $path
+            WriteToConsole ("Could not read latest version info for " + $Title + "!")
+            return
+        }
+        
+        # Parse content
+        try     { $oldDate = Get-Date -Format $Patcher.DateFormat -Date $oldContent[0] }
+        catch   { $oldDate = Get-Date -Format $Patcher.DateFormat -Date "1970-01-01"; WriteToConsole ("Could not read current version date info for " + $Title + "!") }
+        try     { $newDate = Get-Date -Format $Patcher.DateFormat -Date $newContent[0] }
+        catch   { $newDate = Get-Date -Format $Patcher.DateFormat -Date "1970-01-01"; WriteToConsole ("Could not read latest version date info for " + $Title + "!")  }
+        if ($oldContent.Count -gt 1) { try { [byte]$oldHotfix = $oldContent[1] } catch { [byte]$oldHotfix = 0 } } else { [byte]$oldHotfix = 0}
+        if ($newContent.Count -gt 1) { try { [byte]$newHotfix = $newContent[1] } catch { [byte]$newHotfix = 0 } } else { [byte]$newHotifx = 0}
 
-        try   { [byte]$oldHotfix = (Get-Content -LiteralPath ($addonPath + "\lastUpdate.txt"))[1] }
-        catch { [byte]$oldHotfix = 0 }
-        try   { [byte]$newHotfix = (Get-Content -LiteralPath $file)[1] }
-        catch { [byte]$newHotfix = 0 }
-
-        if     ($oldVersion -lt $newVersion)                        { $update = $true }
+        # Compare content
+        if     ($oldDate    -lt $newDate)                           { $update = $true }
         elseif ($oldHotfix  -lt $newHotfix -and $newHotfix -ne 0)   { $update = $true }
-        else {
-            RemovePath $path
-            return
-        }
+        else                                                        { RemovePath $path; return }
     }
     else {
         WriteToConsole ("Could not find last update for " + $Title + "! Downloading now!")
@@ -221,7 +262,10 @@ function UpdateAddon([string]$Uri, [string]$Version, [string]$Title) {
         Get-ChildItem -Path $path -Directory | ForEach-Object { RemovePath ($path + "\" + $_) }
         RemoveFile $zip
 
-        try { InvokeWebRequest -Uri $Uri -OutFile $zip }
+        try {
+            InvokeWebRequest -Uri $Uri -OutFile $zip
+            WriteToConsole ("Downloading latest update for " + $Title + "!")
+        }
         catch {
             RemovePath $path
             WriteToConsole ("Could not download lastest version for " + $Title + "!")
