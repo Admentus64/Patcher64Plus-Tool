@@ -39,13 +39,13 @@ function AutoUpdate([switch]$Manual) {
 
         # Load content
         $oldContent = $newContent = $null
-        try { [array]$oldContent = Get-Content -LiteralPath ($addonPath + "\lastUpdate.txt") }
+        try { [array]$oldContent = Get-Content -LiteralPath $versionFile }
         catch {
             RemovePath $path
             WriteToConsole ("Could not read current version info for " + $Title + "!")
             return
         }
-        try { [array]$newContent = Get-Content -LiteralPath $file }
+        try { [array]$newContent = Get-Content -LiteralPath ($Paths.LocalTemp   + "\version.txt") }
         catch {
             RemovePath $path
             WriteToConsole ("Could not read latest version info for " + $Title + "!")
