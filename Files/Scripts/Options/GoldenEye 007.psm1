@@ -1,8 +1,8 @@
 function PatchOptions() {
 
-    if (IsChecked $Redux.Main.DualEyes)        { ApplyPatch -Patch "Compressed\Optional\dual_eyes_cooperative.bps" } # Dual Eyes Cooperative
-    if (IsChecked $Redux.Main.Mouse)           { ApplyPatch -Patch "Compressed\Optional\n64_mouse.ips"             } # N64 Mouse
-    if (IsChecked $Redux.Main.RestoredBlood)   { ApplyPatch -Patch "Compressed\Optional\restored_blood.ppf"        } # Restored Blood
+    if (IsChecked $Redux.Main.DualEyes)       { ApplyPatch -Patch "Compressed\Optional\dual_eyes_cooperative.bps" } # Dual Eyes Cooperative
+    if (IsChecked $Redux.Main.Mouse)          { ApplyPatch -Patch "Compressed\Optional\n64_mouse.ips"             } # N64 Mouse
+    if (IsChecked $Redux.Main.RestoreBlood)   { ApplyPatch -Patch "Compressed\Optional\restored_blood.ppf"        } # Restore Blood
 
 }
 
@@ -72,8 +72,9 @@ function CreateOptions() {
 
     CreateOptionsDialog -Columns 5 -Height 450
 
-    $Redux.Main.DualEyes.Add_CheckedChanged( { LockOptions })
-    $Redux.Main.Mouse.Add_CheckedChanged(    { EnableForm -Form $Redux.Main.MouseRemap -Enable $Redux.Main.Mouse.Checked })
+    $Redux.Main.DualEyes.Add_CheckedChanged(     { LockOptions })
+    $Redux.Main.RestoreBlood.Add_CheckedChanged( { LockOptions })
+    $Redux.Main.Mouse.Add_CheckedChanged(        { EnableForm -Form $Redux.Main.MouseRemap -Enable $Redux.Main.Mouse.Checked })
     LockOptions
 
     $Redux.HUD.Cursor.Add_SelectedIndexChanged( { SetImage } )
@@ -138,8 +139,8 @@ function SetImage() {
 #==============================================================================================================================================================================================
 function LockOptions() {
     
-    EnableElem -Elem @($Redux.Main.Mouse, $Redux.Main.MouseRemap) -Active (!$Redux.Main.DualEyes.Checked)
+    EnableElem -Elem @($Redux.Main.Mouse, $Redux.Main.MouseRemap, $Redux.Disable.Singleplayer, $Redux.Disable.Multiplayer) -Active (!$Redux.Main.DualEyes.Checked)
     EnableForm -Form $Redux.Main.MouseRemap -Enable ($Redux.Main.Mouse.Checked -and $Redux.Main.Mouse.Active)
-    for ($i=0; $i -lt $Redux.Language.Count/2; $i++) { EnableForm -Form $Redux.Language[$i] -Enable (!$Redux.Main.DualEyes.Active -and !$Redux.Main.RestoreBlood.Active) }
+    for ($i=0; $i -lt $Redux.Language.Count/2; $i++) { EnableForm -Form $Redux.Language[$i] -Enable (!$Redux.Main.DualEyes.Checked -and !$Redux.Main.RestoreBlood.Checked) }
 
 }

@@ -191,9 +191,9 @@ function SetFileParameters() {
 
 
     # Store GoldenEye 007 files
-    $Files.ge007.cam                       = CheckPatchExtension ($Paths.Games + "\GoldenEye 007\Compressed\Optional\dual_eyes_cooperative")
-    $Files.ge007.fps                       = CheckPatchExtension ($Paths.Games + "\GoldenEye 007\Compressed\Optional\n64_mouse")
-    $Files.ge007.cam                       = CheckPatchExtension ($Paths.Games + "\GoldenEye 007\Compressed\Optional\restored_blood")
+    $Files.ge007.dual_eyes                  = CheckPatchExtension ($Paths.Games + "\GoldenEye 007\Compressed\Optional\dual_eyes_cooperative")
+    $Files.ge007.mouse                      = CheckPatchExtension ($Paths.Games + "\GoldenEye 007\Compressed\Optional\n64_mouse")
+    $Files.ge007.blood                      = CheckPatchExtension ($Paths.Games + "\GoldenEye 007\Compressed\Optional\restore_blood")
 
 
 
