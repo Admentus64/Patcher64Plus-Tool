@@ -83,27 +83,6 @@ function AutoUpdate([switch]$Manual) {
         elseif ($Patcher.Hotfix  -lt $newHotfix -and $newHotfix -ne 0)   { $update = $True }
         $Settings.Core.LastUpdateVersionCheck = $newVersion
         $Settings.Core.LastUpdateDateCheck    = $newDate
-
-
-
-
-        try { $newVersion = (Get-Content -LiteralPath $file)[0] }
-        catch {
-            WriteToConsole ("Could not read version for newest update for" + $Patcher.Title)
-            return
-        }
-        try { $newDate = (Get-Date -Format $Patcher.DateFormat -Date (Get-Content -LiteralPath $file)[1]) }
-        catch {
-            WriteToConsole ("Could not read version date for newest update for" + $Patcher.Title)
-            return
-        }
-        try   { [byte]$newHotfix = (Get-Content -LiteralPath $file)[2] }
-        catch { [byte]$newHotfix = 0 }
-        RemoveFile $file
-
-        
-
-        
     }
     else {
         $update = $True
