@@ -3,6 +3,7 @@ v17.2.0
 - Added new game mode for GoldenEye 007 (GE) with Additional Options
 - Added new "Add Navi Prompt" for OoT
 - Updated Smash Remix to v1.1.1
+- Updated "Kristin" models (by Ikey Ilex)
 - Fixed enemy HP modifiers for MM
 
 v17.1.1

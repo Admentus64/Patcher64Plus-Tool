@@ -528,8 +528,8 @@ function GamePath_Finish([object]$TextBox, [string]$Path) {
     SetMainScreenSize
     $global:GameIsSelected = $True
 
-    if ($IsWiiVC)   { WriteToConsole ("WAD Path:      " + $GamePath) }
-    else            { WriteToConsole ("ROM Path:      " + $GamePath) }
+    if ($IsWiiVC)   { WriteToConsole ("WAD Path:       " + $GamePath) }
+    else            { WriteToConsole ("ROM Path:       " + $GamePath) }
 
     ChangeGamesList
     $InputPaths.ClearGameButton.Enabled = $True
