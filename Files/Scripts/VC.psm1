@@ -6,7 +6,7 @@
     $CloseButton.Add_Click({ $VCRemapDialog.Hide() })
     
     # Create the version number and script name label
-    $InfoLabel = CreateLabel -X ($VCRemapDialog.Width / 2 - $String.Width - (DPISize 100)) -Y (DPISize 10) -Width (DPISize 200) -Height (DPISize 15) -Font $Fonts.SmallBold -Text ($ScriptName + " " + $Version + " (" + $VersionDate + ")") -AddTo $VCRemapDialog
+    $InfoLabel = CreateLabel -X ($VCRemapDialog.Width / 2 - $String.Width - (DPISize 100)) -Y (DPISize 10) -Width (DPISize 200) -Height (DPISize 15) -Font $Fonts.SmallBold -Text ($Patcher.Title + " " + $Patcher.Version + " (" + $Patcher.Date + ")") -AddTo $VCRemapDialog
 
     # VC Remap Settings
     CreateReduxGroup -Tag "Controls" -Y (DPISize 40) -Text "Virtual Console Remap Presets" -Name $null -ShowAlways -AddTo $VCRemapDialog
