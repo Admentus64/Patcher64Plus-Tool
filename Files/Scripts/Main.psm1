@@ -24,13 +24,13 @@
             $tooltip = "Addon: " + $Addon.title + " is missing"
         }
         elseif ($Addons[$Addon.title].isUpdated) {
-            $icon += "_missing"
+            $icon += "_updated"
             $tooltip = "Addon: " + $Addon.title + " just got updated"
-            $tooltip += "{0}{0}New version: " + $Addons[$Addon.title].date
+            $tooltip += "{0}{0}New version for " + $Addon.title +": " + $Addons[$Addon.title].date
             if (IsSet $Addon.hotfix) { $tooltip += "{0}Hotfix: " + $Addons[$Addon.title].hotfix }
         }
         else {
-            $tooltip = "Current version: " + $Addons[$Addon.title].date
+            $tooltip = "Current version for " + $Addon.title + ": " + $Addons[$Addon.title].date
             if (IsSet $Addon.hotfix) { $tooltip += "{0}Hotfix: " + $Addons[$Addon.title].hotfix }
         }
         $icon += ".png"
