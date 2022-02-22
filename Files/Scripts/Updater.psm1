@@ -126,7 +126,7 @@ function ShowUpdateDialog([String]$Version, [String]$Date, [String]$Hotfix) {
     $UpdateDialog.Icon = $Files.icon.main
 
     $text = "Would you like to update Patcher64+?`n" + "New Version: " + $version + " (" + $date + ")"
-    if ($Hotfix -ne 0) { $text += "`nHotfix: #" + $Hotfix }
+    if (IsSet $Hotfix) { $text += "`nHotfix: #" + $Hotfix }
 
     $label   = CreateLabel -x (DPISize 20)  -Y (DPISize 10) -Text $Text -Font $Fonts.Medium -AddTo $UpdateDialog
     $yesBtn  = CreateButton -X (DPISize 20)  -Y (DPISize 100)  -Width (DPISize 100) -Height (DPISize 50) -AddTo $UpdateDialog -Text "Yes"
