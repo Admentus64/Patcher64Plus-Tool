@@ -2,20 +2,26 @@ Patcher64+ Tool
 Join our Discord and feel free to contact us there.
 List of credits are accessible within the Patcher64+ Tool.
 
+
 --- Support or visit me ---
 Discord:	https://discord.gg/P22GGzz
 GitHub:		https://github.com/Admentus64
 Patreon:	https://www.patreon.com/Admentus
 PayPal:		https://www.paypal.com/paypalme/Admentus/
 
---- Setup ---
-If you are using Windows 10 or 11, skip to step 5.
-For those using Windows 7 or 8.1, please follow the instructions below:
-1) Click here: https://mega.nz/folder/Z2Rk1ZLK#mcOTLlJH6B3IxLIeJYUmDg
-2) Download the PowerShell .msi installer and the WMT 5.1 package for your OS.
-3) Install WMT 5.1 first and initiate a reboot.
-4) Install PowerShell 7.
-5) You should now be able to launch the .ps1 file doing a right click -> Run with PowerShell.
+
+--- Instructions ---
+Windows 10 and 11 users may simply run the launcher or right click the .ps1 file -> Run with PowerShell.
+
+
+--- Setup (Legacy OS) ---
+For users running Windows 7 or 8.1, download and install WMT 5.1 from here: https://www.microsoft.com/en-us/download/details.aspx?id=54616
+- Windows 7 (64-bit): Win7AndW2K8R2-KB3191566-x64.zip
+- Windows 8.1 (64-bit): Win8.1AndW2K12R2-KB3191564-x64.msu
+Initiate a reboot after installation is done. Running the launcher will now work.
+
+Optional: After installing WMT 5.1 and rebooting your system, download and install the latest PowerShell-x.y.z-win-x64.msi from https://github.com/PowerShell/PowerShell/releases/latest and activate "Add Run with PowerShell 7 context menu" during installation. Right click the .ps1 file -> Run with PowerShell 7 to launch Patcher64+.
+
 
 --- Rules for Posting Bug Reports / Issues --
 - Confirm issue on Project64/Mupen64Plus with GlideN64 or Dolphin, no custom Frontends which interfere with the emulation such as ModLoader64
@@ -39,6 +45,7 @@ For those using Windows 7 or 8.1, please follow the instructions below:
 - www.youtube.com/c/malonrose (Model Replacements)
 - www.youtube.com/channel/UC3071imQKR5cEIobsFHLW9Q (voices / patches)
 
+
 --- Original Redux Sources ---
 - https://github.com/MarocZan/Ocarina-of-Time-REDUX (www.romhacking.net/hacks/5138)
 - https://github.com/MarocZan/Majora-s-Mask-REDUX (www.romhacking.net/hacks/5122)
@@ -46,6 +53,7 @@ For those using Windows 7 or 8.1, please follow the instructions below:
 - www.romhacking.net/hacks/2594
 - www.romhacking.net/hacks/5440
 - www.romhacking.net/forum/index.php?topic=29403.0
+
 
 --- WARNING ---
 If you're upgrading from a previous version and are using the Files\Settings folder from the previous version, you may encounter some issues.
