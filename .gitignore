@@ -5,8 +5,9 @@ Files/Settings/*.ini
 Files/Logs/*.log
 Files/Tools/Patching/flipscfg.bin
 Files/Tools/cygdrive
-**/Extracted/*.*
-**/Custom Text/*.*
+Files/Games/**/Extracted
+Files/Games/**/Custom Text/*.*
+Files/Games/**/Editor/*.*
 *.exe
 !Files/Tools/*.exe
 *.7z

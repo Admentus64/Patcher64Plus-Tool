@@ -138,37 +138,37 @@
 - Zora Link:				spyfoxgames
 
 --- Music Track Sequence Replacements ---
-- Apasher		( 17 sequences)
-- Asra			(341 sequences)
-- BigBomba88		( 23 sequences)
-- Bluwiikoon		(  1 sequence )
-- Darkychao		(125 sequences)
-- DKDavid		(  2 sequences)
-- Fish-waffle64		( 68 sequences)		https://github.com/Fish-waffle64/Feeshs-MM-Music
-- FQef94		( 23 sequences)
-- Isghj			( 53 sequences)
-- Joshua8600		( 62 sequences)
-- Kirox			( 22 sequences)
-- Kolipoki		( 14 sequences)
-- Liamnajor		( 30 sequences)
-- LuigiXHero		( 35 sequences)		https://github.com/LuigiXHero/OoT-Randomizer-Music-Pack
-- MM			( 69 sequences)		Nintendo
-- MM Rando		( 97 sequences)		https://github.com/ZoeyZolotova/mm-rando
-- MrMario7788		( 10 sequences)
-- Nika			( 31 sequences)
-- Nyxael		( 51 sequences)
-- OoT			( 29 sequences)		Nintendo
-- Rokon			(  2 sequences)
-- Senate		(138 sequences)
-- sillyhorseradish	(  1 sequence )
-- SlickYoshi		( 25 sequences)
-- SlyryD		(  8 sequences)
-- SonicRPika		( 17 sequences)
-- The Sound Defense	( 12 sequences)
-- Volcove		(  1 sequence )
-- Yaruzu		( 11 sequences)
-- Zeldaboy14		(  1 sequence )
-- Zeraphyr		(  7 sequences)
+- Apasher
+- Asra
+- BigBomba88
+- Bluwiikoon
+- Darkychao
+- DKDavid
+- Fish-waffle64		https://github.com/Fish-waffle64/Feeshs-MM-Music
+- FQef94
+- Isghj
+- Joshua8600
+- Kirox
+- Kolipoki
+- Liamnajor
+- LuigiXHero		https://github.com/LuigiXHero/OoT-Randomizer-Music-Pack
+- MM			Nintendo
+- MM Rando		https://github.com/ZoeyZolotova/mm-rando
+- MrMario7788
+- Nika
+- Nyxael
+- OoT			Nintendo
+- Rokon
+- Senate
+- sillyhorseradish
+- SlickYoshi
+- SlyryD
+- SonicRPika
+- The Sound Defense
+- Volcove
+- Yaruzu
+- Zeldaboy14
+- Zeraphyr
 https://github.com/DaruniasJoy/OoT-Custom-Sequences
 
 --- Quality Assurance ---
@@ -410,37 +410,37 @@ https://github.com/DaruniasJoy/OoT-Custom-Sequences
 - Ocarina of Time Eyes:			GhostlyDark
 
 --- Music Track Sequence Replacements ---
-- Apasher		( 17 sequences)
-- Asra			(341 sequences)
-- BigBomba88		( 23 sequences)
-- Bluwiikoon		(  1 sequence )
-- Darkychao		(125 sequences)
-- DKDavid		(  2 sequences)
-- Fish-waffle64		( 68 sequences)		https://github.com/Fish-waffle64/Feeshs-MM-Music
-- FQef94		( 23 sequences)
-- Isghj			( 53 sequences)
-- Joshua8600		( 62 sequences)
-- Kirox			( 22 sequences)
-- Kolipoki		( 14 sequences)
-- Liamnajor		( 30 sequences)
-- LuigiXHero		( 35 sequences)		https://github.com/LuigiXHero/OoT-Randomizer-Music-Pack
-- MM			( 69 sequences)		Nintendo
-- MM Rando		( 97 sequences)		https://github.com/ZoeyZolotova/mm-rando
-- MrMario7788		( 10 sequences)
-- Nika			( 31 sequences)
-- Nyxael		( 51 sequences)
-- OoT			( 29 sequences)		Nintendo
-- Rokon			(  2 sequences)
-- Senate		(138 sequences)
-- sillyhorseradish	(  1 sequence )
-- SlickYoshi		( 25 sequences)
-- SlyryD		(  8 sequences)
-- SonicRPika		( 17 sequences)
-- The Sound Defense	( 12 sequences)
-- Volcove		(  1 sequence )
-- Yaruzu		( 11 sequences)
-- Zeldaboy14		(  1 sequence )
-- Zeraphyr		(  7 sequences)
+- Apasher
+- Asra
+- BigBomba88
+- Bluwiikoon
+- Darkychao
+- DKDavid
+- Fish-waffle64		https://github.com/Fish-waffle64/Feeshs-MM-Music
+- FQef94
+- Isghj
+- Joshua8600
+- Kirox
+- Kolipoki
+- Liamnajor
+- LuigiXHero		https://github.com/LuigiXHero/OoT-Randomizer-Music-Pack
+- MM			Nintendo
+- MM Rando		https://github.com/ZoeyZolotova/mm-rando
+- MrMario7788
+- Nika
+- Nyxael
+- OoT			Nintendo
+- Rokon
+- Senate
+- sillyhorseradish
+- SlickYoshi
+- SlyryD
+- SonicRPika
+- The Sound Defense
+- Volcove
+- Yaruzu
+- Zeldaboy14
+- Zeraphyr
 https://github.com/DaruniasJoy/OoT-Custom-Sequences
 
 --- Link Voices ---

@@ -1,6 +1,7 @@
 [ {
 	"title"				: "Redux Plus",
 	"vc_title"			: "Redux: Ocarina of Time",
+	"finalize"			: 0,
 	"patch" : [ {
 		"file"			: "Decompressed\\Redux\\redux_plus.bps",
 		"rev"			: "5BD1FE107BF8106B2AB6650ABECD54D6",
@@ -15,6 +16,7 @@
 }, {
 	"title"				: "Redux Plus (Master Quest)",
 	"vc_title"			: "Redux: Ocarina of Time",
+	"finalize"			: 0,
 	"patch" : [ {
 		"file"			: "Decompressed\\Redux\\redux_plus_mq.bps",
 		"rev"			: "5BD1FE107BF8106B2AB6650ABECD54D6",
