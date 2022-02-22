@@ -24,7 +24,8 @@ Add-Type -AssemblyName 'System.Drawing'
 #==============================================================================================================================================================================================
 # Setup global variables
 
-$global:Patcher  = @{}
+$global:Patcher     = @{}
+$global:Addons      = @{}
 $Patcher.Title      = "Patcher64+ Tool"
 $Patcher.Date       = "Date Missing"
 $Patcher.DateFormat = "yyyy-MM-dd"
@@ -149,6 +150,7 @@ $Paths.Registry        = $Paths.Master + "\Registry"
 $Paths.Games           = $Paths.Master + "\Games"
 $Paths.Shared          = $Paths.Master + "\Games\Shared"
 $Paths.Main            = $Paths.Master + "\Main"
+$Paths.AddonIcons      = $Paths.Master + "\Main\Addons"
 $Paths.Tools           = $Paths.Master + "\Tools"
 $Paths.WiiVC           = $Paths.Tools  + "\Wii VC"
 $Paths.Scripts         = $Paths.Master + "\Scripts"
@@ -162,6 +164,7 @@ $Paths.cygdrive        = $Paths.Master + "\Tools\cygdrive"
 $Paths.Addons          = $Paths.Master + "\Addons"
 $Paths.Models          = $Paths.Addons + "\Models"
 $Paths.Music           = $Paths.Addons + "\Music"
+$Patcher.VersionFile   = $Paths.Master + "\version.txt"
 
 
 
@@ -180,27 +183,11 @@ foreach ($Script in Get-ChildItem -LiteralPath $Paths.Scripts -Force) {
 
 
 
-#==================================================================================================================================================================================================================================================================
-# Read version data
-
-$versionFile = $Paths.Master + "\Version.txt"
-if (TestFile $versionFile) {
-    $Patcher.Version    = (Get-Content -LiteralPath $versionFile)[0]
-    try { $Patcher.Date = (Get-Date -Format $Patcher.DateFormat -Date (Get-Content -LiteralPath $versionFile)[1]) }
-    catch {
-        $Patcher.Date = (Get-Date -Format $Patcher.DateFormat -Date "1970-01-01")
-        WriteToConsole ("Could not read version date for current update for" + $Patcher.Title)
-    }
-    try   { [byte]$Patcher.Hotfix = (Get-Content -LiteralPath $versionFile)[2] }
-    catch { [byte]$Patcher.Hotfix = 0 }
-}
-
-
-
 #==============================================================================================================================================================================================
 # Run Patcher64+ Tool
 
 Clear-Host
+CheckUpdate
 
 # Retrieve settings
 $global:Settings = GetSettings ($Paths.Settings + "\Core.ini")
@@ -246,8 +233,9 @@ ShowPowerShellConsole ($Settings.Debug.Console -eq $True)
 
 $Files.json.repo = SetJSONFile ($Paths.Master + "\repo.json")
 if ($Settings.Core.DisableUpdates -ne $True) { AutoUpdate }
-if ($Settings.Core.DisableAddons -ne $True) {
-    foreach ($addon in $Files.json.repo.addons) { UpdateAddon -Title $addon.title -Uri $addon.uri -Version $addon.version }
+foreach ($addon in $Files.json.repo.addons) {
+    CheckAddon  -Title $addon.title
+    if ($Settings.Core.DisableAddons -ne $True) { UpdateAddon -Title $addon.title -Uri $addon.uri -Version $addon.version }
 }
 
 # Ask for default interface mode on first time use
@@ -322,7 +310,7 @@ if (!$FatalError) {
     InitializeEvents
 }
 
-if (!(TestFile $versionFile)) { UpdateStatusLabel "Could not read version and date of the patcher" }
+if (!(TestFile $Patcher.VersionFile)) { UpdateStatusLabel "Could not read version and date of the patcher" }
 
 # Show the dialog to the user
 if (!$FatalError) { $MainDialog.ShowDialog() | Out-Null }

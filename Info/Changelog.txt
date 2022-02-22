@@ -1,3 +1,8 @@
+v17.2.1
+- Added icons to showcase which addons are missing, present or got updated
+- Auto-Updater improvements
+- Fixed Redux Plus patching
+
 v17.2.0
 - Added new Auto-Updater feature
 - Added new game mode for GoldenEye 007 (GE) with Additional Options

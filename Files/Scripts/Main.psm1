@@ -13,6 +13,33 @@
     $MainDialog.Icon            = $Files.icon.main
     $MainDialog.Add_Shown({ $MainDialog.Activate() })
 
+    # Addons
+    $AddonsToolTip = CreateToolTip
+    for ($i=0; $i -lt $Files.json.repo.addons.length; $i++) {
+        $Addon = $Files.json.repo.addons[$i]
+
+        $icon = $Paths.AddonIcons + "\" + $Addon.title
+        if ($Addons[$Addon.title].isUpdated) {
+            $icon += "_missing"
+            $tooltip = "Addon: " + $Addon.title + " just got updated"
+            $tooltip += "{0}{0}New version: " + $Addons[$Addon.title].date
+            if (IsSet $Addon.hotfix) { $tooltip += "{0}Hotfix: " + $Addons[$Addon.title].hotfix }
+        }
+        elseif (!(TestFile ($Paths.Addons + "\" + $Addon.title) -Container)) {
+            $icon += "_missing"
+            $tooltip = "Addon: " + $Addon.title + " is missing"
+        }
+        else {
+            $tooltip = "Current version: " + $Addons[$Addon.title].date
+            if (IsSet $Addon.hotfix) { $tooltip += "{0}Hotfix: " + $Addons[$Addon.title].hotfix }
+        }
+        $icon += ".png"
+        
+        $PictureBox = CreateForm -X ($MainDialog.Right - (DPISize 50) - (DPISize 30) * $i) -Y (DPISize 45) -Width (DPISize 25) -Height (DPISize 25) -Form (New-Object Windows.Forms.PictureBox) -AddTo $MainDialog 
+        SetBitmap -Path $icon -Box $PictureBox -Width 25 -Height 25
+        $AddonsToolTip.SetToolTip($PictureBox, ([string]::Format($tooltip, [Environment]::NewLine)))
+    }
+
     # Menu bar
     $menuBarMain      = New-Object System.Windows.Forms.MenuStrip; $MainDialog.Controls.Add($menuBarMain)
 

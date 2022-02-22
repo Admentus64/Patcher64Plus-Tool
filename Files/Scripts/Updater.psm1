@@ -20,16 +20,33 @@ function ExpandArchive([string]$LiteralPath, [String]$DestinationPath) {
 
 
 #==============================================================================================================================================================================================
+function CheckUpdate() {
+    
+    if (TestFile $Patcher.VersionFile) {
+        $Patcher.Version    = (Get-Content -LiteralPath $Patcher.VersionFile)[0]
+        try { $Patcher.Date = (Get-Date -Format $Patcher.DateFormat -Date (Get-Content -LiteralPath $Patcher.VersionFile)[1]) }
+        catch {
+            $Patcher.Date = (Get-Date -Format $Patcher.DateFormat -Date "1970-01-01")
+            WriteToConsole ("Could not read version date for current update for" + $Patcher.Title)
+        }
+        try   { [byte]$Patcher.Hotfix = (Get-Content -LiteralPath $Patcher.VersionFile)[2] }
+        catch { [byte]$Patcher.Hotfix = 0 }
+    }
+
+}
+
+
+
+#==============================================================================================================================================================================================
 function AutoUpdate([switch]$Manual) {
     
-    $versionFile = $Paths.Master + "\Version.txt"
     if ($Settings.Core.LocalTempFolder -eq $True)   { CreateSubPath $Paths.LocalTemp;   $file = $Paths.LocalTemp   + "\version.txt" }
     else                                            { CreateSubPath $Paths.AppDataTemp; $file = $Paths.AppDataTemp + "\version.txt" }
 
     $update = $False
     $oldContent = $newContent = $newVersion = $newDate = $newHotfix = $null
 
-    if (TestFile $versionFile) {
+    if (TestFile $Patcher.VersionFile) {
         # Download version info
         try { InvokeWebRequest -Uri $Files.json.repo.version -OutFile $file }
         catch {
@@ -39,7 +56,7 @@ function AutoUpdate([switch]$Manual) {
 
         # Load content
         $oldContent = $newContent = $null
-        try { [array]$oldContent = Get-Content -LiteralPath $versionFile }
+        try { [array]$oldContent = Get-Content -LiteralPath $Patcher.VersionFile }
         catch {
             RemovePath $path
             WriteToConsole ("Could not read current version info for " + $Title + "!")
@@ -180,9 +197,36 @@ function RunUpdate() {
 
 
 #==============================================================================================================================================================================================
-function UpdateAddon([string]$Uri, [string]$Version, [string]$Title) {
+function CheckAddon([string]$Title) {
+
+    $Addons[$Title] = @{}
+    $Addons[$Title].isUpdated = $False
+    if (!(TestFile ($Paths.Addons + "\" + $Title + "\lastUpdate.txt"))) { return }
+
+    $addonPath = ($Paths.Addons + "\" + $Title)
+    if ($Settings.Core.LocalTempFolder -eq $True)   { $path = $Paths.LocalTemp   }
+    else                                            { $path = $Paths.AppDataTemp }
+
+    # Load content
+    try { [array]$content = Get-Content -LiteralPath ($addonPath + "\lastUpdate.txt") }
+    catch {
+        WriteToConsole ("Could not read current version info for " + $Title + "!")
+        return
+    }
+        
+    # Parse content
+    try     { $Addons[$title].date = Get-Date -Format $Patcher.DateFormat -Date $content[0] }
+    catch   { $Addons[$title].date = Get-Date -Format $Patcher.DateFormat -Date "1970-01-01"; WriteToConsole ("Could not read current version date info for " + $Title + "!") }
+    if ($content.Count -gt 1) { try { [byte]$Addons[$title].hotfix = $content[1] } catch { [byte]$Addons[$title].hotfix = 0 } } else { [byte]$Addons[$title].hotfix = 0}
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function UpdateAddon([string]$Title, [string]$Uri, [string]$Version) {
     
-    $update = $false
+    $update = $False
     $addonPath = ($Paths.Addons + "\" + $Title)
     if ($Settings.Core.LocalTempFolder -eq $True)   { $path = $Paths.LocalTemp   }
     else                                            { $path = $Paths.AppDataTemp }
@@ -190,7 +234,7 @@ function UpdateAddon([string]$Uri, [string]$Version, [string]$Title) {
     $Path = $Path + "\updater-" + $Title.ToLower()
     CreateSubPath $Path
 
-    $oldContent = $newContent = $oldDate = $oldHotfix = $newDate = $newHotfix = $null
+    $content = $date = $hotfix = $null
 
     if (TestFile ($addonPath + "\lastUpdate.txt")) {
         # Download version info
@@ -205,13 +249,7 @@ function UpdateAddon([string]$Uri, [string]$Version, [string]$Title) {
         }
 
         # Load content
-        try { [array]$oldContent = Get-Content -LiteralPath ($addonPath + "\lastUpdate.txt") }
-        catch {
-            RemovePath $path
-            WriteToConsole ("Could not read current version info for " + $Title + "!")
-            return
-        }
-        try { [array]$newContent = Get-Content -LiteralPath $file }
+        try { [array]$content = Get-Content -LiteralPath $file }
         catch {
             RemovePath $path
             WriteToConsole ("Could not read latest version info for " + $Title + "!")
@@ -219,16 +257,13 @@ function UpdateAddon([string]$Uri, [string]$Version, [string]$Title) {
         }
         
         # Parse content
-        try     { $oldDate = Get-Date -Format $Patcher.DateFormat -Date $oldContent[0] }
-        catch   { $oldDate = Get-Date -Format $Patcher.DateFormat -Date "1970-01-01"; WriteToConsole ("Could not read current version date info for " + $Title + "!") }
-        try     { $newDate = Get-Date -Format $Patcher.DateFormat -Date $newContent[0] }
-        catch   { $newDate = Get-Date -Format $Patcher.DateFormat -Date "1970-01-01"; WriteToConsole ("Could not read latest version date info for " + $Title + "!")  }
-        if ($oldContent.Count -gt 1) { try { [byte]$oldHotfix = $oldContent[1] } catch { [byte]$oldHotfix = 0 } } else { [byte]$oldHotfix = 0}
-        if ($newContent.Count -gt 1) { try { [byte]$newHotfix = $newContent[1] } catch { [byte]$newHotfix = 0 } } else { [byte]$newHotifx = 0}
+        try     { $date = Get-Date -Format $Patcher.DateFormat -Date $content[0] }
+        catch   { $date = Get-Date -Format $Patcher.DateFormat -Date "1970-01-01"; WriteToConsole ("Could not read latest version date info for " + $Title + "!")  }
+        if ($content.Count -gt 1) { try { [byte]$hotfix = $content[1] } catch { [byte]$hotfix = 0 } } else { [byte]$hotfix = 0}
 
         # Compare content
-        if     ($oldDate    -lt $newDate)                           { $update = $true }
-        elseif ($oldHotfix  -lt $newHotfix -and $newHotfix -ne 0)   { $update = $true }
+        if     ($Addons[$Title].date    -lt $date)                        { $update = $true }
+        elseif ($Addons[$Title].hotfix  -lt $hotfix -and $hotfix -ne 0)   { $update = $true }
         else                                                        { RemovePath $path; return }
     }
     else {
@@ -262,6 +297,9 @@ function UpdateAddon([string]$Uri, [string]$Version, [string]$Title) {
         Get-ChildItem -Path $path -Directory | ForEach-Object { $folder = $path + "\" + $_ }
         Copy-Item -LiteralPath ($folder + "\Files") -Destination $Paths.Base -Force -Recurse
         RemovePath $path
+
+        CheckAddon -Title $Title
+        $Addons[$Title].isUpdated = $True
     }
 
 }
