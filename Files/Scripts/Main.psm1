@@ -19,15 +19,15 @@
         $Addon = $Files.json.repo.addons[$i]
 
         $icon = $Paths.AddonIcons + "\" + $Addon.title
-        if ($Addons[$Addon.title].isUpdated) {
+        if (!(TestFile ($Paths.Addons + "\" + $Addon.title) -Container)) {
+            $icon += "_missing"
+            $tooltip = "Addon: " + $Addon.title + " is missing"
+        }
+        elseif ($Addons[$Addon.title].isUpdated) {
             $icon += "_missing"
             $tooltip = "Addon: " + $Addon.title + " just got updated"
             $tooltip += "{0}{0}New version: " + $Addons[$Addon.title].date
             if (IsSet $Addon.hotfix) { $tooltip += "{0}Hotfix: " + $Addons[$Addon.title].hotfix }
-        }
-        elseif (!(TestFile ($Paths.Addons + "\" + $Addon.title) -Container)) {
-            $icon += "_missing"
-            $tooltip = "Addon: " + $Addon.title + " is missing"
         }
         else {
             $tooltip = "Current version: " + $Addons[$Addon.title].date
