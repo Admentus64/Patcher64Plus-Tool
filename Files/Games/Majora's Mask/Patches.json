@@ -17,6 +17,7 @@
 	"tooltip"			: "The definitive Majora's Mask experience{0}Includes Redux with a series of Quality of Life changes and fixes{0}Widescreen version, not meant for original hardware"
 }, {
 	"title"				: "Majora's Mask - Additional Options & Redux",
+	"priority"			: 1,
 	"redux" : {
 		"options"		: 1,
 		"remap_controls"	: 1,

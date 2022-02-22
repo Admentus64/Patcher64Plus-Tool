@@ -30,6 +30,7 @@
 	"tooltip"			: "The definitive Ocarina of Time experience{0}Includes Redux with a series of Quality of Life changes and fixes{0}Includes the Master Quest dungeons"
 }, {
 	"title"				: "Ocarina of Time - Additional Options & Redux",
+	"priority"			: 1,
 	"redux" : {
 		"options"		: 1,
 		"remap_controls"	: 1,

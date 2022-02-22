@@ -154,36 +154,35 @@ function ChangePatchPanel() {
         if (!(IsSet $item.patch) -and (IsSet $item.rev)) {
             foreach ($i in $item.rev) {
                 if ($i -eq $GameRev.hash) {
-                    $items += $item.title
-                    if (!(IsSet $FirstItem)) { $FirstItem = $item }
+                    if ($item.priority -and (CheckInterfaceMode -Beginner $False -Lite $True -Advanced $True))   { $Patches.Type.Items.Insert(0, $item.title) }
+                    else                                                                                         { $Patches.Type.Items.Add($item.title)       }
                 }
             }
         }
         elseif (!(IsSet $item.patch)) {
-            $items += $item.title
-            if (!(IsSet $FirstItem)) { $FirstItem = $item }
+            if ($item.priority -and (CheckInterfaceMode -Beginner $False -Lite $True -Advanced $True))   { $Patches.Type.Items.Insert(0, $item.title) }
+            else                                                                                         { $Patches.Type.Items.Add($item.title)       }
         }
         elseif ($item.patch -isnot [array]) {
             if ( ( ($IsWiiVC -and $item.console -eq "Wii VC") -or (!$IsWiiVC -and $item.console -eq "Native") -or ($item.console -eq "Both") -or !(IsSet $item.console) ) ) {
-                $items += $item.title
-                if (!(IsSet $FirstItem)) { $FirstItem = $item }
+                if ($item.priority -and (CheckInterfaceMode -Beginner $False -Lite $True -Advanced $True))   { $Patches.Type.Items.Insert(0, $item.title) }
+                else                                                                                         { $Patches.Type.Items.Add($item.title)       }
             }
         }
         else {
             foreach ($i in $item.patch) {
                 if ($i.rev -eq $GameRev.hash -and ( ($IsWiiVC -and $i.console -eq "Wii VC") -or (!$IsWiiVC -and $i.console -eq "Native") -or ($i.console -eq "Both") -or !(IsSet $i.console) ) ) {
-                    $items += $item.title
-                    if (!(IsSet $FirstItem)) { $FirstItem = $item }
+                    if ($item.priority -and (CheckInterfaceMode -Beginner $False -Lite $True -Advanced $True))   { $Patches.Type.Items.Insert(0, $item.title) }
+                    else                                                                                         { $Patches.Type.Items.Add($item.title)       }
                 }
             }
         }
     }
-    $Patches.Type.Items.AddRange($items)
 
     # Reset last index
-    foreach ($i in 0..($items.Length-1)) {
+    foreach ($index in $Patches.Type.Items) {
         foreach ($item in $Files.json.patches) {
-            if ($item.title -eq $GamePatch.title -and $item.title -eq $items[$i]) {
+            if ($item.title -eq $GamePatch.title -and $item.title -eq $index) {
                 $Patches.Type.SelectedIndex = $i
                 break
             }
@@ -191,7 +190,7 @@ function ChangePatchPanel() {
     }
 
     if ($InputPaths.GameTextBox.Text -notlike '*:\*') { $global:IsActiveGameField = $True }
-    if ($items.Length -gt 0 -and $Patches.Type.SelectedIndex -eq -1) {
+    if ($Patches.Type.Items.Count -gt 0 -and $Patches.Type.SelectedIndex -eq -1) {
         try { $Patches.Type.SelectedIndex = $Settings["Core"][$Patches.Type.Name] }
         catch { $Patches.Type.SelectedIndex = 0 }
     }

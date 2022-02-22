@@ -79,9 +79,9 @@
     elseif ($Settings.Core.Interface -eq 2)   { $menuBarLite.BackColor     = "#D3D3D3" }
     elseif ($Settings.Core.Interface -eq 3)   { $menuBarAdvanced.BackColor = "#D3D3D3" }
     else                                      { $menuBarBeginner.BackColor = "#D3D3D3"; $Settings.Core.Interface = 1 }
-    $menuBarBeginner.Add_Click(  { $Settings.Core.Interface = 1; $menuBarBeginner.BackColor = "#D3D3D3"; $menuBarLite.BackColor = "White";   $menuBarAdvanced.BackColor = "White";   ResetReduxSettings; LoadAdditionalOptions; DisablePatches; SetMainScreenSize } )
-    $menuBarLite.Add_Click(      { $Settings.Core.Interface = 2; $menuBarBeginner.BackColor = "White";   $menuBarLite.BackColor = "#D3D3D3"; $menuBarAdvanced.BackColor = "White";   ResetReduxSettings; LoadAdditionalOptions; DisablePatches; SetMainScreenSize } )
-    $menuBarAdvanced.Add_Click(  { $Settings.Core.Interface = 3; $menuBarBeginner.BackColor = "White";   $menuBarLite.BackColor = "White";   $menuBarAdvanced.BackColor = "#D3D3D3"; ResetReduxSettings; LoadAdditionalOptions; DisablePatches; SetMainScreenSize } )
+    $menuBarBeginner.Add_Click(  { $Settings.Core.Interface = 1; $menuBarBeginner.BackColor = "#D3D3D3"; $menuBarLite.BackColor = "White";   $menuBarAdvanced.BackColor = "White";   ChangePatchPanel; ResetReduxSettings; LoadAdditionalOptions; DisablePatches; SetMainScreenSize } )
+    $menuBarLite.Add_Click(      { $Settings.Core.Interface = 2; $menuBarBeginner.BackColor = "White";   $menuBarLite.BackColor = "#D3D3D3"; $menuBarAdvanced.BackColor = "White";   ChangePatchPanel; ResetReduxSettings; LoadAdditionalOptions; DisablePatches; SetMainScreenSize } )
+    $menuBarAdvanced.Add_Click(  { $Settings.Core.Interface = 3; $menuBarBeginner.BackColor = "White";   $menuBarLite.BackColor = "White";   $menuBarAdvanced.BackColor = "#D3D3D3"; ChangePatchPanel; ResetReduxSettings; LoadAdditionalOptions; DisablePatches; SetMainScreenSize } )
 
 
     $menuBarInfo.Add_Click(    { If (!(IsSet $CreditsDialog)) { CreateCreditsDialog | Out-Null }; foreach ($item in $Credits.Sections) { $item.Visible = $False }; $Credits.Sections[0].Visible = $True; $CreditsDialog.ShowDialog() } )

@@ -2,6 +2,7 @@ v17.2.1
 - Added icons to showcase which addons are missing, present or got updated
 - Auto-Updater improvements
 - Fixed Redux Plus patching
+- "Redux + Additional Options" will always be the first patch for Lite or Advanced Mode
 
 v17.2.0
 - Added new Auto-Updater feature
