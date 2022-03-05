@@ -75,7 +75,6 @@ function ByteOptions() {
     if (IsChecked $Redux.Gameplay.NoShieldRecoil)           { ChangeBytes -Offset "BD416C" -Values "24 00"                                                           }
     if (IsChecked $Redux.Gameplay.RunWhileShielding)        { ChangeBytes -Offset "BD7DA0" -Values "10 00 00 55"; ChangeBytes -Offset "BD01D4" -Values "00 00 00 00" }
     if (IsChecked $Redux.Gameplay.PushbackAttackingWalls)   { ChangeBytes -Offset "BDEAE0" -Values "26 24 00 00 24 85 00 00"                                         }
-    if (IsChecked $Redux.Gameplay.FasterClimbing)           { ChangeBytes -Offset "B01994" -Values "46 0A 32 02 46 0D 42 02"                                         }
     if (IsChecked $Redux.Gameplay.SpawnLinksHouse)          { ChangeBytes -Offset "B06332" -Values "00 BB"                                                           }
     if (IsChecked $Redux.Gameplay.AllowWarpSongs)           { ChangeBytes -Offset "B6D3D2" -Values "00";          ChangeBytes -Offset "B6D42A" -Values "00"          }
     if (IsChecked $Redux.Gameplay.AllowFaroreWind)          { ChangeBytes -Offset "B6D3D3" -Values "00";          ChangeBytes -Offset "B6D42B" -Values "00"          }
@@ -458,86 +457,79 @@ function ByteOptions() {
     elseif (IsText -Elem $Redux.Hero.MagicUsage -Compare "8x Magic Usage")   { ChangeBytes -Offset "AE84FA" -Values "2C","C0" }
 
     if (IsIndex -Elem $Redux.Hero.MonsterHP -Index 3 -Not) { # Monsters
-        if (IsIndex -Elem $Redux.Hero.MonsterHP)   { $multiplier = 0   }
-        else                                       { [float]$multiplier = [float]$Redux.Hero.MonsterHP.text.split('x')[0] }
+        if (IsIndex -Elem $Redux.Hero.MonsterHP)   { $multi = 0   }
+        else                                       { [float]$multi = [float]$Redux.Hero.MonsterHP.text.split('x')[0] }
 
-        ChangeBytes -Offset "C83647" -Values $multiplier -Multiply -IsDec; ChangeBytes -Offset "C83817" -Values $multiplier -Multiply -IsDec; ChangeBytes -Offset "C836AB" -Values $multiplier -Multiply -IsDec # Moblin, Moblin (Spear), Moblin (Club)
-        ChangeBytes -Offset "C5F69C" -Values $multiplier -Multiply -IsDec; ChangeBytes -Offset "CAAF9C" -Values $multiplier -Multiply -IsDec; ChangeBytes -Offset "C55A78" -Values $multiplier -Multiply -IsDec # Biri, Bari, Shabom
-        ChangeBytes -Offset "CB1BCB" -Values $multiplier -Multiply -IsDec; ChangeBytes -Offset "CB1903" -Values $multiplier -Multiply -IsDec; ChangeBytes -Offset "CB2DD7" -Values $multiplier -Multiply -IsDec # Green Bubble, Blue Bubble, Red Blue
-        ChangeBytes -Offset "D76A07" -Values $multiplier -Multiply -IsDec; ChangeBytes -Offset "C5FC3F" -Values $multiplier -Multiply -IsDec # Tentacle, Tailpasaran
-        ChangeBytes -Offset "C693CC" -Values $multiplier -Multiply -IsDec; ChangeBytes -Offset "EB797C" -Values $multiplier -Multiply -IsDec # Stinger (Land), Stinger (Water)
-        ChangeBytes -Offset "C2B183" -Values $multiplier -Multiply -IsDec; ChangeBytes -Offset "C2B1F7" -Values $multiplier -Multiply -IsDec # Red Tektite, Blue Tektite
-        ChangeBytes -Offset "CD724F" -Values $multiplier -Multiply -IsDec; ChangeBytes -Offset "EDC597" -Values $multiplier -Multiply -IsDec # ReDead, Stalchild
-        ChangeBytes -Offset "C1097C" -Values $multiplier -Multiply -IsDec; ChangeBytes -Offset "CD582C" -Values $multiplier -Multiply -IsDec # Wallmaster, Floormaster
-        ChangeBytes -Offset "C2DEE7" -Values $multiplier -Multiply -IsDec; ChangeBytes -Offset "C2DF4B" -Values $multiplier -Multiply -IsDec # Leever (Green / Purple)
-        ChangeBytes -Offset "CC6CA7" -Values $multiplier -Multiply -IsDec; ChangeBytes -Offset "CC6CAB" -Values $multiplier -Multiply -IsDec # Beamos
-        ChangeBytes -Offset "C15814" -Values $multiplier -Multiply -IsDec; ChangeBytes -Offset "EEF780" -Values $multiplier -Multiply -IsDec # Keese, Guay
-        ChangeBytes -Offset "C11177" -Values $multiplier -Multiply -IsDec; ChangeBytes -Offset "C599BC" -Values $multiplier -Multiply -IsDec # Dodongo, Baby Dodongo
-        ChangeBytes -Offset "CE60C4" -Values $multiplier -Multiply -IsDec #; ChangeBytes -Offset "CE39AF" -Values "80" # Skullwalltula (Regular & Gold), Gold HP Multiplier
-        ChangeBytes -Offset "C6471B" -Values $multiplier -Multiply -IsDec # Torch Slug
-        ChangeBytes -Offset "C51A9F" -Values $multiplier -Multiply -IsDec # Gohma Larva
-        ChangeBytes -Offset "D74393" -Values $multiplier -Multiply -IsDec # Like-Like
-        ChangeBytes -Offset "C2F97F" -Values $multiplier -Multiply -IsDec # Peehat
-        ChangeBytes -Offset "C0DEF8" -Values $multiplier -Multiply -IsDec # Octorok
-        ChangeBytes -Offset "C0B804" -Values $multiplier -Multiply -IsDec # Poe
-        ChangeBytes -Offset "CA85DC" -Values $multiplier -Multiply -IsDec # Mad Scrub
-        ChangeBytes -Offset "DADBAF" -Values $multiplier -Multiply -IsDec # Spike
-        ChangeBytes -Offset "D463BF" -Values $multiplier -Multiply -IsDec # Shell Blade
+        MultiplyBytes -Offset "C83647" -Factor $multi; MultiplyBytes -Offset "C83817" -Factor $multi; MultiplyBytes -Offset "C836AB" -Factor $multi # Moblin, Moblin (Spear), Moblin (Club)
+        MultiplyBytes -Offset "C5F69C" -Factor $multi; MultiplyBytes -Offset "CAAF9C" -Factor $multi; MultiplyBytes -Offset "C55A78" -Factor $multi # Biri, Bari, Shabom
+        MultiplyBytes -Offset "CD724F" -Factor $multi; MultiplyBytes -Offset "EDC597" -Factor $multi; MultiplyBytes -Offset "C0B804" -Factor $multi; # ReDead / Gibdo, Stalchild, Poe
+        MultiplyBytes -Offset "CB1903" -Factor $multi; MultiplyBytes -Offset "CB2DD7" -Factor $multi # Blue Bubble, Red Blue
+        MultiplyBytes -Offset "D76A07" -Factor $multi; MultiplyBytes -Offset "C5FC3F" -Factor $multi # Tentacle, Tailpasaran
+        MultiplyBytes -Offset "C693CC" -Factor $multi; MultiplyBytes -Offset "EB797C" -Factor $multi # Stinger (Land), Stinger (Water)
+        MultiplyBytes -Offset "C2B183" -Factor $multi; MultiplyBytes -Offset "C2B1F7" -Factor $multi # Red Tektite, Blue Tektite
+        MultiplyBytes -Offset "C1097C" -Factor $multi; MultiplyBytes -Offset "CD582C" -Factor $multi # Wallmaster, Floormaster
+        MultiplyBytes -Offset "C2DEE7" -Factor $multi; MultiplyBytes -Offset "C2DF4B" -Factor $multi # Leever (Green / Purple)
+        MultiplyBytes -Offset "CC6CA7" -Factor $multi; MultiplyBytes -Offset "CC6CAB" -Factor $multi # Beamos
+        MultiplyBytes -Offset "C11177" -Factor $multi; MultiplyBytes -Offset "C599BC" -Factor $multi # Dodongo, Baby Dodongo
+        MultiplyBytes -Offset "CE60C4" -Factor $multi # ChangeBytes -Offset "CE39AF" -Values "80" # Skullwalltula (Regular & Gold), Gold HP Multiplier
+        MultiplyBytes -Offset "EEF780" -Factor $multi; MultiplyBytes -Offset "C6471B" -Factor $multi; MultiplyBytes -Offset "C51A9F" -Factor $multi # Guay, Torch Slug, Gohma Larva
+        MultiplyBytes -Offset "D74393" -Factor $multi; MultiplyBytes -Offset "C2F97F" -Factor $multi; MultiplyBytes -Offset "C0DEF8" -Factor $multi # Like-Like, Peehat, Octorok
+        MultiplyBytes -Offset "D463BF" -Factor $multi; MultiplyBytes -Offset "CA85DC" -Factor $multi; MultiplyBytes -Offset "DADBAF" -Factor $multi # Shell Blade, Mad Scrub, Spike
         
-        if ($multiplier -ge 2) {
+        if ($multi -ge 2) {
             ChangeBytes -Offset "B65660" -Values "10 01 01 01 10 02 01 01 01 01 01 02 02 02 00 00 00 01 01 00 00 00 01 01 01 01 01 01 00 00 00 00" # Skulltula
             ChangeBytes -Offset "DFE767" -Values "F1 F0 F0 F1 F1 F0 F1 F2 22 F0 F0 F0 F0 F0 22 00 00 00 00 F0 F2 F1 F0 F4 F2"                      # Freezard
             
         }
 
-      # ChangeBytes -Offset "" -Values $multiplier -Multiply -IsDec # Peehat Larva                       (HP: 01)   C2F8D0 -> C32FD0 (Length: 3700) (ovl_En_Peehat)
-      # ChangeBytes -Offset "" -Values $multiplier -Multiply -IsDec # Anubis                             (HP: 01)   D79240 -> D7A4F0 (Length: 12B0) (ovl_En_Anubice)
-      # ChangeBytes -Offset "DFC9A3" -Values $multiplier -Multiply -IsDec; ChangeBytes -Offset "DFDE43" -Values $multiplier -Multiply -IsDec # Freezard
-      # ChangeBytes -Offset "C96A5B" -Values $multiplier -Multiply -IsDec; ChangeBytes -Offset "C96B0C" -Values $multiplier -Multiply -IsDec # Armos
-      # ChangeBytes -Offset "C6417C" -Values $multiplier -Multiply -IsDec # Skulltula
+      # MultiplyBytes -Offset "" -Factor $multi # Peehat Larva                       (HP: 01)   C2F8D0 -> C32FD0 (Length: 3700) (ovl_En_Peehat)
+      # MultiplyBytes -Offset "" -Factor $multi # Anubis                             (HP: 01)   D79240 -> D7A4F0 (Length: 12B0) (ovl_En_Anubice)
+      # MultiplyBytes -Offset "DFC9A3" -Factor $multi; ChangeBytes -Offset "DFDE43" -Factor $multi # Freezard
+      # MultiplyBytes -Offset "C96A5B" -Factor $multi; ChangeBytes -Offset "C96B0C" -Factor $multi # Armos
+      # MultiplyBytes -Offset "C6417C" -Factor $multi; ChangeBytes -Offset "C15814" -Factor $multi; ChangeBytes -Offset "CB1BCB" -Factor $multi  # Skulltula, Keese, Green Bubble
     }
 
     if (IsIndex -Elem $Redux.Hero.MiniBossHP -Index 3 -Not) { # Mini-Bosses
-        if (IsIndex -Elem $Redux.Hero.MiniBossHP)   { $multiplier = 0   }
-        else                                        { [float]$multiplier = [float]$Redux.Hero.MiniBossHP.text.split('x')[0] }
+        if (IsIndex -Elem $Redux.Hero.MiniBossHP)   { $multi = 0   }
+        else                                        { [float]$multi = [float]$Redux.Hero.MiniBossHP.text.split('x')[0] }
 
-        ChangeBytes -Offset "BFADAB" -Values $multiplier -Multiply -IsDec; ChangeBytes -Offset "D09283" -Values $multiplier -Multiply -IsDec; ChangeBytes -Offset "CDE1FC" -Values $multiplier -Multiply -IsDec # Stalfos, Dead Hand, Poe Sisters
-        ChangeBytes -Offset "C3452F" -Values $multiplier -Multiply -IsDec; ChangeBytes -Offset "C3453B" -Values $multiplier -Multiply -IsDec # Lizalfos, Dinolfos
-        ChangeBytes -Offset "ED80EB" -Values $multiplier -Multiply -IsDec # Wolfos
-        ChangeBytes -Offset "EBC8B7" -Values $multiplier -Multiply -IsDec # Gerudo Fighter
-        ChangeBytes -Offset "CF2667" -Values $multiplier -Multiply -IsDec # Flare Dancer
-        ChangeBytes -Offset "DEF87F" -Values $multiplier -Multiply -IsDec # Skull Kid
-        ChangeBytes -Offset "D49F50" -Values $multiplier -Multiply -IsDec # Big Octo
+        MultiplyBytes -Offset "BFADAB" -Factor $multi; MultiplyBytes -Offset "D09283" -Factor $multi; MultiplyBytes -Offset "CDE1FC" -Factor $multi # Stalfos, Dead Hand, Poe Sisters
+        MultiplyBytes -Offset "C3452F" -Factor $multi; MultiplyBytes -Offset "C3453B" -Factor $multi # Lizalfos, Dinolfos
+        MultiplyBytes -Offset "ED80EB" -Factor $multi # Wolfos
+        MultiplyBytes -Offset "EBC8B7" -Factor $multi # Gerudo Fighter
+        MultiplyBytes -Offset "CF2667" -Factor $multi # Flare Dancer
+        MultiplyBytes -Offset "DEF87F" -Factor $multi # Skull Kid
+        MultiplyBytes -Offset "D49F50" -Factor $multi # Big Octo
 
-        if ($multiplier -gt 0) {
-            ChangeBytes -Offset "DE9A1B" -Values $multiplier -Multiply -IsDec                                      # Iron Knuckle (phase 1)
-            $value = $ByteArrayGame[(GetDecimal "DEB367")]; $value--; $value *= $multiplier; $value++;
+        if ($multi -gt 0) {
+            MultiplyBytes -Offset "DE9A1B" -Factor $multi                                      # Iron Knuckle (phase 1)
+            $value = $ByteArrayGame[(GetDecimal "DEB367")]; $value--; $value *= $multi; $value++;
             ChangeBytes -Offset "DEB367" -Values $value -IsDec; ChangeBytes -Offset "DEB34F" -Values $value -IsDec # Iron Knuckle (phase 2)
         }
         else { ChangeBytes -Offset "DE9A1B" -Values "01"; ChangeBytes -Offset "DEB367" -Values "01" -IsDec; ChangeBytes -Offset "DEB34F" -Values "01" } # Iron Knuckle (phase 1), Iron Knuckle (phase 2)
     }
     
     if (IsIndex -Elem $Redux.Hero.BossHP -Index 3 -Not) { # Bosses
-        if (IsIndex -Elem $Redux.Hero.BossHP)   { $multiplier = 0   }
-        else                                    { [float]$multiplier = [float]$Redux.Hero.BossHP.text.split('x')[0] }
+        if (IsIndex -Elem $Redux.Hero.BossHP)   { $multi = 0   }
+        else                                    { [float]$multi = [float]$Redux.Hero.BossHP.text.split('x')[0] }
 
-        ChangeBytes -Offset "C44F2B" -Values $multiplier -Multiply -IsDec; ChangeBytes -Offset "C486CC" -Values "00 00 00 00" # Gohma
-        ChangeBytes -Offset "D258BB" -Values $multiplier -Multiply -IsDec; ChangeBytes -Offset "D25B0B" -Values $multiplier -Multiply -IsDec # Barinade
-        ChangeBytes -Offset "D64EFB" -Values $multiplier -Multiply -IsDec; ChangeBytes -Offset "D6223F" -Values $multiplier -Multiply -IsDec # Twinrova
-        ChangeBytes -Offset "C3B9FF" -Values $multiplier -Multiply -IsDec # King Dodongo
-        ChangeBytes -Offset "CE6D2F" -Values $multiplier -Multiply -IsDec # Volvagia
-        ChangeBytes -Offset "D3B4A7" -Values $multiplier -Multiply -IsDec # Morpha
-        ChangeBytes -Offset "DAC824" -Values $multiplier -Multiply -IsDec # Bongo Bongo
-        ChangeBytes -Offset "D7FDA3" -Values $multiplier -Multiply -IsDec # Ganondorf 
+        MultiplyBytes -Offset "C44F2B" -Factor $multi; MultiplyBytes -Offset "C486CC" -Values "00 00 00 00" # Gohma
+        MultiplyBytes -Offset "D258BB" -Factor $multi; MultiplyBytes -Offset "D25B0B" -Factor $multi # Barinade
+        MultiplyBytes -Offset "D64EFB" -Factor $multi; MultiplyBytes -Offset "D6223F" -Factor $multi # Twinrova
+        MultiplyBytes -Offset "C3B9FF" -Factor $multi # King Dodongo
+        MultiplyBytes -Offset "CE6D2F" -Factor $multi # Volvagia
+        MultiplyBytes -Offset "D3B4A7" -Factor $multi # Morpha
+        MultiplyBytes -Offset "DAC824" -Factor $multi # Bongo Bongo
+        MultiplyBytes -Offset "D7FDA3" -Factor $multi # Ganondorf 
 
-        if ($multiplier -gt 0) {
-            ChangeBytes -Offset "C91F8F" -Values $multiplier -Multiply -IsDec # Phantom Ganon (phase 1)
-            $value = $ByteArrayGame[(GetDecimal "C91F8F")]; $value -= (2 * 3 * $multiplier); $value++
-            ChangeBytes -Offset "CAFF33" -Values $value -IsDec                # Phantom Ganon (phase 2)
+        if ($multi -gt 0) {
+            ChangeBytes -Offset "C91F8F" -Factor $multi # Phantom Ganon (phase 1)
+            $value = $ByteArrayGame[(GetDecimal "C91F8F")]; $value -= (2 * 3 * $multi); $value++
+            ChangeBytes -Offset "CAFF33" -Values $value -IsDec # Phantom Ganon (phase 2)
 
-            ChangeBytes -Offset "E82AFB" -Values $multiplier -Multiply -IsDec # Ganon (phase 1)
-            $value = $ByteArrayGame[(GetDecimal "E87F2F")]; $value--; $value *= $multiplier; $value++;
-            ChangeBytes -Offset "E87F2F" -Values $value -IsDec                # Ganon (phase 2)
+            ChangeBytes -Offset "E82AFB" -Factor $multi # Ganon (phase 1)
+            $value = $ByteArrayGame[(GetDecimal "E87F2F")]; $value--; $value *= $multi; $value++;
+            ChangeBytes -Offset "E87F2F" -Values $value -IsDec # Ganon (phase 2)
         }
         else {
             ChangeBytes -Offset "C91F8F" -Values "04"; ChangeBytes -Offset "CAFF33" -Values "03" # Phantom Ganon (phase 1), Phantom Ganon (phase 2)
@@ -647,7 +639,7 @@ function ByteOptions() {
 
     
 
-    # AMMO CAPACITY SELECTION #
+    # AMMO CAPACITY #
 
     if (IsChecked $Redux.Capacity.EnableAmmo) {
         if ([int]$Redux.Capacity.BombBag1.Text -ge 20)   { $BombBag1 = $Redux.Capacity.BombBag1.Text }
@@ -658,11 +650,18 @@ function ByteOptions() {
         ChangeBytes -Offset "B6EC57" -IsDec -Values @($Redux.Capacity.BulletBag1.Text,  $Redux.Capacity.BulletBag2.Text,  $Redux.Capacity.BulletBag3.Text)  -Interval 2
         ChangeBytes -Offset "B6EC5F" -IsDec -Values @($Redux.Capacity.DekuSticks1.Text, $Redux.Capacity.DekuSticks2.Text, $Redux.Capacity.DekuSticks3.Text) -Interval 2
         ChangeBytes -Offset "B6EC67" -IsDec -Values @($Redux.Capacity.DekuNuts1.Text,   $Redux.Capacity.DekuNuts2.Text,   $Redux.Capacity.DekuNuts3.Text)   -Interval 2
+
+        # Initial Ammo
+      # ChangeBytes -Offset "" -IsDec -Values $Redux.Capacity.Quiver1.Text
+      # ChangeBytes -Offset "" -IsDec -Values $BombBag1
+        ChangeBytes -Offset "AE6D03" -IsDec -Values $Redux.Capacity.BulletBag1.Text
+      # ChangeBytes -Offset "" -IsDec -Values $Redux.Capacity.DekuSticks1.Text
+      # ChangeBytes -Offset "" -IsDec -Values $Redux.Capacity.DekuNuts1.Text
     }
 
 
 
-    # WALLET CAPACITY SELECTION #
+    # WALLET CAPACITY #
     
     if (IsChecked $Redux.Capacity.EnableWallet) {
         $Wallet1 = Get16Bit ($Redux.Capacity.Wallet1.Text); $Wallet2 = Get16Bit ($Redux.Capacity.Wallet2.Text); $Wallet3 = Get16Bit ($Redux.Capacity.Wallet3.Text); $Wallet4 = Get16Bit ($Redux.Capacity.Wallet4.Text)
@@ -678,10 +677,24 @@ function ByteOptions() {
         }
         else { $Max = 3 }
         ChangeBytes -Offset "B6D571" -Values @( ($Max - $Redux.Capacity.Wallet1.Text.Length), ($Max - $Redux.Capacity.Wallet2.Text.Length), ($Max - $Redux.Capacity.Wallet3.Text.Length), ($Max - $Redux.Capacity.Wallet4.Text.Length) ) -Interval 2
-        ChangeBytes -Offset "B6D579" -Values @($Redux.Capacity.Wallet1.Text.Length, $Redux.Capacity.Wallet2.Text.Length, $Redux.Capacity.Wallet3.Text.Length, $Redux.Capacity.Wallet4.Text.Length) -Interval 2
-
-        
+        ChangeBytes -Offset "B6D579" -Values @($Redux.Capacity.Wallet1.Text.Length, $Redux.Capacity.Wallet2.Text.Length, $Redux.Capacity.Wallet3.Text.Length, $Redux.Capacity.Wallet4.Text.Length)                                       -Interval 2
     }
+
+
+
+    # ITEM DROPS QUANTITY #
+
+    if (IsChecked $Redux.Capacity.EnableDrops) {
+        ChangeBytes -Offset "B6D4D1" -IsDec -Values @($Redux.Capacity.Arrows1x.Text,  $Redux.Capacity.Arrows2x.Text, $Redux.Capacity.Arrows3x.Text)                              -Interval 2
+        ChangeBytes -Offset "AE6D43" -IsDec -Values $Redux.Capacity.BulletSeeds.Text
+        ChangeBytes -Offset "AE6DCF" -IsDec -Values $Redux.Capacity.BulletSeedsShop.Text
+        ChangeBytes -Offset "AE675B" -IsDec -Values $Redux.Capacity.DekuSticks.Text
+        ChangeBytes -Offset "B6D4C9" -IsDec -Values ($Redux.Capacity.Bombs1x.Text,    $Redux.Capacity.Bombs2x.Text,  $Redux.Capacity.Bombs3x.Text, $Redux.Capacity.Bombs4x.Text) -Interval 2
+        ChangeBytes -Offset "B6D4D9" -IsDec -Values ($Redux.Capacity.DekuNuts1x.Text, $Redux.Capacity.DekuNuts2x.Text)                                                           -Interval 2
+        $RupeeG = Get16Bit ($Redux.Capacity.RupeeG.Text); $RupeeB = Get16Bit ($Redux.Capacity.RupeeB.Text); $RupeeR = Get16Bit ($Redux.Capacity.RupeeR.Text); $RupeeP = Get16Bit ($Redux.Capacity.RupeeP.Text); $RupeeO = Get16Bit ($Redux.Capacity.RupeeO.Text)
+        ChangeBytes -Offset "B6D4DC" -IsDec -Values @($RupeeR, $RupeeB, $RupeeR, $RupeeP, $RupeeO)                                                                               -Interval 2
+    }
+
 
 
     # EQUIPMENT #
@@ -1382,7 +1395,6 @@ function CreateTabMain() {
     CreateReduxCheckBox -Name "NoShieldRecoil"              -Text "No Shield Recoil"          -Lite -Advanced -Info "Disable the recoil when being hit while shielding"                                                                             -Credits "Admentus (ROM) & Aegiker (GameShark)"
     CreateReduxCheckBox -Name "RunWhileShielding"           -Text "Run While Shielding"       -Lite -Advanced -Info "Press R to shield will no longer prevent Link from moving around" -Link $Redux.Gameplay.NoShieldRecoil                         -Credits "Admentus (ported) & Aegiker (Debug)"
     CreateReduxCheckBox -Name "PushbackAttackingWalls"      -Text "Pushback Attacking Walls"  -Lite -Advanced -Info "Link is getting pushed back a bit when hitting the wall with the sword"                                                        -Credits "Admentus (ported) & Aegiker (Debug)"
-    CreateReduxCheckBox -Name "FasterClimbing"              -Text "Faster Climbing"           -Native         -Info "Link climbes up vines much faster"                                                                                             -Credits "Admentus"
     CreateReduxCheckBox -Name "SpawnLinksHouse"             -Text "Adult Spawns in Link's House"              -Info "Saving the game anywhere outside of a dungeon will make Adult start the session in Link's House instead of the Temple of Time" -Credits "GhostlyDark"
     CreateReduxCheckBox -Name "AllowWarpSongs"              -Text "Allow Warp Songs"      -Beginner -Advanced -Info "Allow warp songs in Gerudo Training Ground and Ganon's Castle"                                                                 -Credits "Ported from Rando"
     CreateReduxCheckBox -Name "AllowFaroreWind"             -Text "Allow Farore's Wind"   -Beginner -Advanced -Info "Allow Farore's Wind in Gerudo Training Ground and Ganon's Castle"                                                              -Credits "Ported from Rando"
@@ -1969,12 +1981,13 @@ function CreateTabCapacity() {
     # CAPACITY SELECTION #
 
     CreateReduxGroup    -Tag  "Capacity" -Text "Capacity Selection"
-    CreateReduxCheckBox -Name "EnableAmmo"    -Text "Change Ammo Capacity"   -Info "Enable changing the capacity values for ammo"
-    CreateReduxCheckBox -Name "EnableWallet"  -Text "Change Wallet Capacity" -Info "Enable changing the capacity values for the wallets"
+    CreateReduxCheckBox -Name "EnableAmmo"   -Text "Change Ammo Capacity"       -Info "Enable changing the capacity values for ammo"
+    CreateReduxCheckBox -Name "EnableWallet" -Text "Change Wallet Capacity"     -Info "Enable changing the capacity values for the wallets"
+    CreateReduxCheckBox -Name "EnableDrops"  -Text "Change Item Drops Quantity" -Info "Enable changing the amount which an item drop provides"
 
 
 
-    # AMMO #
+    # AMMO CAPACITY #
 
     $Redux.Box.Ammo = CreateReduxGroup -Tag "Capacity" -Text "Ammo Capacity Selection"
     CreateReduxTextBox -Name "Quiver1"     -Text "Quiver (1)"      -Value 30  -Info "Set the capacity for the Quiver (Base)"           -Credits "GhostlyDark"
@@ -1995,7 +2008,7 @@ function CreateTabCapacity() {
 
 
 
-    # WALLET #
+    # WALLET CAPACITY #
 
     $Redux.Box.Wallet = CreateReduxGroup -Tag "Capacity" -Text "Wallet Capacity Selection"
     CreateReduxTextBox -Name "Wallet1" -Length 4 -Text "Wallet (1)" -Value 99  -Info "Set the capacity for the Wallet (Base)"      -Credits "GhostlyDark"
@@ -2005,10 +2018,33 @@ function CreateTabCapacity() {
 
 
 
+    # ITEM DROPS QUANTITY #
+
+    $Redux.Box.Drops = CreateReduxGroup -Tag "Capacity" -Text "Item Drops Quantity Selection"
+    CreateReduxTextBox -Name "Arrows1x"             -Text "Arrows (Single)"     -Value 5   -Info "Set the recovery quantity for picking up or buying Single Arrows"  -Credits "Admentus" -Row 1 -Column 1
+    CreateReduxTextBox -Name "Arrows2x"             -Text "Arrows (Double)"     -Value 10  -Info "Set the recovery quantity for buying Double Arrows"                -Credits "Admentus"
+    CreateReduxTextBox -Name "Arrows3x"             -Text "Arrows (Triple)"     -Value 30  -Info "Set the recovery quantity for picking up or buying Triple Arrows"  -Credits "Admentus"
+    CreateReduxTextBox -Name "BulletSeeds"          -Text "Bullet Seeds"        -Value 5   -Info "Set the recovery quantity for picking up Bullet Seeds"             -Credits "Admentus"
+    CreateReduxTextBox -Name "BulletSeedsShop"      -Text "Bullet Seeds (Shop)" -Value 30  -Info "Set the recovery quantity for buying Bullet Seeds"                 -Credits "Admentus"
+    CreateReduxTextBox -Name "DekuSticks"           -Text "Deku Sticks"         -Value 1   -Info "Set the recovery quantity for picking up Deku Sticks"              -Credits "Admentus"
+    CreateReduxTextBox -Name "Bombs1x"              -Text "Bombs (5)"           -Value 5   -Info "Set the recovery quantity for picking up or buying Bombs (5)"      -Credits "Admentus" -Row 2 -Column 1
+    CreateReduxTextBox -Name "Bombs2x"              -Text "Bombs (10)"          -Value 10  -Info "Set the recovery quantity for buying Bombs (10)"                   -Credits "Admentus"
+    CreateReduxTextBox -Name "Bombs3x"              -Text "Bombs (15)"          -Value 15  -Info "Set the recovery quantity for buying Bombs (15)"                   -Credits "Admentus"
+    CreateReduxTextBox -Name "Bombs4x"              -Text "Bombs (20)"          -Value 20  -Info "Set the recovery quantity for buying Bombs (20)"                   -Credits "Admentus"
+    CreateReduxTextBox -Name "DekuNuts1x"           -Text "Deku Nuts (5)"       -Value 5   -Info "Set the recovery quantity for pickung up or buying Deku Nuts (5)"  -Credits "Admentus"
+    CreateReduxTextBox -Name "DekuNuts2x"           -Text "Deku Nuts (10)"      -Value 10  -Info "Set the recovery quantity for picking up or buying Deku Nuts (10)" -Credits "Admentus"
+    CreateReduxTextBox -Name "RupeeG"     -Length 4 -Text "Rupee (Green)"       -Value 1   -Info "Set the recovery quantity for picking up Green Rupees"             -Credits "Admentus" -Row 3 -Column 1
+    CreateReduxTextBox -Name "RupeeB"     -Length 4 -Text "Rupee (Blue)"        -Value 5   -Info "Set the recovery quantity for picking up Blue Rupees"              -Credits "Admentus"
+    CreateReduxTextBox -Name "RupeeR"     -Length 4 -Text "Rupee (Red)"         -Value 20  -Info "Set the recovery quantity for picking up Red Rupees"               -Credits "Admentus"
+    CreateReduxTextBox -Name "RupeeP"     -Length 4 -Text "Rupee (Purple)"      -Value 50  -Info "Set the recovery quantity for picking up Purple Rupees"            -Credits "Admentus"
+    CreateReduxTextBox -Name "RupeeO"     -Length 4 -Text "Rupee (Gold)"        -Value 200 -Info "Set the recovery quantity for picking up Gold Rupees"              -Credits "Admentus"
+
     EnableForm -Form $Redux.Box.Ammo -Enable $Redux.Capacity.EnableAmmo.Checked
     $Redux.Capacity.EnableAmmo.Add_CheckStateChanged({ EnableForm -Form $Redux.Box.Ammo -Enable $Redux.Capacity.EnableAmmo.Checked })
     EnableForm -Form $Redux.Box.Wallet -Enable $Redux.Capacity.EnableWallet.Checked
     $Redux.Capacity.EnableWallet.Add_CheckStateChanged({ EnableForm -Form $Redux.Box.Wallet -Enable $Redux.Capacity.EnableWallet.Checked })
+    EnableForm -Form $Redux.Box.Drops -Enable $Redux.Capacity.EnableDrops.Checked
+    $Redux.Capacity.EnableDrops.Add_CheckStateChanged({ EnableForm -Form $Redux.Box.Drops -Enable $Redux.Capacity.EnableDrops.Checked })
 
     $Redux.Capacity.BombBag1.Add_TextChanged({
         if ($this.Text -eq "30") {

@@ -1,3 +1,14 @@
+v17.2.2
+- Added Item Drops Quantity options for OoT
+- Added support for extracting zipped ROM files prior to patching
+- Added new "Multiplayer Music" option for MK64
+- Changed patching for multiplicating byte values (new function: MultiplyBytes)
+- Removed "Faster Climbing" option for OoT
+- Fixed issue with increasing HP for Keese and Green Bubbles (removed both)
+- Fixed issue with restoring the last index for the patches panel
+- Fixed issue with multiply HP when set to 1.5x, 2.5x or 3.5x
+- Fixed issue with patching Widescreen for Banjo-Kazooie
+
 v17.2.1
 - Added icons to showcase which addons are missing, present or got updated
 - Auto-Updater improvements

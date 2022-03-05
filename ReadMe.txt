@@ -43,6 +43,7 @@ Optional: After installing WMT 5.1 and rebooting your system, download and insta
 - https://docs.google.com/spreadsheets/d/1Ihccm8noxsfHZfN1E3Gkccov1F27WXXxl-rxOuManUk (Female Pronouns Script)
 - www.youtube.com/user/skilarbabcock (Model Replacements)
 - www.youtube.com/c/malonrose (Model Replacements)
+- https://github.com/Caverns4/Custom-Game-Models (Model Replacements)
 - www.youtube.com/channel/UC3071imQKR5cEIobsFHLW9Q (voices / patches)
 
 

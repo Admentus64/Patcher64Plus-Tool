@@ -183,7 +183,7 @@ function ChangePatchPanel() {
     foreach ($index in $Patches.Type.Items) {
         foreach ($item in $Files.json.patches) {
             if ($item.title -eq $GamePatch.title -and $item.title -eq $index) {
-                $Patches.Type.SelectedIndex = $i
+                $Patches.Type.Text = $index
                 break
             }
         }

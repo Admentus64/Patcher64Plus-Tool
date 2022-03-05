@@ -124,7 +124,7 @@
 
     # Create a button to allow manually selecting a ROM or WAD
     $InputPaths.GameButton = CreateButton -X ($InputPaths.GameTextBox.Right + (DPISize 6)) -Y (DPISize 18) -Width (DPISize 24) -Height (DPISize 22) -Text "..." -Info "Select your ROM or Wii VC WAD using file explorer"
-    $InputPaths.GameButton.Add_Click({ GamePath_Button -TextBox $InputPaths.GameTextBox -Description "ROM/WAD Files" -FileNames @('*.wad', '*.z64', '*.n64', '*.v64', '*.sfc', '*.smc', '*.nes', '*.gbc') })
+    $InputPaths.GameButton.Add_Click({ GamePath_Button -TextBox $InputPaths.GameTextBox -Description "ROM/WAD Files" -FileNames @('*.wad', '*.z64', '*.n64', '*.v64', '*.sfc', '*.smc', '*.nes', '*.gbc', '*.zip', '*.rar', '*.7z') })
     #"Image Files(*.BMP;*.JPG;*.GIF)|*.BMP;*.JPG;*.GIF|All files (*.*)|*.*"
 
     # Create a button to clear the WAD Path
@@ -169,7 +169,7 @@
 
     # Create a button to allow manually selecting a ROM
     $InputPaths.InjectButton = CreateButton -X ($InputPaths.InjectTextBox.Right + (DPISize 6)) -Y (DPISize 18) -Width (DPISize 24) -Height (DPISize 22) -Text "..." -Info "Select your N64, SNES or NES ROM File using file explorer"
-    $InputPaths.InjectButton.Add_Click({ InjectPath_Button -TextBox $InputPaths.InjectTextBox -Description "ROM Files" -FileNames @('*.z64', '*.n64', '*.v64', '*.sfc', '*.smc', '*.nes', '*.gbc') })
+    $InputPaths.InjectButton.Add_Click({ InjectPath_Button -TextBox $InputPaths.InjectTextBox -Description "ROM Files" -FileNames @('*.z64', '*.n64', '*.v64', '*.sfc', '*.smc', '*.nes', '*.gbc', '*.zip', '*.rar', '*.7z') })
 
     # Create a button to allow patch the WAD with a ROM file
     $InputPaths.ApplyInjectButton = CreateButton -X ($InputPaths.InjectButton.Right + (DPISize 15)) -Y (DPISize 18) -Width ($InputPaths.InjectGroup.Right - $InputPaths.InjectButton.Right - (DPISize 30)) -Height (DPISize 22) -Text "Inject ROM" -Info "Replace the ROM in your selected WAD File with your selected injection file"
@@ -612,7 +612,7 @@ function GamePath_DragDrop() {
             $DroppedExtn = (Get-Item -LiteralPath $DroppedPath).Extension
 
             # Make sure it is a ROM or WAD file
-            if ($DroppedExtn -eq '.wad' -or $DroppedExtn -eq '.z64' -or $DroppedExtn -eq '.n64' -or $DroppedExtn -eq '.v64' -or $DroppedExtn -eq '.sfc' -or $DroppedExtn -eq '.smc' -or $DroppedExtn -eq '.nes' -or $DroppedExtn -eq '.gbc') {
+            if ($DroppedExtn -eq '.wad' -or $DroppedExtn -eq '.z64' -or $DroppedExtn -eq '.n64' -or $DroppedExtn -eq '.v64' -or $DroppedExtn -eq '.sfc' -or $DroppedExtn -eq '.smc' -or $DroppedExtn -eq '.nes' -or $DroppedExtn -eq '.gbc' -or $DroppedExtn -eq '.zip' -or $DroppedExtn -eq '.rar' -or $DroppedExtn -eq '.7z') {
                 $Settings["Core"][$this.name] = $DroppedPath
                 GamePath_Finish -TextBox $InputPaths.GameTextBox -Path $DroppedPath
             }
@@ -637,7 +637,7 @@ function InjectPath_DragDrop() {
             $DroppedExtn = (Get-Item -LiteralPath $DroppedPath).Extension
 
             # Make sure it is a ROM
-            if ($DroppedExtn -eq '.z64' -or $DroppedExtn -eq '.n64' -or $DroppedExtn -eq '.v64' -or $DroppedExtn -eq '.sfc' -or $DroppedExtn -eq '.smc' -or $DroppedExtn -eq '.nes' -or $DroppedExtn -eq '.gbc') {
+            if ($DroppedExtn -eq '.z64' -or $DroppedExtn -eq '.n64' -or $DroppedExtn -eq '.v64' -or $DroppedExtn -eq '.sfc' -or $DroppedExtn -eq '.smc' -or $DroppedExtn -eq '.nes' -or $DroppedExtn -eq '.gbc' -or $DroppedExtn -eq '.zip' -or $DroppedExtn -eq '.rar' -or $DroppedExtn -eq '.7z') {
                 $Settings["Core"][$this.name] = $DroppedPath
                 InjectPath_Finish -TextBox $InputPaths.InjectTextBox -Path $DroppedPath
             }

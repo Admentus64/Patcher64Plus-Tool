@@ -127,31 +127,34 @@ function CreateCreditsDialog() {
 
 
     # Documentation
-    $SourcesLabel    = CreateLabel -X (DPISize 10)        -Y ($PayPal2Label.Bottom + (DPISize 80)) -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("--- Sources ---")                                                                     -AddTo $Credits.Sections[3]
+    $SourcesLabel    = CreateLabel -X (DPISize 10)           -Y ($PayPal2Label.Bottom   + (DPISize 80)) -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("--- Sources ---")                                                                     -AddTo $Credits.Sections[3]
     
-    $Shadow1Label    = CreateLabel -X (DPISize 10)        -Y ($SourcesLabel.Bottom  + (DPISize 2)) -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("ShadowOne333's GitHub")                                                               -AddTo $Credits.Sections[3]
-    $Shadow2Label    = CreateLabel -X $Shadow1Label.Right -Y ($SourcesLabel.Bottom  + (DPISize 2)) -Width (DPISize 340) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("https://github.com/ShadowOne333/Zelda64-Redux-Documentation")                         -AddTo $Credits.Sections[3]
+    $Shadow1Label    = CreateLabel -X (DPISize 10)           -Y ($SourcesLabel.Bottom    + (DPISize 2)) -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("ShadowOne333's GitHub")                                                               -AddTo $Credits.Sections[3]
+    $Shadow2Label    = CreateLabel -X $Shadow1Label.Right    -Y ($SourcesLabel.Bottom    + (DPISize 2)) -Width (DPISize 340) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("https://github.com/ShadowOne333/Zelda64-Redux-Documentation")                         -AddTo $Credits.Sections[3]
     
-    $Female1Label    = CreateLabel -X (DPISize 10)        -Y ($Shadow1Label.Bottom  + (DPISize 2)) -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("Feminine Pronouns Script`nBy Mil")                                                    -AddTo $Credits.Sections[3]
-    $Female2Label    = CreateLabel -X $Female1Label.Right -Y ($Shadow1Label.Bottom  + (DPISize 2)) -Width (DPISize 470) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("https://docs.google.com/spreadsheets/d/1Ihccm8noxsfHZfN1E3Gkccov1F27WXXxl-rxOuManUk") -AddTo $Credits.Sections[3]
+    $Female1Label    = CreateLabel -X (DPISize 10)           -Y ($Shadow1Label.Bottom    + (DPISize 2)) -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("Feminine Pronouns Script`nBy Mil")                                                    -AddTo $Credits.Sections[3]
+    $Female2Label    = CreateLabel -X $Female1Label.Right    -Y ($Shadow1Label.Bottom    + (DPISize 2)) -Width (DPISize 470) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("https://docs.google.com/spreadsheets/d/1Ihccm8noxsfHZfN1E3Gkccov1F27WXXxl-rxOuManUk") -AddTo $Credits.Sections[3]
 
-    $Skilar1Label    = CreateLabel -X (DPISize 10)        -Y ($Female1Label.Bottom  + (DPISize 2)) -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("Skilarbabcock's YouTube")                                                             -AddTo $Credits.Sections[3]
-    $Skilar2Label    = CreateLabel -X $Skilar1Label.Right -Y ($Female1Label.Bottom  + (DPISize 2)) -Width (DPISize 225) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("https://www.youtube.com/user/skilarbabcock")                                          -AddTo $Credits.Sections[3]
+    $Skilar1Label    = CreateLabel -X (DPISize 10)           -Y ($Female1Label.Bottom    + (DPISize 2)) -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("Skilarbabcock's YouTube")                                                             -AddTo $Credits.Sections[3]
+    $Skilar2Label    = CreateLabel -X $Skilar1Label.Right    -Y ($Female1Label.Bottom    + (DPISize 2)) -Width (DPISize 225) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("https://www.youtube.com/user/skilarbabcock")                                          -AddTo $Credits.Sections[3]
+    
+    $Malon1Label     = CreateLabel -X (DPISize 10)           -Y ($Skilar1Label.Bottom    + (DPISize 2)) -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("Malon Rose YouTube")                                                                  -AddTo $Credits.Sections[3]
+    $Malon2Label     = CreateLabel -X $Malon1Label.Right     -Y ($Skilar1Label.Bottom    + (DPISize 2)) -Width (DPISize 225) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("https://www.youtube.com/c/MalonRose")                                                 -AddTo $Credits.Sections[3]
 
-    $Malon1Label     = CreateLabel -X (DPISize 10)        -Y ($Skilar1Label.Bottom  + (DPISize 2)) -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("Malon Rose YouTube")                                                                  -AddTo $Credits.Sections[3]
-    $Malon2Label     = CreateLabel -X $Skilar1Label.Right -Y ($Skilar2Label.Bottom  + (DPISize 2)) -Width (DPISize 225) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("https://www.youtube.com/c/MalonRose")                                                 -AddTo $Credits.Sections[3]
+    $Luigi1Label     = CreateLabel -X (DPISize 10)           -Y ($Malon1Label.Bottom     + (DPISize 2)) -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("theluigidude2007 YouTube")                                                            -AddTo $Credits.Sections[3]
+    $Luigi2Label     = CreateLabel -X $Luigi1Label.Right     -Y ($Malon1Label.Bottom     + (DPISize 2)) -Width (DPISize 300) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("www.youtube.com/channel/UC3071imQKR5cEIobsFHLW9Q")                                    -AddTo $Credits.Sections[3]
+    
+    $Darunia1Label   = CreateLabel -X (DPISize 10)           -Y ($Luigi1Label.Bottom     + (DPISize 2)) -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("Darunias Joy GitHub")                                                                 -AddTo $Credits.Sections[3]
+    $Darunia2Label   = CreateLabel -X $Darunia1Label.Right   -Y ($Luigi1Label.Bottom     + (DPISize 2)) -Width (DPISize 275) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("https://github.com/DaruniasJoy/OoT-Custom-Sequences")                                 -AddTo $Credits.Sections[3]
 
-    $Luigi1Label     = CreateLabel -X (DPISize 10)        -Y ($Malon1Label.Bottom   + (DPISize 2)) -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("theluigidude2007 YouTube")                                                            -AddTo $Credits.Sections[3]
-    $Luigi2Label     = CreateLabel -X $Malon1Label.Right  -Y ($Malon2Label.Bottom   + (DPISize 2)) -Width (DPISize 300) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("www.youtube.com/channel/UC3071imQKR5cEIobsFHLW9Q")                                    -AddTo $Credits.Sections[3]
+    $Fish1Label      = CreateLabel -X (DPISize 10)           -Y ($Darunia1Label.Bottom   + (DPISize 2)) -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("Fish-waffle64's GitHub")                                                              -AddTo $Credits.Sections[3]
+    $Fish2Label      = CreateLabel -X $Fish1Label.Right      -Y ($Darunia1Label.Bottom   + (DPISize 2)) -Width (DPISize 260) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("https://github.com/Fish-waffle64/Feeshs-MM-Music")                                    -AddTo $Credits.Sections[3]
 
-    $Darunia1Label   = CreateLabel -X (DPISize 10)        -Y ($Luigi1Label.Bottom   + (DPISize 2)) -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("Darunias Joy GitHub")                                                                 -AddTo $Credits.Sections[3]
-    $Darunia2Label   = CreateLabel -X $Malon1Label.Right  -Y ($Luigi2Label.Bottom   + (DPISize 2)) -Width (DPISize 275) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("https://github.com/DaruniasJoy/OoT-Custom-Sequences")                                 -AddTo $Credits.Sections[3]
+    $LuigiHero1Label = CreateLabel -X (DPISize 10)           -Y ($Fish1Label.Bottom      + (DPISize 2)) -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("LuigiXHero's GitHub")                                                                 -AddTo $Credits.Sections[3]
+    $LuigiHero2Label = CreateLabel -X $LuigiHero1Label.Right -Y ($Fish1Label.Bottom      + (DPISize 2)) -Width (DPISize 300) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("https://github.com/LuigiXHero/OoT-Randomizer-Music-Pack")                             -AddTo $Credits.Sections[3]
 
-    $Fish1Label      = CreateLabel -X (DPISize 10)        -Y ($Darunia1Label.Bottom + (DPISize 2)) -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("Fish-waffle64's GitHub")                                                              -AddTo $Credits.Sections[3]
-    $Fish2Label      = CreateLabel -X $Malon1Label.Right  -Y ($Darunia2Label.Bottom + (DPISize 2)) -Width (DPISize 260) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("https://github.com/Fish-waffle64/Feeshs-MM-Music")                                    -AddTo $Credits.Sections[3]
-
-    $LuigiHero1Label = CreateLabel -X (DPISize 10)        -Y ($Fish1Label.Bottom    + (DPISize 2)) -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("LuigiXHero's GitHub")                                                                 -AddTo $Credits.Sections[3]
-    $LuigiHero2Label = CreateLabel -X $Malon1Label.Right  -Y ($Fish2Label.Bottom    + (DPISize 2)) -Width (DPISize 300) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("https://github.com/LuigiXHero/OoT-Randomizer-Music-Pack")                             -AddTo $Credits.Sections[3]
+    $IkeyIlex1Label  = CreateLabel -X (DPISize 10)           -Y ($LuigiHero1Label.Bottom + (DPISize 2)) -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("Ikey Ilex's GitHub")                                                                  -AddTo $Credits.Sections[3]
+    $IkeyIlex2Label  = CreateLabel -X $IkeyIlex1Label.Right  -Y ($LuigiHero1Label.Bottom + (DPISize 2)) -Width (DPISize 260) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("https://github.com/Caverns4/Custom-Game-Models")                                      -AddTo $Credits.Sections[3]
 
     $Shadow2Label.add_Click(    { [system.Diagnostics.Process]::start("https://github.com/ShadowOne333/Zelda64-Redux-Documentation") } )
     $Female2Label.add_Click(    { [system.Diagnostics.Process]::start("https://docs.google.com/spreadsheets/d/1Ihccm8noxsfHZfN1E3Gkccov1F27WXXxl-rxOuManUk") } )
@@ -161,8 +164,9 @@ function CreateCreditsDialog() {
     $Darunia2Label.add_Click(   { [system.Diagnostics.Process]::start("https://github.com/DaruniasJoy/OoT-Custom-Sequences") } )
     $Fish2Label.add_Click(      { [system.Diagnostics.Process]::start("https://github.com/Fish-waffle64/Feeshs-MM-Music") } )
     $LuigiHero2Label.add_Click( { [system.Diagnostics.Process]::start("https://github.com/LuigiXHero/OoT-Randomizer-Music-Pack") } )
+    $IkeyIlex2Label.add_Click(  { [system.Diagnostics.Process]::start("https://github.com/Caverns4/Custom-Game-Models") } )
 
-    $Shadow2Label.ForeColor = $Female2Label.ForeColor = $Skilar2Label.ForeColor = $Malon2Label.ForeColor = $Luigi2Label.ForeColor = $Darunia2Label.ForeColor = $Fish2Label.ForeColor = $LuigiHero2Label.ForeColor = "Blue"
+    $Shadow2Label.ForeColor = $Female2Label.ForeColor = $Skilar2Label.ForeColor = $Malon2Label.ForeColor = $Luigi2Label.ForeColor = $Darunia2Label.ForeColor = $Fish2Label.ForeColor = $LuigiHero2Label.ForeColor = $IkeyIlex2Label.ForeColor = "Blue"
 
 
     

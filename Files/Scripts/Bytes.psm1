@@ -1,4 +1,4 @@
-﻿function ChangeBytes([string]$File, [string]$Offset, [object]$Match=$null, [object]$Values, [uint16]$Interval=1, [switch]$Multiply, [switch]$Add, [switch]$Subtract, [switch]$IsDec, [switch]$Overflow) {
+﻿function ChangeBytes([string]$File, [string]$Offset, [object]$Match=$null, [object]$Values, [uint16]$Interval=1, [switch]$Add, [switch]$Subtract, [switch]$IsDec, [switch]$Overflow) {
     
     if ($Match  -is [System.String])   { $Match  = $Match  -split ' ' }
     if ($Values -is [System.String])   { $Values = $Values -split ' ' }
@@ -34,23 +34,17 @@
     if ($IsDec) {
         $arr = @()
         foreach ($i in $Values) { $arr += Get8Bit $i }
-        if ($Multiply)   { WriteToConsole ( (Get32Bit $Offset) + " -> Multiplied values by: " + $arr) }
-        else             { WriteToConsole ( (Get32Bit $Offset) + " -> Change values: " + $arr) }
+        WriteToConsole ( (Get32Bit $Offset) + " -> Change values: " + $arr)
+        $arr = $null
     }
-    else {
-        if ($Multiply)   { WriteToConsole ( (Get32Bit $Offset) + " -> Multiplied values by: " + $Values) }
-        else             { WriteToConsole ( (Get32Bit $Offset) + " -> Change values: " + $Values) }
-    }
-    $arr = $null
+    else { WriteToConsole ( (Get32Bit $Offset) + " -> Change values: " + $Values) }
 
     # Patch
     foreach ($i in 0..($Values.Length-1)) {
         if ($IsDec) {
             if     ($Values[$i] -lt 0   -and $Overflow)   { $Values[$i] = $Values[$i] + 255 }
             elseif ($Values[$i] -gt 255 -and $Overflow)   { $Values[$i] = $Values[$i] - 255 }
-            
-            if ($Multiply)   { [float]$value = $Values[$i] }
-            else             { [byte]$value  = $Values[$i] }
+            [byte]$value = $Values[$i]
         }
         else {
             try { [byte]$value = GetDecimal $Values[$i] }
@@ -60,13 +54,53 @@
             }
         }
 
-        if     ($Multiply)                     { [byte]$Value *= $ByteArrayGame[$Offset + ($i * $Interval)] }
-        if     ($Multiply -and $Value -eq 0)   { [byte]$Value  = 1 }
-
         if     ($Add)        { $ByteArrayGame[$Offset + ($i * $Interval)] += $value }
         elseif ($Subtract)   { $ByteArrayGame[$Offset + ($i * $Interval)] -= $value }
         else                 { $ByteArrayGame[$Offset + ($i * $Interval)]  = $value }
     }
+
+    # Write to File
+    if (IsSet $File) { [System.IO.File]::WriteAllBytes($File, $ByteArrayGame) }
+    return $True
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function MultiplyBytes([string]$File, [string]$Offset, [object]$Match=$null, [float]$Factor) {
+    
+    if ($Match  -is [System.String])   { $Match  = $Match  -split ' ' }
+    if (IsSet $File)                   { $ByteArrayGame = [System.IO.File]::ReadAllBytes($File) }
+
+    # Offset
+    try { [uint32]$Offset = GetDecimal $Offset }
+    catch {
+        WriteToConsole "Offset is negative, too large or not an integer!"
+        $global:WarningError = $True
+        return $False
+    }
+    if ($Offset -gt $ByteArrayGame.Length) {
+        WriteToConsole "Offset is too large for file!"
+        $global:WarningError = $True
+        return $False
+    }
+
+    # Match
+    if ($Match -ne $null) {
+        foreach ($i in 0..($Match.Length-1)) {
+            try { [byte]$value  = GetDecimal $Match[$i] }
+            catch {
+                WriteToConsole "Match value is negative!"
+                return $False
+            }
+            if ($ByteArrayGame[$Offset + $i] -ne $value) { return $True }
+        }
+    }
+
+    # Patch
+    $ByteArrayGame[$Offset] *= $Factor
+    WriteToConsole ( (Get32Bit $Offset) + " -> Multiplied value " + (Get8Bit $ByteArrayGame[$Offset]) +" by: " + $Factor)
 
     # Write to File
     if (IsSet $File) { [System.IO.File]::WriteAllBytes($File, $ByteArrayGame) }

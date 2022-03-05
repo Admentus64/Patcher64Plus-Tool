@@ -95,9 +95,9 @@ function AutoUpdate([switch]$Manual) {
         }
 
         # Compare content
-        if     ($Patcher.Version -lt $newVersion)                        { $update = $True }
-        elseif ($Patcher.Date    -lt $newDate)                           { $update = $True }
-        elseif ($Patcher.Hotfix  -lt $newHotfix -and $newHotfix -ne 0)   { $update = $True }
+        if     ($Patcher.Version -lt $newVersion)   { $update = $True }
+        elseif ($Patcher.Date    -lt $newDate)      { $update = $True }
+        elseif ($Patcher.Version -le $newVersion -and $Patcher.Date -le $newDate -and $Patcher.Hotfix -lt $newHotfix -and $newHotfix -ne 0) { $update = $True }
         $Settings.Core.LastUpdateVersionCheck = $newVersion
         $Settings.Core.LastUpdateDateCheck    = $newDate
     }

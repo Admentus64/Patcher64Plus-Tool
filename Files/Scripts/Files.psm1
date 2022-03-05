@@ -52,6 +52,8 @@ function SetFileParameters() {
     $Files.tool.romc                        = (GetFilePath) + "\Files\Tools\Wii VC\romc.exe"
     $Files.tool.romchu                      = (GetFilePath) + "\Files\Tools\Wii VC\romchu.exe"
 
+    $Files.tool.zip                         = (GetFilePath) + "\Files\Tools\Zip\7z.exe"
+
     $Files.tool.playSMF                     = (GetFilePath) + "\Files\Tools\playsmf.exe"
 
 

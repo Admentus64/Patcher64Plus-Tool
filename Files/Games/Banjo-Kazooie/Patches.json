@@ -1,10 +1,10 @@
 [ {
 	"title"		: "16:9 Widescreen",
 	"patch" : [ {
-		"file"	: "Decompressed\\widescreen_rev0.ips",
+		"file"	: "Compressed\\widescreen_rev0.ips",
 		"rev"	: "B29599651A13F681C9923D69354BF4A3"
 	}, {
-		"file"	: "Decompressed\\widescreen_rev1.ips",
+		"file"	: "Compressed\\widescreen_rev1.ips",
 		"rev"	: "B11F476D4BC8E039355241E871DC08CF"
 	} ],
 	"output"	: "_widescreen_patched",

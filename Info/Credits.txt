@@ -99,7 +99,7 @@
 					GNU General Public License v3.0 (GPL-3.0 License)
 
 --- Custom Models ---
-- 1996 Link:				Ikey Ilex
+- 1996 Link:				Ikey Ilex (https://github.com/Caverns4/Custom-Game-Models)
 - A Link to the Past			Oni 3D-Arts
 - Amara:				Amara & Karicyan
 - Amara Valkyrie:			Amara & Karicyan
@@ -113,7 +113,7 @@
 - Hatsune Miku Link:			JanexLane
 - Hatsune Miku Vocaloid:		JanexLane
 - Kafei:				Malon Rose (www.patreon.com/MalonRose & www.youtube.com/c/MalonRose)
-- Kristin:				Ikey Ilex
+- Kristin:				Ikey Ilex (https://github.com/Caverns4/Custom-Game-Models)
 - Lorna Rissa:				JanexLane
 - Link's Awakening:			Skilarbabcock (www.youtube.com/user/skilarbabcock)
 - Majora's Mask:			The3Dude (child) & Skilarbabcock (adult)
@@ -144,20 +144,20 @@
 - Bluwiikoon
 - Darkychao
 - DKDavid
-- Fish-waffle64		https://github.com/Fish-waffle64/Feeshs-MM-Music
+- Fish-waffle64				https://github.com/Fish-waffle64/Feeshs-MM-Music
 - FQef94
 - Isghj
 - Joshua8600
 - Kirox
 - Kolipoki
 - Liamnajor
-- LuigiXHero		https://github.com/LuigiXHero/OoT-Randomizer-Music-Pack
-- MM			Nintendo
-- MM Rando		https://github.com/ZoeyZolotova/mm-rando
+- LuigiXHero				https://github.com/LuigiXHero/OoT-Randomizer-Music-Pack
+- MM					Nintendo
+- MM Rando				https://github.com/ZoeyZolotova/mm-rando
 - MrMario7788
 - Nika
 - Nyxael
-- OoT			Nintendo
+- OoT					Nintendo
 - Rokon
 - Senate
 - sillyhorseradish
@@ -394,15 +394,15 @@ https://github.com/DaruniasJoy/OoT-Custom-Sequences
 
 --- Hylian Link Models ---
 - Adult Link (MM):			Skilarbabcock (www.youtube.com/user/skilarbabcock)
-- Diddy Kong:				Ikey Ilex
+- Diddy Kong:				Ikey Ilex (https://github.com/Caverns4/Custom-Game-Models)
 - Elegy of Emptiness:			JerryWester
 - Fierce Deity Link:			UltIMa647
 - Glover:				Unesag
 - Hat Kid:				Hailey
 - Improved Link:			Skilarbabcock (www.youtube.com/user/skilarbabcock) & Nerrel
 - Improved Link + OoT Eyes:		Skilarbabcock (model), Nerrel (owner) & GhostlyDark (eyes)
-- Kristin:				Ikey Ilex
-- Kristina Olivine:			Ikey Ilex	
+- Kristin:				Ikey Ilex (https://github.com/Caverns4/Custom-Game-Models)
+- Kristina Olivine:			Ikey Ilex (https://github.com/Caverns4/Custom-Game-Models)
 - Majora's Mask + OoT Eyes:		GhostlyDark (eyes)
 - Princess Zelda:			Unesag
 - Ocarina of Time:			Rando
@@ -416,20 +416,20 @@ https://github.com/DaruniasJoy/OoT-Custom-Sequences
 - Bluwiikoon
 - Darkychao
 - DKDavid
-- Fish-waffle64		https://github.com/Fish-waffle64/Feeshs-MM-Music
+- Fish-waffle64				https://github.com/Fish-waffle64/Feeshs-MM-Music
 - FQef94
 - Isghj
 - Joshua8600
 - Kirox
 - Kolipoki
 - Liamnajor
-- LuigiXHero		https://github.com/LuigiXHero/OoT-Randomizer-Music-Pack
-- MM			Nintendo
-- MM Rando		https://github.com/ZoeyZolotova/mm-rando
+- LuigiXHero				https://github.com/LuigiXHero/OoT-Randomizer-Music-Pack
+- MM					Nintendo
+- MM Rando				https://github.com/ZoeyZolotova/mm-rando
 - MrMario7788
 - Nika
 - Nyxael
-- OoT			Nintendo
+- OoT					Nintendo
 - Rokon
 - Senate
 - sillyhorseradish
@@ -596,11 +596,11 @@ https://github.com/DaruniasJoy/OoT-Custom-Sequences
 =====================
 <<< MARIO KART 64 >>>
 
---- 16:9 Widescreen ---
-- gamemasterplc
-
---- CPUs use human items including shells ---
-- triclon
+--- Additional Options ---
+- 16:9 Widescreen:			gamemasterplc
+- 60 FPS:				retroben
+- CPU Use human Items:			triclon
+- Multiplayer Music:			Zoinkity
 
 --- Amped Up ---
 - Production:				Litronom

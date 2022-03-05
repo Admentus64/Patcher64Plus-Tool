@@ -369,86 +369,75 @@ function ByteOptions() {
     elseif (IsText -Elem $Redux.Hero.MagicUsage -Compare "8x Item Usage")    { ChangeBytes -Offset "BABF5E" -Values "2C","C0" }
 
     if (IsIndex -Elem $Redux.Hero.MonsterHP -Index 3 -Not) { # Monsters
-        if (IsIndex -Elem $Redux.Hero.MonsterHP)   { $multiplier = 0   }
-        else                                       { [float]$multiplier = [float]$Redux.Hero.MiniBossHP.text.split('x')[0] }
+        if (IsIndex -Elem $Redux.Hero.MonsterHP)   { $multi = 0   }
+        else                                       { [float]$multi = [float]$Redux.Hero.MiniBossHP.text.split('x')[0] }
+        
+        MultiplyBytes -Offset "D4E07F" -Factor $multi; MultiplyBytes -Offset "E0790F" -Factor $multi; MultiplyBytes -Offset "F94A00" -Factor $multi # ReDead / Gibdo, Stalchild, Poe
+        MultiplyBytes -Offset "D2F07C" -Factor $multi; MultiplyBytes -Offset "D6CFB8" -Factor $multi; MultiplyBytes -Offset "F5B7FC" -Factor $multi # Deku Baba, Wilted Deku Baba, Dexihand
+        MultiplyBytes -Offset "D55BDC" -Factor $multi; MultiplyBytes -Offset "D55C08" -Factor $multi # Skullwalltula, Golden Skullwalltula
+        MultiplyBytes -Offset "CF3514" -Factor $multi; MultiplyBytes -Offset "CF0A4B" -Factor $multi # Dodongo (Small / Big)
+        MultiplyBytes -Offset "D10D3C" -Factor $multi; MultiplyBytes -Offset "D0DBDB" -Factor $multi # Red Tektite, Blue Tektite
+        MultiplyBytes -Offset "CF05CC" -Factor $multi; MultiplyBytes -Offset "D4DA9C" -Factor $multi # Wallmaster, Floormaster
+        MultiplyBytes -Offset "D13750" -Factor $multi; MultiplyBytes -Offset "D1375C" -Factor $multi # Peahat, Peahat Larva
+        MultiplyBytes -Offset "E0336B" -Factor $multi; MultiplyBytes -Offset "E07028" -Factor $multi # Wolfos
+        MultiplyBytes -Offset "D3D9DC" -Factor $multi; MultiplyBytes -Offset "D3AFBC" -Factor $multi # Blue Bubble, Red Bubble
+        MultiplyBytes -Offset "EAE53C" -Factor $multi; MultiplyBytes -Offset "E0EE24" -Factor $multi # Bad Bat, Guay
+        MultiplyBytes -Offset "D47754" -Factor $multi; MultiplyBytes -Offset "D76388" -Factor $multi # Beamos, Like-Like
+        MultiplyBytes -Offset "D5E0E3" -Factor $multi; MultiplyBytes -Offset "F3E82C" -Factor $multi # Shell Blade, Snapper
+        MultiplyBytes -Offset "D3914C" -Factor $multi; MultiplyBytes -Offset "CEACD8" -Factor $multi # Mad Scrub, Octorok
+        MultiplyBytes -Offset "F7ED78" -Factor $multi; MultiplyBytes -Offset "EC1F2C" -Factor $multi # Eeno, Real Bombchu
+        MultiplyBytes -Offset "EB922C" -Factor $multi; MultiplyBytes -Offset "E9B69C" -Factor $multi # White Boe, Black Boe, Chuchu (alt: E9B66E)
 
-        ChangeBytes -Offset "CF56BC" -Values $multiplier -Multiply -IsDec; ChangeBytes -Offset "EAE53C" -Values $multiplier -Multiply -IsDec; ChangeBytes -Offset "E0EE24" -Values $multiplier -Multiply -IsDec # Keese, Bad Bat, Guay
-        ChangeBytes -Offset "D55BDC" -Values $multiplier -Multiply -IsDec; ChangeBytes -Offset "D55C08" -Values $multiplier -Multiply -IsDec # Skullwalltula, Golden Skullwalltula
-        ChangeBytes -Offset "CF3514" -Values $multiplier -Multiply -IsDec; ChangeBytes -Offset "CF0A4B" -Values $multiplier -Multiply -IsDec # Dodongo (Small / Big)
-        ChangeBytes -Offset "D10D3C" -Values $multiplier -Multiply -IsDec; ChangeBytes -Offset "D0DBDB" -Values $multiplier -Multiply -IsDec # Red Tektite, Blue Tektite
-        ChangeBytes -Offset "CF05CC" -Values $multiplier -Multiply -IsDec; ChangeBytes -Offset "D4DA9C" -Values $multiplier -Multiply -IsDec # Wallmaster, Floormaster
-        ChangeBytes -Offset "D13750" -Values $multiplier -Multiply -IsDec; ChangeBytes -Offset "D1375C" -Values $multiplier -Multiply -IsDec # Peahat, Peahat Larva
-        ChangeBytes -Offset "E0336B" -Values $multiplier -Multiply -IsDec; ChangeBytes -Offset "E07028" -Values $multiplier -Multiply -IsDec # Wolfos
-        ChangeBytes -Offset "D3D9DC" -Values $multiplier -Multiply -IsDec; ChangeBytes -Offset "D3AFBC" -Values $multiplier -Multiply -IsDec # Blue Bubble, Red Bubble
-        ChangeBytes -Offset "D2F07C" -Values $multiplier -Multiply -IsDec; ChangeBytes -Offset "D6CFB8" -Values $multiplier -Multiply -IsDec # Deku Baba, Wilted Deku Baba
-        ChangeBytes -Offset "D47754" -Values $multiplier -Multiply -IsDec # Beamos
-        ChangeBytes -Offset "D76388" -Values $multiplier -Multiply -IsDec # Like-Like
-        ChangeBytes -Offset "D4E07F" -Values $multiplier -Multiply -IsDec # ReDead, Gibdo
-        ChangeBytes -Offset "F94A00" -Values $multiplier -Multiply -IsDec # Poe
-        ChangeBytes -Offset "E0790F" -Values $multiplier -Multiply -IsDec # Stalchild
-        ChangeBytes -Offset "D5E0E3" -Values $multiplier -Multiply -IsDec # Shell Blade
-        ChangeBytes -Offset "F3E82C" -Values $multiplier -Multiply -IsDec # Snapper
-        ChangeBytes -Offset "D3914C" -Values $multiplier -Multiply -IsDec # Mad Scrub
-        ChangeBytes -Offset "F7ED78" -Values $multiplier -Multiply -IsDec # Eeno
-        ChangeBytes -Offset "EC1F2C" -Values $multiplier -Multiply -IsDec # Real Bombchu
-        ChangeBytes -Offset "F5B7FC" -Values $multiplier -Multiply -IsDec # Dexihand
-        ChangeBytes -Offset "CEACD8" -Values $multiplier -Multiply -IsDec # Octorok
-        ChangeBytes -Offset "E9B69C" -Values $multiplier -Multiply -IsDec # Chuchu (alt: E9B66E)
-        ChangeBytes -Offset "EB922C" -Values $multiplier -Multiply -IsDec # White Boe, Black Boe
+      # MultiplyBytes -Offset "" -Factor $multi # Leever                    (Green)   (HP: 04)   FE1A10 -> FE3AB0 (Length: 20A0) (ovl_En_Neo_Reeba)
+      # MultiplyBytes -Offset "" -Factor $multi # Leever                    (Purple)  (HP: 14)
+      # MultiplyBytes -Offset "" -Factor $multi # Ghost                               (HP: ??)    ->  (Length: ) (ovl_En_??)
+      # MultiplyBytes -Offset "" -Factor $multi # Garo                                (HP: ??)   E20590 -> E24200 (Length: 3C70) (ovl_En_Jso)
+      # MultiplyBytes -Offset "" -Factor $multi # Giant Bee                           (HP: ??)   FBF8B0 -> FC0470 (Length: 0BC0) (ovl_En_Bee)
+      # MultiplyBytes -Offset "" -Factor $multi # Nejiron                             (HP: ??)   EA4BD0 -> EA6030 (Length: 1460) (ovl_En_Baguo)
+      # MultiplyBytes -Offset "" -Factor $multi # Dragonfly                           (HP: ??)   E18FF0 -> E1BE80 (Length: 2E90) (ovl_En_Grasshopper)
+      # MultiplyBytes -Offset "" -Factor $multi # Skullfish                           (HP: ??)   EDB9F0 -> EDD810 (Length: 1E20) (ovl_En_Pr2)
+      # MultiplyBytes -Offset "" -Factor $multi # Desbreko                            (HP: ??)   E9BD60 -> E9D650 (Length: 18F0) (ovl_En_Pr)
+      # MultiplyBytes -Offset "" -Factor $multi # Death Armos                         (HP: ??)   D26B30 -> D28AD0 (Length: 1FA0) (ovl_En_Famos)
+      # MultiplyBytes -Offset "" -Factor $multi # Hiploop                             (HP: ??)   F831B0 -> F86E00 (Length: 3C50) (ovl_En_Pp)
+      # MultiplyBytes -Offset "" -Factor $multi # Deep Python                         (HP: ??)   FC3A10 -> FC5C50 (Length: 2240) (ovl_En_Dragon)
+      # MultiplyBytes -Offset "" -Factor $multi # Bio Deku Baba                       (HP: ??)   E596F0 -> E5D320 (Length: 3C30) (ovl_Boss_05)
 
-      # ChangeBytes -Offset "" -Values $multiplier -Multiply -IsDec # Leever                    (Green)   (HP: 04)   FE1A10 -> FE3AB0 (Length: 20A0) (ovl_En_Neo_Reeba)
-      # ChangeBytes -Offset "" -Values $multiplier -Multiply -IsDec # Leever                    (Purple)  (HP: 14)
-      # ChangeBytes -Offset "" -Values $multiplier -Multiply -IsDec # Ghost                               (HP: ??)    ->  (Length: ) (ovl_En_??)
-      # ChangeBytes -Offset "" -Values $multiplier -Multiply -IsDec # Garo                                (HP: ??)   E20590 -> E24200 (Length: 3C70) (ovl_En_Jso)
-      # ChangeBytes -Offset "" -Values $multiplier -Multiply -IsDec # Giant Bee                           (HP: ??)   FBF8B0 -> FC0470 (Length: 0BC0) (ovl_En_Bee)
-      # ChangeBytes -Offset "" -Values $multiplier -Multiply -IsDec # Nejiron                             (HP: ??)   EA4BD0 -> EA6030 (Length: 1460) (ovl_En_Baguo)
-      # ChangeBytes -Offset "" -Values $multiplier -Multiply -IsDec # Dragonfly                           (HP: ??)   E18FF0 -> E1BE80 (Length: 2E90) (ovl_En_Grasshopper)
-      # ChangeBytes -Offset "" -Values $multiplier -Multiply -IsDec # Skullfish                           (HP: ??)   EDB9F0 -> EDD810 (Length: 1E20) (ovl_En_Pr2)
-      # ChangeBytes -Offset "" -Values $multiplier -Multiply -IsDec # Desbreko                            (HP: ??)   E9BD60 -> E9D650 (Length: 18F0) (ovl_En_Pr)
-      # ChangeBytes -Offset "" -Values $multiplier -Multiply -IsDec # Death Armos                         (HP: ??)   D26B30 -> D28AD0 (Length: 1FA0) (ovl_En_Famos)
-      # ChangeBytes -Offset "" -Values $multiplier -Multiply -IsDec # Hiploop                             (HP: ??)   F831B0 -> F86E00 (Length: 3C50) (ovl_En_Pp)
-      # ChangeBytes -Offset "" -Values $multiplier -Multiply -IsDec # Deep Python                         (HP: ??)   FC3A10 -> FC5C50 (Length: 2240) (ovl_En_Dragon)
-      # ChangeBytes -Offset "" -Values $multiplier -Multiply -IsDec # Bio Deku Baba                       (HP: ??)   E596F0 -> E5D320 (Length: 3C30) (ovl_Boss_05)
-
-      # ChangeBytes -Offset "DA556F" -Values $multiplier -Multiply -IsDec; ChangeBytes -Offset "DA6E67" -Values $multiplier -Multiply -IsDec # Freezard
-      # ChangeBytes -Offset "D21870" -Values $multiplier -Multiply -IsDec # Skulltula
-      # ChangeBytes -Offset "D2B2F8" -Values $multiplier -Multiply -IsDec # Armos (alt: D2B29E)
+      # MultiplyBytes -Offset "DA556F" -Factor $multi; ChangeBytes -Offset "DA6E67" -Factor $multi # Freezard
+      # MultiplyBytes -Offset "D21870" -Factor $multi; ChangeBytes -Offset "CF56BC" -Factor $multi # Skulltula, Keese
+      # MultiplyBytes -Offset "D2B2F8" -Factor $multi # Armos (alt: D2B29E)
     }
 
     if (IsIndex -Elem $Redux.Hero.MiniBossHP -Index 3 -Not) { # Mini-Bosses
-        if (IsIndex -Elem $Redux.Hero.MiniBossHP)   { $multiplier = 0   }
-        else                                        { [float]$multiplier = [float]$Redux.Hero.MiniBossHP.text.split('x')[0] }
+        if (IsIndex -Elem $Redux.Hero.MiniBossHP)   { $multi = 0   }
+        else                                        { [float]$multi = [float]$Redux.Hero.MiniBossHP.text.split('x')[0] }
 
-        ChangeBytes -Offset "CE718B"  -Values $multiplier -Multiply -IsDec; ChangeBytes -Offset "CE7DB8" -Values $multiplier -Multiply -IsDec # Gekko & Snapper (Gekko)
-        ChangeBytes -Offset "E9329C"  -Values $multiplier -Multiply -IsDec; ChangeBytes -Offset "D6A48C" -Values $multiplier -Multiply -IsDec # Gekko & Snapper (Snapper), Gekko & Mad Jelly
-        ChangeBytes -Offset "F82D9C"  -Values $multiplier -Multiply -IsDec; ChangeBytes -Offset "F7F873" -Values $multiplier -Multiply -IsDec # Poe Sisters
-        ChangeBytes -Offset "D18554"  -Values $multiplier -Multiply -IsDec # Dinolfos
-        ChangeBytes -Offset "10785BC" -Values $multiplier -Multiply -IsDec # Takkuri
-        ChangeBytes -Offset "E57387"  -Values $multiplier -Multiply -IsDec # Wart
-        ChangeBytes -Offset "FCA1BC"  -Values $multiplier -Multiply -IsDec # Big Poe
-        ChangeBytes -Offset "D43C10"  -Values $multiplier -Multiply -IsDec # Gomess
-        ChangeBytes -Offset "D9F210"  -Values $multiplier -Multiply -IsDec # Iron Knuckle (phase 1, phase 2 unknown, D9C9C0-> D9F5E0 Length: 2C20 File: ovl_En_Ik)
+        ChangeBytes -Offset "E57387" -Factor $multi; ChangeBytes -Offset "FCA1BC"  -Factor $multi; ChangeBytes -Offset "D43C10" -Factor $multi # Wart, Big Poe, Gomess
+        ChangeBytes -Offset "CE718B" -Factor $multi; ChangeBytes -Offset "CE7DB8"  -Factor $multi # Gekko & Snapper (Gekko)
+        ChangeBytes -Offset "E9329C" -Factor $multi; ChangeBytes -Offset "D6A48C"  -Factor $multi # Gekko & Snapper (Snapper), Gekko & Mad Jelly
+        ChangeBytes -Offset "F82D9C" -Factor $multi; ChangeBytes -Offset "F7F873"  -Factor $multi # Poe Sisters
+        ChangeBytes -Offset "D18554" -Factor $multi; ChangeBytes -Offset "10785BC" -Factor $multi # Dinolfos, Takkuri
+        ChangeBytes -Offset "D9F210" -Factor $multi # Iron Knuckle (phase 1, phase 2 unknown, D9C9C0-> D9F5E0 Length: 2C20 File: ovl_En_Ik)
 
-      # ChangeBytes -Offset -Values $multiplier -Multiply -IsDec # Wizzrobe                               (HP: ??)   EAEE40  -> EB2AC0  (Length: 3C80) (ovl_En_Wiz)
-      # ChangeBytes -Offset -Values $multiplier -Multiply -IsDec # Garo Master                            (HP: ??)   E20590  -> E24200  (Length: 3C70) (ovl_En_jso2)
-      # ChangeBytes -Offset -Values $multiplier -Multiply -IsDec # Eyegore                                (HP: ??)   EE43E0  -> EE8C20  (Length: 4840) (ovl_En_Egol)
-      # ChangeBytes -Offset -Values $multiplier -Multiply -IsDec # Gerudo Pirate                          (HP: ??)   FEA700  -> FF0440  (Length: 5D40) (ovl_En_Kaizoku)
-      # ChangeBytes -Offset -Values $multiplier -Multiply -IsDec # Captain Keeta                          (HP: ??)   105ABA0 -> 105C460 (Length: 18C0) (ovl_En_Osk)
-      # ChangeBytes -Offset -Values $multiplier -Multiply -IsDec # Igos du Ikana                          (HP: ??)   E24DA0  -> E31C80  (Length: CEE0) (ovl_En_Knight)
-      # ChangeBytes -Offset -Values $multiplier -Multiply -IsDec # King's Lackeys                         (HP: ??)   ??????  -> ??????  (Length: ????) (ovl_En_??)
+      # MultiplyBytes -Offset -Factor $multi # Wizzrobe                               (HP: ??)   EAEE40  -> EB2AC0  (Length: 3C80) (ovl_En_Wiz)
+      # MultiplyBytes -Offset -Factor $multi # Garo Master                            (HP: ??)   E20590  -> E24200  (Length: 3C70) (ovl_En_jso2)
+      # MultiplyBytes -Offset -Factor $multi # Eyegore                                (HP: ??)   EE43E0  -> EE8C20  (Length: 4840) (ovl_En_Egol)
+      # MultiplyBytes -Offset -Factor $multi # Gerudo Pirate                          (HP: ??)   FEA700  -> FF0440  (Length: 5D40) (ovl_En_Kaizoku)
+      # MultiplyBytes -Offset -Factor $multi # Captain Keeta                          (HP: ??)   105ABA0 -> 105C460 (Length: 18C0) (ovl_En_Osk)
+      # MultiplyBytes -Offset -Factor $multi # Igos du Ikana                          (HP: ??)   E24DA0  -> E31C80  (Length: CEE0) (ovl_En_Knight)
+      # MultiplyBytes -Offset -Factor $multi # King's Lackeys                         (HP: ??)   ??????  -> ??????  (Length: ????) (ovl_En_??)
     }
 
     if (IsIndex -Elem $Redux.Hero.BossHP -Index 3 -Not) { # Bosses
-        if (IsIndex -Elem $Redux.Hero.BossHP)   { $multiplier = 0   }
-        else                                    { [float]$multiplier = [float]$Redux.Hero.MiniBossHP.text.split('x')[0] }
+        if (IsIndex -Elem $Redux.Hero.BossHP)   { $multi = 0   }
+        else                                    { [float]$multi = [float]$Redux.Hero.MiniBossHP.text.split('x')[0] }
 
-        ChangeBytes -Offset "F73D90" -Values $multiplier -Multiply -IsDec; ChangeBytes -Offset "F6BF37" -Values $multiplier -Multiply -IsDec # Goht (phase 3 missing, file: Boss_Hakugin)
-        ChangeBytes -Offset "E60633" -Values $multiplier -Multiply -IsDec; ChangeBytes -Offset "E6B20B" -Values $multiplier -Multiply -IsDec # Majora's Mask (phase 1), Majora's Mask (phase 2)
-        ChangeBytes -Offset "E60743" -Values $multiplier -Multiply -IsDec; ChangeBytes -Offset "E606AB" -Values $multiplier -Multiply -IsDec # Majora's Incarnation, Majora's Wrath
-        ChangeBytes -Offset "E424E7" -Values $multiplier -Multiply -IsDec # Odolwa
-        ChangeBytes -Offset "E50D33" -Values $multiplier -Multiply -IsDec # Gyorg (phase 2 missing, file: Boss_03)
-        ChangeBytes -Offset "E4A607" -Values $multiplier -Multiply -IsDec # Twinmold
-        ChangeBytes -Offset "E6FA2F" -Values $multiplier -Multiply -IsDec # Four Remains
+        MultiplyBytes -Offset "F73D90" -Factor $multi; MultiplyBytes -Offset "F6BF37" -Factor $multi # Goht (phase 3 missing, file: Boss_Hakugin)
+        MultiplyBytes -Offset "E60633" -Factor $multi; MultiplyBytes -Offset "E6B20B" -Factor $multi # Majora's Mask (phase 1), Majora's Mask (phase 2)
+        MultiplyBytes -Offset "E60743" -Factor $multi; MultiplyBytes -Offset "E606AB" -Factor $multi # Majora's Incarnation, Majora's Wrath
+        MultiplyBytes -Offset "E424E7" -Factor $multi # Odolwa
+        MultiplyBytes -Offset "E50D33" -Factor $multi # Gyorg (phase 2 missing, file: Boss_03)
+        MultiplyBytes -Offset "E4A607" -Factor $multi # Twinmold
+        MultiplyBytes -Offset "E6FA2F" -Factor $multi # Four Remains
     }
 
     if (IsIndex -Elem $Redux.Hero.DamageEffect -Not) {

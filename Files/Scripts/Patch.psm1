@@ -133,13 +133,13 @@ function SetHeader([Array]$Header, [string]$ROMTitle, [string]$ROMGameID, [strin
 #==============================================================================================================================================================================================
 function MainFunctionPatch([string]$Command, [Array]$Header, [string]$PatchedFileName) {
     
-    # Step 00: Prepare for patching
+    # Step 01: Prepare for patching
     WriteDebug -Command $Command -Header $Header -PatchedFileName $PatchedFileName
     if ($Settings.Debug.Stop -eq $True) { return $False }
     WriteToConsole "START PATCHING PROCESS OF SELECTED GAME"
     WriteToConsole
 
-    # Step 01: Disable the main dialog, allow patching and delete files if they still exist and redirect to the neccesary folders
+    # Step 02: Disable the main dialog, allow patching and delete files if they still exist and redirect to the neccesary folders
     EnableGUI $False
     if ($Settings.Core.LocalTempFolder -eq $True) { $GameFiles.extracted = $GameFiles.base + "\Extracted" }
     else {
@@ -148,62 +148,67 @@ function MainFunctionPatch([string]$Command, [Array]$Header, [string]$PatchedFil
     }
     CreatePath $Paths.Temp
 
-    # Only continue with these steps in VC WAD mode, otherwise ignore these steps
+    # Step 03: Unpack archive
+    if (!(Unpack $PatchedFileName)) { return }
+
+    # Step 04: Only continue with these steps in VC WAD mode, otherwise ignore these steps
     if ($IsWiiVC) {
-        if (!(ExtractWADFile $PatchedFileName))                    { return }   # Step 02: Extract the contents of the WAD file
-        if (!(CheckVCGameID))                                      { return }   # Step 03: Check the GameID to be vanilla
-        if (!(ExtractU8AppFile $Command))                          { return }   # Step 04: Extract "00000005.app" file to get the ROM
-        if (!(PatchVCROM -Command $Command))                       { return }   # Step 05: Do some initial patching stuff for the ROM for VC WAD files
-        if (!(PatchVCEmulator $Command))                           { return }   # Step 06: Replace the Virtual Console emulator within the WAD file
+        if (!(ExtractWADFile $PatchedFileName))   { return }   # Step A: Extract the contents of the WAD file
+        if (!(CheckVCGameID))                     { return }   # Step B: Check the GameID to be vanilla
+        if (!(ExtractU8AppFile $Command))         { return }   # Step C: Extract "00000005.app" file to get the ROM
+        if (!(PatchVCROM -Command $Command))      { return }   # Step D: Do some initial patching stuff for the ROM for VC WAD files
+        if (!(PatchVCEmulator $Command))          { return }   # Step E: Replace the Virtual Console emulator within the WAD file
     }
 
-    # Step 07: Set checksum to determine downgrading & decompressing
+    # Step 05: Set checksum to determine downgrading & decompressing
     if (TestFile $GetROM.run)                                                   { $global:ROMHashSum = (Get-FileHash -Algorithm MD5 -LiteralPath $GetROM.run).Hash }
     if ($Settings.Debug.IgnoreChecksum -eq $False -and (IsSet $CheckHashsum))   { $PatchInfo.downgrade = ($ROMHashSum -ne $CheckHashSum) }
     if ($PatchInfo.downgrade)                                                   { $PatchInfo.decompress = $True }
 
-    # Step 08: Convert, compare the hashsum of the ROM and check if the maximum size is allowed
+    # Step 06: Convert, compare the hashsum of the ROM and check if the maximum size is allowed
     if (!(GetMaxSize $Command)) { return }
     if ($PatchInfo.run) {
         ConvertROM $Command
         if (!(CompareHashSums $Command)) { return }
     }
 
-    # Step 09: Downgrade and decompress the ROM if required
+    # Step 07: Downgrade and decompress the ROM if required
     if ( (StrLike -str $Command -val "Inject" -Not) -and $PatchInfo.run) {
         if (!(DecompressROM)) { return }
         $item = DowngradeROM
         if ( (IsSet $item.rom_gameID) -and !(IsSet $header[1]) ) { $header = SetHeader -Header $Header -ROMGameID $item.rom_gameID }
     }
 
+    # Step 08: Patch the ROM
     if ( !(StrLike -str $Command -val "Inject") -and !(StrLike -str $Command -val "Apply Patch") -and !(StrLike -str $Command -val "Extract") -and $PatchInfo.run) {
-        ExtractMQData                               # Step 10: Extract MQ dungeon data for OoT
-        PrePatchingAdditionalOptions                # Step 11: Apply additional options before Redux
-        PatchRedux                                  # Step 12: Apply the Redux patch
-        PatchingAdditionalOptions                   # Step 13: Apply additional options
-        if (!(PatchDecompressedROM))   { return }   # Step 14: Patch and extend the ROM file with the patch through Floating IPS
-        CompressROM                                 # Step 15: Compress the decompressed ROM if required
-        if (!(PatchCompressedROM))     { return }   # Step 16: Patch and extend the ROM file with the patch through Floating IPS
+        ExtractMQData                               # Step A: Extract MQ dungeon data for OoT
+        PrePatchingAdditionalOptions                # Step B: Apply additional options before Redux
+        PatchRedux                                  # Step C: Apply the Redux patch
+        PatchingAdditionalOptions                   # Step D: Apply additional options
+        if (!(PatchDecompressedROM))   { return }   # Step E: Patch and extend the ROM file with the patch through Floating IPS
+        CompressROM                                 # Step F: Compress the decompressed ROM if required
+        if (!(PatchCompressedROM))     { return }   # Step G: Patch and extend the ROM file with the patch through Floating IPS
     }
-    elseif (StrLike -str $Command -val "Apply Patch") { # Step 17: Compress if needed and apply provided BPS Patch
+    elseif (StrLike -str $Command -val "Apply Patch") { # Step H: Compress if needed and apply provided BPS Patch
         CompressROM
         if (!(ApplyPatchROM)) { return }
     }
     
-    if ($PatchInfo.run) { UpdateROMCRC }                                       # Step 18: Update the .Z64 ROM CRC
-    HackROMGameTitle -Title $Header[0] -GameID $Header[1] -Region $Header[4]   # Step 19: Hack the Game Title and GameID of a N64 ROM, remove the US region protection as well if applicable and neccesary
-    CreateDebugPatches                                                         # Step 20: Debug
+    # Step 09: Misc tasks
+    if ($PatchInfo.run) { UpdateROMCRC }                                       # Step A: Update the .Z64 ROM CRC
+    HackROMGameTitle -Title $Header[0] -GameID $Header[1] -Region $Header[4]   # Step B: Hack the Game Title and GameID of a N64 ROM, remove the US region protection as well if applicable and neccesary
+    CreateDebugPatches                                                         # Step C: Debug
 
-    # Only continue with these steps in VC WAD mode, otherwise ignore these steps
+    # Step 10: Only continue with these steps in VC WAD mode, otherwise ignore these steps
     if ($IsWiiVC) {
-        if ($PatchInfo.run) { ExtendROM }      # Step 21: Extend a ROM if it is neccesary for the Virtual Console. Mostly applies to decompressed ROMC files
-        if ($PatchInfo.run) { CompressROMC }   # Step 22: Compress the ROMC again if possible
-        HackOpeningBNRTitle $Header[2]         # Step 23: Hack the Channel Title.
-        RepackU8AppFile                        # Step 24: Repack the "00000005.app" with the updated ROM file 
-        RepackWADFile $Header[3]               # Step 25: Repack the WAD file with the updated APP file
+        if ($PatchInfo.run) { ExtendROM }      # Step A: Extend a ROM if it is neccesary for the Virtual Console. Mostly applies to decompressed ROMC files
+        if ($PatchInfo.run) { CompressROMC }   # Step B: Compress the ROMC again if possible
+        HackOpeningBNRTitle $Header[2]         # Step C: Hack the Channel Title.
+        RepackU8AppFile                        # Step D: Repack the "00000005.app" with the updated ROM file 
+        RepackWADFile $Header[3]               # Step E: Repack the WAD file with the updated APP file
     }
 
-    # Step 26: Final message
+    # Step 11: Final message
     if (!$WarningError) {
         if ($IsWiiVC)   { UpdateStatusLabel ('Finished patching the ' + $GameType.mode + ' VC WAD file.') }
         else            { UpdateStatusLabel ('Finished patching the ' + $GameType.mode + ' ROM file.') }
@@ -302,6 +307,35 @@ function Cleanup() {
     RemoveFile $Files.stackdump
 
     [System.GC]::Collect() | Out-Null
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function Unpack([string]$PatchedFileName) {
+    
+    $Ext = (Get-Item $GamePath).Extension
+
+    if ($Ext -ne ".zip" -and $Ext -ne ".rar" -and $Ext -ne ".7z") { return $True }
+
+    $path = $paths.Temp + "\archive"
+    RemovePath $path
+    UpdateStatusLabel "Unpacking ROM Archive..."
+    try {
+        & $Files.tool.zip e $GamePath ("-o" + $path)
+        $file = $null
+        Get-ChildItem -Path $path -File -Name | ForEach-Object {
+            $Ext = [System.IO.Path]::GetExtension($_)
+            if ($Ext -eq '.z64' -or $Ext -eq '.n64' -or $Ext -eq '.v64' -or $Ext -eq '.sfc' -or $Ext -eq '.smc' -or $Ext -eq '.nes' -or $Ext -eq '.gbc') { $file = ($path + "\" + [System.IO.Path]::GetFileName($_)) }
+        }
+        if ($file -eq $null) { return $False }
+        $ROMFile.ROM = $file
+        SetGetROM
+    }
+    catch { return $False }
+
+    return $True
 
 }
 
