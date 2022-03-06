@@ -1,3 +1,27 @@
+function PerformUpdate() {
+    
+    $Files.json.repo = SetJSONFile ($Paths.Master + "\repo.json")
+    if (IsSet $Settings.Core) {
+        if ($Settings.Core.DisableUpdates -ne $True) { AutoUpdate }
+        if ($Settings.Core.DisableAddons -ne $True) {
+            foreach ($addon in $Files.json.repo.addons) {
+                CheckAddon  -Title $addon.title
+                UpdateAddon -Title $addon.title -Uri $addon.uri -Version $addon.version }
+        }
+    }
+    else {
+        AutoUpdate
+        foreach ($addon in $Files.json.repo.addons) {
+            CheckAddon  -Title $addon.title
+            UpdateAddon -Title $addon.title -Uri $addon.uri -Version $addon.version
+        }
+    }
+
+}
+
+
+
+#==============================================================================================================================================================================================
 function InvokeWebRequest([string]$Uri, [String]$OutFile) {
     
     $ProgressPreference = 'SilentlyContinue'

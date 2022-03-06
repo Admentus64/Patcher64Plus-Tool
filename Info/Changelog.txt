@@ -1,3 +1,8 @@
+v17.2.3
+- Updated Redux for "A Link to the Past" to v9.3
+- Updated Auto-Updater
+- Fixed Rupee Quantity options for OoT
+
 v17.2.2
 - Added Item Drops Quantity options for OoT
 - Added support for extracting zipped ROM files prior to patching

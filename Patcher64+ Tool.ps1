@@ -231,12 +231,8 @@ $Fonts.Editor         = New-Object System.Drawing.Font("Consolas", 16, [System.D
 # Hide the PowerShell console from the user
 ShowPowerShellConsole ($Settings.Debug.Console -eq $True)
 
-$Files.json.repo = SetJSONFile ($Paths.Master + "\repo.json")
-if ($Settings.Core.DisableUpdates -ne $True) { AutoUpdate }
-foreach ($addon in $Files.json.repo.addons) {
-    CheckAddon  -Title $addon.title
-    if ($Settings.Core.DisableAddons -ne $True) { UpdateAddon -Title $addon.title -Uri $addon.uri -Version $addon.version }
-}
+# Auto-Updater
+PerformUpdate
 
 # Ask for default interface mode on first time use
 if ($Settings.Core.Interface -ne 1 -and $Settings.Core.Interface -ne 2 -and $Settings.Core.Interface -ne 3 -and !$FatalError) {

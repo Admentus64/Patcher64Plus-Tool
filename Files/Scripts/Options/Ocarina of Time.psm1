@@ -664,7 +664,7 @@ function ByteOptions() {
     # WALLET CAPACITY #
     
     if (IsChecked $Redux.Capacity.EnableWallet) {
-        $Wallet1 = Get16Bit ($Redux.Capacity.Wallet1.Text); $Wallet2 = Get16Bit ($Redux.Capacity.Wallet2.Text); $Wallet3 = Get16Bit ($Redux.Capacity.Wallet3.Text); $Wallet4 = Get16Bit ($Redux.Capacity.Wallet4.Text)
+        $Wallet1 = Get16Bit $Redux.Capacity.Wallet1.Text; $Wallet2 = Get16Bit $Redux.Capacity.Wallet2.Text; $Wallet3 = Get16Bit $Redux.Capacity.Wallet3.Text; $Wallet4 = Get16Bit $Redux.Capacity.Wallet4.Text
         ChangeBytes -Offset "B6EC4C" -Values @($Wallet1.Substring(0, 2), $Wallet1.Substring(2) )
         ChangeBytes -Offset "B6EC4E" -Values @($Wallet2.Substring(0, 2), $Wallet2.Substring(2) )
         ChangeBytes -Offset "B6EC50" -Values @($Wallet3.Substring(0, 2), $Wallet3.Substring(2) )
@@ -691,8 +691,15 @@ function ByteOptions() {
         ChangeBytes -Offset "AE675B" -IsDec -Values $Redux.Capacity.DekuSticks.Text
         ChangeBytes -Offset "B6D4C9" -IsDec -Values ($Redux.Capacity.Bombs1x.Text,    $Redux.Capacity.Bombs2x.Text,  $Redux.Capacity.Bombs3x.Text, $Redux.Capacity.Bombs4x.Text) -Interval 2
         ChangeBytes -Offset "B6D4D9" -IsDec -Values ($Redux.Capacity.DekuNuts1x.Text, $Redux.Capacity.DekuNuts2x.Text)                                                           -Interval 2
-        $RupeeG = Get16Bit ($Redux.Capacity.RupeeG.Text); $RupeeB = Get16Bit ($Redux.Capacity.RupeeB.Text); $RupeeR = Get16Bit ($Redux.Capacity.RupeeR.Text); $RupeeP = Get16Bit ($Redux.Capacity.RupeeP.Text); $RupeeO = Get16Bit ($Redux.Capacity.RupeeO.Text)
-        ChangeBytes -Offset "B6D4DC" -IsDec -Values @($RupeeR, $RupeeB, $RupeeR, $RupeeP, $RupeeO)                                                                               -Interval 2
+        $RupeeG = Get16Bit $Redux.Capacity.RupeeG.Text; $RupeeB = Get16Bit $Redux.Capacity.RupeeB.Text; $RupeeR = Get16Bit $Redux.Capacity.RupeeR.Text; $RupeeP = Get16Bit $Redux.Capacity.RupeeP.Text; $RupeeO = Get16Bit $Redux.Capacity.RupeeO.Text
+        
+        Write-Host $RupeeG   $RupeeG.Substring(0, 2)   $RupeeG.Substring(2)
+        Write-Host $RupeeB   $RupeeB.Substring(0, 2)   $RupeeB.Substring(2)
+        Write-Host $RupeeR   $RupeeR.Substring(0, 2)   $RupeeR.Substring(2)
+        Write-Host $RupeeP   $RupeeP.Substring(0, 2)   $RupeeP.Substring(2)
+        Write-Host $RupeeO   $RupeeO.Substring(0, 2)   $RupeeO.Substring(2)
+
+        ChangeBytes -Offset "B6D4DC" -Values @($RupeeG.Substring(0, 2), $RupeeG.Substring(2), $RupeeB.Substring(0, 2), $RupeeB.Substring(2), $RupeeR.Substring(0, 2), $RupeeR.Substring(2), $RupeeP.Substring(0, 2), $RupeeP.Substring(2), $RupeeO.Substring(0, 2), $RupeeO.Substring(2) )
     }
 
 

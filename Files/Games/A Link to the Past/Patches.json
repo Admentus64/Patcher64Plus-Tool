@@ -2,7 +2,7 @@
 	"title"		: "A Link to the Past",
 	"redux" : {
 		"options"	: 1,
-		"vc_title"	: "ALTTP Redux (v9.2)",
+		"vc_title"	: "ALTTP Redux (v9.3)",
 		"vc_gameID"	: "JAD0",
 		"file"		: "Compressed\\redux.ips",
 		"file_v2"	: "Compressed\\redux_new_gfx.ips",
