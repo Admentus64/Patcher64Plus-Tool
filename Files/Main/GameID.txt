@@ -102,21 +102,22 @@ F2DC6C4E093E4F8C6CBEA80E8DBD62CB	(Rev 0)
 
 
 --- UNOFFICIAL WII VC GAMEID'S (ROM Hacks) ---
-- NAC0		Ocarina of Time REDUX
-- NZCE		GZ Practice ROM
-- NAC1		Ocarina of Time: The Missing Link
-- NAC2		Ocarina of Time: Dawn & Dusk
-- NAC3		Ocarina of Time: Master of Time
-- NAC4		Ocarina of Time: Nimpize Adventure
-- NAC5		Ocarina of Time: The Fate of the Bombiwa
-- NAC6		Ocarina of Time Puzzling
+- NAC0		Redux: Ocarina				The Legend of Zelda: Ocarina of Time REDUX
+- NZCE		Zelda: GZ Practice ROM			GZ Practice ROM
+- NAC1		Zelda: The Missing Link			The Legend of Zelda: The Missing Link
+- NAC2		Zelda: Dawn & Dusk			The Legend of Zelda: Dawn & Dusk
+- NAC3		Zelda: Master of Time			The Legend of Zelda: Master of Time
+- NAC4		Zelda: Nimpize				The Legend of Zelda: Nimpize Adventure
+- NAC5		Zelda: Bombiwa				The Legend of Zelda: The Fate of the Bombiwa
+- NAC6		Zelda: Puzzling				Ocarina of Time Puzzling
+- NAC7		Zelda: Pots Challenge			Pots Challenge
+- NAC8		Zelda: Gold Quest			The Legend of Zelda: Gold Quest
 
-
-- NAR0		Majora's Mask REDUX
-- NG2E		KZ Practice ROM
-- NG2E		KZ Practice ROM (Lite)
-- NURE		Majora's Mask: Masked Quest
-- NAR1		Majora's Mask: Master Quest
+- NAR0		Redux: Majora's				The Legend of Zelda: Majora's Mask REDUX
+- NG2E		Zelda: KZ Practice ROM			KZ Practice ROM
+- NG2E		Zelda: KZ Practice ROM 			KZ Practice ROM (Lite)
+- NURE		Zelda: Masked Quest			Majora's Mask: Masked Quest
+- NAR1		Zelda: Master Quest			Majora's Mask: Master Quest
 
 - NAAM		Super Mario 64: Multiplayer v1.4.2
 - NAA0		Super Mario: Star Road

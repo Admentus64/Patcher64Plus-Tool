@@ -1,8 +1,8 @@
 ﻿function MainFunction([string]$Command, [string]$PatchedFileName) {
     
     # Reset variables
-    $global:WarningError = $False
-    $global:PatchInfo = @{}
+    $global:WarningError  = $False
+    $global:PatchInfo     = @{}
     $PatchInfo.decompress = $False
     $PatchInfo.downgrade  = $False
     $PatchInfo.finalize   = $True
@@ -84,7 +84,14 @@
     }
     
     # Set ROM
-    if ($GameType.checksum -ne 0) { $global:CheckHashSum = $GameType.version[0].hash }
+    if ($GameType.checksum -ne 0) {
+        foreach ($rev in $GameType.version) {
+            if ($rev.list -eq $CurrentGame.Rev.Text) {
+                $global:CheckHashSum = $rev.hash
+                break
+            }
+        }
+    }
     if ( (IsSet -Elem $InjectFile -MinLength 4) -and $IsWiiVC) { $global:ROMFile = SetROMParameters -Path $InjectPath -PatchedFileName $PatchedFileName }
     if (!$IsWiiVC) {
         $global:ROMFile = SetROMParameters -Path $GamePath -PatchedFileName $PatchedFileName
@@ -161,8 +168,8 @@ function MainFunctionPatch([string]$Command, [Array]$Header, [string]$PatchedFil
     }
 
     # Step 05: Set checksum to determine downgrading & decompressing
-    if (TestFile $GetROM.run)                                                   { $global:ROMHashSum = (Get-FileHash -Algorithm MD5 -LiteralPath $GetROM.run).Hash }
-    if ($Settings.Debug.IgnoreChecksum -eq $False -and (IsSet $CheckHashsum))   { $PatchInfo.downgrade = ($ROMHashSum -ne $CheckHashSum) }
+    if (TestFile $GetROM.run)                                                   { $global:ROMHashSum    = (Get-FileHash -Algorithm MD5 -LiteralPath $GetROM.run).Hash }
+    if ($Settings.Debug.IgnoreChecksum -eq $False -and (IsSet $CheckHashsum))   { $PatchInfo.downgrade  = ($ROMHashSum -ne $CheckHashSum) }
     if ($PatchInfo.downgrade)                                                   { $PatchInfo.decompress = $True }
 
     # Step 06: Convert, compare the hashsum of the ROM and check if the maximum size is allowed
@@ -442,10 +449,9 @@ function UpdateROMCRC() {
     & $Files.tool.rn64crc $GetROM.patched -update | Out-Null
     WriteToConsole ("Updated CRC hash for ROM: " + $GetROM.patched)
 
-    if ($Settings.Debug.KeepConverted -eq $True -and (TestFile $GetROM.keepConvert) )      { & $Files.tool.rn64crc $GetROM.keepConvert -update | Out-Null;   WriteToConsole ("Updated CRC hash for ROM: " + $GetROM.keepConvert) }
-    if ($Settings.Debug.KeepDowngraded -eq $True -and (TestFile $GetROM.keepDowngrade) )   { & $Files.tool.rn64crc $GetROM.keepDowngrade -update | Out-Null; WriteToConsole ("Updated CRC hash for ROM: " + $GetROM.keepDowngrade) }
-    if ($Settings.Debug.KeepDecompressed -eq $True -and (TestFile $GetROM.keepDecomp) )    { & $Files.tool.rn64crc $GetROM.keepDecomp -update | Out-Null;    WriteToConsole ("Updated CRC hash for ROM: " + $GetROM.keepDecomp) }
-
+    if ($Settings.Debug.KeepConverted    -eq $True -and (TestFile $GetROM.keepConvert)   )   { & $Files.tool.rn64crc $GetROM.keepConvert   -update | Out-Null; WriteToConsole ("Updated CRC hash for ROM: " + $GetROM.keepConvert)   }
+    if ($Settings.Debug.KeepDowngraded   -eq $True -and (TestFile $GetROM.keepDowngrade) )   { & $Files.tool.rn64crc $GetROM.keepDowngrade -update | Out-Null; WriteToConsole ("Updated CRC hash for ROM: " + $GetROM.keepDowngrade) }
+    if ($Settings.Debug.KeepDecompressed -eq $True -and (TestFile $GetROM.keepDecomp)    )   { & $Files.tool.rn64crc $GetROM.keepDecomp   -update  | Out-Null; WriteToConsole ("Updated CRC hash for ROM: " + $GetROM.keepDecomp)    }
 
 }
 

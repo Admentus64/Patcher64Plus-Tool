@@ -251,6 +251,9 @@ https://github.com/DaruniasJoy/OoT-Custom-Sequences
 - Rogue_Millipede
 - DezZival
 
+--- Gold Quest ---
+- AndiiSyn
+
 --- Spaceworld ´97 Experience ---
 - Main Programming:			Zel, Fig, MrCheeze
 - Additional Programming:		Tharo, louist103, Aegiker, CDi-Fails, Rankaisija, MelonSpeedruns

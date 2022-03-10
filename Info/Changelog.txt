@@ -1,3 +1,8 @@
+v17.2.4
+- Added new "Gold Quest" ROM hack for OoT
+- Improved detection for downgrading
+- Changed some GameIDs and titles for patches
+
 v17.2.3
 - Updated Redux for "A Link to the Past" to v9.3
 - Updated Auto-Updater

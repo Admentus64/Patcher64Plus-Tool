@@ -1,6 +1,6 @@
 [ {
 	"title"				: "Redux Plus",
-	"vc_title"			: "Redux: Ocarina of Time",
+	"vc_title"			: "Redux: Ocarina",
 	"finalize"			: 0,
 	"patch" : [ {
 		"file"			: "Decompressed\\Redux\\redux_plus.bps",
@@ -15,7 +15,7 @@
 	"tooltip"			: "The definitive Ocarina of Time experience{0}Includes Redux with a series of Quality of Life changes and fixes"
 }, {
 	"title"				: "Redux Plus (Master Quest)",
-	"vc_title"			: "Redux: Ocarina of Time",
+	"vc_title"			: "Redux: Ocarina",
 	"finalize"			: 0,
 	"patch" : [ {
 		"file"			: "Decompressed\\Redux\\redux_plus_mq.bps",
@@ -82,7 +82,6 @@
 	"tooltip"			: "A trainer / practice / testing utility for The Legend of Zelda: Ocarina of Time{0}Formally known by its codename 'gz', but generally referred to as 'The Practice ROM'"
 }, {
 	"title"				: "The Legend of Zelda: The Missing Link (v2.0)",
-	"command"			: "Force Downgrade",
 	"expand_memory"			: 1,
 	"vc_title"			: "Zelda: The Missing Link",
 	"vc_gameID"			: "NAC1",
@@ -111,7 +110,6 @@
 	"tooltip"			: "A small-sized ROM hack in a completely new setting"
 }, {
 	"title"				: "The Legend of Zelda: Master of Time (v1.0.9)",
-	"command"			: "Force Downgrade",
 	"vc_title"			: "Zelda: Master of Time",
 	"vc_gameID"			: "NAC3",
 	"patch" : [ {
@@ -122,7 +120,6 @@
 	"tooltip"			: "A small-sized ROM hack in a completely new setting"
 }, {
 	"title"				: "The Legend of Zelda: Nimpize Adventure",
-	"command"			: "Force Downgrade",
 	"vc_title"			: "Zelda: Nimpize",
 	"vc_gameID"			: "NAC4",
 	"patch"	: [ {
@@ -133,7 +130,6 @@
 	"tooltip"			: "A reworked and harder version of Ocarina of Time with remixed dungeons"
 }, {
 	"title"				: "The Legend of Zelda: The Fate of the Bombiwa (v1.0.3)",
-	"command"			: "Force Downgrade",
 	"vc_title"			: "Zelda: Bombiwa",
 	"vc_gameID"			: "NAC5",
 	"patch" : [ {
@@ -144,7 +140,6 @@
 	"tooltip"			: "A small-sized ROM hack in a completely new setting, and extremely tricky and difficult"
 }, {
 	"title"				: "Ocarina of Time Puzzling (v1.1.2)",
-	"command"			: "Force Downgrade",
 	"vc_title"			: "Zelda: Puzzling",
 	"vc_gameID"			: "NAC6",
 	"patch"	: [ {
@@ -155,7 +150,6 @@
 	"tooltip"			: "A small-sized ROM hack that focuses on puzzling your way through"
 }, {
 	"title"				: "Pots Challenge",
-	"command"			: "Force Downgrade",
 	"vc_title"			: "Zelda: Pots Challenge",
 	"vc_gameID"			: "NAC7",
 	"patch" : [ {
@@ -164,6 +158,17 @@
 	} ],
 	"output"			: "_pots_challenge_patched",
 	"tooltip"			: "Replay though the original Ocarina of Time by throwing pots only at your targets"
+}, {
+	"title"				: "The Legend of Zelda: Gold Quest",
+	"finalize"			: 0,
+	"vc_title"			: "Zelda: Gold Quest",
+	"vc_gameID"			: "NAC8",
+	"patch" : [ {
+		"file"			: "Decompressed\\gold_quest.bps",
+		"rev"			: "57A9719AD547C516342E1A15D5C28C3D"
+	} ],
+	"output"			: "_gold_quest_patched",
+	"tooltip"			: "Remixes the overworld and dungeons as a harder version of master Quest"
 }, {
 	"title"				: "The Helix Blade (Demo)",
 	"console"			: "Native",
