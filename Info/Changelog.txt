@@ -1,3 +1,8 @@
+v17.2.5
+- Added OS info and check
+- Changed logging to have a max of 10 log files
+- Changed logging to only create a new log per date (reruns are added to today's log file)
+
 v17.2.4
 - Added new "Gold Quest" ROM hack for OoT
 - Improved detection for downgrading

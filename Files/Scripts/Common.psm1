@@ -207,7 +207,7 @@ function SetMainScreenSize() {
     else            { $CustomHeader.Group.Text = " Custom Game Title and GameID " }
 
     # Set Paths Panels Visibility and sizes
-    $InputPaths.GamePanel.Top = (DPISize 70)
+    $InputPaths.GamePanel.Top = (DPISize 80)
 
     if ($GameType.inject -eq 1 -and $IsWiiVC) {
         $InputPaths.InjectPanel.Visible = $True
@@ -1157,9 +1157,15 @@ function SetLogging([boolean]$Enable) {
     }
 
     if ($Enable) {
-        $global:TranscriptTime = Get-Date -Format yyyy-MM-dd-HH-mm-ss
+        $global:TranscriptTime = Get-Date -Format yyyy-MM-dd
         if (!(TestFile -Path $Paths.Logs -Container)) { CreatePath $Paths.Logs }
-        Start-Transcript -LiteralPath ($Paths.Logs + "\" + $TranscriptTime + ".log")
+
+        $file = $Paths.Logs + "\" + $TranscriptTime + ".log"
+        if (!(TestFile $file)) { Start-Transcript -LiteralPath $file }
+        else {
+            Add-Content -LiteralPath $file -Value "`n`n`n"
+            Start-Transcript -LiteralPath $file -Append
+        }
     }
     else {
         if ($TranscriptTime -ne $null) {

@@ -32,7 +32,6 @@ $Patcher.DateFormat = "yyyy-MM-dd"
 $Patcher.Version    = "Version Missing"
 $Patcher.Hotfix     = 0
 
-
 $global:CommandType = $MyInvocation.MyCommand.CommandType.ToString()
 $global:Definition  = $MyInvocation.MyCommand.Definition.ToString()
 
@@ -42,7 +41,7 @@ $global:GameFiles          = $global:Settings       = @{}
 $global:IsWiiVC            = $global:MissingFiles   = $False
 $global:Last               = $global:Fonts          = @{}
 $global:FatalError         = $global:WarningError   = $False
-$global:SystemDate         = Get-Date -Format yyyy-MM-dd-HH-mm-ss
+$global:SystemDate         = Get-Date -Format yyyy-MM-dd
 $global:ConsoleHistory     = @()
 $global:VCTitleLength      = 40
 $global:DialogUpdateRateMS = 50
@@ -187,6 +186,11 @@ foreach ($Script in Get-ChildItem -LiteralPath $Paths.Scripts -Force) {
 # Run Patcher64+ Tool
 
 Clear-Host
+
+if ([Environment]::Is64BitOperatingSystem) { $Patcher.Bit = "x86-64" } else { $Patcher.Bit = "x86" }
+$Patcher.OS = GetWindowsVersion
+if ([Environment]::OSVersion -Match "Windows") { $Patcher.OS = "Windows " + $Patcher.OS }
+
 CheckUpdate
 
 # Retrieve settings
@@ -268,6 +272,7 @@ if (IsRestrictedFolder $Paths.FullBase) {
 }
 
 # Critical info
+WriteToConsole ("OS:             " + $Patcher.OS + " (" + $Patcher.Bit + ")")
 WriteToConsole ("Version:        " + $Patcher.Version)
 WriteToConsole ("Version Date:   " + $Patcher.Date)
 WriteToConsole ("Version Hotfix: #" + $Patcher.Hotfix)
@@ -313,12 +318,17 @@ if (!$FatalError) { $MainDialog.ShowDialog() | Out-Null }
 
 # Exit
 if (!$FatalError) {
-        Out-IniFile -FilePath $Files.settings -InputObject $Settings | Out-Null
-        if ($GameType.save -gt 0) { Out-IniFile -FilePath (GetGameSettingsFile) -InputObject $GameSettings | Out-Null }
-        RemovePath $Paths.Registry
-        SetLogging $False
-        $global:ConsoleHistory = $global:Redux = $global:Settings = $global:GeneralSettings = $global:MainDialog = $global:InputPaths = $global:Patches = $global:VC = $global:CustomHeader = $null
-    }
+    Out-IniFile -FilePath $Files.settings -InputObject $Settings | Out-Null
+    if ($GameType.save -gt 0) { Out-IniFile -FilePath (GetGameSettingsFile) -InputObject $GameSettings | Out-Null }
+    RemovePath $Paths.Registry
+    SetLogging $False
+    $global:ConsoleHistory = $global:Redux = $global:Settings = $global:GeneralSettings = $global:MainDialog = $global:InputPaths = $global:Patches = $global:VC = $global:CustomHeader = $null
+}
+
+if (TestFile -Path $Paths.Logs -Container) {
+    [System.Collections.ArrayList]$logs = (Get-ChildItem -Path $Paths.Logs -Filter "*.log" -File)
+    while ($logs.count -gt 10) { RemoveFile ($Paths.Logs + "\" + $logs[0]); $logs.RemoveAt(0) }
+}
 
 StopJobs
 if ($Relaunch) {
