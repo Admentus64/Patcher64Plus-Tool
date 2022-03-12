@@ -10,17 +10,23 @@ Patreon:	https://www.patreon.com/Admentus
 PayPal:		https://www.paypal.com/paypalme/Admentus/
 
 
---- Instructions ---
-Windows 10 and 11 users may simply run the launcher or right click the .ps1 file -> Run with PowerShell.
+--- System Requirements ---
+- 64-bit
+- PowerShell 5.1 or newer
+- Windows 7 or newer
 
 
---- Setup (Legacy OS) ---
-For users running Windows 7 or 8.1, download and install WMT 5.1 from here: https://www.microsoft.com/en-us/download/details.aspx?id=54616
-- Windows 7 (64-bit): Win7AndW2K8R2-KB3191566-x64.zip
-- Windows 8.1 (64-bit): Win8.1AndW2K12R2-KB3191564-x64.msu
-Initiate a reboot after installation is done. Running the launcher will now work.
+--- Instructions: Windows 10/11 ---
+Run the launcher or right click the .ps1 file -> Run with PowerShell.
 
-Optional: After installing WMT 5.1 and rebooting your system, download and install the latest PowerShell-x.y.z-win-x64.msi from https://github.com/PowerShell/PowerShell/releases/latest and activate "Add Run with PowerShell 7 context menu" during installation. Right click the .ps1 file -> Run with PowerShell 7 to launch Patcher64+.
+
+--- Instructions: Windows 7/8.1 ---
+Download and install WMF 5.1 from here: https://www.microsoft.com/en-us/download/details.aspx?id=54616
+- Windows 7: Win7AndW2K8R2-KB3191566-x64.zip
+- Windows 8.1: Win8.1AndW2K12R2-KB3191564-x64.msu
+Initiate a reboot after the installation is done. Running the launcher will now work.
+
+Optional: After installing WMF 5.1 and rebooting the system, download and install the latest PowerShell-x.y.z-win-x64.msi from https://github.com/PowerShell/PowerShell/releases/latest and enable "Add Run with PowerShell 7 context menu" during installation. Right click the .ps1 file -> Run with PowerShell 7.
 
 
 --- Rules for Posting Bug Reports / Issues --
@@ -85,7 +91,7 @@ a) Patching Majora's Mask, Super Smash Bros., Paper Mario requires their respect
 
 b) Free Mode and Inject ROM will not work with ROMs not meant for their console mode for the Wii's Virtual Console
 
-c) NES titles requires the console mode to be set to NES mode due to their ROM file being stored differently
+c) NES titles require the console mode to be set to NES mode due to their ROM file being stored differently
 
 
 
