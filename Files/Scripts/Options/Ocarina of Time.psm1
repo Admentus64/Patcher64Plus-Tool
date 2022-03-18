@@ -1145,21 +1145,19 @@ function ByteReduxOptions() {
     # MISC COLORS #
 
     if (IsChecked $Redux.Colors.PauseScreenColors) {
-        ChangeBytes -Offset "BBEDDA" -Values "97 8B"
-        ChangeBytes -Offset "BBEDDE" -Values "61"
-        ChangeBytes -Offset "BBF88E" -Values "97 8B"
-        ChangeBytes -Offset "BBF892" -Values "61"
-        ChangeBytes -Offset "BBF97E" -Values "97 8B"
-        ChangeBytes -Offset "BBF982" -Values "61 FF"
-        ChangeBytes -Offset "BBFC7E" -Values "FF FF"
-        ChangeBytes -Offset "BBFC82" -Values "FF"
-        ChangeBytes -Offset "BC793D" -Values "97"
-        ChangeBytes -Offset "BC793F" -Values "8B"
-        ChangeBytes -Offset "BC7941" -Values "61"
-        ChangeBytes -Offset "BC7945" -Values "97"
-        ChangeBytes -Offset "BC7947" -Values "8B"
-        ChangeBytes -Offset "BC7949" -Values "61"
-        ChangeBytes -Offset "BC7994" -Values "B4 B4 B4 B4 78 B4 B4 B4 B4 B4 B4 B4 78 B4 B4 B4 B4 B4 B4 B4 B4 B4 B4 B4 B4 B4 B4 B4 78 B4 B4 B4 B4 B4 B4 B4 78 B4 B4 B4 B4 B4 B4 B4 B4 B4 B4 B4 78 78 78 78 46 78 78 78 78 78 78 78 46 78 78 78 78 78 78 78 78 78 78 78"
+        ChangeBytes -Offset "BBF88E" -Values "97 8B" # Menu Title Background
+        ChangeBytes -Offset "BBF892" -Values "61" # Menu Title Background
+        ChangeBytes -Offset "BBF97E" -Values "97 8B" # Z
+        ChangeBytes -Offset "BBF982" -Values "61 FF" # R
+        ChangeBytes -Offset "BBFC7E" -Values "FF FF" # Unavailable Menu Title
+        ChangeBytes -Offset "BBFC82" -Values "FF" # Unavailable Menu Title
+        ChangeBytes -Offset "BC793D" -Values "97" # Z/R Highlight
+        ChangeBytes -Offset "BC793F" -Values "8B" # Z/R Highlight
+        ChangeBytes -Offset "BC7941" -Values "61" # Z/R Highlight
+        ChangeBytes -Offset "BC7945" -Values "97" # Z/R Highlight
+        ChangeBytes -Offset "BC7947" -Values "8B" # Z/R Highlight
+        ChangeBytes -Offset "BC7949" -Values "61" # Z/R Highlight
+        ChangeBytes -Offset "BC7994" -Values "B4 B4 B4 B4 78 B4 B4 B4 B4 B4 B4 B4 78 B4 B4 B4 B4 B4 B4 B4 B4 B4 B4 B4 B4 B4 B4 B4 78 B4 B4 B4 B4 B4 B4 B4 78 B4 B4 B4 B4 B4 B4 B4 B4 B4 B4 B4 78 78 78 78 46 78 78 78 78 78 78 78 46 78 78 78 78 78 78 78 78 78 78 78" # Background
     }
 
 }
