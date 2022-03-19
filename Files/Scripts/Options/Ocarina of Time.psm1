@@ -637,7 +637,27 @@ function ByteOptions() {
         }
     }
 
-    
+
+
+    # MISC COLORS #
+
+    if (IsChecked $Redux.Colors.PauseScreenColors) {
+        ChangeBytes -Offset "BBF88E" -Values "97 8B" # Menu Title Background
+        ChangeBytes -Offset "BBF892" -Values "61" # Menu Title Background
+        ChangeBytes -Offset "BBF97E" -Values "97 8B" # Z
+        ChangeBytes -Offset "BBF982" -Values "61 FF" # R
+        ChangeBytes -Offset "BBFC7E" -Values "FF FF" # Unavailable Menu Title
+        ChangeBytes -Offset "BBFC82" -Values "FF" # Unavailable Menu Title
+        ChangeBytes -Offset "BC793D" -Values "97" # Z/R Highlight
+        ChangeBytes -Offset "BC793F" -Values "8B" # Z/R Highlight
+        ChangeBytes -Offset "BC7941" -Values "61" # Z/R Highlight
+        ChangeBytes -Offset "BC7945" -Values "97" # Z/R Highlight
+        ChangeBytes -Offset "BC7947" -Values "8B" # Z/R Highlight
+        ChangeBytes -Offset "BC7949" -Values "61" # Z/R Highlight
+        ChangeBytes -Offset "BC7994" -Values "B4 B4 B4 B4 78 B4 B4 B4 B4 B4 B4 B4 78 B4 B4 B4 B4 B4 B4 B4 B4 B4 B4 B4 B4 B4 B4 B4 78 B4 B4 B4 B4 B4 B4 B4 78 B4 B4 B4 B4 B4 B4 B4 B4 B4 B4 B4 78 78 78 78 46 78 78 78 78 78 78 78 46 78 78 78 78 78 78 78 78 78 78 78" # Background
+    }
+
+
 
     # AMMO CAPACITY #
 
@@ -765,6 +785,7 @@ function ByteOptions() {
     
 
     # HITBOX #
+
     if (IsValue -Elem $Redux.Hitbox.KokiriSword       -Not)   { ChangeBytes -Offset "B6DB18" -Values (ConvertFloatToHex $Redux.Hitbox.KokiriSword.Value) }
     if (IsValue -Elem $Redux.Hitbox.MasterSword       -Not)   { ChangeBytes -Offset "B6DB14" -Values (ConvertFloatToHex $Redux.Hitbox.MasterSword.Value) }
     if (IsValue -Elem $Redux.Hitbox.GiantsKnife       -Not)   { ChangeBytes -Offset "B6DB1C" -Values (ConvertFloatToHex $Redux.Hitbox.GiantsKnife.Value) }
@@ -775,6 +796,7 @@ function ByteOptions() {
 
 
     # UNLOCK CHILD RESTRICTIONS #
+
     if ( (IsIndex -Elem $Redux.Unlock.MegatonHammer -Index 2) -or (IsIndex -Elem $Redux.Unlock.MegatonHammer -Index 4) ) { ChangeBytes -Offset "BC77A3" -Values "09 09" -Interval 42 }
 
     if (IsChecked $Redux.Unlock.Tunics)          { ChangeBytes -Offset "BC77B6" -Values "09 09"; ChangeBytes -Offset "BC77FE" -Values "09 09" }
@@ -1138,26 +1160,6 @@ function ByteReduxOptions() {
     if (IsChecked $Redux.UI.GCScheme) {
         ChangeBytes -Offset "348085F" -Values "FF 00 50" # Cursor
         ChangeBytes -Offset "3480859" -Values "C8 00 50" # Cursor
-    }
-
-
-
-    # MISC COLORS #
-
-    if (IsChecked $Redux.Colors.PauseScreenColors) {
-        ChangeBytes -Offset "BBF88E" -Values "97 8B" # Menu Title Background
-        ChangeBytes -Offset "BBF892" -Values "61" # Menu Title Background
-        ChangeBytes -Offset "BBF97E" -Values "97 8B" # Z
-        ChangeBytes -Offset "BBF982" -Values "61 FF" # R
-        ChangeBytes -Offset "BBFC7E" -Values "FF FF" # Unavailable Menu Title
-        ChangeBytes -Offset "BBFC82" -Values "FF" # Unavailable Menu Title
-        ChangeBytes -Offset "BC793D" -Values "97" # Z/R Highlight
-        ChangeBytes -Offset "BC793F" -Values "8B" # Z/R Highlight
-        ChangeBytes -Offset "BC7941" -Values "61" # Z/R Highlight
-        ChangeBytes -Offset "BC7945" -Values "97" # Z/R Highlight
-        ChangeBytes -Offset "BC7947" -Values "8B" # Z/R Highlight
-        ChangeBytes -Offset "BC7949" -Values "61" # Z/R Highlight
-        ChangeBytes -Offset "BC7994" -Values "B4 B4 B4 B4 78 B4 B4 B4 B4 B4 B4 B4 78 B4 B4 B4 B4 B4 B4 B4 B4 B4 B4 B4 B4 B4 B4 B4 78 B4 B4 B4 B4 B4 B4 B4 78 B4 B4 B4 B4 B4 B4 B4 B4 B4 B4 B4 78 78 78 78 46 78 78 78 78 78 78 78 46 78 78 78 78 78 78 78 78 78 78 78" # Background
     }
 
 }
