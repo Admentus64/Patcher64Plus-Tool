@@ -154,7 +154,7 @@ function CreateTabGameplay() {
     CreateReduxCheckBox -Name "CanNotLoseCap"    -Text "Can Not Lose Cap"   -Info "Mario will not lose his cap anymore"                                                                                                -Credits "Ported from SM64 ROM Manager"
 
     CreateReduxGroup    -Tag  "Gameplay" -Text "Lives"
-    CreateReduxTextBox  -Name "Lives"            -Text "Lives" -Value 4     -Info "Set the amount of lives Mario starts with when opening the save file`nDefault = 4"                                                  -Credits "Ported from SM64 Tweaker"
+    CreateReduxTextBox  -Name "Lives"            -Text "Lives" -Value 4     -Info "Set the amount of lives Mario starts with when opening the save file"                                                               -Credits "Ported from SM64 Tweaker"
     CreateReduxCheckBox -Name "NoGameOver"       -Text "No Game Over"       -Info "The game won't end if Mario's lives reaches below 0"                                                                                -Credits "Kaze Emanuar"
 
 }

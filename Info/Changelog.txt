@@ -1,3 +1,7 @@
+v17.2.6
+- Fixed issue with "MM Pause Screen Colors" for OoT without Redux
+- Fixed tooltip for "Lives" for SM64
+
 v17.2.5
 - Added OS info and check
 - Changed logging to have a max of 10 log files
