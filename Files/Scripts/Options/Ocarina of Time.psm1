@@ -1623,7 +1623,7 @@ function CreateTabGraphics() {
     CreateReduxComboBox -Name "ButtonSize"       -Text "HUD Buttons" -Row 3 -Column 1             -FilePath ($Paths.shared + "\Buttons")  -Ext $null -Default "Large"            -Info "Set the size for the HUD buttons" -Credits "GhostlyDark (ported)"
     $path = $Paths.shared + "\Buttons" + "\" + $Redux.UI.ButtonSize.Text.replace(" (default)", "")
     CreateReduxComboBox -Name "ButtonStyle"      -Text "HUD Buttons" -Items @("Ocarina of Time") -FilePath $path                          -Ext "bin" -Default "Ocarina of Time" -Info "Set the style for the HUD buttons" -Credits "GhostlyDark, Djipi, Community, Nerrel, Federelli"
-    CreateReduxComboBox -Name "MagicBar"         -Text "Magic Bar"   -Items @("Ocarina of Time") -FilePath ($Paths.shared + "\HUD\Magic") -Ext "bin" -Default "Ocarina of Time" -Info "Set the style for the magic meter" -Credits "GhostlyDark, azred, Nerrel"
+    CreateReduxComboBox -Name "MagicBar"         -Text "Magic Bar"   -Items @("Ocarina of Time") -FilePath ($Paths.shared + "\HUD\Magic") -Ext "bin" -Default "Ocarina of Time" -Info "Set the style for the magic meter" -Credits "GhostlyDark, azred, Nerrel, Zeth Alkar"
     CreateReduxComboBox -Name "BlackBars"        -Text "Black Bars"  -Items @("Enabled", "Disabled for Z-Targeting", "Disabled for Cutscenes", "Always Disabled") -Info "Removes the black bars shown on the top and bottom of the screen during Z-targeting and cutscenes" -Credits "Admentus"
 
     

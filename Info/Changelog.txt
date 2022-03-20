@@ -1,3 +1,6 @@
+v17.2.7
+- Added Twilight Princess magic bar
+
 v17.2.6
 - Fixed issue with "MM Pause Screen Colors" for OoT without Redux
 - Fixed tooltip for "Lives" for SM64

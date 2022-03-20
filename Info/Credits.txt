@@ -61,7 +61,7 @@
 - MM Button Positions:			GhostlyDark
 - Button Sizes:				GhostlyDark
 - Button Styles:			GhostlyDark, Djipi, Community, Nerrel, Federelli
-- Magic Meter Styles:			GhostlyDark, azred, Nerrel
+- Magic Meter Styles:			GhostlyDark, azred, Nerrel, Zeth Alkar
 - MM Pause Screen:			CM & GhostlyDark
 - MM Pause Screen Colors:		Garo-Mastah
 - HUD Size:				Admentus & GhostlyDark
@@ -376,7 +376,7 @@ https://github.com/DaruniasJoy/OoT-Custom-Sequences
 - OoT HUD Icons:			GhostlyDark (ported)
 - Button Sizes:				GhostlyDark
 - Button Styles:			GhostlyDark, Djipi, Community, Nerrel, Federelli
-- Magic Meter Styles:			GhostlyDark, azred, Nerrel
+- Magic Meter Styles:			GhostlyDark, azred, Nerrel, Zeth Alkar
 - Hide HUD:				Marcelo20XX
 - No Item Drops:			Admentus & BilonFullHDemon
 - Restore Palace Route:			ShadowOne333
