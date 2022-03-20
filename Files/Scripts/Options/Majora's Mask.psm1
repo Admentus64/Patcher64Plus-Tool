@@ -330,9 +330,16 @@ function ByteOptions() {
         ChangeBytes -Offset "BABEA2" -Values "2A 00"
         ChangeBytes -Offset "BABEA5" -Values "00 00 00"
     }
-    elseif ( (IsText -Elem $Redux.Hero.Damage -Compare "1x Damage" -Not) -or (IsText -Elem $Redux.Hero.Recovery -Compare "1x Recovery" -Not) ) {
+    elseif ( (IsIndex -Elem $Redux.Hero.Damage -Not) -or (IsIndex -Elem $Redux.Hero.Recovery -Not) -or (IsChecked $Redux.Hero.NoRecoveryHearts) ) {
         ChangeBytes -Offset "BABE7F" -Values "09 04" -Interval 16
-        if         (IsText -Elem $Redux.Hero.Recovery -Compare "1x Recovery") {
+        if       ( (IsText -Elem $Redux.Hero.Recovery -Compare "0x Recovery") -or (IsChecked $Redux.Hero.NoRecoveryHearts) ) {
+            if     (IsText -Elem $Redux.Hero.Damage   -Compare "1x Damage")   { ChangeBytes -Offset "BABEA2" -Values "29 40" }
+            elseif (IsText -Elem $Redux.Hero.Damage   -Compare "2x Damage")   { ChangeBytes -Offset "BABEA2" -Values "29 80" }
+            elseif (IsText -Elem $Redux.Hero.Damage   -Compare "4x Damage")   { ChangeBytes -Offset "BABEA2" -Values "29 C0" }
+            elseif (IsText -Elem $Redux.Hero.Damage   -Compare "8x Damage")   { ChangeBytes -Offset "BABEA2" -Values "2A 00" }
+            ChangeBytes -Offset "BABEA5" -Values "05 29 43"
+        }
+        elseif     (IsText -Elem $Redux.Hero.Recovery -Compare "1x Recovery") {
             if     (IsText -Elem $Redux.Hero.Damage   -Compare "2x Damage")   { ChangeBytes -Offset "BABEA2" -Values "28 40" }
             elseif (IsText -Elem $Redux.Hero.Damage   -Compare "4x Damage")   { ChangeBytes -Offset "BABEA2" -Values "28 80" }
             elseif (IsText -Elem $Redux.Hero.Damage   -Compare "8x Damage")   { ChangeBytes -Offset "BABEA2" -Values "28 C0" }
@@ -351,13 +358,6 @@ function ByteOptions() {
             elseif (IsText -Elem $Redux.Hero.Damage   -Compare "4x Damage")   { ChangeBytes -Offset "BABEA2" -Values "29 00" }
             elseif (IsText -Elem $Redux.Hero.Damage   -Compare "8x Damage")   { ChangeBytes -Offset "BABEA2" -Values "29 40" }
             ChangeBytes -Offset "BABEA5" -Values "05 28 83"
-        }
-        elseif     (IsText -Elem $Redux.Hero.Recovery -Compare "0x Recovery") {
-            if     (IsText -Elem $Redux.Hero.Damage   -Compare "1x Damage")   { ChangeBytes -Offset "BABEA2" -Values "29 40" }
-            elseif (IsText -Elem $Redux.Hero.Damage   -Compare "2x Damage")   { ChangeBytes -Offset "BABEA2" -Values "29 80" }
-            elseif (IsText -Elem $Redux.Hero.Damage   -Compare "4x Damage")   { ChangeBytes -Offset "BABEA2" -Values "29 C0" }
-            elseif (IsText -Elem $Redux.Hero.Damage   -Compare "8x Damage")   { ChangeBytes -Offset "BABEA2" -Values "2A 00" }
-            ChangeBytes -Offset "BABEA5" -Values "05 29 43"
         }
     }
 
@@ -455,14 +455,6 @@ function ByteOptions() {
             elseif ($Redux.Hero.ClockSpeed.SelectedIndex -eq 5) { ChangeBytes -Offset "BB005E" -Values "FF F4"; ChangeBytes -Offset "BC668F" -Values "12"; ChangeBytes -Offset "BEDB8E" -Values "FF F4" }
     }
 
-    if (IsChecked $Redux.Hero.NoRecoveryHearts) {
-        ChangeBytes -Offset "B3E35C" -Values "00 00 90 25"
-        ChangeBytes -Offset "B3E3A0" -Values "00 00 90 25"
-        ChangeBytes -Offset "B3E440" -Values "00 00 90 25 24 13 00 01 10 00 00 3C 00 00 88 25"
-        ChangeBytes -Offset "B3E45C" -Values "00 00 90 25 24 13 00 01"
-        ChangeBytes -Offset "B3E468" -Values "00 00 88 25"
-    }
-
     if (IsChecked $Redux.Hero.NoItemDrops) {
         $Values = @()
         for ($i=0; $i -lt 80; $i++) { $Values += 0 }
@@ -486,6 +478,8 @@ function ByteOptions() {
         ChangeBytes -Offset "2CB10DA" -Values "03 60";      ChangeBytes -Offset "2CB1212" -Values "03 60"                                                          # Move Bomb Bag to Stock Pot Inn
         ChangeBytes -Offset "E76F38" -Values "00 00 00 00"; ChangeBytes -Offset "E772DC" -Values "24 05 06 4A"; ChangeBytes -Offset "E77CCC" -Values "24 05 06 4A" # Disable Bomb Shop
     }
+
+    if (IsChecked $Redux.Hero.NoRecoveryHearts) { ChangeBytes -Offset "B3DC54" -Values "50" }
 
 
 

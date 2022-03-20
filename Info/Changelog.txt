@@ -1,3 +1,8 @@
+v17.2.8
+- Fixed "No Recovery Hearts" option for MM
+- Changed that selecting "No Recovery Hearts" will also set their restore value to 0
+- Changed that selecting "0x Recovery" no longer prevents Recovery Hearts from dropping
+
 v17.2.7
 - Added Twilight Princess magic bar
 
