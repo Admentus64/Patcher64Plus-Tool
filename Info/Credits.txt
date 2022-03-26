@@ -2,10 +2,10 @@
 <<< PATCHER64+ TOOL >>>
 
 --- Thanks to my Patreons ---
-- Amara, Colby Bertrand, Craig, Gagrecco, Tommy Naugle, Yang
+- Amara, Colby Bertrand, Craig, Gagrecco, Third M, Yang
 
 --- Thanks to my past Patreons --
-- Crypto Logiq, David Pyne, Gicrax, Leigh Pierce, Moons Moons, Raim, Richard Moser
+- Crypto Logiq, David Pyne, Gicrax, Leigh Pierce, Moons Moons, Raim, Richard Moser, Tommy Naugle
 
 --- Patcher64+ Tool ---
 - Admentus (Testing and Coding of Patcher64+ Tool)
