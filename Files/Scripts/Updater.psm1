@@ -25,7 +25,7 @@ function PerformUpdate() {
 function InvokeWebRequest([string]$Uri, [String]$OutFile) {
     
     $ProgressPreference = 'SilentlyContinue'
-    Invoke-WebRequest -Uri $Uri -OutFile $outFile
+    Invoke-WebRequest -UseBasicParsing -Uri $Uri -OutFile $outFile
     $ProgressPreference = 'Continue'
 
 }
@@ -75,6 +75,12 @@ function AutoUpdate([switch]$Manual) {
         try { InvokeWebRequest -Uri $Files.json.repo.version -OutFile $file }
         catch {
             WriteToConsole "Could not retrieve Patcher version info!"
+            return
+        }
+
+        # Test version info file
+        if (!(TestFile ($Paths.LocalTemp   + "\version.txt"))) {
+            WriteToConsole ("Could not find latest version info file for " + $Title + "!")
             return
         }
 
