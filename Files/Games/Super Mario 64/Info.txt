@@ -5,7 +5,7 @@ Patches for Super Mario 64:
 	* Extract ROM Only
 2. Apply Patch (requires a patch file)
 3. Patch Header
-4. Eight ROM hacks
+4. Nine ROM hacks
 5. Additional Options
 
 Known Issues:

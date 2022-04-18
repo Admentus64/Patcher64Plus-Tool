@@ -14,6 +14,7 @@ function PatchOptions() {
     if (IsChecked $Redux.Gameplay.TunicChange)              { ApplyPatch -Patch "Compressed\Optional\tunic_change.ips" }
     if (IsChecked $Redux.Gameplay.FairyPreventDoors)        { ApplyPatch -Patch "Compressed\Optional\fairy_not_go_through_doors.ips" }
     if (IsChecked $Redux.Gameplay.Secret)                   { ApplyPatch -Patch "Compressed\Optional\secret.ips" }
+    if (IsChecked $Redux.Gameplay.Coop)                     { ApplyPatch -Patch "Compressed\Optional\coop.ips" }
 
     if (IsChecked $Redux.Experience.NewExp)                 { ApplyPatch -Patch "Compressed\Optional\new_exp.ips" }
     if ( (IsChecked $Redux.Experience.KeepExpGameOver ) -and !(IsChecked $Redux.Gameplay.RestartSameScreen) ) { ApplyPatch -Patch "Compressed\Optional\keep_exp_game_over.ips" }
@@ -89,6 +90,7 @@ function CreateTabMain() {
     CreateReduxCheckBox -Name "TunicChange"            -Text "Tunic Change at Lvl 7" -Info "The tunic changes from Blue to Red when defense reaches lvl 7"                                     -Credits "ShadowOne333 and his team"
     CreateReduxCheckBox -Name "FairyPreventDoors"      -Text "Fairy Prevent Doors"   -Info "When using the Fairy Spell you cannot go though any doors anymore"                                 -Credits "ShadowOne333 and his team"
     CreateReduxCheckBox -Name "Secret"                 -Text "Secret"                -Info "It's a secret"                                                                                     -Credits "ShadowOne333 and his team"
+    CreateReduxCheckBox -Name "Coop"                   -Text "2P Co-Op"              -Info "Adds a perfect clone of Link called Lonk, who will assist Link in this new 2 Player Co-op hack"    -Credits "Von Fahrenheit"
 
 
 

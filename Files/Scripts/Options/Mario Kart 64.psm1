@@ -22,6 +22,7 @@ function ByteOptions() {
 
     if (IsChecked $Redux.Gameplay.RemoveRubberBanding)   { ChangeBytes -Offset "297AA" -Values "B49A"                                         }
     if (IsChecked $Redux.Gameplay.MultiplayerMusic)      { ChangeBytes -Offset "F82BF" -Values "00"; ChangeBytes -Offset "F8FE7" -Values "00" }
+    if (IsChecked $Redux.Gameplay.NoCameraShake)         { ChangeBytes -Offset "8E018" -Values "2400" }
 
 }
 
@@ -38,6 +39,7 @@ function CreateOptions() {
     CreateReduxCheckBox -Name "CPUItems"            -Text "CPU Use Human Items"   -Info "CPUs can now use all items human players can use too"                                                                           -Credits "Triclon"
     CreateReduxCheckBox -Name "RemoveRubberBanding" -Text "Remove Rubber Banding" -Info "Removes the rubber banding from CPU players`nRubber banding causes CPUs to adjust their speed to that of the player's position" -Credits "Admentus (ROM)"
     CreateReduxCheckBox -Name "MultiplayerMusic"    -Text "Multiplayer Music"     -Info "Enable music for 3-Player and 4-Player Mode`nPress L to toggle the music"                                                       -Credits "Zoinkity"
+    CreateReduxCheckBox -Name "NoCameraShake"       -Text "No Camera Shake"       -Info "The camera won't shake when using mushrooms"                                                                                    -Credits "Triclon"
 
     EnableElem -Elem $Redux.Gameplay.CPUItems -Active (!$IsWiiVC)
 

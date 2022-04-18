@@ -105,8 +105,8 @@
         elseif ($GameType.decompress -eq 1 -and !(StrLike -str $Command -val "Inject") -and !(StrLike -str $Command -val "Apply Patch") -and !(StrLike -str $Command -val "Extract") ) {
             if ( (IsChecked $Patches.Options) -or (IsChecked $Patches.Redux) )   { $PatchInfo.decompress = $True }
         }
-        elseif ($GameType.decompress -eq 2 -and (IsChecked $Patches.Extend))   { $PatchInfo.decompress = $True }
-        elseif ($GameType.decompress -eq 3 -and (IsChecked $Patches.Extend))   { $PatchInfo.decompress = $True }
+        elseif ($GameType.decompress -eq 2 -and (IsChecked $Patches.Extend))     { $PatchInfo.decompress = $True }
+        elseif ($GameType.decompress -eq 3 -and (IsChecked $Patches.Extend))     { $PatchInfo.decompress = $True }
     }
 
     # Check if ROM is getting patched
@@ -191,8 +191,8 @@ function MainFunctionPatch([string]$Command, [Array]$Header, [string]$PatchedFil
         ExtractMQData                               # Step A: Extract MQ dungeon data for OoT
         PrePatchingAdditionalOptions                # Step B: Apply additional options before Redux
         PatchRedux                                  # Step C: Apply the Redux patch
-        PatchingAdditionalOptions                   # Step D: Apply additional options
-        if (!(PatchDecompressedROM))   { return }   # Step E: Patch and extend the ROM file with the patch through Floating IPS
+        if (!(PatchDecompressedROM))   { return }   # Step D: Patch and extend the ROM file with the patch through Floating IPS
+        PatchingAdditionalOptions                   # Step E: Apply additional options
         CompressROM                                 # Step F: Compress the decompressed ROM if required
         if (!(PatchCompressedROM))     { return }   # Step G: Patch and extend the ROM file with the patch through Floating IPS
     }
@@ -353,7 +353,7 @@ function GetPatchFile() {
     
     if ($GamePatch.patch -is [System.Array]) {
         foreach ($item in $GamePatch.patch) {
-            if ($item.hash -eq $ROMHashSum) { return $item.file }
+            if ($item.hash -eq $ROMHashSum -and ( ($item.console -eq "Native" -and !$IsWiiVC) -or ($item.console -eq "Wii VC" -and $IsWiiVC) -or !(IsSet $item.console) ) ) { return $item.file }
         }
         return $GamePatch.patch[0].file
     }
@@ -425,7 +425,7 @@ function PatchingAdditionalOptions() {
 
     # Language Options
     if (GetCommand "ByteLanguageOptions") {
-        #UpdateStatusLabel ("Patching " + $GameType.mode + " Additional Language Options...")
+        UpdateStatusLabel ("Patching " + $GameType.mode + " Additional Language Options...")
         iex "ByteLanguageOptions"
     }
 

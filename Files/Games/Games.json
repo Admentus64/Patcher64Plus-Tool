@@ -36,7 +36,8 @@
 		"file"		: "gc_mq_to_rev0.bps",
 		"hash"		: "DA35577FE54579F6A266931CC75F512D",
 		"rev"		: "GameCube - Master Quest",
-		"region"	: "North American / NTSC-U"
+		"region"	: "North American / NTSC-U",
+		"supported"	: 1
 	}, {
 		"hash"		: "21F7B4A4FF463464BFC23498C1AB9DA1",
 		"rev"		: "Beta",

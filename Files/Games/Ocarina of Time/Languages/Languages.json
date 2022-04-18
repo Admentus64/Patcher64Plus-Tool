@@ -54,7 +54,7 @@
 	"script_length"		: "38130",
 	"max_text_speed"	: 2,
 	"output"		: "_it_patched",
-	"credits"		: "Ruleless, xxcentury & Brisma (translation) & GhostlyDark (ported / improvements)"
+	"credits"		: "Rulesless, xxcentury & Brisma (translation) & GhostlyDark (ported / improvements)"
 }, {
 	"title"			: "Polish",
 	"code"			: "pl",

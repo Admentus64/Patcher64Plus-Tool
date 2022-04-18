@@ -116,6 +116,8 @@
         if (!(PatchDungeon -TableOffset "CCC0" -Path ($dungeons[$title] + "\" + $title + "\") -Length 20 -Scene "B71544")) { return }
     }
 
+    return $dungeons
+
 }
 
 
@@ -141,28 +143,27 @@ function PatchDungeonsMQ() {
 
     UpdateStatusLabel ("Patching " + $GameType.mode + " Master Quest Dungeons...")
     $dungeons = @{}
+    $versions = @{}
 
     foreach ($item in $Redux.Box.SelectMQ) {
         foreach ($label in $item.controls) {
-            if     ( (IsChecked $Redux.MQ.Select)    -and $label.GetType() -eq [System.Windows.Forms.Label]) { $dungeons[$label.text.replace(":", "")] = $label.ComboBox.text }
+            if     ( (IsChecked $Redux.MQ.Select)    -and $label.GetType() -eq [System.Windows.Forms.Label]) { $dungeons[$label.text.replace(":", "")] = $label.ComboBox.text     }
             elseif ( (IsChecked $Redux.MQ.EnableMQ)  -and $label.GetType() -eq [System.Windows.Forms.Label]) { $dungeons[$label.text.replace(":", "")] = $label.ComboBox.items[1] }
             elseif ( (IsChecked $Redux.MQ.EnableUra) -and $label.GetType() -eq [System.Windows.Forms.Label]) { $dungeons[$label.text.replace(":", "")] = $label.ComboBox.items[2] }
-            elseif ( (IsChecked $Redux.MQ.Randomize) -and $label.GetType() -eq [System.Windows.Forms.Label]) { $dungeons[$label.text.replace(":", "")] = $label.ComboBox.items[0] }
+            elseif ( (IsChecked $Redux.MQ.Randomize) -and $label.GetType() -eq [System.Windows.Forms.Label]) { $dungeons[$label.text.replace(":", "")] = $label.ComboBox.items[0]; $versions[$label.text.replace(":", "")] = $label.ComboBox.items }
         }
     }
 
     if (IsChecked $Redux.MQ.Randomize) {
-        $min = $Redux.MQ.Minimum.Text.replace(" (default)", "")
-        $max = $Redux.MQ.Maximum.Text.replace(" (default)", "")
+        $min   = $Redux.MQ.Minimum.Text.replace(" (default)", "")
+        $max   = $Redux.MQ.Maximum.Text.replace(" (default)", "")
         $count = (Get-Random -Minimum $min -Maximum $max)
-
         while ($count -gt 0) {
             foreach ($h in $dungeons.Keys) {
                 $change = (Get-Random -Maximum 20)
-                if ($change -eq 0) {
-                    $type = (Get-Random -Maximum 2)
-                    if ($type -eq 0) { $type = "Master Quest" } else { $type = "Ura Quest" }
-                    $dungeons.$h = $type
+                if ($change -eq 0 -and $dungeons.$h -eq "Vanilla") {
+                    $dungeons.$h = $versions.$h[(Get-Random -Minimum 1 -Maximum ($versions.$h.count))]
+                    WriteToConsole ("Dungeon Spoiler: " + $h + " -> " + $dungeons.$h)
                     $count--
                     break
                 }
@@ -198,9 +199,9 @@ function ExtractMQData() {
     if ($GameType.mode -eq "Ocarina of Time") {
         if ( ( (IsChecked -Elem $Redux.MQ.Select) -or (IsChecked -Elem $Redux.MQ.EnableMQ) -or (IsChecked -Elem $Redux.MQ.Randomize) ) -and (IsChecked $Patches.Options) ) { # EXTRACT MQ DUNGEON DATA
             if ( (CountFiles ($GameFiles.extracted + "\Master Quest")) -ne $GameType.mq_files -or $Settings.Debug.ForceExtract -eq $True) {
-                if (TestFile -Path ($GameFiles.decompressed + "\master_quest.bps") ) {
+                if (TestFile -Path ($GameFiles.decompressed + "\Dungeons\master_quest.bps") ) {
                     WriteToConsole "Extracting Master Quest dungeon files"
-                    ApplyPatch -File $GetROM.decomp -Patch "Decompressed\master_quest.bps" -New $GetROM.masterQuest
+                    ApplyPatch -File $GetROM.decomp -Patch "Decompressed\Dungeons\master_quest.bps" -New $GetROM.masterQuest
                     $global:ByteArrayGame = [IO.File]::ReadAllBytes($GetROM.masterQuest)
                     ExtractAllDungeons ($GameFiles.extracted + "\Master Quest")
                 }
@@ -208,9 +209,9 @@ function ExtractMQData() {
         }
         if ( ( (IsChecked -Elem $Redux.MQ.Select) -or (IsChecked -Elem $Redux.MQ.EnableUra) -or (IsChecked -Elem $Redux.MQ.Randomize) ) -and (IsChecked $Patches.Options) ) { # EXTRACT URA DUNGEON DATA
             if ( (CountFiles ($GameFiles.extracted + "\Ura Quest")) -ne $GameType.mq_files -or $Settings.Debug.ForceExtract -eq $True) {
-                if (TestFile -Path ($GameFiles.decompressed + "\ura_quest.bps") ) {
+                if (TestFile -Path ($GameFiles.decompressed + "\Dungeons\ura_quest.bps") ) {
                     WriteToConsole "Extracting Ura Quest dungeon files"
-                    ApplyPatch -File $GetROM.decomp -Patch "Decompressed\ura_quest.bps" -New $GetROM.masterQuest
+                    ApplyPatch -File $GetROM.decomp -Patch "Decompressed\Dungeons\ura_quest.bps" -New $GetROM.masterQuest
                     $global:ByteArrayGame = [IO.File]::ReadAllBytes($GetROM.masterQuest)
                     ExtractAllDungeons ($GameFiles.extracted + "\Ura Quest")
                 }

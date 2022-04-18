@@ -1,7 +1,10 @@
 ﻿function ChangeBytes([string]$File, [string]$Offset, [object]$Match=$null, [object]$Values, [uint16]$Interval=1, [switch]$Add, [switch]$Subtract, [switch]$IsDec, [switch]$Overflow) {
     
-    if ($Match  -is [System.String])   { $Match  = $Match  -split ' ' }
-    if ($Values -is [System.String])   { $Values = $Values -split ' ' }
+    if     ($Match  -is [System.String] -and $Match  -Like "* *")   { $Match  = $Match  -split ' '           }
+    elseif ($Match  -is [System.String])                            { $Match  = $Match  -split '(..)' -ne '' }
+    if     ($Values -is [System.String] -and $Values -Like "* *")   { $Values = $Values -split ' '           }
+    elseif ($Values -is [System.String])                            { $Values = $Values -split '(..)' -ne '' }
+
     if (IsSet $File)                   { $ByteArrayGame = [System.IO.File]::ReadAllBytes($File) }
     if ($Interval -lt 1)               { $Interval = 1 }
 

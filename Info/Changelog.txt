@@ -1,3 +1,24 @@
+v17.3.0
+- Added new Interface Mode: Streamlined
+- Added settings files for patches with their own options customization
+- Added new Additional Options for OoT (ported from Gold Quest)
+- Added new "Chests" option for OoT & MM
+- Added new location options for OoT
+- Added Additional Options for Master of Time
+- Added Dawn & Dusk, The Missing Link & Gold Quest equipment and HUD texture options
+- Added alternate Navi prompts
+- Added file and language checking for several text options
+- Added Gold Quest Tunic options
+- Added new "Save" tab for OoT for Additional Options
+- Added a new option for OoT MQ Debug, MK64 & Zelda II
+- Added new patch for SM64
+- Split Iron Shield option into two separate options
+- Updated Russian, Brazilian Portuguese, Polish and Simplified Chinese for OoT & MM
+- Improved GUI generation optimization
+- Fixed issue with patching ROM hacks (such as Star Road on Wii VC)
+- Fixed issue with tab generation
+- Fixed issue with clearing log files
+
 v17.2.8
 - Fixed "No Recovery Hearts" option for MM
 - Changed that selecting "No Recovery Hearts" will also set their restore value to 0

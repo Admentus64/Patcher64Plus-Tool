@@ -1,8 +1,10 @@
-﻿function CreateOptionsDialog([byte]$Columns, [int32]$Height, [Array]$Tabs=@()) {
+﻿function CreateOptionsDialog([byte]$Columns, [int32]$Height, [Array]$Tabs=@(), [switch]$NoLanguages) {
     
+    WriteToConsole "Creating options dialog..."
+
     # Create Dialog
     if ( (IsSet $Columns) -and (IsSet $Height) )   { $global:OptionsDialog = CreateDialog -Width ($FormDistance * $Columns + (DPISize 60)) -Height (DPISize $Height) }
-    else                                           { $global:OptionsDialog = CreateDialog -Width ($FormDistance * 4        + (DPISize 60)) -Height (DPISize 640) }
+    else                                           { $global:OptionsDialog = CreateDialog -Width ($FormDistance * 4        + (DPISize 60)) -Height (DPISize 640)     }
     $OptionsDialog.Icon = $Files.icon.additional
 
     # Close Button
@@ -18,12 +20,13 @@
     $OptionsLabel.Left = ([Math]::Floor($OptionsDialog.Width / 2) - [Math]::Floor($OptionsLabel.Width / 2))
 
     # Reset Options
-    $Redux.Box = @{}
+    $Redux.Box    = @{}
     $Redux.Groups = @()
-    $Last.Group = $Last.Panel = $Last.GroupName = $Last.Hide = $null
-    $Last.Half = $False
-    $Redux.Panel = CreatePanel -Width $OptionsDialog.Width -Height $OptionsDialog.Height -AddTo $OptionsDialog
-    CreateTabButtons $Tabs
+    $Last.Group   = $Last.Panel = $Last.GroupName = $Last.Hide = $null
+    $Last.Half    = $False
+    $Redux.Panel  = CreatePanel -Width $OptionsDialog.Width -Height $OptionsDialog.Height -AddTo $OptionsDialog
+    [System.GC]::Collect() | Out-Null
+    CreateTabButtons -Tabs $Tabs -NoLanguages $NoLanguages
 
     # Lock GUI if needed
     if (Get-Command "AdjustGUI" -errorAction SilentlyContinue) { iex "AdjustGUI" }

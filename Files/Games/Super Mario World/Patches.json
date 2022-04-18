@@ -2,6 +2,12 @@
 	"title"		: "Super Mario World",
 	"tooltip"	: "The regular Super Mario World experience{0}- Supported: Rev 0 (US)"
 }, {
+	"title"		: "Super Mario World (2P Tag Team Co-op)",
+	"command"	: "Force Downgrade",
+	"patch"		: "Compressed\\kcoop.bps",
+	"output"	: "_coop_patched",
+	"tooltip"	: "Adds Two Player co-op support to Super Mario World{0}- Supported: Rev 0 (US)"
+}, {
 	"title"		: "Kaizo Mario World",
 	"command"	: "Force Downgrade",
 	"vc_title"	: "Kaizo Mario World",

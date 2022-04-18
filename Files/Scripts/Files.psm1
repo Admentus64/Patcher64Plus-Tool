@@ -64,8 +64,9 @@ function SetFileParameters() {
 
 
     # Store Ocarina of Time files
-    $Files.oot.ura_quest                    = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\ura_quest")
-    $Files.oot.master_quest                 = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\master_quest")
+    $Files.oot.ura_quest                    = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Dungeons\ura_quest")
+    $Files.oot.master_quest                 = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Dungeons\master_quest")
+
     $Files.oot.feminine_animations          = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Optional\feminine_animations")
     $Files.oot.harder_child_bosses          = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Optional\harder_child_bosses")
     $Files.oot.hide_equipment               = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Optional\hide_equipment")
@@ -80,11 +81,6 @@ function SetFileParameters() {
     $Files.oot.title_ura_copyright          = $Paths.Games + "\Ocarina of Time\Textures\Logo\ura_copyright.bin"
     $Files.oot.title_ura_logo               = $Paths.Games + "\Ocarina of Time\Textures\Logo\ura_logo.bin"
     
-    $Files.oot.hud_tatl                     = $Paths.Games + "\Ocarina of Time\Textures\HUD\tatl.bin"
-    $Files.oot.hud_tael                     = $Paths.Games + "\Ocarina of Time\Textures\HUD\tael.bin"
-    $Files.oot.iron_shield_front            = $Paths.Games + "\Ocarina of Time\Textures\Equipment\Iron Shield\front.bin"
-    $Files.oot.iron_shield_front            = $Paths.Games + "\Ocarina of Time\Textures\Equipment\Iron Shield\back.bin"
-    $Files.oot.iron_shield_icon             = $Paths.Games + "\Ocarina of Time\Textures\Equipment\Iron Shield\icon.bin"
     $Files.oot.l_pause_button               = $Paths.Games + "\Ocarina of Time\Textures\GameCube\l_pause_screen_button.bin"
     $Files.oot.l_pause_button_mm            = $Paths.Games + "\Ocarina of Time\Textures\GameCube\l_pause_screen_button_mm.bin"
     $Files.oot.l_target_icon                = $Paths.Games + "\Ocarina of Time\Textures\GameCube\l_text_icon.bin"
@@ -147,11 +143,6 @@ function SetFileParameters() {
     $Files.mm.mq_remix                      = CheckPatchExtension ($Paths.Games + "\Majora's Mask\Decompressed\Optional\master_quest_remix")
     $Files.mm.research_lab_platform         = CheckPatchExtension ($Paths.Games + "\Majora's Mask\Decompressed\Optional\raised_research_lab_platform")
     $Files.mm.widescreen                    = CheckPatchExtension ($Paths.Games + "\Majora's Mask\Decompressed\Optional\widescreen")
-
-    $Files.mm.hud_navi                      = $Paths.Games + "\Majora's Mask\Textures\HUD\navi.bin"
-    $Files.mm.hud_tael                      = $Paths.Games + "\Majora's Mask\Textures\HUD\tael.bin"
-    $Files.mm.hud_tatl                      = $Paths.Games + "\Majora's Mask\Textures\HUD\tatl.bin"
-    $Files.mm.hud_taya                      = $Paths.Games + "\Majora's Mask\Textures\HUD\taya.bin"
 
     $Files.mm.l_target_button               = $Paths.Games + "\Majora's Mask\Textures\GameCube\l_pause_screen_button.yaz0"
     $Files.mm.l_target_button               = $Paths.Games + "\Majora's Mask\Textures\GameCube\l_text_icon.bin"

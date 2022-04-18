@@ -5,6 +5,11 @@
 	"extend"	: 64,
 	"tooltip"	: "The regular Super Mario 64 experience{0}With support for additional options{0}- Supported: Rev 0 (US)"
 }, {
+	"title"		: "Super Mario 64 (Rumble Support)",
+	"patch"		: "Compressed\\rumble.bps",
+	"output"	: "_rumble_patched",
+	"tooltip"	: "Adds Rumble Support to Super Mario 64{0}- Supported: Rev 0 (US)"
+}, {
 	"title"		: "Super Mario 64 (Lowpoly Promo Mario Model)",
 	"patch"		: "Compressed\\promo_mario.bps",
 	"output"	: "_promo_mario_patched",

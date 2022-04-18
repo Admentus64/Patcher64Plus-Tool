@@ -73,7 +73,10 @@ function GetSettings([string]$File) {
 function GetGameTypePreset() {
     
     for ($i=0; $i -lt $GeneralSettings.Presets.length; $i++) {
-        if ($GeneralSettings.Presets[$i].checked) { return $GameType.mode + " - " + ($i+1) }
+        if ($GeneralSettings.Presets[$i].checked) {
+            if ( (IsSet $GamePatch.script) -and $GamePatch.options -eq 1) { return $GamePatch.script + " - " + ($i+1) }
+            return $GameType.mode + " - " + ($i+1)
+        }
     }
     return $null
 

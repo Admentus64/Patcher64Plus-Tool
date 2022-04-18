@@ -1,4 +1,20 @@
-﻿function GetSFXID([string]$SFX) {
+﻿function GetOoTEntranceIndex([string]$Index) {
+
+    if ($index -eq "Link's House")                   { return "00 BB" }     elseif ($index -eq "Temple of Time")             { return "05 F4" }     elseif ($index -eq "Hyrule Field")               { return "01 FD" }
+    elseif ($index -eq "Kakariko Village")           { return "00 DB" }     elseif ($index -eq "Inside the Deku Tree")       { return "00 00" }     elseif ($index -eq "Dodongo's Cavern")           { return "00 04" }
+    elseif ($index -eq "Inside Jabu-Jabu's Belly")   { return "00 28" }     elseif ($index -eq "Forest Temple")              { return "01 69" }     elseif ($index -eq "Fire Temple")                { return "01 65" }
+    elseif ($index -eq "Water Temple")               { return "00 10" }     elseif ($index -eq "Shadow Temple")              { return "00 82" }     elseif ($index -eq "Spirit Temple")              { return "00 37" }
+    elseif ($index -eq "Ice Cavern")                 { return "00 88" }     elseif ($index -eq "Bottom of the Well")         { return "00 98" }     elseif ($index -eq "Thieves' Hideout")           { return "04 86" }
+    elseif ($index -eq "Gerudo's Training Ground")   { return "00 08" }     elseif ($index -eq "Inside Ganon's Castle")      { return "04 67" }     elseif ($index -eq "Ganon's Tower")              { return "04 1B" }
+    else {
+        WriteToConsole ("Could not find entrance index ID for: " + $index)
+        return -1
+    }
+
+}
+
+
+function GetSFXID([string]$SFX) {
     
     $SFX = $SFX.replace(' (default)', "")
     if     ($SFX -eq "None" -or $SFX -eq "Disabled")   { return "00 00" }
@@ -200,9 +216,14 @@ function MusicOptions([string]$Default="File Select") {
 
     # MUSIC #
 
-    CreateReduxGroup    -Tag "Music" -Text "Music" -Columns 2 -Height 8
+    CreateReduxGroup    -Tag "Music" -Text "Music" -Streamlined
     CreateReduxComboBox -Name "FileSelect"-Text "File Select Theme"  -Default $Default -Items $tracks -Info "Set the music theme for the File Select menu" -Credits "Admentus"
     
+    if (IsInterface -Lite -Streamlined) { return }
+
+    CreateReduxGroup    -Tag "Music" -Text "Music" -Columns 2 -Height 8
+    CreateReduxComboBox -Name "FileSelect"-Text "File Select Theme"  -Default $Default -Items $tracks -Info "Set the music theme for the File Select menu" -Credits "Admentus"
+
     CreateReduxPanel -X 25 -Row 1 -Columns 1.9 -Rows 2
     CreateReduxRadioButton -Name "EnableAll"    -Column 1 -Row 1 -Max 4 -SaveTo "Mute" -Checked -Text "Enable All Music"     -Info "Keep the music as it is"                           -Credits "Admentus"
     CreateReduxRadioButton -Name "MuteSelected" -Column 2 -Row 1 -Max 4 -SaveTo "Mute"          -Text "Mute Selected Music"  -Info "Mute the selected music from the list in the game" -Credits "Admentus"
@@ -441,27 +462,40 @@ function ShowHudPreview([switch]$IsOoT) {
     if (TestFile $path)   { SetBitMap -Path $path -Box $Redux.UI.ButtonPreview -Width 90 -Height 90 }
     else                  { $Redux.UI.ButtonPreview.Image = $null }
 
-    $path = ($Paths.shared + "\HUD\Magic\" + $Redux.UI.MagicBar.Text.replace(" (default)", "") + ".png")
-    if (TestFile $path)   { SetBitMap -Path $path -Box $Redux.UI.MagicPreview -Width 200 -Height 40 }
-    else                  { $Redux.UI.MagicPreview.Image = $null }
+    # Magic / Hearts
+    if (IsChecked $Redux.UI.HUD) {
+        $file = "Majora's Mask"
+        if (!$IsOoT) { $file = "Ocarina of Time" }
+        if (TestFile ($Paths.Shared + "\HUD\Magic\"  + $file + ".png")) { SetBitMap -Path ($Paths.Shared + "\HUD\Magic\"  + $file + ".png") -Box $Redux.UI.MagicPreview  } else { $Redux.UI.Magicreview.Image = $null   }
+        if (TestFile ($Paths.Shared + "\HUD\Hearts\" + $file + ".png")) { SetBitMap -Path ($Paths.Shared + "\HUD\Hearts\" + $file + ".png") -Box $Redux.UI.HeartsPreview } else { $Redux.UI.HeartsPreview.Image = $null }
+    }
+    elseif (IsChecked $Redux.UI.HUD -Not) {
+        $file = "Ocarina of Time"
+        if (!$IsOoT) { $file = "Majora's Mask" }
+        if (TestFile ($Paths.Shared + "\HUD\Magic\"  + $file + ".png")) { SetBitMap -Path ($Paths.Shared + "\HUD\Magic\"  + $file + ".png") -Box $Redux.UI.MagicPreview  } else { $Redux.UI.Magicreview.Image = $null   }
+        if (TestFile ($Paths.Shared + "\HUD\Hearts\" + $file + ".png")) { SetBitMap -Path ($Paths.Shared + "\HUD\Hearts\" + $file + ".png") -Box $Redux.UI.HeartsPreview } else { $Redux.UI.HeartsPreview.Image = $null }
+    }
+    else {
+        $path = ($Paths.shared + "\HUD\Magic\" + $Redux.UI.Magic.Text.replace(" (default)", "") + ".png")
+        if (TestFile $path)   { SetBitMap -Path $path -Box $Redux.UI.MagicPreview -Width 200 -Height 40 }
+        else                  { $Redux.UI.MagicPreview.Image = $null }
 
-    $file = $null
-    if       ( ( (IsChecked $Redux.UI.Hearts)      -or (IsChecked $Redux.UI.HUD) )      -and  $IsOoT)        { $file = "Majora's Mask"   }
-    elseif   ( ( (IsChecked $Redux.UI.Hearts)      -or (IsChecked $Redux.UI.HUD) )      -and !$IsOoT)        { $file = "Ocarina of Time" }
-    elseif   ( ( (IsChecked $Redux.UI.Hearts -Not) -or (IsChecked $Redux.UI.HUD -Not) ) -and  $IsOoT)        { $file = "Ocarina of Time" }    elseif   ( ( (IsChecked $Redux.UI.Hearts -Not) -or (IsChecked $Redux.UI.HUD -Not) ) -and !$IsOoT)        { $file = "Majora's Mask"   }
-    if (TestFile ($Paths.Shared + "\HUD\Heart\" + $file + ".png"))    { SetBitMap -Path ($Paths.Shared + "\HUD\Heart\" + $file + ".png") -Box $Redux.UI.HeartsPreview } else { $Redux.UI.HeartsPreview.Image = $null }
+        $path = ($Paths.shared + "\HUD\Hearts\" + $Redux.UI.Hearts.Text.replace(" (default)", "") + ".png")
+        if (TestFile $path)   { SetBitMap -Path $path -Box $Redux.UI.HeartsPreview }
+        else                  { $Redux.UI.HeartsPreview.Image = $null }
+    }
 
     $file = $null
     if       ( ( (IsChecked $Redux.UI.Rupees)      -or (IsChecked $Redux.UI.HUD) )      -and  $IsOoT)        { $file = "Majora's Mask"   }
     elseif   ( ( (IsChecked $Redux.UI.Rupees)      -or (IsChecked $Redux.UI.HUD) )      -and !$IsOoT)        { $file = "Ocarina of Time" }
     elseif   ( ( (IsChecked $Redux.UI.Rupees -Not) -or (IsChecked $Redux.UI.HUD -Not) ) -and  $IsOoT)        { $file = "Ocarina of Time" }    elseif   ( ( (IsChecked $Redux.UI.Rupees -Not) -or (IsChecked $Redux.UI.HUD -Not) ) -and !$IsOoT)        { $file = "Majora's Mask"   }
-    if (TestFile ($Paths.Shared + "\HUD\Rupee\" + $file + ".png"))    { SetBitMap -Path ($Paths.Shared + "\HUD\Rupee\" + $file + ".png") -Box $Redux.UI.RupeesPreview } else { $Redux.UI.RupeesPreview.Image = $null }
+    if (TestFile ($Paths.Shared + "\HUD\Rupees\" + $file + ".png"))    { SetBitMap -Path ($Paths.Shared + "\HUD\Rupees\" + $file + ".png") -Box $Redux.UI.RupeesPreview } else { $Redux.UI.RupeesPreview.Image = $null }
 
     $file = $null
     if       ( ( (IsChecked $Redux.UI.DungeonKeys)      -or (IsChecked $Redux.UI.HUD) )      -and  $IsOoT)        { $file = "Majora's Mask"   }
     elseif   ( ( (IsChecked $Redux.UI.DungeonKeys)      -or (IsChecked $Redux.UI.HUD) )      -and !$IsOoT)        { $file = "Ocarina of Time" }
     elseif   ( ( (IsChecked $Redux.UI.DungeonKeys -Not) -or (IsChecked $Redux.UI.HUD -Not) ) -and  $IsOoT)        { $file = "Ocarina of Time" }    elseif   ( ( (IsChecked $Redux.UI.DungeonKeys -Not) -or (IsChecked $Redux.UI.HUD -Not) ) -and !$IsOoT)        { $file = "Majora's Mask"   }
-    if (TestFile ($Paths.Shared + "\HUD\Key\"   + $file + ".png"))    { SetBitMap -Path ($Paths.Shared + "\HUD\Key\"   + $file + ".png") -Box $Redux.UI.DungeonKeysPreview } else { $Redux.UI.DungeonKeysPreview.Image = $null }
+    if (TestFile ($Paths.Shared + "\HUD\Keys\"   + $file + ".png"))    { SetBitMap -Path ($Paths.Shared + "\HUD\Keys\"   + $file + ".png") -Box $Redux.UI.DungeonKeysPreview } else { $Redux.UI.DungeonKeysPreview.Image = $null }
 }
 
 
@@ -469,39 +503,47 @@ function ShowHudPreview([switch]$IsOoT) {
 #==============================================================================================================================================================================================
 function ShowEquipmentPreview() {
     
-    if (IsChecked $Redux.Equipment.IronShield)   { $path = ($Paths.shared + "\Equipment\Deku Shield\Iron Shield Icon.png") }
-    else                                         { $path = ($Paths.shared + "\Equipment\Deku Shield\Deku Shield Icon.png") }
-    if (TestFile $Path)   { SetBitMap -Path $path -Box $Redux.Equipment.DekuShieldIconPreview }
-    else                  { $Redux.Equipment.DekuShieldIconPreview.Image = $null }
+    if (IsSet $Redux.Equipment.DekuShield) {
+        $path = ($Paths.shared + "\Equipment\Deku Shield\"   + $Redux.Equipment.DekuShield.Text.replace(" (default)", "")   + " Icon.png")
+        if (TestFile $Path)   { SetBitMap -Path $path -Box $Redux.Equipment.DekuShieldIconPreview }
+        else                  { $Redux.Equipment.DekuShieldIconPreview.Image = $null }
 
-    if (IsChecked $Redux.Equipment.IronShield)   { $path = ($Paths.shared + "\Equipment\Deku Shield\Iron Shield.png") }
-    else                                         { $path = ($Paths.shared + "\Equipment\Deku Shield\Deku Shield.png") }
-    if (TestFile $Path)   { SetBitMap -Path $path -Box $Redux.Equipment.DekuShieldPreview }
-    else                  { $Redux.Equipment.DekuShieldPreview.Image = $null }
+        $path = ($Paths.shared + "\Equipment\Deku Shield\"   + $Redux.Equipment.DekuShield.Text.replace(" (default)", "")   + ".png")
+        if (TestFile $Path)   { SetBitMap -Path $path -Box $Redux.Equipment.DekuShieldPreview }
+        else                  { $Redux.Equipment.DekuShieldPreview.Image = $null }
+    }
 
-    $path = ($Paths.shared + "\Equipment\Hylian Shield\" + $Redux.Equipment.HylianShield.Text.replace(" (default)", "") + " Icon.png")
-    if (TestFile $Path)   { SetBitMap -Path $path -Box $Redux.Equipment.HylianShieldIconPreview }
-    else                  { $Redux.Equipment.HylianShieldIconPreview.Image = $null }
+    if (IsSet $Redux.Equipment.HylianShield) {
+        $path = ($Paths.shared + "\Equipment\Hylian Shield\" + $Redux.Equipment.HylianShield.Text.replace(" (default)", "") + " Icon.png")
+        if (TestFile $Path)   { SetBitMap -Path $path -Box $Redux.Equipment.HylianShieldIconPreview }
+        else                  { $Redux.Equipment.HylianShieldIconPreview.Image = $null }
 
-    $path = ($Paths.shared + "\Equipment\Hylian Shield\" + $Redux.Equipment.HylianShield.Text.replace(" (default)", "") + ".png")
-    if (TestFile $Path)   { SetBitMap -Path $path -Box $Redux.Equipment.HylianShieldPreview }
-    else                  { $Redux.Equipment.HylianShieldPreview.Image = $null }
+        $path = ($Paths.shared + "\Equipment\Hylian Shield\" + $Redux.Equipment.HylianShield.Text.replace(" (default)", "") + ".png")
+        if (TestFile $Path)   { SetBitMap -Path $path -Box $Redux.Equipment.HylianShieldPreview }
+        else                  { $Redux.Equipment.HylianShieldPreview.Image = $null }
+    }
 
-    $path = ($Paths.shared + "\Equipment\Mirror Shield\" + $Redux.Equipment.MirrorShield.Text.replace(" (default)", "") + " Icon.png")
-    if (TestFile $Path)   { SetBitMap -Path $path -Box $Redux.Equipment.MirrorShieldIconPreview }
-    else                  { $Redux.Equipment.MirrorShieldIconPreview.Image = $null }
+    if (IsSet $Redux.Equipment.MirrorShield) {
+        $path = ($Paths.shared + "\Equipment\Mirror Shield\" + $Redux.Equipment.MirrorShield.Text.replace(" (default)", "") + " Icon.png")
+        if (TestFile $Path)   { SetBitMap -Path $path -Box $Redux.Equipment.MirrorShieldIconPreview }
+        else                  { $Redux.Equipment.MirrorShieldIconPreview.Image = $null }
 
-    $path = ($Paths.shared + "\Equipment\Mirror Shield\" + $Redux.Equipment.MirrorShield.Text.replace(" (default)", "") + ".png")
-    if (TestFile $Path)   { SetBitMap -Path $path -Box $Redux.Equipment.MirrorShieldPreview }
-    else                  { $Redux.Equipment.MirrorShieldPreview.Image = $null }
+        $path = ($Paths.shared + "\Equipment\Mirror Shield\" + $Redux.Equipment.MirrorShield.Text.replace(" (default)", "") + ".png")
+        if (TestFile $Path)   { SetBitMap -Path $path -Box $Redux.Equipment.MirrorShieldPreview }
+        else                  { $Redux.Equipment.MirrorShieldPreview.Image = $null }
+    }
 
-    $path = ($Paths.shared + "\Equipment\Kokiri Sword\" + $Redux.Equipment.KokiriSword.Text.replace(" (default)", "") + " Icon.png")
-    if (TestFile $Path)   { SetBitMap -Path $path -Box $Redux.Equipment.KokiriSwordIconPreview }
-    else                  { $Redux.Equipment.KokiriSwordIconPreview.Image = $null }
+    if (IsSet $Redux.Equipment.KokiriSword) {
+        $path = ($Paths.shared + "\Equipment\Kokiri Sword\" + $Redux.Equipment.KokiriSword.Text.replace(" (default)", "") + " Icon.png")
+        if (TestFile $Path)   { SetBitMap -Path $path -Box $Redux.Equipment.KokiriSwordIconPreview }
+        else                  { $Redux.Equipment.KokiriSwordIconPreview.Image = $null }
+    }
 
-    $path = ($Paths.shared + "\Equipment\Master Sword\" + $Redux.Equipment.MasterSword.Text.replace(" (default)", "") + " Icon.png")
-    if (TestFile $Path)   { SetBitMap -Path $path -Box $Redux.Equipment.MasterSwordIconPreview }
-    else                  { $Redux.Equipment.MasterSwordIconPreview.Image = $null }
+    if (IsSet $Redux.Equipment.MasterSword) {
+        $path = ($Paths.shared + "\Equipment\Master Sword\" + $Redux.Equipment.MasterSword.Text.replace(" (default)", "") + " Icon.png")
+        if (TestFile $Path)   { SetBitMap -Path $path -Box $Redux.Equipment.MasterSwordIconPreview }
+        else                  { $Redux.Equipment.MasterSwordIconPreview.Image = $null }
+    }
 
 }
 
@@ -1064,7 +1106,18 @@ function SetFormColorLabel([object]$ComboBox, [object]$Label) {
 
 
 #==============================================================================================================================================================================================
+function IncreaseHP([string]$Offset, [float]$Value=0, [boolean]$Multiply=$True) {
+    
+    if ($Multiply)   { MultiplyBytes -Offset $Offset -Factor $Value        }
+    else             { ChangeBytes   -Offset $Offset -Values $Value -IsDec }
 
+}
+
+
+
+#==============================================================================================================================================================================================
+
+Export-ModuleMember -Function GetOoTEntranceIndex
 Export-ModuleMember -Function GetSFXID
 Export-ModuleMember -Function GetOoTMusicID
 Export-ModuleMember -Function GetMMMusicID
@@ -1102,3 +1155,5 @@ Export-ModuleMember -Function SetSwordColorsPreset
 Export-ModuleMember -Function SetColor
 Export-ModuleMember -Function SetColors
 Export-ModuleMember -Function SetFormColorLabel
+
+Export-ModuleMember -Function IncreaseHP

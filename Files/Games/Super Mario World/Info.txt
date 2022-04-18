@@ -5,7 +5,7 @@ Patch Options for Super Mario World:
 	* Extract ROM Only
 2. Apply Patch (requires a patch file)
 3. Patch Header
-4. Four ROM hacks
+4. Five ROM hacks
 
 Known Issues:
 - Unknown

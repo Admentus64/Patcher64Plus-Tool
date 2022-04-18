@@ -225,11 +225,11 @@ LoadSoundEffects ($Settings.Core.EnableSounds -eq $True)
 # Font
 if ($Settings.Core.ClearType -eq $True)   { $Font = "Segoe UI" }
 else                                      { $Font = "Microsoft Sans Serif" }
-$Fonts.Medium         = New-Object System.Drawing.Font($Font, 12, [System.Drawing.FontStyle]::Bold)
-$Fonts.Small          = New-Object System.Drawing.Font($Font, 8,  [System.Drawing.FontStyle]::Regular)
-$Fonts.SmallBold      = New-Object System.Drawing.Font($Font, 8,  [System.Drawing.FontStyle]::Bold)
-$Fonts.SmallUnderline = New-Object System.Drawing.Font($Font, 8,  [System.Drawing.FontStyle]::Underline)
-$Fonts.TextFile       = New-Object System.Drawing.Font("Consolas", 8, [System.Drawing.FontStyle]::Regular)
+$Fonts.Medium         = New-Object System.Drawing.Font($Font,      12, [System.Drawing.FontStyle]::Bold)
+$Fonts.Small          = New-Object System.Drawing.Font($Font,      8,  [System.Drawing.FontStyle]::Regular)
+$Fonts.SmallBold      = New-Object System.Drawing.Font($Font,      8,  [System.Drawing.FontStyle]::Bold)
+$Fonts.SmallUnderline = New-Object System.Drawing.Font($Font,      8,  [System.Drawing.FontStyle]::Underline)
+$Fonts.TextFile       = New-Object System.Drawing.Font("Consolas", 8,  [System.Drawing.FontStyle]::Regular)
 $Fonts.Editor         = New-Object System.Drawing.Font("Consolas", 16, [System.Drawing.FontStyle]::Regular)
 
 # Hide the PowerShell console from the user
@@ -239,25 +239,27 @@ ShowPowerShellConsole ($Settings.Debug.Console -eq $True)
 PerformUpdate
 
 # Ask for default interface mode on first time use
-if ($Settings.Core.Interface -ne 1 -and $Settings.Core.Interface -ne 2 -and $Settings.Core.Interface -ne 3 -and !$FatalError) {
+if ($Settings.Core.Interface -ne 1 -and $Settings.Core.Interface -ne 2 -and $Settings.Core.Interface -ne 3 -and $Settings.Core.Interface -ne 4 -and !$FatalError) {
     $global:PopupDialog = New-Object System.Windows.Forms.Form
-    $PopupDialog.Size = DPISize (New-Object System.Drawing.Size(390, 150))
+    $PopupDialog.Size = DPISize (New-Object System.Drawing.Size(510, 150))
     $PopupDialog.Text = $Patcher.Title
     $PopupDialog.FormBorderStyle = [System.Windows.Forms.FormBorderStyle]::FixedDialog
     $PopupDialog.StartPosition = "CenterScreen"
     $PopupDialog.Icon = $Files.icon.main
 
     $label   = CreateLabel  -x (DPISize 20)  -Y (DPISize 10) -Text "Select Your Default Interface Mode:" -Font $Fonts.Medium -AddTo $PopupDialog
-    $hud1Btn = CreateButton -X (DPISize 20)  -Y (DPISize 50)  -Width (DPISize 100) -Height (DPISize 50) -AddTo $PopupDialog -Text "Beginner Mode" -Info "Hide advanced options"
-    $hud2Btn = CreateButton -X (DPISize 140) -Y (DPISize 50)  -Width (DPISize 100) -Height (DPISize 50) -AddTo $PopupDialog -Text "Lite Mode"     -Info "Hide options that are likely incompatible with various ROM hacks"
-    $hud3Btn = CreateButton -X (DPISize 260) -Y (DPISize 50)  -Width (DPISize 100) -Height (DPISize 50) -AddTo $PopupDialog -Text "Advanced Mode" -Info "Show all options"
-    
+    $hud1Btn = CreateButton -X (DPISize 20)  -Y (DPISize 50)  -Width (DPISize 100) -Height (DPISize 50) -AddTo $PopupDialog -Text "Beginner Mode"    -Info "Hide advanced options"
+    $hud2Btn = CreateButton -X (DPISize 140) -Y (DPISize 50)  -Width (DPISize 100) -Height (DPISize 50) -AddTo $PopupDialog -Text "Lite Mode"        -Info "Hide options that are likely incompatible with various ROM hacks"
+    $hud3Btn = CreateButton -X (DPISize 260) -Y (DPISize 50)  -Width (DPISize 100) -Height (DPISize 50) -AddTo $PopupDialog -Text "Advanced Mode"    -Info "Show all options. This is the slowest mode due the many options it has."
+    $hud4Btn = CreateButton -X (DPISize 380) -Y (DPISize 50)  -Width (DPISize 100) -Height (DPISize 50) -AddTo $PopupDialog -Text "Streamlined Mode" -Info "Show all essential options, even advanced ones. But hide those you likely would not need"
+
     $hud1Btn.Add_Click( { $Settings.Core.Interface = 1; $PopupDialog.Close() } )
     $hud2Btn.Add_Click( { $Settings.Core.Interface = 2; $PopupDialog.Close() } )
     $hud3Btn.Add_Click( { $Settings.Core.Interface = 3; $PopupDialog.Close() } )
+    $hud4Btn.Add_Click( { $Settings.Core.Interface = 4; $PopupDialog.Close() } )
 
     $PopupDialog.ShowDialog() | Out-Null
-    $global:PopupDialog = $label = $hud1Btn = $Hud2Btn = $Hud3Btn = $null
+    $global:PopupDialog = $label = $hud1Btn = $Hud2Btn = $Hud3Btn = $Hud4Btn = $null
 }
 
 # Create the dialogs to show to the user
@@ -282,8 +284,8 @@ WriteToConsole ("Temp Folder:    " + $Paths.Temp)
 
 if (!$FatalError) {
     # Set default game mode
-    ChangeConsolesList   | Out-Null
-    GetFilePaths         | Out-Null
+    GetFilePaths       | Out-Null
+    WriteToConsole "--------------------------------"
 
     # Restore Last Custom Title and GameID
     $CustomHeader.ROMTitle.Add_TextChanged({        if (IsChecked $CustomHeader.EnableHeader)   { $Settings["Core"]["CustomHeader.ROMTitle"]  = $this.Text } })
@@ -297,15 +299,16 @@ if (!$FatalError) {
     RestoreCustomRegion
 
     # Restore last settings
-    if ($GameConsole -eq $null) { ChangeGamesList | Out-Null }
-    ChangeGameMode    | Out-Null
-    ChangeGameRev     | Out-Null
-    ChangePatchPanel  | Out-Null
-    ChangePatch       | Out-Null
-    SetMainScreenSize | Out-Null
-    SetVCPanel        | Out-Null
-    ChangeGamesList   | Out-Null
-    ChangeRevList     | Out-Null
+    ChangeConsolesList | Out-Null
+    ChangeGamesList    | Out-Null
+    ChangeGameMode     | Out-Null
+    ChangeGameRev      | Out-Null
+  # ChangePatchPanel   | Out-Null
+    ChangePatch        | Out-Null
+    SetMainScreenSize  | Out-Null
+    SetVCPanel         | Out-Null
+  # ChangeGamesList    | Out-Null
+  # ChangeRevList      | Out-Null
 
     # Active GUI events
     InitializeEvents
@@ -326,7 +329,7 @@ if (!$FatalError) {
 }
 
 if (TestFile -Path $Paths.Logs -Container) {
-    [System.Collections.ArrayList]$logs = (Get-ChildItem -Path $Paths.Logs -Filter "*.log" -File)
+    $logs = [System.Collections.ArrayList]@(Get-ChildItem -Path $Paths.Logs -Filter "*.log" -File)
     while ($logs.count -gt 10) { RemoveFile ($Paths.Logs + "\" + $logs[0]); $logs.RemoveAt(0) }
 }
 
@@ -335,4 +338,5 @@ if ($Relaunch) {
     Get-ChildItem -Path ".\" -Filter "*.ps1" -File -Name| ForEach-Object { $scriptPath = $Paths.Base + "\" + ([System.IO.Path]::GetFileName($_)) }
     Start-Process -FilePath powershell.exe -ArgumentList @("-File `"$ScriptPath`" $arg")
 }
+
 Exit

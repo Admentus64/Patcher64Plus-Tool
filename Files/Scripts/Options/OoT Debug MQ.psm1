@@ -7,10 +7,11 @@ function ByteOptions() {
         ExportAndPatch -Path "debug_mq_map_select_2" -Offset "BD2384" -Length "CC"
     }
     
-    if (IsChecked $Redux.Debug.Speed2x)                 { ChangeBytes -Offset "B80AAB"  -Values "02" }
-    if (IsChecked $Redux.Debug.DefaultZTargeting)       { ChangeBytes -Offset "BA168D"  -Values "01" }
-    if (IsChecked $Redux.Debug.ForceHiresModel)         { ChangeBytes -Offset "C194D3"  -Values "00" }
-    if (IsChecked $Redux.Debug.CowNoseRing)             { ChangeBytes -Offset "EF3E68"  -Values "00 00" }
+    if (IsChecked $Redux.Debug.Speed2x)                 { ChangeBytes -Offset "B80AAB" -Values "02" }
+    if (IsChecked $Redux.Debug.DefaultZTargeting)       { ChangeBytes -Offset "BA168D" -Values "01" }
+    if (IsChecked $Redux.Debug.ForceHiresModel)         { ChangeBytes -Offset "C194D3" -Values "00" }
+    if (IsChecked $Redux.Debug.CowNoseRing)             { ChangeBytes -Offset "EF3E68" -Values "00 00" }
+    if (IsChecked $Redux.Debug.ResumeLastArea)          { ChangeBytes -Offset "B1F7A0" -Values "00 00"; ChangeBytes -Offset "B1F7AC" -Values "00 00" }
     if (IsChecked $Redux.Debug.TranslateItemSelect)     { ExportAndPatch -Path "inventory_editor" -Offset "BFE3D4" -Length "C8" }
 
 
@@ -96,6 +97,7 @@ function CreateOptions() {
     CreateReduxCheckBox -Name "DefaultZTargeting"     -Text "Default Hold Z-Targeting"           -Info "Change the Default Z-Targeting option to Hold instead of Switch"                                                -Credits "Redux"
     CreateReduxCheckBox -Name "ForceHiresModel"       -Text "Force Hires Link Model"    -Checked -Info "Always use Link's High Resolution Model when Link is too far away"                                              -Credits "GhostlyDark"
     CreateReduxCheckBox -Name "CowNoseRing"           -Text "Restore Cow Nose Ring"              -Info "Restore the rings in the noses for Cows as seen in the Japanese release"                                        -Credits "ShadowOne333"
+    CreateReduxCheckBox -Name "ResumeLastArea"        -Text "Resume From Last Area"              -Info "Resume playing from the area you last saved in" -Warning "Be careful of saving in Grottos"                      -Credits "Aegiker (Debug)"
     CreateReduxCheckBox -Name "TranslateMapSelect"    -Text "Translate Map Select"               -Info "Translates the Debug Map Select menu into English"                                                              -Credits "Jared Johnson (translated by Zelda Edit)"
     CreateReduxCheckBox -Name "TranslateItemSelect"   -Text "Translate Item Select"              -Info "Translates the Debug Inventory Select menu into English"                                                        -Credits "GhostlyDark"
     
