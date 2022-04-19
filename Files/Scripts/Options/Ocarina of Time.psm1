@@ -44,7 +44,7 @@ function PatchOptions() {
 
 #==============================================================================================================================================================================================
 function ByteOptions() {
-
+    
     # GAMEPLAY #
 
     if (IsChecked $Redux.Gameplay.FasterBlockPushing) {
@@ -1497,27 +1497,6 @@ function CreateOptions() {
     elseif (IsInterface -Advanced)      { CreateOptionsDialog -Columns 6 -Height 790 -Tabs @("Main", "Graphics", "Audio", "Difficulty", "Colors", "Equipment", "Save", "Capacity", "Animations") }
     elseif (IsInterface -Streamlined)   { CreateOptionsDialog -Columns 6 -Height 625 -Tabs @("Main", "Graphics", "Audio", "Difficulty", "Equipment", "Animations") }
 
-    if (!(IsInterface -Lite)) {
-        $Redux.Graphics.Widescreen.Add_CheckStateChanged(    { AdjustGUI } )
-        $Redux.Graphics.WidescreenAlt.Add_CheckStateChanged( { AdjustGUI } )
-    }
-
-}
-
-
-
-#==============================================================================================================================================================================================
-function AdjustGUI() {
-   
-    if (IsInterface -Lite) { return }
-
-    EnableElem -Elem $Redux.Graphics.Widescreen    -Active (!$Redux.Graphics.WidescreenAlt.Checked -and !$Patches.Redux.Checked -and !$IswiiVC)
-    EnableElem -Elem $Redux.Graphics.WidescreenAlt -Active (!$Redux.Graphics.Widescreen.Checked)
-
-    if ($Redux.Graphics.Widescreen.Enabled -eq $False -and $Redux.Graphics.WidescreenAlt.Enabled -eq $False) { EnableElem -Elem $Redux.Graphics.WidescreenAlt -Active $True }
-    if (!$Redux.Graphics.Widescreen.Enabled)      { $Redux.Graphics.Widescreen.Checked    = $False }
-    if (!$Redux.Graphics.WidescreenAlt.Enabled)   { $Redux.Graphics.WidescreenAlt.Checked = $False }
-
 }
 
 
@@ -1739,14 +1718,13 @@ function CreateTabGraphics() {
     $Info += "`n- Backgrounds are 4:3 and centered showing collisions at the sides."
     $Info += "`n- Not compatible with Redux."
 
-    CreateReduxCheckBox -Name "Widescreen"         -Text "16:9 Widescreen (Advanced)"   -Info $Info -Beginner -Advanced                                                                             -Credits "Widescreen Patch by gamemasterplc, enhanced and ported by GhostlyDark"
-    CreateReduxCheckBox -Name "WidescreenAlt"      -Text "16:9 Widescreen (Simplified)" -Info "Apply 16:9 Widescreen adjusted backgrounds and textures (as well as 16:9 Widescreen for the Wii VC)" -Credits "Aspect Ratio Fix by Admentus`n16:9 backgrounds by GhostlyDark, ShadowOne333 & CYB3RTRON"
+    CreateReduxCheckBox -Name "Widescreen"         -Text "16:9 Widescreen (Advanced)"   -Info $Info -Beginner -Advanced -Native                                                                     -Credits "Widescreen Patch by gamemasterplc, enhanced and ported by GhostlyDark"
+    CreateReduxCheckBox -Name "WidescreenAlt"      -Text "16:9 Widescreen (Simplified)" -Info "Apply 16:9 Widescreen adjusted backgrounds and textures (as well as 16:9 Widescreen for the Wii VC)" -Credits "Aspect Ratio Fix by Admentus`n16:9 backgrounds by GhostlyDark, ShadowOne333 & CYB3RTRON" -Link $Redux.Graphics.Widescreen
     CreateReduxCheckBox -Name "ExtendedDraw"       -Text "Extended Draw Distance"       -Info "Increases the game's draw distance for objects`nDoes not work on all objects"                        -Credits "Admentus"
     CreateReduxCheckBox -Name "ForceHiresModel"    -Text "Force Hires Link Model"       -Info "Always use Link's High Resolution Model when Link is too far away"                                   -Credits "GhostlyDark"
     CreateReduxCheckBox -Name "HideEquipment"      -Text "Hide Equipment"               -Info "Hide the equipment when it is sheathed"                                                              -Credits "XModxGodX"
     CreateReduxCheckBox -Name "OverworldSkyboxes"  -Text "Overworld Skyboxes"           -Info "Use day and night skyboxes for all overworld areas lacking one" -Advanced                            -Credits "Admentus (ported) & BrianMp16 (AR Code)"
     CreateReduxCheckBox -Name "Chests"             -Text "Treasure Chests"              -Info "Use a different style for treasure chests"                      -Advanced                            -Credits "AndiiSyn"
-    CreateReduxCheckBox -Name "PointFiltering"     -Text "Point Filtering"              -Info "Use point filtering instead of the 3-point bilinear filtering"  -Advanced -Native                    -Credits "Admentus" -Warning "This option will make the game look worse and more like a PlayStation 1 title"
 
     $Models = LoadModelsList -Category "Child"
     CreateReduxComboBox -Name "ChildModels" -Text "Child Model" -Items (@("Original") + $Models) -Default "Original" -Info "Replace the child model used for Link" -Row 3 -Column 1
@@ -1821,10 +1799,10 @@ function CreateTabGraphics() {
     $Last.Group.Height = (DPISize 140)
 
     CreateImageBox -x 40  -y 30 -w 90  -h 90 -Name "ButtonPreview";      $Redux.UI.ButtonSize.Add_SelectedIndexChanged( { ShowHUDPreview -IsOoT } );   $Redux.UI.ButtonStyle.Add_SelectedIndexChanged( { ShowHUDPreview -IsOoT } )
-    CreateImageBox -x 160 -y 35 -w 40  -h 40 -Name "HeartsPreview";      if (IsInterface -Lite -Advanced) { $Redux.UI.Hearts.Add_SelectedIndexChanged(   { ShowHUDPreview -IsOoT } ) }
-    CreateImageBox -x 220 -y 35 -w 40  -h 40 -Name "RupeesPreview";      if (IsInterface -Lite -Advanced) { $Redux.UI.Rupees.Add_CheckStateChanged(      { ShowHUDPreview -IsOoT } ) }
-    CreateImageBox -x 280 -y 35 -w 40  -h 40 -Name "DungeonKeysPreview"; if (IsInterface -Lite -Advanced) { $Redux.UI.DungeonKeys.Add_CheckStateChanged( { ShowHUDPreview -IsOoT } ) }
-    CreateImageBox -x 140 -y 85 -w 200 -h 40 -Name "MagicPreview";       if (IsInterface -Lite -Advanced) { $Redux.UI.Magic.Add_SelectedIndexChanged(    { ShowHUDPreview -IsOoT } ) }
+    CreateImageBox -x 160 -y 35 -w 40  -h 40 -Name "HeartsPreview";      if (IsInterface -Lite -Advanced -Streamlined) { $Redux.UI.Hearts.Add_SelectedIndexChanged(   { ShowHUDPreview -IsOoT } ) }
+    CreateImageBox -x 220 -y 35 -w 40  -h 40 -Name "RupeesPreview";      if (IsInterface -Lite -Advanced -Streamlined) { $Redux.UI.Rupees.Add_CheckStateChanged(      { ShowHUDPreview -IsOoT } ) }
+    CreateImageBox -x 280 -y 35 -w 40  -h 40 -Name "DungeonKeysPreview"; if (IsInterface -Lite -Advanced -Streamlined) { $Redux.UI.DungeonKeys.Add_CheckStateChanged( { ShowHUDPreview -IsOoT } ) }
+    CreateImageBox -x 140 -y 85 -w 200 -h 40 -Name "MagicPreview";       if (IsInterface -Lite -Advanced -Streamlined) { $Redux.UI.Magic.Add_SelectedIndexChanged(    { ShowHUDPreview -IsOoT } ) }
     
     ShowHUDPreview -IsOoT
     if (IsInterface -Beginner) { $Redux.UI.HUD.Add_CheckStateChanged( { ShowHUDPreview -IsOoT } ) }
@@ -1849,7 +1827,7 @@ function CreateTabAudio() {
 
     $SFX = @("Default", "Disabled", "Soft Beep", "Bark", "Bomb Bounce", "Bongo Bongo Low", "Bow Twang", "Business Scrub", "Carrot Refill", "Cluck", "Great Fairy", "Drawbridge Set", "Guay", "Horse Trot", "HP Recover", "Iron Boots", "Moo", "Mweep!", 'Navi "Hey!"', "Navi Random", "Notification", "Pot Shattering", "Ribbit", "Rupee (Silver)", "Switch", "Sword Bonk", "Tambourine", "Timer", "Zelda Gasp (Adult)")
     
-    CreateReduxGroup    -Tag "SFX" -Text "SFX Sound Effects" -Streamlined
+    CreateReduxGroup    -Tag "SFX" -Text "SFX Sound Effects" -Beginner -Streamlined
     CreateReduxComboBox -Name "LowHP"      -Text "Low HP"      -Items $SFX -Info "Set the sound effect for the low HP beeping"                      -Credits "Ported from Rando"
     
     CreateReduxGroup    -Tag "SFX" -Text "SFX Sound Effects" -Lite -Advanced

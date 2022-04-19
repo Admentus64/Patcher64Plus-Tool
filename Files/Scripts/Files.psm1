@@ -71,7 +71,6 @@ function SetFileParameters() {
     $Files.oot.harder_child_bosses          = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Optional\harder_child_bosses")
     $Files.oot.hide_equipment               = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Optional\hide_equipment")
     $Files.oot.mm_pause_screen              = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Optional\mm_pause_screen")
-    $Files.oot.point_filtering              = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Optional\point_filtering")
     $Files.oot.megaton_hammer               = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Optional\vanilla_child_megaton_hammer")
     $Files.oot.widescreen                   = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Optional\widescreen")
 

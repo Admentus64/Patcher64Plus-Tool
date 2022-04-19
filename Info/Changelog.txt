@@ -1,3 +1,10 @@
+v17.3.1
+- Fixed issue with HUD previews not updating in Streamlined mode
+- Fixed issue with not removing the colors tab for Master of Time in Streamlined mode
+- Fixed issue with not showing or hiding several sound effect options
+- Changed behaviour for Widescreen checkboxes for OoT & MM
+- Removed "Point Filtering" option for OoT
+
 v17.3.0
 - Added new Interface Mode: Streamlined
 - Added settings files for patches with their own options customization
