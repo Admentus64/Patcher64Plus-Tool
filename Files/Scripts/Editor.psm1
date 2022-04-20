@@ -31,8 +31,6 @@
     $Editor.Label.AutoSize = $True
     $Editor.Label.Left = ([Math]::Floor($Editor.Dialog.Width / 2) - [Math]::Floor($Editor.Label.Width / 2))
 
-
-
     $list = GetMessageIDs
     $row = $column = 0
     $width = 60
@@ -52,7 +50,9 @@
         $button.BackColor = "Gray"
 
         $button.Add_Click( {
-            $Editor.Content.Text = GetMessage -ID $this.Text
+            $Table  = [System.IO.File]::ReadAllBytes($GameFiles.editor + "\Table Vanilla.tbl")
+            $Script = [System.IO.File]::ReadAllBytes($GameFiles.editor + "\vanilla.bin")
+            $Editor.Content.Text = GetMessage -Table $Table -Script $Script -ID $this.Text
             if (IsSet $Editor.LastButton) { $Editor.LastButton.BackColor = "Gray" }
             $Editor.LastButton = $this
             $this.BackColor = "DarkGray"
@@ -67,18 +67,19 @@
 
 
 #==============================================================================================================================================================================================
-function GetMessage([string]$ID, [switch]$HexOutput) {
+function GetMessage($Table, $Script, [string]$ID, [switch]$HexOutput) {
     
-    $table  = [System.IO.File]::ReadAllBytes($GameFiles.editor + "\Table Vanilla.tbl")
-    $script = [System.IO.File]::ReadAllBytes($GameFiles.editor + "\vanilla.bin")
+    if (!(IsSet $Table))    { $Table  = $ByteTableArray  }
+    if (!(IsSet $Script))   { $Script = $ByteScriptArray }
 
-    for ($i=0; $i -lt $table.length; $i+= 8) {
-        if ( (CombineHex $table[$i..($i+1)]) -eq $ID) {
-            $start = GetDecimal ( CombineHex @($table[$i+5],   $table[$i+6],   $table[$i+7])   )
-            $end   = GetDecimal ( CombineHex @($table[$i+5+8], $table[$i+6+8], $table[$i+7+8]) )
+    for ($i=0; $i -lt $Table.length; $i+= 8) {
+        $combine = CombineHex $Table[$i..($i+1)]
+        if ( (GetDecimal $combine) -eq (GetDecimal $ID )) {
+            $start = GetDecimal ( CombineHex @($Table[$i+5],   $Table[$i+6],   $Table[$i+7])   )
+            $end   = GetDecimal ( CombineHex @($Table[$i+5+8], $Table[$i+6+8], $Table[$i+7+8]) )
             
-            if ($HexOutput) { return (($script[$start..$end]) | ForEach-Object ToString X2) }
-            return [char[]]$script[$start..$end] -join ''
+            if ($HexOutput) { return (($Script[$start..$end]) | ForEach-Object ToString X2) }
+            return [char[]]$Script[$start..$end] -join ''
         }
     }
     return -1
@@ -88,7 +89,7 @@ function GetMessage([string]$ID, [switch]$HexOutput) {
 
 
 #==============================================================================================================================================================================================
-function GetMessageIDs([string]$ID) {
+function GetMessageIDs() {
     
     $table  = [System.IO.File]::ReadAllBytes($GameFiles.editor + "\Table Vanilla.tbl")
     $list = @()

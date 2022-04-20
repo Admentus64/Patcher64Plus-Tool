@@ -1307,18 +1307,30 @@ function ByteReduxOptions() {
 #==============================================================================================================================================================================================
 function ByteLanguageOptions() {
     
-    if ( (IsChecked -Elem $Redux.Text.Vanilla -Not) -or (IsChecked -Elem $Redux.Text.Speed1x -Not) -or (IsChecked $Redux.UI.GCScheme) -or (IsLanguage $Redux.Unlock.Tunics) -or (IsIndex -Elem $Redux.Text.NaviScript -Not) -or (IsLanguage $Redux.Capacity.EnableAmmo) -or (IsLanguage $Redux.Capacity.EnableWallet) -or ( (IsLangText -Elem $Redux.Equipment.DekuShield -Compare "Iron Shield") -and $ChildModel.deku_shield -ne 0) ) {
-        if ( (IsSet $LanguagePatch.script_start) -and (IsSet $LanguagePatch.script_length) ) {
-            $script = $GameFiles.extracted + "\message_data_static.bin"
-            $table  = $GameFiles.extracted + "\message_data.tbl"
-            ExportBytes -Offset $LanguagePatch.script_start -Length $LanguagePatch.script_length -Output $script -Force
-            ExportBytes -Offset "B849EC" -Length "43A8" -Output $table -Force
-            $lengthDifference = (Get-Item ($GameFiles.extracted + "\message_data_static.bin")).length
-        }
-        else  { return }
+    # Check
+
+    if ( (IsChecked -Elem $Redux.Text.Vanilla -Not) -or (IsChecked -Elem $Redux.Text.Speed1x -Not) -or (IsChecked $Redux.UI.GCScheme) ) {
+        if ( !(IsSet $LanguagePatch.script_start) -or !(IsSet $LanguagePatch.script_length) ) { return }
+    }
+    elseif ( (IsLanguage $Redux.Unlock.Tunics) -or (IsIndex -Elem $Redux.Text.NaviScript -Not) -or (IsLanguage $Redux.Capacity.EnableAmmo) -or (IsLanguage $Redux.Capacity.EnableWallet) -or ( (IsLangText -Elem $Redux.Equipment.DekuShield -Compare "Iron Shield") -and $ChildModel.deku_shield -ne 0) ) {
+        if ( !(IsSet $LanguagePatch.script_start) -or !(IsSet $LanguagePatch.script_length) ) { return }
     }
     else { return }
 
+
+
+    # Init
+
+    $script = $GameFiles.extracted + "\message_data_static.bin"
+    $table  = $GameFiles.extracted + "\message_data.tbl"
+    ExportBytes -Offset $LanguagePatch.script_start -Length $LanguagePatch.script_length -Output $script -Force
+    ExportBytes -Offset "B849EC" -Length "43A8" -Output $table -Force
+    $lengthDifference = (Get-Item ($GameFiles.extracted + "\message_data_static.bin")).length
+    
+
+    
+    # Patch whole script
+    
     if (IsChecked $Redux.Text.Redux) { ApplyPatch -File $script -Patch "\Export\Message\redux_static.bps" }
     elseif (IsChecked $Redux.Text.Restore) {
         ChangeBytes -Offset "7596" -Values "52 40"
@@ -1346,11 +1358,26 @@ function ByteLanguageOptions() {
         }
     }
 
+
+
+    # Length difference
+
     $lengthDifference = (Get-Item ($GameFiles.extracted + "\message_data_static.bin")).length - $lengthDifference
     if ($lengthDifference -ne 0) {
         $newDma = (Get16Bit ((GetDecimal "5130") + $lengthDifference)) -split '(..)' -ne ''
         ChangeBytes -Offset "7596" -Values $newDma
     }
+
+
+
+    # Load
+
+    $global:ByteScriptArray = [System.IO.File]::ReadAllBytes($script)
+    $global:ByteTableArray  = [System.IO.File]::ReadAllBytes($table)
+
+
+
+    # Patch options
 
     if (IsChecked $Redux.Text.Speed2x) {
         ChangeBytes -Offset "B5006F" -Values "02" # Text Speed

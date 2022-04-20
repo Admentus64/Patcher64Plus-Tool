@@ -814,17 +814,29 @@ function ByteReduxOptions() {
 #==============================================================================================================================================================================================
 function ByteLanguageOptions() {
     
-    if ( (IsChecked -Elem $Redux.Text.Vanilla -Not) -or (IsLanguage $Redux.Gameplay.RazorSword) -or (IsLanguage $Redux.Text.AdultPronouns) -or (IsChecked $Redux.UI.GCScheme) -or (IsIndex -Elem $Redux.Text.TatlScript -Not) -or (IsLanguage $Redux.Capacity.EnableAmmo) -or (IsLanguage $Redux.Capacity.EnableWallet)  ) {
-        if ( (IsSet $LanguagePatch.script_start) -and (IsSet $LanguagePatch.script_length) ) {
-            $script = $GameFiles.extracted + "\message_data_static.bin"
-            $table  = $GameFiles.extracted + "\message_data.tbl"
-            ExportBytes -Offset $LanguagePatch.script_start -Length $LanguagePatch.script_length -Output $script -Force
-            ExportBytes -Offset "C5D0D8" -Length "8F70" -Output $table -Force
-            $lengthDifference = (Get-Item ($GameFiles.extracted + "\message_data_static.bin")).length
-        }
-        else  { return }
+    # Check
+
+    if ( (IsChecked -Elem $Redux.Text.Vanilla -Not) -or (IsLanguage $Redux.Text.AdultPronouns) -or (IsChecked $Redux.UI.GCScheme) ) {
+        if ( !(IsSet $LanguagePatch.script_start) -or !(IsSet $LanguagePatch.script_length) ) { return }
+    }
+    elseif ( (IsLanguage $Redux.Gameplay.RazorSword) -or (IsIndex -Elem $Redux.Text.TatlScript -Not) -or (IsLanguage $Redux.Capacity.EnableAmmo) -or (IsLanguage $Redux.Capacity.EnableWallet) ) {
+        if ( !(IsSet $LanguagePatch.script_start) -or !(IsSet $LanguagePatch.script_length) ) { return }
     }
     else { return }
+
+
+
+    # Init
+
+    $script = $GameFiles.extracted + "\message_data_static.bin"
+    $table  = $GameFiles.extracted + "\message_data.tbl"
+    ExportBytes -Offset $LanguagePatch.script_start -Length $LanguagePatch.script_length -Output $script -Force
+    ExportBytes -Offset "C5D0D8" -Length "8F70" -Output $table -Force
+    $lengthDifference = (Get-Item ($GameFiles.extracted + "\message_data_static.bin")).length
+
+
+
+    # Patch whole script
 
     if (IsChecked $Redux.Text.Restore) {
         ApplyPatch  -File $script -Patch "\Export\Message\restore_static.bps"
@@ -846,11 +858,26 @@ function ByteLanguageOptions() {
         }
     }
 
+
+
+    # Length difference
+
     $lengthDifference = (Get-Item ($GameFiles.extracted + "\message_data_static.bin")).length - $lengthDifference
     if ($lengthDifference -ne 0) {
         $newDma = (Get16Bit ((GetDecimal "A9F0") + $lengthDifference)) -split '(..)' -ne ''
         ChangeBytes -Offset "1A6D6" -Values $newDma
     }
+
+
+
+    # Load
+
+    $global:ByteScriptArray = [System.IO.File]::ReadAllBytes($script)
+    $global:ByteTableArray  = [System.IO.File]::ReadAllBytes($table)
+
+
+
+    # Patch options
 
     if (IsChecked $Redux.Text.OcarinaIcons) {
         PatchBytes -Offset "A3B9BC" -Length "850" -Texture -Pad -Patch "Icons\deku_pipes_icon.yaz0"  # Slingshot, ID: 0x0B

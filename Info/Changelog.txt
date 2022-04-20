@@ -1,3 +1,8 @@
+v17.3.2
+- Added more initial setup for text editor (lookup dialogue directly rather than scanning through whole)
+- Improved performance when swapping out ROM / WAD files while retaining the same mode
+- Fixed issue with Redux options not disabling properly
+
 v17.3.1
 - Fixed issue with HUD previews not updating in Streamlined mode
 - Fixed issue with not removing the colors tab for Master of Time in Streamlined mode

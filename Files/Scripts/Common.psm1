@@ -459,7 +459,6 @@ function ChangePatch() {
                 $PatchToolTip.SetToolTip($Patches.Button, ([string]::Format($item.tooltip, [Environment]::NewLine)))
                 GetHeader
                 GetRegion
-                DisablePatches
 
                 if     (IsSet $GamePatch.script)   { $GameFiles.script = ($Paths.Scripts + "\Options\" + $GamePatch.script + ".psm1") }
                 elseif (IsSet $GameRev.script)     { $GameFiles.script = ($Paths.Scripts + "\Options\" + $GameRev.script   + ".psm1") }
@@ -468,8 +467,10 @@ function ChangePatch() {
                 if ( (TestFile $GameFiles.script) -and $GamePatch.options -eq 1) {
                     $global:GameSettings = GetSettings (GetGameSettingsFile)
                     Import-Module -Name $GameFiles.script -Global
-                    LoadAdditionalOptions
+                    if (Get-Command "CreateOptions" -errorAction SilentlyContinue) { iex "CreateOptions" }
                 }
+                DisablePatches
+
                 break
         }
     }
@@ -558,14 +559,17 @@ function GamePath_Finish([object]$TextBox, [string]$Path) {
     # Check if the game is a WAD
     $DroppedExtn = $GamePath.Extension
 
-    if ( ($DroppedExtn -eq '.wad') -and !$IsWiiVC)              { SetWiiVCMode $True  }
-    elseif ( ($DroppedExtn -ne '.wad') -and $IsWiiVC)           { SetWiiVCMode $False }
-    elseif ( ($DroppedExtn -ne '.wad') -and !$GameIsSelected)   { SetWiiVCMode $False }
+    $changed = $false
+    if ( ($DroppedExtn -eq '.wad') -and !$IsWiiVC)              { $changed = $true; SetWiiVCMode $True  }
+    elseif ( ($DroppedExtn -ne '.wad') -and $IsWiiVC)           { $changed = $true; SetWiiVCMode $False }
+    elseif ( ($DroppedExtn -ne '.wad') -and !$GameIsSelected)   { $changed = $true; SetWiiVCMode $False }
     $global:GameIsSelected = $True
 
     if ($IsWiiVC)   { WriteToConsole ("WAD Path:       " + $GamePath) }
     else            { WriteToConsole ("ROM Path:       " + $GamePath) }
     
+    if (!$changed) { return }
+
     $InputPaths.ClearGameButton.Enabled = $True
     $InputPaths.PatchPanel.Visible      = $True
     $CustomHeader.EnableHeader.checked -or $CustomHeader.EnableRegion.checked

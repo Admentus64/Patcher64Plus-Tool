@@ -531,21 +531,11 @@ function CheckDowngradable() {
 
 #==============================================================================================================================================================================================
 function DisableReduxOptions() {
-
+    
     if (!(IsSet $Redux.Groups)) { return }
     foreach ($item in $Redux.Groups) {
         if ($item.IsRedux) { EnableElem -Elem $item -Active ($Patches.Options.Checked -and $Patches.Redux.Checked) }
     }
-
-}
-
-
-
-#==============================================================================================================================================================================================
-function LoadAdditionalOptions(){
-    
-    # Create options content based on current game
-    if (Get-Command "CreateOptions" -errorAction SilentlyContinue) { iex "CreateOptions" }
 
 }
 
@@ -682,6 +672,5 @@ function PatchPath_DragDrop() {
 Export-ModuleMember -Function CreateMainDialog
 Export-ModuleMember -Function InitializeEvents
 Export-ModuleMember -Function DisablePatches
-Export-ModuleMember -Function LoadAdditionalOptions
 Export-ModuleMember -Function SetJSONFile
 Export-ModuleMember -Function DisableReduxOptions
