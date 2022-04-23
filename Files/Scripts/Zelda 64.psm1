@@ -182,7 +182,7 @@ function PatchReplaceMusic([string]$BankPointerTableStart, [string]$BankPointerT
 
                     # Bank
                     if (TestFile ($Paths.Music + "\" + $file + ".meta"))   { $value = (Get-Content -Path ($Paths.Music + "\" + $file + ".meta"))[1].replace("0x", "") } # Meta
-                    else                                                    { $value = ($file.Substring(($file.IndexOf('_')+1))).split("_")[0] }                        # Filename
+                    else                                                   { $value = ($file.Substring(($file.IndexOf('_')+1))).split("_")[0] }                         # Filename
                     if ($ext -eq $Files.json.music.conversion.ext) {
                         foreach ($conversion in $Files.json.music.conversion.bank) {
                                 if ( (GetDecimal $value) -eq (GetDecimal $conversion.original) ) {
@@ -302,8 +302,18 @@ function MusicOptions([string]$Default="File Select") {
                 if (TestFile ($file + ".mid")) {
                     if (TestFile ($file + ".meta"))   { $audioBank = (Get-Content -Path ($file + ".meta"))[1].replace("0x", "") }         # Meta
                     else                              { $audioBank = (($file + ".mid").Substring(($file.IndexOf('_')+1))).split("_")[0] } # Filename
-                    $audioBank = "`"soundfont " + (Get8Bit (GetDecimal $audioBank)) + ".sf2`""
                     $midiFile  = $Paths.Music + "\" + $item.BaseName + "\" + $Redux.ReplaceMusic.Tracks.SelectedItems + ".zip#" + $Redux.ReplaceMusic.Tracks.SelectedItems + ".mid"
+                    $ext = ".seq"
+                    if (TestFile ($file + ".zseq")) { $ext = ".zseq" }
+                    if ($ext -eq $Files.json.music.conversion.ext) {
+                        foreach ($conversion in $Files.json.music.conversion.bank) {
+                                if ( (GetDecimal $audioBank) -eq (GetDecimal $conversion.original) ) {
+                                    $audioBank = $conversion.replace
+                                    break
+                                }
+                            }
+                    }
+                    $audioBank = "`"soundfont " + (Get8Bit (GetDecimal $audioBank)) + ".sf2`""
                     break
                 }
             }
@@ -852,7 +862,7 @@ function SetButtonColorsPreset([object]$ComboBox) {
     elseif ($Text -eq "Randomized")   {
         $Colors = @()
         for ($i=0; $i -lt $Redux.Colors.SetButtons.length; $i++) { $Colors += SetRandomColor -Dialog $Redux.Colors.SetButtons[$i] -Label $Redux.Colors.ButtonLabels[$i] }
-        if ($GameSettings.Debug.Console -eq $True) { Write-Host ("Randomize Button Colors: " + $Colors) }
+        WriteToConsole ("Randomize Button Colors: " + $Colors)
     }
 
 }
