@@ -38,7 +38,6 @@ function ByteOptions() {
     if (IsChecked $Redux.Gameplay.NoShieldRecoil)           { ChangeBytes -Offset "BD416C" -Values "24 00"                                                           }
     if (IsChecked $Redux.Gameplay.RunWhileShielding)        { ChangeBytes -Offset "BD7DA0" -Values "10 00 00 55"; ChangeBytes -Offset "BD01D4" -Values "00 00 00 00" }
     if (IsChecked $Redux.Gameplay.PushbackAttackingWalls)   { ChangeBytes -Offset "BDEAE0" -Values "26 24 00 00 24 85 00 00"                                         }
-    if (IsChecked $Redux.Gameplay.ResumeLastArea)           { ChangeBytes -Offset "B06348" -Values "00 00";       ChangeBytes -Offset "B06354" -Values "00 00"       }
     if (IsChecked $Redux.Gameplay.AllowWarpSongs)           { ChangeBytes -Offset "B6D3D2" -Values "00";          ChangeBytes -Offset "B6D42A" -Values "00"          }
     if (IsChecked $Redux.Gameplay.AllowFaroreWind)          { ChangeBytes -Offset "B6D3D3" -Values "00";          ChangeBytes -Offset "B6D42B" -Values "00"          }
 
@@ -644,7 +643,6 @@ function CreateTabMain() {
     CreateReduxCheckBox -Name "NoShieldRecoil"         -Text "No Shield Recoil"         -Info "Disable the recoil when being hit while shielding"                                                           -Credits "Admentus (ROM) & Aegiker (GameShark)"
     CreateReduxCheckBox -Name "RunWhileShielding"      -Text "Run While Shielding"      -Info "Press R to shield will no longer prevent Link from moving around" -Link $Redux.Gameplay.NoShieldRecoil       -Credits "Admentus (ROM) & Aegiker (GameShark)"
     CreateReduxCheckBox -Name "PushbackAttackingWalls" -Text "Pushback Attacking Walls" -Info "Link is getting pushed back a bit when hitting the wall with the sword"                                      -Credits "Admentus (ROM) & Aegiker (GameShark)"
-    CreateReduxCheckBox -Name "ResumeLastArea"         -Text "Resume From Last Area"    -Info "Resume playing from the area you last saved in" -Warning "Be careful of saving in Grottos"                   -Credits "Admentus (ROM) & Aegiker (GameShark)"
 
 
 

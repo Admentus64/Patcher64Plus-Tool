@@ -370,11 +370,12 @@ function CombineHex([string[]]$Hex) {
 
 
 #==================================================================================================================================================================================================================================================================
-function Get8Bit([byte]$Value)                     { return '{0:X2}' -f $Value }
-function Get16Bit([uint16]$Value)                  { return '{0:X4}' -f $Value }
-function Get24Bit([uint32]$Value)                  { return '{0:X6}' -f $Value }
-function Get32Bit([uint32]$Value)                  { return '{0:X8}' -f $Value }
-function AddToOffset([string]$Hex, [string]$Add)   { return (Get32Bit ( (GetDecimal $Hex) + (GetDecimal $Add) ) ) }
+function Get8Bit([byte]$Value)                                 { return '{0:X2}' -f $Value }
+function Get16Bit([uint16]$Value)                              { return '{0:X4}' -f $Value }
+function Get24Bit([uint32]$Value)                              { return '{0:X6}' -f $Value }
+function Get32Bit([uint32]$Value)                              { return '{0:X8}' -f $Value }
+function AddToOffset([string]$Hex, [string]$Add)               { return (Get32Bit ( (GetDecimal $Hex) + (GetDecimal $Add)      ) ) }
+function SubtractFromOffset([string]$Hex, [string]$Subtract)   { return (Get32Bit ( (GetDecimal $Hex) - (GetDecimal $Subtract) ) ) }
 
 
 

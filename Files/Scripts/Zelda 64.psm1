@@ -182,7 +182,7 @@ function PatchReplaceMusic([string]$BankPointerTableStart, [string]$BankPointerT
 
                     # Bank
                     if (TestFile ($Paths.Music + "\" + $file + ".meta"))   { $value = (Get-Content -Path ($Paths.Music + "\" + $file + ".meta"))[1].replace("0x", "") } # Meta
-                    else                                                    { $value = ($file.Substring(($file.IndexOf('_')+1))).split("_")[0] }                          # Filename
+                    else                                                    { $value = ($file.Substring(($file.IndexOf('_')+1))).split("_")[0] }                        # Filename
                     if ($ext -eq $Files.json.music.conversion.ext) {
                         foreach ($conversion in $Files.json.music.conversion.bank) {
                                 if ( (GetDecimal $value) -eq (GetDecimal $conversion.original) ) {
@@ -289,20 +289,28 @@ function MusicOptions([string]$Default="File Select") {
     $Redux.Music.Preview.Add_Click({
         if ($this.text -eq "Start Music Preview") {
             $midiScript = {
-                Param ([string]$toolFile, [string]$midiFile)
-                $task = & $toolFile $midiFile | Out-Null
+                Param ([string]$Path, [string]$toolFile, [string]$audioBank, [string]$midiFile)
+                Push-Location $path
+                $task = & $toolFile -x $audioBank $midiFile | Out-Null
+                Pop-Location
             }
 
-            $midiFile = $null
+            $midiFile  = $null
+            $audioBank = $null
             foreach ($item in (Get-ChildItem -LiteralPath $Paths.Music -Directory)) {
-                if (TestFile ($Paths.Music + "\" + $item.BaseName + "\" + $Redux.ReplaceMusic.Tracks.SelectedItems + ".mid")) {
-                    $midiFile = $Paths.Music + "\" + $item.BaseName + "\" + $Redux.ReplaceMusic.Tracks.SelectedItems + ".mid"
+                $file = $Paths.Music + "\" + $item.BaseName + "\" + $Redux.ReplaceMusic.Tracks.SelectedItems
+                if (TestFile ($file + ".mid")) {
+                    if (TestFile ($file + ".meta"))   { $audioBank = (Get-Content -Path ($file + ".meta"))[1].replace("0x", "") }         # Meta
+                    else                              { $audioBank = (($file + ".mid").Substring(($file.IndexOf('_')+1))).split("_")[0] } # Filename
+                    $audioBank = "`"soundfont " + (Get8Bit (GetDecimal $audioBank)) + ".sf2`""
+                    $midiFile  = $Paths.Music + "\" + $item.BaseName + "\" + $Redux.ReplaceMusic.Tracks.SelectedItems + ".zip#" + $Redux.ReplaceMusic.Tracks.SelectedItems + ".mid"
+                    break
                 }
             }
-            if (IsSet $midiFile) {
+            if ( (IsSet $midiFile) -and (IsSet $audioBank) ) {
                 $this.Text      = "Stop Music Preview"
                 $this.BackColor = "Red"
-                Start-Job -Name 'MidiPlayer' -Scriptblock $midiScript -ArgumentList @($Files.tool.playSMF, $midiFile)
+                Start-Job -Name 'MidiPlayer' -Scriptblock $midiScript -ArgumentList @($GameFiles.banks, $Files.tool.timidity, $audioBank, $midiFile)
                 $jobStatus = (Get-Job -Name "MidiPlayer").State
 
                 $check = $false

@@ -1,3 +1,8 @@
+v17.3.3
+- Replaced midi previewer
+- Removed "Resume From Last Area" option for Master of Time
+- Fixed checking default value for patching
+
 v17.3.2
 - Added more initial setup for text editor (lookup dialogue directly rather than scanning through whole)
 - Improved performance when swapping out ROM / WAD files while retaining the same mode

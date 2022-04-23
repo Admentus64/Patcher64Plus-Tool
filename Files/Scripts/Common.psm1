@@ -359,6 +359,7 @@ function ChangeGameMode() {
     $GameFiles.compressed   = $GameFiles.Base + "\Compressed"
     $GameFiles.decompressed = $GameFiles.Base + "\Decompressed"
     $GameFiles.languages    = $GameFiles.Base + "\Languages"
+    $GameFiles.banks        = $GameFiles.Base + "\Audio Banks"
     $GameFiles.models       = $Paths.Models + "\" + $GameType.mode
     $GameFiles.downgrade    = $GameFiles.Base + "\Downgrade"
     $GameFiles.textures     = $GameFiles.Base + "\Textures"
@@ -651,12 +652,13 @@ function PatchPath_Finish([object]$TextBox, [string]$Path) {
 
 
 #==============================================================================================================================================================================================
-function IsDefault([object]$Elem, [switch]$Not, $Value) {
+function IsDefault([object]$Elem, $Value, [switch]$Not) {
     
-    if (!(IsSet $Elem))             { return $False }
-    if (!$Elem.Active)              { return $False }
-    if ($Elem.Default -eq $Value)   { return !$Not  }
-    if ($Elem.Default -ne $Value)   { return  $Not  }
+    if (!(IsSet $Value))            { $Value = $Elem.Text }
+    if (!(IsSet $Elem))             { return $False       }
+    if (!$Elem.Active)              { return $False       }
+    if ($Elem.Default -eq $Value)   { return !$Not        }
+    if ($Elem.Default -ne $Value)   { return  $Not        }
     return $False
 
 }

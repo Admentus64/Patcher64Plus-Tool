@@ -54,7 +54,7 @@ function SetFileParameters() {
 
     $Files.tool.zip                         = (GetFilePath) + "\Files\Tools\Zip\7z.exe"
 
-    $Files.tool.playSMF                     = (GetFilePath) + "\Files\Tools\playsmf.exe"
+    $Files.tool.timidity                    = (GetFilePath) + "\Files\Tools\timidity.exe"
 
 
 
