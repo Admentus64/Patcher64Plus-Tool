@@ -65,6 +65,7 @@ function ByteOptions() {
     if (IsChecked $Redux.Gameplay.NoShieldRecoil)           { ChangeBytes -Offset "BD416C" -Values "24 00"                                                           }
     if (IsChecked $Redux.Gameplay.RunWhileShielding)        { ChangeBytes -Offset "BD7DA0" -Values "10 00 00 55"; ChangeBytes -Offset "BD01D4" -Values "00 00 00 00" }
     if (IsChecked $Redux.Gameplay.PushbackAttackingWalls)   { ChangeBytes -Offset "BDEAE0" -Values "26 24 00 00 24 85 00 00"                                         }
+    if (IsChecked $Redux.Gameplay.RemoveCrouchStab)         { ChangeBytes -Offset "BDE374" -Values "10 00 00 0D"                                                     }
     if (IsChecked $Redux.Gameplay.ResumeLastArea)           { ChangeBytes -Offset "B06348" -Values "00 00";       ChangeBytes -Offset "B06354" -Values "00 00"       }
     if (IsChecked $Redux.Gameplay.AllowWarpSongs)           { ChangeBytes -Offset "B6D3D2" -Values "00";          ChangeBytes -Offset "B6D42A" -Values "00"          }
     if (IsChecked $Redux.Gameplay.AllowFaroreWind)          { ChangeBytes -Offset "B6D3D3" -Values "00";          ChangeBytes -Offset "B6D42B" -Values "00"          }
@@ -229,12 +230,12 @@ function ByteOptions() {
         PatchBytes -Offset "1A3E580" -Shared -Patch "HUD\Dungeon Map Chest\Majora's Mask.bin"
     }
 
-    if (IsChecked $Redux.UI.CenterNaviPrompt)                                { ChangeBytes -Offset "B582DF" -Values "01" -Subtract }
-    if ( (IsChecked $Redux.UI.HUD) -or (IsChecked $Redux.UI.Rupees)      )   { PatchBytes -Offset "1A3DF00" -Shared -Patch "HUD\Rupees\Majora's Mask.bin" }
-    if ( (IsChecked $Redux.UI.HUD) -or (IsChecked $Redux.UI.DungeonKeys) )   { PatchBytes -Offset "1A3DE00" -Shared -Patch "HUD\Keys\Majora's Mask.bin"   }
-    if ( !(IsIndex -Elem $Redux.UI.Hearts -Text "Gold Quest") )              { PatchBytes -Offset "1A3C000" -Shared -Patch ("HUD\Hearts\" + $Redux.UI.Hearts.Text.replace(" (default)", "") + ".bin") }
-    if ( !(IsIndex -Elem $Redux.UI.Magic  -Text "Ocarina Of Time") )         { PatchBytes -Offset "1A3F8C0" -Shared -Patch ("HUD\Magic\"  + $Redux.UI.Magic.Text.replace(" (default)", "")  + ".bin") }
-    if   (IsChecked $Redux.UI.HUD)                                           { PatchBytes -Offset "1A3C000" -Shared -Patch "HUD\Hearts\Majora's Mask.bin"; PatchBytes -Offset "1A3F8C0" -Shared -Patch "HUD\Magic\Majora's Mask.bin" }
+    if   (IsChecked $Redux.UI.CenterNaviPrompt)                              { ChangeBytes -Offset "B582DF"  -Values "01" -Subtract }
+    if ( (IsChecked $Redux.UI.HUD) -or (IsChecked $Redux.UI.Rupees)      )   { PatchBytes  -Offset "1A3DF00" -Shared -Patch "HUD\Rupees\Majora's Mask.bin" }
+    if ( (IsChecked $Redux.UI.HUD) -or (IsChecked $Redux.UI.DungeonKeys) )   { PatchBytes  -Offset "1A3DE00" -Shared -Patch "HUD\Keys\Majora's Mask.bin"   }
+    if   (IsDefault -Elem $Redux.UI.Hearts -Not)                             { PatchBytes  -Offset "1A3C000" -Shared -Patch ("HUD\Hearts\" + $Redux.UI.Hearts.Text.replace(" (default)", "") + ".bin") }
+    if   (IsDefault -Elem $Redux.UI.Magic  -Not)                             { PatchBytes  -Offset "1A3F8C0" -Shared -Patch ("HUD\Magic\"  + $Redux.UI.Magic.Text.replace(" (default)", "")  + ".bin") }
+    if   (IsChecked $Redux.UI.HUD)                                           { PatchBytes  -Offset "1A3C000" -Shared -Patch "HUD\Hearts\Majora's Mask.bin"; PatchBytes -Offset "1A3F8C0" -Shared -Patch "HUD\Magic\Majora's Mask.bin" }
 
 
 
@@ -332,8 +333,10 @@ function ByteOptions() {
 
     # MUSIC #
 
-    PatchReplaceMusic -bankPointerTableStart "B899EC" -BankPointerTableEnd "B89AD0" -PointerTableStart "B89AE0" -PointerTableEnd "B8A1C0" -SeqStart "29DE0" -SeqEnd "79470"
-    PatchMuteMusic -SequenceTable "B89AE0" -Sequence "29DE0" -Length 108
+    if (IsInterface -Beginner -Advanced) {
+        PatchReplaceMusic -bankPointerTableStart "B899EC" -BankPointerTableEnd "B89AD0" -PointerTableStart "B89AE0" -PointerTableEnd "B8A1C0" -SeqStart "29DE0" -SeqEnd "79470"
+        PatchMuteMusic -SequenceTable "B89AE0" -Sequence "29DE0" -Length 108
+    }
 
     if (IsIndex -Elem $Redux.Music.FileSelect -Text $Redux.Music.FileSelect.default -Not) {
         foreach ($track in $Files.json.music.tracks) {
@@ -1106,6 +1109,7 @@ function CreateTabMain() {
     CreateReduxCheckBox -Name "NoShieldRecoil"         -Text "No Shield Recoil"          -Lite -Advanced -Info "Disable the recoil when being hit while shielding"                                                                             -Credits "Admentus (ROM) & Aegiker (GameShark)"
     CreateReduxCheckBox -Name "RunWhileShielding"      -Text "Run While Shielding"       -Lite -Advanced -Info "Press R to shield will no longer prevent Link from moving around" -Link $Redux.Gameplay.NoShieldRecoil                         -Credits "Admentus (ROM) & Aegiker (GameShark)"
     CreateReduxCheckBox -Name "PushbackAttackingWalls" -Text "Pushback Attacking Walls"  -Lite -Advanced -Info "Link is getting pushed back a bit when hitting the wall with the sword"                                                        -Credits "Admentus (ROM) & Aegiker (GameShark)"
+    CreateReduxCheckBox -Name "RemoveCrouchStab"       -Text "Remove Crouch Stab"        -Lite -Advanced -Info "The Crouch Stab move is removed"                                                                                               -Credits "Garo-Mastah"
     CreateReduxCheckBox -Name "ResumeLastArea"         -Text "Resume From Last Area"                     -Info "Resume playing from the area you last saved in" -Warning "Be careful of saving in Grottos"                                     -Credits "Admentus (ROM) & Aegiker (GameShark)"
     CreateReduxCheckBox -Name "AllowWarpSongs"         -Text "Allow Warp Songs"      -Beginner -Advanced -Info "Allow warp songs in Gerudo Training Ground and Ganon's Castle"                                                                 -Credits "Ported from Rando"
     CreateReduxCheckBox -Name "AllowFaroreWind"        -Text "Allow Farore's Wind"   -Beginner -Advanced -Info "Allow Farore's Wind in Gerudo Training Ground and Ganon's Castle"                                                              -Credits "Ported from Rando"

@@ -1,3 +1,11 @@
+v17.3.4
+- Added new "Remove Crouch Stab" option for OoT & MM
+- Fixed issue with patching OoT & MM HUD in Beginner Mode
+- Fixed issue with patches ordering in Streamlined mode
+- Fixed issue with resetting options
+- Fixed patching in music in Lite & Streamlined modes
+- Fixed double-patching options when switching patches
+
 v17.3.3
 - Replaced midi previewer
 - Removed "Resume From Last Area" option for Master of Time

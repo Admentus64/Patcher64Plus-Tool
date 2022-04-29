@@ -243,9 +243,9 @@ function ByteOptions() {
 
     if ( (IsChecked $Redux.UI.HUD) -or (IsChecked $Redux.UI.Rupees)      )   { PatchBytes -Offset "1EBDE60" -Shared -Patch "HUD\Rupees\Ocarina of Time.bin" }
     if ( (IsChecked $Redux.UI.HUD) -or (IsChecked $Redux.UI.DungeonKeys) )   { PatchBytes -Offset "1EBDD60" -Shared -Patch "HUD\Keys\Ocarina of Time.bin"   }
-    if ( !(IsIndex -Elem $Redux.UI.Hearts -Text "Majora's Mask") )           { PatchBytes -Offset "1EBD000" -Shared -Patch ("HUD\Hearts\" + $Redux.UI.Hearts.Text.replace(" (default)", "") + ".bin") }
-    if ( !(IsIndex -Elem $Redux.UI.Magic  -Text "Majora's Mask") )           { PatchBytes -Offset "1EC1DA0" -Shared -Patch ("HUD\Magic\"  + $Redux.UI.Magic.Text.replace(" (default)", "")  + ".bin") }
-    if (IsChecked $Redux.UI.BlackBars)                                       { ChangeBytes -Offset "BF72A4" -Values "00 00 00 00" }
+    if   (IsDefault -Elem $Redux.UI.Hearts -Not)                             { PatchBytes -Offset "1EBD000" -Shared -Patch ("HUD\Hearts\" + $Redux.UI.Hearts.Text.replace(" (default)", "") + ".bin") }
+    if   (IsDefault -Elem $Redux.UI.Magic  -Not)                             { PatchBytes -Offset "1EC1DA0" -Shared -Patch ("HUD\Magic\"  + $Redux.UI.Magic.Text.replace(" (default)", "")  + ".bin") }
+    if   (IsChecked $Redux.UI.BlackBars)                                     { ChangeBytes -Offset "BF72A4" -Values "00 00 00 00" }
     if   (IsChecked $Redux.UI.HUD)                                           { PatchBytes -Offset "1EBD000" -Shared -Patch "HUD\Hearts\Ocarina of Time.bin"; PatchBytes -Offset "1EC1DA0" -Shared -Patch "HUD\Magic\Ocarina of Time.bin" }
     
 
@@ -314,8 +314,10 @@ function ByteOptions() {
 
     # MUSIC #
 
-    PatchReplaceMusic -BankPointerTableStart "C77A60" -BankPointerTableEnd "C77B70" -PointerTableStart "C77B80" -PointerTableEnd "C78380" -SeqStart "46AF0" -SeqEnd "97F70"
-    PatchMuteMusic -SequenceTable "C77B80" -Sequence "46AF0" -Length 127
+    if (IsInterface -Beginner -Advanced) {
+        PatchReplaceMusic -BankPointerTableStart "C77A60" -BankPointerTableEnd "C77B70" -PointerTableStart "C77B80" -PointerTableEnd "C78380" -SeqStart "46AF0" -SeqEnd "97F70"
+        PatchMuteMusic -SequenceTable "C77B80" -Sequence "46AF0" -Length 127
+    }
 
     if (IsIndex -Elem $Redux.Music.FileSelect -Text $Redux.Music.FileSelect.default -Not) {
         foreach ($track in $Files.json.music.tracks) {

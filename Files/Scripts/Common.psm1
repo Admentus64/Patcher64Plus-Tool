@@ -171,8 +171,8 @@ function ChangePatchPanel() {
             }
         }
         elseif (!(IsSet $item.patch)) {
-            if ($item.priority -and (IsInterface -Lite -Advanced))   { $Patches.Type.Items.Insert(0, $item.title) }
-            else                                                     { $Patches.Type.Items.Add($item.title)       }
+            if ($item.priority -and !(IsInterface -Beginner))   { $Patches.Type.Items.Insert(0, $item.title) }
+            else                                                { $Patches.Type.Items.Add($item.title)       }
         }
         elseif ($item.patch -isnot [array]) {
             if ( ( ($IsWiiVC -and $item.console -eq "Wii VC") -or (!$IsWiiVC -and $item.console -eq "Native") -or ($item.console -eq "Both") -or !(IsSet $item.console) ) ) {
@@ -416,10 +416,6 @@ function SetCreditsSections() {
 #==============================================================================================================================================================================================
 function ChangeGameRev() {
     
-    if (IsSet $GamePatch.script)   { if (Get-Module -Name $GamePatch.script)   { Remove-Module -Name $GamePatch.script } }
-    if (IsSet $GameRev.script)     { if (Get-Module -Name $GameRev.script)     { Remove-Module -Name $GameRev.script }   }
-    if (IsSet $GameType.mode)      { if (Get-Module -Name $GameType.mode)      { Remove-Module -Name $GameType.mode  }   }
-
     if (!(IsSet $GameType)) { return }
 
     WriteToConsole "Changing revision..."
@@ -432,10 +428,7 @@ function ChangeGameRev() {
         }
     }
 
-    $Redux.Box    = @{}
-    $Redux.Groups = @()
-    $Last.Group   = $Last.Panel = $Last.GroupName = $null
-    $Last.Half    = $False
+    ResetReduxSettings
 
     if (IsSet $GameRev.script)   { $GameFiles.script = ($Paths.Scripts + "\Options\" + $GameRev.script + ".psm1") }
     else                         { $GameFiles.script = ($Paths.Scripts + "\Options\" + $GameType.mode  + ".psm1") }
@@ -467,6 +460,9 @@ function ChangePatch() {
 
                 if ( (TestFile $GameFiles.script) -and $GamePatch.options -eq 1) {
                     $global:GameSettings = GetSettings (GetGameSettingsFile)
+                    if (IsSet $GamePatch.script)   { if (Get-Module -Name $GamePatch.script)   { Remove-Module -Name $GamePatch.script } }
+                    if (IsSet $GameRev.script)     { if (Get-Module -Name $GameRev.script)     { Remove-Module -Name $GameRev.script }   }
+                    if (IsSet $GameType.mode)      { if (Get-Module -Name $GameType.mode)      { Remove-Module -Name $GameType.mode  }   }
                     Import-Module -Name $GameFiles.script -Global
                     if (Get-Command "CreateOptions" -errorAction SilentlyContinue) { iex "CreateOptions" }
                 }
@@ -734,10 +730,10 @@ function IsValue([object]$Elem, [int16]$Value, [switch]$Active, [switch]$Not) {
 #==============================================================================================================================================================================================
 function IsIndex([object]$Elem, [int16]$Index=1, [string]$Text, [switch]$Active, [switch]$Not) {
     
+    if (!(IsSet $Elem))                 { return $False }
+    if ( $Active -and !$Elem.Visible)   { return $False }
+    if (!$Active -and !$Elem.Enabled)   { return $False }
     if ($Index -lt 1) { $Index = 1 }
-    if (!(IsSet $Elem))                       { return $False }
-    if ($Active -and !$Elem.Visible)          { return $False }
-    if (!$Active -and !$Elem.Enabled)         { return $False }
 
     if (IsSet $Text) {
         if ($Elem.Text.replace(" (default)", "") -eq $Text)   { return !$Not  }
