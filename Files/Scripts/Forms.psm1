@@ -520,11 +520,11 @@ function CreateReduxTextBox([single]$Column=$Last.Column, [single]$Row=$Last.Row
     })
 
     if (IsSet $Min) {
-        if ($TextBox.Text -lt $Min) { [int]$TextBox.Text = $Min }
+        if ([int]$TextBox.Text -lt $Min) { $TextBox.Text = $Min }
         Add-Member -InputObject $TextBox -NotePropertyMembers @{ Min = $Min }
     }
     if (IsSet $Max) {
-        if ($TextBox.Text -gt $Max) { [int]$TextBox.Text = $Max }
+        if ([int]$TextBox.Text -gt $Max) { $TextBox.Text = $Max }
         Add-Member -InputObject $TextBox -NotePropertyMembers @{ Max = $Max }
     }
 

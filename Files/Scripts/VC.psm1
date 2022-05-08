@@ -218,7 +218,7 @@ function PatchVCEmulator([string]$Command) {
     if ( ( (IsChecked $VC.ExpandMemory) -or ($Patches.Redux.Checked -and $Settings.Core.Interface -eq 1 -and $VC.ExpandMemory.Active) ) -and $GameType.mode -ne "Majora's Mask") {
         $offset = SearchBytes -File $WadFile.AppFile01 -Start "2000" -End "9999" -Values "41 82 00 08 3C 80 00 80"
         if ($offset -gt 0) {
-            ChangeBytes -File $WadFile.AppFile01 -Offset $offset  -Values "60 00 00 00"
+            ChangeBytes -File $WadFile.AppFile01 -Offset $offset -Values "60 00 00 00"
             WriteToConsole "Expanded Game Memory"
         }
         else {
