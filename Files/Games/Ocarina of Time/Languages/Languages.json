@@ -4,6 +4,9 @@
 	"code"			: "en",
 	"script_start"		: "92D000",
 	"script_length"		: "38130",
+	"script_dma"		: "7590",
+	"table_start"		: "B849EC",
+	"table_length"		: "43A8",
 	"max_text_speed"	: 3
 }, {
 	"title"			: "German",
@@ -12,6 +15,9 @@
 	"vc_gameID"		: "NACD",
 	"script_start"		: "348E070",
 	"script_length"		: "3B9C0",
+	"script_dma"		: "7590",
+	"table_start"		: "B849EC",
+	"table_length"		: "43A8",
 	"max_text_speed"	: 2,
 	"output"		: "_de_patched",
 	"credits"		: "Admentus, GhostlyDark & Ticamus (ported)"
@@ -22,6 +28,9 @@
 	"vc_gameID"		: "NACF",
 	"script_start"		: "92D000",
 	"script_length"		: "371C0",
+	"script_dma"		: "7590",
+	"table_start"		: "B849EC",
+	"table_length"		: "43A8",
 	"max_text_speed"	: 2,
 	"output"		: "_fr_patched",
 	"credits"		: "Admentus & GhostlyDark (ported)"
@@ -32,6 +41,9 @@
 	"vc_gameID"		: "NACS",
 	"script_start"		: "92D000",
 	"script_length"		: "38130",
+	"script_dma"		: "7590",
+	"table_start"		: "B849EC",
+	"table_length"		: "43A8",
 	"max_text_speed"	: 2,
 	"output"		: "_es_patched",
 	"credits"		: "eduardo_aj2 (v2.2)"
@@ -42,6 +54,9 @@
 	"vc_gameID"		: "NACT",
 	"script_start"		: "92D000",
 	"script_length"		: "38130",
+	"script_dma"		: "7590",
+	"table_start"		: "B849EC",
+	"table_length"		: "43A8",
 	"output"		: "_pt-BR_patched",
 	"max_text_speed"	: 2,
 	"credits"		: "Fserve (v1.7a), Mex Maximus BR, Projeto BR (MM v1.1c) & GhostlyDark"
@@ -52,6 +67,9 @@
 	"vc_gameID"		: "NACI",
 	"script_start"		: "92D000",
 	"script_length"		: "38130",
+	"script_dma"		: "7590",
+	"table_start"		: "B849EC",
+	"table_length"		: "43A8",
 	"max_text_speed"	: 2,
 	"output"		: "_it_patched",
 	"credits"		: "Rulesless, xxcentury & Brisma (translation) & GhostlyDark (ported / improvements)"
@@ -62,6 +80,9 @@
 	"vc_gameID"		: "NACL",
 	"script_start"		: "92D000",
 	"script_length"		: "38130",
+	"script_dma"		: "7590",
+	"table_start"		: "B849EC",
+	"table_length"		: "43A8",
 	"max_text_speed"	: 2,
 	"output"		: "_pl_patched",
 	"credits"		: "RPG (v1.3) & GhostlyDark (improvements)"
@@ -72,6 +93,9 @@
 	"vc_gameID"		: "NACR",
 	"script_start"		: "92D000",
 	"script_length"		: "34390",
+	"script_dma"		: "7590",
+	"table_start"		: "B849EC",
+	"table_length"		: "43A8",
 	"max_text_speed"	: 2,
 	"output"		: "_ru_patched",
 	"credits"		: "Zelda64rus (v2.32) & GhostlyDark (improvements)"
@@ -83,6 +107,9 @@
 	"vc_gameID"		: "NACJ",
 	"script_start"		: "8EB000",
 	"script_length"		: "3A350",
+	"script_dma"		: "7560",
+	"table_start"		: "B808AC",
+	"table_length"		: "4140",
 	"l_target_jpn"		: 1,
 	"max_text_speed"	: 1,
 	"output"		: "_ja_patched"
@@ -94,6 +121,9 @@
 	"vc_gameID"		: "NACZ",
 	"script_start"		: "8EB000",
 	"script_length"		: "3A350",
+	"script_dma"		: "7560",
+	"table_start"		: "B808AC",
+	"table_length"		: "4140",
 	"l_target_jpn"		: 1,
 	"max_text_speed"	: 1,
 	"output"		: "_zh-CN_patched",

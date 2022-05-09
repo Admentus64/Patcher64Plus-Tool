@@ -25,35 +25,33 @@
 					KevinPal, junglechief87
 
 --- Additional Options ---
+- Faster Block Pushing:			ShadowOne333
+- Easier Minigames:			ShadowOne333
 - Manual Jump:				Admentus (ROM), CloudModding (GameShark)
 - No Kill Flash:			Chez Cousteau
 - No Shield Recoil:			Admentus (ROM), Aegiker (GameShark)
 - Run While Shielding:			Admentus (ROM), Aegiker (GameShark)
 - Pushback Attacing Walls:		Admentus (ROM), Aegiker (GameShark)
 - Resume From Last Area:		Admentus (ROM), Aegiker (GameShark)
-- Enable Disk Drive Saves:		ZethN64, Sakura, Frostclaw, Steve(ToCoool) & GhostlyDark (ported)
+- Correct Rupee Colors:			GhostlyDark
 - Restore Cow Nose Ring:		ShadowOne333
 - Restore Fire Temple:			ShadowOne333
-- Censor Blood:				ShadowOne333
-- Restore Gerudo Textures:		GhostlyDark, ShadowOne333
+- Censor Gerudo Textures:		GhostlyDark, ShadowOne333
+- Blood Color:				ShadowOne333, Admentus
 - Pause Screen Delay Fix:		zel
-- Link's Speed:				AndiiSyn
 - Visible Gerudo Tent:			Chez Cousteau
 - Temple of Time Door:			Chez Cousteau
 - Navi Targettable Spots:		Chez Cousteau
 - Add Water Temple Actors:		Chez Cousteau
 - Add Lost Woods Octorok:		Chez Cousteau
 - Gerudo Fortress Minimap:		GhostlyDark
-- Remove Owls:				Chez Cousteau
 - Debug Map Select:			Jared Johnson
 - Skip Intro:				Aegiker
-- Graveyard Keese:			salvador235
-- Master Quest:				ShadowOne333
-- Ura Quest:				ZethN64, Sakura, Frostclaw, Steve(ToCoool) & Admentus (clean port)
-- No Item Drops:			Admentus & BilonFullHDemon
-- Harder Child Bosses:			BilonFullHDemon
+- Remove Owls:				Chez Cousteau
+- Enable Disk Drive Saves:		ZethN64, Sakura, Frostclaw, Steve(ToCoool) & GhostlyDark (ported)
+- Link's Speed:				AndiiSyn
 - 16:9 Backgrounds & Textures:		GhostlyDark, ShadowOne333, CYB3RTR0N
-- Enhanced 16:9 Widescreen:		gamemasterplc, GhostlyDark
+- Advanced 16:9 Widescreen:		gamemasterplc, GhostlyDark
 - Force Hires Link Model:		GhostlyDark
 - Feminine Animations:			GhostlyDark (ported), AriaHiro64 (model)
 - Hide Equipment:			XModxGodX
@@ -64,26 +62,33 @@
 - Button Styles:			GhostlyDark, Djipi, Community, Nerrel, Federelli, AndiiSyn
 - OoT & MM Button HD Previews:		Pizza
 - Magic Meter Styles:			GhostlyDark, Pizza, Nerrel, Zeth Alkar
-- MM Pause Screen:			CM & GhostlyDark
-- MM Pause Screen Colors:		Garo-Mastah
 - HUD Size:				Admentus & GhostlyDark
-- Easier Minigames:			ShadowOne333
-- Faster Block Pushing:			ShadowOne333
-- Correct Rupee Colors:			GhostlyDark
+- Chests, Crates & Pots Alternatives:	Admentus, GhostlyDark & OoT Randomizer
+- Hair Color:				Third M
+- Graveyard Keese:			salvador235
+- Master Quest:				ShadowOne333
+- Ura Quest:				ZethN64, Sakura, Frostclaw, Steve(ToCoool) & Admentus (clean port)
+- No Item Drops:			Admentus & BilonFullHDemon
+- Harder Child Bosses:			BilonFullHDemon
 - Fireproof Deku Shield:		Three Pendants
 - Equipment icons & alternatives:	Admentus, GhostlyDark (injects), CYB3RTR0N (icons), sanguinetti (shields),
 					AndiiSyn (shields), ZombieBrainySnack (Iron Shield)
 - Hitboxes:				Admentus & Aria Hiroshi 64 (ROM), Aegiker (Shield Recoil GameShark)
+- Set New Save Slot Items:		Admentus
 - Set Capacity:				GhostlyDark
 - 4 Digits for Rupees:			CloudMax, VictorHale & CrookedPoe
 - Unlock Equipment:			Admentus (ROM), GhostlyGark (RAM offsets), Aegiker (gauntlets GameShark)
-- Show File Select Icons:		ShadowOne333
-- Colors:				GhostlyDark
+- Colors for several options:		GhostlyDark
+- MM Pause Screen Colors:		Garo-Mastah
 - Frontflip Jump / Somarsault Jump:	SoulofDeity
+- Side Backflip:			Username0713
 - Bomb Bag Beta Animation:		Admentus (ROM), Aegiker (GameShark)
+- Show File Select Icons:		ShadowOne333
 - Restore Text:				ShadowOne333
 - Female Pronouns:			Admentus & Mil
+- MM Pause Screen:			CM & GhostlyDark
 - Add Navi Prompt:			Aegiker & GhostlyDark (textures)
+
 - Various offsets:			Chez Cousteau
 - Admentus (Scripting and Maintaince of all Options)
 
@@ -176,6 +181,7 @@ https://github.com/DaruniasJoy/OoT-Custom-Sequences
 --- Quality Assurance ---
 - Translations:				GhostlyDark
 - Custom Models:			GhostlyDark
+- Music Tracks:				GhostlyDark
 
 --- Translations ---
 - German:				Admentus, GhostlyDark & Ticamus (ported)
@@ -381,6 +387,8 @@ https://github.com/DaruniasJoy/OoT-Custom-Sequences
 - OoT & MM Button HD Previews:		Pizza
 - Magic Meter Styles:			GhostlyDark, Pizza, Nerrel, Zeth Alkar
 - Hide HUD:				Marcelo20XX
+- Chests, Crates & Pots Alternatives:	Admentus, GhostlyDark & OoT Randomizer
+- Hair Color:				Third M
 - No Item Drops:			Admentus & BilonFullHDemon
 - Restore Palace Route:			ShadowOne333
 - Raised Research Lab Platform:		Linkz
@@ -605,8 +613,10 @@ https://github.com/DaruniasJoy/OoT-Custom-Sequences
 --- Additional Options ---
 - 16:9 Widescreen:			gamemasterplc
 - 60 FPS:				retroben
-- CPU Use human Items:			triclon
+- CPU Use human Items:			Triclon
 - Multiplayer Music:			Zoinkity
+- No Camera Shake:			Triclon
+- Always Advance:			Litronom
 
 --- Amped Up ---
 - Production:				Litronom
