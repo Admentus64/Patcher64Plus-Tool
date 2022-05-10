@@ -1,3 +1,6 @@
+v17.3.6
+- Adjusted "Additional Options" Advanced Mode window sizes for OoT, GQ & MoT
+
 v17.3.5
 - Added Gold Quest support for Additional Options
 - Added new "Always Advance" option for MK64

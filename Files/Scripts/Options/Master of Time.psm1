@@ -621,8 +621,8 @@ function ByteOptions() {
 #==============================================================================================================================================================================================
 function CreateOptions() {
     
-    if (IsInterface -Streamlined)   { CreateOptionsDialog -Columns 6 -Height 640 -Tabs @("Main", "Graphics", "Audio", "Equipment")                               -NoLanguages }
-    else                            { CreateOptionsDialog -Columns 6 -Height 735 -Tabs @("Main", "Graphics", "Audio", "Colors", "Equipment", "Save", "Capacity") -NoLanguages }
+    if (IsInterface -Streamlined)   { CreateOptionsDialog -Columns 6 -Height 640 -Tabs @("Main", "Graphics", "Audio", "Equipment")                                           -NoLanguages }
+    else                            { CreateOptionsDialog -Columns 6 -Height 640 -Tabs @("Main", "Graphics", "Audio", "Colors", "Equipment", "Save 1", "Save 2", "Capacity") -NoLanguages }
 
 }
 
@@ -987,7 +987,7 @@ function CreateTabEquipment() {
 
 
 #==============================================================================================================================================================================================
-function CreateTabSave() {
+function CreateTabSave1() {
     
     # STARTING EQUIPMENT #
 
@@ -1042,8 +1042,13 @@ function CreateTabSave() {
     CreateReduxCheckBox -Name "RequiemOfSpirit"  -Text "Requiem of Spirit"  -Info "Start a new save file with the Requiem of Spirit"
     CreateReduxCheckBox -Name "NocturneOfShadow" -Text "Nocturne of Shadow" -Info "Start a new save file with the Nocturne of Shadow"
     CreateReduxCheckBox -Name "PreludeOfLight"   -Text "Prelude of Light"   -Info "Start a new save file with the Prelude of Light"
-    
 
+}
+
+
+
+#==============================================================================================================================================================================================
+function CreateTabSave2() {
 
     # STARTING UPGRADES #
 

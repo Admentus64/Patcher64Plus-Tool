@@ -1085,7 +1085,7 @@ function CreateOptions() {
     
     if     (IsInterface -Beginner)      { CreateOptionsDialog -Columns 6 -Height 520 -Tabs @("Main", "Graphics", "Audio", "Difficulty") }
     elseif (IsInterface -Lite)          { CreateOptionsDialog -Columns 6 -Height 575 -Tabs @("Main", "Graphics", "Audio", "Difficulty", "Capacity") }
-    elseif (IsInterface -Advanced)      { CreateOptionsDialog -Columns 6 -Height 790 -Tabs @("Main", "Graphics", "Audio", "Difficulty", "Colors", "Equipment", "Save", "Capacity", "Animations") }
+    elseif (IsInterface -Advanced)      { CreateOptionsDialog -Columns 6 -Height 575 -Tabs @("Main", "Graphics", "Audio", "Difficulty", "Colors", "Equipment", "Save 1", "Save 2", "Capacity", "Animations") }
     elseif (IsInterface -Streamlined)   { CreateOptionsDialog -Columns 6 -Height 570 -Tabs @("Main", "Graphics", "Audio", "Difficulty", "Equipment", "Animations") }
 
 }
@@ -1556,7 +1556,7 @@ function CreateTabEquipment() {
 
 
 #==============================================================================================================================================================================================
-function CreateTabSave() {
+function CreateTabSave1() {
     
     # STARTING EQUIPMENT #
 
@@ -1628,8 +1628,13 @@ function CreateTabSave() {
     CreateReduxCheckBox -Name "RequiemOfSpirit"  -Text "Requiem of Spirit"  -Info "Start a new save file with the Requiem of Spirit"
     CreateReduxCheckBox -Name "NocturneOfShadow" -Text "Nocturne of Shadow" -Info "Start a new save file with the Nocturne of Shadow"
     CreateReduxCheckBox -Name "PreludeOfLight"   -Text "Prelude of Light"   -Info "Start a new save file with the Prelude of Light"
-    
 
+}
+
+
+
+#==============================================================================================================================================================================================
+function CreateTabSave2() {
 
     # STARTING UPGRADES #
 

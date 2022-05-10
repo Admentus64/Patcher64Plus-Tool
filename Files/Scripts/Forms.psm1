@@ -101,12 +101,12 @@ function CreatePanel([uint16]$X, [uint16]$Y, [uint16]$Width, [uint16]$Height, [s
 
 
 #==============================================================================================================================================================================================
-function CreateTextBox([uint16]$X=0, [uint16]$Y=0, [uint16]$Width=0, [uint16]$Height=0, [byte]$Length=10, [string]$Name, [string]$Tag, [switch]$ReadOnly, [switch]$Multiline, [string]$Text="", [string]$Info, [switch]$IsGame, [switch]$TextFileFont, [object]$AddTo=$Last.Group) {
+function CreateTextBox([uint16]$X=0, [uint16]$Y=0, [uint16]$Width=0, [uint16]$Height=0, [uint16]$Length=10, [string]$Name, [string]$Tag, [switch]$ReadOnly, [switch]$Multiline, [string]$Text="", [string]$Info, [switch]$IsGame, [switch]$TextFileFont, [object]$AddTo=$Last.Group) {
     
     $TextBox = CreateForm -X $X -Y $Y -Width $Width -Height $Height -Name $Name -Tag $Tag -IsGame $IsGame -Form (New-Object System.Windows.Forms.TextBox) -AddTo $AddTo
     $TextBox.Text = $Text
     if ($TextFileFont)   { $TextBox.Font = $Fonts.TextFile }
-    else                 { $TextBox.Font = $Fonts.Small }
+    else                 { $TextBox.Font = $Fonts.Small    }
     $TextBox.MaxLength = $Length
 
     if ($ReadOnly) {
@@ -359,6 +359,7 @@ function CreateTabButtons([string[]]$Tabs, [boolean]$NoLanguages=$False, [object
             $this.BackColor = "DarkGray"
         })
         $global:ReduxTabs += $Button
+        while ($Tabs[$i].Contains(' ')) { $Tabs[$i] = $Tabs[$i].Replace(' ', '') }
         if (Get-Command ("CreateTab" + $Tabs[$i]) -errorAction SilentlyContinue) {
             $Last.Half = $False
             iex ("CreateTab" + $Tabs[$i])
