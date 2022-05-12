@@ -185,7 +185,7 @@ function PatchReplaceMusic([string]$BankPointerTableStart, [string]$BankPointerT
                     if ($ext -eq $Files.json.music.conversion.ext) {
                         foreach ($conversion in $Files.json.music.conversion.bank) {
                             if ( (GetDecimal $value) -eq (GetDecimal $conversion.original) ) {
-                                $value = Get8Bit $conversion.replace
+                                $value = $conversion.replace
                                 break
                             }
                         }
@@ -320,6 +320,9 @@ function MusicOptions([string]$Default="File Select") {
             if ( (IsSet $midiFile) -and (IsSet $audioBank) ) {
                 $this.Text      = "Stop Music Preview"
                 $this.BackColor = "Red"
+
+                write-host $audioBank
+
                 Start-Job -Name 'MidiPlayer' -Scriptblock $midiScript -ArgumentList @($GameFiles.banks, $Files.tool.timidity, $audioBank, $midiFile)
                 $jobStatus = (Get-Job -Name "MidiPlayer").State
 
