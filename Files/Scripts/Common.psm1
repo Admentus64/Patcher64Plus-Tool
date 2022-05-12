@@ -380,7 +380,6 @@ function ChangeGameMode() {
 
     ResetReduxSettings
     SetCreditsSections
-   
 
     $Patches.Panel.Visible = ( ($GameType.patches -eq 1) -or ($GameType.patches -eq 2 -and $IsWiiVC) )
 
@@ -650,11 +649,15 @@ function PatchPath_Finish([object]$TextBox, [string]$Path) {
 #==============================================================================================================================================================================================
 function IsDefault([object]$Elem, $Value, [switch]$Not) {
     
-    if (!(IsSet $Value))            { $Value = $Elem.Text }
     if (!(IsSet $Elem))             { return $False       }
-    if (!$Elem.Active)              { return $False       }
-    if ($Elem.Default -eq $Value)   { return !$Not        }
-    if ($Elem.Default -ne $Value)   { return  $Not        }
+    if (!(IsSet $Value))            { $Value = $Elem.Text }
+
+    if ($Elem.GetType() -eq [System.Windows.Forms.ComboBox])   { $Default = $Elem.Items[$Elem.Default] }
+    else                                                       { $Default = $Elem.Default              }
+
+    if (!$Elem.Active)         { return $False }
+    if ($Default -eq $Value)   { return !$Not  }
+    if ($Default -ne $Value)   { return  $Not  }
     return $False
 
 }

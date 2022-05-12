@@ -1,3 +1,9 @@
+v17.4.0
+- Initial Overhaul for the upcomming v18.0.0 Text Editor update
+- Added hew "Side Backflip" option for OoT (by Username0713)
+- Added new "Style" options for OoT & MM (by Third M)
+- Adjusted "Additional Options" window sizes for OoT, GQ, MoT & MM
+
 v17.3.6
 - Adjusted "Additional Options" Advanced Mode window sizes for OoT, GQ & MoT
 

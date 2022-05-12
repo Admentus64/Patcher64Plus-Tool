@@ -158,25 +158,25 @@ function PatchReplaceMusic([string]$BankPointerTableStart, [string]$BankPointerT
                 foreach ($item in (Get-ChildItem -LiteralPath $Paths.Music -Directory)) {
                     if (TestFile ($Paths.Music + "\" + $item.BaseName + "\" + $GameSettings["ReplaceMusic"][$track.title] + ".seq")) { # .seq
                         $file = $item.BaseName + "\" + $GameSettings["ReplaceMusic"][$track.title]
-                        $ext = ".seq"
+                        $ext  = ".seq"
                         break
                     }
                     elseif (TestFile ($Paths.Music + "\" + $item.BaseName + "\" + $GameSettings["ReplaceMusic"][$track.title] + ".zseq")) { # .zseq
                         $file = $item.BaseName + "\" + $GameSettings["ReplaceMusic"][$track.title]
-                        $ext = ".zseq"
+                        $ext  = ".zseq"
                         break
                     }
                 }
 
                 # Sequence
                 foreach ($id in $track.id) {
-                    $tableOffset = ((GetDecimal $id) * 16)
-                    $offset   = (Get8Bit $pointerTableArray[$tableOffset]) + (Get8Bit $pointerTableArray[$tableOffset+1]) + (Get8Bit $pointerTableArray[$tableOffset+2]) + (Get8Bit $pointerTableArray[$tableOffset+3])
+                    $tableOffset = ( (GetDecimal $id) * 16)
+                    $offset      = (Get8Bit $pointerTableArray[$tableOffset]) + (Get8Bit $pointerTableArray[$tableOffset+1]) + (Get8Bit $pointerTableArray[$tableOffset+2]) + (Get8Bit $pointerTableArray[$tableOffset+3])
                     PatchBytes -File $seq -Offset $offset -Length $track.size -Patch ($file + $ext) -Music
 
                     # Size
-                    $value = Get16Bit ( (Get-Item -LiteralPath ($Paths.Music + "\" + $file + $ext)).length )
-                    $tableOffset = (Get16Bit (((GetDecimal $id) * 16) + 6))
+                    $tableOffset = Get16Bit ( (GetDecimal $id) * 16 + 6)
+                    $value       = Get16Bit ( (Get-Item -LiteralPath ($Paths.Music + "\" + $file + $ext)).length )
                     ChangeBytes -File $pointerTable -Offset $tableOffset -Values $value
 
                     # Bank

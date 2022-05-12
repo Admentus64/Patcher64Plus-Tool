@@ -278,14 +278,14 @@ function WriteDebug([string]$Command, [string[]]$Header, [string]$PatchedFileNam
         foreach ($form in $item.controls) {
             if     ($form.GetType() -eq [System.Windows.Forms.CheckBox] -and $form.enabled)      { if (IsChecked $form)                                                 { WriteToConsole ($item.text + ". " + $form.name) } }
             elseif ($form.GetType() -eq [System.Windows.Forms.RadioButton] -and $form.enabled)   { if ( (IsDefault $form -Not $form.checked) -and (IsChecked $form) )   { WriteToConsole ($item.text + ". " + $form.name) } }
-            elseif ($form.GetType() -eq [System.Windows.Forms.ComboBox] -and $form.enabled)      { if (IsDefault $form -Not $form.selectedIndex)                        { WriteToConsole ($item.text + ". " + $form.name + " -> " + $form.text) } }
+            elseif ($form.GetType() -eq [System.Windows.Forms.ComboBox] -and $form.enabled)      { if (IsDefault $form -Not $form.text)                                 { WriteToConsole ($item.text + ". " + $form.name + " -> " + $form.text)  } }
             elseif ($form.GetType() -eq [System.Windows.Forms.TrackBar] -and $form.enabled)      { if (IsDefault $form -Not $form.value)                                { WriteToConsole ($item.text + ". " + $form.name + " -> " + $form.value) } }
 
             elseif ($form.GetType() -eq [System.Windows.Forms.Panel]) {
                 foreach ($subform in $form.controls) {
                     if     ($subform.GetType() -eq [System.Windows.Forms.CheckBox] -and $form.enabled)      { if (IsChecked $subform)                                                       { WriteToConsole ($item.text + ". " + $subform.name) } }
                     elseif ($subform.GetType() -eq [System.Windows.Forms.RadioButton] -and $form.enabled)   { if ( (IsDefault $subform -Not $subform.checked) -and (IsChecked $subform) )   { WriteToConsole ($item.text + ". " + $subform.name) } }
-                    elseif ($subform.GetType() -eq [System.Windows.Forms.ComboBox] -and $form.enabled)      { if (IsDefault $subform -Not $subform.selectedIndex)                           { WriteToConsole ($item.text + ". " + $subform.name + " -> " + $subform.text) } }
+                    elseif ($subform.GetType() -eq [System.Windows.Forms.ComboBox] -and $form.enabled)      { if (IsDefault $subform -Not $subform.text)                                    { WriteToConsole ($item.text + ". " + $subform.name + " -> " + $subform.text)  } }
                     elseif ($subform.GetType() -eq [System.Windows.Forms.TrackBar] -and $form.enabled)      { if (IsDefault $subform -Not $subform.value)                                   { WriteToConsole ($item.text + ". " + $subform.name + " -> " + $subform.value) } }
                 }
             }
