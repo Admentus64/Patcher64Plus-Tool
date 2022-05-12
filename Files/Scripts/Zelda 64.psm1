@@ -176,7 +176,6 @@ function PatchReplaceMusic([string]$BankPointerTableStart, [string]$BankPointerT
 
                     # Size
                     $value = Get16Bit ( (Get-Item -LiteralPath ($Paths.Music + "\" + $file + $ext)).length )
-                    [string[]]$value = $value -split '(..)' -ne ''
                     $tableOffset = (Get16Bit (((GetDecimal $id) * 16) + 6))
                     ChangeBytes -File $pointerTable -Offset $tableOffset -Values $value
 
@@ -185,12 +184,13 @@ function PatchReplaceMusic([string]$BankPointerTableStart, [string]$BankPointerT
                     else                                                   { $value = ($file.Substring(($file.IndexOf('_')+1))).split("_")[0] }                         # Filename
                     if ($ext -eq $Files.json.music.conversion.ext) {
                         foreach ($conversion in $Files.json.music.conversion.bank) {
-                                if ( (GetDecimal $value) -eq (GetDecimal $conversion.original) ) {
-                                    $value = Get8Bit $conversion.replace
-                                    break
-                                }
+                            if ( (GetDecimal $value) -eq (GetDecimal $conversion.original) ) {
+                                $value = Get8Bit $conversion.replace
+                                break
                             }
+                        }
                     }
+
                     $offset = (Get16Bit ( (GetDecimal $id) * 2 + 2) )
                     ChangeBytes -File $bankPointerTable -Offset $offset -Values $value
                 }
