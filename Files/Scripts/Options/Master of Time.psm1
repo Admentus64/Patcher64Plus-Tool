@@ -839,8 +839,8 @@ function CreateTabAudio() {
     # SOUNDS / VOICES #
 
     CreateReduxGroup    -Tag  "Sounds" -Text "Sounds / Voices"
-    CreateReduxComboBox -Name "AdultVoices" -Text "Adult Voice" -Items @("Original") -FilePath ($GameFiles.binaries + "\Voices Adult") -Default "Original" -Info "Replace the voice used for the Adult Link Model" -Credits "`nMajora's Mask: Korey Cryderman (ported) & GhostlyDark (corrected)`nMelee Zelda: Thiago Alcântara 6 & theluigidude2007 (edits)`nAmara: Amara (ripping) & theluigidude2007`nPeach: theluigidude2007"
-    CreateReduxComboBox -Name "Instrument"  -Text "Instrument"  -Items @("Ocarina", "Female", "Voice", "Whistle Harp", "Grind-Organ", "Flute") -Info "Replace the sound used for playing the Ocarina of Time" -Credits "Ported from Rando"
+    CreateReduxComboBox -Name "AdultVoices" -Text "Adult Voice" -Items @("Original") -FilePath ($GameFiles.binaries + "\Voices Adult") -Default "Original" -Info "Replace the voice used for the Adult Link Model"        -Credits "`nMajora's Mask: Korey Cryderman (ported) & GhostlyDark (corrected)`nMelee Zelda: Thiago Alcântara 6 & theluigidude2007 (edits)`nAmara: Amara (ripping) & theluigidude2007`nPeach: theluigidude2007"
+    CreateReduxComboBox -Name "Instrument"  -Text "Instrument"  -Items @("Ocarina", "Female Voice", "Whistle", "Harp", "Organ", "Flute")                   -Info "Replace the sound used for playing the Ocarina of Time" -Credits "Ported from Rando"
 
 
 

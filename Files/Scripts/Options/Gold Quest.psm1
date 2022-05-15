@@ -114,10 +114,10 @@ function ByteOptions() {
         ChangeBytes -Offset "2C1906D" -Values "18 00 00 00 00"       # Ice Cavern
     }
 
-    if (IsChecked $Redux.Fixes.PauseScreenDelay)      { ChangeBytes -Offset "B15DD0" -Values "00 00 00 00"              } # Pause Screen Anti-Aliasing
-    if (IsChecked $Redux.Fixes.PoacherSaw)            { ChangeBytes -Offset "AE72CC"  -Values "00 00 00 00"             }
-    if (IsChecked $Redux.Fixes.Boomerang)             { ChangeBytes -Offset "F0F718"  -Values "FC 41 C7 FF FF FF FE 38" }
-    if (IsChecked $Redux.Fixes.FortressMinimap)       { CopyBytes   -Offset "96E068"  -Length "D48" -Start "974600"     }
+    if (IsChecked $Redux.Fixes.PauseScreenDelay)      { ChangeBytes -Offset "B15DD0" -Values "00 00 00 00"             } # Pause Screen Anti-Aliasing
+    if (IsChecked $Redux.Fixes.PoacherSaw)            { ChangeBytes -Offset "AE72CC" -Values "00 00 00 00"             }
+    if (IsChecked $Redux.Fixes.Boomerang)             { ChangeBytes -Offset "F0F718" -Values "FC 41 C7 FF FF FF FE 38" }
+    if (IsChecked $Redux.Fixes.FortressMinimap)       { CopyBytes   -Offset "96E068" -Length "D48" -Start "974600"     }
     
 
     # OTHER #
@@ -908,9 +908,9 @@ function ByteOptions() {
 
     # SCRIPT #
 
-    if (IsIndex -Elem $Redux.Text.NaviPrompt -Not) {
+    if (IsDefault $Redux.Text.NaviPrompt -Not) {
         ChangeBytes -Offset "AE7CD8" -Values "00 00 00 00"
-        PatchBytes -Offset "8E3A80"  -Texture -Patch ("Action Prompts\Navi\" + $Redux.Text.NaviPrompt.text + ".prompt")
+        PatchBytes  -Offset "8E3A80" -Texture -Patch ("Action Prompts\Navi\" + $Redux.Text.NaviPrompt.text + ".prompt")
     }
 
     if (IsChecked $Redux.Text.KeatonMaskFix)   { PatchBytes  -Offset "89F800" -Texture -Patch "Text Labels\keaton_mask.en.label" }
@@ -1369,9 +1369,9 @@ function CreateTabAudio() {
     # SOUNDS / VOICES #
 
     CreateReduxGroup    -Tag  "Sounds" -Text "Sounds / Voices"
-    CreateReduxComboBox -Name "ChildVoices" -Text "Child Voice" -Default "Original" -Items @("Original") -FilePath ($GameFiles.binaries + "\Voices Child")         -Info "Replace the voice used for the Child Link Model"        -Credits "`nMajora's Mask: Korey Cryderman (ported) & GhostlyDark (corrected)`nMelee Zelda: Thiago Alcântara 6 & theluigidude2007 (edits)`nAmara: Amara (ripping) & theluigidude2007 (edits)"
-    CreateReduxComboBox -Name "AdultVoices" -Text "Adult Voice" -Default "Original" -Items @("Original") -FilePath ($GameFiles.binaries + "\Voices Adult")         -Info "Replace the voice used for the Adult Link Model"        -Credits "`nMajora's Mask: Korey Cryderman (ported) & GhostlyDark (corrected)`nMelee Zelda: Thiago Alcântara 6 & theluigidude2007 (edits)`nAmara: Amara (ripping) & theluigidude2007`nPeach: theluigidude2007"
-    CreateReduxComboBox -Name "Instrument"  -Text "Instrument"  -Beginner -Advanced -Items @("Ocarina", "Female", "Voice", "Whistle Harp", "Grind-Organ", "Flute") -Info "Replace the sound used for playing the Ocarina of Time" -Credits "Ported from Rando"
+    CreateReduxComboBox -Name "ChildVoices" -Text "Child Voice" -Default "Original" -Items @("Original") -FilePath ($GameFiles.binaries + "\Voices Child")   -Info "Replace the voice used for the Child Link Model"        -Credits "`nMajora's Mask: Korey Cryderman (ported) & GhostlyDark (corrected)`nMelee Zelda: Thiago Alcântara 6 & theluigidude2007 (edits)`nAmara: Amara (ripping) & theluigidude2007 (edits)"
+    CreateReduxComboBox -Name "AdultVoices" -Text "Adult Voice" -Default "Original" -Items @("Original") -FilePath ($GameFiles.binaries + "\Voices Adult")   -Info "Replace the voice used for the Adult Link Model"        -Credits "`nMajora's Mask: Korey Cryderman (ported) & GhostlyDark (corrected)`nMelee Zelda: Thiago Alcântara 6 & theluigidude2007 (edits)`nAmara: Amara (ripping) & theluigidude2007`nPeach: theluigidude2007"
+    CreateReduxComboBox -Name "Instrument"  -Text "Instrument"  -Beginner -Advanced -Items @("Ocarina", "Female Voice", "Whistle", "Harp", "Organ", "Flute") -Info "Replace the sound used for playing the Ocarina of Time" -Credits "Ported from Rando"
 
 
 
