@@ -913,8 +913,8 @@ function ByteOptions() {
         PatchBytes  -Offset "8E3A80" -Texture -Patch ("Action Prompts\Navi\" + $Redux.Text.NaviPrompt.text + ".prompt")
     }
 
-    if (IsChecked $Redux.Text.KeatonMaskFix)   { PatchBytes  -Offset "89F800" -Texture -Patch "Text Labels\keaton_mask.en.label" }
-    if (IsChecked $Redux.Text.Fairy)           { PatchBytes  -Offset "8A4C00" -Texture -Patch "Text Labels\fairy.en.label" }
+    if (IsChecked $Redux.Text.KeatonMaskFix)   { PatchBytes  -Offset "8A7C00" -Texture -Patch "Text Labels\keaton_mask.en.label" }
+    if (IsChecked $Redux.Text.Fairy)           { PatchBytes  -Offset "8A4C00" -Texture -Patch "Text Labels\fairy.en.label"       }
     if (IsChecked $Redux.Text.Milk)            { PatchBytes  -Offset "8A5400" -Texture -Patch "Text Labels\milk.en.label"; PatchBytes  -Offset "8A6800" -Texture -Patch "Text Labels\milk_half.en.label" }
     if (IsIndex   $Redux.Text.NaviCUp -Not)    { PatchBytes -Offset "1A3EFC0" -Texture -Patch ("Action Prompts\Navi\" + $Redux.Text.NaviCUp.text + ".cup") }
 
@@ -1010,7 +1010,7 @@ function ByteReduxOptions() {
 #==============================================================================================================================================================================================
 function ByteLanguageOptions() {
     
-    if ( (IsChecked $Redux.UI.GCScheme) -or (IsChecked $Redux.Unlock.Tunics) -or (IsIndex -Elem $Redux.Text.NaviScript -Not) -or (IsChecked $Redux.Capacity.EnableAmmo) -or (IsChecked $Redux.Capacity.EnableWallet)-or ( (IsText -Elem $Redux.Equipment.DekuShield -Compare "Iron Shield") -and $ChildModel.deku_shield -ne 0) ) {
+    if ( (IsChecked $Redux.UI.GCScheme) -or (IsIndex -Elem $Redux.Text.NaviScript -Not) -or (IsChecked $Redux.Capacity.EnableAmmo) -or (IsChecked $Redux.Capacity.EnableWallet) -or ( (IsText -Elem $Redux.Equipment.DekuShield -Compare "Iron Shield") -and $ChildModel.deku_shield -ne 0) ) {
         $script = $GameFiles.extracted + "\message_data_static.bin"
         $table  = $GameFiles.extracted + "\message_data.tbl"
         ExportBytes -Offset "92D000" -Length "380E0" -Output $script -Force
@@ -1040,16 +1040,6 @@ function ByteLanguageOptions() {
                 $offset = AddToOffset -Hex $offset -Add "1"
             }
         } while ($offset -ge 0)
-    }
-
-    if (IsChecked $Redux.Unlock.Tunics) {
-        $Offset = SearchBytes -File $script -Values "59 6F 75 20 67 6F 74 20 61 20 05 41 47 6F 72 6F 6E 20 54 75 6E 69 63"
-        ChangeBytes -File $script -Offset ( Get24Bit ( (GetDecimal $Offset) + (GetDecimal "39") ) ) -Values "75 6E 69 73 69 7A 65 2C 20 73 6F 20 69 74 20 66 69 74 73 20 61 64 75 6C 74 20 61 6E 64"
-        ChangeBytes -File $script -Offset ( Get24Bit ( (GetDecimal $Offset) + (GetDecimal "B3") ) ) -Values "75 6E 69 73 69 7A 65 2C 01 73 6F 20 69 74 20 66 69 74 73 20 61 64 75 6C 74 20 61 6E 64"
-
-        $Offset = SearchBytes -File $script -Values "41 20 74 75 6E 69 63 20 6D 61 64 65 20 62 79 20 47 6F 72 6F 6E 73"
-        ChangeBytes -File $script -Offset ( Get24Bit ( (GetDecimal $Offset) + (GetDecimal "18") ) ) -Values "55 6E 69 2D 20"
-        ChangeBytes -File $script -Offset ( Get24Bit ( (GetDecimal $Offset) + (GetDecimal "7A") ) ) -Values "55 6E 69 73 69 7A 65 2E 20 20 20"
     }
 
     if (IsIndex -Elem $Redux.Text.NaviScript -Not) {
