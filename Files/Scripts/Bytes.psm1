@@ -2,11 +2,19 @@
     
     if     ($Match  -is [System.String] -and $Match  -Like "* *")   { $matchDec = $Match -split ' '           | foreach { [Convert]::ToByte($_, 16) } }
     elseif ($Match  -is [System.String])                            { $matchDec = $Match -split '(..)' -ne '' | foreach { [Convert]::ToByte($_, 16) } }
-    else                                                            { $matchDec = $Match }
+    else {
+        $matchDec = $Match
+        if ($matchDec.count -gt 0) {
+            if ($matchDec[0] -is [System.String]) { $matchDec = $matchDec | foreach { [Convert]::ToByte($_, 16) } }
+        }    }
 
     if     ($Values -is [System.String] -and $Values -Like "* *")   { $valuesDec = $Values -split ' '           | foreach { [Convert]::ToByte($_, 16) } }
     elseif ($Values -is [System.String])                            { $valuesDec = $Values -split '(..)' -ne '' | foreach { [Convert]::ToByte($_, 16) } }
-    else                                                            { $valuesDec = $Values }
+    else {
+        $valuesDec = $Values
+        if ($valuesDec.count -gt 0) {
+            if ($valuesDec[0] -is [System.String]) { $valuesDec = $valuesDec | foreach { [Convert]::ToByte($_, 16) } }
+        }    }
 
     if (IsSet $File)                   { $ByteArrayGame = [System.IO.File]::ReadAllBytes($File) }
     if ($Interval -lt 1)               { $Interval = 1 }
