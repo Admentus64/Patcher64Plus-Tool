@@ -107,6 +107,11 @@
 	"event"		: 1,
 	"size"		: "0230"
 }, {
+	"title"		: "Prelude of Light",
+	"id"		: "25",
+	"event"		: 1,
+	"size"		: "04C0"
+}, {
 	"title"		: "Inside Jabu-Jabu's Belly",
 	"id"		: "26",
 	"size"		: "09A0"
@@ -161,6 +166,31 @@
 	"event"		: 1,
 	"size"		: "0540"
 }, {
+	"title"		: "Bolero of Fire",
+	"id"		: "33",
+	"event"		: 1,
+	"size"		: "0490"
+}, {
+	"title"		: "Minuet of Forest",
+	"id"		: "34",
+	"event"		: 1,
+	"size"		: "0510"
+}, {
+	"title"		: "Serenade of Water",
+	"id"		: "35",
+	"event"		: 1,
+	"size"		: "0790"
+}, {
+	"title"		: "Requiem of Spirit",
+	"id"		: "36",
+	"event"		: 1,
+	"size"		: "0590"
+}, {
+	"title"		: "Nocturne of Shadow",
+	"id"		: "37",
+	"event"		: 1,
+	"size"		: "05B0"
+}, {
 	"title"		: "Mini-Boss Battle",
 	"id"		: "38",
 	"size"		: "1310"
@@ -213,6 +243,36 @@
 	"id"		: "43",
 	"event"		: 1,
 	"size"		: "05B0"
+}, {
+	"title"		: "Saria's Song",
+	"id"		: "44",
+	"event"		: 1,
+	"size"		: "00B0"
+}, {
+	"title"		: "Epona's Song",
+	"id"		: "45",
+	"event"		: 1,
+	"size"		: "0140"
+}, {
+	"title"		: "Zelda's Lullaby",
+	"id"		: "46",
+	"event"		: 1,
+	"size"		: "0170"
+}, {
+	"title"		: "Sun's Song",
+	"id"		: "47",
+	"event"		: 1,
+	"size"		: "0080"
+}, {
+	"title"		: "Song of Time",
+	"id"		: "48",
+	"event"		: 1,
+	"size"		: "0130"
+}, {
+	"title"		: "Song of Storms",
+	"id"		: "49",
+	"event"		: 1,
+	"size"		: "00D0"
 }, {
 	"title"		: "Fairy Flying",
 	"id"		: "4A",
