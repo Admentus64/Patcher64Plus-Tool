@@ -1924,10 +1924,10 @@ function CreateTabDifficulty() {
 
     # RECOVERY #
 
-    CreateReduxGroup   -Tag "Recovery"     -Text "Recovery" -Height 1.5
+    CreateReduxGroup   -Tag "Recovery"     -Text "Recovery" -Height 1.6
     CreateReduxTextBox -Name "Heart"       -Text "Recovery Heart" -Value 16  -Min 0 -Max 320 -Length 3 -Info "Set the amount of HP that Recovery Hearts will replenish`nRecovery Heart drops are removed if set to 0" -Credits "Admentus, Three Pendants & Rando (No Heart Drops)"
     CreateReduxTextBox -Name "Fairy"       -Text "Fairy (Bottle)" -Value 320 -Min 0 -Max 320 -Length 3 -Info "Set the amount of HP that a Bottled Fairy will replenish"                                               -Credits "Admentus & Three Pendants"
-    CreateReduxTextBox -Name "FairyRevive" -Text "Fairy (Revive)" -Value 320 -Min 0 -Max 320 -Length 3 -Info "Set the amount of HP that a Bottled Fairy will recover after Link died will replenish"                  -Credits "Admentus & Three Pendants"
+    CreateReduxTextBox -Name "FairyRevive" -Text "Fairy (Revive)" -Value 320 -Min 0 -Max 320 -Length 3 -Info "Set the amount of HP that a Bottled Fairy will replenish after Link died"                               -Credits "Admentus & Three Pendants"
     CreateReduxTextBox -Name "Milk"        -Text "Milk"           -Value 80  -Min 0 -Max 320 -Length 3 -Info "Set the amount of HP that Milk will replenish"                                                          -Credits "Admentus & Three Pendants"
     CreateReduxTextBox -Name "RedPotion"   -Text "Red Potion"     -Value 320 -Min 0 -Max 320 -Length 3 -Info "Set the amount of HP that a Red Potion will replenish"                                                  -Credits "Admentus & Three Pendants"
 
@@ -1947,14 +1947,14 @@ function CreateTabDifficulty() {
     # MINIGAMES #
 
     CreateReduxGroup    -Tag  "Minigames" -Text "Minigames" -Advanced
-    CreateReduxCheckBox -Name "Dampe"     -Text "Dampe's Digging"                                                                                                       -Info "Fishing is less random and has less demanding requirements"                                                             -Credits "Ported from Rando"
-    CreateReduxCheckBox -Name "Fishing"   -Text "Fishing"                                                                                                               -Info "Dampe's Digging Game is always first try"                                                                               -Credits "Ported from Rando"
-    CreateReduxCheckBox -Name "Bowling"   -Text "Bombchu Bowling"                                                                                                       -Info "Bombchu Bowling prizes now appear in fixed order instead of random"                                                     -Credits "Ported from Rando"
-    CreateReduxComboBox -Name "Bowling1"  -Text "Bowling Reward #1" -Items ("Piece of Heart", "Bomb Bag", "Purple Rupee", "Bombchus") -Values @("64", "28", "4C", "58") -Info 'Set the first reward for the Bombchu Bowling Minigame`nThis option requires the "Bombchu Bowling" option to be checked' -Credits "Ported from Rando" -Default 1 -Column 1 -Row 2
-    CreateReduxComboBox -Name "Bowling2"  -Text "Bowling Reward #2" -Items ("Piece of Heart", "Bomb Bag", "Purple Rupee", "Bombchus") -Values @("64", "28", "4C", "58") -Info 'Set the first reward for the Bombchu Bowling Minigame`nThis option requires the "Bombchu Bowling" option to be checked' -Credits "Ported from Rando" -Default 2
-    CreateReduxComboBox -Name "Bowling3"  -Text "Bowling Reward #3" -Items ("Piece of Heart", "Bomb Bag", "Purple Rupee", "Bombchus") -Values @("64", "28", "4C", "58") -Info 'Set the first reward for the Bombchu Bowling Minigame`nThis option requires the "Bombchu Bowling" option to be checked' -Credits "Ported from Rando" -Default 4
-    CreateReduxComboBox -Name "Bowling4"  -Text "Bowling Reward #4" -Items ("Piece of Heart", "Bomb Bag", "Purple Rupee", "Bombchus") -Values @("64", "28", "4C", "58") -Info 'Set the first reward for the Bombchu Bowling Minigame`nThis option requires the "Bombchu Bowling" option to be checked' -Credits "Ported from Rando" -Default 3
-    CreateReduxComboBox -Name "Bowling5"  -Text "Bowling Reward #5" -Items ("Piece of Heart", "Bomb Bag", "Purple Rupee", "Bombchus") -Values @("64", "28", "4C", "58") -Info 'Set the first reward for the Bombchu Bowling Minigame`nThis option requires the "Bombchu Bowling" option to be checked' -Credits "Ported from Rando" -Default 3
+    CreateReduxCheckBox -Name "Dampe"     -Text "Dampe's Digging"                                                                                                       -Info "Dampe's Digging Game is always first try"                           -Credits "Ported from Rando"
+    CreateReduxCheckBox -Name "Fishing"   -Text "Fishing"                                                                                                               -Info "Fishing is less random and has less demanding requirements"         -Credits "Ported from Rando"
+    CreateReduxCheckBox -Name "Bowling"   -Text "Bombchu Bowling"                                                                                                       -Info "Bombchu Bowling prizes now appear in fixed order instead of random" -Credits "Ported from Rando"
+    CreateReduxComboBox -Name "Bowling1"  -Text "Bowling Reward #1" -Items ("Piece of Heart", "Bomb Bag", "Purple Rupee", "Bombchus") -Values @("64", "28", "4C", "58") -Info "Set the first reward for the Bombchu Bowling Minigame"              -Credits "Ported from Rando" -Default 1 -Column 1 -Row 2
+    CreateReduxComboBox -Name "Bowling2"  -Text "Bowling Reward #2" -Items ("Piece of Heart", "Bomb Bag", "Purple Rupee", "Bombchus") -Values @("64", "28", "4C", "58") -Info "Set the second reward for the Bombchu Bowling Minigame"             -Credits "Ported from Rando" -Default 2
+    CreateReduxComboBox -Name "Bowling3"  -Text "Bowling Reward #3" -Items ("Piece of Heart", "Bomb Bag", "Purple Rupee", "Bombchus") -Values @("64", "28", "4C", "58") -Info "Set the third reward for the Bombchu Bowling Minigame"              -Credits "Ported from Rando" -Default 4
+    CreateReduxComboBox -Name "Bowling4"  -Text "Bowling Reward #4" -Items ("Piece of Heart", "Bomb Bag", "Purple Rupee", "Bombchus") -Values @("64", "28", "4C", "58") -Info "Set the fourth reward for the Bombchu Bowling Minigame"             -Credits "Ported from Rando" -Default 3
+    CreateReduxComboBox -Name "Bowling5"  -Text "Bowling Reward #5" -Items ("Piece of Heart", "Bomb Bag", "Purple Rupee", "Bombchus") -Values @("64", "28", "4C", "58") -Info "Set the fifth reward for the Bombchu Bowling Minigame"              -Credits "Ported from Rando" -Default 3
 
     if (IsInterface -Advanced) {
         $Redux.Minigames.Bowling.Add_CheckedChanged({ $Redux.Minigames.Bowling1.enabled = $Redux.Minigames.Bowling2.enabled = $Redux.Minigames.Bowling3.enabled = $Redux.Minigames.Bowling4.enabled = $Redux.Minigames.Bowling5.enabled = $this.checked })
