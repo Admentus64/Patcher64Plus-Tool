@@ -146,7 +146,7 @@ function CreateTextBox([uint16]$X=0, [uint16]$Y=0, [uint16]$Width=0, [uint16]$He
 
 
 #==============================================================================================================================================================================================
-function CreateCheckBox([uint16]$X=0, [uint16]$Y=0, [string]$Name, [byte]$SaveAs=1, [string]$SaveTo, [byte]$Max=1, [string]$Tag, [boolean]$Checked=$False, [boolean]$Disable=$False, [boolean]$IsRadio=$False, [string]$Info="", [boolean]$IsGame=$False, [boolean]$IsDebug=$False, [object]$AddTo=$Last.Group, [object]$Link) {
+function CreateCheckBox([uint16]$X=0, [uint16]$Y=0, [string]$Name, [byte]$SaveAs=1, [string]$SaveTo, [byte]$Max=1, [string]$Tag, [boolean]$Checked=$False, [boolean]$Disable=$False, [switch]$IsRadio, [string]$Info="", [boolean]$IsGame=$False, [boolean]$IsDebug=$False, [object]$AddTo=$Last.Group, [object]$Link) {
     
     if ($IsRadio) {
         $CheckBox = CreateForm -X $X -Y $Y -Width (DPISize 20) -Height (DPISize 20) -Name $Name -Tag $Tag -IsGame $IsGame -Form (New-Object System.Windows.Forms.RadioButton) -AddTo $AddTo
@@ -190,10 +190,10 @@ function CreateCheckBox([uint16]$X=0, [uint16]$Y=0, [string]$Name, [byte]$SaveAs
         Add-Member -InputObject $Checkbox -NotePropertyMembers @{ Link = $Link }
         Add-Member -InputObject $Link     -NotePropertyMembers @{ Link = $Checkbox }
 
-        if ($Checkbox.GetType() -eq "System.Windows.Forms.Checkbox")   { $Checkbox.Add_CheckStateChanged( { EnableElem -Elem $this.link -Active (!$this.Checked) }) }
-        else                                                           { $Checkbox.Add_CheckedChanged(    { EnableElem -Elem $this.link -Active (!$this.Checked) }) }
-        if ($Link.GetType() -eq "System.Windows.Forms.Checkbox")       { $Link.Add_CheckStateChanged(     { EnableElem -Elem $this.link -Active (!$this.Checked) }) }
-        else                                                           { $Link.Add_CheckedChanged(        { EnableElem -Elem $this.link -Active (!$this.Checked) }) }
+        if ($Checkbox.GetType().Name -eq "Checkbox")   { $Checkbox.Add_CheckStateChanged( { EnableElem -Elem $this.link -Active (!$this.Checked) }) }
+        else                                           { $Checkbox.Add_CheckedChanged(    { EnableElem -Elem $this.link -Active (!$this.Checked) }) }
+        if ($Link.GetType().Name -eq "Checkbox")       { $Link.Add_CheckStateChanged(     { EnableElem -Elem $this.link -Active (!$this.Checked) }) }
+        else                                           { $Link.Add_CheckedChanged(        { EnableElem -Elem $this.link -Active (!$this.Checked) }) }
         EnableElem -Elem $Checkbox -Active (!$Checkbox.link.Checked)
         EnableElem -Elem $Link     -Active (!$Link.link.Checked)
         if ($Checkbox.Enabled -eq $False)   { $Checkbox.Checked = $False }
@@ -501,6 +501,8 @@ function CreateReduxTextBox([single]$Column=$Last.Column, [single]$Row=$Last.Row
     }
     if ( (IsSet $Info ) -and (IsSet $Credits) ) { $Info += ("`n`n- Credits: " + $Credits) }
 
+    if (IsSet $Text) { $Text += ":" }
+
     $Label   = CreateLabel   -X (($Column-1) * $FormDistance + (DPISize 15)) -Y ($Row * (DPISize 30) - (DPISize 10)) -Width (DPISize 100) -Height (DPISize 15) -Text $Text -Info $Info -AddTo $AddTo
     $TextBox = CreateTextBox -X $Label.Right -Y ($Label.Top - (DPISize 3)) -Width (DPISize 35) -Height (DPISize 15) -Length $Length -Text $Value -IsGame $True -Name $Name -Tag $Tag -Info $Info -AddTo $AddTo
 
@@ -548,7 +550,6 @@ function CreateReduxRadioButton([single]$Column=$Last.Column, [single]$Row=$Last
     
     if (!(CheckInterface -Beginner $Beginner -Lite $Lite -Advanced $Advanced -Streamlined $Advanced) -or ($Native -and $IsWiiVC) -or $Last.Hide) { return $null }
 
-    if ($Disable) { $Disable = !$PatchReduxCheckBox.Checked }
     if (IsSet $Warning) {
         if (IsSet $Info)   { $Info += ("`n[!] " + $Warning) }
         if (IsSet $Text)   { $Text += " [!]" }
@@ -556,7 +557,7 @@ function CreateReduxRadioButton([single]$Column=$Last.Column, [single]$Row=$Last
     if ( (IsSet $Info ) -and (IsSet $Credits) ) { $Info += ("`n`n- Credits: " + $Credits) }
     $Last.Max++
 
-    $Radio = CreateCheckBox -X (($Column-1) * $FormDistance) -Y (($Row-1) * (DPISize 30)) -Checked $Checked -Disable $Disable -IsRadio $True -Info $Info -IsGame $True -Name $Name -SaveAs $Last.Max -SaveTo $SaveTo -Max $Max -Tag $Tag -AddTo $AddTo -Link $Link
+    $Radio = CreateCheckBox -X (($Column-1) * $FormDistance) -Y (($Row-1) * (DPISize 30)) -Checked $Checked -Disable $Disable -IsRadio -Info $Info -IsGame $True -Name $Name -SaveAs $Last.Max -SaveTo $SaveTo -Max $Max -Tag $Tag -AddTo $AddTo -Link $Link
     
     if (IsSet $Text) {
         $Label = CreateLabel -X $Radio.Right -Y ($Radio.Top + (DPISize 3)) -Height (DPISize 15) -Text $Text -Info $Info -AddTo $AddTo
@@ -586,14 +587,13 @@ function CreateReduxCheckBox([single]$Column=$Last.Column, [single]$Row=$Last.Ro
     
     if (!(CheckInterface -Beginner $Beginner -Lite $Lite -Advanced $Advanced -Streamlined $Advanced) -or ($Native -and $IsWiiVC) -or $Last.Hide) { return $null }
 
-    if ($Disable) { $Disable = !$PatchReduxCheckBox.Checked }
     if (IsSet $Warning) {
         if (IsSet $Info)   { $Info += ("`n[!] " + $Warning) }
         if (IsSet $Text)   { $Text += " [!]" }
     }
     if ( (IsSet $Info ) -and (IsSet $Credits) ) { $Info += ("`n`n- Credits: " + $Credits) }
 
-    $CheckBox = CreateCheckBox -X (($Column-1) * $FormDistance + (DPISize 15)) -Y ($Row * (DPISize 30) - (DPISize 10)) -Checked $Checked -Disable $Disable -IsRadio $False -Info $Info -IsGame $True -Name $Name -Tag $Tag -AddTo $AddTo -Link $Link
+    $CheckBox = CreateCheckBox -X (($Column-1) * $FormDistance + (DPISize 15)) -Y ($Row * (DPISize 30) - (DPISize 10)) -Checked $Checked -Disable $Disable -Info $Info -IsGame $True -Name $Name -Tag $Tag -AddTo $AddTo -Link $Link
     
     if (IsSet $Text) {
         $Label = CreateLabel -X $CheckBox.Right -Y ($CheckBox.Top + (DPISize 3)) -Height (DPISize 15) -Text $Text -Info $Info -AddTo $AddTo
@@ -619,7 +619,7 @@ function CreateReduxCheckBox([single]$Column=$Last.Column, [single]$Row=$Last.Ro
 
 
 #==============================================================================================================================================================================================
-function CreateReduxComboBox([single]$Column=$Last.Column, [single]$Row=$Last.Row, [int16]$Length=170, [int]$Shift=0, [string[]]$Items=$null, [string[]]$PostItems=$null, [string]$FilePath, $Ext="bin", $Default=1, [switch]$NoDefault, [string]$Text, [string]$Info, [string]$Warning, [string]$Credits, [string]$Name, [string]$Tag, [object]$AddTo=$Last.Group, [switch]$Beginner, [switch]$Lite, [switch]$Advanced, [switch]$Native) {
+function CreateReduxComboBox([single]$Column=$Last.Column, [single]$Row=$Last.Row, [int16]$Length=170, [int]$Shift=0, [string[]]$Items=$null, [string[]]$Values=$null, [string[]]$PostItems=$null, [string]$FilePath, $Ext="bin", $Default=1, [switch]$NoDefault, [string]$Text, [string]$Info, [string]$Warning, [string]$Credits, [string]$Name, [string]$Tag, [object]$AddTo=$Last.Group, [switch]$Beginner, [switch]$Lite, [switch]$Advanced, [switch]$Native) {
     
     if (!(CheckInterface -Beginner $Beginner -Lite $Lite -Advanced $Advanced -Streamlined $Advanced) -or ($Native -and $IsWiiVC) -or $Last.Hide) { return $null }
 
@@ -671,6 +671,13 @@ function CreateReduxComboBox([single]$Column=$Last.Column, [single]$Row=$Last.Ro
         Add-Member -InputObject $Label    -NotePropertyMembers @{ ComboBox = $ComboBox }
         Add-Member -InputObject $ComboBox -NotePropertyMembers @{ Label    = $Text }
     }
+    if (IsSet $Values) {
+        Add-Member -InputObject $ComboBox -NotePropertyMembers @{
+            Values = $Values
+            Value  = $Values[$ComboBox.selectedIndex]
+        }
+        $ComboBox.Add_SelectedIndexChanged({ $this.Value = $this.Values[$this.selectedIndex] })
+    }
 
     $Last.Column = $column + 2;
     $Last.Row = $row;
@@ -693,11 +700,11 @@ function CreateReduxSlider([single]$Column=$Last.Column, [single]$Row=$Last.Row,
     if (!(CheckInterface -Beginner $Beginner -Lite $Lite -Advanced $Advanced -Streamlined $Advanced) -or ($Native -and $IsWiiVC) -or $Last.Hide) { return $null }
 
     if ($Default.GetType().Name -eq "String")   { $Default = GetDecimal $Default }
-    if ($Min.GetType().Name -eq "String")       { $Min     = GetDecimal $Min }
-    if ($Max.GetType().Name -eq "String")       { $Max     = GetDecimal $Max }
-    if ($Freq.GetType().Name -eq "String")      { $Freq    = GetDecimal $Freq }
-    if ($Small.GetType().Name -eq "String")     { $Small   = GetDecimal $Small }
-    if ($Large.GetType().Name -eq "String")     { $Large   = GetDecimal $Large }
+    if ($Min.GetType().Name     -eq "String")   { $Min     = GetDecimal $Min }
+    if ($Max.GetType().Name     -eq "String")   { $Max     = GetDecimal $Max }
+    if ($Freq.GetType().Name    -eq "String")   { $Freq    = GetDecimal $Freq }
+    if ($Small.GetType().Name   -eq "String")   { $Small   = GetDecimal $Small }
+    if ($Large.GetType().Name   -eq "String")   { $Large   = GetDecimal $Large }
 
     $Info = "Right click to reset to default value`n`n" + $Info
     if ( (IsSet $Info ) -and (IsSet $Credits) ) { $Info += ("`n`n- Credits: " + $Credits) }

@@ -13,6 +13,14 @@
     $MainDialog.Icon            = $Files.icon.main
     $MainDialog.Add_Shown({ $MainDialog.Activate() })
 
+
+
+    # Load json files
+    $Files.json.consoles = SetJSONFile $Files.json.consoles
+    $Files.json.games    = SetJSONFile $Files.json.games
+
+
+
     # Addons
     $AddonsToolTip = CreateToolTip
     for ($i=0; $i -lt $Files.json.repo.addons.length; $i++) {
@@ -43,38 +51,44 @@
     # Menu bar
     $menuBarMain               = New-Object System.Windows.Forms.MenuStrip; $MainDialog.Controls.Add($menuBarMain)
 
-    $menuBarFile               = New-Object System.Windows.Forms.ToolStripMenuItem; $menuBarFile.Text        = "File";               $menuBarMain.Items.Add($menuBarFile)
-    $menuBarEdit               = New-Object System.Windows.Forms.ToolStripMenuItem; $menuBarEdit.Text        = "Edit";               $menuBarMain.Items.Add($menuBarEdit)
-    $menuBarInterface          = New-Object System.Windows.Forms.ToolStripMenuItem; $menuBarInterface.Text   = "Interface";          $menuBarMain.Items.Add($menuBarInterface)
-    $menuBarHelp               = New-Object System.Windows.Forms.ToolStripMenuItem; $menuBarHelp.Text        = "Help";               $menuBarMain.Items.Add($menuBarHelp)
+    $menuBarFile               = New-Object System.Windows.Forms.ToolStripMenuItem; $menuBarFile.Text           = "File";               $menuBarMain.Items.Add($menuBarFile)
+    $menuBarEdit               = New-Object System.Windows.Forms.ToolStripMenuItem; $menuBarEdit.Text           = "Edit";               $menuBarMain.Items.Add($menuBarEdit)
+    $menuBarInterface          = New-Object System.Windows.Forms.ToolStripMenuItem; $menuBarInterface.Text      = "Interface";          $menuBarMain.Items.Add($menuBarInterface)
+    $menuBarHelp               = New-Object System.Windows.Forms.ToolStripMenuItem; $menuBarHelp.Text           = "Help";               $menuBarMain.Items.Add($menuBarHelp)
+    $menuBarEditors            = New-Object System.Windows.Forms.ToolStripMenuItem; $menuBarEditors.Text        = "Editors";            $menuBarMain.Items.Add($menuBarEditors)
 
-    $menuBarChecksum           = New-Object System.Windows.Forms.ToolStripButton;   $menuBarChecksum.Text    = "Checksum";           $menuBarFile.DropDownItems.Add($menuBarChecksum)
-    $menuBarUpdate             = New-Object System.Windows.Forms.ToolStripButton;   $menuBarUpdate.Text      = "Update Tool";        $menuBarFile.DropDownItems.Add($menuBarUpdate)
-    $menuBarExit               = New-Object System.Windows.Forms.ToolStripButton;   $menuBarExit.Text        = "Exit";               $menuBarFile.DropDownItems.Add($menuBarExit)
+    $menuBarChecksum           = New-Object System.Windows.Forms.ToolStripButton;   $menuBarChecksum.Text       = "Checksum";           $menuBarFile.DropDownItems.Add($menuBarChecksum)
+    $menuBarUpdate             = New-Object System.Windows.Forms.ToolStripButton;   $menuBarUpdate.Text         = "Update Tool";        $menuBarFile.DropDownItems.Add($menuBarUpdate)
+    $menuBarExit               = New-Object System.Windows.Forms.ToolStripButton;   $menuBarExit.Text           = "Exit";               $menuBarFile.DropDownItems.Add($menuBarExit)
 
-    $menuBarSettings           = New-Object System.Windows.Forms.ToolStripButton;   $menuBarSettings.Text    = "Settings";           $menuBarEdit.DropDownItems.Add($menuBarSettings)
-    $menuBarResetAll           = New-Object System.Windows.Forms.ToolStripButton;   $menuBarResetAll.Text    = "Reset All Settings"; $menuBarEdit.DropDownItems.Add($menuBarResetAll)
-    $menuBarResetGame          = New-Object System.Windows.Forms.ToolStripButton;   $menuBarResetGame.Text   = "Reset Current Game"; $menuBarEdit.DropDownItems.Add($menuBarResetGame)
-    $menuBarCleanup            = New-Object System.Windows.Forms.ToolStripButton;   $menuBarCleanup.Text     = "Cleanup Files";      $menuBarEdit.DropDownItems.Add($menuBarCleanup)
+    $menuBarSettings           = New-Object System.Windows.Forms.ToolStripButton;   $menuBarSettings.Text       = "Settings";           $menuBarEdit.DropDownItems.Add($menuBarSettings)
+    $menuBarResetAll           = New-Object System.Windows.Forms.ToolStripButton;   $menuBarResetAll.Text       = "Reset All Settings"; $menuBarEdit.DropDownItems.Add($menuBarResetAll)
+    $menuBarResetGame          = New-Object System.Windows.Forms.ToolStripButton;   $menuBarResetGame.Text      = "Reset Current Game"; $menuBarEdit.DropDownItems.Add($menuBarResetGame)
+    $menuBarCleanupFiles       = New-Object System.Windows.Forms.ToolStripButton;   $menuBarCleanupFiles.Text   = "Cleanup Files";      $menuBarEdit.DropDownItems.Add($menuBarCleanupFiles)
+    $menuBarCleanupScripts     = New-Object System.Windows.Forms.ToolStripButton;   $menuBarCleanupScripts.Text = "Cleanup Scripts";    $menuBarEdit.DropDownItems.Add($menuBarCleanupScripts)
 
-    $global:menuBarBeginner    = New-Object System.Windows.Forms.ToolStripButton;   $menuBarBeginner.Text    = "Beginner";           $menuBarInterface.DropDownItems.Add($menuBarBeginner)
-    $global:menuBarLite        = New-Object System.Windows.Forms.ToolStripButton;   $menuBarLite.Text        = "Lite";               $menuBarInterface.DropDownItems.Add($menuBarLite)
-    $global:menuBarAdvanced    = New-Object System.Windows.Forms.ToolStripButton;   $menuBarAdvanced.Text    = "Advanced";           $menuBarInterface.DropDownItems.Add($menuBarAdvanced)
-    $global:menuBarStreamlined = New-Object System.Windows.Forms.ToolStripButton;   $menuBarStreamlined.Text = "Streamlined";        $menuBarInterface.DropDownItems.Add($menuBarStreamlined)
+    $global:menuBarBeginner    = New-Object System.Windows.Forms.ToolStripButton;   $menuBarBeginner.Text       = "Beginner";           $menuBarInterface.DropDownItems.Add($menuBarBeginner)
+    $global:menuBarLite        = New-Object System.Windows.Forms.ToolStripButton;   $menuBarLite.Text           = "Lite";               $menuBarInterface.DropDownItems.Add($menuBarLite)
+    $global:menuBarAdvanced    = New-Object System.Windows.Forms.ToolStripButton;   $menuBarAdvanced.Text       = "Advanced";           $menuBarInterface.DropDownItems.Add($menuBarAdvanced)
+    $global:menuBarStreamlined = New-Object System.Windows.Forms.ToolStripButton;   $menuBarStreamlined.Text    = "Streamlined";        $menuBarInterface.DropDownItems.Add($menuBarStreamlined)
     
-    $menuBarInfo               = New-Object System.Windows.Forms.ToolStripButton;   $menuBarInfo.Text        = "Info";               $menuBarHelp.DropDownItems.Add($menuBarInfo)
-    $menuBarLinks              = New-Object System.Windows.Forms.ToolStripButton;   $menuBarLinks.Text       = "Links";              $menuBarHelp.DropDownItems.Add($menuBarLinks)
-    $menuBarCredits            = New-Object System.Windows.Forms.ToolStripButton;   $menuBarCredits.Text     = "Credits";            $menuBarHelp.DropDownItems.Add($menuBarCredits)
-    $menuBarGameID             = New-Object System.Windows.Forms.ToolStripButton;   $menuBarGameID.Text      = "GameID";             $menuBarHelp.DropDownItems.Add($menuBarGameID)
+    $menuBarInfo               = New-Object System.Windows.Forms.ToolStripButton;   $menuBarInfo.Text           = "Info";               $menuBarHelp.DropDownItems.Add($menuBarInfo)
+    $menuBarLinks              = New-Object System.Windows.Forms.ToolStripButton;   $menuBarLinks.Text          = "Links";              $menuBarHelp.DropDownItems.Add($menuBarLinks)
+    $menuBarCredits            = New-Object System.Windows.Forms.ToolStripButton;   $menuBarCredits.Text        = "Credits";            $menuBarHelp.DropDownItems.Add($menuBarCredits)
+    $menuBarGameID             = New-Object System.Windows.Forms.ToolStripButton;   $menuBarGameID.Text         = "GameID";             $menuBarHelp.DropDownItems.Add($menuBarGameID)
 
-    $menuBarChecksum.Add_Click(  { If (!(IsSet $CreditsDialog)) { CreateCreditsDialog | Out-Null }; foreach ($item in $Credits.Sections) { $item.Visible = $False }; $Credits.Sections[4].Visible = $True; $CreditsDialog.ShowDialog() } )
-    $menuBarExit.Add_Click(      { $MainDialog.Close() } )
-    $menuBarUpdate.Add_Click(    { AutoUpdate -Manual } )
+    $menuBarOoTTextEditor      = New-Object System.Windows.Forms.ToolStripButton;   $menuBarOoTTextEditor.Text  = "OoT Text Editor";    $menuBarEditors.DropDownItems.Add($menuBarOoTTextEditor)
+    $menuBarMMTextEditor       = New-Object System.Windows.Forms.ToolStripButton;   $menuBarMMTextEditor.Text   = "MM Text Editor";     $menuBarEditors.DropDownItems.Add($menuBarMMTextEditor)
 
-    $menuBarSettings.Add_Click(  { $SettingsDialog.ShowDialog() } )
-    $menuBarResetAll.Add_Click(  { ResetTool } )
-    $menuBarResetGame.Add_Click( { ResetGame } )
-    $menuBarCleanup.Add_Click(   { CleanupFiles } )
+    $menuBarChecksum.Add_Click(       { If (!(IsSet $CreditsDialog)) { CreateCreditsDialog | Out-Null }; $Credits.Section | foreach { $_.Visible = $False }; $Credits.Sections[4].Visible = $True; $CreditsDialog.ShowDialog() } )
+    $menuBarExit.Add_Click(           { $MainDialog.Close()          } )
+    $menuBarUpdate.Add_Click(         { AutoUpdate -Manual           } )
+
+    $menuBarSettings.Add_Click(       { $SettingsDialog.ShowDialog() } )
+    $menuBarResetAll.Add_Click(       { ResetTool                    } )
+    $menuBarResetGame.Add_Click(      { ResetGame                    } )
+    $menuBarCleanupFiles.Add_Click(   { CleanupFiles                 } )
+    $menuBarCleanupScripts.Add_Click( { CleanupScripts               } )
 
     if     ($Settings.Core.Interface -eq 1)   { $menuBarBeginner.BackColor    = "#D3D3D3" }
     elseif ($Settings.Core.Interface -eq 2)   { $menuBarLite.BackColor        = "#D3D3D3" }
@@ -86,10 +100,13 @@
     $menuBarAdvanced.Add_Click(    { $Settings.Core.Interface = 3; $menuBarBeginner.BackColor = "White";   $menuBarLite.BackColor = "White";   $menuBarAdvanced.BackColor = "#D3D3D3"; $menuBarStreamlined.BackColor = "White";   ResetReduxSettings; ChangePatchPanel; DisablePatches; SetMainScreenSize } )
     $menuBarStreamlined.Add_Click( { $Settings.Core.Interface = 4; $menuBarBeginner.BackColor = "White";   $menuBarLite.BackColor = "White";   $menuBarAdvanced.BackColor = "White";   $menuBarStreamlined.BackColor = "#D3D3D3"; ResetReduxSettings; ChangePatchPanel; DisablePatches; SetMainScreenSize } )
 
-    $menuBarInfo.Add_Click(    { If (!(IsSet $CreditsDialog)) { CreateCreditsDialog | Out-Null }; foreach ($item in $Credits.Sections) { $item.Visible = $False }; $Credits.Sections[0].Visible = $True; $CreditsDialog.ShowDialog() } )
-    $menuBarLinks.Add_Click(   { If (!(IsSet $CreditsDialog)) { CreateCreditsDialog | Out-Null }; foreach ($item in $Credits.Sections) { $item.Visible = $False }; $Credits.Sections[3].Visible = $True; $CreditsDialog.ShowDialog() } )
-    $menuBarCredits.Add_Click( { If (!(IsSet $CreditsDialog)) { CreateCreditsDialog | Out-Null }; foreach ($item in $Credits.Sections) { $item.Visible = $False }; $Credits.Sections[1].Visible = $True; $CreditsDialog.ShowDialog() } )
-    $menuBarGameID.Add_Click(  { If (!(IsSet $CreditsDialog)) { CreateCreditsDialog | Out-Null }; foreach ($item in $Credits.Sections) { $item.Visible = $False }; $Credits.Sections[2].Visible = $True; $CreditsDialog.ShowDialog() } )
+    $menuBarInfo.Add_Click(    { If (!(IsSet $CreditsDialog)) { CreateCreditsDialog | Out-Null }; $Credits.Sections | foreach { $_.Visible = $False }; $Credits.Sections[0].Visible = $True; $CreditsDialog.ShowDialog() } )
+    $menuBarLinks.Add_Click(   { If (!(IsSet $CreditsDialog)) { CreateCreditsDialog | Out-Null }; $Credits.Sections | foreach { $_.Visible = $False }; $Credits.Sections[3].Visible = $True; $CreditsDialog.ShowDialog() } )
+    $menuBarCredits.Add_Click( { If (!(IsSet $CreditsDialog)) { CreateCreditsDialog | Out-Null }; $Credits.Sections | foreach { $_.Visible = $False }; $Credits.Sections[1].Visible = $True; $CreditsDialog.ShowDialog() } )
+    $menuBarGameID.Add_Click(  { If (!(IsSet $CreditsDialog)) { CreateCreditsDialog | Out-Null }; $Credits.Sections | foreach { $_.Visible = $False }; $Credits.Sections[2].Visible = $True; $CreditsDialog.ShowDialog() } )
+
+    $menuBarOoTTextEditor.Add_Click( { RunTextEditor -Game "Ocarina of Time" } )
+    $menuBarMMTextEditor.Add_Click(  { RunTextEditor -Game "Majora's Mask"   } )
 
 
 
@@ -234,9 +251,6 @@
 
     $global:PatchToolTip = CreateToolTip
 
-    $Files.json.consoles = SetJSONFile $Files.json.consoles
-    $Files.json.games    = SetJSONFile $Files.json.games
-
 
 
     #################
@@ -294,34 +308,27 @@
     $Patches.Group = CreateGroupBox -Width $Patches.Panel.Width -Height $Patches.Panel.Height
 
     # Create patch button
-    $Patches.Button = CreateButton -X (DPISize 10) -Y (DPISize 45) -Width (DPISize 200) -Height (DPISize 35) -Text "Patch Selected Options"
+    $Patches.Button = CreateButton -X (DPISize 10) -Y (DPISize 45) -Width (DPISize 300) -Height (DPISize 35) -Text "Patch Selected Options"
     $Patches.Button.Font = $Fonts.SmallBold
     $Patches.Button.Add_Click( { MainFunction -Command $GamePatch.command -PatchedFileName $GamePatch.output } )
     $Patches.Button.Enabled = $False
 
-    # Create editor button
-    $Patches.Editor = CreateButton -X ($Patches.Button.right + (DPISize 5)) -Y $Patches.Button.top -Width (DPISize 95) -Height (DPISize 35) -Text "Open Editor" -Info "Open the text editor for adjusting the dialogue of the game"
-    $Patches.Editor.Add_Click( {
-        if ($global:Editor -eq $null) { CreateEditorDialog -Width 900 -Height 800  }
-        $Editor.Dialog.ShowDialog()
-    } )
-
     # Create Patches ComboBox
-    $Patches.Type = CreateComboBox -X $Patches.Button.Left -Y ($Patches.Button.Top - (DPISize 25)) -Width ($Patches.Editor.Right - (DPISize 10)) -Height (DPISize 30) -Name "Selected.Patch"
+    $Patches.Type = CreateComboBox -X $Patches.Button.Left -Y ($Patches.Button.Top - (DPISize 25)) -Width ($Patches.Button.Right - (DPISize 10)) -Height (DPISize 30) -Name "Selected.Patch"
     $global:PatchToolTip = CreateToolTip
 
     # Additional Options Checkbox
-    $Patches.OptionsLabel = CreateLabel -X ($Patches.Editor.Right + (DPISize 10)) -Y ($Patches.Type.Top + (DPISize 5)) -Width (DPISize 85) -Height (DPISize 15) -Text "Enable Options:" -Info "Enable options in order to apply a customizable set of features and changes" 
+    $Patches.OptionsLabel = CreateLabel -X ($Patches.Button.Right + (DPISize 10)) -Y ($Patches.Type.Top + (DPISize 5)) -Width (DPISize 85) -Height (DPISize 15) -Text "Enable Options:" -Info "Enable options in order to apply a customizable set of features and changes" 
     $Patches.Options = CreateCheckBox -X ($Patches.OptionsLabel.Right) -Y ($Patches.OptionsLabel.Top - (DPISize 2)) -Width (DPISize 20) -Height (DPISize 20) -Info "Enable options in order to apply a customizable set of features and changes" -Name "Patches.Options" -Checked $True
     $Patches.OptionsLabel.Add_Click({ $Patches.Options.Checked = !$Patches.Options.Checked })
 
     # Extend Checkbox
-    $Patches.ExtendLabel = CreateLabel -X ($Patches.Editor.Right + (DPISize 10)) -Y ($Patches.OptionsLabel.Bottom + (DPISize 15)) -Width (DPISize 85) -Height (DPISize 15) -Text "Allow Extend:" -Info "Allows extending the ROM beyond it's regular size`nSome patches will automaticially force an extend of the ROM"
+    $Patches.ExtendLabel = CreateLabel -X ($Patches.Button.Right + (DPISize 10)) -Y ($Patches.OptionsLabel.Bottom + (DPISize 15)) -Width (DPISize 85) -Height (DPISize 15) -Text "Allow Extend:" -Info "Allows extending the ROM beyond it's regular size`nSome patches will automaticially force an extend of the ROM"
     $Patches.Extend = CreateCheckBox -X ($Patches.ExtendLabel.Right) -Y ($Patches.ExtendLabel.Top - (DPISize 2)) -Width (DPISize 20) -Height (DPISize 20) -Info "Allows extending the ROM beyond it's regular size`nSome patches will automaticially force an extend of the ROM" -Name "Patches.Extend"
     $Patches.ExtendLabel.Add_Click({ $Patches.Extend.Checked = !$Patches.Extend.Checked })
 
     # Redux Checkbox
-    $Patches.ReduxLabel = CreateLabel -X ($Patches.Editor.Right + (DPISize 10)) -Y ($Patches.OptionsLabel.Bottom + (DPISize 15)) -Width (DPISize 85) -Height (DPISize 15) -Text "Enable Redux:" -Info "Enable the Redux patch which improves game mechanics`nIncludes among other changes the inclusion of the D-Pad for dedicated item buttons"
+    $Patches.ReduxLabel = CreateLabel -X ($Patches.Button.Right + (DPISize 10)) -Y ($Patches.OptionsLabel.Bottom + (DPISize 15)) -Width (DPISize 85) -Height (DPISize 15) -Text "Enable Redux:" -Info "Enable the Redux patch which improves game mechanics`nIncludes among other changes the inclusion of the D-Pad for dedicated item buttons"
     $Patches.Redux = CreateCheckBox -X ($Patches.ReduxLabel.Right) -Y ($Patches.ReduxLabel.Top - (DPISize 2)) -Width (DPISize 20) -Height (DPISize 20) -Info "Enable the Redux patch which improves game mechanics`nIncludes among other changes the inclusion of the D-Pad for dedicated item buttons" -Name "Patches.Redux" -Checked $True
     $Patches.ReduxLabel.Add_Click({ $Patches.Redux.Checked = !$Patches.Redux.Checked })
 
@@ -510,11 +517,6 @@ function DisablePatches() {
     EnableElem -Elem $Patches.OptionsButton                                               -Active $Patches.Options.Checked
     DisableReduxOptions
 
-    # Editor
-    EnableElem -Elem $Patches.Editor -Active ($GameType.editor -eq 1 -and $GameRev.editor -ne 0) -Hide
-    if ($GameType.editor -eq 1 -and $GameRev.editor -ne 0)   { $Patches.Button.Width = (DPISize 200) }
-    else                                                     { $Patches.Button.Width = (DPISize 300) }
-
 }
 
 
@@ -662,6 +664,42 @@ function PatchPath_DragDrop() {
             }
         }
     }
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function CleanupFiles() {
+    
+    foreach ($item in $Files.json.games) {
+        RemovePath ($Paths.Games + "\" + $item.mode + "\Extracted")
+    }
+
+    RemovePath $Paths.cygdrive
+    RemovePath $Paths.Temp
+    RemoveFile $Files.flipscfg
+    RemoveFile $Files.stackdump
+
+    WriteToConsole "All extracted files have been deleted"
+    [System.GC]::Collect() | Out-Null
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function CleanupScripts() {
+    
+    foreach ($item in $Files.json.games) {
+        RemoveFile ($Paths.Games + "\" + $item.mode + "\Custom Text\message_data_static.bin")
+        RemoveFile ($Paths.Games + "\" + $item.mode + "\Custom Text\message_data.tbl")
+        RemoveFile ($Paths.Games + "\" + $item.mode + "\Editor\message_data_static.bin")
+        RemoveFile ($Paths.Games + "\" + $item.mode + "\Editor\message_data.tbl")
+    }
+
+    WriteToConsole "All extracted scripts have been deleted"
+    [System.GC]::Collect() | Out-Null
 
 }
 

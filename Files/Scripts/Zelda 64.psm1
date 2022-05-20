@@ -299,10 +299,14 @@ function MusicOptions([string]$Default="File Select") {
             $audioBank = $null
             foreach ($item in (Get-ChildItem -LiteralPath $Paths.Music -Directory)) {
                 $file = $Paths.Music + "\" + $item.BaseName + "\" + $Redux.ReplaceMusic.Tracks.SelectedItems
-                if (TestFile ($file + ".mid")) {
+                if ( (TestFile ($file + ".mid")) -or (TestFile ($file + ".zip")) ) {
                     if (TestFile ($file + ".meta"))   { $audioBank = (Get-Content -Path ($file + ".meta"))[1].replace("0x", "") }         # Meta
                     else                              { $audioBank = (($file + ".mid").Substring(($file.IndexOf('_')+1))).split("_")[0] } # Filename
-                    $midiFile  = $Paths.Music + "\" + $item.BaseName + "\" + $Redux.ReplaceMusic.Tracks.SelectedItems + ".zip#" + $Redux.ReplaceMusic.Tracks.SelectedItems + ".mid"
+
+                    $file = $Paths.Music + "\" + $item.BaseName + "\" + $Redux.ReplaceMusic.Tracks.SelectedItems
+                    if     (TestFile ($file + ".mid"))   { $midiFile  = $file + ".mid" }
+                    elseif (TestFile ($file + ".zip"))   { $midiFile  = $file + ".zip#" + $Redux.ReplaceMusic.Tracks.SelectedItems + ".mid" }
+                    
                     $ext = ".seq"
                     if (TestFile ($file + ".zseq")) { $ext = ".zseq" }
                     if ($ext -eq $Files.json.music.conversion.ext) {
@@ -1127,16 +1131,6 @@ function SetFormColorLabel([object]$ComboBox, [object]$Label) {
 
 
 #==============================================================================================================================================================================================
-function IncreaseHP([string]$Offset, [float]$Value=0, [boolean]$Multiply=$True) {
-    
-    if ($Multiply)   { MultiplyBytes -Offset $Offset -Factor $Value        }
-    else             { ChangeBytes   -Offset $Offset -Values $Value -IsDec }
-
-}
-
-
-
-#==============================================================================================================================================================================================
 
 Export-ModuleMember -Function GetOoTEntranceIndex
 Export-ModuleMember -Function GetSFXID
@@ -1176,5 +1170,3 @@ Export-ModuleMember -Function SetSwordColorsPreset
 Export-ModuleMember -Function SetColor
 Export-ModuleMember -Function SetColors
 Export-ModuleMember -Function SetFormColorLabel
-
-Export-ModuleMember -Function IncreaseHP

@@ -32,6 +32,8 @@
 - No Shield Recoil:			Admentus (ROM), Aegiker (GameShark)
 - Run While Shielding:			Admentus (ROM), Aegiker (GameShark)
 - Pushback Attacing Walls:		Admentus (ROM), Aegiker (GameShark)
+- Remove Crouch Stab:			Garo-Mastah
+- Remove Magic Quick Spin:		Admentus (ported) & Three Pendants (Debug)
 - Resume From Last Area:		Admentus (ROM), Aegiker (GameShark)
 - Correct Rupee Colors:			GhostlyDark
 - Restore Cow Nose Ring:		ShadowOne333
@@ -54,7 +56,6 @@
 - Advanced 16:9 Widescreen:		gamemasterplc, GhostlyDark
 - Force Hires Link Model:		GhostlyDark
 - Feminine Animations:			GhostlyDark (ported), AriaHiro64 (model)
-- Hide Equipment:			XModxGodX
 - Overworld Skyboxes:			Admentus (ported), BrianMp16 (AR code)
 - MM HUD Icons:				GhostlyDark (ported)
 - MM Button Positions:			GhostlyDark
@@ -66,10 +67,11 @@
 - Chests, Crates & Pots Alternatives:	Admentus, GhostlyDark & OoT Randomizer
 - Hair Color:				Third M
 - Graveyard Keese:			salvador235
-- Master Quest:				ShadowOne333
 - Ura Quest:				ZethN64, Sakura, Frostclaw, Steve(ToCoool) & Admentus (clean port)
 - No Item Drops:			Admentus & BilonFullHDemon
 - Harder Child Bosses:			BilonFullHDemon
+- Recovery:				Admentus (ported), Three Pendants (debug) & Rando (No Heart Drops)
+- Master Quest:				ShadowOne333
 - Fireproof Deku Shield:		Three Pendants
 - Equipment icons & alternatives:	Admentus, GhostlyDark (injects), CYB3RTR0N (icons), sanguinetti (shields),
 					AndiiSyn (shields), ZombieBrainySnack (Iron Shield)

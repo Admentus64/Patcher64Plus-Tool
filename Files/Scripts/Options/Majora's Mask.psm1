@@ -205,6 +205,9 @@ function ByteOptions() {
         elseif (IsIndex -Elem $Redux.Graphics.ChildModels -Text "Majora's Mask + OoT Eyes")    { $offset = "1160400"; $folder = "Majora's Mask"   }
         elseif (IsIndex -Elem $Redux.Graphics.ChildModels -Text "Ocarina of Time")             { $offset = "1164290"; $folder = "Ocarina of Time" }
         elseif (IsIndex -Elem $Redux.Graphics.ChildModels -Text "Ocarina of Time + MM Eyes")   { $offset = "1164290"; $folder = "Ocarina of Time" }
+       #elseif (IsIndex -Elem $Redux.Graphics.ChildModels -Text "Improved Link")               { $offset = "1160600"; $folder = "Improved Link"   }
+       #elseif (IsIndex -Elem $Redux.Graphics.ChildModels -Text "Improved Link + OoT Eyes")    { $offset = "1160600"; $folder = "Improved Link"   }
+       #elseif (IsIndex -Elem $Redux.Graphics.ChildModels -Text "Adult Link (MM)")             { $offset = "1162600"; $folder = "Majora's Mask"   }
 
         if ($offset -gt -1) { PatchBytes -Offset $offset -Shared -Patch ("Hair\" + $folder + "\" + $Redux.Styles.HairColor.Text + ".bin") }
     }
@@ -226,9 +229,9 @@ function ByteOptions() {
         if (IsChecked $Redux.Graphics.Widescreen) {
             foreach ($i in 0..($GamePatch.Languages.Length-1)) {
                 if (IsChecked $Redux.Language[$i]) {
-                    if ($LanguagePatch.tatl_name -eq "Tatl" -and (IsIndex -Elem $Redux.Text.TatlCUp -Not) )   { $Taya = $True }
-                    if ($LanguagePatch.tatl_name -eq "Taya" )                                                 { $Taya = $True }
-                    else                                                                                      { $Taya = $False }
+                    if ($LanguagePatch.tatl -eq "Tatl" -and (IsIndex -Elem $Redux.Text.TatlCUp -Not) )   { $Taya = $True }
+                    if ($LanguagePatch.tatl -eq "Taya" )                                                 { $Taya = $True }
+                    else                                                                                 { $Taya = $False }
                 }
             }
             if ($Taya)   { ChangeBytes -Offset "BADD28" -Values "35 CE C0 78 3C 18 00 57 37 18 40 48 24 6F 00 08 AE 0F 02 A0" }
@@ -702,8 +705,14 @@ function ByteOptions() {
 
     # SCRIPT
 
-    if (IsChecked $Redux.Script.Comma)        { ChangeBytes -Offset "ACC660"  -Values "00 F3 00 00 00 00 00 00 4F 60 00 00 00 00 00 00 24" }
-    if (IsIndex   $Redux.Text.TatlCUp -Not)   { PatchBytes -Offset "1A3EFC0" -Texture -Patch ("Tatl\" + $Redux.Text.TatlCUp.text + ".cup") }
+    if (IsIndex $Redux.Text.TatlCUp -Not) {
+        if     ($Redux.Text.TatlCUp.text -eq "Override" -and $LanguagePatch.tatl -eq "Tatl")   { $tatl = "Taya"                   }
+        elseif ($Redux.Text.TatlCUp.text -eq "Override" -and $LanguagePatch.tatl -ne "Tatl")   { $tatl = "Tatl"                   }
+        else                                                                                   { $tatl = $Redux.Text.TatlCUp.text }
+        PatchBytes -Offset "1EBFAE0" -Texture -Patch ("Tatl\" + $tatl + ".cup")
+    }
+
+    if (IsChecked $Redux.Text.Comma) { ChangeBytes -Offset "ACC660"  -Values "00 F3 00 00 00 00 00 00 4F 60 00 00 00 00 00 00 24" }
 
 }
 
@@ -821,43 +830,33 @@ function ByteReduxOptions() {
 
     # HUD COLORS #
 
-    if (IsDefaultColor -Elem $Redux.Colors.SetHUDStats[0] -Not)   { ChangeBytes -Offset (AddToOffset $offset -Add "28") -Values @($Redux.Colors.SetHUDStats[0].Color.R, $Redux.Colors.SetHUDStats[0].Color.G, $Redux.Colors.SetHUDStats[0].Color.B) } # Hearts
-    if (IsDefaultColor -Elem $Redux.Colors.SetHUDStats[1] -Not)   { ChangeBytes -Offset (AddToOffset $offset -Add "2C") -Values @($Redux.Colors.SetHUDStats[1].Color.R, $Redux.Colors.SetHUDStats[1].Color.G, $Redux.Colors.SetHUDStats[1].Color.B) } # Hearts
-    if (IsDefaultColor -Elem $Redux.Colors.SetHUDStats[2] -Not)   { ChangeBytes -Offset (AddToOffset $offset -Add "30") -Values @($Redux.Colors.SetHUDStats[2].Color.R, $Redux.Colors.SetHUDStats[2].Color.G, $Redux.Colors.SetHUDStats[2].Color.B) } # Magic
-    if (IsDefaultColor -Elem $Redux.Colors.SetHUDStats[3] -Not)   { ChangeBytes -Offset (AddToOffset $Offset -Add "34") -Values @($Redux.Colors.SetHUDStats[3].Color.R, $Redux.Colors.SetHUDStats[3].Color.G, $Redux.Colors.SetHUDStats[3].Color.B) } # Magic
-    if (IsDefaultColor -Elem $Redux.Colors.SetHUDStats[4] -Not)   { ChangeBytes -Offset (AddToOffset $offset -Add "38") -Values @($Redux.Colors.SetHUDStats[4].Color.R, $Redux.Colors.SetHUDStats[4].Color.G, $Redux.Colors.SetHUDStats[4].Color.B) } # Minimap
-
+    if (IsSet $Redux.Colors.SetHUDStats) {
+        if (IsDefaultColor -Elem $Redux.Colors.SetHUDStats[0] -Not)   { ChangeBytes -Offset (AddToOffset $offset -Add "28") -Values @($Redux.Colors.SetHUDStats[0].Color.R, $Redux.Colors.SetHUDStats[0].Color.G, $Redux.Colors.SetHUDStats[0].Color.B) } # Hearts
+        if (IsDefaultColor -Elem $Redux.Colors.SetHUDStats[1] -Not)   { ChangeBytes -Offset (AddToOffset $offset -Add "2C") -Values @($Redux.Colors.SetHUDStats[1].Color.R, $Redux.Colors.SetHUDStats[1].Color.G, $Redux.Colors.SetHUDStats[1].Color.B) } # Hearts
+        if (IsDefaultColor -Elem $Redux.Colors.SetHUDStats[2] -Not)   { ChangeBytes -Offset (AddToOffset $offset -Add "30") -Values @($Redux.Colors.SetHUDStats[2].Color.R, $Redux.Colors.SetHUDStats[2].Color.G, $Redux.Colors.SetHUDStats[2].Color.B) } # Magic
+        if (IsDefaultColor -Elem $Redux.Colors.SetHUDStats[3] -Not)   { ChangeBytes -Offset (AddToOffset $Offset -Add "34") -Values @($Redux.Colors.SetHUDStats[3].Color.R, $Redux.Colors.SetHUDStats[3].Color.G, $Redux.Colors.SetHUDStats[3].Color.B) } # Magic
+        if (IsDefaultColor -Elem $Redux.Colors.SetHUDStats[4] -Not)   { ChangeBytes -Offset (AddToOffset $offset -Add "38") -Values @($Redux.Colors.SetHUDStats[4].Color.R, $Redux.Colors.SetHUDStats[4].Color.G, $Redux.Colors.SetHUDStats[4].Color.B) } # Minimap
+    }
 
 }
 
 
 
 #==============================================================================================================================================================================================
-function ByteLanguageOptions() {
+function CheckLanguageOptions() {
     
-    # Check
+    if     ( (IsChecked  $Redux.Text.Vanilla -Not)   -or (IsLanguage $Redux.Text.AdultPronouns) -or (IsChecked $Redux.UI.GCScheme) )                                                          { return $True }
+    elseif ( (IsLanguage $Redux.Gameplay.RazorSword) -or (IsIndex $Redux.Text.TatlScript -Not)  -or (IsLanguage $Redux.Capacity.EnableAmmo) -or (IsLanguage $Redux.Capacity.EnableWallet) )   { return $True }
 
-    if ( (IsChecked -Elem $Redux.Text.Vanilla -Not) -or (IsLanguage $Redux.Text.AdultPronouns) -or (IsChecked $Redux.UI.GCScheme) ) {
-        if ( !(IsSet $LanguagePatch.script_start) -or !(IsSet $LanguagePatch.script_length) ) { return }
-    }
-    elseif ( (IsLanguage $Redux.Gameplay.RazorSword) -or (IsIndex -Elem $Redux.Text.TatlScript -Not) -or (IsLanguage $Redux.Capacity.EnableAmmo) -or (IsLanguage $Redux.Capacity.EnableWallet) ) {
-        if ( !(IsSet $LanguagePatch.script_start) -or !(IsSet $LanguagePatch.script_length) ) { return }
-    }
-    else { return }
+}
 
 
 
-    # Init
-
+#==============================================================================================================================================================================================
+function WholeLanguageOptions() {
+    
     $script = $GameFiles.extracted + "\message_data_static.bin"
     $table  = $GameFiles.extracted + "\message_data.tbl"
-    ExportBytes -Offset $LanguagePatch.script_start -Length $LanguagePatch.script_length -Output $script -Force
-    ExportBytes -Offset "C5D0D8" -Length "8F70" -Output $table -Force
-    $lengthDifference = (Get-Item ($GameFiles.extracted + "\message_data_static.bin")).length
-
-
-
-    # Patch whole script
 
     if (IsChecked $Redux.Text.Restore) {
         ApplyPatch  -File $script -Patch "\Export\Message\restore_static.bps"
@@ -873,33 +872,16 @@ function ByteLanguageOptions() {
             Copy-Item -LiteralPath ($Gamefiles.customText + "\message_data_static.bin") -Destination ($GameFiles.extracted + "\message_data_static.bin") -Force
             Copy-Item -LiteralPath ($Gamefiles.customText + "\message_data.tbl")        -Destination ($GameFiles.extracted + "\message_data.tbl")        -Force
         }
-        else {
-            WriteToConsole "Custom Text could not be found. All text changes will be discarded."
-            return   
-        }
+        else { WriteToConsole "Custom Text could not be found." }
     }
 
-
-
-    # Length difference
-
-    $lengthDifference = (Get-Item ($GameFiles.extracted + "\message_data_static.bin")).length - $lengthDifference
-    if ($lengthDifference -ne 0) {
-        $newDma = (Get16Bit ((GetDecimal "A9F0") + $lengthDifference)) -split '(..)' -ne ''
-        ChangeBytes -Offset "1A6D6" -Values $newDma
-    }
+}
 
 
 
-    # Load
-
-    $global:ByteScriptArray = [System.IO.File]::ReadAllBytes($script)
-    $global:ByteTableArray  = [System.IO.File]::ReadAllBytes($table)
-
-
-
-    # Patch options
-
+#==============================================================================================================================================================================================
+function ByteLanguageOptions() {
+    
     if (IsChecked $Redux.Text.OcarinaIcons) {
         PatchBytes -Offset "A3B9BC" -Length "850" -Texture -Pad -Patch "Icons\deku_pipes_icon.yaz0"  # Slingshot, ID: 0x0B
         PatchBytes -Offset "A28AF4" -Length "1AF" -Texture -Pad -Patch "Icons\deku_pipes_text.yaz0"
@@ -908,83 +890,74 @@ function ByteLanguageOptions() {
         PatchBytes -Offset "A4AAFC" -Length "999" -Texture -Pad -Patch "Icons\zora_guitar_icon.yaz0" # Hylian Loach, ID: 0x26
         PatchBytes -Offset "A2B2B4" -Length "230" -Texture -Pad -Patch "Icons\zora_guitar_text.yaz0"
 
-        # Pointer Deku Pipes icon
-        ChangeBytes -Offset "A36D80" -Values "00 00 4A B0"
-
-        # Pointer Goron Drums Text
-        ChangeBytes -Offset "A27674" -Values "00 00 2B A0"
-        ChangeBytes -Offset "A276D0" -Values "00 00 09 C0"
+        ChangeBytes -Offset "A36D80" -Values "00 00 4A B0"                                                     # Pointer Deku Pipes icon
+        ChangeBytes -Offset "A27674" -Values "00 00 2B A0"; ChangeBytes -Offset "A276D0" -Values "00 00 09 C0" # Pointer Goron Drums Text
     }
 
     if (IsChecked $Redux.UI.GCScheme) {
-        if ( (IsSet  $LanguagePatch.l_target_seach) -and (IsSet  $LanguagePatch.l_target_replace) ) {
-            $offset = 0
-            do { # Z Targeting
-                $offset = SearchBytes -File $script -Start $offset -Values $LanguagePatch.l_target_search
-                if ($offset -ge 0) { ChangeBytes -File $script -Offset $offset -Values $LanguagePatch.l_target_replace }
-            } while ($offset -ge 0)
-        }
+        SetMessage -ID "0227" -Text "5A20" -Replace "4C20"; SetMessage -ID "1912" -Text "5A20" -Replace "4C20"; SetMessage -ID "191D" -Text "5A20" -Replace "4C20"; SetMessage -ID "1946" -Text "5A20" -Replace "4C20"; SetMessage -ID "1954" -Text "5A20" -Replace "4C20"
     }
 
     if (IsLanguage -Elem $Redux.Gameplay.RazorSword) {
-        $offset = 0
-        $Offset = SearchBytes -File $script -Start $offset -Values "54 68 69 73 20 6E 65 77 2C 20 73 68 61 72 70 65 72 20 62 6C 61 64 65";          PatchBytes -File $script -Offset $offset -Patch "Message\razor_sword_1.bin"
-        $Offset = SearchBytes -File $script -Start $offset -Values "4B 65 65 70 20 69 6E 20 6D 69 6E 64 20 74 68 61 74 20 61 66 74 65 72";          PatchBytes -File $script -Offset $offset -Patch "Message\razor_sword_2.bin"
-        $Offset = SearchBytes -File $script -Start $offset -Values "4E 6F 77 20 6B 65 65 70 20 69 6E 20 6D 69 6E 64 20 74 68 61 74";                PatchBytes -File $script -Offset $offset -Patch "Message\razor_sword_3.bin"
-        $Offset = SearchBytes -File $script -Start $offset -Values "54 68 65 20 4B 6F 6B 69 72 69 20 53 77 6F 72 64 20 72 65 66 6F 72 67 65 64";    PatchBytes -File $script -Offset $offset -Patch "Message\razor_sword_4.bin"
+        SetMessage -ID "0038" -Text "This new, sharper blade is a cut<N>above the rest. Use it up to<N><R>100 times <W>without dulling its<N>superior edge!"                            -Replace "This new, sharper blade is a cut<N>above the rest. Use it as much<N>as you want without dulling it's<N>superior edge!"
+        SetMessage -ID "0C3B" -Text "Keep in mind that after you use<N>your reforged sword <R>100 times<W>, it<N>will lose its edge and it'll be back<N>to its original sharpness..."   -Replace "This reforged blade will be unbreakable.<N>Ohh... Don't look at me like that.<N>Surely I would not dare conning you<N>with a flimsy weapon."
+        SetMessage -ID "0C51" -Text "Now keep in mind that after<N>you've used this <R>100 times<W>, the<N>blade will lose its edge and will<N>return to its <R>original sharpness<W>." -Replace "You do not need to worry for it, as<N>this blade is unbreakable. What!?<N>You do not believe me? Go see it<N>for yourself then in action."
+        SetMessage -ID "1785" -Text "Use it up to <R>100 times<W>."                                                                                                                     -Replace "Use it as much you want."
     }
 
     if (IsLanguage -Elem $Redux.Text.AdultPronouns) {
-        $offset = 0
-        $offset = SearchBytes -File $script -Start $offset -Values "63 68 69 6C 64";                                       ChangeBytes -File $script -Offset $offset -Values "74 65 65 6E 20"
-        $offset = SearchBytes -File $script -Start $offset -Values "6E 20 61 64 75 6C 74 20 6F 72 11";                     ChangeBytes -File $script -Offset $offset -Values "20 67 75 61 72 64 20 6F 72 11 20"
-        $offset = SearchBytes -File $script -Start $offset -Values "6E 6F 74 20 61 6C 6C 6F 77 20 61 20 63 68 69 6C 64";   ChangeBytes -File $script -Offset $offset -Values "27 74 20 6C 65 74 20 61 20 74 65 65 6E 61 67 65 72"
-        $offset = SearchBytes -File $script -Start $offset -Values "6E 20 61 64 75 6C";                                    ChangeBytes -File $script -Offset $offset -Values "20 6B 6E 69 67 68"
-        do {
-            $offset = SearchBytes -File $script -Start $offset -Values "6E 6F 74 20 61 6C 6C 6F 77 20 61 20 63 68 69 6C 64"
-            if ($offset -ge 0) { ChangeBytes -File $script -Offset $offset -Values "27 74 20 6C 65 74 20 61 20 74 65 65 6E 61 67 65 72" }
-        } while ($offset -ge 0)
+        SetMessage -ID "04B0" -Text "6368696C64" -Replace "796F756E67206D616E"; SetMessage -ID "04B2" -Text "6368696C64" -Replace "796F756E67206D616E"; SetMessage -ID "04B5" -Text "6368696C64" -Replace "796F756E67206D616E"
+
+        SetMessage -ID "0514" -Text "6368696C64" -Replace "<N>defenseless Deku Scrub"; SetMessage -ID "0514" -Text "without an adult or<N>until you are old enough to carry" -Replace "until you are<N>capeable of carrying" # Guard guarding Clock Town exit (Deku Scrub)
+        SetMessage -ID "0515" -Text "6368696C64" -Replace "defenseless<N>Deku Scrub";  SetMessage -ID "0515" -Text "without an adult or<N>until you are old enough to carry" -Replace "until you are<N>capeable of carrying"
+
+        SetMessage -ID "0516" -Text "6368696C64" -Replace "7465656E"; SetMessage -ID "0517" -Text "6368696C64" -Replace "7465656E"; SetMessage -ID "0518" -Text "6368696C64" -Replace "7465656E"; SetMessage -ID "0519" -Text "6368696C64" -Replace "7465656E"; SetMessage -ID "0521" -Text "6368696C64" -Replace "7465656E"; SetMessage -ID "0523" -Text "6368696C64" -Replace "7465656E" # Guard guarding Clock Town exit
+        SetMessage -ID "052B" -Text "6368696C64" -Replace "7465656E"; SetMessage -ID "052D" -Text "6368696C64" -Replace "7465656E"; SetMessage -ID "0535" -Text "6368696C64" -Replace "7465656E"; SetMessage -ID "0537" -Text "6368696C64" -Replace "7465656E"; SetMessage -ID "055E" -Text "6368696C64" -Replace "7465656E"; SetMessage -ID "055F" -Text "6368696C64" -Replace "7465656E"
+        
+        SetMessage -ID "0560" -Text "6368696C64" -Replace "<N>defenseless Deku Scrub"; SetMessage -ID "0560" -Text "Until you are old enough to carry<N>a <R>weapon<W>, you cannot pass<N>through here without being<N>accompanied by an adult" -Replace "Until you are capeable of carrying<N>a <R>weapon<W>, you cannot pass<N>through here without being<N>so defenseless" # Guard guarding Clock Town exit (Deku Scrub)
+        SetMessage -ID "0561" -Text "6368696C64" -Replace "<N>defenseless Deku Scrub"; SetMessage -ID "0561" -Text "Until you are old enough to carry<N>a <R>weapon<W>, you cannot pass<N>through here without being<N>accompanied by an adult" -Replace "Until you are capeable of carrying<N>a <R>weapon<W>, you cannot pass<N>through here without being<N>so defenseless"
+        SetMessage -ID "0562" -Text "6368696C64" -Replace "<N>defenseless Deku Scrub"; SetMessage -ID "0562" -Text "Until you are old enough to carry<N>a <R>weapon<W>, you cannot pass<N>through here without being<N>accompanied by an adult" -Replace "Until you are capeable of carrying<N>a <R>weapon<W>, you cannot pass<N>through here without being<N>so defenseless"
+        SetMessage -ID "0563" -Text "6368696C64" -Replace "<N>defenseless Deku Scrub"; SetMessage -ID "0563" -Text "Until you are old enough to carry<N>a <R>weapon<W>, you cannot pass<N>through here without being<N>accompanied by an adult" -Replace "Until you are capeable of carrying<N>a <R>weapon<W>, you cannot pass<N>through here without being<N>so defenseless"
+        SetMessage -ID "0564" -Text "6368696C64" -Replace "<N>defenseless Deku Scrub"; SetMessage -ID "0564" -Text "Until you are old enough to carry<N>a <R>weapon<W>, you cannot pass<N>through here without being<N>accompanied by an adult" -Replace "Until you are capeable of carrying<N>a <R>weapon<W>, you cannot pass<N>through here without being<N>so defenseless"
+        SetMessage -ID "0565" -Text "6368696C64" -Replace "defenseless<N>Deku Scrub";  SetMessage -ID "0565" -Text "Until you are old enough to carry<N>a <R>weapon<W>, you cannot pass<N>through here without being<N>accompanied by an adult" -Replace "Until you are capeable of carrying<N>a <R>weapon<W>, you cannot pass<N>through here without being<N>so defenseless"
+
+        SetMessage -ID "0566" -Text "6368696C64" -Replace "7465656E"; SetMessage -ID "0567" -Text "6368696C64" -Replace "7465656E"; SetMessage -ID "0568" -Text "6368696C64" -Replace "7465656E"; SetMessage -ID "0569" -Text "6368696C64" -Replace "7465656E"; SetMessage -ID "056A" -Text "6368696C64" -Replace "7465656E"; SetMessage -ID "056B" -Text "6368696C64" -Replace "7465656E" # Guard guarding Clock Town exit
+        SetMessage -ID "056C" -Text "6368696C64" -Replace "7465656E"; SetMessage -ID "056D" -Text "6368696C64" -Replace "7465656E"; SetMessage -ID "056E" -Text "6368696C64" -Replace "7465656E"; SetMessage -ID "056F" -Text "6368696C64" -Replace "7465656E"; SetMessage -ID "0570" -Text "6368696C64" -Replace "7465656E"; SetMessage -ID "0571" -Text "6368696C64" -Replace "7465656E"
+        SetMessage -ID "0572" -Text "6368696C64" -Replace "7465656E"; SetMessage -ID "0573" -Text "6368696C64" -Replace "7465656E" # Guard guarding Clock Town exit
+
+        SetMessage -ID "05F5" -Text "6368696C64" -Replace "796F756E67206D616E"; SetMessage -ID "083C" -Text "6368696C64" -Replace "796F756E67206D616E"; SetMessage -ID "0BEA" -Text "fairy child" -Replace "young fairy man"; SetMessage -ID "0BEA" -Text "6368696C64" -Replace "796F756E67206D616E"; SetMessage -ID "0BF6" -Text "fairy child" -Replace "young fairy man"
+        SetMessage -ID "33C3" -Text "6368696C64" -Replace "796F756E6773746572"
     }
 
     if (IsIndex -Elem $Redux.Text.TatlScript -Not) {
-        $offset  = 0
-        $search  = "54 61 74 6C"
-        $replace = ""
+        if     ($Redux.Text.TatlScript.text -eq "Override" -and $LanguagePatch.tatl -eq "Tatl")   { $replace = "Taya"                      }
+        elseif ($Redux.Text.TatlScript.text -eq "Override" -and $LanguagePatch.tatl -ne "Tatl")   { $replace = "Tatl"                      }
+        else                                                                                      { $replace = $Redux.Text.TatlScript.text }
 
-        if (IsSet $LanguagePatch.tatl_search)                                                      { $search = $LanguagePatch.tatl_search   }
-        if ($Redux.Text.TatlScript.text -eq "Override" -and (IsSet $LanguagePatch.tatl_replace))   { $replace = $LanguagePatch.tatl_replace }
-        else { for ($i=0; $i -lt $Redux.Text.TatlScript.text.length; $i++) { $replace += Get8Bit ([byte]$Redux.Text.TatlScript.text[$i]) }  }
-
-        do { # Tatl -> New
-            $offset = SearchBytes -File $script -Start $offset -Values $search
-            if ($offset -ge 0) { ChangeBytes -File $script -Offset $offset -Values $replace }
-        } while ($offset -ge 0)
+        SetMessage -ID "057A" -Text $LanguagePatch.tatl -Replace $replace -NoParse
+        SetMessage -ID "057C" -Text $LanguagePatch.tatl -Replace $replace -NoParse
+        SetMessage -ID "057E" -Text $LanguagePatch.tatl -Replace $replace -NoParse
+        SetMessage -ID "058E" -Text $LanguagePatch.tatl -Replace $replace -NoParse
+        SetMessage -ID "0735" -Text $LanguagePatch.tatl -Replace $replace -NoParse
+        SetMessage -ID "073E" -Text $LanguagePatch.tatl -Replace $replace -NoParse
+        SetMessage -ID "073F" -Text $LanguagePatch.tatl -Replace $replace -NoParse
+        SetMessage -ID "1F4E" -Text $LanguagePatch.tatl -Replace $replace -NoParse
     }
 
     if (IsLanguage $Redux.Capacity.EnableAmmo) {
-        ChangeStringIntoDigits -File $script -Search "33 30 20 61 72 72 6F 77 73 00 2E" -Value $Redux.Capacity.Quiver1.Text
-        ChangeStringIntoDigits -File $script -Search "34 30 20 61 72 72 6F 77 73 00"    -Value $Redux.Capacity.Quiver2.Text
-        ChangeStringIntoDigits -File $script -Search "34 30 20 61 72 72 6F 77 73 00"    -Value $Redux.Capacity.Quiver2.Text
-        ChangeStringIntoDigits -File $script -Search "35 30 20 61 72 72 6F 77 73 00"    -Value $Redux.Capacity.Quiver3.Text
-        ChangeStringIntoDigits -File $script -Search "35 30 20 61 72 72 6F 77 73 00"    -Value $Redux.Capacity.Quiver3.Text
-
-        ChangeStringIntoDigits -File $script -Search "32 30 20 42 6F 6D 62 73 00 21 11" -Value $Redux.Capacity.BombBag1.Text
-        ChangeStringIntoDigits -File $script -Search "32 30 20 42 6F 6D 62 73 00 2E BF" -Value $Redux.Capacity.BombBag1.Text
-        ChangeStringIntoDigits -File $script -Search "33 30 20 42 6F 6D 62 73 00 2E BF" -Value $Redux.Capacity.BombBag2.Text
-        ChangeStringIntoDigits -File $script -Search "33 30 20 42 6F 6D 62 73 00 2E BF" -Value $Redux.Capacity.BombBag2.Text
-        ChangeStringIntoDigits -File $script -Search "34 30 20 62 6F 6D 62 73"          -Value $Redux.Capacity.BombBag3.Text
-        ChangeStringIntoDigits -File $script -Search "34 30 20 42 6F 6D 62 73"          -Value $Redux.Capacity.BombBag3.Text
-
-        ChangeStringIntoDigits -File $script -Search "31 30 2C 11 73 6F 20 75 73 65"    -Value $Redux.Capacity.DekuSticks1.Text
+        SetMessage -ID "0019" -ASCII -NoParse -Text "10" -Replace $Redux.Capacity.DekuSticks1.text
+        SetMessage -ID "178A" -ASCII -NoParse -Text "30" -Replace $Redux.Capacity.Quiver1.text
+        SetMessage -ID "178B" -ASCII -NoParse -Text "40" -Replace $Redux.Capacity.Quiver2.text;  SetMessage -ID "0023" -ASCII -NoParse -Text "40" -Replace $Redux.Capacity.Quiver2.text
+        SetMessage -ID "178C" -ASCII -NoParse -Text "50" -Replace $Redux.Capacity.Quiver3.text;  SetMessage -ID "0024" -ASCII -NoParse -Text "50" -Replace $Redux.Capacity.Quiver3.text
+        SetMessage -ID "178D" -ASCII -NoParse -Text "20" -Replace $Redux.Capacity.BombBag1.text
+        SetMessage -ID "178E" -ASCII -NoParse -Text "30" -Replace $Redux.Capacity.BombBag2.text; SetMessage -ID "001C" -ASCII -NoParse -Text "30" -Replace $Redux.Capacity.BombBag2.text
+        SetMessage -ID "178F" -ASCII -NoParse -Text "40" -Replace $Redux.Capacity.BombBag3.text; SetMessage -ID "001D" -ASCII -NoParse -Text "40" -Replace $Redux.Capacity.BombBag3.text
     }
 
     if (IsLanguage $Redux.Capacity.EnableWallet) {
-        ChangeStringIntoDigits -File $script -Search "32 30 30 20 00 6F 66 20 74 68 65 6D" -Value $Redux.Capacity.Wallet2.Text -Triple
-        ChangeStringIntoDigits -File $script -Search "35 30 30 20 52 75 70 65 65 73 00 2E" -Value $Redux.Capacity.Wallet3.Text -Triple
+        SetMessage -ID "0008" -ASCII -Text "200" -Replace $Redux.Capacity.Wallet2.text -NoParse
+        SetMessage -ID "0009" -ASCII -Text "500" -Replace $Redux.Capacity.Wallet3.text -NoParse
     }
-
-    PatchBytes -Offset $LanguagePatch.script_start -Patch "message_data_static.bin" -Extracted
-    PatchBytes -Offset "C5D0D8"                    -Patch "message_data.tbl"        -Extracted
 
 }
 
@@ -1175,10 +1148,10 @@ function CreateTabLanguage() {
 
     # OTHER TEXT OPTIONS #
 
-    $Redux.Box.Text = CreateReduxGroup -Tag "Script" -Text "Other Text Options"
-    CreateReduxCheckBox -Name "Comma"      -Text "Better Comma"     -Info "Make the comma not look as awful"                                                                                                             -Credits "ShadowOne333"
-    CreateReduxComboBox -Name "TatlCUp"    -Text "Tatl C-Up Prompt" -Items @("Default", "Override", "Tatl", "Taya") -FilePath ($GameFiles.textures + "\Tatl") -Ext "bin" -Info "Replace the C-Up Button prompt for Tatl" -Credits "GhostlyDark (injects)"
-    CreateReduxComboBox -Name "TatlScript" -Text "Tatl Text"        -Items @("Default", "Override", "Tatl", "Taya", "Tael", "Navi", "Nite")                   -Info "Change the name for Navi in the dialogue script"    -Credits "Admentus & GhostlyDark"
+    $Redux.Box.Text = CreateReduxGroup -Tag "Text" -Text "Other Text Options"
+    CreateReduxCheckBox -Name "Comma"      -Text "Better Comma"     -Info "Make the comma not look as awful"                                                                                                                     -Credits "ShadowOne333"
+    CreateReduxComboBox -Name "TatlCUp"    -Text "Tatl C-Up Prompt" -Items @("Default", "Override", "Tatl", "Taya") -FilePath ($GameFiles.textures + "\Tatl") -Ext "cup" -Info "Replace the C-Up Button prompt for Tatl"         -Credits "GhostlyDark (injects)"
+    CreateReduxComboBox -Name "TatlScript" -Text "Tatl Text"        -Items @("Default", "Override", "Tatl", "Taya", "Tael", "Navi", "Nite")                              -Info "Change the name for Navi in the dialogue script" -Credits "Admentus & GhostlyDark"
 
 
     $Redux.Text.Restore.Add_CheckedChanged({ EnableElem -Elem $Redux.Text.OcarinaIcons -Active $this.checked })
@@ -1218,7 +1191,7 @@ function CreateTabGraphics() {
     $Info += "`n- D-Pad icons causing issues if combined with Redux (force hidden)"
 
     CreateReduxCheckBox -Name "Widescreen"     -Text "16:9 Widescreen (Advanced)"   -Info $Info -Beginner -Advanced -Native                                                                                      -Credits "Granny Story images by Nerrel, Widescreen Patch by gamemasterplc, enhanced and ported by GhostlyDark" -Linked $Redux.Graphics.Widescreen
-    CreateReduxCheckBox -Name "WidescreenAlt"  -Text "16:9 Widescreen (Simplified)" -Info "Apply 16:9 Widescreen adjusted backgrounds and textures (as well as 16:9 Widescreen for the Wii VC)"                  -Credits "Aspect Ratio Fix by Admentus`n16:9 backgrounds by GhostlyDark & ShadowOne333"
+    CreateReduxCheckBox -Name "WidescreenAlt"  -Text "16:9 Widescreen (Simplified)" -Info "Apply 16:9 Widescreen adjusted backgrounds and textures (as well as 16:9 Widescreen for the Wii VC)"                  -Credits "Aspect Ratio Fix by Admentus`n16:9 backgrounds by GhostlyDark & ShadowOne333" -Link $Redux.Graphics.Widescreen
     CreateReduxCheckBox -Name "ExtendedDraw"   -Text "Extended Draw Distance"       -Info "Increases the game's draw distance for objects`nDoes not work on all objects"                                         -Credits "Admentus"
     CreateReduxCheckBox -Name "PixelatedStars" -Text "Disable Pixelated Stars"      -Info "Completely disable the stars at night-time, which are pixelated dots and do not have any textures for HD replacement" -Credits "Admentus"
     
@@ -1279,12 +1252,12 @@ function CreateTabGraphics() {
     # STYLES #
 
     CreateReduxGroup    -Tag  "Styles"        -Text "Styles" -Beginner -Streamlined -Columns 4
-    CreateReduxComboBox -Name "RegularChests" -Text "Regular Chests" -Info "Use a different style for regular treasure chests"                                           -FilePath ($Paths.shared + "\Chests")               -Ext "front" -Items @("Regular") -Credits "AndiiSyn & Rando"
-    CreateReduxComboBox -Name "LeatherChests" -Text "Leather Chests" -Info "Use a different style for leathered treasure chests"                                         -FilePath ($Paths.shared + "\Chests")               -Ext "front" -Items @("Leather") -Credits "AndiiSyn & Rando"
-    CreateReduxComboBox -Name "BossChests"    -Text "Boss Chests"    -Info "Use a different style for Boss Key treasure chests"                                          -FilePath ($Paths.shared + "\Chests")               -Ext "front" -Items @("Boss MM") -Credits "AndiiSyn & Rando"
-    CreateReduxComboBox -Name "Crates"        -Text "Small Crates"   -Info "Use a different style for small liftable crates"                                             -FilePath ($Paths.shared + "\Crates")               -Ext "bin"   -Items @("Regular") -Credits "Rando"
-    CreateReduxComboBox -Name "Pots"          -Text "Pots"           -Info "Use a different style for throwable pots"                                                    -FilePath ($Paths.shared + "\Pots")                 -Ext "bin"   -Items @("Regular") -Credits "Rando"
-    CreateReduxComboBox -Name "HairColor"     -Text "Hair Color"     -Info "Use a different hair color style for Link`nOnly for Ocarina of Time or Majora's Mask models" -FilePath ($Paths.shared + "\Hair\Ocarina of Time") -Ext "bin"   -Items @("Blonde")  -Credits "Third M & AndiiSyn"
+    CreateReduxComboBox -Name "RegularChests" -Text "Regular Chests" -Info "Use a different style for regular treasure chests"                                           -FilePath ($Paths.shared + "\Chests")               -Ext "front" -Items @("Regular")           -Credits "AndiiSyn & Rando"
+    CreateReduxComboBox -Name "LeatherChests" -Text "Leather Chests" -Info "Use a different style for leathered treasure chests"                                         -FilePath ($Paths.shared + "\Chests")               -Ext "front" -Items @("Leather")           -Credits "AndiiSyn & Rando"
+    CreateReduxComboBox -Name "BossChests"    -Text "Boss Chests"    -Info "Use a different style for Boss Key treasure chests"                                          -FilePath ($Paths.shared + "\Chests")               -Ext "front" -Items @("Boss MM")           -Credits "AndiiSyn & Rando"
+    CreateReduxComboBox -Name "Crates"        -Text "Small Crates"   -Info "Use a different style for small liftable crates"                                             -FilePath ($Paths.shared + "\Crates")               -Ext "bin"   -Items @("Regular")           -Credits "Rando"
+    CreateReduxComboBox -Name "Pots"          -Text "Pots"           -Info "Use a different style for throwable pots"                                                    -FilePath ($Paths.shared + "\Pots")                 -Ext "bin"   -Items @("Regular")           -Credits "Rando"
+    CreateReduxComboBox -Name "HairColor"     -Text "Hair Color"     -Info "Use a different hair color style for Link`nOnly for Ocarina of Time or Majora's Mask models" -FilePath ($Paths.shared + "\Hair\Ocarina of Time") -Ext "bin"   -Items @("Default", "Blonde") -Credits "Third M & AndiiSyn"
 
 
 
@@ -1306,12 +1279,12 @@ function CreateTabGraphics() {
     # STYLES #
 
     CreateReduxGroup    -Tag  "Styles"        -Text "Styles" -Lite -Advanced
-    CreateReduxComboBox -Name "RegularChests" -Text "Regular Chests" -Info "Use a different style for regular treasure chests"                                           -FilePath ($Paths.shared + "\Chests")               -Ext "front" -Items @("Regular")  -Credits "AndiiSyn & Rando"
-    CreateReduxComboBox -Name "LeatherChests" -Text "Leather Chests" -Info "Use a different style for leathered treasure chests"                                         -FilePath ($Paths.shared + "\Chests")               -Ext "front" -Items @("Leather")  -Credits "AndiiSyn & Rando"
-    CreateReduxComboBox -Name "BossChests"    -Text "Boss Chests"    -Info "Use a different style for Boss Key treasure chests"                                          -FilePath ($Paths.shared + "\Chests")               -Ext "front" -Items @("Boss OoT") -Credits "AndiiSyn & Rando"
-    CreateReduxComboBox -Name "Crates"        -Text "Small Crates"   -Info "Use a different style for small liftable crates"                                             -FilePath ($Paths.shared + "\Crates")               -Ext "bin"   -Items @("Regular")  -Credits "Rando"
-    CreateReduxComboBox -Name "Pots"          -Text "Pots"           -Info "Use a different style for throwable pots"                                                    -FilePath ($Paths.shared + "\Pots")                 -Ext "bin"   -Items @("Regular")  -Credits "Rando"
-    CreateReduxComboBox -Name "HairColor"     -Text "Hair Color"     -Info "Use a different hair color style for Link`nOnly for Ocarina of Time or Majora's Mask models" -FilePath ($Paths.shared + "\Hair\Ocarina of Time") -Ext "bin"   -Items @("Blonde")  -Credits "Third M & AndiiSyn"
+    CreateReduxComboBox -Name "RegularChests" -Text "Regular Chests" -Info "Use a different style for regular treasure chests"                                           -FilePath ($Paths.shared + "\Chests")               -Ext "front" -Items @("Regular")            -Credits "AndiiSyn & Rando"
+    CreateReduxComboBox -Name "LeatherChests" -Text "Leather Chests" -Info "Use a different style for leathered treasure chests"                                         -FilePath ($Paths.shared + "\Chests")               -Ext "front" -Items @("Leather")            -Credits "AndiiSyn & Rando"
+    CreateReduxComboBox -Name "BossChests"    -Text "Boss Chests"    -Info "Use a different style for Boss Key treasure chests"                                          -FilePath ($Paths.shared + "\Chests")               -Ext "front" -Items @("Boss OoT")           -Credits "AndiiSyn & Rando"
+    CreateReduxComboBox -Name "Crates"        -Text "Small Crates"   -Info "Use a different style for small liftable crates"                                             -FilePath ($Paths.shared + "\Crates")               -Ext "bin"   -Items @("Regular")            -Credits "Rando"
+    CreateReduxComboBox -Name "Pots"          -Text "Pots"           -Info "Use a different style for throwable pots"                                                    -FilePath ($Paths.shared + "\Pots")                 -Ext "bin"   -Items @("Regular")            -Credits "Rando"
+    CreateReduxComboBox -Name "HairColor"     -Text "Hair Color"     -Info "Use a different hair color style for Link`nOnly for Ocarina of Time or Majora's Mask models" -FilePath ($Paths.shared + "\Hair\Ocarina of Time") -Ext "bin"   -Items @("Default", "Blonde")  -Credits "Third M & AndiiSyn"
 
 }
 
@@ -1354,9 +1327,9 @@ function CreateTabDifficulty() {
     CreateReduxComboBox -Name "Damage"     -Text "Damage"       -Items @("1x Damage", "2x Damage", "4x Damage", "8x Damage", "OHKO Mode")        -Info "Set the amount of damage you receive`nOHKO Mode = You die in one hit" -Credits "Admentus"
     CreateReduxComboBox -Name "Recovery"   -Text "Recovery"     -Items @("1x Recovery", "1/2x Recovery", "1/4x Recovery", "0x Recovery")         -Info "Set the amount health you recovery from Recovery Hearts"              -Credits "Admentus"
     CreateReduxComboBox -Name "MagicUsage" -Text "Magic Usage"  -Items @("1x Magic Usage", "2x Magic Usage", "4x Magic Usage", "8x Magic Usage") -Info "Set the amount of times magic is consumed at"                         -Credits "Admentus"
-    $items1 = @("1 Monster HP","0.5x Monster HP", "1x Monster HP", "1.5x Monster HP", "2x Monster HP", "2.5x Monster HP", "3x Monster HP", "3.5x Monster HP", "4x Monster HP")
-    $items2 = @("1 Mini-Boss HP", "0.5x Mini-Boss HP", "1x Mini-Boss HP", "1.5x Mini-Boss HP", "2x Mini-Boss HP", "2.5x Mini-Boss HP", "3x Mini-Boss HP", "3.5x Mini-Boss HP", "4x Mini-Boss HP")
-    $items3 = @("1 Boss HP", "0.5x Boss HP", "1x Boss HP", "1.5x Boss HP", "2x Boss HP", "2.5x Boss HP", "3x Boss HP", "3.5x Boss HP", "4x Boss HP")
+    $items1 = @("1 Monster HP","0.5x Monster HP", "1x Monster HP", "1.5x Monster HP", "2x Monster HP", "2.5x Monster HP", "3x Monster HP", "3.5x Monster HP", "4x Monster HP", "5x Monster HP")
+    $items2 = @("1 Mini-Boss HP", "0.5x Mini-Boss HP", "1x Mini-Boss HP", "1.5x Mini-Boss HP", "2x Mini-Boss HP", "2.5x Mini-Boss HP", "3x Mini-Boss HP", "3.5x Mini-Boss HP", "4x Mini-Boss HP", "5x Mini-Boss HP")
+    $items3 = @("1 Boss HP", "0.5x Boss HP", "1x Boss HP", "1.5x Boss HP", "2x Boss HP", "2.5x Boss HP", "3x Boss HP", "3.5x Boss HP", "4x Boss HP", "5x Boss HP")
     CreateReduxComboBox -Name "MonsterHP"  -Text "Monster HP"   -Items $items1 -Default 3 -Info "Set the amount of health for monsters"                       -Credits "Admentus" -Warning "Some enemies are missing"
     CreateReduxComboBox -Name "MiniBossHP" -Text "Mini-Boss HP" -Items $items2 -Default 3 -Info "Set the amount of health for elite monsters and mini-bosses" -Credits "Admentus" -Warning "Some Mini-bosses are missing"
     CreateReduxComboBox -Name "BossHP"     -Text "Boss HP"      -Items $items3 -Default 3 -Info "Set the amount of health for bosses"                         -Credits "Admentus" -Warning "Goht (phases 3) and Gyorg (phase 2) are missing"

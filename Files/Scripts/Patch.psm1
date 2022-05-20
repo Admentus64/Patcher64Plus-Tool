@@ -276,17 +276,17 @@ function WriteDebug([string]$Command, [string[]]$Header, [string]$PatchedFileNam
     
     foreach ($item in $Redux.Groups) {
         foreach ($form in $item.controls) {
-            if     ($form.GetType() -eq [System.Windows.Forms.CheckBox] -and $form.enabled)      { if (IsChecked $form)                                                 { WriteToConsole ($item.text + ". " + $form.name) } }
-            elseif ($form.GetType() -eq [System.Windows.Forms.RadioButton] -and $form.enabled)   { if ( (IsDefault $form -Not $form.checked) -and (IsChecked $form) )   { WriteToConsole ($item.text + ". " + $form.name) } }
-            elseif ($form.GetType() -eq [System.Windows.Forms.ComboBox] -and $form.enabled)      { if (IsDefault $form -Not $form.text)                                 { WriteToConsole ($item.text + ". " + $form.name + " -> " + $form.text)  } }
-            elseif ($form.GetType() -eq [System.Windows.Forms.TrackBar] -and $form.enabled)      { if (IsDefault $form -Not $form.value)                                { WriteToConsole ($item.text + ". " + $form.name + " -> " + $form.value) } }
+            if     ($form.GetType().Name -eq "CheckBox"    -and $form.enabled)   { if (IsChecked $form)                                                 { WriteToConsole ($item.text + ". " + $form.name) } }
+            elseif ($form.GetType().Name -eq "RadioButton" -and $form.enabled)   { if ( (IsDefault $form -Not $form.checked) -and (IsChecked $form) )   { WriteToConsole ($item.text + ". " + $form.name) } }
+            elseif ($form.GetType().Name -eq "ComboBox"    -and $form.enabled)   { if (IsDefault $form -Not $form.text)                                 { WriteToConsole ($item.text + ". " + $form.name + " -> " + $form.text)  } }
+            elseif ($form.GetType().Name -eq "TrackBar"    -and $form.enabled)   { if (IsDefault $form -Not $form.value)                                { WriteToConsole ($item.text + ". " + $form.name + " -> " + $form.value) } }
 
             elseif ($form.GetType() -eq [System.Windows.Forms.Panel]) {
                 foreach ($subform in $form.controls) {
-                    if     ($subform.GetType() -eq [System.Windows.Forms.CheckBox] -and $form.enabled)      { if (IsChecked $subform)                                                       { WriteToConsole ($item.text + ". " + $subform.name) } }
-                    elseif ($subform.GetType() -eq [System.Windows.Forms.RadioButton] -and $form.enabled)   { if ( (IsDefault $subform -Not $subform.checked) -and (IsChecked $subform) )   { WriteToConsole ($item.text + ". " + $subform.name) } }
-                    elseif ($subform.GetType() -eq [System.Windows.Forms.ComboBox] -and $form.enabled)      { if (IsDefault $subform -Not $subform.text)                                    { WriteToConsole ($item.text + ". " + $subform.name + " -> " + $subform.text)  } }
-                    elseif ($subform.GetType() -eq [System.Windows.Forms.TrackBar] -and $form.enabled)      { if (IsDefault $subform -Not $subform.value)                                   { WriteToConsole ($item.text + ". " + $subform.name + " -> " + $subform.value) } }
+                    if     ($subform.GetType().Name -eq "CheckBox"    -and $form.enabled)   { if (IsChecked $subform)                                                       { WriteToConsole ($item.text + ". " + $subform.name) } }
+                    elseif ($subform.GetType().Name -eq "RadioButton" -and $form.enabled)   { if ( (IsDefault $subform -Not $subform.checked) -and (IsChecked $subform) )   { WriteToConsole ($item.text + ". " + $subform.name) } }
+                    elseif ($subform.GetType().Name -eq "ComboBox"    -and $form.enabled)   { if (IsDefault $subform -Not $subform.text)                                    { WriteToConsole ($item.text + ". " + $subform.name + " -> " + $subform.text)  } }
+                    elseif ($subform.GetType().Name -eq "TrackBar"    -and $form.enabled)   { if (IsDefault $subform -Not $subform.value)                                   { WriteToConsole ($item.text + ". " + $subform.name + " -> " + $subform.value) } }
                 }
             }
         }
@@ -392,6 +392,16 @@ function PatchingAdditionalOptions() {
     }
 
     # Language patches
+    if ($Settings.Debug.ExtractCleanScript -eq $True -and (IsSet $LanguagePatch.script_dma) -and (IsSet $LanguagePatch.table_start) -and (IsSet $LanguagePatch.table_length)) {
+        $global:ByteArrayGame = [System.IO.File]::ReadAllBytes($GetROM.decomp)
+        CreateSubPath $GameFiles.editor
+        $start  = CombineHex $ByteArrayGame[((GetDecimal $LanguagePatch.script_dma)+0)..((GetDecimal $LanguagePatch.script_dma)+3)]
+        $end    = CombineHex $ByteArrayGame[((GetDecimal $LanguagePatch.script_dma)+4)..((GetDecimal $LanguagePatch.script_dma)+7)]
+        $length = Get32Bit ( (GetDecimal $end) - (GetDecimal $start) )
+        ExportBytes -Offset $start                     -Length $length                     -Output ($GameFiles.editor + "\message_data_static.bin") -Force
+        ExportBytes -Offset $LanguagePatch.table_start -Length $LanguagePatch.table_length -Output ($GameFiles.editor + "\message_data.tbl")        -Force
+    }
+
     if (IsSet -Elem $LanguagePatchFile) {
         UpdateStatusLabel ("Patching " + $GameType.mode + " Language...")
         ApplyPatch -File $GetROM.decomp -Patch $LanguagePatchFile
@@ -424,9 +434,38 @@ function PatchingAdditionalOptions() {
     }
 
     # Language Options
-    if (GetCommand "ByteLanguageOptions") {
-        UpdateStatusLabel ("Patching " + $GameType.mode + " Additional Language Options...")
-        iex "ByteLanguageOptions"
+    if ( (GetCommand "CheckLanguageOptions") -and (GetCommand "ByteLanguageOptions") ) {
+        if ( (iex "CheckLanguageOptions") -and (IsSet $LanguagePatch.script_dma) ) {
+            UpdateStatusLabel ("Patching " + $GameType.mode + " Additional Language Options...")
+
+            $start  = CombineHex $ByteArrayGame[((GetDecimal $LanguagePatch.script_dma)+0)..((GetDecimal $LanguagePatch.script_dma)+3)]
+            $end    = CombineHex $ByteArrayGame[((GetDecimal $LanguagePatch.script_dma)+4)..((GetDecimal $LanguagePatch.script_dma)+7)]
+            $length = Get32Bit ( (GetDecimal $end) - (GetDecimal $start) )
+            ExportBytes -Offset $start                     -Length $length                     -Output ($GameFiles.extracted + "\message_data_static.bin") -Force
+            ExportBytes -Offset $LanguagePatch.table_start -Length $LanguagePatch.table_length -Output ($GameFiles.extracted + "\message_data.tbl")        -Force
+
+            if (GetCommand "WholeLanguageOptions") { iex "WholeLanguageOptions" }
+            LoadScript -Script ($GameFiles.extracted + "\message_data_static.bin") -Table ($GameFiles.extracted + "\message_data.tbl")
+
+            $global:ScriptLastID    = "0000"
+            $global:ScriptLastIndex = 0
+            $Files.json.textEditor = SetJSONFile $GameFiles.textEditor
+            iex "ByteLanguageOptions"
+
+            SaveScript -Script ($GameFiles.extracted + "\message_data_static.bin") -Table ($GameFiles.extracted + "\message_data.tbl")
+            PatchBytes -Offset $start                     -Patch "message_data_static.bin" -Extracted
+            PatchBytes -Offset $LanguagePatch.table_start -Patch "message_data.tbl"        -Extracted
+
+            $lengthDifference = (Get-Item ($GameFiles.extracted + "\message_data_static.bin")).length - ( (GetDecimal $end) - (GetDecimal $start) )
+            while ($lengthDifference % 16 -ne 0) { $lengthDifference++ }
+            if ($lengthDifference -ne 0) { ChangeBytes -Offset (AddToOffset -Hex $LanguagePatch.script_dma -Add "04") -Values (AddToOffset -Hex $end -Add (Get32Bit $lengthDifference)) }
+
+            if ($Settings.Debug.ExtractFullScript -eq $True) {
+                CreateSubPath $GameFiles.editor
+                ExportBytes -Offset $start                     -Length $length                     -Output ($GameFiles.editor + "\message_data_static.bin") -Force
+                ExportBytes -Offset $LanguagePatch.table_start -Length $LanguagePatch.table_length -Output ($GameFiles.editor + "\message_data.tbl")        -Force
+            }
+        }
     }
 
     if ( (GetCommand "ByteOptions") -or (GetCommand "ByteReduxOptions") -or (GetCommand "ByteLanguageOptions") ) {
@@ -1017,3 +1056,4 @@ Export-ModuleMember -Function MainFunction
 Export-ModuleMember -Function ApplyPatch
 Export-ModuleMember -Function Cleanup
 Export-ModuleMember -Function GetPatchFile
+Export-ModuleMember -Function FinishLanguagePatching

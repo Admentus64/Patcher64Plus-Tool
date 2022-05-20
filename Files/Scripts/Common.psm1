@@ -368,6 +368,7 @@ function ChangeGameMode() {
     $GameFiles.info         = $GameFiles.Base + "\Info.txt"
     $GameFiles.patches      = $GameFiles.Base + "\Patches.json"
     $GameFiles.controls     = $GameFiles.Base + "\Controls.json"
+    $GameFiles.textEditor   = $GameFiles.Base + "\Text Editor.json"
 
     $global:GameSettings = GetSettings (GetGameSettingsFile)
 
@@ -722,8 +723,14 @@ function IsValue([object]$Elem, [int16]$Value, [switch]$Active, [switch]$Not) {
     if (!(IsSet $Value))                 { $Value = $Elem.Default }
     if ($Active -and !$Elem.Visible)     { return $False }
     if (!$Active -and !$Elem.Enabled)    { return $False }
-    if ([int16]$Elem.value -eq $Value)   { return !$Not  }
-    if ([int16]$Elem.value -ne $Value)   { return  $Not  }
+    if ($Elem.GetType().name -eq "TextBox") {
+        if ([int16]$Elem.text  -eq $Value)   { return !$Not }
+        if ([int16]$Elem.text  -ne $Value)   { return  $Not }
+    }
+    else {
+        if ([int16]$Elem.value -eq $Value)   { return !$Not }
+        if ([int16]$Elem.value -ne $Value)   { return  $Not }
+    }
     return $False
 
 }
@@ -1037,11 +1044,17 @@ function EnableElem([object]$Elem, [boolean]$Active=$True, [switch]$Hide) {
         foreach ($item in $Elem) {
             $item.Enabled = $item.Active = $Active
             if ($Hide) { $item.Visible = $Active }
+            if ($item.GetType().Name -eq "Checkbox" -and !$Active -and (IsSet $item.section) ) {
+                if ($item.section -ne "Core" -and $Elem.section -ne "VC" -and $Elem.section -ne "Controls") { $item.checked = $False }
+            }
         }
     }
     else {
         $Elem.Enabled = $Elem.Active = $Active
         if ($Hide) { $Elem.Visible = $Active }
+        if ($Elem.GetType().Name -eq "Checkbox" -and !$Active -and (IsSet $Elem.section) ) {
+            if ($Elem.section -ne "Core" -and $Elem.section -ne "VC" -and $Elem.section -ne "Controls") { $Elem.checked = $False }
+        }
     }
 
 }

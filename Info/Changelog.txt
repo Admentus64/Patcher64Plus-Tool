@@ -1,3 +1,19 @@
+v18.0.0
+- Added new Text Editor for OoT & MM
+- Added Shop Model Tunic colors for OoT (by Username0713)
+- Added new "Recovery" options for OoT
+- Added new "Remove Magic Quick Spin" option for OoT
+- Added new "No Bottled Fairies" option for OoT
+- Added dialogue changes for changed equipment names
+- Added new split customization for the Easier Minigames option
+- Added extended functionality to dropdown menus
+- Removed "Hide Equipment" option for OoT
+- Overhauled patching dialogue
+- Improved patching dialogue options by utilizing the text editor
+- Fixed typos
+- Fixed a bunch of options for OoT & MM not getting patched in correctly
+- Fixed incorrect rewards for the Bombchu Bowling Minigame for the Easier Minigames option
+
 v17.4.0 (preparation update for v18.0.0)
 - Initial Overhaul for the upcomming v18.0.0 Text Editor update
 - Added new "Side Backflip" option for OoT (by Username0713)
@@ -5,6 +21,7 @@ v17.4.0 (preparation update for v18.0.0)
 - Fixed issue with patching custom music sequences
 - Fixed crash issues when trying to buy items in Gold Quest Remix
 - Fixed several other minor issues
+- Fixed Gold Quest Remix bugs and crashes
 - Overhauled "Additional Options" layouts for OoT, GQ, MoT & MM
 - Improved overall performance
 

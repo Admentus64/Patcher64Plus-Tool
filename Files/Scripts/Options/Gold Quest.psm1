@@ -23,7 +23,6 @@ function PatchOptions() {
     }
 
     if (IsChecked $Redux.Animation.Feminine)            { ApplyPatch -Patch "Decompressed\Optional\feminine_animations.ppf" }
-    if (IsChecked $Redux.Graphics.HideEquipment)        { ApplyPatch -Patch "Decompressed\Optional\hide_equipment.ppf"      }
 
 
 
@@ -44,17 +43,6 @@ function PatchOptions() {
 #==============================================================================================================================================================================================
 function ByteOptions() {
 
-    # GAMEPLAY #
-
-    if (IsChecked $Redux.Gameplay.EasierMinigames) {
-        ChangeBytes -Offset "CC4024" -Values "00 00 00 00"                                                                                                         # Dampe's Digging Game
-        ChangeBytes -Offset "DBF428" -Values "0C 10 07 7D 3C 01 42 82 44 81 40 00 44 98 90 00 E6 52"                                                               # Easier Fishing
-        ChangeBytes -Offset "DBF484" -Values "00 00 00 00"; ChangeBytes -Offset "DBF4A8" -Values "00 00 00 00"                                                     # Easier Fishing
-        ChangeBytes -Offset "DCBEAB" -Values "48";          ChangeBytes -Offset "DCBF27" -Values "48"                                                              # Adult Fish size requirement
-        ChangeBytes -Offset "DCBF33" -Values "30";          ChangeBytes -Offset "DCBF9F" -Values "30"                                                              # Child Fish size requirement
-        ChangeBytes -Offset "E2E698" -Values "80 AA E2 64"; ChangeBytes -Offset "E2E6A0" -Values "80 AA E2 4C"; ChangeBytes -Offset "E2D440" -Values "24 19 00 00" # Fixed Bombchu Bowling item order
-    }
-
     if (IsChecked $Redux.Gameplay.Medallions)               { ChangeBytes -Offset "E2B454" -Values "80 EA 00 A7 24 01 00 3F 31 4A 00 3F 00 00 00 00"                 }
     if (IsChecked $Redux.Gameplay.RutoNeverDisappears)      { ChangeBytes -Offset "D01EA3" -Values "00"                                                              }
     if (IsChecked $Redux.Gameplay.AlwaysMoveKingZora)       { ChangeBytes -Offset "E55BB0" -Values "85 CE 8C 3C"; ChangeBytes -Offset "E55BB4" -Values "84 4F 0E DA" }
@@ -65,6 +53,7 @@ function ByteOptions() {
     if (IsChecked $Redux.Gameplay.RunWhileShielding)        { ChangeBytes -Offset "BD7DA0" -Values "10 00 00 55"; ChangeBytes -Offset "BD01D4" -Values "00 00 00 00" }
     if (IsChecked $Redux.Gameplay.PushbackAttackingWalls)   { ChangeBytes -Offset "BDEAE0" -Values "26 24 00 00 24 85 00 00"                                         }
     if (IsChecked $Redux.Gameplay.RemoveCrouchStab)         { ChangeBytes -Offset "BDE374" -Values "10 00 00 0D"                                                     }
+    if (IsChecked $Redux.Gameplay.RemoveQuickSpin)          { ChangeBytes -Offset "C9C9E8" -Values "10 00 00 0E"                                                     }
     if (IsChecked $Redux.Gameplay.ResumeLastArea)           { ChangeBytes -Offset "B06348" -Values "00 00";       ChangeBytes -Offset "B06354" -Values "00 00"       }
     if (IsChecked $Redux.Gameplay.AllowWarpSongs)           { ChangeBytes -Offset "B6D3D2" -Values "00";          ChangeBytes -Offset "B6D42A" -Values "00"          }
     if (IsChecked $Redux.Gameplay.AllowFaroreWind)          { ChangeBytes -Offset "B6D3D3" -Values "00";          ChangeBytes -Offset "B6D42B" -Values "00"          }
@@ -100,7 +89,8 @@ function ByteOptions() {
         ChangeBytes -Offset "D8D590" -Values "00 78 00 FF 00 78 00 FF"; ChangeBytes -Offset "E8C424" -Values "00 78 00 FF 00 78 00 FF"
     }
 
-    if (IsChecked $Redux.Restore.CowNoseRing) { ChangeBytes -Offset "EF3E68" -Values "00 00" }
+    if (IsChecked $Redux.Restore.CowNoseRing)           { ChangeBytes -Offset "EF3E68" -Values "00 00" }
+    if (IsChecked $Redux.Restore.CenterTextboxCursor)   { ChangeBytes -Offset "B5883B" -Values "9A"    }
     
 
 
@@ -117,7 +107,8 @@ function ByteOptions() {
     if (IsChecked $Redux.Fixes.PoacherSaw)            { ChangeBytes -Offset "AE72CC" -Values "00 00 00 00"             }
     if (IsChecked $Redux.Fixes.Boomerang)             { ChangeBytes -Offset "F0F718" -Values "FC 41 C7 FF FF FF FE 38" }
     if (IsChecked $Redux.Fixes.FortressMinimap)       { CopyBytes   -Offset "96E068" -Length "D48" -Start "974600"     }
-    
+
+
 
     # OTHER #
 
@@ -379,40 +370,13 @@ function ByteOptions() {
 
     # HERO MODE #
 
-    if (IsText -Elem $Redux.Hero.Damage -Compare "OHKO Mode") {
-        ChangeBytes -Offset "AE8073" -Values "09 04" -Interval 16
-        ChangeBytes -Offset "AE8096" -Values "82 00"
+    if (IsDefault $Redux.Hero.Damage -Not) {
+        ChangeBytes -Offset "AE8073" -Values "09 04" -Interval 16         
+        if     (IsText -Elem $Redux.Hero.Damage -Compare "2x Damage")   { ChangeBytes -Offset "AE8096" -Values "80 40" }
+        elseif (IsText -Elem $Redux.Hero.Damage -Compare "4x Damage")   { ChangeBytes -Offset "AE8096" -Values "80 80" }
+        elseif (IsText -Elem $Redux.Hero.Damage -Compare "8x Damage")   { ChangeBytes -Offset "AE8096" -Values "80 C0" }
+        elseif (IsText -Elem $Redux.Hero.Damage -Compare "OHKO Mode")   { ChangeBytes -Offset "AE8096" -Values "82 00" }
         ChangeBytes -Offset "AE8099" -Values "00 00 00"
-    }
-    elseif ( (IsIndex -Elem $Redux.Hero.Damage -Not) -or (IsIndex -Elem $Redux.Hero.Recovery -Not) -or (IsChecked $Redux.Hero.NoRecoveryHearts) ) {
-        ChangeBytes -Offset "AE8073" -Values "09 04" -Interval 16
-        if       ( (IsText -Elem $Redux.Hero.Recovery -Compare "0x Recovery") -or (IsChecked $Redux.Hero.NoRecoveryHearts) ) {                
-            if     (IsText -Elem $Redux.Hero.Damage   -Compare "1x Damage")   { ChangeBytes -Offset "AE8096" -Values "81 40" }
-            elseif (IsText -Elem $Redux.Hero.Damage   -Compare "2x Damage")   { ChangeBytes -Offset "AE8096" -Values "81 80" }
-            elseif (IsText -Elem $Redux.Hero.Damage   -Compare "4x Damage")   { ChangeBytes -Offset "AE8096" -Values "81 C0" }
-            elseif (IsText -Elem $Redux.Hero.Damage   -Compare "8x Damage")   { ChangeBytes -Offset "AE8096" -Values "82 00" }
-            ChangeBytes -Offset "AE8099" -Values "10 81 43"
-        }
-        elseif     (IsText -Elem $Redux.Hero.Recovery -Compare "1x Recovery") {                
-            if     (IsText -Elem $Redux.Hero.Damage   -Compare "2x Damage")   { ChangeBytes -Offset "AE8096" -Values "80 40" }
-            elseif (IsText -Elem $Redux.Hero.Damage   -Compare "4x Damage")   { ChangeBytes -Offset "AE8096" -Values "80 80" }
-            elseif (IsText -Elem $Redux.Hero.Damage   -Compare "8x Damage")   { ChangeBytes -Offset "AE8096" -Values "80 C0" }
-            ChangeBytes -Offset "AE8099" -Values "00 00 00"
-        }
-        elseif     (IsText -Elem $Redux.Hero.Recovery -Compare "1/2x Recovery") {               
-            if     (IsText -Elem $Redux.Hero.Damage   -Compare "1x Damage")   { ChangeBytes -Offset "AE8096" -Values "80 40" }
-            elseif (IsText -Elem $Redux.Hero.Damage   -Compare "2x Damage")   { ChangeBytes -Offset "AE8096" -Values "80 80" }
-            elseif (IsText -Elem $Redux.Hero.Damage   -Compare "4x Damage")   { ChangeBytes -Offset "AE8096" -Values "80 C0" }
-            elseif (IsText -Elem $Redux.Hero.Damage   -Compare "8x Damage")   { ChangeBytes -Offset "AE8096" -Values "81 00" }
-            ChangeBytes -Offset "AE8099" -Values "10 80 43"
-        }
-        elseif     (IsText -Elem $Redux.Hero.Recovery -Compare "1/4x Recovery") {                
-            if     (IsText -Elem $Redux.Hero.Damage   -Compare "1x Damage")   { ChangeBytes -Offset "AE8096" -Values "80 80" }
-            elseif (IsText -Elem $Redux.Hero.Damage   -Compare "2x Damage")   { ChangeBytes -Offset "AE8096" -Values "80 C0" }
-            elseif (IsText -Elem $Redux.Hero.Damage   -Compare "4x Damage")   { ChangeBytes -Offset "AE8096" -Values "81 00" }
-            elseif (IsText -Elem $Redux.Hero.Damage   -Compare "8x Damage")   { ChangeBytes -Offset "AE8096" -Values "81 40" }
-            ChangeBytes -Offset "AE8099" -Values "10 80 83"
-        }
     }
 
     if     (IsText -Elem $Redux.Hero.MagicUsage -Compare "2x Magic Usage")   { ChangeBytes -Offset "AE84FA" -Values "2C","40" }
@@ -420,26 +384,24 @@ function ByteOptions() {
     elseif (IsText -Elem $Redux.Hero.MagicUsage -Compare "8x Magic Usage")   { ChangeBytes -Offset "AE84FA" -Values "2C","C0" }
 
     if (IsIndex -Elem $Redux.Hero.MonsterHP -Index 3 -Not) { # Monsters
-        $Multiply = $True 
-        if     (IsIndex -Elem $Redux.Hero.MonsterHP)                          { $multi = 0   }
-        elseif (IsIndex -Elem $Redux.Hero.MonsterHP -Text "Max Monster HP")   { $multi = 255; $multiply = $False }
-        else                                                                  { [float]$multi = [float]$Redux.Hero.MonsterHP.text.split('x')[0] }
+        if (IsIndex -Elem $Redux.Hero.MonsterHP)   { $multi = 0   }
+        else                                       { [float]$multi = [float]$Redux.Hero.MonsterHP.text.split('x')[0] }
 
-        IncreaseHP -Offset "EEF780" -Value $multi -Multiply $multiply; IncreaseHP -Offset "C6471B" -Value $multi -Multiply $multiply; IncreaseHP -Offset "C51A9F" -Value $multi -Multiply $multiply # Guay, Torch Slug, Gohma Larva
-        IncreaseHP -Offset "D74393" -Value $multi -Multiply $multiply; IncreaseHP -Offset "C2F97F" -Value $multi -Multiply $multiply; IncreaseHP -Offset "C0DEF8" -Value $multi -Multiply $multiply # Like-Like, Peehat, Octorok
-        IncreaseHP -Offset "D463BF" -Value $multi -Multiply $multiply; IncreaseHP -Offset "CA85DC" -Value $multi -Multiply $multiply; IncreaseHP -Offset "DADBAF" -Value $multi -Multiply $multiply # Shell Blade, Mad Scrub, Spike
-        IncreaseHP -Offset "C83647" -Value $multi -Multiply $multiply; IncreaseHP -Offset "C83817" -Value $value -Multiply $multiply; IncreaseHP -Offset "C836AB" -Value $multi -Multiply $multiply # Moblin, Moblin (Spear), Moblin (Club)
-        IncreaseHP -Offset "C5F69C" -Value $multi -Multiply $multiply; IncreaseHP -Offset "CAAF9C" -Value $value -Multiply $multiply; IncreaseHP -Offset "C55A78" -Value $multi -Multiply $multiply # Biri, Bari, Shabom
-        IncreaseHP -Offset "CD724F" -Value $multi -Multiply $multiply; IncreaseHP -Offset "EDC597" -Value $value -Multiply $multiply; IncreaseHP -Offset "C0B804" -Value $multi -Multiply $multiply # ReDead / Gibdo, Stalchild, Poe
-        IncreaseHP -Offset "CB1903" -Value $multi -Multiply $multiply; IncreaseHP -Offset "CB2DD7" -Value $value -Multiply $multiply # Blue Bubble, Red Blue
-        IncreaseHP -Offset "D76A07" -Value $multi -Multiply $multiply; IncreaseHP -Offset "C5FC3F" -Value $value -Multiply $multiply # Tentacle, Tailpasaran
-        IncreaseHP -Offset "C693CC" -Value $multi -Multiply $multiply; IncreaseHP -Offset "EB797C" -Value $value -Multiply $multiply # Stinger (Land), Stinger (Water)
-        IncreaseHP -Offset "C2B183" -Value $multi -Multiply $multiply; IncreaseHP -Offset "C2B1F7" -Value $value -Multiply $multiply # Red Tektite, Blue Tektite
-        IncreaseHP -Offset "C1097C" -Value $multi -Multiply $multiply; IncreaseHP -Offset "CD582C" -Value $value -Multiply $multiply # Wallmaster, Floormaster
-        IncreaseHP -Offset "C2DEE7" -Value $multi -Multiply $multiply; IncreaseHP -Offset "C2DF4B" -Value $value -Multiply $multiply # Leever (Green / Purple)
-        IncreaseHP -Offset "CC6CA7" -Value $multi -Multiply $multiply; IncreaseHP -Offset "CC6CAB" -Value $value -Multiply $multiply # Beamos
-        IncreaseHP -Offset "C11177" -Value $multi -Multiply $multiply; IncreaseHP -Offset "C599BC" -Value $value -Multiply $multiply # Dodongo, Baby Dodongo
-        IncreaseHP -Offset "CE60C4" -Value $multi -Multiply $multiply                                                                # # Skullwalltula (Gold)
+        MultiplyBytes -Offset "EEF780" -Factor $multi; MultiplyBytes -Offset "C6471B" -Factor $multi; MultiplyBytes -Offset "C51A9F" -Factor $multi # Guay, Torch Slug, Gohma Larva
+        MultiplyBytes -Offset "D74393" -Factor $multi; MultiplyBytes -Offset "C2F97F" -Factor $multi; MultiplyBytes -Offset "C0DEF8" -Factor $multi # Like-Like, Peehat, Octorok
+        MultiplyBytes -Offset "D463BF" -Factor $multi; MultiplyBytes -Offset "CA85DC" -Factor $multi; MultiplyBytes -Offset "DADBAF" -Factor $multi # Shell Blade, Mad Scrub, Spike
+        MultiplyBytes -Offset "C83647" -Factor $multi; MultiplyBytes -Offset "C83817" -Value $value -Multiply $multiply; MultiplyBytes -Offset "C836AB" -Factor $multi # Moblin, Moblin (Spear), Moblin (Club)
+        MultiplyBytes -Offset "C5F69C" -Factor $multi; MultiplyBytes -Offset "CAAF9C" -Value $value -Multiply $multiply; MultiplyBytes -Offset "C55A78" -Factor $multi # Biri, Bari, Shabom
+        MultiplyBytes -Offset "CD724F" -Factor $multi; MultiplyBytes -Offset "EDC597" -Value $value -Multiply $multiply; MultiplyBytes -Offset "C0B804" -Factor $multi # ReDead / Gibdo, Stalchild, Poe
+        MultiplyBytes -Offset "CB1903" -Factor $multi; MultiplyBytes -Offset "CB2DD7" -Value $value -Multiply $multiply # Blue Bubble, Red Blue
+        MultiplyBytes -Offset "D76A07" -Factor $multi; MultiplyBytes -Offset "C5FC3F" -Value $value -Multiply $multiply # Tentacle, Tailpasaran
+        MultiplyBytes -Offset "C693CC" -Factor $multi; MultiplyBytes -Offset "EB797C" -Value $value -Multiply $multiply # Stinger (Land), Stinger (Water)
+        MultiplyBytes -Offset "C2B183" -Factor $multi; MultiplyBytes -Offset "C2B1F7" -Value $value -Multiply $multiply # Red Tektite, Blue Tektite
+        MultiplyBytes -Offset "C1097C" -Factor $multi; MultiplyBytes -Offset "CD582C" -Value $value -Multiply $multiply # Wallmaster, Floormaster
+        MultiplyBytes -Offset "C2DEE7" -Factor $multi; MultiplyBytes -Offset "C2DF4B" -Value $value -Multiply $multiply # Leever (Green / Purple)
+        MultiplyBytes -Offset "CC6CA7" -Factor $multi; MultiplyBytes -Offset "CC6CAB" -Value $value -Multiply $multiply # Beamos
+        MultiplyBytes -Offset "C11177" -Factor $multi; MultiplyBytes -Offset "C599BC" -Value $value -Multiply $multiply # Dodongo, Baby Dodongo
+        MultiplyBytes -Offset "CE60C4" -Factor $multi                                                                # # Skullwalltula (Gold)
         
         if ($multi -ge 2) {
             ChangeBytes -Offset "B65660" -Values "10 01 01 01 10 02 01 01 01 01 01 02 02 02 00 00 00 01 01 00 00 00 01 01 01 01 01 01 00 00 00 00" # Skulltula
@@ -449,18 +411,16 @@ function ByteOptions() {
     }
 
     if (IsIndex -Elem $Redux.Hero.MiniBossHP -Index 3 -Not) { # Mini-Bosses
-        $mulitply = $True
-        if     (IsIndex -Elem $Redux.Hero.MiniBossHP)                            { $multi = 0   }
-        elseif (IsIndex -Elem $Redux.Hero.MiniBossHP -Text "Max Mini-Boss HP")   { $multi = 255; $multiply = $False  }
-        else                                                                     { [float]$multi = [float]$Redux.Hero.MiniBossHP.text.split('x')[0] }
+        if (IsIndex -Elem $Redux.Hero.MiniBossHP)   { $multi = 0   }
+        else                                        { [float]$multi = [float]$Redux.Hero.MiniBossHP.text.split('x')[0] }
 
-        IncreaseHP -Offset "BFADAB" -Value $multi -Multiply $multiply; IncreaseHP -Offset "D09283" -Value $multi -Multiply $multiply; IncreaseHP -Offset "CDE1FC" -Value $multi -Multiply $multiply # Stalfos, Dead Hand, Poe Sisters
-        IncreaseHP -Offset "C3452F" -Value $multi -Multiply $multiply; IncreaseHP -Offset "C3453B" -Value $multi -Multiply $multiply # Lizalfos, Dinolfos
-        IncreaseHP -Offset "ED80EB" -Value $multi -Multiply $multiply # Wolfos
-        IncreaseHP -Offset "EBC8B7" -Value $multi -Multiply $multiply # Gerudo Fighter
-        IncreaseHP -Offset "CF2667" -Value $multi -Multiply $multiply # Flare Dancer
-        IncreaseHP -Offset "DEF87F" -Value $multi -Multiply $multiply # Skull Kid
-        IncreaseHP -Offset "D49F50" -Value $multi -Multiply $multiply # Big Octo
+        MultiplyBytes -Offset "BFADAB" -Factor $multi; MultiplyBytes -Offset "D09283" -Factor $multi; MultiplyBytes -Offset "CDE1FC" -Factor $multi # Stalfos, Dead Hand, Poe Sisters
+        MultiplyBytes -Offset "C3452F" -Factor $multi; MultiplyBytes -Offset "C3453B" -Factor $multi # Lizalfos, Dinolfos
+        MultiplyBytes -Offset "ED80EB" -Factor $multi # Wolfos
+        MultiplyBytes -Offset "EBC8B7" -Factor $multi # Gerudo Fighter
+        MultiplyBytes -Offset "CF2667" -Factor $multi # Flare Dancer
+        MultiplyBytes -Offset "DEF87F" -Factor $multi # Skull Kid
+        MultiplyBytes -Offset "D49F50" -Factor $multi # Big Octo
 
         if ($multi -eq 255 -and !$multiply) { ChangeBytes -Offset "DE9A1B" -Values "FF" ChangeBytes -Offset "DEB367" -Values "7F" -IsDec; ChangeBytes -Offset "DEB34F" -Values "7F" } # Iron Knuckle (phase 1), Iron Knuckle (phase 2)
         elseif ($multi -gt 0) {
@@ -472,19 +432,17 @@ function ByteOptions() {
     }
     
     if (IsIndex -Elem $Redux.Hero.BossHP -Index 3 -Not) { # Bosses
-        $mulitply = $True
-        if     (IsIndex -Elem $Redux.Hero.BossHP)                       { $multi = 0   }
-        elseif (IsIndex -Elem $Redux.Hero.BossHP -Text "Max Boss HP")   { $multi = 255; $multiply = $False   }
-        else                                                            { [float]$multi = [float]$Redux.Hero.BossHP.text.split('x')[0] }
+        if     (IsIndex -Elem $Redux.Hero.BossHP)   { $multi = 0   }
+        else                                        { [float]$multi = [float]$Redux.Hero.BossHP.text.split('x')[0] }
 
-        IncreaseHP -Offset "C44F2B" -Value $multi -Multiply $multiply; ChangeBytes -Offset "C486CC" -Values "00 00 00 00" # Gohma
-        IncreaseHP -Offset "D258BB" -Value $multi -Multiply $multiply; IncreaseHP  -Offset "D25B0B" -Value $multi -Multiply $multiply # Barinade
-        IncreaseHP -Offset "D64EFB" -Value $multi -Multiply $multiply; IncreaseHP  -Offset "D6223F" -Value $multi -Multiply $multiply # Twinrova
-        IncreaseHP -Offset "C3B9FF" -Value $multi -Multiply $multiply # King Dodongo
-        IncreaseHP -Offset "CE6D2F" -Value $multi -Multiply $multiply # Volvagia
-        IncreaseHP -Offset "D3B4A7" -Value $multi -Multiply $multiply # Morpha
-        IncreaseHP -Offset "DAC824" -Value $multi -Multiply $multiply # Bongo Bongo
-        IncreaseHP -Offset "D7FDA3" -Value $multi -Multiply $multiply # Ganondorf 
+        MultiplyBytes -Offset "C44F2B" -Factor $multi; ChangeBytes -Offset "C486CC" -Values "00 00 00 00" # Gohma
+        MultiplyBytes -Offset "D258BB" -Factor $multi; MultiplyBytes  -Offset "D25B0B" -Factor $multi # Barinade
+        MultiplyBytes -Offset "D64EFB" -Factor $multi; MultiplyBytes  -Offset "D6223F" -Factor $multi # Twinrova
+        MultiplyBytes -Offset "C3B9FF" -Factor $multi # King Dodongo
+        MultiplyBytes -Offset "CE6D2F" -Factor $multi # Volvagia
+        MultiplyBytes -Offset "D3B4A7" -Factor $multi # Morpha
+        MultiplyBytes -Offset "DAC824" -Factor $multi # Bongo Bongo
+        MultiplyBytes -Offset "D7FDA3" -Factor $multi # Ganondorf 
         
         if ($multi -eq 255 -and !$multiply) {
             ChangeBytes -Offset "C91F8F" -Values "FF"; ChangeBytes -Offset "CAFF33" -Values "7F" # Phantom Ganon (phase 1), Phantom Ganon (phase 2)
@@ -511,7 +469,35 @@ function ByteOptions() {
         ChangeBytes -Offset "B5D6B0" -Values $Values
     }
 
-    if (IsChecked $Redux.Hero.NoRecoveryHearts)   { ChangeBytes -Offset "A895B7"  -Values "2E" }
+    if ( (IsChecked $Redux.Hero.NoRecoveryHearts) -or (IsValue $Redux.Recovery.Hearts -Value 0) )   { ChangeBytes -Offset "A895B7" -Values "2E"          }
+    if   (IsChecked $Redux.Hero.NoBottledFairy)                                                     { ChangeBytes -Offset "BF0264" -Values "00 00 00 00" }
+
+
+
+    # RECOVERY #
+
+    if (IsDefault $Redux.Recovery.Heart       -Not)   { ChangeBytes -Offset "AE6FC6" -Values (Get16Bit $Redux.Recovery.Heart.Text       ) }
+    if (IsDefault $Redux.Recovery.Fairy       -Not)   { ChangeBytes -Offset "BEAA4A" -Values (Get16Bit $Redux.Recovery.Fairy.Text       ) }
+    if (IsDefault $Redux.Recovery.FairyRevive -Not)   { ChangeBytes -Offset "BDF65A" -Values (Get16Bit $Redux.Recovery.FairyRevive.Text ) }
+    if (IsDefault $Redux.Recovery.Milk        -Not)   { ChangeBytes -Offset "BEA64A" -Values (Get16Bit $Redux.Recovery.Milk.Text        ) }
+    if (IsDefault $Redux.Recovery.RedPotion   -Not)   { ChangeBytes -Offset "BEA616" -Values (Get16Bit $Redux.Recovery.RedPotion.Text   ) }
+
+
+
+    # MINIGAMES #
+
+    if ( (IsChecked $Redux.Minigames.EasierMinigames) -or  (IsChecked $Redux.Minigames.Dampe) ) { ChangeBytes -Offset "CC4024" -Values "00 00 00 00" } # Dampe's Digging Game
+    if ( (IsChecked $Redux.Minigames.EasierMinigames) -or  (IsChecked $Redux.Minigames.Fishing) ) {
+        ChangeBytes -Offset "DBF428" -Values "0C 10 07 7D 3C 01 42 82 44 81 40 00 44 98 90 00 E6 52"           # Easier Fishing
+        ChangeBytes -Offset "DBF484" -Values "00 00 00 00"; ChangeBytes -Offset "DBF4A8" -Values "00 00 00 00" # Easier Fishing
+        ChangeBytes -Offset "DCBEAB" -Values "48";          ChangeBytes -Offset "DCBF27" -Values "48"          # Adult Fish size requirement
+        ChangeBytes -Offset "DCBF33" -Values "30";          ChangeBytes -Offset "DCBF9F" -Values "30"          # Child Fish size requirement
+    }
+    if (IsChecked $Redux.Minigames.EasierMinigames) { ChangeBytes -Offset "E2E697" -Values "64"; ChangeBytes -Offset "E2E69B" -Values "28"; ChangeBytes -Offset "E2E69F" -Values "58"; ChangeBytes -Offset "E2E6A3" -Values "4C"; ChangeBytes -Offset "E2E6A7" -Values "4C"; ChangeBytes -Offset "E2D440" -Values "24 19 00 00" }
+    elseif (IsChecked $Redux.Minigames.Bowling) {
+        ChangeBytes -Offset "E2E697" -Values $Redux.Minigames.Bowling1.value; ChangeBytes -Offset "E2E69B" -Values $Redux.Minigames.Bowling2.value; ChangeBytes -Offset "E2E69F" -Values $Redux.Minigames.Bowling3.value
+        ChangeBytes -Offset "E2E6A3" -Values $Redux.Minigames.Bowling4.value; ChangeBytes -Offset "E2E6A7" -Values $Redux.Minigames.Bowling5.value; ChangeBytes -Offset "E2D440" -Values "24 19 00 00"
+    }
 
     
     
@@ -524,13 +510,21 @@ function ByteOptions() {
         }
 
         if (IsDefaultColor -Elem $Redux.Colors.SetEquipment[1] -Not) { # Goron Tunic
-            ChangeBytes -Offset "B6DA3B" -Values @($Redux.Colors.SetEquipment[1].Color.R, $Redux.Colors.SetEquipment[1].Color.G, $Redux.Colors.SetEquipment[1].Color.B)
-            if ( (IsText -Elem $Redux.Colors.Equipment[1] -Compare "Randomized" -Not) -and (IsText -Elem $Redux.Colors.Equipment[1] -Compare "Custom" -Not) ) { PatchBytes -Offset "7FF000"  -Texture -Patch ("Tunic\" + $Redux.Colors.Equipment[1].text.replace(" (default)", "") + ".bin") }
+            ChangeBytes -Offset "B6DA3B"  -Values @($Redux.Colors.SetEquipment[1].Color.R, $Redux.Colors.SetEquipment[1].Color.G, $Redux.Colors.SetEquipment[1].Color.B) # Outfit
+            ChangeBytes -Offset "16394EC" -Values @($Redux.Colors.SetEquipment[2].Color.R, $Redux.Colors.SetEquipment[2].Color.G, $Redux.Colors.SetEquipment[2].Color.B) # Shop / obtain model
+            ChangeBytes -Offset "16394F4" -Values @($Redux.Colors.SetEquipment[2].Color.R, $Redux.Colors.SetEquipment[2].Color.G, $Redux.Colors.SetEquipment[2].Color.B)
+            ChangeBytes -Offset "163952C" -Values @($Redux.Colors.SetEquipment[2].Color.R, $Redux.Colors.SetEquipment[2].Color.G, $Redux.Colors.SetEquipment[2].Color.B)
+            ChangeBytes -Offset "1639534" -Values @($Redux.Colors.SetEquipment[2].Color.R, $Redux.Colors.SetEquipment[2].Color.G, $Redux.Colors.SetEquipment[2].Color.B)
+            if ( (IsText -Elem $Redux.Colors.Equipment[1] -Compare "Randomized" -Not) -and (IsText -Elem $Redux.Colors.Equipment[1] -Compare "Custom" -Not) ) { PatchBytes -Offset "7FF000" -Texture -Patch ("Tunic\" + $Redux.Colors.Equipment[1].text.replace(" (default)", "") + ".bin") }
         }
 
         if (IsDefaultColor -Elem $Redux.Colors.SetEquipment[2] -Not) { # Zora Tunic
-            ChangeBytes -Offset "B6DA3E" -Values @($Redux.Colors.SetEquipment[2].Color.R, $Redux.Colors.SetEquipment[2].Color.G, $Redux.Colors.SetEquipment[2].Color.B)
-            if ( (IsText -Elem $Redux.Colors.Equipment[2] -Compare "Randomized" -Not) -and (IsText -Elem $Redux.Colors.Equipment[2] -Compare "Custom" -Not) ) { PatchBytes -Offset "800000"  -Texture -Patch ("Tunic\" + $Redux.Colors.Equipment[2].text.replace(" (default)", "") + ".bin") }
+            ChangeBytes -Offset "B6DA3E"  -Values @($Redux.Colors.SetEquipment[2].Color.R, $Redux.Colors.SetEquipment[2].Color.G, $Redux.Colors.SetEquipment[2].Color.B) # Outfit
+            ChangeBytes -Offset "163950C" -Values @($Redux.Colors.SetEquipment[2].Color.R, $Redux.Colors.SetEquipment[2].Color.G, $Redux.Colors.SetEquipment[2].Color.B) # Shop / obtain model
+            ChangeBytes -Offset "1639514" -Values @($Redux.Colors.SetEquipment[2].Color.R, $Redux.Colors.SetEquipment[2].Color.G, $Redux.Colors.SetEquipment[2].Color.B)
+            ChangeBytes -Offset "163954C" -Values @($Redux.Colors.SetEquipment[2].Color.R, $Redux.Colors.SetEquipment[2].Color.G, $Redux.Colors.SetEquipment[2].Color.B)
+            ChangeBytes -Offset "1639554" -Values @($Redux.Colors.SetEquipment[2].Color.R, $Redux.Colors.SetEquipment[2].Color.G, $Redux.Colors.SetEquipment[2].Color.B)
+            if ( (IsText -Elem $Redux.Colors.Equipment[2] -Compare "Randomized" -Not) -and (IsText -Elem $Redux.Colors.Equipment[2] -Compare "Custom" -Not) ) { PatchBytes -Offset "800000" -Texture -Patch ("Tunic\" + $Redux.Colors.Equipment[2].text.replace(" (default)", "") + ".bin") }
         }
 
         if (IsDefaultColor -Elem $Redux.Colors.SetEquipment[3] -Not)   { ChangeBytes -Offset "B6DA44" -Values @($Redux.Colors.SetEquipment[3].Color.R, $Redux.Colors.SetEquipment[3].Color.G, $Redux.Colors.SetEquipment[3].Color.B) } # Silver Gauntlets
@@ -790,7 +784,7 @@ function ByteOptions() {
 
     # EQUIPMENT #
 
-    if (IsChecked $Redux.Equipment.HerosBowIcons) {
+    if (IsChecked $Redux.Equipment.HerosBow) {
         PatchBytes -Offset "7C0000" -Texture -Patch "Equipment\Bow\heros_bow.icon"
         PatchBytes -Offset "7F5000" -Texture -Patch "Equipment\Bow\heros_bow_fire.icon"
         PatchBytes -Offset "7F6000" -Texture -Patch "Equipment\Bow\heros_bow_ice.icon"
@@ -800,7 +794,7 @@ function ByteOptions() {
 
     if (IsChecked $Redux.Equipment.FireProofDekuShield)   { ChangeBytes -Offset "BD3C5B" -Values "00" }
     if (IsChecked $Redux.Equipment.UnsheathSword)         { ChangeBytes -Offset "BD04A0" -Values "28 42 00 05 14 40 00 05 00 00 10 25" }
-    if (IsChecked $Redux.Equipment.HookshotIcon)          { PatchBytes  -Offset "7C7000" -Texture -Patch "Equipment\Hookshot\termina_hookshot.icon" }
+    if (IsChecked $Redux.Equipment.Hookshot)              { PatchBytes  -Offset "7C7000" -Texture -Patch "Equipment\Hookshot\termina_hookshot.icon" }
 
 
 
@@ -1007,93 +1001,193 @@ function ByteReduxOptions() {
 
 
 #==============================================================================================================================================================================================
-function ByteLanguageOptions() {
+function CheckLanguageOptions() {
     
-    if ( (IsChecked $Redux.UI.GCScheme) -or (IsIndex -Elem $Redux.Text.NaviScript -Not) -or (IsChecked $Redux.Capacity.EnableAmmo) -or (IsChecked $Redux.Capacity.EnableWallet) -or ( (IsText -Elem $Redux.Equipment.DekuShield -Compare "Iron Shield") -and $ChildModel.deku_shield -ne 0) ) {
+    if     ( (IsChecked -Elem $Redux.Text.Custom) -or (IsChecked -Elem $Redux.Text.Speed1x -Not)  -or (IsChecked $Redux.UI.GCScheme)         -or (IsChecked $Redux.Equipment.HerosBow)    )   { return $True }
+    elseif ( (IsChecked $Redux.Unlock.Tunics)     -or (IsIndex -Elem $Redux.Text.NaviScript -Not) -or (IsChecked $Redux.Capacity.EnableAmmo) -or (IsChecked $Redux.Capacity.EnableWallet) )   { return $True }
+    elseif ( (IsText -Elem $Redux.Equipment.KokiriSword -Compare "Knife")        -or (IsText -Elem $Redux.Equipment.KokiriSword -Compare "Razor Sword") )                                     { return $True }
+    elseif ( (IsText -Elem $Redux.Equipment.MasterSword -Compare "Gilded Sword") -or (IsText -Elem $Redux.Equipment.MasterSword -Compare "Great Fairy's Sword") )                             { return $True }
+    elseif ( (IsText -Elem $Redux.Equipment.DekuShield   -Compare "Iron Shield")   -and $ChildModel.deku_shield -ne 0)                                                                        { return $True }
+    elseif ( (IsText -Elem $Redux.Equipment.HylianShield -Compare "Hero's Shield") -and $ChildModel.hylian_shield -ne 0 -and $AdultModel.hylian_shield -ne 0)                                 { return $True }
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function WholeLanguageOptions() {
+    
+    if (IsChecked $Redux.Text.Custom) {
         $script = $GameFiles.extracted + "\message_data_static.bin"
         $table  = $GameFiles.extracted + "\message_data.tbl"
-        ExportBytes -Offset "92D000" -Length "380E0" -Output $script -Force
-    }
-    else { return }
-  
-    if (IsChecked $Redux.UI.GCScheme) {
-        if (IsChecked $Redux.Language[0]) { # English only
-            # Hole of Z
-            $offset = SearchBytes -File $script -Values "48 6F 6C 65 20 6F 66 20 22 5A 22"
-            ChangeBytes -File $script -Offset $offset -Values "48 6F 6C 65 20 6F 66 20 22 4C 22"
-
-            # GC Colors
-            $offset = SearchBytes -File $script -Values "62 6C 75 65 20 69 63 6F 6E 05 40 02 00 00 54 68"
-            ChangeBytes -File $script -Offset $offset -Values "67 72 65 65 6E 20 69 63 6F 6E 05 40 02"
+        
+        if ( (TestFile ($Gamefiles.customText + "\message_data_static.bin") ) -and (TestFile ($Gamefiles.customText + "\message_data.tbl") ) ) {
+            Copy-Item -LiteralPath ($Gamefiles.customText + "\message_data_static.bin") -Destination ($GameFiles.extracted + "\message_data_static.bin") -Force
+            Copy-Item -LiteralPath ($Gamefiles.customText + "\message_data.tbl")        -Destination ($GameFiles.extracted + "\message_data.tbl")        -Force
         }
+        else { WriteToConsole "Custom Text could not be found." }
+    }
 
-        $offset = 0
-        do { # # Color codes
-            $offset = SearchBytes -File $script -Start $offset -Values "05" -Suppress
-            if ($offset -ge 0) {
-                ChangeBytes -File $script -Offset $offset -Match "05 43 9F"                -Values "05 42" # A Button icon
-                ChangeBytes -File $script -Offset $offset -Match "05 43 20 9F"             -Values "05 42" # A Button icon
-                ChangeBytes -File $script -Offset $offset -Match "05 43 41 63 74 69 6F 6E" -Values "05 42" # Action Button text
-                ChangeBytes -File $script -Offset $offset -Match "05 42 A0"                -Values "05 41" # B Button icon
-                ChangeBytes -File $script -Offset $offset -Match "05 41 53 54 41 52 54"    -Values "05 44" # Start Button text
-                $offset = AddToOffset -Hex $offset -Add "1"
-            }
-        } while ($offset -ge 0)
+}
+
+
+
+#==============================================================================================================================================================================================
+function ByteLanguageOptions() {
+
+    if (IsChecked $Redux.Text.Speed2x) {
+        ChangeBytes -Offset "B5006F" -Values "02"          # Text Speed
+        SetMessage -ID "4046" -Text "1A" -Replace "1A0E01" # Correct Ruto Confession Textbox
+
+        # Correct Phantom Ganon Defeat Textbox
+        SetMessage -ID "108E" -Text "0C3C" -Replace "0C66" # Delay
+        SetMessage -ID "108E" -Text "0C3C" -Replace "0C66" # Delay
+        SetMessage -ID "108E" -Text "0E3C" -Replace "0E60" # Fade
+    }
+    elseif (IsChecked $Redux.Text.Speed3x) {
+        ChangeBytes -Offset "B5006F" -Values "03"          # Text Speed
+        SetMessage -ID "4046" -Text "1A" -Replace "1A0E01" # Correct Ruto Confession Textbox
+
+        # Correct Learning Song Textboxes
+        SetMessage -ID "086D" -Text "<W>.<Y><N><W><N><N><DC>" -Replace "<DC><W>.<Y><N><W><N><N>" # Play using ...
+        SetMessage -ID "086E" -Text ".<N><N><N><DC>"          -Replace "<DC>.<N><N><N>"          # Play using ...
+        SetMessage -ID "086F" -Text "<N><N><Ocarina>"         -Replace "<Ocarina><N><N>"         # Play using ...
+        SetMessage -ID "0870" -Text "!<G><N><N><N><W><DC>"    -Replace "<DC>!<G><N><N><N><W>"    # Minuet of Forest
+        SetMessage -ID "0871" -Text "!<N><N><N><DC>"          -Replace "<DC>!<N><N><N>"          # Bolero of Fire
+        SetMessage -ID "0872" -Text "!<N><N><N><DC>"          -Replace "<DC>!<N><N><N>"          # Senerade of Water
+        SetMessage -ID "0873" -Text "<DI><Shift:15>"          -Replace "<NS><Shift:15>"          # Requiem of Spirit
+        SetMessage -ID "0873" -Text "!<N><N><N><DC>"          -Replace "<DC>!<N><N><N>"          # Requiem of Spirit
+        SetMessage -ID "0874" -Text "!<N><N><N><DC>"          -Replace "<DC>!<N><N><N>"          # Nocturne of Shadow
+        SetMessage -ID "0875" -Text "!<N><N><N><DC>"          -Replace "<DC>!<N><N><N>"          # Prelude of Light
+        SetMessage -ID "0876" -Text "!<N><N><N><DC>"          -Replace "<DC>!<N><N><N>"          # Follow along with Saria's Song
+        SetMessage -ID "0877" -Text ".<N><N><N><DC>"          -Replace "<DC>.<N><N><N>"          # Ok? This is the Song
+        SetMessage -ID "0878" -Text ".<N><N><N><DC>"          -Replace "<DC>.<N><N><N>"          # Memorize this song
+        SetMessage -ID "0879" -Text ".<N><N><N><DC>"          -Replace "<DC>.<N><N><N>"          # Keep the Sun's Song in your heart
+        SetMessage -ID "087A" -Text ".<N><N><N><DC>"          -Replace "<DC>.<N><N><N>"          # This song opens the Door of Time
+        SetMessage -ID "087B" -Text "!<N><N><N><DC>"          -Replace "<DC>!<N><N><N>"          # I'll never forget this song
+        SetMessage -ID "087C" -Text ".<N><N><N><DC>"          -Replace "<DC>.<N><N><N>"          # Play using ...
+
+        # Correct Phantom Ganon Defeat Textbox
+        SetMessage -ID "108E" -Text "0C3C" -Replace "0C76" # Delay
+        SetMessage -ID "108E" -Text "0C3C" -Replace "0C76" # Delay
+        SetMessage -ID "108E" -Text "0E3C" -Replace "0E70" # Fade
+    }
+        
+    if (IsChecked $Redux.UI.GCScheme) {
+        SetMessage -ID "0103" -Text "<B><A Button><C>.<W><New Box><NS><C>Pay attention to what the<N><B>Action<C> <B>Icon<C> says.<N>That's the <B>blue" -Replace "<G><A Button><C>.<W><New Box><NS><C>Pay attention to what the<N><B>Action<C> <G>Icon<C> says.<N>That's the <B>green" # Deku Tree - Opening a door
+        SetMessage -ID "0337" -Text 'Hole of "Z"'  -Replace 'Hole of "L"'
+        SetMessage -ID "1035" -Text "blue icon<W>" -Replace "green icon<W>"
+        SetMessage -ID "1037" -Text "blue icon at the top of the<N>screen is called the <B>Action Icon<W>.<New Box>This Action Icon shows you <N>what action you will perform<N>when you press <B><A Button>" -Replace "green icon at the top of the<N>screen is called the <G>Action Icon<W>.<New Box>This Action Icon shows you<N>what action you will perform<N>when you press <G><A Button>" # Know-It-All Brothers                         
+
+        SetMessage -ID "0066" -Text "<R>START" -Replace "<C>START"; SetMessage -ID "1039" -Text "<R>START" -Replace "<C>START"; SetMessage -ID "103A" -Text "<R>START" -Replace "<C>START"; SetMessage -ID "103B" -Text "<R>START" -Replace "<C>START" # START
+        SetMessage -ID "103D" -Text "<R>START" -Replace "<C>START"; SetMessage -ID "2065" -Text "<R>START" -Replace "<C>START"; SetMessage -ID "2071" -Text "<R>START" -Replace "<C>START"; SetMessage -ID "405A" -Text "<R>START" -Replace "<C>START"
+
+        SetMessage -ID "002E" -Text "0542A0" -Replace "0541A0"; SetMessage -ID "004A" -Text "0542A0" -Replace "0541A0"; SetMessage -ID "004B" -Text "0542A0" -Replace "0541A0"; SetMessage -ID "00DD" -Text "0542A0" -Replace "0541A0"; SetMessage -ID "00DD" -Text "0542A0" -Replace "0541A0" # B Button
+        SetMessage -ID "00DD" -Text "0542A0" -Replace "0541A0"; SetMessage -ID "0336" -Text "0542A0" -Replace "0541A0"; SetMessage -ID "0338" -Text "0542A0" -Replace "0541A0"; SetMessage -ID "0401" -Text "0542A0" -Replace "0541A0"; SetMessage -ID "086E" -Text "0542A0" -Replace "0541A0"
+        SetMessage -ID "087C" -Text "0542A0" -Replace "0541A0"; SetMessage -ID "103B" -Text "0542A0" -Replace "0541A0"; SetMessage -ID "1072" -Text "0542A0" -Replace "0541A0"; SetMessage -ID "407F" -Text "0542A0" -Replace "0541A0"; SetMessage -ID "407F" -Text "0542A0" -Replace "0541A0"
+
+        SetMessage -ID "0108" -Text "<B>Action" -Replace "<C>Action"; SetMessage -ID "0337" -Text "<B>Action" -Replace "<C>Action"; SetMessage -ID "0337" -Text "<B>Action" -Replace "<C>Action" # Action
+
+        SetMessage -ID "0037" -Text "05439F" -Replace "05429F"; SetMessage -ID "004A" -Text "05439F" -Replace "05429F"; SetMessage -ID "004C" -Text "05439F" -Replace "05429F"; SetMessage -ID "004D" -Text "05439F" -Replace "05429F"; SetMessage -ID "005B" -Text "05439F" -Replace "05429F" # A Button
+        SetMessage -ID "005C" -Text "05439F" -Replace "05429F"; SetMessage -ID "0079" -Text "05439F" -Replace "05429F"; SetMessage -ID "00A4" -Text "05439F" -Replace "05429F"; SetMessage -ID "00CD" -Text "05439F" -Replace "05429F"; SetMessage -ID "00CE" -Text "05439F" -Replace "05429F"
+        SetMessage -ID "0108" -Text "05439F" -Replace "05429F"; SetMessage -ID "0218" -Text "05439F" -Replace "05429F"; SetMessage -ID "0337" -Text "05439F" -Replace "05429F"; SetMessage -ID "086D" -Text "05439F" -Replace "05429F"; SetMessage -ID "086E" -Text "05439F" -Replace "05429F"
+        SetMessage -ID "087C" -Text "05439F" -Replace "05429F"; SetMessage -ID "1004" -Text "05439F" -Replace "05429F"; SetMessage -ID "1007" -Text "05439F" -Replace "05429F"; SetMessage -ID "103A" -Text "05439F" -Replace "05429F"; SetMessage -ID "103D" -Text "05439F" -Replace "05429F"
+        SetMessage -ID "2035" -Text "05439F" -Replace "05429F"; SetMessage -ID "2037" -Text "05439F" -Replace "05429F"; SetMessage -ID "300C" -Text "05439F" -Replace "05429F"; SetMessage -ID "301C" -Text "05439F" -Replace "05429F"; SetMessage -ID "3022" -Text "05439F" -Replace "05429F"
+        SetMessage -ID "302B" -Text "05439F" -Replace "05429F"; SetMessage -ID "407F" -Text "05439F" -Replace "05429F"; SetMessage -ID "4081" -Text "05439F" -Replace "05429F"; SetMessage -ID "7004" -Text "05439F" -Replace "05429F"; SetMessage -ID "0108" -Text "05439F" -Replace "05429F"
+        SetMessage -ID "1004" -Text "05439F" -Replace "05429F"; SetMessage -ID "1007" -Text "05439F" -Replace "05429F"; SetMessage -ID "2035" -Text "05439F" -Replace "05429F"; SetMessage -ID "302B" -Text "05439F" -Replace "05429F"; SetMessage -ID "407F" -Text "05439F" -Replace "05429F"
+        SetMessage -ID "7004" -Text "05439F" -Replace "05429F"; SetMessage -ID "0108" -Text "05439F" -Replace "05429F"; SetMessage -ID "1007" -Text "05439F" -Replace "05429F"; SetMessage -ID "1007" -Text "05439F" -Replace "05429F"; SetMessage -ID "407F" -Text "05439F" -Replace "05429F"
+        SetMessage -ID "407F" -Text "05439F" -Replace "05429F"; SetMessage -ID "010C" -Text "0543209F" -Replace "0542209F"
+    }
+
+    if (IsLanguage $Redux.Unlock.Tunics) {
+        SetMessage -ID "0050" -Text "adult size, so it won't fit a kid..." -Replace "unisize, so it fits an adult and kid"   # Goron Tunic
+        SetMessage -ID "0051" -Text "adult size,<N>so it won't fit a kid." -Replace "unisize,<N>so it fits an adult and kid" # Zora Tunic
+        SetMessage -ID "00AA" -Text "Adult" -Replace "Uni-" # Goron Tunic
+        SetMessage -ID "00AB" -Text "Adult" -Replace "Uni-" # Zora Tunic
     }
 
     if (IsIndex -Elem $Redux.Text.NaviScript -Not) {
-        $offset  = 0
-        $replace = ""
-        for ($i=0; $i -lt $Redux.Text.NaviScript.text.length; $i++) {
-            $replace += Get8Bit ([byte]$Redux.Text.NaviScript.text[$i])
-        }
-
-        do { # Navi -> New
-            $offset = SearchBytes -File $script -Start $offset -Values "4E 61 76 69"
-            if ($offset -ge 0) { ChangeBytes -File $script -Offset $offset -Values $replace }
-        } while ($offset -ge 0)
+        SetMessage -ID "1000" -Text "4E617669" -Replace $Redux.Text.NaviScript.text -NoParse
+        SetMessage -ID "1015" -Text "4E617669" -Replace $Redux.Text.NaviScript.text -NoParse
+        SetMessage -ID "1017" -Text "4E617669" -Replace $Redux.Text.NaviScript.text -NoParse
+        SetMessage -ID "1017" -Text "4E617669" -Replace $Redux.Text.NaviScript.text -NoParse
+        SetMessage -ID "1017" -Text "4E617669" -Replace $Redux.Text.NaviScript.text -NoParse
+        SetMessage -ID "103F" -Text "4E617669" -Replace $Redux.Text.NaviScript.text -NoParse
+        SetMessage -ID "103F" -Text "4E617669" -Replace $Redux.Text.NaviScript.text -NoParse
+        SetMessage -ID "1099" -Text "4E617669" -Replace $Redux.Text.NaviScript.text -NoParse
+        SetMessage -ID "1099" -Text "4E617669" -Replace $Redux.Text.NaviScript.text -NoParse
+        SetMessage -ID "109A" -Text "4E617669" -Replace $Redux.Text.NaviScript.text -NoParse
+        SetMessage -ID "109A" -Text "4E617669" -Replace $Redux.Text.NaviScript.text -NoParse
+        SetMessage -ID "109A" -Text "4E617669" -Replace $Redux.Text.NaviScript.text -NoParse
     }
 
-    if (IsChecked $Redux.Capacity.EnableAmmo) {
-        ChangeStringIntoDigits -File $script -Search "34 30 20 05 40 69 6E 20 74 6F 74 61 6C"    -Value $Redux.Capacity.Quiver2.Text
-        ChangeStringIntoDigits -File $script -Search "35 30 05 40 21 02 00 00 1A 13"             -Value $Redux.Capacity.Quiver3.Text
-
-        ChangeStringIntoDigits -File $script -Search "32 30 20 42 6F 6D 62 73"                   -Value $Redux.Capacity.BombBag1.Text
-        ChangeStringIntoDigits -File $script -Search "33 30 05 40 21 02 00 1A 13"                -Value $Redux.Capacity.BombBag2.Text
-        ChangeStringIntoDigits -File $script -Search "34 30 05 40 20 42 6F 6D 62 73"             -Value $Redux.Capacity.BombBag3.Text
-
-        ChangeStringIntoDigits -File $script -Search "34 30 05 40 01 73 6C 69 6E 67 73 68 6F 74" -Value $Redux.Capacity.BulletBag2.Text
-        ChangeStringIntoDigits -File $script -Search "35 30 05 41 20 05 40 62 75 6C 6C 65 74 73" -Value $Redux.Capacity.BulletBag3.Text
-
-        ChangeStringIntoDigits -File $script -Search "31 30 20 73 74 69 63 6B 73"                -Value $Redux.Capacity.DekuSticks1.Text
-        ChangeStringIntoDigits -File $script -Search "32 30 05 40 20 6F 66 20 74 68 65 6D"       -Value $Redux.Capacity.DekuSticks2.Text
-        ChangeStringIntoDigits -File $script -Search "33 30 05 40 20 6F 66 20 74 68 65 6D"       -Value $Redux.Capacity.DekuSticks3.Text
-
-        ChangeStringIntoDigits -File $script -Search "33 30 05 40 20 6E 75 74 73"                -Value $Redux.Capacity.DekuNuts2.Text
-        ChangeStringIntoDigits -File $script -Search "34 30 05 41 20 05 40 6E 75 74 73"          -Value $Redux.Capacity.DekuNuts3.Text
+    if (IsLanguage $Redux.Capacity.EnableAmmo) {
+        SetMessage -ID "0056" -ASCII -NoParse -Text "40" -Replace $Redux.Capacity.Quiver2.text;     SetMessage -ID "0057" -ASCII -NoParse -Text "50" -Replace $Redux.Capacity.Quiver3.text
+        SetMessage -ID "0058" -ASCII -NoParse -Text "20" -Replace $Redux.Capacity.BombBag1.text;    SetMessage -ID "0059" -ASCII -NoParse -Text "30" -Replace $Redux.Capacity.BombBag2.text;    SetMessage -ID "005A" -Text "40" -Replace $Redux.Capacity.BombBag3.text
+        SetMessage -ID "0007" -ASCII -NoParse -Text "40" -Replace $Redux.Capacity.BulletBag2.text;  SetMessage -ID "006C" -ASCII -NoParse -Text "50" -Replace $Redux.Capacity.BulletBag3.text
+        SetMessage -ID "0037" -ASCII -NoParse -Text "10" -Replace $Redux.Capacity.DekuSticks1.text; SetMessage -ID "0090" -ASCII -NoParse -Text "20" -Replace $Redux.Capacity.DekuSticks2.text; SetMessage -ID "0091" -Text "30" -Replace $Redux.Capacity.DekuSticks3.text
+        SetMessage -ID "00A7" -ASCII -NoParse -Text "30" -Replace $Redux.Capacity.DekuNuts2.text;   SetMessage -ID "00A8" -ASCII -NoParse -Text "40" -Replace $Redux.Capacity.DekuNuts3.text
     }
 
-    if (IsChecked $Redux.Capacity.EnableWallet) {
-        if ($Redux.Capacity.Wallet2.Text.Length -gt 3)   { $Text = "999" }
-        else                                             { $Text = $Redux.Capacity.Wallet2.Text }
-        ChangeStringIntoDigits -File $script -Search "32 30 30 05 40 20 05 46 52 75 70 65 65 73 05 40 2E 02 00" -Value $Text -Triple
+    if (IsLanguage $Redux.Capacity.EnableWallet) {
+        SetMessage -ID "005E" -ASCII -Text "200" -Replace $Redux.Capacity.Wallet2.Text -NoParse; SetMessage -ID "005F" -ASCII -Text "500" -Replace $Redux.Capacity.Wallet3.Text -NoParse
+    }
 
-        if ($Redux.Capacity.Wallet3.Text.Length -gt 3)   { $Text = "999" }
-        else                                             { $Text = $Redux.Capacity.Wallet3.Text }
-        ChangeStringIntoDigits -File $script -Search "35 30 30 05 40 20 05 46 52 75 70 65 65 73 05 40 2E 02 13" -Value $Text -Triple
+    if (IsChecked $Redux.Equipment.HerosBow) { SetMessage -ID "0031" -Text "Fairy Bow" -Replace "Hero's Bow" -NoParse }
 
-        $Text = $null
+    if (IsText -Elem $Redux.Equipment.KokiriSword -Compare "Knife") {
+        SetMessage -ID "00A4" -Text "Kokiri Sword" -Replace "Knife" -NoParse; SetMessage -ID "10D2" -Text "Kokiri Sword" -Replace "Knife" -NoParse
+    }
+    elseif (IsText -Elem $Redux.Equipment.KokiriSword -Compare "Razor Sword") {
+        SetMessage -ID "00A4" -Text "Kokiri Sword" -Replace "Razor Sword" -NoParse; SetMessage -ID "10D2" -Text "Kokiri Sword" -Replace "Razor Sword" -NoParse
+    }
+
+    if (IsText -Elem $Redux.Equipment.MasterSword -Compare "Gilded Sword") {
+        SetMessage -ID "600C" -Text "Master Sword" -Replace "Gilded Sword" -NoParse; SetMessage -ID "704F" -Text "Master Sword" -Replace "Gilded Sword" -NoParse; SetMessage -ID "7051" -Text "Master Sword" -Replace "Gilded Sword" -NoParse
+        SetMessage -ID "7059" -Text "Master Sword" -Replace "Gilded Sword" -NoParse; SetMessage -ID "706D" -Text "Master Sword" -Replace "Gilded Sword" -NoParse; SetMessage -ID "7075" -Text "Master Sword" -Replace "Gilded Sword" -NoParse
+        SetMessage -ID "7081" -Text "Master Sword" -Replace "Gilded Sword" -NoParse; SetMessage -ID "7088" -Text "Master Sword" -Replace "Gilded Sword" -NoParse; SetMessage -ID "7091" -Text "Master Sword" -Replace "Gilded Sword" -NoParse
+        SetMessage -ID "70E8" -Text "Master Sword" -Replace "Gilded Sword" -NoParse
+    }
+    elseif (IsText -Elem $Redux.Equipment.MasterSword -Compare "Great Fairy's Sword") {
+        SetMessage -ID "600C" -Text "Master Sword" -Replace "Great Fairy's Sword" -NoParse; SetMessage -ID "704F" -Text "Master Sword" -Replace "Great Fairy's Sword" -NoParse; SetMessage -ID "7051" -Text "Master Sword" -Replace "Great Fairy's Sword" -NoParse
+        SetMessage -ID "7059" -Text "Master Sword" -Replace "Great Fairy's Sword" -NoParse; SetMessage -ID "706D" -Text "Master Sword" -Replace "Great Fairy's Sword" -NoParse; SetMessage -ID "7075" -Text "Master Sword" -Replace "Great Fairy's Sword" -NoParse
+        SetMessage -ID "7081" -Text "Master Sword" -Replace "Great Fairy's Sword" -NoParse; SetMessage -ID "7088" -Text "Master Sword" -Replace "Great Fairy's Sword" -NoParse; SetMessage -ID "7091" -Text "Master Sword" -Replace "Great Fairy's Sword" -NoParse
+        SetMessage -ID "70E8" -Text "Master Sword" -Replace "Great Fairy's Sword" -NoParse
     }
 
     if ( (IsText -Elem $Redux.Equipment.DekuShield -Compare "Iron Shield") -and $ChildModel.deku_shield -ne 0) {
-        $offset = 0
-        do { # Deku Shield -> Iron Shield
-            $offset = SearchBytes -File $script -Start $offset -Values "44 65 6B 75 20 53 68 69 65 6C 64"
-            if ($offset -ge 0) { ChangeBytes -File $script -Offset $offset -Values "49 72 6F 6E 20 53 68 69 65 6C 64" }
-        } while ($offset -ge 0)
+        SetMessage -ID "004C" -Text "Deku Shield" -Replace "Iron Shield" -NoParse; SetMessage -ID "0089" -Text "Deku Shield" -Replace "Iron Shield" -NoParse; SetMessage -ID "009F" -Text "Deku Shield" -Replace "Iron Shield" -NoParse; SetMessage -ID "0611" -Text "Deku Shield" -Replace "Iron Shield" -NoParse
+        SetMessage -ID "103D" -Text "Deku Shield" -Replace "Iron Shield" -NoParse; SetMessage -ID "1052" -Text "Deku Shield" -Replace "Iron Shield" -NoParse; SetMessage -ID "10CB" -Text "Deku Shield" -Replace "Iron Shield" -NoParse; SetMessage -ID "10D2" -Text "Deku Shield" -Replace "Iron Shield" -NoParse
     }
 
-    PatchBytes -Offset "92D000" -Patch "message_data_static.bin" -Extracted
+    if ( (IsText -Elem $Redux.Equipment.HylianShield -Compare "Hero's Shield") -and $ChildModel.hylian_shield -ne 0 -and $AdultModel.hylian_shield -ne 0) {
+        SetMessage -ID "004D" -Text "Hylian Shield" -Replace "Hero's Shield" -NoParse; SetMessage -ID "0092" -Text "Hylian Shield" -Replace "Hero's Shield" -NoParse; SetMessage -ID "009C" -Text "Hylian Shield" -Replace "Hero's Shield" -NoParse
+        SetMessage -ID "00A9" -Text "Hylian Shield" -Replace "Hero's Shield" -NoParse; SetMessage -ID "7013" -Text "Hylian Shield" -Replace "Hero's Shield" -NoParse; SetMessage -ID "7121" -Text "Hylian Shield" -Replace "Hero's Shield" -NoParse
+    }
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function AdjustGUI() {
+    
+    if (IsInterface -Lite)   { return }
+    if ($IsWiiVC)            { return }
+
+    $Redux.Graphics.Widescreen.Add_CheckStateChanged(    { if (!$Patches.Redux.Checked)   { EnableElem -Elem $Redux.Graphics.WidescreenAlt -Active (!$this.Checked) } } )
+    $Redux.Graphics.WidescreenAlt.Add_CheckStateChanged( { if (!$Patches.Redux.Checked)   { EnableElem -Elem $Redux.Graphics.Widescreen    -Active (!$this.Checked) } } )
+
+    if (!$Patches.Redux.Checked) {
+        EnableElem -Elem $Redux.Graphics.Widescreen    -Active (!$Redux.Graphics.WidescreenAlt.checked)
+        EnableElem -Elem $Redux.Graphics.WidescreenAlt -Active (!$Redux.Graphics.Widescreen.checked)
+    }
+    else { EnableElem -Elem $Redux.Graphics.Widescreen -Active $False }
+
+    if (!$Redux.Graphics.Widescreen.Checked -and !$Redux.Graphics.WidescreenAlt.Checked) {
+        EnableElem -Elem $Redux.Graphics.WidescreenAlt -Active $True
+        if (!$Patches.Redux.Checked) { EnableElem -Elem $Redux.Graphics.Widescreen -Active $True }
+    }
 
 }
 
@@ -1117,7 +1211,6 @@ function CreateTabMain() {
     # GAMEPLAY #
 
     CreateReduxGroup    -Tag  "Gameplay" -Text "Gameplay" 
-    CreateReduxCheckBox -Name "EasierMinigames"        -Text "Easier Minigames"      -Beginner -Advanced -Info "Certain minigames are made easier and faster`n- Dampe's Digging Game is first try always`n- Fishing is less random and has less demanding requirements`n- Bombchu Bowling prizes now appear in fixed order instead of random" -Credits "Ported from Rando"
     CreateReduxCheckBox -Name "Medallions"             -Text "Require All Medallions"          -Advanced -Info "All six medallions are required for the Rainbow Bridge to appear before Ganon's Castle`nThe vanilla requirements were the Shadow and Spirit Medallions and the Light Arrows" -Credits "Ported from Rando"
     CreateReduxCheckBox -Name "RutoNeverDisappears"    -Text "Ruto Never Disappears" -Beginner -Advanced -Info "Ruto never disappears in Jabu Jabu's Belly and will remain in place when leaving the room"                                     -Credits "Ported from Rando"
     CreateReduxCheckBox -Name "AlwaysMoveKingZora"     -Text "Always Move King Zora"           -Advanced -Info "King Zora will move aside even if the Zora Sapphire is in possession"                                                          -Credits "Ported from Rando"
@@ -1128,6 +1221,7 @@ function CreateTabMain() {
     CreateReduxCheckBox -Name "RunWhileShielding"      -Text "Run While Shielding"       -Lite -Advanced -Info "Press R to shield will no longer prevent Link from moving around" -Link $Redux.Gameplay.NoShieldRecoil                         -Credits "Admentus (ROM) & Aegiker (GameShark)"
     CreateReduxCheckBox -Name "PushbackAttackingWalls" -Text "Pushback Attacking Walls"  -Lite -Advanced -Info "Link is getting pushed back a bit when hitting the wall with the sword"                                                        -Credits "Admentus (ROM) & Aegiker (GameShark)"
     CreateReduxCheckBox -Name "RemoveCrouchStab"       -Text "Remove Crouch Stab"        -Lite -Advanced -Info "The Crouch Stab move is removed"                                                                                               -Credits "Garo-Mastah"
+    CreateReduxCheckBox -Name "RemoveQuickSpin"        -Text "Remove Magic Quick Spin"   -Lite -Advanced -Info "The magic Quick Spin Attack move is removed´nIt's a regular Quick Spin Attack now instead"                                     -Credits "Admentus & Three Pendants"
     CreateReduxCheckBox -Name "ResumeLastArea"         -Text "Resume From Last Area"                     -Info "Resume playing from the area you last saved in" -Warning "Be careful of saving in Grottos"                                     -Credits "Admentus (ROM) & Aegiker (GameShark)"
     CreateReduxCheckBox -Name "AllowWarpSongs"         -Text "Allow Warp Songs"      -Beginner -Advanced -Info "Allow warp songs in Gerudo Training Ground and Ganon's Castle"                                                                 -Credits "Ported from Rando"
     CreateReduxCheckBox -Name "AllowFaroreWind"        -Text "Allow Farore's Wind"   -Beginner -Advanced -Info "Allow Farore's Wind in Gerudo Training Ground and Ganon's Castle"                                                              -Credits "Ported from Rando"
@@ -1140,23 +1234,24 @@ function CreateTabMain() {
 
     # RESTORE #
 
-    CreateReduxGroup    -Tag  "Restore"     -Text "Restore / Correct / Censor"
-    CreateReduxCheckBox -Name "RupeeColors" -Text "Correct Rupee Colors"             -Info "Corrects the colors for the Purple (50) and Golden (200) Rupees"         -Credits "GhostlyDark"
-    CreateReduxCheckBox -Name "CowNoseRing" -Text "Restore Cow Nose Ring"            -Info "Restore the rings in the noses for Cows as seen in the Japanese release" -Credits "ShadowOne333"
-    CreateReduxCheckBox -Name "FireTemple"  -Text "Censor Fire Temple"     -Advanced -Info "Censor Fire Temple theme as used in the Rev 2 ROM" -Credits "ShadowOne333"
-    CreateReduxComboBox -Name "Blood"       -Text "Blood Color"      -Lite -Advanced -Info "Change the color of blood used for several monsters, Ganondorf and Ganon" -Items @("Default", "Red blood for monsters", "Green blood for Ganondorf/Ganon", "Change both") -Credits "ShadowOne333 & Admentus"
-    
+    CreateReduxGroup    -Tag  "Restore"             -Text "Restore / Correct / Censor"
+    CreateReduxCheckBox -Name "RupeeColors"         -Text "Correct Rupee Colors"             -Info "Corrects the colors for the Purple (50) and Golden (200) Rupees"          -Credits "GhostlyDark"
+    CreateReduxCheckBox -Name "CowNoseRing"          -Text "Restore Cow Nose Ring"           -Info "Restore the rings in the noses for Cows as seen in the Japanese release"  -Credits "ShadowOne333"
+    CreateReduxCheckBox -Name "FireTemple"          -Text "Censor Fire Temple"     -Advanced -Info "Censor Fire Temple theme as used in the Rev 2 ROM"                        -Credits "ShadowOne333"
+    CreateReduxCheckBox -Name "CenterTextboxCursor" -Text "Center Textbox Cursor"            -Info "Aligns the textbox cursor to the middle of the screen"                    -Credits "Username0713"
+    CreateReduxComboBox -Name "Blood"               -Text "Blood Color"      -Lite -Advanced -Info "Change the color of blood used for several monsters, Ganondorf and Ganon" -Items @("Default", "Red blood for monsters", "Green blood for Ganondorf/Ganon", "Change both") -Credits "ShadowOne333 & Admentus"
+
 
 
     # FIXES #
 
-    CreateReduxGroup    -Tag  "Fixes"            -Text "Fixes"
-    CreateReduxCheckBox -Name "PauseScreenDelay" -Text "Pause Screen Delay"      -Checked        -Info "Removes the delay when opening the Pause Screen by removing the anti-aliasing" -Native          -Credits "zel"
-    CreateReduxCheckBox -Name "PauseScreenCrash" -Text "Pause Screen Crash Fix"  -Checked        -Info "Prevents the game from randomly crashing emulating a decompressed ROM upon pausing"             -Credits "zel"
-    CreateReduxCheckBox -Name "PoacherSaw"       -Text "Poacher's Saw"           -Checked        -Info "Obtaining the Poacher's Saw no longer prevents Link from obtaining the second Deku Nut upgrade" -Credits "Ported from Rando"
-    CreateReduxCheckBox -Name "Boomerang"        -Text "Boomerang"               -Lite -Advanced -Info "Fix the gem color on the thrown boomerang"                                                      -Credits "Aria"
-    CreateReduxCheckBox -Name "FortressMinimap"  -Text "Gerudo Fortress Minimap" -Lite -Advanced -Info "Display the complete minimap for the Gerudo Fortress during the Child era"                       -Credits "GhostlyDark"
-
+    CreateReduxGroup    -Tag  "Fixes"               -Text "Fixes"
+    CreateReduxCheckBox -Name "PauseScreenDelay"    -Text "Pause Screen Delay"      -Checked        -Info "Removes the delay when opening the Pause Screen by removing the anti-aliasing" -Native          -Credits "zel"
+    CreateReduxCheckBox -Name "PauseScreenCrash"    -Text "Pause Screen Crash Fix"  -Checked        -Info "Prevents the game from randomly crashing emulating a decompressed ROM upon pausing"             -Credits "zel"
+    CreateReduxCheckBox -Name "PoacherSaw"          -Text "Poacher's Saw"           -Checked        -Info "Obtaining the Poacher's Saw no longer prevents Link from obtaining the second Deku Nut upgrade" -Credits "Ported from Rando"
+    CreateReduxCheckBox -Name "Boomerang"           -Text "Boomerang"               -Lite -Advanced -Info "Fix the gem color on the thrown boomerang"                                                      -Credits "Aria"
+    CreateReduxCheckBox -Name "FortressMinimap"     -Text "Gerudo Fortress Minimap" -Lite -Advanced -Info "Display the complete minimap for the Gerudo Fortress during the Child era"                      -Credits "GhostlyDark"
+    
 
 
     # OTHER #
@@ -1207,6 +1302,23 @@ function CreateTabRedux() {
 #==============================================================================================================================================================================================
 function CreateTabLanguage() {
 
+    # TEXT SPEED #
+
+    CreateReduxGroup       -Tag  "Text" -Text "Text Speed"
+    CreateReduxPanel
+    CreateReduxRadioButton -Name "Speed1x" -Max 3 -SaveTo "Speed" -Text "1x Text Speed" -Info "Leave the dialogue text speed at normal"               -Checked
+    CreateReduxRadioButton -Name "Speed2x" -Max 3 -SaveTo "Speed" -Text "2x Text Speed" -Info "Set the dialogue text speed to be twice as fast"       -Credits "Ported from Redux"
+    CreateReduxRadioButton -Name "Speed3x" -Max 3 -SaveTo "Speed" -Text "3x Text Speed" -Info "Set the dialogue text speed to be three times as fast" -Credits "Ported from Redux"
+
+
+
+    # DIALOGUE OPTIONS #
+
+    $Redux.Box.Dialogue = CreateReduxGroup -Tag "Text" -Text "Dialogue Options" -Advanced -Streamlined
+    CreateReduxCheckBox -Name "Custom" -Text "Custom" -Info 'Insert custom dialogue found from "..\Patcher64+ Tool\Files\Games\Ocarina of Time\Custom Text"' -Warning "Make sure your custom script is proper and correct, or your ROM will crash`n[!] No edit will be made if the custom script is missing"
+    
+
+
     # SCRIPT OPTIONS #
 
     $Redux.Box.Text = CreateReduxGroup -Tag  "Text" -Text "Script Options"
@@ -1223,7 +1335,6 @@ function CreateTabLanguage() {
     CreateReduxComboBox -Name "NaviPrompt" -Text "Navi A Button Prompt" -Items @("Hidden", "Navi") -FilePath ($GameFiles.textures + "\Action Prompts\Navi") -Ext "prompt" -Info "Replace the A Button prompt for Navi"            -Credits "Aegiker & GhostlyDark (texture fix, injects)"
     CreateReduxComboBox -Name "NaviCUp"    -Text "Navi C-Up Prompt"     -Items @("Navi")           -FilePath ($GameFiles.textures + "\Action Prompts\Navi") -Ext "cup"    -Info "Replace the C-Up Buttn prompt for Navi"          -Credits "GhostlyDark (injects)"
     CreateReduxComboBox -Name "NaviScript" -Text "Navi Text"            -Items @("Navi", "Tatl", "Tael", "Taya", "Nite")                                                  -Info "Change the name for Navi in the dialogue script" -Credits "Admentus"
-
 
 }
 
@@ -1242,10 +1353,9 @@ function CreateTabGraphics() {
     $Info += "`n- Not compatible with Redux."
 
     CreateReduxCheckBox -Name "Widescreen"         -Text "16:9 Widescreen (Advanced)"   -Info $Info -Beginner -Advanced -Native                                                                     -Credits "Widescreen Patch by gamemasterplc, enhanced and ported by GhostlyDark"
-    CreateReduxCheckBox -Name "WidescreenAlt"      -Text "16:9 Widescreen (Simplified)" -Info "Apply 16:9 Widescreen adjusted backgrounds and textures (as well as 16:9 Widescreen for the Wii VC)" -Credits "Aspect Ratio Fix by Admentus`n16:9 backgrounds by GhostlyDark, ShadowOne333 & CYB3RTRON" -Link $Redux.Graphics.Widescreen
+    CreateReduxCheckBox -Name "WidescreenAlt"      -Text "16:9 Widescreen (Simplified)" -Info "Apply 16:9 Widescreen adjusted backgrounds and textures (as well as 16:9 Widescreen for the Wii VC)" -Credits "Aspect Ratio Fix by Admentus`n16:9 backgrounds by GhostlyDark, ShadowOne333 & CYB3RTRON"
     CreateReduxCheckBox -Name "ExtendedDraw"       -Text "Extended Draw Distance"       -Info "Increases the game's draw distance for objects`nDoes not work on all objects"                        -Credits "Admentus"
     CreateReduxCheckBox -Name "ForceHiresModel"    -Text "Force Hires Link Model"       -Info "Always use Link's High Resolution Model when Link is too far away"                                   -Credits "GhostlyDark"
-    CreateReduxCheckBox -Name "HideEquipment"      -Text "Hide Equipment"               -Info "Hide the equipment when it is sheathed"                                                              -Credits "XModxGodX"
 
     $Models = LoadModelsList -Category "Child"
     CreateReduxComboBox -Name "ChildModels" -Text "Child Model" -Items (@("Original") + $Models) -Default "Original" -Info "Replace the child model used for Link" -Row 3 -Column 1
@@ -1276,7 +1386,7 @@ function CreateTabGraphics() {
     CreateReduxCheckBox -Name "DungeonIcons"     -Text "MM Dungeon Icons"    -Info "Replace the dungeon map icons with those from Majora's Mask" -Lite -Advanced              -Credits "Ported by GhostlyDark"
     CreateReduxCheckBox -Name "ButtonPositions"  -Text "MM Button Positions" -Info "Positions the A and B buttons like in Majora's Mask"                                      -Credits "Ported by GhostlyDark"
     CreateReduxCheckBox -Name "CenterNaviPrompt" -Text "Center Navi Prompt"  -Info 'Centers the "Navi" prompt shown in the C-Up button'                                       -Credits "Ported by GhostlyDark"
-    CreateReduxCheckBox -Name "GCScheme"         -Text "GC Scheme"           -Info "Replace and change the textures, dialogue and text colors to match the GameCube's scheme" -Credits "Admentus, GhostlyDark, ShadowOne333 & Ported from Redux" -Warning "Dialogue changes are only available for the English language`n[!] Changing the textbox cursor color requires Redux to be enabled"
+    CreateReduxCheckBox -Name "GCScheme"         -Text "GC Scheme"           -Info "Replace and change the textures, dialogue and text colors to match the GameCube's scheme" -Credits "Admentus, GhostlyDark, ShadowOne333 & Ported from Redux"
     CreateReduxComboBox -Name "BlackBars"        -Text "Black Bars"  -Items @("Enabled", "Disabled for Z-Targeting", "Disabled for Cutscenes", "Always Disabled") -Info "Removes the black bars shown on the top and bottom of the screen during Z-targeting and cutscenes" -Credits "Admentus"
     CreateReduxComboBox -Name "ButtonSize"       -Text "HUD Buttons"                                           -FilePath ($Paths.shared + "\Buttons")    -Ext $null -Default "Large"           -Info "Set the size for the HUD buttons"  -Credits "GhostlyDark (ported)"
     $path = $Paths.shared + "\Buttons" + "\" + $Redux.UI.ButtonSize.Text.replace(" (default)", "")
@@ -1313,11 +1423,11 @@ function CreateTabGraphics() {
     # STYLES #
 
     CreateReduxGroup    -Tag  "Styles"        -Text "Styles"         -Columns 4 -Beginner -Streamlined
-    CreateReduxComboBox -Name "RegularChests" -Text "Regular Chests" -Info "Use a different style for regular treasure chests"                                           -FilePath ($Paths.shared + "\Chests")               -Ext "front" -Items @("Gold Quest") -Credits "AndiiSyn & Rando"
-    CreateReduxComboBox -Name "BossChests"    -Text "Boss Chests"    -Info "Use a different style for Boss Key treasure chests"                                          -FilePath ($Paths.shared + "\Chests")               -Ext "front" -Items @("Boss OoT")   -Credits "AndiiSyn & Rando"
-    CreateReduxComboBox -Name "Crates"        -Text "Small Crates"   -Info "Use a different style for small liftable crates"                                             -FilePath ($Paths.shared + "\Crates")               -Ext "bin"   -Items @("Regular")    -Credits "Rando"
-    CreateReduxComboBox -Name "Pots"          -Text "Pots"           -Info "Use a different style for throwable pots"                                                    -FilePath ($Paths.shared + "\Pots")                 -Ext "bin"   -Items @("Regular")    -Credits "Rando"
-    CreateReduxComboBox -Name "HairColor"     -Text "Hair Color"     -Info "Use a different hair color style for Link`nOnly for Ocarina of Time or Majora's Mask models" -FilePath ($Paths.shared + "\Hair\Ocarina of Time") -Ext "bin"   -Items @("Blonde")     -Credits "Third M & AndiiSyn"
+    CreateReduxComboBox -Name "RegularChests" -Text "Regular Chests" -Info "Use a different style for regular treasure chests"                                           -FilePath ($Paths.shared + "\Chests")               -Ext "front" -Items @("Gold Quest")        -Credits "AndiiSyn & Rando"
+    CreateReduxComboBox -Name "BossChests"    -Text "Boss Chests"    -Info "Use a different style for Boss Key treasure chests"                                          -FilePath ($Paths.shared + "\Chests")               -Ext "front" -Items @("Boss OoT")          -Credits "AndiiSyn & Rando"
+    CreateReduxComboBox -Name "Crates"        -Text "Small Crates"   -Info "Use a different style for small liftable crates"                                             -FilePath ($Paths.shared + "\Crates")               -Ext "bin"   -Items @("Regular")           -Credits "Rando"
+    CreateReduxComboBox -Name "Pots"          -Text "Pots"           -Info "Use a different style for throwable pots"                                                    -FilePath ($Paths.shared + "\Pots")                 -Ext "bin"   -Items @("Regular")           -Credits "Rando"
+    CreateReduxComboBox -Name "HairColor"     -Text "Hair Color"     -Info "Use a different hair color style for Link`nOnly for Ocarina of Time or Majora's Mask models" -FilePath ($Paths.shared + "\Hair\Ocarina of Time") -Ext "bin"   -Items @("Default", "Blonde") -Credits "Third M & AndiiSyn"
 
 
 
@@ -1341,11 +1451,11 @@ function CreateTabGraphics() {
     # STYLES #
 
     CreateReduxGroup    -Tag  "Styles"        -Text "Styles" -Lite -Advanced
-    CreateReduxComboBox -Name "RegularChests" -Text "Regular Chests" -Info "Use a different style for regular treasure chests"                                           -FilePath ($Paths.shared + "\Chests")               -Ext "front" -Items @("Gold Quest") -Credits "AndiiSyn & Rando"
-    CreateReduxComboBox -Name "BossChests"    -Text "Boss Chests"    -Info "Use a different style for Boss Key treasure chests"                                          -FilePath ($Paths.shared + "\Chests")               -Ext "front" -Items @("Boss OoT")   -Credits "AndiiSyn & Rando"
-    CreateReduxComboBox -Name "Crates"        -Text "Small Crates"   -Info "Use a different style for small liftable crates"                                             -FilePath ($Paths.shared + "\Crates")               -Ext "bin"   -Items @("Regular")    -Credits "Rando"
-    CreateReduxComboBox -Name "Pots"          -Text "Pots"           -Info "Use a different style for throwable pots"                                                    -FilePath ($Paths.shared + "\Pots")                 -Ext "bin"   -Items @("Regular")    -Credits "Rando"
-    CreateReduxComboBox -Name "HairColor"     -Text "Hair Color"     -Info "Use a different hair color style for Link`nOnly for Ocarina of Time or Majora's Mask models" -FilePath ($Paths.shared + "\Hair\Ocarina of Time") -Ext "bin"   -Items @("Blonde")     -Credits "Third M & AndiiSyn"
+    CreateReduxComboBox -Name "RegularChests" -Text "Regular Chests" -Info "Use a different style for regular treasure chests"                                           -FilePath ($Paths.shared + "\Chests")               -Ext "front" -Items @("Gold Quest")        -Credits "AndiiSyn & Rando"
+    CreateReduxComboBox -Name "BossChests"    -Text "Boss Chests"    -Info "Use a different style for Boss Key treasure chests"                                          -FilePath ($Paths.shared + "\Chests")               -Ext "front" -Items @("Boss OoT")          -Credits "AndiiSyn & Rando"
+    CreateReduxComboBox -Name "Crates"        -Text "Small Crates"   -Info "Use a different style for small liftable crates"                                             -FilePath ($Paths.shared + "\Crates")               -Ext "bin"   -Items @("Regular")           -Credits "Rando"
+    CreateReduxComboBox -Name "Pots"          -Text "Pots"           -Info "Use a different style for throwable pots"                                                    -FilePath ($Paths.shared + "\Pots")                 -Ext "bin"   -Items @("Regular")           -Credits "Rando"
+    CreateReduxComboBox -Name "HairColor"     -Text "Hair Color"     -Info "Use a different hair color style for Link`nOnly for Ocarina of Time or Majora's Mask models" -FilePath ($Paths.shared + "\Hair\Ocarina of Time") -Ext "bin"   -Items @("Default", "Blonde") -Credits "Third M & AndiiSyn"
 
 }
 
@@ -1400,22 +1510,62 @@ function CreateTabDifficulty() {
     # HERO MODE #
 
     CreateReduxGroup    -Tag  "Hero" -Text "Hero Mode"
-    CreateReduxComboBox -Name "Damage"     -Text "Damage"       -Items @("1x Damage", "2x Damage", "4x Damage", "8x Damage", "OHKO Mode")        -Info "Set the amount of damage you receive`nOHKO Mode = You die in one hit"                                   -Credits "Admentus"
-    CreateReduxComboBox -Name "Recovery"   -Text "Recovery"     -Items @("1x Recovery", "1/2x Recovery", "1/4x Recovery", "0x Recovery")         -Info "Set the amount health you recovery from Recovery Hearts`nRecovery Heart drops are removed if set to 0x" -Credits "Admentus & Rando (No Heart Drops)"
-    CreateReduxComboBox -Name "MagicUsage" -Text "Magic Usage"  -Items @("1x Magic Usage", "2x Magic Usage", "4x Magic Usage", "8x Magic Usage") -Info "Set the amount of times magic is consumed at"                                                           -Credits "Admentus"
-    $items1 = @("1 Monster HP","0.5x Monster HP", "1x Monster HP", "1.5x Monster HP", "2x Monster HP", "2.5x Monster HP", "3x Monster HP", "3.5x Monster HP", "4x Monster HP", "Max Monster HP")
-    $items2 = @("1 Mini-Boss HP", "0.5x Mini-Boss HP", "1x Mini-Boss HP", "1.5x Mini-Boss HP", "2x Mini-Boss HP", "2.5x Mini-Boss HP", "3x Mini-Boss HP", "3.5x Mini-Boss HP", "4x Mini-Boss HP", "Max Mini-Boss HP")
-    $items3 = @("1 Boss HP", "0.5x Boss HP", "1x Boss HP", "1.5x Boss HP", "2x Boss HP", "2.5x Boss HP", "3x Boss HP", "3.5x Boss HP", "4x Boss HP", "Max Boss HP")
-    CreateReduxComboBox -Name "MonsterHP"  -Text "Monster HP"   -Items $items1 -Default 3 -Info "Set the amount of health for monsters"                       -Credits "Admentus" -Warning "Half of the enemies are missing"
-    CreateReduxComboBox -Name "MiniBossHP" -Text "Mini-Boss HP" -Items $items2 -Default 3 -Info "Set the amount of health for elite monsters and mini-bosses" -Credits "Admentus" -Warning "Big Octo and Dark Link are missing"
-    CreateReduxComboBox -Name "BossHP"     -Text "Boss HP"      -Items $items3 -Default 3 -Info "Set the amount of health for bosses"                         -Credits "Admentus & Marcelo20XX"
-    CreateReduxCheckBox -Name "NoRecoveryHearts"  -Text "No Recovery Heart Drops" -Info "Disable Recovery Hearts from spawning from item drops"                                           -Credits "Ported from Rando"
-    CreateReduxCheckBox -Name "NoItemDrops"       -Text "No Item Drops"           -Info "Disable all items from spawning"                                                                 -Credits "Admentus & BilonFullHDemon"
+    CreateReduxComboBox -Name "Damage"     -Text "Damage"       -Items @("1x Damage", "2x Damage", "4x Damage", "8x Damage", "OHKO Mode")        -Info "Set the amount of damage you receive`nOHKO Mode = You die in one hit" -Credits "Admentus"
+    CreateReduxComboBox -Name "MagicUsage" -Text "Magic Usage"  -Items @("1x Magic Usage", "2x Magic Usage", "4x Magic Usage", "8x Magic Usage") -Info "Set the amount of times magic is consumed at"                         -Credits "Admentus"
+    $items1 = @("1 Monster HP","0.5x Monster HP", "1x Monster HP", "1.5x Monster HP", "2x Monster HP", "2.5x Monster HP", "3x Monster HP", "3.5x Monster HP", "4x Monster HP", "5x Monster HP")
+    $items2 = @("1 Mini-Boss HP", "0.5x Mini-Boss HP", "1x Mini-Boss HP", "1.5x Mini-Boss HP", "2x Mini-Boss HP", "2.5x Mini-Boss HP", "3x Mini-Boss HP", "3.5x Mini-Boss HP", "4x Mini-Boss HP", "5x Mini-Boss HP")
+    $items3 = @("1 Boss HP", "0.5x Boss HP", "1x Boss HP", "1.5x Boss HP", "2x Boss HP", "2.5x Boss HP", "3x Boss HP", "3.5x Boss HP", "4x Boss HP", "5x Boss HP")
+    CreateReduxComboBox -Name "MonsterHP"  -Text "Monster HP"   -Items $items1 -Default 3 -Info "Set the amount of health for monsters"                                -Column 1 -Row 2 -Credits "Admentus" -Warning "Half of the enemies are missing"
+    CreateReduxComboBox -Name "MiniBossHP" -Text "Mini-Boss HP" -Items $items2 -Default 3 -Info "Set the amount of health for elite monsters and mini-bosses"                           -Credits "Admentus" -Warning "Big Octo and Dark Link are missing"
+    CreateReduxComboBox -Name "BossHP"     -Text "Boss HP"      -Items $items3 -Default 3 -Info "Set the amount of health for bosses"                                                   -Credits "Admentus & Marcelo20XX"
+    CreateReduxCheckBox -Name "NoRecoveryHearts"  -Text "No Recovery Heart Drops" -Info "Disable Recovery Hearts from spawning from item drops"                                         -Credits "Ported from Rando"
+    CreateReduxCheckBox -Name "NoBottledFairy"    -Text "No Bottled Fairies"      -Info "Fairies can no longer be put into a bottle"                                                     -Credits "Admentus & Three Pendants"
+    CreateReduxCheckBox -Name "NoItemDrops"       -Text "No Item Drops"           -Info "Disable all items from spawning"                                                               -Credits "Admentus & BilonFullHDemon"
     CreateReduxCheckBox -Name "HarderChildBosses" -Text "Harder Child Bosses"     -Info "Replace objects in the Child Dungeon Boss arenas with additional monsters" -Beginner -Advanced -Credits "BilonFullHDemon"
 
-    $Redux.Hero.Damage.Add_SelectedIndexChanged({ EnableElem -Elem $Redux.Hero.Recovery -Active ($this.text -ne "OHKO Mode") })
-    EnableElem -Elem ($Redux.Hero.Recovery) -Active ($Redux.Hero.Damage.text -ne "OHKO Mode")
 
+
+    # RECOVERY #
+
+    CreateReduxGroup   -Tag "Recovery"     -Text "Recovery" -Height 1.5
+    CreateReduxTextBox -Name "Heart"       -Text "Recovery Heart" -Value 16  -Min 0 -Max 320 -Length 3 -Info "Set the amount of HP that Recovery Hearts will replenish`nRecovery Heart drops are removed if set to 0" -Credits "Admentus, Three Pendants & Rando (No Heart Drops)"
+    CreateReduxTextBox -Name "Fairy"       -Text "Fairy (Bottle)" -Value 320 -Min 0 -Max 320 -Length 3 -Info "Set the amount of HP that a Bottled Fairy will replenish"                                               -Credits "Admentus & Three Pendants"
+    CreateReduxTextBox -Name "FairyRevive" -Text "Fairy (Revive)" -Value 320 -Min 0 -Max 320 -Length 3 -Info "Set the amount of HP that a Bottled Fairy will recover after Link died will replenish"                  -Credits "Admentus & Three Pendants"
+    CreateReduxTextBox -Name "Milk"        -Text "Milk"           -Value 80  -Min 0 -Max 320 -Length 3 -Info "Set the amount of HP that Milk will replenish"                                                          -Credits "Admentus & Three Pendants"
+    CreateReduxTextBox -Name "RedPotion"   -Text "Red Potion"     -Value 320 -Min 0 -Max 320 -Length 3 -Info "Set the amount of HP that a Red Potion will replenish"                                                  -Credits "Admentus & Three Pendants"
+
+    $Redux.Recovery.HeartLabel       = CreateLabel -X $Redux.Recovery.Heart.Left       -Y ($Redux.Recovery.Heart.Bottom + (DPISize 6))       -Text ("(" + [math]::Round($Redux.Recovery.Heart.text/16, 1) + " Hearts)")       -AddTo $Last.Group
+    $Redux.Recovery.FairyLabel       = CreateLabel -X $Redux.Recovery.Fairy.Left       -Y ($Redux.Recovery.Fairy.Bottom + (DPISize 6))       -Text ("(" + [math]::Round($Redux.Recovery.Fairy.text/16, 1) + " Hearts)")       -AddTo $Last.Group
+    $Redux.Recovery.FairyReviveLabel = CreateLabel -X $Redux.Recovery.FairyRevive.Left -Y ($Redux.Recovery.FairyRevive.Bottom + (DPISize 6)) -Text ("(" + [math]::Round($Redux.Recovery.FairyRevive.text/16, 1) + " Hearts)") -AddTo $Last.Group
+    $Redux.Recovery.MilkLabel        = CreateLabel -X $Redux.Recovery.Milk.Left        -Y ($Redux.Recovery.Milk.Bottom + (DPISize 6))        -Text ("(" + [math]::Round($Redux.Recovery.Milk.text/16, 1) + " Hearts)")        -AddTo $Last.Group
+    $Redux.Recovery.RedPotionLabel   = CreateLabel -X $Redux.Recovery.RedPotion.Left   -Y ($Redux.Recovery.RedPotion.Bottom + (DPISize 6))   -Text ("(" + [math]::Round($Redux.Recovery.RedPotion.text/16, 1) + " Hearts)")   -AddTo $Last.Group
+    $Redux.Recovery.Heart.Add_TextChanged(       { if ($this.text -eq "16") { $Redux.Recovery.HeartLabel.Text       = "(1 Heart)" } else { $Redux.Recovery.HeartLabel.Text       = "(" + [math]::Round($this.text/16, 1) + " Hearts)" } } )
+    $Redux.Recovery.Fairy.Add_TextChanged(       { if ($this.text -eq "16") { $Redux.Recovery.FairyLabel.Text       = "(1 Heart)" } else { $Redux.Recovery.FairyLabel.Text       = "(" + [math]::Round($this.text/16, 1) + " Hearts)" } } )
+    $Redux.Recovery.FairyRevive.Add_TextChanged( { if ($this.text -eq "16") { $Redux.Recovery.FairyReviveLabel.Text = "(1 Heart)" } else { $Redux.Recovery.FairyReviveLabel.Text = "(" + [math]::Round($this.text/16, 1) + " Hearts)" } } )
+    $Redux.Recovery.Milk.Add_TextChanged(        { if ($this.text -eq "16") { $Redux.Recovery.MilkLabel.Text        = "(1 Heart)" } else { $Redux.Recovery.MilkLabel.Text        = "(" + [math]::Round($this.text/16, 1) + " Hearts)" } } )
+    $Redux.Recovery.RedPotion.Add_TextChanged(   { if ($this.text -eq "16") { $Redux.Recovery.RedPotionLabel.Text   = "(1 Heart)" } else { $Redux.Recovery.RedPotionLabel.Text   = "(" + [math]::Round($this.text/16, 1) + " Hearts)" } } )
+
+
+
+    # MINIGAMES #
+
+    CreateReduxGroup    -Tag  "Minigames" -Text "Minigames" -Advanced
+    CreateReduxCheckBox -Name "Dampe"     -Text "Dampe's Digging"                                                                                                       -Info "Fishing is less random and has less demanding requirements"                                                             -Credits "Ported from Rando"
+    CreateReduxCheckBox -Name "Fishing"   -Text "Fishing"                                                                                                               -Info "Dampe's Digging Game is always first try"                                                                               -Credits "Ported from Rando"
+    CreateReduxCheckBox -Name "Bowling"   -Text "Bombchu Bowling"                                                                                                       -Info "Bombchu Bowling prizes now appear in fixed order instead of random"                                                     -Credits "Ported from Rando"
+    CreateReduxComboBox -Name "Bowling1"  -Text "Bowling Reward #1" -Items ("Piece of Heart", "Bomb Bag", "Purple Rupee", "Bombchus") -Values @("64", "28", "4C", "58") -Info 'Set the first reward for the Bombchu Bowling Minigame`nThis option requires the "Bombchu Bowling" option to be checked' -Credits "Ported from Rando" -Default 1 -Column 1 -Row 2
+    CreateReduxComboBox -Name "Bowling2"  -Text "Bowling Reward #2" -Items ("Piece of Heart", "Bomb Bag", "Purple Rupee", "Bombchus") -Values @("64", "28", "4C", "58") -Info 'Set the first reward for the Bombchu Bowling Minigame`nThis option requires the "Bombchu Bowling" option to be checked' -Credits "Ported from Rando" -Default 2
+    CreateReduxComboBox -Name "Bowling3"  -Text "Bowling Reward #3" -Items ("Piece of Heart", "Bomb Bag", "Purple Rupee", "Bombchus") -Values @("64", "28", "4C", "58") -Info 'Set the first reward for the Bombchu Bowling Minigame`nThis option requires the "Bombchu Bowling" option to be checked' -Credits "Ported from Rando" -Default 4
+    CreateReduxComboBox -Name "Bowling4"  -Text "Bowling Reward #4" -Items ("Piece of Heart", "Bomb Bag", "Purple Rupee", "Bombchus") -Values @("64", "28", "4C", "58") -Info 'Set the first reward for the Bombchu Bowling Minigame`nThis option requires the "Bombchu Bowling" option to be checked' -Credits "Ported from Rando" -Default 3
+    CreateReduxComboBox -Name "Bowling5"  -Text "Bowling Reward #5" -Items ("Piece of Heart", "Bomb Bag", "Purple Rupee", "Bombchus") -Values @("64", "28", "4C", "58") -Info 'Set the first reward for the Bombchu Bowling Minigame`nThis option requires the "Bombchu Bowling" option to be checked' -Credits "Ported from Rando" -Default 3
+
+    if (IsInterface -Advanced) {
+        $Redux.Minigames.Bowling.Add_CheckedChanged({ $Redux.Minigames.Bowling1.enabled = $Redux.Minigames.Bowling2.enabled = $Redux.Minigames.Bowling3.enabled = $Redux.Minigames.Bowling4.enabled = $Redux.Minigames.Bowling5.enabled = $this.checked })
+        $Redux.Minigames.Bowling1.enabled = $Redux.Minigames.Bowling2.enabled = $Redux.Minigames.Bowling3.enabled = $Redux.Minigames.Bowling4.enabled = $Redux.Minigames.Bowling5.enabled = $Redux.Minigames.Bowling.checked
+    }
+
+    CreateReduxGroup    -Tag  "Minigames"       -Text "Minigames" -Beginner -Streamlined
+    CreateReduxCheckBox -Name "EasierMinigames" -Text "Easier Minigames" -Info "Certain minigames are made easier and faster`n- Dampe's Digging Game is first try always`n- Fishing is less random and has less demanding requirements`n- Bombchu Bowling prizes now appear in fixed order instead of random" -Credits "Ported from Rando"
 }
 
 
@@ -1520,13 +1670,13 @@ function CreateTabEquipment1() {
     CreateReduxGroup    -Tag  "Equipment" -Text "Equipment Adjustments"
     CreateReduxCheckBox -Name "UnsheathSword"       -Text "Unsheath Sword"        -Info "The sword is unsheathed first before immediately swinging it"                   -Credits "Admentus"
     CreateReduxCheckBox -Name "FireproofDekuShield" -Text "Fireproof Deku Shield" -Info "The Deku Shield turns into an fireproof shield, which will not burn up anymore" -Credits "Admentus (ported) & Three Pendants (ROM patch)"
-    CreateReduxCheckBox -Name "HerosBowIcons"       -Text "Hero's Bow Icons"      -Info "Use the Hero's Bow icons for the Fairy Bow"                                     -Credits "GhostlyDark (ported)"
-    CreateReduxCheckBox -Name "HookshotIcon"        -Text "Termina Hookshot Icon" -Info "Use the Termina Hookshot icon for the regular Hookshot"                         -Credits "GhostlyDark (ported)"
+    CreateReduxCheckBox -Name "HerosBow"            -Text "Hero's Bow"            -Info "Replace the Fairy Bow icon and text with the Hero's Bow"                        -Credits "GhostlyDark (ported textures) & Admentus (dialogue)"
+    CreateReduxCheckBox -Name "Hookshot"            -Text "Termina Hookshot"      -Info "Replace the Hyrule Hookshot icon with the Termina Hookshot"                     -Credits "GhostlyDark (ported textures)"
     
     CreateReduxGroup    -Tag  "Equipment" -Text "Swords and Shields" -Beginner -Lite -Advanced
     CreateReduxComboBox -Name "KokiriSword"   -Text "Kokiri Sword"  -Items @("Kokiri Sword")                       -FilePath ($GameFiles.Textures + "\Equipment\Kokiri Sword")  -Ext @("icon", "bin")   -Info "Select an alternative for the appearence of the Kokiri Sword"  -Credits "Admentus & GhostlyDark (injects) & CYB3RTR0N (beta icon)"
     CreateReduxComboBox -Name "MasterSword"   -Text "Master Sword"  -Items @("Master Sword")                       -FilePath ($GameFiles.Textures + "\Equipment\Master Sword")  -Ext @("icon", "bin")   -Info "Select an alternative for the appearence of the Master Sword"  -Credits "Admentus & GhostlyDark (injects) & CYB3RTR0N (beta icon)"
-    CreateReduxComboBox -Name "DekuShield"    -Text "Deku Shield"   -Items @("Gold Quest Shield", "Deku Shield")   -FilePath ($GameFiles.Textures + "\Equipment\Deku Shield")   -Ext @("icon", "front") -Info "Select an alternative for the appearence of the Deku Shield"   -Credits "Admentus & GhostlyDark (injects), ZombieBrainySnack (textures) & AndiiSyn (textures)"
+    CreateReduxComboBox -Name "DekuShield"    -Text "Deku Shield"   -Items @("Gold Quest Shield", "Deku Shield")   -FilePath ($GameFiles.Textures + "\Equipment\Deku Shield")   -Ext @("icon", "front") -Info "Select an alternative for the appearence of the Deku Shield"   -Credits "Admentus & GhostlyDark (injects), ZombieBrainySnack (textures) & AndiiSyn (textures)" -Column 1 -Row 2
     CreateReduxComboBox -Name "HylianShield"  -Text "Hylian Shield" -Items @("Gold Quest Shield", "Hylian Shield") -FilePath ($GameFiles.Textures + "\Equipment\Hylian Shield") -Ext @("icon", "bin")   -Info "Select an alternative for the appearence of the Hylian Shield" -Credits "Admentus & GhostlyDark (injects), CYB3RTR0N (icons), sanguinetti (Beta / Red Shield textures) & AndiiSyn (textures)"
     CreateReduxComboBox -Name "MirrorShield"  -Text "Mirror Shield" -Items @("Gold Quest Shield", "Mirror Shield") -FilePath ($GameFiles.Textures + "\Equipment\Mirror Shield") -Ext @("icon", "bin")   -Info "Select an alternative for the appearence of the Mirror Shield" -Credits "Admentus & GhostlyDark (injects) & AndiiSyn (textures)"
 
@@ -1573,14 +1723,14 @@ function CreateTabEquipment2() {
     # STARTING UPGRADES #
 
     CreateReduxGroup    -Tag  "Save"          -Text "Starting Upgrades" -Advanced
-    CreateReduxComboBox -Name "DekuSticks"    -Text "Deku Sticks" -Items ("Standard", "Big", "Biggest")
-    CreateReduxComboBox -Name "DekuNuts"      -Text "Deku Nuts"   -Items ("Standard", "Big", "Biggest")
-    CreateReduxComboBox -Name "BulletBag"     -Text "Bullet Bag"  -Items ("Standard", "Big", "Biggest")
-    CreateReduxComboBox -Name "Quiver"        -Text "Quiver"      -Items ("Standard", "Big", "Biggest")
-    CreateReduxComboBox -Name "BombBag"       -Text "Bomb Bag"    -Items ("Standard", "Big", "Biggest")
-    CreateReduxComboBox -Name "Strength"      -Text "Strength"    -Items ("None", "Goron's Bracelet", "Silver Gauntlets", "Golden Gauntlets")
-    CreateReduxComboBox -Name "Scale"         -Text "Scale"       -Items ("None", "Silver Scale", "Golden Scale")
-    CreateReduxComboBox -Name "Wallet"        -Text "Wallet"      -Items ("Wallet", "Adult's Wallet", "Giant's Wallet", "Unused Wallet") -Warning 'The "Unused Wallet" is unused, and has issues'
+    CreateReduxComboBox -Name "DekuSticks"    -Text "Deku Sticks"     -Items ("Standard", "Big", "Biggest")                                       -Info "Set the starting capacity upgrade level for the Deku Sticks"
+    CreateReduxComboBox -Name "DekuNuts"      -Text "Deku Nuts"       -Items ("Standard", "Big", "Biggest")                                       -Info "Set the starting capacity upgrade level for the Deku Nuts"
+    CreateReduxComboBox -Name "BulletBag"     -Text "Bullet Seed Bag" -Items ("Standard", "Big", "Biggest")                                       -Info "Set the starting capacity upgrade level for the Bullet Seed Bag"
+    CreateReduxComboBox -Name "Quiver"        -Text "Quiver"          -Items ("Standard", "Big", "Biggest")                                       -Info "Set the starting capacity upgrade level for the Quiver"
+    CreateReduxComboBox -Name "BombBag"       -Text "Bomb Bag"        -Items ("Standard", "Big", "Biggest")                                       -Info "Set the starting capacity upgrade level for the Bomb Bag"
+    CreateReduxComboBox -Name "Strength"      -Text "Strength"        -Items ("None", "Goron's Bracelet", "Silver Gauntlets", "Golden Gauntlets") -Info "Set the starting capacity upgrade level for the Bracelet / Gauntlets"
+    CreateReduxComboBox -Name "Scale"         -Text "Scale"           -Items ("None", "Silver Scale", "Golden Scale")                             -Info "Set the starting capacity upgrade level for the Scale"
+    CreateReduxComboBox -Name "Wallet"        -Text "Wallet"          -Items ("Wallet", "Adult's Wallet", "Giant's Wallet", "Tycoon Wallet")      -Info "Set the starting capacity upgrade level for the Wallet" -Warning 'The "Tycoon Wallet" is unused and has issues'
 
     CreateReduxTextBox  -Name "Hearts"        -Text "Hearts" -Value 3 -Min 1 -Max 20 -Info "Start a new save file with the chosen amount of hearts"
     CreateReduxCheckBox -Name "DoubleDefense" -Text "Double Defense"                 -Info "Start a new save file with the double defense upgrade"
@@ -1742,9 +1892,9 @@ function CreateTabCapacity() {
     CreateReduxTextBox -Name "Quiver1"     -Text "Quiver (1)"      -Value 30  -Info "Set the capacity for the Quiver (Base)"           -Credits "GhostlyDark"
     CreateReduxTextBox -Name "Quiver2"     -Text "Quiver (2)"      -Value 40  -Info "Set the capacity for the Quiver (Upgrade 1)"      -Credits "GhostlyDark"
     CreateReduxTextBox -Name "Quiver3"     -Text "Quiver (3)"      -Value 50  -Info "Set the capacity for the Quiver (Upgrade 2)"      -Credits "GhostlyDark"
-    CreateReduxTextBox -Name "BombBag1"    -Text "Bomb Bag (1)"    -Value 20  -Info "Set the capacity for the Bomb Bag (Base)"         -Credits "GhostlyDark" -Min 10 -Warning "The minimum value has to be 20 or higher in order to be changed`n[!] A few values are excluded to prevent issues and will automatically be set to the next possible value"
+    CreateReduxTextBox -Name "BombBag1"    -Text "Bomb Bag (1)"    -Value 10  -Info "Set the capacity for the Bomb Bag (Base)"         -Credits "GhostlyDark" -Min 10 -Warning "The minimum value has to be 20 or higher in order to be changed`n[!] A few values are excluded to prevent issues and will automatically be set to the next possible value"
     CreateReduxTextBox -Name "BombBag2"    -Text "Bomb Bag (2)"    -Value 30  -Info "Set the capacity for the Bomb Bag (Upgrade 1)"    -Credits "GhostlyDark"
-    CreateReduxTextBox -Name "BombBag3"    -Text "Bomb Bag (3)"    -Value 40  -Info "Set the capacity for the Bomb Bag (Upgrade 2)"    -Credits "GhostlyDark"
+    CreateReduxTextBox -Name "BombBag3"    -Text "Bomb Bag (3)"    -Value 50  -Info "Set the capacity for the Bomb Bag (Upgrade 2)"    -Credits "GhostlyDark"
     CreateReduxTextBox -Name "BulletBag1"  -Text "Bullet Bag (1)"  -Value 30  -Info "Set the capacity for the Bullet Bag (Base)"       -Credits "GhostlyDark"
     CreateReduxTextBox -Name "BulletBag2"  -Text "Bullet Bag (2)"  -Value 40  -Info "Set the capacity for the Bullet Bag (Upgrade 1)"  -Credits "GhostlyDark"
     CreateReduxTextBox -Name "BulletBag3"  -Text "Bullet Bag (3)"  -Value 50  -Info "Set the capacity for the Bullet Bag (Upgrade 2)"  -Credits "GhostlyDark"
@@ -1753,7 +1903,7 @@ function CreateTabCapacity() {
     CreateReduxTextBox -Name "DekuSticks3" -Text "Deku Sticks (3)" -Value 30  -Info "Set the capacity for the Deku Sticks (Upgrade 2)" -Credits "GhostlyDark"
     CreateReduxTextBox -Name "DekuNuts1"   -Text "Deku Nuts (1)"   -Value 20  -Info "Set the capacity for the Deku Nuts (Base)"        -Credits "GhostlyDark"
     CreateReduxTextBox -Name "DekuNuts2"   -Text "Deku Nuts (2)"   -Value 30  -Info "Set the capacity for the Deku Nuts (Upgrade 1)"   -Credits "GhostlyDark"
-    CreateReduxTextBox -Name "DekuNuts3"   -Text "Deku Nuts (3)"   -Value 40  -Info "Set the capacity for the Deku Nuts (Upgrade 2)"   -Credits "GhostlyDark"
+    CreateReduxTextBox -Name "DekuNuts3"   -Text "Deku Nuts (3)"   -Value 50  -Info "Set the capacity for the Deku Nuts (Upgrade 2)"   -Credits "GhostlyDark"
 
 
 
@@ -1762,8 +1912,8 @@ function CreateTabCapacity() {
     $Redux.Box.Wallet = CreateReduxGroup -Tag "Capacity" -Text "Wallet Capacity Selection"
     CreateReduxTextBox -Name "Wallet1" -Length 4 -Text "Wallet (1)" -Value 99  -Info "Set the capacity for the Wallet (Base)"      -Credits "GhostlyDark"
     CreateReduxTextBox -Name "Wallet2" -Length 4 -Text "Wallet (2)" -Value 200 -Info "Set the capacity for the Wallet (Upgrade 1)" -Credits "GhostlyDark"
-    CreateReduxTextBox -Name "Wallet3" -Length 4 -Text "Wallet (3)" -Value 500 -Info "Set the capacity for the Wallet (Upgrade 2)" -Credits "GhostlyDark"
-    CreateReduxTextBox -Name "Wallet4" -Length 4 -Text "Wallet (4)" -Value 500 -Info "Set the capacity for the Wallet (Upgrade 3)" -Credits "GhostlyDark" -Warning "This wallet is not obtained through regular gameplay" -Lite -Advanced
+    CreateReduxTextBox -Name "Wallet3" -Length 4 -Text "Wallet (3)" -Value 999 -Info "Set the capacity for the Wallet (Upgrade 2)" -Credits "GhostlyDark"
+    CreateReduxTextBox -Name "Wallet4" -Length 4 -Text "Wallet (4)" -Value 999 -Info "Set the capacity for the Wallet (Upgrade 3)" -Credits "GhostlyDark" -Warning "This wallet is not obtained through regular gameplay" -Lite -Advanced
 
 
 

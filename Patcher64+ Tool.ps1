@@ -101,19 +101,19 @@ function CheckScripts() {
     $string  = $Patcher.Title + " " + $Patcher.Version + " (" + $Patcher.Date + ")" + "{0}{0}"
     $string += "Fatal Error: Script files are missing{0}"
 
-    if (!(Test-Path -PathType Leaf -LiteralPath ($Paths.Scripts + "\Bytes.psm1")))      { $FatalError = $True; $string += "{0}" + $Paths.Scripts + "\Bytes.psm1" }
-    if (!(Test-Path -PathType Leaf -LiteralPath ($Paths.Scripts + "\Common.psm1")))     { $FatalError = $True; $string += "{0}" + $Paths.Scripts + "\Common.psm1" }
-    if (!(Test-Path -PathType Leaf -LiteralPath ($Paths.Scripts + "\Dialogs.psm1")))    { $FatalError = $True; $string += "{0}" + $Paths.Scripts + "\Dialogs.psm1" }
-    if (!(Test-Path -PathType Leaf -LiteralPath ($Paths.Scripts + "\DPI.psm1")))        { $FatalError = $True; $string += "{0}" + $Paths.Scripts + "\DPI.psm1" }
-    if (!(Test-Path -PathType Leaf -LiteralPath ($Paths.Scripts + "\Editor.psm1")))     { $FatalError = $True; $string += "{0}" + $Paths.Scripts + "\Editor.psm1" }
-    if (!(Test-Path -PathType Leaf -LiteralPath ($Paths.Scripts + "\Files.psm1")))      { $FatalError = $True; $string += "{0}" + $Paths.Scripts + "\Files.psm1" }
-    if (!(Test-Path -PathType Leaf -LiteralPath ($Paths.Scripts + "\Forms.psm1")))      { $FatalError = $True; $string += "{0}" + $Paths.Scripts + "\Forms.psm1" }
-    if (!(Test-Path -PathType Leaf -LiteralPath ($Paths.Scripts + "\Main.psm1")))       { $FatalError = $True; $string += "{0}" + $Paths.Scripts + "\Main.psm1" }
-    if (!(Test-Path -PathType Leaf -LiteralPath ($Paths.Scripts + "\MQ.psm1")))         { $FatalError = $True; $string += "{0}" + $Paths.Scripts + "\MQ.psm1" }
-    if (!(Test-Path -PathType Leaf -LiteralPath ($Paths.Scripts + "\Patch.psm1")))      { $FatalError = $True; $string += "{0}" + $Paths.Scripts + "\Patch.psm1" }
-    if (!(Test-Path -PathType Leaf -LiteralPath ($Paths.Scripts + "\Settings.psm1")))   { $FatalError = $True; $string += "{0}" + $Paths.Scripts + "\Settings.psm1" }
-    if (!(Test-Path -PathType Leaf -LiteralPath ($Paths.Scripts + "\VC.psm1")))         { $FatalError = $True; $string += "{0}" + $Paths.Scripts + "\VC.psm1" }
-    if (!(Test-Path -PathType Leaf -LiteralPath ($Paths.Scripts + "\Zelda 64.psm1")))   { $FatalError = $True; $string += "{0}" + $Paths.Scripts + "\Zelda 64.psm1" }
+    if (!(Test-Path -PathType Leaf -LiteralPath ($Paths.Scripts + "\Bytes.psm1")))         { $FatalError = $True; $string += "{0}" + $Paths.Scripts + "\Bytes.psm1" }
+    if (!(Test-Path -PathType Leaf -LiteralPath ($Paths.Scripts + "\Common.psm1")))        { $FatalError = $True; $string += "{0}" + $Paths.Scripts + "\Common.psm1" }
+    if (!(Test-Path -PathType Leaf -LiteralPath ($Paths.Scripts + "\Dialogs.psm1")))       { $FatalError = $True; $string += "{0}" + $Paths.Scripts + "\Dialogs.psm1" }
+    if (!(Test-Path -PathType Leaf -LiteralPath ($Paths.Scripts + "\DPI.psm1")))           { $FatalError = $True; $string += "{0}" + $Paths.Scripts + "\DPI.psm1" }
+    if (!(Test-Path -PathType Leaf -LiteralPath ($Paths.Scripts + "\Text Editor.psm1")))   { $FatalError = $True; $string += "{0}" + $Paths.Scripts + "\Text Editor.psm1" }
+    if (!(Test-Path -PathType Leaf -LiteralPath ($Paths.Scripts + "\Files.psm1")))         { $FatalError = $True; $string += "{0}" + $Paths.Scripts + "\Files.psm1" }
+    if (!(Test-Path -PathType Leaf -LiteralPath ($Paths.Scripts + "\Forms.psm1")))         { $FatalError = $True; $string += "{0}" + $Paths.Scripts + "\Forms.psm1" }
+    if (!(Test-Path -PathType Leaf -LiteralPath ($Paths.Scripts + "\Main.psm1")))          { $FatalError = $True; $string += "{0}" + $Paths.Scripts + "\Main.psm1" }
+    if (!(Test-Path -PathType Leaf -LiteralPath ($Paths.Scripts + "\MQ.psm1")))            { $FatalError = $True; $string += "{0}" + $Paths.Scripts + "\MQ.psm1" }
+    if (!(Test-Path -PathType Leaf -LiteralPath ($Paths.Scripts + "\Patch.psm1")))         { $FatalError = $True; $string += "{0}" + $Paths.Scripts + "\Patch.psm1" }
+    if (!(Test-Path -PathType Leaf -LiteralPath ($Paths.Scripts + "\Settings.psm1")))      { $FatalError = $True; $string += "{0}" + $Paths.Scripts + "\Settings.psm1" }
+    if (!(Test-Path -PathType Leaf -LiteralPath ($Paths.Scripts + "\VC.psm1")))            { $FatalError = $True; $string += "{0}" + $Paths.Scripts + "\VC.psm1" }
+    if (!(Test-Path -PathType Leaf -LiteralPath ($Paths.Scripts + "\Zelda 64.psm1")))      { $FatalError = $True; $string += "{0}" + $Paths.Scripts + "\Zelda 64.psm1" }
     
     if (!$FatalError) { return }
     

@@ -207,7 +207,7 @@ function CreateCreditsDialog() {
 function CreateSettingsDialog() {
     
     # Create Dialog
-    $global:SettingsDialog = CreateDialog -Width (DPISize 560) -Height (DPISize 610) -Icon $Files.icon.settings
+    $global:SettingsDialog = CreateDialog -Width (DPISize 560) -Height (DPISize 640) -Icon $Files.icon.settings
     $CloseButton = CreateButton -X ($SettingsDialog.Width / 2 - (DPISize 40)) -Y ($SettingsDialog.Height - (DPISize 90)) -Width (DPISize 80) -Height (DPISize 35) -Text "Close" -AddTo $SettingsDialog
     $CloseButton.Add_Click({ $SettingsDialog.Hide() })
 
@@ -230,10 +230,13 @@ function CreateSettingsDialog() {
 
 
     # Advanced Settings
-    $GeneralSettings.Box                 = CreateReduxGroup -Y ($GeneralSettings.Box.Bottom + (DPISize 10)) -IsGame $False -Height 1 -AddTo $SettingsDialog -Text "Advanced Settings"
-    $GeneralSettings.IgnoreChecksum      = CreateSettingsCheckbox -Name "IgnoreChecksum"   -Column 1 -Row 1 -Text "Ignore Input Checksum" -IsDebug -Info "Do not check the checksum of a ROM or WAD and patch it regardless`nDowngrade is no longer forced anymore if the checksum is different than the supported revision`nThis option also skips the maximum ROM size verification`n`nDO NOT REPORT ANY BUGS IF THIS OPTION IS ENABLED!"
-    $GeneralSettings.ForceExtract        = CreateSettingsCheckbox -Name "ForceExtract"     -Column 2 -Row 1 -Text "Force Extract"         -IsDebug -Info "Always extract game data required for patching even if it was already extracted on a previous run"
-    $GeneralSettings.ForceOptions        = CreateSettingsCheckbox -Name "ForceOptions"     -Column 3 -Row 1 -Text "Force Show Options"    -IsDebug -Info ("Always show the " + '"Additional Options"' + " checkbox if it can be supported`n`nDO NOT REPORT ANY BUGS IF THIS OPTION IS ENABLED!")
+    $GeneralSettings.Box                 = CreateReduxGroup -Y ($GeneralSettings.Box.Bottom + (DPISize 10)) -IsGame $False -Height 2 -AddTo $SettingsDialog -Text "Advanced Settings"
+    $GeneralSettings.IgnoreChecksum      = CreateSettingsCheckbox -Name "IgnoreChecksum"     -Column 1 -Row 1 -Text "Ignore Input Checksum"  -IsDebug -Info "Do not check the checksum of a ROM or WAD and patch it regardless`nDowngrade is no longer forced anymore if the checksum is different than the supported revision`nThis option also skips the maximum ROM size verification`n`nDO NOT REPORT ANY BUGS IF THIS OPTION IS ENABLED!"
+    $GeneralSettings.ForceExtract        = CreateSettingsCheckbox -Name "ForceExtract"       -Column 2 -Row 1 -Text "Force Extract"          -IsDebug -Info "Always extract game data required for patching even if it was already extracted on a previous run"
+    $GeneralSettings.ForceOptions        = CreateSettingsCheckbox -Name "ForceOptions"       -Column 3 -Row 1 -Text "Force Show Options"     -IsDebug -Info ("Always show the " + '"Additional Options"' + " checkbox if it can be supported`n`nDO NOT REPORT ANY BUGS IF THIS OPTION IS ENABLED!")
+    $GeneralSettings.ExtractCleanScript  = CreateSettingsCheckbox -Name "ExtractCleanScript" -Column 1 -Row 2 -Text "Extract Clean Script"   -IsDebug -Info "Extract a clean copy of dialogue script for the Text Editor when patching`nvanilla Ocarina of Time or Majora's Mask"
+    $GeneralSettings.ExtractFullScript   = CreateSettingsCheckbox -Name "ExtractFullScript"  -Column 2 -Row 2 -Text "Extract Patched Script" -IsDebug -Info "Extract a fully patched copy of dialogue script for the Text Editor when patching`nvanilla Ocarina of Time or Majora's Mask"
+
 
     # Debug Settings
     $GeneralSettings.Box                 = CreateReduxGroup -Y ($GeneralSettings.Box.Bottom + (DPISize 10)) -IsGame $False -Height 3 -AddTo $SettingsDialog -Text "Debug Settings"
@@ -291,7 +294,7 @@ function CreateSettingsDialog() {
                 }
             }
             $global:GameSettings = GetSettings -File (GetGameSettingsFile) -IsGame
-            LoadAdditionalOptions
+            if (Get-Command "CreateOptions" -errorAction SilentlyContinue) { iex "CreateOptions" }
             DisableReduxOptions
         } )
     }
@@ -375,30 +378,10 @@ function ResetGame() {
 
 
 
-
-#==============================================================================================================================================================================================
-function CleanupFiles() {
-    
-    foreach ($item in $Files.json.games) {
-        RemovePath ($Paths.Games + "\" + $item.mode + "\Extracted")
-    }
-
-    RemovePath $Paths.cygdrive
-    RemovePath $Paths.Temp
-    RemoveFile $Files.flipscfg
-    RemoveFile $Files.stackdump
-
-    WriteToConsole "All extracted files have been deleted"
-    [System.GC]::Collect() | Out-Null
-
-}
-
-
-
 #==============================================================================================================================================================================================
 function CreateSettingsCheckbox([byte]$Column=1, [byte]$Row=1, [switch]$Checked, [boolean]$Disable=$False, [string]$Text="", [string]$Info="", [string]$Name, [switch]$IsDebug) {
     
-    $Checkbox = CreateCheckbox -X (($Column-1) * (DPISize 165) + (DPISize 15)) -Y ($Row * (DPISize 30) - (DPISize 10)) -Checked $Checked -Disable $Disable -IsRadio $False -Info $Info -IsDebug $IsDebug -Name $Name
+    $Checkbox = CreateCheckbox -X (($Column-1) * (DPISize 165) + (DPISize 15)) -Y ($Row * (DPISize 30) - (DPISize 10)) -Checked $Checked -Disable $Disable -Info $Info -IsDebug $IsDebug -Name $Name
     if (IsSet $Text) {  
         $Label = CreateLabel -X $CheckBox.Right -Y ($CheckBox.Top + (DPISize 3)) -Width (DPISize 135) -Height (DPISize 15) -Text $Text -Info $Info
         Add-Member -InputObject $Label    -NotePropertyMembers @{ CheckBox = $CheckBox }
@@ -417,7 +400,7 @@ function CreateSettingsCheckbox([byte]$Column=1, [byte]$Row=1, [switch]$Checked,
 #==============================================================================================================================================================================================
 function CreateSettingsRadioField([byte]$Column=1, [byte]$Row=1, [switch]$Checked, [switch]$Disable, [string]$Text="", [string]$Info="", [string]$Name, [int16]$SaveAs, [int16]$Max, [string]$NameTextbox, [switch]$IsDebug) {
     
-    $Checkbox = CreateCheckbox -X (($Column-1) * (DPISize 165) + (DPISize 15)) -Y ($Row * (DPISize 30) - (DPISize 10)) -Checked $Checked -Disable $Disable -IsRadio $True -Info $Info -IsDebug $IsDebug -Name $Name -SaveAs $SaveAs -SaveTo $Name -Max $Max
+    $Checkbox = CreateCheckbox -X (($Column-1) * (DPISize 165) + (DPISize 15)) -Y ($Row * (DPISize 30) - (DPISize 10)) -Checked $Checked -Disable $Disable -IsRadio -Info $Info -IsDebug $IsDebug -Name $Name -SaveAs $SaveAs -SaveTo $Name -Max $Max
     $Textbox  = CreateTextBox  -X $Checkbox.Right -Y $Checkbox.Top -Width (DPISize 130) -Height (DPISize 15) -Length 20 -Text $Text -IsDebug $IsDebug -Name $NameTextbox
 
     return $CheckBox
@@ -477,4 +460,3 @@ Export-ModuleMember -Function CreateLanguageContent
 
 Export-ModuleMember -Function ResetTool
 Export-ModuleMember -Function ResetGame
-Export-ModuleMember -Function CleanupFiles

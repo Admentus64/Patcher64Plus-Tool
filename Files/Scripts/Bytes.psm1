@@ -1,20 +1,14 @@
 ﻿function ChangeBytes([string]$File, [string]$Offset, [object]$Match=$null, [object]$Values, [uint16]$Interval=1, [switch]$Add, [switch]$Subtract) {
     
-    if     ($Match  -is [System.String] -and $Match  -Like "* *")   { $matchDec = $Match -split ' '           | foreach { [Convert]::ToByte($_, 16) } }
-    elseif ($Match  -is [System.String])                            { $matchDec = $Match -split '(..)' -ne '' | foreach { [Convert]::ToByte($_, 16) } }
-    else {
-        $matchDec = $Match
-        if ($matchDec.count -gt 0) {
-            if ($matchDec[0] -is [System.String]) { $matchDec = $matchDec | foreach { [Convert]::ToByte($_, 16) } }
-        }    }
+    if     ($Match  -is [String] -and $Match  -Like "* *")      { $matchDec = $Match -split ' '           | foreach { [Convert]::ToByte($_, 16) } }
+    elseif ($Match  -is [String])                               { $matchDec = $Match -split '(..)' -ne '' | foreach { [Convert]::ToByte($_, 16) } }
+    elseif ($Match  -is [Array]  -and $Match[0] -is [String])   { $matchDec = $Match                      | foreach { [Convert]::ToByte($_, 16) } }
+    else                                                        { $matchDec = $Match }
 
-    if     ($Values -is [System.String] -and $Values -Like "* *")   { $valuesDec = $Values -split ' '           | foreach { [Convert]::ToByte($_, 16) } }
-    elseif ($Values -is [System.String])                            { $valuesDec = $Values -split '(..)' -ne '' | foreach { [Convert]::ToByte($_, 16) } }
-    else {
-        $valuesDec = $Values
-        if ($valuesDec.count -gt 0) {
-            if ($valuesDec[0] -is [System.String]) { $valuesDec = $valuesDec | foreach { [Convert]::ToByte($_, 16) } }
-        }    }
+    if     ($Values -is [String] -and $Values -Like "* *")              { $valuesDec = $Values -split ' '           | foreach { [Convert]::ToByte($_, 16) } }
+    elseif ($Values -is [String])                                       { $valuesDec = $Values -split '(..)' -ne '' | foreach { [Convert]::ToByte($_, 16) } }
+    elseif ($Values -is [Array]  -and $Values[0] -is [System.String])   { $valuesDec = $Values                      | foreach { [Convert]::ToByte($_, 16) } }
+    else                                                                { $valuesDec = $Values }
 
     if (IsSet $File)                   { $ByteArrayGame = [System.IO.File]::ReadAllBytes($File) }
     if ($Interval -lt 1)               { $Interval = 1 }
@@ -69,10 +63,12 @@
 #==============================================================================================================================================================================================
 function MultiplyBytes([string]$File, [string]$Offset, [object]$Match=$null, [float]$Factor) {
     
-    if     ($Match  -is [System.String] -and $Match  -Like "* *")   { $matchDec = $Match -split ' '           | foreach { [Convert]::ToByte($_, 16) } }
-    elseif ($Match  -is [System.String])                            { $matchDec = $Match -split '(..)' -ne '' | foreach { [Convert]::ToByte($_, 16) } }
-    else                                                            { $matchDec = $Match }
-    if (IsSet $File)                                                { $ByteArrayGame = [System.IO.File]::ReadAllBytes($File) }
+    if     ($Match -is [String] -and $Match  -Like "* *")      { $matchDec = $Match -split ' '           | foreach { [Convert]::ToByte($_, 16) } }
+    elseif ($Match -is [String])                               { $matchDec = $Match -split '(..)' -ne '' | foreach { [Convert]::ToByte($_, 16) } }
+    elseif ($Match -is [Array]  -and $Match[0] -is [String])   { $matchDec = $Match                      | foreach { [Convert]::ToByte($_, 16) } }
+    else                                                       { $matchDec = $Match }
+
+    if (IsSet $File) { $ByteArrayGame = [System.IO.File]::ReadAllBytes($File) }
 
     # Offset
     $offsetDec = GetDecimal $Offset

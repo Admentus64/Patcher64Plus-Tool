@@ -1,0 +1,542 @@
+{
+	"parse"		: "mm",
+	"end"		: 191,
+	"header"	: 11,
+	"icons" : [
+		{
+			"id"	: "01",
+			"name"	: "Green Rupee"
+		}, {
+			"id"	: "02",
+			"name"	: "Blue Rupee"
+		}, {
+			"id"	: "03",
+			"name"	: "Silver Rupee"
+		}, {
+			"id"	: "04",
+			"name"	: "Red Rupee"
+		}, {
+			"id"	: "05",
+			"name"	: "Purple Rupee"
+		}, {
+			"id"	: "06",
+			"name"	: "Silver Rupee"
+		}, {
+			"id"	: "07",
+			"name"	: "Gold Rupee"
+		}, {
+			"id"	: "08",
+			"name"	: "Adult Wallet"
+		}, {
+			"id"	: "09",
+			"name"	: "Giant's Wallet"
+		}, {
+			"id"	: "0A",
+			"name"	: "Recovery Heart"
+		}, {
+			"id"	: "0B",
+			"name"	: "Recovery Heart"
+		}, {
+			"id"	: "0C",
+			"name"	: "Piece of Heart"
+		}, {
+			"id"	: "0D",
+			"name"	: "Recovery Heart"
+		}, {
+			"id"	: "0E",
+			"name"	: "Small Magic Jar"
+		}, {
+			"id"	: "0F",
+			"name"	: "Large Magic Jar"
+		}, {
+			"id"	: "10",
+			"name"	: "Recovery Heart"
+		}, {
+			"id"	: "11",
+			"name"	: "Stray Fairy"
+		}, {
+			"id"	: "12",
+			"name"	: "Recovery Heart"
+		}, {
+			"id"	: "13",
+			"name"	: "Recovery Heart"
+		}, {
+			"id"	: "14",
+			"name"	: "Bomb"
+		}, {
+			"id"	: "15",
+			"name"	: "Bomb"
+		}, {
+			"id"	: "16",
+			"name"	: "Bomb"
+		}, {
+			"id"	: "17",
+			"name"	: "Bomb"
+		}, {
+			"id"	: "18",
+			"name"	: "Bomb"
+		}, {
+			"id"	: "19",
+			"name"	: "Deku Stick"
+		}, {
+			"id"	: "1A",
+			"name"	: "Bombchu"
+		}, {
+			"id"	: "1B",
+			"name"	: "Bomb Bag"
+		}, {
+			"id"	: "1C",
+			"name"	: "Big Bomb Bag"
+		}, {
+			"id"	: "1D",
+			"name"	: "Biggest Bomb Bag"
+		}, {
+			"id"	: "1E",
+			"name"	: "Hero's Bow"
+		}, {
+			"id"	: "1F",
+			"name"	: "Hero's Bow"
+		}, {
+			"id"	: "20",
+			"name"	: "Hero's Bow"
+		}, {
+			"id"	: "21",
+			"name"	: "Hero's Bow"
+		}, {
+			"id"	: "22",
+			"name"	: "Quiver"
+		}, {
+			"id"	: "23",
+			"name"	: "Big Quiver"
+		}, {
+			"id"	: "24",
+			"name"	: "Biggest Quiver"
+		}, {
+			"id"	: "25",
+			"name"	: "Fire Arrow"
+		}, {
+			"id"	: "26",
+			"name"	: "Ice Arrow"
+		}, {
+			"id"	: "27",
+			"name"	: "Light Arrow"
+		}, {
+			"id"	: "28",
+			"name"	: "Deku Nut"
+		}, {
+			"id"	: "29",
+			"name"	: "Deku Nut"
+		}, {
+			"id"	: "2A",
+			"name"	: "Deku Nut"
+		}, {
+			"id"	: "32",
+			"name"	: "Hero's Shield"
+		}, {
+			"id"	: "33",
+			"name"	: "Mirror Shield"
+		}, {
+			"id"	: "34",
+			"name"	: "Powder Keg"
+		}, {
+			"id"	: "35",
+			"name"	: "Magic Bean"
+		}, {
+			"id"	: "36",
+			"name"	: "Pictograph Box"
+		}, {
+			"id"	: "37",
+			"name"	: "Kokiri Sword"
+		}, {
+			"id"	: "38",
+			"name"	: "Razor Sword"
+		}, {
+			"id"	: "39",
+			"name"	: "Gilded Sword"
+		}, {
+			"id"	: "3A",
+			"name"	: "Fierce Deity's Sword"
+		}, {
+			"id"	: "3B",
+			"name"	: "Great Fairy's Sword"
+		}, {
+			"id"	: "3C",
+			"name"	: "Small Key"
+		}, {
+			"id"	: "3D",
+			"name"	: "Boss Key"
+		}, {
+			"id"	: "3E",
+			"name"	: "Dungeon Map"
+		}, {
+			"id"	: "3F",
+			"name"	: "Compass"
+		}, {
+			"id"	: "40",
+			"name"	: "Powder Keg"
+		}, {
+			"id"	: "41",
+			"name"	: "Hookshot"
+		}, {
+			"id"	: "42",
+			"name"	: "Lens of Truth"
+		}, {
+			"id"	: "43",
+			"name"	: "Pictograph Box"
+		}, {
+			"id"	: "44",
+			"name"	: "Fishing Rod"
+		}, {
+			"id"	: "4C",
+			"name"	: "Ocarina of Time"
+		}, {
+			"id"	: "50",
+			"name"	: "Bomber's Notebook"
+		}, {
+			"id"	: "52",
+			"name"	: "Gold Skulltula Token"
+		}, {
+			"id"	: "55",
+			"name"	: "Odolwa's Remains"
+		}, {
+			"id"	: "56",
+			"name"	: "Goht's Remains"
+		}, {
+			"id"	: "57",
+			"name"	: "Gyorg's Remains"
+		}, {
+			"id"	: "58",
+			"name"	: "Twinmold's Remains"
+		}, {
+			"id"	: "59",
+			"name"	: "Red Potion"
+		}, {
+			"id"	: "5A",
+			"name"	: "Empty Bottle"
+		}, {
+			"id"	: "5B",
+			"name"	: "Red Potion"
+		}, {
+			"id"	: "5C",
+			"name"	: "Green Potion"
+		}, {
+			"id"	: "5D",
+			"name"	: "Blue Potion"
+		}, {
+			"id"	: "5E",
+			"name"	: "Bottled Fairy"
+		}, {
+			"id"	: "5F",
+			"name"	: "Deku Princess"
+		}, {
+			"id"	: "60",
+			"name"	: "Milk"
+		}, {
+			"id"	: "61",
+			"name"	: "Milk (1/2)"
+		}, {
+			"id"	: "62",
+			"name"	: "Fish"
+		}, {
+			"id"	: "63",
+			"name"	: "Bug"
+		}, {
+			"id"	: "64",
+			"name"	: "Blue Fire"
+		}, {
+			"id"	: "65",
+			"name"	: "Poe"
+		}, {
+			"id"	: "66",
+			"name"	: "Big Poe"
+		}, {
+			"id"	: "67",
+			"name"	: "Spring Water"
+		}, {
+			"id"	: "68",
+			"name"	: "Hot Spring Water"
+		}, {
+			"id"	: "69",
+			"name"	: "Zora Egg"
+		}, {
+			"id"	: "6A",
+			"name"	: "Gold Dust"
+		}, {
+			"id"	: "6B",
+			"name"	: "Mushroom"
+		}, {
+			"id"	: "6E",
+			"name"	: "Seahorse"
+		}, {
+			"id"	: "6F",
+			"name"	: "Chateau Romani"
+		}, {
+			"id"	: "70",
+			"name"	: "Hylian Loach"
+		}, {
+			"id"	: "78",
+			"name"	: "Deku Mask"
+		}, {
+			"id"	: "79",
+			"name"	: "Goron Mask"
+		}, {
+			"id"	: "7A",
+			"name"	: "Zora Mask"
+		}, {
+			"id"	: "7B",
+			"name"	: "Fierce Deity Mask"
+		}, {
+			"id"	: "7C",
+			"name"	: "Mask of Truth"
+		}, {
+			"id"	: "7D",
+			"name"	: "Kafei' Mask"
+		}, {
+			"id"	: "7E",
+			"name"	: "All-Night Mask"
+		}, {
+			"id"	: "7F",
+			"name"	: "Bunny Hood"
+		}, {
+			"id"	: "80",
+			"name"	: "Keaton Mask"
+		}, {
+			"id"	: "81",
+			"name"	: "Garo Mask"
+		}, {
+			"id"	: "82",
+			"name"	: "Romani Mask"
+		}, {
+			"id"	: "83",
+			"name"	: "Circus Leader's Mask"
+		}, {
+			"id"	: "84",
+			"name"	: "Postman's Hat"
+		}, {
+			"id"	: "85",
+			"name"	: "Couple's Mask"
+		}, {
+			"id"	: "86",
+			"name"	: "Great Fairy's Mask"
+		}, {
+			"id"	: "87",
+			"name"	: "Gibdo Mask"
+		}, {
+			"id"	: "88",
+			"name"	: "Don Gero Mask"
+		}, {
+			"id"	: "89",
+			"name"	: "Kamaro's Mask"
+		}, {
+			"id"	: "8A",
+			"name"	: "Captain's Hat"
+		}, {
+			"id"	: "8B",
+			"name"	: "Stone Mask"
+		}, {
+			"id"	: "8C",
+			"name"	: "Bremen Mask"
+		}, {
+			"id"	: "8D",
+			"name"	: "Blast Mask"
+		}, {
+			"id"	: "8E",
+			"name"	: "Mask of Scents"
+		}, {
+			"id"	: "8F",
+			"name"	: "Giant's Mask"
+		}, {
+			"id"	: "91",
+			"name"	: "Chateau Romani"
+		}, {
+			"id"	: "92",
+			"name"	: "Milk"
+		}, {
+			"id"	: "93",
+			"name"	: "Gold Dust"
+		}, {
+			"id"	: "94",
+			"name"	: "Hylian Loach"
+		}, {
+			"id"	: "95",
+			"name"	: "Seahorse"
+		}, {
+			"id"	: "96",
+			"name"	: "Moon's Tear"
+		}, {
+			"id"	: "97",
+			"name"	: "Town Title Deed"
+		}, {
+			"id"	: "98",
+			"name"	: "Swamp Title Deed"
+		}, {
+			"id"	: "99",
+			"name"	: "Mountain Title Deed"
+		}, {
+			"id"	: "9A",
+			"name"	: "Ocean Title Deed"
+		}, {
+			"id"	: "A0",
+			"name"	: "Room Key"
+		}, {
+			"id"	: "A1",
+			"name"	: "Special Delivery to Mama"
+		}, {
+			"id"	: "AA",
+			"name"	: "Letter to Kafei"
+		}, {
+			"id"	: "AB",
+			"name"	: "Pendant of Memories"
+		}, {
+			"id"	: "B3",
+			"name"	: "Tingle's Map"
+		}, {
+			"id"	: "B4",
+			"name"	: "Tingle's Map"
+		}, {
+			"id"	: "B5",
+			"name"	: "Tingle's Map"
+		}, {
+			"id"	: "B6",
+			"name"	: "Tingle's Map"
+		}, {
+			"id"	: "B7",
+			"name"	: "Tingle's Map"
+		}, {
+			"id"	: "B8",
+			"name"	: "Tingle's Map"
+		}, {
+			"id"	: "B9",
+			"name"	: "Tingle's Map"
+		}, {
+			"id"	: "D8",
+			"name"	: "[Small Black Line]"
+		}, {
+			"id"	: "D9",
+			"name"	: "[Small Black Line]"
+		}, {
+			"id"	: "DA",
+			"name"	: "[Small Black Line]"
+		}, {
+			"id"	: "DB",
+			"name"	: "[Small Black Line]"
+		}, {
+			"id"	: "DC",
+			"name"	: "Anju"
+		}, {
+			"id"	: "DD",
+			"name"	: "Kafei"
+		}, {
+			"id"	: "DE",
+			"name"	: "Curiosity Shop Owner"
+		}, {
+			"id"	: "DF",
+			"name"	: "Bomb Shop Owner's Mother"
+		}, {
+			"id"	: "E0",
+			"name"	: "Romani"
+		}, {
+			"id"	: "E1",
+			"name"	: "Cremia"
+		}, {
+			"id"	: "E2",
+			"name"	: "Mayor Dotour"
+		}, {
+			"id"	: "E3",
+			"name"	: "Madama Aroma"
+		}, {
+			"id"	: "E4",
+			"name"	: "Toto"
+		}, {
+			"id"	: "E5",
+			"name"	: "Gorman"
+		}, {
+			"id"	: "E6",
+			"name"	: "Postman"
+		}, {
+			"id"	: "E7",
+			"name"	: "Rosa Sisters"
+		}, {
+			"id"	: "E8",
+			"name"	: "Toilet Hand"
+		}, {
+			"id"	: "E9",
+			"name"	: "Granny"
+		}, {
+			"id"	: "EA",
+			"name"	: "Kamaro"
+		}, {
+			"id"	: "EB",
+			"name"	: "Grog"
+		}, {
+			"id"	: "EC",
+			"name"	: "Gorman Brothers"
+		}, {
+			"id"	: "ED",
+			"name"	: "Shiro"
+		}, {
+			"id"	: "EE",
+			"name"	: "Guru-Guru"
+		}, {
+			"id"	: "EF",
+			"name"	: "Bombers"
+		}, {
+			"id"	: "F0",
+			"name"	: "[Exclamation Mark]"
+		}, {
+			"id"	: "FE",
+			"name"	: "[No Icon]"
+		}
+	],
+	"textboxes" : [
+		{
+			"id"	: 0,
+			"name"	: "Standard Text Box I"
+		}, {
+			"id"	: 1,
+			"name"	: "Wooden Sign Background"
+		}, {
+			"id"	: 2,
+			"name"	: "Transluscent Blue Text Box"
+		}, {
+			"id"	: 3,
+			"name"	: "Ocarina Staff"
+		}, {
+			"id"	: 4,
+			"name"	: "Invisible Text Box I"
+		}, {
+			"id"	: 5,
+			"name"	: "Invisible Text Box II"
+		}, {
+			"id"	: 6,
+			"name"	: "Standard Text Box II"
+		}, {
+			"id"	: 7,
+			"name"	: "Invisible Text Box"
+		}, {
+			"id"	: 8,
+			"name"	: "Blue Text Box"
+		}, {
+			"id"	: 9,
+			"name"	: "Red Text Box I"
+		}, {
+			"id"	: 10,
+			"name"	: "Invisible Text Box III"
+		}, {
+			"id"	: 11,
+			"name"	: "Invisible Text Box IV"
+		}, {
+			"id"	: 12,
+			"name"	: "Invisible Text Box V"
+		}, {
+			"id"	: 13,
+			"name"	: "Bombers' Notebook"
+		}, {
+			"id"	: 14,
+			"name"	: "Invisible Text Box VI"
+		}, {
+			"id"	: 15,
+			"name"	: "Red Text Box II"
+		}
+	]
+}

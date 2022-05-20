@@ -69,7 +69,6 @@ function SetFileParameters() {
 
     $Files.oot.feminine_animations          = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Optional\feminine_animations")
     $Files.oot.harder_child_bosses          = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Optional\harder_child_bosses")
-    $Files.oot.hide_equipment               = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Optional\hide_equipment")
     $Files.oot.mm_pause_screen              = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Optional\mm_pause_screen")
     $Files.oot.megaton_hammer               = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Optional\vanilla_child_megaton_hammer")
     $Files.oot.widescreen                   = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Optional\widescreen")
@@ -88,10 +87,6 @@ function SetFileParameters() {
     $Files.oot.frontflip_jump               = $Paths.Games + "\Ocarina of Time\Binaries\Jumps\frontflip.bin"
     $Files.oot.somarsault_jump              = $Paths.Games + "\Ocarina of Time\Binaries\Jumps\somarsault.bin"
     $Files.oot.message_credits              = $Paths.Games + "\Ocarina of Time\Binaries\Message\credits.bin"
-    $Files.oot.message_mq1                  = $Paths.Games + "\Ocarina of Time\Binaries\Message\mq_navi_action.bin"
-    $Files.oot.message_mq2                  = $Paths.Games + "\Ocarina of Time\Binaries\Message\mq_navi_door.bin"
-    $Files.oot.message_ruto_confession      = $Paths.Games + "\Ocarina of Time\Binaries\Message\ruto_confession.bin"
-    $Files.oot.message_songs                = $Paths.Games + "\Ocarina of Time\Binaries\Message\songs.bin"
     $Files.oot.fire_temple_bank             = $Paths.Games + "\Ocarina of Time\Binaries\Fire Temple Theme\audiobank_pointers.bin"
     $Files.oot.fire_temple_seq              = $Paths.Games + "\Ocarina of Time\Binaries\Fire Temple Theme\audioseq_pointers.bin"
     $Files.oot.fire_temple_table            = $Paths.Games + "\Ocarina of Time\Binaries\Fire Temple Theme\audiotable_pointers.bin"
@@ -157,10 +152,6 @@ function SetFileParameters() {
     $Files.mm.frontflip_jump_attack         = $Paths.Games + "\Majora's Mask\Binaries\frontflip_jump_attack.bin"
 
     $Files.mm.message_credits               = $Paths.Games + "\Majora's Mask\Binaries\Message\credits.bin"
-    $Files.mm.message_razor_sword_1         = $Paths.Games + "\Majora's Mask\Binaries\Message\razor_sword_1.bin"
-    $Files.mm.message_razor_sword_2         = $Paths.Games + "\Majora's Mask\Binaries\Message\razor_sword_2.bin"
-    $Files.mm.message_razor_sword_3         = $Paths.Games + "\Majora's Mask\Binaries\Message\razor_sword_3.bin"
-    $Files.mm.message_razor_sword_4         = $Paths.Games + "\Majora's Mask\Binaries\Message\razor_sword_4.bin"
 
     $Files.mm.southern_swamp_cleared        = CheckPatchExtension ($Paths.Games + "\Majora's Mask\Export\Southern Swamp\southern_swamp_cleared_scene")
     $Files.mm.southern_swamp_cleared_0      = CheckPatchExtension ($Paths.Games + "\Majora's Mask\Export\Southern Swamp\southern_swamp_cleared_room_0")
