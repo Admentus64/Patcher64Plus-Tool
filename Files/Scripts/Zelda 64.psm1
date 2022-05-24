@@ -219,7 +219,7 @@ function MusicOptions([string]$Default="File Select") {
     CreateReduxGroup    -Tag "Music" -Text "Music" -Streamlined
     CreateReduxComboBox -Name "FileSelect"-Text "File Select Theme"  -Default $Default -Items $tracks -Info "Set the music theme for the File Select menu" -Credits "Admentus"
     
-    if (IsInterface -Lite -Streamlined) { return }
+    if (IsSimple) { return }
 
     CreateReduxGroup    -Tag "Music" -Text "Music" -Columns 2 -Height 8
     CreateReduxComboBox -Name "FileSelect"-Text "File Select Theme"  -Default $Default -Items $tracks -Info "Set the music theme for the File Select menu" -Credits "Admentus"

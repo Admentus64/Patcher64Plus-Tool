@@ -185,6 +185,14 @@
 	"output"			: "_pots_challenge_patched",
 	"tooltip"			: "Replay though the original Ocarina of Time by throwing pots only at your targets"
 }, {
+	"title"				: "The Legend of Zelda: Ocarina of Time (Widescreen)",
+	"patch" : [ {
+		"file"			: "Decompressed\\widescreen.bps",
+		"rev"			: "57A9719AD547C516342E1A15D5C28C3D"
+	} ],
+	"output"			: "_widescreen_patched",
+	"tooltip"			: "16:9 widescreen support for Ocarina of Time"
+}, {
 	"title"				: "The Legend of Zelda: Gold Quest",
 	"finalize"			: 0,
 	"vc_title"			: "Zelda: Gold Quest",
@@ -195,6 +203,17 @@
 	} ],
 	"output"			: "_gold_quest_patched",
 	"tooltip"			: "Remixes the overworld and dungeons as a harder version of master Quest"
+}, {
+	"title"				: "The Legend of Zelda: Gold Quest (Widescreen)",
+	"finalize"			: 0,
+	"vc_title"			: "Zelda: Gold Quest (WS)",
+	"vc_gameID"			: "NAC8",
+	"patch" : [ {
+		"file"			: "Decompressed\\gold_quest_widescreen.bps",
+		"rev"			: "57A9719AD547C516342E1A15D5C28C3D"
+	} ],
+	"output"			: "_gold_quest_widescreen_patched",
+	"tooltip"			: "Remixes the overworld and dungeons as a harder version of master Quest{0}With 16:9 widescreen support"
 }, {
 	"title"				: "The Helix Blade (Demo)",
 	"console"			: "Native",

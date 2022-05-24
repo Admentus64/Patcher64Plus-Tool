@@ -391,9 +391,9 @@ function CreateTabButtons([string[]]$Tabs, [boolean]$NoLanguages=$False, [object
 
 
 #==============================================================================================================================================================================================
-function CreateReduxPanel([single]$X=$Last.Group.Left, [single]$Row=0, [single]$Columns, [single]$Rows=1,  [string]$Name, [string]$Tag, [object]$AddTo=$Last.Group, [switch]$Beginner, [switch]$Lite, [switch]$Advanced) {
+function CreateReduxPanel([single]$X=$Last.Group.Left, [single]$Row=0, [single]$Columns, [single]$Rows=1,  [string]$Name, [string]$Tag, [object]$AddTo=$Last.Group, [switch]$Simple, [switch]$Advanced) {
     
-    if (!(CheckInterface -Beginner $Beginner -Lite $Lite -Advanced $Advanced -Streamlined $Advanced) -or $Last.Hide) { return $null }
+    if (!(CheckInterface -Simple $Simple -Advanced $Advanced) -or $Last.Hide) { return $null }
 
     $Last.Max = 0
     $Last.Column = $Last.Row = 1
@@ -406,9 +406,9 @@ function CreateReduxPanel([single]$X=$Last.Group.Left, [single]$Row=0, [single]$
 
 
 #==============================================================================================================================================================================================
-function CreateReduxGroup([single]$X=(DPISize 15), [single]$Y=(DPISize 50), [single]$Height, [string]$Name=$Last.TabName, [string]$Tag, [switch]$ShowAlways, [boolean]$IsGame=$True, [string]$Text="", [switch]$IsRedux, [single]$Columns=0, [object]$AddTo=$Redux.Panel, [switch]$Beginner, [switch]$Lite, [switch]$Advanced, [switch]$Streamlined) {
+function CreateReduxGroup([single]$X=(DPISize 15), [single]$Y=(DPISize 50), [single]$Height, [string]$Name=$Last.TabName, [string]$Tag, [switch]$ShowAlways, [boolean]$IsGame=$True, [string]$Text="", [switch]$IsRedux, [single]$Columns=0, [object]$AddTo=$Redux.Panel, [switch]$Simple, [switch]$Advanced) {
     
-    if (!(CheckInterface -Beginner $Beginner -Lite $Lite -Advanced $Advanced -Streamlined $Streamlined)) {
+    if (!(CheckInterface -Simple $Simple -Advanced $Advanced)) {
         $Last.Hide = $True
         return $null
     }
@@ -470,9 +470,9 @@ function CreateReduxGroup([single]$X=(DPISize 15), [single]$Y=(DPISize 50), [sin
 
 
 #==============================================================================================================================================================================================
-function CreateReduxButton([single]$Column=$Last.Column, [single]$Row=$Last.Row, [int16]$Width=150, [int16]$Height=20, [string]$Name, [string]$Tag, [string]$Text="", [string]$Info="", [string]$Credits="", [object]$AddTo=$Last.Group, [switch]$Beginner, [switch]$Lite, [switch]$Advanced, [switch]$Native) {
+function CreateReduxButton([single]$Column=$Last.Column, [single]$Row=$Last.Row, [int16]$Width=150, [int16]$Height=20, [string]$Name, [string]$Tag, [string]$Text="", [string]$Info="", [string]$Credits="", [object]$AddTo=$Last.Group, [switch]$Simple, [switch]$Advanced) {
     
-    if (!(CheckInterface -Beginner $Beginner -Lite $Lite -Advanced $Advanced -Streamlined $Advanced) -or ($Native -and $IsWiiVC) -or $Last.Hide) { return $null }
+    if (!(CheckInterface -Simple $Simple -Advanced $Advanced) -or ($Native -and $IsWiiVC) -or $Last.Hide) { return $null }
 
     if ( (IsSet $Info ) -and (IsSet $Credits) ) { $Info += ("`n`n- Credits: " + $Credits) }
     return CreateButton -X (($Column-1) * $FormDistance + (DPISize 15)) -Y ($Row * (DPISize 30) - (DPISize 13)) -Width (DPISize $Width) -Height (DPISize $Height) -Name $Name -Tag $Tag -Text $Text -Info $Info -AddTo $AddTo
@@ -490,9 +490,9 @@ function CreateReduxButton([single]$Column=$Last.Column, [single]$Row=$Last.Row,
 
 
 #==============================================================================================================================================================================================
-function CreateReduxTextBox([single]$Column=$Last.Column, [single]$Row=$Last.Row, [byte]$Length=2, [string]$Value=0, [int]$Min, [int]$Max, [string]$Text, [string]$Info, [string]$Warning, [string]$Credits, [string]$Name, [string]$Tag, [object]$AddTo=$Last.Group, [switch]$Beginner, [switch]$Lite, [switch]$Advanced, [switch]$Native) {
+function CreateReduxTextBox([single]$Column=$Last.Column, [single]$Row=$Last.Row, [byte]$Length=2, [string]$Value=0, [int]$Min, [int]$Max, [string]$Text, [string]$Info, [string]$Warning, [string]$Credits, [string]$Name, [string]$Tag, [object]$AddTo=$Last.Group, [switch]$Simple, [switch]$Advanced) {
     
-    if (!(CheckInterface -Beginner $Beginner -Lite $Lite -Advanced $Advanced -Streamlined $Advanced) -or ($Native -and $IsWiiVC) -or $Last.Hide) { return $null }
+    if (!(CheckInterface -Simple $Simple -Advanced $Advanced) -or ($Native -and $IsWiiVC) -or $Last.Hide) { return $null }
 
     if (IsSet $Info) { $Info += "`nDefault value: " + $Value }
     if (IsSet $Warning) {
@@ -546,9 +546,9 @@ function CreateReduxTextBox([single]$Column=$Last.Column, [single]$Row=$Last.Row
 
 
 #==============================================================================================================================================================================================
-function CreateReduxRadioButton([single]$Column=$Last.Column, [single]$Row=$Last.Row, [switch]$Checked, [switch]$Disable, [string]$Text, [string]$Info, [string]$Warning, [string]$Credits, [string]$Name, [object]$Link, [string]$SaveTo, [byte]$Max, [string]$Tag, [object]$AddTo=$Last.Panel, [switch]$Beginner, [switch]$Lite, [switch]$Advanced, [switch]$Native) {
+function CreateReduxRadioButton([single]$Column=$Last.Column, [single]$Row=$Last.Row, [switch]$Checked, [switch]$Disable, [string]$Text, [string]$Info, [string]$Warning, [string]$Credits, [string]$Name, [object]$Link, [string]$SaveTo, [byte]$Max, [string]$Tag, [object]$AddTo=$Last.Panel, [switch]$Simple, [switch]$Advanced) {
     
-    if (!(CheckInterface -Beginner $Beginner -Lite $Lite -Advanced $Advanced -Streamlined $Advanced) -or ($Native -and $IsWiiVC) -or $Last.Hide) { return $null }
+    if (!(CheckInterface -Simple $Simple -Advanced $Advanced) -or ($Native -and $IsWiiVC) -or $Last.Hide) { return $null }
 
     if (IsSet $Warning) {
         if (IsSet $Info)   { $Info += ("`n[!] " + $Warning) }
@@ -583,9 +583,9 @@ function CreateReduxRadioButton([single]$Column=$Last.Column, [single]$Row=$Last
 
 
 #==============================================================================================================================================================================================
-function CreateReduxCheckBox([single]$Column=$Last.Column, [single]$Row=$Last.Row, [switch]$Checked, [switch]$Disable, [string]$Text="", [string]$Info, [string]$Warning, [string]$Credits, [string]$Name, [object]$Link, [string]$Tag, [object]$AddTo=$Last.Group, [switch]$Beginner, [switch]$Lite, [switch]$Advanced, [switch]$Native) {
+function CreateReduxCheckBox([single]$Column=$Last.Column, [single]$Row=$Last.Row, [switch]$Checked, [switch]$Disable, [string]$Text="", [string]$Info, [string]$Warning, [string]$Credits, [string]$Name, [object]$Link, [string]$Tag, [object]$AddTo=$Last.Group, [switch]$Simple, [switch]$Advanced) {
     
-    if (!(CheckInterface -Beginner $Beginner -Lite $Lite -Advanced $Advanced -Streamlined $Advanced) -or ($Native -and $IsWiiVC) -or $Last.Hide) { return $null }
+    if (!(CheckInterface -Simple $Simple -Advanced $Advanced) -or ($Native -and $IsWiiVC) -or $Last.Hide) { return $null }
 
     if (IsSet $Warning) {
         if (IsSet $Info)   { $Info += ("`n[!] " + $Warning) }
@@ -619,9 +619,9 @@ function CreateReduxCheckBox([single]$Column=$Last.Column, [single]$Row=$Last.Ro
 
 
 #==============================================================================================================================================================================================
-function CreateReduxComboBox([single]$Column=$Last.Column, [single]$Row=$Last.Row, [int16]$Length=170, [int]$Shift=0, [string[]]$Items=$null, [string[]]$Values=$null, [string[]]$PostItems=$null, [string]$FilePath, $Ext="bin", $Default=1, [switch]$NoDefault, [string]$Text, [string]$Info, [string]$Warning, [string]$Credits, [string]$Name, [string]$Tag, [object]$AddTo=$Last.Group, [switch]$Beginner, [switch]$Lite, [switch]$Advanced, [switch]$Native) {
+function CreateReduxComboBox([single]$Column=$Last.Column, [single]$Row=$Last.Row, [int16]$Length=170, [int]$Shift=0, [string[]]$Items=$null, [string[]]$Values=$null, [string[]]$PostItems=$null, [string]$FilePath, $Ext="bin", $Default=1, [switch]$NoDefault, [string]$Text, [string]$Info, [string]$Warning, [string]$Credits, [string]$Name, [string]$Tag, [object]$AddTo=$Last.Group, [switch]$Simple, [switch]$Advanced) {
     
-    if (!(CheckInterface -Beginner $Beginner -Lite $Lite -Advanced $Advanced -Streamlined $Advanced) -or ($Native -and $IsWiiVC) -or $Last.Hide) { return $null }
+    if (!(CheckInterface -Simple $Simple -Advanced $Advanced) -or ($Native -and $IsWiiVC) -or $Last.Hide) { return $null }
 
     if ($Column -eq $Last.Width -and $Column -eq $Last.Column -and $Row -eq $Last.Row) {
         $Column = 1
@@ -695,9 +695,9 @@ function CreateReduxComboBox([single]$Column=$Last.Column, [single]$Row=$Last.Ro
 
 
 #==============================================================================================================================================================================================
-function CreateReduxSlider([single]$Column=$Last.Column, [single]$Row=$Last.Row, $Default, $Min, $Max, $Freq, $Small, $Large, [string]$Text, [string]$Info, [string]$Warning, [string]$Credits, [string]$Name, [string]$Tag, [object]$AddTo=$Last.Group, [switch]$Beginner, [switch]$Lite, [switch]$Advanced, [switch]$Native) {
+function CreateReduxSlider([single]$Column=$Last.Column, [single]$Row=$Last.Row, $Default, $Min, $Max, $Freq, $Small, $Large, [string]$Text, [string]$Info, [string]$Warning, [string]$Credits, [string]$Name, [string]$Tag, [object]$AddTo=$Last.Group, [switch]$Simple, [switch]$Advanced) {
     
-    if (!(CheckInterface -Beginner $Beginner -Lite $Lite -Advanced $Advanced -Streamlined $Advanced) -or ($Native -and $IsWiiVC) -or $Last.Hide) { return $null }
+    if (!(CheckInterface -Simple $Simple -Advanced $Advanced) -or ($Native -and $IsWiiVC) -or $Last.Hide) { return $null }
 
     if ($Default.GetType().Name -eq "String")   { $Default = GetDecimal $Default }
     if ($Min.GetType().Name     -eq "String")   { $Min     = GetDecimal $Min }
@@ -725,9 +725,9 @@ function CreateReduxSlider([single]$Column=$Last.Column, [single]$Row=$Last.Row,
 
 
 #==============================================================================================================================================================================================
-function CreateReduxListBox([single]$Column=$Last.Column, [single]$Row=$Last.Row, [string[]]$Items, $Default=$null, [switch]$MultiSelect, [string]$Text, [string]$Info, [string]$Warning, [string]$Credits, [string]$Name, [string]$Tag, [object]$AddTo=$Last.Group, [switch]$Beginner, [switch]$Lite, [switch]$Advanced, [switch]$Native) {
+function CreateReduxListBox([single]$Column=$Last.Column, [single]$Row=$Last.Row, [string[]]$Items, $Default=$null, [switch]$MultiSelect, [string]$Text, [string]$Info, [string]$Warning, [string]$Credits, [string]$Name, [string]$Tag, [object]$AddTo=$Last.Group, [switch]$Simple, [switch]$Advanced) {
     
-    if (!(CheckInterface -Beginner $Beginner -Lite $Lite -Advanced $Advanced -Streamlined $Advanced) -or ($Native -and $IsWiiVC) -or $Last.Hide) { return $null }
+    if (!(CheckInterface -Simple $Simple -Advanced $Advanced) -or ($Native -and $IsWiiVC) -or $Last.Hide) { return $null }
 
     $listBox  = CreateListBox -X (($Column-1) * $FormDistance + (DPISize 15)) -Y ($Row * (DPISize 45) - (DPISize 25)) -Width (DPISize 300) -Height (DPISize 175) -Items $Items -Default $Default -MultiSelect $MultiSelect -Info $Info -IsGame $True -Name $Name -Tag $Tag -AddTo $AddTo
     return $listBox
@@ -737,9 +737,9 @@ function CreateReduxListBox([single]$Column=$Last.Column, [single]$Row=$Last.Row
 
 
 #==============================================================================================================================================================================================
-function CreateReduxColoredLabel([System.Windows.Forms.Button]$Link, [System.Drawing.Color]$Color, [string]$Name, [string]$Tag, [object]$AddTo=$Last.Group, [switch]$Beginner, [switch]$Lite, [switch]$Advanced, [switch]$Native) {
-
-    if (!(CheckInterface -Beginner $Beginner -Lite $Lite -Advanced $Advanced -Streamlined $Advanced) -or ($Native -and $IsWiiVC) -or $Last.Hide) { return $null }
+function CreateReduxColoredLabel([System.Windows.Forms.Button]$Link, [System.Drawing.Color]$Color, [string]$Name, [string]$Tag, [object]$AddTo=$Last.Group, [switch]$Simple, [switch]$Advanced) {
+    
+    if (!(CheckInterface -Simple $Simple -Advanced $Advanced) -or ($Native -and $IsWiiVC) -or $Last.Hide) { return $null }
 
     $label = CreateLabel -X ($Link.Right + (DPISize 15)) -Y $Link.Top -Width (DPISize 40) -Height $Link.Height -Name $Name -Tag $Tag -AddTo $AddTo
     if (IsSet $Color) { $label.BackColor = $Color }
@@ -750,9 +750,9 @@ function CreateReduxColoredLabel([System.Windows.Forms.Button]$Link, [System.Dra
 
 
 #==============================================================================================================================================================================================
-function CreateImageBox([int]$x, [int]$y, [int]$w, [int]$h, [boolean]$IsGame=$True, [string]$Name, [string]$Tag, [object]$AddTo=$Last.Group, [switch]$Beginner, [switch]$Lite, [switch]$Advanced, [switch]$Native) {
+function CreateImageBox([int]$x, [int]$y, [int]$w, [int]$h, [boolean]$IsGame=$True, [string]$Name, [string]$Tag, [object]$AddTo=$Last.Group, [switch]$Simple, [switch]$Advanced) {
     
-    if (!(CheckInterface -Beginner $Beginner -Lite $Lite -Advanced $Advanced -Streamlined $Advanced) -or ($Native -and $IsWiiVC) -or $Last.Hide) { return $null }
+    if (!(CheckInterface -Simple $Simple -Advanced $Advanced) -or ($Native -and $IsWiiVC) -or $Last.Hide) { return $null }
 
     $image          = CreateForm -X $X -Y $Y -Width $Width -Height $Height -IsGame $IsGame -Name $Name -Tag $Tag -Form (New-Object Windows.Forms.PictureBox) -AddTo $AddTo 
     $image.Location = (DPISize (New-object System.Drawing.Size($x, $y)))
@@ -765,32 +765,12 @@ function CreateImageBox([int]$x, [int]$y, [int]$w, [int]$h, [boolean]$IsGame=$Tr
 
 
 #==============================================================================================================================================================================================
-function CheckInterface([boolean]$Beginner=$False, [boolean]$Lite=$False, [boolean]$Advanced=$False, [boolean]$Streamlined=$False) {
+function CheckInterface([boolean]$Simple=$False, [boolean]$Advanced=$False) {
     
-    if (!$Beginner -and !$Lite -and !$Advanced -and !$Streamlined)   { return $True }
-    if ( $Beginner -and  $Lite -and  $Advanced -and  $Streamlined)   { return $True }
-
-    if ($Beginner    -and $Settings.Core.Interface -eq 1)   { return $True }
-    if ($Lite        -and $Settings.Core.Interface -eq 2)   { return $True }
-    if ($Advanced    -and $Settings.Core.Interface -eq 3)   { return $True }
-    if ($Streamlined -and $Settings.Core.Interface -eq 4)   { return $True }
-
-    if ($Beginner    -and $Lite        -and $Settings.Core.Interface -eq 1)   { return $True }
-    if ($Beginner    -and $Advanced    -and $Settings.Core.Interface -eq 1)   { return $True }
-    if ($Beginner    -and $Streamlined -and $Settings.Core.Interface -eq 1)   { return $True }
-
-    if ($Lite        -and $Beginner    -and $Settings.Core.Interface -eq 2)   { return $True }
-    if ($Lite        -and $Advanced    -and $Settings.Core.Interface -eq 2)   { return $True }
-    if ($Lite        -and $Streamlined -and $Settings.Core.Interface -eq 2)   { return $True }
-
-    if ($Advanced    -and $Beginner    -and $Settings.Core.Interface -eq 3)   { return $True }
-    if ($Advanced    -and $Lite        -and $Settings.Core.Interface -eq 3)   { return $True }
-    if ($Advanced    -and $Streamlined -and $Settings.Core.Interface -eq 3)   { return $True }
-
-    if ($Streamlined -and $Beginner    -and $Settings.Core.Interface -eq 4)   { return $True }
-    if ($Streamlined -and $Lite        -and $Settings.Core.Interface -eq 4)   { return $True }
-    if ($Streamlined -and $Advanced    -and $Settings.Core.Interface -eq 4)   { return $True }
-
+    if (!$Simple   -and !$Advanced)                        { return $True }
+    if ( $Simple   -and  $Advanced)                        { return $True }
+    if ( $Simple   -and  $Settings.Core.Interface -eq 1)   { return $True }
+    if ( $Advanced -and  $Settings.Core.Interface -eq 2)   { return $True }
     return $False
 
 }
@@ -798,7 +778,8 @@ function CheckInterface([boolean]$Beginner=$False, [boolean]$Lite=$False, [boole
 
 
 #==============================================================================================================================================================================================
-function IsInterface([Switch]$Beginner, [Switch]$Lite, [Switch]$Advanced, [Switch]$Streamlined) { CheckInterface -Beginner $Beginner -Lite $Lite -Advanced $Advanced -Streamlined $Streamlined }
+function IsSimple()     { return $Settings.Core.Interface -eq 1 }
+function IsAdvanced()   { return $Settings.Core.Interface -eq 2 }
 
 
 

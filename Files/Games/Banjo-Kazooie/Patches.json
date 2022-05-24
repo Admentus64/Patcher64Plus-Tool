@@ -8,7 +8,7 @@
 		"rev"	: "B11F476D4BC8E039355241E871DC08CF"
 	} ],
 	"output"	: "_widescreen_patched",
-	"tooltip"	: "16:9 Widescreen adjusted format for Banjo-Kazooie{}- Supported: Rev 1 (US)"
+	"tooltip"	: "16:9 Widescreen adjusted format for Banjo-Kazooie{0}- Supported: Rev 1 (US)"
 }, {
 	"title"		: "Banjo-Dreamie",
 	"patch" : [ {

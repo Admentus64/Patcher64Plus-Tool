@@ -159,32 +159,32 @@ function ChangePatchPanel() {
     # Set combobox for patches
     $items = @()
     foreach ($item in $Files.json.patches) {
-        if ($item.hide -eq 1 -and !(IsInterface -Advanced))   { continue }
-        if ($item.hide -eq 2)                                 { continue }
+        if ($item.hide -eq 1 -and !(IsAdvanced))   { continue }
+        if ($item.hide -eq 2)                      { continue }
 
         if (!(IsSet $item.patch) -and (IsSet $item.rev)) {
             foreach ($i in $item.rev) {
                 if ($i -eq $GameRev.hash) {
-                    if ($item.priority -and !(IsInterface -Beginner))   { $Patches.Type.Items.Insert(0, $item.title) }
-                    else                                                { $Patches.Type.Items.Add($item.title)       }
+                    if ($item.priority -and !(IsSimple))   { $Patches.Type.Items.Insert(0, $item.title) }
+                    else                                   { $Patches.Type.Items.Add($item.title)       }
                 }
             }
         }
         elseif (!(IsSet $item.patch)) {
-            if ($item.priority -and !(IsInterface -Beginner))   { $Patches.Type.Items.Insert(0, $item.title) }
-            else                                                { $Patches.Type.Items.Add($item.title)       }
+            if ($item.priority -and !(IsSimple))   { $Patches.Type.Items.Insert(0, $item.title) }
+            else                                   { $Patches.Type.Items.Add($item.title)       }
         }
         elseif ($item.patch -isnot [array]) {
             if ( ( ($IsWiiVC -and $item.console -eq "Wii VC") -or (!$IsWiiVC -and $item.console -eq "Native") -or ($item.console -eq "Both") -or !(IsSet $item.console) ) ) {
-                if ($item.priority -and !(IsInterface -Beginner))   { $Patches.Type.Items.Insert(0, $item.title) }
-                else                                                { $Patches.Type.Items.Add($item.title)       }
+                if ($item.priority -and !(IsSimple))   { $Patches.Type.Items.Insert(0, $item.title) }
+                else                                   { $Patches.Type.Items.Add($item.title)       }
             }
         }
         else {
             foreach ($i in $item.patch) {
                 if ($i.rev -eq $GameRev.hash -and ( ($IsWiiVC -and $i.console -eq "Wii VC") -or (!$IsWiiVC -and $i.console -eq "Native") -or ($i.console -eq "Both") -or !(IsSet $i.console) ) ) {
-                    if ($item.priority -and !(IsInterface -Beginner))   { $Patches.Type.Items.Insert(0, $item.title) }
-                    else                                                { $Patches.Type.Items.Add($item.title)       }
+                    if ($item.priority -and !(IsSimple))   { $Patches.Type.Items.Insert(0, $item.title) }
+                    else                                   { $Patches.Type.Items.Add($item.title)       }
                 }
             }
         }
@@ -244,21 +244,18 @@ function SetMainScreenSize() {
     }
 
     # Custom Header Panel Visibility and Size
-    if ($Settings.Core.Interface -gt 1) {
-        $CustomHeader.Panel.Visible     = ($GameConsole.rom_title -gt 0) -or ($GameConsole.rom_gameID -gt 0)  -or $IsWiiVC
-        $CustomHeader.ROMTitle.Visible  = $CustomHeader.ROMTitleLabel.Visible  = ($GameConsole.rom_title -gt 0)  -and !$IsWiiVC
-        $CustomHeader.ROMGameID.Visible = $CustomHeader.ROMGameIDLabel.Visible = ($GameConsole.rom_gameID -eq 1) -and !$IsWiiVC
-        $CustomHeader.VCTitle.Visible   = $CustomHeader.VCTitleLabel.Visible   = $CustomHeader.VCGameID.Visible     = $CustomHeader.VCGameIDLabel.Visible     = $IsWiiVC
-        $CustomHeader.Region.Visible    = $CustomHeader.RegionLabel.Visible    = $CustomHeader.EnableRegion.Visible = $CustomHeader.EnableRegionLabel.Visible = ($GameConsole.rom_gameID -eq 2)
+    $CustomHeader.Panel.Visible     = ($GameConsole.rom_title -gt 0) -or ($GameConsole.rom_gameID -gt 0)  -or $IsWiiVC
+    $CustomHeader.ROMTitle.Visible  = $CustomHeader.ROMTitleLabel.Visible  = ($GameConsole.rom_title -gt 0)  -and !$IsWiiVC
+    $CustomHeader.ROMGameID.Visible = $CustomHeader.ROMGameIDLabel.Visible = ($GameConsole.rom_gameID -eq 1) -and !$IsWiiVC
+    $CustomHeader.VCTitle.Visible   = $CustomHeader.VCTitleLabel.Visible   = $CustomHeader.VCGameID.Visible     = $CustomHeader.VCGameIDLabel.Visible     = $IsWiiVC
+    $CustomHeader.Region.Visible    = $CustomHeader.RegionLabel.Visible    = $CustomHeader.EnableRegion.Visible = $CustomHeader.EnableRegionLabel.Visible = ($GameConsole.rom_gameID -eq 2)
 
-        if ($GameConsole.rom_gameID -eq 2)   { $CustomHeader.Panel.Height = (DPISize 80) }
-        else                                 { $CustomHeader.Panel.Height = (DPISize 50) }
-        $CustomHeader.Group.Height = $CustomHeader.Panel.Height
-    }
-    else { $CustomHeader.Group.Height = $CustomHeader.Panel.Height = 0 }
+    if ($GameConsole.rom_gameID -eq 2)   { $CustomHeader.Panel.Height = (DPISize 80) }
+    else                                 { $CustomHeader.Panel.Height = (DPISize 50) }
+    $CustomHeader.Group.Height = $CustomHeader.Panel.Height
 
     $InputPaths.InjectPanel.Visible = $IsWiiVC
-    $VC.Panel.Visible = $IsWiiVC -and $Settings.Core.Interface -ne 1
+    $VC.Panel.Visible = $IsWiiVC
 
     # Positioning
     if ($GameType.custom_patch -eq 1)   { $CurrentGame.Panel.Location = New-Object System.Drawing.Size((DPISize 10), ($InputPaths.PatchPanel.Bottom + (DPISize 5))) }
@@ -270,7 +267,7 @@ function SetMainScreenSize() {
     else                                                                                                                                      { $VC.Panel.Height = $VC.Group.Height = (DPISize 70) }
 
     # Arrange Panels
-    if ($IsWiiVC -and $Settings.Core.Interface -ne 1) {
+    if ($IsWiiVC) {
         if ( ($GameType.patches -eq 1) -or ($GameType.patches -eq 2 -and $IsWiiVC) ) {
             $Patches.Panel.Location = New-Object System.Drawing.Size((DPISize 10), ($CustomHeader.Panel.Bottom + (DPISize 5)))
             $VC.Panel.Location      = New-Object System.Drawing.Size((DPISize 10), ($Patches.Panel.Bottom      + (DPISize 5)))

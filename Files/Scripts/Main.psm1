@@ -67,10 +67,8 @@
     $menuBarCleanupFiles       = New-Object System.Windows.Forms.ToolStripButton;   $menuBarCleanupFiles.Text   = "Cleanup Files";      $menuBarEdit.DropDownItems.Add($menuBarCleanupFiles)
     $menuBarCleanupScripts     = New-Object System.Windows.Forms.ToolStripButton;   $menuBarCleanupScripts.Text = "Cleanup Scripts";    $menuBarEdit.DropDownItems.Add($menuBarCleanupScripts)
 
-    $global:menuBarBeginner    = New-Object System.Windows.Forms.ToolStripButton;   $menuBarBeginner.Text       = "Beginner";           $menuBarInterface.DropDownItems.Add($menuBarBeginner)
-    $global:menuBarLite        = New-Object System.Windows.Forms.ToolStripButton;   $menuBarLite.Text           = "Lite";               $menuBarInterface.DropDownItems.Add($menuBarLite)
+    $global:menuBarSimple      = New-Object System.Windows.Forms.ToolStripButton;   $menuBarSimple.Text         = "Simplified";         $menuBarInterface.DropDownItems.Add($menuBarSimple)
     $global:menuBarAdvanced    = New-Object System.Windows.Forms.ToolStripButton;   $menuBarAdvanced.Text       = "Advanced";           $menuBarInterface.DropDownItems.Add($menuBarAdvanced)
-    $global:menuBarStreamlined = New-Object System.Windows.Forms.ToolStripButton;   $menuBarStreamlined.Text    = "Streamlined";        $menuBarInterface.DropDownItems.Add($menuBarStreamlined)
     
     $menuBarInfo               = New-Object System.Windows.Forms.ToolStripButton;   $menuBarInfo.Text           = "Info";               $menuBarHelp.DropDownItems.Add($menuBarInfo)
     $menuBarLinks              = New-Object System.Windows.Forms.ToolStripButton;   $menuBarLinks.Text          = "Links";              $menuBarHelp.DropDownItems.Add($menuBarLinks)
@@ -90,15 +88,11 @@
     $menuBarCleanupFiles.Add_Click(   { CleanupFiles                 } )
     $menuBarCleanupScripts.Add_Click( { CleanupScripts               } )
 
-    if     ($Settings.Core.Interface -eq 1)   { $menuBarBeginner.BackColor    = "#D3D3D3" }
-    elseif ($Settings.Core.Interface -eq 2)   { $menuBarLite.BackColor        = "#D3D3D3" }
-    elseif ($Settings.Core.Interface -eq 3)   { $menuBarAdvanced.BackColor    = "#D3D3D3" }
-    elseif ($Settings.Core.Interface -eq 4)   { $menuBarStreamlined.BackColor = "#D3D3D3" }
-    else                                      { $menuBarBeginner.BackColor = "#D3D3D3"; $Settings.Core.Interface = 1 }
-    $menuBarBeginner.Add_Click(    { $Settings.Core.Interface = 1; $menuBarBeginner.BackColor = "#D3D3D3"; $menuBarLite.BackColor = "White";   $menuBarAdvanced.BackColor = "White";   $menuBarStreamlined.BackColor = "White";   ResetReduxSettings; ChangePatchPanel; DisablePatches; SetMainScreenSize } )
-    $menuBarLite.Add_Click(        { $Settings.Core.Interface = 2; $menuBarBeginner.BackColor = "White";   $menuBarLite.BackColor = "#D3D3D3"; $menuBarAdvanced.BackColor = "White";   $menuBarStreamlined.BackColor = "White";   ResetReduxSettings; ChangePatchPanel; DisablePatches; SetMainScreenSize } )
-    $menuBarAdvanced.Add_Click(    { $Settings.Core.Interface = 3; $menuBarBeginner.BackColor = "White";   $menuBarLite.BackColor = "White";   $menuBarAdvanced.BackColor = "#D3D3D3"; $menuBarStreamlined.BackColor = "White";   ResetReduxSettings; ChangePatchPanel; DisablePatches; SetMainScreenSize } )
-    $menuBarStreamlined.Add_Click( { $Settings.Core.Interface = 4; $menuBarBeginner.BackColor = "White";   $menuBarLite.BackColor = "White";   $menuBarAdvanced.BackColor = "White";   $menuBarStreamlined.BackColor = "#D3D3D3"; ResetReduxSettings; ChangePatchPanel; DisablePatches; SetMainScreenSize } )
+    if     ($Settings.Core.Interface -eq 1)   { $menuBarSimple.BackColor    = "#D3D3D3" }
+    elseif ($Settings.Core.Interface -eq 2)   { $menuBarAdvanced.BackColor  = "#D3D3D3" }
+    else                                      { $menuBarSimple.BackColor    = "#D3D3D3"; $Settings.Core.Interface = 1 }
+    $menuBarSimple.Add_Click(   { $Settings.Core.Interface = 1; $menuBarSimple.BackColor = "#D3D3D3"; $menuBarAdvanced.BackColor = "White";   ResetReduxSettings; ChangePatchPanel; DisablePatches; SetMainScreenSize } )
+    $menuBarAdvanced.Add_Click( { $Settings.Core.Interface = 2; $menuBarSimple.BackColor = "White";   $menuBarAdvanced.BackColor = "#D3D3D3"; ResetReduxSettings; ChangePatchPanel; DisablePatches; SetMainScreenSize } )
 
     $menuBarInfo.Add_Click(    { If (!(IsSet $CreditsDialog)) { CreateCreditsDialog | Out-Null }; $Credits.Sections | foreach { $_.Visible = $False }; $Credits.Sections[0].Visible = $True; $CreditsDialog.ShowDialog() } )
     $menuBarLinks.Add_Click(   { If (!(IsSet $CreditsDialog)) { CreateCreditsDialog | Out-Null }; $Credits.Sections | foreach { $_.Visible = $False }; $Credits.Sections[3].Visible = $True; $CreditsDialog.ShowDialog() } )
@@ -511,8 +505,8 @@ function SetJSONFile($File) {
 function DisablePatches() {
     
     # Disable boxes if needed
-    EnableElem -Elem @($Patches.Extend,    $Patches.ExtendLabel)                          -Active ((IsSet $GamePatch.allow_extend) -and $Settings.Core.Interface -ne 2 -and $GameRev.extend -ne 0) -Hide
-    EnableElem -Elem @($Patches.Redux,     $Patches.ReduxLabel)                           -Active ((IsSet $GamePatch.redux.file)   -and $Settings.Core.Interface -ne 2 -and $GameRev.redux  -ne 0) -Hide
+    EnableElem -Elem @($Patches.Extend,    $Patches.ExtendLabel)                          -Active ((IsSet $GamePatch.allow_extend) -and $GameRev.extend -ne 0) -Hide
+    EnableElem -Elem @($Patches.Redux,     $Patches.ReduxLabel)                           -Active ((IsSet $GamePatch.redux.file)   -and $GameRev.redux  -ne 0) -Hide
     EnableElem -Elem @($Patches.Options,   $Patches.OptionsLabel, $Patches.OptionsButton) -Active ((TestFile $GameFiles.script)    -and ($GamePatch.options -eq 1 -or $Settings.Debug.ForceOptions -ne $False) -and $GameRev.options -ne 0) -Hide
     EnableElem -Elem $Patches.OptionsButton                                               -Active $Patches.Options.Checked
     DisableReduxOptions

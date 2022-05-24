@@ -239,27 +239,23 @@ ShowPowerShellConsole ($Settings.Debug.Console -eq $True)
 PerformUpdate
 
 # Ask for default interface mode on first time use
-if ($Settings.Core.Interface -ne 1 -and $Settings.Core.Interface -ne 2 -and $Settings.Core.Interface -ne 3 -and $Settings.Core.Interface -ne 4 -and !$FatalError) {
+if ($Settings.Core.Interface -ne 1 -and $Settings.Core.Interface -ne 2 -and !$FatalError) {
     $global:PopupDialog = New-Object System.Windows.Forms.Form
-    $PopupDialog.Size = DPISize (New-Object System.Drawing.Size(510, 150))
+    $PopupDialog.Size = DPISize (New-Object System.Drawing.Size(330, 150))
     $PopupDialog.Text = $Patcher.Title
     $PopupDialog.FormBorderStyle = [System.Windows.Forms.FormBorderStyle]::FixedDialog
     $PopupDialog.StartPosition = "CenterScreen"
     $PopupDialog.Icon = $Files.icon.main
 
     $label   = CreateLabel  -x (DPISize 20)  -Y (DPISize 10) -Text "Select Your Default Interface Mode:" -Font $Fonts.Medium -AddTo $PopupDialog
-    $hud1Btn = CreateButton -X (DPISize 20)  -Y (DPISize 50)  -Width (DPISize 100) -Height (DPISize 50) -AddTo $PopupDialog -Text "Beginner Mode"    -Info "Hide advanced options"
-    $hud2Btn = CreateButton -X (DPISize 140) -Y (DPISize 50)  -Width (DPISize 100) -Height (DPISize 50) -AddTo $PopupDialog -Text "Lite Mode"        -Info "Hide options that are likely incompatible with various ROM hacks"
-    $hud3Btn = CreateButton -X (DPISize 260) -Y (DPISize 50)  -Width (DPISize 100) -Height (DPISize 50) -AddTo $PopupDialog -Text "Advanced Mode"    -Info "Show all options. This is the slowest mode due the many options it has."
-    $hud4Btn = CreateButton -X (DPISize 380) -Y (DPISize 50)  -Width (DPISize 100) -Height (DPISize 50) -AddTo $PopupDialog -Text "Streamlined Mode" -Info "Show all essential options, even advanced ones. But hide those you likely would not need"
+    $hud1Btn = CreateButton -X (DPISize 20)  -Y (DPISize 50) -Width (DPISize 120) -Height (DPISize 50) -AddTo $PopupDialog -Text "Simplified Mode" -Info "Simplify the amount of available options."
+    $hud2Btn = CreateButton -X (DPISize 180) -Y (DPISize 50) -Width (DPISize 120) -Height (DPISize 50) -AddTo $PopupDialog -Text "Advanced Mode"   -Info "Show all options. This is the slowest mode due the many options it has."
 
     $hud1Btn.Add_Click( { $Settings.Core.Interface = 1; $PopupDialog.Close() } )
     $hud2Btn.Add_Click( { $Settings.Core.Interface = 2; $PopupDialog.Close() } )
-    $hud3Btn.Add_Click( { $Settings.Core.Interface = 3; $PopupDialog.Close() } )
-    $hud4Btn.Add_Click( { $Settings.Core.Interface = 4; $PopupDialog.Close() } )
 
     $PopupDialog.ShowDialog() | Out-Null
-    $global:PopupDialog = $label = $hud1Btn = $Hud2Btn = $Hud3Btn = $Hud4Btn = $null
+    $global:PopupDialog = $label = $hud1Btn = $Hud2Btn = $null
 }
 
 # Create the dialogs to show to the user

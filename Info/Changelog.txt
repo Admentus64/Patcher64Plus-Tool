@@ -1,3 +1,7 @@
+v18.0.1
+- Added Rev2 Widescreen patches for OoT and Gold Quest
+- Removed "Lite" and "Streamlined" GUI modes and added "Simplified" GUI mode
+
 v18.0.0
 - Added new Text Editor for OoT & MM
 - Added Shop Model Tunic colors for OoT (by Username0713)
