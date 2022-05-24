@@ -464,8 +464,8 @@ function RepackWADFile($GameID) {
     Push-Location -LiteralPath $Paths.Temp
 
     # Repack the WAD using the new files
-    if ($GameID -ne $null)   { & $Files.tool.wadpacker $tik $tmd $cert $WadFile.Patched '-sign' '-i' $GameID }
-    else                     { & $Files.tool.wadpacker $tik $tmd $cert $WadFile.Patched '-sign' }
+    if ($GameID -ne $null -and $Settings.Debug.NoChannelChange -ne $True)   { & $Files.tool.wadpacker $tik $tmd $cert $WadFile.Patched '-sign' '-i' $GameID }
+    else                                                                    { & $Files.tool.wadpacker $tik $tmd $cert $WadFile.Patched '-sign'              }
 
     # Doesn't matter, but return to where we were.
     Pop-Location
