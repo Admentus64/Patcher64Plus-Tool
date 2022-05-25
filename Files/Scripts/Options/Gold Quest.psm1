@@ -1635,7 +1635,6 @@ function CreateTabColors() {
 
     CreateFairyColorOptions -Name "Navi"
 
-    if ($Settings.Core.Interface -ne 3) { return }
     CreateReduxCheckBox -Name "BetaNavi" -Text "Beta Navi Colors" -Info "Use the Beta colors for Navi" -Column 1 -Row 2
     $Redux.Colors.BetaNavi.Add_CheckedChanged({ EnableElem -Elem $Redux.Colors.Fairy -Active (!$this.checked) })
     EnableElem -Elem $Redux.Colors.Fairy -Active (!$Redux.Colors.BetaNavi.Checked)

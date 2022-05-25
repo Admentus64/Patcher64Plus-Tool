@@ -337,14 +337,14 @@ function CreateButton([uint16]$X=0, [uint16]$Y=0, [uint16]$Width=(DPISize 100), 
 function CreateTabButtons([string[]]$Tabs, [boolean]$NoLanguages=$False, [object]$AddTo=$Redux.Panel) {
     
     if ($Tabs.Count -eq 0) {
-        if ( (($GamePatch.redux.options -eq 1 -and $GameRev.redux -ne 0) -or ((IsSet $Files.json.languages) -and $GameRev.languages -ne 0)) -and $Settings.Core.Interface -ne 2) {
+        if ( (($GamePatch.redux.options -eq 1 -and $GameRev.redux -ne 0) -or ((IsSet $Files.json.languages) -and $GameRev.languages -ne 0)) ) {
             $Tabs += "Main"
             $Last.TabName = "Main"
         }
     }
 
-    if ($GamePatch.redux.options -eq 1 -and $GameRev.redux     -ne 0 -and $Settings.Core.Interface -ne 2)                       { $Tabs += "Redux" }
-    if ( (IsSet $Files.json.languages) -and $GameRev.languages -ne 0 -and $Settings.Core.Interface -ne 2 -and !$NoLanguages)    { $Tabs += "Language" }
+    if ($GamePatch.redux.options -eq 1 -and $GameRev.redux     -ne 0)                      { $Tabs += "Redux" }
+    if ( (IsSet $Files.json.languages) -and $GameRev.languages -ne 0 -and !$NoLanguages)   { $Tabs += "Language" }
     $global:ReduxTabs = @()
     if (!(IsSet $GameSettings.Core) -and $Tabs.Length -gt 0) { $GameSettings.Core  = @{} }
 
