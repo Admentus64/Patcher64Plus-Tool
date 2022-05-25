@@ -24,7 +24,7 @@
 	"output"		: "_expert_edition_patched",
 	"tooltip"		: "Removes the DK Barrels, Star Barrels, and Warp Barrels to make the game more challenging{0}Only recommended for hardcore players!{0}- Supported: Rev 0 (US)"
 }, {
-	"title"			: "Donkey Kong Country: German 60 Hz",
+	"title"			: "Donkey Kong Country: German 60Hz",
 	"vc_title"		: "Donkey Kong Country (German)",
 	"vc_gameID"		: "JAEG",
 	"patch"	: [ {

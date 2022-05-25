@@ -818,7 +818,7 @@ https://github.com/DaruniasJoy/OoT-Custom-Sequences
 --- Expert Edition ---
 - Q
 
---- German 60 Hz ---
+--- German 60Hz ---
 - GhostlyDark
 
 
