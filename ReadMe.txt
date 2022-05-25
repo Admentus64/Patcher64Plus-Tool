@@ -116,13 +116,21 @@ The following games have included patches:
 - The Legend of Zelda: Majora's Mask (MM)
 - Super Mario 64 (SM64)
 - Paper Mario (PP)
-- Super Smash Bros. (Smash)
+- Super Smash Bros. (SSB)
 - Mario Kart 64 (MK64)
+- Banjo-Kazooie (BK)
+- Banjo-Tooie (BT)
+- Donkey Kong 64 (DK64)
+- Diddy Kong Racing (DKR)
 - The Legend of Zelda: A Link to the Past (ALttP)
 - Super Mario World (SMW)
 - Super Metroid (SM)
+- Donkey Kong Country (DKC)
 - The Legend of Zelda (TLoZ)
 - Zelda II: The Adventure of Link (TAoL)
+- The Legend of Zelda: Link's Awakening DX (LADX)
+- The Legend of Zelda: Oracle of Ages (OoA)
+- The Legend of Zelda: Oracle of Ages (OoS)
 
 
 
@@ -135,9 +143,11 @@ The following patches are included:
 - The Legend of Zelda: The Missing Link (OoT)
 - The Legend of Zelda: Dawn & Dusk (OoT)
 - The Legend of Zelda: Master of Time (OoT)
+- The Legend of Zelda: Gold Quest (OoT)
 - The Fate of the Bombiwa (OoT)
 - The Legend of Zelda: Nimpize Adventure (OoT)
 - Ocarina of Time Puzzling (OoT)
+- Pots Challenge (OoT)
 - KZ Practice ROM (MM)
 - KZ Practice ROM Lite (MM)
 - Majora's Mask: Masked Quest (MM)
@@ -152,10 +162,28 @@ The following patches are included:
 - Paper Mario: Hard Mode (PP)
 - Paper Mario: Hard Mode+ (PP)
 - Paper Mario: Insane Mode (PP)
-- Super Smash Bros. Remix (Smash)
-- CPUs use human items including shells (MK64)
+- Super Smash Bros. Remix (SSB)
+- Mario Kart 64: Amped Up (MK64)
+- OverKart (MK64)
+- Battle Kart 64 (MK64)
+- Hooting Time (MK64)
+- Banjo-Dreamie (BK)
+- Banjo-Kazooie Returns (BK)
+- Banjo-Kazooie: Cut-Throat Coast (BK)
+- Banjo-Kazooie: World Collide (BK)
+- Banjo-Kazooie: The Jiggies of Time (BK)
+- Banjo-Kazooie: The Legend of the Crystal Jiggy (BK)
+- Banjo-Kazooie: The Night-Bear Before Christmas (BK)
+- Banjo-Kazooie: Gruntilda's Mask (BK)
+- Banjo-Kazooie: Quest for Cake (BK)
+- Snow Glow Village (BK)
+- Tag Anywhere (DK64)
 - Parallel Worlds / Parallel Remodel (ALttP)
 - Super Kaizo World 1/2/3 (SMW)
+- Donkey Kong Country: Boss Blitz (DKC)
+- Donkey Kong Country: Expert Edition (DKC)
+- Donkey Kong Country: German 60Hz (DKC)
+- Donkey Kong Country (DKC)
 
 
 
@@ -170,6 +198,7 @@ The following games have support for Redux:
 - Super Metroid (SM)
 - The Legend of Zelda (TLoZ)
 - Zelda II: The Adventure of Link (TAoL)
+- The Legend of Zelda: Link's Awakening DX (LADX)
 
 The Redux patch for The Legend of Zelda: A Link to the Past is shown as a patch option instead and thus always forced.
 
@@ -177,25 +206,40 @@ The following games have support for Additional Options:
 - The Legend of Zelda: Ocarina of Time (OoT)
 - The Legend of Zelda: Majora's Mask (MM)
 - Super Mario 64 (SM64)
+- Paper Mario (PP)
+- Super Smash Bros. (SSB)
+- Mario Kart 64 (MK64)
+- Banjo-Kazooie (BK)
+- Bomberman Hero (BH)
+- GoldenEye 007 (GE)
 - The Legend of Zelda: A Link to the Past (ALttP)
 - Super Metroid (SM)
 - The Legend of Zelda (TLoZ)
 - Zelda II: The Adventure of Link (TAoL)
+- The Legend of Zelda: Link's Awakening DX (LADX)
 
-Some other patches for Super Mario 64 also support Additional Options.
+Some ROM Hacks for Banjo-Kazooie, Ocarina of Time and Super Mario 64 also support Additional Options.
 
-Ocarina of Time and Majora's Mask also have support for language selection.
+Ocarina of Time and Majora's Mask also have support for a language selection.
 
 Supported languages for Ocarina of Time include:
 - English
-- Japanese
+- German
+- French
 - Spanish
+- Brazilian Portuguese
+- Italian
 - Polish
 - Russian
-- Chinese
+- Japanese
+- Simplified Chinese
 
 Supported languages for Majora's Mask include:
 - English
+- German
+- French
+- Spanish
+- Brazilian Portuguese
 - Polish
 - Russian
 
@@ -238,23 +282,23 @@ Options offers smaller individual changes that can be applied individually from 
 ==================================
 
 --- Checkboxes ---
-- Enable Redux			Include the Redux patch into the selected patch. This checkbox is only shown if it is supported.
-- Enable Options		Allow for the customization of the ROM. This checkbox is only shown if it is supported.
-- Downgrade			Downgrade a ROM to the first revision, but only works with No-Intro US ROMs. This checkbox is only shown if it is supported.
+- Enable Redux              Include the Redux patch into the selected patch. This checkbox is only shown if it is supported.
+- Enable Options            Allow for the customization of the ROM. This checkbox is only shown if it is supported.
+- Downgrade                 Downgrade a ROM to the first revision, but only works with No-Intro US ROMs. This checkbox is only shown if it is supported.
 
 --- Buttons ---
-- Select Options		Additional Options in general can be fully customized in here.
-- Patch Selected Option		Run the patching process.
+- Select Options            Additional Options in general can be fully customized in here.
+- Patch Selected Option     Run the patching process.
 
 --- Select Options ---
-- Main				Contains several options in general to customize.
-- Audiovisual			Contains graphics, music and sound related options to customize.
-- Difficulty			Contains difficulty-related options to customize.
-- Colors			Contains options in where HUD elements and ingame objects can be customized with different color schemes.
-- Equipment			Contains options to change the behaviour of equipable or usable items, such as ammunition.
-- Cutscenes			Contains cutscene- and skip-related options to customize, often to speed-up the flow of the game.
-- Redux				Additional Options that are require the Redux patch can be customized in here.
-- Language			Different languages can be customized in here, as well as specific options that are language-dependant.
+- Main                      Contains several options in general to customize.
+- Audiovisual               Contains graphics, music and sound related options to customize.
+- Difficulty                Contains difficulty-related options to customize.
+- Colors                    Contains options in where HUD elements and ingame objects can be customized with different color schemes.
+- Equipment                 Contains options to change the behaviour of equipable or usable items, such as ammunition.
+- Cutscenes                 Contains cutscene- and skip-related options to customize, often to speed-up the flow of the game.
+- Redux                     Additional Options that are require the Redux patch can be customized in here.
+- Language                  Different languages can be customized in here, as well as specific options that are language-dependant.
 
 
 
@@ -263,15 +307,15 @@ Options offers smaller individual changes that can be applied individually from 
 =====================================
 
 --- Checkboxes ---
-- Remove All T64		Remove all injected custom textures by the Virtual Console in the .T64 format.
-- Remove Filter			Remove the dark filter injected by the Virtual Console to display the original N64 gamma.
-- Expand Memory			Expand the available RAM memory, but invalidates existing AR/Gecko codes.
-- Remap D-Pad			Remap the D-Pad to their four D-Pad button directions instead of toggling the minimap.
-- Remap L Button		Remap L to it's actual L button (ex. for showing the interface in SM64).
-- Remap C-Down			Remap C-Down to toggle the minimap button.
-- Remap Z Button		Remap Z, ZL and ZR to toggle the minimap.
-- Leave D-Pad Up		Keep D-Pad for toggling the minimap.
+- Remove All T64            Remove all injected custom textures by the Virtual Console in the .T64 format.
+- Remove Filter             Remove the dark filter injected by the Virtual Console to display the original N64 gamma.
+- Expand Memory             Expand the available RAM memory, but invalidates existing AR/Gecko codes.
+- Remap D-Pad               Remap the D-Pad to their four D-Pad button directions instead of toggling the minimap.
+- Remap L Button            Remap L to it's actual L button (ex. for showing the interface in SM64).
+- Remap C-Down              Remap C-Down to toggle the minimap button.
+- Remap Z Button            Remap Z, ZL and ZR to toggle the minimap.
+- Leave D-Pad Up            Keep D-Pad for toggling the minimap.
 
 --- Buttons ---
-- Patch VC Emulator Only	Only apply the VC Patch Options to the ROM, and nothing else.
-- Extract ROM Only		Only extract the ROM from the WAD, and nothing else. Appears in the same folder as the WAD itself.
+- Patch VC Emulator Only    Only apply the VC Patch Options to the ROM, and nothing else.
+- Extract ROM Only          Only extract the ROM from the WAD, and nothing else. Appears in the same folder as the WAD itself.
