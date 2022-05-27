@@ -681,6 +681,21 @@ function ByteOptions() {
 
 
 
+    # RUPEE ICON COLORS #
+
+    if ( (IsChecked $Redux.UI.RupeeIconColors) -and $Patches.Redux.Checked) {
+        if (IsDefaultColor -Elem $Redux.Colors.SetRupee[0] -Not)   { ChangeBytes -Offset "3488F5C" -Values @($Redux.Colors.SetRupee[0].Color.R, $Redux.Colors.SetRupee[0].Color.G, $Redux.Colors.SetRupee[0].Color.B) } # Base wallet 
+        if (IsDefaultColor -Elem $Redux.Colors.SetRupee[1] -Not)   { ChangeBytes -Offset "3488F5F" -Values @($Redux.Colors.SetRupee[1].Color.R, $Redux.Colors.SetRupee[1].Color.G, $Redux.Colors.SetRupee[1].Color.B) } # Adult's Wallet
+        if (IsDefaultColor -Elem $Redux.Colors.SetRupee[2] -Not)   { ChangeBytes -Offset "3488F62" -Values @($Redux.Colors.SetRupee[2].Color.R, $Redux.Colors.SetRupee[2].Color.G, $Redux.Colors.SetRupee[2].Color.B) } # Giant's Wallet
+        if (IsDefaultColor -Elem $Redux.Colors.SetRupee[3] -Not)   { ChangeBytes -Offset "3488F65" -Values @($Redux.Colors.SetRupee[3].Color.R, $Redux.Colors.SetRupee[3].Color.G, $Redux.Colors.SetRupee[3].Color.B) } # Tycoon's Wallet 
+    }
+    elseif (IsDefaultColor -Elem $Redux.Colors.SetRupeeVanilla -Not) {
+        ChangeBytes -Offset "AEB766" -Values @($Redux.Colors.SetRupeeVanilla.Color.R, $Redux.Colors.SetRupeeVanilla.Color.G)
+        ChangeBytes -Offset "AEB77A" -Values $Redux.Colors.SetRupeeVanilla.Color.B
+    }
+
+
+
     # MISC COLORS #
 
     if (IsChecked $Redux.Colors.BoomerangTrail) {
@@ -953,6 +968,7 @@ function ByteOptions() {
     if (IsValue -Elem $Redux.Hitbox.ShieldRecoil      -Not)   { ChangeBytes -Offset "BD4162" -Values (Get16Bit ($Redux.Hitbox.ShieldRecoil.Value + 45000))     }
     if (IsValue -Elem $Redux.Hitbox.Hookshot          -Not)   { ChangeBytes -Offset "CAD3C7" -Values (Get8Bit $Redux.Hitbox.Hookshot.Value)                    }
     if (IsValue -Elem $Redux.Hitbox.Longshot          -Not)   { ChangeBytes -Offset "CAD3B7" -Values (Get8Bit $Redux.Hitbox.Longshot.Value)                    }
+
 
 
     # UNLOCK CHILD RESTRICTIONS #
@@ -1261,7 +1277,7 @@ function ByteReduxOptions() {
         ChangeBytes -Offset "BB2F96"  -Values   $Redux.Colors.SetButtons[0].Color.B # Blue
     }
 
-    if (IsDefaultColor -Elem $Redux.Colors.SetButtons[1] -Not) { ChangeBytes -Offset "348084B" -IsDec -Values @($Redux.Colors.SetButtons[1].Color.R, $Redux.Colors.SetButtons[1].Color.G, $Redux.Colors.SetButtons[1].Color.B) -Interval 2 } # B Button 
+    if (IsDefaultColor -Elem $Redux.Colors.SetButtons[1] -Not) { ChangeBytes -Offset "348084B" -Values @($Redux.Colors.SetButtons[1].Color.R, $Redux.Colors.SetButtons[1].Color.G, $Redux.Colors.SetButtons[1].Color.B) -Interval 2 } # B Button 
 
     if (IsDefaultColor -Elem $Redux.Colors.SetButtons[2] -Not) { # C Buttons
         ChangeBytes -Offset "3480851" -Values @($Redux.Colors.SetButtons[2].Color.R, $Redux.Colors.SetButtons[2].Color.G, $Redux.Colors.SetButtons[2].Color.B) -Interval 2
@@ -1289,7 +1305,7 @@ function ByteReduxOptions() {
         ChangeBytes -Offset "AE9EC6" -Values @($Redux.Colors.SetButtons[3].Color.R, $Redux.Colors.SetButtons[3].Color.G) # Red + Green
         ChangeBytes -Offset "AE9ED8" -Values @(53, 238, $Redux.Colors.SetButtons[3].Color.B) # Blue
     }
-
+    
 
 
     # HUD COLORS #
@@ -1353,6 +1369,8 @@ function WholeLanguageOptions() {
 
 #==============================================================================================================================================================================================
 function ByteLanguageOptions() {
+    
+    Write-Host "456"
 
     if (IsChecked $Redux.Text.Speed2x) {
         ChangeBytes -Offset "B5006F" -Values "02"          # Text Speed
@@ -1617,9 +1635,10 @@ function CreateTabRedux() {
 
 
 
-    # BUTTON COLORS #
+    # COLORS #
 
     CreateButtonColorOptions
+    CreateRupeeColorOptions
 
 }
 
@@ -2083,14 +2102,9 @@ function CreateTabColors() {
 
 
 
-    # SPIN ATTACK COLORS #
+    # COLORS #
 
     CreateSpinAttackColorOptions
-
-
-
-    # SWORD TRAIL COLORS #
-
     CreateSwordTrailColorOptions
 
 
@@ -2102,6 +2116,12 @@ function CreateTabColors() {
     CreateReduxCheckBox -Name "BetaNavi" -Text "Beta Navi Colors" -Info "Use the Beta colors for Navi" -Column 1 -Row 2
     $Redux.Colors.BetaNavi.Add_CheckedChanged({ EnableElem -Elem $Redux.Colors.Fairy -Active (!$this.checked) })
     EnableElem -Elem $Redux.Colors.Fairy -Active (!$Redux.Colors.BetaNavi.Checked)
+
+
+
+    # RUPEE ICON COLOR #
+
+    CreateRupeeVanillaColorOptions
 
 
 
@@ -2177,14 +2197,14 @@ function CreateTabEquipment2() {
      # STARTING UPGRADES #
 
     CreateReduxGroup    -Tag  "Save"          -Text "Starting Upgrades" -Advanced
-    CreateReduxComboBox -Name "DekuSticks"    -Text "Deku Sticks"     -Items ("Standard", "Big", "Biggest")                                       -Info "Set the starting capacity upgrade level for the Deku Sticks"
-    CreateReduxComboBox -Name "DekuNuts"      -Text "Deku Nuts"       -Items ("Standard", "Big", "Biggest")                                       -Info "Set the starting capacity upgrade level for the Deku Nuts"
-    CreateReduxComboBox -Name "BulletBag"     -Text "Bullet Seed Bag" -Items ("Standard", "Big", "Biggest")                                       -Info "Set the starting capacity upgrade level for the Bullet Seed Bag"
-    CreateReduxComboBox -Name "Quiver"        -Text "Quiver"          -Items ("Standard", "Big", "Biggest")                                       -Info "Set the starting capacity upgrade level for the Quiver"
-    CreateReduxComboBox -Name "BombBag"       -Text "Bomb Bag"        -Items ("Standard", "Big", "Biggest")                                       -Info "Set the starting capacity upgrade level for the Bomb Bag"
-    CreateReduxComboBox -Name "Strength"      -Text "Strength"        -Items ("None", "Goron's Bracelet", "Silver Gauntlets", "Golden Gauntlets") -Info "Set the starting capacity upgrade level for the Bracelet / Gauntlets"
-    CreateReduxComboBox -Name "Scale"         -Text "Scale"           -Items ("None", "Silver Scale", "Golden Scale")                             -Info "Set the starting capacity upgrade level for the Scale"
-    CreateReduxComboBox -Name "Wallet"        -Text "Wallet"          -Items ("Wallet", "Adult's Wallet", "Giant's Wallet", "Tycoon Wallet")      -Info "Set the starting capacity upgrade level for the Wallet" -Warning 'The "Tycoon Wallet" is unused and has issues'
+    CreateReduxComboBox -Name "DekuSticks"    -Text "Deku Sticks"     -Items ("Standard", "Big", "Biggest")                                         -Info "Set the starting capacity upgrade level for the Deku Sticks"
+    CreateReduxComboBox -Name "DekuNuts"      -Text "Deku Nuts"       -Items ("Standard", "Big", "Biggest")                                         -Info "Set the starting capacity upgrade level for the Deku Nuts"
+    CreateReduxComboBox -Name "BulletBag"     -Text "Bullet Seed Bag" -Items ("Standard", "Big", "Biggest")                                         -Info "Set the starting capacity upgrade level for the Bullet Seed Bag"
+    CreateReduxComboBox -Name "Quiver"        -Text "Quiver"          -Items ("Standard", "Big", "Biggest")                                         -Info "Set the starting capacity upgrade level for the Quiver"
+    CreateReduxComboBox -Name "BombBag"       -Text "Bomb Bag"        -Items ("Standard", "Big", "Biggest")                                         -Info "Set the starting capacity upgrade level for the Bomb Bag"
+    CreateReduxComboBox -Name "Strength"      -Text "Strength"        -Items ("None", "Goron's Bracelet", "Silver Gauntlets", "Golden Gauntlets")   -Info "Set the starting capacity upgrade level for the Bracelet / Gauntlets"
+    CreateReduxComboBox -Name "Scale"         -Text "Scale"           -Items ("None", "Silver Scale", "Golden Scale")                               -Info "Set the starting capacity upgrade level for the Scale"
+    CreateReduxComboBox -Name "Wallet"        -Text "Wallet"          -Items ("Base Wallet", "Adult's Wallet", "Giant's Wallet", "Tycoon's Wallet") -Info "Set the starting capacity upgrade level for the Wallet" -Warning 'The "Tycoon Wallet" is unused and has issues'
 
     CreateReduxTextBox  -Name "Hearts"        -Text "Hearts" -Value 3 -Min 1 -Max 20 -Info "Start a new save file with the chosen amount of hearts"
     CreateReduxCheckBox -Name "DoubleDefense" -Text "Double Defense"                 -Info "Start a new save file with the double defense upgrade"

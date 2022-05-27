@@ -40,7 +40,7 @@
 
         # Language Patch
         $global:LanguagePatch = $global:LanguagePatchFile = $null
-        if ( (IsSet $Files.json.languages) -and $Settings.Core.Interface -ne 2 -and (IsChecked $Patches.Options) -and (IsSet $Redux.Language) ) {
+        if ( (IsSet $Files.json.languages) -and (IsChecked $Patches.Options) -and (IsSet $Redux.Language) ) {
             for ($i=0; $i -lt $Files.json.languages.Length; $i++) {
                 if (IsChecked $Redux.Language[$i]) {
                     $global:LanguagePatch = $Files.json.languages[$i]
@@ -65,23 +65,19 @@
     }
 
     #  Title / GameID
-    if ($Settings.Core.Interface -eq 2 -or $Settings.Core.Interface -eq 3) {
-        if ($CustomHeader.EnableHeader.Checked) {
-            if (!$IsWiiVC) {
-                if ($CustomHeader.ROMTitle.TextLength  -gt 0)   { $Header[0] = [string]$CustomHeader.ROMTitle.Text }
-                if ($CustomHeader.ROMGameID.TextLength -eq 4)   { $Header[1] = [string]$CustomHeader.ROMGameID.Text }
-            }
-            else {
-                if ($CustomHeader.VCTitle.TextLength  -gt 0)    { $Header[2] = [string]$CustomHeader.VCTitle.Text }
-                if ($CustomHeader.VCGameID.TextLength -eq 4)    { $Header[3] = [string]$CustomHeader.VCGameID.Text }
-            }
+    if ($CustomHeader.EnableHeader.Checked) {
+        if (!$IsWiiVC) {
+            if ($CustomHeader.ROMTitle.TextLength  -gt 0)   { $Header[0] = [string]$CustomHeader.ROMTitle.Text }
+            if ($CustomHeader.ROMGameID.TextLength -eq 4)   { $Header[1] = [string]$CustomHeader.ROMGameID.Text }
+        }
+        else {
+            if ($CustomHeader.VCTitle.TextLength  -gt 0)    { $Header[2] = [string]$CustomHeader.VCTitle.Text }
+            if ($CustomHeader.VCGameID.TextLength -eq 4)    { $Header[3] = [string]$CustomHeader.VCGameID.Text }
         }
     }
 
     # Region
-    if ($Settings.Core.Interface -eq 2 -or $Settings.Core.Interface -eq 3) {
-        if ($CustomHeader.EnableRegion.Checked -and $GameConsole.rom_gameID -eq 2) { $Header[4] = [Byte]$CustomHeader.Region.SelectedIndex }
-    }
+    if ($CustomHeader.EnableRegion.Checked -and $GameConsole.rom_gameID -eq 2) { $Header[4] = [Byte]$CustomHeader.Region.SelectedIndex }
     
     # Set ROM
     if ($GameType.checksum -ne 0) {
@@ -436,6 +432,7 @@ function PatchingAdditionalOptions() {
     # Language Options
     if ( (GetCommand "CheckLanguageOptions") -and (GetCommand "ByteLanguageOptions") ) {
         if ( (iex "CheckLanguageOptions") -and (IsSet $LanguagePatch.script_dma) ) {
+            write-host "BBB"
             UpdateStatusLabel ("Patching " + $GameType.mode + " Additional Language Options...")
 
             $start  = CombineHex $ByteArrayGame[((GetDecimal $LanguagePatch.script_dma)+0)..((GetDecimal $LanguagePatch.script_dma)+3)]

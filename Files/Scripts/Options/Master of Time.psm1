@@ -403,6 +403,15 @@ function ByteOptions() {
 
 
 
+    # RUPEE ICON COLOR
+
+    if (IsDefaultColor -Elem $Redux.Colors.SetRupeeVanilla -Not) {
+        ChangeBytes -Offset "AEB766" -Values @($Redux.Colors.SetRupeeVanilla.Color.R, $Redux.Colors.SetRupeeVanilla.Color.G)
+        ChangeBytes -Offset "AEB77A" -Values $Redux.Colors.SetRupeeVanilla.Color.B
+    }
+
+
+
     # MISC COLORS #
 
     if (IsChecked $Redux.Colors.PauseScreenColors) {
@@ -1049,28 +1058,18 @@ function CreateTabColors() {
 
 
 
-    # SPIN ATTACK COLORS #
+    # COLORS #
 
     CreateSpinAttackColorOptions
-
-
-
-    # SWORD TRAIL COLORS #
-
     CreateSwordTrailColorOptions
-
-
-
-    # FAIRY COLORS #
-
     CreateFairyColorOptions -Name "Navi"
+    CreateRupeeVanillaColorOptions
 
 
 
     # MISC COLORS #
 
     CreateReduxGroup -Tag "Colors" -Text "Misc Colors"
-
     CreateReduxCheckBox -Name "PauseScreenColors" -Text "MM Pause Screen Colors" -Info "Use the Pause Screen color scheme from Majora's Mask" -Credits "Garo-Mastah"
 
 }
@@ -1131,12 +1130,12 @@ function CreateTabEquipment2() {
     # STARTING UPGRADES #
 
     CreateReduxGroup    -Tag  "Save"          -Text "Starting Upgrades" -Advanced
-    CreateReduxComboBox -Name "DekuNuts"      -Text "Deku Nuts"       -Items ("Standard", "Big", "Biggest")                                       -Info "Set the starting capacity upgrade level for the Deku Nuts"
-    CreateReduxComboBox -Name "Quiver"        -Text "Quiver"          -Items ("Standard", "Big", "Biggest")                                       -Info "Set the starting capacity upgrade level for the Quiver"
-    CreateReduxComboBox -Name "BombBag"       -Text "Bomb Bag"        -Items ("Standard", "Big", "Biggest")                                       -Info "Set the starting capacity upgrade level for the Bomb Bag"
-    CreateReduxComboBox -Name "Strength"      -Text "Strength"        -Items ("None", "Goron's Bracelet", "Silver Gauntlets", "Golden Gauntlets") -Info "Set the starting capacity upgrade level for the Gauntlets"
-    CreateReduxComboBox -Name "Scale"         -Text "Scale"           -Items ("None", "Silver Scale", "Golden Scale")                             -Info "Set the starting capacity upgrade level for the Scale"
-    CreateReduxComboBox -Name "Wallet"        -Text "Wallet"          -Items ("Wallet", "Adult's Wallet", "Giant's Wallet", "Tycoon Wallet")      -Info "Set the starting capacity upgrade level for the Wallet" -Warning 'The "Tycoon Wallet" is unused and has issues'
+    CreateReduxComboBox -Name "DekuNuts"      -Text "Deku Nuts"       -Items ("Standard", "Big", "Biggest")                                         -Info "Set the starting capacity upgrade level for the Deku Nuts"
+    CreateReduxComboBox -Name "Quiver"        -Text "Quiver"          -Items ("Standard", "Big", "Biggest")                                         -Info "Set the starting capacity upgrade level for the Quiver"
+    CreateReduxComboBox -Name "BombBag"       -Text "Bomb Bag"        -Items ("Standard", "Big", "Biggest")                                         -Info "Set the starting capacity upgrade level for the Bomb Bag"
+    CreateReduxComboBox -Name "Strength"      -Text "Strength"        -Items ("None", "Goron's Bracelet", "Silver Gauntlets", "Golden Gauntlets")   -Info "Set the starting capacity upgrade level for the Gauntlets"
+    CreateReduxComboBox -Name "Scale"         -Text "Scale"           -Items ("None", "Silver Scale", "Golden Scale")                               -Info "Set the starting capacity upgrade level for the Scale"
+    CreateReduxComboBox -Name "Wallet"        -Text "Wallet"          -Items ("Base Wallet", "Adult's Wallet", "Giant's Wallet", "Tycoon's Wallet") -Info "Set the starting capacity upgrade level for the Wallet" -Warning 'The "Tycoon Wallet" is unused and has issues'
 
     CreateReduxTextBox  -Name "Hearts"        -Text "Hearts" -Value 3 -Min 1 -Max 20 -Info "Start a new save file with the chosen amount of hearts"
     CreateReduxCheckBox -Name "DoubleDefense" -Text "Double Defense"                 -Info "Start a new save file with the double defense upgrade"

@@ -216,7 +216,7 @@ function MusicOptions([string]$Default="File Select") {
 
     # MUSIC #
 
-    CreateReduxGroup    -Tag "Music" -Text "Music" -Streamlined
+    CreateReduxGroup    -Tag "Music" -Text "Music" -Simple
     CreateReduxComboBox -Name "FileSelect"-Text "File Select Theme"  -Default $Default -Items $tracks -Info "Set the music theme for the File Select menu" -Credits "Admentus"
     
     if (IsSimple) { return }
@@ -713,6 +713,66 @@ function CreateButtonColorOptions($Default=1) {
     $Redux.Colors.Buttons.Add_SelectedIndexChanged({ SetButtonColorsPreset -ComboBox $Redux.Colors.Buttons })
     SetButtonColorsPreset -ComboBox $Redux.Colors.Buttons
 
+    $Buttons = $null
+
+}
+
+
+#==============================================================================================================================================================================================
+function CreateRupeeColorOptions() {
+
+    # RUPEE ICON COLORS #
+    CreateReduxGroup    -Tag  "Colors"  -Height 2 -Text "Rupee Icon Colors"
+    CreateReduxComboBox -Name "Rupees" -Text "Rupee Icon Colors" -Items @("Redux", "Randomized", "Custom") -Info ("Select a preset for the Rupee icon colors`n" + '"Randomized" fully randomizes the colors each time the patcher is opened') -Credits "Ported from Redux"
+
+    # Rupee Icon Colors - Buttons
+    $Buttons = @()
+    $Buttons += CreateReduxButton -Column 1 -Row 2 -Width 100 -Tag $Buttons.Count -Text "Base Wallet"     -Info "Select the color you want for the Base Wallet HUD icon"     -Credits "Ported from Redux"
+    $Buttons += CreateReduxButton -Column 2 -Row 2 -Width 100 -Tag $Buttons.Count -Text "Adult's Wallet"  -Info "Select the color you want for the Adult's Wallet HUD icon"  -Credits "Ported from Redux"
+    $Buttons += CreateReduxButton -Column 3 -Row 2 -Width 100 -Tag $Buttons.Count -Text "Giant's Wallet"  -Info "Select the color you want for the Giant's Wallet HUD icons" -Credits "Ported from Redux"
+    $Buttons += CreateReduxButton -Column 4 -Row 2 -Width 100 -Tag $Buttons.Count -Text "Tycoon's Wallet" -Info "Select the color you want for the Tycoon's Wallet HUD icon" -Credits "Ported from Redux"
+
+    # Rupee Icon Colors - Dialogs
+    $Redux.Colors.SetRupee = @()
+    $Redux.Colors.SetRupee += CreateColorDialog -Color "C8FF64" -Name "SetRupeeIcon1" -IsGame -Button $Buttons[0]
+    $Redux.Colors.SetRupee += CreateColorDialog -Color "8282FF" -Name "SetRupeeIcon2" -IsGame -Button $Buttons[1]
+    $Redux.Colors.SetRupee += CreateColorDialog -Color "FF6464" -Name "SetRupeeIcon3" -IsGame -Button $Buttons[2]
+    $Redux.Colors.SetRupee += CreateColorDialog -Color "FF5AFF" -Name "SetRupeeIcon4" -IsGame -Button $Buttons[3]
+
+    # Rupee Icon Colors - Labels
+    $Redux.Colors.RupeeLabels = @()
+    for ($i=0; $i -lt $Buttons.length; $i++) {
+        $Buttons[$i].Add_Click({ $Redux.Colors.SetRupee[[int16]$this.Tag].ShowDialog(); $Redux.Colors.Rupees.Text = "Custom"; $Redux.Colors.RupeeLabels[[int16]$this.Tag].BackColor = $Redux.Colors.SetRupee[[int16]$this.Tag].Color; $GameSettings["Colors"][$Redux.Colors.SetRupee[[int16]$this.Tag].Tag] = $Redux.Colors.SetRupee[[int16]$this.Tag].Color.Name })
+        $Redux.Colors.RupeeLabels += CreateReduxColoredLabel -Link $Buttons[$i]  -Color $Redux.Colors.SetRupee[$i].Color
+    }
+    
+    $Redux.Colors.Rupees.Add_SelectedIndexChanged({ SetRupeeColorsPreset -ComboBox $Redux.Colors.Rupees })
+    SetRupeeColorsPreset -ComboBox $Redux.Colors.Rupees
+
+    $Buttons = $null
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function CreateRupeeVanillaColorOptions($Default="C8FF64") {
+
+    CreateReduxGroup -Tag "Colors" -Text "Rupee Icon Color"
+
+    $Items = @("Base Wallet", "Adult's Wallet", "Giant's Wallet", "Tycoon's Wallet", "Gold Quest", "Randomized", "Custom"); $Randomize = '"Randomized" fully randomizes the colors each time the patcher is opened'
+    $Redux.Colors.RupeesVanilla   = CreateReduxComboBox -Name "RupeesVanilla" -Text "Rupee Icon Color" -Length 230 -Shift 40 -Items $Items -Info ("Select a color scheme for the Rupee Icon Color`n" + $Randomize) -Credits "Ported from Redux"
+    $Button                       = CreateReduxButton -Width 100 -Text "Wallet Icon" -Info "Select the color you want for Rupee Icon Color" -Credits "Ported from Redux"
+    $Redux.Colors.SetRupeeVanilla = CreateColorDialog -Color $default -Name "SetRupeeIcon" -IsGame -Button $Button
+    
+    $Button.Add_Click({ $Redux.Colors.SetRupeeVanilla.ShowDialog(); $Redux.Colors.RupeeVanillaLabel.BackColor = $Redux.Colors.SetRupeeVanilla.Color; $GameSettings["Colors"][$Redux.Colors.SetRupeeVanilla] = $Redux.Colors.SetRupeeVanilla.Color.Name })
+    $Redux.Colors.RupeeVanillaLabel = CreateReduxColoredLabel -Link $Button -Color $Redux.Colors.SetRupeeVanilla.Color
+    
+    $Redux.Colors.RupeesVanilla.Add_SelectedIndexChanged({ SetRupeeVanillaColorsPreset -ComboBox $Redux.Colors.RupeesVanilla -Dialog $Redux.Colors.SetRupeeVanilla -Label $Redux.Colors.RupeeVanillaLabel })
+    SetRupeeVanillaColorsPreset -ComboBox $Redux.Colors.RupeesVanilla -Dialog $Redux.Colors.SetRupeeVanilla -Label $Redux.Colors.RupeeVanillaLabel
+    
+    $Button = $null
+
 }
 
 
@@ -870,6 +930,39 @@ function SetButtonColorsPreset([object]$ComboBox) {
         $Colors = @()
         for ($i=0; $i -lt $Redux.Colors.SetButtons.length; $i++) { $Colors += SetRandomColor -Dialog $Redux.Colors.SetButtons[$i] -Label $Redux.Colors.ButtonLabels[$i] }
         WriteToConsole ("Randomize Button Colors: " + $Colors)
+    }
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function SetRupeeColorsPreset([object]$ComboBox) {
+    
+    $Text = $ComboBox.Text.replace(' (default)', "")
+    if     ($Text -eq "Redux")        { SetColors -Colors @("C8FF64", "8282FF", "FF6464", "FF5AFF") -Dialogs $Redux.Colors.SetRupee -Labels $Redux.Colors.RupeeLabels }
+    elseif ($Text -eq "Randomized")   {
+        $Colors = @()
+        for ($i=0; $i -lt $Redux.Colors.SetRupee.length; $i++) { $Colors += SetRandomColor -Dialog $Redux.Colors.SetRupee[$i] -Label $Redux.Colors.RupeeLabels[$i] }
+        WriteToConsole ("Randomize Rupee Icon HUD Colors: " + $Colors)
+    }
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function SetRupeeVanillaColorsPreset([object]$ComboBox) {
+    
+    $Text = $ComboBox.Text.replace(' (default)', "")
+    if     ($Text -eq "Base Wallet")       { SetColor -Color "C8FF64" -Dialog $Redux.Colors.SetRupeeVanilla -Label $Redux.Colors.RupeeVanillaLabel }
+    elseif ($Text -eq "Adult's Wallet")    { SetColor -Color "8282FF" -Dialog $Redux.Colors.SetRupeeVanilla -Label $Redux.Colors.RupeeVanillaLabel }
+    elseif ($Text -eq "Giant's Wallet")    { SetColor -Color "FF6464" -Dialog $Redux.Colors.SetRupeeVanilla -Label $Redux.Colors.RupeeVanillaLabel }
+    elseif ($Text -eq "Tycoon's Wallet")   { SetColor -Color "FF5AFF" -Dialog $Redux.Colors.SetRupeeVanilla -Label $Redux.Colors.RupeeVanillaLabel }
+    elseif ($Text -eq "Gold Quest")        { SetColor -Color "FFFF00" -Dialog $Redux.Colors.SetRupeeVanilla -Label $Redux.Colors.RupeeVanillaLabel }
+    elseif ($Text -eq "Randomized") {
+        $Colors = SetRandomColor -Dialog $Redux.Colors.SetRupeeVanilla -Label $Redux.Colors.RupeeVanillaLabel
+        WriteToConsole ("Randomize Rupee Icon Colors: " + $Color)
     }
 
 }
@@ -1151,11 +1244,12 @@ Export-ModuleMember -Function ChangeModelsSelection
 Export-ModuleMember -Function LoadModelsList
 
 Export-ModuleMember -Function CreateButtonColorOptions
+Export-ModuleMember -Function CreateRupeeColorOptions
+Export-ModuleMember -Function CreateRupeeVanillaColorOptions
 Export-ModuleMember -Function CreateSpinAttackColorOptions
 Export-ModuleMember -Function CreateSwordTrailColorOptions
 Export-ModuleMember -Function CreateFairyColorOptions
 
-Export-ModuleMember -Function SetButtonColorsPreset
 Export-ModuleMember -Function SetFairyColorsPreset
 Export-ModuleMember -Function SetFairyColors
 Export-ModuleMember -Function SetTunicColorsPreset
