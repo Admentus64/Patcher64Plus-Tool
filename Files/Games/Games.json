@@ -138,12 +138,16 @@
 		"hash"		: "0AB48B2D44A74B3BB2D384F6170C2742",
 		"rev"		: "iQue",
 		"region"	: "China / CHN",
-		"supported"	: 0
+		"supported"	: 1,
+		"list"		: "China (iQue)",
+		"native"	: 1
 	}, {
 		"hash"		: "A475E9F8615513666A265C464708AE8F",
 		"rev"		: "iQue",
 		"region"	: "Taiwan / TWN",
-		"supported"	: 0
+		"supported"	: 1,
+		"list"		: "Taiwan (iQue)",
+		"native"	: 1
 	} ],
 	"patches"		: 1,
 	"decompress"		: 1,
@@ -252,7 +256,9 @@
 	"version" : [ {
 		"hash"		: "20B854B239203BAF6C961B850A4A51A2",
 		"rev"		: "Revision 0",
-		"region"	: "North America / NTSC-U"
+		"region"	: "North America / NTSC-U",
+		"supported"	: 1,
+		"list"		: "Rev 0 (US)"
 	}, {
 		"hash"		: "45676429EF6B90E65B517129B700308E",
 		"rev"		: "Revision 0",
@@ -268,6 +274,13 @@
 		"rev"		: "Shindou",
 		"region"	: "Japan / JPN",
 		"supported"	: 0
+	}, {
+		"hash"		: "29047FBA820695BD14C5BD7AA1AA4400",
+		"rev"		: "iQue",
+		"region"	: "China / CHN",
+		"supported"	: 1,
+		"list"		: "China (iQue)",
+		"native"	: 1
 	} ],
 	"patches"		: 1,
 	"decompress"		: 2,

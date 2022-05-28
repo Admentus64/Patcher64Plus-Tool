@@ -78,7 +78,6 @@
     $menuBarOoTTextEditor      = New-Object System.Windows.Forms.ToolStripButton;   $menuBarOoTTextEditor.Text  = "OoT Text Editor";    $menuBarEditors.DropDownItems.Add($menuBarOoTTextEditor)
     $menuBarMMTextEditor       = New-Object System.Windows.Forms.ToolStripButton;   $menuBarMMTextEditor.Text   = "MM Text Editor";     $menuBarEditors.DropDownItems.Add($menuBarMMTextEditor)
 
-    $menuBarChecksum.Add_Click(       { If (!(IsSet $CreditsDialog)) { CreateCreditsDialog | Out-Null }; $Credits.Section | foreach { $_.Visible = $False }; $Credits.Sections[4].Visible = $True; $CreditsDialog.ShowDialog() } )
     $menuBarExit.Add_Click(           { $MainDialog.Close()          } )
     $menuBarUpdate.Add_Click(         { AutoUpdate -Manual           } )
 
@@ -94,10 +93,11 @@
     $menuBarSimple.Add_Click(   { $Settings.Core.Interface = 1; $menuBarSimple.BackColor = "#D3D3D3"; $menuBarAdvanced.BackColor = "White";   ResetReduxSettings; ChangePatchPanel; DisablePatches; SetMainScreenSize } )
     $menuBarAdvanced.Add_Click( { $Settings.Core.Interface = 2; $menuBarSimple.BackColor = "White";   $menuBarAdvanced.BackColor = "#D3D3D3"; ResetReduxSettings; ChangePatchPanel; DisablePatches; SetMainScreenSize } )
 
-    $menuBarInfo.Add_Click(    { If (!(IsSet $CreditsDialog)) { CreateCreditsDialog | Out-Null }; $Credits.Sections | foreach { $_.Visible = $False }; $Credits.Sections[0].Visible = $True; $CreditsDialog.ShowDialog() } )
-    $menuBarLinks.Add_Click(   { If (!(IsSet $CreditsDialog)) { CreateCreditsDialog | Out-Null }; $Credits.Sections | foreach { $_.Visible = $False }; $Credits.Sections[3].Visible = $True; $CreditsDialog.ShowDialog() } )
-    $menuBarCredits.Add_Click( { If (!(IsSet $CreditsDialog)) { CreateCreditsDialog | Out-Null }; $Credits.Sections | foreach { $_.Visible = $False }; $Credits.Sections[1].Visible = $True; $CreditsDialog.ShowDialog() } )
-    $menuBarGameID.Add_Click(  { If (!(IsSet $CreditsDialog)) { CreateCreditsDialog | Out-Null }; $Credits.Sections | foreach { $_.Visible = $False }; $Credits.Sections[2].Visible = $True; $CreditsDialog.ShowDialog() } )
+    $menuBarInfo.Add_Click(     { If (!(IsSet $CreditsDialog)) { CreateCreditsDialog | Out-Null }; $Credits.Sections | foreach { $_.Visible = $False }; $Credits.Sections[0].Visible = $True; $CreditsDialog.ShowDialog() } )
+    $menuBarLinks.Add_Click(    { If (!(IsSet $CreditsDialog)) { CreateCreditsDialog | Out-Null }; $Credits.Sections | foreach { $_.Visible = $False }; $Credits.Sections[3].Visible = $True; $CreditsDialog.ShowDialog() } )
+    $menuBarCredits.Add_Click(  { If (!(IsSet $CreditsDialog)) { CreateCreditsDialog | Out-Null }; $Credits.Sections | foreach { $_.Visible = $False }; $Credits.Sections[1].Visible = $True; $CreditsDialog.ShowDialog() } )
+    $menuBarGameID.Add_Click(   { If (!(IsSet $CreditsDialog)) { CreateCreditsDialog | Out-Null }; $Credits.Sections | foreach { $_.Visible = $False }; $Credits.Sections[2].Visible = $True; $CreditsDialog.ShowDialog() } )
+    $menuBarChecksum.Add_Click( { If (!(IsSet $CreditsDialog)) { CreateCreditsDialog | Out-Null }; $Credits.Sections | foreach { $_.Visible = $False }; $Credits.Sections[4].Visible = $True; $CreditsDialog.ShowDialog() } )
 
     $menuBarOoTTextEditor.Add_Click( { RunTextEditor -Game "Ocarina of Time" } )
     $menuBarMMTextEditor.Add_Click(  { RunTextEditor -Game "Majora's Mask"   } )

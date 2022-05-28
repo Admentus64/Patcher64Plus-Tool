@@ -247,4 +247,24 @@
 	} ],
 	"output"			: "_spaceworld_patched",
 	"tooltip"			: "A recreation of the demo of Ocarina of Time shown at Spaceworld in 1997"
+}, {
+	"title"				: "iQue ROM, Header Fix + Save Fix",
+	"console"			: "Native",
+	"finalize"			: 0,
+	"patch"	: [ {
+		"file"			: "Compressed\\iQue\\chn.bps",
+		"rev"			: "0AB48B2D44A74B3BB2D384F6170C2742"
+	} ],
+	"output"			: "_iQue_china_patched",
+	"tooltip"			: "Header fix and save fix for the Chinese iQue ROM"
+}, {
+	"title"				: "iQue Chinese Traditional, Header Fix only",
+	"console"			: "Native",
+	"finalize"			: 0,
+	"patch"	: [ {
+		"file"			: "Compressed\\iQue\\twn.bps",
+		"rev"			: "A475E9F8615513666A265C464708AE8F"
+	} ],
+	"output"			: "_iQue_taiwan_patched",
+	"tooltip"			: "Header fix for the iQue Chinese Traditional iQue ROM"
 } ]

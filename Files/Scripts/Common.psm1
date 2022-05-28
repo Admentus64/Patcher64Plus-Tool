@@ -562,6 +562,8 @@ function GamePath_Finish([object]$TextBox, [string]$Path) {
     if ($IsWiiVC)   { WriteToConsole ("WAD Path:       " + $GamePath) }
     else            { WriteToConsole ("ROM Path:       " + $GamePath) }
     
+    CalculateHashSum
+
     if (!$changed) { return }
 
     $InputPaths.ClearGameButton.Enabled = $True
@@ -570,7 +572,6 @@ function GamePath_Finish([object]$TextBox, [string]$Path) {
 
     ChangeGamesList
     SetMainScreenSize
-    CalculateHashSum
 
 }
 
@@ -580,7 +581,7 @@ function GamePath_Finish([object]$TextBox, [string]$Path) {
 function CalculateHashSum() {
     
     if (!(IsSet $CreditsDialog)) { return }
-    
+
     # Calculate checksum if Native Mode
     if (!$IsWiiVC) {
         # Update hash

@@ -1,3 +1,7 @@
+v18.0.3
+- Added iQue patches for OoT and SM64
+- Fixed issue with checksum not updating and being accessible
+
 v18.0.2
 - Added new Rupee Icon(s) color options
 - Fixed issues with new GUI modes
