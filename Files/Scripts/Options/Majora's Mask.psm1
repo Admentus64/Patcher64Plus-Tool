@@ -969,6 +969,8 @@ function CreateOptions() {
     if (IsSimple)   { CreateOptionsDialog -Columns 6 -Height 540 -Tabs @("Main", "Graphics", "Audio", "Difficulty", "Equipment", "Speedup")           }
     else            { CreateOptionsDialog -Columns 6 -Height 605 -Tabs @("Main", "Graphics", "Audio", "Difficulty", "Colors", "Equipment", "Speedup") }
 
+    if (IsSet $Redux.Graphics.Widescreen) { $Redux.Graphics.Widescreen.Add_CheckedChanged({ AdjustGUI }) }
+
 }
 
 
@@ -1178,7 +1180,7 @@ function CreateTabGraphics() {
     
     # GRAPHICS #
 
-    $info  = "Patch the game to be in true 16:9 widescreen with the HUD pushed to the edges.`n`nKnown Issues:`n- Notebook screen stretched`n- Text corruption if combined with Redux during and after cutscenes with blur/sepia effect (disabled by default)`n- D-Pad icons causing issues if combined with Redux (force hidden)"
+    $info  = "Patch the game to be in true 16:9 widescreen with the HUD pushed to the edges.`n`nKnown Issues:`n- Notebook screen stretched`n- D-Pad icons causing issues if combined with Redux (force hidden)"
 
     CreateReduxGroup -Tag "Graphics" -Text "Graphics" -Columns 4
     CreateReduxCheckBox -Name "Widescreen"       -Text "16:9 Widescreen (Advanced)"   -Info $info                                                                                                          -Native -Credits "Granny Story images by Nerrel, Widescreen Patch by gamemasterplc, enhanced and ported by GhostlyDark"
