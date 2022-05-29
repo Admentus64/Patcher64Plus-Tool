@@ -546,7 +546,8 @@
 	"version" : [ {
 		"hash"		: "4156F66C0FAC36222B5A1DA05DB85D68",
 		"rev"		: "Revision 0 (iNES 2.0)",
-		"region"	: "North America / NTSC-U"
+		"region"	: "North America / NTSC-U",
+		"list"		: "Rev 0 (US)"
 	}, {
 		"file"		: "rev1_to_rev0.bps",
 		"hash"		: "614FB3085826E62F3BE3A3FE0B931689",
@@ -572,18 +573,22 @@
 		"rev"		: "Revision 0 (iNES 1.0)",
 		"region"	: "North America / NTSC-U"
 	}, {
+		"file"		: "rev1_to_rev0.bps",
 		"hash"		: "F4095791987351BE68674A9355B266BC",
 		"rev"		: "Revision 1 (iNES 1.0)",
 		"region"	: "North America / NTSC-U"
 	}, {
+		"file"		: "vc_to_rev0.bps",
 		"hash"		: "D7E083EC4AA373FCC825A39BDA17F16A",
 		"rev"		: "Virtual Console (iNES 1.0)",
 		"region"	: "North America / NTSC-U"
 	}, {
+		"file"		: "gc_to_rev0.bps",
 		"hash"		: "B43E241F10069DCD32698DF798A7EC96",
 		"rev"		: "GameCube (iNES 1.0)",
 		"region"	: "North America / NTSC-U"
 	}, {
+		"file"		: "ce_to_rev0.bps",
 		"hash"		: "DA78C49364D9739E406B4AEFA46FAB03",
 		"rev"		: "Collector's Edition (iNES 1.0)",
 		"region"	: "North America / NTSC-U"
@@ -601,7 +606,8 @@
 	"version" : [ {
 		"hash"		: "E6DD4104FA46EB4BEF2CB52DC341DD38",
 		"rev"		: "Revision 0 (iNES 2.0)",
-		"region"	: "North America / NTSC-U"
+		"region"	: "North America / NTSC-U",
+		"list"		: "Rev 0 (US)"
 	}, {
 		"file"		: "vc_to_rev0.bps",
 		"hash"		: "5B60C669DF7EEC1EE90D3AC8A8B79993",
@@ -617,10 +623,12 @@
 		"rev"		: "Revision 0 (iNES 1.0)",
 		"region"	: "North America / NTSC-U"
 	}, {
+		"file"		: "vc_to_rev0.bps",
 		"hash"		: "D21D31E0EB0E666E9224954F312E915C",
 		"rev"		: "Virtual Console (iNES 1.0)",
 		"region"	: "North America / NTSC-U"
 	}, {
+		"file"		: "gc_to_rev0.bps",
 		"hash"		: "6587C65FAACEBECCABAC13CFA5C5078A",
 		"rev"		: "Collector's Edition (iNES 1.0)",
 		"region"	: "North America / NTSC-U"

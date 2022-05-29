@@ -432,7 +432,6 @@ function PatchingAdditionalOptions() {
     # Language Options
     if ( (GetCommand "CheckLanguageOptions") -and (GetCommand "ByteLanguageOptions") ) {
         if ( (iex "CheckLanguageOptions") -and (IsSet $LanguagePatch.script_dma) ) {
-            write-host "BBB"
             UpdateStatusLabel ("Patching " + $GameType.mode + " Additional Language Options...")
 
             $start  = CombineHex $ByteArrayGame[((GetDecimal $LanguagePatch.script_dma)+0)..((GetDecimal $LanguagePatch.script_dma)+3)]
@@ -550,7 +549,8 @@ function DowngradeROM() {
         return $null
     }
 
-    if ($PatchInfo.decompress) { $GetROM.run = $GetROM.decomp }
+    if (!(TestFile $GetROM.decomp))   { Copy-Item -LiteralPath $GetROM.run -Destination $GetROM.decomp -Force }
+    if ($PatchInfo.decompress)        { $GetROM.run = $GetROM.decomp }
     else {
         Copy-Item -LiteralPath $GetROM.run -Destination $GetROM.downgrade -Force
         $GetROM.run = $GetROM.downgrade
@@ -558,6 +558,8 @@ function DowngradeROM() {
     
     foreach ($item in $GameType.version) {
         if ($ROMHashSum -eq $item.hash -and (IsSet $item.file)) {
+            write-host $item.file   $patchinfo.decompress   $getROM.run
+
             if (!(ApplyPatch -File $GetROM.run -Patch ("Downgrade\" + $item.file))) {
                 WriteToConsole "Could not apply downgrade patch"
                 return
@@ -773,6 +775,8 @@ function ApplyPatch([string]$File=$GetROM.decomp, [string]$Patch, [string]$New, 
     }
 
     # File Exists
+    write-host $File   $Patch
+
     if (!(TestFile $File)) {
         UpdateStatusLabel "Failed! Could not find file."
         WriteToConsole ("Missing file: " + $File)
