@@ -67,7 +67,7 @@ function CreateTabMain() {
     CreateReduxGroup    -Tag  "Graphics" -Text "Graphics"
     CreateReduxCheckBox -Name "NewGFX"                 -Text "New GFX"                  -Info "Completely revamped graphics based on the graphics used in the 'Rev Edition' and 'New Link Sprites' hacks`nNot compatible with the Revility Edition Sprites option" -Credits "darthvaderx"
     CreateReduxCheckBox -Name "RevilityEditionSprites" -Text "Revility Edition Sprites" -Info "New GFX optional patch, which combines assets from both the 'Rev Edition`nNot compatible with the NEW GFX option' and 'New Link Sprite' hacks"                      -Credits "Trax" -Link $Redux.Graphics.NewGFX
-    CreateReduxCheckBox -Name "ReworkedTitleScreen"    -Text "Reworked Title Screen"    -Info "The Sword is the same as in the original US boxart cover, and the scrolling text fits the canon story"                                                              -Credits "ShadowOne333 and his team"
+    CreateReduxCheckBox -Name "ReworkedTitleScreen"    -Text "Reworked Title Screen"    -Info "The Sword is the same as in the original US boxart cover and the scrolling text fits the canon story"                                                               -Credits "ShadowOne333 and his team"
 
 
 
@@ -97,9 +97,9 @@ function CreateTabMain() {
     # EXPERIENCE #
 
     CreateReduxGroup    -Tag  "Experience" -Text "Experience"
-    CreateReduxCheckBox -Name "NewExp"                 -Text "New Exp"                   -Info "A completely revamped Exp system which removes the Level Up window prompt once you reach the required Exp for a new level`nInstead, Experience points will now accumulate, and once you want to Level Up a certain ability,`npressing Up+Start will automatically bring up the Level Up menu, even if you don’t have enough Exp for a level up`nIn that case, the only available option will be 'Cancel'" -Credits "ShadowOne333 and his team"
-    CreateReduxCheckBox -Name "KeepExpGameOver"        -Text "Keep Exp At Game Over"     -Info "You keep all your Exp when you die, but ONLY if you choose Continue (since the Exp is not saved on reboot/restart)"              -Credits "ShadowOne333 and his team"
-    CreateReduxCheckBox -Name "StaticExpPalaceCrystal" -Text "Static Exp Palace Crystal" -Info "At the end of each palace, where you put the crystal in, you now get a determined amount of Exp that increases with each palace" -Credits "ShadowOne333 and his team"
+    CreateReduxCheckBox -Name "NewExp"                 -Text "New Exp"                   -Info "A completely revamped Exp system which removes the level up window prompt once you reach the required Exp for a new level`nInstead, Experience points will now accumulate, and once you want to Level Up a certain ability,`npressing Up+Start will automatically bring up the Level Up menu, even if you don’t have enough Exp for a level up`nIn that case, the only available option will be 'Cancel'" -Credits "ShadowOne333 and his team"
+    CreateReduxCheckBox -Name "KeepExpGameOver"        -Text "Keep Exp At Game Over"     -Info "You keep all your Exp when you die, but ONLY if you choose Continue (since the Exp is not saved on reboot/restart)"                 -Credits "ShadowOne333 and his team"
+    CreateReduxCheckBox -Name "StaticExpPalaceCrystal" -Text "Static Exp Palace Crystal" -Info "At the end of each palace, where you put the crystal in, you now get a predetermined amount of Exp that increases with each palace" -Credits "ShadowOne333 and his team"
     
 
 
@@ -117,21 +117,21 @@ function CreateTabRedux() {
     
     # ORIGINAL #
 
-    CreateReduxGroup    -Tag  "Revert" -Text "Original (Revert)"
-    CreateReduxCheckBox -Name "EnemyAttributes"        -Text "Enemy Attributes"        -Info "Restores the original enemy attributes, meaning the enemies will drain Exp from Link, and they will have the same HP and give the same Exp in the original Zelda II" -Credits "ShadowOne333 and his team"
-    CreateReduxCheckBox -Name "EnemyDrops"             -Text "Enemy Drops"             -Info "Restores the original enemy item drop rules, meaning the enemies will drop items every 6th kill like in the original Zelda II"                                       -Credits "ShadowOne333 and his team"
-    CreateReduxCheckBox -Name "LinkDolls"              -Text "Link Dolls"              -Info "Restores the functionality of the Link dolls to be the same as in the original Zelda II, meaning they will not be permanent lives anymore"                           -Credits "ShadowOne333 and his team"
-    CreateReduxCheckBox -Name "RestartGameOver"        -Text "Restart Game Over"       -Info "Restores the original behaviour of Link getting a Game Over and starting all the way back at Zelda’s Palace`nNot compatible with the Restart Same Screen option"     -Credits "ShadowOne333 and his team" -Link $Redux.Gameplay.RestartSameScreen
-    CreateReduxCheckBox -Name "SpellMagicConsumption"  -Text "Spell Magic Consumption" -Info "Restores the original magic consumption that each spell takes to that of the original Zelda II"                                                                      -Credits "ShadowOne333 and his team"
-    CreateReduxCheckBox -Name "NESGFX"                 -Text "NES GFX"                 -Info "Restores the graphics as used in the original Zelda II"                                                                                                              -Credits "ShadowOne333 and his team"
-    CreateReduxCheckBox -Name "TitleScreenPalette"     -Text "Title Screen Palette"    -Info "Restores only the palette of the original Title Screen from Zelda II"                                                                                                -Credits "ShadowOne333 and his team"
-    CreateReduxCheckBox -Name "TitleScreenSword"       -Text "Title Screen Sword"      -Info "Restores only the sword of the original Title Screen from Zelda II"                                                                                                  -Credits "ShadowOne333 and his team"
+    CreateReduxGroup    -Tag  "Revert"                -Text "Original (Revert)"
+    CreateReduxCheckBox -Name "EnemyAttributes"       -Text "Enemy Attributes"        -Info "Restores the original enemy attributes, meaning the enemies will drain Exp from Link and they will have the same HP and give the same Exp in the original Zelda II" -Credits "ShadowOne333 and his team"
+    CreateReduxCheckBox -Name "EnemyDrops"            -Text "Enemy Drops"             -Info "Restores the original enemy item drop rules, meaning the enemies will drop items every 6th kill like in the original Zelda II"                                      -Credits "ShadowOne333 and his team"
+    CreateReduxCheckBox -Name "LinkDolls"             -Text "Link Dolls"              -Info "Restores the functionality of the Link dolls to be the same as in the original Zelda II, meaning they will not be permanent lives anymore"                          -Credits "ShadowOne333 and his team"
+    CreateReduxCheckBox -Name "RestartGameOver"       -Text "Restart Game Over"       -Info "Restores the original behaviour of Link getting a Game Over and starting all the way back at Zelda’s Palace`nNot compatible with the Restart Same Screen option"    -Credits "ShadowOne333 and his team" -Link $Redux.Gameplay.RestartSameScreen
+    CreateReduxCheckBox -Name "SpellMagicConsumption" -Text "Spell Magic Consumption" -Info "Restores the original magic consumption that each spell takes to that of the original Zelda II"                                                                     -Credits "ShadowOne333 and his team"
+    CreateReduxCheckBox -Name "NESGFX"                -Text "NES GFX"                 -Info "Restores the graphics as used in the original Zelda II"                                                                                                             -Credits "ShadowOne333 and his team"
+    CreateReduxCheckBox -Name "TitleScreenPalette"    -Text "Title Screen Palette"    -Info "Restores the palette of the original Title Screen from Zelda II only"                                                                                               -Credits "ShadowOne333 and his team"
+    CreateReduxCheckBox -Name "TitleScreenSword"      -Text "Title Screen Sword"      -Info "Restores the sword of the original Title Screen from Zelda II only"                                                                                                 -Credits "ShadowOne333 and his team"
 
 
 
     # SOUND #
 
-    CreateReduxGroup    -Tag  "Music" -Text "Music"
-    CreateReduxCheckBox -Name "RandomBattleTheme"      -Text "Random Battle Theme" -Info "Modifies the way in which the Battle Themes are used from the standard Zelda 2 Redux`nWith this patch, instead of having the FDS Battle Theme play on East Hyrule, now the game will load either the Battle Themes at random in all encounters" -Credits "ShadowOne333 and his team"
+    CreateReduxGroup    -Tag  "Music"             -Text "Music"
+    CreateReduxCheckBox -Name "RandomBattleTheme" -Text "Random Battle Theme" -Info "Modifies the way in which the Battle Themes are used from the standard Zelda 2 Redux`nInstead of the FDS Battle Theme playing in East Hyrule, the game will now load Battle Themes at random during all encounters" -Credits "ShadowOne333 and his team"
 
 }

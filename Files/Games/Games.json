@@ -544,25 +544,51 @@
 	"support_vc"		: 1,
 	"console"		: "NES",
 	"version" : [ {
-		"hash"		: "337BD6F1A1163DF31BF2633665589AB0",
-		"rev"		: "Revision 0",
+		"hash"		: "4156F66C0FAC36222B5A1DA05DB85D68",
+		"rev"		: "Revision 0 (iNES 2.0)",
 		"region"	: "North America / NTSC-U"
 	}, {
 		"file"		: "rev1_to_rev0.bps",
-		"hash"		: "F4095791987351BE68674A9355B266BC",
-		"rev"		: "Revision 1",
+		"hash"		: "614FB3085826E62F3BE3A3FE0B931689",
+		"rev"		: "Revision 1 (iNES 2.0)",
 		"region"	: "North America / NTSC-U"
 	}, {
 		"file"		: "vc_to_rev0.bps",
-		"hash"		: "F6DE506F3019B88F35D62BFE4FF41FE2",
-		"rev"		: "Virtual Console",
+		"hash"		: "86ACECE9B5E571DCDE8C29A3EE0A3545",
+		"rev"		: "Virtual Console (iNES 2.0)",
 		"region"	: "North America / NTSC-U"
 	}, {
 		"file"		: "gc_to_rev0.bps",
+		"hash"		: "2412D4B780A7586FC4FE43E3CAD10F64",
+		"rev"		: "GameCube (iNES 2.0)",
+		"region"	: "North America / NTSC-U"
+	}, {
+		"file"		: "ce_to_rev0.bps",
+		"hash"		: "BF8266F0FA69A5A8DAF5F23C2876A1AD",
+		"rev"		: "Collector's Edition (iNES 2.0)",
+		"region"	: "North America / NTSC-U"
+	}, {
+		"hash"		: "337BD6F1A1163DF31BF2633665589AB0",
+		"rev"		: "Revision 0 (iNES 1.0)",
+		"region"	: "North America / NTSC-U"
+	}, {
+		"hash"		: "F4095791987351BE68674A9355B266BC",
+		"rev"		: "Revision 1 (iNES 1.0)",
+		"region"	: "North America / NTSC-U"
+	}, {
+		"hash"		: "D7E083EC4AA373FCC825A39BDA17F16A",
+		"rev"		: "Virtual Console (iNES 1.0)",
+		"region"	: "North America / NTSC-U"
+	}, {
+		"hash"		: "B43E241F10069DCD32698DF798A7EC96",
+		"rev"		: "GameCube (iNES 1.0)",
+		"region"	: "North America / NTSC-U"
+	}, {
 		"hash"		: "DA78C49364D9739E406B4AEFA46FAB03",
-		"rev"		: "GameCube",
+		"rev"		: "Collector's Edition (iNES 1.0)",
 		"region"	: "North America / NTSC-U"
 	} ],
+	"header"		: "080012080000700700000001",
 	"patches"		: 1,
 	"vc_title"		: "The Legend of Zelda",
 	"vc_gameID"		: "FAKE"
@@ -573,20 +599,33 @@
 	"support_vc"		: 1,
 	"console"		: "NES",
 	"version" : [ {
-		"hash"		: "764D36FA8A2450834DA5E8194281035A",
-		"rev"		: "Revision 0",
+		"hash"		: "E6DD4104FA46EB4BEF2CB52DC341DD38",
+		"rev"		: "Revision 0 (iNES 2.0)",
 		"region"	: "North America / NTSC-U"
 	}, {
 		"file"		: "vc_to_rev0.bps",
-		"hash"		: "D21D31E0EB0E666E9224954F312E915C",
-		"rev"		: "Virtual Console",
+		"hash"		: "5B60C669DF7EEC1EE90D3AC8A8B79993",
+		"rev"		: "Virtual Console (iNES 2.0)",
 		"region"	: "North America / NTSC-U"
 	}, {
 		"file"		: "gc_to_rev0.bps",
+		"hash"		: "32308B00B9DEC4DF130C7BF703340FF3",
+		"rev"		: "Collector's Edition (iNES 2.0)",
+		"region"	: "North America / NTSC-U"
+	}, {
 		"hash"		: "6587C65FAACEBECCABAC13CFA5C5078A",
-		"rev"		: "GameCube",
+		"rev"		: "Revision 0 (iNES 1.0)",
+		"region"	: "North America / NTSC-U"
+	}, {
+		"hash"		: "D21D31E0EB0E666E9224954F312E915C",
+		"rev"		: "Virtual Console (iNES 1.0)",
+		"region"	: "North America / NTSC-U"
+	}, {
+		"hash"		: "6587C65FAACEBECCABAC13CFA5C5078A",
+		"rev"		: "Collector's Edition (iNES 1.0)",
 		"region"	: "North America / NTSC-U"
 	} ],
+	"header"		: "081012080000700000000001",
 	"patches"		: 1,
 	"vc_title"		: "Zelda II: The Adventure of Link",
 	"vc_gameID"		: "FA9E"

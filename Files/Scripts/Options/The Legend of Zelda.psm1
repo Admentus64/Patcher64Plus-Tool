@@ -107,7 +107,7 @@ function CreateTabRedux() {
     # ORIGINAL #
 
     CreateReduxGroup    -Tag  "Revert" -Text "Original (Revert)"
-    CreateReduxCheckBox -Name "HiddenSecrets"         -Text "Hidden Secrets"         -Info "Revert back all hiden secrets like that Redux adjusted, for the orginal experience"  -Credits "ShadowOne333 and his team"
+    CreateReduxCheckBox -Name "HiddenSecrets"         -Text "Hidden Secrets"         -Info "Revert back all hidden secrets like that Redux adjusted, for the orginal experience"  -Credits "ShadowOne333 and his team"
     CreateReduxCheckBox -Name "DisableDiagionalSword" -Text "Disable Diagonal Sword" -Info "Remove the ability to swing the sword diagonal as the original version"              -Credits "ShadowOne333 and his team"
     CreateReduxCheckBox -Name "OverworldColumns"      -Text "Overworld Columns"      -Info "Revert back the blocky overworld screen/column definition from the original version" -Credits "ShadowOne333 and his team"
     CreateReduxCheckBox -Name "BombUpgrades"          -Text "Bomb Upgrades"          -Info "Revert back bomb upgrades to increase the amount of bombs by 5 instead of 10"        -Credits "ShadowOne333 and his team"

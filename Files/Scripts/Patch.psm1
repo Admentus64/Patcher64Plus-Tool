@@ -597,13 +597,32 @@ function GetMaxSize([string]$Command) {
 #==============================================================================================================================================================================================
 function ConvertROM([string]$Command) {
     
-    if ($Settings.Debug.NoConversion -eq $True) { return }
-    if ( (StrLike -str $Command -val "Inject") ) { return }
+    if ($Settings.Debug.NoConversion -eq $True)    { return }
+    if ( (StrLike -str $Command -val "Inject") )   { return }
 
     $array = [IO.File]::ReadAllBytes($GetROM.run)
 
     # Convert ROM if needed
-    if ($GameConsole.mode -eq "SNES") {
+    if ($GameConsole.mode -eq "NES") {
+        if (IsSet $GameType.header) {
+            $header = $GameType.header
+            if     ($header -Like "* *")   { $header = $header -split ' '           | foreach { [Convert]::ToByte($_, 16) } }
+            else                           { $header = $header -split '(..)' -ne '' | foreach { [Convert]::ToByte($_, 16) } }
+        }
+        else { $header = $null }
+
+        if ((Get-Item -LiteralPath $GetROM.run).length/1KB % 2 -eq 0) {
+            UpdateStatusLabel "Adding header to ROM..."
+            $array = @(78, 69, 83, 26) + $header + $array
+        }
+        elseif ($header -ne $null -and $array[4..15] -ne $header) {
+            UpdateStatusLabel "Updating header to iNES 2.0..."
+            for ($i=0; $i -lt 12; $i++) { $array[4+$i] = $header[$i] }
+        }
+        else { return }
+    }
+
+    elseif ($GameConsole.mode -eq "SNES") {
         if ((Get-Item -LiteralPath $GetROM.run).length/1KB % 2 -ne 0) {
             UpdateStatusLabel "Removing header from ROM..."
             $array = $array[512..$array.length]

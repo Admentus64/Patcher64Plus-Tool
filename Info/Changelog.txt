@@ -1,3 +1,7 @@
+v18.0.4
+- Revamped checksum verification for NES patching
+- Fixed typos for Zelda I and Zelda II Additional Options
+
 v18.0.3
 - Added iQue patches for OoT and SM64
 - Fixed issue with checksum not updating and being accessible
