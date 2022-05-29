@@ -558,8 +558,6 @@ function DowngradeROM() {
     
     foreach ($item in $GameType.version) {
         if ($ROMHashSum -eq $item.hash -and (IsSet $item.file)) {
-            write-host $item.file   $patchinfo.decompress   $getROM.run
-
             if (!(ApplyPatch -File $GetROM.run -Patch ("Downgrade\" + $item.file))) {
                 WriteToConsole "Could not apply downgrade patch"
                 return
@@ -775,8 +773,6 @@ function ApplyPatch([string]$File=$GetROM.decomp, [string]$Patch, [string]$New, 
     }
 
     # File Exists
-    write-host $File   $Patch
-
     if (!(TestFile $File)) {
         UpdateStatusLabel "Failed! Could not find file."
         WriteToConsole ("Missing file: " + $File)
