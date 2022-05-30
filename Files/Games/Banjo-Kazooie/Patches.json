@@ -26,7 +26,7 @@
 	} ],
 	"options"	: 1,
 	"output"	: "_banjo_kazooie_returns_patched",
-	"tooltip"	: "A small-sized ROM hack in a completely new setting{0}Currently available as a Demo{0}- Supported: Rev 0 (US)"
+	"tooltip"	: "A small-sized ROM hack in a completely new setting, currently a demo{0}Currently available as a Demo{0}- Supported: Rev 0 (US)"
 }, {
 	"title"		: "Banjo-Kazooie: Cut-Throat Coast (v1.4)",
 	"patch" : [ {
@@ -34,7 +34,7 @@
 		"rev"	: "B29599651A13F681C9923D69354BF4A3"
 	} ],
 	"output"	: "_cut_throat_coast_patched",
-	"tooltip"	: "A small-sized ROM hack in a completely new setting{0}Features 1 world, 100 notes & 10 jiggies with an average length of 1-2 hours{0}- Supported: Rev 0 (US)"
+	"tooltip"	: "A small-sized ROM hack in a completely new setting, as part of a collaborative Halloween mod{0}Features 1 world, 100 notes & 10 jiggies with an average length of 1-2 hours{0}- Supported: Rev 0 (US)"
 }, {
 	"title"		: "Banjo-Kazooie: Worlds Collide (v2.0)",
 	"patch" : [ {
@@ -52,7 +52,7 @@
 	} ],
 	"options"	: 1,
 	"output"	: "_jiggies_of_time_patched",
-	"tooltip"	: "A full-sized ROM hack in a completely new setting{0}Features 9 worlds, 900 notes & 100 jiggies with an average length of 8 hours{0}- Supported: Rev 0 (US)"
+	"tooltip"	: "A full-sized ROM hack in a completely new setting, inspired by Ocarina of Time{0}Features 9 worlds, 900 notes & 100 jiggies with an average length of 8 hours{0}- Supported: Rev 0 (US)"
 }, {
 	"title"		: "Banjo-Kazooie: The Legend of the Crystal Jiggy",
 	"patch" : [ {
@@ -88,7 +88,80 @@
 	} ],
 	"options"	: 1,
 	"output"	: "_quest_for_cake_patched",
-	"tooltip"	: "A medium-sized ROM hack in a completely new setting{0}Features 5 worlds, 500 notes and 50 jiggies with an average length of 2-3 hours{0}- Supported: Rev 0 (US)"
+	"tooltip"	: "A medium-sized ROM hack in a completely new setting{0}Features 5 worlds, 500 notes and 50 jiggies with an average length of 2-3 hours{0}Includes custom music and enemies{0}- Supported: Rev 0 (US)"
+}, {
+	"title"		: "Banjo-Kazooie: Fort Fun",
+	"patch" : [ {
+		"file"	: "Decompressed\\fort_fun.bps",
+		"rev"	: "B29599651A13F681C9923D69354BF4A3"
+	} ],
+	"options"	: 1,
+	"output"	: "_fort_fun_patched",
+	"tooltip"	: "A tiny-sized ROM hack in a completely new setting with the intention to make you suffer{0}Features 1 world and 10 jiggies with an average length of 0.5 hours{0}- Supported: Rev 0 (US)"
+}, {
+	"title"		: "Banjo-Kazooie: Smash Bros. Temple",
+	"patch" : [ {
+		"file"	: "Decompressed\\smash_bros_temple.bps",
+		"rev"	: "B29599651A13F681C9923D69354BF4A3"
+	} ],
+	"options"	: 1,
+	"output"	: "_smash_bros_temple_patched",
+	"tooltip"	: "A tiny-sized ROM hack in a completely new setting inspired by the Super Smash Bros. Melee{0}Features 1 world, 100 notes, 8 jiggies and 2 honeycombs with an average length of 0.5 hours{0}- Supported: Rev 0 (US)"
+}, {
+	"title"		: "Banjo-Kazooie: The Bear Waker",
+	"patch" : [ {
+		"file"	: "Decompressed\\bear_waker.bps",
+		"rev"	: "B29599651A13F681C9923D69354BF4A3"
+	} ],
+	"options"	: 1,
+	"output"	: "_bear_waker_patched",
+	"tooltip"	: "A medium-sized ROM hack in a completely new setting inspired by the Wind Waker{0}Features 1 world, 200 notes, 10 jiggies and 2 honeycombs with an average length of 2 hours{0}- Supported: Rev 0 (US)"
+}, {
+	"title"		: "Banjo-Kazooie: The Final Mission",
+	"patch" : [ {
+		"file"	: "Decompressed\\final_mission.bps",
+		"rev"	: "B29599651A13F681C9923D69354BF4A3"
+	} ],
+	"options"	: 1,
+	"output"	: "_final_mission_patched",
+	"tooltip"	: "A medium-sized ROM hack in a completely new setting, as a prequel to The Legend of the Crystal Jiggy{0}Features 9 worlds, 100 notes, custom enemies and integrated beta items with an average length of 1-2 hours{0}Includes beta items{0}- Supported: Rev 0 (US)"
+
+}, {
+	"title"		: "Banjo-Kazooie: Grunty's Mansion",
+	"patch" : [ {
+		"file"	: "Decompressed\\gruntys_mansion.bps",
+		"rev"	: "B29599651A13F681C9923D69354BF4A3"
+	} ],
+	"options"	: 1,
+	"output"	: "_grunties_mansion_patched",
+	"tooltip"	: "A small-sized ROM hack in a completely new setting{0}Features 1 worlds, 100 notes, 10 jiggies, 6 honeycombs, 5 mumbo tokens and 25 game boxes with an average length of 2 hours{0}Includes custom items{0}- Supported: Rev 0 (US)"
+}, {
+	"title"		: "Cheato's Challenges",
+	"patch" : [ {
+		"file"	: "Decompressed\\cheatos_challenges.bps",
+		"rev"	: "B29599651A13F681C9923D69354BF4A3"
+	} ],
+	"options"	: 1,
+	"output"	: "_cheatos_challenges_patched",
+	"tooltip"	: "A medium-sized ROM hack in a completely new setting{0}Features 6 worlds, 1 hub, 120 notes, 12 jiggies with an average length of 1-2 hours{0}Includes custom music and enemies with assembly injection{0}- Supported: Rev 0 (US)"
+}, {
+	"title"		: "Banjo-Kazooie: The Cave of Dreams",
+	"patch" : [ {
+		"file"	: "Decompressed\\cave_of_dreams.bps",
+		"rev"	: "B29599651A13F681C9923D69354BF4A3"
+	} ],
+	"options"	: 1,
+	"output"	: "_cave_of_dreams_patched",
+	"tooltip"	: "An above-average-sized ROM hack in a completely new setting{0}Features 3 worlds, 300 notes and 30 jiggies with an average length of 3-4 hours{0}Includes custom objects and enemies{0}- Supported: Rev 0 (US)"
+}, {
+	"title"		: "Kurkoin Quest: Snacker Coral Bay",
+	"patch" : [ {
+		"file"	: "Decompressed\\snacker_coral_bay.bps",
+		"rev"	: "B29599651A13F681C9923D69354BF4A3"
+	} ],
+	"options"	: 1,
+	"output"	: "_snacker_coral_bay_patched",
+	"tooltip"	: "A tiny-sized ROM hack in a completely new setting{0}Features 1 worlds, 100 notes, 5 jiggies and 6 honeycombs with an average length of 2-3 hours{0}Includes custom objects with assembly injection{0}- Supported: Rev 0 (US)"
 }, {
 	"title"		: "Snow Glow Village",
 	"patch" : [ {

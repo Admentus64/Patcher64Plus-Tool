@@ -685,7 +685,7 @@ https://github.com/DaruniasJoy/OoT-Custom-Sequences
 - Loggo
 - bynine
 
---- Banjo-Kazooie: World Collide ---
+--- Banjo-Kazooie: Worlds Collide ---
 - Author:				bynine
 - Beta Testers:				Banjofreak, Xekonm, Davey, Fadida, Dad & Kiz, Snooplax
 - Special Thanks:			Banjo's Backback + Discord,  VGMusic, Rare
@@ -707,6 +707,30 @@ https://github.com/DaruniasJoy/OoT-Custom-Sequences
 
 --- Banjo-Kazooie: Quest for Cake ---
 - JacksonG13
+
+--- Banjo-Kazooie: Fort Fun ---
+- SonoUshiBousou
+
+--- Banjo-Kazooie: Smash Bros. Temple ---
+- Kurkomark
+
+--- Banjo-Kazooie: The Bear Waker ---
+- Kurkomark
+
+--- Banjo-Kazooie: The Final Mission ---
+- JacksonG13
+
+--- Banjo-Kazooie: Grunty's Mansion ---
+- JacksonG13
+
+--- Banjo-Kazooie: Cheato's Challenges ---
+- bynine, Brady, SonoUshiBousou, squashmvp, BanjōFurīku64, Wedamogi-tan, Barry M'dickener 
+
+--- Banjo-Kazooie: The Cave of Dreams
+- squashmvp
+
+--- Kurkoin Quest: Snacker Coral Bay ---
+- Kurkomark
 
 --- Snow Glow Village ---
 - KBM

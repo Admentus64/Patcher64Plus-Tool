@@ -1,7 +1,7 @@
 Patches for Banjo-Kazooie:
 1. Free Patching (requires .IPS, .BPS, .XDELTA, .VCDIFF or .PPF File)
 2. Patch Header
-3. Ten ROM hacks
+3. Twenty ROM hacks
 4. Additional Options
 
 Known Issues:
