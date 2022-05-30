@@ -49,7 +49,8 @@ function AdjustGUI() {
         if ($this.checked) { $Redux.Graphics.AnimatedTiles.Checked = $Redux.Revert.NESGFX.Checked  = $False }
     })
 
-    $Redux.Graphics.AnimatedTiles.Add_CheckStateChanged({        $Redux.Graphics.LinksAwakeningGFX.Enabled = $Redux.Revert.NESGFX.Enabled = !$this.checked
+    $Redux.Graphics.AnimatedTiles.Add_CheckStateChanged({
+        $Redux.Graphics.LinksAwakeningGFX.Enabled = $Redux.Revert.NESGFX.Enabled = !$this.checked
         if ($this.checked) { $Redux.Graphics.LinksAwakeningGFX.Checked = $Redux.Revert.NESGFX.Checked  = $False }
     })
 

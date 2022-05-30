@@ -781,15 +781,15 @@ function ApplyPatch([string]$File=$GetROM.decomp, [string]$Patch, [string]$New, 
 
     # Patch File
     if ($FullPath)         {  }
-    elseif ($FilesPath)    { $Patch = $Paths.Master + "\" + $Patch }
+    elseif ($FilesPath)    { $Patch = $Paths.Master + "\" + $Patch   }
     else                   { $Patch = $GameFiles.base + "\" + $Patch }
 
-    if (TestFile ($Patch + ".bps"))      { $Patch + ".bps" }
-    if (TestFile ($Patch + ".ips"))      { $Patch + ".ips" }
-    if (TestFile ($Patch + ".ups"))      { $Patch + ".ups" }
+    if (TestFile ($Patch + ".bps"))      { $Patch + ".bps"    }
+    if (TestFile ($Patch + ".ips"))      { $Patch + ".ips"    }
+    if (TestFile ($Patch + ".ups"))      { $Patch + ".ups"    }
     if (TestFile ($Patch + ".xdelta"))   { $Patch + ".xdelta" }
     if (TestFile ($Patch + ".vcdiff"))   { $Patch + ".vcdiff" }
-    if (TestFile ($Patch + ".ppf"))      { $Patch + ".ppf" }
+    if (TestFile ($Patch + ".ppf"))      { $Patch + ".ppf"    }
 
     if (TestFile $Patch) { $Patch = Get-Item -LiteralPath $Patch }
     else { # Patch File does not exist
@@ -800,15 +800,15 @@ function ApplyPatch([string]$File=$GetROM.decomp, [string]$Patch, [string]$New, 
 
     # Patching
     if ($Patch -like "*.bps*" -or $Patch -like "*.ips*") {
-        if ($New.Length -gt 0) { & $Files.tool.flips --ignore-checksum --apply $Patch $File $New | Out-Null }
-        else { & $Files.tool.flips --ignore-checksum $Patch $File | Out-Null }
+        if ($New.Length -gt 0)   { & $Files.tool.flips --ignore-checksum --apply $Patch $File $New | Out-Null }
+        else                     { & $Files.tool.flips --ignore-checksum $Patch $File | Out-Null              }
     }
     elseif ($Patch -like "*.ups*") {
-        if ($New.Length -gt 0)   { & $Files.tool.ups apply -b $File -p $Patch -o $New | Out-Null }
+        if ($New.Length -gt 0)   { & $Files.tool.ups apply -b $File -p $Patch -o $New | Out-Null  }
         else                     { & $Files.tool.ups apply -b $File -p $Patch -o $File | Out-Null }
     }
     elseif ($Patch -like "*.xdelta*" -or $Patch -like "*.vcdiff*") {
-        if     ($Patch -like "*.xdelta*")   { $Tool = $Files.tool.xdelta }
+        if     ($Patch -like "*.xdelta*")   { $Tool = $Files.tool.xdelta  }
         elseif ($Patch -like "*.vcdiff*")   { $Tool = $Files.tool.xdelta3 }
 
         if ($New.Length -gt 0) {
@@ -831,7 +831,7 @@ function ApplyPatch([string]$File=$GetROM.decomp, [string]$Patch, [string]$New, 
     else { return $False }
 
     if (IsSet $New)   { WriteToConsole ("Applied patch: " + $Patch + " from " + $File + " to " + $New) }
-    else              { WriteToConsole ("Applied patch: " + $Patch + " to " + $File) }
+    else              { WriteToConsole ("Applied patch: " + $Patch + " to " + $File)                   }
     return $True
 
 }
@@ -859,9 +859,9 @@ function DecompressROM() {
 
         # Get the correct DMA table for the ROM
         if     ( (IsSet $GamePatch.redux.dmaTable) -and (IsChecked $Patches.Redux) )                        { RemoveFile $Files.dmaTable; Add-Content $Files.dmaTable $GamePatch.redux.dmaTable }
-        elseif (IsSet $GamePatch.dmaTable)                                                                  { RemoveFile $Files.dmaTable; Add-Content $Files.dmaTable $GamePatch.dmaTable }
-        elseif (IsSet $LanguagePatch.dmaTable)                                                              { RemoveFile $Files.dmaTable; Add-Content $Files.dmaTable $LanguagePatch.dmaTable }
-        elseif ( (IsSet $GameType.dmaTable) -and $ROMHashSum -ne $CheckHashSum -and $PatchInfo.downgrade)   { RemoveFile $Files.dmaTable; Add-Content $Files.dmaTable $GameType.dmaTable }
+        elseif (IsSet $GamePatch.dmaTable)                                                                  { RemoveFile $Files.dmaTable; Add-Content $Files.dmaTable $GamePatch.dmaTable       }
+        elseif (IsSet $LanguagePatch.dmaTable)                                                              { RemoveFile $Files.dmaTable; Add-Content $Files.dmaTable $LanguagePatch.dmaTable   }
+        elseif ( (IsSet $GameType.dmaTable) -and $ROMHashSum -ne $CheckHashSum -and $PatchInfo.downgrade)   { RemoveFile $Files.dmaTable; Add-Content $Files.dmaTable $GameType.dmaTable        }
         else                                                                                                { & $Files.tool.TabExt $GetROM.run | Out-Null }
 
         WriteToConsole ("Generated DMA Table from: " + $GetROM.run)
