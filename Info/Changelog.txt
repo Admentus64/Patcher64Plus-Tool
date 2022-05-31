@@ -1,3 +1,6 @@
+v18.0.6
+- Added support for extracting a clean script through the Text Editor when using ROMs
+
 v18.0.5
 - Added new ROM hacks for BK
 

@@ -67,11 +67,11 @@
     #  Title / GameID
     if ($CustomHeader.EnableHeader.Checked) {
         if (!$IsWiiVC) {
-            if ($CustomHeader.ROMTitle.TextLength  -gt 0)   { $Header[0] = [string]$CustomHeader.ROMTitle.Text }
+            if ($CustomHeader.ROMTitle.TextLength  -gt 0)   { $Header[0] = [string]$CustomHeader.ROMTitle.Text  }
             if ($CustomHeader.ROMGameID.TextLength -eq 4)   { $Header[1] = [string]$CustomHeader.ROMGameID.Text }
         }
         else {
-            if ($CustomHeader.VCTitle.TextLength  -gt 0)    { $Header[2] = [string]$CustomHeader.VCTitle.Text }
+            if ($CustomHeader.VCTitle.TextLength  -gt 0)    { $Header[2] = [string]$CustomHeader.VCTitle.Text  }
             if ($CustomHeader.VCGameID.TextLength -eq 4)    { $Header[3] = [string]$CustomHeader.VCGameID.Text }
         }
     }
@@ -316,7 +316,7 @@ function Cleanup() {
 
 
 #==============================================================================================================================================================================================
-function Unpack([string]$PatchedFileName) {
+function Unpack() {
     
     $Ext = (Get-Item $GamePath).Extension
 
@@ -579,8 +579,8 @@ function DowngradeROM() {
 #==============================================================================================================================================================================================
 function GetMaxSize([string]$Command) {
 
-    if ($Settings.Debug.IgnoreChecksum -eq $True) { return $True }
-    if ( (StrLike -str $Command -val "Inject") ) { return $True }
+    if ($Settings.Debug.IgnoreChecksum -eq $True)   { return $True }
+    if (StrLike -str $Command -val "Inject")        { return $True }
 
     $maxSize = ($GameConsole.max_size) + "MB"
     if ((Get-Item -LiteralPath $GetROM.run).length/$maxSize -gt 1) {
@@ -1073,3 +1073,10 @@ Export-ModuleMember -Function ApplyPatch
 Export-ModuleMember -Function Cleanup
 Export-ModuleMember -Function GetPatchFile
 Export-ModuleMember -Function FinishLanguagePatching
+
+Export-ModuleMember -Function SetROMParameters
+Export-ModuleMember -Function Unpack
+Export-ModuleMember -Function ConvertROM
+Export-ModuleMember -Function CompareHashSums
+Export-ModuleMember -Function DecompressROM
+Export-ModuleMember -Function DowngradeROM

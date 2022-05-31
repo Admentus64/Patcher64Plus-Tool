@@ -252,7 +252,6 @@ function SetGetROM() {
         $GetROM.keepConvert   = $ROMFile.Convert
         $GetROM.keepDowngrade = $ROMFile.Downgrade
         $GetROM.keepDecomp    = $ROMFile.Decomp
-        $GetROM.input         
     }
 
     if ($GetROM.in -ne $null) { $GetROM.run = $GetROM.in }

@@ -1,6 +1,8 @@
-﻿function CreateTextEditorDialog([int32]$Width, [int32]$Height, [string]$Game=$GameType.mode) {
+﻿function CreateTextEditorDialog([int32]$Width, [int32]$Height, [string]$Game=$GameType.mode, [string]$Checksum) {
     
-    $global:Editor = @{}
+    $global:Editor   = @{}
+    $Editor.Game     = $Game
+    $Editor.Checksum = $Checksum
 
     # Create Dialog
     $Editor.Dialog = CreateDialog -Width (DPISize 1000) -Height (DPISize 550)
@@ -21,7 +23,7 @@
     $Editor.Content      = CreateTextBox -X (DPISize 15) -Y ($Editor.SearchBar.Bottom + (DPISize 15)) -Width ($Editor.ContentPanel.width - (DPISize 50)) -length 1000 -Height ($Editor.ContentPanel.Height - $Editor.SearchBar.Bottom - (DPISize 20) ) -Multiline -Font $Fonts.Editor -AddTo $Editor.ContentPanel
 
     # Close Button
-    $X = $Editor.ContentPanel.Left + ($Editor.ContentPanel.Width / 4)
+    $X = $Editor.ContentPanel.Left + ($Editor.ContentPanel.Width / 6)
     $Y = $Editor.Dialog.Height - (DPISize 90)
     $CloseButton = CreateButton -X $X -Y $Y -Width (DPISize 80) -Height (DPISize 35) -Text "Close" -AddTo $Editor.Dialog
     $CloseButton.Add_Click( { $Editor.Dialog.Hide() })
@@ -31,14 +33,16 @@
     $SearchButton = CreateButton -X ($CloseButton.Right + (DPISize 15)) -Y $CloseButton.Top -Width $CloseButton.Width -Height $CloseButton.Height -Text "Search" -AddTo $Editor.Dialog
     $SearchButton.BackColor = "White"
 
+    # Extract Button
+    $ExtractButton = CreateButton -X ($SearchButton.Right + (DPISize 15)) -Y $SearchButton.Top -Width $SearchButton.Width -Height $SearchButton.Height -Text "Extract Script" -AddTo $Editor.Dialog
+    $ExtractButton.BackColor = "White"
+
     # Options Label
-    $Editor.Label = CreateLabel -Y (DPISize 15) -Width $Editor.Dialog.width -Height (DPISize 15) -Font $Fonts.SmallBold -Text ($Game + " - Text Editor") -AddTo $Editor.Dialog
+    $Editor.Label = CreateLabel -Y (DPISize 15) -Width $Editor.Dialog.width -Height (DPISize 15) -Font $Fonts.SmallBold -Text ($Editor.Game + " - Text Editor") -AddTo $Editor.Dialog
     $Editor.Label.AutoSize = $True
     $Editor.Label.Left = ([Math]::Floor($Editor.Dialog.Width / 2) - [Math]::Floor($Editor.Label.Width / 2))
 
-    if (!(TestFile ($Paths.Games + "\" + $Game + "\Editor\message_data_static.bin")) -or !(TestFile ($Paths.Games + "\" + $Game + "\Editor\message_data.tbl")) ) { return }
-    LoadScript -Script ($Paths.Games + "\" + $Game + "\Editor\message_data_static.bin") -Table ($Paths.Games + "\" + $Game + "\Editor\message_data.tbl")
-    GetMessageIDs
+    LoadMessages
 
     [string]$global:ScriptLastID    = "0000"
     [uint32]$global:ScriptLastIndex = 0
@@ -49,7 +53,7 @@
     [uint16]$Editor.LastBoxRupees   = 0
     [string]$Editor.LastBoxJump     = "0000"
 
-    $Files.json.textEditor = SetJSONFile ($Paths.Games + "\" + $Game + "\Text Editor.json")
+    $Files.json.textEditor = SetJSONFile ($Paths.Games + "\" + $Editor.Game + "\Text Editor.json")
 
     # Bottom Panel
     $Editor.TextBoxPanel = CreatePanel -X $Editor.ContentPanel.Left -Y $Editor.ContentPanel.Bottom -Width $Editor.ContentPanel.Width -Height ($Editor.Dialog.Height - $Editor.ContentPanel.Height) -AddTo $Editor.Dialog
@@ -161,14 +165,68 @@
         }
     })
 
+    $ExtractButton.Add_Click({
+        $global:PatchInfo     = @{}
+        $PatchInfo.decompress = $True
+        $global:CheckHashSum  = $Editor.Checksum
+        $global:ROMFile       = SetROMParameters -Path $GamePath
+        SetGetROM
+
+        if ($IsWiiVC) {
+            if (!(ExtractWADFile))    { return }   # Step A: Extract the contents of the WAD file
+            if (!(CheckVCGameID))     { return }   # Step B: Check the GameID to be vanilla
+            if (!(ExtractU8AppFile))  { return }   # Step C: Extract "00000005.app" file to get the ROM
+            if (!(PatchVCROM))        { return }   # Step D: Do some initial patching stuff for the ROM for VC WAD files
+        }
+
+        if (!(Unpack))                                                              { UpdateStatusLabel "Failed! Could not extract ROM."; return }
+        if (TestFile $GetROM.run)                                                   { $global:ROMHashSum   = (Get-FileHash -Algorithm MD5 -LiteralPath $GetROM.run).Hash }
+        if ($Settings.Debug.IgnoreChecksum -eq $False -and (IsSet $CheckHashsum))   { $PatchInfo.downgrade = ($ROMHashSum -ne $CheckHashSum)                             }
+        if ((Get-Item -LiteralPath $GetROM.run).length/"32MB" -ne 1)                { UpdateStatusLabel "Failed! The ROM should be 32 MB!"; return $False }
+
+        if ($PatchInfo.run) {
+            ConvertROM $Command
+            if (!(CompareHashSums $Command)) { UpdateStatusLabel "Failed! The ROM is an incorrect version or is broken."; return }
+        }
+
+        if (!(DecompressROM)) { UpdateStatusLabel "Failed! The ROM could not be compressed."; return }
+        $item = DowngradeROM
+
+        # Extract script
+        if ((IsSet $Files.json.languages[0].script_dma) -and (IsSet $Files.json.languages[0].table_start) -and (IsSet $Files.json.languages[0].table_length)) {
+            $global:ByteArrayGame = [System.IO.File]::ReadAllBytes($GetROM.decomp)
+            CreateSubPath $GameFiles.editor
+            $start  = CombineHex $ByteArrayGame[((GetDecimal $Files.json.languages[0].script_dma)+0)..((GetDecimal $Files.json.languages[0].script_dma)+3)]
+            $end    = CombineHex $ByteArrayGame[((GetDecimal $Files.json.languages[0].script_dma)+4)..((GetDecimal $Files.json.languages[0].script_dma)+7)]
+            $length = Get32Bit ( (GetDecimal $end) - (GetDecimal $start) )
+            ExportBytes -Offset $start                               -Length $length                               -Output ($GameFiles.editor + "\message_data_static.bin") -Force
+            ExportBytes -Offset $Files.json.languages[0].table_start -Length $Files.json.languages[0].table_length -Output ($GameFiles.editor + "\message_data.tbl")        -Force
+        }
+
+        Cleanup
+        LoadMessages
+        PlaySound $Sounds.done # Play a sound when it is finished
+        UpdateStatusLabel "Success! Script has been extracted."
+    })
+
 }
 
 
 
 #==============================================================================================================================================================================================
-function RunTextEditor([string]$Game=$GameType.mode) {
+function LoadMessages() {
+
+    if (!(TestFile ($Paths.Games + "\" + $Editor.Game + "\Editor\message_data_static.bin")) -or !(TestFile ($Paths.Games + "\" + $Editor.Game + "\Editor\message_data.tbl")) ) { return $False }
+    LoadScript -Script ($Paths.Games + "\" + $Editor.Game + "\Editor\message_data_static.bin") -Table ($Paths.Games + "\" + $Editor.Game + "\Editor\message_data.tbl")
+    GetMessageIDs
+
+}
+
+
+#==============================================================================================================================================================================================
+function RunTextEditor([string]$Game=$GameType.mode, [string]$Checksum) {
     
-    CreateTextEditorDialog -Game $Game
+    CreateTextEditorDialog -Game $Game -Checksum $Checksum
     $Editor.Dialog.ShowDialog()
     if (!(TestFile ($Paths.Games + "\" + $Game + "\Editor\message_data_static.bin")) -or !(TestFile ($Paths.Games + "\" + $Game + "\Editor\message_data.tbl")) ) { return }
     SaveLastMessage

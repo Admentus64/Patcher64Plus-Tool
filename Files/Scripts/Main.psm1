@@ -99,8 +99,8 @@
     $menuBarGameID.Add_Click(   { If (!(IsSet $CreditsDialog)) { CreateCreditsDialog | Out-Null }; $Credits.Sections | foreach { $_.Visible = $False }; $Credits.Sections[2].Visible = $True; $CreditsDialog.ShowDialog() } )
     $menuBarChecksum.Add_Click( { If (!(IsSet $CreditsDialog)) { CreateCreditsDialog | Out-Null }; $Credits.Sections | foreach { $_.Visible = $False }; $Credits.Sections[4].Visible = $True; $CreditsDialog.ShowDialog() } )
 
-    $menuBarOoTTextEditor.Add_Click( { RunTextEditor -Game "Ocarina of Time" } )
-    $menuBarMMTextEditor.Add_Click(  { RunTextEditor -Game "Majora's Mask"   } )
+    $menuBarOoTTextEditor.Add_Click( { RunTextEditor -Game "Ocarina of Time" -Checksum "5BD1FE107BF8106B2AB6650ABECD54D6" } )
+    $menuBarMMTextEditor.Add_Click(  { RunTextEditor -Game "Majora's Mask"   -Checmsum "2A0A8ACB61538235BC1094D297FB6556" } )
 
 
 
