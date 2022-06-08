@@ -2,6 +2,8 @@
 	"title"				: "Redux Plus",
 	"vc_title"			: "Redux: Ocarina",
 	"finalize"			: 0,
+	"remap_controls"		: 1,
+	"expand_memory"			: 1,
 	"patch" : [ {
 		"file"			: "Decompressed\\Redux\\redux_plus.bps",
 		"rev"			: "5BD1FE107BF8106B2AB6650ABECD54D6",
@@ -17,6 +19,8 @@
 	"title"				: "Redux Plus (Master Quest)",
 	"vc_title"			: "Redux: Ocarina",
 	"finalize"			: 0,
+	"remap_controls"		: 1,
+	"expand_memory"			: 1,
 	"patch" : [ {
 		"file"			: "Decompressed\\Redux\\redux_plus_mq.bps",
 		"rev"			: "5BD1FE107BF8106B2AB6650ABECD54D6",
