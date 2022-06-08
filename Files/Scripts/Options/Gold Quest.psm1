@@ -55,6 +55,7 @@ function ByteOptions() {
     if (IsChecked $Redux.Gameplay.RemoveCrouchStab)         { ChangeBytes -Offset "BDE374" -Values "10 00 00 0D"                                                     }
     if (IsChecked $Redux.Gameplay.RemoveQuickSpin)          { ChangeBytes -Offset "C9C9E8" -Values "10 00 00 0E"                                                     }
     if (IsChecked $Redux.Gameplay.ResumeLastArea)           { ChangeBytes -Offset "B06348" -Values "00 00";       ChangeBytes -Offset "B06354" -Values "00 00"       }
+    if (IsChecked $Redux.Gameplay.SpawnLinksHouse)          { ChangeBytes -Offset "B06332" -Values "00 BB"                                                           }
     if (IsChecked $Redux.Gameplay.AllowWarpSongs)           { ChangeBytes -Offset "B6D3D2" -Values "00";          ChangeBytes -Offset "B6D42A" -Values "00"          }
     if (IsChecked $Redux.Gameplay.AllowFaroreWind)          { ChangeBytes -Offset "B6D3D3" -Values "00";          ChangeBytes -Offset "B6D42B" -Values "00"          }
 
@@ -1224,20 +1225,21 @@ function CreateTabMain() {
     # GAMEPLAY #
 
     CreateReduxGroup    -Tag  "Gameplay" -Text "Gameplay" 
-    CreateReduxCheckBox -Name "Medallions"             -Text "Require All Medallions"          -Advanced -Info "All six medallions are required for the Rainbow Bridge to appear before Ganon's Castle`nThe vanilla requirements were the Shadow and Spirit Medallions and the Light Arrows" -Credits "Ported from Rando"
-    CreateReduxCheckBox -Name "RutoNeverDisappears"    -Text "Ruto Never Disappears" -Beginner -Advanced -Info "Ruto never disappears in Jabu Jabu's Belly and will remain in place when leaving the room"                                     -Credits "Ported from Rando"
-    CreateReduxCheckBox -Name "AlwaysMoveKingZora"     -Text "Always Move King Zora"           -Advanced -Info "King Zora will move aside even if the Zora Sapphire is in possession"                                                          -Credits "Ported from Rando"
-    CreateReduxCheckBox -Name "DistantZTargeting"      -Text "Distant Z-Targeting"             -Advanced -Info "Allow to use Z-Targeting on enemies, objects and NPC's from any distance"                                                      -Credits "Admentus"
-    CreateReduxCheckBox -Name "ManualJump"             -Text "Manual Jump"               -Lite -Advanced -Info "Press Z + A to do a Manual Jump instead of a Jump Attack`nPress B mid-air after jumping to do a Jump Attack"                   -Credits "Admentus (ROM) & CloudModding (GameShark)"
-    CreateReduxCheckBox -Name "NoKillFlash"            -Text "No Kill Flash"             -Lite -Advanced -Info "Disable the flash effect when killing certain enemies such as the Guay or Skullwalltula"                                       -Credits "Chez Cousteau"
-    CreateReduxCheckBox -Name "NoShieldRecoil"         -Text "No Shield Recoil"          -Lite -Advanced -Info "Disable the recoil when being hit while shielding"                                                                             -Credits "Admentus (ROM) & Aegiker (GameShark)"
-    CreateReduxCheckBox -Name "RunWhileShielding"      -Text "Run While Shielding"       -Lite -Advanced -Info "Press R to shield will no longer prevent Link from moving around" -Link $Redux.Gameplay.NoShieldRecoil                         -Credits "Admentus (ROM) & Aegiker (GameShark)"
-    CreateReduxCheckBox -Name "PushbackAttackingWalls" -Text "Pushback Attacking Walls"  -Lite -Advanced -Info "Link is getting pushed back a bit when hitting the wall with the sword"                                                        -Credits "Admentus (ROM) & Aegiker (GameShark)"
-    CreateReduxCheckBox -Name "RemoveCrouchStab"       -Text "Remove Crouch Stab"        -Lite -Advanced -Info "The Crouch Stab move is removed"                                                                                               -Credits "Garo-Mastah"
-    CreateReduxCheckBox -Name "RemoveQuickSpin"        -Text "Remove Magic Quick Spin"   -Lite -Advanced -Info "The magic Quick Spin Attack move is removed´nIt's a regular Quick Spin Attack now instead"                                     -Credits "Admentus & Three Pendants"
-    CreateReduxCheckBox -Name "ResumeLastArea"         -Text "Resume From Last Area"                     -Info "Resume playing from the area you last saved in" -Warning "Be careful of saving in Grottos"                                     -Credits "Admentus (ROM) & Aegiker (GameShark)"
-    CreateReduxCheckBox -Name "AllowWarpSongs"         -Text "Allow Warp Songs"      -Beginner -Advanced -Info "Allow warp songs in Gerudo Training Ground and Ganon's Castle"                                                                 -Credits "Ported from Rando"
-    CreateReduxCheckBox -Name "AllowFaroreWind"        -Text "Allow Farore's Wind"   -Beginner -Advanced -Info "Allow Farore's Wind in Gerudo Training Ground and Ganon's Castle"                                                              -Credits "Ported from Rando"
+    CreateReduxCheckBox -Name "Medallions"             -Text "Require All Medallions"               -Info "All six medallions are required for the Rainbow Bridge to appear before Ganon's Castle`nThe vanilla requirements were the Shadow and Spirit Medallions and the Light Arrows" -Credits "Ported from Rando"
+    CreateReduxCheckBox -Name "RutoNeverDisappears"    -Text "Ruto Never Disappears"                -Info "Ruto never disappears in Jabu Jabu's Belly and will remain in place when leaving the room"                                                                                   -Credits "Ported from Rando"
+    CreateReduxCheckBox -Name "AlwaysMoveKingZora"     -Text "Always Move King Zora"      -Advanced -Info "King Zora will move aside even if the Zora Sapphire is in possession"                                                                                                        -Credits "Ported from Rando"
+    CreateReduxCheckBox -Name "DistantZTargeting"      -Text "Distant Z-Targeting"        -Advanced -Info "Allow to use Z-Targeting on enemies, objects and NPC's from any distance"                                                                                                    -Credits "Admentus"
+    CreateReduxCheckBox -Name "ManualJump"             -Text "Manual Jump"                -Advanced -Info "Press Z + A to do a Manual Jump instead of a Jump Attack`nPress B mid-air after jumping to do a Jump Attack"                                                                 -Credits "Admentus (ROM) & CloudModding (GameShark)"
+    CreateReduxCheckBox -Name "NoKillFlash"            -Text "No Kill Flash"              -Advanced -Info "Disable the flash effect when killing certain enemies such as the Guay or Skullwalltula"                                                                                     -Credits "Chez Cousteau"
+    CreateReduxCheckBox -Name "NoShieldRecoil"         -Text "No Shield Recoil"           -Advanced -Info "Disable the recoil when being hit while shielding"                                                                                                                           -Credits "Admentus (ROM) & Aegiker (GameShark)"
+    CreateReduxCheckBox -Name "RunWhileShielding"      -Text "Run While Shielding"        -Advanced -Info "Press R to shield will no longer prevent Link from moving around" -Link $Redux.Gameplay.NoShieldRecoil                                                                       -Credits "Admentus (ROM) & Aegiker (GameShark)"
+    CreateReduxCheckBox -Name "PushbackAttackingWalls" -Text "Pushback Attacking Walls"   -Advanced -Info "Link is getting pushed back a bit when hitting the wall with the sword"                                                                                                      -Credits "Admentus (ROM) & Aegiker (GameShark)"
+    CreateReduxCheckBox -Name "RemoveCrouchStab"       -Text "Remove Crouch Stab"         -Advanced -Info "The Crouch Stab move is removed"                                                                                                                                             -Credits "Garo-Mastah"
+    CreateReduxCheckBox -Name "RemoveQuickSpin"        -Text "Remove Magic Quick Spin"    -Advanced -Info "The magic Quick Spin Attack move is removed´nIt's a regular Quick Spin Attack now instead"                                                                                   -Credits "Admentus & Three Pendants"
+    CreateReduxCheckBox -Name "ResumeLastArea"         -Text "Resume From Last Area"                -Info "Resume playing from the area you last saved in" -Warning "Be careful of saving in Grottos"                                                                                   -Credits "Admentus (ROM) & Aegiker (GameShark)"
+    CreateReduxCheckBox -Name "SpawnLinksHouse"        -Text "Adult Spawns in Link's House" -Simple -Info "Saving the game anywhere outside of a dungeon will make Adult start the session in Link's House instead of the Temple of Time"                                               -Credits "GhostlyDark"
+    CreateReduxCheckBox -Name "AllowWarpSongs"         -Text "Allow Warp Songs"                     -Info "Allow warp songs in Gerudo Training Ground and Ganon's Castle"                                                                                                               -Credits "Ported from Rando"
+    CreateReduxCheckBox -Name "AllowFaroreWind"        -Text "Allow Farore's Wind"                  -Info "Allow Farore's Wind in Gerudo Training Ground and Ganon's Castle"                                                                                                            -Credits "Ported from Rando"
 
     $Last.Column = 1; $Last.Row++
     CreateReduxComboBox -Name "SpawnChild" -Text "Child Starting Location" -Advanced -Default 1 -Items ("Link's House", "Temple of Time", "Hyrule Field", "Kakariko Village", "Inside the Deku Tree", "Dodongo's Cavern", "Inside Jabu-Jabu's Belly", "Forest Temple", "Fire Temple", "Water Temple", "Shadow Temple", "Spirit Temple", "Ice Cavern", "Bottom of the Well", "Thieves' Hideout", "Gerudo's Training Ground", "Inside Ganon's Castle", "Ganon's Tower") -Credits "Admentus & GhostlyDark"
@@ -1248,33 +1250,33 @@ function CreateTabMain() {
     # RESTORE #
 
     CreateReduxGroup    -Tag  "Restore"             -Text "Restore / Correct / Censor"
-    CreateReduxCheckBox -Name "RupeeColors"         -Text "Correct Rupee Colors"             -Info "Corrects the colors for the Purple (50) and Golden (200) Rupees"          -Credits "GhostlyDark"
-    CreateReduxCheckBox -Name "CowNoseRing"          -Text "Restore Cow Nose Ring"           -Info "Restore the rings in the noses for Cows as seen in the Japanese release"  -Credits "ShadowOne333"
-    CreateReduxCheckBox -Name "FireTemple"          -Text "Censor Fire Temple"     -Advanced -Info "Censor Fire Temple theme as used in the Rev 2 ROM"                        -Credits "ShadowOne333"
-    CreateReduxCheckBox -Name "CenterTextboxCursor" -Text "Center Textbox Cursor"            -Info "Aligns the textbox cursor to the middle of the screen"                    -Credits "Username0713"
-    CreateReduxComboBox -Name "Blood"               -Text "Blood Color"      -Lite -Advanced -Info "Change the color of blood used for several monsters, Ganondorf and Ganon" -Items @("Default", "Red blood for monsters", "Green blood for Ganondorf/Ganon", "Change both") -Credits "ShadowOne333 & Admentus"
+    CreateReduxCheckBox -Name "RupeeColors"         -Text "Correct Rupee Colors"  -Info "Corrects the colors for the Purple (50) and Golden (200) Rupees"          -Credits "GhostlyDark"
+    CreateReduxCheckBox -Name "CowNoseRing"         -Text "Restore Cow Nose Ring" -Info "Restore the rings in the noses for Cows as seen in the Japanese release"  -Credits "ShadowOne333"
+    CreateReduxCheckBox -Name "FireTemple"          -Text "Censor Fire Temple"    -Info "Censor Fire Temple theme as used in the Rev 2 ROM"                        -Credits "ShadowOne333"
+    CreateReduxCheckBox -Name "CenterTextboxCursor" -Text "Center Textbox Cursor" -Info "Aligns the textbox cursor to the middle of the screen"                    -Credits "Username0713"
+    CreateReduxComboBox -Name "Blood"               -Text "Blood Color"           -Info "Change the color of blood used for several monsters, Ganondorf and Ganon" -Items @("Default", "Red blood for monsters", "Green blood for Ganondorf/Ganon", "Change both") -Credits "ShadowOne333 & Admentus"
 
 
 
     # FIXES #
 
     CreateReduxGroup    -Tag  "Fixes"               -Text "Fixes"
-    CreateReduxCheckBox -Name "PauseScreenDelay"    -Text "Pause Screen Delay"      -Checked        -Info "Removes the delay when opening the Pause Screen by removing the anti-aliasing" -Native          -Credits "zel"
-    CreateReduxCheckBox -Name "PauseScreenCrash"    -Text "Pause Screen Crash Fix"  -Checked        -Info "Prevents the game from randomly crashing emulating a decompressed ROM upon pausing"             -Credits "zel"
-    CreateReduxCheckBox -Name "PoacherSaw"          -Text "Poacher's Saw"           -Checked        -Info "Obtaining the Poacher's Saw no longer prevents Link from obtaining the second Deku Nut upgrade" -Credits "Ported from Rando"
-    CreateReduxCheckBox -Name "Boomerang"           -Text "Boomerang"               -Lite -Advanced -Info "Fix the gem color on the thrown boomerang"                                                      -Credits "Aria"
-    CreateReduxCheckBox -Name "FortressMinimap"     -Text "Gerudo Fortress Minimap" -Lite -Advanced -Info "Display the complete minimap for the Gerudo Fortress during the Child era"                      -Credits "GhostlyDark"
+    CreateReduxCheckBox -Name "PauseScreenDelay"    -Text "Pause Screen Delay"     -Checked -Info "Removes the delay when opening the Pause Screen by removing the anti-aliasing" -Native          -Credits "zel"
+    CreateReduxCheckBox -Name "PauseScreenCrash"    -Text "Pause Screen Crash Fix" -Checked -Info "Prevents the game from randomly crashing emulating a decompressed ROM upon pausing"             -Credits "zel"
+    CreateReduxCheckBox -Name "PoacherSaw"          -Text "Poacher's Saw"          -Checked -Info "Obtaining the Poacher's Saw no longer prevents Link from obtaining the second Deku Nut upgrade" -Credits "Ported from Rando"
+    CreateReduxCheckBox -Name "Boomerang"           -Text "Boomerang"                       -Info "Fix the gem color on the thrown boomerang"                                                      -Credits "Aria"
+    CreateReduxCheckBox -Name "FortressMinimap"     -Text "Gerudo Fortress Minimap"         -Info "Display the complete minimap for the Gerudo Fortress during the Child era"                      -Credits "GhostlyDark"
     
 
 
     # OTHER #
 
     CreateReduxGroup    -Tag  "Other" -Text "Other"
-    CreateReduxCheckBox -Name "RemoveNaviPrompts" -Text "Remove Navi Prompts" -Beginner -Advanced -Info "Navi will no longer interrupt you with text boxes in the first dungeon"                                 -Credits "Ported from Redux"
-    CreateReduxCheckBox -Name "DefaultZTargeting" -Text "Default Hold Z-Targeting"      -Advanced -Info "Change the Default Z-Targeting option to Hold instead of Switch"                                        -Credits "Ported from Redux"
-    CreateReduxCheckBox -Name "InstantClaimCheck" -Text "Instant Claim Check" -Beginner -Advanced -Info "Remove the check for waiting until the Biggoron Sword can be claimed through the Claim Check"           -Credits "Ported from Rando"
-    CreateReduxCheckBox -Name "ItemSelect"        -Text "Translate Item Select"         -Advanced -Info "Translates the Debug Inventory Select menu into English"                                                -Credits "GhostlyDark"
-    CreateReduxCheckBox -Name "DiskDrive"         -Text "Enable Disk Drive Saves"       -Advanced -Info "Use the Disk Drive for Save Slots" -Warning "This option disables the use of non-Disk Drive save slots" -Credits "ZethN64, Sakura, Frostclaw, Steve(ToCoool) & GhostlyDark (ported)"
+    CreateReduxCheckBox -Name "RemoveNaviPrompts" -Text "Remove Navi Prompts"                -Info "Navi will no longer interrupt you with text boxes in the first dungeon"                                 -Credits "Ported from Redux"
+    CreateReduxCheckBox -Name "DefaultZTargeting" -Text "Default Hold Z-Targeting" -Advanced -Info "Change the Default Z-Targeting option to Hold instead of Switch"                                        -Credits "Ported from Redux"
+    CreateReduxCheckBox -Name "InstantClaimCheck" -Text "Instant Claim Check"                -Info "Remove the check for waiting until the Biggoron Sword can be claimed through the Claim Check"           -Credits "Ported from Rando"
+    CreateReduxCheckBox -Name "ItemSelect"        -Text "Translate Item Select"              -Info "Translates the Debug Inventory Select menu into English"                                                -Credits "GhostlyDark"
+    CreateReduxCheckBox -Name "DiskDrive"         -Text "Enable Disk Drive Saves"  -Advanced -Info "Use the Disk Drive for Save Slots" -Warning "This option disables the use of non-Disk Drive save slots" -Credits "ZethN64, Sakura, Frostclaw, Steve(ToCoool) & GhostlyDark (ported)"
     
     $Last.Column = 1; $Last.Row++
     CreateReduxComboBox -Name "MapSelect" -Text "Enable Map Select"     -Items @("Disable", "Translate Only", "Enable Only", "Translate and Enable") -Info "Enable the Map Select menu like in the Debug ROM`nThe File Select menu now opens the Map Select menu instead`nA separate debug save file is used" -Credits "Jared Johnson (translated by Zelda Edit)"

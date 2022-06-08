@@ -445,7 +445,7 @@ function PatchingAdditionalOptions() {
 
             $global:ScriptLastID    = "0000"
             $global:ScriptLastIndex = 0
-            $Files.json.textEditor = SetJSONFile $GameFiles.textEditor
+            $Files.json.textEditor  = SetJSONFile $GameFiles.textEditor
             iex "ByteLanguageOptions"
 
             SaveScript -Script ($GameFiles.extracted + "\message_data_static.bin") -Table ($GameFiles.extracted + "\message_data.tbl")

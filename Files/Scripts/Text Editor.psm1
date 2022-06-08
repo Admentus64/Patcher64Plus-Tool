@@ -1,89 +1,89 @@
 ﻿function CreateTextEditorDialog([int32]$Width, [int32]$Height, [string]$Game=$GameType.mode, [string]$Checksum) {
     
-    $global:Editor   = @{}
-    $Editor.Game     = $Game
-    $Editor.Checksum = $Checksum
+    $global:TextEditor   = @{}
+    $TextEditor.Game     = $Game
+    $TextEditor.Checksum = $Checksum
 
     # Create Dialog
-    $Editor.Dialog = CreateDialog -Width (DPISize 1000) -Height (DPISize 550)
-    $Editor.Dialog.Icon = $Files.icon.additional
-    $Editor.Dialog.BackColor = 'AntiqueWhite'
+    $TextEditor.Dialog           = CreateDialog -Width (DPISize 1000) -Height (DPISize 550)
+    $TextEditor.Dialog.Icon      = $Files.icon.additional
+    $TextEditor.Dialog.BackColor = 'AntiqueWhite'
 
     # Left Panel
-    $Editor.ListPanel = CreatePanel -Width (DPISize 520) -Height ($Editor.Dialog.Height - (DPISize 40)) -AddTo $Editor.Dialog
-    $Editor.ListPanel.BackColor         = 'AliceBlue'
-    $Editor.ListPanel.AutoScroll        = $True
-    $Editor.ListPanel.AutoScrollMargin  = New-Object System.Drawing.Size(0, 0)
-    $Editor.ListPanel.AutoScrollMinSize = New-Object System.Drawing.Size(0, 0)
+    $TextEditor.ListPanel                   = CreatePanel -Width (DPISize 520) -Height ($TextEditor.Dialog.Height - (DPISize 40)) -AddTo $TextEditor.Dialog
+    $TextEditor.ListPanel.BackColor         = 'AliceBlue'
+    $TextEditor.ListPanel.AutoScroll        = $True
+    $TextEditor.ListPanel.AutoScrollMargin  = New-Object System.Drawing.Size(0, 0)
+    $TextEditor.ListPanel.AutoScrollMinSize = New-Object System.Drawing.Size(0, 0)
 
     # Right Panel
-    $Editor.ContentPanel = CreatePanel   -X $Editor.ListPanel.Right -Width ($Editor.Dialog.Width - $Editor.ListPanel.Width) -Height ($Editor.Dialog.Height - (DPISize 230)) -AddTo $Editor.Dialog
-    $Editor.SearchBar    = CreateTextBox -X (DPISize 65) -Y (DPISize 15)                              -Width ($Editor.ContentPanel.width - (DPISize 100)) -length 50                                                                                              -Font $Fonts.Editor -AddTo $Editor.ContentPanel
-    CreateLabel -X ($Editor.SearchBar.Left - (DPISize 50) ) -Y $Editor.SearchBar.Top -Font $Fonts.SmallBold -Text "Search:" -AddTo $Editor.ContentPanel
-    $Editor.Content      = CreateTextBox -X (DPISize 15) -Y ($Editor.SearchBar.Bottom + (DPISize 15)) -Width ($Editor.ContentPanel.width - (DPISize 50)) -length 1000 -Height ($Editor.ContentPanel.Height - $Editor.SearchBar.Bottom - (DPISize 20) ) -Multiline -Font $Fonts.Editor -AddTo $Editor.ContentPanel
+    $TextEditor.ContentPanel = CreatePanel   -X $TextEditor.ListPanel.Right -Width ($TextEditor.Dialog.Width - $TextEditor.ListPanel.Width) -Height ($TextEditor.Dialog.Height - (DPISize 230)) -AddTo $TextEditor.Dialog
+    $TextEditor.SearchBar    = CreateTextBox -X (DPISize 65)    -Y (DPISize 15)                                  -Width ($TextEditor.ContentPanel.width - (DPISize 100)) -length 50 -Font $Fonts.TextEditor -AddTo $TextEditor.ContentPanel
+    CreateLabel -X ($TextEditor.SearchBar.Left - (DPISize 50) ) -Y $TextEditor.SearchBar.Top -Font $Fonts.SmallBold -Text "Search:" -AddTo $TextEditor.ContentPanel
+    $TextEditor.Content      = CreateTextBox -X (DPISize 15)    -Y ($TextEditor.SearchBar.Bottom + (DPISize 15)) -Width ($TextEditor.ContentPanel.width - (DPISize 50)) -length 1000 -Height ($TextEditor.ContentPanel.Height - $TextEditor.SearchBar.Bottom - (DPISize 20) ) -Multiline -Font $Fonts.TextEditor -AddTo $TextEditor.ContentPanel
 
     # Close Button
-    $X = $Editor.ContentPanel.Left + ($Editor.ContentPanel.Width / 6)
-    $Y = $Editor.Dialog.Height - (DPISize 90)
-    $CloseButton = CreateButton -X $X -Y $Y -Width (DPISize 80) -Height (DPISize 35) -Text "Close" -AddTo $Editor.Dialog
-    $CloseButton.Add_Click( { $Editor.Dialog.Hide() })
+    $X = $TextEditor.ContentPanel.Left + ($TextEditor.ContentPanel.Width / 6)
+    $Y = $TextEditor.Dialog.Height - (DPISize 90)
+    $CloseButton = CreateButton -X $X -Y $Y -Width (DPISize 80) -Height (DPISize 35) -Text "Close" -AddTo $TextEditor.Dialog
+    $CloseButton.Add_Click( { $TextEditor.Dialog.Hide() })
     $CloseButton.BackColor = "White"
 
     # Search Button
-    $SearchButton = CreateButton -X ($CloseButton.Right + (DPISize 15)) -Y $CloseButton.Top -Width $CloseButton.Width -Height $CloseButton.Height -Text "Search" -AddTo $Editor.Dialog
+    $SearchButton = CreateButton -X ($CloseButton.Right + (DPISize 15)) -Y $CloseButton.Top -Width $CloseButton.Width -Height $CloseButton.Height -Text "Search" -AddTo $TextEditor.Dialog
     $SearchButton.BackColor = "White"
 
     # Extract Button
-    $ExtractButton = CreateButton -X ($SearchButton.Right + (DPISize 15)) -Y $SearchButton.Top -Width $SearchButton.Width -Height $SearchButton.Height -Text "Extract Script" -AddTo $Editor.Dialog
+    $ExtractButton = CreateButton -X ($SearchButton.Right + (DPISize 15)) -Y $SearchButton.Top -Width $SearchButton.Width -Height $SearchButton.Height -Text "Extract Script" -AddTo $TextEditor.Dialog
     $ExtractButton.BackColor = "White"
 
     # Options Label
-    $Editor.Label = CreateLabel -Y (DPISize 15) -Width $Editor.Dialog.width -Height (DPISize 15) -Font $Fonts.SmallBold -Text ($Editor.Game + " - Text Editor") -AddTo $Editor.Dialog
-    $Editor.Label.AutoSize = $True
-    $Editor.Label.Left = ([Math]::Floor($Editor.Dialog.Width / 2) - [Math]::Floor($Editor.Label.Width / 2))
+    $TextEditor.Label = CreateLabel -Y (DPISize 15) -Width $TextEditor.Dialog.width -Height (DPISize 15) -Font $Fonts.SmallBold -Text ($TextEditor.Game + " - Text Editor") -AddTo $TextEditor.Dialog
+    $TextEditor.Label.AutoSize = $True
+    $TextEditor.Label.Left = ([Math]::Floor($TextEditor.Dialog.Width / 2) - [Math]::Floor($TextEditor.Label.Width / 2))
 
     LoadMessages
 
     [string]$global:ScriptLastID    = "0000"
     [uint32]$global:ScriptLastIndex = 0
-    [boolean[]]$Editor.Edited       = @($False, $False, $False, $False, $False, $False)
-    [byte]$Editor.LastBoxType       = 0
-    [byte]$Editor.LastBoxPosition   = 0
-    [string]$Editor.LastBoxIcon     = "00"
-    [uint16]$Editor.LastBoxRupees   = 0
-    [string]$Editor.LastBoxJump     = "0000"
+    [boolean[]]$TextEditor.Edited       = @($False, $False, $False, $False, $False, $False)
+    [byte]$TextEditor.LastBoxType       = 0
+    [byte]$TextEditor.LastBoxPosition   = 0
+    [string]$TextEditor.LastBoxIcon     = "00"
+    [uint16]$TextEditor.LastBoxRupees   = 0
+    [string]$TextEditor.LastBoxJump     = "0000"
 
-    $Files.json.textEditor = SetJSONFile ($Paths.Games + "\" + $Editor.Game + "\Text Editor.json")
+    $Files.json.textEditor = SetJSONFile ($Paths.Games + "\" + $TextEditor.Game + "\Text Editor.json")
 
     # Bottom Panel
-    $Editor.TextBoxPanel = CreatePanel -X $Editor.ContentPanel.Left -Y $Editor.ContentPanel.Bottom -Width $Editor.ContentPanel.Width -Height ($Editor.Dialog.Height - $Editor.ContentPanel.Height) -AddTo $Editor.Dialog
+    $TextEditor.TextBoxPanel = CreatePanel -X $TextEditor.ContentPanel.Left -Y $TextEditor.ContentPanel.Bottom -Width $TextEditor.ContentPanel.Width -Height ($TextEditor.Dialog.Height - $TextEditor.ContentPanel.Height) -AddTo $TextEditor.Dialog
     
     $items = @()
     $Files.json.textEditor.textboxes | foreach { $items += $_.name }
-    $Editor.TextBoxType     = CreateComboBox        -X (DPISize 15)                                  -Y (DPISize 35)                                   -Width (DPISize 160) -Height (DPISize 20) -Items $items -Text "Type"     -AddTo $Editor.TextBoxPanel
-    CreateLabel     -X $Editor.TextBoxType.Left     -Y ($Editor.TextBoxType.Top - (DPISize 20) )     -Font $Fonts.SmallBold -Text "Textbox Type"       -AddTo $Editor.TextBoxPanel
+    $TextEditor.TextBoxType     = CreateComboBox        -X (DPISize 15)                                  -Y (DPISize 35)                                   -Width (DPISize 160) -Height (DPISize 20) -Items $items -Text "Type"     -AddTo $TextEditor.TextBoxPanel
+    CreateLabel     -X $TextEditor.TextBoxType.Left     -Y ($TextEditor.TextBoxType.Top - (DPISize 20) )     -Font $Fonts.SmallBold -Text "Textbox Type"       -AddTo $TextEditor.TextBoxPanel
 
     $items = @("Dynamic", "Top", "Middle", "Bottom")
-    $Editor.TextBoxPosition = CreateComboBox        -X ($Editor.TextBoxType.Right   + (DPISize 15) ) -Y $Editor.TextBoxType.Top                        -Width (DPISize 160) -Height (DPISize 20) -Items $items -Text "Position" -AddTo $Editor.TextBoxPanel
-    CreateLabel     -X $Editor.TextBoxPosition.Left -Y ($Editor.TextBoxPosition.Top - (DPISize 20) ) -Font $Fonts.SmallBold -Text "Textbox Position"   -AddTo $Editor.TextBoxPanel
+    $TextEditor.TextBoxPosition = CreateComboBox        -X ($TextEditor.TextBoxType.Right   + (DPISize 15) ) -Y $TextEditor.TextBoxType.Top                        -Width (DPISize 160) -Height (DPISize 20) -Items $items -Text "Position" -AddTo $TextEditor.TextBoxPanel
+    CreateLabel     -X $TextEditor.TextBoxPosition.Left -Y ($TextEditor.TextBoxPosition.Top - (DPISize 20) ) -Font $Fonts.SmallBold -Text "Textbox Position"   -AddTo $TextEditor.TextBoxPanel
 
     if ($Files.json.textEditor.header -gt 0) {
         $items = @()
         $Files.json.textEditor.icons | foreach { $items += $_.name }
         $items = $items | select -Unique
-        $Editor.TextBoxIcon   = CreateComboBox      -X $Editor.TextBoxType.Left                      -Y ($Editor.TextBoxType.Bottom + (DPISize 30) )   -Width (DPISize 160) -Height (DPISize 20) -Items $items -Text "Icon"     -AddTo $Editor.TextBoxPanel
-        CreateLabel -X $Editor.TextBoxIcon.Left     -Y ($Editor.TextBoxIcon.Top - (DPISize 20) )     -Font $Fonts.SmallBold -Text "Textbox Icon"       -AddTo $Editor.TextBoxPanel
+        $TextEditor.TextBoxIcon   = CreateComboBox      -X $TextEditor.TextBoxType.Left                      -Y ($TextEditor.TextBoxType.Bottom + (DPISize 30) )   -Width (DPISize 160) -Height (DPISize 20) -Items $items -Text "Icon"     -AddTo $TextEditor.TextBoxPanel
+        CreateLabel -X $TextEditor.TextBoxIcon.Left     -Y ($TextEditor.TextBoxIcon.Top - (DPISize 20) )     -Font $Fonts.SmallBold -Text "Textbox Icon"       -AddTo $TextEditor.TextBoxPanel
     
-        $Editor.TextBoxRupees = CreateTextBox       -X ($Editor.TextBoxIcon.Right + (DPISize 15) )   -Y $Editor.TextBoxIcon.Top                        -Width (DPISize 60)  -Height (DPISize 15) -Length 4     -Text "0"        -AddTo $Editor.TextBoxPanel
-        CreateLabel -X $Editor.TextBoxRupees.Left   -Y ($Editor.TextBoxRupees.Top - (DPISize 20) )   -Font $Fonts.SmallBold -Text "Textbox Rupee Cost" -AddTo $Editor.TextBoxPanel
+        $TextEditor.TextBoxRupees = CreateTextBox       -X ($TextEditor.TextBoxIcon.Right + (DPISize 15) )   -Y $TextEditor.TextBoxIcon.Top                        -Width (DPISize 60)  -Height (DPISize 15) -Length 4     -Text "0"        -AddTo $TextEditor.TextBoxPanel
+        CreateLabel -X $TextEditor.TextBoxRupees.Left   -Y ($TextEditor.TextBoxRupees.Top - (DPISize 20) )   -Font $Fonts.SmallBold -Text "Textbox Rupee Cost" -AddTo $TextEditor.TextBoxPanel
 
-        $Editor.TextBoxJump   = CreateTextBox       -X ($Editor.TextBoxRupees.Right + (DPISize 65) ) -Y $Editor.TextBoxIcon.Top                        -Width (DPISize 60)  -Height (DPISize 15) -Length 4     -Text "0000"     -AddTo $Editor.TextBoxPanel
-        CreateLabel -X $Editor.TextBoxJump.Left     -Y ($Editor.TextBoxJump.Top     - (DPISize 20) ) -Font $Fonts.SmallBold -Text "Jump to Message"    -AddTo $Editor.TextBoxPanel
+        $TextEditor.TextBoxJump   = CreateTextBox       -X ($TextEditor.TextBoxRupees.Right + (DPISize 65) ) -Y $TextEditor.TextBoxIcon.Top                        -Width (DPISize 60)  -Height (DPISize 15) -Length 4     -Text "0000"     -AddTo $TextEditor.TextBoxPanel
+        CreateLabel -X $TextEditor.TextBoxJump.Left     -Y ($TextEditor.TextBoxJump.Top     - (DPISize 20) ) -Font $Fonts.SmallBold -Text "Jump to Message"    -AddTo $TextEditor.TextBoxPanel
 
-        $Editor.TextBoxIcon.Add_SelectedIndexChanged({ if ($Editor.Edited[0]) { $Editor.Edited[3] = $True } })
+        $TextEditor.TextBoxIcon.Add_SelectedIndexChanged({ if ($TextEditor.Edited[0]) { $TextEditor.Edited[3] = $True } })
 
-        $Editor.TextBoxRupees.Add_TextChanged( {
-            if ($Editor.Edited[0]) { $Editor.Edited[4] = $True }
+        $TextEditor.TextBoxRupees.Add_TextChanged( {
+            if ($TextEditor.Edited[0]) { $TextEditor.Edited[4] = $True }
 
             $regEx = '[^0-9]'
             if ($this.Text -cmatch $regEx) {
@@ -96,8 +96,8 @@
             }
         } )
 
-        $Editor.TextBoxJump.Add_TextChanged( {
-            if ($Editor.Edited[0]) { $Editor.Edited[5] = $True }
+        $TextEditor.TextBoxJump.Add_TextChanged( {
+            if ($TextEditor.Edited[0]) { $TextEditor.Edited[5] = $True }
 
             $regEx = '[^0-9a-fA-F]'
             if ($this.Text -cmatch $regEx) {
@@ -110,19 +110,19 @@
             }
         } )
 
-        $Editor.TextBoxIcon.enabled = $Editor.TextBoxRupees.enabled = $Editor.TextBoxJump.enabled = $False
+        $TextEditor.TextBoxIcon.enabled = $TextEditor.TextBoxRupees.enabled = $TextEditor.TextBoxJump.enabled = $False
     }
-    $Editor.Content.Add_TextChanged(                  { if ($Editor.Edited[0]) { $Editor.Edited[1] = $True } })
-    $Editor.TextBoxType.Add_SelectedIndexChanged(     { if ($Editor.Edited[0]) { $Editor.Edited[2] = $True } })
-    $Editor.TextBoxPosition.Add_SelectedIndexChanged( { if ($Editor.Edited[0]) { $Editor.Edited[2] = $True } })
-    $Editor.TextBoxType.enabled = $Editor.TextBoxPosition.enabled = $False
+    $TextEditor.Content.Add_TextChanged(                  { if ($TextEditor.Edited[0]) { $TextEditor.Edited[1] = $True } })
+    $TextEditor.TextBoxType.Add_SelectedIndexChanged(     { if ($TextEditor.Edited[0]) { $TextEditor.Edited[2] = $True } })
+    $TextEditor.TextBoxPosition.Add_SelectedIndexChanged( { if ($TextEditor.Edited[0]) { $TextEditor.Edited[2] = $True } })
+    $TextEditor.TextBoxType.enabled = $TextEditor.TextBoxPosition.enabled = $False
 
     $SearchButton.Add_Click({
-        $Editor.ListPanel.VerticalScroll.Value = 0;
+        $TextEditor.ListPanel.VerticalScroll.Value = 0;
         $i      = 0
         $row    = $column = 0
-        if ($Editor.SearchBar.text.length -eq 0) {
-            foreach ($btn in $Editor.ListPanel.Controls) {
+        if ($TextEditor.SearchBar.text.length -eq 0) {
+            foreach ($btn in $TextEditor.ListPanel.Controls) {
                 if ($column -eq 10) {
                     $row++
                     $column = 0
@@ -133,8 +133,8 @@
             }
         }
         else {
-            $search = ParseMessage -Text ($Editor.SearchBar.text | Format-Hex | Select-Object -Expand Bytes) -Encode
-            foreach ($btn in $Editor.ListPanel.Controls) {
+            $search = ParseMessage -Text ($TextEditor.SearchBar.text | Format-Hex | Select-Object -Expand Bytes) -Encode
+            foreach ($btn in $TextEditor.ListPanel.Controls) {
                 $start   = GetDecimal ( (Get8Bit $ByteTableArray[$i+5])   + (Get8Bit $ByteTableArray[$i+6])   + (Get8Bit $ByteTableArray[$i+7])   )
                 $end     = GetDecimal ( (Get8Bit $ByteTableArray[$i+5+8]) + (Get8Bit $ByteTableArray[$i+6+8]) + (Get8Bit $ByteTableArray[$i+7+8]) )
                 $message = $ByteScriptArray[($start+$Files.json.textEditor.header)..$end]
@@ -168,7 +168,7 @@
     $ExtractButton.Add_Click({
         $global:PatchInfo     = @{}
         $PatchInfo.decompress = $True
-        $global:CheckHashSum  = $Editor.Checksum
+        $global:CheckHashSum  = $TextEditor.Checksum
         $global:ROMFile       = SetROMParameters -Path $GamePath
         SetGetROM
 
@@ -214,26 +214,27 @@
 
 
 #==============================================================================================================================================================================================
-function LoadMessages() {
-
-    if (!(TestFile ($Paths.Games + "\" + $Editor.Game + "\Editor\message_data_static.bin")) -or !(TestFile ($Paths.Games + "\" + $Editor.Game + "\Editor\message_data.tbl")) ) { return $False }
-    LoadScript -Script ($Paths.Games + "\" + $Editor.Game + "\Editor\message_data_static.bin") -Table ($Paths.Games + "\" + $Editor.Game + "\Editor\message_data.tbl")
-    GetMessageIDs
+function RunTextEditor([string]$Game=$GameType.mode, [string]$Checksum) {
+    
+    CreateTextEditorDialog -Game $Game -Checksum $Checksum
+    $TextEditor.Dialog.ShowDialog()
+    if (!(TestFile ($Paths.Games + "\" + $Game + "\TextEditor\message_data_static.bin")) -or !(TestFile ($Paths.Games + "\" + $Game + "\TextEditor\message_data.tbl")) ) { return }
+    SaveLastMessage
+    SaveScript -Script ($Paths.Games + "\" + $Game + "\TextEditor\message_data_static.bin") -Table ($Paths.Games + "\" + $Game + "\TextEditor\message_data.tbl")
+    CreateSubPath ($Paths.Games + "\" + $Game + "\Custom Text")
+    Copy-Item -LiteralPath ($Paths.Games + "\" + $Game + "\TextEditor\message_data_static.bin") -Destination ($Paths.Games + "\" + $Game + "\Custom Text\message_data_static.bin") -Force
+    Copy-Item -LiteralPath ($Paths.Games + "\" + $Game + "\TextEditor\message_data.tbl")        -Destination ($Paths.Games + "\" + $Game + "\Custom Text\message_data.tbl")        -Force
 
 }
 
 
+
 #==============================================================================================================================================================================================
-function RunTextEditor([string]$Game=$GameType.mode, [string]$Checksum) {
-    
-    CreateTextEditorDialog -Game $Game -Checksum $Checksum
-    $Editor.Dialog.ShowDialog()
-    if (!(TestFile ($Paths.Games + "\" + $Game + "\Editor\message_data_static.bin")) -or !(TestFile ($Paths.Games + "\" + $Game + "\Editor\message_data.tbl")) ) { return }
-    SaveLastMessage
-    SaveScript -Script ($Paths.Games + "\" + $Game + "\Editor\message_data_static.bin") -Table ($Paths.Games + "\" + $Game + "\Editor\message_data.tbl")
-    CreateSubPath ($Paths.Games + "\" + $Game + "\Custom Text")
-    Copy-Item -LiteralPath ($Paths.Games + "\" + $Game + "\Editor\message_data_static.bin") -Destination ($Paths.Games + "\" + $Game + "\Custom Text\message_data_static.bin") -Force
-    Copy-Item -LiteralPath ($Paths.Games + "\" + $Game + "\Editor\message_data.tbl")        -Destination ($Paths.Games + "\" + $Game + "\Custom Text\message_data.tbl")        -Force
+function LoadMessages() {
+
+    if (!(TestFile ($Paths.Games + "\" + $TextEditor.Game + "\TextEditor\message_data_static.bin")) -or !(TestFile ($Paths.Games + "\" + $TextEditor.Game + "\TextEditor\message_data.tbl")) ) { return $False }
+    LoadScript -Script ($Paths.Games + "\" + $TextEditor.Game + "\TextEditor\message_data_static.bin") -Table ($Paths.Games + "\" + $TextEditor.Game + "\TextEditor\message_data.tbl")
+    GetMessageIDs
 
 }
 
@@ -263,14 +264,14 @@ function SaveScript([string]$Script, [string]$Table) {
 function SaveLastMessage() {
     
     if (IsSet $ScriptLastID) {
-        if ($Editor.Edited[1]) { SetMessage -Replace $Editor.Content.Text -ID $ScriptLastID }
-        if ($Editor.Edited[2]) { SetMessageBox -ID $ScriptLastID -Type $Editor.TextBoxType.selectedIndex -Position $Editor.TextBoxPosition.selectedIndex }
+        if ($TextEditor.Edited[1]) { SetMessage -Replace $TextEditor.Content.Text -ID $ScriptLastID }
+        if ($TextEditor.Edited[2]) { SetMessageBox -ID $ScriptLastID -Type $TextEditor.TextBoxType.selectedIndex -Position $TextEditor.TextBoxPosition.selectedIndex }
         if ($Files.json.textEditor.header -gt 0) {
-            if ($Editor.Edited[3]) { SetMessageIcon   -ID $ScriptLastID -Value $Editor.TextBoxIcon.text             }
-            if ($Editor.Edited[4]) { SetMessageRupees -ID $ScriptLastID -Value ([uint16]$Editor.TextBoxRupees.text) }
-            if ($Editor.Edited[5]) { SetJumpToMessage -ID $ScriptLastID -Value $Editor.TextBoxJump.text             }
+            if ($TextEditor.Edited[3]) { SetMessageIcon   -ID $ScriptLastID -Value $TextEditor.TextBoxIcon.text             }
+            if ($TextEditor.Edited[4]) { SetMessageRupees -ID $ScriptLastID -Value ([uint16]$TextEditor.TextBoxRupees.text) }
+            if ($TextEditor.Edited[5]) { SetJumpToMessage -ID $ScriptLastID -Value $TextEditor.TextBoxJump.text             }
         }
-        for ($i=0; $i -lt $Editor.Edited.count; $i++) { $Editor.edited[$i] = $False }
+        for ($i=0; $i -lt $TextEditor.Edited.count; $i++) { $TextEditor.edited[$i] = $False }
     }
 
 }
@@ -291,37 +292,37 @@ function GetMessage([string]$ID) {
             $offset                 = GetDecimal (CombineHex $ByteTableArray[($i  +5)..($i  +7)])
             $length                 = GetDecimal (CombineHex $ByteTableArray[($i+5+8)..($i+7+8)])
 
-            if ($Editor) {
+            if ($TextEditor) {
                 if ($Files.json.textEditor.header -gt 0) {
-                    $Editor.LastBoxType     = $ByteScriptArray[$offset + 0]
-                    $Editor.LastBoxPosition = $ByteScriptArray[$offset + 1] -shr 4
-                    $Editor.LastBoxIcon     = Get8Bit $ByteScriptArray[$offset + 2]
-                    $Editor.LastBoxRupees   = GetDecimal (CombineHex $ByteScriptArray[($offset + 5)..($offset + 6)])
-                    if ($Editor.LastBoxRupees -eq 65535) { $Editor.LastBoxRupees = 0 }
-                    $Editor.LastBoxJump     = CombineHex $ByteScriptArray[($offset + 3)..($offset + 4)]
+                    $TextEditor.LastBoxType     = $ByteScriptArray[$offset + 0]
+                    $TextEditor.LastBoxPosition = $ByteScriptArray[$offset + 1] -shr 4
+                    $TextEditor.LastBoxIcon     = Get8Bit $ByteScriptArray[$offset + 2]
+                    $TextEditor.LastBoxRupees   = GetDecimal (CombineHex $ByteScriptArray[($offset + 5)..($offset + 6)])
+                    if ($TextEditor.LastBoxRupees -eq 65535) { $TextEditor.LastBoxRupees = 0 }
+                    $TextEditor.LastBoxJump     = CombineHex $ByteScriptArray[($offset + 3)..($offset + 4)]
 
                     foreach ($icon in $Files.json.textEditor.icons) {
-                        if ($icon.id -eq $Editor.LastBoxIcon) {
-                            $Editor.TextBoxIcon.text = $icon.name
+                        if ($icon.id -eq $TextEditor.LastBoxIcon) {
+                            $TextEditor.TextBoxIcon.text = $icon.name
                             break
                         }
                     }
-                    $Editor.TextBoxRupees.text = $Editor.LastBoxRupees
-                    $Editor.TextBoxJump.text   = $Editor.LastBoxJump
+                    $TextEditor.TextBoxRupees.text = $TextEditor.LastBoxRupees
+                    $TextEditor.TextBoxJump.text   = $TextEditor.LastBoxJump
                 }
                 else {
-                    $Editor.LastBoxType     =  $ByteTableArray[$i + 2] -shr 4       # Upper
-                    $Editor.LastBoxPosition = ($ByteTableArray[$i + 2] -shl 4) / 16 # Lower
+                    $TextEditor.LastBoxType     =  $ByteTableArray[$i + 2] -shr 4       # Upper
+                    $TextEditor.LastBoxPosition = ($ByteTableArray[$i + 2] -shl 4) / 16 # Lower
                 }
 
                 foreach ($box in $Files.json.textEditor.textboxes) {
-                    if ($box.id -eq $Editor.LastBoxType) {
-                        $Editor.TextBoxType.text = $box.name
+                    if ($box.id -eq $TextEditor.LastBoxType) {
+                        $TextEditor.TextBoxType.text = $box.name
                         break
                     }
                 }
-                if ($Editor.LastBoxPosition -ge 3)   { $Editor.TextBoxPosition.selectedIndex = 3 }
-                else                                 { $Editor.TextBoxPosition.selectedIndex = GetDecimal $Editor.LastBoxPosition }
+                if ($TextEditor.LastBoxPosition -ge 3)   { $TextEditor.TextBoxPosition.selectedIndex = 3 }
+                else                                 { $TextEditor.TextBoxPosition.selectedIndex = GetDecimal $TextEditor.LastBoxPosition }
             }
 
             return [string]([char[]](ParseMessage -Text $ByteScriptArray[($offset+$Files.json.textEditor.header)..($length-1)]) -join '')
@@ -364,15 +365,15 @@ function AddMessageIDButton([string]$ID, [byte]$Column, [uint16]$Row) {
     $button.BackColor = "Gray"
     $button.Add_Click( {
         SaveLastMessage
-        $Editor.Content.Text = GetMessage -ID $this.Text
-        if (IsSet $Editor.LastButton) { $Editor.LastButton.BackColor = "Gray" }
-        $Editor.LastButton = $this
+        $TextEditor.Content.Text = GetMessage -ID $this.Text
+        if (IsSet $TextEditor.LastButton) { $TextEditor.LastButton.BackColor = "Gray" }
+        $TextEditor.LastButton = $this
         $this.BackColor = "DarkGray"
-        $Editor.TextBoxType.enabled = $Editor.TextBoxPosition.enabled = $True
-        if ($Files.json.textEditor.header -gt 0) { $Editor.TextBoxIcon.enabled = $Editor.TextBoxRupees.enabled = $Editor.TextBoxJump.enabled = $True }
-        $Editor.Edited[0] = $True
+        $TextEditor.TextBoxType.enabled = $TextEditor.TextBoxPosition.enabled = $True
+        if ($Files.json.textEditor.header -gt 0) { $TextEditor.TextBoxIcon.enabled = $TextEditor.TextBoxRupees.enabled = $TextEditor.TextBoxJump.enabled = $True }
+        $TextEditor.Edited[0] = $True
     } )
-    $Editor.ListPanel.Controls.Add($button)
+    $TextEditor.ListPanel.Controls.Add($button)
 
 }
 
@@ -517,7 +518,7 @@ function SetMessageIcon([string]$ID, [string]$Value) {
             $global:ScriptLastIndex     = $i
             [uint32]$offset             = GetDecimal (GetMessageOffset)
             foreach ($icon in $Files.json.textEditor.icons) {
-                if ($icon.name -eq $Editor.TextBoxIcon.text) {
+                if ($icon.name -eq $TextEditor.TextBoxIcon.text) {
                     $ByteScriptArray[$offset+2] = GetDecimal $icon.id
                     break
                 }
@@ -655,7 +656,7 @@ function SetMessage([string]$ID, [object]$Text, [object]$Replace, [string]$File,
     else {
         [uint32]$match = $offset
         $Text          = $ByteScriptArray[$offset..($offset+$length-1)]
-        [int16]$index  = $Text.indexOf([byte]$Files.json.textEditor.end)
+        [int16]$index  = $Text.indexOf([byte]$Files.json.t-extEditor.end)
         if ($index -ge 0) { $Text = $Text[0..($index-1)] }
     }
 
@@ -720,9 +721,9 @@ function ParseMessage([byte[]]$Text, [switch]$Encode) {
 #==============================================================================================================================================================================================
 function ParseMessageOoT([byte[]]$Text, [switch]$Encode) {
     
-  # $Editor.IgnoreDecode2 = @(5, 6, 7, 12, 14, 17, 18, 29, 30)
-  # $Editor.IgnoreDecode3 = @(18)
-  # $Editor.IgnoreDecode4 = @(21)
+  # $TextEditor.IgnoreDecode2 = @(5, 6, 7, 12, 14, 17, 18, 29, 30)
+  # $TextEditor.IgnoreDecode3 = @(18)
+  # $TextEditor.IgnoreDecode4 = @(21)
 
     [int16]$index = $Text.indexOf([byte]$Files.json.textEditor.end)
     if ($index -ge 0) { $Text = $Text[0..($index-1)] }
@@ -799,7 +800,7 @@ function ParseMessageOoT([byte[]]$Text, [switch]$Encode) {
         $Text = ParseMessagePart -Text $Text -Encoded @(171) -Decoded @(60, 68, 45,  80,  97,  100, 62)                                       -Encode $Encode # AB / <D-Pad>         (D-Pad)
 
         # New box / line break
-        if (IsSet $Editor.Dialog) {
+        if (IsSet $TextEditor.Dialog) {
             $Text = ParseMessagePart -Text $Text -Encoded @(4) -Decoded @(13, 10, 60, 78, 101, 119, 32, 66, 111, 120, 62, 13, 10) -Encode $Encode # 04 / <New Box> (box break with new lines)
             $Text = ParseMessagePart -Text $Text -Encoded @(1) -Decoded @(13, 10)                                                 -Encode $Encode # 01 / `r`n      (new line)
         }
@@ -818,9 +819,9 @@ function ParseMessageOoT([byte[]]$Text, [switch]$Encode) {
 #==============================================================================================================================================================================================
 function ParseMessageMM([byte[]]$Text, [switch]$Encode) {
     
-  # $Editor.IgnoreDecode2 = @(20)
-  # $Editor.IgnoreDecode3 = @(27, 28, 29, 30, 31)
-  # $Editor.IgnoreDecode4 = $null
+  # $TextEditor.IgnoreDecode2 = @(20)
+  # $TextEditor.IgnoreDecode3 = @(27, 28, 29, 30, 31)
+  # $TextEditor.IgnoreDecode4 = $null
 
     [int16]$index = $Text.indexOf([byte]$Files.json.textEditor.end)
     if ($index -ge 0) { $Text = $Text[0..($index-1)] }
@@ -923,7 +924,7 @@ function ParseMessageMM([byte[]]$Text, [switch]$Encode) {
         $Text = ParseMessagePart -Text $Text -Encoded @(188) -Decoded @(60, 68, 45,  80,  97,  100, 62)                                       -Encode $Encode # BC / <D-Pad>         (D-Pad)
 
         # New box / line break
-        if (IsSet $Editor.Dialog) {
+        if (IsSet $TextEditor.Dialog) {
             $Text = ParseMessagePart -Text $Text -Encoded @(16) -Decoded @(13, 10, 60,  78,  101, 119, 32,  66,  111, 120, 62, 13, 10)             -Encode $Encode # 10 / <New Box>    (box break with new lines)
             $Text = ParseMessagePart -Text $Text -Encoded @(18) -Decoded @(13, 10, 60,  78,  101, 119, 32,  66,  111, 120, 32, 73, 73, 62, 13, 10) -Encode $Encode # 12 / <New Box II> (box break with new lines)
             $Text = ParseMessagePart -Text $Text -Encoded @(17) -Decoded @(13, 10)                                                                 -Encode $Encode # 11 / `r`n         (new line)
@@ -991,16 +992,16 @@ function ParseMessagePart([System.Collections.ArrayList]$Text, [System.Collectio
         :inner for ($j=0; $j-lt $Encoded.count; $j++) {
             $c = $Text[$i+$j]
          <# if ($Encoded.count -eq 1) {
-                foreach ($ignore in $Editor.IgnoreDecode2) { if ($c -eq $ignore) {        break inner } }
-                foreach ($ignore in $Editor.IgnoreDecode3) { if ($c -eq $ignore) { $i++;  break inner } }
-                foreach ($ignore in $Editor.IgnoreDecode4) { if ($c -eq $ignore) { $i+=2; break inner } }
+                foreach ($ignore in $TextEditor.IgnoreDecode2) { if ($c -eq $ignore) {        break inner } }
+                foreach ($ignore in $TextEditor.IgnoreDecode3) { if ($c -eq $ignore) { $i++;  break inner } }
+                foreach ($ignore in $TextEditor.IgnoreDecode4) { if ($c -eq $ignore) { $i+=2; break inner } }
             }
             elseif ($Encoded.count -eq 2) {
-                foreach ($ignore in $Editor.IgnoreDecode3) { if ($c -eq $ignore) {       break inner } }
-                foreach ($ignore in $Editor.IgnoreDecode4) { if ($c -eq $ignore) { $i++; break inner } }
+                foreach ($ignore in $TextEditor.IgnoreDecode3) { if ($c -eq $ignore) {       break inner } }
+                foreach ($ignore in $TextEditor.IgnoreDecode4) { if ($c -eq $ignore) { $i++; break inner } }
             }
             elseif ($Encoded.count -eq 3) {
-                foreach ($ignore in $Editor.IgnoreDecode4) { if ($c -eq $ignore) { break inner } }
+                foreach ($ignore in $TextEditor.IgnoreDecode4) { if ($c -eq $ignore) { break inner } }
             } #>
 
             if ($c -ne $Encoded[$j] -and $Encoded[$j] -ne 255) { break }
