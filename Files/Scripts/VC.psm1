@@ -174,25 +174,18 @@ function PatchVCEmulator([string]$Command) {
     }
 
     # Games
-    if ($GameType.mode -eq "Ocarina of Time" -and ( (IsChecked $VC.ExpandMemory) -or ($Patches.Redux.Checked -and $Settings.Core.Interface -eq 1 -and $VC.ExpandMemory.Active) ) ) {
+    if ($GameType.mode -eq "Ocarina of Time" -and $VC.ExpandMemory.Checked) {
         ChangeBytes -File $WadFile.AppFile01 -Offset "5BF44" -Values "3C 80 72 00"
         ChangeBytes -File $WadFile.AppFile01 -Offset "5BFD7" -Values "00"
     }
-    elseif ($GameType.mode -eq "Majora's Mask" -and (IsChecked $VC.ExpandMemory) -and $Redux.Core.Interface -ne 1 ) {
+    elseif ($GameType.mode -eq "Majora's Mask" -and $VC.ExpandMemory.Checked) {
         ChangeBytes -File $WadFile.AppFile01 -Offset "10B58" -Values "3C 80 00 C0"
         ChangeBytes -File $WadFile.AppFile01 -Offset "4BD20" -Values "67 E4 70 00"
         ChangeBytes -File $WadFile.AppFile01 -Offset "4BC80" -Values "3C A0 01 00"
     }
 
     # Controls
-    if ($Patches.Redux.Checked -and $Settings.Core.Interface -eq 1-and $VC.RemapControls.Active) {
-        $Redux.Controls.Preset.SelectedIndex = 0
-        foreach ($item in $Redux.Controls.Preset.Items) {
-            if ($item -eq "Redux") { $Redux.Controls.Preset.Text = $item }
-        }
-    }
-
-    if ( (IsChecked $VC.RemapControls) -or ($Patches.Redux.Checked -and $Settings.Core.Interface -eq 1 -and $VC.RemapControls.Active) ) {
+    if ($VC.RemapControls.Checked) {
         if (StrLike -Str $Command -Val "Patch Boot DOL")   { $controls = $Files.json.controls.$("offsets_" + [System.IO.Path]::GetFileNameWithoutExtension((GetPatchFile))); }
         else                                               { $controls = $Files.json.controls.offsets; }
 
@@ -215,7 +208,7 @@ function PatchVCEmulator([string]$Command) {
     }
 
     # Expand Memory
-    if ( ( (IsChecked $VC.ExpandMemory) -or ($Patches.Redux.Checked -and $Settings.Core.Interface -eq 1 -and $VC.ExpandMemory.Active) ) -and $GameType.mode -ne "Majora's Mask") {
+    if ($VC.ExpandMemory.Checked -and $GameType.mode -ne "Majora's Mask") {
         $offset = SearchBytes -File $WadFile.AppFile01 -Start "2000" -End "9999" -Values "41 82 00 08 3C 80 00 80"
         if ($offset -gt 0) {
             ChangeBytes -File $WadFile.AppFile01 -Offset $offset -Values "60 00 00 00"
@@ -228,7 +221,7 @@ function PatchVCEmulator([string]$Command) {
         # SM64: 5AD4 / MK64: 5C28 / SF: 2EF4 / PM: 2EE4 / OoT: 2EB0 / MM: ?? / Smash: 3094 / Sin: 3028
     }
 
-    if ( (IsChecked $VC.RemoveFilter) -or ($Settings.Core.Interface -eq 1 -and $VC.RemoveFilter.Active) ) {
+    if ($VC.RemoveFilter.Checked) {
         $offset = SearchBytes -File $WadFile.AppFile01 -Start "40000" -End "60000" -Values "38 21 00 xx 4E 80 00 20 94 21 FF E0 7C 08 02 A6 3C 80 80 xx 90 01 00 24"
         if ($offset -gt 0) {
             ChangeBytes -File $WadFile.AppFile01 -Offset ( Get24Bit ( (GetDecimal $Offset) + (GetDecimal "08") ) )  -Values "4E 80 00 20"
@@ -488,7 +481,7 @@ function ExtractU8AppFile([string]$Command) {
     if ($GameConsole.appfile -eq "00000005.app") {
         UpdateStatusLabel 'Extracting "00000005.app" file...'                                                 # Set the status label
         & $Files.tool.wszst 'X' $WADFile.AppFile05 '-d' $WADFile.AppPath05 | Out-Null                         # Unpack the file using wszst
-        if ($VC.RemoveT64.Checked -and $Settings.Core.Interface -ne 1) { Get-ChildItem $WADFile.AppPath05 -Include *.T64 -Recurse | Remove-Item } # Remove all .T64 files when selected
+        if ($VC.RemoveT64.Checked) { Get-ChildItem $WADFile.AppPath05 -Include *.T64 -Recurse | Remove-Item } # Remove all .T64 files when selected
         foreach ($item in Get-ChildItem $WADFile.AppPath05) {                                                 # Reference ROM in unpacked AppFile
             if ($item -match "rom") {
                 $WADFile.ROM = $item.FullName
