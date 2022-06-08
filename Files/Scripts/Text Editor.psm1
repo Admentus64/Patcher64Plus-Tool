@@ -656,7 +656,7 @@ function SetMessage([string]$ID, [object]$Text, [object]$Replace, [string]$File,
     else {
         [uint32]$match = $offset
         $Text          = $ByteScriptArray[$offset..($offset+$length-1)]
-        [int16]$index  = $Text.indexOf([byte]$Files.json.t-extEditor.end)
+        [int16]$index  = $Text.indexOf([byte]$Files.json.textEditor.end)
         if ($index -ge 0) { $Text = $Text[0..($index-1)] }
     }
 
