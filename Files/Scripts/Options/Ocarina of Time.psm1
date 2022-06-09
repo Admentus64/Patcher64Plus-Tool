@@ -1547,7 +1547,7 @@ function CreateTabMain() {
     # GAMEPLAY #
 
     CreateReduxGroup    -Tag  "Gameplay" -Text "Gameplay" 
-    CreateReduxComboBox -Name "FasterBlockPushing"     -Text "Faster Block Pushing"      -Default 3 -Info "All blocks are pushed faster" -Items @("Disabled", "Except Time-Based Puzzles", "Fully Enabled")                                                                             -Credits "GhostlyDark (Ported from Redux)"
+    CreateReduxComboBox -Name "FasterBlockPushing"     -Text "Faster Block Pushing"      -Default 3 -Info "All blocks are pushed faster" -Items @("Disabled", "Exclude Time-Based Puzzles", "Fully Enabled")                                                                            -Credits "GhostlyDark (Ported from Redux)"
     CreateReduxCheckBox -Name "ReturnChild"            -Text "Can Always Return"                    -Info "You can always go back to being a child again before clearing the boss of the Forest Temple`nOut of the way Sheik!"                                                          -Credits "Ported from Redux"
     CreateReduxCheckBox -Name "Medallions"             -Text "Require All Medallions"               -Info "All six medallions are required for the Rainbow Bridge to appear before Ganon's Castle`nThe vanilla requirements were the Shadow and Spirit Medallions and the Light Arrows" -Credits "Ported from Rando"
     CreateReduxCheckBox -Name "RutoNeverDisappears"    -Text "Ruto Never Disappears"                -Info "Ruto never disappears in Jabu Jabu's Belly and will remain in place when leaving the room"                                                                                   -Credits "Ported from Rando"
