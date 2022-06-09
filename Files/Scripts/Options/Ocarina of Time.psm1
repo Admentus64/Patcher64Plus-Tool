@@ -45,13 +45,13 @@ function ByteOptions() {
     
     # GAMEPLAY #
 
-    if (IsChecked $Redux.Gameplay.FasterBlockPushing) {
+    if (IsIndex $Redux.Gameplay.FasterBlockPushing -Index 1 -Not) {
         ChangeBytes -Offset "DD2B87" -Values "80";          ChangeBytes -Offset "DD2D27" -Values "03" # Block Speed, Delay
         ChangeBytes -Offset "DD9683" -Values "80";          ChangeBytes -Offset "DD981F" -Values "03" # Milk Crate Speed, Delay
-        ChangeBytes -Offset "CE1BD0" -Values "40 80 00 00"; ChangeBytes -Offset "CE0F0F" -Values "03" # Amy Puzzle Speed, Delay
         ChangeBytes -Offset "C77CA8" -Values "40 80 00 00"; ChangeBytes -Offset "C770C3" -Values "01" # Fire Block Speed, Delay
         ChangeBytes -Offset "CC5DBF" -Values "01";          ChangeBytes -Offset "DBCF73" -Values "01" # Forest Basement Puzzle Delay / spirit Cobra Mirror Delay
         ChangeBytes -Offset "DBA233" -Values "19";          ChangeBytes -Offset "DBA3A7" -Values "00" # Truth Spinner Speed, Delay
+        if (IsIndex $Redux.Gameplay.FasterBlockPushing -Index 3) { ChangeBytes -Offset "CE1BD0" -Values "40 80 00 00"; ChangeBytes -Offset "CE0F0F" -Values "03" } # Amy Puzzle Speed, Delay
     }
 
     if (IsChecked $Redux.Gameplay.Medallions)               { ChangeBytes -Offset "E2B454" -Values "80 EA 00 A7 24 01 00 3F 31 4A 00 3F 00 00 00 00"                 }
@@ -442,38 +442,26 @@ function ByteOptions() {
 
     # HERO MODE #
 
-    if (IsDefault $Redux.Hero.Damage -Not) {
-        ChangeBytes -Offset "AE8073" -Values "09 04" -Interval 16         
-        if     (IsText -Elem $Redux.Hero.Damage -Compare "2x Damage")   { ChangeBytes -Offset "AE8096" -Values "80 40" }
-        elseif (IsText -Elem $Redux.Hero.Damage -Compare "4x Damage")   { ChangeBytes -Offset "AE8096" -Values "80 80" }
-        elseif (IsText -Elem $Redux.Hero.Damage -Compare "8x Damage")   { ChangeBytes -Offset "AE8096" -Values "80 C0" }
-        elseif (IsText -Elem $Redux.Hero.Damage -Compare "OHKO Mode")   { ChangeBytes -Offset "AE8096" -Values "82 00" }
-        ChangeBytes -Offset "AE8099" -Values "00 00 00"
-    }
-
-    if     (IsText -Elem $Redux.Hero.MagicUsage -Compare "2x Magic Usage")   { ChangeBytes -Offset "AE84FA" -Values "2C","40" }
-    elseif (IsText -Elem $Redux.Hero.MagicUsage -Compare "4x Magic Usage")   { ChangeBytes -Offset "AE84FA" -Values "2C","80" }
-    elseif (IsText -Elem $Redux.Hero.MagicUsage -Compare "8x Magic Usage")   { ChangeBytes -Offset "AE84FA" -Values "2C","C0" }
-
     if (IsIndex -Elem $Redux.Hero.MonsterHP -Index 3 -Not) { # Monsters
         if     (IsIndex -Elem $Redux.Hero.MonsterHP)   { $multi = 0   }
         else                                           { [float]$multi = [float]$Redux.Hero.MonsterHP.text.split('x')[0] }
 
-        MultiplyBytes -Offset "EEF780" -Factor $multi; MultiplyBytes -Offset "C6471B" -Factor $multi; MultiplyBytes -Offset "C51A9F" -Factor $multi # Guay, Torch Slug, Gohma Larva
         MultiplyBytes -Offset "D74393" -Factor $multi; MultiplyBytes -Offset "C2F97F" -Factor $multi; MultiplyBytes -Offset "C0DEF8" -Factor $multi # Like-Like, Peehat, Octorok
         MultiplyBytes -Offset "D463BF" -Factor $multi; MultiplyBytes -Offset "CA85DC" -Factor $multi; MultiplyBytes -Offset "DADBAF" -Factor $multi # Shell Blade, Mad Scrub, Spike
-        MultiplyBytes -Offset "C83647" -Factor $multi; MultiplyBytes -Offset "C83817" -Value $value -Multiply $multiply; MultiplyBytes -Offset "C836AB" -Factor $multi # Moblin, Moblin (Spear), Moblin (Club)
-        MultiplyBytes -Offset "C5F69C" -Factor $multi; MultiplyBytes -Offset "CAAF9C" -Value $value -Multiply $multiply; MultiplyBytes -Offset "C55A78" -Factor $multi # Biri, Bari, Shabom
-        MultiplyBytes -Offset "CD724F" -Factor $multi; MultiplyBytes -Offset "EDC597" -Value $value -Multiply $multiply; MultiplyBytes -Offset "C0B804" -Factor $multi # ReDead / Gibdo, Stalchild, Poe
-        MultiplyBytes -Offset "CB1903" -Factor $multi; MultiplyBytes -Offset "CB2DD7" -Value $value -Multiply $multiply # Blue Bubble, Red Blue
-        MultiplyBytes -Offset "D76A07" -Factor $multi; MultiplyBytes -Offset "C5FC3F" -Value $value -Multiply $multiply # Tentacle, Tailpasaran
-        MultiplyBytes -Offset "C693CC" -Factor $multi; MultiplyBytes -Offset "EB797C" -Value $value -Multiply $multiply # Stinger (Land), Stinger (Water)
-        MultiplyBytes -Offset "C2B183" -Factor $multi; MultiplyBytes -Offset "C2B1F7" -Value $value -Multiply $multiply # Red Tektite, Blue Tektite
-        MultiplyBytes -Offset "C1097C" -Factor $multi; MultiplyBytes -Offset "CD582C" -Value $value -Multiply $multiply # Wallmaster, Floormaster
-        MultiplyBytes -Offset "C2DEE7" -Factor $multi; MultiplyBytes -Offset "C2DF4B" -Value $value -Multiply $multiply # Leever (Green / Purple)
-        MultiplyBytes -Offset "CC6CA7" -Factor $multi; MultiplyBytes -Offset "CC6CAB" -Value $value -Multiply $multiply # Beamos
-        MultiplyBytes -Offset "C11177" -Factor $multi; MultiplyBytes -Offset "C599BC" -Value $value -Multiply $multiply # Dodongo, Baby Dodongo
-        MultiplyBytes -Offset "CE60C4" -Factor $multi                                                                # # Skullwalltula (Gold)
+        MultiplyBytes -Offset "C83647" -Factor $multi; MultiplyBytes -Offset "C83817" -Factor $multi; MultiplyBytes -Offset "C836AB" -Factor $multi # Moblin, Moblin (Spear), Moblin (Club)
+        MultiplyBytes -Offset "C5F69C" -Factor $multi; MultiplyBytes -Offset "CAAF9C" -Factor $multi; MultiplyBytes -Offset "C55A78" -Factor $multi # Biri, Bari, Shabom
+        MultiplyBytes -Offset "CD724F" -Factor $multi; MultiplyBytes -Offset "EDC597" -Factor $multi; MultiplyBytes -Offset "C0B804" -Factor $multi # ReDead / Gibdo, Stalchild, Poe
+        MultiplyBytes -Offset "C6471B" -Factor $multi; MultiplyBytes -Offset "C51A9F" -Factor $multi # Torch Slug, Gohma Larva
+        MultiplyBytes -Offset "CB1903" -Factor $multi; MultiplyBytes -Offset "CB2DD7" -Factor $multi # Blue Bubble, Red Blue
+        MultiplyBytes -Offset "D76A07" -Factor $multi; MultiplyBytes -Offset "C5FC3F" -Factor $multi # Tentacle, Tailpasaran
+        MultiplyBytes -Offset "C693CC" -Factor $multi; MultiplyBytes -Offset "EB797C" -Factor $multi # Stinger (Land), Stinger (Water)
+        MultiplyBytes -Offset "C2B183" -Factor $multi; MultiplyBytes -Offset "C2B1F7" -Factor $multi # Red Tektite, Blue Tektite
+        MultiplyBytes -Offset "C1097C" -Factor $multi; MultiplyBytes -Offset "CD582C" -Factor $multi # Wallmaster, Floormaster
+        MultiplyBytes -Offset "C2DEE7" -Factor $multi; MultiplyBytes -Offset "C2DF4B" -Factor $multi # Leever (Green / Purple)
+        MultiplyBytes -Offset "CC6CA7" -Factor $multi; MultiplyBytes -Offset "CC6CAB" -Factor $multi # Beamos
+
+        MultiplyBytes -Offset "C11177" -Factor $multi; MultiplyBytes -Offset "C599BC" -Factor $multi # Dodongo, Baby Dodongo
+        MultiplyBytes -Offset "CE60C4" -Factor $multi                                                # Skullwalltula (Gold)
         
         if ($multi -ge 2) {
             ChangeBytes -Offset "B65660" -Values "10 01 01 01 10 02 01 01 01 01 01 02 02 02 00 00 00 01 01 00 00 00 01 01 01 01 01 01 00 00 00 00" # Skulltula
@@ -481,12 +469,13 @@ function ByteOptions() {
             
         }
 
-      # MultiplyBytes -Offset "xxxxxx" -Value $multi # Peehat Larva                       (HP: 01)   C2F8D0 -> C32FD0 (Length: 3700) (ovl_En_Peehat)
-      # MultiplyBytes -Offset "xxxxxx" -Value $multi # Anubis                             (HP: 01)   D79240 -> D7A4F0 (Length: 12B0) (ovl_En_Anubice)
+      # MultiplyBytes -Offset "EEF780" -Factor $multi # Guay
+      # MultiplyBytes -Offset "xxxxxx" -Factor $multi # Peehat Larva                       (HP: 01)   C2F8D0 -> C32FD0 (Length: 3700) (ovl_En_Peehat)
+      # MultiplyBytes -Offset "xxxxxx" -Factor $multi # Anubis                             (HP: 01)   D79240 -> D7A4F0 (Length: 12B0) (ovl_En_Anubice)
       # MultiplyBytes -Offset "DFC9A3" -Factor $multi; MultiplyBytes -Offset "DFDE43" -Factor $multi # Freezard
       # MultiplyBytes -Offset "C96A5B" -Factor $multi; MultiplyBytes -Offset "C96B0C" -Factor $multi # Armos
-      # MultiplyBytes -Offset "C6417C" -Factor $multi; MultiplyBytes -Offset "C15814" -Value $multi; MultiplyBytes -Offset "CB1BCB" -Value $value -Multiply $multiply  # Skulltula, Keese, Green Bubble
-      # MultiplyBytes -Offset "CE39AF" -Factor $multi                                                                                                            # Skullwalltula
+      # MultiplyBytes -Offset "C6417C" -Factor $multi; MultiplyBytes -Offset "C15814" -Factor $multi; MultiplyBytes -Offset "CB1BCB" -Factor $multi  # Skulltula, Keese, Green Bubble
+      # MultiplyBytes -Offset "CE39AF" -Factor $multi                                                                                                # Skullwalltula
     }
 
     if (IsIndex -Elem $Redux.Hero.MiniBossHP -Index 3 -Not) { # Mini-Bosses
@@ -541,6 +530,19 @@ function ByteOptions() {
             ChangeBytes -Offset "E82AFB" -Values "04"; ChangeBytes -Offset "E87F2F" -Values "03" # Ganon (phase 1), Ganon (phase 2)
         }
     }
+
+    if (IsDefault $Redux.Hero.Damage -Not) {
+        ChangeBytes -Offset "AE8073" -Values "09 04" -Interval 16         
+        if     (IsText -Elem $Redux.Hero.Damage -Compare "2x Damage")   { ChangeBytes -Offset "AE8096" -Values "80 40" }
+        elseif (IsText -Elem $Redux.Hero.Damage -Compare "4x Damage")   { ChangeBytes -Offset "AE8096" -Values "80 80" }
+        elseif (IsText -Elem $Redux.Hero.Damage -Compare "8x Damage")   { ChangeBytes -Offset "AE8096" -Values "80 C0" }
+        elseif (IsText -Elem $Redux.Hero.Damage -Compare "OHKO Mode")   { ChangeBytes -Offset "AE8096" -Values "82 00" }
+        ChangeBytes -Offset "AE8099" -Values "00 00 00"
+    }
+
+    if     (IsText -Elem $Redux.Hero.MagicUsage -Compare "2x Magic Usage")   { ChangeBytes -Offset "AE84FA" -Values "2C","40" }
+    elseif (IsText -Elem $Redux.Hero.MagicUsage -Compare "4x Magic Usage")   { ChangeBytes -Offset "AE84FA" -Values "2C","80" }
+    elseif (IsText -Elem $Redux.Hero.MagicUsage -Compare "8x Magic Usage")   { ChangeBytes -Offset "AE84FA" -Values "2C","C0" }
 
     if (IsChecked $Redux.Hero.GraveyardKeese) {
         ChangeBytes -Offset "202F389" -Values "0E"; ChangeBytes -Offset "202F3BB" -Values "0D"; ChangeBytes -Offset "202F3DD" -Values "13"; ChangeBytes -Offset "202F3EB" -Values "03"; ChangeBytes -Offset "202F3ED" -Values "13"; ChangeBytes -Offset "202F3FB" -Values "03"
@@ -1545,7 +1547,7 @@ function CreateTabMain() {
     # GAMEPLAY #
 
     CreateReduxGroup    -Tag  "Gameplay" -Text "Gameplay" 
-    CreateReduxCheckBox -Name "FasterBlockPushing"     -Text "Faster Block Pushing"        -Checked -Info "All blocks are pushed faster"                                                                                                                                                -Credits "GhostlyDark (Ported from Redux)"
+    CreateReduxComboBox -Name "FasterBlockPushing"     -Text "Faster Block Pushing"      -Default 3 -Info "All blocks are pushed faster" -Items @("Disabled", "Except Time-Based Puzzles", "Fully Enabled")                                                                             -Credits "GhostlyDark (Ported from Redux)"
     CreateReduxCheckBox -Name "ReturnChild"            -Text "Can Always Return"                    -Info "You can always go back to being a child again before clearing the boss of the Forest Temple`nOut of the way Sheik!"                                                          -Credits "Ported from Redux"
     CreateReduxCheckBox -Name "Medallions"             -Text "Require All Medallions"               -Info "All six medallions are required for the Rainbow Bridge to appear before Ganon's Castle`nThe vanilla requirements were the Shadow and Spirit Medallions and the Light Arrows" -Credits "Ported from Rando"
     CreateReduxCheckBox -Name "RutoNeverDisappears"    -Text "Ruto Never Disappears"                -Info "Ruto never disappears in Jabu Jabu's Belly and will remain in place when leaving the room"                                                                                   -Credits "Ported from Rando"
@@ -1913,13 +1915,13 @@ function CreateTabDifficulty() {
     $items3 = @("1 Boss HP", "0.5x Boss HP", "1x Boss HP", "1.5x Boss HP", "2x Boss HP", "2.5x Boss HP", "3x Boss HP", "3.5x Boss HP", "4x Boss HP", "5x Boss HP")
 
     CreateReduxGroup    -Tag  "Hero" -Text "Hero Mode"
+    CreateReduxComboBox -Name "MonsterHP"         -Text "Monster HP"   -Items $items1 -Default 3                                                        -Info "Set the amount of health for monsters"                                       -Credits "Admentus" -Warning "Half of the enemies are missing"
+    CreateReduxComboBox -Name "MiniBossHP"        -Text "Mini-Boss HP" -Items $items2 -Default 3                                                        -Info "Set the amount of health for elite monsters and mini-bosses"                 -Credits "Admentus" -Warning "Big Octo and Dark Link are missing"
+    CreateReduxComboBox -Name "BossHP"            -Text "Boss HP"      -Items $items3 -Default 3                                                        -Info "Set the amount of health for bosses"                                         -Credits "Admentus & Marcelo20XX"
     CreateReduxComboBox -Name "Damage"            -Text "Damage"       -Items @("1x Damage", "2x Damage", "4x Damage", "8x Damage", "OHKO Mode")        -Info "Set the amount of damage you receive`nOHKO Mode = You die in one hit"        -Credits "Admentus"
     CreateReduxComboBox -Name "MagicUsage"        -Text "Magic Usage"  -Items @("1x Magic Usage", "2x Magic Usage", "4x Magic Usage", "8x Magic Usage") -Info "Set the amount of times magic is consumed at"                                -Credits "Admentus"
     CreateReduxCheckBox -Name "Arwing"            -Text "Arwing"       -Advanced                                                                        -Info "Replaces the Rock-Lifting Kokiri Kid with an Arwing in Kokiri Forest"        -Credits "Admentus"
     CreateReduxCheckBox -Name "LikeLike"          -Text "Like-Like"    -Advanced                                                                        -Info "Replaces the Rock-Lifting Kokiri Kid with a Like-Like in Kokiri Forest"      -Credits "Admentus" -Link $Redux.Hero.Arwing
-    CreateReduxComboBox -Name "MonsterHP"         -Text "Monster HP"   -Items $items1 -Default 3                                                        -Info "Set the amount of health for monsters"                                       -Credits "Admentus" -Warning "Half of the enemies are missing"
-    CreateReduxComboBox -Name "MiniBossHP"        -Text "Mini-Boss HP" -Items $items2 -Default 3                                                        -Info "Set the amount of health for elite monsters and mini-bosses"                 -Credits "Admentus" -Warning "Big Octo and Dark Link are missing"
-    CreateReduxComboBox -Name "BossHP"            -Text "Boss HP"      -Items $items3 -Default 3                                                        -Info "Set the amount of health for bosses"                                         -Credits "Admentus & Marcelo20XX"
     CreateReduxCheckBox -Name "NoRecoveryHearts"  -Text "No Recovery Heart Drops"                                                                       -Info "Disable Recovery Hearts from spawning from item drops"                       -Credits "Ported from Rando"
     CreateReduxCheckBox -Name "NoBottledFairy"    -Text "No Bottled Fairies"                                                                            -Info "Fairies can no longer be put into a bottle"                                  -Credits "Admentus & Three Pendants"
     CreateReduxCheckBox -Name "NoItemDrops"       -Text "No Item Drops"                                                                                 -Info "Disable all items from spawning"                                             -Credits "Admentus & BilonFullHDemon"

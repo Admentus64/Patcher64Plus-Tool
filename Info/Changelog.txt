@@ -1,3 +1,9 @@
+v18.0.7
+- Split Faster Block Pushing option for OoT
+- Fixed issues with Wii VC patching
+- Fixed issues with 3x HP for some baddies
+- Fixed GQ Rev0 issues
+
 v18.0.6
 - Added support for extracting a clean script through the Text Editor when using ROMs
 
