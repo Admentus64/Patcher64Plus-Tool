@@ -3,6 +3,7 @@ v18.0.7
 - Fixed issues with Wii VC patching
 - Fixed issues with 3x HP for some baddies
 - Fixed GQ Rev0 issues
+- Fixed issue with "Allow Warp Songs" and "Allow Farore's Wind" for OoT
 
 v18.0.6
 - Added support for extracting a clean script through the Text Editor when using ROMs
