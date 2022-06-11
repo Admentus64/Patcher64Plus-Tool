@@ -361,6 +361,7 @@ function ByteOptions() {
         MultiplyBytes -Offset "D4E07F" -Factor $multi; MultiplyBytes -Offset "E0790F" -Factor $multi; MultiplyBytes -Offset "F94A00" -Factor $multi # ReDead / Gibdo, Stalchild, Poe
         MultiplyBytes -Offset "D2F07C" -Factor $multi; MultiplyBytes -Offset "D6CFB8" -Factor $multi; MultiplyBytes -Offset "F5B7FC" -Factor $multi # Deku Baba, Wilted Deku Baba, Dexihand
         MultiplyBytes -Offset "D13750" -Factor $multi; MultiplyBytes -Offset "D1375C" -Factor $multi; MultiplyBytes -Offset "EAE53C" -Factor $multi # Peahat, Peahat Larva, Bad Bat
+        MultiplyBytes -Offset "FC3A5F" -Factor $multi; MultiplyBytes -Offset "EDBA17" -Factor $multi; MultiplyBytes -Offset "E9BD87" -Factor $multi # Deep Python, Skullfish, Desbreko
         MultiplyBytes -Offset "D55BDC" -Factor $multi; MultiplyBytes -Offset "D55C08" -Factor $multi # Skullwalltula, Golden Skullwalltula
         MultiplyBytes -Offset "CF3514" -Factor $multi; MultiplyBytes -Offset "CF0A4B" -Factor $multi # Dodongo (Small / Big)
         MultiplyBytes -Offset "D10D3C" -Factor $multi; MultiplyBytes -Offset "D0DBDB" -Factor $multi # Red Tektite, Blue Tektite
@@ -372,19 +373,15 @@ function ByteOptions() {
         MultiplyBytes -Offset "D3914C" -Factor $multi; MultiplyBytes -Offset "CEACD8" -Factor $multi # Mad Scrub, Octorok
         MultiplyBytes -Offset "F7ED78" -Factor $multi; MultiplyBytes -Offset "EC1F2C" -Factor $multi # Eeno, Real Bombchu
         MultiplyBytes -Offset "EB922C" -Factor $multi; MultiplyBytes -Offset "E9B69C" -Factor $multi # White Boe, Black Boe, Chuchu (alt: E9B66E)
-
-      # MultiplyBytes -Offset "" -Factor $multi # Leever                    (Green)   (HP: 04)   FE1A10 -> FE3AB0 (Length: 20A0) (ovl_En_Neo_Reeba)
-      # MultiplyBytes -Offset "" -Factor $multi # Leever                    (Purple)  (HP: 14)
+        MultiplyBytes -Offset "FE1AA3" -Factor $multi; MultiplyBytes -Offset "FE1ABF" -Factor $multi # Leever (Green), Leever (Purple)
+        
       # MultiplyBytes -Offset "" -Factor $multi # Ghost                               (HP: ??)    ->  (Length: ) (ovl_En_??)
       # MultiplyBytes -Offset "" -Factor $multi # Garo                                (HP: ??)   E20590 -> E24200 (Length: 3C70) (ovl_En_Jso)
       # MultiplyBytes -Offset "" -Factor $multi # Giant Bee                           (HP: ??)   FBF8B0 -> FC0470 (Length: 0BC0) (ovl_En_Bee)
       # MultiplyBytes -Offset "" -Factor $multi # Nejiron                             (HP: ??)   EA4BD0 -> EA6030 (Length: 1460) (ovl_En_Baguo)
       # MultiplyBytes -Offset "" -Factor $multi # Dragonfly                           (HP: ??)   E18FF0 -> E1BE80 (Length: 2E90) (ovl_En_Grasshopper)
-      # MultiplyBytes -Offset "" -Factor $multi # Skullfish                           (HP: ??)   EDB9F0 -> EDD810 (Length: 1E20) (ovl_En_Pr2)
-      # MultiplyBytes -Offset "" -Factor $multi # Desbreko                            (HP: ??)   E9BD60 -> E9D650 (Length: 18F0) (ovl_En_Pr)
       # MultiplyBytes -Offset "" -Factor $multi # Death Armos                         (HP: ??)   D26B30 -> D28AD0 (Length: 1FA0) (ovl_En_Famos)
       # MultiplyBytes -Offset "" -Factor $multi # Hiploop                             (HP: ??)   F831B0 -> F86E00 (Length: 3C50) (ovl_En_Pp)
-      # MultiplyBytes -Offset "" -Factor $multi # Deep Python                         (HP: ??)   FC3A10 -> FC5C50 (Length: 2240) (ovl_En_Dragon)
       # MultiplyBytes -Offset "" -Factor $multi # Bio Deku Baba                       (HP: ??)   E596F0 -> E5D320 (Length: 3C30) (ovl_Boss_05)
 
       # MultiplyBytes -Offset "DA556F" -Factor $multi; ChangeBytes -Offset "DA6E67" -Factor $multi # Freezard
@@ -421,7 +418,7 @@ function ByteOptions() {
         MultiplyBytes -Offset "E60633" -Factor $multi; MultiplyBytes -Offset "E6B20B" -Factor $multi # Majora's Mask (phase 1), Majora's Mask (phase 2)
         MultiplyBytes -Offset "E60743" -Factor $multi; MultiplyBytes -Offset "E606AB" -Factor $multi # Majora's Incarnation, Majora's Wrath
         MultiplyBytes -Offset "E424E7" -Factor $multi # Odolwa
-        MultiplyBytes -Offset "E50D33" -Factor $multi # Gyorg (phase 2 missing, file: Boss_03)
+        MultiplyBytes -Offset "E50D33" -Factor $multi; MultiplyBytes -Offset "E54683" -Factor $multi # Gyorg
         MultiplyBytes -Offset "E4A607" -Factor $multi # Twinmold
         MultiplyBytes -Offset "E6FA2F" -Factor $multi # Four Remains
     }
@@ -514,7 +511,8 @@ function ByteOptions() {
 
     # EASY MODE #
 
-    if (IsChecked $Redux.EasyMode.NoBlueBubbleRespawn) { ChangeBytes -Offset "D3CEC0" -Values "57 20 00 04" }
+    if (IsChecked $Redux.EasyMode.NoBlueBubbleRespawn)   { ChangeBytes -Offset "D3CEC0"  -Values "57 20 00 04"                                                      }
+    if (IsChecked $Redux.EasyMode.NoTakkuriSteal)        { ChangeBytes -Offset "1075B88" -Values "10 00 00 16"; ChangeBytes -Offset "1075BE4" -Values "10 00 00 46" }
 
 
 
@@ -1341,6 +1339,7 @@ function CreateTabDifficulty() {
 
     CreateReduxGroup    -Tag  "EasyMode" -Text "Easy Mode"
     CreateReduxCheckbox -Name "NoBlueBubbleRespawn" -Text "No Blue Bubble Respawn" -Info "Removes the respawn of the Blue Bubble monsters (until you re-enter the room)" -Credits "Garo-Mastah"
+    CreateReduxCheckbox -Name "NoTakkuriSteal"      -Text "No Takkuri Steal"       -Info "The Takkuri in Termina Field will no longer steal items from Link"             -Credits "Admentus"
 
 }
 

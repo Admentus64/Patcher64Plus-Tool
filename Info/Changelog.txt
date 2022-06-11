@@ -1,3 +1,7 @@
+v18.0.8
+- Added new "No Takkuri Steal" option for MM
+- Added more missing enemies and boss phases for the increase HP options for MM
+
 v18.0.7
 - Split Faster Block Pushing option for OoT
 - Fixed issues with Wii VC patching

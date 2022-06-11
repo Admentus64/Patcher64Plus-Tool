@@ -2,7 +2,7 @@
 <<< PATCHER64+ TOOL >>>
 
 --- Thanks to my Patreons ---
-- Amara, Colby Bertrand, Craig, Gagrecco, Third M, Yang
+- Andrew Kinney, Amara, Colby Bertrand, Craig, Gagrecco, Third M, Yang
 
 --- Thanks to my past Patreons --
 - Crypto Logiq, David Pyne, Gicrax, Leigh Pierce, Moons Moons, Raim, Richard Moser, Tommy Naugle
