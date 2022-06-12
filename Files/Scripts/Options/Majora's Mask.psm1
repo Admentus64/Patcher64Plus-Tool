@@ -513,6 +513,8 @@ function ByteOptions() {
 
     if (IsChecked $Redux.EasyMode.NoBlueBubbleRespawn)   { ChangeBytes -Offset "D3CEC0"  -Values "57 20 00 04"                                                      }
     if (IsChecked $Redux.EasyMode.NoTakkuriSteal)        { ChangeBytes -Offset "1075B88" -Values "10 00 00 16"; ChangeBytes -Offset "1075BE4" -Values "10 00 00 46" }
+    if (IsChecked $Redux.EasyMode.KeepBottles)           { ChangeBytes -Offset "BDA5AB"  -Values "17"                                                               }
+    if (IsChecked $Redux.EasyMode.KeepAmmo)              { ChangeBytes -Offset "BDA560"  -Values "10 00 00 0D"                                                      }
 
 
 
@@ -1338,8 +1340,10 @@ function CreateTabDifficulty() {
     # EASY MODE #
 
     CreateReduxGroup    -Tag  "EasyMode" -Text "Easy Mode"
-    CreateReduxCheckbox -Name "NoBlueBubbleRespawn" -Text "No Blue Bubble Respawn" -Info "Removes the respawn of the Blue Bubble monsters (until you re-enter the room)" -Credits "Garo-Mastah"
-    CreateReduxCheckbox -Name "NoTakkuriSteal"      -Text "No Takkuri Steal"       -Info "The Takkuri in Termina Field will no longer steal items from Link"             -Credits "Admentus"
+    CreateReduxCheckbox -Name "NoBlueBubbleRespawn" -Text "No Blue Bubble Respawn"   -Info "Removes the respawn of the Blue Bubble monsters (until you re-enter the room)" -Credits "Garo-Mastah"
+    CreateReduxCheckbox -Name "NoTakkuriSteal"      -Text "No Takkuri Steal"         -Info "The Takkuri in Termina Field will no longer steal items from Link"             -Credits "Admentus"
+    CreateReduxCheckbox -Name "KeepBottles"         -Text "Keep Potions and Fairies" -Info "Keep any Red, Green and Blue Potions as well as Fairies after rewinding time"  -Credits "Admentus"
+    CreateReduxCheckbox -Name "KeepAmmo"            -Text "Keep Ammo"                -Info "Keep consumable items like ammo for items after rewinding time"                -Credits "Admentus"
 
 }
 

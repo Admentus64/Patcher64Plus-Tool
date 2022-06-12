@@ -1,3 +1,6 @@
+v18.0.9
+- Added two new Easy Mode options for MM
+
 v18.0.8
 - Added new "No Takkuri Steal" option for MM
 - Added more missing enemies and boss phases for the increase HP options for MM
