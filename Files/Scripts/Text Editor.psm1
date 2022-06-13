@@ -218,12 +218,12 @@ function RunTextEditor([string]$Game=$GameType.mode, [string]$Checksum) {
     
     CreateTextEditorDialog -Game $Game -Checksum $Checksum
     $TextEditor.Dialog.ShowDialog()
-    if (!(TestFile ($Paths.Games + "\" + $Game + "\TextEditor\message_data_static.bin")) -or !(TestFile ($Paths.Games + "\" + $Game + "\TextEditor\message_data.tbl")) ) { return }
+    if (!(TestFile ($Paths.Games + "\" + $Game + "\Editor\message_data_static.bin")) -or !(TestFile ($Paths.Games + "\" + $Game + "\Editor\message_data.tbl")) ) { return }
     SaveLastMessage
-    SaveScript -Script ($Paths.Games + "\" + $Game + "\TextEditor\message_data_static.bin") -Table ($Paths.Games + "\" + $Game + "\TextEditor\message_data.tbl")
+    SaveScript -Script ($Paths.Games + "\" + $Game + "\Editor\message_data_static.bin") -Table ($Paths.Games + "\" + $Game + "\Editor\message_data.tbl")
     CreateSubPath ($Paths.Games + "\" + $Game + "\Custom Text")
-    Copy-Item -LiteralPath ($Paths.Games + "\" + $Game + "\TextEditor\message_data_static.bin") -Destination ($Paths.Games + "\" + $Game + "\Custom Text\message_data_static.bin") -Force
-    Copy-Item -LiteralPath ($Paths.Games + "\" + $Game + "\TextEditor\message_data.tbl")        -Destination ($Paths.Games + "\" + $Game + "\Custom Text\message_data.tbl")        -Force
+    Copy-Item -LiteralPath ($Paths.Games + "\" + $Game + "\Editor\message_data_static.bin") -Destination ($Paths.Games + "\" + $Game + "\Custom Text\message_data_static.bin") -Force
+    Copy-Item -LiteralPath ($Paths.Games + "\" + $Game + "\Editor\message_data.tbl")        -Destination ($Paths.Games + "\" + $Game + "\Custom Text\message_data.tbl")        -Force
 
 }
 
@@ -232,8 +232,8 @@ function RunTextEditor([string]$Game=$GameType.mode, [string]$Checksum) {
 #==============================================================================================================================================================================================
 function LoadMessages() {
 
-    if (!(TestFile ($Paths.Games + "\" + $TextEditor.Game + "\TextEditor\message_data_static.bin")) -or !(TestFile ($Paths.Games + "\" + $TextEditor.Game + "\TextEditor\message_data.tbl")) ) { return $False }
-    LoadScript -Script ($Paths.Games + "\" + $TextEditor.Game + "\TextEditor\message_data_static.bin") -Table ($Paths.Games + "\" + $TextEditor.Game + "\TextEditor\message_data.tbl")
+    if (!(TestFile ($Paths.Games + "\" + $TextEditor.Game + "\Editor\message_data_static.bin")) -or !(TestFile ($Paths.Games + "\" + $TextEditor.Game + "\Editor\message_data.tbl")) ) { return $False }
+    LoadScript -Script ($Paths.Games + "\" + $TextEditor.Game + "\Editor\message_data_static.bin") -Table ($Paths.Games + "\" + $TextEditor.Game + "\Editor\message_data.tbl")
     GetMessageIDs
 
 }
