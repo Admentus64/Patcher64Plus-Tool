@@ -143,8 +143,8 @@
                 $matches = $False
                 $index = 0
                 foreach ($c in $message) {
-                    if     ($c -eq $search[$index])   { $index++ }
-                    elseif ($index -gt 0)             { break    }
+                    if     ($c -eq $search[$index])   { $index++   }
+                    elseif ($index -gt 0)             { $index = 0 }
                     if ($index -eq $search.count) {
                         $matches = $True
                         break
