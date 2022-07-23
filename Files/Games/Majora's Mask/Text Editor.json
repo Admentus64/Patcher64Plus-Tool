@@ -1,7 +1,9 @@
 {
+	"game"		: "Majora's Mask",
 	"parse"		: "mm",
 	"end"		: 191,
 	"header"	: 11,
+	"hash"		: "2A0A8ACB61538235BC1094D297FB6556",
 	"icons" : [
 		{
 			"id"	: "01",

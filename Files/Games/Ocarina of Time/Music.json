@@ -130,7 +130,8 @@
 }, {
 	"title"		: "Fire Temple",
 	"id"		: "2A",
-	"size"		: "0E70"
+	"size"		: "0E70",
+	"size_censored"	: "1290"
 }, {
 	"title"		: "Open Treasure Chest",
 	"id"		: "2B",

@@ -71,7 +71,8 @@ function SetFileParameters() {
     $Files.oot.harder_child_bosses          = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Optional\harder_child_bosses")
     $Files.oot.mm_pause_screen              = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Optional\mm_pause_screen")
     $Files.oot.megaton_hammer               = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Optional\vanilla_child_megaton_hammer")
-    $Files.oot.widescreen                   = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Optional\widescreen")
+    $Files.oot.widescreen_1                 = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Optional\widescreen_minimum")
+    $Files.oot.widescreen_2                 = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Optional\widescreen_hide_geometry")
 
     $Files.oot.lens_of_truth                = $Paths.Games + "\Ocarina of Time\Textures\widescreen\lens_of_truth.bin"
     $Files.oot.title_mq_copyright           = $Paths.Games + "\Ocarina of Time\Textures\Logo\mq_copyright.bin"
@@ -83,7 +84,6 @@ function SetFileParameters() {
     $Files.oot.l_pause_button_mm            = $Paths.Games + "\Ocarina of Time\Textures\GameCube\l_pause_screen_button_mm.bin"
     $Files.oot.l_target_icon                = $Paths.Games + "\Ocarina of Time\Textures\GameCube\l_text_icon.bin"
 
-    $Files.oot.file_select                  = $Paths.Games + "\Ocarina of Time\Binaries\file_select.bin"
     $Files.oot.frontflip_jump               = $Paths.Games + "\Ocarina of Time\Binaries\Jumps\frontflip.bin"
     $Files.oot.somarsault_jump              = $Paths.Games + "\Ocarina of Time\Binaries\Jumps\somarsault.bin"
     $Files.oot.message_credits              = $Paths.Games + "\Ocarina of Time\Binaries\Message\credits.bin"
@@ -93,9 +93,8 @@ function SetFileParameters() {
 
     $Files.oot.theme_fire_temple            = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Export\audiobank_fire_temple")
     $Files.oot.debug_map_select             = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Export\debug_map_select")
-    $Files.oot.female_pronouns_text_static  = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Export\Message\female_pronouns_static")
-    $Files.oot.female_pronouns_text_table   = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Export\Message\female_pronouns_table")
-    $Files.oot.redux_text_static            = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Export\Message\redux_static")
+    $Files.oot.mmot_static                  = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Export\Message\malon_master_of_time_static")
+    $Files.oot.mmot_table                   = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Export\Message\malon_master_of_time_table")
     $Files.oot.restore_text_static          = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Export\Message\restore_static")
     $Files.oot.restore_text_table           = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Export\Message\restore_table")
     $Files.oot.ura_text_static              = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Export\Message\ura_static")
@@ -133,7 +132,6 @@ function SetFileParameters() {
     $Files.mm.zora_guitar_icon              = $Paths.Games + "\Majora's Mask\Textures\Icons\zora_guitar_icon.yaz0"
     $Files.mm.zora_guitar_text              = $Paths.Games + "\Majora's Mask\Textures\Icons\zora_guitar_text.yaz0"
 
-    $Files.mm.fda                           = CheckPatchExtension ($Paths.Games + "\Majora's Mask\Decompressed\Optional\fda")
     $Files.mm.mq_remix                      = CheckPatchExtension ($Paths.Games + "\Majora's Mask\Decompressed\Optional\master_quest_remix")
     $Files.mm.research_lab_platform         = CheckPatchExtension ($Paths.Games + "\Majora's Mask\Decompressed\Optional\raised_research_lab_platform")
     $Files.mm.widescreen                    = CheckPatchExtension ($Paths.Games + "\Majora's Mask\Decompressed\Optional\widescreen")

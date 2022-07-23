@@ -26,10 +26,7 @@
 		"dmaTable"		: "0 1 2 3 4 5 6 7 -8 -9 15 16 17 18 19 20 -21 22 25 26 27 28 29 30 -652 1127 -1539 -1540 -1541 -1542 -1543 1544 1545 1546 1547 1548 1549 1550 -1551 1552 1553 1554 1555 1556 1557 1558 1559 1560 1561 1562 1563 1564 1565 1566 1567",
 		"vc_title"		: "Redux: Majora's",
 		"vc_gameID"		: "NAR0",
-		"file"			: "Decompressed\\Redux\\redux.bps",
-		"file_v2"		: "Decompressed\\Redux\\redux_v2.bps",
-		"file_widescreen"	: "Decompressed\\Redux\\redux_widescreen.bps",
-		"file_widescreen_v2"	: "Decompressed\\Redux\\redux_widescreen_v2.bps",
+		"file"			: "Decompressed\\Redux\\redux.ppf",
 		"output"		: "_redux_patched"
 	},
 	"options"			: 1,

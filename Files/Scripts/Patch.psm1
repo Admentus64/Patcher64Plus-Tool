@@ -40,11 +40,14 @@
 
         # Language Patch
         $global:LanguagePatch = $global:LanguagePatchFile = $null
-        if ( (IsSet $Files.json.languages) -and (IsChecked $Patches.Options) -and (IsSet $Redux.Language) ) {
-            for ($i=0; $i -lt $Files.json.languages.Length; $i++) {
-                if (IsChecked $Redux.Language[$i]) {
-                    $global:LanguagePatch = $Files.json.languages[$i]
-                    break
+        if ( (IsSet $Files.json.languages) -and (IsChecked $Patches.Options) ) {
+            $global:LanguagePatch = $Files.json.languages[0]
+            if (IsSet $Redux.Language) {
+                for ($i=1; $i -lt $Files.json.languages.Length; $i++) {
+                    if (IsChecked $Redux.Language[$i]) {
+                        $global:LanguagePatch = $Files.json.languages[$i]
+                        break
+                    }
                 }
             }
 
@@ -183,16 +186,16 @@ function MainFunctionPatch([string]$Command, [Array]$Header, [string]$PatchedFil
     }
 
     # Step 08: Patch the ROM
-    if ( !(StrLike -str $Command -val "Inject") -and !(StrLike -str $Command -val "Apply Patch") -and !(StrLike -str $Command -val "Extract") -and $PatchInfo.run) {
-        ExtractMQData                               # Step A: Extract MQ dungeon data for OoT
-        PrePatchingAdditionalOptions                # Step B: Apply additional options before Redux
-        PatchRedux                                  # Step C: Apply the Redux patch
-        if (!(PatchDecompressedROM))   { return }   # Step D: Patch and extend the ROM file with the patch through Floating IPS
-        PatchingAdditionalOptions                   # Step E: Apply additional options
-        CompressROM                                 # Step F: Compress the decompressed ROM if required
-        if (!(PatchCompressedROM))     { return }   # Step G: Patch and extend the ROM file with the patch through Floating IPS
+    if ( !(StrLike -str $Command -val "Inject") -and !(StrLike -str $Command -val "Apply Patch") -and !(StrLike -str $Command -val "Extract") -and $PatchInfo.run) {           
+        if (!(PatchDecompressedROM)) { return }         # Step A: Patch the decompressed ROM file with the patch through Floating IPS
+        ExtractMQData                                   # Step B: Extract MQ dungeon data for OoT
+        PrePatchingAdditionalOptions                    # Step C: Apply additional options before Redux
+        PatchRedux                                      # Step D: Apply the Redux patch
+        PatchingAdditionalOptions                       # Step F: Apply additional options
+        CompressROM                                     # Step G: Compress the decompressed ROM if required          
+        if (!(PatchCompressedROM)) { return }           # Step H: Patch the compressed ROM file with the patch through Floating IPS
     }
-    elseif (StrLike -str $Command -val "Apply Patch") { # Step H: Compress if needed and apply provided BPS Patch
+    elseif (StrLike -str $Command -val "Apply Patch") { # Step I: Compress if needed and apply provided BPS Patch
         CompressROM
         if (!(ApplyPatchROM)) { return }
     }
@@ -301,7 +304,8 @@ function Cleanup() {
     if ($Settings.debug.NoCleanup -eq $True) { return }
     WriteToConsole "Cleaning up files..."
     
-    $global:ByteArrayGame = $global:ROMFile = $global:WADFile = $global:CheckHashSum = $global:ROMHashSum = $global:LanguagePatch = $null
+    $global:ByteArrayGame = $global:ROMFile = $global:WADFile = $global:CheckHashSum = $global:ROMHashSum = $null
+    if (!(IsSet $TextEditor)) { $global:LanguagePatch = $null }
 
     RemovePath $WADFile.Folder
     RemovePath $Paths.cygdrive
@@ -366,9 +370,13 @@ function PrePatchingAdditionalOptions() {
     if (!$PatchInfo.decompress -and !(TestFile $GetROM.decomp) )                                   { Copy-Item -LiteralPath $GetROM.run -Destination $GetROM.decomp -Force }
 
     # BPS - Pre-Redux Options
+    if (GetCommand "PrePatchOptions") {
+        UpdateStatusLabel ("Pre-Patching " + $GameType.mode + " Additional Patches...")
+        PrePatchOptions
+    }
     if ( (GetCommand "PrePatchReduxOptions") -and (IsChecked $Patches.Redux) -and (IsSet $GamePatch.redux.file) ) {
         UpdateStatusLabel ("Pre-Patching " + $GameType.mode + " Additional Redux Patches...")
-        iex "PrePatchReduxOptions"
+        PrePatchReduxOptions
     }
 
 }
@@ -384,7 +392,7 @@ function PatchingAdditionalOptions() {
     # BPS - Additional Options (before languages)
     if (GetCommand "PrePatchLanguageOptions") {
         UpdateStatusLabel ("Pre-Patching " + $GameType.mode + " Additional Options Patches...")
-        iex "PrePatchLanguageOptions"
+        PrePatchLanguageOptions
     }
 
     # Language patches
@@ -394,25 +402,26 @@ function PatchingAdditionalOptions() {
         $start  = CombineHex $ByteArrayGame[((GetDecimal $LanguagePatch.script_dma)+0)..((GetDecimal $LanguagePatch.script_dma)+3)]
         $end    = CombineHex $ByteArrayGame[((GetDecimal $LanguagePatch.script_dma)+4)..((GetDecimal $LanguagePatch.script_dma)+7)]
         $length = Get32Bit ( (GetDecimal $end) - (GetDecimal $start) )
-        ExportBytes -Offset $start                     -Length $length                     -Output ($GameFiles.editor + "\message_data_static.bin") -Force
-        ExportBytes -Offset $LanguagePatch.table_start -Length $LanguagePatch.table_length -Output ($GameFiles.editor + "\message_data.tbl")        -Force
+        ExportBytes -Offset $start                     -Length $length                     -Output ($GameFiles.editor + "\message_data_static." + $LanguagePatch.code + ".bin") -Force
+        ExportBytes -Offset $LanguagePatch.table_start -Length $LanguagePatch.table_length -Output ($GameFiles.editor + "\message_data."        + $LanguagePatch.code + ".tbl") -Force
     }
 
     if (IsSet -Elem $LanguagePatchFile) {
         UpdateStatusLabel ("Patching " + $GameType.mode + " Language...")
         ApplyPatch -File $GetROM.decomp -Patch $LanguagePatchFile
+        $global:LanguagePatchFile = $null
     }
 
     # BPS - Additional Options
     if (GetCommand "PatchOptions") {
         UpdateStatusLabel ("Patching " + $GameType.mode + " Additional Options Patches...")
-        iex "PatchOptions"
+        PatchOptions
     }
 
     # BPS - Redux Options
     if ( (GetCommand "PatchReduxOptions") -and (IsChecked $Patches.Redux) -and (IsSet $GamePatch.redux.file) ) {
         UpdateStatusLabel ("Patching " + $GameType.mode + " Additional Redux Patches...")
-        iex "PatchReduxOptions"
+        PatchReduxOptions
     }
 
     if ( (GetCommand "ByteOptions") -or (GetCommand "ByteReduxOptions") -or (GetCommand "ByteLanguageOptions") ) { $global:ByteArrayGame = [System.IO.File]::ReadAllBytes($GetROM.decomp) }
@@ -420,53 +429,54 @@ function PatchingAdditionalOptions() {
     # Additional Options
     if (GetCommand "ByteOptions") {
         UpdateStatusLabel ("Patching " + $GameType.mode + " Additional Options...")
-        iex "ByteOptions"
+        ByteOptions
     }
 
     # Redux Options
     if ( (GetCommand "ByteReduxOptions") -and (IsChecked $Patches.Redux) -and (IsSet $GamePatch.redux.file) ) {
         UpdateStatusLabel ("Patching " + $GameType.mode + " Additional Redux Options...")
-        iex "ByteReduxOptions"
+        ByteReduxOptions
     }
 
     # Language Options
     if ( (GetCommand "CheckLanguageOptions") -and (GetCommand "ByteLanguageOptions") ) {
-        if ( (iex "CheckLanguageOptions") -and (IsSet $LanguagePatch.script_dma) ) {
+        if ( (CheckLanguageOptions) -and (IsSet $LanguagePatch.script_dma)  -and $LanguagePatch.region -ne "J") {
             UpdateStatusLabel ("Patching " + $GameType.mode + " Additional Language Options...")
 
             $start  = CombineHex $ByteArrayGame[((GetDecimal $LanguagePatch.script_dma)+0)..((GetDecimal $LanguagePatch.script_dma)+3)]
             $end    = CombineHex $ByteArrayGame[((GetDecimal $LanguagePatch.script_dma)+4)..((GetDecimal $LanguagePatch.script_dma)+7)]
             $length = Get32Bit ( (GetDecimal $end) - (GetDecimal $start) )
-            ExportBytes -Offset $start                     -Length $length                     -Output ($GameFiles.extracted + "\message_data_static.bin") -Force
-            ExportBytes -Offset $LanguagePatch.table_start -Length $LanguagePatch.table_length -Output ($GameFiles.extracted + "\message_data.tbl")        -Force
+            ExportBytes -Offset $start                     -Length $length                     -Output ($GameFiles.extracted + "\message_data_static." + $LanguagePatch.code + ".bin") -Force
+            ExportBytes -Offset $LanguagePatch.table_start -Length $LanguagePatch.table_length -Output ($GameFiles.extracted + "\message_data."        + $LanguagePatch.code + ".tbl") -Force
 
-            if (GetCommand "WholeLanguageOptions") { iex "WholeLanguageOptions" }
-            LoadScript -Script ($GameFiles.extracted + "\message_data_static.bin") -Table ($GameFiles.extracted + "\message_data.tbl")
+            if (GetCommand "WholeLanguageOptions") { WholeLanguageOptions -Script ($GameFiles.extracted + "\message_data_static." + $LanguagePatch.code + ".bin") -Table ($GameFiles.extracted + "\message_data." + $LanguagePatch.code + ".tbl") }
+            $global:LastScript     = @{}
+            $Files.json.textEditor = SetJSONFile $GameFiles.textEditor
+            LoadScript -Script ($GameFiles.extracted + "\message_data_static." + $LanguagePatch.code + ".bin") -Table ($GameFiles.extracted + "\message_data." + $LanguagePatch.code + ".tbl")
+            ByteLanguageOptions
 
-            $global:ScriptLastID    = "0000"
-            $global:ScriptLastIndex = 0
-            $Files.json.textEditor  = SetJSONFile $GameFiles.textEditor
-            iex "ByteLanguageOptions"
+            SaveScript -Script ($GameFiles.extracted + "\message_data_static." + $LanguagePatch.code + ".bin") -Table ($GameFiles.extracted + "\message_data." + $LanguagePatch.code + ".tbl")
+            PatchBytes -Offset $start                     -Patch ("message_data_static." + $LanguagePatch.code + ".bin") -Extracted
+            PatchBytes -Offset $LanguagePatch.table_start -Patch ("message_data."        + $LanguagePatch.code + ".tbl") -Extracted
 
-            SaveScript -Script ($GameFiles.extracted + "\message_data_static.bin") -Table ($GameFiles.extracted + "\message_data.tbl")
-            PatchBytes -Offset $start                     -Patch "message_data_static.bin" -Extracted
-            PatchBytes -Offset $LanguagePatch.table_start -Patch "message_data.tbl"        -Extracted
-
-            $lengthDifference = (Get-Item ($GameFiles.extracted + "\message_data_static.bin")).length - ( (GetDecimal $end) - (GetDecimal $start) )
+            $lengthDifference = (Get-Item ($GameFiles.extracted + "\message_data_static." + $LanguagePatch.code + ".bin")).length - ( (GetDecimal $end) - (GetDecimal $start) )
             while ($lengthDifference % 16 -ne 0) { $lengthDifference++ }
+            if ($lengthDifference -lt 0) { $lengthDifference = 0 }
             if ($lengthDifference -ne 0) { ChangeBytes -Offset (AddToOffset -Hex $LanguagePatch.script_dma -Add "04") -Values (AddToOffset -Hex $end -Add (Get32Bit $lengthDifference)) }
 
             if ($Settings.Debug.ExtractFullScript -eq $True) {
                 CreateSubPath $GameFiles.editor
-                ExportBytes -Offset $start                     -Length $length                     -Output ($GameFiles.editor + "\message_data_static.bin") -Force
-                ExportBytes -Offset $LanguagePatch.table_start -Length $LanguagePatch.table_length -Output ($GameFiles.editor + "\message_data.tbl")        -Force
+                Copy-Item -LiteralPath ($GameFiles.extracted + "\message_data_static." + $LanguagePatch.code + ".bin") -Destination ($GameFiles.editor + "\message_data_static." + $LanguagePatch.code + ".bin") -Force
+                Copy-Item -LiteralPath ($GameFiles.extracted + "\message_data."        + $LanguagePatch.code + ".tbl") -Destination ($GameFiles.editor + "\message_data."        + $LanguagePatch.code + ".tbl") -Force
             }
+
+            $global:LastScript = $global:DialogueList = $global:ByteScriptArray = $global:ByteTableArray = $Files.json.textEditor = $null
         }
     }
 
     if ( (GetCommand "ByteOptions") -or (GetCommand "ByteReduxOptions") -or (GetCommand "ByteLanguageOptions") ) {
         [System.IO.File]::WriteAllBytes($GetROM.decomp, $ByteArrayGame)
-        $ByteArrayGame = $null
+        $global:ByteArrayGame = $global:LanguagePatch = $null
     }
 
     if (!$PatchInfo.decompress) { Move-Item -LiteralPath $GetROM.decomp -Destination $GetROM.patched -Force }
@@ -925,16 +935,21 @@ function PatchRedux() {
     
     # BPS PATCHING REDUX #
     if ( (IsChecked $Patches.Redux) -and (IsSet -Elem $GamePatch.redux.file) ) {
-
         if ( !$PatchInfo.decompress -and !(TestFile $GetROM.decomp) ) { Copy-Item -LiteralPath $GetROM.run -Destination $GetROM.decomp -Force }
-
         UpdateStatusLabel ("Patching " + $GameType.mode + " REDUX...")
 
         # Redux patch
-        if     ( (IsChecked $Redux.Graphics.Widescreen) -and (IsChecked $Redux.Gameplay.AltRedux) -and (IsSet -Elem $GamePatch.redux.file_widescreen_v2) )   { ApplyPatch -File $GetROM.decomp -Patch $GamePatch.redux.file_widescreen_v2 }
-        elseif ( (IsChecked $Redux.Gameplay.AltRedux)   -and (IsSet -Elem $GamePatch.redux.file_v2) )                                                        { ApplyPatch -File $GetROM.decomp -Patch $GamePatch.redux.file_v2 }
-        elseif ( (IsChecked $Redux.Graphics.Widescreen) -and (IsSet -Elem $GamePatch.redux.file_widescreen) )                                                { ApplyPatch -File $GetROM.decomp -Patch $GamePatch.redux.file_widescreen }
-        elseif (IsSet -Elem $GamePatch.redux.file)                                                                                                           { ApplyPatch -File $GetROM.decomp -Patch $GamePatch.redux.file }
+        if ( (IsChecked $Redux.Graphics.Widescreen) -and (IsSet -Elem $GamePatch.redux.file_widescreen) )   { ApplyPatch -File $GetROM.decomp -Patch $GamePatch.redux.file_widescreen }
+        elseif (IsSet -Elem $GamePatch.redux.file)                                                          { ApplyPatch -File $GetROM.decomp -Patch $GamePatch.redux.file }
+
+        # Revert Redux options not selected
+        if (GetCommand "RevertReduxOptions") {
+            $global:ByteArrayGame = [System.IO.File]::ReadAllBytes($GetROM.decomp)
+            UpdateStatusLabel ("Reverting " + $GameType.mode + " Redux content...")
+            RevertReduxOptions
+            [System.IO.File]::WriteAllBytes($GetROM.decomp, $ByteArrayGame)
+            $ByteArrayGame = $null
+        }
     }
 
 }
@@ -957,7 +972,7 @@ function HackROMGameTitle($Title, $GameID, $Region) {
     # Internal ROM Title
     if ($Title -ne $null -and (IsSet $GameConsole.rom_title_offset) -and (IsSet -Elem $GameConsole.rom_title_length -Min 1) -and ($GameConsole.rom_title -gt 0) ) {
         if ($hiROM) { $offset = $GameConsole.rom_title_offset_hi } else { $offset = $GameConsole.rom_title_offset }
-        $emptyTitle = foreach ($i in 1..$GameConsole.rom_title_length) { 20 }
+        $emptyTitle = foreach ($i in 1..$GameConsole.rom_title_length) { 32 }
         if ($GameConsole.rom_title_uppercase -gt 0) { $Title = $Title.ToUpper() }
         ChangeBytes -Offset $Offset -Values $emptyTitle
         ChangeBytes -Offset $offset -Values ($Title.ToCharArray() | % { [uint32][char]$_ }) -IsDec

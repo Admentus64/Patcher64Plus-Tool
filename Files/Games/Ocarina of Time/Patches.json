@@ -41,33 +41,11 @@
 		"expand_memory"		: 1,
 		"vc_title"		: "Redux: Ocarina",
 		"vc_gameID"		: "NAC0",
-		"file"			: "Decompressed\\Redux\\redux.bps",
+		"file"			: "Decompressed\\Redux\\redux.ppf",
 		"output"		: "_redux_patched"
 	},
 	"options"			: 1,
 	"tooltip"			: "The regular Ocarina of Time experience{0}With support for languages, redux and additional options{0}- Supported: Rev 0 (US)",
-	"rev"				: [ "5BD1FE107BF8106B2AB6650ABECD54D6", "3C10B67A76616AE2C162DEF7528724CF", "AB1CA59D0039E3B34D82DB650B54D7B9", "8CA71E87DE4CE5E9F6EC916202A623E9" ]
-}, {
-	"title"				: "Gold Quest - Additional Options & Redux",
-	"vc_title"			: "Zelda: Gold Quest",
-	"vc_gameID"			: "NACG",
-	"finalize"			: 0,
-	"script"			: "Gold Quest",
-	"patch" : [ {
-		"file"			: "Decompressed\\gold_quest_remix.ppf",
-		"rev"			: "5BD1FE107BF8106B2AB6650ABECD54D6"
-	} ],
-	"redux" : {
-		"options"		: 1,
-		"remap_controls"	: 1,
-		"expand_memory"		: 1,
-		"vc_title"		: "Redux: Gold Quest",
-		"file"			: "Decompressed\\Redux\\redux.bps",
-		"output"		: "_gold_quest_redux_patched"
-	},
-	"options"			: 1,
-	"output"			: "_gold_quest_patched",
-	"tooltip"			: "The regular Gold Quest experience{0}With support for languages, redux and additional options{0}- Supported: Rev 0 (US){0}{0}--- WARNING ---{0}This is an incomplete port of Gold Quest Rev 2 to Rev 0{0}Crashes and bugs can and will occur!",
 	"rev"				: [ "5BD1FE107BF8106B2AB6650ABECD54D6", "3C10B67A76616AE2C162DEF7528724CF", "AB1CA59D0039E3B34D82DB650B54D7B9", "8CA71E87DE4CE5E9F6EC916202A623E9" ]
 }, {
 	"title"				: "GZ Practice ROM",
@@ -107,6 +85,28 @@
 	"output"			: "_gz_practice_patched",
 	"tooltip"			: "A trainer / practice / testing utility for The Legend of Zelda: Ocarina of Time{0}Formally known by its codename 'gz', but generally referred to as 'The Practice ROM'"
 }, {
+	"title"				: "The Legend of Zelda: Gold Quest",
+	"vc_title"			: "Zelda: Gold Quest",
+	"vc_gameID"			: "NACG",
+	"finalize"			: 0,
+	"settings"			: "Gold Quest",
+	"patch" : [ {
+		"file"			: "Decompressed\\gold_quest.bps",
+		"rev"			: "5BD1FE107BF8106B2AB6650ABECD54D6"
+	} ],
+	"redux" : {
+		"options"		: 1,
+		"remap_controls"	: 1,
+		"expand_memory"		: 1,
+		"vc_title"		: "Redux: Gold Quest",
+		"file"			: "Decompressed\\Redux\\redux.ppf",
+		"output"		: "_gold_quest_redux_patched"
+	},
+	"options"			: 1,
+	"output"			: "_gold_quest_patched",
+	"tooltip"			: "Remixes the overworld and dungeons as a harder version of master Quest{0}With support for languages, redux and additional options{0}- Supported: Rev 0 (US)",
+	"rev"				: [ "5BD1FE107BF8106B2AB6650ABECD54D6", "3C10B67A76616AE2C162DEF7528724CF", "AB1CA59D0039E3B34D82DB650B54D7B9", "8CA71E87DE4CE5E9F6EC916202A623E9" ]
+}, {
 	"title"				: "The Legend of Zelda: The Missing Link (v2.0)",
 	"expand_memory"			: 1,
 	"vc_title"			: "Zelda: The Missing Link",
@@ -117,10 +117,10 @@
 	} ],
 	"output"			: "_the_missing_link_patched",
 	"tooltip"			: "A small-sized ROM hack in a completely new setting"
-	
 }, {
 	"title"				: "The Legend of Zelda: Dawn & Dusk (v2.0)",
 	"vc_title"			: "Zelda: Dawn & Dusk",
+	"settings"			: "Dawn & Dusk",
 	"vc_gameID" 			: "NAC2",
 	"patch" : [ {
 		"file"			: "Decompressed\\Dawn & Dusk\\dawn_rev0.bps",
@@ -132,6 +132,15 @@
 		"file"			: "Decompressed\\Dawn & Dusk\\dawn_rev2.bps",
 		"rev"			: "57A9719AD547C516342E1A15D5C28C3D"
 	} ],
+	"redux" : {
+		"options"		: 1,
+		"remap_controls"	: 1,
+		"expand_memory"		: 1,
+		"vc_title"		: "Redux: Dawn & Dusk",
+		"file"			: "Decompressed\\Redux\\redux.ppf",
+		"output"		: "_dawn_&_dusk_redux_patched"
+	},
+	"options"			: 2,
 	"output"			: "_dawn_&_dusk_patched",
 	"tooltip"			: "A small-sized ROM hack in a completely new setting"
 }, {
@@ -140,12 +149,20 @@
 	"vc_title"			: "Zelda: Master of Time",
 	"vc_gameID"			: "NAC3",
 	"finalize"			: 0,
-	"script"			: "Master of Time",
+	"settings"			: "Master of Time",
 	"patch" : [ {
 		"file"			: "Decompressed\\master_of_time.bps",
 		"rev" 			: "5BD1FE107BF8106B2AB6650ABECD54D6"
 	} ],
-	"options"			: 1,
+	"redux" : {
+		"options"		: 1,
+		"remap_controls"	: 1,
+		"expand_memory"		: 1,
+		"vc_title"		: "Redux: Master of Time",
+		"file"			: "Decompressed\\Redux\\redux.ppf",
+		"output"		: "_master_of_time_redux_patched"
+	},
+	"options"			: 2,
 	"output"			: "_master_of_time_patched",
 	"tooltip"			: "A small-sized ROM hack in a completely new setting"
 }, {
@@ -196,28 +213,6 @@
 	} ],
 	"output"			: "_widescreen_patched",
 	"tooltip"			: "16:9 widescreen support for Ocarina of Time"
-}, {
-	"title"				: "The Legend of Zelda: Gold Quest",
-	"finalize"			: 0,
-	"vc_title"			: "Zelda: Gold Quest",
-	"vc_gameID"			: "NAC8",
-	"patch" : [ {
-		"file"			: "Decompressed\\gold_quest.bps",
-		"rev"			: "57A9719AD547C516342E1A15D5C28C3D"
-	} ],
-	"output"			: "_gold_quest_patched",
-	"tooltip"			: "Remixes the overworld and dungeons as a harder version of master Quest"
-}, {
-	"title"				: "The Legend of Zelda: Gold Quest (Widescreen)",
-	"finalize"			: 0,
-	"vc_title"			: "Zelda: Gold Quest (WS)",
-	"vc_gameID"			: "NAC8",
-	"patch" : [ {
-		"file"			: "Decompressed\\gold_quest_widescreen.bps",
-		"rev"			: "57A9719AD547C516342E1A15D5C28C3D"
-	} ],
-	"output"			: "_gold_quest_widescreen_patched",
-	"tooltip"			: "Remixes the overworld and dungeons as a harder version of master Quest{0}With 16:9 widescreen support"
 }, {
 	"title"				: "The Helix Blade (Demo)",
 	"console"			: "Native",

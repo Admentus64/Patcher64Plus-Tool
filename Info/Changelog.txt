@@ -1,3 +1,33 @@
+v19.0.0
+- Overhauled text editor for improved performances and new posibilities
+- Added multi-language support for the text editor
+- Added several new options for OoT & MM
+- Added Redux support for MoT & D&D (rev0)
+- Added new "Malon's Master of Time" dialogue option to MoT
+- Added more "Additional Options for MoT"
+- Added "Additional Options" support for D&D (rev0)
+- Added several new Redux options for OoT (Rainbow Colors? We got you covered!)
+- Added scrolling bars for Additional Options
+- Updated OoT Redux with plenty new features (Mask on D-Pad Right for Child Link, hurray!)
+- Updated MM Redux (Debug Map Select works again, hurray!)
+- Updated widescreen patches for OoT & MM
+- Updated Patches.json with new specifications
+- Updated the widescreen patch for Rev0 and Rev2
+- Updated Gold Quest
+- Updated Redux for Super Metroid
+- Changed how Redux is patched
+- Changed how ROM hacks are having Additional Options patches
+- Changed how Redux features are being applied and reverted
+- Split several options from Redux to be optional for OoT & MM
+- Fixed text patching issues for MoT
+- Fixed custom sequences not being accepted when using the max size limit
+- Fixed issue with ammo values not properly converted to hex values
+- Fixed issue with health below 3 max hearts not properly resetting when dying
+- Fixed plenty of others bugs (and likely introduced some new ones...)
+- Fixed issue with setting ROM title
+- Fixed issues with the text editor
+- Fixed various other issues
+
 v18.0.9
 - Added two new Easy Mode options for MM
 

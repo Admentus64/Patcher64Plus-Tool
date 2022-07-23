@@ -3,28 +3,35 @@
     WriteToConsole "Creating options dialog..."
 
     # Create Dialog
-    if ( (IsSet $Columns) -and (IsSet $Height) )   { $global:OptionsDialog = CreateDialog -Width ($FormDistance * $Columns + (DPISize 60)) -Height (DPISize $Height) }
-    else                                           { $global:OptionsDialog = CreateDialog -Width ($FormDistance * 4        + (DPISize 60)) -Height (DPISize 640)     }
+    if ( (IsSet $Columns) -and (IsSet $Height) )   { $global:OptionsDialog = CreateDialog -Width ($FormDistance * $Columns + (DPISize 75)) -Height (DPISize $Height) }
+    else                                           { $global:OptionsDialog = CreateDialog -Width ($FormDistance * 4        + (DPISize 75)) -Height (DPISize 640)     }
     $OptionsDialog.Icon = $Files.icon.additional
-
-    # Close Button
-    $X = $OptionsDialog.Width / 2 - (DPISize 40)
-    $Y = $OptionsDialog.Height - (DPISize 90)
-    $CloseButton = CreateButton -X $X -Y $Y -Width (DPISize 80) -Height (DPISize 35) -Text "Close" -AddTo $OptionsDialog
-
-    $CloseButton.Add_Click( { StopJobs; $OptionsDialog.Hide() })
 
     # Options Label
     $global:OptionsLabel = CreateLabel -Y (DPISize 15) -Width $OptionsDialog.width -Height (DPISize 15) -Font $Fonts.SmallBold -Text ($GameType.mode + " - Additional Options") -AddTo $OptionsDialog
     $OptionsLabel.AutoSize = $True
     $OptionsLabel.Left = ([Math]::Floor($OptionsDialog.Width / 2) - [Math]::Floor($OptionsLabel.Width / 2))
 
+    # Close Button
+    $X = $OptionsDialog.Width / 2 - (DPISize 40)
+    $Y = $OptionsDialog.Height - (DPISize 90)
+    $CloseButton = CreateButton -X $X -Y $Y -Width (DPISize 80) -Height (DPISize 35) -Text "Close" -AddTo $OptionsDialog
+    $CloseButton.Add_Click( { StopJobs; $OptionsDialog.Hide() })
+
     # Reset Options
+    
+    foreach ($s in $Redux.Sections) {
+        if ($s -eq "Controls") { continue }
+        $Redux[$s] = $null
+    }
+
+    $Redux.Sections = @()
     $Redux.Box    = @{}
     $Redux.Groups = @()
     $Last.Group   = $Last.Panel = $Last.GroupName = $Last.Hide = $null
     $Last.Half    = $False
-    $Redux.Panel  = CreatePanel -Width $OptionsDialog.Width -Height $OptionsDialog.Height -AddTo $OptionsDialog
+    $Redux.Panel  = CreatePanel -Y (DPISize 80) -Width ($OptionsDialog.Width - (DPISize 15)) -Height ($OptionsDialog.Height - (DPISize 180)) -AddTo $OptionsDialog
+    $Redux.Panel.AutoScroll = $True
     [System.GC]::Collect() | Out-Null
     CreateTabButtons -Tabs $Tabs -NoLanguages $NoLanguages
 
@@ -288,13 +295,14 @@ function CreateSettingsDialog() {
     # Presets
     foreach ($item in $GeneralSettings.Presets) {
         $item.Add_CheckedChanged( {
+            if (!$this.checked) { return }
             foreach ($i in 0..($GeneralSettings.Presets.length-1)) {
                 if (!$this.checked -and $GeneralSettings.Presets[$i] -eq $this) {
                     if ($GameType.save -gt 0) { Out-IniFile -FilePath ($Paths.Settings + "\" + $GameType.mode + " - " + ($i+1) + ".ini") -InputObject $GameSettings }
                 }
             }
             $global:GameSettings = GetSettings -File (GetGameSettingsFile) -IsGame
-            if (Get-Command "CreateOptions" -errorAction SilentlyContinue) { iex "CreateOptions" }
+            if (GetCommand "CreateOptions") { CreateOptions }
             DisableReduxOptions
         } )
     }

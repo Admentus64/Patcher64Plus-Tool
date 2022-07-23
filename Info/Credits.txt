@@ -23,6 +23,8 @@
 - Editing / Revision:			ShadowOne333, MattKimura
 - Original Hacking:			Roman971, TestRunnerSRL, AmazingAmpharos, fig02, krimtonz, rlbond86,
 					KevinPal, junglechief87
+- Fixes:				Admentus, GhostlyDark
+- Improvements:				Admentus, GhostlyDark
 
 --- Additional Options ---
 - Faster Block Pushing:			ShadowOne333
@@ -353,12 +355,12 @@ https://github.com/DaruniasJoy/OoT-Custom-Sequences
 --- Redux ---
 - Hacking:				Maroc
 - Original Hacking:			Saneki
-- Fixes:				Admentus & GhostlyDark
-- Improvements:				GhostlyDark
+- Fixes:				Admentus, GhostlyDark
+- Improvements:				Admentus, GhostlyDark
 
 --- Additional Options ---
 - Zora Physics:				ShadowOne333
-- Use Items With Mask Forms:		Firebreather
+- Use Items With Mask Forms:		bry_dawg02
 - Jump Attack:				Admentus (ported), SoulofDeity & Aegiker
 - Frontflip Jump:			SoulofDeity
 - Correct Rupee Colors:			GhostlyDark

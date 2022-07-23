@@ -77,6 +77,8 @@
 
     $menuBarOoTTextEditor      = New-Object System.Windows.Forms.ToolStripButton;   $menuBarOoTTextEditor.Text  = "OoT Text Editor";    $menuBarEditors.DropDownItems.Add($menuBarOoTTextEditor)
     $menuBarMMTextEditor       = New-Object System.Windows.Forms.ToolStripButton;   $menuBarMMTextEditor.Text   = "MM Text Editor";     $menuBarEditors.DropDownItems.Add($menuBarMMTextEditor)
+  # $menuBarOoTSceneEditor     = New-Object System.Windows.Forms.ToolStripButton;   $menuBarOoTSceneEditor.Text = "OoT Scene Editor";   $menuBarEditors.DropDownItems.Add($menuBarOoTSceneEditor)
+  # $menuBarMMSceneEditor      = New-Object System.Windows.Forms.ToolStripButton;   $menuBarMMSceneEditor.Text  = "MM Scene Editor";    $menuBarEditors.DropDownItems.Add($menuBarMMSceneEditor)
 
     $menuBarExit.Add_Click(           { $MainDialog.Close()          } )
     $menuBarUpdate.Add_Click(         { AutoUpdate -Manual           } )
@@ -99,8 +101,10 @@
     $menuBarGameID.Add_Click(   { If (!(IsSet $CreditsDialog)) { CreateCreditsDialog | Out-Null }; $Credits.Sections | foreach { $_.Visible = $False }; $Credits.Sections[2].Visible = $True; $CreditsDialog.ShowDialog() } )
     $menuBarChecksum.Add_Click( { If (!(IsSet $CreditsDialog)) { CreateCreditsDialog | Out-Null }; $Credits.Sections | foreach { $_.Visible = $False }; $Credits.Sections[4].Visible = $True; $CreditsDialog.ShowDialog() } )
 
-    $menuBarOoTTextEditor.Add_Click( { RunTextEditor -Game "Ocarina of Time" -Checksum "5BD1FE107BF8106B2AB6650ABECD54D6" } )
-    $menuBarMMTextEditor.Add_Click(  { RunTextEditor -Game "Majora's Mask"   -Checmsum "2A0A8ACB61538235BC1094D297FB6556" } )
+    $menuBarOoTTextEditor.Add_Click(  { RunTextEditor  -Game "Ocarina of Time" } )
+    $menuBarMMTextEditor.Add_Click(   { RunTextEditor  -Game "Majora's Mask"   } )
+  # $menuBarOoTSceneEditor.Add_Click( { RunSceneEditor -Game "Ocarina of Time" } )
+  # $menuBarMMSceneEditor.Add_Click(  { RunSceneEditor -Game "Majora's Mask"   } )
 
 
 
@@ -384,9 +388,9 @@
     # Status Panel #
     ################
 
-    $global:StatusPanel = CreatePanel -Width (DPISize 625) -Height (DPISize 30)
-    $global:StatusGroup = CreateGroupBox -Width (DPISize 590) -Height (DPISize 30)
-    $global:StatusLabel = Createlabel -X (DPISize 8) -Y (DPISize 10) -Width (DPISize 570) -Height (DPISize 15)
+    $global:StatusPanel = CreatePanel                                -Width (DPISize 625) -Height (DPISize 30)
+    $global:StatusGroup = CreateGroupBox                             -Width (DPISize 590) -Height (DPISize 30)
+    $global:StatusLabel = CreateLabel -X (DPISize 8) -Y (DPISize 10) -Width (DPISize 570) -Height (DPISize 15)
 
 }
 
@@ -507,7 +511,7 @@ function DisablePatches() {
     # Disable boxes if needed
     EnableElem -Elem @($Patches.Extend,    $Patches.ExtendLabel)                          -Active ((IsSet $GamePatch.allow_extend) -and $GameRev.extend -ne 0) -Hide
     EnableElem -Elem @($Patches.Redux,     $Patches.ReduxLabel)                           -Active ((IsSet $GamePatch.redux.file)   -and $GameRev.redux  -ne 0) -Hide
-    EnableElem -Elem @($Patches.Options,   $Patches.OptionsLabel, $Patches.OptionsButton) -Active ((TestFile $GameFiles.script)    -and ($GamePatch.options -eq 1 -or $Settings.Debug.ForceOptions -ne $False) -and $GameRev.options -ne 0) -Hide
+    EnableElem -Elem @($Patches.Options,   $Patches.OptionsLabel, $Patches.OptionsButton) -Active ((TestFile $GameFiles.script)    -and ($GamePatch.options -ge 1 -or $Settings.Debug.ForceOptions -ne $False) -and $GameRev.options -ne 0) -Hide
     EnableElem -Elem $Patches.OptionsButton                                               -Active $Patches.Options.Checked
     DisableReduxOptions
 
@@ -686,10 +690,7 @@ function CleanupFiles() {
 function CleanupScripts() {
     
     foreach ($item in $Files.json.games) {
-        RemoveFile ($Paths.Games + "\" + $item.mode + "\Custom Text\message_data_static.bin")
-        RemoveFile ($Paths.Games + "\" + $item.mode + "\Custom Text\message_data.tbl")
-        RemoveFile ($Paths.Games + "\" + $item.mode + "\Editor\message_data_static.bin")
-        RemoveFile ($Paths.Games + "\" + $item.mode + "\Editor\message_data.tbl")
+        RemovePath ($Paths.Games + "\" + $item.mode + "\Editor")
     }
 
     WriteToConsole "All extracted scripts have been deleted"

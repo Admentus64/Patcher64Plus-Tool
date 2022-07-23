@@ -39,8 +39,8 @@
 function Out-IniFile([hashtable]$InputObject, [string]$FilePath) {
     
     if (!(TestFile -Path ($Paths.Settings) -Container)) { New-Item -Path $Paths.Master -Name "Settings" -ItemType Directory | Out-Null }
-    RemoveFile $FilePath
-    $OutFile = New-Item -ItemType File -Path $Filepath
+  # RemoveFile $FilePath
+    $OutFile = New-Item -ItemType File -Path $Filepath -Force
     foreach ($i in $InputObject.keys) {
         if (!($($InputObject[$i].GetType().Name) -eq "Hashtable")) { Add-Content -Path $outFile -Value "$i=$($InputObject[$i])" } # No Sections
         else {
@@ -74,7 +74,8 @@ function GetGameTypePreset() {
     
     for ($i=0; $i -lt $GeneralSettings.Presets.length; $i++) {
         if ($GeneralSettings.Presets[$i].checked) {
-            if ( (IsSet $GamePatch.script) -and $GamePatch.options -eq 1) { return $GamePatch.script + " - " + ($i+1) }
+            if ( (IsSet $GamePatch.settings) -and $GamePatch.options -ge 1) { return $GamePatch.settings + " - " + ($i+1) }
+            if ( (IsSet $GamePatch.script)   -and $GamePatch.options -ge 1) { return $GamePatch.script   + " - " + ($i+1) }
             return $GameType.mode + " - " + ($i+1)
         }
     }

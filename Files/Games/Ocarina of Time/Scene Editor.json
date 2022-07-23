@@ -1,0 +1,431 @@
+{
+	"scenes" : [
+		{
+			"name"		: "Hyrule Field",
+			"dma"		: "",
+			"length"	: 1
+		}, {
+			"name"		: "Kakariko Village",
+			"dma"		: "",
+			"length"	: 1
+		}, {
+			"name"		: "Graveyard",
+			"dma"		: "",
+			"length"	: 2
+		}, {
+			"name"		: "Zora's River",
+			"dma"		: "",
+			"length"	: 2
+		}, {
+			"name"		: "Kokiri Forest",
+			"dma"		: "",
+			"length"	: 3
+		}, {
+			"name"		: "Sacred Forest Meadow",
+			"dma"		: "",
+			"length"	: 1
+		}, {
+			"name"		: "Lake Hylia",
+			"dma"		: "",
+			"length"	: 1
+		}, {
+			"name"		: "Zora's Domain",
+			"dma"		: "",
+			"length"	: 2
+		}, {
+			"name"		: "Zora's Fountain",
+			"dma"		: "",
+			"length"	: 1
+		}, {
+			"name"		: "Gerudo Valley",
+			"dma"		: "",
+			"length"	: 1
+		}, {
+			"name"		: "Lost woods",
+			"dma"		: "",
+			"length"	: 10
+		}, {
+			"name"		: "Desert Colossus",
+			"dma"		: "",
+			"length"	: 1
+		}, {
+			"name"		: "Gerudo's Fortress",
+			"dma"		: "",
+			"length"	: 2
+		}, {
+			"name"		: "Haunted Wasteland",
+			"dma"		: "",
+			"length"	: 2
+		}, {
+			"name"		: "Hyrule Castle",
+			"dma"		: "",
+			"length"	: 1
+		}, {
+			"name"		: "Ganon's Castle Exterior",
+			"dma"		: "",
+			"length"	: 1
+		}, {
+			"name"		: "Death Mountain Trail",
+			"dma"		: "",
+			"length"	: 1
+		}, {
+			"name"		: "Death Mountain Crater",
+			"dma"		: "",
+			"length"	: 1
+		}, {
+			"name"		: "Goron City",
+			"dma"		: "",
+			"length"	: 4
+		}, {
+			"name"		: "Lon Lon Ranch",
+			"dma"		: "",
+			"length"	: 1
+		}, {
+			"name"		: "Temple of Time",
+			"dma"		: "",
+			"length"	: 2
+		}, {
+			"name"		: "Chamber of the Sages",
+			"dma"		: "",
+			"length"	: 1
+		}, {
+			"name"		: "Shooting Gallery",
+			"dma"		: "",
+			"length"	: 1
+		}, {
+			"name"		: "Castle Hedge Maze (Day)",
+			"dma"		: "",
+			"length"	: 1
+		}, {
+			"name"		: "Castle Hedge Maze (Night)",
+			"dma"		: "",
+			"length"	: 1
+		}, {
+			"name"		: "Grave (Redead)",
+			"dma"		: "",
+			"length"	: 1
+		}, {
+			"name"		: "Grave (Fairy's Fountain)",
+			"dma"		: "",
+			"length"	: 1
+		}, {
+			"name"		: "Royal Family Tomb",
+			"dma"		: "",
+			"length"	: 3
+		}, {
+			"name"		: "Great Fairy's Fountain (Upgrades)",
+			"dma"		: "",
+			"length"	: 1
+		}, {
+			"name"		: "Fairy's Fountain",
+			"dma"		: "",
+			"length"	: 1
+		}, {
+			"name"		: "Great Fairy's Fountain (Spells)",
+			"dma"		: "",
+			"length"	: 1
+		}, {
+			"name"		: "Castle Courtyard",
+			"dma"		: "",
+			"length"	: 1
+		}, {
+			"name"		: "Fishing Pond",
+			"dma"		: "",
+			"length"	: 1
+		}, {
+			"name"		: "Bombchu Bowling Alley",
+			"dma"		: "",
+			"length"	: 1
+		}, {
+			"name"		: "Ranch House & Silo",
+			"dma"		: "",
+			"length"	: 3
+		}, {
+			"name"		: "Guard's House",
+			"dma"		: "",
+			"length"	: 1
+		}, {
+			"name"		: "Granny's Potion Shop",
+			"dma"		: "",
+			"length"	: 1
+		}, {
+			"name"		: "Treasure Box Shop",
+			"dma"		: "",
+			"length"	: 7
+		}, {
+			"name"		: "House of Skulltulas",
+			"dma"		: "",
+			"length"	: 1
+		}, {
+			"name"		: "Market Entrance (Child - Day)",
+			"dma"		: "",
+			"length"	: 1
+		}, {
+			"name"		: "Market Entrance (Child - Night)",
+			"dma"		: "",
+			"length"	: 1
+		}, {
+			"name"		: "Market Entrance (Ruins)",
+			"dma"		: "",
+			"length"	: 1
+		}, {
+			"name"		: "Market (Child - Day)",
+			"dma"		: "",
+			"length"	: 1
+		}, {
+			"name"		: "Market (Child - Night)",
+			"dma"		: "",
+			"length"	: 1
+		}, {
+			"name"		: "Market (Ruins)",
+			"dma"		: "",
+			"length"	: 1
+		}, {
+			"name"		: "Back Alley (Child - Day)",
+			"dma"		: "",
+			"length"	: 1
+		}, {
+			"name"		: "Back Alley (Child - Night)",
+			"dma"		: "",
+			"length"	: 1
+		}, {
+			"name"		: "Temple of Time Exterior (Child - Day)",
+			"dma"		: "",
+			"length"	: 1
+		}, {
+			"name"		: "Temple of Time Exterior (Child - Night)",
+			"dma"		: "",
+			"length"	: 1
+		}, {
+			"name"		: "Temple of Time Exterior (Ruins)",
+			"dma"		: "",
+			"length"	: 1
+		}, {
+			"name"		: "Link's House",
+			"dma"		: "",
+			"length"	: 1
+		}, {
+			"name"		: "Carpenter Boss's House",
+			"dma"		: "",
+			"length"	: 1
+		}, {
+			"name"		: "Back Alley House (Man in Green)",
+			"dma"		: "",
+			"length"	: 1
+		}, {
+			"name"		: "Know-It-All Brothers' House",
+			"dma"		: "",
+			"length"	: 1
+		}, {
+			"name"		: "House of Twins",
+			"dma"		: "",
+			"length"	: 1
+		}, {
+			"name"		: "Grottos",
+			"dma"		: "",
+			"length"	: 14
+		}, {
+			"name"		: "Kokiri Shop",
+			"dma"		: "",
+			"length"	: 1
+		}, {
+			"name"		: "Goron Shop",
+			"dma"		: "",
+			"length"	: 1
+		}, {
+			"name"		: "Zora Shop",
+			"dma"		: "",
+			"length"	: 1
+		}, {
+			"name"		: "Bazaar",
+			"dma"		: "",
+			"length"	: 1
+		}, {
+			"name"		: "Happy Mask Shop",
+			"dma"		: "",
+			"length"	: 1
+		}, {
+			"name"		: "Kakariko Potion Shop",
+			"dma"		: "",
+			"length"	: 1
+		}, {
+			"name"		: "Market Potion Shop",
+			"dma"		: "",
+			"length"	: 1
+		}, {
+			"name"		: "Bombchu Shop",
+			"dma"		: "",
+			"length"	: 1
+		}, {
+			"name"		: "Gravekeeper's Hut",
+			"dma"		: "",
+			"length"	: 1
+		}, {
+			"name"		: "Impa's House",
+			"dma"		: "",
+			"length"	: 1
+		}, {
+			"name"		: "Carpenters' Tent",
+			"dma"		: "",
+			"length"	: 1
+		}, {
+			"name"		: "Stable",
+			"dma"		: "",
+			"length"	: 1
+		}, {
+			"name"		: "Carpenter Boss's House",
+			"dma"		: "",
+			"length"	: 1
+		}, {
+			"name"		: "Cutscene Map",
+			"dma"		: "",
+			"length"	: 1
+		}, {
+			"name"		: "Dampé's Grave & Windwill",
+			"dma"		: "",
+			"length"	: 7
+		}, {
+			"name"		: "Inside the Deku Tree",
+			"dma"		: "",
+			"length"	: 12,
+			"dungeon"	: 1
+		}, {
+			"name"		: "Dodongo's Cavern",
+			"dma"		: "",
+			"length"	: 17,
+			"dungeon"	: 1
+		}, {
+			"name"		: "Inside Jabu-Jabu's Belly",
+			"dma"		: "",
+			"length"	: 16,
+			"dungeon"	: 1
+		}, {
+			"name"		: "Forest Temple",
+			"dma"		: "",
+			"length"	: 23,
+			"dungeon"	: 1
+		}, {
+			"name"		: "Fire Temple",
+			"dma"		: "",
+			"length"	: 27,
+			"dungeon"	: 1
+		}, {
+			"name"		: "Water Temple",
+			"dma"		: "",
+			"length"	: 23,
+			"dungeon"	: 1
+		}, {
+			"name"		: "Shadow Temple",
+			"dma"		: "",
+			"length"	: 23,
+			"dungeon"	: 1
+		}, {
+			"name"		: "Spirit Temple",
+			"dma"		: "",
+			"length"	: 29,
+			"dungeon"	: 1
+		}, {
+			"name"		: "Ice Cavern",
+			"dma"		: "",
+			"length"	: 12,
+			"dungeon"	: 1
+		}, {
+			"name"		: "Bottom of the Well",
+			"dma"		: "",
+			"length"	: 7,
+			"dungeon"	: 1
+		}, {
+			"name"		: "Thieves' Hideout",
+			"dma"		: "",
+			"length"	: 6,
+			"dungeon"	: 2
+		}, {
+			"name"		: "Gerudo Training Ground",
+			"dma"		: "",
+			"length"	: 11,
+			"dungeon"	: 1
+		}, {
+			"name"		: "Inside Ganon's Castle",
+			"dma"		: "",
+			"length"	: 2,
+			"dungeon"	: 1
+		}, {
+			"name"		: "Ganon's Tower",
+			"dma"		: 10,
+			"length"	: 2
+		}, {
+			"name"		: "Inside Ganon's Castle (Collapsing)",
+			"dma"		: "",
+			"length"	: 20,
+			"dungeon"	: 2
+		}, {
+			"name"		: "Ganon's Tower (Collapsing)",
+			"dma"		: "",
+			"length"	: 5,
+			"dungeon"	: 2
+		}, {
+			"name"		: "Tower Collapse Exterior",
+			"dma"		: "",
+			"length"	: 1,
+			"dungeon"	: 2
+		}, {
+			"name"		: "Gohma's Lair",
+			"dma"		: "",
+			"length"	: 2,
+			"dungeon"	: 2
+		}, {
+			"name"		: "King Dodongo's Lair",
+			"dma"		: "",
+			"length"	: 2,
+			"dungeon"	: 2
+		}, {
+			"name"		: "Barinade's Lair",
+			"dma"		: "",
+			"length"	: 2,
+			"dungeon"	: 2
+		}, {
+			"name"		: "Phantom Ganon's Lair",
+			"dma"		: "",
+			"length"	: 2,
+			"dungeon"	: 2
+		}, {
+			"name"		: "Volvagia's Lair",
+			"dma"		: "",
+			"length"	: 2,
+			"dungeon"	: 2
+		}, {
+			"name"		: "Morpha's Lair",
+			"dma"		: "",
+			"length"	: 2,
+			"dungeon"	: 2
+		}, {
+			"name"		: "Bongo Bongo's Lair",
+			"dma"		: "",
+			"length"	: 2,
+			"dungeon"	: 2
+		}, {
+			"name"		: "Twinrova's Lair & Iron Knuckle's Lair",
+			"dma"		: "",
+			"length"	: 4,
+			"dungeon"	: 2
+		}, {
+			"name"		: "Ganondorf's Lair",
+			"dma"		: "",
+			"length"	: 1,
+			"dungeon"	: 2
+		}, {
+			"name"		: "Ganon's Battle Arena",
+			"dma"		: "",
+			"length"	: 1,
+			"dungeon"	: 2
+		}
+	],
+	"chests" : [
+		{
+			"item"		: "",
+			"id"		: ""
+		}, {
+		
+		}
+	]
+}

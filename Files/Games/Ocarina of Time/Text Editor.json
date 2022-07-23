@@ -1,6 +1,9 @@
 {
-	"parse"	: "oot",
-	"end"	: 2,
+	"game"		: "Ocarina of Time",
+	"parse"		: "oot",
+	"end"		: 2,
+	"header"	: 0,
+	"hash"		: "5BD1FE107BF8106B2AB6650ABECD54D6",
 	"textboxes" : [
 		{
 			"id"	: 0,

@@ -337,8 +337,8 @@ function ChangeGameMode() {
     WriteToConsole "Changing game mode..."
 
     if (IsSet $GamePatch.script)   { if (Get-Module -Name $GamePatch.script)   { Remove-Module -Name $GamePatch.script } }
-    if (IsSet $GameRev.script)     { if (Get-Module -Name $GameRev.script)     { Remove-Module -Name $GameRev.script }   }
-    if (IsSet $GameType.mode)      { if (Get-Module -Name $GameType.mode)      { Remove-Module -Name $GameType.mode  }   }
+    if (IsSet $GameRev.script)     { if (Get-Module -Name $GameRev.script)     { Remove-Module -Name $GameRev.script   } }
+    if (IsSet $GameType.mode)      { if (Get-Module -Name $GameType.mode)      { Remove-Module -Name $GameType.mode    } }
 
     if ($GameType.save -gt 0) { Out-IniFile -FilePath (GetGameSettingsFile) -InputObject $GameSettings | Out-Null }
 
@@ -455,11 +455,11 @@ function ChangePatch() {
                 elseif (IsSet $GameRev.script)     { $GameFiles.script = ($Paths.Scripts + "\Options\" + $GameRev.script   + ".psm1") }
                 else                               { $GameFiles.script = ($Paths.Scripts + "\Options\" + $GameType.mode    + ".psm1") }
 
-                if ( (TestFile $GameFiles.script) -and $GamePatch.options -eq 1) {
+                if ( (TestFile $GameFiles.script) -and $GamePatch.options -ge 1) {
                     $global:GameSettings = GetSettings (GetGameSettingsFile)
                     if (IsSet $GamePatch.script)   { if (Get-Module -Name $GamePatch.script)   { Remove-Module -Name $GamePatch.script } }
-                    if (IsSet $GameRev.script)     { if (Get-Module -Name $GameRev.script)     { Remove-Module -Name $GameRev.script }   }
-                    if (IsSet $GameType.mode)      { if (Get-Module -Name $GameType.mode)      { Remove-Module -Name $GameType.mode  }   }
+                    if (IsSet $GameRev.script)     { if (Get-Module -Name $GameRev.script)     { Remove-Module -Name $GameRev.script   } }
+                    if (IsSet $GameType.mode)      { if (Get-Module -Name $GameType.mode)      { Remove-Module -Name $GameType.mode    } }
                     Import-Module -Name $GameFiles.script -Global
                     if (Get-Command "CreateOptions" -errorAction SilentlyContinue) { iex "CreateOptions" }
                 }
@@ -495,8 +495,14 @@ function SetVCPanel() {
 function UpdateStatusLabel([string]$Text) {
     
     WriteToConsole $Text
+
     $StatusLabel.Text = $Text
     $StatusLabel.Refresh()
+
+    if (IsSet $TextEditor.StatusLabel) {
+        $TextEditor.StatusLabel.Text = $Text
+        $TextEditor.StatusLabel.Refresh()
+    }
 
 }
 
@@ -677,11 +683,28 @@ function IsChecked([object]$Elem, [switch]$Not) {
 
 
 #==============================================================================================================================================================================================
+function IsRevert([object]$Elem) {
+    
+    if (!(IsSet $Elem)) { return $True }
+    if ($Elem.GetType() -eq [System.Windows.Forms.CheckBox]) {
+        return !( (IsChecked $Elem) -and $Patches.Options.Checked)
+    }
+    elseif ($Elem.GetType() -eq [System.Windows.Forms.ComboBox]) {
+        return !( (IsDefault $Elem -Not) -and $Patches.Options.Checked)
+    }
+
+}
+
+
+
+#==============================================================================================================================================================================================
 function IsLanguage([object]$Elem, [int]$Lang=0, [switch]$Not) {
     
-    if (!$Redux.Language[$Lang].Checked)   { return $False }
-    if (IsChecked $Elem)                   { return !$Not  }
-    if (IsChecked $Elem -Not)              { return  $Not  }
+    if (IsSet $Redux.Language) {
+        if (!$Redux.Language[$Lang].Checked)   { return $False }
+    }
+    if (IsChecked $Elem)                       { return !$Not  }
+    if (IsChecked $Elem -Not)                  { return  $Not  }
     return $False
 
 }
@@ -706,7 +729,9 @@ function IsText([object]$Elem, [string]$Compare, [switch]$Active, [switch]$Not) 
 #==============================================================================================================================================================================================
 function IsLangText([object]$Elem, [string]$Compare, [int]$Lang=0, [switch]$Not) {
     
-    if (!$Redux.Language[$Lang].Checked)             { return $False }
+    if (IsSet $Redux.Language) {
+        if (!$Redux.Language[$Lang].Checked)         { return $False }
+    }
     if (IsText -Elem $Elem -Compare $Compare)        { return !$Not  }
     if (IsText -Elem $Elem -Compare $Compare -Not)   { return  $Not  }
     return $False
@@ -1042,17 +1067,11 @@ function EnableElem([object]$Elem, [boolean]$Active=$True, [switch]$Hide) {
         foreach ($item in $Elem) {
             $item.Enabled = $item.Active = $Active
             if ($Hide) { $item.Visible = $Active }
-            if ($item.GetType().Name -eq "Checkbox" -and !$Active -and (IsSet $item.section) ) {
-                if ($item.section -ne "Core" -and $Elem.section -ne "VC" -and $Elem.section -ne "Controls") { $item.checked = $False }
-            }
         }
     }
     else {
         $Elem.Enabled = $Elem.Active = $Active
         if ($Hide) { $Elem.Visible = $Active }
-        if ($Elem.GetType().Name -eq "Checkbox" -and !$Active -and (IsSet $Elem.section) ) {
-            if ($Elem.section -ne "Core" -and $Elem.section -ne "VC" -and $Elem.section -ne "Controls") { $Elem.checked = $False }
-        }
     }
 
 }
@@ -1345,6 +1364,7 @@ Export-ModuleMember -Function PatchPath_Finish
 
 Export-ModuleMember -Function IsDefault
 Export-ModuleMember -Function IsChecked
+Export-ModuleMember -Function IsRevert
 Export-ModuleMember -Function IsLanguage
 Export-ModuleMember -Function IsText
 Export-ModuleMember -Function IsLangText

@@ -8,8 +8,11 @@
     if (IsSet $Name) {
         $Form.Name = $Name
         if     (IsSet $Last.Extend)   { Add-Member -InputObject $Form -NotePropertyMembers @{ Section = $Last.Extend } }
-        elseif (!$IsGame)             { Add-Member -InputObject $Form -NotePropertyMembers @{ Section = "Core" } }
-        if      ($IsGame)             { $Redux[$Last.Extend][$Name] = $Form }
+        elseif (!$IsGame)             { Add-Member -InputObject $Form -NotePropertyMembers @{ Section = "Core"       } }
+        if     ( $IsGame) {
+            $Redux[$Last.Extend][$Name] = $Form
+            if (-not ($Redux.Sections -contains $Last.Extend) ) { $Redux.Sections += $Last.Extend }
+        }
     }
     Add-Member -InputObject $Form -NotePropertyMembers @{ Active = $True }
 
@@ -159,21 +162,20 @@ function CreateCheckBox([uint16]$X=0, [uint16]$Y=0, [string]$Name, [byte]$SaveAs
     if (IsSet $CheckBox.Name) {
         if ($IsGame) {
             if ($IsRadio) {
-                if (IsSet -Elem $GameSettings[$CheckBox.Section][$CheckBox.SaveTo] -Max $Max -HasInt)   { $CheckBox.Checked = $GameSettings[$CheckBox.Section][$CheckBox.SaveTo] -eq $Checkbox.SaveAs }
+                if (IsSet -Elem $GameSettings[$CheckBox.Section][$CheckBox.SaveTo] -Max $Max -HasInt)   { $CheckBox.Checked = $GameSettings[$CheckBox.Section][$CheckBox.SaveTo] -eq $Checkbox.SaveAs      }
                 elseif ($Checked)                                                                       { $CheckBox.Checked = $True; $GameSettings[$CheckBox.Section][$CheckBox.SaveTo] = $CheckBox.SaveAs }
                 $CheckBox.Add_CheckedChanged({ $GameSettings[$this.Section][$this.SaveTo] = $this.SaveAs })
             }
             else {
-                if (IsSet $GameSettings[$CheckBox.Section][$CheckBox.Name])                             { $CheckBox.Checked = $GameSettings[$CheckBox.Section][$CheckBox.Name] -eq "True" }
+                if (IsSet $GameSettings[$CheckBox.Section][$CheckBox.Name])                             { $CheckBox.Checked = $GameSettings[$CheckBox.Section][$CheckBox.Name] -eq "True"  }
                 else                                                                                    { $CheckBox.Checked = $GameSettings[$CheckBox.Section][$CheckBox.Name] = $Checked  }
                 $CheckBox.Add_CheckStateChanged({ $GameSettings[$this.Section][$this.Name] = $this.Checked })
             }
         }
         else {
-            if ($IsDebug) { $CheckBox.Section = "Debug" }
-
+            if ($IsDebug) { $CheckBox.Section = "Debug" } else { $Checkbox.Section = "Core" }
             if ($IsRadio) {
-                if (IsSet -Elem $Settings[$CheckBox.Section][$CheckBox.SaveTo] -Max $Max -HasInt)       { $CheckBox.Checked = $Settings[$CheckBox.Section][$CheckBox.SaveTo] -eq $Checkbox.SaveAs }
+                if (IsSet -Elem $Settings[$CheckBox.Section][$CheckBox.SaveTo] -Max $Max -HasInt)       { $CheckBox.Checked = $Settings[$CheckBox.Section][$CheckBox.SaveTo] -eq $Checkbox.SaveAs      }
                 elseif ($Checked)                                                                       { $CheckBox.Checked = $True; $Settings[$CheckBox.Section][$CheckBox.SaveTo] = $CheckBox.SaveAs }
                 $CheckBox.Add_CheckedChanged({ $Settings[$this.Section][$this.SaveTo] = $this.SaveAs })
             }
@@ -197,7 +199,7 @@ function CreateCheckBox([uint16]$X=0, [uint16]$Y=0, [string]$Name, [byte]$SaveAs
         EnableElem -Elem $Checkbox -Active (!$Checkbox.link.Checked)
         EnableElem -Elem $Link     -Active (!$Link.link.Checked)
         if ($Checkbox.Enabled -eq $False)   { $Checkbox.Checked = $False }
-        if ($Link.Enabled     -eq $Faöse)   { $Link.Checked     = $False }
+        if ($Link.Enabled     -eq $False)   { $Link.Checked     = $False }
     }
 
     Add-Member -InputObject $CheckBox -NotePropertyMembers @{ Default = $Checked }
@@ -334,7 +336,7 @@ function CreateButton([uint16]$X=0, [uint16]$Y=0, [uint16]$Width=(DPISize 100), 
 
 
 #==============================================================================================================================================================================================
-function CreateTabButtons([string[]]$Tabs, [boolean]$NoLanguages=$False, [object]$AddTo=$Redux.Panel) {
+function CreateTabButtons([string[]]$Tabs, [boolean]$NoLanguages=$False) {
     
     if ($Tabs.Count -eq 0) {
         if ( (($GamePatch.redux.options -eq 1 -and $GameRev.redux -ne 0) -or ((IsSet $Files.json.languages) -and $GameRev.languages -ne 0)) ) {
@@ -350,9 +352,10 @@ function CreateTabButtons([string[]]$Tabs, [boolean]$NoLanguages=$False, [object
 
     # Create tabs
     for ($i=0; $i -lt $Tabs.Count; $i++) {
-        $Button = CreateButton -X ((DPISize 15) + (($Redux.Panel.width - (DPISize 50))/$Tabs.length*$i)) -Y (DPISize 40) -Width (($Redux.Panel.width - (DPISize 50))/$Tabs.length) -Height (DPISize 30) -ForeColor "White" -BackColor "Gray" -Name $Tabs[$i] -Tag $i -Text $Tabs[$i] -AddTo $AddTo
+        $Button = CreateButton -X ((DPISize 15) + (($OptionsDialog.width - (DPISize 50))/$Tabs.length*$i)) -Y (DPISize 40) -Width (($OptionsDialog.width - (DPISize 50))/$Tabs.length) -Height (DPISize 30) -ForeColor "White" -BackColor "Gray" -Name $Tabs[$i] -Tag $i -Text $Tabs[$i] -AddTo $OptionsDialog
         $Last.TabName = $Tabs[$i]
         $Button.Add_Click({
+            $Redux.Panel.AutoScrollPosition = 0
             foreach ($item in $ReduxTabs)      { $item.BackColor = "Gray" }
             foreach ($item in $Redux.Groups)   { if (!$item.ShowAlways) { $item.Visible = $item.Name -eq $this.Name } }
             $GameSettings["Core"]["LastTab"] = $this.Tag
@@ -360,6 +363,7 @@ function CreateTabButtons([string[]]$Tabs, [boolean]$NoLanguages=$False, [object
         })
         $global:ReduxTabs += $Button
         while ($Tabs[$i].Contains(' ')) { $Tabs[$i] = $Tabs[$i].Replace(' ', '') }
+        while ($Tabs[$i].Contains('-')) { $Tabs[$i] = $Tabs[$i].Replace('-', '') }
         if (Get-Command ("CreateTab" + $Tabs[$i]) -errorAction SilentlyContinue) {
             $Last.Half = $False
             iex ("CreateTab" + $Tabs[$i])
@@ -406,7 +410,7 @@ function CreateReduxPanel([single]$X=$Last.Group.Left, [single]$Row=0, [single]$
 
 
 #==============================================================================================================================================================================================
-function CreateReduxGroup([single]$X=(DPISize 15), [single]$Y=(DPISize 50), [single]$Height, [string]$Name=$Last.TabName, [string]$Tag, [switch]$ShowAlways, [boolean]$IsGame=$True, [string]$Text="", [switch]$IsRedux, [single]$Columns=0, [object]$AddTo=$Redux.Panel, [switch]$Simple, [switch]$Advanced) {
+function CreateReduxGroup([single]$X=(DPISize 15), [single]$Y=(DPISize 0), [single]$Height, [string]$Name=$Last.TabName, [string]$Tag, [switch]$ShowAlways, [boolean]$IsGame=$True, [string]$Text="", [switch]$IsRedux, [single]$Columns=0, [object]$AddTo=$Redux.Panel, [switch]$Simple, [switch]$Advanced) {
     
     if (!(CheckInterface -Simple $Simple -Advanced $Advanced)) {
         $Last.Hide = $True
@@ -428,7 +432,7 @@ function CreateReduxGroup([single]$X=(DPISize 15), [single]$Y=(DPISize 50), [sin
     if (IsSet $Name) {
         if (!$Last.Half) {
             if ($Last.GroupName -eq $Name)     { $Y = $Last.Group.Bottom + 5}
-            elseif ($ReduxTabs.length -gt 0)   { $Y = (DPISize 80) }
+            elseif ($ReduxTabs.length -gt 0)   { $Y = (DPISize 0)  }
             else                               { $Y = (DPISize 40) }
         }
         if ($Last.Half) {

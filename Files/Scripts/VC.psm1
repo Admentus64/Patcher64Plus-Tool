@@ -178,11 +178,11 @@ function PatchVCEmulator([string]$Command) {
         ChangeBytes -File $WadFile.AppFile01 -Offset "5BF44" -Values "3C 80 72 00"
         ChangeBytes -File $WadFile.AppFile01 -Offset "5BFD7" -Values "00"
     }
-    elseif ($GameType.mode -eq "Majora's Mask" -and $VC.ExpandMemory.Checked) {
+   <# elseif ($GameType.mode -eq "Majora's Mask" -and $VC.ExpandMemory.Checked) {
         ChangeBytes -File $WadFile.AppFile01 -Offset "10B58" -Values "3C 80 00 C0"
         ChangeBytes -File $WadFile.AppFile01 -Offset "4BD20" -Values "67 E4 70 00"
         ChangeBytes -File $WadFile.AppFile01 -Offset "4BC80" -Values "3C A0 01 00"
-    }
+    } #>
 
     # Controls
     if ($VC.RemapControls.Checked) {

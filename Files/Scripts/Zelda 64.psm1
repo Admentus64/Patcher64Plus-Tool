@@ -1,6 +1,6 @@
 ﻿function GetOoTEntranceIndex([string]$Index) {
 
-    if ($index -eq "Link's House")                   { return "00 BB" }     elseif ($index -eq "Temple of Time")             { return "05 F4" }     elseif ($index -eq "Hyrule Field")               { return "01 FD" }
+    if     ($index -eq "Link's House")               { return "00 BB" }     elseif ($index -eq "Temple of Time")             { return "05 F4" }     elseif ($index -eq "Hyrule Field")               { return "01 FD" }
     elseif ($index -eq "Kakariko Village")           { return "00 DB" }     elseif ($index -eq "Inside the Deku Tree")       { return "00 00" }     elseif ($index -eq "Dodongo's Cavern")           { return "00 04" }
     elseif ($index -eq "Inside Jabu-Jabu's Belly")   { return "00 28" }     elseif ($index -eq "Forest Temple")              { return "01 69" }     elseif ($index -eq "Fire Temple")                { return "01 65" }
     elseif ($index -eq "Water Temple")               { return "00 10" }     elseif ($index -eq "Shadow Temple")              { return "00 82" }     elseif ($index -eq "Spirit Temple")              { return "00 37" }
@@ -172,7 +172,8 @@ function PatchReplaceMusic([string]$BankPointerTableStart, [string]$BankPointerT
                 foreach ($id in $track.id) {
                     $tableOffset = ( (GetDecimal $id) * 16)
                     $offset      = (Get8Bit $pointerTableArray[$tableOffset]) + (Get8Bit $pointerTableArray[$tableOffset+1]) + (Get8Bit $pointerTableArray[$tableOffset+2]) + (Get8Bit $pointerTableArray[$tableOffset+3])
-                    PatchBytes -File $seq -Offset $offset -Length $track.size -Patch ($file + $ext) -Music
+                    if ( (IsChecked $Redux.Restore.FireTemple) -and (IsSet $track.size_censored) )   { PatchBytes -File $seq -Offset $offset -Length $track.size_censored -Patch ($file + $ext) -Music }
+                    else                                                                             { PatchBytes -File $seq -Offset $offset -Length $track.size          -Patch ($file + $ext) -Music }
 
                     # Size
                     $tableOffset = Get16Bit ( (GetDecimal $id) * 16 + 6)
@@ -325,8 +326,6 @@ function MusicOptions([string]$Default="File Select") {
                 $this.Text      = "Stop Music Preview"
                 $this.BackColor = "Red"
 
-                write-host $audioBank
-
                 Start-Job -Name 'MidiPlayer' -Scriptblock $midiScript -ArgumentList @($GameFiles.banks, $Files.tool.timidity, $audioBank, $midiFile)
                 $jobStatus = (Get-Job -Name "MidiPlayer").State
 
@@ -404,7 +403,7 @@ function GetReplacementTracks() {
         if ($track.title -eq $Redux.Music.SelectReplace.text) {
             foreach ($item in Get-ChildItem -LiteralPath $Paths.Music -Recurse) {
                 if ($item.extension -eq ".zseq" -or $item.extension -eq ".seq") {
-                    if ($item.length -lt (GetDecimal $track.size) ) {
+                    if ($item.length -le (GetDecimal $track.size) ) {
                         $event = $False
 
                         $file = $item.FullName
@@ -686,7 +685,7 @@ function ChangeModelsSelection() {
 function CreateButtonColorOptions($Default=1) {
     
     # BUTTON COLORS #
-    CreateReduxGroup    -Tag  "Colors"  -Height 2 -Text "Button Colors"
+    CreateReduxGroup    -Tag  "Colors"  -Text "Button Colors" -Height 2 -Columns 4
     CreateReduxComboBox -Name "Buttons" -Text "Button Colors" -Items @("N64 OoT", "N64 MM", "GC OoT", "GC MM", "Randomized", "Custom") -Default $Default -Info ("Select a preset for the button colors`n" + '"Randomized" fully randomizes the colors each time the patcher is opened') -Credits "GhostlyDark (ported from Redux)"
 
     # Button Colors - Buttons
@@ -718,11 +717,76 @@ function CreateButtonColorOptions($Default=1) {
 }
 
 
+
+#==============================================================================================================================================================================================
+function CreateBoomerangColorOptions($Default=1) {
+
+    CreateReduxGroup    -Tag  "Colors"    -Text "Boomerang Colors" -Height 2
+    CreateReduxComboBox -Name "Boomerang" -Text "Boomerang Colors" -Items @("Vanilla", "Gold Quest", "Randomized", "Custom") -Default $Default -Info ("Select a preset for the boomerang trail colors`n" + '"Randomized" fully randomizes the colors each time the patcher is opened') -Credits "Ported from Redux"
+
+    # Boomerang Trail Colors - Buttons
+    $Buttons = @()
+    $Buttons += CreateReduxButton -Column 1 -Row 2 -Width 100 -Tag $Buttons.Count -Text "Inner Trail" -Info "Select the color you want for the inner trail" -Credits "Ported from Redux"
+    $Buttons += CreateReduxButton -Column 2 -Row 2 -Width 100 -Tag $Buttons.Count -Text "Outer Trail" -Info "Select the color you want for the outer trail" -Credits "Ported from Redux"
+
+    # Boomerang Trail - Dialogs
+    $Redux.Colors.SetBoomerang = @()
+    $Redux.Colors.SetBoomerang += CreateColorDialog -Color "FFFF64" -Name "SetInnerBoomerang" -IsGame -Button $Buttons[0]
+    $Redux.Colors.SetBoomerang += CreateColorDialog -Color "FFFF64" -Name "SetOuterBoomerang" -IsGame -Button $Buttons[1]
+
+    # Boomerang Trail - Labels
+    $Redux.Colors.BoomerangLabels = @()
+    for ($i=0; $i -lt $Buttons.length; $i++) {
+        $Buttons[$i].Add_Click({ $Redux.Colors.SetBoomerang[[int16]$this.Tag].ShowDialog(); $Redux.Colors.Boomerang.Text = "Custom"; $Redux.Colors.BoomerangLabels[[int16]$this.Tag].BackColor = $Redux.Colors.SetBoomerang[[int16]$this.Tag].Color; $GameSettings["Colors"][$Redux.Colors.SetBoomerang[[int16]$this.Tag].Tag] = $Redux.Colors.SetBoomerang[[int16]$this.Tag].Color.Name })
+        $Redux.Colors.BoomerangLabels += CreateReduxColoredLabel -Link $Buttons[$i]  -Color $Redux.Colors.SetBoomerang[$i].Color
+    }
+    
+    $Redux.Colors.Boomerang.Add_SelectedIndexChanged({ SetBoomerangColorsPreset -ComboBox $Redux.Colors.Boomerang })
+    SetBoomerangColorsPreset -ComboBox $Redux.Colors.Boomerang
+
+    $Buttons = $null
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function CreateBombchuColorOptions() {
+
+    CreateReduxGroup    -Tag  "Colors"  -Text "Bombchu Colors" -Height 2
+    CreateReduxComboBox -Name "Bombchu" -Text "Bombchu Colors" -Items @("Vanilla", "Randomized", "Custom") -Info ("Select a preset for the bombchu trail colors`n" + '"Randomized" fully randomizes the colors each time the patcher is opened') -Credits "Ported from Redux"
+
+    # Bombchu Trail Colors - Buttons
+    $Buttons = @()
+    $Buttons += CreateReduxButton -Column 1 -Row 2 -Width 100 -Tag $Buttons.Count -Text "Inner Trail" -Info "Select the color you want for the inner trail" -Credits "Ported from Redux"
+    $Buttons += CreateReduxButton -Column 2 -Row 2 -Width 100 -Tag $Buttons.Count -Text "Outer Trail" -Info "Select the color you want for the outer trail" -Credits "Ported from Redux"
+
+    # Bombchu Trail - Dialogs
+    $Redux.Colors.SetBombchu = @()
+    $Redux.Colors.SetBombchu += CreateColorDialog -Color "FFFF64" -Name "SetInnerBombchu" -IsGame -Button $Buttons[0]
+    $Redux.Colors.SetBombchu += CreateColorDialog -Color "FFFF64" -Name "SetOuterBombchu" -IsGame -Button $Buttons[1]
+
+    # Bombchu Trail - Labels
+    $Redux.Colors.BombchuLabels = @()
+    for ($i=0; $i -lt $Buttons.length; $i++) {
+        $Buttons[$i].Add_Click({ $Redux.Colors.SetBombchu[[int16]$this.Tag].ShowDialog(); $Redux.Colors.Bombchu.Text = "Custom"; $Redux.Colors.BombchuLabels[[int16]$this.Tag].BackColor = $Redux.Colors.SetBombchu[[int16]$this.Tag].Color; $GameSettings["Colors"][$Redux.Colors.SetBombchu[[int16]$this.Tag].Tag] = $Redux.Colors.SetBombchu[[int16]$this.Tag].Color.Name })
+        $Redux.Colors.BombchuLabels += CreateReduxColoredLabel -Link $Buttons[$i]  -Color $Redux.Colors.SetBombchu[$i].Color
+    }
+    
+    $Redux.Colors.Bombchu.Add_SelectedIndexChanged({ SetBombchuColorsPreset -ComboBox $Redux.Colors.Bombchu })
+    SetBombchuColorsPreset -ComboBox $Redux.Colors.Bombchu
+
+    $Buttons = $null
+
+}
+
+
+
 #==============================================================================================================================================================================================
 function CreateRupeeColorOptions() {
 
     # RUPEE ICON COLORS #
-    CreateReduxGroup    -Tag  "Colors"  -Height 2 -Text "Rupee Icon Colors"
+    CreateReduxGroup    -Tag  "Colors" -Text "Rupee Icon Colors" -Height 2 -Columns 4
     CreateReduxComboBox -Name "Rupees" -Text "Rupee Icon Colors" -Items @("Redux", "Randomized", "Custom") -Info ("Select a preset for the Rupee icon colors`n" + '"Randomized" fully randomizes the colors each time the patcher is opened') -Credits "Ported from Redux"
 
     # Rupee Icon Colors - Buttons
@@ -756,14 +820,14 @@ function CreateRupeeColorOptions() {
 
 
 #==============================================================================================================================================================================================
-function CreateRupeeVanillaColorOptions($Default="C8FF64") {
+function CreateRupeeVanillaColorOptions($Preset=1, $Color="C8FF64") {
 
     CreateReduxGroup -Tag "Colors" -Text "Rupee Icon Color"
 
     $Items = @("Base Wallet", "Adult's Wallet", "Giant's Wallet", "Tycoon's Wallet", "Gold Quest", "Randomized", "Custom"); $Randomize = '"Randomized" fully randomizes the colors each time the patcher is opened'
-    $Redux.Colors.RupeesVanilla   = CreateReduxComboBox -Name "RupeesVanilla" -Text "Rupee Icon Color" -Length 230 -Shift 40 -Items $Items -Info ("Select a color scheme for the Rupee Icon Color`n" + $Randomize) -Credits "Ported from Redux"
+    $Redux.Colors.RupeesVanilla   = CreateReduxComboBox -Name "RupeesVanilla" -Text "Rupee Icon Color" -Length 230 -Shift 40 -Items $Items -Default $Preset -Info ("Select a color scheme for the Rupee Icon Color`n" + $Randomize) -Credits "Ported from Redux"
     $Button                       = CreateReduxButton -Width 100 -Text "Wallet Icon" -Info "Select the color you want for Rupee Icon Color" -Credits "Ported from Redux"
-    $Redux.Colors.SetRupeeVanilla = CreateColorDialog -Color $default -Name "SetRupeeIcon" -IsGame -Button $Button
+    $Redux.Colors.SetRupeeVanilla = CreateColorDialog -Color $Color -Name "SetRupeeIcon" -IsGame -Button $Button
     
     $Button.Add_Click({ $Redux.Colors.SetRupeeVanilla.ShowDialog(); $Redux.Colors.RupeeVanillaLabel.BackColor = $Redux.Colors.SetRupeeVanilla.Color; $GameSettings["Colors"][$Redux.Colors.SetRupeeVanilla] = $Redux.Colors.SetRupeeVanilla.Color.Name })
     $Redux.Colors.RupeeVanillaLabel = CreateReduxColoredLabel -Link $Button -Color $Redux.Colors.SetRupeeVanilla.Color
@@ -919,6 +983,134 @@ function CreateFairyColorOptions($name) {
 
 
 #==============================================================================================================================================================================================
+function CreateHUDColorOptions([switch]$MM) { 
+
+    # HUD COLORS #
+
+    CreateReduxGroup    -Tag  "Colors" -Text "HUD Colors" -IsRedux -Height 2
+    CreateReduxComboBox -Name "Hearts"  -Column 1 -Text "Hearts Colors"  -Length 220 -Items @("Red", "Green", "Blue", "Yellow", "Randomized", "Custom") -Info ("Select a preset for the hearts colors`n" + '"Randomized" fully randomizes the colors each time the patcher is opened')
+    CreateReduxComboBox -Name "Magic"   -Column 3 -Text "Magic Colors"   -Length 220 -Items @("Green", "Red", "Blue", "Purple", "Pink", "Yellow", "White", "Randomized", "Custom") -Info ("Select a preset for the magic colors`n" + '"Randomized" fully randomizes the colors each time the patcher is opened')
+    if ($MM) { CreateReduxComboBox -Name "Minimap" -Column 5 -Text "Minimap Colors" -Length 220 -Items @("Cyan", "Green", "Red", "Blue", "Gray", "Purple", "Pink", "Yellow", "White", "Black", "Randomized", "Custom") -Info ("Select a preset for the minimap colors`n" + '"Randomized" fully randomizes the colors each time the patcher is opened') }
+
+    # Heart / Magic Colors - Buttons
+    $Buttons = @()
+    $Buttons += CreateReduxButton -Column 1 -Row 2 -Width 100 -Tag $Buttons.Count -Text "Hearts (Base)"   -Info "Select the color you want for the standard hearts display" -Credits "Ported from Rando"
+    if ($MM) { $Buttons += CreateReduxButton -Column 2 -Row 2 -Width 100 -Tag $Buttons.Count -Text "Hearts (Double)" -Info "Select the color you want for the enhanced hearts display" -Credits "Ported from Rando" }
+    $Buttons += CreateReduxButton -Column 3 -Row 2 -Width 100 -Tag $Buttons.Count -Text "Magic (Base)"    -Info "Select the color you want for the standard magic display"  -Credits "Ported from Rando"
+    if ($MM) {
+        $Redux.Colors.BaseMagic = $Buttons[$Buttons.Length-1]
+        $Buttons += CreateReduxButton -Column 4 -Row 2 -Width 100 -Tag $Buttons.Count -Text "Magic (Infinite)" -Info "Select the color you want for the infinite magic display" -Credits "Ported from Rando"
+        $Redux.Colors.InfiniteMagic = $Buttons[$Buttons.Length-1]
+        $Buttons += CreateReduxButton -Column 5 -Row 2 -Width 100 -Tag $Buttons.Count -Text "Minimap"          -Info "Select the color you want for the minimap"                -Credits "Ported from Rando"
+    }
+
+    # Heart / Magic Colors - Dialogs
+    $Redux.Colors.SetHUDStats = @()
+    $Redux.Colors.SetHUDStats += CreateColorDialog -Color "FF4632" -Name "SetBaseHearts"    -IsGame -Button $Buttons[$Redux.Colors.SetHUDStats.Count]
+    if ($MM) { $Redux.Colors.SetHUDStats += CreateColorDialog -Color "C80000" -Name "SetDoubleHearts" -IsGame -Button $Buttons[$Redux.Colors.SetHUDStats.Count]  }
+    $Redux.Colors.SetHUDStats += CreateColorDialog -Color "00C800" -Name "SetBaseMagic"     -IsGame -Button $Buttons[$Redux.Colors.SetHUDStats.Count]
+    if ($MM) {
+        $Redux.Colors.SetHUDStats += CreateColorDialog -Color "0000C8" -Name "SetInfiniteMagic" -IsGame -Button $Buttons[$Redux.Colors.SetHUDStats.Count]
+        $Redux.Colors.SetHUDStats += CreateColorDialog -Color "00FFFF" -Name "SetMinimap"       -IsGame -Button $Buttons[$Redux.Colors.SetHUDStats.Count]
+    }
+
+    # Heart / Magic Colors - Labels
+    $Redux.Colors.HUDStatsLabels = @()
+    for ($i=0; $i -lt $Buttons.length; $i++) {
+        $Buttons[$i].Add_Click({
+            $Redux.Colors.SetHUDStats[[int16]$this.Tag].ShowDialog(); $Redux.Colors.HUDStatsLabels[[int16]$this.Tag].BackColor = $Redux.Colors.SetHUDStats[[int16]$this.Tag].Color; $GameSettings["Colors"][$Redux.Colors.SetHUDStats[[int16]$this.Tag].Tag] = $Redux.Colors.SetHUDStats[[int16]$this.Tag].Color.Name
+            
+            if ($MM) {
+                if     ($this.Tag -lt 2)   { $Redux.Colors.Hearts.Text   = "Custom" }
+                elseif ($this.Tag -lt 4)   { $Redux.Colors.Magic.Text    = "Custom" }
+                else                       { $Redux.Colors.Minimap.Text  = "Custom" }
+            }
+            else {
+                if ($this.Tag -lt 1)   { $Redux.Colors.Hearts.Text = "Custom" }
+                else                   { $Redux.Colors.Magic.Text  = "Custom" }
+            }
+        })
+        $Redux.Colors.HUDStatsLabels += CreateReduxColoredLabel -Link $Buttons[$i] -Color $Redux.Colors.SetHUDStats[$i].Color
+    }
+
+    $Redux.Colors.Hearts.Add_SelectedIndexChanged({ SetHeartsColorsPreset -ComboBox $Redux.Colors.Hearts -Dialog $Redux.Colors.SetHUDStats[0] -Label $Redux.Colors.HUDStatsLabels[0] })
+    SetHeartsColorsPreset -ComboBox $Redux.Colors.Hearts -Dialog $Redux.Colors.SetHUDStats[0] -Label $Redux.Colors.HUDStatsLabels[0]
+    
+    if ($MM) {
+        $Redux.Colors.Hearts.Add_SelectedIndexChanged({
+            SetHeartsColorsPreset -ComboBox $Redux.Colors.Hearts -Dialog $Redux.Colors.SetHUDStats[1] -Label $Redux.Colors.HUDStatsLabels[1]
+            if (IsIndex $Redux.Colors.Hearts) { SetColor -Color "C80000" -Dialog $Redux.Colors.SetHUDStats[1] -Label $Redux.Colors.HUDStatsLabels[1] }
+        })
+        SetHeartsColorsPreset -ComboBox $Redux.Colors.Hearts -Dialog $Redux.Colors.SetHUDStats[1] -Label $Redux.Colors.HUDStatsLabels[1]
+        if (IsIndex $Redux.Colors.Hearts) { SetColor -Color "C80000" -Dialog $Redux.Colors.SetHUDStats[1] -Label $Redux.Colors.HUDStatsLabels[1] }
+    }
+
+    if (!$MM) {
+        $Redux.Colors.Magic.Add_SelectedIndexChanged({ SetMagicColorsPreset -ComboBox $Redux.Colors.Magic -Dialog $Redux.Colors.SetHUDStats[1] -Label $Redux.Colors.HUDStatsLabels[1] })
+        SetMagicColorsPreset -ComboBox $Redux.Colors.Magic -Dialog $Redux.Colors.SetHUDStats[1] -Label $Redux.Colors.HUDStatsLabels[1]
+    }
+    else {
+        $Redux.Colors.Magic.Add_SelectedIndexChanged({ SetMagicColorsPreset -ComboBox $Redux.Colors.Magic -Dialog $Redux.Colors.SetHUDStats[2] -Label $Redux.Colors.HUDStatsLabels[2] })
+        SetMagicColorsPreset -ComboBox $Redux.Colors.Magic -Dialog $Redux.Colors.SetHUDStats[2] -Label $Redux.Colors.HUDStatsLabels[2]
+    }
+    
+    if ($MM) {
+        $Redux.Colors.Magic.Add_SelectedIndexChanged({
+            SetMagicColorsPreset -ComboBox $Redux.Colors.Magic -Dialog $Redux.Colors.SetHUDStats[3] -Label $Redux.Colors.HUDStatsLabels[3]
+            if (IsIndex $Redux.Colors.Magic) { SetColor -Color "0000C8" -Dialog $Redux.Colors.SetHUDStats[3] -Label $Redux.Colors.HUDStatsLabels[3] }
+        })
+        SetMagicColorsPreset -ComboBox $Redux.Colors.Magic -Dialog $Redux.Colors.SetHUDStats[3] -Label $Redux.Colors.HUDStatsLabels[3]
+        if (IsIndex $Redux.Colors.Magic) { SetColor -Color "0000C8" -Dialog $Redux.Colors.SetHUDStats[3] -Label $Redux.Colors.HUDStatsLabels[3] }
+
+        $Redux.Colors.Minimap.Add_SelectedIndexChanged({ SetMinimapColorsPreset -ComboBox $Redux.Colors.Minimap -Dialog $Redux.Colors.SetHUDStats[4] -Label $Redux.Colors.HUDStatsLabels[4] })
+        SetMinimapColorsPreset -ComboBox $Redux.Colors.Minimap -Dialog $Redux.Colors.SetHUDStats[4] -Label $Redux.Colors.HUDStatsLabels[4]
+    }
+
+    $Buttons = $null
+
+}
+
+
+#==============================================================================================================================================================================================
+function CreateTextColorOptions() { 
+
+    # TEXT CURSOR COLORS #
+    CreateReduxGroup    -Tag  "Colors" -Text "Text Cursor Colors" -Height 2
+    $Items = @("Blue", "Green", "Randomized", "Custom")
+    CreateReduxComboBox -Name "TextCursor"  -Column 1 -Text "Text Cursor" -Length 220 -Items $Items -Info ("Select a preset for the textbox cursor color`n" + '"Randomized" fully randomizes the colors each time the patcher is opened') -Credits "Ported from Rando"
+    CreateReduxComboBox -Name "ShopCursor"  -Column 3 -Text "Shop Cursor" -Length 220 -Items $Items -Info ("Select a preset for the shop cursor color`n"    + '"Randomized" fully randomizes the colors each time the patcher is opened') -Credits "Ported from Rando"
+
+    # Text Colors - Buttons
+    $Buttons = @()
+    $Buttons += CreateReduxButton -Column 1 -Row 2 -Width 100 -Tag $Buttons.Count -Text "Text Cursor" -Info "Select the color you want for the textbox cursor" -Credits "Ported from Rando"
+    $Buttons += CreateReduxButton -Column 3 -Row 2 -Width 100 -Tag $Buttons.Count -Text "Shop Cursor" -Info "Select the color you want for the shop cursor"    -Credits "Ported from Rando"
+
+    # Text Colors - Dialogs
+    $Redux.Colors.SetText = @()
+    $Redux.Colors.SetText += CreateColorDialog -Color "0050C8" -Name "SetTextCursor" -IsGame -Button $Buttons[0]
+    $Redux.Colors.SetText += CreateColorDialog -Color "0050FF" -Name "SetShopCursor" -IsGame -Button $Buttons[1]
+
+    # Text Colors - Labels
+    $Redux.Colors.TextLabels = @()
+    for ($i=0; $i -lt $Buttons.length; $i++) {
+        $Buttons[$i].Add_Click({
+            $Redux.Colors.SetText[[int16]$this.Tag].ShowDialog(); $Redux.Colors.TextLabels[[int16]$this.Tag].BackColor = $Redux.Colors.SetText[[int16]$this.Tag].Color; $GameSettings["Colors"][$Redux.Colors.SetText[[int16]$this.Tag].Tag] = $Redux.Colors.SetText[[int16]$this.Tag].Color.Name
+            if ($this.Tag -lt 1)   { $Redux.Colors.TextCursor.Text = "Custom" }
+            else                   { $Redux.Colors.ShopCursor.Text = "Custom" }
+        })
+        $Redux.Colors.TextLabels += CreateReduxColoredLabel -Link $Buttons[$i]  -Color $Redux.Colors.SetText[$i].Color
+    }
+
+    $Redux.Colors.TextCursor.Add_SelectedIndexChanged({ SetTextCursorColorsPreset -ComboBox $Redux.Colors.TextCursor -Dialog $Redux.Colors.SetText[0] -Label $Redux.Colors.TextLabels[0] })
+    SetTextCursorColorsPreset -ComboBox $Redux.Colors.TextCursor -Dialog $Redux.Colors.SetText[0] -Label $Redux.Colors.TextLabels[0]
+    $Redux.Colors.ShopCursor.Add_SelectedIndexChanged({ SetShopCursorColorsPreset -ComboBox $Redux.Colors.ShopCursor -Dialog $Redux.Colors.SetText[1] -Label $Redux.Colors.TextLabels[1] })
+    SetShopCursorColorsPreset -ComboBox $Redux.Colors.ShopCursor -Dialog $Redux.Colors.SetText[1] -Label $Redux.Colors.TextLabels[1]
+
+}
+
+
+
+#==============================================================================================================================================================================================
 function SetButtonColorsPreset([object]$ComboBox) {
     
     $Text = $ComboBox.Text.replace(' (default)', "")
@@ -930,6 +1122,37 @@ function SetButtonColorsPreset([object]$ComboBox) {
         $Colors = @()
         for ($i=0; $i -lt $Redux.Colors.SetButtons.length; $i++) { $Colors += SetRandomColor -Dialog $Redux.Colors.SetButtons[$i] -Label $Redux.Colors.ButtonLabels[$i] }
         WriteToConsole ("Randomize Button Colors: " + $Colors)
+    }
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function SetBoomerangColorsPreset([object]$ComboBox) {
+    
+    $Text = $ComboBox.Text.replace(' (default)', "")
+    if     ($Text -eq "Vanilla")      { SetColors -Colors @("FFFF64", "FFFF64") -Dialogs $Redux.Colors.SetBoomerang -Labels $Redux.Colors.BoomerangLabels }
+    elseif ($Text -eq "Gold Quest")   { SetColors -Colors @("BBBBBB", "BBBBBB") -Dialogs $Redux.Colors.SetBoomerang -Labels $Redux.Colors.BoomerangLabels }
+    elseif ($Text -eq "Randomized")   {
+        $Colors = @()
+        for ($i=0; $i -lt $Redux.Colors.SetBoomerang.length; $i++) { $Colors += SetRandomColor -Dialog $Redux.Colors.SetBoomerang[$i] -Label $Redux.Colors.BoomerangLabels[$i] }
+        WriteToConsole ("Randomize Boomerang Trail Colors: " + $Colors)
+    }
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function SetBombchuColorsPreset([object]$ComboBox) {
+    
+    $Text = $ComboBox.Text.replace(' (default)', "")
+    if     ($Text -eq "Vanilla")      { SetColors -Colors @("FA0000", "FA0000") -Dialogs $Redux.Colors.SetBombchu -Labels $Redux.Colors.BombchuLabels }
+    elseif ($Text -eq "Randomized")   {
+        $Colors = @()
+        for ($i=0; $i -lt $Redux.Colors.SetBombchu.length; $i++) { $Colors += SetRandomColor -Dialog $Redux.Colors.SetBombchu[$i] -Label $Redux.Colors.BombchuLabels[$i] }
+        WriteToConsole ("Randomize Bombchu Trail Colors: " + $Colors)
     }
 
 }
@@ -1022,38 +1245,41 @@ function SetFairyColors([string]$Inner, [string]$Outer, [Array]$Dialogs, [Array]
 function SetTunicColorsPreset([object]$ComboBox, [object]$Dialog, [object]$Label) {
     
     $text = $ComboBox.Text.replace(' (default)', "")
-    if     ($text -eq "Kokiri Green")    { SetColor -Color "1E691B" -Dialog $Dialog -Label $Label }
-    elseif ($text -eq "Goron Red")       { SetColor -Color "641400" -Dialog $Dialog -Label $Label }
-    elseif ($text -eq "Zora Blue")       { SetColor -Color "003C64" -Dialog $Dialog -Label $Label }
-    elseif ($text -eq "Black")           { SetColor -Color "303030" -Dialog $Dialog -Label $Label }
-    elseif ($text -eq "White")           { SetColor -Color "F0F0FF" -Dialog $Dialog -Label $Label }
-    elseif ($text -eq "Azure Blue")      { SetColor -Color "139ED8" -Dialog $Dialog -Label $Label }
-    elseif ($text -eq "Vivid Cyan")      { SetColor -Color "13E9D8" -Dialog $Dialog -Label $Label }
-    elseif ($text -eq "Light Red")       { SetColor -Color "F87C6D" -Dialog $Dialog -Label $Label }
-    elseif ($text -eq "Fuchsia")         { SetColor -Color "FF00FF" -Dialog $Dialog -Label $Label }
-    elseif ($text -eq "Purple")          { SetColor -Color "953080" -Dialog $Dialog -Label $Label }
-    elseif ($text -eq "Majora Purple")   { SetColor -Color "400040" -Dialog $Dialog -Label $Label }
-    elseif ($text -eq "Twitch Purple")   { SetColor -Color "6441A5" -Dialog $Dialog -Label $Label }
-    elseif ($text -eq "Purple Heart")    { SetColor -Color "8A2BE2" -Dialog $Dialog -Label $Label }
-    elseif ($text -eq "Persian Rose")    { SetColor -Color "FF1493" -Dialog $Dialog -Label $Label }
-    elseif ($text -eq "Dirty Yellow")    { SetColor -Color "E0D860" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "Blush Pink")      { SetColor -Color "F86CF8" -Dialog $Dialog -Label $Label }
-    elseif ($text -eq "Hot Pink")        { SetColor -Color "FF69B4" -Dialog $Dialog -Label $Label }
-    elseif ($text -eq "Rose Pink")       { SetColor -Color "FF90B3" -Dialog $Dialog -Label $Label }
-    elseif ($text -eq "Orange")          { SetColor -Color "E07940" -Dialog $Dialog -Label $Label }
-    elseif ($text -eq "Gray")            { SetColor -Color "A0A0B0" -Dialog $Dialog -Label $Label }
-    elseif ($text -eq "Gold")            { SetColor -Color "D8B060" -Dialog $Dialog -Label $Label }
-    elseif ($text -eq "Silver")          { SetColor -Color "D0F0FF" -Dialog $Dialog -Label $Label }
-    elseif ($text -eq "Beige")           { SetColor -Color "C0A0A0" -Dialog $Dialog -Label $Label }
-    elseif ($text -eq "Teal")            { SetColor -Color "30D0B0" -Dialog $Dialog -Label $Label }
-    elseif ($text -eq "Blood Red")       { SetColor -Color "830303" -Dialog $Dialog -Label $Label }
-    elseif ($text -eq "Blood Orange")    { SetColor -Color "FE4B03" -Dialog $Dialog -Label $Label }
-    elseif ($text -eq "Royal Blue")      { SetColor -Color "400090" -Dialog $Dialog -Label $Label }
-    elseif ($text -eq "Sonic Blue")      { SetColor -Color "5090E0" -Dialog $Dialog -Label $Label }
-    elseif ($text -eq "NES Green")       { SetColor -Color "00D000" -Dialog $Dialog -Label $Label }
-    elseif ($text -eq "Dark Green")      { SetColor -Color "002518" -Dialog $Dialog -Label $Label }
-    elseif ($text -eq "Lumen")           { SetColor -Color "508CF0" -Dialog $Dialog -Label $Label }
-    elseif ($text -eq "Randomized")      { SetRandomColor -Dialog $Dialog -Label $Label -Message "Randomize Tunic Color" }
+    if     ($text -eq "Kokiri Green")        { SetColor -Color "1E691B" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Goron Red")           { SetColor -Color "641400" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Zora Blue")           { SetColor -Color "003C64" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Gold Quest Gold")     { SetColor -Color "FFCC00" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Gold Quest Purple")   { SetColor -Color "83226C" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Gold Quest White")    { SetColor -Color "D7D7D7" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Black")               { SetColor -Color "303030" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "White")               { SetColor -Color "F0F0FF" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Azure Blue")          { SetColor -Color "139ED8" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Vivid Cyan")          { SetColor -Color "13E9D8" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Light Red")           { SetColor -Color "F87C6D" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Fuchsia")             { SetColor -Color "FF00FF" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Purple")              { SetColor -Color "953080" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Majora Purple")       { SetColor -Color "400040" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Twitch Purple")       { SetColor -Color "6441A5" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Purple Heart")        { SetColor -Color "8A2BE2" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Persian Rose")        { SetColor -Color "FF1493" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Dirty Yellow")        { SetColor -Color "E0D860" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "Blush Pink")          { SetColor -Color "F86CF8" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Hot Pink")            { SetColor -Color "FF69B4" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Rose Pink")           { SetColor -Color "FF90B3" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Orange")              { SetColor -Color "E07940" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Gray")                { SetColor -Color "A0A0B0" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Gold")                { SetColor -Color "D8B060" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Silver")              { SetColor -Color "D0F0FF" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Beige")               { SetColor -Color "C0A0A0" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Teal")                { SetColor -Color "30D0B0" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Blood Red")           { SetColor -Color "830303" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Blood Orange")        { SetColor -Color "FE4B03" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Royal Blue")          { SetColor -Color "400090" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Sonic Blue")          { SetColor -Color "5090E0" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "NES Green")           { SetColor -Color "00D000" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Dark Green")          { SetColor -Color "002518" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Lumen")               { SetColor -Color "508CF0" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Randomized")          { SetRandomColor -Dialog $Dialog -Label $Label -Message "Randomize Tunic Color" }
 
 }
 
@@ -1079,6 +1305,7 @@ function SetGauntletsColorsPreset([object]$ComboBox, [object]$Dialog, [object]$L
     elseif ($text -eq "Randomized")   { SetRandomColor -Dialog $Dialog -Label $Label -Message "Randomize Gauntlets Color" }
 
 }
+
 
 
 #==============================================================================================================================================================================================
@@ -1110,6 +1337,29 @@ function SetHeartsColorsPreset([object]$ComboBox, [object]$Dialog, [object]$Labe
     elseif ($text -eq "Blue")         { SetColor -Color "3246FF" -Dialog $Dialog -Label $Label }
     elseif ($text -eq "Yellow")       { SetColor -Color "FFE000" -Dialog $Dialog -Label $Label }
     elseif ($text -eq "Randomized")   { SetRandomColor -Dialog $Dialog -Label $Label -Message "Randomize Hearts Color" }
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function SetTextCursorColorsPreset([object]$ComboBox, [object]$Dialog, [object]$Label) {
+    
+    $text = $ComboBox.Text.replace(' (default)', "")
+    if     ($text -eq "Blue")         { SetColor -Color "0050C8" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Green")        { SetColor -Color "00C850" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Randomized")   { SetRandomColor -Dialog $Dialog -Label $Label -Message "Randomize Magic Color" }
+
+}
+
+
+#==============================================================================================================================================================================================
+function SetShopCursorColorsPreset([object]$ComboBox, [object]$Dialog, [object]$Label) {
+    
+    $text = $ComboBox.Text.replace(' (default)', "")
+    if     ($text -eq "Blue")         { SetColor -Color "0050FF" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Green")        { SetColor -Color "00FF50" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Randomized")   { SetRandomColor -Dialog $Dialog -Label $Label -Message "Randomize Magic Color" }
 
 }
 
@@ -1244,22 +1494,21 @@ Export-ModuleMember -Function ChangeModelsSelection
 Export-ModuleMember -Function LoadModelsList
 
 Export-ModuleMember -Function CreateButtonColorOptions
+Export-ModuleMember -Function CreateBoomerangColorOptions
+Export-ModuleMember -Function CreateBombchuColorOptions
 Export-ModuleMember -Function CreateRupeeColorOptions
 Export-ModuleMember -Function CreateRupeeVanillaColorOptions
 Export-ModuleMember -Function CreateSpinAttackColorOptions
 Export-ModuleMember -Function CreateSwordTrailColorOptions
 Export-ModuleMember -Function CreateFairyColorOptions
+Export-ModuleMember -Function CreateHUDColorOptions
+Export-ModuleMember -Function CreateTextColorOptions
 
 Export-ModuleMember -Function SetFairyColorsPreset
 Export-ModuleMember -Function SetFairyColors
 Export-ModuleMember -Function SetTunicColorsPreset
 Export-ModuleMember -Function SetGauntletsColorsPreset
 Export-ModuleMember -Function SetMirrorShieldFrameColorsPreset
-
-Export-ModuleMember -Function SetHeartsColorsPreset
-Export-ModuleMember -Function SetMagicColorsPreset
-Export-ModuleMember -Function SetMinimapColorsPreset
-Export-ModuleMember -Function SetSwordColorsPreset
 
 Export-ModuleMember -Function SetColor
 Export-ModuleMember -Function SetColors

@@ -44,11 +44,20 @@
 
     # Patch
     foreach ($i in 0..($valuesDec.Length-1)) {
-        if     ($valuesDec[$i] -lt 0)     { $ValuesDec[$i] = $ValuesDec[$i] + 255 }
-        elseif ($valuesDec[$i] -gt 255)   { $ValuesDec[$i] = $ValuesDec[$i] - 255 }
-        
-        if     ($Add)        { $ByteArrayGame[$offsetDec + ($i * $Interval)] += $ValuesDec[$i] }
-        elseif ($Subtract)   { $ByteArrayGame[$offsetDec + ($i * $Interval)] -= $ValuesDec[$i] }
+        if ($Add) {
+            if ($ByteArrayGame[$offsetDec + ($i * $Interval)] + $valuesDec[$i] -gt 255) {
+                $ByteArrayGame[$offsetDec + ($i * $Interval)]     += $valuesDec[$i] - 255
+                $ByteArrayGame[$offsetDec + ($i * $Interval) - 1] += 1
+            }
+            else { $ByteArrayGame[$offsetDec + ($i * $Interval)] += $ValuesDec[$i] }
+        }
+        elseif ($Subtract) {
+            if ($ByteArrayGame[$offsetDec + ($i * $Interval)] - $valuesDec[$i] -lt 0) {
+                $ByteArrayGame[$offsetDec + ($i * $Interval)]     -= $valuesDec[$i] + 255
+                $ByteArrayGame[$offsetDec + ($i * $Interval) + 1] -= 1
+            }
+            else { $ByteArrayGame[$offsetDec + ($i * $Interval)] -= $ValuesDec[$i] }
+        }
         else                 { $ByteArrayGame[$offsetDec + ($i * $Interval)]  = $ValuesDec[$i] }
     }
 
@@ -92,7 +101,7 @@ function MultiplyBytes([string]$File, [string]$Offset, [object]$Match=$null, [fl
 
     # Patch
     $ByteArrayGame[$offsetDec] *= $Factor
-    WriteToConsole ($Offset + " -> Multiplied value " + (Get8Bit $ByteArrayGame[$offsetDec]) +" by: " + $Factor)
+    WriteToConsole ($Offset + " -> Multiplied value " + (Get8Bit $ByteArrayGame[$offsetDec]) +" by:" + $Factor)
 
     # Write to File
     if (IsSet $File) { [System.IO.File]::WriteAllBytes($File, $ByteArrayGame) }

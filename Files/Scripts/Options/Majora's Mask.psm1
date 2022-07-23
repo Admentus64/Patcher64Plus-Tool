@@ -1,8 +1,9 @@
-function PrePatchLanguageOptions() {
+function PrePatchOptions() {
 
     # ENHANCED 16:9 WIDESCREEN #
 
-    if ( (IsChecked $Redux.Graphics.Widescreen) -and !$Patches.Redux.Checked)   { ApplyPatch -Patch "Decompressed\optional\widescreen.ppf"; }
+    if (IsChecked $Redux.Graphics.Widescreen) { ApplyPatch -Patch "Decompressed\Optional\widescreen.ppf" }
+
     if ( (IsSet $LanguagePatch.DmaTable)        -and !$Patches.Redux.Checked)   { return }
 
     if   (IsChecked $Redux.Graphics.Widescreen)                                 { RemoveFile $Files.dmaTable }
@@ -30,12 +31,6 @@ function PatchOptions() {
     if (IsChecked $Redux.Hero.MasterQuest)                     { ApplyPatch -Patch "Decompressed\optional\master_quest_remix.ppf"           }
     if (IsChecked $Redux.Hero.RaisedResearchLabPlatform)       { ApplyPatch -Patch "Decompressed\optional\raised_research_lab_platform.ppf" }
 
-
-
-    # GAMEPLAY #
-
-    if (IsChecked $Redux.Gameplay.FierceDeity)                 { ApplyPatch -Patch "Decompressed\optional\fda.ppf" }
-
 }
 
 
@@ -61,14 +56,22 @@ function ByteOptions() {
     elseif (IsIndex -Elem $Redux.Gameplay.ZoraJumpAttack -Text "Beta Backflip")    { ChangeBytes -Offset "CD72C2"  -Values "D7 F0" }
     elseif (IsIndex -Elem $Redux.Gameplay.ZoraJumpAttack -Text "Spin Slash")       { ChangeBytes -Offset "CD72C2"  -Values "D7 E0" }
     
-    if (IsChecked $Redux.Gameplay.ZoraPhysics)         { PatchBytes  -Offset "65D000"  -Patch "zora_physics_fix.bin" }
-    if (IsChecked $Redux.Gameplay.DistantZTargeting)   { ChangeBytes -Offset "B4E924"  -Values "00 00 00 00"         }
-    if (IsChecked $Redux.Gameplay.ManualJump)          { ChangeBytes -Offset "CB4008"  -Values "04 C1"; ChangeBytes -Offset "CB402B" -Values "01" }
-    if (IsChecked $Redux.Gameplay.FDSpinAttack)        { ChangeBytes -Offset "CAD780"  -Values "24 00"     }
-    if (IsChecked $Redux.Gameplay.FrontflipJump)       { ChangeBytes -Offset "1098E4D" -Values "23 34 D0"  }
-    if (IsChecked $Redux.Gameplay.NoShieldRecoil)      { ChangeBytes -Offset "CAEDD0"  -Values "24 00"     }
-    if (IsChecked $Redux.Gameplay.SunSong)             { ChangeBytes -Offset "C5CE71"  -Values "02"        }
-    if (IsChecked $Redux.Gameplay.SariaSong)           { ChangeBytes -Offset "C5CE72"  -Values "08"        }
+    if (IsChecked $Redux.Gameplay.FierceDeityAnywhere) {
+        ChangeBytes -Offset "BA76D0"  -Values "1000";     ChangeBytes -Offset "E384D8"  -Values "284100021420"; ChangeBytes -Offset "E7A852"  -Values "CA8480A0CA84"; ChangeBytes -Offset "F4D3A4"  -Values "5441002B24060001"; ChangeBytes -Offset "10632C0" -Values "286100021020000200000000A48702C8"
+        ChangeBytes -Offset "1068960" -Values "00000000"; ChangeBytes -Offset "1069B60" -Values "24080002";     ChangeBytes -Offset "2704FF7" -Values "A9";           ChangeBytes -Offset "2704FFD" -Values "A9"
+        ChangeBytes -Offset "1069B6C" -Values "2841000301014022A4E802C2A4F902CE0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+    }
+
+    if (IsChecked $Redux.Gameplay.ZoraPhysics)            { PatchBytes  -Offset "65D000"  -Patch "zora_physics_fix.bin"                             }
+    if (IsChecked $Redux.Gameplay.DistantZTargeting)      { ChangeBytes -Offset "B4E924"  -Values "00000000"                                        }
+    if (IsChecked $Redux.Gameplay.ManualJump)             { ChangeBytes -Offset "CB4008"  -Values "04C1"; ChangeBytes -Offset "CB402B" -Values "01" }
+    if (IsChecked $Redux.Gameplay.FDSpinAttack)           { ChangeBytes -Offset "CAD780"  -Values "2400"                                            }
+    if (IsChecked $Redux.Gameplay.FrontflipJump)          { ChangeBytes -Offset "1098E4D" -Values "2334D0"                                          }
+    if (IsChecked $Redux.Gameplay.NoShieldRecoil)         { ChangeBytes -Offset "CAEDD0"  -Values "2400"                                            }
+    if (IsChecked $Redux.Gameplay.SunSong)                { ChangeBytes -Offset "C5CE71"  -Values "02"                                              }
+    if (IsChecked $Redux.Gameplay.SariaSong)              { ChangeBytes -Offset "C5CE72"  -Values "08"                                              }
+    if (IsChecked $Redux.Gameplay.HookshotAnything)       { ChangeBytes -Offset "D3BA30"  -Values "00000000"                                        }
+    if (IsChecked $Redux.Gameplay.NoMagicArrowCooldown)   { ChangeBytes -Offset "BAC3CD"  -Values "69"                                              }
 
     
 
@@ -423,41 +426,17 @@ function ByteOptions() {
         MultiplyBytes -Offset "E6FA2F" -Factor $multi # Four Remains
     }
 
-    if (IsText -Elem $Redux.Hero.Damage -Compare "OHKO Mode") {
+    if ( (IsIndex -Elem $Redux.Hero.Recovery -Not) -or (IsChecked $Redux.Hero.NoRecoveryHearts) ) {
         ChangeBytes -Offset "BABE7F" -Values "09 04" -Interval 16
-        ChangeBytes -Offset "BABEA2" -Values "2A 00"
-        ChangeBytes -Offset "BABEA5" -Values "00 00 00"
+        if       ( (IsText -Elem $Redux.Hero.Recovery -Compare "0x Recovery") -or (IsChecked $Redux.Hero.NoRecoveryHearts) )   { ChangeBytes -Offset "BABEA2" -Values "29 40"; ChangeBytes -Offset "BABEA5" -Values "05 29 43" }
+        elseif     (IsText -Elem $Redux.Hero.Recovery -Compare "1/2x Recovery")                                                { ChangeBytes -Offset "BABEA2" -Values "28 40"; ChangeBytes -Offset "BABEA5" -Values "05 28 43" }
+        elseif     (IsText -Elem $Redux.Hero.Recovery -Compare "1/4x Recovery")                                                { ChangeBytes -Offset "BABEA2" -Values "28 80"; ChangeBytes -Offset "BABEA5" -Values "05 28 83" }
     }
-    elseif ( (IsIndex -Elem $Redux.Hero.Damage -Not) -or (IsIndex -Elem $Redux.Hero.Recovery -Not) -or (IsChecked $Redux.Hero.NoRecoveryHearts) ) {
-        ChangeBytes -Offset "BABE7F" -Values "09 04" -Interval 16
-        if       ( (IsText -Elem $Redux.Hero.Recovery -Compare "0x Recovery") -or (IsChecked $Redux.Hero.NoRecoveryHearts) ) {
-            if     (IsText -Elem $Redux.Hero.Damage   -Compare "1x Damage")   { ChangeBytes -Offset "BABEA2" -Values "29 40" }
-            elseif (IsText -Elem $Redux.Hero.Damage   -Compare "2x Damage")   { ChangeBytes -Offset "BABEA2" -Values "29 80" }
-            elseif (IsText -Elem $Redux.Hero.Damage   -Compare "4x Damage")   { ChangeBytes -Offset "BABEA2" -Values "29 C0" }
-            elseif (IsText -Elem $Redux.Hero.Damage   -Compare "8x Damage")   { ChangeBytes -Offset "BABEA2" -Values "2A 00" }
-            ChangeBytes -Offset "BABEA5" -Values "05 29 43"
-        }
-        elseif     (IsText -Elem $Redux.Hero.Recovery -Compare "1x Recovery") {
-            if     (IsText -Elem $Redux.Hero.Damage   -Compare "2x Damage")   { ChangeBytes -Offset "BABEA2" -Values "28 40" }
-            elseif (IsText -Elem $Redux.Hero.Damage   -Compare "4x Damage")   { ChangeBytes -Offset "BABEA2" -Values "28 80" }
-            elseif (IsText -Elem $Redux.Hero.Damage   -Compare "8x Damage")   { ChangeBytes -Offset "BABEA2" -Values "28 C0" }
-            ChangeBytes -Offset "BABEA5" -Values "00 00 00"
-        }
-        elseif     (IsText -Elem $Redux.Hero.Recovery -Compare "1/2x Recovery") {
-            if     (IsText -Elem $Redux.Hero.Damage   -Compare "1x Damage")   { ChangeBytes -Offset "BABEA2" -Values "28 40" }
-            elseif (IsText -Elem $Redux.Hero.Damage   -Compare "2x Damage")   { ChangeBytes -Offset "BABEA2" -Values "28 80" }
-            elseif (IsText -Elem $Redux.Hero.Damage   -Compare "4x Damage")   { ChangeBytes -Offset "BABEA2" -Values "28 C0" }
-            elseif (IsText -Elem $Redux.Hero.Damage   -Compare "8x Damage")   { ChangeBytes -Offset "BABEA2" -Values "29 00" }
-            ChangeBytes -Offset "BABEA5" -Values "05 28 43"
-        }
-        elseif     (IsText -Elem $Redux.Hero.Recovery -Compare "1/4x Recovery") {
-            if     (IsText -Elem $Redux.Hero.Damage   -Compare "1x Damage")   { ChangeBytes -Offset "BABEA2" -Values "28 80" }
-            elseif (IsText -Elem $Redux.Hero.Damage   -Compare "2x Damage")   { ChangeBytes -Offset "BABEA2" -Values "28 C0" }
-            elseif (IsText -Elem $Redux.Hero.Damage   -Compare "4x Damage")   { ChangeBytes -Offset "BABEA2" -Values "29 00" }
-            elseif (IsText -Elem $Redux.Hero.Damage   -Compare "8x Damage")   { ChangeBytes -Offset "BABEA2" -Values "29 40" }
-            ChangeBytes -Offset "BABEA5" -Values "05 28 83"
-        }
-    }
+
+    if     (IsText -Elem $Redux.Hero.Damage -Compare "2x Damage")   { ChangeBytes -Offset "CADEC2" -Values "2B C3" }
+    elseif (IsText -Elem $Redux.Hero.Damage -Compare "4x Damage")   { ChangeBytes -Offset "CADEC2" -Values "2B 83" }
+    elseif (IsText -Elem $Redux.Hero.Damage -Compare "8x Damage")   { ChangeBytes -Offset "CADEC2" -Values "2B 43" }
+    elseif (IsText -Elem $Redux.Hero.Damage -Compare "OHKO Mode")   { ChangeBytes -Offset "CADEC2" -Values "2A 03" }
 
     if     (IsText -Elem $Redux.Hero.MagicUsage -Compare "2x Magic Usage")   { ChangeBytes -Offset "BAC306" -Values "2C","40" }
     elseif (IsText -Elem $Redux.Hero.MagicUsage -Compare "4x Magic Usage")   { ChangeBytes -Offset "BAC306" -Values "2C","80" }
@@ -505,7 +484,8 @@ function ByteOptions() {
         ChangeBytes -Offset "E76F38"  -Values "00 00 00 00"; ChangeBytes -Offset "E772DC"  -Values "24 05 06 4A"; ChangeBytes -Offset "E77CCC" -Values "24 05 06 4A" # Disable Bomb Shop
     }
 
-    if (IsChecked $Redux.Hero.NoRecoveryHearts) { ChangeBytes -Offset "B3DC54" -Values "50" }
+    if (IsChecked $Redux.Hero.NoRecoveryHearts)   { ChangeBytes -Offset "B3DC54" -Values "50" }
+    if (IsChecked $Redux.Hero.PermanentKeese)     { ChangeBytes -Offset "CF3B58" -Values "00 00 00 00 00 00 00 00"; ChangeBytes -Offset "CF3B60" -Values "00 00 00 00 00 00 00 00 00 00 00 00" }
 
 
 
@@ -513,6 +493,7 @@ function ByteOptions() {
 
     if (IsChecked $Redux.EasyMode.NoBlueBubbleRespawn)   { ChangeBytes -Offset "D3CEC0"  -Values "57 20 00 04"                                                      }
     if (IsChecked $Redux.EasyMode.NoTakkuriSteal)        { ChangeBytes -Offset "1075B88" -Values "10 00 00 16"; ChangeBytes -Offset "1075BE4" -Values "10 00 00 46" }
+    if (IsChecked $Redux.EasyMode.NoShieldSteal)         { ChangeBytes -Offset "D7475C"  -Values "10 00 00 08"                                                      }
     if (IsChecked $Redux.EasyMode.KeepBottles)           { ChangeBytes -Offset "BDA5AB"  -Values "17"                                                               }
     if (IsChecked $Redux.EasyMode.KeepAmmo)              { ChangeBytes -Offset "BDA560"  -Values "10 00 00 0D"                                                      }
 
@@ -597,10 +578,10 @@ function ByteOptions() {
     # AMMO CAPACITY SELECTION #
 
     if (IsChecked $Redux.Capacity.EnableAmmo) {
-        ChangeBytes -Offset "C5834F" -Values @($Redux.Capacity.Quiver1.Text,     $Redux.Capacity.Quiver2.Text,     $Redux.Capacity.Quiver3.Text)     -Interval 2
-        ChangeBytes -Offset "C58357" -Values @($Redux.Capacity.BombBag1.Text,    $Redux.Capacity.BombBag2.Text,    $Redux.Capacity.BombBag3.Text)    -Interval 2
-        ChangeBytes -Offset "C5837F" -Values @($Redux.Capacity.DekuSticks1.Text, $Redux.Capacity.DekuSticks1.Text, $Redux.Capacity.DekuSticks1.Text) -Interval 2
-        ChangeBytes -Offset "C58387" -Values @($Redux.Capacity.DekuNuts1.Text,   $Redux.Capacity.DekuNuts1.Text,   $Redux.Capacity.DekuNuts1.Text)   -Interval 2
+        ChangeBytes -Offset "C5834F" -Values @( (Get8Bit $Redux.Capacity.Quiver1.Text),     (Get8Bit $Redux.Capacity.Quiver2.Text),     (Get8Bit $Redux.Capacity.Quiver3.Text)     ) -Interval 2
+        ChangeBytes -Offset "C58357" -Values @( (Get8Bit $Redux.Capacity.BombBag1.Text),    (Get8Bit $Redux.Capacity.BombBag2.Text),    (Get8Bit $Redux.Capacity.BombBag3.Text)    ) -Interval 2
+        ChangeBytes -Offset "C5837F" -Values @( (Get8Bit $Redux.Capacity.DekuSticks1.Text), (Get8Bit $Redux.Capacity.DekuSticks1.Text), (Get8Bit $Redux.Capacity.DekuSticks1.Text) ) -Interval 2
+        ChangeBytes -Offset "C58387" -Values @( (Get8Bit $Redux.Capacity.DekuNuts1.Text),   (Get8Bit $Redux.Capacity.DekuNuts1.Text),   (Get8Bit $Redux.Capacity.DekuNuts1.Text)   ) -Interval 2
     }
 
 
@@ -719,111 +700,119 @@ function ByteOptions() {
 
 
 #==============================================================================================================================================================================================
+function RevertReduxOptions() {
+    
+    if (IsRevert $Redux.Gameplay.FasterBlockPushing) {
+        ChangeBytes -Offset "E93FD0" -Values "241900058DC71CCC25F80001A6180188860201882604018A2405038428410006"; ChangeBytes -Offset "FA1930" -Values "008038258FAE002424E40168240500648DC31CCCAFA7002024060001"; ChangeBytes -Offset "D8B3F4" -Values "AFA50004948E01603C0140004480200044813000"
+        ChangeBytes -Offset "E94384" -Values "241900058DC31CCC25F80001A6180188860201882604018A2405038428410006"; ChangeBytes -Offset "E8FA0C" -Values "3C014060448160003C0180A2C432707C3C0180A2C4267080";         ChangeBytes -Offset "E90F34" -Values "45002E1446002E1845002E1C46002E20"
+        ChangeBytes -Offset "FD59C8" -Values "4500076046000764450007684600076C450007A4460007A8450007AC460007B0"; ChangeBytes -Offset "FE4424" -Values "3C063ECC34C6CCCD2604016C0C03FC0F3C054000";                 ChangeBytes -Offset "FD5410" -Values "3C0180B7C43007943C0180B7C4240798"
+        ChangeBytes -Offset "FD5454" -Values "3C0180B7C432079C3C0180B7C42607A0";                                 ChangeBytes -Offset "CC2418" -Values "C6280AD03C013F0044818000";                                 ChangeBytes -Offset "E16944" -Values "3C06401334C63333"
+        ChangeBytes -Offset "E93FBC" -Values "00808025AFBF001C"; ChangeBytes -Offset "E94370" -Values "00808025AFBF001C"; ChangeBytes -Offset "FD5688" -Values "3C0180B7C42C07A4"; ChangeBytes -Offset "FD5A04" -Values "450009D8460009DC"
+    }
+
+    if (IsRevert $Redux.Gameplay.ElegySpeedup) {
+        ChangeBytes -Offset "CC2AF4"  -Values "8FA3004C861800BE24190014";         ChangeBytes -Offset "CCFEF4"  -Values "0080302500A03825";         ChangeBytes -Offset "CCFF08"  -Values "2843005B"; ChangeBytes -Offset "CCFF3C" -Values "2401000A"; ChangeBytes -Offset "D1D610"  -Values "00022C0000052C03"
+        ChangeBytes -Offset "D1D620"  -Values "24060008";                         ChangeBytes -Offset "EB60B0"  -Values "AFB0002000808025AFBF0024"; ChangeBytes -Offset "EB6214"  -Values "0C03F4AD"; ChangeBytes -Offset "EB6240" -Values "0C03C761"; ChangeBytes -Offset "1029228" -Values "3C0141A0448120008E0E015C8E020160E604007091"
+        ChangeBytes -Offset "1029448" -Values "3C0142208E020160448120003C0F80BC"; ChangeBytes -Offset "102945C" -Values "E6040070";                 ChangeBytes -Offset "1029734" -Values "45000AF4"
+    }
+
+    if (IsRevert $Redux.Gameplay.CritWiggle) {
+        ChangeBytes -Offset "B66B6C" -Values "8463F6A628610011"; ChangeBytes -Offset "B66B78" -Values "28610011"; ChangeBytes -Offset "B66BA8" -Values "100000208463F6A6"; ChangeBytes -Offset "B66C28" -Values "8463F6A628610011"; ChangeBytes -Offset "B66D10" -Values "8739F6A6000020252B210011"
+    }
+
+    if (IsRevert $Redux.Gameplay.UnderwaterOcarina)   { ChangeBytes -Offset "BA6E54" -Values "30CF00FF29E10012"         }
+    if (IsRevert $Redux.Gameplay.ClimbAnything)       { ChangeBytes -Offset "CB7D40" -Values "8C422B0C0000402530490008" }
+
+
+    if (IsChecked $Redux.Graphics.Widescreen) {
+        ChangeBytes -Offset "B9A3CC" -Values "31B900FF03217825";         ChangeBytes -Offset "B9C910" -Values "316C00FF01816825"; ChangeBytes -Offset "BAD2B4" -Values "852F027231F800FF3719C800"; ChangeBytes -Offset "BAD2D0" -Values "3C0100C8244E0008AC6E02A0AC480000852F027231F800FF0301C825"
+        ChangeBytes -Offset "BAD384" -Values "85380272331900FF372EC800"; ChangeBytes -Offset "BAD3B4" -Values "85380272331900FF03217025"
+    }
+
+}
+
+
+
+#==============================================================================================================================================================================================
 function ByteReduxOptions() {
     
+    $Symbols = SetJSONFile ($GameFiles.base + "\symbols.json")
+
+
+
+    # WIDESCREEN #
+
+    if (IsChecked $Redux.Graphics.Widescreen) {
+        $offset = SearchBytes -Start $Symbols.PAYLOAD_START -End (AddToOffset -Hex $Symbols.PAYLOAD_START -Add "1000") -Values "3C 04 00 04"
+        ChangeBytes -Offset $offset -Values "3C 04 00 06"
+    }
+
+
+
     # D-PAD #
 
-    $offset = SearchBytes -Start "3800000" -End "380F000" -Values "44 50 41 44 00 00 00 00"
+    ChangeBytes -Offset (AddToOffset $Symbols.DPAD_CONFIG -Add "08") -Values "32 34 00 33"
+    ChangeBytes -Offset (AddToOffset $Symbols.DPAD_CONFIG -Add "18") -Values "01"
+    if (IsDefault $Redux.DPad.Up    -Not)   { ChangeBytes -Offset (AddToOffset $Symbols.DPAD_CONFIG -Add "08") -Values (GetMMItemID -Item $Redux.DPad.Up.Text)    }
+    if (IsDefault $Redux.DPad.Right -Not)   { ChangeBytes -Offset (AddToOffset $Symbols.DPAD_CONFIG -Add "09") -Values (GetMMItemID -Item $Redux.DPad.Right.Text) }
+    if (IsDefault $Redux.DPad.Down  -Not)   { ChangeBytes -Offset (AddToOffset $Symbols.DPAD_CONFIG -Add "0A") -Values (GetMMItemID -Item $Redux.DPad.Down.Text)  }
+    if (IsDefault $Redux.DPad.Left  -Not)   { ChangeBytes -Offset (AddToOffset $Symbols.DPAD_CONFIG -Add "0B") -Values (GetMMItemID -Item $Redux.DPad.Left.Text)  }
 
-    if (IsIndex -Elem $Redux.DPad.Up.SelectedIndex -Text "Deku Mask" -Not) {
-        GetMMItemID -Item $Redux.DPad.Up.Text
-        $offset2 = AddToOffset -Hex $offset -Add "8"
-        ChangeBytes -Offset $Offset -Values $Array
-    }
-
-    if (IsIndex -Elem $Redux.DPad.Right.SelectedIndex -Text "Zora Mask" -Not) {
-        GetMMItemID -Item $Redux.DPad.Right.Text
-        $offset2 = AddToOffset -Hex $offset -Add "9"
-        ChangeBytes -Offset $Offset -Values $Array
-    }
-
-    if (IsIndex -Elem $Redux.DPad.Down.SelectedIndex -Text "Ocarina of Time" -Not) {
-        GetMMItemID -Item $Redux.DPad.Down.Text
-        $offset2 = AddToOffset -Hex $offset -Add "A"
-        ChangeBytes -Offset $Offset -Values $Array
-    }
-
-    if (IsIndex -Elem $Redux.DPad.Left.SelectedIndex -Text "Goron Mask" -Not) {
-        GetMMItemID -Item $Redux.DPad.Left.Text
-        $offset2 = AddToOffset -Hex $offset -Add "B"
-        ChangeBytes -Offset $offset2 -Values $Array
-    }
-
-    if ( (IsChecked $Redux.DPad.Disable) -or (IsChecked $Redux.DPad.Hide) -or (IsChecked $Redux.DPad.LayoutRight) ) {
-        $offset2 = AddToOffset -Hex $offset -Add "18"
-        if (IsChecked $Redux.DPad.Disable)           { ChangeBytes -Offset $offset2 -Values "00 00" }
-        elseif (IsChecked $Redux.DPad.Hide)          { ChangeBytes -Offset $offset2 -Values "01 00" }
-        elseif (IsChecked $Redux.DPad.LayoutRight)   { ChangeBytes -Offset $offset2 -Values "01 02" }
-        
-    }
+    if     (IsChecked $Redux.DPad.Disable)       { ChangeBytes -Offset (AddToOffset $Symbols.DPAD_CONFIG -Add "18") -Values "00 00" }
+    elseif (IsChecked $Redux.DPad.Hide)          { ChangeBytes -Offset (AddToOffset $Symbols.DPAD_CONFIG -Add "18") -Values "01 00" }
+    elseif (IsChecked $Redux.DPad.LayoutRight)   { ChangeBytes -Offset (AddToOffset $Symbols.DPAD_CONFIG -Add "18") -Values "01 02" }
 
 
 
     # GAMEPLAY #
 
-    if ( (IsChecked $Redux.Gameplay.FasterBlockPushing) -or (IsChecked $Redux.Gameplay.ElegySpeedup) -or (IsChecked $Redux.Gameplay.FierceDeity) ) {
-        $Offset = SearchBytes -Start "3800000" -End "380F000" -Values "4D 49 53 43"
-        $Offset = AddToOffset -Hex $offset -Add "8"
-    }
+    ChangeBytes -Offset (AddToOffset $Symbols.MISC_CONFIG -Add "08") -Values "97 E2 EA E7 0B 2B 24 A0 B0 52 B5 99 94 66 AC 25 98 39 08"
+    if (IsChecked $Redux.Gameplay.ClimbAnything) { ChangeBytes -Offset "CB8810" -Values "1000"; ChangeBytes -Offset "CC69E4" -Values "00000000" }
 
-    if (IsChecked $Redux.Gameplay.NewRedux) {
-        if ( (IsChecked $Redux.Gameplay.FasterBlockPushing)      -or (IsChecked $Redux.Gameplay.ElegySpeedup -Not) -or (IsChecked $Redux.Gameplay.FierceDeity -Not) )   { ChangeBytes -Offset $Offset -Values "60 51 9B D1 13 52 85 41 46 21 F2 4C 5B 84 F6 FB 18 31" }
-        if ( (IsChecked $Redux.Gameplay.FasterBlockPushing -Not) -or (IsChecked $Redux.Gameplay.ElegySpeedup)      -or (IsChecked $Redux.Gameplay.FierceDeity -Not) )   { ChangeBytes -Offset $Offset -Values "E7 B0 BC 19 D9 F2 F8 E1 BE 72 B8 84 76 81 3D 4D 08 39" }
-        if ( (IsChecked $Redux.Gameplay.FasterBlockPushing -Not) -or (IsChecked $Redux.Gameplay.ElegySpeedup -Not) -or (IsChecked $Redux.Gameplay.FierceDeity) )        { ChangeBytes -Offset $Offset -Values "33 01 DF 74 A3 82 2C 25 44 BA 18 2D 42 F9 EA 98 08 31" }
-        if ( (IsChecked $Redux.Gameplay.FasterBlockPushing)      -or (IsChecked $Redux.Gameplay.ElegySpeedup)      -or (IsChecked $Redux.Gameplay.FierceDeity -Not) )   { ChangeBytes -Offset $Offset -Values "CD 99 74 F8 83 8F DE FF 6C C0 31 8F 0B 66 44 E8 18 39" }
-        if ( (IsChecked $Redux.Gameplay.FasterBlockPushing)      -or (IsChecked $Redux.Gameplay.ElegySpeedup -Not) -or (IsChecked $Redux.Gameplay.FierceDeity) )        { ChangeBytes -Offset $Offset -Values "96 43 6E A8 EB 1C 9A 13 E8 C2 75 C7 BD 51 F0 22 18 31" }
-        if ( (IsChecked $Redux.Gameplay.FasterBlockPushing)      -or (IsChecked $Redux.Gameplay.ElegySpeedup)      -or (IsChecked $Redux.Gameplay.FierceDeity) )        { ChangeBytes -Offset $Offset -Values "44 BE 70 0E DA 58 AC E9 64 C1 E6 2C 06 96 81 6A 18 39" }
-        if ( (IsChecked $Redux.Gameplay.FasterBlockPushing -Not) -or (IsChecked $Redux.Gameplay.ElegySpeedup)      -or (IsChecked $Redux.Gameplay.FierceDeity) )        { ChangeBytes -Offset $Offset -Values "CE B5 4B C3 1D 42 85 33 FB 47 A4 70 6A 2F F0 1F 08 39" }
-        if ( (IsChecked $Redux.Gameplay.FasterBlockPushing)      -or (IsChecked $Redux.Gameplay.ElegySpeedup)      -or (IsChecked $Redux.Gameplay.FierceDeity) )        { ChangeBytes -Offset $Offset -Values "44 BE 70 0E DA 58 AC E9 64 C1 E6 2C 06 96 81 6A 18 39" }
-    }
-    else {
-        if (IsChecked $Redux.Gameplay.FasterBlockPushing) { ChangeBytes -Offset $Offset -Values "9E 45 06 2D 57 4B 28 62 49 87 69 FB 0F 79 1B 9F 18 30" }
-    }
 
 
     # BUTTON COLORS #
 
-     if (IsDefaultColor -Elem $Redux.Colors.SetButtons[0] -Not) { # A Button
-        $offset = SearchBytes -Start "3800000" -End "380F000" -Values "48 55 44 43" # Old Redux: 3806470
-        $offset = AddToOffset -Hex $Offset -Add "8"
+    $offset = "380F854"
 
-        ChangeBytes -Offset (AddToOffset $offset -Add "00") -Values @($Redux.Colors.SetButtons[0].Color.R, $Redux.Colors.SetButtons[0].Color.G, $Redux.Colors.SetButtons[0].Color.B) # Button
-        ChangeBytes -Offset (AddToOffset $offset -Add "80") -Values @($Redux.Colors.SetButtons[0].Color.R, $Redux.Colors.SetButtons[0].Color.G, $Redux.Colors.SetButtons[0].Color.B) # Text Icons
-        ChangeBytes -Offset (AddToOffset $offset -Add "50") -Values @($Redux.Colors.SetButtons[0].Color.R, $Redux.Colors.SetButtons[0].Color.G, $Redux.Colors.SetButtons[0].Color.B)
-        ChangeBytes -Offset (AddToOffset $offset -Add "7C") -Values @($Redux.Colors.SetButtons[0].Color.R, $Redux.Colors.SetButtons[0].Color.G, $Redux.Colors.SetButtons[0].Color.B)
-        ChangeBytes -Offset (AddToOffset $offset -Add "88") -Values @($Redux.Colors.SetButtons[0].Color.R, $Redux.Colors.SetButtons[0].Color.G, $Redux.Colors.SetButtons[0].Color.B)
-        ChangeBytes -Offset (AddToOffset $offset -Add "9C") -Values @($Redux.Colors.SetButtons[0].Color.R, $Redux.Colors.SetButtons[0].Color.G, $Redux.Colors.SetButtons[0].Color.B)
-        ChangeBytes -Offset (AddToOffset $offset -Add "A4") -Values @($Redux.Colors.SetButtons[0].Color.R, $Redux.Colors.SetButtons[0].Color.G, $Redux.Colors.SetButtons[0].Color.B)
-        ChangeBytes -Offset (AddToOffset $offset -Add "A8") -Values @($Redux.Colors.SetButtons[0].Color.R, $Redux.Colors.SetButtons[0].Color.G, $Redux.Colors.SetButtons[0].Color.B)
-        ChangeBytes -Offset (AddToOffset $offset -Add "AC") -Values @($Redux.Colors.SetButtons[0].Color.R, $Redux.Colors.SetButtons[0].Color.G, $Redux.Colors.SetButtons[0].Color.B)
+     if (IsDefaultColor -Elem $Redux.Colors.SetButtons[0] -Not) { # A Button
+        ChangeBytes -Offset (AddToOffset $Symbols.HUD_COLOR_CONFIG -Add "08") -Values @($Redux.Colors.SetButtons[0].Color.R, $Redux.Colors.SetButtons[0].Color.G, $Redux.Colors.SetButtons[0].Color.B) # Button
+        ChangeBytes -Offset (AddToOffset $Symbols.HUD_COLOR_CONFIG -Add "88") -Values @($Redux.Colors.SetButtons[0].Color.R, $Redux.Colors.SetButtons[0].Color.G, $Redux.Colors.SetButtons[0].Color.B) # Text Icons
+        ChangeBytes -Offset (AddToOffset $Symbols.HUD_COLOR_CONFIG -Add "58") -Values @($Redux.Colors.SetButtons[0].Color.R, $Redux.Colors.SetButtons[0].Color.G, $Redux.Colors.SetButtons[0].Color.B)
+        ChangeBytes -Offset (AddToOffset $Symbols.HUD_COLOR_CONFIG -Add "84") -Values @($Redux.Colors.SetButtons[0].Color.R, $Redux.Colors.SetButtons[0].Color.G, $Redux.Colors.SetButtons[0].Color.B)
+        ChangeBytes -Offset (AddToOffset $Symbols.HUD_COLOR_CONFIG -Add "90") -Values @($Redux.Colors.SetButtons[0].Color.R, $Redux.Colors.SetButtons[0].Color.G, $Redux.Colors.SetButtons[0].Color.B)
+        ChangeBytes -Offset (AddToOffset $Symbols.HUD_COLOR_CONFIG -Add "A4") -Values @($Redux.Colors.SetButtons[0].Color.R, $Redux.Colors.SetButtons[0].Color.G, $Redux.Colors.SetButtons[0].Color.B)
+        ChangeBytes -Offset (AddToOffset $Symbols.HUD_COLOR_CONFIG -Add "AC") -Values @($Redux.Colors.SetButtons[0].Color.R, $Redux.Colors.SetButtons[0].Color.G, $Redux.Colors.SetButtons[0].Color.B)
+        ChangeBytes -Offset (AddToOffset $Symbols.HUD_COLOR_CONFIG -Add "B0") -Values @($Redux.Colors.SetButtons[0].Color.R, $Redux.Colors.SetButtons[0].Color.G, $Redux.Colors.SetButtons[0].Color.B)
+        ChangeBytes -Offset (AddToOffset $Symbols.HUD_COLOR_CONFIG -Add "B4") -Values @($Redux.Colors.SetButtons[0].Color.R, $Redux.Colors.SetButtons[0].Color.G, $Redux.Colors.SetButtons[0].Color.B)
         if ($Redux.Colors.Buttons.Text -eq "Randomized" -or $Redux.Colors.Buttons.Text -eq "Custom") {
-            ChangeBytes -Offset (AddToOffset $offset -Add "5C") -Values @($Redux.Colors.SetButtons[0].Color.R, $Redux.Colors.SetButtons[0].Color.G, $Redux.Colors.SetButtons[0].Color.B) # Pause Outer Selection
-            ChangeBytes -Offset (AddToOffset $offset -Add "60") -Values @($Redux.Colors.SetButtons[0].Color.R, $Redux.Colors.SetButtons[0].Color.G, $Redux.Colors.SetButtons[0].Color.B) # Pause Outer Glow Selection
-          # ChangeBytes -Offset (AddToOffset $offset -Add "64") -Values @(($Redux.Colors.SetButtons[0].Color.R+20), ($Redux.Colors.SetButtons[0].Color.G+20), ($Redux.Colors.SetButtons[0].Color.B+20)) # Pause Outer Glow Selection
-          # ChangeBytes -Offset (AddToOffset $offset -Add "68") -Values @(($Redux.Colors.SetButtons[0].Color.R-50), ($Redux.Colors.SetButtons[0].Color.G-50), ($Redux.Colors.SetButtons[0].Color.B-50)) # Pause Glow Selection
+            ChangeBytes -Offset (AddToOffset $Symbols.HUD_COLOR_CONFIG -Add "64") -Values @($Redux.Colors.SetButtons[0].Color.R, $Redux.Colors.SetButtons[0].Color.G, $Redux.Colors.SetButtons[0].Color.B) # Pause Outer Selection
+            ChangeBytes -Offset (AddToOffset $Symbols.HUD_COLOR_CONFIG -Add "68") -Values @($Redux.Colors.SetButtons[0].Color.R, $Redux.Colors.SetButtons[0].Color.G, $Redux.Colors.SetButtons[0].Color.B) # Pause Outer Glow Selection
+          # ChangeBytes -Offset (AddToOffset $Symbols.HUD_COLOR_CONFIG -Add "6C") -Values @(($Redux.Colors.SetButtons[0].Color.R+20), ($Redux.Colors.SetButtons[0].Color.G+20), ($Redux.Colors.SetButtons[0].Color.B+20)) # Pause Outer Glow Selection
+          # ChangeBytes -Offset (AddToOffset $Symbols.HUD_COLOR_CONFIG -Add "70") -Values @(($Redux.Colors.SetButtons[0].Color.R-50), ($Redux.Colors.SetButtons[0].Color.G-50), ($Redux.Colors.SetButtons[0].Color.B-50)) # Pause Glow Selection
         }
     }
 
     if ( IsDefaultColor -Elem $Redux.Colors.SetButtons[1] -Not) { # B Button
-        ChangeBytes -Offset (AddToOffset $offset -Add "04") -Values @($Redux.Colors.SetButtons[1].Color.R, $Redux.Colors.SetButtons[1].Color.G, $Redux.Colors.SetButtons[1].Color.B) # Button
-        ChangeBytes -Offset (AddToOffset $offset -Add "54") -Values @($Redux.Colors.SetButtons[1].Color.R, $Redux.Colors.SetButtons[1].Color.G, $Redux.Colors.SetButtons[1].Color.B) # Text Icons
+        ChangeBytes -Offset (AddToOffset $Symbols.HUD_COLOR_CONFIG -Add "0C") -Values @($Redux.Colors.SetButtons[1].Color.R, $Redux.Colors.SetButtons[1].Color.G, $Redux.Colors.SetButtons[1].Color.B) # Button
+        ChangeBytes -Offset (AddToOffset $Symbols.HUD_COLOR_CONFIG -Add "5C") -Values @($Redux.Colors.SetButtons[1].Color.R, $Redux.Colors.SetButtons[1].Color.G, $Redux.Colors.SetButtons[1].Color.B) # Text Icons
     }
 
     if (IsDefaultColor -Elem $Redux.Colors.SetButtons[2] -Not) { # C Buttons
-        ChangeBytes -Offset (AddToOffset $offset -Add "08") -Values @($Redux.Colors.SetButtons[2].Color.R, $Redux.Colors.SetButtons[2].Color.G, $Redux.Colors.SetButtons[2].Color.B) # Buttons
+        ChangeBytes -Offset (AddToOffset $Symbols.HUD_COLOR_CONFIG -Add "10") -Values @($Redux.Colors.SetButtons[2].Color.R, $Redux.Colors.SetButtons[2].Color.G, $Redux.Colors.SetButtons[2].Color.B) # Buttons
         if ($Redux.Colors.Buttons.Text -eq "Randomized" -or $Redux.Colors.Buttons.Text -eq "Custom") {
-            ChangeBytes -Offset (AddToOffset $offset -Add "58") -Values @($Redux.Colors.SetButtons[2].Color.R, $Redux.Colors.SetButtons[2].Color.G, $Redux.Colors.SetButtons[2].Color.B) # Text Icons
-            ChangeBytes -Offset (AddToOffset $offset -Add "A0") -Values @($Redux.Colors.SetButtons[2].Color.R, $Redux.Colors.SetButtons[2].Color.G, $Redux.Colors.SetButtons[2].Color.B) # to Equip
-            ChangeBytes -Offset (AddToOffset $offset -Add "8C") -Values @($Redux.Colors.SetButtons[2].Color.R, $Redux.Colors.SetButtons[2].Color.G, $Redux.Colors.SetButtons[2].Color.B) # Note
-            ChangeBytes -Offset (AddToOffset $offset -Add "6C") -Values @($Redux.Colors.SetButtons[2].Color.R, $Redux.Colors.SetButtons[2].Color.G, $Redux.Colors.SetButtons[2].Color.B) # Pause Outer Selection
-            ChangeBytes -Offset (AddToOffset $offset -Add "70") -Values @($Redux.Colors.SetButtons[2].Color.R, $Redux.Colors.SetButtons[2].Color.G, $Redux.Colors.SetButtons[2].Color.B) # Pause Selection
-          # ChangeBytes -Offset (AddToOffset $offset -Add "78") -Values @($Redux.Colors.SetButtons[2].Color.R, $Redux.Colors.SetButtons[2].Color.G, $Redux.Colors.SetButtons[2].Color.B) # Pause Outer Glow Selection
-          # ChangeBytes -Offset (AddToOffset $offset -Add "90") -Values @($Redux.Colors.SetButtons[2].Color.R, $Redux.Colors.SetButtons[2].Color.G, $Redux.Colors.SetButtons[2].Color.B) # Pause Outer Selection
+            ChangeBytes -Offset (AddToOffset $Symbols.HUD_COLOR_CONFIG -Add "60") -Values @($Redux.Colors.SetButtons[2].Color.R, $Redux.Colors.SetButtons[2].Color.G, $Redux.Colors.SetButtons[2].Color.B) # Text Icons
+            ChangeBytes -Offset (AddToOffset $Symbols.HUD_COLOR_CONFIG -Add "A8") -Values @($Redux.Colors.SetButtons[2].Color.R, $Redux.Colors.SetButtons[2].Color.G, $Redux.Colors.SetButtons[2].Color.B) # to Equip
+            ChangeBytes -Offset (AddToOffset $Symbols.HUD_COLOR_CONFIG -Add "94") -Values @($Redux.Colors.SetButtons[2].Color.R, $Redux.Colors.SetButtons[2].Color.G, $Redux.Colors.SetButtons[2].Color.B) # Note
+            ChangeBytes -Offset (AddToOffset $Symbols.HUD_COLOR_CONFIG -Add "74") -Values @($Redux.Colors.SetButtons[2].Color.R, $Redux.Colors.SetButtons[2].Color.G, $Redux.Colors.SetButtons[2].Color.B) # Pause Outer Selection
+            ChangeBytes -Offset (AddToOffset $Symbols.HUD_COLOR_CONFIG -Add "7C") -Values @($Redux.Colors.SetButtons[2].Color.R, $Redux.Colors.SetButtons[2].Color.G, $Redux.Colors.SetButtons[2].Color.B) # Pause Selection
+          # ChangeBytes -Offset (AddToOffset $Symbols.HUD_COLOR_CONFIG -Add "80") -Values @($Redux.Colors.SetButtons[2].Color.R, $Redux.Colors.SetButtons[2].Color.G, $Redux.Colors.SetButtons[2].Color.B) # Pause Outer Glow Selection
+          # ChangeBytes -Offset (AddToOffset $Symbols.HUD_COLOR_CONFIG -Add "98") -Values @($Redux.Colors.SetButtons[2].Color.R, $Redux.Colors.SetButtons[2].Color.G, $Redux.Colors.SetButtons[2].Color.B) # Pause Outer Selection
         }
     }
 
     if (IsDefaultColor -Elem $Redux.Colors.SetButtons[3] -Not) { # Start Button
-        ChangeBytes -Offset (AddToOffset $offset -Add "0C") -Values @($Redux.Colors.SetButtons[3].Color.R, $Redux.Colors.SetButtons[3].Color.G, $Redux.Colors.SetButtons[3].Color.B) # Button
+        ChangeBytes -Offset (AddToOffset $Symbols.HUD_COLOR_CONFIG -Add "14") -Values @($Redux.Colors.SetButtons[3].Color.R, $Redux.Colors.SetButtons[3].Color.G, $Redux.Colors.SetButtons[3].Color.B) # Button
     }
 
 
@@ -831,12 +820,18 @@ function ByteReduxOptions() {
     # HUD COLORS #
 
     if (IsSet $Redux.Colors.SetHUDStats) {
-        if (IsDefaultColor -Elem $Redux.Colors.SetHUDStats[0] -Not)   { ChangeBytes -Offset (AddToOffset $offset -Add "28") -Values @($Redux.Colors.SetHUDStats[0].Color.R, $Redux.Colors.SetHUDStats[0].Color.G, $Redux.Colors.SetHUDStats[0].Color.B) } # Hearts
-        if (IsDefaultColor -Elem $Redux.Colors.SetHUDStats[1] -Not)   { ChangeBytes -Offset (AddToOffset $offset -Add "2C") -Values @($Redux.Colors.SetHUDStats[1].Color.R, $Redux.Colors.SetHUDStats[1].Color.G, $Redux.Colors.SetHUDStats[1].Color.B) } # Hearts
-        if (IsDefaultColor -Elem $Redux.Colors.SetHUDStats[2] -Not)   { ChangeBytes -Offset (AddToOffset $offset -Add "30") -Values @($Redux.Colors.SetHUDStats[2].Color.R, $Redux.Colors.SetHUDStats[2].Color.G, $Redux.Colors.SetHUDStats[2].Color.B) } # Magic
-        if (IsDefaultColor -Elem $Redux.Colors.SetHUDStats[3] -Not)   { ChangeBytes -Offset (AddToOffset $Offset -Add "34") -Values @($Redux.Colors.SetHUDStats[3].Color.R, $Redux.Colors.SetHUDStats[3].Color.G, $Redux.Colors.SetHUDStats[3].Color.B) } # Magic
-        if (IsDefaultColor -Elem $Redux.Colors.SetHUDStats[4] -Not)   { ChangeBytes -Offset (AddToOffset $offset -Add "38") -Values @($Redux.Colors.SetHUDStats[4].Color.R, $Redux.Colors.SetHUDStats[4].Color.G, $Redux.Colors.SetHUDStats[4].Color.B) } # Minimap
+        if (IsDefaultColor -Elem $Redux.Colors.SetHUDStats[0] -Not)   { ChangeBytes -Offset (AddToOffset $Symbols.HUD_COLOR_CONFIG -Add "30") -Values @($Redux.Colors.SetHUDStats[0].Color.R, $Redux.Colors.SetHUDStats[0].Color.G, $Redux.Colors.SetHUDStats[0].Color.B) } # Hearts
+        if (IsDefaultColor -Elem $Redux.Colors.SetHUDStats[1] -Not)   { ChangeBytes -Offset (AddToOffset $Symbols.HUD_COLOR_CONFIG -Add "34") -Values @($Redux.Colors.SetHUDStats[1].Color.R, $Redux.Colors.SetHUDStats[1].Color.G, $Redux.Colors.SetHUDStats[1].Color.B) } # Hearts
+        if (!(IsChecked $Redux.Graphics.Widescreen)) {
+            if (IsDefaultColor -Elem $Redux.Colors.SetHUDStats[2] -Not)   { ChangeBytes -Offset (AddToOffset $Symbols.HUD_COLOR_CONFIG -Add "38") -Values @($Redux.Colors.SetHUDStats[2].Color.R, $Redux.Colors.SetHUDStats[2].Color.G, $Redux.Colors.SetHUDStats[2].Color.B) } # Magic
+            if (IsDefaultColor -Elem $Redux.Colors.SetHUDStats[3] -Not)   { ChangeBytes -Offset (AddToOffset $Symbols.HUD_COLOR_CONFIG -Add "3C") -Values @($Redux.Colors.SetHUDStats[3].Color.R, $Redux.Colors.SetHUDStats[3].Color.G, $Redux.Colors.SetHUDStats[3].Color.B) } # Magic
+        }
+        if (IsDefaultColor -Elem $Redux.Colors.SetHUDStats[4] -Not)   { ChangeBytes -Offset (AddToOffset $Symbols.HUD_COLOR_CONFIG -Add "40") -Values @($Redux.Colors.SetHUDStats[4].Color.R, $Redux.Colors.SetHUDStats[4].Color.G, $Redux.Colors.SetHUDStats[4].Color.B) } # Minimap
     }
+
+
+
+    $Symbols = $null
 
 }
 
@@ -845,7 +840,7 @@ function ByteReduxOptions() {
 #==============================================================================================================================================================================================
 function CheckLanguageOptions() {
     
-    if     ( (IsChecked  $Redux.Text.Vanilla -Not)   -or (IsLanguage $Redux.Text.AdultPronouns) -or (IsChecked $Redux.UI.GCScheme) )                                                          { return $True }
+    if     ( (IsChecked  $Redux.Text.Vanilla -Not)   -or (IsLanguage $Redux.Text.AdultPronouns) -or (IsLanguage $Redux.UI.GCScheme) )                                                         { return $True }
     elseif ( (IsLanguage $Redux.Gameplay.RazorSword) -or (IsIndex $Redux.Text.TatlScript -Not)  -or (IsLanguage $Redux.Capacity.EnableAmmo) -or (IsLanguage $Redux.Capacity.EnableWallet) )   { return $True }
 
 }
@@ -853,24 +848,21 @@ function CheckLanguageOptions() {
 
 
 #==============================================================================================================================================================================================
-function WholeLanguageOptions() {
+function WholeLanguageOptions([string]$Script, [string]$Table) {
     
-    $script = $GameFiles.extracted + "\message_data_static.bin"
-    $table  = $GameFiles.extracted + "\message_data.tbl"
-
     if (IsChecked $Redux.Text.Restore) {
-        ApplyPatch  -File $script -Patch "\Export\Message\restore_static.bps"
-        ApplyPatch -File $table   -Patch "\Export\Message\restore_table.bps"
-        PatchBytes  -Offset "A2DDC4" -Length "26F" -Texture -Patch "Icons\troupe_leaders_mask_text.yaz0" # Correct Circus Mask
+        ApplyPatch -File $Script    -Patch "\Export\Message\restore_static.bps"
+        ApplyPatch -File $Table     -Patch "\Export\Message\restore_table.bps"
+        PatchBytes -Offset "A2DDC4" -Patch "Icons\troupe_leaders_mask_text.yaz0" -Length "26F" -Texture # Correct Circus Mask
     }
     elseif (IsChecked $Redux.Text.MasterQuest) {
-        ApplyPatch -File $script -Patch "\Export\Message\master_quest_static.bps"
-        ApplyPatch -File $table  -Patch "\Export\Message\master_quest_table.bps"
+        ApplyPatch -File $Script -Patch "\Export\Message\master_quest_static.bps"
+        ApplyPatch -File $Table  -Patch "\Export\Message\master_quest_table.bps"
     }
     elseif (IsChecked $Redux.Text.Custom) {
-        if ( (TestFile ($Gamefiles.customText + "\message_data_static.bin") ) -and (TestFile ($Gamefiles.customText + "\message_data.tbl") ) ) {
-            Copy-Item -LiteralPath ($Gamefiles.customText + "\message_data_static.bin") -Destination ($GameFiles.extracted + "\message_data_static.bin") -Force
-            Copy-Item -LiteralPath ($Gamefiles.customText + "\message_data.tbl")        -Destination ($GameFiles.extracted + "\message_data.tbl")        -Force
+        if ( (TestFile ($Gamefiles.editor + "\message_data_static." + $LanguagePatch.code + ".bin") ) -and (TestFile ($Gamefiles.editor + "\message_data." + $LanguagePatch.code + ".tbl") ) ) {
+            Copy-Item -LiteralPath ($Gamefiles.editor + "\message_data_static." + $LanguagePatch.code + ".bin") -Destination $Script -Force
+            Copy-Item -LiteralPath ($Gamefiles.editor + "\message_data."        + $LanguagePatch.code + ".tbl") -Destination $Table  -Force
         }
         else { WriteToConsole "Custom Text could not be found." }
     }
@@ -894,9 +886,7 @@ function ByteLanguageOptions() {
         ChangeBytes -Offset "A27674" -Values "00 00 2B A0"; ChangeBytes -Offset "A276D0" -Values "00 00 09 C0" # Pointer Goron Drums Text
     }
 
-    if (IsChecked $Redux.UI.GCScheme) {
-        SetMessage -ID "0227" -Text "5A20" -Replace "4C20"; SetMessage -ID "1912" -Text "5A20" -Replace "4C20"; SetMessage -ID "191D" -Text "5A20" -Replace "4C20"; SetMessage -ID "1946" -Text "5A20" -Replace "4C20"; SetMessage -ID "1954" -Text "5A20" -Replace "4C20"
-    }
+    if (IsLanguage $Redux.UI.GCScheme) { SetMessage -ID "0227" -Text "5A20" -Replace "4C20"; SetMessage -ID "1912"; SetMessage -ID "191D"; SetMessage -ID "1946"; SetMessage -ID "1954" }
 
     if (IsLanguage -Elem $Redux.Gameplay.RazorSword) {
         SetMessage -ID "0038" -Text "This new, sharper blade is a cut<N>above the rest. Use it up to<N><R>100 times <W>without dulling its<N>superior edge!"                            -Replace "This new, sharper blade is a cut<N>above the rest. Use it as much<N>as you want without dulling it's<N>superior edge!"
@@ -906,52 +896,39 @@ function ByteLanguageOptions() {
     }
 
     if (IsLanguage -Elem $Redux.Text.AdultPronouns) {
-        SetMessage -ID "04B0" -Text "6368696C64" -Replace "796F756E67206D616E"; SetMessage -ID "04B2" -Text "6368696C64" -Replace "796F756E67206D616E"; SetMessage -ID "04B5" -Text "6368696C64" -Replace "796F756E67206D616E"
+        SetMessage -ID "0514" -Text "without an adult or<N>until you are old enough to carry" -Replace "until you are<N>capeable of carrying"; SetMessage -ID "0515"
+        SetMessage -ID "0514" -Text "child" -Replace "<N>defenseless Deku Scrub"; SetMessage -ID "0560"; SetMessage -ID "0561"; SetMessage -ID "0562"; SetMessage -ID "0563"; SetMessage -ID "0564"; SetMessage -ID "0565" # Guard guarding Clock Town exit (Deku Scrub)
+        SetMessage -ID "0515" -Text "child" -Replace "defenseless<N>Deku Scrub"
 
-        SetMessage -ID "0514" -Text "6368696C64" -Replace "<N>defenseless Deku Scrub"; SetMessage -ID "0514" -Text "without an adult or<N>until you are old enough to carry" -Replace "until you are<N>capeable of carrying" # Guard guarding Clock Town exit (Deku Scrub)
-        SetMessage -ID "0515" -Text "6368696C64" -Replace "defenseless<N>Deku Scrub";  SetMessage -ID "0515" -Text "without an adult or<N>until you are old enough to carry" -Replace "until you are<N>capeable of carrying"
-
-        SetMessage -ID "0516" -Text "6368696C64" -Replace "7465656E"; SetMessage -ID "0517" -Text "6368696C64" -Replace "7465656E"; SetMessage -ID "0518" -Text "6368696C64" -Replace "7465656E"; SetMessage -ID "0519" -Text "6368696C64" -Replace "7465656E"; SetMessage -ID "0521" -Text "6368696C64" -Replace "7465656E"; SetMessage -ID "0523" -Text "6368696C64" -Replace "7465656E" # Guard guarding Clock Town exit
-        SetMessage -ID "052B" -Text "6368696C64" -Replace "7465656E"; SetMessage -ID "052D" -Text "6368696C64" -Replace "7465656E"; SetMessage -ID "0535" -Text "6368696C64" -Replace "7465656E"; SetMessage -ID "0537" -Text "6368696C64" -Replace "7465656E"; SetMessage -ID "055E" -Text "6368696C64" -Replace "7465656E"; SetMessage -ID "055F" -Text "6368696C64" -Replace "7465656E"
+        SetMessage -ID "0560" -Text "Until you are old enough to carry<N>a <R>weapon<W>, you cannot pass<N>through here without being<N>accompanied by an adult"  -Replace "Until you are capeable of carrying<N>a <R>weapon<W>, you cannot pass<N>through here without being<N>so defenseless"; SetMessage -ID "0562"; SetMessage -ID "0565"
+        SetMessage -ID "0561" -Text "Until you are old enough to carry<N>a <R>weapon<W>, you cannot pass<N>through here without being <N>accompanied by an adult" -Replace "Until you are capeable of carrying<N>a <R>weapon<W>, you cannot pass<N>through here without being<N>so defenseless"
+        SetMessage -ID "0563" -Text "Until you are old enough to carry<N>a <R>weapon<W>, you cannot pass <N>through here without being<N>accompanied an adult"    -Replace "Until you are capeable of carrying<N>a <R>weapon<W>, you cannot pass<N>through here without being<N>so defenseless"
+        SetMessage -ID "0564" -Text "Until you are old enough to carry<N>a<R> weapon<W>, you cannot pass<N>through here without being<N>accompanied by an adult"  -Replace "Until you are capeable of carrying<N>a <R>weapon<W>, you cannot pass<N>through here without being<N>so defenseless"
         
-        SetMessage -ID "0560" -Text "6368696C64" -Replace "<N>defenseless Deku Scrub"; SetMessage -ID "0560" -Text "Until you are old enough to carry<N>a <R>weapon<W>, you cannot pass<N>through here without being<N>accompanied by an adult" -Replace "Until you are capeable of carrying<N>a <R>weapon<W>, you cannot pass<N>through here without being<N>so defenseless" # Guard guarding Clock Town exit (Deku Scrub)
-        SetMessage -ID "0561" -Text "6368696C64" -Replace "<N>defenseless Deku Scrub"; SetMessage -ID "0561" -Text "Until you are old enough to carry<N>a <R>weapon<W>, you cannot pass<N>through here without being<N>accompanied by an adult" -Replace "Until you are capeable of carrying<N>a <R>weapon<W>, you cannot pass<N>through here without being<N>so defenseless"
-        SetMessage -ID "0562" -Text "6368696C64" -Replace "<N>defenseless Deku Scrub"; SetMessage -ID "0562" -Text "Until you are old enough to carry<N>a <R>weapon<W>, you cannot pass<N>through here without being<N>accompanied by an adult" -Replace "Until you are capeable of carrying<N>a <R>weapon<W>, you cannot pass<N>through here without being<N>so defenseless"
-        SetMessage -ID "0563" -Text "6368696C64" -Replace "<N>defenseless Deku Scrub"; SetMessage -ID "0563" -Text "Until you are old enough to carry<N>a <R>weapon<W>, you cannot pass<N>through here without being<N>accompanied by an adult" -Replace "Until you are capeable of carrying<N>a <R>weapon<W>, you cannot pass<N>through here without being<N>so defenseless"
-        SetMessage -ID "0564" -Text "6368696C64" -Replace "<N>defenseless Deku Scrub"; SetMessage -ID "0564" -Text "Until you are old enough to carry<N>a <R>weapon<W>, you cannot pass<N>through here without being<N>accompanied by an adult" -Replace "Until you are capeable of carrying<N>a <R>weapon<W>, you cannot pass<N>through here without being<N>so defenseless"
-        SetMessage -ID "0565" -Text "6368696C64" -Replace "defenseless<N>Deku Scrub";  SetMessage -ID "0565" -Text "Until you are old enough to carry<N>a <R>weapon<W>, you cannot pass<N>through here without being<N>accompanied by an adult" -Replace "Until you are capeable of carrying<N>a <R>weapon<W>, you cannot pass<N>through here without being<N>so defenseless"
+        # Guard guarding Clock Town exit
+        SetMessage -ID "0516" -Text "child" -Replace "teen"; SetMessage -ID "0517"; SetMessage -ID "0518"; SetMessage -ID "0519"; SetMessage -ID "0521"; SetMessage -ID "0523"; SetMessage -ID "052B"; SetMessage -ID "052D"; SetMessage -ID "0535"; SetMessage -ID "0537"; SetMessage -ID "055E"; SetMessage -ID "055F"
+        SetMessage -ID "0566"; SetMessage -ID "0567"; SetMessage -ID "0568"; SetMessage -ID "0569"; SetMessage -ID "056A"; SetMessage -ID "056B"; SetMessage -ID "056C"; SetMessage -ID "056D";  SetMessage -ID "056E"; SetMessage -ID "056F"; SetMessage -ID "0570"; SetMessage -ID "0571"; SetMessage -ID "0572"; SetMessage -ID "0573"
 
-        SetMessage -ID "0566" -Text "6368696C64" -Replace "7465656E"; SetMessage -ID "0567" -Text "6368696C64" -Replace "7465656E"; SetMessage -ID "0568" -Text "6368696C64" -Replace "7465656E"; SetMessage -ID "0569" -Text "6368696C64" -Replace "7465656E"; SetMessage -ID "056A" -Text "6368696C64" -Replace "7465656E"; SetMessage -ID "056B" -Text "6368696C64" -Replace "7465656E" # Guard guarding Clock Town exit
-        SetMessage -ID "056C" -Text "6368696C64" -Replace "7465656E"; SetMessage -ID "056D" -Text "6368696C64" -Replace "7465656E"; SetMessage -ID "056E" -Text "6368696C64" -Replace "7465656E"; SetMessage -ID "056F" -Text "6368696C64" -Replace "7465656E"; SetMessage -ID "0570" -Text "6368696C64" -Replace "7465656E"; SetMessage -ID "0571" -Text "6368696C64" -Replace "7465656E"
-        SetMessage -ID "0572" -Text "6368696C64" -Replace "7465656E"; SetMessage -ID "0573" -Text "6368696C64" -Replace "7465656E" # Guard guarding Clock Town exit
-
-        SetMessage -ID "05F5" -Text "6368696C64" -Replace "796F756E67206D616E"; SetMessage -ID "083C" -Text "6368696C64" -Replace "796F756E67206D616E"; SetMessage -ID "0BEA" -Text "fairy child" -Replace "young fairy man"; SetMessage -ID "0BEA" -Text "6368696C64" -Replace "796F756E67206D616E"; SetMessage -ID "0BF6" -Text "fairy child" -Replace "young fairy man"
-        SetMessage -ID "33C3" -Text "6368696C64" -Replace "796F756E6773746572"
+        SetMessage -ID "04B0" -Text "child"       -Replace "adult";       SetMessage -ID "04B2"; SetMessage -ID "04B5"; SetMessage -ID "05F5"; SetMessage -ID "083C"
+        SetMessage -ID "0BEA" -Text "fairy child" -Replace "fairy adult"; SetMessage -ID "0BF6"
+        SetMessage -ID "33C3" -Text "child"       -Replace "youngster"
     }
 
     if (IsIndex -Elem $Redux.Text.TatlScript -Not) {
         if     ($Redux.Text.TatlScript.text -eq "Override" -and $LanguagePatch.tatl -eq "Tatl")   { $replace = "Taya"                      }
         elseif ($Redux.Text.TatlScript.text -eq "Override" -and $LanguagePatch.tatl -ne "Tatl")   { $replace = "Tatl"                      }
         else                                                                                      { $replace = $Redux.Text.TatlScript.text }
-
-        SetMessage -ID "057A" -Text $LanguagePatch.tatl -Replace $replace -NoParse
-        SetMessage -ID "057C" -Text $LanguagePatch.tatl -Replace $replace -NoParse
-        SetMessage -ID "057E" -Text $LanguagePatch.tatl -Replace $replace -NoParse
-        SetMessage -ID "058E" -Text $LanguagePatch.tatl -Replace $replace -NoParse
-        SetMessage -ID "0735" -Text $LanguagePatch.tatl -Replace $replace -NoParse
-        SetMessage -ID "073E" -Text $LanguagePatch.tatl -Replace $replace -NoParse
-        SetMessage -ID "073F" -Text $LanguagePatch.tatl -Replace $replace -NoParse
-        SetMessage -ID "1F4E" -Text $LanguagePatch.tatl -Replace $replace -NoParse
+        SetMessage -ID "057A" -Text $LanguagePatch.tatl -Replace $replace; SetMessage -ID "057C"; SetMessage -ID "057E"; SetMessage -ID "058E"; SetMessage -ID "0735"; SetMessage -ID "073E"; SetMessage -ID "073F"; SetMessage -ID "1F4E"
     }
 
     if (IsLanguage $Redux.Capacity.EnableAmmo) {
-        SetMessage -ID "0019" -ASCII -NoParse -Text "10" -Replace $Redux.Capacity.DekuSticks1.text
-        SetMessage -ID "178A" -ASCII -NoParse -Text "30" -Replace $Redux.Capacity.Quiver1.text
-        SetMessage -ID "178B" -ASCII -NoParse -Text "40" -Replace $Redux.Capacity.Quiver2.text;  SetMessage -ID "0023" -ASCII -NoParse -Text "40" -Replace $Redux.Capacity.Quiver2.text
-        SetMessage -ID "178C" -ASCII -NoParse -Text "50" -Replace $Redux.Capacity.Quiver3.text;  SetMessage -ID "0024" -ASCII -NoParse -Text "50" -Replace $Redux.Capacity.Quiver3.text
-        SetMessage -ID "178D" -ASCII -NoParse -Text "20" -Replace $Redux.Capacity.BombBag1.text
-        SetMessage -ID "178E" -ASCII -NoParse -Text "30" -Replace $Redux.Capacity.BombBag2.text; SetMessage -ID "001C" -ASCII -NoParse -Text "30" -Replace $Redux.Capacity.BombBag2.text
-        SetMessage -ID "178F" -ASCII -NoParse -Text "40" -Replace $Redux.Capacity.BombBag3.text; SetMessage -ID "001D" -ASCII -NoParse -Text "40" -Replace $Redux.Capacity.BombBag3.text
+        SetMessage -ID "0019" -ASCII -Text "10" -Replace $Redux.Capacity.DekuSticks1.text
+        SetMessage -ID "178A" -ASCII -Text "30" -Replace $Redux.Capacity.Quiver1.text
+        SetMessage -ID "178B" -ASCII -Text "40" -Replace $Redux.Capacity.Quiver2.text;  SetMessage -ID "0023"
+        SetMessage -ID "178C" -ASCII -Text "50" -Replace $Redux.Capacity.Quiver3.text;  SetMessage -ID "0024"
+        SetMessage -ID "178D" -ASCII -Text "20" -Replace $Redux.Capacity.BombBag1.text
+        SetMessage -ID "178E" -ASCII -Text "30" -Replace $Redux.Capacity.BombBag2.text; SetMessage -ID "001C"
+        SetMessage -ID "178F" -ASCII -Text "40" -Replace $Redux.Capacity.BombBag3.text; SetMessage -ID "001D"
     }
 
     if (IsLanguage $Redux.Capacity.EnableWallet) {
@@ -978,15 +955,14 @@ function CreateOptions() {
 #==============================================================================================================================================================================================
 function AdjustGUI() {
     
-    if (IsAdvanced) {
-        EnableElem -Elem @($Redux.Colors.Magic, $Redux.Colors.BaseMagic, $Redux.Colors.InfiniteMagic) -Active (!( (IsChecked $Redux.Graphics.Widescreen) -and $Patches.Redux.Checked))
-    }
-    EnableElem -Elem @($Redux.DPad.LayoutLeft, $Redux.DPad.LayoutRight)                               -Active (!( (IsChecked $Redux.Graphics.Widescreen) -and $Patches.Redux.Checked))
+    EnableElem -Elem @($Redux.DPad.LayoutLeft, $Redux.DPad.LayoutRight) -Active (!( (IsChecked $Redux.Graphics.Widescreen) -and $Patches.Redux.Checked))
     
     if ( (IsChecked $Redux.Graphics.Widescreen) -and $Patches.Redux.Checked)   { EnableElem -Elem @($Redux.DPad.Up, $Redux.DPad.Left, $Redux.DPad.Right, $Redux.DPad.Down) -Active $True }
     elseif ($Redux.Dpad.Disable.Checked)                                       { EnableElem -Elem @($Redux.DPad.Up, $Redux.DPad.Left, $Redux.DPad.Right, $Redux.DPad.Down) -Active $False }
 
     if ( (IsChecked $Redux.Graphics.Widescreen) -and $Patches.Redux.Checked -and ($Redux.DPad.LayoutLeft.Checked -or $Redux.DPad.LayoutRight.Checked) ) { $Redux.DPad.Hide.Checked = $True }
+
+    if ($Patches.Redux.Checked) { EnableElem -Elem @($Redux.Colors.Magic, $Redux.Colors.BaseMagic, $Redux.Colors.InfiniteMagic) -Active (!$Redux.Graphics.Widescreen.Checked) }
 
 }
 
@@ -998,18 +974,21 @@ function CreateTabMain() {
     
     # GAMEPLAY #
 
-    CreateReduxGroup    -Tag  "Gameplay"          -Text "Gameplay"
-    CreateReduxCheckBox -Name "ZoraPhysics"       -Text "Zora Physics"              -Info "Change the Zora physics when using the boomerang`nZora Link will take a step forward instead of staying on his spot"                                             -Credits "ShadowOne333"
-    CreateReduxCheckBox -Name "DistantZTargeting" -Text "Distant Z-Targeting"       -Info "Allow to use Z-Targeting on enemies, objects and NPC's from any distance"                                                                              -Advanced -Credits "Admentus"
-    CreateReduxCheckBox -Name "ManualJump"        -Text "Manual Jump"               -Info "Press Z + A to do a Manual Jump instead of a Jump Attack`nPress B mid-air after jumping to do a Jump Attack"                                                     -Credits "Admentus"
-    CreateReduxCheckBox -Name "FDSpinAttack"      -Text "Fierce Deity Spin Attack"  -Info "Allows Fierce Deity Link to perform a magic spin attack"                                                                                                         -Credits "Admentus"
-    CreateReduxCheckBox -Name "FrontflipJump"     -Text "Force Frontflip Jump"      -Info "Link will always use the frontflip animation when jumping"                                                                                                       -Credits "SoulofDeity"
-    CreateReduxCheckBox -Name "NoShieldRecoil"    -Text "No Shield Recoil"          -Info "Disable the recoil when being hit while shielding"                                                                                                               -Credits "Admentus"
-    CreateReduxCheckBox -Name "FormItems"         -Text "Use Items With Mask Forms" -Info "Deku Link, Goron Link and Zora Link are able to use a few items such as Bombs and Deku Sticks"                                                                   -Credits "Firebreather"
-    CreateReduxCheckBox -Name "SunSong"           -Text "Sun's Song"                -Info "Unlocks the Sun's Song when creating a new save file, which skips time to the next day or night"                                                                 -Credits "Ported from Rando"
-    CreateReduxCheckBox -Name "SariaSong"         -Text "Saria's Song"              -Info "Unlocks Saria's Song when creating a new save file, which plays the Final Hours music theme until the next area"                                                 -Credits "Ported from Rando"
-    CreateReduxComboBox -Name "LinkJumpAttack"    -Text "Link Jump Attack"          -Info "Set the Jump Attack animation for Link in his Hylian Form" -Items @("Jumpslash", "Frontflip", "Beta Frontflip", "Beta Backflip", "Spin Slash", "Zora Jumpslash") -Credits "Admentus (ported), SoulofDeity & Aegiker"
-    CreateReduxComboBox -Name "ZoraJumpAttack"    -Text "Zora Jump Attack"          -Info "Set the Jump Attack animation for Link in his Zora Form"   -Items @("Zora Jumpslash", "Beta Frontflip", "Beta Backflip", "Spin Slash")                           -Credits "Admentus (ported) & Aegiker"
+    CreateReduxGroup    -Tag  "Gameplay"             -Text "Gameplay"
+    CreateReduxCheckBox -Name "ZoraPhysics"          -Text "Zora Physics"              -Info "Change the Zora physics when using the boomerang`nZora Link will take a step forward instead of staying on his spot"                                             -Credits "ShadowOne333"
+    CreateReduxCheckBox -Name "DistantZTargeting"    -Text "Distant Z-Targeting"       -Info "Allow to use Z-Targeting on enemies, objects and NPC's from any distance"                                                                              -Advanced -Credits "Admentus"
+    CreateReduxCheckBox -Name "ManualJump"           -Text "Manual Jump"               -Info "Press Z + A to do a Manual Jump instead of a Jump Attack`nPress B mid-air after jumping to do a Jump Attack"                                                     -Credits "Admentus"
+    CreateReduxCheckBox -Name "FDSpinAttack"         -Text "Fierce Deity Spin Attack"  -Info "Allows Fierce Deity Link to perform a magic spin attack"                                                                                                         -Credits "Admentus"
+    CreateReduxCheckBox -Name "FrontflipJump"        -Text "Force Frontflip Jump"      -Info "Link will always use the frontflip animation when jumping"                                                                                                       -Credits "SoulofDeity"
+    CreateReduxCheckBox -Name "NoShieldRecoil"       -Text "No Shield Recoil"          -Info "Disable the recoil when being hit while shielding"                                                                                                               -Credits "Admentus"
+    CreateReduxCheckBox -Name "FormItems"            -Text "Use Items With Mask Forms" -Info "Deku Link, Goron Link and Zora Link are able to use a few items such as Bombs and Deku Sticks"                                                                   -Credits "bry_dawg02"
+    CreateReduxCheckBox -Name "SunSong"              -Text "Sun's Song"                -Info "Unlocks the Sun's Song when creating a new save file, which skips time to the next day or night"                                                                 -Credits "Ported from Rando"
+    CreateReduxCheckBox -Name "SariaSong"            -Text "Saria's Song"              -Info "Unlocks Saria's Song when creating a new save file, which plays the Final Hours music theme until the next area"                                                 -Credits "Ported from Rando"
+    CreateReduxComboBox -Name "LinkJumpAttack"       -Text "Link Jump Attack"          -Info "Set the Jump Attack animation for Link in his Hylian Form" -Items @("Jumpslash", "Frontflip", "Beta Frontflip", "Beta Backflip", "Spin Slash", "Zora Jumpslash") -Credits "Admentus (ported), SoulofDeity & Aegiker"
+    CreateReduxComboBox -Name "ZoraJumpAttack"       -Text "Zora Jump Attack"          -Info "Set the Jump Attack animation for Link in his Zora Form"   -Items @("Zora Jumpslash", "Beta Frontflip", "Beta Backflip", "Spin Slash")                           -Credits "Admentus (ported) & Aegiker"
+    CreateReduxCheckBox -Name "HookshotAnything"     -Text "Hookshot Anything"         -Info "Be able to hookshot most surfaces" -Warning "Prone to softlocks, be careful"                                                                           -Advanced -Credits "Ported from Rando"
+    CreateReduxCheckBox -Name "NoMagicArrowCooldown" -Text "No Magic Arrow Cooldown"   -Info "Be able to shoot magic arrows without delay inbetween" -Warning "Prone to crashes if switching arrow types to quickly"                                 -Advanced -Credits "Ported from Rando"
+    CreateReduxCheckBox -Name "FierceDeityAnywhere"  -Text "Fierce Deity Anywhere"     -Info "The Fierce Deity Mask can be used anywhere now"                                                                                                                  -Credits "Ported from Rando"
 
 
 
@@ -1040,9 +1019,9 @@ function CreateTabMain() {
     CreateReduxCheckBox -Name "FairyFountain"     -Text "Fix Fairy Fountain"       -Info "Fix the Ikana Canyon Fairy Fountain area not displaying the correct color"                                                                                  -Credits "Dybbles (fix) & ShadowOne333 (patch)"
     CreateReduxCheckBox -Name "OutOfBoundsGrotto" -Text "Fix Out-of-Bounds Grotto" -Info "Fix the out-of-bounds grotto in the Mountain Village area during winter"                                                                          -Advanced -Credits "Chez Cousteau"
     CreateReduxCheckBox -Name "OutOfBoundsRupee"  -Text "Fix Out-of-Bounds Rupee"  -Info "Fix the out-of-bounds Rupee in the Deku Palace Left Outer Garden area"                                                                            -Advanced -Credits "Chez Cousteau"
-    CreateReduxCheckBox -Name "AlwaysBestEnding"  -Text "Always Best Ending"       -Info "The credits sequence always includes the best ending, regardless of actual ingame progression"                                                              -Credits "Marcelo20XX"
     CreateReduxCheckBox -Name "DebugMapSelect"    -Text "Debug Map Select"         -Info "Translates the Debug Map Select menu into English"                                                                                                          -Credits "GhostlyDark"
     CreateReduxCheckBox -Name "DebugItemSelect"   -Text "Debug Item Select"        -Info "Translates the Debug Inventory Select menu into English"                                                                                                    -Credits "GhostlyDark"
+    CreateReduxCheckBox -Name "AlwaysBestEnding"  -Text "Always Best Ending"       -Info "The credits sequence always includes the best ending, regardless of actual ingame progression"                                                              -Credits "Marcelo20XX"
 
     CreateReduxGroup    -Tag  "Cutscenes"         -Text "Cutscene Fixes"   -Advanced
     CreateReduxCheckBox -Name "GohtAwakening"     -Text "Goht Awakening"   -Info "Fix Goht's awakening cutscene so that Link no longer gets run over"                     -Credits "ShadowOne333"
@@ -1066,7 +1045,7 @@ function CreateTabRedux() {
     CreateReduxRadioButton -Name "Hide"        -SaveTo "Layout" -Column 1 -Row 2          -Text "Hidden"     -Info "Hide the D-Pad icons, while they are still active" -Credits "Ported from Redux"
     CreateReduxRadioButton -Name "LayoutLeft"  -SaveTo "Layout" -Column 1 -Row 3 -Checked -Text "Left Side"  -Info "Show the D-Pad icons on the left side of the HUD"  -Credits "Ported from Redux"
     CreateReduxRadioButton -Name "LayoutRight" -SaveTo "Layout" -Column 1 -Row 4          -Text "Right Side" -Info "Show the D-Pad icons on the right side of the HUD" -Credits "Ported from Redux"
-    $Items = @("Disabled", "Ocarina of Time", "Hero's Bow", "Pictograph Box", "Deku Mask", "Goron Mask", "Zora Mask", "Fierce Deity's Mask", "Bunny Hood")
+    $Items = @("Disabled", "Ocarina of Time", "Hero's Bow", "Pictograph Box", "Deku Mask", "Goron Mask", "Zora Mask", "Fierce Deity's Mask")
     CreateReduxComboBox    -Name "Up"          -Column 2.95 -Row 1   -Length 160 -Items $Items -Default "Deku Mask"       -Info "Set the quick slot item for the D-Pad Up button"    -Credits "Ported from Redux"
     CreateReduxComboBox    -Name "Left"        -Column 1.95 -Row 3.5 -Length 160 -Items $Items -Default "Goron Mask"      -Info "Set the quick slot item for the D-Pad Left button"  -Credits "Ported from Redux"
     CreateReduxComboBox    -Name "Right"       -Column 3.95 -Row 3.5 -Length 160 -Items $Items -Default "Zora Mask"       -Info "Set the quick slot item for the D-Pad Right button" -Credits "Ported from Redux"
@@ -1089,16 +1068,11 @@ function CreateTabRedux() {
 
     CreateReduxGroup    -Tag  "Gameplay" -Text "Gameplay"
     $Last.Width = 2
-    CreateReduxCheckBox -Name "AltRedux"           -Advanced -Text "Old Redux"                  -Info "Uses the older outdated version of Redux"                                           -Credits "Maroc (fixed by GhostlyDark, adjusted by Admentus)" -Warning "Only use the older outdated version if you run into issues with the newer updated Redux version"
-    CreateReduxCheckBox -Name "FasterBlockPushing" -Checked  -Text "Faster Block Pushing"       -Info "All blocks are pushed faster"                                                       -Credits "Ported from Redux"
-    CreateReduxCheckBox -Name "ElegySpeedup"       -Checked  -Text "Elegy of Emptiness Speedup" -Info "The Elegy of Emptiness statue summoning cutscene is skipped after playing the song" -Credits "Ported from Redux"
-    CreateReduxCheckBox -Name "FierceDeity"                  -Text "Fierce Deity Anywhere"      -Info "The Fierce Deity Mask can be used anywhere now"                                     -Credits "Ported from Redux"
-
-    if (IsAdvanced) {
-        EnableElem -Elem @($Redux.Gameplay.ElegySpeedup, $Redux.Gameplay.FierceDeity) -Active (!$Redux.Gameplay.AltRedux.Checked)
-        $Redux.Gameplay.AltRedux.Add_CheckedChanged({ EnableElem -Elem @($Redux.Gameplay.ElegySpeedup, $Redux.Gameplay.FierceDeity) -Active (!$Redux.Gameplay.AltRedux.Checked) })
-    }
-
+    CreateReduxCheckBox -Name "FasterBlockPushing" -Checked -Text "Faster Block Pushing"       -Info "All blocks are pushed faster"                                                       -Credits "Ported from Redux"
+    CreateReduxCheckBox -Name "ElegySpeedup"       -Checked -Text "Elegy of Emptiness Speedup" -Info "The Elegy of Emptiness statue summoning cutscene is skipped after playing the song" -Credits "Ported from Redux"
+    CreateReduxCheckBox -Name "CritWiggle"         -Checked -Text "Disable Crit Wiggle"        -Info "Link no longer randomly moves when his health is critical"                          -Credits "Ported from Redux"
+    CreateReduxCheckBox -Name "UnderwaterOcarina"  -Checked -Text "Underwater Ocarina"         -Info "Zora Link can play the Ocarina when standing on the bottom of water"                -Credits "Ported from Redux"
+    CreateReduxCheckBox -Name "ClimbAnything"               -Text "Climb Anything"             -Info "Climb most walls in the game" -Warning "Prone to softlocks, be careful"   -Advanced -Credits "Ported from Rando"
 
 
     # HERO #
@@ -1118,6 +1092,8 @@ function CreateTabRedux() {
     # BUTTON COLORS #
 
     CreateButtonColorOptions -Default 2
+    $Last.Half = $False
+    CreateHUDColorOptions -MM
     
 }
 
@@ -1130,9 +1106,9 @@ function CreateTabLanguage() {
 
 
 
-    # ENGLISH TEXT OPTIONS #
+    # DIALOGUE #
      
-    CreateReduxGroup -Tag "Text" -Text "English Text Options"
+    CreateReduxGroup -Tag "Text" -Text "Dialogue"
     CreateReduxPanel -Columns 4
     CreateReduxRadioButton -Name "Vanilla"     -Checked  -Max 4 -SaveTo "Dialogue" -Text "Vanilla Text"      -Info "Keep the text as it is"
     CreateReduxRadioButton -Name "Restore"               -Max 4 -SaveTo "Dialogue" -Text "Restore Text"      -Info "Restores and fixes the following:`n- Restore the area titles cards for those that do not have any`n- Sound effects that do not play during dialogue`n- Grammar and typo fixes" -Credits "Redux"
@@ -1164,12 +1140,12 @@ function CreateTabLanguage() {
 function UnlockLanguageContent() {
     
     # English options
-    EnableElem -Elem $Redux.Text.Vanilla       -Active $Redux.Language[0].Checked
     EnableElem -Elem $Redux.Text.Restore       -Active $Redux.Language[0].checked
     EnableElem -Elem $Redux.Text.MasterQuest   -Active $Redux.Language[0].checked
-    EnableElem -Elem $Redux.Text.Custom        -Active $Redux.Language[0].checked
     EnableElem -Elem $Redux.Text.AdultPronouns -Active $Redux.Language[0].checked
     EnableElem -Elem $Redux.Text.OcarinaIcons  -Active ($Redux.Language[0].checked -and $Redux.Text.Restore.Checked)
+
+    if (!$Redux.Language[0].Checked -and !$Redux.Text.Vanilla.Checked -and !$Redux.Text.Custom.Checked) { $Redux.Text.Vanilla.Checked = $True }
 
 }
 
@@ -1334,6 +1310,7 @@ function CreateTabDifficulty() {
     CreateReduxCheckBox -Name "RaisedResearchLabPlatform" -Text "Raised Research Lab Platform"                                                            -Info "Raise the platform leading up to the Research Laboratory as in the Japanese release"                                -Credits "Linkz"
     CreateReduxCheckBox -Name "DeathIsMoonCrash"          -Text "Death is Moon Crash"                                                                     -Info "If you die, the moon will crash`nThere are no continues anymore"                                                    -Credits "Ported from Rando"
     CreateReduxCheckBox -Name "CloseBombShop"             -Text "Close Bomb Shop"                                                                         -Info "The bomb shop is now closed just like in the Master Quest ROM hack`nThe first bomb bag is now found somewhere else" -Credits "Admentus (ported) & DeathBasket (ROM hack)"
+    CreateReduxCheckBox -Name "PermanentKeese"            -Text "Permanent Keese"                                                                         -Info "Fire Keese or Ice Keese won't turn into regular Keese after hitting Link"                                           -Credits "Garo-Mastah"
 
 
 
@@ -1342,6 +1319,7 @@ function CreateTabDifficulty() {
     CreateReduxGroup    -Tag  "EasyMode" -Text "Easy Mode"
     CreateReduxCheckbox -Name "NoBlueBubbleRespawn" -Text "No Blue Bubble Respawn"   -Info "Removes the respawn of the Blue Bubble monsters (until you re-enter the room)" -Credits "Garo-Mastah"
     CreateReduxCheckbox -Name "NoTakkuriSteal"      -Text "No Takkuri Steal"         -Info "The Takkuri in Termina Field will no longer steal items from Link"             -Credits "Admentus"
+    CreateReduxCheckbox -Name "NoShieldSteal"       -Text "No Shield Steal"          -Info "Like-Likes will no longer steal the Hero's Shield from Link"                   -Credits "Admentus"
     CreateReduxCheckbox -Name "KeepBottles"         -Text "Keep Potions and Fairies" -Info "Keep any Red, Green and Blue Potions as well as Fairies after rewinding time"  -Credits "Admentus"
     CreateReduxCheckbox -Name "KeepAmmo"            -Text "Keep Ammo"                -Info "Keep consumable items like ammo for items after rewinding time"                -Credits "Admentus"
 
@@ -1398,75 +1376,10 @@ function CreateTabColors() {
     
 
 
-    # SPIN ATTACK COLORS #
+    # COLORS #
 
     CreateSpinAttackColorOptions
-
-
-
-    # FAIRY COLORS #
-
     CreateFairyColorOptions -Name "Tatl"
-
-
-
-    # HUD COLORS #
-
-    CreateReduxGroup    -Tag  "Colors" -Text "HUD Colors" -IsRedux -Height 2
-    CreateReduxComboBox -Name "Hearts"  -Column 1 -Text "Hearts Colors"  -Length 220 -Items @("Red", "Green", "Blue", "Yellow", "Randomized", "Custom") -Info ("Select a preset for the hearts colors`n" + '"Randomized" fully randomizes the colors each time the patcher is opened')
-    CreateReduxComboBox -Name "Magic"   -Column 3 -Text "Magic Colors"   -Length 220 -Items @("Green", "Red", "Blue", "Purple", "Pink", "Yellow", "White", "Randomized", "Custom") -Info ("Select a preset for the magic colors`n" + '"Randomized" fully randomizes the colors each time the patcher is opened')
-    CreateReduxComboBox -Name "Minimap" -Column 5 -Text "Minimap Colors" -Length 220 -Items @("Cyan", "Green", "Red", "Blue", "Gray", "Purple", "Pink", "Yellow", "White", "Black", "Randomized", "Custom") -Info ("Select a preset for the minimap colors`n" + '"Randomized" fully randomizes the colors each time the patcher is opened')
-
-    # Heart / Magic Colors - Buttons
-    $Buttons = @()
-    $Buttons += CreateReduxButton -Column 1 -Row 2 -Width 100 -Tag $Buttons.Count -Text "Hearts (Base)"    -Info "Select the color you want for the standard hearts display" -Credits "Ported from Rando"
-    $Buttons += CreateReduxButton -Column 2 -Row 2 -Width 100 -Tag $Buttons.Count -Text "Hearts (Double)"  -Info "Select the color you want for the enhanced hearts display" -Credits "Ported from Rando"
-    $Buttons += CreateReduxButton -Column 3 -Row 2 -Width 100 -Tag $Buttons.Count -Text "Magic (Base)"     -Info "Select the color you want for the standard magic display"  -Credits "Ported from Rando"
-    $Redux.Colors.BaseMagic = $Buttons[$Buttons.Length-1]
-    $Buttons += CreateReduxButton -Column 4 -Row 2 -Width 100 -Tag $Buttons.Count -Text "Magic (Infinite)" -Info "Select the color you want for the infinite magic display"  -Credits "Ported from Rando"
-    $Redux.Colors.InfiniteMagic = $Buttons[$Buttons.Length-1]
-    $Buttons += CreateReduxButton -Column 5 -Row 2 -Width 100 -Tag $Buttons.Count -Text "Minimap"          -Info "Select the color you want for the minimap"                 -Credits "Ported from Rando"
-
-    # Heart / Magic Colors - Dialogs
-    $Redux.Colors.SetHUDStats = @()
-    $Redux.Colors.SetHUDStats += CreateColorDialog -Color "FF4632" -Name "SetBaseHearts"    -IsGame -Button $Buttons[0]
-    $Redux.Colors.SetHUDStats += CreateColorDialog -Color "C80000" -Name "SetDoubleHearts"  -IsGame -Button $Buttons[1]
-    $Redux.Colors.SetHUDStats += CreateColorDialog -Color "00C800" -Name "SetBaseMagic"     -IsGame -Button $Buttons[2]
-    $Redux.Colors.SetHUDStats += CreateColorDialog -Color "0000C8" -Name "SetInfiniteMagic" -IsGame -Button $Buttons[3]
-    $Redux.Colors.SetHUDStats += CreateColorDialog -Color "00FFFF" -Name "SetMinimap"       -IsGame -Button $Buttons[4]
-
-    # Heart / Magic Colors - Labels
-    $Redux.Colors.HUDStatsLabels = @()
-    for ($i=0; $i -lt $Buttons.length; $i++) {
-        $Buttons[$i].Add_Click({
-            $Redux.Colors.SetHUDStats[[int16]$this.Tag].ShowDialog(); $Redux.Colors.HUDStatsLabels[[int16]$this.Tag].BackColor = $Redux.Colors.SetHUDStats[[int16]$this.Tag].Color; $GameSettings["Colors"][$Redux.Colors.SetHUDStats[[int16]$this.Tag].Tag] = $Redux.Colors.SetHUDStats[[int16]$this.Tag].Color.Name
-            if     ($this.Tag -lt 2)   { $Redux.Colors.Hearts.Text   = "Custom" }
-            elseif ($this.Tag -lt 4)   { $Redux.Colors.Magic.Text    = "Custom" }
-            else                       { $Redux.Colors.Minimap.Text  = "Custom" }
-        })
-        $Redux.Colors.HUDStatsLabels += CreateReduxColoredLabel -Link $Buttons[$i] -Color $Redux.Colors.SetHUDStats[$i].Color
-    }
-
-    $Redux.Colors.Hearts.Add_SelectedIndexChanged({ SetHeartsColorsPreset -ComboBox $Redux.Colors.Hearts -Dialog $Redux.Colors.SetHUDStats[0] -Label $Redux.Colors.HUDStatsLabels[0] })
-    SetHeartsColorsPreset -ComboBox $Redux.Colors.Hearts -Dialog $Redux.Colors.SetHUDStats[0] -Label $Redux.Colors.HUDStatsLabels[0]
-    $Redux.Colors.Hearts.Add_SelectedIndexChanged({
-        SetHeartsColorsPreset -ComboBox $Redux.Colors.Hearts -Dialog $Redux.Colors.SetHUDStats[1] -Label $Redux.Colors.HUDStatsLabels[1]
-        if (IsIndex $Redux.Colors.Hearts) { SetColor -Color "C80000" -Dialog $Redux.Colors.SetHUDStats[1] -Label $Redux.Colors.HUDStatsLabels[1] }
-    })
-    SetHeartsColorsPreset -ComboBox $Redux.Colors.Hearts -Dialog $Redux.Colors.SetHUDStats[1] -Label $Redux.Colors.HUDStatsLabels[1]
-    if (IsIndex $Redux.Colors.Hearts) { SetColor -Color "C80000" -Dialog $Redux.Colors.SetHUDStats[1] -Label $Redux.Colors.HUDStatsLabels[1] }
-
-    $Redux.Colors.Magic.Add_SelectedIndexChanged({ SetMagicColorsPreset -ComboBox $Redux.Colors.Magic -Dialog $Redux.Colors.SetHUDStats[2] -Label $Redux.Colors.HUDStatsLabels[2] })
-    SetMagicColorsPreset -ComboBox $Redux.Colors.Magic -Dialog $Redux.Colors.SetHUDStats[2] -Label $Redux.Colors.HUDStatsLabels[2]
-    $Redux.Colors.Magic.Add_SelectedIndexChanged({
-        SetMagicColorsPreset -ComboBox $Redux.Colors.Magic -Dialog $Redux.Colors.SetHUDStats[3] -Label $Redux.Colors.HUDStatsLabels[3]
-        if (IsIndex $Redux.Colors.Magic) { SetColor -Color "0000C8" -Dialog $Redux.Colors.SetHUDStats[3] -Label $Redux.Colors.HUDStatsLabels[3] }
-    })
-    SetMagicColorsPreset -ComboBox $Redux.Colors.Magic -Dialog $Redux.Colors.SetHUDStats[3] -Label $Redux.Colors.HUDStatsLabels[3]
-    if (IsIndex $Redux.Colors.Magic) { SetColor -Color "0000C8" -Dialog $Redux.Colors.SetHUDStats[3] -Label $Redux.Colors.HUDStatsLabels[3] }
-
-    $Redux.Colors.Minimap.Add_SelectedIndexChanged({ SetMinimapColorsPreset -ComboBox $Redux.Colors.Minimap -Dialog $Redux.Colors.SetHUDStats[4] -Label $Redux.Colors.HUDStatsLabels[4] })
-    SetMinimapColorsPreset -ComboBox $Redux.Colors.Minimap -Dialog $Redux.Colors.SetHUDStats[4] -Label $Redux.Colors.HUDStatsLabels[4]
 
 }
 
