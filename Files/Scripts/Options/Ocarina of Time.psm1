@@ -78,13 +78,7 @@ function ByteOptions() {
         if (IsIndex $Redux.Gameplay.FasterBlockPushing -Index 3) { ChangeBytes -Offset "CE1BD0" -Values "40800000"; ChangeBytes -Offset "CE0F0F" -Values "03" } # Amy Puzzle Speed, Delay
     }
 
-    if (IsChecked $Redux.Gameplay.ClimbAnything) {
-        <#for ($i=0; $i -lt 128; $i+=4) {
-            if ($i -eq 8) { continue }
-            ChangeBytes -Offset (AddToOffset "B61F80" -Add (Get8Bit $i)) -Values "00000008"
-        }#>
-        ChangeBytes -Offset "AAA394" -Values "34020004"
-    }
+    
 
     if (IsChecked $Redux.Gameplay.Medallions)               { ChangeBytes -Offset "E2B454" -Values "80EA00A72401003F314A003F00000000"                          }
     if (IsChecked $Redux.Gameplay.RutoNeverDisappears)      { ChangeBytes -Offset "D01EA3" -Values "00"                                                        }
@@ -97,13 +91,14 @@ function ByteOptions() {
     if (IsChecked $Redux.Gameplay.PushbackAttackingWalls)   { ChangeBytes -Offset "BDEAE0" -Values "2624000024850000"                                          }
     if (IsChecked $Redux.Gameplay.RemoveCrouchStab)         { ChangeBytes -Offset "BDE374" -Values "1000000D"                                                  }
     if (IsChecked $Redux.Gameplay.RemoveQuickSpin)          { ChangeBytes -Offset "C9C9E8" -Values "1000000E"                                                  }
+    if (IsChecked $Redux.Gameplay.ClimbAnything)            { ChangeBytes -Offset "AAA394" -Values "34020004"                                                  }
     if (IsChecked $Redux.Gameplay.ResumeLastArea)           { ChangeBytes -Offset "B06348" -Values "0000";     ChangeBytes -Offset "B06354" -Values "0000"     }
     if (IsChecked $Redux.Gameplay.SpawnLinksHouse)          { ChangeBytes -Offset "B06332" -Values "00BB"                                                      }
     if (IsChecked $Redux.Gameplay.AllowWarpSongs)           { ChangeBytes -Offset "B6D3D2" -Values "00";       ChangeBytes -Offset "B6D42A" -Values "00"       }
     if (IsChecked $Redux.Gameplay.AllowFaroreWind)          { ChangeBytes -Offset "B6D3D3" -Values "00";       ChangeBytes -Offset "B6D42B" -Values "00"       }
     if (IsChecked $Redux.Gameplay.OpenBombchuShop)          { ChangeBytes -Offset "C6CEDC" -Values "340B0001"                                                  }
-    if (IsChecked $Redux.Gameplay.HookshotAnything)         { ChangeBytes -Offset "D3BA30"  -Values "00000000"                                                 }
-    if (IsChecked $Redux.Gameplay.NoMagicArrowCooldown)     { ChangeBytes -Offset "AE85C9"  -Values "62"                                                       }
+    if (IsChecked $Redux.Gameplay.HookshotAnything)         { ChangeBytes -Offset "D3BA30" -Values "00000000"                                                  }
+    if (IsChecked $Redux.Gameplay.NoMagicArrowCooldown)     { ChangeBytes -Offset "AE85C9" -Values "62"                                                        }
 
     if (IsIndex $Redux.Gameplay.SpawnChild -Index 1 -Not) { ChangeBytes -Offset "B0631E" -Values (GetOoTEntranceIndex $Redux.Gameplay.SpawnChild.Text) }
     if (IsIndex $Redux.Gameplay.SpawnAdult -Index 2 -Not) { ChangeBytes -Offset "B06332" -Values (GetOoTEntranceIndex $Redux.Gameplay.SpawnAdult.Text) }
@@ -154,6 +149,7 @@ function ByteOptions() {
     if (IsChecked $Redux.Fixes.PauseScreenDelay)      { ChangeBytes -Offset "B15DD0" -Values "00000000"                                                  } # Pause Screen Anti-Aliasing
     if (IsChecked $Redux.Fixes.PauseScreenCrash)      { ChangeBytes -Offset "B12947" -Values "03"                                                        } # Pause Screen Delay Speed
     if (IsChecked $Redux.Fixes.SpiritTempleMirrors)   { ChangeBytes -Offset "E45678" -Values "0000"; ChangeBytes -Offset "0E4567B" -Values "00"          }
+    if (IsChecked $Redux.Fixes.BuyableBombs)          { ChangeBytes -Offset "C00840" -Values "1000"                                                      }
     if (IsChecked $Redux.Fixes.RemoveFishingPiracy)   { ChangeBytes -Offset "DBEC80" -Values "34020000"                                                  }
     if (IsChecked $Redux.Fixes.PoacherSaw)            { ChangeBytes -Offset "AE72CC" -Values "00000000"                                                  }
     if (IsChecked $Redux.Fixes.Boomerang)             { ChangeBytes -Offset "F0F718" -Values "FC41C7FFFFFFFE38"                                          }
@@ -637,6 +633,7 @@ function ByteOptions() {
     if (IsChecked $Redux.EasyMode.NoTunicSteal)          { ChangeBytes -Offset "D74964"  -Values "1000000A"                                          }
     if (IsChecked $Redux.EasyMode.SkipStealthSequence)   { ChangeBytes -Offset "21F60DE" -Values "05F0"                                              }
     if (IsChecked $Redux.EasyMode.SkipTowerEscape)       { ChangeBytes -Offset "D82A12"  -Values "0517"; ChangeBytes -Offset "B139A2" -Values "0517" }
+    if (IsChecked $Redux.EasyMode.HotRodderGoron)        { ChangeBytes -Offset "ED289C"  -Values "1100"; ChangeBytes -Offset "ED28A4" -Values "1100" }
 
 
 
@@ -947,13 +944,15 @@ function ByteOptions() {
         ChangeBytes -Offset "B6EC57" -Values @( (Get8Bit $Redux.Capacity.BulletBag1.Text),  (Get8Bit $Redux.Capacity.BulletBag2.Text),  (Get8Bit $Redux.Capacity.BulletBag3.Text)  ) -Interval 2
         ChangeBytes -Offset "B6EC5F" -Values @( (Get8Bit $Redux.Capacity.DekuSticks1.Text), (Get8Bit $Redux.Capacity.DekuSticks2.Text), (Get8Bit $Redux.Capacity.DekuSticks3.Text) ) -Interval 2
         ChangeBytes -Offset "B6EC67" -Values @( (Get8Bit $Redux.Capacity.DekuNuts1.Text),   (Get8Bit $Redux.Capacity.DekuNuts2.Text),   (Get8Bit $Redux.Capacity.DekuNuts3.Text)   ) -Interval 2
+        
+        # Bombchu Max Capacity
+        $val = (Get8Bit $Redux.Capacity.Bombchu.Text); ChangeBytes -Offset "AE6B7F" -Values $val; ChangeBytes -Offset "AE6C33" -Values $val; ChangeBytes -Offset "AE6C23" -Values $val; ChangeBytes -Offset "AE6C33" -Values $val; $val = $null
+
+        # Upgrade Checks
+        ChangeBytes -Offset "ED288B" -Values (Get8Bit $Redux.Capacity.BombBag1.Text); ChangeBytes -Offset "ED295B" -Values (Get8Bit $Redux.Capacity.BombBag2.Text); ChangeBytes -Offset "E2EEFB" -Values (Get8Bit $Redux.Capacity.BombBag2.Text)
 
         # Initial Ammo
-      # ChangeBytes -Offset ""       -Values (Get8Bit $Redux.Capacity.Quiver1.Text)
-      # ChangeBytes -Offset ""       -Values (Get8Bit $Redux.Capacity.BombBag1.Text)
         ChangeBytes -Offset "AE6D03" -Values (Get8Bit $Redux.Capacity.BulletBag1.Text)
-      # ChangeBytes -Offset ""       -Values (Get8Bit $Redux.Capacity.DekuSticks1.Text)
-      # ChangeBytes -Offset ""       -Values (Get8Bit $Redux.Capacity.DekuNuts1.Text)
     }
 
 
@@ -986,13 +985,17 @@ function ByteOptions() {
 
     if (IsChecked $Redux.Capacity.EnableDrops) {
         ChangeBytes -Offset "B6D4D1" -Values @($Redux.Capacity.Arrows1x.Text,  $Redux.Capacity.Arrows2x.Text, $Redux.Capacity.Arrows3x.Text)                              -Interval 2
-        ChangeBytes -Offset "AE6D43" -Values $Redux.Capacity.BulletSeeds.Text
-        ChangeBytes -Offset "AE6DCF" -Values $Redux.Capacity.BulletSeedsShop.Text
-        ChangeBytes -Offset "AE675B" -Values $Redux.Capacity.DekuSticks.Text
+        ChangeBytes -Offset "AE6D43" -Values $Redux.Capacity.BulletSeeds1x.Text
+        ChangeBytes -Offset "AE6DCF" -Values $Redux.Capacity.BulletSeeds2x.Text
+        ChangeBytes -Offset "AE675B" -Values $Redux.Capacity.DekuSticks1x.Text
         ChangeBytes -Offset "B6D4C9" -Values ($Redux.Capacity.Bombs1x.Text,    $Redux.Capacity.Bombs2x.Text,  $Redux.Capacity.Bombs3x.Text, $Redux.Capacity.Bombs4x.Text) -Interval 2
         ChangeBytes -Offset "B6D4D9" -Values ($Redux.Capacity.DekuNuts1x.Text, $Redux.Capacity.DekuNuts2x.Text)                                                           -Interval 2
+        ChangeBytes -Offset "B9CC39" -Values ($Redux.Capacity.Bombchus1x.Text, $Redux.Capacity.Bombchus3x.Text)                                                           -Interval 2
+        ChangeBytes -Offset "AE6B63" -Values $Redux.Capacity.Bombchus2x.Text;  ChangeBytes -Offset "AE6B8B" -Values $Redux.Capacity.Bombchus2x.Text
+
         $RupeeG = Get16Bit $Redux.Capacity.RupeeG.Text; $RupeeB = Get16Bit $Redux.Capacity.RupeeB.Text; $RupeeR = Get16Bit $Redux.Capacity.RupeeR.Text; $RupeeP = Get16Bit $Redux.Capacity.RupeeP.Text; $RupeeO = Get16Bit $Redux.Capacity.RupeeO.Text
         ChangeBytes -Offset "B6D4DC" -Values ($RupeeG + $RupeeB + $RupeeR + $RupeeP + $RupeeO)
+        ChangeBytes -Offset "DF362E" -Values (Get16Bit $Redux.Capacity.RupeeS.Text)
     }
 
 
@@ -1206,7 +1209,7 @@ function ByteOptions() {
     }
 
     if (IsChecked $Redux.Speedup.Bosses) {
-        ChangeBytes -Offset "C944D8"  -Values "00 00 00 00";  ChangeBytes -Offset "C94548" -Values "00 00 00 00";  ChangeBytes -Offset "C94730" -Values "00 00 00 00";  ChangeBytes -Offset "C945A8" -Values "00 00 00 00"; ChangeBytes -Offset "C94594" -Values "00 00 00 00"                                     # Phantom Ganon
+        ChangeBytes -Offset "C944D8"  -Values "00 00 00 00";  ChangeBytes -Offset "C94548"  -Values "00 00 00 00"; ChangeBytes -Offset "C94730" -Values "00 00 00 00";  ChangeBytes -Offset "C945A8" -Values "00 00 00 00"; ChangeBytes -Offset "C94594" -Values "00 00 00 00"                                     # Phantom Ganon
         ChangeBytes -Offset "2F5AF84" -Values "00 00 00 05";  ChangeBytes -Offset "2F5C7DA" -Values "00 01 00 02"; ChangeBytes -Offset "2F5C7A2" -Values "00 03 00 04"; ChangeBytes -Offset "2F5B369" -Values "09";         ChangeBytes -Offset "2F5B491" -Values "04"; ChangeBytes -Offset "2F5B559" -Values "04" # Nabooru
         ChangeBytes -Offset "2F5B621" -Values "04";           ChangeBytes -Offset "2F5B761" -Values "07";          ChangeBytes -Offset "2F5B840" -Values "00 05 00 01 00 05 00 05"                                                                                                                                 # Shorten white flash
         ChangeBytes -Offset "D67BA4"  -Values "10 00";        ChangeBytes -Offset "D678CC" -Values "24 01 03 A2 A6 01 01 42"                                                                                                                                                                                       # Twinrova
@@ -1649,11 +1652,13 @@ function CheckLanguageOptions() {
     elseif ( (IsLanguage $Redux.Unlock.Tunics)       -or (IsLanguage $Redux.Equipment.HerosBow) -or (IsLanguage $Redux.Capacity.EnableAmmo) -or (IsLanguage $Redux.Capacity.EnableWallet) )   { return $True }
     elseif ( (IsChecked  $Redux.Text.FemalePronouns) -or (IsChecked  $Redux.Text.TypoFixes)     -or (IsChecked  $Redux.Text.GoldSkulltula)  -or (IsChecked  $Redux.Text.Instant) )            { return $True }
     
-    if ($Redux.Language[0].Checked) {
+    if ($LanguagePatch.code -eq "en") {
         if     ( (IsDefault $Redux.Equipment.KokiriSword  -Not) -or (IsDefault $Redux.Equipment.MasterSword  -Not) )                         { return $True }
         elseif ( (IsDefault $Redux.Equipment.DekuShield   -Not) -and $ChildModel.deku_shield -ne 0)                                          { return $True }
         elseif ( (IsDefault $Redux.Equipment.HylianShield -Not) -and $ChildModel.hylian_shield -ne 0 -and $AdultModel.hylian_shield -ne 0)   { return $True }
     }
+
+    return $False
 
 }
 
@@ -1797,7 +1802,7 @@ function ByteLanguageOptions() {
     if     (IsLangText -Elem $Redux.Equipment.KokiriSword -Compare "Knife"       -and $GamePatch.title -notlike "*Master of Time*")   { SetMessage -ID "00A4" -Text "Kokiri Sword" -Replace "Knife"       -NoParse; SetMessage -ID "10D2" }
     elseif (IsLangText -Elem $Redux.Equipment.KokiriSword -Compare "Razor Sword" -and $GamePatch.title -notlike "*Master of Time*")   { SetMessage -ID "00A4" -Text "Kokiri Sword" -Replace "Razor Sword" -NoParse; SetMessage -ID "10D2" }
 
-    if ( (IsDefault $Redux.Equipment.MasterSword -Not) -and $Redux.Language[0].Checked) {
+    if ( (IsDefault $Redux.Equipment.MasterSword -Not) -and $LanguagePatch.code -eq "en") {
         $replace = "Master Sword"
         if     (IsLangText -Elem $Redux.Equipment.MasterSword -Compare "Gilded Sword")          { $replace = "Gilded Sword"        }
         elseif (IsLangText -Elem $Redux.Equipment.MasterSword -Compare "Great Fairy's Sword")   { $replace = "Great Fairy's Sword" }
@@ -1986,24 +1991,23 @@ function CreateTabMain() {
 
     # FIXES #
 
+    CreateReduxGroup    -Tag  "Fixes"                    -Text "Fixes"
+    CreateReduxCheckBox -Name "BuyableBombs"             -Text "Buyable Bombs"                       -Info "You no longer need the Goron's Ruby before you can buy bombs`nOnly the Bomb Bag is required"        -Credits "Admentus"
     if ($GamePatch.title -notlike "*Master of Time*") {
-        CreateReduxGroup    -Tag  "Fixes"                -Text "Fixes"
-        if ($GamePatch.title -like "*Ocarina*") {
-            CreateReduxCheckBox -Name "NaviTarget"           -Text "Navi Targettable Spots"    -Advanced -Info "Fix several spots in dungeons which Navi could not target for Link"                                                                                   -Credits "Chez Cousteau"
-            CreateReduxCheckBox -Name "SpiritTempleMirrors"  -Text "Spirit Temple Mirrors"               -Info "Fix a broken effect with the mirrors in the Spirit Temple"                                                                                            -Credits "ZethN64, Sakura, Frostclaw, Steve(ToCoool) & GhostlyDark (ported)"
-        }
-        if ($GamePatch.title -notlike "*Master of Time*") {
-            CreateReduxCheckBox -Name "PauseScreenDelay"     -Text "Pause Screen Delay"         -Checked -Info "Removes the delay when opening the Pause Screen by removing the anti-aliasing" -Native                                                                -Credits "zel"
-            CreateReduxCheckBox -Name "PauseScreenCrash"     -Text "Pause Screen Crash Fix"     -Checked -Info "Prevents the game from randomly crashing emulating a decompressed ROM upon pausing"                                                                   -Credits "zel"
-        }
-        if ($GamePatch.title -notlike "*Dawn & Dusk*") {
-            CreateReduxCheckBox -Name "RemoveFishingPiracy"  -Text "Remove Fishing Anti-Piracy" -Checked -Info "Removes the anti-piracy check for fishing that can cause the fish to always let go after 51 frames"                                                   -Credits "Ported from Rando"
-            CreateReduxCheckBox -Name "PoacherSaw"           -Text "Poacher's Saw"              -Checked -Info "Obtaining the Poacher's Saw no longer prevents Link from obtaining the second Deku Nut upgrade"                                                       -Credits "Ported from Rando"
-            CreateReduxCheckBox -Name "Boomerang"            -Text "Boomerang"                           -Info "Fix the gem color on the thrown boomerang"                                                                                                            -Credits "Aria"
-            CreateReduxCheckBox -Name "FortressMinimap"      -Text "Gerudo Fortress Minimap"             -Info "Display the complete minimap for the Gerudo Fortress during the Child era"                                                                            -Credits "GhostlyDark"
-            CreateReduxCheckBox -Name "AlwaysMoveKingZora"   -Text "Always Move King Zora"     -Advanced -Info "King Zora will move aside even if the Zora Sapphire is in possession"                                                                                 -Credits "Ported from Rando"
-            CreateReduxCheckBox -Name "DeathMountainOwl"     -Text "Death Mountain Owl"        -Advanced -Info "The Owl on top of the Death Mountain will always carry down Link regardless of having magic"                                                          -Credits "Ported from Rando"
-        }
+        CreateReduxCheckBox -Name "PauseScreenDelay"     -Text "Pause Screen Delay"         -Checked -Info "Removes the delay when opening the Pause Screen by removing the anti-aliasing"              -Native -Credits "zel"
+        CreateReduxCheckBox -Name "PauseScreenCrash"     -Text "Pause Screen Crash Fix"     -Checked -Info "Prevents the game from randomly crashing emulating a decompressed ROM upon pausing"                 -Credits "zel"
+    }
+    if ($GamePatch.options -eq 1) {
+        CreateReduxCheckBox -Name "RemoveFishingPiracy"  -Text "Remove Fishing Anti-Piracy" -Checked -Info "Removes the anti-piracy check for fishing that can cause the fish to always let go after 51 frames" -Credits "Ported from Rando"
+        CreateReduxCheckBox -Name "PoacherSaw"           -Text "Poacher's Saw"              -Checked -Info "Obtaining the Poacher's Saw no longer prevents Link from obtaining the second Deku Nut upgrade"     -Credits "Ported from Rando"
+        CreateReduxCheckBox -Name "Boomerang"            -Text "Boomerang"                           -Info "Fix the gem color on the thrown boomerang"                                                          -Credits "Aria"
+        CreateReduxCheckBox -Name "FortressMinimap"      -Text "Gerudo Fortress Minimap"             -Info "Display the complete minimap for the Gerudo Fortress during the Child era"                          -Credits "GhostlyDark"
+        CreateReduxCheckBox -Name "AlwaysMoveKingZora"   -Text "Always Move King Zora"     -Advanced -Info "King Zora will move aside even if the Zora Sapphire is in possession"                               -Credits "Ported from Rando"
+        CreateReduxCheckBox -Name "DeathMountainOwl"     -Text "Death Mountain Owl"        -Advanced -Info "The Owl on top of the Death Mountain will always carry down Link regardless of having magic"        -Credits "Ported from Rando"
+    }
+    if ($GamePatch.title -like "*Ocarina*") {
+        CreateReduxCheckBox -Name "NaviTarget"           -Text "Navi Targettable Spots"    -Advanced -Info "Fix several spots in dungeons which Navi could not target for Link"                                 -Credits "Chez Cousteau"
+        CreateReduxCheckBox -Name "SpiritTempleMirrors"  -Text "Spirit Temple Mirrors"               -Info "Fix a broken effect with the mirrors in the Spirit Temple"                                          -Credits "ZethN64, Sakura, Frostclaw, Steve(ToCoool) & GhostlyDark (ported)"
     }
 
 
@@ -2128,6 +2132,7 @@ function CreateTabRedux() {
     }
 
 
+
     # CODE HOOKS FEATURES #
 
     CreateReduxGroup    -Tag  "Hooks"                            -Text "Code Hook Features"
@@ -2147,6 +2152,8 @@ function CreateTabRedux() {
         CreateReduxCheckBox -Name "TalonSkip"                    -Text "Skip Talon Cutscene"      -Info "Skip the cutscene after waking up Talon before entering the Castle Courtyard"                          -Credits "Ported from Redux"
     }
     else { CreateReduxCheckBox -Name "ShowFileSelectIcons"       -Text "Show File Select Icons"   -Info "Show icons on the File Select screen to display your save file progress"                               -Credits "Ported from Redux" }
+
+
 
     # BUTTON ACTIVATIONS #
 
@@ -2568,11 +2575,14 @@ function CreateTabDifficulty() {
     # EASY MODE #
 
     CreateReduxGroup    -Tag  "EasyMode" -Text "Easy Mode"
-    CreateReduxCheckbox     -Name "NoShieldSteal"       -Text "No Shield Steal"       -Info "Like-Likes will no longer steal the Deku Shield or Hylian Shield from Link"                      -Credits "Admentus"
-    CreateReduxCheckbox     -Name "NoTunicSteal"        -Text "No Tunic Steal"        -Info "Like-Likes will no longer steal the Goron Tunic or Zora Tunic from Link"                         -Credits "GhostlyDark (ported from Redux)"
+    CreateReduxCheckbox     -Name "NoShieldSteal"       -Text "No Shield Steal"       -Info "Like-Likes will no longer steal the Deku Shield or Hylian Shield from Link"                                            -Credits "Admentus"
+    CreateReduxCheckbox     -Name "NoTunicSteal"        -Text "No Tunic Steal"        -Info "Like-Likes will no longer steal the Goron Tunic or Zora Tunic from Link"                                               -Credits "GhostlyDark (ported from Redux)"
     if ($GamePatch.options -eq 1) {
-        CreateReduxCheckBox -Name "SkipStealthSequence" -Text "Skip Stealth Sequence" -Info "Skip the Castle Courtyard Stealth Sequence and allows you to go straight to the Inner Courtyard" -Credits "Ported from Rando"
-        CreateReduxCheckBox -Name "SkipTowerEscape"     -Text "Skip Tower Escape"     -Info "Skip the Ganon's Tower Escape Sequence and allows you to go straight to the Ganon boss fight"    -Credits "Ported from Rando"
+        CreateReduxCheckBox -Name "SkipStealthSequence" -Text "Skip Stealth Sequence" -Info "Skip the Castle Courtyard Stealth Sequence and allows you to go straight to the Inner Courtyard"                       -Credits "Ported from Rando"
+        CreateReduxCheckBox -Name "SkipTowerEscape"     -Text "Skip Tower Escape"     -Info "Skip the Ganon's Tower Escape Sequence and allows you to go straight to the Ganon boss fight"                          -Credits "Ported from Rando"
+    }
+    if ($GamePatch.title -notlike "*Dawn & Dusk*") {
+        CreateReduxCheckBox -Name "HotRodderGoron"      -Text "Hot Rodder Goron"      -Info "The Hot Rodder Goron no longer needs to be stopped in a specific location before rewarding you with a bigger bomb bag" -Credits "Admentus"
     }
     
 }
@@ -2997,7 +3007,7 @@ function CreateTabCapacity() {
     if ($GamePatch.title -like "*Master of Time*") { $val = 99 } else { $val = 50 }
     CreateReduxTextBox -Name "Quiver3"      -Text "Quiver (3)"      -Value 50   -Info "Set the capacity for the Quiver (Upgrade 2)"      -Credits "GhostlyDark"
     if ($GamePatch.title -like "*Ocarina*") {
-        CreateReduxTextBox -Name "BombBag1" -Text "Bomb Bag (1)"    -Value 20   -Info "Set the capacity for the Bomb Bag (Base)"         -Credits "GhostlyDark" -Min 20 -Warning "The minimum value has to be 20 or higher in order to be changed`n[!] A few values are excluded to prevent issues and will automatically be set to the next possible value"
+        CreateReduxTextBox -Name "BombBag1" -Text "Bomb Bag (1)"    -Value 20   -Info "Set the capacity for the Bomb Bag (Base)"         -Credits "GhostlyDark"
     }
     else {
         if ($GamePatch.title -like "*Gold Quest*") { $val = 10 } elseif ($GamePatch.title -like "*Master of Time*") { $val = 15 } else { $val = 20 }
@@ -3017,6 +3027,7 @@ function CreateTabCapacity() {
     CreateReduxTextBox -Name "DekuNuts2"    -Text "Deku Nuts (2)"   -Value 30   -Info "Set the capacity for the Deku Nuts (Upgrade 1)"   -Credits "GhostlyDark"
     if ($GamePatch.title -like "*Master of Time*") { $val = 99 } else { $val = 40 }
     CreateReduxTextBox -Name "DekuNuts3"    -Text "Deku Nuts (3)"   -Value $val -Info "Set the capacity for the Deku Nuts (Upgrade 2)"   -Credits "GhostlyDark"
+    CreateReduxTextBox -Name "Bombchu"      -Text "Bombchu"         -Value 50   -Info "Set the capacity for the Bombchus"                -Credits "Admentus"
 
 
 
@@ -3036,25 +3047,29 @@ function CreateTabCapacity() {
     # ITEM DROPS QUANTITY #
 
     $Redux.Box.Drops = CreateReduxGroup -Tag "Capacity" -Text "Item Drops Quantity Selection"
-    CreateReduxTextBox -Name "Arrows1x"         -Text "Arrows (Single)"     -Value 5   -Info "Set the recovery quantity for picking up or buying Single Arrows"  -Credits "Admentus" -Row 1 -Column 1
-    CreateReduxTextBox -Name "Arrows2x"         -Text "Arrows (Double)"     -Value 10  -Info "Set the recovery quantity for buying Double Arrows"                -Credits "Admentus"
-    CreateReduxTextBox -Name "Arrows3x"         -Text "Arrows (Triple)"     -Value 30  -Info "Set the recovery quantity for picking up or buying Triple Arrows"  -Credits "Admentus"
-    CreateReduxTextBox -Name "BulletSeeds"      -Text "Bullet Seeds"        -Value 5   -Info "Set the recovery quantity for picking up Bullet Seeds"             -Credits "Admentus"
-    CreateReduxTextBox -Name "BulletSeedsShop"  -Text "Bullet Seeds (Shop)" -Value 30  -Info "Set the recovery quantity for buying Bullet Seeds"                 -Credits "Admentus"
-    CreateReduxTextBox -Name "DekuSticks"       -Text "Deku Sticks"         -Value 1   -Info "Set the recovery quantity for picking up Deku Sticks"              -Credits "Admentus"
-    CreateReduxTextBox -Name "Bombs1x"          -Text "Bombs (5)"           -Value 5   -Info "Set the recovery quantity for picking up or buying Bombs (5)"      -Credits "Admentus" -Row 2 -Column 1
-    CreateReduxTextBox -Name "Bombs2x"          -Text "Bombs (10)"          -Value 10  -Info "Set the recovery quantity for buying Bombs (10)"                   -Credits "Admentus"
-    CreateReduxTextBox -Name "Bombs3x"          -Text "Bombs (15)"          -Value 15  -Info "Set the recovery quantity for buying Bombs (15)"                   -Credits "Admentus"
-    CreateReduxTextBox -Name "Bombs4x"          -Text "Bombs (20)"          -Value 20  -Info "Set the recovery quantity for buying Bombs (20)"                   -Credits "Admentus"
-    CreateReduxTextBox -Name "DekuNuts1x"       -Text "Deku Nuts (5)"       -Value 5   -Info "Set the recovery quantity for pickung up or buying Deku Nuts (5)"  -Credits "Admentus"
-    CreateReduxTextBox -Name "DekuNuts2x"       -Text "Deku Nuts (10)"      -Value 10  -Info "Set the recovery quantity for picking up or buying Deku Nuts (10)" -Credits "Admentus"
+    CreateReduxTextBox -Name "Arrows1x"         -Text "Arrows (Single)"     -Value 5   -Info "Set the recovery quantity for picking up or buying Single Arrows"      -Credits "Admentus" -Row 1 -Column 1
+    CreateReduxTextBox -Name "Arrows2x"         -Text "Arrows (Double)"     -Value 10  -Info "Set the recovery quantity for pickung up or buying Double Arrows"      -Credits "Admentus"
+    CreateReduxTextBox -Name "Arrows3x"         -Text "Arrows (Triple)"     -Value 30  -Info "Set the recovery quantity for pickung up or buying Triple Arrows"      -Credits "Admentus"
+    CreateReduxTextBox -Name "BulletSeeds1x"    -Text "Bullet Seeds (5)"    -Value 5   -Info "Set the recovery quantity for pickung up or buying Bullet Seeds (5)"   -Credits "Admentus"
+    CreateReduxTextBox -Name "BulletSeeds2x"    -Text "Bullet Seeds (30)"   -Value 30  -Info "Set the recovery quantity for pickung up or buying Bullet Seeds (30)"  -Credits "Admentus"
+    CreateReduxTextBox -Name "DekuSticks1x"     -Text "Deku Sticks (1)"     -Value 1   -Info "Set the recovery quantity for pickung up or buying up Deku Sticks (1)" -Credits "Admentus"
+    CreateReduxTextBox -Name "Bombs1x"          -Text "Bombs (5)"           -Value 5   -Info "Set the recovery quantity for picking up or buying Bombs (5)"          -Credits "Admentus" -Row 2 -Column 1
+    CreateReduxTextBox -Name "Bombs2x"          -Text "Bombs (10)"          -Value 10  -Info "Set the recovery quantity for pickung up or buying Bombs (10)"         -Credits "Admentus"
+    CreateReduxTextBox -Name "Bombs3x"          -Text "Bombs (15)"          -Value 15  -Info "Set the recovery quantity for pickung up or buying Bombs (15)"         -Credits "Admentus"
+    CreateReduxTextBox -Name "Bombs4x"          -Text "Bombs (20)"          -Value 20  -Info "Set the recovery quantity for pickung up or buying Bombs (20)"         -Credits "Admentus"
+    CreateReduxTextBox -Name "DekuNuts1x"       -Text "Deku Nuts (5)"       -Value 5   -Info "Set the recovery quantity for pickung up or buying Deku Nuts (5)"      -Credits "Admentus"
+    CreateReduxTextBox -Name "DekuNuts2x"       -Text "Deku Nuts (10)"      -Value 10  -Info "Set the recovery quantity for picking up or buying Deku Nuts (10)"     -Credits "Admentus"
+    CreateReduxTextBox -Name "Bombchus1x"       -Text "Bombchus (5)"        -Value 5   -Info "Set the recovery quantity for picking up or buying Bombchus (5)"       -Credits "Admentus"
+    CreateReduxTextBox -Name "Bombchus2x"       -Text "Bombchus (10)"       -Value 10  -Info "Set the recovery quantity for picking up or buying Bombchus (10)"      -Credits "Admentus"
+    CreateReduxTextBox -Name "Bombchus3x"       -Text "Bombchus (20)"       -Value 20  -Info "Set the recovery quantity for picking up or buying Bombchus (20)"      -Credits "Admentus"
 
     if ($GamePatch.title -like "*Master of Time*") { $b = 2; $r = 5 } else { $b = 5; $r = 20 }
-    CreateReduxTextBox -Name "RupeeG" -Length 4 -Text "Rupee (Green)"       -Value 1   -Info "Set the recovery quantity for picking up Green Rupees"             -Credits "Admentus" -Row 3 -Column 1
+    CreateReduxTextBox -Name "RupeeG" -Length 4 -Text "Rupee (Green)"       -Value 1   -Info "Set the recovery quantity for picking up Green Rupees"             -Credits "Admentus" -Row 4 -Column 1
     CreateReduxTextBox -Name "RupeeB" -Length 4 -Text "Rupee (Blue)"        -Value $b  -Info "Set the recovery quantity for picking up Blue Rupees"              -Credits "Admentus"
     CreateReduxTextBox -Name "RupeeR" -Length 4 -Text "Rupee (Red)"         -Value $r  -Info "Set the recovery quantity for picking up Red Rupees"               -Credits "Admentus"
     CreateReduxTextBox -Name "RupeeP" -Length 4 -Text "Rupee (Purple)"      -Value 50  -Info "Set the recovery quantity for picking up Purple Rupees"            -Credits "Admentus"
     CreateReduxTextBox -Name "RupeeO" -Length 4 -Text "Rupee (Gold)"        -Value 200 -Info "Set the recovery quantity for picking up Gold Rupees"              -Credits "Admentus"
+    CreateReduxTextBox -Name "RupeeS" -Length 4 -Text "Rupee (Silver)"      -Value 5   -Info "Set the recovery quantity for picking up Silver Rupees"            -Credits "Admentus"
     $b = $r = $null
 
     EnableForm -Form $Redux.Box.Ammo -Enable $Redux.Capacity.EnableAmmo.Checked
@@ -3064,12 +3079,49 @@ function CreateTabCapacity() {
     EnableForm -Form $Redux.Box.Drops -Enable $Redux.Capacity.EnableDrops.Checked
     $Redux.Capacity.EnableDrops.Add_CheckStateChanged({ EnableForm -Form $Redux.Box.Drops -Enable $Redux.Capacity.EnableDrops.Checked })
 
+    $Redux.Capacity.BombBag3.Add_TextChanged({
+        if ([byte]$this.Text -le [byte]$Redux.Capacity.BombBag2.Text ) {
+            $cursorPos                    = $this.SelectionStart
+            $value                        = [byte]$this.Text + 1
+            if ($value -gt 99)   { $value = 99 }
+            $this.Text                    = $value
+            if ($cursorPos -gt 0) {
+                $this.SelectionStart      = $cursorPos - 1
+                $this.SelectionLength     = 0
+            }
+        }
+    })
+
+    $Redux.Capacity.BombBag2.Add_TextChanged({
+        if ([byte]$this.Text -le [byte]$Redux.Capacity.BombBag1.Text ) {
+            $cursorPos                    = $this.SelectionStart
+            $value                        = [byte]$this.Text + 1
+            if ($value -gt 99)   { $value = 99 }
+            $this.Text                    = $value
+            if ($cursorPos -gt 0) {
+                $this.SelectionStart      = $cursorPos - 1
+                $this.SelectionLength     = 0
+            }
+        }
+
+        if ([byte]$Redux.Capacity.BombBag3.Text -le [byte]$this.Text) {
+            $value                        = [byte]$Redux.Capacity.BombBag3.Text + 1
+            if ($value -gt 99)   { $value = 99 }
+            $Redux.Capacity.BombBag3.Text = $value
+        }
+    })
+
     $Redux.Capacity.BombBag1.Add_TextChanged({
-        if ($this.Text -eq "30") {
-            $cursorPos = $this.SelectionStart
-            $this.Text = $this.Text = "31"
-            $this.SelectionStart = $cursorPos - 1
-            $this.SelectionLength = 0
+        if ([byte]$Redux.Capacity.BombBag2.Text -le [byte]$this.Text) {
+            $value                        = [byte]$Redux.Capacity.BombBag2.Text + 1
+            if ($value -gt 99)   { $value = 99 }
+            $Redux.Capacity.BombBag2.Text = $value
+        }
+
+        if ([byte]$Redux.Capacity.BombBag3.Text -le [byte]$this.Text) {
+            $value                        = [byte]$Redux.Capacity.BombBag3.Text + 1
+            if ($value -gt 99)   { $value = 99 }
+            $Redux.Capacity.BombBag3.Text = $value
         }
     })
 

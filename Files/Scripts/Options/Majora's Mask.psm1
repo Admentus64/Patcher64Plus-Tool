@@ -842,6 +842,7 @@ function CheckLanguageOptions() {
     
     if     ( (IsChecked  $Redux.Text.Vanilla -Not)   -or (IsLanguage $Redux.Text.AdultPronouns) -or (IsLanguage $Redux.UI.GCScheme) )                                                         { return $True }
     elseif ( (IsLanguage $Redux.Gameplay.RazorSword) -or (IsIndex $Redux.Text.TatlScript -Not)  -or (IsLanguage $Redux.Capacity.EnableAmmo) -or (IsLanguage $Redux.Capacity.EnableWallet) )   { return $True }
+    return $False
 
 }
 
@@ -1453,15 +1454,6 @@ function CreateTabEquipment() {
         $Redux.Capacity.EnableAmmo.Add_CheckStateChanged({ EnableForm -Form $Redux.Box.Ammo -Enable $Redux.Capacity.EnableAmmo.Checked })
         EnableForm -Form $Redux.Box.Wallet -Enable $Redux.Capacity.EnableWallet.Checked
         $Redux.Capacity.EnableWallet.Add_CheckStateChanged({ EnableForm -Form $Redux.Box.Wallet -Enable $Redux.Capacity.EnableWallet.Checked })
-
-        $Redux.Capacity.BombBag1.Add_TextChanged({
-            if ($this.Text -eq "30") {
-                $cursorPos = $this.SelectionStart
-                $this.Text = $this.Text = "31"
-                $this.SelectionStart = $cursorPos - 1
-                $this.SelectionLength = 0
-            }
-        })
     }
 
 }

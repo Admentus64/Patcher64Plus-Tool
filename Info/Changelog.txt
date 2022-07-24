@@ -1,3 +1,9 @@
+v19.0.1
+- Added some new options related to the Bombs / Bomb Bag for OoT
+- Updated and added new capacity and quantity options for OoT
+- Removed Bomb Bag capacity limits for OoT and MM
+- Fix issue with patching language options for MoT and D&D
+
 v19.0.0
 - Overhauled text editor for improved performances and new posibilities
 - Added multi-language support for the text editor
