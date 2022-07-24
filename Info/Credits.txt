@@ -2,16 +2,16 @@
 <<< PATCHER64+ TOOL >>>
 
 --- Thanks to my Patreons ---
-- Andrew Kinney, Amara, Colby Bertrand, Craig, Gagrecco, Third M, Yang
+- Tier 2:	Amara, Craig, Chadlight Rutherford, Third M, Andrew Kinney, Buggy Games
 
---- Thanks to my past Patreons --
-- Crypto Logiq, David Pyne, Gicrax, Leigh Pierce, Moons Moons, Raim, Richard Moser, Tommy Naugle
+- Tier 1:	Yang, Gagrecco, mad_scrub
+
 
 --- Patcher64+ Tool ---
-- Admentus (Testing and Coding of Patcher64+ Tool)
-- Bighead (Initial PowerShell patcher, Hi-DPI Mode)
-- GhostlyDark (Model Preview Renders, D-Pad Icon, Testing and Assistance)
-- ShadowOne333 (Testing and Assistance)
+- Admentus	(Testing and Coding of Patcher64+ Tool)
+- Bighead	(Initial PowerShell patcher, Hi-DPI Mode)
+- GhostlyDark	(Model Preview Renders, D-Pad Icon, Testing and Assistance)
+- ShadowOne333	(Testing and Assistance)
 
 
 
