@@ -1,6 +1,6 @@
 ﻿function CreateSceneEditorDialog([int32]$Width, [int32]$Height, [string]$Game=$GameType.mode, [string]$Checksum) {
     
-    $global:SceneEditor   = @{}
+    <# $global:SceneEditor   = @{}
     $SceneEditor.Game     = $Game
     $SceneEditor.Checksum = $Checksum
 
@@ -77,7 +77,7 @@
         LoadMessages
         PlaySound $Sounds.done # Play a sound when it is finished
         UpdateStatusLabel "Success! Script has been extracted."
-    })
+    }) #>
 
 }
 
@@ -86,13 +86,13 @@
 #==============================================================================================================================================================================================
 function RunSceneEditor([string]$Game=$GameType.mode, [string]$Checksum) {
     
-    CreateSceneEditorDialog -Game $Game -Checksum $Checksum
+    <# CreateSceneEditorDialog -Game $Game -Checksum $Checksum
     $SceneEditor.Dialog.ShowDialog()
     if (!(TestFile ($Paths.Games + "\" + $Game + "\SceneEditor\message_data_static.bin")) -or !(TestFile ($Paths.Games + "\" + $Game + "\SceneEditor\message_data.tbl")) ) { return }
     SaveScript -Script ($Paths.Games + "\" + $Game + "\SceneEditor\message_data_static.bin") -Table ($Paths.Games + "\" + $Game + "\SceneEditor\message_data.tbl")
     CreateSubPath ($Paths.Games + "\" + $Game + "\Custom Text")
     Copy-Item -LiteralPath ($Paths.Games + "\" + $Game + "\SceneEditor\message_data_static.bin") -Destination ($Paths.Games + "\" + $Game + "\Custom Text\message_data_static.bin") -Force
-    Copy-Item -LiteralPath ($Paths.Games + "\" + $Game + "\SceneEditor\message_data.tbl")        -Destination ($Paths.Games + "\" + $Game + "\Custom Text\message_data.tbl")        -Force
+    Copy-Item -LiteralPath ($Paths.Games + "\" + $Game + "\SceneEditor\message_data.tbl")        -Destination ($Paths.Games + "\" + $Game + "\Custom Text\message_data.tbl")        -Force #>
 
 }
 
@@ -109,4 +109,4 @@ function LoadScenes() {
 
 #==============================================================================================================================================================================================
 
-Export-ModuleMember -Function RunSceneEditor
+# Export-ModuleMember -Function RunSceneEditor

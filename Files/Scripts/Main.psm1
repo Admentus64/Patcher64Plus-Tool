@@ -53,7 +53,6 @@
 
     $menuBarFile               = New-Object System.Windows.Forms.ToolStripMenuItem; $menuBarFile.Text           = "File";               $menuBarMain.Items.Add($menuBarFile)
     $menuBarEdit               = New-Object System.Windows.Forms.ToolStripMenuItem; $menuBarEdit.Text           = "Edit";               $menuBarMain.Items.Add($menuBarEdit)
-    $menuBarInterface          = New-Object System.Windows.Forms.ToolStripMenuItem; $menuBarInterface.Text      = "Interface";          $menuBarMain.Items.Add($menuBarInterface)
     $menuBarHelp               = New-Object System.Windows.Forms.ToolStripMenuItem; $menuBarHelp.Text           = "Help";               $menuBarMain.Items.Add($menuBarHelp)
     $menuBarEditors            = New-Object System.Windows.Forms.ToolStripMenuItem; $menuBarEditors.Text        = "Editors";            $menuBarMain.Items.Add($menuBarEditors)
 
@@ -66,9 +65,6 @@
     $menuBarResetGame          = New-Object System.Windows.Forms.ToolStripButton;   $menuBarResetGame.Text      = "Reset Current Game"; $menuBarEdit.DropDownItems.Add($menuBarResetGame)
     $menuBarCleanupFiles       = New-Object System.Windows.Forms.ToolStripButton;   $menuBarCleanupFiles.Text   = "Cleanup Files";      $menuBarEdit.DropDownItems.Add($menuBarCleanupFiles)
     $menuBarCleanupScripts     = New-Object System.Windows.Forms.ToolStripButton;   $menuBarCleanupScripts.Text = "Cleanup Scripts";    $menuBarEdit.DropDownItems.Add($menuBarCleanupScripts)
-
-    $global:menuBarSimple      = New-Object System.Windows.Forms.ToolStripButton;   $menuBarSimple.Text         = "Simplified";         $menuBarInterface.DropDownItems.Add($menuBarSimple)
-    $global:menuBarAdvanced    = New-Object System.Windows.Forms.ToolStripButton;   $menuBarAdvanced.Text       = "Advanced";           $menuBarInterface.DropDownItems.Add($menuBarAdvanced)
     
     $menuBarInfo               = New-Object System.Windows.Forms.ToolStripButton;   $menuBarInfo.Text           = "Info";               $menuBarHelp.DropDownItems.Add($menuBarInfo)
     $menuBarLinks              = New-Object System.Windows.Forms.ToolStripButton;   $menuBarLinks.Text          = "Links";              $menuBarHelp.DropDownItems.Add($menuBarLinks)
@@ -88,12 +84,6 @@
     $menuBarResetGame.Add_Click(      { ResetGame                    } )
     $menuBarCleanupFiles.Add_Click(   { CleanupFiles                 } )
     $menuBarCleanupScripts.Add_Click( { CleanupScripts               } )
-
-    if     ($Settings.Core.Interface -eq 1)   { $menuBarSimple.BackColor    = "#D3D3D3" }
-    elseif ($Settings.Core.Interface -eq 2)   { $menuBarAdvanced.BackColor  = "#D3D3D3" }
-    else                                      { $menuBarSimple.BackColor    = "#D3D3D3"; $Settings.Core.Interface = 1 }
-    $menuBarSimple.Add_Click(   { $Settings.Core.Interface = 1; $menuBarSimple.BackColor = "#D3D3D3"; $menuBarAdvanced.BackColor = "White";   ResetReduxSettings; ChangePatchPanel; DisablePatches; SetMainScreenSize } )
-    $menuBarAdvanced.Add_Click( { $Settings.Core.Interface = 2; $menuBarSimple.BackColor = "White";   $menuBarAdvanced.BackColor = "#D3D3D3"; ResetReduxSettings; ChangePatchPanel; DisablePatches; SetMainScreenSize } )
 
     $menuBarInfo.Add_Click(     { If (!(IsSet $CreditsDialog)) { CreateCreditsDialog | Out-Null }; $Credits.Sections | foreach { $_.Visible = $False }; $Credits.Sections[0].Visible = $True; $CreditsDialog.ShowDialog() } )
     $menuBarLinks.Add_Click(    { If (!(IsSet $CreditsDialog)) { CreateCreditsDialog | Out-Null }; $Credits.Sections | foreach { $_.Visible = $False }; $Credits.Sections[3].Visible = $True; $CreditsDialog.ShowDialog() } )
@@ -332,7 +322,10 @@
 
     # Patch Options
     $Patches.OptionsButton = CreateButton -X ($Patches.Group.Right - (DPISize 15) - (DPISize 145)) -Y ($Patches.Options.Top - (DPISize 3)) -Width (DPISize 145) -Height (DPISize 25) -Text "Select Options" -Info 'Open the "Additional Options" panel to change preferences'
-    $Patches.OptionsButton.Add_Click( { $OptionsDialog.ShowDialog() } )
+    $Patches.OptionsButton.Add_Click( {
+        $OptionsDialog.ShowDialog()
+        if ($GameType.save -gt 0) { Out-IniFile -FilePath (GetGameSettingsFile) -InputObject $GameSettings | Out-Null }
+    } )
 
 
 
@@ -509,8 +502,8 @@ function SetJSONFile($File) {
 function DisablePatches() {
     
     # Disable boxes if needed
-    EnableElem -Elem @($Patches.Extend,    $Patches.ExtendLabel)                          -Active ((IsSet $GamePatch.allow_extend) -and $GameRev.extend -ne 0) -Hide
-    EnableElem -Elem @($Patches.Redux,     $Patches.ReduxLabel)                           -Active ((IsSet $GamePatch.redux.file)   -and $GameRev.redux  -ne 0) -Hide
+    EnableElem -Elem @($Patches.Extend,    $Patches.ExtendLabel)                          -Active ((IsSet $GamePatch.allow_extend) -and $GameRev.extend -ne 0)                           -Hide
+    EnableElem -Elem @($Patches.Redux,     $Patches.ReduxLabel)                           -Active ((IsSet $GamePatch.redux.file)   -and $GameRev.redux  -ne 0 -and $GameRev.redux -ne 0) -Hide
     EnableElem -Elem @($Patches.Options,   $Patches.OptionsLabel, $Patches.OptionsButton) -Active ((TestFile $GameFiles.script)    -and ($GamePatch.options -ge 1 -or $Settings.Debug.ForceOptions -ne $False) -and $GameRev.options -ne 0) -Hide
     EnableElem -Elem $Patches.OptionsButton                                               -Active $Patches.Options.Checked
     DisableReduxOptions

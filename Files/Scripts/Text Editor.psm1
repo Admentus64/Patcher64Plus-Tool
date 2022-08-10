@@ -252,7 +252,7 @@
         Cleanup
         LoadMessages
         PlaySound $Sounds.done # Play a sound when it is finished
-        UpdateStatusLabel "Success! Script has been extracted."
+        UpdateStatusLabel -Text "Success! Script has been extracted." -Editor
     })
     
 }
@@ -379,28 +379,33 @@ function SaveScript([string]$Script, [string]$Table) {
     for ($i=0; $i -lt $ByteTableArray.count; $i+=8) {
         if (@(Compare-Object $ByteTableArray[$i..($i+7)] @(255, 255, 0, 0, 0, 0, 0, 0) -SyncWindow 0).Length -eq 0) { break }
         $item = (Get8Bit $ByteTableArray[$i]) + (Get8Bit $ByteTableArray[$i+1])
+        $curr = $ByteTableArray[$i+5]   * 65536 + $ByteTableArray[$i+6]   * 256 + $ByteTableArray[$i+7]
+        $next = $ByteTableArray[$i+8+5] * 65536 + $ByteTableArray[$i+8+6] * 256 + $ByteTableArray[$i+8+7]
+
         if (IsSet $DialogueList[$item]) {
             foreach ($c in $DialogueList[$item].msg) {
                 $tempList.insert($tempList.count, $c)
             }
 
             if ($Files.json.textEditor.header -eq 0) { $ByteTableArray[$i+2] = $DialogueList[$item].type * 16 + $DialogueList[$item].pos }
-            $offset       = (Get24Bit ($DialogueList[$item].start + $DialogueList[$item].msg.count + $increase) ) -split '(..)' -ne '' | foreach { [Convert]::ToByte($_, 16) }
-            $increase    += $DialogueList[$item].start - $DialogueList[$item].end + $DialogueList[$item].msg.count
-            $next         = $ByteTableArray[$i+8+5] * 65536 + $ByteTableArray[$i+8+6] * 256 + $ByteTableArray[$i+8+7]
+            $offset    = (Get24Bit ($DialogueList[$item].start + $DialogueList[$item].msg.count + $increase) ) -split '(..)' -ne '' | foreach { [Convert]::ToByte($_, 16) }
+            $increase += $DialogueList[$item].start - $DialogueList[$item].end + $DialogueList[$item].msg.count
 
-            if ($next -ge $ByteScriptArray.count ) { break }
+            if ($next -ge $ByteScriptArray.count) { break }
             if ($next -ne 0) {
                 for ($j=0; $j -lt $offset.length; $j++) { $ByteTableArray[$i + 8 + 5 + $j] = $offset[$j] }
             }
         }
         else {
-            if ($ByteTableArray[$i+5] * 65536 + $ByteTableArray[$i+6] * 256 + $ByteTableArray[$i+7] -ne 0) {
+            if ($next -gt $curr) {
+                $nextItem = (Get8Bit $ByteTableArray[$i+8]) + (Get8Bit $ByteTableArray[$i+1+8])
+                $offset = (Get24Bit ($DialogueList[$nextItem].start + $DialogueList[$item].msg.count + $increase) ) -split '(..)' -ne '' | foreach { [Convert]::ToByte($_, 16) }
+                for ($j=0; $j -lt $offset.length; $j++) { $ByteTableArray[$i + 8 + 5 + $j] = $offset[$j] }
+            }
+            elseif ($curr -ne 0) {
                 for ($j=0; $j -lt 3; $j++) { $ByteTableArray[$i + 5 + $j] = $ByteTableArray[$i - 8 + 5 + $j] }
             }
         }
-
-        
     }
     while ($tempList.count % 16 -ne 0) { $tempList.Insert($tempList.count, 0) }
 
@@ -416,7 +421,7 @@ function SaveScript([string]$Script, [string]$Table) {
 function SaveLastMessage() {
     
     if (IsSet $LastScript.entry) {
-        if ($TextEditor.Edited[1])       { SetMessage -Replace $TextEditor.Content.Text -ID $LastScript.entry -Safety }
+        if ($TextEditor.Edited[1])       { SetMessage -Replace $TextEditor.Content.Text -ID $LastScript.entry -Safety -ASCII }
         if ($TextEditor.Edited[2])       { SetMessageBox -ID $LastScript.entry -Type $TextEditor.TextBoxType.selectedIndex -Position $TextEditor.TextBoxPosition.selectedIndex }
         if ($Files.json.textEditor.header -gt 0) {
             if ($TextEditor.Edited[3])   { SetMessageIcon   -ID $LastScript.entry -Value $TextEditor.TextBoxIcon.text             }
@@ -457,8 +462,6 @@ function GetMessage([string]$ID) {
         else                                { $TextEditor.TextBoxPosition.selectedIndex = $DialogueList[$ID].pos }
     }
     
-    if ($DialogueList[$ID].msg.count - $Files.json.textEditor.header -le 1) { return "" }
-
     $end = $DialogueList[$ID].msg.count - 1
     for ($i=$end; $i -ge $end-3; $i--) {
         if ($DialogueList[$ID].msg[$i] -eq [byte]$Files.json.textEditor.end) {
@@ -466,6 +469,8 @@ function GetMessage([string]$ID) {
             break
         }
     }
+
+    if ($end -eq -1) { return "" }
     return (ParseMessage -Text $DialogueList[$ID].msg[$Files.json.textEditor.header..$end]) -join ''
 }
 
@@ -530,8 +535,13 @@ function SetMessageBox([string]$ID, [byte]$Type, [byte]$Position) {
 }
 
 #==============================================================================================================================================================================================
-function SetMessageIcon([string]$ID, [string]$Value) {
+function SetMessageIcon([string]$ID, [string]$Hex, [string]$Value) {
     
+    if (IsSet $Hex) {
+        $DialogueList[$ID].icon = $DialogueList[$ID].msg[2] = GetDecimal $Hex
+        return
+    }
+
     foreach ($icon in $Files.json.textEditor.icons) {
         if ($icon.name -eq $TextEditor.TextBoxIcon.text) {
             $DialogueList[$ID].icon = $DialogueList[$ID].msg[2] = GetDecimal $icon.id
@@ -688,10 +698,10 @@ function SetMessage([string]$ID, [object]$Text, [object]$Replace, [string]$File,
         else {
             [uint16]$match = $Files.json.textEditor.header
             $Text  = $DialogueList[$ID].msg[$Files.json.textEditor.header..($DialogueList[$ID].msg.count - 1)]
-
             for ($i=$Text.count-1; $i -ge $Text.count-4; $i--) {
                 if ($Text[$i] -eq [byte]$Files.json.textEditor.end) {
-                    $Text = $Text[0..($i-1)]
+                    if ($i -eq 0)   { $Text = @()              }
+                    else            { $Text = $Text[0..($i-1)] }
                     break
                 }
             }
@@ -730,11 +740,15 @@ function SetMessage([string]$ID, [object]$Text, [object]$Replace, [string]$File,
         return -3
     }
 
-    if     ($Insert)   { $DialogueList[$ID].msg.InsertRange(0, $Replace)                            }
-    elseif ($Append)   { $DialogueList[$ID].msg.InsertRange($DialogueList[$ID].msg.count, $Replace) }
+    if ($Insert) {
+        if ($Replace.count -gt 0) { $DialogueList[$ID].msg.InsertRange(0, $Replace) }
+    }
+    elseif ($Append)   {
+        if ($Replace.count -gt 0) { $DialogueList[$ID].msg.InsertRange($DialogueList[$ID].msg.count, $Replace) }
+    }
     elseif (!$All) {
-        $DialogueList[$ID].msg.RemoveRange($match, $Text.count)
-        $DialogueList[$ID].msg.InsertRange($match, $Replace)
+        if ($Text.count    -gt 0) { $DialogueList[$ID].msg.RemoveRange($match, $Text.count) }
+        if ($Replace.count -gt 0) { $DialogueList[$ID].msg.InsertRange($match, $Replace)    }
     }
     else {
         [int16]$correct = 0
@@ -761,14 +775,14 @@ function SetMessage([string]$ID, [object]$Text, [object]$Replace, [string]$File,
 #==============================================================================================================================================================================================
 function ParseMessage([char[]]$Text, [switch]$Encode) {
     
-    if ($Encode) { $Text = ParseMessageLanguage -Text $Text -Encode }
+   # if ($Encode) { $Text = ParseMessageLanguage -Text $Text -Encode }
 
     if     ($Files.json.textEditor.parse -eq "oot" -and  $Encode)   { $Text = ParseMessageOoT -Text $Text -Encode }
     elseif ($Files.json.textEditor.parse -eq "oot" -and !$Encode)   { $Text = ParseMessageOoT -Text $Text         }
     elseif ($Files.json.textEditor.parse -eq "mm"  -and  $Encode)   { $Text = ParseMessageMM  -Text $Text -Encode }
     elseif ($Files.json.textEditor.parse -eq "mm"  -and !$Encode)   { $Text = ParseMessageMM  -Text $Text         }
 
-    if (!$Encode) { $Text = ParseMessageLanguage -Text $Text }
+   # if (!$Encode) { $Text = ParseMessageLanguage -Text $Text }
 
     $global:ScriptCounter = $null
     return $Text
@@ -823,7 +837,7 @@ function ParseMessageLanguage([char[]]$Text, [switch]$Encode) {
 
 #==============================================================================================================================================================================================
 function ParseMessageOoT([char[]]$Text, [switch]$Encode) {
-    
+
     [System.Collections.ArrayList]$types = @()
     for ($i=0; $i -lt 45; $i++) { $types += $False }
 
@@ -856,7 +870,7 @@ function ParseMessageOoT([char[]]$Text, [switch]$Encode) {
         if ($types[6])    { $Text = ParseMessagePart -Text $Text -Encoded @(6,  255) -Decoded @(60, 83, 104, 105, 102, 116, 58,  255, 62) -Encode $Encode } # 06 xx / <Shift:xx> (shift)
         if ($types[12])   { $Text = ParseMessagePart -Text $Text -Encoded @(12, 255) -Decoded @(60, 68, 101, 108, 97,  121, 58,  255, 62) -Encode $Encode } # 0C xx / <Delay:>   (box break after delay)
         if ($types[14])   { $Text = ParseMessagePart -Text $Text -Encoded @(14, 255) -Decoded @(60, 70, 97,  100, 101, 58,  255, 62)      -Encode $Encode } # 0E xx / <Fade:xx>  (end box with fade out after amount of frames)
-      # if ($types[17])   { $Text = ParseMessagePart -Text $Text -Encoded @(17, 255) -Decoded @(60, 87, 97,  110, 101, 58,  255, 62)      -Encode $Encode } # 11 xx / <Wane:xx>  (unused fade out and wait)
+        if ($types[17])   { $Text = ParseMessagePart -Text $Text -Encoded @(17, 255) -Decoded @(60, 87, 97,  110, 101, 58,  255, 62)      -Encode $Encode } # 11 xx / <Wane:xx>  (unused fade out and wait)
         if ($types[19])   { $Text = ParseMessagePart -Text $Text -Encoded @(19, 255) -Decoded @(60, 73, 99,  111, 110, 58,  255, 62)      -Encode $Encode } # 13 xx / <Icon:xx>  (icon)
         if ($types[20])   { $Text = ParseMessagePart -Text $Text -Encoded @(20, 255) -Decoded @(60, 87, 97,  105, 116, 58,  255, 62)      -Encode $Encode } # 14 xx / <Wait:xx>  (wait for frames to print out text)
 
@@ -889,7 +903,7 @@ function ParseMessageOoT([char[]]$Text, [switch]$Encode) {
         if ($types[9])    { $Text = ParseMessagePart -Text $Text -Encoded @(9)  -Decoded @(60, 68, 67,  62)                                                                     -Encode $Encode } # 09 / <DC>               (disable instantaneous text)
         if ($types[10])   { $Text = ParseMessagePart -Text $Text -Encoded @(10) -Decoded @(60, 83, 104, 111, 112, 32,  68, 101, 115, 99, 114, 105, 112, 116, 105, 111, 110, 62) -Encode $Encode } # 0A / <Shop Description> (keep box open)
         if ($types[11])   { $Text = ParseMessagePart -Text $Text -Encoded @(11) -Decoded @(60, 69, 118, 101, 110, 116, 62)                                                      -Encode $Encode } # 0B / <Event>            (trigger event)
-      # if ($types[13])   { $Text = ParseMessagePart -Text $Text -Encoded @(13) -Decoded @(60, 80, 114, 101, 115, 115, 62)                                                      -Encode $Encode } # 0D / <Press>            (unused wait for button press)
+        if ($types[13])   { $Text = ParseMessagePart -Text $Text -Encoded @(13) -Decoded @(60, 80, 114, 101, 115, 115, 62)                                                      -Encode $Encode } # 0D / <Press>            (unused wait for button press)
         if ($types[15])   { $Text = ParseMessagePart -Text $Text -Encoded @(15) -Decoded @(60, 80, 108, 97,  121, 101, 114, 62)                                                 -Encode $Encode } # 0F / <Player>           (player name)
         if ($types[16])   { $Text = ParseMessagePart -Text $Text -Encoded @(16) -Decoded @(60, 79, 99,  97,  114, 105, 110, 97, 62)                                             -Encode $Encode } # 10 / <Ocarina>          (play ocarina)
         if ($types[22])   { $Text = ParseMessagePart -Text $Text -Encoded @(22) -Decoded @(60, 77, 97,  114, 97,  116, 104, 111, 110, 32,  84, 105, 109, 101, 62)               -Encode $Encode } # 16 / <Marathon Time>    (Marathon Time)
@@ -1052,7 +1066,7 @@ function ParseMessageMM([char[]]$Text, [switch]$Encode) {
         if ($types[224])   { $Text = ParseMessagePart -Text $Text -Encoded @(224) -Decoded @(60, 69, 110, 100, 62)                                                 -Encode $Encode } # E0 / <End>           (End conversation)
 
         # New box / line break
-        if ( (IsSet $TextEditor.Dialog) -and !(IsSet $TextEditor.Search)) {
+        if ( (IsSet $TextEditor.Dialog) -and !(IsSet $TextEditor.Search) ) {
             if ($types[16])   { $Text = ParseMessagePart -Text $Text -Encoded @(16) -Decoded @(13, 10, 60,  78,  101, 119, 32,  66,  111, 120, 62, 13, 10)             -Encode $Encode } # 10 / <New Box>    (box break with new lines)
             if ($types[18])   { $Text = ParseMessagePart -Text $Text -Encoded @(18) -Decoded @(13, 10, 60,  78,  101, 119, 32,  66,  111, 120, 32, 73, 73, 62, 13, 10) -Encode $Encode } # 12 / <New Box II> (box break with new lines)
             if ($types[17])   { $Text = ParseMessagePart -Text $Text -Encoded @(17) -Decoded @(13, 10)                                                                 -Encode $Encode } # 11 / `r`n         (new line)
@@ -1075,6 +1089,13 @@ function ParseMessageMM([char[]]$Text, [switch]$Encode) {
 function ParseMessagePart([System.Collections.ArrayList]$Text, [System.Collections.ArrayList]$Encoded, [System.Collections.ArrayList]$Decoded, [boolean]$Encode=$False) {
     
     $i = $ScriptCounter
+
+    if (!$Encode -and $Text.count -gt $i + 1 -and (IsSet $TextEditor.Dialog) -and !(IsSet $TextEditor.Search) ) {
+        if ($Text[$i] -eq 13 -and $Text[$i+1] -eq 10) {
+            $global:ScriptCounter = $i + 1
+            return $Text
+        }
+    }
 
     if ($Encode -and $Text.count -ge $Decoded.count -and $Text.count -gt 1 -and $i -le ($Text.count - $Decoded.count)) {
         :inner for ($j=0; $j -lt $Decoded.count; $j++) {

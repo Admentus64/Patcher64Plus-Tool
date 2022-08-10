@@ -101,32 +101,33 @@ function CheckScripts() {
     $string  = $Patcher.Title + " " + $Patcher.Version + " (" + $Patcher.Date + ")" + "{0}{0}"
     $string += "Fatal Error: Script files are missing{0}"
 
-    if (!(Test-Path -PathType Leaf -LiteralPath ($Paths.Scripts + "\Bytes.psm1")))         { $FatalError = $True; $string += "{0}" + $Paths.Scripts + "\Bytes.psm1" }
-    if (!(Test-Path -PathType Leaf -LiteralPath ($Paths.Scripts + "\Common.psm1")))        { $FatalError = $True; $string += "{0}" + $Paths.Scripts + "\Common.psm1" }
-    if (!(Test-Path -PathType Leaf -LiteralPath ($Paths.Scripts + "\Dialogs.psm1")))       { $FatalError = $True; $string += "{0}" + $Paths.Scripts + "\Dialogs.psm1" }
-    if (!(Test-Path -PathType Leaf -LiteralPath ($Paths.Scripts + "\DPI.psm1")))           { $FatalError = $True; $string += "{0}" + $Paths.Scripts + "\DPI.psm1" }
-    if (!(Test-Path -PathType Leaf -LiteralPath ($Paths.Scripts + "\Text Editor.psm1")))   { $FatalError = $True; $string += "{0}" + $Paths.Scripts + "\Text Editor.psm1" }
-    if (!(Test-Path -PathType Leaf -LiteralPath ($Paths.Scripts + "\Files.psm1")))         { $FatalError = $True; $string += "{0}" + $Paths.Scripts + "\Files.psm1" }
-    if (!(Test-Path -PathType Leaf -LiteralPath ($Paths.Scripts + "\Forms.psm1")))         { $FatalError = $True; $string += "{0}" + $Paths.Scripts + "\Forms.psm1" }
-    if (!(Test-Path -PathType Leaf -LiteralPath ($Paths.Scripts + "\Main.psm1")))          { $FatalError = $True; $string += "{0}" + $Paths.Scripts + "\Main.psm1" }
-    if (!(Test-Path -PathType Leaf -LiteralPath ($Paths.Scripts + "\MQ.psm1")))            { $FatalError = $True; $string += "{0}" + $Paths.Scripts + "\MQ.psm1" }
-    if (!(Test-Path -PathType Leaf -LiteralPath ($Paths.Scripts + "\Patch.psm1")))         { $FatalError = $True; $string += "{0}" + $Paths.Scripts + "\Patch.psm1" }
-    if (!(Test-Path -PathType Leaf -LiteralPath ($Paths.Scripts + "\Settings.psm1")))      { $FatalError = $True; $string += "{0}" + $Paths.Scripts + "\Settings.psm1" }
-    if (!(Test-Path -PathType Leaf -LiteralPath ($Paths.Scripts + "\VC.psm1")))            { $FatalError = $True; $string += "{0}" + $Paths.Scripts + "\VC.psm1" }
-    if (!(Test-Path -PathType Leaf -LiteralPath ($Paths.Scripts + "\Zelda 64.psm1")))      { $FatalError = $True; $string += "{0}" + $Paths.Scripts + "\Zelda 64.psm1" }
+    if (!(Test-Path -PathType Leaf -LiteralPath ($Paths.Scripts + "\Bytes.psm1")        ) )   { $FatalError = $True; $string += "{0}" + $Paths.Scripts + "\Bytes.psm1"        }
+    if (!(Test-Path -PathType Leaf -LiteralPath ($Paths.Scripts + "\Common.psm1")       ) )   { $FatalError = $True; $string += "{0}" + $Paths.Scripts + "\Common.psm1"       }
+    if (!(Test-Path -PathType Leaf -LiteralPath ($Paths.Scripts + "\Dialogs.psm1")      ) )   { $FatalError = $True; $string += "{0}" + $Paths.Scripts + "\Dialogs.psm1"      }
+    if (!(Test-Path -PathType Leaf -LiteralPath ($Paths.Scripts + "\DPI.psm1")          ) )   { $FatalError = $True; $string += "{0}" + $Paths.Scripts + "\DPI.psm1"          }
+    if (!(Test-Path -PathType Leaf -LiteralPath ($Paths.Scripts + "\Text Editor.psm1")  ) )   { $FatalError = $True; $string += "{0}" + $Paths.Scripts + "\Text Editor.psm1"  }
+    if (!(Test-Path -PathType Leaf -LiteralPath ($Paths.Scripts + "\Files.psm1")        ) )   { $FatalError = $True; $string += "{0}" + $Paths.Scripts + "\Files.psm1"        }
+    if (!(Test-Path -PathType Leaf -LiteralPath ($Paths.Scripts + "\Forms.psm1")        ) )   { $FatalError = $True; $string += "{0}" + $Paths.Scripts + "\Forms.psm1"        }
+    if (!(Test-Path -PathType Leaf -LiteralPath ($Paths.Scripts + "\Main.psm1")         ) )   { $FatalError = $True; $string += "{0}" + $Paths.Scripts + "\Main.psm1"         }
+    if (!(Test-Path -PathType Leaf -LiteralPath ($Paths.Scripts + "\MQ.psm1")           ) )   { $FatalError = $True; $string += "{0}" + $Paths.Scripts + "\MQ.psm1"           }
+    if (!(Test-Path -PathType Leaf -LiteralPath ($Paths.Scripts + "\Patch.psm1")        ) )   { $FatalError = $True; $string += "{0}" + $Paths.Scripts + "\Patch.psm1"        }
+    if (!(Test-Path -PathType Leaf -LiteralPath ($Paths.Scripts + "\Scene Editor.psm1") ) )   { $FatalError = $True; $string += "{0}" + $Paths.Scripts + "\Scene Editor.psm1" }
+    if (!(Test-Path -PathType Leaf -LiteralPath ($Paths.Scripts + "\Settings.psm1")     ) )   { $FatalError = $True; $string += "{0}" + $Paths.Scripts + "\Settings.psm1"     }
+    if (!(Test-Path -PathType Leaf -LiteralPath ($Paths.Scripts + "\VC.psm1")           ) )   { $FatalError = $True; $string += "{0}" + $Paths.Scripts + "\VC.psm1"           }
+    if (!(Test-Path -PathType Leaf -LiteralPath ($Paths.Scripts + "\Zelda 64.psm1")     ) )   { $FatalError = $True; $string += "{0}" + $Paths.Scripts + "\Zelda 64.psm1"     }
     
     if (!$FatalError) { return }
     
-    $Dialog = New-Object System.Windows.Forms.Form
-    $Dialog.Text = $Patcher.Title
-    $Dialog.AutoSize = $True
-    $Dialog.StartPosition = "CenterScreen"
+    $Dialog                 = New-Object System.Windows.Forms.Form
+    $Dialog.Text            = $Patcher.Title
+    $Dialog.AutoSize        = $True
+    $Dialog.StartPosition   = "CenterScreen"
     $Dialog.FormBorderStyle = [System.Windows.Forms.FormBorderStyle]::FixedDialog
 
-    $Label = New-Object System.Windows.Forms.Label
+    $Label          = New-Object System.Windows.Forms.Label
     $Label.AutoSize = $True
     $Label.Location = New-Object System.Drawing.Size(10, 10)
-    $Label.Text = [string]::Format($String, [Environment]::NewLine)
+    $Label.Text     = [string]::Format($String, [Environment]::NewLine)
 
     $Dialog.Controls.Add($Label)
     $Dialog.ShowDialog() | Out-Null
@@ -238,26 +239,6 @@ ShowPowerShellConsole ($Settings.Debug.Console -eq $True)
 # Auto-Updater
 PerformUpdate
 
-# Ask for default interface mode on first time use
-if ($Settings.Core.Interface -ne 1 -and $Settings.Core.Interface -ne 2 -and !$FatalError) {
-    $global:PopupDialog = New-Object System.Windows.Forms.Form
-    $PopupDialog.Size = DPISize (New-Object System.Drawing.Size(330, 150))
-    $PopupDialog.Text = $Patcher.Title
-    $PopupDialog.FormBorderStyle = [System.Windows.Forms.FormBorderStyle]::FixedDialog
-    $PopupDialog.StartPosition = "CenterScreen"
-    $PopupDialog.Icon = $Files.icon.main
-
-    $label   = CreateLabel  -x (DPISize 20)  -Y (DPISize 10) -Text "Select Your Default Interface Mode:" -Font $Fonts.Medium -AddTo $PopupDialog
-    $hud1Btn = CreateButton -X (DPISize 20)  -Y (DPISize 50) -Width (DPISize 120) -Height (DPISize 50) -AddTo $PopupDialog -Text "Simplified Mode" -Info "Simplify the amount of available options."
-    $hud2Btn = CreateButton -X (DPISize 180) -Y (DPISize 50) -Width (DPISize 120) -Height (DPISize 50) -AddTo $PopupDialog -Text "Advanced Mode"   -Info "Show all options. This is the slowest mode due the many options it has."
-
-    $hud1Btn.Add_Click( { $Settings.Core.Interface = 1; $PopupDialog.Close() } )
-    $hud2Btn.Add_Click( { $Settings.Core.Interface = 2; $PopupDialog.Close() } )
-
-    $PopupDialog.ShowDialog() | Out-Null
-    $global:PopupDialog = $label = $hud1Btn = $Hud2Btn = $null
-}
-
 # Create the dialogs to show to the user
 CreateMainDialog     | Out-Null
 CreateSettingsDialog | Out-Null
@@ -284,27 +265,24 @@ if (!$FatalError) {
     WriteToConsole "--------------------------------"
 
     # Restore Last Custom Title and GameID
-    $CustomHeader.ROMTitle.Add_TextChanged({        if (IsChecked $CustomHeader.EnableHeader)   { $Settings["Core"]["CustomHeader.ROMTitle"]  = $this.Text } })
-    $CustomHeader.ROMGameID.Add_TextChanged({       if (IsChecked $CustomHeader.EnableHeader)   { $Settings["Core"]["CustomHeader.ROMGameID"] = $this.Text } })
-    $CustomHeader.VCTitle.Add_TextChanged({         if (IsChecked $CustomHeader.EnableHeader)   { $Settings["Core"]["CustomHeader.VCTitle"]   = $this.Text } })
-    $CustomHeader.VCGameID.Add_TextChanged({        if (IsChecked $CustomHeader.EnableHeader)   { $Settings["Core"]["CustomHeader.VCGameID"]  = $this.Text } })
+    RestoreCustomHeader
+    RestoreCustomRegion
+    $CustomHeader.ROMTitle.Add_TextChanged({        if (IsChecked $CustomHeader.EnableHeader)   { $Settings["Core"]["CustomHeader.ROMTitle"]  = $this.Text          } })
+    $CustomHeader.ROMGameID.Add_TextChanged({       if (IsChecked $CustomHeader.EnableHeader)   { $Settings["Core"]["CustomHeader.ROMGameID"] = $this.Text          } })
+    $CustomHeader.VCTitle.Add_TextChanged({         if (IsChecked $CustomHeader.EnableHeader)   { $Settings["Core"]["CustomHeader.VCTitle"]   = $this.Text          } })
+    $CustomHeader.VCGameID.Add_TextChanged({        if (IsChecked $CustomHeader.EnableHeader)   { $Settings["Core"]["CustomHeader.VCGameID"]  = $this.Text          } })
     $CustomHeader.Region.Add_SelectedIndexChanged({ if (IsChecked $CustomHeader.EnableRegion)   { $Settings["Core"]["CustomHeader.Region"]    = $this.SelectedIndex } })
     $CustomHeader.EnableHeader.Add_CheckedChanged({ RestoreCustomHeader })
     $CustomHeader.EnableRegion.Add_CheckedChanged({ RestoreCustomRegion })
-    RestoreCustomHeader
-    RestoreCustomRegion
 
     # Restore last settings
     ChangeConsolesList | Out-Null
     ChangeGamesList    | Out-Null
     ChangeGameMode     | Out-Null
     ChangeGameRev      | Out-Null
-  # ChangePatchPanel   | Out-Null
     ChangePatch        | Out-Null
     SetMainScreenSize  | Out-Null
     SetVCPanel         | Out-Null
-  # ChangeGamesList    | Out-Null
-  # ChangeRevList      | Out-Null
 
     # Active GUI events
     InitializeEvents

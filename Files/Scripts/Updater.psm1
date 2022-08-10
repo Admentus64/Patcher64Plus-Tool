@@ -25,6 +25,7 @@ function PerformUpdate() {
 function InvokeWebRequest([string]$Uri, [String]$OutFile) {
     
     $ProgressPreference = 'SilentlyContinue'
+    [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
     Invoke-WebRequest -UseBasicParsing -Uri $Uri -OutFile $outFile
     $ProgressPreference = 'Continue'
 
@@ -80,7 +81,7 @@ function AutoUpdate([switch]$Manual) {
 
         # Test version info file
         if (!(TestFile ($Paths.LocalTemp   + "\version.txt"))) {
-            WriteToConsole ("Could not find latest version info file for " + $Title + "!")
+            WriteToConsole ("Could not find latest version info file for " + $Patcher.Title + "!")
             return
         }
 
@@ -89,13 +90,13 @@ function AutoUpdate([switch]$Manual) {
         try { [array]$oldContent = Get-Content -LiteralPath $Patcher.VersionFile }
         catch {
             RemovePath $path
-            WriteToConsole ("Could not read current version info for " + $Title + "!")
+            WriteToConsole ("Could not read current version info for " + $Patcher.Title + "!")
             return
         }
         try { [array]$newContent = Get-Content -LiteralPath ($Paths.LocalTemp   + "\version.txt") }
         catch {
             RemovePath $path
-            WriteToConsole ("Could not read latest version info for " + $Title + "!")
+            WriteToConsole ("Could not read latest version info for " + $Patcher.Title + "!")
             return
         }
         
@@ -297,7 +298,7 @@ function UpdateAddon([string]$Title, [string]$Uri, [string]$Version) {
         else                                                        { RemovePath $path; return }
     }
     else {
-        WriteToConsole ("Could not find last update for " + $Title + "! Downloading now!")
+        WriteToConsole ("Could not find lastest update for " + $Title + "! Downloading now!")
         $update = $true
     }
 

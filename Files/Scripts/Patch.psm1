@@ -16,9 +16,9 @@
     if (!(IsSet $PatchedFileName)) { $PatchedFileName = "_patched" }
     
     # Expand Memory, Remap Controls
-    if     ($VC.ExpandMemory.Active  -and $GamePatch.expand_memory  -eq  1)    { $VC.ExpandMemory.Checked  = $True }
+    if     ($VC.ExpandMemory.Active  -and $GamePatch.expand_memory  -eq  1)    { $VC.ExpandMemory.Checked  = $True  }
     elseif ($VC.ExpandMemory.Active  -and $GamePatch.expand_memory  -eq -1)    { $VC.ExpandMemory.Checked  = $False }
-    if     ($VC.RemapControls.Active -and $GamePatch.remap_controls -eq  1)    { $VC.RemapControls.Checked = $True }
+    if     ($VC.RemapControls.Active -and $GamePatch.remap_controls -eq  1)    { $VC.RemapControls.Checked = $True  }
     elseif ($VC.RemapControls.Active -and $GamePatch.remap_controls -eq -1)    { $VC.RemapControls.Checked = $False }
 
     # Finalize
@@ -30,9 +30,9 @@
         # Redux
         if ( (IsChecked $Patches.Redux) -and (IsSet $GamePatch.redux.file)) {
             $Header = SetHeader -Header $Header -ROMTitle $GamePatch.redux.rom_title -ROMGameID $GamePatch.redux.rom_gameID -VCTitle $GamePatch.redux.vc_title -VCGameID $GamePatch.redux.vc_gameID -Region $GamePatch.rom_region
-            if     ($VC.RemapControls.Active -and $GamePatch.redux.remap_controls -eq  1)   { $VC.RemapControls.Checked = $True }
+            if     ($VC.RemapControls.Active -and $GamePatch.redux.remap_controls -eq  1)   { $VC.RemapControls.Checked = $True  }
             elseif ($VC.RemapControls.Active -and $GamePatch.redux.remap_controls -eq -1)   { $VC.RemapControls.Checked = $False }
-            if     ($VC.ExpandMemory.Active  -and $GamePatch.redux.expand_memory  -eq  1)   { $VC.ExpandMemory.Checked  = $True }
+            if     ($VC.ExpandMemory.Active  -and $GamePatch.redux.expand_memory  -eq  1)   { $VC.ExpandMemory.Checked  = $True  }
             elseif ($VC.ExpandMemory.Active  -and $GamePatch.redux.expand_memory  -eq -1)   { $VC.ExpandMemory.Checked  = $False }
             if     (IsSet -Elem $GamePatch.redux.output)   { $PatchedFileName = $GamePatch.redux.output }
             $PatchInfo.finalize = $False
@@ -102,10 +102,11 @@
         if     (StrStarts -Str (GetPatchFile) -Val "Decompressed\")   { $PatchInfo.decompress = $True }
         elseif ($PatchInfo.downgrade)                                 { $PatchInfo.decompress = $True }
         elseif ($GameType.decompress -eq 1 -and !(StrLike -str $Command -val "Inject") -and !(StrLike -str $Command -val "Apply Patch") -and !(StrLike -str $Command -val "Extract") ) {
-            if ( (IsChecked $Patches.Options) -or (IsChecked $Patches.Redux) )   { $PatchInfo.decompress = $True }
+            if ( (IsChecked $Patches.Options) -or (IsChecked $Patches.Redux) )                                                                                                          { $PatchInfo.decompress = $True }
         }
-        elseif ($GameType.decompress -eq 2 -and (IsChecked $Patches.Extend))     { $PatchInfo.decompress = $True }
-        elseif ($GameType.decompress -eq 3 -and (IsChecked $Patches.Extend))     { $PatchInfo.decompress = $True }
+        elseif ($GameType.decompress -eq 2 -and (IsChecked $Patches.Extend))                                                                                                            { $PatchInfo.decompress = $True }
+        elseif ($GameType.decompress -eq 3 -and (IsChecked $Patches.Extend))                                                                                                            { $PatchInfo.decompress = $True }
+        if     ($Settings.Debug.ExtractCleanScript -eq $True -and (IsSet $LanguagePatch.script_dma) -and (IsSet $LanguagePatch.table_start) -and (IsSet $LanguagePatch.table_length))   { $PatchInfo.decompress = $True }
     }
 
     # Check if ROM is getting patched
@@ -386,15 +387,9 @@ function PrePatchingAdditionalOptions() {
 #==============================================================================================================================================================================================
 function PatchingAdditionalOptions() {
     
-    if (!(IsSet $GamePatch.options) -or !$Patches.Options.Checked -or !$Patches.Options.Visible)   { return }
-    if (!$PatchInfo.decompress -and !(TestFile $GetROM.decomp) )                                   { Copy-Item -LiteralPath $GetROM.run -Destination $GetROM.decomp -Force }
+    if (!(IsSet $GamePatch.options) -or !$Patches.Options.Visible)   { return }
+    if (!$PatchInfo.decompress -and !(TestFile $GetROM.decomp) )     { Copy-Item -LiteralPath $GetROM.run -Destination $GetROM.decomp -Force }
     
-    # BPS - Additional Options (before languages)
-    if (GetCommand "PrePatchLanguageOptions") {
-        UpdateStatusLabel ("Pre-Patching " + $GameType.mode + " Additional Options Patches...")
-        PrePatchLanguageOptions
-    }
-
     # Language patches
     if ($Settings.Debug.ExtractCleanScript -eq $True -and (IsSet $LanguagePatch.script_dma) -and (IsSet $LanguagePatch.table_start) -and (IsSet $LanguagePatch.table_length)) {
         $global:ByteArrayGame = [System.IO.File]::ReadAllBytes($GetROM.decomp)
@@ -404,6 +399,14 @@ function PatchingAdditionalOptions() {
         $length = Get32Bit ( (GetDecimal $end) - (GetDecimal $start) )
         ExportBytes -Offset $start                     -Length $length                     -Output ($GameFiles.editor + "\message_data_static." + $LanguagePatch.code + ".bin") -Force
         ExportBytes -Offset $LanguagePatch.table_start -Length $LanguagePatch.table_length -Output ($GameFiles.editor + "\message_data."        + $LanguagePatch.code + ".tbl") -Force
+    }
+
+    if (!$Patches.Options.Checked) { return }
+
+    # BPS - Additional Options (before languages)
+    if (GetCommand "PrePatchLanguageOptions") {
+        UpdateStatusLabel ("Pre-Patching " + $GameType.mode + " Additional Options Patches...")
+        PrePatchLanguageOptions
     }
 
     if (IsSet -Elem $LanguagePatchFile) {

@@ -164,28 +164,16 @@ function ChangePatchPanel() {
 
         if (!(IsSet $item.patch) -and (IsSet $item.rev)) {
             foreach ($i in $item.rev) {
-                if ($i -eq $GameRev.hash) {
-                    if ($item.priority -and !(IsSimple))   { $Patches.Type.Items.Insert(0, $item.title) }
-                    else                                   { $Patches.Type.Items.Add($item.title)       }
-                }
+                if ($i -eq $GameRev.hash) { $Patches.Type.Items.Add($item.title) }
             }
         }
-        elseif (!(IsSet $item.patch)) {
-            if ($item.priority -and !(IsSimple))   { $Patches.Type.Items.Insert(0, $item.title) }
-            else                                   { $Patches.Type.Items.Add($item.title)       }
-        }
+        elseif (!(IsSet $item.patch)) { $Patches.Type.Items.Add($item.title) }
         elseif ($item.patch -isnot [array]) {
-            if ( ( ($IsWiiVC -and $item.console -eq "Wii VC") -or (!$IsWiiVC -and $item.console -eq "Native") -or ($item.console -eq "Both") -or !(IsSet $item.console) ) ) {
-                if ($item.priority -and !(IsSimple))   { $Patches.Type.Items.Insert(0, $item.title) }
-                else                                   { $Patches.Type.Items.Add($item.title)       }
-            }
+            if ( ( ($IsWiiVC -and $item.console -eq "Wii VC") -or (!$IsWiiVC -and $item.console -eq "Native") -or ($item.console -eq "Both") -or !(IsSet $item.console) ) ) { $Patches.Type.Items.Add($item.title) }
         }
         else {
             foreach ($i in $item.patch) {
-                if ($i.rev -eq $GameRev.hash -and ( ($IsWiiVC -and $i.console -eq "Wii VC") -or (!$IsWiiVC -and $i.console -eq "Native") -or ($i.console -eq "Both") -or !(IsSet $i.console) ) ) {
-                    if ($item.priority -and !(IsSimple))   { $Patches.Type.Items.Insert(0, $item.title) }
-                    else                                   { $Patches.Type.Items.Add($item.title)       }
-                }
+                if ($i.rev -eq $GameRev.hash -and ( ($IsWiiVC -and $i.console -eq "Wii VC") -or (!$IsWiiVC -and $i.console -eq "Native") -or ($i.console -eq "Both") -or !(IsSet $i.console) ) ) { $Patches.Type.Items.Add($item.title) }
             }
         }
     }
@@ -340,8 +328,6 @@ function ChangeGameMode() {
     if (IsSet $GameRev.script)     { if (Get-Module -Name $GameRev.script)     { Remove-Module -Name $GameRev.script   } }
     if (IsSet $GameType.mode)      { if (Get-Module -Name $GameType.mode)      { Remove-Module -Name $GameType.mode    } }
 
-    if ($GameType.save -gt 0) { Out-IniFile -FilePath (GetGameSettingsFile) -InputObject $GameSettings | Out-Null }
-
     foreach ($item in $Files.json.games) {
         if ($item.title -eq $CurrentGame.Game.Text) {
             $global:GameType = $item
@@ -366,8 +352,6 @@ function ChangeGameMode() {
     $GameFiles.patches      = $GameFiles.Base + "\Patches.json"
     $GameFiles.controls     = $GameFiles.Base + "\Controls.json"
     $GameFiles.textEditor   = $GameFiles.Base + "\Text Editor.json"
-
-    $global:GameSettings = GetSettings (GetGameSettingsFile)
 
     # JSON Files
     if ( ($GameType.patches -eq 1) -or ($GameType.patches -eq 2 -and $IsWiiVC) )   { $Files.json.patches   = SetJSONFile $GameFiles.patches }                           else { $Files.json.patches   = $null }
@@ -492,14 +476,16 @@ function SetVCPanel() {
 
 
 #==============================================================================================================================================================================================
-function UpdateStatusLabel([string]$Text) {
+function UpdateStatusLabel([string]$Text, [switch]$Main, [switch]$Editor) {
     
     WriteToConsole $Text
 
-    $StatusLabel.Text = $Text
-    $StatusLabel.Refresh()
+    if (!$Editor) {
+        $StatusLabel.Text = $Text
+        $StatusLabel.Refresh()
+    }
 
-    if (IsSet $TextEditor.StatusLabel) {
+    if (!$Main -and (IsSet $TextEditor.StatusLabel) ) {
         $TextEditor.StatusLabel.Text = $Text
         $TextEditor.StatusLabel.Refresh()
     }
@@ -937,28 +923,28 @@ function GetHeader() {
     if (IsChecked $CustomHeader.EnableHeader) { return }
 
     # ROM Title
-    if ( (IsSet $GamePatch.redux.rom_title) -and (IsChecked $Patches.Redux) )    { $CustomHeader.ROMTitle.Text  = $GamePatch.redux.rom_title }
-    elseif (IsSet $GamePatch.rom_title)                                          { $CustomHeader.ROMTitle.Text  = $GamePatch.rom_title }
-    elseif (IsSet $GameType.rom_title)                                           { $CustomHeader.ROMTitle.Text  = $GameType.rom_title }
-    else                                                                         { $CustomHeader.ROMTitle.Text  = "" }
+    if   ( (IsSet $GamePatch.redux.rom_title) -and (IsChecked $Patches.Redux) )    { $CustomHeader.ROMTitle.Text  = $GamePatch.redux.rom_title }
+    elseif (IsSet $GamePatch.rom_title)                                            { $CustomHeader.ROMTitle.Text  = $GamePatch.rom_title       }
+    elseif (IsSet $GameType.rom_title)                                             { $CustomHeader.ROMTitle.Text  = $GameType.rom_title        }
+    else                                                                           { $CustomHeader.ROMTitle.Text  = ""                         }
 
     # ROM GameID
-    if ( (IsSet $GamePatch.redux.rom_gameID) -and (IsChecked $Patches.Redux) )   { $CustomHeader.ROMGameID.Text = $GamePatch.redux.rom_gameID }
-    elseif (IsSet $GamePatch.rom_gameID)                                         { $CustomHeader.ROMGameID.Text = $GamePatch.rom_gameID }
-    elseif (IsSet $GameType.rom_gameID)                                          { $CustomHeader.ROMGameID.Text = $GameType.rom_gameID }
-    else                                                                         { $CustomHeader.ROMGameID.Text = "" }
+    if   ( (IsSet $GamePatch.redux.rom_gameID) -and (IsChecked $Patches.Redux) )   { $CustomHeader.ROMGameID.Text = $GamePatch.redux.rom_gameID }
+    elseif (IsSet $GamePatch.rom_gameID)                                           { $CustomHeader.ROMGameID.Text = $GamePatch.rom_gameID       }
+    elseif (IsSet $GameType.rom_gameID)                                            { $CustomHeader.ROMGameID.Text = $GameType.rom_gameID        }
+    else                                                                           { $CustomHeader.ROMGameID.Text = ""                          }
 
     # VC Title
-    if ( (IsSet $GamePatch.redux.vc_title) -and (IsChecked $Patches.Redux) )     { $CustomHeader.VCTitle.Text   = $GamePatch.redux.vc_title }
-    elseif (IsSet $GamePatch.vc_title)                                           { $CustomHeader.VCTitle.Text   = $GamePatch.vc_title }
-    elseif (IsSet $GameType.vc_title)                                            { $CustomHeader.VCTitle.Text   = $GameType.vc_title }
-    else                                                                         { $CustomHeader.VCTitle.Text   = "" }
+    if   ( (IsSet $GamePatch.redux.vc_title) -and (IsChecked $Patches.Redux) )     { $CustomHeader.VCTitle.Text   = $GamePatch.redux.vc_title }
+    elseif (IsSet $GamePatch.vc_title)                                             { $CustomHeader.VCTitle.Text   = $GamePatch.vc_title       }
+    elseif (IsSet $GameType.vc_title)                                              { $CustomHeader.VCTitle.Text   = $GameType.vc_title        }
+    else                                                                           { $CustomHeader.VCTitle.Text   = ""                        }
 
     # VC GameID
-    if ( (IsSet $GamePatch.redux.vc_gameID) -and (IsChecked $Patches.Redux) )    { $CustomHeader.VCGameID.Text  = $GamePatch.redux.vc_gameID }
-    elseif (IsSet $GamePatch.vc_gameID)                                          { $CustomHeader.VCGameID.Text  = $GamePatch.vc_gameID }
-    elseif (IsSet $GameType.vc_gameID)                                           { $CustomHeader.VCGameID.Text  = $GameType.vc_gameID }
-    else                                                                         { $CustomHeader.VCGameID.Text  = "" }
+    if   ( (IsSet $GamePatch.redux.vc_gameID) -and (IsChecked $Patches.Redux) )    { $CustomHeader.VCGameID.Text  = $GamePatch.redux.vc_gameID }
+    elseif (IsSet $GamePatch.vc_gameID)                                            { $CustomHeader.VCGameID.Text  = $GamePatch.vc_gameID       }
+    elseif (IsSet $GameType.vc_gameID)                                             { $CustomHeader.VCGameID.Text  = $GameType.vc_gameID        }
+    else                                                                           { $CustomHeader.VCGameID.Text  = ""                         }
     
 }
 
@@ -979,10 +965,10 @@ function GetRegion() {
 function RestoreCustomHeader() {
     
     if (IsChecked $CustomHeader.EnableHeader) {
-        if (IsSet $Settings["Core"]["CustomHeader.ROMTitle"])    { $CustomHeader.ROMTitle.Text  = $Settings["Core"]["CustomHeader.ROMTitle"] }
+        if (IsSet $Settings["Core"]["CustomHeader.ROMTitle"])    { $CustomHeader.ROMTitle.Text  = $Settings["Core"]["CustomHeader.ROMTitle"]  }
         if (IsSet $Settings["Core"]["CustomHeader.ROMGameID"])   { $CustomHeader.ROMGameID.Text = $Settings["Core"]["CustomHeader.ROMGameID"] }
-        if (IsSet $Settings["Core"]["CustomHeader.VCTitle"])     { $CustomHeader.VCTitle.Text   = $Settings["Core"]["CustomHeader.VCTitle"] }
-        if (IsSet $Settings["Core"]["CustomHeader.VCGameID"])    { $CustomHeader.VCGameID.Text  = $Settings["Core"]["CustomHeader.VCGameID"] }
+        if (IsSet $Settings["Core"]["CustomHeader.VCTitle"])     { $CustomHeader.VCTitle.Text   = $Settings["Core"]["CustomHeader.VCTitle"]   }
+        if (IsSet $Settings["Core"]["CustomHeader.VCGameID"])    { $CustomHeader.VCGameID.Text  = $Settings["Core"]["CustomHeader.VCGameID"]  }
     }
     else { GetHeader }
 

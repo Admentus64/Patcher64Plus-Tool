@@ -1,50 +1,16 @@
 [ {
-	"title"				: "Redux Plus",
-	"vc_title"			: "Redux: Ocarina",
-	"finalize"			: 0,
-	"remap_controls"		: 1,
-	"expand_memory"			: 1,
-	"patch" : [ {
-		"file"			: "Decompressed\\Redux\\redux_plus.bps",
-		"rev"			: "5BD1FE107BF8106B2AB6650ABECD54D6",
-		"console"		: "Native"
-	}, {
-		"file"			: "Decompressed\\Redux\\redux_plus_vc.bps",
-		"rev"			: "5BD1FE107BF8106B2AB6650ABECD54D6",
-		"console"		: "Wii VC"
-	} ],
-	"output"			: "_redux_plus_patched",	
-	"tooltip"			: "The definitive Ocarina of Time experience{0}Includes Redux with a series of Quality of Life changes and fixes"
-}, {
-	"title"				: "Redux Plus (Master Quest)",
-	"vc_title"			: "Redux: Ocarina",
-	"finalize"			: 0,
-	"remap_controls"		: 1,
-	"expand_memory"			: 1,
-	"patch" : [ {
-		"file"			: "Decompressed\\Redux\\redux_plus_mq.bps",
-		"rev"			: "5BD1FE107BF8106B2AB6650ABECD54D6",
-		"console"		: "Native"
-	}, {
-		"file"			: "Decompressed\\Redux\\redux_plus_mq_vc.bps",
-		"rev"			: "5BD1FE107BF8106B2AB6650ABECD54D6",
-		"console"		: "Wii VC"
-	} ],
-	"output"			: "_redux_plus_patched",
-	"tooltip"			: "The definitive Ocarina of Time experience{0}Includes Redux with a series of Quality of Life changes and fixes{0}Includes the Master Quest dungeons"
-}, {
 	"title"				: "Ocarina of Time - Additional Options & Redux",
-	"priority"			: 1,
 	"redux" : {
 		"options"		: 1,
 		"remap_controls"	: 1,
 		"expand_memory"		: 1,
 		"vc_title"		: "Redux: Ocarina",
 		"vc_gameID"		: "NAC0",
-		"file"			: "Decompressed\\Redux\\redux.ppf",
+		"file"			: "Decompressed\\redux.ppf",
 		"output"		: "_redux_patched"
 	},
 	"options"			: 1,
+	"backgrounds"			: 1,
 	"tooltip"			: "The regular Ocarina of Time experience{0}With support for languages, redux and additional options{0}- Supported: Rev 0 (US)",
 	"rev"				: [ "5BD1FE107BF8106B2AB6650ABECD54D6", "3C10B67A76616AE2C162DEF7528724CF", "AB1CA59D0039E3B34D82DB650B54D7B9", "8CA71E87DE4CE5E9F6EC916202A623E9" ]
 }, {
@@ -99,10 +65,11 @@
 		"remap_controls"	: 1,
 		"expand_memory"		: 1,
 		"vc_title"		: "Redux: Gold Quest",
-		"file"			: "Decompressed\\Redux\\redux.ppf",
+		"file"			: "Decompressed\\redux.ppf",
 		"output"		: "_gold_quest_redux_patched"
 	},
 	"options"			: 1,
+	"backgrounds"			: 1,
 	"output"			: "_gold_quest_patched",
 	"tooltip"			: "Remixes the overworld and dungeons as a harder version of master Quest{0}With support for languages, redux and additional options{0}- Supported: Rev 0 (US)",
 	"rev"				: [ "5BD1FE107BF8106B2AB6650ABECD54D6", "3C10B67A76616AE2C162DEF7528724CF", "AB1CA59D0039E3B34D82DB650B54D7B9", "8CA71E87DE4CE5E9F6EC916202A623E9" ]
@@ -137,10 +104,11 @@
 		"remap_controls"	: 1,
 		"expand_memory"		: 1,
 		"vc_title"		: "Redux: Dawn & Dusk",
-		"file"			: "Decompressed\\Redux\\redux.ppf",
+		"file"			: "Decompressed\\redux.ppf",
 		"output"		: "_dawn_&_dusk_redux_patched"
 	},
 	"options"			: 2,
+	"age"				: "Child",
 	"output"			: "_dawn_&_dusk_patched",
 	"tooltip"			: "A small-sized ROM hack in a completely new setting"
 }, {
@@ -159,52 +127,82 @@
 		"remap_controls"	: 1,
 		"expand_memory"		: 1,
 		"vc_title"		: "Redux: Master of Time",
-		"file"			: "Decompressed\\Redux\\redux.ppf",
+		"file"			: "Decompressed\\redux.ppf",
 		"output"		: "_master_of_time_redux_patched"
 	},
 	"options"			: 2,
+	"age"				: "Adult",
 	"output"			: "_master_of_time_patched",
 	"tooltip"			: "A small-sized ROM hack in a completely new setting"
 }, {
 	"title"				: "The Legend of Zelda: Nimpize Adventure",
 	"vc_title"			: "Zelda: Nimpize",
 	"vc_gameID"			: "NAC4",
+	"finalize"			: 0,
+	"settings"			: "Nimpize Adventure",
 	"patch"	: [ {
 		"file"			: "Decompressed\\nimpize.bps",
 		"rev"			: "5BD1FE107BF8106B2AB6650ABECD54D6"
 	} ],
+	"redux" : {
+		"options"		: 1,
+		"remap_controls"	: 1,
+		"expand_memory"		: 1,
+		"vc_title"		: "Redux: Nimpize",
+		"vc_gameID"		: "NAC0",
+		"file"			: "Decompressed\\redux.ppf",
+		"output"		: "_nimpize_redux_patched"
+	},
+	"options"			: 1,
+	"backgrounds"			: 1,
 	"output"			: "_nimpize_patched",
 	"tooltip"			: "A reworked and harder version of Ocarina of Time with remixed dungeons"
 }, {
 	"title"				: "The Legend of Zelda: The Fate of the Bombiwa (v1.0.3)",
 	"vc_title"			: "Zelda: Bombiwa",
 	"vc_gameID"			: "NAC5",
+	"finalize"			: 0,
+	"settings"			: "Bombiwa",
 	"patch" : [ {
 		"file"			: "Decompressed\\bombiwa.bps",
 		"rev"			: "5BD1FE107BF8106B2AB6650ABECD54D6"
 	} ],
+	"redux" : {
+		"options"		: 1,
+		"remap_controls"	: 1,
+		"expand_memory"		: 1,
+		"vc_title"		: "Redux: Bombiwa",
+		"vc_gameID"		: "NAC0",
+		"file"			: "Decompressed\\redux.ppf",
+		"output"		: "_bombiwa_redux_patched"
+	},
+	"options"			: 2,
+	"age"				: "Child",
 	"output"			: "_bombiwa_patched",
 	"tooltip"			: "A small-sized ROM hack in a completely new setting, and extremely tricky and difficult"
 }, {
 	"title"				: "Ocarina of Time Puzzling (v1.1.2)",
 	"vc_title"			: "Zelda: Puzzling",
 	"vc_gameID"			: "NAC6",
+	"finalize"			: 0,
+	"settings"			: "Puzzling",
 	"patch"	: [ {
-		"file"			: "Compressed\\puzzling.bps",
+		"file"			: "Decompressed\\puzzling.bps",
 		"rev" 			: "5BD1FE107BF8106B2AB6650ABECD54D6"
 	} ],
+	"redux" : {
+		"options"		: 1,
+		"remap_controls"	: 1,
+		"expand_memory"		: 1,
+		"vc_title"		: "Redux: Puzzling",
+		"vc_gameID"		: "NAC0",
+		"file"			: "Decompressed\\redux.ppf",
+		"output"		: "_puzzling_redux_patched"
+	},
+	"options"			: 2,
+	"age"				: "Child",
 	"output"			: "_puzzling_patched",
 	"tooltip"			: "A small-sized ROM hack that focuses on puzzling your way through"
-}, {
-	"title"				: "Pots Challenge",
-	"vc_title"			: "Zelda: Pots Challenge",
-	"vc_gameID"			: "NAC7",
-	"patch" : [ {
-		"file"			: "Compressed\\pots_challenge.bps",
-		"rev"			: "5BD1FE107BF8106B2AB6650ABECD54D6"
-	} ],
-	"output"			: "_pots_challenge_patched",
-	"tooltip"			: "Replay though the original Ocarina of Time by throwing pots only at your targets"
 }, {
 	"title"				: "The Legend of Zelda: Ocarina of Time (Widescreen)",
 	"patch" : [ {

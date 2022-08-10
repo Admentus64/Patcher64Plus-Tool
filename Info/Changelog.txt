@@ -1,3 +1,19 @@
+v19.1.0
+- Added ingame remapable D-Pad actions
+- Added Redux for several OoT ROM hacks
+- Added Pots Challenge for OoT + several ROM hacks
+- Added new HUD texture replacements
+- Added new Redux options for OoT & MM
+- Updated Redux for OoT & MM
+- Updated the Ocarina Icons option for MM
+- Updated Smash Remix to v1.2.0
+- Updated saving patcher settings
+- Changed how options are being generated
+- Removed Redux Plus patches
+- Removed interface modes
+- Fixed Easier Fishing (OoT) and Fierce Deity Anywhere (MM) options
+- Fixed Text Editor issues
+
 v19.0.1
 - Added some new options related to the Bombs / Bomb Bag for OoT
 - Updated and added new capacity and quantity options for OoT

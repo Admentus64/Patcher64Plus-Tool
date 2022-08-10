@@ -9,40 +9,40 @@
     $InfoLabel = CreateLabel -X ($VCRemapDialog.Width / 2 - $String.Width - (DPISize 100)) -Y (DPISize 10) -Width (DPISize 200) -Height (DPISize 15) -Font $Fonts.SmallBold -Text ($Patcher.Title + " " + $Patcher.Version + " (" + $Patcher.Date + ")") -AddTo $VCRemapDialog
 
     # VC Remap Settings
-    CreateReduxGroup -Tag "Controls" -Y (DPISize 40) -Text "Virtual Console Remap Presets" -Name $null -ShowAlways -AddTo $VCRemapDialog
+    CreateReduxGroup -All -Tag "Controls" -Y (DPISize 40) -Text "Virtual Console Remap Presets" -Name $null -ShowAlways -AddTo $VCRemapDialog
     $items = @()
     if (IsSet $Files.json.controls) { foreach ($item in $Files.json.controls.presets) { $items += $item.title } }
-    CreateReduxComboBox -Name "Preset" -Text "Preset" -Length 200 -Items $items -PostItems @("Custom") -Info "Select a preset for the VC Remap controls"
+    CreateReduxComboBox -All -Name "Preset" -Text "Preset" -Length 200 -Items $items -PostItems @("Custom") -Info "Select a preset for the VC Remap controls"
 
     CreateReduxGroup -Tag "Controls" -Y ($Last.Group.bottom + (DPISize 10) ) -Height 10 -Text "Virtual Console Remap Settings" -Name $null -ShowAlways -AddTo $VCRemapDialog
     if     ($GameConsole.mode -eq "N64")    { $items = @("Disabled", "A", "B", "Start", "L", "R", "Z", "C-Up", "C-Right", "C-Down", "C-Left", "D-Pad Up", "D-Pad Right", "D-Pad Down", "D-Pad Left") }
     elseif ($GameConsole.mode -eq "SNES")   { $items = @("Disabled", "A", "B", "X", "Y", "Start", "Select", "L", "R") }
     elseif ($GameConsole.mode -eq "NES")    { $items = @("Disabled", "A", "B", "Start", "Select") }
 
-    CreateReduxComboBox -Items $items -NoDefault -Shift -40 -Length 70 -Name "A"         -Column 1    -Row 1 -Text "A"           -Info "Remap the A button"
-    CreateReduxComboBox -Items $items -NoDefault -Shift -40 -Length 70 -Name "B"         -Column 2.3  -Row 1 -Text "B"           -Info "Remap the B button"
-    CreateReduxComboBox -Items $items -NoDefault -Shift -40 -Length 70 -Name "Start"     -Column 3.6  -Row 1 -Text "Start"       -Info "Remap the Start button"
-    CreateReduxComboBox -Items $items -NoDefault -Shift -40 -Length 70 -Name "L"         -Column 1    -Row 2 -Text "L"           -Info "Remap the L button"
-    CreateReduxComboBox -Items $items -NoDefault -Shift -40 -Length 70 -Name "R"         -Column 2.3  -Row 2 -Text "R"           -Info "Remap the R button"
-    CreateReduxComboBox -Items $items -NoDefault -Shift -40 -Length 70 -Name "Z"         -Column 3.6  -Row 2 -Text "Z / ZL / ZR" -Info "Remap the Z button"
-    CreateReduxComboBox -Items $items -NoDefault -Shift -40 -Length 70 -Name "X"         -Column 1    -Row 3 -Text "X"           -Info "Remap the R button"
-    CreateReduxComboBox -Items $items -NoDefault -Shift -40 -Length 70 -Name "Y"         -Column 2.3  -Row 3 -Text "Y"           -Info "Remap the R button"
+    CreateReduxComboBox -All -Items $items -NoDefault -Shift (-40) -Length 70 -Name "A"         -Column 1    -Row 1 -Text "A"           -Info "Remap the A button"
+    CreateReduxComboBox -All -Items $items -NoDefault -Shift (-40) -Length 70 -Name "B"         -Column 2.3  -Row 1 -Text "B"           -Info "Remap the B button"
+    CreateReduxComboBox -All -Items $items -NoDefault -Shift (-40) -Length 70 -Name "Start"     -Column 3.6  -Row 1 -Text "Start"       -Info "Remap the Start button"
+    CreateReduxComboBox -All -Items $items -NoDefault -Shift (-40) -Length 70 -Name "L"         -Column 1    -Row 2 -Text "L"           -Info "Remap the L button"
+    CreateReduxComboBox -All -Items $items -NoDefault -Shift (-40) -Length 70 -Name "R"         -Column 2.3  -Row 2 -Text "R"           -Info "Remap the R button"
+    CreateReduxComboBox -All -Items $items -NoDefault -Shift (-40) -Length 70 -Name "Z"         -Column 3.6  -Row 2 -Text "Z / ZL / ZR" -Info "Remap the Z button"
+    CreateReduxComboBox -All -Items $items -NoDefault -Shift (-40) -Length 70 -Name "X"         -Column 1    -Row 3 -Text "X"           -Info "Remap the R button"
+    CreateReduxComboBox -All -Items $items -NoDefault -Shift (-40) -Length 70 -Name "Y"         -Column 2.3  -Row 3 -Text "Y"           -Info "Remap the R button"
 
-    CreateReduxComboBox -Items $items -NoDefault -Shift -60 -Length 40 -Name "CUp"       -Column 1.625 -Row 5                    -Info "Remap the C Up button"
-    CreateReduxComboBox -Items $items -NoDefault -Shift -60 -Length 40 -Name "CRight"    -Column 2.25  -Row 7.5                  -Info "Remap the C Right button"
-    CreateReduxComboBox -Items $items -NoDefault -Shift -60 -Length 40 -Name "CDown"     -Column 1.625 -Row 10                   -Info "Remap the C Down button"
-    CreateReduxComboBox -Items $items -NoDefault -Shift -60 -Length 40 -Name "CLeft"     -Column 1     -Row 7.5                  -Info "Remap the C Left button"
+    CreateReduxComboBox -All -Items $items -NoDefault -Shift (-60) -Length 40 -Name "CUp"       -Column 1.625 -Row 5                    -Info "Remap the C Up button"
+    CreateReduxComboBox -All -Items $items -NoDefault -Shift (-60) -Length 40 -Name "CRight"    -Column 2.25  -Row 7.5                  -Info "Remap the C Right button"
+    CreateReduxComboBox -All -Items $items -NoDefault -Shift (-60) -Length 40 -Name "CDown"     -Column 1.625 -Row 10                   -Info "Remap the C Down button"
+    CreateReduxComboBox -All -Items $items -NoDefault -Shift (-60) -Length 40 -Name "CLeft"     -Column 1     -Row 7.5                  -Info "Remap the C Left button"
 
-    CreateReduxComboBox -Items $items -NoDefault -Shift -60 -Length 40 -Name "DPadUp"    -Column 3.625 -Row 5                    -Info "Remap the D-Pad Up button"
-    CreateReduxComboBox -Items $items -NoDefault -Shift -60 -Length 40 -Name "DPadRight" -Column 4.25  -Row 7.5                  -Info "Remap the D-Pad Right button"
-    CreateReduxComboBox -Items $items -NoDefault -Shift -60 -Length 40 -Name "DPadDown"  -Column 3.625 -Row 10                   -Info "Remap the D-Pad Down button"
-    CreateReduxComboBox -Items $items -NoDefault -Shift -60 -Length 40 -Name "DPadLeft"  -Column 3     -Row 7.5                  -Info "Remap the D-Pad Left button"
+    CreateReduxComboBox -All -Items $items -NoDefault -Shift (-60) -Length 40 -Name "DPadUp"    -Column 3.625 -Row 5                    -Info "Remap the D-Pad Up button"
+    CreateReduxComboBox -All -Items $items -NoDefault -Shift (-60) -Length 40 -Name "DPadRight" -Column 4.25  -Row 7.5                  -Info "Remap the D-Pad Right button"
+    CreateReduxComboBox -All -Items $items -NoDefault -Shift (-60) -Length 40 -Name "DPadDown"  -Column 3.625 -Row 10                   -Info "Remap the D-Pad Down button"
+    CreateReduxComboBox -All -Items $items -NoDefault -Shift (-60) -Length 40 -Name "DPadLeft"  -Column 3     -Row 7.5                  -Info "Remap the D-Pad Left button"
 
     # Images #
-    $PictureBox = CreateImageBox -x 115 -y 155 -w 128 -h 128
+    $PictureBox = CreateImageBox -x 115 -y 155 -w 128 -h 128 -All
     SetBitmap -Path ($Paths.Main + "\C.png") -Box $PictureBox
 
-    $PictureBox = CreateImageBox -x 485 -y 160 -w 128 -h 128
+    $PictureBox = CreateImageBox -x 485 -y 160 -w 128 -h 128 -All
     SetBitmap -Path ($Paths.Main + "\D-Pad.png") -Box $PictureBox
 
     $Redux.Controls.Preset.Add_SelectedIndexChanged({ SetPreset -ComboBox $Redux.Controls.Preset -Text $Redux.Controls.Preset.Text })

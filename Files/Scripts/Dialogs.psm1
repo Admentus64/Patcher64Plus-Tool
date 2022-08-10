@@ -25,12 +25,12 @@
         $Redux[$s] = $null
     }
 
-    $Redux.Sections = @()
-    $Redux.Box    = @{}
-    $Redux.Groups = @()
-    $Last.Group   = $Last.Panel = $Last.GroupName = $Last.Hide = $null
-    $Last.Half    = $False
-    $Redux.Panel  = CreatePanel -Y (DPISize 80) -Width ($OptionsDialog.Width - (DPISize 15)) -Height ($OptionsDialog.Height - (DPISize 180)) -AddTo $OptionsDialog
+    $Redux.Sections         = @()
+    $Redux.Box              = @{}
+    $Redux.Groups           = @()
+    $Last.Group             = $Last.Panel = $Last.GroupName = $Last.Hide = $null
+    $Last.Half              = $False
+    $Redux.Panel            = CreatePanel -Y (DPISize 80) -Width ($OptionsDialog.Width - (DPISize 15)) -Height ($OptionsDialog.Height - (DPISize 180)) -AddTo $OptionsDialog
     $Redux.Panel.AutoScroll = $True
     [System.GC]::Collect() | Out-Null
     CreateTabButtons -Tabs $Tabs -NoLanguages $NoLanguages
@@ -296,12 +296,8 @@ function CreateSettingsDialog() {
     foreach ($item in $GeneralSettings.Presets) {
         $item.Add_CheckedChanged( {
             if (!$this.checked) { return }
-            foreach ($i in 0..($GeneralSettings.Presets.length-1)) {
-                if (!$this.checked -and $GeneralSettings.Presets[$i] -eq $this) {
-                    if ($GameType.save -gt 0) { Out-IniFile -FilePath ($Paths.Settings + "\" + $GameType.mode + " - " + ($i+1) + ".ini") -InputObject $GameSettings }
-                }
-            }
-            $global:GameSettings = GetSettings -File (GetGameSettingsFile) -IsGame
+            if ($GameType.save -gt 0) { Out-IniFile -FilePath (GetGameSettingsFile) -InputObject $GameSettings | Out-Null }
+            $global:GameSettings = GetSettings -File (GetGameSettingsFile)
             if (GetCommand "CreateOptions") { CreateOptions }
             DisableReduxOptions
         } )
