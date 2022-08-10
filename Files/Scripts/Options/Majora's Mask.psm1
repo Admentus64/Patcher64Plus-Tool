@@ -601,7 +601,7 @@ function ByteOptions() {
 
     # EQUIPMENT #
 
-    if (IsChecked $Redux.Gameplay.RazorSword) {
+    if ( (IsChecked $Redux.Gameplay.RazorSword) -or (IsChecked $Redux.Features.GearSwap) ) {
         ChangeBytes -Offset "CBA496" -Values "00 00" # Prevent losing hits
         ChangeBytes -Offset "BDA6B7" -Values "01"    # Keep sword after Song of Time
     }
@@ -751,7 +751,7 @@ function ByteReduxOptions() {
 
     if     (IsChecked $Redux.DPad.Disable)       { ChangeBytes -Offset (AddToOffset $Symbols.DPAD_CONFIG -Add "18") -Values "00 00" }
     else {
-        if (IsChecked $Redux.DPad.DualSet)       { ChangeBytes -Offset $Symbols.CFG_DUAL_DPAD_ENABLED               -Values "01"    }
+      # if (IsChecked $Redux.DPad.DualSet)       { ChangeBytes -Offset $Symbols.CFG_DUAL_DPAD_ENABLED               -Values "01"    }
         if (IsChecked $Redux.DPad.Hide)          { ChangeBytes -Offset (AddToOffset $Symbols.DPAD_CONFIG -Add "18") -Values "01 00" }
         if (IsChecked $Redux.DPad.LayoutLeft)    { ChangeBytes -Offset (AddToOffset $Symbols.DPAD_CONFIG -Add "18") -Values "01 01" }
         if (IsChecked $Redux.DPad.LayoutRight)   { ChangeBytes -Offset (AddToOffset $Symbols.DPAD_CONFIG -Add "18") -Values "01 02" }
@@ -1077,7 +1077,7 @@ function CreateTabRedux() {
     CreateReduxRadioButton -Name "Hide"        -All -Max 4 -SaveTo "Layout" -Text "Hidden"     -Info "Hide the D-Pad icons, while they are still active"                                            -Credits "Ported from Redux"
     CreateReduxRadioButton -Name "LayoutLeft"  -All -Max 4 -SaveTo "Layout" -Text "Left Side"  -Info "Show the D-Pad icons on the left side of the HUD"                                    -Checked -Credits "Ported from Redux"
     CreateReduxRadioButton -Name "LayoutRight" -All -Max 4 -SaveTo "Layout" -Text "Right Side" -Info "Show the D-Pad icons on the right side of the HUD"                                            -Credits "Ported from Redux"
-    CreateReduxCheckBox    -Name "DualSet"     -All                         -Text "Dual Set"   -Info "Allow switching between two different D-Pad sets`nPress L + R ingame to swap between layouts" -Credits "Admentus" -Link $Redux.Dpad.Disable
+  # CreateReduxCheckBox    -Name "DualSet"     -All                         -Text "Dual Set"   -Info "Allow switching between two different D-Pad sets`nPress L + R ingame to swap between layouts" -Credits "Admentus" -Link $Redux.Dpad.Disable
 
 
 
@@ -1096,13 +1096,13 @@ function CreateTabRedux() {
     CreateReduxCheckBox -Name "InstantElegy"       -All -Text "Instant Elegy Statue"       -Info "Hold L and press D-Pad Down to summon an Elegy of Emptiness Statue without the use of the Ocarina"                                     -Credits "Admentus"
     
     CreateReduxGroup    -Tag  "Features"     -All -Text "Features"
-    CreateReduxCheckBox -Name "FPS"          -All -Text "30 FPS (Experimental)" -Info "Experimental 30 FPS support`nUse L + Z to toggle between 20 FPS and 30 FPS mode"                                                                                        -Credits "Admentus" -Warning $warning
-    CreateReduxCheckBox -Name "OcarinaIcons" -All -Text "Ocarina Icons"         -Info "Restore the Ocarina Icons with their text when transformed like in the N64 Beta or 3DS version"                                                                         -Credits "Admentus & ShadowOne333"
-    CreateReduxCheckBox -Name "HUDToggle"    -All -Text "HUD Toggle"            -Info "Toggle the HUD by using the L button`nPress L in the MAP subscreen to toggle it in its entirety`nPress L ingame to toggle the essential display"                        -Credits "Admentus"
-    CreateReduxCheckBox -Name "ItemsUnequip" -All -Text "Unequip Items"         -Info "Press C-Up on an equipped C Button item to unequip it from the assigned C Button"                                                                                       -Credits "Admentus"
-    CreateReduxCheckBox -Name "ItemsOnB"     -All -Text "Items on B Button"     -Info "Press the L Button on an item in the SELECT ITEM subscreen to equip it on the B button`nSome items are excluded`nPress C-Up on the Sword icon to equip the sword again" -Credits "Admentus"
-    CreateReduxCheckBox -Name "GearSwap"     -All -Text "Swap Gear"             -Info "Press C-Left or C-Right on a sword or shield icon to change between equipment`nYou must have obtained the upgrades, and must not be stolen or reforged"                 -Credits "Admentus"
-    CreateReduxCheckBox -Name "SkipGuard"    -All -Text "Skip Clock Town Guard" -Info "The Clock Town Guard will no longer block entry to Termina Field on subsequent cycles when Hylian Link has spoken to them at least once"                                -Credits "Admentus"
+    CreateReduxCheckBox -Name "FPS"          -All -Text "30 FPS (Experimental)" -Info "Experimental 30 FPS support`nUse L + Z to toggle between 20 FPS and 30 FPS mode"                                                                                                                          -Credits "Admentus" -Warning $warning
+    CreateReduxCheckBox -Name "OcarinaIcons" -All -Text "Ocarina Icons"         -Info "Restore the Ocarina Icons with their text when transformed like in the N64 Beta or 3DS version`nRequires the language to be set to English"                                                               -Credits "Admentus & ShadowOne333"
+    CreateReduxCheckBox -Name "HUDToggle"    -All -Text "HUD Toggle"            -Info "Toggle the HUD by using the L button`nPress L in the MAP subscreen to toggle it in its entirety`nPress L ingame to toggle the essential display"                                                          -Credits "Admentus"
+    CreateReduxCheckBox -Name "ItemsUnequip" -All -Text "Unequip Items"         -Info "Press C-Up on an equipped C Button item to unequip it from the assigned C Button"                                                                                                                         -Credits "Admentus"
+    CreateReduxCheckBox -Name "ItemsOnB"     -All -Text "Items on B Button"     -Info "Press the L Button on an item in the SELECT ITEM subscreen to equip it on the B button`nSome items are excluded`nPress C-Up on the Sword icon to equip the sword again"                                   -Credits "Admentus"
+    CreateReduxCheckBox -Name "GearSwap"     -All -Text "Swap Gear"             -Info "Press C-Left or C-Right on a sword or shield icon to change between equipment`nYou must have obtained the upgrades, and must not be stolen or reforged`nThis option also makes the Razor Sword permanent" -Credits "Admentus"
+    CreateReduxCheckBox -Name "SkipGuard"    -All -Text "Skip Clock Town Guard" -Info "The Clock Town Guard will no longer block entry to Termina Field on subsequent cycles when Hylian Link has spoken to them at least once"                                                                  -Credits "Admentus"
 
     CreateReduxGroup    -Tag  "Hero"        -Text "Hero Mode"
     CreateReduxCheckBox -Name "MasterQuest" -Text "Master Quest" -Info "Use all areas and dungeons from the Master Quest ROM hack`nThis is for advanced players who like a higher challenge`nThe structure of the walkthrough is completely re-arranged" -Credits "Admentus (ported) & DeathBasket (ROM hack)"
