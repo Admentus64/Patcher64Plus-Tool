@@ -743,6 +743,7 @@ function ByteReduxOptions() {
     if (IsChecked $Redux.Graphics.Widescreen) {
         $offset = SearchBytes -Start $Symbols.PAYLOAD_START -End (AddToOffset -Hex $Symbols.PAYLOAD_START -Add "1000") -Values "3C 04 00 04"
         ChangeBytes -Offset $offset -Values "3C 04 00 06"
+        ChangeBytes -Offset $Symbols.CFG_WS_ENABLED -Values "01"
     }
 
 
@@ -1085,7 +1086,7 @@ function CreateTabRedux() {
 
     $warning  = "30 FPS mode will have issues that prevent you from completing the game and certain challenges`nSwitch back to 20 FPS mode to continue these sections before returning to 30 FPS mode"
     $warning += "´n´n--- Known Issues --"
-    $warning += "Lizafos jumping`nGravity for throwing objects`nExplosion timers are shorter`nLit torches burn out faster`nTriple swing is extremely hard to perform`nBaddies act and attack faster`nBusiness Scrubs glitch out when defeated, reload room and attempt again in 20 FPS mode"
+    $warning += "Gravity for throwing objects`nExplosion timers are shorter`nLit torches burn out faster`nTriple swing is extremely hard to perform`nBaddies act and attack faster`nMinigame timers run too fast"
 
     CreateReduxGroup    -Tag  "Gameplay"           -All -Text "Gameplay"
     CreateReduxCheckBox -Name "FasterBlockPushing" -All -Text "Faster Block Pushing"       -Info "All blocks are pushed faster"                                                                                                 -Checked -Credits "Ported from Redux"
@@ -1096,7 +1097,7 @@ function CreateTabRedux() {
     CreateReduxCheckBox -Name "InstantElegy"       -All -Text "Instant Elegy Statue"       -Info "Hold L and press D-Pad Down to summon an Elegy of Emptiness Statue without the use of the Ocarina"                                     -Credits "Admentus"
     
     CreateReduxGroup    -Tag  "Features"     -All -Text "Features"
-    CreateReduxCheckBox -Name "FPS"          -All -Text "30 FPS (Experimental)" -Info "Experimental 30 FPS support`nUse L + Z to toggle between 20 FPS and 30 FPS mode"                                                                                                                          -Credits "Admentus" -Warning $warning
+    CreateReduxCheckBox -Name "FPS"          -All -Text "30 FPS (Experimental)" -Info "Experimental 30 FPS support`nUse L + Z to toggle between 20 FPS and 30 FPS mode`nDoes not work together with the Advanced Widescreen patch"                                                               -Credits "Admentus" -Warning $warning
     CreateReduxCheckBox -Name "OcarinaIcons" -All -Text "Ocarina Icons"         -Info "Restore the Ocarina Icons with their text when transformed like in the N64 Beta or 3DS version`nRequires the language to be set to English"                                                               -Credits "Admentus & ShadowOne333"
     CreateReduxCheckBox -Name "HUDToggle"    -All -Text "HUD Toggle"            -Info "Toggle the HUD by using the L button`nPress L in the MAP subscreen to toggle it in its entirety`nPress L ingame to toggle the essential display"                                                          -Credits "Admentus"
     CreateReduxCheckBox -Name "ItemsUnequip" -All -Text "Unequip Items"         -Info "Press C-Up on an equipped C Button item to unequip it from the assigned C Button"                                                                                                                         -Credits "Admentus"
@@ -1116,6 +1117,9 @@ function CreateTabRedux() {
     CreateReduxCheckBox -Name "Rupees"          -All -Text "Infinite Rupees"  -Info "Link's wallet is always filled at it's maximum"                                -Credits "Admentus"
 
     $warning = $null
+
+    $Redux.Graphics.Widescreen.Add_CheckStateChanged({ EnableElem -Elem $Redux.Features.FPS -Active (!$this.checked) })
+    EnableElem -Elem $Redux.Features.FPS -Active (!$Redux.Graphics.Widescreen.checked)
 
     $Redux.Hero.MasterQuest.Add_CheckStateChanged({
         if ($Redux.Hero.MasterQuest.Checked) {
