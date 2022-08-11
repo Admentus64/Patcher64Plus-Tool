@@ -878,9 +878,9 @@ function ByteReduxOptions() {
 #==============================================================================================================================================================================================
 function CheckLanguageOptions() {
     
-    if     ( (IsChecked  $Redux.Text.Vanilla -Not)   -or (IsLanguage $Redux.Text.AdultPronouns) -or (IsLanguage $Redux.UI.GCScheme) )                                                         { return $True }
-    elseif ( (IsLanguage $Redux.Gameplay.RazorSword) -or (IsIndex $Redux.Text.TatlScript -Not)  -or (IsLanguage $Redux.Capacity.EnableAmmo) -or (IsLanguage $Redux.Capacity.EnableWallet) )   { return $True }
-    elseif ( (IsLanguage $Redux.Features.OcarinaIcons) )                                                                                                                                      { return $True }
+    if     ( (IsChecked  $Redux.Text.Vanilla -Not)     -or (IsLanguage $Redux.Text.AdultPronouns) -or (IsLanguage $Redux.UI.GCScheme) )                                                         { return $True }
+    elseif ( (IsLanguage $Redux.Gameplay.RazorSword)   -or (IsIndex $Redux.Text.TatlScript -Not)  -or (IsLanguage $Redux.Capacity.EnableAmmo) -or (IsLanguage $Redux.Capacity.EnableWallet) )   { return $True }
+    elseif ( (IsLanguage $Redux.Features.OcarinaIcons) -or (IsLanguage $Redux.Text.AreaTitleCards) )                                                                                            { return $True }
     return $False
 
 }
@@ -940,6 +940,19 @@ function ByteLanguageOptions() {
         SetMessage -ID "04B0" -Text "child"       -Replace "adult";       SetMessage -ID "04B2"; SetMessage -ID "04B5"; SetMessage -ID "05F5"; SetMessage -ID "083C"
         SetMessage -ID "0BEA" -Text "fairy child" -Replace "fairy adult"; SetMessage -ID "0BF6"
         SetMessage -ID "33C3" -Text "child"       -Replace "youngster"
+    }
+
+    if (IsLanguage -Elem $Redux.Text.AreaTitleCards) {
+        ChangeBytes -Offset "C5A2D0" -Values "01FCD00001FD8810000B000000000000"; ChangeBytes -Offset "C5A918" -Values "0F004102" # Barn
+        ChangeBytes -Offset "C5A6A0" -Values "020A000002A0B8B000120001";         ChangeBytes -Offset "C5B4D8" -Values "4C054102" # Zora Shop
+        ChangeBytes -Offset "C5A3C0" -Values "022A8000022B0E9000130001";         ChangeBytes -Offset "C5AC98" -Values "1E014102" # Deku Scrub Playground
+        ChangeBytes -Offset "C5A250" -Values "02E9500002EA4CD000100001";         ChangeBytes -Offset "C5BA30" -Values "07104102" # Lon Peak Shrine
+
+        SetMessage -ID "002B" -ASCII -Replace "Lone Peak Shrine";      SetMessageIcon -ID "002B" -Hex "FE"
+        SetMessage -ID "000B" -ASCII -Replace "Barn";                  SetMessageIcon -ID "000B" -Hex "FE"
+        SetMessage -ID "0012" -ASCII -Replace "Zora Shop";             SetMessageIcon -ID "0012" -Hex "FE"
+        SetMessage -ID "0139" -ASCII -Replace "Zora Cape";             SetMessageIcon -ID "0139" -Hex "FE"
+        SetMessage -ID "0013" -ASCII -Replace "Deku Scrub Playground"; SetMessageIcon -ID "0013" -Hex "FE"
     }
 
     if (IsIndex -Elem $Redux.Text.TatlScript -Not) {
@@ -1153,7 +1166,8 @@ function CreateTabLanguage() {
     CreateReduxRadioButton -Name "MasterQuest"           -Max 4 -SaveTo "Dialogue" -Text "Master Quest Text" -Info "Uses the script from the Master Quest ROM hack`nAlso disables buying items from the Bomb Shop`nBest used along with the Master Quest difficulty option"                        -Credits "Admentus (ported) & DeathBasket (ROM hack)"
     CreateReduxRadioButton -Name "Custom"                -Max 4 -SaveTo "Dialogue" -Text "Custom"            -Info ('Insert custom dialogue found from "..\Patcher64+ Tool\Files\Games\Majora' + "'" + 's Mask\Custom Text"') -Warning "Make sure your custom script is proper and correct, or your ROM will crash`n[!] No edit will be made if the custom script is missing"
 
-    CreateReduxCheckBox -Name "AdultPronouns" -Text "Adult Pronouns"      -Info "Refer to Link as an adult instead of a child"                                                                                                        -Credits "Skilar"
+    CreateReduxCheckBox -Name "AdultPronouns"  -Text "Adult Pronouns"   -Info "Refer to Link as an adult instead of a child" -Credits "Skilar"
+    CreateReduxCheckBox -Name "AreaTitleCards" -Text "Area Title Cards" -Info "Add area title cards to missing areas"        -Credits "ShadowOne333"
 
 
 
@@ -1179,6 +1193,7 @@ function UnlockLanguageContent() {
     EnableElem -Elem $Redux.Text.Restore          -Active $Redux.Language[0].checked
     EnableElem -Elem $Redux.Text.MasterQuest      -Active $Redux.Language[0].checked
     EnableElem -Elem $Redux.Text.AdultPronouns    -Active $Redux.Language[0].checked
+    EnableElem -Elem $Redux.Text.AreaTitleCards   -Active $Redux.Language[0].checked
     EnableElem -Elem $Redux.Features.OcarinaIcons -Active $Redux.Language[0].checked
 
     if (!$Redux.Language[0].Checked -and !$Redux.Text.Vanilla.Checked -and !$Redux.Text.Custom.Checked) { $Redux.Text.Vanilla.Checked = $True }
