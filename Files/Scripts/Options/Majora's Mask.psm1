@@ -965,13 +965,13 @@ function ByteLanguageOptions() {
     }
 
     if (IsLanguage $Redux.Features.OcarinaIcons) {
-        SetMessage     -ID "170B" -Replace "<R>Deku Pipes<N><W>Loud pipes that sprout forth from<N>your Deku Scrub body.<New Box II><N>Play it with <A Button> and the four <C Button><N>Buttons. Press <B Button> to stop."
+        SetMessage     -ID "170B" -Replace "<R>Deku Pipes<N><W>Loud pipes that sprout forth from<N>your Deku Scrub body.<N><New Box II>Play it with <A Button> and the four <C Button><N>Buttons. Press <B Button> to stop."
         SetMessageIcon -ID "170B" -Hex "44"
 
-        SetMessage     -ID "171C" -Replace "<R>Goron Drums<N><W>The traditional instrument of the<N>Goron tribe.<New Box II><N>Play it with <A Button> and the four <C Button><N>Buttons. Press <B Button> to stop."
+        SetMessage     -ID "171C" -Replace "<R>Goron Drums<N><W>The traditional instrument of the<N>Goron tribe.<N><New Box II>Play it with <A Button> and the four <C Button><N>Buttons. Press <B Button> to stop."
         SetMessageIcon -ID "171C" -Hex "64"
         
-        SetMessage     -ID "1726" -Replace "<R>Zora Guitar<N><W>A soulful guitar from a Zora bank.<N>It's overflowing with good vibes.<New Box II><N>Play it with <A Button> and the four <C Button><N>Buttons. Press <B Button> to stop."
+        SetMessage     -ID "1726" -Replace "<R>Zora Guitar<N><W>A soulful guitar from a Zora bank.<N>It's overflowing with good vibes.<N><New Box II>Play it with <A Button> and the four <C Button><N>Buttons. Press <B Button> to stop."
         SetMessageIcon -ID "1726" -Hex "70"
     }
 
