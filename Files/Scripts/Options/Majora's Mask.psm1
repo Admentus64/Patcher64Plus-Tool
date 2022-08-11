@@ -943,11 +943,12 @@ function ByteLanguageOptions() {
     }
 
     if (IsLanguage -Elem $Redux.Text.AreaTitleCards) {
-        ChangeBytes -Offset "C5A2D0" -Values "01FCD00001FD8810000B000000000000"; ChangeBytes -Offset "C5A918" -Values "0F004102" # Barn
-        ChangeBytes -Offset "C5A6A0" -Values "020A000002A0B8B000120001";         ChangeBytes -Offset "C5B4D8" -Values "4C054102" # Zora Shop
-        ChangeBytes -Offset "C5A3C0" -Values "022A8000022B0E9000130001";         ChangeBytes -Offset "C5AC98" -Values "1E014102" # Deku Scrub Playground
-        ChangeBytes -Offset "C5A250" -Values "02E9500002EA4CD000100001";         ChangeBytes -Offset "C5BA30" -Values "07104102" # Lon Peak Shrine
-
+        ChangeBytes -Offset "C5A250" -Values "02E9500002EA4CD000100001";         ChangeBytes -Offset "C5BA30" -Values "07104102"                                                                  # Lon Peak Shrine
+        ChangeBytes -Offset "C5A2D0" -Values "01FCD00001FD8810000B000000000000"; ChangeBytes -Offset "C5A918" -Values "0F004102"                                                                  # Barn
+        ChangeBytes -Offset "C5A6A0" -Values "02A0000002A0B8B000120001";         ChangeBytes -Offset "C5B4D8" -Values "4C054102"                                                                  # Zora Shop
+        ChangeBytes -Offset "C5A560" -Values "026FC00002714F9001390001";         ChangeBytes -Offset "C5B22C" -Values "38008A1438008A14"; ChangeBytes -Offset "C5B254" -Values "3805410238054102" # Zora Cape
+        ChangeBytes -Offset "C5A3C0" -Values "022A8000022B0E9000130001";         ChangeBytes -Offset "C5AC98" -Values "1E004102"                                                                  # Deku Scrub Playground
+        
         SetMessage -ID "002B" -ASCII -Replace "Lone Peak Shrine";      SetMessageIcon -ID "002B" -Hex "FE"
         SetMessage -ID "000B" -ASCII -Replace "Barn";                  SetMessageIcon -ID "000B" -Hex "FE"
         SetMessage -ID "0012" -ASCII -Replace "Zora Shop";             SetMessageIcon -ID "0012" -Hex "FE"
