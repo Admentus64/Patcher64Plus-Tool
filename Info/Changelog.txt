@@ -1,3 +1,6 @@
+v19.1.2
+- Fixed issue with "Additional Options" not generating properly for some games
+
 v19.1.1
 - Added new "Area Title Cards" option for MM
 - Fixed several issues with Redux

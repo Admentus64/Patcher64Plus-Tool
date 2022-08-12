@@ -390,6 +390,8 @@ function CreateTabButtons([string[]]$Tabs, [boolean]$NoLanguages=$False) {
     }
     else { $Last.TabName = "Main" }
 
+    return $Tabs
+
 }
 
 

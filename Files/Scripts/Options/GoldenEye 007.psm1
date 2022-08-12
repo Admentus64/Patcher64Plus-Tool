@@ -70,7 +70,7 @@ function CreateOptions() {
     
     $Redux.ImageSize = 100
 
-    CreateOptionsDialog -Columns 5 -Height 450
+    CreateOptionsDialog -Columns 5 -Height 500
 
     $Redux.Main.DualEyes.Add_CheckedChanged(     { LockOptions })
     $Redux.Main.RestoreBlood.Add_CheckedChanged( { LockOptions })

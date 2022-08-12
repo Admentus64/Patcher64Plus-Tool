@@ -33,7 +33,12 @@
     $Redux.Panel            = CreatePanel -Y (DPISize 80) -Width ($OptionsDialog.Width - (DPISize 15)) -Height ($OptionsDialog.Height - (DPISize 180)) -AddTo $OptionsDialog
     $Redux.Panel.AutoScroll = $True
     [System.GC]::Collect() | Out-Null
-    CreateTabButtons -Tabs $Tabs -NoLanguages $NoLanguages
+    $tabs = CreateTabButtons -Tabs $Tabs -NoLanguages $NoLanguages
+
+    if ($tabs.count -eq 0) {
+        $Redux.Panel.Top    = 0
+        $Redux.Panel.Height = $OptionsDialog.Height - (DPISize 100)
+    }
 
     # Lock GUI if needed
     if (Get-Command "AdjustGUI" -errorAction SilentlyContinue) { iex "AdjustGUI" }
