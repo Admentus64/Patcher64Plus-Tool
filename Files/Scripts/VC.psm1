@@ -1,4 +1,4 @@
-﻿function CreateVCRemapDialog() {
+function CreateVCRemapDialog() {
     
     # Create Dialog
     $global:VCRemapDialog = CreateDialog -Width (DPISize 800) -Height (DPISize 520) -Icon $Files.icon.settings

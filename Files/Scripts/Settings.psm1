@@ -1,4 +1,4 @@
-﻿function Get-IniContent ([string]$FilePath) {
+function Get-IniContent ([string]$FilePath) {
     
     $ini = @{}
 

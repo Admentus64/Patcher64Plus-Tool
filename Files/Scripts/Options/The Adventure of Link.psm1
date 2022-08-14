@@ -77,7 +77,7 @@ function CreateTabMain() {
     CreateReduxGroup    -Tag  "Sound" -Text "Sound"
     CreateReduxCheckBox -Name "NoLowHPBeep"            -Text "No Low HP Beep"        -Info "Remove the low health beep"                                                                -Credits "ShadowOne333 and his team"
     CreateReduxCheckBox -Name "ChangeMinorItemSFX"     -Text "Change Minor Item SFX" -Info "Replace the sound effect when grabbing a item, so it is different from the Sword Beam SFX" -Credits "ShadowOne333 and his team"
-    CreateReduxCheckBox -Name "ReduceTextSound"        -Text "Reduce Text Sound"     -Info "Replace the sound effect that plays during text boxes so that isn’t as intrusive"          -Credits "ShadowOne333 and his team"
+    CreateReduxCheckBox -Name "ReduceTextSound"        -Text "Reduce Text Sound"     -Info "Replace the sound effect that plays during text boxes so that isn't as intrusive"          -Credits "ShadowOne333 and his team"
     CreateReduxCheckBox -Name "NoTextSound"            -Text "No Text Sound"         -Info "Remove the sound effect that plays during text boxes"                                      -Credits "ShadowOne333 and his team" -Link $Redux.Sound.ReduceTextSound
 
 
@@ -85,7 +85,7 @@ function CreateTabMain() {
     # GAMEPLAY #
 
     CreateReduxGroup    -Tag  "Gameplay" -Text "Gameplay"
-    CreateReduxCheckBox -Name "FDSKingsTomb"           -Text "FDS King's Tomb"       -Info "Restores the layout of the King’s Tomb screen to resemble that of the Famicom release of Zelda II" -Credits "ShadowOne333 and his team"
+    CreateReduxCheckBox -Name "FDSKingsTomb"           -Text "FDS King's Tomb"       -Info "Restores the layout of the King's Tomb screen to resemble that of the Famicom release of Zelda II" -Credits "ShadowOne333 and his team"
     CreateReduxCheckBox -Name "RestartSameScreen"      -Text "Restart Same Screen"   -Info "When you die you start at the same screen you died on rather than being brought back to the beginning of the palace or Zelda's palace`nIncludes the Keep Exp At Game Over option`nNot compatible with the Restart Game Over option" -Credits "ShadowOne333 and his team"
     CreateReduxCheckBox -Name "TunicChange"            -Text "Tunic Change at Lvl 7" -Info "The tunic changes from Blue to Red when defense reaches lvl 7"                                     -Credits "ShadowOne333 and his team"
     CreateReduxCheckBox -Name "FairyPreventDoors"      -Text "Fairy Prevent Doors"   -Info "When using the Fairy Spell you cannot go though any doors anymore"                                 -Credits "ShadowOne333 and his team"
@@ -97,7 +97,7 @@ function CreateTabMain() {
     # EXPERIENCE #
 
     CreateReduxGroup    -Tag  "Experience" -Text "Experience"
-    CreateReduxCheckBox -Name "NewExp"                 -Text "New Exp"                   -Info "A completely revamped Exp system which removes the level up window prompt once you reach the required Exp for a new level`nInstead, Experience points will now accumulate, and once you want to Level Up a certain ability,`npressing Up+Start will automatically bring up the Level Up menu, even if you don’t have enough Exp for a level up`nIn that case, the only available option will be 'Cancel'" -Credits "ShadowOne333 and his team"
+    CreateReduxCheckBox -Name "NewExp"                 -Text "New Exp"                   -Info "A completely revamped Exp system which removes the level up window prompt once you reach the required Exp for a new level`nInstead, Experience points will now accumulate, and once you want to Level Up a certain ability,`npressing Up+Start will automatically bring up the Level Up menu, even if you don't have enough Exp for a level up`nIn that case, the only available option will be 'Cancel'" -Credits "ShadowOne333 and his team"
     CreateReduxCheckBox -Name "KeepExpGameOver"        -Text "Keep Exp At Game Over"     -Info "You keep all your Exp when you die, but ONLY if you choose Continue (since the Exp is not saved on reboot/restart)"                 -Credits "ShadowOne333 and his team"
     CreateReduxCheckBox -Name "StaticExpPalaceCrystal" -Text "Static Exp Palace Crystal" -Info "At the end of each palace, where you put the crystal in, you now get a predetermined amount of Exp that increases with each palace" -Credits "ShadowOne333 and his team"
     
@@ -121,7 +121,7 @@ function CreateTabRedux() {
     CreateReduxCheckBox -Name "EnemyAttributes"       -Text "Enemy Attributes"        -Info "Restores the original enemy attributes, meaning the enemies will drain Exp from Link and they will have the same HP and give the same Exp in the original Zelda II" -Credits "ShadowOne333 and his team"
     CreateReduxCheckBox -Name "EnemyDrops"            -Text "Enemy Drops"             -Info "Restores the original enemy item drop rules, meaning the enemies will drop items every 6th kill like in the original Zelda II"                                      -Credits "ShadowOne333 and his team"
     CreateReduxCheckBox -Name "LinkDolls"             -Text "Link Dolls"              -Info "Restores the functionality of the Link dolls to be the same as in the original Zelda II, meaning they will not be permanent lives anymore"                          -Credits "ShadowOne333 and his team"
-    CreateReduxCheckBox -Name "RestartGameOver"       -Text "Restart Game Over"       -Info "Restores the original behaviour of Link getting a Game Over and starting all the way back at Zelda’s Palace`nNot compatible with the Restart Same Screen option"    -Credits "ShadowOne333 and his team" -Link $Redux.Gameplay.RestartSameScreen
+    CreateReduxCheckBox -Name "RestartGameOver"       -Text "Restart Game Over"       -Info "Restores the original behaviour of Link getting a Game Over and starting all the way back at Zelda's Palace`nNot compatible with the Restart Same Screen option"    -Credits "ShadowOne333 and his team" -Link $Redux.Gameplay.RestartSameScreen
     CreateReduxCheckBox -Name "SpellMagicConsumption" -Text "Spell Magic Consumption" -Info "Restores the original magic consumption that each spell takes to that of the original Zelda II"                                                                     -Credits "ShadowOne333 and his team"
     CreateReduxCheckBox -Name "NESGFX"                -Text "NES GFX"                 -Info "Restores the graphics as used in the original Zelda II"                                                                                                             -Credits "ShadowOne333 and his team"
     CreateReduxCheckBox -Name "TitleScreenPalette"    -Text "Title Screen Palette"    -Info "Restores the palette of the original Title Screen from Zelda II only"                                                                                               -Credits "ShadowOne333 and his team"

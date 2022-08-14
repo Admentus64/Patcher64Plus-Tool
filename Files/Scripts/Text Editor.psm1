@@ -1,4 +1,4 @@
-﻿function CreateTextEditorDialog([int32]$Width, [int32]$Height, [string]$Game=$GameType.mode) {
+function CreateTextEditorDialog([int32]$Width, [int32]$Height, [string]$Game=$GameType.mode) {
     
     $global:TextEditor       = @{}
     $Files.json.textEditor   = SetJSONFile ($Paths.Games + "\" + $Game + "\Text Editor.json")
@@ -421,7 +421,7 @@ function SaveScript([string]$Script, [string]$Table) {
 function SaveLastMessage() {
     
     if (IsSet $LastScript.entry) {
-        if ($TextEditor.Edited[1])       { SetMessage -Replace $TextEditor.Content.Text -ID $LastScript.entry -Safety -ASCII }
+        if ($TextEditor.Edited[1])       { SetMessage -Replace $TextEditor.Content.Text -ID $LastScript.entry -Safety -ASCII -Force }
         if ($TextEditor.Edited[2])       { SetMessageBox -ID $LastScript.entry -Type $TextEditor.TextBoxType.selectedIndex -Position $TextEditor.TextBoxPosition.selectedIndex }
         if ($Files.json.textEditor.header -gt 0) {
             if ($TextEditor.Edited[3])   { SetMessageIcon   -ID $LastScript.entry -Value $TextEditor.TextBoxIcon.text             }
@@ -470,7 +470,7 @@ function GetMessage([string]$ID) {
         }
     }
 
-    if ($end -eq -1) { return "" }
+    if ($end - $Files.json.texteditor.header -le 0) { return "" }
     return (ParseMessage -Text $DialogueList[$ID].msg[$Files.json.textEditor.header..$end]) -join ''
 }
 
@@ -657,7 +657,7 @@ function FindMatch([byte[]]$Text, [boolean]$All) {
 }
 
 #==============================================================================================================================================================================================
-function SetMessage([string]$ID, [object]$Text, [object]$Replace, [string]$File, [switch]$Full, [switch]$Insert, [switch]$Append, [switch]$All, [switch]$ASCII, [switch]$Silent, [switch]$Safety) {
+function SetMessage([string]$ID, [object]$Text, [object]$Replace, [string]$File, [switch]$Full, [switch]$Insert, [switch]$Append, [switch]$All, [switch]$ASCII, [switch]$Silent, [switch]$Safety, [switch]$Force) {
     
     if (!(IsSet $DialogueList[$ID])) {
         if (!$Silent) { WriteToConsole ("Could not find message ID: " + $ID) }
@@ -683,7 +683,8 @@ function SetMessage([string]$ID, [object]$Text, [object]$Replace, [string]$File,
             }
             else {
                 $parse = $False
-                if ($Text -like "*<*" -and $Text -like "*>*") { $parse = $True }
+                if ($Text -like "*<*" -and $Text -like "*>*")   { $parse = $True }
+                elseif ($Force)                                 { $parse = $True }
                 $Text = $Text.toCharArray()
                 if ($parse)    { $Text = ParseMessage -Text $Text -Encode }
                 if ($Safety)   { for ($i=0; $i -lt $Text.count; $i++) { if ($Text[$i] -gt 255) { $Text[$i] = 63 } } }
@@ -715,7 +716,8 @@ function SetMessage([string]$ID, [object]$Text, [object]$Replace, [string]$File,
             }
             else {
                 $parse = $False
-                if ($Replace -like "*<*" -and $Replace -like "*>*") { $parse = $True }
+                if ($Replace -like "*<*" -and $Replace -like "*>*")   { $parse = $True }
+                elseif ($Force)                                       { $parse = $True }
                 $Replace = $Replace.toCharArray()
                 if ($parse)    { $Replace = ParseMessage -Text $Replace -Encode }
                 if ($Safety)   { for ($i=0; $i -lt $Replace.count; $i++) { if ($Replace[$i] -gt 255) { $Replace[$i] = 63 } } }
@@ -775,14 +777,14 @@ function SetMessage([string]$ID, [object]$Text, [object]$Replace, [string]$File,
 #==============================================================================================================================================================================================
 function ParseMessage([char[]]$Text, [switch]$Encode) {
     
-   # if ($Encode) { $Text = ParseMessageLanguage -Text $Text -Encode }
+    if ($Encode) { $Text = ParseMessageLanguage -Text $Text -Encode }
 
     if     ($Files.json.textEditor.parse -eq "oot" -and  $Encode)   { $Text = ParseMessageOoT -Text $Text -Encode }
     elseif ($Files.json.textEditor.parse -eq "oot" -and !$Encode)   { $Text = ParseMessageOoT -Text $Text         }
     elseif ($Files.json.textEditor.parse -eq "mm"  -and  $Encode)   { $Text = ParseMessageMM  -Text $Text -Encode }
     elseif ($Files.json.textEditor.parse -eq "mm"  -and !$Encode)   { $Text = ParseMessageMM  -Text $Text         }
 
-   # if (!$Encode) { $Text = ParseMessageLanguage -Text $Text }
+    if (!$Encode) { $Text = ParseMessageLanguage -Text $Text }
 
     $global:ScriptCounter = $null
     return $Text
@@ -793,7 +795,7 @@ function ParseMessage([char[]]$Text, [switch]$Encode) {
 
 #==============================================================================================================================================================================================
 function ParseMessageLanguage([char[]]$Text, [switch]$Encode) {
-
+    
     # Language Parsing
 
     [System.Collections.ArrayList]$types = @()
@@ -820,7 +822,7 @@ function ParseMessageLanguage([char[]]$Text, [switch]$Encode) {
         if ($Text[$i] -eq [byte]$Files.json.textEditor.end)   { break          }
         if ($Text[$i] -eq 60)                                 { $skip = $True  }
         if ($Text[$i] -eq 62)                                 { $skip = $False }
-        
+
         if (!$skip) {
             for ($i=0; $i -lt $LanguagePatch.encode.length; $i++) {
                 if ($types[$i]) { $Text = ParseMessagePart -Text $Text -Encoded @($LanguagePatch.encode[$i]) -Decoded @($LanguagePatch.decode[$i]) -Encode $Encode }

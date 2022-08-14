@@ -1,4 +1,4 @@
-﻿function ChangeBytes([string]$File, [string]$Offset, [object]$Match=$null, [object]$Values, [uint16]$Interval=1, [switch]$Add, [switch]$Subtract) {
+function ChangeBytes([string]$File, [string]$Offset, [object]$Match=$null, [object]$Values, [uint16]$Interval=1, [switch]$Add, [switch]$Subtract) {
     
     if     ($Match  -is [String] -and $Match  -Like "* *")      { $matchDec = $Match -split ' '           | foreach { [Convert]::ToByte($_, 16) } }
     elseif ($Match  -is [String])                               { $matchDec = $Match -split '(..)' -ne '' | foreach { [Convert]::ToByte($_, 16) } }

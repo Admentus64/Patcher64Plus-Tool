@@ -1,4 +1,4 @@
-﻿function CreateForm([uint16]$X=0, [uint16]$Y=0, [uint16]$Width=0, [uint16]$Height=0, [string]$Name, [string]$Tag, [object]$Form, [boolean]$IsGame, [object]$AddTo) {
+function CreateForm([uint16]$X=0, [uint16]$Y=0, [uint16]$Width=0, [uint16]$Height=0, [string]$Name, [string]$Tag, [object]$Form, [boolean]$IsGame, [object]$AddTo) {
     
     $Form.Size = New-Object System.Drawing.Size($Width, $Height)
     $Form.Location = New-Object System.Drawing.Size($X, $Y)

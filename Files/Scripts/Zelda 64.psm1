@@ -1,4 +1,4 @@
-﻿function GetOoTEntranceIndex([string]$Index) {
+function GetOoTEntranceIndex([string]$Index) {
 
     if     ($index -eq "Link's House")               { return "00 BB" }     elseif ($index -eq "Temple of Time")             { return "05 F4" }     elseif ($index -eq "Hyrule Field")               { return "01 FD" }
     elseif ($index -eq "Kakariko Village")           { return "00 DB" }     elseif ($index -eq "Inside the Deku Tree")       { return "00 00" }     elseif ($index -eq "Dodongo's Cavern")           { return "00 04" }

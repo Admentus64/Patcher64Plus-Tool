@@ -1,4 +1,4 @@
-﻿function SetTempFileParameters() {
+function SetTempFileParameters() {
     
     $Files.ckey                             = $Paths.Temp + "\common-key.bin"
     $Files.dmaTable                         = $Paths.Temp + "\dmaTable.dat"

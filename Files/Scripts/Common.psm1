@@ -1,4 +1,4 @@
-﻿function SetWiiVCMode([boolean]$Enable) {
+function SetWiiVCMode([boolean]$Enable) {
     
     if ( ($Enable -eq $IsWiiVC) -and $GameIsSelected) { return }
     $global:IsWiiVC = $Enable

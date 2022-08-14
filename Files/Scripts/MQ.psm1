@@ -1,4 +1,4 @@
-﻿function PatchDungeonsOoTMQ() {
+function PatchDungeonsOoTMQ() {
     
     if ($GameType.mode -ne "Ocarina of Time") { return }
 

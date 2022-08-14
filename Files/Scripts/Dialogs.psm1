@@ -1,4 +1,4 @@
-﻿function CreateOptionsDialog([byte]$Columns, [int32]$Height, [Array]$Tabs=@(), [switch]$NoLanguages) {
+function CreateOptionsDialog([byte]$Columns, [int32]$Height, [Array]$Tabs=@(), [switch]$NoLanguages) {
     
     WriteToConsole "Creating options dialog..."
 

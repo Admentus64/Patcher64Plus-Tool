@@ -1,4 +1,4 @@
-﻿function CreateSceneEditorDialog([int32]$Width, [int32]$Height, [string]$Game=$GameType.mode, [string]$Checksum) {
+function CreateSceneEditorDialog([int32]$Width, [int32]$Height, [string]$Game=$GameType.mode, [string]$Checksum) {
     
     <# $global:SceneEditor   = @{}
     $SceneEditor.Game     = $Game

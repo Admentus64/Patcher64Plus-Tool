@@ -1,4 +1,4 @@
-﻿function MainFunction([string]$Command, [string]$PatchedFileName) {
+function MainFunction([string]$Command, [string]$PatchedFileName) {
     
     # Reset variables
     $global:WarningError  = $False

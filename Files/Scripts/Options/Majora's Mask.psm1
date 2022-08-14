@@ -77,9 +77,6 @@ function ByteOptions() {
 
     # RESTORE #
 
-    if (IsChecked $Redux.Restore.RomaniSign)   { PatchBytes  -Offset "26A58C0" -Texture -Patch "romani_sign.bin" }
-    if (IsChecked $Redux.Restore.Title)        { ChangeBytes -Offset "DE0C2E"  -Values "FF C8 36 10 98 00" }
-
     if (IsChecked $Redux.Restore.RupeeColors) {
         ChangeBytes -Offset "10ED020" -Values "70 6B BB 3F FF FF EF 3F 68 AD C3 FD E6 BF CD 7F 48 9B 91 AF C3 7D BB 3D 40 0F 58 19 88 ED 80 AB" # Purple
         ChangeBytes -Offset "10ED040" -Values "D4 C3 F7 49 FF FF F7 E1 DD 03 EF 89 E7 E3 E7 DD A3 43 D5 C3 DF 85 E7 45 7A 43 82 83 B4 43 CC 83" # Gold
@@ -100,6 +97,8 @@ function ByteOptions() {
         PatchBytes  -Offset "181C620" -Texture -Patch "skull_kid_beak.bin"
     }
 
+    if (IsChecked $Redux.Restore.RomaniSign)          { PatchBytes  -Offset "26A58C0" -Texture -Patch "romani_sign.bin" }
+    if (IsChecked $Redux.Restore.Title)               { ChangeBytes -Offset "DE0C2E"  -Values "FF C8 36 10 98 00" }
     if (IsChecked $Redux.Restore.ShopMusic)           { ChangeBytes -Offset "2678007" -Values "44"                }
     if (IsChecked $Redux.Restore.IkanaCastle)         { ChangeBytes -Offset "2055505" -Values "02 3E E0 03 01 1D" }
     if (IsChecked $Redux.Restore.PieceOfHeartSound)   { ChangeBytes -Offset "BA94C8"  -Values "10 00"             }
@@ -878,9 +877,9 @@ function ByteReduxOptions() {
 #==============================================================================================================================================================================================
 function CheckLanguageOptions() {
     
-    if     ( (IsChecked  $Redux.Text.Vanilla -Not)     -or (IsLanguage $Redux.Text.AdultPronouns) -or (IsLanguage $Redux.UI.GCScheme) )                                                         { return $True }
+    if     ( (IsChecked  $Redux.Text.Vanilla -Not)     -or (IsLanguage $Redux.Text.AdultPronouns) -or (IsLanguage $Redux.UI.GCScheme)         -or (IsLanguage $Redux.Text.AreaTitleCards)   )   { return $True }
     elseif ( (IsLanguage $Redux.Gameplay.RazorSword)   -or (IsIndex $Redux.Text.TatlScript -Not)  -or (IsLanguage $Redux.Capacity.EnableAmmo) -or (IsLanguage $Redux.Capacity.EnableWallet) )   { return $True }
-    elseif ( (IsLanguage $Redux.Features.OcarinaIcons) -or (IsLanguage $Redux.Text.AreaTitleCards) )                                                                                            { return $True }
+    elseif ( (IsLanguage $Redux.Features.OcarinaIcons) -and $Patches.Redux.Checked)                                                                                                             { return $True }
     return $False
 
 }
@@ -941,19 +940,35 @@ function ByteLanguageOptions() {
         SetMessage -ID "0BEA" -Text "fairy child" -Replace "fairy adult"; SetMessage -ID "0BF6"
         SetMessage -ID "33C3" -Text "child"       -Replace "youngster"
     }
-
+    
     if (IsLanguage -Elem $Redux.Text.AreaTitleCards) {
-        ChangeBytes -Offset "C5A250" -Values "02E9500002EA4CD000100001";         ChangeBytes -Offset "C5BA30" -Values "07104102"                                                                  # Lon Peak Shrine
-        ChangeBytes -Offset "C5A2D0" -Values "01FCD00001FD8810000B000000000000"; ChangeBytes -Offset "C5A918" -Values "0F004102"                                                                  # Barn
+        ChangeBytes -Offset "C5A250" -Values "02E9500002EA4CD0000B0001";         ChangeBytes -Offset "C5BA30" -Values "07104102"                                                                  # Lon Peak Shrine
+        ChangeBytes -Offset "C5A2D0" -Values "01FCD00001FD88100010000000000000"; ChangeBytes -Offset "C5A918" -Values "0F004102"                                                                  # Barn
+        ChangeBytes -Offset "C5A560" -Values "026FC00002714F9001390001";         ChangeBytes -Offset "C5B22C" -Values "3800CA143800CA14"; ChangeBytes -Offset "C5B254" -Values "3805410238054102" # Zora Cape		
         ChangeBytes -Offset "C5A6A0" -Values "02A0000002A0B8B000120001";         ChangeBytes -Offset "C5B4D8" -Values "4C054102"                                                                  # Zora Shop
-        ChangeBytes -Offset "C5A560" -Values "026FC00002714F9001390001";         ChangeBytes -Offset "C5B22C" -Values "38008A1438008A14"; ChangeBytes -Offset "C5B254" -Values "3805410238054102" # Zora Cape
         ChangeBytes -Offset "C5A3C0" -Values "022A8000022B0E9000130001";         ChangeBytes -Offset "C5AC98" -Values "1E004102"                                                                  # Deku Scrub Playground
+        ChangeBytes -Offset "C5A2C0" -Values "026180000261DC5000A2000100000000"; ChangeBytes -Offset "C5B048" -Values "0E014102";                                                                 # DampÃ©'s House
+        ChangeBytes -Offset "C5A740" -Values "02B6F00002B7A01000A30001";         ChangeBytes -Offset "C5B5D4" -Values "AA00C102"                                                                  # Igos du Ikana's Throne
+        ChangeBytes -Offset "C5A5E0" -Values "027B9000027C0B5000A40001";         ChangeBytes -Offset "C5B320" -Values "4000CA144001CA14"                                                 		  # Road to Southern Swamp
+        ChangeBytes -Offset "C5A7B0" -Values "02C1900002C22BB000AC0001";         ChangeBytes -Offset "C5B6C4" -Values "5D00CA145D01C1025D024102"                                                  # Path to Goron Village (Winter)
+        ChangeBytes -Offset "C5A7C0" -Values "02C2B00002C33AD000AC0001";         ChangeBytes -Offset "C5B6DC" -Values "5E00CA145E01C1025E024102"                                                  # Path to Goron Village (Spring)
+        ChangeBytes -Offset "C5A790" -Values "02BFE00002C03CF000AD0000";                                                                                                                          # Path to Snowhead
+        ChangeBytes -Offset "C5A710" -Values "02B2B00002B3309000AE0000";         ChangeBytes -Offset "C5B5B4" -Values "5300CA145301CA1453024A14"                                                  # Road to Ikana
         
-        SetMessage -ID "002B" -ASCII -Replace "Lone Peak Shrine";      SetMessageIcon -ID "002B" -Hex "FE"
-        SetMessage -ID "000B" -ASCII -Replace "Barn";                  SetMessageIcon -ID "000B" -Hex "FE"
-        SetMessage -ID "0012" -ASCII -Replace "Zora Shop";             SetMessageIcon -ID "0012" -Hex "FE"
-        SetMessage -ID "0139" -ASCII -Replace "Zora Cape";             SetMessageIcon -ID "0139" -Hex "FE"
-        SetMessage -ID "0013" -ASCII -Replace "Deku Scrub Playground"; SetMessageIcon -ID "0013" -Hex "FE"
+        SetMessage -ID "000B" -ASCII -Replace "Lone Peak Shrine";       SetMessageIcon -ID "000B" -Hex "FE"
+        SetMessage -ID "0010" -ASCII -Replace "Barn";                   SetMessageIcon -ID "0010" -Hex "FE"
+        SetMessage -ID "0139" -ASCII -Replace "Zora Cape";              SetMessageIcon -ID "0139" -Hex "FE"
+        SetMessage -ID "0012" -ASCII -Replace "Zora Shop";              SetMessageIcon -ID "0012" -Hex "FE"
+        SetMessage -ID "0013" -ASCII -Replace "Deku Scrub Playground";  SetMessageIcon -ID "0013" -Hex "FE"
+        SetMessage -ID "00A2" -ASCII -Replace "DampÃ©'s House" -Force;  SetMessageIcon -ID "00A2" -Hex "FE"
+        SetMessage -ID "00A3" -ASCII -Replace "Igos du Ikana's Throne"; SetMessageIcon -ID "00A3" -Hex "FE"
+        SetMessage -ID "00A4" -ASCII -Replace "Road to Southern Swamp"; SetMessageIcon -ID "00A4" -Hex "FE"
+        SetMessage -ID "00AC" -ASCII -Replace "Path to Goron Village";  SetMessageIcon -ID "00AC" -Hex "FE"
+        SetMessage -ID "00AD" -ASCII -Replace "Path to Snowhead";       SetMessageIcon -ID "00AD" -Hex "FE"
+        SetMessage -ID "00AE" -ASCII -Replace "Road to Ikana";          SetMessageIcon -ID "00AE" -Hex "FE"
+        SetMessage -ID "00AF" -ASCII -Replace "The Moon";               SetMessageIcon -ID "00AF" -Hex "FE"
+
+        if (IsChecked -Elem $Redux.Restore.OnTheMoonIntro -Not) { ChangeBytes -Offset "C5A850" -Values "02D5A00002D64FD000AF0000"; ChangeBytes -Offset "C5B7CC" -Values "67004387"; SetMessage -ID "00AF" -ASCII -Replace "The Moon"; SetMessageIcon -ID "00AF" -Hex "FE" } # The Moon
     }
 
     if (IsIndex -Elem $Redux.Text.TatlScript -Not) {
@@ -978,7 +993,7 @@ function ByteLanguageOptions() {
         SetMessage -ID "0009" -ASCII -Text "500" -Replace $Redux.Capacity.Wallet3.text -NoParse
     }
 
-    if (IsLanguage $Redux.Features.OcarinaIcons) {
+    if ( (IsLanguage $Redux.Features.OcarinaIcons) -and $Patches.Redux.Checked) {
         SetMessage     -ID "170B" -Replace "<R>Deku Pipes<N><W>Loud pipes that sprout forth from<N>your Deku Scrub body.<N><New Box II>Play it with <A Button> and the four <C Button><N>Buttons. Press <B Button> to stop."
         SetMessageIcon -ID "170B" -Hex "44"
 
@@ -1031,11 +1046,11 @@ function CreateTabMain() {
     CreateReduxCheckBox -Name "FormItems"            -Text "Use Items With Mask Forms" -Info "Deku Link, Goron Link and Zora Link are able to use a few items such as Bombs and Deku Sticks"                                                                   -Credits "bry_dawg02"
     CreateReduxCheckBox -Name "SunSong"              -Text "Sun's Song"                -Info "Unlocks the Sun's Song when creating a new save file, which skips time to the next day or night"                                                                 -Credits "Ported from Rando"
     CreateReduxCheckBox -Name "SariaSong"            -Text "Saria's Song"              -Info "Unlocks Saria's Song when creating a new save file, which plays the Final Hours music theme until the next area"                                                 -Credits "Ported from Rando"
-    CreateReduxComboBox -Name "LinkJumpAttack"       -Text "Link Jump Attack"          -Info "Set the Jump Attack animation for Link in his Hylian Form" -Items @("Jumpslash", "Frontflip", "Beta Frontflip", "Beta Backflip", "Spin Slash", "Zora Jumpslash") -Credits "Admentus (ported), SoulofDeity & Aegiker"
-    CreateReduxComboBox -Name "ZoraJumpAttack"       -Text "Zora Jump Attack"          -Info "Set the Jump Attack animation for Link in his Zora Form"   -Items @("Zora Jumpslash", "Beta Frontflip", "Beta Backflip", "Spin Slash")                           -Credits "Admentus (ported) & Aegiker"
     CreateReduxCheckBox -Name "HookshotAnything"     -Text "Hookshot Anything"         -Info "Be able to hookshot most surfaces" -Warning "Prone to softlocks, be careful"                                                                                     -Credits "Ported from Rando"
     CreateReduxCheckBox -Name "NoMagicArrowCooldown" -Text "No Magic Arrow Cooldown"   -Info "Be able to shoot magic arrows without delay inbetween" -Warning "Prone to crashes if switching arrow types to quickly"                                           -Credits "Ported from Rando"
     CreateReduxCheckBox -Name "FierceDeityAnywhere"  -Text "Fierce Deity Anywhere"     -Info "The Fierce Deity Mask can be used anywhere now"                                                                                                                  -Credits "Ported from Rando"
+    CreateReduxComboBox -Name "LinkJumpAttack"       -Text "Link Jump Attack"          -Info "Set the Jump Attack animation for Link in his Hylian Form" -Items @("Jumpslash", "Frontflip", "Beta Frontflip", "Beta Backflip", "Spin Slash", "Zora Jumpslash") -Credits "Admentus (ported), SoulofDeity & Aegiker"
+    CreateReduxComboBox -Name "ZoraJumpAttack"       -Text "Zora Jump Attack"          -Info "Set the Jump Attack animation for Link in his Zora Form"   -Items @("Zora Jumpslash", "Beta Frontflip", "Beta Backflip", "Spin Slash")                           -Credits "Admentus (ported) & Aegiker"
 
 
 
@@ -1099,7 +1114,7 @@ function CreateTabRedux() {
     # GAMEPLAY #
 
     $warning  = "30 FPS mode will have issues that prevent you from completing the game and certain challenges`nSwitch back to 20 FPS mode to continue these sections before returning to 30 FPS mode"
-    $warning += "´n´n--- Known Issues --"
+    $warning += "Â´nÂ´n--- Known Issues --"
     $warning += "Gravity for throwing objects`nExplosion timers are shorter`nLit torches burn out faster`nTriple swing is extremely hard to perform`nBaddies act and attack faster`nMinigame timers run too fast"
 
     CreateReduxGroup    -Tag  "Gameplay"           -All -Text "Gameplay"
@@ -1521,7 +1536,7 @@ function CreateTabSpeedup() {
 
     CreateReduxGroup    -Tag  "Speedup" -Text "Speedup"
     CreateReduxCheckBox -Name "LabFish" -Text "Faster Lab Fish"   -Info "Only one fish has to be feeded in the Marine Research Lab"                            -Credits "Ported from Rando"
-    CreateReduxCheckBox -Name "Dampe"   -Text "Good Dampé RNG"    -Info "Dampe's Digging Game always has two Ghost Flames on the ground and one up the ladder" -Credits "Ported from Rando"
+    CreateReduxCheckBox -Name "Dampe"   -Text "Good DampÃ© RNG"    -Info "Dampe's Digging Game always has two Ghost Flames on the ground and one up the ladder" -Credits "Ported from Rando"
     CreateReduxCheckBox -Name "DogRace" -Text "Good Dog Race RNG" -Info "The Gold Dog always wins the Doggy Racetrack race if you have the Mask of Truth"      -Credits "Ported from Rando"
 
 

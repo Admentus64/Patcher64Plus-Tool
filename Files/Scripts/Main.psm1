@@ -1,4 +1,4 @@
-﻿function CreateMainDialog() {
+function CreateMainDialog() {
     
     # Create the main dialog that is shown to the user.
     $global:MainDialog          = New-Object System.Windows.Forms.Form
