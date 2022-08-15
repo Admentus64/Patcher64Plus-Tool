@@ -123,6 +123,7 @@
 - Hat Kid:				Hailey
 - Hatsune Miku Link:			JanexLane
 - Hatsune Miku Vocaloid:		JanexLane
+- Ikey:					Ikey Ilex (https://github.com/Caverns4/Custom-Game-Models)
 - Kafei:				Malon Rose (www.patreon.com/MalonRose & www.youtube.com/c/MalonRose)
 - Kristin:				Ikey Ilex (https://github.com/Caverns4/Custom-Game-Models)
 - Lorna Rissa:				JanexLane
@@ -417,6 +418,7 @@ https://github.com/DaruniasJoy/OoT-Custom-Sequences
 - Fierce Deity Link:			UltIMa647
 - Glover:				Unesag
 - Hat Kid:				Hailey
+- Ikey:					Ikey Ilex (https://github.com/Caverns4/Custom-Game-Models)
 - Improved Link:			Skilarbabcock (www.youtube.com/user/skilarbabcock) & Nerrel
 - Improved Link + OoT Eyes:		Skilarbabcock (model), Nerrel (owner) & GhostlyDark (eyes)
 - Kristin:				Ikey Ilex (https://github.com/Caverns4/Custom-Game-Models)

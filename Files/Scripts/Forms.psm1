@@ -786,14 +786,6 @@ function CheckReduxOption([Object]$Expose=@($GameType.mode), [Object]$Exclude, [
 
     if ($All) { return $True }
 
-    if ($Base) {
-        if ($GamePatch.options -eq 1) { return $True }
-    }
-
-    if ($Alt) {
-        if ($GamePatch.options -eq 2) { return $True }
-    }
-
     if ($Child) {
         if (!(IsSet $GamePatch.age))                { return $True }
         if ($GamePatch.age.toLower() -eq "child")   { return $True }
@@ -804,7 +796,13 @@ function CheckReduxOption([Object]$Expose=@($GameType.mode), [Object]$Exclude, [
         if ($GamePatch.age.toLower() -eq "adult")   { return $True }
     }
     
-    if ($Expose -is [Array]) {
+    if ($Base) {
+        if ($GamePatch.options -eq 1) { return $True }
+    }
+    elseif ($Alt) {
+        if ($GamePatch.options -eq 2) { return $True }
+    }
+    elseif ($Expose -is [Array]) {
         if ($Expose.count -gt 0) {
             foreach ($e in $Expose) {
                 if ($GamePatch.title -like "*$e*")   { return $True }
