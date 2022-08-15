@@ -14,7 +14,7 @@ function CreateVCRemapDialog() {
     if (IsSet $Files.json.controls) { foreach ($item in $Files.json.controls.presets) { $items += $item.title } }
     CreateReduxComboBox -All -Name "Preset" -Text "Preset" -Length 200 -Items $items -PostItems @("Custom") -Info "Select a preset for the VC Remap controls"
 
-    CreateReduxGroup -Tag "Controls" -Y ($Last.Group.bottom + (DPISize 10) ) -Height 10 -Text "Virtual Console Remap Settings" -Name $null -ShowAlways -AddTo $VCRemapDialog
+    CreateReduxGroup -All -Tag "Controls" -Y ($Last.Group.bottom + (DPISize 10) ) -Height 10 -Text "Virtual Console Remap Settings" -Name $null -ShowAlways -AddTo $VCRemapDialog
     if     ($GameConsole.mode -eq "N64")    { $items = @("Disabled", "A", "B", "Start", "L", "R", "Z", "C-Up", "C-Right", "C-Down", "C-Left", "D-Pad Up", "D-Pad Right", "D-Pad Down", "D-Pad Left") }
     elseif ($GameConsole.mode -eq "SNES")   { $items = @("Disabled", "A", "B", "X", "Y", "Start", "Select", "L", "R") }
     elseif ($GameConsole.mode -eq "NES")    { $items = @("Disabled", "A", "B", "Start", "Select") }

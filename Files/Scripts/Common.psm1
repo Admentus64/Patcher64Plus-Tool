@@ -10,7 +10,6 @@ function SetWiiVCMode([boolean]$Enable) {
       # ChangeGameRev
     }
 
-    SetVCRemap
     EnablePatchButtons (IsSet $GamePath)
     SetModeLabel
 
@@ -309,8 +308,8 @@ function ResetReduxSettings() {
 #==============================================================================================================================================================================================
 function SetVCRemap() {
 
-    if ( (TestFile $GameFiles.controls) -and $IsWiiVC) {
-        $Files.json.controls  = SetJSONFile $GameFiles.controls
+    if ( (TestFile $GameFiles.controls) -and (IsSet $GameSettings) -and $IsWiiVC) {
+        $Files.json.controls = SetJSONFile $GameFiles.controls
         CreateVCRemapDialog # Create VC remap settings
     }
     else { $Files.json.controls  = $null }
@@ -448,7 +447,7 @@ function ChangePatch() {
                     if (Get-Command "CreateOptions" -errorAction SilentlyContinue) { iex "CreateOptions" }
                 }
                 DisablePatches
-
+                SetVCRemap
                 break
         }
     }
