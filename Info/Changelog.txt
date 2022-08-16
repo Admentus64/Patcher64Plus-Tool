@@ -1,3 +1,6 @@
+v19.1.5
+- Updated "Ocarina Icons" option with alternative icon option
+
 v19.1.4
 - Fixed issue with Wii VC controls remapping
 - Fixed issue with OoT Redux HUD layout
