@@ -505,17 +505,17 @@ function ShowHudPreview([switch]$IsOoT) {
     }
 
     $file = $null
-    if       ( ( (IsChecked $Redux.UI.Rupees)      -or (IsChecked $Redux.UI.HUD) )      -and  $IsOoT)        { $file = "Majora's Mask"   }
-    elseif   ( ( (IsChecked $Redux.UI.Rupees)      -or (IsChecked $Redux.UI.HUD) )      -and !$IsOoT)        { $file = "Ocarina of Time" }
-    elseif   ( ( (IsChecked $Redux.UI.Rupees -Not) -or (IsChecked $Redux.UI.HUD -Not) ) -and  $IsOoT)        { $file = "Ocarina of Time" }
-    elseif   ( ( (IsChecked $Redux.UI.Rupees -Not) -or (IsChecked $Redux.UI.HUD -Not) ) -and !$IsOoT)        { $file = "Majora's Mask"   }
+    if       ( ( (IsChecked $Redux.UI.Rupees)      -or (IsChecked $Redux.UI.HUD) )      -and  $IsOoT)   { $file = "Majora's Mask"   }
+    elseif   ( ( (IsChecked $Redux.UI.Rupees)      -or (IsChecked $Redux.UI.HUD) )      -and !$IsOoT)   { $file = "Ocarina of Time" }
+    elseif   ( ( (IsChecked $Redux.UI.Rupees -Not) -or (IsChecked $Redux.UI.HUD -Not) ) -and  $IsOoT)   { $file = "Ocarina of Time" }
+    elseif   ( ( (IsChecked $Redux.UI.Rupees -Not) -or (IsChecked $Redux.UI.HUD -Not) ) -and !$IsOoT)   { $file = "Majora's Mask"   }
     if (TestFile ($Paths.Shared + "\HUD\Rupees\" + $file + ".png"))    { SetBitMap -Path ($Paths.Shared + "\HUD\Rupees\" + $file + ".png") -Box $Redux.UI.RupeesPreview } else { $Redux.UI.RupeesPreview.Image = $null }
 
     $file = $null
-    if       ( ( (IsChecked $Redux.UI.DungeonKeys)      -or (IsChecked $Redux.UI.HUD) )      -and  $IsOoT)        { $file = "Majora's Mask"   }
-    elseif   ( ( (IsChecked $Redux.UI.DungeonKeys)      -or (IsChecked $Redux.UI.HUD) )      -and !$IsOoT)        { $file = "Ocarina of Time" }
-    elseif   ( ( (IsChecked $Redux.UI.DungeonKeys -Not) -or (IsChecked $Redux.UI.HUD -Not) ) -and  $IsOoT)        { $file = "Ocarina of Time" }
-    elseif   ( ( (IsChecked $Redux.UI.DungeonKeys -Not) -or (IsChecked $Redux.UI.HUD -Not) ) -and !$IsOoT)        { $file = "Majora's Mask"   }
+    if       ( ( (IsChecked $Redux.UI.DungeonKeys)      -or (IsChecked $Redux.UI.HUD) )      -and  $IsOoT)   { $file = "Majora's Mask"   }
+    elseif   ( ( (IsChecked $Redux.UI.DungeonKeys)      -or (IsChecked $Redux.UI.HUD) )      -and !$IsOoT)   { $file = "Ocarina of Time" }
+    elseif   ( ( (IsChecked $Redux.UI.DungeonKeys -Not) -or (IsChecked $Redux.UI.HUD -Not) ) -and  $IsOoT)   { $file = "Ocarina of Time" }
+    elseif   ( ( (IsChecked $Redux.UI.DungeonKeys -Not) -or (IsChecked $Redux.UI.HUD -Not) ) -and !$IsOoT)   { $file = "Majora's Mask"   }
     if (TestFile ($Paths.Shared + "\HUD\Keys\"   + $file + ".png"))    { SetBitMap -Path ($Paths.Shared + "\HUD\Keys\"   + $file + ".png") -Box $Redux.UI.DungeonKeysPreview } else { $Redux.UI.DungeonKeysPreview.Image = $null }
 }
 

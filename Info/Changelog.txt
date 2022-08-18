@@ -1,3 +1,8 @@
+v19.1.6
+- Updated Gold Deku Pipes Icon (by ShadowOne333)
+- Added new fairy colors
+- Fixed issue with 30 FPS being enabled for MM Redux
+
 v19.1.5
 - Updated "Ocarina Icons" option with alternative icon option
 
