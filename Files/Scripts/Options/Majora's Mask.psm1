@@ -556,6 +556,11 @@ function ByteOptions() {
     if (IsSet $Redux.Colors.SetFairy) {
         if ( (IsDefaultColor -Elem $Redux.Colors.SetFairy[0] -Not) -or (IsDefaultColor -Elem $Redux.Colors.SetFairy[1] -Not) ) { # Idle
             ChangeBytes -Offset "C451D4" -Values @($Redux.Colors.SetFairy[0].Color.R, $Redux.Colors.SetFairy[0].Color.G, $Redux.Colors.SetFairy[0].Color.B, 255, $Redux.Colors.SetFairy[1].Color.R, $Redux.Colors.SetFairy[1].Color.G, $Redux.Colors.SetFairy[1].Color.B, 0)
+		# Special case for Tael's cutscene values
+        if (IsIndex -Elem $Redux.Colors.Fairy -Text "Tael")	{ $rgb_inner = "3F125D";	$rgb_outer = "FA280A"	}
+        else		{ $rgb_inner = $Redux.Colors.SetFairy[0].Color; $rgb_outer = $Redux.Colors.SetFairy[1].Color }
+        ChangeBytes -Offset "F0D228" -Values (Get32Bit (ConvertHexToFloat $rgb_inner) )	# 42 7C 00 00 41 90 00 00 42 BA 00 00 - Inner for Tael (Cutscene)
+		ChangeBytes -Offset "F0D258" -Values (Get32Bit (ConvertHexToFloat $rgb_outer) )	# 43 7A 00 00 42 20 00 00 41 20 00 00 - Outer for Tael (Cutscene)
         }
         if ( (IsDefaultColor -Elem $Redux.Colors.SetFairy[2] -Not) -or (IsDefaultColor -Elem $Redux.Colors.SetFairy[3] -Not) ) { # Interact
             ChangeBytes -Offset "C451F4" -Values @($Redux.Colors.SetFairy[2].Color.R, $Redux.Colors.SetFairy[2].Color.G, $Redux.Colors.SetFairy[2].Color.B, 255, $Redux.Colors.SetFairy[3].Color.R, $Redux.Colors.SetFairy[3].Color.G, $Redux.Colors.SetFairy[3].Color.B, 0)
