@@ -944,7 +944,7 @@ function CreateFairyColorOptions($name) {
 
     # FAIRY COLORS #
     CreateReduxGroup    -Tag  "Colors" -All -Text "Fairy Colors" -Height 2
-    $Items = @($GameType.default_values.fairy_option1, $GameType.default_values.fairy_option2, "Tael", "Tatl (Cutscene)", "Tael (Cutscene)", "Gold", "Green", "Light Blue", "Yellow", "Red", "Magenta", "Black", "Fi", "Ciela", "Epona", "Ezlo", "King of Red Lions", "Linebeck", "Loftwing", "Midna", "Phantom Zelda", "Randomized", "Custom")
+    $Items = @($GameType.default_values.fairy_option1, $GameType.default_values.fairy_option2, "Tael", "Gold", "Green", "Light Blue", "Yellow", "Red", "Magenta", "Black", "Fi", "Ciela", "Epona", "Ezlo", "King of Red Lions", "Linebeck", "Loftwing", "Midna", "Phantom Zelda", "Randomized", "Custom")
     $Presets = ("`n" + 'Selecting the presets ' + '"' + $GameType.default_values.fairy_option1 + '"' + ' or "Tael" will also change the references for ' + '"' + $GameType.default_values.fairy_option1 + '"' + ' in the dialogue')
     CreateReduxComboBox -Name "Fairy" -Length 230 -Shift 40 -Items $Items -All -Text ($name + " Colors") -Info ("Select a color scheme for " + $name + $Presets + "`n" + '"Randomized" fully randomizes the colors each time the patcher is opened') -Credits "Ported from Rando"
 
@@ -1201,8 +1201,6 @@ function SetFairyColorsPreset([object]$ComboBox, [Array]$Dialogs, [Array]$Labels
     if     ($Text -eq "Navi")                { SetFairyColors -Inner "FFFFFF" -Outer "0000FF" -Dialogs $Dialogs -Labels $Labels }
     elseif ($Text -eq "Tatl")                { SetFairyColors -Inner "FFFFE6" -Outer "DCA050" -Dialogs $Dialogs -Labels $Labels }
     elseif ($Text -eq "Tael")                { SetFairyColors -Inner "49146C" -Outer "FF0000" -Dialogs $Dialogs -Labels $Labels }
-    elseif ($Text -eq "Tatl (Cutscene)")     { SetFairyColors -Inner "FAFFE6" -Outer "DCA050" -Dialogs $Dialogs -Labels $Labels }
-    elseif ($Text -eq "Tael (Cutscene)")     { SetFairyColors -Inner "3F125D" -Outer "FA280A" -Dialogs $Dialogs -Labels $Labels }
     elseif ($Text -eq "Gold")                { SetFairyColors -Inner "FECC3C" -Outer "FEC007" -Dialogs $Dialogs -Labels $Labels }
     elseif ($Text -eq "Green")               { SetFairyColors -Inner "00FF00" -Outer "00FF00" -Dialogs $Dialogs -Labels $Labels }
     elseif ($Text -eq "Light Blue")          { SetFairyColors -Inner "9696FF" -Outer "9696FF" -Dialogs $Dialogs -Labels $Labels }
