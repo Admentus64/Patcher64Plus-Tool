@@ -553,13 +553,28 @@ function ByteOptions() {
 
     # FAIRY COLORS #
 
+    # Colors for Tatl option
     if (IsSet $Redux.Colors.SetFairy) {
+    if ( (IsDefaultColor -Elem $Redux.Colors.SetFairy[0] -Not) -or (IsDefaultColor -Elem $Redux.Colors.SetFairy[1] -Not) ) { # Idle colors for Tael's cutscene values
+        if (IsIndex -Elem $Redux.Colors.Fairy -Text "Tael") {
+                # For Tatl in cutscenes, her colors are Inner FAFFE6 and Outer DCA050
+                $r_in  = ConvertFloatToHex 63;  $g_in  = ConvertFloatToHex 18; $b_in  = ConvertFloatToHex 93	# 3F125D
+                $r_out = ConvertFloatToHex 250; $g_out = ConvertFloatToHex 40; $b_out = ConvertFloatToHex 10	# FA280A
+        }
+        else {
+            $r_in  = ConvertFloatToHex $Redux.Colors.SetFairy[0].Color.r; $g_in  = ConvertFloatToHex $Redux.Colors.SetFairy[0].Color.g; $b_in  = ConvertFloatToHex $Redux.Colors.SetFairy[0].Color.b
+            $r_out = ConvertFloatToHex $Redux.Colors.SetFairy[1].Color.r; $g_out = ConvertFloatToHex $Redux.Colors.SetFairy[1].Color.g; $b_out = ConvertFloatToHex $Redux.Colors.SetFairy[1].Color.b
+        }
+            ChangeBytes -Offset "F0D228" -Values ($r_in  + $g_in  + $b_in)
+            ChangeBytes -Offset "F0D258" -Values ($r_out + $g_out + $b_out)
+        }
+    }
+    else {
         if ( (IsDefaultColor -Elem $Redux.Colors.SetFairy[0] -Not) -or (IsDefaultColor -Elem $Redux.Colors.SetFairy[1] -Not) ) { # Idle
             ChangeBytes -Offset "C451D4" -Values @($Redux.Colors.SetFairy[0].Color.R, $Redux.Colors.SetFairy[0].Color.G, $Redux.Colors.SetFairy[0].Color.B, 255, $Redux.Colors.SetFairy[1].Color.R, $Redux.Colors.SetFairy[1].Color.G, $Redux.Colors.SetFairy[1].Color.B, 0)
-		    
             # Special case for Tael's cutscene values
             if (IsIndex -Elem $Redux.Colors.Fairy -Text "Tael") {
-			# For Tatl in cutscenes, her colors are Inner FAFFE6 and Outer DCA050
+                # For Tatl in cutscenes, her colors are Inner FAFFE6 and Outer DCA050
                 $r_in  = ConvertFloatToHex 63;  $g_in  = ConvertFloatToHex 18; $b_in  = ConvertFloatToHex 93	# 3F125D
                 $r_out = ConvertFloatToHex 250; $g_out = ConvertFloatToHex 40; $b_out = ConvertFloatToHex 10	# FA280A
             }
@@ -583,6 +598,29 @@ function ByteOptions() {
         }
     }
 
+
+    # Colors for Tael option
+    if (IsSet $Redux.Colors.SetTael) {
+        if ( (IsDefaultColor -Elem $Redux.Colors.SetTael[0] -Not) -or (IsDefaultColor -Elem $Redux.Colors.SetTael[1] -Not) ) { # Idle
+            if (IsIndex -Elem $Redux.Colors.Tael -Text "Tael") {
+                $r_in  = ConvertFloatToHex 63;  $g_in  = ConvertFloatToHex 18; $b_in  = ConvertFloatToHex 93	# 3F125D
+                $r_out = ConvertFloatToHex 250; $g_out = ConvertFloatToHex 40; $b_out = ConvertFloatToHex 10	# FA280A
+            }
+            else {
+                if (IsIndex -Elem $Redux.Colors.Tael -Text "Tatl") {
+                    $r_in  = ConvertFloatToHex 250; $g_in  = ConvertFloatToHex 255; $b_in  = ConvertFloatToHex 230	# FAFFE6
+                    $r_out = ConvertFloatToHex 220; $g_out = ConvertFloatToHex 160; $b_out = ConvertFloatToHex 80	# DCA050
+                }
+                else {
+                    $r_in  = ConvertFloatToHex $Redux.Colors.SetTael[0].Color.r; $g_in  = ConvertFloatToHex $Redux.Colors.SetTael[0].Color.g; $b_in  = ConvertFloatToHex $Redux.Colors.SetTael[0].Color.b
+                    $r_out = ConvertFloatToHex $Redux.Colors.SetTael[1].Color.r; $g_out = ConvertFloatToHex $Redux.Colors.SetTael[1].Color.g; $b_out = ConvertFloatToHex $Redux.Colors.SetTael[1].Color.b
+                }
+            }
+        ChangeBytes -Offset "F0D238" -Values ($r_in  + $g_in  + $b_in)
+        ChangeBytes -Offset "F0D268" -Values ($r_out + $g_out + $b_out)
+        }
+    }
+    
 
 
     # AMMO CAPACITY SELECTION #
@@ -1460,6 +1498,31 @@ function CreateTabColors() {
 
     CreateSpinAttackColorOptions
     CreateFairyColorOptions -Name "Tatl"
+
+    # FAIRY COLORS #
+    $Items = @("Tael", "Tatl", "Navi", "Gold", "Green", "Light Blue", "Yellow", "Red", "Magenta", "Black", "Fi", "Ciela", "Epona", "Ezlo", "King of Red Lions", "Linebeck", "Loftwing", "Midna", "Phantom Zelda", "Randomized", "Custom")
+    $Presets = ("`n" + 'Selecting the presets "Tael" or ' + '"' + $GameType.default_values.fairy_option1 + '"' + ' will also change the references for ' + '"Tael"' + ' in the dialogue')
+    CreateReduxComboBox -Name "Tael" -Column 1 -Row 3 -Length 230 -Shift 40 -Items $Items -All -Text ($name + "Tael Colors") -Info ("Select a color scheme for Tael" + $Presets + "`n" + '"Randomized" fully randomizes the colors each time the patcher is opened') -Credits "By ShadowOne333"
+
+    # Fairy Colors - Buttons
+    $Buttons = @()
+    $Buttons += CreateReduxButton -Column 3 -Row 3 -Width 100 -Tag $Buttons.Count -All -Text "Idle (Inner)"     -Info ("Select the color you want for the Inner Idle stance for " + $name)  -Credits "Ported from Rando"
+    $Buttons += CreateReduxButton -Column 3 -Row 4 -Width 100 -Tag $Buttons.Count -All -Text "Idle (Outer)"     -Info ("Select the color you want for the Outer Idle stance for " + $name)  -Credits "Ported from Rando"
+
+    # Fairy Colors - Dialogs
+    $Redux.Colors.SetTael = @()
+    $Redux.Colors.SetTael += CreateColorDialog -Color "3F125D" -Name "SetTaelIdleInner"     -IsGame -Button $Buttons[0]
+    $Redux.Colors.SetTael += CreateColorDialog -Color "FA280A" -Name "SetTaelIdleOuter"     -IsGame -Button $Buttons[1]
+
+    # Fairy Colors - Labels
+    $Redux.Colors.TaelLabels = @()
+    for ($i=0; $i -lt $Buttons.length; $i++) {
+    	$Buttons[$i].Add_Click({ $Redux.Colors.SetTael[[int16]$this.Tag].ShowDialog(); $Redux.Colors.Tael.Text = "Custom"; $Redux.Colors.TaelLabels[[int16]$this.Tag].BackColor = $Redux.Colors.SetTael[[int16]$this.Tag].Color; $GameSettings["Colors"][$Redux.Colors.SetTael[[int16]$this.Tag].Tag] = $Redux.Colors.SetTael[[int16]$this.Tag].Color.Name })
+    	$Redux.Colors.TaelLabels += CreateReduxColoredLabel -All -Link $Buttons[$i] -Color $Redux.Colors.SetTael[$i].Color
+    }
+
+    $Redux.Colors.Tael.Add_SelectedIndexChanged({ SetFairyColorsPreset -ComboBox $Redux.Colors.Tael -Dialogs $Redux.Colors.SetTael -Labels $Redux.Colors.TaelLabels })
+    SetTaelColorsPreset -ComboBox $Redux.Colors.Tael -Dialogs $Redux.Colors.SetTael -Labels $Redux.Colors.TaelLabels
 
 }
 
