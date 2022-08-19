@@ -553,15 +553,14 @@ function ByteOptions() {
 
     # FAIRY COLORS #
 
-    # Colors for Tatl option
-    if (IsSet $Redux.Colors.SetFairy) {
+    if (IsSet $Redux.Colors.SetFairy) { # Colors for Tatl option
         if ( (IsDefaultColor -Elem $Redux.Colors.SetFairy[0] -Not) -or (IsDefaultColor -Elem $Redux.Colors.SetFairy[1] -Not) ) { # Idle
             ChangeBytes -Offset "C451D4" -Values @($Redux.Colors.SetFairy[0].Color.R, $Redux.Colors.SetFairy[0].Color.G, $Redux.Colors.SetFairy[0].Color.B, 255, $Redux.Colors.SetFairy[1].Color.R, $Redux.Colors.SetFairy[1].Color.G, $Redux.Colors.SetFairy[1].Color.B, 0)
-			# Special case for Tael's cutscene values
-            if (IsIndex -Elem $Redux.Colors.Fairy -Text "Tael") {
+			
+            if (IsIndex -Elem $Redux.Colors.Fairy -Text "Tael") { # Special case for Tael's cutscene values
 				# For Tatl in cutscenes, her colors are Inner FAFFE6 and Outer DCA050
-                $r_in  = ConvertFloatToHex 63;  $g_in  = ConvertFloatToHex 18; $b_in  = ConvertFloatToHex 93	# 3F125D
-                $r_out = ConvertFloatToHex 250; $g_out = ConvertFloatToHex 40; $b_out = ConvertFloatToHex 10	# FA280A
+                $r_in  = ConvertFloatToHex 63;  $g_in  = ConvertFloatToHex 18; $b_in  = ConvertFloatToHex 93 # 3F125D
+                $r_out = ConvertFloatToHex 250; $g_out = ConvertFloatToHex 40; $b_out = ConvertFloatToHex 10 # FA280A
             }
             else {
                 $r_in  = ConvertFloatToHex $Redux.Colors.SetFairy[0].Color.r; $g_in  = ConvertFloatToHex $Redux.Colors.SetFairy[0].Color.g; $b_in  = ConvertFloatToHex $Redux.Colors.SetFairy[0].Color.b
@@ -583,20 +582,18 @@ function ByteOptions() {
         }
     }
 
-
-    # Colors for Tael option
-    if (IsSet $Redux.Colors.SetTael) {
-        if ( (IsDefaultColor -Elem $Redux.Colors.SetTael[0] -Not) -or (IsDefaultColor -Elem $Redux.Colors.SetTael[1] -Not) ) { # Idle
+    if (IsSet $Redux.Colors.SetTael) { # Colors for Tael option
+        if ( (IsDefaultColor -Elem $Redux.Colors.SetTael[0] -Not) -or (IsDefaultColor -Elem $Redux.Colors.SetTael[1] -Not) ) {
             if (IsIndex -Elem $Redux.Colors.Tael -Text "Tatl") {
-                    $r_in  = ConvertFloatToHex 250; $g_in  = ConvertFloatToHex 255; $b_in  = ConvertFloatToHex 230	# FAFFE6
-                    $r_out = ConvertFloatToHex 220; $g_out = ConvertFloatToHex 160; $b_out = ConvertFloatToHex 80	# DCA050
+                $r_in  = ConvertFloatToHex 250; $g_in  = ConvertFloatToHex 255; $b_in  = ConvertFloatToHex 230 # FAFFE6
+                $r_out = ConvertFloatToHex 220; $g_out = ConvertFloatToHex 160; $b_out = ConvertFloatToHex 80  # DCA050
             }
             else {
-                    $r_in  = ConvertFloatToHex $Redux.Colors.SetTael[0].Color.r; $g_in  = ConvertFloatToHex $Redux.Colors.SetTael[0].Color.g; $b_in  = ConvertFloatToHex $Redux.Colors.SetTael[0].Color.b
-                    $r_out = ConvertFloatToHex $Redux.Colors.SetTael[1].Color.r; $g_out = ConvertFloatToHex $Redux.Colors.SetTael[1].Color.g; $b_out = ConvertFloatToHex $Redux.Colors.SetTael[1].Color.b
+                $r_in  = ConvertFloatToHex $Redux.Colors.SetTael[0].Color.r; $g_in  = ConvertFloatToHex $Redux.Colors.SetTael[0].Color.g; $b_in  = ConvertFloatToHex $Redux.Colors.SetTael[0].Color.b
+                $r_out = ConvertFloatToHex $Redux.Colors.SetTael[1].Color.r; $g_out = ConvertFloatToHex $Redux.Colors.SetTael[1].Color.g; $b_out = ConvertFloatToHex $Redux.Colors.SetTael[1].Color.b
             }
-        ChangeBytes -Offset "F0D238" -Values ($r_in  + $g_in  + $b_in)
-        ChangeBytes -Offset "F0D268" -Values ($r_out + $g_out + $b_out)
+            ChangeBytes -Offset "F0D238" -Values ($r_in  + $g_in  + $b_in)
+            ChangeBytes -Offset "F0D268" -Values ($r_out + $g_out + $b_out)
         }
     }
     
@@ -910,9 +907,9 @@ function ByteReduxOptions() {
 #==============================================================================================================================================================================================
 function CheckLanguageOptions() {
     
-    if     ( (IsChecked  $Redux.Text.Vanilla -Not)     -or (IsLanguage $Redux.Text.AdultPronouns) -or (IsLanguage $Redux.UI.GCScheme)         -or (IsLanguage $Redux.Text.AreaTitleCards)   )   { return $True }
-    elseif ( (IsLanguage $Redux.Gameplay.RazorSword)   -or (IsIndex $Redux.Text.TatlScript -Not)  -or (IsLanguage $Redux.Capacity.EnableAmmo) -or (IsLanguage $Redux.Capacity.EnableWallet) )   { return $True }
-    elseif ( (IsDefault $Redux.Features.OcarinaIcons -Not) -and $Patches.Redux.Checked -and $LanguagePatch.code -eq "en")                                                                       { return $True }
+    if     ( (IsChecked  $Redux.Text.Vanilla -Not)   -or (IsLanguage $Redux.Text.AdultPronouns) -or (IsLanguage $Redux.UI.GCScheme)       -or (IsLanguage $Redux.Text.AreaTitleCards)                                               )   { return $True }
+    elseif ( (IsLanguage $Redux.Gameplay.RazorSword) -or (IsIndex $Redux.Text.TatlScript -Not)  -or (IsIndex $Redux.Text.TaelScript -Not) -or (IsLanguage $Redux.Capacity.EnableAmmo) -or (IsLanguage $Redux.Capacity.EnableWallet) )   { return $True }
+    elseif ( (IsDefault $Redux.Features.OcarinaIcons -Not) -and $Patches.Redux.Checked -and $LanguagePatch.code -eq "en")                                                                                                               { return $True }
     return $False
 
 }
@@ -1009,6 +1006,10 @@ function ByteLanguageOptions() {
         elseif ($Redux.Text.TatlScript.text -eq "Override" -and $LanguagePatch.tatl -ne "Tatl")   { $replace = "Tatl"                      }
         else                                                                                      { $replace = $Redux.Text.TatlScript.text }
         SetMessage -ID "057A" -Text $LanguagePatch.tatl -Replace $replace; SetMessage -ID "057C"; SetMessage -ID "057E"; SetMessage -ID "058E"; SetMessage -ID "0735"; SetMessage -ID "073E"; SetMessage -ID "073F"; SetMessage -ID "1F4E"
+    }
+
+    if (IsIndex -Elem $Redux.Text.TaelScript -Not) {
+
     }
 
     if (IsLanguage $Redux.Capacity.EnableAmmo) {
@@ -1225,8 +1226,8 @@ function CreateTabLanguage() {
     CreateReduxGroup    -Tag  "Text"       -Text "Other Text Options"
     CreateReduxCheckBox -Name "Comma"      -Text "Better Comma"     -Info "Make the comma not look as awful"                                                                                                                     -Credits "ShadowOne333"
     CreateReduxComboBox -Name "TatlCUp"    -Text "Tatl C-Up Prompt" -Items @("Default", "Override", "Tatl", "Taya") -FilePath ($GameFiles.textures + "\Tatl") -Ext "cup" -Info "Replace the C-Up Button prompt for Tatl"         -Credits "GhostlyDark (injects)"
-    CreateReduxComboBox -Name "TatlScript" -Text "Tatl Text"        -Items @("Default", "Override", "Tatl", "Taya", "Tael", "Navi", "Nite")                              -Info "Change the name for Navi in the dialogue script" -Credits "Admentus & GhostlyDark"
-
+    CreateReduxComboBox -Name "TatlScript" -Text "Tatl Text"        -Items @("Default", "Override", "Tatl", "Taya", "Tael", "Navi", "Nite")                              -Info "Change the name for Tatl in the dialogue script" -Credits "Admentus & GhostlyDark"
+    CreateReduxComboBox -Name "TaelScript" -Text "Tael Text"        -Items @("Tael", "Tatl", "Taya", "Navi", "Nite")                                                     -Info "Change the name for Tael in the dialogue script" -Credits "Admentus & ShadowOne333"
 
     foreach ($i in 0.. ($Files.json.languages.length-1)) { $Redux.Language[$i].Add_CheckedChanged({ UnlockLanguageContent }) }
     UnlockLanguageContent
@@ -1478,20 +1479,18 @@ function CreateTabColors() {
     CreateSpinAttackColorOptions
     CreateFairyColorOptions -Name "Tatl"
 
-    # FAIRY COLORS #
-    $Items = @("Tael", "Tatl", "Navi", "Gold", "Green", "Light Blue", "Yellow", "Red", "Magenta", "Black", "Fi", "Ciela", "Epona", "Ezlo", "King of Red Lions", "Linebeck", "Loftwing", "Midna", "Phantom Zelda", "Randomized", "Custom")
-    $Presets = ("`n" + 'Selecting the presets "Tael" or ' + '"' + $GameType.default_values.fairy_option1 + '"' + ' will also change the references for ' + '"Tael"' + ' in the dialogue')
-    CreateReduxComboBox -Name "Tael" -Column 1 -Row 3 -Length 230 -Shift 40 -Items $Items -All -Text ($name + "Tael Colors") -Info ("Select a color scheme for Tael" + $Presets + "`n" + '"Randomized" fully randomizes the colors each time the patcher is opened') -Credits "By ShadowOne333"
+    $Items = @("Tatl", "Tael", "Navi", "Gold", "Green", "Light Blue", "Yellow", "Red", "Magenta", "Black", "Fi", "Ciela", "Epona", "Ezlo", "King of Red Lions", "Linebeck", "Loftwing", "Midna", "Phantom Zelda", "Randomized", "Custom")
+    CreateReduxComboBox -Name "Tael" -Default "Tael" -Column 1 -Row 3 -Length 230 -Shift 40 -Items $Items -All -Text ($name + "Tael Colors") -Info ("Select a color scheme for Tael`n" + '"Randomized" fully randomizes the colors each time the patcher is opened') -Credits "By ShadowOne333"
 
     # Fairy Colors - Buttons
     $Buttons = @()
-    $Buttons += CreateReduxButton -Column 3 -Row 3 -Width 100 -Tag $Buttons.Count -All -Text "Idle (Inner)"     -Info ("Select the color you want for the Inner Idle stance for " + $name)  -Credits "Ported from Rando"
-    $Buttons += CreateReduxButton -Column 3 -Row 4 -Width 100 -Tag $Buttons.Count -All -Text "Idle (Outer)"     -Info ("Select the color you want for the Outer Idle stance for " + $name)  -Credits "Ported from Rando"
+    $Buttons += CreateReduxButton -Column 3 -Row 3 -Width 100 -Tag $Buttons.Count -All -Text "Cutscene (Inner)" -Info "Select the color you want for the Inner Idle stance for Tael"  -Credits "ShadowOne333"
+    $Buttons += CreateReduxButton -Column 3 -Row 4 -Width 100 -Tag $Buttons.Count -All -Text "Cutscene (Outer)" -Info "Select the color you want for the Outer Idle stance for Tael"  -Credits "ShadowOne333"
 
     # Fairy Colors - Dialogs
     $Redux.Colors.SetTael = @()
-    $Redux.Colors.SetTael += CreateColorDialog -Color "3F125D" -Name "SetTaelIdleInner"     -IsGame -Button $Buttons[0]
-    $Redux.Colors.SetTael += CreateColorDialog -Color "FA280A" -Name "SetTaelIdleOuter"     -IsGame -Button $Buttons[1]
+    $Redux.Colors.SetTael += CreateColorDialog -Color "3F125D" -Name "SetTaelIdleInner" -IsGame -Button $Buttons[0]
+    $Redux.Colors.SetTael += CreateColorDialog -Color "FA280A" -Name "SetTaelIdleOuter" -IsGame -Button $Buttons[1]
 
     # Fairy Colors - Labels
     $Redux.Colors.TaelLabels = @()
@@ -1565,7 +1564,7 @@ function CreateTabEquipment() {
 
     # EQUIPMENT #
 
-    CreateReduxGroup    -Tag "Gameplay"    -Text "Equipment"
+    CreateReduxGroup    -Tag  "Gameplay"   -Text "Equipment"
     CreateReduxCheckBox -Name "RazorSword" -Text "Permanent Razor Sword" -Info "The Razor Sword won't get destroyed after 100 hits`nYou can also keep the Razor Sword when traveling back in time" -Credits "darklord92"
 
 
