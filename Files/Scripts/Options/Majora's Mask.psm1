@@ -587,19 +587,13 @@ function ByteOptions() {
     # Colors for Tael option
     if (IsSet $Redux.Colors.SetTael) {
         if ( (IsDefaultColor -Elem $Redux.Colors.SetTael[0] -Not) -or (IsDefaultColor -Elem $Redux.Colors.SetTael[1] -Not) ) { # Idle
-            if (IsIndex -Elem $Redux.Colors.Tael -Text "Tael") {
-                $r_in  = ConvertFloatToHex 63;  $g_in  = ConvertFloatToHex 18; $b_in  = ConvertFloatToHex 93	# 3F125D
-                $r_out = ConvertFloatToHex 250; $g_out = ConvertFloatToHex 40; $b_out = ConvertFloatToHex 10	# FA280A
-            }
-            else {
-                if (IsIndex -Elem $Redux.Colors.Tael -Text "Tatl") {
+            if (IsIndex -Elem $Redux.Colors.Tael -Text "Tatl") {
                     $r_in  = ConvertFloatToHex 250; $g_in  = ConvertFloatToHex 255; $b_in  = ConvertFloatToHex 230	# FAFFE6
                     $r_out = ConvertFloatToHex 220; $g_out = ConvertFloatToHex 160; $b_out = ConvertFloatToHex 80	# DCA050
-                }
-                else {
+            }
+            else {
                     $r_in  = ConvertFloatToHex $Redux.Colors.SetTael[0].Color.r; $g_in  = ConvertFloatToHex $Redux.Colors.SetTael[0].Color.g; $b_in  = ConvertFloatToHex $Redux.Colors.SetTael[0].Color.b
                     $r_out = ConvertFloatToHex $Redux.Colors.SetTael[1].Color.r; $g_out = ConvertFloatToHex $Redux.Colors.SetTael[1].Color.g; $b_out = ConvertFloatToHex $Redux.Colors.SetTael[1].Color.b
-                }
             }
         ChangeBytes -Offset "F0D238" -Values ($r_in  + $g_in  + $b_in)
         ChangeBytes -Offset "F0D268" -Values ($r_out + $g_out + $b_out)
