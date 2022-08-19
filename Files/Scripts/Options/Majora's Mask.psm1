@@ -1009,7 +1009,10 @@ function ByteLanguageOptions() {
     }
 
     if (IsIndex -Elem $Redux.Text.TaelScript -Not) {
-
+        SetMessage -ID "0216"   -Text "Tael" -Replace $Redux.Script.TaelScript.text; SetMessage -ID "0217"; SetMessage -ID "0229"
+		SetMessage -ID "146B"; SetMessage -ID "1F42"; SetMessage -ID "1F47"; SetMessage -ID "1F4B"; SetMessage -ID "200A"
+		SetMessage -ID "2011"; SetMessage -ID "2016"; SetMessage -ID "2029"; SetMessage -ID "202E"; SetMessage -ID "203B"
+		SetMessage -ID "203D"; SetMessage -ID "2040"; SetMessage -ID "2049"; SetMessage -ID "2080";	
     }
 
     if (IsLanguage $Redux.Capacity.EnableAmmo) {
@@ -1228,6 +1231,10 @@ function CreateTabLanguage() {
     CreateReduxComboBox -Name "TatlCUp"    -Text "Tatl C-Up Prompt" -Items @("Default", "Override", "Tatl", "Taya") -FilePath ($GameFiles.textures + "\Tatl") -Ext "cup" -Info "Replace the C-Up Button prompt for Tatl"         -Credits "GhostlyDark (injects)"
     CreateReduxComboBox -Name "TatlScript" -Text "Tatl Text"        -Items @("Default", "Override", "Tatl", "Taya", "Tael", "Navi", "Nite")                              -Info "Change the name for Tatl in the dialogue script" -Credits "Admentus & GhostlyDark"
     CreateReduxComboBox -Name "TaelScript" -Text "Tael Text"        -Items @("Tael", "Tatl", "Taya", "Navi", "Nite")                                                     -Info "Change the name for Tael in the dialogue script" -Credits "Admentus & ShadowOne333"
+
+	# Add option to split messages with sis/bro (pronouns) depending on selected Name text:
+	#1F43 (sis), 1F48(S-s... Sis!), 1F4A (little girl), 2009 (Sis!!!), 2028 (Sis!!!), 202D (Sis...), 2045 (Sis...), 2048 (sis), 204A (sister).
+	#1F49 (brother), 200D (brother), 2012 (brother)
 
     foreach ($i in 0.. ($Files.json.languages.length-1)) { $Redux.Language[$i].Add_CheckedChanged({ UnlockLanguageContent }) }
     UnlockLanguageContent
