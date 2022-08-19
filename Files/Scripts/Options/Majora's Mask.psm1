@@ -559,8 +559,9 @@ function ByteOptions() {
 		    
             # Special case for Tael's cutscene values
             if (IsIndex -Elem $Redux.Colors.Fairy -Text "Tael") {
-                $r_in  = ConvertFloatToHex 63;  $g_in  = ConvertFloatToHex 18; $b_in  = ConvertFloatToHex 93
-                $r_out = ConvertFloatToHex 250; $g_out = ConvertFloatToHex 40; $b_out = ConvertFloatToHex 10
+			# For Tatl in cutscenes, her colors are Inner FAFFE6 and Outer DCA050
+                $r_in  = ConvertFloatToHex 63;  $g_in  = ConvertFloatToHex 18; $b_in  = ConvertFloatToHex 93	# 3F125D
+                $r_out = ConvertFloatToHex 250; $g_out = ConvertFloatToHex 40; $b_out = ConvertFloatToHex 10	# FA280A
             }
             else {
                 $r_in  = ConvertFloatToHex $Redux.Colors.SetFairy[0].Color.r; $g_in  = ConvertFloatToHex $Redux.Colors.SetFairy[0].Color.g; $b_in  = ConvertFloatToHex $Redux.Colors.SetFairy[0].Color.b
