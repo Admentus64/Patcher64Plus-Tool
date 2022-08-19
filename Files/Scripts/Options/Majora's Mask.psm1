@@ -555,26 +555,11 @@ function ByteOptions() {
 
     # Colors for Tatl option
     if (IsSet $Redux.Colors.SetFairy) {
-    if ( (IsDefaultColor -Elem $Redux.Colors.SetFairy[0] -Not) -or (IsDefaultColor -Elem $Redux.Colors.SetFairy[1] -Not) ) { # Idle colors for Tael's cutscene values
-        if (IsIndex -Elem $Redux.Colors.Fairy -Text "Tael") {
-                # For Tatl in cutscenes, her colors are Inner FAFFE6 and Outer DCA050
-                $r_in  = ConvertFloatToHex 63;  $g_in  = ConvertFloatToHex 18; $b_in  = ConvertFloatToHex 93	# 3F125D
-                $r_out = ConvertFloatToHex 250; $g_out = ConvertFloatToHex 40; $b_out = ConvertFloatToHex 10	# FA280A
-        }
-        else {
-            $r_in  = ConvertFloatToHex $Redux.Colors.SetFairy[0].Color.r; $g_in  = ConvertFloatToHex $Redux.Colors.SetFairy[0].Color.g; $b_in  = ConvertFloatToHex $Redux.Colors.SetFairy[0].Color.b
-            $r_out = ConvertFloatToHex $Redux.Colors.SetFairy[1].Color.r; $g_out = ConvertFloatToHex $Redux.Colors.SetFairy[1].Color.g; $b_out = ConvertFloatToHex $Redux.Colors.SetFairy[1].Color.b
-        }
-            ChangeBytes -Offset "F0D228" -Values ($r_in  + $g_in  + $b_in)
-            ChangeBytes -Offset "F0D258" -Values ($r_out + $g_out + $b_out)
-        }
-    }
-    else {
         if ( (IsDefaultColor -Elem $Redux.Colors.SetFairy[0] -Not) -or (IsDefaultColor -Elem $Redux.Colors.SetFairy[1] -Not) ) { # Idle
             ChangeBytes -Offset "C451D4" -Values @($Redux.Colors.SetFairy[0].Color.R, $Redux.Colors.SetFairy[0].Color.G, $Redux.Colors.SetFairy[0].Color.B, 255, $Redux.Colors.SetFairy[1].Color.R, $Redux.Colors.SetFairy[1].Color.G, $Redux.Colors.SetFairy[1].Color.B, 0)
-            # Special case for Tael's cutscene values
+			# Special case for Tael's cutscene values
             if (IsIndex -Elem $Redux.Colors.Fairy -Text "Tael") {
-                # For Tatl in cutscenes, her colors are Inner FAFFE6 and Outer DCA050
+				# For Tatl in cutscenes, her colors are Inner FAFFE6 and Outer DCA050
                 $r_in  = ConvertFloatToHex 63;  $g_in  = ConvertFloatToHex 18; $b_in  = ConvertFloatToHex 93	# 3F125D
                 $r_out = ConvertFloatToHex 250; $g_out = ConvertFloatToHex 40; $b_out = ConvertFloatToHex 10	# FA280A
             }
