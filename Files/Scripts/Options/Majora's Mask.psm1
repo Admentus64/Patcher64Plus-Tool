@@ -1,4 +1,4 @@
-﻿function PrePatchOptions() {
+function PrePatchOptions() {
 
     # ENHANCED 16:9 WIDESCREEN #
 
@@ -1007,7 +1007,16 @@ function ByteLanguageOptions() {
         else                                                                                      { $replace = $Redux.Text.TatlScript.text.replace(" ♂", "").replace(" ♀", "") }
         
         if ($Redux.Text.TatlScript.text -like "*♂*") {
-            SetMessage -ID "xxxx" -Text "" -Replace ""
+            SetMessage -ID "1F43" -Text "sis..." -Replace "bro..."
+            SetMessage -ID "1F48" -Text "S-s..." -Replace "B-b...";
+            SetMessage -ID "1F48" -Text "Sis" -Replace "Bro"
+            SetMessage -ID "1F4A" -Text "little girl" -Replace "little boy"
+            SetMessage -ID "2009" -Text "Sis!!!" -Replace "Bro!!!"
+            SetMessage -ID "2028" -Text "Sis!!!" -Replace "Bro!!!"
+            SetMessage -ID "202D" -Text "Sis..." -Replace "Bro..."
+            SetMessage -ID "2045" -Text "Sis..." -Replace "Bro..."
+            SetMessage -ID "2048" -Text "sis?" -Replace "bro?"
+            SetMessage -ID "204A" -Text "sister!" -Replace "brother!"
         }
 
         SetMessage -ID "057A" -Text $LanguagePatch.tatl -Replace $replace; SetMessage -ID "057C"; SetMessage -ID "057E"; SetMessage -ID "058E"; SetMessage -ID "0735"; SetMessage -ID "073E"; SetMessage -ID "073F"; SetMessage -ID "1F4E"
@@ -1017,7 +1026,9 @@ function ByteLanguageOptions() {
         $replace = $Redux.Text.TaelScript.text.replace(" ♂", "").replace(" ♀", "")
         
         if ($Redux.Text.TaelScript.text -like "*♀*") {
-            SetMessage -ID "xxxx" -Text "" -Replace ""
+            SetMessage -ID "1F49" -Text "brother!" -Replace "sister!"
+            SetMessage -ID "200D" -Text "brother?" -Replace "sister?"
+            SetMessage -ID "2012" -Text "my brother" -Replace "my sister"
         }
 
         SetMessage -ID "0216" -Text "Tael" -Replace $replace; SetMessage -ID "0217"; SetMessage -ID "0229"; SetMessage -ID "146B"; SetMessage -ID "1F42"; SetMessage -ID "1F47"; SetMessage -ID "1F4B"; SetMessage -ID "200A"; SetMessage -ID "2011"
