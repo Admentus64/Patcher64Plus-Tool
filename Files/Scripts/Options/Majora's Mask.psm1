@@ -1,4 +1,4 @@
-function PrePatchOptions() {
+﻿function PrePatchOptions() {
 
     # ENHANCED 16:9 WIDESCREEN #
 
@@ -990,7 +990,7 @@ function ByteLanguageOptions() {
         SetMessage -ID "0139" -ASCII -Replace "Zora Cape";              SetMessageIcon -ID "0139" -Hex "FE"
         SetMessage -ID "0012" -ASCII -Replace "Zora Shop";              SetMessageIcon -ID "0012" -Hex "FE"
         SetMessage -ID "0013" -ASCII -Replace "Deku Scrub Playground";  SetMessageIcon -ID "0013" -Hex "FE"
-        SetMessage -ID "00A2" -ASCII -Replace "Dampé's House" -Force;  SetMessageIcon -ID "00A2" -Hex "FE"
+        SetMessage -ID "00A2" -ASCII -Replace "Dampé's House" -Force;   SetMessageIcon -ID "00A2" -Hex "FE"
         SetMessage -ID "00A3" -ASCII -Replace "Igos du Ikana's Throne"; SetMessageIcon -ID "00A3" -Hex "FE"
         SetMessage -ID "00A4" -ASCII -Replace "Road to Southern Swamp"; SetMessageIcon -ID "00A4" -Hex "FE"
         SetMessage -ID "00AC" -ASCII -Replace "Path to Goron Village";  SetMessageIcon -ID "00AC" -Hex "FE"
@@ -1002,17 +1002,26 @@ function ByteLanguageOptions() {
     }
 
     if (IsIndex -Elem $Redux.Text.TatlScript -Not) {
-        if     ($Redux.Text.TatlScript.text -eq "Override" -and $LanguagePatch.tatl -eq "Tatl")   { $replace = "Taya"                      }
-        elseif ($Redux.Text.TatlScript.text -eq "Override" -and $LanguagePatch.tatl -ne "Tatl")   { $replace = "Tatl"                      }
-        else                                                                                      { $replace = $Redux.Text.TatlScript.text }
+        if     ($Redux.Text.TatlScript.text -eq "Override" -and $LanguagePatch.tatl -eq "Tatl")   { $replace = "Taya" }
+        elseif ($Redux.Text.TatlScript.text -eq "Override" -and $LanguagePatch.tatl -ne "Tatl")   { $replace = "Tatl" }
+        else                                                                                      { $replace = $Redux.Text.TatlScript.text.replace(" ♂", "").replace(" ♀", "") }
+        
+        if ($Redux.Text.TatlScript.text -like "*♂*") {
+            SetMessage -ID "xxxx" -Text "" -Replace ""
+        }
+
         SetMessage -ID "057A" -Text $LanguagePatch.tatl -Replace $replace; SetMessage -ID "057C"; SetMessage -ID "057E"; SetMessage -ID "058E"; SetMessage -ID "0735"; SetMessage -ID "073E"; SetMessage -ID "073F"; SetMessage -ID "1F4E"
     }
 
     if (IsIndex -Elem $Redux.Text.TaelScript -Not) {
-        SetMessage -ID "0216"   -Text "Tael" -Replace $Redux.Script.TaelScript.text; SetMessage -ID "0217"; SetMessage -ID "0229"
-		SetMessage -ID "146B"; SetMessage -ID "1F42"; SetMessage -ID "1F47"; SetMessage -ID "1F4B"; SetMessage -ID "200A"
-		SetMessage -ID "2011"; SetMessage -ID "2016"; SetMessage -ID "2029"; SetMessage -ID "202E"; SetMessage -ID "203B"
-		SetMessage -ID "203D"; SetMessage -ID "2040"; SetMessage -ID "2049"; SetMessage -ID "2080";	
+        $replace = $Redux.Text.TaelScript.text.replace(" ♂", "").replace(" ♀", "")
+        
+        if ($Redux.Text.TaelScript.text -like "*♀*") {
+            SetMessage -ID "xxxx" -Text "" -Replace ""
+        }
+
+        SetMessage -ID "0216" -Text "Tael" -Replace $replace; SetMessage -ID "0217"; SetMessage -ID "0229"; SetMessage -ID "146B"; SetMessage -ID "1F42"; SetMessage -ID "1F47"; SetMessage -ID "1F4B"; SetMessage -ID "200A"; SetMessage -ID "2011"
+        SetMessage -ID "2016";                                SetMessage -ID "2029"; SetMessage -ID "202E"; SetMessage -ID "203B"; SetMessage -ID "203D"; SetMessage -ID "2040"; SetMessage -ID "2049"; SetMessage -ID "2080"
     }
 
     if (IsLanguage $Redux.Capacity.EnableAmmo) {
@@ -1150,8 +1159,8 @@ function CreateTabRedux() {
 
     # GAMEPLAY #
 
-    $warning  = "30 FPS mode will have issues that prevent you from completing the game and certain challenges`nSwitch back to 20 FPS mode to continue these sections before returning to 30 FPS mode"
-    $warning += "´n´n--- Known Issues --"
+    $warning  = "30 FPS mode will have issues that prevent you from completing the game and certain challenges`nSwitch back to 20 FPS mode to continue these sections before returning to 30 FPS mode`n`n"
+    $warning += "--- Known Issues --`n"
     $warning += "Gravity for throwing objects`nExplosion timers are shorter`nLit torches burn out faster`nTriple swing is extremely hard to perform`nBaddies act and attack faster`nMinigame timers run too fast"
 
     CreateReduxGroup    -Tag  "Gameplay"           -All -Text "Gameplay"
@@ -1222,19 +1231,16 @@ function CreateTabLanguage() {
     CreateReduxCheckBox -Name "AdultPronouns"  -Text "Adult Pronouns"   -Info "Refer to Link as an adult instead of a child" -Credits "Skilar"
     CreateReduxCheckBox -Name "AreaTitleCards" -Text "Area Title Cards" -Info "Add area title cards to missing areas"        -Credits "ShadowOne333"
 
-
+    
 
     # OTHER TEXT OPTIONS #
 
+    $names = @("Tatl ♂", "Tatl ♀", "Taya ♂", "Taya ♀", "Tael ♂", "Tael ♀", "Navi ♂", "Navi ♀", "Nite ♂", "Nite ♀")
     CreateReduxGroup    -Tag  "Text"       -Text "Other Text Options"
-    CreateReduxCheckBox -Name "Comma"      -Text "Better Comma"     -Info "Make the comma not look as awful"                                                                                                                     -Credits "ShadowOne333"
+    CreateReduxCheckBox -Name "Comma"      -Text "Better Comma"                                                                                                          -Info "Make the comma not look as awful"                -Credits "ShadowOne333"
     CreateReduxComboBox -Name "TatlCUp"    -Text "Tatl C-Up Prompt" -Items @("Default", "Override", "Tatl", "Taya") -FilePath ($GameFiles.textures + "\Tatl") -Ext "cup" -Info "Replace the C-Up Button prompt for Tatl"         -Credits "GhostlyDark (injects)"
-    CreateReduxComboBox -Name "TatlScript" -Text "Tatl Text"        -Items @("Default", "Override", "Tatl", "Taya", "Tael", "Navi", "Nite")                              -Info "Change the name for Tatl in the dialogue script" -Credits "Admentus & GhostlyDark"
-    CreateReduxComboBox -Name "TaelScript" -Text "Tael Text"        -Items @("Tael", "Tatl", "Taya", "Navi", "Nite")                                                     -Info "Change the name for Tael in the dialogue script" -Credits "Admentus & ShadowOne333"
-
-	# Add option to split messages with sis/bro (pronouns) depending on selected Name text:
-	#1F43 (sis), 1F48(S-s... Sis!), 1F4A (little girl), 2009 (Sis!!!), 2028 (Sis!!!), 202D (Sis...), 2045 (Sis...), 2048 (sis), 204A (sister).
-	#1F49 (brother), 200D (brother), 2012 (brother)
+    CreateReduxComboBox -Name "TatlScript" -Text "Tatl Text"        -Items @("Default", "Override", $names)                                                              -Info "Change the name for Tatl in the dialogue script" -Credits "Admentus & GhostlyDark"
+    CreateReduxComboBox -Name "TaelScript" -Text "Tael Text"        -Items $names -Default 5                                                                             -Info "Change the name for Tael in the dialogue script" -Credits "Admentus & ShadowOne333"
 
     foreach ($i in 0.. ($Files.json.languages.length-1)) { $Redux.Language[$i].Add_CheckedChanged({ UnlockLanguageContent }) }
     UnlockLanguageContent
@@ -1485,21 +1491,23 @@ function CreateTabColors() {
 
     CreateSpinAttackColorOptions
     CreateFairyColorOptions -Name "Tatl"
+    $Last.Group.Height = (DPISize 140)
 
-    $Items = @("Tatl", "Tael", "Navi", "Gold", "Green", "Light Blue", "Yellow", "Red", "Magenta", "Black", "Fi", "Ciela", "Epona", "Ezlo", "King of Red Lions", "Linebeck", "Loftwing", "Midna", "Phantom Zelda", "Randomized", "Custom")
-    CreateReduxComboBox -Name "Tael" -Default "Tael" -Column 1 -Row 3 -Length 230 -Shift 40 -Items $Items -All -Text ($name + "Tael Colors") -Info ("Select a color scheme for Tael`n" + '"Randomized" fully randomizes the colors each time the patcher is opened') -Credits "By ShadowOne333"
+    $items = @("Tatl", "Tael", "Navi", "Gold", "Green", "Light Blue", "Yellow", "Red", "Magenta", "Black", "Fi", "Ciela", "Epona", "Ezlo", "King of Red Lions", "Linebeck", "Loftwing", "Midna", "Phantom Zelda", "Randomized", "Custom")
+    CreateReduxComboBox -Name "Tael" -Column 1 -Row 3 -Length 230 -Shift 40 -Items $items -Default "Tael" -All -Text "Tael Colors" -Info ("Select a color scheme for Tael`n" + '"Randomized" fully randomizes the colors each time the patcher is opened') -Credits "By ShadowOne333"
+    $items = $null
 
-    # Fairy Colors - Buttons
+    # Tael Colors - Buttons
     $Buttons = @()
     $Buttons += CreateReduxButton -Column 3 -Row 3 -Width 100 -Tag $Buttons.Count -All -Text "Cutscene (Inner)" -Info "Select the color you want for the Inner Idle stance for Tael"  -Credits "ShadowOne333"
     $Buttons += CreateReduxButton -Column 3 -Row 4 -Width 100 -Tag $Buttons.Count -All -Text "Cutscene (Outer)" -Info "Select the color you want for the Outer Idle stance for Tael"  -Credits "ShadowOne333"
 
-    # Fairy Colors - Dialogs
+    # Tael Colors - Dialogs
     $Redux.Colors.SetTael = @()
     $Redux.Colors.SetTael += CreateColorDialog -Color "3F125D" -Name "SetTaelIdleInner" -IsGame -Button $Buttons[0]
     $Redux.Colors.SetTael += CreateColorDialog -Color "FA280A" -Name "SetTaelIdleOuter" -IsGame -Button $Buttons[1]
 
-    # Fairy Colors - Labels
+    # Tael Colors - Labels
     $Redux.Colors.TaelLabels = @()
     for ($i=0; $i -lt $Buttons.length; $i++) {
     	$Buttons[$i].Add_Click({ $Redux.Colors.SetTael[[int16]$this.Tag].ShowDialog(); $Redux.Colors.Tael.Text = "Custom"; $Redux.Colors.TaelLabels[[int16]$this.Tag].BackColor = $Redux.Colors.SetTael[[int16]$this.Tag].Color; $GameSettings["Colors"][$Redux.Colors.SetTael[[int16]$this.Tag].Tag] = $Redux.Colors.SetTael[[int16]$this.Tag].Color.Name })
@@ -1507,7 +1515,7 @@ function CreateTabColors() {
     }
 
     $Redux.Colors.Tael.Add_SelectedIndexChanged({ SetFairyColorsPreset -ComboBox $Redux.Colors.Tael -Dialogs $Redux.Colors.SetTael -Labels $Redux.Colors.TaelLabels })
-    SetTaelColorsPreset -ComboBox $Redux.Colors.Tael -Dialogs $Redux.Colors.SetTael -Labels $Redux.Colors.TaelLabels
+    SetFairyColorsPreset -ComboBox $Redux.Colors.Tael -Dialogs $Redux.Colors.SetTael -Labels $Redux.Colors.TaelLabels
 
 }
 

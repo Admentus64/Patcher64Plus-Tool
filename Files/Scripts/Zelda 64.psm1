@@ -944,8 +944,8 @@ function CreateFairyColorOptions($name) {
 
     # FAIRY COLORS #
     CreateReduxGroup    -Tag  "Colors" -All -Text "Fairy Colors" -Height 2
-    $Items = @($GameType.default_values.fairy_option1, $GameType.default_values.fairy_option2, "Tael", "Gold", "Green", "Light Blue", "Yellow", "Red", "Magenta", "Black", "Fi", "Ciela", "Epona", "Ezlo", "King of Red Lions", "Linebeck", "Loftwing", "Midna", "Phantom Zelda", "Randomized", "Custom")
-    CreateReduxComboBox -Name "Fairy" -Length 230 -Shift 40 -Items $Items -All -Text ($name + " Colors") -Info ("Select a color scheme for " + $name + "`n" + '"Randomized" fully randomizes the colors each time the patcher is opened') -Credits "Ported from Rando"
+    $items = @($GameType.default_values.fairy_option1, $GameType.default_values.fairy_option2, "Tael", "Gold", "Green", "Light Blue", "Yellow", "Red", "Magenta", "Black", "Fi", "Ciela", "Epona", "Ezlo", "King of Red Lions", "Linebeck", "Loftwing", "Midna", "Phantom Zelda", "Randomized", "Custom")
+    CreateReduxComboBox -Name "Fairy" -Length 230 -Shift 40 -Items $items -All -Text ($name + " Colors") -Info ("Select a color scheme for " + $name + "`n" + '"Randomized" fully randomizes the colors each time the patcher is opened') -Credits "Ported from Rando"
 
     # Fairy Colors - Buttons
     $Buttons = @()
@@ -1219,7 +1219,7 @@ function SetFairyColorsPreset([object]$ComboBox, [Array]$Dialogs, [Array]$Labels
     elseif ($Text -eq "Randomized") {
         $Colors = @()
         for ($i=0; $i -lt $Dialogs.length; $i++) { $Colors += SetRandomColor -Dialog $Dialogs[$i] -Label $Labels[$i] }
-        WriteToConsole ("Randomize Navi Colors: " + $Colors)
+        WriteToConsole ("Randomize Fairy Colors: " + $Colors)
     }
 
 }
@@ -1229,14 +1229,17 @@ function SetFairyColorsPreset([object]$ComboBox, [Array]$Dialogs, [Array]$Labels
 #==============================================================================================================================================================================================
 function SetFairyColors([string]$Inner, [string]$Outer, [Array]$Dialogs, [Array]$Labels) {
     
-    $GameSettings["Colors"][$Dialogs[0].Tag] = $Inner;   $Labels[0].BackColor = $Dialogs[0].Color = "#" + $Inner
-    $GameSettings["Colors"][$Dialogs[1].Tag] = $Outer;   $Labels[1].BackColor = $Dialogs[1].Color = "#" + $Outer
-    $GameSettings["Colors"][$Dialogs[2].Tag] = "00FF00"; $Labels[2].BackColor = $Dialogs[2].Color = "#00FF00"
-    $GameSettings["Colors"][$Dialogs[3].Tag] = "00FF00"; $Labels[3].BackColor = $Dialogs[3].Color = "#00FF00"
-    $GameSettings["Colors"][$Dialogs[4].Tag] = "9696FF"; $Labels[4].BackColor = $Dialogs[4].Color = "#9696FF"
-    $GameSettings["Colors"][$Dialogs[5].Tag] = "9696FF"; $Labels[5].BackColor = $Dialogs[5].Color = "#9696FF"
-    $GameSettings["Colors"][$Dialogs[6].Tag] = "FFFF00"; $Labels[6].BackColor = $Dialogs[6].Color = "#FFFF00"
-    $GameSettings["Colors"][$Dialogs[7].Tag] = "C89B00"; $Labels[7].BackColor = $Dialogs[7].Color = "#C89B00"
+    $GameSettings["Colors"][$Dialogs[0].Tag] = $Inner; $Labels[0].BackColor = $Dialogs[0].Color = "#" + $Inner
+    $GameSettings["Colors"][$Dialogs[1].Tag] = $Outer; $Labels[1].BackColor = $Dialogs[1].Color = "#" + $Outer
+
+    if ($Dialogs.count -gt 2) {
+        $GameSettings["Colors"][$Dialogs[2].Tag] = "00FF00"; $Labels[2].BackColor = $Dialogs[2].Color = "#00FF00"
+        $GameSettings["Colors"][$Dialogs[3].Tag] = "00FF00"; $Labels[3].BackColor = $Dialogs[3].Color = "#00FF00"
+        $GameSettings["Colors"][$Dialogs[4].Tag] = "9696FF"; $Labels[4].BackColor = $Dialogs[4].Color = "#9696FF"
+        $GameSettings["Colors"][$Dialogs[5].Tag] = "9696FF"; $Labels[5].BackColor = $Dialogs[5].Color = "#9696FF"
+        $GameSettings["Colors"][$Dialogs[6].Tag] = "FFFF00"; $Labels[6].BackColor = $Dialogs[6].Color = "#FFFF00"
+        $GameSettings["Colors"][$Dialogs[7].Tag] = "C89B00"; $Labels[7].BackColor = $Dialogs[7].Color = "#C89B00"
+    }
 
 }
 
