@@ -1006,18 +1006,18 @@ function ByteLanguageOptions() {
         elseif ($Redux.Text.TatlScript.text -eq "Override" -and $LanguagePatch.tatl -ne "Tatl")   { $replace = "Tatl" }
         else                                                                                      { $replace = $Redux.Text.TatlScript.text.replace(" ♂", "").replace(" ♀", "") }
         
-        if ($Redux.Text.TatlScript.text -like "*♂*") {
-            SetMessage -ID "1F43" -Text "sis..." -Replace "bro..."
-            SetMessage -ID "1F48" -Text "S-s..." -Replace "B-b...";
-            SetMessage -ID "1F48" -Text "Sis" -Replace "Bro"
-            SetMessage -ID "1F4A" -Text "little girl" -Replace "little boy"
-            SetMessage -ID "2009" -Text "Sis!!!" -Replace "Bro!!!"
-            SetMessage -ID "2028" -Text "Sis!!!" -Replace "Bro!!!"
-            SetMessage -ID "202D" -Text "Sis..." -Replace "Bro..."
-            SetMessage -ID "2045" -Text "Sis..." -Replace "Bro..."
-            SetMessage -ID "2048" -Text "sis?" -Replace "bro?"
-            SetMessage -ID "204A" -Text "sister!" -Replace "brother!"
-        }
+		if ($Redux.Text.TatlScript.text -like "*♂*" -and $LanguagePatch.code -eq "en") {
+				SetMessage -ID "1F43" -Text "sis" -Replace "bro"
+				SetMessage -ID "1F48" -Text "S-s..." -Replace "B-b..."
+				SetMessage -ID "1F48" -Text "Sis" -Replace "Bro"
+				SetMessage -ID "1F4A" -Text "girl" -Replace "boy"
+				SetMessage -ID "2009" -Text "Sis!!!" -Replace "Bro!!!"
+				SetMessage -ID "2028" -Text "Sis!!!" -Replace "Bro!!!"
+				SetMessage -ID "202D" -Text "Sis..." -Replace "Bro..."
+				SetMessage -ID "2045" -Text "Sis..." -Replace "Bro..."
+				SetMessage -ID "2048" -Text "sis" -Replace "bro"
+				SetMessage -ID "204A" -Text "sister" -Replace "brother"
+		}
 
         SetMessage -ID "057A" -Text $LanguagePatch.tatl -Replace $replace; SetMessage -ID "057C"; SetMessage -ID "057E"; SetMessage -ID "058E"; SetMessage -ID "0735"; SetMessage -ID "073E"; SetMessage -ID "073F"; SetMessage -ID "1F4E"
     }
@@ -1025,10 +1025,11 @@ function ByteLanguageOptions() {
     if (IsIndex -Elem $Redux.Text.TaelScript -Not) {
         $replace = $Redux.Text.TaelScript.text.replace(" ♂", "").replace(" ♀", "")
         
-        if ($Redux.Text.TaelScript.text -like "*♀*") {
-            SetMessage -ID "1F49" -Text "brother!" -Replace "sister!"
-            SetMessage -ID "200D" -Text "brother?" -Replace "sister?"
-            SetMessage -ID "2012" -Text "my brother" -Replace "my sister"
+        if ($Redux.Text.TaelScript.text -like "*♀*" -and $LanguagePatch.code -eq "en") {
+            SetMessage -ID "1F49" -Text "brother" -Replace "sister"
+			SetMessage -ID "1F4B" -Text "his" -Replace "her"
+			SetMessage -ID "200D" -Text "brother" -Replace "sister"
+			SetMessage -ID "2012" -Text "brother" -Replace "sister"
         }
 
         SetMessage -ID "0216" -Text "Tael" -Replace $replace; SetMessage -ID "0217"; SetMessage -ID "0229"; SetMessage -ID "146B"; SetMessage -ID "1F42"; SetMessage -ID "1F47"; SetMessage -ID "1F4B"; SetMessage -ID "200A"; SetMessage -ID "2011"
@@ -1250,7 +1251,7 @@ function CreateTabLanguage() {
     CreateReduxGroup    -Tag  "Text"       -Text "Other Text Options"
     CreateReduxCheckBox -Name "Comma"      -Text "Better Comma"                                                                                                          -Info "Make the comma not look as awful"                -Credits "ShadowOne333"
     CreateReduxComboBox -Name "TatlCUp"    -Text "Tatl C-Up Prompt" -Items @("Default", "Override", "Tatl", "Taya") -FilePath ($GameFiles.textures + "\Tatl") -Ext "cup" -Info "Replace the C-Up Button prompt for Tatl"         -Credits "GhostlyDark (injects)"
-    CreateReduxComboBox -Name "TatlScript" -Text "Tatl Text"        -Items @("Default", "Override", $names)                                                              -Info "Change the name for Tatl in the dialogue script" -Credits "Admentus & GhostlyDark"
+CreateReduxComboBox -Name "TatlScript" -Text "Tatl Text"        -Items (@("Default", "Override") + $names)                                                              -Info "Change the name for Tatl in the dialogue script" -Credits "Admentus & GhostlyDark"
     CreateReduxComboBox -Name "TaelScript" -Text "Tael Text"        -Items $names -Default 5                                                                             -Info "Change the name for Tael in the dialogue script" -Credits "Admentus & ShadowOne333"
 
     foreach ($i in 0.. ($Files.json.languages.length-1)) { $Redux.Language[$i].Add_CheckedChanged({ UnlockLanguageContent }) }
