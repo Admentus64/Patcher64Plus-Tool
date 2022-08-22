@@ -1,4 +1,4 @@
-function PrePatchOptions() {
+﻿function PrePatchOptions() {
 
     # ENHANCED 16:9 WIDESCREEN #
 
@@ -710,13 +710,6 @@ function ByteOptions() {
 
     # SCRIPT
 
-    if (IsIndex $Redux.Text.TatlCUp -Not) {
-        if     ($Redux.Text.TatlCUp.text -eq "Override" -and $LanguagePatch.tatl -eq "Tatl")   { $tatl = "Taya"                   }
-        elseif ($Redux.Text.TatlCUp.text -eq "Override" -and $LanguagePatch.tatl -ne "Tatl")   { $tatl = "Tatl"                   }
-        else                                                                                   { $tatl = $Redux.Text.TatlCUp.text }
-        PatchBytes -Offset "1EBFAE0" -Texture -Patch ("Tatl\" + $tatl + ".cup")
-    }
-
     if (IsChecked $Redux.Text.Comma) { ChangeBytes -Offset "ACC660"  -Values "00 F3 00 00 00 00 00 00 4F 60 00 00 00 00 00 00 24" }
 
 }
@@ -907,9 +900,12 @@ function ByteReduxOptions() {
 #==============================================================================================================================================================================================
 function CheckLanguageOptions() {
     
-    if     ( (IsChecked  $Redux.Text.Vanilla -Not)   -or (IsLanguage $Redux.Text.AdultPronouns) -or (IsLanguage $Redux.UI.GCScheme)       -or (IsLanguage $Redux.Text.AreaTitleCards)                                               )   { return $True }
-    elseif ( (IsLanguage $Redux.Gameplay.RazorSword) -or (IsIndex $Redux.Text.TatlScript -Not)  -or (IsIndex $Redux.Text.TaelScript -Not) -or (IsLanguage $Redux.Capacity.EnableAmmo) -or (IsLanguage $Redux.Capacity.EnableWallet) )   { return $True }
-    elseif ( (IsDefault $Redux.Features.OcarinaIcons -Not) -and $Patches.Redux.Checked -and $LanguagePatch.code -eq "en")                                                                                                               { return $True }
+    if     ( (IsChecked  $Redux.Text.Vanilla -Not)   -or (IsLanguage $Redux.Text.AdultPronouns)  -or (IsLanguage $Redux.UI.GCScheme) -or (IsLanguage $Redux.Text.AreaTitleCards) )   { return $True }
+    elseif ( (IsLanguage $Redux.Gameplay.RazorSword) -or (IsLanguage $Redux.Capacity.EnableAmmo) -or (IsLanguage $Redux.Capacity.EnableWallet) )                                     { return $True }
+    elseif ( (IsDefault $Redux.Features.OcarinaIcons -Not) -and $Patches.Redux.Checked -and $LanguagePatch.code -eq "en")                                                            { return $True }
+    elseif ( ( (IsDefault $Redux.Text.TatlScript     -Not) -and (IsDefault $Redux.Text.TatlName -Not) ) -or (IsIndex -Elem $Redux.Text.TatlScript -Index 2) )                        { return $True }
+    elseif ( ( (IsDefault $Redux.Text.TealScript     -Not) -and (IsDefault $Redux.Text.TealName -Not) ) -or (IsIndex -Elem $Redux.Text.TaelScript -Index 3) )                        { return $True }
+    
     return $False
 
 }
@@ -977,9 +973,9 @@ function ByteLanguageOptions() {
         ChangeBytes -Offset "C5A560" -Values "026FC00002714F9001390001";         ChangeBytes -Offset "C5B22C" -Values "3800CA143800CA14"; ChangeBytes -Offset "C5B254" -Values "3805410238054102" # Zora Cape		
         ChangeBytes -Offset "C5A6A0" -Values "02A0000002A0B8B000120001";         ChangeBytes -Offset "C5B4D8" -Values "4C054102"                                                                  # Zora Shop
         ChangeBytes -Offset "C5A3C0" -Values "022A8000022B0E9000130001";         ChangeBytes -Offset "C5AC98" -Values "1E004102"                                                                  # Deku Scrub Playground
-        ChangeBytes -Offset "C5A2C0" -Values "026180000261DC5000A2000100000000"; ChangeBytes -Offset "C5B048" -Values "0E014102";                                                                 # Dampé's House
+        ChangeBytes -Offset "C5A2C0" -Values "026180000261DC5000A2000100000000"; ChangeBytes -Offset "C5B048" -Values "0E014102"                                                                  # Dampé's House
         ChangeBytes -Offset "C5A740" -Values "02B6F00002B7A01000A30001";         ChangeBytes -Offset "C5B5D4" -Values "AA00C102"                                                                  # Igos du Ikana's Throne
-        ChangeBytes -Offset "C5A5E0" -Values "027B9000027C0B5000A40001";         ChangeBytes -Offset "C5B320" -Values "4000CA144001CA14"                                                 		  # Road to Southern Swamp
+        ChangeBytes -Offset "C5A5E0" -Values "027B9000027C0B5000A40001";         ChangeBytes -Offset "C5B320" -Values "4000CA144001CA14"                                                          # Road to Southern Swamp
         ChangeBytes -Offset "C5A7B0" -Values "02C1900002C22BB000AC0001";         ChangeBytes -Offset "C5B6C4" -Values "5D00CA145D01C1025D024102"                                                  # Path to Goron Village (Winter)
         ChangeBytes -Offset "C5A7C0" -Values "02C2B00002C33AD000AC0001";         ChangeBytes -Offset "C5B6DC" -Values "5E00CA145E01C1025E024102"                                                  # Path to Goron Village (Spring)
         ChangeBytes -Offset "C5A790" -Values "02BFE00002C03CF000AD0000";                                                                                                                          # Path to Snowhead
@@ -1001,40 +997,21 @@ function ByteLanguageOptions() {
         if (IsChecked -Elem $Redux.Restore.OnTheMoonIntro -Not) { ChangeBytes -Offset "C5A850" -Values "02D5A00002D64FD000AF0000"; ChangeBytes -Offset "C5B7CC" -Values "67004387"; SetMessage -ID "00AF" -ASCII -Replace "The Moon"; SetMessageIcon -ID "00AF" -Hex "FE" } # The Moon
     }
 
-    if (IsIndex -Elem $Redux.Text.TatlScript -Not) {
-        if     ($Redux.Text.TatlScript.text -eq "Override" -and $LanguagePatch.tatl -eq "Tatl")   { $replace = "Taya" }
-        elseif ($Redux.Text.TatlScript.text -eq "Override" -and $LanguagePatch.tatl -ne "Tatl")   { $replace = "Tatl" }
-        else                                                                                      { $replace = $Redux.Text.TatlScript.text.replace(" ♂", "").replace(" ♀", "") }
-        
-		if ($Redux.Text.TatlScript.text -like "*♂*" -and $LanguagePatch.code -eq "en") {
-				SetMessage -ID "1F43" -Text "sis" -Replace "bro"
-				SetMessage -ID "1F48" -Text "S-s..." -Replace "B-b..."
-				SetMessage -ID "1F48" -Text "Sis" -Replace "Bro"
-				SetMessage -ID "1F4A" -Text "girl" -Replace "boy"
-				SetMessage -ID "2009" -Text "Sis!!!" -Replace "Bro!!!"
-				SetMessage -ID "2028" -Text "Sis!!!" -Replace "Bro!!!"
-				SetMessage -ID "202D" -Text "Sis..." -Replace "Bro..."
-				SetMessage -ID "2045" -Text "Sis..." -Replace "Bro..."
-				SetMessage -ID "2048" -Text "sis" -Replace "bro"
-				SetMessage -ID "204A" -Text "sister" -Replace "brother"
-		}
-
-        SetMessage -ID "057A" -Text $LanguagePatch.tatl -Replace $replace; SetMessage -ID "057C"; SetMessage -ID "057E"; SetMessage -ID "058E"; SetMessage -ID "0735"; SetMessage -ID "073E"; SetMessage -ID "073F"; SetMessage -ID "1F4E"
+    if ( (IsDefault $Redux.Text.TatlScript -Not) -and (IsDefault $Redux.Text.TatlName -Not) ) {
+        SetMessage -ID "057A" -Text $LanguagePatch.tatl -Replace $Redux.Text.TatlName.Text; SetMessage -ID "057C"; SetMessage -ID "057E"; SetMessage -ID "058E"; SetMessage -ID "0735"; SetMessage -ID "073E"; SetMessage -ID "073F"; SetMessage -ID "1F4E"
+        if (TestFile ($GameFiles.textures + "\Tatl\" + $Redux.Text.TatlName.Text + ".cup") )   { PatchBytes -Offset "1EBFAE0" -Texture -Patch ("Tatl\" + $Redux.Text.TatlName.Text + ".cup") }
+        else                                                                                   { PatchBytes -Offset "1EBFAE0" -Texture -Patch ("Tatl\Info.cup")                              }
+    }
+    if ( (IsIndex -Elem $Redux.Text.TatlScript -Index 2) -and $LanguagePatch.code -eq "en") {
+	    SetMessage -ID "1F43" -Text "sis"    -Replace "bro";    SetMessage -ID "1F48" -Text "S-s..." -Replace "B-b..."; SetMessage -ID "1F48" -Text "Sis"    -Replace "Bro";    SetMessage -ID "1F4A" -Text "girl" -Replace "boy"; SetMessage -ID "2009" -Text "Sis!!!" -Replace "Bro!!!"
+        SetMessage -ID "2028" -Text "Sis!!!" -Replace "Bro!!!"; SetMessage -ID "202D" -Text "Sis..." -Replace "Bro..."; SetMessage -ID "2045" -Text "Sis..." -Replace "Bro..."; SetMessage -ID "2048" -Text "sis"  -Replace "bro"; SetMessage -ID "204A" -Text "sister" -Replace "brother"
     }
 
-    if (IsIndex -Elem $Redux.Text.TaelScript -Not) {
-        $replace = $Redux.Text.TaelScript.text.replace(" ♂", "").replace(" ♀", "")
-        
-        if ($Redux.Text.TaelScript.text -like "*♀*" -and $LanguagePatch.code -eq "en") {
-            SetMessage -ID "1F49" -Text "brother" -Replace "sister"
-			SetMessage -ID "1F4B" -Text "his" -Replace "her"
-			SetMessage -ID "200D" -Text "brother" -Replace "sister"
-			SetMessage -ID "2012" -Text "brother" -Replace "sister"
-        }
-
-        SetMessage -ID "0216" -Text "Tael" -Replace $replace; SetMessage -ID "0217"; SetMessage -ID "0229"; SetMessage -ID "146B"; SetMessage -ID "1F42"; SetMessage -ID "1F47"; SetMessage -ID "1F4B"; SetMessage -ID "200A"; SetMessage -ID "2011"
-        SetMessage -ID "2016";                                SetMessage -ID "2029"; SetMessage -ID "202E"; SetMessage -ID "203B"; SetMessage -ID "203D"; SetMessage -ID "2040"; SetMessage -ID "2049"; SetMessage -ID "2080"
+    if ( (IsDefault $Redux.Text.TaelScript -Not) -and (IsDefault $Redux.Text.TaelName -Not) ) {
+        SetMessage -ID "0216" -Text "Tael" -Replace $Redux.Text.TaelName.Text; SetMessage -ID "0217"; SetMessage -ID "0229"; SetMessage -ID "146B"; SetMessage -ID "1F42"; SetMessage -ID "1F47"; SetMessage -ID "1F4B"; SetMessage -ID "200A"; SetMessage -ID "2011"
+        SetMessage -ID "2016";                                                 SetMessage -ID "2029"; SetMessage -ID "202E"; SetMessage -ID "203B"; SetMessage -ID "203D"; SetMessage -ID "2040"; SetMessage -ID "2049"; SetMessage -ID "2080"
     }
+    if ( (IsIndex -Elem $Redux.Text.TaelScript -Index 3) -and $LanguagePatch.code -eq "en") { SetMessage -ID "1F49" -Text "brother" -Replace "sister"; SetMessage -ID "1F4B" -Text "his" -Replace "her"; SetMessage -ID "200D" -Text "brother" -Replace "sister"; SetMessage -ID "2012" -Text "brother" -Replace "sister" }
 
     if (IsLanguage $Redux.Capacity.EnableAmmo) {
         SetMessage -ID "0019" -ASCII -Text "10" -Replace $Redux.Capacity.DekuSticks1.text
@@ -1247,15 +1224,22 @@ function CreateTabLanguage() {
 
     # OTHER TEXT OPTIONS #
 
-    $names = @("Tatl ♂", "Tatl ♀", "Taya ♂", "Taya ♀", "Tael ♂", "Tael ♀", "Navi ♂", "Navi ♀", "Nite ♂", "Nite ♀")
     CreateReduxGroup    -Tag  "Text"       -Text "Other Text Options"
-    CreateReduxCheckBox -Name "Comma"      -Text "Better Comma"                                                                                                          -Info "Make the comma not look as awful"                -Credits "ShadowOne333"
-    CreateReduxComboBox -Name "TatlCUp"    -Text "Tatl C-Up Prompt" -Items @("Default", "Override", "Tatl", "Taya") -FilePath ($GameFiles.textures + "\Tatl") -Ext "cup" -Info "Replace the C-Up Button prompt for Tatl"         -Credits "GhostlyDark (injects)"
-CreateReduxComboBox -Name "TatlScript" -Text "Tatl Text"        -Items (@("Default", "Override") + $names)                                                              -Info "Change the name for Tatl in the dialogue script" -Credits "Admentus & GhostlyDark"
-    CreateReduxComboBox -Name "TaelScript" -Text "Tael Text"        -Items $names -Default 5                                                                             -Info "Change the name for Tael in the dialogue script" -Credits "Admentus & ShadowOne333"
+    CreateReduxComboBox -Name "TatlScript" -Text "Tatl Text" -Items @("Disabled", "Enabled as Male", "Enabled as Female") -Info "Allow renaming Tatl and the gender" -Credits "Admentus & ShadowOne333" -Warning "Gender swap is only supported for English"
+    CreateReduxTextBox  -Name "TatlName"   -Text "Tatl Name" -Length 5 -ASCII -Value "Tatl" -Width 50                     -Info "Select the name for Tatl"           -Credits "Admentus & ShadowOne333" -Warning 'Most names do not have an unique texture label, and use a default "Info" prompt label'
+    CreateReduxComboBox -Name "TaelScript" -Text "Tael Text" -Items @("Disabled", "Enabled as Male", "Enabled as Female") -Info "Allow renaming Tael and the gender" -Credits "Admentus & ShadowOne333" -Warning "Gender swap is only supported for English"
+    CreateReduxTextBox  -Name "TaelName"   -Text "Tael Name" -Length 5 -ASCII -Value "Tael" -Width 50                     -Info "Select the name for Tael"           -Credits "Admentus & ShadowOne333"
+    CreateReduxCheckBox -Name "Comma"      -Text "Better Comma"                                                           -Info "Make the comma not look as awful"   -Credits "ShadowOne333"
+    
+
 
     foreach ($i in 0.. ($Files.json.languages.length-1)) { $Redux.Language[$i].Add_CheckedChanged({ UnlockLanguageContent }) }
     UnlockLanguageContent
+
+    EnableElem -Elem $Redux.Text.TatlName -Active ($Redux.Text.TatlScript.selectedIndex -ne 0)
+    EnableElem -Elem $Redux.Text.TaelName -Active ($Redux.Text.TaelScript.selectedIndex -ne 0)
+    $Redux.Text.TatlScript.Add_SelectedIndexChanged({ EnableElem -Elem $Redux.Text.TatlName -Active ($this.selectedIndex -ne 0) })
+    $Redux.Text.TaelScript.Add_SelectedIndexChanged({ EnableElem -Elem $Redux.Text.TaelName -Active ($this.selectedIndex -ne 0) })
 
 }
 
@@ -1620,7 +1604,7 @@ function CreateTabSpeedup() {
 
     CreateReduxGroup    -Tag  "Speedup" -Text "Speedup"
     CreateReduxCheckBox -Name "LabFish" -Text "Faster Lab Fish"   -Info "Only one fish has to be feeded in the Marine Research Lab"                            -Credits "Ported from Rando"
-    CreateReduxCheckBox -Name "Dampe"   -Text "Good Dampé RNG"    -Info "Dampe's Digging Game always has two Ghost Flames on the ground and one up the ladder" -Credits "Ported from Rando"
+    CreateReduxCheckBox -Name "Dampe"   -Text "Good Dampé RNG"    -Info "Dampé's Digging Game always has two Ghost Flames on the ground and one up the ladder" -Credits "Ported from Rando"
     CreateReduxCheckBox -Name "DogRace" -Text "Good Dog Race RNG" -Info "The Gold Dog always wins the Doggy Racetrack race if you have the Mask of Truth"      -Credits "Ported from Rando"
 
 
