@@ -900,11 +900,11 @@ function ByteReduxOptions() {
 #==============================================================================================================================================================================================
 function CheckLanguageOptions() {
     
-    if     ( (IsChecked  $Redux.Text.Vanilla -Not)   -or (IsLanguage $Redux.Text.AdultPronouns)  -or (IsLanguage $Redux.UI.GCScheme) -or (IsLanguage $Redux.Text.AreaTitleCards) )   { return $True }
-    elseif ( (IsLanguage $Redux.Gameplay.RazorSword) -or (IsLanguage $Redux.Capacity.EnableAmmo) -or (IsLanguage $Redux.Capacity.EnableWallet) )                                     { return $True }
-    elseif ( (IsDefault $Redux.Features.OcarinaIcons -Not) -and $Patches.Redux.Checked -and $LanguagePatch.code -eq "en")                                                            { return $True }
-    elseif ( ( (IsDefault $Redux.Text.TatlScript     -Not) -and (IsDefault $Redux.Text.TatlName -Not) ) -or (IsIndex -Elem $Redux.Text.TatlScript -Index 2) )                        { return $True }
-    elseif ( ( (IsDefault $Redux.Text.TealScript     -Not) -and (IsDefault $Redux.Text.TealName -Not) ) -or (IsIndex -Elem $Redux.Text.TaelScript -Index 3) )                        { return $True }
+    if     ( (IsChecked  $Redux.Text.Vanilla -Not)   -or (IsLanguage $Redux.Text.AdultPronouns)  -or (IsLanguage $Redux.UI.GCScheme) -or (IsLanguage $Redux.Text.AreaTitleCards) )                                                     { return $True }
+    elseif ( (IsLanguage $Redux.Gameplay.RazorSword) -or (IsLanguage $Redux.Capacity.EnableAmmo) -or (IsLanguage $Redux.Capacity.EnableWallet) )                                                                                       { return $True }
+    elseif ( (IsDefault $Redux.Features.OcarinaIcons -Not) -and $Patches.Redux.Checked -and $LanguagePatch.code -eq "en")                                                                                                              { return $True }
+    elseif ( ( (IsDefault $Redux.Text.TatlScript -Not) -and (IsDefault $Redux.Text.TatlName -Not) -and $Redux.Text.TatlName.Text.Count -gt 0) -or (IsIndex -Elem $Redux.Text.TatlScript -Index 2) -and $LanguagePatch.code -eq "en")   { return $True }
+    elseif ( ( (IsDefault $Redux.Text.TealScript -Not) -and (IsDefault $Redux.Text.TealName -Not) -and $Redux.Text.TaelName.Text.Count -gt 0) -or (IsIndex -Elem $Redux.Text.TaelScript -Index 3) -and $LanguagePatch.code -eq "en")   { return $True }
     
     return $False
 
@@ -997,7 +997,7 @@ function ByteLanguageOptions() {
         if (IsChecked -Elem $Redux.Restore.OnTheMoonIntro -Not) { ChangeBytes -Offset "C5A850" -Values "02D5A00002D64FD000AF0000"; ChangeBytes -Offset "C5B7CC" -Values "67004387"; SetMessage -ID "00AF" -ASCII -Replace "The Moon"; SetMessageIcon -ID "00AF" -Hex "FE" } # The Moon
     }
 
-    if ( (IsDefault $Redux.Text.TatlScript -Not) -and (IsDefault $Redux.Text.TatlName -Not) ) {
+    if ( (IsDefault $Redux.Text.TatlScript -Not) -and (IsDefault $Redux.Text.TatlName -Not) -and $Redux.Text.TatlName.Text.Count -gt 0) {
         SetMessage -ID "057A" -Text $LanguagePatch.tatl -Replace $Redux.Text.TatlName.Text; SetMessage -ID "057C"; SetMessage -ID "057E"; SetMessage -ID "058E"; SetMessage -ID "0735"; SetMessage -ID "073E"; SetMessage -ID "073F"; SetMessage -ID "1F4E"
         if (TestFile ($GameFiles.textures + "\Tatl\" + $Redux.Text.TatlName.Text + ".cup") )   { PatchBytes -Offset "1EBFAE0" -Texture -Patch ("Tatl\" + $Redux.Text.TatlName.Text + ".cup") }
         else                                                                                   { PatchBytes -Offset "1EBFAE0" -Texture -Patch ("Tatl\Info.cup")                              }
@@ -1007,7 +1007,7 @@ function ByteLanguageOptions() {
         SetMessage -ID "2028" -Text "Sis!!!" -Replace "Bro!!!"; SetMessage -ID "202D" -Text "Sis..." -Replace "Bro..."; SetMessage -ID "2045" -Text "Sis..." -Replace "Bro..."; SetMessage -ID "2048" -Text "sis"  -Replace "bro"; SetMessage -ID "204A" -Text "sister" -Replace "brother"
     }
 
-    if ( (IsDefault $Redux.Text.TaelScript -Not) -and (IsDefault $Redux.Text.TaelName -Not) ) {
+    if ( (IsDefault $Redux.Text.TaelScript -Not) -and (IsDefault $Redux.Text.TaelName -Not) -and $Redux.Text.TaelName.Text.Count -gt 0) {
         SetMessage -ID "0216" -Text "Tael" -Replace $Redux.Text.TaelName.Text; SetMessage -ID "0217"; SetMessage -ID "0229"; SetMessage -ID "146B"; SetMessage -ID "1F42"; SetMessage -ID "1F47"; SetMessage -ID "1F4B"; SetMessage -ID "200A"; SetMessage -ID "2011"
         SetMessage -ID "2016";                                                 SetMessage -ID "2029"; SetMessage -ID "202E"; SetMessage -ID "203B"; SetMessage -ID "203D"; SetMessage -ID "2040"; SetMessage -ID "2049"; SetMessage -ID "2080"
     }
@@ -1224,12 +1224,12 @@ function CreateTabLanguage() {
 
     # OTHER TEXT OPTIONS #
 
-    CreateReduxGroup    -Tag  "Text"       -Text "Other Text Options"
-    CreateReduxComboBox -Name "TatlScript" -Text "Tatl Text" -Items @("Disabled", "Enabled as Male", "Enabled as Female") -Info "Allow renaming Tatl and the gender" -Credits "Admentus & ShadowOne333" -Warning "Gender swap is only supported for English"
-    CreateReduxTextBox  -Name "TatlName"   -Text "Tatl Name" -Length 5 -ASCII -Value "Tatl" -Width 50                     -Info "Select the name for Tatl"           -Credits "Admentus & ShadowOne333" -Warning 'Most names do not have an unique texture label, and use a default "Info" prompt label'
-    CreateReduxComboBox -Name "TaelScript" -Text "Tael Text" -Items @("Disabled", "Enabled as Male", "Enabled as Female") -Info "Allow renaming Tael and the gender" -Credits "Admentus & ShadowOne333" -Warning "Gender swap is only supported for English"
-    CreateReduxTextBox  -Name "TaelName"   -Text "Tael Name" -Length 5 -ASCII -Value "Tael" -Width 50                     -Info "Select the name for Tael"           -Credits "Admentus & ShadowOne333"
-    CreateReduxCheckBox -Name "Comma"      -Text "Better Comma"                                                           -Info "Make the comma not look as awful"   -Credits "ShadowOne333"
+    CreateReduxGroup    -All -Tag  "Text"       -Text "Other Text Options"
+    CreateReduxComboBox -All -Name "TatlScript" -Text "Tatl Text" -Items @("Disabled", "Enabled as Male", "Enabled as Female") -Info "Allow renaming Tatl and the gender" -Credits "Admentus & ShadowOne333" -Warning "Gender swap is only supported for English"
+    CreateReduxTextBox  -All -Name "TatlName"   -Text "Tatl Name" -Length 5 -ASCII -Value "Tatl" -Width 50                     -Info "Select the name for Tatl"           -Credits "Admentus & ShadowOne333" -Warning 'Most names do not have an unique texture label, and use a default "Info" prompt label'
+    CreateReduxComboBox -All -Name "TaelScript" -Text "Tael Text" -Items @("Disabled", "Enabled as Male", "Enabled as Female") -Info "Allow renaming Tael and the gender" -Credits "Admentus & ShadowOne333" -Warning "Gender swap is only supported for English"
+    CreateReduxTextBox  -All -Name "TaelName"   -Text "Tael Name" -Length 5 -ASCII -Value "Tael" -Width 50                     -Info "Select the name for Tael"           -Credits "Admentus & ShadowOne333"
+    CreateReduxCheckBox -All -Name "Comma"      -Text "Better Comma"                                                           -Info "Make the comma not look as awful"   -Credits "ShadowOne333"
     
 
 
