@@ -1,4 +1,4 @@
-function PrePatchOptions() {
+Ôªøfunction PrePatchOptions() {
     
     # GRAPHICS #
 
@@ -629,7 +629,7 @@ function ByteOptions() {
     }
 
     if (IsChecked $Redux.Minigames.Ocarina)   { ChangeBytes -Offset "DF2204" -Values "24030002" } # Skullkid Ocarina
-    if (IsChecked $Redux.Minigames.Dampe)     { ChangeBytes -Offset "CC4024" -Values "00000000" } # Dampe's Digging Game
+    if (IsChecked $Redux.Minigames.Dampe)     { ChangeBytes -Offset "CC4024" -Values "00000000" } # Damp√©'s Digging Game
     
 
 
@@ -1422,7 +1422,7 @@ function RevertReduxOptions() {
 function ByteReduxOptions() {
     
     $Symbols = SetJSONFile ($GameFiles.base + "\symbols.json")
-    
+    
 
     # WIDESCREEN #
 
@@ -1800,7 +1800,7 @@ function ByteLanguageOptions() {
     if ( (IsChecked $Redux.Text.Restore) -or (IsChecked $Redux.Text.GoldSkulltula) ) { ChangeBytes -Offset "EC68CF" -Values "00"; ChangeBytes -Offset "EC69BF" -Values "00"; ChangeBytes -Offset "EC6A2B" -Values "00" }
     if (IsChecked $Redux.Text.GoldSkulltula) {
         if     ($LanguagePatch.code -eq "en")   { SetMessage -ID "00B4" -Replace "You got a <R>Gold Skulltula Token<W>!<N>You've collected <R><Gold Skulltulas><W> tokens in total.<Fade:28>"        }
-        elseif ($LanguagePatch.code -eq "de")   { SetMessage -ID "00B4" -Replace "Du erh‰ltst ein <R>Skulltula-Symbol<W>. Du<N>hast insgesamt <R><Gold Skulltulas><W> Skulltulas zerstˆrt.<Fade:28>" }
+        elseif ($LanguagePatch.code -eq "de")   { SetMessage -ID "00B4" -Replace "Du erh√§ltst ein <R>Skulltula-Symbol<W>. Du<N>hast insgesamt <R><Gold Skulltulas><W> Skulltulas zerst√∂rt.<Fade:28>" }
         else                                    { SetMessage -ID "00B4" -Replace @(14, 40) -Append }
    }
 
@@ -2012,8 +2012,8 @@ function CreateTabMain() {
     CreateReduxCheckBox -Name "ResumeLastArea"         -Base                                -Text "Resume From Last Area"    -Info "Resume playing from the area you last saved in" -Warning "Don't save in Grottos"                                                                                             -Credits "Admentus (ROM) & Aegiker (GameShark)"
     CreateReduxCheckBox -Name "AllowWarpSongs"         -Base                                -Text "Allow Warp Songs"         -Info "Allow warp songs in Gerudo Training Ground and Ganon's Castle"                                                                                                               -Credits "Ported from Rando"
     CreateReduxCheckBox -Name "AllowFaroreWind"        -Base                                -Text "Allow Farore's Wind"      -Info "Allow Farore's Wind in Gerudo Training Ground and Ganon's Castle"                                                                                                            -Credits "Ported from Rando"
-    CreateReduxComboBox -Name "SpawnChild"             -Base -Default 1                     -Text "Child Starting Location"  -Items ("Link's House", "Temple of Time", "Hyrule Field", "Kakariko Village", "Inside the Deku Tree", "Dodongo's Cavern", "Inside Jabu-Jabu's Belly", "Forest Temple", "Fire Temple", "Water Temple", "Shadow Temple", "Spirit Temple", "Ice Cavern", "Bottom of the Well", "Thieves' Hideout", "Gerudo's Training Ground", "Inside Ganon's Castle", "Ganon's Tower") -Credits "Admentus & GhostlyDark"
-    CreateReduxComboBox -Name "SpawnAdult"             -Base -Default 2                     -Text "Adult Starting Location"  -Items ("Link's House", "Temple of Time", "Hyrule Field", "Kakariko Village", "Inside the Deku Tree", "Dodongo's Cavern", "Inside Jabu-Jabu's Belly", "Forest Temple", "Fire Temple", "Water Temple", "Shadow Temple", "Spirit Temple", "Ice Cavern", "Bottom of the Well", "Thieves' Hideout", "Gerudo's Training Ground", "Inside Ganon's Castle", "Ganon's Tower") -Credits "Admentus & GhostlyDark"
+    CreateReduxComboBox -Name "SpawnChild"             -Base -Default 1 -Exclude "Nimpize"  -Text "Child Starting Location"  -Items ("Link's House", "Temple of Time", "Hyrule Field", "Kakariko Village", "Inside the Deku Tree", "Dodongo's Cavern", "Inside Jabu-Jabu's Belly", "Forest Temple", "Fire Temple", "Water Temple", "Shadow Temple", "Spirit Temple", "Ice Cavern", "Bottom of the Well", "Thieves' Hideout", "Gerudo's Training Ground", "Inside Ganon's Castle", "Ganon's Tower") -Credits "Admentus & GhostlyDark"
+    CreateReduxComboBox -Name "SpawnAdult"             -Base -Default 2 -Exclude "Nimpize"  -Text "Adult Starting Location"  -Items ("Link's House", "Temple of Time", "Hyrule Field", "Kakariko Village", "Inside the Deku Tree", "Dodongo's Cavern", "Inside Jabu-Jabu's Belly", "Forest Temple", "Fire Temple", "Water Temple", "Shadow Temple", "Spirit Temple", "Ice Cavern", "Bottom of the Well", "Thieves' Hideout", "Gerudo's Training Ground", "Inside Ganon's Castle", "Ganon's Tower") -Credits "Admentus & GhostlyDark"
 
 
 
@@ -2112,7 +2112,7 @@ function CreateTabRedux() {
     # MISC #
 
     $warning  = "30 FPS mode will have issues that prevent you from completing the game and certain challenges`nSwitch back to 20 FPS mode to continue these sections before returning to 30 FPS mode"
-    $warning += "¥n¥n--- Known Issues --"
+    $warning += "¬¥n¬¥n--- Known Issues --"
     $warning += "Lizafos jumping`nGravity for throwing objects`nExplosion timers are shorter`nLit torches burn out faster`nTriple swing is extremely hard to perform`nBaddies act and attack faster`nBusiness Scrubs glitch out when defeated, reload room and attempt again in 20 FPS mode"
 
     CreateReduxGroup    -Tag  "Misc"          -All                 -Text "Misc Options"
@@ -2134,7 +2134,7 @@ function CreateTabRedux() {
     CreateReduxCheckBox -Name "ShowFileSelectIcons"  -All                 -Checked -Text "Show File Select Icons"   -Info "Show icons on the File Select screen to display your save file progress"                                -Credits "Ported from Redux"
     CreateReduxCheckBox -Name "StoneOfAgony"         -Base                -Checked -Text "Stone of Agony Indicator" -Info "The Stony of Agony uses a visual indicator in addition to rumble"                                       -Credits "Ported from Redux"
     CreateReduxCheckBox -Name "BiggoronFix"          -Base                         -Text "Big Goron Fix"            -Info "Fix bug when trying to trade in the Biggoron Sword"                                                     -Credits "Ported from Redux"
-    CreateReduxCheckBox -Name "DampeFix"             -Base                         -Text "DampÈ Fix"                -Info "Prevent the heart piece of the Gravedigging Tour from being missable"                                   -Credits "Ported from Redux"
+    CreateReduxCheckBox -Name "DampeFix"             -Base                         -Text "Damp√© Fix"                -Info "Prevent the heart piece of the Gravedigging Tour from being missable"                                   -Credits "Ported from Redux"
     CreateReduxCheckBox -Name "HyruleGuardsSoftlock" -Base                         -Text "Hyrule Guards Softlock"   -Info "Fix a potential softlock when culling Hyrule Guards"                                                    -Credits "Ported from Redux"
     CreateReduxCheckBox -Name "WarpSongsSpeedup"     -Base                         -Text "Warp Songs Speedup"       -Info "Speedup the warp songs warping sequences"                                                               -Credits "Ported from Redux"
     CreateReduxCheckBox -Name "GoldGauntletsSpeedup" -Base                         -Text "Gold Gauntlets Speedup"   -Info "Cutscene speed-up for throwing pillars that require Golden Gauntlets"                                   -Credits "Ported from Redux"
@@ -2422,8 +2422,8 @@ function CreateTabAudio() {
     # SOUNDS / VOICES #
 
     CreateReduxGroup    -Tag  "Sounds"      -All   -Text "Sounds / Voices"
-    CreateReduxComboBox -Name "ChildVoices" -Child -Text "Child Voice" -Default "Original" -Items @("Original") -FilePath ($GameFiles.binaries + "\Voices Child")   -Info "Replace the voice used for the Child Link Model"    -Credits "`nMajora's Mask: Korey Cryderman (ported) & GhostlyDark (corrected)`nMelee Zelda: Thiago Alc‚ntara 6 & theluigidude2007 (edits)`nAmara: Amara (ripping) & theluigidude2007 (edits)"
-    CreateReduxComboBox -Name "AdultVoices" -Adult -Text "Adult Voice" -Default "Original" -Items @("Original") -FilePath ($GameFiles.binaries + "\Voices Adult")   -Info "Replace the voice used for the Adult Link Model"    -Credits "`nMajora's Mask: Korey Cryderman (ported) & GhostlyDark (corrected)`nMelee Zelda: Thiago Alc‚ntara 6 & theluigidude2007 (edits)`nAmara: Amara (ripping) & theluigidude2007`nPeach: theluigidude2007"
+    CreateReduxComboBox -Name "ChildVoices" -Child -Text "Child Voice" -Default "Original" -Items @("Original") -FilePath ($GameFiles.binaries + "\Voices Child")   -Info "Replace the voice used for the Child Link Model"    -Credits "`nMajora's Mask: Korey Cryderman (ported) & GhostlyDark (corrected)`nMelee Zelda: Thiago Alc√¢ntara 6 & theluigidude2007 (edits)`nAmara: Amara (ripping) & theluigidude2007 (edits)"
+    CreateReduxComboBox -Name "AdultVoices" -Adult -Text "Adult Voice" -Default "Original" -Items @("Original") -FilePath ($GameFiles.binaries + "\Voices Adult")   -Info "Replace the voice used for the Adult Link Model"    -Credits "`nMajora's Mask: Korey Cryderman (ported) & GhostlyDark (corrected)`nMelee Zelda: Thiago Alc√¢ntara 6 & theluigidude2007 (edits)`nAmara: Amara (ripping) & theluigidude2007`nPeach: theluigidude2007"
     CreateReduxComboBox -Name "Instrument"  -All   -Text "Instrument"                      -Items @("Ocarina", "Female Voice", "Whistle", "Harp", "Organ", "Flute") -Info "Replace the sound used for playing the Ocarina of Time" -Credits "Ported from Rando"
 
 
@@ -2512,7 +2512,7 @@ function CreateTabDifficulty() {
     # MINIGAMES #
 
     CreateReduxGroup    -Tag  "Minigames"   -Base -Expose "Master" -Text "Minigames"
-    CreateReduxCheckBox -Name "Dampe"       -Base                  -Text "Dampe's Digging"                                                                                                       -Info "Dampe's Digging Game is always first try"                           -Credits "Ported from Rando"
+    CreateReduxCheckBox -Name "Dampe"       -Base                  -Text "Damp√©'s Digging"                                                                                                       -Info "Damp√©'s Digging Game is always first try"                           -Credits "Ported from Rando"
     CreateReduxCheckBox -Name "Ocarina"     -Base                  -Text "Skullkid Ocarina"                                                                                                      -Info "You only need to clear the first round to get the Piece of Heart"   -Credits "Ported from Rando"
     CreateReduxCheckBox -Name "Fishing"     -Base -Expose "Master" -Text "Fishing"                                                                                                               -Info "Fishing is less random and has less demanding requirements"         -Credits "Ported from Rando"
     CreateReduxCheckBox -Name "Bowling"     -Base -Expose "Master" -Text "Bombchu Bowling"                                                                                                       -Info "Bombchu Bowling prizes now appear in fixed order instead of random" -Credits "Ported from Rando"
@@ -2982,9 +2982,9 @@ function CreateTabCapacity() {
     CreateReduxTextBox -Name "BombBag1"         -Expose  "Master" -Exclude "Dawn"     -Text "Bomb Bag (1)"    -Value 15 -Info "Set the capacity for the Bomb Bag (Base)"         -Credits "GhostlyDark"
     CreateReduxTextBox -Name "BombBag1"         -Expose  "Gold"   -Exclude "Dawn"     -Text "Bomb Bag (1)"    -Value 10 -Info "Set the capacity for the Bomb Bag (Base)"         -Credits "GhostlyDark"
     CreateReduxTextBox -Name "BombBag2"    -All -Exclude "Dawn"                       -Text "Bomb Bag (2)"    -Value 30 -Info "Set the capacity for the Bomb Bag (Upgrade 1)"    -Credits "GhostlyDark"
-    CreateReduxTextBox -Name "BombBag3"    -All -Exclude  @("Master", "Gold", "Dawn") -Text "Bomb Bag (1)"    -Value 40 -Info "Set the capacity for the Bomb Bag (Base)"         -Credits "GhostlyDark"
-    CreateReduxTextBox -Name "BombBag3"         -Expose  "Master"  -Exclude "Dawn"    -Text "Bomb Bag (1)"    -Value 99 -Info "Set the capacity for the Bomb Bag (Base)"         -Credits "GhostlyDark"
-    CreateReduxTextBox -Name "BombBag3"         -Expose  "Gold"    -Exclude "Dawn"    -Text "Bomb Bag (1)"    -Value 50 -Info "Set the capacity for the Bomb Bag (Base)"         -Credits "GhostlyDark"
+    CreateReduxTextBox -Name "BombBag3"    -All -Exclude  @("Master", "Gold", "Dawn") -Text "Bomb Bag (3)"    -Value 40 -Info "Set the capacity for the Bomb Bag (Upgrade 2)"    -Credits "GhostlyDark"
+    CreateReduxTextBox -Name "BombBag3"         -Expose  "Master" -Exclude "Dawn"     -Text "Bomb Bag (3)"    -Value 99 -Info "Set the capacity for the Bomb Bag (Upgrade 2)"    -Credits "GhostlyDark"
+    CreateReduxTextBox -Name "BombBag3"         -Expose  "Gold"   -Exclude "Dawn"     -Text "Bomb Bag (3)"    -Value 50 -Info "Set the capacity for the Bomb Bag (Upgrade 2)"    -Credits "GhostlyDark"
 
     CreateReduxTextBox -Name "BulletBag1"  -Child                                     -Text "Bullet Bag (1)"  -Value 30 -Info "Set the capacity for the Bullet Bag (Base)"       -Credits "GhostlyDark"
     CreateReduxTextBox -Name "BulletBag2"  -Child                                     -Text "Bullet Bag (2)"  -Value 40 -Info "Set the capacity for the Bullet Bag (Upgrade 1)"  -Credits "GhostlyDark"
@@ -2997,8 +2997,8 @@ function CreateTabCapacity() {
     CreateReduxTextBox -Name "DekuNuts1"   -All -Exclude "Master"                     -Text "Deku Nuts (1)"   -Value 20 -Info "Set the capacity for the Deku Nuts (Base)"        -Credits "GhostlyDark"
     CreateReduxTextBox -Name "DekuNuts1"        -Expose  "Master"                     -Text "Deku Nuts (1)"   -Value 15 -Info "Set the capacity for the Deku Nuts (Base)"        -Credits "GhostlyDark"
     CreateReduxTextBox -Name "DekuNuts2"   -All                                       -Text "Deku Nuts (2)"   -Value 30 -Info "Set the capacity for the Deku Nuts (Upgrade 1)"   -Credits "GhostlyDark"
-    CreateReduxTextBox -Name "DekuNuts3"   -All -Exclude "Master"                     -Text "Deku Nuts (1)"   -Value 40 -Info "Set the capacity for the Deku Nuts (Base)"        -Credits "GhostlyDark"
-    CreateReduxTextBox -Name "DekuNuts3"        -Expose  "Master"                     -Text "Deku Nuts (1)"   -Value 99 -Info "Set the capacity for the Deku Nuts (Base)"        -Credits "GhostlyDark"
+    CreateReduxTextBox -Name "DekuNuts3"   -All -Exclude "Master"                     -Text "Deku Nuts (3)"   -Value 40 -Info "Set the capacity for the Deku Nuts (Upgrade 2)"   -Credits "GhostlyDark"
+    CreateReduxTextBox -Name "DekuNuts3"        -Expose  "Master"                     -Text "Deku Nuts (3)"   -Value 99 -Info "Set the capacity for the Deku Nuts (Upgrade 2)"   -Credits "GhostlyDark"
 
     CreateReduxTextBox -Name "Bombchu"     -All -Exclude "Dawn"                       -Text "Bombchu"         -Value 50 -Info "Set the capacity for the Bombchus"                -Credits "Admentus"
 

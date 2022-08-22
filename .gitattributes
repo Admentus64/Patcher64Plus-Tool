@@ -1,0 +1,4 @@
+*.ps1 text=auto
+*.psm1 text=auto
+*.txt text=auto
+*.json text=auto
