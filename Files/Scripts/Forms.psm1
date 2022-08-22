@@ -496,7 +496,7 @@ function CreateReduxButton([single]$Column=$Last.Column, [single]$Row=$Last.Row,
 
 
 #==============================================================================================================================================================================================
-function CreateReduxTextBox([single]$Column=$Last.Column, [single]$Row=$Last.Row, [byte]$Length=2, [string]$Value=0, [int]$Min, [int]$Max, [string]$Text, [string]$Info, [string]$Warning, [string]$Credits, [string]$Name, [string]$Tag, [object]$AddTo=$Last.Group, [switch]$Native, [Object]$Expose=@($GameType.mode), [Object]$Exclude, [switch]$Base, [switch]$Alt, [switch]$Child, [switch]$Adult, [switch]$All) {
+function CreateReduxTextBox([single]$Column=$Last.Column, [single]$Row=$Last.Row, [byte]$Length=2, [int]$Width=35, [string]$Value=0, [switch]$ASCII, [int]$Min, [int]$Max, [string]$Text, [string]$Info, [string]$Warning, [string]$Credits, [string]$Name, [string]$Tag, [object]$AddTo=$Last.Group, [switch]$Native, [Object]$Expose=@($GameType.mode), [Object]$Exclude, [switch]$Base, [switch]$Alt, [switch]$Child, [switch]$Adult, [switch]$All) {
     
     if (!(CheckReduxOption -Expose $Expose -Exclude $Exclude -Base $Base -Alt $Alt -Child $Child -Adult $Adult -All $All) -or ($Native -and $IsWiiVC) -or $Last.Hide) { return $null }
 
@@ -510,31 +510,33 @@ function CreateReduxTextBox([single]$Column=$Last.Column, [single]$Row=$Last.Row
     if (IsSet $Text) { $Text += ":" }
 
     $Label   = CreateLabel   -X (($Column-1) * $FormDistance + (DPISize 15)) -Y ($Row * (DPISize 30) - (DPISize 10)) -Width (DPISize 100) -Height (DPISize 15) -Text $Text -Info $Info -AddTo $AddTo
-    $TextBox = CreateTextBox -X $Label.Right -Y ($Label.Top - (DPISize 3)) -Width (DPISize 35) -Height (DPISize 15) -Length $Length -Text $Value -IsGame $True -Name $Name -Tag $Tag -Info $Info -AddTo $AddTo
+    $TextBox = CreateTextBox -X $Label.Right -Y ($Label.Top - (DPISize 3)) -Width (DPISize $Width) -Height (DPISize 15) -Length $Length -Text $Value -IsGame $True -Name $Name -Tag $Tag -Info $Info -AddTo $AddTo
 
-    $TextBox.Add_TextChanged({
-        if ($this.Text -cmatch "[^0-9]") {
-            $this.Text = $this.Text.ToUpper() -replace "[^0-9]",''
-            $this.Select($this.Text.Length, $this.Text.Length)
+    if (!$ASCII) {
+        $TextBox.Add_TextChanged({
+            if ($this.Text -cmatch "[^0-9]") {
+                $this.Text = $this.Text.ToUpper() -replace "[^0-9]",''
+                $this.Select($this.Text.Length, $this.Text.Length)
+            }
+            if ($this.Text -cmatch " ") {
+                $this.Text = $this.Text.ToUpper() -replace " ",''
+                $this.Select($this.Text.Length, $this.Text.Length)
+            }
+
+            if ($this.Text -eq "") { $this.Text = 0 }
+
+            if (IsSet $this.Min) { if ([int]$this.Text -lt $this.Min) { $this.Text = $this.Min } }
+            if (IsSet $this.Max) { if ([int]$this.Text -gt $this.Max) { $this.Text = $this.Max } }
+        })
+
+        if (IsSet $Min) {
+            if ([int]$TextBox.Text -lt $Min) { $TextBox.Text = $Min }
+            Add-Member -InputObject $TextBox -NotePropertyMembers @{ Min = $Min }
         }
-        if ($this.Text -cmatch " ") {
-            $this.Text = $this.Text.ToUpper() -replace " ",''
-            $this.Select($this.Text.Length, $this.Text.Length)
+        if (IsSet $Max) {
+            if ([int]$TextBox.Text -gt $Max) { $TextBox.Text = $Max }
+            Add-Member -InputObject $TextBox -NotePropertyMembers @{ Max = $Max }
         }
-
-        if ($this.Text -eq "") { $this.Text = 0 }
-
-        if (IsSet $this.Min) { if ([int]$this.Text -lt $this.Min) { $this.Text = $this.Min } }
-        if (IsSet $this.Max) { if ([int]$this.Text -gt $this.Max) { $this.Text = $this.Max } }
-    })
-
-    if (IsSet $Min) {
-        if ([int]$TextBox.Text -lt $Min) { $TextBox.Text = $Min }
-        Add-Member -InputObject $TextBox -NotePropertyMembers @{ Min = $Min }
-    }
-    if (IsSet $Max) {
-        if ([int]$TextBox.Text -gt $Max) { $TextBox.Text = $Max }
-        Add-Member -InputObject $TextBox -NotePropertyMembers @{ Max = $Max }
     }
 
     $Last.Column = $column + 1;
