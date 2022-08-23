@@ -1226,7 +1226,7 @@ function CreateTabLanguage() {
 
     CreateReduxGroup    -All -Tag  "Text"       -Text "Other Text Options"
     CreateReduxComboBox -All -Name "TatlScript" -Text "Tatl Text" -Items @("Disabled", "Enabled as Male", "Enabled as Female") -Info "Allow renaming Tatl and the gender" -Credits "Admentus & ShadowOne333" -Warning "Gender swap is only supported for English"
-    CreateReduxTextBox  -All -Name "TatlName"   -Text "Tatl Name" -Length 5 -ASCII -Value "Tatl" -Width 50                     -Info "Select the name for Tatl"           -Credits "Admentus & ShadowOne333" -Warning 'Most names do not have an unique texture label, and use a default "Info" prompt label'
+    CreateReduxTextBox  -All -Name "TatlName"   -Text "Tatl Name" -Length 5 -ASCII -Value "Tatl" -Width 50                     -Info "Select the name for Tatl"           -Credits "Admentus & ShadowOne333" -Warning ('Most names do not have an unique texture label, and use a default "Info" prompt label' + "`n`n--- Supported Names With Textures ---`nNavi`nTatl`nTaya`nTael`nNite`nInfo")
     CreateReduxComboBox -All -Name "TaelScript" -Text "Tael Text" -Items @("Disabled", "Enabled as Male", "Enabled as Female") -Info "Allow renaming Tael and the gender" -Credits "Admentus & ShadowOne333" -Warning "Gender swap is only supported for English"
     CreateReduxTextBox  -All -Name "TaelName"   -Text "Tael Name" -Length 5 -ASCII -Value "Tael" -Width 50                     -Info "Select the name for Tael"           -Credits "Admentus & ShadowOne333"
     CreateReduxCheckBox -All -Name "Comma"      -Text "Better Comma"                                                           -Info "Make the comma not look as awful"   -Credits "ShadowOne333"

@@ -2248,7 +2248,7 @@ function CreateTabLanguage() {
     CreateReduxGroup    -All -Tag  "Text"       -Text "Other Text Options"
     if ($GamePatch.title -like "*Master of Time*") { $val = "Nite" } else { $val = "Navi" }
     CreateReduxComboBox -All -Name "NaviScript" -Text ($val + " Text")   -Items @("Disabled", "Enabled as Male", "Enabled as Female") -Info ("Allow renaming " + $val + " and the gender") -Credits "Admentus & ShadowOne333" -Warning "Gender swap is only supported for English"
-    CreateReduxTextBox  -All -Name "NaviName"   -Text ($val + " Name")   -Length 5 -ASCII -Value $val -Width 50                       -Info ("Select the name for " + $val)                -Credits "Admentus & ShadowOne333" -Warning 'Most names do not have an unique texture label, and use a default "Info" prompt label'
+    CreateReduxTextBox  -All -Name "NaviName"   -Text ($val + " Name")   -Length 5 -ASCII -Value $val -Width 50                       -Info ("Select the name for " + $val)                -Credits "Admentus & ShadowOne333" -Warning ('Most names do not have an unique texture label, and use a default "Info" prompt label' + "`n`n--- Supported Names With Textures ---`nNavi`nTatl`nTaya`nTael`nNite`nInfo")
     CreateReduxCheckBox -All -Name "NaviPrompt" -Text ($val + " Prompt")                                                              -Info ("Enables the A button prompt for " + $val)    -Credits "Admentus & ShadowOne333" -Warning 'Most names do not have an unique texture prompt, and use a default "Info" prompt label'
 
 
