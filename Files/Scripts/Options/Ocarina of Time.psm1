@@ -1789,7 +1789,7 @@ function ByteLanguageOptions() {
             PatchBytes -Offset "1A3EFC0" -Texture -Patch ("Action Prompts\Navi\" + $Redux.Text.NaviName.text + ".cup")
         }
         else {
-            if (IsChecked $Redux.Text.NaviPrompt) { PatchBytes  -Offset "8E3A80" -Texture -Patch "Action Prompts\Navi\Info.prompt" }
+            if (IsChecked $Redux.Text.NaviPrompt) { PatchBytes  -Offset "8E3A80" -Texture -Patch "Action Prompts\Navi\Info.prompt" } 
             PatchBytes -Offset "1A3EFC0" -Texture -Patch "Action Prompts\Navi\Info.cup"
         }
     }
@@ -2252,8 +2252,9 @@ function CreateTabLanguage() {
     CreateReduxGroup    -All -Tag  "Text"       -Text "Other Text Options"
     if ($GamePatch.title -like "*Master of Time*")   { $val = "Nite" }                                                    else   { $val   = "Navi"                   }
     if ($GamePatch.title -like "*Ocarina*")          { $items = @("Disabled", "Enabled as Female", "Enabled as Male") }   else   { $items = @("Disabled", "Enabled") }
+    $names = "`n`n--- Supported Names With Textures ---`n" + "Navi`nTatl`nTaya`nТдтп`nTael`nNite`nNagi`nInfo"
     CreateReduxComboBox -All -Name "NaviScript" -Text ($val + " Text") -Items $items                          -Info ("Allow renaming " + $val + " and the gender") -Credits "Admentus & ShadowOne333" -Warning "Gender swap is only supported for English"
-    CreateReduxTextBox  -All -Name "NaviName"   -Text ($val + " Name") -Length 5 -ASCII -Value $val -Width 50 -Info ("Select the name for " + $val)                -Credits "Admentus & ShadowOne333" -Warning ('Most names do not have an unique texture label, and use a default "Info" prompt label' + "`n`n--- Supported Names With Textures ---`nNavi`nTatl`nTaya`nTael`nNite`nInfo")
+    CreateReduxTextBox  -All -Name "NaviName"   -Text ($val + " Name") -Length 5 -ASCII -Value $val -Width 50 -Info ("Select the name for " + $val)                -Credits "Admentus & ShadowOne333" -Warning ('Most names do not have an unique texture label, and use a default "Info" prompt label' + $names)
     CreateReduxCheckBox -All -Name "NaviPrompt" -Text ($val + " Prompt")                                      -Info ("Enables the A button prompt for " + $val)    -Credits "Admentus & ShadowOne333" -Warning 'Most names do not have an unique texture prompt, and use a default "Info" prompt label'
     $val = $items = $null
 
