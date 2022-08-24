@@ -1669,11 +1669,12 @@ function ByteReduxOptions() {
 #==============================================================================================================================================================================================
 function CheckLanguageOptions() {
     
-    if     ( (IsChecked  $Redux.Text.Vanilla -Not)   -or (IsChecked  $Redux.Text.Speed1x  -Not) -or (IsChecked  $Redux.UI.GCScheme) )                                                                                                   { return $True }
-    elseif ( (IsLanguage $Redux.Unlock.Tunics)       -or (IsLanguage $Redux.Equipment.HerosBow) -or (IsLanguage $Redux.Capacity.EnableAmmo) -or (IsLanguage $Redux.Capacity.EnableWallet) )                                             { return $True }
-    elseif ( (IsChecked  $Redux.Text.FemalePronouns) -or (IsChecked  $Redux.Text.TypoFixes)     -or (IsChecked  $Redux.Text.GoldSkulltula)  -or (IsChecked  $Redux.Text.Instant) )                                                      { return $True }
-    elseif ( ( (IsDefault $Redux.Text.NaviScript -Not) -and (IsDefault $Redux.Text.NaviName -Not) -and $Redux.Text.NaviName.Text.Count -gt 0) -or (IsIndex -Elem $Redux.Text.NaviScript -Index 2 -and $LanguagePatch.code -eq "en") )   { return $True }
-    
+    if     ( (IsChecked  $Redux.Text.Vanilla -Not)   -or (IsChecked  $Redux.Text.Speed1x  -Not) -or (IsChecked  $Redux.UI.GCScheme) )                                                         { return $True }
+    elseif ( (IsLanguage $Redux.Unlock.Tunics)       -or (IsLanguage $Redux.Equipment.HerosBow) -or (IsLanguage $Redux.Capacity.EnableAmmo) -or (IsLanguage $Redux.Capacity.EnableWallet) )   { return $True }
+    elseif ( (IsChecked  $Redux.Text.FemalePronouns) -or (IsChecked  $Redux.Text.TypoFixes)     -or (IsChecked  $Redux.Text.GoldSkulltula)  -or (IsChecked  $Redux.Text.Instant) )            { return $True }
+    elseif ( (IsDefault $Redux.Text.NaviScript -Not) -and (IsDefault $Redux.Text.NaviName -Not) -and $Redux.Text.NaviName.Text.Count -gt 0)                                                   { return $True }
+    elseif ( (IsIndex -Elem $Redux.Text.NaviScript -Index 3) -and $LanguagePatch.code -eq "en")                                                                                               { return $True }
+
     if ($LanguagePatch.code -eq "en") {
         if     ( (IsDefault $Redux.Equipment.KokiriSword  -Not) -or (IsDefault $Redux.Equipment.MasterSword   -Not) )                        { return $True }
         elseif ( (IsDefault $Redux.Equipment.GiantsKnife  -Not) -or (IsDefault $Redux.Equipment.BiggoronSword -Not) )                        { return $True }
@@ -1774,22 +1775,25 @@ function ByteLanguageOptions() {
             SetMessage -ID "0051" -Text "adult size,<N>so it won't fit a kid." -Replace "unisize,<N>so it fits an adult and kid" # Zora Tunic
             SetMessage -ID "00AA" -Text "Adult" -Replace "Uni-"; SetMessage -ID "00AB"  # Tunic
         }
-
-        if ( (IsDefault $Redux.Text.NaviScript -Not) -and (IsDefault $Redux.Text.NaviName -Not) -and $Redux.Text.NaviName.Text.Count -gt 0) {
-            SetMessage -ID "1000" -Text "4E617669" -Replace $Redux.Text.NaviName.text -NoParse; SetMessage -ID "1015"; SetMessage -ID "1017"; SetMessage -ID "1017"; SetMessage -ID "1017"; SetMessage -ID "103F"
-            SetMessage -ID "103F";                                                              SetMessage -ID "1099"; SetMessage -ID "1099"; SetMessage -ID "109A"; SetMessage -ID "109A"; SetMessage -ID "109A"
-
-            if (TestFile ($GameFiles.textures + "\Action Prompts\Navi\" + $Redux.Text.NaviName.Text + ".cup") ) {
-                if (IsChecked $Redux.Text.NaviPrompt) { PatchBytes  -Offset "8E3A80" -Texture -Patch ("Action Prompts\Navi\" + $Redux.Text.NaviName.text + ".prompt") }
-                PatchBytes -Offset "1A3EFC0" -Texture -Patch ("Action Prompts\Navi\" + $Redux.Text.NaviName.text + ".cup")
-            }
-            else {
-                if (IsChecked $Redux.Text.NaviPrompt) { PatchBytes  -Offset "8E3A80" -Texture -Patch "Action Prompts\Navi\Info.prompt" }
-                PatchBytes -Offset "1A3EFC0" -Texture -Patch "Action Prompts\Navi\Info.cup"
-            }
-        }
+    }
     }
     elseif (IsChecked $Redux.Text.Speed2x) { ChangeBytes -Offset "B5006F" -Values "02" }
+
+    if ( (IsDefault $Redux.Text.NaviScript -Not) -and (IsDefault $Redux.Text.NaviName -Not) -and $Redux.Text.NaviName.Text.Count -gt 0) {
+        if ($GamePatch.options -eq 1) {
+            SetMessage -ID "1000" -Text "4E617669" -Replace $Redux.Text.NaviName.text -NoParse; SetMessage -ID "1015"; SetMessage -ID "1017"; SetMessage -ID "1017"; SetMessage -ID "1017"; SetMessage -ID "103F"
+            SetMessage -ID "103F";                                                              SetMessage -ID "1099"; SetMessage -ID "1099"; SetMessage -ID "109A"; SetMessage -ID "109A"; SetMessage -ID "109A"
+        }
+        if (TestFile ($GameFiles.textures + "\Action Prompts\Navi\" + $Redux.Text.NaviName.Text + ".cup") ) {
+            if (IsChecked $Redux.Text.NaviPrompt) { PatchBytes  -Offset "8E3A80" -Texture -Patch ("Action Prompts\Navi\" + $Redux.Text.NaviName.text + ".prompt") }
+            PatchBytes -Offset "1A3EFC0" -Texture -Patch ("Action Prompts\Navi\" + $Redux.Text.NaviName.text + ".cup")
+        }
+        else {
+            if (IsChecked $Redux.Text.NaviPrompt) { PatchBytes  -Offset "8E3A80" -Texture -Patch "Action Prompts\Navi\Info.prompt" }
+            PatchBytes -Offset "1A3EFC0" -Texture -Patch "Action Prompts\Navi\Info.cup"
+        }
+    }
+    if ( (IsIndex -Elem $Redux.Text.NaviScript -Index 3) -and $LanguagePatch.code -eq "en") { SetMessage -ID "1017" -Text "her" -Replace "his"; SetMessage -ID "103F" -Text "her" -Replace "his" }
 
     if (IsLanguage $Redux.Text.TypoFixes) {
         SetMessage "4013" -Text " Princess Ruto has gone to the <N>temple of Lake Hylia and has not<N>come back... I'm so worried...again!" -Replace "Princess Ruto has gone to Lake<N>Hylia and has not come back...<N>I'm so worried...again!"
@@ -2246,11 +2250,12 @@ function CreateTabLanguage() {
     # OTHER TEXT OPTIONS #
 
     CreateReduxGroup    -All -Tag  "Text"       -Text "Other Text Options"
-    if ($GamePatch.title -like "*Master of Time*") { $val = "Nite" } else { $val = "Navi" }
-    CreateReduxComboBox -All -Name "NaviScript" -Text ($val + " Text")   -Items @("Disabled", "Enabled as Male", "Enabled as Female") -Info ("Allow renaming " + $val + " and the gender") -Credits "Admentus & ShadowOne333" -Warning "Gender swap is only supported for English"
-    CreateReduxTextBox  -All -Name "NaviName"   -Text ($val + " Name")   -Length 5 -ASCII -Value $val -Width 50                       -Info ("Select the name for " + $val)                -Credits "Admentus & ShadowOne333" -Warning ('Most names do not have an unique texture label, and use a default "Info" prompt label' + "`n`n--- Supported Names With Textures ---`nNavi`nTatl`nTaya`nTael`nNite`nInfo")
-    CreateReduxCheckBox -All -Name "NaviPrompt" -Text ($val + " Prompt")                                                              -Info ("Enables the A button prompt for " + $val)    -Credits "Admentus & ShadowOne333" -Warning 'Most names do not have an unique texture prompt, and use a default "Info" prompt label'
-
+    if ($GamePatch.title -like "*Master of Time*")   { $val = "Nite" }                                                    else   { $val   = "Navi"                   }
+    if ($GamePatch.title -like "*Ocarina*")          { $items = @("Disabled", "Enabled as Female", "Enabled as Male") }   else   { $items = @("Disabled", "Enabled") }
+    CreateReduxComboBox -All -Name "NaviScript" -Text ($val + " Text") -Items $items                          -Info ("Allow renaming " + $val + " and the gender") -Credits "Admentus & ShadowOne333" -Warning "Gender swap is only supported for English"
+    CreateReduxTextBox  -All -Name "NaviName"   -Text ($val + " Name") -Length 5 -ASCII -Value $val -Width 50 -Info ("Select the name for " + $val)                -Credits "Admentus & ShadowOne333" -Warning ('Most names do not have an unique texture label, and use a default "Info" prompt label' + "`n`n--- Supported Names With Textures ---`nNavi`nTatl`nTaya`nTael`nNite`nInfo")
+    CreateReduxCheckBox -All -Name "NaviPrompt" -Text ($val + " Prompt")                                      -Info ("Enables the A button prompt for " + $val)    -Credits "Admentus & ShadowOne333" -Warning 'Most names do not have an unique texture prompt, and use a default "Info" prompt label'
+    $val = $items = $null
 
     if ($GamePatch.title -like "*Ocarina*") {
         foreach ($i in 0.. ($Files.json.languages.length-1)) { $Redux.Language[$i].Add_CheckedChanged({ UnlockLanguageContent }) }

@@ -903,7 +903,7 @@ function CheckLanguageOptions() {
     if     ( (IsChecked  $Redux.Text.Vanilla -Not)   -or (IsLanguage $Redux.Text.AdultPronouns)  -or (IsLanguage $Redux.UI.GCScheme) -or (IsLanguage $Redux.Text.AreaTitleCards) )                                                     { return $True }
     elseif ( (IsLanguage $Redux.Gameplay.RazorSword) -or (IsLanguage $Redux.Capacity.EnableAmmo) -or (IsLanguage $Redux.Capacity.EnableWallet) )                                                                                       { return $True }
     elseif ( (IsDefault $Redux.Features.OcarinaIcons -Not) -and $Patches.Redux.Checked -and $LanguagePatch.code -eq "en")                                                                                                              { return $True }
-    elseif ( ( (IsDefault $Redux.Text.TatlScript -Not) -and (IsDefault $Redux.Text.TatlName -Not) -and $Redux.Text.TatlName.Text.Count -gt 0) -or (IsIndex -Elem $Redux.Text.TatlScript -Index 2) -and $LanguagePatch.code -eq "en")   { return $True }
+    elseif ( ( (IsDefault $Redux.Text.TatlScript -Not) -and (IsDefault $Redux.Text.TatlName -Not) -and $Redux.Text.TatlName.Text.Count -gt 0) -or (IsIndex -Elem $Redux.Text.TatlScript -Index 3) -and $LanguagePatch.code -eq "en")   { return $True }
     elseif ( ( (IsDefault $Redux.Text.TealScript -Not) -and (IsDefault $Redux.Text.TealName -Not) -and $Redux.Text.TaelName.Text.Count -gt 0) -or (IsIndex -Elem $Redux.Text.TaelScript -Index 3) -and $LanguagePatch.code -eq "en")   { return $True }
     
     return $False
@@ -1002,7 +1002,7 @@ function ByteLanguageOptions() {
         if (TestFile ($GameFiles.textures + "\Tatl\" + $Redux.Text.TatlName.Text + ".cup") )   { PatchBytes -Offset "1EBFAE0" -Texture -Patch ("Tatl\" + $Redux.Text.TatlName.Text + ".cup") }
         else                                                                                   { PatchBytes -Offset "1EBFAE0" -Texture -Patch ("Tatl\Info.cup")                              }
     }
-    if ( (IsIndex -Elem $Redux.Text.TatlScript -Index 2) -and $LanguagePatch.code -eq "en") {
+    if ( (IsIndex -Elem $Redux.Text.TatlScript -Index 3) -and $LanguagePatch.code -eq "en") {
 	    SetMessage -ID "1F43" -Text "sis"    -Replace "bro";    SetMessage -ID "1F48" -Text "S-s..." -Replace "B-b..."; SetMessage -ID "1F48" -Text "Sis"    -Replace "Bro";    SetMessage -ID "1F4A" -Text "girl" -Replace "boy"; SetMessage -ID "2009" -Text "Sis!!!" -Replace "Bro!!!"
         SetMessage -ID "2028" -Text "Sis!!!" -Replace "Bro!!!"; SetMessage -ID "202D" -Text "Sis..." -Replace "Bro..."; SetMessage -ID "2045" -Text "Sis..." -Replace "Bro..."; SetMessage -ID "2048" -Text "sis"  -Replace "bro"; SetMessage -ID "204A" -Text "sister" -Replace "brother"
     }
@@ -1225,7 +1225,7 @@ function CreateTabLanguage() {
     # OTHER TEXT OPTIONS #
 
     CreateReduxGroup    -All -Tag  "Text"       -Text "Other Text Options"
-    CreateReduxComboBox -All -Name "TatlScript" -Text "Tatl Text" -Items @("Disabled", "Enabled as Male", "Enabled as Female") -Info "Allow renaming Tatl and the gender" -Credits "Admentus & ShadowOne333" -Warning "Gender swap is only supported for English"
+    CreateReduxComboBox -All -Name "TatlScript" -Text "Tatl Text" -Items @("Disabled", "Enabled as Female", "Enabled as Male") -Info "Allow renaming Tatl and the gender" -Credits "Admentus & ShadowOne333" -Warning "Gender swap is only supported for English"
     CreateReduxTextBox  -All -Name "TatlName"   -Text "Tatl Name" -Length 5 -ASCII -Value "Tatl" -Width 50                     -Info "Select the name for Tatl"           -Credits "Admentus & ShadowOne333" -Warning ('Most names do not have an unique texture label, and use a default "Info" prompt label' + "`n`n--- Supported Names With Textures ---`nNavi`nTatl`nTaya`nTael`nNite`nInfo")
     CreateReduxComboBox -All -Name "TaelScript" -Text "Tael Text" -Items @("Disabled", "Enabled as Male", "Enabled as Female") -Info "Allow renaming Tael and the gender" -Credits "Admentus & ShadowOne333" -Warning "Gender swap is only supported for English"
     CreateReduxTextBox  -All -Name "TaelName"   -Text "Tael Name" -Length 5 -ASCII -Value "Tael" -Width 50                     -Info "Select the name for Tael"           -Credits "Admentus & ShadowOne333"
