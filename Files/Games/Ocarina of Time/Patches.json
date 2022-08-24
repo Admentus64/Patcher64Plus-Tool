@@ -51,7 +51,7 @@
 	"output"			: "_gz_practice_patched",
 	"tooltip"			: "A trainer / practice / testing utility for The Legend of Zelda: Ocarina of Time{0}Formally known by its codename 'gz', but generally referred to as 'The Practice ROM'"
 }, {
-	"title"				: "The Legend of Zelda: Gold Quest",
+	"title"				: "The Legend of Zelda: Gold Quest (v2.1)",
 	"vc_title"			: "Zelda: Gold Quest",
 	"vc_gameID"			: "NACG",
 	"finalize"			: 0,
