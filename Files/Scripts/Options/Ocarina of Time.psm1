@@ -2312,44 +2312,51 @@ function CreateTabGraphics() {
     
     # GRAPHICS #
 
-    CreateReduxGroup    -Tag  "Graphics"        -All -Text "Graphics"                     -Columns 4 -Height 3
-    CreateReduxCheckBox -Name "Widescreen"      -All -Text "16:9 Widescreen (Advanced)"   -Info "Patch the game to be in true 16:9 widescreen with the HUD pushed to the edges"                       -Native -Credits "Widescreen Patch by gamemasterplc, enhanced and ported by GhostlyDark"
-    CreateReduxCheckBox -Name "WidescreenAlt"   -All -Text "16:9 Widescreen (Simplified)" -Info "Apply 16:9 Widescreen adjusted backgrounds and textures (as well as 16:9 Widescreen for the Wii VC)" -Credits "Aspect Ratio Fix by Admentus`n16:9 backgrounds by GhostlyDark, ShadowOne333 & CYB3RTRON" -Link $Redux.Graphics.Widescreen
-    CreateReduxCheckBox -Name "ExtendedDraw"    -All -Text "Extended Draw Distance"       -Info "Increases the game's draw distance for objects`nDoes not work on all objects"                        -Credits "Admentus"
-    CreateReduxCheckBox -Name "ForceHiresModel" -All -Text "Force Hires Link Model"       -Info "Always use Link's High Resolution Model when Link is too far away"                                   -Credits "GhostlyDark"
-    CreateReduxCheckBox -Name "OverworldSkyboxes"    -Text "Overworld Skyboxes"           -Info "Use day and night skyboxes for all overworld areas lacking one"                                      -Credits "Admentus (ported) & BrianMp16 (AR Code)"
-    CreateReduxCheckBox -Name "HideDungeonIcon" -All -Text "Hide Dungeon Icon"            -Info "Hide dungeon icon for minimaps that do not have a dungeon entrance"                                  -Credits "GhostlyDark"
+    if ($GamePatch.models -ne 0)   { CreateReduxGroup -Tag  "Graphics" -All -Text "Graphics" -Columns 4 -Height 3 }
+    else                           { CreateReduxGroup -Tag  "Graphics" -All -Text "Graphics"                      }
+    CreateReduxCheckBox -Name "Widescreen"      -All  -Text "16:9 Widescreen (Advanced)"   -Info "Patch the game to be in true 16:9 widescreen with the HUD pushed to the edges"                       -Native -Credits "Widescreen Patch by gamemasterplc, enhanced and ported by GhostlyDark"
+    CreateReduxCheckBox -Name "WidescreenAlt"   -All  -Text "16:9 Widescreen (Simplified)" -Info "Apply 16:9 Widescreen adjusted backgrounds and textures (as well as 16:9 Widescreen for the Wii VC)" -Credits "Aspect Ratio Fix by Admentus`n16:9 backgrounds by GhostlyDark, ShadowOne333 & CYB3RTRON" -Link $Redux.Graphics.Widescreen
+    CreateReduxCheckBox -Name "ExtendedDraw"    -All  -Text "Extended Draw Distance"       -Info "Increases the game's draw distance for objects`nDoes not work on all objects"                        -Credits "Admentus"
+    CreateReduxCheckBox -Name "ForceHiresModel" -All  -Text "Force Hires Link Model"       -Info "Always use Link's High Resolution Model when Link is too far away" -Exclude "Dawn & Dusk"            -Credits "GhostlyDark"
+    CreateReduxCheckBox -Name "OverworldSkyboxes"     -Text "Overworld Skyboxes"           -Info "Use day and night skyboxes for all overworld areas lacking one"                                      -Credits "Admentus (ported) & BrianMp16 (AR Code)"
+    CreateReduxCheckBox -Name "HideDungeonIcon" -Base -Text "Hide Dungeon Icon"            -Info "Hide dungeon icon for minimaps that do not have a dungeon entrance"                                  -Credits "GhostlyDark"
 
     if (!$IsWiiVC) {
         EnableElem -Elem @($Redux.Fixes.PauseScreenDelay, $Redux.Fixes.PauseScreenCrash) -Active (!$Redux.Graphics.Widescreen.Checked)
         $Redux.Graphics.Widescreen.Add_CheckStateChanged({ EnableElem -Elem @($Redux.Fixes.PauseScreenDelay, $Redux.Fixes.PauseScreenCrash) -Active (!$this.Checked) })
     }
 
-    $Last.Column = 1; $Last.Row = 3
-    $models = LoadModelsList -Category "Child"
-    CreateReduxComboBox -Name "ChildModels" -Child -Text "Child Model" -Items (@("Original") + $models) -Default "Original" -Info "Replace the child model used for Link"
-    $models = LoadModelsList -Category "Adult"
-    CreateReduxComboBox -Name "AdultModels" -Adult -Text "Adult Model" -Items (@("Original") + $models) -Default "Original" -Info "Replace the adult model used for Link"
-    $info = $models = $null
 
 
+    # MDOELS #
 
-    # MODELS PREVIEW #
+    if ($GamePatch.models -ne 0) { 
+        $Last.Column = 1; $Last.Row = 3
+        $models = LoadModelsList -Category "Child"
+        CreateReduxComboBox -Name "ChildModels" -Child -Text "Child Model" -Items (@("Original") + $models) -Default "Original" -Info "Replace the child model used for Link"
+        $models = LoadModelsList -Category "Adult"
+        CreateReduxComboBox -Name "AdultModels" -Adult -Text "Adult Model" -Items (@("Original") + $models) -Default "Original" -Info "Replace the adult model used for Link"
+        $info = $models = $null
 
-    $Redux.Graphics.ModelPreviews = CreateReduxGroup -Tag "Graphics" -All -Text "Model Previews"
-    $Last.Group.Height = (DPISize 252)
+        $Redux.Graphics.ModelPreviews = CreateReduxGroup -Tag "Graphics" -All -Text "Model Previews"
+        $Last.Group.Height = (DPISize 252)
 
-    CreateImageBox -x 20  -y 20 -w 154 -h 220 -Child -Name "ModelsPreviewChild"
-    CreateImageBox -x 210 -y 20 -w 154 -h 220 -Adult -Name "ModelsPreviewAdult"
-    $global:PreviewToolTip = CreateToolTip
-    ChangeModelsSelection
+        CreateImageBox -x 20  -y 20 -w 154 -h 220 -Child -Name "ModelsPreviewChild"
+        CreateImageBox -x 210 -y 20 -w 154 -h 220 -Adult -Name "ModelsPreviewAdult"
+        $global:PreviewToolTip = CreateToolTip
+        ChangeModelsSelection
+    }
     
 
 
     # INTERFACE #
+    
+    if ($GamePatch.models -ne 0) {
+        CreateReduxGroup -Tag  "UI" -All -Text "Interface" -Height 4
+        $Last.Group.Width = $Redux.Groups[$Redux.Groups.Length-3].Width; $Last.Group.Top = $Redux.Groups[$Redux.Groups.Length-3].Bottom + 5; $Last.Width = 4
+    }
+    else { CreateReduxGroup -Tag  "UI" -All -Text "Interface" }
 
-    CreateReduxGroup    -Tag  "UI"               -All -Text "Interface" -Height 4
-    $Last.Group.Width = $Redux.Groups[$Redux.Groups.Length-3].Width; $Last.Group.Top = $Redux.Groups[$Redux.Groups.Length-3].Bottom + 5; $Last.Width = 4;
     CreateReduxCheckBox -Name "Rupees"           -All -Text "MM Rupee Icon"                                                                                            -Info "Replace the rupees icon with that from Majora's Mask"                                              -Credits "Ported by GhostlyDark"
     CreateReduxCheckBox -Name "DungeonKeys"      -All -Text "MM Key Icon"                                                                                              -Info "Replace the key icon with that from Majora's Mask"                                                 -Credits "Ported by GhostlyDark"
     CreateReduxCheckBox -Name "DungeonIcons"     -All -Text "MM Dungeon Icons"                                                                                         -Info "Replace the dungeon map icons with those from Majora's Mask"                                       -Credits "Ported by GhostlyDark"

@@ -1,6 +1,6 @@
 ﻿function PrePatchOptions() {
 
-    if (IsChecked $Redux.Graphics.Widescreen)          { ApplyPatch -Patch "Decompressed\Optional\widescreen.ppf" }
+    if (IsChecked $Redux.Graphics.Widescreen)          { ApplyPatch -Patch "Decompressed\Optional\widescreen.ppf"    }
     if (IsDefault $Redux.Features.OcarinaIcons -Not)   { ApplyPatch -Patch "Decompressed\Optional\ocarina_icons.ppf" }
 
     if ( (IsSet $LanguagePatch.DmaTable)        -and !$Patches.Redux.Checked)   { return }
