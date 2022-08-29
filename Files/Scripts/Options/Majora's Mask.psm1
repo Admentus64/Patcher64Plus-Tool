@@ -800,10 +800,10 @@ function ByteReduxOptions() {
         PatchBytes -Offset "A3B9BC" -Length "850" -Texture -Pad -Patch "Icons\zora_guitar_icon.yaz0" # Slingshot, ID: 0x26
         PatchBytes -Offset "A28AF4" -Length "1B0" -Texture -Pad -Patch "Icons\zora_guitar_text.yaz0"
 
+        ChangeBytes -Offset "CD6E32" -Values "14"                                                              # Hylian Loach is now Ocarina
         ChangeBytes -Offset "CD6E17" -Values "14"                                                              # Slingshot is now Ocarina
         ChangeBytes -Offset "CD6E28" -Values "14"                                                              # Blue Fire is now Ocarina
-        ChangeBytes -Offset "CD6E32" -Values "14"                                                              # Hylian Loach is now Ocarina
-        ChangeBytes -Offset "C58AB1" -Values "01"                                                              # Deku Link can use Slingshot
+        ChangeBytes -Offset "C58A3F" -Values "01"                                                              # Zora Link can use Slingshot
         ChangeBytes -Offset "A36D80" -Values "00 00 4A B0"                                                     # Pointer Zora Guitar icon
         ChangeBytes -Offset "A27674" -Values "00 00 2B A0"; ChangeBytes -Offset "A276D0" -Values "00 00 09 C0" # Pointer Goron Drums Text
 
