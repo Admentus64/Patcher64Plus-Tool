@@ -20,15 +20,15 @@ function PatchOptions() {
 
     if (IsIndex -Elem $Redux.Graphics.ChildModels -Text "Original" -Not) {
         $file = "\Child\" + $Redux.Graphics.ChildModels.Text.replace(" (default)", "") + ".ppf" 
-        if (TestFile ($GameFiles.models + $file))              { ApplyPatch -Patch ($GameFiles.models + $file) -FullPath }
+        if (TestFile ($GameFiles.models + $file))   { ApplyPatch -Patch ($GameFiles.models + $file) -FullPath }
     }
 
 
 
     # DIFFICULTY #
 
-    if (IsChecked $Redux.Hero.MasterQuest)                     { ApplyPatch -Patch "Decompressed\optional\master_quest_remix.ppf"           }
-    if (IsChecked $Redux.Hero.RaisedResearchLabPlatform)       { ApplyPatch -Patch "Decompressed\optional\raised_research_lab_platform.ppf" }
+    if (IsChecked $Redux.Hero.MasterQuest)                 { ApplyPatch -Patch "Decompressed\optional\master_quest_remix.ppf"           }
+    if (IsChecked $Redux.Hero.RaisedResearchLabPlatform)   { ApplyPatch -Patch "Decompressed\optional\raised_research_lab_platform.ppf" }
 
 }
 
@@ -1155,12 +1155,12 @@ function CreateTabRedux() {
     CreateReduxCheckBox -Name "FasterBlockPushing" -All -Text "Faster Block Pushing"       -Info "All blocks are pushed faster"                                                                                                 -Checked -Credits "Ported from Redux"
     CreateReduxCheckBox -Name "ElegySpeedup"       -All -Text "Elegy of Emptiness Speedup" -Info "The Elegy of Emptiness statue summoning cutscene is skipped after playing the song"                                           -Checked -Credits "Ported from Redux"
     CreateReduxCheckBox -Name "CritWiggle"         -All -Text "Disable Crit Wiggle"        -Info "Link no longer randomly moves when his health is critical"                                                                    -Checked -Credits "Ported from Redux"
-    CreateReduxCheckBox -Name "UnderwaterOcarina"  -All -Text "Underwater Ocarina"         -Info "Zora Link can play the Ocarina when standing on the bottom of water"                                                          -Checked -Credits "Ported from Redux"
+    CreateReduxCheckBox -Name "UnderwaterOcarina"  -All -Text "Underwater Ocarina"         -Info "Zora Link can play the Ocarina when standing on the bottom of water" -Warning "Not compatible with Ocarina Icons"             -Checked -Credits "Ported from Redux"
     CreateReduxCheckBox -Name "FlowOfTime"         -All -Text "Control Flow of Time"       -Info "Hold L and press D-Pad Up, Right or Left to control the flow of time`nTime can be sped up and inversed without the use of the Ocarina" -Credits "Admentus"
     CreateReduxCheckBox -Name "InstantElegy"       -All -Text "Instant Elegy Statue"       -Info "Hold L and press D-Pad Down to summon an Elegy of Emptiness Statue without the use of the Ocarina"                                     -Credits "Admentus"
     
     CreateReduxGroup    -Tag  "Features"     -All -Text "Features"
-    CreateReduxComboBox -Name "OcarinaIcons" -All -Text "Ocarina Icons"         -Info "Restore the Ocarina Icons with their text when transformed like in the N64 Beta or 3DS version`nRequires the language to be set to English" -Items @("Disabled", "Enabled", "Enabled with Original Icon") -Credits "Admentus & ShadowOne333"
+    CreateReduxComboBox -Name "OcarinaIcons" -All -Text "Ocarina Icons"         -Info "Restore the Ocarina Icons with their text when transformed like in the N64 Beta or 3DS version`nRequires the language to be set to English" -Items @("Disabled", "Enabled", "Enabled with Original Icon") -Credits "Admentus & ShadowOne333" -Warning "Not compatible with Underwater Ocarina"
     CreateReduxCheckBox -Name "FPS"          -All -Text "30 FPS (Experimental)" -Info "Experimental 30 FPS support`nUse L + Z to toggle between 20 FPS and 30 FPS mode"                                                                                                                          -Credits "Admentus" -Warning $warning
     CreateReduxCheckBox -Name "HUDToggle"    -All -Text "HUD Toggle"            -Info "Toggle the HUD by using the L button`nPress L in the MAP subscreen to toggle it in its entirety`nPress L ingame to toggle the essential display"                                                          -Credits "Admentus"
     CreateReduxCheckBox -Name "ItemsUnequip" -All -Text "Unequip Items"         -Info "Press C-Up on an equipped C Button item to unequip it from the assigned C Button"                                                                                                                         -Credits "Admentus"
@@ -1188,7 +1188,14 @@ function CreateTabRedux() {
         }
     })
 
+    if     ($Redux.Gameplay.UnderwaterOcarina.Checked -and $Redux.Features.OcarinaIcons.SelectedIndex -gt 0)   { $Redux.Gameplay.UnderwaterOcarina.Checked = $False; $Redux.Features.OcarinaIcons.SelectedIndex = 0 }
+    elseif ($Redux.Gameplay.UnderwaterOcarina.Checked)                                                         { EnableElem -Elem $Redux.Features.OcarinaIcons      -Active $False }
+    elseif ($Redux.Features.OcarinaIcons.SelectedIndex -gt 0)                                                  { EnableElem -Elem $Redux.Gameplay.UnderwaterOcarina -Active $False }
 
+    $Redux.Gameplay.UnderwaterOcarina.Add_CheckStateChanged( { EnableElem -Elem $Redux.Features.OcarinaIcons      -Active (!$this.checked)             })
+    $Redux.Features.OcarinaIcons.Add_SelectedIndexChanged(   { EnableElem -Elem $Redux.Gameplay.UnderwaterOcarina -Active (!$this.selectedIndex -ne 0) })
+    
+    
 
     # BUTTON COLORS #
 
