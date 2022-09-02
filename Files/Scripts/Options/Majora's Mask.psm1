@@ -790,23 +790,21 @@ function ByteReduxOptions() {
     # FEATURES #
 
     if (IsDefault $Redux.Features.OcarinaIcons -Not) {
-        if ($Redux.Features.OcarinaIcons.selectedIndex -eq 1)   { PatchBytes -Offset "A4AAFC" -Length "9A0" -Texture -Pad -Patch "Icons\deku_pipes_icon.yaz0"          } # Hylian Loach, ID: 0x0B
+        if ($Redux.Features.OcarinaIcons.selectedIndex -eq 1)   { PatchBytes -Offset "A4AAFC" -Length "9A0" -Texture -Pad -Patch "Icons\deku_pipes_icon.yaz0"          } # Hylian Loach, ID: 0x26
         else                                                    { PatchBytes -Offset "A4AAFC" -Length "9A0" -Texture -Pad -Patch "Icons\deku_pipes_original_icon.yaz0" }
-        PatchBytes -Offset "A2B2B4" -Length "230" -Texture -Pad -Patch "Icons\deku_pipes_text.yaz0"
+        PatchBytes  -Offset "A2B2B4" -Length "230" -Texture -Pad -Patch "Icons\deku_pipes_text.yaz0"
+        ChangeBytes -Offset "CD6E32" -Values "14"                                                     # Hylian Loach is now Ocarina
 
-        PatchBytes -Offset "A44BFC" -Length "A70" -Texture -Pad -Patch "Icons\goron_drums_icon.yaz0" # Blue Fire, ID: 0x1C
-        PatchBytes -Offset "A28204" -Length "270" -Texture -Pad -Patch "Icons\goron_drums_text.yaz0"
+        PatchBytes  -Offset "A44BFC" -Length "A70" -Texture -Pad -Patch "Icons\goron_drums_icon.yaz0" # Blue Fire, ID: 0x1C
+        PatchBytes  -Offset "A28204" -Length "270" -Texture -Pad -Patch "Icons\goron_drums_text.yaz0"
+        ChangeBytes -Offset "CD6E28" -Values "14"                                                     # Blue Fire is now Ocarina
+        ChangeBytes -Offset "A276D0" -Values "00 00 09 C0"                                            # Pointer Goron Drums text
 
-        PatchBytes -Offset "A3B9BC" -Length "850" -Texture -Pad -Patch "Icons\zora_guitar_icon.yaz0" # Slingshot, ID: 0x26
-        PatchBytes -Offset "A28AF4" -Length "1B0" -Texture -Pad -Patch "Icons\zora_guitar_text.yaz0"
-
-        ChangeBytes -Offset "CD6E32" -Values "14"                                                              # Hylian Loach is now Ocarina
-        ChangeBytes -Offset "CD6E17" -Values "14"                                                              # Slingshot is now Ocarina
-        ChangeBytes -Offset "CD6E28" -Values "14"                                                              # Blue Fire is now Ocarina
-        ChangeBytes -Offset "C58A3F" -Values "01"                                                              # Zora Link can use Slingshot
-        ChangeBytes -Offset "A36D80" -Values "00 00 4A B0"                                                     # Pointer Zora Guitar icon
-        ChangeBytes -Offset "A27674" -Values "00 00 2B A0"; ChangeBytes -Offset "A276D0" -Values "00 00 09 C0" # Pointer Goron Drums Text
-
+        PatchBytes  -Offset "A4B49C" -Length "7C0" -Texture -Pad -Patch "Icons\zora_guitar_icon.yaz0" # Granny's Drink, ID: 0x27
+        PatchBytes  -Offset "A2B4E4" -Length "260" -Texture -Pad -Patch "Icons\zora_guitar_text.yaz0"
+        ChangeBytes -Offset "CD6E33" -Values "14"                                                     # Granny's Drink is now Ocarina
+        ChangeBytes -Offset "A36D80" -Values "00 01 45 90"                                            # Pointer Zora Guitar text box icon
+        
         ChangeBytes -Offset $Symbols.CFG_OCARINA_ICONS_ENABLED -Values "01"
     }
 
@@ -1034,8 +1032,8 @@ function ByteLanguageOptions() {
         SetMessage     -ID "171C" -Replace "<R>Goron Drums<N><W>The traditional instrument of the<N>Goron tribe.<N><New Box II>Play it with <A Button> and the four <C Button><N>Buttons. Press <B Button> to stop."
         SetMessageIcon -ID "171C" -Hex "64"
         
-        SetMessage     -ID "170B" -Replace "<R>Zora Guitar<N><W>A soulful guitar from a Zora bank.<N>It's overflowing with good vibes.<N><New Box II>Play it with <A Button> and the four <C Button><N>Buttons. Press <B Button> to stop."
-        SetMessageIcon -ID "170B" -Hex "44"
+        SetMessage     -ID "1727" -Replace "<R>Zora Guitar<N><W>A soulful guitar from a Zora band.<N>It's overflowing with good vibes.<N><New Box II>Play it with <A Button> and the four <C Button><N>Buttons. Press <B Button> to stop."
+        SetMessageIcon -ID "1727" -Hex "44"
     }
 
 }

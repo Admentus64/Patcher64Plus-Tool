@@ -1,3 +1,9 @@
+v19.1.7
+- Reworked name options for Tatl, Tael and Navi
+- Several minor fixes
+- Fixed Zora Guitar not being usable
+- Ocarina icons reverts back to the Ocarina of Time when saving (when reverting back to a non-Icons patched ROM)
+
 v19.1.6
 - Updated Gold Deku Pipes Icon (by ShadowOne333)
 - Added new fairy colors
