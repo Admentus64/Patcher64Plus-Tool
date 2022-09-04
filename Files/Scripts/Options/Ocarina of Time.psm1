@@ -2299,7 +2299,7 @@ function UnlockLanguageContent() {
                 if ($Redux.Text.Speed3x.checked -eq $True) { $Redux.Text.Speed2x.checked = $True }
             }
             else { EnableElem -Elem @($Redux.Text.Speed2x, $Redux.Text.Speed3x) -Active $True }
-            EnableElem -Elem @($Redux.Text.Instant, $Redux.Text.GoldSkulltula, $Redux.Text.NaviPrompt, $Redux.Text.NaviCUp, $Redux.Text.NaviScript) -Active ($Files.json.languages[$i].region -ne "J")
+            EnableElem -Elem @($Redux.Text.Instant, $Redux.Text.GoldSkulltula, $Redux.Text.NaviScript, $Redux.Text.NaviName, $Redux.Text.NaviPrompt) -Active ($Files.json.languages[$i].region -ne "J")
         }
     }
 

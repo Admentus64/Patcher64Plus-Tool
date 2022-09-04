@@ -616,16 +616,17 @@ function ShowModelPreview([object]$Box, [string]$Path, [string]$Text, $Type) {
     $Credits = ""
 
     if     (!(IsSet $Type.name))                                { $Credits += "--- Model with missing license ---{0}" }
-    else                                                        { $Credits += "--- " + $Type.name + " ---{0}" }
+    else                                                        { $Credits += "--- " + $Type.name + " ---{0}"         }
     if       ($Type.author -eq 0)                               { }
-    elseif   (IsSet $Type.author)                               { $Credits += "{0}Made by: " + $Type.author }
-    else                                                        { $Credits += "{0}Made by: Unknown" }
-    if       (IsSet $Type.source)                               { $Credits += "{0}Source: "  + $Type.source }
-    if       ($Type.WIP -eq 1)                                  { $Credits += "{0}This model is still Work-In-Progress" }
+    elseif   (IsSet $Type.author)                               { $Credits += "{0}Made by: " + $Type.author                           }
+    else                                                        { $Credits += "{0}Made by: Unknown"                                   }
+    if       (IsSet $Type.source)                               { $Credits += "{0}Source: "  + $Type.source                           }
+    if       ($Type.WIP -eq 1)                                  { $Credits += "{0}This model is still Work-In-Progress"               }
     if       ($Type.WIP -eq 2)                                  { $Credits += "{0}This model is a demonstration of the final version" }
-    if     ( (IsSet $Type.url) -and !(IsSet $Type.author) )     { $Credits += "{0}{0}Click to visit the source of the model" }
-    elseif ( (IsSet $Type.url) -and  (IsSet $Type.author) )     { $Credits += "{0}{0}Click to visit the modder's homepage" }
-    if       (IsSet $Type.info)                                 { $Credits += "{0}{0}" + $Type.info }
+    if     ( (IsSet $Type.url) -and !(IsSet $Type.author) )     { $Credits += "{0}{0}Click to visit the source of the model"          }
+    elseif ( (IsSet $Type.url) -and  (IsSet $Type.author) )     { $Credits += "{0}{0}Click to visit the modder's homepage"            }
+    if       (IsSet $Type.info)                                 { $Credits += "{0}{0}" + $Type.info                                   }
+    if       (IsSet $Type.warning)                              { $Credits += "{0}{0}[!] " + $Type.warning                            }
 
     if (IsSet $Credits)   { $PreviewToolTip.SetToolTip($Box, ([string]::Format($Credits, [Environment]::NewLine))) }
     else                  { $PreviewToolTip.RemoveAll() }
