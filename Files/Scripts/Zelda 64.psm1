@@ -626,7 +626,14 @@ function ShowModelPreview([object]$Box, [string]$Path, [string]$Text, $Type) {
     if     ( (IsSet $Type.url) -and !(IsSet $Type.author) )     { $Credits += "{0}{0}Click to visit the source of the model"          }
     elseif ( (IsSet $Type.url) -and  (IsSet $Type.author) )     { $Credits += "{0}{0}Click to visit the modder's homepage"            }
     if       (IsSet $Type.info)                                 { $Credits += "{0}{0}" + $Type.info                                   }
-    if       (IsSet $Type.warning)                              { $Credits += "{0}{0}[!] " + $Type.warning                            }
+
+    if ( (IsSet $Type.warning) -or $Type.deku_shield -eq 0 -or $Type.hylian_shield -eq 0 -or $Type.mirror_shield -eq 0) {
+        $Credits += "{0}"
+        if (IsSet $Type.warning)         { $Credits += "{0}[!] " + $Type.warning }
+        if ($Type.deku_shield   -eq 0)   { $Credits += "{0}[!] " + "This model does not support Deku Shield changes"   }
+        if ($Type.hylian_shield -eq 0)   { $Credits += "{0}[!] " + "This model does not support Hylian Shield changes" }
+        if ($Type.mirror_shield -eq 0)   { $Credits += "{0}[!] " + "This model does not support Mirror Shield changes" }
+    }
 
     if (IsSet $Credits)   { $PreviewToolTip.SetToolTip($Box, ([string]::Format($Credits, [Environment]::NewLine))) }
     else                  { $PreviewToolTip.RemoveAll() }
