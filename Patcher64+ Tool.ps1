@@ -111,7 +111,7 @@ function CheckScripts() {
     if (!(Test-Path -PathType Leaf -LiteralPath ($Paths.Scripts + "\Main.psm1")         ) )   { $FatalError = $True; $string += "{0}" + $Paths.Scripts + "\Main.psm1"         }
     if (!(Test-Path -PathType Leaf -LiteralPath ($Paths.Scripts + "\MQ.psm1")           ) )   { $FatalError = $True; $string += "{0}" + $Paths.Scripts + "\MQ.psm1"           }
     if (!(Test-Path -PathType Leaf -LiteralPath ($Paths.Scripts + "\Patch.psm1")        ) )   { $FatalError = $True; $string += "{0}" + $Paths.Scripts + "\Patch.psm1"        }
-    if (!(Test-Path -PathType Leaf -LiteralPath ($Paths.Scripts + "\Scene Editor.psm1") ) )   { $FatalError = $True; $string += "{0}" + $Paths.Scripts + "\Scene Editor.psm1" }
+  # if (!(Test-Path -PathType Leaf -LiteralPath ($Paths.Scripts + "\Actor Editor.psm1") ) )   { $FatalError = $True; $string += "{0}" + $Paths.Scripts + "\Actor Editor.psm1" }
     if (!(Test-Path -PathType Leaf -LiteralPath ($Paths.Scripts + "\Settings.psm1")     ) )   { $FatalError = $True; $string += "{0}" + $Paths.Scripts + "\Settings.psm1"     }
     if (!(Test-Path -PathType Leaf -LiteralPath ($Paths.Scripts + "\VC.psm1")           ) )   { $FatalError = $True; $string += "{0}" + $Paths.Scripts + "\VC.psm1"           }
     if (!(Test-Path -PathType Leaf -LiteralPath ($Paths.Scripts + "\Zelda 64.psm1")     ) )   { $FatalError = $True; $string += "{0}" + $Paths.Scripts + "\Zelda 64.psm1"     }

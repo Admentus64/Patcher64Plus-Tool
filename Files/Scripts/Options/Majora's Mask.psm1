@@ -27,7 +27,6 @@ function PatchOptions() {
 
     # DIFFICULTY #
 
-    if (IsChecked $Redux.Hero.MasterQuest)                 { ApplyPatch -Patch "Decompressed\optional\master_quest_remix.ppf"           }
     if (IsChecked $Redux.Hero.RaisedResearchLabPlatform)   { ApplyPatch -Patch "Decompressed\optional\raised_research_lab_platform.ppf" }
 
 }
@@ -917,10 +916,6 @@ function WholeLanguageOptions([string]$Script, [string]$Table) {
         ApplyPatch -File $Table     -Patch "\Export\Message\restore_table.bps"
         PatchBytes -Offset "A2DDC4" -Patch "Icons\troupe_leaders_mask_text.yaz0" -Length "26F" -Texture # Correct Circus Mask
     }
-    elseif (IsChecked $Redux.Text.MasterQuest) {
-        ApplyPatch -File $Script -Patch "\Export\Message\master_quest_static.bps"
-        ApplyPatch -File $Table  -Patch "\Export\Message\master_quest_table.bps"
-    }
     elseif (IsChecked $Redux.Text.Custom) {
         if ( (TestFile ($Gamefiles.editor + "\message_data_static." + $LanguagePatch.code + ".bin") ) -and (TestFile ($Gamefiles.editor + "\message_data." + $LanguagePatch.code + ".tbl") ) ) {
             Copy-Item -LiteralPath ($Gamefiles.editor + "\message_data_static." + $LanguagePatch.code + ".bin") -Destination $Script -Force
@@ -1166,9 +1161,6 @@ function CreateTabRedux() {
     CreateReduxCheckBox -Name "GearSwap"     -All -Text "Swap Gear"             -Info "Press C-Left or C-Right on a sword or shield icon to change between equipment`nYou must have obtained the upgrades, and must not be stolen or reforged`nThis option also makes the Razor Sword permanent" -Credits "Admentus"
     CreateReduxCheckBox -Name "SkipGuard"    -All -Text "Skip Clock Town Guard" -Info "The Clock Town Guard will no longer block entry to Termina Field on subsequent cycles when Hylian Link has spoken to them at least once"                                                                  -Credits "Admentus"
 
-    CreateReduxGroup    -Tag  "Hero"        -Text "Hero Mode"
-    CreateReduxCheckBox -Name "MasterQuest" -Text "Master Quest" -Info "Use all areas and dungeons from the Master Quest ROM hack`nThis is for advanced players who like a higher challenge`nThe structure of the walkthrough is completely re-arranged" -Credits "Admentus (ported) & DeathBasket (ROM hack)"
-
     CreateReduxGroup    -Tag  "Cheats"          -All -Text "Cheats"
     CreateReduxCheckBox -Name "ClimbAnything"   -All -Text "Climb Anything"   -Info "Climb most walls in the game" -Warning "Prone to softlocks, be careful"        -Credits "Ported from Rando"
     CreateReduxCheckBox -Name "InventoryEditor" -All -Text "Inventory Editor" -Info "Press the L button in the QUEST STATUS subscreen to open the Inventory Editor" -Credits "Admentus"
@@ -1178,13 +1170,6 @@ function CreateTabRedux() {
     CreateReduxCheckBox -Name "Rupees"          -All -Text "Infinite Rupees"  -Info "Link's wallet is always filled at it's maximum"                                -Credits "Admentus"
 
     $warning = $null
-
-    $Redux.Hero.MasterQuest.Add_CheckStateChanged({
-        if ($Redux.Hero.MasterQuest.Checked) {
-            $Redux.Hero.CloseBombShop.Checked = $True
-            $Redux.Text.MasterQuest.Checked   = $True
-        }
-    })
 
     if     ($Redux.Gameplay.UnderwaterOcarina.Checked -and $Redux.Features.OcarinaIcons.SelectedIndex -gt 0)   { $Redux.Gameplay.UnderwaterOcarina.Checked = $False; $Redux.Features.OcarinaIcons.SelectedIndex = 0 }
     elseif ($Redux.Gameplay.UnderwaterOcarina.Checked)                                                         { EnableElem -Elem $Redux.Features.OcarinaIcons      -Active $False }
@@ -1216,10 +1201,9 @@ function CreateTabLanguage() {
      
     CreateReduxGroup -Tag "Text" -Text "Dialogue"
     CreateReduxPanel -Columns 4
-    CreateReduxRadioButton -Name "Vanilla"     -Checked  -Max 4 -SaveTo "Dialogue" -Text "Vanilla Text"      -Info "Keep the text as it is"
-    CreateReduxRadioButton -Name "Restore"               -Max 4 -SaveTo "Dialogue" -Text "Restore Text"      -Info "Restores and fixes the following:`n- Restore the area titles cards for those that do not have any`n- Sound effects that do not play during dialogue`n- Grammar and typo fixes" -Credits "Redux"
-    CreateReduxRadioButton -Name "MasterQuest"           -Max 4 -SaveTo "Dialogue" -Text "Master Quest Text" -Info "Uses the script from the Master Quest ROM hack`nAlso disables buying items from the Bomb Shop`nBest used along with the Master Quest difficulty option"                        -Credits "Admentus (ported) & DeathBasket (ROM hack)"
-    CreateReduxRadioButton -Name "Custom"                -Max 4 -SaveTo "Dialogue" -Text "Custom"            -Info ('Insert custom dialogue found from "..\Patcher64+ Tool\Files\Games\Majora' + "'" + 's Mask\Custom Text"') -Warning "Make sure your custom script is proper and correct, or your ROM will crash`n[!] No edit will be made if the custom script is missing"
+    CreateReduxRadioButton -Name "Vanilla" -Checked  -Max 3 -SaveTo "Dialogue" -Text "Vanilla Text" -Info "Keep the text as it is"
+    CreateReduxRadioButton -Name "Restore"           -Max 3 -SaveTo "Dialogue" -Text "Restore Text" -Info "Restores and fixes the following:`n- Restore the area titles cards for those that do not have any`n- Sound effects that do not play during dialogue`n- Grammar and typo fixes" -Credits "Redux"
+    CreateReduxRadioButton -Name "Custom"            -Max 3 -SaveTo "Dialogue" -Text "Custom"       -Info ('Insert custom dialogue found from "..\Patcher64+ Tool\Files\Games\Majora' + "'" + 's Mask\Custom Text"') -Warning "Make sure your custom script is proper and correct, or your ROM will crash`n[!] No edit will be made if the custom script is missing"
 
     CreateReduxCheckBox -Name "AdultPronouns"  -Text "Adult Pronouns"   -Info "Refer to Link as an adult instead of a child" -Credits "Skilar"
     CreateReduxCheckBox -Name "AreaTitleCards" -Text "Area Title Cards" -Info "Add area title cards to missing areas"        -Credits "ShadowOne333"
@@ -1255,7 +1239,6 @@ function UnlockLanguageContent() {
     
     # English options
     EnableElem -Elem $Redux.Text.Restore          -Active $Redux.Language[0].checked
-    EnableElem -Elem $Redux.Text.MasterQuest      -Active $Redux.Language[0].checked
     EnableElem -Elem $Redux.Text.AdultPronouns    -Active $Redux.Language[0].checked
     EnableElem -Elem $Redux.Text.AreaTitleCards   -Active $Redux.Language[0].checked
     EnableElem -Elem $Redux.Features.OcarinaIcons -Active $Redux.Language[0].checked
@@ -1413,16 +1396,16 @@ function CreateTabDifficulty() {
     $Redux.Hero.Damage.Add_SelectedIndexChanged({ EnableElem -Elem $Redux.Hero.Recovery -Active ($this.Text -ne "OHKO Mode") })
     EnableElem -Elem $Redux.Hero.Recovery -Active ($Redux.Hero.Damage.Text -ne "OHKO Mode")
 
-    CreateReduxComboBox -Name "Ammo"     -Column 1 -Row 3 -Text "Ammo Usage" -Items @("1x Ammo Usage", "2x Ammo Usage", "4x Ammo Usage", "8x Ammo Usage") -Info "Set the amount of times ammo is consumed at"                                                                        -Credits "Admentus"
-    CreateReduxComboBox -Name "DamageEffect"              -Text "Damage Effect"               -Items @("Default", "Burn", "Freeze", "Shock", "Knockdown") -Info "Add an effect when damaged"                                                                                         -Credits "Ported from Rando"
-    CreateReduxComboBox -Name "ClockSpeed"                -Text "Clock Speed"                 -Items @("Default", "1/3", "2/3", "2x", "3x", "6x")         -Info "Set the speed at which time is progressing"                                                                         -Credits "Ported from Rando"
-    CreateReduxCheckBox -Name "NoRecoveryHearts"          -Text "No Recovery Heart Drops"                                                                 -Info "Disable Recovery Hearts from spawning from item drops"                                                              -Credits "Admentus"
-    CreateReduxCheckBox -Name "NoItemDrops"               -Text "No Item Drops"                                                                           -Info "Disable all items from spawning"                                                                                    -Credits "Admentus & BilonFullHDemon"
-    CreateReduxCheckBox -Name "PalaceRoute"               -Text "Restore Palace Route"                                                                    -Info "Restore the route to the Bean Seller within the Deku Palace as seen in the Japanese release"                        -Credits "ShadowOne"
-    CreateReduxCheckBox -Name "RaisedResearchLabPlatform" -Text "Raised Research Lab Platform"                                                            -Info "Raise the platform leading up to the Research Laboratory as in the Japanese release"                                -Credits "Linkz"
-    CreateReduxCheckBox -Name "DeathIsMoonCrash"          -Text "Death is Moon Crash"                                                                     -Info "If you die, the moon will crash`nThere are no continues anymore"                                                    -Credits "Ported from Rando"
-    CreateReduxCheckBox -Name "CloseBombShop"             -Text "Close Bomb Shop"                                                                         -Info "The bomb shop is now closed just like in the Master Quest ROM hack`nThe first bomb bag is now found somewhere else" -Credits "Admentus (ported) & DeathBasket (ROM hack)"
-    CreateReduxCheckBox -Name "PermanentKeese"            -Text "Permanent Keese"                                                                         -Info "Fire Keese or Ice Keese won't turn into regular Keese after hitting Link"                                           -Credits "Garo-Mastah"
+    CreateReduxComboBox -Name "Ammo"     -Column 1 -Row 3 -Text "Ammo Usage" -Items @("1x Ammo Usage", "2x Ammo Usage", "4x Ammo Usage", "8x Ammo Usage") -Info "Set the amount of times ammo is consumed at"                                                 -Credits "Admentus"
+    CreateReduxComboBox -Name "DamageEffect"              -Text "Damage Effect"               -Items @("Default", "Burn", "Freeze", "Shock", "Knockdown") -Info "Add an effect when damaged"                                                                  -Credits "Ported from Rando"
+    CreateReduxComboBox -Name "ClockSpeed"                -Text "Clock Speed"                 -Items @("Default", "1/3", "2/3", "2x", "3x", "6x")         -Info "Set the speed at which time is progressing"                                                  -Credits "Ported from Rando"
+    CreateReduxCheckBox -Name "NoRecoveryHearts"          -Text "No Recovery Heart Drops"                                                                 -Info "Disable Recovery Hearts from spawning from item drops"                                       -Credits "Admentus"
+    CreateReduxCheckBox -Name "NoItemDrops"               -Text "No Item Drops"                                                                           -Info "Disable all items from spawning"                                                             -Credits "Admentus & BilonFullHDemon"
+    CreateReduxCheckBox -Name "PalaceRoute"               -Text "Restore Palace Route"                                                                    -Info "Restore the route to the Bean Seller within the Deku Palace as seen in the Japanese release" -Credits "ShadowOne"
+    CreateReduxCheckBox -Name "RaisedResearchLabPlatform" -Text "Raised Research Lab Platform"                                                            -Info "Raise the platform leading up to the Research Laboratory as in the Japanese release"         -Credits "Linkz"
+    CreateReduxCheckBox -Name "DeathIsMoonCrash"          -Text "Death is Moon Crash"                                                                     -Info "If you die, the moon will crash`nThere are no continues anymore"                             -Credits "Ported from Rando"
+    CreateReduxCheckBox -Name "CloseBombShop"             -Text "Close Bomb Shop"                                                                         -Info "The bomb shop is now closed and the bomb bag is now found somewhere else"                    -Credits "Admentus (ported) & DeathBasket (ROM hack)"
+    CreateReduxCheckBox -Name "PermanentKeese"            -Text "Permanent Keese"                                                                         -Info "Fire Keese or Ice Keese won't turn into regular Keese after hitting Link"                    -Credits "Garo-Mastah"
 
 
 

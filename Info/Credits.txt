@@ -85,7 +85,7 @@
 - Colors for several options:		GhostlyDark
 - MM Pause Screen Colors:		Garo-Mastah
 - Frontflip Jump / Somarsault Jump:	SoulofDeity
-- Side Backflip:			Username0713
+- Side Backflip:			BilonFullHDemon
 - Bomb Bag Beta Animation:		Admentus (ROM), Aegiker (GameShark)
 - Show File Select Icons:		ShadowOne333
 - Restore Text:				ShadowOne333

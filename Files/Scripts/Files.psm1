@@ -125,14 +125,14 @@ function SetFileParameters() {
 
     # Store Majora's Mask files
     $Files.mm.troupe_leaders_mask_text      = $Paths.Games + "\Majora's Mask\Textures\Icons\troupe_leaders_mask_text.yaz0"
-    $Files.mm.deku_pipes_icon               = $Paths.Games + "\Majora's Mask\Textures\Icons\deku_pipes_icon.yaz0"
+    $Files.mm.deku_pipes_icon1              = $Paths.Games + "\Majora's Mask\Textures\Icons\deku_pipes_original_icon.yaz0"
+    $Files.mm.deku_pipes_icon2              = $Paths.Games + "\Majora's Mask\Textures\Icons\deku_pipes_icon.yaz0"
     $Files.mm.deku_pipes_Text               = $Paths.Games + "\Majora's Mask\Textures\Icons\deku_pipes_text.yaz0"
     $Files.mm.goron_drums_icon              = $Paths.Games + "\Majora's Mask\Textures\Icons\goron_drums_icon.yaz0"
     $Files.mm.goron_drums_text              = $Paths.Games + "\Majora's Mask\Textures\Icons\goron_drums_text.yaz0"
     $Files.mm.zora_guitar_icon              = $Paths.Games + "\Majora's Mask\Textures\Icons\zora_guitar_icon.yaz0"
     $Files.mm.zora_guitar_text              = $Paths.Games + "\Majora's Mask\Textures\Icons\zora_guitar_text.yaz0"
 
-    $Files.mm.mq_remix                      = CheckPatchExtension ($Paths.Games + "\Majora's Mask\Decompressed\Optional\master_quest_remix")
     $Files.mm.research_lab_platform         = CheckPatchExtension ($Paths.Games + "\Majora's Mask\Decompressed\Optional\raised_research_lab_platform")
     $Files.mm.widescreen                    = CheckPatchExtension ($Paths.Games + "\Majora's Mask\Decompressed\Optional\widescreen")
 
@@ -158,8 +158,6 @@ function SetFileParameters() {
     $Files.mm.deku_palace_0                 = CheckPatchExtension ($Paths.Games + "\Majora's Mask\Export\Deku Palace\deku_palace_room_0")
     $Files.mm.deku_palace_1                 = CheckPatchExtension ($Paths.Games + "\Majora's Mask\Export\Deku Palace\deku_palace_room_1")
     $Files.mm.deku_palace_2                 = CheckPatchExtension ($Paths.Games + "\Majora's Mask\Export\Deku Palace\deku_palace_room_2")
-    $Files.mm.text_master_quest_static      = CheckPatchExtension ($Paths.Games + "\Majora's Mask\Export\Message\master_quest_static")
-    $Files.mm.text_master_quest_table       = CheckPatchExtension ($Paths.Games + "\Majora's Mask\Export\Message\master_quest_table")
     $Files.mm.text_restore_static           = CheckPatchExtension ($Paths.Games + "\Majora's Mask\Export\Message\restore_static")
     $Files.mm.text_restore_table            = CheckPatchExtension ($Paths.Games + "\Majora's Mask\Export\Message\restore_table")
 

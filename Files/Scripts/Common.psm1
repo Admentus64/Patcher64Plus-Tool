@@ -351,6 +351,7 @@ function ChangeGameMode() {
     $GameFiles.patches      = $GameFiles.Base + "\Patches.json"
     $GameFiles.controls     = $GameFiles.Base + "\Controls.json"
     $GameFiles.textEditor   = $GameFiles.Base + "\Text Editor.json"
+    $GameFiles.actorEditor  = $GameFiles.Base + "\Actor Editor.json"
 
     # JSON Files
     if ( ($GameType.patches -eq 1) -or ($GameType.patches -eq 2 -and $IsWiiVC) )   { $Files.json.patches   = SetJSONFile $GameFiles.patches }                           else { $Files.json.patches   = $null }
