@@ -99,6 +99,15 @@
 	"output"	: "_fort_fun_patched",
 	"tooltip"	: "A tiny-sized ROM hack in a completely new setting with the intention to make you suffer{0}Features 1 world and 10 jiggies with an average length of 0.5 hours{0}- Supported: Rev 0 (US)"
 }, {
+	"title"		: "Banjo-Kazooie: Fort Adventure (v1.1)",
+	"patch" : [ {
+		"file"	: "Decompressed\\fort_adventure.bps",
+		"rev"	: "B29599651A13F681C9923D69354BF4A3"
+	} ],
+	"options"	: 1,
+	"output"	: "_fort_adventure_patched",
+	"tooltip"	: "A tiny-sized ROM hack in a completely new setting with the intention to make you suffer{0}Features 1 world, 15 jiggies, 6 honeycombs and 10 mumbo tokens with an average length of 1-2 hours{0}Requires the 8MB Expansion Pak{0}- Supported: Rev 0 (US)"
+}, {
 	"title"		: "Banjo-Kazooie: Smash Bros. Temple",
 	"patch" : [ {
 		"file"	: "Decompressed\\smash_bros_temple.bps",
@@ -153,6 +162,24 @@
 	"options"	: 1,
 	"output"	: "_cave_of_dreams_patched",
 	"tooltip"	: "An above-average-sized ROM hack in a completely new setting{0}Features 3 worlds, 300 notes and 30 jiggies with an average length of 3-4 hours{0}Includes custom objects and enemies{0}- Supported: Rev 0 (US)"
+}, {
+	"title"		: "Banjo-Kazooie: Mumbo Mountain X",
+	"patch" : [ {
+		"file"	: "Decompressed\\mumbo_mountain_x.bps",
+		"rev"	: "B29599651A13F681C9923D69354BF4A3"
+	} ],
+	"options"	: 1,
+	"output"	: "_mumbo_mountain_x_patched",
+	"tooltip"	: "A reimagined version of Mumbo's Mountain{0}Features 1 world, 100 notes, 10 jiggies and 5 mumbo tokens with an average length of 1 hours{0}- Supported: Rev 0 (US)"
+}, {
+	"title"		: "Banjo-Kazooie: Winter's Call",
+	"patch" : [ {
+		"file"	: "Decompressed\\winters_call.bps",
+		"rev"	: "B29599651A13F681C9923D69354BF4A3"
+	} ],
+	"options"	: 1,
+	"output"	: "_winters_call_patched",
+	"tooltip"	: "A tiny-sized ROM hack in a completely new Christmas winter setting{0}Features 1 world, 8 sub-areas, 125 notes, 13 jiggies, 6 honeycombs and 16 mumbo tokens with an average length of 1-3 hours{0}Includes custom objects{0}- Supported: Rev 0 (US)"
 }, {
 	"title"		: "Kurkoin Quest: Snacker Coral Bay",
 	"patch" : [ {

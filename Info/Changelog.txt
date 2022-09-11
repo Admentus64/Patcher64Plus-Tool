@@ -1,3 +1,6 @@
+v19.1.9
+- Added three new BK ROM hacks
+
 v19.1.8
 - Minimap toggle for MM Redux now acts as in vanilla if all L button options are disabled
 - More Ocarina Icons fixes (fixes Termina Field issue, unusable Zora Guitar in houses)

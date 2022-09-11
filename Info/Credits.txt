@@ -715,6 +715,9 @@ https://github.com/DaruniasJoy/OoT-Custom-Sequences
 --- Banjo-Kazooie: Fort Fun ---
 - SonoUshiBousou
 
+--- Banjo-Kazooie: Fort Adventure ---
+- FreeRunnerGuys
+
 --- Banjo-Kazooie: Smash Bros. Temple ---
 - Kurkomark
 
@@ -732,6 +735,12 @@ https://github.com/DaruniasJoy/OoT-Custom-Sequences
 
 --- Banjo-Kazooie: The Cave of Dreams
 - squashmvp
+
+--- Banjo-Kazooie: Mumbo Mountain X ---
+- FreeRunnerGuys
+
+--- Banjo-Kazooie: Winter's Call ---
+- FreeRunnerGuys
 
 --- Kurkoin Quest: Snacker Coral Bay ---
 - Kurkomark
