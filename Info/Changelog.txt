@@ -1,8 +1,13 @@
+v19.1.8
+- Minimap toggle for MM Redux now acts as in vanilla if all L button options are disabled
+- More Ocarina Icons fixes (fixes Termina Field issue, unusable Zora Guitar in houses)
+- Several minor fixes
+
 v19.1.7
 - Reworked name options for Tatl, Tael and Navi
 - Several minor fixes
 - Fixed Zora Guitar not being usable
-- Ocarina icons reverts back to the Ocarina of Time when saving (when reverting back to a non-Icons patched ROM)
+- Ocarina Icons reverts back to the Ocarina of Time item when saving (for when using a ROM without Ocarina Icons)
 
 v19.1.6
 - Updated Gold Deku Pipes Icon (by ShadowOne333)
