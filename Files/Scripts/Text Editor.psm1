@@ -802,14 +802,11 @@ function ParseMessageLanguage([char[]]$Text, [switch]$Encode) {
     for ($i=0; $i -lt $LanguagePatch.encode.length; $i++) { $types += $False }
     if (!$Encode) {
         foreach ($c in $Text) {
-            if ($Text[$i] -eq [byte]$Files.json.textEditor.end)   { break          }
-            if ($c -eq 60)                                        { $skip = $True  }
-            if ($c -eq 62)                                        { $skip = $False }
-            if (!$skip) {
-                for ($i=0; $i -lt $LanguagePatch.encode.length; $i++) {
-                    if ([char]$c -eq [char]$LanguagePatch.encode[$i]) {
-                        $types[$i] = $True
-                    }
+            if ($c -eq [byte]$Files.json.textEditor.end) { break }
+
+            for ($i=0; $i -lt $LanguagePatch.encode.length; $i++) {
+                if ([char]$c -eq [char]$LanguagePatch.encode[$i]) {
+                    $types[$i] = $True
                 }
             }
         }
@@ -819,13 +816,23 @@ function ParseMessageLanguage([char[]]$Text, [switch]$Encode) {
     }
 
     for ($global:ScriptCounter=0; $ScriptCounter -lt $Text.count; $global:ScriptCounter++) {
-        if ($Text[$i] -eq [byte]$Files.json.textEditor.end)   { break          }
-        if ($Text[$i] -eq 60)                                 { $skip = $True  }
-        if ($Text[$i] -eq 62)                                 { $skip = $False }
+        if ($Text[$ScriptCounter] -eq [byte]$Files.json.textEditor.end) { break }
+
+        if ($Text[$ScriptCounter] -eq 60) {
+            $skip = $False
+            
+            for ($i=$global:ScriptCounter; $i -lt $Text.count-1; $i++) {
+                if     ($Text[$i+1] -eq 60)   { $skip = $False; break }
+                elseif ($Text[$i+1] -eq 62)   { $skip = $True;  break }
+            }
+        }
+        if ($Text[$ScriptCounter] -eq 62) { $skip = $False }
 
         if (!$skip) {
             for ($i=0; $i -lt $LanguagePatch.encode.length; $i++) {
-                if ($types[$i]) { $Text = ParseMessagePart -Text $Text -Encoded @($LanguagePatch.encode[$i]) -Decoded @($LanguagePatch.decode[$i]) -Encode $Encode }
+                if ($types[$i]) {
+                    $Text = ParseMessagePart -Text $Text -Encoded @($LanguagePatch.encode[$i]) -Decoded @($LanguagePatch.decode[$i]) -Encode $Encode
+                }
             }
         }
     }
