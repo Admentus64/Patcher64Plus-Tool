@@ -126,9 +126,21 @@ function AutoUpdate([switch]$Manual) {
         }
 
         # Compare content
-        if     ($Patcher.Version -lt $newVersion)                                                                                             { $update = $True }
-        elseif ($Patcher.Version -le $newVersion -and $Patcher.Date -lt $newDate)                                                             { $update = $True }
-        elseif ($Patcher.Version -le $newVersion -and $Patcher.Date -le $newDate -and $Patcher.Hotfix -lt $newHotfix -and $newHotfix -ne 0)   { $update = $True }
+        [byte[]]$oldTier = $oldVersion.split('.')
+        [byte[]]$newTier = $newVersion.split('.')
+
+        if ($newTier.count -gt 0 -and $oldTier.count -gt 0) {
+            if ($newTier[0] -gt $oldTier[0])                                                                    { $update = $True }
+        }
+        if ($newTier.count -gt 1 -and $oldTier.count -gt 1) {
+            if ($newTier[0] -ge $oldTier[0] -and $newTier[1] -gt $oldTier[1] )                                  { $update = $True }
+        }
+        if ($newTier.count -gt 2 -and $oldTier.count -gt 2) {
+            if ($newTier[0] -ge $oldTier[0] -and $newTier[1] -ge $oldTier[1] -and $newTier[2] -gt $oldTier[2])  { $update = $True }
+        }
+        
+        if     ($Patcher.Version -eq $newVersion -and $Patcher.Date -lt $newDate)                                                             { $update = $True }
+        elseif ($Patcher.Version -eq $newVersion -and $Patcher.Date -le $newDate -and $Patcher.Hotfix -lt $newHotfix -and $newHotfix -ne 0)   { $update = $True }
         $Settings.Core.LastUpdateVersionCheck = $newVersion
         $Settings.Core.LastUpdateDateCheck    = $newDate
     }

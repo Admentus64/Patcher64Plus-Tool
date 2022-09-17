@@ -218,7 +218,7 @@ function MusicOptions([string]$Default="File Select") {
     # MUSIC #
 
     CreateReduxGroup    -Tag "Music"       -All -Text "Music" -Columns 2 -Height 8
-    CreateReduxComboBox -Name "FileSelect" -All -Text "File Select Theme"  -Default $Default -Items $tracks -Info "Set the music theme for the File Select menu" -Credits "Admentus"
+    CreateReduxComboBox -Name "FileSelect" -All -Text "File Select Theme" -Default $Default -Items $tracks -Info "Set the music theme for the File Select menu" -Credits "Admentus"
 
     CreateReduxPanel -X 25 -Row 1 -Columns 1.9 -Rows 2 -All
     CreateReduxRadioButton -Name "EnableAll"    -All -Column 1 -Row 1 -Max 4 -SaveTo "Mute" -Checked -Text "Enable All Music"     -Info "Keep the music as it is"                           -Credits "Admentus"
