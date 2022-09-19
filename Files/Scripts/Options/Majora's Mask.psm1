@@ -1193,13 +1193,13 @@ function CreateTabRedux() {
 #==============================================================================================================================================================================================
 function CreateTabLanguage() {
     
-    CreateLanguageContent
+    if ($GamePatch.title -like "*Majora's Mask*") { CreateLanguageContent }
 
 
 
     # DIALOGUE #
      
-    CreateReduxGroup       -Tag "Text" -Text "Dialogue"
+    CreateReduxGroup  -All -Tag "Text" -Text "Dialogue"
     CreateReduxPanel       -Columns 4
     CreateReduxRadioButton -Name "Vanilla" -Checked  -Max 3 -SaveTo "Dialogue" -Text "Vanilla Text" -Info "Keep the text as it is"
     CreateReduxRadioButton -Name "Restore"           -Max 3 -SaveTo "Dialogue" -Text "Restore Text" -Info "Restores and fixes the following:`n- Restore the area titles cards for those that do not have any`n- Sound effects that do not play during dialogue`n- Grammar and typo fixes" -Credits "Redux"
@@ -1220,10 +1220,10 @@ function CreateTabLanguage() {
     CreateReduxTextBox  -All -Name "TaelName"   -Text "Tael Name" -Length 5 -ASCII -Value "Tael" -Width 50                     -Info "Select the name for Tael"           -Credits "Admentus & ShadowOne333"
     CreateReduxCheckBox -All -Name "Comma"      -Text "Better Comma"                                                           -Info "Make the comma not look as awful"   -Credits "ShadowOne333"
     
-
-
-    foreach ($i in 0.. ($Files.json.languages.length-1)) { $Redux.Language[$i].Add_CheckedChanged({ UnlockLanguageContent }) }
-    UnlockLanguageContent
+    if ($GamePatch.title -like "*Majora's Mask*") {
+        foreach ($i in 0.. ($Files.json.languages.length-1)) { $Redux.Language[$i].Add_CheckedChanged({ UnlockLanguageContent }) }
+        UnlockLanguageContent
+    }
 
     EnableElem -Elem $Redux.Text.TatlName -Active ($Redux.Text.TatlScript.selectedIndex -ne 0)
     EnableElem -Elem $Redux.Text.TaelName -Active ($Redux.Text.TaelScript.selectedIndex -ne 0)
@@ -1291,7 +1291,7 @@ function CreateTabGraphics() {
     CreateReduxCheckBox -All -Name "Rupees"           -Text "OoT Rupee Icon"                                                                                                      -Info "Replace the rupees icon with that from Ocarina of Time"                                            -Credits "Ported by GhostlyDark"
     CreateReduxCheckBox -All -Name "DungeonKeys"      -Text "OoT Key Icon"                                                                                                        -Info "Replace the key icon with that from Ocarina of Time"                                               -Credits "Ported by GhostlyDark"
     CreateReduxCheckBox -All -Name "CenterTatlPrompt" -Text "Center Tatl Prompt"                                                                                                  -Info 'Centers the "Tatl" prompt shown in the C-Up button'                                                -Credits "Ported by GhostlyDark"
-    CreateReduxComboBox -Name "ButtonSize"       -Text "HUD Buttons" -Row 2 -Column 1          -FilePath ($Paths.shared + "\Buttons")    -Ext $null -Default "Large"         -Info "Set the size for the HUD buttons"                                                                  -Credits "GhostlyDark (ported)" 
+    CreateReduxComboBox -All -Name "ButtonSize"       -Text "HUD Buttons" -Row 2 -Column 1          -FilePath ($Paths.shared + "\Buttons")    -Ext $null -Default "Large"         -Info "Set the size for the HUD buttons"                                                                  -Credits "GhostlyDark (ported)" 
     $path = $Paths.shared + "\Buttons" + "\" + $Redux.UI.ButtonSize.Text.replace(" (default)", "")
     CreateReduxComboBox -All -Name "ButtonStyle"      -Text "HUD Buttons" -Items @("Majora's Mask") -FilePath $path                           -Ext "bin" -Default "Majora's Mask" -Info "Set the style for the HUD buttons"                                                                 -Credits "GhostlyDark, Pizza (HD) Djipi, Community, Nerrel, Federelli, AndiiSyn"
     CreateReduxComboBox -All -Name "Hearts"           -Text "Heart Icons" -Items @("Majora's Mask") -FilePath ($Paths.shared + "\HUD\Hearts") -Ext "bin" -Default "Majora's Mask" -Info "Set the style for the heart icons"                                                                 -Credits "Ported by GhostlyDark & AndiiSyn"
@@ -1431,10 +1431,10 @@ function CreateTabColors() {
     CreateReduxGroup    -All -Tag  "Colors" -Text "Tunic Colors" -Columns 5
     $Colors = @("Kokiri Green", "Goron Red", "Zora Blue", "Black", "White", "Azure Blue", "Vivid Cyan", "Light Red", "Fuchsia", "Purple", "Majora Purple", "Twitch Purple", "Persian Rose", "Dirty Yellow", "Blush Pink", "Hot Pink", "Rose Pink", "Orange", "Gray", "Gold", "Silver", "Beige", "Teal", "Blood Red", "Blood Orange", "Royal Blue", "Sonic Blue", "NES Green", "Dark Green", "Lumen", "Randomized", "Custom")
     CreateReduxComboBox -All -Name "KokiriTunic" -Column 1 -Text "Kokiri Tunic Color" -Length 230 -Shift 70 -Items $Colors -Info ("Select a color scheme for the Kokiri Tunic`n" + '"Randomized" fully randomizes the colors each time the patcher is opened') -Credits "Ported from Rando"
-    $Redux.Colors.KokiriTunicButton = CreateReduxButton -Column 3 -Text "Kokiri Tunic" -Width 100  -Info "Select the color you want for the Kokiri Tunic" -Credits "Ported from Rando"
+    $Redux.Colors.KokiriTunicButton = CreateReduxButton -All -Column 3 -Text "Kokiri Tunic" -Width 100  -Info "Select the color you want for the Kokiri Tunic" -Credits "Ported from Rando"
     $Redux.Colors.KokiriTunicButton.Add_Click({ $Redux.Colors.SetKokiriTunic.ShowDialog(); $Redux.Colors.KokiriTunic.Text = "Custom"; $Redux.Colors.KokiriTunicLabel.BackColor = $Redux.Colors.SetKokiriTunic.Color; $GameSettings["Hex"][$Redux.Colors.SetKokiriTunic] = $Redux.Colors.SetKokiriTunic.Color.Name })
-    $Redux.Colors.SetKokiriTunic   = CreateColorDialog -Name "SetKokiriTunic" -Color "1E691B" -IsGame -Button $Redux.Colors.KokiriTunicButton
-    $Redux.Colors.KokiriTunicLabel = CreateReduxColoredLabel -Link $Redux.Colors.KokiriTunicButton -Color $Redux.Colors.SetKokiriTunic.Color
+    $Redux.Colors.SetKokiriTunic   = CreateColorDialog -All -Name "SetKokiriTunic" -Color "1E691B" -IsGame -Button $Redux.Colors.KokiriTunicButton
+    $Redux.Colors.KokiriTunicLabel = CreateReduxColoredLabel -All -Link $Redux.Colors.KokiriTunicButton -Color $Redux.Colors.SetKokiriTunic.Color
 
     $Redux.Colors.KokiriTunic.Add_SelectedIndexChanged({ SetTunicColorsPreset -ComboBox $Redux.Colors.KokiriTunic -Dialog $Redux.Colors.SetKokiriTunic -Label $Redux.Colors.KokiriTunicLabel })
     SetTunicColorsPreset -All -ComboBox $Redux.Colors.KokiriTunic -Dialog $Redux.Colors.SetKokiriTunic -Label $Redux.Colors.KokiriTunicLabel

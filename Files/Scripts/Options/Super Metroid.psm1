@@ -46,7 +46,7 @@ function PatchReduxOptions() {
 #==============================================================================================================================================================================================
 function CreateOptions() {
     
-    CreateOptionsDialog -Columns 2 -Height 320
+    CreateOptionsDialog -Columns 2 -Height 350
 
 }
 
