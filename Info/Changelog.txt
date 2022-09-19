@@ -1,3 +1,7 @@
+v19.1.10
+- Added SM64: Termina Invasion
+- Updated Auto-Updater
+
 v19.1.9
 - Added three new BK ROM hacks
 - Fixed Text Editor bug with replaced < and > letters
