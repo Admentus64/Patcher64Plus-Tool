@@ -126,7 +126,7 @@ function AutoUpdate([switch]$Manual) {
         }
 
         # Compare content
-        [byte[]]$oldTier = $oldVersion.split('.')
+        [byte[]]$oldTier = $Patcher.Version.split('.')
         [byte[]]$newTier = $newVersion.split('.')
 
         if ($newTier.count -gt 0 -and $oldTier.count -gt 0) {
