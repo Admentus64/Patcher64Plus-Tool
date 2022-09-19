@@ -565,6 +565,9 @@ https://github.com/DaruniasJoy/OoT-Custom-Sequences
 --- Super Mario 64 Internal Plexus: Build 3313 (v0.7) ---
 - Christopher Rios Lillo
 
+--- Termina Invasion ---
+- Reonu
+
 
 
 ===================

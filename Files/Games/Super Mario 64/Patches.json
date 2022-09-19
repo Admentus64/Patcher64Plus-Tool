@@ -46,6 +46,14 @@
 	"output"		: "_render96_luigi_patched",
 	"tooltip"		: "render96 patch with the Luigi model with 3D models and promo styles for several objects{0}Both widescreen (stretched HUD) and puppycam can be enabled/disabled in the pause menu{0}- Supported: Rev 0 (US)"
 }, {
+	"title"			: "Super Mario 64: Termina Invasion",
+	"patch" : [ {
+		"file"		: "Compressed\\termina_invasion.bps",
+		"rev"		: "20B854B239203BAF6C961B850A4A51A2"
+	} ],
+	"output"		: "_termina_invasion_patched",
+	"tooltip"		: "Termina takes over the Mushroom Kingdom{0}- Supported: Rev 0 (US)"
+}, {
 	"title"			: "Super Mario 64: Multiplayer (v1.4.2)",
 	"console"		: "Wii VC",
 	"command"		: "Patch Boot DOL",
