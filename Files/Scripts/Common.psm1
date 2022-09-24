@@ -158,8 +158,7 @@ function ChangePatchPanel() {
     # Set combobox for patches
     $items = @()
     foreach ($item in $Files.json.patches) {
-        if ($item.hide -eq 1 -and !(IsAdvanced))   { continue }
-        if ($item.hide -eq 2)                      { continue }
+        if ($item.hide -eq 1) { continue }
 
         if (!(IsSet $item.patch) -and (IsSet $item.rev)) {
             foreach ($i in $item.rev) {

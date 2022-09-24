@@ -181,7 +181,8 @@
 	"version" : [ {
 		"hash"		: "2A0A8ACB61538235BC1094D297FB6556",
 		"rev"		: "Revision 0",
-		"region"	: "North America / NTSC-U"
+		"region"	: "North America / NTSC-U",
+		"list"		: "Rev 0 (US)"
 	}, {
 		"file"		: "gc_to_rev0.bps",
 		"hash"		: "AC0751DBC23AB2EC0C3144203ACA0003",

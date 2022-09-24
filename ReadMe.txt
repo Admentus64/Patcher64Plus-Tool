@@ -281,10 +281,12 @@ Options offers smaller individual changes that can be applied individually from 
 === PATCH OPTIONS DESCRIPTIONS ===
 ==================================
 
+--- Automatic ---
+- Downgrade                 Downgrade a ROM to the first revision if supported, but only works with No-Intro US ROMs.
+
 --- Checkboxes ---
 - Enable Redux              Include the Redux patch into the selected patch. This checkbox is only shown if it is supported.
 - Enable Options            Allow for the customization of the ROM. This checkbox is only shown if it is supported.
-- Downgrade                 Downgrade a ROM to the first revision, but only works with No-Intro US ROMs. This checkbox is only shown if it is supported.
 
 --- Buttons ---
 - Select Options            Additional Options in general can be fully customized in here.

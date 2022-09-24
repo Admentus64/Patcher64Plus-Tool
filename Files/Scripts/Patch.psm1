@@ -99,8 +99,7 @@ function MainFunction([string]$Command, [string]$PatchedFileName) {
 
     # Decompress
     if ($GameType.decompress -gt 0) {
-        if     (StrStarts -Str (GetPatchFile) -Val "Decompressed\")   { $PatchInfo.decompress = $True }
-        elseif ($PatchInfo.downgrade)                                 { $PatchInfo.decompress = $True }
+        if     (StrStarts -Str (GetPatchFile) -Val "Decompressed\") { $PatchInfo.decompress = $True }
         elseif ($GameType.decompress -eq 1 -and !(StrLike -str $Command -val "Inject") -and !(StrLike -str $Command -val "Apply Patch") -and !(StrLike -str $Command -val "Extract") ) {
             if ( (IsChecked $Patches.Options) -or (IsChecked $Patches.Redux) )                                                                                                          { $PatchInfo.decompress = $True }
         }
@@ -110,7 +109,7 @@ function MainFunction([string]$Command, [string]$PatchedFileName) {
     }
 
     # Check if ROM is getting patched
-    if ( (IsChecked $Patches.Options) -or (IsChecked $Patches.Redux) -or $PatchInfo.downgrade -or (IsSet $GamePatch.patch) -or (StrLike -str $Command -val "Apply Patch") ) { $PatchInfo.run = $True } else { $PatchInfo.run = $False }
+    if ( (IsChecked $Patches.Options) -or (IsChecked $Patches.Redux) -or (IsSet $GamePatch.patch) -or (StrLike -str $Command -val "Apply Patch") ) { $PatchInfo.run = $True } else { $PatchInfo.run = $False }
 
     # GO!
     if ($Settings.NoCleanup.Checked -ne $True -and $IsWiiVC) { RemovePath $Paths.Temp } # Remove the temp folder first to avoid issues
@@ -245,7 +244,6 @@ function WriteDebug([string]$Command, [string[]]$Header, [string]$PatchedFileNam
     WriteToConsole ("Language File: " + $LanguagePatchFile + " (" + $LanguagePatch.code + ")")
     WriteToConsole ("Output Name:   " + $PatchedFileName)
     WriteToConsole ("Command:       " + $Command)
-    WriteToConsole ("Downgrade:     " + $PatchInfo.downgrade)
     WriteToConsole ("Finalize:      " + $PatchInfo.finalize)
     WriteToConsole ("Decompress:    " + $PatchInfo.decompress)
     WriteToConsole ("ROM Hash:      " + $ROMHashSum)
