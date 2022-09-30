@@ -312,48 +312,32 @@ function ByteOptions() {
 
     # HIDE HUD #
 
-    if (IsChecked $Redux.Hide.AButton) {
+    if ( (IsIndex -Elem $Redux.Hide.Interface -Index 2) -or (IsIndex -Elem $Redux.Hide.Interface -Index 3) ) {
         ChangeBytes -Offset "B586B0" -Values "00 00 00 00" # A Button (scale)
         ChangeBytes -Offset "AE7D0E" -Values "03 10"       # A Button - Text (DMA)
         ChangeBytes -Offset "7540"   -Values "03 10 00 00 03 10 57 00 03 10 00 00"
-    } 
 
-    if (IsChecked $Redux.Hide.BButton)        { ChangeBytes -Offset "B57EEC" -Values "24 02 03 A0"; ChangeBytes -Offset "B57EFC" -Values "24 0A 03 A2"; ChangeBytes -Offset "B589D4" -Values "24 0F 03 97"; ChangeBytes -Offset "B589E8" -Values "24 19 03 94" } # B Button -> Icon / Ammo / Japanese / English
-    if (IsChecked $Redux.Hide.StartButton)    { ChangeBytes -Offset "B584EC" -Values "24 19 03 84"; ChangeBytes -Offset "B58490" -Values "24 18 03 7A"; ChangeBytes -Offset "B5849C" -Values "24 0E 03 78" } # Start Button   -> Button / Japanese / English
-    if (IsChecked $Redux.Hide.CupButton)      { ChangeBytes -Offset "B584C0" -Values "24 19 03 FE"; ChangeBytes -Offset "B582DC" -Values "24 0E 03 F7"                                                     } # C-Up Button    -> Button / Navi Text
-    if (IsChecked $Redux.Hide.CLeftButton)    { ChangeBytes -Offset "B58504" -Values "24 19 03 E3"; ChangeBytes -Offset "B5857C" -Values "24 19 03 E3"; ChangeBytes -Offset "B58DC4" -Values "24 0E 03 E4" } # C-Left Button  -> Button / Icon / Ammo
-    if (IsChecked $Redux.Hide.CDownButton)    { ChangeBytes -Offset "B58510" -Values "24 0F 03 F9"; ChangeBytes -Offset "B58588" -Values "24 0F 03 F9"; ChangeBytes -Offset "B58C40" -Values "24 06 02 FA" } # C-Down Button  -> Button / Icon / Ammo
-    if (IsChecked $Redux.Hide.CRightButton)   { ChangeBytes -Offset "B5851C" -Values "24 19 03 0F"; ChangeBytes -Offset "B58594" -Values "24 19 03 0F"; ChangeBytes -Offset "B58DE0" -Values "24 19 03 10" } # C-Right Button -> Button / Icon / Ammo
-    if (IsChecked $Redux.Hide.AreaTitle)      { ChangeBytes -Offset "BE2B10" -Values "24 07 03 A0" } # Area Titles
-    if (IsChecked $Redux.Hide.DungeonTitle)   { ChangeBytes -Offset "AC8828" -Values "24 07 03 A0" } # Dungeon Titles
-    if (IsChecked $Redux.Hide.Carrots)        { ChangeBytes -Offset "B58348" -Values "24 0F 03 6E" } # Epona Carrots    
-    if (IsChecked $Redux.Hide.Hearts)         { ChangeBytes -Offset "ADADEC" -Values "10 00"       } # Disable Hearts Render
-
-    if (IsChecked $Redux.Hide.Magic) {
+        ChangeBytes -Offset "B57EEC" -Values "24 02 03 A0"; ChangeBytes -Offset "B57EFC" -Values "24 0A 03 A2"; ChangeBytes -Offset "B589D4" -Values "24 0F 03 97"; ChangeBytes -Offset "B589E8" -Values "24 19 03 94" } # B Button -> Icon / Ammo / Japanese / English
+        ChangeBytes -Offset "B584EC" -Values "24 19 03 84"; ChangeBytes -Offset "B58490" -Values "24 18 03 7A"; ChangeBytes -Offset "B5849C" -Values "24 0E 03 78"                                                       # Start Button   -> Button / Japanese / English
+        ChangeBytes -Offset "B584C0" -Values "24 19 03 FE"; ChangeBytes -Offset "B582DC" -Values "24 0E 03 F7"                                                                                                           # C-Up Button    -> Button / Navi Text
+        ChangeBytes -Offset "B58504" -Values "24 19 03 E3"; ChangeBytes -Offset "B5857C" -Values "24 19 03 E3"; ChangeBytes -Offset "B58DC4" -Values "24 0E 03 E4"                                                       # C-Left Button  -> Button / Icon / Ammo
+        ChangeBytes -Offset "B58510" -Values "24 0F 03 F9"; ChangeBytes -Offset "B58588" -Values "24 0F 03 F9"; ChangeBytes -Offset "B58C40" -Values "24 06 02 FA"                                                       # C-Down Button  -> Button / Icon / Ammo
+        ChangeBytes -Offset "B5851C" -Values "24 19 03 0F"; ChangeBytes -Offset "B58594" -Values "24 19 03 0F"; ChangeBytes -Offset "B58DE0" -Values "24 19 03 10"                                                       # C-Right Button -> Button / Icon / Ammo
+        ChangeBytes -Offset "BE2B10" -Values "24 07 03 A0"                                                                                                                                                               # Area Titles
+        ChangeBytes -Offset "AC8828" -Values "24 07 03 A0"                                                                                                                                                               # Dungeon Titles
+    }
+    if (IsIndex -Elem $Redux.Hide.Interface -Index 3) {
+        ChangeBytes -Offset "AEB7B0" -Values "24 0C 03 1A"; ChangeBytes -Offset "AEBC48" -Values "24 0D 01 CE"                                                     # Rupees - Icon / Rupees - Text (Y pos)
+        ChangeBytes -Offset "AEB8AC" -Values "24 0F 03 1A"; ChangeBytes -Offset "AEBA00" -Values "24 19 01 BE"                                                     # Key    - Icon / Key    - Text (Y pos)
+        ChangeBytes -Offset "B58348" -Values "24 0F 03 6E"                                                                                                         # Epona Carrots
+        ChangeBytes -Offset "ADADEC" -Values "10 00"                                                                                                               # Disable Hearts Render
         ChangeBytes -Offset "B587C0" -Values "24 0F 03 1A"; ChangeBytes -Offset "B587A0" -Values "24 0E 01 22"; ChangeBytes -Offset "B587B4" -Values "24 19 01 2A" # Magic Meter / Magic Bar - Small (Y pos) / Magic Bar - Large (Y pos)
+        ChangeBytes -Offset "B58CFC" -Values "24 0F 00 00"                                                                                                         # Clock - Digits (scale)
+        $Values = @(); for ($i=0; $i -lt 256; $i++) { $Values += 0 }; ChangeBytes -Offset "1A3E000" -Values $Values                                                # Clock - Icon
+        $Values = @(); for ($i=0; $i -lt 768; $i++) { $Values += 0 }; ChangeBytes -Offset "1A3E600" -Values $Values                                                # Score Counter - Icon
     }
-
-    if (IsChecked $Redux.Hide.Icons) {
-        ChangeBytes -Offset "B58CFC" -Values "24 0F 00 00" # Clock - Digits (scale)
-        $Values = @();     for ($i=0; $i -lt 256; $i++) { $Values += 0 };     ChangeBytes -Offset "1A3E000" -Values $Values     # Clock - Icon
-        $Values = @();     for ($i=0; $i -lt 768; $i++) { $Values += 0 };     ChangeBytes -Offset "1A3E600" -Values $Values     # Score Counter - Icon
-    }
-
-    <#if (IsChecked $Redux.Hide.Minimaps) {
-        $Values = @(); for ($i=0; $i -lt 20; $i++) { $Values += 3 }; ChangeBytes -Offset "B6C814" -Values $values -Interval 2 # Minimaps
-        $Values = @(); for ($i=0; $i -lt 20; $i++) { $Values += 8 }; ChangeBytes -Offset "B6C878" -Values $values -Interval 8 # Arrows
-        $Values = @(); for ($i=0; $i -lt 24; $i++) { $Values += 3 }; ChangeBytes -Offset "B6C9FA" -Values $values -Interval 2 # Dungeon Icons
-        ChangeBytes -Offset "58AF0"  -Values "03" # Dungeon Map
-        ChangeBytes -Offset "B6C87A" -Values "03" # Dungeon Icon - Bottom of the Well   ChangeBytes -Offset "B6CA00" -Values "03" # Dungeon Icon - Inside the Deku Tree       ChangeBytes -Offset "B6CA02" -Values "03" # Dungeon Icon - Forest Temple
-        ChangeBytes -Offset "B6CA04" -Values "03" # Dungeon Icon - ?                    ChangeBytes -Offset "B6CA08" -Values "03" # Dungeon Icon - Inside Jabu-Jabu's Belly   ChangeBytes -Offset "B6CA0E" -Values "03" # Dungeon Icon - Spirit Temple
-        ChangeBytes -Offset "B6CA16" -Values "03" # Dungeon Icon - Dodongo's Cavern     ChangeBytes -Offset "B6CA18" -Values "03" # Dungeon Icon - Fire Temple                ChangeBytes -Offset "B6CA1E" -Values "03" # Dungeon Icon - Ganon's Castle
-        ChangeBytes -Offset "B6CA20" -Values "03" # Dungeon Icon - Shadow Temple        ChangeBytes -Offset "B6CA22" -Values "03" # Dungeon Icon - Water Temple               ChangeBytes -Offset "B6CA26" -Values "03" # Dungeon Icon - ?
-    }#>
-
-    if (IsChecked $Redux.Hide.Rupees)        { ChangeBytes -Offset "AEB7B0" -Values "24 0C 03 1A"; ChangeBytes -Offset "AEBC48" -Values "24 0D 01 CE" } # Rupees - Icon / Rupees - Text (Y pos)
-    if (IsChecked $Redux.Hide.DungeonKeys)   { ChangeBytes -Offset "AEB8AC" -Values "24 0F 03 1A"; ChangeBytes -Offset "AEBA00" -Values "24 19 01 BE" } # Key    - Icon / Key    - Text (Y pos)
-    if (IsChecked $Redux.Hide.Credits)       { PatchBytes  -Offset "966000" -Patch "Message\credits.bin" }
-
+    
+    if (IsChecked $Redux.Hide.Credits) { PatchBytes  -Offset "966000" -Patch "Message\credits.bin" }
 
 
 
@@ -547,6 +531,9 @@ function ByteOptions() {
         MultiplyBytes -Offset "CE6D2F" -Factor $multi # Volvagia
         MultiplyBytes -Offset "D3B4A7" -Factor $multi # Morpha
         MultiplyBytes -Offset "DAC824" -Factor $multi # Bongo Bongo
+
+        if ($multi -gt 3) { $multi = 3 }
+
         MultiplyBytes -Offset "D7FDA3" -Factor $multi # Ganondorf 
         
         if ($multi -gt 0) {
@@ -580,7 +567,7 @@ function ByteOptions() {
         ChangeBytes -Offset "202F7ED" -Values "13"; ChangeBytes -Offset "202F7FB" -Values "03"; ChangeBytes -Offset "202F7FD" -Values "13"; ChangeBytes -Offset "202F80B" -Values "03"; ChangeBytes -Offset "202F80D" -Values "13"; ChangeBytes -Offset "202F81B" -Values "03"
     }
 
-    if (IsChecked $Redux.Hero.AddLostWoodsOctorok) {
+    if (IsChecked $Redux.Hero.LostWoodsOctorok) {
         ChangeBytes -Offset "2150C95" -Values "07 E1" # Child
         ChangeBytes -Offset "2157031" -Values "0C"; ChangeBytes -Offset "215706F" -Values "07"; ChangeBytes -Offset "21570F1" -Values "07"; ChangeBytes -Offset "215A031" -Values "0C"; ChangeBytes -Offset "215A06F" -Values "07"; ChangeBytes -Offset "215A151" -Values "07" # Child
         ChangeBytes -Offset "2163031" -Values "0C"; ChangeBytes -Offset "216306F" -Values "07"; ChangeBytes -Offset "2163151" -Values "07"; ChangeBytes -Offset "2168031" -Values "0C"; ChangeBytes -Offset "216806F" -Values "07"; ChangeBytes -Offset "2168191" -Values "07" # Child
@@ -2376,25 +2363,9 @@ function CreateTabGraphics() {
     
 
     # HIDE HUD #
-    
-    CreateReduxGroup    -Tag  "Hide"         -All -Text "Hide HUD"
-    CreateReduxCheckBox -Name "AButton"      -All -Text "Hide A Button"           -Info "Hide the A Button"                                            -Credits "Admentus"
-    CreateReduxCheckBox -Name "BButton"      -All -Text "Hide B Button"           -Info "Hide the B Button"                                            -Credits "Admentus"
-    CreateReduxCheckBox -Name "StartButton"  -All -Text "Hide Start Button"       -Info "Hide the Start Button"                                        -Credits "Admentus"
-    CreateReduxCheckBox -Name "CUpButton"    -All -Text "Hide C-Up Button"        -Info "Hide the C-Up Button"                                         -Credits "Admentus"
-    CreateReduxCheckBox -Name "CLeftButton"  -All -Text "Hide C-Left Button"      -Info "Hide the C-Left Button"                                       -Credits "Admentus"
-    CreateReduxCheckBox -Name "CDownButton"  -All -Text "Hide C-Down Button"      -Info "Hide the C-Down Button"                                       -Credits "Admentus"
-    CreateReduxCheckBox -Name "CRightButton" -All -Text "Hide C-Right Button"     -Info "Hide the C-Right Button"                                      -Credits "Admentus"
-    CreateReduxCheckBox -Name "Hearts"       -All -Text "Hide Hearts"             -Info "Hide the Hearts display"                                      -Credits "Admentus"
-    CreateReduxCheckBox -Name "Magic"        -All -Text "Hide Magic"              -Info "Hide the Magic display"                                       -Credits "Admentus"
-    CreateReduxCheckBox -Name "Rupees"       -All -Text "Hide Rupees"             -Info "Hide the the Rupees display"                                  -Credits "Admentus"
-    CreateReduxCheckBox -Name "DungeonKeys"  -All -Text "Hide Keys"               -Info "Hide the Keys display shown in several dungeons and areas"    -Credits "Admentus"
-    CreateReduxCheckBox -Name "Carrots"      -All -Text "Hide Epona Carrots"      -Info "Hide the Epona Carrots display"                               -Credits "Admentus"
-    CreateReduxCheckBox -Name "AreaTitle"    -All -Text "Hide Area Title Card"    -Info "Hide the area title that displays when entering a new area"   -Credits "Admentus"
-    CreateReduxCheckBox -Name "DungeonTitle" -All -Text "Hide Dungeon Title Card" -Info "Hide the dungeon title that displays when entering a dungeon" -Credits "Admentus"
-    CreateReduxCheckBox -Name "Icons"        -All -Text "Hide Icons"              -Info "Hide the Clock and Score Counter icons display"               -Credits "Admentus"
-  # CreateReduxCheckBox -Name "Minimaps"     -All -Text "Hide Minimaps"           -Info "Hide the Minimap that displays in the overworld and dungeons" -Credits "Admentus"
-    CreateReduxCheckBox -Name "Credits"      -All -Text "Hide Credits"            -Info "Hide the credits text during the credits sequence"            -Credits "Admentus" -Exclude "Master"
+
+    CreateReduxComboBox -Name "Interface" -All -Text "Hide HUD" -Items @("Keep the HUD", "Keep essential display", "Hide everything") -Info "Hide the interface"                                -Credits "Admentus"
+    CreateReduxCheckBox -Name "Credits"   -All -Text "Hide Credits"                                                                   -Info "Hide the credits text during the credits sequence" -Credits "Admentus" -Exclude "Master"
 
     
 
@@ -2480,20 +2451,20 @@ function CreateTabDifficulty() {
     $items3 = @("1 Boss HP", "0.5x Boss HP", "1x Boss HP", "1.5x Boss HP", "2x Boss HP", "2.5x Boss HP", "3x Boss HP", "3.5x Boss HP", "4x Boss HP", "5x Boss HP")
 
     CreateReduxGroup    -Tag  "Hero"             -All -Text "Hero Mode"
-    CreateReduxComboBox -Name "MonsterHP"        -All -Text "Monster HP"   -Items $items1 -Default 3                                                        -Info "Set the amount of health for monsters"                                       -Credits "Admentus" -Warning "Half of the enemies are missing"
-    CreateReduxComboBox -Name "MiniBossHP"       -All -Text "Mini-Boss HP" -Items $items2 -Default 3                                                        -Info "Set the amount of health for elite monsters and mini-bosses"                 -Credits "Admentus" -Warning "Big Octo and Dark Link are missing"
-    CreateReduxComboBox -Name "BossHP"           -All -Text "Boss HP"      -Items $items3 -Default 3                                                        -Info "Set the amount of health for bosses"                                         -Credits "Admentus & Marcelo20XX"
-    CreateReduxComboBox -Name "Damage"           -All -Text "Damage"       -Items @("1x Damage", "2x Damage", "4x Damage", "8x Damage", "OHKO Mode")        -Info "Set the amount of damage you receive`nOHKO Mode = You die in one hit"        -Credits "Admentus"
-    CreateReduxComboBox -Name "MagicUsage"       -All -Text "Magic Usage"  -Items @("1x Magic Usage", "2x Magic Usage", "4x Magic Usage", "8x Magic Usage") -Info "Set the amount of times magic is consumed at"                                -Credits "Admentus"
-    CreateReduxCheckBox -Name "Arwing"                -Text "Arwing"                                                                                        -Info "Replaces the Rock-Lifting Kokiri Kid with an Arwing in Kokiri Forest"        -Credits "Admentus"
-    CreateReduxCheckBox -Name "LikeLike"              -Text "Like-Like"                                                                                     -Info "Replaces the Rock-Lifting Kokiri Kid with a Like-Like in Kokiri Forest"      -Credits "Admentus" -Link $Redux.Hero.Arwing
-    CreateReduxCheckBox -Name "GraveyardKeese"        -Text "Graveyard Keese"                                                                               -Info "Extends the object list for Adult Link so the Keese appear at the Graveyard" -Credits "salvador235"
-    CreateReduxCheckBox -Name "LostWoodsOctorok"      -Text "Lost Woods Octorok"                                                                            -Info "Add an Octorok actor in the Lost Woods area which leads to Zora's River"     -Credits "Chez Cousteau"
-    CreateReduxCheckBox -Name "HarderChildBosses"     -Text "Harder Child Bosses"                                                                           -Info "Replace objects in the Child Dungeon Boss arenas with additional monsters"   -Credits "BilonFullHDemon"
-    CreateReduxCheckBox -Name "PotsChallenge"    -All -Text "Pots Challenge"                                                                                -Info "Throw pots at your enemies to defeat them! Pots everywhere!"                 -Credits "Aegiker"
-    CreateReduxCheckBox -Name "NoRecoveryHearts" -All -Text "No Recovery Heart Drops"                                                                       -Info "Disable Recovery Hearts from spawning from item drops"                       -Credits "Ported from Rando"
-    CreateReduxCheckBox -Name "NoBottledFairy"   -All -Text "No Bottled Fairies"                                                                            -Info "Fairies can no longer be put into a bottle"                                  -Credits "Admentus & Three Pendants"
-    CreateReduxCheckBox -Name "NoItemDrops"      -All -Text "No Item Drops"                                                                                 -Info "Disable all items from spawning"                                             -Credits "Admentus & BilonFullHDemon"
+    CreateReduxComboBox -Name "MonsterHP"        -All -Text "Monster HP"   -Items $items1 -Default 3                                                        -Info "Set the amount of health for monsters`nDoesn't include monsters which die in 1 hit already"           -Credits "Admentus"
+    CreateReduxComboBox -Name "MiniBossHP"       -All -Text "Mini-Boss HP" -Items $items2 -Default 3                                                        -Info "Set the amount of health for elite monsters and mini-bosses`nBig Octo and Dark Link are not included" -Credits "Admentus"
+    CreateReduxComboBox -Name "BossHP"           -All -Text "Boss HP"      -Items $items3 -Default 3                                                        -Info "Set the amount of health for bosses`nPhantom Ganon, Ganondorf and Ganon have a max of 3x HP"          -Credits "Admentus & Marcelo20XX"
+    CreateReduxComboBox -Name "Damage"           -All -Text "Damage"       -Items @("1x Damage", "2x Damage", "4x Damage", "8x Damage", "OHKO Mode")        -Info "Set the amount of damage you receive`nOHKO Mode = You die in one hit"                                 -Credits "Admentus"
+    CreateReduxComboBox -Name "MagicUsage"       -All -Text "Magic Usage"  -Items @("1x Magic Usage", "2x Magic Usage", "4x Magic Usage", "8x Magic Usage") -Info "Set the amount of times magic is consumed at"                                                         -Credits "Admentus"
+    CreateReduxCheckBox -Name "Arwing"                -Text "Arwing"                                                                                        -Info "Replaces the Rock-Lifting Kokiri Kid with an Arwing in Kokiri Forest"                                 -Credits "Admentus"
+    CreateReduxCheckBox -Name "LikeLike"              -Text "Like-Like"                                                                                     -Info "Replaces the Rock-Lifting Kokiri Kid with a Like-Like in Kokiri Forest"                               -Credits "Admentus" -Link $Redux.Hero.Arwing
+    CreateReduxCheckBox -Name "GraveyardKeese"        -Text "Graveyard Keese"                                                                               -Info "Extends the object list for Adult Link so the Keese appear at the Graveyard"                          -Credits "salvador235"
+    CreateReduxCheckBox -Name "LostWoodsOctorok"      -Text "Lost Woods Octorok"                                                                            -Info "Add an Octorok actor in the Lost Woods area which leads to Zora's River"                              -Credits "Chez Cousteau"
+    CreateReduxCheckBox -Name "HarderChildBosses"     -Text "Harder Child Bosses"                                                                           -Info "Replace objects in the Child Dungeon Boss arenas with additional monsters"                            -Credits "BilonFullHDemon"
+    CreateReduxCheckBox -Name "PotsChallenge"    -All -Text "Pots Challenge"                                                                                -Info "Throw pots at your enemies to defeat them! Pots everywhere!"                                          -Credits "Aegiker"
+    CreateReduxCheckBox -Name "NoRecoveryHearts" -All -Text "No Recovery Heart Drops"                                                                       -Info "Disable Recovery Hearts from spawning from item drops"                                                -Credits "Ported from Rando"
+    CreateReduxCheckBox -Name "NoBottledFairy"   -All -Text "No Bottled Fairies"                                                                            -Info "Fairies can no longer be put into a bottle"                                                           -Credits "Admentus & Three Pendants"
+    CreateReduxCheckBox -Name "NoItemDrops"      -All -Text "No Item Drops"                                                                                 -Info "Disable all items from spawning"                                                                      -Credits "Admentus & BilonFullHDemon"
     
     $items1 = $items2= $items3 = $null
     
