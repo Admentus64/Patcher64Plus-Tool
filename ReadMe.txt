@@ -29,7 +29,7 @@ Initiate a reboot after the installation is done. Running the launcher will now 
 Optional: After installing WMF 5.1 and rebooting the system, download and install the latest PowerShell-x.y.z-win-x64.msi from https://github.com/PowerShell/PowerShell/releases/latest and enable "Add Run with PowerShell 7 context menu" during installation. Right click the .ps1 file -> Run with PowerShell 7.
 
 
---- Rules for Posting Bug Reports / Issues --
+--- Rules for Posting Bug Reports / Issues ---
 - Confirm issue on Project64/Mupen64Plus with GlideN64 or Dolphin, no custom Frontends which interfere with the emulation such as ModLoader64
 - Always use latest build
 - Expansion Pak is enabled when needed, both in WAD or emulator
