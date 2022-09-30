@@ -200,6 +200,12 @@ function CreateTextEditorDialog([int32]$Width, [int32]$Height, [string]$Game=$Ga
     })
 
     $ExtractButton.Add_Click({
+        if (!(IsSet $GamePath)) {
+            PlaySound $Sounds.done
+            UpdateStatusLabel -Text "Failed! No ROM path is given." -Editor
+            return
+        }
+
         # Language Patch
         $global:LanguagePatchFile = $null
         if (TestFile (CheckPatchExtension ($Paths.Games + "\" + $Files.json.textEditor.game + "\Languages\" + $LanguagePatch.code) ) ) {
@@ -219,19 +225,39 @@ function CreateTextEditorDialog([int32]$Width, [int32]$Height, [string]$Game=$Ga
             if (!(PatchVCROM))        { return }   # Step D: Do some initial patching stuff for the ROM for VC WAD files
         }
 
-        if (!(Unpack))                                                              { UpdateStatusLabel "Failed! Could not extract ROM."; return }
+        if (!(Unpack)) {
+            PlaySound $Sounds.done
+            UpdateStatusLabel "Failed! Could not extract ROM."
+            return
+        }
         if (TestFile $GetROM.run)                                                   { $global:ROMHashSum   = (Get-FileHash -Algorithm MD5 -LiteralPath $GetROM.run).Hash }
         if ($Settings.Debug.IgnoreChecksum -eq $False -and (IsSet $CheckHashsum))   { $PatchInfo.downgrade = ($ROMHashSum -ne $CheckHashSum)                             }
-        if ((Get-Item -LiteralPath $GetROM.run).length/"32MB" -ne 1)                { UpdateStatusLabel "Failed! The ROM should be 32 MB!"; return $False }
+        if ((Get-Item -LiteralPath $GetROM.run).length/"32MB" -ne 1) {
+            PlaySound $Sounds.done
+            UpdateStatusLabel "Failed! The ROM should be 32 MB!"
+            return $False
+        }
 
         if ($PatchInfo.run) {
             ConvertROM $Command
-            if (!(CompareHashSums $Command)) { UpdateStatusLabel "Failed! The ROM is an incorrect version or is broken."; return }
+            if (!(CompareHashSums $Command)) {
+                PlaySound $Sounds.done
+                UpdateStatusLabel "Failed! The ROM is an incorrect version or is broken."
+                return
+            }
         }
 
-        if (!(DecompressROM)) { UpdateStatusLabel "Failed! The ROM could not be compressed."; return }
+        if (!(DecompressROM)) {
+            PlaySound $Sounds.done
+            UpdateStatusLabel "Failed! The ROM could not be compressed."
+            return
+        }
         $item = DowngradeROM
-        if ($ROMHashSum -ne $CheckHashSum) { UpdateStatusLabel "Failed! The ROM is an incorrect version or is broken."; return }
+        if ($ROMHashSum -ne $CheckHashSum) {
+            PlaySound $Sounds.done
+            UpdateStatusLabel "Failed! The ROM is an incorrect version or is broken."
+            return
+        }
 
         if (IsSet $LanguagePatchFile) {
             UpdateStatusLabel ("Patching " + $Files.json.textEditor.game + " Language...")
@@ -251,7 +277,7 @@ function CreateTextEditorDialog([int32]$Width, [int32]$Height, [string]$Game=$Ga
 
         Cleanup
         LoadMessages
-        PlaySound $Sounds.done # Play a sound when it is finished
+        PlaySound $Sounds.done
         UpdateStatusLabel -Text "Success! Script has been extracted." -Editor
     })
     

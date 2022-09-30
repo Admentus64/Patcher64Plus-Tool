@@ -1,3 +1,9 @@
+v19.1.2
+- Fixed issue with Arrow Toggling for OoT
+- Fixed issue with 4x and 5x HP for some OoT bosses being too high
+- Fixed issue with Lost Woods Octorok not being patched
+- Merged non-Redux Hide HUD options
+
 v19.1.11
 - Fixed issue with downgrading for MM
 
