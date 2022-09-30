@@ -2364,6 +2364,7 @@ function CreateTabGraphics() {
 
     # HIDE HUD #
 
+    CreateReduxGroup    -Tag  "Hide"      -All -Text "Hide HUD"
     CreateReduxComboBox -Name "Interface" -All -Text "Hide HUD" -Items @("Keep the HUD", "Keep essential display", "Hide everything") -Info "Hide the interface"                                -Credits "Admentus"
     CreateReduxCheckBox -Name "Credits"   -All -Text "Hide Credits"                                                                   -Info "Hide the credits text during the credits sequence" -Credits "Admentus" -Exclude "Master"
 
