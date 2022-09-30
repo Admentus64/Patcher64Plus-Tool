@@ -29,7 +29,7 @@ Initiate a reboot after the installation is done. Running the launcher will now 
 Optional: After installing WMF 5.1 and rebooting the system, download and install the latest PowerShell-x.y.z-win-x64.msi from https://github.com/PowerShell/PowerShell/releases/latest and enable "Add Run with PowerShell 7 context menu" during installation. Right click the .ps1 file -> Run with PowerShell 7.
 
 
---- Rules for Posting Bug Reports / Issues --
+--- Rules for Posting Bug Reports / Issues ---
 - Confirm issue on Project64/Mupen64Plus with GlideN64 or Dolphin, no custom Frontends which interfere with the emulation such as ModLoader64
 - Always use latest build
 - Expansion Pak is enabled when needed, both in WAD or emulator
@@ -89,9 +89,9 @@ Keep in mind that:
 
 a) Patching Majora's Mask, Super Smash Bros., Paper Mario requires their respective modes and not Free Mode, since both VC WAD titles have applied specific compression to their ROM and Boot DOL.
 
-b) Free Mode and Inject ROM will not work with ROMs not meant for their console mode for the Wii's Virtual Console
+b) Free Mode and Inject ROM will not work with ROMs not meant for their console mode for the Wii's Virtual Console.
 
-c) NES titles require the console mode to be set to NES mode due to their ROM file being stored differently
+c) NES titles require the console mode to be set to NES mode due to their ROM file being stored differently.
 
 
 
@@ -311,13 +311,13 @@ Options offers smaller individual changes that can be applied individually from 
 --- Checkboxes ---
 - Remove All T64            Remove all injected custom textures by the Virtual Console in the .T64 format.
 - Remove Filter             Remove the dark filter injected by the Virtual Console to display the original N64 gamma.
-- Expand Memory             Expand the available RAM memory, but invalidates existing AR/Gecko codes.
+- Expand Memory             Expands the available RAM memory, but invalidates existing AR/Gecko codes.
 - Remap D-Pad               Remap the D-Pad to their four D-Pad button directions instead of toggling the minimap.
-- Remap L Button            Remap L to it's actual L button (ex. for showing the interface in SM64).
+- Remap L Button            Remap L to its actual L button (e.g. for showing the interface in SM64).
 - Remap C-Down              Remap C-Down to toggle the minimap button.
-- Remap Z Button            Remap Z, ZL and ZR to toggle the minimap.
+- Remap Z Button            Remap Z, ZL and ZR for toggling the minimap.
 - Leave D-Pad Up            Keep D-Pad for toggling the minimap.
 
 --- Buttons ---
 - Patch VC Emulator Only    Only apply the VC Patch Options to the ROM, and nothing else.
-- Extract ROM Only          Only extract the ROM from the WAD, and nothing else. Appears in the same folder as the WAD itself.
+- Extract ROM Only          Only extract the ROM from the WAD and nothing else. Appears in the same folder as the WAD itself.
