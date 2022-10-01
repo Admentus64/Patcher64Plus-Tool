@@ -3,6 +3,7 @@ v19.1.2
 - Fixed issue with 4x and 5x HP for some OoT bosses being too high
 - Fixed issue with Lost Woods Octorok not being patched
 - Fixed issue with copying save files
+- Fixed issue with expanding Expansion Pak for Wii VC when not supported
 - Merged non-Redux Hide HUD options
 
 v19.1.11

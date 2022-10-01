@@ -208,7 +208,7 @@ function PatchVCEmulator([string]$Command) {
     }
 
     # Expand Memory
-    if ($VC.ExpandMemory.Checked -and $GameType.mode -ne "Majora's Mask") {
+    if ($VC.ExpandMemory.Checked -and $VC.ExpandMemory.Visible -and $GameType.mode -ne "Majora's Mask") {
         $offset = SearchBytes -File $WadFile.AppFile01 -Start "2000" -End "9999" -Values "41 82 00 08 3C 80 00 80"
         if ($offset -gt 0) {
             ChangeBytes -File $WadFile.AppFile01 -Offset $offset -Values "60 00 00 00"
