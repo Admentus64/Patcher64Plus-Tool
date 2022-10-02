@@ -5,6 +5,7 @@ v19.1.2
 - Fixed issue with copying save files
 - Fixed issue with expanding Expansion Pak for Wii VC when not supported
 - Fixed issue with Hookshot Anything for OoT
+- Fixed issue with Pots not changing textures
 - Removed Skullkid Ocarina option for OoT
 - Merged non-Redux Hide HUD options
 

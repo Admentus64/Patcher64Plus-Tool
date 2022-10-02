@@ -8,6 +8,11 @@
         elseif ($GamePatch.backgrounds -eq 1)       { ApplyPatch -Patch "Decompressed\Optional\widescreen_hide_geometry.ppf" }
     }
 
+   <# if (IsChecked $Redux.Hero.PotsChallenge) {
+        RemoveFile  $Files.dmaTable
+        Add-Content $Files.dmaTable "0 1 2 3 4 5 6 7 8 9 15 16 17 18 19 20 21 22 23 24 25 26 942 944 946 948 950 952 954 956 958 960 962 964 966 968 970 972 974 976 978 980 982 984 986 988 990 992 994 996 998 1000 1002 1004 1510 1511 1512 1513 1514 1515 1516 1517 1518 1519 1520 1521 1522 1523 1524 1525"
+    } #>
+
 }
 
 
@@ -364,10 +369,10 @@ function ByteOptions() {
         elseif ($offsetChild -gt -1) { PatchBytes -Offset $offsetChild -Shared -Patch ("Hair\" + $folderChild + "\" + $Redux.Styles.HairColor.Text + ".bin") }
     }
 
-    if (IsDefault $Redux.Styles.RegularChests -Not)   { PatchBytes -Offset "FEC798" -Shared -Patch ("Chests\" + $Redux.Styles.RegularChests.Text + ".front"); PatchBytes -Offset "FED798" -Shared -Patch ("Chests\" + $Redux.Styles.RegularChests.Text + ".back") }
-    if (IsDefault $Redux.Styles.BossChests    -Not)   { PatchBytes -Offset "FEE798" -Shared -Patch ("Chests\" + $Redux.Styles.BossChests.Text    + ".front"); PatchBytes -Offset "FEDF98" -Shared -Patch ("Chests\" + $Redux.Styles.BossChests.Text    + ".back") }
+    if (IsDefault $Redux.Styles.RegularChests -Not)   { PatchBytes -Offset "FEC798" -Shared -Patch ("Chests\" + $Redux.Styles.RegularChests.Text + ".front"); PatchBytes -Offset "FED798"  -Shared -Patch ("Chests\" + $Redux.Styles.RegularChests.Text + ".back") }
+    if (IsDefault $Redux.Styles.BossChests    -Not)   { PatchBytes -Offset "FEE798" -Shared -Patch ("Chests\" + $Redux.Styles.BossChests.Text    + ".front"); PatchBytes -Offset "FEDF98"  -Shared -Patch ("Chests\" + $Redux.Styles.BossChests.Text    + ".back") }
     if (IsDefault $Redux.Styles.Crates        -Not)   { PatchBytes -Offset "F7ECA0" -Shared -Patch ("Crates\" + $Redux.Styles.Crates.Text        + ".bin") }
-    if (IsDefault $Redux.Styles.Pots          -Not)   { PatchBytes -Offset "F7D8A0" -Shared -Patch ("Pots\"   + $Redux.Styles.Pots.Text          + ".bin") }
+    if (IsDefault $Redux.Styles.Pots          -Not)   { PatchBytes -Offset "F7D8A0" -Shared -Patch ("Pots\"   + $Redux.Styles.Pots.Text          + ".bin");   PatchBytes -Offset "1738000" -Shared -Patch ("Pots\"   + $Redux.Styles.Pots.Text          + ".bin")  }
 
 
     # SOUNDS / VOICES #
