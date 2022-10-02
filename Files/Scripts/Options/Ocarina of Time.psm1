@@ -100,7 +100,7 @@ function ByteOptions() {
     if (IsChecked $Redux.Gameplay.AllowWarpSongs)           { ChangeBytes -Offset "B6D3D2" -Values "00";       ChangeBytes -Offset "B6D42A" -Values "00"       }
     if (IsChecked $Redux.Gameplay.AllowFaroreWind)          { ChangeBytes -Offset "B6D3D3" -Values "00";       ChangeBytes -Offset "B6D42B" -Values "00"       }
     if (IsChecked $Redux.Gameplay.OpenBombchuShop)          { ChangeBytes -Offset "C6CEDC" -Values "340B0001"                                                  }
-    if (IsChecked $Redux.Gameplay.HookshotAnything)         { ChangeBytes -Offset "D3BA30" -Values "00000000"                                                  }
+    if (IsChecked $Redux.Gameplay.HookshotAnything)         { ChangeBytes -Offset "AAA60E" -Values "24002400"                                                  }
     if (IsChecked $Redux.Gameplay.NoMagicArrowCooldown)     { ChangeBytes -Offset "AE85C9" -Values "62"                                                        }
 
     if (IsIndex $Redux.Gameplay.SpawnChild -Index 1 -Not) { ChangeBytes -Offset "B0631E" -Values (GetOoTEntranceIndex $Redux.Gameplay.SpawnChild.Text) }
@@ -615,7 +615,7 @@ function ByteOptions() {
         ChangeBytes -Offset "E2E6A3" -Values $Redux.Minigames.Bowling4.value; ChangeBytes -Offset "E2E6A7" -Values $Redux.Minigames.Bowling5.value; ChangeBytes -Offset "E2D440" -Values "24190000"
     }
 
-    if (IsChecked $Redux.Minigames.Ocarina)   { ChangeBytes -Offset "DF2204" -Values "24030002" } # Skullkid Ocarina
+  # if (IsChecked $Redux.Minigames.Ocarina)   { ChangeBytes -Offset "DF2204" -Values "24030002" } # Skullkid Ocarina
     if (IsChecked $Redux.Minigames.Dampe)     { ChangeBytes -Offset "CC4024" -Values "00000000" } # Dampé's Digging Game
     
 
@@ -2497,7 +2497,7 @@ function CreateTabDifficulty() {
 
     CreateReduxGroup    -Tag  "Minigames"   -Base -Expose "Master" -Text "Minigames"
     CreateReduxCheckBox -Name "Dampe"       -Base                  -Text "Dampé's Digging"                                                                                                       -Info "Dampé's Digging Game is always first try"                           -Credits "Ported from Rando"
-    CreateReduxCheckBox -Name "Ocarina"     -Base                  -Text "Skullkid Ocarina"                                                                                                      -Info "You only need to clear the first round to get the Piece of Heart"   -Credits "Ported from Rando"
+  # CreateReduxCheckBox -Name "Ocarina"     -Base                  -Text "Skullkid Ocarina"                                                                                                      -Info "You only need to clear the first round to get the Piece of Heart"   -Credits "Ported from Rando"
     CreateReduxCheckBox -Name "Fishing"     -Base -Expose "Master" -Text "Fishing"                                                                                                               -Info "Fishing is less random and has less demanding requirements"         -Credits "Ported from Rando"
     CreateReduxCheckBox -Name "Bowling"     -Base -Expose "Master" -Text "Bombchu Bowling"                                                                                                       -Info "Bombchu Bowling prizes now appear in fixed order instead of random" -Credits "Ported from Rando"
     CreateReduxComboBox -Name "Bowling1"    -Base -Expose "Master" -Text "Bowling Reward #1" -Items ("Piece of Heart", "Bomb Bag", "Purple Rupee", "Bombchus") -Values @("64", "28", "4C", "58") -Info "Set the first reward for the Bombchu Bowling Minigame"              -Credits "Ported from Rando" -Default 1 -Column 1 -Row 2
