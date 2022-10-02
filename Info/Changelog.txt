@@ -1,4 +1,8 @@
-v19.1.2
+v19.1.13
+- Reworked Paper Mario Hard Mode options
+
+v19.1.12
+- Added new Deku Shield option
 - Fixed issue with Arrow Toggling for OoT
 - Fixed issue with 4x and 5x HP for some OoT bosses being too high
 - Fixed issue with Lost Woods Octorok not being patched
