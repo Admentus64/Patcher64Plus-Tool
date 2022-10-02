@@ -1825,47 +1825,66 @@ function ByteLanguageOptions() {
 
     if (IsLanguage $Redux.Equipment.HerosBow) { SetMessage -ID "0031" -Text "Fairy Bow" -Replace "Hero's Bow" }
 
-    if     (IsLangText -Elem $Redux.Equipment.KokiriSword -Compare "Knife"       -and $GamePatch.title -notlike "*Master of Time*")   { SetMessage -ID "00A4" -Text "Kokiri Sword" -Replace "Knife"       -NoParse; SetMessage -ID "10D2" }
-    elseif (IsLangText -Elem $Redux.Equipment.KokiriSword -Compare "Razor Sword" -and $GamePatch.title -notlike "*Master of Time*")   { SetMessage -ID "00A4" -Text "Kokiri Sword" -Replace "Razor Sword" -NoParse; SetMessage -ID "10D2" }
+    if ( (IsDefault $Redux.Equipment.KokiriSword -Not) -and $LanguagePatch.code -eq "en") {
+        $replace = $null
+        if     (IsText -Elem $Redux.Equipment.MasterSword -Compare "Kokiri Sword")   { $replace = "Kokiri Sword" }
+        elseif (IsText -Elem $Redux.Equipment.MasterSword -Compare "Knife")          { $replace = "Knife"        }
+        elseif (IsText -Elem $Redux.Equipment.MasterSword -Compare "Razor Sword")    { $replace = "Razord Sword" }
+        if (IsSet $replace) { SetMessage -ID "00A4" -Text "Kokiri Sword" -Replace $replace -NoParse; SetMessage -ID "10D2" }
+        $replace = $null
+    }
 
     if ( (IsDefault $Redux.Equipment.MasterSword -Not) -and $LanguagePatch.code -eq "en") {
-        $replace = "Master Sword"
-        if     (IsLangText -Elem $Redux.Equipment.MasterSword -Compare "Gilded Sword")          { $replace = "Gilded Sword"        }
-        elseif (IsLangText -Elem $Redux.Equipment.MasterSword -Compare "Great Fairy's Sword")   { $replace = "Great Fairy's Sword" }
-        elseif (IsLangText -Elem $Redux.Equipment.MasterSword -Compare "Double Helix Sword")    { $replace = "Double Helix Sword"  }
-        elseif (IsLangText -Elem $Redux.Equipment.MasterSword -Compare "Razor Longsword")       { $replace = "Razor Longsword"     }
-        if ($replace -ne "Master Sword") { SetMessage -ID "600C" -Text "Master Sword" -Replace $replace -NoParse; SetMessage -ID "704F"; SetMessage -ID "7051"; SetMessage -ID "7059"; SetMessage -ID "706D"; SetMessage -ID "7075"; SetMessage -ID "7081"; SetMessage -ID "7088"; SetMessage -ID "7091"; SetMessage -ID "70E8" }
+        $replace = $null
+        if     (IsText -Elem $Redux.Equipment.MasterSword -Compare "Master Sword")          { $replace = "Master Sword"        }
+        elseif (IsText -Elem $Redux.Equipment.MasterSword -Compare "Gilded Sword")          { $replace = "Gilded Sword"        }
+        elseif (IsText -Elem $Redux.Equipment.MasterSword -Compare "Great Fairy's Sword")   { $replace = "Great Fairy's Sword" }
+        elseif (IsText -Elem $Redux.Equipment.MasterSword -Compare "Double Helix Sword")    { $replace = "Double Helix Sword"  }
+        elseif (IsText -Elem $Redux.Equipment.MasterSword -Compare "Razor Longsword")       { $replace = "Razor Longsword"     }
+        if (IsSet $replace) { SetMessage -ID "600C" -Text "Master Sword" -Replace $replace -NoParse; SetMessage -ID "704F"; SetMessage -ID "7051"; SetMessage -ID "7059"; SetMessage -ID "706D"; SetMessage -ID "7075"; SetMessage -ID "7081"; SetMessage -ID "7088"; SetMessage -ID "7091"; SetMessage -ID "70E8" }
         $replace = $null
     }
 
     if ( (IsDefault $Redux.Equipment.GiantsKnife -Not) -and $LanguagePatch.code -eq "en") {
-        $replace = "Giant's Knife"
-        if     (IsLangText -Elem $Redux.Equipment.GiantsKnife -Compare "Gilded Sword")          { $replace = "Gilded Sword"        }
-        elseif (IsLangText -Elem $Redux.Equipment.GiantsKnife -Compare "Great Fairy's Sword")   { $replace = "Great Fairy's Sword" }
-        elseif (IsLangText -Elem $Redux.Equipment.GiantsKnife -Compare "Double Helix Sword")    { $replace = "Double Helix Sword"  }
-        elseif (IsLangText -Elem $Redux.Equipment.GiantsKnife -Compare "Razor Longsword")       { $replace = "Razor Longsword"     }
-        if ($replace -ne "Giant's Knife") { SetMessage -ID "000B" -Text "Giant's Knife" -Replace $replace -NoParse; SetMessage -ID "004B" }
+        $replace = $null
+        if     (IsText -Elem $Redux.Equipment.GiantsKnife -Compare "Giant's Knife")         { $replace = "Giant's Knife"       }
+        elseif (IsText -Elem $Redux.Equipment.GiantsKnife -Compare "Gilded Sword")          { $replace = "Gilded Sword"        }
+        elseif (IsText -Elem $Redux.Equipment.GiantsKnife -Compare "Great Fairy's Sword")   { $replace = "Great Fairy's Sword" }
+        elseif (IsText -Elem $Redux.Equipment.GiantsKnife -Compare "Double Helix Sword")    { $replace = "Double Helix Sword"  }
+        elseif (IsText -Elem $Redux.Equipment.GiantsKnife -Compare "Razor Longsword")       { $replace = "Razor Longsword"     }
+        if (IsSet $replace) { SetMessage -ID "000B" -Text "Giant's Knife" -Replace $replace -NoParse; SetMessage -ID "004B" }
         $replace = $null
     }
 
     if ( (IsDefault $Redux.Equipment.BiggoronSword -Not) -and $LanguagePatch.code -eq "en") {
-        $replace = "Biggoron's Sword"
-        if     (IsLangText -Elem $Redux.Equipment.BiggoronSword -Compare "Gilded Sword")          { $replace = "Gilded Sword"        }
-        elseif (IsLangText -Elem $Redux.Equipment.BiggoronSword -Compare "Great Fairy's Sword")   { $replace = "Great Fairy's Sword" }
-        elseif (IsLangText -Elem $Redux.Equipment.BiggoronSword -Compare "Double Helix Sword")    { $replace = "Double Helix Sword"  }
-        elseif (IsLangText -Elem $Redux.Equipment.BiggoronSword -Compare "Razor Longsword")       { $replace = "Razor Longsword"     }
-        if ($replace -ne "Biggoron's Sword") { SetMessage -ID "000A" -Text "Biggoron's Sword" -Replace $replace -NoParse; SetMessage -ID "000B"; SetMessage -ID "000C"; SetMessage -ID "0404" }
+        $replace = $null
+        if     (IsText -Elem $Redux.Equipment.BiggoronSword -Compare "Biggoron Sword")           { $replace = "Biggoron Sword"        }
+        elseif (IsText -Elem $Redux.Equipment.BiggoronSword -Compare "Gilded Sword")             { $replace = "Gilded Sword"        }
+        elseif (IsText -Elem $Redux.Equipment.BiggoronSword -Compare "Great Fairy's Sword")      { $replace = "Great Fairy's Sword" }
+        elseif (IsLang -Elem $Redux.Equipment.BiggoronSword -Compare "Double Helix Sword")       { $replace = "Double Helix Sword"  }
+        elseif (IsText -Elem $Redux.Equipment.BiggoronSword -Compare "Razor Longsword")          { $replace = "Razor Longsword"     }
+        if (IsSet $replace) { SetMessage -ID "000A" -Text "Biggoron's Sword" -Replace $replace -NoParse; SetMessage -ID "000B"; SetMessage -ID "000C"; SetMessage -ID "0404" }
         $replace = $null
     }
 
-    if ( (IsLangText -Elem $Redux.Equipment.DekuShield -Compare "Iron Shield") -and $ChildModel.deku_shield -ne 0 -and $GamePatch.title -notlike "*Master of Time*") {
-        SetMessage -ID "004C" -Text "Deku Shield" -Replace "Iron Shield" -NoParse; SetMessage -ID "0089"; SetMessage -ID "009F"; SetMessage -ID "0611" SetMessage -ID "103D"-Last; SetMessage -ID "1052"; SetMessage -ID "10CB"; SetMessage -ID "10D2"
+    if ( (IsDefault $Redux.Equipment.DekuShield -Not) -and $ChildModel.deku_shield -ne 0 -and $LanguagePatch.code -eq "en") {
+        $replace = $null
+        if     (IsText -Elem $Redux.Equipment.DekuShield -Compare "Deku Shield")          { $replace = "Deku Shield" }
+        elseif (IsText -Elem $Redux.Equipment.DekuShield -Compare "Wooden Shield")        { $replace = "Wooden Shield" }
+        elseif (IsText -Elem $Redux.Equipment.DekuShield -Compare "Dawn & Dusk Shield")   { $replace = "Wooden Shield" }
+        elseif (IsText -Elem $Redux.Equipment.DekuShield -Compare "Iron Shield")          { $replace = "Iron Shield" }
+        if (IsSet $replace) { SetMessage -ID "004C" -Text "Deku Shield" -Replace $replace -NoParse; SetMessage -ID "0089"; SetMessage -ID "009F"; SetMessage -ID "0611" SetMessage -ID "103D"-Last; SetMessage -ID "1052"; SetMessage -ID "10CB"; SetMessage -ID "10D2" }
+        $replace = $null
     }
 
-    if ($ChildModel.hylian_shield -ne 0 -and $AdultModel.hylian_shield -ne 0) {
-        if     (IsLangText -Elem $Redux.Equipment.HylianShield -Compare "Hero's Shield")   { SetMessage -ID "004D" -Text "Hylian Shield" -Replace "Hero's Shield" -NoParse; SetMessage -ID "0092"; SetMessage -ID "009C"; SetMessage -ID "00A9"; SetMessage -ID "7013"; SetMessage -ID "7121" }
-        elseif (IsLangText -Elem $Redux.Equipment.HylianShield -Compare "Red Shield")      { SetMessage -ID "004D" -Text "Hylian Shield" -Replace "Red Shield"    -NoParse; SetMessage -ID "0092"; SetMessage -ID "009C"; SetMessage -ID "00A9"; SetMessage -ID "7013"; SetMessage -ID "7121" }
-        elseif (IsLangText -Elem $Redux.Equipment.HylianShield -Compare "Metal Shield")    { SetMessage -ID "004D" -Text "Hylian Shield" -Replace "Metal Shield"  -NoParse; SetMessage -ID "0092"; SetMessage -ID "009C"; SetMessage -ID "00A9"; SetMessage -ID "7013"; SetMessage -ID "7121" }
+    if ( (IsDefault $Redux.Equipment.HylianShield -Not) -and $ChildModel.hylian_shield -ne 0 -and $AdultModel.hylian_shield -ne 0 -and $LanguagePatch.code -eq "en") {
+        $replace = $null
+        if     (IsText -Elem $Redux.Equipment.HylianShield -Compare "Hylian Shield")   { $replace = "Hylian Shield" }
+        elseif (IsText -Elem $Redux.Equipment.HylianShield -Compare "Hero's Shield")   { $replace = "Hero's Shield" }
+        elseif (IsText -Elem $Redux.Equipment.HylianShield -Compare "Red Shield")      { $replace = "Red Shield"    }
+        elseif (IsText -Elem $Redux.Equipment.HylianShield -Compare "Metal Shield")    { $replace = "Metal Shield"  }
+        if (IsSet $replace) { SetMessage -ID "004D" -Text "Hylian Shield" -Replace $replace -NoParse; SetMessage -ID "0092"; SetMessage -ID "009C"; SetMessage -ID "00A9"; SetMessage -ID "7013"; SetMessage -ID "7121" }
+        $replace = $null
     }
 
     if (IsChecked $Redux.Text.FemalePronouns) {
@@ -2739,9 +2758,14 @@ function CreateTabEquipment() {
     CreateReduxComboBox -Name "MasterSword"   -Adult -Text "Master Sword"     -Items @("Master Sword")                      -FilePath ($GameFiles.Textures + "\Equipment\Master Sword")  -Ext @("icon", "bin")   -Info "Select an alternative for the icon and text of the Master Sword"     -Credits "Admentus (injects) & GhostlyDark (injects) & CYB3RTR0N (beta icon)"
     CreateReduxComboBox -Name "GiantsKnife"   -Adult -Text "Giant's Knife"    -Items @("Giant's Knife", "Biggoron's Sword") -FilePath ($GameFiles.Textures + "\Equipment\Master Sword")  -Ext @("icon", "bin")   -Info "Select an alternative for the icon and text of the Giant's Knife"    -Credits "Admentus (injects) & GhostlyDark (injects) & CYB3RTR0N (beta icon)"
     CreateReduxComboBox -Name "BiggoronSword" -Adult -Text "Biggoron's Sword" -Items @("Biggoron's Sword", "Giant's Knife") -FilePath ($GameFiles.Textures + "\Equipment\Master Sword")  -Ext @("icon", "bin")   -Info "Select an alternative for the icon and text of the Biggoron's Sword" -Credits "Admentus (injects) & GhostlyDark (injects) & CYB3RTR0N (beta icon)"
-    CreateReduxComboBox -Name "DekuShield"    -Child -Text "Deku Shield"      -Items @("Deku Shield")                       -FilePath ($GameFiles.Textures + "\Equipment\Deku Shield")   -Ext @("icon", "front") -Info "Select an alternative for the appearence of the Deku Shield"         -Credits "Admentus (injects) & GhostlyDark (injects), ZombieBrainySnack (textures) & LuigiBlood (texture)" -Column 1 -Row 3
+    
+    if ($GamePatch.title -like "*Dawn*") { $item = "Dawn & Dusk Shield" } elseif ($GamePatch.title -like "*Dawn*") { $item = "Gold Quest Shield" } else { $item = "Deku Shield" }
+    
+    CreateReduxComboBox -Name "DekuShield"    -Child -Text "Deku Shield"      -Items @("Deku Shield") -Default $item        -FilePath ($GameFiles.Textures + "\Equipment\Deku Shield")   -Ext @("icon", "front") -Info "Select an alternative for the appearence of the Deku Shield"         -Credits "Admentus (injects) & GhostlyDark (injects), ZombieBrainySnack (textures) & LuigiBlood (texture)" -Column 1 -Row 3
     CreateReduxComboBox -Name "HylianShield"  -All   -Text "Hylian Shield"    -Items @("Hylian Shield")                     -FilePath ($GameFiles.Textures + "\Equipment\Hylian Shield") -Ext @("icon", "bin")   -Info "Select an alternative for the appearence of the Hylian Shield"       -Credits "Admentus (injects) & GhostlyDark (injects), CYB3RTR0N (icons), sanguinetti (Beta / Red Shield textures) & LuigiBlood (texture)"
     CreateReduxComboBox -Name "MirrorShield"  -Adult -Text "Mirror Shield"    -Items @("Mirror Shield")                     -FilePath ($GameFiles.Textures + "\Equipment\Mirror Shield") -Ext @("icon", "bin")   -Info "Select an alternative for the appearence of the Mirror Shield"       -Credits "Admentus (injects) & GhostlyDark (injects)"
+
+    $item = $null
 
     if (IsSet $Redux.Equipment.GiantsKnife) {
         $Redux.Equipment.GiantsKnife.Add_SelectedIndexChanged( {
