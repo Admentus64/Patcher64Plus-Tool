@@ -10,7 +10,7 @@
 
    <# if (IsChecked $Redux.Hero.PotsChallenge) {
         RemoveFile  $Files.dmaTable
-        Add-Content $Files.dmaTable "0 1 2 3 4 5 6 7 8 9 15 16 17 18 19 20 21 22 23 24 25 26 942 944 946 948 950 952 954 956 958 960 962 964 966 968 970 972 974 976 978 980 982 984 986 988 990 992 994 996 998 1000 1002 1004 1510 1511 1512 1513 1514 1515 1516 1517 1518 1519 1520 1521 1522 1523 1524 1525"
+        Add-Content $Files.dmaTable "0 1 2 3 4 5 6 7 8 9 15 16 17 18 19 20 21 22 23 24 25 26 942 944 946 948 950 952 954 956 958 960 962 964 966 968 970 972 974 976 978 980 982 984 986 988 990 992 994 996 998 1000 1002 1004 1512 1515 1516 1518 1519 1520 1521 1522 1523 1524 1525"
     } #>
 
 }
@@ -100,8 +100,7 @@ function ByteOptions() {
     if (IsChecked $Redux.Gameplay.RemoveQuickSpin)          { ChangeBytes -Offset "C9C9E8" -Values "1000000E"                                                  }
     if (IsChecked $Redux.Gameplay.ClimbAnything)            { ChangeBytes -Offset "AAA394" -Values "34020004"                                                  }
     if (IsChecked $Redux.Gameplay.RemoveSpeedClamp)         { ChangeBytes -Offset "BD9AF0" -Values "2400"                                                      }
-    if (IsChecked $Redux.Gameplay.ResumeLastArea)           { ChangeBytes -Offset "B06348" -Values "0000";     ChangeBytes -Offset "B06354" -Values "0000"     }
-    if (IsChecked $Redux.Gameplay.SpawnLinksHouse)          { ChangeBytes -Offset "B06332" -Values "00BB"                                                      }
+    if (IsChecked $Redux.Gameplay.ResumeLastArea)           { ChangeBytes -Offset "B06348" -Values "0000";     ChangeBytes -Offset "B06350" -Values "0000"     }
     if (IsChecked $Redux.Gameplay.AllowWarpSongs)           { ChangeBytes -Offset "B6D3D2" -Values "00";       ChangeBytes -Offset "B6D42A" -Values "00"       }
     if (IsChecked $Redux.Gameplay.AllowFaroreWind)          { ChangeBytes -Offset "B6D3D3" -Values "00";       ChangeBytes -Offset "B6D42B" -Values "00"       }
     if (IsChecked $Redux.Gameplay.OpenBombchuShop)          { ChangeBytes -Offset "C6CEDC" -Values "340B0001"                                                  }
@@ -2004,7 +2003,7 @@ function CreateTabMain() {
     CreateReduxCheckBox -Name "Medallions"             -Base                                -Text "Require All Medallions"   -Info "All six medallions are required for the Rainbow Bridge to appear before Ganon's Castle`nThe vanilla requirements were the Shadow and Spirit Medallions and the Light Arrows" -Credits "Ported from Rando"
     CreateReduxCheckBox -Name "RutoNeverDisappears"    -Base                                -Text "Ruto Never Disappears"    -Info "Ruto never disappears in Jabu Jabu's Belly and will remain in place when leaving the room"                                                                                   -Credits "Ported from Rando"
     CreateReduxCheckbox -Name "RemoveSpeedClamp"       -All                                 -Text "Remove Jump Speed Limit"  -Info "Removes the jumping speed limit just like in MM"                                                                                                                             -Credits "Admentus (ROM) & Aegiker (GameShark)"
-    CreateReduxCheckBox -Name "ResumeLastArea"         -Base                                -Text "Resume From Last Area"    -Info "Resume playing from the area you last saved in" -Warning "Don't save in Grottos"                                                                                             -Credits "Admentus (ROM) & Aegiker (GameShark)"
+    CreateReduxCheckBox -Name "ResumeLastArea"         -All -Exclude "Dawn"                 -Text "Resume From Last Area"    -Info "Resume playing from the area you last saved in" -Warning "Don't save in Grottos"                                                                                             -Credits "Admentus (ROM) & Aegiker (GameShark)"
     CreateReduxCheckBox -Name "AllowWarpSongs"         -Base                                -Text "Allow Warp Songs"         -Info "Allow warp songs in Gerudo Training Ground and Ganon's Castle"                                                                                                               -Credits "Ported from Rando"
     CreateReduxCheckBox -Name "AllowFaroreWind"        -Base                                -Text "Allow Farore's Wind"      -Info "Allow Farore's Wind in Gerudo Training Ground and Ganon's Castle"                                                                                                            -Credits "Ported from Rando"
     CreateReduxComboBox -Name "SpawnChild"             -Base -Default 1 -Exclude "Nimpize"  -Text "Child Starting Location"  -Items ("Link's House", "Temple of Time", "Hyrule Field", "Kakariko Village", "Inside the Deku Tree", "Dodongo's Cavern", "Inside Jabu-Jabu's Belly", "Forest Temple", "Fire Temple", "Water Temple", "Shadow Temple", "Spirit Temple", "Ice Cavern", "Bottom of the Well", "Thieves' Hideout", "Gerudo's Training Ground", "Inside Ganon's Castle", "Ganon's Tower") -Credits "Admentus & GhostlyDark"

@@ -6,6 +6,7 @@ v19.1.2
 - Fixed issue with expanding Expansion Pak for Wii VC when not supported
 - Fixed issue with Hookshot Anything for OoT
 - Fixed issue with Pots not changing textures
+- Fixed issue with Resume Last Area for Adult Link (also for MoT)
 - Removed Skullkid Ocarina option for OoT
 - Merged non-Redux Hide HUD options
 
