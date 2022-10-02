@@ -1,5 +1,6 @@
 v19.1.13
 - Reworked Paper Mario Hard Mode options
+- Removed Pots Challenge
 
 v19.1.12
 - Added new Deku Shield option
