@@ -1,3 +1,6 @@
+v19.2.0
+- Brought back Master Quest for MM again, with Additional Options + Redux support
+
 v19.1.13
 - Reworked Paper Mario Hard Mode options
 - Removed Pots Challenge

@@ -1162,13 +1162,14 @@ function CreateTabRedux() {
 
     $warning = $null
 
-    if     ($Redux.Gameplay.UnderwaterOcarina.Checked -and $Redux.Features.OcarinaIcons.SelectedIndex -gt 0)   { $Redux.Gameplay.UnderwaterOcarina.Checked = $False; $Redux.Features.OcarinaIcons.SelectedIndex = 0 }
-    elseif ($Redux.Gameplay.UnderwaterOcarina.Checked)                                                         { EnableElem -Elem $Redux.Features.OcarinaIcons      -Active $False }
-    elseif ($Redux.Features.OcarinaIcons.SelectedIndex -gt 0)                                                  { EnableElem -Elem $Redux.Gameplay.UnderwaterOcarina -Active $False }
+    if ( (IsSet $Redux.Gameplay.UnderwaterOcarina) -and (IsSet $Redux.Gameplay.OcarinaIcons) ) {
+        if     ($Redux.Gameplay.UnderwaterOcarina.Checked -and $Redux.Features.OcarinaIcons.SelectedIndex -gt 0)   { $Redux.Gameplay.UnderwaterOcarina.Checked = $False; $Redux.Features.OcarinaIcons.SelectedIndex = 0 }
+        elseif ($Redux.Gameplay.UnderwaterOcarina.Checked)                                                         { EnableElem -Elem $Redux.Features.OcarinaIcons      -Active $False }
+        elseif ($Redux.Features.OcarinaIcons.SelectedIndex -gt 0)                                                  { EnableElem -Elem $Redux.Gameplay.UnderwaterOcarina -Active $False }
 
-    $Redux.Gameplay.UnderwaterOcarina.Add_CheckStateChanged( { EnableElem -Elem $Redux.Features.OcarinaIcons      -Active (!$this.checked)             })
-    $Redux.Features.OcarinaIcons.Add_SelectedIndexChanged(   { EnableElem -Elem $Redux.Gameplay.UnderwaterOcarina -Active (!$this.selectedIndex -ne 0) })
-    
+        $Redux.Gameplay.UnderwaterOcarina.Add_CheckStateChanged( { EnableElem -Elem $Redux.Features.OcarinaIcons      -Active (!$this.checked)             })
+        $Redux.Features.OcarinaIcons.Add_SelectedIndexChanged(   { EnableElem -Elem $Redux.Gameplay.UnderwaterOcarina -Active (!$this.selectedIndex -ne 0) })
+    }
     
 
     # BUTTON COLORS #

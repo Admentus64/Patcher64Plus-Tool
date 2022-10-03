@@ -199,6 +199,7 @@ function MainFunctionPatch([string]$Command, [Array]$Header, [string]$PatchedFil
         CompressROM
         if (!(ApplyPatchROM)) { return }
     }
+    PatchDMA
     
     # Step 09: Misc tasks
     if ($PatchInfo.run) { UpdateROMCRC }                                       # Step A: Update the .Z64 ROM CRC
@@ -497,7 +498,7 @@ function UpdateROMCRC() {
 
     if ($Settings.Debug.KeepConverted    -eq $True -and (TestFile $GetROM.keepConvert)   )   { & $Files.tool.rn64crc $GetROM.keepConvert   -update | Out-Null; WriteToConsole ("Updated CRC hash for ROM: " + $GetROM.keepConvert)   }
     if ($Settings.Debug.KeepDowngraded   -eq $True -and (TestFile $GetROM.keepDowngrade) )   { & $Files.tool.rn64crc $GetROM.keepDowngrade -update | Out-Null; WriteToConsole ("Updated CRC hash for ROM: " + $GetROM.keepDowngrade) }
-    if ($Settings.Debug.KeepDecompressed -eq $True -and (TestFile $GetROM.keepDecomp)    )   { & $Files.tool.rn64crc $GetROM.keepDecomp   -update  | Out-Null; WriteToConsole ("Updated CRC hash for ROM: " + $GetROM.keepDecomp)    }
+    if ($Settings.Debug.KeepDecompressed -eq $True -and (TestFile $GetROM.keepDecomp)    )   { & $Files.tool.rn64crc $GetROM.keepDecomp    -update | Out-Null; WriteToConsole ("Updated CRC hash for ROM: " + $GetROM.keepDecomp)    }
 
 }
 
@@ -751,6 +752,20 @@ function PatchCompressedROM() {
 
 
 #==============================================================================================================================================================================================
+function PatchDMA() {
+
+    if ( !(IsSet $GamePatch.custom_offset) -or !(IsSet $GamePatch.custom_value) ) { return }
+
+    $global:ByteArrayGame = [System.IO.File]::ReadAllBytes($GetROM.run)
+    ChangeBytes -Offset $GamePatch.custom_offset -Values $GamePatch.custom_value
+    [System.IO.File]::WriteAllBytes($GetROM.run, $ByteArrayGame)
+    $global:ByteArrayGame = $null
+
+}
+
+
+
+#==============================================================================================================================================================================================
 function ApplyPatchROM() {
     
     $HashSum1 = (Get-FileHash -Algorithm MD5 -LiteralPath $GetROM.run).Hash
@@ -926,7 +941,6 @@ function CompressROM() {
     else { Move-Item -LiteralPath $GetROM.decomp -Destination $GetROM.patched -Force }
 
     $GetROM.run = $GetROM.patched
-
 }
 
 
