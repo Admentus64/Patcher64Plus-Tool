@@ -419,10 +419,11 @@ function ByteOptions() {
         elseif     (IsText -Elem $Redux.Hero.Recovery -Compare "1/4x Recovery")                                                { ChangeBytes -Offset "BABEA2" -Values "28 80"; ChangeBytes -Offset "BABEA5" -Values "05 28 83" }
     }
 
-    if     (IsText -Elem $Redux.Hero.Damage -Compare "2x Damage")   { ChangeBytes -Offset "CADEC2" -Values "2B C3" }
-    elseif (IsText -Elem $Redux.Hero.Damage -Compare "4x Damage")   { ChangeBytes -Offset "CADEC2" -Values "2B 83" }
-    elseif (IsText -Elem $Redux.Hero.Damage -Compare "8x Damage")   { ChangeBytes -Offset "CADEC2" -Values "2B 43" }
-    elseif (IsText -Elem $Redux.Hero.Damage -Compare "OHKO Mode")   { ChangeBytes -Offset "CADEC2" -Values "2A 03" }
+    if     ( (IsText -Elem $Redux.Hero.Damage -Compare "1x Damage") -and ($GameType.title -notlike "*Master Quest*") )   { ChangeBytes -Offset "CADEC2" -Values "2C 03" }
+    elseif ( (IsText -Elem $Redux.Hero.Damage -Compare "2x Damage") -and ($GameType.title -like    "*Master Quest*") )   { ChangeBytes -Offset "CADEC2" -Values "2B C3" }
+    elseif   (IsText -Elem $Redux.Hero.Damage -Compare "4x Damage")                                                      { ChangeBytes -Offset "CADEC2" -Values "2B 83" }
+    elseif   (IsText -Elem $Redux.Hero.Damage -Compare "8x Damage")                                                      { ChangeBytes -Offset "CADEC2" -Values "2B 43" }
+    elseif   (IsText -Elem $Redux.Hero.Damage -Compare "OHKO Mode")                                                      { ChangeBytes -Offset "CADEC2" -Values "2A 03" }
 
     if     (IsText -Elem $Redux.Hero.MagicUsage -Compare "2x Magic Usage")   { ChangeBytes -Offset "BAC306" -Values "2C","40" }
     elseif (IsText -Elem $Redux.Hero.MagicUsage -Compare "4x Magic Usage")   { ChangeBytes -Offset "BAC306" -Values "2C","80" }
@@ -1373,11 +1374,14 @@ function CreateTabDifficulty() {
     CreateReduxComboBox -All -Name "MonsterHP"  -Text "Monster HP"   -Items $items1 -Default 3 -Info "Set the amount of health for monsters"                                                                                       -Credits "Admentus" -Warning "Some enemies are missing"
     CreateReduxComboBox -All -Name "MiniBossHP" -Text "Mini-Boss HP" -Items $items2 -Default 3 -Info "Set the amount of health for elite monsters and mini-bosses"                                                                 -Credits "Admentus" -Warning "Some Mini-bosses are missing"
     CreateReduxComboBox -All -Name "BossHP"     -Text "Boss HP"      -Items $items3 -Default 3 -Info "Set the amount of health for bosses"                                                                                         -Credits "Admentus" -Warning "Goht (phases 3) and Gyorg (phase 2) are missing"
-    CreateReduxComboBox -All -Name "Damage"     -Text "Damage"       -Items @("1x Damage", "2x Damage", "4x Damage", "8x Damage", "OHKO Mode")        -Info "Set the amount of damage you receive`nOHKO Mode = You die in one hit" -Credits "Admentus"
+
+    if ($GamePatch.title -like "*Master Quest*") { $default = 2 } else { $default = 1 }
+
+    CreateReduxComboBox -All -Name "Damage"     -Text "Damage"       -Items @("1x Damage", "2x Damage", "4x Damage", "8x Damage", "OHKO Mode")        -Info "Set the amount of damage you receive`nOHKO Mode = You die in one hit" -Credits "Admentus" -Default $default
     CreateReduxComboBox -All -Name "Recovery"   -Text "Recovery"     -Items @("1x Recovery", "1/2x Recovery", "1/4x Recovery", "0x Recovery")         -Info "Set the amount health you recovery from Recovery Hearts"              -Credits "Admentus"
     CreateReduxComboBox -All -Name "MagicUsage" -Text "Magic Usage"  -Items @("1x Magic Usage", "2x Magic Usage", "4x Magic Usage", "8x Magic Usage") -Info "Set the amount of times magic is consumed at"                         -Credits "Admentus"
     
-    $items1 = $items2= $items3 = $null
+    $items1 = $items2= $items3 = $default = $null
 
     $Redux.Hero.Damage.Add_SelectedIndexChanged({ EnableElem -Elem $Redux.Hero.Recovery -Active ($this.Text -ne "OHKO Mode") })
     EnableElem -Elem $Redux.Hero.Recovery -Active ($Redux.Hero.Damage.Text -ne "OHKO Mode")
