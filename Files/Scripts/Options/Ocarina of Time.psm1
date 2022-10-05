@@ -610,7 +610,6 @@ function ByteOptions() {
     # MINIGAMES #
 
     if (IsChecked $Redux.Minigames.FishSize) {
-        ChangeBytes -Offset "DBF484" -Values "00000000"; ChangeBytes -Offset "DBF4A8" -Values "00000000"                                                  # Easier Fishing
         ChangeBytes -Offset "DCBEA8" -Values "3C014248"; ChangeBytes -Offset "DCBF24" -Values "3C014248"                                                  # Adult Fish size requirement
         ChangeBytes -Offset "DCBF30" -Values "3C014230"; ChangeBytes -Offset "DCBF9C" -Values "3C014230"                                                  # Child Fish size requirement
     }
@@ -1396,19 +1395,22 @@ function RevertReduxOptions() {
         ChangeBytes -Offset "CDF420" -Values "0C01ADBF";         ChangeBytes -Offset "CDF638" -Values "E7A40034C606000C"; ChangeBytes -Offset "CDF792" -Values "03E7"
     }
 
-    if (IsRevert $Redux.Speedup.DoorOfTime)           { ChangeBytes -Offset "CCE9A4" -Values "3C013F8044813000"                                                                                                                   }
-    if (IsRevert $Redux.Hooks.FishLarger)             { ChangeBytes -Offset "DBF428" -Values "C652019C3C0142824481400046009100E644"                                                                                               }
-    if (IsRevert $Redux.Hooks.FishBites)              { ChangeBytes -Offset "DC7090" -Values "C60A019846025102"                                                                                                                   }
-    if (IsRevert $Redux.Hooks.BlueFireArrow)          { ChangeBytes -Offset "DB32C8" -Values "240100F0"                                                                                                                           }
-    if (IsRevert $Redux.Hooks.RupeeIconColors)        { ChangeBytes -Offset "AEB764" -Values "3C01C8FF26380008AE9802B0"; ChangeBytes -Offset "AEB778" -Values "34216400"                                                          }
-    if (IsRevert $Redux.Hooks.StoneOfAgony)           { ChangeBytes -Offset "BE4A14" -Values "4602003C";                 ChangeBytes -Offset "BE4A40" -Values "4606203C"; ChangeBytes -Offset "BE4A60" -Values "27BD002003E00008" }
-    if (IsRevert $Redux.Hooks.EmptyBombFix)           { ChangeBytes -Offset "C0E77C" -Values "AC400428AC4D066C"                                                                                                                   }
-    if (IsRevert $Redux.Hooks.WarpSongsSpeedup)       { ChangeBytes -Offset "B10CC0" -Values "3C0100013421241C";         ChangeBytes -Offset "BEA045"  -Values "009444E7A00010"                                                   }
-    if (IsRevert $Redux.Hooks.BiggoronFix)            { ChangeBytes -Offset "ED645C" -Values "1000000DAC8E0180"                                                                                                                   }
-    if (IsRevert $Redux.Hooks.DampeFix)               { ChangeBytes -Offset "CC4038" -Values "240C0004304A1000";         ChangeBytes -Offset "CC453E" -Values "0006"                                                              }
-    if (IsRevert $Redux.Hooks.HyruleGuardsSoftlock)   { ChangeBytes -Offset "E24E7C" -Values "0C00863B24060001"                                                                                                                   }
-    if (IsRevert $Redux.Hooks.TalonSkip)              { ChangeBytes -Offset "CC0038" -Values "8FA4001824090041"                                                                                                                   }
-    if (IsRevert $Redux.Misc.SkipCutscenes)           { ChangeBytes -Offset "B06C2C" -Values "A2280020A2250021"                                                                                                                   }
+
+    
+
+    if (IsRevert $Redux.Speedup.DoorOfTime)           { ChangeBytes -Offset "CCE9A4" -Values "3C013F8044813000"                                                                                                                       }
+    if (IsRevert $Redux.Hooks.FishLarger)             { ChangeBytes -Offset "DBF428" -Values "C652019C3C0142824481400046009100E644"; ChangeBytes -Offset "DBF484" -Values "E652019C"; ChangeBytes -Offset "DBF4A8" -Values "E648019C" }
+    if (IsRevert $Redux.Hooks.FishBites)              { ChangeBytes -Offset "DC7090" -Values "C60A019846025102"                                                                                                                       }
+    if (IsRevert $Redux.Hooks.BlueFireArrow)          { ChangeBytes -Offset "DB32C8" -Values "240100F0"                                                                                                                               }
+    if (IsRevert $Redux.Hooks.RupeeIconColors)        { ChangeBytes -Offset "AEB764" -Values "3C01C8FF26380008AE9802B0"; ChangeBytes -Offset "AEB778" -Values "34216400"                                                              }
+    if (IsRevert $Redux.Hooks.StoneOfAgony)           { ChangeBytes -Offset "BE4A14" -Values "4602003C";                 ChangeBytes -Offset "BE4A40" -Values "4606203C"; ChangeBytes -Offset "BE4A60" -Values "27BD002003E00008"     }
+    if (IsRevert $Redux.Hooks.EmptyBombFix)           { ChangeBytes -Offset "C0E77C" -Values "AC400428AC4D066C"                                                                                                                       }
+    if (IsRevert $Redux.Hooks.WarpSongsSpeedup)       { ChangeBytes -Offset "B10CC0" -Values "3C0100013421241C";         ChangeBytes -Offset "BEA045"  -Values "009444E7A00010"                                                       }
+    if (IsRevert $Redux.Hooks.BiggoronFix)            { ChangeBytes -Offset "ED645C" -Values "1000000DAC8E0180"                                                                                                                       }
+    if (IsRevert $Redux.Hooks.DampeFix)               { ChangeBytes -Offset "CC4038" -Values "240C0004304A1000";         ChangeBytes -Offset "CC453E" -Values "0006"                                                                  }
+    if (IsRevert $Redux.Hooks.HyruleGuardsSoftlock)   { ChangeBytes -Offset "E24E7C" -Values "0C00863B24060001"                                                                                                                       }
+    if (IsRevert $Redux.Hooks.TalonSkip)              { ChangeBytes -Offset "CC0038" -Values "8FA4001824090041"                                                                                                                       }
+    if (IsRevert $Redux.Misc.SkipCutscenes)           { ChangeBytes -Offset "B06C2C" -Values "A2280020A2250021"                                                                                                                       }
     
     $Symbols = $payload = $null
 
