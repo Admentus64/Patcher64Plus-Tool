@@ -316,32 +316,36 @@ function ByteOptions() {
 
     # HIDE HUD #
 
-    if ( (IsIndex -Elem $Redux.Hide.Interface -Index 2) -or (IsIndex -Elem $Redux.Hide.Interface -Index 3) ) {
+    if (IsChecked $Redux.Hide.AButton) {
         ChangeBytes -Offset "B586B0" -Values "00 00 00 00" # A Button (scale)
         ChangeBytes -Offset "AE7D0E" -Values "03 10"       # A Button - Text (DMA)
         ChangeBytes -Offset "7540"   -Values "03 10 00 00 03 10 57 00 03 10 00 00"
+    }
 
-        ChangeBytes -Offset "B57EEC" -Values "24 02 03 A0"; ChangeBytes -Offset "B57EFC" -Values "24 0A 03 A2"; ChangeBytes -Offset "B589D4" -Values "24 0F 03 97"; ChangeBytes -Offset "B589E8" -Values "24 19 03 94" # B Button -> Icon / Ammo / Japanese / English
-        ChangeBytes -Offset "B584EC" -Values "24 19 03 84"; ChangeBytes -Offset "B58490" -Values "24 18 03 7A"; ChangeBytes -Offset "B5849C" -Values "24 0E 03 78"                                                     # Start Button   -> Button / Japanese / English
-        ChangeBytes -Offset "B584C0" -Values "24 19 03 FE"; ChangeBytes -Offset "B582DC" -Values "24 0E 03 F7"                                                                                                         # C-Up Button    -> Button / Navi Text
-        ChangeBytes -Offset "B58504" -Values "24 19 03 E3"; ChangeBytes -Offset "B5857C" -Values "24 19 03 E3"; ChangeBytes -Offset "B58DC4" -Values "24 0E 03 E4"                                                     # C-Left Button  -> Button / Icon / Ammo
-        ChangeBytes -Offset "B58510" -Values "24 0F 03 F9"; ChangeBytes -Offset "B58588" -Values "24 0F 03 F9"; ChangeBytes -Offset "B58C40" -Values "24 06 02 FA"                                                     # C-Down Button  -> Button / Icon / Ammo
-        ChangeBytes -Offset "B5851C" -Values "24 19 03 0F"; ChangeBytes -Offset "B58594" -Values "24 19 03 0F"; ChangeBytes -Offset "B58DE0" -Values "24 19 03 10"                                                     # C-Right Button -> Button / Icon / Ammo
-        ChangeBytes -Offset "BE2B10" -Values "24 07 03 A0"                                                                                                                                                             # Area Titles
-        ChangeBytes -Offset "AC8828" -Values "24 07 03 A0"                                                                                                                                                             # Dungeon Titles
-    }
-    if (IsIndex -Elem $Redux.Hide.Interface -Index 3) {
-        ChangeBytes -Offset "AEB7B0" -Values "24 0C 03 1A"; ChangeBytes -Offset "AEBC48" -Values "24 0D 01 CE"                                                     # Rupees - Icon / Rupees - Text (Y pos)
-        ChangeBytes -Offset "AEB8AC" -Values "24 0F 03 1A"; ChangeBytes -Offset "AEBA00" -Values "24 19 01 BE"                                                     # Key    - Icon / Key    - Text (Y pos)
-        ChangeBytes -Offset "B58348" -Values "24 0F 03 6E"                                                                                                         # Epona Carrots
-        ChangeBytes -Offset "ADADEC" -Values "10 00"                                                                                                               # Disable Hearts Render
+    if (IsChecked $Redux.Hide.BButton)        { ChangeBytes -Offset "B57EEC" -Values "24 02 03 A0"; ChangeBytes -Offset "B57EFC" -Values "24 0A 03 A2"; ChangeBytes -Offset "B589D4" -Values "24 0F 03 97"; ChangeBytes -Offset "B589E8" -Values "24 19 03 94" } # B Button -> Icon / Ammo / Japanese / English
+    if (IsChecked $Redux.Hide.StartButton)    { ChangeBytes -Offset "B584EC" -Values "24 19 03 84"; ChangeBytes -Offset "B58490" -Values "24 18 03 7A"; ChangeBytes -Offset "B5849C" -Values "24 0E 03 78" } # Start Button   -> Button / Japanese / English
+    if (IsChecked $Redux.Hide.CupButton)      { ChangeBytes -Offset "B584C0" -Values "24 19 03 FE"; ChangeBytes -Offset "B582DC" -Values "24 0E 03 F7"                                                     } # C-Up Button    -> Button / Navi Text
+    if (IsChecked $Redux.Hide.CLeftButton)    { ChangeBytes -Offset "B58504" -Values "24 19 03 E3"; ChangeBytes -Offset "B5857C" -Values "24 19 03 E3"; ChangeBytes -Offset "B58DC4" -Values "24 0E 03 E4" } # C-Left Button  -> Button / Icon / Ammo
+    if (IsChecked $Redux.Hide.CDownButton)    { ChangeBytes -Offset "B58510" -Values "24 0F 03 F9"; ChangeBytes -Offset "B58588" -Values "24 0F 03 F9"; ChangeBytes -Offset "B58C40" -Values "24 06 02 FA" } # C-Down Button  -> Button / Icon / Ammo
+    if (IsChecked $Redux.Hide.CRightButton)   { ChangeBytes -Offset "B5851C" -Values "24 19 03 0F"; ChangeBytes -Offset "B58594" -Values "24 19 03 0F"; ChangeBytes -Offset "B58DE0" -Values "24 19 03 10" } # C-Right Button -> Button / Icon / Ammo
+    if (IsChecked $Redux.Hide.AreaTitle)      { ChangeBytes -Offset "BE2B10" -Values "24 07 03 A0" } # Area Titles
+    if (IsChecked $Redux.Hide.DungeonTitle)   { ChangeBytes -Offset "AC8828" -Values "24 07 03 A0" } # Dungeon Titles
+    if (IsChecked $Redux.Hide.Carrots)        { ChangeBytes -Offset "B58348" -Values "24 0F 03 6E" } # Epona Carrots    
+    if (IsChecked $Redux.Hide.Hearts)         { ChangeBytes -Offset "ADADEC" -Values "10 00"       } # Disable Hearts Render
+
+    if (IsChecked $Redux.Hide.Magic) {
         ChangeBytes -Offset "B587C0" -Values "24 0F 03 1A"; ChangeBytes -Offset "B587A0" -Values "24 0E 01 22"; ChangeBytes -Offset "B587B4" -Values "24 19 01 2A" # Magic Meter / Magic Bar - Small (Y pos) / Magic Bar - Large (Y pos)
-        ChangeBytes -Offset "B58CFC" -Values "24 0F 00 00"                                                                                                         # Clock - Digits (scale)
-        $Values = @(); for ($i=0; $i -lt 256; $i++) { $Values += 0 }; ChangeBytes -Offset "1A3E000" -Values $Values                                                # Clock - Icon
-        $Values = @(); for ($i=0; $i -lt 768; $i++) { $Values += 0 }; ChangeBytes -Offset "1A3E600" -Values $Values                                                # Score Counter - Icon
     }
-    
-    if (IsChecked $Redux.Hide.Credits) { PatchBytes  -Offset "966000" -Patch "Message\credits.bin" }
+
+    if (IsChecked $Redux.Hide.Icons) {
+        ChangeBytes -Offset "B58CFC" -Values "24 0F 00 00" # Clock - Digits (scale)
+        $Values = @();     for ($i=0; $i -lt 256; $i++) { $Values += 0 };     ChangeBytes -Offset "1A3E000" -Values $Values     # Clock - Icon
+        $Values = @();     for ($i=0; $i -lt 768; $i++) { $Values += 0 };     ChangeBytes -Offset "1A3E600" -Values $Values     # Score Counter - Icon
+    }
+
+    if (IsChecked $Redux.Hide.Rupees)        { ChangeBytes -Offset "AEB7B0" -Values "24 0C 03 1A"; ChangeBytes -Offset "AEBC48" -Values "24 0D 01 CE" } # Rupees - Icon / Rupees - Text (Y pos)
+    if (IsChecked $Redux.Hide.DungeonKeys)   { ChangeBytes -Offset "AEB8AC" -Values "24 0F 03 1A"; ChangeBytes -Offset "AEBA00" -Values "24 19 01 BE" } # Key    - Icon / Key    - Text (Y pos)
+    if (IsChecked $Redux.Hide.Credits)       { PatchBytes  -Offset "966000" -Patch "Message\credits.bin" }
 
 
 
@@ -605,11 +609,13 @@ function ByteOptions() {
 
     # MINIGAMES #
 
-    if (IsChecked $Redux.Minigames.Fishing) {
+    if (IsChecked $Redux.Minigames.FishSize) {
         ChangeBytes -Offset "DBF484" -Values "00000000"; ChangeBytes -Offset "DBF4A8" -Values "00000000"                                                  # Easier Fishing
         ChangeBytes -Offset "DCBEA8" -Values "3C014248"; ChangeBytes -Offset "DCBF24" -Values "3C014248"                                                  # Adult Fish size requirement
         ChangeBytes -Offset "DCBF30" -Values "3C014230"; ChangeBytes -Offset "DCBF9C" -Values "3C014230"                                                  # Child Fish size requirement
-        ChangeBytes -Offset "DC7090" -Values "0C10080FC60A0198"                                                                                           # Fish bite guaranteed when the hook is stable
+    }
+
+    if (IsChecked $Redux.Minigames.FishLoss) {
         ChangeBytes -Offset "DC87A0" -Values "00000000"; ChangeBytes -Offset "DC87BC" -Values "00000000"; ChangeBytes -Offset "DC87CC" -Values "00000000" # Remove most fish loss branches
         ChangeBytes -Offset "DC8828" -Values "01A00821"                                                                                                   # Prevent RNG fish loss
     }
@@ -1390,8 +1396,9 @@ function RevertReduxOptions() {
         ChangeBytes -Offset "CDF420" -Values "0C01ADBF";         ChangeBytes -Offset "CDF638" -Values "E7A40034C606000C"; ChangeBytes -Offset "CDF792" -Values "03E7"
     }
 
-    if (IsRevert $Redux.Minigames.Fishing)            { ChangeBytes -Offset "DBF428" -Values "C652019C3C0142824481400046009100E644"                                                                                               }
     if (IsRevert $Redux.Speedup.DoorOfTime)           { ChangeBytes -Offset "CCE9A4" -Values "3C013F8044813000"                                                                                                                   }
+    if (IsRevert $Redux.Hooks.FishLarger)             { ChangeBytes -Offset "DBF428" -Values "C652019C3C0142824481400046009100E644"                                                                                               }
+    if (IsRevert $Redux.Hooks.FishBites)              { ChangeBytes -Offset "DC7090" -Values "C60A019846025102"                                                                                                                   }
     if (IsRevert $Redux.Hooks.BlueFireArrow)          { ChangeBytes -Offset "DB32C8" -Values "240100F0"                                                                                                                           }
     if (IsRevert $Redux.Hooks.RupeeIconColors)        { ChangeBytes -Offset "AEB764" -Values "3C01C8FF26380008AE9802B0"; ChangeBytes -Offset "AEB778" -Values "34216400"                                                          }
     if (IsRevert $Redux.Hooks.StoneOfAgony)           { ChangeBytes -Offset "BE4A14" -Values "4602003C";                 ChangeBytes -Offset "BE4A40" -Values "4606203C"; ChangeBytes -Offset "BE4A60" -Values "27BD002003E00008" }
@@ -2141,6 +2148,8 @@ function CreateTabRedux() {
     # CODE HOOKS FEATURES #
 
     CreateReduxGroup    -Tag  "Hooks"                -All                          -Text "Code Hook Features"
+    CreateReduxCheckBox -Name "FishLarger"           -Base -Expose "Master"        -Text "Larger Fish"              -Info "Fish are now larger"                                                                                    -Credits "Ported from Rando"
+    CreateReduxCheckBox -Name "FishBites"            -Base -Expose "Master"        -Text "Guaranteed Fish Bites"    -Info "Make fish bites guaranteed when the hook of the rod is stable"                                          -Credits "Ported from Rando"
     CreateReduxCheckBox -Name "RupeeIconColors"      -All                 -Checked -Text "Rupee Icon Colors"        -Info "The color of the Rupees counter icon changes depending on your wallet size"                             -Credits "Ported from Redux"
     CreateReduxCheckBox -Name "EmptyBombFix"         -All -Exclude "Dawn" -Checked -Text "Empty Bomb Fix"           -Info "Fixes Empty Bomb Glitch"                                                                                -Credits "Ported from Redux"
     CreateReduxCheckBox -Name "BlueFireArrow"        -Adult                        -Text "Blue Fire Arrows"         -Info "Ice Arrows have the same attributes as Blue Fire, thus the ability to melt Blue Ice and bombable walls" -Credits "Ported from Redux"
@@ -2387,9 +2396,23 @@ function CreateTabGraphics() {
 
     # HIDE HUD #
 
-    CreateReduxGroup    -Tag  "Hide"      -All -Text "Hide HUD"
-    CreateReduxComboBox -Name "Interface" -All -Text "Hide HUD" -Items @("Keep the HUD", "Keep essential display", "Hide everything") -Info "Hide the interface"                                -Credits "Admentus"
-    CreateReduxCheckBox -Name "Credits"   -All -Text "Hide Credits"                                                                   -Info "Hide the credits text during the credits sequence" -Credits "Admentus" -Exclude "Master"
+    CreateReduxGroup    -Tag  "Hide"         -All -Text "Hide HUD"
+    CreateReduxCheckBox -Name "AButton"      -All -Text "Hide A Button"           -Info "Hide the A Button"                                            -Credits "Admentus"
+    CreateReduxCheckBox -Name "BButton"      -All -Text "Hide B Button"           -Info "Hide the B Button"                                            -Credits "Admentus"
+    CreateReduxCheckBox -Name "StartButton"  -All -Text "Hide Start Button"       -Info "Hide the Start Button"                                        -Credits "Admentus"
+    CreateReduxCheckBox -Name "CUpButton"    -All -Text "Hide C-Up Button"        -Info "Hide the C-Up Button"                                         -Credits "Admentus"
+    CreateReduxCheckBox -Name "CLeftButton"  -All -Text "Hide C-Left Button"      -Info "Hide the C-Left Button"                                       -Credits "Admentus"
+    CreateReduxCheckBox -Name "CDownButton"  -All -Text "Hide C-Down Button"      -Info "Hide the C-Down Button"                                       -Credits "Admentus"
+    CreateReduxCheckBox -Name "CRightButton" -All -Text "Hide C-Right Button"     -Info "Hide the C-Right Button"                                      -Credits "Admentus"
+    CreateReduxCheckBox -Name "Hearts"       -All -Text "Hide Hearts"             -Info "Hide the Hearts display"                                      -Credits "Admentus"
+    CreateReduxCheckBox -Name "Magic"        -All -Text "Hide Magic"              -Info "Hide the Magic display"                                       -Credits "Admentus"
+    CreateReduxCheckBox -Name "Rupees"       -All -Text "Hide Rupees"             -Info "Hide the the Rupees display"                                  -Credits "Admentus"
+    CreateReduxCheckBox -Name "DungeonKeys"  -All -Text "Hide Keys"               -Info "Hide the Keys display shown in several dungeons and areas"    -Credits "Admentus"
+    CreateReduxCheckBox -Name "Carrots"      -All -Text "Hide Epona Carrots"      -Info "Hide the Epona Carrots display"                               -Credits "Admentus"
+    CreateReduxCheckBox -Name "AreaTitle"    -All -Text "Hide Area Title Card"    -Info "Hide the area title that displays when entering a new area"   -Credits "Admentus"
+    CreateReduxCheckBox -Name "DungeonTitle" -All -Text "Hide Dungeon Title Card" -Info "Hide the dungeon title that displays when entering a dungeon" -Credits "Admentus"
+    CreateReduxCheckBox -Name "Icons"        -All -Text "Hide Icons"              -Info "Hide the Clock and Score Counter icons display"               -Credits "Admentus"
+    CreateReduxCheckBox -Name "Credits"      -All -Text "Hide Credits"            -Info "Hide the credits text during the credits sequence"            -Credits "Admentus" -Exclude "Master"
 
     
 
@@ -2521,7 +2544,8 @@ function CreateTabDifficulty() {
     CreateReduxGroup    -Tag  "Minigames"   -Base -Expose "Master" -Text "Minigames"
     CreateReduxCheckBox -Name "Dampe"       -Base                  -Text "Dampé's Digging"                                                                                                       -Info "Dampé's Digging Game is always first try"                           -Credits "Ported from Rando"
   # CreateReduxCheckBox -Name "Ocarina"     -Base                  -Text "Skullkid Ocarina"                                                                                                      -Info "You only need to clear the first round to get the Piece of Heart"   -Credits "Ported from Rando"
-    CreateReduxCheckBox -Name "Fishing"     -Base -Expose "Master" -Text "Fishing"                                                                                                               -Info "Fishing is less random and has less demanding requirements"         -Credits "Ported from Rando"
+    CreateReduxCheckBox -Name "FishSize"    -Base -Expose "Master" -Text "Lower Fish Requirements"                                                                                               -Info "Fishing has less demanding size requirements"                       -Credits "Ported from Rando"
+    CreateReduxCheckBox -Name "FishLoss"    -Base -Expose "Master" -Text "No Fish RNG Loss"                                                                                                      -Info "Fish no longer randomly let go when trying to reel them in"         -Credits "Ported from Rando"
     CreateReduxCheckBox -Name "Bowling"     -Base -Expose "Master" -Text "Bombchu Bowling"                                                                                                       -Info "Bombchu Bowling prizes now appear in fixed order instead of random" -Credits "Ported from Rando"
     CreateReduxComboBox -Name "Bowling1"    -Base -Expose "Master" -Text "Bowling Reward #1" -Items ("Piece of Heart", "Bomb Bag", "Purple Rupee", "Bombchus") -Values @("64", "28", "4C", "58") -Info "Set the first reward for the Bombchu Bowling Minigame"              -Credits "Ported from Rando" -Default 1 -Column 1 -Row 2
     CreateReduxComboBox -Name "Bowling2"    -Base -Expose "Master" -Text "Bowling Reward #2" -Items ("Piece of Heart", "Bomb Bag", "Purple Rupee", "Bombchus") -Values @("64", "28", "4C", "58") -Info "Set the second reward for the Bombchu Bowling Minigame"             -Credits "Ported from Rando" -Default 2

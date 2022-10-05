@@ -1,3 +1,7 @@
+v19.2.1
+- Unmerged non-Redux Hide HUD options
+- Fixed Easier Fishing and split them into more options
+
 v19.2.0
 - Brought back Master Quest for MM again, with Additional Options + Redux support
 
