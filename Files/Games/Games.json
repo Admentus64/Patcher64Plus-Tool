@@ -42,35 +42,35 @@
 		"region"	: "North American / NTSC-U",
 		"supported"	: 1
 	}, {
+		"file"		: "beta_to_rev0.bps",
 		"hash"		: "21F7B4A4FF463464BFC23498C1AB9DA1",
 		"rev"		: "Beta",
 		"region"	: "North American / NTSC-U",
-		"supported"	: 0
+		"supported"	: 1
 	}, {
+		"file"		: "eur_rev0_to_rev0.bps",
 		"hash"		: "E040DE91A74B61E3201DB0E2323F768A",
 		"rev"		: "Revision 0",
 		"region"	: "Europe / PAL",
-		"supported"	: 0
+		"supported"	: 1
 	}, {
+		"file"		: "eur_rev1_to_rev0.bps",
 		"hash"		: "D714580DD74C2C033F5E1B6DC0AEAC77",
 		"rev"		: "Revision 1",
 		"region"	: "Europe / PAL",
-		"supported"	: 0
+		"supported"	: 1
 	}, {
+		"file"		: "eur_gc_to_rev0.bps",
 		"hash"		: "2C27B4E000E85FD78DBCA551F1B1C965",
 		"rev"		: "GameCube",
 		"region"	: "Europe / PAL",
-		"supported"	: 0
+		"supported"	: 1
 	}, {
+		"file"		: "eur_gc_mq_to_rev0.bps",
 		"hash"		: "1618403427E4344A57833043DB5CE3C3",
 		"rev"		: "GameCube - Master Quest",
 		"region"	: "Europe / PAL",
-		"supported"	: 0
-	}, {
-		"hash"		: "21F7B4A4FF463464BFC23498C1AB9DA1",
-		"rev"		: "Beta 0.9",
-		"region"	: "North American / NTSC-U",
-		"supported"	: 0
+		"supported"	: 1
 	}, {
 		"rom_gameID"	: "NZLE",
 		"hash"		: "3C10B67A76616AE2C162DEF7528724CF",
@@ -124,20 +124,23 @@
 		"rev"		: "Revision 2",
 		"region"	: "Japan / JPN"
 	}, {
+		"file"		: "jap_collector_to_rev0.bps",
 		"hash"		: "0C13E0449A28EA5B925CDB8AF8D29768",
 		"rev"		: "GameCube (Collector's Edition)",
 		"region"	: "Japan / JPN",
-		"supported"	: 0
+		"supported"	: 1
 	}, {
+		"file"		: "jap_gc_to_rev0.bps",
 		"hash"		: "33FB7852C180B18EA0B9620B630F413F",
 		"rev"		: "GameCube",
 		"region"	: "Japan / JPN",
-		"supported"	: 0
+		"supported"	: 1
 	}, {
+		"file"		: "jap_gc_mq_to_rev0.bps",
 		"hash"		: "69895C5C78442260F6EAFB2506DC482A",
 		"rev"		: "GameCube - Master Quest",
 		"region"	: "Japan / JPN",
-		"supported"	: 0
+		"supported"	: 1
 	}, {
 		"hash"		: "0AB48B2D44A74B3BB2D384F6170C2742",
 		"rev"		: "iQue",
@@ -190,50 +193,58 @@
 		"region"	: "North America / NTSC-U",
 		"supported"	: 1
 	}, {
+		"file"		: "demo_to_rev0.bps",
 		"hash"		: "8F281800FBA5DDCB1D2B377731FC0215",
 		"rev"		: "Demo",
 		"region"	: "North America / NTSC-U",
-		"supported"	: 0
+		"supported"	: 1
 	}, {
+		"file"		: "eur_rev0_to_rev0.bps",
 		"hash"		: "13FAB67E603B002CEAF0EEA84130E973",
 		"rev"		: "Revision 0",
 		"region"	: "Europe / PAL",
-		"supported"	: 0
+		"supported"	: 1
 	}, {
+		"file"		: "eur_rev1_to_rev0.bps",
 		"hash"		: "BECCFDED43A2F159D03555027462A950",
 		"rev"		: "Revision 1",
 		"region"	: "Europe / PAL",
-		"supported"	: 0
+		"supported"	: 1
 	}, {
+		"file"		: "eur_vc_to_rev0.bps",
 		"hash"		: "609B47B79DA21F3DF9B31D06C95C09A1",
 		"rev"		: "Virtual Console",
 		"region"	: "Europe / PAL",
-		"supported"	: 0
+		"supported"	: 1
 	}, {
+		"file"		: "eur_gc_to_rev0.bps",
 		"hash"		: "DBE9AF0DB46256E42B5C67902B696549",
 		"rev"		: "GameCube",
 		"region"	: "Europe / PAL",
-		"supported"	: 0
+		"supported"	: 1
 	}, {
 		"hash"		: "71FBAE5D2B27926EA54E92CE2FC91622",
 		"rev"		: "Debug",
 		"region"	: "Europe / PAL",
 		"supported"	: 0
 	}, {
+		"file"		: "jap_rev0_to_rev0.bps",
 		"hash"		: "15D1A2217CAD61C39CFECBFFA0703E25",
 		"rev"		: "Revision 0",
 		"region"	: "Japan / NTSC-J",
-		"supported"	: 0
+		"supported"	: 1
 	}, {
+		"file"		: "jap_rev1_to_rev0.bps",
 		"hash"		: "C38A7F6F6B61862EA383A75CDF888279",
 		"rev"		: "Revision 1",
 		"region"	: "Japan / NTSC-J",
-		"supported"	: 0
+		"supported"	: 1
 	}, {
+		"file"		: "jap_gc_to_rev0.bps",
 		"hash"		: "D3929AADF7640F8C5B4CE8321AD4393A",
 		"rev"		: "GameCube",
 		"region"	: "Japan / NTSC-J",
-		"supported"	: 0
+		"supported"	: 1
 	} ],
 	"patches"		: 1,
 	"decompress"		: 1,
