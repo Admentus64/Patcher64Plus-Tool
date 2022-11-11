@@ -68,12 +68,14 @@
 - HUD Size:				Admentus & GhostlyDark
 - Chests, Crates & Pots Alternatives:	Admentus, GhostlyDark & OoT Randomizer
 - Hair Color:				Third M
-- Graveyard Keese:			salvador235
-- Ura Quest:				ZethN64, Sakura, Frostclaw, Steve(ToCoool) & Admentus (clean port)
-- No Item Drops:			Admentus & BilonFullHDemon
-- Harder Child Bosses:			BilonFullHDemon
 - Recovery:				Admentus (ported), Three Pendants (debug) & Rando (No Heart Drops)
+- Graveyard Keese:			salvador235
+- Harder Child Bosses:			BilonFullHDemon
+- No Item Drops:			Admentus & BilonFullHDemon
+- Pot's Challenge:			Aegiker
+- Harder Stalfos / Wolfos / Dark Link:	BilonFullHDemon
 - Master Quest:				ShadowOne333
+- Ura Quest:				ZethN64, Sakura, Frostclaw, Steve(ToCoool) & Admentus (clean port)
 - Fireproof Deku Shield:		Three Pendants
 - Equipment icons & alternatives:	Admentus, GhostlyDark (injects), CYB3RTR0N (icons), sanguinetti (shields),
 					AndiiSyn (shields), ZombieBrainySnack (Iron Shield)
@@ -123,7 +125,7 @@
 - Hat Kid:				Hailey
 - Hatsune Miku Link:			JanexLane
 - Hatsune Miku Vocaloid:		JanexLane
-- Ikey:					Ikey Ilex (https://github.com/Caverns4/Custom-Game-Models)
+- Felix:				Ikey Ilex (https://github.com/Caverns4/Custom-Game-Models)
 - Kafei:				Malon Rose (www.patreon.com/MalonRose & www.youtube.com/c/MalonRose)
 - Kristin:				Ikey Ilex (https://github.com/Caverns4/Custom-Game-Models)
 - Lorna Rissa:				JanexLane
@@ -573,25 +575,20 @@ https://github.com/DaruniasJoy/OoT-Custom-Sequences
 ===================
 <<< PAPER MARIO >>>
 
---- 16:9 Widescreen ---
-- gamemasterplc
-
---- Hard Mode ---
-- Skelux (Extra Damage)
-
---- Hard Mode+ ---
-- Skelux (Extra Damage)
-- Knux5577 (Enemy HP)
-
---- Insane Mode ---
-- Skelux (Extra Damage)
+--- Additional Options ---
+16:9 Widescreen:	gamemasterplc
+Extra Damage:		Skelux
+Extra Enemy HP:		Knux5577 & Admentus
+Extra Enemy DEF:	Admentus
+Badges:			Admentus
+Moves:			Admentus
+Other:			Admentus & gamemasterplc
 
 --- Master Quest & Master Quest Jr. ---
 - Emperor_Thamz
 - Rainchus
 - JaThePlayer
 - Brotenko
-
 
 
 
