@@ -196,8 +196,9 @@ CheckUpdate
 
 # Retrieve settings
 $global:Settings = GetSettings ($Paths.Settings + "\Core.ini")
-if (!(IsSet $Settings.Core)  -and !$FatalError)   { $Settings.Core  = @{} }
-if (!(IsSet $Settings.Debug) -and !$FatalError)   { $Settings.Debug = @{} }
+if (!(IsSet $Settings.Core)    -and !$FatalError)   { $Settings.Core    = @{} }
+if (!(IsSet $Settings.Dungeon) -and !$FatalError)   { $Settings.Dungeon = @{} }
+if (!(IsSet $Settings.Debug)   -and !$FatalError)   { $Settings.Debug   = @{} }
 
 # Logging
 if (!$ExternalScript) { $global:TranscriptTime = $SystemDate }

@@ -1,0 +1,1393 @@
+[
+	{ "type" : "Other", "items" : [ {
+		"title"		: "Coin",
+		"id"		: "0157"
+	}, {
+		"title"		: "Heart Point",
+		"id"		: "015A"
+	}, {
+		"title"		: "Flower Point",
+		"id"		: "015B"
+	} ] },
+
+	{ "type" : "Consumable", "items" : [ {
+		"title"		: "Fire Flower",
+		"id"		: "0080"
+	}, {
+		"title"		: "Snowman Doll",
+		"id"		: "0081"
+	}, {
+		"title"		: "Thunder Rage",
+		"id"		: "0082"
+	}, {
+		"title"		: "Shooting Star",
+		"id"		: "0083"
+	}, {
+		"title"		: "Thunder Bolt",
+		"id"		: "0084"
+	}, {
+		"title"		: "Pebble",
+		"id"		: "0085"
+	}, {
+		"title"		: "Dusty Hammer",
+		"id"		: "0086"
+	}, {
+		"title"		: "Insecticide Herb",
+		"id"		: "0087"
+	}, {
+		"title"		: "Stone Cap",
+		"id"		: "0088"
+	}, {
+		"title"		: "Tasty Tonic",
+		"id"		: "0089"
+	}, {
+		"title"		: "Mushroom",
+		"id"		: "008A"
+	}, {
+		"title"		: "Volt Shroom",
+		"id"		: "008B"
+	}, {
+		"title"		: "Super Shroom",
+		"id"		: "008C"
+	}, {
+		"title"		: "Dried Shroom",
+		"id"		: "008D"
+	}, {
+		"title"		: "Ultra Shroom",
+		"id"		: "008E"
+	}, {
+		"title"		: "Sleepy Sheep",
+		"id"		: "008F"
+	}, {
+		"title"		: "POW Block",
+		"id"		: "0090"
+	}, {
+		"title"		: "Hustle Drink",
+		"id"		: "0091"
+	}, {
+		"title"		: "Stop Watch",
+		"id"		: "0092"
+	}, {
+		"title"		: "Whacka's Bump",
+		"id"		: "0093"
+	}, {
+		"title"		: "Apple",
+		"id"		: "0094"
+	}, {
+		"title"		: "Life Shroom",
+		"id"		: "0095"
+	}, {
+		"title"		: "Mystery",
+		"id"		: "0096"
+	}, {
+		"title"		: "Repel Gel",
+		"id"		: "0097"
+	}, {
+		"title"		: "Fright Jar",
+		"id"		: "0098"
+	}, {
+		"title"		: "Dizzy Dial",
+		"id"		: "009A"
+	}, {
+		"title"		: "Super Soda",
+		"id"		: "009B"
+	}, {
+		"title"		: "Lemon",
+		"id"		: "009C"
+	}, {
+		"title"		: "Lime",
+		"id"		: "009D"
+	}, {
+		"title"		: "Blue Berry",
+		"id"		: "009E"
+	}, {
+		"title"		: "Red Berry",
+		"id"		: "009F"
+	}, {
+		"title"		: "Yellow Berry",
+		"id"		: "00A0"
+	}, {
+		"title"		: "Bubble Berry",
+		"id"		: "00A1"
+	}, {
+		"title"		: "Jamming Jelly",
+		"id"		: "00A2"
+	}, {
+		"title"		: "Maple Syrup",
+		"id"		: "00A3"
+	}, {
+		"title"		: "Honey Syrup",
+		"id"		: "00A4"
+	}, {
+		"title"		: "Goomnut",
+		"id"		: "00A5"
+	}, {
+		"title"		: "Koopa Leaf",
+		"id"		: "00A6"
+	}, {
+		"title"		: "Dried pasta",
+		"id"		: "00A7"
+	}, {
+		"title"		: "Dried Fruit",
+		"id"		: "00A8"
+	}, {
+		"title"		: "Strange Leaf",
+		"id"		: "00A9"
+	}, {
+		"title"		: "Cake Mix",
+		"id"		: "00AA"
+	}, {
+		"title"		: "Egg",
+		"id"		: "00AB"
+	}, {
+		"title"		: "Coconut",
+		"id"		: "00AC"
+	}, {
+		"title"		: "Melon",
+		"id"		: "00AD"
+	}, {
+		"title"		: "Stinky Herb",
+		"id"		: "00AE"
+	}, {
+		"title"		: "Iced Potato",
+		"id"		: "00AF"
+	}, {
+		"title"		: "Spicy Soup",
+		"id"		: "00B0"
+	}, {
+		"title"		: "Apple Pie",
+		"id"		: "00B1"
+	}, {
+		"title"		: "Honey Ultra",
+		"id"		: "00B2"
+	}, {
+		"title"		: "Maple Ultra",
+		"id"		: "00B3"
+	}, {
+		"title"		: "Jelly Ultra",
+		"id"		: "00B4"
+	}, {
+		"title"		: "Koopasta",
+		"id"		: "00B5"
+	}, {
+		"title"		: "Fried Shroom",
+		"id"		: "00B6"
+	}, {
+		"title"		: "Shroom Cake",
+		"id"		: "00B7"
+	}, {
+		"title"		: "Shroom Steak",
+		"id"		: "00B8"
+	}, {
+		"title"		: "Hot Shroom",
+		"id"		: "00B9"
+	}, {
+		"title"		: "Sweet Shroom",
+		"id"		: "00BA"
+	}, {
+		"title"		: "Yummy Meal",
+		"id"		: "00BB"
+	}, {
+		"title"		: "Healthy Juice",
+		"id"		: "00BC"
+	}, {
+		"title"		: "Bland Meal",
+		"id"		: "00BD"
+	}, {
+		"title"		: "Deluxe Feast",
+		"id"		: "00BE"
+	}, {
+		"title"		: "Special Shake",
+		"id"		: "00BF"
+	}, {
+		"title"		: "Big Cookie",
+		"id"		: "00C0"
+	}, {
+		"title"		: "Cake",
+		"id"		: "00C1"
+	}, {
+		"title"		: "Mistake",
+		"id"		: "00C2"
+	}, {
+		"title"		: "Koopa Tea",
+		"id"		: "00C3"
+	}, {
+		"title"		: "Honey Super",
+		"id"		: "00C4"
+	}, {
+		"title"		: "Maple Super",
+		"id"		: "00C5"
+	}, {
+		"title"		: "Jelly Super",
+		"id"		: "00C6"
+	}, {
+		"title"		: "Spaghetti",
+		"id"		: "00C7"
+	}, {
+		"title"		: "Egg Missile",
+		"id"		: "00C8"
+	}, {
+		"title"		: "Fried Egg",
+		"id"		: "00C9"
+	}, {
+		"title"		: "Honey Shroom",
+		"id"		: "00CA"
+	}, {
+		"title"		: "Honey Candy",
+		"id"		: "00CB"
+	}, {
+		"title"		: "Electro Pop",
+		"id"		: "00CC"
+	}, {
+		"title"		: "Fire Pop",
+		"id"		: "00CD"
+	}, {
+		"title"		: "Lime Candy",
+		"id"		: "00CE"
+	}, {
+		"title"		: "Coco Pop",
+		"id"		: "00CF"
+	}, {
+		"title"		: "Lemon Candy",
+		"id"		: "00D0"
+	}, {
+		"title"		: "Jelly Pop",
+		"id"		: "00D1"
+	}, {
+		"title"		: "Strange Cake",
+		"id"		: "00D2"
+	}, {
+		"title"		: "Kooky Cookie",
+		"id"		: "00D3"
+	}, {
+		"title"		: "Frozen Fries",
+		"id"		: "00D4"
+	}, {
+		"title"		: "Potato Salad",
+		"id"		: "00D5"
+	}, {
+		"title"		: "Nutty Cake",
+		"id"		: "00D6"
+	}, {
+		"title"		: "Maple Shroom",
+		"id"		: "00D7"
+	}, {
+		"title"		: "Boiled Egg",
+		"id"		: "00D8"
+	}, {
+		"title"		: "Yoshi Cookie",
+		"id"		: "00D9"
+	} ] },
+
+	{ "type": "Jump", "badges" : [ {
+		"name"		: "PowerJump",
+		"title"		: "Power Jump",
+		"id"		: "0121",
+		"msg"		: "0058",
+		"icon"		: "00C0",
+		"move"		: "2B",
+		"sell"		: 50,
+		"sort"		: 1
+	}, {
+		"name"		: "MegaJump",
+		"title"		: "Mega Jump",
+		"id"		: "0123",
+		"msg"		: "0059",
+		"icon"		: "00C2",
+		"move"		: "2D",
+		"sell"		: 200,
+		"sort"		: 3
+	}, {
+		"name"		: "Multibounce",
+		"title"		: "Multibounce",
+		"id"		: "00E1",
+		"msg"		: "005E",
+		"icon"		: "0091",
+		"move"		: "1F",
+		"sell"		: 75,
+		"sort"		: 4
+	}, {
+		"name"		: "JumpCharge",
+		"title"		: "Jump Charge",
+		"id"		: "010A",
+		"msg"		: "005A",
+		"icon"		: "00A1",
+		"move"		: "25",
+		"sell"		: 50,
+		"sort"		: 5
+	}, {
+		"name"		: "SJumpCharge",
+		"title"		: "S. Jump Charge",
+		"id"		: "010C",
+		"msg"		: "005B",
+		"icon"		: "00A2",
+		"move"		: "27",
+		"sell"		: 100,
+		"sort"		: 6
+	}, {
+		"name"		: "ShrinkStomp",
+		"title"		: "Shrink Stomp",
+		"id"		: "012F",
+		"msg"		: "005F",
+		"icon"		: "00D9",
+		"move"		: "2F",
+		"sell"		: 75,
+		"sort"		: 8
+	}, {
+		"name"		: "SleepStomp",
+		"title"		: "Sleep Stomp",
+		"id"		: "00EB",
+		"msg"		: "005C",
+		"icon"		: "009C",
+		"move"		: "21",
+		"sell"		: 75,
+		"sort"		: 9
+	}, {
+		"name"		: "DizzyStomp",
+		"title"		: "Dizzy Stomp",
+		"id"		: "00EF",
+		"msg"		: "005D",
+		"icon"		: "00A6",
+		"move"		: "22",
+		"sell"		: 75,
+		"sort"		: 10
+	}, {
+		"name"		: "DDownJump",
+		"title"		: "D-Down Jump",
+		"id"		: "012E",
+		"msg"		: "0060",
+		"icon"		: "00DA",
+		"move"		: "2E",
+		"sell"		: 100,
+		"sort"		: 12
+	}, {
+		"name"		: "PowerBounce",
+		"title"		: "Power Bounce",
+		"id"		: "00E4",
+		"msg"		: "0061",
+		"icon"		: "0094",
+		"move"		: "20",
+		"sell"		: 100,
+		"sort"		: 13
+	} ] },
+
+ 	{ "type": "Hammer", "badges" : [ {
+		"name"		: "PowerSmash",
+		"title"		: "Power Smash",
+		"id"		: "0124",
+		"msg"		: "0062",
+		"icon"		: "00C3",
+		"move"		: "15",
+		"sell"		: 50,
+		"sort"		: 17
+	}, {
+		"name"		: "MegaSmash",
+		"title"		: "Mega Smash",
+		"id"		: "0126",
+		"msg"		: "0063",
+		"icon"		: "00C5",
+		"move"		: "17",
+		"sell"		: 200,
+		"sort"		: 19
+	}, {
+		"name"		: "SmashCharge",
+		"title"		: "Smash Charge",
+		"id"		: "0109",
+		"msg"		: "0064",
+		"icon"		: "009D",
+		"move"		: "0F",
+		"sell"		: 50,
+		"sort"		: 21
+	}, {
+		"name"		: "SSmashCharge",
+		"title"		: "S. Smash Charge",
+		"id"		: "010B",
+		"msg"		: "0065",
+		"icon"		: "000E",
+		"move"		: "11",
+		"sell"		: 100,
+		"sort"		: 22
+	}, {
+		"name"		: "SpinSmash",
+		"title"		: "Spin Smash",
+		"id"		: "00E0",
+		"msg"		: "0068",
+		"icon"		: "0090",
+		"move"		: "08",
+		"sell"		: 75,
+		"sort"		: 23
+	}, {
+		"name"		: "PowerQuake",
+		"title"		: "Power Quake",
+		"id"		: "0117",
+		"msg"		: "007B",
+		"icon"		: "009A",
+		"move"		: "14",
+		"sell"		: 150,
+		"sort"		: 25
+	}, {
+		"name"		: "MegaQuake",
+		"title"		: "Mega Quake",
+		"id"		: "0108",
+		"msg"		: "006C",
+		"icon"		: "009B",
+		"move"		: "0E",
+		"sell"		: 200,
+		"sort"		: 26
+	}, {
+		"name"		: "ShrinkSmash",
+		"title"		: "Shrink Smash",
+		"id"		: "012B",
+		"msg"		: "0067",
+		"icon"		: "00D8",
+		"move"		: "18",
+		"sell"		: 75,
+		"sort"		: 27
+	}, {
+		"name"		: "HammerThrow",
+		"title"		: "Hammer Throw",
+		"id"		: "0107",
+		"msg"		: "0066",
+		"icon"		: "00A7",
+		"move"		: "0D",
+		"sell"		: 75,
+		"sort"		: 28
+	}, {
+		"name"		: "DownPound",
+		"title"		: "D-Down Pound",
+		"id"		: "00EE",
+		"msg"		: "0069",
+		"icon"		: "00A4",
+		"move"		: "0A",
+		"sell"		: 75,
+		"sort"		: 29
+	}, {
+		"name"		: "QuakeHammer",
+		"title"		: "Quake Hammer",
+		"id"		: "00E8",
+		"msg"		: "006A",
+		"icon"		: "0098",
+		"move"		: "09",
+		"sell"		: 100,
+		"sort"		: 53
+	} ] },
+
+	{ "type": "Status", "badges" : [ {
+		"name"		: "IcePower",
+		"title"		: "Ice Power",
+		"id"		: "00FA",
+		"msg"		: "0095",
+		"icon"		: "00B2",
+		"move"		: "3D",
+		"sell"		: 75,
+		"sort"		: 90
+	}, {
+		"name"		: "FireShield",
+		"title"		: "Fire Shield",
+		"id"		: "00EC",
+		"msg"		: "0097",
+		"icon"		: "00A0",
+		"move"		: "41",
+		"sell"		: 75,
+		"sort"		: 91
+	}, {
+		"name"		: "SpikeShield",
+		"title"		: "Spike Shield",
+		"id"		: "00E5",
+		"msg"		: "007F",
+		"icon"		: "0095",
+		"move"		: "40",
+		"sell"		: 100,
+		"sort"		: 92
+	}, {
+		"name"		: "FeelingFine",
+		"title"		: "Feeling Fine",
+		"id"		: "00F2",
+		"msg"		: "008C",
+		"icon"		: "00AA",
+		"move"		: "43",
+		"sell"		: 100,
+		"sort"		: 94
+	}, {
+		"name"		: "ZapTap",
+		"title"		: "Zap Tap",
+		"id"		: "0100",
+		"msg"		: "0099",
+		"icon"		: "00B8",
+		"move"		: "44",
+		"sell"		: 100,
+		"sort"		: 95
+	} ] },
+
+	{ "type": "Stats", "badges" : [ {
+		"name"		: "HappyHeartA",
+		"title"		: "Happy Heart",
+		"copy"		: "A",
+		"id"		: "00FF",
+		"msg"		: "0079",
+		"icon"		: "00B7",
+		"move"		: "5E",
+		"sell"		: 100,
+		"sort"		: 42
+	}, {
+		"name"		: "HappyHeartB",
+		"title"		: "Happy Heart",
+		"copy"		: "B",
+		"id"		: "0136",
+		"msg"		: "0079",
+		"icon"		: "00B7",
+		"move"		: "5E",
+		"sell"		: 100,
+		"sort"		: 42
+	}, {
+		"name"		: "HPPlusA",
+		"title"		: "HP Plus",
+		"copy"		: "A",
+		"id"		: "00E7",
+		"msg"		: "0071",
+		"icon"		: "0097",
+		"move"		: "52",
+		"sell"		: 100,
+		"sort"		: 53
+	}, {
+		"name"		: "HPPlusB",
+		"title"		: "HP Plus",
+		"copy"		: "B",
+		"id"		: "0134",
+		"msg"		: "0071",
+		"icon"		: "0097",
+		"move"		: "52",
+		"sell"		: 150,
+		"sort"		: 53
+	}, {
+		"name"		: "HPPlusC",
+		"title"		: "HP Plus",
+		"copy"		: "C",
+		"id"		: "014A",
+		"msg"		: "0071",
+		"icon"		: "0097",
+		"move"		: "52",
+		"sell"		: 150,
+		"sort"		: 53
+	}, {
+		"name"		: "FPPlusA",
+		"title"		: "FP Plus",
+		"copy"		: "A",
+		"id"		: "00F8",
+		"msg"		: "0072",
+		"icon"		: "00B0",
+		"move"		: "5B",
+		"sell"		: 150,
+		"sort"		: 58
+	}, {
+		"name"		: "FPPlusB",
+		"title"		: "FP Plus",
+		"copy"		: "B",
+		"id"		: "0135",
+		"msg"		: "0072",
+		"icon"		: "00B0",
+		"move"		: "5B",
+		"sell"		: 150,
+		"sort"		: 58
+	}, {
+		"name"		: "FPPlusC",
+		"title"		: "FP Plus",
+		"copy"		: "C",
+		"id"		: "014D",
+		"msg"		: "0072",
+		"icon"		: "00B0",
+		"move"		: "5B",
+		"sell"		: 150,
+		"sort"		: 58
+	}, {
+		"name"		: "FlowerSaverA",
+		"title"		: "Flower Saver",
+		"copy"		: "A",
+		"id"		: "0105",
+		"msg"		: "007B",
+		"icon"		: "00BD",
+		"move"		: "62",
+		"sell"		: 250,
+		"sort"		: 63
+	}, {
+		"name"		: "FlowerSaverB",
+		"title"		: "Flower Saver",
+		"copy"		: "B",
+		"id"		: "0138",
+		"msg"		: "007B",
+		"icon"		: "00BD",
+		"move"		: "62",
+		"sell"		: 250,
+		"sort"		: 63
+	}, {
+		"name"		: "HPDrain",
+		"title"		: "HP Drain",
+		"id"		: "00F5",
+		"msg"		: "0078",
+		"icon"		: "00AD",
+		"move"		: "5A",
+		"sell"		: 50,
+		"sort"		: 79
+	} ] },
+
+	{ "type": "Power", "badges" : [ {
+		"name"		: "PowerPlusA",
+		"title"		: "Power Plus",
+		"copy"		: "A",
+		"id"		: "00E2",
+		"msg"		: "0073",
+		"icon"		: "0092",
+		"move"		: "3B",
+		"sell"		: 250,
+		"sort"		: 67
+	}, {
+		"name"		: "PowerPlusB",
+		"title"		: "Power Plus",
+		"copy"		: "B",
+		"id"		: "013C",
+		"msg"		: "0073",
+		"icon"		: "0092",
+		"move"		: "3B",
+		"sell"		: 250,
+		"sort"		: 67
+	}, {
+		"name"		: "PUpDDown",
+		"title"		: "P-Up, D-Down",
+		"id"		: "0113",
+		"msg"		: "0076",
+		"icon"		: "00C9",
+		"move"		: "3E",
+		"sell"		: 100,
+		"sort"		: 78
+	}, {
+		"name"		: "AllorNothing",
+		"title"		: "All or Nothing",
+		"id"		: "00F4",
+		"msg"		: "0093",
+		"icon"		: "00AC",
+		"move"		: "3C",
+		"sell"		: 100,
+		"sort"		: 80
+	} ] },
+
+	{ "type": "Defense", "badges" : [ {
+		"name"		: "DodgeMaster",
+		"title"		: "Dodge Master",
+		"id"		: "00E3",
+		"msg"		: "0080",
+		"icon"		: "0093",
+		"move"		: "4C",
+		"sell"		: 100,
+		"sort"		: 40
+	}, {
+		"name"		: "DefendPlusA",
+		"title"		: "Defend Plus",
+		"copy"		: "A",
+		"id"		: "00FB",
+		"msg"		: "0074",
+		"icon"		: "00B3",
+		"move"		: "45",
+		"sell"		: 250,
+		"sort"		: 70
+	}, {
+		"name"		: "DamageDodgeA",
+		"title"		: "Damage Dodge",
+		"copy"		: "A",
+		"id"		: "0130",
+		"msg"		: "0075",
+		"icon"		: "0093",
+		"move"		: "33",
+		"sell"		: 150,
+		"sort"		: 73
+	}, {
+		"name"		: "DamageDodgeB",
+		"title"		: "Damage Dodge",
+		"copy"		: "B",
+		"id"		: "013A",
+		"msg"		: "0075",
+		"icon"		: "0093",
+		"move"		: "33",
+		"sell"		: 150,
+		"sort"		: 73
+	}, {
+		"name"		: "PDownDUp",
+		"title"		: "P-Down, D-Up",
+		"id"		: "0116",
+		"msg"		: "0077",
+		"icon"		: "00CA",
+		"move"		: "49",
+		"sell"		: 100,
+		"sort"		: 77
+	} ] },
+
+	{ "type": "Tactics", "badges" : [ {
+		"name"		: "DoubleDip",
+		"title"		: "Double Dip",
+		"id"		: "00E9",
+		"msg"		: "006D",
+		"icon"		: "0099",
+		"move"		: "35",
+		"sell"		: 100,
+		"sort"		: 33
+	}, {
+		"name"		: "GroupFocus",
+		"title"		: "Group Focus",
+		"id"		: "0143",
+		"msg"		: "006F",
+		"icon"		: "00E9",
+		"move"		: "75",
+		"sell"		: 100,
+		"sort"		: 35
+	}, {
+		"name"		: "QuickChange",
+		"title"		: "Quick Change",
+		"id"		: "00ED",
+		"msg"		: "0070",
+		"icon"		: "00E3",
+		"move"		: "38",
+		"sell"		: 200,
+		"sort"		: 36
+	}, {
+		"name"		: "Peekaboo",
+		"title"		: "Peekaboo",
+		"id"		: "0144",
+		"msg"		: "009F",
+		"icon"		: "00DB",
+		"move"		: "76",
+		"sell"		: 100,
+		"sort"		: 37
+	}, {
+		"name"		: "DeepFocus1",
+		"title"		: "Deep Focus",
+		"copy"		: "1",
+		"id"		: "0129",
+		"msg"		: "007E",
+		"icon"		: "00E0",
+		"move"		: "71",
+		"sell"		: 50,
+		"sort"		: 49
+	}, {
+		"name"		: "DeepFocus2",
+		"title"		: "Deep Focus",
+		"copy"		: "2",
+		"id"		: "0132",
+		"msg"		: "007E",
+		"icon"		: "00E0",
+		"move"		: "71",
+		"sell"		: 50,
+		"sort"		: 49
+	}, {
+		"name"		: "DeepFocus3",
+		"title"		: "Deep Focus",
+		"copy"		: "3",
+		"id"		: "0133",
+		"msg"		: "007E",
+		"icon"		: "00E0",
+		"move"		: "71",
+		"sell"		: 50,
+		"sort"		: 49
+	}, {
+		"name"		: "TripleDip",
+		"title"		: "Triple Dip",
+		"id"		: "0106",
+		"msg"		: "006E",
+		"icon"		: "00BE",
+		"move"		: "36",
+		"sell"		: 250,
+		"sort"		: 63
+	}, {
+		"name"		: "ISpy",
+		"title"		: "I Spy",
+		"id"		: "011E",
+		"msg"		: "009E",
+		"icon"		: "00D0",
+		"move"		: "6C",
+		"sell"		: 200,
+		"sort"		: 104
+	} ] },
+
+	{ "type": "Field", "badges" : [ {
+		"name"		: "ChillOut",
+		"title"		: "Chill Out",
+		"id"		: "00FE",
+		"msg"		: "0098",
+		"icon"		: "00B6",
+		"move"		: "5D",
+		"sell"		: 50,
+		"sort"		: 105
+	}, {
+		"name"		: "SpeedySpin",
+		"title"		: "Speedy Spin",
+		"id"		: "011F",
+		"msg"		: "008B",
+		"icon"		: "00CE",
+		"move"		: "6D",
+		"sell"		: 50,
+		"sort"		: 106
+	}, {
+		"name"		: "DizyAttack",
+		"title"		: "Dizzy Attack",
+		"id"		: "011D",
+		"msg"		: "008A",
+		"icon"		: "00CD",
+		"move"		: "6B",
+		"sell"		: 100,
+		"sort"		: 107
+	}, {
+		"name"		: "SpinAttack",
+		"title"		: "Spin Attack",
+		"id"		: "011C",
+		"msg"		: "0089",
+		"icon"		: "00CF",
+		"move"		: "6A",
+		"sell"		: 150,
+		"sort"		: 108
+	}, {
+		"name"		: "FirstAttack",
+		"title"		: "First Attack",
+		"id"		: "00E6",
+		"msg"		: "0087",
+		"icon"		: "0096",
+		"move"		: "4D",
+		"sell"		: 100,
+		"sort"		: 109
+	}, {
+		"name"		: "BumpAttack",
+		"title"		: "Bump Attack",
+		"id"		: "0120",
+		"msg"		: "0088",
+		"icon"		: "00C8",
+		"move"		: "50",
+		"sell"		: 200,
+		"sort"		: 110
+	}, {
+		"name"		: "SlowGo",
+		"title"		: "Slow Go",
+		"id"		: "00F7",
+		"msg"		: "0094",
+		"icon"		: "00AF",
+		"move"		: "4E",
+		"sell"		: 10,
+		"sort"		: 111
+	} ] },
+
+	{ "type": "Condition", "badges" : [ {
+		"name"		: "LastStand",
+		"title"		: "Last Stand",
+		"id"		: "0111",
+		"msg"		: "0085",
+		"icon"		: "00D2",
+		"move"		: "46",
+		"sell"		: 50,
+		"sort"		: 82
+	}, {
+		"name"		: "PowerRush",
+		"title"		: "Power Rush",
+		"id"		: "010D",
+		"msg"		: "0084",
+		"icon"		: "00D1",
+		"move"		: "64",
+		"sell"		: 50,
+		"sort"		: 83
+	}, {
+		"name"		: "CloseCall",
+		"title"		: "Close Call",
+		"id"		: "0112",
+		"msg"		: "0083",
+		"icon"		: "00D3",
+		"move"		: "47",
+		"sell"		: 50,
+		"sort"		: 84
+	}, {
+		"name"		: "PrettyLucky",
+		"title"		: "Pretty Lucky",
+		"id"		: "00F1",
+		"msg"		: "0081",
+		"icon"		: "00A9",
+		"move"		: "42",
+		"sell"		: 100,
+		"sort"		: 85
+	}, {
+		"name"		: "LuckyDay",
+		"title"		: "Lucky Day",
+		"id"		: "0114",
+		"msg"		: "0082",
+		"icon"		: "00C6",
+		"move"		: "48",
+		"sell"		: 300,
+		"sort"		: 86
+	}, {
+		"name"		: "MegaRush",
+		"title"		: "Mega Rush",
+		"id"		: "00F9",
+		"msg"		: "0086",
+		"icon"		: "00B1",
+		"move"		: "5F",
+		"sell"		: 75,
+		"sort"		: 90
+	} ] },
+
+	{ "type": "Items", "badges" : [ {
+		"name"		: "HappyFlowerA",
+		"title"		: "Happy Flower",
+		"copy"		: "A",
+		"id"		: "0140",
+		"msg"		: "007A",
+		"icon"		: "00DD",
+		"move"		: "74",
+		"sell"		: 100,
+		"sort"		: 46
+	}, {
+		"name"		: "HappyFlowerB",
+		"title"		: "Happy Flower",
+		"copy"		: "B",
+		"id"		: "0141",
+		"msg"		: "007A",
+		"icon"		: "00DD",
+		"move"		: "74",
+		"sell"		: 100,
+		"sort"		: 46
+	}, {
+		"name"		: "HeartFinder",
+		"title"		: "Heart Finder",
+		"id"		: "011A",
+		"msg"		: "007C",
+		"icon"		: "00CB",
+		"move"		: "68",
+		"sell"		: 75,
+		"sort"		: 97
+	}, {
+		"name"		: "FlowerFinder",
+		"title"		: "Flower Finder",
+		"id"		: "011B",
+		"msg"		: "007D",
+		"icon"		: "00CC",
+		"move"		: "69",
+		"sell"		: 75,
+		"sort"		: 98
+	}, {
+		"name"		: "RunawayPay",
+		"title"		: "Runaway Pay",
+		"id"		: "0103",
+		"msg"		: "009C",
+		"icon"		: "00BB",
+		"move"		: "61",
+		"sell"		: 50,
+		"sort"		: 99
+	}, {
+		"name"		: "Refund",
+		"title"		: "Refund",
+		"id"		: "0104",
+		"msg"		: "009D",
+		"icon"		: "00BC",
+		"move"		: "6E",
+		"sell"		: 50,
+		"sort"		: 100
+	}, {
+		"name"		: "PayOff",
+		"title"		: "Pay-Off",
+		"id"		: "00FC",
+		"msg"		: "0096",
+		"icon"		: "00B4",
+		"move"		: "19",
+		"sell"		: 50,
+		"sort"		: 101
+	}, {
+		"name"		: "MoneyMoney",
+		"title"		: "Money Money",
+		"id"		: "00FD",
+		"msg"		: "009A",
+		"icon"		: "00B5",
+		"move"		: "5C",
+		"sell"		: 200,
+		"sort"		: 101
+	} ] },
+
+	{ "type": "FX", "badges" : [ {
+		"name"		: "AttackFXA",
+		"title"		: "Attack FX A",
+		"id"		: "00F3",
+		"msg"		: "008D",
+		"icon"		: "00AB",
+		"move"		: "54",
+		"sell"		: 30,
+		"sort"		: 112
+	}, {
+		"name"		: "AttackFXB",
+		"title"		: "Attack FX B",
+		"id"		: "0146",
+		"msg"		: "008F",
+		"icon"		: "00EB",
+		"move"		: "56",
+		"sell"		: 30,
+		"sort"		: 113
+	}, {
+		"name"		: "AttackFXC",
+		"title"		: "Attack FX C",
+		"id"		: "0148",
+		"msg"		: "0091",
+		"icon"		: "00ED",
+		"move"		: "58",
+		"sell"		: 30,
+		"sort"		: 114
+	}, {
+		"name"		: "AttackFXD",
+		"title"		: "Attack FX D",
+		"id"		: "0145",
+		"msg"		: "008E",
+		"icon"		: "00EA",
+		"move"		: "55",
+		"sell"		: 30,
+		"sort"		: 115
+
+	}, {
+		"name"		: "AttackFXE",
+		"title"		: "Attack FX E",
+		"id"		: "0147",
+		"msg"		: "0090",
+		"icon"		: "00EC",
+		"move"		: "57",
+		"sell"		: 30,
+		"sort"		: 116
+	} ] },
+	
+	{ "type": "Unused", "badges" : [ {
+		"name"		: "MysteryScroll",
+		"title"		: "Mystery Scroll",
+		"id"		: "00EA",
+		"icon"		: "0140",
+		"move"		: "53",
+		"sell"		: 100,
+		"sort"		: 0
+	}, {
+		"name"		: "SuperJump",
+		"title"		: "Super Jump",
+		"id"		: "0122",
+		"msg"		: "0116",
+		"icon"		: "00C1",
+		"move"		: "2C",
+		"sell"		: 100,
+		"sort"		: 2
+	}, {
+		"name"		: "WeakJumpCharge",
+		"title"		: "Weak Jump Charge",
+		"id"		: "00F6",
+		"msg"		: "010E",
+		"icon"		: "00AE",
+		"move"		: "23",
+		"sell"		: 30,
+		"sort"		: 4
+	}, {
+		"name"		: "EartquakeJump",
+		"title"		: "Earthquake Jump",
+		"id"		: "0131",
+		"msg"		: "0119",
+		"icon"		: "00DC",
+		"move"		: "30",
+		"sell"		: 100,
+		"sort"		: 11
+	}, {
+		"name"		: "AutoMultibounce",
+		"title"		: "Auto Multibounce",
+		"id"		: "0118",
+		"msg"		: "0114",
+		"icon"		: "00A5",
+		"move"		: "2A",
+		"sell"		: 75,
+		"sort"		: 14
+	}, {
+		"name"		: "AutoJump",
+		"title"		: "Auto Jump",
+		"msg"		: "0110",
+		"id"		: "010E",
+		"icon"		: "00A3",
+		"move"		: "29",
+		"sell"		: 50,
+		"sort"		: 15
+	}, {
+		"name"		: "PowerSmash2",
+		"title"		: "Power Smash",
+		"copy"		: "2",
+		"id"		: "0127",
+		"msg"		: "0062",
+		"icon"		: "0140",
+		"move"		: "15",
+		"sell"		: 50,
+		"sort"		: 17
+	}, {
+		"name"		: "PowerSmash3",
+		"title"		: "Power Smash",
+		"copy"		: "3",
+		"id"		: "0128",
+		"msg"		: "0062",
+		"icon"		: "0140",
+		"move"		: "15",
+		"sell"		: 50,
+		"sort"		: 17
+	}, {
+		"name"		: "SuperSmash",
+		"title"		: "Super Smash",
+		"id"		: "0125",
+		"msg"		: "0117",
+		"icon"		: "00C4",
+		"move"		: "16",
+		"sell"		: 100,
+		"sort"		: 18
+	}, {
+		"name"		: "WeakSmashCharge",
+		"title"		: "Weak Smash Charge",
+		"id"		: "00F0",
+		"msg"		: "010D",
+		"icon"		: "00A8",
+		"move"		: "0B",
+		"sell"		: 30,
+		"sort"		: 20
+	}, {
+		"name"		: "ShellCrack",
+		"title"		: "Shell Crack",
+		"id"		: "012C",
+		"icon"		: "0140",
+		"move"		: "19",
+		"sell"		: 100,
+		"sort"		: 30
+	}, {
+		"name"		: "AutoSmash",
+		"title"		: "Auto Smash",
+		"id"		: "010F",
+		"msg"		: "0111",
+		"icon"		: "009F",
+		"move"		: "13",
+		"sell"		: 50,
+		"sort"		: 31
+	}, {
+		"name"		: "Initiation",
+		"title"		: "Initiation",
+		"id"		: "012D",
+		"icon"		: "00E2",
+		"move"		: "73",
+		"sell"		: 300,
+		"sort"		: 39
+	}, {
+		"name"		: "RightOn",
+		"title"		: "Right On!",
+		"id"		: "0102",
+		"msg"		: "009B",
+		"icon"		: "00BA",
+		"move"		: "4F",
+		"sell"		: 300,
+		"sort"		: 41
+	}, {
+		"name"		: "HappyHeartX",
+		"title"		: "Happy Heart",
+		"copy"		: "X",
+		"id"		: "0137",
+		"msg"		: "0079",
+		"icon"		: "00B7",
+		"move"		: "5E",
+		"sell"		: 100,
+		"sort"		: 42
+	}, {
+		"name"		: "CrazyHeart",
+		"title"		: "Crazy Heart",
+		"id"		: "0110",
+		"msg"		: "0112",
+		"icon"		: "00D4",
+		"move"		: "65",
+		"sell"		: 300,
+		"sort"		: 45
+	}, {
+		"name"		: "HappyFlowerX",
+		"title"		: "Happy Flower",
+		"copy"		: "X",
+		"id"		: "0142",
+		"msg"		: "007A",
+		"icon"		: "00DD",
+		"move"		: "74",
+		"sell"		: 100,
+		"sort"		: 46
+	}, {
+		"name"		: "SuperFocus",
+		"title"		: "Super Focus",
+		"id"		: "012A",
+		"msg"		: "0118",
+		"icon"		: "00E1",
+		"move"		: "72",
+		"sell"		: 100,
+		"sort"		: 52
+	}, {
+		"name"		: "HPPlusX",
+		"title"		: "HP Plus",
+		"copy"		: "X",
+		"id"		: "014B",
+		"msg"		: "0071",
+		"icon"		: "0097",
+		"move"		: "52",
+		"sell"		: 150,
+		"sort"		: 53
+	}, {
+		"name"		: "HPPlusY",
+		"title"		: "HP Plus",
+		"copy"		: "Y",
+		"id"		: "014C",
+		"msg"		: "0071",
+		"icon"		: "0097",
+		"move"		: "52",
+		"sell"		: 150,
+		"sort"		: 53
+	}, {
+		"name"		: "FPPlusX",
+		"title"		: "FP Plus",
+		"copy"		: "X",
+		"id"		: "014E",
+		"msg"		: "0072",
+		"icon"		: "00B0",
+		"move"		: "5B",
+		"sell"		: 150,
+		"sort"		: 58
+	}, {
+		"name"		: "FPPlusY",
+		"title"		: "FP Plus",
+		"copy"		: "Y",
+		"id"		: "014F",
+		"msg"		: "0072",
+		"icon"		: "00B0",
+		"move"		: "5B",
+		"sell"		: 150,
+		"sort"		: 58
+	}, {
+		"name"		: "FlowerSaverX",
+		"title"		: "Flower Saver",
+		"copy"		: "X",
+		"id"		: "0139",
+		"msg"		: "007B",
+		"icon"		: "00BD",
+		"move"		: "62",
+		"sell"		: 250,
+		"sort"		: 63
+	}, {
+		"name"		: "FlowerFanatic",
+		"title"		: "Flower Fanatic",
+		"id"		: "0119",
+		"msg"		: "0115",
+		"icon"		: "00BF",
+		"move"		: "67",
+		"sell"		: 300,
+		"sort"		: 66
+	}, {
+		"name"		: "PowerPlusX",
+		"title"		: "Power Plus",
+		"copy"		: "X",
+		"id"		: "013D",
+		"msg"		: "0073",
+		"icon"		: "0092",
+		"move"		: "3B",
+		"sell"		: 250,
+		"sort"		: 67
+	}, {
+		"name"		: "DefendPlusX",
+		"title"		: "Defend Plus",
+		"copy"		: "X",
+		"id"		: "013E",
+		"msg"		: "0074",
+		"icon"		: "00B3",
+		"move"		: "45",
+		"sell"		: 250,
+		"sort"		: 70
+	}, {
+		"name"		: "DefendPlusY",
+		"title"		: "Defend Plus",
+		"copy"		: "Y",
+		"id"		: "013F",
+		"msg"		: "0074",
+		"icon"		: "00B3",
+		"move"		: "45",
+		"sell"		: 250,
+		"sort"		: 70
+	}, {
+		"name"		: "DamageDodgeX",
+		"title"		: "Damage Dodge",
+		"copy"		: "X",
+		"id"		: "013B",
+		"msg"		: "0075",
+		"icon"		: "0093",
+		"move"		: "33",
+		"sell"		: 150,
+		"sort"		: 73
+	}, {
+		"name"		: "MegaHPDrain",
+		"title"		: "Mega HP Drain",
+		"id"		: "0115",
+		"msg"		: "0113",
+		"icon"		: "00C7",
+		"move"		: "66",
+		"sell"		: 100,
+		"sort"		: 87
+	}, {
+		"name"		: "Beserker",
+		"title"		: "Berserker",
+		"id"		: "0101",
+		"msg"		: "010F",
+		"icon"		: "00B9",
+		"move"		: "60",
+		"sell"		: 300,
+		"sort"		: 88
+	}, {
+		"name"		: "HealthyHealthy",
+		"title"		: "Healty Healthy",
+		"id"		: "0150",
+		"msg"		: "011A",
+		"icon"		: "00F0",
+		"move"		: "4A",
+		"sell"		: 100,
+		"sort"		: 93
+	}, {
+		"name"		: "AttackFXF",
+		"title"		: "Attack FX F",
+		"id"		: "0149",
+		"msg"		: "0092",
+		"icon"		: "00EE",
+		"move"		: "59",
+		"sell"		: 30,
+		"sort"		: 117
+	}, {
+		"name"		: "AttackFX2",
+		"title"		: "Attack FX F",
+		"copy"		: "2",
+		"id"		: "0151",
+		"msg"		: "0092",
+		"icon"		: "00EE",
+		"move"		: "59",
+		"sell"		: 30,
+		"sort"		: 117
+	}, {
+		"name"		: "AttackFX3",
+		"title"		: "Attack FX F",
+		"copy"		: "3",
+		"id"		: "0151",
+		"msg"		: "0092",
+		"icon"		: "00EE",
+		"move"		: "59",
+		"sell"		: 30,
+		"sort"		: 117
+	}, {
+		"name"		: "AttackFX4",
+		"title"		: "Attack FX F",
+		"copy"		: "4",
+		"id"		: "0152",
+		"msg"		: "0092",
+		"icon"		: "00EE",
+		"move"		: "59",
+		"sell"		: 30,
+		"sort"		: 117
+	}, {
+		"name"		: "AttackFX5",
+		"title"		: "Attack FX F",
+		"copy"		: "5",
+		"id"		: "0153",
+		"msg"		: "0092",
+		"icon"		: "00EE",
+		"move"		: "59",
+		"sell"		: 30,
+		"sort"		: 117
+	} ] }
+]

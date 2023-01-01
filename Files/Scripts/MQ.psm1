@@ -21,7 +21,7 @@ function PatchDungeonsOoTMQ() {
         ChangeBytes -Offset "E6DE2E" -Values "96" # Title Flames color
     }
 
-    if (IsChecked $Redux.MQ.Disable) { return }
+    if ( (IsChecked $Redux.MQ.Disable) -or (IsChecked $Redux.MQ.Custom) ) { return }
     $dungeons = PatchDungeonsMQ
 
     $title = "Inside the Deku Tree" # Inside the Deku Tree

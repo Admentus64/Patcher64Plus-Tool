@@ -1,0 +1,289 @@
+[
+	{ "area": "Goomba Region", "blocks" : [ {
+		"id"		: "KMR03_Coin",
+		"item"		: "Coin",
+		"map"		: "Bottom of the Cliff",
+		"offset"	: "8C9607"
+	}, {
+		"id"		: "KMR03_RepelGel",
+		"item"		: "Repel Gel",
+		"map"		: "Bottom of the Cliff",
+		"hidden"	: 1,
+		"offset"	: "8C9587"
+	}, {
+		"id"		: "KMR09_CoinA",
+		"item"		: "Coin",
+		"map"		: "Goomba Road 1",
+		"offset"	: "8D83BF"
+	}, {
+		"id"		: "KMR09_CoinB",
+		"item"		: "Coin",
+		"map"		: "Goomba Road 1",
+		"offset"	: "8D841B"
+	}, {
+		"id"		: "KMR06_CloseCall",
+		"item"		: "Close Call",
+		"map"		: "Goomba Road 2",
+		"offset"	: "8D3AF3"
+	}, {
+		"id"		: "KMR10_SleepySheep",
+		"item"		: "Sleepy Sheep",
+		"map"		: "Toad Town Entrance",
+		"offset"	: "8D9567"
+	} ] },
+
+	{ "area": "Koopa Fortress", "blocks" : [ {
+		"id"		: "TRD09_MapleSyrup",
+		"item"		: "Maple Syrup",
+		"map"		: "Battlement",
+		"offset"	: "9BDE43"
+	} ] },
+
+
+	{ "area": "Mt. Rugged", "blocks" : [ {
+		"id"		: "IWA00_SleepySheep",
+		"item"		: "Sleepy Sheep",
+		"map"		: "Mt. Rugged 1",
+		"offset"	: "90D347"
+	}, {
+		"id"		: "IWA03_Coin",
+		"item"		: "Coin",
+		"map"		: "Mt. Rugged 4",
+		"offset"	: "91A44B"
+	}, {
+		"id"		: "IWA03_Mushrooom",
+		"item"		: "Mushroom",
+		"map"		: "Mr. Rugged 4",
+		"offset"	: "91A483"
+	}, {
+		"id"		: "IWA03_HoneySyrup",
+		"item"		: "Honey Syrup",
+		"map"		: "Mr. Rugged 4",
+		"offset"	: "91A4BB"
+	} ] },
+
+	{ "area": "Dry Dry Desert", "blocks" : [ {
+		"id"		: "SBK00_FrightJar",
+		"item"		: "Fright Jar",
+		"map"		: "North 3",
+		"offset"	: "929A0F"
+	}, {
+		"id"		: "SBK00_Coin",
+		"item"		: "Coin",
+		"map"		: "North 3",
+		"offset"	: "929A47"
+	}, {
+		"id"		: "SBK10_ThunderRage",
+		"item"		: "Thunder Rage",
+		"map"		: "North 2, West 3",
+		"offset"	: "933FDF"
+	}, {
+		"id"		: "SBK14_Coin",
+		"item"		: "Coin",
+		"map"		: "Tweester A",
+		"offset"	: "936C27"
+	}, {
+		"id"		: "SBK14_Syrup",
+		"item"		: "Honey Syrup",
+		"map"		: "Tweester A",
+		"offset"	: "936C5F"
+	}, {
+		"id"		: "SBK20_Mushroom",
+		"item"		: "Mushroom",
+		"map"		: "Special Block",
+		"offset"	: [ "938AAB", "938CE7" ]
+	}, {
+		"id"		: "SBK20_SuperShroom",
+		"item"		: "Super Shroom",
+		"map"		: "Special Block",
+		"offset"	: [ "938B7B", "938D37" ]
+	}, {
+		"id"		: "SBK20_UltraShroom",
+		"item"		: "Ultra Shroom",
+		"map"		: "Special Block",
+		"offset"	: [ "938C4B", "938D87" ]
+	}, {
+		"id"		: "SBK22_CoinA",
+		"item"		: "Coin",
+		"map"		: "North 1, West 1",
+		"offset"	: "93A61F"
+	}, {
+		"id"		: "SBK22_CoinB",
+		"item"		: "Coin",
+		"map"		: "North 1, West 1",
+		"offset"	: "93A657"
+	}, {
+		"id"		: "SBK22_CoinC",
+		"item"		: "Coin",
+		"map"		: "North 1, West 1",
+		"offset"	: "93A68F"
+	}, {
+		"id"		: "SBK22_CoinD",
+		"item"		: "Coin",
+		"map"		: "North 1, West 1",
+		"offset"	: "93A6C7"
+	}, {
+		"id"		: "SBK22_FireFlower",
+		"item"		: "Fire Flower",
+		"map"		: "North 1, West 1",
+		"offset"	: "93A6FF"
+	}, {
+		"id"		: "SBK24_RunawayPay",
+		"item"		: "Runaway Pay",
+		"map"		: "Palm Trio",
+		"hidden"	: 1,
+		"offset"	: "93B72F"
+	}, {
+		"id"		: "SBK43_Coin",
+		"item"		: "Coin",
+		"map"		: "South 1",
+		"offset"	: "94D53F"
+	}, {
+		"id"		: "SBK46_Coin",
+		"item"		: "Coin",
+		"map"		: "North of Oasis",
+		"offset"	: "95057F"
+	}, {
+		"id"		: "SBK46_LifeShroom",
+		"item"		: "Life Shroom",
+		"map"		: "North of Oasis",
+		"hidden"	: 1,
+		"offset"	: "9505B7"
+	}, {
+		"id"		: "SBK61_AttackFXC",
+		"item"		: "Attack FX C",
+		"map"		: "South 3, West 2",
+		"hidden"	: 1,
+		"offset"	: "9572EF"
+	}, {
+		"id"		: "SBK64_Coin",
+		"item"		: "Coin",
+		"map"		: "South 3, East 1",
+		"offset"	: "9588EF"
+	} ] },
+
+	{ "area": "Forever Forest", "blocks" : [ {
+		"id"		: "MIM08_HPPlusA",
+		"item"		: "HP Plus A",
+		"map"		: "Laughing Rock",
+		"offset"	: "BB0E3F"
+	}, {
+		"id"		: "MIM09_FPPlusA",
+		"item"		: "FP Plus A",
+		"map"		: "Flowers Appear",
+		"offset"	: "BB413F"
+	}, {
+		"id"		: "MIM11_VoltShroom",
+		"item"		: "Volt Shroom",
+		"map"		: "Outside Boo's Mansion",
+		"offset"	: "BBA29F"
+	} ] },
+
+	{ "area": "Gusty Gulch", "blocks" : [ {
+		"id"		: "ARN02_CoinA",
+		"item"		: "Coin",
+		"map"		: "Wasteland Ascent 1",
+		"offset"	: "BDE4D7"
+	}, {
+		"id"		: "ARN02_CoinB",
+		"item"		: "Mushroom",
+		"map"		: "Wasteland Ascent 1",
+		"offset"	: "BDE50F"
+	}, {
+		"id"		: "ARN02_RepelGel",
+		"item"		: "Repel Gel",
+		"map"		: "Wasteland Ascent 1",
+		"offset"	: "BDE547"
+	}, {
+		"id"		: "ARN03_Coin",
+		"item"		: "Coin",
+		"map"		: "Ghost Town 1",
+		"offset"	: "BE357F"
+	}, {
+		"id"		: "ARN04_SuperShroom",
+		"item"		: "Super Shroom",
+		"map"		: "Wasteland Ascent 2",
+		"offset"	: "BE77FF"
+	}, {
+		"id"		: "ARN04_Coin",
+		"item"		: "Coin",
+		"map"		: "Wasteland Ascent 2",
+		"offset"	: "BE7837"
+	} ] },
+
+	{ "area": "Tubba's Castle", "blocks" : [ {
+		"id"		: "DGB14_MapleSyrup",
+		"item"		: "Maple Syrup",
+		"map"		: "Stairs to Third Floor",
+		"offset"	: "C4F4BF"
+	} ] },
+
+	{ "area": "Mt. Lavalava", "blocks" : [ {
+		"id"		: "KZN03_CoinA",
+		"item"		: "Coin",
+		"map"		: "Central Cavern",
+		"offset"	: "C6742F"
+	}, {
+		"id"		: "KZN03_CoinB",
+		"item"		: "Coin",
+		"map"		: "Central Cavern",
+		"offset"	: "C67467"
+	}, {
+		"id"		: "KZN03_CoinC",
+		"item"		: "Coin",
+		"map"		: "Central Cavern",
+		"offset"	: "C6749F"
+	}, {
+		"id"		: "KZN03_CoinD",
+		"item"		: "Coin",
+		"map"		: "Central Cavern",
+		"offset"	: "C674D7"
+	}, {
+		"id"		: "KZN06_LifeShroom",
+		"item"		: "Life Shroom",
+		"map"		: "Flowing Lava Puzzle",
+		"hidden"	: 1,
+		"offset"	: "C6DADF"
+	}, {
+		"id"		: "KZN19_SuperShroom",
+		"item"		: "Super Shroom",
+		"map"		: "Boss Room",
+		"offset"	: "C95E7F"
+	}, {
+		"id"		: "KZN19_MapleSyrup",
+		"item"		: "Maple Syrup",
+		"map"		: "Boss Room",
+		"offset"	: "C95EB7"
+	} ] },
+
+	{ "area": "Flower Fields", "blocks" : [ {
+		"id"		: "FLO17_ThunderRage",
+		"item"		: "Thunder Rage",
+		"map"		: "Fallen Logs",
+		"hidden"	: 1,
+		"offset"	: "CDC56F"
+	}, {
+		"id"		: "FLO23_ShootingStar",
+		"item"		: "Shooting Star",
+		"map"		: "Path to Maze",
+		"hidden"	: 1,
+		"offset"	: "CF0833"
+	}, {
+		"id"		: "FLO23_Coin",
+		"item"		: "Coin",
+		"map"		: "Path to Maze",
+		"hidden"	: 1,
+		"offset"	: "CF086B"
+	}, {
+		"id"		: "FLO24_DizzyDial",
+		"item"		: "Dizzy Dial",
+		"map"		: "Water Level Room",
+		"offset"	: "CF2AFF"
+	}, {
+		"id"		: "FLO24_MapleSyrup",
+		"item"		: "Maple Syrup",
+		"map"		: "Water Level Room",
+		"hidden"	: 1,
+		"offset"	: "CF2B37"
+	} ] }
+]

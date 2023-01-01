@@ -73,8 +73,8 @@ function CreateMainDialog() {
 
     $menuBarOoTTextEditor      = New-Object System.Windows.Forms.ToolStripButton;   $menuBarOoTTextEditor.Text  = "OoT Text Editor";    $menuBarEditors.DropDownItems.Add($menuBarOoTTextEditor)
     $menuBarMMTextEditor       = New-Object System.Windows.Forms.ToolStripButton;   $menuBarMMTextEditor.Text   = "MM Text Editor";     $menuBarEditors.DropDownItems.Add($menuBarMMTextEditor)
-  # $menuBarOoTSceneEditor     = New-Object System.Windows.Forms.ToolStripButton;   $menuBarOoTSceneEditor.Text = "OoT Scene Editor";   $menuBarEditors.DropDownItems.Add($menuBarOoTSceneEditor)
-  # $menuBarMMSceneEditor      = New-Object System.Windows.Forms.ToolStripButton;   $menuBarMMSceneEditor.Text  = "MM Scene Editor";    $menuBarEditors.DropDownItems.Add($menuBarMMSceneEditor)
+    $menuBarOoTActorEditor     = New-Object System.Windows.Forms.ToolStripButton;   $menuBarOoTActorEditor.Text = "OoT Actor Editor";   $menuBarEditors.DropDownItems.Add($menuBarOoTActorEditor)
+  # $menuBarMMActorEditor      = New-Object System.Windows.Forms.ToolStripButton;   $menuBarMMActorEditor.Text  = "MM Actor Editor";    $menuBarEditors.DropDownItems.Add($menuBarMMActorEditor)
 
     $menuBarExit.Add_Click(           { $MainDialog.Close()          } )
     $menuBarUpdate.Add_Click(         { AutoUpdate -Manual           } )
@@ -93,8 +93,8 @@ function CreateMainDialog() {
 
     $menuBarOoTTextEditor.Add_Click(  { RunTextEditor  -Game "Ocarina of Time" } )
     $menuBarMMTextEditor.Add_Click(   { RunTextEditor  -Game "Majora's Mask"   } )
-  # $menuBarOoTSceneEditor.Add_Click( { RunSceneEditor -Game "Ocarina of Time" } )
-  # $menuBarMMSceneEditor.Add_Click(  { RunSceneEditor -Game "Majora's Mask"   } )
+    $menuBarOoTActorEditor.Add_Click( { RunActorEditor -Game "Ocarina of Time" } )
+  # $menuBarMMActorEditor.Add_Click(  { RunActorEditor -Game "Majora's Mask"   } )
 
 
 
@@ -501,6 +501,14 @@ function SetJSONFile($File) {
 #==============================================================================================================================================================================================
 function DisablePatches() {
     
+    if (IsSet $GamePatch.preset) {
+        EnableElem -Elem @($Patches.Extend, $Patches.ExtendLabel, $Patches.Redux, $Patches.ReduxLabel, $Patches.Options, $Patches.OptionsLabel, $Patches.OptionsButton) -Active $False -Hide
+        foreach ($item in $Redux.Groups) {
+            if ($item.IsRedux) { EnableElem -Elem $item -Active $True }
+        }
+        return
+    }
+
     # Disable boxes if needed
     EnableElem -Elem @($Patches.Extend,    $Patches.ExtendLabel)                          -Active ((IsSet $GamePatch.allow_extend) -and $GameRev.extend -ne 0)                           -Hide
     EnableElem -Elem @($Patches.Redux,     $Patches.ReduxLabel)                           -Active ((IsSet $GamePatch.redux.file)   -and $GameRev.redux  -ne 0 -and $GameRev.redux -ne 0) -Hide

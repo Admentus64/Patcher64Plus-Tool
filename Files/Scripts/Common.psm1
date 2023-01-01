@@ -334,30 +334,35 @@ function ChangeGameMode() {
         }
     }
 
-    $GameFiles.base         = $Paths.Games + "\" + $GameType.mode
-    $GameFiles.binaries     = $GameFiles.Base + "\Binaries"
-    $GameFiles.export       = $GameFiles.Base + "\Export"
-    $GameFiles.compressed   = $GameFiles.Base + "\Compressed"
-    $GameFiles.decompressed = $GameFiles.Base + "\Decompressed"
-    $GameFiles.languages    = $GameFiles.Base + "\Languages"
-    $GameFiles.banks        = $GameFiles.Base + "\Audio Banks"
-    $GameFiles.models       = $Paths.Models + "\" + $GameType.mode
-    $GameFiles.downgrade    = $GameFiles.Base + "\Downgrade"
-    $GameFiles.textures     = $GameFiles.Base + "\Textures"
-    $GameFiles.editor       = $GameFiles.Base + "\Editor"
-    $GameFiles.customText   = $GameFiles.Base + "\Custom Text"
-    $GameFiles.info         = $GameFiles.Base + "\Info.txt"
-    $GameFiles.patches      = $GameFiles.Base + "\Patches.json"
-    $GameFiles.controls     = $GameFiles.Base + "\Controls.json"
-    $GameFiles.textEditor   = $GameFiles.Base + "\Text Editor.json"
-    $GameFiles.actorEditor  = $GameFiles.Base + "\Actor Editor.json"
+    $GameFiles.base         = $Paths.Games      + "\" + $GameType.mode
+    $GameFiles.binaries     = $GameFiles.Base   + "\Binaries"
+    $GameFiles.export       = $GameFiles.Base   + "\Export"
+    $GameFiles.compressed   = $GameFiles.Base   + "\Compressed"
+    $GameFiles.decompressed = $GameFiles.Base   + "\Decompressed"
+    $GameFiles.languages    = $GameFiles.Base   + "\Languages"
+    $GameFiles.banks        = $GameFiles.Base   + "\Audio Banks"
+    $GameFiles.models       = $Paths.Models     + "\" + $GameType.mode
+    $GameFiles.downgrade    = $GameFiles.Base   + "\Downgrade"
+    $GameFiles.textures     = $GameFiles.Base   + "\Textures"
+    $GameFiles.editor       = $GameFiles.Base   + "\Editor"
+    $GameFiles.customText   = $GameFiles.Base   + "\Custom Text"
+    $GameFiles.info         = $GameFiles.Base   + "\Info.txt"
+    $GameFiles.patches      = $GameFiles.Base   + "\Patches.json"
+    $GameFiles.controls     = $GameFiles.Base   + "\Controls.json"
+    $GameFiles.textEditor   = $GameFiles.Base   + "\Text Editor.json"
+    $GameFiles.actorEditor  = $GameFiles.Base   + "\Actor Editor.json"
+    $GameFiles.scenesPatch  = $GameFiles.editor + "\scenes.bps"
 
     # JSON Files
-    if ( ($GameType.patches -eq 1) -or ($GameType.patches -eq 2 -and $IsWiiVC) )   { $Files.json.patches   = SetJSONFile $GameFiles.patches }                           else { $Files.json.patches   = $null }
-    if (TestFile ($GameFiles.languages + "\Languages.json"))                       { $Files.json.languages = SetJSONFile ($GameFiles.languages + "\Languages.json") }   else { $Files.json.languages = $null }
-    if (TestFile ($Paths.Models        + "\Models.json"))                          { $Files.json.models    = SetJSONFile ($Paths.Models        + "\Models.json") }      else { $Files.json.models    = $null }
-    if (TestFile ($Paths.shared        + "\Sequences.json"))                       { $Files.json.sequences = SetJSONFile ($Paths.shared        + "\Sequences.json") }   else { $Files.json.sequences  = $null }
-    if (TestFile ($GameFiles.base      + "\Music.json"))                           { $Files.json.music     = SetJSONFile ($GameFiles.base      + "\Music.json") }       else { $Files.json.music     = $null }
+    if ( ($GameType.patches -eq 1) -or ($GameType.patches -eq 2 -and $IsWiiVC) )   { $Files.json.patches   = SetJSONFile $GameFiles.patches }                         else { $Files.json.patches   = $null }
+    if (TestFile ($GameFiles.languages + "\Languages.json"))                       { $Files.json.languages = SetJSONFile ($GameFiles.languages + "\Languages.json") } else { $Files.json.languages = $null }
+    if (TestFile ($Paths.Models        + "\Models.json"))                          { $Files.json.models    = SetJSONFile ($Paths.Models        + "\Models.json")    } else { $Files.json.models    = $null }
+    if (TestFile ($Paths.shared        + "\Sequences.json"))                       { $Files.json.sequences = SetJSONFile ($Paths.shared        + "\Sequences.json") } else { $Files.json.sequences = $null }
+    if (TestFile ($GameFiles.base      + "\Music.json"))                           { $Files.json.music     = SetJSONFile ($GameFiles.base      + "\Music.json")     } else { $Files.json.music     = $null }
+    if (TestFile ($GameFiles.base      + "\Items.json"))                           { $Files.json.items     = SetJSONFile ($GameFiles.base      + "\Items.json")     } else { $Files.json.items     = $null }
+    if (TestFile ($GameFiles.base      + "\Moves.json"))                           { $Files.json.moves     = SetJSONFile ($GameFiles.base      + "\Moves.json")     } else { $Files.json.moves     = $null }
+    if (TestFile ($GameFiles.base      + "\Blocks.json"))                          { $Files.json.blocks    = SetJSONFile ($GameFiles.base      + "\Blocks.json")    } else { $Files.json.blocks    = $null }
+    if (TestFile ($GameFiles.base      + "\Enemies.json"))                         { $Files.json.enemies   = SetJSONFile ($GameFiles.base      + "\Enemies.json")   } else { $Files.json.enemies   = $null }
 
     ResetReduxSettings
     SetCreditsSections
@@ -423,7 +428,9 @@ function ChangeGameRev() {
 #==============================================================================================================================================================================================
 function ChangePatch() {
     
-    WriteToConsole "Changing patch..."
+    EnableGUI $False
+    $lastMessage = $StatusLabel.Text
+    UpdateStatusLabel "Changing patch..."
 
     foreach ($item in $Files.json.patches) {
         if ($item.title -eq $Patches.Type.Text -and ( ($IsWiiVC -and $item.console -eq "Wii VC") -or (!$IsWiiVC -and $item.console -eq "Native") -or ($item.console -eq "Both") -or !(IsSet $item.console) ) ) {
@@ -451,6 +458,9 @@ function ChangePatch() {
                 break
         }
     }
+
+    EnableGUI $True
+    UpdateStatusLabel $lastMessage
 
 }
 
@@ -483,10 +493,13 @@ function UpdateStatusLabel([string]$Text, [switch]$Main, [switch]$Editor) {
         $StatusLabel.Text = $Text
         $StatusLabel.Refresh()
     }
-
-    if (!$Main -and (IsSet $TextEditor.StatusLabel) ) {
+    elseif (!$Main -and (IsSet $TextEditor.StatusLabel) ) {
         $TextEditor.StatusLabel.Text = $Text
         $TextEditor.StatusLabel.Refresh()
+    }
+    elseif (!$Main -and (IsSet $ActorEditor.StatusLabel) ) {
+        $ActorEditor.StatusLabel.Text = $Text
+        $ActorEditor.StatusLabel.Refresh()
     }
 
 }
@@ -513,6 +526,7 @@ function SetModeLabel() {
     $CurrentModeLabel.Text = "Current  Mode  :  " + $GameType.mode
     if ($IsWiiVC) { $CurrentModeLabel.Text += "  (Wii  VC)" } else { $CurrentModeLabel.Text += "  (" + $GameConsole.Mode + ")" }
     $CurrentModeLabel.Location = New-Object System.Drawing.Size(([Math]::Floor($MainDialog.Width / 2) - [Math]::Floor($CurrentModeLabel.Width / 2)), 50)
+    $CurrentModeLabel.Refresh()
 
 }
 
@@ -1023,6 +1037,9 @@ function EnableGUI([boolean]$Enable) {
     $CurrentGame.Panel.Enabled = $CustomHeader.Panel.Enabled = $Enable
     $Patches.Panel.Enabled = $VC.Panel.Enabled = $Enable
     SetModernVisualStyle $GeneralSettings.ModernStyle.Checked
+
+    if (IsSet $ActorEditor)   { $ActorEditor.Dialog.Enabled = $Enable }
+    if (IsSet $TextEditor)    { $TextEditor.Dialog.Enabled  = $Enable }
 
 }
 

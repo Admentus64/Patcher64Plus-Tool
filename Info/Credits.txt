@@ -2,9 +2,11 @@
 <<< PATCHER64+ TOOL >>>
 
 --- Thanks to my Patreons ---
-- Tier 2:	Amara, Craig, Chadlight Rutherford, Third M, Andrew Kinney
+- Tier 3:	Thanatos-Zero
 
-- Tier 1:	Yang, Gagrecco, mad_scrub
+- Tier 2:	Amara, Craig, Chadlight Rutherford, Third M, Andrew Kinney, Peach, Petra
+
+- Tier 1:	Yang, mad_scrub
 
 
 --- Patcher64+ Tool ---
@@ -19,95 +21,62 @@
 <<< OCARINA OF TIME >>>
 
 --- Redux ---
-- Hacking:				Maroc
+- Original Version:			Maroc
 - Editing / Revision:			ShadowOne333, MattKimura
 - Original Hacking:			Roman971, TestRunnerSRL, AmazingAmpharos, fig02, krimtonz, rlbond86,
 					KevinPal, junglechief87
 - Fixes:				Admentus, GhostlyDark
 - Improvements:				Admentus, GhostlyDark
+- Debug ROM Options:			GhostlyDark Cooliscool, DeathBasket, Airikita, Jason777, ChriisTiian
+- Tools & Sources:			Randomizer, CloudMax, CloudModding
 
 --- Additional Options ---
-- Faster Block Pushing:			ShadowOne333
-- Easier Minigames:			ShadowOne333
-- Manual Jump:				Admentus (ROM), CloudModding (GameShark)
-- No Kill Flash:			Chez Cousteau
-- No Shield Recoil:			Admentus (ROM), Aegiker (GameShark)
-- Run While Shielding:			Admentus (ROM), Aegiker (GameShark)
-- Pushback Attacing Walls:		Admentus (ROM), Aegiker (GameShark)
-- Remove Crouch Stab:			Garo-Mastah
-- Remove Magic Quick Spin:		Admentus (ported) & Three Pendants (Debug)
-- Resume From Last Area:		Admentus (ROM), Aegiker (GameShark)
-- Correct Rupee Colors:			GhostlyDark
-- Restore Cow Nose Ring:		ShadowOne333
-- Restore Fire Temple:			ShadowOne333
-- Censor Gerudo Textures:		GhostlyDark, ShadowOne333
-- Blood Color:				ShadowOne333, Admentus
-- Pause Screen Delay Fix:		zel
-- Visible Gerudo Tent:			Chez Cousteau
-- Temple of Time Door:			Chez Cousteau
-- Navi Targettable Spots:		Chez Cousteau
-- Add Water Temple Actors:		Chez Cousteau
-- Add Lost Woods Octorok:		Chez Cousteau
-- Gerudo Fortress Minimap:		GhostlyDark
-- Debug Map Select:			Jared Johnson
-- Skip Intro:				Aegiker
-- Remove Owls:				Chez Cousteau
-- Enable Disk Drive Saves:		ZethN64, Sakura, Frostclaw, Steve(ToCoool) & GhostlyDark (ported)
-- Link's Speed:				AndiiSyn
-- 16:9 Backgrounds & Textures:		GhostlyDark, ShadowOne333, CYB3RTR0N
-- Advanced 16:9 Widescreen:		gamemasterplc, GhostlyDark
-- Force Hires Link Model:		GhostlyDark
-- Feminine Animations:			GhostlyDark (ported), AriaHiro64 (model)
-- Overworld Skyboxes:			Admentus (ported), BrianMp16 (AR code)
-- MM HUD Icons:				GhostlyDark (ported)
-- MM Button Positions:			GhostlyDark
-- Button Sizes:				GhostlyDark
-- Button Styles:			GhostlyDark, Djipi, Community, Nerrel, Federelli, AndiiSyn
-- OoT & MM Button HD Previews:		Pizza
-- Magic Meter Styles:			GhostlyDark, Pizza, Nerrel, Zeth Alkar
-- HUD Size:				Admentus & GhostlyDark
-- Chests, Crates & Pots Alternatives:	Admentus, GhostlyDark & OoT Randomizer
-- Hair Color:				Third M
-- Recovery:				Admentus (ported), Three Pendants (debug) & Rando (No Heart Drops)
-- Graveyard Keese:			salvador235
-- Harder Child Bosses:			BilonFullHDemon
-- No Item Drops:			Admentus & BilonFullHDemon
-- Pot's Challenge:			Aegiker
-- Harder Stalfos / Wolfos / Dark Link:	BilonFullHDemon
-- Master Quest:				ShadowOne333
-- Ura Quest:				ZethN64, Sakura, Frostclaw, Steve(ToCoool) & Admentus (clean port)
-- Fireproof Deku Shield:		Three Pendants
-- Equipment icons & alternatives:	Admentus, GhostlyDark (injects), CYB3RTR0N (icons), sanguinetti (shields),
-					AndiiSyn (shields), ZombieBrainySnack (Iron Shield)
-- Hitboxes:				Admentus & Aria Hiroshi 64 (ROM), Aegiker (Shield Recoil GameShark)
-- Set New Save Slot Items:		Admentus
-- Set Capacity:				GhostlyDark
-- 4 Digits for Rupees:			CloudMax, VictorHale & CrookedPoe
-- Unlock Equipment:			Admentus (ROM), GhostlyGark (RAM offsets), Aegiker (gauntlets GameShark)
-- Colors for several options:		GhostlyDark
-- MM Pause Screen Colors:		Garo-Mastah
-- Frontflip Jump / Somarsault Jump:	SoulofDeity
-- Side Backflip:			BilonFullHDemon
-- Bomb Bag Beta Animation:		Admentus (ROM), Aegiker (GameShark)
-- Show File Select Icons:		ShadowOne333
-- Restore Text:				ShadowOne333
-- Female Pronouns:			Admentus & Mil
-- MM Pause Screen:			CM & GhostlyDark
-- Add Navi Prompt:			Aegiker & GhostlyDark (textures)
+- Admentus
+- GhostlyDark
+- ShadowOne333
+- Chez Cousteau
+- BilonFullHDemon,
+- Aegiker
+- gamemasterplc
+- Garo-Mastah
+- zel
+- Third M
+- ChriisTiian
+- Three Pendants
+- Jared Johnson
+- ZethN64
+- Sakura
+- Frostclaw
+- Steve(ToCoool)
+- AndiiSyn
+- BrianMp16
+- Zeth Alkar
+- salvador235
+- Sakura
+- Aria Hiroshi 64
+- VictorHale,
+- CrookedPoe
+- SoulofDeity
+- Mil
 
-- Various offsets:			Chez Cousteau
-- Admentus (Scripting and Maintaince of all Options)
-
---- Debug ROM Options ---
-- Various offsets:			Cooliscool, DeathBasket, Airikita, CloudMax, Jason777, ChriisTiian
-- Ported to other Debug ROMs:		GhostlyDark
+--- Custom Textures ---
+- Community Texture pack
+- Admentus
+- GhostlyDark
+- ShadowOne333
+- Nerrel
+- Third M
+- CYB3RTR0N
+- Djipi
+- Pizza,
+- Federelli
+- sanguinetti
+- ZombieBrainySnack
+- AndiiSyn
+- CM
 
 --- Link Voices ---
-- Majora's Mask Link:			Korey Cryderman (ported) & GhostlyDark (corrected)
-- Melee Zelda:				Thiago Alcântara 6 & theluigidude2007
-- Amara:				Amara & theluigidude2007
-- Peach:				theluigidude2007
-
+- Amara, GhostlyDark, Korey Cryderman, theluigidude2007 & Mickey Devi
 - Hylian Modding Models License:	https://github.com/hylian-modding/Z64-CustomPlayerModels
 					GNU General Public License v3.0 (GPL-3.0 License)
 
@@ -360,58 +329,41 @@ https://github.com/DaruniasJoy/OoT-Custom-Sequences
 - Original Hacking:			Saneki
 - Fixes:				Admentus, GhostlyDark
 - Improvements:				Admentus, GhostlyDark
+- Tools & Sources:			Randomizer, CloudMax, CloudModding
 
 --- Additional Options ---
-- Zora Physics:				ShadowOne333
-- Use Items With Mask Forms:		bry_dawg02
-- Jump Attack:				Admentus (ported), SoulofDeity & Aegiker
-- Frontflip Jump:			SoulofDeity
-- Correct Rupee Colors:			GhostlyDark
-- Restore Cow Nose Ring:		ShadowOne333
-- Correct Romani Sign:			ShadowOne333
-- Restore Title:			ShadowOne333 & Garo-Mastah
-- Restore Skull Kid:			ShadowOne333
-- Restore Shop Music:			ShadowOne333
-- Restore Ikana Castle:			Linkz
-- 4th Piece of Heart Sound:		fkualol
-- Move Bomber Kid:			ShadowOne333
-- On The Moon Intro:			Chez Cousteau
-- Fix Mushroom Bottle:			ozidual
-- Fix Clock Town			Linkz
-- Fix Southern Swamp:			ShadowOne333
-- Fix Great Bay:			Links
-- Fix Fairy Fountain:			Dybbles (fix) & ShadowOne333 (ROM / patch)
-- Fix Out-of-Bounds Rupee:		Chez Cousteau
-- Always Best Ending:			Marcelo20XX
-- Map Select & Item Select:		GhostlyDark
-- Goht Awakening:			ShadowOne333
-- Unused Cutscenes:			Chez Cousteau
-- 16:9 Widescreen (Advanced):		gamemasterplc & GhostlyDark
-- 16:9 Backgrounds & Textures:		GhostlyDark & ShadowOne333
-- OoT HUD Icons:			GhostlyDark (ported)
-- Button Sizes:				GhostlyDark
-- Button Styles:			GhostlyDark, Djipi, Community, Nerrel, Federelli, AndiiSyn
-- OoT & MM Button HD Previews:		Pizza
-- Magic Meter Styles:			GhostlyDark, Pizza, Nerrel, Zeth Alkar
-- Hide HUD:				Marcelo20XX
-- Chests, Crates & Pots Alternatives:	Admentus, GhostlyDark & OoT Randomizer
-- Hair Color:				Third M
-- No Item Drops:			Admentus & BilonFullHDemon
-- Restore Palace Route:			ShadowOne333
-- Raised Research Lab Platform:		Linkz
-- Kokiri Tunic Color:			GhostlyDark
-- Recolor Mask Forms:			Admentus, ShadowOne333 & Garo-Mastah
-- Fairy Colors:				Dzeko
-- Spin Attack Colors:			Dzeko
-- Set Capacity:				GhostlyDark
-- Permanent Razor Sword:		darklord92
-- Master Quest Remix:			Admentus (porting) & DeathBasket (maps / patch)
-- Restore Text:				ShadowOne333
-- Adult Pronouns:			Skilarbabcock (www.youtube.com/user/skilarbabcock)
-- Correct Circus Mask:			ShadowOne333
-- Correct Comma:			ShadowOne333
-- Various offsets:			Chez Cousteau
-- Admentus (Scripting and Assistance of all Options)
+- Admentus
+- GhostlyDark
+- ShadowOne333
+- Chez Cousteau
+- Linkz
+- Marcelo20XX
+- ozidual
+- BilonFullHDemon
+- Aegiker
+- gamemasterplc
+- Garo-Mastah
+- Skilarbabcock
+- Third M
+- SoulofDeity
+- bry_dawg02
+- fkualol
+- Dybbles
+- Dzeko
+- darklord92
+
+--- Custom Textures ---
+- Community Texture pack
+- Admentus
+- GhostlyDark
+- ShadowOne333
+- Third M
+- Nerrel
+- Pizza
+- Djipi
+- Federelli
+- AndiiSyn
+- Zeth Alkar
 
 --- Hylian Link Models ---
 - Adult Link (MM):			Skilarbabcock (www.youtube.com/user/skilarbabcock)

@@ -3,6 +3,12 @@
 	"options"	: 1,
 	"tooltip"	: "The regular Paper Mario experience{0}- Supported: Rev 0 (US)"
 }, {
+	"title"		: "Paper Mario: Hard Mode",
+	"options"	: 1,
+	"preset"	: 1,
+	"settings"	: "Paper Mario Hard Mode",
+	"tooltip"	: "A rebalanced harder difficulty for Paper Mario with new unused badges{0}This patch uses options found from within the Patcher64+ Tool{0}- Supported: Rev 0 (US)"
+}, {
 	"title"		: "Master Quest (v1.3.0.2)",
 	"options"	: 1,
 	"console"	: "Native",

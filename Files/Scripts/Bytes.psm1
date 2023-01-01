@@ -1,4 +1,4 @@
-function ChangeBytes([string]$File, [string]$Offset, [object]$Match=$null, [object]$Values, [uint16]$Interval=1, [switch]$Add, [switch]$Subtract) {
+function ChangeBytes([string]$File, [byte[]]$Array, [string]$Offset, [object]$Match=$null, [object]$Values, [uint16]$Interval=1, [switch]$Add, [switch]$Subtract) {
     
     if     ($Match  -is [String] -and $Match  -Like "* *")      { $matchDec = $Match -split ' '           | foreach { [Convert]::ToByte($_, 16) } }
     elseif ($Match  -is [String])                               { $matchDec = $Match -split '(..)' -ne '' | foreach { [Convert]::ToByte($_, 16) } }
@@ -10,8 +10,9 @@ function ChangeBytes([string]$File, [string]$Offset, [object]$Match=$null, [obje
     elseif ($Values -is [Array]  -and $Values[0] -is [System.String])   { $valuesDec = $Values                      | foreach { [Convert]::ToByte($_, 16) } }
     else                                                                { $valuesDec = $Values }
 
-    if (IsSet $File)                   { $ByteArrayGame = [System.IO.File]::ReadAllBytes($File) }
-    if ($Interval -lt 1)               { $Interval = 1 }
+    if     ($Array.count -gt 0 -and $Array -ne $null)   { $ByteArrayGame = $Array                                }
+    elseif (IsSet $File)                                { $ByteArrayGame = [System.IO.File]::ReadAllBytes($File) }
+    if     ($Interval -lt 1)                            { $Interval      = 1                                     }
 
     # Offset
     $offsetDec = GetDecimal $Offset
@@ -20,6 +21,7 @@ function ChangeBytes([string]$File, [string]$Offset, [object]$Match=$null, [obje
         $global:WarningError = $True
         return $False
     }
+
     if ($offsetDec -gt $ByteArrayGame.Length) {
         WriteToConsole "Offset is too large for file!"
         $global:WarningError = $True
@@ -46,14 +48,14 @@ function ChangeBytes([string]$File, [string]$Offset, [object]$Match=$null, [obje
     foreach ($i in 0..($valuesDec.Length-1)) {
         if ($Add) {
             if ($ByteArrayGame[$offsetDec + ($i * $Interval)] + $valuesDec[$i] -gt 255) {
-                $ByteArrayGame[$offsetDec + ($i * $Interval)]     += $valuesDec[$i] - 255
+                $ByteArrayGame[$offsetDec + ($i * $Interval)]     += $valuesDec[$i] - 256
                 $ByteArrayGame[$offsetDec + ($i * $Interval) - 1] += 1
             }
             else { $ByteArrayGame[$offsetDec + ($i * $Interval)] += $ValuesDec[$i] }
         }
         elseif ($Subtract) {
             if ($ByteArrayGame[$offsetDec + ($i * $Interval)] - $valuesDec[$i] -lt 0) {
-                $ByteArrayGame[$offsetDec + ($i * $Interval)]     -= $valuesDec[$i] + 255
+                $ByteArrayGame[$offsetDec + ($i * $Interval)]     -= $valuesDec[$i] + 256
                 $ByteArrayGame[$offsetDec + ($i * $Interval) + 1] -= 1
             }
             else { $ByteArrayGame[$offsetDec + ($i * $Interval)] -= $ValuesDec[$i] }
@@ -147,7 +149,7 @@ function CopyBytes([string]$File, [string]$Start, [string]$Length, [string]$Offs
 
 
 #==============================================================================================================================================================================================
-function PatchBytes([string]$File, [string]$Offset, [string]$Length, [string]$Patch, [switch]$Texture, [switch]$Shared, [switch]$Models, [switch]$Extracted, [switch]$Music, [switch]$Pad) {
+function PatchBytes([string]$File, [string]$Offset, [string]$Length, [string]$Patch, [switch]$Texture, [switch]$Shared, [switch]$Models, [switch]$Extracted, [switch]$Music, [switch]$Editor, [switch]$Pad) {
     
     # Binary Patch File Parameter Check
     if (!(IsSet -Elem $Patch) ) {
@@ -157,12 +159,13 @@ function PatchBytes([string]$File, [string]$Offset, [string]$Length, [string]$Pa
     }
 
     # Binary Patch File Path
-    if     ($Texture)     { $Patch = $GameFiles.textures  + "\" + $Patch }
-    elseif ($Models)      { $Patch = $GameFiles.models    + "\" + $Patch }
-    elseif ($Extracted)   { $Patch = $GameFiles.extracted + "\" + $Patch }
-    elseif ($Music)       { $Patch = $Paths.Music         + "\" + $Patch }
-    elseif ($Shared)      { $Patch = $Paths.Shared        + "\" + $Patch }
-    else                  { $Patch = $GameFiles.binaries  + "\" + $Patch }
+    if     ($Texture)     { $Patch = $GameFiles.textures  + "\" + $Patch                               }
+    elseif ($Models)      { $Patch = $GameFiles.models    + "\" + $Patch                               }
+    elseif ($Extracted)   { $Patch = $GameFiles.extracted + "\" + $Patch                               }
+    elseif ($Music)       { $Patch = $Paths.Music         + "\" + $Patch                               }
+    elseif ($Editor)      { $Patch = $Paths.Games         + "\" + $GameType.mode + "\Editor\" + $Patch }
+    elseif ($Shared)      { $Patch = $Paths.Shared        + "\" + $Patch                               }
+    else                  { $Patch = $GameFiles.binaries  + "\" + $Patch                               }
 
     # Binary Patch File Exists
     if (!(TestFile $Patch)) {

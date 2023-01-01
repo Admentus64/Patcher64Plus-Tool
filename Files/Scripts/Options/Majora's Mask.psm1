@@ -293,7 +293,7 @@ function ByteOptions() {
         ChangeBytes -Offset "BA603C" -Values "00 00 00 00"; ChangeBytes -Offset "BA6530" -Values "00 00 00 00"; ChangeBytes -Offset "BB787C" -Values "00 00 00 00"
     }
 
-    if (IsChecked $Redux.Hide.Magic) { # Magic Meter and Rupees
+    if (IsChecked $Redux.Hide.Magic) { # Magic Meter & Rupees
         ChangeBytes -Offset "BA5A28" -Values "00 00 00 00"; ChangeBytes -Offset "BA5B3C" -Values "00 00 00 00"; ChangeBytes -Offset "BA5BE8" -Values "00 00 00 00"
         ChangeBytes -Offset "BA6028" -Values "00 00 00 00"; ChangeBytes -Offset "BA6520" -Values "00 00 00 00"; ChangeBytes -Offset "BB788C" -Values "00 00 00 00"
     }
@@ -358,8 +358,8 @@ function ByteOptions() {
         
         MultiplyBytes -Offset "D4E07F" -Factor $multi; MultiplyBytes -Offset "E0790F" -Factor $multi; MultiplyBytes -Offset "F94A00" -Factor $multi # ReDead / Gibdo, Stalchild, Poe
         MultiplyBytes -Offset "D2F07C" -Factor $multi; MultiplyBytes -Offset "D6CFB8" -Factor $multi; MultiplyBytes -Offset "F5B7FC" -Factor $multi # Deku Baba, Wilted Deku Baba, Dexihand
-        MultiplyBytes -Offset "D13750" -Factor $multi; MultiplyBytes -Offset "D1375C" -Factor $multi; MultiplyBytes -Offset "EAE53C" -Factor $multi # Peahat, Peahat Larva, Bad Bat
         MultiplyBytes -Offset "FC3A5F" -Factor $multi; MultiplyBytes -Offset "EDBA17" -Factor $multi; MultiplyBytes -Offset "E9BD87" -Factor $multi # Deep Python, Skullfish, Desbreko
+        MultiplyBytes -Offset "D13750" -Factor $multi; MultiplyBytes -Offset "D1375C" -Factor $multi # Peahat, Peahat Larva
         MultiplyBytes -Offset "D55BDC" -Factor $multi; MultiplyBytes -Offset "D55C08" -Factor $multi # Skullwalltula, Golden Skullwalltula
         MultiplyBytes -Offset "CF3514" -Factor $multi; MultiplyBytes -Offset "CF0A4B" -Factor $multi # Dodongo (Small / Big)
         MultiplyBytes -Offset "D10D3C" -Factor $multi; MultiplyBytes -Offset "D0DBDB" -Factor $multi # Red Tektite, Blue Tektite
@@ -382,10 +382,10 @@ function ByteOptions() {
       # MultiplyBytes -Offset "" -Factor $multi # Hiploop                             (HP: ??)   F831B0 -> F86E00 (Length: 3C50) (ovl_En_Pp)
       # MultiplyBytes -Offset "" -Factor $multi # Bio Deku Baba                       (HP: ??)   E596F0 -> E5D320 (Length: 3C30) (ovl_Boss_05)
 
-      # MultiplyBytes -Offset "DA556F" -Factor $multi; ChangeBytes -Offset "DA6E67" -Factor $multi # Freezard
-      # MultiplyBytes -Offset "D21870" -Factor $multi; ChangeBytes -Offset "CF56BC" -Factor $multi # Skulltula, Keese
+      # MultiplyBytes -Offset "DA556F" -Factor $multi; MultiplyBytes -Offset "DA6E67" -Factor $multi # Freezard
+      # MultiplyBytes -Offset "D21870" -Factor $multi; MultiplyBytes -Offset "CF56BC" -Factor $multi # Skulltula, Keese
+      # MultiplyBytes -Offset "E0EE24" -Factor $multi; MultiplyBytes -Offset "EAE53C" -Factor $multi # Guay, Bad Bat
       # MultiplyBytes -Offset "D2B2F8" -Factor $multi # Armos (alt: D2B29E)
-      # MultiplyBytes -Offset "E0EE24" -Factor $multi # Guay
     }
 
     if (IsIndex -Elem $Redux.Hero.MiniBossHP -Index 3 -Not) { # Mini-Bosses
@@ -421,11 +421,11 @@ function ByteOptions() {
         MultiplyBytes -Offset "E6FA2F" -Factor $multi # Four Remains
     }
 
-    if ( (IsIndex -Elem $Redux.Hero.Recovery -Not) -or (IsChecked $Redux.Hero.NoRecoveryHearts) ) {
+    if (IsIndex -Elem $Redux.Hero.Recovery -Not) {
         ChangeBytes -Offset "BABE7F" -Values "09 04" -Interval 16
-        if       ( (IsText -Elem $Redux.Hero.Recovery -Compare "0x Recovery") -or (IsChecked $Redux.Hero.NoRecoveryHearts) )   { ChangeBytes -Offset "BABEA2" -Values "29 40"; ChangeBytes -Offset "BABEA5" -Values "05 29 43" }
-        elseif     (IsText -Elem $Redux.Hero.Recovery -Compare "1/2x Recovery")                                                { ChangeBytes -Offset "BABEA2" -Values "28 40"; ChangeBytes -Offset "BABEA5" -Values "05 28 43" }
-        elseif     (IsText -Elem $Redux.Hero.Recovery -Compare "1/4x Recovery")                                                { ChangeBytes -Offset "BABEA2" -Values "28 80"; ChangeBytes -Offset "BABEA5" -Values "05 28 83" }
+        if       ( (IsText -Elem $Redux.Hero.Recovery -Compare "0x Recovery") -or (IsText -Elem $Redux.Hero.ItemDrops -Compare "No Hearts") )   { ChangeBytes -Offset "BABEA2" -Values "29 40"; ChangeBytes -Offset "BABEA5" -Values "05 29 43" }
+        elseif     (IsText -Elem $Redux.Hero.Recovery -Compare "1/2x Recovery")                                                                 { ChangeBytes -Offset "BABEA2" -Values "28 40"; ChangeBytes -Offset "BABEA5" -Values "05 28 43" }
+        elseif     (IsText -Elem $Redux.Hero.Recovery -Compare "1/4x Recovery")                                                                 { ChangeBytes -Offset "BABEA2" -Values "28 80"; ChangeBytes -Offset "BABEA5" -Values "05 28 83" }
     }
 
     if     ( (IsText -Elem $Redux.Hero.Damage -Compare "1x Damage") -and ($GameType.title -notlike "*Master Quest*") )   { ChangeBytes -Offset "CADEC2" -Values "2C 03" }
@@ -454,13 +454,16 @@ function ByteOptions() {
             elseif ($Redux.Hero.ClockSpeed.SelectedIndex -eq 3) { ChangeBytes -Offset "BB005E" -Values "FF FC"; ChangeBytes -Offset "BC668F" -Values "06"; ChangeBytes -Offset "BEDB8E" -Values "FF FC" }
             elseif ($Redux.Hero.ClockSpeed.SelectedIndex -eq 4) { ChangeBytes -Offset "BB005E" -Values "FF FA"; ChangeBytes -Offset "BC668F" -Values "09"; ChangeBytes -Offset "BEDB8E" -Values "FF FA" }
             elseif ($Redux.Hero.ClockSpeed.SelectedIndex -eq 5) { ChangeBytes -Offset "BB005E" -Values "FF F4"; ChangeBytes -Offset "BC668F" -Values "12"; ChangeBytes -Offset "BEDB8E" -Values "FF F4" }
+            elseif ($Redux.Hero.ClockSpeed.SelectedIndex -eq 6) { ChangeBytes -Offset "BB005E" -Values "FF EC"; ChangeBytes -Offset "BC668F" -Values "1E"; ChangeBytes -Offset "BEDB8E" -Values "FF EC" }
     }
 
-    if (IsChecked $Redux.Hero.NoItemDrops) {
+    if (IsText -Elem $Redux.Hero.ItemDrops -Compare "Nothing") {
         $Values = @()
         for ($i=0; $i -lt 80; $i++) { $Values += 0 }
         ChangeBytes -Offset "C44400" -Values $Values
     }
+    elseif (IsText -Elem $Redux.Hero.ItemDrops -Compare "No Hearts")     { ChangeBytes -Offset "B3DC54" -Values "50" }
+    elseif (IsText -Elem $Redux.Hero.ItemDrops -Compare "Only Rupees")   { PatchBytes  -Offset "C444B9" -Patch "only_rupee_drops.bin" }
 
     if (IsChecked $Redux.Hero.PalaceRoute) {
         CreateSubPath  -Path ($GameFiles.extracted + "\Deku Palace")
@@ -480,8 +483,7 @@ function ByteOptions() {
         ChangeBytes -Offset "E76F38"  -Values "00 00 00 00"; ChangeBytes -Offset "E772DC"  -Values "24 05 06 4A"; ChangeBytes -Offset "E77CCC" -Values "24 05 06 4A" # Disable Bomb Shop
     }
 
-    if (IsChecked $Redux.Hero.NoRecoveryHearts)   { ChangeBytes -Offset "B3DC54" -Values "50" }
-    if (IsChecked $Redux.Hero.PermanentKeese)     { ChangeBytes -Offset "CF3B58" -Values "00 00 00 00 00 00 00 00"; ChangeBytes -Offset "CF3B60" -Values "00 00 00 00 00 00 00 00 00 00 00 00" }
+    if (IsChecked $Redux.Hero.PermanentKeese) { ChangeBytes -Offset "CF3B58" -Values "00 00 00 00 00 00 00 00"; ChangeBytes -Offset "CF3B60" -Values "00 00 00 00 00 00 00 00 00 00 00 00" }
 
 
 
@@ -857,7 +859,7 @@ function ByteReduxOptions() {
 
     if (IsDefaultColor -Elem $Redux.Colors.SetButtons[2] -Not) { # C Buttons
         ChangeBytes -Offset (AddToOffset $Symbols.HUD_COLOR_CONFIG -Add "10") -Values @($Redux.Colors.SetButtons[2].Color.R, $Redux.Colors.SetButtons[2].Color.G, $Redux.Colors.SetButtons[2].Color.B) # Buttons
-        if ($Redux.Colors.Buttons.Text -eq "Randomized" -or $Redux.Colors.Buttons.Text -eq "Custom") {
+        if ($Redux.Colors.Buttons.Text -ne "N64 OoT" -and $Redux.Colors.Buttons.Text -ne "N64 MM" -and $Redux.Colors.Buttons.Text -ne "GC OoT" -and $Redux.Colors.Buttons.Text -ne "GC MM") {
             ChangeBytes -Offset (AddToOffset $Symbols.HUD_COLOR_CONFIG -Add "60") -Values @($Redux.Colors.SetButtons[2].Color.R, $Redux.Colors.SetButtons[2].Color.G, $Redux.Colors.SetButtons[2].Color.B) # Text Icons
             ChangeBytes -Offset (AddToOffset $Symbols.HUD_COLOR_CONFIG -Add "A8") -Values @($Redux.Colors.SetButtons[2].Color.R, $Redux.Colors.SetButtons[2].Color.G, $Redux.Colors.SetButtons[2].Color.B) # to Equip
             ChangeBytes -Offset (AddToOffset $Symbols.HUD_COLOR_CONFIG -Add "94") -Values @($Redux.Colors.SetButtons[2].Color.R, $Redux.Colors.SetButtons[2].Color.G, $Redux.Colors.SetButtons[2].Color.B) # Note
@@ -989,6 +991,13 @@ function ByteLanguageOptions() {
 
         if (IsChecked -Elem $Redux.Restore.OnTheMoonIntro -Not) { ChangeBytes -Offset "C5A850" -Values "02D5A00002D64FD000AF0000"; ChangeBytes -Offset "C5B7CC" -Values "67004387"; SetMessage -ID "00AF" -ASCII -Replace "The Moon"; SetMessageIcon -ID "00AF" -Hex "FE" } # The Moon
     }
+
+    if (IsChecked $Redux.Text.EasterEggs) {
+        if (TestFile ($GameFiles.Base + "\Easter Eggs.json")) {
+            $json = SetJSONFile ($GameFiles.Base + "\Easter Eggs.json")
+            foreach ($entry in $json) { SetMessage -ID $entry.box -Replace $entry.message }
+        }
+   }
 
     if ( (IsDefault $Redux.Text.TatlScript -Not) -and (IsDefault $Redux.Text.TatlName -Not) -and $Redux.Text.TatlName.Text.Count -gt 0) {
         SetMessage -ID "057A" -Text $LanguagePatch.tatl -Replace $Redux.Text.TatlName.Text; SetMessage -ID "057C"; SetMessage -ID "057E"; SetMessage -ID "058E"; SetMessage -ID "0735"; SetMessage -ID "073E"; SetMessage -ID "073F"; SetMessage -ID "1F4E"
@@ -1131,11 +1140,11 @@ function CreateTabRedux() {
 
     CreateReduxGroup       -Tag  "Dpad"        -All                         -Text "D-Pad Layout"
     CreateReduxPanel                           -All -Columns 4
-    CreateReduxRadioButton -Name "Disable"     -All -Max 4 -SaveTo "Layout" -Text "Disable"    -Info "Completely disable the D-Pad"                                                                 -Credits "Ported from Redux"
-    CreateReduxRadioButton -Name "Hide"        -All -Max 4 -SaveTo "Layout" -Text "Hidden"     -Info "Hide the D-Pad icons, while they are still active"                                            -Credits "Ported from Redux"
-    CreateReduxRadioButton -Name "LayoutLeft"  -All -Max 4 -SaveTo "Layout" -Text "Left Side"  -Info "Show the D-Pad icons on the left side of the HUD"                                    -Checked -Credits "Ported from Redux"
-    CreateReduxRadioButton -Name "LayoutRight" -All -Max 4 -SaveTo "Layout" -Text "Right Side" -Info "Show the D-Pad icons on the right side of the HUD"                                            -Credits "Ported from Redux"
-  # CreateReduxCheckBox    -Name "DualSet"     -All                         -Text "Dual Set"   -Info "Allow switching between two different D-Pad sets`nPress L + R ingame to swap between layouts" -Credits "Admentus" -Link $Redux.Dpad.Disable
+    CreateReduxRadioButton -Name "Disable"     -All -Max 4 -SaveTo "Layout" -Text "Disable"    -Info "Completely disable the D-Pad"                                                                                          -Credits "Ported from Redux"
+    CreateReduxRadioButton -Name "Hide"        -All -Max 4 -SaveTo "Layout" -Text "Hidden"     -Info "Hide the D-Pad icons, while they are still active`nYou can rebind the items to the D-Pad in the pause screen"          -Credits "Ported from Redux"
+    CreateReduxRadioButton -Name "LayoutLeft"  -All -Max 4 -SaveTo "Layout" -Text "Left Side"  -Info "Show the D-Pad icons on the left side of the HUD`nYou can rebind the items to the D-Pad in the pause screen"  -Checked -Credits "Ported from Redux"
+    CreateReduxRadioButton -Name "LayoutRight" -All -Max 4 -SaveTo "Layout" -Text "Right Side" -Info "Show the D-Pad icons on the right side of the HUD`nYou can rebind the items to the D-Pad in the pause screen"          -Credits "Ported from Redux"
+  # CreateReduxCheckBox    -Name "DualSet"     -All                         -Text "Dual Set"   -Info "Allow switching between two different D-Pad sets`nPress L + R ingame to swap between layouts"                          -Credits "Admentus" -Link $Redux.Dpad.Disable
 
 
 
@@ -1207,8 +1216,9 @@ function CreateTabLanguage() {
     CreateReduxRadioButton -Name "Restore"           -Max 3 -SaveTo "Dialogue" -Text "Restore Text" -Info "Restores and fixes the following:`n- Restore the area titles cards for those that do not have any`n- Sound effects that do not play during dialogue`n- Grammar and typo fixes" -Credits "Redux"
     CreateReduxRadioButton -Name "Custom"            -Max 3 -SaveTo "Dialogue" -Text "Custom"       -Info ('Insert custom dialogue found from "..\Patcher64+ Tool\Files\Games\Majora' + "'" + 's Mask\Custom Text"') -Warning "Make sure your custom script is proper and correct, or your ROM will crash`n[!] No edit will be made if the custom script is missing"
 
-    CreateReduxCheckBox -All -Name "AdultPronouns"  -Text "Adult Pronouns"   -Info "Refer to Link as an adult instead of a child" -Credits "Skilar"
-    CreateReduxCheckBox -All -Name "AreaTitleCards" -Text "Area Title Cards" -Info "Add area title cards to missing areas"        -Credits "ShadowOne333"
+    CreateReduxCheckBox -All -Name "AdultPronouns"  -Text "Adult Pronouns"   -Info "Refer to Link as an adult instead of a child"                              -Credits "Skilar"
+    CreateReduxCheckBox -All -Name "AreaTitleCards" -Text "Area Title Cards" -Info "Add area title cards to missing areas"                                     -Credits "ShadowOne333"
+    CreateReduxCheckBox -All -Name "EasterEggs"     -Text "Easter Eggs"      -Info "Adds custom Patreon Tier 3 messages into the game`nCan you find them all?" -Credits "Admentus & Patreons" -Checked
 
     
 
@@ -1243,6 +1253,7 @@ function UnlockLanguageContent() {
     EnableElem -Elem $Redux.Text.Restore          -Active $Redux.Language[0].checked
     EnableElem -Elem $Redux.Text.AdultPronouns    -Active $Redux.Language[0].checked
     EnableElem -Elem $Redux.Text.AreaTitleCards   -Active $Redux.Language[0].checked
+    EnableElem -Elem $Redux.Text.EasterEggs       -Active $Redux.Language[0].checked
     EnableElem -Elem $Redux.Features.OcarinaIcons -Active $Redux.Language[0].checked
 
     if (!$Redux.Language[0].Checked -and !$Redux.Text.Vanilla.Checked -and !$Redux.Text.Custom.Checked) { $Redux.Text.Vanilla.Checked = $True }
@@ -1308,15 +1319,15 @@ function CreateTabGraphics() {
     # HIDE HUD #
 
     CreateReduxGroup    -All -Tag  "Hide"           -Text "Hide HUD"
-    CreateReduxCheckBox -All -Name "AButton"        -Text "Hide A Button"         -Info "Hide the A Button"                                                                              -Credits "Marcelo20XX"
-    CreateReduxCheckBox -All -Name "BButton"        -Text "Hide B Button"         -Info "Hide the B Button"                                                                              -Credits "Marcelo20XX"
-    CreateReduxCheckBox -All -Name "CButtons"       -Text "Hide C Buttons"        -Info "Hide the C Buttons"                                                                             -Credits "Marcelo20XX"
-    CreateReduxCheckBox -All -Name "Hearts"         -Text "Hide Hearts"           -Info "Hide the Hearts display"                                                                        -Credits "Marcelo20XX"
-    CreateReduxCheckBox -All -Name "Magic"          -Text "Hide Magic and Rupees" -Info "Hide the Magic and Rupees display"                                                              -Credits "Marcelo20XX"
-    CreateReduxCheckBox -All -Name "AreaTitle"      -Text "Hide Area Title Card"  -Info "Hide the area title that displays when entering a new area"                                     -Credits "Marcelo20XX"
-    CreateReduxCheckBox -All -Name "Clock"          -Text "Hide Clock"            -Info "Hide the Clock display"                                                                         -Credits "Marcelo20XX"
-    CreateReduxCheckBox -All -Name "CountdownTimer" -Text "Hide Countdown Timer"  -Info "Hide the countdown timer that displays during the final hours before the Moon will hit Termina" -Credits "Marcelo20XX"
-    CreateReduxCheckBox -All -Name "Credits"        -Text "Hide Credits"          -Info "Do not show the credits text during the credits sequence"                                       -Credits "Admentus"
+    CreateReduxCheckBox -All -Name "AButton"        -Text "Hide A Button"        -Info "Hide the A Button"                                                                              -Credits "Marcelo20XX"
+    CreateReduxCheckBox -All -Name "BButton"        -Text "Hide B Button"        -Info "Hide the B Button"                                                                              -Credits "Marcelo20XX"
+    CreateReduxCheckBox -All -Name "CButtons"       -Text "Hide C Buttons"       -Info "Hide the C Buttons"                                                                             -Credits "Marcelo20XX"
+    CreateReduxCheckBox -All -Name "Hearts"         -Text "Hide Hearts"          -Info "Hide the Hearts display"                                                                        -Credits "Marcelo20XX"
+    CreateReduxCheckBox -All -Name "Magic"          -Text "Hide Magic && Rupees" -Info "Hide the Magic & Rupees display"                                                                -Credits "Marcelo20XX"
+    CreateReduxCheckBox -All -Name "AreaTitle"      -Text "Hide Area Title Card" -Info "Hide the area title that displays when entering a new area"                                     -Credits "Marcelo20XX"
+    CreateReduxCheckBox -All -Name "Clock"          -Text "Hide Clock"           -Info "Hide the Clock display"                                                                         -Credits "Marcelo20XX"
+    CreateReduxCheckBox -All -Name "CountdownTimer" -Text "Hide Countdown Timer" -Info "Hide the countdown timer that displays during the final hours before the Moon will hit Termina" -Credits "Marcelo20XX"
+    CreateReduxCheckBox -All -Name "Credits"        -Text "Hide Credits"         -Info "Do not show the credits text during the credits sequence"                                       -Credits "Admentus"
 
 
 
@@ -1404,9 +1415,8 @@ function CreateTabDifficulty() {
 
     CreateReduxComboBox -All -Name "Ammo"     -Column 1 -Row 3 -Text "Ammo Usage" -Items @("1x Ammo Usage", "2x Ammo Usage", "4x Ammo Usage", "8x Ammo Usage") -Info "Set the amount of times ammo is consumed at"                                                 -Credits "Admentus"
     CreateReduxComboBox -All -Name "DamageEffect"              -Text "Damage Effect"               -Items @("Default", "Burn", "Freeze", "Shock", "Knockdown") -Info "Add an effect when damaged"                                                                  -Credits "Ported from Rando"
-    CreateReduxComboBox -All -Name "ClockSpeed"                -Text "Clock Speed"                 -Items @("Default", "1/3", "2/3", "2x", "3x", "6x")         -Info "Set the speed at which time is progressing"                                                  -Credits "Ported from Rando"
-    CreateReduxCheckBox -All -Name "NoRecoveryHearts"          -Text "No Recovery Heart Drops"                                                                 -Info "Disable Recovery Hearts from spawning from item drops"                                       -Credits "Admentus"
-    CreateReduxCheckBox -All -Name "NoItemDrops"               -Text "No Item Drops"                                                                           -Info "Disable all items from spawning"                                                             -Credits "Admentus & BilonFullHDemon"
+    CreateReduxComboBox -All -Name "ClockSpeed"                -Text "Clock Speed"                 -Items @("Default", "1/3", "2/3", "2x", "3x", "6x", "10x")  -Info "Set the speed at which time is progressing"                                                  -Credits "Ported from Rando"
+    CreateReduxComboBox -All -Name "ItemDrops"                 -Text "Item Drops"                  -Items @("Default", "No Hearts", "Only Rupees", "Nothing")  -Info "Set the items that will drop from grass, pots and more"                                      -Credits "Admentus, Third M & BilonFullHDemon"
     CreateReduxCheckBox -All -Name "PalaceRoute"               -Text "Restore Palace Route"                                                                    -Info "Restore the route to the Bean Seller within the Deku Palace as seen in the Japanese release" -Credits "ShadowOne"
     CreateReduxCheckBox -All -Name "RaisedResearchLabPlatform" -Text "Raised Research Lab Platform"                                                            -Info "Raise the platform leading up to the Research Laboratory as in the Japanese release"         -Credits "Linkz"
     CreateReduxCheckBox -All -Name "DeathIsMoonCrash"          -Text "Death is Moon Crash"                                                                     -Info "If you die, the moon will crash`nThere are no continues anymore"                             -Credits "Ported from Rando"

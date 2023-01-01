@@ -86,6 +86,23 @@ function GetGameTypePreset() {
 
 
 #==============================================================================================================================================================================================
+function GetMember {
+
+    [CmdletBinding()]
+    Param(
+        [Parameter(Mandatory=$True, ValueFromPipeline=$True)]
+        [PSCustomObject]$obj
+    )
+    $obj | Get-Member -MemberType NoteProperty | ForEach-Object {
+        $key = $_.Name
+        [PSCustomObject]@{Key = $key; Value = $obj."$key"}
+    }
+
+}
+
+
+
+#==============================================================================================================================================================================================
 function GetGameSettingsFile() { return $Paths.Settings + "\" + (GetGameTypePreset) + ".ini" }
 
 
@@ -98,3 +115,4 @@ Export-ModuleMember -Function GetSettings
 Export-ModuleMember -Function GetGameTypePreset
 Export-ModuleMember -Function CreateGameTypePreset
 Export-ModuleMember -Function GetGameSettingsFile
+Export-ModuleMember -Function GetMember

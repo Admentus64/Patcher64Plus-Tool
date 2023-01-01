@@ -1,0 +1,665 @@
+[
+	{ "type": "Jump", "moves" : [ {
+		"name"		: "Multibounce",
+		"title"		: "Multibounce",
+		"id"		: "1F",
+		"fp"		: 2,
+		"bp"		: 1
+	}, {
+		"name"		: "PowerBounce",
+		"title"		: "Power Bounce",
+		"id"		: "20",
+		"fp"		: 3,
+		"bp"		: 2
+	}, {
+		"name"		: "SleepStomp",
+		"title"		: "Sleep Stomp",
+		"id"		: "21",
+		"fp"		: 2,
+		"bp"		: 1
+	}, {
+		"name"		: "DizzyStomp",
+		"title"		: "Dizzy Stomp",
+		"id"		: "22",
+		"fp"		: 2,
+		"bp"		: 1
+	}, {
+		"name"		: "JumpCharge",
+		"title"		: "Jump Charge",
+		"id"		: "25",
+		"fp"		: 1,
+		"bp"		: 1
+	}, {
+		"name"		: "SJumpCharge",
+		"title"		: "S. Jump Charge",
+		"id"		: "27",
+		"fp"		: 4,
+		"bp"		: 2
+	}, {
+		"name"		: "PowerJump",
+		"title"		: "Power Jump",
+		"id"		: "2B",
+		"fp"		: 2,
+		"bp"		: 1
+	}, {
+		"name"		: "SuperJump",
+		"title"		: "Super Jump",
+		"id"		: "2C",
+		"fp"		: 4,
+		"bp"		: 2
+	}, {
+		"name"		: "MegaJump",
+		"title"		: "Mega Jump",
+		"id"		: "2D",
+		"fp"		: 6,
+		"bp"		: 3
+	}, {
+		"name"		: "DDownJump",
+		"title"		: "D-Down Jump",
+		"id"		: "2E",
+		"fp"		: 2,
+		"bp"		: 2
+	}, {
+		"name"		: "ShrinkStomp",
+		"title"		: "Shrink Stomp",
+		"id"		: "2F",
+		"fp"		: 2,
+		"bp"		: 1
+	} ] },
+
+	{ "type": "Hammer", "moves" : [ {
+		"name"		: "SpinSmash",
+		"title"		: "Spin Smash",
+		"id"		: "08",
+		"fp"		: 2,
+		"bp"		: 1
+	}, {
+		"name"		: "QuakeHammer",
+		"title"		: "Quake Hammer",
+		"id"		: "09",
+		"fp"		: 2,
+		"bp"		: 1
+	}, {
+		"name"		: "DDownPound",
+		"title"		: "D-Down Pound",
+		"id"		: "0A",
+		"fp"		: 2,
+		"bp"		: 2
+	}, {
+		"name"		: "HammerThrow",
+		"title"		: "Hammer Throw",
+		"id"		: "0D",
+		"fp"		: 2,
+		"bp"		: 2
+	}, {
+		"name"		: "MegaQuake",
+		"title"		: "Mega Quake",
+		"id"		: "0E",
+		"fp"		: 7,
+		"bp"		: 3
+	}, {
+		"name"		: "SmashCharge",
+		"title"		: "Smash Charge",
+		"id"		: "0F",
+		"fp"		: 1,
+		"bp"		: 1
+	}, {
+		"name"		: "SSmashCharge",
+		"title"		: "S. Smash Charge",
+		"id"		: "11",
+		"fp"		: 4,
+		"bp"		: 2
+	}, {
+		"name"		: "PowerQuake",
+		"title"		: "Power Quake",
+		"id"		: "14",
+		"fp"		: 4,
+		"bp"		: 2
+	}, {
+		"name"		: "PowerSmash",
+		"title"		: "Power Smash",
+		"id"		: "15",
+		"fp"		: 2,
+		"bp"		: 1
+	}, {
+		"name"		: "SuperSmash",
+		"title"		: "Super Smash",
+		"id"		: "16",
+		"fp"		: 4,
+		"bp"		: 2
+	}, {
+		"name"		: "MegaSmash",
+		"title"		: "Mega Smash",
+		"id"		: "17",
+		"fp"		: 6,
+		"bp"		: 3
+	}, {
+		"name"		: "ShrinkSmash",
+		"title"		: "ShrinkSmash",
+		"id"		: "18",
+		"fp"		: 2,
+		"bp"		: 1
+	} ] },
+
+	{ "type": "Stats", "onlyBadges": 1, "moves" : [ {
+		"name"		: "DamageDodge",
+		"title"		: "Damage Dodge",
+		"id"		: "33",
+		"bp"		: 3
+	}, {
+		"name"		: "PowerPlus",
+		"title"		: "Power Plus",
+		"id"		: "3B",
+		"bp"		: 6
+	}, {
+		"name"		: "AllorNothing",
+		"title"		: "All or Nothing",
+		"id"		: "3C",
+		"bp"		: 4
+	}, {
+		"name"		: "IcePower",
+		"title"		: "Ice Power",
+		"id"		: "3D",
+		"bp"		: 2
+	}, {
+		"name"		: "PUpDDown",
+		"title"		: "P-Up, D-Down",
+		"id"		: "3E",
+		"bp"		: 2
+	}, {
+		"name"		: "SpikeShield",
+		"title"		: "Spike Shield",
+		"id"		: "40",
+		"bp"		: 2
+	}, {
+		"name"		: "FireShield",
+		"title"		: "Fire Shield",
+		"id"		: "41",
+		"bp"		: 2
+	}, {
+		"name"		: "PrettyLucky",
+		"title"		: "Pretty Lucky",
+		"id"		: "42",
+		"bp"		: 3
+	}, {
+		"name"		: "FeelingFine",
+		"title"		: "Feeling Fine",
+		"id"		: "43",
+		"bp"		: 3
+	}, {
+		"name"		: "ZapTap",
+		"title"		: "Zap Tap",
+		"id"		: "44",
+		"bp"		: 4
+	}, {
+		"name"		: "DefendPlus",
+		"title"		: "Defend Plus",
+		"id"		: "45",
+		"bp"		: 6
+	}, {
+		"name"		: "LastStand",
+		"title"		: "Last Stand",
+		"id"		: "46",
+		"bp"		: 1
+	}, {
+		"name"		: "CloseCall",
+		"title"		: "Close Call",
+		"id"		: "47",
+		"bp"		: 1
+	}, {
+		"name"		: "LuckyDay",
+		"title"		: "Lucky Day",
+		"id"		: "48",
+		"bp"		: 7
+	}, {
+		"name"		: "PDownDUp",
+		"title"		: "P-Down, D-Up",
+		"id"		: "49",
+		"bp"		: 2
+	}, {
+		"name"		: "DodgeMaster",
+		"title"		: "Dodge Master",
+		"id"		: "4C",
+		"bp"		: 2
+	}, {
+		"name"		: "HPPlus",
+		"title"		: "HP Plus",
+		"id"		: "52",
+		"bp"		: 3
+	}, {
+		"name"		: "HPDrain",
+		"title"		: "HP Drain",
+		"id"		: "5A",
+		"bp"		: 3
+	}, {
+		"name"		: "FPPlus",
+		"title"		: "FP Plus",
+		"id"		: "5B",
+		"bp"		: 3
+	}, {
+		"name"		: "HappyHeart",
+		"title"		: "Happy Heart",
+		"id"		: "5E",
+		"bp"		: 3
+	}, {
+		"name"		: "MegaRush",
+		"title"		: "Mega Rush",
+		"id"		: "5F",
+		"bp"		: 1
+	}, {
+		"name"		: "FlowerSaver",
+		"title"		: "Flower Saver",
+		"id"		: "62",
+		"bp"		: 6
+	}, {
+		"name"		: "PowerRush",
+		"title"		: "Power Rush",
+		"id"		: "64",
+		"bp"		: 1
+	}, {
+		"name"		: "HappyFlower",
+		"title"		: "Happy Flower",
+		"id"		: "74",
+		"bp"		: 3
+	} ] },
+
+	{ "type": "Tactics", "moves" : [ {
+		"name"		: "DoubleDip",
+		"title"		: "Double Dip",
+		"id"		: "35",
+		"fp"		: 3,
+		"bp"		: 1
+	}, {
+		"name"		: "TripleDip",
+		"title"		: "Triple Dip",
+		"id"		: "36",
+		"fp"		: 6,
+		"bp"		: 3
+	}, {
+		"name"		: "QuickChange",
+		"title"		: "Quick Change",
+		"id"		: "38",
+		"bp"		: 4
+	}, {
+		"name"		: "ISpy",
+		"title"		: "I Spy",
+		"id"		: "6C",
+		"bp"		: 1
+	}, {
+		"name"		: "DeepFocus",
+		"title"		: "Deep Focus",
+		"id"		: "71",
+		"bp"		: 1
+	}, {
+		"name"		: "GroupFocus",
+		"title"		: "Group Focus",
+		"id"		: "75",
+		"bp"		: 3
+	}, {
+		"name"		: "Peekaboo",
+		"title"		: "Peekaboo",
+		"id"		: "76",
+		"bp"		: 3
+	} ] },
+
+	{ "type": "Field", "onlyBadges": 1, "moves" : [ {
+		"name"		: "FirstAttack",
+		"title"		: "First Attack",
+		"id"		: "4D",
+		"bp"		: 1
+	}, {
+		"name"		: "SlowGo",
+		"title"		: "Slow Go",
+		"id"		: "4E",
+		"bp"		: 0
+	}, {
+		"name"		: "BumpAttack",
+		"title"		: "Bump Attack",
+		"id"		: "50",
+		"bp"		: 5
+	}, {
+		"name"		: "ChillOut",
+		"title"		: "Chill Out",
+		"id"		: "5D",
+		"bp"		: 2
+	}, {
+		"name"		: "SpinAttack",
+		"title"		: "Spin Attack",
+		"id"		: "6A",
+		"bp"		: 3
+	}, {
+		"name"		: "DizzyAttack",
+		"title"		: "Dizzy Attack",
+		"id"		: "6B",
+		"bp"		: 2
+	}, {
+		"name"		: "SpeedySpin",
+		"title"		: "Speedy Spin",
+		"id"		: "6D",
+		"bp"		: 1
+	} ] },
+
+	{ "type": "Items", "onlyBadges": 1, "moves" : [ {
+		"name"		: "MoneyMoney",
+		"title"		: "Money Money",
+		"id"		: "5C",
+		"bp"		: 7
+	}, {
+		"name"		: "RunawayPay",
+		"title"		: "Runaway Pay",
+		"id"		: "61",
+		"bp"		: 2
+	}, {
+		"name"		: "PayOff",
+		"title"		: "Pay-Off",
+		"id"		: "63",
+		"bp"		: 2
+	}, {
+		"name"		: "HeartFinder",
+		"title"		: "Heart Finder",
+		"id"		: "68",
+		"bp"		: 3
+	}, {
+		"name"		: "FlowerFinder",
+		"title"		: "Flower Finder",
+		"id"		: "69",
+		"bp"		: 3
+	}, {
+		"name"		: "Refund",
+		"title"		: "Refund",
+		"id"		: "6E",
+		"bp"		: 1
+	} ] },
+
+	{ "type": "FX", "onlyBadges": 1, "moves" : [ {
+		"name"		: "AttackFXA",
+		"title"		: "Attack FX A",
+		"id"		: "54",
+		"bp"		: 0
+	}, {
+		"name"		: "AttackFXB",
+		"title"		: "Attack FX B",
+		"id"		: "56",
+		"bp"		: 0
+	}, {
+		"name"		: "AttackFXC",
+		"title"		: "Attack FX C",
+		"id"		: "58",
+		"bp"		: 0
+	}, {
+		"name"		: "AttackFXD",
+		"title"		: "Attack FX D",
+		"id"		: "55",
+		"bp"		: 0
+
+	}, {
+		"name"		: "AttackFXE",
+		"title"		: "Attack FX E",
+		"id"		: "57",
+		"bp"		: 0
+	} ] },
+
+	{ "type": "Unused", "moves" : [ {
+		"name"		: "WeakSmashCharge",
+		"title"		: "Weak Smash Charge",
+		"id"		: "0B",
+		"fp"		: 1,
+		"bp"		: 1
+	}, {
+		"name"		: "AutoSmash",
+		"title"		: "Auto Smash",
+		"id"		: "13",
+		"fp"		: 2,
+		"bp"		: 1
+	}, {
+		"name"		: "ShellCrack",
+		"title"		: "Shell Crack",
+		"id"		: "19",
+		"fp"		: 6,
+		"bp"		: 3
+	}, {
+		"name"		: "WeakJumpCharge",
+		"title"		: "Weak Jump Charge",
+		"id"		: "23",
+		"fp"		: 1,
+		"bp"		: 1
+	}, {
+		"name"		: "AutoJump",
+		"title"		: "Auto Jump",
+		"id"		: "29",
+		"fp"		: 2,
+		"bp"		: 1
+	}, {
+		"name"		: "Auto Multibounce",
+		"title"		: "Auto Multibounce",
+		"id"		: "2A",
+		"fp"		: 5,
+		"bp"		: 2
+	}, {
+		"name"		: "EarthquakeJump",
+		"title"		: "Earthquake Jump",
+		"id"		: "30",
+		"fp"		: 2,
+		"bp"		: 2
+	}, {
+		"name"		: "HealthyHealthy",
+		"title"		: "Healthy Healthy",
+		"id"		: "4A",
+		"bp"		: 1
+	}, {
+		"name"		: "RightOn",
+		"title"		: "Right On!",
+		"id"		: "4F",
+		"bp"		: 8
+	}, {
+		"name"		: "MysteryScroll",
+		"title"		: "Mystery Scroll",
+		"id"		: "53",
+		"bp"		: 0
+	}, {
+		"name"		: "AttackFXF",
+		"title"		: "Attack FX F",
+		"id"		: "59",
+		"bp"		: 0
+	}, {
+		"name"		: "Berserker",
+		"title"		: "Berserker",
+		"id"		: "60",
+		"bp"		: 8
+	}, {
+		"name"		: "CrazyHeart",
+		"title"		: "Crazy Heart",
+		"id"		: "65",
+		"bp"		: 10
+	}, {
+		"name"		: "MegaHPDrain",
+		"title"		: "Mega HP Drain",
+		"id"		: "66",
+		"bp"		: 10
+	}, {
+		"name"		: "FlowerFanatic",
+		"title"		: "Flower Fanatic",
+		"id"		: "67",
+		"bp"		: 10
+	}, {
+		"name"		: "SuperFocus",
+		"title"		: "Super Focus",
+		"id"		: "72",
+		"bp"		: 5
+	}, {
+		"name"		: "Initiation",
+		"title"		: "Initiation",
+		"id"		: "73",
+		"bp"		: 0
+	} ] },
+
+	{ "type": "Goombario", "onlyMoves": 1, "moves" : [ {
+		"name"		: "Charge",
+		"title"		: "Charge",
+		"type"		: "Goombario",
+		"id"		: "87",
+		"fp"		: 1
+	}, {
+		"name"		: "Multibonk",
+		"title"		: "Multibonk",
+		"type"		: "Goombario",
+		"id"		: "88",
+		"fp"		: 3
+	} ] },
+
+	{ "type": "Kooper", "onlyMoves": 1, "moves" : [ {
+		"name"		: "PowerShell",
+		"title"		: "Power Shell",
+		"id"		: "8C",
+		"fp"		: 3
+	}, {
+		"name"		: "DizzyShell",
+		"title"		: "Dizzy Shell",
+		"id"		: "8D",
+		"fp"		: 4
+	}, {
+		"name"		: "FireShell",
+		"title"		: "Fire Shell",
+		"id"		: "8E",
+		"fp"		: 5
+	} ] },
+
+	{ "type": "Bombette", "onlyMoves": 1, "moves" : [ {
+		"name"		: "Bomb",
+		"title"		: "Bomb",
+		"id"		: "92",
+		"fp"		: 3
+	}, {
+		"name"		: "PowerBomb",
+		"title"		: "Power Bomb",
+		"id"		: "93",
+		"fp"		: 6
+	}, {
+		"name"		: "MegaBomb",
+		"title"		: "Mega Bomb",
+		"id"		: "94",
+		"fp"		: 8
+	} ] },
+
+	{ "type": "Parakarry", "onlyMoves": 1, "moves" : [ {
+		"name"		: "ShellShot",
+		"title"		: "Shell Shot",
+		"id"		: "98",
+		"fp"		: 3
+	}, {
+		"name"		: "AirLift",
+		"title"		: "Air Lift",
+		"id"		: "99",
+		"fp"		: 3
+	}, {
+		"name"		: "AirRaid",
+		"title"		: "Air Raid",
+		"id"		: "9A",
+		"fp"		: 6
+	} ] },
+
+	{ "type": "Bow", "onlyMoves": 1, "moves" : [ {
+		"name"		: "OuttaSight",
+		"title"		: "Outta Sight",
+		"id"		: "B6",
+		"fp"		: 2
+	}, {
+		"name"		: "Spook",
+		"title"		: "Spook",
+		"id"		: "B7",
+		"fp"		: 3
+	}, {
+		"name"		: "FanSmack",
+		"title"		: "Fan Smack",
+		"id"		: "B8",
+		"fp"		: 5
+	} ] },
+
+	{ "type": "Watt", "onlyMoves": 1, "moves" : [ {
+		"name"		: "PowerShock",
+		"title"		: "Power Shock",
+		"id"		: "A4",
+		"fp"		: 2
+	}, {
+		"name"		: "TurboCharge",
+		"title"		: "Turbo Charge",
+		"id"		: "A5",
+		"fp"		: 3
+	}, {
+		"name"		: "MegaShock",
+		"title"		: "Mega Shock",
+		"id"		: "A6",
+		"fp"		: 5
+	} ] },
+
+	{ "type": "Sushie", "onlyMoves": 1, "moves" : [ {
+		"name"		: "Squirt",
+		"title"		: "Squirt",
+		"id"		: "AA",
+		"fp"		: 3
+	}, {
+		"name"		: "WaterBlock",
+		"title"		: "Water Block",
+		"id"		: "AB",
+		"fp"		: 3
+	}, {
+		"name"		: "TidalWave",
+		"title"		: "Tidal Wave",
+		"id"		: "AC",
+		"fp"		: 6
+	} ] },
+
+	{ "type": "Lakilester", "onlyMoves": 1, "moves" : [ {
+		"name"		: "SpinySurge",
+		"title"		: "Spiny Surge",
+		"id"		: "B0",
+		"fp"		: 4
+	}, {
+		"name"		: "CloudNine",
+		"title"		: "Cloud Nine",
+		"id"		: "B1",
+		"fp"		: 4
+	}, {
+		"name"		: "Hurricane",
+		"title"		: "Hurricane",
+		"id"		: "B2",
+		"fp"		: 5
+	} ] },
+
+	{ "type": "Star Powers", "onlyMoves": 1, "moves" : [ {
+		"name"		: "Refresh",
+		"title"		: "Refresh",
+		"id"		: "78",
+		"fp"		: 1
+	}, {
+		"name"		: "Lullaby",
+		"title"		: "Lullaby",
+		"id"		: "79",
+		"fp"		: 2
+	}, {
+		"name"		: "StarStorm",
+		"title"		: "Star Storm",
+		"id"		: "7A",
+		"fp"		: 2
+	}, {
+		"name"		: "ChillOut",
+		"title"		: "Chill Out",
+		"id"		: "7B",
+		"fp"		: 2
+	}, {
+		"name"		: "Smooch",
+		"title"		: "Smooch",
+		"id"		: "7C",
+		"fp"		: 3
+	}, {
+		"name"		: "TimeOut",
+		"title"		: "Time Out",
+		"id"		: "7D",
+		"fp"		: 2
+	}, {
+		"name"		: "UpAndAway",
+		"title"		: "Up and Away",
+		"id"		: "7E",
+		"fp"		: 2
+	} ] }
+]

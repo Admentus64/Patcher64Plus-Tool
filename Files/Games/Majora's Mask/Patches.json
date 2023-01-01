@@ -53,6 +53,7 @@
 	"rev"				: [ "2A0A8ACB61538235BC1094D297FB6556", "AC0751DBC23AB2EC0C3144203ACA0003" ]
 }, {
 	"title"				: "The Legend of Zelda: Masked Quest (v4.3)",
+	"options"			: 1,
 	"finalize"			: 0,
 	"command"			: "Force Remap D-Pad Force Downgrade",
 	"vc_title"			: "Zelda: Masked Quest",

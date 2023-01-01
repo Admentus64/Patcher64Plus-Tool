@@ -1,0 +1,1455 @@
+[
+	{ "type" : "Goombas", "targets" : [ {
+		"name"			: "Goomba",
+		"title"			: "Goombas",
+		"hp"			: 2,
+		"hp_offset"		: [ "432093", "48E9D3", "55C613" ],
+		"def" : [ {
+			"value"		: 0,
+			"offset"	: [ "431FB4", "48E8F4", "55C534" ]
+		} ]
+	}, {
+		"name"			: "SpikedGoomba",
+		"title"			: "Spiked Goombas",
+		"hp"			: 2,
+		"hp_offset"		: [ "433A53", "493633" ],
+		"def" : [ {
+			"value"		: 0,
+			"offset"	: [ "433974", "493554" ]
+		} ]
+	}, {
+		"name"			: "Paragoomba",
+		"title"			: "Paragoombas",
+		"hp"			: 2,
+		"hp_offset"		: [ "4356A7", "44ED97", "4904B7", "641277" ],
+		"def" : [ {
+			"value"		: 0,
+			"offset"	: [ "4354A4", "44EB94", "4902B4", "641074" ]
+		}, {
+			"type"		: "Flying",
+			"value"		: 0,
+			"offset"	: [ "4354B0", "44EBA0", "4902C0", "641080" ]
+		} ]
+	}, {
+		"name"			: "HyperGoomba",
+		"title"			: "Hyper Goombas",
+		"hp"			: 7,
+		"hp_offset"		: "4FF2A3",
+		"def" : [ {
+			"value"		: 0,
+			"offset"	: "4FF1C4"
+		} ]
+	}, {
+		"name"			: "HyperParagoomba",
+		"title"			: "Hyper Paragoombas",
+		"hp"			: 7,
+		"hp_offset"		: "501F47",
+		"def" : [ {
+			"value"		: 0,
+			"offset"	: "501D44"
+		}, {
+			"type"		: "Flying",
+			"value"		: 0,
+			"offset"	: "501D50"
+		} ]
+	}, {
+		"name"			: "Gloomba",
+		"title"			: "Gloombas",
+		"hp"			: 7,
+		"hp_offset"		: "5F6793",
+		"def" : [ {
+			"value"		: 0,
+			"offset"	: "5F66B4"
+		} ]
+	}, {
+		"name"			: "SpikedGloomba",
+		"title"			: "Spiked Gloombas",
+		"hp"			: 7,
+		"hp_offset"		: "5F8153",
+		"def" : [ {
+			"value"		: 0,
+			"offset"	: "5F8074"
+		} ]
+	}, {
+		"name"			: "Paragloomba",
+		"title"			: "Paragloombas",
+		"hp"			: 7,
+		"hp_offset"		: "5F9DA7",
+		"def" : [ {
+			"value"		: 0,
+			"offset"	: "5F9BA4"
+		}, {
+			"type"		: "Flying",
+			"value"		: 0,
+			"offset"	: "5F9BB0"
+		} ]
+	} ] },
+	
+	{ "type" : "Koopas", "targets" : [ {
+		"name"			: "KoopaTroopa",
+		"title"			: "Koopa Troopas",
+		"hp"			: 4,
+		"hp_offset"		: [ "49518C", "4A5B0C", "6DE77C" ],
+		"def" : [ {
+			"title"		: [ "Normal", "Hammer", "Jump", "Water", "Blast" ],
+			"value"		: [ 1, 1, 1, 1, 1 ],
+			"offset"	: [ "495084", "4A5A04", "6DE674" ]
+		}, {
+			"type"		: "Flipped",
+			"value"		: 0,
+			"offset"	: [ "4950B0", "4A5A30", "6DE6A0" ]
+		} ]
+	}, {
+		"name"			: "Paratroopa",
+		"title"			: "Paratroopas",
+		"hp"			: 4,
+		"hp_offset"		: [ "498CAF", "4A7D7F" ],
+		"def" : [ {
+			"title"		: [ "Normal", "Hammer", "Jump", "Water", "Blast" ],
+			"value"		: [ 1, 1, 1, 1, 1 ],
+			"offset"	: [ "498AA4", "4A7B74" ]
+		}, {
+			"type"		: "Flying",
+			"value"		: 1,
+			"offset"	: [ "498AD0", "4A7BA0" ]
+		}, {
+			"type"		: "Flipped",
+			"value"		: 0,
+			"offset"	: [ "498ADC", "4A7BAC" ]
+		} ]
+	}, {
+		"name"			: "DarkKoopa",
+		"title"			: "Dark Koopas",
+		"hp"			: 8,
+		"hp_offset"		: "5EE65F",
+		"def" : [ {
+			"title"		: [ "Normal", "Hammer", "Jump", "Water", "Blast" ],
+			"value"		: [ 2, 2, 2, 2, 2 ],
+			"offset"	: "5EE554"
+		}, {
+			"type"		: "Flipped",
+			"value"		: 0,
+			"offset"	: "5EE580"
+		} ]
+	}, {
+		"name"			: "Koopatrol",
+		"title"			: "Koopatrols",
+		"hp"			: 8,
+		"hp_offset"		: [ "5677A7", "68D027", "6CDF17" ],
+		"def" : [ {
+			"title"		: [ "Normal", "Shock" ],
+			"value"		: [ 3, 3 ],
+			"offset"	: [ "567604", "68CE84", "6CDD74" ]
+		}, {
+			"type"		: "Flipped",
+			"value"		: 0,
+			"offset"	: [ "567618", "68CE98", "6CDD88" ]
+		}, {
+			"type"		: "Charged",
+			"title"		: [ "Normal", "Fire" ],
+			"value"		: [ 3, 3 ],
+			"offset"	: [ "567624", "68CEA4", "6CDD94" ]
+		} ]
+	}, {
+		"name"			: "HammerBro",
+		"title"			: "Hammer Bros.",
+		"hp"			: 12,
+		"hp_offset"		: [ "56059F", "68B0AF" ],
+		"def" : [ {
+			"value"		: 1,
+			"offset"	: [ "56040C", "68AF1C" ]
+		} ]
+	}, {
+		"name"			: "DryBones",
+		"title"			: "Dry Bones",
+		"hp"			: 8,
+		"hp_offset"		: "689693",
+		"def" : [ {
+			"title"		: [ "Normal", "Fire", "Blast" ],
+			"value"		: [ 2, -10, -10 ],
+			"offset"	: "6894B8"
+		}, {
+			"type"		: "Dead",
+			"title"		: [ "Normal", "Fire", "Blast" ],
+			"value"		: [ 99, -10, -10 ],
+			"offset"	: "6894D4"
+		} ]
+	} ] },
+	
+	{ "type" : "Shy Guys", "targets" : [ {
+		"name"			: "ShyGuy",
+		"title"			: "Shy Guys",
+		"hp"			: 7,
+		"hp_offset"		: [ "5138CB", "5153CB", "516ECB", "5189CB", "51A4CB", "56C1BB", "6E961B" ],
+		"def" : [ {
+			"title"		: [ "Normal", "Shock" ],
+			"value"		: [ 0, 0 ],
+			"offset"	: [ "5137E4", "5152E4", "516DE4", "5188E4", "51A3E4", "56C0D4", "6E9534" ]
+		} ]
+	}, {
+		"name"			: "GrooveGuy",
+		"title"			: "Groove Guys",
+		"hp"			: 7,
+		"hp_offset"		: "51F0E7",
+		"def" : [ {
+			"title"		: [ "Normal", "Shock" ],
+			"value"		: [ 0, 0 ],
+			"offset"	: "51F000"
+		} ]
+	}, {
+		"name"			: "Sky Guy",
+		"title"			: "Sky Guys",
+		"hp"			: 7,
+		"hp_offset"		: "523E2B",
+		"def" : [ {
+			"title"		: [ "Normal", "Shock" ],
+			"value"		: [ 0, 0 ],
+			"offset"	: "523BD0"
+		}, {
+			"type"		: "Flying",
+			"title"		: [ "Normal", "Shock" ],
+			"value"		: [ 0, 0 ],
+			"offset"	: "523BE4"
+		} ]
+	}, {
+		"name"			: "AntiGuy",
+		"title"			: "Anti Guys",
+		"hp"			: 50,
+		"hp_offset"		: [ "51BFC3", "6BD333" ],
+		"def" : [ {
+			"value"		: 0,
+			"offset"	: [ "51BEE4", "6BD254" ]
+		} ]
+	}, {
+		"name"			: "SpyGuy",
+		"title"			: "Spy Guys",
+		"hp"			: 7,
+		"hp_offset"		: "521B83",
+		"def" : [ {
+			"title"		: [ "Normal", "Shock" ],
+			"value"		: [ 0, 0 ],
+			"offset"	: "521A78"
+		} ]
+	}, {
+		"name"			: "MediGuy",
+		"title"			: "Medi Guys",
+		"hp"			: 7,
+		"hp_offset"		: [ "51DB17", "57DFA7", "593CB7", "5BCBB7" ],
+		"heal" : [ {
+			"type"		: "Heal",
+			"value"		: 4,
+			"offset"	: ""
+		} ],
+		"def" : [ {
+			"title"		: [ "Normal", "Shock" ],
+			"value"		: [ 0, 0 ],
+			"offset"	: [ "51DA30", "57DEC0", "593BD0", "5BCAD0" ]
+		} ]
+	}, {
+		"name"			: "PyroGuy",
+		"title"			: "Pyro Guys",
+		"hp"			: 7,
+		"hp_offset"		: "52722F",
+		"def" : [ {
+			"title"		: [ "Normal", "Water", "Ice", "Fire", "Shock", "Hammer", "Blast" ],
+			"value"		: [ 0, -2, -2, 99, 0, 0, -1 ],
+			"offset"	: "527120"
+		} ]
+	}, {
+		"name"			: "SpearGuy",
+		"title"			: "Spear Guys",
+		"hp"			: 7,
+		"hp_offset"		: "5741A7",
+		"def" : [ {
+			"title"		: [ "Normal", "Fire" ],
+			"value"		: [ 0, 0 ],
+			"offset"	: "573F94"
+		}, {
+			"type"		: "Thrust",
+			"title"		: [ "Normal", "Shock" ],
+			"value"		: [ 0, 0 ],
+			"offset"	: "573FA8"
+		} ]
+	} ] },
+	
+	{ "type" : "Magikoopas", "targets" : [ {
+		"name"			: "WhiteMagikoopa",
+		"title"			: "White Magikoopas",
+		"hp"			: 11,
+		"hp_offset"		: [ "586A17", "598017", "5C3BD7", "65B947" ],
+		"heal" : [ {
+			"type"		: "Heal",
+			"value"		: 5,
+			"offset"	: [ "589A83", "59B083", "5C6C43", "65E9B3" ]
+		}, {
+			"type"		: "Group Heal",
+			"value"		: 3,
+			"offset"	: [ "58A0FF", "59B6FF", "5C72BF", "65F02F" ]
+		} ],
+		"def" : [ {
+			"value"		: 0,
+			"offset"	: [ "586814", "597E14", "5C39D4", "65B744" ]
+		}, {
+			"type"		: "Flying",
+			"value"		: 0,
+			"offset"	: [ "586820", "597E20", "5C39E0", "65B750" ]
+		} ]
+	}, {
+		"name"			: "RedMagikoopa",
+		"title"			: "Red Magikoopas",
+		"hp"			: 11,
+		"hp_offset"		: [ "595357", "5BE257", "6505F7", "67E0A7" ],
+		"def" : [ {
+			"value"		: 0,
+			"offset"	: [ "595154", "5BE054", "6503F4", "67DEA4" ]
+		}, {
+			"type"		: "Flying",
+			"value"		: 0,
+			"offset"	: [ "595160", "5BE060", "650400", "67DEB0" ]
+		} ]
+	}, {
+		"name"			: "GreenMagikoopa",
+		"title"			: "Green Magikoopas",
+		"hp"			: 11,
+		"hp_offset"		: [ "5C0F17", "6532B7" ],
+		"def" : [ {
+			"value"		: 0,
+			"offset"	: [ "5C0D14", "6530B4" ]
+		}, {
+			"type"		: "Flying",
+			"value"		: 0,
+			"offset"	: [ "5C0D20", "6530C0" ]
+		} ]
+	}, {
+		"name"			: "YellowMagikoopa",
+		"title"			: "Yellow Magikoopas",
+		"hp"			: 11,
+		"hp_offset"		: [ "5C7837", "655F77" ],
+		"def" : [ {
+			"value"		: 0,
+			"offset"	: [ "5C7634", "655D74" ]
+		}, {
+			"type"		: "Flying",
+			"value"		: 0,
+			"offset"	: [ "5C7640", "655D80" ]
+		} ]
+	}, {
+		"name"			: "GrayMagikoopa",
+		"title"			: "Gray Magikoopas",
+		"hp"			: 11,
+		"hp_offset"		: [ "6380B7", "644517", "658C87", "680D67" ],
+		"def" : [ {
+			"value"		: 0,
+			"offset"	: [ "637EB4", "644314", "658A84", "680B64" ]
+		}, {
+			"type"		: "Flying",
+			"value"		: 0,
+			"offset"	: [ "637EC0", "644320", "658A90", "680B70" ]
+		} ]
+	}, {
+		"name"			: "Magikoopa",
+		"title"			: "Magikoopas",
+		"hp"			: 11,
+		"hp_offset"		: [ "691B57", "6D2A47" ],
+		"heal" : [ {
+			"type"		: "Heal",
+			"value"		: 5,
+			"offset"	: [ "6941E3", "6D50D3" ]
+		}, {
+			"type"		: "Group Heal",
+			"value"		: 3,
+			"offset"	: [ "694837", "6D5727" ]
+		} ],
+		"def" : [ {
+			"value"		: 0,
+			"offset"	: [ "691954", "6D2844" ]
+		}, {
+			"type"		: "Flying",
+			"value"		: 0,
+			"offset"	: [ "691960", "6D2850" ]
+		} ]
+	} ] },
+	
+	{ "type" : "Beetles", "targets" : [ {
+		"name"			: "BuzzyBeetle",
+		"title"			: "Buzzy Beetles",
+		"hp"			: 3,
+		"hp_offset"		: [ "4E8CFF", "5FCF3F"],
+		"def" : [ {
+			"title"		: [ "Normal", "Fire", "Blast" ],
+			"value"		: [ 2, 99, 99 ],
+			"offset"	: [ "4E8C04", "5FCE44" ]
+		}, {
+			"type"		: "Flipped",
+			"value"		: 0,
+			"offset"	: [ "4E8C20", "5FCE60" ]
+		} ]
+	}, {
+		"name"			: "Spike Top",
+		"title"			: "Spike Tops",
+		"hp"			: 4,
+		"hp_offset"		: [ "57F53F", "590C9F", "5FFECF" ],
+		"def" : [ {
+			"title"		: [ "Normal", "Fire", "Blast" ],
+			"value"		: [ 4, 99, 99 ],
+			"offset"	: [ "57F444", "590BA4", "5FFDD4" ]
+		}, {
+			"type"		: "Flipped",
+			"value"		: 0,
+			"offset"	: [ "57F460", "590BC0", "5FFDF0" ]
+		} ]
+	}, {
+		"name"			: "Spiny",
+		"title"			: "Spinies",
+		"hp"			: 5,
+		"hp_offset"		: [ "5B5537", "602F67" ],
+		"def" : [ {
+			"value"		: 3,
+			"offset"	: [ "5B5428", "602E58" ]
+		}, {
+			"type"		: "Flipped",
+			"value"		: 0,
+			"offset"	: [ "5B5434", "602E64" ]
+		} ]
+	}, {
+		"name"			: "BonyBeetle",
+		"title"			: "Bony Beetles",
+		"hp"			: 8,
+		"hp_offset"		: "68547F",
+		"def" : [ {
+			"value"		: 4,
+			"offset"	: "685394"
+		}, {
+			"type"		: "Flipped",
+			"value"		: 0,
+			"offset"	: "6853A0"
+		} ]
+	} ] },
+
+	{ "type" : "Swoopers", "targets" : [ {
+		"name"			: "Swooper",
+		"title"			: "Swooper",
+		"hp"			: 4,
+		"hp_offset"		: [ "4E6CD3", "61A023" ],
+		"def" : [ {
+			"value"		: 0,
+			"offset"	: [ "4E6BF4", "619F44" ]
+		} ]
+	}, {
+		"name"			: "Swoopula",
+		"title"			: "Swoopula",
+		"hp"			: 8,
+		"hp_offset"		: [ "61C033", "64A423", "678CB3" ],
+		"def" : [ {
+			"value"		: 0,
+			"offset"	: [ "61BF57", "64A347", "678BD7" ]
+		} ]
+	} ] },
+	
+	{ "type" : "Bullet Bills", "targets" : [ {
+		"name"			: "BulletBil",
+		"title"			: "Bullet Bills",
+		"hp"			: 2,
+		"hp_offset"		: "4A20E3",
+		"def" : [ {
+			"value"		: 0,
+			"offset"	: "4A2004"
+		} ]
+	}, {
+		"name"			: "BillBlaster",
+		"title"			: "Bill Blasters",
+		"hp"			: 4,
+		"hp_offset"		: "4A2EC7",
+		"def" : [ {
+			"value"		: 1,
+			"offset"	: "4A2DC4"
+		} ]
+	}, {
+		"name"			: "BombshellBill",
+		"title"			: "Bombshell Bills",
+		"hp"			: 3,
+		"hp_offset"		: "6CCF63",
+		"def" : [ {
+			"value"		: 0,
+			"offset"	: "6CCE84"
+		} ]
+	}, {
+		"name"			: "BBillBlaster",
+		"title"			: "B. Bill Blasters",
+		"hp"			: 10,
+		"hp_offset"		: "6CC7A3",
+		"def" : [ {
+			"value"		: 4,
+			"offset"	: "6CC6C4"
+		} ]
+	} ] },
+
+	{ "type" : "Clubbas", "targets" : [ {
+		"name"			: "Clubba",
+		"title"			: "Clubbas",
+		"hp"			: 8,
+		"hp_offset"		: [ "50F14F", "55E01F" ],
+		"def" : [ {
+			"value"		: 0,
+			"offset"	: [ "50F070", "55DF40" ]
+		} ]
+	}, {
+		"name"			: "WhiteClubba",
+		"title"			: "White Clubbas",
+		"hp"			: 12,
+		"hp_offset"		: [ "63579F", "64F53F", "67CFEF" ],
+		"def" : [ {
+			"title"		: [ "Normal", "Fire", "Ice" ],
+			"value"		: [ 0, -2, 99 ],
+			"offset"	: [ "6356B0", "64F450", "67CF00" ]
+		} ]
+	} ] },
+	
+	{ "type" : "Piranhas", "targets" : [ {
+		"name"			: "PiranhaPlant",
+		"title"			: "Piranha Plants",
+		"hp"			: 5,
+		"hp_offset"		: "4FD057",
+		"def" : [ {
+			"value"		: 0,
+			"offset"	: "4FCF78"
+		} ]
+	}, {
+		"name"			: "PutridPiranha",
+		"title"			: "Putrid Piranhas",
+		"hp"			: 12,
+		"hp_offset"		: [ "585137", "58F4C7" ],
+		"def" : [ {
+			"title"		: [ "Normal", "Fire" ],
+			"value"		: [ 0, 0 ],
+			"offset"	: [ "585050", "58F3E0" ]
+		} ]
+	}, {
+		"name"			: "FrostPiranha",
+		"title"			: "Frost Piranhas",
+		"hp"			: 10,
+		"hp_offset"		: "63678F",
+		"def" : [ {
+			"title"		: [ "Normal", "Fire", "Ice" ],
+			"value"		: [ 0, -2, 99 ],
+			"offset"	: "6366A0"
+		} ]
+	} ] },
+	
+	{ "type" : "Fuzzies", "targets" : [ {
+		"name"			: "Fuzzy",
+		"title"			: "Fuzzies",
+		"hp"			: 3,
+		"hp_offset"		: [ "4972D3", "55EBE3", "6E08C3" ],
+		"def" : [ {
+			"value"		: 0,
+			"offset"	: [ "4971F4", "55EB04", "6E07E4" ]
+		} ]
+	}, {
+		"name"			: "ForestFuzzy",
+		"title"			: "Forest Fuzzies",
+		"hp"			: 6,
+		"hp_offset"		: "4F8083",
+		"def" : [ {
+			"value"		: 0,
+			"offset"	: "4F7FA4"
+		} ]
+	}, {
+		"name"			: "JungleFuzzy",
+		"title"			: "Jungle Fuzzies",
+		"hp"			: 7,
+		"hp_offset"		: "57A3DB",
+		"def" : [ {
+			"title"		: [ "Normal", "Fire" ],
+			"value"		: [ 0, 0 ],
+			"offset"	: "57A2F4"
+		} ]
+	} ] },
+	
+	{ "type" : "Clefts", "targets" : [ {
+		"name"			: "Cleft",
+		"title"			: "Clefts",
+		"hp"			: 2,
+		"hp_offset"		: "4D0A07",
+		"def" : [ {
+			"title"		: [ "Normal", "Fire", "Magic" ],
+			"value"		: [ 2, 99, 0 ],
+			"offset"	: "4D0904"
+		}, {
+			"type"		: "Flipped",
+			"title"		: [ "Normal", "Fire" ],
+			"value"		: [ 0, 99 ],
+			"offset"	: "4D0920"
+		} ]
+	}, {
+		"name"			: "HyperCleft",
+		"title"			: "Hyper Clefts",
+		"hp"			: 4,
+		"hp_offset"		: "50768F",
+		"def" : [ {
+			"title"		: [ "Normal", "Fire" ],
+			"value"		: [ 3, 99 ],
+			"offset"	: "507594"
+		}, {
+			"type"		: "Flipped",
+			"title"		: [ "Normal", "Fire" ],
+			"value"		: [ 1, 99 ],
+			"offset"	: "5075A8"
+		} ]
+	} ] },
+
+	{ "type" : "Bubbles", "targets" : [ {
+		"name"			: "LavaBubble",
+		"title"			: "Lava Bubbles",
+		"hp"			: 9,
+		"hp_offset"		: "58D293",
+		"def" : [ {
+			"title"		: [ "Normal", "Water", "Ice", "Fire", "Blast" ],
+			"value"		: [ 0, -2, -2, 99, -1 ],
+			"offset"	: "58D104"
+		} ]
+	}, {
+		"name"			: "Ember",
+		"title"			: "Embers",
+		"hp"			: 10,
+		"hp_offset"		: [ "481EEB", "6993CB" ],
+		"def" : [ {
+			"title"		: [ "Normal", "Water", "Ice", "Fire" ],
+			"value"		: [ 0, -2, -2, 99 ],
+			"offset"	: [ "481D64", "699244" ]
+		} ]
+	} ] },
+	
+	{ "type" : "Desert", "targets" : [ {
+		"name"			: "MontyMole",
+		"title"			: "Monty Moles",
+		"hp"			: 3,
+		"hp_offset"		: [ "4D276B", "6ECC3B" ],
+		"def" : [ {
+			"value"		: 0,
+			"offset"	: [ "4D2644", "6ECB14" ]
+		} ]
+	}, {
+		"name"			: "Bandit",
+		"title"			: "Bandits",
+		"hp"			: 5,
+		"hp_offset"		: [ "4DFCBF", "6E74EF" ],
+		"def" : [ {
+			"value"		: 0,
+			"offset"	: [ "4DFB98", "6E73C8" ]
+		} ]
+	}, {
+		"name"			: "Pokey",
+		"title"			: "Pokeys",
+		"hp"			: 4,
+		"hp_offset"		: [ "4DA9F7", "5623D7", "6E2227" ],
+		"def" : [ {
+			"value"		: 0,
+			"offset"	: [ "4DA864", "562244", "6E2094" ]
+		} ]
+	}, {
+		"name"			: "PokeyMummy",
+		"title"			: "Pokey Mummies",
+		"hp"			: 4,
+		"hp_offset"		: "4E34E7",
+		"def" : [ {
+			"value"		: 0,
+			"offset"	: "4E3354"
+		} ]
+	}, {
+		"name"			: "StoneChomp",
+		"title"			: "Stone Chomps",
+		"hp"			: 4,
+		"hp_offset"		: "4EBEB3",
+		"def" : [ {
+			"value"		: 1,
+			"offset"	: "4EBC90"
+		} ]
+	} ] },
+	
+	{ "type" : "Flower Fields", "targets" : [ {
+		"name"			: "MontyMoleBoss",
+		"title"			: "Green Monty Moles",
+		"hp"			: 12,
+		"hp_offset"		: "5E6E1B",
+		"def" : [ {
+			"title"		: [ "Normal", "Hammer", "Throw" ],
+			"value"		: [ 0, 0, -3 ],
+			"offset"	: "5E6CE4"
+		} ]
+	}, {
+		"name"			: "Dayzee",
+		"title"			: "Dayzees",
+		"hp"			: 8,
+		"hp_offset"		: "5B6D33",
+		"def" : [ {
+			"value"		: 0,
+			"offset"	: "5B6C54"
+		} ]
+	}, {
+		"name"			: "AmazingDayzee",
+		"title"			: "Amazing Dayzees",
+		"hp"			: 20,
+		"hp_offset"		: "5BA9D3",
+		"def" : [ {
+			"value"		: 1,
+			"offset"	: "5BA8F4"
+		} ]
+	}, {
+		"name"			: "Bzzap",
+		"title"			: "Bzzaps!",
+		"hp"			: 3,
+		"hp_offset"		: [ "4FA5E3", "5B7FC3" ],
+		"def" : [ {
+			"value"		: 0,
+			"offset"	: [ "4FA450", "5B7E30" ]
+		} ]
+	}, {
+		"name"			: "RuffPuff",
+		"title"			: "Ruff Puffs",
+		"hp"			: 10,
+		"hp_offset"		: "5BBB7F",
+		"def" : [ {
+			"title"		: [ "Normal", "Mystery" ],
+			"value"		: [ 0, 0 ],
+			"offset"	: "5BBA98"
+		} ]
+	}, {
+		"name"			: "Lakitu",
+		"title"			: "Lakitus",
+		"hp"			: 12,
+		"hp_offset"		: "5B3507",
+		"def" : [ {
+			"title"		: [ "Normal", "Mystery" ],
+			"value"		: [ 0, 0 ],
+			"offset"	: "5B33D8"
+		} ]
+	} ] },
+	
+	{ "type" : "Other", "targets" : [ {
+		"name"			: "Bobomb",
+		"title"			: "Bob-ombs",
+		"hp"			: 3,
+		"hp_offset"		: "4A37D7",
+		"def" : [ {
+			"value"		: 0,
+			"offset"	: "4A364C"
+		} ]
+	}, {
+		"name"			: "HurtPlant",
+		"title"			: "Hurt Plants",
+		"hp"			: 8,
+		"hp_offset"		: "579397",
+		"def" : [ {
+			"title"		: [ "Normal", "Fire" ],
+			"value"		: [ 0, 0 ],
+			"offset"	: "5792B0"
+		} ]
+	}, {
+		"name"			: "MBush",
+		"title"			: "M. Bush",
+		"hp"			: 8,
+		"hp_offset"		: "57D287",
+		"def" : [ {
+			"title"		: [ "Normal", "Fire" ],
+			"value"		: [ 0, 0 ],
+			"offset"	: "57D1A0"
+		} ]
+	}, {
+		"name"			: "Gulpit",
+		"title"			: "Gulpits",
+		"hp"			: 12,
+		"hp_offset"		: "633AFF",
+		"def" : [ {
+			"value"		: 0,
+			"offset"	: "6339D8"
+		} ]
+	}, {
+		"name"			: "GulpitsRocks",
+		"title"			: "Gultpits' Rocks",
+		"hp"			: 1,
+		"hp_offset"		: "63516B",
+		"def" : [ {
+			"value"		: 0,
+			"offset"	: "63508C"
+		} ]
+	}, {
+		"name"			: "Duplighost",
+		"title"			: "Duplighosts",
+		"hp"			: 15,
+		"hp_offset"		: [ "626B77", "6287C3", "62A3A3", "62BFFF", "62D283", "62E20F", "62F5E7", "6304B7", "631E7F", "66BDD7", "66DA23", "66F603", "67125F", "6724E3", "67346F", "674847", "675717", "6770DF", "6BEE97", "6C0AE3", "6C26C3", "6C431F", "6C55A3", "6C652F", "6C7907", "6C87D7", "6CA19F" ],
+		"def" : [ {
+			"value"		: 0,
+			"offset"	: [ "626A98", "66BCF8", "6BEDB8" ]
+		}, {
+			"type"		: "Goombario",
+			"value"		: 0,
+			"offset"	: [ "6286E4", "66D944", "6C0A04" ]
+		}, {
+			"type"		: "Kooper",
+			"value"		: 1,
+			"offset"	: [ "62A2B8", "66F518", "6C25D8" ]
+		}, {
+			"type"		: "Flipped",
+			"value"		: 0,
+			"offset"	: [ "62A2C4", "66F524", "6C25E4" ]
+		}, {
+			"type"		: "Bombette",
+			"value"		: 0,
+			"offset"	: [ "62BF20", "671180", "6C4240" ]
+		}, {
+			"type"		: "Parakarry",
+			"value"		: 1,
+			"offset"	: [ "62D180", "6723E0", "6C54A0" ]
+		}, {
+			"type"		: "Bow",
+			"value"		: 0,
+			"offset"	: [ "62E10C", "67336C", "6C642C" ]
+		}, {
+			"type"		: "Watt",
+			"title"		: [ "Normal", "Shocked" ],
+			"value"		: [ 0, 99 ],
+			"offset"	: [ "62F4DC", "67473C", "6C77FC" ]
+		}, {
+			"type"		: "Sushie",
+			"value"		: 0,
+			"offset"	: [ "6303D8", "675638", "6C86F8" ]
+		}, {
+			"type"		: "Lakilester",
+			"value"		: 0,
+			"offset"	: [ "631D7C", "676FDC", "6CA09C" ]
+		} ]
+	} ] },
+	
+	{ "type" : "Mini-Bosses", "targets" : [ {
+		"name"			: "JrTroopa1",
+		"title"			: "Jr. Troopa (1)",
+		"hp"			: 5,
+		"hp_offset"		: "451F4F",
+		"def" : [ {
+			"value"		: 0,
+			"offset"	: "451E70"
+		} ],
+		"event"			: 1
+	}, {
+		"name"			: "BlueGoomba1",
+		"title"			: "Blue Goomba (1)",
+		"hp"			: 6,
+		"hp_offset"		: "43B423",
+		"def" : [ {
+			"value"		: 0,
+			"offset"	: "43B344"
+		} ]
+	}, {
+		"name"			: "RedGoomba1",
+		"title"			: "Red Goomba (1)",
+		"hp"			: 7,
+		"hp_offset"		: "43D233",
+		"def" : [ {
+			"value"		: 0,
+			"offset"	: "43D154"
+		} ]
+	}, {
+		"name"			: "MagikoopaPrologue",
+		"title"			: "Magikoopa (Prologue)",
+		"hp"			: 8,
+		"hp_offset"		: [ "484737", "48475F" ],
+		"def" : [ {
+			"value"		: 0,
+			"offset"	: "484534"
+		}, {
+			"type"		: "Flying",
+			"value"		: 0,
+			"offset"	: "484540"
+		} ]
+	}, {
+		"name"			: "JrTroopa2",
+		"title"			: "Jr. Troopa (2)",
+		"hp"			: 15,
+		"hp_offset"		: "45392F",
+		"def" : [ {
+			"value"		: 1,
+			"offset"	: "453850"
+		} ]
+	}, {
+		"name"			: "Buzzar",
+		"title"			: "Buzzar",
+		"hp"			: 40,
+		"hp_offset"		: "4D39B3",
+		"def" : [ {
+			"value"		: 0,
+			"offset"	: "4D3844"
+		} ]
+	}, {
+		"name"			: "JrTroopa3",
+		"title"			: "Jr. Troopa (3)",
+		"hp"			: 40,
+		"hp_offset"		: "45539B",
+		"def" : [ {
+			"value"		: 1,
+			"offset"	: "455298"
+		} ]
+	}, {
+		"name"			: "BigLanternGhost",
+		"title"			: "Big Lantern Ghost",
+		"hp"			: 40,
+		"hp_offset"		: "5582A3",
+		"def" : [ {
+			"value"		: 0,
+			"offset"	: "558194"
+		}, {
+			"type"		: "Dark",
+			"value"		: 99,
+			"offset"	: "5581A0"
+		} ]
+	}, {
+		"name"			: "Fuzzipede",
+		"title"			: "Fuzzipede",
+		"hp"			: 20,
+		"hp_offset"		: "56EDEF",
+		"def" : [ {
+			"value"		: 0,
+			"offset"	: "56ECEC"
+		} ]
+	}, {
+		"name"			: "JrTroopa4",
+		"title"			: "Jr. Troopa (4)",
+		"hp"			: 40,
+		"hp_offset"		: "4574A3",
+		"heal" : [ {
+			"type"		: "Damaged",
+			"value"		: 20,
+			"offset"	: ""
+		} ],
+		"def" : [ {
+			"value"		: 1,
+			"offset"	: "4573A0"
+		} ]
+	}, {
+		"name"			: "Spike",
+		"title"			: "Spike?",
+		"hp"			: 50,
+		"hp_offset"		: "5E7FFF",
+		"def" : [ {
+			"value"		: 0,
+			"offset"	: "5E7EFC"
+		} ]
+	}, {
+		"name"			: "JrTroopa5",
+		"title"			: "Jr. Troopa (5)",
+		"hp"			: 50,
+		"hp_offset"		: "459B6F",
+		"def" : [ {
+			"value"		: 1,
+			"offset"	: "459A6C"
+		} ]
+	}, {
+		"name"			: "Monstar",
+		"title"			: "Monstar",
+		"hp"			: 20,
+		"hp_offset"		: "63F14F",
+		"def" : [ {
+			"title"		: [ "Normal", "Cosmic" ],
+			"value"		: [ 0, 99 ],
+			"offset"	: "63F044"
+		} ]
+	}, {
+		"name"			: "JrTroopa6",
+		"title"			: "Jr. Troopa (6)",
+		"hp"			: 60,
+		"hp_offset"		: "45BAF3",
+		"def" : [ {
+			"value"		: 2,
+			"offset"	: "45B85C"
+		}, {
+			"type"		: "Flying",
+			"value"		: 2,
+			"offset"	: "45B868"
+		}, {
+			"type"		: "Mage",
+			"value"		: 2,
+			"offset"	: "45B874"
+		} ]
+	} ] },
+	
+	{ "type" : "Optional Bosses", "targets" : [ {
+		"name"			: "KentCKoopa",
+		"title"			: "Kent C. Koopa",
+		"hp"			: 70,
+		"hp_offset"		: "49CD9F",
+		"def" : [ {
+			"title"		: [ "Normal", "Blast" ],
+			"value"		: [ 6, 6],
+			"offset"	: "49CB80"
+		}, {
+			"type"		: "Flipped",
+			"value"		: 3,
+			"offset"	: "49CB90"
+		}, {
+			"type"		: "Tail",
+			"value"		: 0,
+			"offset"	: "49CBA0"
+		} ]
+	}, {
+		"name"			: "Blooper",
+		"title"			: "Blooper",
+		"hp"			: 30,
+		"hp_offset"		: "60B2BF",
+		"def" : [ {
+			"value"		: 0,
+			"offset"	: "60B1BC"
+		} ]
+	}, {
+		"name"			: "ElectroBlooper",
+		"title"			: "Electro Blooper",
+		"hp"			: 50,
+		"hp_offset"		: "60D2BB",
+		"def" : [ {
+			"value"		: 0,
+			"offset"	: "60D10C"
+		} ]
+	}, {
+		"name"			: "SuperBlooper",
+		"title"			: "Super Blooper",
+		"hp"			: 70,
+		"hp_offset"		: "6101AB",
+		"def" : [ {
+			"value"		: 0,
+			"offset"	: "60FFFC"
+		} ]
+	}, {
+		"name"			: "Chan",
+		"title"			: "Chan",
+		"hp"			: 15,
+		"hp_offset"		: "4662DF",
+		"def" : [ {
+			"title"		: [ "Normal", "Fire", "Blast" ],
+			"value"		: [ 2, 99, 99 ],
+			"offset"	: "4661E4"
+		}, {
+			"type"		: "Flipped",
+			"value"		: 0,
+			"offset"	: "466200"
+		} ]
+	}, {
+		"name"			: "Lee",
+		"title"			: "Lee",
+		"hp"			: 20,
+		"hp_offset"		: [ "469937", "46AF0B", "46CB57", "46E84F", "46F96B", "4709F3", "471F5F", "472F3B", "4749FB" ],
+		"def" : [ {
+			"value"		: 0,
+			"offset"	: "469858"
+		}, {
+			"type"		: "Goombario",
+			"value"		: 0,
+			"offset"	: "46AE2C"
+		}, {
+			"type"		: "Kooper",
+			"value"		: 1,
+			"offset"	: "46CA6C"
+		}, {
+			"type"		: "Flipped",
+			"value"		: 0,
+			"offset"	: "46CA78"
+		}, {
+			"type"		: "Bombette",
+			"value"		: 0,
+			"offset"	: "46E770"
+		}, {
+			"type"		: "Parakarry",
+			"value"		: 1,
+			"offset"	: "46F868"
+		}, {
+			"type"		: "Bow",
+			"value"		: 0,
+			"offset"	: "4708F0"
+		}, {
+			"type"		: "Watt",
+			"title"		: [ "Normal", "Shock" ],
+			"value"		: [ 0, 99 ],
+			"offset"	: "471E54"
+		}, {
+			"type"		: "Sushie",
+			"value"		: 0,
+			"offset"	: "472E5C"
+		}, {
+			"type"		: "Lakilester",
+			"value"		: 0,
+			"offset"	: "4748F8"
+		} ]
+	}, {
+		"name"			: "TheMaster1",
+		"title"			: "The Master (1)",
+		"hp"			: 50,
+		"hp_offset"		: "47681F",
+		"def" : [ {
+			"value"		: 0,
+			"offset"	: "476740"
+		} ]
+	}, {
+		"name"			: "TheMaster2",
+		"title"			: "The Master (2)",
+		"hp"			: 75,
+		"hp_offset"		: "477C4B",
+		"def" : [ {
+			"value"		: 0,
+			"offset"	: "477B6C"
+		} ]
+	}, {
+		"name"			: "TheMaster3",
+		"title"			: "The Master (3)",
+		"hp"			: 99,
+		"hp_offset"		: "479FCF",
+		"def" : [ {
+			"value"		: 1,
+			"offset"	: "479ECC"
+		} ]
+	} ] },
+	
+	{ "type" : "Bosses", "targets" : [ {
+		"name"			: "GoombaKing",
+		"title"			: "Goomba King",
+		"hp"			: 10,
+		"hp_offset"		: "4424A7",
+		"def" : [ {
+			"value"		: 0,
+			"offset"	: "4423A4"
+		} ]
+	}, {
+		"name"			: "FakeBowser",
+		"title"			: "Bowser???",
+		"hp"			: 10,
+		"hp_offset"		: "4B3ACB",
+		"def" : [ {
+			"title"		: [ "Normal", "Blast" ],
+			"value"		: [ 1, 1 ],
+			"offset"	: "4B3864"
+		}, {
+			"type"		: "Tower",
+			"value"		: 1,
+			"offset"	: "4B3878"
+		} ]
+	}, {
+		"name"			: "RedNinjakoopa",
+		"title"			: "Red Ninjakoopa",
+		"hp"			: 5,
+		"hp_offset"		: "4C17DF",
+		"def" : [ {
+			"value"		: 1,
+			"offset"	: "4C16F4"
+		}, {
+			"type"		: "Flipped",
+			"value"		: 0,
+			"offset"	: "4C1700"
+		} ]
+	}, {
+		"name"			: "BlueNinjakoopa",
+		"title"			: "Blue Ninjakoopa",
+		"hp"			: 5,
+		"hp_offset"		: "4C477F",		
+		"def" : [ {
+			"value"		: 1,
+			"offset"	: "4C4694"
+		}, {
+			"type"		: "Flipped",
+			"value"		: 0,
+			"offset"	: "4C46A0"
+		} ]
+	}, {
+		"name"			: "YellowNinjakoopa",
+		"title"			: "Yellow Ninjakoopa",
+		"hp"			: 5,
+		"hp_offset"		: "4C771F",
+		"def" : [ {
+			"value"		: 1,
+			"offset"	: "4C7634"
+		}, {
+			"type"		: "Flipped",
+			"value"		: 0,
+			"offset"	: "4C7640"
+		} ]
+	}, {
+		"name"			: "GreenNinjakoopa",
+		"title"			: "Green Ninjakoopa",
+		"hp"			: 5,
+		"hp_offset"		: "4BE83F",
+		"def" : [ {
+			"value"		: 1,
+			"offset"	: "4BE754"
+		}, {
+			"type"		: "Flipped",
+			"value"		: 0,
+			"offset"	: "4BE760"
+		} ]
+	}, {
+		"name"			: "Tutankoopa",
+		"title"			: "Tutankoopa",
+		"hp"			: 30,
+		"hp_offset"		: "4F309B",
+		"def" : [ {
+			"value"		: 0,
+			"offset"	: "4F2EC0"
+		} ]
+	}, {
+		"name"			: "TubbaBlubba",
+		"title"			: "Tubba Blubba",
+		"hp"			: 10,
+		"hp_offset"		: [ "50C7C7", "50FD6F", "6EB16F" ],
+		"def" : [ {
+			"value"		: 0,
+			"offset"	: [ "6EB090", "50C6EC" ]
+		}, {
+			"type"		: "Immortal",
+			"value"		: 99,
+			"offset"	: "50FC90"
+		} ]
+	}, {
+		"name"			: "TubbasHeart",
+		"title"			: "Tubba's Heart",
+		"hp"			: 50,
+		"hp_offset"		: "50A7CF",
+		"def" : [ {
+			"value"		: 0,
+			"offset"	: "50A6CC"
+		} ]
+	}, {
+		"name"			: "GeneralGuy",
+		"title"			: "General Guy",
+		"hp"			: 30,
+		"hp_offset"		: "540003",
+		"def" : [ {
+			"value"		: 2,
+			"offset"	: "53FEDC"
+		} ]
+	}, {
+		"name"			: "LavaPiranha",
+		"title"			: "Lava Piranha",
+		"hp"			: 40,
+		"hp_offset"		: "5A3923",
+		"def" : [ {
+			"title"		: [ "Normal", "Water", "Ice", "Fire", "Blast" ],
+			"value"		: [ 0, 0, 0, 99, 0 ],
+			"offset"	: "5A37A8"
+		}, {
+			"type"		: "Fiery",
+			"title"		: [ "Normal", "Water", "Ice", "Fire", "Blast" ],
+			"value"		: [ 0, -2, -2, 99, 0 ],
+			"offset"	: "5A37D4"
+		}, {
+			"type"		: "Wet",
+			"title"		: [ "Normal", "Water", "Ice", "Fire", "Blast" ],
+			"value"		: [ 0, 0, 0, 99, 0 ],
+			"offset"	: "5A3800"
+		} ],
+		"separate"		: 1
+	}, {
+		"name"			: "LavaBud",
+		"title"			: "Lava Bud",
+		"hp"			: 8,
+		"hp_offset"		: "5AB95B",
+		"def" : [ {
+			"title"		: [ "Normal", "Water", "Ice", "Fire", "Blast" ],
+			"value"		: [ 0, 0, 0, 99, 0 ],
+			"offset"	: "5AB7E0"
+		}, {
+			"type"		: "Fiery",
+			"title"		: [ "Normal", "Water", "Ice", "Fire", "Blast" ],
+			"value"		: [ 0, -2, -2, 99, 0 ],
+			"offset"	: "5AB80C"
+		}, {
+			"type"		: "Wet",
+			"title"		: [ "Normal", "Water", "Ice", "Fire", "Blast" ],
+			"value"		: [ 0, 0, 0, 99, 0 ],
+			"offset"	: "5AB838"
+		} ],
+		"separate"		: 1
+	}, {
+		"name"			: "HuffNPuff",
+		"title"			: "Huff N. Puff",
+		"hp"			: 60,
+		"hp_offset"		: "5D0233",
+		"def" : [ {
+			"title"		: [ "Normal", "Shock", "Mystery", "Jump", "Hammer" ],
+			"value"		: [ 0, 99, 0, 0, 0 ],
+			"offset"	: "5D00C8"
+		} ]
+	}, {
+		"name"			: "CrystalKing",
+		"title"			: "Crystal King",
+		"hp"			: 70,
+		"hp_offset"		: [ "66126F", "664F3B" ],
+		"heal" : [ {
+			"type"		: "Heal",
+			"value"		: 20,
+			"offset"	: [ "6689D3", "668A23", "668A6B", "668AB3" ]
+		} ],
+		"def" : [ {
+			"title"		: [ "Normal", "Fire", "Ice" ],
+			"value"		: [ 2, 0, 99 ],
+			"offset"	: "661180"
+		} ]
+	}, {
+		"name"			: "Bowser1",
+		"title"			: "Bowser (1)",
+		"hp"			: 50,
+		"hp_offset"		: [ "6A4617", "6A889F" ],
+		"def" : [ {
+			"value"		: 1,
+			"offset"	: [ "6A4538", "6A8708" ]
+		}, {
+			"title"		: "Boosted",
+			"value"		: 4,
+			"offset"	: "6A8714"
+		} ]
+	}, {
+		"name"			: "Bowser2",
+		"title"			: "Bowser (2)",
+		"hp"			: 99,
+		"hp_offset"		: [ "6AE94F", "6B487F" ],
+		"heal" : [ {
+			"type"		: "Heal Times",
+			"value"		: 3,
+			"offset"	: [ "6AEA17", "6B4977" ]
+		} ],
+		"def" : [ {
+			"value"		: 2,
+			"offset"	: [ "6AE7B8", "6B46E8" ]
+		}, {
+			"title"		: "Boosted",
+			"value"		: 99,
+			"offset"	: [ "6AE7C4", "6B46F4" ]
+		} ]
+	} ] },
+	
+	{ "type" : "Boss Supports", "targets" : [ {
+		"name"			: "BlueGoomba2",
+		"title"			: "Blue Goomba (2)",
+		"assist"		: "King Goomba",
+		"hp"			: 6,
+		"hp_offset"		: "43EF73",
+		"heal" : [ {
+			"type"		: "Damaged",
+			"value"		: 2,
+			"offset"	: "440867"
+		} ],
+		"def" : [ {
+			"value"		: 0,
+			"offset"	: "43EE94"
+		} ]
+	}, {
+		"name"			: "RedGoomba2",
+		"title"			: "Red Goomba (2)",
+		"assist"		: "King Goomba",
+		"hp"			: 7,
+		"hp_offset"		: "440973",
+		"heal" : [ {
+			"type"		: "Damaged",
+			"value"		: 2,
+			"offset"	: "442267"
+		} ],
+		"def" : [ {
+			"value"		: 0,
+			"offset"	: "440894"
+		} ]
+	}, {
+		"name"			: "Chomp",
+		"title"			: "Chomp",
+		"assist"		: "Tutankoopa",
+		"hp"			: 4,
+		"hp_offset"		: "4F0343",
+		"def" : [ {
+			"title"		: [ "Normal", "Shock", "Fire", "Ice", "Magic" ],
+			"value"		: [ 3, 3, 99, 99, 99 ],
+			"offset"	: "4F0100"
+		} ]
+	}, {
+		"name"			: "ShySquad",
+		"title"			: "Shy Squad",
+		"assist"		: "General Guy",
+		"hp"			: 15,
+		"hp_offset"		: [ "54391F", "552EAF" ],
+		"def" : [ {
+			"value"		: 0,
+			"offset"	: [ "543624", "552BB4" ]
+		} ]
+	}, {
+		"name"			: "StiltGuy",
+		"title"			: "Stilt Guy",
+		"assist"		: "General Guy",
+		"hp"			: 7,
+		"hp_offset"		: "5487FF",
+		"def" : [ {
+			"type"		: "Bottom",
+			"value"		: 0,
+			"offset"	: "548564"
+		}, {
+			"type"		: "Stack",
+			"title"		: [ "Normal", "Shock" ],
+			"value"		: [ 0, 0 ],
+			"offset"	: "548570"
+		} ]
+	}, {
+		"name"			: "ShyStack",
+		"title"			: "Shy Stack",
+		"assist"		: "General Guy",
+		"hp"			: 10,
+		"hp_offset"		: "54CF57",
+		"def" : [ {
+			"value"		: 0,
+			"offset"	: "54CCA4"
+		} ]
+	}, {
+		"name"			: "Bulb",
+		"title"			: "Bulb",
+		"assist"		: "General Guy",
+		"hp"			: 8,
+		"hp_offset"		: "542D8B",
+		"def" : [ {
+			"value"		: 1,
+			"offset"	: "542CA4"
+		} ]
+	}, {
+		"name"			: "PetitPiranha",
+		"title"			: "Petit Piranhas",
+		"assist"		: "Lava Piranha",
+		"hp"			: 1,
+		"hp_offset"		: [ "5AA707", "5AEF57" ],
+		"def" : [ {
+			"title"		: [ "Normal", "Water", "Ice", "Fire", "Blast" ],
+			"value"		: [ 0, -2, -2, 99, 0 ],
+			"offset"	: [ "5AA608", "5AEE58" ]
+		} ]
+	}, {
+		"name"			: "BlooperBaby",
+		"title"			: "Blooper Babies",
+		"assist"		: "Super blooper",
+		"hp"			: 6,
+		"hp_offset"		: "6130DF",
+		"def" : [ {
+			"value"		: 0,
+			"offset"	: "612FDC"
+		} ]
+	}, {
+		"name"			: "TuffPuff",
+		"title"			: "Tuff Puffs",
+		"assist"		: "Huff N. Puff",
+		"hp"			: 1,
+		"hp_offset"		: "5E5DEF",
+		"def" : [ {
+			"title"		: [ "Normal", "Shock", "Mystery", "Jump", "Hammer" ],
+			"value"		: [ 0, 99, 0, 0, 0 ],
+			"offset"	: "5E5CCC"
+		} ]
+	}, {
+		"name"			: "CrystalBit",
+		"title"			: "Crystal Bits",
+		"assist"		: "Crystal King",
+		"hp"			: 1,
+		"hp_offset"		: "668D9B",
+		"def" : [ {
+			"title"		: [ "Normal", "Fire", "Ice" ],
+			"value"		: [ 0, 0, 99 ],
+			"offset"	: "668BF8"
+		} ]
+	} ] }
+]

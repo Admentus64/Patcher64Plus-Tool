@@ -1,6 +1,6 @@
 function CreateForm([uint16]$X=0, [uint16]$Y=0, [uint16]$Width=0, [uint16]$Height=0, [string]$Name, [string]$Tag, [object]$Form, [boolean]$IsGame, [object]$AddTo) {
     
-    $Form.Size = New-Object System.Drawing.Size($Width, $Height)
+    $Form.Size     = New-Object System.Drawing.Size($Width, $Height)
     $Form.Location = New-Object System.Drawing.Size($X, $Y)
     if ( ($Tag -ne "") -or ($Tag -ne $null) ) { $Form.Tag = $Tag }
     if (IsSet $AddTo) { $AddTo.Controls.Add($Form) }
@@ -70,8 +70,7 @@ function CreateColorDialog([string]$Color="000000", [string]$Name, [switch]$IsGa
         }
     }
 
-    Add-Member -InputObject $ColorDialog -NotePropertyMembers @{ Default = $Color }
-    Add-Member -InputObject $ColorDialog -NotePropertyMembers @{ Button  = $Button }
+    Add-Member -InputObject $ColorDialog -NotePropertyMembers @{ Default = $Color; Button  = $Button }
     return $ColorDialog
 
 }
@@ -214,6 +213,7 @@ function CreateComboBox([uint16]$X=0, [uint16]$Y=0, [uint16]$Width=0, [uint16]$H
     
     $ComboBox = CreateForm -X $X -Y $Y -Width $Width -Height $Height -Name $Name -Tag $Tag -IsGame $IsGame -Form (New-Object System.Windows.Forms.ComboBox) -AddTo $AddTo
     $ComboBox.DropDownStyle = "DropDownList"
+    $ComboBox.Add_Mousewheel({ $_.Handled = $True })
     $ComboBox.Font = $Fonts.Small
     $ToolTip = CreateToolTip -Form $ComboBox -Info $Info
     if ($Default -lt 1) { $Default = 1 }
@@ -227,7 +227,7 @@ function CreateComboBox([uint16]$X=0, [uint16]$Y=0, [uint16]$Width=0, [uint16]$H
                 $ComboBox.Add_SelectedIndexChanged({ $GameSettings[$this.Section][$this.Name] = ($this.SelectedIndex+1) })
             }
             else {
-                if (IsSet $Settings["Core"][$ComboBox.Name] -Max $ComboBox.Items.Count -HasInt)                  { $ComboBox.SelectedIndex = ($Settings[$ComboBox.Section][$ComboBox.Name]-1) }
+                if (IsSet $Settings["Core"][$ComboBox.Name] -Max $ComboBox.Items.Count -HasInt)                  { $ComboBox.SelectedIndex = ($Settings["Core"][$ComboBox.Name]-1) }
                 else                                                                                             { $Settings["Core"][$ComboBox.Name] = $Default }
                 $ComboBox.Add_SelectedIndexChanged({ $Settings["Core"][$this.Name] = ($this.SelectedIndex+1) })
             }
@@ -263,7 +263,7 @@ function CreateSlider([uint16]$X=0, [uint16]$Y=0, [uint16]$Width=0, [uint16]$Hei
         else {
             if (!(IsSet $Settings["Core"][$Slider.Name] -Min $Min -Max $Max -HasInt)) { $Settings["Core"][$Slider.Name] = $Minimum }
             $Slider.Add_ValueChanged({ $Settings["Core"][$this.Name] = $this.value })
-            $Slider.value = $Settings[$Slider.Section][$Slider.Name]
+            $Slider.value = $Settings["Core"][$Slider.Name]
         }
     }
 
@@ -271,6 +271,7 @@ function CreateSlider([uint16]$X=0, [uint16]$Y=0, [uint16]$Width=0, [uint16]$Hei
     $Slider.Add_MouseClick({
         if ($_.Button -eq "Right") { $this.value = $this.Default }
     })
+    $Slider.Add_Mousewheel({ $_.Handled = $True })
 
     return $Slider
 
@@ -481,7 +482,7 @@ function CreateReduxButton([single]$Column=$Last.Column, [single]$Row=$Last.Row,
     if (!(CheckReduxOption -Expose $Expose -Exclude $Exclude -Base $Base -Alt $Alt -Child $Child -Adult $Adult -All $All) -or ($Native -and $IsWiiVC) -or $Last.Hide) { return $null }
 
     if ( (IsSet $Info ) -and (IsSet $Credits) ) { $Info += ("`n`n- Credits: " + $Credits) }
-    return CreateButton -X (($Column-1) * $FormDistance + (DPISize 15)) -Y ($Row * (DPISize 30) - (DPISize 13)) -Width (DPISize $Width) -Height (DPISize $Height) -Name $Name -Tag $Tag -Text $Text -Info $Info -AddTo $AddTo
+    $Button = CreateButton -X (($Column-1) * $FormDistance + (DPISize 15)) -Y ($Row * (DPISize 30) - (DPISize 13)) -Width (DPISize $Width) -Height (DPISize $Height) -Name $Name -Tag $Tag -Text $Text -Info $Info -AddTo $AddTo
 
     $Last.Column = $column + 1;
     $Last.Row = $row;
@@ -491,12 +492,14 @@ function CreateReduxButton([single]$Column=$Last.Column, [single]$Row=$Last.Row,
     }
     if ($Last.Flexible) { $Last.Group.Height = ($Row * (DPISize 30) + (DPISize 20)) }
 
+    return $Button
+
 }
 
 
 
 #==============================================================================================================================================================================================
-function CreateReduxTextBox([single]$Column=$Last.Column, [single]$Row=$Last.Row, [byte]$Length=2, [int]$Width=35, [string]$Value=0, [switch]$ASCII, [int]$Min, [int]$Max, [string]$Text, [string]$Info, [string]$Warning, [string]$Credits, [string]$Name, [string]$Tag, [object]$AddTo=$Last.Group, [switch]$Native, [Object]$Expose=@($GameType.mode), [Object]$Exclude, [switch]$Base, [switch]$Alt, [switch]$Child, [switch]$Adult, [switch]$All) {
+function CreateReduxTextBox([single]$Column=$Last.Column, [single]$Row=$Last.Row, [byte]$Length=2, [int16]$Width=35, [int16]$BoxHeight=-1, [string]$Value=0, [switch]$ASCII, [int]$Min, [int]$Max, [string]$Text, [string]$Info, [string]$Warning, [string]$Credits, [string]$Name, [string]$Tag, [object]$AddTo=$Last.Group, [switch]$Native, [Object]$Expose=@($GameType.mode), [Object]$Exclude, [switch]$Base, [switch]$Alt, [switch]$Child, [switch]$Adult, [switch]$All) {
     
     if (!(CheckReduxOption -Expose $Expose -Exclude $Exclude -Base $Base -Alt $Alt -Child $Child -Adult $Adult -All $All) -or ($Native -and $IsWiiVC) -or $Last.Hide) { return $null }
 
@@ -509,24 +512,16 @@ function CreateReduxTextBox([single]$Column=$Last.Column, [single]$Row=$Last.Row
 
     if (IsSet $Text) { $Text += ":" }
 
-    $Label   = CreateLabel   -X (($Column-1) * $FormDistance + (DPISize 15)) -Y ($Row * (DPISize 30) - (DPISize 10)) -Width (DPISize 100) -Height (DPISize 15) -Text $Text -Info $Info -AddTo $AddTo
-    $TextBox = CreateTextBox -X $Label.Right -Y ($Label.Top - (DPISize 3)) -Width (DPISize $Width) -Height (DPISize 15) -Length $Length -Text $Value -IsGame $True -Name $Name -Tag $Tag -Info $Info -AddTo $AddTo
+    $Label   = CreateLabel   -X (($Column-1) * $FormDistance + (DPISize 15)) -Y ($Row * (DPISize 28) - (DPISize 10)) -Width (DPISize 105)    -Height (DPISize 30)                 -Text $Text                                      -Info $Info -AddTo $AddTo
+    $TextBox = CreateTextBox -X $Label.Right                                 -Y ($Label.Top + (DPISize $BoxHeight))  -Width (DPISize $Width) -Height (DPISize 15) -Length $Length -Text $Value -IsGame $True -Name $Name -Tag $Tag -Info $Info -AddTo $AddTo
 
     if (!$ASCII) {
-        $TextBox.Add_TextChanged({
-            if ($this.Text -cmatch "[^0-9]") {
-                $this.Text = $this.Text.ToUpper() -replace "[^0-9]",''
-                $this.Select($this.Text.Length, $this.Text.Length)
+        $TextBox.Add_LostFocus({
+            if (($this.Text -as [int]) -eq $null)                           { $this.Text = $this.Default }
+            else {
+                if (IsSet $this.Min) { if ([int]$this.Text -lt $this.Min)   { $this.Text = $this.Min } }
+                if (IsSet $this.Max) { if ([int]$this.Text -gt $this.Max)   { $this.Text = $this.Max } }
             }
-            if ($this.Text -cmatch " ") {
-                $this.Text = $this.Text.ToUpper() -replace " ",''
-                $this.Select($this.Text.Length, $this.Text.Length)
-            }
-
-            if ($this.Text -eq "") { $this.Text = 0 }
-
-            if (IsSet $this.Min) { if ([int]$this.Text -lt $this.Min) { $this.Text = $this.Min } }
-            if (IsSet $this.Max) { if ([int]$this.Text -gt $this.Max) { $this.Text = $this.Max } }
         })
 
         if (IsSet $Min) {
@@ -660,15 +655,9 @@ function CreateReduxComboBox([single]$Column=$Last.Column, [single]$Row=$Last.Ro
     if ($Items.Count -gt 0 -and $PostItems.Count -gt 0) { $Items = $Items + $PostItems }
 
     if ($Items.Count -gt 0) {
-        $Items = $Items | select -Unique
-        if ($Default.GetType().Name -eq "String") {
-            foreach ($i in 0..($Items.length-1)) { if ($Items[$i] -eq $Default) { $Default = ($i +1) } }
-            if ($Default.GetType().Name -eq "String") { $Default = 0 }
-        }
-        if ($Items[($Default-1)] -ne "Default" -and $Default -gt 0 -and !$NoDefault) {
-            $Items = $Items.Clone()
-            $Items[($Default-1)] += " (default)"
-        }
+        $Items = $Items | Get-Unique
+        if ($Default.GetType().Name -eq "String")                                      { $Default = [array]::indexof($Items, $Default) + 1 }
+        if ($Items[($Default-1)] -ne "Default" -and $Default -gt 0 -and !$NoDefault)   { $Items[($Default-1)] += " (default)"              }
     }
 
     $Default  = [byte]$Default

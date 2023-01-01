@@ -19,7 +19,6 @@ function CreateOptionsDialog([byte]$Columns, [int32]$Height, [Array]$Tabs=@(), [
     $CloseButton.Add_Click( { StopJobs; $OptionsDialog.Hide() })
 
     # Reset Options
-    
     foreach ($s in $Redux.Sections) {
         if ($s -eq "Controls") { continue }
         $Redux[$s] = $null
@@ -43,6 +42,14 @@ function CreateOptionsDialog([byte]$Columns, [int32]$Height, [Array]$Tabs=@(), [
     # Lock GUI if needed
     if (Get-Command "AdjustGUI" -errorAction SilentlyContinue) { iex "AdjustGUI" }
 
+    # Run Preset
+    if (IsSet $GamePatch.preset) {
+        if (GetCommand ("ApplyPreset" + $GamePatch.preset)) {
+            ResetGame
+            iex ("ApplyPreset" + $GamePatch.preset)
+        }
+    }
+
 }
 
 
@@ -53,34 +60,36 @@ function CreateLanguageContent($Columns=[byte][Math]::Round($Redux.Panel.Width /
     $file = $Files.json.languages
 
     # Box + Panel
-    $Rows = [Math]::Ceiling($file.length / $Columns)
-    CreateReduxGroup -Text "Languages" -Tag "Language" -Height $Rows
+    $rows = [Math]::Ceiling($file.length / $Columns)
+    CreateReduxGroup -Text "Languages" -Tag "Language" -Height $rows
     $Last.Group.IsLanguage = $True
-    CreateReduxPanel -Rows $Rows
+    CreateReduxPanel -Rows $rows
 
     if (IsSet $file) {
-        $Row = $Column = 0
+        $row = $column = 0
         for ($i=0; $i -lt $file.length; $i++) {
-            if ($i % $Columns -ne 0) { $Column += 1 }
+            if ($i % $columns -ne 0) { $column++ }
             else {
-                $Column = 0
-                $Row += 1
+                $column = 0
+                $row++
             }
             if (IsSet $file[$i].warning)   { $warning = ([string]::Format($file[$i].warning, [Environment]::NewLine)) }
             else                           { $warning = $null }
-            if ($file[$i].default -eq 1)   { $Redux.Language[$i] = CreateReduxRadioButton -Column ($Column+1) -Row $Row -Text $file[$i].title -Info ("Play the game in " + $file[$i].title) -Warning $warning -Name $file[$i].title -Credits $file[$i].credits -SaveTo "Translation" -Checked }
-            else                           { $Redux.Language[$i] = CreateReduxRadioButton -Column ($Column+1) -Row $Row -Text $file[$i].title -Info ("Play the game in " + $file[$i].title) -Warning $warning -Name $file[$i].title -Credits $file[$i].credits -SaveTo "Translation" }
+            if ($file[$i].default -eq 1)   { $Redux.Language[$i] = CreateReduxRadioButton -Column ($column+1) -Row $row -Text $file[$i].title -Info ("Play the game in " + $file[$i].title) -Warning $warning -Name $file[$i].title -Credits $file[$i].credits -SaveTo "Translation" -Checked }
+            else                           { $Redux.Language[$i] = CreateReduxRadioButton -Column ($column+1) -Row $row -Text $file[$i].title -Info ("Play the game in " + $file[$i].title) -Warning $warning -Name $file[$i].title -Credits $file[$i].credits -SaveTo "Translation" }
         }
     
-        $HasDefault = $False
+        $hasDefault = $False
         foreach ($i in 0..($file.Length-1)) {
             if ($Redux.Language[$i].Checked) {
-                $HasDefault = $True
+                $hasDefault = $True
                 break
             }
         }
-        if (!$HasDefault) { $Redux.Language[0].Checked = $True }
+        if (!$hasDefault) { $Redux.Language[0].Checked = $True }
     }
+
+    $file = $rows = $row = $column = $warning = $hasDefault = $null
 
 }
 
@@ -257,8 +266,8 @@ function CreateSettingsDialog() {
     $GeneralSettings.Logging             = CreateSettingsCheckbox -Name "Logging"          -Column 3 -Row 1 -Text "Logging"      -Checked -IsDebug -Info "Write all events of Patcher64+ into log files"
     $GeneralSettings.CreateBPS           = CreateSettingsCheckbox -Name "CreateBPS"        -Column 1 -Row 2 -Text "Create BPS"            -IsDebug -Info "Create compressed and decompressed BPS patches when patching is concluded"
     $GeneralSettings.NoCleanup           = CreateSettingsCheckbox -Name "NoCleanup"        -Column 2 -Row 2 -Text "No Cleanup"            -IsDebug -Info "Do not clean up the files after the patching process fails or succeeds"
-    $GeneralSettings.NoHeaderChange      = CreateSettingsCheckbox -Name "NoHeaderChange"   -Column 3 -Row 2 -Text "No Header Change"      -IsDebug -Info "Do not change the title header of the ROM when patching is concluded"
-    $GeneralSettings.NoChannelChange     = CreateSettingsCheckbox -Name "NoChannelChange"  -Column 1 -Row 3 -Text "No Channel Change"     -IsDebug -Info "Do not change the channel title and channel GameID of the WAD when patching is concluded"
+    $GeneralSettings.NoHeaderChange      = CreateSettingsCheckbox -Name "NoHeaderChange"   -Column 3 -Row 2 -Text "No Header Change"      -IsDebug -Info "Do not change the header of the ROM when patching is concluded"
+    $GeneralSettings.NoChannelChange     = CreateSettingsCheckbox -Name "NoChannelChange"  -Column 1 -Row 3 -Text "No Channel Change"     -IsDebug -Info "Do not change the channel title and GameID of the WAD when patching is concluded"
     $GeneralSettings.KeepDowngraded      = CreateSettingsCheckbox -Name "KeepDowngraded"   -Column 2 -Row 3 -Text "Keep Downgraded"       -IsDebug -Info "Keep the downgraded patched ROM in the output folder"
     $GeneralSettings.KeepConverted       = CreateSettingsCheckbox -Name "KeepConverted"    -Column 3 -Row 3 -Text "Keep Converted"        -IsDebug -Info "Keep the converted patched ROM in the output folder"
 

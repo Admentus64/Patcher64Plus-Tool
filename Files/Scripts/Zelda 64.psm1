@@ -526,8 +526,12 @@ function ShowEquipmentPreview() {
     
     if (IsSet $Redux.Equipment.DekuShield) {
         $path = ($Paths.shared + "\Equipment\Deku Shield\"   + $Redux.Equipment.DekuShield.Text.replace(" (default)", "")   + " Icon.png")
-        if (TestFile $Path)   { SetBitMap -Path $path -Box $Redux.Equipment.DekuShieldIconPreview }
-        else                  { $Redux.Equipment.DekuShieldIconPreview.Image = $null }
+        if (TestFile $Path) { SetBitMap -Path $path -Box $Redux.Equipment.DekuShieldIconPreview }
+        else {
+            $path = ($Paths.shared + "\Equipment\Deku Shield\"   + $Redux.Equipment.DekuShield.Items[0].replace(" (default)", "")   + " Icon.png")
+            if (TestFile $Path)   { SetBitMap -Path $path -Box $Redux.Equipment.DekuShieldIconPreview }
+            else                  { $Redux.Equipment.DekuShieldIconPreview.Image = $null              }
+        }
 
         $path = ($Paths.shared + "\Equipment\Deku Shield\"   + $Redux.Equipment.DekuShield.Text.replace(" (default)", "")   + ".png")
         if (TestFile $Path)   { SetBitMap -Path $path -Box $Redux.Equipment.DekuShieldPreview }
@@ -536,8 +540,12 @@ function ShowEquipmentPreview() {
 
     if (IsSet $Redux.Equipment.HylianShield) {
         $path = ($Paths.shared + "\Equipment\Hylian Shield\" + $Redux.Equipment.HylianShield.Text.replace(" (default)", "") + " Icon.png")
-        if (TestFile $Path)   { SetBitMap -Path $path -Box $Redux.Equipment.HylianShieldIconPreview }
-        else                  { $Redux.Equipment.HylianShieldIconPreview.Image = $null }
+        if (TestFile $Path) { SetBitMap -Path $path -Box $Redux.Equipment.HylianShieldIconPreview }
+        else {
+            $path = ($Paths.shared + "\Equipment\Hylian Shield\" + $Redux.Equipment.HylianShield.Items[0].replace(" (default)", "") + " Icon.png")
+            if (TestFile $Path)   { SetBitMap -Path $path -Box $Redux.Equipment.HylianShieldIconPreview }
+            else                  { $Redux.Equipment.HylianShieldIconPreview.Image = $null              }
+        }
 
         $path = ($Paths.shared + "\Equipment\Hylian Shield\" + $Redux.Equipment.HylianShield.Text.replace(" (default)", "") + ".png")
         if (TestFile $Path)   { SetBitMap -Path $path -Box $Redux.Equipment.HylianShieldPreview }
@@ -546,8 +554,12 @@ function ShowEquipmentPreview() {
 
     if (IsSet $Redux.Equipment.MirrorShield) {
         $path = ($Paths.shared + "\Equipment\Mirror Shield\" + $Redux.Equipment.MirrorShield.Text.replace(" (default)", "") + " Icon.png")
-        if (TestFile $Path)   { SetBitMap -Path $path -Box $Redux.Equipment.MirrorShieldIconPreview }
-        else                  { $Redux.Equipment.MirrorShieldIconPreview.Image = $null }
+        if (TestFile $Path) { SetBitMap -Path $path -Box $Redux.Equipment.MirrorShieldIconPreview }
+        else {
+            $path = ($Paths.shared + "\Equipment\Mirror Shield\" + $Redux.Equipment.MirrorShield.Items[0].replace(" (default)", "") + " Icon.png")
+            if (TestFile $Path)   { SetBitMap -Path $path -Box $Redux.Equipment.MirrorShieldIconPreview }
+            else                  { $Redux.Equipment.MirrorShieldIconPreview.Image = $null              }
+        }
 
         $path = ($Paths.shared + "\Equipment\Mirror Shield\" + $Redux.Equipment.MirrorShield.Text.replace(" (default)", "") + ".png")
         if (TestFile $Path)   { SetBitMap -Path $path -Box $Redux.Equipment.MirrorShieldPreview }
@@ -556,14 +568,22 @@ function ShowEquipmentPreview() {
 
     if (IsSet $Redux.Equipment.KokiriSword) {
         $path = ($Paths.shared + "\Equipment\Kokiri Sword\" + $Redux.Equipment.KokiriSword.Text.replace(" (default)", "") + " Icon.png")
-        if (TestFile $Path)   { SetBitMap -Path $path -Box $Redux.Equipment.KokiriSwordIconPreview }
-        else                  { $Redux.Equipment.KokiriSwordIconPreview.Image = $null }
+        if (TestFile $Path) { SetBitMap -Path $path -Box $Redux.Equipment.KokiriSwordIconPreview }
+        else  {
+            $path = ($Paths.shared + "\Equipment\Kokiri Sword\" + $Redux.Equipment.KokiriSword.Items[0].replace(" (default)", "") + " Icon.png")
+            if (TestFile $Path)   { SetBitMap -Path $path -Box $Redux.Equipment.KokiriSwordIconPreview }
+            else                  { $Redux.Equipment.KokiriSwordIconPreview.Image = $null              }
+        }
     }
 
     if (IsSet $Redux.Equipment.MasterSword) {
         $path = ($Paths.shared + "\Equipment\Master Sword\" + $Redux.Equipment.MasterSword.Text.replace(" (default)", "") + " Icon.png")
-        if (TestFile $Path)   { SetBitMap -Path $path -Box $Redux.Equipment.MasterSwordIconPreview }
-        else                  { $Redux.Equipment.MasterSwordIconPreview.Image = $null }
+        if (TestFile $Path) { SetBitMap -Path $path -Box $Redux.Equipment.MasterSwordIconPreview }
+        else {
+            $path = ($Paths.shared + "\Equipment\Master Sword\" + $Redux.Equipment.MasterSword.Items[0].replace(" (default)", "") + " Icon.png")
+            if (TestFile $Path)   { SetBitMap -Path $path -Box $Redux.Equipment.MasterSwordIconPreview }
+            else                  { $Redux.Equipment.MasterSwordIconPreview.Image = $null              }
+        }
     }
 
 }
@@ -692,7 +712,7 @@ function CreateButtonColorOptions($Default=1) {
     
     # BUTTON COLORS #
     CreateReduxGroup    -Tag  "Colors"  -All -Text "Button Colors" -Height 2
-    CreateReduxComboBox -Name "Buttons" -All -Text "Button Colors" -Items @("N64 OoT", "N64 MM", "GC OoT", "GC MM", "Randomized", "Custom") -Default $Default -Info ("Select a preset for the button colors`n" + '"Randomized" fully randomizes the colors each time the patcher is opened') -Credits "GhostlyDark (ported from Redux)"
+    CreateReduxComboBox -Name "Buttons" -All -Text "Button Colors" -Items @("N64 OoT", "N64 MM", "GC OoT", "GC MM", "Xbox OoT", "Xbox MM", "Randomized", "Custom") -Default $Default -Info ("Select a preset for the button colors`n" + '"Randomized" fully randomizes the colors each time the patcher is opened') -Credits "GhostlyDark (ported from Redux)"
 
     # Button Colors - Buttons
     $Buttons = @()
@@ -1127,6 +1147,8 @@ function SetButtonColorsPreset([object]$ComboBox) {
     elseif ($Text -eq "N64 MM")       { SetColors -Colors @("64C8FF", "64FF78", "FFF000", "FF823C") -Dialogs $Redux.Colors.SetButtons -Labels $Redux.Colors.ButtonLabels }
     elseif ($Text -eq "GC OoT")       { SetColors -Colors @("00C832", "FF1E1E", "FFA000", "787878") -Dialogs $Redux.Colors.SetButtons -Labels $Redux.Colors.ButtonLabels }
     elseif ($Text -eq "GC MM")        { SetColors -Colors @("64FF78", "FF6464", "FFF000", "787878") -Dialogs $Redux.Colors.SetButtons -Labels $Redux.Colors.ButtonLabels }
+    elseif ($Text -eq "Xbox OoT")     { SetColors -Colors @("00C832", "5A96FF", "3C3C3C", "3C3C3C") -Dialogs $Redux.Colors.SetButtons -Labels $Redux.Colors.ButtonLabels }
+    elseif ($Text -eq "Xbox MM")      { SetColors -Colors @("64FF78", "64C8FF", "787878", "787878") -Dialogs $Redux.Colors.SetButtons -Labels $Redux.Colors.ButtonLabels }
     elseif ($Text -eq "Randomized")   {
         $Colors = @()
         for ($i=0; $i -lt $Redux.Colors.SetButtons.length; $i++) { $Colors += SetRandomColor -Dialog $Redux.Colors.SetButtons[$i] -Label $Redux.Colors.ButtonLabels[$i] }

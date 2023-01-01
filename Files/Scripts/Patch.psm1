@@ -22,13 +22,13 @@ function MainFunction([string]$Command, [string]$PatchedFileName) {
     elseif ($VC.RemapControls.Active -and $GamePatch.remap_controls -eq -1)    { $VC.RemapControls.Checked = $False }
 
     # Finalize
-    if     (IsChecked $Patches.Options)          { $PatchInfo.finalize = $False }
-    if     ($GamePatch.finalize -eq 0)           { $PatchInfo.finalize = $False }
-    elseif ($GamePatch.finalize -eq 1)           { $PatchInfo.finalize = $True }
+    if     ( (IsChecked $Patches.Options) -or (IsSet $GamePatch.preset) )      { $PatchInfo.finalize = $False }
+    if     ($GamePatch.finalize -eq 0)                                         { $PatchInfo.finalize = $False }
+    elseif ($GamePatch.finalize -eq 1)                                         { $PatchInfo.finalize = $True }
 
     if ( !(StrLike -str $Command -val "Inject") -and !(StrLike -str $Command -val "Apply Patch") -and !(StrLike -str $Command -val "Extract") ) {
         # Redux
-        if ( (IsChecked $Patches.Redux) -and (IsSet $GamePatch.redux.file)) {
+        if ( ( (IsChecked $Patches.Redux) -or (IsSet $GamePatch.preset) ) -and (IsSet $GamePatch.redux.file)) {
             $Header = SetHeader -Header $Header -ROMTitle $GamePatch.redux.rom_title -ROMGameID $GamePatch.redux.rom_gameID -VCTitle $GamePatch.redux.vc_title -VCGameID $GamePatch.redux.vc_gameID -Region $GamePatch.rom_region
             if     ($VC.RemapControls.Active -and $GamePatch.redux.remap_controls -eq  1)   { $VC.RemapControls.Checked = $True  }
             elseif ($VC.RemapControls.Active -and $GamePatch.redux.remap_controls -eq -1)   { $VC.RemapControls.Checked = $False }
@@ -101,7 +101,7 @@ function MainFunction([string]$Command, [string]$PatchedFileName) {
     if ($GameType.decompress -gt 0) {
         if     (StrStarts -Str (GetPatchFile) -Val "Decompressed\") { $PatchInfo.decompress = $True }
         elseif ($GameType.decompress -eq 1 -and !(StrLike -str $Command -val "Inject") -and !(StrLike -str $Command -val "Apply Patch") -and !(StrLike -str $Command -val "Extract") ) {
-            if ( (IsChecked $Patches.Options) -or (IsChecked $Patches.Redux) )                                                                                                          { $PatchInfo.decompress = $True }
+            if ( (IsChecked $Patches.Options) -or (IsChecked $Patches.Redux) -or (IsSet $GamePatch.preset) )                                                                            { $PatchInfo.decompress = $True }
         }
         elseif ($GameType.decompress -eq 2 -and (IsChecked $Patches.Extend))                                                                                                            { $PatchInfo.decompress = $True }
         elseif ($GameType.decompress -eq 3 -and (IsChecked $Patches.Extend))                                                                                                            { $PatchInfo.decompress = $True }
@@ -109,7 +109,7 @@ function MainFunction([string]$Command, [string]$PatchedFileName) {
     }
 
     # Check if ROM is getting patched
-    if ( (IsChecked $Patches.Options) -or (IsChecked $Patches.Redux) -or (IsSet $GamePatch.patch) -or (StrLike -str $Command -val "Apply Patch") ) { $PatchInfo.run = $True } else { $PatchInfo.run = $False }
+    if ( (IsChecked $Patches.Options) -or (IsChecked $Patches.Redux) -or (IsSet $GamePatch.patch) -or (StrLike -str $Command -val "Apply Patch") -or (IsSet $GamePatch.preset) ) { $PatchInfo.run = $True } else { $PatchInfo.run = $False }
 
     # GO!
     if ($Settings.NoCleanup.Checked -ne $True -and $IsWiiVC) { RemovePath $Paths.Temp } # Remove the temp folder first to avoid issues
@@ -239,8 +239,8 @@ function WriteDebug([string]$Command, [string[]]$Header, [string]$PatchedFileNam
     WriteToConsole ("Patch Options: " + $GamePatch.title)
     WriteToConsole ("Custom Header: " + $Header)
     WriteToConsole ("Patch File:    " + (GetPatchFile))
-    WriteToConsole ("Use Options:   " + ( (IsSet $GamePatch.options) -and $Patches.Options.Checked -and $Patches.Options.Visible) )
-    WriteToConsole ("Use Redux:     " + ( (IsChecked $Patches.Redux) -and (IsSet $GamePatch.redux.file) ) )
+    WriteToConsole ("Use Options:   " + (UseOptions))
+    WriteToConsole ("Use Redux:     " + ( ( (IsChecked $Patches.Redux) -or (IsSet $GamePatch.preset) ) -and (IsSet $GamePatch.redux.file) ) )
     WriteToConsole ("Redux File:    " + $GamePatch.redux.file)
     WriteToConsole ("Language File: " + $LanguagePatchFile + " (" + $LanguagePatch.code + ")")
     WriteToConsole ("Output Name:   " + $PatchedFileName)
@@ -266,7 +266,7 @@ function WriteDebug([string]$Command, [string[]]$Header, [string]$PatchedFileNam
     WriteToConsole ("Use Local Temp Folder: " + $GeneralSettings.LocalTempFolder.Checked)
     WriteToConsole "--- End Misc Settings Info ---"
 
-    if (!$Patches.Options.Checked) { return }
+    if (!(UseOptions)) { return }
 
     WriteToConsole
     WriteToConsole
@@ -353,7 +353,7 @@ function GetPatchFile() {
     
     if ($GamePatch.patch -is [System.Array]) {
         foreach ($item in $GamePatch.patch) {
-            if ($item.hash -eq $ROMHashSum -and ( ($item.console -eq "Native" -and !$IsWiiVC) -or ($item.console -eq "Wii VC" -and $IsWiiVC) -or !(IsSet $item.console) ) ) { return $item.file }
+            if ($item.rev -eq $ROMHashSum -and ( ($item.console -eq "Native" -and !$IsWiiVC) -or ($item.console -eq "Wii VC" -and $IsWiiVC) -or !(IsSet $item.console) ) ) { return $item.file }
         }
         return $GamePatch.patch[0].file
     }
@@ -364,17 +364,29 @@ function GetPatchFile() {
 
 
 #==============================================================================================================================================================================================
+function UseOptions() {
+    
+    if (IsSet $GamePatch.options) {
+        if ( (IsSet $GamePatch.preset) -or ($Patches.Options.Checked -and $Patches.Options.Visible) ) { return $True }
+    }
+    return $False
+
+}
+
+
+
+#==============================================================================================================================================================================================
 function PrePatchingAdditionalOptions() {
 
-    if (!(IsSet $GamePatch.options) -or !$Patches.Options.Checked -or !$Patches.Options.Visible)   { return }
-    if (!$PatchInfo.decompress -and !(TestFile $GetROM.decomp) )                                   { Copy-Item -LiteralPath $GetROM.run -Destination $GetROM.decomp -Force }
+    if (!(UseOptions))                                             { return }
+    if (!$PatchInfo.decompress -and !(TestFile $GetROM.decomp) )   { Copy-Item -LiteralPath $GetROM.run -Destination $GetROM.decomp -Force }
 
     # BPS - Pre-Redux Options
     if (GetCommand "PrePatchOptions") {
         UpdateStatusLabel ("Pre-Patching " + $GameType.mode + " Additional Patches...")
         PrePatchOptions
     }
-    if ( (GetCommand "PrePatchReduxOptions") -and (IsChecked $Patches.Redux) -and (IsSet $GamePatch.redux.file) ) {
+    if ( (GetCommand "PrePatchReduxOptions") -and ( (IsChecked $Patches.Redux) -or (IsSet $GamePatch.preset) ) -and (IsSet $GamePatch.redux.file) ) {
         UpdateStatusLabel ("Pre-Patching " + $GameType.mode + " Additional Redux Patches...")
         PrePatchReduxOptions
     }
@@ -386,8 +398,8 @@ function PrePatchingAdditionalOptions() {
 #==============================================================================================================================================================================================
 function PatchingAdditionalOptions() {
     
-    if (!(IsSet $GamePatch.options) -or !$Patches.Options.Visible)   { return }
-    if (!$PatchInfo.decompress -and !(TestFile $GetROM.decomp) )     { Copy-Item -LiteralPath $GetROM.run -Destination $GetROM.decomp -Force }
+    if (!(IsSet $GamePatch.options))                               { return }
+    if (!$PatchInfo.decompress -and !(TestFile $GetROM.decomp) )   { Copy-Item -LiteralPath $GetROM.run -Destination $GetROM.decomp -Force }
     
     # Language patches
     if ($Settings.Debug.ExtractCleanScript -eq $True -and (IsSet $LanguagePatch.script_dma) -and (IsSet $LanguagePatch.table_start) -and (IsSet $LanguagePatch.table_length)) {
@@ -400,8 +412,8 @@ function PatchingAdditionalOptions() {
         ExportBytes -Offset $LanguagePatch.table_start -Length $LanguagePatch.table_length -Output ($GameFiles.editor + "\message_data."        + $LanguagePatch.code + ".tbl") -Force
     }
 
-    if (!$Patches.Options.Checked) { return }
-
+    if (!(UseOptions)) { return }
+    
     # BPS - Additional Options (before languages)
     if (GetCommand "PrePatchLanguageOptions") {
         UpdateStatusLabel ("Pre-Patching " + $GameType.mode + " Additional Options Patches...")
@@ -421,7 +433,7 @@ function PatchingAdditionalOptions() {
     }
 
     # BPS - Redux Options
-    if ( (GetCommand "PatchReduxOptions") -and (IsChecked $Patches.Redux) -and (IsSet $GamePatch.redux.file) ) {
+    if ( (GetCommand "PatchReduxOptions") -and ( (IsChecked $Patches.Redux) -or (IsSet $GamePatch.preset) ) -and (IsSet $GamePatch.redux.file) ) {
         UpdateStatusLabel ("Patching " + $GameType.mode + " Additional Redux Patches...")
         PatchReduxOptions
     }
@@ -435,7 +447,7 @@ function PatchingAdditionalOptions() {
     }
 
     # Redux Options
-    if ( (GetCommand "ByteReduxOptions") -and (IsChecked $Patches.Redux) -and (IsSet $GamePatch.redux.file) ) {
+    if ( (GetCommand "ByteReduxOptions") -and ( (IsChecked $Patches.Redux) -or (IsSet $GamePatch.preset) ) -and (IsSet $GamePatch.redux.file) ) {
         UpdateStatusLabel ("Patching " + $GameType.mode + " Additional Redux Options...")
         ByteReduxOptions
     }
@@ -742,8 +754,8 @@ function PatchCompressedROM() {
     UpdateStatusLabel ("Patching " + $GameType.mode + " ROM with patch file...")
 
     # Apply the selected patch to the ROM, if it is provided
-    if     ( $IsWiiVC)   { if (!(ApplyPatch -File $GetROM.patched -Patch (GetPatchFile)))                    { return $False } }
-    elseif (!$IsWiiVC)   { if (!(ApplyPatch -File $GetROM.run -Patch (GetPatchFile) -New $GetROM.patched))   { return $False } }
+    if     ( $IsWiiVC)   { if (!(ApplyPatch -File $GetROM.patched -Patch (GetPatchFile)))                        { return $False } }
+    elseif (!$IsWiiVC)   { if (!(ApplyPatch -File $GetROM.run     -Patch (GetPatchFile) -New $GetROM.patched))   { return $False } }
 
     return $True
 
@@ -754,12 +766,18 @@ function PatchCompressedROM() {
 #==============================================================================================================================================================================================
 function PatchDMA() {
 
-    if ( !(IsSet $GamePatch.custom_offset) -or !(IsSet $GamePatch.custom_value) ) { return }
-
-    $global:ByteArrayGame = [System.IO.File]::ReadAllBytes($GetROM.run)
-    ChangeBytes -Offset $GamePatch.custom_offset -Values $GamePatch.custom_value
-    [System.IO.File]::WriteAllBytes($GetROM.run, $ByteArrayGame)
-    $global:ByteArrayGame = $null
+    if ( (IsSet $GamePatch.custom_offset) -and (IsSet $GamePatch.custom_value) ) {
+        $global:ByteArrayGame = [System.IO.File]::ReadAllBytes($GetROM.run)
+        ChangeBytes -Offset $GamePatch.custom_offset -Values $GamePatch.custom_value
+        [System.IO.File]::WriteAllBytes($GetROM.run, $ByteArrayGame)
+        $global:ByteArrayGame = $null
+    }
+    if ( (GetCommand "ByteDMAOptions") -and (UseOptions) ) {
+        $global:ByteArrayGame = [System.IO.File]::ReadAllBytes($GetROM.run)
+        ByteDMAOptions
+        [System.IO.File]::WriteAllBytes($GetROM.run, $ByteArrayGame)
+        $global:ByteArrayGame = $null
+    }
 
 }
 
@@ -777,9 +795,9 @@ function ApplyPatchROM() {
     $HashSum2 = (Get-FileHash -Algorithm MD5 -LiteralPath $GetROM.patched).Hash
 
     if ($HashSum1 -eq $HashSum2) {
-        if ($IsWiiVC -and $GameType.downgrade -and !$PatchInfo.downgrade -and $Patches.Options.Checked -or $Patches.Options.Visible )   { UpdateStatusLabel "Failed! Patch file does not match source. ROM has left unchanged. Enable Downgrade?" }
-        elseif ($IsWiiVC -and $GameType.downgrade -and $Downgrade)                                                                      { UpdateStatusLabel "Failed! Patch file does not match source. ROM has left unchanged. Disable Downgrade?" }
-        else                                                                                                                            { UpdateStatusLabel "Failed! Patch file does not match source. ROM has left unchanged." }
+        if ($IsWiiVC -and $GameType.downgrade -and !$PatchInfo.downgrade -and ($Patches.Options.Checked -or $Patches.Options.Visible -or (IsSet $GamePatch.preset) ) )   { UpdateStatusLabel "Failed! Patch file does not match source. ROM has left unchanged. Enable Downgrade?" }
+        elseif ($IsWiiVC -and $GameType.downgrade -and $Downgrade)                                                                                                       { UpdateStatusLabel "Failed! Patch file does not match source. ROM has left unchanged. Disable Downgrade?" }
+        else                                                                                                                                                             { UpdateStatusLabel "Failed! Patch file does not match source. ROM has left unchanged." }
         return $False
     }
 
@@ -793,7 +811,7 @@ function ApplyPatchROM() {
 function ApplyPatch([string]$File=$GetROM.decomp, [string]$Patch, [string]$New, [switch]$FilesPath, [switch]$FullPath) {
     
     # File Parameter Check
-    if ( !(IsSet -Elem $File) -or !(IsSet -Elem $Patch) ) {
+    if ( !(IsSet $File) -or !(IsSet $Patch) ) {
         WriteToConsole "No file or patch file is provided"
         return $True
     }
@@ -806,8 +824,8 @@ function ApplyPatch([string]$File=$GetROM.decomp, [string]$Patch, [string]$New, 
     }
 
     # Patch File
-    if ($FullPath)         {  }
-    elseif ($FilesPath)    { $Patch = $Paths.Master + "\" + $Patch   }
+    if     ($FullPath)     {  }
+    elseif ($FilesPath)    { $Patch = $Paths.Master   + "\" + $Patch }
     else                   { $Patch = $GameFiles.base + "\" + $Patch }
 
     if (TestFile ($Patch + ".bps"))      { $Patch + ".bps"    }
@@ -884,18 +902,18 @@ function DecompressROM() {
         Push-Location $Paths.Temp
 
         # Get the correct DMA table for the ROM
-        if     ( (IsSet $GamePatch.redux.dmaTable) -and (IsChecked $Patches.Redux) )                        { RemoveFile $Files.dmaTable; Add-Content $Files.dmaTable $GamePatch.redux.dmaTable }
-        elseif (IsSet $GamePatch.dmaTable)                                                                  { RemoveFile $Files.dmaTable; Add-Content $Files.dmaTable $GamePatch.dmaTable       }
-        elseif (IsSet $LanguagePatch.dmaTable)                                                              { RemoveFile $Files.dmaTable; Add-Content $Files.dmaTable $LanguagePatch.dmaTable   }
-        elseif ( (IsSet $GameType.dmaTable) -and $ROMHashSum -ne $CheckHashSum -and $PatchInfo.downgrade)   { RemoveFile $Files.dmaTable; Add-Content $Files.dmaTable $GameType.dmaTable        }
-        else                                                                                                { & $Files.tool.TabExt $GetROM.run | Out-Null }
+        if     ( (IsSet $GamePatch.redux.dmaTable) -and ( (IsChecked $Patches.Redux) -or (IsSet $GamePatch.preset) ) )   { RemoveFile $Files.dmaTable; Add-Content $Files.dmaTable $GamePatch.redux.dmaTable }
+        elseif (IsSet $GamePatch.dmaTable)                                                                               { RemoveFile $Files.dmaTable; Add-Content $Files.dmaTable $GamePatch.dmaTable       }
+        elseif (IsSet $LanguagePatch.dmaTable)                                                                           { RemoveFile $Files.dmaTable; Add-Content $Files.dmaTable $LanguagePatch.dmaTable   }
+        elseif ( (IsSet $GameType.dmaTable) -and $ROMHashSum -ne $CheckHashSum -and $PatchInfo.downgrade)                { RemoveFile $Files.dmaTable; Add-Content $Files.dmaTable $GameType.dmaTable        }
+        else                                                                                                             { & $Files.tool.TabExt $GetROM.run | Out-Null }
 
         WriteToConsole ("Generated DMA Table from: " + $GetROM.run)
         & $Files.tool.ndec $GetROM.run $GetROM.decomp | Out-Null
         WriteToConsole ("Decompressed ROM: " + $GetROM.decomp)
         Pop-Location
 
-        if ($Settings.Debug.CreateBPS -eq $True) { Copy-Item -LiteralPath $GetROM.decomp -Destination $GetROM.cleanDecomp -Force }
+        if ($Settings.Debug.CreateBPS -eq $True -or (IsSet $ActorEditor) ) { Copy-Item -LiteralPath $GetROM.decomp -Destination $GetROM.cleanDecomp -Force }
     }
     elseif ($GameType.decompress -eq 2) {
         UpdateStatusLabel ("Extending " + $GameType.mode + " ROM...")
@@ -949,7 +967,7 @@ function CompressROM() {
 function PatchRedux() {
     
     # BPS PATCHING REDUX #
-    if ( (IsChecked $Patches.Redux) -and (IsSet -Elem $GamePatch.redux.file) ) {
+    if ( ( (IsChecked $Patches.Redux) -or (IsSet $GamePatch.preset) ) -and (IsSet -Elem $GamePatch.redux.file) ) {
         if ( !$PatchInfo.decompress -and !(TestFile $GetROM.decomp) ) { Copy-Item -LiteralPath $GetROM.run -Destination $GetROM.decomp -Force }
         UpdateStatusLabel ("Patching " + $GameType.mode + " REDUX...")
 
@@ -1073,7 +1091,7 @@ function IsHiROM([uint32]$Offset) {
 #==============================================================================================================================================================================================
 function IsReduxOnly() {
     
-    if ($Patches.Redux.Checked -and !(IsWidescreen -Patched)) { return $True }
+    if ( ($Patches.Redux.Checked -or (IsSet $GamePatch.preset) ) -and !(IsWidescreen -Patched)) { return $True }
     return $False
 
 }

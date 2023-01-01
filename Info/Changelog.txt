@@ -1,3 +1,25 @@
+v20.0.0
+- Added new Easter Egg option for OoT & MM for Tier 3 Patreons
+- Added Actor Editor for OoT (with support for MQ and Ura too)
+- Added new PM options
+- Added support for patching "Additional Options" presets as patches
+- Added new features for the Text Editor
+- Added new Item Drop options for OoT & MM
+- Added new glitch fixes options for OoT
+- Added new options for MK64
+- Added new graphics option for Smash 64
+- Added new quipment options for OoT
+- Moved several options around, and adjusted options window sizes for some games
+- Fixed Pot's Challenge for OoT
+- Fixed issue with OoT Text Editor commands
+- Fixed issue with checking hashes
+- Fixed game mode label not refreshing during changing game modes
+- Fixed issue with not properly getting the patch for the correct revision
+- Fixed title for Fairy's Fountain for English Map Select translation
+- Changed auto-correction for numeric text fields
+- Changed GUI to be locked when changing generating GUI options
+- Changed dropdown menus and sliders to be no longer affected by the mouse's scrolling wheel
+
 v19.2.1
 - Unmerged non-Redux Hide HUD options
 - Fixed Easier Fishing and split them into more options
