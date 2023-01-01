@@ -8,7 +8,7 @@ v20.0.0
 - Added new glitch fixes options for OoT
 - Added new options for MK64
 - Added new graphics option for Smash 64
-- Added new quipment options for OoT
+- Added new equipment options for OoT
 - Moved several options around, and adjusted options window sizes for some games
 - Fixed Pot's Challenge for OoT
 - Fixed issue with OoT Text Editor commands
