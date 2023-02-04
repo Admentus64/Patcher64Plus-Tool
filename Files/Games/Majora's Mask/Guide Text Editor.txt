@@ -1,0 +1,95 @@
+----------------
+--- COMMANDS ---
+----------------
+
+<Space:xx>			Print xx spaces
+<Delay:xxxx>			Delay for xxxx frames before printing remaining text
+<Keep:xxxx>			Keep text on screen for xxxx frames before closing
+<End:xxxx>			Delay for xxxx frames before ending conversation
+<Sound:xxxx>			Play sound effect xxxx
+<Resume:xxxx>			Delay for xxxx frames Before resuming text flow
+
+<W>				White text color
+<R>				Red text color
+<G>				Green text color
+<B>				Blue text color
+<C>				Light blue text color
+<M>				Pink text color
+<Y>				Yellow text color
+<S>				Silver text color
+<P>				Purple text color
+
+<Jungle Cruise>			Print Jungle Cruise minigame results
+<Jungle Cruise:Hits>		Print hits Required to Win Jungle Cruise reward
+<Gold Skulltulas>		Print Gold Skulltulas Collected in Current Spider House
+<Player>			Print the player's name
+<Postman>			Print Postman's Counting Game results
+<Clock Tower>			Print remaining time till Moon falls (Clock Tower Roof)
+<Playground>			Print Deku Scrub Playground results
+<Shooting Gallery>		Print Shooting Gallery Minigame results
+<Rupees>			Print number of Rupees entered or bet
+<Rupees Total>			Print total rupees in bank or won by betting
+<Time>				Print time remaining in hours & minutes
+<Soaring>			Print Song of Soaring destination
+<Lottery:Win>			Print winning lottery numbers
+<Lottery>			Print player's lottery numbers
+<Value>				Print item value in Rupees
+<Bomber>			Print Bombers' Code
+<Bank>				Print total Rupees in bank
+<Timer>				Print timer or highscore in 00+ '' + 00' Format
+<Magic Bean>			Print Magic Bean price
+
+<Prompt:Bank>			Display prompt to withdraw or deposit Rupees
+<Prompt:Bet>			Display prompt to bet Rupees
+<Prompt:Bomber>			Display prompt for Bombers' Code
+<Prompt:Lottery>		Display prompt for Lottery Number
+
+<Score:Shooting Gallery>	Print Town Shooting Gallery highscore
+<Score:Balloon Archery>		Print Epona Balloon Archery highscore
+<Score:Playground 1>		Print Deku Scrub Playground highscore (Day 1)
+<Score:Playground 2>		Print Deku Scrub Playground highscore (Day 1)
+<Score:Playground 3>		Print Deku Scrub Playground highscore (Day 1)
+
+<Fairies>			Print Stray Fairies collected in current dungeon
+<Fairies:1>			Print remaining Stray Fairies in Woodfall Temple
+<Fairies:2>			Print remaining Stray Fairies in Snowhead Temple
+<Fairies:3>			Print remaining Stray Fairies in Great Bay Temple
+<Fairies:4>			Print remaining Stray Fairies in Stone Tower Temple
+
+<Spider House>			Print the Oceanside Spider House color code
+<Spider House:1>		Print color of Oceanside Spider House Mask 1
+<Spider House:2>		Print color of Oceanside Spider House Mask 2
+<Spider House:3>		Print color of Oceanside Spider House Mask 3
+<Spider House:4>		Print color of Oceanside Spider House Mask 4
+<Spider House:5>		Print color of Oceanside Spider House Mask 5
+<Spider House:6>		Print color of Oceanside Spider House Mask 6
+
+<Reset>				Reset cursor position to the start of the current line
+<DI>				Enable instantaneous text
+<DC>				Disable instantaneous text
+<Shop Description>		Used in shop item descriptions
+<Ocarina>			Ocarina Song failure
+<NS>				Prevent text from being skipped by the B button
+<NSS>				Prevent text from being skipped by the B button with sound effect
+<NC>				Prevent textbox from being closed
+<Two Choices>			Initialize a two-choice selection
+<Three Choices>			Initialize a three-choice selection
+<End>				End Conversation
+
+<A Button>			Print the A button
+<B Button>			Print the B button
+<C Button>			Print the C button
+<L Button>			Print the L button
+<R Button>			Print the R button
+<Z Button>			Print the Z button
+<C Up>				Print the C Up button
+<C Down>			Print the C Down button
+<C Left>			Print the C Left button
+<C Right>			Print the C Right button
+<Triangle>			Print the text box cursor
+<Control Stick>			Print the Control Stick
+<D-Pad>				Print the D-Pad
+
+<New Box>			Begin next message box for three lines of text
+<New Box II>			Begin next message box for four lines of text
+Press Enter to create a new Line Break

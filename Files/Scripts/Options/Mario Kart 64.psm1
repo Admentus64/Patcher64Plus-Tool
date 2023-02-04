@@ -1,6 +1,7 @@
 function PatchOptions() {
     
     if (IsChecked $Redux.Gameplay.CPUItems)     { ApplyPatch -Patch "Compressed\cpu_items.ppf" }
+    if (IsChecked $Redux.Gameplay.Kamek)        { ApplyPatch -Patch "Compressed\kamek.ppf"     }
 
 }
 
@@ -61,6 +62,7 @@ function CreateOptions() {
     CreateReduxCheckBox -Name "AddBombs"            -Text "Add Bombs (GP Mode)"     -Info "Add the yellow bombs to the racetrack during Grand Prix mode"                                                                   -Credits "Admentus (ROM) & TheBoy181 (GS)"
     CreateReduxCheckBox -Name "RemoveBombs"         -Text "Remove Bombs (MP Races)" -Info "Removes the yellow bombs from the racetrack during multiplayer races"                                                           -Credits "Admentus (ROM) & TheBoy181 (GS)"
     CreateReduxCheckBox -Name "AlwaysSmallRacers"   -Text "Always Small Racers"     -Info "Always play with mini racers`nLoose the ability to power slide, but gain the ability of a new challenge"                        -Credits "Admentus (ROM) & TheBoy181 (GS)"
+    CreateReduxCheckBox -Name "Kamek"               -Text "Kamek"                   -Info "Replaces Donkey Kong with Kamek"                                                                                                -Credits "Andrat"
 
     EnableElem -Elem $Redux.Gameplay.CPUItems -Active (!$IsWiiVC)
 

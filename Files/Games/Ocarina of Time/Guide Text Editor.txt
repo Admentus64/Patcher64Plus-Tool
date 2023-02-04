@@ -1,0 +1,65 @@
+----------------
+--- COMMANDS ---
+----------------
+
+<Jump:xxxx>			Go to (follow up with) Message ID xxxx
+<Sound:xxxx>			Play sound effect xxxx 
+
+<Shift:xx>			Shift text that follows it xx pixels to the right 
+<Delay:xx>			Wait xx visual frames before next message box 
+<Fade:xx>			Fade out after waiting xx frames
+<Wane:xx>			Fade out and wait xx frames 
+<Icon:xx			Display icon xx 
+<Wait:xx>			Delay printing each character by xx frames 
+
+<W>				White text color
+<R>				Red text color
+<G>				Green text color
+<B>				Blue text color 
+<C>				Light blue text color 
+<M>				Pink text color 
+<Y>				Yellow text color 
+<K>				Black text color
+<O>				Orange text color 
+<P>				Purple text color
+
+<Score:Archery>			Print Horseback Archery highscore 
+<Score:Poe Points>		Print Poe Collector highscore 
+<Score:Fishing>			Print largest caught fish highscore 
+<Score:Horse Race>		Print Ingo Horse Race Time highscore
+<Score:Marathon>		Print Running Man Marathon time highscore 
+<Score:Dampe Race>		Print Dampé Race time highscore
+
+<DI>				Enable instantaneous text 
+<DC>				Disable instantaneous text
+<Shop Description>		Used in shop item descriptions
+<Event>				Trigger an event
+<Press>				Wait for button press, continue in same box or line 
+<Player>			Print the player's name 
+<Ocarina>			Initialize Ocarina playing
+<Marathon Time>			Print Running Man Marathon time 
+<Race Time>			Print race time 
+<Points>			Print number of points
+<Gold Skulltulas>		Print number of Gold Skulltulas collected 
+<NS>				Prevent the following text from being skipped by the B button 
+<Two Choices>			Initialize a two-choice selection 
+<Three Choices>			Initialize a three-choice selection 
+<Fish Weight>			Print the weight of the caught fish 
+<Time>				Print the in-game world time 
+
+<A Button>			Print the A button
+<B Button>			Print the B button
+<C Button>			Print the C button
+<L Button>			Print the L button
+<R Button>			Print the R button
+<Z Button>			Print the Z button
+<C Up>				Print the C Up button 
+<C Down>			Print the C Down button 
+<C Left>			Print the C Left button 
+<C Right>			Print the C Right button
+<Triangle>			Print the text box cursor 
+<Control Stick>			Print the Control Stick 
+<D-Pad>				Print the D-Pad
+
+<New Box>			Begin next message box
+Press Enter to create a new Line Break

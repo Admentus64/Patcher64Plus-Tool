@@ -154,7 +154,7 @@
 		"file"			: "Decompressed\\redux.ppf",
 		"output"		: "_nimpize_redux_patched"
 	},
-	"options"			: 1,
+	"options"			: 2,
 	"backgrounds"			: 1,
 	"output"			: "_nimpize_patched",
 	"tooltip"			: "A reworked and harder version of Ocarina of Time with remixed dungeons"

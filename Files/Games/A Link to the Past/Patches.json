@@ -9,7 +9,7 @@
 		"output"	: "_redux_patched"
 	},
 	"options"	: 1,
-	"tooltip"	: "The regular A Link to the Past experience{0}With support for redux and additional options{0}- Supported: Rev 0 (US)"
+	"tooltip"	: "The regular A Link to the Past experience{0}With support for redux and additional options{0}Redux version: 10.1{0}- Supported: Rev 0 (US)"
 }, {
 	"title"		: "The Legend of Zelda: Parallel Worlds (v1.23)",
 	"vc_title"	: "Parallel Worlds",

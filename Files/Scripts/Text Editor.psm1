@@ -20,6 +20,10 @@ function CreateTextEditorDialog([string]$Game=$GameType.mode) {
     $TextEditor.StatusPanel = CreatePanel -X (DPISize 10) -Y ($TextEditor.ListPanel.Bottom + (DPISize 7) ) -Width ($TextEditor.ListPanel.Width   - (DPISize 35) ) -Height (DPISize 25)                            -AddTo $TextEditor.Dialog
     $TextEditor.StatusLabel = CreateLabel -X (DPISize 10) -Y (DPISize 3)                                   -Width ($TextEditor.StatusPanel.Width - (DPISize 5)  ) -Height (DPISize 15) -Text "Awaiting action..." -AddTo $TextEditor.StatusPanel
     $TextEditor.StatusPanel.BackColor = 'White'
+    
+    # Help Window
+    $button = CreateButton -X ($TextEditor.StatusPanel.Right + (DPISize 5)) -Y ($TextEditor.StatusPanel.Top - (DPISize 1)) -Width (DPISize 26) -Height (DPISize 26) -Font $Fonts.Medium -Text "?" -BackColor "White" -AddTo $TextEditor.Dialog
+    $button.Add_Click({ OpenHelpDialog })
 
     # Right Panel
     $TextEditor.ContentPanel = CreatePanel   -X $TextEditor.ListPanel.Right                                  -Width ($TextEditor.Dialog.Width - $TextEditor.ListPanel.Width)       -Height ($TextEditor.Dialog.Height - (DPISize 280) ) -AddTo $TextEditor.Dialog
@@ -349,9 +353,10 @@ function RunTextEditor([string]$Game=$GameType.mode) {
     $LastGame    = $GameType
     $LastConsole = $GameConsole
 
-    $GameConsole = $Files.json.consoles[0]
     if     ($Game -eq "Ocarina of Time")   { $global:GameType = $Files.json.games[0] }
     elseif ($Game -eq "Majora's Mask")     { $global:GameType = $Files.json.games[1] }
+    else                                   { $global:GameType = $null                }
+    $global:GameConsole = $Files.json.consoles[0]
 
     CreateTextEditorDialog -Game $Game
     $TextEditor.Dialog.ShowDialog()
@@ -363,6 +368,30 @@ function RunTextEditor([string]$Game=$GameType.mode) {
 
     $global:GameType    = $LastGame
     $global:GameConsole = $LastConsole
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function OpenHelpDialog() {
+    
+    # Create Dialog
+    $Dialog           = CreateDialog -Width (DPISize 750) -Height (DPISize 600)
+    $Dialog.Icon      = $Files.icon.additional
+    $Dialog.BackColor = 'AntiqueWhite'
+    
+    # Close Button
+    $CloseButton           = CreateButton -X ($Dialog.Left + ($Dialog.Width / 3)) -Y ($Dialog.Height - (DPISize 90)) -Width (DPISize 90) -Height (DPISize 35) -Text "Close" -AddTo $Dialog
+    $CloseButton.BackColor = "White"
+    $CloseButton.Add_Click({ $Dialog.Hide() })
+
+    # Text Box
+    $textbox = CreateTextBox -X (DPISize 40) -Y (DPISize 30) -Width ($Dialog.Width - (DPISize 100)) -Height ($CloseButton.Top - (DPISize 40)) -ReadOnly -Multiline -TextFileFont -AddTo $Dialog
+    AddTextFileToTextbox -TextBox $textbox -File ($Paths.Games + "\" + $GameType.mode + "\Guide Text Editor.txt")
+
+    # Show Dialog
+    $Dialog.ShowDialog()
 
 }
 
@@ -1137,9 +1166,10 @@ function ParseMessageMM([char[]]$Text, [switch]$Encode) {
         if ($types[200])   { $Text = ParseMessagePart -Text $Text -Encoded @(200) -Decoded @(60, 80, 108, 97,  121, 103, 114, 111, 117, 110, 100, 62)                                        -Encode $Encode } # C8 / <Playground>         (deku scrub playground)
         if ($types[203])   { $Text = ParseMessagePart -Text $Text -Encoded @(203) -Decoded @(60, 83, 104, 111, 111, 116, 105, 110, 103, 32,  71,  97,  108, 108, 101, 114, 121, 62)          -Encode $Encode } # CB / <Shooting Gallery>   (shooting gallery)
         if ($types[205])   { $Text = ParseMessagePart -Text $Text -Encoded @(205) -Decoded @(60, 82, 117, 112, 101, 101, 115, 62)                                                            -Encode $Encode } # CD / <Rupees>             (rupees entered or bet)
-        if ($types[206])   { $Text = ParseMessagePart -Text $Text -Encoded @(206) -Decoded @(60, 84, 105, 109, 101, 62)                                                                      -Encode $Encode } # CE / <Time>               (remaining time)
+        if ($types[205])   { $Text = ParseMessagePart -Text $Text -Encoded @(206) -Decoded @(60, 82, 117, 112, 101, 101, 115, 32,  84,  111, 116, 97,  108, 62)                              -Encode $Encode } # CE / <Rupees Total>       (total rupees in bank or won by betting)
+        if ($types[206])   { $Text = ParseMessagePart -Text $Text -Encoded @(207) -Decoded @(60, 84, 105, 109, 101, 62)                                                                      -Encode $Encode } # CF / <Time>               (remaining time)
         if ($types[212])   { $Text = ParseMessagePart -Text $Text -Encoded @(212) -Decoded @(60, 83, 111, 97,  114, 105, 110, 103, 62)                                                       -Encode $Encode } # D4 / <Soaring>            (song of soaring destination)
-        if ($types[218])   { $Text = ParseMessagePart -Text $Text -Encoded @(218) -Decoded @(60, 67, 114, 117, 105, 115, 101, 32,  67,  114, 117, 105, 115, 101 ,62)                         -Encode $Encode } # DA / <Jungle Cruise>      (jungle cruise)
+        if ($types[218])   { $Text = ParseMessagePart -Text $Text -Encoded @(219) -Decoded @(60, 67, 114, 117, 105, 115, 101, 32,  67,  114, 117, 105, 115, 101 ,62)                         -Encode $Encode } # DB / <Jungle Cruise>      (jungle cruise)
         if ($types[220])   { $Text = ParseMessagePart -Text $Text -Encoded @(220) -Decoded @(60, 76, 111, 116, 116, 101, 114, 121, 58,  87,  105, 110, 62)                                   -Encode $Encode } # DC / <Lottery:Win>        (winning lottery numbers)
         if ($types[221])   { $Text = ParseMessagePart -Text $Text -Encoded @(221) -Decoded @(60, 76, 111, 116, 116, 101, 114, 121, 62)                                                       -Encode $Encode } # DD / <Lottery>            (player lottery numbers)
         if ($types[222])   { $Text = ParseMessagePart -Text $Text -Encoded @(222) -Decoded @(60, 86, 97,  108, 117, 101, 62)                                                                 -Encode $Encode } # DE / <Value>              (item value in rupees)

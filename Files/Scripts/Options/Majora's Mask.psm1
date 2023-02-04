@@ -428,8 +428,8 @@ function ByteOptions() {
         elseif     (IsText -Elem $Redux.Hero.Recovery -Compare "1/4x Recovery")                                                                 { ChangeBytes -Offset "BABEA2" -Values "28 80"; ChangeBytes -Offset "BABEA5" -Values "05 28 83" }
     }
 
-    if     ( (IsText -Elem $Redux.Hero.Damage -Compare "1x Damage") -and ($GameType.title -notlike "*Master Quest*") )   { ChangeBytes -Offset "CADEC2" -Values "2C 03" }
-    elseif ( (IsText -Elem $Redux.Hero.Damage -Compare "2x Damage") -and ($GameType.title -like    "*Master Quest*") )   { ChangeBytes -Offset "CADEC2" -Values "2B C3" }
+    if     ( (IsText -Elem $Redux.Hero.Damage -Compare "1x Damage") -and ($GameType.title -like    "*Master Quest*") )   { ChangeBytes -Offset "CADEC2" -Values "2C 03" }
+    elseif ( (IsText -Elem $Redux.Hero.Damage -Compare "2x Damage") -and ($GameType.title -notlike "*Master Quest*") )   { ChangeBytes -Offset "CADEC2" -Values "2B C3" }
     elseif   (IsText -Elem $Redux.Hero.Damage -Compare "4x Damage")                                                      { ChangeBytes -Offset "CADEC2" -Values "2B 83" }
     elseif   (IsText -Elem $Redux.Hero.Damage -Compare "8x Damage")                                                      { ChangeBytes -Offset "CADEC2" -Values "2B 43" }
     elseif   (IsText -Elem $Redux.Hero.Damage -Compare "OHKO Mode")                                                      { ChangeBytes -Offset "CADEC2" -Values "2A 03" }
@@ -711,7 +711,8 @@ function ByteOptions() {
 
     # SCRIPT
 
-    if (IsChecked $Redux.Text.Comma) { ChangeBytes -Offset "ACC660"  -Values "00 F3 00 00 00 00 00 00 4F 60 00 00 00 00 00 00 24" }
+    if (IsChecked $Redux.Text.YeetPrompt)   { PatchBytes  -Offset "AC0D80" -Shared -Patch "Action Prompts\throw.en.prompt"              }
+    if (IsChecked $Redux.Text.Comma)        { ChangeBytes -Offset "ACC660" -Values "00 F3 00 00 00 00 00 00 4F 60 00 00 00 00 00 00 24" }
 
 }
 
@@ -902,6 +903,7 @@ function CheckLanguageOptions() {
     if     ( (IsChecked  $Redux.Text.Vanilla -Not)   -or (IsLanguage $Redux.Text.AdultPronouns)  -or (IsLanguage $Redux.UI.GCScheme) -or (IsLanguage $Redux.Text.AreaTitleCards) )                                                     { return $True }
     elseif ( (IsLanguage $Redux.Gameplay.RazorSword) -or (IsLanguage $Redux.Capacity.EnableAmmo) -or (IsLanguage $Redux.Capacity.EnableWallet) )                                                                                       { return $True }
     elseif ( (IsDefault $Redux.Features.OcarinaIcons -Not) -and $Patches.Redux.Checked -and $LanguagePatch.code -eq "en")                                                                                                              { return $True }
+    elseif ( (IsChecked -Elem $Redux.Text.LinkScript)  -and $Redux.Text.LinkName.Text.Count -gt 0)                                                                                                                                     { return $True }
     elseif ( ( (IsDefault $Redux.Text.TatlScript -Not) -and (IsDefault $Redux.Text.TatlName -Not) -and $Redux.Text.TatlName.Text.Count -gt 0) -or (IsIndex -Elem $Redux.Text.TatlScript -Index 3) -and $LanguagePatch.code -eq "en")   { return $True }
     elseif ( ( (IsDefault $Redux.Text.TealScript -Not) -and (IsDefault $Redux.Text.TealName -Not) -and $Redux.Text.TaelName.Text.Count -gt 0) -or (IsIndex -Elem $Redux.Text.TaelScript -Index 3) -and $LanguagePatch.code -eq "en")   { return $True }
     
@@ -998,6 +1000,13 @@ function ByteLanguageOptions() {
             foreach ($entry in $json) { SetMessage -ID $entry.box -Replace $entry.message }
         }
    }
+
+   if ( (IsChecked $Redux.Text.LinkScript) -and $Redux.Text.LinkName.Text.Count -gt 0) {
+        SetMessage -ID "0462" -Text "16" -Replace $Redux.Text.LinkName.text; SetMessage -ID "046A"; SetMessage -ID "046C"; SetMessage -ID "0591"; SetMessage -ID "0593"; SetMessage -ID "059D"; SetMessage -ID "05A1"; SetMessage -ID "05A5"; SetMessage -ID "05A9"; SetMessage -ID "0710" -All; SetMessage -ID "0734" -All
+        SetMessage -ID "0736"; SetMessage -ID "0800"; SetMessage -ID "0802"; SetMessage -ID "08E4"; SetMessage -ID "08E5"; SetMessage -ID "0961"; SetMessage -ID "0966"; SetMessage -ID "0967"; SetMessage -ID "0969"; SetMessage -ID "096D"; SetMessage -ID "096F"; SetMessage -ID "0971";      SetMessage -ID "102A"
+        SetMessage -ID "102D"; SetMessage -ID "1030"; SetMessage -ID "1068"; SetMessage -ID "1069"; SetMessage -ID "106D"; SetMessage -ID "14DD"; SetMessage -ID "14F9"; SetMessage -ID "1F74"; SetMessage -ID "27D9"; SetMessage -ID "27DB"; SetMessage -ID "27DC"; SetMessage -ID "27DE";      SetMessage -ID "27DF"
+        SetMessage -ID "27E0"; SetMessage -ID "27F0"; SetMessage -ID "27F2"; SetMessage -ID "27F6"; SetMessage -ID "28AA"; SetMessage -ID "28AB"; SetMessage -ID "28B2"; SetMessage -ID "28B3"; SetMessage -ID "28B5"; SetMessage -ID "28B6"; SetMessage -ID "3339"; SetMessage -ID "333A";
+    }
 
     if ( (IsDefault $Redux.Text.TatlScript -Not) -and (IsDefault $Redux.Text.TatlName -Not) -and $Redux.Text.TatlName.Text.Count -gt 0) {
         SetMessage -ID "057A" -Text $LanguagePatch.tatl -Replace $Redux.Text.TatlName.Text; SetMessage -ID "057C"; SetMessage -ID "057E"; SetMessage -ID "058E"; SetMessage -ID "0735"; SetMessage -ID "073E"; SetMessage -ID "073F"; SetMessage -ID "1F4E"
@@ -1226,21 +1235,26 @@ function CreateTabLanguage() {
 
     $names = "`n`n--- Supported Names With Textures ---`n" + "Navi`nTatl`nTaya`nТдтп`nTael`nNite`nNagi`nInfo"
     CreateReduxGroup    -All -Tag  "Text"       -Text "Other Text Options"
-    CreateReduxComboBox -All -Name "TatlScript" -Text "Tatl Text" -Items @("Disabled", "Enabled as Female", "Enabled as Male") -Info "Allow renaming Tatl and the gender" -Credits "Admentus & ShadowOne333" -Warning "Gender swap is only supported for English"
-    CreateReduxTextBox  -All -Name "TatlName"   -Text "Tatl Name" -Length 5 -ASCII -Value "Tatl" -Width 50                     -Info "Select the name for Tatl"           -Credits "Admentus & ShadowOne333" -Warning ('Most names do not have an unique texture label, and use a default "Info" prompt label' + $names)
-    CreateReduxComboBox -All -Name "TaelScript" -Text "Tael Text" -Items @("Disabled", "Enabled as Male", "Enabled as Female") -Info "Allow renaming Tael and the gender" -Credits "Admentus & ShadowOne333" -Warning "Gender swap is only supported for English"
-    CreateReduxTextBox  -All -Name "TaelName"   -Text "Tael Name" -Length 5 -ASCII -Value "Tael" -Width 50                     -Info "Select the name for Tael"           -Credits "Admentus & ShadowOne333"
-    CreateReduxCheckBox -All -Name "Comma"      -Text "Better Comma"                                                           -Info "Make the comma not look as awful"   -Credits "ShadowOne333"
-    
+    CreateReduxComboBox -All -Name "TatlScript" -Text "Tatl Text" -Items @("Disabled", "Enabled as Female", "Enabled as Male") -Info "Allow renaming Tatl and the gender"                            -Credits "Admentus & ShadowOne333" -Warning "Gender swap is only supported for English"
+    CreateReduxTextBox  -All -Name "TatlName"   -Text "Tatl Name" -Length 5 -ASCII -Value "Tatl" -Width 50                     -Info "Select the name for Tatl"                                      -Credits "Admentus & ShadowOne333" -Warning ('Most names do not have an unique texture label, and use a default "Info" prompt label' + $names)
+    CreateReduxComboBox -All -Name "TaelScript" -Text "Tael Text" -Items @("Disabled", "Enabled as Male", "Enabled as Female") -Info "Allow renaming Tael and the gender"                            -Credits "Admentus & ShadowOne333" -Warning "Gender swap is only supported for English"
+    CreateReduxTextBox  -All -Name "TaelName"   -Text "Tael Name" -Length 5 -ASCII -Value "Tael" -Width 50                     -Info "Select the name for Tael"                                      -Credits "Admentus & ShadowOne333"
+    CreateReduxCheckBox -All -Name "LinkScript" -Text "Link Text"                                                              -Info "Separate file name from Link's name in-game"                   -Credits "Admentus & Third M"
+    CreateReduxTextBox  -All -Name "LinkName"   -Text "Link Name" -Length 8 -ASCII -Value "Link" -Width 90                     -Info "Select the name for Link in-game"                              -Credits "Admentus & Third M"      -Shift 40
+    CreateReduxCheckBox -All -Name "YeetPrompt" -Text "Yeet Action Prompt"                                                     -Info ('Replace the "Throw" Action Prompt with "Yeet"' + "`nYeeeeet") -Credits "kr3z"
+    CreateReduxCheckBox -All -Name "Comma"      -Text "Better Comma"                                                           -Info "Make the comma not look as awful"                              -Credits "ShadowOne333"
+
     if ($GamePatch.title -like "*Majora's Mask*") {
         foreach ($i in 0.. ($Files.json.languages.length-1)) { $Redux.Language[$i].Add_CheckedChanged({ UnlockLanguageContent }) }
         UnlockLanguageContent
     }
 
-    EnableElem -Elem $Redux.Text.TatlName -Active ($Redux.Text.TatlScript.selectedIndex -ne 0)
-    EnableElem -Elem $Redux.Text.TaelName -Active ($Redux.Text.TaelScript.selectedIndex -ne 0)
-    $Redux.Text.TatlScript.Add_SelectedIndexChanged({ EnableElem -Elem $Redux.Text.TatlName -Active ($this.selectedIndex -ne 0) })
-    $Redux.Text.TaelScript.Add_SelectedIndexChanged({ EnableElem -Elem $Redux.Text.TaelName -Active ($this.selectedIndex -ne 0) })
+    EnableElem -Elem $Redux.Text.TatlName -Active ($Redux.Text.TatlScript.SelectedIndex -ne 0)
+    EnableElem -Elem $Redux.Text.TaelName -Active ($Redux.Text.TaelScript.SelectedIndex -ne 0)
+    EnableElem -Elem $Redux.Text.LinkName -Active ($Redux.Text.LinkScript.Checked)
+    $Redux.Text.TatlScript.Add_SelectedIndexChanged( { EnableElem -Elem $Redux.Text.TatlName -Active ($this.SelectedIndex -ne 0) } )
+    $Redux.Text.TaelScript.Add_SelectedIndexChanged( { EnableElem -Elem $Redux.Text.TaelName -Active ($this.SelectedIndex -ne 0) } )
+    $Redux.Text.LinkScript.Add_CheckStateChanged(    { EnableElem -Elem $Redux.Text.LinkName -Active ($this.Checked)             } )
 
 }
 

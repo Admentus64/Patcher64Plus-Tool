@@ -167,6 +167,14 @@
 	"output"		: "_internal_plexus_patched",
 	"tooltip"		: "A brand new beta-based world for Super Mario 64 with new stages and 142 stars to collect{0}- Supported: Rev 0 (US)"
 }, {
+	"title"			: "Super Mario 64 - Italian Translation",
+	"patch" : [ {
+		"file"		: "Compressed\\ita.bps",
+		"rev"		: "20B854B239203BAF6C961B850A4A51A2"
+	} ],
+	"output"		: "_ita_patched",
+	"tooltip"		: "Italian Translation of Super Mario 64{0}Based on the Japanese Shindou version{0}- Supported: Rev 0 (US)"
+}, {
 	"title"			: "SM64 iQue: Header Fix + Save Fix + Rumble Fix",
 	"console"		: "Native",
 	"patch" : [ {

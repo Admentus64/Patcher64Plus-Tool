@@ -660,10 +660,25 @@
 	"support_vc"		: 0,
 	"console"		: "GBC",
 	"version" : [ {
+		"hash"		: "07C211479386825042EFB4AD31BB525F",
+		"rev"		: "Revision 0",
+		"region"	: "North America / NTSC-U & Europe / PAL",
+		"list"		: "Rev 0 (US / PAL)",
+		"supported"	: 1
+	}, {
+		"file"		: "rev1_to_rev0.bps",
+		"hash"		: "CCBB56212E3DBAA9007D389A17E9D075",
+		"rev"		: "Revision 1",
+		"region"	: "North America / NTSC-U & Europe / PAL",
+		"list"		: "Rev 1 (US / PAL)",
+		"supported"	: 1
+	}, {
+		"file"		: "rev2_to_rev0.bps",
 		"hash"		: "7351DAA3C0A91D8F6FE2FBCCA6182478",
 		"rev"		: "Revision 2",
 		"region"	: "North America / NTSC-U & Europe / PAL",
-		"list"		: "Rev 2 (US / PAL)"
+		"list"		: "Rev 2 (US / PAL)",
+		"supported"	: 1
 	} ],
 	"patches"		: 1,
 	"rom_title"		: "ZELDA"

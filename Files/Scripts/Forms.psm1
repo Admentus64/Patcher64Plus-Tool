@@ -499,7 +499,7 @@ function CreateReduxButton([single]$Column=$Last.Column, [single]$Row=$Last.Row,
 
 
 #==============================================================================================================================================================================================
-function CreateReduxTextBox([single]$Column=$Last.Column, [single]$Row=$Last.Row, [byte]$Length=2, [int16]$Width=35, [int16]$BoxHeight=-1, [string]$Value=0, [switch]$ASCII, [int]$Min, [int]$Max, [string]$Text, [string]$Info, [string]$Warning, [string]$Credits, [string]$Name, [string]$Tag, [object]$AddTo=$Last.Group, [switch]$Native, [Object]$Expose=@($GameType.mode), [Object]$Exclude, [switch]$Base, [switch]$Alt, [switch]$Child, [switch]$Adult, [switch]$All) {
+function CreateReduxTextBox([single]$Column=$Last.Column, [single]$Row=$Last.Row, [byte]$Length=2, [int16]$Width=35, [int16]$Shift=0,[sbyte]$BoxHeight=-1, [string]$Value=0, [switch]$ASCII, [int]$Min, [int]$Max, [string]$Text, [string]$Info, [string]$Warning, [string]$Credits, [string]$Name, [string]$Tag, [object]$AddTo=$Last.Group, [switch]$Native, [Object]$Expose=@($GameType.mode), [Object]$Exclude, [switch]$Base, [switch]$Alt, [switch]$Child, [switch]$Adult, [switch]$All) {
     
     if (!(CheckReduxOption -Expose $Expose -Exclude $Exclude -Base $Base -Alt $Alt -Child $Child -Adult $Adult -All $All) -or ($Native -and $IsWiiVC) -or $Last.Hide) { return $null }
 
@@ -512,8 +512,8 @@ function CreateReduxTextBox([single]$Column=$Last.Column, [single]$Row=$Last.Row
 
     if (IsSet $Text) { $Text += ":" }
 
-    $Label   = CreateLabel   -X (($Column-1) * $FormDistance + (DPISize 15)) -Y ($Row * (DPISize 28) - (DPISize 10)) -Width (DPISize 105)    -Height (DPISize 30)                 -Text $Text                                      -Info $Info -AddTo $AddTo
-    $TextBox = CreateTextBox -X $Label.Right                                 -Y ($Label.Top + (DPISize $BoxHeight))  -Width (DPISize $Width) -Height (DPISize 15) -Length $Length -Text $Value -IsGame $True -Name $Name -Tag $Tag -Info $Info -AddTo $AddTo
+    $Label   = CreateLabel   -X (($Column-1) * $FormDistance + (DPISize 15)) -Y ($Row * (DPISize 30) - (DPISize 10)) -Width (DPISize (105 - $Shift) ) -Height (DPISize 20)                 -Text $Text                                      -Info $Info -AddTo $AddTo
+    $TextBox = CreateTextBox -X $Label.Right                                 -Y ($Label.Top + (DPISize $BoxHeight))  -Width (DPISize $Width)          -Height (DPISize 15) -Length $Length -Text $Value -IsGame $True -Name $Name -Tag $Tag -Info $Info -AddTo $AddTo
 
     if (!$ASCII) {
         $TextBox.Add_LostFocus({
@@ -563,7 +563,7 @@ function CreateReduxRadioButton([single]$Column=$Last.Column, [single]$Row=$Last
     $Radio = CreateCheckBox -X (($Column-1) * $FormDistance) -Y (($Row-1) * (DPISize 30)) -Checked $Checked -Disable $Disable -IsRadio -Info $Info -IsGame $True -Name $Name -SaveAs $Last.Max -SaveTo $SaveTo -Max $Max -Tag $Tag -AddTo $AddTo -Link $Link
     
     if (IsSet $Text) {
-        $Label = CreateLabel -X $Radio.Right -Y ($Radio.Top + (DPISize 3)) -Height (DPISize 15) -Text $Text -Info $Info -AddTo $AddTo
+        $Label = CreateLabel -X $Radio.Right -Y ($Radio.Top + (DPISize 2)) -Height (DPISize 15) -Text $Text -Info $Info -AddTo $AddTo
         Add-Member -InputObject $Label -NotePropertyMembers @{ CheckBox = $Radio }
         Add-Member -InputObject $Radio -NotePropertyMembers @{ Label    = $Text }
         $Label.Add_Click({
@@ -599,7 +599,7 @@ function CreateReduxCheckBox([single]$Column=$Last.Column, [single]$Row=$Last.Ro
     $CheckBox = CreateCheckBox -X (($Column-1) * $FormDistance + (DPISize 15)) -Y ($Row * (DPISize 30) - (DPISize 10)) -Checked $Checked -Disable $Disable -Info $Info -IsGame $True -Name $Name -Tag $Tag -AddTo $AddTo -Link $Link
     
     if (IsSet $Text) {
-        $Label = CreateLabel -X $CheckBox.Right -Y ($CheckBox.Top + (DPISize 3)) -Height (DPISize 15) -Text $Text -Info $Info -AddTo $AddTo
+        $Label = CreateLabel -X $CheckBox.Right -Y ($CheckBox.Top + (DPISize 2)) -Height (DPISize 15) -Text $Text -Info $Info -AddTo $AddTo
         Add-Member -InputObject $Label    -NotePropertyMembers @{ CheckBox = $CheckBox }
         Add-Member -InputObject $CheckBox -NotePropertyMembers @{ Label    = $Text }
         $Label.Add_Click({
@@ -622,7 +622,7 @@ function CreateReduxCheckBox([single]$Column=$Last.Column, [single]$Row=$Last.Ro
 
 
 #==============================================================================================================================================================================================
-function CreateReduxComboBox([single]$Column=$Last.Column, [single]$Row=$Last.Row, [int16]$Length=170, [int]$Shift=0, [string[]]$Items=$null, [string[]]$Values=$null, [string[]]$PostItems=$null, [string]$FilePath, $Ext="bin", $Default=1, [switch]$NoDefault, [string]$Text, [string]$Info, [string]$Warning, [string]$Credits, [string]$Name, [string]$Tag, [object]$AddTo=$Last.Group, [switch]$Native, [Object]$Expose=@($GameType.mode), [Object]$Exclude, [switch]$Base, [switch]$Alt, [switch]$Child, [switch]$Adult, [switch]$All) {
+function CreateReduxComboBox([single]$Column=$Last.Column, [single]$Row=$Last.Row, [int16]$Length=170, [sbyte]$Shift=0, [string[]]$Items=$null, [string[]]$Values=$null, [string[]]$PostItems=$null, [string]$FilePath, $Ext="bin", $Default=1, [switch]$NoDefault, [string]$Text, [string]$Info, [string]$Warning, [string]$Credits, [string]$Name, [string]$Tag, [object]$AddTo=$Last.Group, [switch]$Native, [Object]$Expose=@($GameType.mode), [Object]$Exclude, [switch]$Base, [switch]$Alt, [switch]$Child, [switch]$Adult, [switch]$All) {
     
     if (!(CheckReduxOption -Expose $Expose -Exclude $Exclude -Base $Base -Alt $Alt -Child $Child -Adult $Adult -All $All) -or ($Native -and $IsWiiVC) -or $Last.Hide) { return $null }
 
@@ -661,8 +661,8 @@ function CreateReduxComboBox([single]$Column=$Last.Column, [single]$Row=$Last.Ro
     }
 
     $Default  = [byte]$Default
-    $Label    = CreateLabel    -X (($Column-1) * $FormDistance + (DPISize 15)) -Y ($Row * (DPISize 30) - (DPISize 7)) -Width $Width -Height (DPISize 15) -Text $Text -Info $Info -AddTo $AddTo
-    $ComboBox = CreateComboBox -X $Label.Right -Y ($Label.Top - (DPISize 3)) -Width (DPISize ($Length - $Shift)) -Height (DPISize 20) -Items $Items -Default $Default -Info $Info -IsGame $True -Name $Name -Tag $Tag -AddTo $AddTo
+    $Label    = CreateLabel    -X (($Column-1) * $FormDistance + (DPISize 15)) -Y ($Row * (DPISize 30) - (DPISize 10)) -Width $Width                       -Height (DPISize 15) -Text $Text -Info $Info -AddTo $AddTo
+    $ComboBox = CreateComboBox -X $Label.Right                                 -Y ($Label.Top - (DPISize 2))           -Width (DPISize ($Length - $Shift)) -Height (DPISize 20) -Items $Items -Default $Default -Info $Info -IsGame $True -Name $Name -Tag $Tag -AddTo $AddTo
 
     if (IsSet $Text) {
         Add-Member -InputObject $Label    -NotePropertyMembers @{ ComboBox = $ComboBox }

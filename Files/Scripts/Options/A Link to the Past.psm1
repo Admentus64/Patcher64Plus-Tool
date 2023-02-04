@@ -1,8 +1,20 @@
 function PatchOptions() {
     
-    if       (IsChecked $Redux.Main.ReWizardized)                                     { ApplyPatch -Patch "Compressed\Optional\rewizardized.ips"   }
-    if     ( (IsChecked $Redux.Main.KakarikoShortcut) -and !$Patches.Redux.Checked)   { ApplyPatch -Patch "Compressed\Optional\shortcut.ips" }
-    elseif ( (IsChecked $Redux.Main.KakarikoShortcut) -and  $Patches.Redux.Checked)   { ApplyPatch -Patch "Compressed\Optional\shortcut_redux.ips" }
+    # MAIN #
+
+    if     ( (IsChecked $Redux.Main.KakarikoShortcut) -and !$Patches.Redux.Checked)   { ApplyPatch -Patch "Compressed\Optional\shortcut.ips"                 }
+    elseif ( (IsChecked $Redux.Main.KakarikoShortcut) -and  $Patches.Redux.Checked)   { ApplyPatch -Patch "Compressed\Optional\shortcut_redux.ips"           }
+    if       (IsChecked $Redux.Main.MaxBombArrow)                                     { ApplyPatch -Patch "Compressed\Optional\max_bomb_arrow.ips"           }
+    if       (IsChecked $Redux.Main.MirrorWorksBothWorlds)                            { ApplyPatch -Patch "Compressed\Optional\mirror_works_both_worlds.ips" }
+    if       (IsChecked $Redux.Main.MoveBlocksIndefinitely)                           { ApplyPatch -Patch "Compressed\Optional\move_blocks_indefinitely.ips" }
+    if       (IsChecked $Redux.Main.RemoveLowHealthBeep)                              { ApplyPatch -Patch "Compressed\Optional\remove_low_health_beep.ips"   }
+    if       (IsChecked $Redux.Main.StartFullHearts)                                  { ApplyPatch -Patch "Compressed\Optional\start_full_hearts.ips"        }
+
+
+
+    # TEXT #
+
+    if  (IsChecked $Redux.Main.ReWizardized) { ApplyPatch -Patch "Compressed\Optional\rewizardized.ips" }
 
 }
 
@@ -11,17 +23,28 @@ function PatchOptions() {
 #==============================================================================================================================================================================================
 function PatchReduxOptions() {
 
-    $gfx = ""
-    if (IsChecked $Redux.Gameplay.AltRedux) { $gfx = "_new_gfx" }
+    # GFX #
 
-    if     (IsChecked $Redux.Main.OptionalVideo)                                                { ApplyPatch -Patch "Compressed\Optional\optional_video.ips" }
+    $gfx = "" # if (IsChecked $Redux.GFX.AltRedux) { $gfx = "_new_gfx" } else { $gfx = "" }
 
+    if     (IsChecked $Redux.GFX.OptionalVideo)                                                 { ApplyPatch -Patch  "Compressed\Optional\optional_video.ips"                               }
     if   ( (IsChecked $Redux.GFX.GreenAgahnim) -and (IsChecked $Redux.GFX.TriforceSubtitle) )   { ApplyPatch -Patch ("Compressed\Optional\green_agahnim_triforce_subtitle" + $gfx + ".ips") }
-    elseif (IsChecked $Redux.GFX.GreenAgahnim)                                                  { ApplyPatch -Patch ("Compressed\Optional\green_agahnim" + $gfx + ".ips")                   }
-    elseif (IsChecked $Redux.GFX.TriforceSubtitle)                                              { ApplyPatch -Patch ("Compressed\Optional\triforce_subtitle" + $gfx + ".ips")               }
+    elseif (IsChecked $Redux.GFX.GreenAgahnim)                                                  { ApplyPatch -Patch ("Compressed\Optional\green_agahnim"                   + $gfx + ".ips") }
+    elseif (IsChecked $Redux.GFX.TriforceSubtitle)                                              { ApplyPatch -Patch ("Compressed\Optional\triforce_subtitle"               + $gfx + ".ips") }
 
-    if     (IsChecked $Redux.Revert.PinkHair)                                                   { ApplyPatch -Patch "Compressed\Original\pink_hair.ips" }
-    if     (IsChecked $Redux.Revert.DisableDashTurning)                                         { ApplyPatch -Patch "Compressed\Original\disable_dash_turning.ips"      }
+
+
+    # TEXT #
+
+    if     (IsChecked $Redux.Text.Retranslated) { ApplyPatch -Patch "Compressed\Optional\retranslated.ips" }
+
+
+
+    # REVERT #
+
+    if     (IsChecked $Redux.Revert.PinkHair)             { ApplyPatch -Patch "Compressed\Original\pink_hair.ips"            }
+    if     (IsChecked $Redux.Revert.DisableDashTurning)   { ApplyPatch -Patch "Compressed\Original\disable_dash_turning.ips" }
+    if     (IsChecked $Redux.Revert.MaxBombArrow)         { ApplyPatch -Patch "Compressed\Optional\low_bomb_arrow.ips"       }
 
 }
 
@@ -30,7 +53,7 @@ function PatchReduxOptions() {
 #==============================================================================================================================================================================================
 function CreateOptions() {
     
-    CreateOptionsDialog -Columns 2 -Height 320
+    CreateOptionsDialog -Columns 3 -Height 335
 
 }
 
@@ -41,14 +64,23 @@ function CreateTabMain() {
 
     # MAIN #
 
-    CreateReduxGroup    -Tag "Main"              -Text "Main"
-    CreateReduxCheckBox -Name "ReWizardized"     -Text "Re-Wizardized Script" -Info "Addresses some script changes, such as addressing Agahnim's role as 'Wizard' instead of 'Priest'" -Credits "Kyler Ashton" -Warning "Does not work with Redux"
-    CreateReduxCheckBox -Name "KakarikoShortcut" -Text "Kakariko Shortcut"    -Info "Adds a shortcut to Kakariko Village for the Light and Dark World"                                 -Credits "PowerPanda"
+    CreateReduxGroup    -Tag  "Main"                   -Text "Main"
+    CreateReduxCheckBox -Name "KakarikoShortcut"       -Text "Kakariko Shortcut"           -Info "Adds a shortcut to Kakariko Village for the Light and Dark World"                            -Credits "PowerPanda"
+    CreateReduxCheckBox -Name "MaxBombArrow"           -Text "Max Bombs & Arrows"          -Info "Maxes ammo amounts:`Total amount for bombs is 20 to 99´nTotal amount for arrows is 30 to 99" -Credits "Kazuto"
+    CreateReduxCheckBox -Name "MirrorWorksBothWorlds"  -Text "Mirror Works in Both Worlds" -Info "The Mirror can be used in both the Light and Dark Worlds"                                    -Credits "ShadowOne333 and his team"
+    CreateReduxCheckBox -Name "MoveBlocksIndefinitely" -Text "Move Blocks Indefinitely"    -Info "Blocks which can be pushed can now be pushed several times"                                  -Credits "ShadowOne333 and his team"
+    CreateReduxCheckBox -Name "RemoveLowHealthBeep"    -Text "Remove Low Health Beep"      -Info "Completely remove the constant beeping that plays when you’re low on hearts"                 -Credits "ShadowOne333 and his team"
+    CreateReduxCheckBox -Name "StartFullHearts"        -Text "Start at Full Hearts"        -Info "Makes Link spawn with a full set of hearts upon save load"                                   -Credits "ShadowOne333 and his team"
+
+    # TEXT #
+
+    CreateReduxGroup    -Tag  "Text"         -Text "Text"
+    CreateReduxCheckBox -Name "ReWizardized" -Text "Re-Wizardized Script" -Info "Addresses some script changes, such as addressing Agahnim's role as 'Wizard' instead of 'Priest'" -Credits "Kyler Ashton" -Warning "Does not work with Redux"
 
 
 
-    $Patches.Redux.Add_CheckStateChanged( { EnableForm -Form $Redux.Main.ReWizardized -Enable (!$Patches.Redux.Checked) } )
-    EnableForm -Form $Redux.Main.ReWizardized -Enable (!$Patches.Redux.Checked)
+    $Patches.Redux.Add_CheckStateChanged( { EnableForm -Form $Redux.Text.ReWizardized -Enable (!$Patches.Redux.Checked) } )
+    EnableForm -Form $Redux.Text.ReWizardized -Enable (!$Patches.Redux.Checked)
 
 }
 
@@ -59,23 +91,26 @@ function CreateTabRedux() {
     
     # GFX #
 
-    CreateReduxGroup    -Tag "GFX"                 -Text "GFX"
-    CreateReduxCheckBox -Name "AltRedux"           -Text "GFX Redux"                     -Info "Uses a different version of Redux that changes the GFX for the Inventory Menu"    -Credits "ShadowOne333 and his team"
-    CreateReduxCheckBox -Name "OptionalVideo"      -Text "Enable FMV for MSU"            -Info "Enable FMV video sequences for the MSU-1 SNES chip"                               -Credits "ShadowOne333 and his team" -Warning "Has no effect when using on the Wii VC"
-    CreateReduxCheckBox -Name "GreenAgahnim"       -Text "Green Agahnim"                 -Info "Restore the color of Agahnim for Red and Blue to this original green robe"        -Credits "ShadowOne333 and his team"
-    CreateReduxCheckBox -Name "TriforceSubtitle"   -Text "Triforce of the Gods Subtitle" -Info "Replace the subtitle in the title screen to match the original Japanese subtitle" -Credits "ShadowOne333 and his team"
+    CreateReduxGroup    -Tag  "GFX"              -Text "GFX"
+  # CreateReduxCheckBox -Name "AltRedux"         -Text "GFX Redux"                     -Info "Uses a different version of Redux that changes the GFX for the Inventory Menu"    -Credits "ShadowOne333 and his team"
+    CreateReduxCheckBox -Name "OptionalVideo"    -Text "Enable FMV for MSU-1"          -Info "Enable FMV video sequences for the MSU-1 SNES chip"                               -Credits "ShadowOne333 and his team" -Warning "Has no effect when using on the Wii VC"
+    CreateReduxCheckBox -Name "GreenAgahnim"     -Text "Green Agahnim"                 -Info "Restore the color of Agahnim for Red and Blue to this original green robe"        -Credits "ShadowOne333 and his team"
+    CreateReduxCheckBox -Name "TriforceSubtitle" -Text "Triforce of the Gods Subtitle" -Info "Replace the subtitle in the title screen to match the original Japanese subtitle" -Credits "ShadowOne333 and his team"
+
+
+
+    # TEXT #
+
+    CreateReduxGroup    -Tag "Text"          -Text "Text"
+    CreateReduxCheckBox -Name "Retranslated" -Text "Retranslated Script" -Info "Provides a completely new and unique retranslation of the game’s script provided by the Translation Quest team that is primarily faithful to the Japanese text" -Credits "ChickenKnife, Dattebayo & nejimakipiyo"
 
 
 
     # REVERT #
 
-    CreateReduxGroup    -Tag "Revert"              -Text "Original (Revert)"
-    CreateReduxCheckBox -Name "PinkHair"           -Text "Pink Hair"                     -Info "Restores the Pink Hair for Link to that of the original game"                     -Credits "ShadowOne333 and his team"
-    CreateReduxCheckBox -Name "DisableDashTurning" -Text "Disable Dash Turning"          -Info "Restore the Pegasus Boots dash mechanics to that of the original game "           -Credits "ShadowOne333 and his team"
-
-
-
-    $Redux.Gameplay = @{}
-    $Redux.Gameplay.AltRedux = $Redux.GFX.AltRedux
+    CreateReduxGroup    -Tag  "Revert"             -Text "Original (Revert)"
+    CreateReduxCheckBox -Name "PinkHair"           -Text "Pink Hair"               -Info "Restores the Pink Hair for Link to that of the original game"                                   -Credits "ShadowOne333 and his team"
+    CreateReduxCheckBox -Name "DisableDashTurning" -Text "Disable Dash Turning"    -Info "Restore the Pegasus Boots dash mechanics to that of the original game"                          -Credits "ShadowOne333 and his team"
+    CreateReduxCheckBox -Name "LowBombArrow"       -Text "Original Bombs & Arrows" -Info "Restores ammo amounts:`Total amount for bombs is 10 to 50´nTotal amount for arrows is 30 to 70" -Credits "Kazuto"
 
 }

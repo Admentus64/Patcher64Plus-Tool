@@ -1,3 +1,24 @@
+v20.0.1
+- Added Info window for Text Editor
+- Added Link Name option for OoT & MM
+- Added new "Yeet" Action Prompt option for OoT & MM
+- Added new text label for "Red Shield" for OoT
+- Added new Kamek option for MK64
+- Added Italian translation patch for SM64
+- Added Zelda 1 Port patch for LA
+- Changed Fairy Name options to be locked when unusable or disabled
+- Changed Multi-Quest dungeon patching for Actor Editor
+- Updated "Info" Navi prompt for OoT
+- Updated Smash Remix to v1.3.0
+- Updated ALttP Redux to v10.1 and added new additional options
+- Fixed issue with Kokiri Sword not being renamable for OoT
+- Fixed issue with Giant's Knife and Biggoron Sword not being renamable as the other
+- Fixed issue with "Razor Sword" being named "Razord Sword" for OoT
+- Fixed issue with Bombchu Capacity not being set properly
+- Fixed positioning of GUI elements
+- Fixed issue with options for Link's Awakening not generating
+- Fixed issue with Text Editor command conversions
+
 v20.0.0
 - Added new Easter Egg option for OoT & MM for Tier 3 Patreons
 - Added Actor Editor for OoT (with support for MQ and Ura too)

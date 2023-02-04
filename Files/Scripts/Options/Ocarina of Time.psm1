@@ -219,7 +219,8 @@ function ByteOptions() {
 
     # SPEED #
 
-    if (IsValue -Elem $Redux.Gameplay.MovementSpeed -Not) { ChangeBytes -Offset "B6D5BA" -Values (Get16Bit $Redux.Gameplay.MovementSpeed.Value) }
+    if (IsValue -Elem $Redux.Gameplay.MovementSpeedChild -Not)   { ChangeBytes -Offset "B6D664" -Values (Get16Bit $Redux.Gameplay.MovementSpeed.Value) }
+    if (IsValue -Elem $Redux.Gameplay.MovementSpeedAdult -Not)   { ChangeBytes -Offset "B6D5BA" -Values (Get16Bit $Redux.Gameplay.MovementSpeed.Value) }
 
 
 
@@ -981,9 +982,8 @@ function ByteOptions() {
         ChangeBytes -Offset "B6EC67" -Values @( (Get8Bit $Redux.Capacity.DekuNuts1.Text),   (Get8Bit $Redux.Capacity.DekuNuts2.Text),   (Get8Bit $Redux.Capacity.DekuNuts3.Text)   ) -Interval 2
         
         # Bombchu Max Capacity
-        $val = (Get8Bit  $Redux.Capacity.Bombchu.Text);       ChangeBytes -Offset "AE6B7F" -Values $val; ChangeBytes -Offset "AE6C23" -Values $val;
-        $val = (Get8Bit ($Redux.Capacity.Bombchu.Text + 1) ); ChangeBytes -Offset "AE6C33" -Values $val; ChangeBytes -Offset "AE6C33" -Values $val;
-        $val = $null
+        $val = (Get8Bit  $Redux.Capacity.Bombchu.Text);            ChangeBytes -Offset "AE6B7F" -Values $val; ChangeBytes -Offset "AE6C23" -Values $val;
+        $val = (Get8Bit ([int]$Redux.Capacity.Bombchu.Text + 1) ); ChangeBytes -Offset "AE6C33" -Values $val; ChangeBytes -Offset "AE6C33" -Values $val;
 
         # Upgrade Checks
         ChangeBytes -Offset "ED288B" -Values (Get8Bit $Redux.Capacity.BombBag1.Text); ChangeBytes -Offset "ED295B" -Values (Get8Bit $Redux.Capacity.BombBag2.Text); ChangeBytes -Offset "E2EEFB" -Values (Get8Bit $Redux.Capacity.BombBag2.Text)
@@ -1398,9 +1398,10 @@ function ByteOptions() {
         ChangeBytes -Offset "AE7CD8" -Values "00 00 00 00"
         PatchBytes  -Offset "8E3A80" -Texture -Patch ("Action Prompts\Navi\Navi.prompt")
     }
-
-    if (IsChecked $Redux.Text.CheckPrompt)    { PatchBytes -Offset "8E2D00"  -Texture -Patch "Action Prompts\check.de.prompt" }
-    if (IsChecked $Redux.Text.DivePrompt)     { PatchBytes -Offset "8E3600"  -Texture -Patch "Action Prompts\dive.de.prompt"  }
+    
+    if (IsChecked $Redux.Text.YeetPrompt)    { PatchBytes -Offset "8E3900" -Shared  -Patch "Action Prompts\throw.en.prompt" }
+    if (IsChecked $Redux.Text.CheckPrompt)   { PatchBytes -Offset "8E2D00" -Texture -Patch "Action Prompts\check.de.prompt" }
+    if (IsChecked $Redux.Text.DivePrompt)    { PatchBytes -Offset "8E3600" -Texture -Patch "Action Prompts\dive.de.prompt"  }
 
 }
 
@@ -1707,14 +1708,15 @@ function CheckLanguageOptions() {
     if     ( (IsChecked  $Redux.Text.Vanilla -Not)   -or (IsChecked  $Redux.Text.Speed1x  -Not) -or (IsChecked  $Redux.UI.GCScheme) )                                                         { return $True }
     elseif ( (IsLanguage $Redux.Unlock.Tunics)       -or (IsLanguage $Redux.Equipment.HerosBow) -or (IsLanguage $Redux.Capacity.EnableAmmo) -or (IsLanguage $Redux.Capacity.EnableWallet) )   { return $True }
     elseif ( (IsChecked  $Redux.Text.FemalePronouns) -or (IsChecked  $Redux.Text.TypoFixes)     -or (IsChecked  $Redux.Text.GoldSkulltula)  -or (IsChecked  $Redux.Text.Instant) )            { return $True }
-    elseif ( (IsDefault $Redux.Text.NaviScript -Not) -and (IsDefault $Redux.Text.NaviName -Not) -and $Redux.Text.NaviName.Text.Count -gt 0)                                                   { return $True }
-    elseif ( (IsIndex -Elem $Redux.Text.NaviScript -Index 3) -and $LanguagePatch.code -eq "en")                                                                                               { return $True }
+    elseif ( (IsChecked -Elem $Redux.Text.LinkScript)      -and $Redux.Text.LinkName.Text.Count -gt 0)                                                                                        { return $True }
+    elseif ( (IsDefault -Elem $Redux.Text.NaviScript -Not) -and $Redux.Text.NaviName.Text.Count -gt 0 -and (IsDefault $Redux.Text.NaviName -Not) )                                            { return $True }
 
-    if ($LanguagePatch.code -eq "en") {
+    elseif ($LanguagePatch.code -eq "en") {
         if     ( (IsDefault $Redux.Equipment.KokiriSword  -Not) -or (IsDefault $Redux.Equipment.MasterSword   -Not) )                        { return $True }
         elseif ( (IsDefault $Redux.Equipment.GiantsKnife  -Not) -or (IsDefault $Redux.Equipment.BiggoronSword -Not) )                        { return $True }
         elseif ( (IsDefault $Redux.Equipment.DekuShield   -Not) -and $ChildModel.deku_shield -ne 0)                                          { return $True }
         elseif ( (IsDefault $Redux.Equipment.HylianShield -Not) -and $ChildModel.hylian_shield -ne 0 -and $AdultModel.hylian_shield -ne 0)   { return $True }
+        elseif (IsIndex -Elem $Redux.Text.NaviScript -Index 3)                                                                               { return $True }
     }
 
     return $False
@@ -1813,6 +1815,24 @@ function ByteLanguageOptions() {
     }
     elseif (IsChecked $Redux.Text.Speed2x) { ChangeBytes -Offset "B5006F" -Values "02" }
 
+    if ( (IsChecked $Redux.Text.LinkScript) -and $Redux.Text.LinkName.Text.Count -gt 0) {
+        SetMessage -ID "00D7" -Text "0F" -Replace $Redux.Text.LinkName.text;
+        SetMessage -ID "00D8";      SetMessage -ID "00D9";      SetMessage -ID "00DB";      SetMessage -ID "00E2"; SetMessage -ID "00EA";      SetMessage -ID "0101"; SetMessage -ID "0102";      SetMessage -ID "011F";      SetMessage -ID "012F";      SetMessage -ID "0131"; SetMessage -ID "0132"
+        SetMessage -ID "0133";      SetMessage -ID "015F";      SetMessage -ID "0162";      SetMessage -ID "0165"; SetMessage -ID "0166";      SetMessage -ID "0168"; SetMessage -ID "016A";      SetMessage -ID "016B" -All; SetMessage -ID "016C" -All; SetMessage -ID "018D"; SetMessage -ID "0198"
+        SetMessage -ID "01A3";      SetMessage -ID "01AB";      SetMessage -ID "0218";      SetMessage -ID "022A"; SetMessage -ID "031F";      SetMessage -ID "0626"; SetMessage -ID "1001";      SetMessage -ID "1001";      SetMessage -ID "1002";      SetMessage -ID "1005"; SetMessage -ID "100F"
+        SetMessage -ID "1015" -All; SetMessage -ID "1017" -All; SetMessage -ID "1024";      SetMessage -ID "1026"; SetMessage -ID "102A" -All; SetMessage -ID "102B"; SetMessage -ID "1045";      SetMessage -ID "1047";      SetMessage -ID "1048";      SetMessage -ID "104B"; SetMessage -ID "1058" -All
+        SetMessage -ID "105B";      SetMessage -ID "105C";      SetMessage -ID "1066";      SetMessage -ID "106D"; SetMessage -ID "1070";      SetMessage -ID "1075"; SetMessage -ID "107A";      SetMessage -ID "107C";      SetMessage -ID "1093";      SetMessage -ID "1094"; SetMessage -ID "1095" -All
+        SetMessage -ID "10A8";      SetMessage -ID "10C0";      SetMessage -ID "2000" -All; SetMessage -ID "2005"; SetMessage -ID "2008";      SetMessage -ID "2009"; SetMessage -ID "2010";      SetMessage -ID "2018";      SetMessage -ID "2064";      SetMessage -ID "2068"; SetMessage -ID "206C"
+        SetMessage -ID "206D";      SetMessage -ID "206E";      SetMessage -ID "206F";      SetMessage -ID "2074"; SetMessage -ID "2075";      SetMessage -ID "207B"; SetMessage -ID "208B";      SetMessage -ID "3031";      SetMessage -ID "3032" -All; SetMessage -ID "3036"; SetMessage -ID "3037"
+        SetMessage -ID "3039" -All; SetMessage -ID "303B";      SetMessage -ID "303F";      SetMessage -ID "3040"; SetMessage -ID "3041";      SetMessage -ID "3042"; SetMessage -ID "3043";      SetMessage -ID "3062";      SetMessage -ID "4002";      SetMessage -ID "4003"; SetMessage -ID "4017"
+        SetMessage -ID "4024" -All; SetMessage -ID "402B";      SetMessage -ID "402D";      SetMessage -ID "402E"; SetMessage -ID "4031";      SetMessage -ID "4036"; SetMessage -ID "403E" -All; SetMessage -ID "403F";      SetMessage -ID "4041";      SetMessage -ID "4057"; SetMessage -ID "4059"
+        SetMessage -ID "4089";      SetMessage -ID "40B1";      SetMessage -ID "501B";      SetMessage -ID "501C"; SetMessage -ID "501D";      SetMessage -ID "5024"; SetMessage -ID "5031";      SetMessage -ID "5071";      SetMessage -ID "6023";      SetMessage -ID "6038"; SetMessage -ID "603A"
+        SetMessage -ID "603D";      SetMessage -ID "6079" -All; SetMessage -ID "704E" -All; SetMessage -ID "704F"; SetMessage -ID "7050";      SetMessage -ID "7054"; SetMessage -ID "705A";      SetMessage -ID "705B";      SetMessage -ID "705E";      SetMessage -ID "7067"; SetMessage -ID "706D"
+        SetMessage -ID "706F";      SetMessage -ID "7070";      SetMessage -ID "7075";      SetMessage -ID "707A"; SetMessage -ID "7084";      SetMessage -ID "7093"; SetMessage -ID "7095";      SetMessage -ID "70CD" -All; SetMessage -ID "70CF";      SetMessage -ID "70D1"; SetMessage -ID "70D4"
+        SetMessage -ID "70D7";      SetMessage -ID "70E0";      SetMessage -ID "70E6";      SetMessage -ID "70F4"; SetMessage -ID "71A8";      SetMessage -ID "71AA"; SetMessage -ID "71AB";      SetMessage -ID "71AC"
+        SetMessage -ID "70DC" -Text "0F" -Replace $Redux.Text.LinkName.Text.ToUpper()
+    }
+
     if ( (IsDefault $Redux.Text.NaviScript -Not) -and (IsDefault $Redux.Text.NaviName -Not) -and $Redux.Text.NaviName.Text.Count -gt 0) {
         if ($GamePatch.options -eq 1) {
             SetMessage -ID "1000" -Text "4E617669" -Replace $Redux.Text.NaviName.text -NoParse; SetMessage -ID "1015"; SetMessage -ID "1017"; SetMessage -ID "1017"; SetMessage -ID "1017"; SetMessage -ID "103F"
@@ -1878,11 +1898,10 @@ function ByteLanguageOptions() {
 
     if ( (IsDefault $Redux.Equipment.KokiriSword -Not) -and $LanguagePatch.code -eq "en") {
         $replace = $null
-        if     (IsText -Elem $Redux.Equipment.MasterSword -Compare "Kokiri Sword")   { $replace = "Kokiri Sword" }
-        elseif (IsText -Elem $Redux.Equipment.MasterSword -Compare "Knife")          { $replace = "Knife"        }
-        elseif (IsText -Elem $Redux.Equipment.MasterSword -Compare "Razor Sword")    { $replace = "Razord Sword" }
+        if     (IsText -Elem $Redux.Equipment.KokiriSword -Compare "Kokiri Sword")   { $replace = "Kokiri Sword" }
+        elseif (IsText -Elem $Redux.Equipment.KokiriSword -Compare "Knife")          { $replace = "Knife"        }
+        elseif (IsText -Elem $Redux.Equipment.KokiriSword -Compare "Razor Sword")    { $replace = "Razor Sword"  }
         if (IsSet $replace) { SetMessage -ID "00A4" -Text "Kokiri Sword" -Replace $replace -NoParse; SetMessage -ID "10D2" }
-        $replace = $null
     }
 
     if ( (IsDefault $Redux.Equipment.MasterSword -Not) -and $LanguagePatch.code -eq "en") {
@@ -1893,39 +1912,37 @@ function ByteLanguageOptions() {
         elseif (IsText -Elem $Redux.Equipment.MasterSword -Compare "Double Helix Sword")    { $replace = "Double Helix Sword"  }
         elseif (IsText -Elem $Redux.Equipment.MasterSword -Compare "Razor Longsword")       { $replace = "Razor Longsword"     }
         if (IsSet $replace) { SetMessage -ID "600C" -Text "Master Sword" -Replace $replace -NoParse; SetMessage -ID "704F"; SetMessage -ID "7051"; SetMessage -ID "7059"; SetMessage -ID "706D"; SetMessage -ID "7075"; SetMessage -ID "7081"; SetMessage -ID "7088"; SetMessage -ID "7091"; SetMessage -ID "70E8" }
-        $replace = $null
     }
 
     if ( (IsDefault $Redux.Equipment.GiantsKnife -Not) -and $LanguagePatch.code -eq "en") {
         $replace = $null
         if     (IsText -Elem $Redux.Equipment.GiantsKnife -Compare "Giant's Knife")         { $replace = "Giant's Knife"       }
+        elseif (IsText -Elem $Redux.Equipment.GiantsKnife -Compare "Biggoron Sword")        { $replace = "Biggoron Sword"      }
         elseif (IsText -Elem $Redux.Equipment.GiantsKnife -Compare "Gilded Sword")          { $replace = "Gilded Sword"        }
         elseif (IsText -Elem $Redux.Equipment.GiantsKnife -Compare "Great Fairy's Sword")   { $replace = "Great Fairy's Sword" }
         elseif (IsText -Elem $Redux.Equipment.GiantsKnife -Compare "Double Helix Sword")    { $replace = "Double Helix Sword"  }
         elseif (IsText -Elem $Redux.Equipment.GiantsKnife -Compare "Razor Longsword")       { $replace = "Razor Longsword"     }
         if (IsSet $replace) { SetMessage -ID "000B" -Text "Giant's Knife" -Replace $replace -NoParse; SetMessage -ID "004B" }
-        $replace = $null
     }
 
     if ( (IsDefault $Redux.Equipment.BiggoronSword -Not) -and $LanguagePatch.code -eq "en") {
         $replace = $null
-        if     (IsText -Elem $Redux.Equipment.BiggoronSword -Compare "Biggoron Sword")           { $replace = "Biggoron Sword"        }
-        elseif (IsText -Elem $Redux.Equipment.BiggoronSword -Compare "Gilded Sword")             { $replace = "Gilded Sword"        }
-        elseif (IsText -Elem $Redux.Equipment.BiggoronSword -Compare "Great Fairy's Sword")      { $replace = "Great Fairy's Sword" }
-        elseif (IsLang -Elem $Redux.Equipment.BiggoronSword -Compare "Double Helix Sword")       { $replace = "Double Helix Sword"  }
-        elseif (IsText -Elem $Redux.Equipment.BiggoronSword -Compare "Razor Longsword")          { $replace = "Razor Longsword"     }
+        if     (IsText -Elem $Redux.Equipment.BiggoronSword -Compare "Giant's Knife")         { $replace = "Giant's Knife"       }
+        elseif (IsText -Elem $Redux.Equipment.BiggoronSword -Compare "Biggoron Sword")        { $replace = "Biggoron Sword"      }
+        elseif (IsText -Elem $Redux.Equipment.BiggoronSword -Compare "Gilded Sword")          { $replace = "Gilded Sword"        }
+        elseif (IsText -Elem $Redux.Equipment.BiggoronSword -Compare "Great Fairy's Sword")   { $replace = "Great Fairy's Sword" }
+        elseif (IsLang -Elem $Redux.Equipment.BiggoronSword -Compare "Double Helix Sword")    { $replace = "Double Helix Sword"  }
+        elseif (IsText -Elem $Redux.Equipment.BiggoronSword -Compare "Razor Longsword")       { $replace = "Razor Longsword"     }
         if (IsSet $replace) { SetMessage -ID "000A" -Text "Biggoron's Sword" -Replace $replace -NoParse; SetMessage -ID "000B"; SetMessage -ID "000C"; SetMessage -ID "0404" }
-        $replace = $null
     }
 
     if ( (IsDefault $Redux.Equipment.DekuShield -Not) -and $ChildModel.deku_shield -ne 0 -and $LanguagePatch.code -eq "en") {
         $replace = $null
-        if     (IsText -Elem $Redux.Equipment.DekuShield -Compare "Deku Shield")          { $replace = "Deku Shield" }
+        if     (IsText -Elem $Redux.Equipment.DekuShield -Compare "Deku Shield")          { $replace = "Deku Shield"   }
         elseif (IsText -Elem $Redux.Equipment.DekuShield -Compare "Wooden Shield")        { $replace = "Wooden Shield" }
         elseif (IsText -Elem $Redux.Equipment.DekuShield -Compare "Dawn & Dusk Shield")   { $replace = "Wooden Shield" }
-        elseif (IsText -Elem $Redux.Equipment.DekuShield -Compare "Iron Shield")          { $replace = "Iron Shield" }
+        elseif (IsText -Elem $Redux.Equipment.DekuShield -Compare "Iron Shield")          { $replace = "Iron Shield"   }
         if (IsSet $replace) { SetMessage -ID "004C" -Text "Deku Shield" -Replace $replace -NoParse; SetMessage -ID "0089"; SetMessage -ID "009F"; SetMessage -ID "0611"; SetMessage -ID "103D"-Last; SetMessage -ID "1052"; SetMessage -ID "10CB"; SetMessage -ID "10D2" }
-        $replace = $null
     }
 
     if ( (IsDefault $Redux.Equipment.HylianShield -Not) -and $ChildModel.hylian_shield -ne 0 -and $AdultModel.hylian_shield -ne 0 -and $LanguagePatch.code -eq "en") {
@@ -1935,7 +1952,6 @@ function ByteLanguageOptions() {
         elseif (IsText -Elem $Redux.Equipment.HylianShield -Compare "Red Shield")      { $replace = "Red Shield"    }
         elseif (IsText -Elem $Redux.Equipment.HylianShield -Compare "Metal Shield")    { $replace = "Metal Shield"  }
         if (IsSet $replace) { SetMessage -ID "004D" -Text "Hylian Shield" -Replace $replace -NoParse; SetMessage -ID "0092"; SetMessage -ID "009C"; SetMessage -ID "00A9"; SetMessage -ID "7013"; SetMessage -ID "7121" }
-        $replace = $null
     }
 
     if (IsChecked $Redux.Text.FemalePronouns) {
@@ -2148,9 +2164,10 @@ function CreateTabMain() {
 
     # SPEED #
 
-    CreateReduxGroup  -Tag  "Gameplay"      -All -Text "Speed" -Height 1.2
-    CreateReduxSlider -Name "MovementSpeed" -All -Exclude "Gold" -Default 600  -Min 300 -Max 1200 -Freq 50 -Small 25 -Large 50 -Text "Link's Speed" -Info "Adjust the movement speed for Link" -Credits "AndiiSyn"
-    CreateReduxSlider -Name "MovementSpeed"      -Expose  "Gold" -Default 650  -Min 300 -Max 1200 -Freq 50 -Small 25 -Large 50 -Text "Link's Speed" -Info "Adjust the movement speed for Link" -Credits "AndiiSyn"
+    CreateReduxGroup  -Tag  "Gameplay"           -All -Text "Speed" -Height 1.2
+    if ($GamePatch.title -like "*Gold Quest*") { $value = 50 } else { $value = 0 }
+    CreateReduxSlider -Name "MovementSpeedChild" -All -Column 1 -Default (550 + $value) -Min 300 -Max 1200 -Freq 50 -Small 25 -Large 50 -Text "Child Link's Speed" -Info "Adjust the movement speed for Child Link" -Credits "AndiiSyn"
+    CreateReduxSlider -Name "MovementSpeedAdult" -All -Column 3 -Default (600 + $value) -Min 300 -Max 1200 -Freq 50 -Small 25 -Large 50 -Text "Adult Link's Speed" -Info "Adjust the movement speed for Adult Link" -Credits "AndiiSyn"
 
 }
 
@@ -2312,7 +2329,8 @@ function CreateTabLanguage() {
     # OTHER ENGLISH OPTIONS #
 
     CreateReduxGroup    -Tag  "Text"          -All  -Text "Other English Options"
-    CreateReduxCheckBox -Name "Fairy"               -Text "MM Fairy Text"        -Info ("Changes " + '"Bottled Fairy" to "Fairy"' + " as used in Majora's Mask") -Credits "GhostlyDark (ported)"
+    CreateReduxCheckBox -Name "YeetPrompt"    -All  -Text "Yeet Action Prompt"   -Info ('Replace the "Throw" Action Prompt with "Yeet"' + "`nYeeeeet")           -Credits "kr3z"
+    CreateReduxCheckBox -Name "Fairy"         -Base -Text "MM Fairy Text"        -Info ("Changes " + '"Bottled Fairy" to "Fairy"' + " as used in Majora's Mask") -Credits "GhostlyDark (ported)"
     CreateReduxCheckBox -Name "Milk"          -Base -Text "MM Milk Text"         -Info ("Changes " + '"Lon Lon Milk" to "Milk"' + " as used in Majora's Mask")   -Credits "GhostlyDark (ported)"
     CreateReduxCheckBox -Name "KeatonMaskFix" -Base -Text "Keaton Mask Text Fix" -Info 'Fixes the grammatical typo for the "Keaton Mask"'                        -Credits "Redux"
     CreateReduxCheckBox -Name "PauseScreen"   -Base -Text "MM Pause Screen"      -Info "Replaces the Pause Screen textures to be styled like Majora's Mask"      -Credits "CM & GhostlyDark"
@@ -2333,15 +2351,20 @@ function CreateTabLanguage() {
     if ($GamePatch.title -like "*Master of Time*")   { $val = "Nite" }                                                    else   { $val   = "Navi"                   }
     if ($GamePatch.title -like "*Ocarina*")          { $items = @("Disabled", "Enabled as Female", "Enabled as Male") }   else   { $items = @("Disabled", "Enabled") }
     $names = "`n`n--- Supported Names With Textures ---`n" + "Navi`nTatl`nTaya`nТдтп`nTael`nNite`nNagi`nInfo"
-    CreateReduxComboBox -All -Name "NaviScript" -Text ($val + " Text") -Items $items                          -Info ("Allow renaming " + $val + " and the gender") -Credits "Admentus & ShadowOne333" -Warning "Gender swap is only supported for English"
-    CreateReduxTextBox  -All -Name "NaviName"   -Text ($val + " Name") -Length 5 -ASCII -Value $val -Width 50 -Info ("Select the name for " + $val)                -Credits "Admentus & ShadowOne333" -Warning ('Most names do not have an unique texture label, and use a default "Info" prompt label' + $names)
-    CreateReduxCheckBox -All -Name "NaviPrompt" -Text ($val + " Prompt")                                      -Info ("Enables the A button prompt for " + $val)    -Credits "Admentus & ShadowOne333" -Warning 'Most names do not have an unique texture prompt, and use a default "Info" prompt label'
+    CreateReduxCheckBox -All -Name "LinkScript" -Text "Link Text"                                               -Info "Separate file name from Link's name in-game"  -Credits "Admentus & Third M"
+    CreateReduxTextBox  -All -Name "LinkName"   -Text "Link Name"      -Length 8 -ASCII -Value "Link" -Width 90 -Info "Select the name for Link"                     -Credits "Admentus & Third M"      -Shift 40
+    CreateReduxComboBox -All -Name "NaviScript" -Text ($val + " Text") -Items $items                            -Info ("Allow renaming " + $val + " and the gender") -Credits "Admentus & ShadowOne333" -Warning "Gender swap is only supported for English"
+    CreateReduxTextBox  -All -Name "NaviName"   -Text ($val + " Name") -Length 5 -ASCII -Value $val   -Width 50 -Info ("Select the name for " + $val)                -Credits "Admentus & ShadowOne333" -Warning ('Most names do not have an unique texture label, and use a default "Info" prompt label' + $names)
+    CreateReduxCheckBox -All -Name "NaviPrompt" -Text ($val + " Prompt")                                        -Info ("Enables the A button prompt for " + $val)    -Credits "Admentus & ShadowOne333" -Warning 'Most names do not have an unique texture prompt, and use a default "Info" prompt label'
     $val = $items = $null
 
     if ($GamePatch.title -like "*Ocarina*") {
         foreach ($i in 0.. ($Files.json.languages.count-1)) { $Redux.Language[$i].Add_CheckedChanged({ UnlockLanguageContent }) }
         UnlockLanguageContent
     }
+
+    $Redux.Text.NaviScript.Add_SelectedIndexChanged( { UnlockLanguageContent } )
+    $Redux.Text.LinkScript.Add_CheckStateChanged(    { UnlockLanguageContent } )
 
 }
 
@@ -2381,7 +2404,10 @@ function UnlockLanguageContent() {
                 if ($Redux.Text.Speed3x.checked -eq $True) { $Redux.Text.Speed2x.checked = $True }
             }
             else { EnableElem -Elem @($Redux.Text.Speed2x, $Redux.Text.Speed3x) -Active $True }
-            EnableElem -Elem @($Redux.Text.Instant, $Redux.Text.GoldSkulltula, $Redux.Text.NaviScript, $Redux.Text.NaviName, $Redux.Text.NaviPrompt) -Active ($Files.json.languages[$i].region -ne "J")
+            EnableElem -Elem @($Redux.Text.Instant, $Redux.Text.GoldSkulltula, $Redux.Text.LinkScript, $Redux.Text.NaviScript, $Redux.Text.NaviPrompt) -Active ($Files.json.languages[$i].region -ne "J")
+
+            EnableElem -Elem $Redux.Text.NaviName -Active ($Redux.Text.NaviScript.SelectedIndex -ne 0 -and $Redux.Text.NaviScript.Enabled)
+            EnableElem -Elem $Redux.Text.LinkName -Active ($Redux.Text.LinkScript.Checked             -and $Redux.Text.LinkScript.Enabled)
         }
     }
 

@@ -56,16 +56,16 @@ function CreateTabMain() {
     
     # GRAPHICS #
 
-    CreateReduxGroup    -Tag "Graphics" -Text "Graphics"
-    CreateReduxCheckBox -Name "Widescreen"                -Text "16:9 Widescreen [!]"  -Info "16:9 Widescreen display" -Warning "Only works with the BSNES / Higan Widescreen feature, and does not work on Dolphin" -Credits "ocesse" -Native
-    CreateReduxCheckBox -Name "RedesignedSamus"           -Text "Redesigned Samus"     -Info "Change the appearence of Samus"                                                                                        -Credits "Dmit Ryaz"
-    CreateReduxCheckBox -Name "DeathCensor"               -Text "Death Censor"         -Info "Censors the deatrh animations of Samus upon game over"                                                                 -Credits "Dmit Ryaz"
+    CreateReduxGroup    -Tag  "Graphics"        -Text "Graphics"
+    CreateReduxCheckBox -Name "Widescreen"      -Text "16:9 Widescreen [!]" -Info "16:9 Widescreen display" -Warning "Only works with the BSNES / Higan Widescreen feature, and does not work on Dolphin" -Credits "ocesse" -Native
+    CreateReduxCheckBox -Name "RedesignedSamus" -Text "Redesigned Samus"    -Info "Change the appearence of Samus"                                                                                        -Credits "Dmit Ryaz"
+    CreateReduxCheckBox -Name "DeathCensor"     -Text "Death Censor"        -Info "Censors the deatrh animations of Samus upon game over"                                                                 -Credits "Dmit Ryaz"
 
 
 
     # GAMEPLAY #
 
-    CreateReduxGroup    -Tag "Gameplay" -Text "Gameplay"
+    CreateReduxGroup    -Tag  "Gameplay"                  -Text "Gameplay"
     CreateReduxCheckBox -Name "FixedTourianUnlockedDoors" -Text "Fixed Unlocked Doors" -Info "Makes it so that the Tourian doors now let you go back to Crateria normally`nThis patch is already implemented into Redux"     -Credits "ShadowOne333 and this team"
     CreateReduxCheckBox -Name "SaveStationsRefill"        -Text "Save Stations Refill" -Info "Save Stations will now refill both Energy and all Weapons"                                                                     -Credits "ShadowOne333 and this team"
     CreateReduxCheckBox -Name "SkipCeres"                 -Text "Skip Ceres"           -Info "Skip the Ceres Station sequence at the beginning, and start off directly on Planet Zebes' Landing Site on New Game"            -Credits "ShadowOne333 and this team"

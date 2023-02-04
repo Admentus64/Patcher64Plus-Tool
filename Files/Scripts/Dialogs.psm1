@@ -113,12 +113,12 @@ function CreateCreditsDialog() {
 
     # Create Text Box
     $Credits.Sections = @()
-    $Credits.Sections += CreateTextBox -X (DPISize 40) -Y (DPISize 30) -Width ($CreditsDialog.Width - (DPISize 100)) -Height ($CloseButton.Top - (DPISize 40)) -ReadOnly -Multiline -AddTo $CreditsDialog -Tag "Info" -TextFileFont
-    $Credits.Sections += CreateTextBox -X $Credits.Sections[0].Left -Y $Credits.Sections[0].Top -Width $Credits.Sections[0].Width -Height $Credits.Sections[0].Height -ReadOnly -Multiline -AddTo $CreditsDialog -Tag "Credits"  -TextFileFont
-    $Credits.Sections += CreateTextBox -X $Credits.Sections[0].Left -Y $Credits.Sections[0].Top -Width $Credits.Sections[0].Width -Height $Credits.Sections[0].Height -ReadOnly -Multiline -AddTo $CreditsDialog -Tag "GameID's" -TextFileFont
+    $Credits.Sections += CreateTextBox -X (DPISize 40)              -Y (DPISize 30)             -Width ($CreditsDialog.Width - (DPISize 100)) -Height ($CloseButton.Top - (DPISize 40)) -ReadOnly -Multiline -AddTo $CreditsDialog -Tag "Info"     -TextFileFont
+    $Credits.Sections += CreateTextBox -X $Credits.Sections[0].Left -Y $Credits.Sections[0].Top -Width $Credits.Sections[0].Width             -Height $Credits.Sections[0].Height       -ReadOnly -Multiline -AddTo $CreditsDialog -Tag "Credits"  -TextFileFont
+    $Credits.Sections += CreateTextBox -X $Credits.Sections[0].Left -Y $Credits.Sections[0].Top -Width $Credits.Sections[0].Width             -Height $Credits.Sections[0].Height       -ReadOnly -Multiline -AddTo $CreditsDialog -Tag "GameID's" -TextFileFont
     AddTextFileToTextbox -TextBox $Credits.Sections[2] -File $Files.text.gameID
-    $Credits.Sections += CreatePanel   -X $Credits.Sections[0].Left -Y $Credits.Sections[0].Top -Width $Credits.Sections[0].Width -Height $Credits.Sections[0].Height -AddTo $CreditsDialog -Tag "Misc"
-    $Credits.Sections += CreatePanel   -X $Credits.Sections[0].Left -Y $Credits.Sections[0].Top -Width $Credits.Sections[0].Width -Height $Credits.Sections[0].Height -AddTo $CreditsDialog -Tag "Checksum"
+    $Credits.Sections += CreatePanel   -X $Credits.Sections[0].Left -Y $Credits.Sections[0].Top -Width $Credits.Sections[0].Width             -Height $Credits.Sections[0].Height                            -AddTo $CreditsDialog -Tag "Misc"
+    $Credits.Sections += CreatePanel   -X $Credits.Sections[0].Left -Y $Credits.Sections[0].Top -Width $Credits.Sections[0].Width             -Height $Credits.Sections[0].Height                            -AddTo $CreditsDialog -Tag "Checksum"
 
     # Support
     $SupportLabel  = CreateLabel -X (DPISize 10)         -Y (DPISize 10)                          -Width (DPISize 200) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("--- Support or visit me at ---")   -AddTo $Credits.Sections[3]
@@ -198,7 +198,7 @@ function CreateCreditsDialog() {
     $global:VerificationInfo = @{}
 
     $VerificationInfo.HashText              = CreateLabel -X (DPISize 10) -Y (DPISize 20) -Width (DPISize 120) -Height (DPISize 15) -Font $Fonts.SmallBold -Text "ROM Hashsum:" -AddTo $Credits.Sections[4]
-    $VerificationInfo.HashField             = CreateTextBox -X $VerificationInfo.HashText.Right -Y ($VerificationInfo.HashText.Top - (DPISize 3)) -Width ($Credits.Sections[4].Width - $VerificationInfo.HashText.Width - (DPISize 100))  -Height (DPISize 50) -AddTo $Credits.Sections[4]
+    $VerificationInfo.HashField             = CreateTextBox -X $VerificationInfo.HashText.Right -Y ($VerificationInfo.HashText.Top - (DPISize 3)) -Width ($Credits.Sections[4].Width - $VerificationInfo.HashText.Width - (DPISize 100)) -Height (DPISize 50) -AddTo $Credits.Sections[4]
     $VerificationInfo.HashField.ReadOnly    = $True
 
     $VerificationInfo.GameText              = CreateLabel -X (DPISize 10) -Y ($VerificationInfo.HashField.Bottom + (DPISize 10)) -Width (DPISize 120) -Height (DPISize 15) -Font $Fonts.SmallBold -Text "Current Game:" -AddTo $Credits.Sections[4]
@@ -228,7 +228,7 @@ function CreateCreditsDialog() {
 function CreateSettingsDialog() {
     
     # Create Dialog
-    $global:SettingsDialog = CreateDialog -Width (DPISize 560) -Height (DPISize 640) -Icon $Files.icon.settings
+    $global:SettingsDialog = CreateDialog -Width (DPISize 560) -Height (DPISize 670) -Icon $Files.icon.settings
     $CloseButton = CreateButton -X ($SettingsDialog.Width / 2 - (DPISize 40)) -Y ($SettingsDialog.Height - (DPISize 90)) -Width (DPISize 80) -Height (DPISize 35) -Text "Close" -AddTo $SettingsDialog
     $CloseButton.Add_Click({ $SettingsDialog.Hide() })
 
@@ -260,16 +260,17 @@ function CreateSettingsDialog() {
 
 
     # Debug Settings
-    $GeneralSettings.Box                 = CreateReduxGroup -Y ($GeneralSettings.Box.Bottom + (DPISize 10)) -IsGame $False -Height 3 -AddTo $SettingsDialog -Text "Debug Settings"
-    $GeneralSettings.Console             = CreateSettingsCheckbox -Name "Console"          -Column 1 -Row 1 -Text "Console"               -IsDebug -Info "Show the console log"
-    $GeneralSettings.Stop                = CreateSettingsCheckbox -Name "Stop"             -Column 2 -Row 1 -Text "Stop Patching"         -IsDebug -Info "Do not start the patching process and only show the debug information for the console log or log file"
-    $GeneralSettings.Logging             = CreateSettingsCheckbox -Name "Logging"          -Column 3 -Row 1 -Text "Logging"      -Checked -IsDebug -Info "Write all events of Patcher64+ into log files"
-    $GeneralSettings.CreateBPS           = CreateSettingsCheckbox -Name "CreateBPS"        -Column 1 -Row 2 -Text "Create BPS"            -IsDebug -Info "Create compressed and decompressed BPS patches when patching is concluded"
-    $GeneralSettings.NoCleanup           = CreateSettingsCheckbox -Name "NoCleanup"        -Column 2 -Row 2 -Text "No Cleanup"            -IsDebug -Info "Do not clean up the files after the patching process fails or succeeds"
-    $GeneralSettings.NoHeaderChange      = CreateSettingsCheckbox -Name "NoHeaderChange"   -Column 3 -Row 2 -Text "No Header Change"      -IsDebug -Info "Do not change the header of the ROM when patching is concluded"
-    $GeneralSettings.NoChannelChange     = CreateSettingsCheckbox -Name "NoChannelChange"  -Column 1 -Row 3 -Text "No Channel Change"     -IsDebug -Info "Do not change the channel title and GameID of the WAD when patching is concluded"
-    $GeneralSettings.KeepDowngraded      = CreateSettingsCheckbox -Name "KeepDowngraded"   -Column 2 -Row 3 -Text "Keep Downgraded"       -IsDebug -Info "Keep the downgraded patched ROM in the output folder"
-    $GeneralSettings.KeepConverted       = CreateSettingsCheckbox -Name "KeepConverted"    -Column 3 -Row 3 -Text "Keep Converted"        -IsDebug -Info "Keep the converted patched ROM in the output folder"
+    $GeneralSettings.Box                 = CreateReduxGroup -Y ($GeneralSettings.Box.Bottom + (DPISize 10)) -IsGame $False -Height 4 -AddTo $SettingsDialog -Text "Debug Settings"
+    $GeneralSettings.Console             = CreateSettingsCheckbox -Name "Console"           -Column 1 -Row 1 -Text "Console"             -IsDebug -Info "Show the console log"
+    $GeneralSettings.Stop                = CreateSettingsCheckbox -Name "Stop"              -Column 2 -Row 1 -Text "Stop Patching"       -IsDebug -Info "Do not start the patching process and only show the debug information for the console log or log file"
+    $GeneralSettings.Logging             = CreateSettingsCheckbox -Name "Logging"           -Column 3 -Row 1 -Text "Logging"    -Checked -IsDebug -Info "Write all events of Patcher64+ into log files"
+    $GeneralSettings.CreateBPS           = CreateSettingsCheckbox -Name "CreateBPS"         -Column 1 -Row 2 -Text "Create BPS"          -IsDebug -Info "Create compressed and decompressed BPS patches when patching is concluded"
+    $GeneralSettings.NoCleanup           = CreateSettingsCheckbox -Name "NoCleanup"         -Column 2 -Row 2 -Text "No Cleanup"          -IsDebug -Info "Do not clean up the files after the patching process fails or succeeds"
+    $GeneralSettings.NoHeaderChange      = CreateSettingsCheckbox -Name "NoHeaderChange"    -Column 3 -Row 2 -Text "No Header Change"    -IsDebug -Info "Do not change the header of the ROM when patching is concluded"
+    $GeneralSettings.NoChannelChange     = CreateSettingsCheckbox -Name "NoChannelChange"   -Column 1 -Row 3 -Text "No Channel Change"   -IsDebug -Info "Do not change the channel title and GameID of the WAD when patching is concluded"
+    $GeneralSettings.KeepDowngraded      = CreateSettingsCheckbox -Name "KeepDowngraded"    -Column 2 -Row 3 -Text "Keep Downgraded"     -IsDebug -Info "Keep the downgraded patched ROM in the output folder"
+    $GeneralSettings.KeepConverted       = CreateSettingsCheckbox -Name "KeepConverted"     -Column 3 -Row 3 -Text "Keep Converted"      -IsDebug -Info "Keep the converted patched ROM in the output folder"
+    $GeneralSettings.ActorEditorChecks   = CreateSettingsCheckbox -Name "ActorEditorChecks" -Column 1 -Row 4 -Text "Actor Editor Checks" -IsDebug -Info "Print out extras debug info and perform extra checks for the Actor Editor`nThis may slow down performance a bit"
 
     # Debug Settings (Nintendo 64)
     $GeneralSettings.Box                 = CreateReduxGroup -Y ($GeneralSettings.Box.Bottom + (DPISize 10)) -IsGame $False -Height 2 -AddTo $SettingsDialog -Text "Debug Settings (Nintendo 64)"

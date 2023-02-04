@@ -74,6 +74,7 @@
 - ZombieBrainySnack
 - AndiiSyn
 - CM
+- kr3z
 
 --- Link Voices ---
 - Amara, GhostlyDark, Korey Cryderman, theluigidude2007 & Mickey Devi
@@ -86,6 +87,7 @@
 - Amara:				Amara & Karicyan
 - Amara Valkyrie:			Amara & Karicyan
 - Aria the Demon:			AriaHiro64
+- Athena:				Ikey Ilex (https://github.com/Caverns4/Custom-Game-Models)
 - Breath of the Wild:			Skilarbabcock (www.youtube.com/user/skilarbabcock)
 - Dark Link:				CrookedPoe (adult)
 - Dark Link Smash:			Mikus64
@@ -364,9 +366,11 @@ https://github.com/DaruniasJoy/OoT-Custom-Sequences
 - Federelli
 - AndiiSyn
 - Zeth Alkar
+- kr3z
 
 --- Hylian Link Models ---
 - Adult Link (MM):			Skilarbabcock (www.youtube.com/user/skilarbabcock)
+- Athena:				Ikey Ilex (https://github.com/Caverns4/Custom-Game-Models)
 - Diddy Kong:				Ikey Ilex (https://github.com/Caverns4/Custom-Game-Models)
 - Elegy of Emptiness:			JerryWester
 - Fierce Deity Link:			UltIMa647
@@ -521,6 +525,9 @@ https://github.com/DaruniasJoy/OoT-Custom-Sequences
 
 --- Termina Invasion ---
 - Reonu
+
+--- Italian Translation ---
+- Rulesless
 
 
 
@@ -743,6 +750,9 @@ Other:			Admentus & gamemasterplc
 - Re-Wizardized Script:			Kyler Ashton
 - Kakariko Shortcut:			PowerPanda
 
+--- Retranslation Quest ---
+- Chicken Knife, Dattebayo, nejimakipiyo
+
 --- Parallel Worlds ---
 - Directors:				Euclid, SePH, qwertymodo
 - Music:				Richyawyingtmv 
@@ -848,6 +858,9 @@ Other:			Admentus & gamemasterplc
 
 ===========================
 <<< LINK'S AWAKENING DX >>>
+
+--- Zelda 1 Port ---
+daid
 
 --- Redux ---
 - Main Hacking:				ShadowOne333
