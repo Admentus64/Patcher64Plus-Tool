@@ -1,4 +1,5 @@
 v20.0.2
+- Restored Masked Quest version
 - Re-arranged layout for some gameplay options for OoT
 - Merged hide individual C buttons into single option for OoT
 - Updated SM64 Split-Screen Multi-Player
