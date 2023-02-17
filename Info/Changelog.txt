@@ -1,3 +1,9 @@
+v20.0.2
+- Re-arranged layout for some gameplay options for OoT
+- Merged hide individual C buttons into single option for OoT
+- Updated SM64 Split-Screen Multi-Player
+- Fixing issue with changing Link's Speed for OoT
+
 v20.0.1
 - Added Info window for Text Editor
 - Added Link Name option for OoT & MM

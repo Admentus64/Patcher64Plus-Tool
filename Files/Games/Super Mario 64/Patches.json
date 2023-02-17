@@ -72,7 +72,7 @@
 	"title"			: "Super Mario 64: Split-Screen Multiplayer",
 	"rom_title"		: "SM64 Multiplayer",
 	"patch" : [ {
-		"file"		: "Compressed\\splitscreen_multiplayer.vcdiff",
+		"file"		: "Compressed\\splitscreen_multiplayer.bps",
 		"rev"		: "20B854B239203BAF6C961B850A4A51A2",
 		"console"	: "Native"
 	} ],

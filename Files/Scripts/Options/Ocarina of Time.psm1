@@ -117,7 +117,6 @@ function ByteOptions() {
 
     if (IsIndex $Redux.Gameplay.SpawnChild -Index 1 -Not)   { ChangeBytes -Offset "B0631E" -Values (GetOoTEntranceIndex $Redux.Gameplay.SpawnChild.Text)       }
     if (IsIndex $Redux.Gameplay.SpawnAdult -Index 2 -Not)   { ChangeBytes -Offset "B06332" -Values (GetOoTEntranceIndex $Redux.Gameplay.SpawnAdult.Text)       }
-    if (IsChecked $Redux.Gameplay.DistantZTargeting)        { ChangeBytes -Offset "A987AC" -Values "00000000"                                                  }
     if (IsChecked $Redux.Gameplay.ManualJump)               { ChangeBytes -Offset "BD78C0" -Values "04C1";     ChangeBytes -Offset "BD78E3" -Values "01"       }
     if (IsChecked $Redux.Gameplay.AltManualJump)            { ChangeBytes -Offset "BD78E3" -Values "00"                                                        }
     if (IsChecked $Redux.Gameplay.NoShieldRecoil)           { ChangeBytes -Offset "BD416C" -Values "2400"                                                      }
@@ -126,11 +125,16 @@ function ByteOptions() {
     if (IsChecked $Redux.Gameplay.RemoveCrouchStab)         { ChangeBytes -Offset "BDE374" -Values "1000000D"                                                  }
     if (IsChecked $Redux.Gameplay.RemoveQuickSpin)          { ChangeBytes -Offset "C9C9E8" -Values "1000000E"                                                  }
     if (IsChecked $Redux.Gameplay.InstantSpinAttack)        { ChangeBytes -Offset "AD97EC" -Values "2400"                                                      }
-    if (IsChecked $Redux.Gameplay.ClimbAnything)            { ChangeBytes -Offset "AAA394" -Values "34020004"                                                  }
     if (IsChecked $Redux.Gameplay.RemoveSpeedClamp)         { ChangeBytes -Offset "BD9AF0" -Values "2400"                                                      }
-    if (IsChecked $Redux.Gameplay.HookshotAnything)         { ChangeBytes -Offset "AAA60E" -Values "24002400"                                                  }
     if (IsChecked $Redux.Gameplay.NoMagicArrowCooldown)     { ChangeBytes -Offset "AE85C9" -Values "62"                                                        }
     
+
+
+    # GAMEPLAY (UNSTABLE) #
+
+    if (IsChecked $Redux.Gameplay.HookshotAnything)    { ChangeBytes -Offset "AAA60E" -Values "24002400" }
+    if (IsChecked $Redux.Gameplay.ClimbAnything)       { ChangeBytes -Offset "AAA394" -Values "34020004" }
+    if (IsChecked $Redux.Gameplay.DistantZTargeting)   { ChangeBytes -Offset "A987AC" -Values "00000000" }
 
 
 
@@ -219,8 +223,8 @@ function ByteOptions() {
 
     # SPEED #
 
-    if (IsValue -Elem $Redux.Gameplay.MovementSpeedChild -Not)   { ChangeBytes -Offset "B6D664" -Values (Get16Bit $Redux.Gameplay.MovementSpeed.Value) }
-    if (IsValue -Elem $Redux.Gameplay.MovementSpeedAdult -Not)   { ChangeBytes -Offset "B6D5BA" -Values (Get16Bit $Redux.Gameplay.MovementSpeed.Value) }
+    if (IsValue -Elem $Redux.Gameplay.MovementSpeedChild -Not)   { ChangeBytes -Offset "B6D664" -Values (Get16Bit $Redux.Gameplay.MovementSpeedChild.Value) }
+    if (IsValue -Elem $Redux.Gameplay.MovementSpeedAdult -Not)   { ChangeBytes -Offset "B6D5BA" -Values (Get16Bit $Redux.Gameplay.MovementSpeedAdult.Value) }
 
 
 
@@ -338,16 +342,11 @@ function ByteOptions() {
         ChangeBytes -Offset "7540"   -Values "03 10 00 00 03 10 57 00 03 10 00 00"
     }
 
-    if (IsChecked $Redux.Hide.BButton)        { ChangeBytes -Offset "B57EEC" -Values "24 02 03 A0"; ChangeBytes -Offset "B57EFC" -Values "24 0A 03 A2"; ChangeBytes -Offset "B589D4" -Values "24 0F 03 97"; ChangeBytes -Offset "B589E8" -Values "24 19 03 94" } # B Button -> Icon / Ammo / Japanese / English
-    if (IsChecked $Redux.Hide.StartButton)    { ChangeBytes -Offset "B584EC" -Values "24 19 03 84"; ChangeBytes -Offset "B58490" -Values "24 18 03 7A"; ChangeBytes -Offset "B5849C" -Values "24 0E 03 78" } # Start Button   -> Button / Japanese / English
-    if (IsChecked $Redux.Hide.CupButton)      { ChangeBytes -Offset "B584C0" -Values "24 19 03 FE"; ChangeBytes -Offset "B582DC" -Values "24 0E 03 F7"                                                     } # C-Up Button    -> Button / Navi Text
-    if (IsChecked $Redux.Hide.CLeftButton)    { ChangeBytes -Offset "B58504" -Values "24 19 03 E3"; ChangeBytes -Offset "B5857C" -Values "24 19 03 E3"; ChangeBytes -Offset "B58DC4" -Values "24 0E 03 E4" } # C-Left Button  -> Button / Icon / Ammo
-    if (IsChecked $Redux.Hide.CDownButton)    { ChangeBytes -Offset "B58510" -Values "24 0F 03 F9"; ChangeBytes -Offset "B58588" -Values "24 0F 03 F9"; ChangeBytes -Offset "B58C40" -Values "24 06 02 FA" } # C-Down Button  -> Button / Icon / Ammo
-    if (IsChecked $Redux.Hide.CRightButton)   { ChangeBytes -Offset "B5851C" -Values "24 19 03 0F"; ChangeBytes -Offset "B58594" -Values "24 19 03 0F"; ChangeBytes -Offset "B58DE0" -Values "24 19 03 10" } # C-Right Button -> Button / Icon / Ammo
-    if (IsChecked $Redux.Hide.AreaTitle)      { ChangeBytes -Offset "BE2B10" -Values "24 07 03 A0" } # Area Titles
-    if (IsChecked $Redux.Hide.DungeonTitle)   { ChangeBytes -Offset "AC8828" -Values "24 07 03 A0" } # Dungeon Titles
-    if (IsChecked $Redux.Hide.Carrots)        { ChangeBytes -Offset "B58348" -Values "24 0F 03 6E" } # Epona Carrots    
-    if (IsChecked $Redux.Hide.Hearts)         { ChangeBytes -Offset "ADADEC" -Values "10 00"       } # Disable Hearts Render
+    if (IsChecked $Redux.Hide.CButtons) {
+        ChangeBytes -Offset "B58504" -Values "24 19 03 E3"; ChangeBytes -Offset "B5857C" -Values "24 19 03 E3"; ChangeBytes -Offset "B58DC4" -Values "24 0E 03 E4" # C-Left Button  -> Button / Icon / Ammo
+        ChangeBytes -Offset "B58510" -Values "24 0F 03 F9"; ChangeBytes -Offset "B58588" -Values "24 0F 03 F9"; ChangeBytes -Offset "B58C40" -Values "24 06 02 FA" # C-Down Button  -> Button / Icon / Ammo
+        ChangeBytes -Offset "B5851C" -Values "24 19 03 0F"; ChangeBytes -Offset "B58594" -Values "24 19 03 0F"; ChangeBytes -Offset "B58DE0" -Values "24 19 03 10" # C-Right Button -> Button / Icon / Ammo
+    }
 
     if (IsChecked $Redux.Hide.Magic) {
         ChangeBytes -Offset "B587C0" -Values "24 0F 03 1A"; ChangeBytes -Offset "B587A0" -Values "24 0E 01 22"; ChangeBytes -Offset "B587B4" -Values "24 19 01 2A" # Magic Meter / Magic Bar - Small (Y pos) / Magic Bar - Large (Y pos)
@@ -359,9 +358,16 @@ function ByteOptions() {
         $Values = @();     for ($i=0; $i -lt 768; $i++) { $Values += 0 };     ChangeBytes -Offset "1A3E600" -Values $Values     # Score Counter - Icon
     }
 
-    if (IsChecked $Redux.Hide.Rupees)        { ChangeBytes -Offset "AEB7B0" -Values "24 0C 03 1A"; ChangeBytes -Offset "AEBC48" -Values "24 0D 01 CE" } # Rupees - Icon / Rupees - Text (Y pos)
-    if (IsChecked $Redux.Hide.DungeonKeys)   { ChangeBytes -Offset "AEB8AC" -Values "24 0F 03 1A"; ChangeBytes -Offset "AEBA00" -Values "24 19 01 BE" } # Key    - Icon / Key    - Text (Y pos)
-    if (IsChecked $Redux.Hide.Credits)       { PatchBytes  -Offset "966000" -Patch "Message\credits.bin" }
+    if (IsChecked $Redux.Hide.BButton)        { ChangeBytes -Offset "B57EEC" -Values "24 02 03 A0"; ChangeBytes -Offset "B57EFC" -Values "24 0A 03 A2"; ChangeBytes -Offset "B589D4" -Values "24 0F 03 97"; ChangeBytes -Offset "B589E8" -Values "24 19 03 94" } # B Button -> Icon / Ammo / Japanese / English
+    if (IsChecked $Redux.Hide.StartButton)    { ChangeBytes -Offset "B584EC" -Values "24 19 03 84"; ChangeBytes -Offset "B58490" -Values "24 18 03 7A"; ChangeBytes -Offset "B5849C" -Values "24 0E 03 78" } # Start Button   -> Button / Japanese / English
+    if (IsChecked $Redux.Hide.CupButton)      { ChangeBytes -Offset "B584C0" -Values "24 19 03 FE"; ChangeBytes -Offset "B582DC" -Values "24 0E 03 F7"                                                     } # C-Up Button    -> Button / Navi Text
+    if (IsChecked $Redux.Hide.AreaTitle)      { ChangeBytes -Offset "BE2B10" -Values "24 07 03 A0" } # Area Titles
+    if (IsChecked $Redux.Hide.DungeonTitle)   { ChangeBytes -Offset "AC8828" -Values "24 07 03 A0" } # Dungeon Titles
+    if (IsChecked $Redux.Hide.Carrots)        { ChangeBytes -Offset "B58348" -Values "24 0F 03 6E" } # Epona Carrots    
+    if (IsChecked $Redux.Hide.Hearts)         { ChangeBytes -Offset "ADADEC" -Values "10 00"       } # Disable Hearts Render
+    if (IsChecked $Redux.Hide.Rupees)         { ChangeBytes -Offset "AEB7B0" -Values "24 0C 03 1A"; ChangeBytes -Offset "AEBC48" -Values "24 0D 01 CE" } # Rupees - Icon / Rupees - Text (Y pos)
+    if (IsChecked $Redux.Hide.DungeonKeys)    { ChangeBytes -Offset "AEB8AC" -Values "24 0F 03 1A"; ChangeBytes -Offset "AEBA00" -Values "24 19 01 BE" } # Key    - Icon / Key    - Text (Y pos)
+    if (IsChecked $Redux.Hide.Credits)        { PatchBytes  -Offset "966000" -Patch "Message\credits.bin"                                              }
 
 
 
@@ -1370,7 +1376,7 @@ function ByteOptions() {
         PatchBytes -Offset "2BE7920" -Texture -Patch "Gerudo Symbols\spirit_temple_room_10.bin"
         PatchBytes -Offset "1636940" -Texture -Patch "Gerudo Symbols\spirit_temple_room_0_elevator.bin"
         $Offset = SearchBytes -Start "2AF8000" -End "2B08F40" -Values "00 05 00 11 06 00 06 4E 06 06 06 06 11 11 06 11"
-        PatchBytes -Offset $Offset -Texture -Patch "Gerudo Symbols\spirit_temple_room_0_pillars.bin"
+        PatchBytes -Offset $Offset   -Texture -Patch "Gerudo Symbols\spirit_temple_room_0_pillars.bin"
         PatchBytes -Offset "289CA90" -Texture -Patch "Gerudo Symbols\gerudo_training_ground_ceiling_frame.bin"
         PatchBytes -Offset "28BBCD8" -Texture -Patch "Gerudo Symbols\gerudo_training_ground_room_5.bin"
         PatchBytes -Offset "28CA728" -Texture -Patch "Gerudo Symbols\gerudo_training_ground_room_5.bin"
@@ -1494,7 +1500,6 @@ function ByteReduxOptions() {
             [uint16]$value = ($ByteArrayGame[(GetDecimal "BC7182")] * 256) + $ByteArrayGame[(GetDecimal "BC7183")]; $value += [math]::Round(20 * 12.5); ChangeBytes -Offset "BC7182" -Values (Get16Bit $value) # C-Down  (Y-pos)
             [uint16]$value = ($ByteArrayGame[(GetDecimal "BC717C")] * 256) + $ByteArrayGame[(GetDecimal "BC717D")]; $value -= [math]::Round(54 * 12.5); ChangeBytes -Offset "BC717C" -Values (Get16Bit $value) # C-Right (X-pos)
             [uint16]$value = ($ByteArrayGame[(GetDecimal "BC7184")] * 256) + $ByteArrayGame[(GetDecimal "BC7185")]; $value -= [math]::Round(20 * 12.5); ChangeBytes -Offset "BC7184" -Values (Get16Bit $value) # C-Right (Y-pos)
-            $value = $null
         }
         elseif ($Redux.UI.Layout.SelectedIndex -eq 3) { # Modern
             [uint16]$value = ($ByteArrayGame[(GetDecimal "BC7178")] * 256) + $ByteArrayGame[(GetDecimal "BC7179")]; $value -= [math]::Round(10 * 12.5); ChangeBytes -Offset "BC7178" -Values (Get16Bit $value) # C-Left  (X-pos)
@@ -1502,7 +1507,6 @@ function ByteReduxOptions() {
             [uint16]$value = ($ByteArrayGame[(GetDecimal "BC717A")] * 256) + $ByteArrayGame[(GetDecimal "BC717B")]; $value += [math]::Round(30 * 12.5); ChangeBytes -Offset "BC717A" -Values (Get16Bit $value) # C-Down  (X-pos)
             [uint16]$value = ($ByteArrayGame[(GetDecimal "BC7182")] * 256) + $ByteArrayGame[(GetDecimal "BC7183")]; $value += [math]::Round(20 * 12.5); ChangeBytes -Offset "BC7182" -Values (Get16Bit $value) # C-Down  (Y-pos)
             [uint16]$value = ($ByteArrayGame[(GetDecimal "BC717C")] * 256) + $ByteArrayGame[(GetDecimal "BC717D")]; $value -= [math]::Round(30 * 12.5); ChangeBytes -Offset "BC717C" -Values (Get16Bit $value) # C-Right (X-pos)
-            $value = $null
         }
         elseif ($Redux.UI.Layout.SelectedIndex -eq 4) { # GameCube (Original)
             [uint16]$value = ($ByteArrayGame[(GetDecimal "BC7178")] * 256) + $ByteArrayGame[(GetDecimal "BC7179")]; $value += [math]::Round(24 * 12.5); ChangeBytes -Offset "BC7178" -Values (Get16Bit $value) # C-Left  (X-pos)
@@ -1511,7 +1515,6 @@ function ByteReduxOptions() {
             [uint16]$value = ($ByteArrayGame[(GetDecimal "BC7182")] * 256) + $ByteArrayGame[(GetDecimal "BC7183")]; $value += [math]::Round(20 * 12.5); ChangeBytes -Offset "BC7182" -Values (Get16Bit $value) # C-Down  (Y-pos)
             [uint16]$value = ($ByteArrayGame[(GetDecimal "BC717C")] * 256) + $ByteArrayGame[(GetDecimal "BC717D")]; $value += [math]::Round(11 * 12.5); ChangeBytes -Offset "BC717C" -Values (Get16Bit $value) # C-Right (X-pos)
             [uint16]$value = ($ByteArrayGame[(GetDecimal "BC7184")] * 256) + $ByteArrayGame[(GetDecimal "BC7185")]; $value -= [math]::Round(25 * 12.5); ChangeBytes -Offset "BC7184" -Values (Get16Bit $value) # C-Right (Y-pos)
-            $value = $null
         }
         elseif ($Redux.UI.Layout.SelectedIndex -eq 5) { # GameCube (Modern)
             [uint16]$value = ($ByteArrayGame[(GetDecimal "BC7178")] * 256) + $ByteArrayGame[(GetDecimal "BC7179")]; $value += [math]::Round(55 * 12.5); ChangeBytes -Offset "BC7178" -Values (Get16Bit $value) # C-Left  (X-pos)
@@ -1520,7 +1523,6 @@ function ByteReduxOptions() {
             [uint16]$value = ($ByteArrayGame[(GetDecimal "BC7182")] * 256) + $ByteArrayGame[(GetDecimal "BC7183")]; $value += [math]::Round(20 * 12.5); ChangeBytes -Offset "BC7182" -Values (Get16Bit $value) # C-Down  (Y-pos)
             [uint16]$value = ($ByteArrayGame[(GetDecimal "BC717C")] * 256) + $ByteArrayGame[(GetDecimal "BC717D")]; $value -= [math]::Round(20 * 12.5); ChangeBytes -Offset "BC717C" -Values (Get16Bit $value) # C-Right (X-pos)
             [uint16]$value = ($ByteArrayGame[(GetDecimal "BC7184")] * 256) + $ByteArrayGame[(GetDecimal "BC7185")]; $value += [math]::Round(10 * 12.5); ChangeBytes -Offset "BC7184" -Values (Get16Bit $value) # C-Right (Y-pos)
-            $value = $null
         }
     }
     
@@ -2091,9 +2093,7 @@ function CreateTabMain() {
     CreateReduxGroup    -Tag  "Gameplay"               -All             -Text "Gameplay Changes" 
     CreateReduxComboBox -Name "SpawnChild"             -Base -Default 1 -Text "Child Starting Location"  -Items ("Link's House", "Temple of Time", "Hyrule Field", "Kakariko Village", "Inside the Deku Tree", "Dodongo's Cavern", "Inside Jabu-Jabu's Belly", "Forest Temple", "Fire Temple", "Water Temple", "Shadow Temple", "Spirit Temple", "Ice Cavern", "Bottom of the Well", "Thieves' Hideout", "Gerudo's Training Ground", "Inside Ganon's Castle", "Ganon's Tower") -Credits "Admentus & GhostlyDark"
     CreateReduxComboBox -Name "SpawnAdult"             -Base -Default 2 -Text "Adult Starting Location"  -Items ("Link's House", "Temple of Time", "Hyrule Field", "Kakariko Village", "Inside the Deku Tree", "Dodongo's Cavern", "Inside Jabu-Jabu's Belly", "Forest Temple", "Fire Temple", "Water Temple", "Shadow Temple", "Spirit Temple", "Ice Cavern", "Bottom of the Well", "Thieves' Hideout", "Gerudo's Training Ground", "Inside Ganon's Castle", "Ganon's Tower") -Credits "Admentus & GhostlyDark"
-    CreateReduxCheckBox -Name "HookshotAnything"       -Adult           -Text "Hookshot Anything"        -Info "Be able to hookshot most surfaces" -Warning "Prone to softlocks, be careful"                                                                                    -Credits "Ported from Rando"
     CreateReduxCheckBox -Name "NoMagicArrowCooldown"   -Adult           -Text "No Magic Arrow Cooldown"  -Info "Be able to shoot magic arrows without delay inbetween" -Warning "Prone to crashes if switching arrow types too quickly"                                         -Credits "Ported from Rando"
-    CreateReduxCheckBox -Name "DistantZTargeting"      -All             -Text "Distant Z-Targeting"      -Info "Allow to use Z-Targeting on enemies, objects and NPC's from any distance"                                                                                       -Credits "Admentus"
     CreateReduxCheckBox -Name "ManualJump"             -All             -Text "Manual Jump"              -Info "Press Z + A to do a Manual Jump instead of a Jump Attack`nPress B mid-air after jumping to do a Jump Attack"                                                    -Credits "Admentus (ROM) & CloudModding (GameShark)"
     CreateReduxCheckbox -Name "AltManualJump"          -All             -Text "Alt Manual Jump"          -Info "Press Z + A to do a Manual Jump instead of a Jump Attack`nPress B mid-air after jumping to do a Jump Attack`nThis version allows you still to roll when moving" -Credits "BilonFullHDemon" -Link $Redux.Gameplay.ManualJump
     CreateReduxCheckBox -Name "NoShieldRecoil"         -All             -Text "No Shield Recoil"         -Info "Disable the recoil when being hit while shielding"                                                                                                              -Credits "Admentus (ROM) & Aegiker (GameShark)"
@@ -2102,9 +2102,17 @@ function CreateTabMain() {
     CreateReduxCheckBox -Name "RemoveCrouchStab"       -All             -Text "Remove Crouch Stab"       -Info "The Crouch Stab move is removed"                                                                                                                                -Credits "Garo-Mastah"
     CreateReduxCheckBox -Name "RemoveQuickSpin"        -All             -Text "Remove Magic Quick Spin"  -Info "The magic Quick Spin Attack move is removed`nIt's a regular Quick Spin Attack now instead"                                                                      -Credits "Admentus & Three Pendants"
     CreateReduxCheckBox -Name "InstantSpinAttack"      -All             -Text "Instant Spin Attack"      -Info "The Charged Spin Attack now charges instantly"                                                                                                                  -Credits "Aegiker"
-    CreateReduxCheckBox -Name "ClimbAnything"          -All             -Text "Climb Anything"           -Info "Climb most walls in the game" -Warning "Prone to softlocks, be careful"                                                                                         -Credits "Ported from Rando"
     CreateReduxCheckbox -Name "RemoveSpeedClamp"       -All             -Text "Remove Jump Speed Limit"  -Info "Removes the jumping speed limit just like in MM"                                                                                                                -Credits "Admentus (ROM) & Aegiker (GameShark)"
     
+
+
+    # GAMEPLAY (UNSTABLE) #
+
+    CreateReduxGroup    -Tag  "Gameplay"          -All   -Text "Gameplay Changes (Unstable)" 
+    CreateReduxCheckBox -Name "HookshotAnything"  -Adult -Text "Hookshot Anything"   -Info "Be able to hookshot most surfaces"                                       -Warning "Prone to softlocks, be careful" -Credits "Ported from Rando"
+    CreateReduxCheckBox -Name "ClimbAnything"     -All   -Text "Climb Anything"      -Info "Climb most walls in the game"                                            -Warning "Prone to softlocks, be careful" -Credits "Ported from Rando"
+    CreateReduxCheckBox -Name "DistantZTargeting" -All   -Text "Distant Z-Targeting" -Info "Allow to use Z-Targeting on enemies, objects and NPC's from any distance"                                          -Credits "Admentus"
+
 
 
     # RESTORE #
@@ -2489,10 +2497,7 @@ function CreateTabGraphics() {
     CreateReduxCheckBox -Name "BButton"      -All -Text "Hide B Button"           -Info "Hide the B Button"                                            -Credits "Admentus"
     CreateReduxCheckBox -Name "StartButton"  -All -Text "Hide Start Button"       -Info "Hide the Start Button"                                        -Credits "Admentus"
     CreateReduxCheckBox -Name "CUpButton"    -All -Text "Hide C-Up Button"        -Info "Hide the C-Up Button"                                         -Credits "Admentus"
-    CreateReduxCheckBox -Name "CLeftButton"  -All -Text "Hide C-Left Button"      -Info "Hide the C-Left Button"                                       -Credits "Admentus"
-    CreateReduxCheckBox -Name "CDownButton"  -All -Text "Hide C-Down Button"      -Info "Hide the C-Down Button"                                       -Credits "Admentus"
-    CreateReduxCheckBox -Name "CRightButton" -All -Text "Hide C-Right Button"     -Info "Hide the C-Right Button"                                      -Credits "Admentus"
-    CreateReduxCheckBox -Name "Hearts"       -All -Text "Hide Hearts"             -Info "Hide the Hearts display"                                      -Credits "Admentus"
+    CreateReduxCheckBox -Name "CButtons"     -All -Text "Hide C Buttons"          -Info "Hide the C Button used for items"                             -Credits "Admentus"
     CreateReduxCheckBox -Name "Magic"        -All -Text "Hide Magic"              -Info "Hide the Magic display"                                       -Credits "Admentus"
     CreateReduxCheckBox -Name "Rupees"       -All -Text "Hide Rupees"             -Info "Hide the the Rupees display"                                  -Credits "Admentus"
     CreateReduxCheckBox -Name "DungeonKeys"  -All -Text "Hide Keys"               -Info "Hide the Keys display shown in several dungeons and areas"    -Credits "Admentus"
