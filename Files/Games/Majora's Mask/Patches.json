@@ -52,12 +52,14 @@
 	"tooltip"			: "A Master Quest style romhack for Majora's Mask, offering a higher difficulty with remixed dungeons and some overworld changes{0}The path of progress has been changed to be in a different order",
 	"rev"				: [ "2A0A8ACB61538235BC1094D297FB6556", "AC0751DBC23AB2EC0C3144203ACA0003" ]
 }, {
-	"title"				: "The Legend of Zelda: Masked Quest (v4.3.0)",
+	"title"				: "The Legend of Zelda: Masked Quest (v4.3.0 Textpointer Fix)",
+	"options"			: 1,
 	"finalize"			: 0,
+	"dmaTable"			: "0 1 2 3 4 5 6 7 13 14 15 16 17 18 19 22 23 24 25 26 27 645 698 744 763 812 824 942 963 995 1089 1104 1111 1119 1120 1534 1535 1536 1537 1538 1539 1540 1541 1542 1543 1544 1545 1546 1547 1548 1549 1550 1551 1552 1553 1554 1555 1556 1557 1558 1559 1560 1561 1562 1563 1564 1565 1566 1567",
 	"command"			: "Force Remap D-Pad Force Downgrade",
 	"vc_title"			: "Zelda: Masked Quest",
 	"vc_gameID"			: "NURE",
-	"patch"				: "Compressed\\masked_quest.bps",
+	"patch"				: "Decompressed\\masked_quest.bps",
 	"output"			: "_masked_quest_patched",
 	"tooltip"			: "A Master Quest style romhack for Majora's Mask, offering a higher difficulty{0}The patch contains major changes to where progress is obtained throughout the overworld and dungeons{0}Includes some of the changes featured in the Redux / Randomizer patches like D-Pad support",
 	"rev"				: [ "2A0A8ACB61538235BC1094D297FB6556", "AC0751DBC23AB2EC0C3144203ACA0003" ]
