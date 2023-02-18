@@ -221,13 +221,6 @@ function ByteOptions() {
 
 
 
-    # SPEED #
-
-    if (IsValue -Elem $Redux.Gameplay.MovementSpeedChild -Not)   { ChangeBytes -Offset "B6D664" -Values (Get16Bit $Redux.Gameplay.MovementSpeedChild.Value) }
-    if (IsValue -Elem $Redux.Gameplay.MovementSpeedAdult -Not)   { ChangeBytes -Offset "B6D5BA" -Values (Get16Bit $Redux.Gameplay.MovementSpeedAdult.Value) }
-
-
-
     # GRAPHICS #
 
     if (IsChecked $Redux.Graphics.WidescreenAlt) {
@@ -2167,15 +2160,6 @@ function CreateTabMain() {
     CreateReduxCheckBox -Name "ItemSelect"        -All                 -Text "Translate Item Select"    -Info "Translates the Debug Inventory Select menu into English"                                                                                                         -Credits "GhostlyDark"
     CreateReduxCheckBox -Name "DefaultZTargeting" -All                 -Text "Default Hold Z-Targeting" -Info "Change the Default Z-Targeting option to Hold instead of Switch"                                                                                                 -Credits "Ported from Redux"
     CreateReduxCheckBox -Name "DiskDrive"         -All -Exclude "Dawn" -Text "Enable Disk Drive Saves"  -Info "Use the Disk Drive for Save Slots" -Warning "This option disables the use of non-Disk Drive save slots"                                                          -Credits "ZethN64, Sakura, Frostclaw, Steve(ToCoool) & GhostlyDark (ported)"
-    
-    
-
-    # SPEED #
-
-    CreateReduxGroup  -Tag  "Gameplay"           -All -Text "Speed" -Height 1.2
-    if ($GamePatch.title -like "*Gold Quest*") { $value = 50 } else { $value = 0 }
-    CreateReduxSlider -Name "MovementSpeedChild" -All -Column 1 -Default (550 + $value) -Min 300 -Max 1200 -Freq 50 -Small 25 -Large 50 -Text "Child Link's Speed" -Info "Adjust the movement speed for Child Link" -Credits "AndiiSyn"
-    CreateReduxSlider -Name "MovementSpeedAdult" -All -Column 3 -Default (600 + $value) -Min 300 -Max 1200 -Freq 50 -Small 25 -Large 50 -Text "Adult Link's Speed" -Info "Adjust the movement speed for Adult Link" -Credits "AndiiSyn"
 
 }
 
