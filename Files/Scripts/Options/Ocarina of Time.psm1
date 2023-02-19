@@ -124,7 +124,6 @@ function ByteOptions() {
     if (IsChecked $Redux.Gameplay.PushbackAttackingWalls)   { ChangeBytes -Offset "BDEAE0" -Values "2624000024850000"                                          }
     if (IsChecked $Redux.Gameplay.RemoveCrouchStab)         { ChangeBytes -Offset "BDE374" -Values "1000000D"                                                  }
     if (IsChecked $Redux.Gameplay.RemoveQuickSpin)          { ChangeBytes -Offset "C9C9E8" -Values "1000000E"                                                  }
-    if (IsChecked $Redux.Gameplay.InstantSpinAttack)        { ChangeBytes -Offset "AD97EC" -Values "2400"                                                      }
     if (IsChecked $Redux.Gameplay.RemoveSpeedClamp)         { ChangeBytes -Offset "BD9AF0" -Values "2400"                                                      }
     if (IsChecked $Redux.Gameplay.NoMagicArrowCooldown)     { ChangeBytes -Offset "AE85C9" -Values "62"                                                        }
     
@@ -188,18 +187,6 @@ function ByteOptions() {
     if (IsChecked $Redux.Fixes.DeathMountainOwl)       { ChangeBytes -Offset "E304F0" -Values "240E0001"                                                  }
     if (IsChecked $Redux.Fixes.SpiritTempleMirrors)    { ChangeBytes -Offset "E45678" -Values "0000";     ChangeBytes -Offset "E4567B" -Values "00"       }
     if (IsChecked $Redux.Fixes.Boomerang)              { ChangeBytes -Offset "F0F718" -Values "FC41C7FFFFFFFE38"                                          }
-    
-
-
-
-    # GLITCH FIXES #
-
-    if (IsChecked $Redux.Glitches.SwordlessEpona)   { ChangeBytes -Offset "AE4380" -Values "00000000000000000000000000000000"                          }
-    if (IsChecked $Redux.Glitches.Ocarina)          { ChangeBytes -Offset "BD1A98" -Values "A0E0069D"                                                  }
-    if (IsChecked $Redux.Glitches.BottleDupe)       { ChangeBytes -Offset "AEF303" -Values "82"                                                        }
-    if (IsChecked $Redux.Glitches.InfiniteSword)    { ChangeBytes -Offset "BE70B8" -Values "A2000843"; ChangeBytes -Offset "BE1388" -Values "A2000843" }
-    if (IsChecked $Redux.Glitches.ZTargetItem)      { ChangeBytes -Offset "A98B4B" -Values "38"                                                        }
-
 
 
 
@@ -2094,7 +2081,6 @@ function CreateTabMain() {
     CreateReduxCheckBox -Name "PushbackAttackingWalls" -All             -Text "Pushback Attacking Walls" -Info "Link is getting pushed back a bit when hitting the wall with the sword"                                                                                         -Credits "Admentus (ROM) & Aegiker (GameShark)"
     CreateReduxCheckBox -Name "RemoveCrouchStab"       -All             -Text "Remove Crouch Stab"       -Info "The Crouch Stab move is removed"                                                                                                                                -Credits "Garo-Mastah"
     CreateReduxCheckBox -Name "RemoveQuickSpin"        -All             -Text "Remove Magic Quick Spin"  -Info "The magic Quick Spin Attack move is removed`nIt's a regular Quick Spin Attack now instead"                                                                      -Credits "Admentus & Three Pendants"
-    CreateReduxCheckBox -Name "InstantSpinAttack"      -All             -Text "Instant Spin Attack"      -Info "The Charged Spin Attack now charges instantly"                                                                                                                  -Credits "Aegiker"
     CreateReduxCheckbox -Name "RemoveSpeedClamp"       -All             -Text "Remove Jump Speed Limit"  -Info "Removes the jumping speed limit just like in MM"                                                                                                                -Credits "Admentus (ROM) & Aegiker (GameShark)"
     
 
@@ -2111,12 +2097,12 @@ function CreateTabMain() {
     # RESTORE #
 
     CreateReduxGroup    -Tag  "Restore"             -All  -Text "Restore / Correct / Censor"
-    CreateReduxComboBox -Name "Blood"               -Base -Text "Blood Color"            -Info "Change the color of blood used for several monsters, Ganondorf and Ganon`nSeveral monsters have blue or green blood, while Ganondorf/Ganon has red blood" -Items @("Default", "Red blood for monsters", "Green blood for Ganondorf/Ganon", "Change both") -Credits "ShadowOne333 & Admentus"
-    CreateReduxCheckBox -Name "RedBlood"            -Alt  -Text "Red Blood"              -Info "Change the color of blood used for several monsters to red"                                                                                                               -Credits "Admentus"
-    CreateReduxCheckBox -Name "RupeeColors"         -All  -Text "Correct Rupee Colors"   -Info "Corrects the colors for the Purple (50) and Golden (200) Rupees"                                                                                                          -Credits "GhostlyDark"
-    CreateReduxCheckBox -Name "CowNoseRing"         -All  -Text "Restore Cow Nose Ring"  -Info "Restore the rings in the noses for Cows as seen in the Japanese release"                                                                                                  -Credits "ShadowOne333"
-    CreateReduxCheckBox -Name "CenterTextboxCursor" -All  -Text "Center Textbox Cursor"  -Info "Aligns the textbox cursor to the center of the screen"                                                                                                                    -Credits "BilonFullHDemon"
-    CreateReduxCheckBox -Name "FireTemple"          -Base -Text "Censor Fire Temple"     -Info "Censor Fire Temple theme as used in the Rev 2 ROM"                                                                                                                        -Credits "ShadowOne333"
+    CreateReduxComboBox -Name "Blood"               -Base -Text "Blood Color"            -Info "Change the color of blood used for several monsters, Ganondorf and Ganon`nSeveral monsters have blue or green blood, while Ganondorf/Ganon has red blood" -Items @("Default", "Red blood for monsters", "Green blood for Ganondorf/Ganon", "Change both")                  -Credits "ShadowOne333 & Admentus"
+    CreateReduxCheckBox -Name "RedBlood"            -Alt  -Text "Red Blood"              -Info "Change the color of blood used for several monsters to red"                                                                                                                                                                                                                -Credits "Admentus"
+    CreateReduxCheckBox -Name "RupeeColors"         -All  -Text "Correct Rupee Colors"   -Info "Corrects the colors for the Purple (50) and Golden (200) Rupees"                                                                                                                                                                                                           -Credits "GhostlyDark"
+    CreateReduxCheckBox -Name "CowNoseRing"         -All  -Text "Restore Cow Nose Ring"  -Info "Restore the rings in the noses for Cows as seen in the Japanese release"                                                                                                                                                                                                   -Credits "ShadowOne333"
+    CreateReduxCheckBox -Name "CenterTextboxCursor" -All  -Text "Center Textbox Cursor"  -Info "Aligns the textbox cursor to the center of the screen"                                                                                                                                                                                                                     -Credits "BilonFullHDemon"
+    CreateReduxCheckBox -Name "FireTemple"          -Base -Text "Censor Fire Temple"     -Info "Censor Fire Temple theme as used in the Rev 2 ROM"                                                                                                                                                                                                                         -Credits "ShadowOne333"
     CreateReduxCheckBox -Name "GerudoTextures"      -Base -Text "Censor Gerudo Textures" -Info "Censor Gerudo symbol textures used in the GameCube / Virtual Console releases`n- Disable the option to uncensor the Gerudo Texture used in the Master Quest dungeons`n- Player model textures such as the Mirror Shield might not get restored for specific custom models" -Credits "GhostlyDark & ShadowOne333"
 
 
@@ -2135,17 +2121,6 @@ function CreateTabMain() {
     CreateReduxCheckBox -Name "SpiritTempleMirrors"  -Base                    -Text "Spirit Temple Mirrors"               -Info "Fix a broken effect with the mirrors in the Spirit Temple"                                          -Credits "ZethN64, Sakura, Frostclaw, Steve(ToCoool) & GhostlyDark (ported)"
     CreateReduxCheckBox -Name "RemoveFishingPiracy"  -Base  -Expose  "Master" -Text "Remove Fishing Anti-Piracy" -Checked -Info "Removes the anti-piracy check for fishing that can cause the fish to always let go after 51 frames" -Credits "Ported from Rando"
     CreateReduxCheckBox -Name "Boomerang"            -Child -Exclude "Dawn"   -Text "Boomerang"                           -Info "Fix the gem color on the thrown boomerang"                                                          -Credits "Aria"
-
-
-
-    # GLITCH FIXES #
-
-    CreateReduxGroup    -Tag  "Glitches"       -All -Text "Glitch Fixes"
-    CreateReduxCheckBox -Name "SwordlessEpona" -All -Text "Swordless Epona Glitch Fix"    -Info "Fixes the glitch where you can't use the Bow when riding Epona without a Sword equipped" -Credits "ChriisTiian (debug) & Admentus (ported)"
-    CreateReduxCheckBox -Name "Ocarina"        -All -Text "Ocarina Glitch Fix"            -Info "Fixes the glitch where you can duplicate items using bottles and the Ocarina"            -Credits "ChriisTiian (debug) & Admentus (ported)"
-    CreateReduxCheckBox -Name "BottleDupe"     -All -Text "Bottle Dupe Glitch Fix"        -Info "Fixes the glitch where you can use bottles in the Pause Screen to duplicate items"       -Credits "ChriisTiian (debug) & Admentus (ported)"
-    CreateReduxCheckBox -Name "InfiniteSword"  -All -Text "Infinite Sword Glitch Fix"     -Info "Fixes the glitch where you can infinitely keep attacking with the sword"                 -Credits "ChriisTiian (debug) & Admentus (ported)"
-    CreateReduxCheckBox -Name "ZTargetItem"    -All -Text "Z-Target Item Pick Glitch Fix" -Info "Fixes the glitch where you can pick up items when Z-Targeting"                           -Credits "ChriisTiian (debug) & Admentus (ported)"
 
 
 
