@@ -1,4 +1,4 @@
-function PatchOptions() {
+ï»¿function PatchOptions() {
     
     # MAIN #
 
@@ -65,12 +65,14 @@ function CreateTabMain() {
     # MAIN #
 
     CreateReduxGroup    -Tag  "Main"                   -Text "Main"
-    CreateReduxCheckBox -Name "KakarikoShortcut"       -Text "Kakariko Shortcut"           -Info "Adds a shortcut to Kakariko Village for the Light and Dark World"                            -Credits "PowerPanda"
-    CreateReduxCheckBox -Name "MaxBombArrow"           -Text "Max Bombs & Arrows"          -Info "Maxes ammo amounts:`Total amount for bombs is 20 to 99´nTotal amount for arrows is 30 to 99" -Credits "Kazuto"
-    CreateReduxCheckBox -Name "MirrorWorksBothWorlds"  -Text "Mirror Works in Both Worlds" -Info "The Mirror can be used in both the Light and Dark Worlds"                                    -Credits "ShadowOne333 and his team"
-    CreateReduxCheckBox -Name "MoveBlocksIndefinitely" -Text "Move Blocks Indefinitely"    -Info "Blocks which can be pushed can now be pushed several times"                                  -Credits "ShadowOne333 and his team"
-    CreateReduxCheckBox -Name "RemoveLowHealthBeep"    -Text "Remove Low Health Beep"      -Info "Completely remove the constant beeping that plays when you’re low on hearts"                 -Credits "ShadowOne333 and his team"
-    CreateReduxCheckBox -Name "StartFullHearts"        -Text "Start at Full Hearts"        -Info "Makes Link spawn with a full set of hearts upon save load"                                   -Credits "ShadowOne333 and his team"
+    CreateReduxCheckBox -Name "KakarikoShortcut"       -Text "Kakariko Shortcut"            -Info "Adds a shortcut to Kakariko Village for the Light and Dark World"                            -Credits "PowerPanda"
+    CreateReduxCheckBox -Name "MaxBombArrow"           -Text "Max Bombs && Arrows"          -Info "Maxes ammo amounts:`Total amount for bombs is 20 to 99`nTotal amount for arrows is 30 to 99" -Credits "Kazuto"
+    CreateReduxCheckBox -Name "MirrorWorksBothWorlds"  -Text "Mirror Works in Both Worlds"  -Info "The Mirror can be used in both the Light and Dark Worlds"                                    -Credits "ShadowOne333 and his team"
+    CreateReduxCheckBox -Name "MoveBlocksIndefinitely" -Text "Move Blocks Indefinitely"     -Info "Blocks which can be pushed can now be pushed several times"                                  -Credits "ShadowOne333 and his team"
+    CreateReduxCheckBox -Name "RemoveLowHealthBeep"    -Text "Remove Low Health Beep"       -Info "Completely remove the constant beeping that plays when you're low on hearts"                 -Credits "ShadowOne333 and his team"
+    CreateReduxCheckBox -Name "StartFullHearts"        -Text "Start at Full Hearts"         -Info "Makes Link spawn with a full set of hearts upon save load"                                   -Credits "ShadowOne333 and his team"
+
+
 
     # TEXT #
 
@@ -102,15 +104,15 @@ function CreateTabRedux() {
     # TEXT #
 
     CreateReduxGroup    -Tag "Text"          -Text "Text"
-    CreateReduxCheckBox -Name "Retranslated" -Text "Retranslated Script" -Info "Provides a completely new and unique retranslation of the game’s script provided by the Translation Quest team that is primarily faithful to the Japanese text" -Credits "ChickenKnife, Dattebayo & nejimakipiyo"
+    CreateReduxCheckBox -Name "Retranslated" -Text "Retranslated Script" -Info "Provides a completely new and unique retranslation of the game's script provided by the Translation Quest team that is primarily faithful to the Japanese text" -Credits "ChickenKnife, Dattebayo & nejimakipiyo"
 
 
 
     # REVERT #
 
     CreateReduxGroup    -Tag  "Revert"             -Text "Original (Revert)"
-    CreateReduxCheckBox -Name "PinkHair"           -Text "Pink Hair"               -Info "Restores the Pink Hair for Link to that of the original game"                                   -Credits "ShadowOne333 and his team"
-    CreateReduxCheckBox -Name "DisableDashTurning" -Text "Disable Dash Turning"    -Info "Restore the Pegasus Boots dash mechanics to that of the original game"                          -Credits "ShadowOne333 and his team"
-    CreateReduxCheckBox -Name "LowBombArrow"       -Text "Original Bombs & Arrows" -Info "Restores ammo amounts:`Total amount for bombs is 10 to 50´nTotal amount for arrows is 30 to 70" -Credits "Kazuto"
+    CreateReduxCheckBox -Name "PinkHair"           -Text "Pink Hair"                -Info "Restores the Pink Hair for Link to that of the original game"                                   -Credits "ShadowOne333 and his team"
+    CreateReduxCheckBox -Name "DisableDashTurning" -Text "Disable Dash Turning"     -Info "Restore the Pegasus Boots dash mechanics to that of the original game"                          -Credits "ShadowOne333 and his team"
+    CreateReduxCheckBox -Name "LowBombArrow"       -Text "Original Bombs && Arrows" -Info "Restores ammo amounts:`Total amount for bombs is 10 to 50`nTotal amount for arrows is 30 to 70" -Credits "Kazuto"
 
 }

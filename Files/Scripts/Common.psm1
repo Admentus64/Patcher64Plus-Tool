@@ -585,7 +585,7 @@ function GamePath_Finish([object]$TextBox, [string]$Path) {
 #==================================================================================================================================================================================================================================================================
 function CalculateHashSum() {
     
-    if (!(IsSet $CreditsDialog)) { return }
+    if (!(IsSet $CreditsDialog) -or $GamePath -eq $null) { return }
 
     # Calculate checksum if Native Mode
     if (!$IsWiiVC) {
@@ -798,9 +798,9 @@ function IsColor([System.Windows.Forms.ColorDialog]$Elem, [string]$Color, [switc
     
     if (!(IsSet $Elem))         { return $False }
     if (!$Elem.Button.Active)   { return $False }
-    $C = (Get8Bit $Elem.Color.R) + (Get8Bit $Elem.Color.G) + (Get8Bit $Elem.Color.B)
-    if ($C -eq $Color)          { return !$Not  }
-    if ($C -ne $Color)          { return  $Not  }
+    $c = (Get8Bit $Elem.Color.R) + (Get8Bit $Elem.Color.G) + (Get8Bit $Elem.Color.B)
+    if ($c -eq $Color)          { return !$Not  }
+    if ($c -ne $Color)          { return  $Not  }
     return $False
 
 }
@@ -812,9 +812,9 @@ function IsDefaultColor([System.Windows.Forms.ColorDialog]$Elem, [switch]$Not) {
     
     if (!(IsSet $Elem))         { return $False }
     if (!$Elem.Button.Active)   { return $False }
-    $C = (Get8Bit $Elem.Color.R) + (Get8Bit $Elem.Color.G) + (Get8Bit $Elem.Color.B)
-    if ($C -eq $Elem.Default)   { return !$Not  }
-    if ($C -ne $Elem.Default)   { return  $Not  }
+    $c = (Get8Bit $Elem.Color.R) + (Get8Bit $Elem.Color.G) + (Get8Bit $Elem.Color.B)
+    if ($c -eq $Elem.Default)   { return !$Not  }
+    if ($c -ne $Elem.Default)   { return  $Not  }
     return $False
 
 }
@@ -836,6 +836,13 @@ function IsSet([object]$Elem, [int16]$Min, [int16]$Max, [int16]$MinLength, [int1
     return $True
 
 }
+
+
+
+#==============================================================================================================================================================================================
+function BoxCheck([object]$Elem)     { if ($Elem -ne $null) { $Elem.Checked = $True          } }
+function BoxUncheck([object]$Elem)   { if ($Elem -ne $null) { $Elem.Checked = $False         } }
+function BoxToggle([object]$Elem)    { if ($Elem -ne $null) { $Elem.Checked = !$Elem.Checked } }
 
 
 
@@ -1104,12 +1111,9 @@ function GetFileName([string]$Path, [string]$Description, [string[]]$FileNames) 
 #==============================================================================================================================================================================================
 function RemovePath([string]$Path) {
     
-    # Make sure the path isn't null to avoid errors
-    if ($Path -ne '') {
-        # Check to see if the path exists
-        if (TestFile -Path $Path -Container) {
-            # Remove the path
-            Remove-Item -LiteralPath $Path -Recurse -Force -ErrorAction 'SilentlyContinue' | Out-Null
+    if ($Path -ne '') { # Make sure the path isn't null to avoid errors
+        if (TestFile -Path $Path -Container) { # Check to see if the path exists
+            Remove-Item -LiteralPath $Path -Recurse -Force -ErrorAction 'SilentlyContinue' | Out-Null # Remove the path
         }
     }
 
@@ -1376,6 +1380,10 @@ Export-ModuleMember -Function IsLangIndex
 Export-ModuleMember -Function IsColor
 Export-ModuleMember -Function IsDefaultColor
 Export-ModuleMember -Function IsSet
+
+Export-ModuleMember -Function BoxCheck
+Export-ModuleMember -Function BoxUncheck
+Export-ModuleMember -Function BoxToggle
 
 Export-ModuleMember -Function CompareArray
 Export-ModuleMember -Function AddTextFileToTextbox

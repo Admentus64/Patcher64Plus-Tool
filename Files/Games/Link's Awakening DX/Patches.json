@@ -10,8 +10,10 @@
 	"rev"			: [ "7351DAA3C0A91D8F6FE2FBCCA6182478" ]
 }, {
 	"title"			: "Zelda 1 Port",
-	"patch"			: "Compressed\\zelda1.ips",
+	"patch" : [ {
+		"file"		: "Compressed\\zelda1.bps",
+		"rev"		: [ "07C211479386825042EFB4AD31BB525F", "CCBB56212E3DBAA9007D389A17E9D075", "7351DAA3C0A91D8F6FE2FBCCA6182478" ]
+	} ],
 	"output"		: "_zelda1_patched",
-	"tooltip"		: "{0}- Supported: Rev 2 (US/EU)",
-	"rev"			: [ "07C211479386825042EFB4AD31BB525F", "CCBB56212E3DBAA9007D389A17E9D075", "7351DAA3C0A91D8F6FE2FBCCA6182478" ]
+	"tooltip"		: "{0}- Supported: Rev 2 (US/EU)"
 } ]

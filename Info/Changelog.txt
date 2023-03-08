@@ -1,3 +1,9 @@
+v20.0.4
+- Added new options for MK64
+- Added new patch for ALttP
+- Fixed issue with loading checksum for non-exist WAD or ROM
+- Fixed issue with setting the default color for Tael
+
 v20.0.3
 - Removed several broken options for OoT
 

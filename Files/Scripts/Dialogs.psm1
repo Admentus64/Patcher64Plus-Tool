@@ -116,7 +116,6 @@ function CreateCreditsDialog() {
     $Credits.Sections += CreateTextBox -X (DPISize 40)              -Y (DPISize 30)             -Width ($CreditsDialog.Width - (DPISize 100)) -Height ($CloseButton.Top - (DPISize 40)) -ReadOnly -Multiline -AddTo $CreditsDialog -Tag "Info"     -TextFileFont
     $Credits.Sections += CreateTextBox -X $Credits.Sections[0].Left -Y $Credits.Sections[0].Top -Width $Credits.Sections[0].Width             -Height $Credits.Sections[0].Height       -ReadOnly -Multiline -AddTo $CreditsDialog -Tag "Credits"  -TextFileFont
     $Credits.Sections += CreateTextBox -X $Credits.Sections[0].Left -Y $Credits.Sections[0].Top -Width $Credits.Sections[0].Width             -Height $Credits.Sections[0].Height       -ReadOnly -Multiline -AddTo $CreditsDialog -Tag "GameID's" -TextFileFont
-    AddTextFileToTextbox -TextBox $Credits.Sections[2] -File $Files.text.gameID
     $Credits.Sections += CreatePanel   -X $Credits.Sections[0].Left -Y $Credits.Sections[0].Top -Width $Credits.Sections[0].Width             -Height $Credits.Sections[0].Height                            -AddTo $CreditsDialog -Tag "Misc"
     $Credits.Sections += CreatePanel   -X $Credits.Sections[0].Left -Y $Credits.Sections[0].Top -Width $Credits.Sections[0].Width             -Height $Credits.Sections[0].Height                            -AddTo $CreditsDialog -Tag "Checksum"
 
@@ -217,6 +216,7 @@ function CreateCreditsDialog() {
     $VerificationInfo.SupportField          = CreateTextBox -X $VerificationInfo.SupportText.Right -Y ($VerificationInfo.SupportText.Top - (DPISize 3)) -Width ($Credits.Sections[4].Width - $VerificationInfo.SupportText.Width - (DPISize 100)) -Height (DPISize 50) -Text "No ROM Selected" -AddTo $Credits.Sections[4]
     $VerificationInfo.SupportField.ReadOnly = $True
 
+    AddTextFileToTextbox -TextBox $Credits.Sections[2] -File $Files.text.gameID
     SetCreditsSections
     CalculateHashSum
 

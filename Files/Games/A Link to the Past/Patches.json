@@ -11,6 +11,12 @@
 	"options"	: 1,
 	"tooltip"	: "The regular A Link to the Past experience{0}With support for redux and additional options{0}Redux version: 10.1{0}- Supported: Rev 0 (US)"
 }, {
+	"title"		: "ALttP: Quick Commands (v1.0)",
+	"options"	: 1,
+	"patch"		: "Compressed\\quick_commands.ips",
+	"output"	: "_quick_commands_patched",
+	"tooltip"	: "Assign up to eight Y-Button items to quick access by holding the L or R buttons and pressing A, B, X or Y{0}With support for redux and additional options{0}- Supported: Rev 0 (US)"
+}, {
 	"title"		: "The Legend of Zelda: Parallel Worlds (v1.23)",
 	"vc_title"	: "Parallel Worlds",
 	"vc_gameID"	: "JAD1",

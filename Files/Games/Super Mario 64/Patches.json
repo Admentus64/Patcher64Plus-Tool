@@ -2,7 +2,7 @@
 	"title"			: "Super Mario 64",
 	"options"		: 1,
 	"rev"			: "20B854B239203BAF6C961B850A4A51A2",
-	"allow_extend"		: 1,
+	"allow_extend"	: 1,
 	"extend"		: 64,
 	"tooltip"		: "The regular Super Mario 64 experience{0}With support for additional options{0}- Supported: Rev 0 (US)"
 }, {

@@ -4,9 +4,9 @@
 --- Thanks to my Patreons ---
 - Tier 3:	Thanatos-Zero
 
-- Tier 2:	Amara, Craig, Chadlight Rutherford, Third M, Andrew Kinney, Peach, Petra
+- Tier 2:	Amara, Craig, Chadlight Rutherford, Third M, Andrew Kinney, Petra
 
-- Tier 1:	Yang, mad_scrub
+- Tier 1:	Yang, mad_scrub, redmaro
 
 
 --- Patcher64+ Tool ---
@@ -41,7 +41,6 @@
 - Garo-Mastah
 - zel
 - Third M
-- ChriisTiian
 - Three Pendants
 - Jared Johnson
 - ZethN64
@@ -752,6 +751,9 @@ Other:			Admentus & gamemasterplc
 
 --- Retranslation Quest ---
 - Chicken Knife, Dattebayo, nejimakipiyo
+
+--- Quick Commands ---
+- chillyfeez
 
 --- Parallel Worlds ---
 - Directors:				Euclid, SePH, qwertymodo
