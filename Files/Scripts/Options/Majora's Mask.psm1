@@ -9,6 +9,14 @@
     if ( (IsChecked $Redux.Graphics.Widescreen) -and !$Patches.Redux.Checked)   { Add-Content $Files.dmaTable "0 1 2 3 4 5 6 7 -8 -9 15 16 17 18 19 20 -21 22 -24 25 26 27 28 29 30 -652 1127 -1540 -1541 -1542 -1543 -1544 -1545 -1546 -1547 -1548 -1549 -1550 -1551 1552 1553 1554 1555 1556 1557 1558 1559 1560 1561 1562 1563 1564 1565 1566 1567" }
     if ( (IsChecked $Redux.Graphics.Widescreen) -and  $Patches.Redux.Checked)   { Add-Content $Files.dmaTable "0 1 2 3 4 5 6 7 -8 -9 15 16 17 18 19 20 -21 22 -24 25 26 27 28 29 30 -652 1127 -1540 -1541 -1542 -1543 1544 1545 1546 1547 1548 1549 1550 -1551 1552 1553 1554 1555 1556 1557 1558 1559 1560 1561 1562 1563 1564 1565 1566 1567" }
 
+
+
+    # SCENES #
+
+    if (IsChecked $Redux.Gameplay.CustomScenes) {
+        if (TestFile $GameFiles.scenesPatch) { ApplyPatch -Patch $GameFiles.scenesPatch -FullPath }
+    }
+
 }
 
 
@@ -56,7 +64,7 @@ function ByteOptions() {
     
     if (IsChecked $Redux.Gameplay.FierceDeityAnywhere) {
         ChangeBytes -Offset "BA76D0"  -Values "1000";     ChangeBytes -Offset "E384D8"  -Values "284100021420"; ChangeBytes -Offset "E7A852"  -Values "CA8480A0CA84"; ChangeBytes -Offset "F4D3A4"  -Values "5441002B24060001"; ChangeBytes -Offset "10632C0" -Values "286100021020000200000000A48702C8"
-        ChangeBytes -Offset "1068960" -Values "00000000"; ChangeBytes -Offset "1069B60" -Values "24080002";     ChangeBytes -Offset "2704FF7" -Values "A9";           ChangeBytes -Offset "2704FFD" -Values "A9"
+        ChangeBytes -Offset "1068960" -Values "00000000"; ChangeBytes -Offset "1069B60" -Values "24080002";     ChangeBytes -Offset "2704FF7" -Values "A9";           ChangeBytes -Offset "2704FFD" -Values "A9";               ChangeBytes -Offset "C564D8"  -Values "02"
         ChangeBytes -Offset "1069B6C" -Values "2841000301014022A4E802C2A4F902CE00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
     }
 
@@ -359,14 +367,14 @@ function ByteOptions() {
         MultiplyBytes -Offset "D4E07F" -Factor $multi; MultiplyBytes -Offset "E0790F" -Factor $multi; MultiplyBytes -Offset "F94A00" -Factor $multi # ReDead / Gibdo, Stalchild, Poe
         MultiplyBytes -Offset "D2F07C" -Factor $multi; MultiplyBytes -Offset "D6CFB8" -Factor $multi; MultiplyBytes -Offset "F5B7FC" -Factor $multi # Deku Baba, Wilted Deku Baba, Dexihand
         MultiplyBytes -Offset "FC3A5F" -Factor $multi; MultiplyBytes -Offset "EDBA17" -Factor $multi; MultiplyBytes -Offset "E9BD87" -Factor $multi # Deep Python, Skullfish, Desbreko
+        MultiplyBytes -Offset "D47754" -Factor $multi; MultiplyBytes -Offset "D76388" -Factor $multi; MultiplyBytes -Offset "D74167" -Factor $multi # Beamos, Like Like (Weak), Like Like (Strong)
         MultiplyBytes -Offset "D13750" -Factor $multi; MultiplyBytes -Offset "D1375C" -Factor $multi # Peahat, Peahat Larva
         MultiplyBytes -Offset "D55BDC" -Factor $multi; MultiplyBytes -Offset "D55C08" -Factor $multi # Skullwalltula, Golden Skullwalltula
         MultiplyBytes -Offset "CF3514" -Factor $multi; MultiplyBytes -Offset "CF0A4B" -Factor $multi # Dodongo (Small / Big)
         MultiplyBytes -Offset "D10D3C" -Factor $multi; MultiplyBytes -Offset "D0DBDB" -Factor $multi # Red Tektite, Blue Tektite
         MultiplyBytes -Offset "CF05CC" -Factor $multi; MultiplyBytes -Offset "D4DA9C" -Factor $multi # Wallmaster, Floormaster
-        MultiplyBytes -Offset "E0336B" -Factor $multi; MultiplyBytes -Offset "E07028" -Factor $multi # Wolfos
+        MultiplyBytes -Offset "E0336B" -Factor $multi; MultiplyBytes -Offset "E07028" -Factor $multi # Gray Wolfos / White Wolfos
         MultiplyBytes -Offset "D3D9DC" -Factor $multi; MultiplyBytes -Offset "D3AFBC" -Factor $multi # Blue Bubble, Red Bubble
-        MultiplyBytes -Offset "D47754" -Factor $multi; MultiplyBytes -Offset "D76388" -Factor $multi # Beamos, Like-Like
         MultiplyBytes -Offset "D5E0E3" -Factor $multi; MultiplyBytes -Offset "F3E82C" -Factor $multi # Shell Blade, Snapper
         MultiplyBytes -Offset "D3914C" -Factor $multi; MultiplyBytes -Offset "CEACD8" -Factor $multi # Mad Scrub, Octorok
         MultiplyBytes -Offset "F7ED78" -Factor $multi; MultiplyBytes -Offset "EC1F2C" -Factor $multi # Eeno, Real Bombchu
@@ -434,12 +442,12 @@ function ByteOptions() {
     elseif   (IsText -Elem $Redux.Hero.Damage -Compare "8x Damage")                                                      { ChangeBytes -Offset "CADEC2" -Values "2B 43" }
     elseif   (IsText -Elem $Redux.Hero.Damage -Compare "OHKO Mode")                                                      { ChangeBytes -Offset "CADEC2" -Values "2A 03" }
 
-    if     (IsText -Elem $Redux.Hero.MagicUsage -Compare "2x Magic Usage")   { ChangeBytes -Offset "BAC306" -Values "2C","40" }
-    elseif (IsText -Elem $Redux.Hero.MagicUsage -Compare "4x Magic Usage")   { ChangeBytes -Offset "BAC306" -Values "2C","80" }
-    elseif (IsText -Elem $Redux.Hero.MagicUsage -Compare "8x Magic Usage")   { ChangeBytes -Offset "BAC306" -Values "2C","C0" }
-    if     (IsText -Elem $Redux.Hero.MagicUsage -Compare "2x Item Usage")    { ChangeBytes -Offset "BABF5E" -Values "2C","40" }
-    elseif (IsText -Elem $Redux.Hero.MagicUsage -Compare "4x Item Usage")    { ChangeBytes -Offset "BABF5E" -Values "2C","80" }
-    elseif (IsText -Elem $Redux.Hero.MagicUsage -Compare "8x Item Usage")    { ChangeBytes -Offset "BABF5E" -Values "2C","C0" }
+    if     (IsText -Elem $Redux.Hero.MagicUsage -Compare "2x Magic Usage")   { ChangeBytes -Offset "BAC306" -Values "2C 40" }
+    elseif (IsText -Elem $Redux.Hero.MagicUsage -Compare "4x Magic Usage")   { ChangeBytes -Offset "BAC306" -Values "2C 80" }
+    elseif (IsText -Elem $Redux.Hero.MagicUsage -Compare "8x Magic Usage")   { ChangeBytes -Offset "BAC306" -Values "2C C0" }
+    if     (IsText -Elem $Redux.Hero.MagicUsage -Compare "2x Item Usage")    { ChangeBytes -Offset "BABF5E" -Values "2C 40" }
+    elseif (IsText -Elem $Redux.Hero.MagicUsage -Compare "4x Item Usage")    { ChangeBytes -Offset "BABF5E" -Values "2C 80" }
+    elseif (IsText -Elem $Redux.Hero.MagicUsage -Compare "8x Item Usage")    { ChangeBytes -Offset "BABF5E" -Values "2C C0" }
 
     if (IsIndex -Elem $Redux.Hero.DamageEffect -Not) {
         ChangeBytes -Offset "B79A48" -Values "24"
@@ -483,7 +491,18 @@ function ByteOptions() {
         ChangeBytes -Offset "E76F38"  -Values "00 00 00 00"; ChangeBytes -Offset "E772DC"  -Values "24 05 06 4A"; ChangeBytes -Offset "E77CCC" -Values "24 05 06 4A" # Disable Bomb Shop
     }
 
-    if (IsChecked $Redux.Hero.PermanentKeese) { ChangeBytes -Offset "CF3B58" -Values "00 00 00 00 00 00 00 00"; ChangeBytes -Offset "CF3B60" -Values "00 00 00 00 00 00 00 00 00 00 00 00" }
+    if (IsChecked $Redux.Hero.PermanentKeese)       { ChangeBytes -Offset "CF3B58" -Values "00 00 00 00 00 00 00 00"; ChangeBytes -Offset "CF3B60" -Values "00 00 00 00 00 00 00 00 00 00 00 00" }
+    if (IsChecked $Redux.Hero.FasterIronKnuckles)   { ChangeBytes -Offset "D9CEEC" -Values "14 40 00 04";             ChangeBytes -Offset "D9CEFC" -Values "10 40 00 03"                         }
+    if (IsChecked $Redux.Hero.LargeIronKnuckles)    { ChangeBytes -Offset "D9F21F" -Values "1D";                      ChangeBytes -Offset "D9F21A" -Values "1C"                                  }
+
+
+
+    # MAGIC #
+
+    if (IsDefault $Redux.Magic.FireArrow  -Not)   { ChangeBytes -Offset "CD7428" -Values (Get8Bit $Redux.Magic.FireArrow.Text)  }
+    if (IsDefault $Redux.Magic.IceArrow   -Not)   { ChangeBytes -Offset "CD7429" -Values (Get8Bit $Redux.Magic.IceArrow.Text)   }
+    if (IsDefault $Redux.Magic.LightArrow -Not)   { ChangeBytes -Offset "CD742A" -Values (Get8Bit $Redux.Magic.LightArrow.Text) }
+    if (IsDefault $Redux.Magic.DekuBubble -Not)   { ChangeBytes -Offset "CD742B" -Values (Get8Bit $Redux.Magic.DekuBubble.Text) }
 
 
 
@@ -1092,9 +1111,9 @@ function CreateTabMain() {
     CreateReduxCheckBox -All -Name "FormItems"            -Text "Use Items With Mask Forms" -Info "Deku Link, Goron Link and Zora Link are able to use a few items such as Bombs and Deku Sticks"                                                                   -Credits "bry_dawg02"
     CreateReduxCheckBox -All -Name "SunSong"              -Text "Sun's Song"                -Info "Unlocks the Sun's Song when creating a new save file, which skips time to the next day or night"                                                                 -Credits "Ported from Rando"
     CreateReduxCheckBox -All -Name "SariaSong"            -Text "Saria's Song"              -Info "Unlocks Saria's Song when creating a new save file, which plays the Final Hours music theme until the next area"                                                 -Credits "Ported from Rando"
-    CreateReduxCheckBox -All -Name "HookshotAnything"     -Text "Hookshot Anything"         -Info "Be able to hookshot most surfaces" -Warning "Prone to softlocks, be careful"                                                                                     -Credits "Ported from Rando"
-    CreateReduxCheckBox -All -Name "NoMagicArrowCooldown" -Text "No Magic Arrow Cooldown"   -Info "Be able to shoot magic arrows without delay inbetween" -Warning "Prone to crashes if switching arrow types to quickly"                                           -Credits "Ported from Rando"
-    CreateReduxCheckBox -All -Name "FierceDeityAnywhere"  -Text "Fierce Deity Anywhere"     -Info "The Fierce Deity Mask can be used anywhere now"                                                                                                                  -Credits "Ported from Rando"
+    CreateReduxCheckBox -All -Name "HookshotAnything"     -Text "Hookshot Anything"         -Info "Be able to hookshot most surfaces"                               -Warning "Prone to softlocks, be careful"                                                       -Credits "Ported from Rando"
+    CreateReduxCheckBox -All -Name "NoMagicArrowCooldown" -Text "No Magic Arrow Cooldown"   -Info "Be able to shoot magic arrows without a delay between each shot" -Warning "Prone to crashes upon switching arrow types (Redux feature) to quickly"               -Credits "Ported from Rando"
+    CreateReduxCheckBox -All -Name "FierceDeityAnywhere"  -Text "Fierce Deity Anywhere"     -Info "The Fierce Deity Mask can be used anywhere now´nApplies additional fixes to make the form more usable, such as being able to push blocks"                        -Credits "Ported from Rando"
     CreateReduxComboBox -All -Name "LinkJumpAttack"       -Text "Link Jump Attack"          -Info "Set the Jump Attack animation for Link in his Hylian Form" -Items @("Jumpslash", "Frontflip", "Beta Frontflip", "Beta Backflip", "Spin Slash", "Zora Jumpslash") -Credits "Admentus (ported), SoulofDeity & Aegiker"
     CreateReduxComboBox -All -Name "ZoraJumpAttack"       -Text "Zora Jump Attack"          -Info "Set the Jump Attack animation for Link in his Zora Form"   -Items @("Zora Jumpslash", "Beta Frontflip", "Beta Backflip", "Spin Slash")                           -Credits "Admentus (ported) & Aegiker"
 
@@ -1138,6 +1157,13 @@ function CreateTabMain() {
     CreateReduxCheckBox -All -Name "MountainVillage"   -Text "Mountain Village" -Info "Fix unloaded actors for unused cutscenes in the Spring version of the Mountain Village" -Credits "Chez Cousteau"
     CreateReduxCheckBox -All -Name "IkanaCanyon"       -Text "Ikana Canyon"     -Info "Fix transitions and unloaded actors for unused cutscenes in Ikana Canyon"               -Credits "Chez Cousteau"
     
+
+
+    # CUSTOM SCENES #
+
+    CreateReduxGroup    -Tag  "Gameplay"     -Text "Custom Scenes"
+    CreateReduxCheckBox -Name "CustomScenes" -Text "Custom Scenes" -Info "Patch in custom scenes generated by the Actor Editor`nOnly works if the Actor Editor generated a patch" -Credits "Admentus"
+
 }
 
 
@@ -1337,7 +1363,7 @@ function CreateTabGraphics() {
     CreateReduxCheckBox -All -Name "BButton"        -Text "Hide B Button"        -Info "Hide the B Button"                                                                              -Credits "Marcelo20XX"
     CreateReduxCheckBox -All -Name "CButtons"       -Text "Hide C Buttons"       -Info "Hide the C Buttons"                                                                             -Credits "Marcelo20XX"
     CreateReduxCheckBox -All -Name "Hearts"         -Text "Hide Hearts"          -Info "Hide the Hearts display"                                                                        -Credits "Marcelo20XX"
-    CreateReduxCheckBox -All -Name "Magic"          -Text "Hide Magic && Rupees" -Info "Hide the Magic & Rupees display"                                                                -Credits "Marcelo20XX"
+    CreateReduxCheckBox -All -Name "Magic"          -Text "Hide Magic & Rupees"  -Info "Hide the Magic & Rupees display"                                                                -Credits "Marcelo20XX"
     CreateReduxCheckBox -All -Name "AreaTitle"      -Text "Hide Area Title Card" -Info "Hide the area title that displays when entering a new area"                                     -Credits "Marcelo20XX"
     CreateReduxCheckBox -All -Name "Clock"          -Text "Hide Clock"           -Info "Hide the Clock display"                                                                         -Credits "Marcelo20XX"
     CreateReduxCheckBox -All -Name "CountdownTimer" -Text "Hide Countdown Timer" -Info "Hide the countdown timer that displays during the final hours before the Moon will hit Termina" -Credits "Marcelo20XX"
@@ -1410,24 +1436,25 @@ function CreateTabDifficulty() {
     $items1 = @("1 Monster HP","0.5x Monster HP", "1x Monster HP", "1.5x Monster HP", "2x Monster HP", "2.5x Monster HP", "3x Monster HP", "3.5x Monster HP", "4x Monster HP", "5x Monster HP")
     $items2 = @("1 Mini-Boss HP", "0.5x Mini-Boss HP", "1x Mini-Boss HP", "1.5x Mini-Boss HP", "2x Mini-Boss HP", "2.5x Mini-Boss HP", "3x Mini-Boss HP", "3.5x Mini-Boss HP", "4x Mini-Boss HP", "5x Mini-Boss HP")
     $items3 = @("1 Boss HP", "0.5x Boss HP", "1x Boss HP", "1.5x Boss HP", "2x Boss HP", "2.5x Boss HP", "3x Boss HP", "3.5x Boss HP", "4x Boss HP", "5x Boss HP")
-
-    CreateReduxGroup    -All -Tag  "Hero" -Text "Hero Mode"
-    CreateReduxComboBox -All -Name "MonsterHP"  -Text "Monster HP"   -Items $items1 -Default 3 -Info "Set the amount of health for monsters"                                                                                       -Credits "Admentus" -Warning "Some enemies are missing"
-    CreateReduxComboBox -All -Name "MiniBossHP" -Text "Mini-Boss HP" -Items $items2 -Default 3 -Info "Set the amount of health for elite monsters and mini-bosses"                                                                 -Credits "Admentus" -Warning "Some Mini-bosses are missing"
-    CreateReduxComboBox -All -Name "BossHP"     -Text "Boss HP"      -Items $items3 -Default 3 -Info "Set the amount of health for bosses"                                                                                         -Credits "Admentus" -Warning "Goht (phases 3) and Gyorg (phase 2) are missing"
-
     if ($GamePatch.title -like "*Master Quest*") { $default = 2 } else { $default = 1 }
 
+    CreateReduxGroup    -All -Tag  "Hero" -Text "Hero Mode"
+    CreateReduxComboBox -All -Name "MonsterHP"  -Text "Monster HP"   -Items $items1 -Default 3                                                        -Info "Set the amount of health for monsters"                                -Credits "Admentus" -Warning "Some enemies are missing"
+    CreateReduxComboBox -All -Name "MiniBossHP" -Text "Mini-Boss HP" -Items $items2 -Default 3                                                        -Info "Set the amount of health for elite monsters and mini-bosses"          -Credits "Admentus" -Warning "Some Mini-bosses are missing"
+    CreateReduxComboBox -All -Name "BossHP"     -Text "Boss HP"      -Items $items3 -Default 3                                                        -Info "Set the amount of health for bosses"                                  -Credits "Admentus" -Warning "Goht (phases 3) and Gyorg (phase 2) are missing"
     CreateReduxComboBox -All -Name "Damage"     -Text "Damage"       -Items @("1x Damage", "2x Damage", "4x Damage", "8x Damage", "OHKO Mode")        -Info "Set the amount of damage you receive`nOHKO Mode = You die in one hit" -Credits "Admentus" -Default $default
     CreateReduxComboBox -All -Name "Recovery"   -Text "Recovery"     -Items @("1x Recovery", "1/2x Recovery", "1/4x Recovery", "0x Recovery")         -Info "Set the amount health you recovery from Recovery Hearts"              -Credits "Admentus"
     CreateReduxComboBox -All -Name "MagicUsage" -Text "Magic Usage"  -Items @("1x Magic Usage", "2x Magic Usage", "4x Magic Usage", "8x Magic Usage") -Info "Set the amount of times magic is consumed at"                         -Credits "Admentus"
     
-    $items1 = $items2= $items3 = $default = $null
-
     $Redux.Hero.Damage.Add_SelectedIndexChanged({ EnableElem -Elem $Redux.Hero.Recovery -Active ($this.Text -ne "OHKO Mode") })
     EnableElem -Elem $Redux.Hero.Recovery -Active ($Redux.Hero.Damage.Text -ne "OHKO Mode")
 
-    CreateReduxComboBox -All -Name "Ammo"     -Column 1 -Row 3 -Text "Ammo Usage" -Items @("1x Ammo Usage", "2x Ammo Usage", "4x Ammo Usage", "8x Ammo Usage") -Info "Set the amount of times ammo is consumed at"                                                 -Credits "Admentus"
+
+
+    # HERO MODE #
+
+    CreateReduxGroup    -All -Tag  "Hero" -Text "Hero Mode"
+    CreateReduxComboBox -All -Name "Ammo"                      -Text "Ammo Usage" -Items @("1x Ammo Usage", "2x Ammo Usage", "4x Ammo Usage", "8x Ammo Usage") -Info "Set the amount of times ammo is consumed at"                                                 -Credits "Admentus"
     CreateReduxComboBox -All -Name "DamageEffect"              -Text "Damage Effect"               -Items @("Default", "Burn", "Freeze", "Shock", "Knockdown") -Info "Add an effect when damaged"                                                                  -Credits "Ported from Rando"
     CreateReduxComboBox -All -Name "ClockSpeed"                -Text "Clock Speed"                 -Items @("Default", "1/3", "2/3", "2x", "3x", "6x", "10x")  -Info "Set the speed at which time is progressing"                                                  -Credits "Ported from Rando"
     CreateReduxComboBox -All -Name "ItemDrops"                 -Text "Item Drops"                  -Items @("Default", "No Hearts", "Only Rupees", "Nothing")  -Info "Set the items that will drop from grass, pots and more"                                      -Credits "Admentus, Third M & BilonFullHDemon"
@@ -1436,6 +1463,18 @@ function CreateTabDifficulty() {
     CreateReduxCheckBox -All -Name "DeathIsMoonCrash"          -Text "Death is Moon Crash"                                                                     -Info "If you die, the moon will crash`nThere are no continues anymore"                             -Credits "Ported from Rando"
     CreateReduxCheckBox      -Name "CloseBombShop"             -Text "Close Bomb Shop"                                                                         -Info "The bomb shop is now closed and the bomb bag is now found somewhere else"                    -Credits "Admentus (ported) & DeathBasket (ROM hack)"
     CreateReduxCheckBox -All -Name "PermanentKeese"            -Text "Permanent Keese"                                                                         -Info "Fire Keese or Ice Keese won't turn into regular Keese after hitting Link"                    -Credits "Garo-Mastah"
+    CreateReduxCheckBox -All -Name "FasterIronKnuckles"        -Text "Faster Iron Knuckles"                                                                    -Info "Iron Knuckles now always run, even when in their armored form"                               -Credits "Garo-Mastah"
+    CreateReduxCheckBox -All -Name "LargeIronKnuckles"         -Text "Large Iron Knuckles"                                                                     -Info "Iron Knuckles now now much bigger"                                                           -Credits "Garo-Mastah"
+
+
+
+    # MAGIC #
+
+    CreateReduxGroup   -All -Tag  "Magic"      -Text "Magic Costs"
+    CreateReduxTextBox -All -Name "FireArrow"  -Text "Fire Arrow"  -Value 4 -Max 96 -Info "Set the magic cost for using Fire Arrows´n48 is the maximum amount of the standard magic meter´n96 is the maximum amount of the double magic meter"  -Credits "Garo-Mastah"
+    CreateReduxTextBox -All -Name "IceArrow"   -Text "Ice Arrow"   -Value 4 -Max 96 -Info "Set the magic cost for using Ice Arrows´n48 is the maximum amount of the standard magic meter´n96 is the maximum amount of the double magic meter"   -Credits "Garo-Mastah"
+    CreateReduxTextBox -All -Name "LightArrow" -Text "Light Arrow" -Value 8 -Max 96 -Info "Set the magic cost for using Light Arrows´n48 is the maximum amount of the standard magic meter´n96 is the maximum amount of the double magic meter" -Credits "Garo-Mastah"
+    CreateReduxTextBox -All -Name "DekuBubble" -Text "Deku Bubble" -Value 2 -Max 96 -Info "Set the magic cost for using Deku Bubbles´n48 is the maximum amount of the standard magic meter´n96 is the maximum amount of the double magic meter" -Credits "retroben"
 
 
 

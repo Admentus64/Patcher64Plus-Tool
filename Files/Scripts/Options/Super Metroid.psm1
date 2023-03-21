@@ -2,9 +2,9 @@ function PatchOptions() {
     
     # GRAPHICS #
 
-    if (IsChecked $Redux.Graphics.Widescreen)           { ApplyPatch -Patch "Compressed\widescreen.ips"; Copy-Item -LiteralPath ($GameFiles.compressed + "\widescreen.bso") -Destination ($ROMFile.Patched.replace($ROMFile.Extension, ".bso")) -Force }
-    if (IsChecked $Redux.Graphics.RedesignedSamus)      { ApplyPatch -Patch "Compressed\redesigned_samus.ips" }
-    if (IsChecked $Redux.Graphics.DeathCensor)          { ApplyPatch -Patch "Compressed\death_censor.ips"     }
+    if (IsChecked $Redux.Graphics.Widescreen)        { ApplyPatch -Patch "Compressed\widescreen.ips"; Copy-Item -LiteralPath ($GameFiles.compressed + "\widescreen.bso") -Destination ($ROMFile.Patched.replace($ROMFile.Extension, ".bso")) -Force }
+    if (IsChecked $Redux.Graphics.RedesignedSamus)   { ApplyPatch -Patch "Compressed\redesigned_samus.ips" }
+    if (IsChecked $Redux.Graphics.DeathCensor)       { ApplyPatch -Patch "Compressed\death_censor.ips"     }
 
 
 
@@ -22,6 +22,12 @@ function PatchOptions() {
 #==============================================================================================================================================================================================
 function PatchReduxOptions() {
     
+    # GAMEPLAY #
+
+    if (IsChecked $Redux.Gameplay.HeavyPhysics) { ApplyPatch -Patch "Compressed\heavy_physics.ips" }
+
+
+
     # ORIGINAL #
 
     if (IsChecked $Redux.Revert.OriginalDemos) {
@@ -32,13 +38,8 @@ function PatchReduxOptions() {
     if (IsChecked $Redux.Revert.Xray)             { ApplyPatch -Patch "Compressed\Original\x_ray.ips"           }
     if (IsChecked $Redux.Revert.ElevatorSpeed)    { ApplyPatch -Patch "Compressed\Original\elevator_speed.ips"  }
     if (IsChecked $Redux.Revert.ClassicBooster)   { ApplyPatch -Patch "Compressed\Original\classic_booster.ips" }
+    if (IsChecked $Redux.Revert.BeamCooldowns)    { ApplyPatch -Patch "Compressed\Original\beam_cooldowns.ips"  }
     
-    
-
-    # GAMEPLAY #
-
-    if (IsChecked $Redux.Gameplay.HeavyPhysics)   { ApplyPatch -Patch "Compressed\heavy_physics.ips" }
-
 }
 
 
@@ -46,7 +47,7 @@ function PatchReduxOptions() {
 #==============================================================================================================================================================================================
 function CreateOptions() {
     
-    CreateOptionsDialog -Columns 2 -Height 350
+    CreateOptionsDialog -Columns 3 -Height 315
 
 }
 
@@ -66,10 +67,10 @@ function CreateTabMain() {
     # GAMEPLAY #
 
     CreateReduxGroup    -Tag  "Gameplay"                  -Text "Gameplay"
-    CreateReduxCheckBox -Name "FixedTourianUnlockedDoors" -Text "Fixed Unlocked Doors" -Info "Makes it so that the Tourian doors now let you go back to Crateria normally`nThis patch is already implemented into Redux"     -Credits "ShadowOne333 and this team"
-    CreateReduxCheckBox -Name "SaveStationsRefill"        -Text "Save Stations Refill" -Info "Save Stations will now refill both Energy and all Weapons"                                                                     -Credits "ShadowOne333 and this team"
-    CreateReduxCheckBox -Name "SkipCeres"                 -Text "Skip Ceres"           -Info "Skip the Ceres Station sequence at the beginning, and start off directly on Planet Zebes' Landing Site on New Game"            -Credits "ShadowOne333 and this team"
-    CreateReduxCheckBox -Name "SpazerPlasaMix"            -Text "Spazer Plasa Mix"     -Info "Be able to combine both the Spazer Beam alongside the Plasma Beam" -Warning "There are graphical issues when using this patch" -Credits "ShadowOne333 and this team"
+    CreateReduxCheckBox -Name "FixedTourianUnlockedDoors" -Text "Fixed Unlocked Doors" -Info "Makes it so that the Tourian doors now let you go back to Crateria normally`nThis patch is already implemented into Redux"     -Credits "Smiley"
+    CreateReduxCheckBox -Name "SaveStationsRefill"        -Text "Save Stations Refill" -Info "Save Stations will now refill both Energy and all Weapons"                                                                     -Credits "Redux Project"
+    CreateReduxCheckBox -Name "SkipCeres"                 -Text "Skip Ceres"           -Info "Skip the Ceres Station sequence at the beginning, and start off directly on Planet Zebes' Landing Site on New Game"            -Credits "Redux Project"
+    CreateReduxCheckBox -Name "SpazerPlasaMix"            -Text "Spazer Plasa Mix"     -Info "Be able to combine both the Spazer Beam alongside the Plasma Beam" -Warning "There are graphical issues when using this patch" -Credits "Redux Project"
 
 }
 
@@ -77,19 +78,20 @@ function CreateTabMain() {
 #==============================================================================================================================================================================================
 function CreateTabRedux() {
     
-    # ORIGINAL #
-
-    CreateReduxGroup    -Tag  "Revert"         -Text "Original (Revert)"
-    CreateReduxCheckBox -Name "Xray"           -Text "X-Ray"           -Info "Restores the original Super Metroid X-Ray Visor width"                         -Credits "ShadowOne333 and this team"
-    CreateReduxCheckBox -Name "ElevatorSpeed"  -Text "Elevator Speed"  -Info "Restores the original Super Metroid elevator speeds"                           -Credits "ShadowOne333 and this team"
-    CreateReduxCheckBox -Name "ClassicBooster" -Text "Classic Booster" -Info "Restores the original Super Metroid speed at which the shinepark is activated" -Credits "ShadowOne333 and this team"
-    CreateReduxCheckBox -Name "OriginalDemos"  -Text "Original Demos"  -Info "Restores the original Super Metroid demo title screens"                        -Credits "ShadowOne333 and this team"
-
-
-
     # GAMEPLAY #
 
     CreateReduxGroup    -Tag  "Gameplay"     -Text "Gameplay"
-    CreateReduxCheckBox -Name "HeavyPhysics" -Text "Heavy Physics [!]" -Info "This will make it so that Samus now lands faster and with more gravity to her, similar to that of the GBA Metroids`n[!]This breaks the Demo sequences`n[!]In-game cutscenes and main gameplay still play out normally" -Credits "ShadowOne333 and this team"
+    CreateReduxCheckBox -Name "HeavyPhysics" -Text "Heavy Physics" -Info "This will make it so that Samus now lands faster and with more gravity to her, similar to that of the GBA Metroids" -Credits "Redux Project"
 
+
+
+    # ORIGINAL #
+
+    CreateReduxGroup    -Tag  "Revert"         -Text "Original (Revert)"
+    CreateReduxCheckBox -Name "Xray"           -Text "X-Ray"           -Info "Restores the original Super Metroid X-Ray Visor width"                                                        -Credits "ShadowOne333"
+    CreateReduxCheckBox -Name "ElevatorSpeed"  -Text "Elevator Speed"  -Info "Restores the original Super Metroid elevator speeds"                                                          -Credits "ShadowOne333"
+    CreateReduxCheckBox -Name "ClassicBooster" -Text "Classic Booster" -Info "Restores the original Super Metroid speed at which the shinepark is activated"                                -Credits "ShadowOne333"
+    CreateReduxCheckBox -Name "OriginalDemos"  -Text "Original Demos"  -Info "Restores the original Super Metroid demo title screens"                                                       -Credits "ShadowOne333"
+    CreateReduxCheckBox -Name "BeamCooldowns"  -Text "Beam Cooldowns"  -Info "Restores the original Super Metroid speed at which Samus can fire her beam, and the speed of the projectiles" -Credits "ShadowOne333"
+    
 }

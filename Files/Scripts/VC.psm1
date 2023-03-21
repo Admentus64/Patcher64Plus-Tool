@@ -185,7 +185,7 @@ function PatchVCEmulator([string]$Command) {
     } #>
 
     # Controls
-    if ($VC.RemapControls.Checked) {
+    if ($VC.RemapControls.Checked -and $VC.RemapControls.Visible -and $VC.RemapControls.Enabled) {
         if (StrLike -Str $Command -Val "Patch Boot DOL")   { $controls = $Files.json.controls.$("offsets_" + [System.IO.Path]::GetFileNameWithoutExtension((GetPatchFile))); }
         else                                               { $controls = $Files.json.controls.offsets; }
 

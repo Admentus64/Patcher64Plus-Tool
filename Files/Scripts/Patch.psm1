@@ -1010,12 +1010,10 @@ function HackROMGameTitle($Title, $GameID, $Region) {
         ChangeBytes -Offset $Offset -Values $emptyTitle
         ChangeBytes -Offset $offset -Values ($Title.ToCharArray() | % { [uint32][char]$_ }) -IsDec
 
-        if ($GameConsole.mode -eq "SNES" -and (Get-Item -LiteralPath $GamePath).length/4MB -gt 1) {
-            ChangeBytes -Offset (Get32Bit ( (GetDecimal $offset) + (GetDecimal "400000") ) ) -Values $emptyTitle
-            ChangeBytes -Offset (Get32Bit ( (GetDecimal $offset) + (GetDecimal "400000") ) ) -Values ($Title.ToCharArray() | % { [uint32][char]$_ }) -IsDec
+        if ($GameConsole.mode -eq "SNES" -and (Get-Item -LiteralPath $GetROM.patched).length/4MB -gt 1) {
+            ChangeBytes -Offset (Get32Bit ( (GetDecimal $offset) + 0x400000) ) -Values $emptyTitle
+            ChangeBytes -Offset (Get32Bit ( (GetDecimal $offset) + 0x400000) ) -Values ($Title.ToCharArray() | % { [uint32][char]$_ }) -IsDec
         }
-
-        $emptyTitle = $null
     }
 
     # GameID
@@ -1025,11 +1023,10 @@ function HackROMGameTitle($Title, $GameID, $Region) {
         $offset = ( Get24Bit ( (GetDecimal $Offset) + (GetDecimal "19") ) )
         if ($ByteArrayGame[(GetDecimal $offset)] -ne $Region) {
             $ByteArrayGame[(GetDecimal $offset)] = $Region
-            if ((Get-Item -LiteralPath $GamePath).length/4MB -gt 1) { $ByteArrayGame[(GetDecimal $offset) + (GetDecimal "400000")] = $Region }
+            if ((Get-Item -LiteralPath $GetROM.patched).length/4MB -gt 1) { $ByteArrayGame[(GetDecimal $offset) + 0x400000] = $Region }
             WriteToConsole ("Changed region code: " + (Get8Bit $Region))
             RemoveRegionProtection
         }
-
     }
 
     # Write to file and clear variables

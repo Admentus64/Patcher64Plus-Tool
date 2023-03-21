@@ -350,7 +350,7 @@ function ChangeGameMode() {
     $GameFiles.patches      = $GameFiles.Base   + "\Patches.json"
     $GameFiles.controls     = $GameFiles.Base   + "\Controls.json"
     $GameFiles.textEditor   = $GameFiles.Base   + "\Text Editor.json"
-    $GameFiles.actorEditor  = $GameFiles.Base   + "\Actor Editor.json"
+    $GameFiles.sceneEditor  = $GameFiles.Base   + "\Scene Editor.json"
     $GameFiles.scenesPatch  = $GameFiles.editor + "\scenes.bps"
 
     # JSON Files
@@ -497,9 +497,9 @@ function UpdateStatusLabel([string]$Text, [switch]$Main, [switch]$Editor) {
         $TextEditor.StatusLabel.Text = $Text
         $TextEditor.StatusLabel.Refresh()
     }
-    elseif (!$Main -and (IsSet $ActorEditor.StatusLabel) ) {
-        $ActorEditor.StatusLabel.Text = $Text
-        $ActorEditor.StatusLabel.Refresh()
+    elseif (!$Main -and (IsSet $SceneEditor.StatusLabel) ) {
+        $SceneEditor.StatusLabel.Text = $Text
+        $SceneEditor.StatusLabel.Refresh()
     }
 
 }
@@ -1045,8 +1045,8 @@ function EnableGUI([boolean]$Enable) {
     $Patches.Panel.Enabled = $VC.Panel.Enabled = $Enable
     SetModernVisualStyle $GeneralSettings.ModernStyle.Checked
 
-    if (IsSet $ActorEditor)   { $ActorEditor.Dialog.Enabled = $Enable }
     if (IsSet $TextEditor)    { $TextEditor.Dialog.Enabled  = $Enable }
+    if (IsSet $SceneEditor)   { $SceneEditor.Dialog.Enabled = $Enable }
 
 }
 

@@ -29,7 +29,7 @@
 	} ],
 	"tooltip"		: "ROM hack of Mario Kart 64 that overhauls Battle Mode{0}Features new game modes and settings{0}- Supported: Rev 0 (US)"
 }, {
-	"title"			: "Hooting Time (v0.2)",
+	"title"			: "Hooting Time (v1.1a)",
 	"patch" : [ {
 		"file"		: "Compressed\\hooting_time.bps",
 		"rev"		: "3A67D9986F54EB282924FCA4CD5F6DFF"

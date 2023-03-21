@@ -80,10 +80,13 @@ function CreateColorDialog([string]$Color="000000", [string]$Name, [switch]$IsGa
 #==============================================================================================================================================================================================
 function CreateGroupBox([uint16]$X, [uint16]$Y, [uint16]$Width, [uint16]$Height, [string]$Name, [string]$Tag, [string]$Text, [object]$AddTo=$Last.Panel) {
     
-    $Last.Group = CreateForm -X $X -Y $Y -Width $Width -Height $Height -Name $Name -Tag $Tag -Form (New-Object System.Windows.Forms.GroupBox) -AddTo $AddTo
-    $Last.Hide  = $False
+    $Last.Group      = CreateForm -X $X -Y $Y -Width $Width -Height $Height -Name $Name -Tag $Tag -Form (New-Object System.Windows.Forms.GroupBox) -AddTo $AddTo
+    $Last.Hide       = $False
     $Last.Group.Font = $Fonts.Small
-    if (IsSet $Text) { $Last.Group.Text = (" " + $Text + " ") }
+    if (IsSet $Text) {
+        while ($Text -like "* & *") { $Text = $Text.Replace("&", "&&") }
+        $Last.Group.Text = (" " + $Text + " ")
+    }
     $Last.GroupName = $Name
     return $Last.Group
 
@@ -310,7 +313,8 @@ function CreateListBox([uint16]$X=0, [uint16]$Y=0, [uint16]$Width=0, [uint16]$He
 #==============================================================================================================================================================================================
 function CreateLabel([uint16]$X=0, [uint16]$Y=0, [uint16]$Width=0, [uint16]$Height=20, [string]$Name, [string]$Tag, [string]$Text="", [System.Drawing.Font]$Font=$Fonts.Small, [string]$Info="", [object]$AddTo=$Last.Group) {
     
-    $Label = CreateForm -X $X -Y $Y -Width $Width -Height $Height -Name $Name -Tag $Tag -Form (New-Object System.Windows.Forms.Label) -AddTo $AddTo
+    $Label             = CreateForm -X $X -Y $Y -Width $Width -Height $Height -Name $Name -Tag $Tag -Form (New-Object System.Windows.Forms.Label) -AddTo $AddTo
+    $Label.UseMnemonic = $False
     if (  IsSet $Text)    { $Label.Text     = $Text }
     if (!(IsSet $Width))  { $Label.AutoSize = $True }
     $Label.Font = $Font

@@ -270,7 +270,7 @@ function CreateSettingsDialog() {
     $GeneralSettings.NoChannelChange     = CreateSettingsCheckbox -Name "NoChannelChange"   -Column 1 -Row 3 -Text "No Channel Change"   -IsDebug -Info "Do not change the channel title and GameID of the WAD when patching is concluded"
     $GeneralSettings.KeepDowngraded      = CreateSettingsCheckbox -Name "KeepDowngraded"    -Column 2 -Row 3 -Text "Keep Downgraded"     -IsDebug -Info "Keep the downgraded patched ROM in the output folder"
     $GeneralSettings.KeepConverted       = CreateSettingsCheckbox -Name "KeepConverted"     -Column 3 -Row 3 -Text "Keep Converted"      -IsDebug -Info "Keep the converted patched ROM in the output folder"
-    $GeneralSettings.ActorEditorChecks   = CreateSettingsCheckbox -Name "ActorEditorChecks" -Column 1 -Row 4 -Text "Actor Editor Checks" -IsDebug -Info "Print out extras debug info and perform extra checks for the Actor Editor`nThis may slow down performance a bit"
+    $GeneralSettings.SceneEditorChecks   = CreateSettingsCheckbox -Name "SceneEditorChecks" -Column 1 -Row 4 -Text "Scene Editor Checks" -IsDebug -Info "Print out extras debug info and perform extra checks for the Scene Editor`nThis may slow down performance a bit"
 
     # Debug Settings (Nintendo 64)
     $GeneralSettings.Box                 = CreateReduxGroup -Y ($GeneralSettings.Box.Bottom + (DPISize 10)) -IsGame $False -Height 2 -AddTo $SettingsDialog -Text "Debug Settings (Nintendo 64)"

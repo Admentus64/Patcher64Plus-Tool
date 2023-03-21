@@ -42,4 +42,20 @@
 	"patch"		: "Compressed\\invictus.bps",
 	"output"	: "_invictus_patched",
 	"tooltip"	: "A full-sized ROM hack in a completely new setting, which is extremely difficult{0}Only recommended for hardcore players!{0}- Supported: Rev 0 (US)"
+}, {
+	"title"		: "Return to Dinosaur Land (EN)",
+	"console"	: "Native",
+	"command"	: "Force Downgrade",
+	"rom_title"	: "DINOSAUR LAND",
+	"patch"		: "Compressed\\return_to_dinosaur_land_en.ips",
+	"output"	: "_dinosaur_land_en_patched",
+	"tooltip"	: "A full-sized ROM hack in a completely new setting, which is moderately challenging{0}- Supported: Rev 0 (US)"
+}, {
+	"title"		: "Return to Dinosaur Land (ES)",
+	"console"	: "Native",
+	"command"	: "Force Downgrade",
+	"rom_title"	: "DINOSAUR LAND",
+	"patch"		: "Compressed\\return_to_dinosaur_land_es.ips",
+	"output"	: "_dinosaur_land_es_patched",
+	"tooltip"	: "A full-sized ROM hack in a completely new setting, which is moderately challenging{0}- Supported: Rev 0 (US)"
 } ]

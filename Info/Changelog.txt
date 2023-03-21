@@ -1,3 +1,24 @@
+v20.1.0
+- Renamed Actor Editor to Scene Editor
+- Added MM support for Scene Editor
+- Added support for selective scene patching for Scene Editor
+- Added support for non-shifting scene patching for Scene Editor
+- Added new options for OoT & MM
+- Added presets for OoT
+- Added new ROM hack for SMW
+- Updated Redux for OoT with new options
+- Updated Master of Time HUD button sizes
+- Updated Majora's Mask HUD button previews
+- Updated Xbox preset color for B button for OoT & MM
+- Updated Hooting Time for MK64
+- Updated options for SM
+- Updated Custom Header tooltip with new warning for texture packs and save files
+- Changed how special symbols for text are parsed in the GUI
+- Changed actor coordinates into signed integer values rather than hex values
+- Fixed issues with the Scene Editor
+- Fixed some issues with Redux for OoT
+- Fixed some issues with patching SNES ROM titles in Wii VC mode
+
 v20.0.4
 - Added new options for MK64
 - Added new patch for ALttP

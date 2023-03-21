@@ -219,6 +219,9 @@ function RunUpdate() {
 
     ExpandArchive -LiteralPath $zip -DestinationPath $path
 
+    if (TestFile -Path ($Paths.Games + "\Ocarina of Time\Editor") -Container)   { Copy-Item -LiteralPath ($Paths.Games + "\Ocarina of Time\Editor") -Destination ($Paths.Base + "\Ocarina of Time\Editor") -Force -Recurse }
+    if (TestFile -Path ($Paths.Games + "\Majora's Mask\Editor")   -Container)   { Copy-Item -LiteralPath ($Paths.Games + "\Majora's Mask\Editor")   -Destination ($Paths.Base + "\Majora's Mask\Editor")   -Force -Recurse }
+
     RemovePath $Paths.Games
     RemovePath $Paths.Tools
     RemovePath $Paths.Main
@@ -230,6 +233,9 @@ function RunUpdate() {
     Move-Item -LiteralPath ($folder + "\Patcher64+ Tool.ps1") -Destination ($Paths.Base + "\Patcher64+ Tool.ps1") -Force
     Move-Item -LiteralPath ($folder + "\Readme.txt")          -Destination ($Paths.Base + "\ReadMe.txt")          -Force
     Move-Item -LiteralPath ($folder + "\Files\version.txt")   -Destination ($Paths.Master + "\version.txt")       -Force
+
+    if (TestFile -Path ($Paths.Base + "\Ocarina of Time\Editor") -Container)   { Move-Item -LiteralPath ($Paths.Base + "\Ocarina of Time\Editor") -Destination ($Paths.Games + "\Ocarina of Time\Editor") -Force -Recurse }
+    if (TestFile -Path ($Paths.Base + "\Majora's Mask\Editor")   -Container)   { Move-Item -LiteralPath ($Paths.Base + "\Majora's Mask\Editor")   -Destination ($Paths.Games + "\Majora's Mask\Editor")   -Force -Recurse }
 
     RemovePath $path
     $global:FatalError = $True

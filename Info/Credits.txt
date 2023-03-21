@@ -596,6 +596,7 @@ Other:			Admentus & gamemasterplc
 - Litronom, DeadHamster
 
 --- Hooting Time ---
+- Hacking:				HootHoot
 - Production:				DeadHamster
 - Music:				Litronom
 - Translation:				triclon
@@ -792,6 +793,9 @@ Other:			Admentus & gamemasterplc
 - Music:				tcdw, Sinc-X, Wakana, RednGreen, Izuna, Dr. Tapeworm, Wavee,
 					WorldPeace, Lui37, Masterlink, Crew, S.N.N., Sinister Pixel, Pinci,
 					DanTheVP, aCrowned, MaxodeX, Crispy, LadiesMan217, Amphobius
+
+--- Return to Dinosaur Land ---
+- RAGB
 
 =====================
 <<< SUPER METROID >>>

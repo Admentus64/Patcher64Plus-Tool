@@ -73,8 +73,8 @@ function CreateMainDialog() {
 
     $menuBarOoTTextEditor      = New-Object System.Windows.Forms.ToolStripButton;   $menuBarOoTTextEditor.Text  = "OoT Text Editor";    $menuBarEditors.DropDownItems.Add($menuBarOoTTextEditor)
     $menuBarMMTextEditor       = New-Object System.Windows.Forms.ToolStripButton;   $menuBarMMTextEditor.Text   = "MM Text Editor";     $menuBarEditors.DropDownItems.Add($menuBarMMTextEditor)
-    $menuBarOoTActorEditor     = New-Object System.Windows.Forms.ToolStripButton;   $menuBarOoTActorEditor.Text = "OoT Actor Editor";   $menuBarEditors.DropDownItems.Add($menuBarOoTActorEditor)
-  # $menuBarMMActorEditor      = New-Object System.Windows.Forms.ToolStripButton;   $menuBarMMActorEditor.Text  = "MM Actor Editor";    $menuBarEditors.DropDownItems.Add($menuBarMMActorEditor)
+    $menuBarOoTSceneEditor     = New-Object System.Windows.Forms.ToolStripButton;   $menuBarOoTSceneEditor.Text = "OoT Scene Editor";   $menuBarEditors.DropDownItems.Add($menuBarOoTSceneEditor)
+    $menuBarMMSceneEditor      = New-Object System.Windows.Forms.ToolStripButton;   $menuBarMMSceneEditor.Text  = "MM Scene Editor";    $menuBarEditors.DropDownItems.Add($menuBarMMSceneEditor)
 
     $menuBarExit.Add_Click(           { $MainDialog.Close()          } )
     $menuBarUpdate.Add_Click(         { AutoUpdate -Manual           } )
@@ -93,8 +93,8 @@ function CreateMainDialog() {
 
     $menuBarOoTTextEditor.Add_Click(  { RunTextEditor  -Game "Ocarina of Time" } )
     $menuBarMMTextEditor.Add_Click(   { RunTextEditor  -Game "Majora's Mask"   } )
-    $menuBarOoTActorEditor.Add_Click( { RunActorEditor -Game "Ocarina of Time" } )
-  # $menuBarMMActorEditor.Add_Click(  { RunActorEditor -Game "Majora's Mask"   } )
+    $menuBarOoTSceneEditor.Add_Click( { RunSceneEditor -Game "Ocarina of Time" } )
+    $menuBarMMSceneEditor.Add_Click(  { RunSceneEditor -Game "Majora's Mask"   } )
 
 
 
@@ -262,16 +262,16 @@ function CreateMainDialog() {
     $CustomHeader.ROMTitle      = CreateTextBox -X ($CustomHeader.ROMTitleLabel.Right) -Y (DPISize 20) -Width (DPISize 250) -Height (DPISize 22) -Length 20         -Info "--- WARNING ---`nChanging the Game Title might causes issues with emulation for certain emulators and plugins, such as GlideN64"
 
     # Custom ROM GameID (N64 only)
-    $CustomHeader.ROMGameIDLabel = CreateLabel   -X ($CustomHeader.ROMTitle.Right + (DPISize 10)) -Y (DPISize 22) -Width (DPISize 50) -Height (DPISize 15) -Text "GameID:" -Info "--- WARNING ---`nRequires four characters for acceptance`nThe fourth character sets the region and refresh rate`n`n--- REGION CODES ---`nE = USA`nJ = Japan`nP = PAL`nK = Korea"
-    $CustomHeader.ROMGameID      = CreateTextBox -X ($CustomHeader.ROMGameIDLabel.Right)          -Y (DPISize 20) -Width (DPISize 55) -Height (DPISize 22) -Length 4       -Info "--- WARNING ---`nRequires four characters for acceptance`nThe fourth character sets the region and refresh rate`n`n--- REGION CODES ---`nE = USA`nJ = Japan`nP = PAL`nK = Korea"
+    $CustomHeader.ROMGameIDLabel = CreateLabel   -X ($CustomHeader.ROMTitle.Right + (DPISize 10)) -Y (DPISize 22) -Width (DPISize 50) -Height (DPISize 15) -Text "GameID:" -Info "--- WARNING ---`nRequires four characters for acceptance`nThe fourth character sets the region and refresh rate`nChanging the GameID causes Nintendo 64 emulators to recognize the N64 title as a separate save file and texture pack`n`n--- REGION CODES ---`nE = USA`nJ = Japan`nP = PAL`nK = Korea"
+    $CustomHeader.ROMGameID      = CreateTextBox -X ($CustomHeader.ROMGameIDLabel.Right)          -Y (DPISize 20) -Width (DPISize 55) -Height (DPISize 22) -Length 4       -Info "--- WARNING ---`nRequires four characters for acceptance`nThe fourth character sets the region and refresh rate`nChanging the GameID causes Nintendo 64 emulators to recognize the N64 title as a separate save file and texture pack`n`n--- REGION CODES ---`nE = USA`nJ = Japan`nP = PAL`nK = Korea"
     
     # Custom VC Title 
     $CustomHeader.VCTitleLabel = CreateLabel   -X ($CustomHeader.EnableHeader.Right) -Y (DPISize 22) -Width (DPISize 75)  -Height (DPISize 15) -Text "Channel Title:"
     $CustomHeader.VCTitle      = CreateTextBox -X ($CustomHeader.VCTitleLabel.Right) -Y (DPISize 20) -Width (DPISize 250) -Height (DPISize 22) -Length $VCTitleLength
 
     # Custom VC GameID (N64 only)
-    $CustomHeader.VCGameIDLabel = CreateLabel   -X ($CustomHeader.VCTitle.Right + (DPISize 10)) -Y (DPISize 22) -Width (DPISize 50) -Height (DPISize 15) -Text "GameID:" -Info "--- WARNING ---`nRequires four characters for acceptance`nChanging the GameID causes Dolphin to recognize the VC title as a separate save file`n`n--- REGION CODES ---`nE = USA`nJ = Japan`nP = PAL`nK = Korea"
-    $CustomHeader.VCGameID      = CreateTextBox -X ($CustomHeader.VCGameIDLabel.Right)          -Y (DPISize 20) -Width (DPISize 55) -Height (DPISize 22) -Length 4       -Info "--- WARNING ---`nRequires four characters for acceptance`nChanging the GameID causes Dolphin to recognize the VC title as a separate save file`n`n--- REGION CODES ---`nE = USA`nJ = Japan`nP = PAL`nK = Korea"
+    $CustomHeader.VCGameIDLabel = CreateLabel   -X ($CustomHeader.VCTitle.Right + (DPISize 10)) -Y (DPISize 22) -Width (DPISize 50) -Height (DPISize 15) -Text "GameID:" -Info "--- WARNING ---`nRequires four characters for acceptance`nChanging the GameID causes Dolphin to recognize the VC title as a separate save file and texture pack`n`n--- REGION CODES ---`nE = USA`nJ = Japan`nP = PAL`nK = Korea"
+    $CustomHeader.VCGameID      = CreateTextBox -X ($CustomHeader.VCGameIDLabel.Right)          -Y (DPISize 20) -Width (DPISize 55) -Height (DPISize 22) -Length 4       -Info "--- WARNING ---`nRequires four characters for acceptance`nChanging the GameID causes Dolphin to recognize the VC title as a separate save file and texture pack`n`n--- REGION CODES ---`nE = USA`nJ = Japan`nP = PAL`nK = Korea"
 
     # Custom Region Checkbox (SNES Only)
     $CustomHeader.EnableRegionLabel = CreateLabel    -X ($CustomHeader.EnableHeaderLabel.Left) -Y (DPISize 52) -Width (DPISize 50) -Height (DPISize 15) -Text "Enable:"                   -Info "Enable in order to change the Game ID and title of the ROM or WAD file"

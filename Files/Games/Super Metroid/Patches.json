@@ -9,5 +9,5 @@
 		"output"	: "_redux_patched"
 	},
 	"options"		: 1,
-	"tooltip"		: "The regular Super Metroid experience{0}With support for redux and additional options{0}- Supported: Rev 0 (US)"
+	"tooltip"		: "The regular Super Metroid experience{0}With support for redux and additional options{0}Redux version: 1.5{0}- Supported: Rev 0 (US)"
 } ]

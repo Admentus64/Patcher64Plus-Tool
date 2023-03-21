@@ -1,0 +1,9079 @@
+﻿{
+	"game"			: "Ocarina of Time",
+	"parse"			: "oot",
+	"max_objects"	: 15,
+	"hash"			: "5BD1FE107BF8106B2AB6650ABECD54D6",
+	"quest"			: [ "Master Quest", "Ura Quest" ],
+	"scenes" : [ {
+		"name"		: "Hyrule Field",
+		"dma"		: "B440",
+		"length"	: 1,
+		"stages"	: [ "Child", "Child - Kakariko Gate Opened", "Adult", "Link's Nightmare", "Zelda & Impla Flee Hyrule Castle", "Zelda Reminisces About Her Escape", "Title Screen Demo", "Song of Time", "Credits", "Escaping Lon Lon Ranch", "Farewell to Zelda", "Escorted by Impa" ]
+	}, {
+		"name"		: "Kakariko Village",
+		"dma"		: "B460",
+		"length"	: 1,
+		"stages"	: [ "Child - Day", "Child - Night", "Adult - Day", "Adult - Night", "Bongo Bongo Escapes the Well", "Nocture of Shadow", "The Well is Drained", "Death Mountain Erupts", "Credits" ]
+	}, {
+		"name"		: "Graveyard",
+		"dma"		: "B480",
+		"length"	: 2,
+		"maps"		: [ "Shadow Temple Entrance", "Graveyard" ],
+		"stages"	: [ "Child - Day", "Child - Night", "Adult - Day", "Adult - Night", "Royal Tomb", "Sun's Song" ]
+	}, {
+		"name"		: "Zora's River",
+		"dma"		: "B4B0",
+		"length"	: 2,
+		"maps"		: [ "River Road", "Zora's Domain Entrance" ],
+		"stages"	: [ "Child", "Adult" ]
+	}, {
+		"name"		: "Kokiri Forest",
+		"dma"		: "B4E0",
+		"length"	: 3,
+		"maps"		: [ "Village", "Great Deku Tree's Meadow", "Training Center" ],
+		"stages"	: [ "Child", "Adult - Infested", "Adult", "Farore Creates Life", "Ganndorf's Curse", "Kokiri's Emerald", "Navi Opening", "Unused - Cutscene #1", "Unused - Cutscene #2", "Credits - Deku Tree Meadow", "Credits - Forest", "Meeting the Deku Tree Sprout", "Link's Identity" ]
+	}, {
+		"name"		: "Sacred Forest Meadow",
+		"dma"		: "B520",
+		"length"	: 1,
+		"stages"	: [ "Child", "Adult", "Minuet of Forest", "Saria's Song" ]
+	}, {
+		"name"		: "Lake Hylia",
+		"dma"		: "B540",
+		"length"	: 1,
+		"stages"	: [ "Child", "Adult", "Defeated Morpha", "Credits" ]
+	}, {
+		"name"		: "Zora's Domain",
+		"dma"		: "B560",
+		"length"	: 2,
+		"maps"		: [ "King's Chambers", "Domain" ],
+		"stages"	: [ "Child", "Adult", "Credits" ]
+	}, {
+		"name"		: "Zora's Fountain",
+		"dma"		: "B590",
+		"length"	: 1,
+		"stages"	: [ "Child", "Child - Cucco", "Adult", "Zora's Sapphire", "Unused Jabu-Jabu", "Unused - Credits" ]
+	}, {
+		"name"		: "Gerudo Valley",
+		"dma"		: "B5B0",
+		"length"	: 1,
+		"stages"	: [ "Child", "Adult", "Din Creates the Earth #2", "Din Creates the Earth #1", "Credits" ]
+	}, {
+		"name"		: "Lost woods",
+		"dma"		: "B5D0",
+		"length"	: 10,
+		"maps"		: [ "Entrance", "Bullet Bag Minigame", "Goron City Entrance", "Zora's River Entrance", "Three-Way Fork", "Deku Stick Upgrade", "Three Area", "Road to Sacred Forest Meadow", "Sacred Forest Meadow Entrance", "Skull Mask Skullkid" ],
+		"stages"	: [ "Child", "Adult", "Fairy Ocarina" ]
+	}, {
+		"name"		: "Desert Colossus",
+		"dma"		: "B680",
+		"length"	: 1,
+		"stages"	: [ "Child", "Adult", "Requiem of Spirit", "Nabooru is Kidnapped" ]
+	}, {
+		"name"		: "Gerudo's Fortress",
+		"dma"		: "B6A0",
+		"length"	: 2,
+		"maps"		: [ "Fortress", "Horseback Archery" ],
+		"stages"	: [ "Child", "Adult", "Archery Minigame", "Credits", "Thrown in Jail" ]
+	}, {
+		"name"		: "Haunted Wasteland",
+		"dma"		: "B6D0",
+		"length"	: 2,
+		"maps"		: [ "Stone Structure", "Desert" ]
+	}, {
+		"name"		: "Hyrule Castle",
+		"dma"		: "B700",
+		"length"	: 1
+	}, {
+		"name"		: "Ganon's Castle Exterior",
+		"dma"		: "C330",
+		"length"	: 1,
+		"stages"	: [ "Adult", "Rainbow Bridge" ]
+	}, {
+		"name"		: "Death Mountain Trail",
+		"dma"		: "B720",
+		"length"	: 1,
+		"stages"	: [ "Child", "Adult", "Nayru Gives Law to the World", "Goron's Ruby", "Unused Goron's Ruby", "Credits #1", "Credits #2 - Sages" ]
+	}, {
+		"name"		: "Death Mountain Crater",
+		"dma"		: "B740",
+		"length"	: 2,
+		"maps"		: [ "Fire Temple Entrance", "Crater" ],
+		"stages"	: [ "Child", "Adult", "Bolero of Fire", "Opening Demo" ]
+	}, {
+		"name"		: "Goron City",
+		"dma"		: "B770",
+		"length"	: 4,
+		"maps"		: [ "Boulders Area", "Darunia's Room", "Medigoron's Smithy", "City" ],
+		"stages"	: [ "Child", "Adult", "Darunia Dances to Saria's Song", "Credits" ]
+	}, {
+		"name"		: "Lon Lon Ranch",
+		"dma"		: "C370",
+		"length"	: 1,
+		"stages"	: [ "Child - Day", "Child - Night", "Adult - Day", "Adult - Night", "Ingo's Race", "Epona's Song", "Credits #1 - Circle of Flame", "Credits #2 - Talon & Ingo", "Credits #3 - Hyrule Market Hagglers", "Credits #4 - Malon Singing", "Credits #5 - Mido & King Zora", "Credits #6 - Shop NPCs" ]
+	}, {
+		"name"		: "Temple of Time",
+		"dma"		: "BC30",
+		"length"	: 2,
+		"maps"		: [ "Pedestal of Time", "Entrance" ],
+		"stages"	: [ "Main", "Return From Chamber of Sages", "Farewell to Navi", "Prelude of Light", "Opening the Door of Time", "Unused - Visions of Kokiri's Emerald", "Unused - Visions of Goron's Ruby", "Unused - Visions of Zora's Sapphire", "Song of Time", "Sheik Tells of the Triforce", "Sheik's Identity Revealed", "Light Arrows" ]
+	}, {
+		"name"		: "Chamber of the Sages",
+		"dma"		: "BC10",
+		"length"	: 1,
+		"stages"	: [ "Main", "Awakening in the Sacred Realm", "All Sages Have Awakened", "Door to the Sacred Realm" ]
+	}, {
+		"name"		: "Shooting Gallery",
+		"dma"		: "C210",
+		"length"	: 1,
+		"stages"	: [ "Main", "Unused #1", "Unused #2", "Unused #3" ]
+	}, {
+		"name"		: "Castle Hedge Maze (Day)",
+		"dma"		: "C310",
+		"length"	: 1
+	}, {
+		"name"		: "Castle Hedge Maze (Night)",
+		"dma"		: "CF20",
+		"length"	: 1
+	}, {
+		"name"		: "Grave (Redead)",
+		"dma"		: "C7E0",
+		"length"	: 1
+	}, {
+		"name"		: "Grave (Fairy's Fountain)",
+		"dma"		: "CE10",
+		"length"	: 1
+	}, {
+		"name"		: "Royal Family Tomb",
+		"dma"		: "CF60",
+		"length"	: 3,
+		"maps"		: [ "Entrance", "Toxic Pool", "Composer Brothers' Tombstone" ],
+		"stages"	: [ "Main", "Sun's Song #1", "Sun's Song #2" ]
+	}, {
+		"name"		: "Great Fairy's Fountain (Upgrades)",
+		"dma"		: "C7C0",
+		"length"	: 1,
+		"stages"	: [ "Main", "Spin Attack", "Enhanced Magic Meter", "Enhanced Defensive Power" ]
+	}, {
+		"name"		: "Fairy's Fountain",
+		"dma"		: "C800",
+		"length"	: 1
+	}, {
+		"name"		: "Great Fairy's Fountain (Spells)",
+		"dma"		: "C820",
+		"length"	: 1,
+		"stages"	: [ "Main", "Farore's Wind", "Din's Fire", "Nayru's Love" ]
+	}, {
+		"name"		: "Castle Courtyard",
+		"dma"		: "C940",
+		"length"	: 1,
+		"stages"	: [ "Main", "The End", "Meeting Impa", "Unused - Meeting Impa" ]
+	}, {
+		"name"		: "Fishing Pond",
+		"dma"		: "CC60",
+		"length"	: 1
+	}, {
+		"name"		: "Bombchu Bowling Alley",
+		"dma"		: "CF40",
+		"length"	: 1
+	}, {
+		"name"		: "Ranch House & Silo",
+		"dma"		: "CFC0",
+		"length"	: 3,
+		"maps"		: [ "Silo", "House", "Bedroom" ]
+	}, {
+		"name"		: "Guard's House",
+		"dma"		: "D000",
+		"length"	: 1,
+		"stages"	: [ "Child", "Adult" ]
+	}, {
+		"name"		: "Granny's Potion Shop",
+		"dma"		: "D020",
+		"length"	: 1
+	}, {
+		"name"		: "Treasure Box Shop",
+		"dma"		: "D040",
+		"length"	: 7,
+		"maps"		: [ "Entrance", "Green Room #1", "Green Room #2", "Blue Room #1", "Blue Room #2", "Red Room", "Yellow Room" ]
+	}, {
+		"name"		: "House of Skulltulas",
+		"dma"		: "D160",
+		"length"	: 1
+	}, {
+		"name"		: "Market Entrance (Child - Day)",
+		"dma"		: "BF30",
+		"length"	: 1
+	}, {
+		"name"		: "Market Entrance (Child - Night)",
+		"dma"		: "C3B0",
+		"length"	: 1
+	}, {
+		"name"		: "Market Entrance (Ruins)",
+		"dma"		: "C3D0",
+		"length"	: 1
+	}, {
+		"name"		: "Market (Child - Day)",
+		"dma"		: "B7C0",
+		"length"	: 1
+	}, {
+		"name"		: "Market (Child - Night)",
+		"dma"		: "B7E0",
+		"length"	: 1
+	}, {
+		"name"		: "Market (Ruins)",
+		"dma"		: "C390",
+		"length"	: 1
+	}, {
+		"name"		: "Back Alley (Child - Day)",
+		"dma"		: "C350",
+		"length"	: 1
+	}, {
+		"name"		: "Back Alley (Child - Night)",
+		"dma"		: "C3F0",
+		"length"	: 1
+	}, {
+		"name"		: "Temple of Time Exterior (Child - Day)",
+		"dma"		: "CC40",
+		"length"	: 1
+	}, {
+		"name"		: "Temple of Time Exterior (Child - Night)",
+		"dma"		: "CC80",
+		"length"	: 1
+	}, {
+		"name"		: "Temple of Time Exterior (Ruins)",
+		"dma"		: "CCA0",
+		"length"	: 1
+	}, {
+		"name"		: "Link's House",
+		"dma"		: "BC60",
+		"length"	: 1,
+		"stages"	: [ "Main", "Awoken by Navi", "Opening" ]
+	}, {
+		"name"		: "Carpenter Boss's House",
+		"dma"		: "C720",
+		"length"	: 1
+	}, {
+		"name"		: "Back Alley House (Man in Green)",
+		"dma"		: "CBA0",
+		"length"	: 1
+	}, {
+		"name"		: "Know-It-All Brothers' House",
+		"dma"		: "BE20",
+		"length"	: 1
+	}, {
+		"name"		: "House of Twins",
+		"dma"		: "C430",
+		"length"	: 1
+	}, {
+		"name"		: "Kokiri Shop",
+		"dma"		: "BC80",
+		"length"	: 1
+	}, {
+		"name"		: "Goron Shop",
+		"dma"		: "C840",
+		"length"	: 1
+	}, {
+		"name"		: "Zora Shop",
+		"dma"		: "C860",
+		"length"	: 1
+	}, {
+		"name"		: "Bazaar",
+		"dma"		: "C2F0",
+		"length"	: 1
+	}, {
+		"name"		: "Happy Mask Shop",
+		"dma"		: "D140",
+		"length"	: 1
+	}, {
+		"name"		: "Kakariko Potion Shop",
+		"dma"		: "C880",
+		"length"	: 1
+	}, {
+		"name"		: "Market Potion Shop",
+		"dma"		: "C8A0",
+		"length"	: 1
+	}, {
+		"name"		: "Bombchu Shop",
+		"dma"		: "C8C0",
+		"length"	: 1
+	}, {
+		"name"		: "Gravekeeper's Hut",
+		"dma"		: "C7A0",
+		"length"	: 1
+	}, {
+		"name"		: "Impa's House",
+		"dma"		: "C900",
+		"length"	: 1
+	}, {
+		"name"		: "Carpenters' Tent",
+		"dma"		: "C920",
+		"length"	: 1
+	}, {
+		"name"		: "Stable",
+		"dma"		: "C700",
+		"length"	: 1
+	}, {
+		"name"		: "Back Alley House (Dog Lady)",
+		"dma"		: "C8E0",
+		"length"	: 1
+	}, {
+		"name"		: "Lakeside Laboratory",
+		"dma"		: "CFA0",
+		"length"	: 1
+	}, {
+		"name"		: "Dampe's Grave & Windwill",
+		"dma"		: "CBC0",
+		"length"	: 7,
+		"maps"		: [ "Dampé's Grave", "Race Section #1", "Race Section #2", "Race Section #3", "Reward Room", "Stairs to Windmill", "Windmill" ]
+	}, {
+		"name"		: "Grottos",
+		"dma"		: "BE40",
+		"length"	: 14,
+		"maps"		: [ "Generic", "Salescrub - Heart Piece", "Two Redeads", "Cow", "Webbed", "Octorok", "Two Salescrubs - Deku Nut Upgrade", "Two Wolfos", "Bombable Wall", "Two Salescrubs - Potions", "Tektite", "Forest Stage", "Three Deku Salescrubs", "Big Skulltula" ]
+	}, {
+		"name"		: "Cutscene Map",
+		"dma"		: "C410",
+		"length"	: 1,
+		"stages"	: [ "Main", "The Goddesses Descend", "Ganondorf Riding Through Flames", "The Triforce is Formed", "Ganondorf Infiltrates the Sacred Realm", "Sheik Tells of the Triforce", "Link's Heritage", "Unused - Ganondorf Riding", "Child Zelda Tells of the Triforce", "Ganondorf Curses His Opposers" ]
+	}, {
+		"name"		: "Inside the Deku Tree",
+		"dma"		: "BB40",
+		"length"	: 12,
+		"dungeon"	: 1,
+		"maps"		: [ "Entrance", "Path to Slingshot", "Slingshot Room", "Basement", "Room to Water Challenge", "Path Across Water", "Room after Water Challenge", "Three-Way Room", "Gold Skulltula Room", "Boss Door Room", "Three Rising Pillars", "Boss Lair" ]
+	}, {
+		"name"		: "Dodongo's Cavern",
+		"dma"		: "B320",
+		"length"	: 17,
+		"dungeon"	: 1,
+		"maps"		: [ "Main Hall", "Baby Dodongo Hallway", "Rising Staircase Hall", "Lizalfos Mini-Boss", "Green Cave", "Armos Pushing Challenge", "Small Room - Large Pillars Hall", "Boos Door Room", "Labyrinth", "Large Pillars Hall", "Jump Across One Pillar", "Small Room - Baby Dodongo Hall", "Jump Across Two Pillars", "Small Room - Green Cave", "Small Room - Labyrinth", "Small Room - Rising Staircase Hall", "Boss Lair" ] 
+	}, {
+		"name"		: "Inside Jabu-Jabu's Belly",
+		"dma"		: "BF50",
+		"length"	: 16,
+		"dungeon"	: 1,
+		"maps"		: [ "Entrance", "Main Hall", "Ruto Meeting Room", "Ruto Fallen Down Basement", "Room to Upper Main Hall", "Boss Door Room", "Giant Octo Mini-Boss", "Three-Way Fork", "Middle Fork Tentacle", "East Fork Room", "West Fork Room", "Right Fork Tentacle", "Left Fork Tentacle", "Lone Room in Basement", "Boomerang Hall", "Boss Lair" ],
+		"stages"	: [ "Main", "Finding Zora's Sapphire" ]
+	}, {
+		"name"		: "Forest Temple",
+		"dma"		: "B9C0",
+		"length"	: 23,
+		"dungeon"	: 1,
+		"maps"		: [ "Entrance", "Entrance Hallway", "Elevator Hall", "East Elevator Hall", "North Elevator Hallway", "West Elevator Hallway", "Stalfos Mini-Boss", "East Courtyard", "West Courtyard", "Sewers", "Hallway Connecting Courtyards", "Tall Block Pushing Hall", "Joelle's Hall", "Beth's Hall", "Rotating Platforms Hall", "Chess Hall", "Amy's Block Puzzle", "Boss Door Shifting Hall", "Lone Room - West Courtyard", "Falling Down - West Courtyard", "Fallen Down Room - West Courtyard", "Falling Down - Chess Hall", "Boss Lair" ]
+	}, {
+		"name"		: "Fire Temple",
+		"dma"		: "B800",
+		"length"	: 27,
+		"dungeon"	: 1,
+		"maps"		: [ "Entrance", "Lava Cavern", "Boss Door Hall", "Flare Dance Room - Entrance", "Fire Slug Room", "Boulder Maze", "Narrow Three-Way Bridge", "Room to East Tower", "East Tower", "Hallway Connecting Towers", "Invisible Fire Wall Maze", "Passthrough - Invisible Fire Wall Maze", "Room to West Tower", "West Tower", "Hidden Stairs Room", "Torch Slug Hallway - Entrance", "Flaming Wall of Death Room", "Captured Goron North of Entrance", "Tile Room - Entrance", "Tile Room - Lava Cavern", "Captured Goron - North Lava Cavern", "Flaming Elevator", "Captured Goron - South Lava Cavern", "Captured Goron - Boulder Maze", "Flare Dancer Room - Fire Wall Maze", "Captured Goron - Fire Wall Maze", "Boss Lair" ]
+	}, {
+		"name"		: "Water Temple",
+		"dma"		: "BCA0",
+		"length"	: 23,
+		"dungeon"	: 1,
+		"maps"		: [ "Central Hall", "Central Pillar", "Flooded Basement", "Lower Level - South", "Mid Level - East", "Waterfall Room", "Dragon Statues Room", "Longshot Room", "Spinning Water Room", "Water Pillar Room", "Upper Level - West", "Spike Trap Corridor", "Rolling Boulder Room", "Room of Illusions", "Stinger Room", "Three Water Pillars Room", "Sole Room - Rolling Boulder Room", "Ruto Room", "Lower Room - Ruto Room", "Upper Room - Ruto Room", "Mid Level - South", "Raging Water Cavern", "Boss Lair" ]
+	}, {
+		"name"		: "Shadow Temple",
+		"dma"		: "C060",
+		"length"	: 23,
+		"dungeon"	: 1,
+		"maps"		: [ "Taunting Rooms of Illusion", "First Room - Rooms of Illusion", "Entrance", "Boss Door Room", "Dead Hand Room - Rooms of Illusion", "Beamos Corridor - Entrance", "Scythe Shortcut Room", "Sole Room - Beamos Corridor", "Guillotine Hallway", "Guillotine Cavern", "Falling Spike Blocks Trap Room", "Invisible Spike Room", "Second Giant Skull Jars Room", "Wooden Spike Traps Room", "First Giant Skull Jars Room", "Invisible Maze", "Invisible Scythe Room", "Sacrificial Room", "Wind Fans Room", "Sole Room - Wind Fans Room", "Gibdo Hallway - Wind Fans Room", "River of Death", "Boss Lair" ]
+	}, {
+		"name"		: "Spirit Temple",
+		"dma"		: "C450",
+		"length"	: 29,
+		"dungeon"	: 1,
+		"maps"		: [ "Entrance", "Main Corridor", "East Room - Main Corridor", "West Room - Main Corridor", "Bombiwa Rock Room", "Colossus Room", "Shortcut Room - Entrance", "West Corridor - Colossus Room", "Sun Face Block Pushing Room", "West Hallway to Iron Knuckle Room", "West Iron Knuckle Room", "Exits to Colossus Hands", "Sole Room - Rolling Boulder Room", "Rolling Boulder Room", "Quicksand Room", "Trap Mirror With Mirror", "East Corridor - Colossus Room", "Time Block Puzzle Room", "Armos & Sun Face Room", "East Hallway to Iron Knuckle Room", "East Iron Knuckle Room", "Sole Room - Armos & Sun Face Room", "Sole Room - Triforce Corridor", "Moving Trap Wall", "Triforce Corridor", "Mirror Puzzle Above Colossus Room", "Rotating Mirror Statues Room", "Anubis Room - Main Corridor", "Boss Lair" ]
+	}, {
+		"name"		: "Ice Cavern",
+		"dma"		: "C630",
+		"length"	: 12,
+		"dungeon"	: 1,
+		"maps"		: [ "Entrance", "First Open Room", "Hallway Toward Second Area", "Second Open Room", "Hallway Toward Ice Block Puzzle", "Ice Block Puzzle Room", "Hallway to Mini-Boss", "Mini-Boss Room", "Hallway to Pillars", "Pillars Room", "Room to Exit", "Blue Fire Altar" ],
+		"stages"	: [ "Main", "Serenade of Water" ]
+	}, {
+		"name"		: "Bottom of the Well",
+		"dma"		: "CEA0",
+		"length"	: 7,
+		"dungeon"	: 1,
+		"maps"		: [ "Entrance & Main Area", "Bottom Pit", "Coffins Room", "Room With Grates", "Dead Hand Room", "Invisible Floor Room", "Skull Wall Room" ]
+	}, {
+		"name"		: "Thieves' Hideout",
+		"dma"		: "CE30",
+		"length"	: 6,
+		"dungeon"	: 2,
+		"maps"		: [ "Break Room - Hookshot Beams", "Shiro's Prison Cell", "Ichiro's Prison Cell", "Kitchen", "Sabooro's Prison Cell", "Jiro's Prison Cell" ]
+	}, {
+		"name"		: "Gerudo Training Ground",
+		"dma"		: "C230",
+		"length"	: 11,
+		"dungeon"	: 1,
+		"maps"		: [ "Entrance", "Driftsand Fight Challenge", "Hookshot Challenge", "Fake Room", "Eye Statue Challenge", "Hammer Challenge", "Lava Challenge", "Lizalfos Challenge", "Central Crates Room", "Underwater Challenge", "Preview Room" ]
+	}, {
+		"name"		: "Inside Ganon's Castle",
+		"dma"		: "CCC0",
+		"length"	: 20,
+		"dungeon"	: 1,
+		"maps"		: [ "Entrance", "Main Lobby", "Water Trial #1", "Water Trial #2", "Water Barrier", "Forest Trial #1", "Forest Trial #2", "Forest Barrier", "Light Trial #1", "Light Trial #2", "Fake Light Barrier", "Light Barrier", "Shadow Trial", "Shadow Barrier", "Fire Trial", "Fire Barrier", "Deku Scrubs Area", "Spirit Trial #1", "Spirit Trial #2", "Spirit Barrier" ]
+	}, {
+		"name"		: "Ganon's Tower",
+		"dma"		: "CA20",
+		"length"	: 10,
+		"dungeon"	: 2,
+		"maps"		: [ "Lower Room - Lizalfos", "Staircase #1", "Middle Room - Stalfos", "Staircase #2", "Upper Room - Iron Knuckles", "Staircase #3", "Staircase #4 to Boss Door", "Entrance", "Lower Boss Lair", "Upper Boss Lair" ]
+	}, {
+		"name"		: "Inside Ganon's Castle (Collapsing)",
+		"dma"		: "D180",
+		"length"	: 2,
+		"dungeon"	: 2,
+		"maps"		: [ "Main Lobby", "Entrance" ]
+	}, {
+		"name"		: "Ganon's Tower (Collapsing)",
+		"dma"		: "D0C0",
+		"length"	: 5,
+		"dungeon"	: 2,
+		"maps"		: [ "Lower Room - Exit", "Middle Room - Stalfos", "Upper Room - Wallmaster", "Staircase to Exit", "Boss Lair" ]
+	}, {
+		"name"		: "Ganon's Tower Exterior (Collapsing)",
+		"dma"		: "CB80",
+		"length"	: 1,
+		"dungeon"	: 2
+	}, {
+		"name"		: "Gohma's Lair",
+		"dma"		: "C990",
+		"length"	: 2,
+		"dungeon"	: 2,
+		"maps"		: [ "Dungeon Exit", "Boss Lair" ]
+	}, {
+		"name"		: "King Dodongo's Lair",
+		"dma"		: "C960",
+		"length"	: 2,
+		"dungeon"	: 2,
+		"maps"		: [ "Dungeon Exit", "Boss Lair" ]
+	}, {
+		"name"		: "Barinade's Lair",
+		"dma"		: "C740",
+		"length"	: 2,
+		"dungeon"	: 2,
+		"maps"		: [ "Dungeon Exit", "Boss Lair" ]
+	}, {
+		"name"		: "Phantom Ganon's Lair",
+		"dma"		: "C1E0",
+		"length"	: 2,
+		"dungeon"	: 2,
+		"maps"		: [ "Dungeon Exit", "Boss Lair" ]
+	}, {
+		"name"		: "Volvagia's Lair",
+		"dma"		: "C770",
+		"length"	: 2,
+		"dungeon"	: 2,
+		"maps"		: [ "Dungeon Exit", "Boss Lair" ]
+	}, {
+		"name"		: "Morpha's Lair",
+		"dma"		: "C9F0",
+		"length"	: 2,
+		"dungeon"	: 2,
+		"maps"		: [ "Dungeon Exit", "Boss Lair" ]
+	}, {
+		"name"		: "Bongo Bongo's Lair",
+		"dma"		: "C9C0",
+		"length"	: 2,
+		"dungeon"	: 2,
+		"maps"		: [ "Dungeon Exit", "Boss Lair" ]
+	}, {
+		"name"		: "Twinrova's Lair & Iron Knuckle's Lair",
+		"dma"		: "CAF0",
+		"length"	: 4,
+		"dungeon"	: 2,
+		"maps"		: [ "Dungeon Exit", "Iron Knuckle Room", "Hallway to Boss", "Boss Lair" ],
+		"stages"	: [ "Main", "Iron Knuckle Fight", "The Iron Knuckle Is Defeated", "Nabooru is Transformed" ]
+	}, {
+		"name"		: "Ganondorf's Lair",
+		"dma"		: "CAD0",
+		"length"	: 1,
+		"dungeon"	: 2
+	}, {
+		"name"		: "Ganon's Battle Arena",
+		"dma"		: "D120",
+		"length"	: 1,
+		"dungeon"	: 2,
+		"stages"	: [ "Main", "Ganon's Tower Collapse" ]
+	} ],
+	
+	"actors" : [ {
+		"name"		: "Stalfos",
+		"id"		: "0002",
+		"type"		: "Enemy",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "Invisible (Mini-Boss)",
+			"value"	: "0"
+		}, {
+			"name"	: "Rises (Mini-Boss)",
+			"value"	: "1"
+		}, {
+			"name"	: "Rises (Paired)",
+			"value"	: "2"
+		}, {
+			"name"	: "Ceiling",
+			"value"	: "3"
+		}, {
+			"name"	: "Type 4 (Mini-Boss)",
+			"value"	: [ "4", "FFFF" ]
+		}, {
+			"name"	: "Type 5 (Mini-Boss)",
+			"value"	: "5"
+		} ] ]
+	}, {
+		"name"		: "Body Parts",
+		"id"		: "0007",
+		"default"	: "0001",
+		"type"		: "Effect",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "Green Flame",
+			"value"	: "1"
+		}, {
+			"name"	: "Purple Flame",
+			"value"	: "3"
+		}, {
+			"name"	: "Red Bubbles",
+			"value"	: "4"
+		}, {
+			"name"	: "Purple Flames Burst",
+			"value"	: "5"
+		}, {
+			"name"	: "Green Flame 2",
+			"value"	: "9"
+		}, {
+			"name"	: "Green Flame 3",
+			"value"	: "A"
+		}, {
+			"name"	: "Purple Flame 2",
+			"value"	: "B"
+		}, {
+			"name"	: "Green Flame 4",
+			"value"	: "C"
+		} ] ]
+	}, {
+		"name"		: "Decorative Flames",
+		"id"		: "0008",
+		"type"		: "Effect",
+		"band"		: [ "000F", "03F0", "0400", "0800", "F000" ],
+		"params" : [ [ {
+			"name"	: "Large Orange Flame",
+			"value"	: "0"
+		}, {
+			"name"	: "Large Orange Flame 2",
+			"value"	: "1"
+		}, {
+			"name"	: "Large Blue Flame",
+			"value"	: "2"
+		}, {
+			"name"	: "Large Green Flame",
+			"value"	: "3"
+		}, {
+			"name"	: "Small Orange Flame",
+			"value"	: "4"
+		}, {
+			"name"	: "Large Orange Flame 3",
+			"value"	: "5"
+		}, {
+			"name"	: "Large Green Flame 2",
+			"value"	: "6"
+		}, {
+			"name"	: "Large Blue Flame 2",
+			"value"	: "7"
+		}, {
+			"name"	: "Large Magenta Flame",
+			"value"	: "8"
+		}, {
+			"name"	: "Large Pale Orange Flame",
+			"value"	: "9"
+		}, {
+			"name"	: "Large Pale Yellow Flame",
+			"value"	: "A"
+		}, {
+			"name"	: "Large Pale Green Flame",
+			"value"	: "B"
+		}, {
+			"name"	: "Large Pale Pink Flame",
+			"value"	: "C"
+		}, {
+			"name"	: "Large Pale Purple Flame",
+			"value"	: "D"
+		}, {
+			"name"	: "Large Pale Indigo Flame",
+			"value"	: "E"
+		}, {
+			"name"	: "Large Pale Blue Flame",
+			"value"	: "F"
+		} ], [ {
+			"name"	: "Switch",
+			"value"	: "3F"
+		} ], [ {
+			"name"	: "Switch #1 Off",
+			"value"	: "0"
+		}, {
+			"name"	: "Switch #1 On",
+			"value"	: "400"
+		} ], [ {
+			"name"	: "Switch #2 Off",
+			"value"	: "0"
+		}, {
+			"name"	: "Switch #2 On",
+			"value"	: "800"
+		} ], [ {
+			"name"	: "Intensity",
+			"value"	: "F"
+		} ] ]
+	}, {
+		"name"		: "Treasure Chest",
+		"id"		: "000A",
+		"default"	: "0020",
+		"type"		: "Object",
+		"band" 		: [ "F000", "0FE0", "001F", "003F rz" ],
+		"params" : [ [ {
+			"name"	: "Small",
+			"value"	: "5000"
+		}, {
+			"name"	: "Small (Invisible)",
+			"value"	: "6000"
+		}, {
+			"name"	: "Small (Appears on Clear)",
+			"value"	: "7000"
+		}, {
+			"name"	: "Small (Falls on Switch)",
+			"value"	: "8000"
+		}, {
+			"name"	: "Large",
+			"value"	: "0"
+		}, {
+			"name"	: "Large (Invisible)",
+			"value"	: "4000"
+		}, {
+			"name"	: "Large (Appears on Clear)",
+			"value"	: "1000"
+		}, {
+			"name"	: "Large (Falls on Switch)",
+			"value"	: "3000"
+		}, {
+			"name"	: "Large (Zelda's Lullaby)",
+			"value"	: "9000"
+		}, {
+			"name"	: "Large (Sun's Song)",
+			"value"	: "A000"
+		}, {
+			"name"	: "Large (Appears on Switch)",
+			"value"	: "B000"
+		}, {
+			"name"	: "Ornate",
+			"value"	: "2000"
+		} ], [ {
+			"name"	: "Fairy Slingshot",
+			"value"	: "A0"
+		}, {
+			"name"	: "Fairy Bow",
+			"value"	: "80"
+		}, {
+			"name"	: "Fire Arrow",
+			"value"	: "B00"
+		}, {
+			"name"	: "Ice Arrow",
+			"value"	: "B20"
+		}, {
+			"name"	: "Light Arrow",
+			"value"	: "B40"
+		}, {
+			"name"	: "Boomerang",
+			"value"	: "C0"
+		}, {
+			"name"	: "Hookshot",
+			"value"	: "100"
+		}, {
+			"name"	: "Longshot",
+			"value"	: "120"
+		}, {
+			"name"	: "Fairy Ocarina",
+			"value"	: "760"
+		}, {
+			"name"	: "Ocarina of Time",
+			"value"	: "180"
+		}, {
+			"name"	: "Lens of Truth",
+			"value"	: "140"
+		}, {
+			"name"	: "Magic Bean",
+			"value"	: "2C0"
+		}, {
+			"name"	: "Megaton Hammer",
+			"value"	: "1A0"
+		}, {
+			"name"	: "Din's Fire",
+			"value"	: "B80"
+		}, {
+			"name"	: "Farore's Wind",
+			"value"	: "BA0"
+		}, {
+			"name"	: "Nayru's Love",
+			"value"	: "BC0"
+		}, {
+			"name"	: "Kokiri Sword",
+			"value"	: "4E0"
+		}, {
+			"name"	: "Giant's Knife",
+			"value"	: "500"
+		}, {
+			"name"	: "Biggoron Sword",
+			"value"	: "AE0"
+		}, {
+			"name"	: "Deku Shield",
+			"value"	: "520"
+		}, {
+			"name"	: "Hylian Shield",
+			"value"	: "540"
+		}, {
+			"name"	: "Mirror Shield",
+			"value"	: "560"
+		}, {
+			"name"	: "Goron Tunic",
+			"value"	: "580"
+		}, {
+			"name"	: "Zora Tunic",
+			"value"	: "5A0"
+		}, {
+			"name"	: "Iron Boots",
+			"value"	: "5C0"
+		}, {
+			"name"	: "Hover Boots",
+			"value"	: "5E0"
+		}, {
+			"name"	: "Piece of Heart",
+			"value"	: "7C0"
+		}, {
+			"name"	: "Heart Container",
+			"value"	: "7A0"
+		}, {
+			"name"	: "Heart Container 2",
+			"value"	: "9E0"
+		}, {
+			"name"	: "Small Key",
+			"value"	: "840"
+		}, {
+			"name"	: "Compass",
+			"value"	: "800"
+		}, {
+			"name"	: "Map",
+			"value"	: "820"
+		}, {
+			"name"	: "Boss Key",
+			"value"	: "7E0"
+		}, {
+			"name"	: "Stone of Agony",
+			"value"	: "720"
+		}, {
+			"name"	: "Gerudo Membership Card",
+			"value"	: "740"
+		}, {
+			"name"	: "Gold Skulltula Token",
+			"value"	: "B60"
+		}, {
+			"name"	: "Weird Egg",
+			"value"	: "8E0"
+		}, {
+			"name"	: "Chicken",
+			"value"	: "320"
+		}, {
+			"name"	: "Zelda's Letter",
+			"value"	: "160"
+		}, {
+			"name"	: "Keaton Mask",
+			"value"	: "340"
+		}, {
+			"name"	: "Skull Mask",
+			"value"	: "2E0"
+		}, {
+			"name"	: "Spooky Mask",
+			"value"	: "300"
+		}, {
+			"name"	: "Bunny Hood",
+			"value"	: "360"
+		}, {
+			"name"	: "Mask of Truth",
+			"value"	: "380"
+		}, {
+			"name"	: "Goron Mask",
+			"value"	: "A20"
+		}, {
+			"name"	: "Zora Mask",
+			"value"	: "A40"
+		}, {
+			"name"	: "Gerudo Mask",
+			"value"	: "A60"
+		}, {
+			"name"	: "Pocket Egg",
+			"value"	: "3A0"
+		}, {
+			"name"	: "Pocket Cucco",
+			"value"	: "3C0"
+		}, {
+			"name"	: "Cojiro",
+			"value"	: "1C0"
+		}, {
+			"name"	: "Odd Mushroom",
+			"value"	: "3E0"
+		}, {
+			"name"	: "Odd Potion",
+			"value"	: "400"
+		}, {
+			"name"	: "Poacher's Saw",
+			"value"	: "420"
+		}, {
+			"name"	: "Broken Goron's Sword",
+			"value"	: "440"
+		}, {
+			"name"	: "Prescription",
+			"value"	: "460"
+		}, {
+			"name"	: "Eyeball Frog",
+			"value"	: "480"
+		}, {
+			"name"	: "Eye Drops",
+			"value"	: "4A0"
+		}, {
+			"name"	: "Claim Check",
+			"value"	: "4C0"
+		}, {
+			"name"	: "Empty Bottle",
+			"value"	: "1E0"
+		}, {
+			"name"	: "Red Potion",
+			"value"	: "200"
+		}, {
+			"name"	: "Green Potion",
+			"value"	: "220"
+		}, {
+			"name"	: "Blue Potion",
+			"value"	: "240"
+		}, {
+			"name"	: "Bottled Fairy",
+			"value"	: "260"
+		}, {
+			"name"	: "Lon Lon Milk",
+			"value"	: "280"
+		}, {
+			"name"	: "Lon Lon Milk (Half)",
+			"value"	: "A00"
+		}, {
+			"name"	: "Fish",
+			"value"	: "D80"
+		}, {
+			"name"	: "Bug",
+			"value"	: "DA0"
+		}, {
+			"name"	: "Blue Fire",
+			"value"	: "DC0"
+		}, {
+			"name"	: "Poe",
+			"value"	: "DE0"
+		}, {
+			"name"	: "Big Poe",
+			"value"	: "E00"
+		}, {
+			"name"	: "Ruto's Letter",
+			"value"	: "2A0"
+		}, {
+			"name"	: "Adult Wallet",
+			"value"	: "8A0"
+		}, {
+			"name"	: "Giant's Wallet",
+			"value"	: "8C0"
+		}, {
+			"name"	: "Goron's Bracelet",
+			"value"	: "A80"
+		}, {
+			"name"	: "Silver Gauntlets",
+			"value"	: "6A0"
+		}, {
+			"name"	: "Gold Gauntlets",
+			"value"	: "6C0"
+		}, {
+			"name"	: "Silver Scale",
+			"value"	: "6E0"
+		}, {
+			"name"	: "Gold Scale",
+			"value"	: "700"
+		}, {
+			"name"	: "Bullet Bag",
+			"value"	: "BE0"
+		}, {
+			"name"	: "Big Bullet Bag",
+			"value"	: "C00"
+		}, {
+			"name"	: "Biggest Bullet Bag",
+			"value"	: "F60"
+		}, {
+			"name"	: "Big Quiver",
+			"value"	: "600"
+		}, {
+			"name"	: "Biggest Quiver",
+			"value"	: "620"
+		}, {
+			"name"	: "Bomb Bag",
+			"value"	: "640"
+		}, {
+			"name"	: "Big Bomb Bag",
+			"value"	: "660"
+		}, {
+			"name"	: "Biggest Bomb Bag",
+			"value"	: "680"
+		}, {
+			"name"	: "Deku Sticks Upgrade #1",
+			"value"	: "EE0"
+		}, {
+			"name"	: "Deku Sticks Upgrade #2",
+			"value"	: "F00"
+		}, {
+			"name"	: "Deku Nuts Upgrade #1",
+			"value"	: "F20"
+		}, {
+			"name"	: "Deku Nuts Upgrade #2",
+			"value"	: "F40"
+		}, {
+			"name"	: "Minigame Key",
+			"value"	: "E20"
+		}, {
+			"name"	: "Minigame Green Rupee",
+			"value"	: "E40"
+		}, {
+			"name"	: "Minigame Blue Rupee",
+			"value"	: "E60"
+		}, {
+			"name"	: "Minigame Red Rupee",
+			"value"	: "E80"
+		}, {
+			"name"	: "Minigame Purple Rupee",
+			"value"	: "EA0"
+		}, {
+			"name"	: "Minigame Piece of Heart",
+			"value"	: "EC0"
+		}, {
+			"name"	: "Green Rupee",
+			"value"	: "980"
+		}, {
+			"name"	: "Blue Rupee",
+			"value"	: [ "9A0", "780" ]
+		}, {
+			"name"	: "Red Rupee",
+			"value"	: "9C0"
+		}, {
+			"name"	: "Purple Rupee",
+			"value"	: "AA0"
+		}, {
+			"name"	: "Gold Rupee",
+			"value"	: "AC0"
+		}, {
+			"name"	: "Recovery Heart",
+			"value"	: "900"
+		}, {
+			"name"	: "Small Magic Jar",
+			"value"	: "860"
+		}, {
+			"name"	: "Large Magic Jar",
+			"value"	: "880"
+		}, {
+			"name"	: "Deku Sticks (1)",
+			"value"	: "E0"
+		}, {
+			"name"	: "Deku Sticks (5)",
+			"value"	: "C20"
+		}, {
+			"name"	: "Deku Sticks (10)",
+			"value"	: "C40"
+		}, {
+			"name"	: "Deku Nuts (5)",
+			"value"	: [ "C60", "40" ]
+		}, {
+			"name"	: "Deku Nuts (10)",
+			"value"	: "C80"
+		}, {
+			"name"	: "Bombs (1)",
+			"value"	: "CA0"
+		}, {
+			"name"	: "Bombs (5)",
+			"value"	: "20"
+		}, {
+			"name"	: "Bombs (10)",
+			"value"	: "CC0"
+		}, {
+			"name"	: "Bombs (20)",
+			"value"	: "CE0"
+		}, {
+			"name"	: "Bombs (30)",
+			"value"	: "D00"
+		}, {
+			"name"	: "Deku Seeds",
+			"value"	: "D20"
+		}, {
+			"name"	: "Arrows (5)",
+			"value"	: "920"
+		}, {
+			"name"	: "Arrows (10)",
+			"value"	: "940"
+		}, {
+			"name"	: "Arrows (30)",
+			"value"	: "960"
+		}, {
+			"name"	: "Bombchus (5)",
+			"value"	: "D40"
+		}, {
+			"name"	: "Bombchus (10)",
+			"value"	: "60"
+		}, {
+			"name"	: "Bombchus (20)",
+			"value"	: "D60"
+		}, {
+			"name"	: "Ice Trap",
+			"value"	: "F80"
+		} ], [ {
+			"name"	: "Flag",
+			"value"	: "1F"
+		} ], [ {
+			"name"	: "Switch",
+			"value"	: "3F"
+		} ] ]
+	}, {
+		"name"		: "Great Fairy",
+		"id"		: "000B",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Proximity Fire Wall",
+		"id"		: "000C",
+		"default"	: "00FF",
+		"type"		: "Object"
+	}, {
+		"name"		: "Poe",
+		"id"		: "000D",
+		"type"		: "Enemy",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "Graveyard Poe",
+			"value"	: "0"
+		}, {
+			"name"	: "Spawns Blue Rupee",
+			"value"	: "1"
+		}, {
+			"name"	: "Sharp",
+			"value"	: "2"
+		}, {
+			"name"	: "Flat",
+			"value"	: "3"
+		} ] ]
+	}, {
+		"name"		: "Octorok",
+		"id"		: "000E",
+		"type"		: "Enemy"
+	}, {
+		"name"		: "Spiderweb",
+		"id"		: "000F",
+		"type"		: "Object",
+		"band"		: [ "F000", "0FC0", "003F" ],
+		"params" : [ [ {
+			"name"	: "Floor",
+			"value"	: "0"
+		}, {
+			"name"	: "Wall",
+			"value"	: "1000"
+		} ], [ {
+			"name"	: "Burned",
+			"value"	: "3F"
+		} ], [ {
+			"name"	: "Destroyed",
+			"value"	: "3F"
+		} ] ]
+	}, {
+		"name"		: "Wallmaster",
+		"id"		: "0011",
+		"type"		: "Enemy",
+		"band"		: [ "00FF", "3F00" ],
+		"params" : [ [ {
+			"name"	: "Timer",
+			"value"	: "0"
+		}, {
+			"name"	: "Proximity",
+			"value"	: "1"
+		}, {
+			"name"	: "Switch Spawn",
+			"value"	: "2"
+		} ], [ {
+			"name"	: "Switch",
+			"value"	: "3F"
+		} ] ]
+	}, {
+		"name"		: "Dodongo",
+		"id"		: "0012",
+		"type"		: "Enemy",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "Normal",
+			"value"	: "FFFF"
+		}, {
+			"name"	: "Smokes Upon Death",
+			"value"	: "0"
+		} ] ]
+	}, {
+		"name"		: "Keese",
+		"id"		: "0013",
+		"type"		: "Enemy",
+		"band"		: [ "0004", "8000" ],
+		"params" : [ [ {
+			"name"	: "Normal (Roost)",
+			"value"	: "3"
+		}, {
+			"name"	: "Normal (Fly)",
+			"value"	: "2"
+		}, {
+			"name"	: "Fire (Roost)",
+			"value"	: "1"
+		}, {
+			"name"	: "Fire (Fly)",
+			"value"	: "0"
+		}, {
+			"name"	: "Ice (Fly)",
+			"value"	: "4"
+		} ], [ {
+			"name"	: "Visible",
+			"value"	: "0"
+		}, {
+			"name"	: "Invisible",
+			"value"	: "8000"
+		} ] ]
+	}, {
+		"name"		: "Rideable Horse",
+		"id"		: "0014",
+		"type"		: "Animal",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "Epona",
+			"value"	: "0"
+		}, {
+			"name"	: "No Epona",
+			"value"	: "8000"
+		}, {
+			"name"	: "Default",
+			"value"	: "FFFF"
+		} ] ]
+	}, {
+		"name"		: "Collectable",
+		"id"		: "0015",
+		"type"		: "Object",
+		"band"		: [ "00FF", "3F00" ],
+		"params" : [ [ {
+			"name"	: "Flexible",
+			"value"	: "12"
+		}, {
+			"name"	: "Green Rupee",
+			"value"	: "0"
+		}, {
+			"name"	: "Blue Rupee",
+			"value"	: "1"
+		}, {
+			"name"	: "Red Rupee",
+			"value"	: "2"
+		}, {
+			"name"	: "Purple Rupee",
+			"value"	: "14"
+		}, {
+			"name"	: "Gold Rupee",
+			"value"	: "13"
+		}, {
+			"name"	: "Recovery Heart",
+			"value"	: "3"
+		}, {
+			"name"	: "Small Magic Jar",
+			"value"	: "F"
+		}, {
+			"name"	: "Large Magic Jar",
+			"value"	: "E"
+		}, {
+			"name"	: "Small Key",
+			"value"	: "11"
+		}, {
+			"name"	: "Piece of Heart",
+			"value"	: "6"
+		}, {
+			"name"	: "Heart Container",
+			"value"	: "7"
+		}, {
+			"name"	: "Deku Seeds (5) / Arrows (5)",
+			"value"	: "10"
+		}, {
+			"name"	: "Arrows (1)",
+			"value"	: "5"
+		}, {
+			"name"	: "Arrows (5)",
+			"value"	: "8"
+		}, {
+			"name"	: "Arrows (10)",
+			"value"	: "9"
+		}, {
+			"name"	: "Arrows (30)",
+			"value"	: "A"
+		}, {
+			"name"	: "Bombs (A)",
+			"value"	: "4"
+		}, {
+			"name"	: "Bombs (B)",
+			"value"	: "B"
+		}, {
+			"name"	: "Bombs (Special)",
+			"value"	: "19"
+		}, {
+			"name"	: "Deku Nut",
+			"value"	: "C"
+		}, {
+			"name"	: "Deku Stick",
+			"value"	: "D"
+		}, {
+			"name"	: "Deku Shield",
+			"value"	: "15"
+		}, {
+			"name"	: "Hylian Shield",
+			"value"	: "16"
+		}, {
+			"name"	: "Goron Tunic",
+			"value"	: "18"
+		}, {
+			"name"	: "Zora Tunic",
+			"value"	: "17"
+		}, {
+			"name"	: "No Item",
+			"value"	: "FF"
+		} ], [ {
+			"name"	: "Flag",
+			"value"	: "3F"
+		} ] ]
+	}, {
+		"name"		: "Fairy",
+		"id"		: "0018",
+		"type"		: "Object",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "Navi",
+			"value"	: "0"
+		}, {
+			"name"	: "Revive Bottle",
+			"value"	: "1"
+		}, {
+			"name"	: "Timed",
+			"value"	: "2"
+		}, {
+			"name"	: "Kokiri",
+			"value"	: "3"
+		}, {
+			"name"	: "Group",
+			"value"	: "4"
+		}, {
+			"name"	: "Revive Death",
+			"value"	: "5"
+		}, {
+			"name"	: "Small",
+			"value"	: "6"
+		}, {
+			"name"	: "Big",
+			"value"	: "7"
+		} ] ]
+	}, {
+		"name"		: "Cucco",
+		"id"		: "0019",
+		"type"		: "Animal",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "Default",
+			"value"	: [ "0000", "FFFF" ]
+		}, {
+			"name"	: "Type 1",
+			"value"	: "1"
+		}, {
+			"name"	: "Type 2",
+			"value"	: "2"
+		}, {
+			"name"	: "Type 3",
+			"value"	: "3"
+		}, {
+			"name"	: "Flees",
+			"value"	: "4"
+		}, {
+			"name"	: "Type 5",
+			"value"	: "5"
+		}, {
+			"name"	: "Type 6",
+			"value"	: "6"
+		}, {
+			"name"	: "Type 7",
+			"value"	: "7"
+		}, {
+			"name"	: "Doesn't Flee",
+			"value"	: "8"
+		}, {
+			"name"	: "Type 9",
+			"value"	: "9"
+		}, {
+			"name"	: "Stationary",
+			"value"	: "A"
+		}, {
+			"name"	: "Zora's River (Start)",
+			"value"	: "B"
+		}, {
+			"name"	: "Zora's River (Platform)",
+			"value"	: "C"
+		}, {
+			"name"	: "Type D",
+			"value"	: "D"
+		}, {
+			"name"	: "Ranch House",
+			"value"	: "E"
+		} ] ]
+	}, {
+		"name"		: "Tektite",
+		"id"		: "001B",
+		"type"		: "Enemy",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "Red",
+			"value"	: "FFFF"
+		}, {
+			"name"	: "Blue",
+			"value"	: "FFFE"
+		} ] ]
+	}, {
+		"name"		: "Leever",
+		"id"		: "0017",
+		"type"		: "Enemy",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "Small",
+			"value"	: "0"
+		}, {
+			"name"	: "Big",
+			"value"	: "1"
+		} ] ]
+	}, {
+		"name"		: "Peahat",
+		"id"		: "001D",
+		"type"		: "Enemy",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "Flying",
+			"value"	: "0"
+		}, {
+			"name"	: "Larva",
+			"value"	: "1"
+		}, {
+			"name"	: "Burrowed",
+			"value"	: "FFFF"
+		} ] ]
+	}, {
+		"name"		: "Butterfly",
+		"id"		: "001E",
+		"type"		: "Animal"
+	}, {
+		"name"		: "Bug",
+		"id"		: "0020",
+		"type"		: "Animal",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "Permanent",
+			"value"	: "0"
+		}, {
+			"name"	: "Spawned",
+			"value"	: "1"
+		}, {
+			"name"	: "Dropped First",
+			"value"	: "2"
+		}, {
+			"name"	: "Dropped Extra Bottle",
+			"value"	: "3"
+		} ] ]
+	}, {
+		"name"		: "Fish",
+		"id"		: "0021",
+		"type"		: "Animal",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "Flopping",
+			"value"	: "0"
+		}, {
+			"name"	: "Doesn't Flee",
+			"value"	: "1"
+		}, {
+			"name"	: "Reacts to Link",
+			"value"	: "1"
+		}, {
+			"name"	: "Flees",
+			"value"	: "FFFF"
+		} ] ]
+	}, {
+		"name"		: "Lizalfos",
+		"id"		: "0025",
+		"type"		: "Enemy",
+		"band"		: [ "00FF" ],
+		"params" : [ [ {
+			"name"	: "Lizalfos (Mini-Boss A)",
+			"value"	: "0"
+		}, {
+			"name"	: "Lizalfos (Mini-Boss B)",
+			"value"	: "1"
+		}, {
+			"name"	: "Lizalfos",
+			"value"	: "80"
+		}, {
+			"name"	: "Dinolfos",
+			"value"	: "FE"
+		}, {
+			"name"	: "Lizalfos (Ceiling Drop)",
+			"value"	: "FF"
+		} ] ]
+	}, {
+		"name"		: "Wooden Flagpole",
+		"id"		: "0026",
+		"default"	: "FFFF",
+		"type"		: "Object"
+	}, {
+		"name"		: "King Dodongo",
+		"id"		: "0027",
+		"default"	: "FFFF",
+		"type"		: "Boss"
+	}, {
+		"name"		: "Gohma",
+		"id"		: "0028",
+		"default"	: "FFFF",
+		"type"		: "Boss"
+	}, {
+		"name"		: "Princess Zelda (Window)",
+		"id"		: "0029",
+		"default"	: "FFFF",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Cutscene Actors",
+		"id"		: "002A",
+		"type"		: "Cutscene",
+		"band"		: [ "FF00" ],
+		"params" : [ [ {
+			"name"	: "Zelda's Horse",
+			"value"	: "0"
+		}, {
+			"name"	: "Impa on Horse",
+			"value"	: "100"
+		}, {
+			"name"	: "Zelda on Horse",
+			"value"	: "200"
+		}, {
+			"name"	: "Ganondorf on Horse",
+			"value"	: "300"
+		}, {
+			"name"	: "Ganondorf's Horse",
+			"value"	: "400"
+		}, {
+			"name"	: "Ganondorf on Horse (Flames)",
+			"value"	: "500"
+		}, {
+			"name"	: "Ganondorf's Horse (Galloping)",
+			"value"	: "600"
+		}, {
+			"name"	: "Ganondorf Hands Crossed",
+			"value"	: "700"
+		}, {
+			"name"	: "Ganondorf Bowing",
+			"value"	: "800"
+		}, {
+			"name"	: "Ganondorf Defeated",
+			"value"	: "900"
+		} ] ]
+	}, {
+		"name"		: "Gohma Larva",
+		"id"		: "002B",
+		"type"		: "Enemy",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "Falls",
+			"value"	: "0"
+		}, {
+			"name"	: "Egg",
+			"value"	: "6"
+		}, {
+			"name"	: "Invisible Until Hatched",
+			"value"	: "8"
+		} ] ]
+	}, {
+		"name"		: "Shabom",
+		"id"		: "002D",
+		"type"		: "Enemy"
+	}, {
+		"name"		: "Baby Dodongo",
+		"id"		: "002F",
+		"type"		: "Enemy"
+	}, {
+		"name"		: "Dark Link",
+		"id"		: "0033",
+		"type"		: "Boss",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "Default",
+			"value"	: "FFFF"
+		} ] ]
+	}, {
+		"name"		: "Biri",
+		"id"		: "0034",
+		"type"		: "Enemy",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "Normal",
+			"value"	: "FFFF"
+		}, {
+			"name"	: "Bari Spawned",
+			"value"	: "0"
+		}, {
+			"name"	: "Dying",
+			"value"	: "1"
+		} ] ]
+	}, {
+		"name"		: "Tailpasaran",
+		"id"		: "0035",
+		"type"		: "Enemy",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "Tail",
+			"value"	: "0"
+		}, {
+			"name"	: "Fragment",
+			"value"	: "10"
+		}, {
+			"name"	: "Tail Dying",
+			"value"	: "11"
+		}, {
+			"name"	: "Head Dying",
+			"value"	: "12"
+		}, {
+			"name"	: "Default",
+			"value"	: "FFFF"
+		} ] ]
+	}, {
+		"name"		: "Skulltula",
+		"id"		: "0037",
+		"type"		: "Enemy",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "Normal",
+			"value"	: "0"
+		}, {
+			"name"	: "Big",
+			"value"	: "1"
+		}, {
+			"name"	: "Invisible",
+			"value"	: "2"
+		} ] ]
+	}, {
+		"name"		: "Torch Slug",
+		"id"		: "0038",
+		"type"		: "Enemy"
+	}, {
+		"name"		: "World Objects",
+		"id"		: "0039",
+		"type"		: "Object",
+		"band"		: [ "00FF", "FF00" ],
+		"params" : [ [ {
+			"name"	: "Block Small",
+			"value"	: "0"
+		}, {
+			"name"	: "Block Large",
+			"value"	: "1"
+		}, {
+			"name"	: "Block Huge",
+			"value"	: "2"
+		}, {
+			"name"	: "Block Small Rotates",
+			"value"	: "3"
+		}, {
+			"name"	: "Block Large Rotates",
+			"value"	: "4"
+		}, {
+			"name"	: "Cube Small",
+			"value"	: "5"
+		}, {
+			"name"	: "Grass Clump",
+			"value"	: "7"
+		}, {
+			"name"	: "Tree Stump",
+			"value"	: "8"
+		}, {
+			"name"	: "Signpost Square",
+			"value"	: "9"
+		}, {
+			"name"	: "Signpost Arrow",
+			"value"	: "A"
+		}, {
+			"name"	: "Boulder Fragment",
+			"value"	: "B"
+		} ], [ {
+			"name"	: "Message",
+			"value"	: "FF"
+		} ] ]
+	}, {
+		"name"		: "Stinger (Land)",
+		"id"		: "003A",
+		"type"		: "Enemy",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "Group & Clones",
+			"value"	: "0"
+		}, {
+			"name"	: "3 in Formation",
+			"value"	: "1"
+		}, {
+			"name"	: "2 in Formation",
+			"value"	: "2"
+		}, {
+			"name"	: "1 in Formation",
+			"value"	: "3"
+		}, {
+			"name"	: "Single",
+			"value"	: "A"
+		} ] ]
+	}, {
+		"name"		: "Ambient Sound Effects",
+		"id"		: "003B",
+		"band"		: [ "00FF", "FF00" ],
+		"params" : [ [ {
+			"name"	: "River Low",
+			"value"	: "0",
+			"show"	: 2
+		}, {
+			"name"	: "Waterfall Small",
+			"value"	: "1",
+			"hide"	: 2
+		}, {
+			"name"	: "Lava Bubbles",
+			"value"	: "2",
+			"hide"	: 2
+		}, {
+			"name"	: "Waterfall Large",
+			"value"	: "3",
+			"hide"	: 2
+		}, {
+			"name"	: "River Medium",
+			"value"	: "4",
+			"show"	: 2
+		}, {
+			"name"	: "River High",
+			"value"	: "5",
+			"show"	: 2
+		}, {
+			"name"	: "Lower Fire Temple",
+			"value"	: "6",
+			"hide"	: 2
+		}, {
+			"name"	: "Upper Fire Temple",
+			"value"	: "7",
+			"hide"	: 2
+		}, {
+			"name"	: "Water Dripping",
+			"value"	: "8",
+			"hide"	: 2
+		}, {
+			"name"	: "Water Fountain",
+			"value"	: "9",
+			"hide"	: 2
+		}, {
+			"name"	: "Market Crowd",
+			"value"	: "A",
+			"hide"	: 2
+		}, {
+			"name"	: "Lower Music Volume",
+			"value"	: "B",
+			"hide"	: 2
+		}, {
+			"name"	: "Saria's Song (Lost Woods)",
+			"value"	: "C",
+			"hide"	: 2
+		}, {
+			"name"	: "Saria's Song (Goron City)",
+			"value"	: "D",
+			"hide"	: 2
+		}, {
+			"name"	: "Sandstorm",
+			"value"	: "E",
+			"hide"	: 2
+		}, {
+			"name"	: "Lakeside Lab Tank",
+			"value"	: "F",
+			"hide"	: 2
+		}, {
+			"name"	: "Chamber of Sages 1",
+			"value"	: "10",
+			"hide"	: 2
+		}, {
+			"name"	: "Chamber of Sages 2",
+			"value"	: "11",
+			"hide"	: 2
+		}, {
+			"name"	: "Rumbling",
+			"value"	: "12",
+			"hide"	: 2
+		}, {
+			"name"	: "Great Fairy",
+			"value"	: "13",
+			"hide"	: 2
+		}, {
+			"name"	: "Torch Crackling",
+			"value"	: "14",
+			"hide"	: 2
+		}, {
+			"name"	: "Cow Mooing",
+			"value"	: "15",
+			"hide"	: 2
+		}, {
+			"name"	: "Nature Ambience",
+			"value"	: "F7",
+			"hide"	: 2
+		}, {
+			"name"	: "Ganondorf's Lair",
+			"value"	: "F8",
+			"hide"	: 2
+		}, {
+			"name"	: "Top Ganon's Tower",
+			"value"	: "F9",
+			"hide"	: 2
+		}, {
+			"name"	: "Ganon's Tower 2",
+			"value"	: "FA",
+			"hide"	: 2
+		}, {
+			"name"	: "Ganon's Tower 3",
+			"value"	: "FB",
+			"hide"	: 2
+		}, {
+			"name"	: "Ganon's Tower 4",
+			"value"	: "FC",
+			"hide"	: 2
+		}, {
+			"name"	: "Ganon's Tower 5",
+			"value"	: "FD",
+			"hide"	: 2
+		}, {
+			"name"	: "Ganon's Tower 6",
+			"value"	: "FE",
+			"hide"	: 2
+		}, {
+			"name"	: "Bottom Ganon's Tower",
+			"value"	: "FF",
+			"hide"	: 2
+		} ], [ {
+			"name"	: "Path",
+			"value"	: "FF"
+		} ] ]
+	}, {
+		"name"		: "Horse",
+		"id"		: "003C",
+		"type"		: "Animal",
+		"band"		: [ "00FF" ],
+		"params" : [ [ {
+			"name"	: "Runs Away",
+			"value"	: "10"
+		}, {
+			"name"	: "Runs Around",
+			"value"	: [ "0F", "01", "FF" ]
+		} ] ]
+	}, {
+		"name"		: "Shopkeeper",
+		"id"		: "003D",
+		"type"		: "Enemy",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "Kokiri Shop",
+			"value"	: "0"
+		}, {
+			"name"	: "Kakariko Potion Shop",
+			"value"	: "1"
+		}, {
+			"name"	: "Bombchu Shop",
+			"value"	: "2"
+		}, {
+			"name"	: "Market Potion Shop",
+			"value"	: "3"
+		}, {
+			"name"	: "Bazaar",
+			"value"	: "4"
+		}, {
+			"name"	: "Adult",
+			"value"	: "5"
+		}, {
+			"name"	: "Talon",
+			"value"	: "6"
+		}, {
+			"name"	: "Zora Shop",
+			"value"	: "7"
+		}, {
+			"name"	: "Goron Shop",
+			"value"	: "8"
+		}, {
+			"name"	: "Ingo",
+			"value"	: "9"
+		}, {
+			"name"	: "Happy Mask Shop",
+			"value"	: "A"
+		} ] ]
+	}, {
+		"name"		: "Great Deku Tree's Jaw",
+		"id"		: "003E",
+		"default"	: "FFFF"
+	}, {
+		"name"		: "Mega Dodongo",
+		"id"		: "003F",
+		"type"		: "Area",
+		"band"		: [ "003F" ],
+		"params" : [ [ {
+			"name"	: "Switch",
+			"value"	: "3F"
+		} ] ]
+	}, {
+		"name"		: "Megaton Hammer Statue",
+		"id"		: "0040",
+		"type"		: "Object",
+		"band"		: [ "00FF", "FF00" ],
+		"params" : [ [ {
+			"name"	: "Body",
+			"value"	: "0"
+		}, {
+			"name"	: "Head",
+			"value"	: "1"
+		} ], [ {
+			"name"	: "Switch",
+			"value"	: "FF"
+		} ] ]
+	}, {
+		"name"		: "Huge Stone Spike Platform",
+		"id"		: "0041",
+		"type"		: "Object",
+		"band"		: [ "0F00", "003F" ],
+		"params" : [ [ {
+			"name"	: "Huge",
+			"value"	: "0"
+		}, {
+			"name"	: "Big",
+			"value"	: "100"
+		}, {
+			"name"	: "Small",
+			"value"	: "200"
+		} ], [ {
+			"name"	: "Switch",
+			"value"	: "3F"
+		} ] ]
+	}, {
+		"name"		: "Stone Blocks",
+		"id"		: "0043",
+		"default"	: "FFFF",
+		"type"		: "Area",
+		"band"		: [ "00FF", "FF00" ],
+		"params" : [ [ {
+			"name"	: "Large Face Cube",
+			"value"	: "0"
+		}, {
+			"name"	: "Squat Cube",
+			"value"	: "1"
+		} ], [ {
+			"name"	: "Switch",
+			"value"	: "FF"
+		} ] ]
+	}, {
+		"name"		: "Spinning Flamethrower",
+		"id"		: "0044",
+		"default"	: "FFFF",
+		"type"		: "Area"
+	}, {
+		"name"		: "Flamethrower Statue",
+		"id"		: "0045",
+		"type"		: "Area",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "2-Way",
+			"value"	: "0"
+		}, {
+			"name"	: "4-Way",
+			"value"	: [ "1", "4000" ]
+		} ] ]
+	}, {
+		"name"		: "Stone Platform",
+		"id"		: "0046",
+		"type"		: "Area",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "Sinking",
+			"value"	: "0"
+		}, {
+			"name"	: "Sliding",
+			"value"	: "1"
+		} ] ]
+	}, {
+		"name"		: "Stone Eleavator",
+		"id"		: "0047",
+		"default"	: "FFFF",
+		"type"		: "Area"
+	}, {
+		"name"		: "Sheik",
+		"id"		: "0048",
+		"type"		: "NPC",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "Do Nothing",
+			"value"	: "0"
+		}, {
+			"name"	: "First Time Adult",
+			"value"	: "1"
+		}, {
+			"name"	: "Prelude of Light",
+			"value"	: "2"
+		}, {
+			"name"	: "Defeated Morpha",
+			"value"	: "3"
+		}, {
+			"name"	: "Zelda Reveal",
+			"value"	: "4"
+		}, {
+			"name"	: "Nocturne of Shadow",
+			"value"	: "5"
+		}, {
+			"name"	: "Minuet of Forest",
+			"value"	: "6"
+		}, {
+			"name"	: "Bolero of Fire",
+			"value"	: "7"
+		}, {
+			"name"	: "Serenade of Water",
+			"value"	: "8"
+		}, {
+			"name"	: "Master Sword Pedestal",
+			"value"	: "9"
+		} ] ]
+	}, {
+		"name"		: "Flame Circle",
+		"id"		: "0049",
+		"type"		: "Object",
+		"band"		: [ "F000", "0FC0", "003F" ],
+		"params" : [ [ {
+			"name"	: "Large & Room Clear",
+			"value"	: "0"
+		}, {
+			"name"	: "Large, Long & Chest Clear",
+			"value"	: "1000"
+		}, {
+			"name"	: "Small & Short",
+			"value"	: "2000"
+		}, {
+			"name"	: "Large, Cutscene & Short",
+			"value"	: "3000"
+		}, {
+			"name"	: "Disabled, Small & Short",
+			"value"	: "4000"
+		}, {
+			"name"	: "Disabled, Large & Toggled",
+			"value"	: "5000"
+		}, {
+			"name"	: "Large, Room Clear & Flag Set",
+			"value"	: "6000"
+		}, {
+			"name"	: "Nothing",
+			"value"	: "7000"
+		} ], [ {
+			"name" 	: "Chest",
+			"value"	: "3F"
+		} ], [ {
+			"name" 	: "Switch",
+			"value"	: "3F"
+		} ] ]
+	}, {
+		"name"		: "Drawbridge",
+		"id"		: "004A",
+		"type"		: "Area",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "Chains",
+			"value"	: "0"
+		}, {
+			"name"	: "Drawbridge",
+			"value"	: "FFFF"
+		} ] ]
+	}, {
+		"name"		: "Moblin",
+		"id"		: "004B",
+		"type"		: "Enemy",
+		"band"		: [ "00FF", "FF00" ],
+		"params" : [ [ {
+			"name"	: "Club",
+			"value"	: "0"
+		}, {
+			"name"	: "Spear Patrol",
+			"value"	: "0"
+		}, {
+			"name"	: "Spear Guard",
+			"value"	: "FF"
+		} ], [ {
+			"name"	: "Path",
+			"value"	: "FF"
+		} ] ]
+	}, {
+		"name"		: "Bombflower",
+		"id"		: "004C",
+		"type"		: "Object",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "Body",
+			"value"	: "0"
+		}, {
+			"name"	: "Explosion",
+			"value"	: "1"
+		}, {
+			"name"	: "Flower",
+			"value"	: "FFFF"
+		} ] ]
+	}, {
+		"name"		: "Princess Zelda",
+		"id"		: "004D",
+		"type"		: "Cutscene",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "Temple of Time",
+			"value"	: "0"
+		}, {
+			"name"	: "Final Cutscene",
+			"value"	: "1"
+		}, {
+			"name"	: "Ganondorf",
+			"value"	: "4"
+		} ] ]
+	}, {
+		"name"		: "Hookshot Elevator Platform",
+		"id"		: "004E",
+		"default"	: "FFFF",
+		"type"		: "Area"
+	}, {
+		"name"		: "Red-Haired Kokiri Girl",
+		"id"		: "004F",
+		"type"		: "Unused"
+	}, {
+		"name"		: "Deku Tree Puzzle Element",
+		"id"		: "0050",
+		"type"		: "Area",
+		"band"		: [ "00FF", "FF00" ],
+		"params" : [ [ {
+			"name"	: "Moving Platform",
+			"value"	: "0"
+		}, {
+			"name"	: "Water Plane",
+			"value"	: "1"
+		}, {
+			"name"	: "Three Rising Platforms",
+			"value"	: "2"
+		} ], [ {
+			"name"	: "Switch",
+			"value"	: "FF"
+		} ] ]
+	}, {
+		"name"		: "Rotating Spiked Log",
+		"id"		: "0051",
+		"type"		: "Area",
+		"band"		: [ "FF00", "00FF" ],
+		"params" : [ [ {
+			"name"	: "Spike Trap",
+			"value"	: "0"
+		}, {
+			"name"	: "Falling Ladder",
+			"value"	: "100"
+		} ], [ {
+			"name"	: "Switch",
+			"value"	: "FF"
+		} ] ]
+	}, {
+		"name"		: "Phantom Ganon",
+		"id"		: "0052",
+		"default"	: "FFFF",
+		"type"		: "Boss"
+	}, {
+		"name"		: "Armos",
+		"id"		: "0054",
+		"type"		: "Enemy",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "Pushable",
+			"value"	: "0"
+		}, {
+			"name"	: "Monster",
+			"value"	: [ "1", "FFFF" ]
+		} ] ]
+	}, {
+		"name"		: "Deku Baba",
+		"id"		: "0055",
+		"type"		: "Enemy",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "Small",
+			"value"	: "0"
+		}, {
+			"name"	: "Big",
+			"value"	: "1"
+		} ] ]
+	}, {
+		"name"		: "Rising Stone Platform",
+		"id"		: "0058",
+		"type"		: "Area",
+		"band"		: [ "00FF" ],
+		"params" : [ [ {
+			"name"	: "Switch",
+			"value"	: "FF"
+		} ] ]
+	}, {
+		"name"		: "Bombable Stone Wall",
+		"id"		: "0059",
+		"type"		: "Area",
+		"band"		: [ "8000", "6000", "003F" ],
+		"params" : [ [ {
+			"name"	: "No SFX",
+			"value"	: "0"
+		}, {
+			"name"	: "Play SFX",
+			"value"	: "8000"
+		} ], [ {
+			"name"	: "Wall (Cutscene)",
+			"value"	: "0"
+		}, {
+			"name"	: "Wall",
+			"value"	: "2000"
+		}, {
+			"name"	: "Floor",
+			"value"	: "4000"
+		}, {
+			"name"	: "Lava Cover",
+			"value"	: "6000"
+		} ], [ {
+			"name"	: "Switch",
+			"value"	: "3F"
+		} ] ]
+	}, {
+		"name"		: "Lord Jabu-Jabu",
+		"id"		: "005A",
+		"type"		: "Animal",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "Regular",
+			"value"	: "FFFF"
+		}, {
+			"name"	: "Collision Data",
+			"value"	: "0"
+		}, {
+			"name"	: "Unused Collision",
+			"value"	: "1"
+		} ] ]
+	}, {
+		"name"		: "Stone Stairs",
+		"id"		: "005C",
+		"type"		: "Area",
+		"band"		: [ "003F" ],
+		"params" : [ [ {
+			"name"	: "Switch",
+			"value"	: "3F"
+		} ] ]
+	}, {
+		"name"		: "Warp Portal",
+		"id"		: "005D",
+		"type"		: "Object",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "Blue Crystal",
+			"value"	: "FFFE"
+		}, {
+			"name"	: "Dungeon Adult",
+			"value"	: "FFFF"
+		}, {
+			"name"	: "Dungeon Child",
+			"value"	: "0"
+		}, {
+			"name"	: "Flag Clear",
+			"value"	: "1"
+		}, {
+			"name"	: "Sages",
+			"value"	: "2"
+		}, {
+			"name"	: "Purple Crystal",
+			"value"	: "3"
+		}, {
+			"name"	: "Yellow Warp",
+			"value"	: "4"
+		}, {
+			"name"	: "Ruto",
+			"value"	: "5"
+		}, {
+			"name"	: "Destination",
+			"value"	: "6"
+		}, {
+			"name"	: "Tan Warp",
+			"value"	: "7"
+		}, {
+			"name"	: "Orange Warp",
+			"value"	: "8"
+		}, {
+			"name"	: "Green Warp",
+			"value"	: "9"
+		}, {
+			"name"	: "Red Warp",
+			"value"	: "A"
+		} ] ]
+	}, {
+		"name"		: "Torch",
+		"id"		: "005E",
+		"type"		: "Object",
+		"band"		: [ "F000", "0400", "03C0", "003F" ],
+		"params" : [ [ {
+			"name"	: "Gold",
+			"value"	: "0"
+		}, {
+			"name"	: "Timed",
+			"value"	: "1000"
+		}, {
+			"name"	: "Wood",
+			"value"	: "2000"
+		} ], [ {
+			"name"	: "Unlit",
+			"value"	: "0"
+		}, {
+			"name"	: "Lit",
+			"value"	: "400"
+		} ], [ {
+			"name"	: "Total",
+			"value"	: "3C"
+		} ], [ {
+			"name"	: "Switch",
+			"value"	: "3F"
+		} ] ]
+	}, {
+		"name"		: "Heart Container",
+		"id"		: "005F",
+		"type"		: "Object"
+	}, {
+		"name"		: "Mad Scrub",
+		"id"		: "0060",
+		"type"		: "Enemy"
+	}, {
+		"name"		: "Rotating Stone Ring",
+		"id"		: "0061",
+		"type"		: "Area",
+		"band"		: [ "003F" ],
+		"params" : [ [ {
+			"name"	: "Switch",
+			"value"	: "3F"
+		} ] ]
+	}, {
+		"name"		: "Eye Statue",
+		"id"		: "0062",
+		"type"		: "Area",
+		"band"		: [ "003F" ],
+		"params" : [ [ {
+			"name"	: "Switch",
+			"value"	: "3F"
+		} ] ]
+	}, {
+		"name"		: "Bari",
+		"id"		: "0063",
+		"type"		: "Enemy"
+	}, {
+		"name"		: "Water Temple Objects",
+		"id"		: "0064",
+		"type"		: "Area",
+		"band"		: [ "F000", "0F00", "00F0", "000F" ],
+		"params" : [ [ {
+			"name"	: "Sloped Square Platform",
+			"value"	: "0"
+		}, {
+			"name"	: "Square Platform",
+			"value"	: "1000"
+		}, {
+			"name"	: "Tapered Square Platform",
+			"value"	: "2000"
+		}, {
+			"name"	: "Main Dragon Head Statue",
+			"value"	: "3000"
+		}, {
+			"name"	: "Dragon Head Statue",
+			"value"	: [ "4000", "5000", "6000" ]
+		}, {
+			"name"	: "Target Square Platform ",
+			"value"	: "7000"
+		} ], [ {
+			"name"	: "Path",
+			"value"	: "F"
+		} ], [ {
+			"name"	: "Speed / Flag",
+			"value"	: "F"
+		} ], [ {
+			"name"	: "Start / Flag",
+			"value"	: "F"
+		} ] ]
+	}, {
+		"name"		: "Water Temple Plane",
+		"id"		: "0065",
+		"type"		: "Area",
+		"band"		: [ "00FF", "FF00" ],
+		"params" : [ [ {
+			"name"	: "Type",
+			"value"	: "FF"
+		} ], [ {
+			"name"	: "Switch",
+			"value"	: "FF"
+		} ] ]
+	}, {
+		"name"		: "Twisted Hallway Rooms",
+		"id"		: "0068",
+		"type"		: "Area",
+		"band"		: [ "4000", "8000", "3F00", "003F" ],
+		"params" : [ [ {
+			"name"	: "Switch #1 Off",
+			"value"	: "0"
+		}, {
+			"name"	: "Switch #1 On",
+			"value"	: "4000"
+		} ], [ {
+			"name"	: "Switch #2 Off",
+			"value"	: "0"
+		}, {
+			"name"	: "Switch #2 On",
+			"value"	: "8000"
+		} ], [ {
+			"name"	: "Switch #3",
+			"value"	: "3F"
+		} ], [ {
+			"name"	: "Switch #4",
+			"value"	: "3F"
+		} ] ]
+	}, {
+		"name"		: "Bubble",
+		"id"		: "0069",
+		"default"	: "FFFF",
+		"type"		: "Enemy",
+		"band"		: [ "000F", "FF00" ],
+		"params" : [ [ {
+			"name"	: "Large Green",
+			"value"	: "B"
+		}, {
+			"name"	: "Green",
+			"value"	: "C"
+		}, {
+			"name"	: "White",
+			"value"	: "D"
+		}, {
+			"name"	: "Red",
+			"value"	: "E"
+		}, {
+			"name"	: "Blue",
+			"value"	: "F"
+		} ], [ {
+			"name"	: "Path",
+			"value"	: "FF"
+		} ] ]
+	}, {
+		"name"		: "Windows Temple of Time",
+		"id"		: "006A",
+		"type"		: "Area",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "Normal",
+			"value"	: "0"
+		}, {
+			"name"	: "Invisible",
+			"value"	: "1"
+		} ] ]
+	}, {
+		"name"		: "Flying Tile",
+		"id"		: "006B",
+		"type"		: "Enemy",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "Time",
+			"value"	: "FFFF"
+		} ] ]
+	}, {
+		"name"		: "Master Sword",
+		"id"		: "006C",
+		"default"	: "FFFF",
+		"type"		: "Area"
+	}, {
+		"name"		: "Warp Song Pad",
+		"id"		: "006E",
+		"type"		: "Object",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "Ocarina",
+			"value"	: "0"
+		}, {
+			"name"	: "Light",
+			"value"	: "1"
+		}, {
+			"name"	: "Shadow",
+			"value"	: "2"
+		}, {
+			"name"	: "Fire",
+			"value"	: "3"
+		}, {
+			"name"	: "Water",
+			"value"	: "4"
+		}, {
+			"name"	: "Spirit",
+			"value"	: "5"
+		}, {
+			"name"	: "Forest",
+			"value"	: "6"
+		} ] ]
+	}, {
+		"name"		: "Sliding Metal Gate",
+		"id"		: "006F",
+		"type"		: "Area",
+		"band"		: [ "00FF", "FF00" ],
+		"params" : [ [ {
+			"name"	: "Metal Fence With Slant",
+			"value"	: "0"
+		}, {
+			"name"	: "Rectangular Metal Fence",
+			"value"	: "1"
+		}, {
+			"name"	: "Rusted Metal Fence",
+			"value"	: "2"
+		} ], [ {
+			"name"	: "Switch",
+			"value"	: "3F"
+		} ] ]
+	}, {
+		"name"		: "Stone Steps & Platform",
+		"id"		: "0071",
+		"type"		: "Area",
+		"band"		: [ "00FF", "FF00" ],
+		"params" : [ [ {
+			"name"	: "One-Sided Platform",
+			"value"	: "1"
+		}, {
+			"name"	: "Hammer-Triggered Stone Steps",
+			"value"	: "0"
+		} ], [ {
+			"name"	: "Switch",
+			"value"	: "3F"
+		} ] ]
+	}, {
+		"name"		: "Brown Bird",
+		"id"		: "0072",
+		"type"		: "Animal"
+	}, {
+		"name"		: "Trees and Bushes",
+		"id"		: "0077",
+		"type"		: "Object",
+		"band"		: [ "00FF", "FF00", "00FF rz" ],
+		"params" : [ [ {
+			"name"	: "Tree Conical Large",
+			"value"	: "0"
+		}, {
+			"name"	: "Tree Conical Medium",
+			"value"	: "1"
+		}, {
+			"name"	: "Tree Conical Small",
+			"value"	: "2"
+		}, {
+			"name"	: "Tree Conical Spawner",
+			"value"	: "3"
+		}, {
+			"name"	: "Tree Conical Spawned",
+			"value"	: "4"
+		}, {
+			"name"	: "Tree Oval Green",
+			"value"	: "5"
+		}, {
+			"name"	: "Tree Oval Yellow Spawner",
+			"value"	: "6"
+		}, {
+			"name"	: "Tree Oval Yellow Spawned",
+			"value"	: "7"
+		}, {
+			"name"	: "Tree Oval Green Spawner",
+			"value"	: "8"
+		}, {
+			"name"	: "Tree Oval Green Spawned",
+			"value"	: "9"
+		}, {
+			"name"	: "Tree Kakariko Village",
+			"value"	: "A"
+		}, {
+			"name"	: "Bush Green Small",
+			"value"	: "B"
+		}, {
+			"name"	: "Bush Green Large",
+			"value"	: "C"
+		}, {
+			"name"	: "Bush Green Small Spawner",
+			"value"	: "D"
+		}, {
+			"name"	: "Bush Green Small Spawned",
+			"value"	: "E"
+		}, {
+			"name"	: "Bush Green Large Spawner",
+			"value"	: "F"
+		}, {
+			"name"	: "Bush Green Large Spawned",
+			"value"	: "10"
+		}, {
+			"name"	: "Bush Black Small",
+			"value"	: "11"
+		}, {
+			"name"	: "Bush Black Large",
+			"value"	: "12"
+		}, {
+			"name"	: "Bush Black Small Spawner",
+			"value"	: "13"
+		}, {
+			"name"	: "Bush Black Small Spawned",
+			"value"	: "14"
+		}, {
+			"name"	: "Bush Black Large Spawner",
+			"value"	: "15"
+		}, {
+			"name"	: "Bush Black Large Spawned",
+			"value"	: "16"
+		}, {
+			"name"	: "Leaf Green",
+			"value"	: "17"
+		}, {
+			"name"	: "Leaf Yellow",
+			"value"	: "18"
+		} ], [ {
+			"name"	: "Item Drops",
+			"value"	: "FF"
+		} ], [ {
+			"name"	: "Skulltula",
+			"value"	: "FF"
+		} ] ]
+	}, {
+		"name"		: "Blade Trap",
+		"id"		: "0080",
+		"type"		: "Enemy",
+		"band"		: [ "0030", "F000", "F000", "0001", "0002", "0004", "0008", "0F00" ],
+		"params" : [ [ {
+			"name"	: "4-Way Attack",
+			"value"	: "0",
+			"show"	: 2,
+			"hide"	: 3
+		}, {
+			"name"	: "Line Loop",
+			"value"	: "10",
+			"show"	: 2,
+			"hide"	: 3
+		}, {
+			"name"	: "Circle Loop",
+			"value"	: "20",
+			"show"	: 3,
+			"hide"	: 2
+		}, {
+			"name"	: "Vertical",
+			"value"	: "30",
+			"show"	: 3,
+			"hide"	: 2
+		} ], [ {
+			"name"	: "Radius",
+			"value"	: "F"
+		} ], [ {
+			"name"	: "Trap Range",
+			"value"	: "F"
+		} ], [ {
+			"name"	: "No North",
+			"value"	: "0"
+		}, {
+			"name"	: "Move North",
+			"value"	: "1"
+		} ], [ {
+			"name"	: "No South",
+			"value"	: "0"
+		}, {
+			"name"	: "Move South",
+			"value"	: "2"
+		} ], [ {
+			"name"	: "No West",
+			"value"	: "0"
+		}, {
+			"name"	: "Move West",
+			"value"	: "4"
+		} ], [ {
+			"name"	: "No East",
+			"value"	: "0"
+		}, {
+			"name"	: "Move East",
+			"value"	: "8"
+		} ], [ {
+			"name"	: "Attack Speed",
+			"value"	: "F"
+		} ] ]
+	}, {
+		"name"		: "Arrow Trap",
+		"id"		: "0081",
+		"type"		: "Enemy"
+	}, {
+		"name"		: "Orange Pot",
+		"id"		: "0082",
+		"type"		: "Unused"
+	}, {
+		"name"		: "Large Round Platform",
+		"id"		: "0086",
+		"type"		: "Object",
+		"band"		: [ "3F00" ],
+		"params" : [ [ {
+			"name"	: "Switch",
+			"value"	: "3F"
+		} ] ]
+	}, {
+		"name"		: "Beamos",
+		"id"		: "008A",
+		"type"		: "Enemy",
+		"band"		: [ "00FF", "FF00" ],
+		"params" : [ [ {
+			"name"	: "Large",
+			"value"	: "0"
+		}, {
+			"name"	: "Small",
+			"value"	: "1"
+		} ], [ {
+			"name"	: "Sight",
+			"value"	: "FF"
+		} ] ]
+	}, {
+		"name"		: "Talon",
+		"id"		: "0084",
+		"default"	: "FFFF",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Dampé (Alive)",
+		"id"		: "0085",
+		"default"	: "FFFF",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Elevator",
+		"id"		: "0087",
+		"type"		: "Area",
+		"band"		: [ "003F" ],
+		"params" : [ [ {
+			"name"	: "Switch",
+			"value"	: "3F"
+		} ] ]
+	}, {
+		"name"		: "Rotatable Walls",
+		"id"		: "0088",
+		"default"	: "FFFF",
+		"type"		: "Area"
+	}, {
+		"name"		: "Falling Ceiling",
+		"id"		: "0089",
+		"default"	: "FFFF",
+		"type"		: "Area"
+	}, {
+		"name"		: "Large Fire Wall",
+		"id"		: "008D",
+		"type"		: "Object",
+		"band"		: [ "FF00", "00FF" ],
+		"params" : [ [ {
+			"name"	: "Direction",
+			"value"	: "FF"
+		}, {
+			"name"	: "Switch",
+			"value"	: "FF"
+		} ] ]
+	}, {
+		"name"		: "Floormaster",
+		"id"		: "008E",
+		"type"		: "Enemy",
+		"band"		: [ "8000" ],
+		"params" : [ [ {
+			"name"	: "Visible",
+			"value"	: "0"
+		}, {
+			"name"	: "Invisible",
+			"value"	: "8000"
+		} ] ]
+	}, {
+		"name"		: "Castle Courtyard Guards",
+		"id"		: "008F",
+		"type"		: "NPC",
+		"band"		: [ "FF00", "00FF" ],
+		"params" : [ [ {
+			"name"	: "Timer: 20 & Type 1",
+			"value"	: "0"
+		}, {
+			"name"	: "Timer: 10 & Type 1",
+			"value"	: "100"
+		}, {
+			"name"	: "Timer: 20 & Type 2",
+			"value"	: "200"
+		}, {
+			"name"	: "Timer: 10 & Type 2",
+			"value"	: "300"
+		}, {
+			"name"	: "Timer: 13 & Type 2",
+			"value"	: "400"
+		}, {
+			"name"	: "Standing Guard",
+			"value"	: "500"
+		} ], [ {
+			"name"	: "Path",
+			"value"	: "FF"
+		} ] ]
+	}, {
+		"name"		: "Cutscene Effects",
+		"id"		: "008B",
+		"type"		: "Cutscene",
+		"band"		: [ "00FF", "F000", "0F00" ],
+		"params" : [ [ {
+			"name"	: "Crystal Light",
+			"value"	: "0"
+		}, {
+			"name"	: "Fire Ball",
+			"value"	: "1"
+		}, {
+			"name"	: "Blue Orb",
+			"value"	: "2"
+		}, {
+			"name"	: "Light Shower",
+			"value"	: "3"
+		}, {
+			"name"	: "Din's Goddess Light",
+			"value"	: "4"
+		}, {
+			"name"	: "Nayru's Goddess Light",
+			"value"	: "5"
+		}, {
+			"name"	: "Farore's Goddess Light",
+			"value"	: "6"
+		}, {
+			"name"	: "Expanding Light Ring",
+			"value"	: "7"
+		}, {
+			"name"	: "Spot Triforce",
+			"value"	: "8"
+		}, {
+			"name"	: "Fire Medallion",
+			"value"	: "9"
+		}, {
+			"name"	: "Water Medallion",
+			"value"	: "A"
+		}, {
+			"name"	: "Forest Medallion",
+			"value"	: "B"
+		}, {
+			"name"	: "Spirit Medallion",
+			"value"	: "C"
+		}, {
+			"name"	: "Shadow Medallion",
+			"value"	: "D"
+		}, {
+			"name"	: "Light Medallion",
+			"value"	: "E"
+		}, {
+			"name"	: "Time Warp Master Sword",
+			"value"	: "F"
+		}, {
+			"name"	: "Shrinking Light Ring",
+			"value"	: "10"
+		}, {
+			"name"	: "Triforce Light Ring",
+			"value"	: "11"
+		}, {
+			"name"	: "Light",
+			"value"	: "12"
+		}, {
+			"name"	: "Kokiri's Emerald",
+			"value"	: "13"
+		}, {
+			"name"	: "Goron's Ruby",
+			"value"	: "14"
+		}, {
+			"name"	: "Zora's Sapphire",
+			"value"	: "15"
+		}, {
+			"name"	: "Dust",
+			"value"	: "16"
+		}, {
+			"name"	: "Light Arrow",
+			"value"	: "17"
+		}, {
+			"name"	: "Time Block Large",
+			"value"	: "18"
+		}, {
+			"name"	: "Time Block Small",
+			"value"	: "19"
+		} ], [ {
+			"name"	: "Red",
+			"value"	: "0"
+		}, {
+			"name"	: "Blue",
+			"value"	: "1000"
+		}, {
+			"name"	: "Green",
+			"value"	: "2000"
+		}, {
+			"name"	: "Orange",
+			"value"	: "3000"
+		}, {
+			"name"	: "Yellow",
+			"value"	: "4000"
+		}, {
+			"name"	: "Purple",
+			"value"	: "5000"
+		}, {
+			"name"	: "Green 2",
+			"value"	: "6000"
+		}, {
+			"name"	: "None",
+			"value"	: "F000"
+		} ], [ {
+			"name"	: "Small",
+			"value"	: "0"
+		}, {
+			"name"	: "Large",
+			"value"	: [ "100", "200", "300", "400", "500", "600", "700", "800", "900", "A00", "B00", "C00", "D00", "E00", "F00" ]
+		} ] ]
+	}, {
+		"name"		: "Temple of Time",
+		"id"		: "008C",
+		"type"		: "Area",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "Blue Rain",
+			"value"	: [ "00", "01" ]
+		}, {
+			"name"	: "Giant Rock",
+			"value"	: [ "02", "03", "04", "05", "06" ]
+		}, {
+			"name"	: "Fluffy Clouds",
+			"value"	: "7"
+		}, {
+			"name"	: "Musical Note",
+			"value"	: [ "8", "9", "A", "B", "C" ]
+		}, {
+			"name"	: "Door of Time",
+			"value"	: "D"
+		}, {
+			"name"	: "Plane of Yellow Light",
+			"value"	: "E"
+		}, {
+			"name"	: "Warp Song Leaving",
+			"value"	: "F"
+		}, {
+			"name"	: "Warp Song Arriving",
+			"value"	: "10"
+		}, {
+			"name"	: "Sparkly Effect",
+			"value"	: "11"
+		} ] ]
+	}, {
+		"name"		: "Redead & Gibdo",
+		"id"		: "0090",
+		"type"		: "Enemy",
+		"band"		: [ "00FF" ],
+		"params" : [ [ {
+			"name"	: "Redead",
+			"value"	: "1"
+		}, {
+			"name"	: "Redead (Invisible)",
+			"value"	: "3"
+		}, {
+			"name"	: "Redead (Crying)",
+			"value"	: "2"
+		}, {
+			"name"	: "Redead (No Mourn)",
+			"value"	: [ "7F", "FF" ]
+		}, {
+			"name"	: "Redead (No Mourn Walk)",
+			"value"	: "0"
+		}, {
+			"name"	: "Gibdo",
+			"value"	: [ "7E", "FE" ]
+		}, {
+			"name"	: "Gibdo (Rises)",
+			"value"	: [ "7D", "FD" ]
+		} ] ]
+	}, {
+		"name"		: "Golden Gauntlets Pillar",
+		"id"		: "0092",
+		"type"		: "Object",
+		"band"		: [ "000F", "3F00" ],
+		"params" : [ [ {
+			"name"	: "Unbreakable",
+			"value"	: "0"
+		}, {
+			"name"	: "Breakable",
+			"value"	: "1"
+		}, {
+			"name"	: "Big Piece",
+			"value"	: "2"
+		}, {
+			"name"	: "Small Piece",
+			"value"	: "3"
+		}, {
+			"name"	: "Unbreakable Outside Castle",
+			"value"	: "4"
+		} ], [ {
+			"name"	: "Switch",
+			"value"	: "3F"
+		} ] ]
+	}, {
+		"name"		: "Poe Sisters' Paintings",
+		"id"		: "0093",
+		"type"		: "Object",
+		"band"		: [ "0F00", "003F" ],
+		"params" : [ [ {
+			"name"	: "Amy's Block",
+			"value"	: "0"
+		}, {
+			"name"	: "Beth's Block",
+			"value"	: "100"
+		}, {
+			"name"	: "Joelle's Painting",
+			"value"	: "200"
+		}, {
+			"name"	: "Beth's Painting",
+			"value"	: "300"
+		}, {
+			"name"	: "Amy's Painting",
+			"value"	: "400"
+		} ], [ {
+			"name"	: "Switch",
+			"value"	: "3F"
+		} ] ]
+	}, {
+		"name"		: "Insect Group Spawner",
+		"id"		: "0094",
+		"type"		: "Animal",
+		"band"		: [ "001F", "0060", "F000", "0700" ],
+		"params" : [ [ {
+			"name"	: "Fish",
+			"value"	: "2"
+		}, {
+			"name"	: "Bug",
+			"value"	: "3"
+		}, {
+			"name"	: "Butterfly",
+			"value"	: "4"
+		} ], [ {
+			"name"	: "Zero Spawn Pattern",
+			"value"	: "0"
+		}, {
+			"name"	: "Default Spawn Pattern",
+			"value"	: "20"
+		} ], [ {
+			"name"	: "Count",
+			"value"	: "F"
+		} ], [ {
+			"name"	: "Table",
+			"value"	: "7"
+		} ] ]
+	}, {
+		"name"		: "Skullwalltula",
+		"id"		: "0095",
+		"default"	: 1,
+		"type"		: "Enemy",
+		"band"		: [ "E000", "1F00", "00FF" ],
+		"params" : [ [ {
+			"name"	: "Skullwalltula",
+			"value"	: "0",
+			"hide"	: 3
+		}, {
+			"name"	: "Gold Skulltula (Anytime)",
+			"value"	: [ "8000", "2000", "4000" ],
+			"show"	: 3
+		}, {
+			"name"	: "Gold Skulltula (Appears)",
+			"value"	: [ "6000", "D000", "F000" ],
+			"show"	: 3
+		}, {
+			"name"	: "Gold Skulltula (Night)",
+			"value"	: "A000",
+			"show"	: 3
+		} ], [ {
+			"name"	: "None",
+			"value"	: "0"
+		}, {
+			"name"	: "Deku Tree",
+			"value"	: "100"
+		}, {
+			"name"	: "Dodongo's Cavern",
+			"value"	: "200"
+		}, {
+			"name"	: "Inside Jabu-Jabu's Belly",
+			"value"	: "300"
+		}, {
+			"name"	: "Forest Temple",
+			"value"	: "400"
+		}, {
+			"name"	: "Fire Temple",
+			"value"	: "500"
+		}, {
+			"name"	: "Water Temple",
+			"value"	: "600"
+		}, {
+			"name"	: "Spirit Temple",
+			"value"	: "700"
+		}, {
+			"name"	: "Shadow Temple",
+			"value"	: "800"
+		}, {
+			"name"	: "Bottom of the Well",
+			"value"	: "900"
+		}, {
+			"name"	: "Ice Cavern",
+			"value"	: "A00"
+		}, {
+			"name"	: "Hyrule Field",
+			"value"	: "B00"
+		}, {
+			"name"	: "Lon Lon Ranch",
+			"value"	: "C00"
+		}, {
+			"name"	: "Kokiri Forest",
+			"value"	: "D00"
+		}, {
+			"name"	: "Lost Woods",
+			"value"	: "E00"
+		}, {
+			"name"	: "Castle",
+			"value"	: "F00"
+		}, {
+			"name"	: "Death Mountain",
+			"value"	: "1000"
+		}, {
+			"name"	: "Kakariko Village",
+			"value"	: "1100"
+		}, {
+			"name"	: "River",
+			"value"	: "1200"
+		}, {
+			"name"	: "Lake Hylia",
+			"value"	: "1300"
+		}, {
+			"name"	: "Gerudo Valley",
+			"value"	: "1400"
+		}, {
+			"name"	: "Gerudo Fortress",
+			"value"	: "1500"
+		}, {
+			"name"	: "Desert",
+			"value"	: "1600"
+		} ], [ {
+			"name"	: "No Flag",
+			"value"	: "0"
+		}, {
+			"name"	: "Flag 1",
+			"value"	: "1"
+		}, {
+			"name"	: "Flag 2",
+			"value"	: "2"
+		}, {
+			"name"	: "Flag 3",
+			"value"	: "4"
+		}, {
+			"name"	: "Flag 4",
+			"value"	: "8"
+		}, {
+			"name"	: "Flag 5",
+			"value"	: "10"
+		}, {
+			"name"	: "Flag 6",
+			"value"	: "20"
+		}, {
+			"name"	: "Flag 7",
+			"value"	: "40"
+		}, {
+			"name"	: "Flag 8",
+			"value"	: "80"
+		} ] ]
+	}, {
+		"name"		: "Volvagia (Flying)",
+		"id"		: "0096",
+		"default"	: "FFFF",
+		"type"		: "Boss"
+	}, {
+		"name"		: "Environmental Effects",
+		"id"		: "0097",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "Flying Faries",
+			"value"	: "0"
+		}, {
+			"name"	: "Lightning",
+			"value"	: "2"
+		}, {
+			"name"	: "Snow",
+			"value"	: "3"
+		}, {
+			"name"	: "Electric Spark Effect",
+			"value"	: "4"
+		}, {
+			"name"	: "Colored Light Beams",
+			"value"	: "5"
+		} ] ]
+	}, {
+		"name"		: "Darunia",
+		"id"		: "0098",
+		"default"	: "FFFF",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Flare Dancer",
+		"id"		: "0099",
+		"type"		: "Enemy"
+		}, {
+		"name"		: "Young Epona",
+		"id"		: "009A",
+		"default"	: "FFFF",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Grotto Entrance",
+		"id"		: "009B",
+		"type"		: "Object",
+		"band"		: [ "F000", "000F rz", "000F rz", "0300", "00E0", "001F" ],
+		"params" : [ [ {
+			"name"	: "Grottos",
+			"value"	: "0",
+			"show"	: 2,
+			"hide"	: 3
+		}, {
+			"name"	: "Small Fairy Fountain",
+			"value"	: "1000",
+			"show"	: 3,
+			"hide"	: 2
+		} ], [ {
+			"name"	: "Generic",
+			"value"	: "0"
+		}, {
+			"name"	: "Big Skulltula",
+			"value"	: "1"
+		}, {
+			"name"	: "Salescrub (Piece of Heart)",
+			"value"	: "2"
+		}, {
+			"name"	: "Two Redeads",
+			"value"	: "3"
+		}, {
+			"name"	: "Three Deku Salescrubs",
+			"value"	: "4"
+		}, {
+			"name"	: "Webbed",
+			"value"	: "5"
+		}, {
+			"name"	: "Octorok",
+			"value"	: "6"
+		}, {
+			"name"	: "Salescrubs (Deku Nut Upgrade)",
+			"value"	: "7"
+		}, {
+			"name"	: "Two Wolfos",
+			"value"	: "8"
+		}, {
+			"name"	: "Bombable Wall",
+			"value"	: "9"
+		}, {
+			"name"	: "Salescrubs (Potions)",
+			"value"	: "A"
+		}, {
+			"name"	: "Tektite",
+			"value"	: "B"
+		}, {
+			"name"	: "Forest Stage",
+			"value"	: "C"
+		}, {
+			"name"	: "Cow",
+			"value"	: "D"
+		} ], [ {
+			"name"	: "Fairy Fountain",
+			"value"	: "0",
+			"text"	: 0
+		} ], [ {
+			"name"	: "Visible",
+			"value"	: "0"
+		}, {
+			"name"	: "Song of Storms",
+			"value"	: "100"
+		}, {
+			"name"	: "Bomb / Megaton hammer",
+			"value"	: "200"
+		} ], [ {
+			"name"	: "Blue Rupee",
+			"value"	: "0"
+		}, {
+			"name"	: "Red Rupee",
+			"value"	: "20"
+		}, {
+			"name"	: "Gold Rupee",
+			"value"	: "40"
+		}, {
+			"name"	: "Bombs (1)",
+			"value"	: [ "60", "80", "A0", "C0" ]
+		}, {
+			"name"	: "No Item",
+			"value"	: "E0"
+		} ], [ {
+			"name"	: "Chest Flag",
+			"value"	: "1F"
+		} ] ]
+	}, {
+		"name"		: "Graveyard",
+		"id"		: "009C",
+		"type"		: "Area",
+		"band"		: [ "00FF", "FF00" ],
+		"params" : [ [ {
+			"name"	: "Shadow Temple Door",
+			"value"	: "0"
+		}, {
+			"name"	: "Patch of Dirt",
+			"value"	: "1"
+		}, {
+			"name"	: "Royal Tomb Grave",
+			"value"	: "2"
+		}, {
+			"name"	: "Royal Tomb Cutscene",
+			"value"	: "3"
+		}, {
+			"name"	: "Light Aura",
+			"value"	: "4"
+		} ], [ {
+			"name"	: "Switch",
+			"value"	: "FF"
+		} ] ]
+	}, {
+		"name"		: "Gravestone",
+		"id"		: "009D",
+		"type"		: "Object",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "Default",
+			"value"	: "0"
+		}, {
+			"name"	: "Play SFX",
+			"value"	: "1"
+		}, {
+			"name"	: "Typical",
+			"value"	: "2"
+		} ] ]
+	}, {
+		"name"		: "Ruto (Child)",
+		"id"		: "00A1",
+		"type"		: "NPC",
+		"band"		: [ "00FF", "FF00" ],
+		"params" : [ [ {
+			"name"	: "Defeated Barinade",
+			"value"	: "0"
+		}, {
+			"name"	: "Giving Zora's Sapphire",
+			"value"	: "1"
+		}, {
+			"name"	: "Falling Down",
+			"value"	: "2"
+		}, {
+			"name"	: "Wants To Be Carried",
+			"value"	: "3"
+		}, {
+			"name"	: "Fake Zora's Sapphire",
+			"value"	: "4"
+		}, {
+			"name"	: "Rescued",
+			"value"	: "5"
+		}, {
+			"name"	: "Tenctacles Three-Way",
+			"value"	: "6"
+		}, {
+			"name"	: "Type 10",
+			"value"	: "10"
+		} ], [ {
+			"name"	: "Switch",
+			"value"	: "FF"
+		} ] ]
+	}, {
+		"name"		: "Dead Hand",
+		"id"		: "00A4",
+		"type"		: "Enemy"
+	}, {
+		"name"		: "Dead Hand's Hand",
+		"id"		: "00A5",
+		"type"		: "Enemy"
+	}, {
+		"name"		: "Rauru",
+		"id"		: "00A6",
+		"type"		: "NPC",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "Light Medallion",
+			"value"	: "0"
+		}, {
+			"name"	: "Ganon's Castle Light Trial",
+			"value"	: "2"
+		} ] ]
+	}, {
+		"name"		: "Enemy Spawner",
+		"id"		: "00A7",
+		"type"		: "Enemy",
+		"band"		: [ "F800", "07C0", "003F" ],
+		"params" : [ [ {
+			"name"	: "Leever",
+			"value"	: "0"
+		}, {
+			"name"	: "Red Tektite",
+			"value"	: "800"
+		}, {
+			"name"	: "Stalchildren",
+			"value"	: "1000"
+		}, {
+			"name"	: "Wolfos",
+			"value"	: "1800"
+		} ], [ {
+			"name"	: "Most",
+			"value"	: "1F"
+		} ], [ {
+			"name"	: "Total",
+			"value"	: "3F"
+		} ] ]
+	}, {
+		"name"		: "Darunia",
+		"id"		: "00A8",
+		"type"		: "Cutscene",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "Fire Medallion",
+			"value"	: "0"
+		}, {
+			"name"	: "Goron's Ruby",
+			"value"	: "1"
+		}, {
+			"name"	: "Ganon's Castle Fire Trial",
+			"value"	: "2"
+		}, {
+			"name"	: "Credits",
+			"value"	: "3"
+		} ] ]
+	}, {
+		"name"		: "Impa",
+		"id"		: "00A9",
+		"type"		: "Cutscene",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "Shadow Medallion",
+			"value"	: "0"
+		}, {
+			"name"	: "Ganon's Castle Shadow Trial",
+			"value"	: "2"
+		}, {
+			"name"	: "Cutscene 3",
+			"value"	: "3"
+			}, {
+			"name"	: "Visit Death Mountain",
+			"value"	: "4"
+			}, {
+			"name"	: "Zelda's Lullaby",
+			"value"	: "5"
+			}, {
+			"name"	: "Credits",
+			"value"	: "6"
+		} ] ]
+	}, {
+		"name"		: "Flare Dancer Core",
+		"id"		: "00AB",
+		"type"		: "Enemy",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "No Damage",
+			"value"	: "0"
+		}, {
+			"name"	: "One-Hit Kill",
+			"value"	: "1"
+		} ] ]
+	}, {
+		"name"		: "Fake Walls",
+		"id"		: "00AE",
+		"type"		: "Area",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "Fake Fall & Floor",
+			"value"	: "0"
+		}, {
+			"name"	: "Three Fake Floors",
+			"value"	: "1"
+		}, {
+			"name"	: "Hole Trap",
+			"value"	: "2"
+		}, {
+			"name"	: "Rock Skull Wall",
+			"value"	: "3"
+		}, {
+			"name"	: "Large Skull Face",
+			"value"	: "4"
+		}, {
+			"name"	: "Boss Room Platforms",
+			"value"	: "5"
+		}, {
+			"name"	: "Wall of Skulls",
+			"value"	: "6"
+		}, {
+			"name"	: "Blue Floor",
+			"value"	: "7"
+		}, {
+			"name"	: "Massive Platform",
+			"value"	: "8"
+		}, {
+			"name"	: "Blue Fat Bricks Wall",
+			"value"	: "9"
+		}, {
+			"name"	: "Diamond Room Fall Walls",
+			"value"	: "A"
+		}, {
+			"name"	: "Purple Fat Bricks Wall",
+			"value"	: "B"
+		}, {
+			"name"	: "Invisible Spikes",
+			"value"	: "C"
+		} ] ]
+	}, {
+		"name"		: "Shadow Temple Platforms",
+		"id"		: "00AF",
+		"type"		: "Area",
+		"band"		: [ "00FF", "FF00" ],
+		"params" : [ [ {
+			"name"	: "Moving Stone Platforms",
+			"value"	: "0"
+		}, {
+			"name"	: "Rising & Falling Stone Platforms",
+			"value"	: "1"
+		}, {
+			"name"	: "Spinning Black Platform",
+			"value"	: "2"
+		}, {
+			"name"	: "Metal Grate",
+			"value"	: "3"
+		} ], [ {
+			"name"	: "Switch",
+			"value"	: "3F"
+		} ] ]
+	}, {
+		"name"		: "River Boat",
+		"id"		: "00B0",
+		"type"		: "NPC",
+		"band"		: [ "FF00" ],
+		"params" : [ [ {
+			"name"	: "Switch",
+			"value"	: "3F"
+		} ] ]
+	}, {
+		"name"		: "Spinning Scythe Trap",
+		"id"		: "00B1",
+		"type"		: "NPC",
+		"band"		: [ "FF00", "00FF" ],
+		"params" : [ [ {
+			"name"	: "Shadow Temple",
+			"value"	: "0"
+		}, {
+			"name"	: "Ice Cavern",
+			"value"	: "100"
+		} ], [ {
+			"name"	: "Visible",
+			"value"	: "0"
+		}, {
+			"name"	: "Invisible",
+			"value"	: "1"
+		} ] ]
+	}, {
+		"name"		: "Hyrulian Guards",
+		"id"		: "00B3",
+		"type"		: "NPC",
+		"band"		: [ "00FF" ],
+		"params" : [ [ {
+			"name"	: "Hyrule Castle",
+			"value"	: "2"
+		}, {
+			"name"	: "Kakariko",
+			"value"	: "5"
+		}, {
+			"name"	: "Ceremonial",
+			"value"	: [ "6", "9" ]
+		} ] ]
+	}, {
+		"name"		: "Falling Rock Spawner",
+		"id"		: "00B4",
+		"type"		: "Object"
+	}, {
+		"name"		: "Falling Burning Rock",
+		"id"		: "00B5",
+		"type"		: "Object",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "Falling 1",
+			"value"	: "0"
+		}, {
+			"name"	: "Falling 2",
+			"value"	: "3"
+		}, {
+			"name"	: "Broken Piece 1",
+			"value"	: "1"
+		}, {
+			"name"	: "Broken Piece 2",
+			"value"	: "2"
+		}, {
+			"name"	: "Spawner",
+			"value"	: "5"
+		}, {
+			"name"	: "On Floor",
+			"value"	: "6"
+		} ] ]
+	}, {
+		"name"		: "Muscle Block",
+		"id"		: "00B6",
+		"type"		: "Enemy",
+		"band"		: [ "00FF", "1000" ],
+		"params" : [ [ {
+			"name"	: "Height",
+			"value"	: "FF"
+		} ], [ {
+			"name"	: "Big",
+			"value"	: "0"
+		}, {
+			"name"	: "Small",
+			"value"	: "100"
+		} ] ]
+	}, {
+		"name"		: "Reflectable Light Beam",
+		"id"		: "00B7",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "Map 9",
+			"value"	: 1
+		}, {
+			"name"	: "Map 16",
+			"value"	: 2
+		}, {
+			"name"	: "Map 19",
+			"value"	: 3
+		}, {
+			"name"	: "Map 27",
+			"value"	: 4
+		} ] ]
+	}, {
+		"name"		: "Gerudo Valley",
+		"id"		: "00B8",
+		"type"		: "Area",
+		"band"		: [ "00FF" ],
+		"params" : [ [ {
+			"name"	: "Type",
+			"value"	: "5"
+		} ] ]
+	}, {
+		"name"		: "Darunia's Room Statue",
+		"id"		: "00B9",
+		"type"		: "Area",
+		"band"		: [ "000F", "FF00" ],
+		"params" : [ [ {
+			"name"	: "Statue",
+			"value"	: "0"
+		}, {
+			"name"	: "Spear Only",
+			"value"	: "1"
+		} ], [ {
+			"name"	: "Switch",
+			"value"	: "FF"
+		} ] ]
+	}, {
+		"name"		: "Barinade",
+		"id"		: "00BA",
+		"default"	: "FFFF",
+		"type"		: "Boss"
+	}, {
+		"name"		: "Giant Skull Jar",
+		"id"		: "00BB",
+		"default"	: "00FF",
+		"type"		: "Area",
+		"band"		: [ "00FF" ],
+		"params" : [ [ {
+			"name"	: "Key",
+			"value"	: "FF"
+		} ] ]
+	}, {
+		"name"		: "Shadow Temple Traps",
+		"id"		: "00BC",
+		"type"		: "Area",
+		"band"		: [ "00FF" ],
+		"params" : [ [ {
+			"name"	: "Guillotine Blade (Slow)",
+			"value"	: "0"
+		}, {
+			"name"	: "Spiked Box on Chain",
+			"value"	: "1"
+		}, {
+			"name"	: "Spiked Wooden Wall 1",
+			"value"	: "2"
+		}, {
+			"name"	: "Spiked Wooden Wall 2",
+			"value"	: "3"
+		}, {
+			"name"	: "Fan",
+			"value"	: "4"
+		}, {
+			"name"	: "Guillotine Blade (Fast)",
+			"value"	: "5"
+		} ] ]
+	}, {
+		"name"		: "Coffin Lid",
+		"id"		: "00BD",
+		"type"		: "Object",
+		"band"		: [ "FF00", "00FF" ],
+		"params" : [ [ {
+			"name"	: "Nothing",
+			"value"	: "0"
+		}, {
+			"name"	: "Gibdo",
+			"value"	: "100"
+		}, {
+			"name"	: "Two Keese",
+			"value"	: "200"
+		} ], [ {
+			"name"	: "Switch",
+			"value"	: "3F"
+		} ] ]
+	}, {
+		"name"		: "Bird Statue & Wall",
+		"id"		: "00BE",
+		"type"		: "Area",
+		"band"		: [ "00FF", "3F00" ],
+		"params" : [ [ {
+			"name"	: "Giant Bird Statue",
+			"value"	: "0"
+		}, {
+			"name"	: "Bombable Skull Wall",
+			"value"	: "1"
+		}, {
+			"name"	: "Bombable Rubble",
+			"value"	: "2"
+		} ], [ {
+			"name"	: "Switch",
+			"value"	: "3F"
+		} ] ]
+	}, {
+		"name"		: "Smoke Cone",
+		"id"		: "00BF",
+		"default"	: "FFFF",
+		"type"		: "Area"
+	}, {
+		"name"		: "Shooting Gallery Game",
+		"id"		: "00C0"
+	}, {
+		"name"		: "Shop Shelves",
+		"id"		: "00C2",
+		"type"		: "Area",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "Wood",
+			"value"	: "0"
+		}, {
+			"name"	: "Stone",
+			"value"	: "1"
+		}, {
+			"name"	: "Granite",
+			"value"	: "2"
+		} ] ]
+	}, {
+		"name"		: "Nabooru",
+		"id"		: "00C3",
+		"type"		: "NPC",
+		"band"		: [ "00FF", "FF00" ],
+		"params" : [ [ {
+			"name"	: "Spirit Medallion",
+			"value"	: "0"
+		}, {
+			"name"	: "Ganon's Castle Spirit Trial",
+			"value"	: "2"
+		}, {
+			"name"	: "Kidnapped",
+			"value"	: "3"
+		}, {
+			"name"	: "Iron Knuckle",
+			"value"	: "4"
+		}, {
+			"name"	: "Credits",
+			"value"	: "5"
+		}, {
+			"name"	: "Crawlspace",
+			"value"	: "6"
+		} ], [ {
+			"name"	: "Path",
+			"value"	: "FF"
+		} ] ]
+	}, {
+		"name"		: "Morpha",
+		"id"		: "00C4",
+		"default"	: "FFFF",
+		"type"		: "Boss"
+	}, {
+		"name"		: "Shell Blade",
+		"id"		: "00C5",
+		"type"		: "Enemy"
+	}, {
+		"name"		: "Big Octo",
+		"id"		: "00C6",
+		"type"		: "Enemy",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "Mini-Boss",
+			"value"	: "0"
+		}, {
+			"name"	: "Regular",
+			"value"	: "1"
+		} ] ]
+	}, {
+		"name"		: "Withered Deku Baba",
+		"id"		: "00C7",
+		"type"		: "Enemy"
+	}, {
+		"name"		: "Jabu-Jabu Objects",
+		"id"		: "00C8",
+		"type"		: "Area",
+		"band"		: [ "00FF", "FF00" ],
+		"params"	: [ [ {
+			"name"	: "Giant Octo's Platform",
+			"value"	: "0"
+		}, {
+			"name"	: "Elevator Platform",
+			"value"	: "1"
+		}, {
+			"name"	: "Water Square",
+			"value"	: "2"
+		}, {
+			"name"	: "Lowering Platform",
+			"value"	: "3"
+		} ], [ {
+			"name"	: "Switch",
+			"value"	: "FF"
+		} ] ]
+	}, {
+		"name"		: "Saria",
+		"id"		: "00C9",
+		"type"		: "Cutscene",
+		"band"		: [ "FFFF" ],
+		"params"	: [ [ {
+			"name"	: "Forest Medallion",
+			"value"	: "0"
+		}, {
+			"name"	: "Ganon's Castle Forest Trial",
+			"value"	: "2"
+		}, {
+			"name"	: "Credits",
+			"value"	: "4"
+		}, {
+			"name"	: "Fairy Ocarina",
+			"value"	: "5"
+		} ] ]
+	}, {
+		"name"		: "Gorons",
+		"id"		: "00CA",
+		"type"		: "Cutscene",
+		"band"		: [ "FFFF" ],
+		"params"	: [ [ {
+			"name"	: "Action 0",
+			"value"	: "0"
+		}, {
+			"name"	: "Action 1",
+			"value"	: "1"
+		}, {
+			"name"	: "Action 2",
+			"value"	: "2"
+		} ] ]
+	}, {
+		"name"		: "Ingo",
+		"id"		: "00CB",
+		"default"	: "FFFF",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Koume & Kotake",
+		"id"		: "00CC",
+		"type"		: "NPC",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "Koume",
+			"value"	: "0"
+		}, {
+			"name"	: "Kotake",
+			"value"	: "1"
+		} ] ]
+	}, {
+		"name"		: "Blocking Rock",
+		"id"		: "00CD",
+		"type"		: "Area",
+		"band"		: [ "00FF", "3F00" ],
+		"params" : [ [ {
+			"name"	: "Cavern Rock",
+			"value"	: "FF"
+		}, {
+			"name"	: "Debris",
+			"value"	: [ "00", "01", "02", "03", "04", "05" ]
+		} ], [ {
+			"name"	: "Switch",
+			"value"	: "3F"
+		} ] ]
+	}, {
+		"name"		: "Bombable Wall Fire Temple",
+		"id"		: "00CF",
+		"type"		: "Area",
+		"band"		: [ "00FF", "3F00" ],
+		"params" : [ [ {
+			"name"	: "Cracked Stone Floor",
+			"value"	: "0"
+		}, {
+			"name"	: "Stone Wall",
+			"value"	: "1"
+		}, {
+			"name"	: "Large Stone Wall",
+			"value"	: "2"
+		} ], [ {
+			"name"	: "Switch",
+			"value"	: "3F"
+		} ] ]
+	}, {
+		"name"		: "2D Bombable Wall",
+		"id"		: "00D0",
+		"type"		: "Area",
+		"band"		: [ "00FF", "3F00" ],
+		"params" : [ [ {
+			"name"	: "Trail",
+			"value"	: "0"
+		}, {
+			"name"	: "Crater",
+			"value"	: "1"
+		} ], [ {
+			"name"	: "Switch",
+			"value"	: "3F"
+		} ] ]
+	}, {
+		"name"		: "Ice Platform",
+		"id"		: "00D1",
+		"type"		: "Area",
+		"band"		: [ "0200", "0100", "000F", "00F0" ],
+		"params" : [ [ {
+			"name"	: "Iceberg",
+			"value"	: "0"
+		}, {
+			"name"	: "Ice Ramp",
+			"value"	: "200"
+		} ], [ {
+			"name"	: "No Twin",
+			"value"	: "0"
+		}, {
+			"name"	: "Twin",
+			"value"	: "100"
+		} ], [ {
+			"name"	: "Floating",
+			"value"	: "0"
+		}, {
+			"name"	: "Floating & Less Roll",
+			"value"	: "1"
+		}, {
+			"name"	: "Floating & Rotating",
+			"value"	: "2"
+		}, {
+			"name"	: "Twin Floating Circle",
+			"value"	: "3"
+		}, {
+			"name"	: "Stationary",
+			"value"	: "4"
+		} ], [ {
+			"name"	: "Large",
+			"value"	: "0"
+		}, {
+			"name"	: "Regular",
+			"value"	: "10"
+		}, {
+			"name"	: "Small",
+			"value"	: "20"
+		} ] ]
+	}, {
+		"name"		: "Ruto (Adult)",
+		"id"		: "00D2",
+		"type"		: "NPC",
+		"band"		: [ "00FF", "FF00" ],
+		"params" : [ [ {
+			"name"	: "Water Medallion",
+			"value"	: "0"
+		}, {
+			"name"	: "Ganon's Castle Water Trial",
+			"value"	: "2"
+		}, {
+			"name"	: "Credits",
+			"value"	: "3"
+		}, {
+			"name"	: "Water Temple",
+			"value"	: "4"
+		} ], [ {
+			"name"	: "Switch",
+			"value"	: "FF"
+		} ] ]
+	}, {
+		"name"		: "Deku Tree Sprout",
+		"id"		: "00D3",
+		"type"		: "NPC",
+		"default"	: "1E00"
+	}, {
+		"name"		: "Vortex Water Temple",
+		"id"		: "00D4",
+		"type"		: "Area",
+		"default"	: "00FF"
+	}, {
+		"name"		: "Lake Hylia",
+		"id"		: "00D5",
+		"type"		: "Area",
+		"band"		: [ "FF00", "00FF" ],
+		"params" : [ [ {
+			"name"	: "Temple Gate",
+			"value"	: "0"
+		}, {
+			"name"	: "Gate Lock",
+			"value"	: "100"
+		}, {
+			"name"	: "Water Plane",
+			"value"	: "200"
+		}, {
+			"name"	: "Ice Block",
+			"value"	: "300"
+		} ], [ {
+			"name"	: "Switch",
+			"value"	: "FF"
+		} ] ]
+	}, {
+		"name"		: "Well Water Level Changer",
+		"id"		: "00D7",
+		"band"		: [ "003F" ],
+		"params" : [ [ {
+			"name"	: "Switch",
+			"value"	: "3F"
+		} ] ]
+	}, {
+		"name"		: "Pushable Ice Block",
+		"id"		: "00D6",
+		"type"		: "Object"
+	}, {
+		"name"		: "Malon (Ingo's Ranch)",
+		"id"		: "00D9",
+		"default"	: "FFFF",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Horseback Minigames",
+		"id"		: "00DB",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "Nothing",
+			"value"	: "0"
+		}, {
+			"name"	: "Ingo Race",
+			"value"	: "1"
+		}, {
+			"name"	: "Gerudo Archery",
+			"value"	: "2"
+		}, {
+			"name"	: "Type 3",
+			"value"	: "3"
+		}, {
+			"name"	: "Malon Race",
+			"value"	: "4"
+		} ] ]
+	}, {
+		"name"		: "Twinrova",
+		"id"		: "00DC",
+		"default"	: "FFFF",
+		"type"		: "Boss"
+	}, {
+		"name"		: "Like-Like",
+		"id"		: "00DD",
+		"type"		: "Enemy"
+	}, {
+		"name"		: "Tentacle",
+		"id"		: "00DE",
+		"type"		: "Enemy",
+		"band"		: [ "00FF", "FF00" ],
+		"params" : [ [ {
+			"name"	: "Red",
+			"value"	: "0"
+		}, {
+			"name"	: "Green",
+			"value"	: "1"
+		}, {
+			"name"	: "Gray",
+			"value"	: "2"
+		}, {
+			"name"	: "Dead",
+			"value"	: "3"
+		} ], [ {
+			"name"	: "Switch",
+			"value"	: "FF"
+		} ] ]
+	}, {
+		"name"		: "Electrified Tenctacles",
+		"id"		: "00DF",
+		"type"		: "Enemy",
+		"band"		: [ "007F", "0080", "FF00" ],
+		"params" : [ [ {
+			"name"	: "Display List",
+			"value"	: "7F"
+		} ], [ {
+			"name"	: "Not Towards Player",
+			"value"	: "80"
+		}, {
+			"name"	: "Towards Player",
+			"value"	: "0"
+		} ], [ {
+			"name"	: "Switch",
+			"value"	: "FF"
+		} ] ]
+	}, {
+		"name"		: "Anubis",
+		"id"		: "00E0",
+		"type"		: "Enemy"
+	}, {
+		"name"		: "Forest Temple Objects",
+		"id"		: "00E3",
+		"type"		: "Area",
+		"band"		: [ "00FF", "FF00" ],
+		"params" : [ [ {
+			"name"	: "Rotating Platforms",
+			"value"	: "0"
+		}, {
+			"name"	: "Metal Gate",
+			"value"	: "1"
+		} ], [ {
+			"name"	: "Switch",
+			"value"	: "FF"
+		} ] ]
+	}, {
+		"name"		: "Well Water (Forest Temple)",
+		"id"		: "00E4",
+		"band"		: [ "003F" ],
+		"params" : [ [ {
+			"name"	: "Switch",
+			"value"	: "3F"
+		} ] ]
+	}, {
+		"name"		: "Cloud Ring",
+		"id"		: "00E5",
+		"type"		: "Area",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "Default",
+			"value"	: "FFFF"
+		}, {
+			"name"	: "Expanding 1",
+			"value"	: "1"
+		}, {
+			"name"	: "Expanding 2",
+			"value"	: "2"
+		}, {
+			"name"	: "Expanding 3",
+			"value"	: "3"
+		}, {
+			"name"	: "Expanding 4",
+			"value"	: "4"
+		} ] ]
+	}, {
+		"name"		: "Switch (Jabu)",
+		"id"		: "00E6",
+		"type"		: "Object",
+		"band"		: [ "00FF", "3F00" ],
+		"params" : [ [ {
+			"name"	: "Blue",
+			"value"	: "0"
+		}, {
+			"name"	: "Yellow (Heavy)",
+			"value"	: "1"
+		}, {
+			"name"	: "Yellow",
+			"value"	: "2"
+		}, {
+			"name"	: "Yellow Tall 1",
+			"value"	: "3"
+		}, {
+			"name"	: "Yellow Tall 2",
+			"value"	: "4"
+		} ], [ {
+			"name"	: "Switch",
+			"value"	: "3F"
+		} ] ]
+	}, {
+		"name"		: "Malon (Child)",
+		"id"		: "00E7",
+		"default"	: "FFFF",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Ganondorf",
+		"id"		: "00E8",
+		"default"	: "FFFF",
+		"type"		: "Boss",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "Default",
+			"value"	: "FFFF"
+		}, {
+			"name"	: "Boss Fight",
+			"value"	: "0"
+		}, {
+			"name"	: "Death Sequence",
+			"value"	: "1"
+		} ] ]
+	}, {
+		"name"		: "Bongo Bongo",
+		"id"		: "00E9",
+		"default"	: "FFFF",
+		"type"		: "Boss",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "Head",
+			"value"	: "FFFF"
+		}, {
+			"name"	: "Left Hand",
+			"value"	: "0"
+		}, {
+			"name"	: "Right Hand",
+			"value"	: "1"
+		} ] ]
+	}, {
+		"name"		: "Spike",
+		"id"		: "00EC",
+		"type"		: "Enemy",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "Normal",
+			"value"	: "0"
+		}, {
+			"name"	: "Always in Rock",
+			"value"	: "1"
+		}, {
+			"name"	: "Alternative",
+			"value"	: "2"
+		} ] ]
+	}, {
+		"name"		: "Frogs & Song Spot",
+		"id"		: "00ED",
+		"type"		: "Animal",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "Zelda's Lullaby",
+			"value"	: "0"
+		}, {
+			"name"	: "Epona's Song",
+			"value"	: "1"
+		}, {
+			"name"	: "Saria's song",
+			"value"	: "2"
+		}, {
+			"name"	: "Sun's Song",
+			"value"	: "3"
+		}, {
+			"name"	: "Song of Time",
+			"value"	: "4"
+		}, {
+			"name"	: "Song of Storms",
+			"value"	: "5"
+		}, {
+			"name"	: "Choir Song",
+			"value"	: "6"
+		}, {
+			"name"	: "No Song",
+			"value"	: "7"
+		} ] ]
+	}, {
+		"name"		: "Deku Shield",
+		"id"		: "00EE",
+		"type"		: "Object",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "Collectable",
+			"value"	: "0"
+		}, {
+			"name"	: "Burning",
+			"value"	: "1"
+		} ] ]
+	}, {
+		"name"		: "Red Ice",
+		"id"		: "00EF",
+		"type"		: "Object",
+		"band"		: [ "FF00", "00FF" ],
+		"params" : [ [ {
+			"name"	: "Large Crystal",
+			"value"	: "0"
+		}, {
+			"name"	: "Small Crystal",
+			"value"	: "100"
+		}, {
+			"name"	: "Crystal Platform",
+			"value"	: "200"
+		}, {
+			"name"	: "Meltable Ice Sheet",
+			"value"	: "300"
+		}, {
+			"name"	: "Giant Crystal",
+			"value"	: "400"
+		} ], [ {
+			"name"	: "Switch",
+			"value"	: "FF"
+		} ] ]
+	}, {
+		"name"		: "Blue Fire Flames",
+		"id"		: "00F0",
+		"type"		: "Object",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "Small & Disappears",
+			"value"	: "0"
+		}, {
+			"name"	: "Disappears",
+			"value"	: "1"
+		}, {
+			"name"	: "Targetable",
+			"value"	: "FFFF"
+		}, {
+		} ] ]
+	}, {
+		"name"		: "Ocarina of Time",
+		"id"		: "00F1",
+		"type"		: "Object",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "Tossed High",
+			"value"	: "0"
+		}, {
+			"name"	: "Tossed",
+			"value"	: "1"
+		}, {
+			"name"	: "Object",
+			"value"	: "2"
+		}, {
+			"name"	: "Collectable",
+			"value"	: "3"
+		}, {
+		} ] ]
+	}, {
+		"name"		: "Sages - Balls of Light",
+		"id"		: "00F5",
+		"type"		: "Cutscene",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "Scene",
+			"value"	: "13"
+		} ] ]
+	}, {
+		"name"		: "Anubis Spawn",
+		"id"		: "00F6",
+		"type"		: "Enemy"
+	}, {
+		"name"		: "Truth Spinner",
+		"id"		: "00F7",
+		"type"		: "Area",
+		"band"		: [ "00FF", "FF00" ],
+		"params" : [ [ {
+			"name"	: "Rotatable Bird Statue",
+			"value"	: "0"
+		}, {
+			"name"	: "Circular Trap Door Platform",
+			"value"	: "1"
+		}, {
+			"name"	: "Gate",
+			"value"	: "2"
+		}, {
+			"name"	: "Skull Top",
+			"value"	: "3"
+		} ], [ {
+			"name"	: "Switch",
+			"value"	: "3F"
+		} ] ]
+	}, {
+		"name"		: "Hyrule Castle Gate",
+		"id"		: "00F8",
+		"default"	: "FFFF",
+		"type"		: "Area"
+	}, {
+		"name"		: "Rolling Boulder (Temple)",
+		"id"		: "00F9",
+		"type"		: "Object"
+	}, {
+		"name"		: "Sliding Climbable Brick Wall",
+		"id"		: "00FA",
+		"type"		: "Area"
+	}, {
+		"name"		: "Rotatable Cobra Mirror",
+		"id"		: "00FC",
+		"type"		: "NPC",
+		"band"		: [ "0003", "3F00" ],
+		"params" : [ [ {
+			"name"	: "Large Shadow",
+			"value"	: "0"
+		}, {
+			"name"	: "Small Shadow",
+			"value"	: "1"
+		}, {
+			"name"	: "No Shadow",
+			"value"	: "2"
+		} ], [ {
+			"name"	: "Switch",
+			"value"	: "3F"
+		} ] ]
+	}, {
+		"name"		: "Metal Crating Bridge",
+		"id"		: "00FD",
+		"type"		: "Area",
+		"band"		: [ "00FF" ],
+		"params" : [ [ {
+			"name"	: "Switch",
+			"value"	: "3F"
+		} ] ]
+	}, {
+		"name"		: "Fishing Pond Man",
+		"id"		: "00FE",
+		"default"	: "FFFF",
+		"type"		: "NPC",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "Params",
+			"value"	: "FFFF"
+		} ] ]
+	}, {
+		"name"		: "Pushable Block",
+		"id"		: "00FF",
+		"type"		: "Object",
+		"band"		: [ "00C0", "0004", "0003", "FF00" ],
+		"params" : [ [ {
+			"name"	: "Color #1",
+			"value"	: "0"
+		}, {
+			"name"	: "Color #2",
+			"value"	: "40"
+		}, {
+			"name"	: "Color #3",
+			"value"	: "80"
+		}, {
+			"name"	: "Color #4",
+			"value"	: "C0"
+		} ], [ {
+			"name"	: "Load on Flag Unset",
+			"value"	: "0"
+		}, {
+			"name"	: "Load on Flag Set",
+			"value"	: "4"
+		} ], [ {
+			"name"	: "Size: 60",
+			"value"	: "0"
+		}, {
+			"name"	: "Size: 100",
+			"value"	: "1"
+		}, {
+			"name"	: "Size: 120",
+			"value"	: "2"
+		}, {
+			"name"	: "Size: 200",
+			"value"	: "3"
+		} ], [ {
+			"name"	: "Switch",
+			"value"	: "FF"
+		} ] ]
+	}, {
+		"name"		: "Death Mountain Trail Gate",
+		"id"		: "0100",
+		"default"	: "FFFF",
+		"type"		: "Area"
+	}, {
+		"name"		: "Windmill Sails",
+		"id"		: "0102",
+		"default"	: "FFFF"
+	}, {
+		"name"		: "Well Crossbeam",
+		"id"		: "0103",
+		"default"	: "FFFF"
+	}, {
+		"name"		: "Well Water (Kakariko)",
+		"id"		: "0104",
+		"default"	: "FFFF"
+	}, {
+		"name"		: "Golden Torch",
+		"id"		: "0105",
+		"type"		: "Object",
+		"band"		: [ "FF00", "003F" ],
+		"params" : [ [ {
+			"name"	: "Purple (Meg)",
+			"value"	: "0"
+		}, {
+			"name"	: "Red (Joelle)",
+			"value"	: "100"
+		}, {
+			"name"	: "Blue (Beth)",
+			"value"	: "200"
+		}, {
+			"name"	: "Green (Amy)",
+			"value"	: "300"
+		} ], [ {
+			"name"	: "Switch",
+			"value"	: "3F"
+		} ] ]
+	}, {
+		"name"		: "Falling Platform Tower",
+		"id"		: "0106",
+		"type"		: "Area"
+	}, {
+		"name"		: "Milk Crate",
+		"id"		: "0107",
+		"type"		: "Area"
+	}, {
+		"name"		: "Collectable Item",
+		"id"		: "010F",
+		"type"		: "Object",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "Empty Bottle",
+			"value"	: "0"
+		}, {
+			"name"	: "Ruto's Letter",
+			"value"	: "1"
+		}, {
+			"name"	: "Hylian Shield",
+			"value"	: "2"
+		}, {
+			"name"	: "Quiver",
+			"value"	: "3"
+		}, {
+			"name"	: "Silver Scale",
+			"value"	: "4"
+		}, {
+			"name"	: "Gold Scale",
+			"value"	: "5"
+		}, {
+			"name"	: "Small Key",
+			"value"	: "6"
+		}, {
+			"name"	: "Fire Arrow",
+			"value"	: "7"
+		}, {
+			"name"	: "Minigame Green Rupee",
+			"value"	: "7"
+		}, {
+			"name"	: "Minigame Blue Rupee",
+			"value"	: "8"
+		}, {
+			"name"	: "Minigame Red Rupee",
+			"value"	: "9"
+		}, {
+			"name"	: "Minigame Purple Rupee",
+			"value"	: "A"
+		}, {
+			"name"	: "Minigame Piece of Heart",
+			"value"	: "B"
+		}, {
+			"name"	: "Minigame Key",
+			"value"	: "C"
+		} ] ]
+	}, {
+		"name"		: "Obstacle Fence",
+		"id"		: "0108",
+		"type"		: "Area",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "Fence",
+			"value"	: [ "0", "FFFF" ]
+		}, {
+			"name"	: "Ingo Race Waypoint",
+			"value"	: "1"
+		} ] ]
+	}, {
+		"name"		: "Small Liftable Crate",
+		"id"		: "0110",
+		"type"		: "Object"
+	}, {
+		"name"		: "Breakable Pot",
+		"id"		: "0111",
+		"type"		: "Object",
+		"band"		: [ "00FF", "7E00" ],
+		"params" : [ [ {
+			"name"	: "Flexible",
+			"value"	: "12"
+		}, {
+			"name"	: "Green Rupee",
+			"value"	: "0"
+		}, {
+			"name"	: "Blue Rupee",
+			"value"	: "1"
+		}, {
+			"name"	: "Red Rupee",
+			"value"	: "2"
+		}, {
+			"name"	: "Gold Rupee",
+			"value"	: "13"
+		}, {
+			"name"	: "Purple Rupee",
+			"value"	: "14"
+		}, {
+			"name"	: "Recovery Heart",
+			"value"	: "3"
+		}, {
+			"name"	: "Magic Jar (Large)",
+			"value"	: "E"
+		}, {
+			"name"	: "Magic Jar (Small)",
+			"value"	: "F"
+		}, {
+			"name"	: "Deku Seeds (5) / Arrows (5)",
+			"value"	: "10"
+		}, {
+			"name"	: "Arrow",
+			"value"	: "5"
+		}, {
+			"name"	: "Arrows (x1)",
+			"value"	: "8"
+		}, {
+			"name"	: "Arrows (x2)",
+			"value"	: "9"
+		}, {
+			"name"	: "Arrows (x3)",
+			"value"	: "A"
+		}, {
+			"name"	: "Bombs (5 - A)",
+			"value"	: "4"
+		}, {
+			"name"	: "Bombs (5 - B)",
+			"value"	: "B"
+		}, {
+			"name"	: "Bombs (5 - Special)",
+			"value"	: "19"
+		}, {
+			"name"	: "Deku Nut",
+			"value"	: "C"
+		}, {
+			"name"	: "Deku Stick",
+			"value"	: "D"
+		}, {
+			"name"	: "Piece of Heart",
+			"value"	: "6"
+		}, {
+			"name"	: "Heart Container",
+			"value"	: "7"
+		}, {
+			"name"	: "Key (Small)",
+			"value"	: "11"
+		}, {
+			"name"	: "Deku Shield",
+			"value"	: "15"
+		}, {
+			"name"	: "Hylian Shield",
+			"value"	: "16"
+		}, {
+			"name"	: "Goron Tunic",
+			"value"	: "18"
+		}, {
+			"name"	: "Zora Tunic ",
+			"value"	: "17"
+		}, {
+			"name"	: "No Item",
+			"value"	: "FF"
+		} ], [ {
+			"name"	: "Collectable",
+			"value"	: "3F"
+		} ] ]
+	}, {
+		"name"		: "Invisible Collectable",
+		"id"		: "0112",
+		"type"		: "Object",
+		"band"		: [ "F800", "07C0", "003F", "FFFF rz", "FFFF rz" ],
+		"params" : [ [ {
+			"name"	: "Multitag Free",
+			"value" : "0000",
+			"show"	: 4,
+			"hide"	: 5
+		}, {
+			"name"	: "Tag Point Free",
+			"value" : "0800",
+			"show"	: 4,
+			"hide"	: 5
+		}, {
+			"name"	: "Proximity Drop",
+			"value" : "1000",
+			"show"	: 5,
+			"hide"	: 4
+		}, {
+			"name"	: "Switch Interation",
+			"value" : "1800",
+			"show"	: 4,
+			"hide"	: 5
+		}, {
+			"name"	: "Unused",
+			"value" : "2000",
+			"show"	: 4,
+			"hide"	: 5
+		}, {
+			"name"	: "Multitag Ordered",
+			"value" : "2800",
+			"show"	: 4,
+			"hide"	: 5
+		}, {
+			"name"	: "Tag Point Ordered",
+			"value" : "3000",
+			"show"	: 4,
+			"hide"	: 5
+		}, {
+			"name"	: "Proximity Switch",
+			"value" : "3800",
+			"show"	: 4,
+			"hide"	: 5
+		}, {
+			"name"	: "Slingshotable & Throws Bomb",
+			"value" : "4000",
+			"show"	: 4,
+			"hide"	: 5
+		}, {
+			"name"	: "Roll Drop",
+			"value" : "4800",
+			"show"	: 4,
+			"hide"	: 5
+		} ], [ {
+			"name"	: "Flexible",
+			"value"	: "2C0"
+		}, {
+			"name"	: "Green Rupee",
+			"value"	: "200"
+		}, {
+			"name"	: "Blue Rupee",
+			"value"	: "240"
+		}, {
+			"name"	: "Red Rupee",
+			"value"	: "280"
+		}, {
+			"name"	: "Recovery Heart",
+			"value"	: "100"
+		}, {
+			"name"	: "Small Magic Jar",
+			"value"	: "C0"
+		}, {
+			"name"	: "Large Magic Jar",
+			"value"	: "80"
+		}, {
+			"name"	: "Deku Nuts",
+			"value"	: "0"
+		}, {
+			"name"	: "Arrows (1x)",
+			"value"	: "140"
+		}, {
+			"name"	: "Arrows (2x)",
+			"value"	: "180"
+		}, {
+			"name"	: "Arrows (3x)",
+			"value"	: "1C0"
+		}, {
+			"name"	: "Piece of Heart",
+			"value"	: "40"
+		}, {
+			"name"	: "Random Item Drop #1",
+			"value"	: "300"
+		}, {
+			"name"	: "Random Item Drop #2",
+			"value"	: "340"
+		}, {
+			"name"	: "Random Item Drop #3",
+			"value"	: "380"
+		}, {
+			"name"	: "Random Item Drop #4",
+			"value"	: "3C0"
+		}, {
+			"name"	: "Random Item Drop #5",
+			"value"	: "400"
+		}, {
+			"name"	: "Random Item Drop #6",
+			"value"	: "440"
+		}, {
+			"name"	: "Random Item Drop #7",
+			"value"	: "480"
+		}, {
+			"name"	: "Random Item Drop #8",
+			"value"	: "4C0"
+		}, {
+			"name"	: "Random Item Drop #9",
+			"value"	: "500"
+		}, {
+			"name"	: "Random Item Drop #10",
+			"value"	: "540"
+		}, {
+			"name"	: "Random Item Drop #11",
+			"value"	: "580"
+		}, {
+			"name"	: "Random Item Drop #12",
+			"value"	: "5C0"
+		}, {
+			"name"	: "Random Item Drop #13",
+			"value"	: "600"
+		}, {
+			"name"	: "Random Item Drop #14",
+			"value"	: "640"
+		}, {
+			"name"	: "Random Item Drop #15",
+			"value"	: "680"
+		}, {
+			"name"	: "Random Item Drop #16",
+			"value"	: "6C0"
+		}, {
+			"name"	: "Random Item Drop #17",
+			"value"	: "700"
+		}, {
+			"name"	: "Random Item Drop #18",
+			"value"	: "740"
+		}, {
+			"name"	: "Random Item Drop #19",
+			"value"	: "780"
+		}, {
+			"name"	: "Random Item Drop #20",
+			"value"	: "7C0"
+		}, {
+			"name"	: "Flexible",
+			"value"	: "2C0"
+		} ], [ {
+			"name"	: "Switch",
+			"value"	: "3F"
+		} ], [ {
+			"name"	: "Spawns",
+			"value"	: "FFFF"
+		} ], [ {
+			"name"	: "Sword",
+			"value" : "0"
+		}, {
+			"name"	: "Arrow",
+			"value" : "1"
+		}, {
+			"name"	: "Megaton Hammer",
+			"value" : "2"
+		}, {
+			"name"	: "Explosion",
+			"value" : "3"
+		}, {
+			"name"	: "Fairy Slingshot",
+			"value" : "4"
+		}, {
+			"name"	: "Hookshot",
+			"value" : "6"
+		} ] ]
+	}, {
+		"name"		: "Iron Knuckle",
+		"id"		: "0113",
+		"default"	: "0002",
+		"type"		: "Enemy",
+		"band"		: [ "00FF", "FF00" ],
+		"params" : [ [ {
+			"name"	: "Nabooru",
+			"value"	: "0"
+		}, {
+			"name"	: "White (Sitting)",
+			"value"	: "1"
+		}, {
+			"name"	: "Black",
+			"value"	: "2"
+		}, {
+			"name"	: "White",
+			"value"	: "3"
+		}, {
+			"name"	: "White (No Armor Drop)",
+			"value"	: "B"
+		} ], [ {
+			"name"	: "Switch",
+			"value"	: "FF"
+		} ] ]
+	}, {
+		"name"		: "Nabooru Fight",
+		"id"		: "0114",
+		"type"		: "Cutscene",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "Scene",
+			"value"	: "6"
+		} ] ]
+	}, {
+		"name"		: "Skullkid",
+		"id"		: "0115",
+		"default"	: "00FF",
+		"type"		: "NPC",
+		"band"		: [ "3F00" ],
+		"params" : [ [ {
+			"name"	: "Type",
+			"value"	: "3F"
+		} ] ]
+	}, {
+		"name"		: "Silver Rupee",
+		"id"		: "0117",
+		"type"		: "Object",
+		"band"		: [ "F000", "003F", "0FC0" ],
+		"params" : [ [ {
+			"name"	: "Silver Tracker",
+			"value"	: "0"
+		}, {
+			"name"	: "Silver Rupee",
+			"value"	: "1000"
+		}, {
+			"name"	: "Archery Pot",
+			"value"	: "2000"
+		}, {
+			"name"	: "Target Practice",
+			"value"	: "3000"
+		} ], [ {
+			"name"	: "Count",
+			"value"	: "FC"
+		} ], [ {
+			"name"	: "Switch",
+			"value"	: "3F"
+		} ] ]
+	}, {
+		"name"		: "Magic Vortex",
+		"id"		: "0118"
+	}, {
+		"name"		: "Bongo Bongo's Shadow",
+		"id"		: "0119"
+	}, {
+		"name"		: "Business Scrub",
+		"id"		: "011A",
+		"type"		: "Enemy",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "Deku Nuts (5)",
+			"value"	: "0"
+		}, {
+			"name"	: "Deku Sticks (1)",
+			"value"	: "1"
+		}, {
+			"name"	: "Piece of Heart",
+			"value"	: "2"
+		}, {
+			"name"	: "Deku Seeds (30)",
+			"value"	: "3"
+		}, {
+			"name"	: "Deku Shield",
+			"value"	: "4"
+		}, {
+			"name"	: "Bombs (5)",
+			"value"	: "5"
+		}, {
+			"name"	: "Arrows (30)",
+			"value"	: "6"
+		}, {
+			"name"	: "Red Potion",
+			"value"	: "7"
+		}, {
+			"name"	: "Green Potion",
+			"value"	: "8"
+		}, {
+			"name"	: "Deku Stick Upgrade",
+			"value"	: "9"
+		}, {
+			"name"	: "Deku Nut Upgrade",
+			"value"	: "A"
+		} ] ]
+	}, {
+		"name"		: "Navi Message",
+		"id"		: "011B",
+		"type"		: "Object",
+		"band"		: [ "8000", "00FF", "3F00" ],
+		"params" : [ [ {
+			"name"	: "Talk when in Range",
+			"value"	: "0"
+		}, {
+			"name"	: "C-Up Prompt",
+			"value"	: "8000"
+		} ], [ {
+			"name"	: "Message",
+			"value"	: "FF"
+		} ], [ {
+			"name"	: "Switch",
+			"value"	: "3F"
+		} ] ]
+	}, {
+		"name"		: "Stone Eye & Trap",
+		"id"		: "011C",
+		"type"		: "Object",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "Stone Eye",
+			"value"	: "0"
+		}, {
+			"name"	: "Moving Flame",
+			"value"	: "1"
+		}, {
+			"name"	: "Dropping Flame",
+			"value"	: "2"
+		} ] ]
+	}, {
+		"name"		: "Flying Pot",
+		"id"		: "011D",
+		"type"		: "Enemy",
+		"band"		: [ "FF00", "003F" ],
+		"params" : [ [ {
+			"name"	: "Heart or Green Rupee",
+			"value"	: "0"
+		}, {
+			"name"	: "Bombs",
+			"value"	: "10"
+		}, {
+			"name"	: "Deku Seeds",
+			"value"	: "200"
+		}, {
+			"name"	: "Deku Nuts",
+			"value"	: "300"
+		}, {
+			"name"	: "Deku Seeds 2",
+			"value"	: "400"
+		}, {
+			"name"	: "Giant Purple Rupee",
+			"value"	: "500"
+		}, {
+			"name"	: "Goron Tunic",
+			"value"	: "600"
+		}, {
+			"name"	: "Nothing",
+			"value"	: "FF00"
+		} ], [ {
+			"name"	: "Collectable",
+			"value"	: "3F"
+		} ] ]
+	}, {
+		"name"		: "Zora's River Waterfall",
+		"id"		: "011F",
+		"type"		: "Area",
+		"band"		: [ "003F" ],
+		"params" : [ [ {
+			"name"	: "Switch",
+			"value"	: "3F"
+		} ] ]
+	}, {
+		"name"		: "Waterfall Zora's Domain",
+		"id"		: "0120",
+		"type"		: "Area",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "Waterfall & Pool",
+			"value"	: "0"
+		}, {
+			"name"	: "King's Chamber Water",
+			"value"	: "1"
+		} ] ]
+	}, {
+		"name"		: "Freezard",
+		"id"		: "0121",
+		"type"		: "Enemy",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "Immobile",
+			"value"	: "0"
+		}, {
+			"name"	: "Mobile",
+			"value"	: "FFFF"
+		} ] ]
+	}, {
+		"name"		: "Dampé's Ghost",
+		"id"		: "0122",
+		"type"		: "Area",
+		"band"		: [ "003F" ],
+		"params" : [ [ {
+			"name"	: "Item",
+			"value"	: "3F"
+		} ] ]
+	}, {
+		"name"		: "Windmill Objects",
+		"id"		: "0123",
+		"type"		: "Area",
+		"band"		: [ "FF00", "00FF" ],
+		"params" : [ [ {
+			"name"	: "Rotating Gear",
+			"value"	: "0"
+		}, {
+			"name"	: "Dampé Stone Door",
+			"value"	: "100"
+		} ], [ {
+			"name"	: "Switch",
+			"value"	: "FF"
+		} ] ]
+	}, {
+		"name"		: "Zora Diving Minigame",
+		"id"		: "0124",
+		"default"	: "FFFF"
+	}, {
+		"name"		: "Grass Shrub",
+		"id"		: "0125",
+		"type"		: "Object",
+		"band"		: [ "0003", "0010", "FF00" ],
+		"params" : [ [ {
+			"name"	: "Normal Shrub",
+			"value"	: "0"
+		}, {
+			"name"	: "Regenerating Shrub",
+			"value"	: "1"
+		}, {
+			"name"	: "Cut-able Shrub",
+			"value"	: "2"
+		} ], [ {
+			"name"	: "Don't Spawn Bugs",
+			"value"	: "0"
+		}, {
+			"name"	: "Spawn Bugs",
+			"value"	: "10"
+		} ], [ {
+			"name"	: "Item Drop",
+			"value"	: "FF"
+		} ] ]
+	}, {
+		"name"		: "Bean Plant Spot",
+		"id"		: "0126",
+		"type"		: "Object",
+		"band"		: [ "1F00", "003F", "0003 rz" ],
+		"params" : [ [ {
+			"name"	: "Path",
+			"value"	: "1F"
+		} ], [ {
+			"name"	: "Switch",
+			"value"	: "3F"
+		} ], [ {
+			"name"	: "3.0 velocity / 0.3 acceleration",
+			"value"	: "0"
+		}, {
+			"name"	: "10.0 velocity / 0.5 acceleration",
+			"value"	: "1"
+		}, {
+			"name"	: "30.0 velocity / 0.5 acceleration",
+			"value"	: "2"
+		} ] ]
+	}, {
+		"name"		: "Brown Bombable Boulder",
+		"id"		: "0127",
+		"type"		: "Object",
+		"band"		: [ "8000", "003F" ],
+		"params" : [ [ {
+			"name"	: "No SFX",
+			"value"	: "0"
+		}, {
+			"name"	: "Play SFX",
+			"value"	: "8000"
+		} ], [ {
+			"name"	: "Switch",
+			"value"	: "3F"
+		} ] ]
+	}, {
+		"name"		: "Switch",
+		"id"		: "012A",
+		"type"		: "Object",
+		"band"		: [ "000F", "0010" , "0020", "0080", "0040", "3F00" ],
+		"params" : [ [ {
+			"name"	: "Floor",
+			"value"	: "0"
+		}, {
+			"name"	: "Rusted Floor",
+			"value"	: "1"
+		}, {
+			"name"	: "Eye",
+			"value"	: "2"
+		}, {
+			"name"	: "Crystal",
+			"value"	: "3"
+		}, {
+			"name"	: "Targetable Crystal",
+			"value"	: "4"
+		} ], [ {
+			"name"	: "No Toggle",
+			"value"	: "0"
+		}, {
+			"name"	: "Toggle",
+			"value"	: "10"
+		} ], [ {
+			"name"	: "No Reset",
+			"value"	: "0"
+		}, {
+			"name"	: "Reset",
+			"value"	: "20"
+		} ], [ {
+			"name"	: "Not Frozen",
+			"value"	: "0"
+		}, {
+			"name"	: "Frozen",
+			"value"	: "80"
+		} ], [ {
+			"name"	: "No Trigger",
+			"value"	: "0"
+		}, {
+			"name"	: "Trigger All Switches",
+			"value"	: "40"
+		} ], [ {
+			"name"	: "Flag",
+			"value"	: "3F"
+		} ] ]
+	}, {
+		"name"		: "Square Collapsing Platform",
+		"id"		: "012C",
+		"type"		: "Area",
+		"band"		: [ "0002", "0700" , "00FC" ],
+		"params" : [ [ {
+			"name"	: "Large",
+			"value"	: "0"
+		}, {
+			"name"	: "Small",
+			"value"	: "2"
+		} ], [ {
+			"name"	: "Fall Timer: 0",
+			"value"	: "0"
+		}, {
+			"name"	: "Fall Timer: 10",
+			"value"	: "100"
+		}, {
+			"name"	: "Fall Timer: 20",
+			"value"	: "200"
+		}, {
+			"name"	: "Fall Timer: 30",
+			"value"	: "300"
+		}, {
+			"name"	: "Fall Timer: 40",
+			"value"	: "400"
+		}, {
+			"name"	: "Fall Timer: 50",
+			"value"	: "500"
+		}, {
+			"name"	: "Fall Timer: 60",
+			"value"	: "600"
+		} ], [ {
+			"name"	: "Flag",
+			"value"	: "3F"
+		} ] ]
+	}, {
+		"name"		: "Stone Hookshot Target",
+		"id"		: "012D",
+		"type"		: "Object",
+		"band"		: [ "0002", "00E0", "FF00" ],
+		"params" : [ [ {
+			"name"	: "Target Tower",
+			"value"	: "0"
+		}, {
+			"name"	: "Underground Target Tower",
+			"value"	: "1"
+		}, {
+			"name"	: "Target Stone",
+			"value"	: "2"
+		} ], [ {
+			"name"	: "Unfrozen",
+			"value"	: [ "C0", "80", "40", "0" ]
+		}, {
+			"name"	: "Frozen",
+			"value"	: [ "E0", "A0", "60", "20" ]
+		} ], [ {
+			"name"	: "Switch",
+			"value"	: "FF"
+		} ] ]
+	}, {
+		"name"		: "Music Staff Spot",
+		"id"		: "012E",
+		"type"		: "Object",
+		"band"		: [ "FC00", "03C0", "003F" ],
+		"params" : [ [ {
+			"name"	: "Zora's River",
+			"value"	: "400"
+		}, {
+			"name"	: "Windmill",
+			"value"	: "800"
+		}, {
+			"name"	: "Temple of Time",
+			"value"	: "1000"
+		}, {
+			"name"	: "Sun's Song Spot",
+			"value"	: "1400"
+		}, {
+			"name"	: "Royal Family Tomb",
+			"value"	: "1800"
+		}, {
+			"name"	: "Puzzle Spot",
+			"value"	: "1C00"
+		} ], [ {
+			"name"	: "Epona's Song",
+			"value"	: "40"
+		}, {
+			"name"	: "Zelda's Lullaby",
+			"value"	: "80"
+		}, {
+			"name"	: "Sun's Song",
+			"value"	: "C0"
+		}, {
+			"name"	: "Song of Time",
+			"value"	: "100"
+		}, {
+			"name"	: "Song of Storms",
+			"value"	: "140"
+		}, {
+			"name"	: "Bonooru's Song",
+			"value"	: "1C0"
+		}, {
+			"name"	: "Pierre's Song",
+			"value"	: "200"
+		}, {
+			"name"	: "Bonooru's Song Playback",
+			"value"	: "2C0"
+		}, {
+			"name"	: "Random 3 Notes Playback",
+			"value"	: "300"
+		}, {
+			"name"	: "All Regular Songs",
+			"value"	: "3C0"
+		} ], [ {
+			"name"	: "Switch",
+			"value"	: "3F"
+		} ] ]
+	}, {
+		"name"		: "Horseback Archery Target",
+		"id"		: "012F",
+		"type"		: "Area",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "End Targets",
+			"value"	: "0"
+		}, {
+			"name"	: "Small Mounted Target",
+			"value"	: "1"
+		}, {
+			"name"	: "Big Mounted Target",
+			"value"	: "2"
+		} ] ]
+	}, {
+		"name"		: "Rolling Boulder",
+		"id"		: "0130",
+		"type"		: "Object",
+		"band"		: [ "0300", "00FF", "0001 rz" ],
+		"params" : [ [ {
+			"name"	: "Disappears & Reappears",
+			"value"	: "0"
+		}, {
+			"name"	: "Breaks Into Pieces & Reappears",
+			"value"	: "100"
+		}, {
+			"name"	: "Closed Loop",
+			"value"	: "200"
+		}, {
+			"name"	: "Halts & Reverses",
+			"value"	: "300"
+		} ], [ {
+			"name"	: "Path",
+			"value"	: "FF"
+		} ], [ {
+			"name"	: "Follow",
+			"value"	: "1"
+		}, {
+			"name"	: "Reverse",
+			"value"	: "0"
+		} ] ]
+	}, {
+		"name"		: "Sparkling Rupee",
+		"id"		: "0131",
+		"type"		: "Object",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "Green",
+			"value"	: "0"
+		}, {
+			"name"	: "Blue",
+			"value"	: "1"
+		}, {
+			"name"	: "Red",
+			"value"	: "2"
+		}, {
+			"name"	: "Gold",
+			"value"	: "3"
+		}, {
+			"name"	: "Purple",
+			"value"	: "4"
+		}, {
+		} ] ]
+	}, {
+		"name"		: "Boss Carpenter",
+		"id"		: "0132",
+		"default"	: "FFFF",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Carpenters",
+		"id"		: "0133",
+		"type"		: "NPC",
+		"band"		: [ "0003", "00F0", "3F00" ],
+		"params" : [ [ {
+			"name"	: "Ichiro",
+			"value"	: "0"
+		}, {
+			"name"	: "Sabooro",
+			"value"	: "1"
+		}, {
+			"name"	: "Jiro",
+			"value"	: "2"
+		}, {
+			"name"	: "Shiro",
+			"value"	: "3"
+		} ], [ {
+			"name"	: "Path",
+			"value"	: "F"
+		} ], [ {
+			"name"	: "Switch",
+			"value"	: "3F"
+		} ] ]
+	}, {
+		"name"		: "Dark Link's Illusion Room",
+		"id"		: "0136",
+		"default"	: "FFFF"
+	}, {
+		"name"		: "White Clothed Gerudo",
+		"id"		: "0138",
+		"type"		: "NPC",
+		"band"		: [ "00FF", "3F00" ],
+		"params" : [ [ {
+			"name"	: "Gate Guard",
+			"value"	: "0"
+		}, {
+			"name"	: "Gate Operator",
+			"value"	: "1"
+		}, {
+			"name"	: "Generic Guard",
+			"value"	: "4"
+		}, {
+			"name"	: "Valley Floor Guard",
+			"value"	: "5"
+		}, {
+			"name"	: "Horseback Archery",
+			"value"	: "45"
+		}, {
+			"name"	: "Training Ground Guard",
+			"value"	: "46"
+		} ], [ {
+			"name"	: "Switch",
+			"value"	: "3F"
+		} ] ]
+	}, {
+		"name"		: "Pushable Block Trigger",
+		"id"		: "0139",
+		"band"		: [ "003F" ],
+		"params" : [ [ {
+			"name"	: "Switch",
+			"value"	: "3F"
+		} ] ]
+	}, {
+		"name"		: "Arwing",
+		"id"		: "013B",
+		"type"		: "Enemy",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "Cutscene",
+			"value"	: "0"
+		}, {
+			"name"	: "Regular",
+			"value"	: "1"
+		}, {
+			"name"	: "Laser",
+			"value"	: "64"
+		} ] ]
+	}, {
+		"name"		: "Cucco Lady",
+		"id"		: "013C",
+		"default"	: "FFFF",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Medigoron",
+		"id"		: "013D",
+		"type"		: "NPC",
+		"band"		: [ "003F" ],
+		"params" : [ [ {
+			"name"	: "Switch",
+			"value"	: "3F"
+		} ] ]
+	}, {
+		"name"		: "Bean Salesman",
+		"id"		: "013E",
+		"default"	: "FFFF",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Carpenter's Son",
+		"id"		: "013F",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Ingo's Gates",
+		"id"		: "0140",
+		"type"		: "Area",
+		"band"		: [ "0001", "0002" ],
+		"params" : [ [ {
+			"name"	: "Do Nothing",
+			"value"	: "0"
+		}, {
+			"name"	: "Activated",
+			"value"	: "1"
+		} ], [ {
+			"name"	: "Do Nothing",
+			"value"	: "0"
+		}, {
+			"name"	: "Activated",
+			"value"	: "2"
+		} ] ]
+	}, {
+		"name"		: "Square Signpost",
+		"id"		: "0141",
+		"type"		: "Object",
+		"band"		: [ "00FF" ],
+		"params" : [ [ {
+			"name"	: "Message",
+			"value"	: "45"
+		} ] ]
+	}, {
+		"name"		: "Hyrule Castle Guard",
+		"id"		: "0142",
+		"type"		: "NPC",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "Stands There",
+			"value"	: "1"
+		}, {
+			"name"	: "Whistleblower",
+			"value"	: [ "0", "8000", "FFFF" ]
+		} ] ]
+	}, {
+		"name"		: "Cucco (Minigame)",
+		"id"		: "0143",
+		"type"		: "Animal",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "Shooting Gallery",
+			"value"	: "0"
+		}, {
+			"name"	: "Bombchu Bowling",
+			"value"	: "1"
+		} ] ]
+	}, {
+		"name"		: "Cucco (Attacking)",
+		"id"		: "0144",
+		"type"		: "Animal"
+	}, {
+		"name"		: "Stone Blocking Well",
+		"id"		: "0145",
+		"default"	: "FFFF",
+		"type"		: "Area"
+	}, {
+		"name"		: "Saria",
+		"id"		: "0146",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Checkable Spot",
+		"id"		: "0147",
+		"type"		: "Object",
+		"band"		: [ "F800", "003F" ],
+		"params" : [ [ {
+			"name"	: "Bean Seller",
+			"value"	: "0"
+		}, {
+			"name"	: "Temple of Time Altar",
+			"value"	: "800"
+		}, {
+			"name"	: "Gravekepper's Diary",
+			"value"	: "1000"
+		}, {
+			"name"	: "Sharp's Grave",
+			"value"	: "1800"
+		}, {
+			"name"	: "Royal Family Tomb",
+			"value"	: "2000"
+		}, {
+			"name"	: "Flat's Grave",
+			"value"	: "2800"
+		} ], [ {
+			"name"	: "Switch",
+			"value"	: "3F"
+		} ] ]
+	}, {
+		"name"		: "Rainbow Bridge",
+		"id"		: "0148",
+		"default"	: "FFFF",
+		"type"		: "Area"
+	}, {
+		"name"		: "Potion Shop Granny",
+		"id"		: "0149",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Lakeside Professor",
+		"id"		: "014A",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Bowling Alley Lady",
+		"id"		: "014B",
+		"default"	: "FFFF",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Kaepora Gaebora",
+		"id"		: "014D",
+		"type"		: "Animal",
+		"band"		: [ "0FC0", "003F" ],
+		"params" : [ [ {
+			"name"	: "Default",
+			"value"	: "0"
+		}, {
+			"name"	: "Outside of Kokiri Forest",
+			"value"	: "40"
+		}, {
+			"name"	: "Near Hyrule Castle",
+			"value"	: "80"
+		}, {
+			"name"	: "Near Kakariko Village",
+			"value"	: "C0"
+		}, {
+			"name"	: "Lake Hylia & Gerudo Valley",
+			"value"	: "100"
+		}, {
+			"name"	: "Near Lake Hylia",
+			"value"	: "140"
+		}, {
+			"name"	: "Zora's River",
+			"value"	: "180"
+		}, {
+			"name"	: "Lake Hylia Shortcut",
+			"value"	: "1C0"
+		}, {
+			"name"	: "Death Mountain Shortcut",
+			"value"	: "200"
+		}, {
+			"name"	: "Death Mountain Shortcut 2",
+			"value"	: "240"
+		}, {
+			"name"	: "Desert Colossus",
+			"value"	: "280"
+		}, {
+			"name"	: "Lost Woods - Before Saria",
+			"value"	: "2C0"
+		}, {
+			"name"	: "Lost woods - After Saria",
+			"value"	: "300"
+		}, {
+			"name"	: "Outside of Kokiri Forest 2",
+			"value"	: [ "340", "380", "3C0", "FC0" ]
+		} ], [ {
+			"name"	: "Switch",
+			"value"	: "3F"
+		} ] ]
+	}, {
+		"name"		: "Liftable Rock",
+		"id"		: "014E",
+		"type"		: "Object",
+		"band"		: [ "0001", "0010", "0020", "0F00", "F000", "00C0" ],
+		"params" : [ [ {
+			"name"	: "Small Rock",
+			"value"	: "0"
+		}, {
+			"name"	: "Large Rock",
+			"value"	: "1"
+		} ], [ {
+			"name"	: "No Bugs",
+			"value"	: "0"
+		}, {
+			"name"	: "Spawns Bugs",
+			"value"	: "10"
+		} ], [ {
+			"name"	: "Don't Snap",
+			"value"	: "0"
+		}, {
+			"name"	: "Snap to Floor",
+			"value"	: "20"
+		} ], [ {
+			"name"	: "Item Drop",
+			"value"	: "F"
+		} ], [ {
+			"name"	: "Switch 1",
+			"value"	: "F"
+		} ], [ {
+			"name"	: "Switch 2",
+			"value"	: "C0"
+		} ] ]
+	}, {
+		"name"		: "Uninteractable Objects",
+		"id"		: "014F",
+		"type"		: "Object",
+		"band"		: [ "0003" ],
+		"params" : [ [ {
+			"name"	: "Flower",
+			"value"	: "0"
+		}, {
+			"name"	: "Small Rock",
+			"value"	: "1"
+		}, {
+			"name"	: "Grass Shrub",
+			"value"	: "2"
+		} ] ]
+	}, {
+		"name"		: "Sun Switch",
+		"id"		: "0150",
+		"type"		: "Object",
+		"band"		: [ "0001", "0030", "3F00" ],
+		"params" : [ [ {
+			"name"	: "Sun Emblem",
+			"value"	: "0"
+		}, {
+			"name"	: "Block With Sun Emblem",
+			"value"	: "1"
+		} ], [ {
+			"name"	: "Stay On",
+			"value"	: "0"
+		}, {
+			"name"	: "Toggle",
+			"value"	: "10"
+		}, {
+			"name"	: "Need Constant Light",
+			"value"	: "20"
+		}, {
+			"name"	: "Burn",
+			"value"	: "30"
+		} ], [ {
+			"name"	: "Switch",
+			"value"	: "3F"
+		} ] ]
+	}, {
+		"name"		: "Rock / Bush",
+		"id"		: "0151",
+		"type"		: "Object",
+		"band"		: [ "000F", "0010", "FF00" ],
+		"params" : [ [ {
+			"name"	: "Circle of Shrubs",
+			"value"	: "0"
+		}, {
+			"name"	: "Scattered Shrubs",
+			"value"	: "1"
+		}, {
+			"name"	: "Circle of Rocks",
+			"value"	: "2"
+		} ], [ {
+			"name"	: "Don't Spawn Bugs",
+			"value"	: "0"
+		}, {
+			"name"	: "Spawn Bugs",
+			"value"	: "10"
+		} ], [ {
+			"name"	: "Item Drop",
+			"value"	: "FF"
+		} ] ]
+	}, {
+		"name"		: "Gorons",
+		"id"		: "0152",
+		"type"		: "Unused",
+		"band"		: [ "000F", "00F0", "3F00" ],
+		"params" : [ [ {
+			"name"	: "Path",
+			"value"	: "F"
+		} ], [ {
+			"name"	: "Link",
+			"value"	: "0"
+		}, {
+			"name"	: "Fire Temple",
+			"value"	: "10"
+		}, {
+			"name"	: "Dodongo's Cavern Entrance",
+			"value"	: "20"
+		}, {
+			"name"	: "Rolling & Small",
+			"value"	: "30"
+		}, {
+			"name"	: "Bomb Flower Tip",
+			"value"	: "40"
+		}, {
+			"name"	: "City Entrance",
+			"value"	: "50"
+		}, {
+			"name"	: "City Island",
+			"value"	: "60"
+		}, {
+			"name"	: "Lost Woods Exit",
+			"value"	: "70"
+		}, {
+			"name"	: "Biggoron",
+			"value"	: "90"
+		} ], [ {
+			"name"	: "Switch",
+			"value"	: "3F"
+		} ] ]
+	}, {
+		"name"		: "Windmill Man",
+		"id"		: "0153",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Treasure Shop Minigame",
+		"id"		: "0155"
+	}, {
+		"name"		: "Spirit Temple Statue Face",
+		"id"		: "0156",
+		"band"		: [ "003F" ],
+		"params" : [ [ {
+			"name"	: "Switch",
+			"value"	: "3F"
+		} ] ]
+	}, {
+		"name"		: "Chain Platform",
+		"id"		: "0157",
+		"type"		: "Area",
+		"band"		: [ "003F" ],
+		"params" : [ [ {
+			"name"	: "Switch",
+			"value"	: "3F"
+		} ] ]
+	}, {
+		"name"		: "Large Circular Mirror",
+		"id"		: "0158",
+		"type"		: "Area"
+	}, {
+		"name"		: "Light Blocking Rock",
+		"id"		: "0159",
+		"type"		: "Area",
+		"band"		: [ "003F" ],
+		"params" : [ [ {
+			"name"	: "Switch",
+			"value"	: "3F"
+		} ] ]
+	}, {
+		"name"		: "Sliding Circular Metal Grate",
+		"id"		: "015A",
+		"default"	: "FFFF",
+		"type"		: "Area"
+	}, {
+		"name"		: "Bombable Rock Wall",
+		"id"		: "015B",
+		"type"		: "Area",
+		"band"		: [ "003F" ],
+		"params" : [ [ {
+			"name"	: "Switch",
+			"value"	: "3F"
+		} ] ]
+	}, {
+		"name"		: "Big Goron Pot",
+		"id"		: "015C",
+		"type"		: "Area",
+		"band"		: [ "003F", "3F00" ],
+		"params" : [ [ {
+			"name"	: "Flag",
+			"value"	: "3F"
+		} ], [ {
+			"name"	: "Switch",
+			"value"	: "3F"
+		} ] ]
+	}, {
+		"name"		: "Water Spout",
+		"id"		: "015F",
+		"type"		: "Area",
+		"band"		: [ "F000", "0FC0", "003F" ],
+		"params" : [ [ {
+			"name"	: "Raising",
+			"value"	: "0"
+		}, {
+			"name"	: "Lowering",
+			"value"	: "1000"
+		} ], [ {
+			"name"	: "Switch",
+			"value"	: "3F"
+		} ], [ {
+			"name"	: "Chest",
+			"value"	: "3F"
+		} ] ]
+	}, {
+		"name"		: "Water Vortex",
+		"id"		: "0160",
+		"type"		: "Area",
+		"band"		: [ "00FF" ],
+		"params" : [ [ {
+			"name"	: "Tall & Narrow",
+			"value"	: "0"
+		}, {
+			"name"	: "Short & Wide",
+			"value"	: "1"
+		} ] ]
+	}, {
+		"name"		: "Running Man (Child)",
+		"id"		: "0162",
+		"type"		: "NPC",
+		"band"		: [ "FF00" ],
+		"params" : [ [ {
+			"name"	: "Path",
+			"value"	: "FF"
+		} ] ]
+	}, {
+		"name"		: "Kokiri Children",
+		"id"		: "0163",
+		"type"		: "NPC",
+		"band"		: [ "00FF", "FF00" ],
+		"params" : [ [ {
+			"name"	: "Standing Boy",
+			"value"	: "0"
+		}, {
+			"name"	: "Standing Girl",
+			"value"	: "1"
+		}, {
+			"name"	: "Boxing Boy",
+			"value"	: "2"
+		}, {
+			"name"	: "Backflipping Boy",
+			"value"	: "3"
+		}, {
+			"name"	: "Sitting Girl",
+			"value"	: "4"
+		}, {
+			"name"	: "Standing Girl",
+			"value"	: "5"
+		}, {
+			"name"	: "Type 6",
+			"value"	: "6"
+		}, {
+			"name"	: "Type 7",
+			"value"	: "7"
+		}, {
+			"name"	: "Type 8",
+			"value"	: "8"
+		}, {
+			"name"	: "Type 9",
+			"value"	: "9"
+		}, {
+			"name"	: "Type 10",
+			"value"	: "A"
+		}, {
+			"name"	: "Type 11",
+			"value"	: "B"
+		}, {
+			"name"	: "Fado",
+			"value"	: "C"
+		} ], [ {
+			"name"	: "Path",
+			"value"	: "FF"
+		} ] ]
+	}, {
+		"name"		: "King Zora",
+		"id"		: "0164",
+		"default"	: "FF00",
+		"type"		: "NPC",
+		"band"		: [ "FF00" ],
+		"params" : [ [ {
+			"name"	: "Path",
+			"value"	: "FF"
+		} ] ]
+	}, {
+		"name"		: "Proximity Weather Effects",
+		"id"		: "0165",
+		"type"		: "Effect",
+		"band"		: [ "000F", "FF00" ],
+		"params" : [ [ {
+			"name"	: "Cloudy (Market)",
+			"value"	: "0"
+		}, {
+			"name"	: "Cloudy (Hyrule Field)",
+			"value"	: "1"
+		}, {
+			"name"	: "Snow",
+			"value"	: "2"
+		}, {
+			"name"	: "Rain",
+			"value"	: "3"
+		}, {
+			"name"	: "Cloudy (Kakariko Village)",
+			"value"	: "4"
+		}, {
+			"name"	: "Thunderstorm",
+			"value"	: "5"
+		}, {
+			"name"	: "Sandstorm",
+			"value"	: "6"
+		}, {
+			"name"	: "Heavy Rain & Thunder",
+			"value"	: "7"
+		} ], [ {
+			"name"	: "Effect",
+			"value"	: "FF"
+		} ] ]
+	}, {
+		"name"		: "Rooftop Man",
+		"id"		: "0167",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Iron Knuckle Room",
+		"id"		: "0169",
+		"type"		: "Area",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "Brick Pillar",
+			"value"	: "0"
+		}, {
+			"name"	: "Brick Throne",
+			"value"	: "1"
+		} ] ]
+	}, {
+		"name"		: "Magic Carpet Man",
+		"id"		: "016A",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Graveyard Boy",
+		"id"		: "016C",
+		"type"		: "NPC",
+		"band"		: [ "00FF" ],
+		"params" : [ [ {
+			"name"	: "Path",
+			"value"	: "FF"
+		} ] ]
+	}, {
+		"name"		: "Mido",
+		"id"		: "016D",
+		"type"		: "NPC",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "Not Blocking",
+			"value"	: "0"
+		}, {
+			"name"	: "Blocking",
+			"value" : "100"
+		} ] ]
+	}, {
+		"name"		: "Market Townsfolk",
+		"id"		: "016E",
+		"type"		: "NPC",
+		"band"		: [ "007F", "0780" ],
+		"params" : [ [ {
+			"name"	: "Fat Woman (Blue)",
+			"value"	: "0",
+			"hide"	: 2
+		}, {
+			"name"	: "Fat Woman (Three Colors)",
+			"value"	: "1",
+			"hide"	: 2
+		}, {
+			"name"	: "Bearded Man (White & Green)",
+			"value"	: "2",
+			"hide"	: 2
+		}, {
+			"name"	: "Sakon",
+			"value"	: "3",
+			"show"	: 2
+		}, {
+			"name"	: "Staunch Man (Black & Green)",
+			"value"	: "4",
+			"hide"	: 2
+		}, {
+			"name"	: "Begging Man",
+			"value"	: "5",
+			"hide"	: 2
+		}, {
+			"name"	: "Old Woman (White)",
+			"value"	: "6",
+			"hide"	: 2
+		}, {
+			"name"	: "Old Man (Blue)",
+			"value"	: "7",
+			"show"	: 2
+		}, {
+			"name"	: "Thin Woman (Lilac)",
+			"value"	: "8",
+			"hide"	: 2
+		}, {
+			"name"	: "Laughing Man (Red & White)",
+			"value"	: "9",
+			"hide"	: 2
+		}, {
+			"name"	: "Explaining Man (Blue & White)",
+			"value"	: "A",
+			"hide"	: 2
+		}, {
+			"name"	: "Thin Woman (Blue & Yellow)",
+			"value"	: "B",
+			"hide"	: 2
+		}, {
+			"name"	: "Looking Man (Crimson)",
+			"value"	: "C",
+			"hide"	: 2
+		}, {
+			"name"	: "Red Haired Man (Lilac)",
+			"value"	: "D",
+			"hide"	: 2
+		}, {
+			"name"	: "Bearded Man (Green & White)",
+			"value"	: "E",
+			"hide"	: 2
+		}, {
+			"name"	: "Bald Man (Brown)",
+			"value"	: "F",
+			"hide"	: 2
+		}, {
+			"name"	: "Man (White)",
+			"value"	: "10",
+			"hide"	: 2
+		}, {
+			"name"	: "Staunch Man (Green)",
+			"value"	: "11",
+			"hide"	: 2
+		}, {
+			"name"	: "Man (Type 12)",
+			"value"	: "12",
+			"hide"	: 2
+		}, {
+			"name"	: "Bald Man (Purple)",
+			"value"	: "13",
+			"hide"	: 2
+		}, {
+			"name"	: "Man (Green)",
+			"value"	: "14",
+			"hide"	: 2
+		} ], [ {
+			"name"	: "Path",
+			"value" : "F"
+		} ] ]
+	}, {
+		"name"		: "Cell Door",
+		"id"		: "0172",
+		"type"		: "Area",
+		"band"		: [ "003F", "1F00" ],
+		"params" : [ [ {
+			"name"	: "Switch",
+			"value"	: "3F"
+		} ], [ {
+			"name"	: "Key Flag",
+			"value"	: "1F"
+		} ] ]
+	}, {
+		"name"		: "Information Spot",
+		"id"		: "0173",
+		"type"		: "Object",
+		"band"		: [ "8000", "3F00", "00FF" ],
+		"params" : [ [ {
+			"name"	: "Talk when in Range",
+			"value"	: "0"
+		}, {
+			"name"	: "C-Up Prompt",
+			"value"	: "8000"
+		} ], [ {
+			"name"	: "Switch",
+			"value"	: "3F"
+		} ], [ {
+			"name"	: "Message",
+			"value"	: "FF"
+		} ] ]
+	}, {
+		"name"		: "Ganon's Tower Collapsing",
+		"id"		: "0174",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "Type",
+			"value"	: "7"
+		} ] ]
+	}, {
+		"name"		: "Poe Spawn Point",
+		"id"		: "0175",
+		"type"		: "Enemy",
+		"band"		: [ "003F" ],
+		"params" : [ [ {
+			"name"	: "Switch",
+			"value"	: "3F"
+		} ] ]
+	}, {
+		"name"		: "Metal Bars Ganon's Castle",
+		"id"		: "0177",
+		"type"		: "Area",
+		"band"		: [ "3F00", "001F" ],
+		"params" : [ [ {
+			"name"	: "Switch",
+			"value"	: "3F"
+		} ], [ {
+			"name"	: "Flag",
+			"value"	: "1F"
+		} ] ]
+	}, {
+		"name"		: "Hyrule Guard",
+		"id"		: "0178",
+		"type"		: "NPC",
+		"band"		: [ "00FF" ],
+		"params" : [ [ {
+			"name"	: "Kakariko Village Entrance",
+			"value"	: "0"
+		}, {
+			"name"	: "Impa's House",
+			"value"	: "4"
+		}, {
+			"name"	: "Dying Guard",
+			"value"	: "7"
+		}, {
+			"name"	: "Market Town (Night)",
+			"value"	: "8"
+		} ] ]
+	}, {
+		"name"		: "Princess Zelda (Adult)",
+		"id"		: "0179",
+		"type"		: "NPC",
+		"band"		: [ "3F00", "00F0", "000F" ],
+		"params" : [ [ {
+			"name"	: "Switch",
+			"value"	: "3F"
+		} ], [ {
+			"name"	: "Path",
+			"value"	: "F"
+		} ], [ {
+			"name"	: "State",
+			"value"	: "3"
+		} ] ]
+	}, {
+		"name"		: "Ganon",
+		"id"		: "017A",
+		"default"	: "FFFF",
+		"type"		: "Boss"
+	}, {
+		"name"		: "Pierre the Scarecrow",
+		"id"		: "017B",
+		"default"	: "FFFF",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Treasure Box Shop Man",
+		"id"		: "017C",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Push Block Puzzles",
+		"id"		: "017D",
+		"band"		: [ "4000", "3F00", "0040", "003F", "0001 rz" ],
+		"params" : [ [ {
+			"name"	: "Allow Switch #1",
+			"value"	: "0"
+		}, {
+			"name"	: "Ignore Switch #1",
+			"value"	: "4000"
+		} ], [ {
+			"name"	: "Switch #1",
+			"value"	: "3F"
+		} ], [ {
+			"name"	: "Allow Switch #2",
+			"value"	: "0"
+		}, {
+			"name"	: "Ignore Switch #2",
+			"value"	: "40"
+		} ], [ {
+			"name"	: "Switch #2",
+			"value"	: "3F"
+		} ], [ {
+			"name"	: "Inside the Deku Tree",
+			"value"	: "1"
+		}, {
+			"name"	: "Water Temple",
+			"value"	: "0"
+		} ] ]
+	}, {
+		"name"		: "'The End' Message",
+		"id"		: "017F",
+		"type"		: "Cutscene",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "No Logo",
+			"value"	: "0"
+		}, {
+			"name"	: "Logo",
+			"value"	: "1"
+		} ] ]
+	}, {
+		"name"		: "Grotto Treasure Chest",
+		"id"		: "0181"
+	}, {
+		"name"		: "Credits Revelers",
+		"id"		: "0182",
+		"type"		: "NPC",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "Drunken Ingo",
+			"value"	: "0"
+		}, {
+			"name"	: "Drunken Talon",
+			"value"	: "1"
+		}, {
+			"name"	: "Guru-Guru",
+			"value"	: "2"
+		}, {
+			"name"	: "Encouraging Kokiri Boy",
+			"value"	: "3"
+		}, {
+			"name"	: "Encouraging Kokiri Girl",
+			"value"	: "4"
+		}, {
+			"name"	: "White-Haired Man (Blue)",
+			"value"	: "5"
+		}, {
+			"name"	: "Black-Beared Man (White & Green)",
+			"value"	: "6"
+		}, {
+			"name"	: "Bushy-Haired Woman (Red & Black)",
+			"value"	: "7"
+		}, {
+			"name"	: "Little Old Lady",
+			"value"	: "8"
+		}, {
+			"name"	: "Singing Carpenter Boss",
+			"value"	: "9"
+		}, {
+			"name"	: "Singing Carpenter #1",
+			"value"	: "A"
+		}, {
+			"name"	: "Singing Carpenter #2",
+			"value"	: "B"
+		}, {
+			"name"	: "Singing Carpenter #3",
+			"value"	: "C"
+		}, {
+			"name"	: "Singing Carpenter #4",
+			"value"	: "D"
+		}, {
+			"name"	: "Dancing Kokiri Boy",
+			"value"	: "E"
+		}, {
+			"name"	: "Dancing Kokiri Girl",
+			"value"	: "F"
+		}, {
+			"name"	: "Line-Dancing Gerudo #1",
+			"value"	: "10"
+		}, {
+			"name"	: "Line-Dancing Gerudo #2",
+			"value"	: "11"
+		}, {
+			"name"	: "Spikey-Haired Gerudo",
+			"value"	: "12"
+		}, {
+			"name"	: "Dancing Zora",
+			"value"	: "13"
+		}, {
+			"name"	: "King Zora",
+			"value"	: "14"
+		}, {
+			"name"	: "Sitting Mido",
+			"value"	: "15"
+		}, {
+			"name"	: "Floating Cucco #1",
+			"value"	: "16"
+		}, {
+			"name"	: "Floating Cucco #2",
+			"value"	: "17"
+		}, {
+			"name"	: "Walking Cucco",
+			"value"	: "18"
+		}, {
+			"name"	: "Cucco Lady",
+			"value"	: "19"
+		}, {
+			"name"	: "Medicine Shop Owner",
+			"value"	: "1A"
+		}, {
+			"name"	: "Happy Mask Salesman",
+			"value"	: "1B"
+		}, {
+			"name"	: "Fisherman",
+			"value"	: "1C"
+		}, {
+			"name"	: "Bombchu Shopkeeper",
+			"value"	: "1D"
+		}, {
+			"name"	: "Dancing Goron",
+			"value"	: "1E"
+		}, {
+			"name"	: "Belly Slapping Goron",
+			"value"	: "1F"
+		}, {
+			"name"	: "Dancing Biggoron",
+			"value"	: "20"
+		}, {
+			"name"	: "Medigoron Lying Down",
+			"value"	: "21"
+		}, {
+			"name"	: "Singing Malon",
+			"value"	: "22"
+		} ] ]
+	}, {
+		"name"		: "Sun Hitbox & Big Fairy",
+		"id"		: "0183",
+		"type"		: "Object",
+		"default"	: "0001",
+		"band"		: [ "00FF" ],
+		"params" : [ [ {
+			"name"	: "Sun Hitbox",
+			"value"	: "1"
+		}, {
+			"name"	: "Big Fairy",
+			"value"	: [ "40", "41" ]
+		} ] ]
+	}, {
+		"name"		: "Dialog Spot",
+		"id"		: "0185",
+		"type"		: "Object",
+		"band"		: [ "C000", "3FC0", "003F" ],
+		"params" : [ [ {
+			"name"	: "Sets Switch",
+			"value"	: "0"
+		}, {
+			"name"	: "Instant Text",
+			"value"	: "4000"
+		}, {
+			"name"	: "Disappears on Switch",
+			"value"	: "8000"
+		}, {
+			"name"	: "Z-Target",
+			"value"	: "C000"
+		} ], [ {
+			"name"	: "Message",
+			"value"	: "3F"
+		} ], [ {
+			"name"	: "Switch",
+			"value"	: "3F"
+		} ] ]
+	}, {
+		"name"		: "Patrolling Gerudo",
+		"id"		: "0186",
+		"type"		: "NPC",
+		"band"		: [ "00FF", "FF00" ],
+		"params" : [ [ {
+			"name"	: "Patrolling",
+			"value"	: "0"
+		}, {
+			"name"	: "Stationary",
+			"value"	: "1"
+		}, {
+			"name"	: "Card Giver",
+			"value"	: "2"
+		} ], [ {
+			"name"	: "Duration",
+			"value"	: "FF"
+		} ] ]
+	}, {
+		"name"		: "Room Timer",
+		"id"		: "0187",
+		"band"		: [ "03FF", "FC00" ],
+		"params" : [ [ {
+			"name"	: "Timer (Seconds)",
+			"value"	: "3FF"
+		} ], [ {
+			"name"	: "Switch",
+			"value"	: "3F"
+		} ] ]
+	}, {
+		"name"		: "Cursed Skulltula People",
+		"id"		: "0188",
+		"type"		: "NPC",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "Reward Type",
+			"value"	: "7FFF"
+		} ] ]
+	}, {
+		"name"		: "Uncursed Skulltula People",
+		"id"		: "0189",
+		"type"		: "NPC",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "Reward Type",
+			"value"	: "7FFF"
+		} ] ]
+	}, {
+		"name"		: "Stinger (Water)",
+		"id"		: "018C",
+		"type"		: "Enemy"
+	}, {
+		"name"		: "Sacred Forest Meadow",
+		"id"		: "018D",
+		"type"		: "Area",
+		"band"		: [ "00FF", "3F00" ],
+		"params" : [ [ {
+			"name"	: "Floor Tile",
+			"value"	: "0",
+			"hide"	: 2
+		}, {
+			"name"	: "Gate",
+			"value"	: "1",
+			"show"	: 2
+		} ], [ {
+			"name"	: "Switch",
+			"value"	: "3F"
+		} ] ]
+	}, {
+		"name"		: "Stone Elevator",
+		"id"		: "018E",
+		"type"		: "Area",
+		"band"		: [ "003F" ],
+		"params" : [ [ {
+			"name"	: "Switch",
+			"value"	: "3F"
+		} ] ]
+	}, {
+		"name"		: "Fortress Wooden Gate",
+		"id"		: "0190",
+		"type"		: "Area",
+		"band"		: [ "00FF" ],
+		"params" : [ [ {
+			"name"	: "Switch",
+			"value"	: "FF"
+		} ] ]
+	}, {
+		"name"		: "Training Area Gate",
+		"id"		: "0191",
+		"type"		: "Area",
+		"band"		: [ "00FF" ],
+		"params" : [ [ {
+			"name"	: "Switch",
+			"value"	: "FF"
+		} ] ]
+	}, {
+		"name"		: "Hint Deku Scrub",
+		"id"		: "0192",
+		"type"		: "Enemy",
+		"band"		: [ "FF00", "00FF" ],
+		"params" : [ [ {
+			"name"	: "No Message",
+			"value"	: "0"
+		}, {
+			"name"	: "Path to Deku Slingshot",
+			"value"	: "1A00"
+		}, {
+			"name"	: "Boss Door Hint",
+			"value"	: "9B00"
+		}, {
+			"name"	: "Final",
+			"value"	: "9C00"
+		} ], [ {
+			"name"	: "Normal",
+			"value"	: "0"
+		}, {
+			"name"	: "First Scrub",
+			"value"	: "1"
+		}, {
+			"name"	: "Second Scrub",
+			"value"	: "2"
+		}, {
+			"name"	: "Third Scrub",
+			"value"	: "3"
+		} ] ]
+	}, {
+		"name"		: "Hyrule Field",
+		"id"		: "0194",
+		"type"		: "Area",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "Broken Drawbridge",
+			"value"	: "0"
+		}, {
+			"name"	: "Fence",
+			"value"	: "1"
+		} ] ]
+	}, {
+		"name"		: "Grounded Sales Scrub",
+		"id"		: "0195",
+		"type"		: "NPC",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "Deku Nuts",
+			"value"	: "0"
+		}, {
+			"name"	: "Deku Sticks",
+			"value"	: "1"
+		}, {
+			"name"	: "Piece of Hearts",
+			"value"	: "2"
+		}, {
+			"name"	: "Deku Seeds",
+			"value"	: "3"
+		}, {
+			"name"	: "Deku Shield",
+			"value"	: "4"
+		}, {
+			"name"	: "Bombs",
+			"value"	: "5"
+		}, {
+			"name"	: "Deku Seeds",
+			"value"	: "6"
+		}, {
+			"name"	: "Red Potion",
+			"value"	: "7"
+		}, {
+			"name"	: "Green Potion",
+			"value"	: "8"
+		}, {
+			"name"	: "Deku Stick Upgrade",
+			"value"	: "9"
+		}, {
+			"name"	: "Deku Nut Upgrade",
+			"value"	: "A"
+		} ] ]
+	}, {
+		"name"		: "Dampé's Minigame",
+		"id"		: "0196",
+		"default"	: "FFFF"
+	}, {
+		"name"		: "Gerudo Fighter",
+		"id"		: "0197",
+		"type"		: "Enemy",
+		"band"		: [ "FF00" ],
+		"params" : [ [ {
+			"name"	: "Key Flag",
+			"value"	: "FF"
+		} ] ]
+	}, {
+		"name"		: "Dog",
+		"id"		: "019B",
+		"type"		: "NPC",
+		"band"		: [ "8000", "0F00", "00F0", "000F" ],
+		"params" : [ [ {
+			"name"	: "Follow",
+			"value"	: "0"
+		}, {
+			"name"	: "Free Movement",
+			"value"	: "8000"
+		} ], [ {
+			"name"	: "Following",
+			"value"	: "F"
+		} ], [ {
+			"name"	: "Path",
+			"value"	: "F"
+		} ], [ {
+			"name"	: "Dirty Blond",
+			"value"	: "0"
+		}, {
+			"name"	: "Chocolate Brown",
+			"value"	: "1"
+		}, {
+			"name"	: "Red #1",
+			"value"	: "2"
+		}, {
+			"name"	: "Multi-Colored #1",
+			"value"	: "3"
+		}, {
+			"name"	: "Red #2",
+			"value"	: "4"
+		}, {
+			"name"	: "Multi-Colored #2",
+			"value"	: "5"
+		}, {
+			"name"	: "Dark",
+			"value"	: "6"
+		}, {
+			"name"	: "Green #1",
+			"value"	: "7"
+		}, {
+			"name"	: "Red #3",
+			"value"	: "8"
+		}, {
+			"name"	: "Purple #1",
+			"value"	: "9"
+		}, {
+			"name"	: "Red #4",
+			"value"	: "A"
+		}, {
+			"name"	: "Green #2",
+			"value"	: "B"
+		}, {
+			"name"	: "Green #3",
+			"value"	: "C"
+		}, {
+			"name"	: "Black #1",
+			"value"	: "D"
+		}, {
+			"name"	: "Black #2",
+			"value"	: "E"
+		}, {
+			"name"	: "Purple #2",
+			"value"	: "F"
+		} ] ]
+	}, {
+		"name"		: "Kakariko Village",
+		"id"		: "019D",
+		"type"		: "Area",
+		"band"		: [ "0007", "FF00" ],
+		"params" : [ [ {
+			"name"	: "Potion Shop Poster",
+			"value"	: "0",
+			"hide"	: 2
+		}, {
+			"name"	: "Shooting Gallery Poster",
+			"value"	: "1",
+			"hide"	: 2
+		}, {
+			"name"	: "Bazaar Poster",
+			"value"	: "2",
+			"hide"	: 2
+		}, {
+			"name"	: "Shooting Gallery (In Progress)",
+			"value"	: "3",
+			"show"	: 2
+		}, {
+			"name"	: "Shooting Gallery (Completed)",
+			"value"	: "4",
+			"hide"	: 2
+		} ], [ {
+			"name"	: "Path",
+			"value"	: "FF"
+		} ] ]
+	}, {
+		"name"		: "Beehive",
+		"id"		: "019E",
+		"default"	: "FF00",
+		"type"		: "Object",
+		"band"		: [ "00FF" ],
+		"params" : [ [ {
+			"name"	: "Flexible",
+			"value"	: "12"
+		}, {
+			"name"	: "Green Rupee",
+			"value"	: "0"
+		}, {
+			"name"	: "Blue Rupee",
+			"value"	: "1"
+		}, {
+			"name"	: "Red Rupee",
+			"value"	: "2"
+		}, {
+			"name"	: "Gold Rupee",
+			"value"	: "13"
+		}, {
+			"name"	: "Purple Rupee",
+			"value"	: "14"
+		}, {
+			"name"	: "Recovery Heart",
+			"value"	: "3"
+		}, {
+			"name"	: "Magic Jar (Large)",
+			"value"	: "E"
+		}, {
+			"name"	: "Magic Jar (Small)",
+			"value"	: "F"
+		}, {
+			"name"	: "Deku Seeds (5) / Arrows (5)",
+			"value"	: "10"
+		}, {
+			"name"	: "Arrow",
+			"value"	: "5"
+		}, {
+			"name"	: "Arrows (x1)",
+			"value"	: "8"
+		}, {
+			"name"	: "Arrows (x2)",
+			"value"	: "9"
+		}, {
+			"name"	: "Arrows (x3)",
+			"value"	: "A"
+		}, {
+			"name"	: "Bombs (5 - A)",
+			"value"	: "4"
+		}, {
+			"name"	: "Bombs (5 - B)",
+			"value"	: "B"
+		}, {
+			"name"	: "Bombs (5 - Special)",
+			"value"	: "19"
+		}, {
+			"name"	: "Deku Nut",
+			"value"	: "C"
+		}, {
+			"name"	: "Deku Stick",
+			"value"	: "D"
+		}, {
+			"name"	: "Piece of Heart",
+			"value"	: "6"
+		}, {
+			"name"	: "Heart Container",
+			"value"	: "7"
+		}, {
+			"name"	: "Key (Small)",
+			"value"	: "11"
+		}, {
+			"name"	: "Deku Shield",
+			"value"	: "15"
+		}, {
+			"name"	: "Hylian Shield",
+			"value"	: "16"
+		}, {
+			"name"	: "Goron Tunic",
+			"value"	: "18"
+		}, {
+			"name"	: "Zora Tunic ",
+			"value"	: "17"
+		}, {
+			"name"	: "No Item",
+			"value"	: "FF"
+		} ], [ {
+			"name"	: "Flag",
+			"value"	: "FF"
+		} ] ]
+	}, {
+		"name"		: "Bombable Wall Desert",
+		"id"		: "019F",
+		"type"		: "Area",
+		"band"		: [ "003F" ],
+		"params" : [ [ {
+			"name"	: "Switch",
+			"value"	: "3F"
+		} ] ]
+	}, {
+		"name"		: "Large Crate",
+		"id"		: "01A0",
+		"type"		: "Object",
+		"band"		: [ "00FF rx", "FFFF", "003F rz" ],
+		"params" : [ [ {
+			"name"	: "Flexible",
+			"value"	: "12"
+		}, {
+			"name"	: "Green Rupee",
+			"value"	: "0"
+		}, {
+			"name"	: "Blue Rupee",
+			"value"	: "1"
+		}, {
+			"name"	: "Red Rupee",
+			"value"	: "2"
+		}, {
+			"name"	: "Gold Rupee",
+			"value"	: "13"
+		}, {
+			"name"	: "Purple Rupee",
+			"value"	: "14"
+		}, {
+			"name"	: "Recovery Heart",
+			"value"	: "3"
+		}, {
+			"name"	: "Magic Jar (Large)",
+			"value"	: "E"
+		}, {
+			"name"	: "Magic Jar (Small)",
+			"value"	: "F"
+		}, {
+			"name"	: "Deku Seeds (5) / Arrows (5)",
+			"value"	: "10"
+		}, {
+			"name"	: "Arrow",
+			"value"	: "5"
+		}, {
+			"name"	: "Arrows (x1)",
+			"value"	: "8"
+		}, {
+			"name"	: "Arrows (x2)",
+			"value"	: "9"
+		}, {
+			"name"	: "Arrows (x3)",
+			"value"	: "A"
+		}, {
+			"name"	: "Bombs (5 - A)",
+			"value"	: "4"
+		}, {
+			"name"	: "Bombs (5 - B)",
+			"value"	: "B"
+		}, {
+			"name"	: "Bombs (5 - Special)",
+			"value"	: "19"
+		}, {
+			"name"	: "Deku Nut",
+			"value"	: "C"
+		}, {
+			"name"	: "Deku Stick",
+			"value"	: "D"
+		}, {
+			"name"	: "Piece of Heart",
+			"value"	: "6"
+		}, {
+			"name"	: "Heart Container",
+			"value"	: "7"
+		}, {
+			"name"	: "Key (Small)",
+			"value"	: "11"
+		}, {
+			"name"	: "Deku Shield",
+			"value"	: "15"
+		}, {
+			"name"	: "Hylian Shield",
+			"value"	: "16"
+		}, {
+			"name"	: "Goron Tunic",
+			"value"	: "18"
+		}, {
+			"name"	: "Zora Tunic ",
+			"value"	: "17"
+		}, {
+			"name"	: "No Item",
+			"value"	: [ "FF", "4A" ]
+		} ], [ {
+			"name"	: "Skulltula",
+			"value"	: "FFFF"
+		} ], [ {
+			"name"	: "Flag",
+			"value"	: "3F"
+		} ] ]
+	}, {
+		"name"		: "Deku Mask Panel Trigger",
+		"id"		: "01A1"
+	}, {
+		"name"		: "Slingshot Deku Minigame",
+		"id"		: "01A3",
+		"default"	: "FFFF"
+	}, {
+		"name"		: "Mask Shop Customer",
+		"id"		: "01A4",
+		"default"	: "FFFF"
+	}, {
+		"name"		: "Bowling Alley Aiming Area",
+		"id"		: "01A5",
+		"default"	: "FFFF",
+		"type"		: "Area"
+	}, {
+		"name"		: "Carpenter's Son (Child)",
+		"id"		: "01A6",
+		"default"	: "FFFF",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Magic Barriers",
+		"id"		: "01A7",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "Tower Magic Barrier",
+			"value"	: "0"
+		}, {
+			"name"	: "Water Magic Core",
+			"value"	: "1"
+		}, {
+			"name"	: "Light Magic Core",
+			"value"	: "2"
+		}, {
+			"name"	: "Fire Magic Core",
+			"value"	: "3"
+		}, {
+			"name"	: "Shadow Magic Core",
+			"value"	: "4"
+		}, {
+			"name"	: "Spirit Magic Core",
+			"value"	: "5"
+		}, {
+			"name"	: "Forest Magic Core",
+			"value"	: "6"
+		} ] ]
+	}, {
+		"name"		: "Bombable Wall Fountain",
+		"id"		: "01A8",
+		"type"		: "Area",
+		"band"		: [ "003F" ],
+		"params" : [ [ {
+			"name"	: "Switch",
+			"value"	: "3F"
+		} ] ]
+	}, {
+		"name"		: "Bombable Wall Crater",
+		"id"		: "01A9",
+		"type"		: "Area",
+		"band"		: [ "003F" ],
+		"params" : [ [ {
+			"name"	: "Switch",
+			"value"	: "3F"
+		} ] ]
+	}, {
+		"name"		: "Rupee Cluster",
+		"id"		: "01AB",
+		"type"		: "Object",
+		"band"		: [ "E000", "003F" ],
+		"params" : [ [ {
+			"name"	: "Five Blue Rupees",
+			"value"	: "0"
+		}, {
+			"name"	: "Five Green Rupees",
+			"value"	: "2000"
+		}, {
+			"name"	: "Six Green Rupees & Red Rupee",
+			"value"	: "4000"
+		} ], [ {
+			"name"	: "Switch",
+			"value"	: "3F"
+		} ] ]
+	}, {
+		"name"		: "Honey & Darling",
+		"id"		: "01AC",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Haggling Townspeople",
+		"id"		: "01AD",
+		"type"		: "NPC",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "Blue & Green",
+			"value"	: "0"
+		}, {
+			"name"	: "Green & Brown",
+			"value"	: "1"
+		}, {
+			"name"	: "Green & Red",
+			"value"	: "2"
+		}, {
+			"name"	: "Purple & Red",
+			"value"	: "3"
+		}, {
+			"name"	: "Orange & Red",
+			"value"	: "4"
+		}, {
+			"name"	: "Purple & Black",
+			"value"	: "5"
+		}, {
+			"name"	: "Flashing Purple & Blue",
+			"value"	: "6"
+		}, {
+			"name"	: "Flashing Purple & Cyan",
+			"value"	: "7"
+		}, {
+			"name"	: "Purple & Red #2",
+			"value"	: "8"
+		} ] ]
+	}, {
+		"name"		: "Gorons",
+		"id"		: "01AE",
+		"type"		: "NPC",
+		"band"		: [ "001F", "FC00", "03E0" ],
+		"params" : [ [ {
+			"name"	: "Hot Rodder",
+			"value"	: "0"
+		}, {
+			"name"	: "Link",
+			"value"	: "1"
+		}, {
+			"name"	: "Biggoron",
+			"value"	: "2"
+		}, {
+			"name"	: "Quivering",
+			"value"	: "3"
+		}, {
+			"name"	: "Bomb Flower (Outside)",
+			"value"	: "4"
+		}, {
+			"name"	: "Small & Rolling",
+			"value"	: "5"
+		}, {
+			"name"	: "Dodongo's Cavern",
+			"value"	: "6"
+		}, {
+			"name"	: "City Entrance",
+			"value"	: "7"
+		}, {
+			"name"	: "Island",
+			"value"	: "8"
+		}, {
+			"name"	: "Lowest Floor",
+			"value"	: "9"
+		}, {
+			"name"	: "Stairwell",
+			"value"	: "A"
+		}, {
+			"name"	: "Lost Woods",
+			"value"	: "B"
+		}, {
+			"name"	: "Fairy Hint",
+			"value"	: "C"
+		}, {
+			"name"	: "Market Bazaar",
+			"value"	: "D"
+		} ], [ {
+			"name"	: "Message",
+			"value"	: "3F"
+		} ], [ {
+			"name"	: "Path",
+			"value"	: "1F"
+		} ] ]
+	}, {
+		"name"		: "Wolfos",
+		"id"		: "01AF",
+		"type"		: "Enemy",
+		"band"		: [ "00FF", "FF00" ],
+		"params" : [ [ {
+			"name"	: "Gray",
+			"value"	: "0"
+		}, {
+			"name"	: "White",
+			"value"	: "1"
+		} ], [ {
+			"name"	: "Switch",
+			"value"	: "FF"
+		} ] ]
+	}, {
+		"name"		: "Stalchild",
+		"id"		: "01B0",
+		"type"		: "Enemy",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "Scale",
+			"multi"	: 0,
+			"value"	: "1000"
+		} ] ]
+	}, {
+		"name"		: "Ganon Battle Rubble",
+		"id"		: "01B1",
+		"type"		: "Area",
+		"band"		: [ "00FF", "F800", "0700" ],
+		"params" : [ [ {
+			"name"	: "Indestructable Rubble",
+			"value"	: "4"
+		}, {
+			"name"	: "Rubble Pile #1",
+			"value"	: "8"
+		}, {
+			"name"	: "Rubble Pile #2",
+			"value"	: "9"
+		}, {
+			"name"	: "Rubble Pile #3",
+			"value"	: "A"
+		}, {
+			"name"	: "Rubble Pile #4",
+			"value"	: "B"
+		}, {
+			"name"	: "Rubble Pile #5",
+			"value"	: "C"
+		}, {
+			"name"	: "Rubble Pile #6",
+			"value"	: "D"
+		}, {
+			"name"	: "Rubble Pile #7",
+			"value"	: "E"
+		}, {
+			"name"	: "Destructable Rubble #1",
+			"value"	: "10"
+		}, {
+			"name"	: "Destructable Rubble #2",
+			"value"	: "11"
+		}, {
+			"name"	: "Cutscene #1",
+			"value"	: "13"
+		}, {
+			"name"	: "Cutscene #2",
+			"value"	: "14"
+		}, {
+			"name"	: "Cutscene #3",
+			"value"	: "15"
+		}, {
+			"name"	: "Destructable Tall Rubble",
+			"value"	: "16"
+		} ], [ {
+			"name"	: "Collectable",
+			"value"	: "1F"
+		} ], [ {
+			"name"	: "Amount",
+			"value"	: "7"
+		} ] ]
+	}, {
+		"name"		: "Ganon Rubble Fragment",
+		"id"		: "01B2",
+		"type"		: "Area",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "Type",
+			"value"	: "9"
+		} ] ]
+	}, {
+		"name"		: "Sinking Lava Platform",
+		"id"		: "01B3",
+		"type"		: "Area"
+	}, {
+		"name"		: "Clear Block",
+		"id"		: "01B4",
+		"type"		: "Area",
+		"band"		: [ "00FF", "FF00" ],
+		"params" : [ [ {
+			"name"	: "Invisible Path",
+			"value"	: "0"
+		}, {
+			"name"	: "Glass Block",
+			"value"	: "1"
+		}, {
+			"name"	: "Glass Block Timer",
+			"value"	: "2"
+		} ], [ {
+			"name"	: "Switch",
+			"value"	: "FF"
+		} ] ]
+	}, {
+		"name"		: "Web-Blocked Ceiling Hole",
+		"id"		: "01B5",
+		"type"		: "Area",
+		"band"		: [ "00FF", "3F00" ],
+		"params" : [ [ {
+			"name"	: "Web",
+			"value"	: "0"
+		}, {
+			"name"	: "Light Source",
+			"value"	: "1"
+		}, {
+			"name"	: "Light Floor",
+			"value"	: "2"
+		} ], [ {
+			"name"	: "Switch",
+			"value"	: "3F"
+		} ] ]
+	}, {
+		"name"		: "Fake Walls Ganon's Castle",
+		"id"		: "01B6",
+		"type"		: "Area",
+		"band"		: [ "00FF" ],
+		"params" : [ [ {
+			"name"	: "Light Trial",
+			"value"	: "0"
+		}, {
+			"name"	: "Unused",
+			"value"	: "1"
+		}, {
+			"name"	: "Deku Scrubs",
+			"value"	: "2"
+		} ] ]
+	}, {
+		"name"		: "Pushable Square Ice Block",
+		"id"		: "01B7",
+		"type"		: "Object"
+	}, {
+		"name"		: "Poe Collector",
+		"id"		: "01B8",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Gossip Stone",
+		"id"		: "01B9",
+		"type"		: "Object",
+		"band"		: [ "00FF", "FF00" ],
+		"params" : [ [ {
+			"name"	: "Message",
+			"value"	: "21"
+		} ], [ {
+			"name"	: "Fairy",
+			"value"	: "FF"
+		} ] ]
+	}, {
+		"name"		: "Bombable Stone Wall",
+		"id"		: "01BA",
+		"type"		: "Area",
+		"band"		: [ "000F", "3F00" ],
+		"params" : [ [ {
+			"name"	: "Floor",
+			"value"	: "0"
+		}, {
+			"name"	: "Ruto Room",
+			"value"	: "1"
+		}, {
+			"name"	: "Unused",
+			"value"	: "2"
+		}, {
+			"name"	: "Stinger Room #1",
+			"value"	: "3"
+		}, {
+			"name"	: "Stinger Room #2",
+			"value"	: "4"
+		} ], [ {
+			"name"	: "Switch",
+			"value"	: "3F"
+		} ] ]
+	}, {
+		"name"		: "Metal Gate",
+		"id"		: "01BB",
+		"type"		: "Area",
+		"band"		: [ "F000", "0FC0", "003F" ],
+		"params" : [ [ {
+			"name"	: "Vertical",
+			"value"	: "0"
+		}, {
+			"name"	: "Horizontal",
+			"value"	: "1000"
+		} ], [ {
+			"name"	: "Timer (Seconds)",
+			"value"	: "3F"
+		} ], [ {
+			"name"	: "Switch",
+			"value"	: "3F"
+		} ] ]
+	}, {
+		"name"		: "Carpenters (Kakariko)",
+		"id"		: "01BC",
+		"type"		: "NPC",
+		"band"		: [ "FF00", "00FF" ],
+		"params" : [ [ {
+			"name"	: "Path",
+			"value"	: "FF"
+		} ], [ {
+			"name"	: "Ichiro",
+			"value"	: "0"
+		}, {
+			"name"	: "Sabooro",
+			"value"	: "1"
+		}, {
+			"name"	: "Jiro",
+			"value"	: "2"
+		}, {
+			"name"	: "Shiro",
+			"value"	: "3"
+		} ] ]
+	}, {
+		"name"		: "Bowling Alley Wall",
+		"id"		: "01BD",
+		"type"		: "Area",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "Final Wall",
+			"value"	: "0"
+		}, {
+			"name"	: "Hole Lower-Right",
+			"value"	: "1"
+		}, {
+			"name"	: "Hole Top",
+			"value"	: "2"
+		} ] ]
+	}, {
+		"name"		: "Poe Guide",
+		"id"		: "01BF",
+		"type"		: "NPC",
+		"band"		: [ "FF00" ],
+		"params" : [ [ {
+			"name"	: "Path",
+			"value"	: "FF"
+		} ] ]
+	}, {
+		"name"		: "Guay",
+		"id"		: "01C0",
+		"type"		: "Enemy"
+	}, {
+		"name"		: "Fake Door",
+		"id"		: "01C1",
+		"type"		: "Object",
+		"band"		: [ "00FF", "3F00" ],
+		"params" : [ [ {
+			"name"	: "Fake Door",
+			"value"	: "0"
+		}, {
+			"name"	: "Rubble Piece #1",
+			"value"	: "1"
+		}, {
+			"name"	: "Rubble Piece #2",
+			"value"	: "2"
+		}, {
+			"name"	: "Rubble Piece #3",
+			"value"	: "3"
+		}, {
+			"name"	: "Rubble Piece #4",
+			"value"	: "4"
+		} ], [ {
+			"name"	: "Switch",
+			"value"	: "3F"
+		} ] ]
+	}, {
+		"name"		: "Oasis",
+		"id"		: "01C2",
+		"type"		: "Area"
+	}, {
+		"name"		: "Sliding Doors Goron City",
+		"id"		: "01C4",
+		"type"		: "Area",
+		"band"		: [ "0100", "003F" ],
+		"params" : [ [ {
+			"name"	: "Door",
+			"value"	: "0"
+		}, {
+			"name"	: "Doormat",
+			"value"	: "100"
+		} ], [ {
+			"name"	: "Switch",
+			"value"	: "3F"
+		} ] ]
+	}, {
+		"name"		: "Malon (Lon Lon Ranch)",
+		"id"		: "01C5",
+		"default"	: "FFFF",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Cow",
+		"id"		: "01C6",
+		"type"		: "NPC",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "Cow",
+			"value"	: "0"
+		}, {
+			"name"	: "Tail Only",
+			"value"	: "1"
+		} ] ]
+	}, {
+		"name"		: "Icicles",
+		"id"		: "01C7",
+		"type"		: "Object",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "Stalagmite (Floor)",
+			"value"	: "0"
+		}, {
+			"name"	: "Stalactite (Ceiling)",
+			"value"	: "1"
+		}, {
+			"name"	: "Regrowing Stalactite (Ceiling)",
+			"value"	: "2"
+		} ] ]
+	}, {
+		"name"		: "Vertical Ice Bars",
+		"id"		: "01C8",
+		"type"		: "Area",
+		"band"		: [ "00FF", "FF00" ],
+		"params" : [ [ {
+			"name"	: "Type 0",
+			"value"	: "0"
+		}, {
+			"name"	: "Type 1",
+			"value"	: "1"
+		}, {
+			"name"	: "Type 2",
+			"value"	: "2"
+		} ], [ {
+			"name"	: "Switch",
+			"value"	: "FF"
+		} ] ]
+	}, {
+		"name"		: "Pierre the Scarecrow Spawn",
+		"id"		: "01C9",
+		"type"		: "NPC",
+		"band"		: [ "003F" , "3FC0", "FFFF rz" ],
+		"params" : [ [ {
+			"name"	: "Switch",
+			"value"	: "3F"
+		} ], [ {
+			"name"	: "Range X",
+			"value"	: "FF"
+		} ], [ {
+			"name"	: "Range Y",
+			"value"	: "FFFF"
+		} ] ]
+	}, {
+		"name"		: "Bonooru the Scarecrow",
+		"id"		: "01CA",
+		"default"	: "FFFF",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Void-out Trigger Tower",
+		"id"		: "01CC",
+		"type"		: "Area"
+	}, {
+		"name"		: "Fake Stone Walls",
+		"id"		: "01CD",
+		"type"		: "Area",
+		"band"		: [ "00FF" ],
+		"params" : [ [ {
+			"name"	: "Wall",
+			"value"	: "0"
+		}, {
+			"name"	: "Ceiling",
+			"value"	: "1"
+		} ] ]
+	}, {
+		"name"		: "Zora",
+		"id"		: "01CE",
+		"default"	: "FF00",
+		"type"		: "NPC",
+		"band"		: [ "00FF", "FF00" ],
+		"params" : [ [ {
+			"name"	: "Type",
+			"value"	: "FF"
+		} ], [ {
+			"name"	: "Path",
+			"value"	: "FF"
+		} ] ]
+	}, {
+		"name"		: "Skullwalltula (Bean Spot)",
+		"id"		: "01CF",
+		"type"		: "Enemy",
+		"band"		: [ "E000", "1F00", "00FF" ],
+		"params" : [ [ {
+			"name"	: "Skullwalltula",
+			"value"	: "0"
+		}, {
+			"name"	: "Gold Skulltula (Anytime)",
+			"value"	: [ "8000", "2000", "4000" ]
+		}, {
+			"name"	: "Gold Skulltula (Appears)",
+			"value"	: [ "6000", "D000", "F000" ]
+		}, {
+			"name"	: "Gold Skulltula (Night)",
+			"value"	: "A000"
+		} ], [ {
+			"name"	: "None",
+			"value"	: "0"
+		}, {
+			"name"	: "Deku Tree",
+			"value"	: "100"
+		}, {
+			"name"	: "Dodongo's Cavern",
+			"value"	: "200"
+		}, {
+			"name"	: "Inside Jabu-Jabu's Belly",
+			"value"	: "300"
+		}, {
+			"name"	: "Forest Temple",
+			"value"	: "400"
+		}, {
+			"name"	: "Fire Temple",
+			"value"	: "500"
+		}, {
+			"name"	: "Water Temple",
+			"value"	: "600"
+		}, {
+			"name"	: "Spirit Temple",
+			"value"	: "700"
+		}, {
+			"name"	: "Shadow Temple",
+			"value"	: "800"
+		}, {
+			"name"	: "Bottom of the Well",
+			"value"	: "900"
+		}, {
+			"name"	: "Ice Cavern",
+			"value"	: "A00"
+		}, {
+			"name"	: "Hyrule Field",
+			"value"	: "B00"
+		}, {
+			"name"	: "Lon Lon Ranch",
+			"value"	: "C00"
+		}, {
+			"name"	: "Kokiri Forest",
+			"value"	: "D00"
+		}, {
+			"name"	: "Lost Woods",
+			"value"	: "E00"
+		}, {
+			"name"	: "Castle",
+			"value"	: "F00"
+		}, {
+			"name"	: "Death Mountain",
+			"value"	: "1000"
+		}, {
+			"name"	: "Kakariko Village",
+			"value"	: "1100"
+		}, {
+			"name"	: "River",
+			"value"	: "1200"
+		}, {
+			"name"	: "Lake Hylia",
+			"value"	: "1300"
+		}, {
+			"name"	: "Gerudo Valley",
+			"value"	: "1400"
+		}, {
+			"name"	: "Gerudo Fortress",
+			"value"	: "1500"
+		}, {
+			"name"	: "Desert",
+			"value"	: "1600"
+		} ], [ {
+			"name"	: "Flag 1",
+			"value"	: "1"
+		}, {
+			"name"	: "Flag 2",
+			"value"	: "2"
+		}, {
+			"name"	: "Flag 3",
+			"value"	: "4"
+		}, {
+			"name"	: "Flag 4",
+			"value"	: "8"
+		}, {
+			"name"	: "Flag 5",
+			"value"	: "10"
+		}, {
+			"name"	: "Flag 6",
+			"value"	: "20"
+		}, {
+			"name"	: "Flag 7",
+			"value"	: "40"
+		}, {
+			"name"	: "Flag 8",
+			"value"	: "80"
+		} ] ]
+	}, {
+		"name"		: "Time Block",
+		"id"		: "01D1",
+		"type"		: "Object",
+		"band"		: [ "8000", "8000", "3800", "0100", "0040", "003F", "0007 rz" ],
+		"params" : [ [ {
+			"name"	: "Child Visible",
+			"value"	: "0"
+		}, {
+			"name"	: "Adult Visible",
+			"value"	: "8000"
+		} ], [ {
+			"name"	: "Invisible",
+			"value"	: "0"
+		}, {
+			"name"	: "Visible",
+			"value"	: "8000"
+		} ], [ {
+			"name"	: "Distance: 60",
+			"value"	: "0"
+		}, {
+			"name"	: "Distance: 100",
+			"value"	: "800"
+		}, {
+			"name"	: "Distance: 140",
+			"value"	: "1000"
+		}, {
+			"name"	: "Distance: 180",
+			"value"	: "1800"
+		}, {
+			"name"	: "Distance: 220",
+			"value"	: "2000"
+		}, {
+			"name"	: "Distance: 260",
+			"value"	: "2800"
+		}, {
+			"name"	: "Distance: 300",
+			"value"	: [ "3000", "3800" ]
+		} ], [ {
+			"name"	: "Large",
+			"value"	: "0"
+		}, {
+			"name"	: "Small",
+			"value"	: "100"
+		} ], [ {
+			"name"	: "Normal",
+			"value"	: "40",
+			"show"	: 2,
+			"hide"	: 1
+		}, {
+			"name"	: "Age Inverted",
+			"value"	: "0",
+			"show"	: 1,
+			"hide"	: 2
+		} ], [ {
+			"name"	: "Switch",
+			"value"	: "3F"
+		} ], [ {
+			"name"	: "Color: Default",
+			"value"	: "0"
+		}, {
+			"name"	: "Color: Water Temple",
+			"value"	: "1"
+		}, {
+			"name"	: "Color: Shadow Temple",
+			"value"	: "2"
+		}, {
+			"name"	: "Color: Spirit Temple",
+			"value"	: "3"
+		}, {
+			"name"	: "Color: Forest Temple",
+			"value"	: "4"
+		}, {
+			"name"	: "Color: Dampe's Grave",
+			"value"	: "5"
+		}, {
+			"name"	: "Color: Gerudo Training Ground",
+			"value"	: "6"
+		}, {
+			"name"	: "Color: Ganon's Castle",
+			"value"	: "7"
+		} ] ]
+	}, {
+		"name"		: "Bronze Boulder",
+		"id"		: "01D2",
+		"type"		: "Object",
+		"band"		: [ "003F" ],
+		"params" : [ [ {
+			"name"	: "Switch",
+			"value"	: "3F"
+		} ] ]
+	}, {
+		"name"		: "Princess Zelda (Child)",
+		"id"		: "01D3",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Running Man (Adult)",
+		"id"		: "01D4",
+		"type"		: "NPC",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "No Marathon",
+			"value"	: "0"
+		}, {
+			"name"	: "Marathon",
+			"value"	: "1"
+		} ] ]
+	}, {
+		"name"		: "Silver Block (Child)",
+		"id"		: "01D5",
+		"type"		: "Object",
+		"band"		: [ "003F" ],
+		"params" : [ [ {
+			"name"	: "Switch",
+			"value"	: "3F"
+		} ] ]
+	}, {
+		"name"		: "Navi Block Info Spot",
+		"id"		: "01D6",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "Param",
+			"value"	: "FFFF"
+		} ] ]
+	} ],
+	
+	"objects" : [ {
+		"name"		: "Aria",
+		"id"		: "0006",
+		"type"		: "Unused"
+	}, {
+		"name"		: "Octorok",
+		"id"		: "0007",
+		"type"		: "Enemy"
+	}, {
+		"name"		: "Guay",
+		"id"		: "0008",
+		"type"		: "Enemy"
+	}, {
+		"name"		: "Poe",
+		"id"		: "0009",
+		"type"		: "Enemy"
+	}, {
+		"name"		: "Great Fairy",
+		"id"		: "000A",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Wallmaster & Floormaster",
+		"id"		: "000B",
+		"type"		: "Enemy"
+	}, {
+		"name"		: "Dodongo",
+		"id"		: "000C",
+		"type"		: "Enemy"
+	}, {
+		"name"		: "Keese",
+		"id"		: "000D",
+		"type"		: "Enemy"
+	}, {
+		"name"		: "Treasure Chest",
+		"id"		: "000E",
+		"type"		: "Object"
+	}, {
+		"name"		: "Dancing Flame",
+		"id"		: "000F",
+		"type"		: "Unused"
+	}, {
+		"name"		: "Shabom",
+		"id"		: "0012",
+		"type"		: "Enemy"
+	}, {
+		"name"		: "Cucco",
+		"id"		: "0013",
+		"type"		: "Animal"
+	}, {
+		"name"		: "Tektites",
+		"id"		: "0016",
+		"type"		: "Enemy"
+	}, {
+		"name"		: "Leever",
+		"id"		: "0017",
+		"type"		: "Enemy"
+	}, {
+		"name"		: "Peahat",
+		"id"		: "0018",
+		"type"		: "Enemy"
+	}, {
+		"name"		: "King Dodongo",
+		"id"		: "0019",
+		"type"		: "Boss"
+	}, {
+		"name"		: "Epona",
+		"id"		: "001A",
+		"type"		: "Animal"
+	}, {
+		"name"		: "Lizalfos & Dinolfos",
+		"id"		: "001B",
+		"type"		: "Enemy"
+	}, {
+		"name"		: "Gohma",
+		"id"		: "001C",
+		"type"		: "Boss"
+	}, {
+		"name"		: "Princess Zelda (Window)",
+		"id"		: "001D",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Gohma Larva",
+		"id"		: "001E",
+		"type"		: "Enemy"
+	}, {
+		"name"		: "Baby Dodongo",
+		"id"		: "001F",
+		"type"		: "Enemy"
+	}, {
+		"name"		: "Dark Link",
+		"id"		: "0020",
+		"type"		: "Boss"
+	}, {
+		"name"		: "Biri",
+		"id"		: "0021",
+		"type"		: "Enemy"
+	}, {
+		"name"		: "Tailpasaran",
+		"id"		: "0022",
+		"type"		: "Enemy"
+	}, {
+		"name"		: "Kakariko Rooftop Man",
+		"id"		: "0023",
+		"type"		: "Unused"
+	}, {
+		"name"		: "Skulltulas",
+		"id"		: "0024",
+		"type"		: "Enemy"
+	}, {
+		"name"		: "Torch Slug",
+		"id"		: "0025",
+		"type"		: "Enemy"
+	}, {
+		"name"		: "Stinger",
+		"id"		: "0026",
+		"type"		: "Enemy"
+	}, {
+		"name"		: "Generic Horse",
+		"id"		: "0027",
+		"type"		: "Animal"
+	}, {
+		"name"		: "Bazaar Owner",
+		"id"		: "0028",
+		"type"		: "Unused"
+	}, {
+		"name"		: "NPC I",
+		"id"		: "0029",
+		"type"		: "Animation"
+	}, {
+		"name"		: "Kokiri Forest",
+		"id"		: "002A",
+		"type"		: "Area"
+	}, {
+		"name"		: "Dodongo's Cavern",
+		"id"		: "002B",
+		"type"		: "Area"
+	}, {
+		"name"		: "Fire Temple",
+		"id"		: "002C",
+		"type"		: "Area"
+	}, {
+		"name"		: "Ganondorf's Horse",
+		"id"		: "002D",
+		"type"		: "Animal"
+	}, {
+		"name"		: "Zora (Early)",
+		"id"		: "002E",
+		"type"		: "Unused"
+	}, {
+		"name"		: "Hyrule Field (Child)",
+		"id"		: "002F",
+		"type"		: "Area"
+	}, {
+		"name"		: "Moblins",
+		"id"		: "0030",
+		"type"		: "Enemy"
+	}, {
+		"name"		: "Bomb Flower",
+		"id"		: "0031",
+		"type"		: "Object"
+	}, {
+		"name"		: "Stalfos",
+		"id"		: "0032",
+		"type"		: "Enemy"
+	}, {
+		"name"		: "Mido I (Early)",
+		"id"		: "0033",
+		"type"		: "Unused"
+	}, {
+		"name"		: "NPC II",
+		"id"		: "0034",
+		"type"		: "Animation"
+	}, {
+		"name"		: "Red-Haired Kokiri Girl (Early)",
+		"id"		: "0035",
+		"type"		: "Unused"
+	}, {
+		"name"		: "Inside the Deku Tree",
+		"id"		: "0036",
+		"type"		: "Area"
+	}, {
+		"name"		: "Phantom Ganon",
+		"id"		: "0037",
+		"type"		: "Boss"
+	}, {
+		"name"		: "Armos",
+		"id"		: "0038",
+		"type"		: "Enemy"
+	}, {
+		"name"		: "Deku Babas",
+		"id"		: "0039",
+		"type"		: "Enemy"
+	}, {
+		"name"		: "Impa's Masked Head (Early)",
+		"id"		: "003B",
+		"type"		: "Unused"
+	}, {
+		"name"		: "Laughing Man (Early)",
+		"id"		: "003C",
+		"type"		: "Unused"
+	}, {
+		"name"		: "Hylian Woman in Purple Dress",
+		"id"		: "003D",
+		"type"		: "Unused"
+	}, {
+		"name"		: "Hylian Man in Blue Shirt & Orange Pants",
+		"id"		: "003E",
+		"type"		: "Unused"
+	}, {
+		"name"		: "Hylian Woman in White Shirt & Orange Pants",
+		"id"		: "003F",
+		"type"		: "Unused"
+	}, {
+		"name"		: "Jabu-Jabu",
+		"id"		: "0040",
+		"type"		: "Animal"
+	}, {
+		"name"		: "Old Hylian Man (Early)",
+		"id"		: "0041",
+		"type"		: "Unused"
+	}, {
+		"name"		: "Old Hylian Man's Head (Early)",
+		"id"		: "0042",
+		"type"		: "Unused"
+	}, {
+		"name"		: "Hylian Man in Purple Shirt & Green Pants",
+		"id"		: "0043",
+		"type"		: "Unused"
+	}, {
+		"name"		: "Carpenter's Boss's Wife (Early)",
+		"id"		: "0044",
+		"type"		: "Unused"
+	}, {
+		"name"		: "HHylian Woman in Blue Shirt & White Dress",
+		"id"		: "0045",
+		"type"		: "Unused"
+	}, {
+		"name"		: "Zelda's Horse",
+		"id"		: "0046",
+		"type"		: "Animal"
+	}, {
+		"name"		: "Opening Cutscene",
+		"id"		: "0047",
+		"type"		: "Animation"
+	}, {
+		"name"		: "Warp Circle & Rupee Prism",
+		"id"		: "0048",
+		"type"		: "Object"
+	}, {
+		"name"		: "Heart Container (Early)",
+		"id"		: "0049",
+		"type"		: "Unused"
+	}, {
+		"name"		: "Mad Scrubs",
+		"id"		: "004A",
+		"type"		: "Enemy"
+	}, {
+		"name"		: "Saria (Early)",
+		"id"		: "004B",
+		"type"		: "Unused"
+	}, {
+		"name"		: "Red-Haired Kokiri Boy I (Early)",
+		"id"		: "004C",
+		"type"		: "Unused"
+	}, {
+		"name"		: "Gerudo Training Ground",
+		"id"		: "004D",
+		"type"		: "Area"
+	}, {
+		"name"		: "Fado (Early)",
+		"id"		: "004E",
+		"type"		: "Unused"
+	}, {
+		"name"		: "Kokiri Girl in Brown Band's Head",
+		"id"		: "004F",
+		"type"		: "Unused"
+	}, {
+		"name"		: "Kokiri Boy in Green Cap's Head",
+		"id"		: "0050",
+		"type"		: "Unused"
+	}, {
+		"name"		: "Kokiri Girl in Green Band's Head",
+		"id"		: "0051",
+		"type"		: "Unused"
+	}, {
+		"name"		: "Kokiri Boy in Mint Cap's Head",
+		"id"		: "0052",
+		"type"		: "Unused"
+	}, {
+		"name"		: "Kokiri Shop Owner's Head (Early)",
+		"id"		: "0053",
+		"type"		: "Unused"
+	}, {
+		"name"		: "Kokiri Girl in Green Cap's Head",
+		"id"		: "0054",
+		"type"		: "Unused"
+	}, {
+		"name"		: "Fado's Head (Early)",
+		"id"		: "0055",
+		"type"		: "Unused"
+	}, {
+		"name"		: "Bari",
+		"id"		: "0056",
+		"type"		: "Enemy"
+	}, {
+		"name"		: "Soldier (Early)",
+		"id"		: "0057",
+		"type"		: "Unused"
+	}, {
+		"name"		: "Courtyard Soldier (Early)",
+		"id"		: "0058",
+		"type"		: "Unused"
+	}, {
+		"name"		: "Water Temple",
+		"id"		: "0059",
+		"type"		: "Area"
+	}, {
+		"name"		: "Phantom Ganon's Horse & Objects",
+		"id"		: "005A",
+		"type"		: "Boss"
+	}, {
+		"name"		: "Shooting Gallery Manager & Bazaar Owner",
+		"id"		: "005B",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Forest Temple Room 13 (Twisted)",
+		"id"		: "005C",
+		"type"		: "Area"
+	}, {
+		"name"		: "Bubbles",
+		"id"		: "005D",
+		"type"		: "Enemy"
+	}, {
+		"name"		: "Temple of Time",
+		"id"		: "005E",
+		"type"		: "Area"
+	}, {
+		"name"		: "Flying Tiles",
+		"id"		: "005F",
+		"type"		: "Enemy"
+	}, {
+		"name"		: "Princess Zelda (Adult)",
+		"id"		: "0060",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Warp Pad Base",
+		"id"		: "0061",
+		"type"		: "Object"
+	}, {
+		"name"		: "Light Warp Pad",
+		"id"		: "0062",
+		"type"		: "Object"
+	}, {
+		"name"		: "Shadow Warp Pad",
+		"id"		: "0063",
+		"type"		: "Object"
+	}, {
+		"name"		: "Fire Warp Pad",
+		"id"		: "0064",
+		"type"		: "Object"
+	}, {
+		"name"		: "Water Warp Pad",
+		"id"		: "0065",
+		"type"		: "Object"
+	}, {
+		"name"		: "Spirit Warp Pad",
+		"id"		: "0066",
+		"type"		: "Object"
+	}, {
+		"name"		: "Forest Warp Pad",
+		"id"		: "0067",
+		"type"		: "Object"
+	}, {
+		"name"		: "Oarina Pedestal",
+		"id"		: "0068",
+		"type"		: "Unused"
+	}, {
+		"name"		: "Shadow Temple",
+		"id"		: "0069",
+		"type"		: "Area"
+	}, {
+		"name"		: "Lake Hylia",
+		"id"		: "006A",
+		"type"		: "Area"
+	}, {
+		"name"		: "Ice Cavern",
+		"id"		: "006B",
+		"type"		: "Area"
+	}, {
+		"name"		: "Dampé Relay Race",
+		"id"		: "006C",
+		"type"		: "Area"
+	}, {
+		"name"		: "Big Poe & Poe Guide",
+		"id"		: "006D",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Sharp & Flat",
+		"id"		: "006E",
+		"type"		: "Enemy"
+	}, {
+		"name"		: "Forest Temple Room 13 (Straight)",
+		"id"		: "006F",
+		"type"		: "Area"
+	}, {
+		"name"		: "Forest Temple Room 14 (Straight)",
+		"id"		: "0070",
+		"type"		: "Area"
+	}, {
+		"name"		: "Forest Temple Room 14 (Twisted)",
+		"id"		: "0071",
+		"type"		: "Area"
+	}, {
+		"name"		: "Forest Temple",
+		"id"		: "0072",
+		"type"		: "Area"
+	}, {
+		"name"		: "Forest Temple Textures",
+		"id"		: "0073"
+	}, {
+		"name"		: "Zora's Fountain",
+		"id"		: "0074",
+		"type"		: "Area"
+	}, {
+		"name"		: "Flagpole",
+		"id"		: "0076",
+		"type"		: "Object"
+	}, {
+		"name"		: "Brown Bird",
+		"id"		: "0077",
+		"type"		: "Animal"
+	}, {
+		"name"		: "Bushes & Trees",
+		"id"		: "007C",
+		"type"		: "Object"
+	}, {
+		"name"		: "Rectangular Light Grey Stone Blocks",
+		"id"		: "0081",
+		"type"		: "Unused"
+	}, {
+		"name"		: "Rectangular Dark Grey Stone Blocks",
+		"id"		: "0082",
+		"type"		: "Unused"
+	}, {
+		"name"		: "Blade Trap",
+		"id"		: "0085",
+		"type"		: "Enemy"
+	}, {
+		"name"		: "Orange Pot",
+		"id"		: "0085",
+		"type"		: "Unused"
+	}, {
+		"name"		: "Impa",
+		"id"		: "0087",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Talon",
+		"id"		: "0088",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Dampé & Ghost",
+		"id"		: "0089",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Sheik",
+		"id"		: "008A",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Beamos",
+		"id"		: "008B",
+		"type"		: "Enemy"
+	}, {
+		"name"		: "Barinade",
+		"id"		: "008C",
+		"type"		: "Boss"
+	}, {
+		"name"		: "Bottom of the Well",
+		"id"		: "008D",
+		"type"		: "Area"
+	}, {
+		"name"		: "Goddesses' Flame of Creation",
+		"id"		: "008F"
+	}, {
+		"name"		: "Goddess Light Dome",
+		"id"		: "0091"
+	}, {
+		"name"		: "Light Beam & Rubble",
+		"id"		: "0092"
+	}, {
+		"name"		: "Golden Goddesses",
+		"id"		: "0093"
+	}, {
+		"name"		: "Jagged-Edged Light Ring",
+		"id"		: "0094"
+	}, {
+		"name"		: "Triforce & Beam of Light",
+		"id"		: "0095"
+	}, {
+		"name"		: "Inside Jabu-Jabu's Belly",
+		"id"		: "0096",
+		"type"		: "Area"
+	}, {
+		"name"		: "Soldiers",
+		"id"		: "0097",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Redead & Gibdo",
+		"id"		: "0098",
+		"type"		: "Enemy"
+	}, {
+		"name"		: "Poe Sisters & Objects",
+		"id"		: "0099",
+		"type"		: "Enemy"
+	}, {
+		"name"		: "Golden Gauntlets Boulder",
+		"id"		: "009A",
+		"type"		: "Object"
+	}, {
+		"name"		: "Ganondorf (Cutscene)",
+		"id"		: "009B",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Volvagia (Flying)",
+		"id"		: "009C",
+		"type"		: "Boss"
+	}, {
+		"name"		: "Darunia",
+		"id"		: "009D",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Flare Dancer",
+		"id"		: "009E",
+		"type"		: "Enemy"
+	}, {
+		"name"		: "Medallions (Early)",
+		"id"		: "009F",
+		"type"		: "Unused"
+	}, {
+		"name"		: "Child Epona",
+		"id"		: "00A0",
+		"type"		: "Animal"
+	}, {
+		"name"		: "Graveyard",
+		"id"		: "00A1",
+		"type"		: "Area"
+	}, {
+		"name"		: "Gravestone",
+		"id"		: "00A2",
+		"type"		: "Object"
+	}, {
+		"name"		: "Child Ruto",
+		"id"		: "00A3",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Torches",
+		"id"		: "00A4",
+		"type"		: "Object"
+	}, {
+		"name"		: "Volvagia (Whack-a-Mole)",
+		"id"		: "00A5",
+		"type"		: "Boss"
+	}, {
+		"name"		: "Dead Hand & Hands",
+		"id"		: "00A6",
+		"type"		: "Enemy"
+	}, {
+		"name"		: "Rauru",
+		"id"		: "00A7",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Time Block Disappearance Effect",
+		"id"		: "00A8",
+		"type"		: "Animation"
+	}, {
+		"name"		: "Small Key",
+		"id"		: "00AA",
+		"type"		: "Model"
+	}, {
+		"name"		: "Mirror Shield's Light Reflection",
+		"id"		: "00AB",
+		"type"		: "Animation"
+	}, {
+		"name"		: "Jelly Platform",
+		"id"		: "00AC",
+		"type"		: "Enemy"
+	}, {
+		"name"		: "Spiritual Stones",
+		"id"		: "00AD",
+		"type"		: "Model"
+	}, {
+		"name"		: "Gerudo Valley",
+		"id"		: "00AE",
+		"type"		: "Area"
+	}, {
+		"name"		: "Goron City",
+		"id"		: "00AF",
+		"type"		: "Area"
+	}, {
+		"name"		: "Boss Doors",
+		"id"		: "00B0",
+		"type"		: "Object"
+	}, {
+		"name"		: "Death Mountain Crater",
+		"id"		: "00B1",
+		"type"		: "Area"
+	}, {
+		"name"		: "Shop Shelves",
+		"id"		: "00B2",
+		"type"		: "Object"
+	}, {
+		"name"		: "Nabooru",
+		"id"		: "00B3",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Morpha",
+		"id"		: "00B4",
+		"type"		: "Boss"
+	}, {
+		"name"		: "Shellblade",
+		"id"		: "00B5",
+		"type"		: "Enemy"
+	}, {
+		"name"		: "Music Notes",
+		"id"		: "00B6",
+		"type"		: "Unused"
+	}, {
+		"name"		: "Recovery Heart",
+		"id"		: "00B7",
+		"type"		: "Model"
+	}, {
+		"name"		: "Compass",
+		"id"		: "00B8",
+		"type"		: "Model"
+	}, {
+		"name"		: "Big Key",
+		"id"		: "00B9",
+		"type"		: "Model"
+	}, {
+		"name"		: "Medallions",
+		"id"		: "00BA",
+		"type"		: "Model"
+	}, {
+		"name"		: "Deku Nut",
+		"id"		: "00BB",
+		"type"		: "Model"
+	}, {
+		"name"		: "Saria",
+		"id"		: "00BC",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Heart Containers & Piece of Heart",
+		"id"		: "00BD",
+		"type"		: "Model"
+	}, {
+		"name"		: "Heart Containers",
+		"id"		: "00BD",
+		"type"		: "Model"
+	}, {
+		"name"		: "Quivers",
+		"id"		: "00BE",
+		"type"		: "Model"
+	}, {
+		"name"		: "Bomb Bags",
+		"id"		: "00BF",
+		"type"		: "Model"
+	}, {
+		"name"		: "Ingo",
+		"id"		: "00C0",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Kotake & Koume",
+		"id"		: "00C1",
+		"type"		: "Enemy"
+	}, {
+		"name"		: "Death Mountain Trail",
+		"id"		: "00C2",
+		"type"		: "Area"
+	}, {
+		"name"		: "Mido II (Early)",
+		"id"		: "00C3",
+		"type"		: "Unused"
+	}, {
+		"name"		: "Red-Haired Kokiri Boy II (Early)",
+		"id"		: "00C4",
+		"type"		: "Unused"
+	}, {
+		"name"		: "NPC III",
+		"id"		: "00C5",
+		"type"		: "Animation"
+	}, {
+		"name"		: "Empty Bottle",
+		"id"		: "00C6",
+		"type"		: "Model"
+	}, {
+		"name"		: "Deku Stick",
+		"id"		: "00C7",
+		"type"		: "Model"
+	}, {
+		"name"		: "Dungeon Map & Stone of Agony",
+		"id"		: "00C8",
+		"type"		: "Model"
+	}, {
+		"name"		: "Goron, Medigoron, Biggoron",
+		"id"		: "00C9",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Adult Ruto",
+		"id"		: "00CA",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Deku Shield",
+		"id"		: "00CB",
+		"type"		: "Model"
+	}, {
+		"name"		: "Deku Tree Sprout",
+		"id"		: "00CC",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Magic Jars",
+		"id"		: "00CD",
+		"type"		: "Model"
+	}, {
+		"name"		: "Bomb",
+		"id"		: "00CE",
+		"type"		: "Model"
+	}, {
+		"name"		: "Goron (Early)",
+		"id"		: "00",
+		"type"		: "Unused"
+	}, {
+		"name"		: "Adult Malon",
+		"id"		: "00D0",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Wallets",
+		"id"		: "00D1",
+		"type"		: "Model"
+	}, {
+		"name"		: "Ingo's Horse & Archery Range Horse",
+		"id"		: "00D2",
+		"type"		: "Animal"
+	}, {
+		"name"		: "Twinrova",
+		"id"		: "00D3",
+		"type"		: "Boss"
+	}, {
+		"name"		: "Like-Likes",
+		"id"		: "00D4",
+		"type"		: "Enemy"
+	}, {
+		"name"		: "Parasitic Tentacle & Tentacle Obstruction",
+		"id"		: "00D5",
+		"type"		: "Enemy"
+	}, {
+		"name"		: "Anubis & Fire Trap",
+		"id"		: "00D6",
+		"type"		: "Enemy"
+	}, {
+		"name"		: "Gerudo Card",
+		"id"		: "00D7",
+		"type"		: "Model"
+	}, {
+		"name"		: "Arrows",
+		"id"		: "00D8",
+		"type"		: "Model"
+	}, {
+		"name"		: "Bombchu",
+		"id"		: "00D9",
+		"type"		: "Model"
+	}, {
+		"name"		: "Pocket & Weird Eggs",
+		"id"		: "00DA",
+		"type"		: "Model"
+	}, {
+		"name"		: "Silver & Golden Scales",
+		"id"		: "00DB",
+		"type"		: "Model"
+	}, {
+		"name"		: "Hylian Shield",
+		"id"		: "00DC",
+		"type"		: "Model"
+	}, {
+		"name"		: "Hookshot & Longshot",
+		"id"		: "00DD",
+		"type"		: "Model"
+	}, {
+		"name"		: "Ocarina of Time",
+		"id"		: "00DE",
+		"type"		: "Model"
+	}, {
+		"name"		: "Lon Lon Milk",
+		"id"		: "00DF",
+		"type"		: "Model"
+	}, {
+		"name"		: "Child Malon",
+		"id"		: "00E0",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Ganondorf",
+		"id"		: "00E1",
+		"type"		: "Boss"
+	}, {
+		"name"		: "Bongo Bongo",
+		"id"		: "00E2",
+		"type"		: "Boss"
+	}, {
+		"name"		: "Spikes",
+		"id"		: "00E5",
+		"type"		: "Enemy"
+	}, {
+		"name"		: "Frog",
+		"id"		: "00E6",
+		"type"		: "Animal"
+	}, {
+		"name"		: "Fairy Slingshot",
+		"id"		: "00E7",
+		"type"		: "Model"
+	}, {
+		"name"		: "Boomerang",
+		"id"		: "00E8",
+		"type"		: "Model"
+	}, {
+		"name"		: "Fairy Bow",
+		"id"		: "00E9",
+		"type"		: "Model"
+	}, {
+		"name"		: "Lens of Truth",
+		"id"		: "00EA",
+		"type"		: "Model"
+	}, {
+		"name"		: "Potions",
+		"id"		: "00EB",
+		"type"		: "Model"
+	}, {
+		"name"		: "Kakariko Rooftop Man",
+		"id"		: "00EC",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Chamber of Sages",
+		"id"		: "00ED",
+		"type"		: "Area"
+	}, {
+		"name"		: "Mirror Shield",
+		"id"		: "00EE",
+		"type"		: "Model"
+	}, {
+		"name"		: "Zelda's Letter",
+		"id"		: "00EF",
+		"type"		: "Object"
+	}, {
+		"name"		: "Hyrule Castle",
+		"id"		: "00F0",
+		"type"		: "Area"
+	}, {
+		"name"		: "Spirit Temple",
+		"id"		: "00F1",
+		"type"		: "Area"
+	}, {
+		"name"		: "Tunics",
+		"id"		: "00F2",
+		"type"		: "Model"
+	}, {
+		"name"		: "Magic Bean",
+		"id"		: "00F3",
+		"type"		: "Model"
+	}, {
+		"name"		: "Fish",
+		"id"		: "00F4",
+		"type"		: "Animal"
+	}, {
+		"name"		: "Poacher's Saw",
+		"id"		: "00F5",
+		"type"		: "Model"
+	}, {
+		"name"		: "Reed Whistle",
+		"id"		: "00F6",
+		"type"		: "Unused"
+	}, {
+		"name"		: "Megaton Hammer",
+		"id"		: "00F6",
+		"type"		: "Model"
+	}, {
+		"name"		: "Giant's Knife & Biggoron Sword",
+		"id"		: "00F8",
+		"type"		: "Model"
+	}, {
+		"name"		: "Kakariko Village (Shared)",
+		"id"		: "00F9",
+		"type"		: "Area"
+	}, {
+		"name"		: "Mido",
+		"id"		: "00FB",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Red Haired Kokiri Boy",
+		"id"		: "00FC",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Red Haired Kokiri Girl",
+		"id"		: "00FD",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Zora",
+		"id"		: "00FE",
+		"type"		: "NPC"
+	}, {
+		"name"		: "King Zora",
+		"id"		: "00FF",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Horse-Jumping Fence",
+		"id"		: "0100",
+		"type"		: "Object"
+	}, {
+		"name"		: "Kokiri Shop Owner",
+		"id"		: "0101",
+		"type"		: "Animation"
+	}, {
+		"name"		: "Kokiri Shop Owner's Head",
+		"id"		: "0102",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Goron Shop Owner",
+		"id"		: "0103",
+		"type"		: "Animation"
+	}, {
+		"name"		: "Zora Shop Owner",
+		"id"		: "0104",
+		"type"		: "Animation"
+	}, {
+		"name"		: "Dog Lady",
+		"id"		: "0105",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Iron Knuckle",
+		"id"		: "0106",
+		"type"		: "Enemy"
+	}, {
+		"name"		: "Hylian Men I",
+		"id"		: "0107",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Young Hylian Women",
+		"id"		: "0108",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Cuccos",
+		"id"		: "0109",
+		"type"		: "Model"
+	}, {
+		"name"		: "Skull Kid",
+		"id"		: "010A",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Ruto's Letter",
+		"id"		: "010B",
+		"type"		: "Model"
+	}, {
+		"name"		: "Old Hylian Men",
+		"id"		: "010C",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Old Hylian Woman",
+		"id"		: "010D",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Fairy Ocarina",
+		"id"		: "010E",
+		"type"		: "Unused"
+	}, {
+		"name"		: "Potion Shop Granny",
+		"id"		: "010F",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Cucco Lady",
+		"id"		: "0110",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Hylian Men II",
+		"id"		: "0111",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Zora's River",
+		"id"		: "0112",
+		"type"		: "Area"
+	}, {
+		"name"		: "Zora's Domain",
+		"id"		: "0113",
+		"type"		: "Area"
+	}, {
+		"name"		: "Freezard",
+		"id"		: "0114",
+		"type"		: "Enemy"
+	}, {
+		"name"		: "Carpenter Boss' Wife",
+		"id"		: "0115",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Gerudo in White",
+		"id"		: "0116",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Minigame Points",
+		"id"		: "0117"
+	}, {
+		"name"		: "Iron Boots",
+		"id"		: "0118",
+		"type"		: "Model"
+	}, {
+		"name"		: "Deku Seeds",
+		"id"		: "0119",
+		"type"		: "Model"
+	}, {
+		"name"		: "Ganondorf's Magic Blast",
+		"id"		: "011A",
+		"type"		: "Animation"
+	}, {
+		"name"		: "Stone Elevator Pillar",
+		"id"		: "011B",
+		"type"		: "Unused"
+	}, {
+		"name"		: "Hookshot Pillar & Wall Target",
+		"id"		: "011C",
+		"type"		: "Object"
+	}, {
+		"name"		: "Stone Moving Deku Tree Platform",
+		"id"		: "011D",
+		"type"		: "Area"
+	}, {
+		"name"		: "Magic Bean Objects",
+		"id"		: "011E",
+		"type"		: "Object"
+	}, {
+		"name"		: "Rolling Boulder",
+		"id"		: "011F",
+		"type"		: "Object"
+	}, {
+		"name"		: "Carpenter Boss",
+		"id"		: "0121",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Carpenters",
+		"id"		: "0122",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Cucco Chick",
+		"id"		: "0124",
+		"type"		: "Animal"
+	}, {
+		"name"		: "Dark Link's Illusion Room",
+		"id"		: "0125",
+		"type"		: "Area"
+	}, {
+		"name"		: "Medigoron",
+		"id"		: "0126",
+		"type"		: "Animation"
+	}, {
+		"name"		: "Magic Bean Seller",
+		"id"		: "0127",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Carpenter Boss' Son",
+		"id"		: "0128",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Ingo's Ranch Gate",
+		"id"		: "0129",
+		"type"		: "Object"
+	}, {
+		"name"		: "Sun Switch",
+		"id"		: "012A",
+		"type"		: "Object"
+	}, {
+		"name"		: "Grass",
+		"id"		: "012B",
+		"type"		: "Object"
+	}, {
+		"name"		: "Pot",
+		"id"		: "012C",
+		"type"		: "Object"
+	}, {
+		"name"		: "Silver & Golden Gauntlets",
+		"id"		: "012D",
+		"type"		: "Model"
+	}, {
+		"name"		: "N Coins",
+		"id"		: "012E",
+		"type"		: "Unused"
+	}, {
+		"name"		: "Square Signpost",
+		"id"		: "012F",
+		"type"		: "Object"
+	}, {
+		"name"		: "Ganon's Castle Exterior",
+		"id"		: "0130",
+		"type"		: "Area"
+	}, {
+		"name"		: "Kaepora Gaebora",
+		"id"		: "0131",
+		"type"		: "Animal"
+	}, {
+		"name"		: "Lake Scientist",
+		"id"		: "0132",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Windmill Man",
+		"id"		: "0133",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Keaton Mask",
+		"id"		: "0134",
+		"type"		: "Model"
+	}, {
+		"name"		: "Redead Mask",
+		"id"		: "0135",
+		"type"		: "Model"
+	}, {
+		"name"		: "Spooky Mask",
+		"id"		: "0136",
+		"type"		: "Model"
+	}, {
+		"name"		: "Bunny Hood",
+		"id"		: "0137",
+		"type"		: "Model"
+	}, {
+		"name"		: "Mask of Truth",
+		"id"		: "0138",
+		"type"		: "Model"
+	}, {
+		"name"		: "Ganon's Tower",
+		"id"		: "0139",
+		"type"		: "Area"
+	}, {
+		"name"		: "Water Spout (Small)",
+		"id"		: "013A"
+	}, {
+		"name"		: "Water Spout (Large)",
+		"id"		: "013B"
+	}, {
+		"name"		: "Running Man",
+		"id"		: "013C",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Fado",
+		"id"		: "013D",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Happy Mask Salesman",
+		"id"		: "013E",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Eyedrops",
+		"id"		: "013F",
+		"type"		: "Model"
+	}, {
+		"name"		: "Odd Potion",
+		"id"		: "0140",
+		"type"		: "Model"
+	}, {
+		"name"		: "Odd Mushroom",
+		"id"		: "0141",
+		"type"		: "Model"
+	}, {
+		"name"		: "Claim Check",
+		"id"		: "0142",
+		"type"		: "Model"
+	}, {
+		"name"		: "Broken Goron's Sword & Giant's Knife",
+		"id"		: "0143",
+		"type"		: "Model"
+	}, {
+		"name"		: "Carpet Merchant",
+		"id"		: "0144",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Graveyard Boy",
+		"id"		: "0145",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Prescription",
+		"id"		: "0146",
+		"type"		: "Model"
+	}, {
+		"name"		: "Goron's Bracelet",
+		"id"		: "0147",
+		"type"		: "Model"
+	}, {
+		"name"		: "SOLD OUT",
+		"id"		: "0148",
+		"type"		: "Model"
+	}, {
+		"name"		: "Eyeball Frog",
+		"id"		: "0149",
+		"type"		: "Model"
+	}, {
+		"name"		: "Title Logo",
+		"id"		: "014A"
+	}, {
+		"name"		: "Thieves' Hideout Cell Door",
+		"id"		: "014B",
+		"type"		: "Area"
+	}, {
+		"name"		: "Ganon's Tower Exterior (Collapsing)",
+		"id"		: "014C",
+		"type"		: "Area"
+	}, {
+		"name"		: "Death Mountain Eruption Effects",
+		"id"		: "014D",
+		"type"		: "Animation"
+	}, {
+		"name"		: "Adult Zelda I",
+		"id"		: "014E",
+		"type"		: "Animation"
+	}, {
+		"name"		: "Adult Zelda II",
+		"id"		: "014F",
+		"type"		: "Animation"
+	}, {
+		"name"		: "Goron Mask",
+		"id"		: "0150",
+		"type"		: "Model"
+	}, {
+		"name"		: "Zora Mask",
+		"id"		: "0151",
+		"type"		: "Model"
+	}, {
+		"name"		: "Gerudo Mask",
+		"id"		: "0152",
+		"type"		: "Model"
+	}, {
+		"name"		: "Ganon",
+		"id"		: "0153",
+		"type"		: "Boss"
+	}, {
+		"name"		: "Pierre & Bonooru",
+		"id"		: "0154",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Treasure Chest Shop Manager",
+		"id"		: "0155",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Ganon's Tower Door Bars",
+		"id"		: "0156",
+		"type"		: "Area"
+	}, {
+		"name"		: "Hover Boots",
+		"id"		: "0157",
+		"type"		: "Model"
+	}, {
+		"name"		: "Magic Arrows",
+		"id"		: "0158",
+		"type"		: "Model"
+	}, {
+		"name"		: "Medicine Shop Owner",
+		"id"		: "0159",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Ending Cutscene",
+		"id"		: "015A",
+		"type"		: "Animation"
+	}, {
+		"name"		: "Fishing Pond",
+		"id"		: "015B",
+		"type"		: "Area"
+	}, {
+		"name"		: "Gold Skulltula Token",
+		"id"		: "015C",
+		"type"		: "Model"
+	}, {
+		"name"		: "Goddess Spells",
+		"id"		: "015D",
+		"type"		: "Model"
+	}, {
+		"name"		: "Skulltula House Residents",
+		"id"		: "015E",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Big Octo",
+		"id"		: "015F",
+		"type"		: "Enemy"
+	}, {
+		"name"		: "Bombchu Bowling Employee",
+		"id"		: "0160",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Sacred Forest Meadow",
+		"id"		: "0161",
+		"type"		: "Area"
+	}, {
+		"name"		: "Gerudo Fortress",
+		"id"		: "0162",
+		"type"		: "Area"
+	}, {
+		"name"		: "Bombable Boulder",
+		"id"		: "0163",
+		"type"		: "Object"
+	}, {
+		"name"		: "Hint-Giving Deku Scrub",
+		"id"		: "0164",
+		"type"		: "Enemy"
+	}, {
+		"name"		: "Bombchu Shop Owner",
+		"id"		: "0165",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Hyrule Field (Adult)",
+		"id"		: "0166",
+		"type"		: "Area"
+	}, {
+		"name"		: "Gerudo in Purple",
+		"id"		: "0167",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Business Scrub",
+		"id"		: "0168",
+		"type"		: "Enemy"
+	}, {
+		"name"		: "Gerudo Fighter & Second-in-Command",
+		"id"		: "0169",
+		"type"		: "Enemy"
+	}, {
+		"name"		: "Cucco-Chasing Girl",
+		"id"		: "016A",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Dog",
+		"id"		: "016B",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Destructable Iron Knuckle Objects",
+		"id"		: "016C",
+		"type"		: "Area"
+	}, {
+		"name"		: "Spirit Temple Door & Iron Bars",
+		"id"		: "016D",
+		"type"		: "Area"
+	}, {
+		"name"		: "Desert Colossus",
+		"id"		: "016F",
+		"type"		: "Area"
+	}, {
+		"name"		: "Large Wooden Crate",
+		"id"		: "0170",
+		"type"		: "Object"
+	}, {
+		"name"		: "Forest Stage Judge",
+		"id"		: "0171",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Forest Stage Patron",
+		"id"		: "0172",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Blue Fire",
+		"id"		: "0173",
+		"type"		: "Model"
+	}, {
+		"name"		: "Bug",
+		"id"		: "0174",
+		"type"		: "Animal"
+	}, {
+		"name"		: "Butterfly",
+		"id"		: "0175",
+		"type"		: "Animal"
+	}, {
+		"name"		: "Poe Soul",
+		"id"		: "0176",
+		"type"		: "Model"
+	}, {
+		"name"		: "Fairy's Spirit",
+		"id"		: "0177",
+		"type"		: "Model"
+	}, {
+		"name"		: "Bombchu Bowling Alley Barriers",
+		"id"		: "0178",
+		"type"		: "Object"
+	}, {
+		"name"		: "Inside Ganon's Castle",
+		"id"		: "0179",
+		"type"		: "Area"
+	}, {
+		"name"		: "Death Mountain Cloud Rings",
+		"id"		: "017A"
+	}, {
+		"name"		: "Bullet Bags",
+		"id"		: "017B",
+		"type"		: "Model"
+	}, {
+		"name"		: "Ganondorf I",
+		"id"		: "017C",
+		"type"		: "Animation"
+	}, {
+		"name"		: "Ganondorf II",
+		"id"		: "017D",
+		"type"		: "Animation"
+	}, {
+		"name"		: "Ganondorf III",
+		"id"		: "017E",
+		"type"		: "Animation"
+	}, {
+		"name"		: "Rupees",
+		"id"		: "017F",
+		"type"		: "Model"
+	}, {
+		"name"		: "Kakariko Village (Adult)",
+		"id"		: "0180",
+		"type"		: "Area"
+	}, {
+		"name"		: "Kakariko Village (Child)",
+		"id"		: "0181",
+		"type"		: "Area"
+	}, {
+		"name"		: "Honey & Darling, Haggling Townspeople",
+		"id"		: "0182",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Wolfos",
+		"id"		: "0183",
+		"type"		: "Enemy"
+	}, {
+		"name"		: "Stalchild",
+		"id"		: "0184",
+		"type"		: "Enemy"
+	}, {
+		"name"		: "Ganon's Lair Destructable Rubble",
+		"id"		: "0185"
+	}, {
+		"name"		: "Ganon's Lair Destructable Rubble Fragment",
+		"id"		: "0186"
+	}, {
+		"name"		: "Shadow Temple Door & Shutter",
+		"id"		: "0187",
+		"type"		: "Area"
+	}, {
+		"name"		: "Gossip Stone",
+		"id"		: "0188",
+		"type"		: "Object"
+	}, {
+		"name"		: "Poe Collector",
+		"id"		: "0189",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Dodongo's Cavern Bombable Wall",
+		"id"		: "018A",
+		"type"		: "Object"
+	}, {
+		"name"		: "Cow",
+		"id"		: "018B",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Fat Woman in Blue & Yellow Vest",
+		"id"		: "018C",
+		"type"		: "NPC"
+	}, {
+		"name"		: "Kokiri Sword",
+		"id"		: "018D",
+		"type"		: "Model"
+	}, {
+		"name"		: "Door Mimic",
+		"id"		: "018E",
+		"type"		: "Enemy"
+	}, {
+		"name"		: "Royal Family's Tomb Door",
+		"id"		: "018F",
+		"type"		: "Area"
+	}, {
+		"name"		: "Time Block",
+		"id"		: "0190",
+		"type"		: "Object"
+	}, {
+		"name"		: "Princess Zelda (Child)",
+		"id"		: "0191",
+		"type"		: "NPC"
+	} ]
+}
