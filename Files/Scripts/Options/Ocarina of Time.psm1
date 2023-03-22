@@ -1481,8 +1481,9 @@ function ByteReduxOptions() {
         ChangeBytes -Offset $Symbols.INITIAL_SAVE_DATA -Values $values
     }
 
-    if (IsChecked $Redux.Misc.FastBunnyHood)        { ChangeBytes -Offset $Symbols.FAST_BUNNY_HOOD_ENABLED   -Values "01" }
-    if (IsChecked $Redux.Misc.TycoonWallet)         { ChangeBytes -Offset $Symbols.CFG_TYCOON_WALLET         -Values "01" }
+    if (IsDefault $Redux.Misc.OptionsMenu -Not)     { ChangeBytes -Offset $Symbols.CFG_OPTIONS_MENU        -Values $Redux.Misc.OptionsMenu.SelectedIndex }
+    if (IsChecked $Redux.Misc.FastBunnyHood)        { ChangeBytes -Offset $Symbols.FAST_BUNNY_HOOD_ENABLED -Values "01" }
+    if (IsChecked $Redux.Misc.TycoonWallet)         { ChangeBytes -Offset $Symbols.CFG_TYCOON_WALLET       -Values "01" }
     
 
 
@@ -2202,6 +2203,7 @@ function CreateTabRedux() {
     # MISC #
 
     CreateReduxGroup    -Tag  "Misc"               -All                    -Text "Misc Options"
+    CreateReduxComboBox -Name "OptionsMenu"        -All -Default 4         -Text "Options Menu"    -Items @("Disable", "Core Only", "Essentials", "Fully Enabled") -Info "Adjust how much of the Redux options are available ingame and can be used"  -Credits "Admentus"
     CreateReduxCheckBox -Name "FastBunnyHood"      -Base                   -Text "Fast Bunny Hood" -Info "The Bunny Hood makes Link run faster just like in Majora's Mask"                                                                   -Checked -Credits "Ported from Redux"
     CreateReduxCheckBox -Name "BombchuDrops"       -All -Exclude "Dawn"    -Text "Bombchu Drops"   -Info "Bombchus can now drop from defeated enemies, cutting grass and broken jars"                                                                 -Credits "Ported from Redux"
     CreateReduxCheckBox -Name "TycoonWallet"       -All                    -Text "Tycoon's Wallet" -Info "You get the Tycoon's Wallet from one of the Gold Skulltula reward in addition`nOnly activated if you have the Giant's Wallet"               -Credits "Admentus"
