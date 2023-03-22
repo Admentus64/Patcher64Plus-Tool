@@ -465,6 +465,12 @@ function RunAllScenes([switch]$Patch, [switch]$Current) {
     else {
         UpdateStatusLabel -Text "Extracting all scenes..." -Editor
         Copy-Item -LiteralPath $GetROM.decomp -Destination $GetROM.cleanDecomp -Force
+        
+        if ($SceneEditor.PatchAll.Checked) {
+            RemovePath    ($Paths.Games + "\" + $GameType.mode + "\Editor\Scenes")
+            CreateSubPath ($Paths.Games + "\" + $GameType.mode + "\Editor\Scenes")
+        }
+        
         ExtractAllScenes
 
         if ($Files.json.sceneEditor.quest -is [array] -and $Files.json.sceneEditor.quest.Count -gt 0) {
@@ -494,11 +500,6 @@ function RunAllScenes([switch]$Patch, [switch]$Current) {
 function ExtractAllScenes([switch]$Current, [String]$Quest="Normal Quest") {
     
     $global:ByteArrayGame = [System.IO.File]::ReadAllBytes($GetROM.decomp)
-
-    if (!$Current -and $SceneEditor.PatchAll.Checked) {
-        RemovePath    ($Paths.Games + "\" + $GameType.mode + "\Editor\Scenes")
-        CreateSubPath ($Paths.Games + "\" + $GameType.mode + "\Editor\Scenes")
-    }
 
     if ($Current) {
         foreach ($scene in $Files.json.sceneEditor.scenes) {
