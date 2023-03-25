@@ -481,35 +481,20 @@ function ShowHudPreview([switch]$IsOoT) {
     if (TestFile $path)   { SetBitMap -Path $path -Box $Redux.UI.ButtonPreview -Width 90 -Height 90 }
     else                  { $Redux.UI.ButtonPreview.Image = $null }
 
-    # Magic / Hearts
-    if (IsChecked $Redux.UI.HUD) {
-        $file = "Majora's Mask"
-        if (!$IsOoT) { $file = "Ocarina of Time" }
-        if (TestFile ($Paths.Shared + "\HUD\Magic\"  + $file + ".png")) { SetBitMap -Path ($Paths.Shared + "\HUD\Magic\"  + $file + ".png") -Box $Redux.UI.MagicPreview  } else { $Redux.UI.Magicreview.Image = $null   }
-        if (TestFile ($Paths.Shared + "\HUD\Hearts\" + $file + ".png")) { SetBitMap -Path ($Paths.Shared + "\HUD\Hearts\" + $file + ".png") -Box $Redux.UI.HeartsPreview } else { $Redux.UI.HeartsPreview.Image = $null }
-    }
-    elseif (IsChecked $Redux.UI.HUD -Not) {
-        $file = "Ocarina of Time"
-        if (!$IsOoT) { $file = "Majora's Mask" }
-        if (TestFile ($Paths.Shared + "\HUD\Magic\"  + $file + ".png")) { SetBitMap -Path ($Paths.Shared + "\HUD\Magic\"  + $file + ".png") -Box $Redux.UI.MagicPreview  } else { $Redux.UI.Magicreview.Image = $null   }
-        if (TestFile ($Paths.Shared + "\HUD\Hearts\" + $file + ".png")) { SetBitMap -Path ($Paths.Shared + "\HUD\Hearts\" + $file + ".png") -Box $Redux.UI.HeartsPreview } else { $Redux.UI.HeartsPreview.Image = $null }
-    }
-    else {
-        $path = ($Paths.shared + "\HUD\Magic\" + $Redux.UI.Magic.Text.replace(" (default)", "") + ".png")
-        if (TestFile $path)   { SetBitMap -Path $path -Box $Redux.UI.MagicPreview -Width 200 -Height 40 }
-        else                  { $Redux.UI.MagicPreview.Image = $null }
+    # Rupees
+    $path = ($Paths.shared + "\HUD\Rupees\" + $Redux.UI.Rupees.Text.replace(" (default)", "") + ".png")
+    if (TestFile $path)   { SetBitMap -Path $path -Box $Redux.UI.RupeesPreview }
+    else                  { $Redux.UI.RupeesPreview.Image = $null }
 
-        $path = ($Paths.shared + "\HUD\Hearts\" + $Redux.UI.Hearts.Text.replace(" (default)", "") + ".png")
-        if (TestFile $path)   { SetBitMap -Path $path -Box $Redux.UI.HeartsPreview }
-        else                  { $Redux.UI.HeartsPreview.Image = $null }
-    }
+    # Hearts
+    $path = ($Paths.shared + "\HUD\Hearts\" + $Redux.UI.Hearts.Text.replace(" (default)", "") + ".png")
+    if (TestFile $path)   { SetBitMap -Path $path -Box $Redux.UI.HeartsPreview }
+    else                  { $Redux.UI.HeartsPreview.Image = $null }
 
-    $file = $null
-    if       ( ( (IsChecked $Redux.UI.Rupees)      -or (IsChecked $Redux.UI.HUD) )      -and  $IsOoT)   { $file = "Majora's Mask"   }
-    elseif   ( ( (IsChecked $Redux.UI.Rupees)      -or (IsChecked $Redux.UI.HUD) )      -and !$IsOoT)   { $file = "Ocarina of Time" }
-    elseif   ( ( (IsChecked $Redux.UI.Rupees -Not) -or (IsChecked $Redux.UI.HUD -Not) ) -and  $IsOoT)   { $file = "Ocarina of Time" }
-    elseif   ( ( (IsChecked $Redux.UI.Rupees -Not) -or (IsChecked $Redux.UI.HUD -Not) ) -and !$IsOoT)   { $file = "Majora's Mask"   }
-    if (TestFile ($Paths.Shared + "\HUD\Rupees\" + $file + ".png"))    { SetBitMap -Path ($Paths.Shared + "\HUD\Rupees\" + $file + ".png") -Box $Redux.UI.RupeesPreview } else { $Redux.UI.RupeesPreview.Image = $null }
+    # Magic
+    $path = ($Paths.shared + "\HUD\Magic\" + $Redux.UI.Magic.Text.replace(" (default)", "") + ".png")
+    if (TestFile $path)   { SetBitMap -Path $path -Box $Redux.UI.MagicPreview -Width 200 -Height 40 }
+    else                  { $Redux.UI.MagicPreview.Image = $null }
 
     $file = $null
     if       ( ( (IsChecked $Redux.UI.DungeonKeys)      -or (IsChecked $Redux.UI.HUD) )      -and  $IsOoT)   { $file = "Majora's Mask"   }
@@ -747,7 +732,7 @@ function CreateButtonColorOptions($Default=1) {
 #==============================================================================================================================================================================================
 function CreateBoomerangColorOptions($Default=1) {
 
-    CreateReduxGroup    -Tag  "Colors"    -Child -Exclude "Dawn" -Text "Boomerang Colors" -Height 2
+    CreateReduxGroup    -Tag  "Colors"    -Child -Exclude "Dawn" -Text "Boomerang Colors" -Height 2 -Columns 3
     CreateReduxComboBox -Name "Boomerang" -Child -Exclude "Dawn" -Text "Boomerang Colors" -Items @("Vanilla", "Gold Quest", "Randomized", "Custom") -Default $Default -Info ("Select a preset for the boomerang trail colors`n" + '"Randomized" fully randomizes the colors each time the patcher is opened') -Credits "Ported from Redux"
 
     if (!(IsSet $Redux.Colors.Boomerang)) { return }
@@ -781,7 +766,7 @@ function CreateBoomerangColorOptions($Default=1) {
 #==============================================================================================================================================================================================
 function CreateBombchuColorOptions() {
 
-    CreateReduxGroup    -Tag  "Colors"  -All -Exclude "Dawn" -Text "Bombchu Colors" -Height 2
+    CreateReduxGroup    -Tag  "Colors"  -All -Exclude "Dawn" -Text "Bombchu Colors" -Height 2 -Columns 3
     CreateReduxComboBox -Name "Bombchu" -All -Exclude "Dawn" -Text "Bombchu Colors" -Items @("Vanilla", "Randomized", "Custom") -Info ("Select a preset for the bombchu trail colors`n" + '"Randomized" fully randomizes the colors each time the patcher is opened') -Credits "Ported from Redux"
 
     if (!(IsSet $Redux.Colors.Bombchu)) { return }

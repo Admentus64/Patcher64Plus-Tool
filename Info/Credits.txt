@@ -41,6 +41,7 @@
 - Garo-Mastah
 - zel
 - Third M
+- Syeo
 - Three Pendants
 - Jared Johnson
 - ZethN64
@@ -832,16 +833,11 @@ Other:			Admentus & gamemasterplc
 <<< THE LEGEND OF ZELDA >>>
 
 --- Redux ---
-- Main Hacking:				ShadowOne333
-- Hacking:				bogaabogaa, DarkSamus993, stratoform, snarfblam, gzip,
-					Fiskbit, frantik, minucce
-- Disassembly:				Trax
-
---- Additional Options ---
-- New GFX:				darthvaderx
-- New Exp:				IcePenguin
-- Rearranged Bosses:			lexluthermeister
-- ShadowOne333
+- Main Hacking:		ShadowOne333
+- Disassembly:		Trax
+- Hacking:		bogaabogaa, Fiskbit, DarkSamus993, stratoform, gzip, frantik, minucce, LexLuthermiester
+- Original Hacking:	snarfblam, kalita-kan, auburnbit
+- Script:		BlazeHeatnix, ifightdragons
 
 
 

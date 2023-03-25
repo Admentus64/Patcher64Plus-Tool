@@ -262,12 +262,12 @@ function ByteOptions() {
         ChangeBytes -Offset "C55F15" -Values "07"       -Subtract # B Button         - X position (A7 -> A0, -07)   ChangeBytes -Offset "C55F05" -Values "07 00 07" -Subtract # B Text           - X position (9B -> 94, -07)
     }#>
 
-    if (IsChecked $Redux.UI.Rupees)              { PatchBytes -Offset "1EBDE60" -Shared -Patch "HUD\Rupees\Ocarina of Time.bin" }
-    if (IsChecked $Redux.UI.DungeonKeys)         { PatchBytes -Offset "1EBDD60" -Shared -Patch "HUD\Keys\Ocarina of Time.bin"   }
-    if (IsDefault -Elem $Redux.UI.Hearts -Not)   { PatchBytes -Offset "1EBD000" -Shared -Patch ("HUD\Hearts\" + $Redux.UI.Hearts.Text.replace(" (default)", "") + ".bin") }
-    if (IsDefault -Elem $Redux.UI.Magic  -Not)   { PatchBytes -Offset "1EC1DA0" -Shared -Patch ("HUD\Magic\"  + $Redux.UI.Magic.Text.replace(" (default)", "")  + ".bin") }
-    if (IsChecked $Redux.UI.BlackBars)           { ChangeBytes -Offset "BF72A4" -Values "00 00 00 00" }
-    if (IsChecked $Redux.UI.HUD)                 { PatchBytes -Offset "1EBD000" -Shared -Patch "HUD\Hearts\Ocarina of Time.bin"; PatchBytes -Offset "1EC1DA0" -Shared -Patch "HUD\Magic\Ocarina of Time.bin" }
+    if (IsChecked $Redux.UI.DungeonKeys)   { PatchBytes -Offset "1EBDD60" -Shared -Patch "HUD\Keys\Ocarina of Time.bin"   }
+    if (IsDefault $Redux.UI.Rupees -Not)   { PatchBytes -Offset "1EBDE60" -Shared -Patch ("HUD\Rupees\" + $Redux.UI.Rupees.Text.replace(" (default)", "") + ".bin") }
+    if (IsDefault $Redux.UI.Hearts -Not)   { PatchBytes -Offset "1EBD000" -Shared -Patch ("HUD\Hearts\" + $Redux.UI.Hearts.Text.replace(" (default)", "") + ".bin") }
+    if (IsDefault $Redux.UI.Magic  -Not)   { PatchBytes -Offset "1EC1DA0" -Shared -Patch ("HUD\Magic\"  + $Redux.UI.Magic.Text.replace(" (default)", "")  + ".bin") }
+    if (IsChecked $Redux.UI.BlackBars)     { ChangeBytes -Offset "BF72A4" -Values "00 00 00 00" }
+    if (IsChecked $Redux.UI.HUD)           { PatchBytes -Offset "1EBD000" -Shared -Patch "HUD\Hearts\Ocarina of Time.bin"; PatchBytes -Offset "1EC1DA0" -Shared -Patch "HUD\Magic\Ocarina of Time.bin" }
     
 
 
@@ -1341,18 +1341,17 @@ function CreateTabGraphics() {
 
     CreateReduxGroup    -All -Tag  "UI" -Text "Interface"
     $Last.Group.Width = $Redux.Groups[$Redux.Groups.Length-3].Width; $Last.Group.Top = $Redux.Groups[$Redux.Groups.Length-3].Bottom + 5; $Last.Width = 4;
-    CreateReduxCheckBox -All -Name "Rupees"           -Text "OoT Rupee Icon"                                                                                                      -Info "Replace the rupees icon with that from Ocarina of Time"                                            -Credits "Ported by GhostlyDark"
-    CreateReduxCheckBox -All -Name "DungeonKeys"      -Text "OoT Key Icon"                                                                                                        -Info "Replace the key icon with that from Ocarina of Time"                                               -Credits "Ported by GhostlyDark"
-    CreateReduxCheckBox -All -Name "CenterTatlPrompt" -Text "Center Tatl Prompt"                                                                                                  -Info 'Centers the "Tatl" prompt shown in the C-Up button'                                                -Credits "Ported by GhostlyDark"
-    CreateReduxComboBox -All -Name "ButtonSize"       -Text "HUD Buttons" -Row 2 -Column 1          -FilePath ($Paths.shared + "\Buttons")    -Ext $null -Default "Large"         -Info "Set the size for the HUD buttons"                                                                  -Credits "GhostlyDark (ported)" 
+
+    CreateReduxComboBox -All -Name "ButtonSize"       -Text "HUD Buttons"                           -FilePath ($Paths.shared + "\Buttons")    -Ext $null -Default "Large"         -Info "Set the size for the HUD buttons"                                                                  -Credits "GhostlyDark (ported)" 
     $path = $Paths.shared + "\Buttons" + "\" + $Redux.UI.ButtonSize.Text.replace(" (default)", "")
     CreateReduxComboBox -All -Name "ButtonStyle"      -Text "HUD Buttons" -Items @("Majora's Mask") -FilePath $path                           -Ext "bin" -Default "Majora's Mask" -Info "Set the style for the HUD buttons"                                                                 -Credits "GhostlyDark, Pizza (HD) Djipi, Community, Nerrel, Federelli, AndiiSyn"
+    CreateReduxComboBox -All -Name "Rupees"           -Text "Rupees Icon" -Items @("Majora's Mask") -FilePath ($Paths.shared + "\HUD\Rupees") -Ext "bin" -Default "Majora's Mask" -Info "Set the style for the rupees icon"                                                                 -Credits "Ported by GhostlyDark & AndiiSyn"
     CreateReduxComboBox -All -Name "Hearts"           -Text "Heart Icons" -Items @("Majora's Mask") -FilePath ($Paths.shared + "\HUD\Hearts") -Ext "bin" -Default "Majora's Mask" -Info "Set the style for the heart icons"                                                                 -Credits "Ported by GhostlyDark & AndiiSyn"
     CreateReduxComboBox -All -Name "Magic"            -Text "Magic Bar"   -Items @("Majora's Mask") -FilePath ($Paths.shared + "\HUD\Magic")  -Ext "bin" -Default "Majora's Mask" -Info "Set the style for the magic meter"                                                                 -Credits "GhostlyDark, Pizza, Nerrel (HD), Zeth Alkar"
     CreateReduxCheckBox -All -Name "BlackBars"        -Text "No Black Bars"                                                                                                       -Info "Removes the black bars shown on the top and bottom of the screen during Z-targeting and cutscenes" -Credits "Admentus"
     CreateReduxCheckBox -All -Name "GCScheme"         -Text "GC Scheme"                                                                                                           -Info "Replace the textures to match the GameCube's scheme"                                               -Credits "Admentus & GhostlyDark"
-
-    $path = $null
+    CreateReduxCheckBox -All -Name "DungeonKeys"      -Text "OoT Key Icon"                                                                                                        -Info "Replace the key icon with that from Ocarina of Time"                                               -Credits "Ported by GhostlyDark"
+    CreateReduxCheckBox -All -Name "CenterTatlPrompt" -Text "Center Tatl Prompt"                                                                                                  -Info 'Centers the "Tatl" prompt shown in the C-Up button'                                                -Credits "Ported by GhostlyDark"
 
 
     
@@ -1374,11 +1373,11 @@ function CreateTabGraphics() {
     # STYLES #
 
     CreateReduxGroup    -All -Tag  "Styles"        -Text "Styles"         -Columns 4
-    CreateReduxComboBox -All -Name "RegularChests" -Text "Regular Chests" -Info "Use a different style for regular treasure chests"                                           -FilePath ($Paths.shared + "\Chests")               -Ext "front" -Items @("Regular")           -Credits "AndiiSyn & Rando"
-    CreateReduxComboBox -All -Name "LeatherChests" -Text "Leather Chests" -Info "Use a different style for leathered treasure chests"                                         -FilePath ($Paths.shared + "\Chests")               -Ext "front" -Items @("Leather")           -Credits "AndiiSyn & Rando"
-    CreateReduxComboBox -All -Name "BossChests"    -Text "Boss Chests"    -Info "Use a different style for Boss Key treasure chests"                                          -FilePath ($Paths.shared + "\Chests")               -Ext "front" -Items @("Boss MM")           -Credits "AndiiSyn & Rando"
-    CreateReduxComboBox -All -Name "Crates"        -Text "Small Crates"   -Info "Use a different style for small liftable crates"                                             -FilePath ($Paths.shared + "\Crates")               -Ext "bin"   -Items @("Regular")           -Credits "Rando"
-    CreateReduxComboBox -All -Name "Pots"          -Text "Pots"           -Info "Use a different style for throwable pots"                                                    -FilePath ($Paths.shared + "\Pots")                 -Ext "bin"   -Items @("Regular")           -Credits "Rando"
+    CreateReduxComboBox -All -Name "RegularChests" -Text "Regular Chests" -Info "Use a different style for regular treasure chests"                                           -FilePath ($Paths.shared + "\Chests")               -Ext "front" -Items @("Regular")           -Credits "Nintendo, Syeo, AndiiSyn & Rando"
+    CreateReduxComboBox -All -Name "LeatherChests" -Text "Leather Chests" -Info "Use a different style for leathered treasure chests"                                         -FilePath ($Paths.shared + "\Chests")               -Ext "front" -Items @("Leather")           -Credits "Nintendo, Syeo, AndiiSyn & Rando"
+    CreateReduxComboBox -All -Name "BossChests"    -Text "Boss Chests"    -Info "Use a different style for Boss Key treasure chests"                                          -FilePath ($Paths.shared + "\Chests")               -Ext "front" -Items @("Boss MM")           -Credits "Nintendo, Syeo, AndiiSyn & Rando"
+    CreateReduxComboBox -All -Name "Crates"        -Text "Small Crates"   -Info "Use a different style for small liftable crates"                                             -FilePath ($Paths.shared + "\Crates")               -Ext "bin"   -Items @("Regular")           -Credits "Nintendo & Rando"
+    CreateReduxComboBox -All -Name "Pots"          -Text "Pots"           -Info "Use a different style for throwable pots"                                                    -FilePath ($Paths.shared + "\Pots")                 -Ext "bin"   -Items @("Regular")           -Credits "Nintendo, Syeo & Rando"
     CreateReduxComboBox -All -Name "HairColor"     -Text "Hair Color"     -Info "Use a different hair color style for Link`nOnly for Ocarina of Time or Majora's Mask models" -FilePath ($Paths.shared + "\Hair\Ocarina of Time") -Ext "bin"   -Items @("Default", "Blonde") -Credits "Third M & AndiiSyn"
 
 
@@ -1389,10 +1388,10 @@ function CreateTabGraphics() {
     $Last.Group.Height = (DPISize 162)
 
     CreateImageBox -All -x 40  -y 30 -w 90  -h 90 -Name "ButtonPreview";      $Redux.UI.ButtonSize.Add_SelectedIndexChanged( { ShowHUDPreview -IsMM } ); $Redux.UI.ButtonStyle.Add_SelectedIndexChanged( { ShowHUDPreview } )
+    CreateImageBox -All -x 220 -y 35 -w 40  -h 40 -Name "RupeesPreview";      $Redux.UI.Rupees.Add_SelectedIndexChanged(   { ShowHUDPreview } )
     CreateImageBox -All -x 160 -y 35 -w 40  -h 40 -Name "HeartsPreview";      $Redux.UI.Hearts.Add_SelectedIndexChanged(   { ShowHUDPreview } )
-    CreateImageBox -All -x 220 -y 35 -w 40  -h 40 -Name "RupeesPreview";      $Redux.UI.Rupees.Add_CheckStateChanged(      { ShowHUDPreview } )
-    CreateImageBox -All -x 280 -y 35 -w 40  -h 40 -Name "DungeonKeysPreview"; $Redux.UI.DungeonKeys.Add_CheckStateChanged( { ShowHUDPreview } )
     CreateImageBox -All -x 140 -y 85 -w 200 -h 40 -Name "MagicPreview";       $Redux.UI.Magic.Add_SelectedIndexChanged(    { ShowHUDPreview } )
+    CreateImageBox -All -x 280 -y 35 -w 40  -h 40 -Name "DungeonKeysPreview"; $Redux.UI.DungeonKeys.Add_CheckStateChanged( { ShowHUDPreview } )
     ShowHUDPreview -IsMM
 
 }

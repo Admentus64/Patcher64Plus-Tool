@@ -659,7 +659,7 @@ function CreateReduxComboBox([single]$Column=$Last.Column, [single]$Row=$Last.Ro
     if ($Items.Count -gt 0 -and $PostItems.Count -gt 0) { $Items = $Items + $PostItems }
 
     if ($Items.Count -gt 0) {
-        $Items = $Items | Get-Unique
+        $Items = $Items | Select-Object -Unique
         if ($Default.GetType().Name -eq "String")                                      { $Default = [array]::indexof($Items, $Default) + 1 }
         if ($Items[($Default-1)] -ne "Default" -and $Default -gt 0 -and !$NoDefault)   { $Items[($Default-1)] += " (default)"              }
     }

@@ -264,6 +264,18 @@ function ByteOptions() {
         ChangeBytes -Offset "B6CA10" -Values "FFFFFFFFFFFF"; ChangeBytes -Offset "B6CA1A" -Values "FFFFFFFF"; ChangeBytes -Offset "B6CA24" -Values "FFFF"
     }
 
+    if (IsChecked $Redux.Graphics.GCScheme) { # Z to L + L to D-Pad textures
+        if (IsLanguage $Redux.Text.PauseScreen)   { PatchBytes -Offset "844540"  -Texture -Patch "GameCube\l_pause_screen_button_mm.bin" }
+        else                                      { PatchBytes -Offset "844540"  -Texture -Patch "GameCube\l_pause_screen_button.bin" }
+        PatchBytes -Offset "92C100"  -Texture -Patch "GameCube\dpad_text_icon.bin"
+        PatchBytes -Offset "92C200"  -Texture -Patch "GameCube\l_text_icon.bin"
+        if (TestFile ($GameFiles.textures + "\GameCube\l_targeting_" + $LanguagePatch.code + ".bin")) {
+            if ($LanguagePatch.l_target_jpn -eq 1)   { $offset = "1A0B300" }
+            else                                     { $offset = "1A35680" }
+            PatchBytes -Offset $offset -Texture -Patch ("GameCube\l_targeting_" + $LanguagePatch.code + ".bin")
+        }
+    }
+
     if (IsChecked $Redux.Graphics.ExtendedDraw)      { ChangeBytes -Offset "A9A970" -Values "00 01" }
     if (IsChecked $Redux.Graphics.ForceHiresModel)   { ChangeBytes -Offset "BE608B" -Values "00"    }
 
@@ -276,18 +288,6 @@ function ByteOptions() {
         ChangeBytes -Offset "B586A7" -Values "0E" -Add # A Button / Text - Y position (09 -> 17, +0E)
         ChangeBytes -Offset "B57EEF" -Values "07" -Add # B Button        - X position (A0 -> A7, +07)
         ChangeBytes -Offset "B589EB" -Values "07" -Add # B Text          - X position (94 -> 9B, +07)
-    }
-
-    if (IsChecked $Redux.UI.GCScheme) { # Z to L + L to D-Pad textures
-        if (IsLanguage $Redux.Text.PauseScreen)   { PatchBytes -Offset "844540"  -Texture -Patch "GameCube\l_pause_screen_button_mm.bin" }
-        else                                      { PatchBytes -Offset "844540"  -Texture -Patch "GameCube\l_pause_screen_button.bin" }
-        PatchBytes -Offset "92C100"  -Texture -Patch "GameCube\dpad_text_icon.bin"
-        PatchBytes -Offset "92C200"  -Texture -Patch "GameCube\l_text_icon.bin"
-        if (TestFile ($GameFiles.textures + "\GameCube\l_targeting_" + $LanguagePatch.code + ".bin")) {
-            if ($LanguagePatch.l_target_jpn -eq 1)   { $offset = "1A0B300" }
-            else                                     { $offset = "1A35680" }
-            PatchBytes -Offset $offset -Texture -Patch ("GameCube\l_targeting_" + $LanguagePatch.code + ".bin")
-        }
     }
 
     if ( !((IsIndex -Elem $Redux.UI.ButtonSize -Text "Large") -and (IsIndex -Elem $Redux.UI.ButtonStyle -Text "Ocarina of Time")) ) {
@@ -309,11 +309,10 @@ function ByteOptions() {
     }
 
     if (IsChecked $Redux.UI.CenterNaviPrompt)   { ChangeBytes -Offset "B582DF"  -Values "01" -Subtract }
-    if (IsChecked $Redux.UI.Rupees)             { PatchBytes  -Offset "1A3DF00" -Shared -Patch "HUD\Rupees\Majora's Mask.bin" }
     if (IsChecked $Redux.UI.DungeonKeys)        { PatchBytes  -Offset "1A3DE00" -Shared -Patch "HUD\Keys\Majora's Mask.bin"   }
+    if (IsDefault $Redux.UI.Rupees -Not)        { PatchBytes  -Offset "1A3DF00" -Shared -Patch ("HUD\Rupees\" + $Redux.UI.Rupees.Text.replace(" (default)", "") + ".bin") }
     if (IsDefault $Redux.UI.Hearts -Not)        { PatchBytes  -Offset "1A3C000" -Shared -Patch ("HUD\Hearts\" + $Redux.UI.Hearts.Text.replace(" (default)", "") + ".bin") }
     if (IsDefault $Redux.UI.Magic  -Not)        { PatchBytes  -Offset "1A3F8C0" -Shared -Patch ("HUD\Magic\"  + $Redux.UI.Magic.Text.replace(" (default)", "")  + ".bin") }
-    if (IsChecked $Redux.UI.HUD)                { PatchBytes  -Offset "1A3C000" -Shared -Patch "HUD\Hearts\Majora's Mask.bin"; PatchBytes -Offset "1A3F8C0" -Shared -Patch "HUD\Magic\Majora's Mask.bin" }
 
 
 
@@ -1624,7 +1623,7 @@ function ByteReduxOptions() {
         if (IsDefaultColor -Elem $Redux.Colors.SetHUDStats[1] -Not)    { $values = (Get16Bit $Redux.Colors.SetHUDStats[1].Color.R) + (Get16Bit $Redux.Colors.SetHUDStats[1].Color.G) + (Get16Bit $Redux.Colors.SetHUDStats[1].Color.B); ChangeBytes -Offset $Symbols.CFG_MAGIC_COLOR -Values $values } # Magic
     }
 
-    if (IsChecked $Redux.UI.GCScheme) {
+    if (IsChecked $Redux.Graphics.GCScheme) {
         ChangeBytes -Offset $Symbols.CFG_TEXT_CURSOR_COLOR -Values "00 00 00 C8 00 50" # Text Cursor
         ChangeBytes -Offset $Symbols.CFG_SHOP_CURSOR_COLOR -Values "00 00 00 FF 00 50" # Shop Cursor
     }
@@ -1636,11 +1635,21 @@ function ByteReduxOptions() {
 }
 
 
+#==============================================================================================================================================================================================
+<#function ByteSceneOptions() {
+
+    LoadScene  -Scene  "Hyrule Field"
+    LoadMap    -Map    0
+    LoadHeader -Header 0
+
+}#>
+
+
 
 #==============================================================================================================================================================================================
 function CheckLanguageOptions() {
     
-    if     ( (IsChecked  $Redux.Text.Vanilla -Not)   -or (IsChecked  $Redux.Text.Speed1x  -Not) -or (IsChecked  $Redux.UI.GCScheme) )                                                         { return $True }
+    if     ( (IsChecked  $Redux.Text.Vanilla -Not)   -or (IsChecked  $Redux.Text.Speed1x  -Not) -or (IsChecked  $Redux.Graphics.GCScheme) )                                                   { return $True }
     elseif ( (IsLanguage $Redux.Unlock.Tunics)       -or (IsLanguage $Redux.Equipment.HerosBow) -or (IsLanguage $Redux.Capacity.EnableAmmo) -or (IsLanguage $Redux.Capacity.EnableWallet) )   { return $True }
     elseif ( (IsChecked  $Redux.Text.FemalePronouns) -or (IsChecked  $Redux.Text.TypoFixes)     -or (IsChecked  $Redux.Text.GoldSkulltula)  -or (IsChecked  $Redux.Text.Instant) )            { return $True }
     elseif ( (IsChecked -Elem $Redux.Text.LinkScript)      -and $Redux.Text.LinkName.Text.Count -gt 0)                                                                                        { return $True }
@@ -1723,7 +1732,7 @@ function ByteLanguageOptions() {
             SetMessage -ID "108E" -Text "0E3C" -Replace "0E60"      # Correct Phantom Ganon Defeat Textbox (Fade)
         }
 
-        if (IsChecked $Redux.UI.GCScheme) {
+        if (IsChecked $Redux.Graphics.GCScheme) {
             SetMessage -ID "0103" -Text "<B><A Button>"  -Replace "<G><A Button>";  SetMessage -ID "0103" -Text "<B>Icon" -Replace "<G>Icon"; SetMessage -ID "0103" -Text "<B>blue" -Replace "<B>green" # Deku Tree - Opening a door
             SetMessage -ID "0337" -Text 'Hole of "Z"'    -Replace 'Hole of "L"'
             SetMessage -ID "1035" -Text "blue icon"      -Replace "green icon";     SetMessage -ID "1037"
@@ -1976,12 +1985,11 @@ function ByteLanguageOptions() {
 #==============================================================================================================================================================================================
 function AdjustGUI() {
     
-    EnableElem -Elem $Redux.Unlock.DekuSticks -Active $Patches.Redux.Checked
+    EnableElem -Elem ($Redux.Unlock.DekuSticks, $Redux.UI.ButtonPositions) -Active $Patches.Redux.Checked
 
     if ($Patches.Redux.Checked) {
-        EnableElem -Elem $Redux.UI.Buttonpositions   -Active ($Redux.UI.Layout.SelectedIndex -eq 0)
         EnableElem -Elem $Redux.Colors.RupeesVanilla -Active (!$Redux.Hooks.RupeeIconColors.Checked)
-        EnableForm -Form $Redux.Box.TextColors       -Enable (!$Redux.UI.GCScheme.Checked)
+        EnableForm -Form $Redux.Box.TextColors       -Enable (!$Redux.Graphics.GCScheme.Checked)
     }
 
 }
@@ -2243,14 +2251,14 @@ function CreateTabRedux() {
     # COLORS #
 
     CreateButtonColorOptions
-    CreateBoomerangColorOptions
     CreateRupeeColorOptions
-    CreateBombchuColorOptions
     CreateHUDColorOptions
+    CreateBoomerangColorOptions
+    CreateBombchuColorOptions
     $Last.Half = $False; CreateTextColorOptions; $Redux.Box.TextColors = $Last.Group
 
     $Redux.Hooks.RupeeIconColors.Add_CheckStateChanged( { EnableElem -Elem $Redux.Colors.RupeesVanilla -Active (!$this.checked) } )
-    $Redux.UI.GCScheme.Add_CheckStateChanged(           { EnableForm -Form $Redux.Box.TextColors       -Enable (!$this.checked) } )
+    $Redux.Graphics.GCScheme.Add_CheckStateChanged(     { EnableForm -Form $Redux.Box.TextColors       -Enable (!$this.checked) } )
     
 }
 
@@ -2393,6 +2401,8 @@ function CreateTabGraphics() {
     CreateReduxCheckBox -Name "ExtendedDraw"    -All  -Text "Extended Draw Distance"       -Info "Increases the game's draw distance for objects`nDoes not work on all objects"                        -Credits "Admentus"
     CreateReduxCheckBox -Name "ForceHiresModel" -All  -Text "Force Hires Link Model"       -Info "Always use Link's High Resolution Model when Link is too far away" -Exclude "Dawn & Dusk"            -Credits "GhostlyDark"
     CreateReduxCheckBox -Name "HideDungeonIcon" -Base -Text "Hide Dungeon Icon"            -Info "Hide dungeon icon for minimaps that do not have a dungeon entrance"                                  -Credits "GhostlyDark"
+    CreateReduxCheckBox -Name "GCScheme"        -All  -Text "GC Scheme"                    -Info "Replace and change the textures, dialogue and text colors to match the GameCube's scheme"            -Credits "Admentus, GhostlyDark, ShadowOne333 & Ported from Redux"
+    
 
     if (!$IsWiiVC) {
         EnableElem -Elem @($Redux.Fixes.PauseScreenDelay, $Redux.Fixes.PauseScreenCrash) -Active (!$Redux.Graphics.Widescreen.Checked)
@@ -2429,23 +2439,20 @@ function CreateTabGraphics() {
         $Last.Group.Width = $Redux.Groups[$Redux.Groups.Length-3].Width; $Last.Group.Top = $Redux.Groups[$Redux.Groups.Length-3].Bottom + 5; $Last.Width = 4
     }
     else { CreateReduxGroup -Tag  "UI" -All -Text "Interface" }
-
-    CreateReduxCheckBox -Name "Rupees"           -All -Text "MM Rupee Icon"                                                                                            -Info "Replace the rupees icon with that from Majora's Mask"                                              -Credits "Ported by GhostlyDark"
-    CreateReduxCheckBox -Name "DungeonKeys"      -All -Text "MM Key Icon"                                                                                              -Info "Replace the key icon with that from Majora's Mask"                                                 -Credits "Ported by GhostlyDark"
-    CreateReduxCheckBox -Name "DungeonIcons"     -All -Text "MM Dungeon Icons"                                                                                         -Info "Replace the dungeon map icons with those from Majora's Mask"                                       -Credits "Ported by GhostlyDark"
-    CreateReduxCheckBox -Name "ButtonPositions"  -All -Text "MM Button Positions"                                                                                      -Info "Positions the A and B buttons like in Majora's Mask"                                               -Credits "Ported by GhostlyDark"
-    CreateReduxCheckBox -Name "CenterNaviPrompt" -All -Text "Center Navi Prompt"                                                                                       -Info 'Centers the "Navi" prompt shown in the C-Up button'                                                -Credits "Ported by GhostlyDark"
-    CreateReduxCheckBox -Name "GCScheme"         -All -Text "GC Scheme"                                                                                                -Info "Replace and change the textures, dialogue and text colors to match the GameCube's scheme"          -Credits "Admentus, GhostlyDark, ShadowOne333 & Ported from Redux"
-    CreateReduxComboBox -Name "BlackBars"        -All -Text "Black Bars"  -Items @("Enabled", "Disabled for Z-Targeting", "Disabled for Cutscenes", "Always Disabled") -Info "Removes the black bars shown on the top and bottom of the screen during Z-targeting and cutscenes" -Credits "Admentus"
-    CreateReduxComboBox -Name "ButtonSize"       -All -Text "HUD Buttons"                                           -FilePath ($Paths.shared + "\Buttons")    -Ext $null -Default "Large"           -Info "Set the size for the HUD buttons"                                     -Credits "GhostlyDark (ported)"
-    $path = $Paths.shared + "\Buttons" + "\" + $Redux.UI.ButtonSize.Text.replace(" (default)", "")
     if ($GamePatch.title -like "*Gold Quest*") { $val = "Gold Quest" } else { $val = "Ocarina of Time" }
-    CreateReduxComboBox -Name "ButtonStyle"      -All -Text "HUD Buttons" -Items "Ocarina of Time" -FilePath $path                           -Ext "bin" -Default $val              -Info "Set the style for the HUD buttons" -Credits "GhostlyDark (ported), Admentus (ported), Pizza (HD), Djipi, Community, Nerrel, Federelli, AndiiSyn & Syeo"
-    CreateReduxComboBox -Name "Hearts"           -All -Text "Heart Icons" -Items "Ocarina of Time" -FilePath ($Paths.shared + "\HUD\Hearts") -Ext "bin" -Default $val              -Info "Set the style for the heart icons" -Credits "GhostlyDark (ported), Admentus (ported), AndiiSyn & Syeo"
-    CreateReduxComboBox -Name "Magic"            -All -Text "Magic Bar"   -Items "Ocarina of Time" -FilePath ($Paths.shared + "\HUD\Magic")  -Ext "bin" -Default "Ocarina of Time" -Info "Set the style for the magic meter" -Credits "GhostlyDark (ported), Pizza, Nerrel (HD), Zeth Alkar"
-    
-    $path = $null
 
+    CreateReduxComboBox -Name "BlackBars"        -All -Text "Black Bars"  -Items @("Enabled", "Disabled for Z-Targeting", "Disabled for Cutscenes", "Always Disabled") -Info "Removes the black bars shown on the top and bottom of the screen during Z-targeting and cutscenes"    -Credits "Admentus"
+    CreateReduxComboBox -Name "ButtonSize"       -All -Text "HUD Buttons"                          -FilePath ($Paths.shared + "\Buttons")    -Ext $null -Default "Large"           -Info "Set the size for the HUD buttons"                                                         -Credits "GhostlyDark (ported)"
+    $path = $Paths.shared + "\Buttons" + "\" + $Redux.UI.ButtonSize.Text.replace(" (default)", "")
+    CreateReduxComboBox -Name "ButtonStyle"      -All -Text "HUD Buttons" -Items "Ocarina of Time" -FilePath $path                           -Ext "bin" -Default $val              -Info "Set the style for the HUD buttons"                                                        -Credits "GhostlyDark (ported), Admentus (ported), Pizza (HD), Djipi, Community, Nerrel, Federelli, AndiiSyn & Syeo"
+    CreateReduxComboBox -Name "Rupees"           -All -Text "Rupee Icon"  -Items "Ocarina of Time" -FilePath ($Paths.shared + "\HUD\Rupees") -Ext "bin" -Default "Ocarina of Time" -Info "Set the style for the rupees icon"                                                        -Credits "Ported by GhostlyDark"
+    CreateReduxComboBox -Name "Hearts"           -All -Text "Heart Icons" -Items "Ocarina of Time" -FilePath ($Paths.shared + "\HUD\Hearts") -Ext "bin" -Default $val              -Info "Set the style for the heart icons"                                                        -Credits "GhostlyDark (ported), Admentus (ported), AndiiSyn & Syeo"
+    CreateReduxComboBox -Name "Magic"            -All -Text "Magic Bar"   -Items "Ocarina of Time" -FilePath ($Paths.shared + "\HUD\Magic")  -Ext "bin" -Default "Ocarina of Time" -Info "Set the style for the magic meter"                                                        -Credits "GhostlyDark (ported), Pizza, Nerrel (HD), Zeth Alkar"
+    CreateReduxCheckBox -Name "CenterNaviPrompt" -All -Text "Center Navi Prompt"                                                                                                   -Info 'Centers the "Navi" prompt shown in the C-Up button'                                       -Credits "Ported by GhostlyDark"
+    CreateReduxCheckBox -Name "DungeonKeys"      -All -Text "MM Key Icon"                                                                                                          -Info "Replace the key icon with that from Majora's Mask"                                        -Credits "Ported by GhostlyDark"
+    CreateReduxCheckBox -Name "DungeonIcons"     -All -Text "MM Dungeon Icons"                                                                                                     -Info "Replace the dungeon map icons with those from Majora's Mask"                              -Credits "Ported by GhostlyDark"
+    CreateReduxCheckBox -Name "ButtonPositions"  -All -Text "MM Button Positions"                                                                                                  -Info "Positions the A and B buttons like in Majora's Mask"                                      -Credits "Ported by GhostlyDark"
+    
     
 
     # HIDE HUD #
@@ -2471,10 +2478,10 @@ function CreateTabGraphics() {
 
     CreateReduxGroup    -Tag  "Styles"        -All -Text "Styles"         -Columns 4
     if ($GamePatch.title -like "*Gold Quest*") { $val = "Gold Quest" } else { $val = "Regular" }
-    CreateReduxComboBox -Name "RegularChests" -All -Text "Regular Chests" -Info "Use a different style for regular treasure chests"                                           -FilePath ($Paths.shared + "\Chests") -Default $val -Ext "front" -Items "Regular"              -Credits "AndiiSyn & Rando"
-    CreateReduxComboBox -Name "BossChests"    -All -Text "Boss Chests"    -Info "Use a different style for Boss Key treasure chests"                                          -FilePath ($Paths.shared + "\Chests")               -Ext "front" -Items "Boss OoT"             -Credits "AndiiSyn & Rando"
-    CreateReduxComboBox -Name "Crates"        -All -Text "Small Crates"   -Info "Use a different style for small liftable crates"                                             -FilePath ($Paths.shared + "\Crates")               -Ext "bin"   -Items "Regular"              -Credits "Rando"
-    CreateReduxComboBox -Name "Pots"          -All -Text "Pots"           -Info "Use a different style for throwable pots"                                                    -FilePath ($Paths.shared + "\Pots")                 -Ext "bin"   -Items "Regular"              -Credits "Rando"
+    CreateReduxComboBox -Name "RegularChests" -All -Text "Regular Chests" -Info "Use a different style for regular treasure chests"                                           -FilePath ($Paths.shared + "\Chests") -Default $val -Ext "front" -Items "Regular"              -Credits "Nintendo, Syeo, AndiiSyn & Rando"
+    CreateReduxComboBox -Name "BossChests"    -All -Text "Boss Chests"    -Info "Use a different style for Boss Key treasure chests"                                          -FilePath ($Paths.shared + "\Chests")               -Ext "front" -Items "Boss OoT"             -Credits "Nintendo, Syeo, AndiiSyn & Rando"
+    CreateReduxComboBox -Name "Crates"        -All -Text "Small Crates"   -Info "Use a different style for small liftable crates"                                             -FilePath ($Paths.shared + "\Crates")               -Ext "bin"   -Items "Regular"              -Credits "Nintendo & Rando"
+    CreateReduxComboBox -Name "Pots"          -All -Text "Pots"           -Info "Use a different style for throwable pots"                                                    -FilePath ($Paths.shared + "\Pots")                 -Ext "bin"   -Items "Regular"              -Credits "Nintendo, Syeo & Rando"
     CreateReduxComboBox -Name "HairColor"     -All -Text "Hair Color"     -Info "Use a different hair color style for Link`nOnly for Ocarina of Time or Majora's Mask models" -FilePath ($Paths.shared + "\Hair\Ocarina of Time") -Ext "bin"   -Items @("Default", "Blonde") -Credits "Third M & AndiiSyn"
 
 
@@ -2485,11 +2492,10 @@ function CreateTabGraphics() {
     $Last.Group.Height = (DPISize 140)
 
     CreateImageBox -x 40  -y 30 -w 90  -h 90 -All -Name "ButtonPreview";      $Redux.UI.ButtonSize.Add_SelectedIndexChanged( { ShowHUDPreview -IsOoT } ); $Redux.UI.ButtonStyle.Add_SelectedIndexChanged( { ShowHUDPreview -IsOoT } )
+    CreateImageBox -x 220 -y 35 -w 40  -h 40 -All -Name "RupeesPreview";      $Redux.UI.Rupees.Add_SelectedIndexChanged(     { ShowHUDPreview -IsOoT } )
     CreateImageBox -x 160 -y 35 -w 40  -h 40 -All -Name "HeartsPreview";      $Redux.UI.Hearts.Add_SelectedIndexChanged(     { ShowHUDPreview -IsOoT } )
-    CreateImageBox -x 220 -y 35 -w 40  -h 40 -All -Name "RupeesPreview";      $Redux.UI.Rupees.Add_CheckStateChanged(        { ShowHUDPreview -IsOoT } )
-    CreateImageBox -x 280 -y 35 -w 40  -h 40 -All -Name "DungeonKeysPreview"; $Redux.UI.DungeonKeys.Add_CheckStateChanged(   { ShowHUDPreview -IsOoT } )
     CreateImageBox -x 140 -y 85 -w 200 -h 40 -All -Name "MagicPreview";       $Redux.UI.Magic.Add_SelectedIndexChanged(      { ShowHUDPreview -IsOoT } )
-    
+    CreateImageBox -x 280 -y 35 -w 40  -h 40 -All -Name "DungeonKeysPreview"; $Redux.UI.DungeonKeys.Add_CheckStateChanged(   { ShowHUDPreview -IsOoT } )
     ShowHUDPreview -IsOoT
 
 }

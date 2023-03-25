@@ -1,3 +1,9 @@
+v20.2.0
+- Updated the OoT Redux Options Menu with a new design
+- Updated Redux for SM, Zelda 1 and ALttP
+- Added new Pot, Chest, Rupee and Button designs for OoT & MM
+- Fixed issue with duplicate items for dropdown menus
+
 v20.1.1
 - Made the new options menu for OoT Redux adjustable into several tiers
 

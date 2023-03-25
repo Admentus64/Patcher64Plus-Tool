@@ -4,6 +4,7 @@ function CreateSceneEditorDialog([int32]$Width, [int32]$Height, [string]$Game=$G
     $Files.json.sceneEditor = SetJSONFile ($Paths.Games + "\" + $Game + "\Scene Editor.json")
     $SceneEditor.FirstLoad = $True
     $SceneEditor.Resetting = $False
+    $SceneEditor.GUI       = $True
 
 
 
@@ -18,7 +19,13 @@ function CreateSceneEditorDialog([int32]$Width, [int32]$Height, [string]$Game=$G
     $SceneEditor.TopGroup                             = CreateGroupBox -X (DPISize 10) -Y (DPISize 5)                                  -Width ($SceneEditor.Dialog.Width      - (DPISize 30)) -Height (DPISize 70)                                      -AddTo $SceneEditor.Dialog
     $SceneEditor.BottomGroup                          = CreateGroupBox -X (DPISize 10) -Y ($SceneEditor.TopGroup.Bottom + (DPISize 5)) -Width ($SceneEditor.Dialog.Width      - (DPISize 30)) -Height ($SceneEditor.Dialog.Height      - (DPISize 190)) -AddTo $SceneEditor.Dialog
     
-    $SceneEditor.BottomPanelActors                    = CreatePanel    -X (DPISize 5)  -Y (DPISize 10)                                 -Width ($SceneEditor.BottomGroup.Width - (DPISize 10)) -Height ($SceneEditor.BottomGroup.Height - (DPISize 15))  -AddTo $SceneEditor.BottomGroup
+    $SceneEditor.BottomPanelScene                     = CreatePanel    -X (DPISize 5)  -Y (DPISize 10)                                 -Width ($SceneEditor.BottomGroup.Width - (DPISize 10)) -Height ($SceneEditor.BottomGroup.Height - (DPISize 15))  -AddTo $SceneEditor.BottomGroup
+    $SceneEditor.BottomPanelScene.AutoScroll          = $True
+    $SceneEditor.BottomPanelScene.AutoScrollMargin    = New-Object System.Drawing.Size(0, 0)
+    $SceneEditor.BottomPanelScene.AutoScrollMinSize   = New-Object System.Drawing.Size(0, 0)
+    $SceneEditor.BottomPanelScene.Hide()
+
+    $SceneEditor.BottomPanelActors                    = CreatePanel -X $SceneEditor.BottomPanelScene.Left   -Y $SceneEditor.BottomPanelScene.Top  -Width $SceneEditor.BottomPanelScene.Width  -Height $SceneEditor.BottomPanelScene.Height -AddTo $SceneEditor.BottomGroup
     $SceneEditor.BottomPanelActors.AutoScroll         = $True
     $SceneEditor.BottomPanelActors.AutoScrollMargin   = New-Object System.Drawing.Size(0, 0)
     $SceneEditor.BottomPanelActors.AutoScrollMinSize  = New-Object System.Drawing.Size(0, 0)
@@ -27,32 +34,54 @@ function CreateSceneEditorDialog([int32]$Width, [int32]$Height, [string]$Game=$G
     $SceneEditor.BottomPanelObjects.AutoScroll        = $True
     $SceneEditor.BottomPanelObjects.AutoScrollMargin  = New-Object System.Drawing.Size(0, 0)
     $SceneEditor.BottomPanelObjects.AutoScrollMinSize = New-Object System.Drawing.Size(0, 0)
+    $SceneEditor.BottomPanelObjects.Hide()
 
     $SceneEditor.BottomPanelMapPreview                = CreatePanel -X $SceneEditor.BottomPanelActors.Left  -Y $SceneEditor.BottomPanelActors.Top -Width $SceneEditor.BottomPanelActors.Width -Height $SceneEditor.BottomPanelActors.Height -AddTo $SceneEditor.BottomGroup
     $SceneEditor.MapPreviewImage                      = CreateForm  -X (DPISize 50) -Y (DPISize 5) -Width (DPISize 1152) -Height (DPISize 648) -Form (New-Object Windows.Forms.PictureBox) -AddTo $SceneEditor.BottomPanelMapPreview
+    $SceneEditor.BottomPanelMapPreview.Hide()
     $file                                             = $Paths.Games + "\" + $Game + "\Maps\default.jpg"
     if (TestFile $file) { SetBitMap -Path $file -Box $SceneEditor.MapPreviewImage } else { $SceneEditor.MapPreviewImage.Image = $null }
 
 
+    # Scene Button
+    $SceneButton           = CreateButton -X ($SceneEditor.TopGroup.Right - (DPISize 350)) -Y (DPISize 10) -Width (DPISize 80) -Height (DPISize 35) -Text "Scene" -AddTo $SceneEditor.TopGroup
+    $SceneButton.BackColor = "White"
+    $SceneButton.Add_Click({
+        $SceneEditor.BottomPanelScene.Show()
+        $SceneEditor.BottomPanelActors.Hide()
+        $SceneEditor.BottomPanelObjects.Hide()
+        $SceneEditor.BottomPanelMapPreview.Hide()
+    })
+    $SceneButton.Enabled = $SceneButton.Visible = $False
 
     # Actors Button
-    $ActorsButton           = CreateButton -X ($SceneEditor.TopGroup.Right - (DPISize 300)) -Y (DPISize 15) -Width (DPISize 80) -Height (DPISize 35) -Text "Actors" -AddTo $SceneEditor.TopGroup
+    $ActorsButton           = CreateButton -X ($SceneButton.Right + (DPISize 5)) -Y $SceneButton.Top -Width $SceneButton.Width -Height $SceneButton.Height -Text "Actors" -AddTo $SceneEditor.TopGroup
     $ActorsButton.BackColor = "White"
     $ActorsButton.Add_Click({
+        $SceneEditor.BottomPanelScene.Hide()
         $SceneEditor.BottomPanelActors.Show()
         $SceneEditor.BottomPanelObjects.Hide()
         $SceneEditor.BottomPanelMapPreview.Hide()
     })
 
-
-
     # Objects Button
-    $ObjectsButton           = CreateButton -X ($ActorsButton.Right + (DPISize 15)) -Y $ActorsButton.Top -Width $ActorsButton.Width -Height $ActorsButton.Height -Text "Objects" -AddTo $SceneEditor.TopGroup
+    $ObjectsButton           = CreateButton -X ($ActorsButton.Right + (DPISize 5)) -Y $ActorsButton.Top -Width $ActorsButton.Width -Height $ActorsButton.Height -Text "Objects" -AddTo $SceneEditor.TopGroup
     $ObjectsButton.BackColor = "White"
     $ObjectsButton.Add_Click({
+        $SceneEditor.BottomPanelScene.Hide()
         $SceneEditor.BottomPanelActors.Hide()
         $SceneEditor.BottomPanelObjects.Show()
         $SceneEditor.BottomPanelMapPreview.Hide()
+    })
+
+    # Map Preview Button
+    $MapPreviewButton           = CreateButton -X ($ObjectsButton.Right + (DPISize 5)) -Y $ObjectsButton.Top -Width $ObjectsButton.Width -Height $ObjectsButton.Height -Text "Preview Map" -AddTo $SceneEditor.TopGroup
+    $MapPreviewButton.BackColor = "White"
+    $MapPreviewButton.Add_Click({
+        $SceneEditor.BottomPanelScene.Hide()
+        $SceneEditor.BottomPanelActors.Hide()
+        $SceneEditor.BottomPanelObjects.Hide()
+        $SceneEditor.BottomPanelMapPreview.Show()
     })
 
     $SceneEditor.DeleteActor  = CreateButton -X $ActorsButton.Left              -Y $ActorsButton.Bottom          -Width (DPISize 40) -Height (DPISize 17) -Font $Fonts.SmallBold -Text "-" -AddTo $SceneEditor.TopGroup -BackColor "Red"   -ForeColor "White"
@@ -65,17 +94,6 @@ function CreateSceneEditorDialog([int32]$Width, [int32]$Height, [string]$Game=$G
     $SceneEditor.InsertActor.Add_Click(  { InsertActor  } )
     $SceneEditor.DeleteObject.Add_Click( { DeleteObject } )
     $SceneEditor.InsertObject.Add_Click( { InsertObject } )
-
-
-
-    # Map Preview Button
-    $MapPreviewButton           = CreateButton -X ($ObjectsButton.Right + (DPISize 15)) -Y $ObjectsButton.Top -Width $ObjectsButton.Width -Height $ObjectsButton.Height -Text "Preview Map" -AddTo $SceneEditor.TopGroup
-    $MapPreviewButton.BackColor = "White"
-    $MapPreviewButton.Add_Click({
-        $SceneEditor.BottomPanelActors.Hide()
-        $SceneEditor.BottomPanelObjects.Hide()
-        $SceneEditor.BottomPanelMapPreview.Show()
-    })
 
 
 
@@ -196,18 +214,18 @@ function CreateSceneEditorDialog([int32]$Width, [int32]$Height, [string]$Game=$G
 
 
     $name = "Editor.Scene." + $Files.json.sceneEditor.parse
-    $label               = CreateLabel    -X (DPISize 10)                              -Y (DPISize 17)                                 -Width (DPISize 40)  -Height (DPISize 15) -Font $Fonts.SmallBold -Text "Scene:"      -AddTo $SceneEditor.TopGroup
+    $label               = CreateLabel    -X (DPISize 10)                              -Y (DPISize 17)                                 -Width (DPISize 60)  -Height (DPISize 15) -Font $Fonts.SmallBold -Text "Scene:"      -AddTo $SceneEditor.TopGroup
     $SceneEditor.Scenes  = CreateComboBox -X ($label.Right + (DPISize 15) )            -Y ($label.Top - (DPISize 2) )                  -Width (DPISize 260) -Height (DPISize 20) -Items $Files.json.sceneEditor.scenes.Name -AddTo $SceneEditor.TopGroup -Name $name
     $label               = CreateLabel    -X (DPISize 10)                              -Y ($SceneEditor.Scenes.Bottom + (DPISize 12) ) -Width (DPISize 40)  -Height (DPISize 15) -Font $Fonts.SmallBold -Text "Map:"        -AddTo $SceneEditor.TopGroup
     $SceneEditor.Maps    = CreateComboBox -X ($label.Right + (DPISize 15) )            -Y ($label.Top - (DPISize 2) )                  -Width (DPISize 260) -Height (DPISize 20)                                            -AddTo $SceneEditor.TopGroup
     $SceneEditor.Headers = CreateComboBox -X ($SceneEditor.Maps.Right + (DPISize 15) ) -Y $SceneEditor.Maps.Top                        -Width (DPISize 260) -Height (DPISize 20)                                            -AddTo $SceneEditor.TopGroup
 
     $SceneEditor.Tabs  = @()
-    $SceneEditor.Tabs += CreateButton -X ($SceneEditor.DeleteActor.Right - (DPISize 300)) -Y $SceneEditor.Headers.Top -Width (DPISize 50)               -Height (DPISize 20)                -Text "1-50"    -BackColor "Red" -ForeColor "White" -AddTo $SceneEditor.TopGroup
-    $SceneEditor.Tabs += CreateButton -X ($SceneEditor.Tabs[0].Right     + (DPISize 1))   -Y $SceneEditor.Tabs[0].Top -Width $SceneEditor.Tabs[0].width -Height $SceneEditor.Tabs[0].height -Text "51-100"  -BackColor "Red" -ForeColor "White" -AddTo $SceneEditor.TopGroup
-    $SceneEditor.Tabs += CreateButton -X ($SceneEditor.Tabs[1].Right     + (DPISize 1))   -Y $SceneEditor.Tabs[0].Top -Width $SceneEditor.Tabs[0].width -Height $SceneEditor.Tabs[0].height -Text "101-150" -BackColor "Red" -ForeColor "White" -AddTo $SceneEditor.TopGroup
-    $SceneEditor.Tabs += CreateButton -X ($SceneEditor.Tabs[2].Right     + (DPISize 1))   -Y $SceneEditor.Tabs[0].Top -Width $SceneEditor.Tabs[0].width -Height $SceneEditor.Tabs[0].height -Text "151-200" -BackColor "Red" -ForeColor "White" -AddTo $SceneEditor.TopGroup
-    $SceneEditor.Tabs += CreateButton -X ($SceneEditor.Tabs[3].Right     + (DPISize 1))   -Y $SceneEditor.Tabs[0].Top -Width $SceneEditor.Tabs[0].width -Height $SceneEditor.Tabs[0].height -Text "201-255" -BackColor "Red" -ForeColor "White" -AddTo $SceneEditor.TopGroup
+    $SceneEditor.Tabs += CreateButton -X ($SceneEditor.DeleteActor.Right - (DPISize 300)) -Y ($SceneEditor.Headers.Top + (DPISize 5)) -Width (DPISize 50)               -Height (DPISize 20)                -Text "1-50"    -BackColor "Red" -ForeColor "White" -AddTo $SceneEditor.TopGroup
+    $SceneEditor.Tabs += CreateButton -X ($SceneEditor.Tabs[0].Right     + (DPISize 1))   -Y $SceneEditor.Tabs[0].Top                 -Width $SceneEditor.Tabs[0].width -Height $SceneEditor.Tabs[0].height -Text "51-100"  -BackColor "Red" -ForeColor "White" -AddTo $SceneEditor.TopGroup
+    $SceneEditor.Tabs += CreateButton -X ($SceneEditor.Tabs[1].Right     + (DPISize 1))   -Y $SceneEditor.Tabs[0].Top                 -Width $SceneEditor.Tabs[0].width -Height $SceneEditor.Tabs[0].height -Text "101-150" -BackColor "Red" -ForeColor "White" -AddTo $SceneEditor.TopGroup
+    $SceneEditor.Tabs += CreateButton -X ($SceneEditor.Tabs[2].Right     + (DPISize 1))   -Y $SceneEditor.Tabs[0].Top                 -Width $SceneEditor.Tabs[0].width -Height $SceneEditor.Tabs[0].height -Text "151-200" -BackColor "Red" -ForeColor "White" -AddTo $SceneEditor.TopGroup
+    $SceneEditor.Tabs += CreateButton -X ($SceneEditor.Tabs[3].Right     + (DPISize 1))   -Y $SceneEditor.Tabs[0].Top                 -Width $SceneEditor.Tabs[0].width -Height $SceneEditor.Tabs[0].height -Text "201-255" -BackColor "Red" -ForeColor "White" -AddTo $SceneEditor.TopGroup
     
     $SceneEditor.Tabs[0].Add_Click({ LoadTab -Tab 1 })
     $SceneEditor.Tabs[1].Add_Click({ LoadTab -Tab 2 })
@@ -783,65 +801,72 @@ function LoadScene([object[]]$Scene, [switch]$Keep) {
     
     $folder = $Paths.Games + "\" + $Files.json.sceneEditor.game + "\Editor\Scenes\" + $Scene.name
     $file   = $Paths.Games + "\" + $Files.json.sceneEditor.game + "\Editor\Scenes\" + $Scene.name + "\scene.zscene"
-    $SceneEditor.DropMap = $SceneEditor.DropHeader = $null
+    
+    if ($SceneEditor.GUI) {
+        $SceneEditor.BottomPanelScene.Controls.Clear()
+        $SceneEditor.DropMap = $SceneEditor.DropHeader = $null
 
-    if ($Files.json.sceneEditor.quest -is [array] -and $Files.json.sceneEditor.quest.Count -gt 0) {
-        foreach ($elem in $SceneEditor.Quests) {
-            $elem.Enabled = $False
-            $elem.Visible = $Scene.Dungeon -eq 1
-        }
-        foreach ($elem in $SceneEditor.QuestLabels) { $elem.Visible = $Scene.Dungeon -eq 1 }
-
-        if ($Scene.Dungeon -eq 1) {
-            $SceneEditor.Quests[0].Checked = $True
-            if (IsSet $Settings["Dungeon"][$SceneEditor.Scenes.Text]) {
-                for ($i=0; $i -lt $SceneEditor.Quests.Count; $i++) {
-                    if ($Settings["Dungeon"][$SceneEditor.Scenes.Text] -eq $i+1) {
-                        $SceneEditor.Quests[$i].Checked = $True
-                        if ($i -gt 0) { $folder += "\" + $Files.json.sceneEditor.quest[$i-1] }
+        if ($Files.json.sceneEditor.quest -is [array] -and $Files.json.sceneEditor.quest.Count -gt 0) {
+            foreach ($elem in $SceneEditor.Quests) {
+                $elem.Enabled = $False
+                $elem.Visible = $Scene.Dungeon -eq 1
+            }
+            foreach ($elem in $SceneEditor.QuestLabels) { $elem.Visible = $Scene.Dungeon -eq 1 }
+            
+            if ($Scene.Dungeon -eq 1) {
+                $SceneEditor.Quests[0].Checked = $True
+                if (IsSet $Settings["Dungeon"][$SceneEditor.Scenes.Text]) {
+                    for ($i=0; $i -lt $SceneEditor.Quests.Count; $i++) {
+                        if ($Settings["Dungeon"][$SceneEditor.Scenes.Text] -eq $i+1) {
+                            $SceneEditor.Quests[$i].Checked = $True
+                            if ($i -gt 0) { $folder += "\" + $Files.json.sceneEditor.quest[$i-1] }
+                        }
                     }
                 }
-            }
-
-            for ($i=1; $i -lt $SceneEditor.Quests.Count; $i++) {
-                if ($SceneEditor.Quests[$i].Checked) { $file = $Paths.Games + "\" + $Files.json.sceneEditor.game + "\Editor\Scenes\" + $Scene.name + "\" + $Files.json.sceneEditor.quest[$i-1] + "\scene.zscene" }
-            }
-        }
-    }
-
-    if (!(TestFile -Path $folder -Container) -or !(TestFile -Path $file)) {
-        $SceneEditor.Headers.Items.Clear()
-        $SceneEditor.BottomPanelActors.Controls.Clear()
-        $SceneEditor.BottomPanelObjects.Controls.Clear()
-        
-        [System.Collections.ArrayList]$SceneEditor.Actors = @()
-        [System.Collections.ArrayList]$SceneEditor.Objects = @()
-
-        return
-    }
-
-    if (!$Keep) {
-        $SceneEditor.Maps.Items.Clear()
-        $items = (Get-ChildItem -Path $folder -Filter "*.zmap" -File)
-
-        if ($items.Count -eq 0) { return }
-
-        for ($i=0; $i -lt $items.Count; $i++) {
-            $title = "Map " + ($i+1)
-            if ($Scene.maps -is [array]) {
-                if ($Scene.maps[$i] -ne 0 -and $Scene.maps[$i] -ne "") {
-                    if ($i -lt 9) { $title += "  " }
-                    $title += "   (" + $Scene.maps[$i] + ")"
+                
+                for ($i=1; $i -lt $SceneEditor.Quests.Count; $i++) {
+                    if ($SceneEditor.Quests[$i].Checked) { $file = $Paths.Games + "\" + $Files.json.sceneEditor.game + "\Editor\Scenes\" + $Scene.name + "\" + $Files.json.sceneEditor.quest[$i-1] + "\scene.zscene" }
                 }
             }
-            $SceneEditor.Maps.Items.Add($title)
         }
 
-        $SceneEditor.Maps.SelectedIndex = 0
+        if (!(TestFile -Path $folder -Container) -or !(TestFile -Path $file)) {
+            $SceneEditor.Headers.Items.Clear()
+            $SceneEditor.BottomPanelScene.Controls.Clear()
+            $SceneEditor.BottomPanelActors.Controls.Clear()
+            $SceneEditor.BottomPanelObjects.Controls.Clear()
+            
+            [System.Collections.ArrayList]$SceneEditor.Actors = @()
+            [System.Collections.ArrayList]$SceneEditor.Objects = @()
+            
+            return
+        }
+        
+        if (!$Keep) {
+            $SceneEditor.Maps.Items.Clear()
+            $items = (Get-ChildItem -Path $folder -Filter "*.zmap" -File)
+            
+            if ($items.Count -eq 0) { return }
+            
+            for ($i=0; $i -lt $items.Count; $i++) {
+                $title = "Map " + ($i+1)
+                if ($Scene.maps -is [array]) {
+                    if ($Scene.maps[$i] -ne 0 -and $Scene.maps[$i] -ne "") {
+                        if ($i -lt 9) { $title += "  " }
+                        $title += "   (" + $Scene.maps[$i] + ")"
+                    }
+                }
+                $SceneEditor.Maps.Items.Add($title)
+            }
+
+            $SceneEditor.Maps.SelectedIndex = 0
+        }
+        else { LoadMap $Files.json.sceneEditor.scenes[$SceneEditor.Scenes.SelectedIndex] }
     }
-    else { LoadMap $Files.json.sceneEditor.scenes[$SceneEditor.Scenes.SelectedIndex] }
-
-
+    else {
+        [System.Collections.ArrayList]$SceneEditor.Actors = @()
+        [System.Collections.ArrayList]$SceneEditor.Objects = @()
+    }
 
     # Load scene file #
     $headerSize = 104
@@ -896,20 +921,23 @@ function LoadScene([object[]]$Scene, [switch]$Keep) {
 
 
 #==============================================================================================================================================================================================
-function LoadMap([object[]]$Scene) {
+function LoadMap([object[]]$Scene, [byte]$Map) {
     
     $headerSize = 80
-    $map = $Paths.Games + "\" + $Files.json.sceneEditor.game + "\Editor\Scenes\" + $Scene.name + "\room_" + $SceneEditor.Maps.SelectedIndex + ".zmap"
+    if ($SceneEditor.GUI) {
+        $file = $Paths.Games + "\" + $Files.json.sceneEditor.game + "\Editor\Scenes\" + $Scene.name + "\room_" + $SceneEditor.Maps.SelectedIndex + ".zmap"
     
-    if ($Files.json.sceneEditor.quest -is [array] -and $Files.json.sceneEditor.quest.Count -gt 0 -and $Scene.Dungeon -eq 1) {
-        for ($i=0; $i -lt $Files.json.sceneEditor.quest.Count; $i++) {
-            if ($SceneEditor.Quests[$i+1].Checked) { $map = $Paths.Games + "\" + $Files.json.sceneEditor.game + "\Editor\Scenes\" + $Scene.name + "\" + $Files.json.sceneEditor.quest[$i] + "\room_" + $SceneEditor.Maps.SelectedIndex + ".zmap" }
+        if ($Files.json.sceneEditor.quest -is [array] -and $Files.json.sceneEditor.quest.Count -gt 0 -and $Scene.Dungeon -eq 1) {
+            for ($i=0; $i -lt $Files.json.sceneEditor.quest.Count; $i++) {
+                if ($SceneEditor.Quests[$i+1].Checked) { $file = $Paths.Games + "\" + $Files.json.sceneEditor.game + "\Editor\Scenes\" + $Scene.name + "\" + $Files.json.sceneEditor.quest[$i] + "\room_" + $SceneEditor.Maps.SelectedIndex + ".zmap" }
+            }
         }
     }
+    else { $file = $Paths.Games + "\" + $Files.json.sceneEditor.game + "\Editor\Scenes\" + $Scene.name + "\room_" + $Map + ".zmap" }
 
-    if (!(TestFile -Path $map)) { return }
+    if (!(TestFile -Path $file)) { return }
 
-    [System.Collections.ArrayList]$SceneEditor.MapArray = [System.IO.File]::ReadAllBytes($map)
+    [System.Collections.ArrayList]$SceneEditor.MapArray = [System.IO.File]::ReadAllBytes($file)
     $items                                              = @("Stage 1")
     $SceneEditor.Offsets                                = @()
     $SceneEditor.Offsets                               += @{}
@@ -979,28 +1007,32 @@ function LoadMap([object[]]$Scene) {
                     $SceneEditor.Offsets[$SceneEditor.Offsets.Count-1].MeshIndex        = $j + 5
                 }
             }
-                
-            $title = "Stage " + ($items.Count + 1) 
-            if ($Scene.stages -is [array]) {
-                if ($Scene.stages[$items.Count] -ne 0 -and $Scene.stages[$items.Count] -ne "") {
-                if ($items.Count -lt 9) { $title += "  " }
-                    $title += "   (" + $Scene.stages[$items.Count] + ")"
+
+            if ($SceneEditor.GUI) {
+                $title = "Stage " + ($items.Count + 1) 
+                if ($Scene.stages -is [array]) {
+                    if ($Scene.stages[$items.Count] -ne 0 -and $Scene.stages[$items.Count] -ne "") {
+                    if ($items.Count -lt 9) { $title += "  " }
+                        $title += "   (" + $Scene.stages[$items.Count] + ")"
+                    }
                 }
+                $items += $title
             }
-            $items += $title
         }
     }
 
-    if ($Scene.stages -is [array]) {
-        if ($Scene.stages[0] -ne 0 -and $Scene.stages[0] -ne "") { $items[0] += "     (" + $Scene.stages[0] + ")" }
-    }
+    if ($SceneEditor.GUI) {
+        if ($Scene.stages -is [array]) {
+            if ($Scene.stages[0] -ne 0 -and $Scene.stages[0] -ne "") { $items[0] += "     (" + $Scene.stages[0] + ")" }
+        }
 
-    if ($SceneEditor.LastScene.name -ne $Scene.name -or $SceneEditor.Headers.Items.Count -eq 0) {
-        $SceneEditor.Headers.Items.Clear()
-        $SceneEditor.Headers.Items.AddRange($items)
-        $SceneEditor.Headers.SelectedIndex = 0
+        if ($SceneEditor.LastScene.name -ne $Scene.name -or $SceneEditor.Headers.Items.Count -eq 0) {
+            $SceneEditor.Headers.Items.Clear()
+            $SceneEditor.Headers.Items.AddRange($items)
+            $SceneEditor.Headers.SelectedIndex = 0
+        }
+        else { LoadHeader -Scene $Scene }
     }
-    else { LoadHeader -Scene $Scene }
 
 }
 

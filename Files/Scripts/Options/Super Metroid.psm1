@@ -2,18 +2,23 @@ function PatchOptions() {
     
     # GRAPHICS #
 
-    if (IsChecked $Redux.Graphics.Widescreen)        { ApplyPatch -Patch "Compressed\widescreen.ips"; Copy-Item -LiteralPath ($GameFiles.compressed + "\widescreen.bso") -Destination ($ROMFile.Patched.replace($ROMFile.Extension, ".bso")) -Force }
-    if (IsChecked $Redux.Graphics.RedesignedSamus)   { ApplyPatch -Patch "Compressed\redesigned_samus.ips" }
-    if (IsChecked $Redux.Graphics.DeathCensor)       { ApplyPatch -Patch "Compressed\death_censor.ips"     }
+  # if (IsChecked $Redux.Graphics.Widescreen)        { ApplyPatch -Patch "Compressed\Optional\widescreen.ips"; Copy-Item -LiteralPath ($GameFiles.compressed + "\widescreen.bso") -Destination ($ROMFile.Patched.replace($ROMFile.Extension, ".bso")) -Force }
+    if (IsChecked $Redux.Graphics.RedesignedSamus)   { ApplyPatch -Patch "Compressed\Optional\redesigned_samus.ips" }
+    if (IsChecked $Redux.Graphics.DeathCensor)       { ApplyPatch -Patch "Compressed\Optional\death_censor.ips"     }
 
-
+    if (IsChecked $Redux.Graphics.DualSuit) {
+        if (IsChecked $Redux.Graphics.RedesignedSamus)   { ApplyPatch -Patch "Compressed\Optional\redesigned_dual_suit.ips" }
+        else                                             { ApplyPatch -Patch "Compressed\Optional\dual_suit.ips"            }
+    }
+    
+    
 
     # GAMEPLAY #
 
-    if (IsChecked $Redux.Gameplay.FixedUnlockedDoors)   { ApplyPatch -Patch "Compressed\fixed_tourian_unlocked_doors.ips"    }
-    if (IsChecked $Redux.Gameplay.SaveStationsRefill)   { ApplyPatch -Patch "Compressed\save_stations_refill_everything.ips" }
-    if (IsChecked $Redux.Gameplay.SkipCeres)            { ApplyPatch -Patch "Compressed\skip_ceres.ips"                      }
-    if (IsChecked $Redux.Gameplay.SpazerPlasmaMix)      { ApplyPatch -Patch "Compressed\spazer_plasma_mix.ips"               }
+    if (IsChecked $Redux.Gameplay.FixedUnlockedDoors)   { ApplyPatch -Patch "Compressed\Optional\fixed_tourian_unlocked_doors.ips"    }
+    if (IsChecked $Redux.Gameplay.SaveStationsRefill)   { ApplyPatch -Patch "Compressed\Optional\save_stations_refill_everything.ips" }
+    if (IsChecked $Redux.Gameplay.SkipCeres)            { ApplyPatch -Patch "Compressed\Optional\skip_ceres.ips"                      }
+    if (IsChecked $Redux.Gameplay.SpazerPlasmaMix)      { ApplyPatch -Patch "Compressed\Optional\spazer_plasma_mix.ips"               }
 
 }
 
@@ -24,7 +29,7 @@ function PatchReduxOptions() {
     
     # GAMEPLAY #
 
-    if (IsChecked $Redux.Gameplay.HeavyPhysics) { ApplyPatch -Patch "Compressed\heavy_physics.ips" }
+    if (IsChecked $Redux.Gameplay.HeavyPhysics) { ApplyPatch -Patch "Compressed\Optional\heavy_physics.ips" }
 
 
 
@@ -47,7 +52,7 @@ function PatchReduxOptions() {
 #==============================================================================================================================================================================================
 function CreateOptions() {
     
-    CreateOptionsDialog -Columns 3 -Height 315
+    CreateOptionsDialog -Columns 5 -Height 285
 
 }
 
@@ -58,9 +63,10 @@ function CreateTabMain() {
     # GRAPHICS #
 
     CreateReduxGroup    -Tag  "Graphics"        -Text "Graphics"
-    CreateReduxCheckBox -Name "Widescreen"      -Text "16:9 Widescreen [!]" -Info "16:9 Widescreen display" -Warning "Only works with the BSNES / Higan Widescreen feature, and does not work on Dolphin" -Credits "ocesse" -Native
-    CreateReduxCheckBox -Name "RedesignedSamus" -Text "Redesigned Samus"    -Info "Change the appearence of Samus"                                                                                        -Credits "Dmit Ryaz"
-    CreateReduxCheckBox -Name "DeathCensor"     -Text "Death Censor"        -Info "Censors the deatrh animations of Samus upon game over"                                                                 -Credits "Dmit Ryaz"
+  # CreateReduxCheckBox -Name "Widescreen"      -Text "16:9 Widescreen [!]" -Info "16:9 Widescreen display" -Warning "Only works with the BSNES / Higan Widescreen feature, and does not work on Dolphin"                           -Credits "ocesse" -Native
+    CreateReduxCheckBox -Name "RedesignedSamus" -Text "Redesigned Samus"    -Info "Modifies Samus' sprite slightly to have a better arm cannon and some slight suit touchups"                                                       -Credits "Dmit Ryaz"
+    CreateReduxCheckBox -Name "DualSuit"        -Text "Dual Suit"           -Info "Gives Samus' an entirely different set of graphics for her Power Suit form, to match the Power Suit design and form seen in other Metroid games" -Credits "Crashtour99, Starry_Melody & ShadowOne333"
+    CreateReduxCheckBox -Name "DeathCensor"     -Text "Death Censor"        -Info "Censors the deatrh animations of Samus upon game over"                                                                                           -Credits "Dmit Ryaz"
 
 
 
@@ -88,10 +94,10 @@ function CreateTabRedux() {
     # ORIGINAL #
 
     CreateReduxGroup    -Tag  "Revert"         -Text "Original (Revert)"
-    CreateReduxCheckBox -Name "Xray"           -Text "X-Ray"           -Info "Restores the original Super Metroid X-Ray Visor width"                                                        -Credits "ShadowOne333"
-    CreateReduxCheckBox -Name "ElevatorSpeed"  -Text "Elevator Speed"  -Info "Restores the original Super Metroid elevator speeds"                                                          -Credits "ShadowOne333"
-    CreateReduxCheckBox -Name "ClassicBooster" -Text "Classic Booster" -Info "Restores the original Super Metroid speed at which the shinepark is activated"                                -Credits "ShadowOne333"
-    CreateReduxCheckBox -Name "OriginalDemos"  -Text "Original Demos"  -Info "Restores the original Super Metroid demo title screens"                                                       -Credits "ShadowOne333"
-    CreateReduxCheckBox -Name "BeamCooldowns"  -Text "Beam Cooldowns"  -Info "Restores the original Super Metroid speed at which Samus can fire her beam, and the speed of the projectiles" -Credits "ShadowOne333"
+    CreateReduxCheckBox -Name "Xray"           -Text "X-Ray"           -Info "Restores the original Super Metroid X-Ray Visor width"                                                        -Credits "Nintendo"
+    CreateReduxCheckBox -Name "ElevatorSpeed"  -Text "Elevator Speed"  -Info "Restores the original Super Metroid elevator speeds"                                                          -Credits "Nintendo"
+    CreateReduxCheckBox -Name "ClassicBooster" -Text "Classic Booster" -Info "Restores the original Super Metroid speed at which the shinepark is activated"                                -Credits "Nintendo"
+    CreateReduxCheckBox -Name "OriginalDemos"  -Text "Original Demos"  -Info "Restores the original Super Metroid demo title screens"                                                       -Credits "Nintendo"
+    CreateReduxCheckBox -Name "BeamCooldowns"  -Text "Beam Cooldowns"  -Info "Restores the original Super Metroid speed at which Samus can fire her beam, and the speed of the projectiles" -Credits "Nintendo"
     
 }

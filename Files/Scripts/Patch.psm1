@@ -438,7 +438,7 @@ function PatchingAdditionalOptions() {
         PatchReduxOptions
     }
 
-    if ( (GetCommand "ByteOptions") -or (GetCommand "ByteReduxOptions") -or (GetCommand "ByteLanguageOptions") ) { $global:ByteArrayGame = [System.IO.File]::ReadAllBytes($GetROM.decomp) }
+    if ( (GetCommand "ByteOptions") -or (GetCommand "ByteReduxOptions") -or (GetCommand "ByteLanguageOptions") -or (GetCommand "ByteSceneOptions") ) { $global:ByteArrayGame = [System.IO.File]::ReadAllBytes($GetROM.decomp) }
 
     # Additional Options
     if (GetCommand "ByteOptions") {
@@ -450,6 +450,15 @@ function PatchingAdditionalOptions() {
     if ( (GetCommand "ByteReduxOptions") -and ( (IsChecked $Patches.Redux) -or (IsSet $GamePatch.preset) ) -and (IsSet $GamePatch.redux.file) ) {
         UpdateStatusLabel ("Patching " + $GameType.mode + " Additional Redux Options...")
         ByteReduxOptions
+    }
+
+    # Scene Options
+    if (GetCommand "ByteSceneOptions") {
+        UpdateStatusLabel ("Patching " + $GameType.mode + " Additional Scene Options...")
+        $global:SceneEditor    = @{}
+        $Files.json.textEditor = SetJSONFile $GameFiles.sceneEditor
+        ByteSceneOptions
+        $global:ByteScriptArray = $global:ByteTableArray = $Files.json.textEditor = $null
     }
 
     # Language Options
@@ -488,7 +497,7 @@ function PatchingAdditionalOptions() {
         }
     }
 
-    if ( (GetCommand "ByteOptions") -or (GetCommand "ByteReduxOptions") -or (GetCommand "ByteLanguageOptions") ) {
+    if ( (GetCommand "ByteOptions") -or (GetCommand "ByteReduxOptions") -or (GetCommand "ByteLanguageOptions") -or (GetCommand "ByteSceneOptions") ) {
         [System.IO.File]::WriteAllBytes($GetROM.decomp, $ByteArrayGame)
         $global:ByteArrayGame = $global:LanguagePatch = $null
     }

@@ -5,11 +5,10 @@
 		"vc_title"	: "ALTTP Redux (v9.3)",
 		"vc_gameID"	: "JAD0",
 		"file"		: "Compressed\\redux.ips",
-		"file_v2"	: "Compressed\\redux_new_gfx.ips",
 		"output"	: "_redux_patched"
 	},
 	"options"	: 1,
-	"tooltip"	: "The regular A Link to the Past experience{0}With support for redux and additional options{0}Redux version: 10.1{0}- Supported: Rev 0 (US)"
+	"tooltip"	: "The regular A Link to the Past experience{0}With support for redux and additional options{0}Redux version: 10.2{0}- Supported: Rev 0 (US)"
 }, {
 	"title"		: "ALttP: Quick Commands (v1.0)",
 	"options"	: 1,
