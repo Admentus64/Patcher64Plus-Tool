@@ -1,3 +1,10 @@
+v20.2.1
+- Added ROM hacks for OoT
+- Moved TML to Debug MQ PAL instead of Rev0 US
+- Added Additional Options for NMQ
+- Changed generation of options for patches
+- Changed generation of DMA Table for decompressed input ROMs for patches
+
 v20.2.0
 - Updated the OoT Redux Options Menu with a new design
 - Updated Redux for SM, Zelda 1 and ALttP

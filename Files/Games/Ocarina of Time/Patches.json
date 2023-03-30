@@ -94,7 +94,7 @@
 		"output"		: "_new_master_quest_redux_patched"
 	},
 	"options"			: 1,
-	"backgrounds"			: 1,
+	"backgrounds"			: 0,
 	"output"			: "_new_master_quest_patched",
 	"tooltip"			: "Remixes the overworld and dungeons as a harder version of master Quest{0}With support for languages and additional options",
 	"rev"				: [ "5BD1FE107BF8106B2AB6650ABECD54D6", "3C10B67A76616AE2C162DEF7528724CF", "AB1CA59D0039E3B34D82DB650B54D7B9", "8CA71E87DE4CE5E9F6EC916202A623E9" ]

@@ -4,8 +4,8 @@
 
     if (IsChecked $Redux.Graphics.Widescreen) {
         ApplyPatch -Patch "Decompressed\Optional\widescreen_minimum.ppf"
-        if     ($GamePatch -like "*Dawn & Dusk*")   { ApplyPatch -Patch "Decompressed\Optional\widescreen_dawn_and_dusk.ppf" }
-        elseif ($GamePatch.backgrounds -eq 1)       { ApplyPatch -Patch "Decompressed\Optional\widescreen_hide_geometry.ppf" }
+        if     ($GamePatch.settings -eq "Dawn & Dusk")   { ApplyPatch -Patch "Decompressed\Optional\widescreen_dawn_and_dusk.ppf" }
+        elseif ($GamePatch.backgrounds -eq 1)            { ApplyPatch -Patch "Decompressed\Optional\widescreen_hide_geometry.ppf" }
     }
 
 }
