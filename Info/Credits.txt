@@ -218,6 +218,9 @@ https://github.com/DaruniasJoy/OoT-Custom-Sequences
 - Writers:				CDi-Fails, /Zel/
 - Special Thanks:			Nokaubure, z64me, Ultra553, OoT Decomp
 
+--- The Sealed Palace ---
+- Jinnosuke9, Shoopey & Col0Korn
+
 --- Master of Time ---
 - Aegiker
 - doncamilo
@@ -239,6 +242,9 @@ https://github.com/DaruniasJoy/OoT-Custom-Sequences
 
 --- Gold Quest ---
 - AndiiSyn
+
+--- New Master Quest ---
+- Euler
 
 --- Spaceworld ´97 Experience ---
 - Main Programming:			Zel, Fig, MrCheeze

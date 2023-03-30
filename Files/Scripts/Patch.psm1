@@ -900,7 +900,10 @@ function DecompressROM() {
     if (((Get-Item -LiteralPath $GetROM.run).length)/1MB -ge $GameConsole.max_size) {
         Copy-Item -LiteralPath $GetROM.run -Destination $GetROM.decomp -Force
         RemoveFile $Files.dmaTable
-        Add-Content $Files.dmaTable $GameRev.dmaTable
+        if     ( (IsSet $GamePatch.redux.dmaTable) -and ( (IsChecked $Patches.Redux) -or (IsSet $GamePatch.preset) ) )   { Add-Content $Files.dmaTable $GamePatch.redux.dmaTable }
+        elseif (IsSet $GamePatch.dmaTable)                                                                               { Add-Content $Files.dmaTable $GamePatch.dmaTable       }
+        elseif (IsSet $LanguagePatch.dmaTable)                                                                           { Add-Content $Files.dmaTable $LanguagePatch.dmaTable   }
+        else                                                                                                             { Add-Content $Files.dmaTable $GameRev.dmaTable         }
         if ($IsWiiVC) { RemoveFile $GetROM.run }
         return $True
     }
@@ -968,6 +971,20 @@ function CompressROM() {
     else { Move-Item -LiteralPath $GetROM.decomp -Destination $GetROM.patched -Force }
 
     $GetROM.run = $GetROM.patched
+
+    if (IsSet $GamePatch.size) {
+        if (($GamePatch.size -as [int]) -ne $null) {
+            if ($GamePatch.size -ge 1 -and $GamePatch.size -le $GameConsole.max_size) {
+                if (((Get-Item -LiteralPath $GetROM.run).length)/1MB -gt $GamePatch.size) {
+                  $file = [System.IO.File]::ReadAllBytes($GetROM.run)
+                    $new  = $file[0..($GamePatch.size * 1024 * 1024)]
+                    [System.IO.File]::WriteAllBytes($GetROM.run, $new)
+                    $file = $new = $null
+                    WriteToConsole ("Reduced ROM size to: " + $GamePatch.size + "MB")
+                }
+            }
+        }
+    }
 }
 
 
