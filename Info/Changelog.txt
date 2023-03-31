@@ -1,3 +1,7 @@
+v20.2.2
+- Corrected patch for TSP
+- Added MM Link models for TSP
+
 v20.2.1
 - Added ROM hacks for OoT
 - Moved TML to Debug MQ PAL instead of Rev0 US

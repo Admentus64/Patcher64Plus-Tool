@@ -247,10 +247,12 @@
 	"finalize"			: 0,
 	"compress"			: 1,
 	"patch"	: [ {
-		"file"			: "Decompressed\\the_helix_blade.bps",
+		"file"			: "Decompressed\\the_sealed_palace.bps",
 		"rev"			: "8CA71E87DE4CE5E9F6EC916202A623E9"
 	} ],
-	"output"			: "_the_helix_blade_patched",
+	"script"			: "The Sealed Palace",
+	"options"			: 1,
+	"output"			: "_the_sealed_palace_patched",
 	"tooltip"			: "A small-sized ROM hack in a completely new setting"
 }, {
 	"title"				: "The Legend of Zelda: The Helix Blade (Demo)",
