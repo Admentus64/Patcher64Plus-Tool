@@ -1,6 +1,6 @@
 v20.2.2
 - Corrected patch for TSP
-- Added MM Link models for TSP
+- Added Additional Options for TSP
 
 v20.2.1
 - Added ROM hacks for OoT
