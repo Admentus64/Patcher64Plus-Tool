@@ -1,6 +1,7 @@
 v20.2.2
-- Corrected patch for TSP
 - Added Additional Options for TSP
+- Corrected patch for TSP
+- Fixed issue with ALttP Redux
 
 v20.2.1
 - Added ROM hacks for OoT
