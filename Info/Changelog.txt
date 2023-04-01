@@ -1,3 +1,6 @@
+v20.2.3
+- Added more Additional Options for TSP
+
 v20.2.2
 - Added Additional Options for TSP
 - Corrected patch for TSP
