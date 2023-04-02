@@ -185,7 +185,7 @@ function PatchVCEmulator([string]$Command) {
     } #>
 
     # Controls
-    if ($VC.RemapControls.Checked -and $VC.RemapControls.Visible -and $VC.RemapControls.Enabled) {
+    if ($VC.RemapControls.Checked -and $VC.RemapControls.Visible) {
         if (StrLike -Str $Command -Val "Patch Boot DOL")   { $controls = $Files.json.controls.$("offsets_" + [System.IO.Path]::GetFileNameWithoutExtension((GetPatchFile))); }
         else                                               { $controls = $Files.json.controls.offsets; }
 
@@ -205,6 +205,7 @@ function PatchVCEmulator([string]$Command) {
         ChangeBytes -File $WadFile.AppFile01 -Offset $controls.cdown     -Values (GetControlsValue $Redux.Controls.CDown)
         ChangeBytes -File $WadFile.AppFile01 -Offset $controls.cleft     -Values (GetControlsValue $Redux.Controls.CLeft)
         ChangeBytes -File $WadFile.AppFile01 -Offset $controls.cright    -Values (GetControlsValue $Redux.Controls.CRight)
+        WriteToConsole "Remapped Controls"
     }
 
     # Expand Memory
@@ -221,7 +222,7 @@ function PatchVCEmulator([string]$Command) {
         # SM64: 5AD4 / MK64: 5C28 / SF: 2EF4 / PM: 2EE4 / OoT: 2EB0 / MM: ?? / Smash: 3094 / Sin: 3028
     }
 
-    if ($VC.RemoveFilter.Checked) {
+    if ($VC.RemoveFilter.Checked -and $VC.RemapControls.Visible) {
         $offset = SearchBytes -File $WadFile.AppFile01 -Start "40000" -End "60000" -Values "38 21 00 xx 4E 80 00 20 94 21 FF E0 7C 08 02 A6 3C 80 80 xx 90 01 00 24"
         if ($offset -gt 0) {
             ChangeBytes -File $WadFile.AppFile01 -Offset ( Get24Bit ( (GetDecimal $Offset) + (GetDecimal "08") ) )  -Values "4E 80 00 20"
