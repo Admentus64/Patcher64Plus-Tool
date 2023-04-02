@@ -1482,6 +1482,7 @@ function ByteReduxOptions() {
 
     if (IsDefault $Redux.Misc.OptionsMenu -Not)     { ChangeBytes -Offset $Symbols.CFG_OPTIONS_MENU        -Values $Redux.Misc.OptionsMenu.SelectedIndex }
     if (IsChecked $Redux.Misc.FastBunnyHood)        { ChangeBytes -Offset $Symbols.FAST_BUNNY_HOOD_ENABLED -Values "01" }
+    if (IsChecked $Redux.Misc.BombchuDrops)         { ChangeBytes -Offset $Symbols.BOMBCHUS_IN_LOGIC       -Values "01" }
     if (IsChecked $Redux.Misc.TycoonWallet)         { ChangeBytes -Offset $Symbols.CFG_TYCOON_WALLET       -Values "01" }
     
 
@@ -2294,10 +2295,10 @@ function CreateTabLanguage() {
     CreateReduxRadioButton -Name "Custom"  -All                     -Max 4 -SaveTo "Dialogue" -Text "Custom"                 -Info 'Insert custom dialogue found from "..\Patcher64+ Tool\Files\Games\Ocarina of Time\Custom Text"' -Warning "ROM crashes if the script is not proper`n[!] Won't be applied if the custom script is missing"
    
     $Last.Row++; $Last.Column = 1
-    CreateReduxCheckBox -Name "FemalePronouns" -Text "Female Pronouns" -Info "Refer to Link as a female character"                                                                                                                               -Credits "Admentus & Mil"
-    CreateReduxCheckBox -Name "TypoFixes"      -Text "Typo Fixes"      -Info "Include the typo fixes from the Redux script"                                                                                                                      -Credits "Ported from Redux"
-    CreateReduxCheckBox -Name "GoldSkulltula"  -Text "Gold Skulltula"  -Info "The textbox for obtaining a Gold Skulltula will no longer interrupt the gameplay`nThe English & German scripts also shows the total amount you got so far"         -Credits "Ported from Redux"
-    CreateReduxCheckBox -Name "EasterEggs"     -Text "Easter Eggs"     -Info "Adds custom Patreon Tier 3 messages into the game`nCan you find them all?" -Checked                                                                                -Credits "Admentus & Patreons"
+    CreateReduxCheckBox -Name "FemalePronouns" -Text "Female Pronouns" -Info "Refer to Link as a female character"                                                                                                                       -Credits "Admentus & Mil"
+    CreateReduxCheckBox -Name "TypoFixes"      -Text "Typo Fixes"      -Info "Include the typo fixes from the Redux script"                                                                                                              -Credits "Ported from Redux"
+    CreateReduxCheckBox -Name "GoldSkulltula"  -Text "Gold Skulltula"  -Info "The textbox for obtaining a Gold Skulltula will no longer interrupt the gameplay`nThe English & German scripts also shows the total amount you got so far" -Credits "Ported from Redux"
+    CreateReduxCheckBox -Name "EasterEggs"     -Text "Easter Eggs"     -Info "Adds custom Patreon Tier 3 messages into the game`nCan you find them all?" -Checked                                                                        -Credits "Admentus & Patreons"
 
 
 
