@@ -981,10 +981,6 @@ function ByteOptions() {
         ChangeBytes -Offset "B6EC5F" -Values @( (Get8Bit $Redux.Capacity.DekuSticks1.Text), (Get8Bit $Redux.Capacity.DekuSticks2.Text), (Get8Bit $Redux.Capacity.DekuSticks3.Text) ) -Interval 2
         ChangeBytes -Offset "B6EC67" -Values @( (Get8Bit $Redux.Capacity.DekuNuts1.Text),   (Get8Bit $Redux.Capacity.DekuNuts2.Text),   (Get8Bit $Redux.Capacity.DekuNuts3.Text)   ) -Interval 2
         
-        # Bombchu Max Capacity
-        $val = (Get8Bit  $Redux.Capacity.Bombchu.Text);            ChangeBytes -Offset "AE6B7F" -Values $val; ChangeBytes -Offset "AE6C23" -Values $val;
-        $val = (Get8Bit ([int]$Redux.Capacity.Bombchu.Text + 1) ); ChangeBytes -Offset "AE6C33" -Values $val; ChangeBytes -Offset "AE6C33" -Values $val;
-
         # Upgrade Checks
         ChangeBytes -Offset "ED288B" -Values (Get8Bit $Redux.Capacity.BombBag1.Text); ChangeBytes -Offset "ED295B" -Values (Get8Bit $Redux.Capacity.BombBag2.Text); ChangeBytes -Offset "E2EEFB" -Values (Get8Bit $Redux.Capacity.BombBag2.Text)
 
@@ -1080,6 +1076,10 @@ function ByteOptions() {
     if (IsDefault $Redux.Equipment.BiggoronSword -Not) {
         if (TestFile ($GameFiles.textures + "\Equipment\Master Sword\" + $Redux.Equipment.BiggoronSword.text + ".icon"))                                  { PatchBytes -Offset "7FA000" -Texture -Patch ("Equipment\Master Sword\" + $Redux.Equipment.BiggoronSword.text + ".icon")                              }
         if (TestFile ($GameFiles.textures + "\Equipment\Master Sword\" + $Redux.Equipment.BiggoronSword.text + "." + $LanguagePatch.code + ".label"))     { PatchBytes -Offset "8BD000" -Texture -Patch ("Equipment\Master Sword\" + $Redux.Equipment.BiggoronSword.text + "." + $LanguagePatch.code + ".label") }
+    }
+
+    if (IsDefault $Redux.Equipment.SwordHealth -Not) {
+        ChangeBytes -Offset "AE5F2F" -Values (Get8Bit $Redux.Equipment.SwordHealth.Text); ChangeBytes -Offset "B71F4F" -Values (Get8Bit $Redux.Equipment.SwordHealth.Text); ChangeBytes -Offset "BB6823" -Values (Get8Bit $Redux.Equipment.SwordHealth.Text)
     }
 
     if (IsDefault $Redux.Equipment.DekuShield -Not) {
@@ -2895,7 +2895,8 @@ function CreateTabEquipment() {
     CreateReduxComboBox -Name "MasterSword"   -Adult -Text "Master Sword"     -Items @("Master Sword")                      -FilePath ($GameFiles.Textures + "\Equipment\Master Sword")  -Ext @("icon", "bin")   -Info "Select an alternative for the icon and text of the Master Sword"     -Credits "Admentus (injects) & GhostlyDark (injects) & CYB3RTR0N (beta icon)"
     CreateReduxComboBox -Name "GiantsKnife"   -Adult -Text "Giant's Knife"    -Items @("Giant's Knife", "Biggoron's Sword") -FilePath ($GameFiles.Textures + "\Equipment\Master Sword")  -Ext @("icon", "bin")   -Info "Select an alternative for the icon and text of the Giant's Knife"    -Credits "Admentus (injects) & GhostlyDark (injects) & CYB3RTR0N (beta icon)"
     CreateReduxComboBox -Name "BiggoronSword" -Adult -Text "Biggoron's Sword" -Items @("Biggoron's Sword", "Giant's Knife") -FilePath ($GameFiles.Textures + "\Equipment\Master Sword")  -Ext @("icon", "bin")   -Info "Select an alternative for the icon and text of the Biggoron's Sword" -Credits "Admentus (injects) & GhostlyDark (injects) & CYB3RTR0N (beta icon)"
-    
+    CreateReduxTextBox  -Name "SwordHealth"   -Adult -Text "Sword Health"     -Value 8 -Min 1 -Max 255 -Length 3                                                                                                 -Info "Set the amount of hits the Giant's Knife can take before it breaks"  -Credits "Admentus"
+
     if ($GamePatch.settings -eq "Dawn & Dusk") { $item = "Dawn & Dusk Shield" } elseif ($GamePatch.settings -eq "Gold Quest") { $item = "Gold Quest Shield" } else { $item = "Deku Shield" }
     
     CreateReduxComboBox -Name "DekuShield"    -Child -Text "Deku Shield"      -Items @("Deku Shield") -Default $item        -FilePath ($GameFiles.Textures + "\Equipment\Deku Shield")   -Ext @("icon", "front") -Info "Select an alternative for the appearence of the Deku Shield"         -Credits "Admentus (injects) & GhostlyDark (injects), ZombieBrainySnack (textures) & LuigiBlood (texture)" -Column 1 -Row 3
@@ -3127,8 +3128,6 @@ function CreateTabCapacity() {
     CreateReduxTextBox -Name "DekuNuts3"   -All -Exclude "Master"                     -Text "Deku Nuts (3)"   -Value 40 -Info "Set the capacity for the Deku Nuts (Upgrade 2)"   -Credits "GhostlyDark"
     CreateReduxTextBox -Name "DekuNuts3"        -Expose  "Master"                     -Text "Deku Nuts (3)"   -Value 99 -Info "Set the capacity for the Deku Nuts (Upgrade 2)"   -Credits "GhostlyDark"
 
-    CreateReduxTextBox -Name "Bombchu"     -All -Exclude "Dawn"                       -Text "Bombchu"         -Value 50 -Info "Set the capacity for the Bombchus"                -Credits "Admentus"
-
 
 
     # WALLET CAPACITY #
@@ -3158,9 +3157,9 @@ function CreateTabCapacity() {
     CreateReduxTextBox -Name "Bombs4x"          -All -Exclude "Dawn"   -Text "Bombs (20)"          -Value 20  -Info "Set the recovery quantity for pickung up or buying Bombs (20)"         -Credits "Admentus"
     CreateReduxTextBox -Name "DekuNuts1x"       -All                   -Text "Deku Nuts (5)"       -Value 5   -Info "Set the recovery quantity for pickung up or buying Deku Nuts (5)"      -Credits "Admentus"
     CreateReduxTextBox -Name "DekuNuts2x"       -All                   -Text "Deku Nuts (10)"      -Value 10  -Info "Set the recovery quantity for picking up or buying Deku Nuts (10)"     -Credits "Admentus"
-    CreateReduxTextBox -Name "Bombchus1x"       -All -Exclude "Dawn"   -Text "Bombchus (5)"        -Value 5   -Info "Set the recovery quantity for picking up or buying Bombchus (5)"       -Credits "Admentus"
-    CreateReduxTextBox -Name "Bombchus2x"       -All -Exclude "Dawn"   -Text "Bombchus (10)"       -Value 10  -Info "Set the recovery quantity for picking up or buying Bombchus (10)"      -Credits "Admentus"
-    CreateReduxTextBox -Name "Bombchus3x"       -All -Exclude "Dawn"   -Text "Bombchus (20)"       -Value 20  -Info "Set the recovery quantity for picking up or buying Bombchus (20)"      -Credits "Admentus"
+    CreateReduxTextBox -Name "Bombchus1x"       -All -Exclude "Dawn"   -Text "Bombchus (5)"        -Value 5   -Info "Set the recovery quantity for picking up or buying Bombchus (5)"       -Credits "Admentus" -Max 50
+    CreateReduxTextBox -Name "Bombchus2x"       -All -Exclude "Dawn"   -Text "Bombchus (10)"       -Value 10  -Info "Set the recovery quantity for picking up or buying Bombchus (10)"      -Credits "Admentus" -Max 50
+    CreateReduxTextBox -Name "Bombchus3x"       -All -Exclude "Dawn"   -Text "Bombchus (20)"       -Value 20  -Info "Set the recovery quantity for picking up or buying Bombchus (20)"      -Credits "Admentus" -Max 50
 
     CreateReduxTextBox -Name "RupeeG" -Length 4 -All -Exclude "Master" -Text "Rupee (Green)"       -Value 1   -Info "Set the recovery quantity for picking up Green Rupees"                 -Credits "Admentus" -Row 4 -Column 1
     CreateReduxTextBox -Name "RupeeB" -Length 4 -All -Exclude "Master" -Text "Rupee (Blue)"        -Value 5   -Info "Set the recovery quantity for picking up Blue Rupees"                  -Credits "Admentus"

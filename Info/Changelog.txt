@@ -1,6 +1,9 @@
 v20.2.4
 - Fixed VC controls not remapping
 - Fixed Bombchu Drops for OoT
+- Fixed No Heart Drops for The Sealed Palace
+- Added new Sword Health option for OoT
+- Removed Bombchu capacity
 
 v20.2.3
 - Added more Additional Options for TSP

@@ -20,7 +20,7 @@ function ByteOptions() {
 
     # HERO MODE #
 
-    if (IsChecked $Redux.HeroMode.NoHeartDrops) { ChangeBytes -Offset "A966C7" -Values "2E" }
+    if (IsChecked $Redux.Hero.NoHeartDrops) { ChangeBytes -Offset "A966C7" -Values "2E" }
 
 
 
