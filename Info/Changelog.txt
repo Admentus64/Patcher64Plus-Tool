@@ -1,3 +1,6 @@
+v20.2.5
+- Improved and optimized Redux for OoT
+
 v20.2.4
 - Fixed VC controls not remapping
 - Fixed Bombchu Drops for OoT
