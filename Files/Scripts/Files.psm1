@@ -36,6 +36,7 @@ function SetFileParameters() {
     $Files.tool.ups                         = (GetFilePath) + "\Files\Tools\Patching\ups.exe"
     $Files.tool.xdelta                      = (GetFilePath) + "\Files\Tools\Patching\xdelta.exe"
     $Files.tool.xdelta3                     = (GetFilePath) + "\Files\Tools\Patching\xdelta3.exe"
+    $Files.tool.zzobjman                    = (GetFilePath) + "\Files\Tools\Patching\zzobjman.exe"
 
     $Files.tool.rn64crc                     = (GetFilePath) + "\Files\Tools\Verification\rn64crc.exe"
 

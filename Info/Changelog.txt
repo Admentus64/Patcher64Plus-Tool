@@ -1,3 +1,7 @@
+v20.2.6
+- Added support for .zobj model patching for OoT & MM
+- Added new shield textures for OoT
+
 v20.2.5
 - Improved and optimized Redux for OoT
 

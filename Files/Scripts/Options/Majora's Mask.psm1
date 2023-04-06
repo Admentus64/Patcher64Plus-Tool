@@ -26,10 +26,7 @@ function PatchOptions() {
     
     # MODELS #
 
-    if (IsIndex -Elem $Redux.Graphics.ChildModels -Text "Original" -Not) {
-        $file = "\Child\" + $Redux.Graphics.ChildModels.Text.replace(" (default)", "") + ".ppf" 
-        if (TestFile ($GameFiles.models + $file))   { ApplyPatch -Patch ($GameFiles.models + $file) -FullPath }
-    }
+    if (IsDefault -Elem $Redux.Graphics.ChildModels -Not)   { PatchModel -Category "Child" -Name $Redux.Graphics.ChildModels.Text }
 
 
 

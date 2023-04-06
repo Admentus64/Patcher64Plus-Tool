@@ -1,3 +1,25 @@
+function PatchModel([string]$Category, [string]$Name) {
+
+    $path = $GameFiles.models + "\" + $Category
+    $file = $path + "\" + $Name
+    
+    if (TestFile ($file + ".zobj"))   {
+        $manifest  = $path + "\Manifest\Rev 0 (US).txt"
+        $optimized = $path + "\Manifest\Optimized.zobj"
+
+        Push-Location $Paths.Temp
+        & $Files.tool.zzobjman playas -i ($file + ".zobj") -r $GetROM.patched -o "model" -m $manifest -b $optimized | Out-Null
+        Move-Item -LiteralPath "model.z64" -Destination $GetROM.decomp -Force
+        Pop-Location
+    }
+    elseif (TestFile ($file + ".ppf")) { ApplyPatch -Patch ($file + ".ppf") -FullPath } 
+    else { return }
+
+}
+
+
+
+#==============================================================================================================================================================================================
 function GetOoTEntranceIndex([string]$Index) {
 
     if     ($index -eq "Link's House")               { return "00 BB" }     elseif ($index -eq "Temple of Time")             { return "05 F4" }     elseif ($index -eq "Hyrule Field")               { return "01 FD" }
@@ -14,6 +36,8 @@ function GetOoTEntranceIndex([string]$Index) {
 }
 
 
+
+#==============================================================================================================================================================================================
 function GetSFXID([string]$SFX) {
     
     $SFX = $SFX.replace(' (default)', "")
@@ -654,7 +678,7 @@ function LoadModelsList([string]$Category) {
 
     $path = $GameFiles.models + "\" + $Category
     if (!(TestFile -Container $path)) { return @("No models found?") } 
-    foreach ($item in Get-ChildItem -LiteralPath $path -Force) { if ($item.Extension -eq ".ppf") { $list += $item.BaseName } }
+    foreach ($item in Get-ChildItem -LiteralPath $path -Force) { if ($item.Extension -eq ".ppf" -or $item.Extension -eq ".zobj") { $list += $item.BaseName } }
 
     return $list | Sort-Object | select -Unique
 
@@ -1493,6 +1517,8 @@ function SetFormColorLabel([object]$ComboBox, [object]$Label) {
 
 
 #==============================================================================================================================================================================================
+
+Export-ModuleMember -Function PatchModel
 
 Export-ModuleMember -Function GetOoTEntranceIndex
 Export-ModuleMember -Function GetSFXID
