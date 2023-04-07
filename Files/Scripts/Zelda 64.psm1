@@ -6,11 +6,8 @@ function PatchModel([string]$Category, [string]$Name) {
     if (TestFile ($file + ".zobj"))   {
         $manifest  = $path + "\Manifest\Rev 0 (US).txt"
         $optimized = $path + "\Manifest\Optimized.zobj"
-
-        Push-Location $Paths.Temp
-        & $Files.tool.zzobjman playas -i ($file + ".zobj") -r $GetROM.patched -o "model" -m $manifest -b $optimized | Out-Null
-        Move-Item -LiteralPath "model.z64" -Destination $GetROM.decomp -Force
-        Pop-Location
+        & $Files.tool.zzobjman playas -i ($file + ".zobj") -r $GetROM.decomp -o ($Paths.Temp + "\model") -m $manifest -b $optimized | Out-Null
+        Move-Item -LiteralPath ($Paths.Temp + "\model.z64") -Destination $GetROM.decomp -Force
     }
     elseif (TestFile ($file + ".ppf")) { ApplyPatch -Patch ($file + ".ppf") -FullPath } 
     else { return }
