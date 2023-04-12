@@ -42,6 +42,7 @@
 - zel
 - Third M
 - Syeo
+- Euler
 - Three Pendants
 - Jared Johnson
 - ZethN64
