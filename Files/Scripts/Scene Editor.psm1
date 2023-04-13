@@ -653,7 +653,7 @@ function PatchScene([string]$Path, [string]$Offset, [byte]$Length, [object]$Scen
     
     if ($Scene.Dungeon -eq 1 -and (IsSet $Settings["Dungeon"][$SceneEditor.Scenes.Text]) -and $Files.json.sceneEditor.quest -is [array] -and $Files.json.sceneEditor.quest.Count -gt 0) {
         for ($i=0; $i -lt $Files.json.sceneEditor.quest.Count; $i++) {
-            if ($Settings["Dungeon"][$Scene.Name] -eq $i+2) { $path += "\" + $Files.json.sceneEditor.quest }
+            if ($Settings["Dungeon"][$Scene.Name] -eq $i+2) { $path += "\" + $Files.json.sceneEditor.quest[$i] }
         }
     }
 
