@@ -2017,8 +2017,7 @@ function AdjustGUI() {
 function CreateOptions() {
     
     if ($GamePatch.vanilla -eq 1)   { CreateOptionsDialog -Columns 6 -Height 600 -Tabs @("Main", "Graphics", "Audio", "Difficulty", "Scenes", "Colors", "Equipment", "Capacity", "Animations") }
-  # else                            { CreateOptionsDialog -Columns 6 -Height 600 -Tabs @("Main", "Graphics", "Audio", "Difficulty",           "Colors", "Equipment", "Capacity", "Animations") }
-    else                            { CreateOptionsDialog -Columns 6 -Height 600 -Tabs @("Main") }
+    else                            { CreateOptionsDialog -Columns 6 -Height 600 -Tabs @("Main", "Graphics", "Audio", "Difficulty",           "Colors", "Equipment", "Capacity", "Animations") }
 
 }
 
