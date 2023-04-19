@@ -1,13 +1,9 @@
 [ {
-	"title"			: "Super Metroid",
+	"title"		: "Additional Options & Redux",
 	"redux" : {
-		"options"	: 1,
-		"rom_title"	: "Super Metroid Redux",
 		"vc_title"	: "Super Metroid Redux",
-		"vc_gameID"	: "JAV0",
-		"file"		: "Compressed\\redux.ips",
 		"output"	: "_redux_patched"
 	},
-	"options"		: 1,
-	"tooltip"		: "The regular Super Metroid experience{0}With support for redux and additional options{0}Redux version: 1.5{0}- Supported: Rev 0 (US)"
+	"script"	: "Super Metroid",
+	"tooltip"	: "Customize Super Metroid with Redux and additional options{0}Redux version: 1.5"
 } ]

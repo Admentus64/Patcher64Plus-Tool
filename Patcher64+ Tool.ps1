@@ -155,9 +155,12 @@ $Paths.Tools           = $Paths.Master + "\Tools"
 $Paths.WiiVC           = $Paths.Tools  + "\Wii VC"
 $Paths.Scripts         = $Paths.Master + "\Scripts"
 $Paths.LocalTemp       = $Paths.FullBase + "\Files\Temp"
+$Paths.LocalCache      = $Paths.FullBase + "\Files\Cache"
 $Paths.AppData         = $env:APPDATA + "\Patcher64+ Tool"
 $Paths.AppDataTemp     = $Paths.AppData + "\Temp"
-$Paths.Temp            = $Paths.Local
+$Paths.AppDataCache    = $Paths.AppData + "\Cache"
+$Paths.Temp            = $Paths.LocalTemp
+$Paths.Cache           = $Paths.LocalCache
 $Paths.Settings        = $Paths.Master + "\Settings"
 $Paths.Logs            = $Paths.Master + "\Logs"
 $Paths.cygdrive        = $Paths.Master + "\Tools\cygdrive"
@@ -280,7 +283,6 @@ if (!$FatalError) {
     ChangeConsolesList | Out-Null
     ChangeGamesList    | Out-Null
     ChangeGameMode     | Out-Null
-    ChangeGameRev      | Out-Null
     ChangePatch        | Out-Null
     SetMainScreenSize  | Out-Null
     SetVCPanel         | Out-Null
@@ -297,7 +299,7 @@ if (!$FatalError) { $MainDialog.ShowDialog() | Out-Null }
 # Exit
 if (!$FatalError) {
     Out-IniFile -FilePath $Files.settings -InputObject $Settings | Out-Null
-    if ($GameType.save -gt 0) { Out-IniFile -FilePath (GetGameSettingsFile) -InputObject $GameSettings | Out-Null }
+    if (IsSet $GameSettings) { Out-IniFile -FilePath (GetGameSettingsFile) -InputObject $GameSettings | Out-Null }
     RemovePath $Paths.Registry
     SetLogging $False
     $global:ConsoleHistory = $global:Redux = $global:Settings = $global:GeneralSettings = $global:MainDialog = $global:InputPaths = $global:Patches = $global:VC = $global:CustomHeader = $null

@@ -233,9 +233,9 @@ function CreateMainDialog() {
     
     # Create a combobox with the list of supported games
     $CurrentGame.Game = CreateComboBox -X ($CurrentGame.Console.Right + (DPISize 5)) -Y (DPISize 20) -Width (DPISize 250) -Height (DPISize 30) -Name "Selected.Game"
-    
-    # Create combobox
-    $CurrentGame.Rev = CreateComboBox -X ($CurrentGame.Game.Right + (DPISize 5)) -Y (DPISize 20) -Width (DPISize 125) -Height (DPISize 30) -Name "Selected.Rev"
+
+    # Create a combobox with the list of supported games
+    $CurrentGame.Rev = CreateLabel -X ($CurrentGame.Game.Right + (DPISize 15)) -Y (DPISize 22) -Width (DPISize 120) -Height (DPISize 25) -Font $Fonts.SmallBold
 
     $global:PatchToolTip = CreateToolTip
 
@@ -407,11 +407,6 @@ function InitializeEvents() {
         }
     })
 
-    $CurrentGame.Rev.Add_SelectedIndexChanged({
-        $Settings["Core"][$this.Name] = $this.SelectedIndex
-        ChangeGameRev
-    })
-
     # Custom Header
     $CustomHeader.ROMTitle.Add_TextChanged(  { RunCustomTitleSyntax  -Syntax "[^a-z 0-9]" } )
     $CustomHeader.VCTitle.Add_TextChanged(   { RunCustomTitleSyntax  -Syntax "[^a-z 0-9 \: \- \( \) \' \& \. \!]" } )
@@ -510,10 +505,10 @@ function DisablePatches() {
     }
 
     # Disable boxes if needed
-    EnableElem -Elem @($Patches.Extend,    $Patches.ExtendLabel)                          -Active ((IsSet $GamePatch.allow_extend) -and $GameRev.extend -ne 0)                           -Hide
-    EnableElem -Elem @($Patches.Redux,     $Patches.ReduxLabel)                           -Active ((IsSet $GamePatch.redux.file)   -and $GameRev.redux  -ne 0 -and $GameRev.redux -ne 0) -Hide
-    EnableElem -Elem @($Patches.Options,   $Patches.OptionsLabel, $Patches.OptionsButton) -Active ((TestFile $GameFiles.script)    -and ($GamePatch.options -ge 1 -or $Settings.Debug.ForceOptions -ne $False) -and $GameRev.options -ne 0) -Hide
-    EnableElem -Elem $Patches.OptionsButton                                               -Active $Patches.Options.Checked
+    EnableElem -Elem @($Patches.Extend,  $Patches.ExtendLabel)                          -Active (IsSet $GamePatch.allow_extend)                                          -Hide
+    EnableElem -Elem @($Patches.Redux,   $Patches.ReduxLabel)                           -Active (IsSet $GamePatch.redux)                                                 -Hide
+    EnableElem -Elem @($Patches.Options, $Patches.OptionsLabel, $Patches.OptionsButton) -Active (TestFile ($Paths.Scripts + "\Options\" + $GamePatch.script + ".psm1") ) -Hide
+    EnableElem -Elem $Patches.OptionsButton                                             -Active $Patches.Options.Checked
     DisableReduxOptions
 
 }
@@ -677,6 +672,7 @@ function CleanupFiles() {
 
     RemovePath $Paths.cygdrive
     RemovePath $Paths.Temp
+    RemovePath $Paths.Cache
     RemoveFile $Files.flipscfg
     RemoveFile $Files.stackdump
 

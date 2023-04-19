@@ -1,32 +1,35 @@
 [ {
-	"title"		: "A Link to the Past",
+	
+	"title"		: "Additional Options & Redux",
 	"redux" : {
-		"options"	: 1,
-		"vc_title"	: "ALTTP Redux (v9.3)",
-		"vc_gameID"	: "JAD0",
-		"file"		: "Compressed\\redux.ips",
+		"vc_title"	: "A Link to the Past Redux",
 		"output"	: "_redux_patched"
 	},
-	"options"	: 1,
-	"tooltip"	: "The regular A Link to the Past experience{0}With support for redux and additional options{0}Redux version: 10.2{0}- Supported: Rev 0 (US)"
+	"script"	: "A Link to the Past",
+	"tooltip"	: "Customize A Link to the Past with Redux and additional options{0}Redux version: 10.2.2"
+
 }, {
+
 	"title"		: "ALttP: Quick Commands (v1.0)",
-	"options"	: 1,
+	"script"	: "A Link to the Past",
 	"patch"		: "Compressed\\quick_commands.ips",
 	"output"	: "_quick_commands_patched",
-	"tooltip"	: "Assign up to eight Y-Button items to quick access by holding the L or R buttons and pressing A, B, X or Y{0}With support for redux and additional options{0}- Supported: Rev 0 (US)"
+	"tooltip"	: "Assign up to eight Y-Button items to quick access by holding the L or R buttons and pressing A, B, X or Y{0}With support for redux and additional options"
+
 }, {
+
 	"title"		: "The Legend of Zelda: Parallel Worlds (v1.23)",
 	"vc_title"	: "Parallel Worlds",
-	"vc_gameID"	: "JAD1",
 	"patch"		: "Compressed\\parallel_worlds.ips",
 	"output"	: "_parallel_worlds_patched",
-	"tooltip"	: "A full-sized ROM hack in a completely new setting, which can be quite difficult{0}- Supported: Rev 0 (US)"
+	"tooltip"	: "A full-sized ROM hack in a completely new setting, which can be quite difficult"
+
 }, {
+
 	"title"		: "The Legend of Zelda: Parallel Remodel (v1.1)",
 	"vc_title"	: "Parallel Remodel",
-	"vc_gameID"	: "JAD2",
 	"patch"		: "Compressed\\parallel_remodel.ips",
 	"output"	: "_parallel_remodel_patched",
-	"tooltip"	: "An easier and more vanilla-like balanced version of the Parallel Worlds ROM hack{0}- Supported: Rev 0 (US)"
+	"tooltip"	: "An easier and more vanilla-like balanced version of the Parallel Worlds ROM hack"
+
 } ]

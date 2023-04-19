@@ -2,13 +2,11 @@
     
     # MAIN #
 
-    if     ( (IsChecked $Redux.Main.KakarikoShortcut) -and !$Patches.Redux.Checked)   { ApplyPatch -Patch "Compressed\Optional\shortcut.ips"                 }
-    elseif ( (IsChecked $Redux.Main.KakarikoShortcut) -and  $Patches.Redux.Checked)   { ApplyPatch -Patch "Compressed\Optional\shortcut_redux.ips"           }
-    if       (IsChecked $Redux.Main.MaxBombArrow)                                     { ApplyPatch -Patch "Compressed\Optional\max_bomb_arrow.ips"           }
-    if       (IsChecked $Redux.Main.MirrorWorksBothWorlds)                            { ApplyPatch -Patch "Compressed\Optional\mirror_works_both_worlds.ips" }
-    if       (IsChecked $Redux.Main.MoveBlocksIndefinitely)                           { ApplyPatch -Patch "Compressed\Optional\move_blocks_indefinitely.ips" }
-    if       (IsChecked $Redux.Main.RemoveLowHealthBeep)                              { ApplyPatch -Patch "Compressed\Optional\remove_low_health_beep.ips"   }
-    if       (IsChecked $Redux.Main.StartFullHearts)                                  { ApplyPatch -Patch "Compressed\Optional\start_full_hearts.ips"        }
+    if       (IsChecked $Redux.Main.MaxBombArrow)             { ApplyPatch -Patch "Compressed\Optional\max_bomb_arrow.ips"           }
+    if       (IsChecked $Redux.Main.MirrorWorksBothWorlds)    { ApplyPatch -Patch "Compressed\Optional\mirror_works_both_worlds.ips" }
+    if       (IsChecked $Redux.Main.MoveBlocksIndefinitely)   { ApplyPatch -Patch "Compressed\Optional\move_blocks_indefinitely.ips" }
+    if       (IsChecked $Redux.Main.RemoveLowHealthBeep)      { ApplyPatch -Patch "Compressed\Optional\remove_low_health_beep.ips"   }
+    if       (IsChecked $Redux.Main.StartFullHearts)          { ApplyPatch -Patch "Compressed\Optional\start_full_hearts.ips"        }
 
 
 
@@ -65,7 +63,6 @@ function CreateTabMain() {
     # MAIN #
 
     CreateReduxGroup    -Tag  "Main"                   -Text "Main"
-    CreateReduxCheckBox -Name "KakarikoShortcut"       -Text "Kakariko Shortcut"            -Info "Adds a shortcut to Kakariko Village for the Light and Dark World"                            -Credits "PowerPanda"
     CreateReduxCheckBox -Name "MaxBombArrow"           -Text "Max Bombs && Arrows"          -Info "Maxes ammo amounts:`Total amount for bombs is 20 to 99`nTotal amount for arrows is 30 to 99" -Credits "Kazuto"
     CreateReduxCheckBox -Name "MirrorWorksBothWorlds"  -Text "Mirror Works in Both Worlds"  -Info "The Mirror can be used in both the Light and Dark Worlds"                                    -Credits "Redux Project"
     CreateReduxCheckBox -Name "MoveBlocksIndefinitely" -Text "Move Blocks Indefinitely"     -Info "Blocks which can be pushed can now be pushed several times"                                  -Credits "Redux Project"

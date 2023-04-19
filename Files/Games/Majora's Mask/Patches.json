@@ -1,66 +1,64 @@
 [ {
-	"title"				: "Majora's Mask - Additional Options & Redux",
+	
+	"title"				: "Additional Options & Redux",
 	"redux" : {
-		"options"		: 1,
 		"remap_controls"	: 1,
 		"dmaTable"		: "0 1 2 3 4 5 6 7 -8 -9 15 16 17 18 19 20 -21 22 25 26 27 28 29 30 -652 1127 -1539 -1540 -1541 -1542 -1543 1544 1545 1546 1547 1548 1549 1550 -1551 1552 1553 1554 1555 1556 1557 1558 1559 1560 1561 1562 1563 1564 1565 1566 1567",
 		"vc_title"		: "Redux: Majora's",
-		"vc_gameID"		: "NAR0",
-		"file"			: "Decompressed\\redux.ppf",
 		"output"		: "_redux_patched"
 	},
-	"options"			: 1,
-	"tooltip"			: "The regular Majora's Mask experience{0}With support for languages, redux and additional options",
-	"rev"				: [ "2A0A8ACB61538235BC1094D297FB6556", "AC0751DBC23AB2EC0C3144203ACA0003" ]
+	"finalize"			: "rev0_finalize",
+	"script"			: "Majora's Mask",
+	"vanilla"			: 1,
+	"tooltip"			: "The regular Majora's Mask experience{0}With support for languages, redux and additional options"
+
 }, {
-	"title"				: "KZ Practice ROM",
-	"console"			: "Wii VC",
-	"command"			: "Force Remap D-Pad No Expand Memory Force Downgrade Patch Boot DOL",
-	"vc_title"			: "Zelda: KZ Practice ROM",
-	"vc_gameID"			: "NG2E",
-	"patch"				: "Compressed\\KZ Practice\\kz_practice.bps",
-	"output"			: "_kz_practice_patched",
-	"tooltip"			: "A trainer / practice / testing utility for The Legend of Zelda: Majora's Mask{0}Formally known by its codename 'kz', but generally referred to as 'The Practice ROM'",
-	"rev"				: [ "2A0A8ACB61538235BC1094D297FB6556", "AC0751DBC23AB2EC0C3144203ACA0003" ]
-}, {
-	"title"				: "KZ Practice ROM (Lite)",
-	"command"			: "Force Remap D-Pad No Expand Memory Force Downgrade Patch Boot DOL",
-	"vc_title"			: "Zelda: KZ Practice ROM",
-	"vc_gameID"			: "NG2E",
-	"patch"				: "Compressed\\KZ Practice\\kz_practice_lite.bps",
-	"output"			: "_kz_practice_lite_patched",
-	"tooltip"			: "A trainer / practice / testing utility for The Legend of Zelda: Majora's Mask{0}Formally known by its codename 'kz', but generally referred to as 'The Practice ROM'{0}The lite version has a very limited amount of memory and is more prone to crashing",
-	"rev"				: [ "2A0A8ACB61538235BC1094D297FB6556", "AC0751DBC23AB2EC0C3144203ACA0003" ]
-}, {
+
 	"title"				: "The Legend of Zelda: Master Quest",
 	"redux" : {
-		"options"		: 1,
 		"remap_controls"	: 1,
 		"dmaTable"		: "0 1 2 3 4 5 6 7 -8 -9 15 16 17 18 19 20 -21 22 25 26 27 28 29 30 -652 1127 -1539 -1540 -1541 -1542 -1543 1544 1545 1546 1547 1548 1549 1550 -1551 1552 1553 1554 1555 1556 1557 1558 1559 1560 1561 1562 1563 1564 1565 1566 1567",
 		"vc_title"		: "Redux: Master Quest",
-		"file"			: "Decompressed\\redux.ppf",
+		"file"			: "Decompressed\\Redux\\redux.ppf",
 		"output"		: "_master_quest_redux_patched"
 	},
-	"options"			: 1,
+	"script"			: "Majora's Mask",
 	"custom_offset"			: "20610",
 	"custom_value"			: "34 13 00 7A 15 D3 00 03 00 00 00 00 10 00 00 05 00 00 00 00 34 13 01 42 11 D3 00 02 00 00 00 00 34 13 00 00 03 E0 00 08 00 00 00 00 00 00 00 00 90 8E 00 42 08 04 56 53 00 A5 28 21 00 00 00 00 27 BD FF E0 AF BF 00 1C 30 A8 00 40 50 08 00 05 82 05 00 03 0C 02 D6 EC 00 A8 28 23 10 00 00 03 00 00 00 00 0C 02 D7 46 00 00 00 00 8F BF 00 1C 03 E0 00 08 27 BD 00 20 00 00 00 00 00 00 00 00 3C 08 80 40 03 E0 00 08 AD 00 08 1C 00 00 00 00 50 2F 00 05 90 AF 3F 18 50 0F 00 03 90 AF 3F 18 08 04 42 28 00 00 00 00 08 04 42 6E",
 	"command"			: "Force Downgrade",
 	"vc_title"			: "Zelda: Master Quest",
-	"vc_gameID"			: "NAR1",
 	"patch"				: "Decompressed\\master_quest.bps",
 	"output"			: "_master_quest_patched",
-	"tooltip"			: "A Master Quest style romhack for Majora's Mask, offering a higher difficulty with remixed dungeons and some overworld changes{0}The path of progress has been changed to be in a different order",
-	"rev"				: [ "2A0A8ACB61538235BC1094D297FB6556", "AC0751DBC23AB2EC0C3144203ACA0003" ]
+	"tooltip"			: "A Master Quest style romhack for Majora's Mask, offering a higher difficulty with remixed dungeons and some overworld changes{0}The path of progress has been changed to be in a different order"
+
 }, {
+
 	"title"				: "The Legend of Zelda: Masked Quest (v4.3.0 Textpointer Fix)",
-	"options"			: 1,
-	"finalize"			: 0,
 	"dmaTable"			: "0 1 2 3 4 5 6 7 13 14 15 16 17 18 19 22 23 24 25 26 27 645 698 744 763 812 824 942 963 995 1089 1104 1111 1119 1120 1534 1535 1536 1537 1538 1539 1540 1541 1542 1543 1544 1545 1546 1547 1548 1549 1550 1551 1552 1553 1554 1555 1556 1557 1558 1559 1560 1561 1562 1563 1564 1565 1566 1567",
 	"command"			: "Force Remap D-Pad Force Downgrade",
 	"vc_title"			: "Zelda: Masked Quest",
-	"vc_gameID"			: "NURE",
 	"patch"				: "Decompressed\\masked_quest.bps",
+	"script"			: "Majora's Mask",
 	"output"			: "_masked_quest_patched",
-	"tooltip"			: "A Master Quest style romhack for Majora's Mask, offering a higher difficulty{0}The patch contains major changes to where progress is obtained throughout the overworld and dungeons{0}Includes some of the changes featured in the Redux / Randomizer patches like D-Pad support",
-	"rev"				: [ "2A0A8ACB61538235BC1094D297FB6556", "AC0751DBC23AB2EC0C3144203ACA0003" ]
+	"tooltip"			: "A Master Quest style romhack for Majora's Mask, offering a higher difficulty{0}The patch contains major changes to where progress is obtained throughout the overworld and dungeons{0}Includes some of the changes featured in the Redux / Randomizer patches like D-Pad support"
+
+}, {
+
+	"title"				: "KZ Practice ROM",
+	"console"			: "Wii VC",
+	"command"			: "Force Remap D-Pad No Expand Memory Force Downgrade Patch Boot DOL",
+	"vc_title"			: "Zelda: KZ Practice ROM",
+	"patch"				: "Compressed\\kz_practice.bps",
+	"output"			: "_kz_practice_patched",
+	"tooltip"			: "A trainer / practice / testing utility for The Legend of Zelda: Majora's Mask{0}Formally known by its codename 'kz', but generally referred to as 'The Practice ROM'"
+
+}, {
+
+	"title"				: "KZ Practice ROM (Lite)",
+	"command"			: "Force Remap D-Pad No Expand Memory Force Downgrade Patch Boot DOL",
+	"vc_title"			: "Zelda: KZ Practice ROM",
+	"patch"				: "Compressed\\kz_practice_lite.bps",
+	"output"			: "_kz_practice_lite_patched",
+	"tooltip"			: "A trainer / practice / testing utility for The Legend of Zelda: Majora's Mask{0}Formally known by its codename 'kz', but generally referred to as 'The Practice ROM'{0}The lite version has a very limited amount of memory and is more prone to crashing"
+
 } ]

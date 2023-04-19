@@ -1,49 +1,48 @@
 [ {
-	"title"			: "Mario Kart 64",
-	"tooltip"		: "The regular Mario Kart 64 experience{0}- Supported: Rev 0 (US)",
-	"options"		: 1,
-	"rev"			: "3A67D9986F54EB282924FCA4CD5F6DFF"
+	
+	"title"		: "Additional Options",
+	"script"	: "Mario Kart 64",
+	"tooltip"	: "Customize Mario Kart 64 with additional options"
+
 }, {
-	"title"			: "Mario Kart 64: Amped Up (v2.0)",
-	"console"		: "Native",
-	"patch" : [ {
-		"file"		: "Compressed\\amped_up.bps",
-		"rev"		: "3A67D9986F54EB282924FCA4CD5F6DFF",
-		"console"	: "Native"
-	} ],
-	"tooltip"		: "ROM hack of Mario Kart 64 with custom tracks{0}Features 12 custom tracks with custom music and a new game mode{0}- Supported: Rev 0 (US)"
+
+	"title"		: "Amped Up (v2.0)",
+	"patch"		: "Compressed\\amped_up.bps",
+	"console"	: "Native",
+	"tooltip"	: "ROM hack of Mario Kart 64 with custom tracks{0}Features 12 custom tracks with custom music and a new game mode"
+
 }, {
-	"title"			: "OverKart (v4 DLC)",
-	"patch" : [ {
-		"file"		: "Compressed\\overkart.bps",
-		"rev"		: "3A67D9986F54EB282924FCA4CD5F6DFF",
-		"console"	: "Native"
-	} ],
-	"tooltip"		: "ROM hack of Mario Kart 64 with custom tracks{0}Features 24 custom tracks{0}- Supported: Rev 0 (US)"
+
+	"title"		: "OverKart (v4 DLC)",
+	"patch"		: "Compressed\\overkart.bps",
+	"console"	: "Native",
+	"tooltip"	: "ROM hack of Mario Kart 64 with custom tracks{0}Features 24 custom tracks"
+
 }, {
-	"title"			: "Battle Kart 64 (v2.0)",
-	"patch" : [ {
-		"file"		: "Compressed\\battle_kart_64.bps",
-		"rev"		: "3A67D9986F54EB282924FCA4CD5F6DFF",
-		"console"	: "Native"
-	} ],
-	"tooltip"		: "ROM hack of Mario Kart 64 that overhauls Battle Mode{0}Features new game modes and settings{0}- Supported: Rev 0 (US)"
+
+	"title"		: "Battle Kart 64 (v2.0)",
+	"patch"		: "Compressed\\battle_kart_64.bps",
+	"console"	: "Native",
+	"tooltip"	: "ROM hack of Mario Kart 64 that overhauls Battle Mode{0}Features new game modes and settings"
+
 }, {
-	"title"			: "Hooting Time (v1.1a)",
-	"patch" : [ {
-		"file"		: "Compressed\\hooting_time.bps",
-		"rev"		: "3A67D9986F54EB282924FCA4CD5F6DFF"
-	} ],
-	"tooltip"		: "Overhauls the HUD and various options and gameplay changes for Mario Kart 64{0}- Supported: Rev 0 (US)"
+
+	"title"		: "Hooting Time (v1.1a)",
+	"patch"		: "Compressed\\hooting_time.bps",
+	"tooltip"	: "Overhauls the HUD and various options and gameplay changes for Mario Kart 64"
+
 }, {
-	"title"			: "US Audio",
-	"patch" : [ {
-		"file"		: "Compressed\\us_audio_rev0.bps",
-		"rev"		: "BF964CECA78A13A82055EBDA80B95CCA"
-	}, {
-		"file"		: "Compressed\\us_audio_rev1.bps",
-		"rev"		: "60535265BAE43DDFCBDB0D71594B1693"
-	} ],
-	"tooltip"		: "Ports the audio from the US version to the JPN version of Mario Kart 64{0}- Supported: Rev 0 & 1 (JPN)"
+
+	"title"		: "US Audio (Rev 0)",
+	"version"	: "Rev 0 (JPN)",
+	"patch"		:"Compressed\\us_audio_rev0.bps",
+	"tooltip"	: "Ports the audio from the US version to the JPN version of Mario Kart 64"
+
+}, {
+
+	"title"		: "US Audio (Rev 1)",
+	"version"	: "Rev 1 (JPN)",
+	"patch"		:"Compressed\\us_audio_rev1.bps",
+	"tooltip"	: "Ports the audio from the US version to the JPN version of Mario Kart 64"
 	
 } ]

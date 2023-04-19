@@ -4,7 +4,7 @@ function PatchModel([string]$Category, [string]$Name) {
     $file = $path + "\" + $Name
     
     if (TestFile ($file + ".zobj"))   {
-        $manifest  = $path + "\Manifest\Rev 0 (US).txt"
+        $manifest  = $path + "\Manifest\" + $GameRev.name + ".txt"
         $optimized = $path + "\Manifest\Optimized.zobj"
         & $Files.tool.zzobjman playas -i ($file + ".zobj") -r $GetROM.decomp -o ($Paths.Temp + "\model") -m $manifest -b $optimized | Out-Null
         Move-Item -LiteralPath ($Paths.Temp + "\model.z64") -Destination $GetROM.decomp -Force

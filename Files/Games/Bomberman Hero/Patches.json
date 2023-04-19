@@ -1,5 +1,5 @@
 [ {
 	"title"		: "Bomberman Hero",
-	"options"	: 1,
-	"tooltip"	: "The regular Bomberman Hero experience{0}- Supported: Rev 0 (US)"
+	"script"	: "Bomberman Hero",
+	"tooltip"	: "Customize Bomberman Hero with additional options"
 } ]

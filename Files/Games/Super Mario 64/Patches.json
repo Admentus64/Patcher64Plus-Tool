@@ -1,186 +1,168 @@
 [ {
-	"title"			: "Super Mario 64",
-	"options"		: 1,
-	"rev"			: "20B854B239203BAF6C961B850A4A51A2",
-	"allow_extend"	: 1,
+	
+	"title"			: "Additional Options",
+	"script"		: "Super Mario 64",
+	"allow_extend"		: 1,
 	"extend"		: 64,
-	"tooltip"		: "The regular Super Mario 64 experience{0}With support for additional options{0}- Supported: Rev 0 (US)"
+	"tooltip"		: "Customize Super Mario 64 with additional options"
+
 }, {
-	"title"			: "Super Mario 64 (Rumble Support)",
-	"patch" : [ {
-		"file"		: "Compressed\\rumble.bps",
-		"rev"		: "20B854B239203BAF6C961B850A4A51A2"
-	} ],
+
+	"title"			: "Rumble Support",
+	"patch"			: "Compressed\\rumble.bps",
 	"output"		: "_rumble_patched",
-	"tooltip"		: "Adds Rumble Support to Super Mario 64{0}- Supported: Rev 0 (US)"
+	"tooltip"		: "Adds Rumble Support to Super Mario 64"
+
 }, {
-	"title"			: "Super Mario 64 (Lowpoly Promo Mario Model)",
-	"patch" : [ {
-		"file"		: "Compressed\\promo_mario.bps",
-		"rev"		: "20B854B239203BAF6C961B850A4A51A2"
-	} ],
+
+	"title"			: "Lowpoly Promo Mario Model",
+	"patch"			: "Compressed\\promo_mario.bps",
 	"output"		: "_promo_mario_patched",
-	"tooltip"		: "Replaces Mario's model with the promo model for Mario{0}- Supported: Rev 0 (US)"
+	"tooltip"		: "Replaces Mario's model with the promo model for Mario"
+
 }, {
-	"title"			: "Super Mario 64 (Lowpoly Promo Luigi Model)",
-	"patch" : [ {
-		"file"		: "Compressed\\promo_luigi.bps",
-		"rev"		: "20B854B239203BAF6C961B850A4A51A2"
-	} ],
+
+	"title"			: "Lowpoly Promo Luigi Model",
+	"patch"			: "Compressed\\promo_luigi.bps",
 	"output"		: "_promo_luigi_patched",
-	"tooltip"		: "Replaces Mario's model with the promo model for Luigi{0}- Supported: Rev 0 (US)"
+	"tooltip"		: "Replaces Mario's model with the promo model for Luigi"
+
 }, {
-	"title"			: "Super Mario 64 (render96 Mario Model)",
-	"patch" : [ {
-		"file"		: "Compressed\\render96_mario.bps",
-		"rev"		: "20B854B239203BAF6C961B850A4A51A2"
-	} ],
+
+	"title"			: "render96 Mario Model",
+	"patch"			: "Compressed\\render96_mario.bps",
 	"output"		: "_render96_mario_patched",
-	"tooltip"		: "render96 patch with the Mario model with 3D models and promo styles for several objects{0}Both widescreen (stretched HUD) and puppycam can be enabled/disabled in the pause menu{0}- Supported: Rev 0 (US)"
+	"tooltip"		: "render96 patch with the Mario model with 3D models and promo styles for several objects{0}Both widescreen (stretched HUD) and puppycam can be enabled/disabled in the pause menu"
+
 }, {
-	"title"			: "Super Mario 64 (render96 Luigi Model)",
-	"patch" : [ {
-		"file"		: "Compressed\\render96_luigi.bps",
-		"rev"		: "20B854B239203BAF6C961B850A4A51A2"
-	} ],
+
+	"title"			: "render96 Luigi Model",
+	"patch"			: "Compressed\\render96_luigi.bps",
 	"output"		: "_render96_luigi_patched",
-	"tooltip"		: "render96 patch with the Luigi model with 3D models and promo styles for several objects{0}Both widescreen (stretched HUD) and puppycam can be enabled/disabled in the pause menu{0}- Supported: Rev 0 (US)"
+	"tooltip"		: "render96 patch with the Luigi model with 3D models and promo styles for several objects{0}Both widescreen (stretched HUD) and puppycam can be enabled/disabled in the pause menu"
+
 }, {
-	"title"			: "Super Mario 64: Termina Invasion",
-	"patch" : [ {
-		"file"		: "Compressed\\termina_invasion.bps",
-		"rev"		: "20B854B239203BAF6C961B850A4A51A2"
-	} ],
+
+	"title"			: "Termina Invasion",
+	"patch"			: "Compressed\\termina_invasion.bps",
 	"output"		: "_termina_invasion_patched",
-	"tooltip"		: "Termina takes over the Mushroom Kingdom{0}- Supported: Rev 0 (US)"
+	"tooltip"		: "Termina takes over the Mushroom Kingdom"
+
 }, {
-	"title"			: "Super Mario 64: Multiplayer (v1.4.2)",
+
+	"title"			: "Multiplayer (v1.4.2)",
 	"command"		: "Patch Boot DOL",
 	"expand_memory"		: -1,
-	"options"		: 1,
+	"script"		: "Super Mario 64",
 	"rom_title"		: "SM64 Multiplayer",
 	"vc_title"		: "SM64: Multiplayer",
-	"vc_gameID"		: "NAAM",
-	"patch" : [ {
-		"file"		: "Decompressed\\multiplayer.bps",
-		"rev"		: "20B854B239203BAF6C961B850A4A51A2"
-	} ],
+	"patch"			: "Decompressed\\multiplayer.bps",
 	"extend"		: 18,
 	"output"		: "_multiplayer_v1.4.2_patched",
-	"tooltip"		: "Single-Screen Multiplayer with Mario and Luigi{0}Plugin a second emulated controller for Luigi{0}- Supported: Rev 0 (US)"
+	"tooltip"		: "Single-Screen Multiplayer with Mario and Luigi{0}Plugin a second emulated controller for Luigi"
+
 }, {
-	"title"			: "Super Mario 64: Split-Screen Multiplayer",
+
+	"title"			: "Split-Screen Multiplayer",
 	"rom_title"		: "SM64 Multiplayer",
-	"patch" : [ {
-		"file"		: "Compressed\\splitscreen_multiplayer.bps",
-		"rev"		: "20B854B239203BAF6C961B850A4A51A2",
-		"console"	: "Native"
-	} ],
+	"patch"			: "Compressed\\splitscreen_multiplayer.bps",
+	"console"		: "Native",
 	"output"		: "_splitscreen_multiplayer_patched",
-	"tooltip"		: "Split-Screen Multiplayer with Mario and Luigi{0}Plugin a second emulated controller for Luigi{0}- Supported: Rev 0 (US)"
+	"tooltip"		: "Split-Screen Multiplayer with Mario and Luigi{0}Plugin a second emulated controller for Luigi"
+
 }, {
-	"title"			: "Super Mario 64: Arguably Better Edition (R3)",
-	"patch" : [ {
-		"file"		: "Compressed\\abe.bps",
-		"rev"		: "20B854B239203BAF6C961B850A4A51A2",
-		"console"	: "Native"
-	} ],
+
+	"title"			: "Arguably Better Edition (R3)",
+	"patch"			: "Compressed\\abe.bps",
+	"console"		: "Native",
 	"output"		: "_abe_patched",	
-	"tooltip"		: "Changes Super Mario 64 to make it a better game overall{0}It features some additional bonus features{0}4:3 standard aspect ratio version{0}- Supported: Rev 0 (US)"
+	"tooltip"		: "Changes Super Mario 64 to make it a better game overall{0}It features some additional bonus features{0}4:3 standard aspect ratio version"
+
 }, {
-	"title"			: "Super Mario 64: Arguably Better Edition (WS) (R3)",
-	"patch" : [ {
-		"file"		: "Compressed\\abe_ws.bps",
-		"rev"		: "20B854B239203BAF6C961B850A4A51A2",
-		"console"	: "Native"
-	} ],
+
+	"title"			: "Arguably Better Edition (WS) (R3)",
+	"patch"			: "Compressed\\abe_ws.bps",
+	"console"		: "Native",
 	"output"		: "_abe_ws_patched",	
-	"tooltip"		: "Changes Super Mario 64 to make it a better game overall{0}It features some additional bonus features{0}16:9 widescreen aspect ratio version{0}- Supported: Rev 0 (US)"
+	"tooltip"		: "Changes Super Mario 64 to make it a better game overall{0}It features some additional bonus features{0}16:9 widescreen aspect ratio version"
+
 }, {
-	"title"			: "Super Mario: Star Road (2019)",
-	"options"		: 1,
+
+	"title"			: "Star Road (2019)",
+	"script"		: "Super Mario 64",
 	"rom_title"		: "SM64 Star Road",
-	"patch" : [ {
-		"file"		: "Decompressed\\star_road_n64.bps",
-		"rev"		: "20B854B239203BAF6C961B850A4A51A2",
-		"console"	: "Native"
-	} ],
+	"patch"			: "Decompressed\\star_road_n64.bps",
+	"console"		: "Native",
 	"extend"		: 45,
 	"output"		: "_star_road_patched",
-	"tooltip"		: "A brand new world for Super Mario 64 with new stages and more than 120 stars to collect{0}- Supported: Rev 0 (US)"
+	"tooltip"		: "A brand new world for Super Mario 64 with new stages and more than 120 stars to collect"
+
 }, {
-	"title"			: "Super Mario: Star Road (2019)",
+
+	"title"			: "Star Road (2019)",
 	"command"		: "Patch Boot DOL",
-	"options"		: 1,
+	"script"		: "Super Mario 64",
 	"vc_title"		: "Super Mario: Star Road",
-	"vc_gameID"		: "NAA0",
-	"patch" : [ {
-		"file"		: "Decompressed\\star_road_wii_vc.bps",
-		"rev"		: "20B854B239203BAF6C961B850A4A51A2",
-		"console"	: "Wii VC"
-	} ],
+	"patch"			: "Decompressed\\star_road_wii_vc.bps",
+	"console"		: "Wii VC",
 	"extend"		: 26,
 	"output"		: "_star_road_patched",
-	"tooltip"		: "A brand new world for Super Mario 64 with new stages and more than 120 stars to collect{0}- Supported: Rev 0 (US)"
+	"tooltip"		: "A brand new world for Super Mario 64 with new stages and more than 120 stars to collect"
+
 }, {
-	"title"			: "Super Mario: Last Impact (v1.2)",
+
+	"title"			: "Last Impact (v1.2)",
 	"rom_title"		: "SM64 Last Impact",
-	"patch" : [ {
-		"file"		: "Decompressed\\last_impact.vcdiff",
-		"rev"		: "20B854B239203BAF6C961B850A4A51A2",
-		"console"	: "Native"
-	} ],
+	"patch"			: "Decompressed\\last_impact.vcdiff",
+	"console"		: "Native",
 	"extend"		: 64,
 	"output"		: "_last_impact_patched",
-	"tooltip"		: "A brand new world for Super Mario 64 with new stages and more than 120 stars to collect{0}- Supported: Rev 0 (US)"
+	"tooltip"		: "A brand new world for Super Mario 64 with new stages and more than 120 stars to collect"
+
 }, {
+
 	"title"			: "Super Mario 64 Land (v1.1)",
 	"rom_title"		: "SM64 Land",
-	"patch" : [ {
-		"file"		: "Decompressed\\land.vcdiff",
-		"rev"		: "20B854B239203BAF6C961B850A4A51A2",
-		"console"	: "Native"
-	} ],
+	"patch"			: "Decompressed\\land.vcdiff",
+	"console"		: "Native",
 	"extend"		: 64,
 	"output"		: "_land_patched",
-	"tooltip"		: "A brand new world for Super Mario 64 with new stages and more than 120 stars to collect{0}- Supported: Rev 0 (US)"
+	"tooltip"		: "A brand new world for Super Mario 64 with new stages and more than 120 stars to collect"
+
 }, {
+
 	"title"			: "Super Mario Odyssey 64",
 	"rom_title"		: "SM64 Odyssey",
-	"patch" : [ {	
-		"file"		: "Decompressed\\odyssey.vcdiff",
-		"rev"		: "20B854B239203BAF6C961B850A4A51A2",
-		"console"	: "Native"
-	} ],
+	"patch"			: "Decompressed\\odyssey.vcdiff",
+	"console"		: "Native",
 	"extend"		: 64,
 	"output"		: "_odyssey_patched",
-	"tooltip"		: "A brand new world for Super Mario 64 with new stages and 80 stars to collect{0}- Supported: Rev 0 (US)"
+	"tooltip"		: "A brand new world for Super Mario 64 with new stages and 80 stars to collect"
+
 }, {
-	"title"			: "Super Mario 64 Internal Plexus: Build 3313 (v0.7)",
+
+	"title"			: "Internal Plexus: Build 3313 (v0.7)",
 	"rom_title"		: "SM64 B3313",
-	"patch" : [ {
-		"file"		: "Decompressed\\internal_plexus.bps",
-		"rev"		: "20B854B239203BAF6C961B850A4A51A2",
-		"console"	: "Native"
-	} ],
+	"patch"			: "Decompressed\\internal_plexus.bps",
+	"console"		: "Native",
 	"extend"		: 64,
 	"output"		: "_internal_plexus_patched",
-	"tooltip"		: "A brand new beta-based world for Super Mario 64 with new stages and 142 stars to collect{0}- Supported: Rev 0 (US)"
+	"tooltip"		: "A brand new beta-based world for Super Mario 64 with new stages and 142 stars to collect"
+
 }, {
-	"title"			: "Super Mario 64 - Italian Translation",
-	"patch" : [ {
-		"file"		: "Compressed\\ita.bps",
-		"rev"		: "20B854B239203BAF6C961B850A4A51A2"
-	} ],
+
+	"title"			: "Italian Translation",
+	"patch"			: "Compressed\\ita.bps",
 	"output"		: "_ita_patched",
-	"tooltip"		: "Italian Translation of Super Mario 64{0}Based on the Japanese Shindou version{0}- Supported: Rev 0 (US)"
+	"tooltip"		: "Italian Translation of Super Mario 64{0}Based on the Japanese Shindou version"
+
 }, {
-	"title"			: "SM64 iQue: Header Fix + Save Fix + Rumble Fix",
+
+	"title"			: "iQue: Header Fix + Save Fix + Rumble Fix",
+	"version"		: "China (iQue)",
 	"console"		: "Native",
-	"patch" : [ {
-		"file"		: "Compressed\\iQue_chn.bps",
-		"rev"		: "29047FBA820695BD14C5BD7AA1AA4400"
-	} ],
+	"patch"			: "Compressed\\iQue_chn.bps",
 	"output"		: "_iQue_chn_patched",
-	"tooltip"		: "Fix the header, saving and rumble for the Chinese iQue ROM{0}- Supported: iQue (CHN)"
+	"tooltip"		: "Fix the header, saving and rumble for the Chinese iQue ROM"
+
 } ]

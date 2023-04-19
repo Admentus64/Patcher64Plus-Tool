@@ -74,8 +74,8 @@ function GetGameTypePreset() {
     
     for ($i=0; $i -lt $GeneralSettings.Presets.length; $i++) {
         if ($GeneralSettings.Presets[$i].checked) {
-            if ( (IsSet $GamePatch.settings) -and $GamePatch.options -ge 1) { return $GamePatch.settings + " - " + ($i+1) }
-            if ( (IsSet $GamePatch.script)   -and $GamePatch.options -ge 1) { return $GamePatch.script   + " - " + ($i+1) }
+            if (IsSet $GamePatch.settings)   { return $GamePatch.settings + " - " + ($i+1) }
+            if (IsSet $GamePatch.script)     { return $GamePatch.script   + " - " + ($i+1) }
             return $GameType.mode + " - " + ($i+1)
         }
     }

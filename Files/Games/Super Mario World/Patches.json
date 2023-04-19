@@ -1,56 +1,63 @@
 [ {
-	"title"		: "Super Mario World",
-	"tooltip"	: "The regular Super Mario World experience{0}- Supported: Rev 0 (US)"
-}, {
-	"title"		: "Super Mario World (2P Tag Team Co-op)",
+	
+	"title"		: "2P Tag Team Co-op",
 	"command"	: "Force Downgrade",
-	"patch"		: "Compressed\\kcoop.bps",
+	"patch"		: "Compressed\\coop.bps",
 	"output"	: "_coop_patched",
-	"tooltip"	: "Adds Two Player co-op support to Super Mario World{0}- Supported: Rev 0 (US)"
+	"tooltip"	: "Adds Two Player co-op support to Super Mario World"
+
 }, {
+
 	"title"		: "Kaizo Mario World",
 	"command"	: "Force Downgrade",
 	"vc_title"	: "Kaizo Mario World",
-	"vc_gameID"	: "JAA1",
 	"rom_title"	: "KAIZO MARIOWORLD",
 	"patch"		: "Compressed\\kaizo_mario_world.bps",
 	"output"	: "_kaizo_mario_world_patched",
-	"tooltip"	: "A full-sized ROM hack in a completely new setting, which is extremely difficult{0}Only recommended for hardcore players!{0}- Supported: Rev 0 (US)"
+	"tooltip"	: "A full-sized ROM hack in a completely new setting, which is extremely difficult{0}Only recommended for hardcore players!"
+
 }, {
+
 	"title"		: "Kaizo Mario World 2",
 	"command"	: "Force Downgrade",
 	"vc_title"	: "Kaizo Mario World 2",
-	"vc_gameID"	: "JAA2",
 	"rom_title"	: "KAIZO MARIOWORLD2",
 	"patch"		: "Compressed\\kaizo_mario_world_2.bps",
 	"output"	: "_kaizo_mario_world_2_patched",
-	"tooltip"	: "A full-sized ROM hack in a completely new setting, which is extremely difficult{0}Only recommended for hardcore players and sequel to Kaizo Mario World!{0}- Supported: Rev 0 (US)"
+	"tooltip"	: "A full-sized ROM hack in a completely new setting, which is extremely difficult{0}Only recommended for hardcore players and sequel to Kaizo Mario World!"
+
 }, {
+
 	"title"		: "Kaizo Mario World 3",
 	"command"	: "Force Downgrade",
 	"vc_title"	: "Kaizo Mario World 3",
-	"vc_gameID"	: "JAA3",
 	"rom_title"	: "KAIZO MARIOWORLD3",
 	"patch"		: "Compressed\\kaizo_mario_world_3.bps",
 	"output"	: "_kaizo_mario_world_3_patched",
-	"tooltip"	: "A full-sized ROM hack in a completely new setting, which is extremely difficult{0}Only recommended for hardcore players and sequel to Kaizo Mario World 2!{0}- Supported: Rev 0 (US)"
+	"tooltip"	: "A full-sized ROM hack in a completely new setting, which is extremely difficult{0}Only recommended for hardcore players and sequel to Kaizo Mario World 2!"
+
 }, {
+
 	"title"		: "Invictus",
 	"console"	: "Native",
 	"command"	: "Force Downgrade",
 	"rom_title"	: "INVICTUS",
 	"patch"		: "Compressed\\invictus.bps",
 	"output"	: "_invictus_patched",
-	"tooltip"	: "A full-sized ROM hack in a completely new setting, which is extremely difficult{0}Only recommended for hardcore players!{0}- Supported: Rev 0 (US)"
+	"tooltip"	: "A full-sized ROM hack in a completely new setting, which is extremely difficult{0}Only recommended for hardcore players!"
+
 }, {
+
 	"title"		: "Return to Dinosaur Land (EN)",
 	"console"	: "Native",
 	"command"	: "Force Downgrade",
 	"rom_title"	: "DINOSAUR LAND",
 	"patch"		: "Compressed\\return_to_dinosaur_land_en.ips",
 	"output"	: "_dinosaur_land_en_patched",
-	"tooltip"	: "A full-sized ROM hack in a completely new setting, which is moderately challenging{0}- Supported: Rev 0 (US)"
+	"tooltip"	: "A full-sized ROM hack in a completely new setting, which is moderately challenging"
+
 }, {
+
 	"title"		: "Return to Dinosaur Land (ES)",
 	"console"	: "Native",
 	"command"	: "Force Downgrade",
@@ -58,4 +65,5 @@
 	"patch"		: "Compressed\\return_to_dinosaur_land_es.ips",
 	"output"	: "_dinosaur_land_es_patched",
 	"tooltip"	: "A full-sized ROM hack in a completely new setting, which is moderately challenging{0}- Supported: Rev 0 (US)"
+
 } ]

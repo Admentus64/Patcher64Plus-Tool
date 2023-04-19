@@ -1,3 +1,21 @@
+v20.3.0
+- Revisions is now automatically picked for selected patch
+- Added Keep Cache option for decompressed & downgraded N64 Zelda ROMs
+- Overhauled GamePatch & GameRev JSON specifications
+- Overhauled downgrading
+- Overhauled filepath for Redux patching
+- Overhauled saving options and switching between presets
+- Adjusted Additional Options GUI for several OoT ROM hacks
+- Added upgrading from OoT Rev 0 to OoT GC MQ Debug
+- Added new options for OoT
+- Added new debug options to indivually prevent header changes for ROM / WAD
+- Updated ALttP Redux to v10.2.2
+- Removed Kakariko Shortcut option for ALttP (default with Redux now)
+- Fixed multiplying bytes with a factor less than 1 ending up to be 0
+- Fixed issue with showing and hiding VC panel
+- Fixed issue with disabling updating addons
+- Removed several "duplicate" patches
+
 v20.2.7
 - Updated New Master Quest to v1.9
 

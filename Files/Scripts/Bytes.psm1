@@ -102,8 +102,15 @@ function MultiplyBytes([string]$File, [string]$Offset, [object]$Match=$null, [fl
     }
 
     # Patch
-    $ByteArrayGame[$offsetDec] *= $Factor
-    WriteToConsole ($Offset + " -> Multiplied value " + (Get8Bit $ByteArrayGame[$offsetDec]) +" by:" + $Factor)
+    if ($Factor -eq 0) {
+        WriteToConsole ($Offset + " -> Set value " + (Get8Bit $ByteArrayGame[$offsetDec]) +" to: 1")
+        $ByteArrayGame[$offsetDec] = 1
+    }
+    elseif ($ByteArrayGame[$offsetDec] -gt 0) {
+        WriteToConsole ($Offset + " -> Multiplied value " + (Get8Bit $ByteArrayGame[$offsetDec]) +" by: " + $Factor)
+        $ByteArrayGame[$offsetDec] *= $Factor
+        if ($ByteArrayGame[$offsetDec] -eq 0) { $ByteArrayGame[$offsetDec] = 1 }
+    }
 
     # Write to File
     if (IsSet $File) { [System.IO.File]::WriteAllBytes($File, $ByteArrayGame) }

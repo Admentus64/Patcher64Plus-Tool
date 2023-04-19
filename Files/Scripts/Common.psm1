@@ -5,11 +5,7 @@ function SetWiiVCMode([boolean]$Enable) {
 
     WriteToConsole "Changing Between Wii VC Mode..."
 
-    if (IsSet $GameType) {
-        ChangeRevList
-      # ChangeGameRev
-    }
-
+    SetVCRemap
     EnablePatchButtons (IsSet $GamePath)
     SetModeLabel
 
@@ -105,40 +101,6 @@ function ChangeGamesList() {
         catch { $CurrentGame.Game.SelectedIndex = 0 }
     }
 
-    SetVCPanel
-
-}
-
-
-#==============================================================================================================================================================================================
-function ChangeRevList() {
-    
-    WriteToConsole "Loading revisions..."
-
-    $CurrentGame.Rev.Items.Clear()
-
-    # Add compatible revisions
-    $items = @()
-    foreach ($item in $GameType.version) {
-        if ( (IsSet $item.list) -and ( ($IsWiiVC -and $item.native -ne 1) -or !$IsWiiVC) ) { $items += $item.list }
-    }
-
-    if ($items.count -eq 0) { $items += "Rev 0 (US)" }
-    $CurrentGame.Rev.Items.AddRange($items)
-    
-    # Reset last index
-    foreach ($i in 0..($items.Length-1)) {
-        if ($GameRev.list -eq $items[$i]) {
-            $CurrentGame.Rev.SelectedIndex = $i
-            break
-        }
-    }
-
-    if ($items.Length -gt 0 -and $CurrentGame.Rev.SelectedIndex -eq -1) {
-        try { $CurrentGame.Rev.SelectedIndex = $Settings["Core"][$CurrentGame.Rev.Name] }
-        catch { $CurrentGame.rev.SelectedIndex = 0 }
-    }
-
 }
 
 
@@ -146,8 +108,8 @@ function ChangeRevList() {
 #==============================================================================================================================================================================================
 function ChangePatchPanel() {
     
-    # Return is no GameType or game file is set
-    if (!(IsSet $GameType)) { return }
+    $Patches.Panel.Visible = ($GameType.patches -eq 1 -or ($GameType.patches -eq 2 -and $IsWiiVC) )
+    if ($GameType.patches -eq 0 -or ($GameType.patches -eq 2 -and !$IsWiiVC) ) { return }
 
     WriteToConsole "Loading patches..."
 
@@ -158,21 +120,9 @@ function ChangePatchPanel() {
     # Set combobox for patches
     $items = @()
     foreach ($item in $Files.json.patches) {
-        if ($item.hide -eq 1) { continue }
-
-        if (!(IsSet $item.patch) -and (IsSet $item.rev)) {
-            foreach ($i in $item.rev) {
-                if ($i -eq $GameRev.hash) { $Patches.Type.Items.Add($item.title) }
-            }
-        }
-        elseif (!(IsSet $item.patch)) { $Patches.Type.Items.Add($item.title) }
-        elseif ($item.patch -isnot [array]) {
-            if ( ( ($IsWiiVC -and $item.console -eq "Wii VC") -or (!$IsWiiVC -and $item.console -eq "Native") -or ($item.console -eq "Both") -or !(IsSet $item.console) ) ) { $Patches.Type.Items.Add($item.title) }
-        }
+        if (!(IsSet $item.patch)) { $Patches.Type.Items.Add($item.title) }
         else {
-            foreach ($i in $item.patch) {
-                if ($i.rev -eq $GameRev.hash -and ( ($IsWiiVC -and $i.console -eq "Wii VC") -or (!$IsWiiVC -and $i.console -eq "Native") -or ($i.console -eq "Both") -or !(IsSet $i.console) ) ) { $Patches.Type.Items.Add($item.title) }
-            }
+            if ( ( ($IsWiiVC -and $item.console -eq "Wii VC") -or (!$IsWiiVC -and $item.console -eq "Native") -or ($item.console -eq "Both") -or !(IsSet $item.console) ) ) { $Patches.Type.Items.Add($item.title) }
         }
     }
 
@@ -191,7 +141,7 @@ function ChangePatchPanel() {
         try { $Patches.Type.SelectedIndex = $Settings["Core"][$Patches.Type.Name] }
         catch { $Patches.Type.SelectedIndex = 0 }
     }
-    
+
 }
 
 
@@ -306,12 +256,14 @@ function ResetReduxSettings() {
 
 #==============================================================================================================================================================================================
 function SetVCRemap() {
-
-    if ( (TestFile $GameFiles.controls) -and (IsSet $GameSettings) -and $IsWiiVC) {
+    
+    if ( (TestFile $GameFiles.controls) -and $GameSettings -ne $null -and $IsWiiVC) {
         $Files.json.controls = SetJSONFile $GameFiles.controls
         CreateVCRemapDialog # Create VC remap settings
     }
     else { $Files.json.controls  = $null }
+
+    SetVCPanel
 
 }
 
@@ -322,9 +274,7 @@ function ChangeGameMode() {
     
     WriteToConsole "Changing game mode..."
 
-    if (IsSet $GamePatch.script)   { if (Get-Module -Name $GamePatch.script)   { Remove-Module -Name $GamePatch.script } }
-    if (IsSet $GameRev.script)     { if (Get-Module -Name $GameRev.script)     { Remove-Module -Name $GameRev.script   } }
-    if (IsSet $GameType.mode)      { if (Get-Module -Name $GameType.mode)      { Remove-Module -Name $GameType.mode    } }
+    if (IsSet $GamePatch.script) { if (Get-Module -Name $GamePatch.script)   { Remove-Module -Name $GamePatch.script } }
 
     foreach ($item in $Files.json.games) {
         if ($item.title -eq $CurrentGame.Game.Text) {
@@ -364,13 +314,9 @@ function ChangeGameMode() {
     if (TestFile ($GameFiles.base      + "\Blocks.json"))                          { $Files.json.blocks    = SetJSONFile ($GameFiles.base      + "\Blocks.json")    } else { $Files.json.blocks    = $null }
     if (TestFile ($GameFiles.base      + "\Enemies.json"))                         { $Files.json.enemies   = SetJSONFile ($GameFiles.base      + "\Enemies.json")   } else { $Files.json.enemies   = $null }
 
-    ResetReduxSettings
     SetCreditsSections
-
-    $Patches.Panel.Visible = ( ($GameType.patches -eq 1) -or ($GameType.patches -eq 2 -and $IsWiiVC) )
-
+    ChangePatchPanel
     SetModeLabel
-    ChangeRevList
 
 }
 
@@ -403,23 +349,19 @@ function ChangeGameRev() {
     
     if (!(IsSet $GameType)) { return }
 
-    WriteToConsole "Changing revision..."
+    $global:GameRev = $GameType.version[0]
 
-    $global:GameRev = @{}
-    foreach ($item in $GameType.version) {
-        if ($item.list -eq $CurrentGame.Rev.Text) {
-            $global:GameRev = $item
-            break
+    if (IsSet $GamePatch.version) {
+        foreach ($version in $GameType.version) {
+            if ($version.name -eq $GamePatch.version) {
+                $global:GameRev = $version
+                break
+            }
         }
     }
 
-    ResetReduxSettings
-
-    if (IsSet $GameRev.script)   { $GameFiles.script = ($Paths.Scripts + "\Options\" + $GameRev.script + ".psm1") }
-    else                         { $GameFiles.script = ($Paths.Scripts + "\Options\" + $GameType.mode  + ".psm1") }
-
-    ChangePatchPanel
-    $global:IsActiveGameField = $True
+    if (IsSet $GameRev.Name)   { $CurrentGame.Rev.Text = $GameRev.Name }
+    else                       { $CurrentGame.Rev.Text = ""            }
 
 }
 
@@ -432,35 +374,40 @@ function ChangePatch() {
     $lastMessage = $StatusLabel.Text
     UpdateStatusLabel "Changing patch..."
 
+    if (IsSet $GamePatch.script) { if (Get-Module -Name $GamePatch.script) { Remove-Module -Name $GamePatch.script } }
+    
     foreach ($item in $Files.json.patches) {
         if ($item.title -eq $Patches.Type.Text -and ( ($IsWiiVC -and $item.console -eq "Wii VC") -or (!$IsWiiVC -and $item.console -eq "Native") -or ($item.console -eq "Both") -or !(IsSet $item.console) ) ) {
-                if ($GameType.save -gt 0 -and (IsSet $global:GamePatch) ) { Out-IniFile -FilePath (GetGameSettingsFile) -InputObject $GameSettings | Out-Null }
-
                 $global:GamePatch = $item
                 $PatchToolTip.SetToolTip($Patches.Button, ([string]::Format($item.tooltip, [Environment]::NewLine)))
                 GetHeader
                 GetRegion
+                ResetReduxSettings
 
-                if     (IsSet $GamePatch.script)   { $GameFiles.script = ($Paths.Scripts + "\Options\" + $GamePatch.script + ".psm1") }
-                elseif (IsSet $GameRev.script)     { $GameFiles.script = ($Paths.Scripts + "\Options\" + $GameRev.script   + ".psm1") }
-                else                               { $GameFiles.script = ($Paths.Scripts + "\Options\" + $GameType.mode    + ".psm1") }
+                if ($GameSettings -ne $null) {
+                    Out-IniFile -FilePath $GameSettingsFile -InputObject $GameSettings | Out-Null
+                    $global:GameSettings = $global:GameSettingsFile = $null
+                }
 
-                if ( (TestFile $GameFiles.script) -and $GamePatch.options -ge 1) {
-                    $global:GameSettings = GetSettings (GetGameSettingsFile)
-                    if (IsSet $GamePatch.script)   { if (Get-Module -Name $GamePatch.script)   { Remove-Module -Name $GamePatch.script } }
-                    if (IsSet $GameRev.script)     { if (Get-Module -Name $GameRev.script)     { Remove-Module -Name $GameRev.script   } }
-                    if (IsSet $GameType.mode)      { if (Get-Module -Name $GameType.mode)      { Remove-Module -Name $GameType.mode    } }
-                    Import-Module -Name $GameFiles.script -Global
-                    if (Get-Command "CreateOptions" -errorAction SilentlyContinue) { iex "CreateOptions" }
+                if (IsSet $GamePatch.script) {
+                    $script = $Paths.Scripts + "\Options\" + $GamePatch.script + ".psm1"
+                    if (TestFile $script) {
+                        $global:GameSettingsFile = GetGameSettingsFile
+                        $global:GameSettings     = GetSettings $GameSettingsFile
+                        Import-Module -Name $script -Global
+                        if (Get-Command "CreateOptions" -errorAction SilentlyContinue) { iex "CreateOptions" }
+                    }
                 }
                 DisablePatches
                 SetVCRemap
+                ChangeGameRev
+
                 break
         }
     }
 
     EnableGUI $True
-    UpdateStatusLabel $lastMessage
+    UpdateStatusLabel $lastMessage -NoConsole
 
 }
 
@@ -474,20 +421,22 @@ function SetVCPanel() {
     EnableElem -Elem @($VC.ActionsLabel, $VC.ExtractROMButton) -Active $True -Hide
     
     # Enable VC panel visiblity
-    if ($GameConsole.t64 -eq 1)                                                { EnableElem -Elem @($VC.OptionsLabel, $VC.RemoveT64,     $VC.RemoveT64Label)                              -Active $True -Hide }
-    if ($GameConsole.expand_memory -eq 1 -and $GameType.expansion_pak -ne 0)   { EnableElem -Elem @($VC.OptionsLabel, $VC.ExpandMemory,  $VC.ExpandMemoryLabel)                           -Active $True -Hide }
-    if ($GameConsole.remove_filter -eq 1 -and $GameType.filter        -ne 0)   { EnableElem -Elem @($VC.OptionsLabel, $VC.RemoveFilter,  $VC.RemoveFilterLabel)                           -Active $True -Hide }
-    if (IsSet $Files.json.controls)                                            { EnableElem -Elem @($VC.OptionsLabel, $VC.RemapControls, $VC.RemapControlsLabel, $VC.RemapControlsButton) -Active $True -Hide }
-    $VC.RemapControlsButton.Enabled = $VC.RemapControls.checked -and $VC.RemapControls.Active
+    if ($IsWiiVC) {
+        if ($GameConsole.t64 -eq 1)                                                { EnableElem -Elem @($VC.OptionsLabel, $VC.RemoveT64,     $VC.RemoveT64Label)                              -Active $True -Hide }
+        if ($GameConsole.expand_memory -eq 1 -and $GameType.expansion_pak -ne 0)   { EnableElem -Elem @($VC.OptionsLabel, $VC.ExpandMemory,  $VC.ExpandMemoryLabel)                           -Active $True -Hide }
+        if ($GameConsole.remove_filter -eq 1 -and $GameType.filter        -ne 0)   { EnableElem -Elem @($VC.OptionsLabel, $VC.RemoveFilter,  $VC.RemoveFilterLabel)                           -Active $True -Hide }
+        if (IsSet $Files.json.controls)                                            { EnableElem -Elem @($VC.OptionsLabel, $VC.RemapControls, $VC.RemapControlsLabel, $VC.RemapControlsButton) -Active $True -Hide }
+        $VC.RemapControlsButton.Enabled = $VC.RemapControls.checked -and $VC.RemapControls.Active
+    }
 
 }
 
 
 
 #==============================================================================================================================================================================================
-function UpdateStatusLabel([string]$Text, [switch]$Main, [switch]$Editor) {
+function UpdateStatusLabel([string]$Text, [switch]$Main, [switch]$Editor, [switch]$NoConsole) {
     
-    WriteToConsole $Text
+    if (!$NoConsole) { WriteToConsole $Text }
 
     if (!$Editor) {
         $StatusLabel.Text = $Text
@@ -595,12 +544,13 @@ function CalculateHashSum() {
         # Verify ROM
         $VerificationInfo.GameField.Text = $VerificationInfo.RegionField.Text = $VerificationInfo.RevField.Text = $VerificationInfo.SupportField.Text = "No Valid ROM Selected"
         foreach ($item in $Files.json.games) {
-            foreach ($subitem in $item.version) {
-                if ($VerificationInfo.HashField.Text -eq $subitem.hash) {
+            for ($i=0; $i -lt $item.version.Count; $i++) {
+                if ($VerificationInfo.HashField.Text -eq $item.version[$i].hash) {
                     $VerificationInfo.GameField.Text   = $item.title
-                    $VerificationInfo.RegionField.Text = $subitem.region
-                    $VerificationInfo.RevField.Text    = $subitem.rev
-                    if ($subitem.supported -ne 0) { $VerificationInfo.SupportField.Text = "This ROM is supported" } else { $VerificationInfo.SupportField.Text = "This ROM is NOT supported! Please use a different ROM that is supported!"}
+                    $VerificationInfo.RegionField.Text = $item.version[$i].region
+                    $VerificationInfo.RevField.Text    = $item.version[$i].rev
+                    if ($i -eq 0 -or (IsSet $item.version[$i].downgrade) -or (IsSet $item.version[$i].upgrade) -or $item.version[$i].supported -eq 1)   { $VerificationInfo.SupportField.Text = "This ROM is supported"                                                    }
+                    else                                                                                                                                { $VerificationInfo.SupportField.Text = "This ROM is NOT supported! Please use a different ROM that is supported!" }
                     break
                 }
             }
@@ -1055,7 +1005,7 @@ function EnableGUI([boolean]$Enable) {
 #==============================================================================================================================================================================================
 function EnableForm([object]$Form, [boolean]$Enable, [switch]$Not) {
     
-    if (!(IsSet $Form)) { return }
+    if ($Form -eq $null) { return }
 
     if ($Not) { $Enable = !$Enable }
     if ($Form.Controls.length -eq $True) {
@@ -1070,15 +1020,15 @@ function EnableForm([object]$Form, [boolean]$Enable, [switch]$Not) {
 #==============================================================================================================================================================================================
 function EnableElem([object]$Elem, [boolean]$Active=$True, [switch]$Hide) {
     
-    if (!(IsSet $Elem)) { return }
-
     if ($Elem -is [system.Array]) {
         foreach ($item in $Elem) {
+            if ($item -eq $null) { return }
             $item.Enabled = $item.Active = $Active
             if ($Hide) { $item.Visible = $Active }
         }
     }
     else {
+        if ($Elem -eq $null) { return }
         $Elem.Enabled = $Elem.Active = $Active
         if ($Hide) { $Elem.Visible = $Active }
     }
@@ -1349,8 +1299,6 @@ Export-ModuleMember -Function SetVCPanel
 Export-ModuleMember -Function CreateToolTip
 Export-ModuleMember -Function ChangeConsolesList
 Export-ModuleMember -Function ChangeGamesList
-Export-ModuleMember -Function ChangeRevList
-Export-ModuleMember -Function ChangePatchPanel
 Export-ModuleMember -Function SetMainScreenSize
 Export-ModuleMember -Function ResetReduxSettings
 Export-ModuleMember -Function SetVCRemap

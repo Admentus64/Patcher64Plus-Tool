@@ -228,13 +228,14 @@ function SetGetROM() {
     CreatePath $Paths.Temp
 
     $global:GetROM = @{}
-    $GetROM.romc                            = $Paths.Temp + "\romc"
-    $GetROM.clean                           = $Paths.Temp + "\clean"
-    $GetROM.cleanDecomp                     = $Paths.Temp + "\clean-decompressed"
-    $GetROM.decomp                          = $Paths.Temp + "\decompressed"
-    $GetROM.downgrade                       = $Paths.Temp + "\downgraded"
-    $GetROM.masterQuest                     = $Paths.Temp + "\master-quest-decompressed"
-    $GetROM.nes                             = $Paths.Temp + "\rom.nes"
+    $GetROM.romc                            = $Paths.Temp  + "\romc"
+    $GetROM.clean                           = $Paths.Temp  + "\clean"
+    $GetROM.cleanDecomp                     = $Paths.Temp  + "\clean-decompressed"
+    $GetROM.decomp                          = $Paths.Temp  + "\decompressed"
+    $GetROM.downgrade                       = $Paths.Temp  + "\downgraded"
+    $GetROM.masterQuest                     = $Paths.Temp  + "\master-quest-decompressed"
+    $GetROM.nes                             = $Paths.Temp  + "\rom.nes"
+    $GetROM.cache                           = $Paths.Cache + "\cached_rom"
 
     if ($IsWiiVC -and (IsSet $WADFile) ) {
         if (!(IsSet $WADFile.ROM)) { $WADFile.ROM = $GetROM.nes }

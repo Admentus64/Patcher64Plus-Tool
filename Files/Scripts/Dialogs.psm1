@@ -238,68 +238,77 @@ function CreateSettingsDialog() {
     $global:GeneralSettings = @{}
     
     # General Settings
-    $GeneralSettings.Box                 = CreateReduxGroup -Y (DPISize 40) -IsGame $False -Height 3 -AddTo $SettingsDialog -Text "General Settings"
-    $GeneralSettings.DoubleClick         = CreateSettingsCheckbox                          -Column 1 -Row 1 -Text "Double Click" -Disable ((GetWindowsVersion) -ge 11) -Info "Allows a PowerShell file to be opened by double-clicking it"
+    $GeneralSettings.Box             = CreateReduxGroup -All -Y (DPISize 40) -IsGame $False -Height 3 -AddTo $SettingsDialog -Text "General Settings"
+    $GeneralSettings.DoubleClick     = CreateSettingsCheckbox                         -Column 1 -Row 1 -Text "Double Click" -Disable ((GetWindowsVersion) -ge 11) -Info "Allows a PowerShell file to be opened by double-clicking it"
     if ((GetWindowsVersion) -lt 11) { $GeneralSettings.DoubleClick.Checked = ((Get-ItemProperty -LiteralPath "HKLM:\Software\Classes\Microsoft.PowerShellScript.1\Shell").'(default)' -eq '0') }
-    $GeneralSettings.ClearType           = CreateSettingsCheckbox -Name "ClearType"        -Column 2 -Row 1 -Text "Use ClearType Font"      -Checked -Info ('Use the ClearType font "Segoe UI" instead of the default font "Microsft Sans Serif"' + "`nThe option will only go in effect when opening the tool`nThis change requires the tool to restart to be applied")
-    $GeneralSettings.HiDPIMode           = CreateSettingsCheckbox -Name "HiDPIMode"        -Column 3 -Row 1 -Text "Use Hi-DPI Mode"         -Checked -Info "Enables Hi-DPI Mode suitable for higher resolution displays`nThe option will only go in effect when opening the tool`nThis change requires the tool to restart to be applied"
-    $GeneralSettings.ModernStyle         = CreateSettingsCheckbox -Name "ModernStyle"      -Column 1 -Row 2 -Text "Use Modern Visual Style" -Checked -Info "Use a modern-looking visual style for the whole interface of the tool"
-    $GeneralSettings.EnableSounds        = CreateSettingsCheckbox -Name "EnableSounds"     -Column 2 -Row 2 -Text "Enable Sound Effects"    -Checked -Info "Enable the use of sound effects, for example when patching is concluded"
-    $GeneralSettings.LocalTempFolder     = CreateSettingsCheckbox -Name "LocalTempFolder"  -Column 3 -Row 2 -Text "Use Local Temp Folder"   -Checked -Info "Store all temporary and extracted files within the local Patcher64+ Tool folder`nIf unchecked the temporary and extracted files are kept in the Patcher64+ Tool folder in %AppData%"
-    $GeneralSettings.DisableUpdates      = CreateSettingsCheckbox -Name "DisableUpdates"   -Column 1 -Row 3 -Text "Disable Auto-Updater"             -Info "Disable the Auto-Updater that runs when starting the Patcher64+ Tool"
-    $GeneralSettings.DisableAddons       = CreateSettingsCheckbox -Name "DisableAddons "   -Column 2 -Row 3 -Text "Disable Addons Updater"           -Info "Disable automatically updating addons (music, models, etc) when starting the Patcher64+ Tool"
+    $GeneralSettings.ClearType       = CreateSettingsCheckbox -Name "ClearType"       -Column 2 -Row 1 -Text "Use ClearType Font"      -Checked -Info ('Use the ClearType font "Segoe UI" instead of the default font "Microsft Sans Serif"' + "`nThe option will only go in effect when opening the tool`nThis change requires the tool to restart to be applied")
+    $GeneralSettings.HiDPIMode       = CreateSettingsCheckbox -Name "HiDPIMode"       -Column 3 -Row 1 -Text "Use Hi-DPI Mode"         -Checked -Info "Enables Hi-DPI Mode suitable for higher resolution displays`nThe option will only go in effect when opening the tool`nThis change requires the tool to restart to be applied"
+    $GeneralSettings.ModernStyle     = CreateSettingsCheckbox -Name "ModernStyle"     -Column 1 -Row 2 -Text "Use Modern Visual Style" -Checked -Info "Use a modern-looking visual style for the whole interface of the tool"
+    $GeneralSettings.EnableSounds    = CreateSettingsCheckbox -Name "EnableSounds"    -Column 2 -Row 2 -Text "Enable Sound Effects"    -Checked -Info "Enable the use of sound effects, for example when patching is concluded"
+    $GeneralSettings.LocalTempFolder = CreateSettingsCheckbox -Name "LocalTempFolder" -Column 3 -Row 2 -Text "Use Local Temp Folder"   -Checked -Info "Store all temporary and extracted files within the local Patcher64+ Tool folder`nIf unchecked the temporary and extracted files are kept in the Patcher64+ Tool folder in %AppData%"
+    $GeneralSettings.KeepCache       = CreateSettingsCheckbox -Name "KeepCache"       -Column 1 -Row 3 -Text "Keep Cache"              -Checked -Info "Keep a copy of the downgraded or decompressed ROM to speed up patching for subsequent attempts"
+    $GeneralSettings.DisableUpdates  = CreateSettingsCheckbox -Name "DisableUpdates"  -Column 2 -Row 3 -Text "Disable Auto-Updater"             -Info "Disable the Auto-Updater that runs when starting the Patcher64+ Tool"
+    $GeneralSettings.DisableAddons   = CreateSettingsCheckbox -Name "DisableAddons"   -Column 3 -Row 3 -Text "Disable Addons Updater"           -Info "Disable automatically updating addons (music, models, etc) when starting the Patcher64+ Tool"
 
 
     # Advanced Settings
-    $GeneralSettings.Box                 = CreateReduxGroup -Y ($GeneralSettings.Box.Bottom + (DPISize 10)) -IsGame $False -Height 2 -AddTo $SettingsDialog -Text "Advanced Settings"
-    $GeneralSettings.IgnoreChecksum      = CreateSettingsCheckbox -Name "IgnoreChecksum"     -Column 1 -Row 1 -Text "Ignore Input Checksum"  -IsDebug -Info "Do not check the checksum of a ROM or WAD and patch it regardless`nDowngrade is no longer forced anymore if the checksum is different than the supported revision`nThis option also skips the maximum ROM size verification`n`nDO NOT REPORT ANY BUGS IF THIS OPTION IS ENABLED!"
-    $GeneralSettings.ForceExtract        = CreateSettingsCheckbox -Name "ForceExtract"       -Column 2 -Row 1 -Text "Force Extract"          -IsDebug -Info "Always extract game data required for patching even if it was already extracted on a previous run"
-    $GeneralSettings.ForceOptions        = CreateSettingsCheckbox -Name "ForceOptions"       -Column 3 -Row 1 -Text "Force Show Options"     -IsDebug -Info ("Always show the " + '"Additional Options"' + " checkbox if it can be supported`n`nDO NOT REPORT ANY BUGS IF THIS OPTION IS ENABLED!")
-    $GeneralSettings.ExtractCleanScript  = CreateSettingsCheckbox -Name "ExtractCleanScript" -Column 1 -Row 2 -Text "Extract Clean Script"   -IsDebug -Info "Extract a clean copy of dialogue script for the Text Editor when patching`nvanilla Ocarina of Time or Majora's Mask"
-    $GeneralSettings.ExtractFullScript   = CreateSettingsCheckbox -Name "ExtractFullScript"  -Column 2 -Row 2 -Text "Extract Patched Script" -IsDebug -Info "Extract a fully patched copy of dialogue script for the Text Editor when patching`nvanilla Ocarina of Time or Majora's Mask"
+    $GeneralSettings.Box                = CreateReduxGroup -All -Y ($GeneralSettings.Box.Bottom + (DPISize 10)) -IsGame $False -Height 2 -AddTo $SettingsDialog -Text "Advanced Settings"
+    $GeneralSettings.IgnoreChecksum     = CreateSettingsCheckbox -Name "IgnoreChecksum"     -Column 1 -Row 1 -Text "Ignore Input Checksum"  -IsDebug -Info "Do not check the checksum of a ROM or WAD and patch it regardless`nDowngrade is no longer forced anymore if the checksum is different than the supported revision`nThis option also skips the maximum ROM size verification`n`nDO NOT REPORT ANY BUGS IF THIS OPTION IS ENABLED!"
+    $GeneralSettings.ForceExtract       = CreateSettingsCheckbox -Name "ForceExtract"       -Column 2 -Row 1 -Text "Force Extract"          -IsDebug -Info "Always extract game data required for patching even if it was already extracted on a previous run"
+    $GeneralSettings.ExtractCleanScript = CreateSettingsCheckbox -Name "ExtractCleanScript" -Column 3 -Row 1 -Text "Extract Clean Script"   -IsDebug -Info "Extract a clean copy of dialogue script for the Text Editor when patching`nvanilla Ocarina of Time or Majora's Mask"
+    $GeneralSettings.ExtractFullScript  = CreateSettingsCheckbox -Name "ExtractFullScript"  -Column 1 -Row 2 -Text "Extract Patched Script" -IsDebug -Info "Extract a fully patched copy of dialogue script for the Text Editor when patching`nvanilla Ocarina of Time or Majora's Mask"
 
 
     # Debug Settings
-    $GeneralSettings.Box                 = CreateReduxGroup -Y ($GeneralSettings.Box.Bottom + (DPISize 10)) -IsGame $False -Height 4 -AddTo $SettingsDialog -Text "Debug Settings"
-    $GeneralSettings.Console             = CreateSettingsCheckbox -Name "Console"           -Column 1 -Row 1 -Text "Console"             -IsDebug -Info "Show the console log"
-    $GeneralSettings.Stop                = CreateSettingsCheckbox -Name "Stop"              -Column 2 -Row 1 -Text "Stop Patching"       -IsDebug -Info "Do not start the patching process and only show the debug information for the console log or log file"
-    $GeneralSettings.Logging             = CreateSettingsCheckbox -Name "Logging"           -Column 3 -Row 1 -Text "Logging"    -Checked -IsDebug -Info "Write all events of Patcher64+ into log files"
-    $GeneralSettings.CreateBPS           = CreateSettingsCheckbox -Name "CreateBPS"         -Column 1 -Row 2 -Text "Create BPS"          -IsDebug -Info "Create compressed and decompressed BPS patches when patching is concluded"
-    $GeneralSettings.NoCleanup           = CreateSettingsCheckbox -Name "NoCleanup"         -Column 2 -Row 2 -Text "No Cleanup"          -IsDebug -Info "Do not clean up the files after the patching process fails or succeeds"
-    $GeneralSettings.NoHeaderChange      = CreateSettingsCheckbox -Name "NoHeaderChange"    -Column 3 -Row 2 -Text "No Header Change"    -IsDebug -Info "Do not change the header of the ROM when patching is concluded"
-    $GeneralSettings.NoChannelChange     = CreateSettingsCheckbox -Name "NoChannelChange"   -Column 1 -Row 3 -Text "No Channel Change"   -IsDebug -Info "Do not change the channel title and GameID of the WAD when patching is concluded"
-    $GeneralSettings.KeepDowngraded      = CreateSettingsCheckbox -Name "KeepDowngraded"    -Column 2 -Row 3 -Text "Keep Downgraded"     -IsDebug -Info "Keep the downgraded patched ROM in the output folder"
-    $GeneralSettings.KeepConverted       = CreateSettingsCheckbox -Name "KeepConverted"     -Column 3 -Row 3 -Text "Keep Converted"      -IsDebug -Info "Keep the converted patched ROM in the output folder"
-    $GeneralSettings.SceneEditorChecks   = CreateSettingsCheckbox -Name "SceneEditorChecks" -Column 1 -Row 4 -Text "Scene Editor Checks" -IsDebug -Info "Print out extras debug info and perform extra checks for the Scene Editor`nThis may slow down performance a bit"
+    $GeneralSettings.Box                  = CreateReduxGroup -All -Y ($GeneralSettings.Box.Bottom + (DPISize 10)) -IsGame $False -Height 4 -AddTo $SettingsDialog -Text "Debug Settings"
+    $GeneralSettings.Console              = CreateSettingsCheckbox -Name "Console"              -Column 1 -Row 1 -Text "Console"                 -IsDebug -Info "Show the console log"
+    $GeneralSettings.Stop                 = CreateSettingsCheckbox -Name "Stop"                 -Column 2 -Row 1 -Text "No Patching"             -IsDebug -Info "Do not start the patching process and only show the debug information for the console log or log file"
+    $GeneralSettings.Logging              = CreateSettingsCheckbox -Name "Logging"              -Column 3 -Row 1 -Text "Logging"        -Checked -IsDebug -Info "Write all events of Patcher64+ into log files"
+    $GeneralSettings.CreateBPS            = CreateSettingsCheckbox -Name "CreateBPS"            -Column 1 -Row 2 -Text "Create BPS"              -IsDebug -Info "Create compressed and decompressed BPS patches when patching is concluded"
+    $GeneralSettings.NoCleanup            = CreateSettingsCheckbox -Name "NoCleanup"            -Column 2 -Row 2 -Text "No Cleanup"              -IsDebug -Info "Do not clean up the files after the patching process fails or succeeds"
+    $GeneralSettings.NoTitleChange        = CreateSettingsCheckbox -Name "NoTitleChange"        -Column 3 -Row 2 -Text "No ROM Title Change"     -IsDebug -Info "Do not change the title of the ROM when patching is concluded"
+    $GeneralSettings.NoGameIDChange       = CreateSettingsCheckbox -Name "NoGameIDChange"       -Column 1 -Row 3 -Text "No GameID Change"        -IsDebug -Info "Do not change the GameID of the ROM when patching is concluded"
+    $GeneralSettings.NoChannelTitleChange = CreateSettingsCheckbox -Name "NoChannelTitleChange" -Column 2 -Row 3 -Text "No Channel Title Change" -IsDebug -Info "Do not change the channel title of the WAD when patching is concluded"
+    $GeneralSettings.NoChannelIDChange    = CreateSettingsCheckbox -Name "NoChannelIDChange"    -Column 3 -Row 3 -Text "No Channel ID Change"    -IsDebug -Info "Do not change the channel GameID of the WAD when patching is concluded"
+    $GeneralSettings.KeepDowngraded       = CreateSettingsCheckbox -Name "KeepDowngraded"       -Column 1 -Row 4 -Text "Keep Downgraded"         -IsDebug -Info "Keep the downgraded patched ROM in the output folder"
+    $GeneralSettings.KeepConverted        = CreateSettingsCheckbox -Name "KeepConverted"        -Column 2 -Row 4 -Text "Keep Converted"          -IsDebug -Info "Keep the converted patched ROM in the output folder"
+    $GeneralSettings.SceneEditorChecks    = CreateSettingsCheckbox -Name "SceneEditorChecks"    -Column 3 -Row 4 -Text "Scene Editor Checks"     -IsDebug -Info "Print out extras debug info and perform extra checks for the Scene Editor`nThis may slow down performance a bit"
 
     # Debug Settings (Nintendo 64)
-    $GeneralSettings.Box                 = CreateReduxGroup -Y ($GeneralSettings.Box.Bottom + (DPISize 10)) -IsGame $False -Height 2 -AddTo $SettingsDialog -Text "Debug Settings (Nintendo 64)"
-    $GeneralSettings.KeepDecompressed    = CreateSettingsCheckbox -Name "KeepDecompressed" -Column 1 -Row 1 -Text "Keep Decompressed"     -IsDebug -Info "Keep the decompressed patched ROM in the output folder"
-    $GeneralSettings.Rev0DungeonFiles    = CreateSettingsCheckbox -Name "Rev0DungeonFiles" -Column 2 -Row 1 -Text "Rev 0 Dungeon Files"   -IsDebug -Info "Extract the dungeon files from the OoT ROM (Rev 0 US) or MM ROM (Rev 0 US) as well when extracting dungeon files"
-    $GeneralSettings.NoConversion        = CreateSettingsCheckbox -Name "NoConversion"     -Column 3 -Row 1 -Text "No Conversion"         -IsDebug -Info "Do not attempt to convert the ROM to a proper format"
-    $GeneralSettings.NoCRCChange         = CreateSettingsCheckbox -Name "NoCRCChange"      -Column 1 -Row 2 -Text "No CRC Change"         -IsDebug -Info "Do not change the CRC of the ROM when patching is concluded"
-    $GeneralSettings.NoCompression       = CreateSettingsCheckbox -Name "NoCompression"    -Column 2 -Row 2 -Text "No Compression"        -IsDebug -Info "Do not attempt to compress the ROM back again when patching is concluded`nThis can cause Wii VC WADs to freeze"
+    $GeneralSettings.Box              = CreateReduxGroup -All -Y ($GeneralSettings.Box.Bottom + (DPISize 10)) -IsGame $False -Height 2 -AddTo $SettingsDialog -Text "Debug Settings (Nintendo 64)"
+    $GeneralSettings.KeepDecompressed = CreateSettingsCheckbox -Name "KeepDecompressed" -Column 1 -Row 1 -Text "Keep Decompressed"   -IsDebug -Info "Keep the decompressed patched ROM in the output folder"
+    $GeneralSettings.Rev0DungeonFiles = CreateSettingsCheckbox -Name "Rev0DungeonFiles" -Column 2 -Row 1 -Text "Rev 0 Dungeon Files" -IsDebug -Info "Extract the dungeon files from the OoT ROM (Rev 0 US) or MM ROM (Rev 0 US) as well when extracting dungeon files"
+    $GeneralSettings.NoConversion     = CreateSettingsCheckbox -Name "NoConversion"     -Column 3 -Row 1 -Text "No Conversion"       -IsDebug -Info "Do not attempt to convert the ROM to a proper format"
+    $GeneralSettings.NoCRCChange      = CreateSettingsCheckbox -Name "NoCRCChange"      -Column 1 -Row 2 -Text "No CRC Change"       -IsDebug -Info "Do not change the CRC of the ROM when patching is concluded"
+    $GeneralSettings.NoCompression    = CreateSettingsCheckbox -Name "NoCompression"    -Column 2 -Row 2 -Text "No Compression"      -IsDebug -Info "Do not attempt to compress the ROM back again when patching is concluded`nThis can cause Wii VC WADs to freeze"
 
     # Settings preset
-    $GeneralSettings.Box                 = CreateReduxGroup -Y ($GeneralSettings.Box.Bottom + (DPISize 10)) -IsGame $False -Height 2 -AddTo $SettingsDialog -Text "Settings Presets"
-    $GeneralSettings.PresetsPanel        = CreateReduxPanel -Row 2 -AddTo $GeneralSettings.Box
-    $GeneralSettings.Presets = @()
-    $GeneralSettings.Presets            += CreateSettingsRadioField -Name "Preset" -SaveAs 1 -Max 6 -NameTextbox "Preset.Label1" -Column 1 -Row 1 -Checked -Text "Preset 1" -Info "Settings preset #1`nAll made settings are stored to this preset`nSettings are retrieved when selecting this preset again"
-    $GeneralSettings.Presets            += CreateSettingsRadioField -Name "Preset" -SaveAs 2 -Max 6 -NameTextbox "Preset.Label2" -Column 2 -Row 1          -Text "Preset 2" -Info "Settings preset #2`nAll made settings are stored to this preset`nSettings are retrieved when selecting this preset again"
-    $GeneralSettings.Presets            += CreateSettingsRadioField -Name "Preset" -SaveAs 3 -Max 6 -NameTextbox "Preset.Label3" -Column 3 -Row 1          -Text "Preset 3" -Info "Settings preset #3`nAll made settings are stored to this preset`nSettings are retrieved when selecting this preset again" 
-    $GeneralSettings.Presets            += CreateSettingsRadioField -Name "Preset" -SaveAs 4 -Max 6 -NameTextbox "Preset.Label4" -Column 1 -Row 2          -Text "Preset 4" -Info "Settings preset #4`nAll made settings are stored to this preset`nSettings are retrieved when selecting this preset again"
-    $GeneralSettings.Presets            += CreateSettingsRadioField -Name "Preset" -SaveAs 5 -Max 6 -NameTextbox "Preset.Label5" -Column 2 -Row 2          -Text "Preset 5" -Info "Settings preset #5`nAll made settings are stored to this preset`nSettings are retrieved when selecting this preset again"
-    $GeneralSettings.Presets            += CreateSettingsRadioField -Name "Preset" -SaveAs 6 -Max 6 -NameTextbox "Preset.Label6" -Column 3 -Row 2          -Text "Preset 6" -Info "Settings preset #6`nAll made settings are stored to this preset`nSettings are retrieved when selecting this preset again"
+    $GeneralSettings.Box          = CreateReduxGroup -All -Y ($GeneralSettings.Box.Bottom + (DPISize 10)) -IsGame $False -Height 2 -AddTo $SettingsDialog -Text "Settings Presets"
+    $GeneralSettings.PresetsPanel = CreateReduxPanel -Row 2 -AddTo $GeneralSettings.Box
+    $GeneralSettings.Presets      = @()
+    $text                         = "`nAll made settings are stored to this preset`nSettings are retrieved when selecting this preset again"
+    $GeneralSettings.Presets     += CreateSettingsRadioField -Name "Preset" -SaveAs 1 -Max 6 -NameTextbox "Preset.Label1" -Column 1 -Row 1 -Text "Preset 1" -Info ("Settings preset #1" + $text) -Checked
+    $GeneralSettings.Presets     += CreateSettingsRadioField -Name "Preset" -SaveAs 2 -Max 6 -NameTextbox "Preset.Label2" -Column 2 -Row 1 -Text "Preset 2" -Info ("Settings preset #2" + $text)
+    $GeneralSettings.Presets     += CreateSettingsRadioField -Name "Preset" -SaveAs 3 -Max 6 -NameTextbox "Preset.Label3" -Column 3 -Row 1 -Text "Preset 3" -Info ("Settings preset #3" + $text)
+    $GeneralSettings.Presets     += CreateSettingsRadioField -Name "Preset" -SaveAs 4 -Max 6 -NameTextbox "Preset.Label4" -Column 1 -Row 2 -Text "Preset 4" -Info ("Settings preset #4" + $text)
+    $GeneralSettings.Presets     += CreateSettingsRadioField -Name "Preset" -SaveAs 5 -Max 6 -NameTextbox "Preset.Label5" -Column 2 -Row 2 -Text "Preset 5" -Info ("Settings preset #5" + $text)
+    $GeneralSettings.Presets     += CreateSettingsRadioField -Name "Preset" -SaveAs 6 -Max 6 -NameTextbox "Preset.Label6" -Column 3 -Row 2 -Text "Preset 6" -Info ("Settings preset #6" + $text)
 
     if ((GetWindowsVersion) -lt 11) { $GeneralSettings.DoubleClick.Add_CheckStateChanged( { TogglePowerShellOpenWithClicks $this.Checked } ) }
     $GeneralSettings.ModernStyle.Add_CheckStateChanged(     { SetModernVisualStyle $this.checked } )
-    $GeneralSettings.ForceOptions.Add_CheckStateChanged(    { DisablePatches } )
     $GeneralSettings.EnableSounds.Add_CheckStateChanged(    { LoadSoundEffects $this.checked } )
     $GeneralSettings.Logging.Add_CheckStateChanged(         { SetLogging $this.checked } )
 
     # Local Temp Folder
     $GeneralSettings.LocalTempFolder.Add_CheckStateChanged( {
-        if ($this.checked) { $Paths.Temp = $Paths.LocalTemp } else { $Paths.Temp = $Paths.AppDataTemp }
+        if ($this.checked) {
+            $Paths.Temp  = $Paths.LocalTemp
+            $Paths.Cache = $Paths.LocalCache
+        }
+        else {
+            $Paths.Temp  = $Paths.AppDataTemp
+            $Paths.Cache = $Paths.AppDataCache
+        }
         SetTempFileParameters
     } )
 
@@ -308,13 +317,17 @@ function CreateSettingsDialog() {
     $GeneralSettings.Console.Add_CheckStateChanged( { ShowPowerShellConsole $this.Checked } )
 
     # Presets
-    foreach ($item in $GeneralSettings.Presets) {
-        $item.Add_CheckedChanged( {
-            if (!$this.checked) { return }
-            if ($GameType.save -gt 0) { Out-IniFile -FilePath (GetGameSettingsFile) -InputObject $GameSettings | Out-Null }
-            $global:GameSettings = GetSettings -File (GetGameSettingsFile)
-            if (GetCommand "CreateOptions") { CreateOptions }
-            DisableReduxOptions
+    for ($i=0; $i-lt $GeneralSettings.Presets.Length; $i++) {
+        $GeneralSettings.Presets[$i].Add_CheckedChanged( {
+            if (!(IsSet $GamePatch.script) -and $GameSettings -ne $null) { return }
+
+            if (!$this.checked) { Out-IniFile -FilePath $GameSettingsFile -InputObject $GameSettings | Out-Null }
+            else {
+                $global:GameSettingsFile = GetGameSettingsFile
+                $global:GameSettings     = GetSettings $GameSettingsFile
+                if (GetCommand "CreateOptions") { CreateOptions }
+                DisableReduxOptions
+            }
         } )
     }
 

@@ -21,11 +21,6 @@ function MainFunction([string]$Command, [string]$PatchedFileName) {
     if     ($VC.RemapControls.Active -and $GamePatch.remap_controls -eq  1)    { $VC.RemapControls.Checked = $True  }
     elseif ($VC.RemapControls.Active -and $GamePatch.remap_controls -eq -1)    { $VC.RemapControls.Checked = $False }
 
-    # Finalize
-    if     ( (IsChecked $Patches.Options) -or (IsSet $GamePatch.preset) )      { $PatchInfo.finalize = $False }
-    if     ($GamePatch.finalize -eq 0)                                         { $PatchInfo.finalize = $False }
-    elseif ($GamePatch.finalize -eq 1)                                         { $PatchInfo.finalize = $True }
-
     if ( !(StrLike -str $Command -val "Inject") -and !(StrLike -str $Command -val "Apply Patch") -and !(StrLike -str $Command -val "Extract") ) {
         # Redux
         if ( ( (IsChecked $Patches.Redux) -or (IsSet $GamePatch.preset) ) -and (IsSet $GamePatch.redux.file)) {
@@ -35,7 +30,6 @@ function MainFunction([string]$Command, [string]$PatchedFileName) {
             if     ($VC.ExpandMemory.Active  -and $GamePatch.redux.expand_memory  -eq  1)   { $VC.ExpandMemory.Checked  = $True  }
             elseif ($VC.ExpandMemory.Active  -and $GamePatch.redux.expand_memory  -eq -1)   { $VC.ExpandMemory.Checked  = $False }
             if     (IsSet -Elem $GamePatch.redux.output)   { $PatchedFileName = $GamePatch.redux.output }
-            $PatchInfo.finalize = $False
         }
 
         # Language Patch
@@ -57,8 +51,6 @@ function MainFunction([string]$Command, [string]$PatchedFileName) {
             }
             $Header = SetHeader -Header $Header -ROMTitle $LanguagePatch.rom_title -ROMGameID $LanguagePatch.rom_gameID -VCTitle $LanguagePatch.vc_title -VCGameID $LanguagePatch.vc_gameID -Region $LanguagePatch.rom_region
             if     (IsSet $LanguagePatch.output)     { $PatchedFileName = $LanguagePatch.output }
-            if     ($LanguagePatch.finalize -eq 0)   { $PatchInfo.finalize  = $False }
-            elseif ($LanguagePatch.finalize -eq 1)   { $PatchInfo.finalize  = $True }
             
             if (IsSet $LanguagePatch.region)     {
                 if (!(IsSet $Header[1])) { $Header[1] = $GameType.rom_gameID }
@@ -83,14 +75,7 @@ function MainFunction([string]$Command, [string]$PatchedFileName) {
     if ($CustomHeader.EnableRegion.Checked -and $GameConsole.rom_gameID -eq 2) { $Header[4] = [Byte]$CustomHeader.Region.SelectedIndex }
     
     # Set ROM
-    if ($GameType.checksum -ne 0) {
-        foreach ($rev in $GameType.version) {
-            if ($rev.list -eq $CurrentGame.Rev.Text) {
-                $global:CheckHashSum = $rev.hash
-                break
-            }
-        }
-    }
+    if ($GameType.checksum -ne 0) { $global:CheckHashSum = $GameRev.hash }
     if ( (IsSet -Elem $InjectFile -MinLength 4) -and $IsWiiVC) { $global:ROMFile = SetROMParameters -Path $InjectPath -PatchedFileName $PatchedFileName }
     if (!$IsWiiVC) {
         $global:ROMFile = SetROMParameters -Path $GamePath -PatchedFileName $PatchedFileName
@@ -99,7 +84,7 @@ function MainFunction([string]$Command, [string]$PatchedFileName) {
 
     # Decompress
     if ($GameType.decompress -gt 0) {
-        if     (StrStarts -Str (GetPatchFile) -Val "Decompressed\") { $PatchInfo.decompress = $True }
+        if     (StrStarts -Str $GamePatch.patch -Val "Decompressed\") { $PatchInfo.decompress = $True }
         elseif ($GameType.decompress -eq 1 -and !(StrLike -str $Command -val "Inject") -and !(StrLike -str $Command -val "Apply Patch") -and !(StrLike -str $Command -val "Extract") ) {
             if ( (IsChecked $Patches.Options) -or (IsChecked $Patches.Redux) -or (IsSet $GamePatch.preset) )                                                                            { $PatchInfo.decompress = $True }
         }
@@ -168,7 +153,7 @@ function MainFunctionPatch([string]$Command, [Array]$Header, [string]$PatchedFil
 
     # Step 05: Set checksum to determine downgrading & decompressing
     if (TestFile $GetROM.run)                                                   { $global:ROMHashSum    = (Get-FileHash -Algorithm MD5 -LiteralPath $GetROM.run).Hash }
-    if ($Settings.Debug.IgnoreChecksum -eq $False -and (IsSet $CheckHashsum))   { $PatchInfo.downgrade  = ($ROMHashSum -ne $CheckHashSum) }
+    if ($Settings.Debug.IgnoreChecksum -eq $False -and (IsSet $CheckHashSum))   { $PatchInfo.downgrade  = ($ROMHashSum -ne $CheckHashSum) }
     if ($PatchInfo.downgrade)                                                   { $PatchInfo.decompress = $True }
 
     # Step 06: Convert, compare the hashsum of the ROM and check if the maximum size is allowed
@@ -177,7 +162,7 @@ function MainFunctionPatch([string]$Command, [Array]$Header, [string]$PatchedFil
         ConvertROM $Command
         if (!(CompareHashSums $Command)) { return }
     }
-
+    
     # Step 07: Downgrade and decompress the ROM if required
     if ( (StrLike -str $Command -val "Inject" -Not) -and $PatchInfo.run) {
         if (!(DecompressROM)) { return }
@@ -236,16 +221,15 @@ function WriteDebug([string]$Command, [string[]]$Header, [string]$PatchedFileNam
     WriteToConsole "--- Start Patch Info ---"
     WriteToConsole ("Game Mode:     " + $GameType.mode)
     WriteToConsole ("Console Mode:  " + $GameConsole.Mode)
+    WriteToConsole ("Revision:      " + $GameRev.Name)
     WriteToConsole ("Patch Options: " + $GamePatch.title)
     WriteToConsole ("Custom Header: " + $Header)
-    WriteToConsole ("Patch File:    " + (GetPatchFile))
+    WriteToConsole ("Patch File:    " + $GamePatch.patch)
     WriteToConsole ("Use Options:   " + (UseOptions))
-    WriteToConsole ("Use Redux:     " + ( ( (IsChecked $Patches.Redux) -or (IsSet $GamePatch.preset) ) -and (IsSet $GamePatch.redux.file) ) )
-    WriteToConsole ("Redux File:    " + $GamePatch.redux.file)
+    WriteToConsole ("Use Redux:     " + ( ( (IsChecked $Patches.Redux) -or (IsSet $GamePatch.preset) ) -and (IsSet $GamePatch.redux) ) )
     WriteToConsole ("Language File: " + $LanguagePatchFile + " (" + $LanguagePatch.code + ")")
     WriteToConsole ("Output Name:   " + $PatchedFileName)
     WriteToConsole ("Command:       " + $Command)
-    WriteToConsole ("Finalize:      " + $PatchInfo.finalize)
     WriteToConsole ("Decompress:    " + $PatchInfo.decompress)
     WriteToConsole ("ROM Hash:      " + $ROMHashSum)
     WriteToConsole ("No-Intro Hash: " + $CheckHashSum)
@@ -349,24 +333,9 @@ function Unpack() {
 
 
 #==============================================================================================================================================================================================
-function GetPatchFile() {
-    
-    if ($GamePatch.patch -is [System.Array]) {
-        foreach ($item in $GamePatch.patch) {
-            if ($item.rev -eq $ROMHashSum -and ( ($item.console -eq "Native" -and !$IsWiiVC) -or ($item.console -eq "Wii VC" -and $IsWiiVC) -or !(IsSet $item.console) ) ) { return $item.file }
-        }
-        return $GamePatch.patch[0].file
-    }
-    return $GamePatch.patch
-
-}
-
-
-
-#==============================================================================================================================================================================================
 function UseOptions() {
     
-    if (IsSet $GamePatch.options) {
+    if (IsSet $GamePatch.script) {
         if ( (IsSet $GamePatch.preset) -or ($Patches.Options.Checked -and $Patches.Options.Visible) ) { return $True }
     }
     return $False
@@ -386,7 +355,7 @@ function PrePatchingAdditionalOptions() {
         UpdateStatusLabel ("Pre-Patching " + $GameType.mode + " Additional Patches...")
         PrePatchOptions
     }
-    if ( (GetCommand "PrePatchReduxOptions") -and ( (IsChecked $Patches.Redux) -or (IsSet $GamePatch.preset) ) -and (IsSet $GamePatch.redux.file) ) {
+    if ( (GetCommand "PrePatchReduxOptions") -and ( (IsChecked $Patches.Redux) -or (IsSet $GamePatch.preset) ) -and (IsSet $GamePatch.redux) ) {
         UpdateStatusLabel ("Pre-Patching " + $GameType.mode + " Additional Redux Patches...")
         PrePatchReduxOptions
     }
@@ -398,7 +367,7 @@ function PrePatchingAdditionalOptions() {
 #==============================================================================================================================================================================================
 function PatchingAdditionalOptions() {
     
-    if (!(IsSet $GamePatch.options))                               { return }
+    if (!(IsSet $GamePatch.script))                                { return }
     if (!$PatchInfo.decompress -and !(TestFile $GetROM.decomp) )   { Copy-Item -LiteralPath $GetROM.run -Destination $GetROM.decomp -Force }
     
     # Language patches
@@ -433,7 +402,7 @@ function PatchingAdditionalOptions() {
     }
 
     # BPS - Redux Options
-    if ( (GetCommand "PatchReduxOptions") -and ( (IsChecked $Patches.Redux) -or (IsSet $GamePatch.preset) ) -and (IsSet $GamePatch.redux.file) ) {
+    if ( (GetCommand "PatchReduxOptions") -and ( (IsChecked $Patches.Redux) -or (IsSet $GamePatch.preset) ) -and (IsSet $GamePatch.redux) ) {
         UpdateStatusLabel ("Patching " + $GameType.mode + " Additional Redux Patches...")
         PatchReduxOptions
     }
@@ -447,7 +416,7 @@ function PatchingAdditionalOptions() {
     }
 
     # Redux Options
-    if ( (GetCommand "ByteReduxOptions") -and ( (IsChecked $Patches.Redux) -or (IsSet $GamePatch.preset) ) -and (IsSet $GamePatch.redux.file) ) {
+    if ( (GetCommand "ByteReduxOptions") -and ( (IsChecked $Patches.Redux) -or (IsSet $GamePatch.preset) ) -and (IsSet $GamePatch.redux) ) {
         UpdateStatusLabel ("Patching " + $GameType.mode + " Additional Redux Options...")
         ByteReduxOptions
     }
@@ -589,17 +558,51 @@ function DowngradeROM() {
         $GetROM.run = $GetROM.downgrade
     }
     
-    foreach ($item in $GameType.version) {
-        if ($ROMHashSum -eq $item.hash -and (IsSet $item.file)) {
-            if (!(ApplyPatch -File $GetROM.run -Patch ("Downgrade\" + $item.file))) {
-                WriteToConsole "Could not apply downgrade patch"
-                return
+
+    $romHash = (Get-FileHash -Algorithm MD5 -LiteralPath $GetROM.run).Hash
+    if ($PatchInfo.decompress -and (IsSet $GameRev.hash_decomp)) { $revHash = $GameRev.hash_decomp } else { $revHash = $GameRev.hash }
+
+    :outer while ($romHash -ne $revHash) {
+        $downgradeFile = $null
+        :inner for ($i=0; $i -lt $GameType.version.Count; $i++) {
+            if ($PatchInfo.decompress -and (IsSet $GameRev.hash_decomp)) { $hash = $GameType.version[$i].hash_decomp } else { $hash = $GameType.version[$i].hash }
+            if ($romHash -eq $hash -and (IsSet $GameType.version[$i].downgrade)) {
+                $downgradeFile = "Downgrade\" + $GameType.version[$i].downgrade
+                break inner
             }
-            if ($Settings.Debug.KeepDowngraded -eq $True) { Copy-Item -LiteralPath $GetROM.run -Destination $GetROM.keepDowngrade -Force }
-            $global:ROMHashSum = $CheckHashSum
-            return $item
         }
-        elseif ($ROMHashSum -eq $item.hash) { return $item }
+
+        if ($downgradeFile -ne $null) {
+            if (!(ApplyPatch -File $GetROM.run -Patch $downgradeFile)) {
+                WriteToConsole "Could not apply downgrade patch"
+                return $null
+            }
+            $romHash = (Get-FileHash -Algorithm MD5 -LiteralPath $GetROM.run).Hash
+        }
+        else { break outer }
+    }
+
+    if ($romHash -ne $revHash) {
+        foreach ($item in $GameType.version) {
+            if ($PatchInfo.decompress -and (IsSet $GameRev.hash_decomp)) { $hash = $item.hash_decomp } else { $hash = $item.hash }
+            if ($romHash -eq $hash -and (IsSet $item.upgrade)) {
+                if (!(ApplyPatch -File $GetROM.run -Patch ("Downgrade\" + $item.upgrade))) {
+                    WriteToConsole "Could not apply upgrade patch"
+                    return
+                }
+            }
+            $romHash = (Get-FileHash -Algorithm MD5 -LiteralPath $GetROM.run).Hash
+        }
+    }
+
+    if ($romHash -eq $revHash) {
+        if ($Settings.Debug.KeepDowngraded -eq $True) { Copy-Item -LiteralPath $GetROM.run -Destination $GetROM.keepDowngrade -Force }
+        if ($Settings.Core.KeepCache -eq $True) {
+            CreatePath $Paths.Cache
+            Copy-Item -LiteralPath $GetROM.run -Destination $GetROM.cache -Force
+        }
+        $global:ROMHashSum = $CheckHashSum
+        return $item
     }
 
     WriteToConsole "Unknown version for downgrading"
@@ -740,13 +743,13 @@ function CompareHashSums([string]$Command) {
 #==============================================================================================================================================================================================
 function PatchDecompressedROM() {
     
-    if (!(StrStarts -Str (GetPatchFile) -Val "Decompressed\")) { return $True }
+    if (!(StrStarts -Str $GamePatch.patch -Val "Decompressed\")) { return $True }
     
     # Set the status label.
     UpdateStatusLabel ("Patching " + $GameType.mode + " ROM with patch file...")
     
     # Apply the selected patch to the ROM, if it is provided
-    if (!(ApplyPatch -File $GetROM.decomp -Patch (GetPatchFile))) { return $False }
+    if (!(ApplyPatch -File $GetROM.decomp -Patch $GamePatch.patch)) { return $False }
     
     return $True
 
@@ -757,14 +760,14 @@ function PatchDecompressedROM() {
 #==============================================================================================================================================================================================
 function PatchCompressedROM() {
     
-    if (!(StrStarts -Str (GetPatchFile) -Val "Compressed\")) { return $True }
+    if (!(StrStarts -Str $GamePatch.patch -Val "Compressed\")) { return $True }
     
     # Set the status label.
     UpdateStatusLabel ("Patching " + $GameType.mode + " ROM with patch file...")
 
     # Apply the selected patch to the ROM, if it is provided
-    if     ( $IsWiiVC)   { if (!(ApplyPatch -File $GetROM.patched -Patch (GetPatchFile)))                        { return $False } }
-    elseif (!$IsWiiVC)   { if (!(ApplyPatch -File $GetROM.run     -Patch (GetPatchFile) -New $GetROM.patched))   { return $False } }
+    if     ( $IsWiiVC)   { if (!(ApplyPatch -File $GetROM.patched -Patch $GamePatch.patch))                        { return $False } }
+    elseif (!$IsWiiVC)   { if (!(ApplyPatch -File $GetROM.run     -Patch $GamePatch.patch -New $GetROM.patched))   { return $False } }
 
     return $True
 
@@ -920,11 +923,31 @@ function DecompressROM() {
         elseif ( (IsSet $GameType.dmaTable) -and $ROMHashSum -ne $CheckHashSum -and $PatchInfo.downgrade)                { RemoveFile $Files.dmaTable; Add-Content $Files.dmaTable $GameType.dmaTable        }
         else                                                                                                             { & $Files.tool.TabExt $GetROM.run | Out-Null }
 
+        # Reuse cache
+        if ($Settings.Core.KeepCache -eq $True) {
+            if (TestFile $GetROM.cache) {
+                if (IsSet $GameRev.hash_decomp) { $hash = $GameRev.hash_decomp } else { $hash = $GameRev.hash } 
+                if ($hash -eq (Get-FileHash -Algorithm MD5 -LiteralPath $GetROM.cache).Hash) {
+                    WriteToConsole "Reused ROM from cache"
+                    Copy-Item -LiteralPath $GetROM.cache -Destination $GetROM.decomp -Force
+                    if ($Settings.Debug.CreateBPS -eq $True -or (IsSet $ActorEditor) ) { Copy-Item -LiteralPath $GetROM.decomp -Destination $GetROM.cleanDecomp -Force }
+                    if ($IsWiiVC) { RemoveFile $GetROM.run }
+                    return $True
+                }
+            }
+        
+        }
+
+        # Decompress
         WriteToConsole ("Generated DMA Table from: " + $GetROM.run)
         & $Files.tool.ndec $GetROM.run $GetROM.decomp | Out-Null
         WriteToConsole ("Decompressed ROM: " + $GetROM.decomp)
         Pop-Location
 
+        if ($Settings.Core.KeepCache -eq $True) {
+            CreatePath $Paths.Cache
+            Copy-Item -LiteralPath $GetROM.decomp -Destination $GetROM.cache -Force
+        }
         if ($Settings.Debug.CreateBPS -eq $True -or (IsSet $ActorEditor) ) { Copy-Item -LiteralPath $GetROM.decomp -Destination $GetROM.cleanDecomp -Force }
     }
     elseif ($GameType.decompress -eq 2) {
@@ -966,7 +989,9 @@ function CompressROM() {
         WriteToConsole ("Compressed ROM: " + $GetROM.patched)
         Pop-Location
 
-        if ($PatchInfo.finalize -and (TestFile ($GameFiles.downgrade + "\finalize_rev0.bps"))) { ApplyPatch -File $GetROM.patched -Patch "Downgrade\finalize_rev0.bps" }
+        if (IsSet $GamePatch.finalize) {
+            if (TestFile (CheckPatchExtension ($GameFiles.downgrade + "\" + $GamePatch.finalize) ) ) { ApplyPatch -File $GetROM.patched -Patch (CheckPatchExtension ($GameFiles.downgrade + "\" + $GamePatch.finalize)) -FullPath }
+        }
     }
     else { Move-Item -LiteralPath $GetROM.decomp -Destination $GetROM.patched -Force }
 
@@ -993,22 +1018,22 @@ function CompressROM() {
 function PatchRedux() {
     
     # BPS PATCHING REDUX #
-    if ( ( (IsChecked $Patches.Redux) -or (IsSet $GamePatch.preset) ) -and (IsSet -Elem $GamePatch.redux.file) ) {
-        if ( !$PatchInfo.decompress -and !(TestFile $GetROM.decomp) ) { Copy-Item -LiteralPath $GetROM.run -Destination $GetROM.decomp -Force }
-        UpdateStatusLabel ("Patching " + $GameType.mode + " REDUX...")
+    if ( !(IsChecked $Patches.Redux) -and !(IsSet -Elem $GamePatch.redux) )   { return }
+    if ( !(TestFile (CheckPatchExtension ($GameFiles.base + "\redux") ) ) )   { return }
 
-        # Redux patch
-        if ( (IsChecked $Redux.Graphics.Widescreen) -and (IsSet -Elem $GamePatch.redux.file_widescreen) )   { ApplyPatch -File $GetROM.decomp -Patch $GamePatch.redux.file_widescreen }
-        elseif (IsSet -Elem $GamePatch.redux.file)                                                          { ApplyPatch -File $GetROM.decomp -Patch $GamePatch.redux.file }
+    if ( !$PatchInfo.decompress -and !(TestFile $GetROM.decomp) ) { Copy-Item -LiteralPath $GetROM.run -Destination $GetROM.decomp -Force }
+    UpdateStatusLabel ("Patching " + $GameType.mode + " REDUX...")
 
-        # Revert Redux options not selected
-        if (GetCommand "RevertReduxOptions") {
-            $global:ByteArrayGame = [System.IO.File]::ReadAllBytes($GetROM.decomp)
-            UpdateStatusLabel ("Reverting " + $GameType.mode + " Redux content...")
-            RevertReduxOptions
-            [System.IO.File]::WriteAllBytes($GetROM.decomp, $ByteArrayGame)
-            $ByteArrayGame = $null
-        }
+    # Redux patch
+    ApplyPatch -File $GetROM.decomp -Patch (CheckPatchExtension ($GameFiles.base + "\redux")) -FullPath
+
+    # Revert Redux options not selected
+    if (GetCommand "RevertReduxOptions") {
+        $global:ByteArrayGame = [System.IO.File]::ReadAllBytes($GetROM.decomp)
+        UpdateStatusLabel ("Reverting " + $GameType.mode + " Redux content...")
+        RevertReduxOptions
+        [System.IO.File]::WriteAllBytes($GetROM.decomp, $ByteArrayGame)
+        $ByteArrayGame = $null
     }
 
 }
@@ -1018,9 +1043,9 @@ function PatchRedux() {
 #==============================================================================================================================================================================================
 function HackROMGameTitle($Title, $GameID, $Region) {
 
-    if ($Title -eq $null -and $GameID -eq $null -and $Region -eq $null)   { return }
-    if ($Settings.Debug.NoHeaderChange -eq $True)                         { return }
-    if (!(TestFile $GetROM.patched))                                      { Copy-Item -LiteralPath $GetROM.run -Destination $GetROM.patched -Force }
+    if ($Title -eq $null -and $GameID -eq $null -and $Region -eq $null)                          { return }
+    if ($Settings.Debug.NoTitleChange -eq $True -and $Settings.Debug.NoGameIDChange -eq $True)   { return }
+    if (!(TestFile $GetROM.patched))                                                             { Copy-Item -LiteralPath $GetROM.run -Destination $GetROM.patched -Force }
 
     UpdateStatusLabel "Hacking in Custom Title and GameID..."
 
@@ -1029,29 +1054,33 @@ function HackROMGameTitle($Title, $GameID, $Region) {
     if ($GameConsole.mode -eq "SNES" -and (IsSet -Elem $GameConsole.rom_title_offset_hi) ) { $hiROM = (IsHiROM -Offset (GetDecimal -Hex $GameConsole.rom_title_offset_hi) -ROM $ByteArray) }
 
     # Internal ROM Title
-    if ($Title -ne $null -and (IsSet $GameConsole.rom_title_offset) -and (IsSet -Elem $GameConsole.rom_title_length -Min 1) -and ($GameConsole.rom_title -gt 0) ) {
-        if ($hiROM) { $offset = $GameConsole.rom_title_offset_hi } else { $offset = $GameConsole.rom_title_offset }
-        $emptyTitle = foreach ($i in 1..$GameConsole.rom_title_length) { 32 }
-        if ($GameConsole.rom_title_uppercase -gt 0) { $Title = $Title.ToUpper() }
-        ChangeBytes -Offset $Offset -Values $emptyTitle
-        ChangeBytes -Offset $offset -Values ($Title.ToCharArray() | % { [uint32][char]$_ }) -IsDec
+    if ($Settings.Debug.NoTitleChange -ne $True) {
+        if ($Title -ne $null -and (IsSet $GameConsole.rom_title_offset) -and (IsSet -Elem $GameConsole.rom_title_length -Min 1) -and ($GameConsole.rom_title -gt 0) ) {
+            if ($hiROM) { $offset = $GameConsole.rom_title_offset_hi } else { $offset = $GameConsole.rom_title_offset }
+            $emptyTitle = foreach ($i in 1..$GameConsole.rom_title_length) { 32 }
+            if ($GameConsole.rom_title_uppercase -gt 0) { $Title = $Title.ToUpper() }
+            ChangeBytes -Offset $Offset -Values $emptyTitle
+            ChangeBytes -Offset $offset -Values ($Title.ToCharArray() | % { [uint32][char]$_ }) -IsDec
 
-        if ($GameConsole.mode -eq "SNES" -and (Get-Item -LiteralPath $GetROM.patched).length/4MB -gt 1) {
-            ChangeBytes -Offset (Get32Bit ( (GetDecimal $offset) + 0x400000) ) -Values $emptyTitle
-            ChangeBytes -Offset (Get32Bit ( (GetDecimal $offset) + 0x400000) ) -Values ($Title.ToCharArray() | % { [uint32][char]$_ }) -IsDec
+            if ($GameConsole.mode -eq "SNES" -and (Get-Item -LiteralPath $GetROM.patched).length/4MB -gt 1) {
+                ChangeBytes -Offset (Get32Bit ( (GetDecimal $offset) + 0x400000) ) -Values $emptyTitle
+                ChangeBytes -Offset (Get32Bit ( (GetDecimal $offset) + 0x400000) ) -Values ($Title.ToCharArray() | % { [uint32][char]$_ }) -IsDec
+            }
         }
     }
 
     # GameID
-    if ($GameID -ne $null -and (IsSet -Elem $GameConsole.rom_gameID_offset) -and ($GameConsole.rom_gameID -eq 1)) { ChangeBytes -Offset $GameConsole.rom_gameID_offset -Values ($GameID.ToCharArray() | % { [uint32][char]$_ }) -IsDec }
-    elseif ($Region -ne $null -and $GameConsole.rom_gameID -eq 2) {
-        if ($hiROM) { $offset = $GameConsole.rom_title_offset_hi } else { $offset = $GameConsole.rom_title_offset }
-        $offset = ( Get24Bit ( (GetDecimal $Offset) + (GetDecimal "19") ) )
-        if ($ByteArrayGame[(GetDecimal $offset)] -ne $Region) {
-            $ByteArrayGame[(GetDecimal $offset)] = $Region
-            if ((Get-Item -LiteralPath $GetROM.patched).length/4MB -gt 1) { $ByteArrayGame[(GetDecimal $offset) + 0x400000] = $Region }
-            WriteToConsole ("Changed region code: " + (Get8Bit $Region))
-            RemoveRegionProtection
+    if ($Settings.Debug.NoGameIDChange -ne $True) {
+        if ($GameID -ne $null -and (IsSet -Elem $GameConsole.rom_gameID_offset) -and ($GameConsole.rom_gameID -eq 1)) { ChangeBytes -Offset $GameConsole.rom_gameID_offset -Values ($GameID.ToCharArray() | % { [uint32][char]$_ }) -IsDec }
+        elseif ($Region -ne $null -and $GameConsole.rom_gameID -eq 2) {
+            if ($hiROM) { $offset = $GameConsole.rom_title_offset_hi } else { $offset = $GameConsole.rom_title_offset }
+            $offset = ( Get24Bit ( (GetDecimal $Offset) + (GetDecimal "19") ) )
+            if ($ByteArrayGame[(GetDecimal $offset)] -ne $Region) {
+                $ByteArrayGame[(GetDecimal $offset)] = $Region
+                if ((Get-Item -LiteralPath $GetROM.patched).length/4MB -gt 1) { $ByteArrayGame[(GetDecimal $offset) + 0x400000] = $Region }
+                WriteToConsole ("Changed region code: " + (Get8Bit $Region))
+                RemoveRegionProtection
+            }
         }
     }
 
@@ -1142,7 +1171,6 @@ function GetROMVersion() {
 Export-ModuleMember -Function MainFunction
 Export-ModuleMember -Function ApplyPatch
 Export-ModuleMember -Function Cleanup
-Export-ModuleMember -Function GetPatchFile
 Export-ModuleMember -Function FinishLanguagePatching
 
 Export-ModuleMember -Function SetROMParameters
