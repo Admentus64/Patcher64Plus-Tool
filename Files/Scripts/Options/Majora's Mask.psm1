@@ -1075,7 +1075,10 @@ function CreateOptions() {
     
     CreateOptionsDialog -Columns 6 -Height 605 -Tabs @("Main", "Graphics", "Audio", "Difficulty", "Colors", "Equipment", "Speedup")
 
-    if (IsSet $Redux.Graphics.Widescreen) { $Redux.Graphics.Widescreen.Add_CheckedChanged({ AdjustGUI }) }
+    if (IsSet $Redux.Graphics.WidescreenAlt)   { $Redux.Graphics.WidescreenAlt.Add_CheckStateChanged({ AdjustGUI }) }
+    if (IsSet $Redux.Graphics.Widescreen)      { $Redux.Graphics.Widescreen.Add_CheckStateChanged({    AdjustGUI }) }
+    if (IsSet $Redux.DPad.LayoutLeft)          { $Redux.DPad.LayoutLeft.Add_CheckedChanged({           AdjustGUI }) }
+    if (IsSet $Redux.DPad.LayoutRight)         { $Redux.DPad.LayoutRight.Add_CheckedChanged({          AdjustGUI }) }
 
 }
 
@@ -1084,8 +1087,10 @@ function CreateOptions() {
 #==============================================================================================================================================================================================
 function AdjustGUI() {
     
-    EnableElem -Elem @($Redux.DPad.LayoutLeft, $Redux.DPad.LayoutRight) -Active (!( (IsChecked $Redux.Graphics.Widescreen) -and $Patches.Redux.Checked))
-    if ( (IsChecked $Redux.Graphics.Widescreen) -and $Patches.Redux.Checked -and ($Redux.DPad.LayoutLeft.Checked -or $Redux.DPad.LayoutRight.Checked) ) { $Redux.DPad.Hide.Checked = $True }
+    EnableElem -Elem $Redux.Graphics.Widescreen -Active (!$Redux.Graphics.WidescreenAlt.Checked -and !$Redux.DPad.LayoutLeft.Checked -and !$Redux.DPad.LayoutRight.Checked)
+    EnableElem -Elem @($Redux.Graphics.WidescreenAlt, $Redux.DPad.LayoutLeft, $Redux.DPad.LayoutRight) -Active (!$Redux.Graphics.Widescreen.Checked)
+    if ($Redux.Graphics.Widescreen.Checked -and ($Redux.DPad.LayoutLeft.Checked -or $Redux.DPad.LayoutRight.Checked) ) { $Redux.DPad.Hide.Checked = $True }
+
     if ($Patches.Redux.Checked) { EnableElem -Elem @($Redux.Colors.Magic, $Redux.Colors.BaseMagic, $Redux.Colors.InfiniteMagic) -Active (!$Redux.Graphics.Widescreen.Checked) }
 
 }
@@ -1172,11 +1177,11 @@ function CreateTabRedux() {
 
     CreateReduxGroup       -Tag  "Dpad"        -All                         -Text "D-Pad Layout"
     CreateReduxPanel                           -All -Columns 4
-    CreateReduxRadioButton -Name "Disable"     -All -Max 4 -SaveTo "Layout" -Text "Disable"    -Info "Completely disable the D-Pad"                                                                                          -Credits "Ported from Redux"
-    CreateReduxRadioButton -Name "Hide"        -All -Max 4 -SaveTo "Layout" -Text "Hidden"     -Info "Hide the D-Pad icons, while they are still active`nYou can rebind the items to the D-Pad in the pause screen"          -Credits "Ported from Redux"
-    CreateReduxRadioButton -Name "LayoutLeft"  -All -Max 4 -SaveTo "Layout" -Text "Left Side"  -Info "Show the D-Pad icons on the left side of the HUD`nYou can rebind the items to the D-Pad in the pause screen"  -Checked -Credits "Ported from Redux"
-    CreateReduxRadioButton -Name "LayoutRight" -All -Max 4 -SaveTo "Layout" -Text "Right Side" -Info "Show the D-Pad icons on the right side of the HUD`nYou can rebind the items to the D-Pad in the pause screen"          -Credits "Ported from Redux"
-  # CreateReduxCheckBox    -Name "DualSet"     -All                         -Text "Dual Set"   -Info "Allow switching between two different D-Pad sets`nPress L + R ingame to swap between layouts"                          -Credits "Admentus" -Link $Redux.Dpad.Disable
+    CreateReduxRadioButton -Name "Disable"     -All -Max 4 -SaveTo "Layout" -Text "Disable"    -Info "Completely disable the D-Pad"                                                                                                                                   -Credits "Ported from Redux"
+    CreateReduxRadioButton -Name "Hide"        -All -Max 4 -SaveTo "Layout" -Text "Hidden"     -Info "Hide the D-Pad icons, while they are still active`nYou can rebind the items to the D-Pad in the pause screen"                                                   -Credits "Ported from Redux"
+    CreateReduxRadioButton -Name "LayoutLeft"  -All -Max 4 -SaveTo "Layout" -Text "Left Side"  -Info "Show the D-Pad icons on the left side of the HUD`nYou can rebind the items to the D-Pad in the pause screen`nCan not be used with Advanced Widescreen" -Checked -Credits "Ported from Redux"
+    CreateReduxRadioButton -Name "LayoutRight" -All -Max 4 -SaveTo "Layout" -Text "Right Side" -Info "Show the D-Pad icons on the right side of the HUD`nYou can rebind the items to the D-Pad in the pause screen`nCan not be used with Advanced Widescreen"         -Credits "Ported from Redux"
+  # CreateReduxCheckBox    -Name "DualSet"     -All                         -Text "Dual Set"   -Info "Allow switching between two different D-Pad sets`nPress L + R ingame to swap between layouts"                                         -Link $Redux.Dpad.Disable -Credits "Admentus"
 
 
 
@@ -1304,11 +1309,11 @@ function CreateTabGraphics() {
     
     # GRAPHICS #
 
-    $info  = "Patch the game to be in true 16:9 widescreen with the HUD pushed to the edges.`n`nKnown Issues:`n- Notebook screen stretched`n- D-Pad icons causing issues if combined with Redux (force hidden)"
+    $info  = "Patch the game to be in true 16:9 widescreen with the HUD pushed to the edges.`n`nKnown Issues:`n- Notebook screen stretched`n- The D-Pad from Redux is limited to either Disabled or Hidden, and can not be shown"
 
     CreateReduxGroup    -All -Tag "Graphics"        -Text "Graphics" -Columns 4
     CreateReduxCheckBox -All -Name "Widescreen"     -Text "16:9 Widescreen (Advanced)"   -Info $info                                                                                                          -Native -Credits "Granny Story images by Nerrel, Widescreen Patch by gamemasterplc, enhanced and ported by GhostlyDark"
-    CreateReduxCheckBox -All -Name "WidescreenAlt"  -Text "16:9 Widescreen (Simplified)" -Info "Apply 16:9 Widescreen adjusted backgrounds and textures (as well as 16:9 Widescreen for the Wii VC)"                  -Credits "Aspect Ratio Fix by Admentus`n16:9 backgrounds by GhostlyDark & ShadowOne333" -Link $Redux.Graphics.Widescreen
+    CreateReduxCheckBox -All -Name "WidescreenAlt"  -Text "16:9 Widescreen (Simplified)" -Info "Apply 16:9 Widescreen adjusted backgrounds and textures (as well as 16:9 Widescreen for the Wii VC)"                  -Credits "Aspect Ratio Fix by Admentus`n16:9 backgrounds by GhostlyDark & ShadowOne333"
     CreateReduxCheckBox -All -Name "ExtendedDraw"   -Text "Extended Draw Distance"       -Info "Increases the game's draw distance for objects`nDoes not work on all objects"                                         -Credits "Admentus"
     CreateReduxCheckBox -All -Name "PixelatedStars" -Text "Disable Pixelated Stars"      -Info "Completely disable the stars at night-time, which are pixelated dots and do not have any textures for HD replacement" -Credits "Admentus"
     
@@ -1319,8 +1324,6 @@ function CreateTabGraphics() {
 
     $models = LoadModelsList -Category "Child"
     CreateReduxComboBox -All -Name "ChildModels" -Text "Hylian Model" -Items (@("Original") + $models) -Default "Original" -Info "Replace the Hylian model used for Link"
-
-    $info = $models = $null
 
 
 
