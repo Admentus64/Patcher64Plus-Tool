@@ -5,7 +5,7 @@
 	"redux" : {
 		"output"	: "_redux_patched"
 	},
-	"script"	: "Link's Awakening",
+	"script"	: "Link's Awakening DX",
 	"tooltip"	: "Customize Link's Awakening with Redux and additional options{0}Redux version: 1.3.5"
 
 }, {
