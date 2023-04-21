@@ -69,7 +69,9 @@ function CreateTabRedux() {
     CreateReduxCheckBox -Name "RestoreLowHealthBeep"   -All -Text "Restore Low Health Beep"  -Info "Restores the Low Health Beep sound effect like in the original version"                  -Credits "ShadowOne333"
     CreateReduxCheckBox -Name "RestorePowerupMessages" -All -Text "Restore Powerup Messages" -Info "Restores the textboxes that display when you pick up a Guardian Acorn or Piece of Power" -Credits "IcePenguin"
 
-    CreateReduxGroup    -Tag  "Graphics"    -Text "Graphics"
-    CreateReduxCheckBox -Name "TitleScreen" -Text "Title Screen" -Info ("An edit of the title screen to now read " + '"' + "Link's Awakening Redux" + '"') -Credits "Jayro"
+    if ($GamePatch.title -eq $Files.json.patches[0].title) {
+        CreateReduxGroup    -Tag  "Graphics"    -Text "Graphics"
+        CreateReduxCheckBox -Name "TitleScreen" -Text "Title Screen" -Info ("An edit of the title screen to now read " + '"' + "Link's Awakening Redux" + '"') -Credits "Jayro"
+    }
 
 }

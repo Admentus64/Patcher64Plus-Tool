@@ -225,16 +225,6 @@ function SetMainScreenSize() {
     
     $MainDialog.Height = $StatusPanel.Bottom + (DPISize 50)
 
-    # Lock Console if not VC-supported in Wii VC mode
-    if ($IsWiiVC -and $GameConsole.support_vc -eq 0) {
-        $Patches.Panel.Enabled = $VC.Panel.Enabled = $False
-        $Patches.Button.Text = "Patching is not supported in Wii VC Mode"
-    }
-    else {
-        $Patches.Panel.Enabled = $VC.Panel.Enabled = $True
-        $Patches.Button.Text = "Patch Selected Options"
-    }
-
 }
 
 
@@ -395,9 +385,10 @@ function ChangePatch() {
                         $global:GameSettingsFile = GetGameSettingsFile
                         $global:GameSettings     = GetSettings $GameSettingsFile
                         Import-Module -Name $script -Global
-                        if (Get-Command "CreateOptions" -errorAction SilentlyContinue) { iex "CreateOptions" }
+                        if (GetCommand "CreateOptions") { CreateOptions }
                     }
                 }
+
                 DisablePatches
                 SetVCRemap
                 ChangeGameRev
@@ -407,7 +398,7 @@ function ChangePatch() {
     }
 
     EnableGUI $True
-    UpdateStatusLabel $lastMessage -NoConsole
+    UpdateStatusLabel "Ready to patch..." -NoConsole
 
 }
 
@@ -990,10 +981,10 @@ function StrStarts([string]$Str, [string]$Val, [switch]$Not) {
 #==============================================================================================================================================================================================
 function EnableGUI([boolean]$Enable) {
     
-    $InputPaths.GamePanel.Enabled = $InputPaths.InjectPanel.Enabled = $InputPaths.PatchPanel.Enabled = $Enable
-    $CurrentGame.Panel.Enabled = $CustomHeader.Panel.Enabled = $Enable
-    $Patches.Panel.Enabled = $VC.Panel.Enabled = $Enable
+    $InputPaths.GamePanel.Enabled = $InputPaths.InjectPanel.Enabled = $InputPaths.PatchPanel.Enabled = $CurrentGame.Panel.Enabled = $CustomHeader.Panel.Enabled = $Patches.Panel.Enabled = $VC.Panel.Enabled = $Enable
     SetModernVisualStyle $GeneralSettings.ModernStyle.Checked
+
+    if ($IsWiiVC -and $GameConsole.support_vc -eq 0) { $Patches.Panel.Enabled = $VC.Panel.Enabled = $False }
 
     if (IsSet $TextEditor)    { $TextEditor.Dialog.Enabled  = $Enable }
     if (IsSet $SceneEditor)   { $SceneEditor.Dialog.Enabled = $Enable }

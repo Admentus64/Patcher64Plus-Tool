@@ -2924,8 +2924,6 @@ function CreateTabEquipment() {
     CreateReduxComboBox -Name "HylianShield"  -All   -Text "Hylian Shield"    -Items @("Hylian Shield")                     -FilePath ($GameFiles.Textures + "\Equipment\Hylian Shield") -Ext @("icon", "bin")   -Info "Select an alternative for the appearence of the Hylian Shield"       -Credits "Admentus (injects) & GhostlyDark (injects), CYB3RTR0N (icons), sanguinetti (Beta / Red Shield textures) & LuigiBlood (texture)"
     CreateReduxComboBox -Name "MirrorShield"  -Adult -Text "Mirror Shield"    -Items @("Mirror Shield")                     -FilePath ($GameFiles.Textures + "\Equipment\Mirror Shield") -Ext @("icon", "bin")   -Info "Select an alternative for the appearence of the Mirror Shield"       -Credits "Admentus (injects) & GhostlyDark (injects)"
 
-    $item = $null
-
     if ($Redux.Equipment.GiantsKnife -ne $null) {
         $Redux.Equipment.GiantsKnife.Add_SelectedIndexChanged( {
             if ($this.text.replace(" (default)", "") -eq $Redux.Equipment.BiggoronSword.text.replace(" (default)", "") ) {
@@ -2980,8 +2978,8 @@ function CreateTabEquipment() {
     ShowEquipmentPreview
 
 
-    
-     # STARTING UPGRADES #
+
+    # STARTING UPGRADES #
 
     CreateReduxGroup    -Tag  "Save"          -All                               -Text "Starting Upgrades"
     CreateReduxComboBox -Name "DekuSticks"    -Child                             -Text "Deku Sticks"     -Items ("Standard", "Big", "Biggest")                                         -Info "Set the starting capacity upgrade level for the Deku Sticks"
@@ -3017,7 +3015,7 @@ function CreateTabEquipment() {
     CreateReduxCheckBox -Name "GerudoCard"      -All -Text "Gerudo Card"              -Info "Start a new save file with the Gerudo Card"
     CreateReduxCheckBox -Name "StoneOfAgony"    -All -Text "Stone of Agony"           -Info "Start a new save file with the Stone of Agony"
     CreateReduxTextBox  -Name "GoldSkulltulas"  -All -Text "Gold Skulltulas" -Max 100 -Info "Start a new save file with the chosen amount of Gold Skulltulas"
-    
+
 
 
     # STARTING DEBUG #

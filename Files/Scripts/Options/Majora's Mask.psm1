@@ -1241,7 +1241,7 @@ function CreateTabRedux() {
 #==============================================================================================================================================================================================
 function CreateTabLanguage() {
     
-    if ($GamePatch.title -like "*Majora's Mask*") { CreateLanguageContent }
+    if ($GamePatch.vanilla -eq 1) { CreateLanguageContent }
 
 
 
@@ -1272,7 +1272,7 @@ function CreateTabLanguage() {
     CreateReduxCheckBox -All -Name "YeetPrompt" -Text "Yeet Action Prompt"                                                     -Info ('Replace the "Throw" Action Prompt with "Yeet"' + "`nYeeeeet") -Credits "kr3z"
     CreateReduxCheckBox -All -Name "Comma"      -Text "Better Comma"                                                           -Info "Make the comma not look as awful"                              -Credits "ShadowOne333"
 
-    if ($GamePatch.title -like "*Majora's Mask*") {
+    if ($GamePatch.vanilla -eq 1) {
         foreach ($i in 0.. ($Files.json.languages.length-1)) { $Redux.Language[$i].Add_CheckedChanged({ UnlockLanguageContent }) }
         UnlockLanguageContent
     }

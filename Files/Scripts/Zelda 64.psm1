@@ -741,10 +741,10 @@ function CreateButtonColorOptions($Default=1) {
         $Redux.Colors.ButtonLabels += CreateReduxColoredLabel -All -Link $Buttons[$i]  -Color $Redux.Colors.SetButtons[$i].Color
     }
     
-    $Redux.Colors.Buttons.Add_SelectedIndexChanged({ SetButtonColorsPreset -ComboBox $Redux.Colors.Buttons })
-    SetButtonColorsPreset -ComboBox $Redux.Colors.Buttons
-
-    $Buttons = $null
+    if (IsSet $Redux.Colors.Buttons) {
+        $Redux.Colors.Buttons.Add_SelectedIndexChanged({ SetButtonColorsPreset -ComboBox $Redux.Colors.Buttons })
+        SetButtonColorsPreset -ComboBox $Redux.Colors.Buttons
+    }
 
 }
 
@@ -775,10 +775,10 @@ function CreateBoomerangColorOptions($Default=1) {
         $Redux.Colors.BoomerangLabels += CreateReduxColoredLabel -All -Exclude "Dawn" -Link $Buttons[$i]  -Color $Redux.Colors.SetBoomerang[$i].Color
     }
     
-    $Redux.Colors.Boomerang.Add_SelectedIndexChanged({ SetBoomerangColorsPreset -ComboBox $Redux.Colors.Boomerang })
-    SetBoomerangColorsPreset -ComboBox $Redux.Colors.Boomerang
-
-    $Buttons = $null
+    if (IsSet $Redux.Colors.Boomerang) {
+        $Redux.Colors.Boomerang.Add_SelectedIndexChanged({ SetBoomerangColorsPreset -ComboBox $Redux.Colors.Boomerang })
+        SetBoomerangColorsPreset -ComboBox $Redux.Colors.Boomerang
+    }
 
 }
 
@@ -809,10 +809,10 @@ function CreateBombchuColorOptions() {
         $Redux.Colors.BombchuLabels += CreateReduxColoredLabel -All -Exclude "Dawn" -Link $Buttons[$i]  -Color $Redux.Colors.SetBombchu[$i].Color
     }
     
-    $Redux.Colors.Bombchu.Add_SelectedIndexChanged({ SetBombchuColorsPreset -ComboBox $Redux.Colors.Bombchu })
-    SetBombchuColorsPreset -ComboBox $Redux.Colors.Bombchu
-
-    $Buttons = $null
+    if (IsSet $Redux.Colors.Bombchu) {
+        $Redux.Colors.Bombchu.Add_SelectedIndexChanged({ SetBombchuColorsPreset -ComboBox $Redux.Colors.Bombchu })
+        SetBombchuColorsPreset -ComboBox $Redux.Colors.Bombchu
+    }
 
 }
 
@@ -820,7 +820,7 @@ function CreateBombchuColorOptions() {
 
 #==============================================================================================================================================================================================
 function CreateRupeeColorOptions() {
-
+    
     # RUPEE ICON COLORS #
     CreateReduxGroup    -Tag  "Colors" -All -Text "Rupee Icon Colors" -Height 2
     CreateReduxComboBox -Name "Rupees" -All -Text "Rupee Icon Colors" -Items @("Redux", "Randomized", "Custom") -Info ("Select a preset for the Rupee icon colors`n" + '"Randomized" fully randomizes the colors each time the patcher is opened') -Credits "Ported from Redux"
@@ -846,10 +846,10 @@ function CreateRupeeColorOptions() {
         $Redux.Colors.RupeeLabels += CreateReduxColoredLabel -All -Link $Buttons[$i]  -Color $Redux.Colors.SetRupee[$i].Color
     }
     
-    $Redux.Colors.Rupees.Add_SelectedIndexChanged({ SetRupeeColorsPreset -ComboBox $Redux.Colors.Rupees })
-    SetRupeeColorsPreset -ComboBox $Redux.Colors.Rupees
-
-    $Buttons = $null
+    if (IsSet $Redux.Colors.Rupees) {
+        $Redux.Colors.Rupees.Add_SelectedIndexChanged({ SetRupeeColorsPreset -ComboBox $Redux.Colors.Rupees })
+        SetRupeeColorsPreset -ComboBox $Redux.Colors.Rupees
+    }
 
 }
 
@@ -868,10 +868,10 @@ function CreateRupeeVanillaColorOptions($Preset=1, $Color="C8FF64") {
     $Button.Add_Click({ $Redux.Colors.SetRupeeVanilla.ShowDialog(); $Redux.Colors.RupeeVanillaLabel.BackColor = $Redux.Colors.SetRupeeVanilla.Color; $GameSettings["Colors"][$Redux.Colors.SetRupeeVanilla] = $Redux.Colors.SetRupeeVanilla.Color.Name })
     $Redux.Colors.RupeeVanillaLabel = CreateReduxColoredLabel -All -Link $Button -Color $Redux.Colors.SetRupeeVanilla.Color
     
-    $Redux.Colors.RupeesVanilla.Add_SelectedIndexChanged({ SetRupeeVanillaColorsPreset -ComboBox $Redux.Colors.RupeesVanilla -Dialog $Redux.Colors.SetRupeeVanilla -Label $Redux.Colors.RupeeVanillaLabel })
-    SetRupeeVanillaColorsPreset -ComboBox $Redux.Colors.RupeesVanilla -Dialog $Redux.Colors.SetRupeeVanilla -Label $Redux.Colors.RupeeVanillaLabel
-    
-    $Button = $null
+    if (IsSet $Redux.Colors.RupeesVanilla) {
+        $Redux.Colors.RupeesVanilla.Add_SelectedIndexChanged({ SetRupeeVanillaColorsPreset -ComboBox $Redux.Colors.RupeesVanilla -Dialog $Redux.Colors.SetRupeeVanilla -Label $Redux.Colors.RupeeVanillaLabel })
+        SetRupeeVanillaColorsPreset -ComboBox $Redux.Colors.RupeesVanilla -Dialog $Redux.Colors.SetRupeeVanilla -Label $Redux.Colors.RupeeVanillaLabel
+    }
 
 }
 
@@ -911,23 +911,27 @@ function CreateSpinAttackColorOptions() {
         $Redux.Colors.SpinAttackLabels += CreateReduxColoredLabel -All -Link $Buttons[$i]  -Color $Redux.Colors.SetSpinAttack[$i].Color
     }
 
-    $Redux.Colors.BlueSpinAttack.Add_SelectedIndexChanged({ SetSwordColorsPreset -ComboBox $Redux.Colors.BlueSpinAttack -Dialog $Redux.Colors.SetSpinAttack[0] -Label $Redux.Colors.SpinAttackLabels[0] })
-    SetSwordColorsPreset -ComboBox $Redux.Colors.BlueSpinAttack -Dialog $Redux.Colors.SetSpinAttack[0] -Label $Redux.Colors.SpinAttackLabels[0]
-    $Redux.Colors.BlueSpinAttack.Add_SelectedIndexChanged({
+    if (IsSet $Redux.Colors.BlueSpinAttack) {
+        $Redux.Colors.BlueSpinAttack.Add_SelectedIndexChanged({ SetSwordColorsPreset -ComboBox $Redux.Colors.BlueSpinAttack -Dialog $Redux.Colors.SetSpinAttack[0] -Label $Redux.Colors.SpinAttackLabels[0] })
+        SetSwordColorsPreset -ComboBox $Redux.Colors.BlueSpinAttack -Dialog $Redux.Colors.SetSpinAttack[0] -Label $Redux.Colors.SpinAttackLabels[0]
+        $Redux.Colors.BlueSpinAttack.Add_SelectedIndexChanged({
+            SetSwordColorsPreset -ComboBox $Redux.Colors.BlueSpinAttack -Dialog $Redux.Colors.SetSpinAttack[1] -Label $Redux.Colors.SpinAttackLabels[1]
+            if (IsIndex $Redux.Colors.BlueSpinAttack) { SetColor -Color "0064FF" -Dialog $Redux.Colors.SetSpinAttack[1] -Label $Redux.Colors.SpinAttackLabels[1] }
+        })
         SetSwordColorsPreset -ComboBox $Redux.Colors.BlueSpinAttack -Dialog $Redux.Colors.SetSpinAttack[1] -Label $Redux.Colors.SpinAttackLabels[1]
         if (IsIndex $Redux.Colors.BlueSpinAttack) { SetColor -Color "0064FF" -Dialog $Redux.Colors.SetSpinAttack[1] -Label $Redux.Colors.SpinAttackLabels[1] }
-    })
-    SetSwordColorsPreset -ComboBox $Redux.Colors.BlueSpinAttack -Dialog $Redux.Colors.SetSpinAttack[1] -Label $Redux.Colors.SpinAttackLabels[1]
-    if (IsIndex $Redux.Colors.BlueSpinAttack) { SetColor -Color "0064FF" -Dialog $Redux.Colors.SetSpinAttack[1] -Label $Redux.Colors.SpinAttackLabels[1] }
+    }
 
-    $Redux.Colors.RedSpinAttack.Add_SelectedIndexChanged({ SetSwordColorsPreset -ComboBox $Redux.Colors.RedSpinAttack -Dialog $Redux.Colors.SetSpinAttack[2] -Label $Redux.Colors.SpinAttackLabels[2] })
-    SetSwordColorsPreset -ComboBox $Redux.Colors.RedSpinAttack -Dialog $Redux.Colors.SetSpinAttack[2] -Label $Redux.Colors.SpinAttackLabels[2]
-    $Redux.Colors.RedSpinAttack.Add_SelectedIndexChanged({
+    if (IsSet $Redux.Colors.RedSpinAttack) {
+        $Redux.Colors.RedSpinAttack.Add_SelectedIndexChanged({ SetSwordColorsPreset -ComboBox $Redux.Colors.RedSpinAttack -Dialog $Redux.Colors.SetSpinAttack[2] -Label $Redux.Colors.SpinAttackLabels[2] })
+        SetSwordColorsPreset -ComboBox $Redux.Colors.RedSpinAttack -Dialog $Redux.Colors.SetSpinAttack[2] -Label $Redux.Colors.SpinAttackLabels[2]
+        $Redux.Colors.RedSpinAttack.Add_SelectedIndexChanged({
+            SetSwordColorsPreset -ComboBox $Redux.Colors.RedSpinAttack -Dialog $Redux.Colors.SetSpinAttack[3] -Label $Redux.Colors.SpinAttackLabels[3]
+            if (IsIndex $Redux.Colors.RedSpinAttack -Index 2) { SetColor -Color "FF6400" -Dialog $Redux.Colors.SetSpinAttack[3] -Label $Redux.Colors.SpinAttackLabels[3] }
+        })
         SetSwordColorsPreset -ComboBox $Redux.Colors.RedSpinAttack -Dialog $Redux.Colors.SetSpinAttack[3] -Label $Redux.Colors.SpinAttackLabels[3]
         if (IsIndex $Redux.Colors.RedSpinAttack -Index 2) { SetColor -Color "FF6400" -Dialog $Redux.Colors.SetSpinAttack[3] -Label $Redux.Colors.SpinAttackLabels[3] }
-    })
-    SetSwordColorsPreset -ComboBox $Redux.Colors.RedSpinAttack -Dialog $Redux.Colors.SetSpinAttack[3] -Label $Redux.Colors.SpinAttackLabels[3]
-    if (IsIndex $Redux.Colors.RedSpinAttack -Index 2) { SetColor -Color "FF6400" -Dialog $Redux.Colors.SetSpinAttack[3] -Label $Redux.Colors.SpinAttackLabels[3] }
+    }
 
 }
 
@@ -962,12 +966,14 @@ function CreateSwordTrailColorOptions() {
         $Redux.Colors.SwordTrailLabels += CreateReduxColoredLabel -All -Link $Buttons[$i] -Color $Redux.Colors.SetSwordTrail[$i].Color
     }
 
-    $Redux.Colors.SwordTrail.Add_SelectedIndexChanged({
+    if (IsSet $Redux.Colors.SwordTrail) {
+        $Redux.Colors.SwordTrail.Add_SelectedIndexChanged({
+            if ($Redux.Colors.SwordTrail.text -ne "Custom") { SetColor -Color "FFFFFF" -Dialog $Redux.Colors.SetSwordTrail[1] -Label $Redux.Colors.SwordTrailLabels[1] }
+            SetSwordColorsPreset -ComboBox $Redux.Colors.SwordTrail -Dialog $Redux.Colors.SetSwordTrail[0] -Label $Redux.Colors.SwordTrailLabels[0]
+        })
         if ($Redux.Colors.SwordTrail.text -ne "Custom") { SetColor -Color "FFFFFF" -Dialog $Redux.Colors.SetSwordTrail[1] -Label $Redux.Colors.SwordTrailLabels[1] }
         SetSwordColorsPreset -ComboBox $Redux.Colors.SwordTrail -Dialog $Redux.Colors.SetSwordTrail[0] -Label $Redux.Colors.SwordTrailLabels[0]
-    })
-    if ($Redux.Colors.SwordTrail.text -ne "Custom") { SetColor -Color "FFFFFF" -Dialog $Redux.Colors.SetSwordTrail[1] -Label $Redux.Colors.SwordTrailLabels[1] }
-    SetSwordColorsPreset -ComboBox $Redux.Colors.SwordTrail -Dialog $Redux.Colors.SetSwordTrail[0] -Label $Redux.Colors.SwordTrailLabels[0]
+    }
 
 }
 
@@ -1010,8 +1016,10 @@ function CreateFairyColorOptions($name) {
         $Redux.Colors.FairyLabels += CreateReduxColoredLabel -All -Link $Buttons[$i] -Color $Redux.Colors.SetFairy[$i].Color
     }
 
-    $Redux.Colors.Fairy.Add_SelectedIndexChanged({ SetFairyColorsPreset -ComboBox $Redux.Colors.Fairy -Dialogs $Redux.Colors.SetFairy -Labels $Redux.Colors.FairyLabels })
-    SetFairyColorsPreset -ComboBox $Redux.Colors.Fairy -Dialogs $Redux.Colors.SetFairy -Labels $Redux.Colors.FairyLabels
+    if (IsSet $Redux.Colors.Fairy) {
+        $Redux.Colors.Fairy.Add_SelectedIndexChanged({ SetFairyColorsPreset -ComboBox $Redux.Colors.Fairy -Dialogs $Redux.Colors.SetFairy -Labels $Redux.Colors.FairyLabels })
+        SetFairyColorsPreset -ComboBox $Redux.Colors.Fairy -Dialogs $Redux.Colors.SetFairy -Labels $Redux.Colors.FairyLabels
+    }
 
 }
 
@@ -1068,37 +1076,49 @@ function CreateHUDColorOptions([switch]$MM) {
         $Redux.Colors.HUDStatsLabels += CreateReduxColoredLabel -All -Link $Buttons[$i] -Color $Redux.Colors.SetHUDStats[$i].Color
     }
 
-    $Redux.Colors.Hearts.Add_SelectedIndexChanged({ SetHeartsColorsPreset -ComboBox $Redux.Colors.Hearts -Dialog $Redux.Colors.SetHUDStats[0] -Label $Redux.Colors.HUDStatsLabels[0] })
-    SetHeartsColorsPreset -ComboBox $Redux.Colors.Hearts -Dialog $Redux.Colors.SetHUDStats[0] -Label $Redux.Colors.HUDStatsLabels[0]
+    if (IsSet $Redux.Colors.Hearts) {
+        $Redux.Colors.Hearts.Add_SelectedIndexChanged({ SetHeartsColorsPreset -ComboBox $Redux.Colors.Hearts -Dialog $Redux.Colors.SetHUDStats[0] -Label $Redux.Colors.HUDStatsLabels[0] })
+        SetHeartsColorsPreset -ComboBox $Redux.Colors.Hearts -Dialog $Redux.Colors.SetHUDStats[0] -Label $Redux.Colors.HUDStatsLabels[0]
+    }
     
     if ($MM) {
-        $Redux.Colors.Hearts.Add_SelectedIndexChanged({
+        if (IsSet $Redux.Colors.Hearts) {
+            $Redux.Colors.Hearts.Add_SelectedIndexChanged({
+                SetHeartsColorsPreset -ComboBox $Redux.Colors.Hearts -Dialog $Redux.Colors.SetHUDStats[1] -Label $Redux.Colors.HUDStatsLabels[1]
+                if (IsIndex $Redux.Colors.Hearts) { SetColor -Color "C80000" -Dialog $Redux.Colors.SetHUDStats[1] -Label $Redux.Colors.HUDStatsLabels[1] }
+            })
             SetHeartsColorsPreset -ComboBox $Redux.Colors.Hearts -Dialog $Redux.Colors.SetHUDStats[1] -Label $Redux.Colors.HUDStatsLabels[1]
             if (IsIndex $Redux.Colors.Hearts) { SetColor -Color "C80000" -Dialog $Redux.Colors.SetHUDStats[1] -Label $Redux.Colors.HUDStatsLabels[1] }
-        })
-        SetHeartsColorsPreset -ComboBox $Redux.Colors.Hearts -Dialog $Redux.Colors.SetHUDStats[1] -Label $Redux.Colors.HUDStatsLabels[1]
-        if (IsIndex $Redux.Colors.Hearts) { SetColor -Color "C80000" -Dialog $Redux.Colors.SetHUDStats[1] -Label $Redux.Colors.HUDStatsLabels[1] }
+        }
     }
 
     if (!$MM) {
-        $Redux.Colors.Magic.Add_SelectedIndexChanged({ SetMagicColorsPreset -ComboBox $Redux.Colors.Magic -Dialog $Redux.Colors.SetHUDStats[1] -Label $Redux.Colors.HUDStatsLabels[1] })
-        SetMagicColorsPreset -ComboBox $Redux.Colors.Magic -Dialog $Redux.Colors.SetHUDStats[1] -Label $Redux.Colors.HUDStatsLabels[1]
+        if (IsSet $Redux.Colors.Magic) {
+            $Redux.Colors.Magic.Add_SelectedIndexChanged({ SetMagicColorsPreset -ComboBox $Redux.Colors.Magic -Dialog $Redux.Colors.SetHUDStats[1] -Label $Redux.Colors.HUDStatsLabels[1] })
+            SetMagicColorsPreset -ComboBox $Redux.Colors.Magic -Dialog $Redux.Colors.SetHUDStats[1] -Label $Redux.Colors.HUDStatsLabels[1]
+        }
     }
     else {
-        $Redux.Colors.Magic.Add_SelectedIndexChanged({ SetMagicColorsPreset -ComboBox $Redux.Colors.Magic -Dialog $Redux.Colors.SetHUDStats[2] -Label $Redux.Colors.HUDStatsLabels[2] })
-        SetMagicColorsPreset -ComboBox $Redux.Colors.Magic -Dialog $Redux.Colors.SetHUDStats[2] -Label $Redux.Colors.HUDStatsLabels[2]
+        if (IsSet $Redux.Colors.Magic) {
+            $Redux.Colors.Magic.Add_SelectedIndexChanged({ SetMagicColorsPreset -ComboBox $Redux.Colors.Magic -Dialog $Redux.Colors.SetHUDStats[2] -Label $Redux.Colors.HUDStatsLabels[2] })
+            SetMagicColorsPreset -ComboBox $Redux.Colors.Magic -Dialog $Redux.Colors.SetHUDStats[2] -Label $Redux.Colors.HUDStatsLabels[2]
+        }
     }
     
     if ($MM) {
-        $Redux.Colors.Magic.Add_SelectedIndexChanged({
+        if (IsSet $Redux.Colors.Magic) {
+            $Redux.Colors.Magic.Add_SelectedIndexChanged({
+                SetMagicColorsPreset -ComboBox $Redux.Colors.Magic -Dialog $Redux.Colors.SetHUDStats[3] -Label $Redux.Colors.HUDStatsLabels[3]
+                if (IsIndex $Redux.Colors.Magic) { SetColor -Color "0000C8" -Dialog $Redux.Colors.SetHUDStats[3] -Label $Redux.Colors.HUDStatsLabels[3] }
+            })
             SetMagicColorsPreset -ComboBox $Redux.Colors.Magic -Dialog $Redux.Colors.SetHUDStats[3] -Label $Redux.Colors.HUDStatsLabels[3]
             if (IsIndex $Redux.Colors.Magic) { SetColor -Color "0000C8" -Dialog $Redux.Colors.SetHUDStats[3] -Label $Redux.Colors.HUDStatsLabels[3] }
-        })
-        SetMagicColorsPreset -ComboBox $Redux.Colors.Magic -Dialog $Redux.Colors.SetHUDStats[3] -Label $Redux.Colors.HUDStatsLabels[3]
-        if (IsIndex $Redux.Colors.Magic) { SetColor -Color "0000C8" -Dialog $Redux.Colors.SetHUDStats[3] -Label $Redux.Colors.HUDStatsLabels[3] }
+        }
 
-        $Redux.Colors.Minimap.Add_SelectedIndexChanged({ SetMinimapColorsPreset -ComboBox $Redux.Colors.Minimap -Dialog $Redux.Colors.SetHUDStats[4] -Label $Redux.Colors.HUDStatsLabels[4] })
-        SetMinimapColorsPreset -ComboBox $Redux.Colors.Minimap -Dialog $Redux.Colors.SetHUDStats[4] -Label $Redux.Colors.HUDStatsLabels[4]
+        if (IsSet $Redux.Colors.Minimap) {
+            $Redux.Colors.Minimap.Add_SelectedIndexChanged({ SetMinimapColorsPreset -ComboBox $Redux.Colors.Minimap -Dialog $Redux.Colors.SetHUDStats[4] -Label $Redux.Colors.HUDStatsLabels[4] })
+            SetMinimapColorsPreset -ComboBox $Redux.Colors.Minimap -Dialog $Redux.Colors.SetHUDStats[4] -Label $Redux.Colors.HUDStatsLabels[4]
+        }
     }
 
     $Buttons = $null
@@ -1136,10 +1156,15 @@ function CreateTextColorOptions() {
         $Redux.Colors.TextLabels += CreateReduxColoredLabel -All -Link $Buttons[$i]  -Color $Redux.Colors.SetText[$i].Color
     }
 
-    $Redux.Colors.TextCursor.Add_SelectedIndexChanged({ SetTextCursorColorsPreset -ComboBox $Redux.Colors.TextCursor -Dialog $Redux.Colors.SetText[0] -Label $Redux.Colors.TextLabels[0] })
-    SetTextCursorColorsPreset -ComboBox $Redux.Colors.TextCursor -Dialog $Redux.Colors.SetText[0] -Label $Redux.Colors.TextLabels[0]
-    $Redux.Colors.ShopCursor.Add_SelectedIndexChanged({ SetShopCursorColorsPreset -ComboBox $Redux.Colors.ShopCursor -Dialog $Redux.Colors.SetText[1] -Label $Redux.Colors.TextLabels[1] })
-    SetShopCursorColorsPreset -ComboBox $Redux.Colors.ShopCursor -Dialog $Redux.Colors.SetText[1] -Label $Redux.Colors.TextLabels[1]
+    if (IsSet $Redux.Colors.TextCursor) {
+        $Redux.Colors.TextCursor.Add_SelectedIndexChanged({ SetTextCursorColorsPreset -ComboBox $Redux.Colors.TextCursor -Dialog $Redux.Colors.SetText[0] -Label $Redux.Colors.TextLabels[0] })
+        SetTextCursorColorsPreset -ComboBox $Redux.Colors.TextCursor -Dialog $Redux.Colors.SetText[0] -Label $Redux.Colors.TextLabels[0]
+    }
+
+    if (IsSet $Redux.Colors.ShopCursor) {
+        $Redux.Colors.ShopCursor.Add_SelectedIndexChanged({ SetShopCursorColorsPreset -ComboBox $Redux.Colors.ShopCursor -Dialog $Redux.Colors.SetText[1] -Label $Redux.Colors.TextLabels[1] })
+        SetShopCursorColorsPreset -ComboBox $Redux.Colors.ShopCursor -Dialog $Redux.Colors.SetText[1] -Label $Redux.Colors.TextLabels[1]
+    }
 
 }
 

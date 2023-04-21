@@ -38,6 +38,7 @@ function CreateDialog([uint16]$Width=0, [uint16]$Height=0, [string]$Icon) {
     $Dialog.FormBorderStyle = [System.Windows.Forms.FormBorderStyle]::FixedDialog
     $Dialog.StartPosition = "CenterScreen"
     if (IsSet $Icon) { $Dialog.Icon = $Icon }
+
     return $Dialog
 
 }
@@ -369,9 +370,8 @@ function CreateTabButtons([string[]]$Tabs, [boolean]$NoLanguages=$False) {
             $this.BackColor = "DarkGray"
         })
         $global:ReduxTabs += $Button
-        while ($Tabs[$i].Contains(' ')) { $Tabs[$i] = $Tabs[$i].Replace(' ', '') }
-        while ($Tabs[$i].Contains('-')) { $Tabs[$i] = $Tabs[$i].Replace('-', '') }
-        if (Get-Command ("CreateTab" + $Tabs[$i]) -errorAction SilentlyContinue) {
+        
+        if (GetCommand ("CreateTab" + $Tabs[$i])) {
             $Last.Half = $False
             iex ("CreateTab" + $Tabs[$i])
         }
@@ -426,8 +426,6 @@ function CreateReduxPanel([single]$X=$Last.Group.Left, [single]$Row=0, [single]$
 
 #==============================================================================================================================================================================================
 function CreateReduxGroup([single]$X=(DPISize 15), [single]$Y=(DPISize 0), [single]$Height, [string]$Name=$Last.TabName, [string]$Tag, [switch]$ShowAlways, [boolean]$IsGame=$True, [string]$Text="", [switch]$IsRedux, [single]$Columns=0, [object]$AddTo=$Redux.Panel, [switch]$Native, [Object]$Expose, [Object]$Exclude, [byte]$Base, [switch]$Child, [switch]$Adult, [switch]$All) {
-    
-    if (!(CheckReduxOption -Name $Name -Expose $Expose -Exclude $Exclude -Base $Base -Child $Child -Adult $Adult -All $All) -or $Last.Hide) { return $null }
 
     $Width = ($AddTo.Width - (DPISize 50))
     $Last.Column = $Last.Row = 1
