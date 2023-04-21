@@ -884,3 +884,4 @@ daid
 - Save Button Combo:			ShadowOne333
 - Restore Low Health Beep:		ShadowOne333
 - Restore Powerup Messages:		the_icepenguin
+- Title Screen:				Jayro

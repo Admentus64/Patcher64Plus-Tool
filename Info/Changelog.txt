@@ -1,3 +1,8 @@
+v20.3.1
+- Updated Redux for LA
+- Updated downgradin / upgrading for LA
+- Fixed several minor issues
+
 v20.3.0
 - Revisions is now automatically picked for selected patch
 - Added Keep Cache option for decompressed & downgraded N64 Zelda ROMs

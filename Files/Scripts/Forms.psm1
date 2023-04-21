@@ -355,6 +355,8 @@ function CreateTabButtons([string[]]$Tabs, [boolean]$NoLanguages=$False) {
     $global:ReduxTabs = @()
     if (!(IsSet $GameSettings.Core) -and $Tabs.Length -gt 0) { $GameSettings.Core  = @{} }
 
+    $Tabs = $Tabs | Select-Object -Unique
+
     # Create tabs
     for ($i=0; $i -lt $Tabs.Count; $i++) {
         $Button = CreateButton -X ((DPISize 15) + (($OptionsDialog.width - (DPISize 50))/$Tabs.length*$i)) -Y (DPISize 40) -Width (($OptionsDialog.width - (DPISize 50))/$Tabs.length) -Height (DPISize 30) -ForeColor "White" -BackColor "Gray" -Name $Tabs[$i] -Tag $i -Text $Tabs[$i] -AddTo $OptionsDialog
@@ -383,8 +385,14 @@ function CreateTabButtons([string[]]$Tabs, [boolean]$NoLanguages=$False) {
                 foreach ($item in $Redux.Groups) { if (!$item.ShowAlways) { $item.Visible = $item.Name -eq $ReduxTabs[0].Name } }
             }
             else {
-                $ReduxTabs[$GameSettings["Core"]["LastTab"]].BackColor = "DarkGray"
-                foreach ($item in $Redux.Groups) { if (!$item.ShowAlways) { $item.Visible = $item.Name -eq $ReduxTabs[$GameSettings["Core"]["LastTab"]].Name } }
+                if (IsSet $ReduxTabs[$GameSettings["Core"]["LastTab"]]) {
+                    $ReduxTabs[$GameSettings["Core"]["LastTab"]].BackColor = "DarkGray"
+                    foreach ($item in $Redux.Groups) { if (!$item.ShowAlways) { $item.Visible = $item.Name -eq $ReduxTabs[$GameSettings["Core"]["LastTab"]].Name } }
+                }
+                else {
+                    $ReduxTabs[0].BackColor = "DarkGray"
+                    foreach ($item in $Redux.Groups) { if (!$item.ShowAlways) { $item.Visible = $item.Name -eq $ReduxTabs[0].Name } }
+                }
             }
         }
         else {
@@ -419,6 +427,7 @@ function CreateReduxPanel([single]$X=$Last.Group.Left, [single]$Row=0, [single]$
 #==============================================================================================================================================================================================
 function CreateReduxGroup([single]$X=(DPISize 15), [single]$Y=(DPISize 0), [single]$Height, [string]$Name=$Last.TabName, [string]$Tag, [switch]$ShowAlways, [boolean]$IsGame=$True, [string]$Text="", [switch]$IsRedux, [single]$Columns=0, [object]$AddTo=$Redux.Panel, [switch]$Native, [Object]$Expose, [Object]$Exclude, [byte]$Base, [switch]$Child, [switch]$Adult, [switch]$All) {
     
+    if (!(CheckReduxOption -Name $Name -Expose $Expose -Exclude $Exclude -Base $Base -Child $Child -Adult $Adult -All $All) -or $Last.Hide) { return $null }
 
     $Width = ($AddTo.Width - (DPISize 50))
     $Last.Column = $Last.Row = 1

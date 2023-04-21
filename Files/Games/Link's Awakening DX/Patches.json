@@ -1,7 +1,7 @@
 [ {
 	
 	"title"		: "Additional Options & Redux",
-	"version"	: "Rev 2 (US / PAL)",
+	"version"	: "Rev 0 (US / PAL)",
 	"redux" : {
 		"output"	: "_redux_patched"
 	},
@@ -9,6 +9,15 @@
 	"tooltip"	: "Customize Link's Awakening with Redux and additional options{0}Redux version: 1.3.5"
 
 }, {
+
+	"title"		: "Font Improvement",
+	"version"	: "Rev 2 (US / PAL)",
+	"patch"		: "Compressed\\font_improvement.ips",
+	"script"	: "Link's Awakening DX",
+	"tooltip"	: "Customize Link's Awakening with Redux and additional options{0}Includes the Font Improvement patch{0}Redux version: 1.3.5"
+
+}, {
+
 
 	"title"		: "Zelda 1 Port",
 	"patch"		: "Compressed\\zelda1.bps",

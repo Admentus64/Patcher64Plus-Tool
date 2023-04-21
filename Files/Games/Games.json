@@ -690,6 +690,7 @@
 	"console"			: "GBC",
 	"version" : [ {
 		"name"			: "Rev 0 (US / PAL)",
+		"upgrade"		: "rev0_to_rev2.bps",
 		"hash"			: "07C211479386825042EFB4AD31BB525F",
 		"rev"			: "Revision 0",
 		"region"		: "North America / NTSC-U & Europe / PAL"
@@ -701,7 +702,7 @@
 		"region"		: "North America / NTSC-U & Europe / PAL"
 	}, {
 		"name"			: "Rev 2 (US / PAL)",
-		"downgrade"		: "rev2_to_rev0.bps",
+		"downgrade"		: "rev2_to_rev1.bps",
 		"hash"			: "7351DAA3C0A91D8F6FE2FBCCA6182478",
 		"rev"			: "Revision 2",
 		"region"		: "North America / NTSC-U & Europe / PAL"
