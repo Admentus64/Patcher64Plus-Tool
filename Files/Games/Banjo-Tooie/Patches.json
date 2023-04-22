@@ -1,6 +1,6 @@
 [ {
 	"title"		: "60 FPS",
 	"patch"		: "Compressed\\60_fps.bps",
-	"output"	: "_60_fps_patched",
+	"output"	: "60_fps",
 	"tooltip"	: "Patches Banjo-Tooie to run at 60 FPS instead of 30 FPS"
 } ]

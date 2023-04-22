@@ -1,8 +1,7 @@
 [ {
 	"title"		: "Additional Options & Redux",
 	"redux" : {
-		"vc_title"	: "Super Metroid Redux",
-		"output"	: "_redux_patched"
+		"vc_title"	: "Super Metroid Redux"
 	},
 	"script"	: "Super Metroid",
 	"tooltip"	: "Customize Super Metroid with Redux and additional options{0}Redux version: 1.5"

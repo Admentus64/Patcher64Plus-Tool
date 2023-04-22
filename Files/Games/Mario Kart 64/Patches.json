@@ -9,6 +9,7 @@
 	"title"		: "Amped Up (v2.0)",
 	"patch"		: "Compressed\\amped_up.bps",
 	"console"	: "Native",
+	"output"	: "amped_up",
 	"tooltip"	: "ROM hack of Mario Kart 64 with custom tracks{0}Features 12 custom tracks with custom music and a new game mode"
 
 }, {
@@ -16,6 +17,7 @@
 	"title"		: "OverKart (v4 DLC)",
 	"patch"		: "Compressed\\overkart.bps",
 	"console"	: "Native",
+	"output"	: "overkart",
 	"tooltip"	: "ROM hack of Mario Kart 64 with custom tracks{0}Features 24 custom tracks"
 
 }, {
@@ -23,12 +25,14 @@
 	"title"		: "Battle Kart 64 (v2.0)",
 	"patch"		: "Compressed\\battle_kart_64.bps",
 	"console"	: "Native",
+	"output"	: "battle_kart",
 	"tooltip"	: "ROM hack of Mario Kart 64 that overhauls Battle Mode{0}Features new game modes and settings"
 
 }, {
 
 	"title"		: "Hooting Time (v1.1a)",
 	"patch"		: "Compressed\\hooting_time.bps",
+	"output"	: "hooting_time",
 	"tooltip"	: "Overhauls the HUD and various options and gameplay changes for Mario Kart 64"
 
 }, {
@@ -36,6 +40,7 @@
 	"title"		: "US Audio (Rev 0)",
 	"version"	: "Rev 0 (JPN)",
 	"patch"		:"Compressed\\us_audio_rev0.bps",
+	"output"	: "us_audio",
 	"tooltip"	: "Ports the audio from the US version to the JPN version of Mario Kart 64"
 
 }, {
@@ -43,6 +48,7 @@
 	"title"		: "US Audio (Rev 1)",
 	"version"	: "Rev 1 (JPN)",
 	"patch"		:"Compressed\\us_audio_rev1.bps",
+	"output"	: "us_audio",
 	"tooltip"	: "Ports the audio from the US version to the JPN version of Mario Kart 64"
 	
 } ]

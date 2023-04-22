@@ -4,8 +4,7 @@
 	"redux" : {
 		"remap_controls"	: 1,
 		"expand_memory"		: 1,
-		"vc_title"		: "Redux: Ocarina",
-		"output"		: "_redux_patched"
+		"vc_title"		: "Redux: Ocarina"
 	},
 	"finalize"			: "rev0_finalize",
 	"script"			: "Ocarina of Time",
@@ -20,15 +19,13 @@
 	"redux" : {
 		"remap_controls"	: 1,
 		"expand_memory"		: 1,
-		"vc_title"		: "Redux: Dawn & Dusk",
-		"file"			: "Decompressed\\Redux\\redux.ppf",
-		"output"		: "_dawn_&_dusk_redux_patched"
+		"vc_title"		: "Redux: Dawn & Dusk"
 	},
 	"script"			: "Ocarina of Time",
 	"settings"			: "Dawn & Dusk",
 	"vanilla"			: 6,
 	"age"				: "Child",
-	"output"			: "_dawn_&_dusk_patched",
+	"output"			: "dawn_&_dusk",
 	"tooltip"			: "A small-sized ROM hack in a completely new setting"
 
 }, {
@@ -40,15 +37,13 @@
 	"redux" : {
 		"remap_controls"	: 1,
 		"expand_memory"		: 1,
-		"vc_title"		: "Redux: Master of Time",
-		"file"			: "Decompressed\\Redux\\redux.ppf",
-		"output"		: "_master_of_time_redux_patched"
+		"vc_title"		: "Redux: Master of Time"
 	},
 	"script"			: "Ocarina of Time",
 	"settings"			: "Master of Time",
 	"vanilla"			: 5,
 	"age"				: "Adult",
-	"output"			: "_master_of_time_patched",
+	"output"			: "master_of_time",
 	"tooltip"			: "A small-sized ROM hack in a completely new setting"
 
 }, {
@@ -60,7 +55,7 @@
 	"expand_memory"			: 1,
 	"vc_title"			: "Zelda: The Missing Link",
 	"patch"				: "Decompressed\\the_missing_link.bps",
-	"output"			: "_the_missing_link_patched",
+	"output"			: "the_missing_link",
 	"tooltip"			: "A small-sized ROM hack in a completely new setting"
 
 }, {
@@ -71,7 +66,7 @@
 	"console"			: "Native",
 	"patch"				: "Decompressed\\the_sealed_palace.bps",
 	"script"			: "The Sealed Palace",
-	"output"			: "_the_sealed_palace_patched",
+	"output"			: "the_sealed_palace",
 	"tooltip"			: "A small-sized ROM hack in a completely new setting"
 
 }, {
@@ -82,14 +77,12 @@
 	"redux" : {
 		"remap_controls"	: 1,
 		"expand_memory"		: 1,
-		"vc_title"		: "Redux: Nimpize",
-		"file"			: "Decompressed\\Redux\\redux.ppf",
-		"output"		: "_nimpize_redux_patched"
+		"vc_title"		: "Redux: Nimpize"
 	},
 	"script"			: "Ocarina of Time",
 	"settings"			: "Nimpize Adventure",
 	"vanilla"			: 4,
-	"output"			: "_nimpize_patched",
+	"output"			: "nimpize",
 	"tooltip"			: "A reworked and harder version of Ocarina of Time with remixed dungeons"
 
 }, {
@@ -100,14 +93,12 @@
 	"redux" : {
 		"remap_controls"	: 1,
 		"expand_memory"		: 1,
-		"vc_title"		: "Redux: Gold Quest",
-		"file"			: "Decompressed\\Redux\\redux.ppf",
-		"output"		: "_gold_quest_redux_patched"
+		"vc_title"		: "Redux: Gold Quest"
 	},
 	"script"			: "Ocarina of Time",
 	"settings"			: "Gold Quest",
 	"vanilla"			: 2,
-	"output"			: "_gold_quest_patched",
+	"output"			: "gold_quest",
 	"tooltip"			: "Remixes the overworld and dungeons as a harder version of master Quest{0}With support for languages, redux and additional options"
 
 }, {
@@ -118,14 +109,12 @@
 	"redux" : {
 		"remap_controls"	: 1,
 		"expand_memory"		: 1,
-		"vc_title"		: "Redux: New MQ",
-		"file"			: "Decompressed\\Redux\\redux.ppf",
-		"output"		: "_new_master_quest_redux_patched"
+		"vc_title"		: "Redux: New MQ"
 	},
 	"script"			: "Ocarina of Time",
 	"settings"			: "New Master Quest",
 	"vanilla"			: 3,
-	"output"			: "_new_master_quest_patched",
+	"output"			: "new_master_quest",
 	"tooltip"			: "Remixes the overworld and dungeons as a harder version of master Quest{0}With support for languages and additional options"
 
 }, {
@@ -136,15 +125,13 @@
 	"redux" : {
 		"remap_controls"	: 1,
 		"expand_memory"		: 1,
-		"vc_title"		: "Redux: Bombiwa",
-		"file"			: "Decompressed\\Redux\\redux.ppf",
-		"output"		: "_bombiwa_redux_patched"
+		"vc_title"		: "Redux: Bombiwa"
 	},
 	"script"			: "Ocarina of Time",
 	"settings"			: "Bombiwa",
 	"vanilla"			: 6,
 	"age"				: "Child",
-	"output"			: "_bombiwa_patched",
+	"output"			: "bombiwa",
 	"tooltip"			: "A small-sized ROM hack in a completely new setting, and extremely tricky and difficult"
 
 }, {
@@ -155,15 +142,13 @@
 	"redux" : {
 		"remap_controls"	: 1,
 		"expand_memory"		: 1,
-		"vc_title"		: "Redux: Puzzling",
-		"file"			: "Decompressed\\Redux\\redux.ppf",
-		"output"		: "_puzzling_redux_patched"
+		"vc_title"		: "Redux: Puzzling"
 	},
 	"script"			: "Ocarina of Time",
 	"settings"			: "Puzzling",
 	"vanilla"			: 6,
 	"age"				: "Child",
-	"output"			: "_puzzling_patched",
+	"output"			: "puzzling",
 	"tooltip"			: "A small-sized ROM hack that focuses on puzzling your way through"
 
 }, {
@@ -193,7 +178,7 @@
 	"console"			: "Native",
 	"command"			: "Force Remap D-Pad No Expand Memory Patch Boot DOL",
 	"patch"				: "Compressed\\gz_practice_rev0.bps",
-	"output"			: "_gz_practice_patched",
+	"output"			: "gz_practice",
 	"tooltip"			: "A trainer / practice / testing utility for The Legend of Zelda: Ocarina of Time{0}Formally known by its codename 'gz', but generally referred to as 'The Practice ROM'"
 
 }, {
@@ -204,7 +189,7 @@
 	"command"			: "Force Remap D-Pad No Expand Memory Patch Boot DOL",
 	"vc_title"			: "Zelda: GZ Practice ROM",
 	"patch"				: "Compressed\\gz_practice_rev2_vc.bps",
-	"output"			: "_gz_practice_patched",
+	"output"			: "gz_practice",
 	"tooltip"			: "A trainer / practice / testing utility for The Legend of Zelda: Ocarina of Time{0}Formally known by its codename 'gz', but generally referred to as 'The Practice ROM'"
 
 }, {
@@ -212,7 +197,7 @@
 	"title"				: "Widescreen",
 	"version"			: "Rev 2 (US)",
 	"patch"				: "Decompressed\\widescreen.bps",
-	"output"			: "_widescreen_patched",
+	"output"			: "widescreen",
 	"tooltip"			: "16:9 widescreen support for Ocarina of Time"
 
 }, {
@@ -221,7 +206,7 @@
 	"version"			: "Debug GC MQ (PAL)",
 	"console"			: "Native",
 	"patch"				: "Decompressed\\the_helix_blade.bps",
-	"output"			: "_the_helix_blade_patched",
+	"output"			: "the_helix_blade",
 	"tooltip"			: "A small-sized ROM hack in a completely new setting"
 
 }, {
@@ -230,7 +215,7 @@
 	"version"			: "Debug GC MQ (PAL)",
 	"console"			: "Native",
 	"patch"				: "Decompressed\\dark_hyrule_fantasy.bps",
-	"output"			: "_dark_hyrule_fantasy_patched",
+	"output"			: "dark_hyrule_fantasy",
 	"tooltip"			: "A small-sized ROM hack in a completely new setting"
 
 }, {
@@ -239,7 +224,7 @@
 	"version"			: "Debug GC MQ (PAL)",
 	"console"			: "Native",
 	"patch"				: "Decompressed\\spaceworld.bps",
-	"output"			: "_spaceworld_patched",
+	"output"			: "spaceworld",
 	"tooltip"			: "A recreation of the demo of Ocarina of Time shown at Spaceworld in 1997"
 
 }, {
@@ -248,7 +233,7 @@
 	"version"			: "China (iQue)",
 	"console"			: "Native",
 	"patch"				: "Compressed\\iQue_chn.bps",
-	"output"			: "_iQue_china_patched",
+	"output"			: "iQue_china",
 	"tooltip"			: "Header fix and save fix for the Chinese iQue ROM"
 
 }, {
@@ -257,7 +242,7 @@
 	"version"			: "Taiwan (iQue)",
 	"console"			: "Native",
 	"patch"				: "Compressed\\iQue_twn.bps",
-	"output"			: "_iQue_taiwan_patched",
+	"output"			: "iQue_taiwan",
 	"tooltip"			: "Header fix for the iQue Chinese Traditional iQue ROM"
 
 } ]

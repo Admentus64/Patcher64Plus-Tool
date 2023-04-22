@@ -17,35 +17,35 @@
 
 	"title"			: "Lowpoly Promo Mario Model",
 	"patch"			: "Compressed\\promo_mario.bps",
-	"output"		: "_promo_mario_patched",
+	"output"		: "promo_mario",
 	"tooltip"		: "Replaces Mario's model with the promo model for Mario"
 
 }, {
 
 	"title"			: "Lowpoly Promo Luigi Model",
 	"patch"			: "Compressed\\promo_luigi.bps",
-	"output"		: "_promo_luigi_patched",
+	"output"		: "promo_luigi",
 	"tooltip"		: "Replaces Mario's model with the promo model for Luigi"
 
 }, {
 
 	"title"			: "render96 Mario Model",
 	"patch"			: "Compressed\\render96_mario.bps",
-	"output"		: "_render96_mario_patched",
+	"output"		: "render96_mario",
 	"tooltip"		: "render96 patch with the Mario model with 3D models and promo styles for several objects{0}Both widescreen (stretched HUD) and puppycam can be enabled/disabled in the pause menu"
 
 }, {
 
 	"title"			: "render96 Luigi Model",
 	"patch"			: "Compressed\\render96_luigi.bps",
-	"output"		: "_render96_luigi_patched",
+	"output"		: "render96_luigi",
 	"tooltip"		: "render96 patch with the Luigi model with 3D models and promo styles for several objects{0}Both widescreen (stretched HUD) and puppycam can be enabled/disabled in the pause menu"
 
 }, {
 
 	"title"			: "Termina Invasion",
 	"patch"			: "Compressed\\termina_invasion.bps",
-	"output"		: "_termina_invasion_patched",
+	"output"		: "termina_invasion",
 	"tooltip"		: "Termina takes over the Mushroom Kingdom"
 
 }, {
@@ -58,7 +58,7 @@
 	"vc_title"		: "SM64: Multiplayer",
 	"patch"			: "Decompressed\\multiplayer.bps",
 	"extend"		: 18,
-	"output"		: "_multiplayer_v1.4.2_patched",
+	"output"		: "multiplayer_v1.4.2",
 	"tooltip"		: "Single-Screen Multiplayer with Mario and Luigi{0}Plugin a second emulated controller for Luigi"
 
 }, {
@@ -67,7 +67,7 @@
 	"rom_title"		: "SM64 Multiplayer",
 	"patch"			: "Compressed\\splitscreen_multiplayer.bps",
 	"console"		: "Native",
-	"output"		: "_splitscreen_multiplayer_patched",
+	"output"		: "splitscreen_multiplayer",
 	"tooltip"		: "Split-Screen Multiplayer with Mario and Luigi{0}Plugin a second emulated controller for Luigi"
 
 }, {
@@ -75,7 +75,7 @@
 	"title"			: "Arguably Better Edition (R3)",
 	"patch"			: "Compressed\\abe.bps",
 	"console"		: "Native",
-	"output"		: "_abe_patched",	
+	"output"		: "abe",	
 	"tooltip"		: "Changes Super Mario 64 to make it a better game overall{0}It features some additional bonus features{0}4:3 standard aspect ratio version"
 
 }, {
@@ -83,7 +83,7 @@
 	"title"			: "Arguably Better Edition (WS) (R3)",
 	"patch"			: "Compressed\\abe_ws.bps",
 	"console"		: "Native",
-	"output"		: "_abe_ws_patched",	
+	"output"		: "abe_ws",	
 	"tooltip"		: "Changes Super Mario 64 to make it a better game overall{0}It features some additional bonus features{0}16:9 widescreen aspect ratio version"
 
 }, {
@@ -94,7 +94,7 @@
 	"patch"			: "Decompressed\\star_road_n64.bps",
 	"console"		: "Native",
 	"extend"		: 45,
-	"output"		: "_star_road_patched",
+	"output"		: "star_road",
 	"tooltip"		: "A brand new world for Super Mario 64 with new stages and more than 120 stars to collect"
 
 }, {
@@ -106,7 +106,7 @@
 	"patch"			: "Decompressed\\star_road_wii_vc.bps",
 	"console"		: "Wii VC",
 	"extend"		: 26,
-	"output"		: "_star_road_patched",
+	"output"		: "star_road",
 	"tooltip"		: "A brand new world for Super Mario 64 with new stages and more than 120 stars to collect"
 
 }, {
@@ -116,7 +116,7 @@
 	"patch"			: "Decompressed\\last_impact.vcdiff",
 	"console"		: "Native",
 	"extend"		: 64,
-	"output"		: "_last_impact_patched",
+	"output"		: "last_impact",
 	"tooltip"		: "A brand new world for Super Mario 64 with new stages and more than 120 stars to collect"
 
 }, {
@@ -126,7 +126,7 @@
 	"patch"			: "Decompressed\\land.vcdiff",
 	"console"		: "Native",
 	"extend"		: 64,
-	"output"		: "_land_patched",
+	"output"		: "land",
 	"tooltip"		: "A brand new world for Super Mario 64 with new stages and more than 120 stars to collect"
 
 }, {
@@ -136,7 +136,7 @@
 	"patch"			: "Decompressed\\odyssey.vcdiff",
 	"console"		: "Native",
 	"extend"		: 64,
-	"output"		: "_odyssey_patched",
+	"output"		: "odyssey",
 	"tooltip"		: "A brand new world for Super Mario 64 with new stages and 80 stars to collect"
 
 }, {
@@ -146,14 +146,14 @@
 	"patch"			: "Decompressed\\internal_plexus.bps",
 	"console"		: "Native",
 	"extend"		: 64,
-	"output"		: "_internal_plexus_patched",
+	"output"		: "internal_plexus",
 	"tooltip"		: "A brand new beta-based world for Super Mario 64 with new stages and 142 stars to collect"
 
 }, {
 
 	"title"			: "Italian Translation",
 	"patch"			: "Compressed\\ita.bps",
-	"output"		: "_ita_patched",
+	"output"		: "ita",
 	"tooltip"		: "Italian Translation of Super Mario 64{0}Based on the Japanese Shindou version"
 
 }, {
@@ -162,7 +162,7 @@
 	"version"		: "China (iQue)",
 	"console"		: "Native",
 	"patch"			: "Compressed\\iQue_chn.bps",
-	"output"		: "_iQue_chn_patched",
+	"output"		: "iQue_chn",
 	"tooltip"		: "Fix the header, saving and rumble for the Chinese iQue ROM"
 
 } ]

@@ -1,8 +1,7 @@
 [ {
 	"title"		: "Additional Options & Redux",
 	"redux" : {
-		"vc_title"	: "The Legend of Zelda Redux",
-		"output"	: "_redux_patched"
+		"vc_title"	: "The Legend of Zelda Redux"
 	},
 	"script"	: "The Legend of Zelda",
 	"tooltip"	: "Customize The Legend of Zelda with Redux and additional options{0}Redux version: 3.2"

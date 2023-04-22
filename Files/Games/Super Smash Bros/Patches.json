@@ -9,7 +9,7 @@
 	"title"		: "Smash Remix (v1.3.0)",
 	"console"	: "Native",
 	"patch"		: "Compressed\\remix.bps",
-	"output"	: "_remix_patched",
+	"output"	: "remix",
 	"tooltip"	: "Remixes the whole of Super Smash Bros.{0}Contains new stages and characters to use"
 
 }, {
@@ -19,7 +19,7 @@
 	"expand_memory"	: -1,
 	"vc_title"	: "Super Smash Bros: MSE",
 	"patch"		: "Compressed\\SSBMSE.bps",
-	"output"	: "_ssbmse_patched",
+	"output"	: "ssbmse",
 	"tooltip"	: "Add new stages from the newer Super Smash Bros. entries"
 
 }, {
@@ -27,7 +27,7 @@
 	"title"		: "16:9 Widescreen",
 	"expand_memory"	: -1,
 	"patch"		: "Compressed\\widescreen.bps",
-	"output"	: "_widescreen_patched",
+	"output"	: "widescreen",
 	"tooltip"	: "Adds proper 16:9 widescreen support to Super Smash Bros"
 
 } ]

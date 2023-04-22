@@ -1,6 +1,6 @@
 [ {
 	"title"		: "Oracle of Seasons (GBC to GBA)",
 	"patch"		: "Compressed\\gbc_to_gba.bps",
-	"output"	: "_gbc_to_gba_patched",
+	"output"	: "gbc_to_gba",
 	"tooltip"	: "The game is now recognized as a GBA title, so that you have access to the Advance Shop"
 } ]

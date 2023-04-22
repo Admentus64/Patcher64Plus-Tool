@@ -1,8 +1,7 @@
 [ {
 	"title"		: "Additional Options & Redux",
 	"redux" : {
-		"vc_title"	: "Zelda II: The Adventure of Link Redux",
-		"output"	: "_redux_patched"
+		"vc_title"	: "Zelda II: The Adventure of Link Redux"
 	},
 	"script"	: "The Adventure of Link",
 	"tooltip"	: "Customize Zelda II: The Adventure of Link with Redux and additional options{0}Redux version: 3.0{0}- Supported: Rev 0 (US)"

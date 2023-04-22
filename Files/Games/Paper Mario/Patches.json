@@ -10,6 +10,7 @@
 	"script"	: "Paper Mario",
 	"preset"	: 1,
 	"settings"	: "Paper Mario Hard Mode",
+	"output"	: "hard_mode",
 	"tooltip"	: "A rebalanced harder difficulty for Paper Mario with new unused badges{0}This patch uses options found from within the Patcher64+ Tool"
 
 }, {
@@ -18,7 +19,7 @@
 	"script"	: "Paper Mario",
 	"console"	: "Native",
 	"patch"		: "Compressed\\master_quest.bps",
-	"output"	: "_master_quest_patched",
+	"output"	: "master_quest",
 	"tooltip"	: "A complete overhaul of Paper Mario to be much more difficult to be considered the Dark Souls of Paper Mario{0}This version is extremely difficult and is not recommend for a first attempt{0}Do not attempt this unless you have extensive knowledge of Paper Mario or you will likely struggle{0}Includes: boss refights, new dungeons & 50+ new maps, 60+ new enemies, rebalancing, new AI mechanics, new badges and partner attacks"
 
 }, {
@@ -27,7 +28,7 @@
 	"script"	: "Paper Mario",
 	"console"	: "Native",
 	"patch"		: "Compressed\\master_quest_junior.bps",
-	"output"	: "_master_quest_junior_patched",
+	"output"	: "master_quest_junior",
 	"tooltip"	: "A complete overhaul of Paper Mario to be much more difficult to be considered the Dark Souls of Paper Mario{0}This version has a much more reasonable difficulty curve for a first attempt{0}Includes: boss refights, new dungeons & 50+ new maps, 60+ new enemies, rebalancing, new AI mechanics, new badges and partner attacks"
 
 } ]

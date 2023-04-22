@@ -4,7 +4,7 @@
 	"command"	: "Force Downgrade",
 	"vc_title"	: "Donkey Kong Country: Boss Blitz",
 	"patch"		: "Compressed\\boss_blitz.ips",
-	"output"	: "_boss_blitz_patched",
+	"output"	: "boss_blitz",
 	"tooltip"	: "Transforms the game into a boss rush mode with all 7 bosses{0}Only recommended for hardcore players!"
 
 }, {
@@ -13,7 +13,7 @@
 	"command"	: "Force Downgrade",
 	"vc_title"	: "Donkey Kong Country: Expert Edition",
 	"patch"		: "Compressed\\expert_edition.ips",
-	"output"	: "_expert_edition_patched",
+	"output"	: "expert_edition",
 	"tooltip"	: "Removes the DK Barrels, Star Barrels, and Warp Barrels to make the game more challenging{0}Only recommended for hardcore players!"
 
 }, {
@@ -22,7 +22,7 @@
 	"vc_title"	: "Donkey Kong Country (German)",
 	"patch"		: "Compressed\\german_rev0.ips",
 	"console"	: "Native",
-	"output"	: "_german_patched",
+	"output"	: "german",
 	"tooltip"	: "Forces the game into the German language with typo fixes included"
 
 }, {
@@ -32,7 +32,7 @@
 	"vc_title"	: "Donkey Kong Country (German)",
 	"patch"		: "Compressed\\german_vc.ips",
 	"console"	: "Wii VC",
-	"output"	: "_german_patched",
+	"output"	: "german",
 	"tooltip"	: "Forces the game into the German language with typo fixes included"
 
 } ]

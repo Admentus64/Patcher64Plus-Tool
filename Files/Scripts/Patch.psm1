@@ -13,7 +13,8 @@ function MainFunction([string]$Command, [string]$PatchedFileName) {
     $Header = SetHeader -Header $Header -ROMTitle $GamePatch.rom_title -ROMGameID $GamePatch.rom_gameID -VCTitle $GamePatch.vc_title -VCGameID $GamePatch.vc_gameID -Region $GamePatch.rom_region
 
     # Output
-    if (!(IsSet $PatchedFileName)) { $PatchedFileName = "_patched" }
+    if (!(IsSet $PatchedFileName))   { $PatchedFileName = "_patched" }
+    else                             { $PatchedFileName = "_" + $PatchedFileName + "_patched" }
     
     # Expand Memory, Remap Controls
     if     ($VC.ExpandMemory.Active  -and $GamePatch.expand_memory  -eq  1)    { $VC.ExpandMemory.Checked  = $True  }
@@ -24,12 +25,12 @@ function MainFunction([string]$Command, [string]$PatchedFileName) {
     if ( !(StrLike -str $Command -val "Inject") -and !(StrLike -str $Command -val "Apply Patch") -and !(StrLike -str $Command -val "Extract") ) {
         # Redux
         if ( ( (IsChecked $Patches.Redux) -or (IsSet $GamePatch.preset) ) -and (IsSet $GamePatch.redux)) {
+            $PatchedFileName = $PatchedFileName.replace("_patched", "_redux_patched")
             $Header = SetHeader -Header $Header -ROMTitle $GamePatch.redux.rom_title -ROMGameID $GamePatch.redux.rom_gameID -VCTitle $GamePatch.redux.vc_title -VCGameID $GamePatch.redux.vc_gameID -Region $GamePatch.rom_region
             if     ($VC.RemapControls.Active -and $GamePatch.redux.remap_controls -eq  1)   { $VC.RemapControls.Checked = $True  }
             elseif ($VC.RemapControls.Active -and $GamePatch.redux.remap_controls -eq -1)   { $VC.RemapControls.Checked = $False }
             if     ($VC.ExpandMemory.Active  -and $GamePatch.redux.expand_memory  -eq  1)   { $VC.ExpandMemory.Checked  = $True  }
             elseif ($VC.ExpandMemory.Active  -and $GamePatch.redux.expand_memory  -eq -1)   { $VC.ExpandMemory.Checked  = $False }
-            if     (IsSet -Elem $GamePatch.redux.output)   { $PatchedFileName = $GamePatch.redux.output }
         }
 
         # Language Patch
@@ -48,9 +49,9 @@ function MainFunction([string]$Command, [string]$PatchedFileName) {
             if (TestFile (CheckPatchExtension ($GameFiles.languages + "\" + $LanguagePatch.code) ) ) {
                 $Ext = (Get-Item (CheckPatchExtension ($GameFiles.languages + "\" + $LanguagePatch.code) ) ).Extension
                 $global:LanguagePatchFile = "Languages\" + $LanguagePatch.code + $Ext
+                $PatchedFileName = $PatchedFileName.replace("_patched", "_" + $LanguagePatch.code + "_patched")
             }
             $Header = SetHeader -Header $Header -ROMTitle $LanguagePatch.rom_title -ROMGameID $LanguagePatch.rom_gameID -VCTitle $LanguagePatch.vc_title -VCGameID $LanguagePatch.vc_gameID -Region $LanguagePatch.rom_region
-            if     (IsSet $LanguagePatch.output)     { $PatchedFileName = $LanguagePatch.output }
             
             if (IsSet $LanguagePatch.region)     {
                 if (!(IsSet $Header[1])) { $Header[1] = $GameType.rom_gameID }
