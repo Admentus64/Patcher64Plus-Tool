@@ -103,8 +103,12 @@ function CreateMainDialog() {
     $CurrentModeLabel.AutoSize = $True
 
     # Create a label to show current version.
-    $VersionLabel = CreateLabel -X (DPISize 15) -Y (DPISize 30) -Width (DPISize 150) -Height (DPISize 30) -Text ($Patcher.Version + " - #" + $Patcher.Hotfix + "`n(" + $Patcher.Date + ")") -Font $Fonts.SmallBold -AddTo $MainDialog
-    $osLabel      = CreateLabel -X (DPISize 15) -Y (DPISize 60) -Width (DPISize 250) -Height (DPISize 20) -Text ($Patcher.OS + " (" + $Patcher.Bit + ")")        -Font $Fonts.SmallBold -AddTo $MainDialog
+    $text = $Patcher.Version
+    if (IsSet $Patcher.Hotfix) { $text += " - #" + $Patcher.Hotfix }
+    $text += "`n(" + $Patcher.Date + ")"
+
+    $VersionLabel = CreateLabel -X (DPISize 15) -Y (DPISize 30) -Width (DPISize 150) -Height (DPISize 30) -Text $text                                     -Font $Fonts.SmallBold -AddTo $MainDialog
+    $osLabel      = CreateLabel -X (DPISize 15) -Y (DPISize 60) -Width (DPISize 250) -Height (DPISize 20) -Text ($Patcher.OS + " (" + $Patcher.Bit + ")") -Font $Fonts.SmallBold -AddTo $MainDialog
     if (!([Environment]::Is64BitOperatingSystem)) { $osLabel.text += " NOT SUPPORTED"; $osLabel.ForeColor = "red" }
 
     # Create Arrays for groups

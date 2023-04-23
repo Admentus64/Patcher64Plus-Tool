@@ -3,8 +3,7 @@
 	"title"				: "Additional Options & Redux",
 	"redux" : {
 		"remap_controls"	: 1,
-		"expand_memory"		: 1,
-		"vc_title"		: "Redux: Ocarina"
+		"expand_memory"		: 1
 	},
 	"finalize"			: "rev0_finalize",
 	"script"			: "Ocarina of Time",
@@ -18,8 +17,7 @@
 	"patch" 			: "Decompressed\\dawn_&_dusk.bps",
 	"redux" : {
 		"remap_controls"	: 1,
-		"expand_memory"		: 1,
-		"vc_title"		: "Redux: Dawn & Dusk"
+		"expand_memory"		: 1
 	},
 	"script"			: "Ocarina of Time",
 	"settings"			: "Dawn & Dusk",
@@ -36,8 +34,7 @@
 	"patch"				: "Decompressed\\master_of_time.bps",
 	"redux" : {
 		"remap_controls"	: 1,
-		"expand_memory"		: 1,
-		"vc_title"		: "Redux: Master of Time"
+		"expand_memory"		: 1
 	},
 	"script"			: "Ocarina of Time",
 	"settings"			: "Master of Time",
@@ -76,8 +73,7 @@
 	"patch"				: "Decompressed\\nimpize.bps",
 	"redux" : {
 		"remap_controls"	: 1,
-		"expand_memory"		: 1,
-		"vc_title"		: "Redux: Nimpize"
+		"expand_memory"		: 1
 	},
 	"script"			: "Ocarina of Time",
 	"settings"			: "Nimpize Adventure",
@@ -92,8 +88,7 @@
 	"patch" 			: "Decompressed\\gold_quest.bps",
 	"redux" : {
 		"remap_controls"	: 1,
-		"expand_memory"		: 1,
-		"vc_title"		: "Redux: Gold Quest"
+		"expand_memory"		: 1
 	},
 	"script"			: "Ocarina of Time",
 	"settings"			: "Gold Quest",
@@ -108,8 +103,7 @@
 	"patch"				: "Decompressed\\new_master_quest.bps",
 	"redux" : {
 		"remap_controls"	: 1,
-		"expand_memory"		: 1,
-		"vc_title"		: "Redux: New MQ"
+		"expand_memory"		: 1
 	},
 	"script"			: "Ocarina of Time",
 	"settings"			: "New Master Quest",
@@ -124,8 +118,7 @@
 	"patch"				: "Decompressed\\bombiwa.bps",
 	"redux" : {
 		"remap_controls"	: 1,
-		"expand_memory"		: 1,
-		"vc_title"		: "Redux: Bombiwa"
+		"expand_memory"		: 1
 	},
 	"script"			: "Ocarina of Time",
 	"settings"			: "Bombiwa",
@@ -141,8 +134,7 @@
 	"patch"				: "Decompressed\\puzzling.bps",
 	"redux" : {
 		"remap_controls"	: 1,
-		"expand_memory"		: 1,
-		"vc_title"		: "Redux: Puzzling"
+		"expand_memory"		: 1
 	},
 	"script"			: "Ocarina of Time",
 	"settings"			: "Puzzling",
