@@ -1059,11 +1059,6 @@ function ByteOptions() {
         if (TestFile ($GameFiles.textures + "\Equipment\Bow\heros_bow." + $LanguagePatch.code + ".label")) { PatchBytes -Offset "89F800" -Texture -Patch ("Equipment\Bow\heros_bow." + $LanguagePatch.code + ".label") }
     }
 
-    if (IsDefault $Redux.Equipment.GiantKnifeHealth -Not) {
-        $value =  (Get8Bit $Redux.Equipment.GiantKnifeHealth.Text)
-        ChangeBytes -Offset "AE5F0B" -Values $value; ChangeBytes -Offset "C014F3" -Values $value; ChangeBytes -Offset "B71F4F" -Values $value
-    }
-
     if (IsChecked $Redux.Equipment.FireProofDekuShield)     { ChangeBytes -Offset "BD3C5B" -Values "00"                                            }
     if (IsChecked $Redux.Equipment.UnsheathSword)           { ChangeBytes -Offset "BD04A0" -Values "28 42 00 05 14 40 00 05 00 00 10 25"           }
     if (IsChecked $Redux.Equipment.Hookshot)                { PatchBytes  -Offset "7C7000" -Texture -Patch "Equipment\termina_hookshot.icon"       }
@@ -1094,7 +1089,8 @@ function ByteOptions() {
     }
 
     if (IsDefault $Redux.Equipment.SwordHealth -Not) {
-        ChangeBytes -Offset "AE5F2F" -Values (Get8Bit $Redux.Equipment.SwordHealth.Text); ChangeBytes -Offset "B71F4F" -Values (Get8Bit $Redux.Equipment.SwordHealth.Text); ChangeBytes -Offset "BB6823" -Values (Get8Bit $Redux.Equipment.SwordHealth.Text)
+        $value =  (Get8Bit $Redux.Equipment.SwordHealth.Text)
+        ChangeBytes -Offset "AE5F2F" -Values $value; ChangeBytes -Offset "B71F4F" -Values $value; ChangeBytes -Offset "BB6823" -Values $value; ChangeBytes -Offset "AE5F0B" -Values $value; ChangeBytes -Offset "C014F3" -Values $value
     }
 
     if (IsDefault $Redux.Equipment.DekuShield -Not) {
@@ -2929,7 +2925,6 @@ function CreateTabEquipment() {
     CreateReduxCheckBox -Name "HerosBow"            -Adult   -Text "Hero's Bow"                  -Info "Replace the Fairy Bow icon and text with the Hero's Bow"                                       -Credits "GhostlyDark (ported textures) & Admentus (dialogue)"
     CreateReduxCheckBox -Name "Hookshot"            -Adult   -Text "Termina Hookshot"            -Info "Replace the Hyrule Hookshot icon with the Termina Hookshot"                                    -Credits "GhostlyDark (ported textures)"
     CreateReduxCheckBox -Name "GoronBraceletFix"    -Adult   -Text "Keep Goron's Bracelet Color" -Info "Prevent grayscale on Goron's Bracelet, as Adult Link isn't able to push big blocks without it" -Credits "Ported from Redux"
-    CreateReduxTextBox  -Name "GiantKnifeHealth"    -Adult   -Text "Knife Durability"            -Info "Set the durability strength of the Giant's Knife" -Value 8 -Min 1 -Max 255                     -Credits "Admentus"
     
     CreateReduxGroup    -Tag  "Equipment"     -All   -Text "Swords & Shields"
     CreateReduxComboBox -Name "KokiriSword"   -Child -Text "Kokiri Sword"     -Items @("Kokiri Sword")                      -FilePath ($GameFiles.Textures + "\Equipment\Kokiri Sword")  -Ext @("icon", "bin")   -Info "Select an alternative for the icon and text of the Kokiri Sword"     -Credits "Admentus (injects) & GhostlyDark (injects) & CYB3RTR0N (beta icon)"
