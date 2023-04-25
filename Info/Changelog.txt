@@ -1,4 +1,5 @@
 v20.3.3
+- Updated New Master Quest for OoT
 - Added "Harder Iron Knuckle" option for OoT
 - Fixed having selected both MM Button Positions and Options Menu for OoT
 - Fixed description for Fog option for OoT
