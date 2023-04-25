@@ -1,3 +1,9 @@
+v20.3.3
+- Added "Harder Iron Knuckle" option for OoT
+- Fixed having selected both MM Button Positions and Options Menu for OoT
+- Fixed description for Fog option for OoT
+- Fixed Unequip Item for OoT Redux
+
 v20.3.2
 - Updated Auto-Updater
 

@@ -597,6 +597,11 @@ function ByteOptions() {
     if     ( (IsChecked $Redux.Hero.AggressiveDarkLink)      -and (IsDefault $Redux.Hero.AggressiveDarkLink -Not) )   { ChangeBytes -Offset "C5C39F"  -Values "70" }
     elseif ( (IsChecked $Redux.Hero.AggressiveDarkLink -Not) -and (IsDefault $Redux.Hero.AggressiveDarkLink -Not) )   { ChangeBytes -Offset "C5C39F"  -Values "01" }
 
+    if (IsChecked $Redux.Hero.HarderIronKnuckle) {
+        ChangeBytes -Offset "DEDA10" -Values "4019999A"; ChangeBytes -Offset "DEA06B" -Values "00"; ChangeBytes -Offset "DEA072" -Values "6734"; ChangeBytes -Offset "DEA087" -Values "0024A56734" # Move Faster
+        ChangeBytes -Offset "DEA742" -Values "40";       ChangeBytes -Offset "DEA9C6" -Values "40"                                                                                                 # Attack Faster
+    }
+
     if ( (IsChecked $Redux.Hero.HarderKeese) -and (IsDefault $Redux.Hero.HarderKeese -Not) ) {
         ChangeBytes -Offset "C1495A" -Values "0014"; ChangeBytes -Offset "C1496A" -Values "0014"; ChangeBytes -Offset "C149AE" -Values "0014"; ChangeBytes -Offset "C149E6" -Values "0014"
         ChangeBytes -Offset "C13968" -Values "00000000000000000000000000000000"
@@ -2009,6 +2014,15 @@ function AdjustGUI() {
         EnableForm -Form $Redux.Box.TextColors       -Enable (!$Redux.Graphics.GCScheme.Checked)
     }
 
+    if ($Redux.UI.ButtonPositions -ne $null -and $Redux.Misc.OptionsMenu -ne $null) {
+        if ($Redux.UI.ButtonPositions.Checked -and $Redux.Misc.OptionsMenu.SelectedIndex -ne 0) {
+            $Redux.UI.ButtonPositions.Checked     = $False
+            $Redux.Misc.OptionsMenu.SelectedIndex = 0
+        }
+        EnableElem -Elem $Redux.Misc.OptionsMenu   -Active (!$Redux.UI.ButtonPositions.checked)
+        EnableElem -Elem $Redux.UI.ButtonPositions -Active ($Redux.Misc.OptionsMenu.SelectedIndex -eq 0)
+    }
+
 }
 
 
@@ -2276,8 +2290,13 @@ function CreateTabRedux() {
     $Last.Half = $False; CreateTextColorOptions; $Redux.Box.TextColors = $Last.Group
 
     if ($Redux.Graphics.RupeeIconColors -ne $null)   { $Redux.Hooks.RupeeIconColors.Add_CheckStateChanged( { EnableElem -Elem $Redux.Colors.RupeesVanilla -Active (!$this.checked) } ) }
-    if ($Redux.Graphics.GCScheme        -ne $null)   { $Redux.Graphics.GCScheme.Add_CheckStateChanged(     { EnableForm -Form $Redux.Box.TextColors       -Enable (!$this.checked) } ) }
-    
+    if ($Redux.Graphics.GCScheme        -ne $null)   { $Redux.Graphics.GCScheme.Add_CheckStateChanged(     { EnableElem -Elem $Redux.Box.TextColors       -Active (!$this.checked) } ) }
+
+    if ($Redux.UI.ButtonPositions -ne $null -and $Redux.Misc.OptionsMenu -ne $null) {
+        $Redux.UI.ButtonPositions.Add_CheckedChanged(     { EnableElem -Elem $Redux.Misc.OptionsMenu   -Active (!$this.checked)            } )
+        $Redux.Misc.OptionsMenu.Add_SelectedIndexChanged( { EnableElem -Elem $Redux.UI.ButtonPositions -Active ($this.SelectedIndex -eq 0) } )
+    }
+
 }
 
 
@@ -2577,16 +2596,17 @@ function CreateTabDifficulty() {
     # HERO MODE #
 
     CreateReduxGroup    -Tag  "Hero"               -All    -Text "Hero Mode"
-    CreateReduxCheckBox -Name "Arwing"                     -Text "Arwing"               -Info "Replaces the Rock-Lifting Kokiri Kid with an Arwing in Kokiri Forest"                                -Credits "Admentus"
-    CreateReduxCheckBox -Name "LikeLike"                   -Text "Like-Like"            -Info "Replaces the Rock-Lifting Kokiri Kid with a Like-Like in Kokiri Forest"                              -Credits "Admentus" -Link $Redux.Hero.Arwing
-    CreateReduxCheckBox -Name "GraveyardKeese"             -Text "Graveyard Keese"      -Info "Extends the object list for Adult Link so the Keese appear at the Graveyard"                         -Credits "salvador235"
-    CreateReduxCheckBox -Name "LostWoodsOctorok"           -Text "Lost Woods Octorok"   -Info "Add an Octorok actor in the Lost Woods area which leads to Zora's River"                             -Credits "Chez Cousteau"
-    CreateReduxCheckBox -Name "HarderChildBosses"          -Text "Harder Child Bosses"  -Info "Replace objects in the Child Dungeon Boss arenas with additional monsters"                           -Credits "BilonFullHDemon"
-    CreateReduxCheckBox -Name "PotsChallenge"      -All    -Text "Pots Challenge"       -Info "Throw pots at your enemies to defeat them! Pots everywhere!"                                         -Credits "Aegiker"
-    CreateReduxCheckBox -Name "NoBottledFairy"     -All    -Text "No Bottled Fairies"   -Info "Fairies can no longer be put into a bottle"                                                          -Credits "Admentus & Three Pendants"
+    CreateReduxCheckBox -Name "Arwing"                     -Text "Arwing"               -Info "Replaces the Rock-Lifting Kokiri Kid with an Arwing in Kokiri Forest"        -Credits "Admentus"
+    CreateReduxCheckBox -Name "LikeLike"                   -Text "Like-Like"            -Info "Replaces the Rock-Lifting Kokiri Kid with a Like-Like in Kokiri Forest"      -Credits "Admentus" -Link $Redux.Hero.Arwing
+    CreateReduxCheckBox -Name "GraveyardKeese"             -Text "Graveyard Keese"      -Info "Extends the object list for Adult Link so the Keese appear at the Graveyard" -Credits "salvador235"
+    CreateReduxCheckBox -Name "LostWoodsOctorok"           -Text "Lost Woods Octorok"   -Info "Add an Octorok actor in the Lost Woods area which leads to Zora's River"     -Credits "Chez Cousteau"
+    CreateReduxCheckBox -Name "HarderChildBosses"          -Text "Harder Child Bosses"  -Info "Replace objects in the Child Dungeon Boss arenas with additional monsters"   -Credits "BilonFullHDemon"
+    CreateReduxCheckBox -Name "PotsChallenge"      -All    -Text "Pots Challenge"       -Info "Throw pots at your enemies to defeat them! Pots everywhere!"                 -Credits "Aegiker"
+    CreateReduxCheckBox -Name "NoBottledFairy"     -All    -Text "No Bottled Fairies"   -Info "Fairies can no longer be put into a bottle"                                  -Credits "Admentus & Three Pendants"
 
     CreateReduxCheckBox -Name "HarderStalfos"      -All    -Exclude "New Master Quest" -Text "Harder Stalfos"       -Info "Stalfos will attack you even not Z-Targeted"                                           -Credits "BilonFullHDemon"
     CreateReduxCheckBox -Name "HarderWolfos"       -All    -Exclude "New Master Quest" -Text "Harder Wolfos"        -Info "Wolfos will attack you even not Z-Targeted"                                            -Credits "BilonFullHDemon"
+    CreateReduxCheckBox -Name "HarderIronKnuckle"  -All                                -Text "Harder Iron Knuckle"  -Info "Iron Knuckles now always run and attack a bit faster"                                  -Credits "Admentus"
     CreateReduxCheckBox -Name "HarderKeese"        -All    -Exclude "New Master Quest" -Text "Harder Keese"         -Info "Keese attack earlier and faster between attacks, and will not lose their fire"         -Credits "Euler"
     CreateReduxCheckBox -Name "HarderGohma"        -All    -Exclude "New Master Quest" -Text "Harder Gohma"         -Info "Gohma recovers faster from being stunned and has a smaller window of exposure"         -Credits "Euler"
     CreateReduxCheckBox -Name "HarderKingDodongo"  -All    -Exclude "New Master Quest" -Text "Harder King Dodongo"  -Info "King Dodongo inhales faster, receives half damage from bombs and is no longer stunned" -Credits "Euler"

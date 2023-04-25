@@ -488,9 +488,9 @@ function ByteOptions() {
         ChangeBytes -Offset "E76F38"  -Values "00 00 00 00"; ChangeBytes -Offset "E772DC"  -Values "24 05 06 4A"; ChangeBytes -Offset "E77CCC" -Values "24 05 06 4A" # Disable Bomb Shop
     }
 
-    if (IsChecked $Redux.Hero.PermanentKeese)       { ChangeBytes -Offset "CF3B58" -Values "00 00 00 00 00 00 00 00"; ChangeBytes -Offset "CF3B60" -Values "00 00 00 00 00 00 00 00 00 00 00 00" }
-    if (IsChecked $Redux.Hero.FasterIronKnuckles)   { ChangeBytes -Offset "D9CEEC" -Values "14 40 00 04";             ChangeBytes -Offset "D9CEFC" -Values "10 40 00 03"                         }
-    if (IsChecked $Redux.Hero.LargeIronKnuckles)    { ChangeBytes -Offset "D9F21F" -Values "1D";                      ChangeBytes -Offset "D9F21A" -Values "1C"                                  }
+    if (IsChecked $Redux.Hero.PermanentKeese)       { ChangeBytes -Offset "CF3B58" -Values "0000000000000000"; ChangeBytes -Offset "CF3B60" -Values "000000000000000000000000" }
+    if (IsChecked $Redux.Hero.FasterIronKnuckles)   { ChangeBytes -Offset "D9CEEC" -Values "14400004";         ChangeBytes -Offset "D9CEFC" -Values "10400003"                 }
+    if (IsChecked $Redux.Hero.LargeIronKnuckles)    { ChangeBytes -Offset "D9F21F" -Values "1D";               ChangeBytes -Offset "D9F21A" -Values "1C"                       }
 
 
 
