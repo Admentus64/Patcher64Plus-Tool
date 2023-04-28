@@ -1654,11 +1654,13 @@ function ByteReduxOptions() {
 
 
 #==============================================================================================================================================================================================
-function ByteSceneOptions() {
+<#function ByteSceneOptions() {
     
-    PrepareMap -Scene "Hyrule Field" -Map 0 -Header 0
+    LoadScene  -Scene  "Hyrule Field"
+    LoadMap    -Map    0
+    LoadHeader -Header 0
 
-}
+}#>
 
 
 

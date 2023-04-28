@@ -797,110 +797,80 @@ function ShiftMap([uint32]$Offset, [byte]$Add=0, [byte]$Subtract=0) {
 
 
 #==============================================================================================================================================================================================
-function PrepareMap([string]$Scene, [byte]$Map, [byte]$Header) {
-    
-    $sceneObj = $null
-    foreach ($obj in $Files.json.sceneEditor.scenes) {
-        if ($obj.name -eq $Scene) { $sceneObj = $obj }
-    }
-
-    if ($sceneObj -eq $null) { return }
-
-    $folder = $Paths.Temp + "\Scene\" + $Scene.name
-    $file   = $Paths.Temp + "\Scene\" + $Scene.name + "\scene.zscene"
-
-    [System.Collections.ArrayList]$SceneEditor.Actors = @()
-    [System.Collections.ArrayList]$SceneEditor.Objects = @()
-
-    write-host $sceneObj
-
-    ExtractScene -Path ($Paths.Temp + "\Scene\" + $sceneObj.name) -Offset $sceneObj.dma -Length $sceneObj.length
-    RunLoadScene -File $file
-
-    write-host $SceneEditor.SceneOffsets[0].MapCount
-}
-
-
-
-
-#==============================================================================================================================================================================================
 function LoadScene([object[]]$Scene, [switch]$Keep) {
     
     $folder = $Paths.Games + "\" + $Files.json.sceneEditor.game + "\Editor\Scenes\" + $Scene.name
     $file   = $Paths.Games + "\" + $Files.json.sceneEditor.game + "\Editor\Scenes\" + $Scene.name + "\scene.zscene"
     
-    $SceneEditor.BottomPanelScene.Controls.Clear()
-    $SceneEditor.DropMap = $SceneEditor.DropHeader = $null
+    if ($SceneEditor.GUI) {
+        $SceneEditor.BottomPanelScene.Controls.Clear()
+        $SceneEditor.DropMap = $SceneEditor.DropHeader = $null
 
-    if ($Files.json.sceneEditor.quest -is [array] -and $Files.json.sceneEditor.quest.Count -gt 0) {
-        foreach ($elem in $SceneEditor.Quests) {
-            $elem.Enabled = $False
-            $elem.Visible = $Scene.Dungeon -eq 1
-        }
-        foreach ($elem in $SceneEditor.QuestLabels) { $elem.Visible = $Scene.Dungeon -eq 1 }
-        
-        if ($Scene.Dungeon -eq 1) {
-            $SceneEditor.Quests[0].Checked = $True
-            if (IsSet $Settings["Dungeon"][$SceneEditor.Scenes.Text]) {
-                for ($i=0; $i -lt $SceneEditor.Quests.Count; $i++) {
-                    if ($Settings["Dungeon"][$SceneEditor.Scenes.Text] -eq $i+1) {
-                        $SceneEditor.Quests[$i].Checked = $True
-                        if ($i -gt 0) { $folder += "\" + $Files.json.sceneEditor.quest[$i-1] }
+        if ($Files.json.sceneEditor.quest -is [array] -and $Files.json.sceneEditor.quest.Count -gt 0) {
+            foreach ($elem in $SceneEditor.Quests) {
+                $elem.Enabled = $False
+                $elem.Visible = $Scene.Dungeon -eq 1
+            }
+            foreach ($elem in $SceneEditor.QuestLabels) { $elem.Visible = $Scene.Dungeon -eq 1 }
+            
+            if ($Scene.Dungeon -eq 1) {
+                $SceneEditor.Quests[0].Checked = $True
+                if (IsSet $Settings["Dungeon"][$SceneEditor.Scenes.Text]) {
+                    for ($i=0; $i -lt $SceneEditor.Quests.Count; $i++) {
+                        if ($Settings["Dungeon"][$SceneEditor.Scenes.Text] -eq $i+1) {
+                            $SceneEditor.Quests[$i].Checked = $True
+                            if ($i -gt 0) { $folder += "\" + $Files.json.sceneEditor.quest[$i-1] }
+                        }
                     }
                 }
-            }
-            
-            for ($i=1; $i -lt $SceneEditor.Quests.Count; $i++) {
-                if ($SceneEditor.Quests[$i].Checked) { $file = $Paths.Games + "\" + $Files.json.sceneEditor.game + "\Editor\Scenes\" + $Scene.name + "\" + $Files.json.sceneEditor.quest[$i-1] + "\scene.zscene" }
-            }
-        }
-    }
-
-    if (!(TestFile -Path $folder -Container) -or !(TestFile -Path $file)) {
-        $SceneEditor.Headers.Items.Clear()
-        $SceneEditor.BottomPanelScene.Controls.Clear()
-        $SceneEditor.BottomPanelActors.Controls.Clear()
-        $SceneEditor.BottomPanelObjects.Controls.Clear()
-            
-        [System.Collections.ArrayList]$SceneEditor.Actors = @()
-        [System.Collections.ArrayList]$SceneEditor.Objects = @()
-            
-        return
-    }
-        
-    if (!$Keep) {
-        $SceneEditor.Maps.Items.Clear()
-        $items = (Get-ChildItem -Path $folder -Filter "*.zmap" -File)
-        
-        if ($items.Count -eq 0) { return }
-        
-        for ($i=0; $i -lt $items.Count; $i++) {
-            $title = "Map " + ($i+1)
-            if ($Scene.maps -is [array]) {
-                if ($Scene.maps[$i] -ne 0 -and $Scene.maps[$i] -ne "") {
-                    if ($i -lt 9) { $title += "  " }
-                    $title += "   (" + $Scene.maps[$i] + ")"
+                
+                for ($i=1; $i -lt $SceneEditor.Quests.Count; $i++) {
+                    if ($SceneEditor.Quests[$i].Checked) { $file = $Paths.Games + "\" + $Files.json.sceneEditor.game + "\Editor\Scenes\" + $Scene.name + "\" + $Files.json.sceneEditor.quest[$i-1] + "\scene.zscene" }
                 }
             }
-            $SceneEditor.Maps.Items.Add($title)
+        }
+
+        if (!(TestFile -Path $folder -Container) -or !(TestFile -Path $file)) {
+            $SceneEditor.Headers.Items.Clear()
+            $SceneEditor.BottomPanelScene.Controls.Clear()
+            $SceneEditor.BottomPanelActors.Controls.Clear()
+            $SceneEditor.BottomPanelObjects.Controls.Clear()
+            
+            [System.Collections.ArrayList]$SceneEditor.Actors = @()
+            [System.Collections.ArrayList]$SceneEditor.Objects = @()
+            
+            return
         }
         
-        $SceneEditor.Maps.SelectedIndex = 0
+        if (!$Keep) {
+            $SceneEditor.Maps.Items.Clear()
+            $items = (Get-ChildItem -Path $folder -Filter "*.zmap" -File)
+            
+            if ($items.Count -eq 0) { return }
+            
+            for ($i=0; $i -lt $items.Count; $i++) {
+                $title = "Map " + ($i+1)
+                if ($Scene.maps -is [array]) {
+                    if ($Scene.maps[$i] -ne 0 -and $Scene.maps[$i] -ne "") {
+                        if ($i -lt 9) { $title += "  " }
+                        $title += "   (" + $Scene.maps[$i] + ")"
+                    }
+                }
+                $SceneEditor.Maps.Items.Add($title)
+            }
+
+            $SceneEditor.Maps.SelectedIndex = 0
+        }
+        else { LoadMap $Files.json.sceneEditor.scenes[$SceneEditor.Scenes.SelectedIndex] }
     }
-    else { LoadMap $Files.json.sceneEditor.scenes[$SceneEditor.Scenes.SelectedIndex] }
+    else {
+        [System.Collections.ArrayList]$SceneEditor.Actors = @()
+        [System.Collections.ArrayList]$SceneEditor.Objects = @()
+    }
 
-    RunLoadScene -File $file
-
-}
-
-
-
-#==============================================================================================================================================================================================
-function RunLoadScene([string]$File) {
-    
     # Load scene file #
     $headerSize = 104
-    [System.Collections.ArrayList]$SceneEditor.SceneArray = [System.IO.File]::ReadAllBytes($File)
+    [System.Collections.ArrayList]$SceneEditor.SceneArray = [System.IO.File]::ReadAllBytes($file)
     $SceneEditor.SceneOffsets          = @()
     $SceneEditor.SceneOffsets         += @{}
     $SceneEditor.SceneOffsets[0].Header= 0
@@ -2404,4 +2374,3 @@ function ReloadParams([object]$Actor, [byte]$Index) {
 #==============================================================================================================================================================================================
 
 Export-ModuleMember -Function RunSceneEditor
-Export-ModuleMember -Function PrepareMap

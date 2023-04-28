@@ -189,7 +189,7 @@ foreach ($Script in Get-ChildItem -LiteralPath $Paths.Scripts -Force) {
 #==============================================================================================================================================================================================
 # Run Patcher64+ Tool
 
-#Clear-Host
+Clear-Host
 
 if ([Environment]::Is64BitOperatingSystem) { $Patcher.Bit = "x86-64" } else { $Patcher.Bit = "x86" }
 $Patcher.OS = GetWindowsVersion

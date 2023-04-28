@@ -1019,7 +1019,8 @@ function CompressROM() {
 function PatchRedux() {
     
     # BPS PATCHING REDUX #
-    if (!$Patches.Redux.Checked -or $GamePatch.redux -eq $null -or !(TestFile (CheckPatchExtension ($GameFiles.base + "\redux")))) { return }
+    if ( !(IsChecked $Patches.Redux) -and !(IsSet -Elem $GamePatch.redux) )   { return }
+    if ( !(TestFile (CheckPatchExtension ($GameFiles.base + "\redux") ) ) )   { return }
 
     if ( !$PatchInfo.decompress -and !(TestFile $GetROM.decomp) ) { Copy-Item -LiteralPath $GetROM.run -Destination $GetROM.decomp -Force }
     UpdateStatusLabel ("Patching " + $GameType.mode + " REDUX...")
