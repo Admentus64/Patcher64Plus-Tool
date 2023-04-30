@@ -45,21 +45,25 @@ Optional: After installing WMF 5.1 and rebooting the system, download and instal
 
 
 --- Zelda 64 Options Documentation & Sources ---
-- https://github.com/ShadowOne333/Zelda64-Redux-Documentation (General)
-- https://docs.google.com/spreadsheets/d/1Ihccm8noxsfHZfN1E3Gkccov1F27WXXxl-rxOuManUk (Female Pronouns Script)
-- www.youtube.com/user/skilarbabcock (Model Replacements)
-- www.youtube.com/c/malonrose (Model Replacements)
-- https://github.com/Caverns4/Custom-Game-Models (Model Replacements)
+- https://github.com/ShadowOne333/Zelda64-Redux-Documentation (general)
+- https://github.com/DaruniasJoy/OoT-Custom-Sequences (custom music)
+- https://docs.google.com/spreadsheets/d/1Ihccm8noxsfHZfN1E3Gkccov1F27WXXxl-rxOuManUk (female pronouns script)
 - www.youtube.com/channel/UC3071imQKR5cEIobsFHLW9Q (voices / patches)
+- www.youtube.com/user/skilarbabcock (model replacements)
+- www.youtube.com/c/malonrose (model replacements)
+- https://github.com/Caverns4/Custom-Game-Models (model replacements)
 
 
 --- Original Redux Sources ---
-- https://github.com/MarocZan/Ocarina-of-Time-REDUX (www.romhacking.net/hacks/5138)
-- https://github.com/MarocZan/Majora-s-Mask-REDUX (www.romhacking.net/hacks/5122)
-- www.romhacking.net/hacks/4963
-- www.romhacking.net/hacks/2594
-- www.romhacking.net/hacks/5440
-- www.romhacking.net/forum/index.php?topic=29403.0
+- www.romhacking.net/hacks/5752 (Zelda 1)
+- www.romhacking.net/hacks/5440 (Zelda 2)
+- www.romhacking.net/hacks/2594 (ALttP)
+- www.romhacking.net/hacks/4672 (LA DX)
+- www.romhacking.net/hacks/5138 (OoT)
+- www.romhacking.net/hacks/5122 (MM)
+- www.romhacking.net/hacks/4963 (SM)
+- https://github.com/MarocZan (OoT & MM)
+- https://github.com/ShadowOne333 (multiple games)
 
 
 --- WARNING ---
@@ -111,102 +115,35 @@ Wii VC Mode exclusive options incude:
 - Only patch the Wii VC WAD with the chosen selected modifications
 - Extract the ROM contained within the Wii VC WAD only
 
-The following games have included patches:
+Popular ROM hacks for many games among others but not limited to are featured such as:
+- The Legend of Zelda: Dawn & Dusk
+- The Legend of Zelda: The Missing Link
+- The Legend of Zelda: Master of Time
+- Super Mario: Star Road
+- Super Mario: The Last Impact
+- Super Mario 3D Land
+- OverKart 64
+- Paper Mario: Hard Mode
+- Super Smash Bros. Remix
+- Banjo Kazooie: Cut Throat Coast
+- Tag Anywhere patch for Donkey Kong 64
+- Super Mario World: Invictus
+- Kaizo Mario World
+
+The following games have support for Redux which allows for many quality of life enhancements:
+- The Legend of Zelda: Ocarina of Time (OoT)
+- The Legend of Zelda: Majora's Mask (MM)
+- The Legend of Zelda (TLoZ)
+- Zelda II: The Adventure of Link (TAoL)
+- The Legend of Zelda: A Link to the Past (ALttP)
+- The Legend of Zelda: Link's Awakening DX (LADX)
+- Super Metroid (SM)
+
+The following games have support for Additional Options which allows you to customize the game as you want it:
 - The Legend of Zelda: Ocarina of Time (OoT)
 - The Legend of Zelda: Majora's Mask (MM)
 - Super Mario 64 (SM64)
-- Paper Mario (PP)
-- Super Smash Bros. (SSB)
-- Mario Kart 64 (MK64)
-- Banjo-Kazooie (BK)
-- Banjo-Tooie (BT)
-- Donkey Kong 64 (DK64)
-- Diddy Kong Racing (DKR)
-- The Legend of Zelda: A Link to the Past (ALttP)
-- Super Mario World (SMW)
-- Super Metroid (SM)
-- Donkey Kong Country (DKC)
-- The Legend of Zelda (TLoZ)
-- Zelda II: The Adventure of Link (TAoL)
-- The Legend of Zelda: Link's Awakening DX (LADX)
-- The Legend of Zelda: Oracle of Ages (OoA)
-- The Legend of Zelda: Oracle of Ages (OoS)
-
-
-
-===============
-=== PATCHES ===
-===============
-
-The following patches are included:
-- GZ Practice ROM (OoT)
-- The Legend of Zelda: The Missing Link (OoT)
-- The Legend of Zelda: Dawn & Dusk (OoT)
-- The Legend of Zelda: Master of Time (OoT)
-- The Legend of Zelda: Gold Quest (OoT)
-- The Fate of the Bombiwa (OoT)
-- The Legend of Zelda: Nimpize Adventure (OoT)
-- Ocarina of Time Puzzling (OoT)
-- Pots Challenge (OoT)
-- KZ Practice ROM (MM)
-- KZ Practice ROM Lite (MM)
-- Majora's Mask: Masked Quest (MM)
-- Majora's Mask: Master Quest (MM)
-- SM64: Single-Screen / SM64: Split-Screen Multiplayer (SM64)
-- SM64: Star Road / SM64: Star Road Single-Screen Multiplayer (SM64)
-- SM64: Arguably Better Edition (SM64)
-- SM64: Last Impact (SM64)
-- Super Mario 64 Land (SM64)
-- Super Mario Odyssey 64 (SM64)
-- SM64: Ocarina of Time (SM64)
-- Paper Mario: Hard Mode (PP)
-- Paper Mario: Hard Mode+ (PP)
-- Paper Mario: Insane Mode (PP)
-- Super Smash Bros. Remix (SSB)
-- Mario Kart 64: Amped Up (MK64)
-- OverKart (MK64)
-- Battle Kart 64 (MK64)
-- Hooting Time (MK64)
-- Banjo-Dreamie (BK)
-- Banjo-Kazooie Returns (BK)
-- Banjo-Kazooie: Cut-Throat Coast (BK)
-- Banjo-Kazooie: World Collide (BK)
-- Banjo-Kazooie: The Jiggies of Time (BK)
-- Banjo-Kazooie: The Legend of the Crystal Jiggy (BK)
-- Banjo-Kazooie: The Night-Bear Before Christmas (BK)
-- Banjo-Kazooie: Gruntilda's Mask (BK)
-- Banjo-Kazooie: Quest for Cake (BK)
-- Snow Glow Village (BK)
-- Tag Anywhere (DK64)
-- Parallel Worlds / Parallel Remodel (ALttP)
-- Super Kaizo World 1/2/3 (SMW)
-- Donkey Kong Country: Boss Blitz (DKC)
-- Donkey Kong Country: Expert Edition (DKC)
-- Donkey Kong Country: German 60Hz (DKC)
-- Donkey Kong Country (DKC)
-
-
-
-=============
-=== EXTRA ===
-=============
-
-The following games have support for Redux:
-- The Legend of Zelda: Ocarina of Time (OoT)
-- The Legend of Zelda: Majora's Mask (MM)
-- The Legend of Zelda: A Link to the Past (ALttP)
-- Super Metroid (SM)
-- The Legend of Zelda (TLoZ)
-- Zelda II: The Adventure of Link (TAoL)
-- The Legend of Zelda: Link's Awakening DX (LADX)
-
-The Redux patch for The Legend of Zelda: A Link to the Past is shown as a patch option instead and thus always forced.
-
-The following games have support for Additional Options:
-- The Legend of Zelda: Ocarina of Time (OoT)
-- The Legend of Zelda: Majora's Mask (MM)
-- Super Mario 64 (SM64)
-- Paper Mario (PP)
+- Paper Mario (PM)
 - Super Smash Bros. (SSB)
 - Mario Kart 64 (MK64)
 - Banjo-Kazooie (BK)
@@ -218,35 +155,97 @@ The following games have support for Additional Options:
 - Zelda II: The Adventure of Link (TAoL)
 - The Legend of Zelda: Link's Awakening DX (LADX)
 
-Some ROM Hacks for Banjo-Kazooie, Ocarina of Time and Super Mario 64 also support Additional Options.
+Some ROM Hacks for many multiple games also support Additional Options, so this feature isn't just limited to the original vanilla game.
+This includes ROM hacks such Dawn & Dusk, Gold Quest, Master of Time, Paper Mario: Hard Mode, Super Mario: Star Road and more.
 
-Ocarina of Time and Majora's Mask also have support for a language selection.
+Ocarina of Time and Majora's Mask also have support for different languages, and includes the following:
+- English (OoT, MM)
+- German (OoT, MM)
+- French (OoT, MM)
+- Spanish (OoT, MM)
+- Brazilian Portuguese (OoT, MM)
+- Italian (OoT)
+- Polish (OoT, MM)
+- Russian (OoT, MM)
+- Japanese (OoT)
+- Simplified Chinese (OoT)
 
-Supported languages for Ocarina of Time include:
-- English
-- German
-- French
-- Spanish
-- Brazilian Portuguese
-- Italian
-- Polish
-- Russian
-- Japanese
-- Simplified Chinese
-
-Supported languages for Majora's Mask include:
-- English
-- German
-- French
-- Spanish
-- Brazilian Portuguese
-- Polish
-- Russian
-
-Redux patches aim to enhance the base experience of the game, such improved game mechanics and some other quality of life changes
+Redux patches aim to enhance the base experience of the game, such improved game mechanics and some other quality of life changes.
 For example having items on dedicated buttons (D-Pad) for Ocarina of Time and Majora's Mask.
 Options offers smaller individual changes that can be applied individually from each other, such as Widescreen support.
 
+
+=============================
+=== OCARINA OF TIME REDUX ===
+=============================
+
+Ocarina of Time Redux ingame toggleable features:
+- 30 FPS
+- D-Pad support for mapping items to (disabled, single set or dual set)
+- D-Pad layout (four different layouts)
+- Hide HUD (four different layouts)
+- HUD layout (five different layouts)
+- Inverse aim
+- No idle camera reset when standing still
+- Keep equipped mask when changing areas
+- Tri-Swipe animation
+- Damage taken multiplier
+- Unequip items from the C buttons
+- Unequip gear (swords, shields, tunics)
+- Equip item to B button
+- Toggle between previously obtained items (Fairy Ocarina, Giant's Knife, Hookshot)
+- Crouch stab fix for normal damage
+- Swords dealing one less point of damage
+- Earn new abilities when obtaining Spiritual Stones and Medallion
+- Rupee drain that drains your rupees and then your hearts over time
+- Fog distance
+- Inventory editor
+- Infinite cheats
+
+The following Redux features can be turned on or off during patching:
+- Turning on or off the ingame options menu
+- Skip cutscenes
+- Run faster with the Bunny Hood
+- Bombchus drop as regular item pickups
+- Easier fishing
+- Rupee icon color adjusts based on set wallet
+- Ice Arrows have Blue Fire properties
+- Show game progress in File Select
+- Visual icon indicator for the Stone of Agony
+- Rainbow colors
+- Different colors for buttons, the rupee icons, interface, boomerang, bombchu trail and text cursors
+- Other speedups and fixes
+
+All of this can be customized like you want it to be. Turn it on or off at will.
+These customizations work in combination with the regular non-Redux customizations.
+
+
+=======================
+=== MAJORA'S REDUX ===
+======================
+
+Majora's Redux customizable features:
+- D-Pad layout (disabled, hidden, left or right)
+- Faster block pushing
+- Elegy of Emptiness speedup
+- Disable crit wiggle (randomly move when criticially injured)
+- Use Ocarina of Time when standing underwater
+- Control flow of time with quick buttons
+- Summon an Elegy of Emptiness statue without playing the song
+- Ocarina icons based on transformed form
+- 30 FPS
+- HUD toggle
+- Unequip items from the C buttons
+- Equip items on the B button
+- Change to previously obtained swords & shields
+- Skip talking to the Clock Town guard when done once
+- Climb everything
+- Inventory editor
+- Infinite cheats
+- Different colors for buttons and the interface
+
+All of this can be customized like you want it to be. Turn it on or off at will when patching.
+These customizations work in combination with the regular non-Redux customizations.
 
 
 ====================
