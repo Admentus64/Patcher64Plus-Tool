@@ -1656,9 +1656,13 @@ function ByteReduxOptions() {
 #==============================================================================================================================================================================================
 <#function ByteSceneOptions() {
     
-    LoadScene  -Scene  "Hyrule Field"
-    LoadMap    -Map    0
-    LoadHeader -Header 0
+    PrepareMap -Scene "Hyrule Field" -Map 0 -Header 0
+
+    InsertActor  -ID "0002" -Param "0000"
+    InsertObject -ID "0032"
+
+    SaveLoadedMap
+    PatchLoadedScene
 
 }#>
 
@@ -1817,7 +1821,7 @@ function ByteLanguageOptions() {
         SetMessage "6041" -Text "again "
     }
 
-    if ( (IsChecked $Redux.Text.Restore) -or (IsChecked $Redux.Text.GoldSkulltula) ) { ChangeBytes -Offset "EC68CF" -Values "00"; ChangeBytes -Offset "EC69BF" -Values "00"; ChangeBytes -Offset "EC6A2B" -Values "00" }
+    if ( (IsChecked $Redux.Text.Restore) -or (IsChecked $Redux.Text.GoldSkulltula) ) { ChangeBytes -Offset "EC68CF" -Values "00"; ChangeBytes -Offset "EC69BF" -Values "00"; ChangeBytes -Offset "EC6A2B" -Values "00"; ChangeBytes -Offset "EC6A1C" -Values "14" }
     if (IsChecked $Redux.Text.GoldSkulltula) {
         if     ($LanguagePatch.code -eq "en")   { SetMessage -ID "00B4" -Replace "You got a <R>Gold Skulltula Token<W>!<N>You've collected <R><Gold Skulltulas><W> tokens in total.<Fade:28>"        }
         elseif ($LanguagePatch.code -eq "de")   { SetMessage -ID "00B4" -Replace "Du erhältst ein <R>Skulltula-Symbol<W>. Du<N>hast insgesamt <R><Gold Skulltulas><W> Skulltulas zerstört.<Fade:28>" }

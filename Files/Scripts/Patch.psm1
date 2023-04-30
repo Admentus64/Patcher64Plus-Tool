@@ -425,8 +425,8 @@ function PatchingAdditionalOptions() {
     # Scene Options
     if (GetCommand "ByteSceneOptions") {
         UpdateStatusLabel ("Patching " + $GameType.mode + " Additional Scene Options...")
-        $global:SceneEditor    = @{}
-        $Files.json.textEditor = SetJSONFile $GameFiles.sceneEditor
+        $global:SceneEditor     = @{}
+        $Files.json.sceneEditor = SetJSONFile $GameFiles.sceneEditor
         ByteSceneOptions
         $global:ByteScriptArray = $global:ByteTableArray = $Files.json.textEditor = $null
     }

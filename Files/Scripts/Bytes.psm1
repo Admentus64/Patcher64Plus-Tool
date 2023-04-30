@@ -156,7 +156,7 @@ function CopyBytes([string]$File, [string]$Start, [string]$Length, [string]$Offs
 
 
 #==============================================================================================================================================================================================
-function PatchBytes([string]$File, [string]$Offset, [string]$Length, [string]$Patch, [switch]$Texture, [switch]$Shared, [switch]$Models, [switch]$Extracted, [switch]$Music, [switch]$Editor, [switch]$Pad) {
+function PatchBytes([string]$File, [string]$Offset, [string]$Length, [string]$Patch, [switch]$Texture, [switch]$Models, [switch]$Extracted, [switch]$Music, [switch]$Editor, [switch]$Temp, [switch]$Shared, [switch]$Pad) {
     
     # Binary Patch File Parameter Check
     if (!(IsSet -Elem $Patch) ) {
@@ -171,6 +171,7 @@ function PatchBytes([string]$File, [string]$Offset, [string]$Length, [string]$Pa
     elseif ($Extracted)   { $Patch = $GameFiles.extracted + "\" + $Patch                               }
     elseif ($Music)       { $Patch = $Paths.Music         + "\" + $Patch                               }
     elseif ($Editor)      { $Patch = $Paths.Games         + "\" + $GameType.mode + "\Editor\" + $Patch }
+    elseif ($Temp)        { $Patch = $Paths.Temp          + "\" + $Patch                               }
     elseif ($Shared)      { $Patch = $Paths.Shared        + "\" + $Patch                               }
     else                  { $Patch = $GameFiles.binaries  + "\" + $Patch                               }
 

@@ -986,8 +986,8 @@ function EnableGUI([boolean]$Enable) {
 
     if ($IsWiiVC -and $GameConsole.support_vc -eq 0) { $Patches.Panel.Enabled = $VC.Panel.Enabled = $False }
 
-    if (IsSet $TextEditor)    { $TextEditor.Dialog.Enabled  = $Enable }
-    if (IsSet $SceneEditor)   { $SceneEditor.Dialog.Enabled = $Enable }
+    if (IsSet $TextEditor.Dialog)    { $TextEditor.Dialog.Enabled  = $Enable }
+    if (IsSet $SceneEditor.Dialog)   { $SceneEditor.Dialog.Enabled = $Enable }
 
 }
 
