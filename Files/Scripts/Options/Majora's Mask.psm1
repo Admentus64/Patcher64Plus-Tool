@@ -1087,11 +1087,16 @@ function CreateOptions() {
 #==============================================================================================================================================================================================
 function AdjustGUI() {
     
-    EnableElem -Elem $Redux.Graphics.Widescreen -Active (!$Redux.Graphics.WidescreenAlt.Checked -and !$Redux.DPad.LayoutLeft.Checked -and !$Redux.DPad.LayoutRight.Checked)
-    EnableElem -Elem @($Redux.Graphics.WidescreenAlt, $Redux.DPad.LayoutLeft, $Redux.DPad.LayoutRight) -Active (!$Redux.Graphics.Widescreen.Checked)
-    if ($Redux.Graphics.Widescreen.Checked -and ($Redux.DPad.LayoutLeft.Checked -or $Redux.DPad.LayoutRight.Checked) ) { $Redux.DPad.Hide.Checked = $True }
-
-    if ($Patches.Redux.Checked) { EnableElem -Elem @($Redux.Colors.Magic, $Redux.Colors.BaseMagic, $Redux.Colors.InfiniteMagic) -Active (!$Redux.Graphics.Widescreen.Checked) }
+    if ($Patches.Redux.Checked) {
+        if ($Redux.Graphics.Widescreen.Checked -and ($Redux.DPad.LayoutLeft.Checked -or $Redux.DPad.LayoutRight.Checked) ) { $Redux.DPad.Hide.Checked = $True }
+        EnableElem -Elem @($Redux.Colors.Magic, $Redux.Colors.BaseMagic, $Redux.Colors.InfiniteMagic)      -Active (!$Redux.Graphics.Widescreen.Checked)
+        EnableElem -Elem $Redux.Graphics.Widescreen                                                        -Active (!$Redux.Graphics.WidescreenAlt.Checked -and !$Redux.DPad.LayoutLeft.Checked -and !$Redux.DPad.LayoutRight.Checked)
+        EnableElem -Elem @($Redux.Graphics.WidescreenAlt, $Redux.DPad.LayoutLeft, $Redux.DPad.LayoutRight) -Active (!$Redux.Graphics.Widescreen.Checked)
+    }
+    else {
+        EnableElem -Elem $Redux.Graphics.Widescreen       -Active (!$Redux.Graphics.WidescreenAlt.Checked)
+        EnableElem -Elem @($Redux.Graphics.WidescreenAlt) -Active (!$Redux.Graphics.Widescreen.Checked)
+    }
 
 }
 
@@ -1177,11 +1182,11 @@ function CreateTabRedux() {
 
     CreateReduxGroup       -Tag  "Dpad"        -All                         -Text "D-Pad Layout"
     CreateReduxPanel                           -All -Columns 4
-    CreateReduxRadioButton -Name "Disable"     -All -Max 4 -SaveTo "Layout" -Text "Disable"    -Info "Completely disable the D-Pad"                                                                                                                                   -Credits "Ported from Redux"
-    CreateReduxRadioButton -Name "Hide"        -All -Max 4 -SaveTo "Layout" -Text "Hidden"     -Info "Hide the D-Pad icons, while they are still active`nYou can rebind the items to the D-Pad in the pause screen"                                                   -Credits "Ported from Redux"
-    CreateReduxRadioButton -Name "LayoutLeft"  -All -Max 4 -SaveTo "Layout" -Text "Left Side"  -Info "Show the D-Pad icons on the left side of the HUD`nYou can rebind the items to the D-Pad in the pause screen`nCan not be used with Advanced Widescreen" -Checked -Credits "Ported from Redux"
-    CreateReduxRadioButton -Name "LayoutRight" -All -Max 4 -SaveTo "Layout" -Text "Right Side" -Info "Show the D-Pad icons on the right side of the HUD`nYou can rebind the items to the D-Pad in the pause screen`nCan not be used with Advanced Widescreen"         -Credits "Ported from Redux"
-  # CreateReduxCheckBox    -Name "DualSet"     -All                         -Text "Dual Set"   -Info "Allow switching between two different D-Pad sets`nPress L + R ingame to swap between layouts"                                         -Link $Redux.Dpad.Disable -Credits "Admentus"
+    CreateReduxRadioButton -Name "Disable"     -All -Max 4 -SaveTo "Layout" -Text "Disable"    -Info "Completely disable the D-Pad"                                                                                                                                          -Credits "Ported from Redux"
+    CreateReduxRadioButton -Name "Hide"        -All -Max 4 -SaveTo "Layout" -Text "Hidden"     -Info "Hide the D-Pad icons, while they are still active`nYou can rebind the items to the D-Pad in the pause screen"                                                          -Credits "Ported from Redux"
+    CreateReduxRadioButton -Name "LayoutLeft"  -All -Max 4 -SaveTo "Layout" -Text "Left Side"  -Info "Show the D-Pad icons on the left side of the HUD`nYou can rebind the items to the D-Pad in the pause screen`nCan not be used with 16:9 Widescreen (Advanced)" -Checked -Credits "Ported from Redux"
+    CreateReduxRadioButton -Name "LayoutRight" -All -Max 4 -SaveTo "Layout" -Text "Right Side" -Info "Show the D-Pad icons on the right side of the HUD`nYou can rebind the items to the D-Pad in the pause screen`nCan not be used with 16:9 Widescreen (Advanced)"         -Credits "Ported from Redux"
+  # CreateReduxCheckBox    -Name "DualSet"     -All                         -Text "Dual Set"   -Info "Allow switching between two different D-Pad sets`nPress L + R ingame to swap between layouts"                                                -Link $Redux.Dpad.Disable -Credits "Admentus"
 
 
 
