@@ -627,13 +627,11 @@ function ByteOptions() {
         ChangeBytes -Offset "DEA742" -Values "40";       ChangeBytes -Offset "DEA9C6" -Values "40"                                                                                                 # Attack Faster
     }
 
-    
-
     if ( (IsChecked $Redux.Hero.HarderGohma) -and (IsDefault $Redux.Hero.HarderGohma -Not) ) {
-        ChangeBytes -Offset "C455A7" -Values "20"; ChangeBytes -Offset "C482B3" -Values "40"; ChangeBytes -Offset "C49347" -Values "24"; ChangeBytes -Offset "C49367" -Values "0F"; ChangeBytes -Offset "C49367" -Values "00000000"
+        ChangeBytes -Offset "C455A7" -Values "20"; ChangeBytes -Offset "C482B3" -Values "40"; ChangeBytes -Offset "C49347" -Values "24"; ChangeBytes -Offset "C49367" -Values "0F"; ChangeBytes -Offset "C486CC" -Values "00000000"
     }
     elseif ( (IsChecked $Redux.Hero.HarderGohma -Not) -and (IsDefault $Redux.Hero.HarderGohma -Not) ) {
-        ChangeBytes -Offset "C455A7" -Values "46"; ChangeBytes -Offset "C482B3" -Values "96"; ChangeBytes -Offset "C49347" -Values "5A"; ChangeBytes -Offset "C49367" -Values "28"; ChangeBytes -Offset "C49367" -Values "1581001A"
+        ChangeBytes -Offset "C455A7" -Values "46"; ChangeBytes -Offset "C482B3" -Values "96"; ChangeBytes -Offset "C49347" -Values "5A"; ChangeBytes -Offset "C49367" -Values "28"; ChangeBytes -Offset "C486CC" -Values "1581001A"
     }
     
 
