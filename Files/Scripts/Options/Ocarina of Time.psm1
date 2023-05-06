@@ -92,19 +92,19 @@ function ByteOptions() {
         if (IsIndex $Redux.Gameplay.FasterBlockPushing -Index 3) { ChangeBytes -Offset "CE1BD0" -Values "40800000"; ChangeBytes -Offset "CE0F0F" -Values "03" } # Amy Puzzle Speed, Delay
     }
 
-    if (IsChecked $Redux.Gameplay.NoKillFlash)              { ChangeBytes -Offset "B11C33" -Values "00"                                                                                             }
-    if (IsChecked $Redux.Gameplay.RemoveNaviTimer)          { ChangeBytes -Offset "C26C14" -Values "10000013"; ChangeBytes -Offset "C26C1C" -Values "10000013"                                      }
-    if (IsChecked $Redux.Gameplay.ResumeLastArea)           { ChangeBytes -Offset "B06348" -Values "0000";     ChangeBytes -Offset "B06350" -Values "0000"                                          }
-    if (IsChecked $Redux.Gameplay.InstantClaimCheck)        { ChangeBytes -Offset "ED4470" -Values "00000000"; ChangeBytes -Offset "ED4498" -Values "00000000"                                      }
-    if (IsChecked $Redux.Gameplay.ReturnChild)              { ChangeBytes -Offset "CB6844" -Values "35";       ChangeBytes -Offset "253C0E2" -Values "03"                                           }
-    if (IsChecked $Redux.Gameplay.AllowWarpSongs)           { ChangeBytes -Offset "B6D3D2" -Values "00";       ChangeBytes -Offset "B6D42A" -Values "00"                                            }
-    if (IsChecked $Redux.Gameplay.AllowFaroreWind)          { ChangeBytes -Offset "B6D3D3" -Values "00";       ChangeBytes -Offset "B6D42B" -Values "00"                                            }
-    if (IsChecked $Redux.Gameplay.AllowOcarina)             { ChangeBytes -Offset "B6D346" -Values "11";       ChangeBytes -Offset "B6D33A" -Values "51"; ChangeBytes -Offset "B6D30A" -Values "51" }
-    if (IsChecked $Redux.Gameplay.FasterGoronTunic)         { ChangeBytes -Offset "ED3173" -Values "36";       ChangeBytes -Offset "ED31BB" -Values "36"                                            }
-    if (IsChecked $Redux.Gameplay.RutoNeverDisappears)      { ChangeBytes -Offset "D01EA3" -Values "00"                                                                                             }
-    if (IsChecked $Redux.Gameplay.Medallions)               { ChangeBytes -Offset "E2B454" -Values "80EA00A72401003F314A003F00000000"                                                               }
-    if (IsChecked $Redux.Gameplay.OpenBombchuShop)          { ChangeBytes -Offset "C6CEDC" -Values "340B0001"                                                                                       }
-    if (IsChecked $Redux.Gameplay.RemoveNaviPrompts)        { ChangeBytes -Offset "DF8B84" -Values "00000000"                                                                                       }
+    if (IsChecked $Redux.Gameplay.NoKillFlash)              { ChangeBytes -Offset "B11C33" -Values "00"                                                                                              }
+    if (IsChecked $Redux.Gameplay.RemoveNaviTimer)          { ChangeBytes -Offset "C26C14" -Values "10000013"; ChangeBytes -Offset "C26C1C"  -Values "10000013"                                      }
+    if (IsChecked $Redux.Gameplay.ResumeLastArea)           { ChangeBytes -Offset "B06348" -Values "0000";     ChangeBytes -Offset "B06350"  -Values "0000"                                          }
+    if (IsChecked $Redux.Gameplay.InstantClaimCheck)        { ChangeBytes -Offset "ED4470" -Values "00000000"; ChangeBytes -Offset "ED4498"  -Values "00000000"                                      }
+    if (IsChecked $Redux.Gameplay.ReturnChild)              { ChangeBytes -Offset "CB6844" -Values "35";       ChangeBytes -Offset "253C0E2" -Values "03"                                            }
+    if (IsChecked $Redux.Gameplay.AllowWarpSongs)           { ChangeBytes -Offset "B6D3D2" -Values "00";       ChangeBytes -Offset "B6D42A"  -Values "00"                                            }
+    if (IsChecked $Redux.Gameplay.AllowFaroreWind)          { ChangeBytes -Offset "B6D3D3" -Values "00";       ChangeBytes -Offset "B6D42B"  -Values "00"                                            }
+    if (IsChecked $Redux.Gameplay.AllowOcarina)             { ChangeBytes -Offset "B6D346" -Values "11";       ChangeBytes -Offset "B6D33A"  -Values "51"; ChangeBytes -Offset "B6D30A" -Values "51" }
+    if (IsChecked $Redux.Gameplay.FasterGoronTunic)         { ChangeBytes -Offset "ED3173" -Values "36";       ChangeBytes -Offset "ED31BB"  -Values "36"                                            }
+    if (IsChecked $Redux.Gameplay.RutoNeverDisappears)      { ChangeBytes -Offset "D01EA3" -Values "00"                                                                                              }
+    if (IsChecked $Redux.Gameplay.Medallions)               { ChangeBytes -Offset "E2B454" -Values "80EA00A72401003F314A003F00000000"                                                                }
+    if (IsChecked $Redux.Gameplay.OpenBombchuShop)          { ChangeBytes -Offset "C6CEDC" -Values "340B0001"                                                                                        }
+    if (IsChecked $Redux.Gameplay.RemoveNaviPrompts)        { ChangeBytes -Offset "DF8B84" -Values "00000000"                                                                                        }
     
 
 
@@ -586,29 +586,54 @@ function ByteOptions() {
     if     (IsChecked $Redux.Hero.Arwing)                                                           { ChangeBytes -Offset "2081086" -Values "0002";     ChangeBytes -Offset "2081114" -Values "013B"; ChangeBytes -Offset "2081122" -Values "0000" }
     elseif (IsChecked $Redux.Hero.LikeLike)                                                         { ChangeBytes -Offset "2081086" -Values "00D4";     ChangeBytes -Offset "2081114" -Values "00DD"; ChangeBytes -Offset "2081122" -Values "0000" }
     
-    if     ( (IsChecked $Redux.Hero.HarderStalfos)           -and (IsDefault $Redux.Hero.HarderStalfos      -Not) )   { ChangeBytes -Offset "BFB35C"  -Values "00000000"; ChangeBytes -Offset "BFC148" -Values "00000000" }
-    elseif ( (IsChecked $Redux.Hero.HarderStalfos      -Not) -and (IsDefault $Redux.Hero.HarderStalfos      -Not) )   { ChangeBytes -Offset "BFB35C"  -Values "11E00005"; ChangeBytes -Offset "BFC148" -Values "11200005" }
-    if     ( (IsChecked $Redux.Hero.HarderWolfos)            -and (IsDefault $Redux.Hero.HarderWolfos       -Not) )   { ChangeBytes -Offset "EDBE3F"  -Values "00" }
-    elseif ( (IsChecked $Redux.Hero.HarderWolfos       -Not) -and (IsDefault $Redux.Hero.HarderWolfos       -Not) )   { ChangeBytes -Offset "EDBE3F"  -Values "15" }
-    if     ( (IsChecked $Redux.Hero.HarderGohma)             -and (IsDefault $Redux.Hero.HarderKeese        -Not) )   { ChangeBytes -Offset "C455A7"  -Values "20"; ChangeBytes -Offset "C482B3" -Values "40"; ChangeBytes -Offset "C49347" -Values "24"; ChangeBytes -Offset "C49367" -Values "0F" }
-    elseif ( (IsChecked $Redux.Hero.HarderGohma        -Not) -and (IsDefault $Redux.Hero.HarderKeese        -Not) )   { ChangeBytes -Offset "C455A7"  -Values "46"; ChangeBytes -Offset "C482B3" -Values "96"; ChangeBytes -Offset "C49347" -Values "5A"; ChangeBytes -Offset "C49367" -Values "28" }
-    if     ( (IsChecked $Redux.Hero.HarderKingDodongo)       -and (IsDefault $Redux.Hero.HarderKingDodongo  -Not) )   { ChangeBytes -Offset "C3CB7F"  -Values "32"; ChangeBytes -Offset "C3CF73" -Values "00"; ChangeBytes -Offset "C3CE5E" -Values "FFFF" }
-    elseif ( (IsChecked $Redux.Hero.HarderKingDodongo  -Not) -and (IsDefault $Redux.Hero.HarderKingDodongo  -Not) )   { ChangeBytes -Offset "C3CB7F"  -Values "64"; ChangeBytes -Offset "C3CF73" -Values "64"; ChangeBytes -Offset "C3CE5E" -Values "FFFE" }
-    if     ( (IsChecked $Redux.Hero.AggressiveDarkLink)      -and (IsDefault $Redux.Hero.AggressiveDarkLink -Not) )   { ChangeBytes -Offset "C5C39F"  -Values "70" }
-    elseif ( (IsChecked $Redux.Hero.AggressiveDarkLink -Not) -and (IsDefault $Redux.Hero.AggressiveDarkLink -Not) )   { ChangeBytes -Offset "C5C39F"  -Values "01" }
+    if     ( (IsChecked $Redux.HeroHarder.Wolfos)             -and (IsDefault $Redux.HeroHarder.Wolfos        -Not) )   { ChangeBytes -Offset "EDBE3F"  -Values "00" }
+    elseif ( (IsChecked $Redux.HeroHarder.Wolfos        -Not) -and (IsDefault $Redux.HeroHarder.Wolfos        -Not) )   { ChangeBytes -Offset "EDBE3F"  -Values "15" }
+    if     ( (IsChecked $Redux.HeroHarder.Lizalfos)           -and (IsDefault $Redux.HeroHarder.Lizalfos      -Not) )   { ChangeBytes -Offset "C36DC0"  -Values "00000000"; ChangeBytes -Offset "C34DE0" -Values "00000000"; ChangeBytes -Offset "C34E04" -Values "00000000" }
+    elseif ( (IsChecked $Redux.HeroHarder.Lizalfos      -Not) -and (IsDefault $Redux.HeroHarder.Lizalfos      -Not) )   { ChangeBytes -Offset "C36DC0"  -Values "11600005"; ChangeBytes -Offset "C34DE0" -Values "57210018"; ChangeBytes -Offset "C34E04" -Values "51010004" }
+    if     ( (IsChecked $Redux.HeroHarder.Stalfos)            -and (IsDefault $Redux.HeroHarder.Stalfos       -Not) )   { ChangeBytes -Offset "BFB35C"  -Values "00000000"; ChangeBytes -Offset "BFC148" -Values "00000000" }
+    elseif ( (IsChecked $Redux.HeroHarder.Stalfos       -Not) -and (IsDefault $Redux.HeroHarder.Stalfos       -Not) )   { ChangeBytes -Offset "BFB35C"  -Values "11E00005"; ChangeBytes -Offset "BFC148" -Values "11200005" }
+    if     ( (IsChecked $Redux.HeroHarder.DarkLink)           -and (IsDefault $Redux.HeroHarder.DarkLink      -Not) )   { ChangeBytes -Offset "C5C39F"  -Values "70" }
+    elseif ( (IsChecked $Redux.HeroHarder.DarkLink      -Not) -and (IsDefault $Redux.HeroHarder.DarkLink      -Not) )   { ChangeBytes -Offset "C5C39F"  -Values "01" }
+    if     ( (IsChecked $Redux.HeroHarder.GerudoFighter)      -and (IsDefault $Redux.HeroHarder.GerudoFighter -Not) )   { ChangeBytes -Offset "EC15A5"  -Values "10" }
+    elseif ( (IsChecked $Redux.HeroHarder.GerudoFighter -Not) -and (IsDefault $Redux.HeroHarder.GerudoFighter -Not) )   { ChangeBytes -Offset "EC15A5"  -Values "08" }
+    if     ( (IsChecked $Redux.HeroHarder.KingDodongo)        -and (IsDefault $Redux.HeroHarder.KingDodongo   -Not) )   { ChangeBytes -Offset "C3CB7F"  -Values "32"; ChangeBytes -Offset "C3CF73" -Values "00"; ChangeBytes -Offset "C3CE5E" -Values "FFFF" }
+    elseif ( (IsChecked $Redux.HeroHarder.KingDodongo   -Not) -and (IsDefault $Redux.HeroHarder.KingDodongo   -Not) )   { ChangeBytes -Offset "C3CB7F"  -Values "64"; ChangeBytes -Offset "C3CF73" -Values "64"; ChangeBytes -Offset "C3CE5E" -Values "FFFE" }
 
-    if (IsChecked $Redux.Hero.HarderIronKnuckle) {
+    if ( (IsChecked $Redux.Hero.HarderGohmaLarve) -and (IsDefault $Redux.Hero.HarderGohmaLarve -Not) ) {
+        ChangeBytes -Offset "C51CFE" -Values "40FF"; ChangeBytes -Offset "C523E6" -Values "0000"; ChangeBytes -Offset "C5283E" -Values "0000"; ChangeBytes -Offset "C5298A" -Values "0000"; ChangeBytes -Offset "C52D3E" -Values "40AA"
+    }
+    elseif ( (IsChecked $Redux.HeroHarder.GohmaLarve -Not) -and (IsDefault $Redux.HeroHarder.GohmaLarve -Not) ) {
+        ChangeBytes -Offset "C51CFE" -Values "40D5"; ChangeBytes -Offset "C523E6" -Values "000A"; ChangeBytes -Offset "C5283E" -Values "001E"; ChangeBytes -Offset "C5298A" -Values "001E"; ChangeBytes -Offset "C52D3E" -Values "4055"
+    }
+
+    if ( (IsChecked $Redux.HeroHarder.Keese) -and (IsDefault $Redux.HeroHarder.Keese -Not) ) {
+        ChangeBytes -Offset "C1495A" -Values "0014"; ChangeBytes -Offset "C1496A" -Values "0014"; ChangeBytes -Offset "C149AE" -Values "0014"; ChangeBytes -Offset "C149E6" -Values "0014"
+        ChangeBytes -Offset "C13968" -Values "00000000000000000000000000000000"
+    }
+    elseif ( (IsChecked $Redux.HeroHarder.Keese -Not) -and (IsDefault $Redux.HeroHarder.Keese -Not) ) {
+        ChangeBytes -Offset "C1495A" -Values "01AA"; ChangeBytes -Offset "C1496A" -Values "01AA"; ChangeBytes -Offset "C149AE" -Values "01AA"; ChangeBytes -Offset "C149E6" -Values "01AA"
+        ChangeBytes -Offset "C13968" -Values "A08001A8A08001A9A099011703E00008"
+    }
+
+    if ( (IsChecked $Redux.HeroHarder.DeadHand) -and (IsDefault $Redux.HeroHarder.DeadHand -Not) ) {
+        ChangeBytes -Offset "D0982E" -Values "4080"; ChangeBytes -Offset "D0983A" -Values "0025"; ChangeBytes -Offset "D099A2" -Values "4080"; ChangeBytes -Offset "D099AE" -Values "0008"; ChangeBytes -Offset "D09C26" -Values "0010"; ChangeBytes -Offset "D09EAA" -Values "0008"
+    }
+    elseif ( (IsChecked $Redux.HeroHarder.DeadHand -Not) -and (IsDefault $Redux.HeroHarder.DeadHand -Not) ) {
+        ChangeBytes -Offset "D0982E" -Values "3F80"; ChangeBytes -Offset "D0983A" -Values "012C"; ChangeBytes -Offset "D099A2" -Values "3F80"; ChangeBytes -Offset "D099AE" -Values "0046"; ChangeBytes -Offset "D09C26" -Values "0008"; ChangeBytes -Offset "D09EAA" -Values "0004"
+    }
+
+    if (IsChecked $Redux.HeroHarder.IronKnuckle) {
         ChangeBytes -Offset "DEDA10" -Values "4019999A"; ChangeBytes -Offset "DEA06B" -Values "00"; ChangeBytes -Offset "DEA072" -Values "6734"; ChangeBytes -Offset "DEA087" -Values "0024A56734" # Move Faster
         ChangeBytes -Offset "DEA742" -Values "40";       ChangeBytes -Offset "DEA9C6" -Values "40"                                                                                                 # Attack Faster
     }
 
-    if ( (IsChecked $Redux.Hero.HarderKeese) -and (IsDefault $Redux.Hero.HarderKeese -Not) ) {
-        ChangeBytes -Offset "C1495A" -Values "0014"; ChangeBytes -Offset "C1496A" -Values "0014"; ChangeBytes -Offset "C149AE" -Values "0014"; ChangeBytes -Offset "C149E6" -Values "0014"
-        ChangeBytes -Offset "C13968" -Values "00000000000000000000000000000000"
+    
+
+    if ( (IsChecked $Redux.Hero.HarderGohma) -and (IsDefault $Redux.Hero.HarderGohma -Not) ) {
+        ChangeBytes -Offset "C455A7" -Values "20"; ChangeBytes -Offset "C482B3" -Values "40"; ChangeBytes -Offset "C49347" -Values "24"; ChangeBytes -Offset "C49367" -Values "0F"; ChangeBytes -Offset "C49367" -Values "00000000"
     }
-    elseif ( (IsChecked $Redux.Hero.HarderKeese -Not) -and (IsDefault $Redux.Hero.HarderKeese -Not) ) {
-        ChangeBytes -Offset "C1495A" -Values "01AA"; ChangeBytes -Offset "C1496A" -Values "01AA"; ChangeBytes -Offset "C149AE" -Values "01AA"; ChangeBytes -Offset "C149E6" -Values "01AA"
-        ChangeBytes -Offset "C13968" -Values "A08001A8A08001A9A099011703E00008"
+    elseif ( (IsChecked $Redux.Hero.HarderGohma -Not) -and (IsDefault $Redux.Hero.HarderGohma -Not) ) {
+        ChangeBytes -Offset "C455A7" -Values "46"; ChangeBytes -Offset "C482B3" -Values "96"; ChangeBytes -Offset "C49347" -Values "5A"; ChangeBytes -Offset "C49367" -Values "28"; ChangeBytes -Offset "C49367" -Values "1581001A"
     }
     
 
@@ -658,11 +683,13 @@ function ByteOptions() {
 
     # EASY MODE #
 
-    if (IsChecked $Redux.EasyMode.NoShieldSteal)         { ChangeBytes -Offset "D74910"  -Values "1000000B"                                          }
-    if (IsChecked $Redux.EasyMode.NoTunicSteal)          { ChangeBytes -Offset "D74964"  -Values "1000000A"                                          }
-    if (IsChecked $Redux.EasyMode.SkipStealthSequence)   { ChangeBytes -Offset "21F60DE" -Values "05F0"                                              }
-    if (IsChecked $Redux.EasyMode.SkipTowerEscape)       { ChangeBytes -Offset "D82A12"  -Values "0517"; ChangeBytes -Offset "B139A2" -Values "0517" }
-    if (IsChecked $Redux.EasyMode.HotRodderGoron)        { ChangeBytes -Offset "ED289C"  -Values "1100"; ChangeBytes -Offset "ED28A4" -Values "1100" }
+    if (IsChecked $Redux.EasyMode.NoShieldSteal)          { ChangeBytes -Offset "D74910"  -Values "1000000B"                                                    }
+    if (IsChecked $Redux.EasyMode.NoTunicSteal)           { ChangeBytes -Offset "D74964"  -Values "1000000A"                                                    }
+    if (IsChecked $Redux.EasyMode.SkipStealthSequence)    { ChangeBytes -Offset "21F60DE" -Values "05F0"                                                        }
+    if (IsChecked $Redux.EasyMode.SkipTowerEscape)        { ChangeBytes -Offset "D82A12"  -Values "0517"; ChangeBytes -Offset "B139A2" -Values "0517"           }
+    if (IsChecked $Redux.EasyMode.HotRodderGoron)         { ChangeBytes -Offset "ED289C"  -Values "1100"; ChangeBytes -Offset "ED28A4" -Values "1100"           }
+    if (IsChecked $Redux.EasyMode.GerudoFighterJail)      { ChangeBytes -Offset "EBEF3B"  -Values "00"                                                          }
+    if (IsDefault $Redux.EasyMode.GhostShopPoints -Not)   { ChangeBytes -Offset "EE69CE"  -Values (Get16Bit ([int]$Redux.EasyMode.GhostShopPoints.Text * 100) ) }
 
 
 
@@ -1653,13 +1680,15 @@ function ByteReduxOptions() {
 }
 
 
+
 #==============================================================================================================================================================================================
 <#function ByteSceneOptions() {
     
     PrepareMap -Scene "Hyrule Field" -Map 0 -Header 0
 
-    InsertActor  -ID "0002" -Param "0000"
-    InsertObject -ID "0032"
+    InsertActor  -Name "Stalfos" -Param "0000"
+    ReplaceActor -Name "Kaepora Gaebora" -New "Stalfos" -Param "000"
+    InsertObject -Name "Stalfos"
 
     SaveLoadedMap
     PatchLoadedScene
@@ -2125,10 +2154,17 @@ function CreateTabMain() {
         BoxCheck $Redux.Hero.LostWoodsOctorok
         BoxCheck $Redux.Hero.HarderChildBosses
         BoxCheck $Redux.Hero.NoBottledFairy
-        BoxCheck $Redux.Hero.HarderStalfos
-        BoxCheck $Redux.Hero.HarderWolfos
-        BoxCheck $Redux.Hero.AggressiveDarkLink
-
+        BoxCheck $Redux.HeroHarder.GohmaLarve
+        BoxCheck $Redux.HeroHarder.Keese
+        BoxCheck $Redux.HeroHarder.Wolfos
+        BoxCheck $Redux.HeroHarder.Lizalfos
+        BoxCheck $Redux.HeroHarder.Stalfos
+        BoxCheck $Redux.HeroHarder.DarkLink
+        BoxCheck $Redux.HeroHarder.DeadHand
+        BoxCheck $Redux.HeroHarder.GerudoFighter
+        BoxCheck $Redux.HeroHarder.IronKnuckle
+        BoxCheck $Redux.HeroHarder.Gohma
+        BoxCheck $Redux.HeroHarder.KingDodongo
         BoxCheck $Redux.MQ.EnableMQ
         BoxCheck $Redux.MQ.MasterQuestLogo
     } )
@@ -2595,30 +2631,39 @@ function CreateTabDifficulty() {
 
     # HERO MODE #
 
-    CreateReduxGroup    -Tag  "Hero"               -All    -Text "Hero Mode"
-    CreateReduxCheckBox -Name "Arwing"                     -Text "Arwing"               -Info "Replaces the Rock-Lifting Kokiri Kid with an Arwing in Kokiri Forest"        -Credits "Admentus"
-    CreateReduxCheckBox -Name "LikeLike"                   -Text "Like-Like"            -Info "Replaces the Rock-Lifting Kokiri Kid with a Like-Like in Kokiri Forest"      -Credits "Admentus" -Link $Redux.Hero.Arwing
-    CreateReduxCheckBox -Name "GraveyardKeese"             -Text "Graveyard Keese"      -Info "Extends the object list for Adult Link so the Keese appear at the Graveyard" -Credits "salvador235"
-    CreateReduxCheckBox -Name "LostWoodsOctorok"           -Text "Lost Woods Octorok"   -Info "Add an Octorok actor in the Lost Woods area which leads to Zora's River"     -Credits "Chez Cousteau"
-    CreateReduxCheckBox -Name "HarderChildBosses"          -Text "Harder Child Bosses"  -Info "Replace objects in the Child Dungeon Boss arenas with additional monsters"   -Credits "BilonFullHDemon"
-    CreateReduxCheckBox -Name "PotsChallenge"      -All    -Text "Pots Challenge"       -Info "Throw pots at your enemies to defeat them! Pots everywhere!"                 -Credits "Aegiker"
-    CreateReduxCheckBox -Name "NoBottledFairy"     -All    -Text "No Bottled Fairies"   -Info "Fairies can no longer be put into a bottle"                                  -Credits "Admentus & Three Pendants"
+    CreateReduxGroup    -Tag  "Hero"           -All -Text "Hero Mode"
+    CreateReduxCheckBox -Name "Arwing"              -Text "Arwing"              -Info "Replaces the Rock-Lifting Kokiri Kid with an Arwing in Kokiri Forest"        -Credits "Admentus"
+    CreateReduxCheckBox -Name "LikeLike"            -Text "Like-Like"           -Info "Replaces the Rock-Lifting Kokiri Kid with a Like-Like in Kokiri Forest"      -Credits "Admentus" -Link $Redux.Hero.Arwing
+    CreateReduxCheckBox -Name "GraveyardKeese"      -Text "Graveyard Keese"     -Info "Extends the object list for Adult Link so the Keese appear at the Graveyard" -Credits "salvador235"
+    CreateReduxCheckBox -Name "LostWoodsOctorok"    -Text "Lost Woods Octorok"  -Info "Add an Octorok actor in the Lost Woods area which leads to Zora's River"     -Credits "Chez Cousteau"
+    CreateReduxCheckBox -Name "HarderChildBosses"   -Text "Harder Child Bosses" -Info "Replace objects in the Child Dungeon Boss arenas with additional monsters"   -Credits "BilonFullHDemon"
+    CreateReduxCheckBox -Name "PotsChallenge"  -All -Text "Pots Challenge"      -Info "Throw pots at your enemies to defeat them! Pots everywhere!"                 -Credits "Aegiker"
+    CreateReduxCheckBox -Name "NoBottledFairy" -All -Text "No Bottled Fairies"  -Info "Fairies can no longer be put into a bottle"                                  -Credits "Admentus & Three Pendants"
 
-    CreateReduxCheckBox -Name "HarderStalfos"      -All    -Exclude "New Master Quest" -Text "Harder Stalfos"       -Info "Stalfos will attack you even not Z-Targeted"                                           -Credits "BilonFullHDemon"
-    CreateReduxCheckBox -Name "HarderWolfos"       -All    -Exclude "New Master Quest" -Text "Harder Wolfos"        -Info "Wolfos will attack you even not Z-Targeted"                                            -Credits "BilonFullHDemon"
-    CreateReduxCheckBox -Name "HarderIronKnuckle"  -All                                -Text "Harder Iron Knuckle"  -Info "Iron Knuckles now always run and attack a bit faster"                                  -Credits "Admentus"
-    CreateReduxCheckBox -Name "HarderKeese"        -All    -Exclude "New Master Quest" -Text "Harder Keese"         -Info "Keese attack earlier and faster between attacks, and will not lose their fire"         -Credits "Euler"
-    CreateReduxCheckBox -Name "HarderGohma"        -All    -Exclude "New Master Quest" -Text "Harder Gohma"         -Info "Gohma recovers faster from being stunned and has a smaller window of exposure"         -Credits "Euler"
-    CreateReduxCheckBox -Name "HarderKingDodongo"  -All    -Exclude "New Master Quest" -Text "Harder King Dodongo"  -Info "King Dodongo inhales faster, receives half damage from bombs and is no longer stunned" -Credits "Euler"
-    CreateReduxCheckBox -Name "AggressiveDarkLink" -Base 4 -Exclude "New Master Quest" -Text "Aggressive Dark Link" -Info "Dark Link starts attacking you right away after spawning"                              -Credits "BilonFullHDemon"
+    CreateReduxGroup    -Tag  "HeroHarder"    -All                                -Text "Hero Mode (Harder Enemies)"
+    CreateReduxCheckBox -Name "GohmaLarve"    -All    -Exclude "New Master Quest" -Text "Harder Gohma Larve"    -Info "Gohma Larves are faster"                                                               -Credits "Euler"
+    CreateReduxCheckBox -Name "Keese"         -All    -Exclude "New Master Quest" -Text "Harder Keese"          -Info "Keese attack earlier and faster between attacks, and will not lose their fire"         -Credits "Euler"
+    CreateReduxCheckBox -Name "Wolfos"        -All    -Exclude "New Master Quest" -Text "Harder Wolfos"         -Info "Wolfos will attack you even not Z-Targeted"                                            -Credits "BilonFullHDemon"
+    CreateReduxCheckBox -Name "Lizalfos"      -All    -Exclude "New Master Quest" -Text "Harder Lizalfos"       -Info "Lizalfos & Dinolfos will attack you even not Z-Targeted"                               -Credits "Nokaubure & Euler"
+    CreateReduxCheckBox -Name "Stalfos"       -All    -Exclude "New Master Quest" -Text "Harder Stalfos"        -Info "Stalfos will attack you even not Z-Targeted"                                           -Credits "Nokaubure & BilonFullHDemon"
+    CreateReduxCheckBox -Name "DeadHand"      -All    -Exclude "New Master Quest" -Text "Harder Dead Hand"      -Info "Dead Hands are faster and deal twice as much damage"                                   -Credits "Euler"
+    CreateReduxCheckBox -Name "DarkLink"      -Base 4 -Exclude "New Master Quest" -Text "Harder Dark Link"      -Info "Dark Link starts attacking you right away after spawning"                              -Credits "Nokaubure & BilonFullHDemon"
+    CreateReduxCheckBox -Name "GerudoFighter" -Base 4 -Exclude "New Master Quest" -Text "Harder Gerudo Fighter" -Info "Gerudo Fighters deal twice as much damage"                                             -Credits "Euler"
+    CreateReduxCheckBox -Name "IronKnuckle"   -All                                -Text "Harder Iron Knuckle"   -Info "Iron Knuckles now always run and attack a bit faster"                                  -Credits "Admentus"
+    CreateReduxCheckBox -Name "Gohma"         -All    -Exclude "New Master Quest" -Text "Harder Gohma"          -Info "Gohma recovers faster from being stunned and has a smaller window of exposure"         -Credits "Euler"
+    CreateReduxCheckBox -Name "KingDodongo"   -All    -Exclude "New Master Quest" -Text "Harder King Dodongo"   -Info "King Dodongo inhales faster, receives half damage from bombs and is no longer stunned" -Credits "Euler"
     
-    CreateReduxCheckBox -Name "HarderStalfos"      -Expose "New Master Quest" -Checked -Text "Harder Stalfos"       -Info "Stalfos will attack you even not Z-Targeted"                                           -Credits "BilonFullHDemon"
-    CreateReduxCheckBox -Name "HarderWolfos"       -Expose "New Master Quest" -Checked -Text "Harder Wolfos"        -Info "Wolfos will attack you even not Z-Targeted"                                            -Credits "BilonFullHDemon"
-    CreateReduxCheckBox -Name "HarderKeese"        -Expose "New Master Quest" -Checked -Text "Harder Keese"         -Info "Keese attack earlier and faster between attacks, and will not lose their fire"         -Credits "Euler"
-    CreateReduxCheckBox -Name "HarderGohma"        -Expose "New Master Quest" -Checked -Text "Harder Gohma"         -Info "Gohma recovers faster from being stunned and has a smaller window of exposure"         -Credits "Euler"
-    CreateReduxCheckBox -Name "HarderKingDodongo"  -Expose "New Master Quest" -Checked -Text "Harder King Dodongo"  -Info "King Dodongo inhales faster, receives half damage from bombs and is no longer stunned" -Credits "Euler"
-    CreateReduxCheckBox -Name "AggressiveDarkLink" -Expose "New Master Quest" -Checked -Text "Aggressive Dark Link" -Info "Dark Link starts attacking you right away after spawning"                              -Credits "BilonFullHDemon"
-
+    CreateReduxCheckBox -Name "GohmaLarve"    -Expose "New Master Quest" -Checked -Text "Harder Gohma Larve"    -Info "Gohma Larves are faster"                                                               -Credits "Euler"
+    CreateReduxCheckBox -Name "Keese"         -Expose "New Master Quest" -Checked -Text "Harder Keese"          -Info "Keese attack earlier and faster between attacks, and will not lose their fire"         -Credits "Euler"
+    CreateReduxCheckBox -Name "Wolfos"        -Expose "New Master Quest" -Checked -Text "Harder Wolfos"         -Info "Wolfos will attack you even not Z-Targeted"                                            -Credits "BilonFullHDemon"
+    CreateReduxCheckBox -Name "Lizalfos"      -Expose "New Master Quest" -Checked -Text "Harder Lizalfos"       -Info "Lizalfos & Dinolfos will attack you even not Z-Targeted"                               -Credits "Nokaubure & Euler"
+    CreateReduxCheckBox -Name "Stalfos"       -Expose "New Master Quest" -Checked -Text "Harder Stalfos"        -Info "Stalfos will attack you even not Z-Targeted"                                           -Credits "Nokaubure & BilonFullHDemon"
+    CreateReduxCheckBox -Name "DeadHand"      -Expose "New Master Quest" -Checked -Text "Harder Dead Hand"      -Info "Dead Hands are faster"                                                                 -Credits "Euler"
+    CreateReduxCheckBox -Name "DarkLink"      -Expose "New Master Quest" -Checked -Text "Harder Dark Link"      -Info "Dark Link starts attacking you right away after spawning"                              -Credits "Nokaubure & BilonFullHDemon"
+    CreateReduxCheckBox -Name "GerudoFighter" -Expose "New Master Quest" -Checked -Text "Harder Gerudo Fighter" -Info "Gerudo Fighters deal twice as much damage"                                             -Credits "Euler"
+    CreateReduxCheckBox -Name "Gohma"         -Expose "New Master Quest" -Checked -Text "Harder Gohma"          -Info "Gohma recovers faster from being stunned and has a smaller window of exposure"         -Credits "Euler"
+    CreateReduxCheckBox -Name "KingDodongo"   -Expose "New Master Quest" -Checked -Text "Harder King Dodongo"   -Info "King Dodongo inhales faster, receives half damage from bombs and is no longer stunned" -Credits "Euler"
+    
 
     
     # RECOVERY #
@@ -2685,7 +2730,9 @@ function CreateTabDifficulty() {
     CreateReduxCheckBox -Name "SkipStealthSequence" -Base 3 -Text "Skip Stealth Sequence" -Info "Skip the Castle Courtyard Stealth Sequence and allows you to go straight to the Inner Courtyard"                       -Credits "Ported from Rando"
     CreateReduxCheckBox -Name "SkipTowerEscape"     -Base 3 -Text "Skip Tower Escape"     -Info "Skip the Ganon's Tower Escape Sequence and allows you to go straight to the Ganon boss fight"                          -Credits "Ported from Rando"
     CreateReduxCheckBox -Name "HotRodderGoron"      -Base 5 -Text "Hot Rodder Goron"      -Info "The Hot Rodder Goron no longer needs to be stopped in a specific location before rewarding you with a bigger bomb bag" -Credits "Admentus"
-    
+    CreateReduxCheckBox -Name "GerudoFighterJail"   -Base 4 -Text "Gerudo Fighter Jail"   -Info "You're no longer send to jail when hit by the spin attack from a Gerudo Fighter"                                       -Credits "Euler"
+    CreateReduxTextBox  -Name "GhostShopPoints"     -Base 4 -Text "Ghost Shop Points"     -Info "Set the amount of Big Poes you need to catch for the bottle reward"                 -Value 10 -Min 1 -Max 10 -Length 2 -Credits "Euler"
+
 }
 
 

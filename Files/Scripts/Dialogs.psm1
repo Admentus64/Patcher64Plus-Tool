@@ -113,11 +113,12 @@ function CreateCreditsDialog() {
 
     # Create Text Box
     $Credits.Sections = @()
-    $Credits.Sections += CreateTextBox -X (DPISize 40)              -Y (DPISize 30)             -Width ($CreditsDialog.Width - (DPISize 100)) -Height ($CloseButton.Top - (DPISize 40)) -ReadOnly -Multiline -AddTo $CreditsDialog -Tag "Info"     -TextFileFont
-    $Credits.Sections += CreateTextBox -X $Credits.Sections[0].Left -Y $Credits.Sections[0].Top -Width $Credits.Sections[0].Width             -Height $Credits.Sections[0].Height       -ReadOnly -Multiline -AddTo $CreditsDialog -Tag "Credits"  -TextFileFont
-    $Credits.Sections += CreateTextBox -X $Credits.Sections[0].Left -Y $Credits.Sections[0].Top -Width $Credits.Sections[0].Width             -Height $Credits.Sections[0].Height       -ReadOnly -Multiline -AddTo $CreditsDialog -Tag "GameID's" -TextFileFont
+    $Credits.Sections += CreateTextBox -X (DPISize 40)              -Y (DPISize 30)             -Width ($CreditsDialog.Width - (DPISize 100)) -Height ($CloseButton.Top - (DPISize 40)) -ReadOnly -Multiline -AddTo $CreditsDialog -Tag "Info"      -TextFileFont
+    $Credits.Sections += CreateTextBox -X $Credits.Sections[0].Left -Y $Credits.Sections[0].Top -Width $Credits.Sections[0].Width             -Height $Credits.Sections[0].Height       -ReadOnly -Multiline -AddTo $CreditsDialog -Tag "Credits"   -TextFileFont
+    $Credits.Sections += CreateTextBox -X $Credits.Sections[0].Left -Y $Credits.Sections[0].Top -Width $Credits.Sections[0].Width             -Height $Credits.Sections[0].Height       -ReadOnly -Multiline -AddTo $CreditsDialog -Tag "GameID's"  -TextFileFont
     $Credits.Sections += CreatePanel   -X $Credits.Sections[0].Left -Y $Credits.Sections[0].Top -Width $Credits.Sections[0].Width             -Height $Credits.Sections[0].Height                            -AddTo $CreditsDialog -Tag "Misc"
     $Credits.Sections += CreatePanel   -X $Credits.Sections[0].Left -Y $Credits.Sections[0].Top -Width $Credits.Sections[0].Width             -Height $Credits.Sections[0].Height                            -AddTo $CreditsDialog -Tag "Checksum"
+    $Credits.Sections += CreateTextBox -X $Credits.Sections[0].Left -Y $Credits.Sections[0].Top -Width $Credits.Sections[0].Width             -Height $Credits.Sections[0].Height       -ReadOnly -Multiline -AddTo $CreditsDialog -Tag "Changelog" -TextFileFont
 
     # Support
     $SupportLabel  = CreateLabel -X (DPISize 10)         -Y (DPISize 10)                          -Width (DPISize 200) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("--- Support or visit me at ---")   -AddTo $Credits.Sections[3]
@@ -217,6 +218,7 @@ function CreateCreditsDialog() {
     $VerificationInfo.SupportField.ReadOnly = $True
 
     AddTextFileToTextbox -TextBox $Credits.Sections[2] -File $Files.text.gameID
+    AddTextFileToTextbox -TextBox $Credits.Sections[5] -File $Files.text.changelog
     SetCreditsSections
     CalculateHashSum
 

@@ -758,12 +758,6 @@ function RevertReduxOptions() {
     if (IsRevert $Redux.Gameplay.UnderwaterOcarina)   { ChangeBytes -Offset "BA6E54" -Values "30CF00FF29E10012"         }
     if (IsRevert $Redux.Gameplay.ClimbAnything)       { ChangeBytes -Offset "CB7D40" -Values "8C422B0C0000402530490008" }
 
-
-    if (IsChecked $Redux.Graphics.Widescreen) {
-        ChangeBytes -Offset "B9A3CC" -Values "31B900FF03217825";         ChangeBytes -Offset "B9C910" -Values "316C00FF01816825"; ChangeBytes -Offset "BAD2B4" -Values "852F027231F800FF3719C800"; ChangeBytes -Offset "BAD2D0" -Values "3C0100C8244E0008AC6E02A0AC480000852F027231F800FF0301C825"
-        ChangeBytes -Offset "BAD384" -Values "85380272331900FF372EC800"; ChangeBytes -Offset "BAD3B4" -Values "85380272331900FF03217025"
-    }
-
 }
 
 
@@ -898,16 +892,10 @@ function ByteReduxOptions() {
     if (IsSet $Redux.Colors.SetHUDStats) {
         if (IsDefaultColor -Elem $Redux.Colors.SetHUDStats[0] -Not)   { ChangeBytes -Offset (AddToOffset $Symbols.HUD_COLOR_CONFIG -Add "30") -Values @($Redux.Colors.SetHUDStats[0].Color.R, $Redux.Colors.SetHUDStats[0].Color.G, $Redux.Colors.SetHUDStats[0].Color.B) } # Hearts
         if (IsDefaultColor -Elem $Redux.Colors.SetHUDStats[1] -Not)   { ChangeBytes -Offset (AddToOffset $Symbols.HUD_COLOR_CONFIG -Add "34") -Values @($Redux.Colors.SetHUDStats[1].Color.R, $Redux.Colors.SetHUDStats[1].Color.G, $Redux.Colors.SetHUDStats[1].Color.B) } # Hearts
-        if (!(IsChecked $Redux.Graphics.Widescreen)) {
-            if (IsDefaultColor -Elem $Redux.Colors.SetHUDStats[2] -Not)   { ChangeBytes -Offset (AddToOffset $Symbols.HUD_COLOR_CONFIG -Add "38") -Values @($Redux.Colors.SetHUDStats[2].Color.R, $Redux.Colors.SetHUDStats[2].Color.G, $Redux.Colors.SetHUDStats[2].Color.B) } # Magic
-            if (IsDefaultColor -Elem $Redux.Colors.SetHUDStats[3] -Not)   { ChangeBytes -Offset (AddToOffset $Symbols.HUD_COLOR_CONFIG -Add "3C") -Values @($Redux.Colors.SetHUDStats[3].Color.R, $Redux.Colors.SetHUDStats[3].Color.G, $Redux.Colors.SetHUDStats[3].Color.B) } # Magic
-        }
+        if (IsDefaultColor -Elem $Redux.Colors.SetHUDStats[2] -Not)   { ChangeBytes -Offset (AddToOffset $Symbols.HUD_COLOR_CONFIG -Add "38") -Values @($Redux.Colors.SetHUDStats[2].Color.R, $Redux.Colors.SetHUDStats[2].Color.G, $Redux.Colors.SetHUDStats[2].Color.B) } # Magic
+        if (IsDefaultColor -Elem $Redux.Colors.SetHUDStats[3] -Not)   { ChangeBytes -Offset (AddToOffset $Symbols.HUD_COLOR_CONFIG -Add "3C") -Values @($Redux.Colors.SetHUDStats[3].Color.R, $Redux.Colors.SetHUDStats[3].Color.G, $Redux.Colors.SetHUDStats[3].Color.B) } # Magic
         if (IsDefaultColor -Elem $Redux.Colors.SetHUDStats[4] -Not)   { ChangeBytes -Offset (AddToOffset $Symbols.HUD_COLOR_CONFIG -Add "40") -Values @($Redux.Colors.SetHUDStats[4].Color.R, $Redux.Colors.SetHUDStats[4].Color.G, $Redux.Colors.SetHUDStats[4].Color.B) } # Minimap
     }
-
-
-
-    $Symbols = $null
 
 }
 
@@ -1075,31 +1063,7 @@ function CreateOptions() {
     
     CreateOptionsDialog -Columns 6 -Height 605 -Tabs @("Main", "Graphics", "Audio", "Difficulty", "Colors", "Equipment", "Speedup")
 
-    if (IsSet $Redux.Graphics.WidescreenAlt)   { $Redux.Graphics.WidescreenAlt.Add_CheckStateChanged({ AdjustGUI }) }
-    if (IsSet $Redux.Graphics.Widescreen)      { $Redux.Graphics.Widescreen.Add_CheckStateChanged({    AdjustGUI }) }
-    if (IsSet $Redux.DPad.LayoutLeft)          { $Redux.DPad.LayoutLeft.Add_CheckedChanged({           AdjustGUI }) }
-    if (IsSet $Redux.DPad.LayoutRight)         { $Redux.DPad.LayoutRight.Add_CheckedChanged({          AdjustGUI }) }
-
 }
-
-
-
-#==============================================================================================================================================================================================
-function AdjustGUI() {
-    
-    if ($Patches.Redux.Checked) {
-        if ($Redux.Graphics.Widescreen.Checked -and ($Redux.DPad.LayoutLeft.Checked -or $Redux.DPad.LayoutRight.Checked) ) { $Redux.DPad.Hide.Checked = $True }
-        EnableElem -Elem @($Redux.Colors.Magic, $Redux.Colors.BaseMagic, $Redux.Colors.InfiniteMagic)      -Active (!$Redux.Graphics.Widescreen.Checked)
-        EnableElem -Elem $Redux.Graphics.Widescreen                                                        -Active (!$Redux.Graphics.WidescreenAlt.Checked -and !$Redux.DPad.LayoutLeft.Checked -and !$Redux.DPad.LayoutRight.Checked)
-        EnableElem -Elem @($Redux.Graphics.WidescreenAlt, $Redux.DPad.LayoutLeft, $Redux.DPad.LayoutRight) -Active (!$Redux.Graphics.Widescreen.Checked)
-    }
-    else {
-        EnableElem -Elem $Redux.Graphics.Widescreen       -Active (!$Redux.Graphics.WidescreenAlt.Checked)
-        EnableElem -Elem @($Redux.Graphics.WidescreenAlt) -Active (!$Redux.Graphics.Widescreen.Checked)
-    }
-
-}
-
 
 
 
@@ -1182,11 +1146,11 @@ function CreateTabRedux() {
 
     CreateReduxGroup       -Tag  "Dpad"        -All                         -Text "D-Pad Layout"
     CreateReduxPanel                           -All -Columns 4
-    CreateReduxRadioButton -Name "Disable"     -All -Max 4 -SaveTo "Layout" -Text "Disable"    -Info "Completely disable the D-Pad"                                                                                                                                          -Credits "Ported from Redux"
-    CreateReduxRadioButton -Name "Hide"        -All -Max 4 -SaveTo "Layout" -Text "Hidden"     -Info "Hide the D-Pad icons, while they are still active`nYou can rebind the items to the D-Pad in the pause screen"                                                          -Credits "Ported from Redux"
-    CreateReduxRadioButton -Name "LayoutLeft"  -All -Max 4 -SaveTo "Layout" -Text "Left Side"  -Info "Show the D-Pad icons on the left side of the HUD`nYou can rebind the items to the D-Pad in the pause screen`nCan not be used with 16:9 Widescreen (Advanced)" -Checked -Credits "Ported from Redux"
-    CreateReduxRadioButton -Name "LayoutRight" -All -Max 4 -SaveTo "Layout" -Text "Right Side" -Info "Show the D-Pad icons on the right side of the HUD`nYou can rebind the items to the D-Pad in the pause screen`nCan not be used with 16:9 Widescreen (Advanced)"         -Credits "Ported from Redux"
-  # CreateReduxCheckBox    -Name "DualSet"     -All                         -Text "Dual Set"   -Info "Allow switching between two different D-Pad sets`nPress L + R ingame to swap between layouts"                                                -Link $Redux.Dpad.Disable -Credits "Admentus"
+    CreateReduxRadioButton -Name "Disable"     -All -Max 4 -SaveTo "Layout" -Text "Disable"    -Info "Completely disable the D-Pad"                                                                                           -Credits "Ported from Redux"
+    CreateReduxRadioButton -Name "Hide"        -All -Max 4 -SaveTo "Layout" -Text "Hidden"     -Info "Hide the D-Pad icons, while they are still active`nYou can rebind the items to the D-Pad in the pause screen"           -Credits "Ported from Redux"
+    CreateReduxRadioButton -Name "LayoutLeft"  -All -Max 4 -SaveTo "Layout" -Text "Left Side"  -Info "Show the D-Pad icons on the left side of the HUD`nYou can rebind the items to the D-Pad in the pause screen"   -Checked -Credits "Ported from Redux"
+    CreateReduxRadioButton -Name "LayoutRight" -All -Max 4 -SaveTo "Layout" -Text "Right Side" -Info "Show the D-Pad icons on the right side of the HUD`nYou can rebind the items to the D-Pad in the pause screen"           -Credits "Ported from Redux"
+  # CreateReduxCheckBox    -Name "DualSet"     -All                         -Text "Dual Set"   -Info "Allow switching between two different D-Pad sets`nPress L + R ingame to swap between layouts" -Link $Redux.Dpad.Disable -Credits "Admentus"
 
 
 
@@ -1253,7 +1217,7 @@ function CreateTabLanguage() {
     # DIALOGUE #
      
     CreateReduxGroup  -All -Tag "Text" -Text "Dialogue"
-    CreateReduxPanel       -Columns 4
+    CreateReduxPanel       -Columns 3
     CreateReduxRadioButton -Name "Vanilla" -Checked  -Max 3 -SaveTo "Dialogue" -Text "Vanilla Text" -Info "Keep the text as it is"
     CreateReduxRadioButton -Name "Restore"           -Max 3 -SaveTo "Dialogue" -Text "Restore Text" -Info "Restores and fixes the following:`n- Restore the area titles cards for those that do not have any`n- Sound effects that do not play during dialogue`n- Grammar and typo fixes" -Credits "Redux"
     CreateReduxRadioButton -Name "Custom"            -Max 3 -SaveTo "Dialogue" -Text "Custom"       -Info ('Insert custom dialogue found from "..\Patcher64+ Tool\Files\Games\Majora' + "'" + 's Mask\Custom Text"') -Warning "Make sure your custom script is proper and correct, or your ROM will crash`n[!] No edit will be made if the custom script is missing"
@@ -1314,21 +1278,18 @@ function CreateTabGraphics() {
     
     # GRAPHICS #
 
-    $info  = "Patch the game to be in true 16:9 widescreen with the HUD pushed to the edges.`n`nKnown Issues:`n- Notebook screen stretched`n- The D-Pad from Redux is limited to either Disabled or Hidden, and can not be shown"
-
     CreateReduxGroup    -All -Tag "Graphics"        -Text "Graphics" -Columns 4
-    CreateReduxCheckBox -All -Name "Widescreen"     -Text "16:9 Widescreen (Advanced)"   -Info $info                                                                                                          -Native -Credits "Granny Story images by Nerrel, Widescreen Patch by gamemasterplc, enhanced and ported by GhostlyDark"
-    CreateReduxCheckBox -All -Name "WidescreenAlt"  -Text "16:9 Widescreen (Simplified)" -Info "Apply 16:9 Widescreen adjusted backgrounds and textures (as well as 16:9 Widescreen for the Wii VC)"                  -Credits "Aspect Ratio Fix by Admentus`n16:9 backgrounds by GhostlyDark & ShadowOne333"
-    CreateReduxCheckBox -All -Name "ExtendedDraw"   -Text "Extended Draw Distance"       -Info "Increases the game's draw distance for objects`nDoes not work on all objects"                                         -Credits "Admentus"
-    CreateReduxCheckBox -All -Name "PixelatedStars" -Text "Disable Pixelated Stars"      -Info "Completely disable the stars at night-time, which are pixelated dots and do not have any textures for HD replacement" -Credits "Admentus"
+    CreateReduxCheckBox -All -Name "Widescreen"     -Text "16:9 Widescreen (Advanced)"   -Info "Patches true 16:9 widescreen with the HUD pushed to the edges.`n`nKnown Issue: Stretched Notebook screen"    -Native -Credits "Granny Story images by Nerrel, Widescreen Patch by gamemasterplc, enhanced and ported by GhostlyDark"
+    CreateReduxCheckBox -All -Name "WidescreenAlt"  -Text "16:9 Widescreen (Simplified)" -Info "Apply 16:9 Widescreen adjusted backgrounds and textures (as well as 16:9 Widescreen for the Wii VC)"                 -Credits "Aspect Ratio Fix by Admentus`n16:9 backgrounds by GhostlyDark & ShadowOne333" -Link $Redux.Graphics.Widescreen
+    CreateReduxCheckBox -All -Name "ExtendedDraw"   -Text "Extended Draw Distance"       -Info "Increases the game's draw distance for objects`nDoes not work on all objects"                                        -Credits "Admentus"
+    CreateReduxCheckBox -All -Name "PixelatedStars" -Text "Disable Pixelated Stars"      -Info "Completely disable stars during the night, which are pixelated dots and do not have any textures for HD replacement" -Credits "Admentus"
     
     if (!$IsWiiVC)   { $info = "`n`n--- WARNING ---`nDisabling cutscene effects fixes temporary issues with both Widescreen and Redux patched where garbage pixels at the edges of the screen or garbled text appears`nWorkaround: Resize the window when that happens" }
     else             { $info = "" }
-    CreateReduxCheckBox -All -Name "MotionBlur"       -Text "Disable Motion Blur"          -Info ("Completely d isable the use of motion blur in-game" + $info)                                                         -Credits "GhostlyDark"
-    CreateReduxCheckBox -All -Name "FlashbackOverlay" -Text "Disable Flashback Overlay"    -Info ("Disables the overlay shown during Princess Zelda flashback scene" + $info)                                           -Credits "GhostlyDark"
+    CreateReduxCheckBox -All -Name "MotionBlur"       -Text "Disable Motion Blur"       -Info ("Completely d isable the use of motion blur in-game" + $info)               -Credits "GhostlyDark"
+    CreateReduxCheckBox -All -Name "FlashbackOverlay" -Text "Disable Flashback Overlay" -Info ("Disables the overlay shown during Princess Zelda flashback scene" + $info) -Credits "GhostlyDark"
 
-    $models = LoadModelsList -Category "Child"
-    CreateReduxComboBox -All -Name "ChildModels" -Text "Hylian Model" -Items (@("Original") + $models) -Default "Original" -Info "Replace the Hylian model used for Link"
+    CreateReduxComboBox -All -Name "ChildModels" -Text "Hylian Model" -Items (@("Original") + (LoadModelsList -Category "Child")) -Default "Original" -Info "Replace the Hylian model used for Link"
 
 
 
