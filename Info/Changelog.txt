@@ -4,6 +4,7 @@ v20.3.4
 - Updated New Master Quest to v2.2
 - Fixed issue with several options not working with Advanced Widescreen & MM Redux
 - Fixed issue with "Adult Pronouns" missing for MM
+- Fixed issue with not properly patching with decompression settings
 
 v20.3.3
 - Updated New Master Quest for OoT
