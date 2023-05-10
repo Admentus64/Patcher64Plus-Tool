@@ -17,10 +17,9 @@
 
 }, {
 
-
 	"title"		: "Zelda 1 Port",
 	"patch"		: "Compressed\\zelda1.bps",
 	"output"	: "zelda1",
-	"tooltip"	: "A port of Link's Awakening to the original NES The Legend of Zelda"
+	"tooltip"	: "A port of the original The Legend of Zelda (NES) within Link's Awakening (GBC)"
 
 } ]

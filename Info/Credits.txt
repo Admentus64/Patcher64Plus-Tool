@@ -807,6 +807,8 @@ Other:			Admentus & gamemasterplc
 --- Return to Dinosaur Land ---
 - RAGB
 
+
+
 =====================
 <<< SUPER METROID >>>
 
@@ -821,6 +823,26 @@ Other:			Admentus & gamemasterplc
 - Widescreen:				ocesse
 - Save Stations Refill:			Adamf
 - ShadowOne333
+
+--- Project Base ---
+- Level Designer:			begrimed
+- Programmer:				Quote58
+- Graphics:				begrimed, RealRed, Charmander106, Albert V, Quietus, bob, Quote58,
+					dewhi100
+- Special Thanks:			PB Speedrunning Community, Charity Marathons, squishy_ichigo,
+					AdvancedPillow, Ultime Decathlon, Ryan Barrett, Circ
+
+- Code:					
+Quote58, Scyzer, Kejardon, Jathys, Black Falcon, Drewseph, PJBoy, Slyandro, anomie, nocash, byuu, MathOnNapkins,
+deskjockey, DSO, squishy_ichigo, JAM, Crashtour99, PHOSPHOTiDYL, DChronos, personitis, Kazuto, Daltone, Smiley,
+begrimed
+
+- Testing:
+Stunt_sr, LinkaMeister, Hubert0987, Galamoz, thatzachguyx, bob, Xerclipse, CaptainSwag, Sirkura, countgooby,
+interdpth, Thorben, MetroidMst, mrguyaverage, gloobygloob, Black_Falcon, Gespachio, Zylus, Devaliah,
+Miranda Gemini, Kazuto, AlbertV, Aran;Jaeger, LCA, Xsczo, JAM, Silver Skree, Yuki, Thorben, Dessyreqt, foosda,
+FPzero, personitis, Aran;Jaeger, Hiroshi Mishima, MetroidMst, Nekoishi, Kn0p3XX, SirAileron, Quietus, Weterr123,
+Grahf, ShadowOne333, CeruCap, ScoutTown, MrBlueDork, Duopierce, Skorph2014, marsfromvenus, FusionWarrior				
 
 
 
@@ -842,11 +864,11 @@ Other:			Admentus & gamemasterplc
 <<< THE LEGEND OF ZELDA >>>
 
 --- Redux ---
-- Main Hacking:		ShadowOne333
-- Disassembly:		Trax
-- Hacking:		bogaabogaa, Fiskbit, DarkSamus993, stratoform, gzip, frantik, minucce, LexLuthermiester
-- Original Hacking:	snarfblam, kalita-kan, auburnbit
-- Script:		BlazeHeatnix, ifightdragons
+- Main Hacking:				ShadowOne333
+- Disassembly:				Trax
+- Original Hacking:			auburnbit, kalita-kan, snarfblam
+- Hacking:				bogaabogaa, DarkSamus993, Fiskbit, frantik, gzip, minucce, LexLuthermeister, stratoform, tacoschip
+- Script:				BlazeHeatnix, ifightdragons
 
 
 
@@ -872,6 +894,9 @@ Other:			Admentus & gamemasterplc
 
 --- Zelda 1 Port ---
 daid
+
+--- Zelda's Adventure Port ---
+John Lay (https://john-lay.itch.io/zeldas-adventure)
 
 --- Redux ---
 - Main Hacking:				ShadowOne333
