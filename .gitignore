@@ -11,6 +11,7 @@ Files/Games/**/Custom Text/*.*
 Files/Games/**/Editor
 *.exe
 !Files/Tools/*.exe
+Release Prepare.bat
 *.7z
 *.htm
 *.html

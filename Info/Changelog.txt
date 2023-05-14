@@ -1,4 +1,5 @@
 v20.3.5
+- Updated New Master Quest to v2.3
 - Updated Redux for Zelda 1
 - Fixed patches for Zelda 1
 - Fixed Zelda 1 Port patch not applying for LA

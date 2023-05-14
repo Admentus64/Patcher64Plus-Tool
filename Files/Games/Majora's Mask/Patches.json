@@ -19,6 +19,7 @@
 	},
 	"script"			: "Majora's Mask",
 	"settings"			: "MM Master Quest",
+	"vanilla"			: 2,	
 	"custom_offset"			: "20610",
 	"custom_value"			: "34 13 00 7A 15 D3 00 03 00 00 00 00 10 00 00 05 00 00 00 00 34 13 01 42 11 D3 00 02 00 00 00 00 34 13 00 00 03 E0 00 08 00 00 00 00 00 00 00 00 90 8E 00 42 08 04 56 53 00 A5 28 21 00 00 00 00 27 BD FF E0 AF BF 00 1C 30 A8 00 40 50 08 00 05 82 05 00 03 0C 02 D6 EC 00 A8 28 23 10 00 00 03 00 00 00 00 0C 02 D7 46 00 00 00 00 8F BF 00 1C 03 E0 00 08 27 BD 00 20 00 00 00 00 00 00 00 00 3C 08 80 40 03 E0 00 08 AD 00 08 1C 00 00 00 00 50 2F 00 05 90 AF 3F 18 50 0F 00 03 90 AF 3F 18 08 04 42 28 00 00 00 00 08 04 42 6E",
 	"command"			: "Force Downgrade",
@@ -36,6 +37,7 @@
 	"patch"				: "Decompressed\\masked_quest.bps",
 	"script"			: "Majora's Mask",
 	"settings"			: "MM Masked Quest",
+	"vanilla"			: 2,
 	"output"			: "masked_quest",
 	"tooltip"			: "A Master Quest style romhack for Majora's Mask, offering a higher difficulty{0}The patch contains major changes to where progress is obtained throughout the overworld and dungeons{0}Includes some of the changes featured in the Redux / Randomizer patches like D-Pad support"
 
