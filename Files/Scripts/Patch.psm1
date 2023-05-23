@@ -585,14 +585,15 @@ function DowngradeROM() {
 
     if ($romHash -ne $revHash) {
         foreach ($item in $GameType.version) {
-            if ($PatchInfo.decompress -and (IsSet $GameRev.hash_decomp)) { $hash = $item.hash_decomp } else { $hash = $item.hash }
+            if ($PatchInfo.decompress -and (IsSet $item.hash_decomp)) { $hash = $item.hash_decomp } else { $hash = $item.hash }
             if ($romHash -eq $hash -and (IsSet $item.upgrade)) {
                 if (!(ApplyPatch -File $GetROM.run -Patch ("Downgrade\" + $item.upgrade))) {
                     WriteToConsole "Could not apply upgrade patch"
                     return
                 }
+                $romHash = (Get-FileHash -Algorithm MD5 -LiteralPath $GetROM.run).Hash
+                break
             }
-            $romHash = (Get-FileHash -Algorithm MD5 -LiteralPath $GetROM.run).Hash
         }
     }
 
@@ -993,24 +994,23 @@ function CompressROM() {
         if (IsSet $GamePatch.finalize) {
             if (TestFile (CheckPatchExtension ($GameFiles.downgrade + "\" + $GamePatch.finalize) ) ) { ApplyPatch -File $GetROM.patched -Patch (CheckPatchExtension ($GameFiles.downgrade + "\" + $GamePatch.finalize)) -FullPath }
         }
-    }
-    else { Move-Item -LiteralPath $GetROM.decomp -Destination $GetROM.patched -Force }
 
-    $GetROM.run = $GetROM.patched
-
-    if (IsSet $GamePatch.size) {
-        if (($GamePatch.size -as [int]) -ne $null) {
-            if ($GamePatch.size -ge 1 -and $GamePatch.size -le $GameConsole.max_size) {
-                if (((Get-Item -LiteralPath $GetROM.run).length)/1MB -gt $GamePatch.size) {
-                  $file = [System.IO.File]::ReadAllBytes($GetROM.run)
-                    $new  = $file[0..($GamePatch.size * 1024 * 1024)]
-                    [System.IO.File]::WriteAllBytes($GetROM.run, $new)
-                    $file = $new = $null
-                    WriteToConsole ("Reduced ROM size to: " + $GamePatch.size + "MB")
+        if (IsSet $GamePatch.size) {
+            if (($GamePatch.size -as [int]) -ne $null) {
+                if ($GamePatch.size -ge 1 -and $GamePatch.size -le $GameConsole.max_size) {
+                    if (((Get-Item -LiteralPath $GetROM.patched).length)/1MB -gt $GamePatch.size) {
+                        $file = [System.IO.File]::ReadAllBytes($GetROM.patched)
+                        $new  = $file[0..($GamePatch.size * 1024 * 1024)]
+                        [System.IO.File]::WriteAllBytes($GetROM.patched, $new)
+                        WriteToConsole ("Reduced ROM size to: " + $GamePatch.size + "MB")
+                    }
                 }
             }
         }
     }
+    else { Move-Item -LiteralPath $GetROM.decomp -Destination $GetROM.patched -Force }
+
+    $GetROM.run = $GetROM.patched
 }
 
 

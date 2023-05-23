@@ -92,7 +92,12 @@
 - Breath of the Wild:			Skilarbabcock (www.youtube.com/user/skilarbabcock)
 - Dark Link:				CrookedPoe (adult)
 - Dark Link Smash:			Mikus64
+- Dawn & Dusk:				LuigiBlood
+- Diddy Kong:				Ikey Ilex (https://github.com/Caverns4/Custom-Game-Models)
+- Felix:				Ikey Ilex (https://github.com/Caverns4/Custom-Game-Models)
 - Fierce Deity:				UltIMa647 (child) & CrookedPoe (ported adult)
+- Fox Dinosaur Planet:			Ikey Ilex (https://github.com/Caverns4/Custom-Game-Models)
+- Gatomon:				Ikey Ilex (https://github.com/Caverns4/Custom-Game-Models)
 - Happy Mask Salesman:			Anubis-V1
 - Hat Kid:				Hailey
 - Hatsune Miku Link:			JanexLane
@@ -100,8 +105,10 @@
 - Felix:				Ikey Ilex (https://github.com/Caverns4/Custom-Game-Models)
 - Kafei:				Malon Rose (www.patreon.com/MalonRose & www.youtube.com/c/MalonRose)
 - Kristin:				Ikey Ilex (https://github.com/Caverns4/Custom-Game-Models)
+- Kristina:				Ikey Ilex (https://github.com/Caverns4/Custom-Game-Models)
 - Lorna Rissa:				JanexLane
 - Link's Awakening:			Skilarbabcock (www.youtube.com/user/skilarbabcock)
+- Machop / Machoke:			Ikey Ilex (https://github.com/Caverns4/Custom-Game-Models)
 - Majora's Mask:			The3Dude (child) & Skilarbabcock (adult)
 - Majora's Mask + OoT Eyes:		The3Dude (model) & GhostlyDark (eyes)
 - Majora's Mask Eyes:			GhostlyDark (eyes)
@@ -116,6 +123,7 @@
 - Princess Ruto:			Unesag
 - Princess Zelda 3D:			Hailey
 - Princess Zelda ALttP:			Unesag (child) & Lopieloo (adult)
+- Renamon:				Ikey Ilex (https://github.com/Caverns4/Custom-Game-Models)
 - Roll:					Psi-Hate
 - Ruby Rose:				Malon Rose (www.patreon.com/MalonRose & www.youtube.com/c/MalonRose)
 - Saria:				Malon Rose (www.patreon.com/MalonRose & www.youtube.com/c/MalonRose)
@@ -123,6 +131,7 @@
 - Skyward Sword:			Skilarbabcock (www.youtube.com/user/skilarbabcock)
 - Sunny:				Unesag & Amara
 - Twilight Princess:			Skilarbabcock (www.youtube.com/user/skilarbabcock)
+- Violet:				Ikey Ilex (https://github.com/Caverns4/Custom-Game-Models)
 - Zora Link:				spyfoxgames
 
 --- Music Track Sequence Replacements ---
@@ -140,12 +149,10 @@
 - Kolipoki
 - Liamnajor
 - LuigiXHero				https://github.com/LuigiXHero/OoT-Randomizer-Music-Pack
-- MM					Nintendo
 - MM Rando				https://github.com/ZoeyZolotova/mm-rando
 - MrMario7788
 - Nika
 - Nyxael
-- OoT					Nintendo
 - Rokon
 - Senate
 - sillyhorseradish
@@ -378,23 +385,28 @@ https://github.com/DaruniasJoy/OoT-Custom-Sequences
 - kr3z
 
 --- Hylian Link Models ---
+- 1996 Link:				Ikey Ilex (https://github.com/Caverns4/Custom-Game-Models)
 - Adult Link (MM):			Skilarbabcock (www.youtube.com/user/skilarbabcock)
 - Athena:				Ikey Ilex (https://github.com/Caverns4/Custom-Game-Models)
 - Diddy Kong:				Ikey Ilex (https://github.com/Caverns4/Custom-Game-Models)
 - Elegy of Emptiness:			JerryWester
+- Felix:				Ikey Ilex (https://github.com/Caverns4/Custom-Game-Models)
 - Fierce Deity Link:			UltIMa647
+- Fox Dinosaur Planet:			Ikey Ilex (https://github.com/Caverns4/Custom-Game-Models)
+- Gatomon:				Ikey Ilex (https://github.com/Caverns4/Custom-Game-Models)
 - Glover:				Unesag
 - Hat Kid:				Hailey
-- Ikey:					Ikey Ilex (https://github.com/Caverns4/Custom-Game-Models)
-- Improved Link:			Skilarbabcock (www.youtube.com/user/skilarbabcock) & Nerrel
 - Improved Link + OoT Eyes:		Skilarbabcock (model), Nerrel (owner) & GhostlyDark (eyes)
+- Improved Link:			Skilarbabcock (www.youtube.com/user/skilarbabcock) & Nerrel
 - Kristin:				Ikey Ilex (https://github.com/Caverns4/Custom-Game-Models)
-- Kristina Olivine:			Ikey Ilex (https://github.com/Caverns4/Custom-Game-Models)
+- Kristina:				Ikey Ilex (https://github.com/Caverns4/Custom-Game-Models)
+- Machop:				Ikey Ilex (https://github.com/Caverns4/Custom-Game-Models)
 - Majora's Mask + OoT Eyes:		GhostlyDark (eyes)
-- Princess Zelda:			Unesag
-- Ocarina of Time:			Rando
 - Ocarina of Time + MM Eyes		Rando (model) & GhostlyDark (eyes)
-- Ocarina of Time Eyes:			GhostlyDark
+- Ocarina of Time:			Rando
+- Princess Zelda AlttP:			Unesag
+- Renamon:				Ikey Ilex (https://github.com/Caverns4/Custom-Game-Models)
+- Violet:				Ikey Ilex (https://github.com/Caverns4/Custom-Game-Models)
 
 --- Music Track Sequence Replacements ---
 - Apasher
@@ -411,12 +423,10 @@ https://github.com/DaruniasJoy/OoT-Custom-Sequences
 - Kolipoki
 - Liamnajor
 - LuigiXHero				https://github.com/LuigiXHero/OoT-Randomizer-Music-Pack
-- MM					Nintendo
 - MM Rando				https://github.com/ZoeyZolotova/mm-rando
 - MrMario7788
 - Nika
 - Nyxael
-- OoT					Nintendo
 - Rokon
 - Senate
 - sillyhorseradish
