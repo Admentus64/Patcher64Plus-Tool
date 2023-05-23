@@ -357,6 +357,10 @@ function CreateTabButtons([string[]]$Tabs, [boolean]$NoLanguages=$False) {
     if (!(IsSet $GameSettings.Core) -and $Tabs.Length -gt 0) { $GameSettings.Core  = @{} }
 
     $Tabs = $Tabs | Select-Object -Unique
+    if ($Tabs.Count -eq 1) {
+        $Last.TabName = $Tabs[0]
+        return @()
+    }
 
     # Create tabs
     for ($i=0; $i -lt $Tabs.Count; $i++) {
