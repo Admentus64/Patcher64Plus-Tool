@@ -379,6 +379,10 @@ function ChangePatch() {
                     $global:GameSettings = $global:GameSettingsFile = $null
                 }
 
+                DisablePatches
+                SetVCRemap
+                ChangeGameRev
+
                 if (IsSet $GamePatch.script) {
                     $script = $Paths.Scripts + "\Options\" + $GamePatch.script + ".psm1"
                     if (TestFile $script) {
@@ -388,10 +392,6 @@ function ChangePatch() {
                         if (GetCommand "CreateOptions") { CreateOptions }
                     }
                 }
-
-                DisablePatches
-                SetVCRemap
-                ChangeGameRev
 
                 break
         }
