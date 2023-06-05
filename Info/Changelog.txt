@@ -1,5 +1,9 @@
 v20.3.6
 - Fixed issues with downgrading and compression
+- Fixed patching graphics options for MK64
+- Fixed updater not showing new version if version.txt is missing
+- Changed max size for wallets (OoT) to 999 instead of 9999
+- Changed Tycoon's Wallet default size to 999 instead of 500
 
 v20.3.5
 - Updated New Master Quest to v2.3

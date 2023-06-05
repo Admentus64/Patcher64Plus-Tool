@@ -2,7 +2,7 @@ function PatchOptions() {
     
     # GRAPHICS #
 
-    if (IsChecked $Redux.Gameplay.WidescreenBackgrounds)   { ApplyPatch -Patch "Compressed\Optional\ws_backgrounds.ips" }
+    if (IsChecked $Redux.Graphics.WidescreenBackgrounds)   { ApplyPatch -Patch "Compressed\Optional\ws_backgrounds.ips" }
 
 
 
@@ -25,20 +25,20 @@ function ByteOptions() {
     
     # GRAPHICS #
 
-    if (IsChecked $Redux.Gameplay.Widescreen) {
+    if (IsChecked $Redux.Graphics.Widescreen) {
         ChangeBytes -Offset "952BB"  -Values "E334E78E39"
         ChangeBytes -Offset "953EF"  -Values "E334E78E39"
         ChangeBytes -Offset "12322D" -Values "E38E393F638E3940638E393FE38E39"
     }
 
-    if (IsChecked $Redux.Gameplay.SixtyFrames) {
+    if (IsChecked $Redux.Graphics.SixtyFrames) {
         ChangeBytes -Offset "2490" -Values "2419000124190001"; ChangeBytes -Offset "1BE3" -Values "00"; ChangeBytes -Offset "20CF" -Values "01"
         ChangeBytes -Offset "2890" -Values "240A0001240A0001"; ChangeBytes -Offset "2638" -Values "2409000124090001"
     }
 
     
-    if (IsChecked $Redux.Gameplay.MaxDrawDistance)   { ChangeBytes -Offset "123220" -Values "477DE800" }
-    if (IsChecked $Redux.Gameplay.LagFix)            { ChangeBytes -Offset "EB2D2"  -Values "0D"       }
+    if (IsChecked $Redux.Graphics.MaxDrawDistance)   { ChangeBytes -Offset "123220" -Values "477DE800" }
+    if (IsChecked $Redux.Graphics.LagFix)            { ChangeBytes -Offset "EB2D2"  -Values "0D"       }
 
 
 

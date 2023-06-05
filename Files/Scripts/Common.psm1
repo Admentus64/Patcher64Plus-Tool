@@ -594,8 +594,11 @@ function PatchPath_Finish([object]$TextBox, [string]$Path) {
 #==============================================================================================================================================================================================
 function IsDefault([object]$Elem, $Value, [switch]$Not) {
     
-    if (!(IsSet $Elem))             { return $False       }
-    if (!(IsSet $Value))            { $Value = $Elem.Text }
+    if (!(IsSet $Elem)) { return $False }
+    if (!(IsSet $Value)) {
+        if ($Elem.GetType() -eq [System.Windows.Forms.TrackBar])   { $Value = $Elem.Value }
+        else                                                       { $Value = $Elem.Text  }
+    }
 
     if ($Elem.GetType() -eq [System.Windows.Forms.ComboBox])   { $Default = $Elem.Items[$Elem.Default] }
     else                                                       { $Default = $Elem.Default              }

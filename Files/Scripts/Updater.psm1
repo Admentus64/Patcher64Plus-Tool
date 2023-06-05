@@ -146,10 +146,33 @@ function AutoUpdate([switch]$Manual) {
     else {
         $update = $True
         WriteToConsole "Could not find version info! Downloading latest update now!"
+
+        try {
+            $response   = ReadWebRequest $Files.json.repo.version
+            $newContent = $response.AllElements | Where {$_.class -eq "blob-code blob-code-inner js-file-line"}
+        }
+        catch { WriteToConsole "Could not retrieve Patcher version info!" }
+        
+        if ($newContent -ne $null) {
+            $newVersion = $newContent[0].outerText
+            
+            try { $newDate = Get-Date -Format $Patcher.DateFormat -Date $newContent[1].outerText }
+            catch {
+                $newDate = Get-Date -Format $Patcher.DateFormat -Date "1970-01-01"
+                WriteToConsole ("Could not read latest version date info for " + $Title + "!")
+            }
+            
+            if ($newContent.outerText.Count -gt 2) {
+                try { [byte]$newHotfix = $newContent[2].outerText }
+                catch { [byte]$newHotfix = 0 }
+            }
+            else { [byte]$newHotfix = 0}
+        }
+
     }
     
     if ($update) {
-        ShowUpdateDialog -Version $NewVersion -Date $NewDate -Hotfix $NewHotfix
+        ShowUpdateDialog -Version $newVersion -Date $newDate -Hotfix $newHotfix
         if ($Manual) { $MainDialog.Close() }
     }
 

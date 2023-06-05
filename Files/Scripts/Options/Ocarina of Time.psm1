@@ -1017,19 +1017,16 @@ function ByteOptions() {
         ChangeBytes -Offset "B6EC50" -Values @($Wallet3.Substring(0, 2), $Wallet3.Substring(2) )
         ChangeBytes -Offset "B6EC52" -Values @($Wallet4.Substring(0, 2), $Wallet4.Substring(2) )
 
-        if ($Redux.Capacity.Wallet1.Text.Length -gt 3 -or $Redux.Capacity.Wallet2.Text.Length -gt 3 -or $Redux.Capacity.Wallet3.Text.Length -gt 3 -or $Redux.Capacity.Wallet4.Text.Length -gt 3) {
-            $Max = 4
-            ChangeBytes -Offset "AEBB60" -Values "FE E0 02 30 24 0B 00 00 00 00 00 00 86 AE 00 34 A6 EE 02 36 86 E2 02 36 28 41 03 E8 14 01 00 05 25 6B 00 01 24 42 FC 18 A6 E4 02 36 10 00 FF FA A6 EB 02 30"
-            ChangeBytes -Offset "AEBC23" -Values "30"
-        }
-        else { $Max = 3 }
-        ChangeBytes -Offset "B6D571" -Values @( ($Max - $Redux.Capacity.Wallet1.Text.Length), ($Max - $Redux.Capacity.Wallet2.Text.Length), ($Max - $Redux.Capacity.Wallet3.Text.Length), ($Max - $Redux.Capacity.Wallet4.Text.Length) ) -Interval 2
-        ChangeBytes -Offset "B6D579" -Values @($Redux.Capacity.Wallet1.Text.Length, $Redux.Capacity.Wallet2.Text.Length, $Redux.Capacity.Wallet3.Text.Length, $Redux.Capacity.Wallet4.Text.Length)                                       -Interval 2
+        ChangeBytes -Offset "B6D571" -Values @( ($Max - $Redux.Capacity.Wallet1.Text.Length), (3 - $Redux.Capacity.Wallet2.Text.Length), (3 - $Redux.Capacity.Wallet3.Text.Length), (3 - $Redux.Capacity.Wallet4.Text.Length) ) -Interval 2
+        ChangeBytes -Offset "B6D579" -Values @(         $Redux.Capacity.Wallet1.Text.Length,       $Redux.Capacity.Wallet2.Text.Length,       $Redux.Capacity.Wallet3.Text.Length,       $Redux.Capacity.Wallet4.Text.Length)   -Interval 2
 
-        if ($Redux.Capacity.Wallet4.Text -lt $Redux.Capacity.Wallet3.Text)   { ChangeBytes -Offset "E5088A" -Values @($Wallet3.Substring(0, 2), $Wallet3.Substring(2) ) }
+        if ($Redux.Capacity.Wallet4.Text -lt $Redux.Capacity.Wallet3.Text)   { ChangeBytes -Offset "E5088A" -Values @($Wallet3.Substring(0, 2), $Wallet3.Substring(2) ) } # Running Man
         else                                                                 { ChangeBytes -Offset "E5088A" -Values @($Wallet4.Substring(0, 2), $Wallet4.Substring(2) ) }
     }
-    elseif (IsChecked $Redux.Misc.TycoonWallet) { ChangeBytes -Offset "B6D57F" -Values "03" }
+    elseif (IsChecked $Redux.Misc.TycoonWallet) {
+        ChangeBytes -Offset "B6EC52" -Values "03E7"
+        ChangeBytes -Offset "B6D57F" -Values 3
+    }
 
 
 
@@ -3149,46 +3146,44 @@ function CreateTabCapacity() {
 
     # AMMO CAPACITY #
 
-    $Redux.Box.Ammo = CreateReduxGroup -Tag "Capacity" -All                           -Text "Ammo Capacity Selection"
-    CreateReduxTextBox -Name "Quiver1"     -All -Exclude "Master"                     -Text "Quiver (1)"      -Value 30 -Info "Set the capacity for the Quiver (Base)"           -Credits "GhostlyDark"
-    CreateReduxTextBox -Name "Quiver1"          -Expose  "Master"                     -Text "Quiver (1)"      -Value 25 -Info "Set the capacity for the Quiver (Base)"           -Credits "GhostlyDark"
-    CreateReduxTextBox -Name "Quiver2"     -All                                       -Text "Quiver (2)"      -Value 40 -Info "Set the capacity for the Quiver (Upgrade 1)"      -Credits "GhostlyDark"
-    CreateReduxTextBox -Name "Quiver3"     -All -Exclude "Master"                     -Text "Quiver (3)"      -Value 50 -Info "Set the capacity for the Quiver (Upgrade 2)"      -Credits "GhostlyDark"
-    CreateReduxTextBox -Name "Quiver3"          -Expose  "Master"                     -Text "Quiver (3)"      -Value 99 -Info "Set the capacity for the Quiver (Upgrade 2)"      -Credits "GhostlyDark"
+    $Redux.Box.Ammo = CreateReduxGroup -Tag "Capacity" -All     -Text "Ammo Capacity Selection"
+    if ($GamePatch.settings -eq "Master of Time") { $val = 25 } else { $val = 30 }
+    CreateReduxTextBox -Name "Quiver1"     -All -Exclude "Dawn" -Text "Quiver (1)"      -Value $val -Info "Set the capacity for the Quiver (Base)"           -Credits "GhostlyDark"
+    CreateReduxTextBox -Name "Quiver2"     -All -Exclude "Dawn" -Text "Quiver (2)"      -Value 40   -Info "Set the capacity for the Quiver (Upgrade 1)"      -Credits "GhostlyDark"
+    if ($GamePatch.settings -eq "Master of Time") { $val = 99 } else { $val = 50 }
+    CreateReduxTextBox -Name "Quiver3"     -All -Exclude "Dawn" -Text "Quiver (3)"      -Value $val -Info "Set the capacity for the Quiver (Upgrade 2)"      -Credits "GhostlyDark"
 
-    CreateReduxTextBox -Name "BombBag1"    -All -Exclude  @("Master", "Gold", "Dawn") -Text "Bomb Bag (1)"    -Value 20 -Info "Set the capacity for the Bomb Bag (Base)"         -Credits "GhostlyDark"
-    CreateReduxTextBox -Name "BombBag1"         -Expose  "Master"                     -Text "Bomb Bag (1)"    -Value 15 -Info "Set the capacity for the Bomb Bag (Base)"         -Credits "GhostlyDark"
-    CreateReduxTextBox -Name "BombBag1"         -Expose  "Gold"                       -Text "Bomb Bag (1)"    -Value 10 -Info "Set the capacity for the Bomb Bag (Base)"         -Credits "GhostlyDark"
-    CreateReduxTextBox -Name "BombBag2"    -All -Exclude "Dawn"                       -Text "Bomb Bag (2)"    -Value 30 -Info "Set the capacity for the Bomb Bag (Upgrade 1)"    -Credits "GhostlyDark"
-    CreateReduxTextBox -Name "BombBag3"    -All -Exclude  @("Master", "Gold", "Dawn") -Text "Bomb Bag (3)"    -Value 40 -Info "Set the capacity for the Bomb Bag (Upgrade 2)"    -Credits "GhostlyDark"
-    CreateReduxTextBox -Name "BombBag3"         -Expose  "Master"                     -Text "Bomb Bag (3)"    -Value 99 -Info "Set the capacity for the Bomb Bag (Upgrade 2)"    -Credits "GhostlyDark"
-    CreateReduxTextBox -Name "BombBag3"         -Expose  "Gold"                       -Text "Bomb Bag (3)"    -Value 50 -Info "Set the capacity for the Bomb Bag (Upgrade 2)"    -Credits "GhostlyDark"
+    if ($GamePatch.settings -eq "Master of Time") { $val = 15 } elseif ($GamePatch.settings -eq "Gold Quest") { $val = 10 } else { $val = 20 }
+    CreateReduxTextBox -Name "BombBag1"    -All -Exclude "Dawn" -Text "Bomb Bag (1)"    -Value $val -Info "Set the capacity for the Bomb Bag (Base)"         -Credits "GhostlyDark"
+    CreateReduxTextBox -Name "BombBag2"    -All -Exclude "Dawn" -Text "Bomb Bag (2)"    -Value 30   -Info "Set the capacity for the Bomb Bag (Upgrade 1)"    -Credits "GhostlyDark"
+    if ($GamePatch.settings -eq "Master of Time") { $val = 99 } elseif ($GamePatch.settings -eq "Gold Quest") { $val = 50 } else { $val = 40 }
+    CreateReduxTextBox -Name "BombBag3"    -All -Exclude "Dawn" -Text "Bomb Bag (3)"    -Value $val -Info "Set the capacity for the Bomb Bag (Upgrade 2)"    -Credits "GhostlyDark"
 
-    CreateReduxTextBox -Name "BulletBag1"  -Child                                     -Text "Bullet Bag (1)"  -Value 30 -Info "Set the capacity for the Bullet Bag (Base)"       -Credits "GhostlyDark"
-    CreateReduxTextBox -Name "BulletBag2"  -Child                                     -Text "Bullet Bag (2)"  -Value 40 -Info "Set the capacity for the Bullet Bag (Upgrade 1)"  -Credits "GhostlyDark"
-    CreateReduxTextBox -Name "BulletBag3"  -Child                                     -Text "Bullet Bag (3)"  -Value 50 -Info "Set the capacity for the Bullet Bag (Upgrade 2)"  -Credits "GhostlyDark"
+    CreateReduxTextBox -Name "BulletBag1"  -Child               -Text "Bullet Bag (1)"  -Value 30   -Info "Set the capacity for the Bullet Bag (Base)"       -Credits "GhostlyDark"
+    CreateReduxTextBox -Name "BulletBag2"  -Child               -Text "Bullet Bag (2)"  -Value 40   -Info "Set the capacity for the Bullet Bag (Upgrade 1)"  -Credits "GhostlyDark"
+    CreateReduxTextBox -Name "BulletBag3"  -Child               -Text "Bullet Bag (3)"  -Value 50   -Info "Set the capacity for the Bullet Bag (Upgrade 2)"  -Credits "GhostlyDark"
 
-    CreateReduxTextBox -Name "DekuSticks1" -Child                                     -Text "Deku Sticks (1)" -Value 10 -Info "Set the capacity for the Deku Sticks (Base)"      -Credits "GhostlyDark"
-    CreateReduxTextBox -Name "DekuSticks2" -Child                                     -Text "Deku Sticks (2)" -Value 20 -Info "Set the capacity for the Deku Sticks (Upgrade 1)" -Credits "GhostlyDark"
-    CreateReduxTextBox -Name "DekuSticks3" -Child                                     -Text "Deku Sticks (3)" -Value 30 -Info "Set the capacity for the Deku Sticks (Upgrade 2)" -Credits "GhostlyDark"
+    CreateReduxTextBox -Name "DekuSticks1" -Child               -Text "Deku Sticks (1)" -Value 10   -Info "Set the capacity for the Deku Sticks (Base)"      -Credits "GhostlyDark"
+    CreateReduxTextBox -Name "DekuSticks2" -Child               -Text "Deku Sticks (2)" -Value 20   -Info "Set the capacity for the Deku Sticks (Upgrade 1)" -Credits "GhostlyDark"
+    CreateReduxTextBox -Name "DekuSticks3" -Child               -Text "Deku Sticks (3)" -Value 30   -Info "Set the capacity for the Deku Sticks (Upgrade 2)" -Credits "GhostlyDark"
 
-    CreateReduxTextBox -Name "DekuNuts1"   -All -Exclude "Master"                     -Text "Deku Nuts (1)"   -Value 20 -Info "Set the capacity for the Deku Nuts (Base)"        -Credits "GhostlyDark"
-    CreateReduxTextBox -Name "DekuNuts1"        -Expose  "Master"                     -Text "Deku Nuts (1)"   -Value 15 -Info "Set the capacity for the Deku Nuts (Base)"        -Credits "GhostlyDark"
-    CreateReduxTextBox -Name "DekuNuts2"   -All                                       -Text "Deku Nuts (2)"   -Value 30 -Info "Set the capacity for the Deku Nuts (Upgrade 1)"   -Credits "GhostlyDark"
-    CreateReduxTextBox -Name "DekuNuts3"   -All -Exclude "Master"                     -Text "Deku Nuts (3)"   -Value 40 -Info "Set the capacity for the Deku Nuts (Upgrade 2)"   -Credits "GhostlyDark"
-    CreateReduxTextBox -Name "DekuNuts3"        -Expose  "Master"                     -Text "Deku Nuts (3)"   -Value 99 -Info "Set the capacity for the Deku Nuts (Upgrade 2)"   -Credits "GhostlyDark"
+    if ($GamePatch.settings -eq "Master of Time") { $val = 15 } else { $val = 20 }
+    CreateReduxTextBox -Name "DekuNuts1"   -All                 -Text "Deku Nuts (1)"   -Value $val -Info "Set the capacity for the Deku Nuts (Base)"        -Credits "GhostlyDark"
+    CreateReduxTextBox -Name "DekuNuts2"   -All                 -Text "Deku Nuts (2)"   -Value 30   -Info "Set the capacity for the Deku Nuts (Upgrade 1)"   -Credits "GhostlyDark"
+     if ($GamePatch.settings -eq "Master of Time") { $val = 99 } else { $val = 40 }
+    CreateReduxTextBox -Name "DekuNuts3"   -All                 -Text "Deku Nuts (3)"   -Value $val -Info "Set the capacity for the Deku Nuts (Upgrade 2)"   -Credits "GhostlyDark"
 
 
 
     # WALLET CAPACITY #
 
-    $Redux.Box.Wallet = CreateReduxGroup -Tag "Capacity" -All         -Text "Wallet Capacity Selection"
-    CreateReduxTextBox -Name "Wallet1" -Length 4 -All                 -Text "Wallet (1)" -Value 99  -Info "Set the capacity for the Wallet (Base)"      -Credits "GhostlyDark"
-    CreateReduxTextBox -Name "Wallet2" -Length 4 -All                 -Text "Wallet (2)" -Value 200 -Info "Set the capacity for the Wallet (Upgrade 1)" -Credits "GhostlyDark"
-    CreateReduxTextBox -Name "Wallet3" -Length 4 -All -Exclude "Gold" -Text "Wallet (3)" -Value 500 -Info "Set the capacity for the Wallet (Upgrade 2)" -Credits "GhostlyDark"
-    CreateReduxTextBox -Name "Wallet3" -Length 4      -Expose  "Gold" -Text "Wallet (3)" -Value 999 -Info "Set the capacity for the Wallet (Upgrade 2)" -Credits "GhostlyDark"
-    CreateReduxTextBox -Name "Wallet4" -Length 4 -All -Exclude "Gold" -Text "Wallet (4)" -Value 500 -Info "Set the capacity for the Wallet (Upgrade 3)" -Credits "GhostlyDark" -Warning "This wallet is not obtained through regular gameplay"
-    CreateReduxTextBox -Name "Wallet4" -Length 4      -Expose  "Gold" -Text "Wallet (4)" -Value 999 -Info "Set the capacity for the Wallet (Upgrade 3)" -Credits "GhostlyDark" -Warning "This wallet is not obtained through regular gameplay"
+    $Redux.Box.Wallet = CreateReduxGroup -Tag "Capacity" -All -Text "Wallet Capacity Selection"
+    CreateReduxTextBox -Name "Wallet1" -Length 3         -All -Text "Wallet (1)" -Value 99   -Info "Set the capacity for the Wallet (Base)"                                     -Credits "GhostlyDark"
+    if ($GamePatch.settings -eq "Master of Time")   { $val = 250 } else { $val = 200 }
+    CreateReduxTextBox -Name "Wallet2" -Length 3         -All -Text "Wallet (2)" -Value $val -Info "Set the capacity for the Wallet (Upgrade 1)"                                -Credits "GhostlyDark"
+    if ($GamePatch.settings -eq "Gold Quest")       { $val = 999 } else { $val = 500 }
+    CreateReduxTextBox -Name "Wallet3" -Length 3         -All -Text "Wallet (3)" -Value $val -Info "Set the capacity for the Wallet (Upgrade 2)"                                -Credits "GhostlyDark"
+    CreateReduxTextBox -Name "Wallet4" -Length 3         -All -Text "Wallet (4)" -Value 999  -Info "Set the capacity for the Wallet (Upgrade 3)`nOnly obtainable through Redux" -Credits "GhostlyDark"
 
 
 

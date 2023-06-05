@@ -1,42 +1,49 @@
-function ChangeBytes([string]$File, [byte[]]$Array, [string]$Offset, [object]$Match=$null, [object]$Values, [uint16]$Interval=1, [switch]$Add, [switch]$Subtract) {
+function ChangeBytes([string]$File, [byte[]]$Array, [object]$Offset, [object]$Match=$null, [object]$Values, [uint16]$Interval=1, [switch]$Add, [switch]$Subtract) {
     
     if     ($Match  -is [String] -and $Match  -Like "* *")      { $matchDec = $Match -split ' '           | foreach { [Convert]::ToByte($_, 16) } }
     elseif ($Match  -is [String])                               { $matchDec = $Match -split '(..)' -ne '' | foreach { [Convert]::ToByte($_, 16) } }
     elseif ($Match  -is [Array]  -and $Match[0] -is [String])   { $matchDec = $Match                      | foreach { [Convert]::ToByte($_, 16) } }
-    else                                                        { $matchDec = $Match }
+    else                                                        { $matchDec = @(); $matchDec += $Match }
 
-    if     ($Values -is [String] -and $Values -Like "* *")              { $valuesDec = $Values -split ' '           | foreach { [Convert]::ToByte($_, 16) } }
-    elseif ($Values -is [String])                                       { $valuesDec = $Values -split '(..)' -ne '' | foreach { [Convert]::ToByte($_, 16) } }
-    elseif ($Values -is [Array]  -and $Values[0] -is [System.String])   { $valuesDec = $Values                      | foreach { [Convert]::ToByte($_, 16) } }
-    else                                                                { $valuesDec = $Values }
+    if     ($Values -is [String] -and $Values -Like "* *")               { $valuesDec = $Values -split ' '           | foreach { [Convert]::ToByte($_, 16) } }
+    elseif ($Values -is [String])                                        { $valuesDec = $Values -split '(..)' -ne '' | foreach { [Convert]::ToByte($_, 16) } }
+    elseif ($Values -is [Array]  -and $Values[0] -is [System.String])    { $valuesDec = $Values                      | foreach { [Convert]::ToByte($_, 16) } }
+    else                                                                 { $valuesDec = @(); $valuesDec += $Values }
 
     if     ($Array.count -gt 0 -and $Array -ne $null)   { $ByteArrayGame = $Array                                }
     elseif (IsSet $File)                                { $ByteArrayGame = [System.IO.File]::ReadAllBytes($File) }
     if     ($Interval -lt 1)                            { $Interval      = 1                                     }
 
     # Offset
-    $offsetDec = GetDecimal $Offset
-    if ($offsetDec -lt 0) {
-        WriteToConsole "Offset is negative, too large or not an integer!"
-        $global:WarningError = $True
-        return $False
-    }
+    if ($Offset -is [String]) { $Offset = $Offset -split ' ' }
 
-    if ($offsetDec -gt $ByteArrayGame.Length) {
-        WriteToConsole "Offset is too large for file!"
-        $global:WarningError = $True
-        return $False
+    $offsetDec = @()
+    foreach ($o in $Offset) {
+        $dec = GetDecimal $o
+        if ($dec -lt 0) {
+            WriteToConsole "Offset is negative, too large or not an integer!"
+            $global:WarningError = $True
+            return $False
+        }
+        if ($dec -gt $ByteArrayGame.Length) {
+            WriteToConsole "Offset is too large for file!"
+            $global:WarningError = $True
+            return $False
+        }
+        $offsetDec += $dec
     }
 
     # Match
     if ($matchDec -ne $null) {
-        foreach ($i in 0..($matchDec.Length-1)) {
-            try {
-                if ($ByteArrayGame[$offsetDec + $i] -ne $matchDec[$i]) { return $True }
-            }
-            catch {
-                WriteToConsole "Match value is negative!"
-                return $False
+        foreach ($o in $offsetDec) {
+            foreach ($i in 0..($matchDec.Length-1)) {
+                try {
+                    if ($ByteArrayGame[$o + $i] -ne $matchDec[$i]) { return $True }
+                }
+                catch {
+                    WriteToConsole "Match value is negative!"
+                    return $False
+                }
             }
         }
     }
@@ -45,22 +52,36 @@ function ChangeBytes([string]$File, [byte[]]$Array, [string]$Offset, [object]$Ma
     WriteToConsole ($Offset + " -> Change values: " + $Values)
 
     # Patch
-    foreach ($i in 0..($valuesDec.Length-1)) {
-        if ($Add) {
-            if ($ByteArrayGame[$offsetDec + ($i * $Interval)] + $valuesDec[$i] -gt 255) {
-                $ByteArrayGame[$offsetDec + ($i * $Interval)]     += $valuesDec[$i] - 256
-                $ByteArrayGame[$offsetDec + ($i * $Interval) - 1] += 1
-            }
-            else { $ByteArrayGame[$offsetDec + ($i * $Interval)] += $ValuesDec[$i] }
+    foreach ($o in $offsetDec) {
+        foreach ($i in 0..($valuesDec.Length-1)) {
+            $value = $valuesDec[$i]
+            do {
+                if ($value -ge 255) {
+                    $restValue = 255
+                    $value    -= 255
+                }
+                else {
+                    $restValue = $value
+                    $value     = 0
+                }
+
+                if ($Add) {
+                    if ($ByteArrayGame[$o + ($i * $Interval)] + $restValue -gt 255) {
+                        $ByteArrayGame[$o + ($i * $Interval)]     += $restValue - 256
+                        $ByteArrayGame[$o + ($i * $Interval) - 1] += 1
+                    }
+                    else { $ByteArrayGame[$o + ($i * $Interval)] += $restValue }
+                }
+                elseif ($Subtract) {
+                    if ($ByteArrayGame[$o + ($i * $Interval)] - $restValue -lt 0) {
+                        $ByteArrayGame[$o + ($i * $Interval)]     += 256 - $restValue
+                        $ByteArrayGame[$o + ($i * $Interval) - 1] -= 1
+                    }
+                    else { $ByteArrayGame[$o + ($i * $Interval)] -= $restValue }
+                }
+                else { $ByteArrayGame[$o + ($i * $Interval)]  = $restValue }
+            } while ($value -gt 0)
         }
-        elseif ($Subtract) {
-            if ($ByteArrayGame[$offsetDec + ($i * $Interval)] - $valuesDec[$i] -lt 0) {
-                $ByteArrayGame[$offsetDec + ($i * $Interval)]     -= $valuesDec[$i] + 256
-                $ByteArrayGame[$offsetDec + ($i * $Interval) + 1] -= 1
-            }
-            else { $ByteArrayGame[$offsetDec + ($i * $Interval)] -= $ValuesDec[$i] }
-        }
-        else                 { $ByteArrayGame[$offsetDec + ($i * $Interval)]  = $ValuesDec[$i] }
     }
 
     # Write to File
