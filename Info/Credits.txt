@@ -369,6 +369,7 @@ https://github.com/DaruniasJoy/OoT-Custom-Sequences
 - Dybbles
 - Dzeko
 - darklord92
+- kuirivito
 
 --- Custom Textures ---
 - Community Texture pack

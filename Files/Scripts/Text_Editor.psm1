@@ -905,7 +905,7 @@ function SetMessage([string]$ID, [object]$Text, [object]$Replace, [string]$File,
     }
 
     if ($Insert) {
-        if ($Replace.count -gt 0) { $DialogueList[$ID].msg.InsertRange(0, $Replace) }
+        if ($Replace.count -gt 0) { $DialogueList[$ID].msg.InsertRange($Files.json.textEditor.header, $Replace) }
     }
     elseif ($Append)   {
         if ($Replace.count -gt 0) { $DialogueList[$ID].msg.InsertRange($DialogueList[$ID].msg.count, $Replace) }
@@ -1234,7 +1234,6 @@ function ParseMessageMM([char[]]$Text, [switch]$Encode) {
         if ($types[186])   { $Text = ParseMessagePart -Text $Text -Encoded @(186) -Decoded @(60, 84, 114, 105, 97,  110, 103, 108, 101, 62)                        -Encode $Encode } # BA / <Triangle>      (Triangle)
         if ($types[187])   { $Text = ParseMessagePart -Text $Text -Encoded @(187) -Decoded @(60, 67, 111, 110, 116, 114, 111, 108, 32,  83, 116, 105, 99, 107, 62) -Encode $Encode } # BB / <Control Stick> (Control Stick)
         if ($types[188])   { $Text = ParseMessagePart -Text $Text -Encoded @(188) -Decoded @(60, 68, 45,  80,  97,  100, 62)                                       -Encode $Encode } # BC / <D-Pad>         (D-Pad)
-
         if ($types[224])   { $Text = ParseMessagePart -Text $Text -Encoded @(224) -Decoded @(60, 69, 110, 100, 62)                                                 -Encode $Encode } # E0 / <End>           (End conversation)
 
         # New box / line break
