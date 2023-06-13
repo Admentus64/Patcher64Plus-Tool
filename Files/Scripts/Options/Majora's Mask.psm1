@@ -143,6 +143,7 @@ function ByteOptions() {
     if (IsChecked $Redux.Other.FairyFountain)       { ChangeBytes -Offset "B9133E"  -Values "01 0F"                    }
     if (IsChecked $Redux.Other.OutOfBoundsGrotto)   { ChangeBytes -Offset "2C2306A" -Values "FE DA 00 8B 00 A1"        }
     if (IsChecked $Redux.Other.OutOfBoundsRupee)    { $offset = SearchBytes -Start "2563000" -End "2564000" -Values "00 10 00 00 03 3C 00 07 00 7F 00 7F 0A 00 00 0E"; ChangeBytes -Offset $offset -Values "FD 66" }
+    if (IsChecked $Redux.Other.GossipTime)          { SetMessage -ID "20D2" -Replace "The time is currently <ClockTime>! Only <Time> remaining!<Keep:0028><NSS>" }
     if (IsChecked $Redux.Other.DebugItemSelect)     { ExportAndPatch -Path "inventory_editor" -Offset "CA6370" -Length "1E0" }
     
 
@@ -1123,6 +1124,7 @@ function CreateTabMain() {
     CreateReduxCheckBox -All -Name "FairyFountain"     -Text "Fix Fairy Fountain"       -Info "Fix the Ikana Canyon Fairy Fountain area not displaying the correct color"                                                                                  -Credits "Dybbles (fix) & ShadowOne333 (patch)"
     CreateReduxCheckBox -All -Name "OutOfBoundsGrotto" -Text "Fix Out-of-Bounds Grotto" -Info "Fix the out-of-bounds grotto in the Mountain Village area during winter"                                                                                    -Credits "Chez Cousteau"
     CreateReduxCheckBox -All -Name "OutOfBoundsRupee"  -Text "Fix Out-of-Bounds Rupee"  -Info "Fix the out-of-bounds Rupee in the Deku Palace Left Outer Garden area"                                                                                      -Credits "Chez Cousteau"
+    CreateReduxCheckBox -All -Name "GossipTime"        -Text "Add Gossip Stone Clock"   -Info "Makes it so that the gossip stones, in addition to telling time left to moonfall, also act as a clock"                                                      -Credits "kuirivito"
     CreateReduxCheckBox -All -Name "DebugMapSelect"    -Text "Debug Map Select"         -Info "Translates the Debug Map Select menu into English"                                                                                                          -Credits "GhostlyDark"
     CreateReduxCheckBox -All -Name "DebugItemSelect"   -Text "Debug Item Select"        -Info "Translates the Debug Inventory Select menu into English"                                                                                                    -Credits "GhostlyDark"
     CreateReduxCheckBox -All -Name "AlwaysBestEnding"  -Text "Always Best Ending"       -Info "The credits sequence always includes the best ending, regardless of actual ingame progression"                                                              -Credits "Marcelo20XX"
