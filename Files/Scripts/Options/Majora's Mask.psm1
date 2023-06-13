@@ -943,9 +943,9 @@ function ByteLanguageOptions() {
     if (IsLanguage $Redux.UI.GCScheme) { SetMessage -ID "0227" -Text "5A20" -Replace "4C20"; SetMessage -ID "1912"; SetMessage -ID "191D"; SetMessage -ID "1946"; SetMessage -ID "1954" }
 
     if (IsLanguage -Elem $Redux.Gameplay.RazorSword) {
-        SetMessage -ID "0038" -Text "This new, sharper blade is a cut<N>above the rest. Use it up to<N><R>100 times <W>without dulling its<N>superior edge!"                            -Replace "This new, sharper blade is a cut<N>above the rest. Use it as much<N>as you want without dulling it's<N>superior edge!"
-        SetMessage -ID "0C3B" -Text "Keep in mind that after you use<N>your reforged sword <R>100 times<W>, it<N>will lose its edge and it'll be back<N>to its original sharpness..."   -Replace "This reforged blade will be unbreakable.<N>Ohh... Don't look at me like that.<N>Surely I would not dare conning you<N>with a flimsy weapon."
-        SetMessage -ID "0C51" -Text "Now keep in mind that after<N>you've used this <R>100 times<W>, the<N>blade will lose its edge and will<N>return to its <R>original sharpness<W>." -Replace "You do not need to worry for it, as<N>this blade is unbreakable. What!?<N>You do not believe me? Go see it<N>for yourself then in action."
+        SetMessage -ID "0038" -Text "This new, sharper blade is a cut<N>above the rest. Use it up to<N><R>100 times <W>without dulling its<N>superior edge!"                            -Replace "This new, sharper blade is a cut<N>above the rest. Use it as much<N>as you want without dulling its<N>superior edge!"
+        SetMessage -ID "0C3B" -Text "Keep in mind that after you use<N>your reforged sword <R>100 times<W>, it<N>will lose its edge and it'll be back<N>to its original sharpness..."   -Replace "This reforged blade will be <R>unbreakable<W>.<N>Ohh... Don't look at me like that.<N>Surely I would not dare conning you<N>with a flimsy weapon."
+        SetMessage -ID "0C51" -Text "Now keep in mind that after<N>you've used this <R>100 times<W>, the<N>blade will lose its edge and will<N>return to its <R>original sharpness<W>." -Replace "You do not need to worry for it, as<N>this blade is <R>unbreakable<W>. What!?<N>You do not believe me? Go see it<N>for yourself then in action."
         SetMessage -ID "1785" -Text "Use it up to <R>100 times<W>."                                                                                                                     -Replace "Use it as much you want."
     }
 
@@ -954,10 +954,10 @@ function ByteLanguageOptions() {
         SetMessage -ID "0514" -Text "child" -Replace "<N>defenseless Deku Scrub"; SetMessage -ID "0560"; SetMessage -ID "0561"; SetMessage -ID "0562"; SetMessage -ID "0563"; SetMessage -ID "0564"; SetMessage -ID "0565" # Guard guarding Clock Town exit (Deku Scrub)
         SetMessage -ID "0515" -Text "child" -Replace "defenseless<N>Deku Scrub"
 
-        SetMessage -ID "0560" -Text "Until you are old enough to carry<N>a <R>weapon<W>, you cannot pass<N>through here without being<N>accompanied by an adult"  -Replace "Until you are capeable of carrying<N>a <R>weapon<W>, you cannot pass<N>through here without being<N>so defenseless"; SetMessage -ID "0562"; SetMessage -ID "0565"
-        SetMessage -ID "0561" -Text "Until you are old enough to carry<N>a <R>weapon<W>, you cannot pass<N>through here without being <N>accompanied by an adult" -Replace "Until you are capeable of carrying<N>a <R>weapon<W>, you cannot pass<N>through here without being<N>so defenseless"
-        SetMessage -ID "0563" -Text "Until you are old enough to carry<N>a <R>weapon<W>, you cannot pass <N>through here without being<N>accompanied an adult"    -Replace "Until you are capeable of carrying<N>a <R>weapon<W>, you cannot pass<N>through here without being<N>so defenseless"
-        SetMessage -ID "0564" -Text "Until you are old enough to carry<N>a<R> weapon<W>, you cannot pass<N>through here without being<N>accompanied by an adult"  -Replace "Until you are capeable of carrying<N>a <R>weapon<W>, you cannot pass<N>through here without being<N>so defenseless"
+        SetMessage -ID "0560" -Text "Until you are old enough to carry<N>a <R>weapon<W>, you cannot pass<N>through here without being<N>accompanied by an adult"  -Replace "Until you are capable of carrying<N>a <R>weapon<W>, you cannot pass<N>through here without being<N>defenseless"; SetMessage -ID "0562"; SetMessage -ID "0565"
+        SetMessage -ID "0561" -Text "Until you are old enough to carry<N>a <R>weapon<W>, you cannot pass<N>through here without being <N>accompanied by an adult" -Replace "Until you are capable of carrying<N>a <R>weapon<W>, you cannot pass<N>through here without being<N>defenseless"
+        SetMessage -ID "0563" -Text "Until you are old enough to carry<N>a <R>weapon<W>, you cannot pass <N>through here without being<N>accompanied an adult"    -Replace "Until you are capable of carrying<N>a <R>weapon<W>, you cannot pass<N>through here without being<N>defenseless"
+        SetMessage -ID "0564" -Text "Until you are old enough to carry<N>a<R> weapon<W>, you cannot pass<N>through here without being<N>accompanied by an adult"  -Replace "Until you are capable of carrying<N>a <R>weapon<W>, you cannot pass<N>through here without being<N>defenseless"
         
         # Guard guarding Clock Town exit
         SetMessage -ID "0516" -Text "child" -Replace "teen"; SetMessage -ID "0517"; SetMessage -ID "0518"; SetMessage -ID "0519"; SetMessage -ID "0521"; SetMessage -ID "0523"; SetMessage -ID "052B"; SetMessage -ID "052D"; SetMessage -ID "0535"; SetMessage -ID "0537"; SetMessage -ID "055E"; SetMessage -ID "055F"
@@ -1018,8 +1018,10 @@ function ByteLanguageOptions() {
         else                                                                                   { PatchBytes -Offset "1EBFAE0" -Texture -Patch ("Tatl\Info.cup")                              }
     }
     if ( (IsIndex -Elem $Redux.Text.TatlScript -Index 3) -and $LanguagePatch.code -eq "en") {
-	    SetMessage -ID "1F43" -Text "sis"    -Replace "bro";    SetMessage -ID "1F48" -Text "S-s..." -Replace "B-b..."; SetMessage -ID "1F48" -Text "Sis"    -Replace "Bro";    SetMessage -ID "1F4A" -Text "girl" -Replace "boy"; SetMessage -ID "2009" -Text "Sis!!!" -Replace "Bro!!!"
-        SetMessage -ID "2028" -Text "Sis!!!" -Replace "Bro!!!"; SetMessage -ID "202D" -Text "Sis..." -Replace "Bro..."; SetMessage -ID "2045" -Text "Sis..." -Replace "Bro..."; SetMessage -ID "2048" -Text "sis"  -Replace "bro"; SetMessage -ID "204A" -Text "sister" -Replace "brother"
+	    SetMessage -ID "1F43" -Text "sis"    -Replace "bro";    SetMessage -ID "1F48" -Text "S-s..." -Replace "B-b..."; SetMessage -ID "1F48" -Text "Sis"    -Replace "Bro"
+        SetMessage -ID "1F4A" -Text "girl" -Replace "boy"; SetMessage -ID "2009" -Text "Sis!!!" -Replace "Bro!!!"; SetMessage -ID "2028" -Text "Sis!!!" -Replace "Bro!!!"
+        SetMessage -ID "202D" -Text "Sis..." -Replace "Bro..."; SetMessage -ID "2045" -Text "Sis..." -Replace "Bro..."; SetMessage -ID "2048" -Text "sis"  -Replace "bro"
+        SetMessage -ID "204A" -Text "sister" -Replace "brother"
     }
 
     if ( (IsDefault $Redux.Text.TaelScript -Not) -and (IsDefault $Redux.Text.TaelName -Not) -and $Redux.Text.TaelName.Text.Count -gt 0) {
@@ -1184,10 +1186,10 @@ function CreateTabRedux() {
     CreateReduxGroup    -All -Tag  "Cheats"          -Text "Cheats"
     CreateReduxCheckBox -All -Name "ClimbAnything"   -Text "Climb Anything"   -Info "Climb most walls in the game" -Warning "Prone to softlocks, be careful"        -Credits "Ported from Rando"
     CreateReduxCheckBox -All -Name "InventoryEditor" -Text "Inventory Editor" -Info "Press the L button in the QUEST STATUS subscreen to open the Inventory Editor" -Credits "Admentus"
-    CreateReduxCheckBox -All -Name "Health"          -Text "Infinite Health"  -Info "Link's health is always at it's maximum"                                       -Credits "Admentus"
-    CreateReduxCheckBox -All -Name "Magic"           -Text "Infinite Magic"   -Info "Link's magic is always at it's maximum"                                        -Credits "Admentus"
+    CreateReduxCheckBox -All -Name "Health"          -Text "Infinite Health"  -Info "Link's health is always at its maximum"                                       -Credits "Admentus"
+    CreateReduxCheckBox -All -Name "Magic"           -Text "Infinite Magic"   -Info "Link's magic is always at its maximum"                                        -Credits "Admentus"
     CreateReduxCheckBox -All -Name "Ammo"            -Text "Infinite Ammo"    -Info "Link's ammo for items are always at their maximum"                             -Credits "Admentus"
-    CreateReduxCheckBox -All -Name "Rupees"          -Text "Infinite Rupees"  -Info "Link's wallet is always filled at it's maximum"                                -Credits "Admentus"
+    CreateReduxCheckBox -All -Name "Rupees"          -Text "Infinite Rupees"  -Info "Link's wallet is always filled at its maximum"                                -Credits "Admentus"
 
     $warning = $null
 
@@ -1222,11 +1224,11 @@ function CreateTabLanguage() {
      
     CreateReduxGroup  -All -Tag "Text" -Text "Dialogue"
     CreateReduxPanel       -Columns 3
-    CreateReduxRadioButton -Name "Vanilla" -Checked  -Max 3 -SaveTo "Dialogue" -Text "Vanilla Text" -Info "Keep the text as it is"
+    CreateReduxRadioButton -Name "Vanilla" -Checked  -Max 3 -SaveTo "Dialogue" -Text "Vanilla Text" -Info "Keep the text as it appeared in the original release"
     CreateReduxRadioButton -Name "Restore"           -Max 3 -SaveTo "Dialogue" -Text "Restore Text" -Info "Restores and fixes the following:`n- Restore the area titles cards for those that do not have any`n- Sound effects that do not play during dialogue`n- Grammar and typo fixes" -Credits "Redux"
     CreateReduxRadioButton -Name "Custom"            -Max 3 -SaveTo "Dialogue" -Text "Custom"       -Info ('Insert custom dialogue found from "..\Patcher64+ Tool\Files\Games\Majora' + "'" + 's Mask\Custom Text"') -Warning "Make sure your custom script is proper and correct, or your ROM will crash`n[!] No edit will be made if the custom script is missing"
 
-    CreateReduxCheckBox -All    -Name "AdultPronouns"  -Text "Adult Pronouns"   -Info "Refer to Link as an adult instead of a child"                              -Credits "Skilar"
+    CreateReduxCheckBox -All    -Name "AdultPronouns"  -Text "Adult Pronouns"   -Info "Refer to Link as an adult instead of as a child"                           -Credits "Skilar"
     CreateReduxCheckBox -Base 1 -Name "AreaTitleCards" -Text "Area Title Cards" -Info "Add area title cards to missing areas"                                     -Credits "ShadowOne333"
     CreateReduxCheckBox -All    -Name "EasterEggs"     -Text "Easter Eggs"      -Info "Adds custom Patreon Tier 3 messages into the game`nCan you find them all?" -Credits "Admentus & Patreons" -Checked
 
@@ -1236,10 +1238,10 @@ function CreateTabLanguage() {
 
     $names = "`n`n--- Supported Names With Textures ---`n" + "Navi`nTatl`nTaya`nТдтп`nTael`nNite`nNagi`nInfo"
     CreateReduxGroup    -All -Tag  "Text"       -Text "Other Text Options"
-    CreateReduxComboBox -All -Name "TatlScript" -Text "Tatl Text" -Items @("Disabled", "Enabled as Female", "Enabled as Male") -Info "Allow renaming Tatl and the gender"                            -Credits "Admentus & ShadowOne333" -Warning "Gender swap is only supported for English"
-    CreateReduxTextBox  -All -Name "TatlName"   -Text "Tatl Name" -Length 5 -ASCII -Value "Tatl" -Width 50                     -Info "Select the name for Tatl"                                      -Credits "Admentus & ShadowOne333" -Warning ('Most names do not have an unique texture label, and use a default "Info" prompt label' + $names)
-    CreateReduxComboBox -All -Name "TaelScript" -Text "Tael Text" -Items @("Disabled", "Enabled as Male", "Enabled as Female") -Info "Allow renaming Tael and the gender"                            -Credits "Admentus & ShadowOne333" -Warning "Gender swap is only supported for English"
-    CreateReduxTextBox  -All -Name "TaelName"   -Text "Tael Name" -Length 5 -ASCII -Value "Tael" -Width 50                     -Info "Select the name for Tael"                                      -Credits "Admentus & ShadowOne333"
+    CreateReduxComboBox -All -Name "TatlScript" -Text "Tatl Text" -Items @("Disabled", "Enabled as Female", "Enabled as Male") -Info "Allow renaming Tatl and the pronouns used"                     -Credits "Admentus & ShadowOne333" -Warning "Gender swap is only supported for English"
+    CreateReduxTextBox  -All -Name "TatlName"   -Text "Tatl Name" -Length 5 -ASCII -Value "Tatl" -Width 50                     -Info "Select the name used for Tatl"                                 -Credits "Admentus & ShadowOne333" -Warning ('Most names do not have an unique texture label, and use a default "Info" prompt label' + $names)
+    CreateReduxComboBox -All -Name "TaelScript" -Text "Tael Text" -Items @("Disabled", "Enabled as Male", "Enabled as Female") -Info "Allow renaming Tael and the pronouns used"                     -Credits "Admentus & ShadowOne333" -Warning "Gender swap is only supported for English"
+    CreateReduxTextBox  -All -Name "TaelName"   -Text "Tael Name" -Length 5 -ASCII -Value "Tael" -Width 50                     -Info "Select the name used for Tael"                                 -Credits "Admentus & ShadowOne333"
     CreateReduxCheckBox -All -Name "LinkScript" -Text "Link Text"                                                              -Info "Separate file name from Link's name in-game"                   -Credits "Admentus & Third M"
     CreateReduxTextBox  -All -Name "LinkName"   -Text "Link Name" -Length 8 -ASCII -Value "Link" -Width 90                     -Info "Select the name for Link in-game"                              -Credits "Admentus & Third M"      -Shift 40
     CreateReduxCheckBox -All -Name "YeetPrompt" -Text "Yeet Action Prompt"                                                     -Info ('Replace the "Throw" Action Prompt with "Yeet"' + "`nYeeeeet") -Credits "kr3z"
@@ -1290,7 +1292,7 @@ function CreateTabGraphics() {
     
     if (!$IsWiiVC)   { $info = "`n`n--- WARNING ---`nDisabling cutscene effects fixes temporary issues with both Widescreen and Redux patched where garbage pixels at the edges of the screen or garbled text appears`nWorkaround: Resize the window when that happens" }
     else             { $info = "" }
-    CreateReduxCheckBox -All -Name "MotionBlur"       -Text "Disable Motion Blur"       -Info ("Completely d isable the use of motion blur in-game" + $info)               -Credits "GhostlyDark"
+    CreateReduxCheckBox -All -Name "MotionBlur"       -Text "Disable Motion Blur"       -Info ("Completely disable the use of motion blur in-game" + $info)                -Credits "GhostlyDark"
     CreateReduxCheckBox -All -Name "FlashbackOverlay" -Text "Disable Flashback Overlay" -Info ("Disables the overlay shown during Princess Zelda flashback scene" + $info) -Credits "GhostlyDark"
 
     CreateReduxComboBox -All -Name "ChildModels" -Text "Hylian Model" -Items (@("Original") + (LoadModelsList -Category "Child")) -Default "Original" -Info "Replace the Hylian model used for Link"
