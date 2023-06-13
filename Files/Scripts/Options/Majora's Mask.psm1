@@ -1005,6 +1005,10 @@ function ByteLanguageOptions() {
         }
    }
 
+#    if (IsChecked $Redux.Text.GossipTime) {
+#       SetMessage -ID "20D2" -Text
+#    }
+
    if ( (IsChecked $Redux.Text.LinkScript) -and $Redux.Text.LinkName.Text.Count -gt 0) {
         SetMessage -ID "0462" -Text "16" -Replace $Redux.Text.LinkName.text; SetMessage -ID "046A"; SetMessage -ID "046C"; SetMessage -ID "0591"; SetMessage -ID "0593"; SetMessage -ID "059D"; SetMessage -ID "05A1"; SetMessage -ID "05A5"; SetMessage -ID "05A9"; SetMessage -ID "0710" -All; SetMessage -ID "0734" -All
         SetMessage -ID "0736"; SetMessage -ID "0800"; SetMessage -ID "0802"; SetMessage -ID "08E4"; SetMessage -ID "08E5"; SetMessage -ID "0961"; SetMessage -ID "0966"; SetMessage -ID "0967"; SetMessage -ID "0969"; SetMessage -ID "096D"; SetMessage -ID "096F"; SetMessage -ID "0971";      SetMessage -ID "102A"
@@ -1030,8 +1034,8 @@ function ByteLanguageOptions() {
     }
     if ( (IsIndex -Elem $Redux.Text.TaelScript -Index 3) -and $LanguagePatch.code -eq "en") {
         SetMessage -ID "1F49" -Text "brother" -Replace "sister"; SetMessage -ID "1F4B" -Text "his" -Replace "her"; SetMessage -ID "200D" -Text "brother" -Replace "sister"
-        SetMessage -ID "2012" -Text "brother" -Replace "sister"; SetMessage -ID "0216" -Text "He" -Replace "She"; SetMessage -ID "0216" -Text "he" -Replace "she"
-        SetMessage -ID "0229" -Text "he" -Replace "she"
+        SetMessage -ID "2012" -Text "brother" -Replace "sister"; SetMessage -ID "0216" -Text "He" -Replace "She"; SetMessage -ID "0216" -Text " he " -Replace " she " -All
+        SetMessage -ID "0229" -Text " he " -Replace " she " -All
     }
 
     if (IsLanguage $Redux.Capacity.EnableAmmo) {
