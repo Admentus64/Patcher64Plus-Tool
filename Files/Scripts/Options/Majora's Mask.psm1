@@ -950,7 +950,7 @@ function ByteLanguageOptions() {
     }
 
     if (IsLanguage -Elem $Redux.Text.AdultPronouns) {
-        SetMessage -ID "0514" -Text "without an adult or<N>until you are old enough to carry" -Replace "until you are<N>capeable of carrying"; SetMessage -ID "0515"
+        SetMessage -ID "0514" -Text "without an adult or<N>until you are old enough to carry" -Replace "until you are<N>capable of carrying"; SetMessage -ID "0515"
         SetMessage -ID "0514" -Text "child" -Replace "<N>defenseless Deku Scrub"; SetMessage -ID "0560"; SetMessage -ID "0561"; SetMessage -ID "0562"; SetMessage -ID "0563"; SetMessage -ID "0564"; SetMessage -ID "0565" # Guard guarding Clock Town exit (Deku Scrub)
         SetMessage -ID "0515" -Text "child" -Replace "defenseless<N>Deku Scrub"
 
