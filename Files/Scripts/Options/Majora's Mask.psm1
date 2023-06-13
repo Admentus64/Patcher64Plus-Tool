@@ -1026,7 +1026,11 @@ function ByteLanguageOptions() {
         SetMessage -ID "0216" -Text "Tael" -Replace $Redux.Text.TaelName.Text; SetMessage -ID "0217"; SetMessage -ID "0229"; SetMessage -ID "146B"; SetMessage -ID "1F42"; SetMessage -ID "1F47"; SetMessage -ID "1F4B"; SetMessage -ID "200A"; SetMessage -ID "2011"
         SetMessage -ID "2016";                                                 SetMessage -ID "2029"; SetMessage -ID "202E"; SetMessage -ID "203B"; SetMessage -ID "203D"; SetMessage -ID "2040"; SetMessage -ID "2049"; SetMessage -ID "2080"
     }
-    if ( (IsIndex -Elem $Redux.Text.TaelScript -Index 3) -and $LanguagePatch.code -eq "en") { SetMessage -ID "1F49" -Text "brother" -Replace "sister"; SetMessage -ID "1F4B" -Text "his" -Replace "her"; SetMessage -ID "200D" -Text "brother" -Replace "sister"; SetMessage -ID "2012" -Text "brother" -Replace "sister" }
+    if ( (IsIndex -Elem $Redux.Text.TaelScript -Index 3) -and $LanguagePatch.code -eq "en") {
+        SetMessage -ID "1F49" -Text "brother" -Replace "sister"; SetMessage -ID "1F4B" -Text "his" -Replace "her"; SetMessage -ID "200D" -Text "brother" -Replace "sister"
+        SetMessage -ID "2012" -Text "brother" -Replace "sister"; SetMessage -ID "0216" -Text "He" -Replace "She"; SetMessage -ID "0216" -Text "he" -Replace "she"
+        SetMessage -ID "0229" -Text "he" -Replace "she"
+    }
 
     if (IsLanguage $Redux.Capacity.EnableAmmo) {
         SetMessage -ID "0019" -ASCII -Text "10" -Replace $Redux.Capacity.DekuSticks1.text
