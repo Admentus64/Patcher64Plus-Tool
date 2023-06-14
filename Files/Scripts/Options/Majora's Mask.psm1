@@ -1005,6 +1005,10 @@ function ByteLanguageOptions() {
         }
    }
 
+   if (IsChecked $Redux.Text.GossipTime) {
+        SetMessage -ID "20D2" -Text "Only <Time> remaining!<Keep:0028><NSS>" -Replace "The time is currently <ClockTime>!<N>Only <Time> remaining!<Keep:0028><NSS>"
+    }
+
    if ( (IsChecked $Redux.Text.LinkScript) -and $Redux.Text.LinkName.Text.Count -gt 0) {
         SetMessage -ID "0462" -Text "16" -Replace $Redux.Text.LinkName.text; SetMessage -ID "046A"; SetMessage -ID "046C"; SetMessage -ID "0591"; SetMessage -ID "0593"; SetMessage -ID "059D"; SetMessage -ID "05A1"; SetMessage -ID "05A5"; SetMessage -ID "05A9"; SetMessage -ID "0710" -All; SetMessage -ID "0734" -All
         SetMessage -ID "0736"; SetMessage -ID "0800"; SetMessage -ID "0802"; SetMessage -ID "08E4"; SetMessage -ID "08E5"; SetMessage -ID "0961"; SetMessage -ID "0966"; SetMessage -ID "0967"; SetMessage -ID "0969"; SetMessage -ID "096D"; SetMessage -ID "096F"; SetMessage -ID "0971";      SetMessage -ID "102A"
@@ -1238,14 +1242,15 @@ function CreateTabLanguage() {
 
     $names = "`n`n--- Supported Names With Textures ---`n" + "Navi`nTatl`nTaya`nТдтп`nTael`nNite`nNagi`nInfo"
     CreateReduxGroup    -All -Tag  "Text"       -Text "Other Text Options"
-    CreateReduxComboBox -All -Name "TatlScript" -Text "Tatl Text" -Items @("Disabled", "Enabled as Female", "Enabled as Male") -Info "Allow renaming Tatl and the pronouns used"                     -Credits "Admentus & ShadowOne333" -Warning "Gender swap is only supported for English"
-    CreateReduxTextBox  -All -Name "TatlName"   -Text "Tatl Name" -Length 5 -ASCII -Value "Tatl" -Width 50                     -Info "Select the name used for Tatl"                                 -Credits "Admentus & ShadowOne333" -Warning ('Most names do not have an unique texture label, and use a default "Info" prompt label' + $names)
-    CreateReduxComboBox -All -Name "TaelScript" -Text "Tael Text" -Items @("Disabled", "Enabled as Male", "Enabled as Female") -Info "Allow renaming Tael and the pronouns used"                     -Credits "Admentus, ShadowOne333, & kuirivito" -Warning "Gender swap is only supported for English"
-    CreateReduxTextBox  -All -Name "TaelName"   -Text "Tael Name" -Length 5 -ASCII -Value "Tael" -Width 50                     -Info "Select the name used for Tael"                                 -Credits "Admentus & ShadowOne333"
-    CreateReduxCheckBox -All -Name "LinkScript" -Text "Link Text"                                                              -Info "Separate file name from Link's name in-game"                   -Credits "Admentus & Third M"
-    CreateReduxTextBox  -All -Name "LinkName"   -Text "Link Name" -Length 8 -ASCII -Value "Link" -Width 90                     -Info "Select the name for Link in-game"                              -Credits "Admentus & Third M"      -Shift 40
-    CreateReduxCheckBox -All -Name "YeetPrompt" -Text "Yeet Action Prompt"                                                     -Info ('Replace the "Throw" Action Prompt with "Yeet"' + "`nYeeeeet") -Credits "kr3z"
-    CreateReduxCheckBox -All -Name "Comma"      -Text "Better Comma"                                                           -Info "Make the comma not look as awful"                              -Credits "ShadowOne333"
+    CreateReduxComboBox -All -Name "TatlScript" -Text "Tatl Text" -Items @("Disabled", "Enabled as Female", "Enabled as Male") -Info "Allow renaming Tatl and the pronouns used"                                                            -Credits "Admentus & ShadowOne333" -Warning "Gender swap is only supported for English"
+    CreateReduxTextBox  -All -Name "TatlName"   -Text "Tatl Name" -Length 5 -ASCII -Value "Tatl" -Width 50                     -Info "Select the name used for Tatl"                                                                        -Credits "Admentus & ShadowOne333" -Warning ('Most names do not have an unique texture label, and use a default "Info" prompt label' + $names)
+    CreateReduxComboBox -All -Name "TaelScript" -Text "Tael Text" -Items @("Disabled", "Enabled as Male", "Enabled as Female") -Info "Allow renaming Tael and the pronouns used"                                                            -Credits "Admentus, ShadowOne333, & kuirivito" -Warning "Gender swap is only supported for English"
+    CreateReduxTextBox  -All -Name "TaelName"   -Text "Tael Name" -Length 5 -ASCII -Value "Tael" -Width 50                     -Info "Select the name used for Tael"                                                                        -Credits "Admentus & ShadowOne333"
+    CreateReduxCheckBox -All -Name "LinkScript" -Text "Link Text"                                                              -Info "Separate file name from Link's name in-game"                                                          -Credits "Admentus & Third M"
+    CreateReduxTextBox  -All -Name "LinkName"   -Text "Link Name" -Length 8 -ASCII -Value "Link" -Width 90                     -Info "Select the name for Link in-game"                                                                     -Credits "Admentus & Third M"      -Shift 40
+    CreateReduxCheckBox -All -Name "GossipTime" -Text "Add Gossip Stone Clock"                                                 -Info "Makes it so that the gossip stones, in addition to telling time left to moonfall, also act as a clock"-Credits "kuirivito"
+    CreateReduxCheckBox -All -Name "YeetPrompt" -Text "Yeet Action Prompt"                                                     -Info ('Replace the "Throw" Action Prompt with "Yeet"' + "`nYeeeeet")                                        -Credits "kr3z"
+    CreateReduxCheckBox -All -Name "Comma"      -Text "Better Comma"                                                           -Info "Make the comma not look as awful"                                                                     -Credits "ShadowOne333"
 
     if ($GamePatch.vanilla -eq 1) {
         foreach ($i in 0.. ($Files.json.languages.length-1)) { $Redux.Language[$i].Add_CheckedChanged({ UnlockLanguageContent }) }
@@ -1271,6 +1276,7 @@ function UnlockLanguageContent() {
     EnableElem -Elem $Redux.Text.AdultPronouns    -Active $Redux.Language[0].checked
     EnableElem -Elem $Redux.Text.AreaTitleCards   -Active $Redux.Language[0].checked
     EnableElem -Elem $Redux.Text.EasterEggs       -Active $Redux.Language[0].checked
+    EnableElem -Elem $Redux.Text.GossipTime       -Active $Redux.Language[0].checked
     EnableElem -Elem $Redux.Features.OcarinaIcons -Active $Redux.Language[0].checked
 
     if (!$Redux.Language[0].Checked -and !$Redux.Text.Vanilla.Checked -and !$Redux.Text.Custom.Checked) { $Redux.Text.Vanilla.Checked = $True }

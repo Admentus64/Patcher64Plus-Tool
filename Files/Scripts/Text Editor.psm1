@@ -488,7 +488,9 @@ function LoadScript([string]$Script, [string]$Table) {
             [byte]$DialogueList[$item].type   = $DialogueList[$item].msg[0]
             [byte]$DialogueList[$item].pos    = $DialogueList[$item].msg[1] -shr 4
             [string]$DialogueList[$item].icon = Get8Bit $DialogueList[$item].msg[2]
-            [uint16]$DialogueList[$item].cost = GetDecimal (CombineHex $DialogueList[$item].msg[5..6])            [string]$DialogueList[$item].jump = CombineHex $DialogueList[$item].msg[3..4]        }
+            [uint16]$DialogueList[$item].cost = GetDecimal (CombineHex $DialogueList[$item].msg[5..6])
+            [string]$DialogueList[$item].jump = CombineHex $DialogueList[$item].msg[3..4]
+        }
         else {
             [byte]$DialogueList[$item].type =  $ByteTableArray[$i + 2] -shr 4       # Upper
             [byte]$DialogueList[$item].pos  = ($ByteTableArray[$i + 2] -shl 4) / 16 # Lower
@@ -1164,10 +1166,11 @@ function ParseMessageMM([char[]]$Text, [switch]$Encode) {
         if ($types[196])   { $Text = ParseMessagePart -Text $Text -Encoded @(196) -Decoded @(60, 80, 111, 115, 116, 109, 97,  110, 62)                                                       -Encode $Encode } # C4 / <Postman>            (postman counting game)
         if ($types[199])   { $Text = ParseMessagePart -Text $Text -Encoded @(199) -Decoded @(60, 67, 108, 111, 99,  107, 32,  84,  111, 119, 101, 114, 62)                                   -Encode $Encode } # C7 / <Clock Tower>        (time until moon falls when on the clock tower)
         if ($types[200])   { $Text = ParseMessagePart -Text $Text -Encoded @(200) -Decoded @(60, 80, 108, 97,  121, 103, 114, 111, 117, 110, 100, 62)                                        -Encode $Encode } # C8 / <Playground>         (deku scrub playground)
+        if ($types[202])   { $Text = ParseMessagePart -Text $Text -Encoded @(202) -Decoded @(60, 67, 108, 111, 99, 107, 84, 105, 109, 101, 62)                                               -Encode $Encode } # CA / <ClockTime>          (shows the current time of day)
         if ($types[203])   { $Text = ParseMessagePart -Text $Text -Encoded @(203) -Decoded @(60, 83, 104, 111, 111, 116, 105, 110, 103, 32,  71,  97,  108, 108, 101, 114, 121, 62)          -Encode $Encode } # CB / <Shooting Gallery>   (shooting gallery)
         if ($types[205])   { $Text = ParseMessagePart -Text $Text -Encoded @(205) -Decoded @(60, 82, 117, 112, 101, 101, 115, 62)                                                            -Encode $Encode } # CD / <Rupees>             (rupees entered or bet)
-        if ($types[205])   { $Text = ParseMessagePart -Text $Text -Encoded @(206) -Decoded @(60, 82, 117, 112, 101, 101, 115, 32,  84,  111, 116, 97,  108, 62)                              -Encode $Encode } # CE / <Rupees Total>       (total rupees in bank or won by betting)
-        if ($types[206])   { $Text = ParseMessagePart -Text $Text -Encoded @(207) -Decoded @(60, 84, 105, 109, 101, 62)                                                                      -Encode $Encode } # CF / <Time>               (remaining time)
+        if ($types[206])   { $Text = ParseMessagePart -Text $Text -Encoded @(206) -Decoded @(60, 82, 117, 112, 101, 101, 115, 32,  84,  111, 116, 97,  108, 62)                              -Encode $Encode } # CE / <Rupees Total>       (total rupees in bank or won by betting)
+        if ($types[207])   { $Text = ParseMessagePart -Text $Text -Encoded @(207) -Decoded @(60, 84, 105, 109, 101, 62)                                                                      -Encode $Encode } # CF / <Time>               (remaining time reported by gossip stone)
         if ($types[212])   { $Text = ParseMessagePart -Text $Text -Encoded @(212) -Decoded @(60, 83, 111, 97,  114, 105, 110, 103, 62)                                                       -Encode $Encode } # D4 / <Soaring>            (song of soaring destination)
         if ($types[218])   { $Text = ParseMessagePart -Text $Text -Encoded @(219) -Decoded @(60, 67, 114, 117, 105, 115, 101, 32,  67,  114, 117, 105, 115, 101 ,62)                         -Encode $Encode } # DB / <Jungle Cruise>      (jungle cruise)
         if ($types[220])   { $Text = ParseMessagePart -Text $Text -Encoded @(220) -Decoded @(60, 76, 111, 116, 116, 101, 114, 121, 58,  87,  105, 110, 62)                                   -Encode $Encode } # DC / <Lottery:Win>        (winning lottery numbers)
