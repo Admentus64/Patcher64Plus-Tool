@@ -527,6 +527,11 @@ function LoadScript([string]$Script, [string]$Table) {
 #==============================================================================================================================================================================================
 function SaveScript([string]$Script, [string]$Table) {
     
+    if (!(IsSet $DialogueList)) {
+        WriteToConsole ("Could not save text messages. Did it ran outside ByteLanguageOptions?" )
+        return
+    }
+
     [System.Collections.ArrayList]$tempList = @()
     [int32]$increase = 0
 
@@ -592,6 +597,11 @@ function SaveLastMessage() {
 #==============================================================================================================================================================================================
 function GetMessage([string]$ID, [switch]$Reset) {
     
+    if (!(IsSet $DialogueList)) {
+        WriteToConsole ("Could not get message ID: " + $ID + " as the message data does not exist. Did it ran outside ByteLanguageOptions?" )
+        return
+    }
+
     if ($Reset) { $msg = $DialogueList[$ID].reset }
     else { $msg = $DialogueList[$ID].msg }
 
@@ -669,6 +679,11 @@ function AddMessageIDButton([string]$ID, [byte]$Column, [uint16]$Row, [string]$C
 #==============================================================================================================================================================================================
 function GetMessageOffset([string]$ID) {
     
+    if (!(IsSet $DialogueList)) {
+        WriteToConsole ("Could not get message ID: " + $ID + " offset as the message data does not exist. Did it ran outside ByteLanguageOptions?" )
+        return
+    }
+
     if (IsSet $DialogueList[$ID]) { return $DialogueList[$ID].start }
     return -1
 
@@ -679,6 +694,11 @@ function GetMessageOffset([string]$ID) {
 #==============================================================================================================================================================================================
 function GetMessageLength([string]$ID) {
     
+    if (!(IsSet $DialogueList)) {
+        WriteToConsole ("Could not get message ID: " + $ID + " length as the message data does not exist. Did it ran outside ByteLanguageOptions?" )
+        return
+    }
+
     if (IsSet $DialogueList[$ID]) { return $DialogueList[$ID].end - $DialogueList[$ID].start }
     return -1
 
@@ -687,6 +707,11 @@ function GetMessageLength([string]$ID) {
 #==============================================================================================================================================================================================
 function SetMessageBox([string]$ID, [byte]$Type, [byte]$Position) {
     
+    if (!(IsSet $DialogueList)) {
+        WriteToConsole ("Could not edit message ID: " + $ID + " as the message data does not exist. Did it ran outside ByteLanguageOptions?" )
+        return
+    }
+
     if ($Position -gt 3) { $Position = 3 }
     if ($Files.json.textEditor.header -gt 0) {
         $DialogueList[$ID].msg[0] = $Type
@@ -701,6 +726,11 @@ function SetMessageBox([string]$ID, [byte]$Type, [byte]$Position) {
 #==============================================================================================================================================================================================
 function SetMessageIcon([string]$ID, [string]$Hex, [string]$Value) {
     
+    if (!(IsSet $DialogueList)) {
+        WriteToConsole ("Could not edit message ID: " + $ID + " as the message data does not exist. Did it ran outside ByteLanguageOptions?" )
+        return
+    }
+
     if (IsSet $Hex) {
         $DialogueList[$ID].icon = $DialogueList[$ID].msg[2] = GetDecimal $Hex
         return
@@ -718,6 +748,11 @@ function SetMessageIcon([string]$ID, [string]$Hex, [string]$Value) {
 #==============================================================================================================================================================================================
 function SetMessageRupees([string]$ID, [uint16]$Value) {
     
+    if (!(IsSet $DialogueList)) {
+        WriteToConsole ("Could not edit message ID: " + $ID + " as the message data does not exist. Did it ran outside ByteLanguageOptions?" )
+        return
+    }
+
     if ($Value -eq 0) { $Value = 65535 }
     $value = (Get16Bit $Value)
     [byte[]]$split = $Value -split '(..)' -ne '' | foreach { [Convert]::ToByte($_, 16) }
@@ -731,6 +766,11 @@ function SetMessageRupees([string]$ID, [uint16]$Value) {
 #==============================================================================================================================================================================================
 function SetJumpToMessage([string]$ID, [string]$Value) {
     
+    if (!(IsSet $DialogueList)) {
+        WriteToConsole ("Could not edit message ID: " + $ID + " as the message data does not exist. Did it ran outside ByteLanguageOptions?" )
+        return
+    }
+
     [byte[]]$split = $Value -split '(..)' -ne '' | foreach { [Convert]::ToByte($_, 16) }
     $DialogueList[$ID].msg[3] = $split[0]
     $DialogueList[$ID].msg[4] = $split[1]
@@ -741,6 +781,11 @@ function SetJumpToMessage([string]$ID, [string]$Value) {
 #==============================================================================================================================================================================================
 function FindMatch([byte[]]$Text, [boolean]$All) {
     
+    if (!(IsSet $DialogueList)) {
+        WriteToConsole ("Could not find match in message ID: " + $ID + " as the message data does not exist. Did it ran outside ByteLanguageOptions?" )
+        return
+    } 
+
     if ($Text.count -eq 0) { return [sbyte]-1 }
 
     [sbyte]$skipNext = 0
@@ -823,6 +868,11 @@ function FindMatch([byte[]]$Text, [boolean]$All) {
 #==============================================================================================================================================================================================
 function SetMessage([string]$ID, [object]$Text, [object]$Replace, [string]$File, [switch]$Full, [switch]$Insert, [switch]$Append, [switch]$All, [switch]$ASCII, [switch]$Silent, [switch]$Safety, [switch]$Force) {
     
+    if (!(IsSet $DialogueList)) {
+        WriteToConsole ("Could not edit message ID: " + $ID + " as the message data does not exist. Did it ran outside ByteLanguageOptions?" )
+        return
+    }
+
     if (!(IsSet $DialogueList[$ID])) {
         if (!$Silent) { WriteToConsole ("Could not find message ID: " + $ID) }
         return -1
@@ -1166,7 +1216,7 @@ function ParseMessageMM([char[]]$Text, [switch]$Encode) {
         if ($types[196])   { $Text = ParseMessagePart -Text $Text -Encoded @(196) -Decoded @(60, 80, 111, 115, 116, 109, 97,  110, 62)                                                       -Encode $Encode } # C4 / <Postman>            (postman counting game)
         if ($types[199])   { $Text = ParseMessagePart -Text $Text -Encoded @(199) -Decoded @(60, 67, 108, 111, 99,  107, 32,  84,  111, 119, 101, 114, 62)                                   -Encode $Encode } # C7 / <Clock Tower>        (time until moon falls when on the clock tower)
         if ($types[200])   { $Text = ParseMessagePart -Text $Text -Encoded @(200) -Decoded @(60, 80, 108, 97,  121, 103, 114, 111, 117, 110, 100, 62)                                        -Encode $Encode } # C8 / <Playground>         (deku scrub playground)
-        if ($types[202])   { $Text = ParseMessagePart -Text $Text -Encoded @(202) -Decoded @(60, 67, 108, 111, 99, 107, 84, 105, 109, 101, 62)                                               -Encode $Encode } # CA / <ClockTime>          (shows the current time of day)
+        if ($types[202])   { $Text = ParseMessagePart -Text $Text -Encoded @(202) -Decoded @(60, 67, 108, 111, 99,  107, 84,  105, 109, 101, 62)                                             -Encode $Encode } # CA / <ClockTime>          (shows the current time of day)
         if ($types[203])   { $Text = ParseMessagePart -Text $Text -Encoded @(203) -Decoded @(60, 83, 104, 111, 111, 116, 105, 110, 103, 32,  71,  97,  108, 108, 101, 114, 121, 62)          -Encode $Encode } # CB / <Shooting Gallery>   (shooting gallery)
         if ($types[205])   { $Text = ParseMessagePart -Text $Text -Encoded @(205) -Decoded @(60, 82, 117, 112, 101, 101, 115, 62)                                                            -Encode $Encode } # CD / <Rupees>             (rupees entered or bet)
         if ($types[206])   { $Text = ParseMessagePart -Text $Text -Encoded @(206) -Decoded @(60, 82, 117, 112, 101, 101, 115, 32,  84,  111, 116, 97,  108, 62)                              -Encode $Encode } # CE / <Rupees Total>       (total rupees in bank or won by betting)

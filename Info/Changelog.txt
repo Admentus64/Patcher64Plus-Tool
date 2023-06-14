@@ -1,9 +1,16 @@
+v20.3.7
+- Added Gossip Time option for MM
+- Typo fixes for OoT & MM options
+- Error handling for Text Editor functions
+- Added ReadMe for adding new options
+
 v20.3.6
 - Fixed issues with downgrading and compression
 - Fixed patching graphics options for MK64
 - Fixed updater not showing new version if version.txt is missing
 - Changed max size for wallets (OoT) to 999 instead of 9999
 - Changed Tycoon's Wallet default size to 999 instead of 500
+- Prioritize date and hotfix over version for updating
 
 v20.3.5
 - Updated New Master Quest to v2.3
