@@ -1,10 +1,11 @@
 function CreateSceneEditorDialog([int32]$Width, [int32]$Height, [string]$Game=$GameType.mode, [string]$Checksum) {
     
-    $global:SceneEditor     = @{}
-    $Files.json.sceneEditor = SetJSONFile ($Paths.Games + "\" + $Game + "\Scene Editor.json")
-    $SceneEditor.FirstLoad = $True
-    $SceneEditor.Resetting = $False
-    $SceneEditor.GUI       = $True
+    $global:SceneEditor       = @{}
+    $Files.json.sceneEditor   = SetJSONFile ($Paths.Games + "\" + $Game + "\Scene Editor.json")
+    $SceneEditor.FirstLoad    = $True
+    $SceneEditor.Resetting    = $False
+    $SceneEditor.GUI          = $True
+    $SceneEditor.LoadedHeader = 0
 
 
 
@@ -91,10 +92,15 @@ function CreateSceneEditorDialog([int32]$Width, [int32]$Height, [string]$Game=$G
 
     $SceneEditor.DeleteActor.Enabled = $SceneEditor.InsertActor.Enabled = $SceneEditor.DeleteObject.Enabled = $SceneEditor.InsertObject.Enabled = $False
     $SceneEditor.DeleteActor.Add_Click(  { DeleteActor  } )
-    $SceneEditor.InsertActor.Add_Click(  { InsertActor  } )
     $SceneEditor.DeleteObject.Add_Click( { DeleteObject } )
-    $SceneEditor.InsertObject.Add_Click( { InsertObject } )
-
+    $SceneEditor.InsertObject.Add_Click( { InsertObject -ID "0000" } )
+    
+    $SceneEditor.InsertActor.Add_Click( {
+        if     ($GameType.mode -eq "Ocarina of Time")   { InsertActor -ID "0002" }
+        elseif ($GameType.mode -eq "Majora's Mask")     { InsertActor -ID "0019" -XRot "0007" -YRot "00FF" -ZRot "00FF" }
+        else                                            { InsertActor }
+    } )
+    
 
 
     # Close Button
@@ -214,7 +220,7 @@ function CreateSceneEditorDialog([int32]$Width, [int32]$Height, [string]$Game=$G
 
 
     $name = "Editor.Scene." + $Files.json.sceneEditor.parse
-    $label               = CreateLabel    -X (DPISize 10)                              -Y (DPISize 17)                                 -Width (DPISize 60)  -Height (DPISize 15) -Font $Fonts.SmallBold -Text "Scene:"      -AddTo $SceneEditor.TopGroup
+    $label               = CreateLabel    -X (DPISize 10)                              -Y (DPISize 17)                                 -Width (DPISize 40)  -Height (DPISize 15) -Font $Fonts.SmallBold -Text "Scene:"      -AddTo $SceneEditor.TopGroup
     $SceneEditor.Scenes  = CreateComboBox -X ($label.Right + (DPISize 15) )            -Y ($label.Top - (DPISize 2) )                  -Width (DPISize 260) -Height (DPISize 20) -Items $Files.json.sceneEditor.scenes.Name -AddTo $SceneEditor.TopGroup -Name $name
     $label               = CreateLabel    -X (DPISize 10)                              -Y ($SceneEditor.Scenes.Bottom + (DPISize 12) ) -Width (DPISize 40)  -Height (DPISize 15) -Font $Fonts.SmallBold -Text "Map:"        -AddTo $SceneEditor.TopGroup
     $SceneEditor.Maps    = CreateComboBox -X ($label.Right + (DPISize 15) )            -Y ($label.Top - (DPISize 2) )                  -Width (DPISize 260) -Height (DPISize 20)                                            -AddTo $SceneEditor.TopGroup
@@ -318,7 +324,8 @@ function CreateSceneEditorDialog([int32]$Width, [int32]$Height, [string]$Game=$G
 
     $SceneEditor.Headers.Add_SelectedIndexChanged({
         if ($this.SelectedIndex -eq $SceneEditor.DropHeader) { return }
-        $SceneEditor.DropHeader = $this.SelectedIndex
+        $SceneEditor.DropHeader   = $this.SelectedIndex
+        $SceneEditor.LoadedHeader = $this.SelectedIndex
 
         LoadHeader -Scene $Files.json.sceneEditor.scenes[$SceneEditor.Scenes.SelectedIndex]
     })
@@ -594,7 +601,7 @@ function ExtractScene([switch]$Current, [string]$Path, [string]$Offset, [byte]$L
         }
     }
 
-    if (!(IsChecked $SceneEditor.ShiftScenes)) { return }
+    if (!(IsChecked $SceneEditor.ShiftScenes) -or !$SceneEditor.GUI) { return }
 
     for ($i=0; $i -lt $Length; $i++) {
         $start = $dmaArray[$i*16+4] * 0x1000000 + $dmaArray[$i*16+4+1] * 0x10000 + $dmaArray[$i*16+4+2] * 0x100 + $dmaArray[$i*16+4+3]
@@ -797,83 +804,202 @@ function ShiftMap([uint32]$Offset, [byte]$Add=0, [byte]$Subtract=0) {
 
 
 #==============================================================================================================================================================================================
+function PrepareMap([string]$Scene, [byte]$Map, [byte]$Header) {
+    
+    $LoadedScene                                       = $null
+    [System.Collections.ArrayList]$SceneEditor.Actors  = @()
+    [System.Collections.ArrayList]$SceneEditor.Objects = @()
+
+    foreach ($obj in $Files.json.sceneEditor.scenes) {
+        if ($obj.name -eq $Scene) {
+            $LoadedScene = $obj
+            break
+        }
+    }
+
+    if ($LoadedScene -eq $null) {
+        $SceneEditor.LoadedScene -eq $null
+        return
+    }
+
+    if ($LoadedScene -ne $SceneEditor.LoadedScene) {
+        $SceneEditor.LoadedScene = $LoadedScene
+        $folder                  = $Paths.Temp + "\scene\" + $LoadedScene.name
+        $file                    = $Paths.Temp + "\scene\" + $LoadedScene.name + "\scene.zscene"
+        ExtractScene -Path ($Paths.Temp + "\Scene\" + $LoadedScene.name) -Offset $LoadedScene.dma -Length $LoadedScene.length
+        RunLoadScene -File $file
+    }
+
+    if ($Map -lt 0 -or $Map -gt $SceneEditor.SceneOffsets[0].MapCount) {
+        $SceneEditor.LoadedScene -eq $null
+        return
+    }
+
+    if ($Map -ne $SceneEditor.LoadedMap) {
+        $SceneEditor.LoadedMap = $Map
+        LoadMap -Scene $SceneEditor.LoadedScene -Map $SceneEditor.LoadedMap
+    }
+
+    $SceneEditor.LoadedHeader = $Header
+
+}
+
+
+#==============================================================================================================================================================================================
+function SaveLoadedMap() {
+    
+    if ($SceneEditor.LoadedScene -eq $null) { return }
+    
+    $map  = $Paths.Temp + "\scene\" + $SceneEditor.LoadedScene.Name + "\room_" + $SceneEditor.LoadedMap + ".zmap"
+    $dma  = $Paths.Temp + "\scene\" + $SceneEditor.LoadedScene.Name + "\table.dma"
+    $file = $Paths.Temp + "\scene\" + $SceneEditor.LoadedScene.Name + "\scene.zscene"
+
+    [System.Collections.ArrayList]$dmaArray = [System.IO.File]::ReadAllBytes($dma)
+
+    for ($i=0; $i-lt $SceneEditor.LoadedScene.length; $i++) {
+        $mapStart = $dmaArray[$i*16+4] * 0x1000000 + $dmaArray[$i*16+4+1] * 0x10000 + $dmaArray[$i*16+4+2] * 0x100 + $dmaArray[$i*16+4+3]
+        $mapEnd   = $mapStart + $SceneEditor.MapArray.Count
+    
+        $mapStart = (Get32Bit $mapStart) -split '(..)' -ne '' | foreach { [Convert]::ToByte($_, 16) }
+        $mapEnd   = (Get32Bit $mapEnd)   -split '(..)' -ne '' | foreach { [Convert]::ToByte($_, 16) }
+
+        for ($j=0; $j-lt $SceneEditor.Sceneoffsets.MapStart.Count; $j++) {
+            $SceneEditor.SceneArray[$SceneEditor.Sceneoffsets[$j].MapStart+0 + $i*8] = $mapStart[0]
+            $SceneEditor.SceneArray[$SceneEditor.Sceneoffsets[$j].MapStart+1 + $i*8] = $mapStart[1]
+            $SceneEditor.SceneArray[$SceneEditor.Sceneoffsets[$j].MapStart+2 + $i*8] = $mapStart[2]
+            $SceneEditor.SceneArray[$SceneEditor.Sceneoffsets[$j].MapStart+3 + $i*8] = $mapStart[3]
+            $SceneEditor.SceneArray[$SceneEditor.Sceneoffsets[$j].MapStart+4 + $i*8] = $mapEnd[0]
+            $SceneEditor.SceneArray[$SceneEditor.Sceneoffsets[$j].MapStart+5 + $i*8] = $mapEnd[1]
+            $SceneEditor.SceneArray[$SceneEditor.Sceneoffsets[$j].MapStart+6 + $i*8] = $mapEnd[2]
+            $SceneEditor.SceneArray[$SceneEditor.Sceneoffsets[$j].MapStart+7 + $i*8] = $mapEnd[3]
+        }
+        
+        $j = 16 * $i + 16
+        $dmaArray[$j + 0] = $dmaArray[$j + 8]  = $mapStart[0]
+        $dmaArray[$j + 1] = $dmaArray[$j + 9]  = $mapStart[1]
+        $dmaArray[$j + 2] = $dmaArray[$j + 10] = $mapStart[2]
+        $dmaArray[$j + 3] = $dmaArray[$j + 11] = $mapStart[3]
+        $dmaArray[$j + 4] = $mapEnd[0]
+        $dmaArray[$j + 5] = $mapEnd[1]
+        $dmaArray[$j + 6] = $mapEnd[2]
+        $dmaArray[$j + 7] = $mapEnd[3]
+    }
+
+    [System.IO.File]::WriteAllBytes($map,  $SceneEditor.MapArray)
+    [System.IO.File]::WriteAllBytes($file, $SceneEditor.SceneArray)
+    [System.IO.File]::WriteAllBytes($dma,  $dmaArray)
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function PatchLoadedScene() {
+    
+    if ($SceneEditor.LoadedScene -eq $null) { return }
+    if (!(TestFile -Path ($Paths.Temp + "\scene\" + $SceneEditor.LoadedScene.name) -Container)) { return }
+
+    $length = $SceneEditor.LoadedScene.length
+    $offset = $SceneEditor.LoadedScene.dma
+    $start  = Get24Bit ( (GetDecimal $offset) )
+    $end    = Get24Bit ( (GetDecimal $start) + ($length * 16) + 16)
+    
+    $dmaArray = [System.IO.File]::ReadAllBytes(($Paths.Temp + "\scene\" + $SceneEditor.LoadedScene.name + "\table.dma"))
+    for ($i=0; $i -lt $dmaArray.Count; $i++) { $ByteArrayGame[(GetDecimal $start) + $i] = $dmaArray[$i] }
+
+    $table = $ByteArrayGame[(GetDecimal $start)..(GetDecimal $end)]
+    for ($i=0; $i -le $Length; $i++) {
+        $offset = (Get8Bit $table[($i*16)+0]) + (Get8Bit $table[($i*16)+1]) + (Get8Bit $table[($i*16)+2]) + (Get8Bit $table[($i*16)+3])
+        if ($i -eq 0)   { PatchBytes -Offset $offset -Patch ("scene\" + $SceneEditor.LoadedScene.name + "\scene.zscene")             -Temp }
+        else            { PatchBytes -Offset $offset -Patch ("scene\" + $SceneEditor.LoadedScene.name + "\room_" + ($i-1) + ".zmap") -Temp }
+    }
+
+}
+
+
+
+
+#==============================================================================================================================================================================================
 function LoadScene([object[]]$Scene, [switch]$Keep) {
     
     $folder = $Paths.Games + "\" + $Files.json.sceneEditor.game + "\Editor\Scenes\" + $Scene.name
     $file   = $Paths.Games + "\" + $Files.json.sceneEditor.game + "\Editor\Scenes\" + $Scene.name + "\scene.zscene"
     
-    if ($SceneEditor.GUI) {
-        $SceneEditor.BottomPanelScene.Controls.Clear()
-        $SceneEditor.DropMap = $SceneEditor.DropHeader = $null
+    $SceneEditor.BottomPanelScene.Controls.Clear()
+    $SceneEditor.DropMap = $SceneEditor.DropHeader = $null
 
-        if ($Files.json.sceneEditor.quest -is [array] -and $Files.json.sceneEditor.quest.Count -gt 0) {
-            foreach ($elem in $SceneEditor.Quests) {
-                $elem.Enabled = $False
-                $elem.Visible = $Scene.Dungeon -eq 1
-            }
-            foreach ($elem in $SceneEditor.QuestLabels) { $elem.Visible = $Scene.Dungeon -eq 1 }
-            
-            if ($Scene.Dungeon -eq 1) {
-                $SceneEditor.Quests[0].Checked = $True
-                if (IsSet $Settings["Dungeon"][$SceneEditor.Scenes.Text]) {
-                    for ($i=0; $i -lt $SceneEditor.Quests.Count; $i++) {
-                        if ($Settings["Dungeon"][$SceneEditor.Scenes.Text] -eq $i+1) {
-                            $SceneEditor.Quests[$i].Checked = $True
-                            if ($i -gt 0) { $folder += "\" + $Files.json.sceneEditor.quest[$i-1] }
-                        }
-                    }
-                }
-                
-                for ($i=1; $i -lt $SceneEditor.Quests.Count; $i++) {
-                    if ($SceneEditor.Quests[$i].Checked) { $file = $Paths.Games + "\" + $Files.json.sceneEditor.game + "\Editor\Scenes\" + $Scene.name + "\" + $Files.json.sceneEditor.quest[$i-1] + "\scene.zscene" }
-                }
-            }
+    if ($Files.json.sceneEditor.quest -is [array] -and $Files.json.sceneEditor.quest.Count -gt 0) {
+        foreach ($elem in $SceneEditor.Quests) {
+            $elem.Enabled = $False
+            $elem.Visible = $Scene.Dungeon -eq 1
         }
-
-        if (!(TestFile -Path $folder -Container) -or !(TestFile -Path $file)) {
-            $SceneEditor.Headers.Items.Clear()
-            $SceneEditor.BottomPanelScene.Controls.Clear()
-            $SceneEditor.BottomPanelActors.Controls.Clear()
-            $SceneEditor.BottomPanelObjects.Controls.Clear()
-            
-            [System.Collections.ArrayList]$SceneEditor.Actors = @()
-            [System.Collections.ArrayList]$SceneEditor.Objects = @()
-            
-            return
-        }
+        foreach ($elem in $SceneEditor.QuestLabels) { $elem.Visible = $Scene.Dungeon -eq 1 }
         
-        if (!$Keep) {
-            $SceneEditor.Maps.Items.Clear()
-            $items = (Get-ChildItem -Path $folder -Filter "*.zmap" -File)
-            
-            if ($items.Count -eq 0) { return }
-            
-            for ($i=0; $i -lt $items.Count; $i++) {
-                $title = "Map " + ($i+1)
-                if ($Scene.maps -is [array]) {
-                    if ($Scene.maps[$i] -ne 0 -and $Scene.maps[$i] -ne "") {
-                        if ($i -lt 9) { $title += "  " }
-                        $title += "   (" + $Scene.maps[$i] + ")"
+        if ($Scene.Dungeon -eq 1) {
+            $SceneEditor.Quests[0].Checked = $True
+            if (IsSet $Settings["Dungeon"][$SceneEditor.Scenes.Text]) {
+                for ($i=0; $i -lt $SceneEditor.Quests.Count; $i++) {
+                    if ($Settings["Dungeon"][$SceneEditor.Scenes.Text] -eq $i+1) {
+                        $SceneEditor.Quests[$i].Checked = $True
+                        if ($i -gt 0) { $folder += "\" + $Files.json.sceneEditor.quest[$i-1] }
                     }
                 }
-                $SceneEditor.Maps.Items.Add($title)
             }
-
-            $SceneEditor.Maps.SelectedIndex = 0
+            
+            for ($i=1; $i -lt $SceneEditor.Quests.Count; $i++) {
+                if ($SceneEditor.Quests[$i].Checked) { $file = $Paths.Games + "\" + $Files.json.sceneEditor.game + "\Editor\Scenes\" + $Scene.name + "\" + $Files.json.sceneEditor.quest[$i-1] + "\scene.zscene" }
+            }
         }
-        else { LoadMap $Files.json.sceneEditor.scenes[$SceneEditor.Scenes.SelectedIndex] }
     }
-    else {
+
+    if (!(TestFile -Path $folder -Container) -or !(TestFile -Path $file)) {
+        $SceneEditor.Headers.Items.Clear()
+        $SceneEditor.BottomPanelScene.Controls.Clear()
+        $SceneEditor.BottomPanelActors.Controls.Clear()
+        $SceneEditor.BottomPanelObjects.Controls.Clear()
+            
         [System.Collections.ArrayList]$SceneEditor.Actors = @()
         [System.Collections.ArrayList]$SceneEditor.Objects = @()
+            
+        return
     }
+        
+    if (!$Keep) {
+        $SceneEditor.Maps.Items.Clear()
+        $items = (Get-ChildItem -Path $folder -Filter "*.zmap" -File)
+        
+        if ($items.Count -eq 0) { return }
+        
+        for ($i=0; $i -lt $items.Count; $i++) {
+            $title = "Map " + ($i+1)
+            if ($Scene.maps -is [array]) {
+                if ($Scene.maps[$i] -ne 0 -and $Scene.maps[$i] -ne "") {
+                    if ($i -lt 9) { $title += "  " }
+                    $title += "   (" + $Scene.maps[$i] + ")"
+                }
+            }
+            $SceneEditor.Maps.Items.Add($title)
+        }
+        
+        $SceneEditor.Maps.SelectedIndex = 0
+    }
+    else { LoadMap $Files.json.sceneEditor.scenes[$SceneEditor.Scenes.SelectedIndex] }
 
+    RunLoadScene -File $file
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function RunLoadScene([string]$File) {
+    
     # Load scene file #
     $headerSize = 104
-    [System.Collections.ArrayList]$SceneEditor.SceneArray = [System.IO.File]::ReadAllBytes($file)
-    $SceneEditor.SceneOffsets          = @()
-    $SceneEditor.SceneOffsets         += @{}
-    $SceneEditor.SceneOffsets[0].Header= 0
+    [System.Collections.ArrayList]$SceneEditor.SceneArray = [System.IO.File]::ReadAllBytes($File)
+    $SceneEditor.SceneOffsets           = @()
+    $SceneEditor.SceneOffsets          += @{}
+    $SceneEditor.SceneOffsets[0].Header = 0
 
     for ($i=0; $i -lt $headerSize; $i+=8) {
         if ($SceneEditor.SceneArray[$i] -eq 20) { break }
@@ -933,12 +1059,12 @@ function LoadMap([object[]]$Scene, [byte]$Map) {
             }
         }
     }
-    else { $file = $Paths.Games + "\" + $Files.json.sceneEditor.game + "\Editor\Scenes\" + $Scene.name + "\room_" + $Map + ".zmap" }
+    else { $file = $Paths.Temp + "\scene\" + $Scene.name + "\room_" + $Map + ".zmap" }
 
     if (!(TestFile -Path $file)) { return }
 
     [System.Collections.ArrayList]$SceneEditor.MapArray = [System.IO.File]::ReadAllBytes($file)
-    $items                                              = @("Stage 1")
+    if ($SceneEditor.GUI)                      { $items = @("Stage 1") }
     $SceneEditor.Offsets                                = @()
     $SceneEditor.Offsets                               += @{}
     $SceneEditor.Offsets[0].Header                      = 0
@@ -1039,21 +1165,21 @@ function LoadMap([object[]]$Scene, [byte]$Map) {
 
 
 #==============================================================================================================================================================================================
-function GetHeader()             { return $SceneEditor.Offsets[$SceneEditor.Headers.SelectedIndex].Header                                                                                   }
-function GetActorCount()         { return $SceneEditor.Offsets[$SceneEditor.Headers.SelectedIndex].ActorCount                                                                               }
-function GetActorStart()         { return $SceneEditor.Offsets[$SceneEditor.Headers.SelectedIndex].ActorStart                                                                               }
-function GetActorEnd()           { return $SceneEditor.Offsets[$SceneEditor.Headers.SelectedIndex].ActorStart + ($SceneEditor.Offsets[$SceneEditor.Headers.SelectedIndex].ActorCount * 16)  }
-function GetActorCountIndex()    { return $SceneEditor.Offsets[$SceneEditor.Headers.SelectedIndex].ActorCountIndex                                                                          }
-function GetActorIndex()         { return $SceneEditor.Offsets[$SceneEditor.Headers.SelectedIndex].ActorIndex                                                                               }
-function GetObjectCount()        { return $SceneEditor.Offsets[$SceneEditor.Headers.SelectedIndex].ObjectCount                                                                              }
-function GetObjectStart()        { return $SceneEditor.Offsets[$SceneEditor.Headers.SelectedIndex].ObjectStart                                                                              }
-function GetObjectEnd()          { return $SceneEditor.Offsets[$SceneEditor.Headers.SelectedIndex].ObjectStart + ($SceneEditor.Offsets[$SceneEditor.Headers.SelectedIndex].ObjectCount * 2) }
-function GetObjectCountIndex()   { return $SceneEditor.Offsets[$SceneEditor.Headers.SelectedIndex].ObjectCountIndex                                                                         }
-function GetObjectIndex()        { return $SceneEditor.Offsets[$SceneEditor.Headers.SelectedIndex].ObjectIndex                                                                              }
-function GetMeshStart()          { return $SceneEditor.Offsets[$SceneEditor.Headers.SelectedIndex].MeshStart                                                                                }
-function GetMeshIndex()          { return $SceneEditor.Offsets[$SceneEditor.Headers.SelectedIndex].MeshIndex                                                                                }
-function GetFoundActors()        { return $SceneEditor.Offsets[$SceneEditor.Headers.SelectedIndex].FoundActors                                                                              }
-function GetFoundObjects()       { return $SceneEditor.Offsets[$SceneEditor.Headers.SelectedIndex].FoundObjects                                                                             }
+function GetHeader()             { return $SceneEditor.Offsets[$SceneEditor.LoadedHeader].Header                                                                          }
+function GetActorCount()         { return $SceneEditor.Offsets[$SceneEditor.LoadedHeader].ActorCount                                                                      }
+function GetActorStart()         { return $SceneEditor.Offsets[$SceneEditor.LoadedHeader].ActorStart                                                                      }
+function GetActorEnd()           { return $SceneEditor.Offsets[$SceneEditor.LoadedHeader].ActorStart + ($SceneEditor.Offsets[$SceneEditor.LoadedHeader].ActorCount * 16)  }
+function GetActorCountIndex()    { return $SceneEditor.Offsets[$SceneEditor.LoadedHeader].ActorCountIndex                                                                 }
+function GetActorIndex()         { return $SceneEditor.Offsets[$SceneEditor.LoadedHeader].ActorIndex                                                                      }
+function GetObjectCount()        { return $SceneEditor.Offsets[$SceneEditor.LoadedHeader].ObjectCount                                                                     }
+function GetObjectStart()        { return $SceneEditor.Offsets[$SceneEditor.LoadedHeader].ObjectStart                                                                     }
+function GetObjectEnd()          { return $SceneEditor.Offsets[$SceneEditor.LoadedHeader].ObjectStart + ($SceneEditor.Offsets[$SceneEditor.LoadedHeader].ObjectCount * 2) }
+function GetObjectCountIndex()   { return $SceneEditor.Offsets[$SceneEditor.LoadedHeader].ObjectCountIndex                                                                }
+function GetObjectIndex()        { return $SceneEditor.Offsets[$SceneEditor.LoadedHeader].ObjectIndex                                                                     }
+function GetMeshStart()          { return $SceneEditor.Offsets[$SceneEditor.LoadedHeader].MeshStart                                                                       }
+function GetMeshIndex()          { return $SceneEditor.Offsets[$SceneEditor.LoadedHeader].MeshIndex                                                                       }
+function GetFoundActors()        { return $SceneEditor.Offsets[$SceneEditor.LoadedHeader].FoundActors                                                                     }
+function GetFoundObjects()       { return $SceneEditor.Offsets[$SceneEditor.LoadedHeader].FoundObjects                                                                    }
 
 function GetMapCount()           { return $SceneEditor.SceneOffsets.MapCount                                            }
 function GetMapStart()           { return $SceneEditor.SceneOffsets.MapStart                                            }
@@ -1069,6 +1195,11 @@ function GetTotalObjects() {
 
 }
 
+function GetStartOfHeader() {
+    if (IsSet $SceneEditor.Offsets[0].AlternateStart) { return $SceneEditor.Offsets[0].AlternateStart }
+    return $SceneEditor.Offsets[0].ObjectStart
+}
+
 
 
 #==============================================================================================================================================================================================
@@ -1082,7 +1213,7 @@ function LoadHeader([object[]]$Scene) {
     if (GetFoundActors) {
         $actorTypes = @("Enemy", "Boss", "NPC", "Animal", "Cutscene", "Object", "Area", "Effect", "Unused", "Other")
         $SceneEditor.ActorList = @{}
-        for ($i=0; $i -lt $actorTypes.Count-1; $i++) { $SceneEditor.ActorList[$i]  = $Files.json.sceneEditor.actors  | where { $_.Type -eq $actorTypes[$i] } }
+        for ($i=0; $i -lt $actorTypes.Count-1; $i++) { $SceneEditor.ActorList[$i] = $Files.json.sceneEditor.actors  | where { $_.Type -eq $actorTypes[$i] } }
         $SceneEditor.ActorList[$actorTypes.Count-1]  = $Files.json.sceneEditor.actors  | where { $_.Type -eq $null }
     }
 
@@ -1099,7 +1230,7 @@ function LoadHeader([object[]]$Scene) {
     if ( (IsSet $Settings["Core"]["Editor.Tab." + $Files.json.sceneEditor.parse]) -and $SceneEditor.FirstLoad)   { LoadTab -Tab $Settings["Core"]["Editor.Tab." + $Files.json.sceneEditor.parse] }
     else                                                                                                         { LoadTab -Tab 1 }
 
-    $file = $Paths.Games + "\" + $Game + "\Maps\" + $SceneEditor.Scenes.Text + "\Stage " + ($SceneEditor.Headers.SelectedIndex+1) + "\room_" + $SceneEditor.Maps.SelectedIndex + ".jpg"
+    $file = $Paths.Games + "\" + $Game + "\Maps\" + $SceneEditor.Scenes.Text + "\Stage " + ($SceneEditor.LoadedHeader+1) + "\room_" + $SceneEditor.Maps.SelectedIndex + ".jpg"
     if (TestFile $file) { SetBitMap -Path $file -Box $SceneEditor.MapPreviewImage }
     else {
         $file = $Paths.Games + "\" + $Game + "\Maps\" + $SceneEditor.Scenes.Text + "\room_" + $SceneEditor.Maps.SelectedIndex + ".jpg"
@@ -1157,14 +1288,16 @@ function DeleteActor() {
     
     if ((GetActorCount) -eq 0) { return }
 
-    $SceneEditor.Offsets[$SceneEditor.Headers.SelectedIndex].ActorCount--
+    $SceneEditor.Offsets[$SceneEditor.LoadedHeader].ActorCount--
     $SceneEditor.MapArray[(GetActorCountIndex)]--
     $SceneEditor.MapArray.RemoveRange((GetActorEnd), 16)
 
-    for ($i=$SceneEditor.Offsets[0].AlternateStart; $i-lt $SceneEditor.Offsets[0].ObjectStart; $i+= 4) {
-        if ($SceneEditor.MapArray[$i] -ne 3) { continue }
-        $value = $SceneEditor.MapArray[$i+1] * 65536 + $SceneEditor.MapArray[$i+2] * 256 + $SceneEditor.MapArray[$i+3]
-        if ($value -gt (GetHeader)) { ShiftMap -Offset ($i+1) -Subtract 16 }
+    if (IsSet $SceneEditor.Offsets[0].AlternateStart) {
+        for ($i=$SceneEditor.Offsets[0].AlternateStart; $i-lt $SceneEditor.Offsets[0].ObjectStart; $i+= 4) {
+            if ($SceneEditor.MapArray[$i] -ne 3) { continue }
+            $value = $SceneEditor.MapArray[$i+1] * 65536 + $SceneEditor.MapArray[$i+2] * 256 + $SceneEditor.MapArray[$i+3]
+            if ($value -gt (GetHeader)) { ShiftMap -Offset ($i+1) -Subtract 16 }
+        }
     }
 
     for ($i=1; $i -lt $SceneEditor.Offsets.Header.Count; $i++) {
@@ -1187,14 +1320,14 @@ function DeleteActor() {
         }
 
         $SceneEditor.Offsets[$i].MeshIndex            -= 16
-        if ($SceneEditor.Headers.SelectedIndex -eq 0) {
+        if ($SceneEditor.LoadedHeader -eq 0) {
             $SceneEditor.Offsets[$i].MeshStart        -= 16
             ShiftMap -Offset $SceneEditor.Offsets[$i].MeshIndex   -Subtract 16
         }
         
     }
 
-    if ($SceneEditor.Headers.SelectedIndex -eq 0) {
+    if ($SceneEditor.LoadedHeader -eq 0) {
         $SceneEditor.Offsets[0].MeshStart -= 16
         ShiftMap -Offset $SceneEditor.Offsets[0].MeshIndex     -Subtract 16
         ShiftMap -Offset ($SceneEditor.Offsets[0].MeshStart+5) -Subtract 16
@@ -1232,22 +1365,119 @@ function DeleteActor() {
         }
     }
 
-    $SceneEditor.Tab = $null
-    LoadTab -Tab 1
+    if ($SceneEditor.GUI) {
+        $SceneEditor.Tab = $null
+        LoadTab -Tab 1
+    }
 
 }
 
 
 
 #==============================================================================================================================================================================================
-function InsertActor() {
+function ReplaceActor([string]$ID, [string]$Name, [string]$NewID, [string]$New, [string]$X, [string]$Y, [string]$Z, [string]$XRot, [string]$YRot, [string]$ZRot, [string]$Param) {
+    
+    if (IsSet $Name) {
+        foreach ($actor in $Files.json.sceneEditor.actors) {
+            if ($actor.name -eq $Name) {
+                $ID = $actor.id
+                break
+            }
+        }
+    }
+
+    if (IsSet $New) {
+        foreach ($actor in $Files.json.sceneEditor.actors) {
+            if ($actor.name -eq $New) {
+                $NewID = $actor.id
+                break
+            }
+        }
+    }
+
+    if (!(IsSet $ID) -and !(IsSet $NewID)) { return }
+
+    $offset = $null
+    for ($i=(GetActorStart); $i -lt (GetActorEnd); $i+=16) {
+        if ($SceneEditor.MapArray[$i] * 256 + $SceneEditor.MapArray[$i+1] -eq (GetDecimal $ID)) {
+            $offset = $i
+            break
+        }
+    }
+
+    if ($offset -eq $null) { return }
+
+    if (IsSet $NewID) {
+        $value = $NewID -split '(..)' -ne '' | foreach { [Convert]::ToByte($_, 16) }
+        $SceneEditor.MapArray[$offset+0] = $value[0]
+        $SceneEditor.MapArray[$offset+1] = $value[1]
+    }
+
+    if (IsSet $X) {
+        $X = $X -split '(..)' -ne '' | foreach { [Convert]::ToByte($_, 16) }
+        $SceneEditor.MapArray[$offset+2] = $X[0]
+        $SceneEditor.MapArray[$offset+3] = $X[1]
+    }
+
+    if (IsSet $Y) {
+        $Y = $Y -split '(..)' -ne '' | foreach { [Convert]::ToByte($_, 16) }
+        $SceneEditor.MapArray[$offset+4] = $Y[0]
+        $SceneEditor.MapArray[$offset+5] = $Y[1]
+    }
+
+    if (IsSet $Z) {
+        $Z = $Z -split '(..)' -ne '' | foreach { [Convert]::ToByte($_, 16) }
+        $SceneEditor.MapArray[$offset+6] = $Z[0]
+        $SceneEditor.MapArray[$offset+7] = $Z[1]
+    }
+
+    if (IsSet $XRot) {
+        $XRot = $XRot -split '(..)' -ne '' | foreach { [Convert]::ToByte($_, 16) }
+        $SceneEditor.MapArray[$offset+8] = $XRot[0]
+        $SceneEditor.MapArray[$offset+9] = $XRot[1]
+    }
+
+    if (IsSet $YRot) {
+        $YRot = $YRot -split '(..)' -ne '' | foreach { [Convert]::ToByte($_, 16) }
+        $SceneEditor.MapArray[$offset+10] = $YRot[0]
+        $SceneEditor.MapArray[$offset+11] = $YRot[1]
+    }
+
+    if (IsSet $Zrot) {
+        $Zrot = $ZRot -split '(..)' -ne '' | foreach { [Convert]::ToByte($_, 16) }
+        $SceneEditor.MapArray[$offset+12] = $ZRot[0]
+        $SceneEditor.MapArray[$offset+13] = $ZRot[1]
+    }
+
+    if (IsSet $Param) {
+        $Param = $Param -split '(..)' -ne '' | foreach { [Convert]::ToByte($_, 16) }
+        $SceneEditor.MapArray[$offset+14] = $Param[0]
+        $SceneEditor.MapArray[$offset+15] = $Param[1]
+    }
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function InsertActor([string]$ID="0000", [string]$Name, [string]$X="0000", [string]$Y="0000", [string]$Z="0000", [string]$XRot="0000", [string]$YRot="0000", [string]$ZRot="0000", [string]$Param="0000") {
     
     if ((GetActorCount) -ge 255) { return }
 
-    if     ($GameType.mode -eq "Ocarina of Time")   { $SceneEditor.MapArray.InsertRange((GetActorEnd), @(0, 2,  0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   0, 0,   0, 0)) }
-    elseif ($GameType.mode -eq "Majora's Mask")     { $SceneEditor.MapArray.InsertRange((GetActorEnd), @(0, 25, 0, 0, 0, 0, 0, 0, 0, 7, 0, 127, 0, 127, 0, 0)) }
-    else                                            { $SceneEditor.MapArray.InsertRange((GetActorEnd), @(0, 0,  0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   0, 0,   0, 0)) }
-    $SceneEditor.Offsets[$SceneEditor.Headers.SelectedIndex].ActorCount++
+    if (IsSet $Name) {
+        foreach ($actor in $Files.json.sceneEditor.actors) {
+            if ($actor.name -eq $Name) {
+                $ID = $actor.id
+                break
+            }
+        }
+    }
+
+    $values = $ID + $X + $Y + $Z + $XRot + $YRot + $ZRot + $Param
+    $values = $values -split '(..)' -ne '' | foreach { [Convert]::ToByte($_, 16) }
+
+    $SceneEditor.MapArray.InsertRange((GetActorEnd), $values)
+    $SceneEditor.Offsets[$SceneEditor.LoadedHeader].ActorCount++
     $SceneEditor.MapArray[(GetActorCountIndex)]++
 
     if (IsSet $SceneEditor.Offsets[0].AlternateStart) {
@@ -1278,14 +1508,14 @@ function InsertActor() {
         }
 
         $SceneEditor.Offsets[$i].MeshIndex            += 16
-        if ($SceneEditor.Headers.SelectedIndex -eq 0) {
+        if ($SceneEditor.LoadedHeader -eq 0) {
             $SceneEditor.Offsets[$i].MeshStart        += 16
             ShiftMap -Offset $SceneEditor.Offsets[$i].MeshIndex   -Add 16
         }
         
     }
 
-    if ($SceneEditor.Headers.SelectedIndex -eq 0) {
+    if ($SceneEditor.LoadedHeader -eq 0) {
         $SceneEditor.Offsets[0].MeshStart += 16
         ShiftMap -Offset $SceneEditor.Offsets[0].MeshIndex     -Add 16
         ShiftMap -Offset ($SceneEditor.Offsets[0].MeshStart+5) -Add 16
@@ -1323,8 +1553,10 @@ function InsertActor() {
         }
     }
 
-    $SceneEditor.Tab = $null
-    LoadTab -Tab 1
+    if ($SceneEditor.GUI) {
+        $SceneEditor.Tab = $null
+        LoadTab -Tab 1
+    }
 
 }
 
@@ -1334,9 +1566,9 @@ function InsertActor() {
 function DeleteObject() {
     
     if ((GetObjectCount) -eq 0) { return }
-    $SceneEditor.BottomPanelObjects.AutoScroll = $False
+    if ($SceneEditor.GUI) { $SceneEditor.BottomPanelObjects.AutoScroll = $False }
 
-    $SceneEditor.Offsets[$SceneEditor.Headers.SelectedIndex].ObjectCount--
+    $SceneEditor.Offsets[$SceneEditor.LoadedHeader].ObjectCount--
     $SceneEditor.MapArray[(GetObjectCountIndex)]--
     $SceneEditor.BottomPanelObjects.Controls.Remove($SceneEditor.Objects[$SceneEditor.Objects.Count-1].Panel)
     $SceneEditor.Objects.RemoveAt($SceneEditor.Objects.Count-1)
@@ -1344,13 +1576,15 @@ function DeleteObject() {
     if     ((GetObjectCount) % 2 -eq 1) { $SceneEditor.MapArray[(GetObjectEnd)] = $SceneEditor.MapArray[(GetObjectEnd)+1] = 0 }
     elseif ((GetObjectCount) % 2 -eq 0) {
         $SceneEditor.MapArray.RemoveRange((GetObjectEnd), 4)
-        $SceneEditor.Offsets[$SceneEditor.Headers.SelectedIndex].ActorStart -= 4
+        $SceneEditor.Offsets[$SceneEditor.LoadedHeader].ActorStart -= 4
         ShiftMap -Offset (GetActorIndex) -Subtract 4
 
-        for ($i=$SceneEditor.Offsets[0].AlternateStart; $i-lt $SceneEditor.Offsets[0].ObjectStart; $i+= 4) {
-            if ($SceneEditor.MapArray[$i] -ne 3) { continue }
-            $value = $SceneEditor.MapArray[$i+1] * 65536 + $SceneEditor.MapArray[$i+2] * 256 + $SceneEditor.MapArray[$i+3]
-            if ($value -gt (GetHeader)) { ShiftMap -Offset ($i+1) -Subtract 4 }
+        if (IsSet $SceneEditor.Offsets[0].AlternateStart) {
+            for ($i=$SceneEditor.Offsets[0].AlternateStart; $i-lt $SceneEditor.Offsets[0].ObjectStart; $i+= 4) {
+                if ($SceneEditor.MapArray[$i] -ne 3) { continue }
+                $value = $SceneEditor.MapArray[$i+1] * 65536 + $SceneEditor.MapArray[$i+2] * 256 + $SceneEditor.MapArray[$i+3]
+                if ($value -gt (GetHeader)) { ShiftMap -Offset ($i+1) -Subtract 4 }
+            }
         }
 
         for ($i=1; $i -lt $SceneEditor.Offsets.Header.Count; $i++) {
@@ -1373,13 +1607,13 @@ function DeleteObject() {
             }
 
             $SceneEditor.Offsets[$i].MeshIndex            -= 4
-            if ($SceneEditor.Headers.SelectedIndex -eq 0) {
+            if ($SceneEditor.LoadedHeader -eq 0) {
                 $SceneEditor.Offsets[$i].MeshStart        -= 4
                 ShiftMap -Offset $SceneEditor.Offsets[$i].MeshIndex   -Subtract 4
             }
         }
 
-        if ($SceneEditor.Headers.SelectedIndex -eq 0) {
+        if ($SceneEditor.LoadedHeader -eq 0) {
             $SceneEditor.Offsets[0].MeshStart -= 4
             ShiftMap -Offset $SceneEditor.Offsets[0].MeshIndex     -Subtract 4
             ShiftMap -Offset ($SceneEditor.Offsets[0].MeshStart+5) -Subtract 4
@@ -1423,32 +1657,46 @@ function DeleteObject() {
         }
     }
 
-    $SceneEditor.BottomPanelObjects.AutoScroll        = $True
-    $SceneEditor.BottomPanelObjects.AutoScrollMargin  = New-Object System.Drawing.Size(0, 0)
-    $SceneEditor.BottomPanelObjects.AutoScrollMinSize = New-Object System.Drawing.Size(0, 0)
+    if ($SceneEditor.GUI) {
+        $SceneEditor.BottomPanelObjects.AutoScroll        = $True
+        $SceneEditor.BottomPanelObjects.AutoScrollMargin  = New-Object System.Drawing.Size(0, 0)
+        $SceneEditor.BottomPanelObjects.AutoScrollMinSize = New-Object System.Drawing.Size(0, 0)
+    }
 
 }
 
 
 
 #==============================================================================================================================================================================================
-function InsertObject() {
+function InsertObject([string]$ID="0000", [string]$Name) {
     
     if ((GetObjectCount) -ge $Files.json.sceneEditor.max_objects) { return }
-    $SceneEditor.BottomPanelObjects.AutoScroll = $False
+    if ($SceneEditor.GUI) { $SceneEditor.BottomPanelObjects.AutoScroll = $False }
 
-    $SceneEditor.Offsets[$SceneEditor.Headers.SelectedIndex].ObjectCount++
+    if (IsSet $Name) {
+        foreach ($obj in $Files.json.sceneEditor.objects) {
+            if ($obj.name -eq $Name) {
+                $ID = $obj.id
+                break
+            }
+        }
+    }
+
+    [byte[]]$ID = $ID -split '(..)' -ne '' | foreach { [Convert]::ToByte($_, 16) }
+    $SceneEditor.Offsets[$SceneEditor.LoadedHeader].ObjectCount++
     $SceneEditor.MapArray[(GetObjectCountIndex)]++
 
     if ((GetObjectCount) % 2 -eq 1) {
-        $SceneEditor.MapArray.InsertRange((GetObjectEnd)-4, @(0, 0, 0, 0))
-        $SceneEditor.Offsets[$SceneEditor.Headers.SelectedIndex].ActorStart += 4
+        $SceneEditor.MapArray.InsertRange((GetObjectEnd)-4, ($ID + @(0, 0)))
+        $SceneEditor.Offsets[$SceneEditor.LoadedHeader].ActorStart += 4
         ShiftMap -Offset (GetActorIndex) -Add 4
 
-        for ($i=$SceneEditor.Offsets[0].AlternateStart; $i-lt $SceneEditor.Offsets[0].ObjectStart; $i+= 4) {
-            if ($SceneEditor.MapArray[$i] -ne 3) { continue }
-            $value = $SceneEditor.MapArray[$i+1] * 65536 + $SceneEditor.MapArray[$i+2] * 256 + $SceneEditor.MapArray[$i+3]
-            if ($value -gt (GetHeader)) { ShiftMap -Offset ($i+1) -Add 4 }
+        if (IsSet $SceneEditor.Offsets[0].AlternateStart) {
+            for ($i=$SceneEditor.Offsets[0].AlternateStart; $i-lt $SceneEditor.Offsets[0].ObjectStart; $i+=4) {
+                if ($SceneEditor.MapArray[$i] -ne 3) { continue }
+                $value = $SceneEditor.MapArray[$i+1] * 65536 + $SceneEditor.MapArray[$i+2] * 256 + $SceneEditor.MapArray[$i+3]
+                if ($value -gt (GetHeader)) { ShiftMap -Offset ($i+1) -Add 4 }
+            }
         }
 
         for ($i=1; $i -lt $SceneEditor.Offsets.Header.Count; $i++) {
@@ -1471,13 +1719,13 @@ function InsertObject() {
             }
 
             $SceneEditor.Offsets[$i].MeshIndex            += 4
-            if ($SceneEditor.Headers.SelectedIndex -eq 0) {
+            if ($SceneEditor.LoadedHeader -eq 0) {
                 $SceneEditor.Offsets[$i].MeshStart        += 4
                 ShiftMap -Offset $SceneEditor.Offsets[$i].MeshIndex   -Add 4
             }
         }
 
-        if ($SceneEditor.Headers.SelectedIndex -eq 0) {
+        if ($SceneEditor.LoadedHeader -eq 0) {
             $SceneEditor.Offsets[0].MeshStart += 4
             ShiftMap -Offset $SceneEditor.Offsets[0].MeshIndex     -Add 4
             ShiftMap -Offset ($SceneEditor.Offsets[0].MeshStart+5) -Add 4
@@ -1520,12 +1768,17 @@ function InsertObject() {
         }
         elseif ((GetTotalObjects) % 4 -eq 2) { $SceneEditor.MapArray.RemoveRange($vtx-8, 4) }
     }
+    else {
+        $SceneEditor.MapArray[(GetObjectEnd) - 2] = $ID[0]
+        $SceneEditor.MapArray[(GetObjectEnd) - 1] = $ID[1]
+    }
 
-    AddObject
-
-    $SceneEditor.BottomPanelObjects.AutoScroll        = $True
-    $SceneEditor.BottomPanelObjects.AutoScrollMargin  = New-Object System.Drawing.Size(0, 0)
-    $SceneEditor.BottomPanelObjects.AutoScrollMinSize = New-Object System.Drawing.Size(0, 0)
+    if ($SceneEditor.GUI) {
+        AddObject
+        $SceneEditor.BottomPanelObjects.AutoScroll        = $True
+        $SceneEditor.BottomPanelObjects.AutoScrollMargin  = New-Object System.Drawing.Size(0, 0)
+        $SceneEditor.BottomPanelObjects.AutoScrollMinSize = New-Object System.Drawing.Size(0, 0)
+    }
 
 }
 
@@ -1642,7 +1895,7 @@ function AddActor() {
     CreateLabel -Y (DPISize 2) -Width (DPISize 55) -Height (DPISize 20) -Text ("Actor: " + ($index + 1)) -AddTo $actor.Panel
     Add-Member  -InputObject $actor.types -NotePropertyMembers @{ TabEntry = ($SceneEditor.Actors.Count-1); Index = $index }
 
-    $actor.types.Add_SelectedIndexChanged({
+    $actor.Types.Add_SelectedIndexChanged({
         $SceneEditor.Actors[$this.TabEntry].Name.Items.Clear()
         $SceneEditor.Actors[$this.TabEntry].Name.Items.AddRange($SceneEditor.ActorList[$this.SelectedIndex].name)
         $SceneEditor.Actors[$this.TabEntry].Name.Enabled       = $True
@@ -1664,7 +1917,7 @@ function AddActor() {
             if (IsSet $item.default_y)       { $defaultY = $item.default_y } else { $defaultY = 0      }
             if (IsSet $item.default_z)       { $defaultZ = $item.default_z } else { $defaultZ = 0      }
             $id              = $item.ID
-            $this.Label.Text = "ID: " + $id
+            if ($Settings.Debug.SceneEditorChecks -eq $True) { $this.Label.Text = "ID: " + $id }
 
             if ($GameType.mode -eq "Majora's Mask") {
                 $id = GetDecimal $id
@@ -2374,3 +2627,12 @@ function ReloadParams([object]$Actor, [byte]$Index) {
 #==============================================================================================================================================================================================
 
 Export-ModuleMember -Function RunSceneEditor
+Export-ModuleMember -Function PrepareMap
+Export-ModuleMember -Function SaveLoadedMap
+Export-ModuleMember -Function PatchLoadedScene
+
+Export-ModuleMember -Function ReplaceActor
+Export-ModuleMember -Function DeleteActor
+Export-ModuleMember -Function InsertActor
+Export-ModuleMember -Function DeleteObject
+Export-ModuleMember -Function InsertObject

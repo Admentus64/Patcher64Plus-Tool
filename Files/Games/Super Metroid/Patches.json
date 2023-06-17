@@ -3,4 +3,19 @@
 	"redux"		: 1,
 	"script"	: "Super Metroid",
 	"tooltip"	: "Customize Super Metroid with Redux and additional options{0}Redux version: 1.5"
+
+}, {
+
+	"title"		: "Project Base (v0.8.1)",
+	"patch"		: "Compressed\\project_base.ips",
+	"output"	: "project_base",
+	"tooltip"	: "Includes smoother mechanics, level edits, new content, graphic edits, custom code, and much more{0}This version changes the map{0}The difficulty level of Project Base is roughly the same as the original difficulty level"
+
+}, {
+
+	"title"		: "Project Base Vanilla (v0.8.1)",
+	"patch"		: "Compressed\\project_base_vanilla.ips",
+	"output"	: "project_base",
+	"tooltip"	: "Includes smoother mechanics, level edits, new content, graphic edits, custom code, and much more{0}Vanilla has all the modified mechanics from Project Base with the original untouched map{0}The difficulty level of Project Base is roughly the same as the original difficulty level"
+
 } ]

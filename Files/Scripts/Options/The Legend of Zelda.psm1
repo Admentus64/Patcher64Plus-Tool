@@ -25,6 +25,7 @@ function PatchOptions() {
     # AUDIO #
 
     if     (IsChecked $Redux.Audio.MixedDungeonThemes)   { ApplyPatch -Patch "Compressed\Optional\mixed_dungeon_themes.ips"  }
+    elseif (IsChecked $Redux.Audio.NoMusic)              { ApplyPatch -Patch "Compressed\Optional\no_music.ips"              }
     if     (IsChecked $Redux.Audio.NoLowHPBeep)          { ApplyPatch -Patch "Compressed\Optional\no_low_hp_beep.ips"        }
     elseif (IsChecked $Redux.Audio.LowHPBeep)            { ApplyPatch -Patch "Compressed\Optional\low_hp_beep.ips"           }
 
@@ -80,9 +81,32 @@ function PatchReduxOptions() {
 
 
 #==============================================================================================================================================================================================
+function AdjustGUI() {
+    
+    if ($Patches.Redux.Checked) {
+        EnableElem -Elem @($Redux.Audio.MixedDungeonThemes, $Redux.Audio.NoMusic)       -Active (!$Redux.Revert.DungeonTheme.Checked)
+        EnableElem -Elem @($Redux.Revert.DungeonTheme,      $Redux.Audio.NoMusic)       -Active (!$Redux.Audio.MixedDungeonThemes.Checked)
+        EnableElem -Elem @($Redux.Audio.MixedDungeonThemes, $Redux.Revert.DungeonTheme) -Active (!$Redux.Audio.NoMusic.Checked)
+        if ($Redux.Audio.MixedDungeonThemes.Checked -and $Redux.Audio.NoMusic.Checked -and $Redux.Revert.DungeonTheme.Checked) { $Redux.Audio.MixedDungeonThemes.Checked = $Redux.Audio.NoMusic.Checked = $Redux.Revert.DungeonTheme.Checked = $False }
+    }
+    else {
+        EnableElem -Elem $Redux.Audio.MixedDungeonThemes -Active (!$Redux.Audio.NoMusic.Checked)
+        EnableElem -Elem $Redux.Audio.NoMusic            -Active (!$Redux.Audio.MixedDungeonThemes.Checked)
+        if ($Redux.Audio.MixedDungeonThemes.Checked -and $Redux.Audio.NoMusic.Checked) { $Redux.Audio.MixedDungeonThemes.Checked = $Redux.Audio.NoMusic.Checked = $False }
+    }
+
+}
+
+
+
+#==============================================================================================================================================================================================
 function CreateOptions() {
     
     CreateOptionsDialog -Columns 5 -Height 420
+
+    $Redux.Audio.MixedDungeonThemes.Add_CheckStateChanged( { EnableElem -Elem @($Redux.Audio.NoMusic,            $Redux.Revert.DungeonTheme) -Active (!$this.checked) } )
+    $Redux.Audio.NoMusic.Add_CheckStateChanged(            { EnableElem -Elem @($Redux.Audio.MixedDungeonThemes, $Redux.Revert.DungeonTheme) -Active (!$this.checked) } )
+    $Redux.Revert.DungeonTheme.Add_CheckStateChanged(      { EnableElem -Elem @($Redux.Audio.MixedDungeonThemes, $Redux.Audio.NoMusic)       -Active (!$this.checked) } )
 
 }
 
@@ -118,6 +142,7 @@ function CreateTabMain() {
 
     CreateReduxGroup    -Tag  "Audio"              -Text "Audio"
     CreateReduxCheckBox -Name "MixedDungeonThemes" -Text "Mixed Dungeon Themes" -Info "Changes the Dungeon music to interchange between the original Zelda 1 Dungeon Theme and A New Light's Dungeon Theme" -Credits "tacoschip & gzip"
+    CreateReduxCheckBox -Name "NoMusic"            -Text "No Music"             -Info "Removes the background music in the game"                                                                            -Credits "Fiskbit"
     CreateReduxCheckBox -Name "NoLowHPBeep"        -Text "No Low HP Beep"       -Info "Remove the low health beep"                                                                                          -Credits "ShadowOne333"
     CreateReduxCheckBox -Name "LowHPBeep"          -Text "Low HP Beep"          -Info "Change the Low Hearts beeping sound to a heartbeat-like sound"                                                       -Credits "gzip" -Link $Redux.Audio.NoLowHPBeep
 
@@ -125,11 +150,12 @@ function CreateTabMain() {
 
     # TITLE SCREEN #
 
-    CreateReduxGroup       -Tag   "Title" -Text "Title Screen"
-    CreateReduxRadioButton -Name "Subtitle"             -SaveTo "TitleScreen" -Checked -Text "Keep Title Screen"               -Info "Keep the title screen as it is"
-    CreateReduxRadioButton -Name "ReworkedTitleScreen"  -SaveTo "TitleScreen"          -Text "Reworked Title Screen"           -Info "Reworked title screen to match the more recent Zelda title screen"                                -Credits "Redux Project"
-    CreateReduxRadioButton -Name "ReworkedTitleWithout" -SaveTo "TitleScreen"          -Text "Reworked Title Without Subtitle" -Info "Reworked title screen to match the more recent Zelda title screen but removed the added subtitle" -Credits "Redux Project"
-    CreateReduxRadioButton -Name "RemoveSubtitle"       -SaveTo "TitleScreen"          -Text "Remove Subtitle"                 -Info "Remove the added subtitle from the title screen"                                                  -Credits "Redux Project"
+    CreateReduxGroup       -Tag  "Title"                -Text "Title Screen"
+    CreateReduxPanel
+    CreateReduxRadioButton -Name "Subtitle"             -Text "Keep Title Screen"               -SaveTo "TitleScreen" -Info "Keep the title screen as it is"                                                                   -Checked
+    CreateReduxRadioButton -Name "ReworkedTitleScreen"  -Text "Reworked Title Screen"           -SaveTo "TitleScreen" -Info "Reworked title screen to match the more recent Zelda title screen"                                -Credits "Redux Project"
+    CreateReduxRadioButton -Name "ReworkedTitleWithout" -Text "Reworked Title Without Subtitle" -SaveTo "TitleScreen" -Info "Reworked title screen to match the more recent Zelda title screen but removed the added subtitle" -Credits "Redux Project"
+    CreateReduxRadioButton -Name "RemoveSubtitle"       -Text "Remove Subtitle"                 -SaveTo "TitleScreen" -Info "Remove the added subtitle from the title screen"                                                  -Credits "Redux Project"
      
 }
 
@@ -162,7 +188,7 @@ function CreateTabRedux() {
     # ORIGINAL AUDIO #
 
     CreateReduxGroup    -Tag  "Revert"       -Text "Original Audio (Revert)"
-    CreateReduxCheckBox -Name "DungeonTheme" -Text "Dungeon Theme" -Info "Changes the Dungeon music to only play the original Zelda 1 Dungeon Theme" -Credits "Nintendo" -Link $Redux.Audio.MixedDungeonThemes
+    CreateReduxCheckBox -Name "DungeonTheme" -Text "Dungeon Theme" -Info "Changes the Dungeon music to only play the original Zelda 1 Dungeon Theme" -Credits "Nintendo"
 
 
 

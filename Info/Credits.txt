@@ -833,6 +833,7 @@ Other:			Admentus & gamemasterplc
 --- Additional Options ---
 - Widescreen:				ocesse
 - Save Stations Refill:			Adamf
+- No Music:				Kejardon
 - ShadowOne333
 
 --- Project Base ---
@@ -880,6 +881,9 @@ Grahf, ShadowOne333, CeruCap, ScoutTown, MrBlueDork, Duopierce, Skorph2014, mars
 - Original Hacking:			auburnbit, kalita-kan, snarfblam
 - Hacking:				bogaabogaa, DarkSamus993, Fiskbit, frantik, gzip, minucce, LexLuthermeister, stratoform, tacoschip
 - Script:				BlazeHeatnix, ifightdragons
+
+--- Additional Options ---
+- No Music:				Fiskbit
 
 
 

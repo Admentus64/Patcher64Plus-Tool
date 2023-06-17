@@ -859,10 +859,10 @@ function ApplyPatch([string]$File=$GetROM.decomp, [string]$Patch, [string]$New, 
     # Patching
     if ($Patch -like "*.bps*" -or $Patch -like "*.ips*") {
         if ($New.Length -gt 0)   { & $Files.tool.flips --ignore-checksum --apply $Patch $File $New | Out-Null }
-        else                     { & $Files.tool.flips --ignore-checksum $Patch $File | Out-Null              }
+        else                     { & $Files.tool.flips --ignore-checksum         $Patch $File      | Out-Null }
     }
     elseif ($Patch -like "*.ups*") {
-        if ($New.Length -gt 0)   { & $Files.tool.ups apply -b $File -p $Patch -o $New | Out-Null  }
+        if ($New.Length -gt 0)   { & $Files.tool.ups apply -b $File -p $Patch -o $New  | Out-Null }
         else                     { & $Files.tool.ups apply -b $File -p $Patch -o $File | Out-Null }
     }
     elseif ($Patch -like "*.xdelta*" -or $Patch -like "*.vcdiff*") {

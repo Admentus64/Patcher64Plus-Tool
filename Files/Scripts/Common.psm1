@@ -379,7 +379,6 @@ function ChangePatch() {
                     $global:GameSettings = $global:GameSettingsFile = $null
                 }
 
-                DisablePatches
                 SetVCRemap
                 ChangeGameRev
 
@@ -393,6 +392,7 @@ function ChangePatch() {
                     }
                 }
 
+                DisablePatches
                 break
         }
     }
