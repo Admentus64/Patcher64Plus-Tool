@@ -22,4 +22,11 @@
 	"output"	: "zelda1",
 	"tooltip"	: "A port of the original The Legend of Zelda (NES) within Link's Awakening (GBC)"
 
+}, {
+
+	"title"		: "Zelda's Adventure Port (v1.3.0)",
+	"patch"		: "Compressed\\zeldas_adventure.bps",
+	"output"	: "zelda1",
+	"tooltip"	: "A port of the original Zelda's Adventure (CDI) within Link's Awakening (GBC)"
+
 } ]

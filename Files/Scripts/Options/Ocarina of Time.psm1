@@ -276,10 +276,6 @@ function ByteOptions() {
         ChangeBytes -Offset "B589EB" -Values "07" -Add # B Text          - X position (94 -> 9B, +07)
     }
 
-    if ( !((IsIndex -Elem $Redux.UI.ButtonSize -Text "Large") -and (IsIndex -Elem $Redux.UI.ButtonStyle -Text "Ocarina of Time")) ) {
-        PatchBytes -Offset "1A3CA00" -Shared -Patch ("Buttons\" + $Redux.UI.ButtonSize.Text.replace(" (default)", "") + "\" + $Redux.UI.ButtonStyle.Text.replace(" (default)", "") + ".bin")
-    }
-
     if ( (IsIndex -Elem $Redux.UI.BlackBars -Index 2) -or (IsIndex -Elem $Redux.UI.BlackBars -Index 4) ) { ChangeBytes -Offset "B0F680" -Values "00 00 00 00" }
     if ( (IsIndex -Elem $Redux.UI.BlackBars -Index 3) -or (IsIndex -Elem $Redux.UI.BlackBars -Index 4) ) {
         ChangeBytes -Offset "B0F5A4" -Values "00 00 00 00"
@@ -294,6 +290,7 @@ function ByteOptions() {
         PatchBytes -Offset "1A3E580" -Shared -Patch "HUD\Dungeon Map Chest\Majora's Mask.bin"
     }
 
+    if (IsDefault $Redux.UI.ButtonStyle -Not)   { PatchBytes -Offset "1A3CA00" -Shared -Patch ("Buttons\" + $Redux.UI.ButtonStyle.Text.replace(" (default)", "") + ".bin") }
     if (IsChecked $Redux.UI.CenterNaviPrompt)   { ChangeBytes -Offset "B582DF"  -Values "01" -Subtract }
     if (IsChecked $Redux.UI.DungeonKeys)        { PatchBytes  -Offset "1A3DE00" -Shared -Patch "HUD\Keys\Majora's Mask.bin"   }
     if (IsDefault $Redux.UI.Rupees -Not)        { PatchBytes  -Offset "1A3DF00" -Shared -Patch ("HUD\Rupees\" + $Redux.UI.Rupees.Text.replace(" (default)", "") + ".bin") }
@@ -1011,17 +1008,17 @@ function ByteOptions() {
     # WALLET CAPACITY #
     
     if (IsChecked $Redux.Capacity.EnableWallet) {
-        $Wallet1 = Get16Bit $Redux.Capacity.Wallet1.Text; $Wallet2 = Get16Bit $Redux.Capacity.Wallet2.Text; $Wallet3 = Get16Bit $Redux.Capacity.Wallet3.Text; $Wallet4 = Get16Bit $Redux.Capacity.Wallet4.Text
-        ChangeBytes -Offset "B6EC4C" -Values @($Wallet1.Substring(0, 2), $Wallet1.Substring(2) )
-        ChangeBytes -Offset "B6EC4E" -Values @($Wallet2.Substring(0, 2), $Wallet2.Substring(2) )
-        ChangeBytes -Offset "B6EC50" -Values @($Wallet3.Substring(0, 2), $Wallet3.Substring(2) )
-        ChangeBytes -Offset "B6EC52" -Values @($Wallet4.Substring(0, 2), $Wallet4.Substring(2) )
+        $max     = 3
+        $wallet1 = Get16Bit $Redux.Capacity.Wallet1.Text; ChangeBytes -Offset "B6EC4C" -Values @($wallet1.Substring(0, 2), $wallet1.Substring(2) )
+        $wallet2 = Get16Bit $Redux.Capacity.Wallet2.Text; ChangeBytes -Offset "B6EC4E" -Values @($wallet2.Substring(0, 2), $wallet2.Substring(2) )
+        $wallet3 = Get16Bit $Redux.Capacity.Wallet3.Text; ChangeBytes -Offset "B6EC50" -Values @($wallet3.Substring(0, 2), $wallet3.Substring(2) )
+        $wallet4 = Get16Bit $Redux.Capacity.Wallet4.Text; ChangeBytes -Offset "B6EC52" -Values @($wallet4.Substring(0, 2), $wallet4.Substring(2) )
 
-        ChangeBytes -Offset "B6D571" -Values @( ($Max - $Redux.Capacity.Wallet1.Text.Length), (3 - $Redux.Capacity.Wallet2.Text.Length), (3 - $Redux.Capacity.Wallet3.Text.Length), (3 - $Redux.Capacity.Wallet4.Text.Length) ) -Interval 2
-        ChangeBytes -Offset "B6D579" -Values @(         $Redux.Capacity.Wallet1.Text.Length,       $Redux.Capacity.Wallet2.Text.Length,       $Redux.Capacity.Wallet3.Text.Length,       $Redux.Capacity.Wallet4.Text.Length)   -Interval 2
+        ChangeBytes -Offset "B6D571" -Values @( ($max - $Redux.Capacity.Wallet1.Text.Length), ($max - $Redux.Capacity.Wallet2.Text.Length), ($max - $Redux.Capacity.Wallet3.Text.Length), ($max - $Redux.Capacity.Wallet4.Text.Length) ) -Interval 2
+        ChangeBytes -Offset "B6D579" -Values @(         $Redux.Capacity.Wallet1.Text.Length,          $Redux.Capacity.Wallet2.Text.Length,          $Redux.Capacity.Wallet3.Text.Length,          $Redux.Capacity.Wallet4.Text.Length)   -Interval 2
 
-        if ($Redux.Capacity.Wallet4.Text -lt $Redux.Capacity.Wallet3.Text)   { ChangeBytes -Offset "E5088A" -Values @($Wallet3.Substring(0, 2), $Wallet3.Substring(2) ) } # Running Man
-        else                                                                 { ChangeBytes -Offset "E5088A" -Values @($Wallet4.Substring(0, 2), $Wallet4.Substring(2) ) }
+        if ($Redux.Capacity.Wallet4.Text -lt $Redux.Capacity.Wallet3.Text)   { ChangeBytes -Offset "E5088A" -Values @($wallet3.Substring(0, 2), $wallet3.Substring(2) ) } # Running Man
+        else                                                                 { ChangeBytes -Offset "E5088A" -Values @($wallet4.Substring(0, 2), $wallet4.Substring(2) ) }
     }
     elseif (IsChecked $Redux.Misc.TycoonWallet) {
         ChangeBytes -Offset "B6EC52" -Values "03E7"
@@ -1449,7 +1446,9 @@ function RevertReduxOptions() {
         ChangeBytes -Offset "CDF420" -Values "0C01ADBF";         ChangeBytes -Offset "CDF638" -Values "E7A40034C606000C"; ChangeBytes -Offset "CDF792" -Values "03E7"
     }
 
+    
     if (IsRevert $Redux.Speedup.DoorOfTime)           { ChangeBytes -Offset "CCE9A4" -Values "3C013F8044813000"                                                                                                                       }
+    if (IsRevert $Redux.Hooks.FasterArmosPushing)     { ChangeBytes -Offset "C97C68" -Values "24C8F800"; ChangeBytes -Offset "C97D68" -Values "3C013F0044814000"; ChangeBytes -Offset "C97E20" -Values "3C013F0044815000"             }
     if (IsRevert $Redux.Hooks.FishLarger)             { ChangeBytes -Offset "DBF428" -Values "C652019C3C0142824481400046009100E644"; ChangeBytes -Offset "DBF484" -Values "E652019C"; ChangeBytes -Offset "DBF4A8" -Values "E648019C" }
     if (IsRevert $Redux.Hooks.FishBites)              { ChangeBytes -Offset "DC7090" -Values "C60A019846025102"                                                                                                                       }
     if (IsRevert $Redux.Hooks.BlueFireArrow)          { ChangeBytes -Offset "DB32C8" -Values "240100F0"                                                                                                                               }
@@ -1673,7 +1672,7 @@ function ByteReduxOptions() {
 #==============================================================================================================================================================================================
 function CheckLanguageOptions() {
     
-    if     ( (IsChecked  $Redux.Text.Vanilla -Not)   -or (IsChecked  $Redux.Text.Speed1x  -Not) -or (IsChecked  $Redux.Graphics.GCScheme) )                                                   { return $True }
+    if     ( (IsChecked  $Redux.Text.Vanilla -Not)   -or (IsChecked  $Redux.Text.Speed1x  -Not) -or (IsChecked  $Redux.Graphics.GCScheme)   -or (IsChecked $Redux.Text.EasterEggs))           { return $True }
     elseif ( (IsLanguage $Redux.Unlock.Tunics)       -or (IsLanguage $Redux.Equipment.HerosBow) -or (IsLanguage $Redux.Capacity.EnableAmmo) -or (IsLanguage $Redux.Capacity.EnableWallet) )   { return $True }
     elseif ( (IsChecked  $Redux.Text.FemalePronouns) -or (IsChecked  $Redux.Text.TypoFixes)     -or (IsChecked  $Redux.Text.GoldSkulltula)  -or (IsChecked  $Redux.Text.Instant) )            { return $True }
     elseif ( (IsChecked -Elem $Redux.Text.LinkScript)      -and $Redux.Text.LinkName.Text.Count -gt 0)                                                                                        { return $True }
@@ -1983,21 +1982,21 @@ function ByteLanguageOptions() {
                 }
             }
 
-            SetMessage -ID $h.name -Text @(8)                              -Silent -All    # Remove all <DI>
-            SetMessage -ID $h.name -Text @(9)                              -Silent -All    # Remove all <DC>
-            SetMessage -ID $h.name -Text @(20, 0)                          -Silent -All    # Remove all <Wait:00>
-            SetMessage -ID $h.name -Text @(20, 1)                          -Silent -All    # Remove all <Wait:01>
-            SetMessage -ID $h.name -Text @(20, 2)                          -Silent -All    # Remove all <Wait:02>
-            SetMessage -ID $h.name                  -Replace @(8)          -Silent -Insert # Insert <DI> to start
-            SetMessage -ID $h.name -Text @(4)       -Replace @(4, 8)       -Silent -All    # Add <DI> after <New Box>
-            SetMessage -ID $h.name -Text @(12, 10)  -Replace @(12, 10,  8) -Silent -All    # Add <DI> after <Delay:0A>
-            SetMessage -ID $h.name -Text @(12, 20)  -Replace @(12, 20,  8) -Silent -All    # Add <DI> after <Delay:14>
-            SetMessage -ID $h.name -Text @(12, 30)  -Replace @(12, 30,  8) -Silent -All    # Add <DI> after <Delay:1E>
-            SetMessage -ID $h.name -Text @(12, 40)  -Replace @(12, 40,  8) -Silent -All    # Add <DI> after <Delay:28>
-            SetMessage -ID $h.name -Text @(12, 60)  -Replace @(12, 60,  8) -Silent -All    # Add <DI> after <Delay:3C>
-            SetMessage -ID $h.name -Text @(12, 70)  -Replace @(12, 70,  8) -Silent -All    # Add <DI> after <Delay:46>
-            SetMessage -ID $h.name -Text @(12, 80)  -Replace @(12, 80,  8) -Silent -All    # Add <DI> after <Delay:50>
-            SetMessage -ID $h.name -Text @(12, 90)  -Replace @(12, 90,  8) -Silent -All    # Add <DI> after <Delay:5A>
+            SetMessage -ID $h.name -Text @(8)                             -Silent -All    # Remove all <DI>
+            SetMessage -ID $h.name -Text @(9)                             -Silent -All    # Remove all <DC>
+            SetMessage -ID $h.name -Text @(20, 0)                         -Silent -All    # Remove all <Wait:00>
+            SetMessage -ID $h.name -Text @(20, 1)                         -Silent -All    # Remove all <Wait:01>
+            SetMessage -ID $h.name -Text @(20, 2)                         -Silent -All    # Remove all <Wait:02>
+            SetMessage -ID $h.name                  -Replace @(8)         -Silent -Insert # Insert <DI> to start
+            SetMessage -ID $h.name -Text @(4)       -Replace @(4,  8)     -Silent -All    # Add <DI> after <New Box>
+            SetMessage -ID $h.name -Text @(12, 10)  -Replace @(12, 10, 8) -Silent -All    # Add <DI> after <Delay:0A>
+            SetMessage -ID $h.name -Text @(12, 20)  -Replace @(12, 20, 8) -Silent -All    # Add <DI> after <Delay:14>
+            SetMessage -ID $h.name -Text @(12, 30)  -Replace @(12, 30, 8) -Silent -All    # Add <DI> after <Delay:1E>
+            SetMessage -ID $h.name -Text @(12, 40)  -Replace @(12, 40, 8) -Silent -All    # Add <DI> after <Delay:28>
+            SetMessage -ID $h.name -Text @(12, 60)  -Replace @(12, 60, 8) -Silent -All    # Add <DI> after <Delay:3C>
+            SetMessage -ID $h.name -Text @(12, 70)  -Replace @(12, 70, 8) -Silent -All    # Add <DI> after <Delay:46>
+            SetMessage -ID $h.name -Text @(12, 80)  -Replace @(12, 80, 8) -Silent -All    # Add <DI> after <Delay:50>
+            SetMessage -ID $h.name -Text @(12, 90)  -Replace @(12, 90, 8) -Silent -All    # Add <DI> after <Delay:5A>
         }
         WriteToConsole "Finished Generating Instant Text"
     }
@@ -2263,6 +2262,7 @@ function CreateTabRedux() {
     # CODE HOOKS FEATURES #
 
     CreateReduxGroup    -Tag  "Hooks"                -All                          -Text "Code Hook Features"
+    CreateReduxCheckBox -Name "FasterArmosPushing"   -All                 -Checked -Text "Faster Armos Pushing"     -Info "Armos statues are being pushed faster"                                                                  -Credits "Ported from Rando"
     CreateReduxCheckBox -Name "FishLarger"           -Base 5                       -Text "Larger Fish"              -Info "Fish are now larger"                                                                                    -Credits "Ported from Rando"
     CreateReduxCheckBox -Name "FishBites"            -Base 5                       -Text "Guaranteed Fish Bites"    -Info "Make fish bites guaranteed when the hook of the rod is stable"                                          -Credits "Ported from Rando"
     CreateReduxCheckBox -Name "RupeeIconColors"      -All                 -Checked -Text "Rupee Icon Colors"        -Info "The color of the Rupees counter icon changes depending on your wallet size"                             -Credits "Ported from Redux"
@@ -2481,17 +2481,15 @@ function CreateTabGraphics() {
     $Last.Group.Width = $Redux.Groups[$Redux.Groups.Length-3].Width; $Last.Group.Top = $Redux.Groups[$Redux.Groups.Length-3].Bottom + 5; $Last.Width = 4
     if ($GamePatch.settings -eq "Gold Quest") { $val = "Gold Quest" } else { $val = "Ocarina of Time" }
 
-    CreateReduxComboBox -Name "BlackBars"        -All -Text "Black Bars"  -Items @("Enabled", "Disabled for Z-Targeting", "Disabled for Cutscenes", "Always Disabled") -Info "Removes the black bars shown on the top and bottom of the screen during Z-targeting and cutscenes"    -Credits "Admentus"
-    CreateReduxComboBox -Name "ButtonSize"       -All -Text "HUD Buttons"                          -FilePath ($Paths.shared + "\Buttons")    -Ext $null -Default "Large"           -Info "Set the size for the HUD buttons"                                                         -Credits "GhostlyDark (ported)"
-    $path = $Paths.shared + "\Buttons" + "\" + $Redux.UI.ButtonSize.Text.replace(" (default)", "")
-    CreateReduxComboBox -Name "ButtonStyle"      -All -Text "HUD Buttons" -Items "Ocarina of Time" -FilePath $path                           -Ext "bin" -Default $val              -Info "Set the style for the HUD buttons"                                                        -Credits "GhostlyDark (ported), Admentus (ported), Pizza (HD), Djipi, Community, Nerrel, Federelli, AndiiSyn & Syeo"
-    CreateReduxComboBox -Name "Rupees"           -All -Text "Rupee Icon"  -Items "Ocarina of Time" -FilePath ($Paths.shared + "\HUD\Rupees") -Ext "bin" -Default "Ocarina of Time" -Info "Set the style for the rupees icon"                                                        -Credits "Ported by GhostlyDark"
-    CreateReduxComboBox -Name "Hearts"           -All -Text "Heart Icons" -Items "Ocarina of Time" -FilePath ($Paths.shared + "\HUD\Hearts") -Ext "bin" -Default $val              -Info "Set the style for the heart icons"                                                        -Credits "GhostlyDark (ported), Admentus (ported), AndiiSyn & Syeo"
-    CreateReduxComboBox -Name "Magic"            -All -Text "Magic Bar"   -Items "Ocarina of Time" -FilePath ($Paths.shared + "\HUD\Magic")  -Ext "bin" -Default "Ocarina of Time" -Info "Set the style for the magic meter"                                                        -Credits "GhostlyDark (ported), Pizza, Nerrel (HD), Zeth Alkar"
-    CreateReduxCheckBox -Name "CenterNaviPrompt" -All -Text "Center Navi Prompt"                                                                                                   -Info 'Centers the "Navi" prompt shown in the C-Up button'                                       -Credits "Ported by GhostlyDark"
-    CreateReduxCheckBox -Name "DungeonKeys"      -All -Text "MM Key Icon"                                                                                                          -Info "Replace the key icon with that from Majora's Mask"                                        -Credits "Ported by GhostlyDark"
-    CreateReduxCheckBox -Name "DungeonIcons"     -All -Text "MM Dungeon Icons"                                                                                                     -Info "Replace the dungeon map icons with those from Majora's Mask"                              -Credits "Ported by GhostlyDark"
-    CreateReduxCheckBox -Name "ButtonPositions"  -All -Text "MM Button Positions"                                                                                                  -Info "Positions the A and B buttons like in Majora's Mask"                                      -Credits "Ported by GhostlyDark"
+    CreateReduxComboBox -Name "BlackBars"        -All -Text "Black Bars"    -Items @("Enabled", "Disabled for Z-Targeting", "Disabled for Cutscenes", "Always Disabled")             -Info "Removes the black bars shown on the top and bottom of the screen during Z-targeting and cutscenes" -Credits "Admentus"
+    CreateReduxComboBox -Name "ButtonStyle"      -All -Text "Buttons Style" -Items "Ocarina of Time" -FilePath ($Paths.shared + "\Buttons")    -Ext "bin" -Default $val              -Info "Set the style for the HUD buttons"                                                                 -Credits "GhostlyDark (ported), Admentus (ported), Pizza (HD), Djipi, Community, Nerrel, Federelli, AndiiSyn & Syeo"
+    CreateReduxComboBox -Name "Rupees"           -All -Text "Rupee Icon"    -Items "Ocarina of Time" -FilePath ($Paths.shared + "\HUD\Rupees") -Ext "bin" -Default "Ocarina of Time" -Info "Set the style for the rupees icon"                                                                 -Credits "Ported by GhostlyDark"
+    CreateReduxComboBox -Name "Hearts"           -All -Text "Heart Icons"   -Items "Ocarina of Time" -FilePath ($Paths.shared + "\HUD\Hearts") -Ext "bin" -Default $val              -Info "Set the style for the heart icons"                                                                 -Credits "GhostlyDark (ported), Admentus (ported), AndiiSyn & Syeo"
+    CreateReduxComboBox -Name "Magic"            -All -Text "Magic Bar"     -Items "Ocarina of Time" -FilePath ($Paths.shared + "\HUD\Magic")  -Ext "bin" -Default "Ocarina of Time" -Info "Set the style for the magic meter"                                                                 -Credits "GhostlyDark (ported), Pizza, Nerrel (HD), Zeth Alkar"
+    CreateReduxCheckBox -Name "CenterNaviPrompt" -All -Text "Center Navi Prompt"                                                                                                     -Info 'Centers the "Navi" prompt shown in the C-Up button'                                                -Credits "Ported by GhostlyDark"
+    CreateReduxCheckBox -Name "DungeonKeys"      -All -Text "MM Key Icon"                                                                                                            -Info "Replace the key icon with that from Majora's Mask"                                                 -Credits "Ported by GhostlyDark"
+    CreateReduxCheckBox -Name "DungeonIcons"     -All -Text "MM Dungeon Icons"                                                                                                       -Info "Replace the dungeon map icons with those from Majora's Mask"                                       -Credits "Ported by GhostlyDark"
+    CreateReduxCheckBox -Name "ButtonPositions"  -All -Text "MM Button Positions"                                                                                                    -Info "Positions the A and B buttons like in Majora's Mask"                                               -Credits "Ported by GhostlyDark"
     
     
 
@@ -2531,11 +2529,11 @@ function CreateTabGraphics() {
     CreateReduxGroup -Tag "UI" -All -Text "HUD Previews"
     $Last.Group.Height = (DPISize 140)
 
-    CreateImageBox -x 40  -y 30 -w 90  -h 90 -All -Name "ButtonPreview";      $Redux.UI.ButtonSize.Add_SelectedIndexChanged( { ShowHUDPreview -IsOoT } ); $Redux.UI.ButtonStyle.Add_SelectedIndexChanged( { ShowHUDPreview -IsOoT } )
-    CreateImageBox -x 220 -y 35 -w 40  -h 40 -All -Name "RupeesPreview";      $Redux.UI.Rupees.Add_SelectedIndexChanged(     { ShowHUDPreview -IsOoT } )
-    CreateImageBox -x 160 -y 35 -w 40  -h 40 -All -Name "HeartsPreview";      $Redux.UI.Hearts.Add_SelectedIndexChanged(     { ShowHUDPreview -IsOoT } )
-    CreateImageBox -x 140 -y 85 -w 200 -h 40 -All -Name "MagicPreview";       $Redux.UI.Magic.Add_SelectedIndexChanged(      { ShowHUDPreview -IsOoT } )
-    CreateImageBox -x 280 -y 35 -w 40  -h 40 -All -Name "DungeonKeysPreview"; $Redux.UI.DungeonKeys.Add_CheckStateChanged(   { ShowHUDPreview -IsOoT } )
+    CreateImageBox -x 40  -y 30 -w 90  -h 90 -All -Name "ButtonPreview";      $Redux.UI.ButtonStyle.Add_SelectedIndexChanged( { ShowHUDPreview -IsOoT } )
+    CreateImageBox -x 220 -y 35 -w 40  -h 40 -All -Name "RupeesPreview";      $Redux.UI.Rupees.Add_SelectedIndexChanged(      { ShowHUDPreview -IsOoT } )
+    CreateImageBox -x 160 -y 35 -w 40  -h 40 -All -Name "HeartsPreview";      $Redux.UI.Hearts.Add_SelectedIndexChanged(      { ShowHUDPreview -IsOoT } )
+    CreateImageBox -x 140 -y 85 -w 200 -h 40 -All -Name "MagicPreview";       $Redux.UI.Magic.Add_SelectedIndexChanged(       { ShowHUDPreview -IsOoT } )
+    CreateImageBox -x 280 -y 35 -w 40  -h 40 -All -Name "DungeonKeysPreview"; $Redux.UI.DungeonKeys.Add_CheckStateChanged(    { ShowHUDPreview -IsOoT } )
     ShowHUDPreview -IsOoT
 
 }
@@ -2658,7 +2656,7 @@ function CreateTabDifficulty() {
     CreateReduxTextBox -All -Name "LightArrow"  -Text "Light Arrow"   -Value 8  -Max 96 -Info "Set the magic cost for using Light Arrows´n48 is the maximum amount of the standard magic meter´n96 is the maximum amount of the double magic meter"  -Credits "Admentus"
     CreateReduxTextBox -All -Name "DinsFire"    -Text "Din's Fire"    -Value 12 -Max 96 -Info "Set the magic cost for using Din's Fire´n48 is the maximum amount of the standard magic meter´n96 is the maximum amount of the double magic meter"    -Credits "Admentus"
     CreateReduxTextBox -All -Name "FaroresWind" -Text "Farore's Wind" -Value 12 -Max 96 -Info "Set the magic cost for using Farore's Wind´n48 is the maximum amount of the standard magic meter´n96 is the maximum amount of the double magic meter" -Credits "Admentus"
-    CreateReduxTextBox -All -Name "NayrusLove"  -Text "Nayru'sLove"   -Value 24 -Max 96 -Info "Set the magic cost for using Nayru's Love´n48 is the maximum amount of the standard magic meter´n96 is the maximum amount of the double magic meter"  -Credits "Admentus"
+    CreateReduxTextBox -All -Name "NayrusLove"  -Text "Nayru's Love"  -Value 24 -Max 96 -Info "Set the magic cost for using Nayru's Love´n48 is the maximum amount of the standard magic meter´n96 is the maximum amount of the double magic meter"  -Credits "Admentus"
 
 
 

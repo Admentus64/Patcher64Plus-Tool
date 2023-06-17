@@ -10,6 +10,12 @@ function PatchOptions() {
         if (IsChecked $Redux.Graphics.RedesignedSamus)   { ApplyPatch -Patch "Compressed\Optional\redesigned_dual_suit.ips" }
         else                                             { ApplyPatch -Patch "Compressed\Optional\dual_suit.ips"            }
     }
+
+
+
+    # AUDIO #
+
+    if (IsChecked $Redux.Audio.NoMusic) { ApplyPatch -Patch "Compressed\Optional\no_music.ips" }
     
     
 
@@ -52,7 +58,7 @@ function PatchReduxOptions() {
 #==============================================================================================================================================================================================
 function CreateOptions() {
     
-    CreateOptionsDialog -Columns 5 -Height 285
+    CreateOptionsDialog -Columns 5 -Height 335
 
 }
 
@@ -67,6 +73,13 @@ function CreateTabMain() {
     CreateReduxCheckBox -Name "RedesignedSamus" -Text "Redesigned Samus"    -Info "Modifies Samus' sprite slightly to have a better arm cannon and some slight suit touchups"                                                       -Credits "Dmit Ryaz"
     CreateReduxCheckBox -Name "DualSuit"        -Text "Dual Suit"           -Info "Gives Samus' an entirely different set of graphics for her Power Suit form, to match the Power Suit design and form seen in other Metroid games" -Credits "Crashtour99, Starry_Melody & ShadowOne333"
     CreateReduxCheckBox -Name "DeathCensor"     -Text "Death Censor"        -Info "Censors the deatrh animations of Samus upon game over"                                                                                           -Credits "Dmit Ryaz"
+
+
+
+    # AUDIO #
+
+    CreateReduxGroup    -Tag  "Audio"   -Text "Audio"
+    CreateReduxCheckBox -Name "NoMusic" -Text "No Music" -Info "Removes the background music in the game" -Credits "Kejardon"
 
 
 

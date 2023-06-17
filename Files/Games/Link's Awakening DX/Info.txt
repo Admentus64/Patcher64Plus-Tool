@@ -1,6 +1,7 @@
 Patch Options for Link's Awakening:
 1. Apply Patch (requires a patch file)
-2. Redux and Additional Options
+2. Two ROM hacks
+3. Redux and Additional Options
 
 Known Issues:
 - Unknown

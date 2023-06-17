@@ -5,7 +5,8 @@ Patch Options for Super Metroid:
 	* Extract ROM Only
 2. Apply Patch (requires a patch file)
 3. Patch Header
-4. Redux and Additional Options
+4. Two ROM hacks
+5. Redux and Additional Options
 
 Known Issues:
 - Unknown
