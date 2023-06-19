@@ -241,32 +241,48 @@ function ByteOptions() {
     # INTERFACE #
 
     if (IsDefault $Redux.UI.AButtonScale -Not) {
-        ChangeBytes -Offset @("BAF2D3", "BAF12F", "BAF383", "BAF2EF", "BAF14B", "BAF39F") -Values               ( ($Redux.UI.AButtonScale.Value - $Redux.UI.AButtonScale.Maximum) * -1)     -Subtract
-        ChangeBytes -Offset @("BAF2E3", "BAF2D3", "BAF13F", "BAF12F", "BAF393", "BAF383") -Values ([Math]::Round( ($Redux.UI.AButtonScale.Value - $Redux.UI.AButtonScale.Maximum) * -0.5) ) -Add
-        ChangeBytes -Offset @("BAF2E7", "BAF2EF", "BAF143", "BAF14B", "BAF397", "BAF39F") -Values ([Math]::Round( ($Redux.UI.AButtonScale.Value - $Redux.UI.AButtonScale.Maximum) * -0.5) ) -Add
+        ChangeBytes -Offset @("BAF2D3", "BAF12F", "BAF383", "BAF2EF", "BAF14B", "BAF39F") -Values               ( ([byte]$Redux.UI.AButtonScale.Text - $Redux.UI.AButtonScale.Max - 15) * -1)     -Subtract
+        ChangeBytes -Offset @("BAF2E3", "BAF2D3", "BAF13F", "BAF12F", "BAF393", "BAF383") -Values ([Math]::Round( ([byte]$Redux.UI.AButtonScale.Text - $Redux.UI.AButtonScale.Max - 15) * -0.5) ) -Add
+        ChangeBytes -Offset @("BAF2E7", "BAF2EF", "BAF143", "BAF14B", "BAF397", "BAF39F") -Values ([Math]::Round( ([byte]$Redux.UI.AButtonScale.Text - $Redux.UI.AButtonScale.Max - 15) * -0.5) ) -Add
     }
 
     if (IsDefault $Redux.UI.BButtonScale -Not) {
-        ChangeBytes -Offset @("C55F25", "C55EFD", "C55EF9") -Values               ( ($Redux.UI.BButtonScale.Value - $Redux.UI.BButtonScale.Maximum) * -1)        -Add
-        ChangeBytes -Offset @("C55F15", "C55F07", "C56045") -Values ([Math]::Round( ($Redux.UI.BButtonScale.Value - $Redux.UI.BButtonScale.Maximum) * -0.0125) ) -Add
-        ChangeBytes -Offset @("C55F1D", "C55F0B", "C5604D") -Values ([Math]::Round( ($Redux.UI.BButtonScale.Value - $Redux.UI.BButtonScale.Maximum) * -0.0125) ) -Add
+        ChangeBytes -Offset "C56034"              -Values (Get16Bit       ([byte]$Redux.UI.BButtonScale.Text))                                                               # B Button Size  
+        ChangeBytes -Offset "C55F24"              -Values (GetButtonScale ([byte]$Redux.UI.BButtonScale.Text))                                                               # B Button Scale                            
+        ChangeBytes -Offset @("C55F15", "C55F1D") -Values ([Math]::Round( ($Redux.UI.BButtonScale.Max      - [byte]$Redux.UI.BButtonScale.Text)          * 0.5)  ) -Add      # Correct B Button coords
+        ChangeBytes -Offset "C5603C"              -Values (Get16Bit       ([byte]$Redux.UI.BButtonScale.Text + 1))                                                           # B Button Icon Size                         
+        ChangeBytes -Offset "C55EFC"              -Values (GetButtonScale ([byte]$Redux.UI.BButtonScale.Text + 1))                                                           # B Button Icon Scale
+        ChangeBytes -Offset "C55EF9"              -Values ([Math]::Round( ($Redux.UI.BButtonScale.Max      - [byte]$Redux.UI.BButtonScale.Text      + 1) * 6)    ) -Subtract # B Button Button Text Scale
+        ChangeBytes -Offset @("C56045", "C5604D") -Values ([Math]::Round( ($Redux.UI.BButtonScale.Max      - [byte]$Redux.UI.BButtonScale.Text      + 1) * 0.5)  ) -Add      # Adjust B Button Ammo coords
+        ChangeBytes -Offset "C55F07"              -Values ([Math]::Round( ($Redux.UI.BButtonScale.Max      - [byte]$Redux.UI.BButtonScale.Text      + 1) * 0.75) ) -Add      # Adjust B Button Text X-coord
+        ChangeBytes -Offset "C55F0B"              -Values ([Math]::Round( ($Redux.UI.BButtonScale.Max      - [byte]$Redux.UI.BButtonScale.Text      + 1) * 0.25) ) -Add      # Adjust B Button Text Y-coord
     }
 
-    if (IsDefault $Redux.UI.CLeftScale -Not) {
-        ChangeBytes -Offset @("C55F27", "C55EFF")           -Values               ( ($Redux.UI.CLeftScale.Value   - $Redux.UI.CLeftScale.Maximum)   * -1)        -Add
-        ChangeBytes -Offset @("C55F17", "C56047")           -Values ([Math]::Round( ($Redux.UI.CLeftScale.Value   - $Redux.UI.CLeftScale.Maximum)   * -0.0125) ) -Add
-        ChangeBytes -Offset @("C55F1F", "C5604F")           -Values ([Math]::Round( ($Redux.UI.CLeftScale.Value   - $Redux.UI.CLeftScale.Maximum)   * -0.0125) ) -Add
-    }
-    if (IsDefault $Redux.UI.CDownScale -Not) {
-        ChangeBytes -Offset @("C55F29", "C55F01")           -Values               ( ($Redux.UI.CDownScale.Value   - $Redux.UI.CDownScale.Maximum)   * -1)        -Add
-        ChangeBytes -Offset @("C55F19", "C56049")           -Values ([Math]::Round( ($Redux.UI.CDownScale.Value   - $Redux.UI.CDownScale.Maximum)   * -0.0125) ) -Add
-        ChangeBytes -Offset @("C55F21", "C56051")           -Values ([Math]::Round( ($Redux.UI.CDownScale.Value   - $Redux.UI.CDownScale.Maximum)   * -0.0125) ) -Add
+    if (IsDefault $Redux.UI.CLeftButtonScale -Not) {
+        ChangeBytes -Offset "C56036"              -Values (Get16Bit       ([byte]$Redux.UI.CLeftButtonScale.Text))                                                           # C-Left Button Size  
+        ChangeBytes -Offset "C55F26"              -Values (GetButtonScale ([byte]$Redux.UI.CLeftButtonScale.Text))                                                           # C-Left Button Scale
+        ChangeBytes -Offset @("C55F17", "C55F1F") -Values ([Math]::Round( ($Redux.UI.CLeftButtonScale.Max  - [byte]$Redux.UI.CLeftButtonScale.Text)      * 0.5)  ) -Add      # Adjust C-Left Button coords
+        ChangeBytes -Offset "C5603E"              -Values (Get16Bit       ([byte]$Redux.UI.CLeftButtonScale.Text - 3))                                                       # C-Left Button Icon Size
+        ChangeBytes -Offset "C55EFE"              -Values (GetButtonScale ([byte]$Redux.UI.CLeftButtonScale.Text - 3))                                                       # C-Left Button Icon Scale   
+        ChangeBytes -Offset @("C56047", "C5604F") -Values ([Math]::Round( ($Redux.UI.CLeftButtonScale.Max  - [byte]$Redux.UI.CLeftButtonScale.Text  - 3) * 0.5)  ) -Add      # Adjust C-Left Button Ammo coords
     }
 
-    if (IsDefault $Redux.UI.CRightScale -Not) {
-        ChangeBytes -Offset @("C55F2B", "C55F03")           -Values               ( ($Redux.UI.CRightScale.Value  - $Redux.UI.CRightScale.Maximum)  * -1)        -Add
-        ChangeBytes -Offset @("C55F1B", "C5604B")           -Values ([Math]::Round( ($Redux.UI.CRightScale.Value  - $Redux.UI.CRightScale.Maximum)  * -0.0125) ) -Add
-        ChangeBytes -Offset @("C55F23", "C56053")           -Values ([Math]::Round( ($Redux.UI.CRightScale.Value  - $Redux.UI.CRightScale.Maximum)  * -0.0125) ) -Add
+    if (IsDefault $Redux.UI.CDownButtonScale -Not) {
+        ChangeBytes -Offset "C56038"              -Values (Get16Bit       ([byte]$Redux.UI.CDownButtonScale.Text))                                                           # C-Down Button Size  
+        ChangeBytes -Offset "C55F28"              -Values (GetButtonScale ([byte]$Redux.UI.CDownButtonScale.Text))                                                           # C-Down Button Scale
+        ChangeBytes -Offset @("C55F19", "C55F21") -Values ([Math]::Round( ($Redux.UI.CDownButtonScale.Max  - [byte]$Redux.UI.CDownButtonScale.Text)      * 0.5)  ) -Add      # Adjust C-Down Button coords
+        ChangeBytes -Offset "C56040"              -Values (Get16Bit       ([byte]$Redux.UI.CDownButtonScale.Text - 3))                                                       # C-Down Button Icon Size
+        ChangeBytes -Offset "C55F00"              -Values (GetButtonScale ([byte]$Redux.UI.CDownButtonScale.Text - 3))                                                       # C-Down Button Icon Scale   
+        ChangeBytes -Offset @("C56049", "C56051") -Values ([Math]::Round( ($Redux.UI.CDownButtonScale.Max  - [byte]$Redux.UI.CDownButtonScale.Text  - 3) * 0.5)  ) -Add      # Adjust C-Down Button Ammo coords
+    }
+
+    if (IsDefault $Redux.UI.CRightButtonScale -Not) {
+        ChangeBytes -Offset "C5603A"              -Values (Get16Bit       ([byte]$Redux.UI.CRightButtonScale.Text))                                                          # C-Right Button Size  
+        ChangeBytes -Offset "C55F2A"              -Values (GetButtonScale ([byte]$Redux.UI.CRightButtonScale.Text))                                                          # C-Right Button Scale
+        ChangeBytes -Offset @("C55F1B", "C55F23") -Values ([Math]::Round( ($Redux.UI.CRightButtonScale.Max - [byte]$Redux.UI.CRightButtonScale.Text)     * 0.5)  ) -Add      # Adjust C-Right Button coords
+        ChangeBytes -Offset "C56042"              -Values (Get16Bit       ([byte]$Redux.UI.CRightButtonScale.Text - 3))                                                      # C-Right Button Icon Size
+        ChangeBytes -Offset "C55F02"              -Values (GetButtonScale ([byte]$Redux.UI.CRightButtonScale.Text - 3))                                                      # C-Right Button Icon Scale   
+        ChangeBytes -Offset @("C5604B", "C56053") -Values ([Math]::Round( ($Redux.UI.CRightButtonScale.Max - [byte]$Redux.UI.CRightButtonScale.Text - 3) * 0.5)  ) -Add      # Adjust C-Right Button Ammo coords
     }
 
     if (IsDefault -Elem $Redux.UI.Layout -Not) {
@@ -1372,13 +1388,15 @@ function CreateTabLanguage() {
 
     # DIALOGUE #
      
-    CreateReduxGroup  -All -Tag "Text" -Text "Dialogue"
-    CreateReduxPanel       -Columns 3
-    CreateReduxRadioButton -Name "Vanilla" -Checked  -Max 3 -SaveTo "Dialogue" -Text "Vanilla Text" -Info "Keep the text as it is appeared in the original release"
-    CreateReduxRadioButton -Name "Restore"           -Max 3 -SaveTo "Dialogue" -Text "Restore Text" -Info "Restores and fixes the following:`n- Restore the area titles cards for those that do not have any`n- Sound effects that do not play during dialogue`n- Grammar and typo fixes" -Credits "Redux"
-    CreateReduxRadioButton -Name "Custom"            -Max 3 -SaveTo "Dialogue" -Text "Custom"       -Info ('Insert custom dialogue found from "..\Patcher64+ Tool\Files\Games\Majora' + "'" + 's Mask\Custom Text"') -Warning "Make sure your custom script is proper and correct, or your ROM will crash`n[!] No edit will be made if the custom script is missing"
+    if ($GamePatch.vanilla -eq 1) {
+        CreateReduxGroup       -All -Tag "Text" -Text "Dialogue"
+        CreateReduxPanel       -Columns 4
+        CreateReduxRadioButton -All -Name "Vanilla" -Max 4 -SaveTo "Dialogue" -Text "Vanilla Text" -Info "Keep the text as it is appeared in the original release" -Checked
+        CreateReduxRadioButton -All -Name "Instant" -Max 4 -SaveTo "Dialogue" -Text "Instant Text" -Info "Most text will be shown instantly"                       -Credits "Admentus"
+        CreateReduxRadioButton -All -Name "Restore" -Max 4 -SaveTo "Dialogue" -Text "Restore Text" -Info "Restores and fixes the following:`n- Restore the area titles cards for those that do not have any`n- Sound effects that do not play during dialogue`n- Grammar and typo fixes" -Credits "Redux"
+        CreateReduxRadioButton -All -Name "Custom"  -Max 4 -SaveTo "Dialogue" -Text "Custom"       -Info ('Insert custom dialogue found from "..\Patcher64+ Tool\Files\Games\Majora' + "'" + 's Mask\Custom Text"') -Warning "Make sure your custom script is proper and correct, or your ROM will crash`n[!] No edit will be made if the custom script is missing"
+    }
 
-    CreateReduxCheckBox -Base 1 -Name "Instant"        -Text "Instant Text"     -Info "Most text will be shown instantly"                                         -Credits "Admentus"
     CreateReduxCheckBox -All    -Name "AdultPronouns"  -Text "Adult Pronouns"   -Info "Refer to Link as an adult instead of a child"                              -Credits "Skilar"
     CreateReduxCheckBox -Base 1 -Name "AreaTitleCards" -Text "Area Title Cards" -Info "Add area title cards to missing areas"                                     -Credits "ShadowOne333"
     CreateReduxCheckBox -All    -Name "EasterEggs"     -Text "Easter Eggs"      -Info "Adds custom Patreon Tier 3 messages into the game`nCan you find them all?" -Credits "Admentus & Patreons" -Checked
@@ -1419,8 +1437,10 @@ function CreateTabLanguage() {
 function UnlockLanguageContent() {
     
     # English options
-    EnableElem -Elem @($Redux.Text.Instant, $Redux.Text.Restore, $Redux.Text.AdultPronouns, $Redux.Text.AreaTitleCards, $Redux.Text.EasterEggs, $Redux.Text.GossipTime, $Redux.Features.OcarinaIcons) -Active $Redux.Language[0].checked
+    EnableElem -Elem @($Redux.Text.Restore, $Redux.Text.AdultPronouns, $Redux.Text.AreaTitleCards, $Redux.Text.EasterEggs, $Redux.Text.GossipTime, $Redux.Features.OcarinaIcons) -Active $Redux.Language[0].checked
     if (!$Redux.Language[0].Checked -and !$Redux.Text.Vanilla.Checked -and !$Redux.Text.Custom.Checked) { $Redux.Text.Vanilla.Checked = $True }
+
+
 
 }
 
@@ -1472,14 +1492,16 @@ function CreateTabGraphics() {
 
     # BUTTONS #
 
-    CreateReduxGroup    -All -Tag  "UI" -Height 4.2                                                                                                              -Text "Buttons"
-    CreateReduxComboBox -All -Name "ButtonStyle"  -Items @("Majora's Mask") -FilePath ($Paths.shared + "\Buttons") -Ext "bin" -Default "Majora's Mask"           -Text "Buttons Style"  -Info "Set the style for the HUD buttons"  -Credits "GhostlyDark, Pizza (HD) Djipi, Community, Nerrel, Federelli, AndiiSyn"  
-    CreateReduxComboBox -All -Name "Layout"       -Items @("Majora's Mask", "Ocarina of Time", "Nintendo", "Modern", "GameCube (Original)", "GameCube (Modern)") -Text "HUD Layout"     -Info "Set the layout for the HUD Buttons" -Credits "Admentus" 
-    CreateReduxSlider   -All -Name "AButtonScale" -Column 1 -Row 2 -Default 20  -Min 0 -Max 20  -Freq 2  -Small 1  -Large 2                                      -Text "A Button Scale" -Info "Set the scale of the A Button"      -Credits "Admentus"
-    CreateReduxSlider   -All -Name "BButtonScale" -Column 3 -Row 2 -Default 550 -Min 0 -Max 550 -Freq 50 -Small 10 -Large 50                                     -Text "B Button Scale" -Info "Set the scale of the A Button"      -Credits "Admentus"
-    CreateReduxSlider   -All -Name "CLeftScale"   -Column 1 -Row 3 -Default 550 -Min 0 -Max 550 -Freq 50 -Small 10 -Large 50                                     -Text "C-Left Scale"   -Info "Set the scale of the A Button"      -Credits "Admentus"
-    CreateReduxSlider   -All -Name "CDownScale"   -Column 3 -Row 3 -Default 550 -Min 0 -Max 550 -Freq 50 -Small 10 -Large 50                                     -Text "C-Down Scale"   -Info "Set the scale of the A Button"      -Credits "Admentus"
-    CreateReduxSlider   -All -Name "CRightScale"  -Column 5 -Row 3 -Default 550 -Min 0 -Max 550 -Freq 50 -Small 10 -Large 50                                     -Text "C-Right Scale"  -Info "Set the scale of the A Button"      -Credits "Admentus"
+    CreateReduxGroup    -All -Tag  "UI" -Text "Buttons"
+    CreateReduxComboBox -All -Name "ButtonStyle" -Items @("Majora's Mask") -FilePath ($Paths.shared + "\Buttons") -Ext "bin" -Default "Majora's Mask"           -Text "Buttons Style" -Info "Set the style for the HUD buttons"  -Credits "GhostlyDark, Pizza (HD) Djipi, Community, Nerrel, Federelli, AndiiSyn"  
+    CreateReduxComboBox -All -Name "Layout"      -Items @("Majora's Mask", "Ocarina of Time", "Nintendo", "Modern", "GameCube (Original)", "GameCube (Modern)") -Text "HUD Layout"    -Info "Set the layout for the HUD Buttons" -Credits "Admentus" 
+    
+    CreateReduxTextBox  -All -Name "AButtonScale"      -Text "A Button Scale" -Value 35 -Min 15 -Max 35 -Info "Set the scale of the A Button"       -Credits "Admentus" -Row 2 -Column 1 
+    CreateReduxTextBox  -All -Name "BButtonScale"      -Text "B Button Scale" -Value 29 -Min 15 -Max 30 -Info "Set the scale of the B Button"       -Credits "Admentus"
+    CreateReduxTextBox  -All -Name "CLeftButtonScale"  -Text "C-Left Scale"   -Value 27 -Min 15 -Max 30 -Info "Set the scale of the C-Left Button"  -Credits "Admentus"
+    CreateReduxTextBox  -All -Name "CDownButtonScale"  -Text "C-Down Scale"   -Value 27 -Min 15 -Max 30 -Info "Set the scale of the C-Down Button"  -Credits "Admentus"
+    CreateReduxTextBox  -All -Name "CRightButtonScale" -Text "C-Right Scale"  -Value 27 -Min 15 -Max 30 -Info "Set the scale of the C-Right Button" -Credits "Admentus"
+
 
     
     # HIDE HUD #

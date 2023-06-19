@@ -17,6 +17,40 @@ function PatchModel([string]$Category, [string]$Name) {
 
 
 #==============================================================================================================================================================================================
+function GetButtonScale([byte]$Size) {
+
+    switch ($Size) {
+        31      { return Get16Bit 525  }
+        30      { return Get16Bit 550  } # Official
+        29      { return Get16Bit 575  } # Official
+        28      { return Get16Bit 605  }
+        27      { return Get16Bit 620  } # Official
+        26      { return Get16Bit 640  }
+        25      { return Get16Bit 660  }
+        24      { return Get16Bit 680  } # Official
+        23      { return Get16Bit 705  }
+        22      { return Get16Bit 735  }
+        21      { return Get16Bit 770  }
+        20      { return Get16Bit 810  }
+        19      { return Get16Bit 860  }
+        18      { return Get16Bit 910  }
+        17      { return Get16Bit 960  }
+        16      { return Get16Bit 1020 }
+        15      { return Get16Bit 1090 }
+        14      { return Get16Bit 1175 }
+        13      { return Get16Bit 1270 }
+        12      { return Get16Bit 1370 }
+        11      { return Get16Bit 1480 }
+        10      { return Get16Bit 1620 }
+        9       { return Get16Bit 1780 }
+        Default { return Get16Bit 550  }
+    }
+
+}
+
+
+
+#==============================================================================================================================================================================================
 function GetOoTEntranceIndex([string]$Index) {
 
     if     ($index -eq "Link's House")               { return "00 BB" }     elseif ($index -eq "Temple of Time")             { return "05 F4" }     elseif ($index -eq "Hyrule Field")               { return "01 FD" }
@@ -1543,6 +1577,7 @@ function SetFormColorLabel([object]$ComboBox, [object]$Label) {
 
 Export-ModuleMember -Function PatchModel
 
+Export-ModuleMember -Function GetButtonScale
 Export-ModuleMember -Function GetOoTEntranceIndex
 Export-ModuleMember -Function GetSFXID
 Export-ModuleMember -Function GetOoTMusicID
