@@ -49,6 +49,166 @@ function GetButtonScale([byte]$Size) {
 }
 
 
+#==============================================================================================================================================================================================
+function SetMMCUpTextCoords([int16]$X, [int16]$Y) {
+
+    if ($X -ne 0) {
+        if (IsChecked $Redux.Graphics.Widescreen) {
+            $tens = [math]::Truncate($X / 4)
+            $ones = $X % 4
+
+            while ($ones -gt 0) {
+                if ($ByteArrayGame[(GetDecimal "BADD2A")] -lt 0xC0) { $ByteArrayGame[(GetDecimal "BADD2A")] += 0x40 }
+                else {
+                    $ByteArrayGame[(GetDecimal "BADD2A")] -= 0xC0
+                    $ByteArrayGame[(GetDecimal "BADD27")] += 1;
+                }
+                if ($ByteArrayGame[(GetDecimal "BADD32")] -lt 0xC0) { $ByteArrayGame[(GetDecimal "BADD32")] += 0x40 }
+                else {
+                    $ByteArrayGame[(GetDecimal "BADD32")] -= 0xC0
+                    $ByteArrayGame[(GetDecimal "BADD2F")] += 1;
+                }
+                $ones--
+            }
+
+            while ($ones -lt 0) {
+                if ($ByteArrayGame[(GetDecimal "BADD2A")] -ge 0x40) { $ByteArrayGame[(GetDecimal "BADD2A")] -= 0x40 }
+                else {
+                    $ByteArrayGame[(GetDecimal "BADD2A")] += 0xC0
+                    $ByteArrayGame[(GetDecimal "BADD27")] -= 1;
+                }
+                if ($ByteArrayGame[(GetDecimal "BADD32")] -ge 0x40) { $ByteArrayGame[(GetDecimal "BADD32")] -= 0x40 }
+                else {
+                    $ByteArrayGame[(GetDecimal "BADD32")] += 0xC0
+                    $ByteArrayGame[(GetDecimal "BADD2F")] -= 1;
+                }
+                $ones++
+            }
+
+            while ($tens -gt 0) {
+                $ByteArrayGame[(GetDecimal "BADD27")] += 1
+                $ByteArrayGame[(GetDecimal "BADD2F")] += 1;
+                $tens--
+            }
+            
+            while ($tens -lt 0) {
+                $ByteArrayGame[(GetDecimal "BADD27")] -= 1
+                $ByteArrayGame[(GetDecimal "BADD2F")] -= 1;
+                $tens++
+            }
+        }
+        else {
+            $tens = [math]::Truncate($X / 16)
+            $ones = $X % 16
+
+            while ($ones -gt 0) {
+                if ($ByteArrayGame[(GetDecimal "BADD36")] -lt 0xF0) { $ByteArrayGame[(GetDecimal "BADD36")] += 0x10 }
+                else {
+                    $ByteArrayGame[(GetDecimal "BADD36")] -= 0xF0
+                    $ByteArrayGame[(GetDecimal "BADD27")] += 1;
+                }
+                if ($ByteArrayGame[(GetDecimal "BADD3A")] -lt 0xF0) { $ByteArrayGame[(GetDecimal "BADD3A")] += 0x10 }
+                else {
+                    $ByteArrayGame[(GetDecimal "BADD3A")] -= 0xF0
+                    $ByteArrayGame[(GetDecimal "BADD2B")] += 1;
+                }
+                $ones--
+            }
+            
+            while ($ones -lt 0) {
+                if ($ByteArrayGame[(GetDecimal "BADD36")] -ge 0x10) { $ByteArrayGame[(GetDecimal "BADD36")] -= 0x10 }
+                else {
+                    $ByteArrayGame[(GetDecimal "BADD36")] += 0xF0
+                    $ByteArrayGame[(GetDecimal "BADD27")] -= 1;
+                }
+                if ($ByteArrayGame[(GetDecimal "BADD3A")] -ge 0x10) { $ByteArrayGame[(GetDecimal "BADD3A")] -= 0x10 }
+                else {
+                    $ByteArrayGame[(GetDecimal "BADD3A")] += 0xF0
+                    $ByteArrayGame[(GetDecimal "BADD2B")] -= 1;
+                }
+                $ones++
+            }
+            
+            while ($tens -gt 0) {
+                $ByteArrayGame[(GetDecimal "BADD27")] += 1
+                $ByteArrayGame[(GetDecimal "BADD2B")] += 1;
+                $tens--
+            }
+            
+            while ($tens -lt 0) {
+                $ByteArrayGame[(GetDecimal "BADD27")] -= 1
+                $ByteArrayGame[(GetDecimal "BADD2B")] -= 1;
+                $tens++
+            }
+        }
+    }
+
+    if ($Y -ne 0 -and $Y -gt -0x48) {
+        if (IsChecked $Redux.Graphics.Widescreen) {
+            $hundreds = [math]::Truncate($Y / 100)
+            $ones     = $Y % 100
+
+            while ($ones -gt 0) {
+                if ($ByteArrayGame[(GetDecimal "BADD33")] -lt 0xFF) { $ByteArrayGame[(GetDecimal "BADD33")] += 1 }
+                else {
+                    $ByteArrayGame[(GetDecimal "BADD33")] -= 0xFF
+                    $ByteArrayGame[(GetDecimal "BADD32")] += 1;
+                }
+                if ($ByteArrayGame[(GetDecimal "BADD2B")] -lt 0xFF) { $ByteArrayGame[(GetDecimal "BADD2B")] += 1 }
+                else {
+                    $ByteArrayGame[(GetDecimal "BADD2B")] -= 0xFF
+                    $ByteArrayGame[(GetDecimal "BADD2A")] += 1;
+                }
+                $ones--;
+            }
+
+            while ($ones -lt 0) {
+                $ByteArrayGame[(GetDecimal "BADD33")]--
+                $ByteArrayGame[(GetDecimal "BADD2B")]--
+                $ones++;
+            }
+
+            while ($hundreds -gt 0) {
+                $ByteArrayGame[(GetDecimal "BADD32")]++
+                $ByteArrayGame[(GetDecimal "BADD2A")]++
+                $hundreds--;
+            }
+        }
+        else {
+            $hundreds = [math]::Truncate($Y / 100)
+            $ones     = $Y % 100
+
+            while ($ones -gt 0) {
+                if ($ByteArrayGame[(GetDecimal "BADD37")] -lt 0xFF) { $ByteArrayGame[(GetDecimal "BADD37")] += 1 }
+                else {
+                        $ByteArrayGame[(GetDecimal "BADD37")] -= 0xFF
+                        $ByteArrayGame[(GetDecimal "BADD36")] += 1;
+                    }
+                if ($ByteArrayGame[(GetDecimal "BADD3B")] -lt 0xFF) { $ByteArrayGame[(GetDecimal "BADD3B")] += 1 }
+                else {
+                    $ByteArrayGame[(GetDecimal "BADD3B")] -= 0xFF
+                    $ByteArrayGame[(GetDecimal "BADD3A")] += 1;
+                }
+                $ones--;
+            }
+
+            while ($ones -lt 0) {
+                $ByteArrayGame[(GetDecimal "BADD37")]--
+                $ByteArrayGame[(GetDecimal "BADD3B")]--
+                $ones++;
+            }
+
+            while ($hundreds -gt 0) {
+                $ByteArrayGame[(GetDecimal "BADD36")]++
+                $ByteArrayGame[(GetDecimal "BADD3A")]++
+                $hundreds--;
+            }
+        }
+    }
+
+}
+
+
 
 #==============================================================================================================================================================================================
 function GetOoTEntranceIndex([string]$Index) {
@@ -1578,6 +1738,7 @@ function SetFormColorLabel([object]$ComboBox, [object]$Label) {
 Export-ModuleMember -Function PatchModel
 
 Export-ModuleMember -Function GetButtonScale
+Export-ModuleMember -Function SetMMCUpTextCoords
 Export-ModuleMember -Function GetOoTEntranceIndex
 Export-ModuleMember -Function GetSFXID
 Export-ModuleMember -Function GetOoTMusicID
