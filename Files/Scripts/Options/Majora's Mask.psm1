@@ -504,12 +504,12 @@ function ByteOptions() {
         if (IsIndex -Elem $Redux.Hero.MiniBossHP)   { $multi = 0   }
         else                                        { [float]$multi = [float]$Redux.Hero.MiniBossHP.text.split('x')[0] }
 
-        ChangeBytes -Offset "E57387" -Factor $multi; ChangeBytes -Offset "FCA1BC"  -Factor $multi; ChangeBytes -Offset "D43C10" -Factor $multi # Wart, Big Poe, Gomess
-        ChangeBytes -Offset "CE718B" -Factor $multi; ChangeBytes -Offset "CE7DB8"  -Factor $multi # Gekko & Snapper (Gekko)
-        ChangeBytes -Offset "E9329C" -Factor $multi; ChangeBytes -Offset "D6A48C"  -Factor $multi # Gekko & Snapper (Snapper), Gekko & Mad Jelly
-        ChangeBytes -Offset "F82D9C" -Factor $multi; ChangeBytes -Offset "F7F873"  -Factor $multi # Poe Sisters
-        ChangeBytes -Offset "D18554" -Factor $multi; ChangeBytes -Offset "10785BC" -Factor $multi # Dinolfos, Takkuri
-        ChangeBytes -Offset "D9F210" -Factor $multi # Iron Knuckle (phase 1, phase 2 unknown, D9C9C0-> D9F5E0 Length: 2C20 File: ovl_En_Ik)
+        MultiplyBytes -Offset "E57387" -Factor $multi; MultiplyBytes -Offset "FCA1BC"  -Factor $multi; MultiplyBytes -Offset "D43C10" -Factor $multi # Wart, Big Poe, Gomess
+        MultiplyBytes -Offset "CE718B" -Factor $multi; MultiplyBytes -Offset "CE7DB8"  -Factor $multi # Gekko & Snapper (Gekko)
+        MultiplyBytes -Offset "E9329C" -Factor $multi; MultiplyBytes -Offset "D6A48C"  -Factor $multi # Gekko & Snapper (Snapper), Gekko & Mad Jelly
+        MultiplyBytes -Offset "F82D9C" -Factor $multi; MultiplyBytes -Offset "F7F873"  -Factor $multi # Poe Sisters
+        MultiplyBytes -Offset "D18554" -Factor $multi; MultiplyBytes -Offset "10785BC" -Factor $multi # Dinolfos, Takkuri
+        MultiplyBytes -Offset "D9F210" -Factor $multi # Iron Knuckle (phase 1, phase 2 unknown, D9C9C0-> D9F5E0 Length: 2C20 File: ovl_En_Ik)
 
       # MultiplyBytes -Offset -Factor $multi # Wizzrobe                               (HP: ??)   EAEE40  -> EB2AC0  (Length: 3C80) (ovl_En_Wiz)
       # MultiplyBytes -Offset -Factor $multi # Garo Master                            (HP: ??)   E20590  -> E24200  (Length: 3C70) (ovl_En_jso2)
