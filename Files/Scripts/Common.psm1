@@ -7,6 +7,7 @@ function SetWiiVCMode([boolean]$Enable) {
 
     if (IsSet $GamePatch.script) { if (Get-Module -Name $GamePatch.script) { Remove-Module -Name $GamePatch.script } }
     SetGameScript
+    DisablePatches
     SetVCRemap
     EnablePatchButtons (IsSet $GamePath)
     SetModeLabel
