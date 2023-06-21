@@ -286,6 +286,8 @@ function ByteOptions() {
     }
 
     if (IsDefault -Elem $Redux.UI.Layout -Not) {
+        $c_up_x = 0; $c_up_y = 0
+
         if (IsIndex -Elem $Redux.UI.Layout -Text "Ocarina of Time") {
             ChangeBytes -Offset @("BAF2E3", "BAF2D3", "BAF13F", "BAF12F", "BAF393", "BAF383") -Values 4 -Subtract; ChangeBytes -Offset @("BAF2E7", "BAF2EF", "BAF143", "BAF14B", "BAF397", "BAF39F") -Values 14 -Subtract # A Button
             ChangeBytes -Offset @("C55F15", "C55F07", "C56045")                               -Values 7 -Subtract                                                                                                         # B Button
@@ -297,8 +299,9 @@ function ByteOptions() {
             ChangeBytes -Offset @("C55F17", "C56047")                                         -Values 14        -Add;                                                                                                                    # C-Left Button
             ChangeBytes -Offset @("C55F19", "C56049")                                         -Values 30        -Add;      ChangeBytes -Offset @("C55F21", "C56051")                                         -Values 20        -Subtract # C-Down Button
             ChangeBytes -Offset @("C55F1B", "C5604B")                                         -Values 54        -Subtract; ChangeBytes -Offset @("C55F23", "C56053")                                         -Values 20        -Add      # C-Right Button
-            ChangeBytes -Offset @("BADD27", "BADD2B") -Values "02" -Add; ChangeBytes -Offset @("BADD36", "BADD3A") -Values "10" -Add; ChangeBytes -Offset @("BADD37", "BADD3B") -Values "2D" -Subtract # C-Up
-            ChangeBytes -Offset "BADB0B"              -Values  10  -Add;                                                              ChangeBytes -Offset "BADB13"              -Values  10  -Subtract # C-Up
+            ChangeBytes -Offset "BADB0B"                                                      -Values 10        -Add;      ChangeBytes -Offset "BADB13"                                                       -Values 10       -Subtract # C-Up
+            if (IsChecked $Redux.Graphics.Widescreen)   { $c_up_x = 8;  $c_up_y = -45 }
+            else                                        { $c_up_x = 35; $c_up_y = -40 }
         }
 
         elseif (IsIndex -Elem $Redux.UI.Layout -Text "Modern") {
@@ -307,29 +310,35 @@ function ByteOptions() {
             ChangeBytes -Offset @("C55F17", "C56047")                                         -Values 10        -Subtract; ChangeBytes -Offset @("C55F1F", "C5604F")                                         -Values 20        -Add      # C-Left Button
             ChangeBytes -Offset @("C55F19", "C56049")                                         -Values 30        -Add;      ChangeBytes -Offset @("C55F21", "C56051")                                         -Values 20        -Subtract # C-Down Button
             ChangeBytes -Offset @("C55F1B", "C5604B")                                         -Values 30        -Subtract                                                                                                                # C-Right Button
-            ChangeBytes -Offset @("BADD27", "BADD2B") -Values "02" -Add; ChangeBytes -Offset @("BADD36", "BADD3A") -Values "10" -Add; ChangeBytes -Offset @("BADD37", "BADD3B") -Values "2D" -Subtract # C-Up
-            ChangeBytes -Offset "BADB0B"              -Values  10  -Add;                                                              ChangeBytes -Offset "BADB13"              -Values  10  -Subtract # C-Up
+            ChangeBytes -Offset "BADB0B"                                                      -Values 10        -Add;      ChangeBytes -Offset "BADB13"                                                      -Values 10        -Subtract # C-Up
+            if (IsChecked $Redux.Graphics.Widescreen)   { $c_up_x = 8;  $c_up_y = -45 }
+            else                                        { $c_up_x = 35; $c_up_y = -40 }
+            
         }
 
         elseif (IsIndex -Elem $Redux.UI.Layout -Text "GameCube (Original)") {
             ChangeBytes -Offset @("BAF2E3", "BAF2D3", "BAF13F", "BAF12F", "BAF393", "BAF383") -Values (55 - 4)  -Add;      ChangeBytes -Offset @("BAF2E7", "BAF2EF", "BAF143", "BAF14B", "BAF397", "BAF39F") -Values (20 - 14) -Add      # A Button
-            ChangeBytes -Offset @("C55F15", "C55F07", "C56045")                               -Values (65 - 7)  -Add;      ChangeBytes -Offset @("C55F1D", "C55F0B", "C5604D")                               -Values 40        -Add      # B Button
-            ChangeBytes -Offset @("C55F17", "C56047")                                         -Values 24        -Add;      ChangeBytes -Offset @("C55F1F", "C5604F")                                         -Values 10        -Subtract # C-Left Button
-            ChangeBytes -Offset @("C55F19", "C56049")                                         -Values 30        -Add;      ChangeBytes -Offset @("C55F21", "C56051")                                         -Values 20        -Subtract # C-Down Button
-            ChangeBytes -Offset @("C55F1B", "C5604B")                                         -Values 11        -Add;      ChangeBytes -Offset @("C55F23", "C56053")                                         -Values 20        -Add      # C-Right Button
-            ChangeBytes -Offset @("BADD27", "BADD2B") -Values 5  -Subtract # C-Up
-            ChangeBytes -Offset "BADB0B"              -Values 20 -Subtract # C-Up
+            ChangeBytes -Offset @("C55F15", "C55F07", "C56045")                               -Values (62 - 7)  -Add;      ChangeBytes -Offset @("C55F1D", "C55F0B", "C5604D")                               -Values 43        -Add      # B Button
+            ChangeBytes -Offset @("C55F17", "C56047")                                         -Values 21        -Add;      ChangeBytes -Offset @("C55F1F", "C5604F")                                         -Values 13        -Subtract # C-Left Button
+            ChangeBytes -Offset @("C55F19", "C56049")                                         -Values 30        -Add;      ChangeBytes -Offset @("C55F21", "C56051")                                         -Values 25        -Subtract # C-Down Button
+            ChangeBytes -Offset @("C55F1B", "C5604B")                                         -Values 15        -Add;      ChangeBytes -Offset @("C55F23", "C56053")                                         -Values 20        -Add      # C-Right Button
+            ChangeBytes -Offset "BADB0B"                                                      -Values 25        -Subtract; ChangeBytes -Offset "BADB13"                                                      -Values 5         -Subtract # C-Up
+            if (IsChecked $Redux.Graphics.Widescreen)   { $c_up_x = -26;  $c_up_y = -20 }
+            else                                        { $c_up_x = -102; $c_up_y = -20 }
         }
 
         elseif (IsIndex -Elem $Redux.UI.Layout -Text "GameCube (Modern)") {
             ChangeBytes -Offset @("BAF2E3", "BAF2D3", "BAF13F", "BAF12F", "BAF393", "BAF383") -Values (55 - 4)  -Add;      ChangeBytes -Offset @("BAF2E7", "BAF2EF", "BAF143", "BAF14B", "BAF397", "BAF39F") -Values (20 - 14) -Add      # A Button
-            ChangeBytes -Offset @("C55F15", "C55F07", "C56045")                               -Values (65 - 7)  -Add;      ChangeBytes -Offset @("C55F1D", "C55F0B", "C5604D")                               -Values 40        -Add      # B Button
-            ChangeBytes -Offset @("C55F17", "C56047")                                         -Values 55        -Add;      ChangeBytes -Offset @("C55F1F", "C5604F")                                         -Values 25        -Add      # C-Left Button
-            ChangeBytes -Offset @("C55F19", "C56049")                                         -Values 30        -Add;      ChangeBytes -Offset @("C55F21", "C56051")                                         -Values 20        -Subtract # C-Down Button
-            ChangeBytes -Offset @("C55F1B", "C5604B")                                         -Values 20        -Subtract; ChangeBytes -Offset @("C55F23", "C56053")                                         -Values 10        -Subtract # C-Right Button
-            ChangeBytes -Offset @("BADD27", "BADD2B") -Values 5  -Subtract # C-Up
-            ChangeBytes -Offset "BADB0B"              -Values 20 -Subtract # C-Up
+            ChangeBytes -Offset @("C55F15", "C55F07", "C56045")                               -Values (62 - 7)  -Add;      ChangeBytes -Offset @("C55F1D", "C55F0B", "C5604D")                               -Values 43        -Add      # B Button
+            ChangeBytes -Offset @("C55F17", "C56047")                                         -Values 59        -Add;      ChangeBytes -Offset @("C55F1F", "C5604F")                                         -Values 20        -Add      # C-Left Button
+            ChangeBytes -Offset @("C55F19", "C56049")                                         -Values 30        -Add;      ChangeBytes -Offset @("C55F21", "C56051")                                         -Values 25        -Subtract # C-Down Button
+            ChangeBytes -Offset @("C55F1B", "C5604B")                                         -Values 23        -Subtract; ChangeBytes -Offset @("C55F23", "C56053")                                         -Values 13        -Subtract # C-Right Button
+            ChangeBytes -Offset "BADB0B" -Values 25 -Subtract; ChangeBytes -Offset "BADB13" -Values 5 -Subtract # C-Up
+            if (IsChecked $Redux.Graphics.Widescreen)   { $c_up_x = -26;  $c_up_y = -20 }
+            else                                        { $c_up_x = -102; $c_up_y = -20 }
         }
+
+        SetMMCUpTextCoords -X $c_up_x -Y $c_up_y
     }
 
     if (IsChecked $Redux.UI.CenterTatlPrompt) {
