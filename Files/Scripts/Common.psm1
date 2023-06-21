@@ -5,6 +5,8 @@ function SetWiiVCMode([boolean]$Enable) {
 
     WriteToConsole "Changing Between Wii VC Mode..."
 
+    if (IsSet $GamePatch.script) { if (Get-Module -Name $GamePatch.script) { Remove-Module -Name $GamePatch.script } }
+    SetGameScript
     SetVCRemap
     EnablePatchButtons (IsSet $GamePath)
     SetModeLabel
@@ -379,19 +381,8 @@ function ChangePatch() {
                     $global:GameSettings = $global:GameSettingsFile = $null
                 }
 
-                SetVCRemap
                 ChangeGameRev
-
-                if (IsSet $GamePatch.script) {
-                    $script = $Paths.Scripts + "\Options\" + $GamePatch.script + ".psm1"
-                    if (TestFile $script) {
-                        $global:GameSettingsFile = GetGameSettingsFile
-                        $global:GameSettings     = GetSettings $GameSettingsFile
-                        Import-Module -Name $script -Global
-                        if (GetCommand "CreateOptions") { CreateOptions }
-                    }
-                }
-
+                SetGameScript
                 DisablePatches
                 break
         }
@@ -399,6 +390,22 @@ function ChangePatch() {
 
     EnableGUI $True
     UpdateStatusLabel "Ready to patch..." -NoConsole
+
+}
+
+
+#==============================================================================================================================================================================================
+function SetGameScript() {
+
+    if (IsSet $GamePatch.script) {
+        $script = $Paths.Scripts + "\Options\" + $GamePatch.script + ".psm1"
+        if (TestFile $script) {
+            $global:GameSettingsFile = GetGameSettingsFile
+            $global:GameSettings     = GetSettings $GameSettingsFile
+            Import-Module -Name $script -Global
+            if (GetCommand "CreateOptions") { CreateOptions }
+        }
+    }
 
 }
 
