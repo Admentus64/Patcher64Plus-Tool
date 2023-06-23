@@ -364,8 +364,9 @@ function CreateTabButtons([string[]]$Tabs, [boolean]$NoLanguages=$False) {
 
     # Create tabs
     for ($i=0; $i -lt $Tabs.Count; $i++) {
-        $Button = CreateButton -X ((DPISize 15) + (($OptionsDialog.width - (DPISize 50))/$Tabs.length*$i)) -Y (DPISize 40) -Width (($OptionsDialog.width - (DPISize 50))/$Tabs.length) -Height (DPISize 30) -ForeColor "White" -BackColor "Gray" -Name $Tabs[$i] -Tag $i -Text $Tabs[$i] -AddTo $OptionsDialog
-        $Last.TabName = $Tabs[$i]
+        $name = $Tabs[$i] -replace '\s',''
+        $Button = CreateButton -X ((DPISize 15) + (($OptionsDialog.width - (DPISize 50))/$Tabs.length*$i)) -Y (DPISize 40) -Width (($OptionsDialog.width - (DPISize 50))/$Tabs.length) -Height (DPISize 30) -ForeColor "White" -BackColor "Gray" -Name $name -Tag $i -Text $Tabs[$i] -AddTo $OptionsDialog
+        $Last.TabName = $name
         $Button.Add_Click({
             $Redux.Panel.AutoScrollPosition = 0
             foreach ($item in $ReduxTabs)      { $item.BackColor = "Gray" }
@@ -375,9 +376,9 @@ function CreateTabButtons([string[]]$Tabs, [boolean]$NoLanguages=$False) {
         })
         $global:ReduxTabs += $Button
         
-        if (GetCommand ("CreateTab" + $Tabs[$i])) {
+        if (GetCommand ("CreateTab" + $name)) {
             $Last.Half = $False
-            iex ("CreateTab" + $Tabs[$i])
+            iex ("CreateTab" + $name)
         }
     }
 

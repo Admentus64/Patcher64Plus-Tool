@@ -319,7 +319,7 @@ function CreateTabMain() {
 
 #==============================================================================================================================================================================================
 function CreateTabReplaceItemBlocks() {
-
+    
     CreateReduxGroup -All -Tag "Blocks" -Text "Item Blocks (Presets)"
     $button = CreateReduxButton -All -Text "Reset"      -Info "Keep the vanilla items for item blocks"                                                                            -Credits "Admentus"; $button.Add_Click({ SetAllBlocks             })
     $button = CreateReduxButton -All -Text "Rebalanced" -Info "Rebalances item blocks by replacing some items with badges for a more forgiving experience on harder difficulties" -Credits "Admentus"; $button.Add_Click({ SetAllBlocks -Rebalanced })
