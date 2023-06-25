@@ -5,7 +5,7 @@
 
     if ( (IsSet $LanguagePatch.DmaTable)        -and !$Patches.Redux.Checked)   { return }
 
-    if   (IsChecked $Redux.Graphics.Widescreen)                                 { RemoveFile $Files.dmaTable }
+    if   (IsChecked $Redux.Graphics.Widescreen)                                 { RemoveFile  $Files.dmaTable }
     if ( (IsChecked $Redux.Graphics.Widescreen) -and !$Patches.Redux.Checked)   { Add-Content $Files.dmaTable "0 1 2 3 4 5 6 7 -8 -9 15 16 17 18 19 20 -21 22 -24 25 26 27 28 29 30 -652 1127 -1540 -1541 -1542 -1543 -1544 -1545 -1546 -1547 -1548 -1549 -1550 -1551 1552 1553 1554 1555 1556 1557 1558 1559 1560 1561 1562 1563 1564 1565 1566 1567" }
     if ( (IsChecked $Redux.Graphics.Widescreen) -and  $Patches.Redux.Checked)   { Add-Content $Files.dmaTable "0 1 2 3 4 5 6 7 -8 -9 15 16 17 18 19 20 -21 22 -24 25 26 27 28 29 30 -652 1127 -1540 -1541 -1542 -1543 1544 1545 1546 1547 1548 1549 1550 -1551 1552 1553 1554 1555 1556 1557 1558 1559 1560 1561 1562 1563 1564 1565 1566 1567" }
 
@@ -299,7 +299,7 @@ function ByteOptions() {
             ChangeBytes -Offset @("C55F17", "C56047")                                         -Values 14        -Add;                                                                                                                    # C-Left Button
             ChangeBytes -Offset @("C55F19", "C56049")                                         -Values 30        -Add;      ChangeBytes -Offset @("C55F21", "C56051")                                         -Values 20        -Subtract # C-Down Button
             ChangeBytes -Offset @("C55F1B", "C5604B")                                         -Values 54        -Subtract; ChangeBytes -Offset @("C55F23", "C56053")                                         -Values 20        -Add      # C-Right Button
-            ChangeBytes -Offset "BADB0B"                                                      -Values 10        -Add;      ChangeBytes -Offset "BADB13"                                                       -Values 10       -Subtract # C-Up
+            ChangeBytes -Offset "BADB0B"                                                      -Values 10        -Add;      ChangeBytes -Offset "BADB13"                                                      -Values 10        -Subtract # C-Up
             if (IsChecked $Redux.Graphics.Widescreen)   { $c_up_x = 8;  $c_up_y = -45 }
             else                                        { $c_up_x = 35; $c_up_y = -40 }
         }
