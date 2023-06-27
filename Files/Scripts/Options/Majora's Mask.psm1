@@ -50,6 +50,8 @@ function PatchOptions() {
     elseif (IsIndex -Elem $Redux.Gameplay.SpinAttack -Index 3)   { ApplyPatch -Patch "Decompressed\optional\no_quick_spin.ppf"                  }
     elseif (IsIndex -Elem $Redux.Gameplay.SpinAttack -Index 4)   { ApplyPatch -Patch "Decompressed\optional\no_quick_spin_and_smaller_spin.ppf" }
 
+    if (IsChecked $Redux.Hero.MoveGoldDust) { ApplyPatch -Patch "Decompressed\Optional\chest.ppf" }
+
 }
 
 
@@ -586,13 +588,18 @@ function ByteOptions() {
     }
 
     if (IsChecked $Redux.Hero.DeathIsMoonCrash) {
-        ChangeBytes -Offset "0C40DF8" -Values "8F A2 00 18 24 0E 54 C0"; ChangeBytes -Offset "0C40E08" -Values "3C 01 00 02 00 22 08 21"
-        ChangeBytes -Offset "0C40E14" -Values "A4 2E 88 7A";             ChangeBytes -Offset "0C40E1D" -Values "0E 00 14 A0 2E 88 75 A0 2C 88 7F"
+        ChangeBytes -Offset "0C40DF8" -Values "8FA20018240E54C0"; ChangeBytes -Offset "0C40E08" -Values "3C01000200220821"
+        ChangeBytes -Offset "0C40E14" -Values "A42E887A";         ChangeBytes -Offset "0C40E1D" -Values "0E0014A02E8875A02C887F"
     }
 
     if (IsChecked $Redux.Hero.CloseBombShop) {
-        ChangeBytes -Offset "2CB10DA" -Values "03 60";       ChangeBytes -Offset "2CB1212" -Values "03 60"                                                           # Move Bomb Bag to Stock Pot Inn
-        ChangeBytes -Offset "E76F38"  -Values "00 00 00 00"; ChangeBytes -Offset "E772DC"  -Values "24 05 06 4A"; ChangeBytes -Offset "E77CCC" -Values "24 05 06 4A" # Disable Bomb Shop
+        ChangeBytes -Offset "2CB10DA" -Values "0360";     ChangeBytes -Offset "2CB1212" -Values "0360"                                                      # Move Bomb Bag to Stock Pot Inn
+        ChangeBytes -Offset "E76F38"  -Values "00000000"; ChangeBytes -Offset "E772DC"  -Values "2405064A"; ChangeBytes -Offset "E77CCC" -Values "2405064A" # Disable Bomb Shop
+    }
+
+    if (IsChecked $Redux.Hero.MoveGoldDust) {
+        ChangeBytes -Offset "FB76E7"  -Values "5A"; ChangeBytes -Offset "FB76FF" -Values "04"; ChangeBytes -Offset "FB7723" -Values "5A" # Goron Race
+        ChangeBytes -Offset "2E5C342" -Values "0D40"
     }
 
     if (IsChecked $Redux.Hero.PermanentKeese)       { ChangeBytes -Offset "CF3B58" -Values "0000000000000000"; ChangeBytes -Offset "CF3B60" -Values "000000000000000000000000" }
@@ -984,7 +991,7 @@ function ByteReduxOptions() {
 
     $offset = "380F854"
 
-     if (IsDefaultColor -Elem $Redux.Colors.SetButtons[0] -Not) { # A Button
+    if (IsDefaultColor -Elem $Redux.Colors.SetButtons[0] -Not) { # A Button
         ChangeBytes -Offset (AddToOffset $Symbols.HUD_COLOR_CONFIG -Add "08") -Values @($Redux.Colors.SetButtons[0].Color.R, $Redux.Colors.SetButtons[0].Color.G, $Redux.Colors.SetButtons[0].Color.B) # Button
         ChangeBytes -Offset (AddToOffset $Symbols.HUD_COLOR_CONFIG -Add "88") -Values @($Redux.Colors.SetButtons[0].Color.R, $Redux.Colors.SetButtons[0].Color.G, $Redux.Colors.SetButtons[0].Color.B) # Text Icons
         ChangeBytes -Offset (AddToOffset $Symbols.HUD_COLOR_CONFIG -Add "58") -Values @($Redux.Colors.SetButtons[0].Color.R, $Redux.Colors.SetButtons[0].Color.G, $Redux.Colors.SetButtons[0].Color.B)
@@ -1159,8 +1166,8 @@ function ByteLanguageOptions() {
         SetMessage -ID "2016";                                                 SetMessage -ID "2029"; SetMessage -ID "202E"; SetMessage -ID "203B"; SetMessage -ID "203D"; SetMessage -ID "2040"; SetMessage -ID "2049"; SetMessage -ID "2080"
     }
     if ( (IsIndex -Elem $Redux.Text.TaelScript -Index 3) -and $LanguagePatch.code -eq "en") {
-        SetMessage -ID "1F49" -Text "brother" -Replace "sister"; SetMessage -ID "1F4B" -Text "his" -Replace "her"; SetMessage -ID "200D" -Text "brother" -Replace "sister"; SetMessage -ID "2012" -Text "brother" -Replace "sister"
-        SetMessage -ID "0216" -Text "he"      -Replace "she";    SetMessage -ID "0216" -Text "He"  -Replace "She"
+        SetMessage -ID "1F49" -Text "brother" -Replace "sister";     SetMessage -ID "1F4B" -Text "his" -Replace "her"; SetMessage -ID "200D" -Text "brother" -Replace "sister"; SetMessage -ID "2012" -Text "brother" -Replace "sister"; SetMessage -ID "0216" -Text "He" -Replace "She"
+        SetMessage -ID "0216" -Text " he"     -Replace " she" -All;  SetMessage -ID "0229" -Text " he" -Replace " she" -All
     }
 
     if ( (IsChecked $Redux.Text.LinkScript) -and $Redux.Text.LinkName.Text.Count -gt 0) {
@@ -1619,6 +1626,7 @@ function CreateTabDifficulty() {
     CreateReduxCheckBox -All -Name "RaisedResearchLabPlatform" -Text "Raised Research Lab Platform"                                                            -Info "Raise the platform leading up to the Research Laboratory as in the Japanese release"         -Credits "Linkz"
     CreateReduxCheckBox -All -Name "DeathIsMoonCrash"          -Text "Death is Moon Crash"                                                                     -Info "If you die, the moon will crash`nThere are no continues anymore"                             -Credits "Ported from Rando"
     CreateReduxCheckBox      -Name "CloseBombShop"             -Text "Close Bomb Shop"                                                                         -Info "The bomb shop is now closed and the bomb bag is now found somewhere else"                    -Credits "Admentus (ported) & DeathBasket (ROM hack)"
+    CreateReduxCheckBox      -Name "MoveGoldDust"              -Text "Move Gold Dust"                                                                          -Info "The Goron Race now just gives an empty bottle and the Gold Dust is now found somewhere else" -Credits "Admentus"
     CreateReduxCheckBox -All -Name "PermanentKeese"            -Text "Permanent Keese"                                                                         -Info "Fire Keese or Ice Keese won't turn into regular Keese after hitting Link"                    -Credits "Garo-Mastah"
     CreateReduxCheckBox -All -Name "FasterIronKnuckles"        -Text "Faster Iron Knuckles"                                                                    -Info "Iron Knuckles now always run, even when in their armored form"                               -Credits "Garo-Mastah"
     CreateReduxCheckBox -All -Name "LargeIronKnuckles"         -Text "Large Iron Knuckles"                                                                     -Info "Iron Knuckles now now much bigger"                                                           -Credits "Garo-Mastah"
