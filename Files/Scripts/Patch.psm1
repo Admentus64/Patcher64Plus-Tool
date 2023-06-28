@@ -155,7 +155,7 @@ function MainFunctionPatch([string]$Command, [Array]$Header, [string]$PatchedFil
     # Step 05: Set checksum to determine downgrading & decompressing
     if (TestFile $GetROM.run)                                                   { $global:ROMHashSum    = (Get-FileHash -Algorithm MD5 -LiteralPath $GetROM.run).Hash }
     if ($Settings.Debug.IgnoreChecksum -eq $False -and (IsSet $CheckHashSum))   { $PatchInfo.downgrade  = ($ROMHashSum -ne $CheckHashSum) }
-    if ($PatchInfo.downgrade)                                                   { $PatchInfo.decompress = $True }
+    if ($PatchInfo.downgrade -and $GameType.decompress -eq 1)                   { $PatchInfo.decompress = $True }
 
     # Step 06: Convert, compare the hashsum of the ROM and check if the maximum size is allowed
     if (!(GetMaxSize $Command)) { return }
@@ -566,7 +566,7 @@ function DowngradeROM() {
     :outer while ($romHash -ne $revHash) {
         $downgradeFile = $null
         :inner for ($i=0; $i -lt $GameType.version.Count; $i++) {
-            if ($PatchInfo.decompress -and (IsSet $GameRev.hash_decomp)) { $hash = $GameType.version[$i].hash_decomp } else { $hash = $GameType.version[$i].hash }
+            if ($PatchInfo.decompress -and (IsSet $GameType.version[$i].hash_decomp)) { $hash = $GameType.version[$i].hash_decomp } else { $hash = $GameType.version[$i].hash }
             if ($romHash -eq $hash -and (IsSet $GameType.version[$i].downgrade)) {
                 $downgradeFile = "Downgrade\" + $GameType.version[$i].downgrade
                 break inner

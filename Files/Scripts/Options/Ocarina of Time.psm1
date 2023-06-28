@@ -1659,7 +1659,7 @@ function ByteReduxOptions() {
     PrepareMap -Scene "Hyrule Field" -Map 0 -Header 0
 
     InsertActor  -Name "Stalfos" -Param "0000"
-    ReplaceActor -Name "Kaepora Gaebora" -New "Stalfos" -Param "000"
+    ReplaceActor -Name "Kaepora Gaebora" -New "Stalfos" -Param "0000"
     InsertObject -Name "Stalfos"
 
     SaveLoadedMap
