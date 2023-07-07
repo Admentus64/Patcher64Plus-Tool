@@ -84,7 +84,15 @@ function AutoUpdate([switch]$Manual) {
         # Download version info
         try {
             $response   = ReadWebRequest $Files.json.repo.version
-            $newContent = $response.AllElements | Where {$_.class -eq "blob-code blob-code-inner js-file-line"}
+          # $newContent = $response.AllElements | Where {$_.class -eq "blob-code blob-code-inner js-file-line"}
+            $newcontent = $response.AllElements | Where {$_.type -eq "application/json"}
+            
+            $newContent = [string]$newContent[1]
+            $start   = ($newContent | Select-String "rawBlob").Matches.Index
+            $newContent = $newContent.substring($start+10, $newContent.substring($start+9).indexOf(",")-2)
+            $newContent = $newContent.split("\")
+            if ($newContent.length -gt 1) { $newContent[1] = $newContent[1].replace("n", "") }
+            if ($newContent.length -gt 2) { $newContent[2] = $newContent[2].replace("n", "") }
         }
         catch {
             WriteToConsole "Could not retrieve Patcher version info!"
@@ -101,13 +109,13 @@ function AutoUpdate([switch]$Manual) {
         
         # Parse content
         $Patcher.Version = $oldContent[0]
-        $newVersion      = $newContent[0].outerText
+        $newVersion      = $newContent[0]
         try     { $Patcher.Date = Get-Date -Format $Patcher.DateFormat -Date $oldContent[1] }
         catch   { $Patcher.Date = Get-Date -Format $Patcher.DateFormat -Date "1970-01-01"; WriteToConsole ("Could not read current version date info for " + $Title + "!") }
-        try     { $newDate      = Get-Date -Format $Patcher.DateFormat -Date $newContent[1].outerText }
+        try     { $newDate      = Get-Date -Format $Patcher.DateFormat -Date $newContent[1] }
         catch   { $newDate      = Get-Date -Format $Patcher.DateFormat -Date "1970-01-01"; WriteToConsole ("Could not read latest version date info for " + $Title + "!")  }
-        if ($oldContent.Count -gt 2)           { try { [byte]$Patcher.Hotfix = $oldContent[2]           } catch { [byte]$Patcher.Hotfix = 0 } } else { [byte]$Patcher.Hotfix = 0}
-        if ($newContent.outerText.Count -gt 2) { try { [byte]$newHotfix      = $newContent[2].outerText } catch { [byte]$newHotfix      = 0 } } else { [byte]$newHotfix      = 0}
+        if ($oldContent.Count -gt 2)   { try { [byte]$Patcher.Hotfix = $oldContent[2] } catch { [byte]$Patcher.Hotfix = 0 } } else { [byte]$Patcher.Hotfix = 0}
+        if ($newContent.Count -gt 2)   { try { [byte]$newHotfix      = $newContent[2] } catch { [byte]$newHotfix      = 0 } } else { [byte]$newHotfix      = 0}
 
         # Skip update
         if ($Settings.Core.SkipUpdate -eq $True -and !$Manual) {
@@ -156,16 +164,16 @@ function AutoUpdate([switch]$Manual) {
         catch { WriteToConsole "Could not retrieve Patcher version info!" }
         
         if ($newContent -ne $null) {
-            $newVersion = $newContent[0].outerText
+            $newVersion = $newContent[0]
             
-            try { $newDate = Get-Date -Format $Patcher.DateFormat -Date $newContent[1].outerText }
+            try { $newDate = Get-Date -Format $Patcher.DateFormat -Date $newContent[1] }
             catch {
                 $newDate = Get-Date -Format $Patcher.DateFormat -Date "1970-01-01"
                 WriteToConsole ("Could not read latest version date info for " + $Title + "!")
             }
             
-            if ($newContent.outerText.Count -gt 2) {
-                try { [byte]$newHotfix = $newContent[2].outerText }
+            if ($newContent.Count -gt 2) {
+                try { [byte]$newHotfix = $newContent[2] }
                 catch { [byte]$newHotfix = 0 }
             }
             else { [byte]$newHotfix = 0}
@@ -316,13 +324,22 @@ function UpdateAddon([string]$Title, [string]$Uri, [string]$Version) {
         try {
             $file     = $Path + "\lastUpdate.txt"
             $response = ReadWebRequest $Version
-            $content  = $response.AllElements | Where {$_.class -eq "blob-code blob-code-inner js-file-line"}
+          # $content  = $response.AllElements | Where {$_.class -eq "blob-code blob-code-inner js-file-line"}
+            $content  = $response.AllElements | Where {$_.type -eq "application/json"}
+
+            $content = [string]$content[1]
+            $start   = ($content | Select-String "rawBlob").Matches.Index
+            $content = $content.substring($start+10, $content.substring($start+9).indexOf(",")-2)
+            $content = $content.split("\")
+            if ($content.length -gt 1) { $content[1] = $content[1].replace("n", "") }
         }
         catch {
             RemovePath $path
             WriteToConsole ("Could not retrieve last version info for " + $Title + "!")
             return
         }
+
+        
 
         # Load content
         if ($content -eq $null) {
@@ -332,11 +349,11 @@ function UpdateAddon([string]$Title, [string]$Uri, [string]$Version) {
         }
         
         # Parse content
-        try     { $date = Get-Date -Format $Patcher.DateFormat -Date $content[0].outerText }
+        try     { $date = Get-Date -Format $Patcher.DateFormat -Date $content[0] }
         catch   { $date = Get-Date -Format $Patcher.DateFormat -Date "1970-01-01"; WriteToConsole ("Could not read latest version date info for " + $Title + "!")  }
         
-        if ($content.outerText.Count -gt 1) {
-            try   { [byte]$hotfix = $content[1].outerText }
+        if ($content.Count -gt 1) {
+            try   { [byte]$hotfix = $content[1] }
             catch { [byte]$hotfix = 0 }
         }
         else { [byte]$hotfix = 0}
@@ -344,7 +361,7 @@ function UpdateAddon([string]$Title, [string]$Uri, [string]$Version) {
         # Compare content
         if     ($Addons[$Title].date    -lt $date)                        { $update = $true }
         elseif ($Addons[$Title].hotfix  -lt $hotfix -and $hotfix -ne 0)   { $update = $true }
-        else                                                        { RemovePath $path; return }
+        else                                                              { RemovePath $path; return }
     }
     else {
         WriteToConsole ("Could not find lastest update for " + $Title + "! Downloading now!")
