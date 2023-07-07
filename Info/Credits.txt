@@ -4,7 +4,7 @@
 --- Thanks to my Patreons ---
 - Tier 3:	Thanatos-Zero
 
-- Tier 2:	Amara, Chadlight Rutherford, Third M, Andrew Kinney, Petra
+- Tier 2:	Amara, Third M, Andrew Kinney, Petra, Christopher Lillis
 
 - Tier 1:	Yang, mad_scrub, redmaro
 
@@ -21,11 +21,14 @@
 <<< OCARINA OF TIME >>>
 
 --- Redux ---
+- Current Lead Developer:		Admentus
+- Fixes & Improvements:			Admentus, GhostlyDark
 - Original Version:			Maroc
 - Editing / Revision:			ShadowOne333, MattKimura
 - Original Hacking:			Roman971, TestRunnerSRL, AmazingAmpharos, fig02, krimtonz, rlbond86,
 					KevinPal, junglechief87
-- Fixes:				Admentus, GhostlyDark
+
+--- Patcher64+ Content ---
 - Improvements:				Admentus, GhostlyDark
 - Debug ROM Options:			GhostlyDark Cooliscool, DeathBasket, Airikita, Jason777, ChriisTiian
 - Tools & Sources:			Randomizer, CloudMax, CloudModding
@@ -35,7 +38,7 @@
 - GhostlyDark
 - ShadowOne333
 - Chez Cousteau
-- BilonFullHDemon,
+- BilonFullHDemon
 - Aegiker
 - gamemasterplc
 - Garo-Mastah
@@ -50,12 +53,10 @@
 - Frostclaw
 - Steve(ToCoool)
 - AndiiSyn
-- BrianMp16
 - Zeth Alkar
-- salvador235
 - Sakura
 - Aria Hiroshi 64
-- VictorHale,
+- VictorHale
 - CrookedPoe
 - SoulofDeity
 - Mil
@@ -277,65 +278,106 @@ https://github.com/DaruniasJoy/OoT-Custom-Sequences
 - Music:				Green Ocarina
 
 --- Randomizer ---
-- Roman971
-- AmazingAmpharos
-- Zannick
 - Cuphat
+- fenhl
+- Zannick
+- Roman971
+- mracsys
+- AmazingAmpharos
+- cjohnson57
 - r0bd0g
-- rattus128
-- dragonbane0
-- LumenTheFairy
-- flagrama
 - nlangille
-- krimtonz
+- dragonbane0
+- flagrama
+- ETR-BTF
+- rattus128
+- jdunn596
+- LumenTheFairy
+- rlbond86
 - mzxrules
+- wulfy83
+- krimtonz
 - dotzo
+- fig02
 - phixtyseven
 - junglechief87
-- fig02
+- GSKirox
+- tnt175
 - KevinPal
-- TeknoAnonymous
-- rlbond86
+- rrealmuto
+- matthewkirby
 - Hamsda
-- scatter-dev
+- TreZc0
+- DobbyDigital
+- TeknoAnonymous
+- aofengen
+- BenjaminBrandmeier
+- Maplesstar
 - TestRunnerSRL
-- ETR-BTF
+- Jaybone25
+- puddydoo
+- damdayou
+- DuskTheUmbreon
+- christianlegge
+- skavinger
+- dewiniaid
+- louist103
 - CMuncey
+- srollins-lucid
+- kr3z
 - Tyrusss
 - dombarrieau
 - Exter-N
 - Darkunov
 - ChrisMuncey
+- SlyryD
+- engineer124
 - Dwood15
+- Sirius902
 - BladefangFT
-- itsmedoggo
+- AngheloAlf
 - BeeLuigi
-- aofengen
+- itsmedoggo
+- RawZ06
+- Star1468
 - LostThePirate
-- TreZc0
+- Minibeast
+- Lego6245
+- Blueteeth0711
 - Raizuto
+- stephenk02
+- RealLarsP
+- wakamoleguy
 - ThomasJRyan
 - Raikaru13
-- Mast3rGenius
-- thills03
-- pksage
-- aplumafreak500
-- Triaphlax
-- Jademalo
-- IcySlurpee
-- DatXFire
-- mwiens91
-- darkangel93x
-- danxensen
-- Zamiell
-- Sicilica
-- Mego
-- Martakia
-- Ketris
-- GoldenSierpinski
+- Elagatua
+- Hexocyte
+- exodus122
+- Nicholas-Steel
+- ThreePendants
+- ianfife
 - GhostlyDark
-- BananaSplit2
+- EntropicEidolon
+- L-P
+- thills03
+- Triaphlax
+- DatXFire
+- Jademalo
+- pksage
+- IcySlurpee
+- Wyntilda
+- OriginalPiMan
+- mwiens91
+- clementga
+- darkangel93x
+- GoldenSierpinski
+- Mego
+- Ketris
 - Apasher
+- cakexensen
+- Sicilica
+- Martakia
+- Zamiell
 
 
 
@@ -343,10 +385,12 @@ https://github.com/DaruniasJoy/OoT-Custom-Sequences
 <<< MAJORA'S MASK >>>
 
 --- Redux ---
-- Hacking:				Maroc
+- Current Lead Developer:		Admentus
+- Fixes & Improvements:			Admentus, GhostlyDark
+- Original Version:			Maroc
 - Original Hacking:			Saneki
-- Fixes:				Admentus, GhostlyDark
-- Improvements:				Admentus, GhostlyDark
+
+--- Patcher64+ Content ---
 - Tools & Sources:			Randomizer, CloudMax, CloudModding
 
 --- Additional Options ---
@@ -471,18 +515,22 @@ https://github.com/DaruniasJoy/OoT-Custom-Sequences
 --- Randomizer ---
 - ZoeyZolotova
 - Saneki
+- isghj5
 - zmarotrix
 - mzxrules
-- 5isghj5
 - az64
 - nlangille
-- junglechief87
+- Rebbacus
+- beardsleymj
+- wulfy83
 - aroenai
-- phixtyseven
-- krimtonz
+- junglechief87
 - flagrama
 - Kjelli
+- phixtyseven
+- krimtonz
 - AmazingAmpharos
+- Zymus
 - Zannick
 - TeknoAnonymous
 
