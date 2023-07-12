@@ -294,8 +294,8 @@ function Cleanup() {
     RemovePath $Paths.cygdrive
     RemoveFile $Files.flipscfg
     RemoveFile $Files.stackdump
-    Get-ChildItem -Path $Paths.Temp -Include *.* -File -Recurse | foreach { $_.Delete() }
-    if (Test-Path .\temp\*) { Get-ChildItem -Path $Paths.Temp -Directory | foreach { $_.Delete() } }
+    if (Test-Path .\temp)     { Get-ChildItem -Path $Paths.Temp -Include *.* -File -Recurse | foreach { $_.Delete() } }
+    if (Test-Path .\temp\*)   { Get-ChildItem -Path $Paths.Temp -Directory | foreach { $_.Delete() } }
     RemovePath $Paths.Temp
 
 }
