@@ -699,7 +699,6 @@ function ChangeStringIntoDigits([string]$File, [string]$Search, [string]$Value, 
     elseif ($Triple -and [int16]$Value -lt 10)    { ChangeBytes -File $File -Offset $Offset -IsDec -Values (@("48", "48") + [System.Text.Encoding]::Default.GetBytes($Value)) }
     elseif (!$Triple -and [int16]$Value -lt 10)   { ChangeBytes -File $File -Offset $Offset -IsDec -Values (@("48")       + [System.Text.Encoding]::Default.GetBytes($Value)) }
     else                                          { ChangeBytes -File $File -Offset $Offset -IsDec -Values @([System.Text.Encoding]::Default.GetBytes($Value)) }
-    $offset = $Search = $Value = $Triple = $null
 
 }
 
@@ -1340,8 +1339,6 @@ function CreateHUDColorOptions([switch]$MM) {
             SetMinimapColorsPreset -ComboBox $Redux.Colors.Minimap -Dialog $Redux.Colors.SetHUDStats[4] -Label $Redux.Colors.HUDStatsLabels[4]
         }
     }
-
-    $Buttons = $null
 
 }
 
