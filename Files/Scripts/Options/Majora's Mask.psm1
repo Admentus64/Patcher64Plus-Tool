@@ -1699,7 +1699,6 @@ function CreateTabColors() {
 
     $items = @("Tatl", "Tael", "Navi", "Gold", "Green", "Light Blue", "Yellow", "Red", "Magenta", "Black", "Fi", "Ciela", "Epona", "Ezlo", "King of Red Lions", "Linebeck", "Loftwing", "Midna", "Phantom Zelda", "Randomized", "Custom")
     CreateReduxComboBox -All -Name "Tael" -Column 1 -Row 3 -Length 230 -Shift 40 -Items $items -Default "Tael" -Text "Tael Colors" -Info ("Select a color scheme for Tael`n" + '"Randomized" fully randomizes the colors each time the patcher is opened') -Credits "By ShadowOne333"
-    $items = $null
 
     # Tael Colors - Buttons
     $Buttons = @()

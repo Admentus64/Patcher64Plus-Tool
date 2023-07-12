@@ -827,7 +827,6 @@ function ByteOptions() {
         if (IsDefaultColor -Elem $Redux.Colors.SetRupee[1] -Not)   { ChangeBytes -Offset (AddToOffset -Hex $Symbols.rupee_colors -Add 3) -Values @($Redux.Colors.SetRupee[1].Color.R, $Redux.Colors.SetRupee[1].Color.G, $Redux.Colors.SetRupee[1].Color.B) } # Adult's Wallet
         if (IsDefaultColor -Elem $Redux.Colors.SetRupee[2] -Not)   { ChangeBytes -Offset (AddToOffset -Hex $Symbols.rupee_colors -Add 6) -Values @($Redux.Colors.SetRupee[2].Color.R, $Redux.Colors.SetRupee[2].Color.G, $Redux.Colors.SetRupee[2].Color.B) } # Giant's Wallet
         if (IsDefaultColor -Elem $Redux.Colors.SetRupee[3] -Not)   { ChangeBytes -Offset (AddToOffset -Hex $Symbols.rupee_colors -Add 9) -Values @($Redux.Colors.SetRupee[3].Color.R, $Redux.Colors.SetRupee[3].Color.G, $Redux.Colors.SetRupee[3].Color.B) } # Tycoon's Wallet
-        $Symbols = $null
     }
     elseif ($Redux.Colors.RupeeVanilla.Active -and $Redux.Colors.SetRupeeVanilla -ne $null) {
         if (IsDefaultColor -Elem $Redux.Colors.SetRupeeVanilla -Not) {
@@ -1374,21 +1373,21 @@ function ByteOptions() {
 
         # Dungeons / Areas
         PatchBytes -Offset "3045248" -Texture -Patch "Gerudo Symbols\dampe.bin"
-        PatchBytes -Offset "21B8678" -Texture -Patch "Gerudo Symbols\gerudo_valley.bin"
+        PatchBytes -Offset "21B8678" -Texture -Patch "Gerudo Symbols\gerudo_fortress.bin"
         PatchBytes -Offset "F71350"  -Texture -Patch "Gerudo Symbols\forest_temple_room_11_block.bin"
         PatchBytes -Offset "2464D88" -Texture -Patch "Gerudo Symbols\forest_temple_room_11_hole.bin"
         PatchBytes -Offset "12985F0" -Texture -Patch "Gerudo Symbols\shadow_temple_room_0.bin"
         PatchBytes -Offset "2F64E38" -Texture -Patch "Gerudo Symbols\spirit_temple_boss.bin"
         PatchBytes -Offset "2F73700" -Texture -Patch "Gerudo Symbols\spirit_temple_boss.bin"
-        PatchBytes -Offset "2B5CDA0" -Texture -Patch "Gerudo Symbols\spirit_temple_room_10.bin"
-        PatchBytes -Offset "2B9BDB8" -Texture -Patch "Gerudo Symbols\spirit_temple_room_10.bin"
-        PatchBytes -Offset "2BE7920" -Texture -Patch "Gerudo Symbols\spirit_temple_room_10.bin"
+        PatchBytes -Offset "2B5CDA0" -Texture -Patch "Gerudo Symbols\spirit_temple_room_10_20_28.bin"
+        PatchBytes -Offset "2B9BDB8" -Texture -Patch "Gerudo Symbols\spirit_temple_room_10_20_28.bin"
+        PatchBytes -Offset "2BE7920" -Texture -Patch "Gerudo Symbols\spirit_temple_room_10_20_28.bin"
         PatchBytes -Offset "1636940" -Texture -Patch "Gerudo Symbols\spirit_temple_room_0_elevator.bin"
         $Offset = SearchBytes -Start "2AF8000" -End "2B08F40" -Values "00 05 00 11 06 00 06 4E 06 06 06 06 11 11 06 11"
         PatchBytes -Offset $Offset   -Texture -Patch "Gerudo Symbols\spirit_temple_room_0_pillars.bin"
-        PatchBytes -Offset "289CA90" -Texture -Patch "Gerudo Symbols\gerudo_training_ground_ceiling_frame.bin"
-        PatchBytes -Offset "28BBCD8" -Texture -Patch "Gerudo Symbols\gerudo_training_ground_room_5.bin"
-        PatchBytes -Offset "28CA728" -Texture -Patch "Gerudo Symbols\gerudo_training_ground_room_5.bin"
+        PatchBytes -Offset "289CA90" -Texture -Patch "Gerudo Symbols\gerudo_training_ground_room_1_ceiling_frame.bin"
+        PatchBytes -Offset "28BBCD8" -Texture -Patch "Gerudo Symbols\gerudo_training_ground_room_5_7.bin"
+        PatchBytes -Offset "28CA728" -Texture -Patch "Gerudo Symbols\gerudo_training_ground_room_5_7.bin"
         PatchBytes -Offset "11FB000" -Texture -Patch "Gerudo Symbols\gerudo_training_ground_door.bin"
     }
 
@@ -1556,7 +1555,6 @@ function ByteReduxOptions() {
         if (IsDefaultColor -Elem $Redux.Colors.SetButtons[0] -Not) { # A Button
             $values = (Get16Bit $Redux.Colors.SetButtons[0].Color.R) + (Get16Bit $Redux.Colors.SetButtons[0].Color.G) + (Get16Bit $Redux.Colors.SetButtons[0].Color.B); ChangeBytes -Offset $Symbols.CFG_A_BUTTON_COLOR -Values $values # A Button Color
             $values = (Get16Bit $Redux.Colors.SetButtons[0].Color.R) + (Get16Bit $Redux.Colors.SetButtons[0].Color.G) + (Get16Bit $Redux.Colors.SetButtons[0].Color.B); ChangeBytes -Offset $Symbols.CFG_A_NOTE_COLOR   -Values $values # Note Button
-            $values = $null
 
             # A Button - Text Cursor
             ChangeBytes -Offset "B88E81"  -Values @($Redux.Colors.SetButtons[0].Color.R, $Redux.Colors.SetButtons[0].Color.G, $Redux.Colors.SetButtons[0].Color.B) -Interval 4
@@ -2068,11 +2066,11 @@ function CreateTabMain() {
         BoxCheck $Redux.Graphics.ForceHiresModel
         BoxCheck $Redux.Graphics.HideDungeonIcon
 
-        if ($Redux.Text.Speed2x       -ne $null)   { if ($Redux.Text.Speed2x.Enabled)         { BoxCheck $Redux.Text.Speed2x       } }
-        if ($Redux.Text.Restore       -ne $null)   { if ($Redux.Text.Restore.Enabled)         { BoxCheck $Redux.Text.Restore       } }
-        if ($Redux.Text.TypoFixes     -ne $null)   { if ($Redux.Text.TypoFixes.Enabled)       { BoxCheck $Redux.Text.TypoFixes     } }
-        if ($Redux.Text.GoldSkulltula -ne $null)   { if ($Redux.Text.GoldSkulltula.Enabled)   { BoxCheck $Redux.Text.GoldSkulltula } }
-        if ($Redux.Text.EasterEggs    -ne $null)   { if ($Redux.Text.EasterEggs.Enabled)      { BoxCheck $Redux.Text.EasterEggs    } }
+        if ($Redux.Text.Speed2x              -ne $null)   { if ($Redux.Text.Speed2x.Enabled)                { BoxCheck $Redux.Text.Speed2x              } }
+        if ($Redux.Text.Restore              -ne $null)   { if ($Redux.Text.Restore.Enabled)                { BoxCheck $Redux.Text.Restore              } }
+        if ($Redux.Text.TypoFixes            -ne $null)   { if ($Redux.Text.TypoFixes.Enabled)              { BoxCheck $Redux.Text.TypoFixes            } }
+        if ($Redux.Text.GoldSkulltula        -ne $null)   { if ($Redux.Text.GoldSkulltula.Enabled)          { BoxCheck $Redux.Text.GoldSkulltula        } }
+        if ($Redux.Text.EasterEggs           -ne $null)   { if ($Redux.Text.EasterEggs.Enabled)             { BoxCheck $Redux.Text.EasterEggs           } }
 
         if ($Redux.Scenes.MuteOwls           -ne $null)   { if ($Redux.Scenes.MuteOwls.Enabled)             { BoxCheck $Redux.Scenes.MuteOwls           } }
         if ($Redux.Scenes.Graves             -ne $null)   { if ($Redux.Scenes.Graves.Enabled)               { BoxCheck $Redux.Scenes.Graves             } }
@@ -2356,7 +2354,6 @@ function CreateTabLanguage() {
     CreateReduxComboBox -All -Name "NaviScript" -Text ($val + " Text") -Items $items                            -Info ("Allow renaming " + $val + " and the gender") -Credits "Admentus & ShadowOne333" -Warning "Gender swap is only supported for English"
     CreateReduxTextBox  -All -Name "NaviName"   -Text ($val + " Name") -Length 5 -ASCII -Value $val   -Width 50 -Info ("Select the name for " + $val)                -Credits "Admentus & ShadowOne333" -Warning ('Most names do not have an unique texture label, and use a default "Info" prompt label' + $names)
     CreateReduxCheckBox -All -Name "NaviPrompt" -Text ($val + " Prompt")                                        -Info ("Enables the A button prompt for " + $val)    -Credits "Admentus & ShadowOne333" -Warning 'Most names do not have an unique texture prompt, and use a default "Info" prompt label'
-    $val = $items = $null
 
     if ($GamePatch.vanilla -eq 1) {
         foreach ($i in 0.. ($Files.json.languages.count-1)) { $Redux.Language[$i].Add_CheckedChanged({ UnlockLanguageContent }) }
@@ -2443,7 +2440,6 @@ function CreateTabGraphics() {
     CreateReduxComboBox -Name "ChildModels" -Child -Text "Child Model" -Items (@("Original") + $models) -Default "Original" -Info "Replace the child model used for Link"
     $models = LoadModelsList -Category "Adult"
     CreateReduxComboBox -Name "AdultModels" -Adult -Text "Adult Model" -Items (@("Original") + $models) -Default "Original" -Info "Replace the adult model used for Link"
-    $info = $models = $null
 
     $Redux.Graphics.ModelPreviews = CreateReduxGroup -Tag "Graphics" -All -Text "Model Previews"
     $Last.Group.Height = (DPISize 252)
@@ -2795,7 +2791,6 @@ function CreateTabColors() {
     $Redux.Colors.Equipment += CreateReduxComboBox -Name "GoldenGauntlets"   -Column 4 -Row 2 -Adult -Text "Golden Gauntlets Color"    -Default 2 -Length 230 -Shift 40 -Items $Items -Info ("Select a color scheme for the Golden Gauntlets`n" + $Randomize) -Credits "Ported from Rando"
     $Items =  @("Red", "Green", "Blue", "Yellow", "Cyan", "Magenta", "Orange", "Gold", "Purple", "Pink", "Randomized", "Custom")
     $Redux.Colors.Equipment += CreateReduxComboBox -Name "MirrorShieldFrame" -Column 4 -Row 3 -Adult -Text "Mirror Shield Frame Color" -Default 1 -Length 230 -Shift 40 -Items $Items -Info ("Select a color scheme for the Mirror Shield Frame`n" + $Randomize) -Warning "This option might not work for every custom player model" -Credits "Ported from Rando"
-    $items = $null
 
     # Equipment Colors - Buttons
     $Buttons = @()
@@ -2866,7 +2861,6 @@ function CreateTabColors() {
 
     if ($GamePatch.settings -eq "Gold Quest") { $preset = 5; $color = "FFFF00" } else { $preset = 1; $color = "C8FF64" }
     CreateRupeeVanillaColorOptions -Preset $preset -Color $color
-    $preset = $color = $null
 
 
 

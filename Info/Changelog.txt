@@ -6,6 +6,7 @@ v20.4.1
 - Fixed Inverted Time with 30 FPS for MM
 - Fixed issue with scrolling being broken for the "Additional Options" window
 - Fixed Remap Control not showing
+- Fixed issue with OoT Debug ROM options not properly generating
 
 v20.4.0
 - Added Project Base patches for SM
