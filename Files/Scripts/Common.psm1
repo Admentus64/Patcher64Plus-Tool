@@ -340,7 +340,8 @@ function ChangeGameRev() {
     
     if (!(IsSet $GameType)) { return }
 
-    $global:GameRev = $GameType.version[0]
+    if (IsSet $GameType.version)   { $global:GameRev = $GameType.version[0] }
+    else                           { $global:GameRev = $null                }
 
     if (IsSet $GamePatch.version) {
         foreach ($version in $GameType.version) {
