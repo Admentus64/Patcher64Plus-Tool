@@ -2,3 +2,7 @@
 *.psm1 text=auto
 *.txt text=auto
 *.json text=auto
+*.ps1 text eol=crlf
+*.psm1 text eol=crlf
+*.txt text eol=crlf
+*.json text eol=crlf

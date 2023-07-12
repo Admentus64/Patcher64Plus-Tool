@@ -88,11 +88,11 @@ function AutoUpdate([switch]$Manual) {
             $newcontent = $response.AllElements | Where {$_.type -eq "application/json"}
             
             $newContent = [string]$newContent[1]
-            $start   = ($newContent | Select-String "rawBlob").Matches.Index
-            $newContent = $newContent.substring($start+10, $newContent.substring($start+9).indexOf(",")-2)
-            $newContent = $newContent.split("\")
-            if ($newContent.length -gt 1) { $newContent[1] = $newContent[1].replace("n", "") }
-            if ($newContent.length -gt 2) { $newContent[2] = $newContent[2].replace("n", "") }
+            $start   = ($newContent | Select-String "blob").Matches.Index
+            $newContent = $newContent.substring($start, $newContent.substring($start).indexOf("]"))
+            $newContent = $newContent.substring($newContent.indexOf("[")+1)
+            $newContent = $newContent.replace('"', '')
+            $newContent = $newContent.split(",")
         }
         catch {
             WriteToConsole "Could not retrieve Patcher version info!" -Error
@@ -328,10 +328,11 @@ function UpdateAddon([string]$Title, [string]$Uri, [string]$Version) {
             $content  = $response.AllElements | Where {$_.type -eq "application/json"}
 
             $content = [string]$content[1]
-            $start   = ($content | Select-String "rawBlob").Matches.Index
-            $content = $content.substring($start+10, $content.substring($start+9).indexOf(",")-2)
-            $content = $content.split("\")
-            if ($content.length -gt 1) { $content[1] = $content[1].replace("n", "") }
+            $start   = ($content | Select-String "blob").Matches.Index
+            $content = $content.substring($start, $content.substring($start).indexOf("]"))
+            $content = $content.substring($content.indexOf("[")+1)
+            $content = $content.replace('"', '')
+            $content = $content.split(",")
         }
         catch {
             RemovePath $path
