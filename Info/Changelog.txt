@@ -7,6 +7,7 @@ v20.4.1
 - Fixed issue with scrolling being broken for the "Additional Options" window
 - Fixed Remap Control not showing
 - Fixed issue with OoT Debug ROM options not properly generating
+- Fixed issue with Free Mode
 
 v20.4.0
 - Added Project Base patches for SM
