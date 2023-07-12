@@ -6,6 +6,7 @@ function CreateOptionsDialog([byte]$Columns, [int32]$Height, [Array]$Tabs=@(), [
     if ( (IsSet $Columns) -and (IsSet $Height) )   { $global:OptionsDialog = CreateDialog -Width ($FormDistance * $Columns + (DPISize 75)) -Height (DPISize $Height) }
     else                                           { $global:OptionsDialog = CreateDialog -Width ($FormDistance * 4        + (DPISize 75)) -Height (DPISize 640)     }
     $OptionsDialog.Icon = $Files.icon.additional
+    $OptionsDialog.Add_FormClosing({ StopJobs; ResetReduxScrolling })
 
     # Options Label
     $global:OptionsLabel = CreateLabel -Y (DPISize 15) -Width $OptionsDialog.width -Height (DPISize 15) -Font $Fonts.SmallBold -Text ($GameType.mode + " - Additional Options") -AddTo $OptionsDialog
@@ -16,7 +17,7 @@ function CreateOptionsDialog([byte]$Columns, [int32]$Height, [Array]$Tabs=@(), [
     $X = $OptionsDialog.Width / 2 - (DPISize 40)
     $Y = $OptionsDialog.Height - (DPISize 90)
     $CloseButton = CreateButton -X $X -Y $Y -Width (DPISize 80) -Height (DPISize 35) -Text "Close" -AddTo $OptionsDialog
-    $CloseButton.Add_Click( { StopJobs; $OptionsDialog.Hide() })
+    $CloseButton.Add_Click( { StopJobs; ResetReduxScrolling; $OptionsDialog.Hide() })
 
     # Reset Options
     foreach ($s in $Redux.Sections) {
@@ -230,7 +231,7 @@ function CreateCreditsDialog() {
 function CreateSettingsDialog() {
     
     # Create Dialog
-    $global:SettingsDialog = CreateDialog -Width (DPISize 560) -Height (DPISize 670) -Icon $Files.icon.settings
+    $global:SettingsDialog = CreateDialog -Width (DPISize 560) -Height (DPISize 700) -Icon $Files.icon.settings
     $CloseButton = CreateButton -X ($SettingsDialog.Width / 2 - (DPISize 40)) -Y ($SettingsDialog.Height - (DPISize 90)) -Width (DPISize 80) -Height (DPISize 35) -Text "Close" -AddTo $SettingsDialog
     $CloseButton.Add_Click({ $SettingsDialog.Hide() })
 
@@ -277,12 +278,14 @@ function CreateSettingsDialog() {
     $GeneralSettings.SceneEditorChecks    = CreateSettingsCheckbox -Name "SceneEditorChecks"    -Column 3 -Row 4 -Text "Scene Editor Checks"     -IsDebug -Info "Print out extras debug info and perform extra checks for the Scene Editor`nThis may slow down performance a bit"
 
     # Debug Settings (Nintendo 64)
-    $GeneralSettings.Box              = CreateReduxGroup -All -Y ($GeneralSettings.Box.Bottom + (DPISize 10)) -IsGame $False -Height 2 -AddTo $SettingsDialog -Text "Debug Settings (Nintendo 64)"
-    $GeneralSettings.KeepDecompressed = CreateSettingsCheckbox -Name "KeepDecompressed" -Column 1 -Row 1 -Text "Keep Decompressed"   -IsDebug -Info "Keep the decompressed patched ROM in the output folder"
-    $GeneralSettings.Rev0DungeonFiles = CreateSettingsCheckbox -Name "Rev0DungeonFiles" -Column 2 -Row 1 -Text "Rev 0 Dungeon Files" -IsDebug -Info "Extract the dungeon files from the OoT ROM (Rev 0 US) or MM ROM (Rev 0 US) as well when extracting dungeon files"
-    $GeneralSettings.NoConversion     = CreateSettingsCheckbox -Name "NoConversion"     -Column 3 -Row 1 -Text "No Conversion"       -IsDebug -Info "Do not attempt to convert the ROM to a proper format"
-    $GeneralSettings.NoCRCChange      = CreateSettingsCheckbox -Name "NoCRCChange"      -Column 1 -Row 2 -Text "No CRC Change"       -IsDebug -Info "Do not change the CRC of the ROM when patching is concluded"
-    $GeneralSettings.NoCompression    = CreateSettingsCheckbox -Name "NoCompression"    -Column 2 -Row 2 -Text "No Compression"      -IsDebug -Info "Do not attempt to compress the ROM back again when patching is concluded`nThis can cause Wii VC WADs to freeze"
+    $GeneralSettings.Box                = CreateReduxGroup -All -Y ($GeneralSettings.Box.Bottom + (DPISize 10)) -IsGame $False -Height 3 -AddTo $SettingsDialog -Text "Debug Settings (Nintendo 64)"
+    $GeneralSettings.NoCompression      = CreateSettingsCheckbox -Name "NoCompression"      -Column 1 -Row 1 -Text "No Compression"            -IsDebug -Info "Do not attempt to compress the ROM back again when patching is concluded`nThis can cause Wii VC WADs to freeze"
+    $GeneralSettings.KeepDecompressed   = CreateSettingsCheckbox -Name "KeepDecompressed"   -Column 2 -Row 1 -Text "Keep Decompressed"         -IsDebug -Info "Keep the decompressed patched ROM in the output folder"
+    $GeneralSettings.Rev0DungeonFiles   = CreateSettingsCheckbox -Name "Rev0DungeonFiles"   -Column 1 -Row 2 -Text "Rev 0 Dungeon Files"       -IsDebug -Info "Extract the dungeon files from the OoT ROM (Rev 0 US) or MM ROM (Rev 0 US) as well when extracting dungeon files"
+    $GeneralSettings.NoConversion       = CreateSettingsCheckbox -Name "NoConversion"       -Column 2 -Row 2 -Text "No Conversion"             -IsDebug -Info "Do not attempt to convert the ROM to a proper format"
+    $GeneralSettings.NoCRCChange        = CreateSettingsCheckbox -Name "NoCRCChange"        -Column 3 -Row 2 -Text "No CRC Change"             -IsDebug -Info "Do not change the CRC of the ROM when patching is concluded"
+    $GeneralSettings.NoDialoguePatching = CreateSettingsCheckbox -Name "NoDialoguePatching" -Column 1 -Row 3 -Text "Prevent Dialogue Patching" -IsDebug -Info "Prevents the patching of any dialogue related options for Ocarina of Time or Majora's Mask`nUseful for when patching Randomizer"
+    $GeneralSettings.NoScenePatching    = CreateSettingsCheckbox -Name "NoScenePatching"    -Column 2 -Row 3 -Text "Prevent Scene Patching"    -IsDebug -Info "Prevents the patching of any scene related options for Ocarina of Time or Majora's Mask`nUseful for when patching Randomizer"
 
     # Settings preset
     $GeneralSettings.Box          = CreateReduxGroup -All -Y ($GeneralSettings.Box.Bottom + (DPISize 10)) -IsGame $False -Height 2 -AddTo $SettingsDialog -Text "Settings Presets"
@@ -473,9 +476,9 @@ function CreateErrorDialog([string]$Error, [boolean]$Fatal=$True, [boolean]$Once
     if ($Fatal) {
         $global:FatalError = $True
         if (IsSet $MainDialog) { $MainDialog.Hide() }
-        WriteToConsole "Error Level: Fatal"
+        WriteToConsole "Error Level: Fatal" -Error
     }
-    else { WriteToConsole "Error Level: Non-Fatal" }
+    else { WriteToConsole "Error Level: Non-Fatal" -Error }
     $ErrorDialog.ShowDialog() | Out-Null
 
 }

@@ -45,6 +45,69 @@
 		"replace"	: "24"
 	} ]
 },
+
+"nighttime" : [ {
+	"title"		: "Day & Night Cycle",
+	"id"		: "00"
+}, {
+	"title"		: "Market Entrance",
+	"id"		: "01"
+}, {
+	"title"		: "Kakariko Village",
+	"id"		: "02"
+}, {
+	"title"		: "Market Ruins",
+	"id"		: "03"
+}, {
+	"title"		: "Kokiri Forest",
+	"id"		: "04"
+}, {
+	"title"		: "Market Night",
+	"id"		: "05"
+}, {
+	"title"		: "Ambience #6",
+	"id"		: "06"
+}, {
+	"title"		: "Ganon's Castle",
+	"id"		: "07"
+}, {
+	"title"		: "Ambience #8",
+	"id"		: "08"
+}, {
+	"title"		: "Ambience #9",
+	"id"		: "09"
+}, {
+	"title"		: "Haunted Wasteland",
+	"id"		: "0A"
+}, {
+	"title"		: "Desert Colossus",
+	"id"		: "0B"
+}, {
+	"title"		: "Death Mountain Trail",
+	"id"		: "0C"
+}, {
+	"title"		: "Ambience #13",
+	"id"		: "0D"
+}, {
+	"title"		: "Ambience #14",
+	"id"		: "0E"
+}, {
+	"title"		: "Wind & Birds",
+	"id"		: "0F"
+}, {
+	"title"		: "Ambience #16",
+	"id"		: "10"
+}, {
+	"title"		: "Ambience #17",
+	"id"		: "12"
+}, {
+	"title"		: "Daytime Music",
+	"id"		: "13"
+}, {
+	"title"		: "Disabled",
+	"id"		: "FF"
+} ],
+
 "tracks" : [ {
 	"title"		: "Hyrule Field",
 	"id"		: "02",
@@ -416,4 +479,8 @@
 	"title"		: "Mini-Game",
 	"id"		: "6C",
 	"size"		: "08A0"
+}, {
+	"title"		: "No Music",
+	"id"		: "7F",
+	"size"		: 0
 } ] }

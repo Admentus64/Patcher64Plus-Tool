@@ -130,13 +130,13 @@ function PatchDungeonsMQ() {
 
     if ( (IsChecked $Redux.MQ.Select) -or (IsChecked $Redux.MQ.EnableMQ) -or (IsChecked -Elem $Redux.MQ.Randomize)) {
         if (!(TestFile -Path ($GameFiles.extracted + "\Master Quest") -Container)) {
-            WriteToConsole ('Error: "' + ($GameFiles.extracted + "\Master Quest") + '" was not found')
+            WriteToConsole ('Error: "' + ($GameFiles.extracted + "\Master Quest") + '" was not found') -Error
             return $False
         }
     }
     if ( (IsChecked $Redux.MQ.Select) -or (IsChecked $Redux.MQ.EnableUra) -or (IsChecked -Elem $Redux.MQ.Randomize)) {
         if (!(TestFile -Path ($GameFiles.extracted + "\Ura Quest") -Container)) {
-            WriteToConsole ('Error: "' + ($GameFiles.extracted + "\Ura Quest") + '" was not found')
+            WriteToConsole ('Error: "' + ($GameFiles.extracted + "\Ura Quest") + '" was not found') -Error
             return $False
         }
     }
@@ -181,7 +181,7 @@ function PatchDungeonsMQ() {
 function CheckDungeonData([string]$Path) {
     
     if (!(TestFile -Path $Path -Container)) {
-        WriteToConsole ('Error: "' + $Path + '" was not found')
+        WriteToConsole ('Error: "' + $Path + '" was not found') -Error
         return $False
     }
     return $True

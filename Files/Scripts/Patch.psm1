@@ -47,9 +47,9 @@ function MainFunction([string]$Command, [string]$PatchedFileName) {
             }
 
             if (TestFile (CheckPatchExtension ($GameFiles.languages + "\" + $LanguagePatch.code) ) ) {
-                $Ext = (Get-Item (CheckPatchExtension ($GameFiles.languages + "\" + $LanguagePatch.code) ) ).Extension
+                $Ext                      = (Get-Item (CheckPatchExtension ($GameFiles.languages + "\" + $LanguagePatch.code) ) ).Extension
                 $global:LanguagePatchFile = "Languages\" + $LanguagePatch.code + $Ext
-                $PatchedFileName = $PatchedFileName.replace("_patched", "_" + $LanguagePatch.code + "_patched")
+                $PatchedFileName          = $PatchedFileName.replace("_patched", "_" + $LanguagePatch.code + "_patched")
             }
             $Header = SetHeader -Header $Header -ROMTitle $LanguagePatch.rom_title -ROMGameID $LanguagePatch.rom_gameID -VCTitle $LanguagePatch.vc_title -VCGameID $LanguagePatch.vc_gameID -Region $LanguagePatch.rom_region
             
@@ -202,14 +202,10 @@ function MainFunctionPatch([string]$Command, [Array]$Header, [string]$PatchedFil
     }
 
     # Step 11: Final message
-    if (!$WarningError) {
-        if ($IsWiiVC)   { UpdateStatusLabel ('Finished patching the ' + $GameType.mode + ' VC WAD file.') }
-        else            { UpdateStatusLabel ('Finished patching the ' + $GameType.mode + ' ROM file.') }
-    }
-    else {
-        if ($IsWiiVC)   { UpdateStatusLabel ('Finished patching the ' + $GameType.mode + ' VC WAD file, but encountered issues. Please enable and check the log.') }
-        else            { UpdateStatusLabel ('Finished patching the ' + $GameType.mode + ' ROM file, but encountered issues. Please enable and check the log.') }
-    }
+    if ($IsWiiVC) { $text = "WAD" } else { $text = "ROM" }
+    if     ($WarningError)         { UpdateStatusLabel ("Finished patching " + $GameType.mode + " " + $text + " file, but encountered issues. Please enable and check the log.")          -Error }
+    elseif ($ModelPatchingError)   { UpdateStatusLabel ("Finished patching " + $GameType.mode + " " + $text + " file, but couldn't apply custom model. Please enable and check the log.") -Error }
+    else                           { UpdateStatusLabel ("Finished patching " + $GameType.mode + " " + $text + " file.") }
 
 }
 
@@ -260,17 +256,17 @@ function WriteDebug([string]$Command, [string[]]$Header, [string]$PatchedFileNam
     
     foreach ($item in $Redux.Groups) {
         foreach ($form in $item.controls) {
-            if     ($form.GetType().Name -eq "CheckBox"    -and $form.enabled)   { if (IsChecked $form)                                                 { WriteToConsole ($item.text + ". " + $form.name) } }
-            elseif ($form.GetType().Name -eq "RadioButton" -and $form.enabled)   { if ( (IsDefault $form -Not $form.checked) -and (IsChecked $form) )   { WriteToConsole ($item.text + ". " + $form.name) } }
-            elseif ($form.GetType().Name -eq "ComboBox"    -and $form.enabled)   { if (IsDefault $form -Not $form.text)                                 { WriteToConsole ($item.text + ". " + $form.name + " -> " + $form.text)  } }
-            elseif ($form.GetType().Name -eq "TrackBar"    -and $form.enabled)   { if (IsDefault $form -Not $form.value)                                { WriteToConsole ($item.text + ". " + $form.name + " -> " + $form.value) } }
+            if     ($form.GetType().Name -eq "CheckBox"    -and $form.enabled)   { if (IsChecked $form)                                                 { WriteToConsole ($item.text.replace("&&", "&") + ". " + $form.name) } }
+            elseif ($form.GetType().Name -eq "RadioButton" -and $form.enabled)   { if ( (IsDefault $form -Not $form.checked) -and (IsChecked $form) )   { WriteToConsole ($item.text.replace("&&", "&") + ". " + $form.name) } }
+            elseif ($form.GetType().Name -eq "ComboBox"    -and $form.enabled)   { if (IsDefault $form -Not $form.text)                                 { WriteToConsole ($item.text.replace("&&", "&") + ". " + $form.name + " -> " + $form.text)  } }
+            elseif ($form.GetType().Name -eq "TrackBar"    -and $form.enabled)   { if (IsDefault $form -Not $form.value)                                { WriteToConsole ($item.text.replace("&&", "&") + ". " + $form.name + " -> " + $form.value) } }
 
             elseif ($form.GetType() -eq [System.Windows.Forms.Panel]) {
                 foreach ($subform in $form.controls) {
-                    if     ($subform.GetType().Name -eq "CheckBox"    -and $form.enabled)   { if (IsChecked $subform)                                                       { WriteToConsole ($item.text + ". " + $subform.name) } }
-                    elseif ($subform.GetType().Name -eq "RadioButton" -and $form.enabled)   { if ( (IsDefault $subform -Not $subform.checked) -and (IsChecked $subform) )   { WriteToConsole ($item.text + ". " + $subform.name) } }
-                    elseif ($subform.GetType().Name -eq "ComboBox"    -and $form.enabled)   { if (IsDefault $subform -Not $subform.text)                                    { WriteToConsole ($item.text + ". " + $subform.name + " -> " + $subform.text)  } }
-                    elseif ($subform.GetType().Name -eq "TrackBar"    -and $form.enabled)   { if (IsDefault $subform -Not $subform.value)                                   { WriteToConsole ($item.text + ". " + $subform.name + " -> " + $subform.value) } }
+                    if     ($subform.GetType().Name -eq "CheckBox"    -and $form.enabled)   { if (IsChecked $subform)                                                       { WriteToConsole ($item.text.replace("&&", "&") + ". " + $subform.name) } }
+                    elseif ($subform.GetType().Name -eq "RadioButton" -and $form.enabled)   { if ( (IsDefault $subform -Not $subform.checked) -and (IsChecked $subform) )   { WriteToConsole ($item.text.replace("&&", "&") + ". " + $subform.name) } }
+                    elseif ($subform.GetType().Name -eq "ComboBox"    -and $form.enabled)   { if (IsDefault $subform -Not $subform.text)                                    { WriteToConsole ($item.text.replace("&&", "&") + ". " + $subform.name + " -> " + $subform.text)  } }
+                    elseif ($subform.GetType().Name -eq "TrackBar"    -and $form.enabled)   { if (IsDefault $subform -Not $subform.value)                                   { WriteToConsole ($item.text.replace("&&", "&") + ". " + $subform.name + " -> " + $subform.value) } }
                 }
             }
         }
@@ -292,13 +288,15 @@ function Cleanup() {
     $global:ByteArrayGame = $global:ROMFile = $global:WADFile = $global:CheckHashSum = $global:ROMHashSum = $null
     if (!(IsSet $TextEditor)) { $global:LanguagePatch = $null }
 
+    [System.GC]::Collect() | Out-Null
+
     RemovePath $WADFile.Folder
     RemovePath $Paths.cygdrive
-    RemovePath $Paths.Temp
     RemoveFile $Files.flipscfg
     RemoveFile $Files.stackdump
-
-    [System.GC]::Collect() | Out-Null
+    Get-ChildItem -Path $Paths.Temp -Include *.* -File -Recurse | foreach { $_.Delete() }
+    if (Test-Path .\temp\*) { Get-ChildItem -Path $Paths.Temp -Directory | foreach { $_.Delete() } }
+    RemovePath $Paths.Temp
 
 }
 
@@ -390,7 +388,7 @@ function PatchingAdditionalOptions() {
         PrePatchLanguageOptions
     }
 
-    if (IsSet -Elem $LanguagePatchFile) {
+    if ( (IsSet -Elem $LanguagePatchFile) -and $Settings.Debug.NoDialoguePatching -ne $True) {
         UpdateStatusLabel ("Patching " + $GameType.mode + " Language...")
         ApplyPatch -File $GetROM.decomp -Patch $LanguagePatchFile
         $global:LanguagePatchFile = $null
@@ -408,7 +406,9 @@ function PatchingAdditionalOptions() {
         PatchReduxOptions
     }
 
-    if ( (GetCommand "ByteOptions") -or (GetCommand "ByteReduxOptions") -or (GetCommand "ByteLanguageOptions") -or (GetCommand "ByteSceneOptions") ) { $global:ByteArrayGame = [System.IO.File]::ReadAllBytes($GetROM.decomp) }
+    if ( (GetCommand "ByteOptions") -or (GetCommand "ByteReduxOptions") -or ( ( (GetCommand "WholeLanguageOptions") -or (GetCommand "ByteLanguageOptions") ) -and $Settings.Debug.NoDialoguePatching -ne $True) -or ( (GetCommand "ByteSceneOptions") -and $Settings.Debug.NoScenePatching -ne $True) ) {
+        $global:ByteArrayGame = [System.IO.File]::ReadAllBytes($GetROM.decomp)
+    }
 
     # Additional Options
     if (GetCommand "ByteOptions") {
@@ -423,51 +423,45 @@ function PatchingAdditionalOptions() {
     }
 
     # Scene Options
-    if (GetCommand "ByteSceneOptions") {
+    if ( (GetCommand "ByteSceneOptions") -and $Settings.Debug.NoScenePatching -ne $True) {
         UpdateStatusLabel ("Patching " + $GameType.mode + " Additional Scene Options...")
         $global:SceneEditor     = @{}
         $Files.json.sceneEditor = SetJSONFile $GameFiles.sceneEditor
         ByteSceneOptions
-        $global:ByteScriptArray = $global:ByteTableArray = $Files.json.textEditor = $null
+        $global:SceneEditor = $Files.json.sceneEditor = $null
     }
 
     # Language Options
-    if ( (GetCommand "CheckLanguageOptions") -and (GetCommand "ByteLanguageOptions") ) {
-        if ( (CheckLanguageOptions) -and (IsSet $LanguagePatch.script_dma)  -and $LanguagePatch.region -ne "J") {
-            UpdateStatusLabel ("Patching " + $GameType.mode + " Additional Language Options...")
-
-            $start  = CombineHex $ByteArrayGame[((GetDecimal $LanguagePatch.script_dma)+0)..((GetDecimal $LanguagePatch.script_dma)+3)]
-            $end    = CombineHex $ByteArrayGame[((GetDecimal $LanguagePatch.script_dma)+4)..((GetDecimal $LanguagePatch.script_dma)+7)]
-            $length = Get32Bit ( (GetDecimal $end) - (GetDecimal $start) )
-            ExportBytes -Offset $start                     -Length $length                     -Output ($GameFiles.extracted + "\message_data_static." + $LanguagePatch.code + ".bin") -Force
-            ExportBytes -Offset $LanguagePatch.table_start -Length $LanguagePatch.table_length -Output ($GameFiles.extracted + "\message_data."        + $LanguagePatch.code + ".tbl") -Force
-
-            if (GetCommand "WholeLanguageOptions") { WholeLanguageOptions -Script ($GameFiles.extracted + "\message_data_static." + $LanguagePatch.code + ".bin") -Table ($GameFiles.extracted + "\message_data." + $LanguagePatch.code + ".tbl") }
-            $global:LastScript     = @{}
-            $Files.json.textEditor = SetJSONFile $GameFiles.textEditor
-            LoadScript -Script ($GameFiles.extracted + "\message_data_static." + $LanguagePatch.code + ".bin") -Table ($GameFiles.extracted + "\message_data." + $LanguagePatch.code + ".tbl")
-            ByteLanguageOptions
-
+    if ($Settings.Debug.NoDialoguePatching -ne $True) {
+        if ( (IsSet $LanguagePatch.script_dma) -and $LanguagePatch.region -ne "J") {
+            if (GetCommand "WholeLanguageOptions")  { WholeLanguageOptions -Script ($GameFiles.extracted + "\message_data_static." + $LanguagePatch.code + ".bin") -Table ($GameFiles.extracted + "\message_data." + $LanguagePatch.code + ".tbl") }
+            if (GetCommand "ByteLanguageOptions")   { ByteLanguageOptions }
+        }
+        
+        if (IsSet $Files.json.textEditor) {
+            $start = CombineHex $ByteArrayGame[((GetDecimal $LanguagePatch.script_dma)+0)..((GetDecimal $LanguagePatch.script_dma)+3)]
+            $end   = CombineHex $ByteArrayGame[((GetDecimal $LanguagePatch.script_dma)+4)..((GetDecimal $LanguagePatch.script_dma)+7)]
+            
             SaveScript -Script ($GameFiles.extracted + "\message_data_static." + $LanguagePatch.code + ".bin") -Table ($GameFiles.extracted + "\message_data." + $LanguagePatch.code + ".tbl")
             PatchBytes -Offset $start                     -Patch ("message_data_static." + $LanguagePatch.code + ".bin") -Extracted
             PatchBytes -Offset $LanguagePatch.table_start -Patch ("message_data."        + $LanguagePatch.code + ".tbl") -Extracted
-
+            
             $lengthDifference = (Get-Item ($GameFiles.extracted + "\message_data_static." + $LanguagePatch.code + ".bin")).length - ( (GetDecimal $end) - (GetDecimal $start) )
             while ($lengthDifference % 16 -ne 0) { $lengthDifference++ }
             if ($lengthDifference -lt 0) { $lengthDifference = 0 }
             if ($lengthDifference -ne 0) { ChangeBytes -Offset (AddToOffset -Hex $LanguagePatch.script_dma -Add "04") -Values (AddToOffset -Hex $end -Add (Get32Bit $lengthDifference)) }
-
+            
             if ($Settings.Debug.ExtractFullScript -eq $True) {
                 CreateSubPath $GameFiles.editor
                 Copy-Item -LiteralPath ($GameFiles.extracted + "\message_data_static." + $LanguagePatch.code + ".bin") -Destination ($GameFiles.editor + "\message_data_static." + $LanguagePatch.code + ".bin") -Force
                 Copy-Item -LiteralPath ($GameFiles.extracted + "\message_data."        + $LanguagePatch.code + ".tbl") -Destination ($GameFiles.editor + "\message_data."        + $LanguagePatch.code + ".tbl") -Force
             }
-
+            
             $global:LastScript = $global:DialogueList = $global:ByteScriptArray = $global:ByteTableArray = $Files.json.textEditor = $null
         }
     }
 
-    if ( (GetCommand "ByteOptions") -or (GetCommand "ByteReduxOptions") -or (GetCommand "ByteLanguageOptions") -or (GetCommand "ByteSceneOptions") ) {
+    if ( (GetCommand "ByteOptions") -or (GetCommand "ByteReduxOptions") -or ( ( (GetCommand "WholeLanguageOptions") -or (GetCommand "ByteLanguageOptions") ) -and $Settings.Debug.NoDialoguePatching -ne $True) -or ( (GetCommand "ByteSceneOptions") -and $Settings.Debug.NoScenePatching -ne $True) ) {
         [System.IO.File]::WriteAllBytes($GetROM.decomp, $ByteArrayGame)
         $global:ByteArrayGame = $global:LanguagePatch = $null
     }
@@ -548,7 +542,7 @@ function DowngradeROM() {
     UpdateStatusLabel "Downgrading ROM..."
 
     if ($ROMHashSum -eq $CheckHashSum) {
-        WriteToConsole "ROM is already downgraded"
+        WriteToConsole "ROM is already downgraded" -Error
         return $null
     }
 
@@ -575,7 +569,7 @@ function DowngradeROM() {
 
         if ($downgradeFile -ne $null) {
             if (!(ApplyPatch -File $GetROM.run -Patch $downgradeFile)) {
-                WriteToConsole "Could not apply downgrade patch"
+                WriteToConsole "Could not apply downgrade patch" -Error
                 return $null
             }
             $romHash = (Get-FileHash -Algorithm MD5 -LiteralPath $GetROM.run).Hash
@@ -588,7 +582,7 @@ function DowngradeROM() {
             if ($PatchInfo.decompress -and (IsSet $item.hash_decomp)) { $hash = $item.hash_decomp } else { $hash = $item.hash }
             if ($romHash -eq $hash -and (IsSet $item.upgrade)) {
                 if (!(ApplyPatch -File $GetROM.run -Patch ("Downgrade\" + $item.upgrade))) {
-                    WriteToConsole "Could not apply upgrade patch"
+                    WriteToConsole "Could not apply upgrade patch" -Error
                     return
                 }
                 $romHash = (Get-FileHash -Algorithm MD5 -LiteralPath $GetROM.run).Hash
@@ -607,7 +601,7 @@ function DowngradeROM() {
         return $item
     }
 
-    WriteToConsole "Unknown version for downgrading"
+    WriteToConsole "Unknown version for downgrading" -Error
     return $null
     
 }
@@ -622,7 +616,7 @@ function GetMaxSize([string]$Command) {
 
     $maxSize = ($GameConsole.max_size) + "MB"
     if ((Get-Item -LiteralPath $GetROM.run).length/$maxSize -gt 1) {
-        UpdateStatusLabel ("The ROM is too large! The max allowed size is " + $maxSize) + "!"
+        UpdateStatusLabel ("The ROM is too large! The max allowed size is " + $maxSize) + "!" -Error
         return $False
     }
 
@@ -708,30 +702,30 @@ function CompareHashSums([string]$Command) {
 
     $item = GetROMVersion
     if ($item -eq $null) {
-        UpdateStatusLabel "Failed! The ROM is an incorrect version or is broken."
+        UpdateStatusLabel "Failed! The ROM is an incorrect version or is broken." -Error
         WriteToConsole ("ROM hash is:  " + $ROMHashSum + ". The correct ROM should be: " + $CheckHashSum)
         return $False
     }
 
     if ($item.supported -eq 0) {
         if ($item.region -like "*US*" -or $item.region -like "*NTSC-U*") {
-            UpdateStatusLabel "North American / NTSC-U versions are not supported."
+            UpdateStatusLabel "North American / NTSC-U versions are not supported." -Error
             return $False
         }
         if ($item.region -like "*EU*" -or $item.region -like "*PAL*") {
-            UpdateStatusLabel "Europese / PAL versions are not supported."
+            UpdateStatusLabel "Europese / PAL versions are not supported." -Error
             return $False
         }
         if ($item.region -like "*JPN*" -or $item.region -like "*NTSC-J*") {
-            UpdateStatusLabel "Japanese / NTSC-J versions are not supported."
+            UpdateStatusLabel "Japanese / NTSC-J versions are not supported." -Error
             return $False
         }
         if ($item.region -like "*CHN*") {
-            UpdateStatusLabel "Chinese / CHN versions are not supported."
+            UpdateStatusLabel "Chinese / CHN versions are not supported." -Error
             return $False
         }
         if ($item.region -like "*TWN*") {
-            UpdateStatusLabel "Taiwanese / TWN versions are not supported."
+            UpdateStatusLabel "Taiwanese / TWN versions are not supported." -Error
             return $False
         }
     }
@@ -809,9 +803,9 @@ function ApplyPatchROM() {
     $HashSum2 = (Get-FileHash -Algorithm MD5 -LiteralPath $GetROM.patched).Hash
 
     if ($HashSum1 -eq $HashSum2) {
-        if ($IsWiiVC -and $GameType.downgrade -and !$PatchInfo.downgrade -and ($Patches.Options.Checked -or $Patches.Options.Visible -or (IsSet $GamePatch.preset) ) )   { UpdateStatusLabel "Failed! Patch file does not match source. ROM has left unchanged. Enable Downgrade?" }
-        elseif ($IsWiiVC -and $GameType.downgrade -and $Downgrade)                                                                                                       { UpdateStatusLabel "Failed! Patch file does not match source. ROM has left unchanged. Disable Downgrade?" }
-        else                                                                                                                                                             { UpdateStatusLabel "Failed! Patch file does not match source. ROM has left unchanged." }
+        if ($IsWiiVC -and $GameType.downgrade -and !$PatchInfo.downgrade -and ($Patches.Options.Checked -or $Patches.Options.Visible -or (IsSet $GamePatch.preset) ) )   { UpdateStatusLabel "Failed! Patch file does not match source. ROM has left unchanged. Enable Downgrade?"  -Error }
+        elseif ($IsWiiVC -and $GameType.downgrade -and $Downgrade)                                                                                                       { UpdateStatusLabel "Failed! Patch file does not match source. ROM has left unchanged. Disable Downgrade?" -Error }
+        else                                                                                                                                                             { UpdateStatusLabel "Failed! Patch file does not match source. ROM has left unchanged."                    -Error }
         return $False
     }
 
@@ -826,14 +820,14 @@ function ApplyPatch([string]$File=$GetROM.decomp, [string]$Patch, [string]$New, 
     
     # File Parameter Check
     if ( !(IsSet $File) -or !(IsSet $Patch) ) {
-        WriteToConsole "No file or patch file is provided"
+        WriteToConsole "No file or patch file is provided" -Error
         return $True
     }
 
     # File Exists
     if (!(TestFile $File)) {
-        UpdateStatusLabel "Failed! Could not find file."
-        WriteToConsole ("Missing file: " + $File)
+        UpdateStatusLabel "Failed! Could not find file." -Error
+        WriteToConsole ("Missing file: " + $File) -Error
         return $False
     }
 
@@ -851,8 +845,8 @@ function ApplyPatch([string]$File=$GetROM.decomp, [string]$Patch, [string]$New, 
 
     if (TestFile $Patch) { $Patch = Get-Item -LiteralPath $Patch }
     else { # Patch File does not exist
-        UpdateStatusLabel "Failed! Could not find patch file."
-        WriteToConsole ("Missing patch file: " + $Patch)
+        UpdateStatusLabel "Failed! Could not find patch file." -Error
+        WriteToConsole ("Missing patch file: " + $Patch) -Error
         return $False
     }
 
@@ -956,7 +950,7 @@ function DecompressROM() {
         UpdateStatusLabel ("Extending " + $GameType.mode + " ROM...")
 
         if (!(IsSet -Elem $GamePatch.extend -Min 18 -Max 64)) {
-            UpdateStatusLabel 'Failed. Could not extend SM64 ROM. Make sure the "extend" value is between 18 and 64.'
+            UpdateStatusLabel 'Failed. Could not extend SM64 ROM. Make sure the "extend" value is between 18 and 64.' -Error
             return $False
         }
 

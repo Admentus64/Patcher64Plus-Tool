@@ -79,53 +79,53 @@ function ByteOptions() {
 #==============================================================================================================================================================================================
 function CreateOptions() {
     
-    CreateOptionsDialog -Columns 6 -Height 470
+    CreateOptionsDialog -Columns 6 -Height 470 -NoLanguages
     
     # OTHER #
-    CreateReduxGroup    -Tag  "Debug" -Text "Misc" 
-    CreateReduxCheckBox -Name "Speed2x"               -Text "2x Text Speed"                      -Info "Set the dialogue text speed to be twice as fast"                                                                -Credits "Redux"
-    CreateReduxCheckBox -Name "DefaultZTargeting"     -Text "Default Hold Z-Targeting"           -Info "Change the Default Z-Targeting option to Hold instead of Switch"                                                -Credits "Redux"
-    CreateReduxCheckBox -Name "ForceHiresModel"       -Text "Force Hires Link Model"    -Checked -Info "Always use Link's High Resolution Model when Link is too far away"                                              -Credits "GhostlyDark"
-    CreateReduxCheckBox -Name "CowNoseRing"           -Text "Restore Cow Nose Ring"              -Info "Restore the rings in the noses for Cows as seen in the Japanese release"                                        -Credits "ShadowOne333"
-    CreateReduxCheckBox -Name "TranslateMapSelect"    -Text "Translate Map Select"               -Info "Translates the Debug Map Select menu into English"                                                              -Credits "Jared Johnson (translated by Zelda Edit)"
-    CreateReduxCheckBox -Name "TranslateItemSelect"   -Text "Translate Item Select"              -Info "Translates the Debug Inventory Select menu into English"                                                        -Credits "GhostlyDark"
+    CreateReduxGroup    -All -Tag  "Debug" -Text "Misc" 
+    CreateReduxCheckBox -All -Name "Speed2x"               -Text "2x Text Speed"                      -Info "Set the dialogue text speed to be twice as fast"                                                                -Credits "Redux"
+    CreateReduxCheckBox -All -Name "DefaultZTargeting"     -Text "Default Hold Z-Targeting"           -Info "Change the Default Z-Targeting option to Hold instead of Switch"                                                -Credits "Redux"
+    CreateReduxCheckBox -All -Name "ForceHiresModel"       -Text "Force Hires Link Model"    -Checked -Info "Always use Link's High Resolution Model when Link is too far away"                                              -Credits "GhostlyDark"
+    CreateReduxCheckBox -All -Name "CowNoseRing"           -Text "Restore Cow Nose Ring"              -Info "Restore the rings in the noses for Cows as seen in the Japanese release"                                        -Credits "ShadowOne333"
+    CreateReduxCheckBox -All -Name "TranslateMapSelect"    -Text "Translate Map Select"               -Info "Translates the Debug Map Select menu into English"                                                              -Credits "Jared Johnson (translated by Zelda Edit)"
+    CreateReduxCheckBox -All -Name "TranslateItemSelect"   -Text "Translate Item Select"              -Info "Translates the Debug Inventory Select menu into English"                                                        -Credits "GhostlyDark"
     
 
 
-    CreateReduxGroup    -Tag  "DebugRemove" -Text "Remove"
-    CreateReduxCheckBox -Name "HUDColorsReversal"     -Text "HUD Colors Reversal"                -Info "Restore the HUD colors as used on the Nintendo 64 versions"                                                     -Credits "GhostlyDark"
-    CreateReduxCheckBox -Name "RestoreBlood"          -Text "Restore Blood"                      -Info "Restore the red blood for Ganondorf and Ganon as used in the Rev 0 & Rev 1 ROM"                                 -Credits "ShadowOne333"
-    CreateReduxCheckBox -Name "NormalFile1"           -Text "Normal File 1"                      -Info "Remove the Debug Save Data from File 1`nAllowing to start a fresh game again"                                   -Credits "ChriisTiian & Ported by GhostlyDark"
-    CreateReduxCheckBox -Name "MapSelect"             -Text "Map Select"                         -Info "Remove the debug Map Select feature"                                                                            -Credits "ChriisTiian & Ported by GhostlyDark"
-    CreateReduxCheckBox -Name "ItemSelect"            -Text "Item Select"                        -Info "Remove the debug Item Select feature"                                                                           -Credits "ChriisTiian & Ported by GhostlyDark"
-    CreateReduxCheckBox -Name "FreeMovement"          -Text "Free Movement"                      -Info "Remove the debug Free Movement feature"                                                                         -Credits "ChriisTiian & Ported by GhostlyDark"
-    CreateReduxCheckBox -Name "DebugCamera"           -Text "Debug Camera"                       -Info "Remove the debug Camera feature"                                                                                -Credits "ChriisTiian & Ported by GhostlyDark"
-    CreateReduxCheckBox -Name "RemoveWrongEquip"      -Text "Master Sword Equip"                 -Info "Remove the debug Wrong Master Sword Equip feature"                                                              -Credits "ChriisTiian & Ported by GhostlyDark"
-    CreateReduxCheckBox -Name "RemoveWrongDisplay"    -Text "Master Sword Display"               -Info "Remove the debug Wrong Master Sword Display feature"                                                            -Credits "ChriisTiian & Ported by GhostlyDark"
-    CreateReduxCheckBox -Name "RemoveWrongIcon"       -Text "Hover Boots Icon"                   -Info "Remove the debug Wrong Hover Boots Icon feature"                                                                -Credits "ChriisTiian & Ported by GhostlyDark"
+    CreateReduxGroup    -All -Tag  "DebugRemove" -Text "Remove"
+    CreateReduxCheckBox -All -Name "HUDColorsReversal"     -Text "HUD Colors Reversal"                -Info "Restore the HUD colors as used on the Nintendo 64 versions"                                                     -Credits "GhostlyDark"
+    CreateReduxCheckBox -All -Name "RestoreBlood"          -Text "Restore Blood"                      -Info "Restore the red blood for Ganondorf and Ganon as used in the Rev 0 & Rev 1 ROM"                                 -Credits "ShadowOne333"
+    CreateReduxCheckBox -All -Name "NormalFile1"           -Text "Normal File 1"                      -Info "Remove the Debug Save Data from File 1`nAllowing to start a fresh game again"                                   -Credits "ChriisTiian & Ported by GhostlyDark"
+    CreateReduxCheckBox -All -Name "MapSelect"             -Text "Map Select"                         -Info "Remove the debug Map Select feature"                                                                            -Credits "ChriisTiian & Ported by GhostlyDark"
+    CreateReduxCheckBox -All -Name "ItemSelect"            -Text "Item Select"                        -Info "Remove the debug Item Select feature"                                                                           -Credits "ChriisTiian & Ported by GhostlyDark"
+    CreateReduxCheckBox -All -Name "FreeMovement"          -Text "Free Movement"                      -Info "Remove the debug Free Movement feature"                                                                         -Credits "ChriisTiian & Ported by GhostlyDark"
+    CreateReduxCheckBox -All -Name "DebugCamera"           -Text "Debug Camera"                       -Info "Remove the debug Camera feature"                                                                                -Credits "ChriisTiian & Ported by GhostlyDark"
+    CreateReduxCheckBox -All -Name "RemoveWrongEquip"      -Text "Master Sword Equip"                 -Info "Remove the debug Wrong Master Sword Equip feature"                                                              -Credits "ChriisTiian & Ported by GhostlyDark"
+    CreateReduxCheckBox -All -Name "RemoveWrongDisplay"    -Text "Master Sword Display"               -Info "Remove the debug Wrong Master Sword Display feature"                                                            -Credits "ChriisTiian & Ported by GhostlyDark"
+    CreateReduxCheckBox -All -Name "RemoveWrongIcon"       -Text "Hover Boots Icon"                   -Info "Remove the debug Wrong Hover Boots Icon feature"                                                                -Credits "ChriisTiian & Ported by GhostlyDark"
 
 
 
-    CreateReduxGroup    -Tag  "DebugFix" -Text "Fixes"
-    CreateReduxCheckBox -Name "SubscreenDelay"        -Text "Subscreen Delay"           -Checked -Info "Removes the delay when opening the Pause Screen, which fixes crash issues on emulator when ROM is decompressed" -Credits "ChriisTiian"
-    CreateReduxCheckBox -Name "QuiverIcon"            -Text "Quiver Icon"                        -Info "Properly display the Largest Quiver icon in dialogue when obtaining it"                                         -Credits "GhostlyDark"
-    CreateReduxCheckBox -Name "CreditsCrash"          -Text "Credits Crash"             -Checked -Info "Use the ingame scene for playing the credits rather than the prerendered credits video"                         -Credits "ChriisTiian"
-    CreateReduxCheckBox -Name "CenterNaviPrompt"      -Text "Center Navi Prompt"                 -Info 'Centers the "Navi" prompt shown in the C-Up button'                                                             -Credits "Ported by GhostlyDark"
-    CreateReduxCheckBox -Name "HyruleGardenCrash"     -Text "Hyrule Garden Crash"       -Checked -Info "Fix all GPU Errors and crashes when accessing the Early Hyrule Garden Game debug map"                           -Credits "ChriisTiian & Ported by GhostlyDark"
-    CreateReduxCheckBox -Name "ZoraFountainCrash"     -Text "Zora's Fountain Crash"     -Checked -Info "Fixes the crash that occurs when loading cutscene 01 through the Debug Map Select"                              -Credits "GhostlyDark"
-    CreateReduxCheckBox -Name "KokiriForest"          -Text "Kokiri Forest"                      -Info "Reduces the time when loading cutscenes 04 and 05 through the Debug Map Select"                                 -Credits "ChriisTiian & Ported by GhostlyDark"
+    CreateReduxGroup    -All -Tag  "DebugFix" -Text "Fixes"
+    CreateReduxCheckBox -All -Name "SubscreenDelay"        -Text "Subscreen Delay"           -Checked -Info "Removes the delay when opening the Pause Screen, which fixes crash issues on emulator when ROM is decompressed" -Credits "ChriisTiian"
+    CreateReduxCheckBox -All -Name "QuiverIcon"            -Text "Quiver Icon"                        -Info "Properly display the Largest Quiver icon in dialogue when obtaining it"                                         -Credits "GhostlyDark"
+    CreateReduxCheckBox -All -Name "CreditsCrash"          -Text "Credits Crash"             -Checked -Info "Use the ingame scene for playing the credits rather than the prerendered credits video"                         -Credits "ChriisTiian"
+    CreateReduxCheckBox -All -Name "CenterNaviPrompt"      -Text "Center Navi Prompt"                 -Info 'Centers the "Navi" prompt shown in the C-Up button'                                                             -Credits "Ported by GhostlyDark"
+    CreateReduxCheckBox -All -Name "HyruleGardenCrash"     -Text "Hyrule Garden Crash"       -Checked -Info "Fix all GPU Errors and crashes when accessing the Early Hyrule Garden Game debug map"                           -Credits "ChriisTiian & Ported by GhostlyDark"
+    CreateReduxCheckBox -All -Name "ZoraFountainCrash"     -Text "Zora's Fountain Crash"     -Checked -Info "Fixes the crash that occurs when loading cutscene 01 through the Debug Map Select"                              -Credits "GhostlyDark"
+    CreateReduxCheckBox -All -Name "KokiriForest"          -Text "Kokiri Forest"                      -Info "Reduces the time when loading cutscenes 04 and 05 through the Debug Map Select"                                 -Credits "ChriisTiian & Ported by GhostlyDark"
 
 
 
-    CreateReduxGroup    -Tag  "DebugGlitch" -Text "Glitch Fixes"
-    CreateReduxCheckBox -Name "BottleDupe"            -Text "Bottle Dupe and Ocarina"            -Info "Fixes the Bottle Dupe Glitch and Ocarina Glitch"                                                                -Credits "ChriisTiian & Ported by GhostlyDark"
-    CreateReduxCheckBox -Name "SwordlessEpona"        -Text "Swordless Epona"                    -Info "Fixes the Swordless Epona Glitch"                                                                               -Credits "ChriisTiian & Ported by GhostlyDark"
-    CreateReduxCheckBox -Name "InfiniteSword"         -Text "Infinite Sword"                     -Info "Fixes the Infinite Sword Glitch"                                                                                -Credits "ChriisTiian & Ported by GhostlyDark"
+    CreateReduxGroup    -All -Tag  "DebugGlitch" -Text "Glitch Fixes"
+    CreateReduxCheckBox -All -Name "BottleDupe"            -Text "Bottle Dupe and Ocarina"            -Info "Fixes the Bottle Dupe Glitch and Ocarina Glitch"                                                                -Credits "ChriisTiian & Ported by GhostlyDark"
+    CreateReduxCheckBox -All -Name "SwordlessEpona"        -Text "Swordless Epona"                    -Info "Fixes the Swordless Epona Glitch"                                                                               -Credits "ChriisTiian & Ported by GhostlyDark"
+    CreateReduxCheckBox -All -Name "InfiniteSword"         -Text "Infinite Sword"                     -Info "Fixes the Infinite Sword Glitch"                                                                                -Credits "ChriisTiian & Ported by GhostlyDark"
 
 
 
-    CreateReduxGroup    -Tag  "Debug" -Text "Addons"
-    CreateReduxCheckBox -Name "ExpansionPak"          -Text "Expansion Pak"                      -Info "Allow Ocarina of Time to utilize the Expansion Pak for 8MB Memory"                                              -Credits "ChriisTiian"
-    CreateReduxCheckBox -Name "Speedup"               -Text "Speedup"                            -Info "Speedup the game by removing certain debug commands for calculation"                                            -Credits "ChriisTiian"
+    CreateReduxGroup    -All -Tag  "Debug" -Text "Addons"
+    CreateReduxCheckBox -All -Name "ExpansionPak"          -Text "Expansion Pak"                      -Info "Allow Ocarina of Time to utilize the Expansion Pak for 8MB Memory"                                              -Credits "ChriisTiian"
+    CreateReduxCheckBox -All -Name "Speedup"               -Text "Speedup"                            -Info "Speedup the game by removing certain debug commands for calculation"                                            -Credits "ChriisTiian"
 
 }

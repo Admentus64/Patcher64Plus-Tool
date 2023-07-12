@@ -241,7 +241,6 @@ function ResetReduxSettings() {
     $Redux.Groups = @()
     $Last.Group   = $Last.Panel = $Last.GroupName = $null
     $Last.Half    = $False
-    SetVCRemap
 
 }
 
@@ -300,7 +299,6 @@ function ChangeGameMode() {
     if ( ($GameType.patches -eq 1) -or ($GameType.patches -eq 2 -and $IsWiiVC) )   { $Files.json.patches   = SetJSONFile $GameFiles.patches }                         else { $Files.json.patches   = $null }
     if (TestFile ($GameFiles.languages + "\Languages.json"))                       { $Files.json.languages = SetJSONFile ($GameFiles.languages + "\Languages.json") } else { $Files.json.languages = $null }
     if (TestFile ($Paths.Models        + "\Models.json"))                          { $Files.json.models    = SetJSONFile ($Paths.Models        + "\Models.json")    } else { $Files.json.models    = $null }
-    if (TestFile ($Paths.shared        + "\Sequences.json"))                       { $Files.json.sequences = SetJSONFile ($Paths.shared        + "\Sequences.json") } else { $Files.json.sequences = $null }
     if (TestFile ($GameFiles.base      + "\Music.json"))                           { $Files.json.music     = SetJSONFile ($GameFiles.base      + "\Music.json")     } else { $Files.json.music     = $null }
     if (TestFile ($GameFiles.base      + "\Items.json"))                           { $Files.json.items     = SetJSONFile ($GameFiles.base      + "\Items.json")     } else { $Files.json.items     = $null }
     if (TestFile ($GameFiles.base      + "\Moves.json"))                           { $Files.json.moves     = SetJSONFile ($GameFiles.base      + "\Moves.json")     } else { $Files.json.moves     = $null }
@@ -384,6 +382,7 @@ function ChangePatch() {
 
                 ChangeGameRev
                 SetGameScript
+                SetVCRemap
                 DisablePatches
                 break
         }
@@ -433,9 +432,12 @@ function SetVCPanel() {
 
 
 #==============================================================================================================================================================================================
-function UpdateStatusLabel([string]$Text, [switch]$Main, [switch]$Editor, [switch]$NoConsole) {
+function UpdateStatusLabel([string]$Text, [switch]$Main, [switch]$Editor, [switch]$NoConsole, [switch]$Error) {
     
-    if (!$NoConsole) { WriteToConsole $Text }
+    if (!$NoConsole) {
+        if ($Error)   { WriteToConsole -Text $Text -Error }
+        else          { WriteToConsole -Text $Text        }
+    }
 
     if (!$Editor) {
         $StatusLabel.Text = $Text
@@ -455,9 +457,12 @@ function UpdateStatusLabel([string]$Text, [switch]$Main, [switch]$Editor, [switc
 
 
 #==============================================================================================================================================================================================
-function WriteToConsole([string]$Text) {
+function WriteToConsole([string]$Text, [switch]$Error) {
     
-    if ($ExternalScript) { Write-Host $Text }
+    if ($ExternalScript) {
+        if ($Error)   { Write-Host $Text -ForegroundColor "Red" }
+        else          { Write-Host $Text }
+    }
     if ($Settings.Debug.Logging -eq $True  -and !$ExternalScript) {
         if (!(TestFile -Path $Paths.Logs -Container)) { CreatePath $Paths.Logs }
         Add-Content -LiteralPath ($Paths.Logs + "\" + $TranscriptTime + ".log") -Value $Text
@@ -1302,7 +1307,6 @@ Export-ModuleMember -Function CreateToolTip
 Export-ModuleMember -Function ChangeConsolesList
 Export-ModuleMember -Function ChangeGamesList
 Export-ModuleMember -Function SetMainScreenSize
-Export-ModuleMember -Function ResetReduxSettings
 Export-ModuleMember -Function SetVCRemap
 Export-ModuleMember -Function ChangeGameMode
 Export-ModuleMember -Function SetCreditsSections

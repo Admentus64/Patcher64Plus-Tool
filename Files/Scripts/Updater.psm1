@@ -64,7 +64,7 @@ function CheckUpdate() {
         try { $Patcher.Date = (Get-Date -Format $Patcher.DateFormat -Date (Get-Content -LiteralPath $Patcher.VersionFile)[1]) }
         catch {
             $Patcher.Date = (Get-Date -Format $Patcher.DateFormat -Date "1970-01-01")
-            WriteToConsole ("Could not read version date for current update for" + $Patcher.Title)
+            WriteToConsole ("Could not read version date for current update for" + $Patcher.Title) -Error
         }
         try   { [byte]$Patcher.Hotfix = (Get-Content -LiteralPath $Patcher.VersionFile)[2] }
         catch { [byte]$Patcher.Hotfix = 0 }
@@ -95,25 +95,25 @@ function AutoUpdate([switch]$Manual) {
             if ($newContent.length -gt 2) { $newContent[2] = $newContent[2].replace("n", "") }
         }
         catch {
-            WriteToConsole "Could not retrieve Patcher version info!"
+            WriteToConsole "Could not retrieve Patcher version info!" -Error
             return
         }
 
         # Load content
         try { [array]$oldContent = Get-Content -LiteralPath $Patcher.VersionFile }
         catch {
-            WriteToConsole ("Could not read current version info for " + $Patcher.Title + "!")
+            WriteToConsole ("Could not read current version info for " + $Patcher.Title + "!") -Error
             return
         }
-        if ($newContent -eq $null) { WriteToConsole ("Could not read latest version info for " + $Patcher.Title + "!") }
+        if ($newContent -eq $null) { WriteToConsole ("Could not read latest version info for " + $Patcher.Title + "!") -Error }
         
         # Parse content
         $Patcher.Version = $oldContent[0]
         $newVersion      = $newContent[0]
         try     { $Patcher.Date = Get-Date -Format $Patcher.DateFormat -Date $oldContent[1] }
-        catch   { $Patcher.Date = Get-Date -Format $Patcher.DateFormat -Date "1970-01-01"; WriteToConsole ("Could not read current version date info for " + $Title + "!") }
+        catch   { $Patcher.Date = Get-Date -Format $Patcher.DateFormat -Date "1970-01-01"; WriteToConsole ("Could not read current version date info for " + $Title + "!") -Error }
         try     { $newDate      = Get-Date -Format $Patcher.DateFormat -Date $newContent[1] }
-        catch   { $newDate      = Get-Date -Format $Patcher.DateFormat -Date "1970-01-01"; WriteToConsole ("Could not read latest version date info for " + $Title + "!")  }
+        catch   { $newDate      = Get-Date -Format $Patcher.DateFormat -Date "1970-01-01"; WriteToConsole ("Could not read latest version date info for "  + $Title + "!") -Error }
         if ($oldContent.Count -gt 2)   { try { [byte]$Patcher.Hotfix = $oldContent[2] } catch { [byte]$Patcher.Hotfix = 0 } } else { [byte]$Patcher.Hotfix = 0}
         if ($newContent.Count -gt 2)   { try { [byte]$newHotfix      = $newContent[2] } catch { [byte]$newHotfix      = 0 } } else { [byte]$newHotfix      = 0}
 
@@ -127,7 +127,7 @@ function AutoUpdate([switch]$Manual) {
                 }
             }
             catch {
-                WriteToConsole "Could not save preference to skip this update!"
+                WriteToConsole "Could not save preference to skip this update!" -Error
                 return
             }
         }
@@ -161,7 +161,7 @@ function AutoUpdate([switch]$Manual) {
             $response   = ReadWebRequest $Files.json.repo.version
             $newContent = $response.AllElements | Where {$_.class -eq "blob-code blob-code-inner js-file-line"}
         }
-        catch { WriteToConsole "Could not retrieve Patcher version info!" }
+        catch { WriteToConsole "Could not retrieve Patcher version info!" -Error }
         
         if ($newContent -ne $null) {
             $newVersion = $newContent[0]
@@ -169,7 +169,7 @@ function AutoUpdate([switch]$Manual) {
             try { $newDate = Get-Date -Format $Patcher.DateFormat -Date $newContent[1] }
             catch {
                 $newDate = Get-Date -Format $Patcher.DateFormat -Date "1970-01-01"
-                WriteToConsole ("Could not read latest version date info for " + $Title + "!")
+                WriteToConsole ("Could not read latest version date info for " + $Title + "!") -Error
             }
             
             if ($newContent.Count -gt 2) {
@@ -239,13 +239,13 @@ function RunUpdate() {
     try { InvokeWebRequest -Uri $Files.json.repo.uri -OutFile $zip }
     catch {
         RemovePath $path
-        WriteToConsole "Could not download new update!"
+        WriteToConsole "Could not download new update!" -Error
         return
     }
 
     if (!(TestFile $zip)) {
         RemovePath $path
-        WriteToConsole "Could not extract new update!"
+        WriteToConsole "Could not extract new update!" -Error
         return
     }
 
@@ -288,13 +288,13 @@ function CheckAddon([string]$Title) {
     if (!(TestFile $file)) { return }
     try { [array]$content = Get-Content -LiteralPath $file }
     catch {
-        WriteToConsole ("Could not read current version info for " + $Title + "!")
+        WriteToConsole ("Could not read current version info for " + $Title + "!") -Error
         return
     }
         
     # Parse content
     try     { $Addons[$title].date = Get-Date -Format $Patcher.DateFormat -Date $content[0] }
-    catch   { $Addons[$title].date = Get-Date -Format $Patcher.DateFormat -Date "1970-01-01"; WriteToConsole ("Could not read current version date info for " + $Title + "!") }
+    catch   { $Addons[$title].date = Get-Date -Format $Patcher.DateFormat -Date "1970-01-01"; WriteToConsole ("Could not read current version date info for " + $Title + "!") -Error }
     
     if ($content.Count -gt 1) {
         try   { [byte]$Addons[$title].hotfix = $content[1] }
@@ -335,7 +335,7 @@ function UpdateAddon([string]$Title, [string]$Uri, [string]$Version) {
         }
         catch {
             RemovePath $path
-            WriteToConsole ("Could not retrieve last version info for " + $Title + "!")
+            WriteToConsole ("Could not retrieve last version info for " + $Title + "!") -Error
             return
         }
 
@@ -344,13 +344,13 @@ function UpdateAddon([string]$Title, [string]$Uri, [string]$Version) {
         # Load content
         if ($content -eq $null) {
             RemovePath $path
-            WriteToConsole ("Could not read latest version info for " + $Title + "!")
+            WriteToConsole ("Could not read latest version info for " + $Title + "!") -Error
             return
         }
         
         # Parse content
         try     { $date = Get-Date -Format $Patcher.DateFormat -Date $content[0] }
-        catch   { $date = Get-Date -Format $Patcher.DateFormat -Date "1970-01-01"; WriteToConsole ("Could not read latest version date info for " + $Title + "!")  }
+        catch   { $date = Get-Date -Format $Patcher.DateFormat -Date "1970-01-01"; WriteToConsole ("Could not read latest version date info for " + $Title + "!") -Error }
         
         if ($content.Count -gt 1) {
             try   { [byte]$hotfix = $content[1] }
@@ -375,17 +375,17 @@ function UpdateAddon([string]$Title, [string]$Uri, [string]$Version) {
 
         try {
             InvokeWebRequest -Uri $Uri -OutFile $zip
-            WriteToConsole ("Downloading latest update for " + $Title + "!")
+            WriteToConsole ("Downloading latest update for " + $Title + "!") -Error
         }
         catch {
             RemovePath $path
-            WriteToConsole ("Could not download lastest version for " + $Title + "!")
+            WriteToConsole ("Could not download lastest version for " + $Title + "!") -Error
             return
         }
 
         if (!(TestFile $zip)) {
             RemovePath $path
-            WriteToConsole ("Could not extract new " + $Title + "!")
+            WriteToConsole ("Could not extract new " + $Title + "!") -Error
             return
         }
 

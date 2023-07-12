@@ -25,7 +25,7 @@ function CreateForm([uint16]$X=0, [uint16]$Y=0, [uint16]$Width=0, [uint16]$Heigh
 #==============================================================================================================================================================================================
 function CreateDialog([uint16]$Width=0, [uint16]$Height=0, [string]$Icon) {
     
-    # Create the dialog that displays more info.
+    # Create the dialog that displays more info
     $Dialog = New-Object System.Windows.Forms.Form
     $Dialog.Text = $Patcher.Title
     $Dialog.Size = New-Object System.Drawing.Size($Width, $Height)
@@ -342,6 +342,16 @@ function CreateButton([uint16]$X=0, [uint16]$Y=0, [uint16]$Width=(DPISize 100), 
 
 
 #==============================================================================================================================================================================================
+function ResetReduxScrolling() {
+    
+    $Redux.Panel.Controls[0].Select()
+    $Redux.Panel.ScrollControlIntoView($Redux.Panel)
+    $Redux.Panel.AutoScrollPosition   = 0
+
+}
+
+
+#==============================================================================================================================================================================================
 function CreateTabButtons([string[]]$Tabs, [boolean]$NoLanguages=$False) {
     
     if ($Tabs.Count -eq 0) {
@@ -368,7 +378,7 @@ function CreateTabButtons([string[]]$Tabs, [boolean]$NoLanguages=$False) {
         $Button = CreateButton -X ((DPISize 15) + (($OptionsDialog.width - (DPISize 50))/$Tabs.length*$i)) -Y (DPISize 40) -Width (($OptionsDialog.width - (DPISize 50))/$Tabs.length) -Height (DPISize 30) -ForeColor "White" -BackColor "Gray" -Name $name -Tag $i -Text $Tabs[$i] -AddTo $OptionsDialog
         $Last.TabName = $name
         $Button.Add_Click({
-            $Redux.Panel.AutoScrollPosition = 0
+            ResetReduxScrolling
             foreach ($item in $ReduxTabs)      { $item.BackColor = "Gray" }
             foreach ($item in $Redux.Groups)   { if (!$item.ShowAlways) { $item.Visible = $item.Name -eq $this.Name } }
             $GameSettings["Core"]["LastTab"] = $this.Tag

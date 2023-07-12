@@ -167,8 +167,8 @@ function PatchVCEmulator([string]$Command) {
     }
 
     # Patching Boot DOL
-    if (StrLike -Str $Command -Val "Patch Boot DOL") {
-        $Patch = "\AppFile01\" + [System.IO.Path]::GetFileNameWithoutExtension((GetPatchFile))
+    if ( (StrLike -Str $Command -Val "Patch Boot DOL") -and (IsSet $GamePatch.patch) ) {
+        $Patch = "\AppFile01\" + [System.IO.Path]::GetFileNameWithoutExtension($GamePatch.patch)
         $Patch = CheckPatchExtension -File ($GameFiles.base + $Patch)
         ApplyPatch -File $WADFile.AppFile01 -Patch $Patch -FullPath
     }
@@ -186,8 +186,8 @@ function PatchVCEmulator([string]$Command) {
 
     # Controls
     if ($VC.RemapControls.Checked -and $VC.RemapControls.Visible) {
-        if (StrLike -Str $Command -Val "Patch Boot DOL")   { $controls = $Files.json.controls.$("offsets_" + [System.IO.Path]::GetFileNameWithoutExtension((GetPatchFile))); }
-        else                                               { $controls = $Files.json.controls.offsets; }
+        if ( (StrLike -Str $Command -Val "Patch Boot DOL") -and (IsSet $GamePatch.patch) )   { $controls = $Files.json.controls.$("offsets_" + [System.IO.Path]::GetFileNameWithoutExtension($GamePatch.patch)); }
+        else                                                                                 { $controls = $Files.json.controls.offsets; }
 
         ChangeBytes -File $WadFile.AppFile01 -Offset $controls.a         -Values (GetControlsValue $Redux.Controls.A)
         ChangeBytes -File $WadFile.AppFile01 -Offset $controls.b         -Values (GetControlsValue $Redux.Controls.B)
