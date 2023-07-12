@@ -3,6 +3,24 @@
 	"parse"			: "mm",
 	"max_objects"	: 255,
 	"hash"			: "2A0A8ACB61538235BC1094D297FB6556",
+
+	"skyboxes" : [ {
+		"title"		: "No Skybox",
+		"id"		: "00"
+	}, {
+		"title"		: "Standard Sky",
+		"id"		: "01"
+	}, {
+		"title"		: "Skybox #2",
+		"id"		: "02"
+	}, {
+		"title"		: "Skybox #3",
+		"id"		: "03"
+	}, {
+		"title"		: "Cutscene",
+		"id"		: "05"
+	} ],	
+
 	"scenes" : [ {
 		"name"		: "Lost Woods",
 		"dma"		: "201F0",
@@ -9471,7 +9489,7 @@
 		"id"		: "000B",
 		"type"		: "Enemy"
 	}, {
-		"name"		: "Treasure Chest & Glow",
+		"name"		: "Treasure Chest",
 		"id"		: "000C",
 		"type"		: "Object"
 	}, {

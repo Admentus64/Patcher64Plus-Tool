@@ -4,6 +4,90 @@
 	"max_objects"	: 15,
 	"hash"			: "5BD1FE107BF8106B2AB6650ABECD54D6",
 	"quest"			: [ "Master Quest", "Ura Quest" ],
+	
+	"skyboxes" : [ {
+		"title"		: "No Skybox",
+		"id"		: "00"
+	}, {
+		"title"		: "Standard Sky",
+		"id"		: "01"
+	}, {
+		"title"		: "Hylian Bazaar",
+		"id"		: "02"
+	}, {
+		"title"		: "Brownish & Cloudy",
+		"id"		: "03"
+	}, {
+		"title"		: "Market Ruins",
+		"id"		: "04"
+	}, {
+		"title"		: "Black Night & Cloudy",
+		"id"		: "05"
+	}, {
+		"title"		: "Link's House",
+		"id"		: "07"
+	}, {
+		"title"		: "Market Day",
+		"id"		: "09"
+	}, {
+		"title"		: "Market Night",
+		"id"		: "0A"
+	}, {
+		"title"		: "Happy Mask Shop",
+		"id"		: "0B"
+	}, {
+		"title"		: "Know-It-All Brothers' House",
+		"id"		: "0C"
+	}, {
+		"title"		: "Kokiri Twins' House",
+		"id"		: "0E"
+	}, {
+		"title"		: "Stable",
+		"id"		: "0F"
+	}, {
+		"title"		: "Stew Lady's House",
+		"id"		: "10"
+	}, {
+		"title"		: "Kokiri Shop",
+		"id"		: "11"
+	}, {
+		"title"		: "Goron Shop",
+		"id"		: "13"
+	}, {
+		"title"		: "Zora Shop",
+		"id"		: "14"
+	}, {
+		"title"		: "Kakariko Potion Shop",
+		"id"		: "16"
+	}, {
+		"title"		: "Hylian Potion Shop",
+		"id"		: "17"
+	}, {
+		"title"		: "Bomb Shop",
+		"id"		: "18"
+	}, {
+		"title"		: "Dog Lady's House",
+		"id"		: "1A"
+	}, {
+		"title"		: "Impa's House",
+		"id"		: "1B"
+	}, {
+		"title"		: "Gerudo Tent",
+		"id"		: "1C"
+	}, {
+		"title"		: "Environment Color",
+		"id"		: "1D"
+	}, {
+		"title"		: "Mido's House",
+		"id"		: "20"
+	}, {
+		"title"		: "Saria's House",
+		"id"		: "21"
+	}, {
+		"title"		: "Dog Guy's House",
+		"id"		: "22"
+	} ],
+	
 	"scenes" : [ {
 		"name"		: "Hyrule Field",
 		"dma"		: "B440",
@@ -59,7 +143,7 @@
 		"length"	: 1,
 		"stages"	: [ "Child", "Adult", "Din Creates the Earth #2", "Din Creates the Earth #1", "Credits" ]
 	}, {
-		"name"		: "Lost woods",
+		"name"		: "Lost Woods",
 		"dma"		: "B5D0",
 		"length"	: 10,
 		"maps"		: [ "Entrance", "Bullet Bag Minigame", "Goron City Entrance", "Zora's River Entrance", "Three-Way Fork", "Deku Stick Upgrade", "Three Area", "Road to Sacred Forest Meadow", "Sacred Forest Meadow Entrance", "Skull Mask Skullkid" ],
@@ -8347,7 +8431,7 @@
 		"id"		: "00D3",
 		"type"		: "Boss"
 	}, {
-		"name"		: "Like-Likes",
+		"name"		: "Like-Like",
 		"id"		: "00D4",
 		"type"		: "Enemy"
 	}, {

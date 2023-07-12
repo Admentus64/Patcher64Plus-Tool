@@ -240,7 +240,7 @@ function CreateTextEditorDialog([string]$Game=$GameType.mode) {
     $ExtractButton.Add_Click({
         if (!(IsSet $GamePath)) {
             PlaySound $Sounds.done
-            UpdateStatusLabel -Text "Failed! No ROM path is given." -Editor
+            UpdateStatusLabel -Text "Failed! No ROM path is given." -Editor -Error
             return
         }
 
@@ -268,14 +268,14 @@ function CreateTextEditorDialog([string]$Game=$GameType.mode) {
 
         if (!(Unpack)) {
             PlaySound $Sounds.done
-            UpdateStatusLabel "Failed! Could not extract ROM." -Editor
+            UpdateStatusLabel "Failed! Could not extract ROM." -Editor -Error
             return
         }
         if (TestFile $GetROM.run)                                                   { $global:ROMHashSum   = (Get-FileHash -Algorithm MD5 -LiteralPath $GetROM.run).Hash }
         if ($Settings.Debug.IgnoreChecksum -eq $False -and (IsSet $CheckHashsum))   { $PatchInfo.downgrade = ($ROMHashSum -ne $CheckHashSum)                             }
         if ((Get-Item -LiteralPath $GetROM.run).length/"32MB" -ne 1) {
             PlaySound $Sounds.done
-            UpdateStatusLabel "Failed! The ROM should be 32 MB!" -Editor
+            UpdateStatusLabel "Failed! The ROM should be 32 MB!" -Editor -Error
             return $False
         }
 
@@ -283,21 +283,21 @@ function CreateTextEditorDialog([string]$Game=$GameType.mode) {
             ConvertROM $Command
             if (!(CompareHashSums $Command)) {
                 PlaySound $Sounds.done
-                UpdateStatusLabel "Failed! The ROM is an incorrect version or is broken." -Editor
+                UpdateStatusLabel "Failed! The ROM is an incorrect version or is broken." -Editor -Error
                 return
             }
         }
 
         if (!(DecompressROM)) {
             PlaySound $Sounds.done
-            UpdateStatusLabel "Failed! The ROM could not be decompressed." -Editor
+            UpdateStatusLabel "Failed! The ROM could not be decompressed." -Editor -Error
             return
         }
 
         $item = DowngradeROM
         if ($ROMHashSum -ne $CheckHashSum) {
             PlaySound $Sounds.done
-            UpdateStatusLabel "Failed! The ROM is an incorrect version or is broken." -Editor
+            UpdateStatusLabel "Failed! The ROM is an incorrect version or is broken." -Editor -Error
             return
         }
 
@@ -528,7 +528,7 @@ function LoadScript([string]$Script, [string]$Table) {
 function SaveScript([string]$Script, [string]$Table) {
     
     if (!(IsSet $DialogueList)) {
-        WriteToConsole ("Could not save text messages. Did it ran outside ByteLanguageOptions?" )
+        WriteToConsole ("Could not save text messages. Did it ran outside ByteLanguageOptions?" ) -Error
         return
     }
 
@@ -598,7 +598,7 @@ function SaveLastMessage() {
 function GetMessage([string]$ID, [switch]$Reset) {
     
     if (!(IsSet $DialogueList)) {
-        WriteToConsole ("Could not get message ID: " + $ID + " as the message data does not exist. Did it ran outside ByteLanguageOptions?" )
+        WriteToConsole ("Could not get message ID: " + $ID + " as the message data does not exist. Did it ran outside ByteLanguageOptions?" ) -Error
         return
     }
 
@@ -680,7 +680,7 @@ function AddMessageIDButton([string]$ID, [byte]$Column, [uint16]$Row, [string]$C
 function GetMessageOffset([string]$ID) {
     
     if (!(IsSet $DialogueList)) {
-        WriteToConsole ("Could not get message ID: " + $ID + " offset as the message data does not exist. Did it ran outside ByteLanguageOptions?" )
+        WriteToConsole ("Could not get message ID: " + $ID + " offset as the message data does not exist. Did it ran outside ByteLanguageOptions?" ) -Error
         return
     }
 
@@ -695,7 +695,7 @@ function GetMessageOffset([string]$ID) {
 function GetMessageLength([string]$ID) {
     
     if (!(IsSet $DialogueList)) {
-        WriteToConsole ("Could not get message ID: " + $ID + " length as the message data does not exist. Did it ran outside ByteLanguageOptions?" )
+        WriteToConsole ("Could not get message ID: " + $ID + " length as the message data does not exist. Did it ran outside ByteLanguageOptions?" ) -Error
         return
     }
 
@@ -708,7 +708,7 @@ function GetMessageLength([string]$ID) {
 function SetMessageBox([string]$ID, [byte]$Type, [byte]$Position) {
     
     if (!(IsSet $DialogueList)) {
-        WriteToConsole ("Could not edit message ID: " + $ID + " as the message data does not exist. Did it ran outside ByteLanguageOptions?" )
+        WriteToConsole ("Could not edit message ID: " + $ID + " as the message data does not exist. Did it ran outside ByteLanguageOptions?" ) -Error
         return
     }
 
@@ -727,7 +727,7 @@ function SetMessageBox([string]$ID, [byte]$Type, [byte]$Position) {
 function SetMessageIcon([string]$ID, [string]$Hex, [string]$Value) {
     
     if (!(IsSet $DialogueList)) {
-        WriteToConsole ("Could not edit message ID: " + $ID + " as the message data does not exist. Did it ran outside ByteLanguageOptions?" )
+        WriteToConsole ("Could not edit message ID: " + $ID + " as the message data does not exist. Did it ran outside ByteLanguageOptions?" ) -Error
         return
     }
 
@@ -749,7 +749,7 @@ function SetMessageIcon([string]$ID, [string]$Hex, [string]$Value) {
 function SetMessageRupees([string]$ID, [uint16]$Value) {
     
     if (!(IsSet $DialogueList)) {
-        WriteToConsole ("Could not edit message ID: " + $ID + " as the message data does not exist. Did it ran outside ByteLanguageOptions?" )
+        WriteToConsole ("Could not edit message ID: " + $ID + " as the message data does not exist. Did it ran outside ByteLanguageOptions?" ) -Error
         return
     }
 
@@ -767,7 +767,7 @@ function SetMessageRupees([string]$ID, [uint16]$Value) {
 function SetJumpToMessage([string]$ID, [string]$Value) {
     
     if (!(IsSet $DialogueList)) {
-        WriteToConsole ("Could not edit message ID: " + $ID + " as the message data does not exist. Did it ran outside ByteLanguageOptions?" )
+        WriteToConsole ("Could not edit message ID: " + $ID + " as the message data does not exist. Did it ran outside ByteLanguageOptions?" ) -Error
         return
     }
 
@@ -782,7 +782,7 @@ function SetJumpToMessage([string]$ID, [string]$Value) {
 function FindMatch([byte[]]$Text, [boolean]$All) {
     
     if (!(IsSet $DialogueList)) {
-        WriteToConsole ("Could not find match in message ID: " + $ID + " as the message data does not exist. Did it ran outside ByteLanguageOptions?" )
+        WriteToConsole ("Could not find match in message ID: " + $ID + " as the message data does not exist. Did it ran outside ByteLanguageOptions?" ) -Error
         return
     } 
 
@@ -865,16 +865,41 @@ function FindMatch([byte[]]$Text, [boolean]$All) {
 
 }
 
+
+
+#==============================================================================================================================================================================================
+function LoadTextEditor() {
+    
+    if (IsSet $Files.json.textEditor) { return }
+
+    UpdateStatusLabel ("Patching " + $GameType.mode + " Additional Language Options...")
+
+    $start  = CombineHex $ByteArrayGame[((GetDecimal $LanguagePatch.script_dma)+0)..((GetDecimal $LanguagePatch.script_dma)+3)]
+    $end    = CombineHex $ByteArrayGame[((GetDecimal $LanguagePatch.script_dma)+4)..((GetDecimal $LanguagePatch.script_dma)+7)]
+    $length = Get32Bit ( (GetDecimal $end) - (GetDecimal $start) )
+    ExportBytes -Offset $start                     -Length $length                     -Output ($GameFiles.extracted + "\message_data_static." + $LanguagePatch.code + ".bin") -Force
+    ExportBytes -Offset $LanguagePatch.table_start -Length $LanguagePatch.table_length -Output ($GameFiles.extracted + "\message_data."        + $LanguagePatch.code + ".tbl") -Force
+
+    $global:LastScript     = @{}
+    $Files.json.textEditor = SetJSONFile $GameFiles.textEditor
+    LoadScript -Script ($GameFiles.extracted + "\message_data_static." + $LanguagePatch.code + ".bin") -Table ($GameFiles.extracted + "\message_data." + $LanguagePatch.code + ".tbl")
+
+}
+
+
+
 #==============================================================================================================================================================================================
 function SetMessage([string]$ID, [object]$Text, [object]$Replace, [string]$File, [switch]$Full, [switch]$Insert, [switch]$Append, [switch]$All, [switch]$ASCII, [switch]$Silent, [switch]$Safety, [switch]$Force) {
     
+    if (!(IsSet $Files.json.textEditor)) { LoadTextEditor }
+
     if (!(IsSet $DialogueList)) {
-        WriteToConsole ("Could not edit message ID: " + $ID + " as the message data does not exist. Did it ran outside ByteLanguageOptions?" )
+        WriteToConsole ("Could not edit message ID: " + $ID + " as the message data does not exist. Did it ran outside ByteLanguageOptions?" ) -Error
         return
     }
 
     if (!(IsSet $DialogueList[$ID])) {
-        if (!$Silent) { WriteToConsole ("Could not find message ID: " + $ID) }
+        if (!$Silent) { WriteToConsole ("Could not find message ID: " + $ID) -Error }
         return -1
     }
     $re = "^[a-fa-f 0-9]*$"
@@ -885,7 +910,7 @@ function SetMessage([string]$ID, [object]$Text, [object]$Replace, [string]$File,
 
         $match = FindMatch -Text $Text -All $All
         if ($match -eq -1) {
-            if (!$Silent) { WriteToConsole ("Could not find text to edit for message ID: " + $ID) }
+            if (!$Silent) { WriteToConsole ("Could not find text to edit for message ID: " + $ID) -Error }
             return -2
         }
     }
@@ -906,7 +931,7 @@ function SetMessage([string]$ID, [object]$Text, [object]$Replace, [string]$File,
 
             $match = FindMatch -Text $Text -All $All
             if ($match -eq -1) {
-                if (!$Silent) { WriteToConsole ("Could not find text to edit for message ID: " + $ID) }
+                if (!$Silent) { WriteToConsole ("Could not find text to edit for message ID: " + $ID) -Error }
                 return -2
             }
         }
@@ -952,7 +977,7 @@ function SetMessage([string]$ID, [object]$Text, [object]$Replace, [string]$File,
     if ($Text.count -gt ($DialogueList[$ID].msg.count - $Files.json.textEditor.header) ) {
         $DialogueList[$ID].msg.Insert($DialogueList[$ID].msg.count, [byte]$Files.json.textEditor.end)
         while ($DialogueList[$ID].msg.count % 4 -ne 0) { $DialogueList[$ID].msg.Insert($DialogueList[$ID].msg.count, 0) }
-        if (!$Silent) { WriteToConsole ("Text is too long to search for message ID: " + $ID) }
+        if (!$Silent) { WriteToConsole ("Text is too long to search for message ID: " + $ID) -Error }
         return -3
     }
 
@@ -1333,12 +1358,12 @@ function ParseMessagePart([System.Collections.ArrayList]$Text, [System.Collectio
                     if ($Encoded[-2] -eq 255) {
                         $value = [char]$Text[$i+$Decoded.count-5] + [char]$Text[$i+$Decoded.count-4]
                         if ($value -match $regEx)   { $Encoded[-2] = (GetDecimal $value) }
-                        else                        { WriteToConsole "Text does not contain a valid hex value"; break inner }
+                        else                        { WriteToConsole "Text does not contain a valid hex value" -Error; break inner }
                     }
                     if ($Encoded[-1] -eq 255) {
                         $value = [char]$Text[$i+$Decoded.count-3] + [char]$Text[$i+$Decoded.count-2]
                         if ($value -match $regEx)   { $Encoded[-1] = (GetDecimal $value) }
-                        else                        { WriteToConsole "Text does not contain a valid hex value"; break inner }
+                        else                        { WriteToConsole "Text does not contain a valid hex value" -Error; break inner }
                     }
                 }
                 $Text.RemoveRange($i, $Decoded.count)
@@ -1388,6 +1413,7 @@ Export-ModuleMember -Function LoadScript
 Export-ModuleMember -Function GetMessage
 Export-ModuleMember -Function GetMessageOffset
 Export-ModuleMember -Function GetMessagelength
+Export-ModuleMember -Function LoadTextEditor
 Export-ModuleMember -Function SetMessage
 Export-ModuleMember -Function SetMessageBox
 Export-ModuleMember -Function SetMessagePosition

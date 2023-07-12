@@ -1,16 +1,30 @@
 function PatchModel([string]$Category, [string]$Name) {
 
+    $global:ModelPatchingError = $False
     $path = $GameFiles.models + "\" + $Category
     $file = $path + "\" + $Name
     
     if (TestFile ($file + ".zobj"))   {
-        $manifest  = $path + "\Manifest\" + $GameRev.name + ".txt"
+        $manifest  = $path + "\Manifest\" + $GameRev.name
+        if   ( (IsChecked $Redux.Equipment.HideSword) -and (IsChecked $Redux.Equipment.HideShield) )   { $manifest += " - No Equipment" }
+        elseif (IsChecked $Redux.Equipment.HideSword)                                                  { $manifest += " - No Sword"     }
+        elseif (IsChecked $Redux.Equipment.HideShield)                                                 { $manifest += " - No Shield"    }
+        $manifest += ".txt"
+
         $optimized = $path + "\Manifest\Optimized.zobj"
         & $Files.tool.zzobjman playas -i ($file + ".zobj") -r $GetROM.decomp -o ($Paths.Temp + "\model") -m $manifest -b $optimized | Out-Null
-        Move-Item -LiteralPath ($Paths.Temp + "\model.z64") -Destination $GetROM.decomp -Force
+
+        if (TestFile ($Paths.Temp + "\model.z64")) { Move-Item -LiteralPath ($Paths.Temp + "\model.z64") -Destination $GetROM.decomp -Force }
+        else {
+            WriteToConsole ("Could not patch in custom model: " + $Name) -Error
+            $global:ModelPatchingError = $True
+        }
     }
     elseif (TestFile ($file + ".ppf")) { ApplyPatch -Patch ($file + ".ppf") -FullPath } 
-    else { return }
+    else {
+        WriteToConsole ("Could not find custom model to patch: " + $Name) -Error
+        $global:ModelPatchingError = $True
+    }
 
 }
 
@@ -220,7 +234,7 @@ function GetOoTEntranceIndex([string]$Index) {
     elseif ($index -eq "Ice Cavern")                 { return "00 88" }     elseif ($index -eq "Bottom of the Well")         { return "00 98" }     elseif ($index -eq "Thieves' Hideout")           { return "04 86" }
     elseif ($index -eq "Gerudo's Training Ground")   { return "00 08" }     elseif ($index -eq "Inside Ganon's Castle")      { return "04 67" }     elseif ($index -eq "Ganon's Tower")              { return "04 1B" }
     else {
-        WriteToConsole ("Could not find entrance index ID for: " + $index)
+        WriteToConsole ("Could not find entrance index ID for: " + $index) -Error
         return -1
     }
 
@@ -267,7 +281,7 @@ function GetSFXID([string]$SFX) {
     elseif ($SFX -eq "Target Neutral")                 { return "48 0C" }     elseif ($SFX -eq "Thunder")                 { return "28 2E" }     elseif ($SFX -eq "Timer")                   { return "48 1A" }
     elseif ($SFX -eq "Twinrova Bicker")                { return "39 E7" }     elseif ($SFX -eq "Wolfos Howl")             { return "38 3C" }     elseif ($SFX -eq "Zelda Gasp (Adult)")      { return "68 79" }
     else {
-        WriteToConsole ("Could not find sound ID for: " + $SFX)
+        WriteToConsole ("Could not find sound ID for: " + $SFX) -Error
         return -1
     }
 
@@ -298,7 +312,7 @@ function GetMMItemID([string]$Item) {
     elseif ($Item -eq "Kokiri Sword")                    { return "4D" }   elseif ($Item -eq "Razor Sword")              { return "4E" }   elseif ($Item -eq "Gilded Sword")               { return "4F" }
     elseif ($Item -eq "Double Helix Sword")              { return "50" }   elseif ($Item -eq "Hero's Shield")            { return "51" }   elseif ($Item -eq "Mirror Shield")              { return "52" }
     else {
-        WriteToConsole ("Could not find item ID for : " + $Item)
+        WriteToConsole ("Could not find item ID for : " + $Item) -Error
         return -1
     }
 
@@ -320,7 +334,7 @@ function GetMMInstrumentID([string]$SFX) {
     elseif ($SFX -eq "Arguing")             { return "4F" }   elseif ($SFX -eq "Bass Guitar")    { return "74" }   elseif ($SFX -eq "Beaver")            { return "61" }
     elseif ($SFX -eq "Elder Goron Drums")   { return "71" }
     else {
-        WriteToConsole ("Could not find SFX ID for : " + $Item)
+        WriteToConsole ("Could not find SFX ID for : " + $Item) -Error
         return -1
     }
 
@@ -426,7 +440,9 @@ function PatchReplaceMusic([string]$BankPointerTableStart, [string]$BankPointerT
 function MusicOptions([string]$Default="File Select") {
     
     $tracks = @()
-    foreach ($track in $Files.json.music.tracks) { $tracks += $track.title }
+    foreach ($track in $Files.json.music.tracks) {
+        if ($track.size -ne 0) { $tracks += $track.title }
+    }
 
 
 
@@ -603,7 +619,7 @@ function CheckAuthor() {
 function GetReplacementTracks() {
     
     if (!(TestFile -Path $Paths.Music -Container)) {
-        WriteToConsole "Music sequence files are missing"
+        WriteToConsole "Music sequence files are missing" -Error
         return;
     }
 
@@ -622,7 +638,7 @@ function GetReplacementTracks() {
 
                         if (TestFile ($file + ".meta") ) {
                             try { $event = (Get-Content -Path ($file + ".meta") -Tail 1).ToLower() -eq "fanfare" } # Meta - fanfare / .seq / .zseq }
-                            catch { WriteToConsole ("This song has an incorrect meta file: " + $item.basename) }
+                            catch { WriteToConsole ("This song has an incorrect meta file: " + $item.basename) -Error }
                         }
                         else {
                             try {
@@ -635,7 +651,7 @@ function GetReplacementTracks() {
                                 }
                             }
                             }
-                            catch { WriteToConsole ("This song has an incorrect naming format: " + $item.basename) }
+                            catch { WriteToConsole ("This song has an incorrect naming format: " + $item.basename) -Error }
                             
                         }
 
@@ -653,7 +669,7 @@ function GetReplacementTracks() {
                                     }
                                 }
                             }
-                            catch { WriteToConsole ("This song has an incorrect naming format: " + $item.basename) }
+                            catch { WriteToConsole ("This song has an incorrect naming format: " + $item.basename) -Error }
                         }
                         elseif ( ($track.event -eq 1 -and $event) -or ($track.event -ne 1 -and !$event) ) { $items += $item.BaseName }
                    }
@@ -807,7 +823,7 @@ function ShowModelsPreview([switch]$Child, [switch]$Adult, [object]$Dropdown, [s
                 break
             }   
         }
-        ShowModelPreview -Box $Redux.Graphics.ModelsPreviewChild -Path $Path -Text $Text -Type $ChildModel
+        ShowModelPreview -Box $Redux.Graphics.ModelsPreviewChild -Path $Path -Text $Text -Category $Category -Type $ChildModel
 
     }
 
@@ -819,7 +835,7 @@ function ShowModelsPreview([switch]$Child, [switch]$Adult, [object]$Dropdown, [s
                 break
             }   
         }
-        ShowModelPreview -Box $Redux.Graphics.ModelsPreviewAdult -Path $Path -Text $Text -Type $AdultModel
+        ShowModelPreview -Box $Redux.Graphics.ModelsPreviewAdult -Path $Path -Text $Text -Category $Category -Type $AdultModel
     }
 
 }
@@ -827,7 +843,7 @@ function ShowModelsPreview([switch]$Child, [switch]$Adult, [object]$Dropdown, [s
 
 
 #==============================================================================================================================================================================================
-function ShowModelPreview([object]$Box, [string]$Path, [string]$Text, $Type) {
+function ShowModelPreview([object]$Box, [string]$Path, [string]$Text, [string]$Category, $Type) {
 
     if (!(IsSet $Files.json.models)) {return }
 
@@ -859,6 +875,12 @@ function ShowModelPreview([object]$Box, [string]$Path, [string]$Text, $Type) {
     if (IsSet $Credits)   { $PreviewToolTip.SetToolTip($Box, ([string]::Format($Credits, [Environment]::NewLine))) }
     else                  { $PreviewToolTip.RemoveAll() }
 
+    if (IsSet $Redux.Equipment.DekuShield)     { EnableElem -Elem $Redux.Equipment.DekuShield   -Active ($Type.deku_shield   -ne 0) }
+    if (IsSet $Redux.Equipment.HylianShield)   { EnableElem -Elem $Redux.Equipment.HylianShield -Active ($Type.hylian_shield -ne 0) }
+    if (IsSet $Redux.Equipment.MirrorShield)   { EnableElem -Elem $Redux.Equipment.MirrorShield -Active ($Type.mirror_shield -ne 0) }
+    if (IsSet $Redux.Equipment.HideSword)      { EnableElem -Elem $Redux.Equipment.HideSword    -Active (TestFile ($GameFiles.models + "\" + $Category + "\" + $Type.name + ".zobj")) }
+    if (IsSet $Redux.Equipment.HideShield)     { EnableElem -Elem $Redux.Equipment.HideShield   -Active (TestFile ($GameFiles.models + "\" + $Category + "\" + $Type.name + ".zobj")) }
+
 }
 
 
@@ -880,6 +902,9 @@ function LoadModelsList([string]$Category) {
 
 #==============================================================================================================================================================================================
 function ChangeModelsSelection() {
+    
+    if     ($GamePatch.age -eq "Adult")   { $global:ChildModel = @{}; $ChildModel.deku_shield   = 1; $ChildModel.hylian_shield = 1 }
+    elseif ($GamePatch.age -eq "Child")   { $global:AdultModel = @{}; $AdultModel.hylian_shield = 1; $AdultModel.mirror_shield = 1 }
 
     if (IsSet $Redux.Graphics.ChildModels) {
         ShowModelsPreview -Child -Dropdown $Redux.Graphics.ChildModels -Category "Child"
@@ -913,14 +938,14 @@ function CreateButtonColorOptions($Default=1) {
     
     # BUTTON COLORS #
     CreateReduxGroup    -Tag  "Colors"  -All -Text "Button Colors" -Height 2
-    CreateReduxComboBox -Name "Buttons" -All -Text "Button Colors" -Items @("N64 OoT", "N64 MM", "GC OoT", "GC MM", "Xbox OoT", "Xbox MM", "Randomized", "Custom") -Default $Default -Info ("Select a preset for the button colors`n" + '"Randomized" fully randomizes the colors each time the patcher is opened') -Credits "GhostlyDark (ported from Redux)"
+    CreateReduxComboBox -Name "Buttons" -All -Text "Button Colors" -Items @("N64 OoT", "N64 MM", "GC OoT", "GC MM", "Xbox OoT", "Xbox MM", "Randomized", "Custom") -Default $Default -Info ("Select a preset for the button colors`n" + '"Randomized" fully randomizes the colors each time the patcher is opened') -Credits "GhostlyDark"
 
     # Button Colors - Buttons
     $Buttons = @()
-    $Buttons += CreateReduxButton -Column 1 -Row 2 -Width 100 -Tag $Buttons.Count -All -Text "A Button"     -Info "Select the color you want for the A button"     -Credits "GhostlyDark (ported from Redux)"
-    $Buttons += CreateReduxButton -Column 2 -Row 2 -Width 100 -Tag $Buttons.Count -All -Text "B Button"     -Info "Select the color you want for the B button"     -Credits "GhostlyDark (ported from Redux)"
-    $Buttons += CreateReduxButton -Column 3 -Row 2 -Width 100 -Tag $Buttons.Count -All -Text "C Buttons"    -Info "Select the color you want for the C buttons"    -Credits "GhostlyDark (ported from Redux)"
-    $Buttons += CreateReduxButton -Column 4 -Row 2 -Width 100 -Tag $Buttons.Count -All -Text "Start Button" -Info "Select the color you want for the Start button" -Credits "GhostlyDark (ported from Redux)"
+    $Buttons += CreateReduxButton -Column 1 -Row 2 -Width 100 -Tag $Buttons.Count -All -Text "A Button"     -Info "Select the color you want for the A button"     -Credits "GhostlyDark"
+    $Buttons += CreateReduxButton -Column 2 -Row 2 -Width 100 -Tag $Buttons.Count -All -Text "B Button"     -Info "Select the color you want for the B button"     -Credits "GhostlyDark"
+    $Buttons += CreateReduxButton -Column 3 -Row 2 -Width 100 -Tag $Buttons.Count -All -Text "C Buttons"    -Info "Select the color you want for the C buttons"    -Credits "GhostlyDark"
+    $Buttons += CreateReduxButton -Column 4 -Row 2 -Width 100 -Tag $Buttons.Count -All -Text "Start Button" -Info "Select the color you want for the Start button" -Credits "GhostlyDark"
 
     # Button Colors - Dialogs
     $Redux.Colors.SetButtons = @()
@@ -949,14 +974,14 @@ function CreateButtonColorOptions($Default=1) {
 function CreateBoomerangColorOptions($Default=1) {
 
     CreateReduxGroup    -Tag  "Colors"    -Child -Exclude "Dawn" -Text "Boomerang Colors" -Height 2 -Columns 3
-    CreateReduxComboBox -Name "Boomerang" -Child -Exclude "Dawn" -Text "Boomerang Colors" -Items @("Vanilla", "Gold Quest", "Randomized", "Custom") -Default $Default -Info ("Select a preset for the boomerang trail colors`n" + '"Randomized" fully randomizes the colors each time the patcher is opened') -Credits "Ported from Redux"
+    CreateReduxComboBox -Name "Boomerang" -Child -Exclude "Dawn" -Text "Boomerang Colors" -Items @("Vanilla", "Gold Quest", "Randomized", "Custom") -Default $Default -Info ("Select a preset for the boomerang trail colors`n" + '"Randomized" fully randomizes the colors each time the patcher is opened') -Credits "Randomizer"
 
     if (!(IsSet $Redux.Colors.Boomerang)) { return }
 
     # Boomerang Trail Colors - Buttons
     $Buttons = @()
-    $Buttons += CreateReduxButton -Column 1 -Row 2 -Width 100 -Tag $Buttons.Count -Child -Exclude "Dawn" -Text "Inner Trail" -Info "Select the color you want for the inner trail" -Credits "Ported from Redux"
-    $Buttons += CreateReduxButton -Column 2 -Row 2 -Width 100 -Tag $Buttons.Count -Child -Exclude "Dawn" -Text "Outer Trail" -Info "Select the color you want for the outer trail" -Credits "Ported from Redux"
+    $Buttons += CreateReduxButton -Column 1 -Row 2 -Width 100 -Tag $Buttons.Count -Child -Exclude "Dawn" -Text "Inner Trail" -Info "Select the color you want for the inner trail" -Credits "Randomizer"
+    $Buttons += CreateReduxButton -Column 2 -Row 2 -Width 100 -Tag $Buttons.Count -Child -Exclude "Dawn" -Text "Outer Trail" -Info "Select the color you want for the outer trail" -Credits "Randomizer"
 
     # Boomerang Trail - Dialogs
     $Redux.Colors.SetBoomerang = @()
@@ -983,14 +1008,14 @@ function CreateBoomerangColorOptions($Default=1) {
 function CreateBombchuColorOptions() {
 
     CreateReduxGroup    -Tag  "Colors"  -All -Exclude "Dawn" -Text "Bombchu Colors" -Height 2 -Columns 3
-    CreateReduxComboBox -Name "Bombchu" -All -Exclude "Dawn" -Text "Bombchu Colors" -Items @("Vanilla", "Randomized", "Custom") -Info ("Select a preset for the bombchu trail colors`n" + '"Randomized" fully randomizes the colors each time the patcher is opened') -Credits "Ported from Redux"
+    CreateReduxComboBox -Name "Bombchu" -All -Exclude "Dawn" -Text "Bombchu Colors" -Items @("Vanilla", "Randomized", "Custom") -Info ("Select a preset for the bombchu trail colors`n" + '"Randomized" fully randomizes the colors each time the patcher is opened') -Credits "Randomizer"
 
     if (!(IsSet $Redux.Colors.Bombchu)) { return }
 
     # Bombchu Trail Colors - Buttons
     $Buttons = @()
-    $Buttons += CreateReduxButton -Column 1 -Row 2 -Width 100 -Tag $Buttons.Count -All -Exclude "Dawn" -Text "Inner Trail" -Info "Select the color you want for the inner trail" -Credits "Ported from Redux"
-    $Buttons += CreateReduxButton -Column 2 -Row 2 -Width 100 -Tag $Buttons.Count -All -Exclude "Dawn" -Text "Outer Trail" -Info "Select the color you want for the outer trail" -Credits "Ported from Redux"
+    $Buttons += CreateReduxButton -Column 1 -Row 2 -Width 100 -Tag $Buttons.Count -All -Exclude "Dawn" -Text "Inner Trail" -Info "Select the color you want for the inner trail" -Credits "Randomizer"
+    $Buttons += CreateReduxButton -Column 2 -Row 2 -Width 100 -Tag $Buttons.Count -All -Exclude "Dawn" -Text "Outer Trail" -Info "Select the color you want for the outer trail" -Credits "Randomizer"
 
     # Bombchu Trail - Dialogs
     $Redux.Colors.SetBombchu = @()
@@ -1018,14 +1043,14 @@ function CreateRupeeColorOptions() {
     
     # RUPEE ICON COLORS #
     CreateReduxGroup    -Tag  "Colors" -All -Text "Rupee Icon Colors" -Height 2
-    CreateReduxComboBox -Name "Rupees" -All -Text "Rupee Icon Colors" -Items @("Redux", "Randomized", "Custom") -Info ("Select a preset for the Rupee icon colors`n" + '"Randomized" fully randomizes the colors each time the patcher is opened') -Credits "Ported from Redux"
+    CreateReduxComboBox -Name "Rupees" -All -Text "Rupee Icon Colors" -Items @("Redux", "Randomized", "Custom") -Info ("Select a preset for the Rupee icon colors`n" + '"Randomized" fully randomizes the colors each time the patcher is opened') -Credits "Randomizer"
 
     # Rupee Icon Colors - Buttons
     $Buttons = @()
-    $Buttons += CreateReduxButton -Column 1 -Row 2 -Width 100 -Tag $Buttons.Count -All -Text "Base Wallet"     -Info "Select the color you want for the Base Wallet HUD icon"     -Credits "Ported from Redux"
-    $Buttons += CreateReduxButton -Column 2 -Row 2 -Width 100 -Tag $Buttons.Count -All -Text "Adult's Wallet"  -Info "Select the color you want for the Adult's Wallet HUD icon"  -Credits "Ported from Redux"
-    $Buttons += CreateReduxButton -Column 3 -Row 2 -Width 100 -Tag $Buttons.Count -All -Text "Giant's Wallet"  -Info "Select the color you want for the Giant's Wallet HUD icons" -Credits "Ported from Redux"
-    $Buttons += CreateReduxButton -Column 4 -Row 2 -Width 100 -Tag $Buttons.Count -All -Text "Tycoon's Wallet" -Info "Select the color you want for the Tycoon's Wallet HUD icon" -Credits "Ported from Redux"
+    $Buttons += CreateReduxButton -Column 1 -Row 2 -Width 100 -Tag $Buttons.Count -All -Text "Base Wallet"     -Info "Select the color you want for the Base Wallet HUD icon"     -Credits "Randomizer"
+    $Buttons += CreateReduxButton -Column 2 -Row 2 -Width 100 -Tag $Buttons.Count -All -Text "Adult's Wallet"  -Info "Select the color you want for the Adult's Wallet HUD icon"  -Credits "Randomizer"
+    $Buttons += CreateReduxButton -Column 3 -Row 2 -Width 100 -Tag $Buttons.Count -All -Text "Giant's Wallet"  -Info "Select the color you want for the Giant's Wallet HUD icons" -Credits "Randomizer"
+    $Buttons += CreateReduxButton -Column 4 -Row 2 -Width 100 -Tag $Buttons.Count -All -Text "Tycoon's Wallet" -Info "Select the color you want for the Tycoon's Wallet HUD icon" -Credits "Randomizer"
 
     # Rupee Icon Colors - Dialogs
     $Redux.Colors.SetRupee = @()

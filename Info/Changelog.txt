@@ -1,3 +1,12 @@
+v20.4.1
+- Changed error log messages to show in red
+- Streamlined the Language Options patching
+- CheckLanguageOptions function has been removed
+- Improved logic and error handling for patching custom models
+- Fixed Inverted Time with 30 FPS for MM
+- Fixed issue with scrolling being broken for the "Additional Options" window
+- Fixed Remap Control not showing
+
 v20.4.0
 - Added Project Base patches for SM
 - Added Zelda's Adventure Port patch for LA

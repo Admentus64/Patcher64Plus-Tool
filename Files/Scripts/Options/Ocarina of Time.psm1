@@ -1670,31 +1670,10 @@ function ByteReduxOptions() {
 
 
 #==============================================================================================================================================================================================
-function CheckLanguageOptions() {
-    
-    if     ( (IsChecked  $Redux.Text.Vanilla -Not)   -or (IsChecked  $Redux.Text.Speed1x  -Not) -or (IsChecked  $Redux.Graphics.GCScheme)   -or (IsChecked $Redux.Text.EasterEggs))           { return $True }
-    elseif ( (IsLanguage $Redux.Unlock.Tunics)       -or (IsLanguage $Redux.Equipment.HerosBow) -or (IsLanguage $Redux.Capacity.EnableAmmo) -or (IsLanguage $Redux.Capacity.EnableWallet) )   { return $True }
-    elseif ( (IsChecked  $Redux.Text.FemalePronouns) -or (IsChecked  $Redux.Text.TypoFixes)     -or (IsChecked  $Redux.Text.GoldSkulltula)  -or (IsChecked  $Redux.Text.Instant) )            { return $True }
-    elseif ( (IsChecked -Elem $Redux.Text.LinkScript)      -and $Redux.Text.LinkName.Text.Count -gt 0)                                                                                        { return $True }
-    elseif ( (IsDefault -Elem $Redux.Text.NaviScript -Not) -and $Redux.Text.NaviName.Text.Count -gt 0 -and (IsDefault $Redux.Text.NaviName -Not) )                                            { return $True }
-
-    elseif ($LanguagePatch.code -eq "en") {
-        if     ( (IsDefault $Redux.Equipment.KokiriSword  -Not) -or (IsDefault $Redux.Equipment.MasterSword   -Not) )                        { return $True }
-        elseif ( (IsDefault $Redux.Equipment.GiantsKnife  -Not) -or (IsDefault $Redux.Equipment.BiggoronSword -Not) )                        { return $True }
-        elseif ( (IsDefault $Redux.Equipment.DekuShield   -Not) -and $ChildModel.deku_shield -ne 0)                                          { return $True }
-        elseif ( (IsDefault $Redux.Equipment.HylianShield -Not) -and $ChildModel.hylian_shield -ne 0 -and $AdultModel.hylian_shield -ne 0)   { return $True }
-        elseif (IsIndex -Elem $Redux.Text.NaviScript -Index 3)                                                                               { return $True }
-    }
-
-    return $False
-
-}
-
-
-
-#==============================================================================================================================================================================================
 function WholeLanguageOptions([string]$Script, [string]$Table) {
     
+    if (IsChecked $Redux.Text.Vanilla -Not) { LoadTextEditor }
+
     if (IsChecked $Redux.Text.MMoT) {
         ApplyPatch -File $Script -Patch "\Export\Message\malon_master_of_Time_static.bps"
         ApplyPatch -File $Table  -Patch "\Export\Message\malon_master_of_time_table.bps"
@@ -2033,6 +2012,7 @@ function CreateOptions() {
     
     if ($GamePatch.vanilla -eq 1)   { CreateOptionsDialog -Columns 6 -Height 600 -Tabs @("Main", "Graphics", "Audio", "Difficulty", "Scenes", "Colors", "Equipment", "Capacity", "Animations") }
     else                            { CreateOptionsDialog -Columns 6 -Height 600 -Tabs @("Main", "Graphics", "Audio", "Difficulty",           "Colors", "Equipment", "Capacity", "Animations") }
+    ChangeModelsSelection
 
 }
 
@@ -2471,7 +2451,6 @@ function CreateTabGraphics() {
     CreateImageBox -x 20  -y 20 -w 154 -h 220 -Child -Name "ModelsPreviewChild"
     CreateImageBox -x 210 -y 20 -w 154 -h 220 -Adult -Name "ModelsPreviewAdult"
     $global:PreviewToolTip = CreateToolTip
-    ChangeModelsSelection
     
 
 

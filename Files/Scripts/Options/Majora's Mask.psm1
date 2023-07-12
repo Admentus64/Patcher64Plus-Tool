@@ -1048,24 +1048,10 @@ function ByteReduxOptions() {
 
 
 #==============================================================================================================================================================================================
-function CheckLanguageOptions() {
-    
-    if     ( (IsChecked  $Redux.Text.Vanilla -Not)   -or (IsLanguage $Redux.Text.AdultPronouns)  -or (IsLanguage $Redux.UI.GCScheme)           -or (IsLanguage $Redux.Text.AreaTitleCards) -or (IsChecked $Redux.Text.Instant) )       { return $True }
-    elseif ( (IsLanguage $Redux.Gameplay.RazorSword) -or (IsLanguage $Redux.Capacity.EnableAmmo) -or (IsLanguage $Redux.Capacity.EnableWallet) -or (IsLanguage $Redux.Text.GossipTime)     -or (IsChecked $Redux.Text.EasterEggs) )    { return $True }
-    elseif ( (IsDefault $Redux.Features.OcarinaIcons -Not) -and $Patches.Redux.Checked -and $LanguagePatch.code -eq "en")                                                                                                              { return $True }
-    elseif ( (IsChecked -Elem $Redux.Text.LinkScript)  -and $Redux.Text.LinkName.Text.Count -gt 0)                                                                                                                                     { return $True }
-    elseif ( ( (IsDefault $Redux.Text.TatlScript -Not) -and (IsDefault $Redux.Text.TatlName -Not) -and $Redux.Text.TatlName.Text.Count -gt 0) -or (IsIndex -Elem $Redux.Text.TatlScript -Index 3) -and $LanguagePatch.code -eq "en")   { return $True }
-    elseif ( ( (IsDefault $Redux.Text.TealScript -Not) -and (IsDefault $Redux.Text.TealName -Not) -and $Redux.Text.TaelName.Text.Count -gt 0) -or (IsIndex -Elem $Redux.Text.TaelScript -Index 3) -and $LanguagePatch.code -eq "en")   { return $True }
-    
-    return $False
-
-}
-
-
-
-#==============================================================================================================================================================================================
 function WholeLanguageOptions([string]$Script, [string]$Table) {
     
+    if (IsChecked $Redux.Text.Vanilla -Not) { LoadTextEditor }
+
     if (IsChecked $Redux.Text.Restore) {
         ApplyPatch -File $Script    -Patch "\Export\Message\restore_static.bps"
         ApplyPatch -File $Table     -Patch "\Export\Message\restore_table.bps"
@@ -1115,7 +1101,7 @@ function ByteLanguageOptions() {
     }
 
     if (IsLanguage -Elem $Redux.Text.AreaTitleCards) {
-        ChangeBytes -Offset "C5A250" -Values "02E9500002EA4CD0000B0001";         ChangeBytes -Offset "C5BA30" -Values "07104102"                                                                  # Lon Peak Shrine
+        ChangeBytes -Offset "C5A250" -Values "02E9500002EA4CD0000B0001";         ChangeBytes -Offset "C5BA30" -Values "07104102"                                                                  # Lone Peak Shrine
         ChangeBytes -Offset "C5A2D0" -Values "01FCD00001FD88100010000000000000"; ChangeBytes -Offset "C5A918" -Values "0F004102"                                                                  # Barn
         ChangeBytes -Offset "C5A560" -Values "026FC00002714F9001390001";         ChangeBytes -Offset "C5B22C" -Values "3800CA143800CA14"; ChangeBytes -Offset "C5B254" -Values "3805410238054102" # Zora Cape		
         ChangeBytes -Offset "C5A6A0" -Values "02A0000002A0B8B000120001";         ChangeBytes -Offset "C5B4D8" -Values "4C054102"                                                                  # Zora Shop
@@ -1248,6 +1234,7 @@ function ByteLanguageOptions() {
 function CreateOptions() {
     
     CreateOptionsDialog -Columns 6 -Height 605 -Tabs @("Main", "Graphics", "Audio", "Difficulty", "Colors", "Equipment", "Speedup")
+    ChangeModelsSelection
 
 }
 
@@ -1488,7 +1475,6 @@ function CreateTabGraphics() {
     $Last.Group.Height = (DPISize 223)
     CreateImageBox -All -x 140  -y 25 -w 120 -h 180 -Name "ModelsPreviewChild"
     $global:PreviewToolTip = CreateToolTip
-    ChangeModelsSelection
 
 
 
