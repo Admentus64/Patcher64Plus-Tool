@@ -1,4 +1,5 @@
 v20.4.1
+- Added new button color presets for OoT & MM
 - Changed error log messages to show in red
 - Streamlined the Language Options patching
 - CheckLanguageOptions function has been removed

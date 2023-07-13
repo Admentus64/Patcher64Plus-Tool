@@ -538,6 +538,7 @@ function DisableReduxOptions() {
     foreach ($item in $Redux.Groups) {
         if ($item.IsRedux) { EnableElem -Elem $item -Active ($Patches.Options.Checked -and $Patches.Redux.Checked) }
     }
+    if (Get-Command "AdjustGUI" -errorAction SilentlyContinue) { iex "AdjustGUI" }
 
 }
 
