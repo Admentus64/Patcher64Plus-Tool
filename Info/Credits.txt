@@ -60,6 +60,7 @@
 - CrookedPoe
 - SoulofDeity
 - Mil
+- Feonyx
 
 --- Custom Textures ---
 - Community Texture pack

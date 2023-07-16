@@ -1,3 +1,9 @@
+v20.4.2
+- Added No Symbol option textures for Deku & Hylian Shields
+- Added missing equipment icons
+- Updated credits
+- Restored Master of Time back to the previous version
+
 v20.4.1
 - Added new button color presets for OoT & MM
 - Changed error log messages to show in red
