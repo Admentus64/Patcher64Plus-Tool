@@ -929,6 +929,109 @@ function ChangeModelsSelection() {
         }
     }) }
 
+    if (IsSet $Redux.Graphics.FilterAll) {
+        $Redux.Graphics.FilterAll.Add_CheckedChanged({
+            if ($this.checked) { FilterModelsSelection }
+        } )
+    }
+
+    if (IsSet $Redux.Graphics.FilterLink) {
+        $Redux.Graphics.FilterLink.Add_CheckedChanged( {
+            if ($this.checked) { FilterModelsSelection -Filter $this.Label }
+        } )
+        if (IsChecked $Redux.Graphics.FilterLink) { FilterModelsSelection -Filter $Redux.Graphics.FilterLink.Label }
+    }
+
+    if (IsSet $Redux.Graphics.FilterMale) {
+        $Redux.Graphics.FilterMale.Add_CheckedChanged( {
+            if ($this.checked) { FilterModelsSelection -Filter $this.Label }
+        } )
+        if (IsChecked $Redux.Graphics.FilterMale) { FilterModelsSelection -Filter $Redux.Graphics.FilterMale.Label }
+    }
+
+    if (IsSet $Redux.Graphics.FilterFemale) {
+        $Redux.Graphics.FilterFemale.Add_CheckedChanged( {
+            if ($this.checked) { FilterModelsSelection -Filter $this.Label }
+        } )
+        if (IsChecked $Redux.Graphics.FilterFemale) { FilterModelsSelection -Filter $Redux.Graphics.FilterFemale.Label }
+    }
+
+    if (IsSet $Redux.Graphics.FilterNonHuman) {
+        $Redux.Graphics.FilterNonHuman.Add_CheckedChanged( {
+            if ($this.checked) { FilterModelsSelection -Filter $this.Label }
+        } )
+        if (IsChecked $Redux.Graphics.FilterNonHuman) { FilterModelsSelection -Filter $Redux.Graphics.FilterNonHuman.Label }
+    }
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function FilterModelsSelection([string]$Filter="") {
+    
+    if ($Filter -eq "") {
+        if (IsSet $Redux.Graphics.ChildModels) {
+            $lastIndex = $Redux.Graphics.ChildModels.SelectedIndex
+            $Redux.Graphics.ChildModels.Items.Clear()
+            $Redux.Graphics.ChildModels.Items.AddRange(@("Original (default)") + (LoadModelsList -Category "Child"))
+            if ($lastIndex -le $Redux.Graphics.ChildModels.Items.Count)   { $Redux.Graphics.ChildModels.SelectedIndex = $lastIndex }
+            else                                                          { $Redux.Graphics.ChildModels.SelectedIndex = 0          }
+        }
+
+        if (IsSet $Redux.Graphics.AdultModels) {
+            $lastIndex = $Redux.Graphics.AdultModels.SelectedIndex
+            $Redux.Graphics.AdultModels.Items.Clear()
+            $Redux.Graphics.AdultModels.Items.AddRange(@("Original (default)") + (LoadModelsList -Category "Adult"))
+            if ($lastIndex -le $Redux.Graphics.AdultModels.Items.Count)   { $Redux.Graphics.AdultModels.SelectedIndex = $lastIndex }
+            else                                                          { $Redux.Graphics.AdultModels.SelectedIndex = 0          }
+        }
+    }
+
+    else {
+        if (!(IsSet $Files.json.models)) {return }
+
+        if (IsSet $Redux.Graphics.ChildModels) {
+            $models         = @("Original (default)") + (LoadModelsList -Category "Child")
+            $filteredModels = @()
+
+            :outer foreach ($model in $models) {
+                foreach ($entry in $Files.json.models.child) {
+                    if ($model.replace(" (default)", "") -eq $entry.name) {
+                        if ($entry.filter -eq $Filter) { $filteredModels += $model }
+                        continue outer
+                    }
+                }
+            }
+
+            $lastIndex = $Redux.Graphics.ChildModels.SelectedIndex
+            $Redux.Graphics.ChildModels.Items.Clear()
+            $Redux.Graphics.ChildModels.Items.AddRange($filteredModels)
+            if ($lastIndex -le $Redux.Graphics.ChildModels.Items.Count)   { $Redux.Graphics.ChildModels.SelectedIndex = $lastIndex }
+            else                                                          { $Redux.Graphics.ChildModels.SelectedIndex = 0          }
+        }
+
+        if (IsSet $Redux.Graphics.AdultModels) {
+            $models         =  @("Original (default)") + (LoadModelsList -Category "Adult")
+            $filteredModels = @()
+
+            :outer foreach ($model in $models) {
+                foreach ($entry in $Files.json.models.adult) {
+                    if ($model.replace(" (default)", "") -eq $entry.name) {
+                        if ($entry.filter -eq $Filter) { $filteredModels += $model }
+                        continue outer
+                    }
+                }
+            }
+
+            $lastIndex = $Redux.Graphics.AdultModels.SelectedIndex
+            $Redux.Graphics.AdultModels.Items.Clear()
+            $Redux.Graphics.AdultModels.Items.AddRange($filteredModels)
+            if ($lastIndex -le $Redux.Graphics.AdultModels.Items.Count)   { $Redux.Graphics.AdultModels.SelectedIndex = $lastIndex }
+            else                                                          { $Redux.Graphics.AdultModels.SelectedIndex = 0          }
+        }
+    }
+
 }
 
 
@@ -1532,41 +1635,52 @@ function SetFairyColors([string]$Inner, [string]$Outer, [Array]$Dialogs, [Array]
 function SetTunicColorsPreset([object]$ComboBox, [object]$Dialog, [object]$Label) {
     
     $text = $ComboBox.Text.replace(' (default)', "")
-    if     ($text -eq "Kokiri Green")        { SetColor -Color "1E691B" -Dialog $Dialog -Label $Label }
-    elseif ($text -eq "Goron Red")           { SetColor -Color "641400" -Dialog $Dialog -Label $Label }
-    elseif ($text -eq "Zora Blue")           { SetColor -Color "003C64" -Dialog $Dialog -Label $Label }
-    elseif ($text -eq "Gold Quest Gold")     { SetColor -Color "FFCC00" -Dialog $Dialog -Label $Label }
-    elseif ($text -eq "Gold Quest Purple")   { SetColor -Color "83226C" -Dialog $Dialog -Label $Label }
-    elseif ($text -eq "Gold Quest White")    { SetColor -Color "D7D7D7" -Dialog $Dialog -Label $Label }
-    elseif ($text -eq "Black")               { SetColor -Color "303030" -Dialog $Dialog -Label $Label }
-    elseif ($text -eq "White")               { SetColor -Color "F0F0FF" -Dialog $Dialog -Label $Label }
-    elseif ($text -eq "Azure Blue")          { SetColor -Color "139ED8" -Dialog $Dialog -Label $Label }
-    elseif ($text -eq "Vivid Cyan")          { SetColor -Color "13E9D8" -Dialog $Dialog -Label $Label }
-    elseif ($text -eq "Light Red")           { SetColor -Color "F87C6D" -Dialog $Dialog -Label $Label }
-    elseif ($text -eq "Fuchsia")             { SetColor -Color "FF00FF" -Dialog $Dialog -Label $Label }
-    elseif ($text -eq "Purple")              { SetColor -Color "953080" -Dialog $Dialog -Label $Label }
-    elseif ($text -eq "Majora Purple")       { SetColor -Color "400040" -Dialog $Dialog -Label $Label }
-    elseif ($text -eq "Twitch Purple")       { SetColor -Color "6441A5" -Dialog $Dialog -Label $Label }
-    elseif ($text -eq "Purple Heart")        { SetColor -Color "8A2BE2" -Dialog $Dialog -Label $Label }
-    elseif ($text -eq "Persian Rose")        { SetColor -Color "FF1493" -Dialog $Dialog -Label $Label }
-    elseif ($text -eq "Dirty Yellow")        { SetColor -Color "E0D860" -Dialog $Dialog -Label $Label }
-    elseif ($Text -eq "Blush Pink")          { SetColor -Color "F86CF8" -Dialog $Dialog -Label $Label }
-    elseif ($text -eq "Hot Pink")            { SetColor -Color "FF69B4" -Dialog $Dialog -Label $Label }
-    elseif ($text -eq "Rose Pink")           { SetColor -Color "FF90B3" -Dialog $Dialog -Label $Label }
-    elseif ($text -eq "Orange")              { SetColor -Color "E07940" -Dialog $Dialog -Label $Label }
-    elseif ($text -eq "Gray")                { SetColor -Color "A0A0B0" -Dialog $Dialog -Label $Label }
-    elseif ($text -eq "Gold")                { SetColor -Color "D8B060" -Dialog $Dialog -Label $Label }
-    elseif ($text -eq "Silver")              { SetColor -Color "D0F0FF" -Dialog $Dialog -Label $Label }
-    elseif ($text -eq "Beige")               { SetColor -Color "C0A0A0" -Dialog $Dialog -Label $Label }
-    elseif ($text -eq "Teal")                { SetColor -Color "30D0B0" -Dialog $Dialog -Label $Label }
-    elseif ($text -eq "Blood Red")           { SetColor -Color "830303" -Dialog $Dialog -Label $Label }
-    elseif ($text -eq "Blood Orange")        { SetColor -Color "FE4B03" -Dialog $Dialog -Label $Label }
-    elseif ($text -eq "Royal Blue")          { SetColor -Color "400090" -Dialog $Dialog -Label $Label }
-    elseif ($text -eq "Sonic Blue")          { SetColor -Color "5090E0" -Dialog $Dialog -Label $Label }
-    elseif ($text -eq "NES Green")           { SetColor -Color "00D000" -Dialog $Dialog -Label $Label }
-    elseif ($text -eq "Dark Green")          { SetColor -Color "002518" -Dialog $Dialog -Label $Label }
-    elseif ($text -eq "Lumen")               { SetColor -Color "508CF0" -Dialog $Dialog -Label $Label }
-    elseif ($text -eq "Randomized")          { SetRandomColor -Dialog $Dialog -Label $Label -Message "Randomize Tunic Color" }
+    if     ($text -eq "Azure Blue")           { SetColor -Color "139ED8" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Beige")                { SetColor -Color "C0A0A0" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Black")                { SetColor -Color "303030" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Blood Orange")         { SetColor -Color "FE4B03" -Dialog $Dialog -Label $Label } 
+    elseif ($text -eq "Blood Red")            { SetColor -Color "830303" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "Blush Pink")           { SetColor -Color "F86CF8" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Dark Green")           { SetColor -Color "002518" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "Dawn & Dusk Green")    { SetColor -Color "4C9714" -Dialog $Dialog -Label $Label }
+    elseif ($Text -eq "Dawn & Dusk Purple")   { SetColor -Color "462640" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Dirty Yellow")         { SetColor -Color "E0D860" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Fuchsia")              { SetColor -Color "FF00FF" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Gold Quest Gold")      { SetColor -Color "FFCC00" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Gold Quest Purple")    { SetColor -Color "83226C" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Gold Quest White")     { SetColor -Color "D7D7D7" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Gold")                 { SetColor -Color "D8B060" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Goron Red 3D")         { SetColor -Color "B70212" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Goron Red")            { SetColor -Color "641400" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Gray")                 { SetColor -Color "A0A0B0" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Guardian Silver")      { SetColor -Color "A5AFBE" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Hero Gold")            { SetColor -Color "C8AF32" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Hot Pink")             { SetColor -Color "FF69B4" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Kokiri Green 3D")      { SetColor -Color "1AA712" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Kokiri Green")         { SetColor -Color "1E691B" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Light Red")            { SetColor -Color "F87C6D" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Lumen")                { SetColor -Color "508CF0" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Magician Green")       { SetColor -Color "00913C" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Majora Purple")        { SetColor -Color "400040" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "NES Green")            { SetColor -Color "00D000" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Orange")               { SetColor -Color "E07940" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Pajama Blue")          { SetColor -Color "64B4FF" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Persian Rose")         { SetColor -Color "FF1493" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Purple Heart")         { SetColor -Color "8A2BE2" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Purple")               { SetColor -Color "953080" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Rose Pink")            { SetColor -Color "FF90B3" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Royal Blue")           { SetColor -Color "400090" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Shadow Purple 3D")     { SetColor -Color "AF1FB7" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Shadow Purple")        { SetColor -Color "503CAA" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Silver")               { SetColor -Color "D0F0FF" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Sonic Blue")           { SetColor -Color "5090E0" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Teal")                 { SetColor -Color "30D0B0" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Twitch Purple")        { SetColor -Color "6441A5" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Vivid Cyan")           { SetColor -Color "13E9D8" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "White")                { SetColor -Color "F0F0FF" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Zora Blue 3D")         { SetColor -Color "0A3BAF" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Zora Blue")            { SetColor -Color "003C64" -Dialog $Dialog -Label $Label }
+    elseif ($text -eq "Randomized")           { SetRandomColor -Dialog $Dialog -Label $Label -Message "Randomize Tunic Color" }
 
 }
 
