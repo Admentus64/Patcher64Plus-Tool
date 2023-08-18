@@ -1,3 +1,6 @@
+v21.0.1
+- Added Feline Agility option for a faster Link
+
 v21.0.0
 - Added Map Settings and Scene Settings properties for the Scene Editor
 - Added new Hide Sword and Hide Shield options for OoT & MM
