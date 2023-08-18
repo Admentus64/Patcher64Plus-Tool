@@ -25,10 +25,6 @@ function PrePatchReduxOptions() {
 
 #==============================================================================================================================================================================================
 function PatchOptions() {
-	
-	# GAMEPLAY #
-	
-	if (IsChecked $Redux.Gameplay.AgileSpeed)                { ApplyPatch -Patch "Decompressed\Optional\agile_speed_settings.ppf"   }
     
     # MODELS #
 
@@ -2216,7 +2212,6 @@ function CreateTabMain() {
     CreateReduxCheckBox -Name "PushbackAttackingWalls" -All               -Text "Pushback Attacking Walls" -Info "Link is getting pushed back a bit when hitting the wall with the sword"                                                                                         -Credits "Admentus (ROM) & Aegiker (RAM)"
     CreateReduxCheckBox -Name "RemoveCrouchStab"       -All               -Text "Remove Crouch Stab"       -Info "The Crouch Stab move is removed"                                                                                                                                -Credits "Garo-Mastah"
     CreateReduxCheckBox -Name "RemoveQuickSpin"        -All               -Text "Remove Magic Quick Spin"  -Info "The magic Quick Spin Attack move is removed`nIt's a regular Quick Spin Attack now instead"                                                                      -Credits "Admentus & Three Pendants"
-    CreateReduxCheckBox -Name "AgileSpeed"             -All               -Text "Feline Agility"           -Info "Faster run speed & longer jumps, made for Ikey's characters but works with anyone" -Warning "You may need to play a little more cautiously."                    -Credits "Ikey Ilex"
     CreateReduxCheckbox -Name "RemoveSpeedClamp"       -All               -Text "Remove Jump Speed Limit"  -Info "Removes the jumping speed limit just like in MM"                                                                                                                -Credits "Admentus (ROM) & Aegiker (RAM)"
     
 
