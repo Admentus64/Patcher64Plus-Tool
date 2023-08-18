@@ -266,7 +266,7 @@ function ChangeGameMode() {
     
     WriteToConsole "Changing game mode..."
 
-    if (IsSet $GamePatch.script) { if (Get-Module -Name $GamePatch.script)   { Remove-Module -Name $GamePatch.script } }
+    if (IsSet $GamePatch.script) { if (Get-Module -Name $GamePatch.script) { Remove-Module -Name $GamePatch.script } }
 
     foreach ($item in $Files.json.games) {
         if ($item.title -eq $CurrentGame.Game.Text) {
@@ -1284,6 +1284,18 @@ function GetWindowsVersion() {
 
 
 #==================================================================================================================================================================================================================================================================
+function RefreshScript([string]$Script) {
+    
+    if ($Settings.Debug.RefreshScripts -eq $True) {
+        Remove-Module -Name $Script
+        Import-Module -Name ($Paths.Scripts + "\" + $Script + ".psm1") -Global
+    }
+
+}
+
+
+
+#==================================================================================================================================================================================================================================================================
 function StopJobs() {
     
     if ( (Get-Process "playsmf" -ea SilentlyContinue) -ne $null) { Stop-Process -Name "playsmf" }
@@ -1373,3 +1385,4 @@ Export-ModuleMember -Function IsRestrictedFolder
 Export-ModuleMember -Function GetCommand
 Export-ModuleMember -Function StopJobs
 Export-ModuleMember -Function GetWindowsVersion
+Export-ModuleMember -Function RefreshScript

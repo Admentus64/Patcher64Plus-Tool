@@ -77,26 +77,26 @@ function CreateMainDialog() {
     $menuBarOoTSceneEditor     = New-Object System.Windows.Forms.ToolStripButton;   $menuBarOoTSceneEditor.Text = "OoT Scene Editor";   $menuBarEditors.DropDownItems.Add($menuBarOoTSceneEditor)
     $menuBarMMSceneEditor      = New-Object System.Windows.Forms.ToolStripButton;   $menuBarMMSceneEditor.Text  = "MM Scene Editor";    $menuBarEditors.DropDownItems.Add($menuBarMMSceneEditor)
 
-    $menuBarExit.Add_Click(           { $MainDialog.Close()          } )
-    $menuBarUpdate.Add_Click(         { AutoUpdate -Manual           } )
+    $menuBarExit.Add_Click(           { $MainDialog.Close()                          } )
+    $menuBarUpdate.Add_Click(         { RefreshScript "Updater"; AutoUpdate -Manual  } )
 
-    $menuBarSettings.Add_Click(       { $SettingsDialog.ShowDialog() } )
-    $menuBarResetAll.Add_Click(       { ResetTool                    } )
-    $menuBarResetGame.Add_Click(      { ResetGame                    } )
-    $menuBarCleanupFiles.Add_Click(   { CleanupFiles                 } )
-    $menuBarCleanupScripts.Add_Click( { CleanupScripts               } )
+    $menuBarSettings.Add_Click(       { RefreshScript "Dialogs"; $SettingsDialog.ShowDialog() } )
+    $menuBarResetAll.Add_Click(       { ResetTool      } )
+    $menuBarResetGame.Add_Click(      { ResetGame      } )
+    $menuBarCleanupFiles.Add_Click(   { CleanupFiles   } )
+    $menuBarCleanupScripts.Add_Click( { CleanupScripts } )
 
-    $menuBarInfo.Add_Click(      { If (!(IsSet $CreditsDialog)) { CreateCreditsDialog | Out-Null }; $Credits.Sections | foreach { $_.Visible = $False }; $Credits.Sections[0].Visible = $True; $CreditsDialog.ShowDialog() } )
-    $menuBarLinks.Add_Click(     { If (!(IsSet $CreditsDialog)) { CreateCreditsDialog | Out-Null }; $Credits.Sections | foreach { $_.Visible = $False }; $Credits.Sections[3].Visible = $True; $CreditsDialog.ShowDialog() } )
-    $menuBarCredits.Add_Click(   { If (!(IsSet $CreditsDialog)) { CreateCreditsDialog | Out-Null }; $Credits.Sections | foreach { $_.Visible = $False }; $Credits.Sections[1].Visible = $True; $CreditsDialog.ShowDialog() } )
-    $menuBarChangelog.Add_Click( { If (!(IsSet $CreditsDialog)) { CreateCreditsDialog | Out-Null }; $Credits.Sections | foreach { $_.Visible = $False }; $Credits.Sections[5].Visible = $True; $CreditsDialog.ShowDialog() } )
-    $menuBarGameID.Add_Click(    { If (!(IsSet $CreditsDialog)) { CreateCreditsDialog | Out-Null }; $Credits.Sections | foreach { $_.Visible = $False }; $Credits.Sections[2].Visible = $True; $CreditsDialog.ShowDialog() } )
-    $menuBarChecksum.Add_Click(  { If (!(IsSet $CreditsDialog)) { CreateCreditsDialog | Out-Null }; $Credits.Sections | foreach { $_.Visible = $False }; $Credits.Sections[4].Visible = $True; $CreditsDialog.ShowDialog() } )
+    $menuBarInfo.Add_Click(      { If (!(IsSet $CreditsDialog)) { RefreshScript "Dialogs"; CreateCreditsDialog | Out-Null }; $Credits.Sections | foreach { $_.Visible = $False }; $Credits.Sections[0].Visible = $True; $CreditsDialog.ShowDialog() } )
+    $menuBarLinks.Add_Click(     { If (!(IsSet $CreditsDialog)) { RefreshScript "Dialogs"; CreateCreditsDialog | Out-Null }; $Credits.Sections | foreach { $_.Visible = $False }; $Credits.Sections[3].Visible = $True; $CreditsDialog.ShowDialog() } )
+    $menuBarCredits.Add_Click(   { If (!(IsSet $CreditsDialog)) { RefreshScript "Dialogs"; CreateCreditsDialog | Out-Null }; $Credits.Sections | foreach { $_.Visible = $False }; $Credits.Sections[1].Visible = $True; $CreditsDialog.ShowDialog() } )
+    $menuBarChangelog.Add_Click( { If (!(IsSet $CreditsDialog)) { RefreshScript "Dialogs"; CreateCreditsDialog | Out-Null }; $Credits.Sections | foreach { $_.Visible = $False }; $Credits.Sections[5].Visible = $True; $CreditsDialog.ShowDialog() } )
+    $menuBarGameID.Add_Click(    { If (!(IsSet $CreditsDialog)) { RefreshScript "Dialogs"; CreateCreditsDialog | Out-Null }; $Credits.Sections | foreach { $_.Visible = $False }; $Credits.Sections[2].Visible = $True; $CreditsDialog.ShowDialog() } )
+    $menuBarChecksum.Add_Click(  { If (!(IsSet $CreditsDialog)) { RefreshScript "Dialogs"; CreateCreditsDialog | Out-Null }; $Credits.Sections | foreach { $_.Visible = $False }; $Credits.Sections[4].Visible = $True; $CreditsDialog.ShowDialog() } )
 
-    $menuBarOoTTextEditor.Add_Click(  { RunTextEditor  -Game "Ocarina of Time" } )
-    $menuBarMMTextEditor.Add_Click(   { RunTextEditor  -Game "Majora's Mask"   } )
-    $menuBarOoTSceneEditor.Add_Click( { RunSceneEditor -Game "Ocarina of Time" } )
-    $menuBarMMSceneEditor.Add_Click(  { RunSceneEditor -Game "Majora's Mask"   } )
+    $menuBarOoTTextEditor.Add_Click(  { RefreshScript "Text Editor":  RunTextEditor  -Game "Ocarina of Time" } )
+    $menuBarMMTextEditor.Add_Click(   { RefreshScript "Text Editor";  RunTextEditor  -Game "Majora's Mask"   } )
+    $menuBarOoTSceneEditor.Add_Click( { RefreshScript "Scene Editor"; RunSceneEditor -Game "Ocarina of Time" } )
+    $menuBarMMSceneEditor.Add_Click(  { RefreshScript "Scene Editor"; RunSceneEditor -Game "Majora's Mask"   } )
 
 
 
@@ -188,7 +188,7 @@ function CreateMainDialog() {
 
     # Create a button to allow patch the WAD with a ROM file
     $InputPaths.ApplyInjectButton = CreateButton -X ($InputPaths.InjectButton.Right + (DPISize 15)) -Y (DPISize 18) -Width ($InputPaths.InjectGroup.Right - $InputPaths.InjectButton.Right - (DPISize 30)) -Height (DPISize 22) -Text "Inject ROM" -Info "Replace the ROM in your selected WAD File with your selected injection file"
-    $InputPaths.ApplyInjectButton.Add_Click({ MainFunction -Command "Inject" -PatchedFileName "_injected" })
+    $InputPaths.ApplyInjectButton.Add_Click({ RefreshScript "Patch"; MainFunction -Command "Inject" -PatchedFileName "_injected" })
     $InputPaths.ApplyInjectButton.Enabled = $False
 
 
@@ -219,7 +219,7 @@ function CreateMainDialog() {
     
     # Create a button to allow patch the WAD with a BPS file.
     $InputPaths.ApplyPatchButton = CreateButton -X ($InputPaths.PatchButton.Right + (DPISize 15)) -Y (DPISize 18) -Width ($InputPaths.PatchGroup.Right - $InputPaths.PatchButton.Right - (DPISize 30)) -Height (DPISize 22) -Text "Apply Patch" -Info "Patch the ROM with your selected BPS, IPS, UPS, Xdelta or VCDiff Patch File"
-    $InputPaths.ApplyPatchButton.Add_Click({ MainFunction -Command "Apply Patch" -PatchedFileName "_bps_patched" })
+    $InputPaths.ApplyPatchButton.Add_Click({ RefreshScript "Patch"; MainFunction -Command "Apply Patch" -PatchedFileName "_bps_patched" })
     $InputPaths.ApplyPatchButton.Enabled = $False
 
 
@@ -304,7 +304,7 @@ function CreateMainDialog() {
     # Create patch button
     $Patches.Button = CreateButton -X (DPISize 10) -Y (DPISize 45) -Width (DPISize 300) -Height (DPISize 35) -Text "Patch Selected Options"
     $Patches.Button.Font = $Fonts.SmallBold
-    $Patches.Button.Add_Click( { MainFunction -Command $GamePatch.command -PatchedFileName $GamePatch.output } )
+    $Patches.Button.Add_Click({ RefreshScript "Patch"; MainFunction -Command $GamePatch.command -PatchedFileName $GamePatch.output })
     $Patches.Button.Enabled = $False
 
     # Create Patches ComboBox
@@ -350,11 +350,11 @@ function CreateMainDialog() {
 
     # Create a button to extract the ROM
     $VC.ExtractROMButton = CreateButton -X ($VC.ActionsLabel.Right + (DPISize 10)) -Y ($VC.ActionsLabel.Top - (DPISize 7)) -Width (DPISize 150) -Height (DPISize 30) -Text "Extract ROM Only" -Info "Only extract the ROM from the WAD file`nUseful for native N64 emulators"
-    $VC.ExtractROMButton.Add_Click({ MainFunction -Command "Extract" -PatchedFileName "_extracted" })
+    $VC.ExtractROMButton.Add_Click({ RefreshScript "Patch"; MainFunction -Command "Extract" -PatchedFileName "_extracted" })
 
     # Create a button to show the global settings panel
     $VC.RemapControlsButton = CreateButton -X ($VC.ExtractROMButton.Right + (DPISize 10)) -Y ($VC.ActionsLabel.Top - (DPISize 7)) -Width (DPISize 150) -Height (DPISize 30) -Text "Remap VC Controls" -Info "Open the Virtual Console remap settings panel"
-    $VC.RemapControlsButton.Add_Click({ $VCRemapDialog.ShowDialog() | Out-Null })
+    $VC.RemapControlsButton.Add_Click({ RefreshScript "VC"; $VCRemapDialog.ShowDialog() | Out-Null })
 
     # Create a label for Core patches
     $VC.OptionsLabel = CreateLabel -X (DPISize 10) -Y (DPISize 62) -Width (DPISize 55) -Height (DPISize 15) -Text "Options" -Font $Fonts.SmallBold

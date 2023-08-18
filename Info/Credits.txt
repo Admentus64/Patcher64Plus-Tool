@@ -136,6 +136,7 @@
 - Twilight Princess:			Skilarbabcock (www.youtube.com/user/skilarbabcock)
 - Violet:				Ikey Ilex (https://github.com/Caverns4/Custom-Game-Models)
 - Zora Link:				spyfoxgames
+- Xavres:				Ikey Ilex (https://github.com/Caverns4/Custom-Game-Models)
 
 --- Music Track Sequence Replacements ---
 - Apasher

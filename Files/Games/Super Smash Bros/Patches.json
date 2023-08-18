@@ -6,7 +6,7 @@
 
 }, {
 
-	"title"		: "Smash Remix (v1.3.0)",
+	"title"		: "Smash Remix (v1.4.1)",
 	"console"	: "Native",
 	"patch"		: "Compressed\\remix.bps",
 	"output"	: "remix",

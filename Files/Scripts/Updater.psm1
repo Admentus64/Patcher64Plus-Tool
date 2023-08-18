@@ -6,7 +6,8 @@ function PerformUpdate() {
         if ($Settings.Core.DisableAddons -ne $True) {
             foreach ($addon in $Files.json.repo.addons) {
                 CheckAddon  -Title $addon.title
-                UpdateAddon -Title $addon.title -Uri $addon.uri -Version $addon.version }
+                UpdateAddon -Title $addon.title -Uri $addon.uri -Version $addon.version
+            }
         }
     }
     else {

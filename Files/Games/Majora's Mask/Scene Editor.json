@@ -516,6 +516,106 @@
 		"length"	: 1
 	} ],
 	
+	"transitions" : [ {
+		"name"		: "Standard Door",
+		"id"		: "0005",
+		"band"		: [ "0380", "007F" ],
+		"params" : [ [ {
+			"name"	: "Load Room",
+			"value"	: "0"
+		}, {
+			"name"	: "Small Key Locked",
+			"value"	: "80"
+		}, {
+			"name"	: "Load Room #2",
+			"value"	: "100"
+		}, {
+			"name"	: "Scene Exit",
+			"value"	: "180"
+		}, {
+			"name"	: "Slams Shut",
+			"value"	: "200"
+		}, {
+			"name"	: "Checkable",
+			"value"	: "280"
+		}, {
+			"name"	: "Evening",
+			"value"	: "300"
+		}, {
+			"name"	: "Room Load #3",
+			"value"	: "380"
+		} ], [ {
+			"name"	: "Switch / Text",
+			"value"	: "7F"
+		} ] ]
+	}, {
+		"name"		: "Room Change Plane",
+		"id"		: "0018",
+		"band"		: [ "FC00", "0380", "007F" ],
+		"params" : [ [ {
+			"name"	: "ID",
+			"value"	: "3F"
+		} ], [ {
+			"name"	: "Default",
+			"value"	: "0"
+		}, {
+			"name"	: "Vertical",
+			"value"	: "80"
+		}, {
+			"name"	: "Transparent",
+			"value"	: "100"
+		}, {
+			"name"	: "Vertical Cover",
+			"value"	: "180"
+		}, {
+			"name"	: "Scene Changer",
+			"value"	: "200"
+		} ], [ {
+			"name"	: "Exit Index",
+			"value"	: "7F"
+		} ] ]
+	}, {
+		"name"		: "Lifting Dungeon Door",
+		"id"		: "001E",
+		"band"		: [ "0380", "007F" ],
+		"params" : [ [ {
+			"name"	: "Type #1",
+			"value"	: "0"
+		}, {
+			"name"	: "Type #2",
+			"value"	: "80"
+		}, {
+			"name"	: "Type #3",
+			"value"	: "100"
+		}, {
+			"name"	: "Type #4",
+			"value"	: "180"
+		}, {
+			"name"	: "Type #5",
+			"value"	: "200"
+		}, {
+			"name"	: "Type #6",
+			"value"	: "280"
+		}, {
+			"name"	: "Type #7",
+			"value"	: "300"
+		}, {
+			"name"	: "Type #8",
+			"value"	: "380"
+		} ], [ {
+			"name"	: "Switch",
+			"value"	: "7F"
+		} ] ]
+	}, {
+		"name"		: "Staircase",
+		"id"		: "0100",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "Param",
+			"value"	: "FFFF"
+		} ] ]
+	} ],	
+
 	"actors" : [ {
 		"name"		: "Decorative Flames",
 		"id"		: "0004",
@@ -1334,34 +1434,6 @@
 		} ], [ {
 			"name"	: "Speed #2",
 			"value"	: "1FF"
-		} ] ]
-	}, {
-		"name"		: "Loading Halls",
-		"id"		: "0018",
-		"type"		: "Area",
-		"spawn"		: 1,
-		"band"		: [ "F000", "0380", "007F" ],
-		"params" : [ [ {
-			"name"	: "ID",
-			"value"	: "F"
-		} ], [ {
-			"name"	: "Default",
-			"value"	: "0"
-		}, {
-			"name"	: "Vertical",
-			"value"	: "80"
-		}, {
-			"name"	: "Transparent",
-			"value"	: "100"
-		}, {
-			"name"	: "Vertical (Covered)",
-			"value"	: "180"
-		}, {
-			"name"	: "Scene Changer",
-			"value"	: "200"
-		} ], [ {
-			"name"	: "Exit",
-			"value"	: "7F"
 		} ] ]
 	}, {
 		"name"		: "Dinolfos",

@@ -1,3 +1,27 @@
+v21.0.0
+- Added Map Settings and Scene Settings properties for the Scene Editor
+- Added new Hide Sword and Hide Shield options for OoT & MM
+- Added new Starting Dungeon Item options
+- Added presets for MM
+- Added custom model filtering for OoT & MM
+- Added new tunic colors for OoT using Extra Abilties (Redux)
+- Added new "Oceanside Spider House" option for MM to complete it on any day
+- Added new Hylian Shield texture designs
+- Added Transition Actors support for the Scene Editor
+- Added new debug option to refresh scripts before being called
+- Changed how equipment name replacements for the dialogue are applied
+- Changed several options for OoT and MM to utilize the Scene Editor
+- Changed how the object limit for maps are extended
+- Changed default behaviour for the Hair Color option for OoT
+- Merged "Difficulty" and "Scenes" tabs for OoT
+- Updated Smash Remix to 1.4.1
+- Fixed several Scene Editor issues
+- Fixed dropdown options for OoT presets being the wrong setting
+- Fixed some OoT color options not setting correctly
+- Fixed aligment of the Equipment tab for OoT
+- Fixed not being able to update patched ROM file if in use
+- Removed visible Child Megaton Hammer option (custom model now instead)
+
 v20.4.2
 - Added No Symbol option textures for Deku & Hylian Shields
 - Added missing equipment icons

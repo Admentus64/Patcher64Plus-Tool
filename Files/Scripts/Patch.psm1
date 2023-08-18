@@ -1,5 +1,7 @@
 function MainFunction([string]$Command, [string]$PatchedFileName) {
     
+    RefreshScript "VC"
+
     # Reset variables
     $global:WarningError  = $False
     $global:PatchInfo     = @{}
@@ -96,6 +98,14 @@ function MainFunction([string]$Command, [string]$PatchedFileName) {
 
     # Check if ROM is getting patched
     if ( (IsChecked $Patches.Options) -or (IsChecked $Patches.Redux) -or (IsSet $GamePatch.patch) -or (StrLike -str $Command -val "Apply Patch") -or (IsSet $GamePatch.preset) ) { $PatchInfo.run = $True } else { $PatchInfo.run = $False }
+
+    # Refresh game options script
+    if ($Settings.Debug.RefreshScripts -eq $True) {
+        if (Get-Module -Name $GamePatch.script) {
+            Remove-Module -Name $GamePatch.script
+            Import-Module -Name ($Paths.Scripts + "\Options\" + $GamePatch.script + ".psm1") -Global
+        }
+    }
 
     # GO!
     if ($Settings.NoCleanup.Checked -ne $True -and $IsWiiVC) { RemovePath $Paths.Temp } # Remove the temp folder first to avoid issues
@@ -424,6 +434,7 @@ function PatchingAdditionalOptions() {
 
     # Scene Options
     if ( (GetCommand "ByteSceneOptions") -and $Settings.Debug.NoScenePatching -ne $True) {
+        RefreshScript "Sceen Editor"
         UpdateStatusLabel ("Patching " + $GameType.mode + " Additional Scene Options...")
         $global:SceneEditor     = @{}
         $Files.json.sceneEditor = SetJSONFile $GameFiles.sceneEditor
@@ -435,7 +446,7 @@ function PatchingAdditionalOptions() {
     if ($Settings.Debug.NoDialoguePatching -ne $True) {
         if ( (IsSet $LanguagePatch.script_dma) -and $LanguagePatch.region -ne "J") {
             if (GetCommand "WholeLanguageOptions")  { WholeLanguageOptions -Script ($GameFiles.extracted + "\message_data_static." + $LanguagePatch.code + ".bin") -Table ($GameFiles.extracted + "\message_data." + $LanguagePatch.code + ".tbl") }
-            if (GetCommand "ByteLanguageOptions")   { ByteLanguageOptions }
+            if (GetCommand "ByteLanguageOptions")   { RefreshScript "Text Editor"; ByteLanguageOptions }
         }
         
         if (IsSet $Files.json.textEditor) {
@@ -1002,7 +1013,10 @@ function CompressROM() {
             }
         }
     }
-    else { Move-Item -LiteralPath $GetROM.decomp -Destination $GetROM.patched -Force }
+    else {
+        Copy-Item   -LiteralPath $GetROM.decomp -Destination $GetROM.patched -Force
+        Remove-Item -LiteralPath $GetROM.decomp
+    }
 
     $GetROM.run = $GetROM.patched
 }
