@@ -30,12 +30,7 @@ function PatchOptions() {
 
     if (IsDefault -Elem $Redux.Graphics.ChildModels -Not)   { PatchModel -Category "Child" -Name $Redux.Graphics.ChildModels.Text }
     if (IsDefault -Elem $Redux.Graphics.AdultModels -Not)   { PatchModel -Category "Adult" -Name $Redux.Graphics.AdultModels.Text }
-
-    if ( ( (IsIndex -Elem $Redux.Graphics.ChildModels -Text "Original") -or (IsIndex -Elem $Redux.Graphics.ChildModels -Text "Majora's Mask Eyes") ) -and ( (IsIndex -Elem $Redux.Unlock.MegatonHammer -Index 3) -or (IsIndex -Elem $Redux.Unlock.MegatonHammer -Index 4) ) ) {
-        ApplyPatch -Patch "Decompressed\Optional\vanilla_child_megaton_hammer.ppf"
-    }
-
-    if (IsChecked $Redux.Animation.Feminine)            { ApplyPatch -Patch "Decompressed\Optional\feminine_animations.ppf" }
+    if (IsChecked $Redux.Animation.Feminine)                { ApplyPatch -Patch "Decompressed\Optional\feminine_animations.ppf"   }
 
 
 
@@ -77,10 +72,6 @@ function ByteDMAOptions() {
 #==============================================================================================================================================================================================
 function ByteOptions() {
     
-    if     ($GamePatch.settings -eq "Master of Time")   { $ChildModel = @{}; $ChildModel.deku_shield   = 1; $ChildModel.hylian_shield = 1 }
-    elseif ($GamePatch.settings -eq "Dawn & Dusk")      { $AdultModel = @{}; $AdultModel.hylian_shield = 1; $AdultModel.mirror_shield = 1 }
-
-
     # QUALITY OF LIFE #
 
     if (IsIndex $Redux.Gameplay.FasterBlockPushing -Index 1 -Not) {
@@ -176,6 +167,8 @@ function ByteOptions() {
     if (IsChecked $Redux.Fixes.DeathMountainOwl)       { ChangeBytes -Offset "E304F0" -Values "240E0001"                                                  }
     if (IsChecked $Redux.Fixes.SpiritTempleMirrors)    { ChangeBytes -Offset "E45678" -Values "0000";     ChangeBytes -Offset "E4567B" -Values "00"       }
     if (IsChecked $Redux.Fixes.Boomerang)              { ChangeBytes -Offset "F0F718" -Values "FC41C7FFFFFFFE38"                                          }
+    if (IsChecked $Redux.Fixes.OpenTimeDoor)           { ChangeBytes -Offset "AC8608" -Values "00902025848E00A4340100430000000000000000"                  }
+    if (IsChecked $Redux.Fixes.VisibleGerudoTent)      { ChangeBytes -Offset "D215CB" -Values "11"                                                        }
 
 
 
@@ -290,12 +283,12 @@ function ByteOptions() {
         PatchBytes -Offset "1A3E580" -Shared -Patch "HUD\Dungeon Map Chest\Majora's Mask.bin"
     }
 
-    if (IsDefault $Redux.UI.ButtonStyle -Not)   { PatchBytes -Offset "1A3CA00" -Shared -Patch ("Buttons\" + $Redux.UI.ButtonStyle.Text.replace(" (default)", "") + ".bin") }
+    if (IsDefault $Redux.UI.ButtonStyle -Not)   { PatchBytes  -Offset "1A3CA00" -Shared -Patch ("Buttons\" + $Redux.UI.ButtonStyle.Text.replace(" (default)", "") + ".bin") }
     if (IsChecked $Redux.UI.CenterNaviPrompt)   { ChangeBytes -Offset "B582DF"  -Values "01" -Subtract }
     if (IsChecked $Redux.UI.DungeonKeys)        { PatchBytes  -Offset "1A3DE00" -Shared -Patch "HUD\Keys\Majora's Mask.bin"   }
     if (IsDefault $Redux.UI.Rupees -Not)        { PatchBytes  -Offset "1A3DF00" -Shared -Patch ("HUD\Rupees\" + $Redux.UI.Rupees.Text.replace(" (default)", "") + ".bin") }
     if (IsDefault $Redux.UI.Hearts -Not)        { PatchBytes  -Offset "1A3C000" -Shared -Patch ("HUD\Hearts\" + $Redux.UI.Hearts.Text.replace(" (default)", "") + ".bin") }
-    if (IsDefault $Redux.UI.Magic  -Not)        { PatchBytes  -Offset "1A3F8C0" -Shared -Patch ("HUD\Magic\"  + $Redux.UI.Magic.Text.replace(" (default)", "")  + ".bin") }
+    if (IsDefault $Redux.UI.Magic  -Not)        { PatchBytes  -Offset "1A3F8C0" -Shared -Patch ("HUD\Magic\"  + $Redux.UI.Magic.Text.replace( " (default)", "") + ".bin") }
 
 
 
@@ -555,22 +548,6 @@ function ByteOptions() {
     elseif (IsText -Elem $Redux.Hero.MagicUsage -Compare "4x Magic Usage")   { ChangeBytes -Offset "AE84FA" -Values "2C 80" }
     elseif (IsText -Elem $Redux.Hero.MagicUsage -Compare "8x Magic Usage")   { ChangeBytes -Offset "AE84FA" -Values "2C C0" }
 
-    if (IsChecked $Redux.Hero.GraveyardKeese) {
-        ChangeBytes -Offset "202F389" -Values "0E"; ChangeBytes -Offset "202F3BB" -Values "0D"; ChangeBytes -Offset "202F3DD" -Values "13"; ChangeBytes -Offset "202F3EB" -Values "03"; ChangeBytes -Offset "202F3ED" -Values "13"; ChangeBytes -Offset "202F3FB" -Values "03"
-        ChangeBytes -Offset "202F3FD" -Values "13"; ChangeBytes -Offset "202F40B" -Values "03"; ChangeBytes -Offset "202F40D" -Values "13"; ChangeBytes -Offset "202F41B" -Values "03"; ChangeBytes -Offset "202F41D" -Values "13"; ChangeBytes -Offset "202F42B" -Values "03"
-        ChangeBytes -Offset "202F779" -Values "0E"; ChangeBytes -Offset "202F7AB" -Values "0D"; ChangeBytes -Offset "202F7CD" -Values "13"; ChangeBytes -Offset "202F7DB" -Values "03"; ChangeBytes -Offset "202F7DD" -Values "13"; ChangeBytes -Offset "202F7EB" -Values "03"
-        ChangeBytes -Offset "202F7ED" -Values "13"; ChangeBytes -Offset "202F7FB" -Values "03"; ChangeBytes -Offset "202F7FD" -Values "13"; ChangeBytes -Offset "202F80B" -Values "03"; ChangeBytes -Offset "202F80D" -Values "13"; ChangeBytes -Offset "202F81B" -Values "03"
-    }
-
-    if (IsChecked $Redux.Hero.LostWoodsOctorok) {
-        ChangeBytes -Offset "2150C95" -Values "07 E1" # Child
-        ChangeBytes -Offset "2157031" -Values "0C"; ChangeBytes -Offset "215706F" -Values "07"; ChangeBytes -Offset "21570F1" -Values "07"; ChangeBytes -Offset "215A031" -Values "0C"; ChangeBytes -Offset "215A06F" -Values "07"; ChangeBytes -Offset "215A151" -Values "07" # Child
-        ChangeBytes -Offset "2163031" -Values "0C"; ChangeBytes -Offset "216306F" -Values "07"; ChangeBytes -Offset "2163151" -Values "07"; ChangeBytes -Offset "2168031" -Values "0C"; ChangeBytes -Offset "216806F" -Values "07"; ChangeBytes -Offset "2168191" -Values "07" # Child
-        ChangeBytes -Offset "216E031" -Values "0C"; ChangeBytes -Offset "216E06F" -Values "07"; ChangeBytes -Offset "216E0F1" -Values "07"; ChangeBytes -Offset "2171031" -Values "0C"; ChangeBytes -Offset "217106F" -Values "07"; ChangeBytes -Offset "2171121" -Values "07" # Child
-        ChangeBytes -Offset "2178031" -Values "0C"; ChangeBytes -Offset "217806F" -Values "07"; ChangeBytes -Offset "2178141" -Values "07"; ChangeBytes -Offset "217C031" -Values "0C"; ChangeBytes -Offset "217C06F" -Values "07"; ChangeBytes -Offset "217C131" -Values "07" # Adult
-        ChangeBytes -Offset "217F031" -Values "0C"; ChangeBytes -Offset "217F06F" -Values "07"; ChangeBytes -Offset "217F161" -Values "07"; ChangeBytes -Offset "2182031" -Values "0C"; ChangeBytes -Offset "218206F" -Values "07"; ChangeBytes -Offset "21820F1" -Values "07" # Adult
-    }
-
     if (IsText -Elem $Redux.Hero.ItemDrops -Compare "Nothing") {
         $Values = @()
         for ($i=0; $i -lt 80; $i++) { $Values += 0 }
@@ -580,8 +557,6 @@ function ByteOptions() {
 
     if   ( (IsValue $Redux.Recovery.Hearts -Value 0) -or (IsDefault $Redux.Hero.ItemDrops -Not) )   { ChangeBytes -Offset "A895B7"  -Values "2E"       }
     if     (IsChecked $Redux.Hero.NoBottledFairy)                                                   { ChangeBytes -Offset "BF0264"  -Values "00000000" }
-    if     (IsChecked $Redux.Hero.Arwing)                                                           { ChangeBytes -Offset "2081086" -Values "0002";     ChangeBytes -Offset "2081114" -Values "013B"; ChangeBytes -Offset "2081122" -Values "0000" }
-    elseif (IsChecked $Redux.Hero.LikeLike)                                                         { ChangeBytes -Offset "2081086" -Values "00D4";     ChangeBytes -Offset "2081114" -Values "00DD"; ChangeBytes -Offset "2081122" -Values "0000" }
     
     if (IsChecked $Redux.HeroHarder.Wolfos)          { ChangeBytes -Offset "EDBE3F" -Values "00"                                                                                                         }
     if (IsChecked $Redux.HeroHarder.Lizalfos)        { ChangeBytes -Offset "C36DC0" -Values "00000000"; ChangeBytes -Offset "C34DE0" -Values "00000000"; ChangeBytes -Offset "C34E04" -Values "00000000" }
@@ -666,67 +641,6 @@ function ByteOptions() {
 
 
 
-    # VANILLA DUNGEON ADJUSTMENTS #
-
-    if (IsChecked $Redux.Scenes.WaterTempleActors) {
-        $offset = SearchBytes -Start "2634000" -End "263AFB0" -Values "01 CC 01 79"; ChangeBytes -Offset $offset -Values "03 5C" # 263507C
-        $offset = AddToOffset -Hex $offset -Add "10";                                ChangeBytes -Offset $offset -Values "03 5C" # 263508C
-        $offset = AddToOffset -Hex $offset -Add "10";                                ChangeBytes -Offset $offset -Values "03 5C" # 263509C: Three out of bounds pots
-        ChangeBytes -Offset "25CE08F" -Values "51";                ChangeBytes -Offset "25C7221" -Values "0B";          ChangeBytes -Offset "25C7231" -Values "0B" # Unreachable hookshot spot in room 22
-        ChangeBytes -Offset "25CE092" -Values "00";                ChangeBytes -Offset "25CE082" -Values "00";          ChangeBytes -Offset "25CE055" -Values "0D" # Restore two keese in room 1
-        ChangeBytes -Offset "25CE07A" -Values "FE 39 03 0C FE 51"; ChangeBytes -Offset "25CE08A" -Values "00 4A 03 0C"
-    }
-
-    if (IsChecked $Redux.Scenes.RemoveDisruptiveText) {
-        ChangeBytes -Offset "27C00BC" -Values "FB"; ChangeBytes -Offset "27C00CC" -Values "FB"; ChangeBytes -Offset "27C00DC" -Values "FB"; ChangeBytes -Offset "27C00EC" -Values "FB"
-        ChangeBytes -Offset "27C00FC" -Values "FB"; ChangeBytes -Offset "27C010C" -Values "FB"; ChangeBytes -Offset "27C011C" -Values "FB"; ChangeBytes -Offset "27C012C" -Values "FB"
-        ChangeBytes -Offset "27CE080" -Values "FB"; ChangeBytes -Offset "27CE090" -Values "FB"
-        ChangeBytes -Offset "2887070" -Values "FB"; ChangeBytes -Offset "2887080" -Values "FB"; ChangeBytes -Offset "2887090" -Values "FB"
-        ChangeBytes -Offset "2897070" -Values "FB"; ChangeBytes -Offset "28C7134" -Values "FB"; ChangeBytes -Offset "28D91BC" -Values "FB"; ChangeBytes -Offset "28A60F4" -Values "FB"; ChangeBytes -Offset "28AE084" -Values "FB"; ChangeBytes -Offset "28B9174" -Values "FB"
-        ChangeBytes -Offset "28BF168" -Values "FB"; ChangeBytes -Offset "28BF178" -Values "FB"; ChangeBytes -Offset "28BF188" -Values "FB"; ChangeBytes -Offset "28A1144" -Values "FB"; ChangeBytes -Offset "28A6104" -Values "FB"; ChangeBytes -Offset "28D0094" -Values "FB"
-    }
-
-    if (IsChecked $Redux.Scenes.NaviTarget) {
-        $offset = SearchBytes -Start "2ADE000" -End "2BEAA20" -Values "61 00 06 00 05 00 00 3C 24 01 11 FD A8 01 4D FB"; ChangeBytes -Offset $offset -Values "7E" # Spirit Temple
-        ChangeBytes -Offset "283B14B" -Values "5C FA F3 FD AC"       # Shadow Temple
-        ChangeBytes -Offset "236C059" -Values "4B FD 31 00 1E 00 16" # Fire Temple
-        ChangeBytes -Offset "2C1906D" -Values "18 00 00 00 00"       # Ice Cavern
-    }
-
-    if (IsChecked $Redux.Scenes.DodongosCavernGossipStone) { ChangeBytes -Offset "1F281FE" -Values "38" }
-
-
-
-    # SCENE ADJUSTMENTS #
-
-    if (IsChecked $Redux.Scenes.MuteOwls) {
-        ChangeBytes -Offset "1FE30CF" -Values "00";    ChangeBytes -Offset "1FE30DF" -Values "00";    ChangeBytes -Offset "1FE30EE" -Values "00 00"; ChangeBytes -Offset "1FE30FE" -Values "00 00"
-        ChangeBytes -Offset "205909E" -Values "00 00"; ChangeBytes -Offset "21630CE" -Values "00 00"; ChangeBytes -Offset "217F0DE" -Values "00 00"; ChangeBytes -Offset "21A008E" -Values "00 00"; ChangeBytes -Offset "220F073" -Values "00"
-    }
-
-    if (IsChecked $Redux.Scenes.OverworldSkyboxes) {
-        ChangeBytes -Offset "206F054" -Values "01"; ChangeBytes -Offset "207BC4C" -Values "01"; ChangeBytes -Offset "207BF5C" -Values "01"; ChangeBytes -Offset "207C264" -Values "01"; ChangeBytes -Offset "207C394" -Values "01" # Kokiri Forest
-        ChangeBytes -Offset "207C4B4" -Values "01"; ChangeBytes -Offset "207C5DC" -Values "01"; ChangeBytes -Offset "207C78C" -Values "01"; ChangeBytes -Offset "207C93C" -Values "01"; ChangeBytes -Offset "207CAE4" -Values "01" # Kokiri Forest
-        ChangeBytes -Offset "207CBC4" -Values "01"; ChangeBytes -Offset "207CCA4" -Values "01"; ChangeBytes -Offset "207CE74" -Values "01"                                                                                         # Kokiri Forest
-        ChangeBytes -Offset "214604C" -Values "01"; ChangeBytes -Offset "2151D4C" -Values "01"; ChangeBytes -Offset "21520E4" -Values "01"                                                                                         # Lost Woods
-        ChangeBytes -Offset "20AC044" -Values "01"; ChangeBytes -Offset "20B2814" -Values "01"; ChangeBytes -Offset "20B2A3C" -Values "01"; ChangeBytes -Offset "20B2B1C" -Values "01"                                             # Sacred Meadow
-        ChangeBytes -Offset "2110044" -Values "01"; ChangeBytes -Offset "21143AC" -Values "01"; ChangeBytes -Offset "211458C" -Values "01"                                                                                         # Zora's Fountain
-        ChangeBytes -Offset "21DC04C" -Values "03"                                                                                                                                                                                 # Haunted Wasteland
-    }
-
-    if (IsChecked $Redux.Scenes.CorrectTimeDoor) {
-        ChangeBytes -Offset "25540C6" -Values "FF FC"; ChangeBytes -Offset "2554226" -Values "FF FC"; ChangeBytes -Offset "255429A" -Values "FF FC"; ChangeBytes -Offset "2554326" -Values "FF FC"; ChangeBytes -Offset "2554446" -Values "FF FC"; ChangeBytes -Offset "25544CE" -Values "FF FC"
-        ChangeBytes -Offset "255458E" -Values "FF FC"; ChangeBytes -Offset "255463E" -Values "FF FC"; ChangeBytes -Offset "25546EE" -Values "FF FC"; ChangeBytes -Offset "25547A2" -Values "FF FC"; ChangeBytes -Offset "2554862" -Values "FF FC"; ChangeBytes -Offset "2554902" -Values "FF FC"
-    }
-
-    if (IsChecked $Redux.Scenes.Graves)               { ChangeBytes -Offset "202039D" -Values "20"; ChangeBytes -Offset "202043C" -Values "24"  }
-    if (IsChecked $Redux.Scenes.VisibleGerudoTent)    { ChangeBytes -Offset "D215CB"  -Values "11"                                              }
-    if (IsChecked $Redux.Scenes.OpenTimeDoor)         { ChangeBytes -Offset "AC8608"  -Values "00902025848E00A4340100430000000000000000"        }
-    if (IsChecked $Redux.Scenes.ChildColossusFairy)   { ChangeBytes -Offset "21A026F" -Values "DD"                                              }
-    if (IsChecked $Redux.Scenes.CreaterFairy)         { ChangeBytes -Offset "225E7DC" -Values "00B5000000000000000000000000FFFF"                }
-    
-
-    
     # EQUIPMENT COLORS #
 
     if ($Redux.Colors.SetEquipment -ne $null) {
@@ -737,10 +651,10 @@ function ByteOptions() {
 
         if (IsDefaultColor -Elem $Redux.Colors.SetEquipment[1] -Not) { # Goron Tunic
             ChangeBytes -Offset "B6DA3B"  -Values @($Redux.Colors.SetEquipment[1].Color.R, $Redux.Colors.SetEquipment[1].Color.G, $Redux.Colors.SetEquipment[1].Color.B) # Outfit
-            ChangeBytes -Offset "16394EC" -Values @($Redux.Colors.SetEquipment[2].Color.R, $Redux.Colors.SetEquipment[2].Color.G, $Redux.Colors.SetEquipment[2].Color.B) # Shop / obtain model
-            ChangeBytes -Offset "16394F4" -Values @($Redux.Colors.SetEquipment[2].Color.R, $Redux.Colors.SetEquipment[2].Color.G, $Redux.Colors.SetEquipment[2].Color.B)
-            ChangeBytes -Offset "163952C" -Values @($Redux.Colors.SetEquipment[2].Color.R, $Redux.Colors.SetEquipment[2].Color.G, $Redux.Colors.SetEquipment[2].Color.B)
-            ChangeBytes -Offset "1639534" -Values @($Redux.Colors.SetEquipment[2].Color.R, $Redux.Colors.SetEquipment[2].Color.G, $Redux.Colors.SetEquipment[2].Color.B)
+            ChangeBytes -Offset "16394EC" -Values @($Redux.Colors.SetEquipment[1].Color.R, $Redux.Colors.SetEquipment[1].Color.G, $Redux.Colors.SetEquipment[1].Color.B) # Shop / obtain model
+            ChangeBytes -Offset "16394F4" -Values @($Redux.Colors.SetEquipment[1].Color.R, $Redux.Colors.SetEquipment[1].Color.G, $Redux.Colors.SetEquipment[1].Color.B)
+            ChangeBytes -Offset "163952C" -Values @($Redux.Colors.SetEquipment[1].Color.R, $Redux.Colors.SetEquipment[1].Color.G, $Redux.Colors.SetEquipment[1].Color.B)
+            ChangeBytes -Offset "1639534" -Values @($Redux.Colors.SetEquipment[1].Color.R, $Redux.Colors.SetEquipment[1].Color.G, $Redux.Colors.SetEquipment[1].Color.B)
             if ( (IsText -Elem $Redux.Colors.Equipment[1] -Compare "Randomized" -Not) -and (IsText -Elem $Redux.Colors.Equipment[1] -Compare "Custom" -Not) ) { PatchBytes -Offset "7FF000" -Texture -Patch ("Tunic\" + $Redux.Colors.Equipment[1].text.replace(" (default)", "") + ".bin") }
         }
 
@@ -758,7 +672,7 @@ function ByteOptions() {
         if ( (IsDefaultColor -Elem $Redux.Colors.SetEquipment[5] -Not) -and $AdultModel.mirror_shield -ne 0) { # Mirror Shield Frame
             $offset = "F86000"
             do {
-                $offset = SearchBytes -Start $offset -End "FBD800" -Values "FA 00 00 00 D7 00 00"
+                $offset = SearchBytes -Start $offset -End "FBD800" -Values "FA000000D70000"
                 if ($offset -ge 0) {
                     $Offset = ( Get24Bit ( (GetDecimal $offset) + (GetDecimal "4") ) )
                     if (!(ChangeBytes -Offset $offset -Values @($Redux.Colors.SetEquipment[5].Color.R, $Redux.Colors.SetEquipment[5].Color.G, $Redux.Colors.SetEquipment[5].Color.B))) { break }
@@ -907,6 +821,15 @@ function ByteOptions() {
 
     if (IsIndex   $Redux.Save.TradeSequenceItem -Not)   { $value = Get8Bit ($Redux.Save.TradeSequenceItem.SelectedIndex + 44); ChangeBytes -Offset "B71EE6" -Values $value }
     if (IsIndex   $Redux.Save.Mask              -Not)   { $value = Get8Bit ($Redux.Save.Mask.SelectedIndex + 32);              ChangeBytes -Offset "B71EE7" -Values $value }
+
+
+
+    # STARTING DUNGEON ITEMS #
+
+    if (IsChecked $Redux.Save.SmallKey)   { ChangeBytes -Offset "B71F18" -Values 8 -Repeat 19      }
+    if (IsChecked $Redux.Save.BossKey)    { ChangeBytes -Offset "B71F04" -Values 1 -Repeat 20 -Add }
+    if (IsChecked $Redux.Save.Compass)    { ChangeBytes -Offset "B71F04" -Values 2 -Repeat 20 -Add }
+    if (IsChecked $Redux.Save.Map)        { ChangeBytes -Offset "B71F04" -Values 4 -Repeat 20 -Add }
 
 
 
@@ -1154,15 +1077,14 @@ function ByteOptions() {
 
     # UNLOCK CHILD RESTRICTIONS #
 
-    if ( (IsIndex -Elem $Redux.Unlock.MegatonHammer -Index 2) -or (IsIndex -Elem $Redux.Unlock.MegatonHammer -Index 4) ) { ChangeBytes -Offset "BC77A3" -Values "09 09" -Interval 42 }
-
     if (IsChecked $Redux.Unlock.Tunics)          { ChangeBytes -Offset "BC77B6" -Values "09 09"; ChangeBytes -Offset "BC77FE" -Values "09 09" }
     if (IsChecked $Redux.Unlock.MasterSword)     { ChangeBytes -Offset "BC77AE" -Values "09 09" -Interval 74 }
     if (IsChecked $Redux.Unlock.GiantsKnife)     { ChangeBytes -Offset "BC77AF" -Values "09 09" -Interval 74 ; ChangeBytes -Offset "BC7811" -Values "09" }
-    if (IsChecked $Redux.Unlock.MirrorShield)    { ChangeBytes -Offset "BC77B3" -Values "09 09" -Interval 73 } # ChangeBytes -Offset "BC77B2" -Values "00 00" -Interval 73 # Lock Hylian Shield
+  # if (IsChecked $Redux.Unlock.HylianShield)    { ChangeBytes -Offset "BC77B2" -Values "09 09" -Interval 73 } # Lock Hylian Shield: 00 00
+    if (IsChecked $Redux.Unlock.MirrorShield)    { ChangeBytes -Offset "BC77B3" -Values "09 09" -Interval 73 }
     if (IsChecked $Redux.Unlock.Boots)           { ChangeBytes -Offset "BC77BA" -Values "09 09"; ChangeBytes -Offset "BC7801" -Values "09 09" }
     if (IsChecked $Redux.Unlock.Gauntlets)       { ChangeBytes -Offset "AEFA6C" -Values "24 08 00 00" }
-    
+    if (IsChecked $Redux.Unlock.MegatonHammer)   { ChangeBytes -Offset "BC77A3" -Values "09 09" -Interval 42 }
     
 
     
@@ -1353,42 +1275,9 @@ function ByteOptions() {
 
     # MASTER QUEST #
 
-    if ($GamePatch.vanilla -eq 1) { $dungeons = PatchDungeonsOoTMQ }
-
-
-
-    # CENSOR GERUDO TEXTURES #
-
-    if (IsChecked $Redux.Restore.GerudoTextures) {
-        PatchBytes -Offset "E68CE8"  -Texture -Patch "Gerudo Symbols\ganondorf_cape.bin"
-        PatchBytes -Offset "15B1000" -Texture -Patch "Gerudo Symbols\gerudo_membership_card.bin"
-
-        # Blocks / Switches
-        PatchBytes -Offset "F70350"  -Texture -Patch "Gerudo Symbols\pushing_block.bin"
-        PatchBytes -Offset "F70B50"  -Texture -Patch "Gerudo Symbols\silver_gauntlets_block.bin"
-        PatchBytes -Offset "13B4000" -Texture -Patch "Gerudo Symbols\golden_gauntlets_pillar.bin"
-        PatchBytes -Offset "F748A0"  -Texture -Patch "Gerudo Symbols\floor_switch.bin"
-        PatchBytes -Offset "F7A8A0"  -Texture -Patch "Gerudo Symbols\rusted_floor_switch.bin"
-        PatchBytes -Offset "F80CB0"  -Texture -Patch "Gerudo Symbols\crystal_switch.bin"
-
-        # Dungeons / Areas
-        PatchBytes -Offset "3045248" -Texture -Patch "Gerudo Symbols\dampe.bin"
-        PatchBytes -Offset "21B8678" -Texture -Patch "Gerudo Symbols\gerudo_fortress.bin"
-        PatchBytes -Offset "F71350"  -Texture -Patch "Gerudo Symbols\forest_temple_room_11_block.bin"
-        PatchBytes -Offset "2464D88" -Texture -Patch "Gerudo Symbols\forest_temple_room_11_hole.bin"
-        PatchBytes -Offset "12985F0" -Texture -Patch "Gerudo Symbols\shadow_temple_room_0.bin"
-        PatchBytes -Offset "2F64E38" -Texture -Patch "Gerudo Symbols\spirit_temple_boss.bin"
-        PatchBytes -Offset "2F73700" -Texture -Patch "Gerudo Symbols\spirit_temple_boss.bin"
-        PatchBytes -Offset "2B5CDA0" -Texture -Patch "Gerudo Symbols\spirit_temple_room_10_20_28.bin"
-        PatchBytes -Offset "2B9BDB8" -Texture -Patch "Gerudo Symbols\spirit_temple_room_10_20_28.bin"
-        PatchBytes -Offset "2BE7920" -Texture -Patch "Gerudo Symbols\spirit_temple_room_10_20_28.bin"
-        PatchBytes -Offset "1636940" -Texture -Patch "Gerudo Symbols\spirit_temple_room_0_elevator.bin"
-        $Offset = SearchBytes -Start "2AF8000" -End "2B08F40" -Values "00 05 00 11 06 00 06 4E 06 06 06 06 11 11 06 11"
-        PatchBytes -Offset $Offset   -Texture -Patch "Gerudo Symbols\spirit_temple_room_0_pillars.bin"
-        PatchBytes -Offset "289CA90" -Texture -Patch "Gerudo Symbols\gerudo_training_ground_room_1_ceiling_frame.bin"
-        PatchBytes -Offset "28BBCD8" -Texture -Patch "Gerudo Symbols\gerudo_training_ground_room_5_7.bin"
-        PatchBytes -Offset "28CA728" -Texture -Patch "Gerudo Symbols\gerudo_training_ground_room_5_7.bin"
-        PatchBytes -Offset "11FB000" -Texture -Patch "Gerudo Symbols\gerudo_training_ground_door.bin"
+    if ($GamePatch.vanilla -eq 1) {
+        RefreshScript "MQ"
+        $dungeons = PatchDungeonsOoTMQ
     }
 
 
@@ -1614,6 +1503,16 @@ function ByteReduxOptions() {
             ChangeBytes -Offset "AE9ED8" -Values @(53, 238, $Redux.Colors.SetButtons[3].Color.B) # Blue
         }
     }
+
+
+
+    # TUNIC COLORS #
+
+    if (IsDefaultColor -Elem $Redux.Colors.SetExtraEquipment[0] -Not)   { ChangeBytes -Offset $Symbols.CFG_TUNIC_MAGICIAN -Values @($Redux.Colors.SetExtraEquipment[0].Color.R, $Redux.Colors.SetExtraEquipment[0].Color.G, $Redux.Colors.SetExtraEquipment[0].Color.B) } # Magician Tunic
+    if (IsDefaultColor -Elem $Redux.Colors.SetExtraEquipment[1] -Not)   { ChangeBytes -Offset $Symbols.CFG_TUNIC_GUARDIAN -Values @($Redux.Colors.SetExtraEquipment[1].Color.R, $Redux.Colors.SetExtraEquipment[1].Color.G, $Redux.Colors.SetExtraEquipment[1].Color.B) } # Guardian Tunic
+    if (IsDefaultColor -Elem $Redux.Colors.SetExtraEquipment[2] -Not)   { ChangeBytes -Offset $Symbols.CFG_TUNIC_HERO     -Values @($Redux.Colors.SetExtraEquipment[2].Color.R, $Redux.Colors.SetExtraEquipment[2].Color.G, $Redux.Colors.SetExtraEquipment[2].Color.B) } # Hero Tunic
+    if (IsDefaultColor -Elem $Redux.Colors.SetExtraEquipment[3] -Not)   { ChangeBytes -Offset $Symbols.CFG_TUNIC_NONE     -Values @($Redux.Colors.SetExtraEquipment[3].Color.R, $Redux.Colors.SetExtraEquipment[3].Color.G, $Redux.Colors.SetExtraEquipment[3].Color.B) } # No Tunic
+    if (IsDefaultColor -Elem $Redux.Colors.SetExtraEquipment[4] -Not)   { ChangeBytes -Offset $Symbols.CFG_TUNIC_SHADOW   -Values @($Redux.Colors.SetExtraEquipment[4].Color.R, $Redux.Colors.SetExtraEquipment[4].Color.G, $Redux.Colors.SetExtraEquipment[4].Color.B) } # Shadow Tunic
     
 
 
@@ -1652,18 +1551,165 @@ function ByteReduxOptions() {
 
 
 #==============================================================================================================================================================================================
-<#function ByteSceneOptions() {
+function ByteSceneOptions() {
     
-    PrepareMap -Scene "Hyrule Field" -Map 0 -Header 0
+    # QUALITY OF LIFE #
 
-    InsertActor  -Name "Stalfos" -Param "0000"
-    ReplaceActor -Name "Kaepora Gaebora" -New "Stalfos" -Param "0000"
-    InsertObject -Name "Stalfos"
+    if (IsChecked $Redux.Gameplay.RemoveOwls) {
+        PrepareMap -Scene "Hyrule Field"    -Map 0 -Header 0; RemoveObject -Name "Kaepora Gaebora"; RemoveActor -Name "Kaepora Gaebora"; RemoveActor -Name "Kaepora Gaebora"; RemoveActor -Name "Kaepora Gaebora"; RemoveActor -Name "Kaepora Gaebora"; SaveAndPatchLoadedScene
+        PrepareMap -Scene "Zora's River"    -Map 0 -Header 0; RemoveObject -Name "Kaepora Gaebora"; RemoveActor -Name "Kaepora Gaebora"; SaveAndPatchLoadedScene
+        PrepareMap -Scene "Lost Woods"      -Map 2 -Header 0; RemoveObject -Name "Kaepora Gaebora"; RemoveActor -Name "Kaepora Gaebora"; SaveLoadedMap
+        PrepareMap -Scene "Lost Woods"      -Map 8 -Header 0; RemoveObject -Name "Kaepora Gaebora"; RemoveActor -Name "Kaepora Gaebora"; SaveAndPatchLoadedScene
+        PrepareMap -Scene "Desert Colossus" -Map 0 -Header 0; RemoveObject -Name "Kaepora Gaebora"; RemoveActor -Name "Kaepora Gaebora"; SaveAndPatchLoadedScene
+        PrepareMap -Scene "Hyrule Castle"   -Map 0 -Header 0; RemoveObject -Name "Kaepora Gaebora"; RemoveActor -Name "Kaepora Gaebora"; SaveAndPatchLoadedScene
+    }
 
-    SaveLoadedMap
-    PatchLoadedScene
+    if (IsChecked $Redux.Gameplay.RemoveDisruptiveText) {
+        PrepareMap -Scene "Shadow Temple" -Map 0 -Header 0
+        ReplaceActor -Name "Dialog Spot" -Compare "4225" -Y (-1000); ReplaceActor -Name "Dialog Spot" -Compare "4226" -Y (-1000); ReplaceActor -Name "Dialog Spot" -Compare "4267" -Y (-1000); ReplaceActor -Name "Dialog Spot" -Compare "4268" -Y (-1000)
+        ReplaceActor -Name "Dialog Spot" -Compare "42A9" -Y (-1000); ReplaceActor -Name "Dialog Spot" -Compare "422A" -Y (-1000); ReplaceActor -Name "Dialog Spot" -Compare "422B" -Y (-1000); ReplaceActor -Name "Dialog Spot" -Compare "42AC" -Y (-1000)
+        SaveLoadedMap
 
-}#>
+        PrepareMap -Scene "Shadow Temple" -Map 2 -Header 0
+        ReplaceActor -Name "Dialog Spot" -Compare "493C" -Y (-1000); ReplaceActor -Name "Dialog Spot" -Compare "4F3D" -Y (-1000)
+        SaveAndPatchLoadedScene
+
+        PrepareMap -Scene "Gerudo Training Ground" -Map 0 -Header 0
+        ReplaceActor -Name "Dialog Spot" -Compare "4C2F" -Y (-1000) -CompareX (-43); ReplaceActor -Name "Dialog Spot" -Compare "4C2F" -Y (-1000) -CompareX 468; ReplaceActor -Name "Dialog Spot" -Compare "4C2F" -Y (-1000) -CompareX (-590)
+        SaveLoadedMap
+
+        PrepareMap -Scene "Gerudo Training Ground" -Map 3 -Header 0
+        ReplaceActor -Name "Dialog Spot" -Compare "4DCB" -Y (-1000); ReplaceActor -Name "Dialog Spot" -Compare "4E0F" -Y (-1000)
+        SaveLoadedMap
+
+        PrepareMap -Scene "Gerudo Training Ground" -Map 6 -Header 0
+        ReplaceActor -Name "Dialog Spot" -Compare "4D16" -Y (-1000) -CompareX 1483; ReplaceActor -Name "Dialog Spot" -Compare "4D16" -Y (-1000) -CompareX 1433; ReplaceActor -Name "Dialog Spot" -Compare "4D16" -Y (-1000) -CompareX 912
+        SaveLoadedMap
+
+        PrepareMap -Scene "Gerudo Training Ground" -Map 1 -Header 0; ReplaceActor -Name "Dialog Spot" -Compare "4C9F" -Y (-1000); SaveLoadedMap
+        PrepareMap -Scene "Gerudo Training Ground" -Map 2 -Header 0; ReplaceActor -Name "Dialog Spot" -Compare "4E5C" -Y (-1000); SaveLoadedMap
+        PrepareMap -Scene "Gerudo Training Ground" -Map 4 -Header 0; ReplaceActor -Name "Dialog Spot" -Compare "4D95" -Y (-1000); SaveLoadedMap
+        PrepareMap -Scene "Gerudo Training Ground" -Map 5 -Header 0; ReplaceActor -Name "Dialog Spot" -Compare "4D59" -Y (-1000); SaveLoadedMap
+        PrepareMap -Scene "Gerudo Training Ground" -Map 7 -Header 0; ReplaceActor -Name "Dialog Spot" -Compare "4C9E" -Y (-1000); SaveLoadedMap
+        PrepareMap -Scene "Gerudo Training Ground" -Map 8 -Header 0; ReplaceActor -Name "Dialog Spot" -Compare "4C48" -Y (-1000); SaveLoadedMap
+        PrepareMap -Scene "Gerudo Training Ground" -Map 9 -Header 0; ReplaceActor -Name "Dialog Spot" -Compare "4CDB" -Y (-1000); SaveAndPatchLoadedScene
+    }
+
+
+
+    # RESTORE #
+
+    if (IsChecked $Redux.Restore.GerudoTextures) {
+        PatchBytes -Offset "E68CE8"  -Texture -Patch "Gerudo Symbols\ganondorf_cape.bin"
+        PatchBytes -Offset "F70350"  -Texture -Patch "Gerudo Symbols\pushing_block.bin"
+        PatchBytes -Offset "F70B50"  -Texture -Patch "Gerudo Symbols\silver_gauntlets_block.bin"
+        PatchBytes -Offset "F71350"  -Texture -Patch "Gerudo Symbols\forest_temple_room_11_block.bin"
+        PatchBytes -Offset "F748A0"  -Texture -Patch "Gerudo Symbols\floor_switch.bin"
+        PatchBytes -Offset "F7A8A0"  -Texture -Patch "Gerudo Symbols\rusted_floor_switch.bin"
+        PatchBytes -Offset "F80CB0"  -Texture -Patch "Gerudo Symbols\crystal_switch.bin"
+        PatchBytes -Offset "15B1000" -Texture -Patch "Gerudo Symbols\gerudo_membership_card.bin"
+        PatchBytes -Offset "11FB000" -Texture -Patch "Gerudo Symbols\gerudo_training_ground_door.bin"
+        PatchBytes -Offset "12985F0" -Texture -Patch "Gerudo Symbols\shadow_temple_room_0.bin"
+        PatchBytes -Offset "13B4000" -Texture -Patch "Gerudo Symbols\golden_gauntlets_pillar.bin"
+        PatchBytes -Offset "1636940" -Texture -Patch "Gerudo Symbols\spirit_temple_room_0_elevator.bin"
+        
+        PrepareMap -Scene "Dampe's Grave & Windwill" -Map 0  -Header 0; ChangeMapFile   -Search "66888667777877888778777887788778" -Patch "Gerudo Symbols\dampe.bin";                                       SaveLoadedMap           # 3045248
+        PrepareMap -Scene "Dampe's Grave & Windwill" -Map 3  -Header 0; ChangeMapFile   -Search "66888667777877888778777887788778" -Patch "Gerudo Symbols\dampe.bin";                                       SaveLoadedMap           # 305FEE0
+        PrepareMap -Scene "Dampe's Grave & Windwill" -Map 4  -Header 0; ChangeMapFile   -Search "66888667777877888778777887788778" -Patch "Gerudo Symbols\dampe.bin";                                       SaveAndPatchLoadedScene # 3064E80
+
+        PrepareMap -Scene "Gerudo Fortress"          -Map 0  -Header 0; ChangeSceneFile -Search "62D45A5062D46B166AD47358418B41CB" -Patch "Gerudo Symbols\gerudo_fortress.bin";                             SaveAndPatchLoadedScene # 21B8678
+        PrepareMap -Scene "Forest Temple"            -Map 11 -Header 0; ChangeMapFile   -Search "33445455565536665577988899987777" -Patch "Gerudo Symbols\forest_temple_room_11_hole.bin";                  SaveAndPatchLoadedScene # 2464D88
+        
+        PrepareMap -Scene "Spirit Temple"            -Map 0  -Header 0; ChangeMapFile   -Search "000500110600064E0606060611110611" -Patch "Gerudo Symbols\spirit_temple_room_0_pillars.bin";                SaveLoadedMap           # 2B03928
+        PrepareMap -Scene "Spirit Temple"            -Map 10 -Header 0; ChangeMapFile   -Search "01010101120118010101010101013A37" -Patch "Gerudo Symbols\spirit_temple_room_10_20_28.bin";                 SaveLoadedMap           # 2B5CDA0
+        PrepareMap -Scene "Spirit Temple"            -Map 20 -Header 0; ChangeMapFile   -Search "01010101120118010101010101013A37" -Patch "Gerudo Symbols\spirit_temple_room_10_20_28.bin";                 SaveLoadedMap           # 2B9BDB8
+        PrepareMap -Scene "Spirit Temple"            -Map 28 -Header 0; ChangeMapFile   -Search "01010101120118010101010101013A37" -Patch "Gerudo Symbols\spirit_temple_room_10_20_28.bin";                 SaveAndPatchLoadedScene # 2BE7920
+
+        PrepareMap -Scene "Gerudo Training Ground"   -Map 1  -Header 0; ChangeMapFile   -Search "0B0C08080B08080C23150B08000C4215" -Patch "Gerudo Symbols\gerudo_training_ground_room_1_ceiling_frame.bin"; SaveLoadedMap           # 289CA90
+        PrepareMap -Scene "Gerudo Training Ground"   -Map 5  -Header 0; ChangeMapFile   -Search "0C131313131D131D1D101D1013102D13" -Patch "Gerudo Symbols\gerudo_training_ground_room_5_7.bin";             SaveLoadedMap           # 28BBCD8
+        PrepareMap -Scene "Gerudo Training Ground"   -Map 7  -Header 0; ChangeMapFile   -Search "0C131313131D131D1D101D1013102D13" -Patch "Gerudo Symbols\gerudo_training_ground_room_5_7.bin";             SaveAndPatchLoadedScene # 28CA728
+
+        PrepareMap -Scene "Twinrova's Lair & Iron Knuckle's Lair" -Map 1 -Header 0
+        ChangeMapFile -Search "498B498B498B498B41494989518B498B" -Patch "Gerudo Symbols\spirit_temple_boss.bin" # 2F64E38
+        ChangeMapFile -Search "33445455565536665577988899987777" -Patch "Gerudo Symbols\spirit_temple_boss.bin" # 2F73700
+        SaveAndPatchLoadedScene
+    }
+
+    
+
+    # FIXES #
+
+    if (IsChecked $Redux.Fixes.Graves)  {
+        PrepareMap -Scene "Graveyard" -Map 0 -Header 0
+        ChangeSceneFile -Values "20" -Search "00000200000FC000000203020CA7C200" # 202039D
+        ChangeSceneFile -Values "24" -Search "0000000400000FC80000000400000FCA" # 202043C
+        SaveAndPatchLoadedScene
+    }
+
+    if (IsChecked $Redux.Fixes.CorrectTimeDoor) {
+        for ($i=0; $i -le 11; $i++) { PrepareMap -Scene "Temple of Time" -Map 1 -Header $i; ReplaceActor -Name "Temple of Time" -Compare "000D" -X "FFFC" }
+        SaveAndPatchLoadedScene
+    }
+
+    if (IsChecked $Redux.Fixes.ChildColossusFairy)          { PrepareMap -Scene "Desert Colossus" -Map 0 -Header 0; ReplaceActor -Name "Dialog Spot" -Compare "8EFF" -Param "8EDD"; SaveAndPatchLoadedScene }
+    if (IsChecked $Redux.Fixes.CraterFairy)                 { PrepareMap -Scene "Death Mountain Crater" -Map 1 -Header 1; ReplaceActor -Name "Dialog Spot" -New "Falling Burning Rock" -Compare "8EDC" -X 0 -Y 0 -Z 0 -XRot 0 -YRot 0 -ZRot 0 -Param "FFFF"; SaveAndPatchLoadedScene }
+    if (IsChecked $Redux.Fixes.DodongosCavernGossipStone)   { PrepareMap -Scene "Dodongo's Cavern" -Map 0 -Header 0; ReplaceActor -Name "Gossip Stone" -Compare "1114" -Param "1138"; SaveAndPatchLoadedScene }
+
+    if (IsChecked $Redux.Fixes.WaterTempleActors) {
+        PrepareMap      -Scene "Water Temple" -Map 0 -Header 0
+        ChangeSceneFile -Values "0B" -Search "00097F09800981800100000000FA2400"; ChangeSceneFile -Values "0B" -Search "00097F09810982800100000000FA2400" # 25C7221, 25C7231
+        InsertObject    -Name "Keese"
+        ReplaceActor    -Name "Keese" -CompareX (-1645) -X (-455) -Y 780 -Z (-431) -YRot 0; ReplaceActor -Name "Keese" -CompareX (-1594) -X 74 -Y 780 -Z (-431) -YRot 0
+        SaveLoadedMap
+
+        PrepareMap   -Scene "Water Temple" -Map 10 -Header 0
+        ReplaceActor -Name "Breakable Pot" -Compare "7003" -Y 860; ReplaceActor -Name "Breakable Pot" -Compare "7203" -Y 860; ReplaceActor -Name "Breakable Pot" -Compare "7403" -Y 860
+        SaveAndPatchLoadedScene
+    }
+
+    if (IsChecked $Redux.Fixes.NaviTarget) {
+        PrepareMap -Scene "Fire Temple"   -Map 13 -Header 0; ReplaceActor -Name "Navi Message"     -Compare "BFA7" -Y 4171 -YRot 22;                SaveAndPatchLoadedScene
+        PrepareMap -Scene "Ice Cavern"    -Map 3  -Header 0; ReplaceActor -Name "Navi Message"     -Compare "0580" -XRot 24 -YRot 0 -ZRot 0;        SaveAndPatchLoadedScene
+        PrepareMap -Scene "Shadow Temple" -Map 21 -Header 0; ReplaceActor -Name "Information Spot" -Compare "2084" -X (-2724) -Y (-1293) -Z (-596); SaveAndPatchLoadedScene
+        PrepareMap -Scene "Spirit Temple" -Map 5  -Header 0; ReplaceActor -Name "Information Spot" -Compare "3C24" -Z (-1410);                      SaveAndPatchLoadedScene
+    }
+
+
+
+    # GRAPHICS #
+
+    if (IsChecked $Redux.Graphics.OverworldSkyboxes) {
+        for ($i=0; $i-le 12; $i++)   { PrepareAndSetSceneSettings -Scene "Kokiri Forest"        -Map 0 -Header $i -Skybox 1 }; SaveAndPatchLoadedScene
+        for ($i=0; $i-le 2;  $i++)   { PrepareAndSetSceneSettings -Scene "Lost Woods"           -Map 0 -Header $i -Skybox 1 }; SaveAndPatchLoadedScene
+        for ($i=0; $i-le 3;  $i++)   { PrepareAndSetSceneSettings -Scene "Sacred Forest Meadow" -Map 0 -Header $i -Skybox 1 }; SaveAndPatchLoadedScene
+        for ($i=0; $i-le 2;  $i++)   { PrepareAndSetSceneSettings -Scene "Zora Fountain"        -Map 0 -Header $i -Skybox 1 }; SaveAndPatchLoadedScene
+                                       PrepareAndSetSceneSettings -Scene "Haunted Wasteland"    -Map 0 -Header 0  -Skybox 3;   SaveAndPatchLoadedScene
+    }
+
+
+
+    # HERO MODE #
+
+    if (IsChecked $Redux.Hero.Arwing)     { PrepareMap -Scene "Kokiri Forest" -Map 0 -Header 0; InsertActor  -Name "Arwing" -X (-292) -Y 0 -Z (-430) -Param "0000"; SaveAndPatchLoadedScene }
+    if (IsChecked $Redux.Hero.LikeLike)   { PrepareMap -Scene "Kokiri Forest" -Map 0 -Header 0; InsertObject -Name "Like-Like"; InsertActor  -Name "Like-Like" -X (-322) -Y 380 -Z (-1223) -Param "0000"; SaveAndPatchLoadedScene }
+
+    if (IsChecked $Redux.Hero.GraveyardKeese) {
+        PrepareMap -Scene "Graveyard" -Map 1 -Header 2; InsertObject -Name "Keese"
+        PrepareMap -Scene "Graveyard" -Map 1 -Header 3; InsertObject -Name "Keese"; SaveAndPatchLoadedScene
+    }
+
+    if (IsChecked $Redux.Hero.LostWoodsOctorok) {
+        for ($i=0; $i -le 9; $i++) {
+            for ($j=0; $j -le 1; $j++) {
+                PrepareMap -Scene "Lost Woods" -Map $i -Header $j
+                InsertObject -Name "Octorok"
+            }
+            SaveLoadedMap
+        }
+        ChangeSceneFile -Values "07E1" -Search "006105F830FE98F380099C033E09EC04" -Start "AC00"; SaveAndPatchLoadedScene
+    }
+
+}
 
 
 
@@ -1837,62 +1883,54 @@ function ByteLanguageOptions() {
 
     if (IsLanguage $Redux.Equipment.HerosBow) { SetMessage -ID "0031" -Text "Fairy Bow" -Replace "Hero's Bow" }
 
-    if ( (IsDefault $Redux.Equipment.KokiriSword -Not) -and $LanguagePatch.code -eq "en") {
-        $replace = $null
-        if     (IsText -Elem $Redux.Equipment.KokiriSword -Compare "Kokiri Sword")   { $replace = "Kokiri Sword" }
-        elseif (IsText -Elem $Redux.Equipment.KokiriSword -Compare "Knife")          { $replace = "Knife"        }
-        elseif (IsText -Elem $Redux.Equipment.KokiriSword -Compare "Razor Sword")    { $replace = "Razor Sword"  }
-        if ($replace -ne $null) { SetMessage -ID "00A4" -Text "Kokiri Sword" -Replace $replace -NoParse; SetMessage -ID "10D2" }
+    if (IsDefault $Redux.Equipment.KokiriSword -Not) {
+        $file = $GameFiles.textures + "\Equipment\Kokiri Sword\" + $Redux.Equipment.KokiriSword.text + "." + $LanguagePatch.code + ".txt"
+        if (TestFile $file) {
+            $replace = Get-Content -Path $file
+            if ($replace.length -gt 0) { SetMessage -ID "00A4" -Text "Kokiri Sword" -Replace $replace -NoParse; SetMessage -ID "10D2" }
+        }
     }
 
-    if ( (IsDefault $Redux.Equipment.MasterSword -Not) -and $LanguagePatch.code -eq "en") {
-        $replace = $null
-        if     (IsText -Elem $Redux.Equipment.MasterSword -Compare "Master Sword")          { $replace = "Master Sword"        }
-        elseif (IsText -Elem $Redux.Equipment.MasterSword -Compare "Gilded Sword")          { $replace = "Gilded Sword"        }
-        elseif (IsText -Elem $Redux.Equipment.MasterSword -Compare "Great Fairy's Sword")   { $replace = "Great Fairy's Sword" }
-        elseif (IsText -Elem $Redux.Equipment.MasterSword -Compare "Double Helix Sword")    { $replace = "Double Helix Sword"  }
-        elseif (IsText -Elem $Redux.Equipment.MasterSword -Compare "Razor Longsword")       { $replace = "Razor Longsword"     }
-        if ($replace -ne $null) { SetMessage -ID "600C" -Text "Master Sword" -Replace $replace -NoParse; SetMessage -ID "704F"; SetMessage -ID "7051"; SetMessage -ID "7059"; SetMessage -ID "706D"; SetMessage -ID "7075"; SetMessage -ID "7081"; SetMessage -ID "7088"; SetMessage -ID "7091"; SetMessage -ID "70E8" }
+    if (IsDefault $Redux.Equipment.MasterSword -Not) {
+        $file = $GameFiles.textures + "\Equipment\Master Sword\" + $Redux.Equipment.MasterSword.text + "." + $LanguagePatch.code + ".txt"
+        if (TestFile $file) {
+            $replace = Get-Content -Path $file
+            if ($replace.length -gt 0) {
+                SetMessage -ID "600C" -Text "Master Sword" -Replace $replace -NoParse; SetMessage -ID "704F"; SetMessage -ID "7051"; SetMessage -ID "7059"; SetMessage -ID "706D"; SetMessage -ID "7075"; SetMessage -ID "7081"; SetMessage -ID "7088"; SetMessage -ID "7091"; SetMessage -ID "70E8"
+            }
+        }
     }
 
-    if ( (IsDefault $Redux.Equipment.GiantsKnife -Not) -and $LanguagePatch.code -eq "en") {
-        $replace = $null
-        if     (IsText -Elem $Redux.Equipment.GiantsKnife -Compare "Giant's Knife")         { $replace = "Giant's Knife"       }
-        elseif (IsText -Elem $Redux.Equipment.GiantsKnife -Compare "Biggoron Sword")        { $replace = "Biggoron Sword"      }
-        elseif (IsText -Elem $Redux.Equipment.GiantsKnife -Compare "Gilded Sword")          { $replace = "Gilded Sword"        }
-        elseif (IsText -Elem $Redux.Equipment.GiantsKnife -Compare "Great Fairy's Sword")   { $replace = "Great Fairy's Sword" }
-        elseif (IsText -Elem $Redux.Equipment.GiantsKnife -Compare "Double Helix Sword")    { $replace = "Double Helix Sword"  }
-        elseif (IsText -Elem $Redux.Equipment.GiantsKnife -Compare "Razor Longsword")       { $replace = "Razor Longsword"     }
-        if ($replace -ne $null) { SetMessage -ID "000B" -Text "Giant's Knife" -Replace $replace -NoParse; SetMessage -ID "004B" }
+    if (IsDefault $Redux.Equipment.GiantsKnife -Not) {
+        $file = $GameFiles.textures + "\Equipment\Master Knife\" + $Redux.Equipment.GiantsKnife.text + "." + $LanguagePatch.code + ".txt"
+        if (TestFile $file) {
+            $replace = Get-Content -Path $file
+            if ($replace.length -gt 0) { SetMessage -ID "000B" -Text "Giant's Knife" -Replace $replace -NoParse; SetMessage -ID "004B" }
+        }
     }
 
-    if ( (IsDefault $Redux.Equipment.BiggoronSword -Not) -and $LanguagePatch.code -eq "en") {
-        $replace = $null
-        if     (IsText -Elem $Redux.Equipment.BiggoronSword -Compare "Giant's Knife")         { $replace = "Giant's Knife"       }
-        elseif (IsText -Elem $Redux.Equipment.BiggoronSword -Compare "Biggoron Sword")        { $replace = "Biggoron Sword"      }
-        elseif (IsText -Elem $Redux.Equipment.BiggoronSword -Compare "Gilded Sword")          { $replace = "Gilded Sword"        }
-        elseif (IsText -Elem $Redux.Equipment.BiggoronSword -Compare "Great Fairy's Sword")   { $replace = "Great Fairy's Sword" }
-        elseif (IsLang -Elem $Redux.Equipment.BiggoronSword -Compare "Double Helix Sword")    { $replace = "Double Helix Sword"  }
-        elseif (IsText -Elem $Redux.Equipment.BiggoronSword -Compare "Razor Longsword")       { $replace = "Razor Longsword"     }
-        if ($replace -ne $null) { SetMessage -ID "000A" -Text "Biggoron's Sword" -Replace $replace -NoParse; SetMessage -ID "000B"; SetMessage -ID "000C"; SetMessage -ID "0404" }
+    if (IsDefault $Redux.Equipment.BiggoronSword -Not) {
+        $file = $GameFiles.textures + "\Equipment\Maste Sword\" + $Redux.Equipment.BiggoronSword.text + "." + $LanguagePatch.code + ".txt"
+        if (TestFile $file) {
+            $replace = Get-Content -Path $file
+            if ($replace.length -gt 0) { SetMessage -ID "000A" -Text "Biggoron's Sword" -Replace $replace -NoParse; SetMessage -ID "000B"; SetMessage -ID "000C"; SetMessage -ID "0404" }
+        }
     }
 
-    if ( (IsDefault $Redux.Equipment.DekuShield -Not) -and $ChildModel.deku_shield -ne 0 -and $LanguagePatch.code -eq "en") {
-        $replace = $null
-        if     (IsText -Elem $Redux.Equipment.DekuShield -Compare "Deku Shield")          { $replace = "Deku Shield"   }
-        elseif (IsText -Elem $Redux.Equipment.DekuShield -Compare "Wooden Shield")        { $replace = "Wooden Shield" }
-        elseif (IsText -Elem $Redux.Equipment.DekuShield -Compare "Dawn & Dusk Shield")   { $replace = "Wooden Shield" }
-        elseif (IsText -Elem $Redux.Equipment.DekuShield -Compare "Iron Shield")          { $replace = "Iron Shield"   }
-        if ($replace -ne $null) { SetMessage -ID "004C" -Text "Deku Shield" -Replace $replace -NoParse; SetMessage -ID "0089"; SetMessage -ID "009F"; SetMessage -ID "0611"; SetMessage -ID "103D"-Last; SetMessage -ID "1052"; SetMessage -ID "10CB"; SetMessage -ID "10D2" }
+    if ( (IsDefault $Redux.Equipment.DekuShield -Not) -and $ChildModel.deku_shield -ne 0) {
+        $file = $GameFiles.textures + "\Equipment\Deku Shield\" + $Redux.Equipment.DekuShield.text + "." + $LanguagePatch.code + ".txt"
+        if (TestFile $file) {
+            $replace = Get-Content -Path $file
+            if ($replace.length -gt 0) { SetMessage -ID "004C" -Text "Deku Shield" -Replace $replace -NoParse; SetMessage -ID "0089"; SetMessage -ID "009F"; SetMessage -ID "0611"; SetMessage -ID "103D"-Last; SetMessage -ID "1052"; SetMessage -ID "10CB"; SetMessage -ID "10D2" }
+        }
     }
 
-    if ( (IsDefault $Redux.Equipment.HylianShield -Not) -and $ChildModel.hylian_shield -ne 0 -and $AdultModel.hylian_shield -ne 0 -and $LanguagePatch.code -eq "en") {
-        $replace = $null
-        if     (IsText -Elem $Redux.Equipment.HylianShield -Compare "Hylian Shield")   { $replace = "Hylian Shield" }
-        elseif (IsText -Elem $Redux.Equipment.HylianShield -Compare "Hero's Shield")   { $replace = "Hero's Shield" }
-        elseif (IsText -Elem $Redux.Equipment.HylianShield -Compare "Red Shield")      { $replace = "Red Shield"    }
-        elseif (IsText -Elem $Redux.Equipment.HylianShield -Compare "Metal Shield")    { $replace = "Metal Shield"  }
-        if ($replace -ne $null) { SetMessage -ID "004D" -Text "Hylian Shield" -Replace $replace -NoParse; SetMessage -ID "0092"; SetMessage -ID "009C"; SetMessage -ID "00A9"; SetMessage -ID "7013"; SetMessage -ID "7121" }
+    if ( (IsDefault $Redux.Equipment.HylianShield -Not) -and $ChildModel.hylian_shield -ne 0 -and $AdultModel.hylian_shield -ne 0) {
+        $file = $GameFiles.textures + "\Equipment\Hylian Shield\" + $Redux.Equipment.HylianShield.text + "." + $LanguagePatch.code + ".txt"
+        if (TestFile $file) {
+            $replace = Get-Content -Path $file
+            if ($replace.length -gt 0) { SetMessage -ID "004D" -Text "Hylian Shield" -Replace $replace -NoParse; SetMessage -ID "0092"; SetMessage -ID "009C"; SetMessage -ID "00A9"; SetMessage -ID "7013"; SetMessage -ID "7121" }
+        }
     }
 
     if (IsChecked $Redux.Text.FemalePronouns) {
@@ -1933,7 +1971,7 @@ function ByteLanguageOptions() {
         SetMessage -ID "0420" -Text "he"       -Replace "she";        SetMessage -ID "1075"; SetMessage -ID "5034"; SetMessage -ID "508A"; SetMessage -ID "602B"
         SetMessage -ID "105B" -Text "He"       -Replace "She";        SetMessage -ID "2010"; SetMessage -ID "6048"
         SetMessage -ID "109A" -Text "his"      -Replace "her";        SetMessage -ID "604A"; SetMessage -ID "109A" -All
-        SetMessage -ID "1065" -Text "him"      -Replace "her";        SetMessage -ID "1068"; SetMessage -ID "1070"; SetMessage -ID "1071" -All; SetMessage -ID "109A" -All; SetMessage -ID "10D6" -All; SetMessage -ID "5034"; SetMessage -ID "6048"; SetMessage -ID "6049"; SetMessage -ID "604A" #>
+        SetMessage -ID "1065" -Text "him"      -Replace "her";        SetMessage -ID "1068"; SetMessage -ID "1070"; SetMessage -ID "1071" -All; SetMessage -ID "109A" -All; SetMessage -ID "10D6" -All; SetMessage -ID "5034"; SetMessage -ID "6048"; SetMessage -ID "6049"; SetMessage -ID "604A"
     }
 
     if (IsChecked $Redux.Text.Instant) {
@@ -1989,7 +2027,7 @@ function AdjustGUI() {
 
     if ($Patches.Redux.Checked) {
         EnableElem -Elem $Redux.Colors.RupeesVanilla -Active (!$Redux.Hooks.RupeeIconColors.Checked)
-        EnableForm -Form $Redux.Box.TextColors       -Enable (!$Redux.Graphics.GCScheme.Checked)
+        EnableElem -Elem $Redux.Box.TextColors       -Active (!$Redux.Graphics.GCScheme.Checked)
     }
 
     if ($Redux.UI.ButtonPositions -ne $null -and $Redux.Misc.OptionsMenu -ne $null) {
@@ -2008,8 +2046,8 @@ function AdjustGUI() {
 #==============================================================================================================================================================================================
 function CreateOptions() {
     
-    if ($GamePatch.vanilla -eq 1)   { CreateOptionsDialog -Columns 6 -Height 600 -Tabs @("Main", "Graphics", "Audio", "Difficulty", "Scenes", "Colors", "Equipment", "Capacity", "Animations") }
-    else                            { CreateOptionsDialog -Columns 6 -Height 600 -Tabs @("Main", "Graphics", "Audio", "Difficulty",           "Colors", "Equipment", "Capacity", "Animations") }
+    RefreshScript "Zelda 64"
+    CreateOptionsDialog -Columns 6 -Height 600 -Tabs @("Main", "Graphics", "Audio", "Difficulty", "Colors", "Equipment", "Capacity", "Animations")
     ChangeModelsSelection
 
 }
@@ -2017,7 +2055,7 @@ function CreateOptions() {
 
 
 #==============================================================================================================================================================================================
-function CreateTabMain() {
+function CreatePresets() {
     
     # PRESETS #
 
@@ -2036,7 +2074,7 @@ function CreateTabMain() {
     $Reset.Add_Click( { ResetGame } )
 
     $QualityOfLife.Add_Click( {
-        if ($Redux.Gameplay.FasterBlockPushing -ne $null) { $Redux.Gameplay.FasterBlockPushing.SelectedIndex = 2 }
+        if ($Redux.Gameplay.FasterBlockPushing -ne $null) { $Redux.Gameplay.FasterBlockPushing.SelectedIndex = 1 }
         BoxCheck $Redux.Gameplay.RemoveNaviTimer
         BoxCheck $Redux.Gameplay.ResumeLastArea
         BoxCheck $Redux.Gameplay.InstantClaimCheck
@@ -2066,17 +2104,17 @@ function CreateTabMain() {
         BoxCheck $Redux.Graphics.ForceHiresModel
         BoxCheck $Redux.Graphics.HideDungeonIcon
 
-        if ($Redux.Text.Speed2x              -ne $null)   { if ($Redux.Text.Speed2x.Enabled)                { BoxCheck $Redux.Text.Speed2x              } }
-        if ($Redux.Text.Restore              -ne $null)   { if ($Redux.Text.Restore.Enabled)                { BoxCheck $Redux.Text.Restore              } }
-        if ($Redux.Text.TypoFixes            -ne $null)   { if ($Redux.Text.TypoFixes.Enabled)              { BoxCheck $Redux.Text.TypoFixes            } }
-        if ($Redux.Text.GoldSkulltula        -ne $null)   { if ($Redux.Text.GoldSkulltula.Enabled)          { BoxCheck $Redux.Text.GoldSkulltula        } }
-        if ($Redux.Text.EasterEggs           -ne $null)   { if ($Redux.Text.EasterEggs.Enabled)             { BoxCheck $Redux.Text.EasterEggs           } }
+        if ($Redux.Text.Speed2x             -ne $null)   { if ($Redux.Text.Speed2x.Enabled)                { BoxCheck $Redux.Text.Speed2x             } }
+        if ($Redux.Text.Restore             -ne $null)   { if ($Redux.Text.Restore.Enabled)                { BoxCheck $Redux.Text.Restore             } }
+        if ($Redux.Text.TypoFixes           -ne $null)   { if ($Redux.Text.TypoFixes.Enabled)              { BoxCheck $Redux.Text.TypoFixes           } }
+        if ($Redux.Text.GoldSkulltula       -ne $null)   { if ($Redux.Text.GoldSkulltula.Enabled)          { BoxCheck $Redux.Text.GoldSkulltula       } }
+        if ($Redux.Text.EasterEggs          -ne $null)   { if ($Redux.Text.EasterEggs.Enabled)             { BoxCheck $Redux.Text.EasterEggs          } }
 
-        if ($Redux.Scenes.MuteOwls           -ne $null)   { if ($Redux.Scenes.MuteOwls.Enabled)             { BoxCheck $Redux.Scenes.MuteOwls           } }
-        if ($Redux.Scenes.Graves             -ne $null)   { if ($Redux.Scenes.Graves.Enabled)               { BoxCheck $Redux.Scenes.Graves             } }
-        if ($Redux.Scenes.CorrectTimeDoor    -ne $null)   { if ($Redux.Scenes.CorrectTimeDoor.Enabled)      { BoxCheck $Redux.Scenes.CorrectTimeDoor    } }
-        if ($Redux.Scenes.ChildColossusFairy -ne $null)   { if ($Redux.Scenes.ChildColossusFairy.Enabled)   { BoxCheck $Redux.Scenes.ChildColossusFairy } }
-        if ($Redux.Scenes.CraterFairy        -ne $null)   { if ($Redux.Scenes.CraterFairy.Enabled)          { BoxCheck $Redux.Scenes.CraterFairy        } }
+        if ($Redux.Gameplay.RemoveOwls      -ne $null)   { if ($Redux.Gameplay.RemoveOwls.Enabled)         { BoxCheck $Redux.Gameplay.RemoveOwls      } }
+        if ($Redux.Fixes.Graves             -ne $null)   { if ($Redux.Fixes.Graves.Enabled)                { BoxCheck $Redux.Fixes.Graves             } }
+        if ($Redux.Fixes.CorrectTimeDoor    -ne $null)   { if ($Redux.Fixes.CorrectTimeDoor.Enabled)       { BoxCheck $Redux.Fixes.CorrectTimeDoor    } }
+        if ($Redux.Fixes.ChildColossusFairy -ne $null)   { if ($Redux.Fixes.ChildColossusFairy.Enabled)    { BoxCheck $Redux.Fixes.ChildColossusFairy } }
+        if ($Redux.Fixes.CraterFairy        -ne $null)   { if ($Redux.Fixes.CraterFairy.Enabled)           { BoxCheck $Redux.Fixes.CraterFairy        } }
     } )
 
     $OptimalRedux.Add_Click( {
@@ -2094,10 +2132,10 @@ function CreateTabMain() {
     } )
 
     $HeroMode.Add_Click( {
-        $Redux.Hero.MonsterHP.SelectedIndex  = 5
-        $Redux.Hero.MiniBossHp.SelectedIndex = 5
-        $Redux.Hero.BossHP.SelectedIndex     = 5
-        $Redux.Hero.Damage.SelectedIndex     = 2
+        $Redux.Hero.MonsterHP.SelectedIndex  = 4
+        $Redux.Hero.MiniBossHp.SelectedIndex = 4
+        $Redux.Hero.BossHP.SelectedIndex     = 4
+        $Redux.Hero.Damage.SelectedIndex     = 1
         $Redux.Hero.ItemDrops.Text           = "No Hearts"
         
         BoxCheck $Redux.Hero.GraveyardKeese
@@ -2127,26 +2165,37 @@ function CreateTabMain() {
     $MajoraModels.Add_Click(  { $Redux.Graphics.ChildModels.Text = "Majora's Mask";     $Redux.Graphics.AdultModels.Text = "Majora's Mask"    ; BoxUncheck $Redux.Text.FemalePronouns; $Redux.Sounds.ChildVoices.Text = "Amara";    $Redux.Sounds.AdultVoices.Text = "Amara" } )
     $FemaleModels.Add_Click(  { $Redux.Graphics.ChildModels.Text = "Hatsune Miku Link"; $Redux.Graphics.AdultModels.Text = "Hatsune Miku Link"; BoxCheck   $Redux.Text.FemalePronouns; $Redux.Sounds.ChildVoices.Text = "Amara";    $Redux.Sounds.AdultVoices.Text = "Amara" } )
 
+}
+
+
+
+#==============================================================================================================================================================================================
+function CreateTabMain() {
+    
+    CreatePresets
+
 
 
     # QUALITY OF LIFE #
     
-    CreateReduxGroup    -Tag  "Gameplay"            -All                                           -Text "Quality of Life" 
-    CreateReduxComboBox -Name "FasterBlockPushing"  -All -Exclude "Gold" -Default 3                -Text "Faster Block Pushing"   -Info "All blocks are pushed faster" -Items @("Disabled", "Exclude Time-Based Puzzles", "Fully Enabled")                                                                            -Credits "GhostlyDark (Ported from Redux)"
-    CreateReduxComboBox -Name "FasterBlockPushing"  -All -Exclude "Gold" -Default 3                -Text "Faster Block Pushing"   -Info "All blocks are pushed faster" -Items @("Disabled", "Exclude Time-Based Puzzles", "Fully Enabled")                                                                            -Credits "GhostlyDark (Ported from Redux)"
-    CreateReduxCheckBox -Name "NoKillFlash"         -All                                           -Text "No Kill Flash"          -Info "Disable the flash effect when killing certain enemies such as the Guay or Skullwalltula"                                                                                     -Credits "Chez Cousteau"
-    CreateReduxCheckBox -Name "RemoveNaviTimer"     -All                                           -Text "Remove Navi Timer"      -Info "Navi will no longer pop up with text messages during gameplay`nDoes not apply to location-triggered messages"                                                                -Credits "Admentus"
-    CreateReduxCheckBox -Name "ResumeLastArea"      -All -Exclude "Dawn"                           -Text "Resume From Last Area"  -Info "Resume playing from the area you last saved in" -Warning "Don't save in Grottos"                                                                                             -Credits "Admentus (ROM) & Aegiker (GameShark)"
-    CreateReduxCheckBox -Name "InstantClaimCheck"   -Base 4                                        -Text "Instant Claim Check"    -Info "Remove the check for waiting until the Biggoron Sword can be claimed through the Claim Check"                                                                                -Credits "Ported from Rando"
-    CreateReduxCheckBox -Name "ReturnChild"         -Base 4                                        -Text "Can Always Return"      -Info "You can always go back to being a child again before clearing the boss of the Forest Temple`nOut of the way Sheik!"                                                          -Credits "Ported from Redux"
-    CreateReduxCheckBox -Name "AllowWarpSongs"      -Base 4                                        -Text "Allow Warp Songs"       -Info "Allow warp songs in Gerudo Training Ground and Ganon's Castle"                                                                                                               -Credits "Ported from Rando"
-    CreateReduxCheckBox -Name "AllowFaroreWind"     -Base 4                                        -Text "Allow Farore's Wind"    -Info "Allow Farore's Wind in Gerudo Training Ground and Ganon's Castle"                                                                                                            -Credits "Ported from Rando"
-    CreateReduxCheckBox -Name "AllowOcarina"        -Base 4                                        -Text "Allow Ocarina"          -Info "Allow playing the Ocarina in Granny's Potion Shop, Bombchu Bowling Alley and Archery Ranges"                                                                                 -Credits "Ported from Rando"
-    CreateReduxCheckBox -Name "FasterGoronTunic"    -Base 4                                        -Text "Faster Goron Tunic"     -Info "You only need to select a single dialogue option instead of both for Link the Goron to obtain the Goron Tunic"                                                               -Credits "Ported from Rando"
-    CreateReduxCheckBox -Name "RutoNeverDisappears" -Base 4                                        -Text "Ruto Never Disappears"  -Info "Ruto never disappears in Jabu Jabu's Belly and will remain in place when leaving the room"                                                                                   -Credits "Ported from Rando"
-    CreateReduxCheckBox -Name "Medallions"          -Base 4                                        -Text "Require All Medallions" -Info "All six medallions are required for the Rainbow Bridge to appear before Ganon's Castle`nThe vanilla requirements were the Shadow and Spirit Medallions and the Light Arrows" -Credits "Ported from Rando"
-    CreateReduxCheckBox -Name "OpenBombchuShop"     -Base 5                                        -Text "Open Bombchu Shop"      -Info "The Bombchu Shop is open right away without the need to defeat King Dodongo"                                                                                                 -Credits "Ported from Rando"
-    CreateReduxCheckBox -Name "RemoveNaviPrompts"                                                  -Text "Remove Navi Prompts"    -Info "Navi will no longer interrupt you with tutorial text boxes in dungeons"                                                                                                      -Credits "Ported from Redux"
+    CreateReduxGroup    -Tag  "Gameplay"             -All                            -Text "Quality of Life" 
+    CreateReduxComboBox -Name "FasterBlockPushing"   -All -Exclude "Gold" -Default 3 -Text "Faster Block Pushing"   -Info "All blocks are pushed faster" -Items @("Disabled", "Exclude Time-Based Puzzles", "Fully Enabled")                                                                            -Credits "GhostlyDark (from Randomizer)"
+    CreateReduxComboBox -Name "FasterBlockPushing"   -All -Exclude "Gold" -Default 3 -Text "Faster Block Pushing"   -Info "All blocks are pushed faster" -Items @("Disabled", "Exclude Time-Based Puzzles", "Fully Enabled")                                                                            -Credits "GhostlyDark (from Randomizer)"
+    CreateReduxCheckBox -Name "NoKillFlash"          -All                            -Text "No Kill Flash"          -Info "Disable the flash effect when killing certain enemies such as the Guay or Skullwalltula"                                                                                     -Credits "Chez Cousteau"
+    CreateReduxCheckBox -Name "RemoveNaviTimer"      -All                            -Text "Remove Navi Timer"      -Info "Navi will no longer pop up with text messages during gameplay`nDoes not apply to location-triggered messages"                                                                -Credits "Admentus"
+    CreateReduxCheckBox -Name "ResumeLastArea"       -All -Exclude "Dawn"            -Text "Resume From Last Area"  -Info "Resume playing from the area you last saved in" -Warning "Don't save in Grottos"                                                                                             -Credits "Admentus (ROM) & Aegiker (RAM)"
+    CreateReduxCheckBox -Name "InstantClaimCheck"    -Base 4                         -Text "Instant Claim Check"    -Info "Remove the check for waiting until the Biggoron Sword can be claimed through the Claim Check"                                                                                -Credits "Randomizer"
+    CreateReduxCheckBox -Name "ReturnChild"          -Base 4                         -Text "Can Always Return"      -Info "You can always go back to being a child again before clearing the boss of the Forest Temple`nOut of the way Sheik!"                                                          -Credits "Randomizer"
+    CreateReduxCheckBox -Name "AllowWarpSongs"       -Base 4                         -Text "Allow Warp Songs"       -Info "Allow warp songs in Gerudo Training Ground and Ganon's Castle"                                                                                                               -Credits "Randomizer"
+    CreateReduxCheckBox -Name "AllowFaroreWind"      -Base 4                         -Text "Allow Farore's Wind"    -Info "Allow Farore's Wind in Gerudo Training Ground and Ganon's Castle"                                                                                                            -Credits "Randomizer"
+    CreateReduxCheckBox -Name "AllowOcarina"         -Base 4                         -Text "Allow Ocarina"          -Info "Allow playing the Ocarina in Granny's Potion Shop, Bombchu Bowling Alley and Archery Ranges"                                                                                 -Credits "Randomizer"
+    CreateReduxCheckBox -Name "FasterGoronTunic"     -Base 4                         -Text "Faster Goron Tunic"     -Info "You only need to select a single dialogue option instead of both for Link the Goron to obtain the Goron Tunic"                                                               -Credits "Randomizer"
+    CreateReduxCheckBox -Name "RutoNeverDisappears"  -Base 4                         -Text "Ruto Never Disappears"  -Info "Ruto never disappears in Jabu Jabu's Belly and will remain in place when leaving the room"                                                                                   -Credits "Randomizer"
+    CreateReduxCheckBox -Name "Medallions"           -Base 4                         -Text "Require All Medallions" -Info "All six medallions are required for the Rainbow Bridge to appear before Ganon's Castle`nThe vanilla requirements were the Shadow and Spirit Medallions and the Light Arrows" -Credits "Randomizer"
+    CreateReduxCheckBox -Name "OpenBombchuShop"      -Base 5                         -Text "Open Bombchu Shop"      -Info "The Bombchu Shop is open right away without the need to defeat King Dodongo"                                                                                                 -Credits "Randomizer"
+    CreateReduxCheckBox -Name "RemoveNaviPrompts"    -All                            -Text "Remove Navi Prompts"    -Info "Navi will no longer interrupt you with tutorial text boxes in dungeons"                                                                                                      -Credits "Admentus & Randomizer"
+    CreateReduxCheckBox -Name "RemoveOwls"           -Base 4                         -Text "Remove Owls"            -Info "Kaepora Gaebora the owl will no longer interrupt Link with tutorials"                                                                                                        -Credits "Admentus & Chez Cousteau"
+    CreateReduxCheckBox -Name "RemoveDisruptiveText" -Base 4                         -Text "Remove Disruptive Text" -Info "Remove disruptive text from Gerudo Training Ground and early Shadow Temple"                                                                                                  -Credits "Admentus & Randomizer"
     
 
 
@@ -2155,23 +2204,23 @@ function CreateTabMain() {
     CreateReduxGroup    -Tag  "Gameplay"               -All               -Text "Gameplay Changes" 
     CreateReduxComboBox -Name "SpawnChild"             -Base 4 -Default 1 -Text "Child Starting Location"  -Items ("Link's House", "Temple of Time", "Hyrule Field", "Kakariko Village", "Inside the Deku Tree", "Dodongo's Cavern", "Inside Jabu-Jabu's Belly", "Forest Temple", "Fire Temple", "Water Temple", "Shadow Temple", "Spirit Temple", "Ice Cavern", "Bottom of the Well", "Thieves' Hideout", "Gerudo's Training Ground", "Inside Ganon's Castle", "Ganon's Tower") -Credits "Admentus & GhostlyDark"
     CreateReduxComboBox -Name "SpawnAdult"             -Base 4 -Default 2 -Text "Adult Starting Location"  -Items ("Link's House", "Temple of Time", "Hyrule Field", "Kakariko Village", "Inside the Deku Tree", "Dodongo's Cavern", "Inside Jabu-Jabu's Belly", "Forest Temple", "Fire Temple", "Water Temple", "Shadow Temple", "Spirit Temple", "Ice Cavern", "Bottom of the Well", "Thieves' Hideout", "Gerudo's Training Ground", "Inside Ganon's Castle", "Ganon's Tower") -Credits "Admentus & GhostlyDark"
-    CreateReduxCheckBox -Name "NoMagicArrowCooldown"   -Adult             -Text "No Magic Arrow Cooldown"  -Info "Be able to shoot magic arrows without a delay between each shot" -Warning "Prone to crashes upon switching arrow types (Redux feature) to quickly"              -Credits "Ported from Rando"
-    CreateReduxCheckBox -Name "ManualJump"             -All               -Text "Manual Jump"              -Info "Press Z + A to do a Manual Jump instead of a Jump Attack`nPress B mid-air after jumping to do a Jump Attack"                                                    -Credits "Admentus (ROM) & CloudModding (GameShark)"
+    CreateReduxCheckBox -Name "NoMagicArrowCooldown"   -Adult             -Text "No Magic Arrow Cooldown"  -Info "Be able to shoot magic arrows without a delay between each shot" -Warning "Prone to crashes upon switching arrow types (Redux feature) to quickly"              -Credits "Randomizer"
+    CreateReduxCheckBox -Name "ManualJump"             -All               -Text "Manual Jump"              -Info "Press Z + A to do a Manual Jump instead of a Jump Attack`nPress B mid-air after jumping to do a Jump Attack"                                                    -Credits "Admentus (ROM) & CloudModding (RAM)"
     CreateReduxCheckbox -Name "AltManualJump"          -All               -Text "Alt Manual Jump"          -Info "Press Z + A to do a Manual Jump instead of a Jump Attack`nPress B mid-air after jumping to do a Jump Attack`nThis version allows you still to roll when moving" -Credits "BilonFullHDemon" -Link $Redux.Gameplay.ManualJump
-    CreateReduxCheckBox -Name "NoShieldRecoil"         -All               -Text "No Shield Recoil"         -Info "Disable the recoil when being hit while shielding"                                                                                                              -Credits "Admentus (ROM) & Aegiker (GameShark)"
-    CreateReduxCheckBox -Name "RunWhileShielding"      -All               -Text "Run While Shielding"      -Info "Press R to shield will no longer prevent Link from moving around" -Link $Redux.Gameplay.NoShieldRecoil                                                          -Credits "Admentus (ROM) & Aegiker (GameShark)"
-    CreateReduxCheckBox -Name "PushbackAttackingWalls" -All               -Text "Pushback Attacking Walls" -Info "Link is getting pushed back a bit when hitting the wall with the sword"                                                                                         -Credits "Admentus (ROM) & Aegiker (GameShark)"
+    CreateReduxCheckBox -Name "NoShieldRecoil"         -All               -Text "No Shield Recoil"         -Info "Disable the recoil when being hit while shielding"                                                                                                              -Credits "Admentus (ROM) & Aegiker (RAM)"
+    CreateReduxCheckBox -Name "RunWhileShielding"      -All               -Text "Run While Shielding"      -Info "Press R to shield will no longer prevent Link from moving around" -Link $Redux.Gameplay.NoShieldRecoil                                                          -Credits "Admentus (ROM) & Aegiker (RAM)"
+    CreateReduxCheckBox -Name "PushbackAttackingWalls" -All               -Text "Pushback Attacking Walls" -Info "Link is getting pushed back a bit when hitting the wall with the sword"                                                                                         -Credits "Admentus (ROM) & Aegiker (RAM)"
     CreateReduxCheckBox -Name "RemoveCrouchStab"       -All               -Text "Remove Crouch Stab"       -Info "The Crouch Stab move is removed"                                                                                                                                -Credits "Garo-Mastah"
     CreateReduxCheckBox -Name "RemoveQuickSpin"        -All               -Text "Remove Magic Quick Spin"  -Info "The magic Quick Spin Attack move is removed`nIt's a regular Quick Spin Attack now instead"                                                                      -Credits "Admentus & Three Pendants"
-    CreateReduxCheckbox -Name "RemoveSpeedClamp"       -All               -Text "Remove Jump Speed Limit"  -Info "Removes the jumping speed limit just like in MM"                                                                                                                -Credits "Admentus (ROM) & Aegiker (GameShark)"
+    CreateReduxCheckbox -Name "RemoveSpeedClamp"       -All               -Text "Remove Jump Speed Limit"  -Info "Removes the jumping speed limit just like in MM"                                                                                                                -Credits "Admentus (ROM) & Aegiker (RAM)"
     
 
 
     # GAMEPLAY (UNSTABLE) #
 
     CreateReduxGroup    -Tag  "Gameplay"          -All   -Text "Gameplay Changes (Unstable)" 
-    CreateReduxCheckBox -Name "HookshotAnything"  -Adult -Text "Hookshot Anything"   -Info "Be able to hookshot most surfaces"                                       -Warning "Prone to softlocks, be careful" -Credits "Ported from Rando"
-    CreateReduxCheckBox -Name "ClimbAnything"     -All   -Text "Climb Anything"      -Info "Climb most walls in the game"                                            -Warning "Prone to softlocks, be careful" -Credits "Ported from Rando"
+    CreateReduxCheckBox -Name "HookshotAnything"  -Adult -Text "Hookshot Anything"   -Info "Be able to hookshot most surfaces"                                       -Warning "Prone to softlocks, be careful" -Credits "Randomizer"
+    CreateReduxCheckBox -Name "ClimbAnything"     -All   -Text "Climb Anything"      -Info "Climb most walls in the game"                                            -Warning "Prone to softlocks, be careful" -Credits "Randomizer"
     CreateReduxCheckBox -Name "DistantZTargeting" -All   -Text "Distant Z-Targeting" -Info "Allow to use Z-Targeting on enemies, objects and NPC's from any distance"                                          -Credits "Admentus"
 
 
@@ -2191,18 +2240,27 @@ function CreateTabMain() {
 
     # FIXES #
 
-    CreateReduxGroup    -Tag  "Fixes"                -All                      -Text "Fixes"
-    CreateReduxCheckBox -Name "BuyableBombs"         -Base 5                   -Text "Buyable Bombs"                       -Info "You no longer need the Goron's Ruby before you can buy bombs`nOnly the Bomb Bag is required"        -Credits "Admentus"
-    CreateReduxCheckBox -Name "PauseScreenDelay"     -Base 5                   -Text "Pause Screen Delay"         -Checked -Info "Removes the delay when opening the Pause Screen by removing the anti-aliasing"              -Native -Credits "zel"
-    CreateReduxCheckBox -Name "PauseScreenCrash"     -Base 5                   -Text "Pause Screen Crash Fix"     -Checked -Info "Prevents the game from randomly crashing emulating a decompressed ROM upon pausing"                 -Credits "zel"
-    CreateReduxCheckBox -Name "WhiteBubbleCrash"     -All                      -Text "White Bubble Crash"         -Checked -Info "Prevents the game from crashing when using Din's Fire on White Bubbles"                             -Credits "Ported from Rando"
-    CreateReduxCheckBox -Name "PoacherSaw"           -Base 4                   -Text "Poacher's Saw"              -Checked -Info "Obtaining the Poacher's Saw no longer prevents Link from obtaining the second Deku Nut upgrade"     -Credits "Ported from Rando"
-    CreateReduxCheckBox -Name "FortressMinimap"      -Base 4                   -Text "Gerudo Fortress Minimap"             -Info "Display the complete minimap for the Gerudo Fortress during the Child era"                          -Credits "GhostlyDark"
-    CreateReduxCheckBox -Name "AlwaysMoveKingZora"   -Base 4                   -Text "Always Move King Zora"               -Info "King Zora will move aside even if the Zora Sapphire is in possession"                               -Credits "Ported from Rando"
-    CreateReduxCheckBox -Name "DeathMountainOwl"     -Base 4                   -Text "Death Mountain Owl"                  -Info "The Owl on top of the Death Mountain will always carry down Link regardless of having magic"        -Credits "Ported from Rando"
-    CreateReduxCheckBox -Name "SpiritTempleMirrors"  -Base 4                   -Text "Spirit Temple Mirrors"               -Info "Fix a broken effect with the mirrors in the Spirit Temple"                                          -Credits "ZethN64, Sakura, Frostclaw, Steve(ToCoool) & GhostlyDark (ported)"
-    CreateReduxCheckBox -Name "RemoveFishingPiracy"  -Base 4                   -Text "Remove Fishing Anti-Piracy" -Checked -Info "Removes the anti-piracy check for fishing that can cause the fish to always let go after 51 frames" -Credits "Ported from Rando"
-    CreateReduxCheckBox -Name "Boomerang"            -Child -Exclude "Dawn"   -Text "Boomerang"                           -Info "Fix the gem color on the thrown boomerang"                                                          -Credits "Aria"
+    CreateReduxGroup    -Tag  "Fixes"                     -All                   -Text "Fixes"
+    CreateReduxCheckBox -Name "BuyableBombs"              -Base 5                -Text "Buyable Bombs"                 -Info "You no longer need the Goron's Ruby before you can buy bombs`nOnly the Bomb Bag is required"                                                          -Credits "Admentus"
+    CreateReduxCheckBox -Name "PauseScreenDelay"          -Base 5 -Checked       -Text "Pause Screen Delay"            -Info "Removes the delay when opening the Pause Screen by removing the anti-aliasing"                                                                -Native -Credits "zel"
+    CreateReduxCheckBox -Name "PauseScreenCrash"          -Base 5 -Checked       -Text "Pause Screen Crash Fix"        -Info "Prevents the game from randomly crashing emulating a decompressed ROM upon pausing"                                                                   -Credits "zel"
+    CreateReduxCheckBox -Name "WhiteBubbleCrash"          -All    -Checked       -Text "White Bubble Crash"            -Info "Prevents the game from crashing when using Din's Fire on White Bubbles"                                                                               -Credits "Randomizer"
+    CreateReduxCheckBox -Name "PoacherSaw"                -Base 4 -Checked       -Text "Poacher's Saw"                 -Info "Obtaining the Poacher's Saw no longer prevents Link from obtaining the second Deku Nut upgrade"                                                       -Credits "Randomizer"
+    CreateReduxCheckBox -Name "FortressMinimap"           -Base 4                -Text "Gerudo Fortress Minimap"       -Info "Display the complete minimap for the Gerudo Fortress during the Child era"                                                                            -Credits "GhostlyDark"
+    CreateReduxCheckBox -Name "AlwaysMoveKingZora"        -Base 4                -Text "Always Move King Zora"         -Info "King Zora will move aside even if the Zora Sapphire is in possession"                                                                                 -Credits "Randomizer"
+    CreateReduxCheckBox -Name "DeathMountainOwl"          -Base 4                -Text "Death Mountain Owl"            -Info "The Owl on top of the Death Mountain will always carry down Link regardless of having magic"                                                          -Credits "Randomizer"
+    CreateReduxCheckBox -Name "SpiritTempleMirrors"       -Base 4                -Text "Spirit Temple Mirrors"         -Info "Fix a broken effect with the mirrors in the Spirit Temple"                                                                                            -Credits "ZethN64, Sakura, Frostclaw, Steve(ToCoool) & GhostlyDark (ported)"
+    CreateReduxCheckBox -Name "RemoveFishingPiracy"       -Base 4 -Checked       -Text "Remove Fishing Anti-Piracy"    -Info "Removes the anti-piracy check for fishing that can cause the fish to always let go after 51 frames"                                                   -Credits "Randomizer"
+    CreateReduxCheckBox -Name "Boomerang"                 -Child -Exclude "Dawn" -Text "Boomerang"                     -Info "Fix the gem color on the thrown boomerang"                                                                                                            -Credits "Aria"
+    CreateReduxCheckBox -Name "OpenTimeDoor"              -Base 4                -Text "Door of Time Unlock"           -Info "Fix Door of Time not opening on first visit"                                                                                                          -Credits "Randomizer"
+    CreateReduxCheckBox -Name "VisibleGerudoTent"         -Base 4                -Text "Visible Gerudo Tent"           -Info "Make the tent in the Gerudo Valley during the Child era visible`nThe tent was always accessible, just invisible"                                      -Credits "Admentus & Chez Cousteau" -Warning "Makes the bridge for Child Link broken"
+    CreateReduxCheckBox -Name "Graves"                    -Base 4                -Text "Graveyard Graves"              -Info "The grave holes in Kakariko Graveyard behave as in the Rev 1 revision`nThe edges no longer force Link to grab or jump over them when trying to enter" -Credits "Admentus & Randomizer"
+    CreateReduxCheckBox -Name "CorrectTimeDoor"           -Base 4                -Text "Reposition Door of Time"       -Info "Fix the positioning of the Temple of Time door, so you can not skip past it"                                                                          -Credits "Admentus & Chez Cousteau"
+    CreateReduxCheckBox -Name "ChildColossusFairy"        -Base 4                -Text "Child Colossus Fairy"          -Info 'Fix "...???" textbox outside Child Colossus Fairy to use the right flag and disappear once the wall is destroyed'                                     -Credits "Admentus & Randomizer"
+    CreateReduxCheckBox -Name "CraterFairy"               -Base 4                -Text "Crater Fairy"                  -Info 'Remove the "...???" textbox outside the Crater Fairy'                                                                                                 -Credits "Admentus & Randomizer"
+    CreateReduxCheckBox -Name "DodongosCavernGossipStone" -Base 4                -Text "Dodongo's Cavern Gossip Stone" -Info "Fix the Gossip Stones in Dodongo's Cavern so that a fairy can be spawned from them"                                                                   -Credits "Admentus & Randomizer"
+    CreateReduxCheckBox -Name "WaterTempleActors"         -Base 4                -Text "Add Water Temple Actors"       -Info "Add several actors in the Water Temple`nUnreachable hookshot spot in room 22, three out of bounds pots, restore two Keese in room 1"                  -Credits "Admentus & Chez Cousteau"
+    CreateReduxCheckBox -Name "NaviTarget"                -Base 4                -Text "Navi Targettable Spots"        -Info "Fix several spots in dungeons which Navi could not target for Link"                                                                                   -Credits "Admentus & Chez Cousteau"
 
 
 
@@ -2215,7 +2273,7 @@ function CreateTabMain() {
     CreateReduxComboBox -Name "Skybox"            -All -Exclude "Gold" -Text "Skybox"     -Default 4 -Items @("Dawn", "Day", "Dusk", "Night", "Darkness (Dawn)", "Darkness (Day)", "Darkness (Dusk)", "Darkness (Night)") -Info "Set the skybox theme for the File Select menu" -Credits "Admentus"
     CreateReduxComboBox -Name "Skybox"                 -Expose  "Gold" -Text "Skybox"     -Default 3 -Items @("Dawn", "Day", "Dusk", "Night", "Darkness (Dawn)", "Darkness (Day)", "Darkness (Dusk)", "Darkness (Night)") -Info "Set the skybox theme for the File Select menu" -Credits "Admentus"
     CreateReduxCheckBox -Name "ItemSelect"        -All                 -Text "Translate Item Select"    -Info "Translates the Debug Inventory Select menu into English"                                                                                                         -Credits "GhostlyDark"
-    CreateReduxCheckBox -Name "DefaultZTargeting" -All                 -Text "Default Hold Z-Targeting" -Info "Change the Default Z-Targeting option to Hold instead of Switch"                                                                                                 -Credits "Ported from Redux"
+    CreateReduxCheckBox -Name "DefaultZTargeting" -All                 -Text "Default Hold Z-Targeting" -Info "Change the Default Z-Targeting option to Hold instead of Switch"                                                                                                 -Credits "Randomizer"
     CreateReduxCheckBox -Name "DiskDrive"         -All -Exclude "Dawn" -Text "Enable Disk Drive Saves"  -Info "Use the Disk Drive for Save Slots" -Warning "This option disables the use of non-Disk Drive save slots"                                                          -Credits "ZethN64, Sakura, Frostclaw, Steve(ToCoool) & GhostlyDark (ported)"
 
 }
@@ -2229,10 +2287,10 @@ function CreateTabRedux() {
 
     CreateReduxGroup    -Tag  "Misc"          -All                                       -Text "Misc Options"
     CreateReduxComboBox -Name "OptionsMenu"   -All -Default 4                            -Text "Options Menu"    -Items @("Disable", "Core Only", "Essentials", "Fully Enabled") -Info "Adjust how much of the Redux options are available ingame and can be used" -Credits "Admentus"
-    CreateReduxComboBox -Name "SkipCutscenes" -Base 3                                    -Text "Skip Cutscenes" -Items @("Disabled", "Useful Cutscenes Excluded", "All") -Info "Skip Cutscenes`nUseful Cutscenes Excluded keeps cutscenes intact which are useful for performing glitches`nRequires a new save to take effect" -Credits "Ported from Rando"
-    CreateReduxCheckBox -Name "FastBunnyHood" -Child                            -Checked -Text "Fast Bunny Hood" -Info "The Bunny Hood makes Link run faster just like in Majora's Mask"                                                                   -Credits "Ported from Redux"
-    CreateReduxCheckBox -Name "BombchuDrops"  -All -Exclude ("Dawn", "New Master Quest") -Text "Bombchu Drops"   -Info "Bombchus can now drop from defeated enemies, cutting grass and broken jars"                                                                -Credits "Ported from Redux"
-    CreateReduxCheckBox -Name "BombchuDrops"  -Expose "New Master Quest"        -Checked -Text "Bombchu Drops"   -Info "Bombchus can now drop from defeated enemies, cutting grass and broken jars"                                                                -Credits "Ported from Redux"
+    CreateReduxComboBox -Name "SkipCutscenes" -Base 3                                    -Text "Skip Cutscenes"  -Items @("Disabled", "Useful Cutscenes Excluded", "All")        -Info "Skip Cutscenes`nUseful Cutscenes Excluded keeps cutscenes intact which are useful for performing glitches`nRequires a new save to take effect" -Credits "Randomizer"
+    CreateReduxCheckBox -Name "FastBunnyHood" -Child                            -Checked -Text "Fast Bunny Hood" -Info "The Bunny Hood makes Link run faster just like in Majora's Mask"                                                                           -Credits "Randomizer"
+    CreateReduxCheckBox -Name "BombchuDrops"  -All -Exclude ("Dawn", "New Master Quest") -Text "Bombchu Drops"   -Info "Bombchus can now drop from defeated enemies, cutting grass and broken jars"                                                                -Credits "Randomizer"
+    CreateReduxCheckBox -Name "BombchuDrops"  -Expose "New Master Quest"        -Checked -Text "Bombchu Drops"   -Info "Bombchus can now drop from defeated enemies, cutting grass and broken jars"                                                                -Credits "Randomizer"
     CreateReduxCheckBox -Name "TycoonWallet"  -All                                       -Text "Tycoon's Wallet" -Info "You get the Tycoon's Wallet from one of the Gold Skulltula reward in addition`nOnly activated if you have the Giant's Wallet"              -Credits "Admentus"
     
 
@@ -2240,34 +2298,76 @@ function CreateTabRedux() {
     # CODE HOOKS FEATURES #
 
     CreateReduxGroup    -Tag  "Hooks"                -All                          -Text "Code Hook Features"
-    CreateReduxCheckBox -Name "FasterArmosPushing"   -All                 -Checked -Text "Faster Armos Pushing"     -Info "Armos statues are being pushed faster"                                                                  -Credits "Ported from Rando"
-    CreateReduxCheckBox -Name "FishLarger"           -Base 5                       -Text "Larger Fish"              -Info "Fish are now larger"                                                                                    -Credits "Ported from Rando"
-    CreateReduxCheckBox -Name "FishBites"            -Base 5                       -Text "Guaranteed Fish Bites"    -Info "Make fish bites guaranteed when the hook of the rod is stable"                                          -Credits "Ported from Rando"
-    CreateReduxCheckBox -Name "RupeeIconColors"      -All                 -Checked -Text "Rupee Icon Colors"        -Info "The color of the Rupees counter icon changes depending on your wallet size"                             -Credits "Ported from Redux"
-    CreateReduxCheckBox -Name "EmptyBombFix"         -All -Exclude "Dawn" -Checked -Text "Empty Bomb Fix"           -Info "Fixes Empty Bomb Glitch"                                                                                -Credits "Ported from Redux"
-    CreateReduxCheckBox -Name "BlueFireArrow"        -Adult                        -Text "Blue Fire Arrows"         -Info "Ice Arrows have the same attributes as Blue Fire, thus the ability to melt Blue Ice and bombable walls" -Credits "Ported from Redux"
-    CreateReduxCheckBox -Name "ShowFileSelectIcons"  -All                 -Checked -Text "Show File Select Icons"   -Info "Show icons on the File Select screen to display your save file progress"                                -Credits "Ported from Redux"
-    CreateReduxCheckBox -Name "StoneOfAgony"         -Base 5              -Checked -Text "Stone of Agony Indicator" -Info "The Stony of Agony uses a visual indicator in addition to rumble"                                       -Credits "Ported from Redux"
-    CreateReduxCheckBox -Name "BiggoronFix"          -Base 4                       -Text "Biggoron Fix"             -Info "Fix bug when trying to trade in the Biggoron Sword"                                                     -Credits "Ported from Redux"
-    CreateReduxCheckBox -Name "DampeFix"             -Base 4                       -Text "Dampé Fix"                -Info "Prevent the heart piece of the Gravedigging Tour from being missable"                                   -Credits "Ported from Redux"
-    CreateReduxCheckBox -Name "HyruleGuardsSoftlock" -Base 4                       -Text "Hyrule Guards Softlock"   -Info "Fix a potential softlock when culling Hyrule Guards"                                                    -Credits "Ported from Redux"
-    CreateReduxCheckBox -Name "WarpSongsSpeedup"     -Base 5                       -Text "Warp Songs Speedup"       -Info "Speedup the warp songs warping sequences"                                                               -Credits "Ported from Redux"
-    CreateReduxCheckBox -Name "GoldGauntletsSpeedup" -Base 5                       -Text "Gold Gauntlets Speedup"   -Info "Cutscene speed-up for throwing pillars that require Golden Gauntlets"                                   -Credits "Ported from Redux"
-    CreateReduxCheckBox -Name "TalonSkip"            -Base 3                       -Text "Skip Talon Cutscene"      -Info "Skip the cutscene after waking up Talon before entering the Castle Courtyard"                           -Credits "Ported from Redux"
+    CreateReduxCheckBox -Name "FasterArmosPushing"   -All                 -Checked -Text "Faster Armos Pushing"     -Info "Armos statues are being pushed faster"                                                                  -Credits "Randomizer"
+    CreateReduxCheckBox -Name "FishLarger"           -Base 5                       -Text "Larger Fish"              -Info "Fish are now larger"                                                                                    -Credits "Randomizer"
+    CreateReduxCheckBox -Name "FishBites"            -Base 5                       -Text "Guaranteed Fish Bites"    -Info "Make fish bites guaranteed when the hook of the rod is stable"                                          -Credits "Randomizer"
+    CreateReduxCheckBox -Name "RupeeIconColors"      -All                 -Checked -Text "Rupee Icon Colors"        -Info "The color of the Rupees counter icon changes depending on your wallet size"                             -Credits "Randomizer"
+    CreateReduxCheckBox -Name "EmptyBombFix"         -All -Exclude "Dawn" -Checked -Text "Empty Bomb Fix"           -Info "Fixes Empty Bomb Glitch"                                                                                -Credits "Randomizer"
+    CreateReduxCheckBox -Name "BlueFireArrow"        -Adult                        -Text "Blue Fire Arrows"         -Info "Ice Arrows have the same attributes as Blue Fire, thus the ability to melt Blue Ice and bombable walls" -Credits "Randomizer"
+    CreateReduxCheckBox -Name "ShowFileSelectIcons"  -All                 -Checked -Text "Show File Select Icons"   -Info "Show icons on the File Select screen to display your save file progress"                                -Credits "Randomizer"
+    CreateReduxCheckBox -Name "StoneOfAgony"         -Base 5              -Checked -Text "Stone of Agony Indicator" -Info "The Stony of Agony uses a visual indicator in addition to rumble"                                       -Credits "Randomizer"
+    CreateReduxCheckBox -Name "BiggoronFix"          -Base 4                       -Text "Biggoron Fix"             -Info "Fix bug when trying to trade in the Biggoron Sword"                                                     -Credits "Randomizer"
+    CreateReduxCheckBox -Name "DampeFix"             -Base 4                       -Text "Dampé Fix"                -Info "Prevent the heart piece of the Gravedigging Tour from being missable"                                   -Credits "Randomizer"
+    CreateReduxCheckBox -Name "HyruleGuardsSoftlock" -Base 4                       -Text "Hyrule Guards Softlock"   -Info "Fix a potential softlock when culling Hyrule Guards"                                                    -Credits "Randomizer"
+    CreateReduxCheckBox -Name "WarpSongsSpeedup"     -Base 5                       -Text "Warp Songs Speedup"       -Info "Speedup the warp songs warping sequences"                                                               -Credits "Randomizer"
+    CreateReduxCheckBox -Name "GoldGauntletsSpeedup" -Base 5                       -Text "Gold Gauntlets Speedup"   -Info "Cutscene speed-up for throwing pillars that require Golden Gauntlets"                                   -Credits "Randomizer"
+    CreateReduxCheckBox -Name "TalonSkip"            -Base 3                       -Text "Skip Talon Cutscene"      -Info "Skip the cutscene after waking up Talon before entering the Castle Courtyard"                           -Credits "Randomizer"
 
 
 
     # RAINBOW COLORS #
 
     CreateReduxGroup    -Tag  "Rainbow"   -All                   -Text "Rainbow Colors"
-    CreateReduxCheckBox -Name "Sword"     -All                   -Text "Sword Trail"     -Info "Cycle through random colors for the Sword Trail"     -Credits "Ported from Redux"
-    CreateReduxCheckBox -Name "Boomerang" -Child -Exclude "Dawn" -Text "Boomerang Trail" -Info "Cycle through random colors for the Boomerang Trail" -Credits "Ported from Redux"
-    CreateReduxCheckBox -Name "Bombchu"   -All   -Exclude "Dawn" -Text "Bombchu Trail"   -Info "Cycle through random colors for the Bombchu Trail"   -Credits "Ported from Redux"
-    CreateReduxCheckBox -Name "Navi"      -All                   -Text "Navi"            -Info "Cycle through random colors for Navi"                -Credits "Ported from Redux"
+    CreateReduxCheckBox -Name "Sword"     -All                   -Text "Sword Trail"     -Info "Cycle through random colors for the Sword Trail"     -Credits "Randomizer"
+    CreateReduxCheckBox -Name "Boomerang" -Child -Exclude "Dawn" -Text "Boomerang Trail" -Info "Cycle through random colors for the Boomerang Trail" -Credits "Randomizer"
+    CreateReduxCheckBox -Name "Bombchu"   -All   -Exclude "Dawn" -Text "Bombchu Trail"   -Info "Cycle through random colors for the Bombchu Trail"   -Credits "Randomizer"
+    CreateReduxCheckBox -Name "Navi"      -All                   -Text "Navi"            -Info "Cycle through random colors for Navi"                -Credits "Randomizer"
 
 
 
     # COLORS #
+
+    # EQUIPMENT COLORS #
+
+    CreateReduxGroup -Tag "Colors" -All -Text "Tunic Colors" -Height 3
+    $Redux.Colors.ExtraEquipment = @()
+    $items = @("Magician Green", "Guardian Silver", "Hero Gold", "Pajama Blue", "Shadow Purple"); $postItems = @("Randomized", "Custom"); $Files = ($GameFiles.Textures + "\Tunic"); $Randomize = '"Randomized" fully randomizes the colors each time the patcher is opened'
+    $Redux.Colors.ExtraEquipment += CreateReduxComboBox -Name "MagicianTunic" -Column 1 -Row 1 -All -Text "Magician Tunic Color" -Default 1 -Length 230 -Shift 40 -Items $items -PostItems $postItems -FilePath $Files -Info ("Select a color scheme for the upgraded Kokiri Tunic (Extra Abilities only)`n"     + $Randomize) -Credits "Admentus"
+    $Redux.Colors.ExtraEquipment += CreateReduxComboBox -Name "GuardianTunic" -Column 1 -Row 2 -All -Text "Guardian Tunic Color" -Default 2 -Length 230 -Shift 40 -Items $items -PostItems $postItems -FilePath $Files -Info ("Select a color scheme for the upgraded Goron Tunic (Extra Abilities only)`n"      + $Randomize) -Credits "Admentus"
+    $Redux.Colors.ExtraEquipment += CreateReduxComboBox -Name "HeroTunic"     -Column 1 -Row 3 -All -Text "Hero Tunic Color"     -Default 3 -Length 230 -Shift 40 -Items $items -PostItems $postItems -FilePath $Files -Info ("Select a color scheme for the upgraded Zora Tunic (Extra Abilities only)`n"       + $Randomize) -Credits "Admentus"
+    $Redux.Colors.ExtraEquipment += CreateReduxComboBox -Name "NoTunic"       -Column 4 -Row 1 -All -Text "No Tunic Color"       -Default 4 -Length 230 -Shift 40 -Items $items -PostItems $postItems -FilePath $Files -Info ("Select a color scheme for the Unequipped Tunic`n"                                 + $Randomize) -Credits "Admentus"
+    $Redux.Colors.ExtraEquipment += CreateReduxComboBox -Name "ShadowTunic"   -Column 4 -Row 2 -All -Text "Shadow Tunic Color"   -Default 5 -Length 230 -Shift 40 -Items $items -PostItems $postItems -FilePath $Files -Info ("Select a color scheme for the upgraded Unequipped Tunic (Extra Abilities only)`n" + $Randomize) -Credits "Admentus"
+    
+    $Buttons = @()
+    $Buttons += CreateReduxButton -Column 3 -Row 1 -Tag $Buttons.Count -Width 100 -All -Text "Magician Tunic" -Info "Select the color you want for the upgraded Kokiri Tunic (Extra Abilities only)"     -Credits "Admentus"
+    $Buttons += CreateReduxButton -Column 3 -Row 2 -Tag $Buttons.Count -Width 100 -All -Text "Guardian Tunic" -Info "Select the color you want for the upgraded Goron Tunic (Extra Abilities only)"      -Credits "Admentus"
+    $Buttons += CreateReduxButton -Column 3 -Row 3 -Tag $Buttons.Count -Width 100 -All -Text "Hero Tunic"     -Info "Select the color you want for the upgraded Zora Tunic (Extra Abilities only)"       -Credits "Admentus"
+    $Buttons += CreateReduxButton -Column 6 -Row 1 -Tag $Buttons.Count -Width 100 -All -Text "No Tunic"       -Info "Select the color you want for the Unequipped Tunic"                                 -Credits "Admentus"
+    $Buttons += CreateReduxButton -Column 6 -Row 2 -Tag $Buttons.Count -Width 100 -All -Text "Shadow Tunic"   -Info "Select the color you want for the upgraded Unequipped Tunic (Extra Abilities only)" -Credits "Admentus"
+
+    $Redux.Colors.SetExtraEquipment = @()
+    $Redux.Colors.SetExtraEquipment += CreateColorDialog -Color "1E691B" -Name "SetMagicianTunic" -IsGame -Button $Buttons[0]
+    $Redux.Colors.SetExtraEquipment += CreateColorDialog -Color "641400" -Name "SetGuardianTunic" -IsGame -Button $Buttons[1]
+    $Redux.Colors.SetExtraEquipment += CreateColorDialog -Color "003C64" -Name "SetHeroTunic"     -IsGame -Button $Buttons[2]
+    $Redux.Colors.SetExtraEquipment += CreateColorDialog -Color "003C64" -Name "SetNoTunic"       -IsGame -Button $Buttons[3]
+    $Redux.Colors.SetExtraEquipment += CreateColorDialog -Color "003C64" -Name "SetShadowTunic"   -IsGame -Button $Buttons[4]
+
+    $Redux.Colors.ExtraEquipmentLabels = @()
+    for ($i=0; $i -lt $Buttons.length; $i++) {
+        $Buttons[$i].Add_Click({ $Redux.Colors.SetExtraEquipment[[uint16]$this.Tag].ShowDialog(); $Redux.Colors.ExtraEquipment[[uint16]$this.Tag].Text = "Custom"; $Redux.Colors.ExtraEquipmentLabels[[uint16]$this.Tag].BackColor = $Redux.Colors.SetExtraEquipment[[uint16]$this.Tag].Color; $GameSettings["Colors"][$Redux.Colors.SetExtraEquipment[[uint16]$this.Tag].Tag] = $Redux.Colors.SetExtraEquipment[[uint16]$this.Tag].Color.Name })
+        $Redux.Colors.ExtraEquipmentLabels += CreateReduxColoredLabel -All -Link $Buttons[$i] -Color $Redux.Colors.SetExtraEquipment[$i].Color
+    }
+
+    $Redux.Colors.ExtraEquipment[0].Add_SelectedIndexChanged({ SetTunicColorsPreset -ComboBox $Redux.Colors.ExtraEquipment[0] -Dialog $Redux.Colors.SetExtraEquipment[0] -Label $Redux.Colors.ExtraEquipmentLabels[0] })
+                                                               SetTunicColorsPreset -ComboBox $Redux.Colors.ExtraEquipment[0] -Dialog $Redux.Colors.SetExtraEquipment[0] -Label $Redux.Colors.ExtraEquipmentLabels[0]
+    $Redux.Colors.ExtraEquipment[1].Add_SelectedIndexChanged({ SetTunicColorsPreset -ComboBox $Redux.Colors.ExtraEquipment[1] -Dialog $Redux.Colors.SetExtraEquipment[1] -Label $Redux.Colors.ExtraEquipmentLabels[1] })
+                                                               SetTunicColorsPreset -ComboBox $Redux.Colors.ExtraEquipment[1] -Dialog $Redux.Colors.SetExtraEquipment[1] -Label $Redux.Colors.ExtraEquipmentLabels[1]
+    $Redux.Colors.ExtraEquipment[2].Add_SelectedIndexChanged({ SetTunicColorsPreset -ComboBox $Redux.Colors.ExtraEquipment[2] -Dialog $Redux.Colors.SetExtraEquipment[2] -Label $Redux.Colors.ExtraEquipmentLabels[2] })
+                                                               SetTunicColorsPreset -ComboBox $Redux.Colors.ExtraEquipment[2] -Dialog $Redux.Colors.SetExtraEquipment[2] -Label $Redux.Colors.ExtraEquipmentLabels[2]
+    $Redux.Colors.ExtraEquipment[3].Add_SelectedIndexChanged({ SetTunicColorsPreset -ComboBox $Redux.Colors.ExtraEquipment[3] -Dialog $Redux.Colors.SetExtraEquipment[3] -Label $Redux.Colors.ExtraEquipmentLabels[3] })
+                                                               SetTunicColorsPreset -ComboBox $Redux.Colors.ExtraEquipment[3] -Dialog $Redux.Colors.SetExtraEquipment[3] -Label $Redux.Colors.ExtraEquipmentLabels[3]
+    $Redux.Colors.ExtraEquipment[4].Add_SelectedIndexChanged({ SetTunicColorsPreset -ComboBox $Redux.Colors.ExtraEquipment[4] -Dialog $Redux.Colors.SetExtraEquipment[4] -Label $Redux.Colors.ExtraEquipmentLabels[4] })
+                                                               SetTunicColorsPreset -ComboBox $Redux.Colors.ExtraEquipment[4] -Dialog $Redux.Colors.SetExtraEquipment[4] -Label $Redux.Colors.ExtraEquipmentLabels[4]
 
     CreateButtonColorOptions
     CreateRupeeColorOptions
@@ -2276,8 +2376,16 @@ function CreateTabRedux() {
     CreateBombchuColorOptions
     $Last.Half = $False; CreateTextColorOptions; $Redux.Box.TextColors = $Last.Group
 
-    if ($Redux.Graphics.RupeeIconColors -ne $null)   { $Redux.Hooks.RupeeIconColors.Add_CheckStateChanged( { EnableElem -Elem $Redux.Colors.RupeesVanilla -Active (!$this.checked) } ) }
-    if ($Redux.Graphics.GCScheme        -ne $null)   { $Redux.Graphics.GCScheme.Add_CheckStateChanged(     { EnableElem -Elem $Redux.Box.TextColors       -Active (!$this.checked) } ) }
+    if ($Redux.Graphics.RupeeIconColors -ne $null) {
+        $Redux.Hooks.RupeeIconColors.Add_CheckStateChanged( {
+            if ($Patches.Redux.Checked) { EnableElem -Elem $Redux.Colors.RupeesVanilla -Active (!$this.checked) }
+        } )
+    }
+    if ($Redux.Graphics.GCScheme -ne $null) {
+        $Redux.Graphics.GCScheme.Add_CheckStateChanged( {
+            if ($Patches.Redux.Checked) { EnableElem -Elem $Redux.Box.TextColors -Active (!$this.checked) }
+        } )
+    }
 
     if ($Redux.UI.ButtonPositions -ne $null -and $Redux.Misc.OptionsMenu -ne $null) {
         $Redux.UI.ButtonPositions.Add_CheckedChanged(     { EnableElem -Elem $Redux.Misc.OptionsMenu   -Active (!$this.checked)            } )
@@ -2300,8 +2408,8 @@ function CreateTabLanguage() {
     CreateReduxGroup -Tag "Text"           -All -Text "Text Speed"
     CreateReduxPanel                       -All
     CreateReduxRadioButton -Name "Speed1x" -All -Max 4 -SaveTo "Speed" -Text "1x Text Speed" -Info "Leave the dialogue text speed at normal"               -Checked
-    CreateReduxRadioButton -Name "Speed2x" -All -Max 4 -SaveTo "Speed" -Text "2x Text Speed" -Info "Set the dialogue text speed to be twice as fast"       -Credits "Ported from Redux"
-    CreateReduxRadioButton -Name "Speed3x"      -Max 4 -SaveTo "Speed" -Text "3x Text Speed" -Info "Set the dialogue text speed to be three times as fast" -Credits "Ported from Redux"
+    CreateReduxRadioButton -Name "Speed2x" -All -Max 4 -SaveTo "Speed" -Text "2x Text Speed" -Info "Set the dialogue text speed to be twice as fast"       -Credits "Maroc"
+    CreateReduxRadioButton -Name "Speed3x"      -Max 4 -SaveTo "Speed" -Text "3x Text Speed" -Info "Set the dialogue text speed to be three times as fast" -Credits "Admentus & Maroc"
     CreateReduxRadioButton -Name "Instant"      -Max 4 -SaveTo "Speed" -Text "Instant Text"  -Info "Most text will be shown instantly"                     -Credits "Admentus"
     
 
@@ -2311,26 +2419,26 @@ function CreateTabLanguage() {
     $Redux.Box.Dialogue = CreateReduxGroup -Tag "Text" -All -Text "Dialogue"
     CreateReduxPanel                       -All
     CreateReduxRadioButton -Name "Vanilla" -All                     -Max 4 -SaveTo "Dialogue" -Text "Vanilla Text"  -Checked -Info "Keep the text as it is"
-    CreateReduxRadioButton -Name "Restore"                          -Max 4 -SaveTo "Dialogue" -Text "Restore Text"           -Info ("Restores the text used from the GC revision and applies grammar and typo fixes`nCorrects some icons in the text and includes the changes from" + ' "Redux Text"') -Credits "Redux"
-    CreateReduxRadioButton -Name "Beta"                             -Max 4 -SaveTo "Dialogue" -Text "Beta Text"              -Info "Restores the text as was used in the Ura Quest Beta version"                                                                                                       -Credits "ZethN64, Sakura, Frostclaw & Steve(ToCoool)"
-    CreateReduxRadioButton -Name "MMoT"    -Expose "Master of Time" -Max 4 -SaveTo "Dialogue" -Text "Malon's Master of Time" -Info ("Use the script dialogue from the Malon's Master of Time version`nIt's recommended to use the " + '"Malon Red"' + " model for the best immersive experience")      -Credits "Luna Romana"
+    CreateReduxRadioButton -Name "Restore" -Base 1                  -Max 4 -SaveTo "Dialogue" -Text "Restore Text"           -Info "Restores the text used from the GC revision and applies grammar & typo fixes and corrects some icons in the text" -Credits "ShadowOne333"
+    CreateReduxRadioButton -Name "Beta"    -Base 1                  -Max 4 -SaveTo "Dialogue" -Text "Beta Text"              -Info "Restores the text as was used in the Ura Quest Beta version"                                                      -Credits "ZethN64, Sakura, Frostclaw & Steve(ToCoool)"
+    CreateReduxRadioButton -Name "MMoT"    -Expose "Master of Time" -Max 4 -SaveTo "Dialogue" -Text "Malon's Master of Time" -Info "Use the script dialogue from the Malon's Master of Time version"                                                  -Credits "Luna Romana"
     CreateReduxRadioButton -Name "Custom"  -All                     -Max 4 -SaveTo "Dialogue" -Text "Custom"                 -Info 'Insert custom dialogue found from "..\Patcher64+ Tool\Files\Games\Ocarina of Time\Custom Text"' -Warning "ROM crashes if the script is not proper`n[!] Won't be applied if the custom script is missing"
    
     $Last.Row++; $Last.Column = 1
     CreateReduxCheckBox -Name "FemalePronouns" -Text "Female Pronouns" -Info "Refer to Link as a female character"                                                                                                                       -Credits "Admentus & Mil"
-    CreateReduxCheckBox -Name "TypoFixes"      -Text "Typo Fixes"      -Info "Include the typo fixes from the Redux script"                                                                                                              -Credits "Ported from Redux"
-    CreateReduxCheckBox -Name "GoldSkulltula"  -Text "Gold Skulltula"  -Info "The textbox for obtaining a Gold Skulltula will no longer interrupt the gameplay`nThe English & German scripts also shows the total amount you got so far" -Credits "Ported from Redux"
+    CreateReduxCheckBox -Name "TypoFixes"      -Text "Typo Fixes"      -Info "Include the typo fixes from the Redux script"                                                                                                              -Credits "ShadowOne333"
+    CreateReduxCheckBox -Name "GoldSkulltula"  -Text "Gold Skulltula"  -Info "The textbox for obtaining a Gold Skulltula will no longer interrupt the gameplay`nThe English & German scripts also shows the total amount you got so far" -Credits "ShadowOne333"
     CreateReduxCheckBox -Name "EasterEggs"     -Text "Easter Eggs"     -Info "Adds custom Patreon Tier 3 messages into the game`nCan you find them all?" -Checked                                                                        -Credits "Admentus & Patreons"
 
 
 
     # OTHER ENGLISH OPTIONS #
 
-    CreateReduxGroup    -Tag  "Text"          -All  -Text "Other English Options"
-    CreateReduxCheckBox -Name "YeetPrompt"    -All  -Text "Yeet Action Prompt"     -Info ('Replace the "Throw" Action Prompt with "Yeet"' + "`nYeeeeet")           -Credits "kr3z"
+    CreateReduxGroup    -Tag  "Text"          -All     -Text "Other English Options"
+    CreateReduxCheckBox -Name "YeetPrompt"    -All     -Text "Yeet Action Prompt"  -Info ('Replace the "Throw" Action Prompt with "Yeet"' + "`nYeeeeet")           -Credits "kr3z"
     CreateReduxCheckBox -Name "Fairy"         -Base 4 -Text "MM Fairy Text"        -Info ("Changes " + '"Bottled Fairy" to "Fairy"' + " as used in Majora's Mask") -Credits "GhostlyDark (ported)"
     CreateReduxCheckBox -Name "Milk"          -Base 4 -Text "MM Milk Text"         -Info ("Changes " + '"Lon Lon Milk" to "Milk"' + " as used in Majora's Mask")   -Credits "GhostlyDark (ported)"
-    CreateReduxCheckBox -Name "KeatonMaskFix" -Base 4 -Text "Keaton Mask Text Fix" -Info 'Fixes the grammatical typo for the "Keaton Mask"'                        -Credits "Redux"
+    CreateReduxCheckBox -Name "KeatonMaskFix" -Base 4 -Text "Keaton Mask Text Fix" -Info 'Fixes the grammatical typo for the "Keaton Mask"'                        -Credits "ShadowOne333"
     CreateReduxCheckBox -Name "PauseScreen"   -Base 4 -Text "MM Pause Screen"      -Info "Replaces the Pause Screen textures to be styled like Majora's Mask"      -Credits "CM & GhostlyDark"
 
 
@@ -2417,14 +2525,15 @@ function CreateTabGraphics() {
     
     # GRAPHICS #
 
-    CreateReduxGroup -Tag  "Graphics" -All -Text "Graphics" -Columns 4 -Height 3
-    CreateReduxCheckBox -Name "Widescreen"      -All    -Text "16:9 Widescreen (Advanced)"   -Info "Patch the game to be in true 16:9 widescreen with the HUD pushed to the edges"                       -Native -Credits "Widescreen Patch by gamemasterplc, enhanced and ported by GhostlyDark"
-    CreateReduxCheckBox -Name "WidescreenAlt"   -All    -Text "16:9 Widescreen (Simplified)" -Info "Apply 16:9 Widescreen adjusted backgrounds and textures (as well as 16:9 Widescreen for the Wii VC)" -Credits "Aspect Ratio Fix by Admentus`n16:9 backgrounds by GhostlyDark, ShadowOne333 & CYB3RTRON" -Link $Redux.Graphics.Widescreen
-    CreateReduxCheckBox -Name "ExtendedDraw"    -All    -Text "Extended Draw Distance"       -Info "Increases the game's draw distance for objects`nDoes not work on all objects"                        -Credits "Admentus"
-    CreateReduxCheckBox -Name "ForceHiresModel" -All    -Text "Force Hires Link Model"       -Info "Always use Link's High Resolution Model when Link is too far away" -Exclude "Dawn & Dusk"            -Credits "GhostlyDark"
-    CreateReduxCheckBox -Name "HideDungeonIcon" -Base 3 -Text "Hide Dungeon Icon"            -Info "Hide dungeon icon for minimaps that do not have a dungeon entrance"                                  -Credits "GhostlyDark"
-    CreateReduxCheckBox -Name "GCScheme"        -All    -Text "GC Scheme"                    -Info "Replace and change the textures, dialogue and text colors to match the GameCube's scheme"            -Credits "Admentus, GhostlyDark, ShadowOne333 & Ported from Redux"
-    
+    CreateReduxGroup -Tag  "Graphics" -All -Text "Graphics" -Columns 4 -Height 4
+    CreateReduxCheckBox -Name "Widescreen"        -All    -Text "16:9 Widescreen (Advanced)"   -Info "Patch the game to be in true 16:9 widescreen with the HUD pushed to the edges"               -Native -Credits "Widescreen Patch by gamemasterplc, enhanced and ported by GhostlyDark"
+    CreateReduxCheckBox -Name "WidescreenAlt"     -All    -Text "16:9 Widescreen (Simplified)" -Info "Apply 16:9 Widescreen adjusted backgrounds and textures (as well as 16:9 Widescreen for the Wii VC)" -Credits "Aspect Ratio Fix by Admentus`n16:9 backgrounds by GhostlyDark, ShadowOne333 & CYB3RTRON" -Link $Redux.Graphics.Widescreen
+    CreateReduxCheckBox -Name "ExtendedDraw"      -All    -Text "Extended Draw Distance"       -Info "Increases the game's draw distance for objects`nDoes not work on all objects"                        -Credits "Admentus"
+    CreateReduxCheckBox -Name "ForceHiresModel"   -All    -Text "Force Hires Link Model"       -Info "Always use Link's High Resolution Model when Link is too far away"            -Exclude "Dawn & Dusk" -Credits "GhostlyDark"
+    CreateReduxCheckBox -Name "HideDungeonIcon"   -Base 3 -Text "Hide Dungeon Icon"            -Info "Hide dungeon icon for minimaps that do not have a dungeon entrance"                                  -Credits "GhostlyDark"
+    CreateReduxCheckBox -Name "GCScheme"          -All    -Text "GC Scheme"                    -Info "Replace and change the textures, dialogue and text colors to match the GameCube's scheme"            -Credits "Admentus, GhostlyDark & ShadowOne333"
+    CreateReduxCheckBox -Name "OverworldSkyboxes" -Base 4 -Text "Overworld Skyboxes"           -Info "Use day and night skyboxes for all overworld areas lacking one"                                      -Credits "Admentus"
+
 
     if (!$IsWiiVC) {
         EnableElem -Elem @($Redux.Fixes.PauseScreenDelay, $Redux.Fixes.PauseScreenCrash) -Active (!$Redux.Graphics.Widescreen.Checked)
@@ -2433,13 +2542,21 @@ function CreateTabGraphics() {
 
 
 
-    # MDOELS #
+    # MODELS #
 
     $Last.Column = 1; $Last.Row = 3
     $models = LoadModelsList -Category "Child"
     CreateReduxComboBox -Name "ChildModels" -Child -Text "Child Model" -Items (@("Original") + $models) -Default "Original" -Info "Replace the child model used for Link"
     $models = LoadModelsList -Category "Adult"
     CreateReduxComboBox -Name "AdultModels" -Adult -Text "Adult Model" -Items (@("Original") + $models) -Default "Original" -Info "Replace the adult model used for Link"
+
+    CreateReduxPanel                              -All -Row 3 -Columns 3.9
+    CreateReduxRadioButton -Name "FilterAll"      -All -Column 1   -Max 5 -SaveTo "ModelFilter" -Text "All"       -Info "Don't filter any custom models" -Checked
+    CreateReduxRadioButton -Name "FilterLink"     -All -Column 1.8 -Max 5 -SaveTo "ModelFilter" -Text "Link"      -Info "Filter custom models by Link styled"
+    CreateReduxRadioButton -Name "FilterMale"     -All -Column 2.6 -Max 5 -SaveTo "ModelFilter" -Text "Male"      -Info "Filter custom models by male"                                                     
+    CreateReduxRadioButton -Name "FilterFemale"   -All -Column 3.4 -Max 5 -SaveTo "ModelFilter" -Text "Female"    -Info "Filter custom models by female"
+    CreateReduxRadioButton -Name "FilterNonHuman" -All -Column 4.2 -Max 5 -SaveTo "ModelFilter" -Text "Non-Human" -Info "Filter custom models by non-human"
+   
 
     $Redux.Graphics.ModelPreviews = CreateReduxGroup -Tag "Graphics" -All -Text "Model Previews"
     $Last.Group.Height = (DPISize 252)
@@ -2458,13 +2575,13 @@ function CreateTabGraphics() {
 
     CreateReduxComboBox -Name "BlackBars"        -All -Text "Black Bars"    -Items @("Enabled", "Disabled for Z-Targeting", "Disabled for Cutscenes", "Always Disabled")             -Info "Removes the black bars shown on the top and bottom of the screen during Z-targeting and cutscenes" -Credits "Admentus"
     CreateReduxComboBox -Name "ButtonStyle"      -All -Text "Buttons Style" -Items "Ocarina of Time" -FilePath ($Paths.shared + "\Buttons")    -Ext "bin" -Default $val              -Info "Set the style for the HUD buttons"                                                                 -Credits "GhostlyDark (ported), Admentus (ported), Pizza (HD), Djipi, Community, Nerrel, Federelli, AndiiSyn & Syeo"
-    CreateReduxComboBox -Name "Rupees"           -All -Text "Rupee Icon"    -Items "Ocarina of Time" -FilePath ($Paths.shared + "\HUD\Rupees") -Ext "bin" -Default "Ocarina of Time" -Info "Set the style for the rupees icon"                                                                 -Credits "Ported by GhostlyDark"
+    CreateReduxComboBox -Name "Rupees"           -All -Text "Rupee Icon"    -Items "Ocarina of Time" -FilePath ($Paths.shared + "\HUD\Rupees") -Ext "bin" -Default "Ocarina of Time" -Info "Set the style for the rupees icon"                                                                 -Credits "GhostlyDark (ported)"
     CreateReduxComboBox -Name "Hearts"           -All -Text "Heart Icons"   -Items "Ocarina of Time" -FilePath ($Paths.shared + "\HUD\Hearts") -Ext "bin" -Default $val              -Info "Set the style for the heart icons"                                                                 -Credits "GhostlyDark (ported), Admentus (ported), AndiiSyn & Syeo"
     CreateReduxComboBox -Name "Magic"            -All -Text "Magic Bar"     -Items "Ocarina of Time" -FilePath ($Paths.shared + "\HUD\Magic")  -Ext "bin" -Default "Ocarina of Time" -Info "Set the style for the magic meter"                                                                 -Credits "GhostlyDark (ported), Pizza, Nerrel (HD), Zeth Alkar"
-    CreateReduxCheckBox -Name "CenterNaviPrompt" -All -Text "Center Navi Prompt"                                                                                                     -Info 'Centers the "Navi" prompt shown in the C-Up button'                                                -Credits "Ported by GhostlyDark"
-    CreateReduxCheckBox -Name "DungeonKeys"      -All -Text "MM Key Icon"                                                                                                            -Info "Replace the key icon with that from Majora's Mask"                                                 -Credits "Ported by GhostlyDark"
-    CreateReduxCheckBox -Name "DungeonIcons"     -All -Text "MM Dungeon Icons"                                                                                                       -Info "Replace the dungeon map icons with those from Majora's Mask"                                       -Credits "Ported by GhostlyDark"
-    CreateReduxCheckBox -Name "ButtonPositions"  -All -Text "MM Button Positions"                                                                                                    -Info "Positions the A and B buttons like in Majora's Mask"                                               -Credits "Ported by GhostlyDark"
+    CreateReduxCheckBox -Name "CenterNaviPrompt" -All -Text "Center Navi Prompt"                                                                                                     -Info 'Centers the "Navi" prompt shown in the C-Up button'                                                -Credits "GhostlyDark (ported)"
+    CreateReduxCheckBox -Name "DungeonKeys"      -All -Text "MM Key Icon"                                                                                                            -Info "Replace the key icon with that from Majora's Mask"                                                 -Credits "GhostlyDark (ported)"
+    CreateReduxCheckBox -Name "DungeonIcons"     -All -Text "MM Dungeon Icons"                                                                                                       -Info "Replace the dungeon map icons with those from Majora's Mask"                                       -Credits "GhostlyDark (ported)"
+    CreateReduxCheckBox -Name "ButtonPositions"  -All -Text "MM Button Positions"                                                                                                    -Info "Positions the A and B buttons like in Majora's Mask"                                               -Credits "GhostlyDark (ported)"
     
     
 
@@ -2489,13 +2606,15 @@ function CreateTabGraphics() {
 
     # STYLES #
 
+    $items = @("Blonde")
+
     CreateReduxGroup    -Tag  "Styles"        -All -Text "Styles"         -Columns 4
-    if ($GamePatch.settings -eq "Gold Quest") { $val = "Gold Quest" } else { $val = "Regular" }
-    CreateReduxComboBox -Name "RegularChests" -All -Text "Regular Chests" -Info "Use a different style for regular treasure chests"                                           -FilePath ($Paths.shared + "\Chests") -Default $val -Ext "front" -Items "Regular"              -Credits "Nintendo, Syeo, AndiiSyn & Rando"
-    CreateReduxComboBox -Name "BossChests"    -All -Text "Boss Chests"    -Info "Use a different style for Boss Key treasure chests"                                          -FilePath ($Paths.shared + "\Chests")               -Ext "front" -Items "Boss OoT"             -Credits "Nintendo, Syeo, AndiiSyn & Rando"
-    CreateReduxComboBox -Name "Crates"        -All -Text "Small Crates"   -Info "Use a different style for small liftable crates"                                             -FilePath ($Paths.shared + "\Crates")               -Ext "bin"   -Items "Regular"              -Credits "Nintendo & Rando"
-    CreateReduxComboBox -Name "Pots"          -All -Text "Pots"           -Info "Use a different style for throwable pots"                                                    -FilePath ($Paths.shared + "\Pots")                 -Ext "bin"   -Items "Regular"              -Credits "Nintendo, Syeo & Rando"
-    CreateReduxComboBox -Name "HairColor"     -All -Text "Hair Color"     -Info "Use a different hair color style for Link`nOnly for Ocarina of Time or Majora's Mask models" -FilePath ($Paths.shared + "\Hair\Ocarina of Time") -Ext "bin"   -Items @("Default", "Blonde") -Credits "Third M & AndiiSyn"
+    if ($GamePatch.settings -eq "Gold Quest") { $val = "Gold Quest"; $hair = @("Pink") } else { $val = "Regular"; $hair = @("Blonde") }
+    CreateReduxComboBox -Name "RegularChests" -All -Text "Regular Chests" -Info "Use a different style for regular treasure chests"                                           -FilePath ($Paths.shared + "\Chests") -Default $val -Ext "front" -Items "Regular"  -Credits "Nintendo, Syeo, AndiiSyn & Rando"
+    CreateReduxComboBox -Name "BossChests"    -All -Text "Boss Chests"    -Info "Use a different style for Boss Key treasure chests"                                          -FilePath ($Paths.shared + "\Chests")               -Ext "front" -Items "Boss OoT" -Credits "Nintendo, Syeo, AndiiSyn & Rando"
+    CreateReduxComboBox -Name "Crates"        -All -Text "Small Crates"   -Info "Use a different style for small liftable crates"                                             -FilePath ($Paths.shared + "\Crates")               -Ext "bin"   -Items "Regular"  -Credits "Nintendo & Rando"
+    CreateReduxComboBox -Name "Pots"          -All -Text "Pots"           -Info "Use a different style for throwable pots"                                                    -FilePath ($Paths.shared + "\Pots")                 -Ext "bin"   -Items "Regular"  -Credits "Nintendo, Syeo & Rando"
+    CreateReduxComboBox -Name "HairColor"     -All -Text "Hair Color"     -Info "Use a different hair color style for Link`nOnly for Ocarina of Time or Majora's Mask models" -FilePath ($Paths.shared + "\Hair\Ocarina of Time") -Ext "bin"   -Items $hair      -Credits "Third M & AndiiSyn"
 
 
 
@@ -2522,9 +2641,9 @@ function CreateTabAudio() {
     # SOUNDS / VOICES #
 
     CreateReduxGroup    -Tag  "Sounds"      -All   -Text "Sounds / Voices"
-    CreateReduxComboBox -Name "ChildVoices" -Child -Text "Child Voice" -Default "Original" -Items @("Original") -FilePath ($GameFiles.binaries + "\Voices Child")   -Info "Replace the voice used for the Child Link Model"    -Credits "`nMajora's Mask: Korey Cryderman (ported) & GhostlyDark (corrected)`nMelee Zelda: Mickey Devi & theluigidude2007 (edits)`nAmara: Amara (ripping) & theluigidude2007 (edits)"
-    CreateReduxComboBox -Name "AdultVoices" -Adult -Text "Adult Voice" -Default "Original" -Items @("Original") -FilePath ($GameFiles.binaries + "\Voices Adult")   -Info "Replace the voice used for the Adult Link Model"    -Credits "`nMajora's Mask: Korey Cryderman (ported) & GhostlyDark (corrected)`nMelee Zelda: Mickey Devi & theluigidude2007 (edits)`nAmara: Amara (ripping) & theluigidude2007`nPeach: theluigidude2007"
-    CreateReduxComboBox -Name "Instrument"  -All   -Text "Instrument"                      -Items @("Ocarina", "Female Voice", "Whistle", "Harp", "Organ", "Flute") -Info "Replace the sound used for playing the Ocarina of Time" -Credits "Ported from Rando"
+    CreateReduxComboBox -Name "ChildVoices" -Child -Text "Child Voice" -Default "Original" -Items @("Original") -FilePath ($GameFiles.binaries + "\Voices Child")   -Info "Replace the voice used for the Child Link Model"        -Credits "`nMajora's Mask: Korey Cryderman (ported) & GhostlyDark (corrected)`nMelee Zelda: Mickey Devi & theluigidude2007 (edits)`nAmara: Amara (ripping) & theluigidude2007 (edits)"
+    CreateReduxComboBox -Name "AdultVoices" -Adult -Text "Adult Voice" -Default "Original" -Items @("Original") -FilePath ($GameFiles.binaries + "\Voices Adult")   -Info "Replace the voice used for the Adult Link Model"        -Credits "`nMajora's Mask: Korey Cryderman (ported) & GhostlyDark (corrected)`nMelee Zelda: Mickey Devi & theluigidude2007 (edits)`nAmara: Amara (ripping) & theluigidude2007`nPeach: theluigidude2007"
+    CreateReduxComboBox -Name "Instrument"  -All   -Text "Instrument"                      -Items @("Ocarina", "Female Voice", "Whistle", "Harp", "Organ", "Flute") -Info "Replace the sound used for playing the Ocarina of Time" -Credits "Randomizer"
 
 
 
@@ -2537,14 +2656,14 @@ function CreateTabAudio() {
     "Ruto Lift", "Ruto Thrown", "Scrub Emerge", "Shabom Bounce", "Shabom Pop", "Shellblade", "Skulltula", "Spit Nut", "Switch", "Sword Bonk", 'Talon "Hmm"', "Talon Snore", "Talon WTF", "Tambourine", "Target Enemy", "Target Neutral", "Thunder", "Timer", "Zelda Gasp (Adult)")
     
     CreateReduxGroup    -Tag "SFX"         -All -Text "SFX Sound Effects"
-    CreateReduxComboBox -Name "LowHP"      -All -Text "Low HP"      -Items $SFX1                                                                                                                                   -Info "Set the sound effect for the low HP beeping"                             -Credits "Ported from Rando"
-    CreateReduxComboBox -Name "Navi"       -All -Text "Navi"        -Items $SFX2                                                                                                                                   -Info "Replace the sound used for Navi when she wants to tell something"        -Credits "Ported from Rando"
-    CreateReduxComboBox -Name "ZTarget"    -All -Text "Z-Target"    -Items $SFX2                                                                                                                                   -Info "Replace the sound used for Z-Targeting enemies"                          -Credits "Ported from Rando"
-    CreateReduxComboBox -Name "HoverBoots" -All -Text "Hover Boots" -Items @("Default", "Disabled", "Bark", "Cartoon Fall", "Flare Dancer Laugh", "Mweep!", "Shabom Pop", "Tambourine")                            -Info "Replace the sound used for the Hover Boots"                              -Credits "Ported from Rando" 
-    CreateReduxComboBox -Name "Horse"      -All -Text "Horse Neigh" -Items @("Default", "Disabled", "Armos", "Child Scream", "Great Fairy", "Moo", "Mweep!", "Redead Scream", "Ruto Wiggle", "Stalchild Attack")   -Info "Replace the sound for horses when neighing"                              -Credits "Ported from Rando"
-    CreateReduxComboBox -Name "Nightfall"  -All -Text "Nightfall"   -Items @("Default", "Disabled", "Cockadoodledoo", "Gold Skull Token", "Great Fairy", "Moo", "Mweep!", "Redead Moan", "Talon Snore", "Thunder") -Info "Replace the sound used when Nightfall occurs"                            -Credits "Ported from Rando" 
-    CreateReduxComboBox -Name "FileCursor" -All -Text "File Cursor" -Items $SFX3                                                                                                                                   -Info "Replace the sound used when moving the cursor in the File Select menu"   -Credits "Ported from Rando"
-    CreateReduxComboBox -Name "FileSelect" -All -Text "File Select" -Items $SFX3                                                                                                                                   -Info "Replace the sound used when selecting something in the File Select menu" -Credits "Ported from Rando"
+    CreateReduxComboBox -Name "LowHP"      -All -Text "Low HP"      -Items $SFX1                                                                                                                                   -Info "Set the sound effect for the low HP beeping"                             -Credits "Randomizer"
+    CreateReduxComboBox -Name "Navi"       -All -Text "Navi"        -Items $SFX2                                                                                                                                   -Info "Replace the sound used for Navi when she wants to tell something"        -Credits "Randomizer"
+    CreateReduxComboBox -Name "ZTarget"    -All -Text "Z-Target"    -Items $SFX2                                                                                                                                   -Info "Replace the sound used for Z-Targeting enemies"                          -Credits "Randomizer"
+    CreateReduxComboBox -Name "HoverBoots" -All -Text "Hover Boots" -Items @("Default", "Disabled", "Bark", "Cartoon Fall", "Flare Dancer Laugh", "Mweep!", "Shabom Pop", "Tambourine")                            -Info "Replace the sound used for the Hover Boots"                              -Credits "Randomizer" 
+    CreateReduxComboBox -Name "Horse"      -All -Text "Horse Neigh" -Items @("Default", "Disabled", "Armos", "Child Scream", "Great Fairy", "Moo", "Mweep!", "Redead Scream", "Ruto Wiggle", "Stalchild Attack")   -Info "Replace the sound for horses when neighing"                              -Credits "Randomizer"
+    CreateReduxComboBox -Name "Nightfall"  -All -Text "Nightfall"   -Items @("Default", "Disabled", "Cockadoodledoo", "Gold Skull Token", "Great Fairy", "Moo", "Mweep!", "Redead Moan", "Talon Snore", "Thunder") -Info "Replace the sound used when Nightfall occurs"                            -Credits "Randomizer" 
+    CreateReduxComboBox -Name "FileCursor" -All -Text "File Cursor" -Items $SFX3                                                                                                                                   -Info "Replace the sound used when moving the cursor in the File Select menu"   -Credits "Randomizer"
+    CreateReduxComboBox -Name "FileSelect" -All -Text "File Select" -Items $SFX3                                                                                                                                   -Info "Replace the sound used when selecting something in the File Select menu" -Credits "Randomizer"
 
 
 
@@ -2557,8 +2676,83 @@ function CreateTabAudio() {
 
 
 #==============================================================================================================================================================================================
+function CreateQuestGroups() {
+    
+    # MASTER QUEST #
+
+    CreateReduxGroup -Tag "MQ" -Text "Scenes & Dungeons"
+    CreateReduxPanel
+    CreateReduxRadioButton -Name "Disable"   -Max 6 -SaveTo "Dungeons" -Text "Vanilla"      -Info "All dungeons remain vanilla"                                                                            -Checked
+    CreateReduxRadioButton -Name "EnableMQ"  -Max 6 -SaveTo "Dungeons" -Text "Master Quest" -Info "Patch in all Master Quest dungeons"                                                                     -Credits "ShadowOne333"
+    CreateReduxRadioButton -Name "EnableUra" -Max 6 -SaveTo "Dungeons" -Text "Ura Quest"    -Info "Patch in all Ura (Disk Drive) Master Quest dungeons"                                                    -Credits "ZethN64, Sakura, Frostclaw, Steve(ToCoool) & Admentus"
+    CreateReduxRadioButton -Name "Select"    -Max 6 -SaveTo "Dungeons" -Text "Select"       -Info "Select which dungeons you want from which version"                                                      -Credits "ZethN64, Sakura, Frostclaw, Steve(ToCoool), ShadowOne333 & Admentus"
+    CreateReduxRadioButton -Name "Randomize" -Max 6 -SaveTo "Dungeons" -Text "Randomize"    -Info "Randomize the amount of dungeons from all versions"                                                     -Credits "ZethN64, Sakura, Frostclaw, Steve(ToCoool), ShadowOne333 & Admentus"
+    CreateReduxRadioButton -Name "Custom"    -Max 6 -SaveTo "Dungeons" -Text "Custom"       -Info "Patch in custom scenes generated by the Actor Editor`nOnly works if the Actor Editor generated a patch" -Credits "Admentus"
+
+
+
+    # MASTER QUEST LOGO #
+
+    CreateReduxGroup -Tag "MQ" -Text "Title Screen Logo"
+    CreateReduxPanel
+    CreateReduxRadioButton -Name "VanillaLogo"          -Max 5 -SaveTo "Logo" -Text "Vanilla"              -Info "Keep the original title screen logo"               -Checked
+    CreateReduxRadioButton -Name "MasterQuestLogo"      -Max 5 -SaveTo "Logo" -Text "Master Quest"         -Info "Use the Master Quest title screen logo"            -Credits "ShadowOne333, GhostlyDark & Admentus"
+    CreateReduxRadioButton -Name "NewMasterQuestLogo"   -Max 5 -SaveTo "Logo" -Text "New Master Quest"     -Info "Use the Neq Master Quest title screen logo"        -Credits "Euler"
+    CreateReduxRadioButton -Name "UraQuestLogo"         -Max 5 -SaveTo "Logo" -Text "Ura Quest"            -Info "Use the Ura Quest title screen logo"               -Credits "ZethN64, Sakura, Frostclaw, Steve(ToCoool), GhostlyDark & Admentus"
+    CreateReduxRadioButton -Name "UraQuestSubtitleLogo" -Max 5 -SaveTo "Logo" -Text "Ura Quest + Subtitle" -Info "Use the Ura Quest title screen logo with subtitle" -Credits "ZethN64, Sakura, Frostclaw, Steve(ToCoool), ShadowOne333, GhostlyDark & Admentus"
+
+
+
+    # SELECT - DUNGEONS #
+
+    $items = @("Vanilla", "Master Quest", "Ura Quest"); $credits = "ZethN64, Sakura, Frostclaw, Steve(ToCoool), ShadowOne333 & Admentus"
+    $Redux.Box.SelectMQ = CreateReduxGroup -Tag "MQ" -Text "Select - Dungeons"
+    CreateReduxComboBox -Name "InsideTheDekuTree"    -Text "Inside the Deku Tree"     -Items $items -NoDefault -Info "Patch Inside the Deku Tree to Master Quest"     -Credits $credits
+    CreateReduxComboBox -Name "DodongosCavern"       -Text "Dodongo's Cavern"         -Items $items -NoDefault -Info "Patch Dodongo's Cavern to Master Quest"         -Credits $credits
+    CreateReduxComboBox -Name "InsideJabuJabusBelly" -Text "Inside Jabu-Jabu's Belly" -Items $items -NoDefault -Info "Patch Inside Jabu-Jabu's Belly to Master Quest" -Credits $credits
+    CreateReduxComboBox -Name "ForestTemple"         -Text "Forest Temple"            -Items $items -NoDefault -Info "Patch Forest Temple to Master Quest"            -Credits $credits
+    CreateReduxComboBox -Name "FireTemple"           -Text "Fire Temple"              -Items $items -NoDefault -Info "Patch Fire Temple to Master Quest"              -Credits $credits
+    CreateReduxComboBox -Name "WaterTemple"          -Text "Water Temple"             -Items $items -NoDefault -Info "Patch Water Temple to Master Quest"             -Credits $credits
+    CreateReduxComboBox -Name "ShadowTemple"         -Text "Shadow Temple"            -Items $items -NoDefault -Info "Patch Shadow Temple to Master Quest"            -Credits $credits
+    CreateReduxComboBox -Name "SpiritTemple"         -Text "Spirit Temple"            -Items $items -NoDefault -Info "Patch Spirit Temple to Master Quest"            -Credits $credits
+    CreateReduxComboBox -Name "IceCavern"            -Text "Ice Cavern"               -Items $items -NoDefault -Info "Patch Ice Cavern to Master Quest"               -Credits $credits
+    CreateReduxComboBox -Name "BottomOfTheWell"      -Text "Bottom of the Well"       -Items $items -NoDefault -Info "Patch Bottom of the Well to Master Quest"       -Credits $credits
+    CreateReduxComboBox -Name "GerudoTrainingGround" -Text "Gerudo Training Ground"   -Items $items -NoDefault -Info "Patch Gerudo Training Ground to Master Quest"   -Credits $credits
+    CreateReduxComboBox -Name "InsideGanonsCastle"   -Text "Inside Ganon's Castle"    -Items $items -NoDefault -Info "Patch Inside Ganon's Castle to Master Quest"    -Credits $credits
+
+
+
+    # RANDOMIZE - DUNGEONS #
+
+    $Redux.Box.RandomizeMQ = CreateReduxGroup -Tag "MQ" -Text "Randomize - Dungeons"
+    $Items = @("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12")
+    CreateReduxComboBox -Name "Minimum" -Text "Minimum" -Default 1            -Items $Items
+    CreateReduxComboBox -Name "Maximum" -Text "Maximum" -Default $Items.Count -Items $Items
+
+    $Redux.MQ.Minimum.Add_SelectedIndexChanged({
+        if ($Redux.MQ.Maximum.SelectedIndex -lt $Redux.MQ.Minimum.SelectedIndex) { $Redux.MQ.Maximum.SelectedIndex = $Redux.MQ.Minimum.SelectedIndex }
+    })
+    $Redux.MQ.Maximum.Add_SelectedIndexChanged({
+        if ($Redux.MQ.Maximum.SelectedIndex -lt $Redux.MQ.Minimum.SelectedIndex) { $Redux.MQ.Maximum.SelectedIndex = $Redux.MQ.Minimum.SelectedIndex }
+    })
+    if ($Redux.MQ.Maximum.SelectedIndex -lt $Redux.MQ.Minimum.SelectedIndex) { $Redux.MQ.Maximum.SelectedIndex = $Redux.MQ.Minimum.SelectedIndex }
+        
+    EnableForm -Form $Redux.Box.SelectMQ -Enable $Redux.MQ.Select.Checked
+    $Redux.MQ.Select.Add_CheckedChanged({ EnableForm -Form $Redux.Box.SelectMQ -Enable $Redux.MQ.Select.Checked })
+    EnableForm -Form $Redux.Box.RandomizeMQ -Enable $Redux.MQ.Randomize.Checked
+    $Redux.MQ.Randomize.Add_CheckedChanged({ EnableForm -Form $Redux.Box.RandomizeMQ -Enable $Redux.MQ.Randomize.Checked })
+
+}
+
+
+
+#==============================================================================================================================================================================================
 function CreateTabDifficulty() {
     
+    if ($GamePatch.vanilla -eq 1) { CreateQuestGroups }
+
+
+
     # HERO MODE #
 
     $items1 = @("1 Monster HP","0.5x Monster HP", "1x Monster HP", "1.5x Monster HP", "2x Monster HP", "2.5x Monster HP", "3x Monster HP", "3.5x Monster HP", "4x Monster HP", "5x Monster HP")
@@ -2571,20 +2765,20 @@ function CreateTabDifficulty() {
     CreateReduxComboBox -Name "BossHP"     -All -Text "Boss HP"      -Items $items3 -Default 3                                                        -Info "Set the amount of health for bosses`nPhantom Ganon, Ganondorf and Ganon have a max of 3x HP"          -Credits "Admentus & Marcelo20XX"
     CreateReduxComboBox -Name "Damage"     -All -Text "Damage"       -Items @("1x Damage", "2x Damage", "4x Damage", "8x Damage", "OHKO Mode")        -Info "Set the amount of damage you receive`nOHKO Mode = You die in one hit"                                 -Credits "Admentus"
     CreateReduxComboBox -Name "MagicUsage" -All -Text "Magic Usage"  -Items @("1x Magic Usage", "2x Magic Usage", "4x Magic Usage", "8x Magic Usage") -Info "Set the amount of times magic is consumed at"                                                         -Credits "Admentus"
-    CreateReduxComboBox -Name "ItemDrops"  -All -Text "Item Drops"   -Items @("Default", "No Hearts", "Only Rupees", "Nothing")                       -Info "Set the items that will drop from grass, pots and more"                                               -Credits "Ported from Rando, Admentus, Third M & BilonFullHDemon"
+    CreateReduxComboBox -Name "ItemDrops"  -All -Text "Item Drops"   -Items @("Default", "No Hearts", "Only Rupees", "Nothing")                       -Info "Set the items that will drop from grass, pots and more"                                               -Credits "Randomizer, Admentus, Third M & BilonFullHDemon"
     
 
 
     # HERO MODE #
 
     CreateReduxGroup    -Tag  "Hero"           -All -Text "Hero Mode"
-    CreateReduxCheckBox -Name "Arwing"              -Text "Arwing"              -Info "Replaces the Rock-Lifting Kokiri Kid with an Arwing in Kokiri Forest"        -Credits "Admentus"
-    CreateReduxCheckBox -Name "LikeLike"            -Text "Like-Like"           -Info "Replaces the Rock-Lifting Kokiri Kid with a Like-Like in Kokiri Forest"      -Credits "Admentus" -Link $Redux.Hero.Arwing
-    CreateReduxCheckBox -Name "GraveyardKeese"      -Text "Graveyard Keese"     -Info "Extends the object list for Adult Link so the Keese appear at the Graveyard" -Credits "salvador235"
-    CreateReduxCheckBox -Name "LostWoodsOctorok"    -Text "Lost Woods Octorok"  -Info "Add an Octorok actor in the Lost Woods area which leads to Zora's River"     -Credits "Chez Cousteau"
-    CreateReduxCheckBox -Name "HarderChildBosses"   -Text "Harder Child Bosses" -Info "Replace objects in the Child Dungeon Boss arenas with additional monsters"   -Credits "BilonFullHDemon"
-    CreateReduxCheckBox -Name "PotsChallenge"  -All -Text "Pots Challenge"      -Info "Throw pots at your enemies to defeat them! Pots everywhere!"                 -Credits "Aegiker"
-    CreateReduxCheckBox -Name "NoBottledFairy" -All -Text "No Bottled Fairies"  -Info "Fairies can no longer be put into a bottle"                                  -Credits "Admentus & Three Pendants"
+    CreateReduxCheckBox -Name "Arwing"              -Text "Arwing"              -Info "Add an Arwing to Kokiri Forest"                                            -Credits "Admentus"
+    CreateReduxCheckBox -Name "LikeLike"            -Text "Like-Like"           -Info "Add an Like-Like to Kokiri Forest"                                         -Credits "Admentus"
+    CreateReduxCheckBox -Name "GraveyardKeese"      -Text "Graveyard Keese"     -Info "Restore the Keese that appear at the Graveyard as Adult Kink"              -Credits "Admentus"
+    CreateReduxCheckBox -Name "LostWoodsOctorok"    -Text "Lost Woods Octorok"  -Info "Restore the Octorok in the Lost Woods area which leads to Zora's River"    -Credits "Admentus"
+    CreateReduxCheckBox -Name "HarderChildBosses"   -Text "Harder Child Bosses" -Info "Replace objects in the Child Dungeon Boss arenas with additional monsters" -Credits "BilonFullHDemon"
+    CreateReduxCheckBox -Name "PotsChallenge"  -All -Text "Pots Challenge"      -Info "Throw pots at your enemies to defeat them! Pots everywhere!"               -Credits "Aegiker"
+    CreateReduxCheckBox -Name "NoBottledFairy" -All -Text "No Bottled Fairies"  -Info "Fairies can no longer be put into a bottle"                                -Credits "Admentus & Three Pendants"
 
     CreateReduxGroup    -Tag  "HeroHarder"    -All    -Text "Hero Mode (Harder Enemies)"
     CreateReduxCheckBox -Name "GohmaLarve"    -All    -Text "Harder Gohma Larve"    -Info "Gohma Larves are faster"                                                               -Credits "Euler"
@@ -2604,7 +2798,7 @@ function CreateTabDifficulty() {
     # RECOVERY #
 
     CreateReduxGroup   -Tag  "Recovery"    -All -Text "Recovery" -Height 1.6
-    CreateReduxTextBox -Name "Heart"       -All -Text "Recovery Heart" -Value 16  -Min 0 -Max 320 -Length 3 -Info "Set the amount of HP that Recovery Hearts will replenish`nRecovery Heart drops are removed if set to 0" -Credits "Admentus, Three Pendants & Rando (No Heart Drops)"
+    CreateReduxTextBox -Name "Heart"       -All -Text "Recovery Heart" -Value 16  -Min 0 -Max 320 -Length 3 -Info "Set the amount of HP that Recovery Hearts will replenish`nRecovery Heart drops are removed if set to 0" -Credits "Admentus, Three Pendants & Randomizer (No Heart Drops)"
     CreateReduxTextBox -Name "Fairy"       -All -Text "Fairy (Bottle)" -Value 320 -Min 0 -Max 320 -Length 3 -Info "Set the amount of HP that a Bottled Fairy will replenish"                                               -Credits "Admentus & Three Pendants"
     CreateReduxTextBox -Name "FairyRevive" -All -Text "Fairy (Revive)" -Value 320 -Min 0 -Max 320 -Length 3 -Info "Set the amount of HP that a Bottled Fairy will replenish after Link died"                               -Credits "Admentus & Three Pendants"
     CreateReduxTextBox -Name "Milk"        -All -Text "Milk"           -Value 80  -Min 0 -Max 320 -Length 3 -Info "Set the amount of HP that Milk will replenish"                                                          -Credits "Admentus & Three Pendants"
@@ -2638,17 +2832,17 @@ function CreateTabDifficulty() {
     # MINIGAMES #
 
     CreateReduxGroup    -Tag  "Minigames" -Base 5 -Text "Minigames"
-    CreateReduxCheckBox -Name "Dampe"     -Base 4 -Text "Dampé's Digging"         -Info "Dampé's Digging Game is always first try"                         -Credits "Ported from Rando"
-  # CreateReduxCheckBox -Name "Ocarina"   -Base 4 -Text "Skullkid Ocarina"        -Info "You only need to clear the first round to get the Piece of Heart" -Credits "Ported from Rando"
-    CreateReduxCheckBox -Name "FishSize"  -Base 5 -Text "Lower Fish Requirements" -Info "Fishing has less demanding size requirements"                     -Credits "Ported from Rando"
-    CreateReduxCheckBox -Name "FishLoss"  -Base 5 -Text "No Fish RNG Loss"        -Info "Fish no longer randomly let go when trying to reel them in"       -Credits "Ported from Rando"
+    CreateReduxCheckBox -Name "Dampe"     -Base 4 -Text "Dampé's Digging"         -Info "Dampé's Digging Game is always first try"                         -Credits "Randomizer"
+  # CreateReduxCheckBox -Name "Ocarina"   -Base 4 -Text "Skullkid Ocarina"        -Info "You only need to clear the first round to get the Piece of Heart" -Credits "Randomizer"
+    CreateReduxCheckBox -Name "FishSize"  -Base 5 -Text "Lower Fish Requirements" -Info "Fishing has less demanding size requirements"                     -Credits "Randomizer"
+    CreateReduxCheckBox -Name "FishLoss"  -Base 5 -Text "No Fish RNG Loss"        -Info "Fish no longer randomly let go when trying to reel them in"       -Credits "Randomizer"
     
-    CreateReduxCheckBox -Name "Bowling"   -Base 5 -Exclude "New Master Quest" -Text "Bombchu Bowling"                                                                                                       -Info "Bombchu Bowling prizes now appear in fixed order instead of random" -Credits "Ported from Rando"
-    CreateReduxComboBox -Name "Bowling1"  -Base 5 -Exclude "New Master Quest" -Text "Bowling Reward #1" -Items ("Piece of Heart", "Bomb Bag", "Purple Rupee", "Bombchus") -Values @("64", "28", "4C", "58") -Info "Set the first reward for the Bombchu Bowling Minigame"              -Credits "Ported from Rando" -Default 1 -Column 1 -Row 2
-    CreateReduxComboBox -Name "Bowling2"  -Base 5 -Exclude "New Master Quest" -Text "Bowling Reward #2" -Items ("Piece of Heart", "Bomb Bag", "Purple Rupee", "Bombchus") -Values @("64", "28", "4C", "58") -Info "Set the second reward for the Bombchu Bowling Minigame"             -Credits "Ported from Rando" -Default 2
-    CreateReduxComboBox -Name "Bowling3"  -Base 5 -Exclude "New Master Quest" -Text "Bowling Reward #3" -Items ("Piece of Heart", "Bomb Bag", "Purple Rupee", "Bombchus") -Values @("64", "28", "4C", "58") -Info "Set the third reward for the Bombchu Bowling Minigame"              -Credits "Ported from Rando" -Default 4
-    CreateReduxComboBox -Name "Bowling4"  -Base 5 -Exclude "New Master Quest" -Text "Bowling Reward #4" -Items ("Piece of Heart", "Bomb Bag", "Purple Rupee", "Bombchus") -Values @("64", "28", "4C", "58") -Info "Set the fourth reward for the Bombchu Bowling Minigame"             -Credits "Ported from Rando" -Default 3
-    CreateReduxComboBox -Name "Bowling5"  -Base 5 -Exclude "New Master Quest" -Text "Bowling Reward #5" -Items ("Piece of Heart", "Bomb Bag", "Purple Rupee", "Bombchus") -Values @("64", "28", "4C", "58") -Info "Set the fifth reward for the Bombchu Bowling Minigame"              -Credits "Ported from Rando" -Default 3
+    CreateReduxCheckBox -Name "Bowling"   -Base 5 -Exclude "New Master Quest" -Text "Bombchu Bowling"                                                                                                       -Info "Bombchu Bowling prizes now appear in fixed order instead of random" -Credits "Randomizer"
+    CreateReduxComboBox -Name "Bowling1"  -Base 5 -Exclude "New Master Quest" -Text "Bowling Reward #1" -Items ("Piece of Heart", "Bomb Bag", "Purple Rupee", "Bombchus") -Values @("64", "28", "4C", "58") -Info "Set the first reward for the Bombchu Bowling Minigame"              -Credits "Randomizer" -Default 1 -Column 1 -Row 2
+    CreateReduxComboBox -Name "Bowling2"  -Base 5 -Exclude "New Master Quest" -Text "Bowling Reward #2" -Items ("Piece of Heart", "Bomb Bag", "Purple Rupee", "Bombchus") -Values @("64", "28", "4C", "58") -Info "Set the second reward for the Bombchu Bowling Minigame"             -Credits "Randomizer" -Default 2
+    CreateReduxComboBox -Name "Bowling3"  -Base 5 -Exclude "New Master Quest" -Text "Bowling Reward #3" -Items ("Piece of Heart", "Bomb Bag", "Purple Rupee", "Bombchus") -Values @("64", "28", "4C", "58") -Info "Set the third reward for the Bombchu Bowling Minigame"              -Credits "Randomizer" -Default 4
+    CreateReduxComboBox -Name "Bowling4"  -Base 5 -Exclude "New Master Quest" -Text "Bowling Reward #4" -Items ("Piece of Heart", "Bomb Bag", "Purple Rupee", "Bombchus") -Values @("64", "28", "4C", "58") -Info "Set the fourth reward for the Bombchu Bowling Minigame"             -Credits "Randomizer" -Default 3
+    CreateReduxComboBox -Name "Bowling5"  -Base 5 -Exclude "New Master Quest" -Text "Bowling Reward #5" -Items ("Piece of Heart", "Bomb Bag", "Purple Rupee", "Bombchus") -Values @("64", "28", "4C", "58") -Info "Set the fifth reward for the Bombchu Bowling Minigame"              -Credits "Randomizer" -Default 3
 
     if ($Redux.Minigames.Bowling -ne $null) {
         $Redux.Minigames.Bowling.Add_CheckedChanged({ $Redux.Minigames.Bowling1.enabled = $Redux.Minigames.Bowling2.enabled = $Redux.Minigames.Bowling3.enabled = $Redux.Minigames.Bowling4.enabled = $Redux.Minigames.Bowling5.enabled = $this.checked })
@@ -2661,114 +2855,12 @@ function CreateTabDifficulty() {
 
     CreateReduxGroup    -Tag  "EasyMode"            -All    -Text "Easy Mode"
     CreateReduxCheckbox -Name "NoShieldSteal"       -All    -Text "No Shield Steal"       -Info "Like-Likes will no longer steal the Deku Shield or Hylian Shield from Link"                                            -Credits "Admentus"
-    CreateReduxCheckbox -Name "NoTunicSteal"        -All    -Text "No Tunic Steal"        -Info "Like-Likes will no longer steal the Goron Tunic or Zora Tunic from Link"                                               -Credits "GhostlyDark (ported from Redux)"
-    CreateReduxCheckBox -Name "SkipStealthSequence" -Base 3 -Text "Skip Stealth Sequence" -Info "Skip the Castle Courtyard Stealth Sequence and allows you to go straight to the Inner Courtyard"                       -Credits "Ported from Rando"
-    CreateReduxCheckBox -Name "SkipTowerEscape"     -Base 3 -Text "Skip Tower Escape"     -Info "Skip the Ganon's Tower Escape Sequence and allows you to go straight to the Ganon boss fight"                          -Credits "Ported from Rando"
+    CreateReduxCheckbox -Name "NoTunicSteal"        -All    -Text "No Tunic Steal"        -Info "Like-Likes will no longer steal the Goron Tunic or Zora Tunic from Link"                                               -Credits "GhostlyDark"
+    CreateReduxCheckBox -Name "SkipStealthSequence" -Base 3 -Text "Skip Stealth Sequence" -Info "Skip the Castle Courtyard Stealth Sequence and allows you to go straight to the Inner Courtyard"                       -Credits "Randomizer"
+    CreateReduxCheckBox -Name "SkipTowerEscape"     -Base 3 -Text "Skip Tower Escape"     -Info "Skip the Ganon's Tower Escape Sequence and allows you to go straight to the Ganon boss fight"                          -Credits "Randomizer"
     CreateReduxCheckBox -Name "HotRodderGoron"      -Base 5 -Text "Hot Rodder Goron"      -Info "The Hot Rodder Goron no longer needs to be stopped in a specific location before rewarding you with a bigger bomb bag" -Credits "Admentus"
     CreateReduxCheckBox -Name "GerudoFighterJail"   -Base 4 -Text "Gerudo Fighter Jail"   -Info "You're no longer send to jail when hit by the spin attack from a Gerudo Fighter"                                       -Credits "Euler"
     CreateReduxTextBox  -Name "GhostShopPoints"     -Base 4 -Text "Ghost Shop Points"     -Info "Set the amount of Big Poes you need to catch for the bottle reward"                 -Value 10 -Min 1 -Max 10 -Length 2 -Credits "Euler"
-
-}
-
-
-#==============================================================================================================================================================================================
-function CreateTabScenes() {
-    
-    # MASTER QUEST #
-
-    CreateReduxGroup -Tag "MQ" -Text "Scenes & Dungeons"
-    CreateReduxPanel
-    CreateReduxRadioButton -Name "Disable"   -Max 6 -SaveTo "Dungeons" -Text "Vanilla"      -Info "All dungeons remain vanilla"                                                                            -Checked
-    CreateReduxRadioButton -Name "EnableMQ"  -Max 6 -SaveTo "Dungeons" -Text "Master Quest" -Info "Patch in all Master Quest dungeons"                                                                     -Credits "ShadowOne333"
-    CreateReduxRadioButton -Name "EnableUra" -Max 6 -SaveTo "Dungeons" -Text "Ura Quest"    -Info "Patch in all Ura (Disk Drive) Master Quest dungeons"                                                    -Credits "ZethN64, Sakura, Frostclaw, Steve(ToCoool) & Admentus"
-    CreateReduxRadioButton -Name "Select"    -Max 6 -SaveTo "Dungeons" -Text "Select"       -Info "Select which dungeons you want from which version"                                                      -Credits "ZethN64, Sakura, Frostclaw, Steve(ToCoool), ShadowOne333 & Admentus"
-    CreateReduxRadioButton -Name "Randomize" -Max 6 -SaveTo "Dungeons" -Text "Randomize"    -Info "Randomize the amount of dungeons from all versions"                                                     -Credits "ZethN64, Sakura, Frostclaw, Steve(ToCoool), ShadowOne333 & Admentus"
-    CreateReduxRadioButton -Name "Custom"    -Max 6 -SaveTo "Dungeons" -Text "Custom"       -Info "Patch in custom scenes generated by the Actor Editor`nOnly works if the Actor Editor generated a patch" -Credits "Admentus"
-
-
-
-    # MASTER QUEST LOGO #
-
-    CreateReduxGroup -Tag "MQ" -Text "Title Screen Logo"
-    CreateReduxPanel
-    CreateReduxRadioButton -Name "VanillaLogo"          -Max 5 -SaveTo "Logo" -Text "Vanilla"              -Info "Keep the original title screen logo"               -Checked
-    CreateReduxRadioButton -Name "MasterQuestLogo"      -Max 5 -SaveTo "Logo" -Text "Master Quest"         -Info "Use the Master Quest title screen logo"            -Credits "ShadowOne333, GhostlyDark & Admentus"
-    CreateReduxRadioButton -Name "NewMasterQuestLogo"   -Max 5 -SaveTo "Logo" -Text "New Master Quest"     -Info "Use the Neq Master Quest title screen logo"        -Credits "Euler"
-    CreateReduxRadioButton -Name "UraQuestLogo"         -Max 5 -SaveTo "Logo" -Text "Ura Quest"            -Info "Use the Ura Quest title screen logo"               -Credits "ZethN64, Sakura, Frostclaw, Steve(ToCoool), GhostlyDark & Admentus"
-    CreateReduxRadioButton -Name "UraQuestSubtitleLogo" -Max 5 -SaveTo "Logo" -Text "Ura Quest + Subtitle" -Info "Use the Ura Quest title screen logo with subtitle" -Credits "ZethN64, Sakura, Frostclaw, Steve(ToCoool), ShadowOne333, GhostlyDark & Admentus"
-
-
-
-    # SELECT - DUNGEONS #
-
-    $Redux.Box.SelectMQ = CreateReduxGroup -Tag "MQ" -Text "Select - Dungeons"
-    $items   = @("Vanilla", "Master Quest", "Ura Quest")
-    $credits = "ZethN64, Sakura, Frostclaw, Steve(ToCoool), ShadowOne333 & Admentus"
-    CreateReduxComboBox -Name "InsideTheDekuTree"    -Text "Inside the Deku Tree"     -Items $items -NoDefault -Info "Patch Inside the Deku Tree to Master Quest"     -Credits $credits
-    CreateReduxComboBox -Name "DodongosCavern"       -Text "Dodongo's Cavern"         -Items $items -NoDefault -Info "Patch Dodongo's Cavern to Master Quest"         -Credits $credits
-    CreateReduxComboBox -Name "InsideJabuJabusBelly" -Text "Inside Jabu-Jabu's Belly" -Items $items -NoDefault -Info "Patch Inside Jabu-Jabu's Belly to Master Quest" -Credits $credits
-    CreateReduxComboBox -Name "ForestTemple"         -Text "Forest Temple"            -Items $items -NoDefault -Info "Patch Forest Temple to Master Quest"            -Credits $credits
-    CreateReduxComboBox -Name "FireTemple"           -Text "Fire Temple"              -Items $items -NoDefault -Info "Patch Fire Temple to Master Quest"              -Credits $credits
-    CreateReduxComboBox -Name "WaterTemple"          -Text "Water Temple"             -Items $items -NoDefault -Info "Patch Water Temple to Master Quest"             -Credits $credits
-    CreateReduxComboBox -Name "ShadowTemple"         -Text "Shadow Temple"            -Items $items -NoDefault -Info "Patch Shadow Temple to Master Quest"            -Credits $credits
-    CreateReduxComboBox -Name "SpiritTemple"         -Text "Spirit Temple"            -Items $items -NoDefault -Info "Patch Spirit Temple to Master Quest"            -Credits $credits
-    CreateReduxComboBox -Name "IceCavern"            -Text "Ice Cavern"               -Items $items -NoDefault -Info "Patch Ice Cavern to Master Quest"               -Credits $credits
-    CreateReduxComboBox -Name "BottomOfTheWell"      -Text "Bottom of the Well"       -Items $items -NoDefault -Info "Patch Bottom of the Well to Master Quest"       -Credits $credits
-    CreateReduxComboBox -Name "GerudoTrainingGround" -Text "Gerudo Training Ground"   -Items $items -NoDefault -Info "Patch Gerudo Training Ground to Master Quest"   -Credits $credits
-    CreateReduxComboBox -Name "InsideGanonsCastle"   -Text "Inside Ganon's Castle"    -Items $items -NoDefault -Info "Patch Inside Ganon's Castle to Master Quest"    -Credits $credits
-
-
-
-    # RANDOMIZE - DUNGEONS #
-
-    $Redux.Box.RandomizeMQ = CreateReduxGroup -Tag "MQ" -Text "Randomize - Dungeons"
-    $Items = @("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12")
-    CreateReduxComboBox -Name "Minimum" -Text "Minimum" -Default 1            -Items $Items
-    CreateReduxComboBox -Name "Maximum" -Text "Maximum" -Default $Items.Count -Items $Items
-
-
-
-    # VANILLA DUNGEON ADJUSTMENTS #
-
-    $Redux.Box.VanillaDungeons = CreateReduxGroup -Tag "Scenes" -Text "Vanilla Dungeon Adjustements"
-    CreateReduxCheckBox -Name "DodongosCavernGossipStone" -Text "Dodongo's Cavern Gossip Stone" -Info "Fix the Gossip Stones in Dodongo's Cavern so that a fairy can be spawned from them"                                                  -Credits "Ported from Rando"
-    CreateReduxCheckBox -Name "WaterTempleActors"         -Text "Add Water Temple Actors"       -Info "Add several actors in the Water Temple`nUnreachable hookshot spot in room 22, three out of bounds pots, restore two Keese in room 1" -Credits "Chez Cousteau"
-    CreateReduxCheckBox -Name "RemoveDisruptiveText"      -Text "Remove Disruptive Text"        -Info "Remove disruptive text from Gerudo Training Ground and early Shadow Temple"                                                          -Credits "Ported from Rando"
-    CreateReduxCheckBox -Name "NaviTarget"                -Text "Navi Targettable Spots"        -Info "Fix several spots in dungeons which Navi could not target for Link"                                                                  -Credits "Chez Cousteau"
-
-
-
-    # SCENE ADJUSTMENTS #
-
-    $Redux.Box.Scenes = CreateReduxGroup -Tag "Scenes" -Text "Scene Adjustements"
-    CreateReduxCheckBox -Name "MuteOwls"           -Text "Mute Owls"                    -Info "Kaepora Gaebora the owl will no longer interrupt Link with tutorials"                                                                                 -Credits "Chez Cousteau"
-    CreateReduxCheckBox -Name "OverworldSkyboxes"  -Text "Overworld Skyboxes"           -Info "Use day and night skyboxes for all overworld areas lacking one"                                                                                       -Credits "Admentus (ported) & BrianMp16 (AR Code)"
-    CreateReduxCheckBox -Name "Graves"             -Text "Graveyard Graves"             -Info "The grave holes in Kakariko Graveyard behave as in the Rev 1 revision`nThe edges no longer force Link to grab or jump over them when trying to enter" -Credits "Ported from Rando"
-    CreateReduxCheckBox -Name "VisibleGerudoTent"  -Text "Visible Gerudo Tent"          -Info "Make the tent in the Gerudo Valley during the Child era visible`nThe tent was always accessible, just invisible"                                      -Credits "Chez Cousteau" -Warning "Makes the bridge for Child Link broken"
-    CreateReduxCheckBox -Name "CorrectTimeDoor"    -Text "Correct Door of Time Coords"  -Info "Fix the positioning of the Temple of Time door, so you can not skip past it"                                                                          -Credits "Chez Cousteau"
-    CreateReduxCheckBox -Name "OpenTimeDoor"       -Text "Fix Door of Time Unlock"      -Info "Fix Door of Time not opening on first visit"                                                                                                          -Credits "Rando"
-    CreateReduxCheckBox -Name "ChildColossusFairy" -Text "Fix Child Colossus Fairy"     -Info 'Fix "...???" textbox outside Child Colossus Fairy to use the right flag and disappear once the wall is destroyed'                                     -Credits "Ported from Rando"
-    CreateReduxCheckBox -Name "CraterFairy"        -Text "Fix Crater Fairy"             -Info 'Remove the "...???" textbox outside the Crater Fairy'                                                                                                 -Credits "Ported from Rando"
-
-    
-
-    $Redux.MQ.Disable.Add_CheckedChanged({ EnableForm $Redux.Box.VanillaDungeons -Enable $this.Checked })
-    EnableForm $Redux.Box.VanillaDungeons -Enable $Redux.MQ.Disable.Checked
-
-    $Redux.MQ.Minimum.Add_SelectedIndexChanged({
-        if ($Redux.MQ.Maximum.SelectedIndex -lt $Redux.MQ.Minimum.SelectedIndex) { $Redux.MQ.Maximum.SelectedIndex = $Redux.MQ.Minimum.SelectedIndex }
-    })
-    $Redux.MQ.Maximum.Add_SelectedIndexChanged({
-        if ($Redux.MQ.Maximum.SelectedIndex -lt $Redux.MQ.Minimum.SelectedIndex) { $Redux.MQ.Maximum.SelectedIndex = $Redux.MQ.Minimum.SelectedIndex }
-    })
-    if ($Redux.MQ.Maximum.SelectedIndex -lt $Redux.MQ.Minimum.SelectedIndex) { $Redux.MQ.Maximum.SelectedIndex = $Redux.MQ.Minimum.SelectedIndex }
-
-    EnableForm -Form $Redux.Box.SelectMQ -Enable $Redux.MQ.Select.Checked
-    $Redux.MQ.Select.Add_CheckedChanged({ EnableForm -Form $Redux.Box.SelectMQ -Enable $Redux.MQ.Select.Checked })
-    EnableForm -Form $Redux.Box.RandomizeMQ -Enable $Redux.MQ.Randomize.Checked
-    $Redux.MQ.Randomize.Add_CheckedChanged({ EnableForm -Form $Redux.Box.RandomizeMQ -Enable $Redux.MQ.Randomize.Checked })
-    EnableForm -Form $Redux.Box.Scenes -Enable (!$Redux.MQ.Custom.Checked)
-    $Redux.MQ.Custom.Add_CheckedChanged({ EnableForm -Form $Redux.Box.Scenes -Enable (!$Redux.MQ.Custom.Checked) })
 
 }
 
@@ -2783,27 +2875,25 @@ function CreateTabColors() {
     $Redux.Colors.Equipment = @()
     $items = @("Kokiri Green", "Goron Red", "Zora Blue"); $postItems = @("Randomized", "Custom"); $Files = ($GameFiles.Textures + "\Tunic"); $Randomize = '"Randomized" fully randomizes the colors each time the patcher is opened'
     if ($GamePatch.settings -eq "Gold Quest") { $items = @("Gold Quest Gold", "Gold Quest Purple", "Gold Quest White") + $items }
-    $Redux.Colors.Equipment += CreateReduxComboBox -Name "KokiriTunic" -Column 1 -Row 1 -All -Text "Kokiri Tunic Color" -Default 1 -Length 230 -Shift 40 -Items $items -PostItems $postItems -FilePath $Files -Info ("Select a color scheme for the Kokiri Tunic`n" + $Randomize) -Credits "Ported from Rando"
-    $Redux.Colors.Equipment += CreateReduxComboBox -Name "GoronTunic"  -Column 1 -Row 2 -All -Text "Goron Tunic Color"  -Default 2 -Length 230 -Shift 40 -Items $items -PostItems $postItems -FilePath $Files -Info ("Select a color scheme for the Goron Tunic`n"  + $Randomize) -Credits "Ported from Rando"
-    $Redux.Colors.Equipment += CreateReduxComboBox -Name "ZoraTunic"   -Column 1 -Row 3 -All -Text "Zora Tunic Color"   -Default 3 -Length 230 -Shift 40 -Items $items -PostItems $postItems -FilePath $Files -Info ("Select a color scheme for the Zora Tunic`n"   + $Randomize) -Credits "Ported from Rando"
+    $Redux.Colors.Equipment += CreateReduxComboBox -Name "KokiriTunic"   -Column 1 -Row 1 -All -Text "Kokiri Tunic Color" -Default 1 -Length 230 -Shift 40 -Items $items -PostItems $postItems -FilePath $Files -Info ("Select a color scheme for the Kokiri Tunic`n" + $Randomize) -Credits "Randomizer"
+    $Redux.Colors.Equipment += CreateReduxComboBox -Name "GoronTunic"    -Column 1 -Row 2 -All -Text "Goron Tunic Color"  -Default 2 -Length 230 -Shift 40 -Items $items -PostItems $postItems -FilePath $Files -Info ("Select a color scheme for the Goron Tunic`n"  + $Randomize) -Credits "Randomizer"
+    $Redux.Colors.Equipment += CreateReduxComboBox -Name "ZoraTunic"     -Column 1 -Row 3 -All -Text "Zora Tunic Color"   -Default 3 -Length 230 -Shift 40 -Items $items -PostItems $postItems -FilePath $Files -Info ("Select a color scheme for the Zora Tunic`n"   + $Randomize) -Credits "Randomizer"
     $Items = @("Silver", "Gold", "Black", "Green", "Blue", "Bronze", "Red", "Sky Blue", "Pink", "Magenta", "Orange", "Lime", "Purple", "Randomized", "Custom")
-    $Redux.Colors.Equipment += CreateReduxComboBox -Name "SilverGauntlets"   -Column 4 -Row 1 -Adult -Text "Silver Gauntlets Color"    -Default 1 -Length 230 -Shift 40 -Items $Items -Info ("Select a color scheme for the Silver Gauntlets`n" + $Randomize) -Credits "Ported from Rando"
-    $Redux.Colors.Equipment += CreateReduxComboBox -Name "GoldenGauntlets"   -Column 4 -Row 2 -Adult -Text "Golden Gauntlets Color"    -Default 2 -Length 230 -Shift 40 -Items $Items -Info ("Select a color scheme for the Golden Gauntlets`n" + $Randomize) -Credits "Ported from Rando"
+    $Redux.Colors.Equipment += CreateReduxComboBox -Name "SilverGauntlets"   -Column 4 -Row 1 -Adult -Text "Silver Gauntlets Color"    -Default 1 -Length 230 -Shift 40 -Items $Items -Info ("Select a color scheme for the Silver Gauntlets`n" + $Randomize) -Credits "Randomizer"
+    $Redux.Colors.Equipment += CreateReduxComboBox -Name "GoldenGauntlets"   -Column 4 -Row 2 -Adult -Text "Golden Gauntlets Color"    -Default 2 -Length 230 -Shift 40 -Items $Items -Info ("Select a color scheme for the Golden Gauntlets`n" + $Randomize) -Credits "Randomizer"
     $Items =  @("Red", "Green", "Blue", "Yellow", "Cyan", "Magenta", "Orange", "Gold", "Purple", "Pink", "Randomized", "Custom")
-    $Redux.Colors.Equipment += CreateReduxComboBox -Name "MirrorShieldFrame" -Column 4 -Row 3 -Adult -Text "Mirror Shield Frame Color" -Default 1 -Length 230 -Shift 40 -Items $Items -Info ("Select a color scheme for the Mirror Shield Frame`n" + $Randomize) -Warning "This option might not work for every custom player model" -Credits "Ported from Rando"
+    $Redux.Colors.Equipment += CreateReduxComboBox -Name "MirrorShieldFrame" -Column 4 -Row 3 -Adult -Text "Mirror Shield Frame Color" -Default 1 -Length 230 -Shift 40 -Items $Items -Info ("Select a color scheme for the Mirror Shield Frame`n" + $Randomize) -Warning "This option might not work for every custom player model" -Credits "Randomizer"
 
-    # Equipment Colors - Buttons
     $Buttons = @()
-    $Buttons += CreateReduxButton -Column 3 -Row 1 -Tag $Buttons.Count -Width 100 -All   -Text "Kokiri Tunic"     -Info "Select the color you want for the Kokiri Tunic" -Credits "Ported from Rando"
-    $Buttons += CreateReduxButton -Column 3 -Row 2 -Tag $Buttons.Count -Width 100 -All   -Text "Goron Tunic"      -Info "Select the color you want for the Goron Tunic"  -Credits "Ported from Rando"
-    $Buttons += CreateReduxButton -Column 3 -Row 3 -Tag $Buttons.Count -Width 100 -All   -Text "Zora Tunic"       -Info "Select the color you want for the Zora Tunic"   -Credits "Ported from Rando"
+    $Buttons += CreateReduxButton -Column 3 -Row 1 -Tag $Buttons.Count -Width 100 -All -Text "Kokiri Tunic" -Info "Select the color you want for the Kokiri Tunic" -Credits "Randomizer"
+    $Buttons += CreateReduxButton -Column 3 -Row 2 -Tag $Buttons.Count -Width 100 -All -Text "Goron Tunic"  -Info "Select the color you want for the Goron Tunic"  -Credits "Randomizer"
+    $Buttons += CreateReduxButton -Column 3 -Row 3 -Tag $Buttons.Count -Width 100 -All -Text "Zora Tunic"   -Info "Select the color you want for the Zora Tunic"   -Credits "Randomizer"
     if ($Redux.Colors.SilverGauntlets -ne $null) {
-        $Buttons += CreateReduxButton -Column 6 -Row 1 -Tag $Buttons.Count -Width 100 -Adult -Text "Silver Gaunlets"  -Info "Select the color you want for the Silver Gauntlets"           -Credits "Ported from Rando"
-        $Buttons += CreateReduxButton -Column 6 -Row 2 -Tag $Buttons.Count -Width 100 -Adult -Text "Golden Gauntlets" -Info "Select the color you want for the Golden Gauntlets"           -Credits "Ported from Rando"
-        $Buttons += CreateReduxButton -Column 6 -Row 3 -Tag $Buttons.Count -Width 100 -Adult -Text "Mirror Shield"    -Info "Select the color you want for the frame of the Mirror Shield" -Credits "Ported from Rando"
+        $Buttons += CreateReduxButton -Column 6 -Row 1 -Tag $Buttons.Count -Width 100 -Adult -Text "Silver Gaunlets"  -Info "Select the color you want for the Silver Gauntlets"           -Credits "Randomizer"
+        $Buttons += CreateReduxButton -Column 6 -Row 2 -Tag $Buttons.Count -Width 100 -Adult -Text "Golden Gauntlets" -Info "Select the color you want for the Golden Gauntlets"           -Credits "Randomizer"
+        $Buttons += CreateReduxButton -Column 6 -Row 3 -Tag $Buttons.Count -Width 100 -Adult -Text "Mirror Shield"    -Info "Select the color you want for the frame of the Mirror Shield" -Credits "Randomizer"
     }
 
-    # Equipment Colors - Dialogs
     $Redux.Colors.SetEquipment = @()
     $Redux.Colors.SetEquipment += CreateColorDialog -Color "1E691B" -Name "SetKokiriTunic" -IsGame -Button $Buttons[0]
     $Redux.Colors.SetEquipment += CreateColorDialog -Color "641400" -Name "SetGoronTunic"  -IsGame -Button $Buttons[1]
@@ -2814,7 +2904,6 @@ function CreateTabColors() {
         $Redux.Colors.SetEquipment += CreateColorDialog -Color "D70000" -Name "SetMirrorShieldFrame" -IsGame -Button $Buttons[5]
     }
 
-    # Equipment Colors - Labels
     $Redux.Colors.EquipmentLabels = @()
     for ($i=0; $i -lt $Buttons.length; $i++) {
         $Buttons[$i].Add_Click({ $Redux.Colors.SetEquipment[[uint16]$this.Tag].ShowDialog(); $Redux.Colors.Equipment[[uint16]$this.Tag].Text = "Custom"; $Redux.Colors.EquipmentLabels[[uint16]$this.Tag].BackColor = $Redux.Colors.SetEquipment[[uint16]$this.Tag].Color; $GameSettings["Colors"][$Redux.Colors.SetEquipment[[uint16]$this.Tag].Tag] = $Redux.Colors.SetEquipment[[uint16]$this.Tag].Color.Name })
@@ -2823,20 +2912,19 @@ function CreateTabColors() {
     }
 
     $Redux.Colors.Equipment[0].Add_SelectedIndexChanged({ SetTunicColorsPreset -ComboBox $Redux.Colors.Equipment[0] -Dialog $Redux.Colors.SetEquipment[0] -Label $Redux.Colors.EquipmentLabels[0] })
-    SetTunicColorsPreset -ComboBox $Redux.Colors.Equipment[0] -Dialog $Redux.Colors.SetEquipment[0] -Label $Redux.Colors.EquipmentLabels[0]
+                                                          SetTunicColorsPreset -ComboBox $Redux.Colors.Equipment[0] -Dialog $Redux.Colors.SetEquipment[0] -Label $Redux.Colors.EquipmentLabels[0]
     $Redux.Colors.Equipment[1].Add_SelectedIndexChanged({ SetTunicColorsPreset -ComboBox $Redux.Colors.Equipment[1] -Dialog $Redux.Colors.SetEquipment[1] -Label $Redux.Colors.EquipmentLabels[1] })
-    SetTunicColorsPreset -ComboBox $Redux.Colors.Equipment[1] -Dialog $Redux.Colors.SetEquipment[1] -Label $Redux.Colors.EquipmentLabels[1]
+                                                          SetTunicColorsPreset -ComboBox $Redux.Colors.Equipment[1] -Dialog $Redux.Colors.SetEquipment[1] -Label $Redux.Colors.EquipmentLabels[1]
     $Redux.Colors.Equipment[2].Add_SelectedIndexChanged({ SetTunicColorsPreset -ComboBox $Redux.Colors.Equipment[2] -Dialog $Redux.Colors.SetEquipment[2] -Label $Redux.Colors.EquipmentLabels[2] })
-    SetTunicColorsPreset -ComboBox $Redux.Colors.Equipment[2] -Dialog $Redux.Colors.SetEquipment[2] -Label $Redux.Colors.EquipmentLabels[2]
+                                                          SetTunicColorsPreset -ComboBox $Redux.Colors.Equipment[2] -Dialog $Redux.Colors.SetEquipment[2] -Label $Redux.Colors.EquipmentLabels[2]
 
     if ($Redux.Colors.SilverGauntlets -ne $null) {
-        $Redux.Colors.Equipment[3].Add_SelectedIndexChanged({ SetGauntletsColorsPreset -ComboBox $Redux.Colors.Equipment[3] -Dialog $Redux.Colors.SetEquipment[3] -Label $Redux.Colors.EquipmentLabels[3] })
-        SetGauntletsColorsPreset -ComboBox $Redux.Colors.Equipment[5] -Dialog $Redux.Colors.SetEquipment[5] -Label $Redux.Colors.EquipmentLabels[5]
-        $Redux.Colors.Equipment[4].Add_SelectedIndexChanged({ SetGauntletsColorsPreset -ComboBox $Redux.Colors.Equipment[4] -Dialog $Redux.Colors.SetEquipment[4] -Label $Redux.Colors.EquipmentLabels[4] })
-        SetGauntletsColorsPreset -ComboBox $Redux.Colors.Equipment[4] -Dialog $Redux.Colors.SetEquipment[4] -Label $Redux.Colors.EquipmentLabels[4]
-
+        $Redux.Colors.Equipment[3].Add_SelectedIndexChanged({ SetGauntletsColorsPreset         -ComboBox $Redux.Colors.Equipment[3] -Dialog $Redux.Colors.SetEquipment[3] -Label $Redux.Colors.EquipmentLabels[3] })
+                                                              SetGauntletsColorsPreset         -ComboBox $Redux.Colors.Equipment[3] -Dialog $Redux.Colors.SetEquipment[3] -Label $Redux.Colors.EquipmentLabels[3]
+        $Redux.Colors.Equipment[4].Add_SelectedIndexChanged({ SetGauntletsColorsPreset         -ComboBox $Redux.Colors.Equipment[4] -Dialog $Redux.Colors.SetEquipment[4] -Label $Redux.Colors.EquipmentLabels[4] })
+                                                              SetGauntletsColorsPreset         -ComboBox $Redux.Colors.Equipment[4] -Dialog $Redux.Colors.SetEquipment[4] -Label $Redux.Colors.EquipmentLabels[4]
         $Redux.Colors.Equipment[5].Add_SelectedIndexChanged({ SetMirrorShieldFrameColorsPreset -ComboBox $Redux.Colors.Equipment[5] -Dialog $Redux.Colors.SetEquipment[5] -Label $Redux.Colors.EquipmentLabels[5] })
-        SetMirrorShieldFrameColorsPreset -ComboBox $Redux.Colors.Equipment[5] -Dialog $Redux.Colors.SetEquipment[5] -Label $Redux.Colors.EquipmentLabels[5]
+                                                              SetMirrorShieldFrameColorsPreset -ComboBox $Redux.Colors.Equipment[5] -Dialog $Redux.Colors.SetEquipment[5] -Label $Redux.Colors.EquipmentLabels[5]
     }
 
 
@@ -2885,8 +2973,9 @@ function CreateTabEquipment() {
     CreateReduxCheckBox -Name "GiantsKnife"   -Child -Text "Unlock Giant's Knife" -Info "Child Link is able to use the Giant's Knife / Biggoron Sword`nThe Giant's Knife / Biggoron Sword does four times as much damage as the Kokiri Sword" -Credits "GhostlyDark" -Warning "The Giant's Knife / Biggoron Sword appears as if Link if thrusting the sword through the ground"
     CreateReduxCheckBox -Name "MirrorShield"  -Child -Text "Unlock Mirror Shield" -Info "Child Link is able to use the Mirror Shield"                                                                                                         -Credits "GhostlyDark" -Warning "The Mirror Shield appears as invisible but can still reflect magic or sunlight"
     CreateReduxCheckBox -Name "Boots"         -Child -Text "Unlock Boots"         -Info "Child Link is able to use the Iron Boots and Hover Boots"                                                                                            -Credits "GhostlyDark" -Warning "The Iron and Hover Boots appears as the Kokiri Boots"
-    CreateReduxCheckBox -Name "Gauntlets"     -Child -Text "Unlock Gauntlets"     -Info "Child Link is able to use the Silver and Golden Gauntlets"                                                                                           -Credits "Admentus (ROM) & Aegiker (GameShark)"
-    CreateReduxComboBox -Name "MegatonHammer" -Child -Text "Unlock Hammer"        -Info "Child Link is able to use the Megaton Hammer" -Items @("Disabled", "Unlock Only", "Show Only", "Unlock and Show")                                    -Credits "GhostlyDark" -Warning "The Megaton Hammer appears as invisible on custom models"
+    CreateReduxCheckBox -Name "Gauntlets"     -Child -Text "Unlock Gauntlets"     -Info "Child Link is able to use the Silver and Golden Gauntlets"                                                                                           -Credits "Admentus (ROM) & Aegiker (RAM)"
+    CreateReduxCheckBox -Name "MegatonHammer" -Child -Text "Unlock Hammer"        -Info "Child Link is able to use the Megaton Hammer"                                                                                                        -Credits "GhostlyDark"
+
 
 
     # UNLOCK ADULT RESTRICTIONS #
@@ -2903,25 +2992,27 @@ function CreateTabEquipment() {
 
     # EQUIPMENT #
 
-    CreateReduxGroup    -Tag  "Equipment"           -All     -Text "Equipment Adjustments"
-    CreateReduxCheckBox -Name "UnsheathSword"       -All     -Text "Unsheath Sword"              -Info "The sword is unsheathed first before immediately swinging it"                                  -Credits "Admentus"
-    CreateReduxCheckBox -Name "FireproofDekuShield" -Base 4  -Text "Fireproof Deku Shield"       -Info "The Deku Shield turns into an fireproof shield, which will not burn up anymore"                -Credits "Admentus (ported) & Three Pendants (ROM patch)"
-    CreateReduxCheckBox -Name "HerosBow"            -Adult   -Text "Hero's Bow"                  -Info "Replace the Fairy Bow icon and text with the Hero's Bow"                                       -Credits "GhostlyDark (ported textures) & Admentus (dialogue)"
-    CreateReduxCheckBox -Name "Hookshot"            -Adult   -Text "Termina Hookshot"            -Info "Replace the Hyrule Hookshot icon with the Termina Hookshot"                                    -Credits "GhostlyDark (ported textures)"
-    CreateReduxCheckBox -Name "GoronBraceletFix"    -Adult   -Text "Keep Goron's Bracelet Color" -Info "Prevent grayscale on Goron's Bracelet, as Adult Link isn't able to push big blocks without it" -Credits "Ported from Redux"
+    CreateReduxGroup    -Tag  "Equipment"           -All    -Text "Equipment Adjustments"
+    CreateReduxCheckBox -Name "HideSword"           -All    -Text "Hide Sword"                  -Info "Hides the sword from the player models when sheathed"                                          -Credits "Mod God"
+    CreateReduxCheckBox -Name "HideShield"          -All    -Text "Hide Shield"                 -Info "Hides the shield from the player models when sheathed"                                         -Credits "Mod God"
+    CreateReduxCheckBox -Name "UnsheathSword"       -All    -Text "Unsheath Sword"              -Info "The sword is unsheathed first before immediately swinging it"                                  -Credits "Admentus"
+    CreateReduxCheckBox -Name "FireproofDekuShield" -Base 4 -Text "Fireproof Deku Shield"       -Info "The Deku Shield turns into an fireproof shield, which will not burn up anymore"                -Credits "Admentus (ported) & Three Pendants (ROM patch)"
+    CreateReduxCheckBox -Name "HerosBow"            -Adult  -Text "Hero's Bow"                  -Info "Replace the Fairy Bow icon and text with the Hero's Bow"                                       -Credits "GhostlyDark (ported) & Admentus (dialogue)"
+    CreateReduxCheckBox -Name "Hookshot"            -Adult  -Text "Termina Hookshot"            -Info "Replace the Hyrule Hookshot icon with the Termina Hookshot"                                    -Credits "GhostlyDark (ported)"
+    CreateReduxCheckBox -Name "GoronBraceletFix"    -Adult  -Text "Keep Goron's Bracelet Color" -Info "Prevent grayscale on Goron's Bracelet, as Adult Link isn't able to push big blocks without it" -Credits "Randomizer"
     
     CreateReduxGroup    -Tag  "Equipment"     -All   -Text "Swords & Shields"
-    CreateReduxComboBox -Name "KokiriSword"   -Child -Text "Kokiri Sword"     -Items @("Kokiri Sword")                      -FilePath ($GameFiles.Textures + "\Equipment\Kokiri Sword")  -Ext @("icon", "bin")   -Info "Select an alternative for the icon and text of the Kokiri Sword"     -Credits "Admentus (injects) & GhostlyDark (injects) & CYB3RTR0N (beta icon)"
-    CreateReduxComboBox -Name "MasterSword"   -Adult -Text "Master Sword"     -Items @("Master Sword")                      -FilePath ($GameFiles.Textures + "\Equipment\Master Sword")  -Ext @("icon", "bin")   -Info "Select an alternative for the icon and text of the Master Sword"     -Credits "Admentus (injects) & GhostlyDark (injects) & CYB3RTR0N (beta icon)"
-    CreateReduxComboBox -Name "GiantsKnife"   -Adult -Text "Giant's Knife"    -Items @("Giant's Knife", "Biggoron's Sword") -FilePath ($GameFiles.Textures + "\Equipment\Master Sword")  -Ext @("icon", "bin")   -Info "Select an alternative for the icon and text of the Giant's Knife"    -Credits "Admentus (injects) & GhostlyDark (injects) & CYB3RTR0N (beta icon)"
-    CreateReduxComboBox -Name "BiggoronSword" -Adult -Text "Biggoron's Sword" -Items @("Biggoron's Sword", "Giant's Knife") -FilePath ($GameFiles.Textures + "\Equipment\Master Sword")  -Ext @("icon", "bin")   -Info "Select an alternative for the icon and text of the Biggoron's Sword" -Credits "Admentus (injects) & GhostlyDark (injects) & CYB3RTR0N (beta icon)"
-    CreateReduxTextBox  -Name "SwordHealth"   -Adult -Text "Sword Health"     -Value 8 -Min 1 -Max 255 -Length 3                                                                                                 -Info "Set the amount of hits the Giant's Knife can take before it breaks"  -Credits "Admentus"
+    CreateReduxComboBox -Name "KokiriSword"   -Child -Text "Kokiri Sword"     -Items @("Kokiri Sword")                      -Shift (-15) -FilePath ($GameFiles.Textures + "\Equipment\Kokiri Sword")  -Ext @("icon", "bin") -Info "Select an alternative for the icon and text of the Kokiri Sword"     -Credits "Admentus (injects) & GhostlyDark (injects) & CYB3RTR0N (beta icon)"
+    CreateReduxComboBox -Name "MasterSword"   -Adult -Text "Master Sword"     -Items @("Master Sword")                      -Shift (-15) -FilePath ($GameFiles.Textures + "\Equipment\Master Sword")  -Ext @("icon", "bin") -Info "Select an alternative for the icon and text of the Master Sword"     -Credits "Admentus (injects) & GhostlyDark (injects) & CYB3RTR0N (beta icon)"
+    CreateReduxComboBox -Name "GiantsKnife"   -Adult -Text "Giant's Knife"    -Items @("Giant's Knife", "Biggoron's Sword") -Shift (-15) -FilePath ($GameFiles.Textures + "\Equipment\Master Sword")  -Ext @("icon", "bin") -Info "Select an alternative for the icon and text of the Giant's Knife"    -Credits "Admentus (injects) & GhostlyDark (injects) & CYB3RTR0N (beta icon)"
+    CreateReduxComboBox -Name "BiggoronSword" -Adult -Text "Biggoron's Sword" -Items @("Biggoron's Sword", "Giant's Knife") -Shift (-15) -FilePath ($GameFiles.Textures + "\Equipment\Master Sword")  -Ext @("icon", "bin") -Info "Select an alternative for the icon and text of the Biggoron's Sword" -Credits "Admentus (injects) & GhostlyDark (injects) & CYB3RTR0N (beta icon)"
+    CreateReduxTextBox  -Name "SwordHealth"   -Adult -Text "Sword Health"     -Value 8 -Min 1 -Max 255 -Length 3                                                                                                            -Info "Set the amount of hits the Giant's Knife can take before it breaks"  -Credits "Admentus"
 
     if ($GamePatch.settings -eq "Dawn & Dusk") { $item = "Dawn & Dusk Shield" } elseif ($GamePatch.settings -eq "Gold Quest") { $item = "Gold Quest Shield" } else { $item = "Deku Shield" }
     
-    CreateReduxComboBox -Name "DekuShield"    -Child -Text "Deku Shield"      -Items @("Deku Shield") -Default $item        -FilePath ($GameFiles.Textures + "\Equipment\Deku Shield")   -Ext @("icon", "front") -Info "Select an alternative for the appearence of the Deku Shield"         -Credits "Admentus (injects) & GhostlyDark (injects), ZombieBrainySnack (textures) & LuigiBlood (texture)" -Column 1 -Row 3
-    CreateReduxComboBox -Name "HylianShield"  -All   -Text "Hylian Shield"    -Items @("Hylian Shield")                     -FilePath ($GameFiles.Textures + "\Equipment\Hylian Shield") -Ext @("icon", "bin")   -Info "Select an alternative for the appearence of the Hylian Shield"       -Credits "Admentus (injects) & GhostlyDark (injects), CYB3RTR0N (icons), sanguinetti (Beta / Red Shield textures) & LuigiBlood (texture)"
-    CreateReduxComboBox -Name "MirrorShield"  -Adult -Text "Mirror Shield"    -Items @("Mirror Shield")                     -FilePath ($GameFiles.Textures + "\Equipment\Mirror Shield") -Ext @("icon", "bin")   -Info "Select an alternative for the appearence of the Mirror Shield"       -Credits "Admentus (injects) & GhostlyDark (injects)"
+    CreateReduxComboBox -Name "DekuShield"   -Child -Text "Deku Shield"   -Items @("Deku Shield") -Default $item -Shift (-15) -FilePath ($GameFiles.Textures + "\Equipment\Deku Shield")   -Ext @("icon", "front", "back") -Info "Select an alternative for the appearence of the Deku Shield"   -Credits "Admentus (injects) & GhostlyDark (injects), ZombieBrainySnack (textures) & LuigiBlood (texture), Feonyx (No Symbol)" -Column 1 -Row 3
+    CreateReduxComboBox -Name "HylianShield" -All   -Text "Hylian Shield" -Items @("Hylian Shield")              -Shift (-15) -FilePath ($GameFiles.Textures + "\Equipment\Hylian Shield") -Ext @("icon", "front", "back") -Info "Select an alternative for the appearence of the Hylian Shield" -Credits "Admentus (injects) & GhostlyDark (injects), CYB3RTR0N (icons), sanguinetti (Beta / Red Shield textures), LuigiBlood (texture) & Feonyx (No Symbol)"
+    CreateReduxComboBox -Name "MirrorShield" -Adult -Text "Mirror Shield" -Items @("Mirror Shield")              -Shift (-15) -FilePath ($GameFiles.Textures + "\Equipment\Mirror Shield") -Ext @("icon", "front", "back") -Info "Select an alternative for the appearence of the Mirror Shield" -Credits "Admentus (injects) & GhostlyDark (injects)"
 
     if ($Redux.Equipment.GiantsKnife -ne $null) {
         $Redux.Equipment.GiantsKnife.Add_SelectedIndexChanged( {
@@ -2946,21 +3037,6 @@ function CreateTabEquipment() {
 
 
 
-    # HITBOX #
-
-    CreateReduxGroup  -Tag  "Hitbox"            -All -Text "Sliders" -Height 4.2
-    CreateReduxSlider -Name "KokiriSword"       -Child                 -Column 1 -Row 1 -Default 3000 -Min 512 -Max 8192 -Freq 512 -Small 256 -Large 512 -Text "Kokiri Sword"    -Info "Set the length of the hitbox of the Kokiri Sword"                   -Credits "Aria Hiroshi 64"
-    CreateReduxSlider -Name "MasterSword"       -Adult                 -Column 3 -Row 1 -Default 4000 -Min 512 -Max 8192 -Freq 512 -Small 256 -Large 512 -Text "Master Sword"    -Info "Set the length of the hitbox of the Master Sword"                   -Credits "Aria Hiroshi 64"
-    CreateReduxSlider -Name "GiantsKnife"       -Adult                 -Column 5 -Row 1 -Default 5500 -Min 512 -Max 8192 -Freq 512 -Small 256 -Large 512 -Text "Giant's Knife"   -Info "Set the length of the hitbox of the Giant's Knife / Biggoron Sword" -Credits "Aria Hiroshi 64"
-    CreateReduxSlider -Name "BrokenGiantsKnife" -Adult                 -Column 1 -Row 2 -Default 1500 -Min 512 -Max 8192 -Freq 512 -Small 256 -Large 512 -Text "Broken Knife"    -Info "Set the length of the hitbox of the Broken Giant's Knife"           -Credits "Aria Hiroshi 64"
-    CreateReduxSlider -Name "MegatonHammer"     -Adult -Expose "Dawn"  -Column 3 -Row 2 -Default 2500 -Min 512 -Max 8192 -Freq 512 -Small 256 -Large 512 -Text "Megaton Hammer"  -Info "Set the length of the hitbox of the Megaton Hammer"                 -Credits "Aria Hiroshi 64"
-    CreateReduxSlider -Name "ShieldRecoil"      -All                   -Column 5 -Row 2 -Default 4552 -Min 0   -Max 8248 -Freq 512 -Small 256 -Large 512 -Text "Shield Recoil"   -Info "Set the pushback distance when getting hit while shielding"         -Credits "Admentus (ROM) & Aegiker (GameShark)"
-    CreateReduxSlider -Name "Hookshot"          -Adult                 -Column 1 -Row 3 -Default 13   -Min 0   -Max 255  -Freq 16  -Small 8   -Large 16  -Text "Hookshot Length" -Info "Set the length of the Hookshot"                                     -Credits "AndiiSyn"
-    CreateReduxSlider -Name "Longshot"          -Adult -Exclude "Gold" -Column 3 -Row 3 -Default 26   -Min 0   -Max 255  -Freq 16  -Small 8   -Large 16  -Text "Longshot Length" -Info "Set the length of the Longshot"                                     -Credits "AndiiSyn"
-    CreateReduxSlider -Name "Longshot"                 -Expose  "Gold" -Column 3 -Row 3 -Default 104  -Min 0   -Max 255  -Freq 16  -Small 8   -Large 16  -Text "Longshot Length" -Info "Set the length of the Longshot"                                     -Credits "AndiiSyn"
-
-
-
     # EQUIPMENT PREVIEWS #
 
     CreateReduxGroup -Tag "Equipment" -All -Text "Equipment Previews"
@@ -2975,6 +3051,21 @@ function CreateTabEquipment() {
     CreateImageBox -x 840 -y 30 -w 80 -h 80  -Child -Name "KokiriSwordIconPreview"; if ($Redux.Equipment.KokiriSword  -ne $null)   { $Redux.Equipment.KokiriSword.Add_SelectedIndexChanged(  { ShowEquipmentPreview } ) }
     CreateImageBox -x 960 -y 30 -w 80 -h 80  -Adult -Name "MasterSwordIconPreview"; if ($Redux.Equipment.MasterSword  -ne $null)   { $Redux.Equipment.MasterSword.Add_SelectedIndexChanged(  { ShowEquipmentPreview } ) }
     ShowEquipmentPreview
+
+
+
+    # HITBOX #
+
+    CreateReduxGroup  -Tag  "Hitbox"            -All -Text "Sliders" -Height 4.2
+    CreateReduxSlider -Name "KokiriSword"       -Child                 -Column 1 -Row 1 -Default 3000 -Min 512 -Max 8192 -Freq 512 -Small 256 -Large 512 -Text "Kokiri Sword"    -Info "Set the length of the hitbox of the Kokiri Sword"                   -Credits "Aria Hiroshi 64"
+    CreateReduxSlider -Name "MasterSword"       -Adult                 -Column 3 -Row 1 -Default 4000 -Min 512 -Max 8192 -Freq 512 -Small 256 -Large 512 -Text "Master Sword"    -Info "Set the length of the hitbox of the Master Sword"                   -Credits "Aria Hiroshi 64"
+    CreateReduxSlider -Name "GiantsKnife"       -Adult                 -Column 5 -Row 1 -Default 5500 -Min 512 -Max 8192 -Freq 512 -Small 256 -Large 512 -Text "Giant's Knife"   -Info "Set the length of the hitbox of the Giant's Knife / Biggoron Sword" -Credits "Aria Hiroshi 64"
+    CreateReduxSlider -Name "BrokenGiantsKnife" -Adult                 -Column 1 -Row 2 -Default 1500 -Min 512 -Max 8192 -Freq 512 -Small 256 -Large 512 -Text "Broken Knife"    -Info "Set the length of the hitbox of the Broken Giant's Knife"           -Credits "Aria Hiroshi 64"
+    CreateReduxSlider -Name "MegatonHammer"     -Adult -Expose "Dawn"  -Column 3 -Row 2 -Default 2500 -Min 512 -Max 8192 -Freq 512 -Small 256 -Large 512 -Text "Megaton Hammer"  -Info "Set the length of the hitbox of the Megaton Hammer"                 -Credits "Aria Hiroshi 64"
+    CreateReduxSlider -Name "ShieldRecoil"      -All                   -Column 5 -Row 2 -Default 4552 -Min 0   -Max 8248 -Freq 512 -Small 256 -Large 512 -Text "Shield Recoil"   -Info "Set the pushback distance when getting hit while shielding"         -Credits "Admentus (ROM) & Aegiker (RAM)"
+    CreateReduxSlider -Name "Hookshot"          -Adult                 -Column 1 -Row 3 -Default 13   -Min 0   -Max 255  -Freq 16  -Small 8   -Large 16  -Text "Hookshot Length" -Info "Set the length of the Hookshot"                                     -Credits "AndiiSyn"
+    CreateReduxSlider -Name "Longshot"          -Adult -Exclude "Gold" -Column 3 -Row 3 -Default 26   -Min 0   -Max 255  -Freq 16  -Small 8   -Large 16  -Text "Longshot Length" -Info "Set the length of the Longshot"                                     -Credits "AndiiSyn"
+    CreateReduxSlider -Name "Longshot"                 -Expose  "Gold" -Column 3 -Row 3 -Default 104  -Min 0   -Max 255  -Freq 16  -Small 8   -Large 16  -Text "Longshot Length" -Info "Set the length of the Longshot"                                     -Credits "AndiiSyn"
 
 
 
@@ -3080,6 +3171,16 @@ function CreateTabEquipment() {
     CreateReduxComboBox -Name "TradeSequenceItem" -Adult -Text "Trade Sequence Item" -Info "Start a new save file with a Trade Sequence Item" -Items @("Empty", "Pocket Egg", "Pocket Cucco", "Cojiro", "Odd Mushroom", "Odd Potion", "Poacher's Saw", "Broken Goron's Sword", "Prescription", "Eyeball Frog", "World's Finest Eye Drops", "Claim Check")
     CreateReduxComboBox -Name "Mask"              -Child -Text "Quest Item / Mask"   -Info "Start a new save file with a  Quest Item or Mask" -Items @("Empty", "Weird Egg", "Pocket Egg", "Zelda's Letter", "Keaton Mask", "Skull Mask", "Spooky Mask", "Bunny Hood", "Goron Mask", "Zora Mask", "Gerudo Mask", "Mask of Truth", "SOLD OUT")
     
+
+
+    # STARTING DUNGEON ITEMS #
+
+    CreateReduxGroup    -Tag  "Save"     -All -Text "Starting Dungeon Items"
+    CreateReduxCheckBox -Name "SmallKey" -All -Text "Small Keys"   -Info "Start a new save file with 8 small keys for all dungeons"
+    CreateReduxCheckBox -Name "BossKey"  -All -Text "Boss Keys"    -Info "Start a new save file with the boss key for all dungeons"
+    CreateReduxCheckBox -Name "Compass"  -All -Text "Compasses"    -Info "Start a new save file with the compass for all dungeons"
+    CreateReduxCheckBox -Name "Map"      -All -Text "Dungeon Maps" -Info "Start a new save file with the dungeon map for all dungeons"
+
 
 
     # STARTING SONGS #
@@ -3248,45 +3349,45 @@ function CreateTabAnimations() {
     # SKIP CUTSCENES #
 
     CreateReduxGroup    -Tag  "Skip"             -Text "Skip Cutscenes"
-    CreateReduxCheckBox -Name "OpeningCutscene"  -Text "Opening Cutscene" -Info "Skip the introduction cutscene, so you can start playing immediately"            -Credits "Ported from Better OoT"
-    CreateReduxCheckBox -Name "AllMedallions"    -Text "All Medallions"   -Info "Cutscene for all medallions never triggers when leaving Shadow or Spirit Temple" -Credits "Ported from Better OoT"
-    CreateReduxCheckBox -Name "DaruniaDance"     -Text "Darunia Dance"    -Info "Darunia will not dance"                                                          -Credits "Ported from Better OoT"
-    CreateReduxCheckBox -Name "ZeldaEscape"      -Text "Zelda's Escape"   -Info "Skip the sequence where Zelda is escaping from Hyrule Castle"                    -Credits "Ported from Better OoT"
-    CreateReduxCheckBox -Name "DungeonOutro"     -Text "Dungeon Outro"    -Info "Skip the sequence after clearing a dungeon"                                      -Credits "Ported from Rando"
-    CreateReduxCheckBox -Name "LightArrow"       -Text "Light Arrow"      -Info "Skip the sequence where Link obtains the Light Arrow"                            -Credits "Ported from Rando"
-    CreateReduxCheckBox -Name "RegularSongs"     -Text "Regular Songs"    -Info "Skip the cutscenes for learning regular songs"                                   -Credits "Ported from Rando"
-    CreateReduxCheckBox -Name "WarpSongs"        -Text "Warp Songs"       -Info "Skip the cutscenes for learning warp songs"                                      -Credits "Ported from Rando"
-    CreateReduxCheckBox -Name "RoyalTomb"        -Text "Royal Tomb"       -Info "Skip the destruction scene of the Royal Tomb entrance"                           -Credits "Ported from Rando"
-    CreateReduxCheckBox -Name "ChamberOfSages"   -Text "Chamber of Sages" -Info "Skip the Chamber of Sages after each temple"                                     -Credits "Ported from Rando"
-    CreateReduxCheckBox -Name "JabuJabu"         -Text "Jabu-Jabu"        -Info "Skip the sequence where the Jabu-Jabu swallows Link"                             -Credits "Ported from Rando"
-    CreateReduxCheckBox -Name "GanonTower"       -Text "Ganon's Tower"    -Info "Skip the collapse of Ganon's Tower"                                              -Credits "Ported from Rando"
-    CreateReduxCheckBox -Name "DekuSeedBag"      -Text "Deku Seed Bag"    -Info "Skip the sequence after obtaining the Deku Seed Bag upgrade in the Lost Woods"   -Credits "Ported from Rando"
+    CreateReduxCheckBox -Name "OpeningCutscene"  -Text "Opening Cutscene" -Info "Skip the introduction cutscene, so you can start playing immediately"            -Credits "Better OoT"
+    CreateReduxCheckBox -Name "AllMedallions"    -Text "All Medallions"   -Info "Cutscene for all medallions never triggers when leaving Shadow or Spirit Temple" -Credits "Better OoT"
+    CreateReduxCheckBox -Name "DaruniaDance"     -Text "Darunia Dance"    -Info "Darunia will not dance"                                                          -Credits "Better OoT"
+    CreateReduxCheckBox -Name "ZeldaEscape"      -Text "Zelda's Escape"   -Info "Skip the sequence where Zelda is escaping from Hyrule Castle"                    -Credits "Better OoT"
+    CreateReduxCheckBox -Name "DungeonOutro"     -Text "Dungeon Outro"    -Info "Skip the sequence after clearing a dungeon"                                      -Credits "Randomizer"
+    CreateReduxCheckBox -Name "LightArrow"       -Text "Light Arrow"      -Info "Skip the sequence where Link obtains the Light Arrow"                            -Credits "Randomizer"
+    CreateReduxCheckBox -Name "RegularSongs"     -Text "Regular Songs"    -Info "Skip the cutscenes for learning regular songs"                                   -Credits "Randomizer"
+    CreateReduxCheckBox -Name "WarpSongs"        -Text "Warp Songs"       -Info "Skip the cutscenes for learning warp songs"                                      -Credits "Randomizer"
+    CreateReduxCheckBox -Name "RoyalTomb"        -Text "Royal Tomb"       -Info "Skip the destruction scene of the Royal Tomb entrance"                           -Credits "Randomizer"
+    CreateReduxCheckBox -Name "ChamberOfSages"   -Text "Chamber of Sages" -Info "Skip the Chamber of Sages after each temple"                                     -Credits "Randomizer"
+    CreateReduxCheckBox -Name "JabuJabu"         -Text "Jabu-Jabu"        -Info "Skip the sequence where the Jabu-Jabu swallows Link"                             -Credits "Randomizer"
+    CreateReduxCheckBox -Name "GanonTower"       -Text "Ganon's Tower"    -Info "Skip the collapse of Ganon's Tower"                                              -Credits "Randomizer"
+    CreateReduxCheckBox -Name "DekuSeedBag"      -Text "Deku Seed Bag"    -Info "Skip the sequence after obtaining the Deku Seed Bag upgrade in the Lost Woods"   -Credits "Randomizer"
         
 
 
     # SPEEDUP CUTSCENES #
 
     CreateReduxGroup    -Tag  "Speedup"          -Text "Speedup Cutscenes"
-    CreateReduxCheckBox -Name "OpeningChests"    -Text "Opening Chests"    -Info "Make all chest opening animations fast by kicking them open"                 -Credits "Ported from Better OoT"
-    CreateReduxCheckBox -Name "KakarikoGate"     -Text "Kakariko Gate"     -Info "Speedup the sequences where the Kakariko Gate to Death Mountain Trail opens" -Credits "Ported from Redux"
-    CreateReduxCheckBox -Name "KingZora"         -Text "King Zora"         -Info "King Zora moves quickly"                                                     -Credits "Ported from Better OoT"
-    CreateReduxCheckBox -Name "OwlFlights"       -Text "Owl Flights"       -Info "Speedup the Owls Flights from Death Mountain Trial and Lake Hylia"           -Credits "Ported from Rando"
-    CreateReduxCheckBox -Name "EponaRace"        -Text "Epona Race"        -Info "The Epona race with Ingo starts faster"                                      -Credits "Ported from Rando"
-    CreateReduxCheckBox -Name "EponaEscape"      -Text "Epona Escape"      -Info "The Epona escape sequence after you won the races with Ingo"                 -Credits "Ported from Rando"
-    CreateReduxCheckBox -Name "HorsebackArchery" -Text "Horseback Archery" -Info "The Horseback Archery mini starts and ends faster"                           -Credits "Ported from Rando"
-    CreateReduxCheckBox -Name "DoorOfTime"       -Text "Door of Time"      -Info "The Door of Time in the Temple of Time opens much faster"                    -Credits "Ported from Rando"
-    CreateReduxCheckBox -Name "DrainingTheWell"  -Text "Draining the Well" -Info "The well in Kakariko Village drains much faster"                             -Credits "Ported from Rando"
-    CreateReduxCheckBox -Name "Bosses"           -Text "Bosses"            -Info "Speedup sequences related to some dungeon bosses"                            -Credits "Ported from Rando"
-    CreateReduxCheckBox -Name "RainbowBridge"    -Text "Rainbow Bridge"    -Info "Speedup the sequence where the Rainbow Bridge appears"                       -Credits "Ported from Rando"
-    CreateReduxCheckBox -Name "FairyOcarina"     -Text "Fairy Ocarina"     -Info "Speedup the sequence where Link obtains the Fairy Ocarina"                   -Credits "Ported from Rando"
-    CreateReduxCheckBox -Name "GanonTrials"      -Text "Ganon's Trials"    -Info "Skip the completion sequence of the Ganon's Castle trials"                   -Credits "Ported from Rando"
+    CreateReduxCheckBox -Name "OpeningChests"    -Text "Opening Chests"    -Info "Make all chest opening animations fast by kicking them open"                 -Credits "Better OoT"
+    CreateReduxCheckBox -Name "KakarikoGate"     -Text "Kakariko Gate"     -Info "Speedup the sequences where the Kakariko Gate to Death Mountain Trail opens" -Credits "Randomizer"
+    CreateReduxCheckBox -Name "KingZora"         -Text "King Zora"         -Info "King Zora moves quickly"                                                     -Credits "Better OoT"
+    CreateReduxCheckBox -Name "OwlFlights"       -Text "Owl Flights"       -Info "Speedup the Owls Flights from Death Mountain Trial and Lake Hylia"           -Credits "Randomizer"
+    CreateReduxCheckBox -Name "EponaRace"        -Text "Epona Race"        -Info "The Epona race with Ingo starts faster"                                      -Credits "Randomizer"
+    CreateReduxCheckBox -Name "EponaEscape"      -Text "Epona Escape"      -Info "The Epona escape sequence after you won the races with Ingo"                 -Credits "Randomizer"
+    CreateReduxCheckBox -Name "HorsebackArchery" -Text "Horseback Archery" -Info "The Horseback Archery mini starts and ends faster"                           -Credits "Randomizer"
+    CreateReduxCheckBox -Name "DoorOfTime"       -Text "Door of Time"      -Info "The Door of Time in the Temple of Time opens much faster"                    -Credits "Randomizer"
+    CreateReduxCheckBox -Name "DrainingTheWell"  -Text "Draining the Well" -Info "The well in Kakariko Village drains much faster"                             -Credits "Randomizer"
+    CreateReduxCheckBox -Name "Bosses"           -Text "Bosses"            -Info "Speedup sequences related to some dungeon bosses"                            -Credits "Randomizer"
+    CreateReduxCheckBox -Name "RainbowBridge"    -Text "Rainbow Bridge"    -Info "Speedup the sequence where the Rainbow Bridge appears"                       -Credits "Randomizer"
+    CreateReduxCheckBox -Name "FairyOcarina"     -Text "Fairy Ocarina"     -Info "Speedup the sequence where Link obtains the Fairy Ocarina"                   -Credits "Randomizer"
+    CreateReduxCheckBox -Name "GanonTrials"      -Text "Ganon's Trials"    -Info "Skip the completion sequence of the Ganon's Castle trials"                   -Credits "Randomizer"
 
 
 
     # Restore CUTSCENES #
 
     CreateReduxGroup    -Tag  "Restore"          -Text "Restore Cutscenes"
-    CreateReduxCheckBox -Name "OpeningCutscene"  -Text "Opening Cutscene" -Info "Restore the beta introduction cutscene" -Link $Redux.Skip.OpeningCutscene -Credits "Admentus (ROM) & CloudModding (GameShark)" -Warning "This cutscene has issues in 30 FPS mode"
+    CreateReduxCheckBox -Name "OpeningCutscene"  -Text "Opening Cutscene" -Info "Restore the beta introduction cutscene" -Link $Redux.Skip.OpeningCutscene -Credits "Admentus (ROM) & CloudModding (RAM)" -Warning "This cutscene has issues in 30 FPS mode"
 
 
 
@@ -3300,7 +3401,7 @@ function CreateTabAnimations() {
     CreateReduxCheckBox -Name "WeaponCrouch"    -All -Text "2-handed Weapon Crouch" -Info ("Restore the beta animation when crouching with a two-handed weapon" + $weapons)                    -Credits "Admentus"
     CreateReduxCheckBox -Name "WeaponAttack"    -All -Text "2-handed Weapon Attack" -Info ("Restore the beta animation when attacking with a two-handed weapon" + $weapons)                    -Credits "Admentus"
     CreateReduxCheckBox -Name "HoldShieldOut"   -All -Text "Hold Shield Out"        -Info "Restore the beta animation for Link to always holds his shield out even when his sword is sheathed" -Credits "Admentus"
-    CreateReduxCheckBox -Name "BombBag"         -All -Text "Bomb Bag"               -Info "Restore the beta animation for the bomb bag"                                                        -Credits "Admentus (ROM) & Aegiker (GameShark)"
+    CreateReduxCheckBox -Name "BombBag"         -All -Text "Bomb Bag"               -Info "Restore the beta animation for the bomb bag"                                                        -Credits "Admentus (ROM) & Aegiker (RAM)"
     CreateReduxCheckBox -Name "BackflipAttack"  -All -Text "Backflip Jump Attack"   -Info "Restore the beta animation to turn the Jump Attack into a Backflip Jump Attack"                     -Credits "Admentus"
     CreateReduxCheckBox -Name "FrontflipAttack" -All -Text "Frontflip Jump Attack"  -Info "Restore the beta animation to turn the Jump Attack into a Frontflip Jump Attack"                    -Credits "Admentus"    -Link $Redux.Animation.BackflipAttack
     CreateReduxCheckBox -Name "FrontflipJump"   -All -Text "Frontflip Jump"         -Info "Replace the jumps with frontflip jumps`nThis is a jump from Majora's Mask"                          -Credits "SoulofDeity"

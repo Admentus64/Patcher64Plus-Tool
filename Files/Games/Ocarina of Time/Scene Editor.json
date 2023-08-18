@@ -584,6 +584,119 @@
 		"stages"	: [ "Main", "Ganon's Tower Collapse" ]
 	} ],
 	
+	"transitions" : [ {
+		"name"		: "Standard Door",
+		"id"		: "0009",
+		"band"		: [ "0380", "0040", "003F" ],
+		"params" : [ [ {
+			"name"	: "Load Room",
+			"value"	: "0"
+		}, {
+			"name"	: "Small Key Locked",
+			"value"	: "80"
+		}, {
+			"name"	: "Load Room #2",
+			"value"	: "100"
+		}, {
+			"name"	: "Scene Exit",
+			"value"	: "180"
+		}, {
+			"name"	: "Slams Shut",
+			"value"	: "200"
+		}, {
+			"name"	: "Checkable",
+			"value"	: "280"
+		}, {
+			"name"	: "Evening",
+			"value"	: "300"
+		}, {
+			"name"	: "Room Load #3",
+			"value"	: "380"
+		} ], [ {
+			"name"	: "Single Door",
+			"value"	: "0"
+		}, {
+			"name"	: "Double Door",
+			"value"	: "40"
+		} ], [ {
+			"name"	: "Switch / Text",
+			"value"	: "3F"
+		} ] ]
+	}, {
+		"name"		: "Room Change Plane",
+		"id"		: "0023",
+		"band"		: [ "0180", "003F" ],
+		"params" : [ [ {
+			"name"	: "Horizontal Visible",
+			"value"	: "0"
+		}, {
+			"name"	: "Vertical Drop",
+			"value"	: "40"
+		}, {
+			"name"	: "Vertical Invisible",
+			"value"	: "80"
+		}, {
+			"name"	: "Horizontal Switch",
+			"value"	: "C0"
+		}, {
+			"name"	: "Horizontal Invisible",
+			"value"	: "100"
+		}, {
+			"name"	: "Vertical",
+			"value"	: "140"
+		}, {
+			"name"	: "Horizontal Invisible",
+			"value"	: "180"
+		} ], [ {
+			"name"	: "Switch",
+			"value"	: "3F"
+		} ] ]
+	}, {
+		"name"		: "Lifting Dungeon Door",
+		"id"		: "002E",
+		"band"		: [ "03C0", "003F" ],
+		"params" : [ [ {
+			"name"	: "Standard",
+			"value"	: "0"
+		}, {
+			"name"	: "Front Clear",
+			"value"	: "40"
+		}, {
+			"name"	: "Front Switch",
+			"value"	: "80"
+		}, {
+			"name"	: "Back Locked",
+			"value"	: "C0"
+		}, {
+			"name"	: "Phantom Ganon Bars",
+			"value"	: "100"
+		}, {
+			"name"	: "Boss Door",
+			"value"	: "140"
+		}, {
+			"name"	: "Falling Gohma Block",
+			"value"	: "180"
+		}, {
+			"name"	: "Front Switch, Back Clear",
+			"value"	: "1C0"
+		}, {
+			"name"	: "Locked #1",
+			"value"	: "200"
+		}, {
+			"name"	: "Locked #2",
+			"value"	: "240"
+		}, {
+			"name"	: "Locked #3",
+			"value"	: "280"
+		}, {
+			"name"	: "Small Key Locked",
+			"value"	: "2C0"
+		} ], [ {
+			"name"	: "Switch",
+			"value"	: "3F"
+		} ] ]
+	} ],
+	
 	"actors" : [ {
 		"name"		: "Stalfos",
 		"id"		: "0002",
@@ -7734,7 +7847,7 @@
 		"id"		: "0013",
 		"type"		: "Animal"
 	}, {
-		"name"		: "Tektites",
+		"name"		: "Tektite",
 		"id"		: "0016",
 		"type"		: "Enemy"
 	}, {
@@ -7754,7 +7867,7 @@
 		"id"		: "001A",
 		"type"		: "Animal"
 	}, {
-		"name"		: "Lizalfos & Dinolfos",
+		"name"		: "Lizalfos",
 		"id"		: "001B",
 		"type"		: "Enemy"
 	}, {
@@ -7874,7 +7987,7 @@
 		"id"		: "0038",
 		"type"		: "Enemy"
 	}, {
-		"name"		: "Deku Babas",
+		"name"		: "Deku Baba",
 		"id"		: "0039",
 		"type"		: "Enemy"
 	}, {
@@ -7938,7 +8051,7 @@
 		"id"		: "0049",
 		"type"		: "Unused"
 	}, {
-		"name"		: "Mad Scrubs",
+		"name"		: "Mad Scrub",
 		"id"		: "004A",
 		"type"		: "Enemy"
 	}, {

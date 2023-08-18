@@ -231,7 +231,7 @@ function CreateCreditsDialog() {
 function CreateSettingsDialog() {
     
     # Create Dialog
-    $global:SettingsDialog = CreateDialog -Width (DPISize 560) -Height (DPISize 700) -Icon $Files.icon.settings
+    $global:SettingsDialog = CreateDialog -Width (DPISize 560) -Height (DPISize 670) -Icon $Files.icon.settings
     $CloseButton = CreateButton -X ($SettingsDialog.Width / 2 - (DPISize 40)) -Y ($SettingsDialog.Height - (DPISize 90)) -Width (DPISize 80) -Height (DPISize 35) -Text "Close" -AddTo $SettingsDialog
     $CloseButton.Add_Click({ $SettingsDialog.Hide() })
 
@@ -256,36 +256,37 @@ function CreateSettingsDialog() {
 
     # Advanced Settings
     $GeneralSettings.Box                = CreateReduxGroup -All -Y ($GeneralSettings.Box.Bottom + (DPISize 10)) -IsGame $False -Height 2 -AddTo $SettingsDialog -Text "Advanced Settings"
-    $GeneralSettings.IgnoreChecksum     = CreateSettingsCheckbox -Name "IgnoreChecksum"     -Column 1 -Row 1 -Text "Ignore Input Checksum"  -IsDebug -Info "Do not check the checksum of a ROM or WAD and patch it regardless`nDowngrade is no longer forced anymore if the checksum is different than the supported revision`nThis option also skips the maximum ROM size verification`n`nDO NOT REPORT ANY BUGS IF THIS OPTION IS ENABLED!"
-    $GeneralSettings.ForceExtract       = CreateSettingsCheckbox -Name "ForceExtract"       -Column 2 -Row 1 -Text "Force Extract"          -IsDebug -Info "Always extract game data required for patching even if it was already extracted on a previous run"
-    $GeneralSettings.ExtractCleanScript = CreateSettingsCheckbox -Name "ExtractCleanScript" -Column 3 -Row 1 -Text "Extract Clean Script"   -IsDebug -Info "Extract a clean copy of dialogue script for the Text Editor when patching`nvanilla Ocarina of Time or Majora's Mask"
-    $GeneralSettings.ExtractFullScript  = CreateSettingsCheckbox -Name "ExtractFullScript"  -Column 1 -Row 2 -Text "Extract Patched Script" -IsDebug -Info "Extract a fully patched copy of dialogue script for the Text Editor when patching`nvanilla Ocarina of Time or Majora's Mask"
+    $GeneralSettings.Logging            = CreateSettingsCheckbox -Name "Logging"            -Column 1 -Row 1 -Text "Logging"       -Checked -IsDebug -Info "Write all events of Patcher64+ into log files"
+    $GeneralSettings.IgnoreChecksum     = CreateSettingsCheckbox -Name "IgnoreChecksum"     -Column 2 -Row 1 -Text "Ignore Input Checksum"  -IsDebug -Info "Do not check the checksum of a ROM or WAD and patch it regardless`nDowngrade is no longer forced anymore if the checksum is different than the supported revision`nThis option also skips the maximum ROM size verification`n`nDO NOT REPORT ANY BUGS IF THIS OPTION IS ENABLED!"
+    $GeneralSettings.ForceExtract       = CreateSettingsCheckbox -Name "ForceExtract"       -Column 3 -Row 1 -Text "Force Extract"          -IsDebug -Info "Always extract game data required for patching even if it was already extracted on a previous run"
+    $GeneralSettings.ExtractCleanScript = CreateSettingsCheckbox -Name "ExtractCleanScript" -Column 1 -Row 2 -Text "Extract Clean Script"   -IsDebug -Info "Extract a clean copy of dialogue script for the Text Editor when patching`nvanilla Ocarina of Time or Majora's Mask"
+    $GeneralSettings.ExtractFullScript  = CreateSettingsCheckbox -Name "ExtractFullScript"  -Column 2 -Row 3 -Text "Extract Patched Script" -IsDebug -Info "Extract a fully patched copy of dialogue script for the Text Editor when patching`nvanilla Ocarina of Time or Majora's Mask"
+    $GeneralSettings.NoConversion       = CreateSettingsCheckbox -Name "NoConversion"       -Column 3 -Row 3 -Text "No Conversion"          -IsDebug -Info "Do not attempt to convert the ROM to a proper format"
 
 
     # Debug Settings
     $GeneralSettings.Box                  = CreateReduxGroup -All -Y ($GeneralSettings.Box.Bottom + (DPISize 10)) -IsGame $False -Height 4 -AddTo $SettingsDialog -Text "Debug Settings"
     $GeneralSettings.Console              = CreateSettingsCheckbox -Name "Console"              -Column 1 -Row 1 -Text "Console"                 -IsDebug -Info "Show the console log"
     $GeneralSettings.Stop                 = CreateSettingsCheckbox -Name "Stop"                 -Column 2 -Row 1 -Text "No Patching"             -IsDebug -Info "Do not start the patching process and only show the debug information for the console log or log file"
-    $GeneralSettings.Logging              = CreateSettingsCheckbox -Name "Logging"              -Column 3 -Row 1 -Text "Logging"        -Checked -IsDebug -Info "Write all events of Patcher64+ into log files"
-    $GeneralSettings.CreateBPS            = CreateSettingsCheckbox -Name "CreateBPS"            -Column 1 -Row 2 -Text "Create BPS"              -IsDebug -Info "Create compressed and decompressed BPS patches when patching is concluded"
-    $GeneralSettings.NoCleanup            = CreateSettingsCheckbox -Name "NoCleanup"            -Column 2 -Row 2 -Text "No Cleanup"              -IsDebug -Info "Do not clean up the files after the patching process fails or succeeds"
-    $GeneralSettings.NoTitleChange        = CreateSettingsCheckbox -Name "NoTitleChange"        -Column 3 -Row 2 -Text "No ROM Title Change"     -IsDebug -Info "Do not change the title of the ROM when patching is concluded"
-    $GeneralSettings.NoGameIDChange       = CreateSettingsCheckbox -Name "NoGameIDChange"       -Column 1 -Row 3 -Text "No GameID Change"        -IsDebug -Info "Do not change the GameID of the ROM when patching is concluded"
-    $GeneralSettings.NoChannelTitleChange = CreateSettingsCheckbox -Name "NoChannelTitleChange" -Column 2 -Row 3 -Text "No Channel Title Change" -IsDebug -Info "Do not change the channel title of the WAD when patching is concluded"
-    $GeneralSettings.NoChannelIDChange    = CreateSettingsCheckbox -Name "NoChannelIDChange"    -Column 3 -Row 3 -Text "No Channel ID Change"    -IsDebug -Info "Do not change the channel GameID of the WAD when patching is concluded"
-    $GeneralSettings.KeepDowngraded       = CreateSettingsCheckbox -Name "KeepDowngraded"       -Column 1 -Row 4 -Text "Keep Downgraded"         -IsDebug -Info "Keep the downgraded patched ROM in the output folder"
-    $GeneralSettings.KeepConverted        = CreateSettingsCheckbox -Name "KeepConverted"        -Column 2 -Row 4 -Text "Keep Converted"          -IsDebug -Info "Keep the converted patched ROM in the output folder"
-    $GeneralSettings.SceneEditorChecks    = CreateSettingsCheckbox -Name "SceneEditorChecks"    -Column 3 -Row 4 -Text "Scene Editor Checks"     -IsDebug -Info "Print out extras debug info and perform extra checks for the Scene Editor`nThis may slow down performance a bit"
+    $GeneralSettings.CreateBPS            = CreateSettingsCheckbox -Name "CreateBPS"            -Column 3 -Row 1 -Text "Create BPS"              -IsDebug -Info "Create compressed and decompressed BPS patches when patching is concluded"
+    $GeneralSettings.NoCleanup            = CreateSettingsCheckbox -Name "NoCleanup"            -Column 1 -Row 2 -Text "No Cleanup"              -IsDebug -Info "Do not clean up the files after the patching process fails or succeeds"
+    $GeneralSettings.NoTitleChange        = CreateSettingsCheckbox -Name "NoTitleChange"        -Column 2 -Row 2 -Text "No ROM Title Change"     -IsDebug -Info "Do not change the title of the ROM when patching is concluded"
+    $GeneralSettings.NoGameIDChange       = CreateSettingsCheckbox -Name "NoGameIDChange"       -Column 3 -Row 2 -Text "No GameID Change"        -IsDebug -Info "Do not change the GameID of the ROM when patching is concluded"
+    $GeneralSettings.NoChannelTitleChange = CreateSettingsCheckbox -Name "NoChannelTitleChange" -Column 1 -Row 3 -Text "No Channel Title Change" -IsDebug -Info "Do not change the channel title of the WAD when patching is concluded"
+    $GeneralSettings.NoChannelIDChange    = CreateSettingsCheckbox -Name "NoChannelIDChange"    -Column 2 -Row 3 -Text "No Channel ID Change"    -IsDebug -Info "Do not change the channel GameID of the WAD when patching is concluded"
+    $GeneralSettings.KeepDowngraded       = CreateSettingsCheckbox -Name "KeepDowngraded"       -Column 3 -Row 3 -Text "Keep Downgraded"         -IsDebug -Info "Keep the downgraded patched ROM in the output folder"
+    $GeneralSettings.KeepConverted        = CreateSettingsCheckbox -Name "KeepConverted"        -Column 1 -Row 4 -Text "Keep Converted"          -IsDebug -Info "Keep the converted patched ROM in the output folder"
+    $GeneralSettings.SceneEditorChecks    = CreateSettingsCheckbox -Name "SceneEditorChecks"    -Column 2 -Row 4 -Text "Scene Editor Checks"     -IsDebug -Info "Print out extras debug info and perform extra checks for the Scene Editor`nThis may slow down performance a bit"
+    $GeneralSettings.RefreshScripts       = CreateSettingsCheckbox -Name "RefreshScripts"       -Column 3 -Row 4 -Text "Refresh Scripts"         -IsDebug -Info "Refresh several code scripts prior to running them so that any code changes are included"
 
     # Debug Settings (Nintendo 64)
-    $GeneralSettings.Box                = CreateReduxGroup -All -Y ($GeneralSettings.Box.Bottom + (DPISize 10)) -IsGame $False -Height 3 -AddTo $SettingsDialog -Text "Debug Settings (Nintendo 64)"
+    $GeneralSettings.Box                = CreateReduxGroup -All -Y ($GeneralSettings.Box.Bottom + (DPISize 10)) -IsGame $False -Height 2 -AddTo $SettingsDialog -Text "Debug Settings (Nintendo 64)"
     $GeneralSettings.NoCompression      = CreateSettingsCheckbox -Name "NoCompression"      -Column 1 -Row 1 -Text "No Compression"            -IsDebug -Info "Do not attempt to compress the ROM back again when patching is concluded`nThis can cause Wii VC WADs to freeze"
     $GeneralSettings.KeepDecompressed   = CreateSettingsCheckbox -Name "KeepDecompressed"   -Column 2 -Row 1 -Text "Keep Decompressed"         -IsDebug -Info "Keep the decompressed patched ROM in the output folder"
+    $GeneralSettings.NoCRCChange        = CreateSettingsCheckbox -Name "NoCRCChange"        -Column 3 -Row 1 -Text "No CRC Change"             -IsDebug -Info "Do not change the CRC of the ROM when patching is concluded"
     $GeneralSettings.Rev0DungeonFiles   = CreateSettingsCheckbox -Name "Rev0DungeonFiles"   -Column 1 -Row 2 -Text "Rev 0 Dungeon Files"       -IsDebug -Info "Extract the dungeon files from the OoT ROM (Rev 0 US) or MM ROM (Rev 0 US) as well when extracting dungeon files"
-    $GeneralSettings.NoConversion       = CreateSettingsCheckbox -Name "NoConversion"       -Column 2 -Row 2 -Text "No Conversion"             -IsDebug -Info "Do not attempt to convert the ROM to a proper format"
-    $GeneralSettings.NoCRCChange        = CreateSettingsCheckbox -Name "NoCRCChange"        -Column 3 -Row 2 -Text "No CRC Change"             -IsDebug -Info "Do not change the CRC of the ROM when patching is concluded"
-    $GeneralSettings.NoDialoguePatching = CreateSettingsCheckbox -Name "NoDialoguePatching" -Column 1 -Row 3 -Text "Prevent Dialogue Patching" -IsDebug -Info "Prevents the patching of any dialogue related options for Ocarina of Time or Majora's Mask`nUseful for when patching Randomizer"
-    $GeneralSettings.NoScenePatching    = CreateSettingsCheckbox -Name "NoScenePatching"    -Column 2 -Row 3 -Text "Prevent Scene Patching"    -IsDebug -Info "Prevents the patching of any scene related options for Ocarina of Time or Majora's Mask`nUseful for when patching Randomizer"
+    $GeneralSettings.NoDialoguePatching = CreateSettingsCheckbox -Name "NoDialoguePatching" -Column 2 -Row 2 -Text "Prevent Dialogue Patching" -IsDebug -Info "Prevents the patching of any dialogue related options for Ocarina of Time or Majora's Mask`nUseful for when patching Randomizer"
+    $GeneralSettings.NoScenePatching    = CreateSettingsCheckbox -Name "NoScenePatching"    -Column 3 -Row 2 -Text "Prevent Scene Patching"    -IsDebug -Info "Prevents the patching of any scene related options for Ocarina of Time or Majora's Mask`nUseful for when patching Randomizer"
 
     # Settings preset
     $GeneralSettings.Box          = CreateReduxGroup -All -Y ($GeneralSettings.Box.Bottom + (DPISize 10)) -IsGame $False -Height 2 -AddTo $SettingsDialog -Text "Settings Presets"

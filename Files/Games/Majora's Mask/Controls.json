@@ -89,5 +89,23 @@
 		"cdown"		: "C-Down",
 		"cleft"		: "C-Left",
 		"cright"	: "C-Right"
+	}, {
+		"title"		: "Redux (Leave D-Pad Up)",
+		"a"		: "A",
+		"b"		: "B",
+		"x"		: "C-Right",
+		"y"		: "C-Left",
+		"l"		: "Z",
+		"r"		: "R",
+		"z"		: "C-Down",
+		"start"		: "Start",
+		"dpadup"	: "L",
+		"dpaddown"	: "D-Pad Down",
+		"dpadleft"	: "D-Pad Left",
+		"dpadright"	: "D-Pad Right",
+		"cup"		: "C-Up",
+		"cdown"		: "C-Down",
+		"cleft"		: "C-Left",
+		"cright"	: "C-Right"
 	} ]
 } ]

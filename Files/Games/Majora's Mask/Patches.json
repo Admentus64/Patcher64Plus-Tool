@@ -37,7 +37,7 @@
 	"patch"				: "Decompressed\\masked_quest.bps",
 	"script"			: "Majora's Mask",
 	"settings"			: "MM Masked Quest",
-	"vanilla"			: 2,
+	"vanilla"			: 3,
 	"output"			: "masked_quest",
 	"tooltip"			: "A Master Quest style romhack for Majora's Mask, offering a higher difficulty{0}The patch contains major changes to where progress is obtained throughout the overworld and dungeons{0}Includes some of the changes featured in the Redux / Randomizer patches like D-Pad support"
 
