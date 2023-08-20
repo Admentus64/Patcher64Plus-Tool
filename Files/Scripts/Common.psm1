@@ -608,7 +608,8 @@ function PatchPath_Finish([object]$TextBox, [string]$Path) {
 #==============================================================================================================================================================================================
 function IsDefault([object]$Elem, $Value, [switch]$Not) {
     
-    if (!(IsSet $Elem)) { return $False }
+    if ($Elem -is [int])   { return !$Not  }
+    if (!(IsSet $Elem))    { return $False }
     if (!(IsSet $Value)) {
         if ($Elem.GetType() -eq [System.Windows.Forms.TrackBar])   { $Value = $Elem.Value }
         else                                                       { $Value = $Elem.Text  }
@@ -629,10 +630,11 @@ function IsDefault([object]$Elem, $Value, [switch]$Not) {
 #==============================================================================================================================================================================================
 function IsChecked([object]$Elem, [switch]$Not) {
     
-    if (!(IsSet $Elem))   { return $False }
-    if (!$Elem.Active)    { return $False }
-    if ($Elem.Checked)    { return !$Not  }
-    if (!$Elem.Checked)   { return  $Not  }
+    if ($Elem -is [int])   { return !$Not  }
+    if (!(IsSet $Elem))    { return $False }
+    if (!$Elem.Active)     { return $False }
+    if ($Elem.Checked)     { return !$Not  }
+    if (!$Elem.Checked)    { return  $Not  }
     return $False
 
 }
@@ -642,7 +644,8 @@ function IsChecked([object]$Elem, [switch]$Not) {
 #==============================================================================================================================================================================================
 function IsRevert([object]$Elem) {
     
-    if (!(IsSet $Elem)) { return $True }
+    if ($Elem -eq [int])   { return $True }
+    if (!(IsSet $Elem))    { return $True }
     if ($Elem.GetType() -eq [System.Windows.Forms.CheckBox]) {
         return !( (IsChecked $Elem) -and $Patches.Options.Checked)
     }
@@ -660,6 +663,7 @@ function IsLanguage([object]$Elem, [int]$Lang=0, [switch]$Not) {
     if (IsSet $Redux.Language) {
         if (!$Redux.Language[$Lang].Checked)   { return $False }
     }
+    if ($Elem -is [int])                       { return !$Not  }
     if (IsChecked $Elem)                       { return !$Not  }
     if (IsChecked $Elem -Not)                  { return  $Not  }
     return $False
@@ -671,6 +675,7 @@ function IsLanguage([object]$Elem, [int]$Lang=0, [switch]$Not) {
 #==============================================================================================================================================================================================
 function IsText([object]$Elem, [string]$Compare, [switch]$Active, [switch]$Not) {
     
+    if ($Elem -is [int])                { return !$Not  }
     if (!(IsSet $Elem))                 { return $False }
     $Text = $Elem.Text.replace(" (default)", "")
     if ($Active -and !$Elem.Visible)    { return $False }
@@ -689,6 +694,7 @@ function IsLangText([object]$Elem, [string]$Compare, [int]$Lang=0, [switch]$Not)
     if (IsSet $Redux.Language) {
         if (!$Redux.Language[$Lang].Checked)         { return $False }
     }
+    if ($Elem -is [int])                             { return !$Not }
     if (IsText -Elem $Elem -Compare $Compare)        { return !$Not  }
     if (IsText -Elem $Elem -Compare $Compare -Not)   { return  $Not  }
     return $False
@@ -700,6 +706,11 @@ function IsLangText([object]$Elem, [string]$Compare, [int]$Lang=0, [switch]$Not)
 #==============================================================================================================================================================================================
 function IsValue([object]$Elem, [int16]$Value, [switch]$Active, [switch]$Not) {
     
+    if ($Elem -is [int]) {
+        if ($Not)   { return $Elem -ne $Value }
+        else        { return $Elem -eq $Value }
+    }
+
     if (!(IsSet $Value))                 { $Value = $Elem.Default }
     if ($Active -and !$Elem.Visible)     { return $False }
     if (!$Active -and !$Elem.Enabled)    { return $False }
@@ -720,6 +731,11 @@ function IsValue([object]$Elem, [int16]$Value, [switch]$Active, [switch]$Not) {
 #==============================================================================================================================================================================================
 function IsIndex([object]$Elem, [int16]$Index=1, [string]$Text, [switch]$Active, [switch]$Not) {
     
+    if ($Elem -is [int]) {
+        if ($Not)   { return $Elem -ne $Index }
+        else        { return $Elem -eq $Index }
+    }
+
     if (!(IsSet $Elem))                 { return $False }
     if ( $Active -and !$Elem.Visible)   { return $False }
     if (!$Active -and !$Elem.Enabled)   { return $False }
@@ -742,7 +758,13 @@ function IsIndex([object]$Elem, [int16]$Index=1, [string]$Text, [switch]$Active,
 #==============================================================================================================================================================================================
 function IsLangIndex([object]$Elem, [int16]$Index=1, [int]$Lang=0, [switch]$Not) {
     
-    if (!$Redux.Language[$Lang].Checked)          { return $False }
+    if (!$Redux.Language[$Lang].Checked) { return $False }
+
+    if ($Elem -is [int]) {
+        if ($Not)   { return $Elem -ne $Index }
+        else        { return $Elem -eq $Index }
+    }
+
     if (IsIndex -Elem $Elem -Index $Index)        { return !$Not  }
     if (IsIndex -Elem $Elem -Index $Index -Not)   { return  $Not  }
     return $False

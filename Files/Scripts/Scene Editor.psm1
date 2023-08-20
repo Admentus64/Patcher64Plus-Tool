@@ -597,7 +597,7 @@ function ExtractScene([switch]$Current, [string]$Path, [string]$Offset, [byte]$L
     $Table = $ByteArrayGame[(GetDecimal $Offset)..(GetDecimal $End)]
     CreateSubPath $Path
 
-    if (!$Current) { ExportBytes -Offset $Offset -End $End -Output ($Path + "\table.dma") }
+    if (!$Current) { ExportBytes -Offset $Offset -End $End -Output ($Path + "\table.dma") -Silent }
     
     for ($i=0; $i -le $Length; $i++) {
         $Start = (Get8Bit $Table[($i*16)+0]) + (Get8Bit $Table[($i*16)+1]) + (Get8Bit $Table[($i*16)+2]) + (Get8Bit $Table[($i*16)+3])
@@ -605,8 +605,8 @@ function ExtractScene([switch]$Current, [string]$Path, [string]$Offset, [byte]$L
 
         if ($Current -and ($i-1) -ne $SceneEditor.Maps.SelectedIndex) { continue }
 
-        if ($i -eq 0 -and !$Current)   { ExportBytes -Offset $Start -End $End -Output ($Path + "\scene.zscene")             -Force }
-        else                           { ExportBytes -Offset $Start -End $End -Output ($Path + "\room_" + ($i-1) + ".zmap") -Force }
+        if ($i -eq 0 -and !$Current)   { ExportBytes -Offset $Start -End $End -Output ($Path + "\scene.zscene")             -Force -Silent }
+        else                           { ExportBytes -Offset $Start -End $End -Output ($Path + "\room_" + ($i-1) + ".zmap") -Force -Silent }
     }
 
     $dmaArray   = [System.IO.File]::ReadAllBytes($Path + "\table.dma")
@@ -710,8 +710,8 @@ function PatchScene([string]$Path, [string]$Offset, [byte]$Length, [object]$Scen
     $table = $ByteArrayGame[(GetDecimal $Start)..(GetDecimal $End)]
     for ($i=0; $i -le $Length; $i++) {
         $offset = (Get8Bit $table[($i*16)+0]) + (Get8Bit $table[($i*16)+1]) + (Get8Bit $table[($i*16)+2]) + (Get8Bit $table[($i*16)+3])
-        if ($i -eq 0)   { PatchBytes -Offset $offset -Patch ($Path + "\scene.zscene")             -Editor }
-        else            { PatchBytes -Offset $offset -Patch ($Path + "\room_" + ($i-1) + ".zmap") -Editor }
+        if ($i -eq 0)   { PatchBytes -Offset $offset -Patch ($Path + "\scene.zscene")             -Editor -Silent }
+        else            { PatchBytes -Offset $offset -Patch ($Path + "\room_" + ($i-1) + ".zmap") -Editor -Silent }
     }
 
     return $True
@@ -905,7 +905,7 @@ function PrepareMap([string]$Scene, [byte]$Map, [byte]$Header) {
 
     $SceneEditor.LoadedHeader = $Header
 
-    WriteToConsole ("Load Scene: " + $Scene + " with Map Index: " + $Map + " and Header Index: " + $Header)
+    WriteToConsole ("Loaded Scene:            " + $Scene + " with Map Index: " + $Map + " and Header Index: " + $Header)
 
 }
 
@@ -953,7 +953,7 @@ function SaveLoadedMap() {
 
     [System.IO.File]::WriteAllBytes($file, $SceneEditor.SceneArray)
     [System.IO.File]::WriteAllBytes($dma,  $dmaArray)
-    WriteToConsole ("Saved scene: " + $SceneEditor.LoadedScene.name)
+    WriteToConsole ("Saved scene:             " + $SceneEditor.LoadedScene.name)
 
 }
 
@@ -976,11 +976,11 @@ function PatchLoadedScene() {
     $table = $ByteArrayGame[(GetDecimal $start)..(GetDecimal $end)]
     for ($i=0; $i -le $length; $i++) {
         $offset = (Get8Bit $table[($i*16)+0]) + (Get8Bit $table[($i*16)+1]) + (Get8Bit $table[($i*16)+2]) + (Get8Bit $table[($i*16)+3])
-        if ($i -eq 0)   { PatchBytes -Offset $offset -Patch ("scene\scene.zscene")             -Temp }
-        else            { PatchBytes -Offset $offset -Patch ("scene\room_" + ($i-1) + ".zmap") -Temp }
+        if ($i -eq 0)   { PatchBytes -Offset $offset -Patch ("scene\scene.zscene")             -Temp -Silent }
+        else            { PatchBytes -Offset $offset -Patch ("scene\room_" + ($i-1) + ".zmap") -Temp -Silent }
     }
 
-    WriteToConsole ("Patched scene: " + $SceneEditor.LoadedScene.name)
+    WriteToConsole ("Patched scene:           " + $SceneEditor.LoadedScene.name)
 
 }
 
@@ -2099,6 +2099,8 @@ function InsertActor([string]$ID="0000", [string]$Name, [int]$X=0, [int]$Y=0, [i
         LoadTab -Tab 1
     }
 
+    if (IsSet $Name) { WriteToConsole ("Inserted actor:          " + $Name) } else { WriteToConsole ("Inserted actor with ID:  " + $ID) }
+
 }
 
 
@@ -2260,10 +2262,10 @@ function ReplaceActor($Index, $ID, $Name, $NewID, $New, $X, $Y, $Z, $XRot, $YRot
         $SceneEditor.MapArray[$offset+15] = $val[1]
     }
 
-    if     ($Index -is [int])      { WriteToConsole ("Replaced actor entry: "   + $Index) }
-    elseif ($Name  -is [string])   { WriteToConsole ("Replaced actor: "         + $Name)  }
-    elseif ($ID    -is [string])   { WriteToConsole ("Replaced actor with ID: " + $ID)    }
-    else                           { WriteToConsole  "Replaced actor"                     }
+    if     ($Index -is [int])      { WriteToConsole ("Replaced actor entry:    " + $Index) }
+    elseif ($Name  -is [string])   { WriteToConsole ("Replaced actor:          " + $Name)  }
+    elseif ($ID    -is [string])   { WriteToConsole ("Replaced actor with ID:  " + $ID)    }
+    else                           { WriteToConsole  "Replaced actor"                      }
 
 }
 
@@ -2343,10 +2345,10 @@ function RemoveActor($Index, $ID, $Name, $Compare, $CompareX, $CompareY, $Compar
     }
     DeleteActor
 
-    if     ($Index -is [int])      { WriteToConsole ("Removed actor entry: "   + $Index) }
-    elseif ($Name  -is [string])   { WriteToConsole ("Removed actor: "         + $Name)  }
-    elseif ($ID    -is [string])   { WriteToConsole ("Removed actor with ID: " + $ID)    }
-    else                           { WriteToConsole  "Removed actor"                     }
+    if     ($Index -is [int])      { WriteToConsole ("Removed actor entry:     " + $Index) }
+    elseif ($Name  -is [string])   { WriteToConsole ("Removed actor:           " + $Name)  }
+    elseif ($ID    -is [string])   { WriteToConsole ("Removed actor with ID:   " + $ID)    }
+    else                           { WriteToConsole  "Removed actor"                       }
 
 }
 
@@ -2680,6 +2682,8 @@ function InsertObject([string]$ID="0000", [string]$Name) {
         $SceneEditor.BottomPanelObjects.AutoScrollMinSize = New-Object System.Drawing.Size(0, 0)
     }
 
+    if (IsSet $Name) { WriteToConsole ("Inserted object:         " + $Name) } else { WriteToConsole ("Inserted object with ID: " + $ID) }
+
 }
 
 
@@ -2765,8 +2769,8 @@ function ReplaceObject($Index, $ID, $Name, $NewID, $New) {
         $SceneEditor.MapArray[$offset+1]  = $val[1]
     }
 
-    if     ($Index -is [int])      { WriteToConsole ("Replaced object entry: "   + $Index) }
-    elseif ($Name  -is [string])   { WriteToConsole ("Replaced object: "         + $Name)  }
+    if     ($Index -is [int])      { WriteToConsole ("Replaced object entry:   " + $Index) }
+    elseif ($Name  -is [string])   { WriteToConsole ("Replaced object:         " + $Name)  }
     elseif ($ID    -is [string])   { WriteToConsole ("Replaced object with ID: " + $ID)    }
     else                           { WriteToConsole  "Replaced object"                     }
 
@@ -2827,10 +2831,10 @@ function RemoveObject($Index, $ID, $Name) {
     }
     DeleteObject
 
-    if     ($Index -is [int])      { WriteToConsole ("Removed object entry: "   + $Index) }
-    elseif ($Name  -is [string])   { WriteToConsole ("Removed object: "         + $Name)  }
-    elseif ($ID    -is [string])   { WriteToConsole ("Removed object with ID: " + $ID)    }
-    else                           { WriteToConsole  "Removed object"                     }
+    if     ($Index -is [int])      { WriteToConsole ("Removed object entry:    " + $Index) }
+    elseif ($Name  -is [string])   { WriteToConsole ("Removed object:          " + $Name)  }
+    elseif ($ID    -is [string])   { WriteToConsole ("Removed object with ID:  " + $ID)    }
+    else                           { WriteToConsole  "Removed object"                      }
 
 }
 

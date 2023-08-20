@@ -521,8 +521,9 @@ function CreateReduxButton([single]$Column=$Last.Column, [single]$Row=$Last.Row,
 
 
 #==============================================================================================================================================================================================
-function CreateReduxTextBox([single]$Column=$Last.Column, [single]$Row=$Last.Row, [byte]$Length=2, [int16]$Width=35, [int16]$Shift=0,[sbyte]$BoxHeight=-1, [string]$Value=0, [switch]$ASCII, [int]$Min, [int]$Max, [string]$Text, [string]$Info, [string]$Warning, [string]$Credits, [string]$Name, [string]$Tag, [object]$AddTo=$Last.Group, [switch]$Native, [Object]$Expose, [Object]$Exclude, [byte]$Base, [switch]$Child, [switch]$Adult, [switch]$All) {
+function CreateReduxTextBox([single]$Column=$Last.Column, [single]$Row=$Last.Row, [byte]$Length=2, [int16]$Width=35, [int16]$Shift=0,[sbyte]$BoxHeight=-1, [string]$Value=0, [switch]$ASCII, [int]$Min, [int]$Max, [string]$Text, [string]$Info, [string]$Warning, [string]$Credits, [string]$Name, [string]$Tag, [object]$AddTo=$Last.Group, [switch]$Native, [Object]$Expose, [Object]$Exclude, [Object]$Force, [int16]$ForcedValue=0, [byte]$Base, [switch]$Child, [switch]$Adult, [switch]$All) {
     
+    if   (ForceReduxOption -Name $Name -Force $Force -Value $ForcedValue) { return $null }
     if (!(CheckReduxOption -Name $Name -Expose $Expose -Exclude $Exclude -Base $Base -Child $Child -Adult $Adult -All $All) -or ($Native -and $IsWiiVC) -or $Last.Hide) { return $null }
 
     if (IsSet $Info) { $Info += "`nDefault value: " + $Value }
@@ -571,8 +572,9 @@ function CreateReduxTextBox([single]$Column=$Last.Column, [single]$Row=$Last.Row
 
 
 #==============================================================================================================================================================================================
-function CreateReduxRadioButton([single]$Column=$Last.Column, [single]$Row=$Last.Row, [switch]$Checked, [switch]$Disable, [string]$Text, [string]$Info, [string]$Warning, [string]$Credits, [string]$Name, [object]$Link, [string]$SaveTo, [byte]$Max, [string]$Tag, [object]$AddTo=$Last.Panel, [switch]$Native, [Object]$Expose, [Object]$Exclude, [byte]$Base, [switch]$Child, [switch]$Adult, [switch]$All) {
+function CreateReduxRadioButton([single]$Column=$Last.Column, [single]$Row=$Last.Row, [switch]$Checked, [switch]$Disable, [string]$Text, [string]$Info, [string]$Warning, [string]$Credits, [string]$Name, [object]$Link, [string]$SaveTo, [byte]$Max, [string]$Tag, [object]$AddTo=$Last.Panel, [switch]$Native, [Object]$Expose, [Object]$Exclude, [Object]$Force, [byte]$Base, [switch]$Child, [switch]$Adult, [switch]$All) {
     
+    if   (ForceReduxOption -Name $Name -Force $Force) { return $null }
     if (!(CheckReduxOption -Name $Name -Expose $Expose -Exclude $Exclude -Base $Base -Child $Child -Adult $Adult -All $All) -or ($Native -and $IsWiiVC) -or $Last.Hide) { return $null }
 
     if (IsSet $Warning) {
@@ -608,8 +610,9 @@ function CreateReduxRadioButton([single]$Column=$Last.Column, [single]$Row=$Last
 
 
 #==============================================================================================================================================================================================
-function CreateReduxCheckBox([single]$Column=$Last.Column, [single]$Row=$Last.Row, [switch]$Checked, [switch]$Disable, [string]$Text="", [string]$Info, [string]$Warning, [string]$Credits, [string]$Name, [object]$Link, [string]$Tag, [object]$AddTo=$Last.Group, [switch]$Native, [Object]$Expose, [Object]$Exclude, [byte]$Base, [switch]$Child, [switch]$Adult, [switch]$All) {
+function CreateReduxCheckBox([single]$Column=$Last.Column, [single]$Row=$Last.Row, [switch]$Checked, [switch]$Disable, [string]$Text="", [string]$Info, [string]$Warning, [string]$Credits, [string]$Name, [object]$Link, [string]$Tag, [object]$AddTo=$Last.Group, [switch]$Native, [Object]$Expose, [Object]$Exclude, [Object]$Force, [byte]$Base, [switch]$Child, [switch]$Adult, [switch]$All) {
     
+    if   (ForceReduxOption -Name $Name -Force $Force) { return $null }
     if (!(CheckReduxOption -Name $Name -Expose $Expose -Exclude $Exclude -Base $Base -Child $Child -Adult $Adult -All $All) -or ($Native -and $IsWiiVC) -or $Last.Hide) { return $null }
 
     if (IsSet $Warning) {
@@ -644,8 +647,9 @@ function CreateReduxCheckBox([single]$Column=$Last.Column, [single]$Row=$Last.Ro
 
 
 #==============================================================================================================================================================================================
-function CreateReduxComboBox([single]$Column=$Last.Column, [single]$Row=$Last.Row, [int16]$Length=170, [sbyte]$Shift=0, [string[]]$Items=$null, [string[]]$Values=$null, [string[]]$PostItems=$null, [string]$FilePath, $Ext="bin", $Default=1, [switch]$NoDefault, [string]$Text, [string]$Info, [string]$Warning, [string]$Credits, [string]$Name, [string]$Tag, [object]$AddTo=$Last.Group, [switch]$Native, [Object]$Expose, [Object]$Exclude, [byte]$Base, [switch]$Child, [switch]$Adult, [switch]$All) {
+function CreateReduxComboBox([single]$Column=$Last.Column, [single]$Row=$Last.Row, [int16]$Length=170, [sbyte]$Shift=0, [string[]]$Items=$null, [string[]]$Values=$null, [string[]]$PostItems=$null, [string]$FilePath, $Ext="bin", $Default=1, [switch]$NoDefault, [string]$Text, [string]$Info, [string]$Warning, [string]$Credits, [string]$Name, [string]$Tag, [object]$AddTo=$Last.Group, [switch]$Native, [Object]$Expose, [Object]$Exclude, [Object]$Force, [byte]$ForcedValue=0, [byte]$Base, [switch]$Child, [switch]$Adult, [switch]$All) {
     
+    if   (ForceReduxOption -Name $Name -Force $Force -Value $ForcedValue) { return $null }
     if (!(CheckReduxOption -Name $Name -Expose $Expose -Exclude $Exclude -Base $Base -Child $Child -Adult $Adult -All $All) -or ($Native -and $IsWiiVC) -or $Last.Hide) { return $null }
 
     if ($Column -eq $Last.Width -and $Column -eq $Last.Column -and $Row -eq $Last.Row) {
@@ -714,8 +718,9 @@ function CreateReduxComboBox([single]$Column=$Last.Column, [single]$Row=$Last.Ro
 
 
 #==============================================================================================================================================================================================
-function CreateReduxSlider([single]$Column=$Last.Column, [single]$Row=$Last.Row, $Default, $Min, $Max, $Freq, $Small, $Large, [string]$Text, [string]$Info, [string]$Warning, [string]$Credits, [string]$Name, [string]$Tag, [object]$AddTo=$Last.Group, [switch]$Native, [Object]$Expose, [Object]$Exclude, [byte]$Base, [switch]$Child, [switch]$Adult, [switch]$All) {
+function CreateReduxSlider([single]$Column=$Last.Column, [single]$Row=$Last.Row, $Default, $Min, $Max, $Freq, $Small, $Large, [string]$Text, [string]$Info, [string]$Warning, [string]$Credits, [string]$Name, [string]$Tag, [object]$AddTo=$Last.Group, [switch]$Native, [Object]$Expose, [Object]$Exclude, [Object]$Force, [byte]$ForcedValue=0, [byte]$Base, [switch]$Child, [switch]$Adult, [switch]$All) {
     
+    if   (ForceReduxOption -Name $Name -Force $Force -Value $ForcedValue) { return $null }
     if (!(CheckReduxOption -Name $Name -Expose $Expose -Exclude $Exclude -Base $Base -Child $Child -Adult $Adult -All $All) -or ($Native -and $IsWiiVC) -or $Last.Hide) { return $null }
 
     if ($Default.GetType().Name -eq "String")   { $Default = GetDecimal $Default }
@@ -828,6 +833,30 @@ function CheckReduxOption([string]$Name, [Object]$Expose, [Object]$Exclude, [byt
     }
     elseif (IsSet $Expose) {
         if ($GamePatch.title -like "*$Expose*")      { return $True }
+    }
+
+    return $False
+
+}
+
+#==============================================================================================================================================================================================
+function ForceReduxOption([object]$Force, [int]$Value=0) {
+    
+    if ($Force -is [Array]) {
+        if ($Force.count -gt 0) {
+            foreach ($e in $Force) {
+                if ($GamePatch.title -like "*$e*") {
+                    $Redux[$Last.Extend][$Name] = $Value
+                    return $True
+                }
+            }
+        }
+    }
+    elseif (IsSet $Force) {
+        if ($GamePatch.title -like "*$Force*") {
+            $Redux[$Last.Extend][$Name] = $Value
+            return $True
+        }
     }
 
     return $False

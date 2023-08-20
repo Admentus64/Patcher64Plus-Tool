@@ -1,3 +1,10 @@
+v21.0.2
+- Added support for script-based ROM hack patching
+- Added support for silent console log printouts for several byte patching functions
+- Added support for forcing Additional Options content
+- Added and adjusted console log printouts for Scene Editing
+- Further adjusted Scene Editor.json for OoT
+
 v21.0.1
 - Added Feline Agility option for a faster Link
 

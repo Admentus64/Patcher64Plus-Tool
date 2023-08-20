@@ -5305,6 +5305,24 @@
 			"value"	: "3F"
 		} ] ]
 	}, {
+		"name"		: "Huge Stone Elevator",
+		"id"		: "012B",
+		"type"		: "Area",
+		"band"		: [ "0001", "F000" , "0F00" ],
+		"params" : [ [ {
+			"name"	: "Large",
+			"value"	: "0"
+		}, {
+			"name"	: "Small",
+			"value"	: "1"
+		} ], [ {
+			"name"	: "Rise Height",
+			"value"	: "F"
+		} ], [ {
+			"name"	: "Travel Speed",
+			"value"	: "F"
+		} ] ]
+	}, {
 		"name"		: "Square Collapsing Platform",
 		"id"		: "012C",
 		"type"		: "Area",
@@ -8815,9 +8833,9 @@
 		"id"		: "011A",
 		"type"		: "Animation"
 	}, {
-		"name"		: "Stone Elevator Pillar",
+		"name"		: "Huge Stone Elevator",
 		"id"		: "011B",
-		"type"		: "Unused"
+		"type"		: "Area"
 	}, {
 		"name"		: "Hookshot Pillar & Wall Target",
 		"id"		: "011C",
@@ -9096,7 +9114,7 @@
 		"id"		: "0163",
 		"type"		: "Object"
 	}, {
-		"name"		: "Hint-Giving Deku Scrub",
+		"name"		: "Hint Deku Scrub",
 		"id"		: "0164",
 		"type"		: "Enemy"
 	}, {

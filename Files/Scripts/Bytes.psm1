@@ -202,7 +202,7 @@ function CopyBytes([string]$File, [string]$Start, [string]$Length, [string]$Offs
 
 
 #==============================================================================================================================================================================================
-function PatchBytes([string]$File, [string]$Offset, [string]$Length, [string]$Patch, [switch]$Texture, [switch]$Models, [switch]$Extracted, [switch]$Music, [switch]$Editor, [switch]$Temp, [switch]$Shared, [switch]$Pad) {
+function PatchBytes([string]$File, [string]$Offset, [string]$Length, [string]$Patch, [switch]$Texture, [switch]$Models, [switch]$Extracted, [switch]$Music, [switch]$Editor, [switch]$Temp, [switch]$Shared, [switch]$Pad, [switch]$Silent) {
     
     if (IsSet $File) {
         if (!(TestFile $File)) {
@@ -253,7 +253,7 @@ function PatchBytes([string]$File, [string]$Offset, [string]$Length, [string]$Pa
     }
 
     # Info
-    WriteToConsole ($Offset + " -> Patch file from: " + $Patch)
+    if (!$Silent) { WriteToConsole ($Offset + " -> Patch file from: " + $Patch) }
 
     # Patch
     if (IsSet $Length) {
@@ -276,7 +276,7 @@ function PatchBytes([string]$File, [string]$Offset, [string]$Length, [string]$Pa
 
 
 #==============================================================================================================================================================================================
-function ExportBytes([string]$File, [string]$Offset, [string]$End, [string]$Length, [string]$Output, [switch]$Force) {
+function ExportBytes([string]$File, [string]$Offset, [string]$End, [string]$Length, [string]$Output, [switch]$Force, [switch]$Silent) {
     
     if (IsSet $File) {
         if (!(TestFile $File)) {
@@ -289,7 +289,7 @@ function ExportBytes([string]$File, [string]$Offset, [string]$End, [string]$Leng
     if ( (TestFile $Output) -and ($Settings.Debug.ForceExtract -eq $False) -and !$Force) { return }
 
     [uint32]$Offset = GetDecimal $Offset
-    WriteToConsole ("Write file to: " + $Output)
+    if (!$Silent) { WriteToConsole ("Write file to: " + $Output) }
 
     if ($Offset -lt 0) {
         WriteToConsole "Offset is negative!" -Error

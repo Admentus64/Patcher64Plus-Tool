@@ -87,7 +87,7 @@ function MainFunction([string]$Command, [string]$PatchedFileName) {
 
     # Decompress
     if ($GameType.decompress -gt 0) {
-        if     (StrStarts -Str $GamePatch.patch -Val "Decompressed\") { $PatchInfo.decompress = $True }
+        if     ( (StrStarts -Str $GamePatch.patch -Val "Decompressed\") -or (IsSet $GamePatch.function) ) { $PatchInfo.decompress = $True }
         elseif ($GameType.decompress -eq 1 -and !(StrLike -str $Command -val "Inject") -and !(StrLike -str $Command -val "Apply Patch") -and !(StrLike -str $Command -val "Extract") ) {
             if ( (IsChecked $Patches.Options) -or (IsChecked $Patches.Redux) -or (IsSet $GamePatch.preset) )                                                                            { $PatchInfo.decompress = $True }
         }
@@ -374,6 +374,50 @@ function PrePatchingAdditionalOptions() {
 
 
 #==============================================================================================================================================================================================
+function CheckCommands() {
+    
+    if (   (CheckCommand "ByteOptions") -or (CheckCommand "ByteReduxOptions") )                                                              { return $True }
+    if (   (GetCommand ($GamePatch.function + "ByteLanguageOptions") ) -or (GetCommand ($GamePatch.function + "ByteSceneOptions") ) )        { return $True }
+    if ( ( (GetCommand "WholeLanguageOptions") -or (GetCommand "ByteLanguageOptions") ) -and $Settings.Debug.NoDialoguePatching -ne $True)   { return $True }
+    if (   (GetCommand "ByteSceneOptions")                                              -and $Settings.Debug.NoScenePatching    -ne $True)   { return $True }
+    return $False
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function CheckCommand([string]$Command, [boolean]$Check=$True) {
+
+    if ( (GetCommand $Command) -and $Check)              { return $True }
+    if   (GetCommand ($GamePatch.function + $Command))   { return $True }
+    return $False
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function RunCommand([string]$Command, [string]$Message="", [boolean]$Check=$True, [string]$Refresh) {
+    
+    if (IsSet $Refresh) {
+        if ( ( (GetCommand $Command) -and $Check) -or (GetCommand ($GamePatch.function + $Command) ) ) { RefreshScript $Refresh }
+    }
+    if ( (GetCommand $Command) -and $Check) {
+        UpdateStatusLabel ("Patching " + $GameType.mode + " Additional " + $Message + " Options...")
+        iex $Command
+    }
+    if (GetCommand ($GamePatch.function + $Command)) {
+        UpdateStatusLabel ("Patching " + $GameType.mode + " Patch " + $Message + " Options...")
+        iex ($GamePatch.function + $Command)
+    }
+    return $False
+
+}
+
+
+
+#==============================================================================================================================================================================================
 function PatchingAdditionalOptions() {
     
     if (!(IsSet $GamePatch.script))                                { return }
@@ -410,43 +454,38 @@ function PatchingAdditionalOptions() {
         PatchOptions
     }
 
+    if (GetCommand ($GamePatch.function + "PatchOptions") ) {
+        UpdateStatusLabel ("Patching " + $GameType.mode + " Patch Patches...")
+        iex ($GamePatch.function + "PatchOptions")
+    }
+
     # BPS - Redux Options
     if ( (GetCommand "PatchReduxOptions") -and ( (IsChecked $Patches.Redux) -or (IsSet $GamePatch.preset) ) -and (IsSet $GamePatch.redux) ) {
         UpdateStatusLabel ("Patching " + $GameType.mode + " Additional Redux Patches...")
         PatchReduxOptions
     }
 
-    if ( (GetCommand "ByteOptions") -or (GetCommand "ByteReduxOptions") -or ( ( (GetCommand "WholeLanguageOptions") -or (GetCommand "ByteLanguageOptions") ) -and $Settings.Debug.NoDialoguePatching -ne $True) -or ( (GetCommand "ByteSceneOptions") -and $Settings.Debug.NoScenePatching -ne $True) ) {
-        $global:ByteArrayGame = [System.IO.File]::ReadAllBytes($GetROM.decomp)
-    }
+    if (CheckCommands) { $global:ByteArrayGame = [System.IO.File]::ReadAllBytes($GetROM.decomp) }
 
     # Additional Options
-    if (GetCommand "ByteOptions") {
-        UpdateStatusLabel ("Patching " + $GameType.mode + " Additional Options...")
-        ByteOptions
-    }
+    RunCommand "ByteOptions"
 
     # Redux Options
-    if ( (GetCommand "ByteReduxOptions") -and ( (IsChecked $Patches.Redux) -or (IsSet $GamePatch.preset) ) -and (IsSet $GamePatch.redux) ) {
-        UpdateStatusLabel ("Patching " + $GameType.mode + " Additional Redux Options...")
-        ByteReduxOptions
-    }
+    if ( (CheckCommand "ByteReduxOptions") -and ( (IsChecked $Patches.Redux) -or (IsSet $GamePatch.preset) ) -and (IsSet $GamePatch.redux) ) { RunCommand -Command "ByteReduxOptions" -Message "Redux" }
 
     # Scene Options
-    if ( (GetCommand "ByteSceneOptions") -and $Settings.Debug.NoScenePatching -ne $True) {
-        RefreshScript "Sceen Editor"
-        UpdateStatusLabel ("Patching " + $GameType.mode + " Additional Scene Options...")
+    if (CheckCommand -Command "ByteSceneOptions" -Check ($Settings.Debug.NoScenePatching -ne $True) ) {
         $global:SceneEditor     = @{}
         $Files.json.sceneEditor = SetJSONFile $GameFiles.sceneEditor
-        ByteSceneOptions
+        RunCommand -Command "ByteSceneOptions" -Message "Language" -Check ($Settings.Debug.NoScenePatching -ne $True) -Refresh "Scene Editor"
         $global:SceneEditor = $Files.json.sceneEditor = $null
     }
-
+    
     # Language Options
-    if ($Settings.Debug.NoDialoguePatching -ne $True) {
+    if ($Settings.Debug.NoDialoguePatching -ne $True -or (GetCommand ($GamePatch.function + "ByteLanguageOptions"))) {
         if ( (IsSet $LanguagePatch.script_dma) -and $LanguagePatch.region -ne "J") {
-            if (GetCommand "WholeLanguageOptions")  { WholeLanguageOptions -Script ($GameFiles.extracted + "\message_data_static." + $LanguagePatch.code + ".bin") -Table ($GameFiles.extracted + "\message_data." + $LanguagePatch.code + ".tbl") }
-            if (GetCommand "ByteLanguageOptions")   { RefreshScript "Text Editor"; ByteLanguageOptions }
+            if (GetCommand   "WholeLanguageOptions")   { WholeLanguageOptions -Script ($GameFiles.extracted + "\message_data_static." + $LanguagePatch.code + ".bin") -Table ($GameFiles.extracted + "\message_data." + $LanguagePatch.code + ".tbl") }
+            RunCommand -Command "ByteLanguageOptions" -Message "Language" -Refresh "Text Editor"
         }
         
         if (IsSet $Files.json.textEditor) {
@@ -472,7 +511,7 @@ function PatchingAdditionalOptions() {
         }
     }
 
-    if ( (GetCommand "ByteOptions") -or (GetCommand "ByteReduxOptions") -or ( ( (GetCommand "WholeLanguageOptions") -or (GetCommand "ByteLanguageOptions") ) -and $Settings.Debug.NoDialoguePatching -ne $True) -or ( (GetCommand "ByteSceneOptions") -and $Settings.Debug.NoScenePatching -ne $True) ) {
+    if (CheckCommands) {
         [System.IO.File]::WriteAllBytes($GetROM.decomp, $ByteArrayGame)
         $global:ByteArrayGame = $global:LanguagePatch = $null
     }
