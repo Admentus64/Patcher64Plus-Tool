@@ -93,7 +93,7 @@ function CreateMainDialog() {
     $menuBarGameID.Add_Click(    { If (!(IsSet $CreditsDialog)) { RefreshScript "Dialogs"; CreateCreditsDialog | Out-Null }; $Credits.Sections | foreach { $_.Visible = $False }; $Credits.Sections[2].Visible = $True; $CreditsDialog.ShowDialog() } )
     $menuBarChecksum.Add_Click(  { If (!(IsSet $CreditsDialog)) { RefreshScript "Dialogs"; CreateCreditsDialog | Out-Null }; $Credits.Sections | foreach { $_.Visible = $False }; $Credits.Sections[4].Visible = $True; $CreditsDialog.ShowDialog() } )
 
-    $menuBarOoTTextEditor.Add_Click(  { RefreshScript "Text Editor":  RunTextEditor  -Game "Ocarina of Time" } )
+    $menuBarOoTTextEditor.Add_Click(  { RefreshScript "Text Editor";  RunTextEditor  -Game "Ocarina of Time" } )
     $menuBarMMTextEditor.Add_Click(   { RefreshScript "Text Editor";  RunTextEditor  -Game "Majora's Mask"   } )
     $menuBarOoTSceneEditor.Add_Click( { RefreshScript "Scene Editor"; RunSceneEditor -Game "Ocarina of Time" } )
     $menuBarMMSceneEditor.Add_Click(  { RefreshScript "Scene Editor"; RunSceneEditor -Game "Majora's Mask"   } )
