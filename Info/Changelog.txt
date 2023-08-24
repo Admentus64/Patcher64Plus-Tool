@@ -1,3 +1,8 @@
+v21.0.3
+- Added "Clear Log When Patching" debug option
+- Fixed debug options not showing
+- Fixed issue with double patching
+
 v21.0.2
 - Added support for script-based ROM hack patching
 - Added support for silent console log printouts for several byte patching functions

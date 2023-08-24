@@ -224,6 +224,8 @@ function MainFunctionPatch([string]$Command, [Array]$Header, [string]$PatchedFil
 #==============================================================================================================================================================================================
 function WriteDebug([string]$Command, [string[]]$Header, [string]$PatchedFileName) {
     
+    if ($Settings.Debug.ClearLog -eq $True) { Clear-Host }
+
     WriteToConsole
     WriteToConsole "--- Start Patch Info ---"
     WriteToConsole ("Game Mode:     " + $GameType.mode)
@@ -398,7 +400,7 @@ function CheckCommand([string]$Command, [boolean]$Check=$True) {
 
 
 #==============================================================================================================================================================================================
-function RunCommand([string]$Command, [string]$Message="", [boolean]$Check=$True, [string]$Refresh) {
+function RunCommand([string]$Command="", [string]$Message="", [boolean]$Check=$True, [string]$Refresh) {
     
     if (IsSet $Refresh) {
         if ( ( (GetCommand $Command) -and $Check) -or (GetCommand ($GamePatch.function + $Command) ) ) { RefreshScript $Refresh }
@@ -407,11 +409,12 @@ function RunCommand([string]$Command, [string]$Message="", [boolean]$Check=$True
         UpdateStatusLabel ("Patching " + $GameType.mode + " Additional " + $Message + " Options...")
         iex $Command
     }
-    if (GetCommand ($GamePatch.function + $Command)) {
-        UpdateStatusLabel ("Patching " + $GameType.mode + " Patch " + $Message + " Options...")
-        iex ($GamePatch.function + $Command)
+    if ($Gamepatch.function -ne $null) {
+        if (GetCommand ($GamePatch.function + $Command) ) {
+            UpdateStatusLabel ("Patching " + $GameType.mode + " ROM Hack " + $Message + " Options...")
+            iex ($GamePatch.function + $Command)
+        }
     }
-    return $False
 
 }
 
@@ -450,25 +453,27 @@ function PatchingAdditionalOptions() {
 
     # BPS - Additional Options
     if (GetCommand "PatchOptions") {
-        UpdateStatusLabel ("Patching " + $GameType.mode + " Additional Options Patches...")
+        UpdateStatusLabel ("Patching " + $GameType.mode + " Additional File Options...")
         PatchOptions
     }
 
-    if (GetCommand ($GamePatch.function + "PatchOptions") ) {
-        UpdateStatusLabel ("Patching " + $GameType.mode + " Patch Patches...")
-        iex ($GamePatch.function + "PatchOptions")
+    if ($GamePatch.function -ne $null) {
+        if (GetCommand ($GamePatch.function + "PatchOptions") ) {
+            UpdateStatusLabel ("Patching " + $GameType.mode + " ROM Hack File Options...")
+            iex ($GamePatch.function + "PatchOptions")
+        }
     }
 
     # BPS - Redux Options
     if ( (GetCommand "PatchReduxOptions") -and ( (IsChecked $Patches.Redux) -or (IsSet $GamePatch.preset) ) -and (IsSet $GamePatch.redux) ) {
-        UpdateStatusLabel ("Patching " + $GameType.mode + " Additional Redux Patches...")
+        UpdateStatusLabel ("Patching " + $GameType.mode + " Additional Redux File Options...")
         PatchReduxOptions
     }
 
     if (CheckCommands) { $global:ByteArrayGame = [System.IO.File]::ReadAllBytes($GetROM.decomp) }
 
     # Additional Options
-    RunCommand "ByteOptions"
+    RunCommand -Command "ByteOptions" -Message "Byte"
 
     # Redux Options
     if ( (CheckCommand "ByteReduxOptions") -and ( (IsChecked $Patches.Redux) -or (IsSet $GamePatch.preset) ) -and (IsSet $GamePatch.redux) ) { RunCommand -Command "ByteReduxOptions" -Message "Redux" }
@@ -477,7 +482,7 @@ function PatchingAdditionalOptions() {
     if (CheckCommand -Command "ByteSceneOptions" -Check ($Settings.Debug.NoScenePatching -ne $True) ) {
         $global:SceneEditor     = @{}
         $Files.json.sceneEditor = SetJSONFile $GameFiles.sceneEditor
-        RunCommand -Command "ByteSceneOptions" -Message "Language" -Check ($Settings.Debug.NoScenePatching -ne $True) -Refresh "Scene Editor"
+        RunCommand -Command "ByteSceneOptions" -Message "Scene" -Check ($Settings.Debug.NoScenePatching -ne $True) -Refresh "Scene Editor"
         $global:SceneEditor = $Files.json.sceneEditor = $null
     }
     

@@ -6,7 +6,7 @@ function CreateOptionsDialog([byte]$Columns, [int32]$Height, [Array]$Tabs=@(), [
     if ( (IsSet $Columns) -and (IsSet $Height) )   { $global:OptionsDialog = CreateDialog -Width ($FormDistance * $Columns + (DPISize 75)) -Height (DPISize $Height) }
     else                                           { $global:OptionsDialog = CreateDialog -Width ($FormDistance * 4        + (DPISize 75)) -Height (DPISize 640)     }
     $OptionsDialog.Icon = $Files.icon.additional
-    $OptionsDialog.Add_FormClosing({ StopJobs; ResetReduxScrolling })
+    $OptionsDialog.Add_FormClosing({ CloseOptionsDialog })
 
     # Options Label
     $global:OptionsLabel = CreateLabel -Y (DPISize 15) -Width $OptionsDialog.width -Height (DPISize 15) -Font $Fonts.SmallBold -Text ($GameType.mode + " - Additional Options") -AddTo $OptionsDialog
@@ -17,7 +17,7 @@ function CreateOptionsDialog([byte]$Columns, [int32]$Height, [Array]$Tabs=@(), [
     $X = $OptionsDialog.Width / 2 - (DPISize 40)
     $Y = $OptionsDialog.Height - (DPISize 90)
     $CloseButton = CreateButton -X $X -Y $Y -Width (DPISize 80) -Height (DPISize 35) -Text "Close" -AddTo $OptionsDialog
-    $CloseButton.Add_Click( { StopJobs; ResetReduxScrolling; $OptionsDialog.Hide() })
+    $CloseButton.Add_Click( { CloseOptionsDialog; $OptionsDialog.Hide() })
 
     # Reset Options
     foreach ($s in $Redux.Sections) {
@@ -50,6 +50,28 @@ function CreateOptionsDialog([byte]$Columns, [int32]$Height, [Array]$Tabs=@(), [
             iex ("ApplyPreset" + $GamePatch.preset)
         }
     }
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function CloseOptionsDialog() {
+    
+    StopJobs
+    ResetReduxScrolling
+    if (IsSet $OptionsPreviews.Dialog) { CloseOptionsPreviewDialog }
+
+}
+
+
+#==============================================================================================================================================================================================
+function CloseOptionsPreviewDialog() {
+    
+    $OptionsPreviews.Panel.Controls[0].Select()
+    $OptionsPreviews.Panel.ScrollControlIntoView($Redux.Panel)
+    $OptionsPreviews.Panel.AutoScrollPosition   = 0
+    $OptionsPreviews.Dialog.Hide()
 
 }
 
@@ -231,7 +253,7 @@ function CreateCreditsDialog() {
 function CreateSettingsDialog() {
     
     # Create Dialog
-    $global:SettingsDialog = CreateDialog -Width (DPISize 560) -Height (DPISize 670) -Icon $Files.icon.settings
+    $global:SettingsDialog = CreateDialog -Width (DPISize 560) -Height (DPISize 700) -Icon $Files.icon.settings
     $CloseButton = CreateButton -X ($SettingsDialog.Width / 2 - (DPISize 40)) -Y ($SettingsDialog.Height - (DPISize 90)) -Width (DPISize 80) -Height (DPISize 35) -Text "Close" -AddTo $SettingsDialog
     $CloseButton.Add_Click({ $SettingsDialog.Hide() })
 
@@ -255,13 +277,15 @@ function CreateSettingsDialog() {
 
 
     # Advanced Settings
-    $GeneralSettings.Box                = CreateReduxGroup -All -Y ($GeneralSettings.Box.Bottom + (DPISize 10)) -IsGame $False -Height 2 -AddTo $SettingsDialog -Text "Advanced Settings"
-    $GeneralSettings.Logging            = CreateSettingsCheckbox -Name "Logging"            -Column 1 -Row 1 -Text "Logging"       -Checked -IsDebug -Info "Write all events of Patcher64+ into log files"
-    $GeneralSettings.IgnoreChecksum     = CreateSettingsCheckbox -Name "IgnoreChecksum"     -Column 2 -Row 1 -Text "Ignore Input Checksum"  -IsDebug -Info "Do not check the checksum of a ROM or WAD and patch it regardless`nDowngrade is no longer forced anymore if the checksum is different than the supported revision`nThis option also skips the maximum ROM size verification`n`nDO NOT REPORT ANY BUGS IF THIS OPTION IS ENABLED!"
-    $GeneralSettings.ForceExtract       = CreateSettingsCheckbox -Name "ForceExtract"       -Column 3 -Row 1 -Text "Force Extract"          -IsDebug -Info "Always extract game data required for patching even if it was already extracted on a previous run"
-    $GeneralSettings.ExtractCleanScript = CreateSettingsCheckbox -Name "ExtractCleanScript" -Column 1 -Row 2 -Text "Extract Clean Script"   -IsDebug -Info "Extract a clean copy of dialogue script for the Text Editor when patching`nvanilla Ocarina of Time or Majora's Mask"
-    $GeneralSettings.ExtractFullScript  = CreateSettingsCheckbox -Name "ExtractFullScript"  -Column 2 -Row 3 -Text "Extract Patched Script" -IsDebug -Info "Extract a fully patched copy of dialogue script for the Text Editor when patching`nvanilla Ocarina of Time or Majora's Mask"
-    $GeneralSettings.NoConversion       = CreateSettingsCheckbox -Name "NoConversion"       -Column 3 -Row 3 -Text "No Conversion"          -IsDebug -Info "Do not attempt to convert the ROM to a proper format"
+    $GeneralSettings.Box                = CreateReduxGroup -All -Y ($GeneralSettings.Box.Bottom + (DPISize 10)) -IsGame $False -Height 3 -AddTo $SettingsDialog -Text "Advanced Settings"
+    $GeneralSettings.Logging            = CreateSettingsCheckbox -Name "Logging"            -Column 1 -Row 1 -Text "Logging"        -Checked -IsDebug -Info "Write all events of Patcher64+ into log files"
+    $GeneralSettings.ClearLog           = CreateSettingsCheckbox -Name "ClearLog"           -Column 2 -Row 1 -Text "Clear Log When Patching" -IsDebug -Info "Clear the log when patching a ROM`nDo not enable this option if you want to submit a bug report"
+    $GeneralSettings.IgnoreChecksum     = CreateSettingsCheckbox -Name "IgnoreChecksum"     -Column 3 -Row 1 -Text "Ignore Input Checksum"   -IsDebug -Info "Do not check the checksum of a ROM or WAD and patch it regardless`nDowngrade is no longer forced anymore if the checksum is different than the supported revision`nThis option also skips the maximum ROM size verification`n`nDO NOT REPORT ANY BUGS IF THIS OPTION IS ENABLED!"
+    $GeneralSettings.ForceExtract       = CreateSettingsCheckbox -Name "ForceExtract"       -Column 1 -Row 2 -Text "Force Extract"           -IsDebug -Info "Always extract game data required for patching even if it was already extracted on a previous run"
+    $GeneralSettings.ExtractCleanScript = CreateSettingsCheckbox -Name "ExtractCleanScript" -Column 2 -Row 2 -Text "Extract Clean Script"    -IsDebug -Info "Extract a clean copy of dialogue script for the Text Editor when patching`nvanilla Ocarina of Time or Majora's Mask"
+    $GeneralSettings.ExtractFullScript  = CreateSettingsCheckbox -Name "ExtractFullScript"  -Column 3 -Row 2 -Text "Extract Patched Script"  -IsDebug -Info "Extract a fully patched copy of dialogue script for the Text Editor when patching`nvanilla Ocarina of Time or Majora's Mask"
+    $GeneralSettings.NoConversion       = CreateSettingsCheckbox -Name "NoConversion"       -Column 1 -Row 3 -Text "No Conversion"           -IsDebug -Info "Do not attempt to convert the ROM to a proper format"
+    $GeneralSettings.RefreshScripts     = CreateSettingsCheckbox -Name "RefreshScripts"     -Column 2 -Row 3 -Text "Refresh Scripts"         -IsDebug -Info "Refresh several code scripts prior to running them so that any code changes are included"
 
 
     # Debug Settings
@@ -277,7 +301,8 @@ function CreateSettingsDialog() {
     $GeneralSettings.KeepDowngraded       = CreateSettingsCheckbox -Name "KeepDowngraded"       -Column 3 -Row 3 -Text "Keep Downgraded"         -IsDebug -Info "Keep the downgraded patched ROM in the output folder"
     $GeneralSettings.KeepConverted        = CreateSettingsCheckbox -Name "KeepConverted"        -Column 1 -Row 4 -Text "Keep Converted"          -IsDebug -Info "Keep the converted patched ROM in the output folder"
     $GeneralSettings.SceneEditorChecks    = CreateSettingsCheckbox -Name "SceneEditorChecks"    -Column 2 -Row 4 -Text "Scene Editor Checks"     -IsDebug -Info "Print out extras debug info and perform extra checks for the Scene Editor`nThis may slow down performance a bit"
-    $GeneralSettings.RefreshScripts       = CreateSettingsCheckbox -Name "RefreshScripts"       -Column 3 -Row 4 -Text "Refresh Scripts"         -IsDebug -Info "Refresh several code scripts prior to running them so that any code changes are included"
+    
+
 
     # Debug Settings (Nintendo 64)
     $GeneralSettings.Box                = CreateReduxGroup -All -Y ($GeneralSettings.Box.Bottom + (DPISize 10)) -IsGame $False -Height 2 -AddTo $SettingsDialog -Text "Debug Settings (Nintendo 64)"

@@ -80,7 +80,7 @@ function CreateMainDialog() {
     $menuBarExit.Add_Click(           { $MainDialog.Close()                          } )
     $menuBarUpdate.Add_Click(         { RefreshScript "Updater"; AutoUpdate -Manual  } )
 
-    $menuBarSettings.Add_Click(       { RefreshScript "Dialogs"; $SettingsDialog.ShowDialog() } )
+    $menuBarSettings.Add_Click(       { $SettingsDialog.ShowDialog() } )
     $menuBarResetAll.Add_Click(       { ResetTool      } )
     $menuBarResetGame.Add_Click(      { ResetGame      } )
     $menuBarCleanupFiles.Add_Click(   { CleanupFiles   } )
