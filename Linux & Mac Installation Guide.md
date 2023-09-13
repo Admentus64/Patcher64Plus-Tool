@@ -2,15 +2,15 @@
 
 ### **Index**
 
-* [**Introduction**](#introdution)
+* [**Introduction**](#introduction)
 
 * [**Install Wine**](#install-wine)
 
 * [**Download PowerShell (x86)**](#download-powershell-x86)
 
-* [**Download Patcher64+ Tool**](#download-patcher64+-tool)
+* [**Download Patcher64+ Tool**](#download-patcher64-tool)
 
-* [**Running Patcher64+ Tool with Wine+PowerShell**](#running-patcher64+-tool-with-wine+powershell)
+* [**Running Patcher64+ Tool with Wine+PowerShell**](#running-patcher64-tool-with-winepowershell)
 
 * [**Create an Executable Binary**](#create-an-executable-binary)
 
@@ -141,7 +141,7 @@ Now that we have both PowerShell and Patcher64+ Tool downloaded and in their res
 
 Open Terminal one again, and type in the following command:
 
-    `$ WINEDEBUG=-all wine "/home/user/.wine/drive_c/Program Files (x86)/PowerShell/pwsh.exe" "/home/user/.wine/drive_c/Program Files (x86)/Patcher64+ Tool/Patcher64+ Tool.ps1"`
+	$ WINEDEBUG=-all wine "/home/user/.wine/drive_c/Program Files (x86)/PowerShell/pwsh.exe" "/home/user/.wine/drive_c/Program Files (x86)/Patcher64+ Tool/Patcher64+ Tool.ps1"
 
 After running the command, you should start seeing the log information for Patcher64+ Tool in the terminal being registered, and after a few seconds, you should be greeted with this:
 
@@ -163,21 +163,19 @@ If you want to make all this lenghty command into a simple one word instruction 
 
 We can start by creating a simple bash script with the name `patcher64.sh`, which will encapsulate the command we run for launching Patcher64+ Tool:
 
-    ```
     #! /bin/bash
 
-    $ WINEDEBUG=-all wine "/home/user/.wine/drive_c/Program Files (x86)/PowerShell/pwsh.exe" "/home/user/.wine/drive_c/Program Files (x86)/Patcher64+ Tool/Patcher64+ Tool.ps1"
-    ```
+    WINEDEBUG=-all wine "/home/user/.wine/drive_c/Program Files (x86)/PowerShell/pwsh.exe" "/home/user/.wine/drive_c/Program Files (x86)/Patcher64+ Tool/Patcher64+ Tool.ps1"
 
 After creating the `patcher64.sh` script, save it and then run the following command on Terminal to give it executable permissions:
 
-    `chmod +x patcher64.sh`
+`$ chmod +x patcher64.sh`
 
 With this, you can now type `./patcher64.sh` on Terminal, and Patcher64+ Tool should launch just as if you wrote the entire command.
 
 If you instead want the script to be recognized as an actual command when typing it in Terminal, then you can copy the script into the `/usr/local/bin` directory, like this:
 
-`sudo cp patcher64.sh /usr/local/bin/patcher64`
+	$ sudo cp patcher64.sh /usr/local/bin/patcher64
 
 Now running `patcher64` directly from Terminal without having any directory specified should open Patcher64+ Tool.
 
@@ -187,9 +185,10 @@ Now running `patcher64` directly from Terminal without having any directory spec
 
 ## Possible Errors
 
-Given how we are basically running Patcher64 through several layers, some errors are bound to happen.
+Given how we are basically running Patcher64 through several layers, some errors are bound to happen. Here we'll explain what errors or warnings you might encounter when trying to run Patcher64+ Tool through Wine+PowerShell x86.
 
-* _Winetricks installations errors_
+-----------------
+* _**Winetricks installations errors**_
 
     When installing either `dotnet452` or `mono210`, it's possible that you might get the following message:
 
@@ -197,9 +196,10 @@ Given how we are basically running Patcher64 through several layers, some errors
 <img src="https://i.imgur.com/3gTjY5z.png" alt="Winetricks error">
 </p>
 
-    This message can be ignored, simply click "OK" and the installation of the packages through winetricks should continue as normal.
+This message can be ignored, simply click "OK" and the installation of the packages through winetricks should continue as normal.
 
-* _Errors when compiling a ROM with Patcher64+ Tool_
+-----------------
+* _**Errors when compiling a ROM with Patcher64+ Tool**_
 
     After getting Patcher64+ Tool to launch through Wine, and trying to compile a hack with it, it's possible that you might get some window prompts regarding an error with `flips.exe`, like in the following image:
 
@@ -207,21 +207,22 @@ Given how we are basically running Patcher64 through several layers, some errors
 <img src="https://i.imgur.com/wqMNSgA.png" alt="flips.exe error">
 </p>
 
-    In these cases, you can simply close the prompted message and the compilation of the hack should continue as normal. It has been tested and verified that this error causes no issue on ROM compilations at all, so we can ignore these errors altogether.
+In these cases, you can simply close the prompted message and the compilation of the hack should continue as normal. It has been tested and verified that this error causes no issue on ROM compilations at all, so we can ignore these errors altogether.
 
-* _Patcher64+ Tool refuses to run_
+-----------------
+* _**Patcher64+ Tool refuses to run**_
 
     In case of a failure when opening Patcher64, the most likely culprit is in PowerShell itself, and not Patcher64. In this dire case, if running the wine command through Terminal listed in [Running Patcher64+ Tool with Wine+PowerShell](#running-patcher64+-tool-with-wine+powershell) doesn't work, we need to re-enable the debugging options for Wine by removing the `WINEDEBUG=-all` portion of the command:
-    
-    `wine "/home/user/.wine/drive_c/Program Files (x86)/PowerShell/pwsh.exe" "/home/user/.wine/drive_c/Program Files (x86)/Patcher64+ Tool/Patcher64+ Tool.ps1"`
+    ```
+    $ wine "/home/user/.wine/drive_c/Program Files (x86)/PowerShell/pwsh.exe" "/home/user/.wine/drive_c/Program Files (x86)/Patcher64+ Tool/Patcher64+ Tool.ps1"
+    ```
 
     After doing this, the terminal should now output a much more detailed information on what's going on when trying to run PowerShell. The output might be a bit overwhelming, but from the bunch of text being printed out, the error for launching the application will most likely appear within the very first dozen or so lines after the command runs. We might be looking for something like this to find the error:
-    
-	```
+    ```
     Unhandled exception. System.IO.FileNotFoundException: Could not load file or assembly 'Z:\home\user\.wine\drive_c\Program Files (x86)\PowerShell\System.Runtime.dll'. Module not found.
     File name: 'Z:\home\user\.wine\drive_c\Program Files (x86)\PowerShell\System.Runtime.dll'
     wine: Unhandled exception 0xe0434352 in thread 24 at address 7B0129D6 (thread 0024), starting debugger...
-	```
+    ```
 
     In this example, Wine isn't recognizing the DLL file called "System.Runtime.dll" from within the PowerShell folder, but it other instances it can be a DLL file called "mscoree.dll".
 
@@ -242,3 +243,4 @@ Given how we are basically running Patcher64 through several layers, some errors
     Now try to run Patcher64 again after this, and it should fix the issue.
 
 -----------------
+
