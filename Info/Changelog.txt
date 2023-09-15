@@ -1,5 +1,6 @@
 v21.0.3
 - Added "Clear Log When Patching" debug option
+- Fixed compression issue with Brazilian Portuguese translation of Majora's Mask
 - Fixed debug options not showing
 - Fixed issue with double patching
 
