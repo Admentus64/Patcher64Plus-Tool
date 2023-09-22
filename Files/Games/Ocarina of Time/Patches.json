@@ -153,14 +153,14 @@
 }, {
 
 	"title"				: "Additional Options for Debug GC",
-	"version"			: "Debug GC (PAL)",
+	"version"			: "Debug GC (EU)",
 	"script"			: "OoT Debug",
 	"tooltip"			: "The regular Ocarina of Time experience{0}With support additional options"
 
 }, {
 
 	"title"				: "Additional Options for Debug GC Beta",
-	"version"			: "Debug GC Beta (PAL)",
+	"version"			: "Debug GC Beta (EU)",
 	"script"			: "OoT Debug Beta",
 	"tooltip"			: "The regular Ocarina of Time experience{0}With support additional options"
 

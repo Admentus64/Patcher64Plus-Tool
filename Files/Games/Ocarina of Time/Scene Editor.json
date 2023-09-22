@@ -2219,7 +2219,7 @@
 			"value"	: "FF"
 		} ] ]
 	}, {
-		"name"		: "Bombflower",
+		"name"		: "Bomb Flower",
 		"id"		: "004C",
 		"type"		: "Object",
 		"band"		: [ "FFFF" ],
@@ -3763,8 +3763,20 @@
 		"type"		: "Area",
 		"band"		: [ "00FF" ],
 		"params" : [ [ {
-			"name"	: "Type",
-			"value"	: "5"
+			"name"	: "Bridge (Broken)",
+			"value"	: 1
+		}, {
+			"name"	: "Bridge (Locked)",
+			"value"	: 2
+		}, {
+			"name"	: "Bridge (Repaired)",
+			"value"	: 4
+		}, {
+			"name"	: "Bridge (Side)",
+			"value"	: 0
+		}, {
+			"name"	: "Carpenter's Tent",
+			"value"	: 3
 		} ] ]
 	}, {
 		"name"		: "Darunia's Room Statue",
@@ -4684,11 +4696,97 @@
 			"value"	: "1"
 		} ] ]
 	}, {
-		"name"		: "Small Liftable Crate",
+		"name"		: "Small Crate",
 		"id"		: "0110",
-		"type"		: "Object"
+		"type"		: "Object",
+		"band"		: [ "00FF", "3F00" ],
+		"params" : [ [ {
+			"name"	: "Flexible",
+			"value"	: "12"
+		}, {
+			"name"	: "Green Rupee",
+			"value"	: "0"
+		}, {
+			"name"	: "Blue Rupee",
+			"value"	: "1"
+		}, {
+			"name"	: "Red Rupee",
+			"value"	: "2"
+		}, {
+			"name"	: "Purple Rupee",
+			"value"	: "14"
+		}, {
+			"name"	: "Gold Rupee",
+			"value"	: "13"
+		}, {
+			"name"	: "Recovery Heart",
+			"value"	: "3"
+		}, {
+			"name"	: "Small Magic Jar",
+			"value"	: "F"
+		}, {
+			"name"	: "Large Magic Jar",
+			"value"	: "E"
+		}, {
+			"name"	: "Small Key",
+			"value"	: "11"
+		}, {
+			"name"	: "Piece of Heart",
+			"value"	: "6"
+		}, {
+			"name"	: "Heart Container",
+			"value"	: "7"
+		}, {
+			"name"	: "Deku Seeds (5) / Arrows (5)",
+			"value"	: "10"
+		}, {
+			"name"	: "Arrows (1)",
+			"value"	: "5"
+		}, {
+			"name"	: "Arrows (5)",
+			"value"	: "8"
+		}, {
+			"name"	: "Arrows (10)",
+			"value"	: "9"
+		}, {
+			"name"	: "Arrows (30)",
+			"value"	: "A"
+		}, {
+			"name"	: "Bombs (A)",
+			"value"	: "4"
+		}, {
+			"name"	: "Bombs (B)",
+			"value"	: "B"
+		}, {
+			"name"	: "Bombs (Special)",
+			"value"	: "19"
+		}, {
+			"name"	: "Deku Nut",
+			"value"	: "C"
+		}, {
+			"name"	: "Deku Stick",
+			"value"	: "D"
+		}, {
+			"name"	: "Deku Shield",
+			"value"	: "15"
+		}, {
+			"name"	: "Hylian Shield",
+			"value"	: "16"
+		}, {
+			"name"	: "Goron Tunic",
+			"value"	: "18"
+		}, {
+			"name"	: "Zora Tunic",
+			"value"	: "17"
+		}, {
+			"name"	: "No Item",
+			"value"	: "FF"
+		} ], [ {
+			"name"	: "Flag",
+			"value"	: "3F"
+		} ] ]
 	}, {
-		"name"		: "Breakable Pot",
+		"name"		: "Pot",
 		"id"		: "0111",
 		"type"		: "Object",
 		"band"		: [ "00FF", "7E00" ],
@@ -9158,7 +9256,7 @@
 		"id"		: "016F",
 		"type"		: "Area"
 	}, {
-		"name"		: "Large Wooden Crate",
+		"name"		: "Large Crate",
 		"id"		: "0170",
 		"type"		: "Object"
 	}, {

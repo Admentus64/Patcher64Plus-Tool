@@ -39,7 +39,7 @@ function ByteOptions() {
 #==============================================================================================================================================================================================
 function CreateOptions() {
     
-    CreateOptionsDialog -Columns 2 -Tabs @("Main", "Redux") -Height 285
+    CreateOptionsPanel -Tabs @("Main", "Redux")
 
 }
 

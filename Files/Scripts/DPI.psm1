@@ -20,7 +20,7 @@ public class DPI
 
 # Add the code as a type definition in C# language so we can make use of it.
 $RefAssem = "System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"
-Add-Type -TypeDefinition $Source -ReferencedAssemblies $RefAssem -Language 'CSharp' | Out-Null
+Add-Type -TypeDefinition $Source -ReferencedAssemblies $RefAssem -Language 'CSharp'
 
 
 

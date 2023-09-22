@@ -26,12 +26,12 @@ function ByteOptions() {
     elseif (IsChecked $Redux.Gameplay.CanNeverEscape)          { ChangeBytes -Offset "18F6F0" -Values "1000"   }
     if     (IsChecked $Redux.Gameplay.NoHealthBars)            { ChangeBytes -Offset "16E9D8" -Values "1000"   }
     
-    if (IsDefault -Elem $Redux.StarPower.RefreshHP     -Not)   { ChangeBytes -Offset "78D0FB" -Values (Get8Bit $Redux.StarPower.RefreshHP.Text); ChangeBytes -Offset "78D04B" -Values (Get8Bit $Redux.StarPower.RefreshHP.Text) }
-    if (IsDefault -Elem $Redux.StarPower.RefreshFP     -Not)   { ChangeBytes -Offset "78D10B" -Values (Get8Bit $Redux.StarPower.RefreshFP.Text); ChangeBytes -Offset "78D0A3" -Values (Get8Bit $Redux.StarPower.RefreshFP.Text) }
-    if (IsDefault -Elem $Redux.StarPower.StarStorm     -Not)   { ChangeBytes -Offset "79002F" -Values (Get8Bit $Redux.StarPower.StarStorm.Text)     }
-    if (IsDefault -Elem $Redux.StarPower.ChildOutPower -Not)   { ChangeBytes -Offset "790863" -Values (Get8Bit $Redux.StarPower.ChillOutPower.Text) }
-    if (IsDefault -Elem $Redux.StarPower.ChildOutTurns -Not)   { ChangeBytes -Offset "79085B" -Values (Get8Bit $Redux.StarPower.ChillOutTurns.Text) }
-    if (IsDefault -Elem $Redux.StarPower.Smooch        -Not)   { ChangeBytes -Offset "793B8F" -Values (Get8Bit $Redux.StarPower.Smooch.Text); ChangeBytes -Offset "793B37" -Values (Get8Bit $Redux.StarPower.Smooch.Text) }
+    if (IsDefault $Redux.StarPower.RefreshHP     -Not)   { ChangeBytes -Offset "78D0FB" -Values (Get8Bit $Redux.StarPower.RefreshHP.Text); ChangeBytes -Offset "78D04B" -Values (Get8Bit $Redux.StarPower.RefreshHP.Text) }
+    if (IsDefault $Redux.StarPower.RefreshFP     -Not)   { ChangeBytes -Offset "78D10B" -Values (Get8Bit $Redux.StarPower.RefreshFP.Text); ChangeBytes -Offset "78D0A3" -Values (Get8Bit $Redux.StarPower.RefreshFP.Text) }
+    if (IsDefault $Redux.StarPower.StarStorm     -Not)   { ChangeBytes -Offset "79002F" -Values (Get8Bit $Redux.StarPower.StarStorm.Text)     }
+    if (IsDefault $Redux.StarPower.ChildOutPower -Not)   { ChangeBytes -Offset "790863" -Values (Get8Bit $Redux.StarPower.ChillOutPower.Text) }
+    if (IsDefault $Redux.StarPower.ChildOutTurns -Not)   { ChangeBytes -Offset "79085B" -Values (Get8Bit $Redux.StarPower.ChillOutTurns.Text) }
+    if (IsDefault $Redux.StarPower.Smooch        -Not)   { ChangeBytes -Offset "793B8F" -Values (Get8Bit $Redux.StarPower.Smooch.Text); ChangeBytes -Offset "793B37" -Values (Get8Bit $Redux.StarPower.Smooch.Text) }
 
     if (IsChecked $Redux.Damage.Value2) {
         ChangeBytes -Offset "8974"   -Values "2407018A"
@@ -251,7 +251,7 @@ function SetHealth([string]$Offset) {
 #==============================================================================================================================================================================================
 function CreateOptions() {
     
-    CreateOptionsDialog -Columns 6 -Height 600 -Tabs @("Main", "Replace Item Blocks", "Replace Badges", "Badge Points", "Moves Cost", "Health", "Defense")
+    CreateOptionsPanel -Tabs @("Main", "Replace Item Blocks", "Replace Badges", "Badge Points", "Moves Cost", "Health", "Defense")
 
 }
 
@@ -280,22 +280,22 @@ function ApplyPreset1() {
 #==============================================================================================================================================================================================
 function CreateTabMain() {
 
-    CreateReduxGroup    -All -Tag  "Graphics"        -Text "Graphics" -Columns 3
-    CreateReduxCheckBox -All -Name "Widescreen"      -Text "16:9 Widescreen"      -Info "Adjust the aspect ratio from 4:3 to 16:9 widescreen"             -Credits "gamemasterplc & Admentus"
-    CreateReduxCheckBox -All -Name "Ultrawide"       -Text "21:9 Widescreen"      -Info "Adjust the aspect ratio from 4:3 to 21:9 widescreen"             -Credits "gamemasterplc & Admentus" -Link $Redux.Graphics.Widescreen
+    CreateReduxGroup    -All -Tag  "Graphics"   -Safe -Text "Graphics" 
+    CreateReduxCheckBox -All -Name "Widescreen" -Safe -Text "16:9 Widescreen" -Info "Adjust the aspect ratio from 4:3 to 16:9 widescreen" -Credits "gamemasterplc & Admentus"
+    CreateReduxCheckBox -All -Name "Ultrawide"  -Safe -Text "21:9 Widescreen" -Info "Adjust the aspect ratio from 4:3 to 21:9 widescreen" -Credits "gamemasterplc & Admentus" -Link $Redux.Graphics.Widescreen
 
-    CreateReduxGroup    -All -Tag  "Skip"            -Text "Skip"
-    CreateReduxCheckBox -All -Name "Logo"            -Text "Skip Logos"           -Info "Logos shown on booting up the game are now skipped"              -Credits "Admentus & Star Rod (Utility Tool)"
-    CreateReduxCheckBox -All -Name "Storybook"       -Text "Skip Storybook Intro" -Info "The Storybook Intro shown on booting up the game is now skipped" -Credits "Admentus & Star Rod (Utility Tool)"
-    CreateReduxCheckBox -All -Name "Demo"            -Text "Skip Demos"           -Info "Gameplay Demos will no longer play"                              -Credits "Admentus & Star Rod (Utility Tool)"
+    CreateReduxGroup    -All -Tag  "Skip"      -Text "Skip"
+    CreateReduxCheckBox -All -Name "Logo"      -Text "Skip Logos"           -Info "Logos shown on booting up the game are now skipped"              -Credits "Admentus & Star Rod (Utility Tool)"
+    CreateReduxCheckBox -All -Name "Storybook" -Text "Skip Storybook Intro" -Info "The Storybook Intro shown on booting up the game is now skipped" -Credits "Admentus & Star Rod (Utility Tool)"
+    CreateReduxCheckBox -All -Name "Demo"      -Text "Skip Demos"           -Info "Gameplay Demos will no longer play"                              -Credits "Admentus & Star Rod (Utility Tool)"
 
     CreateReduxGroup    -All -Tag  "Gameplay"        -Text "Gameplay"
-    CreateReduxCheckBox -All -Name "FreezeTimer"     -Text "Freeze Game Timer"    -Info "The game timer on your save file no longer increments"           -Credits "gamemasterplc & Admentus"
-    CreateReduxCheckBox -All -Name "CanAlwaysEscape" -Text "Can Always Escape"    -Info "Escaping from a battle now always succeeds"                      -Credits "gamemasterplc & Admentus"
-    CreateReduxCheckBox -All -Name "CanNeverEscape"  -Text "Can Never Escape"     -Info "Escaping from a battle now never succeeds"                       -Credits "gamemasterplc & Admentus" -Link $Redux.Gameplay.CanAlwaysEscape
-    CreateReduxCheckBox -All -Name "NoHealthBars"    -Text "No Health Bars"       -Info "Health Bars for enemies are never shown"                         -Credits "Admentus"
-    CreateReduxCheckBox -All -Name "FastSpin"        -Text "Fast Spin"            -Info "Spinning with Z goes faster now"                                 -Credits "Admentus"
-    CreateReduxCheckBox -All -Name "SuperFastSpin"   -Text "Super Fast Spin"      -Info "Spinning with Z goes a lot faster now"                           -Credits "Admentus" -Link $Redux.Gameplay.FastSpin
+    CreateReduxCheckBox -All -Name "FreezeTimer"     -Text "Freeze Game Timer"    -Info "The game timer on your save file no longer increments" -Credits "gamemasterplc & Admentus"
+    CreateReduxCheckBox -All -Name "CanAlwaysEscape" -Text "Can Always Escape"    -Info "Escaping from a battle now always succeeds"            -Credits "gamemasterplc & Admentus"
+    CreateReduxCheckBox -All -Name "CanNeverEscape"  -Text "Can Never Escape"     -Info "Escaping from a battle now never succeeds"             -Credits "gamemasterplc & Admentus" -Link $Redux.Gameplay.CanAlwaysEscape
+    CreateReduxCheckBox -All -Name "NoHealthBars"    -Text "No Health Bars"       -Info "Health Bars for enemies are never shown"               -Credits "Admentus"
+    CreateReduxCheckBox -All -Name "FastSpin"        -Text "Fast Spin"            -Info "Spinning with Z goes faster now"                       -Credits "Admentus"
+    CreateReduxCheckBox -All -Name "SuperFastSpin"   -Text "Super Fast Spin"      -Info "Spinning with Z goes a lot faster now"                 -Credits "Admentus" -Link $Redux.Gameplay.FastSpin
 
     CreateReduxGroup   -All -Tag  "StarPower"     -Text "Star Powers"
     CreateReduxTextBox -All -Name "RefreshHP"     -Text "Refresh (HP)"      -Value 5  -Min 1 -Max 99 -Info "Set the amount of HP that Refresh restores"        -Credits "Admentus"
@@ -306,7 +306,6 @@ function CreateTabMain() {
     CreateReduxTextBox -All -Name "Smooch"        -Text "Smooch (HP)"       -Value 20 -Min 1 -Max 99 -Info "Set the amount of HP that Smooch restores"         -Credits "Admentus"
 
     CreateReduxGroup       -All -Tag  "Damage"                         -Text "Hard Mode (Damage)"
-    CreateReduxPanel
     CreateReduxRadioButton -All -Name "Value1" -Max 3 -SaveTo "Damage" -Text "1x Damage"   -Info "Keep the vanilla game difficulty"              -Checked
     CreateReduxRadioButton -All -Name "Value2" -Max 3 -SaveTo "Damage" -Text "1.5x Damage" -Info "Increases the damage dealt by enemies by 1.5x" -Credits "Skelux & Admentus"
     CreateReduxRadioButton -All -Name "Value3" -Max 3 -SaveTo "Damage" -Text "2x Damage"   -Info "Increases the damage dealt by enemies by 2x"   -Credits "Skelux & Admentus"
@@ -427,15 +426,13 @@ function CreateTabMovesCost() {
 
     foreach ($item in $Files.json.moves) {
         if ($item.onlyBadges) { continue }
-        if ($item.type -eq "Goombario" -or $item.type -eq "Bombette" -or $item.type -eq "Bow" -or $item.type -eq "Sushie") { $columns = 3 } else { $columns = 0 }
 
-        if ($item.type -eq "Star Powers")   { CreateReduxGroup -All -Tag "FlowerPoints" -Text ("Star Powers")                        -Columns $columns; $fp = "SP" }
-        else                                { CreateReduxGroup -All -Tag "FlowerPoints" -Text ("Flower Points (" + $item.type + ")") -Columns $columns; $fp = "FP" }
+        if ($item.type -eq "Star Powers")   { CreateReduxGroup -All -Tag "FlowerPoints" -Text ("Star Powers")                       ; $fp = "SP" }
+        else                                { CreateReduxGroup -All -Tag "FlowerPoints" -Text ("Flower Points (" + $item.type + ")"); $fp = "FP" }
         foreach ($move in $item.moves) {
             if ($move.fp -is [int]) { CreateReduxTextBox -All -Name $move.name -Text $move.title -Value $move.fp -Min 0 -Max 50 -Info ("Set the " + $fp + " cost for the " + $move.title + " move") -Credits "Admentus" }
         }
     }
-    $button = $columns = $fp = $null
 
 }
 
@@ -453,10 +450,7 @@ function CreateTabHealth() {
     $button = CreateReduxButton -All -Text "2.5x Health"  -Info "Set the health of Enemies to 3x"            -Credits "Admentus"; $button.Add_Click({ SetAllEnemyHP -Multi 2.5  })
 
     foreach ($item in $Files.json.enemies) {
-        if     ($item.type -eq "Piranhas")                                    { $columns = 3 }
-        elseif ($item.type -eq "Beetles" -or $item.type -eq "Bullet Bills")   { $columns = 4 }
-        else                                                                  { $columns = 0 }
-        CreateReduxGroup -All -Tag "Health" -Text ("Health (" + $item.type + ")") -Columns $columns
+        CreateReduxGroup -All -Tag "Health" -Text ("Health (" + $item.type + ")")
         foreach ($enemy in $item.targets) {
             if ($enemy.hp -is [int] -and (IsSet $enemy.hp_offset) ) {
                 CreateReduxTextBox -All -Name $enemy.name -Text $enemy.title -Value $enemy.hp -Min 1 -Max 127 -Info ("Set the Health Points for " + $enemy.title) -Credits "Admentus"
@@ -484,8 +478,6 @@ function CreateTabHealth() {
             }
         }
     }
-
-    $button = $columns = $name = $text = $info = $null
 
 }
 
@@ -516,7 +508,7 @@ function CreateTabDefense() {
                 foreach ($i in 0..($def.value.count-1)) {
                     CreateReduxTextBox -All -Name ($enemy.name + $name + $def.title[$i]) -Text ($def.title[$i] + $text) -Value $def.value[$i] -Min (-99) -Max 99 -Length 3 -Info ("Set the " + $def.title[$i] + " Defense Points for " + $enemy.title + $text) -Credits "Admentus"
                 }
-                if ($enemy.separate) { $Last.row++; $Last.column = 1 }
+                if ($enemy.separate) { $Last.Row++; $Last.Column = 1 }
             }
         }
     }

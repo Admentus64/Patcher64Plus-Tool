@@ -59,7 +59,7 @@ function ByteOptions() {
 #==============================================================================================================================================================================================
 function CreateOptions() {
     
-    CreateOptionsDialog -Columns 5 -Height 325
+    CreateOptionsPanel
 
     CreateReduxGroup    -Tag  "Graphics"              -Text "Graphics"
     CreateReduxCheckBox -Name "Widescreen"            -Text "16:9 Widescreen"         -Info "Adjust the aspect ratio from 4:3 to 16:9 widescreen"                                                                            -Credits "gamemasterplc"
@@ -68,19 +68,19 @@ function CreateOptions() {
     CreateReduxCheckBox -Name "MaxDrawDistance"       -Text "Max Draw Distance"       -Info "Renders geometry further"                                                                                                       -Credits "Admentus (ROM) & Gabo (GS)"
     CreateReduxCheckBox -Name "LagFix"                -Text "Lag Fix"                 -Info "Fixes frame rate in areas where game can drop frames and loading becomes faster"                                                -Credits "Admentus (ROM) & Gabo (GS)"
 
-    CreateReduxGroup    -Tag  "Audio"                -Text "Audio"
-    CreateReduxCheckBox -Name "JapaneseAudio"        -Text "Japanese Audio"          -Info "Replaces the US audio with JPN audio"                                                                                            -Credits "GhostlyDark"
+    CreateReduxGroup    -Tag  "Audio"                 -Text "Audio"
+    CreateReduxCheckBox -Name "JapaneseAudio"         -Text "Japanese Audio"          -Info "Replaces the US audio with JPN audio"                                                                                           -Credits "GhostlyDark"
 
-    CreateReduxGroup    -Tag  "Gameplay"             -Text "Gameplay"
-    CreateReduxCheckBox -Name "CPUItems"             -Text "CPU Use Human Items"     -Info "CPUs can now use all items human players can use too"                                                                           -Credits "Triclon"
-    CreateReduxCheckBox -Name "RemoveRubberBanding"  -Text "Remove Rubber Banding"   -Info "Removes the rubber banding from CPU players`nRubber banding causes CPUs to adjust their speed to that of the player's position" -Credits "Admentus (ROM)"
-    CreateReduxCheckBox -Name "MultiplayerMusic"     -Text "Multiplayer Music"       -Info "Enable music for 3-Player and 4-Player Mode`nPress L to toggle the music"                                                       -Credits "Zoinkity"
-    CreateReduxCheckBox -Name "NoCameraShake"        -Text "No Camera Shake"         -Info "The camera won't shake when using mushrooms"                                                                                    -Credits "Triclon"
-    CreateReduxCheckBox -Name "AlwaysAdvance"        -Text "Always Advance"          -Info "You always advance to the next race, even if you end up 5th place or lower"                                                     -Credits "Litronom"
-    CreateReduxCheckBox -Name "AddBombs"             -Text "Add Bombs (GP Mode)"     -Info "Add the yellow bombs to the racetrack during Grand Prix mode"                                                                   -Credits "Admentus (ROM) & TheBoy181 (GS)"
-    CreateReduxCheckBox -Name "RemoveBombs"          -Text "Remove Bombs (MP Races)" -Info "Removes the yellow bombs from the racetrack during multiplayer races"                                                           -Credits "Admentus (ROM) & TheBoy181 (GS)"
-    CreateReduxCheckBox -Name "AlwaysSmallRacers"    -Text "Always Small Racers"     -Info "Always play with mini racers`nLoose the ability to power slide, but gain the ability of a new challenge"                        -Credits "Admentus (ROM) & TheBoy181 (GS)"
-    CreateReduxCheckBox -Name "Kamek"                -Text "Kamek"                   -Info "Replaces Donkey Kong with Kamek"                                                                                                -Credits "Andrat" -Link $Redux.Audio.JapaneseAudio
+    CreateReduxGroup    -Tag  "Gameplay"              -Text "Gameplay"
+    CreateReduxCheckBox -Name "CPUItems"              -Text "CPU Use Human Items"     -Info "CPUs can now use all items human players can use too"                                                                           -Credits "Triclon"
+    CreateReduxCheckBox -Name "RemoveRubberBanding"   -Text "Remove Rubber Banding"   -Info "Removes the rubber banding from CPU players`nRubber banding causes CPUs to adjust their speed to that of the player's position" -Credits "Admentus (ROM)"
+    CreateReduxCheckBox -Name "MultiplayerMusic"      -Text "Multiplayer Music"       -Info "Enable music for 3-Player and 4-Player Mode`nPress L to toggle the music"                                                       -Credits "Zoinkity"
+    CreateReduxCheckBox -Name "NoCameraShake"         -Text "No Camera Shake"         -Info "The camera won't shake when using mushrooms"                                                                                    -Credits "Triclon"
+    CreateReduxCheckBox -Name "AlwaysAdvance"         -Text "Always Advance"          -Info "You always advance to the next race, even if you end up 5th place or lower"                                                     -Credits "Litronom"
+    CreateReduxCheckBox -Name "AddBombs"              -Text "Add Bombs (GP Mode)"     -Info "Add the yellow bombs to the racetrack during Grand Prix mode"                                                                   -Credits "Admentus (ROM) & TheBoy181 (GS)"
+    CreateReduxCheckBox -Name "RemoveBombs"           -Text "Remove Bombs (MP Races)" -Info "Removes the yellow bombs from the racetrack during multiplayer races"                                                           -Credits "Admentus (ROM) & TheBoy181 (GS)"
+    CreateReduxCheckBox -Name "AlwaysSmallRacers"     -Text "Always Small Racers"     -Info "Always play with mini racers`nLoose the ability to power slide, but gain the ability of a new challenge"                        -Credits "Admentus (ROM) & TheBoy181 (GS)"
+    CreateReduxCheckBox -Name "Kamek"                 -Text "Kamek"                   -Info "Replaces Donkey Kong with Kamek"                                                                                                -Credits "Andrat" -Link $Redux.Audio.JapaneseAudio
 
     EnableElem -Elem $Redux.Gameplay.CPUItems -Active (!$IsWiiVC)
 

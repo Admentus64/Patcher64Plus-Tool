@@ -3,6 +3,7 @@ function ChangeBytes([string]$File, [byte[]]$Array, [object]$Offset, [object]$Ma
     if (IsSet $File) {
         if (!(TestFile $File)) {
             WriteToConsole ("Could not find path to file to adjust: " + $File)
+            $global:WarningError = $True
             return $False
         }
     }
@@ -61,8 +62,14 @@ function ChangeBytes([string]$File, [byte[]]$Array, [object]$Offset, [object]$Ma
         }
     }
 
-    # Convert to Byte if needed
-    WriteToConsole ($Offset + " -> Change values: " + $Values)
+    # Print info
+    if ($Offset.Count -eq 1) {
+        $spaces = ""
+        while ($Offset[0].Substring(0, 1) -eq "0") { $Offset[0] = $Offset[0].Substring(1) }
+        for ($i=8; $i -gt $Offset[0].Length; $i--) { $spaces += " " }
+        WriteToConsole ($Offset[0] + $spaces + "-> Change values: " + $Values)
+    }
+    else { WriteToConsole ($Offset + "-> Change values: " + $Values) }
 
     # Patch
     foreach ($o in $offsetDec) {
@@ -111,6 +118,7 @@ function MultiplyBytes([string]$File, [string]$Offset, [object]$Match=$null, [fl
     if (IsSet $File) {
         if (!(TestFile $File)) {
             WriteToConsole ("Could not find path to file to adjust: " + $File) -Error
+            $global:WarningError = $True
             return $False
         }
         $ByteArrayGame = [System.IO.File]::ReadAllBytes($File)
@@ -166,6 +174,7 @@ function CopyBytes([string]$File, [string]$Start, [string]$Length, [string]$Offs
     if (IsSet $File) {
         if (!(TestFile $File)) {
             WriteToConsole ("Could not find path to file to adjust: " + $File) -Error
+            $global:WarningError = $True
             return $False
         }
         $ByteArrayGame = [System.IO.File]::ReadAllBytes($File) 
@@ -207,6 +216,7 @@ function PatchBytes([string]$File, [string]$Offset, [string]$Length, [string]$Pa
     if (IsSet $File) {
         if (!(TestFile $File)) {
             WriteToConsole ("Could not find path to file to adjust: " + $File) -Error
+            $global:WarningError = $True
             return $False
         }
         $ByteArrayGame = [System.IO.File]::ReadAllBytes($File) 
@@ -281,6 +291,7 @@ function ExportBytes([string]$File, [string]$Offset, [string]$End, [string]$Leng
     if (IsSet $File) {
         if (!(TestFile $File)) {
             WriteToConsole ("Could not find path to file to adjust: " + $File) -Error
+            $global:WarningError = $True
             return $False
         }
         $ByteArrayGame = [System.IO.File]::ReadAllBytes($File) 
@@ -306,7 +317,7 @@ function ExportBytes([string]$File, [string]$Offset, [string]$End, [string]$Leng
     $Path = $Output.substring(0, $Output.LastIndexOf('\'))
     $Folder = $Path.substring($Path.LastIndexOf('\') + 1)
     $Path = $Path.substring(0, $Path.LastIndexOf('\') + 1)
-    if (!(TestFile -Path ($Path + $Folder) -Container)) { New-Item -Path $Path -Name $Folder -ItemType Directory | Out-Null }
+    if (!(TestFile -Path ($Path + $Folder) -Container)) { New-Item -Path $Path -Name $Folder -ItemType Directory }
 
     if (IsSet $End) {
         $End = GetDecimal $End
@@ -327,16 +338,18 @@ function SearchBytes([string]$File, [object]$Start="0", [object]$End, [object]$V
     if (IsSet $File) {
         if (!(TestFile $File)) {
             WriteToConsole ("Could not find path to file to adjust: " + $File) -Error
-            return $False
+            $global:WarningError = $True
+            return -1
         }
         $ByteArrayGame = [System.IO.File]::ReadAllBytes($File) 
     }
 
-    if     ($values  -is [String] -and $values  -Like "* *")              { $values  = $values -split ' '           }
-    elseif ($values  -is [String])                                        { $values  = $values -split '(..)' -ne '' }
+    if     ($values -is [String] -and $values -Like "* *")   { $values = $values -split ' '           }
+    elseif ($values -is [String])                            { $values = $values -split '(..)' -ne '' }
     else {
         WriteToConsole "Search values are not valid to look for" -Error
-        return $False
+        $global:WarningError = $True
+        return -1
     }
 
     [uint32]$Start = GetDecimal $Start
@@ -346,30 +359,30 @@ function SearchBytes([string]$File, [object]$Start="0", [object]$End, [object]$V
     if ($Start -lt 0 -or $End -lt 0) {
         WriteToConsole "Start or end offset is negative!" -Error
         $global:WarningError = $True
-        return
+        return -1
     }
     elseif ($Start -gt $ByteArrayGame.Length -or $End -gt $ByteArrayGame.Length) {
         WriteToConsole "Start or end offset is too large for file!" -Error
         $global:WarningError = $True
-        return
+        return -1
     }
     elseif ($Start -gt $End) {
         Write-Host "Start offset can not be greater than end offset"
         $global:WarningError = $True
-        return
+        return -1
     }
 
     foreach ($i in $Start..($End-1)) {
-        $Search = $True
+        $found = $True
         foreach ($j in 0..($Values.Length-1)) {
             if ($Values[$j] -ne "") {
                 if ($ByteArrayGame[$i + $j] -ne (GetDecimal $Values[$j]) -and $Values[$j] -ne "xx") {
-                    $Search = $False
+                    $found = $False
                     break
                 }
             }
         }
-        if ($Search -eq $True) {
+        if ($found -eq $True) {
             if (!$Suppress) { WriteToConsole ("Found values at: " + (Get32Bit $i)) }
             if ($Decimal) { return $i }
             return Get32Bit $i

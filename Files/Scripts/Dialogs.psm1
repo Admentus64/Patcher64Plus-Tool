@@ -1,160 +1,156 @@
-function CreateOptionsDialog([byte]$Columns, [int32]$Height, [Array]$Tabs=@(), [switch]$NoLanguages) {
+function CreateOptionsPanel([array]$Tabs=@()) {
     
-    WriteToConsole "Creating options dialog..."
+    WriteToConsole "Creating additional options..."
+    RefreshScripts
 
-    # Create Dialog
-    if ( (IsSet $Columns) -and (IsSet $Height) )   { $global:OptionsDialog = CreateDialog -Width ($FormDistance * $Columns + (DPISize 75)) -Height (DPISize $Height) }
-    else                                           { $global:OptionsDialog = CreateDialog -Width ($FormDistance * 4        + (DPISize 75)) -Height (DPISize 640)     }
-    $OptionsDialog.Icon = $Files.icon.additional
-    $OptionsDialog.Add_FormClosing({ CloseOptionsDialog })
+    if ($RightPanel.Options.Controls.ContainsKey("OptionsPanel")) { $RightPanel.Options.Controls.RemoveByKey("OptionsPanel") }
+    $Redux.WindowPanel = CreatePanel -Name "OptionsPanel" -Width $RightPanel.Options.Width -Height $RightPanel.Options.Height -AddTo $RightPanel.Options
 
     # Options Label
-    $global:OptionsLabel = CreateLabel -Y (DPISize 15) -Width $OptionsDialog.width -Height (DPISize 15) -Font $Fonts.SmallBold -Text ($GameType.mode + " - Additional Options") -AddTo $OptionsDialog
+    $OptionsLabel = CreateLabel -Width $Redux.WindowPanel.width -Height (DPISize 15) -Font $Fonts.SmallBold -Text ($GameType.mode + " - Additional Options") -AddTo $Redux.WindowPanel
     $OptionsLabel.AutoSize = $True
-    $OptionsLabel.Left = ([Math]::Floor($OptionsDialog.Width / 2) - [Math]::Floor($OptionsLabel.Width / 2))
+    $OptionsLabel.Left = ([Math]::Floor($Redux.WindowPanel.Width / 2) - [Math]::Floor($OptionsLabel.Width / 2))
 
-    # Close Button
-    $X = $OptionsDialog.Width / 2 - (DPISize 40)
-    $Y = $OptionsDialog.Height - (DPISize 90)
-    $CloseButton = CreateButton -X $X -Y $Y -Width (DPISize 80) -Height (DPISize 35) -Text "Close" -AddTo $OptionsDialog
-    $CloseButton.Add_Click( { CloseOptionsDialog; $OptionsDialog.Hide() })
-
-    # Reset Options
-    foreach ($s in $Redux.Sections) {
-        if ($s -eq "Controls") { continue }
-        $Redux[$s] = $null
-    }
-
-    $Redux.Sections         = @()
-    $Redux.Box              = @{}
-    $Redux.Groups           = @()
-    $Last.Group             = $Last.Panel = $Last.GroupName = $Last.Hide = $null
-    $Last.Half              = $False
-    $Redux.Panel            = CreatePanel -Y (DPISize 80) -Width ($OptionsDialog.Width - (DPISize 15)) -Height ($OptionsDialog.Height - (DPISize 180)) -AddTo $OptionsDialog
-    $Redux.Panel.AutoScroll = $True
-    [System.GC]::Collect() | Out-Null
-    $tabs = CreateTabButtons -Tabs $Tabs -NoLanguages $NoLanguages
-
-    if ($tabs.count -eq 0) {
-        $Redux.Panel.Top    = 0
-        $Redux.Panel.Height = $OptionsDialog.Height - (DPISize 100)
-    }
+    CreateTabButtons -Tabs $Tabs
 
     # Lock GUI if needed
     if (Get-Command "AdjustGUI" -errorAction SilentlyContinue) { iex "AdjustGUI" }
 
     # Run Preset
     if (IsSet $GamePatch.preset) {
-        if (GetCommand ("ApplyPreset" + $GamePatch.preset)) {
+        if (HasCommand ("ApplyPreset" + $GamePatch.preset)) {
             ResetGame
             iex ("ApplyPreset" + $GamePatch.preset)
         }
     }
 
-}
-
-
-
-#==============================================================================================================================================================================================
-function CloseOptionsDialog() {
-    
-    StopJobs
-    ResetReduxScrolling
-    if (IsSet $OptionsPreviews.Dialog) { CloseOptionsPreviewDialog }
-
-}
-
-
-#==============================================================================================================================================================================================
-function CloseOptionsPreviewDialog() {
-    
-    $OptionsPreviews.Panel.Controls[0].Select()
-    $OptionsPreviews.Panel.ScrollControlIntoView($Redux.Panel)
-    $OptionsPreviews.Panel.AutoScrollPosition   = 0
-    $OptionsPreviews.Dialog.Hide()
-
-}
-
-
-
-#==============================================================================================================================================================================================
-function CreateLanguageContent($Columns=[byte][Math]::Round($Redux.Panel.Width / $ColumnWidth)) {
-    
-    $file = $Files.json.languages
-
-    # Box + Panel
-    $rows = [Math]::Ceiling($file.length / $Columns)
-    CreateReduxGroup -Text "Languages" -Tag "Language" -Height $rows
-    $Last.Group.IsLanguage = $True
-    CreateReduxPanel -Rows $rows
-
-    if (IsSet $file) {
-        $row = $column = 0
-        for ($i=0; $i -lt $file.length; $i++) {
-            if ($i % $columns -ne 0) { $column++ }
-            else {
-                $column = 0
-                $row++
-            }
-            if (IsSet $file[$i].warning)   { $warning = ([string]::Format($file[$i].warning, [Environment]::NewLine)) }
-            else                           { $warning = $null }
-            if ($file[$i].default -eq 1)   { $Redux.Language[$i] = CreateReduxRadioButton -Column ($column+1) -Row $row -Text $file[$i].title -Info ("Play the game in " + $file[$i].title) -Warning $warning -Name $file[$i].title -Credits $file[$i].credits -SaveTo "Translation" -Checked }
-            else                           { $Redux.Language[$i] = CreateReduxRadioButton -Column ($column+1) -Row $row -Text $file[$i].title -Info ("Play the game in " + $file[$i].title) -Warning $warning -Name $file[$i].title -Credits $file[$i].credits -SaveTo "Translation" }
-        }
-    
-        $hasDefault = $False
-        foreach ($i in 0..($file.Length-1)) {
-            if ($Redux.Language[$i].Checked) {
-                $hasDefault = $True
-                break
-            }
-        }
-        if (!$hasDefault) { $Redux.Language[0].Checked = $True }
+    if (HasCommand "CreateOptionsPreviews") {
+        $global:OptionsPreviews = @{}
+        $OptionsPreviews.Dialog = CreateDialog -Icon $Files.icon.preview                          -Width (DPISize 440)                                  -Height (DPISize 300) 
+        $OptionsPreviews.Panel  = CreatePanel -Name "PreviewPanel" -X (DPISize 10) -Y (DPISize 5) -Width ($OptionsPreviews.Dialog.Width - (DPISize 25)) -Height ($OptionsPreviews.Dialog.Height - (DPISize 40)) -AddTo $OptionsPreviews.Dialog
+        $OptionsPreviews.Panel.AutoScroll = $True
+        $OptionsPreviews.Dialog.Add_FormClosing({ param($sender, $e) $e.Cancel = $True; ToggleDialog -Dialog $OptionsPreviews.Dialog -Panel $OptionsPreviews.Panel -Close })
+        CreateOptionsPreviews
+        if (IsSet $Last.Group) { CreatePanel -Y $Last.Group.Bottom -Width 1 -Height (DPISize 10) -AddTo $OptionsPreviews.Panel }
     }
 
-    $file = $rows = $row = $column = $warning = $hasDefault = $null
+    HideNativeOptions
 
 }
 
 
 
 #==============================================================================================================================================================================================
-function CreateCreditsDialog() {
+function CreateTabButtons([string[]]$Tabs) {
     
-    # Create Dialog
+    if ($Tabs.Count -eq 0 -and (IsSet $GamePatch.redux) ) {
+        $Tabs        += "Main"
+        $Last.TabName = "Main"
+    }
+    if ( (IsSet $GamePatch.redux) -and $Tabs -notcontains "Redux") { $Tabs += "Redux" }
+    if (!(IsSet $GameSettings.Core) -and $Tabs.Length -gt 0) { $GameSettings.Core = @{} }
 
-    if ($DisableHighDPIMode) { $width = 830 } else { $width = 810 }
-    $global:CreditsDialog = CreateDialog -Width (DPISize $width) -Height (DPISize 500) -Icon $Files.icon.credits
-    $CloseButton = CreateButton -X ($CreditsDialog.Width / 2 - (DPISize 40)) -Y ($CreditsDialog.Height - (DPISize 90)) -Width (DPISize 80) -Height (DPISize 35) -Text "Close" -AddTo $CreditsDialog
-    $CloseButton.Add_Click({ $CreditsDialog.Hide() })
+    $Tabs = $Tabs | Select-Object -Unique
+    if ($Tabs.Count -eq 1) {
+        $Last.TabName               = $Tabs[0]
+        $Redux.Panels              += CreatePanel -Width $Redux.WindowPanel.Width -Height ($Redux.WindowPanel.Height - (DPISize 70)) -AddTo $Redux.WindowPanel
+        $Redux.Panels[0].AutoScroll = $True
+        return
+    }
 
-    # Create Switch subpanel buttons
+    # Create tabs
+    for ($i=0; $i -lt $Tabs.Count; $i++) {
+        $name = $Tabs[$i] -replace '\s',''
+        if (!(HasCommand ("CreateTab" + $name))) { continue }
+
+        $button       = CreateButton -X ( (DPISize 20) + ( ( ($Redux.WindowPanel.width - (DPISize 50) ) / $Tabs.Count) * $i) ) -Y (DPISize 20) -Width ( ($Redux.WindowPanel.width - (DPISize 50) ) / $Tabs.Count) -Height (DPISize 25) -ForeColor "White" -BackColor "Gray" -Tag $i -Text $Tabs[$i] -AddTo $Redux.WindowPanel
+        $Last.TabName = $name
+        $Button.Add_Click({
+            foreach ($item in $Redux.Tabs)                 { $item.BackColor = "Gray" }
+            for ($i=0; $i -lt $Redux.Panels.Count; $i++)   { $Redux.Panels[$i].Visible = $i -eq $this.Tag }
+            $GameSettings["Core"]["LastTab"] = $this.Tag
+            $this.BackColor                  = "DarkGray"
+        })
+
+        $Redux.Tabs                                    += $Button
+        $Redux.Panels                                  += CreatePanel -Y ($Button.Bottom + (DPISize 5) ) -Width $Redux.WindowPanel.Width -Height ($Redux.WindowPanel.Height - $button.Height - (DPISize 75) ) -Name $name -AddTo $Redux.WindowPanel
+        $Redux.Panels[$Redux.Panels.Count-1].AutoScroll = $True
+        $Last.Half                                      = $False
+        iex ("CreateTab" + $name)
+    }
+
+    # Restore last tab
+    if ($Tabs.Count -gt 0) {
+        if (IsSet -Elem $GameSettings["Core"]["LastTab"] -HasInt) {
+            if ($Redux.Tabs.Length -lt $GameSettings["Core"]["LastTab"]) {
+                $Redux.Tabs[0].BackColor = "DarkGray"
+                for ($i=0; $i -lt $Redux.Panels.Count; $i++) { $Redux.Panels[$i].Visible = $i -eq $Redux.Tabs[0].Tag }
+            }
+            else {
+                if (IsSet $Redux.Tabs[$GameSettings["Core"]["LastTab"]]) {
+                    $Redux.Tabs[$GameSettings["Core"]["LastTab"]].BackColor = "DarkGray"
+                    for ($i=0; $i -lt $Redux.Panels.Count; $i++) { $Redux.Panels[$i].Visible = $i -eq $Redux.Tabs[$GameSettings["Core"]["LastTab"]].Tag }
+                }
+                else {
+                    $Redux.Tabs[0].BackColor = "DarkGray"
+                    for ($i=0; $i -lt $Redux.Panels.Count; $i++) { $Redux.Panels[$i].Visible = $i -eq $Redux.Tabs[0].Tag }
+                }
+            }
+        }
+        else {
+            for ($i=0; $i -lt $Redux.Panels.Count; $i++) { $Redux.Panels[$i].Visible = $i -eq $Redux.Tabs[0].Tag }
+            $GameSettings["Core"]["LastTab"] = 0
+            $Redux.Tabs[0].BackColor = "DarkGray"
+        }
+    }
+    else { $Last.TabName = "Main" }
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function ToggleDialog([System.Windows.Forms.Form]$Dialog, [System.Windows.Forms.Panel]$Panel=$null, [switch]$Close) {
+    
+    if (!(IsSet $Dialog)) { return }
+
+    if ($Dialog.Visible -or $Close) {
+        if ($Panel -ne $null -and $Panel.AutoScroll -eq $True) {
+            $Panel.Controls[0].Select()
+            $Panel.AutoScrollPosition = 0
+        }
+        $Dialog.Hide()
+    }
+    else { $Dialog.Show() }
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function CreateCreditsPanel() {
+    
+    # Initialization
     $global:Credits = @{}
 
-    # Create the version number and script name label
-    $InfoLabel = CreateLabel -X ($CreditsDialog.Width / 2 - $String.Width - (DPISize 100)) -Y (DPISize 10) -Width (DPISize 200) -Height (DPISize 15) -Font $Fonts.SmallBold -Text ($Patcher.Title + " " + $Patcher.Version + " (" + $Patcher.Date + ")") -AddTo $CreditsDialog
-
-    # Create Text Box
-    $Credits.Sections = @()
-    $Credits.Sections += CreateTextBox -X (DPISize 40)              -Y (DPISize 30)             -Width ($CreditsDialog.Width - (DPISize 100)) -Height ($CloseButton.Top - (DPISize 40)) -ReadOnly -Multiline -AddTo $CreditsDialog -Tag "Info"      -TextFileFont
-    $Credits.Sections += CreateTextBox -X $Credits.Sections[0].Left -Y $Credits.Sections[0].Top -Width $Credits.Sections[0].Width             -Height $Credits.Sections[0].Height       -ReadOnly -Multiline -AddTo $CreditsDialog -Tag "Credits"   -TextFileFont
-    $Credits.Sections += CreateTextBox -X $Credits.Sections[0].Left -Y $Credits.Sections[0].Top -Width $Credits.Sections[0].Width             -Height $Credits.Sections[0].Height       -ReadOnly -Multiline -AddTo $CreditsDialog -Tag "GameID's"  -TextFileFont
-    $Credits.Sections += CreatePanel   -X $Credits.Sections[0].Left -Y $Credits.Sections[0].Top -Width $Credits.Sections[0].Width             -Height $Credits.Sections[0].Height                            -AddTo $CreditsDialog -Tag "Misc"
-    $Credits.Sections += CreatePanel   -X $Credits.Sections[0].Left -Y $Credits.Sections[0].Top -Width $Credits.Sections[0].Width             -Height $Credits.Sections[0].Height                            -AddTo $CreditsDialog -Tag "Checksum"
-    $Credits.Sections += CreateTextBox -X $Credits.Sections[0].Left -Y $Credits.Sections[0].Top -Width $Credits.Sections[0].Width             -Height $Credits.Sections[0].Height       -ReadOnly -Multiline -AddTo $CreditsDialog -Tag "Changelog" -TextFileFont
+    # Create Text Boxes
+    $Credits.Info      = CreateTextBox -X (DPISize 10)       -Y (DPISize 10)      -Width ($RightPanel.Info.Width - (DPISize 20)) -Height ($RightPanel.Info.Height - (DPISize 60)) -ReadOnly -Multiline -AddTo $RightPanel.Info      -TextFileFont
+    $Credits.Credits   = CreateTextBox -X $Credits.Info.Left -Y $Credits.Info.Top -Width $Credits.Info.Width                     -Height $Credits.Info.Height                     -ReadOnly -Multiline -AddTo $RightPanel.Credits   -TextFileFont
+    $Credits.GameID    = CreateTextBox -X $Credits.Info.Left -Y $Credits.Info.Top -Width $Credits.Info.Width                     -Height $Credits.Info.Height                     -ReadOnly -Multiline -AddTo $RightPanel.GameID    -TextFileFont
+    $Credits.Changelog = CreateTextBox -X $Credits.Info.Left -Y $Credits.Info.Top -Width $Credits.Info.Width                     -Height $Credits.Info.Height                     -ReadOnly -Multiline -AddTo $RightPanel.Changelog -TextFileFont
 
     # Support
-    $SupportLabel  = CreateLabel -X (DPISize 10)         -Y (DPISize 10)                          -Width (DPISize 200) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("--- Support or visit me at ---")   -AddTo $Credits.Sections[3]
+    $SupportLabel  = CreateLabel -X (DPISize 10)         -Y (DPISize 10)                          -Width (DPISize 200) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("--- Support or visit me at ---")   -AddTo $RightPanel.Links
 
-    $Discord1Label = CreateLabel -X (DPISize 10)         -Y ($SupportLabel.Bottom + (DPISize 2))  -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("Discord")                          -AddTo $Credits.Sections[3]
-    $Discord2Label = CreateLabel -X $Discord1Label.Right -Y ($SupportLabel.Bottom + (DPISize 2))  -Width (DPISize 140) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("https://discord.gg/P22GGzz")       -AddTo $Credits.Sections[3]
-    $GitHub1Label  = CreateLabel -X (DPISize 10)         -Y ($Discord1Label.Bottom + (DPISize 2)) -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("GitHub")                           -AddTo $Credits.Sections[3]
-    $GitHub2Label  = CreateLabel -X $GitHub1Label.Right  -Y ($Discord1Label.Bottom + (DPISize 2)) -Width (DPISize 180) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("https://github.com/Admentus64")    -AddTo $Credits.Sections[3]
+    $Discord1Label = CreateLabel -X (DPISize 10)         -Y ($SupportLabel.Bottom + (DPISize 2))  -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("Discord")                          -AddTo $RightPanel.Links
+    $Discord2Label = CreateLabel -X $Discord1Label.Right -Y ($SupportLabel.Bottom + (DPISize 2))  -Width (DPISize 140) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("https://discord.gg/P22GGzz")       -AddTo $RightPanel.Links
+    $GitHub1Label  = CreateLabel -X (DPISize 10)         -Y ($Discord1Label.Bottom + (DPISize 2)) -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("GitHub")                           -AddTo $RightPanel.Links
+    $GitHub2Label  = CreateLabel -X $GitHub1Label.Right  -Y ($Discord1Label.Bottom + (DPISize 2)) -Width (DPISize 180) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("https://github.com/Admentus64")    -AddTo $RightPanel.Links
     
-    $Patreon1Label = CreateLabel -X (DPISize 10)         -Y ($GitHub1Label.Bottom + (DPISize 2))  -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold             -Text ("Patreon")                   -AddTo $Credits.Sections[3]
-    $Patreon2Label = CreateLabel -X $Patreon1Label.Right -Y ($GitHub1Label.Bottom + (DPISize 2))  -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("www.patreon.com/Admentus")         -AddTo $Credits.Sections[3]
-    $PayPal1Label  = CreateLabel -X (DPISize 10)         -Y ($Patreon1Label.Bottom + (DPISize 2)) -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold             -Text ("PayPal")                    -AddTo $Credits.Sections[3]
-    $PayPal2Label  = CreateLabel -X $PayPal1Label.Right  -Y ($Patreon1Label.Bottom + (DPISize 2)) -Width (DPISize 200) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("www.paypal.com/paypalme/Admentus") -AddTo $Credits.Sections[3]
+    $Patreon1Label = CreateLabel -X (DPISize 10)         -Y ($GitHub1Label.Bottom + (DPISize 2))  -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("Patreon")                          -AddTo $RightPanel.Links
+    $Patreon2Label = CreateLabel -X $Patreon1Label.Right -Y ($GitHub1Label.Bottom + (DPISize 2))  -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("www.patreon.com/Admentus")         -AddTo $RightPanel.Links
+    $PayPal1Label  = CreateLabel -X (DPISize 10)         -Y ($Patreon1Label.Bottom + (DPISize 2)) -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("PayPal")                           -AddTo $RightPanel.Links
+    $PayPal2Label  = CreateLabel -X $PayPal1Label.Right  -Y ($Patreon1Label.Bottom + (DPISize 2)) -Width (DPISize 200) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("www.paypal.com/paypalme/Admentus") -AddTo $RightPanel.Links
 
     $Discord2Label.add_Click( { [system.Diagnostics.Process]::start("https://discord.gg/P22GGzz") } )
     $GitHub2Label.add_Click(  { [system.Diagnostics.Process]::start("https://github.com/Admentus64") } )
@@ -163,45 +159,45 @@ function CreateCreditsDialog() {
     $Discord2Label.ForeColor = $GitHub2Label.ForeColor = $Patreon2Label.ForeColor = $PayPal2Label.ForeColor = "Blue"
 
     # Support Me QR
-    $SwishLabel = CreateLabel -X (DPISize 470) -Y (DPISize 10) -Height (DPISize 15) -Font $Fonts.SmallBold -Text ("Swish") -AddTo $Credits.Sections[3]
+    $SwishLabel = CreateLabel -X (DPISize 470) -Y (DPISize 10) -Height (DPISize 15) -Font $Fonts.SmallBold -Text ("Swish") -AddTo $RightPanel.Links
     $PictureBox = New-Object Windows.Forms.PictureBox
     $PictureBox.Location = New-object System.Drawing.Size($SwishLabel.Left, ($SwishLabel.Bottom + (DPISize 5)))
     SetBitmap -Path ($Paths.Main + "\qr.png") -Box $PictureBox -Width 125 -Height 125
     $PictureBox.Width  = $PictureBox.Image.Size.Width
     $PictureBox.Height = $PictureBox.Image.Size.Height
-    $Credits.Sections[3].controls.add($PictureBox)
+    $RightPanel.Links.controls.add($PictureBox)
 
 
 
     # Documentation
-    $SourcesLabel    = CreateLabel -X (DPISize 10)           -Y ($PayPal2Label.Bottom   + (DPISize 80)) -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("--- Sources ---")                                                                     -AddTo $Credits.Sections[3]
+    $SourcesLabel    = CreateLabel -X (DPISize 10)           -Y ($PayPal2Label.Bottom   + (DPISize 80)) -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("--- Sources ---")                                                                     -AddTo $RightPanel.Links
     
-    $Shadow1Label    = CreateLabel -X (DPISize 10)           -Y ($SourcesLabel.Bottom    + (DPISize 2)) -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("ShadowOne333's GitHub")                                                               -AddTo $Credits.Sections[3]
-    $Shadow2Label    = CreateLabel -X $Shadow1Label.Right    -Y ($SourcesLabel.Bottom    + (DPISize 2)) -Width (DPISize 340) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("https://github.com/ShadowOne333/Zelda64-Redux-Documentation")                         -AddTo $Credits.Sections[3]
+    $Shadow1Label    = CreateLabel -X (DPISize 10)           -Y ($SourcesLabel.Bottom    + (DPISize 2)) -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("ShadowOne333's GitHub")                                                               -AddTo $RightPanel.Links
+    $Shadow2Label    = CreateLabel -X $Shadow1Label.Right    -Y ($SourcesLabel.Bottom    + (DPISize 2)) -Width (DPISize 340) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("https://github.com/ShadowOne333/Zelda64-Redux-Documentation")                         -AddTo $RightPanel.Links
     
-    $Female1Label    = CreateLabel -X (DPISize 10)           -Y ($Shadow1Label.Bottom    + (DPISize 2)) -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("Feminine Pronouns Script`nBy Mil")                                                    -AddTo $Credits.Sections[3]
-    $Female2Label    = CreateLabel -X $Female1Label.Right    -Y ($Shadow1Label.Bottom    + (DPISize 2)) -Width (DPISize 470) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("https://docs.google.com/spreadsheets/d/1Ihccm8noxsfHZfN1E3Gkccov1F27WXXxl-rxOuManUk") -AddTo $Credits.Sections[3]
+    $Female1Label    = CreateLabel -X (DPISize 10)           -Y ($Shadow1Label.Bottom    + (DPISize 2)) -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("Feminine Pronouns Script`nBy Mil")                                                    -AddTo $RightPanel.Links
+    $Female2Label    = CreateLabel -X $Female1Label.Right    -Y ($Shadow1Label.Bottom    + (DPISize 2)) -Width (DPISize 470) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("https://docs.google.com/spreadsheets/d/1Ihccm8noxsfHZfN1E3Gkccov1F27WXXxl-rxOuManUk") -AddTo $RightPanel.Links
 
-    $Skilar1Label    = CreateLabel -X (DPISize 10)           -Y ($Female1Label.Bottom    + (DPISize 2)) -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("Skilarbabcock's YouTube")                                                             -AddTo $Credits.Sections[3]
-    $Skilar2Label    = CreateLabel -X $Skilar1Label.Right    -Y ($Female1Label.Bottom    + (DPISize 2)) -Width (DPISize 225) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("https://www.youtube.com/user/skilarbabcock")                                          -AddTo $Credits.Sections[3]
+    $Skilar1Label    = CreateLabel -X (DPISize 10)           -Y ($Female1Label.Bottom    + (DPISize 2)) -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("Skilarbabcock's YouTube")                                                             -AddTo $RightPanel.Links
+    $Skilar2Label    = CreateLabel -X $Skilar1Label.Right    -Y ($Female1Label.Bottom    + (DPISize 2)) -Width (DPISize 225) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("https://www.youtube.com/user/skilarbabcock")                                          -AddTo $RightPanel.Links
     
-    $Malon1Label     = CreateLabel -X (DPISize 10)           -Y ($Skilar1Label.Bottom    + (DPISize 2)) -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("Malon Rose YouTube")                                                                  -AddTo $Credits.Sections[3]
-    $Malon2Label     = CreateLabel -X $Malon1Label.Right     -Y ($Skilar1Label.Bottom    + (DPISize 2)) -Width (DPISize 225) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("https://www.youtube.com/c/MalonRose")                                                 -AddTo $Credits.Sections[3]
+    $Malon1Label     = CreateLabel -X (DPISize 10)           -Y ($Skilar1Label.Bottom    + (DPISize 2)) -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("Malon Rose YouTube")                                                                  -AddTo $RightPanel.Links
+    $Malon2Label     = CreateLabel -X $Malon1Label.Right     -Y ($Skilar1Label.Bottom    + (DPISize 2)) -Width (DPISize 225) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("https://www.youtube.com/c/MalonRose")                                                 -AddTo $RightPanel.Links
 
-    $Luigi1Label     = CreateLabel -X (DPISize 10)           -Y ($Malon1Label.Bottom     + (DPISize 2)) -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("theluigidude2007 YouTube")                                                            -AddTo $Credits.Sections[3]
-    $Luigi2Label     = CreateLabel -X $Luigi1Label.Right     -Y ($Malon1Label.Bottom     + (DPISize 2)) -Width (DPISize 300) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("www.youtube.com/channel/UC3071imQKR5cEIobsFHLW9Q")                                    -AddTo $Credits.Sections[3]
+    $Luigi1Label     = CreateLabel -X (DPISize 10)           -Y ($Malon1Label.Bottom     + (DPISize 2)) -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("theluigidude2007 YouTube")                                                            -AddTo $RightPanel.Links
+    $Luigi2Label     = CreateLabel -X $Luigi1Label.Right     -Y ($Malon1Label.Bottom     + (DPISize 2)) -Width (DPISize 300) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("www.youtube.com/channel/UC3071imQKR5cEIobsFHLW9Q")                                    -AddTo $RightPanel.Links
     
-    $Darunia1Label   = CreateLabel -X (DPISize 10)           -Y ($Luigi1Label.Bottom     + (DPISize 2)) -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("Darunias Joy GitHub")                                                                 -AddTo $Credits.Sections[3]
-    $Darunia2Label   = CreateLabel -X $Darunia1Label.Right   -Y ($Luigi1Label.Bottom     + (DPISize 2)) -Width (DPISize 275) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("https://github.com/DaruniasJoy/OoT-Custom-Sequences")                                 -AddTo $Credits.Sections[3]
+    $Darunia1Label   = CreateLabel -X (DPISize 10)           -Y ($Luigi1Label.Bottom     + (DPISize 2)) -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("Darunias Joy GitHub")                                                                 -AddTo $RightPanel.Links
+    $Darunia2Label   = CreateLabel -X $Darunia1Label.Right   -Y ($Luigi1Label.Bottom     + (DPISize 2)) -Width (DPISize 275) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("https://github.com/DaruniasJoy/OoT-Custom-Sequences")                                 -AddTo $RightPanel.Links
 
-    $Fish1Label      = CreateLabel -X (DPISize 10)           -Y ($Darunia1Label.Bottom   + (DPISize 2)) -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("Fish-waffle64's GitHub")                                                              -AddTo $Credits.Sections[3]
-    $Fish2Label      = CreateLabel -X $Fish1Label.Right      -Y ($Darunia1Label.Bottom   + (DPISize 2)) -Width (DPISize 260) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("https://github.com/Fish-waffle64/Feeshs-MM-Music")                                    -AddTo $Credits.Sections[3]
+    $Fish1Label      = CreateLabel -X (DPISize 10)           -Y ($Darunia1Label.Bottom   + (DPISize 2)) -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("Fish-waffle64's GitHub")                                                              -AddTo $RightPanel.Links
+    $Fish2Label      = CreateLabel -X $Fish1Label.Right      -Y ($Darunia1Label.Bottom   + (DPISize 2)) -Width (DPISize 260) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("https://github.com/Fish-waffle64/Feeshs-MM-Music")                                    -AddTo $RightPanel.Links
 
-    $LuigiHero1Label = CreateLabel -X (DPISize 10)           -Y ($Fish1Label.Bottom      + (DPISize 2)) -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("LuigiXHero's GitHub")                                                                 -AddTo $Credits.Sections[3]
-    $LuigiHero2Label = CreateLabel -X $LuigiHero1Label.Right -Y ($Fish1Label.Bottom      + (DPISize 2)) -Width (DPISize 300) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("https://github.com/LuigiXHero/OoT-Randomizer-Music-Pack")                             -AddTo $Credits.Sections[3]
+    $LuigiHero1Label = CreateLabel -X (DPISize 10)           -Y ($Fish1Label.Bottom      + (DPISize 2)) -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("LuigiXHero's GitHub")                                                                 -AddTo $RightPanel.Links
+    $LuigiHero2Label = CreateLabel -X $LuigiHero1Label.Right -Y ($Fish1Label.Bottom      + (DPISize 2)) -Width (DPISize 300) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("https://github.com/LuigiXHero/OoT-Randomizer-Music-Pack")                             -AddTo $RightPanel.Links
 
-    $IkeyIlex1Label  = CreateLabel -X (DPISize 10)           -Y ($LuigiHero1Label.Bottom + (DPISize 2)) -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("Ikey Ilex's GitHub")                                                                  -AddTo $Credits.Sections[3]
-    $IkeyIlex2Label  = CreateLabel -X $IkeyIlex1Label.Right  -Y ($LuigiHero1Label.Bottom + (DPISize 2)) -Width (DPISize 260) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("https://github.com/Caverns4/Custom-Game-Models")                                      -AddTo $Credits.Sections[3]
+    $IkeyIlex1Label  = CreateLabel -X (DPISize 10)           -Y ($LuigiHero1Label.Bottom + (DPISize 2)) -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("Ikey Ilex's GitHub")                                                                  -AddTo $RightPanel.Links
+    $IkeyIlex2Label  = CreateLabel -X $IkeyIlex1Label.Right  -Y ($LuigiHero1Label.Bottom + (DPISize 2)) -Width (DPISize 260) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("https://github.com/Caverns4/Custom-Game-Models")                                      -AddTo $RightPanel.Links
 
     $Shadow2Label.add_Click(    { [system.Diagnostics.Process]::start("https://github.com/ShadowOne333/Zelda64-Redux-Documentation") } )
     $Female2Label.add_Click(    { [system.Diagnostics.Process]::start("https://docs.google.com/spreadsheets/d/1Ihccm8noxsfHZfN1E3Gkccov1F27WXXxl-rxOuManUk") } )
@@ -220,28 +216,28 @@ function CreateCreditsDialog() {
     # Hash
     $global:VerificationInfo = @{}
 
-    $VerificationInfo.HashText              = CreateLabel -X (DPISize 10) -Y (DPISize 20) -Width (DPISize 120) -Height (DPISize 15) -Font $Fonts.SmallBold -Text "ROM Hashsum:" -AddTo $Credits.Sections[4]
-    $VerificationInfo.HashField             = CreateTextBox -X $VerificationInfo.HashText.Right -Y ($VerificationInfo.HashText.Top - (DPISize 3)) -Width ($Credits.Sections[4].Width - $VerificationInfo.HashText.Width - (DPISize 100)) -Height (DPISize 50) -AddTo $Credits.Sections[4]
+    $VerificationInfo.HashText              = CreateLabel -X (DPISize 10) -Y (DPISize 20) -Width (DPISize 120) -Height (DPISize 15) -Font $Fonts.SmallBold -Text "ROM Hashsum:" -AddTo $RightPanel.Checksum
+    $VerificationInfo.HashField             = CreateTextBox -X $VerificationInfo.HashText.Right -Y ($VerificationInfo.HashText.Top - (DPISize 3)) -Width ($RightPanel.Checksum.Width - $VerificationInfo.HashText.Width - (DPISize 100)) -Height (DPISize 50) -AddTo $RightPanel.Checksum
     $VerificationInfo.HashField.ReadOnly    = $True
 
-    $VerificationInfo.GameText              = CreateLabel -X (DPISize 10) -Y ($VerificationInfo.HashField.Bottom + (DPISize 10)) -Width (DPISize 120) -Height (DPISize 15) -Font $Fonts.SmallBold -Text "Current Game:" -AddTo $Credits.Sections[4]
-    $VerificationInfo.GameField             = CreateTextBox -X $VerificationInfo.GameText.Right -Y ($VerificationInfo.GameText.Top - (DPISize 3)) -Width ($Credits.Sections[4].Width - $VerificationInfo.GameText.Width - (DPISize 100)) -Height (DPISize 50) -Text "No ROM Selected" -AddTo $Credits.Sections[4]
+    $VerificationInfo.GameText              = CreateLabel -X (DPISize 10) -Y ($VerificationInfo.HashField.Bottom + (DPISize 10)) -Width (DPISize 120) -Height (DPISize 15) -Font $Fonts.SmallBold -Text "Current Game:" -AddTo $RightPanel.Checksum
+    $VerificationInfo.GameField             = CreateTextBox -X $VerificationInfo.GameText.Right -Y ($VerificationInfo.GameText.Top - (DPISize 3)) -Width ($RightPanel.Checksum.Width - $VerificationInfo.GameText.Width - (DPISize 100)) -Height (DPISize 50) -Text "No ROM Selected" -AddTo $RightPanel.Checksum
     $VerificationInfo.GameField.ReadOnly    = $True
 
-    $VerificationInfo.RegionText            = CreateLabel -X (DPISize 10) -Y ($VerificationInfo.GameField.Bottom + (DPISize 10)) -Width (DPISize 120) -Height (DPISize 15) -Font $Fonts.SmallBold -Text "Current Region:" -AddTo $Credits.Sections[4]
-    $VerificationInfo.RegionField           = CreateTextBox -X $VerificationInfo.RegionText.Right -Y ($VerificationInfo.RegionText.Top - (DPISize 3)) -Width ($Credits.Sections[4].Width - $VerificationInfo.RegionText.Width - (DPISize 100)) -Height (DPISize 50) -Text "No ROM Selected" -AddTo $Credits.Sections[4]
+    $VerificationInfo.RegionText            = CreateLabel -X (DPISize 10) -Y ($VerificationInfo.GameField.Bottom + (DPISize 10)) -Width (DPISize 120) -Height (DPISize 15) -Font $Fonts.SmallBold -Text "Current Region:" -AddTo $RightPanel.Checksum
+    $VerificationInfo.RegionField           = CreateTextBox -X $VerificationInfo.RegionText.Right -Y ($VerificationInfo.RegionText.Top - (DPISize 3)) -Width ($RightPanel.Checksum.Width - $VerificationInfo.RegionText.Width - (DPISize 100)) -Height (DPISize 50) -Text "No ROM Selected" -AddTo $RightPanel.Checksum
     $VerificationInfo.RegionField.ReadOnly  = $True
 
-    $VerificationInfo.RevText               = CreateLabel -X (DPISize 10) -Y ($VerificationInfo.RegionField.Bottom + (DPISize 10)) -Width (DPISize 120) -Height (DPISize 15) -Font $Fonts.SmallBold -Text "Current Revision:" -AddTo $Credits.Sections[4]
-    $VerificationInfo.RevField              = CreateTextBox -X $VerificationInfo.RevText.Right -Y ($VerificationInfo.RevText.Top - (DPISize 3)) -Width ($Credits.Sections[4].Width - $VerificationInfo.RevText.Width - (DPISize 100)) -Height (DPISize 50) -Text "No ROM Selected" -AddTo $Credits.Sections[4]
+    $VerificationInfo.RevText               = CreateLabel -X (DPISize 10) -Y ($VerificationInfo.RegionField.Bottom + (DPISize 10)) -Width (DPISize 120) -Height (DPISize 15) -Font $Fonts.SmallBold -Text "Current Revision:" -AddTo $RightPanel.Checksum
+    $VerificationInfo.RevField              = CreateTextBox -X $VerificationInfo.RevText.Right -Y ($VerificationInfo.RevText.Top - (DPISize 3)) -Width ($RightPanel.Checksum.Width - $VerificationInfo.RevText.Width - (DPISize 100)) -Height (DPISize 50) -Text "No ROM Selected" -AddTo $RightPanel.Checksum
     $VerificationInfo.RevField.ReadOnly     = $True
     
-    $VerificationInfo.SupportText           = CreateLabel -X (DPISize 10) -Y ($VerificationInfo.RevField.Bottom + (DPISize 10)) -Width (DPISize 120) -Height (DPISize 15) -Font $Fonts.SmallBold -Text "Supported ROM:" -AddTo $Credits.Sections[4]
-    $VerificationInfo.SupportField          = CreateTextBox -X $VerificationInfo.SupportText.Right -Y ($VerificationInfo.SupportText.Top - (DPISize 3)) -Width ($Credits.Sections[4].Width - $VerificationInfo.SupportText.Width - (DPISize 100)) -Height (DPISize 50) -Text "No ROM Selected" -AddTo $Credits.Sections[4]
+    $VerificationInfo.SupportText           = CreateLabel -X (DPISize 10) -Y ($VerificationInfo.RevField.Bottom + (DPISize 10)) -Width (DPISize 120) -Height (DPISize 15) -Font $Fonts.SmallBold -Text "Supported ROM:" -AddTo $RightPanel.Checksum
+    $VerificationInfo.SupportField          = CreateTextBox -X $VerificationInfo.SupportText.Right -Y ($VerificationInfo.SupportText.Top - (DPISize 3)) -Width ($RightPanel.Checksum.Width - $VerificationInfo.SupportText.Width - (DPISize 100)) -Height (DPISize 50) -Text "No ROM Selected" -AddTo $RightPanel.Checksum
     $VerificationInfo.SupportField.ReadOnly = $True
 
-    AddTextFileToTextbox -TextBox $Credits.Sections[2] -File $Files.text.gameID
-    AddTextFileToTextbox -TextBox $Credits.Sections[5] -File $Files.text.changelog
+    AddTextFileToTextbox -TextBox $Credits.GameID    -File $Files.text.gameID
+    AddTextFileToTextbox -TextBox $Credits.Changelog -File $Files.text.changelog
     SetCreditsSections
     CalculateHashSum
 
@@ -250,80 +246,85 @@ function CreateCreditsDialog() {
 
 
 #==============================================================================================================================================================================================
-function CreateSettingsDialog() {
+function CreateSettingsPanel() {
     
-    # Create Dialog
-    $global:SettingsDialog = CreateDialog -Width (DPISize 560) -Height (DPISize 700) -Icon $Files.icon.settings
-    $CloseButton = CreateButton -X ($SettingsDialog.Width / 2 - (DPISize 40)) -Y ($SettingsDialog.Height - (DPISize 90)) -Width (DPISize 80) -Height (DPISize 35) -Text "Close" -AddTo $SettingsDialog
-    $CloseButton.Add_Click({ $SettingsDialog.Hide() })
-
-    # Create the version number and script name label
-    $InfoLabel = CreateLabel -X ($SettingsDialog.Width / 2 - $String.Width - (DPISize 100)) -Y (DPISize 10) -Width (DPISize 220) -Height (DPISize 15) -Font $Fonts.SmallBold -Text ($Patcher.Title + " " + $Patcher.Version + " (" + $Patcher.Date + ")") -AddTo $SettingsDialog
-
     $global:GeneralSettings = @{}
-    
-    # General Settings
-    $GeneralSettings.Box             = CreateReduxGroup -All -Y (DPISize 40) -IsGame $False -Height 3 -AddTo $SettingsDialog -Text "General Settings"
-    $GeneralSettings.DoubleClick     = CreateSettingsCheckbox                         -Column 1 -Row 1 -Text "Double Click" -Disable ((GetWindowsVersion) -ge 11) -Info "Allows a PowerShell file to be opened by double-clicking it"
-    if ((GetWindowsVersion) -lt 11) { $GeneralSettings.DoubleClick.Checked = ((Get-ItemProperty -LiteralPath "HKLM:\Software\Classes\Microsoft.PowerShellScript.1\Shell").'(default)' -eq '0') }
-    $GeneralSettings.ClearType       = CreateSettingsCheckbox -Name "ClearType"       -Column 2 -Row 1 -Text "Use ClearType Font"      -Checked -Info ('Use the ClearType font "Segoe UI" instead of the default font "Microsft Sans Serif"' + "`nThe option will only go in effect when opening the tool`nThis change requires the tool to restart to be applied")
-    $GeneralSettings.HiDPIMode       = CreateSettingsCheckbox -Name "HiDPIMode"       -Column 3 -Row 1 -Text "Use Hi-DPI Mode"         -Checked -Info "Enables Hi-DPI Mode suitable for higher resolution displays`nThe option will only go in effect when opening the tool`nThis change requires the tool to restart to be applied"
-    $GeneralSettings.ModernStyle     = CreateSettingsCheckbox -Name "ModernStyle"     -Column 1 -Row 2 -Text "Use Modern Visual Style" -Checked -Info "Use a modern-looking visual style for the whole interface of the tool"
-    $GeneralSettings.EnableSounds    = CreateSettingsCheckbox -Name "EnableSounds"    -Column 2 -Row 2 -Text "Enable Sound Effects"    -Checked -Info "Enable the use of sound effects, for example when patching is concluded"
-    $GeneralSettings.LocalTempFolder = CreateSettingsCheckbox -Name "LocalTempFolder" -Column 3 -Row 2 -Text "Use Local Temp Folder"   -Checked -Info "Store all temporary and extracted files within the local Patcher64+ Tool folder`nIf unchecked the temporary and extracted files are kept in the Patcher64+ Tool folder in %AppData%"
-    $GeneralSettings.KeepCache       = CreateSettingsCheckbox -Name "KeepCache"       -Column 1 -Row 3 -Text "Keep Cache"              -Checked -Info "Keep a copy of the downgraded or decompressed ROM to speed up patching for subsequent attempts"
-    $GeneralSettings.DisableUpdates  = CreateSettingsCheckbox -Name "DisableUpdates"  -Column 2 -Row 3 -Text "Disable Auto-Updater"             -Info "Disable the Auto-Updater that runs when starting the Patcher64+ Tool"
-    $GeneralSettings.DisableAddons   = CreateSettingsCheckbox -Name "DisableAddons"   -Column 3 -Row 3 -Text "Disable Addons Updater"           -Info "Disable automatically updating addons (music, models, etc) when starting the Patcher64+ Tool"
+    $GeneralSettings.Panel  = CreatePanel -Name "SettingsPanel" -Width ($RightPanel.Settings.Width) -Height ($RightPanel.Settings.Height - (DPISize 40) ) -AddTo $RightPanel.Settings
+    $GeneralSettings.Panel.AutoScroll = $True
 
+    # General Settings
+    $GeneralSettings.Box             = CreateSettingsGroup -Text "General Settings"
+    $GeneralSettings.DoubleClick     = CreateSettingsCheckbox                         -Text "Double Click" -Disable ((GetWindowsVersion) -ge 11) -Info "Allows a PowerShell file to be opened by double-clicking it"
+    $GeneralSettings.ClearType       = CreateSettingsCheckbox -Name "ClearType"       -Text "Use ClearType Font"      -Checked -Info ('Use the ClearType font "Segoe UI" instead of the default font "Microsft Sans Serif"' + "`nThe option will only go in effect when opening the tool`nThis change requires the tool to restart to be applied")
+    $GeneralSettings.HiDPIMode       = CreateSettingsCheckbox -Name "HiDPIMode"       -Text "Use Hi-DPI Mode"         -Checked -Info "Enables Hi-DPI Mode suitable for higher resolution displays`nThe option will only go in effect when opening the tool`nThis change requires the tool to restart to be applied"
+    $GeneralSettings.ModernStyle     = CreateSettingsCheckbox -Name "ModernStyle"     -Text "Use Modern Visual Style" -Checked -Info "Use a modern-looking visual style for the whole interface of the tool"
+    $GeneralSettings.SafeOptions     = CreateSettingsCheckbox -Name "SafeOptions"     -Text "Use Safe Options"                 -Info "Hide any options which are not considered safe for Randomizer or the Everdrive"
+    $GeneralSettings.PerGameFile     = CreateSettingsCheckbox -Name "PerGameFile"     -Text "Use ROM per Game Mode"            -Info "The last ROM or Wii VC WAD for a chosen Game Mode is stored when switching back to it"
+    $GeneralSettings.EnableSounds    = CreateSettingsCheckbox -Name "EnableSounds"    -Text "Enable Sound Effects"    -Checked -Info "Enable the use of sound effects, for example when patching is concluded"
+    $GeneralSettings.LocalTempFolder = CreateSettingsCheckbox -Name "LocalTempFolder" -Text "Use Local Temp Folder"   -Checked -Info "Store all temporary and extracted files within the local Patcher64+ Tool folder`nIf unchecked the temporary and extracted files are kept in the Patcher64+ Tool folder in %AppData%"
+    $GeneralSettings.KeepCache       = CreateSettingsCheckbox -Name "KeepCache"       -Text "Keep Cache"              -Checked -Info "Keep a copy of the downgraded or decompressed ROM to speed up patching for subsequent attempts"
+    $GeneralSettings.DisableUpdates  = CreateSettingsCheckbox -Name "DisableUpdates"  -Text "Disable Auto-Updater"             -Info "Disable the Auto-Updater that runs when starting the Patcher64+ Tool"
+    $GeneralSettings.DisableAddons   = CreateSettingsCheckbox -Name "DisableAddons"   -Text "Disable Addons Updater"           -Info "Disable automatically updating addons (music, models, etc) when starting the Patcher64+ Tool"
+
+    if ((GetWindowsVersion) -lt 11) {
+        try {
+            $reg = (Get-ItemProperty -LiteralPath "HKLM:\Software\Classes\Microsoft.PowerShellScript.1\Shell").'(default)'
+            if ($reg -ne $null)   { $GeneralSettings.DoubleClick.Checked = (Get-ItemProperty -LiteralPath "HKLM:\Software\Classes\Microsoft.PowerShellScript.1\Shell").'(default)' -eq '0' }
+            else                  { $GeneralSettings.DoubleClick.Checked = $GeneralSettings.DoubleClick.Enabled = $False                                                                   }
+        }
+        catch { $GeneralSettings.DoubleClick.Checked = $GeneralSettings.DoubleClick.Enabled = $False }
+    }
 
     # Advanced Settings
-    $GeneralSettings.Box                = CreateReduxGroup -All -Y ($GeneralSettings.Box.Bottom + (DPISize 10)) -IsGame $False -Height 3 -AddTo $SettingsDialog -Text "Advanced Settings"
-    $GeneralSettings.Logging            = CreateSettingsCheckbox -Name "Logging"            -Column 1 -Row 1 -Text "Logging"        -Checked -IsDebug -Info "Write all events of Patcher64+ into log files"
-    $GeneralSettings.ClearLog           = CreateSettingsCheckbox -Name "ClearLog"           -Column 2 -Row 1 -Text "Clear Log When Patching" -IsDebug -Info "Clear the log when patching a ROM`nDo not enable this option if you want to submit a bug report"
-    $GeneralSettings.IgnoreChecksum     = CreateSettingsCheckbox -Name "IgnoreChecksum"     -Column 3 -Row 1 -Text "Ignore Input Checksum"   -IsDebug -Info "Do not check the checksum of a ROM or WAD and patch it regardless`nDowngrade is no longer forced anymore if the checksum is different than the supported revision`nThis option also skips the maximum ROM size verification`n`nDO NOT REPORT ANY BUGS IF THIS OPTION IS ENABLED!"
-    $GeneralSettings.ForceExtract       = CreateSettingsCheckbox -Name "ForceExtract"       -Column 1 -Row 2 -Text "Force Extract"           -IsDebug -Info "Always extract game data required for patching even if it was already extracted on a previous run"
-    $GeneralSettings.ExtractCleanScript = CreateSettingsCheckbox -Name "ExtractCleanScript" -Column 2 -Row 2 -Text "Extract Clean Script"    -IsDebug -Info "Extract a clean copy of dialogue script for the Text Editor when patching`nvanilla Ocarina of Time or Majora's Mask"
-    $GeneralSettings.ExtractFullScript  = CreateSettingsCheckbox -Name "ExtractFullScript"  -Column 3 -Row 2 -Text "Extract Patched Script"  -IsDebug -Info "Extract a fully patched copy of dialogue script for the Text Editor when patching`nvanilla Ocarina of Time or Majora's Mask"
-    $GeneralSettings.NoConversion       = CreateSettingsCheckbox -Name "NoConversion"       -Column 1 -Row 3 -Text "No Conversion"           -IsDebug -Info "Do not attempt to convert the ROM to a proper format"
-    $GeneralSettings.RefreshScripts     = CreateSettingsCheckbox -Name "RefreshScripts"     -Column 2 -Row 3 -Text "Refresh Scripts"         -IsDebug -Info "Refresh several code scripts prior to running them so that any code changes are included"
+    $GeneralSettings.Box                = CreateSettingsGroup    -Text "Advanced Settings"
+    $GeneralSettings.Logging            = CreateSettingsCheckbox -Name "Logging"            -Text "Logging"        -Checked -IsDebug -Info "Write all events of Patcher64+ into log files"
+    $GeneralSettings.ClearLog           = CreateSettingsCheckbox -Name "ClearLog"           -Text "Clear Log When Patching" -IsDebug -Info "Clear the log when patching a ROM`nDo not enable this option if you want to submit a bug report"
+    $GeneralSettings.IgnoreChecksum     = CreateSettingsCheckbox -Name "IgnoreChecksum"     -Text "Ignore Input Checksum"   -IsDebug -Info "Do not check the checksum of a ROM or WAD and patch it regardless`nDowngrade is no longer forced anymore if the checksum is different than the supported revision`nThis option also skips the maximum ROM size verification`n`nDO NOT REPORT ANY BUGS IF THIS OPTION IS ENABLED!"
+    $GeneralSettings.ForceExtract       = CreateSettingsCheckbox -Name "ForceExtract"       -Text "Force Extract"           -IsDebug -Info "Always extract game data required for patching even if it was already extracted on a previous run"
+    $GeneralSettings.ExtractCleanScript = CreateSettingsCheckbox -Name "ExtractCleanScript" -Text "Extract Clean Script"    -IsDebug -Info "Extract a clean copy of dialogue script for the Text Editor when patching`nvanilla Ocarina of Time or Majora's Mask"
+    $GeneralSettings.ExtractFullScript  = CreateSettingsCheckbox -Name "ExtractFullScript"  -Text "Extract Patched Script"  -IsDebug -Info "Extract a fully patched copy of dialogue script for the Text Editor when patching`nvanilla Ocarina of Time or Majora's Mask"
+    $GeneralSettings.NoConversion       = CreateSettingsCheckbox -Name "NoConversion"       -Text "No Conversion"           -IsDebug -Info "Do not attempt to convert the ROM to a proper format"
+    $GeneralSettings.RefreshScripts     = CreateSettingsCheckbox -Name "RefreshScripts"     -Text "Refresh Scripts"         -IsDebug -Info "Refresh several code scripts prior to running them so that any code changes are included"
 
 
     # Debug Settings
-    $GeneralSettings.Box                  = CreateReduxGroup -All -Y ($GeneralSettings.Box.Bottom + (DPISize 10)) -IsGame $False -Height 4 -AddTo $SettingsDialog -Text "Debug Settings"
-    $GeneralSettings.Console              = CreateSettingsCheckbox -Name "Console"              -Column 1 -Row 1 -Text "Console"                 -IsDebug -Info "Show the console log"
-    $GeneralSettings.Stop                 = CreateSettingsCheckbox -Name "Stop"                 -Column 2 -Row 1 -Text "No Patching"             -IsDebug -Info "Do not start the patching process and only show the debug information for the console log or log file"
-    $GeneralSettings.CreateBPS            = CreateSettingsCheckbox -Name "CreateBPS"            -Column 3 -Row 1 -Text "Create BPS"              -IsDebug -Info "Create compressed and decompressed BPS patches when patching is concluded"
-    $GeneralSettings.NoCleanup            = CreateSettingsCheckbox -Name "NoCleanup"            -Column 1 -Row 2 -Text "No Cleanup"              -IsDebug -Info "Do not clean up the files after the patching process fails or succeeds"
-    $GeneralSettings.NoTitleChange        = CreateSettingsCheckbox -Name "NoTitleChange"        -Column 2 -Row 2 -Text "No ROM Title Change"     -IsDebug -Info "Do not change the title of the ROM when patching is concluded"
-    $GeneralSettings.NoGameIDChange       = CreateSettingsCheckbox -Name "NoGameIDChange"       -Column 3 -Row 2 -Text "No GameID Change"        -IsDebug -Info "Do not change the GameID of the ROM when patching is concluded"
-    $GeneralSettings.NoChannelTitleChange = CreateSettingsCheckbox -Name "NoChannelTitleChange" -Column 1 -Row 3 -Text "No Channel Title Change" -IsDebug -Info "Do not change the channel title of the WAD when patching is concluded"
-    $GeneralSettings.NoChannelIDChange    = CreateSettingsCheckbox -Name "NoChannelIDChange"    -Column 2 -Row 3 -Text "No Channel ID Change"    -IsDebug -Info "Do not change the channel GameID of the WAD when patching is concluded"
-    $GeneralSettings.KeepDowngraded       = CreateSettingsCheckbox -Name "KeepDowngraded"       -Column 3 -Row 3 -Text "Keep Downgraded"         -IsDebug -Info "Keep the downgraded patched ROM in the output folder"
-    $GeneralSettings.KeepConverted        = CreateSettingsCheckbox -Name "KeepConverted"        -Column 1 -Row 4 -Text "Keep Converted"          -IsDebug -Info "Keep the converted patched ROM in the output folder"
-    $GeneralSettings.SceneEditorChecks    = CreateSettingsCheckbox -Name "SceneEditorChecks"    -Column 2 -Row 4 -Text "Scene Editor Checks"     -IsDebug -Info "Print out extras debug info and perform extra checks for the Scene Editor`nThis may slow down performance a bit"
+    $GeneralSettings.Box                   = CreateSettingsGroup    -Text "Debug Settings"
+    $GeneralSettings.Console               = CreateSettingsCheckbox -Name "Console"               -Text "Console"                 -IsDebug -Info "Show the console log"
+    $GeneralSettings.Stop                  = CreateSettingsCheckbox -Name "Stop"                  -Text "No Patching"             -IsDebug -Info "Do not start the patching process and only show the debug information for the console log or log file"
+    $GeneralSettings.CreateCompressedBPS   = CreateSettingsCheckbox -Name "CreateCompressedBPS"   -Text "Create Compressed BPS"   -IsDebug -Info "Create compressed and decompressed BPS patches when patching is concluded"
+    $GeneralSettings.CreatDecompressedeBPS = CreateSettingsCheckbox -Name "CreateDecompressedBPS" -Text "Create Decompressed BPS" -IsDebug -Info "Create compressed and decompressed BPS patches when patching is concluded"
+    $GeneralSettings.NoCleanup             = CreateSettingsCheckbox -Name "NoCleanup"             -Text "No Cleanup"              -IsDebug -Info "Do not clean up the files after the patching process fails or succeeds"
+    $GeneralSettings.NoTitleChange         = CreateSettingsCheckbox -Name "NoTitleChange"         -Text "No ROM Title Change"     -IsDebug -Info "Do not change the title of the ROM when patching is concluded"
+    $GeneralSettings.NoGameIDChange        = CreateSettingsCheckbox -Name "NoGameIDChange"        -Text "No GameID Change"        -IsDebug -Info "Do not change the GameID of the ROM when patching is concluded"
+    $GeneralSettings.NoChannelTitleChange  = CreateSettingsCheckbox -Name "NoChannelTitleChange " -Text "No Channel Title Change" -IsDebug -Info "Do not change the channel title of the WAD when patching is concluded"
+    $GeneralSettings.NoChannelIDChange     = CreateSettingsCheckbox -Name "NoChannelIDChange"     -Text "No Channel ID Change"    -IsDebug -Info "Do not change the channel GameID of the WAD when patching is concluded"
+    $GeneralSettings.KeepDowngraded        = CreateSettingsCheckbox -Name "KeepDowngraded"        -Text "Keep Downgraded"         -IsDebug -Info "Keep the downgraded patched ROM in the output folder"
+    $GeneralSettings.KeepConverted         = CreateSettingsCheckbox -Name "KeepConverted"         -Text "Keep Converted"          -IsDebug -Info "Keep the converted patched ROM in the output folder"
+    $GeneralSettings.SceneEditorChecks     = CreateSettingsCheckbox -Name "SceneEditorChecks"     -Text "Scene Editor Checks"     -IsDebug -Info "Print out extras debug info and perform extra checks for the Scene Editor`nThis may slow down performance a bit"
     
 
 
     # Debug Settings (Nintendo 64)
-    $GeneralSettings.Box                = CreateReduxGroup -All -Y ($GeneralSettings.Box.Bottom + (DPISize 10)) -IsGame $False -Height 2 -AddTo $SettingsDialog -Text "Debug Settings (Nintendo 64)"
-    $GeneralSettings.NoCompression      = CreateSettingsCheckbox -Name "NoCompression"      -Column 1 -Row 1 -Text "No Compression"            -IsDebug -Info "Do not attempt to compress the ROM back again when patching is concluded`nThis can cause Wii VC WADs to freeze"
-    $GeneralSettings.KeepDecompressed   = CreateSettingsCheckbox -Name "KeepDecompressed"   -Column 2 -Row 1 -Text "Keep Decompressed"         -IsDebug -Info "Keep the decompressed patched ROM in the output folder"
-    $GeneralSettings.NoCRCChange        = CreateSettingsCheckbox -Name "NoCRCChange"        -Column 3 -Row 1 -Text "No CRC Change"             -IsDebug -Info "Do not change the CRC of the ROM when patching is concluded"
-    $GeneralSettings.Rev0DungeonFiles   = CreateSettingsCheckbox -Name "Rev0DungeonFiles"   -Column 1 -Row 2 -Text "Rev 0 Dungeon Files"       -IsDebug -Info "Extract the dungeon files from the OoT ROM (Rev 0 US) or MM ROM (Rev 0 US) as well when extracting dungeon files"
-    $GeneralSettings.NoDialoguePatching = CreateSettingsCheckbox -Name "NoDialoguePatching" -Column 2 -Row 2 -Text "Prevent Dialogue Patching" -IsDebug -Info "Prevents the patching of any dialogue related options for Ocarina of Time or Majora's Mask`nUseful for when patching Randomizer"
-    $GeneralSettings.NoScenePatching    = CreateSettingsCheckbox -Name "NoScenePatching"    -Column 3 -Row 2 -Text "Prevent Scene Patching"    -IsDebug -Info "Prevents the patching of any scene related options for Ocarina of Time or Majora's Mask`nUseful for when patching Randomizer"
+    $GeneralSettings.Box                = CreateSettingsGroup    -Text "Debug Settings (Nintendo 64)"
+    $GeneralSettings.NoCompression      = CreateSettingsCheckbox -Name "NoCompression"      -Text "No Compression"            -IsDebug -Info "Do not attempt to compress the ROM back again when patching is concluded`nThis can cause Wii VC WADs to freeze"
+    $GeneralSettings.KeepDecompressed   = CreateSettingsCheckbox -Name "KeepDecompressed"   -Text "Keep Decompressed"         -IsDebug -Info "Keep the decompressed patched ROM in the output folder"
+    $GeneralSettings.NoCRCChange        = CreateSettingsCheckbox -Name "NoCRCChange"        -Text "No CRC Change"             -IsDebug -Info "Do not change the CRC of the ROM when patching is concluded"
+    $GeneralSettings.Rev0DungeonFiles   = CreateSettingsCheckbox -Name "Rev0DungeonFiles"   -Text "Rev 0 Dungeon Files"       -IsDebug -Info "Extract the dungeon files from the OoT ROM (Rev 0 US) or MM ROM (Rev 0 US) as well when extracting dungeon files"
+    $GeneralSettings.NoDialoguePatching = CreateSettingsCheckbox -Name "NoDialoguePatching" -Text "Prevent Dialogue Patching" -IsDebug -Info "Prevents the patching of any dialogue related options for Ocarina of Time or Majora's Mask`nUseful for when patching Randomizer"
+    $GeneralSettings.NoScenePatching    = CreateSettingsCheckbox -Name "NoScenePatching"    -Text "Prevent Scene Patching"    -IsDebug -Info "Prevents the patching of any scene related options for Ocarina of Time or Majora's Mask`nUseful for when patching Randomizer"
 
     # Settings preset
-    $GeneralSettings.Box          = CreateReduxGroup -All -Y ($GeneralSettings.Box.Bottom + (DPISize 10)) -IsGame $False -Height 2 -AddTo $SettingsDialog -Text "Settings Presets"
-    $GeneralSettings.PresetsPanel = CreateReduxPanel -Row 2 -AddTo $GeneralSettings.Box
-    $GeneralSettings.Presets      = @()
-    $text                         = "`nAll made settings are stored to this preset`nSettings are retrieved when selecting this preset again"
-    $GeneralSettings.Presets     += CreateSettingsRadioField -Name "Preset" -SaveAs 1 -Max 6 -NameTextbox "Preset.Label1" -Column 1 -Row 1 -Text "Preset 1" -Info ("Settings preset #1" + $text) -Checked
-    $GeneralSettings.Presets     += CreateSettingsRadioField -Name "Preset" -SaveAs 2 -Max 6 -NameTextbox "Preset.Label2" -Column 2 -Row 1 -Text "Preset 2" -Info ("Settings preset #2" + $text)
-    $GeneralSettings.Presets     += CreateSettingsRadioField -Name "Preset" -SaveAs 3 -Max 6 -NameTextbox "Preset.Label3" -Column 3 -Row 1 -Text "Preset 3" -Info ("Settings preset #3" + $text)
-    $GeneralSettings.Presets     += CreateSettingsRadioField -Name "Preset" -SaveAs 4 -Max 6 -NameTextbox "Preset.Label4" -Column 1 -Row 2 -Text "Preset 4" -Info ("Settings preset #4" + $text)
-    $GeneralSettings.Presets     += CreateSettingsRadioField -Name "Preset" -SaveAs 5 -Max 6 -NameTextbox "Preset.Label5" -Column 2 -Row 2 -Text "Preset 5" -Info ("Settings preset #5" + $text)
-    $GeneralSettings.Presets     += CreateSettingsRadioField -Name "Preset" -SaveAs 6 -Max 6 -NameTextbox "Preset.Label6" -Column 3 -Row 2 -Text "Preset 6" -Info ("Settings preset #6" + $text)
+    $GeneralSettings.Box      = CreateSettingsGroup -Text "Settings Presets"
+    $GeneralSettings.Presets  = @()
+    $text                     = "`nAll made settings are stored to this preset`nSettings are retrieved when selecting this preset again"
+    $GeneralSettings.Presets += CreateSettingsRadioField -Name "Preset" -SaveAs 1 -Max 8 -NameTextbox "Preset.Label1" -Text "Preset 1" -Info ("Settings preset #1" + $text) -Checked
+    $GeneralSettings.Presets += CreateSettingsRadioField -Name "Preset" -SaveAs 2 -Max 8 -NameTextbox "Preset.Label2" -Text "Preset 2" -Info ("Settings preset #2" + $text)
+    $GeneralSettings.Presets += CreateSettingsRadioField -Name "Preset" -SaveAs 3 -Max 8 -NameTextbox "Preset.Label3" -Text "Preset 3" -Info ("Settings preset #3" + $text)
+    $GeneralSettings.Presets += CreateSettingsRadioField -Name "Preset" -SaveAs 4 -Max 8 -NameTextbox "Preset.Label4" -Text "Preset 4" -Info ("Settings preset #4" + $text)
+    $GeneralSettings.Presets += CreateSettingsRadioField -Name "Preset" -SaveAs 5 -Max 8 -NameTextbox "Preset.Label5" -Text "Preset 5" -Info ("Settings preset #5" + $text)
+    $GeneralSettings.Presets += CreateSettingsRadioField -Name "Preset" -SaveAs 6 -Max 8 -NameTextbox "Preset.Label6" -Text "Preset 6" -Info ("Settings preset #6" + $text)
+    $GeneralSettings.Presets += CreateSettingsRadioField -Name "Preset" -SaveAs 7 -Max 8 -NameTextbox "Preset.Label7" -Text "Preset 7" -Info ("Settings preset #7" + $text)
+    $GeneralSettings.Presets += CreateSettingsRadioField -Name "Preset" -SaveAs 8 -Max 8 -NameTextbox "Preset.Label8" -Text "Preset 8" -Info ("Settings preset #8" + $text)
 
     if ((GetWindowsVersion) -lt 11) { $GeneralSettings.DoubleClick.Add_CheckStateChanged( { TogglePowerShellOpenWithClicks $this.Checked } ) }
     $GeneralSettings.ModernStyle.Add_CheckStateChanged(     { SetModernVisualStyle $this.checked } )
@@ -351,100 +352,49 @@ function CreateSettingsDialog() {
     for ($i=0; $i-lt $GeneralSettings.Presets.Length; $i++) {
         $GeneralSettings.Presets[$i].Add_CheckedChanged( {
             if (!(IsSet $GamePatch.script) -and $GameSettings -ne $null) { return }
+            RefreshGameScript
 
-            if (!$this.checked) { Out-IniFile -FilePath $GameSettingsFile -InputObject $GameSettings | Out-Null }
+            if (!$this.checked) { Out-IniFile -FilePath $GameSettingsFile -InputObject $GameSettings }
             else {
                 $global:GameSettingsFile = GetGameSettingsFile
                 $global:GameSettings     = GetSettings $GameSettingsFile
-                if (GetCommand "CreateOptions") { CreateOptions }
+                if (HasCommand "CreateOptions") { CreateOptions }
                 DisableReduxOptions
             }
         } )
     }
 
-}
-
-
-
-#==============================================================================================================================================================================================
-function ResetTool() {
-    
-    $InputPaths.GameTextBox.Text = "Select or drag and drop your ROM or VC WAD file..."
-    $InputPaths.InjectTextBox.Text = "Select or drag and drop your NES, SNES or N64 ROM..."
-    $InputPaths.PatchTextBox.Text = "Select or drag and drop your BPS, IPS, Xdelta or VCDiff Patch File..."
-    
-    foreach ($item in $GeneralSettings) {
-        if ($item.GetType() -eq [System.Windows.Forms.CheckBox]) { $item.Checked = $item.Default }
-    }
-
-    foreach ($item in $VC.GetEnumerator) {
-        if ($item.GetType() -eq [System.Windows.Forms.CheckBox]) { $item.Checked = $item.Default }
-    }
-
-    $Patches.Downgrade.Checked = $Patches.Downgrade.Default
-    $Patches.Redux.Checked = $Patches.Redux.Default
-    $Patches.Options.Checked = $Patches.Options.Default
-    $CustomHeader.EnableHeader.Checked = $CustomHeader.EnableHeader.Default
-    $CustomHeader.EnableRegion.Checked = $CustomHeader.EnableRegion.Default
-    
-    $CurrentGame.Console.SelectedIndex = $CurrentGame.Console.Default
-    $CurrentGame.Game.SelectedIndex = $CurrentGame.Game.Default
-    $Patches.Type.SelectedIndex = $Patches.Type.Default
-    $InputPaths.ApplyInjectButton.Enabled = $InputPaths.ApplyPatchButton.Enabled = $False
-
-    RemoveFile ($Paths.Settings)
-    $global:Settings = GetSettings ($Paths.Settings + "\Core.ini")
-    $global:GameSettings = GetSettings (GetGameSettingsFile)
-
-    RestoreCustomHeader
-    ChangeGameMode
-    SetWiiVCMode $False
-    EnablePatchButtons $False
-    SetMainScreenSize
-
-    $global:GameIsSelected = $False
-    [System.GC]::Collect() | Out-Null
+    # Safe Options
+    $GeneralSettings.SafeOptions.Add_CheckStateChanged({
+        if (!(IsSet $GamePatch.script) -or $GameSettings -eq $null -or !(HasCommand "CreateOptions")) { return }
+        RefreshGameScript
+        Out-IniFile -FilePath $GameSettingsFile -InputObject $GameSettings
+        CreateOptions
+        DisableReduxOptions
+    })
 
 }
 
 
 
 #==============================================================================================================================================================================================
-function ResetGame() {
+function CreateSettingsGroup([string]$Tag, [string]$Text="") {
     
-    if (!(IsSet $Redux.Groups)) { return }
-
-    foreach ($item in $Redux.Groups) {
-        foreach ($form in $item.controls) {
-            if     ($form.GetType() -eq [System.Windows.Forms.CheckBox])      { $form.Checked       = $form.Default }
-            elseif ($form.GetType() -eq [System.Windows.Forms.RadioButton])   { $form.Checked       = $form.Default }
-            elseif ($form.GetType() -eq [System.Windows.Forms.ComboBox])      { $form.SelectedIndex = $form.Default }
-            elseif ($form.GetType() -eq [System.Windows.Forms.TextBox])       { $form.Text          = $form.Default }
-            elseif ($form.GetType() -eq [System.Windows.Forms.TrackBar])      { $form.Value         = $form.Default }
-
-            elseif ($form.GetType() -eq [System.Windows.Forms.Panel]) {
-                foreach ($subform in $form.controls) {
-                    if     ($subform.GetType() -eq [System.Windows.Forms.CheckBox])      { $subform.Checked       = $subform.Default }
-                    elseif ($subform.GetType() -eq [System.Windows.Forms.RadioButton])   { $subform.Checked       = $subform.Default }
-                    elseif ($subform.GetType() -eq [System.Windows.Forms.ComboBox])      { $subform.SelectedIndex = $subform.Default }
-                    elseif ($subform.GetType() -eq [System.Windows.Forms.TextBox])       { $subform.Text          = $subform.Default }
-                    elseif ($subform.GetType() -eq [System.Windows.Forms.TrackBar])      { $subform.Value         = $subform.Default }
-                }
-            }
-        }
-    }
-
-    WriteToConsole "Current selected game options have been reset"
-    [System.GC]::Collect() | Out-Null
+    $width       = $GeneralSettings.Panel.Width - (DPISize 30)
+    $Last.Column = $Last.Row = 1
+    $Last.Width  = [byte][Math]::Round($width / $ColumnWidth)
+    if ($Last.Group -ne $null) { $Y = $Last.Group.Bottom + 5 } else { $Y = 0 }
+    $Group = CreateGroupBox -X (DPISize 10) -Y $Y -Width $width -Height (DPISize 50) -Name "Settings" -Tag $Tag -Text $Text -AddTo $GeneralSettings.Panel
+    return $Group
 
 }
 
 
 
 #==============================================================================================================================================================================================
-function CreateSettingsCheckbox([byte]$Column=1, [byte]$Row=1, [switch]$Checked, [boolean]$Disable=$False, [string]$Text="", [string]$Info="", [string]$Name, [switch]$IsDebug) {
+function CreateSettingsCheckbox([byte]$Column=$Last.Column, [byte]$Row=$Last.Row, [switch]$Checked, [boolean]$Disable=$False, [string]$Text="", [string]$Info="", [string]$Name, [switch]$IsDebug) {
     
-    $Checkbox = CreateCheckbox -X (($Column-1) * (DPISize 165) + (DPISize 15)) -Y ($Row * (DPISize 30) - (DPISize 10)) -Checked $Checked -Disable $Disable -Info $Info -IsDebug $IsDebug -Name $Name
+    $Checkbox = CreateCheckbox -X (($Column-1) * $FormDistance + (DPISize 15)) -Y ($Row * (DPISize 30) - (DPISize 10)) -Checked $Checked -Disable $Disable -Info $Info -IsDebug $IsDebug -Name $Name
     if (IsSet $Text) {  
         $Label = CreateLabel -X $CheckBox.Right -Y ($CheckBox.Top + (DPISize 3)) -Width (DPISize 135) -Height (DPISize 15) -Text $Text -Info $Info
         Add-Member -InputObject $Label    -NotePropertyMembers @{ CheckBox = $CheckBox }
@@ -454,6 +404,14 @@ function CreateSettingsCheckbox([byte]$Column=1, [byte]$Row=1, [switch]$Checked,
         })
     }
 
+    $Last.Column = $column + 1;
+    $Last.Row = $Row;
+    if ($Column -ge $Last.Width) {
+        $Last.Column = 1
+        $Last.Row++
+    }
+    $Last.Group.Height = ($Row * (DPISize 30) + (DPISize 20))
+
     return $CheckBox
 
 }
@@ -461,10 +419,18 @@ function CreateSettingsCheckbox([byte]$Column=1, [byte]$Row=1, [switch]$Checked,
 
 
 #==============================================================================================================================================================================================
-function CreateSettingsRadioField([byte]$Column=1, [byte]$Row=1, [switch]$Checked, [switch]$Disable, [string]$Text="", [string]$Info="", [string]$Name, [int16]$SaveAs, [int16]$Max, [string]$NameTextbox, [switch]$IsDebug) {
+function CreateSettingsRadioField([byte]$Column=$Last.Column, [byte]$Row=$Last.Row, [switch]$Checked, [switch]$Disable, [string]$Text="", [string]$Info="", [string]$Name, [int16]$SaveAs, [int16]$Max, [string]$NameTextbox, [switch]$IsDebug) {
     
-    $Checkbox = CreateCheckbox -X (($Column-1) * (DPISize 165) + (DPISize 15)) -Y ($Row * (DPISize 30) - (DPISize 10)) -Checked $Checked -Disable $Disable -IsRadio -Info $Info -IsDebug $IsDebug -Name $Name -SaveAs $SaveAs -SaveTo $Name -Max $Max
+    $Checkbox = CreateCheckbox -X (($Column-1) * $FormDistance + (DPISize 15)) -Y ($Row * (DPISize 30) - (DPISize 10)) -Checked $Checked -Disable $Disable -IsRadio -Info $Info -IsDebug $IsDebug -Name $Name -SaveAs $SaveAs -SaveTo $Name -Max $Max
     $Textbox  = CreateTextBox  -X $Checkbox.Right -Y $Checkbox.Top -Width (DPISize 130) -Height (DPISize 15) -Length 20 -Text $Text -IsDebug $IsDebug -Name $NameTextbox
+
+    $Last.Column = $column + 1;
+    $Last.Row = $Row;
+    if ($Column -ge $Last.Width) {
+        $Last.Column = 1
+        $Last.Row++
+    }
+    $Last.Group.Height = ($Row * (DPISize 30) + (DPISize 20))
 
     return $CheckBox
 
@@ -505,7 +471,7 @@ function CreateErrorDialog([string]$Error, [boolean]$Fatal=$True, [boolean]$Once
         WriteToConsole "Error Level: Fatal" -Error
     }
     else { WriteToConsole "Error Level: Non-Fatal" -Error }
-    $ErrorDialog.ShowDialog() | Out-Null
+    $ErrorDialog.ShowDialog()
 
 }
 
@@ -513,13 +479,8 @@ function CreateErrorDialog([string]$Error, [boolean]$Fatal=$True, [boolean]$Once
 
 #==============================================================================================================================================================================================
 
-Export-ModuleMember -Function CreateLanguagesDialog
-Export-ModuleMember -Function CreateOptionsDialog
-Export-ModuleMember -Function CreateReduxDialog
-Export-ModuleMember -Function CreateCreditsDialog
-Export-ModuleMember -Function CreateSettingsDialog
+Export-ModuleMember -Function CreateOptionsPanel
+Export-ModuleMember -Function CreateCreditsPanel
+Export-ModuleMember -Function CreateSettingsPanel
 Export-ModuleMember -Function CreateErrorDialog
-Export-ModuleMember -Function CreateLanguageContent
-
-Export-ModuleMember -Function ResetTool
-Export-ModuleMember -Function ResetGame
+Export-ModuleMember -Function ToggleDialog

@@ -88,7 +88,7 @@ function ByteOptions() {
 #==============================================================================================================================================================================================
 function CreateOptions() {
     
-    CreateOptionsDialog -Columns 4 -Height 370 -Tabs @("Graphics", "Gameplay", "Skip")
+    CreateOptionsPanel -Tabs @("Graphics", "Gameplay", "Skip")
 
 }
 
@@ -98,15 +98,19 @@ function CreateOptions() {
 function CreateTabGraphics() {
 
     # GRAPHICS #
-    CreateReduxGroup    -Tag  "Graphics"        -All -Text "Graphics"
-    CreateReduxCheckBox -Name "Widescreen"      -All -Text "16:9 Widescreen"         -Info "Native 16:9 Widescreen Display support" -Warning "Requires Dolphin's or GlideN64's internal Widescreen Hack"      -Credits "Theboy181 (RAM) & Admentus (ROM)"
-    CreateReduxCheckBox -Name "BlackBars"       -All -Text "No Black Bars"           -Info "Removes the black bars shown on the top and bottom of the screen"                                                 -Credits "Theboy181 (RAM) & Admentus (ROM)"
-    CreateReduxCheckBox -Name "ExtendedDraw"    -All -Text "Extended Draw Distance"  -Info "Increases the game's draw distance for solid objects with collision`nIncludes coin formations as well"            -Credits "Theboy181 (RAM) & Admentus (ROM)"
-    CreateReduxCheckBox -Name "ForceHiresModel" -All -Text "Force Hires Mario Model" -Info "Always use Mario's High Resolution Model when Mario is too far away"                                              -Credits "Theboy181 (RAM) & Admentus (ROM)"
+
+    CreateReduxGroup    -Tag  "Graphics"        -All       -Text "Graphics"
+    CreateReduxCheckBox -Name "Widescreen"      -All -Safe -Text "16:9 Widescreen"         -Info "Native 16:9 Widescreen Display support" -Warning "Requires Dolphin's or GlideN64's internal Widescreen Hack" -Credits "Theboy181 (RAM) & Admentus (ROM)"
+    CreateReduxCheckBox -Name "BlackBars"       -All       -Text "No Black Bars"           -Info "Removes the black bars shown on the top and bottom of the screen"                                            -Credits "Theboy181 (RAM) & Admentus (ROM)"
+    CreateReduxCheckBox -Name "ExtendedDraw"    -All -Safe -Text "Extended Draw Distance"  -Info "Increases the game's draw distance for solid objects with collision`nIncludes coin formations as well"       -Credits "Theboy181 (RAM) & Admentus (ROM)"
+    CreateReduxCheckBox -Name "ForceHiresModel" -All       -Text "Force Hires Mario Model" -Info "Always use Mario's High Resolution Model when Mario is too far away"                                         -Credits "Theboy181 (RAM) & Admentus (ROM)"
+
+
 
     # INTERFACE #
+
     CreateReduxGroup    -Tag  "UI"-Text "Interface"
-    CreateReduxCheckBox -Name "HideHUD"         -All -Text "Hide HUD"                -Info "Hide the HUD by default and press L to make it appear`nEnable the 'Remap L Button' VC option when patching a WAD" -Credits "Ported from SM64 ROM Manager"
+    CreateReduxCheckBox -Name "HideHUD" -All -Text "Hide HUD" -Info "Hide the HUD by default and press L to make it appear`nEnable the 'Remap L Button' VC option when patching a WAD" -Credits "Ported from SM64 ROM Manager"
 
 }
 
@@ -116,12 +120,16 @@ function CreateTabGraphics() {
 function CreateTabGameplay() {
     
     # HERO MODE #
-    CreateReduxGroup    -Tag  "Hero"             -All -Text "Hero Mode"
-    CreateReduxComboBox -Name "Damage"           -All -Items @("1x Damage", "2x Damage", "3x Damage") -Text "Damage" -Info "Set the amount of damage you receive"
+
+    CreateReduxGroup    -Tag  "Hero"   -All -Text "Hero Mode"
+    CreateReduxComboBox -Name "Damage" -All -Items @("1x Damage", "2x Damage", "3x Damage") -Text "Damage" -Info "Set the amount of damage you receive"
+
+
 
     # GAMEPLAY #
-    CreateReduxGroup    -Tag  "Gameplay"         -All -Text "Gameplay" -Height 2
-    CreateReduxCheckBox -Name "FPS"              -All -Text "60 FPS"               -Info "Increases the FPS from 30 to 60`nWitness Super Mario 64 in glorious 60 FPS"                                                         -Credits "Kaze Emanuar"
+
+    CreateReduxGroup    -Tag  "Gameplay"         -All -Text "Gameplay"
+    CreateReduxCheckBox -Name "FPS"        -Safe -All -Text "60 FPS"               -Info "Increases the FPS from 30 to 60`nWitness Super Mario 64 in glorious 60 FPS"                                                         -Credits "Kaze Emanuar"
     CreateReduxCheckBox -Name "FreeCam"          -All -Text "Analog Camera"        -Info "Enable full 360 degrees sideways analog camera`nEnable a second emulated controller and bind the Left / Right for the Analog stick" -Credits "Kaze Emanuar" -Link $Redux.Gameplay.FPS
     CreateReduxCheckBox -Name "LagFix"           -All -Text "Lag Fix"              -Info "Smoothens gameplay by reducing lag"                                                                                                 -Credits "Admentus"
     CreateReduxCheckBox -Name "ExitLevelAnytime" -All -Text "Exit Level Anytime"   -Info "Exit the level at any time without the need for standing still"                                                                     -Credits "Ported from SM64 Tweaker"
@@ -130,9 +138,9 @@ function CreateTabGameplay() {
     CreateReduxCheckBox -Name "CanNotLoseCap"    -All -Text "Can Not Lose Cap"     -Info "Mario will not lose his cap anymore"                                                                                                -Credits "Ported from SM64 ROM Manager"
     CreateReduxCheckBox -Name "InvincibleJump"   -All -Text "Have Invincible Jump" -Info "Mario can use the Invincible Triple Jump without having to talk to Yoshi after obtaining all 120 Power Stars"                       -Credits "Admentus"
 
-    CreateReduxGroup    -Tag  "Gameplay"         -All -Text "Lives"
-    CreateReduxTextBox  -Name "Lives"            -All -Text "Lives" -Value 4       -Info "Set the amount of lives Mario starts with when opening the save file"                                                               -Credits "Ported from SM64 Tweaker"
-    CreateReduxCheckBox -Name "NoGameOver"       -All -Text "No Game Over"         -Info "The game won't end if Mario's lives reaches below 0"                                                                                -Credits "Kaze Emanuar"
+    CreateReduxGroup    -Tag  "Gameplay"   -All -Text "Lives"
+    CreateReduxTextBox  -Name "Lives"      -All -Text "Lives" -Value 4 -Info "Set the amount of lives Mario starts with when opening the save file" -Credits "Ported from SM64 Tweaker"
+    CreateReduxCheckBox -Name "NoGameOver" -All -Text "No Game Over"   -Info "The game won't end if Mario's lives reaches below 0"                  -Credits "Kaze Emanuar"
 
 }
 
@@ -142,6 +150,7 @@ function CreateTabGameplay() {
 function CreateTabSkip() {
 
     # SKIP #
+
     CreateReduxGroup    -Tag  "Skip"           -All -Text "Skip Intro"
     CreateReduxCheckBox -Name "TitleScreen"         -Text "Skip Title Screen"     -Info "Skip the title screen shown when booting the game`nThis option only works when modifying the vanilla Super Mario 64 game"                           -Credits "Ported from SM64 ROM Manager"
     CreateReduxCheckBox -Name "MarioScreen"         -Text "Skip Mario Screen"     -Info "Skip the screen which displays Mario's face and the title in the background`nThis option only works when modifying the vanilla Super Mario 64 game" -Credits "Ported from SM64 ROM Manager"

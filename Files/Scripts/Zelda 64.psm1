@@ -5,22 +5,27 @@ function PatchModel([string]$Category, [string]$Name) {
     $file = $path + "\" + $Name
     
     if (TestFile ($file + ".zobj"))   {
-        $manifest  = $path + "\Manifest\" + $GameRev.name
-        if   ( (IsChecked $Redux.Equipment.HideSword) -and (IsChecked $Redux.Equipment.HideShield) )   { $manifest += " - No Equipment" }
-        elseif (IsChecked $Redux.Equipment.HideSword)                                                  { $manifest += " - No Sword"     }
-        elseif (IsChecked $Redux.Equipment.HideShield)                                                 { $manifest += " - No Shield"    }
-        $manifest += ".txt"
-
+        $manifest  = $path + "\Manifest\" + $GameRev.name + ".txt"
         $optimized = $path + "\Manifest\Optimized.zobj"
-        & $Files.tool.zzobjman playas -i ($file + ".zobj") -r $GetROM.decomp -o ($Paths.Temp + "\model") -m $manifest -b $optimized | Out-Null
+        $script = { Param([string]$Tool, [string]$Model, [string]$File, [string]$Path, [string]$Manifest, [string]$Optimized)
+            & $Tool playas -i ($Model + ".zobj") -r $File -o ($Path + "\model") -m $Manifest -b $Optimized | Out-Null
+        }
+        Start-Job    -Name "Script" -ScriptBlock $script -ArgumentList @($Files.tool.zzobjman, $file, $GetROM.decomp, $Paths.Temp, $manifest, $optimized)
+        StartJobLoop -Name "Script"
 
-        if (TestFile ($Paths.Temp + "\model.z64")) { Move-Item -LiteralPath ($Paths.Temp + "\model.z64") -Destination $GetROM.decomp -Force }
+        if (TestFile ($Paths.Temp + "\model.z64")) {
+            Move-Item -LiteralPath ($Paths.Temp + "\model.z64") -Destination $GetROM.decomp -Force
+            WriteToConsole ("Applied ZOBJ model PlayAs: " + $Name)
+        }
         else {
             WriteToConsole ("Could not patch in custom model: " + $Name) -Error
             $global:ModelPatchingError = $True
         }
     }
-    elseif (TestFile ($file + ".ppf")) { ApplyPatch -Patch ($file + ".ppf") -FullPath } 
+    elseif (TestFile ($file + ".ppf")) {
+        ApplyPatch -Patch ($file + ".ppf") -FullPath
+        WriteToConsole ("Applied PPF model patch: " + $Name)
+    } 
     else {
         WriteToConsole ("Could not find custom model to patch: " + $Name) -Error
         $global:ModelPatchingError = $True
@@ -440,6 +445,8 @@ function PatchReplaceMusic([string]$BankPointerTableStart, [string]$BankPointerT
 #==============================================================================================================================================================================================
 function MusicOptions([string]$Default="File Select") {
     
+    if ($Settings.Core.SafeOptions -eq $True) { return }
+
     $tracks = @()
     foreach ($track in $Files.json.music.tracks) {
         if ($track.size -ne 0) { $tracks += $track.title }
@@ -449,25 +456,22 @@ function MusicOptions([string]$Default="File Select") {
 
     # MUSIC #
 
-    CreateReduxGroup    -Tag "Music"       -All -Text "Music" -Columns 2 -Height 8
-    CreateReduxComboBox -Name "FileSelect" -All -Text "File Select Theme" -Default $Default -Items $tracks -Info "Set the music theme for the File Select menu" -Credits "Admentus"
-
-    CreateReduxPanel -X 25 -Row 1 -Columns 1.9 -Rows 2 -All
-    CreateReduxRadioButton -Name "EnableAll"    -All -Column 1 -Row 1 -Max 4 -SaveTo "Mute" -Checked -Text "Enable All Music"     -Info "Keep the music as it is"                           -Credits "Admentus"
-    CreateReduxRadioButton -Name "MuteSelected" -All -Column 2 -Row 1 -Max 4 -SaveTo "Mute"          -Text "Mute Selected Music"  -Info "Mute the selected music from the list in the game" -Credits "Admentus"
-    CreateReduxRadioButton -Name "MuteAreaOnly" -All -Column 1 -Row 2 -Max 4 -SaveTo "Mute"          -Text "Mute Area Music Only" -Info "Mute only the area music in the game"              -Credits "Admentus"
-    CreateReduxRadioButton -Name "MuteAll"      -All -Column 2 -Row 2 -Max 4 -SaveTo "Mute"          -Text "Mute All Music"       -Info "Mute all the music in the game"                    -Credits "Admentus"
-    
-    CreateReduxComboBox    -Name "SelectReplace" -All -Text "Select Replace Track" -Info "Select the ingame track that should be replaced" -Items $tracks -NoDefault -Row 5
-    CreateReduxCheckBox    -Name "EnableReplace" -All -Text "Enable Replace Music" -Info "Enables patching in music replacements"
-    $Redux.Music.Reset = CreateReduxButton -All -Text "Reset Replacements" -Row 6 -Column 2
+    CreateReduxGroup       -Tag "Music"          -All -Text "Music"
+    CreateReduxRadioButton -Name "EnableAll"     -All -Max 4 -SaveTo "Mute" -Text "Enable All Music"     -Info "Keep the music as it is"                                  -Checked -Credits "Admentus"
+    CreateReduxRadioButton -Name "MuteSelected"  -All -Max 4 -SaveTo "Mute" -Text "Mute Selected Music"  -Info "Mute the selected music from the list in the game"                 -Credits "Admentus"
+    CreateReduxRadioButton -Name "MuteAreaOnly"  -All -Max 4 -SaveTo "Mute" -Text "Mute Area Music Only" -Info "Mute only the area music in the game"                              -Credits "Admentus"
+    CreateReduxRadioButton -Name "MuteAll"       -All -Max 4 -SaveTo "Mute" -Text "Mute All Music"       -Info "Mute all the music in the game"                                    -Credits "Admentus"
+    CreateReduxComboBox    -Name "FileSelect"    -All -Items $tracks        -Text "File Select Theme"    -Info "Set the music theme for the File Select menu"    -Default $Default -Credits "Admentus"
+    CreateReduxComboBox    -Name "SelectReplace" -All -Items $tracks        -Text "Select Replace Track" -Info "Select the ingame track that should be replaced" -NoDefault
+    CreateReduxCheckBox    -Name "EnableReplace" -All                       -Text "Enable Replace Music" -Info "Enables patching in music replacements"
+    $Redux.Music.Reset = CreateReduxButton       -All                       -Text "Reset Replacements"
 
 
 
     # MUTE MUSIC #
 
-    CreateReduxGroup   -Tag  "MuteMusic" -All -Text "Mute Music Tracks" -Columns 2 -Height 6
-    CreateReduxListBox -Name "Tracks"    -All -Items $tracks -MultiSelect
+    CreateReduxGroup   -Tag  "MuteMusic" -All -Text "Mute Music Tracks" -Columns 2 -Height 8
+    CreateReduxListBox -Name "Tracks"    -All -Items $tracks -MultiSelect -Columns 1.9 -Rows 4.8
 
     EnableForm -Form $Redux.MuteMusic.Tracks -Enable $Redux.Music.MuteSelected.Checked
     $Redux.Music.MuteSelected.Add_CheckedChanged({ EnableForm -Form $Redux.MuteMusic.Tracks -Enable $this.Checked })
@@ -477,7 +481,7 @@ function MusicOptions([string]$Default="File Select") {
     # REPLACE MUSIC #
 
     CreateReduxGroup   -Tag  "ReplaceMusic" -All -Text "Replace Music Tracks"
-    $Redux.ReplaceMusic.Tracks = CreateReduxListBox -All
+    $Redux.ReplaceMusic.Tracks = CreateReduxListBox -All -Columns 1.9 -Rows 4.8
 
     EnableElem -Elem @($Redux.ReplaceMusic.Tracks, $Redux.Music.SelectReplace) -Active $Redux.Music.EnableReplace.Checked
     $Redux.Music.EnableReplace.Add_CheckedChanged({ EnableElem -Elem @($Redux.ReplaceMusic.Tracks, $Redux.Music.SelectReplace) -Active $this.Checked })
@@ -706,34 +710,44 @@ function ChangeStringIntoDigits([string]$File, [string]$Search, [string]$Value, 
 
 
 #==============================================================================================================================================================================================
+function ShowStylePreview() {
+    
+    if ($Redux.Styles.RegularChests  -ne $null)   { ShowPreviewImage -Option $Redux.Styles.RegularChests.Text  -Path "Styles\Chests"       -Box $Redux.Previews.RegularChests  }
+    if ($Redux.Styles.LeatherChests  -ne $null)   { ShowPreviewImage -Option $Redux.Styles.LeatherChests.Text  -Path "Styles\Chests"       -Box $Redux.Previews.LeatherChests  }
+    if ($Redux.Styles.BossChests     -ne $null)   { ShowPreviewImage -Option $Redux.Styles.BossChests.Text     -Path "Styles\Chests"       -Box $Redux.Previews.BossChests     }
+    if ($Redux.Styles.SmallCrates    -ne $null)   { ShowPreviewImage -Option $Redux.Styles.SmallCrates.Text    -Path "Styles\Small Crates" -Box $Redux.Previews.SmallCrates    }
+    if ($Redux.Styles.Pots           -ne $null)   { ShowPreviewImage -Option $Redux.Styles.Pots.Text           -Path "Styles\Pots"         -Box $Redux.Previews.Pots           }
+
+}
+
+
+
+#==============================================================================================================================================================================================
 function ShowHudPreview([switch]$IsOoT) {
     
-    # Buttons
-    $path = ($Paths.shared + "\Buttons\" + $Redux.UI.ButtonStyle.Text.replace(" (default)", "") + ".png")
-    if (TestFile $path)   { SetBitMap -Path $path -Box $Redux.UI.ButtonPreview -Width 90 -Height 90 }
-    else                  { $Redux.UI.ButtonPreview.Image = $null }
+    if ($Redux.UI.ButtonStyle  -ne $null)   { ShowPreviewImage -Option $Redux.UI.ButtonStyle.Text  -Path "HUD\Buttons"       -Box $Redux.Previews.ButtonStyle -Width 90  -Height 90 }
+    if ($Redux.UI.Magic        -ne $null)   { ShowPreviewImage -Option $Redux.UI.Magic.Text        -Path "HUD\Magic"         -Box $Redux.Previews.Magic       -Width 200 -Height 40 }
+    if ($Redux.UI.Hearts       -ne $null)   { ShowPreviewImage -Option $Redux.UI.Hearts.Text       -Path "HUD\Hearts"        -Box $Redux.Previews.Hearts       }
+    if ($Redux.UI.Rupees       -ne $null)   { ShowPreviewImage -Option $Redux.UI.Rupees.Text       -Path "HUD\Rupees"        -Box $Redux.Previews.Rupees       }
+    if ($Redux.UI.CurrentFloor -ne $null)   { ShowPreviewImage -Option $Redux.UI.CurrentFloor.Text -Path "HUD\Current Floor" -Box $Redux.Previews.CurrentFloor }
 
-    # Rupees
-    $path = ($Paths.shared + "\HUD\Rupees\" + $Redux.UI.Rupees.Text.replace(" (default)", "") + ".png")
-    if (TestFile $path)   { SetBitMap -Path $path -Box $Redux.UI.RupeesPreview }
-    else                  { $Redux.UI.RupeesPreview.Image = $null }
-
-    # Hearts
-    $path = ($Paths.shared + "\HUD\Hearts\" + $Redux.UI.Hearts.Text.replace(" (default)", "") + ".png")
-    if (TestFile $path)   { SetBitMap -Path $path -Box $Redux.UI.HeartsPreview }
-    else                  { $Redux.UI.HeartsPreview.Image = $null }
-
-    # Magic
-    $path = ($Paths.shared + "\HUD\Magic\" + $Redux.UI.Magic.Text.replace(" (default)", "") + ".png")
-    if (TestFile $path)   { SetBitMap -Path $path -Box $Redux.UI.MagicPreview -Width 200 -Height 40 }
-    else                  { $Redux.UI.MagicPreview.Image = $null }
-
-    $file = $null
     if       ( ( (IsChecked $Redux.UI.DungeonKeys)      -or (IsChecked $Redux.UI.HUD) )      -and  $IsOoT)   { $file = "Majora's Mask"   }
     elseif   ( ( (IsChecked $Redux.UI.DungeonKeys)      -or (IsChecked $Redux.UI.HUD) )      -and !$IsOoT)   { $file = "Ocarina of Time" }
     elseif   ( ( (IsChecked $Redux.UI.DungeonKeys -Not) -or (IsChecked $Redux.UI.HUD -Not) ) -and  $IsOoT)   { $file = "Ocarina of Time" }
     elseif   ( ( (IsChecked $Redux.UI.DungeonKeys -Not) -or (IsChecked $Redux.UI.HUD -Not) ) -and !$IsOoT)   { $file = "Majora's Mask"   }
-    if (TestFile ($Paths.Shared + "\HUD\Keys\"   + $file + ".png"))    { SetBitMap -Path ($Paths.Shared + "\HUD\Keys\"   + $file + ".png") -Box $Redux.UI.DungeonKeysPreview } else { $Redux.UI.DungeonKeysPreview.Image = $null }
+    $image = GetImageFile ($Paths.Shared + "\HUD\Keys\" + $file)
+    if ($image -ne $null) { SetBitMap -Path $image -Box $Redux.Previews.DungeonKeys } else { $Redux.Previews.DungeonKeys.Image = $null }
+}
+
+
+
+#==============================================================================================================================================================================================
+function ShowPreviewImage([string]$Option=$null, [string]$Path="", [object]$Box=$null, [int]$Width=0, [int]$Height=0) {
+    
+    if ($Box -eq $null) { return }
+    $image = GetImageFile ($Paths.shared + "\" + $Path + "\" + $Option.replace(" (default)", "") )
+    if ($image -ne $null) { SetBitMap -Path $image -Box $Box -Width $Width -Height $Height } else { $Box.Image = $null }
+
 }
 
 
@@ -741,66 +755,32 @@ function ShowHudPreview([switch]$IsOoT) {
 #==============================================================================================================================================================================================
 function ShowEquipmentPreview() {
     
-    if (IsSet $Redux.Equipment.DekuShield) {
-        $path = ($Paths.shared + "\Equipment\Deku Shield\"   + $Redux.Equipment.DekuShield.Text.replace(" (default)", "")   + " Icon.png")
-        if (TestFile $Path) { SetBitMap -Path $path -Box $Redux.Equipment.DekuShieldIconPreview }
+    if ($Redux.Equipment.DekuShield   -ne $null)   { ShowEquipmentPreviewImage -Option $Redux.Equipment.DekuShield   -Equipment "Deku Shield"   -IconBox $Redux.Previews.DekuShieldIcon   -LinkBox $Redux.Previews.DekuShield   }
+    if ($Redux.Equipment.HylianShield -ne $null)   { ShowEquipmentPreviewImage -Option $Redux.Equipment.HylianShield -Equipment "Hylian Shield" -IconBox $Redux.Previews.HylianShieldIcon -LinkBox $Redux.Previews.HylianShield }
+    if ($Redux.Equipment.MirrorShield -ne $null)   { ShowEquipmentPreviewImage -Option $Redux.Equipment.MirrorShield -Equipment "Mirror Shield" -IconBox $Redux.Previews.MirrorShieldIcon -LinkBox $Redux.Previews.MirrorShield }
+
+    if ($Redux.Equipment.KokiriSword  -ne $null)   { ShowEquipmentPreviewImage -Option $Redux.Equipment.KokiriSword  -Equipment "Kokiri Sword"  -IconBox $Redux.Previews.KokiriSwordIcon }
+    if ($Redux.Equipment.MasterSword  -ne $null)   { ShowEquipmentPreviewImage -Option $Redux.Equipment.MasterSword  -Equipment "Master Sword"  -IconBox $Redux.Previews.MasterSwordIcon }
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function ShowEquipmentPreviewImage([object]$Option=$null, [string]$Equipment="", [object]$IconBox=$null, [object]$LinkBox=$null) {
+    
+    if ($IconBox -ne $null) {
+        $image = GetImageFile ($Paths.shared + "\Equipment\" + $Equipment + "\"  + $Option.Text.replace(" (default)", "")  + " Icon")
+        if ($image -ne $null) { SetBitMap -Path $image -Box $IconBox }
         else {
-            $path = ($Paths.shared + "\Equipment\Deku Shield\"   + $Redux.Equipment.DekuShield.Items[0].replace(" (default)", "")   + " Icon.png")
-            if (TestFile $Path)   { SetBitMap -Path $path -Box $Redux.Equipment.DekuShieldIconPreview }
-            else                  { $Redux.Equipment.DekuShieldIconPreview.Image = $null              }
-        }
-
-        $path = ($Paths.shared + "\Equipment\Deku Shield\"   + $Redux.Equipment.DekuShield.Text.replace(" (default)", "")   + ".png")
-        if (TestFile $Path)   { SetBitMap -Path $path -Box $Redux.Equipment.DekuShieldPreview }
-        else                  { $Redux.Equipment.DekuShieldPreview.Image = $null }
-    }
-
-    if (IsSet $Redux.Equipment.HylianShield) {
-        $path = ($Paths.shared + "\Equipment\Hylian Shield\" + $Redux.Equipment.HylianShield.Text.replace(" (default)", "") + " Icon.png")
-        if (TestFile $Path) { SetBitMap -Path $path -Box $Redux.Equipment.HylianShieldIconPreview }
-        else {
-            $path = ($Paths.shared + "\Equipment\Hylian Shield\" + $Redux.Equipment.HylianShield.Items[0].replace(" (default)", "") + " Icon.png")
-            if (TestFile $Path)   { SetBitMap -Path $path -Box $Redux.Equipment.HylianShieldIconPreview }
-            else                  { $Redux.Equipment.HylianShieldIconPreview.Image = $null              }
-        }
-
-        $path = ($Paths.shared + "\Equipment\Hylian Shield\" + $Redux.Equipment.HylianShield.Text.replace(" (default)", "") + ".png")
-        if (TestFile $Path)   { SetBitMap -Path $path -Box $Redux.Equipment.HylianShieldPreview }
-        else                  { $Redux.Equipment.HylianShieldPreview.Image = $null }
-    }
-
-    if (IsSet $Redux.Equipment.MirrorShield) {
-        $path = ($Paths.shared + "\Equipment\Mirror Shield\" + $Redux.Equipment.MirrorShield.Text.replace(" (default)", "") + " Icon.png")
-        if (TestFile $Path) { SetBitMap -Path $path -Box $Redux.Equipment.MirrorShieldIconPreview }
-        else {
-            $path = ($Paths.shared + "\Equipment\Mirror Shield\" + $Redux.Equipment.MirrorShield.Items[0].replace(" (default)", "") + " Icon.png")
-            if (TestFile $Path)   { SetBitMap -Path $path -Box $Redux.Equipment.MirrorShieldIconPreview }
-            else                  { $Redux.Equipment.MirrorShieldIconPreview.Image = $null              }
-        }
-
-        $path = ($Paths.shared + "\Equipment\Mirror Shield\" + $Redux.Equipment.MirrorShield.Text.replace(" (default)", "") + ".png")
-        if (TestFile $Path)   { SetBitMap -Path $path -Box $Redux.Equipment.MirrorShieldPreview }
-        else                  { $Redux.Equipment.MirrorShieldPreview.Image = $null }
-    }
-
-    if (IsSet $Redux.Equipment.KokiriSword) {
-        $path = ($Paths.shared + "\Equipment\Kokiri Sword\" + $Redux.Equipment.KokiriSword.Text.replace(" (default)", "") + " Icon.png")
-        if (TestFile $Path) { SetBitMap -Path $path -Box $Redux.Equipment.KokiriSwordIconPreview }
-        else  {
-            $path = ($Paths.shared + "\Equipment\Kokiri Sword\" + $Redux.Equipment.KokiriSword.Items[0].replace(" (default)", "") + " Icon.png")
-            if (TestFile $Path)   { SetBitMap -Path $path -Box $Redux.Equipment.KokiriSwordIconPreview }
-            else                  { $Redux.Equipment.KokiriSwordIconPreview.Image = $null              }
+            $image = GetImageFile ($Paths.shared + "\Equipment\" + $Equipment + "\"  + $Option.Items[0].replace(" (default)", "")  + " Icon")
+            if ($image -ne $null) { SetBitMap -Path $image -Box $IconBox } else { $IconBox.Image = $null }
         }
     }
 
-    if (IsSet $Redux.Equipment.MasterSword) {
-        $path = ($Paths.shared + "\Equipment\Master Sword\" + $Redux.Equipment.MasterSword.Text.replace(" (default)", "") + " Icon.png")
-        if (TestFile $Path) { SetBitMap -Path $path -Box $Redux.Equipment.MasterSwordIconPreview }
-        else {
-            $path = ($Paths.shared + "\Equipment\Master Sword\" + $Redux.Equipment.MasterSword.Items[0].replace(" (default)", "") + " Icon.png")
-            if (TestFile $Path)   { SetBitMap -Path $path -Box $Redux.Equipment.MasterSwordIconPreview }
-            else                  { $Redux.Equipment.MasterSwordIconPreview.Image = $null              }
-        }
+    if ($LinkBox -ne $null) {
+        $image = GetImageFile ($Paths.shared + "\Equipment\" + $Equipment + "\"  + $Option.Text.replace(" (default)", "") )
+        if ($image -ne $null) { SetBitMap -Path $image -Box $LinkBox } else { $LinkBox.Image = $null }
     }
 
 }
@@ -808,14 +788,14 @@ function ShowEquipmentPreview() {
 
 
 #==============================================================================================================================================================================================
-function ShowModelsPreview([switch]$Child, [switch]$Adult, [object]$Dropdown, [string]$Category) {
+function ShowModelsPreview([object]$Dropdown, [string]$Category) {
     
-    if (!(IsSet $Files.json.models)) { return }
+    if (!(IsSet $Files.json.models) -or $OptionsPreviews -eq $null) { return }
 
     $Path = $GameFiles.models + "\" + $Category + "\"
     $Text = $Dropdown.Text.replace(" (default)", "")
 
-    if ($Child) {
+    if ($Category -eq "Child") {
         $global:ChildModel = @{}
         for ($i=0; $i -lt $Files.json.models.child.length; $i++) {
             if ($Files.json.models.child[$i].name -eq $Text) {
@@ -823,11 +803,11 @@ function ShowModelsPreview([switch]$Child, [switch]$Adult, [object]$Dropdown, [s
                 break
             }   
         }
-        ShowModelPreview -Box $Redux.Graphics.ModelsPreviewChild -Path $Path -Text $Text -Category $Category -Type $ChildModel
+        ShowModelPreview -Box $Redux.Previews.ModelChild -Path $Path -Text $Text -Category $Category -Type $ChildModel
 
     }
 
-    if ($Adult) {
+    if ($Category -eq "Adult") {
         $global:AdultModel = @{}
         for ($i=0; $i -lt $Files.json.models.adult.length; $i++) {
             if ($Files.json.models.adult[$i].name -eq $Text) {
@@ -835,7 +815,7 @@ function ShowModelsPreview([switch]$Child, [switch]$Adult, [object]$Dropdown, [s
                 break
             }   
         }
-        ShowModelPreview -Box $Redux.Graphics.ModelsPreviewAdult -Path $Path -Text $Text -Category $Category -Type $AdultModel
+        ShowModelPreview -Box $Redux.Previews.ModelAdult -Path $Path -Text $Text -Category $Category -Type $AdultModel
     }
 
 }
@@ -847,8 +827,14 @@ function ShowModelPreview([object]$Box, [string]$Path, [string]$Text, [string]$C
 
     if (!(IsSet $Files.json.models)) {return }
 
-    if (TestFile ($Path + $Text + ".png"))   { SetBitMap -Path ($Path + $Text + ".png") -Box $Box }
-    else                                     { $Box.Image = $null }
+    $image = GetImageFile ($Path + $Text)
+    if ($image -ne $null) { SetBitMap -Path $image -Box $Box }
+    elseif ($Category -eq "Child" -and $GameType.mode -eq "Majora's Mask") {
+        $Path  = $Path.Replace("\Majora's Mask\Child", "\Ocarina of Time\Child")
+        $image = GetImageFile ($Path + $Text)
+        if ($image -ne $null) { SetBitMap -Path $image -Box $Box } else { $Box.Image = $null }
+    }
+    else { $Box.Image = $null }
 
     $Credits = ""
 
@@ -863,6 +849,7 @@ function ShowModelPreview([object]$Box, [string]$Path, [string]$Text, [string]$C
     if     ( (IsSet $Type.url) -and !(IsSet $Type.author) )     { $Credits += "{0}{0}Click to visit the source of the model"          }
     elseif ( (IsSet $Type.url) -and  (IsSet $Type.author) )     { $Credits += "{0}{0}Click to visit the modder's homepage"            }
     if       (IsSet $Type.info)                                 { $Credits += "{0}{0}" + $Type.info                                   }
+    if       (IsSet $Type.license)                              { $Credits += "{0}{0}License: " + $Type.license                       }
 
     if ( (IsSet $Type.warning) -or $Type.deku_shield -eq 0 -or $Type.hylian_shield -eq 0 -or $Type.mirror_shield -eq 0) {
         $Credits += "{0}"
@@ -878,8 +865,6 @@ function ShowModelPreview([object]$Box, [string]$Path, [string]$Text, [string]$C
     if (IsSet $Redux.Equipment.DekuShield)     { EnableElem -Elem $Redux.Equipment.DekuShield   -Active ($Type.deku_shield   -ne 0) }
     if (IsSet $Redux.Equipment.HylianShield)   { EnableElem -Elem $Redux.Equipment.HylianShield -Active ($Type.hylian_shield -ne 0) }
     if (IsSet $Redux.Equipment.MirrorShield)   { EnableElem -Elem $Redux.Equipment.MirrorShield -Active ($Type.mirror_shield -ne 0) }
-    if (IsSet $Redux.Equipment.HideSword)      { EnableElem -Elem $Redux.Equipment.HideSword    -Active (TestFile ($GameFiles.models + "\" + $Category + "\" + $Type.name + ".zobj")) }
-    if (IsSet $Redux.Equipment.HideShield)     { EnableElem -Elem $Redux.Equipment.HideShield   -Active (TestFile ($GameFiles.models + "\" + $Category + "\" + $Type.name + ".zobj")) }
 
 }
 
@@ -903,31 +888,33 @@ function LoadModelsList([string]$Category) {
 #==============================================================================================================================================================================================
 function ChangeModelsSelection() {
     
+    if ($GamePatch.models -eq 0) { return }
+
     if     ($GamePatch.age -eq "Adult")   { $global:ChildModel = @{}; $ChildModel.deku_shield   = 1; $ChildModel.hylian_shield = 1 }
     elseif ($GamePatch.age -eq "Child")   { $global:AdultModel = @{}; $AdultModel.hylian_shield = 1; $AdultModel.mirror_shield = 1 }
 
     if (IsSet $Redux.Graphics.ChildModels) {
-        ShowModelsPreview -Child -Dropdown $Redux.Graphics.ChildModels -Category "Child"
-        $Redux.Graphics.ChildModels.Add_SelectedIndexChanged( { ShowModelsPreview -Child -Dropdown $Redux.Graphics.ChildModels -Category "Child" } )
+        ShowModelsPreview -Dropdown $Redux.Graphics.ChildModels -Category "Child"
+        $Redux.Graphics.ChildModels.Add_SelectedIndexChanged( { ShowModelsPreview -Dropdown $Redux.Graphics.ChildModels -Category "Child" } )
     }
     if (IsSet $Redux.Graphics.AdultModels) {
-        ShowModelsPreview -Adult -Dropdown $Redux.Graphics.AdultModels -Category "Adult"
-        $Redux.Graphics.AdultModels.Add_SelectedIndexChanged( { ShowModelsPreview -Adult -Dropdown $Redux.Graphics.AdultModels -Category "Adult" } )
+        ShowModelsPreview -Dropdown $Redux.Graphics.AdultModels -Category "Adult"
+        $Redux.Graphics.AdultModels.Add_SelectedIndexChanged( { ShowModelsPreview -Dropdown $Redux.Graphics.AdultModels -Category "Adult" } )
     }
 
-    # URL
-    if (IsSet $Redux.Graphics.ModelsPreviewChild) { $Redux.Graphics.ModelsPreviewChild.add_Click({ if (IsSet $ChildModel.url) {
-        $url = $ChildModel.url.Split("{0}")
-        foreach ($item in $url) {
-            if ($item.length -gt 0) { [system.Diagnostics.Process]::start($item) } }
-        }
-    }) }
-    if (IsSet $Redux.Graphics.ModelsPreviewAdult) { $Redux.Graphics.ModelsPreviewAdult.add_Click({ if (IsSet $AdultModel.url) {
-        $url = $AdultModel.url.Split("{0}")
-        foreach ($item in $url) {
-            if ($item.length -gt 0) { [system.Diagnostics.Process]::start($item) } }
-        }
-    }) }
+    # Child URL
+    if (IsSet $Redux.Previews.ModelChild) {
+        $Redux.Previews.ModelChild.add_Click({
+            if (IsSet $ChildModel.url) { $ChildModel.url | foreach { [system.Diagnostics.Process]::start($_) } }
+        })
+    }
+
+    # Adult URL
+    if (IsSet $Redux.Previews.ModelAdult) {
+        $Redux.Previews.ModelAdult.add_Click({
+            if (IsSet $AdultModel.url) { $AdultModel.url | foreach { [system.Diagnostics.Process]::start($_) } }
+        })
+    }
 
     if (IsSet $Redux.Graphics.FilterAll) {
         $Redux.Graphics.FilterAll.Add_CheckedChanged({
@@ -1039,29 +1026,28 @@ function FilterModelsSelection([string]$Filter="") {
 #==============================================================================================================================================================================================
 function CreateButtonColorOptions($Default=1) {
     
-    # BUTTON COLORS #
-    CreateReduxGroup    -Tag  "Colors"  -All -Text "Button Colors" -Height 2
-    CreateReduxComboBox -Name "Buttons" -All -Text "Button Colors" -Items @("N64 OoT", "N64 MM", "GC OoT", "GC MM", "Xbox OoT", "Xbox MM", "JP PlayStation OoT", "JP PlayStation MM", "WE PlayStation OoT", "WE PlayStation MM", "Randomized", "Custom") -Default $Default -Info ("Select a preset for the button colors`n" + '"Randomized" fully randomizes the colors each time the patcher is opened') -Credits "GhostlyDark & Third M"
+    $items     = @("N64 OoT", "N64 MM", "GC OoT", "GC MM", "Xbox OoT", "Xbox MM", "JP PlayStation OoT", "JP PlayStation MM", "WE PlayStation OoT", "WE PlayStation MM", "Randomized", "Custom")
+    $randomize = "`n" + '"Randomized" fully randomizes the colors each time the patcher is opened'
+    $buttons   = $Redux.Colors.SetButtons = $Redux.Colors.ButtonLabels = @()
 
-    # Button Colors - Buttons
-    $Buttons = @()
-    $Buttons += CreateReduxButton -Column 1 -Row 2 -Width 100 -Tag $Buttons.Count -All -Text "A Button"     -Info "Select the color you want for the A button"     -Credits "GhostlyDark"
-    $Buttons += CreateReduxButton -Column 2 -Row 2 -Width 100 -Tag $Buttons.Count -All -Text "B Button"     -Info "Select the color you want for the B button"     -Credits "GhostlyDark"
-    $Buttons += CreateReduxButton -Column 3 -Row 2 -Width 100 -Tag $Buttons.Count -All -Text "C Buttons"    -Info "Select the color you want for the C buttons"    -Credits "GhostlyDark"
-    $Buttons += CreateReduxButton -Column 4 -Row 2 -Width 100 -Tag $Buttons.Count -All -Text "Start Button" -Info "Select the color you want for the Start button" -Credits "GhostlyDark"
+    CreateReduxGroup    -Tag  "Colors"  -All -Text "Button Colors"
+    CreateReduxComboBox -Name "Buttons" -All -Text "Button" -Items $items -Default $Default -Info ("Select a preset for the button colors" + $randomize) -Credits "GhostlyDark & Third M"
+    $Last.Row++; $Last.Column = 1
+    
+    $buttons += CreateReduxButton -Tag $buttons.Count -All -Text "A Button"     -Info "Select the color you want for the A button"     -Credits "GhostlyDark"
+    $buttons += CreateReduxButton -Tag $buttons.Count -All -Text "B Button"     -Info "Select the color you want for the B button"     -Credits "GhostlyDark"
+    $buttons += CreateReduxButton -Tag $buttons.Count -All -Text "C Buttons"    -Info "Select the color you want for the C buttons"    -Credits "GhostlyDark"
+    $buttons += CreateReduxButton -Tag $buttons.Count -All -Text "Start Button" -Info "Select the color you want for the Start button" -Credits "GhostlyDark"
 
-    # Button Colors - Dialogs
-    $Redux.Colors.SetButtons = @()
-    $Redux.Colors.SetButtons += CreateColorDialog -Color $GameType.default_values.a_button  -Name "SetAButton"  -IsGame -Button $Buttons[0]
-    $Redux.Colors.SetButtons += CreateColorDialog -Color $GameType.default_values.b_button  -Name "SetBButton"  -IsGame -Button $Buttons[1]
-    $Redux.Colors.SetButtons += CreateColorDialog -Color $GameType.default_values.c_buttons -Name "SetCButtons" -IsGame -Button $Buttons[2]
-    $Redux.Colors.SetButtons += CreateColorDialog -Color $GameType.default_values.s_button  -Name "SetSButton"  -IsGame -Button $Buttons[3]
+    $Redux.Colors.SetButtons += CreateColorDialog -Color $GameType.default_values.a_button  -Name "SetAButton"  -IsGame -Button $buttons[0]
+    $Redux.Colors.SetButtons += CreateColorDialog -Color $GameType.default_values.b_button  -Name "SetBButton"  -IsGame -Button $buttons[1]
+    $Redux.Colors.SetButtons += CreateColorDialog -Color $GameType.default_values.c_buttons -Name "SetCButtons" -IsGame -Button $buttons[2]
+    $Redux.Colors.SetButtons += CreateColorDialog -Color $GameType.default_values.s_button  -Name "SetSButton"  -IsGame -Button $buttons[3]
 
-    # Button Colors - Labels
-    $Redux.Colors.ButtonLabels = @()
+    
     for ($i=0; $i -lt $Buttons.length; $i++) {
-        $Buttons[$i].Add_Click({ $Redux.Colors.SetButtons[[int16]$this.Tag].ShowDialog(); $Redux.Colors.Buttons.Text = "Custom"; $Redux.Colors.ButtonLabels[[int16]$this.Tag].BackColor = $Redux.Colors.SetButtons[[int16]$this.Tag].Color; $GameSettings["Colors"][$Redux.Colors.SetButtons[[int16]$this.Tag].Tag] = $Redux.Colors.SetButtons[[int16]$this.Tag].Color.Name })
-        $Redux.Colors.ButtonLabels += CreateReduxColoredLabel -All -Link $Buttons[$i]  -Color $Redux.Colors.SetButtons[$i].Color
+        $buttons[$i].Add_Click({ $Redux.Colors.SetButtons[[int16]$this.Tag].ShowDialog(); $Redux.Colors.Buttons.Text = "Custom"; $Redux.Colors.ButtonLabels[[int16]$this.Tag].BackColor = $Redux.Colors.SetButtons[[int16]$this.Tag].Color; $GameSettings["Colors"][$Redux.Colors.SetButtons[[int16]$this.Tag].Tag] = $Redux.Colors.SetButtons[[int16]$this.Tag].Color.Name })
+        $Redux.Colors.ButtonLabels += CreateReduxColoredLabel -All -Link $buttons[$i]  -Color $Redux.Colors.SetButtons[$i].Color
     }
     
     if (IsSet $Redux.Colors.Buttons) {
@@ -1075,27 +1061,23 @@ function CreateButtonColorOptions($Default=1) {
 
 #==============================================================================================================================================================================================
 function CreateBoomerangColorOptions($Default=1) {
+    
+    $randomize = "`n" + '"Randomized" fully randomizes the colors each time the patcher is opened'
+    $buttons   = $Redux.Colors.SetBoomerang = $Redux.Colors.BoomerangLabels = @()
 
-    CreateReduxGroup    -Tag  "Colors"    -Child -Exclude "Dawn" -Text "Boomerang Colors" -Height 2 -Columns 3
-    CreateReduxComboBox -Name "Boomerang" -Child -Exclude "Dawn" -Text "Boomerang Colors" -Items @("Vanilla", "Gold Quest", "Randomized", "Custom") -Default $Default -Info ("Select a preset for the boomerang trail colors`n" + '"Randomized" fully randomizes the colors each time the patcher is opened') -Credits "Randomizer"
+                CreateReduxGroup    -Tag  "Colors"      -Child -Exclude "Dawn" -Text "Boomerang Colors"
+                CreateReduxComboBox -Name "Boomerang"   -Child -Exclude "Dawn" -Text "Boomerang"   -Info ("Select a preset for the boomerang trail colors" + $randomize) -Credits "Randomizer" -Items @("Vanilla", "Gold Quest", "Randomized", "Custom") -Default $Default
+    $buttons += CreateReduxButton   -Tag $buttons.Count -Child -Exclude "Dawn" -Text "Inner Trail" -Info "Select the color you want for the inner trail"                 -Credits "Randomizer"
+    $buttons += CreateReduxButton   -Tag $buttons.Count -Child -Exclude "Dawn" -Text "Outer Trail" -Info "Select the color you want for the outer trail"                 -Credits "Randomizer"
 
     if (!(IsSet $Redux.Colors.Boomerang)) { return }
 
-    # Boomerang Trail Colors - Buttons
-    $Buttons = @()
-    $Buttons += CreateReduxButton -Column 1 -Row 2 -Width 100 -Tag $Buttons.Count -Child -Exclude "Dawn" -Text "Inner Trail" -Info "Select the color you want for the inner trail" -Credits "Randomizer"
-    $Buttons += CreateReduxButton -Column 2 -Row 2 -Width 100 -Tag $Buttons.Count -Child -Exclude "Dawn" -Text "Outer Trail" -Info "Select the color you want for the outer trail" -Credits "Randomizer"
+    $Redux.Colors.SetBoomerang += CreateColorDialog -Color "FFFF64" -Name "SetInnerBoomerang" -IsGame -Button $buttons[0]
+    $Redux.Colors.SetBoomerang += CreateColorDialog -Color "FFFF64" -Name "SetOuterBoomerang" -IsGame -Button $buttons[1]
 
-    # Boomerang Trail - Dialogs
-    $Redux.Colors.SetBoomerang = @()
-    $Redux.Colors.SetBoomerang += CreateColorDialog -Color "FFFF64" -Name "SetInnerBoomerang" -IsGame -Button $Buttons[0]
-    $Redux.Colors.SetBoomerang += CreateColorDialog -Color "FFFF64" -Name "SetOuterBoomerang" -IsGame -Button $Buttons[1]
-
-    # Boomerang Trail - Labels
-    $Redux.Colors.BoomerangLabels = @()
-    for ($i=0; $i -lt $Buttons.length; $i++) {
-        $Buttons[$i].Add_Click({ $Redux.Colors.SetBoomerang[[int16]$this.Tag].ShowDialog(); $Redux.Colors.Boomerang.Text = "Custom"; $Redux.Colors.BoomerangLabels[[int16]$this.Tag].BackColor = $Redux.Colors.SetBoomerang[[int16]$this.Tag].Color; $GameSettings["Colors"][$Redux.Colors.SetBoomerang[[int16]$this.Tag].Tag] = $Redux.Colors.SetBoomerang[[int16]$this.Tag].Color.Name })
-        $Redux.Colors.BoomerangLabels += CreateReduxColoredLabel -All -Exclude "Dawn" -Link $Buttons[$i]  -Color $Redux.Colors.SetBoomerang[$i].Color
+    for ($i=0; $i -lt $buttons.length; $i++) {
+        $buttons[$i].Add_Click({ $Redux.Colors.SetBoomerang[[int16]$this.Tag].ShowDialog(); $Redux.Colors.Boomerang.Text = "Custom"; $Redux.Colors.BoomerangLabels[[int16]$this.Tag].BackColor = $Redux.Colors.SetBoomerang[[int16]$this.Tag].Color; $GameSettings["Colors"][$Redux.Colors.SetBoomerang[[int16]$this.Tag].Tag] = $Redux.Colors.SetBoomerang[[int16]$this.Tag].Color.Name })
+        $Redux.Colors.BoomerangLabels += CreateReduxColoredLabel -All -Exclude "Dawn" -Link $buttons[$i]  -Color $Redux.Colors.SetBoomerang[$i].Color
     }
     
     if (IsSet $Redux.Colors.Boomerang) {
@@ -1109,27 +1091,23 @@ function CreateBoomerangColorOptions($Default=1) {
 
 #==============================================================================================================================================================================================
 function CreateBombchuColorOptions() {
+    
+    $randomize = "`n" + '"Randomized" fully randomizes the colors each time the patcher is opened'
+    $buttons = $Redux.Colors.SetBombchu = $Redux.Colors.BombchuLabels = @()
 
-    CreateReduxGroup    -Tag  "Colors"  -All -Exclude "Dawn" -Text "Bombchu Colors" -Height 2 -Columns 3
-    CreateReduxComboBox -Name "Bombchu" -All -Exclude "Dawn" -Text "Bombchu Colors" -Items @("Vanilla", "Randomized", "Custom") -Info ("Select a preset for the bombchu trail colors`n" + '"Randomized" fully randomizes the colors each time the patcher is opened') -Credits "Randomizer"
+                CreateReduxGroup    -Tag  "Colors"      -All -Exclude "Dawn" -Text "Bombchu Colors"
+                CreateReduxComboBox -Name "Bombchu"     -All -Exclude "Dawn" -Text "Bombchu"     -Info ("Select a preset for the bombchu trail colors" + $randomize) -Credits "Randomizer" -Items @("Vanilla", "Randomized", "Custom")
+    $buttons += CreateReduxButton   -Tag $buttons.Count -All -Exclude "Dawn" -Text "Inner Trail" -Info "Select the color you want for the inner trail"               -Credits "Randomizer"
+    $buttons += CreateReduxButton   -Tag $buttons.Count -All -Exclude "Dawn" -Text "Outer Trail" -Info "Select the color you want for the outer trail"               -Credits "Randomizer"
 
     if (!(IsSet $Redux.Colors.Bombchu)) { return }
 
-    # Bombchu Trail Colors - Buttons
-    $Buttons = @()
-    $Buttons += CreateReduxButton -Column 1 -Row 2 -Width 100 -Tag $Buttons.Count -All -Exclude "Dawn" -Text "Inner Trail" -Info "Select the color you want for the inner trail" -Credits "Randomizer"
-    $Buttons += CreateReduxButton -Column 2 -Row 2 -Width 100 -Tag $Buttons.Count -All -Exclude "Dawn" -Text "Outer Trail" -Info "Select the color you want for the outer trail" -Credits "Randomizer"
+    $Redux.Colors.SetBombchu += CreateColorDialog -Color "FA0000" -Name "SetInnerBombchu" -IsGame -Button $buttons[0]
+    $Redux.Colors.SetBombchu += CreateColorDialog -Color "FA0000" -Name "SetOuterBombchu" -IsGame -Button $buttons[1]
 
-    # Bombchu Trail - Dialogs
-    $Redux.Colors.SetBombchu = @()
-    $Redux.Colors.SetBombchu += CreateColorDialog -Color "FA0000" -Name "SetInnerBombchu" -IsGame -Button $Buttons[0]
-    $Redux.Colors.SetBombchu += CreateColorDialog -Color "FA0000" -Name "SetOuterBombchu" -IsGame -Button $Buttons[1]
-
-    # Bombchu Trail - Labels
-    $Redux.Colors.BombchuLabels = @()
     for ($i=0; $i -lt $Buttons.length; $i++) {
-        $Buttons[$i].Add_Click({ $Redux.Colors.SetBombchu[[int16]$this.Tag].ShowDialog(); $Redux.Colors.Bombchu.Text = "Custom"; $Redux.Colors.BombchuLabels[[int16]$this.Tag].BackColor = $Redux.Colors.SetBombchu[[int16]$this.Tag].Color; $GameSettings["Colors"][$Redux.Colors.SetBombchu[[int16]$this.Tag].Tag] = $Redux.Colors.SetBombchu[[int16]$this.Tag].Color.Name })
-        $Redux.Colors.BombchuLabels += CreateReduxColoredLabel -All -Exclude "Dawn" -Link $Buttons[$i]  -Color $Redux.Colors.SetBombchu[$i].Color
+        $buttons[$i].Add_Click({ $Redux.Colors.SetBombchu[[int16]$this.Tag].ShowDialog(); $Redux.Colors.Bombchu.Text = "Custom"; $Redux.Colors.BombchuLabels[[int16]$this.Tag].BackColor = $Redux.Colors.SetBombchu[[int16]$this.Tag].Color; $GameSettings["Colors"][$Redux.Colors.SetBombchu[[int16]$this.Tag].Tag] = $Redux.Colors.SetBombchu[[int16]$this.Tag].Color.Name })
+        $Redux.Colors.BombchuLabels += CreateReduxColoredLabel -All -Exclude "Dawn" -Link $buttons[$i]  -Color $Redux.Colors.SetBombchu[$i].Color
     }
     
     if (IsSet $Redux.Colors.Bombchu) {
@@ -1144,29 +1122,26 @@ function CreateBombchuColorOptions() {
 #==============================================================================================================================================================================================
 function CreateRupeeColorOptions() {
     
-    # RUPEE ICON COLORS #
-    CreateReduxGroup    -Tag  "Colors" -All -Text "Rupee Icon Colors" -Height 2
-    CreateReduxComboBox -Name "Rupees" -All -Text "Rupee Icon Colors" -Items @("Redux", "Randomized", "Custom") -Info ("Select a preset for the Rupee icon colors`n" + '"Randomized" fully randomizes the colors each time the patcher is opened') -Credits "Randomizer"
+    $randomize = "`n" + '"Randomized" fully randomizes the colors each time the patcher is opened'
+    $buttons   = $Redux.Colors.SetRupee = $Redux.Colors.RupeeLabels = @()
 
-    # Rupee Icon Colors - Buttons
-    $Buttons = @()
-    $Buttons += CreateReduxButton -Column 1 -Row 2 -Width 100 -Tag $Buttons.Count -All -Text "Base Wallet"     -Info "Select the color you want for the Base Wallet HUD icon"     -Credits "Randomizer"
-    $Buttons += CreateReduxButton -Column 2 -Row 2 -Width 100 -Tag $Buttons.Count -All -Text "Adult's Wallet"  -Info "Select the color you want for the Adult's Wallet HUD icon"  -Credits "Randomizer"
-    $Buttons += CreateReduxButton -Column 3 -Row 2 -Width 100 -Tag $Buttons.Count -All -Text "Giant's Wallet"  -Info "Select the color you want for the Giant's Wallet HUD icons" -Credits "Randomizer"
-    $Buttons += CreateReduxButton -Column 4 -Row 2 -Width 100 -Tag $Buttons.Count -All -Text "Tycoon's Wallet" -Info "Select the color you want for the Tycoon's Wallet HUD icon" -Credits "Randomizer"
+    CreateReduxGroup    -Tag  "Colors" -All -Text "Rupee Icon Colors"
+    CreateReduxComboBox -Name "Rupees" -All -Text "Rupee Icon" -Items @("Redux", "Randomized", "Custom") -Info ("Select a preset for the Rupee icon colors" + $randomize) -Credits "Randomizer"
+    $Last.Row++; $Last.Column = 1
 
-    # Rupee Icon Colors - Dialogs
-    $Redux.Colors.SetRupee = @()
-    $Redux.Colors.SetRupee += CreateColorDialog -Color "C8FF64" -Name "SetRupeeIcon1" -IsGame -Button $Buttons[0]
-    $Redux.Colors.SetRupee += CreateColorDialog -Color "8282FF" -Name "SetRupeeIcon2" -IsGame -Button $Buttons[1]
-    $Redux.Colors.SetRupee += CreateColorDialog -Color "FF6464" -Name "SetRupeeIcon3" -IsGame -Button $Buttons[2]
-    $Redux.Colors.SetRupee += CreateColorDialog -Color "FF5AFF" -Name "SetRupeeIcon4" -IsGame -Button $Buttons[3]
+    $buttons += CreateReduxButton -Tag $buttons.Count -All -Text "Base Wallet"     -Info "Select the color you want for the Base Wallet HUD icon"     -Credits "Randomizer"
+    $buttons += CreateReduxButton -Tag $buttons.Count -All -Text "Adult's Wallet"  -Info "Select the color you want for the Adult's Wallet HUD icon"  -Credits "Randomizer"
+    $buttons += CreateReduxButton -Tag $buttons.Count -All -Text "Giant's Wallet"  -Info "Select the color you want for the Giant's Wallet HUD icons" -Credits "Randomizer"
+    $buttons += CreateReduxButton -Tag $buttons.Count -All -Text "Tycoon's Wallet" -Info "Select the color you want for the Tycoon's Wallet HUD icon" -Credits "Randomizer"
+    
+    $Redux.Colors.SetRupee += CreateColorDialog -Color "C8FF64" -Name "SetRupeeIcon1" -IsGame -Button $buttons[0]
+    $Redux.Colors.SetRupee += CreateColorDialog -Color "8282FF" -Name "SetRupeeIcon2" -IsGame -Button $buttons[1]
+    $Redux.Colors.SetRupee += CreateColorDialog -Color "FF6464" -Name "SetRupeeIcon3" -IsGame -Button $buttons[2]
+    $Redux.Colors.SetRupee += CreateColorDialog -Color "FF5AFF" -Name "SetRupeeIcon4" -IsGame -Button $buttons[3]
 
-    # Rupee Icon Colors - Labels
-    $Redux.Colors.RupeeLabels = @()
     for ($i=0; $i -lt $Buttons.length; $i++) {
-        $Buttons[$i].Add_Click({ $Redux.Colors.SetRupee[[int16]$this.Tag].ShowDialog(); $Redux.Colors.Rupees.Text = "Custom"; $Redux.Colors.RupeeLabels[[int16]$this.Tag].BackColor = $Redux.Colors.SetRupee[[int16]$this.Tag].Color; $GameSettings["Colors"][$Redux.Colors.SetRupee[[int16]$this.Tag].Tag] = $Redux.Colors.SetRupee[[int16]$this.Tag].Color.Name })
-        $Redux.Colors.RupeeLabels += CreateReduxColoredLabel -All -Link $Buttons[$i]  -Color $Redux.Colors.SetRupee[$i].Color
+        $buttons[$i].Add_Click({ $Redux.Colors.SetRupee[[int16]$this.Tag].ShowDialog(); $Redux.Colors.Rupees.Text = "Custom"; $Redux.Colors.RupeeLabels[[int16]$this.Tag].BackColor = $Redux.Colors.SetRupee[[int16]$this.Tag].Color; $GameSettings["Colors"][$Redux.Colors.SetRupee[[int16]$this.Tag].Tag] = $Redux.Colors.SetRupee[[int16]$this.Tag].Color.Name })
+        $Redux.Colors.RupeeLabels += CreateReduxColoredLabel -All -Link $buttons[$i]  -Color $Redux.Colors.SetRupee[$i].Color
     }
     
     if (IsSet $Redux.Colors.Rupees) {
@@ -1180,16 +1155,17 @@ function CreateRupeeColorOptions() {
 
 #==============================================================================================================================================================================================
 function CreateRupeeVanillaColorOptions($Preset=1, $Color="C8FF64") {
-
-    CreateReduxGroup -Tag "Colors" -All -Text "Rupee Icon Color"
-
-    $Items = @("Base Wallet", "Adult's Wallet", "Giant's Wallet", "Tycoon's Wallet", "Gold Quest", "Randomized", "Custom"); $Randomize = '"Randomized" fully randomizes the colors each time the patcher is opened'
-    $Redux.Colors.RupeesVanilla   = CreateReduxComboBox -Name "RupeesVanilla" -All -Text "Rupee Icon Color" -Length 230 -Shift 40 -Items $Items -Default $Preset -Info ("Select a color scheme for the Rupee Icon Color`n" + $Randomize) -Credits "Ported from Redux"
-    $Button                       = CreateReduxButton -Width 100              -All -Text "Wallet Icon" -Info "Select the color you want for Rupee Icon Color" -Credits "Ported from Redux"
-    $Redux.Colors.SetRupeeVanilla = CreateColorDialog -Color $Color -Name "SetRupeeIcon" -IsGame -Button $Button
     
-    $Button.Add_Click({ $Redux.Colors.SetRupeeVanilla.ShowDialog(); $Redux.Colors.RupeeVanillaLabel.BackColor = $Redux.Colors.SetRupeeVanilla.Color; $GameSettings["Colors"][$Redux.Colors.SetRupeeVanilla] = $Redux.Colors.SetRupeeVanilla.Color.Name })
-    $Redux.Colors.RupeeVanillaLabel = CreateReduxColoredLabel -All -Link $Button -Color $Redux.Colors.SetRupeeVanilla.Color
+    $items     = @("Base Wallet", "Adult's Wallet", "Giant's Wallet", "Tycoon's Wallet", "Gold Quest", "Randomized", "Custom")
+    $randomize = "`n" + '"Randomized" fully randomizes the colors each time the patcher is opened'
+
+                                    CreateReduxGroup    -Tag "Colors"         -All -Text "Rupee Icon Color"
+    $Redux.Colors.RupeesVanilla   = CreateReduxComboBox -Name "RupeesVanilla" -All -Text "Rupee Icon" -Items $items -Default $Preset -Info ("Select a color scheme for the Rupee Icon Color" + $randomize) -Credits "Ported from Redux"
+    $button                       = CreateReduxButton                         -All -Text "Wallet Icon"                               -Info "Select the color you want for Rupee Icon Color"                -Credits "Ported from Redux"
+    $Redux.Colors.SetRupeeVanilla = CreateColorDialog   -Name "SetRupeeIcon"  -Color $Color -IsGame -Button $button
+    
+    $button.Add_Click({ $Redux.Colors.SetRupeeVanilla.ShowDialog(); $Redux.Colors.RupeeVanillaLabel.BackColor = $Redux.Colors.SetRupeeVanilla.Color; $GameSettings["Colors"][$Redux.Colors.SetRupeeVanilla] = $Redux.Colors.SetRupeeVanilla.Color.Name })
+    $Redux.Colors.RupeeVanillaLabel = CreateReduxColoredLabel -All -Link $button -Color $Redux.Colors.SetRupeeVanilla.Color
     
     if (IsSet $Redux.Colors.RupeesVanilla) {
         $Redux.Colors.RupeesVanilla.Add_SelectedIndexChanged({ SetRupeeVanillaColorsPreset -ComboBox $Redux.Colors.RupeesVanilla -Dialog $Redux.Colors.SetRupeeVanilla -Label $Redux.Colors.RupeeVanillaLabel })
@@ -1203,35 +1179,32 @@ function CreateRupeeVanillaColorOptions($Preset=1, $Color="C8FF64") {
 #==============================================================================================================================================================================================
 function CreateSpinAttackColorOptions() {
     
-    # SPIN ATTACK COLORS #
-    CreateReduxGroup    -Tag  "Colors"                   -All -Text "Magic Spin Attack Colors" -Height 2
-    $Items = @("Blue", "Red", "Green", "White", "Cyan", "Magenta", "Orange", "Gold", "Purple", "Pink", "Black", "Randomized", "Custom")
-    CreateReduxComboBox -Name "BlueSpinAttack" -Column 1 -All -Text "Blue Spin Attack Colors" -Length 230 -Shift 40 -Items $Items -Default 1 -Info ("Select a preset for the blue spin attack colors`n" + '"Randomized" fully randomizes the colors each time the patcher is opened') -Credits "Chez Cousteau"
-    CreateReduxComboBox -Name "RedSpinAttack"  -Column 4 -All -Text "Red Spin Attack Colors"  -Length 230 -Shift 40 -Items $Items -Default 2 -Info ("Select a preset for the red spin attack colors`n" + '"Randomized" fully randomizes the colors each time the patcher is opened')  -Credits "Chez Cousteau"
+    $items     = @("Blue", "Red", "Green", "White", "Cyan", "Magenta", "Orange", "Gold", "Purple", "Pink", "Black", "Randomized", "Custom")
+    $randomize = "`n" + '"Randomized" fully randomizes the colors each time the patcher is opened'
+    $buttons   = $Redux.Colors.SetSpinAttack = $Redux.Colors.SpinAttackLabels = @()
 
-    # Spin Attack Colors - Buttons
-    $Buttons = @()
-    $Buttons += CreateReduxButton -Column 3 -Row 1 -Width 100 -Tag $Buttons.Count -All -Text "Blue Spin (Inner)" -Info "Select the inner color you want for the blue spin attack" -Credits "Chez Cousteau"
-    $Buttons += CreateReduxButton -Column 3 -Row 2 -Width 100 -Tag $Buttons.Count -All -Text "Blue Spin (Outer)" -Info "Select the outer color you want for the blue spin attack" -Credits "Chez Cousteau"
-    $Buttons += CreateReduxButton -Column 6 -Row 1 -Width 100 -Tag $Buttons.Count -All -Text "Red Spin (Inner)"  -Info "Select the inner color you want for the red spin attack"  -Credits "Chez Cousteau"
-    $Buttons += CreateReduxButton -Column 6 -Row 2 -Width 100 -Tag $Buttons.Count -All -Text "Red Spin (Outer)"  -Info "Select the outer color you want for the red spin attack"  -Credits "Chez Cousteau"
+    CreateReduxGroup -Tag "Colors" -All -Text "Magic Spin Attack Colors"
 
-    # Spin Attack Colors - Dialogs
-    $Redux.Colors.SetSpinAttack = @()
-    $Redux.Colors.SetSpinAttack += CreateColorDialog -Color "0000FF" -Name "SetInnerBlueSpinAttack" -IsGame -Button $Buttons[0]
-    $Redux.Colors.SetSpinAttack += CreateColorDialog -Color "0064FF" -Name "SetOuterBlueSpinAttack" -IsGame -Button $Buttons[1]
-    $Redux.Colors.SetSpinAttack += CreateColorDialog -Color "FF0000" -Name "SetInnerRedSpinAttack"  -IsGame -Button $Buttons[2]
-    $Redux.Colors.SetSpinAttack += CreateColorDialog -Color "FF6400" -Name "SetOuterRedSpinAttack"  -IsGame -Button $Buttons[3]
+                CreateReduxComboBox -Name "BlueSpinAttack" -All -Text "Blue Spin Attack" -Items $items -Default 1 -Info ("Select a preset for the blue spin attack colors" + $randomize) -Credits "Chez Cousteau"
+    $buttons += CreateReduxButton   -Tag $buttons.Count    -All -Text "Blue Spin (Inner)"                         -Info "Select the inner color you want for the blue spin attack"       -Credits "Chez Cousteau"
+    $buttons += CreateReduxButton   -Tag $buttons.Count    -All -Text "Blue Spin (Outer)"                         -Info "Select the outer color you want for the blue spin attack"       -Credits "Chez Cousteau"
+    
+                CreateReduxComboBox -Name "RedSpinAttack"  -All -Text "Red Spin Attack"  -Items $items -Default 2 -Info ("Select a preset for the red spin attack colors"  + $randomize) -Credits "Chez Cousteau"
+    $buttons += CreateReduxButton   -Tag $buttons.Count    -All -Text "Red Spin (Inner)"                          -Info "Select the inner color you want for the red spin attack"        -Credits "Chez Cousteau"
+    $buttons += CreateReduxButton   -Tag $buttons.Count    -All -Text "Red Spin (Outer)"                          -Info "Select the outer color you want for the red spin attack"        -Credits "Chez Cousteau"
 
-    # Spin Attack Colors - Labels
-    $Redux.Colors.SpinAttackLabels = @()
+    $Redux.Colors.SetSpinAttack += CreateColorDialog -Color "0000FF" -Name "SetInnerBlueSpinAttack" -IsGame -Button $buttons[0]
+    $Redux.Colors.SetSpinAttack += CreateColorDialog -Color "0064FF" -Name "SetOuterBlueSpinAttack" -IsGame -Button $buttons[1]
+    $Redux.Colors.SetSpinAttack += CreateColorDialog -Color "FF0000" -Name "SetInnerRedSpinAttack"  -IsGame -Button $buttons[2]
+    $Redux.Colors.SetSpinAttack += CreateColorDialog -Color "FF6400" -Name "SetOuterRedSpinAttack"  -IsGame -Button $buttons[3]
+
     for ($i=0; $i -lt $Buttons.length; $i++) {
-        $Buttons[$i].Add_Click({
+        $buttons[$i].Add_Click({
             $Redux.Colors.SetSpinAttack[[int16]$this.Tag].ShowDialog(); $Redux.Colors.SpinAttackLabels[[int16]$this.Tag].BackColor = $Redux.Colors.SetSpinAttack[[int16]$this.Tag].Color; $GameSettings["Colors"][$Redux.Colors.SetSpinAttack[[int16]$this.Tag].Tag] = $Redux.Colors.SetSpinAttack[[int16]$this.Tag].Color.Name
             if ($this.Tag -lt 2)   { $Redux.Colors.BlueSpinAttack.Text = "Custom" }
             else                   { $Redux.Colors.RedSpinAttack.Text  = "Custom" }
         })
-        $Redux.Colors.SpinAttackLabels += CreateReduxColoredLabel -All -Link $Buttons[$i]  -Color $Redux.Colors.SetSpinAttack[$i].Color
+        $Redux.Colors.SpinAttackLabels += CreateReduxColoredLabel -All -Link $buttons[$i]  -Color $Redux.Colors.SetSpinAttack[$i].Color
     }
 
     if (IsSet $Redux.Colors.BlueSpinAttack) {
@@ -1263,24 +1236,21 @@ function CreateSpinAttackColorOptions() {
 #==============================================================================================================================================================================================
 function CreateSwordTrailColorOptions() {
     
-    # SWORD TRAIL COLORS #
-    CreateReduxGroup    -Tag  "Colors"                       -All -Text "Sword Trail Colors"
-    $Items = @("White", "Red", "Green", "Blue", "Cyan", "Magenta", "Orange", "Gold", "Purple", "Pink", "Randomized", "Custom")
-    CreateReduxComboBox -Name "SwordTrail"         -Column 1 -All -Text "Sword Trail Color"    -Length 230 -Shift 40 -Items $Items -Default 1 -Info ("Select a preset for the sword trail color`n" + '"Randomized" fully randomizes the colors each time the patcher is opened') -Credits "Ported from Rando"
-    CreateReduxComboBox -Name "SwordTrailDuration" -Column 5 -All -Text "Sword Trail Duration" -Length 230 -Shift 40 -Items @("Disabled", "Short", "Long", "Very Long", "Lightsaber") -Default 2 -Info ("Select the duration for sword trail") -Credits "Ported from Rando"
+    $items1    = @("White", "Red", "Green", "Blue", "Cyan", "Magenta", "Orange", "Gold", "Purple", "Pink", "Randomized", "Custom")
+    $items2    = @("Disabled", "Short", "Long", "Very Long", "Lightsaber")
+    $randomize = "`n" + '"Randomized" fully randomizes the colors each time the patcher is opened'
+    $buttons   = $Redux.Colors.SetSwordTrail = $Redux.Colors.SwordTrailLabels = @()
 
-    # Sword Trail Colors - Buttons
-    $Buttons = @()
-    $Buttons += CreateReduxButton -Column 3 -Row 1 -Width 100 -Tag $Buttons.Count -All -Text "Trail (Inner)" -Info "Select the inner color you want for the sword trail" -Credits "Ported from Rando"
-    $Buttons += CreateReduxButton -Column 4 -Row 1 -Width 100 -Tag $Buttons.Count -All -Text "Trail (Outer)" -Info "Select the outer color you want for the sword trail" -Credits "Ported from Rando"
+    CreateReduxGroup -Tag  "Colors" -All -Text "Sword Trail Colors"
+    
+                CreateReduxComboBox -Name "SwordTrail"         -All -Text "Sword Trail Color"    -Items $items1 -Default 1 -Info ("Select a preset for the sword trail color" + $randomize) -Credits "Ported from Rando"
+    $buttons += CreateReduxButton   -Tag $Buttons.Count        -All -Text "Trail (Inner)"                                  -Info "Select the inner color you want for the sword trail"      -Credits "Ported from Rando"
+    $buttons += CreateReduxButton   -Tag $Buttons.Count        -All -Text "Trail (Outer)"                                  -Info "Select the outer color you want for the sword trail"      -Credits "Ported from Rando"
+                CreateReduxComboBox -Name "SwordTrailDuration" -All -Text "Sword Trail Duration" -Items $items2 -Default 2 -Info ("Select the duration for sword trail")                    -Credits "Ported from Rando"
 
-    # Sword Trail Colors - Dialogs
-    $Redux.Colors.SetSwordTrail = @()
     $Redux.Colors.SetSwordTrail += CreateColorDialog -Color "FFFFFF" -Name "SetInnerSwordTrail" -IsGame -Button $Buttons[0]
     $Redux.Colors.SetSwordTrail += CreateColorDialog -Color "FFFFFF" -Name "SetOuterSwordTrail" -IsGame -Button $Buttons[1]
 
-    # Sword Trail Colors - Labels
-    $Redux.Colors.SwordTrailLabels = @()
     for ($i=0; $i -lt $Buttons.length; $i++) {
         $Buttons[$i].Add_Click({
             $Redux.Colors.SetSwordTrail[[int16]$this.Tag].ShowDialog(); $Redux.Colors.SwordTrailLabels[[int16]$this.Tag].BackColor = $Redux.Colors.SetSwordTrail[[int16]$this.Tag].Color; $GameSettings["Colors"][$Redux.Colors.SetSwordTrail[[int16]$this.Tag].Tag] = $Redux.Colors.SetSwordTrail[[int16]$this.Tag].Color.Name
@@ -1306,37 +1276,36 @@ function CreateSwordTrailColorOptions() {
 function CreateFairyColorOptions($name) {
 
     # FAIRY COLORS #
-    CreateReduxGroup    -Tag  "Colors" -All -Text "Fairy Colors" -Height 2
-    $items = @($GameType.default_values.fairy_option1, $GameType.default_values.fairy_option2, "Tael", "Gold", "Green", "Light Blue", "Yellow", "Red", "Magenta", "Black", "Fi", "Ciela", "Epona", "Ezlo", "King of Red Lions", "Linebeck", "Loftwing", "Midna", "Phantom Zelda", "Randomized", "Custom")
-    CreateReduxComboBox -Name "Fairy" -Length 230 -Shift 40 -Items $items -All -Text ($name + " Colors") -Info ("Select a color scheme for " + $name + "`n" + '"Randomized" fully randomizes the colors each time the patcher is opened') -Credits "Ported from Rando"
 
-    # Fairy Colors - Buttons
-    $Buttons = @()
-    $Buttons += CreateReduxButton -Column 3 -Row 1 -Width 100 -Tag $Buttons.Count -All -Text "Idle (Inner)"     -Info ("Select the color you want for the Inner Idle stance for " + $name)  -Credits "Ported from Rando"
-    $Buttons += CreateReduxButton -Column 3 -Row 2 -Width 100 -Tag $Buttons.Count -All -Text "Idle (Outer)"     -Info ("Select the color you want for the Outer Idle stance for " + $name)  -Credits "Ported from Rando"
-    $Buttons += CreateReduxButton -Column 4 -Row 1 -Width 100 -Tag $Buttons.Count -All -Text "Interact (Inner)" -Info ("Select the color you want for the Inner Other stance for " + $name) -Credits "Ported from Rando"
-    $Buttons += CreateReduxButton -Column 4 -Row 2 -Width 100 -Tag $Buttons.Count -All -Text "Interact (Outer)" -Info ("Select the color you want for the Outer Other stance for " + $name) -Credits "Ported from Rando"
-    $Buttons += CreateReduxButton -Column 5 -Row 1 -Width 100 -Tag $Buttons.Count -All -Text "NPC (Inner)"      -Info ("Select the color you want for the Inner NPC stance for " + $name)   -Credits "Ported from Rando"
-    $Buttons += CreateReduxButton -Column 5 -Row 2 -Width 100 -Tag $Buttons.Count -All -Text "NPC (Outer)"      -Info ("Select the color you want for the Outer NPC stance for " + $name)   -Credits "Ported from Rando"
-    $Buttons += CreateReduxButton -Column 6 -Row 1 -Width 100 -Tag $Buttons.Count -All -Text "Enemy (Inner)"    -Info ("Select the color you want for the Inner Enemy stance for " + $name) -Credits "Ported from Rando"
-    $Buttons += CreateReduxButton -Column 6 -Row 2 -Width 100 -Tag $Buttons.Count -All -Text "Enemy (Outer)"    -Info ("Select the color you want for the Outer Enemy stance for " + $name) -Credits "Ported from Rando"
-
-    # Fairy Colors - Dialogs
-    $Redux.Colors.SetFairy = @()
-    $Redux.Colors.SetFairy += CreateColorDialog -Color $GameType.default_values.fairy_idle1 -Name "SetFairyIdleInner"     -IsGame -Button $Buttons[0]
-    $Redux.Colors.SetFairy += CreateColorDialog -Color $GameType.default_values.fairy_idle2 -Name "SetFairyIdleOuter"     -IsGame -Button $Buttons[1]
-    $Redux.Colors.SetFairy += CreateColorDialog -Color "00FF00"                             -Name "SetFairyInteractInner" -IsGame -Button $Buttons[2]
-    $Redux.Colors.SetFairy += CreateColorDialog -Color "00FF00"                             -Name "SetFairyInteractOuter" -IsGame -Button $Buttons[3]
-    $Redux.Colors.SetFairy += CreateColorDialog -Color "9696FF"                             -Name "SetFairyNPCInner"      -IsGame -Button $Buttons[4]
-    $Redux.Colors.SetFairy += CreateColorDialog -Color "9696FF"                             -Name "SetFairyNPCOuter"      -IsGame -Button $Buttons[5]
-    $Redux.Colors.SetFairy += CreateColorDialog -Color "FFFF00"                             -Name "SetFairyEnemyInner"    -IsGame -Button $Buttons[6]
-    $Redux.Colors.SetFairy += CreateColorDialog -Color "C89B00"                             -Name "SetFairyEnemyOuter"    -IsGame -Button $Buttons[7]
-
-    # Fairy Colors - Labels
-    $Redux.Colors.FairyLabels = @()
-    for ($i=0; $i -lt $Buttons.length; $i++) {
-        $Buttons[$i].Add_Click({ $Redux.Colors.SetFairy[[int16]$this.Tag].ShowDialog(); $Redux.Colors.Fairy.Text = "Custom"; $Redux.Colors.FairyLabels[[int16]$this.Tag].BackColor = $Redux.Colors.SetFairy[[int16]$this.Tag].Color; $GameSettings["Colors"][$Redux.Colors.SetFairy[[int16]$this.Tag].Tag] = $Redux.Colors.SetFairy[[int16]$this.Tag].Color.Name })
-        $Redux.Colors.FairyLabels += CreateReduxColoredLabel -All -Link $Buttons[$i] -Color $Redux.Colors.SetFairy[$i].Color
+    $items     = @($GameType.default_values.fairy_option1, $GameType.default_values.fairy_option2, "Tael", "Gold", "Green", "Light Blue", "Yellow", "Red", "Magenta", "Black", "Fi", "Ciela", "Epona", "Ezlo", "King of Red Lions", "Linebeck", "Loftwing", "Midna", "Phantom Zelda", "Randomized", "Custom")
+    $randomize = "`n" + '"Randomized" fully randomizes the colors each time the patcher is opened'
+    $buttons   = $Redux.Colors.SetFairy = $Redux.Colors.FairyLabels = @()
+    
+    CreateReduxGroup    -Tag  "Colors" -All -Text "Fairy Colors"
+    CreateReduxComboBox -Name "Fairy"  -All -Text $name -Items $items -Info ("Select a color scheme for " + $name + $randomize) -Credits "Ported from Rando"
+    $Last.Row++; $Last.Column = 1
+    
+    $Buttons += CreateReduxButton -Width 100 -Tag $buttons.Count -All -Text "Idle (Inner)"     -Info ("Select the color you want for the Inner Idle stance for "  + $name) -Credits "Ported from Rando"
+    $Buttons += CreateReduxButton -Width 100 -Tag $buttons.Count -All -Text "Idle (Outer)"     -Info ("Select the color you want for the Outer Idle stance for "  + $name) -Credits "Ported from Rando"
+    $Buttons += CreateReduxButton -Width 100 -Tag $buttons.Count -All -Text "Interact (Inner)" -Info ("Select the color you want for the Inner Other stance for " + $name) -Credits "Ported from Rando"
+    $Buttons += CreateReduxButton -Width 100 -Tag $buttons.Count -All -Text "Interact (Outer)" -Info ("Select the color you want for the Outer Other stance for " + $name) -Credits "Ported from Rando"
+    $Buttons += CreateReduxButton -Width 100 -Tag $buttons.Count -All -Text "NPC (Inner)"      -Info ("Select the color you want for the Inner NPC stance for "   + $name) -Credits "Ported from Rando"
+    $Buttons += CreateReduxButton -Width 100 -Tag $buttons.Count -All -Text "NPC (Outer)"      -Info ("Select the color you want for the Outer NPC stance for "   + $name) -Credits "Ported from Rando"
+    $Buttons += CreateReduxButton -Width 100 -Tag $buttons.Count -All -Text "Enemy (Inner)"    -Info ("Select the color you want for the Inner Enemy stance for " + $name) -Credits "Ported from Rando"
+    $Buttons += CreateReduxButton -Width 100 -Tag $buttons.Count -All -Text "Enemy (Outer)"    -Info ("Select the color you want for the Outer Enemy stance for " + $name) -Credits "Ported from Rando"
+    
+    $Redux.Colors.SetFairy += CreateColorDialog -Color $GameType.default_values.fairy_idle1 -Name "SetFairyIdleInner"     -IsGame -Button $buttons[0]
+    $Redux.Colors.SetFairy += CreateColorDialog -Color $GameType.default_values.fairy_idle2 -Name "SetFairyIdleOuter"     -IsGame -Button $buttons[1]
+    $Redux.Colors.SetFairy += CreateColorDialog -Color "00FF00"                             -Name "SetFairyInteractInner" -IsGame -Button $buttons[2]
+    $Redux.Colors.SetFairy += CreateColorDialog -Color "00FF00"                             -Name "SetFairyInteractOuter" -IsGame -Button $buttons[3]
+    $Redux.Colors.SetFairy += CreateColorDialog -Color "9696FF"                             -Name "SetFairyNPCInner"      -IsGame -Button $buttons[4]
+    $Redux.Colors.SetFairy += CreateColorDialog -Color "9696FF"                             -Name "SetFairyNPCOuter"      -IsGame -Button $buttons[5]
+    $Redux.Colors.SetFairy += CreateColorDialog -Color "FFFF00"                             -Name "SetFairyEnemyInner"    -IsGame -Button $buttons[6]
+    $Redux.Colors.SetFairy += CreateColorDialog -Color "C89B00"                             -Name "SetFairyEnemyOuter"    -IsGame -Button $buttons[7]
+    
+    for ($i=0; $i -lt $buttons.length; $i++) {
+        $buttons[$i].Add_Click({ $Redux.Colors.SetFairy[[int16]$this.Tag].ShowDialog(); $Redux.Colors.Fairy.Text = "Custom"; $Redux.Colors.FairyLabels[[int16]$this.Tag].BackColor = $Redux.Colors.SetFairy[[int16]$this.Tag].Color; $GameSettings["Colors"][$Redux.Colors.SetFairy[[int16]$this.Tag].Tag] = $Redux.Colors.SetFairy[[int16]$this.Tag].Color.Name })
+        $Redux.Colors.FairyLabels += CreateReduxColoredLabel -All -Link $buttons[$i] -Color $Redux.Colors.SetFairy[$i].Color
     }
 
     if (IsSet $Redux.Colors.Fairy) {
@@ -1351,39 +1320,33 @@ function CreateFairyColorOptions($name) {
 #==============================================================================================================================================================================================
 function CreateHUDColorOptions([switch]$MM) { 
 
-    # HUD COLORS #
+    $buttons = $Redux.Colors.SetHUDStats = $Redux.Colors.HUDStatsLabels = @()
+    CreateReduxGroup -Tag "Colors" -All -Text "HUD Colors" -IsRedux
+    
+    CreateReduxComboBox -Name "Hearts" -All -Text "Hearts" -Items @("Red", "Green", "Blue", "Yellow", "Randomized", "Custom")                            -Info ("Select a preset for the hearts colors`n" + '"Randomized" fully randomizes the colors each time the patcher is opened')
+               $buttons += CreateReduxButton -Tag $buttons.Count -All -Text "Hearts (Base)"    -Info "Select the color you want for the standard hearts display" -Credits "Ported from Rando"
+    if ($MM) { $buttons += CreateReduxButton -Tag $buttons.Count -All -Text "Hearts (Double)"  -Info "Select the color you want for the enhanced hearts display" -Credits "Ported from Rando" }
 
-    CreateReduxGroup               -Tag  "Colors"            -All -Text "HUD Colors" -IsRedux -Height 2
-    CreateReduxComboBox            -Name "Hearts"  -Column 1 -All -Text "Hearts Colors"  -Length 220 -Items @("Red", "Green", "Blue", "Yellow", "Randomized", "Custom") -Info ("Select a preset for the hearts colors`n" + '"Randomized" fully randomizes the colors each time the patcher is opened')
-    CreateReduxComboBox            -Name "Magic"   -Column 3 -All -Text "Magic Colors"   -Length 220 -Items @("Green", "Red", "Blue", "Purple", "Pink", "Yellow", "White", "Randomized", "Custom") -Info ("Select a preset for the magic colors`n" + '"Randomized" fully randomizes the colors each time the patcher is opened')
-    if ($MM) { CreateReduxComboBox -Name "Minimap" -Column 5 -All -Text "Minimap Colors" -Length 220 -Items @("Cyan", "Green", "Red", "Blue", "Gray", "Purple", "Pink", "Yellow", "White", "Black", "Randomized", "Custom") -Info ("Select a preset for the minimap colors`n" + '"Randomized" fully randomizes the colors each time the patcher is opened') }
-
-    # Heart / Magic Colors - Buttons
-    $Buttons = @()
-    $Buttons            += CreateReduxButton -Column 1 -Row 2 -Width 100 -Tag $Buttons.Count -All -Text "Hearts (Base)"   -Info "Select the color you want for the standard hearts display" -Credits "Ported from Rando"
-    if ($MM) { $Buttons += CreateReduxButton -Column 2 -Row 2 -Width 100 -Tag $Buttons.Count -All -Text "Hearts (Double)" -Info "Select the color you want for the enhanced hearts display" -Credits "Ported from Rando" }
-    $Buttons            += CreateReduxButton -Column 3 -Row 2 -Width 100 -Tag $Buttons.Count -All -Text "Magic (Base)"    -Info "Select the color you want for the standard magic display"  -Credits "Ported from Rando"
+    CreateReduxComboBox -Name "Magic"  -All -Text "Magic"  -Items @("Green", "Red", "Blue", "Purple", "Pink", "Yellow", "White", "Randomized", "Custom") -Info ("Select a preset for the magic colors`n"  + '"Randomized" fully randomizes the colors each time the patcher is opened')
+               $buttons += CreateReduxButton -Tag $buttons.Count -All -Text "Magic (Base)"     -Info "Select the color you want for the standard magic display"  -Credits "Ported from Rando"
+    if ($MM) { $buttons += CreateReduxButton -Tag $buttons.Count -All -Text "Magic (Infinite)" -Info "Select the color you want for the infinite magic display"  -Credits "Ported from Rando" }
+    
     if ($MM) {
-        $Redux.Colors.BaseMagic = $Buttons[$Buttons.Length-1]
-        $Buttons += CreateReduxButton -Column 4 -Row 2 -Width 100 -Tag $Buttons.Count -All -Text "Magic (Infinite)" -Info "Select the color you want for the infinite magic display" -Credits "Ported from Rando"
-        $Redux.Colors.InfiniteMagic = $Buttons[$Buttons.Length-1]
-        $Buttons += CreateReduxButton -Column 5 -Row 2 -Width 100 -Tag $Buttons.Count -All -Text "Minimap"          -Info "Select the color you want for the minimap"                -Credits "Ported from Rando"
+        CreateReduxComboBox -Name "Minimap" -All -Text "Minimap" -Items @("Cyan", "Green", "Red", "Blue", "Gray", "Purple", "Pink", "Yellow", "White", "Black", "Randomized", "Custom") -Info ("Select a preset for the minimap colors`n" + '"Randomized" fully randomizes the colors each time the patcher is opened')
+        $buttons += CreateReduxButton -Tag $Buttons.Count -All -Text "Minimap" -Info "Select the color you want for the minimap" -Credits "Ported from Rando"
+        
     }
 
-    # Heart / Magic Colors - Dialogs
-    $Redux.Colors.SetHUDStats = @()
-    $Redux.Colors.SetHUDStats            += CreateColorDialog -Color "FF4632" -Name "SetBaseHearts"   -IsGame -Button $Buttons[$Redux.Colors.SetHUDStats.Count]
-    if ($MM) { $Redux.Colors.SetHUDStats += CreateColorDialog -Color "C80000" -Name "SetDoubleHearts" -IsGame -Button $Buttons[$Redux.Colors.SetHUDStats.Count]  }
-    $Redux.Colors.SetHUDStats            += CreateColorDialog -Color "00C800" -Name "SetBaseMagic"    -IsGame -Button $Buttons[$Redux.Colors.SetHUDStats.Count]
+    $Redux.Colors.SetHUDStats            += CreateColorDialog -Color "FF4632" -Name "SetBaseHearts"   -IsGame -Button $buttons[$Redux.Colors.SetHUDStats.Count]
+    if ($MM) { $Redux.Colors.SetHUDStats += CreateColorDialog -Color "C80000" -Name "SetDoubleHearts" -IsGame -Button $buttons[$Redux.Colors.SetHUDStats.Count]  }
+    $Redux.Colors.SetHUDStats            += CreateColorDialog -Color "00C800" -Name "SetBaseMagic"    -IsGame -Button $buttons[$Redux.Colors.SetHUDStats.Count]
     if ($MM) {
-        $Redux.Colors.SetHUDStats += CreateColorDialog -Color "0000C8" -Name "SetInfiniteMagic" -IsGame -Button $Buttons[$Redux.Colors.SetHUDStats.Count]
-        $Redux.Colors.SetHUDStats += CreateColorDialog -Color "00FFFF" -Name "SetMinimap"       -IsGame -Button $Buttons[$Redux.Colors.SetHUDStats.Count]
+        $Redux.Colors.SetHUDStats += CreateColorDialog -Color "0000C8" -Name "SetInfiniteMagic" -IsGame -Button $buttons[$Redux.Colors.SetHUDStats.Count]
+        $Redux.Colors.SetHUDStats += CreateColorDialog -Color "00FFFF" -Name "SetMinimap"       -IsGame -Button $buttons[$Redux.Colors.SetHUDStats.Count]
     }
 
-    # Heart / Magic Colors - Labels
-    $Redux.Colors.HUDStatsLabels = @()
-    for ($i=0; $i -lt $Buttons.length; $i++) {
-        $Buttons[$i].Add_Click({
+    for ($i=0; $i -lt $buttons.length; $i++) {
+        $buttons[$i].Add_Click({
             $Redux.Colors.SetHUDStats[[int16]$this.Tag].ShowDialog(); $Redux.Colors.HUDStatsLabels[[int16]$this.Tag].BackColor = $Redux.Colors.SetHUDStats[[int16]$this.Tag].Color; $GameSettings["Colors"][$Redux.Colors.SetHUDStats[[int16]$this.Tag].Tag] = $Redux.Colors.SetHUDStats[[int16]$this.Tag].Color.Name
             
             if ($MM) {
@@ -1450,26 +1413,21 @@ function CreateHUDColorOptions([switch]$MM) {
 #==============================================================================================================================================================================================
 function CreateTextColorOptions() { 
 
-    # TEXT CURSOR COLORS #
-    CreateReduxGroup    -Tag  "Colors"                -All -Text "Text Cursor Colors" -Height 2
-    $Items = @("Blue", "Green", "Randomized", "Custom")
-    CreateReduxComboBox -Name "TextCursor"  -Column 1 -All -Text "Text Cursor" -Length 220 -Items $Items -Info ("Select a preset for the textbox cursor color`n" + '"Randomized" fully randomizes the colors each time the patcher is opened') -Credits "Ported from Rando"
-    CreateReduxComboBox -Name "ShopCursor"  -Column 3 -All -Text "Shop Cursor" -Length 220 -Items $Items -Info ("Select a preset for the shop cursor color`n"    + '"Randomized" fully randomizes the colors each time the patcher is opened') -Credits "Ported from Rando"
+    $Items     = @("Blue", "Green", "Randomized", "Custom");
+    $buttons   = $Redux.Colors.SetText = $Redux.Colors.TextLabels = @()
+    $randomize = '"Randomized" fully randomizes the colors each time the patcher is opened'
 
-    # Text Colors - Buttons
-    $Buttons = @()
-    $Buttons += CreateReduxButton -Column 1 -Row 2 -Width 100 -Tag $Buttons.Count -All -Text "Text Cursor" -Info "Select the color you want for the textbox cursor" -Credits "Ported from Rando"
-    $Buttons += CreateReduxButton -Column 3 -Row 2 -Width 100 -Tag $Buttons.Count -All -Text "Shop Cursor" -Info "Select the color you want for the shop cursor"    -Credits "Ported from Rando"
+                CreateReduxGroup    -Tag  "Colors"      -All -Text "Text Cursor Colors"
+                CreateReduxComboBox -Name "TextCursor"  -All -Text "Text Cursor" -Items $Items -Info ("Select a preset for the textbox cursor color`n" + $randomize) -Credits "Ported from Rando"
+    $buttons += CreateReduxButton   -Tag $Buttons.Count -All -Text "Text Cursor"               -Info "Select the color you want for the textbox cursor"              -Credits "Ported from Rando"
+                CreateReduxComboBox -Name "ShopCursor"  -All -Text "Shop Cursor" -Items $Items -Info ("Select a preset for the shop cursor color`n"    + $randomize) -Credits "Ported from Rando"
+    $buttons += CreateReduxButton   -Tag $Buttons.Count -All -Text "Shop Cursor"               -Info "Select the color you want for the shop cursor"                 -Credits "Ported from Rando"
 
-    # Text Colors - Dialogs
-    $Redux.Colors.SetText = @()
-    $Redux.Colors.SetText += CreateColorDialog -Color "0050C8" -Name "SetTextCursor" -IsGame -Button $Buttons[0]
-    $Redux.Colors.SetText += CreateColorDialog -Color "0050FF" -Name "SetShopCursor" -IsGame -Button $Buttons[1]
+    $Redux.Colors.SetText += CreateColorDialog -Color "0050C8" -Name "SetTextCursor" -IsGame -Button $buttons[0]
+    $Redux.Colors.SetText += CreateColorDialog -Color "0050FF" -Name "SetShopCursor" -IsGame -Button $buttons[1]
 
-    # Text Colors - Labels
-    $Redux.Colors.TextLabels = @()
-    for ($i=0; $i -lt $Buttons.length; $i++) {
-        $Buttons[$i].Add_Click({
+    for ($i=0; $i -lt $buttons.length; $i++) {
+        $buttons[$i].Add_Click({
             $Redux.Colors.SetText[[int16]$this.Tag].ShowDialog(); $Redux.Colors.TextLabels[[int16]$this.Tag].BackColor = $Redux.Colors.SetText[[int16]$this.Tag].Color; $GameSettings["Colors"][$Redux.Colors.SetText[[int16]$this.Tag].Tag] = $Redux.Colors.SetText[[int16]$this.Tag].Color.Name
             if ($this.Tag -lt 1)   { $Redux.Colors.TextCursor.Text = "Custom" }
             else                   { $Redux.Colors.ShopCursor.Text = "Custom" }
@@ -1893,6 +1851,7 @@ Export-ModuleMember -Function MusicOptions
 Export-ModuleMember -Function GetReplacementTracks
 Export-ModuleMember -Function ChangeStringIntoDigits
 
+Export-ModuleMember -Function ShowStylePreview
 Export-ModuleMember -Function ShowHudPreview
 Export-ModuleMember -Function ShowEquipmentPreview
 Export-ModuleMember -Function ChangeModelsSelection

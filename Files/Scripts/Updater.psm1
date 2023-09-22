@@ -6,7 +6,7 @@ function PerformUpdate() {
         if ($Settings.Core.DisableAddons -ne $True) {
             foreach ($addon in $Files.json.repo.addons) {
                 CheckAddon  -Title $addon.title
-                UpdateAddon -Title $addon.title -Uri $addon.uri -Version $addon.version
+                UpdateAddon -Title $addon.title -Uri $addon.uri -Version $addon.version -VersionFallback $addon.versionFallback
             }
         }
     }
@@ -14,7 +14,7 @@ function PerformUpdate() {
         AutoUpdate
         foreach ($addon in $Files.json.repo.addons) {
             CheckAddon  -Title $addon.title
-            UpdateAddon -Title $addon.title -Uri $addon.uri -Version $addon.version
+            UpdateAddon -Title $addon.title -Uri $addon.uri -Version $addon.version -VersionFallback $addon.versionFallback
         }
     }
 
@@ -25,9 +25,14 @@ function PerformUpdate() {
 #==============================================================================================================================================================================================
 function InvokeWebRequest([string]$Uri, [String]$OutFile) {
     
-    $ProgressPreference = 'SilentlyContinue'
-    [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-    Invoke-WebRequest -UseBasicParsing -Uri $Uri -OutFile $outFile
+    $script = { Param([string]$Uri, [string]$OutFile)
+        $ProgressPreference                         = 'SilentlyContinue'
+        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+        Invoke-WebRequest -UseBasicParsing -Uri $Uri -OutFile $OutFile
+        $ProgressPreference = 'Continue'
+    }
+    Start-Job    -Name "Script" -ScriptBlock $script -ArgumentList @($Uri, $OutFile)
+    StartJobLoop -Name "Script"
     $ProgressPreference = 'Continue'
 
 }
@@ -37,10 +42,15 @@ function InvokeWebRequest([string]$Uri, [String]$OutFile) {
 #==============================================================================================================================================================================================
 function ReadWebRequest([string]$Uri) {
     
-    $ProgressPreference = 'SilentlyContinue'
-    [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-    Invoke-WebRequest -Uri $Uri
-    $ProgressPreference = 'Continue'
+    $script = { Param([string]$Uri)
+        $ProgressPreference                         = 'SilentlyContinue'
+        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+        Write-Output (Invoke-WebRequest -Uri $Uri)
+        $ProgressPreference                         = 'Continue'
+    }
+              Start-Job    -Name "Script" -ScriptBlock $script -ArgumentList @($Uri)
+    $result = StartJobLoop -Name "Script" -Output
+    return $result
 
 }
 
@@ -49,10 +59,14 @@ function ReadWebRequest([string]$Uri) {
 #==============================================================================================================================================================================================
 function ExpandArchive([string]$LiteralPath, [String]$DestinationPath) {
     
-    $global:ProgressPreference = 'SilentlyContinue'
-    Expand-Archive -LiteralPath $LiteralPath -DestinationPath $DestinationPath
-    $global:ProgressPreference = 'Continue'
-
+    $script = { Param([string]$LiteralPath, [string]$DestinationPath)
+        $global:ProgressPreference = 'SilentlyContinue'
+        Expand-Archive -LiteralPath $LiteralPath -DestinationPath $DestinationPath
+        $ProgressPreference = 'Continue'
+    }
+    Start-Job    -Name "Script" -ScriptBlock $script -ArgumentList @($LiteralPath, $DestinationPath)
+    StartJobLoop -Name "Script"
+    
 }
 
 
@@ -78,27 +92,46 @@ function CheckUpdate() {
 #==============================================================================================================================================================================================
 function AutoUpdate([switch]$Manual) {
 
-    $update = $False
+    $update     = $error = $False
     $oldContent = $newContent = $newVersion = $newDate = $newHotfix = $null
 
     if (TestFile $Patcher.VersionFile) {
         # Download version info
         try {
             $response   = ReadWebRequest $Files.json.repo.version
-          # $newContent = $response.AllElements | Where {$_.class -eq "blob-code blob-code-inner js-file-line"}
-            $newcontent = $response.AllElements | Where {$_.type -eq "application/json"}
+          # $newContent = $response.AllElements | Where { $_.class -eq "blob-code blob-code-inner js-file-line" }
+            $newcontent = $response.AllElements | Where { $_.type -eq "application/json" }
             
             $newContent = [string]$newContent[1]
-            $start   = ($newContent | Select-String "blob").Matches.Index
+            $start      = ($newContent | Select-String "blob").Matches.Index
             $newContent = $newContent.substring($start, $newContent.substring($start).indexOf("]"))
             $newContent = $newContent.substring($newContent.indexOf("[")+1)
             $newContent = $newContent.replace('"', '')
             $newContent = $newContent.split(",")
         }
         catch {
-            WriteToConsole "Could not retrieve Patcher version info!" -Error
-            return
+            WriteToConsole "Could not retrieve Patcher version info! Trying fallback URL..." -Error
+            $error = $True
         }
+
+        # Download version info using fallback URL
+        if ($error) {
+            $error = $False
+            try {
+                if ($Settings.Core.LocalTempFolder -ne $False)   { CreateSubPath $Paths.LocalTemp;   $file = $Paths.LocalTemp   + "\version.txt" }
+                else                                             { CreateSubPath $Paths.AppDataTemp; $file = $Paths.AppDataTemp + "\version.txt" }
+                InvokeWebRequest -Uri $Files.json.repo.versionFallback -OutFile $file
+                [array]$newcontent = Get-Content -LiteralPath $file
+                RemoveFile $file
+            }
+            catch {
+                WriteToConsole "Could not retrieve Patcher version info using fallback URL!" -Error
+                RemoveFile $file
+                $error = $True
+            }
+        }
+
+        if ($error) { return }
 
         # Load content
         try { [array]$oldContent = Get-Content -LiteralPath $Patcher.VersionFile }
@@ -124,7 +157,7 @@ function AutoUpdate([switch]$Manual) {
                 if ($Settings.Core.LastUpdateVersionCheck -le $newVersion -and $Settings.Core.LastUpdateDateCheck -le $newDate) { return }
                 else {
                     $Settings.Core.SkipUpdate = $False
-                    Out-IniFile -FilePath $Files.settings -InputObject $Settings | Out-Null
+                    Out-IniFile -FilePath $Files.settings -InputObject $Settings
                 }
             }
             catch {
@@ -193,32 +226,42 @@ function AutoUpdate([switch]$Manual) {
 
 #==============================================================================================================================================================================================
 function ShowUpdateDialog([String]$Version, [String]$Date, [String]$Hotfix) {
-
-    $UpdateDialog = New-Object System.Windows.Forms.Form
-    $UpdateDialog.Size = DPISize (New-Object System.Drawing.Size(440, 200))
-    $UpdateDialog.Text = $Patcher.Title
-    $UpdateDialog.FormBorderStyle = [System.Windows.Forms.FormBorderStyle]::FixedDialog
-    $UpdateDialog.StartPosition = "CenterScreen"
-    $UpdateDialog.Icon = $Files.icon.main
+    
+    $global:Update                 = @{}
+    $Update.Dialog                 = New-Object System.Windows.Forms.Form
+    $Update.Dialog.Size            = DPISize (New-Object System.Drawing.Size(440, 200))
+    $Update.Dialog.Text            = $Patcher.Title
+    $Update.Dialog.FormBorderStyle = [System.Windows.Forms.FormBorderStyle]::FixedDialog
+    $Update.Dialog.StartPosition   = "CenterScreen"
+    $Update.Dialog.Icon            = $Files.icon.main
 
     $text = "Would you like to update Patcher64+?`n" + "New Version: " + $version + " (" + $date + ")"
     if (IsSet $Hotfix) { $text += "`nHotfix: #" + $Hotfix }
 
-    $label   = CreateLabel -x (DPISize 20)  -Y (DPISize 10) -Text $Text -Font $Fonts.Medium -AddTo $UpdateDialog
-    $yesBtn  = CreateButton -X (DPISize 20)  -Y (DPISize 100)  -Width (DPISize 100) -Height (DPISize 50) -AddTo $UpdateDialog -Text "Yes"
-    $noBtn   = CreateButton -X (DPISize 160) -Y (DPISize 100)  -Width (DPISize 100) -Height (DPISize 50) -AddTo $UpdateDialog -Text "No"
-    $skipBtn = CreateButton -X (DPISize 300) -Y (DPISize 100)  -Width (DPISize 100) -Height (DPISize 50) -AddTo $UpdateDialog -Text "Skip Version"
+    $label          = CreateLabel  -x (DPISize 20)  -Y (DPISize 10)   -Text $Text          -Font $Fonts.Medium  -AddTo $Update.Dialog
+    $Update.yesBtn  = CreateButton -X (DPISize 20)  -Y (DPISize 100)  -Width (DPISize 100) -Height (DPISize 50) -AddTo $Update.Dialog -Text "Yes"
+    $Update.noBtn   = CreateButton -X (DPISize 160) -Y (DPISize 100)  -Width (DPISize 100) -Height (DPISize 50) -AddTo $Update.Dialog -Text "No"
+    $Update.skipBtn = CreateButton -X (DPISize 300) -Y (DPISize 100)  -Width (DPISize 100) -Height (DPISize 50) -AddTo $Update.Dialog -Text "Skip Version"
     
-    $yesBtn.Add_Click(  { $UpdateDialog.Close(); RunUpdate } )
-    $noBtn.Add_Click(   { $UpdateDialog.Close()            } )
-    $skipBtn.Add_Click( {
-        $UpdateDialog.Close()
-        $Settings.Core.SkipUpdate = $True
-        Out-IniFile -FilePath $Files.settings -InputObject $Settings | Out-Null
+    $Update.yesBtn.Add_Click(  {
+        $Update.Dialog.Close();
+        EnableGUI $False; $Update.yesBtn.Enabled = $Update.noBtn.Enabled = $Update.skipBtn.Enabled = $False
+        RunUpdate
+        Enable GUI $True
     } )
 
-    $UpdateDialog.ShowDialog() | Out-Null
-    $UpdateDialog = $label = $yesBtn = $noBtn = $null
+    $Update.noBtn.Add_Click( {
+        $Update.Dialog.Close()
+    } )
+
+    $Update.skipBtn.Add_Click( {
+        $Update.Dialog.Close()
+        $Settings.Core.SkipUpdate = $True
+        Out-IniFile -FilePath $Files.settings -InputObject $Settings
+    } )
+
+    $Update.Dialog.ShowDialog()
+    $global:Update = $null
 
 }
 
@@ -261,11 +304,12 @@ function RunUpdate() {
     RemovePath $Paths.Scripts
     RemovePath ($Paths.Base + "\Info")
 
-    Get-ChildItem -Path $path   -Directory | ForEach-Object { $folder = $path + "\" + $_ }
+    $folder = $path + "\Patcher64Plus-Tool-master"
+    Copy-Item -LiteralPath $folder -Destination $Paths.Base -Force -Recurse
     Get-ChildItem -Path $folder -Directory | ForEach-Object { Copy-Item -LiteralPath ($folder + "\" + $_) -Destination $Paths.Base -Force -Recurse }
-    Move-Item -LiteralPath ($folder + "\Patcher64+ Tool.ps1") -Destination ($Paths.Base + "\Patcher64+ Tool.ps1") -Force
-    Move-Item -LiteralPath ($folder + "\Readme.txt")          -Destination ($Paths.Base + "\ReadMe.txt")          -Force
-    Move-Item -LiteralPath ($folder + "\Files\version.txt")   -Destination ($Paths.Master + "\version.txt")       -Force
+    Move-Item -LiteralPath ($folder + "\Patcher64+ Tool.ps1") -Destination ($Paths.Base   + "\Patcher64+ Tool.ps1") -Force
+    Move-Item -LiteralPath ($folder + "\Readme.txt")          -Destination ($Paths.Base   + "\ReadMe.txt")          -Force
+    Move-Item -LiteralPath ($folder + "\Files\version.txt")   -Destination ($Paths.Master + "\version.txt")         -Force
 
     if (TestFile -Path ($Paths.Base + "\Ocarina of Time\Editor") -Container)   { Move-Item -LiteralPath ($Paths.Base + "\Ocarina of Time\Editor") -Destination ($Paths.Games + "\Ocarina of Time\Editor") -Force -Recurse }
     if (TestFile -Path ($Paths.Base + "\Majora's Mask\Editor")   -Container)   { Move-Item -LiteralPath ($Paths.Base + "\Majora's Mask\Editor")   -Destination ($Paths.Games + "\Majora's Mask\Editor")   -Force -Recurse }
@@ -308,22 +352,21 @@ function CheckAddon([string]$Title) {
 
 
 #==============================================================================================================================================================================================
-function UpdateAddon([string]$Title, [string]$Uri, [string]$Version) {
+function UpdateAddon([string]$Title, [string]$Uri, [string]$Version, [string]$VersionFallback) {
     
-    $update    = $False
+    $update    = $error = $False
     $addonPath = $Paths.Addons + "\" + $Title
     $content   = $date = $hotfix = $null
 
-    if ($Settings.Core.LocalTempFolder -eq $True)   { $path = $Paths.LocalTemp   }
-    else                                            { $path = $Paths.AppDataTemp }
-    CreateSubPath $Path
-    $Path = $Path + "\updater-" + $Title.ToLower()
-    CreateSubPath $Path
+    if ($Settings.Core.LocalTempFolder -ne $False)   { $path = $Paths.LocalTemp   }
+    else                                             { $path = $Paths.AppDataTemp }
+    CreateSubPath $path
+    $path = $path + "\updater-" + $Title.ToLower()
+    CreateSubPath $path
 
     if (TestFile ($addonPath + "\lastUpdate.txt")) {
         # Download version info
         try {
-            $file     = $Path + "\lastUpdate.txt"
             $response = ReadWebRequest $Version
           # $content  = $response.AllElements | Where {$_.class -eq "blob-code blob-code-inner js-file-line"}
             $content  = $response.AllElements | Where {$_.type -eq "application/json"}
@@ -336,12 +379,26 @@ function UpdateAddon([string]$Title, [string]$Uri, [string]$Version) {
             $content = $content.split(",")
         }
         catch {
-            RemovePath $path
-            WriteToConsole ("Could not retrieve last version info for " + $Title + "!") -Error
-            return
+            WriteToConsole ("Could not retrieve last version info for " + $Title + "! Trying fallback URL...") -Error
+            $error = $True
         }
 
-        
+        # Download version info using fallback URL
+        if ($error) {
+            $error = $False
+            try {
+                InvokeWebRequest -Uri $VersionFallback -OutFile     ($Path + "\lastUpdate.txt")
+                [array]$content = Get-Content          -LiteralPath ($Path + "\lastUpdate.txt")
+                RemoveFile ($Path + "\lastUpdate.txt")
+            }
+            catch {
+                WriteToConsole ("Could not retrieve last version info for " + $Title + " using the fallback URL!") -Error
+                RemoveFile ($Path + "\lastUpdate.txt")
+                $error = $True
+            }
+        }
+
+        if ($error) { return }
 
         # Load content
         if ($content -eq $null) {
@@ -377,7 +434,7 @@ function UpdateAddon([string]$Title, [string]$Uri, [string]$Version) {
 
         try {
             InvokeWebRequest -Uri $Uri -OutFile $zip
-            WriteToConsole ("Downloading latest update for " + $Title + "!") -Error
+            WriteToConsole ("Downloading latest update for " + $Title + "!")
         }
         catch {
             RemovePath $path
@@ -393,10 +450,8 @@ function UpdateAddon([string]$Title, [string]$Uri, [string]$Version) {
 
         ExpandArchive -LiteralPath $zip -DestinationPath $path -Force
         RemovePath $addonPath
-        Get-ChildItem -Path $path -Directory | ForEach-Object { $folder = $path + "\" + $_ }
-        Copy-Item -LiteralPath ($folder + "\Files") -Destination $Paths.Base -Force -Recurse
+        Copy-Item -LiteralPath ($path + "\Patcher64Plus-Tool-" + $Title + "-main\Files") -Destination $Paths.Base -Force -Recurse
         RemovePath $path
-
         CheckAddon -Title $Title
         $Addons[$Title].isUpdated = $True
     }

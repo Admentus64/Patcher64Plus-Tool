@@ -2,8 +2,9 @@ function PatchDungeonsOoTMQ() {
     
     if ($GameType.mode -ne "Ocarina of Time") { return }
 
-    if (IsChecked $Redux.MQ.MasterQuestLogo) { # MQ Title with Subtitle
-        PatchBytes -Offset "1795300" -Texture -Patch "Logo\mq_logo.bin"
+    if ( (IsIndex -Elem $Redux.MQ.Logo -Text "Master Quest") -or (IsIndex -Elem $Redux.MQ.Logo -Text "New Master Quest") ) { # MQ Title with Subtitle
+        if     (IsIndex -Elem $Redux.MQ.Logo -Text "Master Quest")       { PatchBytes -Offset "1795300" -Texture -Patch "Logo\mq_logo.bin"  }
+        elseif (IsIndex -Elem $Redux.MQ.Logo -Text "Neq Master Quest")   { PatchBytes -Offset "1795300" -Texture -Patch "Logo\nmq_logo.bin" }
         PatchBytes -Offset "17AE300" -Texture -Patch "Logo\mq_copyright.bin"
         ChangeBytes -Offset "E6E266" -Values "64 96 34 21 FF" # THE LEGEND OF + OCARINA OF TIME (14 50 35 8C A0)
         ChangeBytes -Offset "E6E2A6" -Values "08 5C 35 8C 98" # Overlay Title color
@@ -12,16 +13,16 @@ function PatchDungeonsOoTMQ() {
         ChangeBytes -Offset "E6C9F0" -Values "3C 01 BF B0 C4 44 62 D4 44 81 80 00 C4 4A 62 E0 46 06 22 00 84 4E 62 CA 26 01 7F FF 46 10 54 80 E4 48 62 D4 25 CF FF FF E4 52 62 E0"
         ChangeBytes -Offset "E6CA48" -Values "3C 01 43 48 44 81 40 00 26 01 7F FF E4 46 62 D4 E4 48 62 E0"
     }
-    elseif ( (IsChecked $Redux.MQ.UraQuestLogo) -or (IsChecked $Redux.MQ.UraQuestSubtitleLogo) ) { # Ura Title
-        if     (IsChecked $Redux.MQ.UraQuestLogo)           { PatchBytes -Offset "1795300" -Texture -Patch "Logo\ura_logo.bin"          } # Ura Title
-        elseif (IsChecked $Redux.MQ.UraQuestSubtitleLogo)   { PatchBytes -Offset "1795300" -Texture -Patch "Logo\ura_subtitle_logo.bin" } # Ura Title + Subtitle
+    elseif ( (IsIndex -Elem $Redux.MQ.Logo -Text "Ura Quest") -or (IsIndex -Elem $Redux.MQ.Logo -Text "Ura Quest + Subtitle") ) { # Ura Title
+        if     (IsIndex -Elem $Redux.MQ.Logo -Text "Ura Quest")              { PatchBytes -Offset "1795300" -Texture -Patch "Logo\ura_logo.bin"          } # Ura Title
+        elseif (IsIndex -Elem $Redux.MQ.Logo -Text "Ura Quest + Subtitle")   { PatchBytes -Offset "1795300" -Texture -Patch "Logo\ura_subtitle_logo.bin" } # Ura Title + Subtitle
         PatchBytes -Offset "17AE300" -Texture -Patch "Logo\ura_copyright.bin"
         ChangeBytes -Offset "E6E266" -Values "C8 96 34 21 C8" # THE LEGEND OF + OCARINA OF TIME
         ChangeBytes -Offset "E6E2A6" -Values "64 32 35 8C 64" # Overlay Title color
         ChangeBytes -Offset "E6DE2E" -Values "96" # Title Flames color
     }
 
-    if ( (IsChecked $Redux.MQ.Disable) -or (IsChecked $Redux.MQ.Custom) ) { return }
+    if ( (IsDefault $Redux.MQ.Dungeons) -or (IsIndex -Elem $Redux.MQ.Dungeons -Text "Custom") ) { return }
     $dungeons = PatchDungeonsMQ
 
     $title = "Inside the Deku Tree" # Inside the Deku Tree
@@ -128,13 +129,13 @@ function PatchDungeonsMQ() {
     # BYTE PATCHING MASTER QUEST DUNGEONS
     if (IsChecked $Redux.MQ.Disable) { return $False }
 
-    if ( (IsChecked $Redux.MQ.Select) -or (IsChecked $Redux.MQ.EnableMQ) -or (IsChecked -Elem $Redux.MQ.Randomize)) {
+    if ( (IsIndex -Elem $Redux.MQ.Dungeons -Text "Select") -or (IsIndex -Elem $Redux.MQ.Dungeons -Text "Master Quest") -or (IsIndex -Elem $Redux.MQ.Dungeons -Text "Randomize") ) {
         if (!(TestFile -Path ($GameFiles.extracted + "\Master Quest") -Container)) {
             WriteToConsole ('Error: "' + ($GameFiles.extracted + "\Master Quest") + '" was not found') -Error
             return $False
         }
     }
-    if ( (IsChecked $Redux.MQ.Select) -or (IsChecked $Redux.MQ.EnableUra) -or (IsChecked -Elem $Redux.MQ.Randomize)) {
+    if ( (IsIndex -Elem $Redux.MQ.Dungeons -Text "Select") -or (IsIndex -Elem $Redux.MQ.Dungeons -Text "Ura Quest") -or (IsIndex -Elem $Redux.MQ.Dungeons -Text "Randomize") ) {
         if (!(TestFile -Path ($GameFiles.extracted + "\Ura Quest") -Container)) {
             WriteToConsole ('Error: "' + ($GameFiles.extracted + "\Ura Quest") + '" was not found') -Error
             return $False
@@ -147,14 +148,14 @@ function PatchDungeonsMQ() {
 
     foreach ($item in $Redux.Box.SelectMQ) {
         foreach ($label in $item.controls) {
-            if     ( (IsChecked $Redux.MQ.Select)    -and $label.GetType() -eq [System.Windows.Forms.Label]) { $dungeons[$label.text.replace(":", "")] = $label.ComboBox.text     }
-            elseif ( (IsChecked $Redux.MQ.EnableMQ)  -and $label.GetType() -eq [System.Windows.Forms.Label]) { $dungeons[$label.text.replace(":", "")] = $label.ComboBox.items[1] }
-            elseif ( (IsChecked $Redux.MQ.EnableUra) -and $label.GetType() -eq [System.Windows.Forms.Label]) { $dungeons[$label.text.replace(":", "")] = $label.ComboBox.items[2] }
-            elseif ( (IsChecked $Redux.MQ.Randomize) -and $label.GetType() -eq [System.Windows.Forms.Label]) { $dungeons[$label.text.replace(":", "")] = $label.ComboBox.items[0]; $versions[$label.text.replace(":", "")] = $label.ComboBox.items }
+            if     ( (IsIndex -Elem $Redux.MQ.Dungeons -Text "Select")       -and $label.GetType() -eq [System.Windows.Forms.Label]) { $dungeons[$label.text.replace(":", "")] = $label.ComboBox.text     }
+            elseif ( (IsIndex -Elem $Redux.MQ.Dungeons -Text "Master Quest") -and $label.GetType() -eq [System.Windows.Forms.Label]) { $dungeons[$label.text.replace(":", "")] = $label.ComboBox.items[1] }
+            elseif ( (IsIndex -Elem $Redux.MQ.Dungeons -Text "Ura Quest")    -and $label.GetType() -eq [System.Windows.Forms.Label]) { $dungeons[$label.text.replace(":", "")] = $label.ComboBox.items[2] }
+            elseif ( (IsIndex -Elem $Redux.MQ.Dungeons -Text "Randomize")    -and $label.GetType() -eq [System.Windows.Forms.Label]) { $dungeons[$label.text.replace(":", "")] = $label.ComboBox.items[0]; $versions[$label.text.replace(":", "")] = $label.ComboBox.items }
         }
     }
 
-    if (IsChecked $Redux.MQ.Randomize) {
+    if (IsIndex -Elem $Redux.MQ.Dungeons -Text "Randomize") {
         $min   = $Redux.MQ.Minimum.Text.replace(" (default)", "")
         $max   = $Redux.MQ.Maximum.Text.replace(" (default)", "")
         $count = (Get-Random -Minimum $min -Maximum $max)
@@ -197,7 +198,7 @@ function ExtractMQData() {
 
     # EXTRACT MQ DATA #
     if ($GameType.mode -eq "Ocarina of Time") {
-        if ( ( (IsChecked -Elem $Redux.MQ.Select) -or (IsChecked -Elem $Redux.MQ.EnableMQ) -or (IsChecked -Elem $Redux.MQ.Randomize) ) -and (IsChecked $Patches.Options) ) { # EXTRACT MQ DUNGEON DATA
+        if ( ( (IsIndex -Elem $Redux.MQ.Dungeons -Text "Select") -or (IsIndex -Elem $Redux.MQ.Dungeons -Text "Master Quest") -or (IsIndex -Elem $Redux.MQ.Dungeons -Text "Randomize") ) -and (IsChecked $Patches.Options) ) { # EXTRACT MQ DUNGEON DATA
             if ( (CountFiles ($GameFiles.extracted + "\Master Quest")) -ne $GameType.mq_files -or $Settings.Debug.ForceExtract -eq $True) {
                 if (TestFile -Path ($GameFiles.decompressed + "\Dungeons\master_quest.bps") ) {
                     WriteToConsole "Extracting Master Quest dungeon files"
@@ -207,7 +208,7 @@ function ExtractMQData() {
                 }
             }
         }
-        if ( ( (IsChecked -Elem $Redux.MQ.Select) -or (IsChecked -Elem $Redux.MQ.EnableUra) -or (IsChecked -Elem $Redux.MQ.Randomize) ) -and (IsChecked $Patches.Options) ) { # EXTRACT URA DUNGEON DATA
+        if ( ( (IsIndex -Elem $Redux.MQ.Dungeons -Text "Select") -or (IsIndex -Elem $Redux.MQ.Dungeons -Text "Ura Quest") -or (IsIndex -Elem $Redux.MQ.Dungeons -Text "Randomize") ) -and (IsChecked $Patches.Options) ) { # EXTRACT URA DUNGEON DATA
             if ( (CountFiles ($GameFiles.extracted + "\Ura Quest")) -ne $GameType.mq_files -or $Settings.Debug.ForceExtract -eq $True) {
                 if (TestFile -Path ($GameFiles.decompressed + "\Dungeons\ura_quest.bps") ) {
                     WriteToConsole "Extracting Ura Quest dungeon files"
