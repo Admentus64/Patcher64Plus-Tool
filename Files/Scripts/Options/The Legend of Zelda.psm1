@@ -102,7 +102,7 @@ function AdjustGUI() {
 #==============================================================================================================================================================================================
 function CreateOptions() {
     
-    CreateOptionsDialog -Columns 5 -Height 420
+    CreateOptionsPanel
 
     $Redux.Audio.MixedDungeonThemes.Add_CheckStateChanged( { EnableElem -Elem @($Redux.Audio.NoMusic,            $Redux.Revert.DungeonTheme) -Active (!$this.checked) } )
     $Redux.Audio.NoMusic.Add_CheckStateChanged(            { EnableElem -Elem @($Redux.Audio.MixedDungeonThemes, $Redux.Revert.DungeonTheme) -Active (!$this.checked) } )
@@ -151,7 +151,6 @@ function CreateTabMain() {
     # TITLE SCREEN #
 
     CreateReduxGroup       -Tag  "Title"                -Text "Title Screen"
-    CreateReduxPanel
     CreateReduxRadioButton -Name "Subtitle"             -Text "Keep Title Screen"               -SaveTo "TitleScreen" -Info "Keep the title screen as it is"                                                                   -Checked
     CreateReduxRadioButton -Name "ReworkedTitleScreen"  -Text "Reworked Title Screen"           -SaveTo "TitleScreen" -Info "Reworked title screen to match the more recent Zelda title screen"                                -Credits "Redux Project"
     CreateReduxRadioButton -Name "ReworkedTitleWithout" -Text "Reworked Title Without Subtitle" -SaveTo "TitleScreen" -Info "Reworked title screen to match the more recent Zelda title screen but removed the added subtitle" -Credits "Redux Project"
@@ -195,7 +194,6 @@ function CreateTabRedux() {
     # ORIGINAL HUD #
 
     CreateReduxGroup       -Tag  "UI" -Text "Original HUD (Revert)"
-    CreateReduxPanel
     CreateReduxRadioButton -Name "Automap"             -SaveTo "HUD" -Text "Keep Automap"       -Checked -Info "Keep the new Automap Plus feature as it is"                                     -Credits "snarfblam"
     CreateReduxRadioButton -Name "OriginalHUD"         -SaveTo "HUD" -Text "Original HUD"                -Info "Revert back to the HUD from the original version"                               -Credits "snarfblam"
     CreateReduxRadioButton -Name "GreyAutomap"         -SaveTo "HUD" -Text "Grey Automap"                -Info "Grayscale the new automap"                                                      -Credits "snarfblam"

@@ -43,7 +43,7 @@ function ByteOptions() {
 #==============================================================================================================================================================================================
 function CreateOptions() {
     
-    CreateOptionsDialog -Columns 4 -Height 410 -NoLanguages
+    CreateOptionsPanel
     
 
 

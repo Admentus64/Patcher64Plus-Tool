@@ -2,11 +2,11 @@
     
     # MAIN #
 
-    if       (IsChecked $Redux.Main.MaxBombArrow)             { ApplyPatch -Patch "Compressed\Optional\max_bomb_arrow.ips"           }
-    if       (IsChecked $Redux.Main.MirrorWorksBothWorlds)    { ApplyPatch -Patch "Compressed\Optional\mirror_works_both_worlds.ips" }
-    if       (IsChecked $Redux.Main.MoveBlocksIndefinitely)   { ApplyPatch -Patch "Compressed\Optional\move_blocks_indefinitely.ips" }
-    if       (IsChecked $Redux.Main.RemoveLowHealthBeep)      { ApplyPatch -Patch "Compressed\Optional\remove_low_health_beep.ips"   }
-    if       (IsChecked $Redux.Main.StartFullHearts)          { ApplyPatch -Patch "Compressed\Optional\start_full_hearts.ips"        }
+    if (IsChecked $Redux.Main.MaxBombArrow)             { ApplyPatch -Patch "Compressed\Optional\max_bomb_arrow.ips"           }
+    if (IsChecked $Redux.Main.MirrorWorksBothWorlds)    { ApplyPatch -Patch "Compressed\Optional\mirror_works_both_worlds.ips" }
+    if (IsChecked $Redux.Main.MoveBlocksIndefinitely)   { ApplyPatch -Patch "Compressed\Optional\move_blocks_indefinitely.ips" }
+    if (IsChecked $Redux.Main.RemoveLowHealthBeep)      { ApplyPatch -Patch "Compressed\Optional\remove_low_health_beep.ips"   }
+    if (IsChecked $Redux.Main.StartFullHearts)          { ApplyPatch -Patch "Compressed\Optional\start_full_hearts.ips"        }
 
 
 
@@ -51,7 +51,7 @@ function PatchReduxOptions() {
 #==============================================================================================================================================================================================
 function CreateOptions() {
     
-    CreateOptionsDialog -Columns 3 -Height 335
+    CreateOptionsPanel
 
 }
 

@@ -3,6 +3,9 @@
 # Concept By     :  Bighead
 # Testing By     :  Admentus, GhostlyDark
 
+$existingVariables = Get-Variable
+Clear-Host
+
 
 
 #==============================================================================================================================================================================================
@@ -24,28 +27,32 @@ Add-Type -AssemblyName 'System.Drawing'
 #==============================================================================================================================================================================================
 # Setup global variables
 
-$global:Patcher     = @{}
-$global:Addons      = @{}
-$Patcher.Title      = "Patcher64+ Tool"
-$Patcher.Date       = "Date Missing"
-$Patcher.DateFormat = "yyyy-MM-dd"
-$Patcher.Version    = "Version Missing"
-$Patcher.Hotfix     = 0
+$global:Patcher       = @{}
+$global:Addons        = @{}
+$Patcher.Title        = "Patcher64+ Tool"
+$Patcher.Date         = "Date Missing"
+$Patcher.DateFormat   = "yyyy-MM-dd"
+$Patcher.Version      = "Version Missing"
+$Patcher.Hotfix       = 0
+$Patcher.WindowHeight = 500
 
 $global:CommandType = $MyInvocation.MyCommand.CommandType.ToString()
 $global:Definition  = $MyInvocation.MyCommand.Definition.ToString()
 
 $global:GameConsole        = $global:GameType       = $global:GamePatch         = $global:CheckHashSum = $null
 $global:Bootup             = $global:GameIsSelected = $global:IsActiveGameField = $False
+$global:FatalError         = $global:WarningError   = $global:MissingFiles      = $False
 $global:GameFiles          = $global:Settings       = @{}
-$global:IsWiiVC            = $global:MissingFiles   = $False
 $global:Last               = $global:Fonts          = @{}
-$global:FatalError         = $global:WarningError   = $False
 $global:SystemDate         = Get-Date -Format yyyy-MM-dd
 $global:ConsoleHistory     = @()
 $global:VCTitleLength      = 40
 $global:DialogUpdateRateMS = 50
 $global:Relaunch           = $False
+$global:IsFoolsDay         = ((Get-Date).Day -eq 1 -and (Get-Date).Month -eq 4)
+$global:Loading            = $False
+
+if ($IsFoolsDay) { $Patcher.Title = "Jason64+ Tool" }
 
 
 
@@ -130,7 +137,7 @@ function CheckScripts() {
     $Label.Text     = [string]::Format($String, [Environment]::NewLine)
 
     $Dialog.Controls.Add($Label)
-    $Dialog.ShowDialog() | Out-Null
+    $Dialog.ShowDialog()
     Exit
 
 }
@@ -138,36 +145,36 @@ function CheckScripts() {
 
 
 #==================================================================================================================================================================================================================================================================
-# Paths
+# Set All Paths
 
 $global:Paths = @{}
 
 # Set all paths
 $Paths.Base            = GetScriptPath
 if ($Paths.FullBase -eq $null) { $Paths.FullBase = $Paths.Base }
-$Paths.Master          = $Paths.Base   + "\Files"
-$Paths.Registry        = $Paths.Master + "\Registry"
-$Paths.Games           = $Paths.Master + "\Games"
-$Paths.Shared          = $Paths.Master + "\Games\Shared"
-$Paths.Main            = $Paths.Master + "\Main"
-$Paths.AddonIcons      = $Paths.Master + "\Main\Addons"
-$Paths.Tools           = $Paths.Master + "\Tools"
-$Paths.WiiVC           = $Paths.Tools  + "\Wii VC"
-$Paths.Scripts         = $Paths.Master + "\Scripts"
-$Paths.LocalTemp       = $Paths.FullBase + "\Files\Temp"
-$Paths.LocalCache      = $Paths.FullBase + "\Files\Cache"
-$Paths.AppData         = $env:APPDATA + "\Patcher64+ Tool"
+$Paths.Master          = $Paths.Base    + "\Files"
+$Paths.Registry        = $Paths.Master  + "\Registry"
+$Paths.Games           = $Paths.Master  + "\Games"
+$Paths.Shared          = $Paths.Master  + "\Games\Shared"
+$Paths.Main            = $Paths.Master  + "\Main"
+$Paths.AddonIcons      = $Paths.Master  + "\Main\Addons"
+$Paths.Tools           = $Paths.Master  + "\Tools"
+$Paths.WiiVC           = $Paths.Tools   + "\Wii VC"
+$Paths.Scripts         = $Paths.Master  + "\Scripts"
+$Paths.LocalTemp       = $Paths.Master  + "\Temp"
+$Paths.LocalCache      = $Paths.Master  + "\Cache"
+$Paths.AppData         = $env:APPDATA   + "\Patcher64+ Tool"
 $Paths.AppDataTemp     = $Paths.AppData + "\Temp"
 $Paths.AppDataCache    = $Paths.AppData + "\Cache"
 $Paths.Temp            = $Paths.LocalTemp
 $Paths.Cache           = $Paths.LocalCache
-$Paths.Settings        = $Paths.Master + "\Settings"
-$Paths.Logs            = $Paths.Master + "\Logs"
-$Paths.cygdrive        = $Paths.Master + "\Tools\cygdrive"
-$Paths.Addons          = $Paths.Master + "\Addons"
-$Paths.Models          = $Paths.Addons + "\Models"
-$Paths.Music           = $Paths.Addons + "\Music"
-$Patcher.VersionFile   = $Paths.Master + "\version.txt"
+$Paths.Settings        = $Paths.Master  + "\Settings"
+$Paths.Logs            = $Paths.Master  + "\Logs"
+$Paths.cygdrive        = $Paths.Master  + "\Tools\cygdrive"
+$Paths.Addons          = $Paths.Master  + "\Addons"
+$Paths.Models          = $Paths.Addons  + "\Models"
+$Paths.Music           = $Paths.Addons  + "\Music"
+$Patcher.VersionFile   = $Paths.Master  + "\version.txt"
 
 
 
@@ -189,34 +196,35 @@ foreach ($Script in Get-ChildItem -LiteralPath $Paths.Scripts -Force) {
 #==============================================================================================================================================================================================
 # Run Patcher64+ Tool
 
-Clear-Host
-
 if ([Environment]::Is64BitOperatingSystem) { $Patcher.Bit = "x86-64" } else { $Patcher.Bit = "x86" }
 $Patcher.OS = GetWindowsVersion
 if ([Environment]::OSVersion -Match "Windows") { $Patcher.OS = "Windows " + $Patcher.OS }
-
-CheckUpdate
 
 # Retrieve settings
 $global:Settings = GetSettings ($Paths.Settings + "\Core.ini")
 if (!(IsSet $Settings.Core)    -and !$FatalError)   { $Settings.Core    = @{} }
 if (!(IsSet $Settings.Dungeon) -and !$FatalError)   { $Settings.Dungeon = @{} }
 if (!(IsSet $Settings.Debug)   -and !$FatalError)   { $Settings.Debug   = @{} }
+if (!(IsSet $Settings.Paths)   -and !$FatalError)   { $Settings.Paths   = @{} }
+
+[void](CheckUpdate)
 
 # Logging
 if (!$ExternalScript) { $global:TranscriptTime = $SystemDate }
-SetLogging ($Settings.Debug.Logging -ne $False)
+SetLogging ($Settings.Debug.Logging -eq $True)
 
 # Temp
-if ($Settings.Core.LocalTempFolder -eq $True)   { $Paths.Temp = $Paths.LocalTemp }
+if ($Settings.Core.LocalTempFolder -eq $True)   { $Paths.Temp = $Paths.LocalTemp   }
 else                                            { $Paths.Temp = $Paths.AppDataTemp }
 
 # Hi-DPI Mode
-$global:DisableHighDPIMode = $Settings.Core.HiDPIMode -eq $False
+if ($Settings.Core.HiDPIMode -eq $False) { $global:DisableHighDPIMode = $True } else { $global:DisableHighDPIMode = $False }
 InitializeHiDPIMode
 $global:ColumnWidth  = DPISize 180
 $global:FormDistance = DPISize 185
-$global:DialogSize   = 185
+
+# Hide the PowerShell console from the user
+ShowPowerShellConsole ($Settings.Debug.Console -eq $True)
 
 # Visual Style
 SetModernVisualStyle ($Settings.Core.ModernStyle -ne $False)
@@ -228,8 +236,7 @@ SetFileParameters
 LoadSoundEffects ($Settings.Core.EnableSounds -eq $True)
 
 # Font
-if ($Settings.Core.ClearType -eq $True)   { $Font = "Segoe UI" }
-else                                      { $Font = "Microsoft Sans Serif" }
+if ($Settings.Core.ClearType -ne $False) { $Font = "Segoe UI" } else { $Font = "Microsoft Sans Serif" }
 $Fonts.Medium         = New-Object System.Drawing.Font($Font,      12, [System.Drawing.FontStyle]::Bold)
 $Fonts.Small          = New-Object System.Drawing.Font($Font,      8,  [System.Drawing.FontStyle]::Regular)
 $Fonts.SmallBold      = New-Object System.Drawing.Font($Font,      8,  [System.Drawing.FontStyle]::Bold)
@@ -237,15 +244,14 @@ $Fonts.SmallUnderline = New-Object System.Drawing.Font($Font,      8,  [System.D
 $Fonts.TextFile       = New-Object System.Drawing.Font("Consolas", 8,  [System.Drawing.FontStyle]::Regular)
 $Fonts.Editor         = New-Object System.Drawing.Font("Consolas", 16, [System.Drawing.FontStyle]::Regular)
 
-# Hide the PowerShell console from the user
-ShowPowerShellConsole ($Settings.Debug.Console -eq $True)
-
 # Auto-Updater
-PerformUpdate
+[void](PerformUpdate)
 
 # Create the dialogs to show to the user
-CreateMainDialog     | Out-Null
-CreateSettingsDialog | Out-Null
+[void](CreateMainDialog)
+CreateSettingsPanel
+CreateCreditsPanel
+
 
 # Check if restricted
 if (IsRestrictedFolder $Paths.FullBase) {
@@ -265,7 +271,6 @@ WriteToConsole ("Temp Folder:    " + $Paths.Temp)
 
 if (!$FatalError) {
     # Set default game mode
-    GetFilePaths       | Out-Null
     WriteToConsole "--------------------------------"
 
     # Restore Last Custom Title and GameID
@@ -280,13 +285,23 @@ if (!$FatalError) {
     $CustomHeader.EnableRegion.Add_CheckedChanged({ RestoreCustomRegion })
 
     # Restore last settings
-    ChangeConsolesList | Out-Null
-    ChangeGamesList    | Out-Null
-    ChangeGameMode     | Out-Null
-    ChangePatch        | Out-Null
-    SetMainScreenSize  | Out-Null
-    SetVCPanel         | Out-Null
+    $global:IsWiiVC = $False
+    if ($Settings.Core.WiiMode -eq $True) { $global:IsWiiVC = $True }
+    if ($IsWiiVC) { $png = $Files.icon.WiiEnabled } else { $png = $Files.icon.WiiDisabled }
+    SetBitmap -Path $png -Box $Patches.WiiButton
 
+    ChangeConsolesList
+    ChangeGamesList
+    [void](ChangeGameMode)
+    [void](ChangePatch)
+    
+    if ($IsWiiVC) {
+        SetVCContent
+        HideNativeOptions
+    }
+    GetFilePaths
+    SetMainScreenSize
+    
     # Active GUI events
     InitializeEvents
 }
@@ -294,15 +309,14 @@ if (!$FatalError) {
 if (!(TestFile $Patcher.VersionFile)) { UpdateStatusLabel "Could not read version and date of the patcher" }
 
 # Show the dialog to the user
-if (!$FatalError) { $MainDialog.ShowDialog() | Out-Null }
+if (!$FatalError) { [void]($MainDialog.ShowDialog()) }
 
 # Exit
 if (!$FatalError) {
-    Out-IniFile -FilePath $Files.settings -InputObject $Settings | Out-Null
-    if (IsSet $GameSettings) { Out-IniFile -FilePath (GetGameSettingsFile) -InputObject $GameSettings | Out-Null }
+    Out-IniFile -FilePath $Files.settings -InputObject $Settings
+    if (IsSet $GameSettings) { Out-IniFile -FilePath (GetGameSettingsFile) -InputObject $GameSettings }
     RemovePath $Paths.Registry
     SetLogging $False
-    $global:ConsoleHistory = $global:Redux = $global:Settings = $global:GeneralSettings = $global:MainDialog = $global:InputPaths = $global:Patches = $global:VC = $global:CustomHeader = $null
 }
 
 if (TestFile -Path $Paths.Logs -Container) {
@@ -312,8 +326,12 @@ if (TestFile -Path $Paths.Logs -Container) {
 
 StopJobs
 if ($Relaunch) {
-    Get-ChildItem -Path ".\" -Filter "*.ps1" -File -Name| ForEach-Object { $scriptPath = $Paths.Base + "\" + ([System.IO.Path]::GetFileName($_)) }
+    Get-ChildItem -Path ".\" -Filter "*.ps1" -File -Name | ForEach-Object { $scriptPath = $Paths.Base + "\" + ([System.IO.Path]::GetFileName($_)) }
     Start-Process -FilePath powershell.exe -ArgumentList @("-File `"$ScriptPath`" $arg")
 }
 
+Get-Variable | Where-Object Name -NotIn $existingVariables.Name | Remove-Variable
+Remove-Module *
+$error.Clear()
+[System.GC]::Collect()
 Exit

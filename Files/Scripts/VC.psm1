@@ -1,20 +1,13 @@
-function CreateVCRemapDialog() {
+function CreateVCRemapPanel() {
     
-    # Create Dialog
-    $global:VCRemapDialog = CreateDialog -Width (DPISize 800) -Height (DPISize 520) -Icon $Files.icon.settings
-    $CloseButton = CreateButton -X ($VCRemapDialog.Width / 2 - (DPISize 40)) -Y ($VCRemapDialog.Height - (DPISize 90)) -Width (DPISize 80) -Height (DPISize 35) -Text "Close" -AddTo $VCRemapDialog
-    $CloseButton.Add_Click({ $VCRemapDialog.Hide() })
-    
-    # Create the version number and script name label
-    $InfoLabel = CreateLabel -X ($VCRemapDialog.Width / 2 - $String.Width - (DPISize 100)) -Y (DPISize 10) -Width (DPISize 200) -Height (DPISize 15) -Font $Fonts.SmallBold -Text ($Patcher.Title + " " + $Patcher.Version + " (" + $Patcher.Date + ")") -AddTo $VCRemapDialog
-
     # VC Remap Settings
-    CreateReduxGroup -All -Tag "Controls" -Y (DPISize 40) -Text "Virtual Console Remap Presets" -Name $null -ShowAlways -AddTo $VCRemapDialog
+    $panel = CreatePanel -Width $RightPanel.RemapControls.Width -Height $RightPanel.RemapControls.Height -Name "RemapVCControlsPanel" -AddTo $RightPanel.RemapControls
+    CreateReduxGroup -All -Tag "Controls" -Y (DPISize 0) -Text "Virtual Console Remap Presets" -AddTo $panel
     $items = @()
     if (IsSet $Files.json.controls) { foreach ($item in $Files.json.controls.presets) { $items += $item.title } }
     CreateReduxComboBox -All -Name "Preset" -Text "Preset" -Length 200 -Items $items -PostItems @("Custom") -Info "Select a preset for the VC Remap controls"
 
-    CreateReduxGroup -All -Tag "Controls" -Y ($Last.Group.bottom + (DPISize 10) ) -Height 10 -Text "Virtual Console Remap Settings" -Name $null -ShowAlways -AddTo $VCRemapDialog
+    CreateReduxGroup -All -Tag "Controls" -Y ($Last.Group.bottom + (DPISize 10) ) -Height 10 -Text "Virtual Console Remap Settings" -AddTo $panel
     if     ($GameConsole.mode -eq "N64")    { $items = @("Disabled", "A", "B", "Start", "L", "R", "Z", "C-Up", "C-Right", "C-Down", "C-Left", "D-Pad Up", "D-Pad Right", "D-Pad Down", "D-Pad Left") }
     elseif ($GameConsole.mode -eq "SNES")   { $items = @("Disabled", "A", "B", "X", "Y", "Start", "Select", "L", "R") }
     elseif ($GameConsole.mode -eq "NES")    { $items = @("Disabled", "A", "B", "Start", "Select") }
@@ -112,10 +105,19 @@ function PatchVCROM([string]$Command) {
 
     # Extract ROM if required
     if (StrLike -str $Command -val "Extract") {
-        if     ($romcType -eq 1)   { & $Files.tool.romc d $GetROM.run $GetROM.romc | Out-Null }
-        elseif ($romcType -eq 2)   { & $Files.tool.romchu $GetROM.run $GetROM.romc | Out-Null }
-        if     ($romcType -ge 1)   { Move-Item -LiteralPath $GetROM.romc -Destination $WADFile.Extracted -Force }
-        else                       { Move-Item -LiteralPath $GetROM.run  -Destination $WADFile.Extracted -Force }
+        if ($romcType -eq 1 -or $romcType -eq 2) {
+            if     ($romcType -eq 1)   { $tool = $Files.tool.romc   }
+            elseif ($romcType -eq 2)   { $tool = $Files.tool.romchu }
+            $script = { Param([string]$Tool, [string]$File, [string]$Compressed)
+                & $Tool $File $Compressed | Out-Null
+            }
+            Start-Job    -Name "Script" -ScriptBlock $script -ArgumentList @($tool, $GetROM.run, $GetROM.romc)
+            StartJobLoop -Name "Script"
+        }
+
+        if ($romcType -ge 1)   { Move-Item -LiteralPath $GetROM.romc -Destination $WADFile.Extracted -Force }
+        else                   { Move-Item -LiteralPath $GetROM.run  -Destination $WADFile.Extracted -Force }
+
         UpdateStatusLabel ("Successfully extracted " + $GameType.mode + " ROM with " + (Get-Item -LiteralPath $Files.tool.romc).BaseName + ".")
         return $False
     }
@@ -132,8 +134,15 @@ function PatchVCROM([string]$Command) {
     # Decompress romc if needed
     elseif ($PatchInfo.run -and $romcType -ge 1) {
         RemoveFile $GetROM.romc
-        if     ($romcType -eq 1)   { & $Files.tool.romc d $GetROM.run $GetROM.romc | Out-Null }
-        elseif ($romcType -eq 2)   { & $Files.tool.romchu $GetROM.run $GetROM.romc | Out-Null }
+        if ($romcType -eq 1 -or $romcType -eq 2) {
+            if     ($romcType -eq 1)   { $tool = $Files.tool.romc   }
+            elseif ($romcType -eq 2)   { $tool = $Files.tool.romchu }
+            $script = { Param([string]$Tool, [string]$File, [string]$Compressed)
+                & $Tool $File $Compressed | Out-Null
+            }
+            Start-Job    -Name "Script" -ScriptBlock $script -ArgumentList @($tool, $GetROM.run, $GetROM.romc)
+            StartJobLoop -Name "Script"
+        }
         Move-Item -LiteralPath $GetROM.romc -Destination $GetROM.run -Force
         UpdateStatusLabel ("Successfully decompressed " + $GameType.mode + " ROMC with " + (Get-Item -LiteralPath $Files.tool.romc).BaseName + ".")
     }
@@ -160,7 +169,12 @@ function PatchVCEmulator([string]$Command) {
     $array = [IO.File]::ReadAllBytes($WADFile.AppFile01)
     if ($array[0] -eq (GetDecimal "10") -and (Get-Item $WADFile.AppFile01).length/1MB -lt 1) {
         if ( (StrLike -Str $Command -Val "Patch Boot DOL") -or (IsChecked $VC.ExpandMemory) -or (IsChecked $VC.RemoveFilter) -or (IsChecked $VC.RemapControls) ) {
-            & $Files.tool.lzss -d $WADFile.AppFile01 | Out-Null
+            $script = { Param([string]$Tool, [string]$File)
+                & $Tool -d $File | Out-Null
+            }
+            Start-Job    -Name "Script" -ScriptBlock $script -ArgumentList @($Files.tool.lzss, $WADFile.AppFile01)
+            StartJobLoop -Name "Script"
+
             $DecompressedApp = $True
             WriteToConsole ("Decompressed LZSS File: " + $WADFile.AppFile01)
         }
@@ -185,7 +199,7 @@ function PatchVCEmulator([string]$Command) {
     } #>
 
     # Controls
-    if ($VC.RemapControls.Checked -and $VC.RemapControls.Visible) {
+    if ($VC.RemapControls.Checked -and $VC.RemapControls.Visible -and $Redux.Controls.Preset.SelectedIndex -ne 0) {
         if ( (StrLike -Str $Command -Val "Patch Boot DOL") -and (IsSet $GamePatch.patch) )   { $controls = $Files.json.controls.$("offsets_" + [System.IO.Path]::GetFileNameWithoutExtension($GamePatch.patch)); }
         else                                                                                 { $controls = $Files.json.controls.offsets; }
 
@@ -237,7 +251,12 @@ function PatchVCEmulator([string]$Command) {
 
     # Applying LZSS compression
     if ($DecompressedApp) {
-        & $Files.tool.lzss -evn $WADFile.AppFile01 | Out-Null
+        $script = { Param([string]$Tool, [string]$File)
+            & $Tool -evn $File | Out-Null
+        }
+        Start-Job    -Name "Script" -ScriptBlock $script -ArgumentList @($Files.tool.lzss, $WADFile.AppFile01)
+        StartJobLoop -Name "Script"
+
         WriteToConsole ("Compressed LZSS File: " + $WADFile.AppFile01)
     }
 
@@ -282,7 +301,13 @@ function CompressROMC() {
     if ($romcType -ne 1) { return }
     UpdateStatusLabel ("Compressing " + $GameType.mode + " VC ROM...")
     RemoveFile $GetROM.romc
-    & $Files.tool.romc e $GetROM.run $GetROM.romc | Out-Null
+
+    $script = { Param([string]$Tool, [string]$File, $Compressed)
+        & $Tool e $File $Compressed | Out-Null
+    }
+    Start-Job    -Name "Script" -ScriptBlock $script -ArgumentList @($Files.tool.romc, $GetROM.run, $GetROM.romc)
+    StartJobLoop -Name "Script"
+
     Move-Item -LiteralPath $GetROM.romc -Destination $GetROM.run -Force
 
 }
@@ -398,17 +423,18 @@ function ExtractWADFile([string]$PatchedFileName) {
     
     [IO.File]::WriteAllBytes($Files.ckey, @(235, 228, 42, 34, 94, 133, 147, 228, 72, 217, 197, 69, 115, 129, 170, 247))
     
-    # We need to be in the same path as some files so just jump there
-    Push-Location $Paths.Temp
-
     # Run the program to extract the wad file
     $ErrorActionPreference = $WarningPreference = 'SilentlyContinue'
-    try   { (& $Files.tool.wadunpacker $GamePath) | Out-Null }
-    catch { }
+    try  {
+        $script = { Param([string]$Tool, [string]$Path, [string]$Temp)
+            Push-Location $Temp
+            & $Tool $Path | Out-Null
+        }
+        Start-Job    -Name "Script" -ScriptBlock $script -ArgumentList @($Files.tool.wadunpacker, $GamePath, $Paths.Temp)
+        StartJobLoop -Name "Script"
+    }
+    catch { WriteToConsole "Could not unpack Wii VC WAD" -Error }
     $ErrorActionPreference = $WarningPreference = 'Continue'
-
-    # Doesn't matter, but return to where we were
-    Pop-Location
 
     # Find the extracted folder by looping through all files in the folder.
     $FolderExists = $False
@@ -454,16 +480,24 @@ function RepackWADFile($GameID) {
         }
     }
 
-    # We need to be in the same path as some files so just jump there.
-    Push-Location -LiteralPath $Paths.Temp
-
     # Repack the WAD using the new files
-    if ($GameID -ne $null -and $Settings.Debug.NoChannelIDChange -ne $True)   { & $Files.tool.wadpacker $tik $tmd $cert $WadFile.Patched '-sign' '-i' $GameID }
-    else                                                                      { & $Files.tool.wadpacker $tik $tmd $cert $WadFile.Patched '-sign'              }
-
-    # Doesn't matter, but return to where we were.
-    Pop-Location
-
+    if ($GameID -ne $null -and $Settings.Debug.NoChannelIDChange -ne $True) {
+        $script = { Param([string]$Tool, [string]$Tik, [string]$Tmd, [string]$Cert, [string]$Out, [string]$ID, [string]$Path)
+            Push-Location -LiteralPath $Path
+            & $Tool $Tik $Tmd $Cert $Out '-sign' '-i' $ID | Out-Null
+        }
+        Start-Job    -Name "Script" -ScriptBlock $script -ArgumentList @($Files.tool.wadpacker, $tik, $tmd, $cert, $WadFile.Patched, $GameID, $Paths.Temp)
+        StartJobLoop -Name "Script"
+    }
+    else {
+        $script = { Param([string]$Tool, [string]$Tik, [string]$Tmd, [string]$Cert, [string]$Out, [string]$Path)
+            Push-Location -LiteralPath $Path
+            & $Tool $Tik $Tmd $Cert $Out '-sign' | Out-Null
+        }
+        Start-Job    -Name "Script" -ScriptBlock $script -ArgumentList @($Files.tool.wadpacker, $tik, $tmd, $cert, $WadFile.Patched, $Paths.Temp)
+        StartJobLoop -Name "Script"
+    }
+    
     # If the patched file was created or could not be created.
     if (TestFile $WadFile.Patched)   { UpdateStatusLabel "Complete! Patched Wii VC WAD was successfully patched." } # Set the status label.
     else                             { UpdateStatusLabel "Failed! Patched Wii VC WAD was not created." }
@@ -481,7 +515,13 @@ function ExtractU8AppFile([string]$Command) {
     # ROM is within the "0000005.app" file
     if ($GameConsole.appfile -eq "00000005.app") {
         UpdateStatusLabel 'Extracting "00000005.app" file...'                                                 # Set the status label
-        & $Files.tool.wszst 'X' $WADFile.AppFile05 '-d' $WADFile.AppPath05 | Out-Null                         # Unpack the file using wszst
+
+        $script = { Param([string]$Tool, [string]$File, [string]$Path)
+            & $Tool 'X' $File '-d' $Path | Out-Null                                                           # Unpack the file using wszst
+        }
+        Start-Job    -Name "Script" -ScriptBlock $script -ArgumentList @($Files.tool.wszst, $WADFile.AppFile05, $WADFile.AppPath05)
+        StartJobLoop -Name "Script"
+
         if ($VC.RemoveT64.Checked) { Get-ChildItem $WADFile.AppPath05 -Include *.T64 -Recurse | Remove-Item } # Remove all .T64 files when selected
         foreach ($item in Get-ChildItem $WADFile.AppPath05) {                                                 # Reference ROM in unpacked AppFile
             if ($item -match "rom") {
@@ -521,13 +561,19 @@ function RepackU8AppFile() {
     
     # The ROM is located witin the "00000005.app" file
     if ($GameConsole.appFile -eq "00000005.app") {
-        UpdateStatusLabel 'Repacking "00000005.app" file...'                 # Set the status label
-        RemoveFile $WadFile.AppFile05                                        # Remove the original app file as its going to be replaced
-        & $Files.tool.wszst 'C' $WadFile.AppPath05 '-d' $WadFile.AppFile05   # Repack the file using wszst
-        $AppByteArray = [IO.File]::ReadAllBytes($WadFile.AppFile05)          # Get the file as a byte array
-        for ($i=16; $i -le 31; $i++) { $AppByteArray[$i] = 0 }               # Overwrite the values in 0x10 with zeroes. I don't know why, I'm just matching the output from another program
-        [IO.File]::WriteAllBytes($WadFile.AppFile05, $AppByteArray)          # Overwrite the patch file with the extended file
-        RemoveFile $WadFile.AppPath05                                        # Remove the extracted WAD folder
+        UpdateStatusLabel 'Repacking "00000005.app" file...'                          # Set the status label
+        RemoveFile $WadFile.AppFile05                                                 # Remove the original app file as its going to be replaced
+
+        $script = { Param([string]$Tool, [string]$Path, [string]$File)
+            & $Tool 'C' $Path '-d' $File | Out-Null                                   # Repack the file using wszst
+        }
+        Start-Job    -Name "Script" -ScriptBlock $script -ArgumentList @($Files.tool.wszst, $WADFile.AppPath05, $WADFile.AppFile05)
+        StartJobLoop -Name "Script"
+
+        $AppByteArray = [IO.File]::ReadAllBytes($WadFile.AppFile05)                   # Get the file as a byte array
+        for ($i=16; $i -le 31; $i++) { $AppByteArray[$i] = 0 }                        # Overwrite the values in 0x10 with zeroes. I don't know why, I'm just matching the output from another program
+        [IO.File]::WriteAllBytes($WadFile.AppFile05, $AppByteArray)                   # Overwrite the patch file with the extended file
+        RemoveFile $WadFile.AppPath05                                                 # Remove the extracted WAD folder
     }
 
     # The ROM is located witin the "00000001.app" VC emulator file
@@ -591,7 +637,7 @@ function SetItem([object]$ComboBox, [string]$Text) {
 
 #==============================================================================================================================================================================================
 
-Export-ModuleMember -Function CreateVCRemapDialog
+Export-ModuleMember -Function CreateVCRemapPanel
 
 Export-ModuleMember -Function CheckVCGameID
 Export-ModuleMember -Function PatchVCROM

@@ -68,25 +68,8 @@ function ByteOptions() {
 #==============================================================================================================================================================================================
 function CreateOptions() {
     
-    $Redux.ImageSize = 100
+    CreateOptionsPanel
 
-    CreateOptionsDialog -Columns 5 -Height 500
-
-    $Redux.Main.DualEyes.Add_CheckedChanged(     { LockOptions })
-    $Redux.Main.RestoreBlood.Add_CheckedChanged( { LockOptions })
-    $Redux.Main.Mouse.Add_CheckedChanged(        { EnableForm -Form $Redux.Main.MouseRemap -Enable $Redux.Main.Mouse.Checked })
-    LockOptions
-
-    $Redux.HUD.Cursor.Add_SelectedIndexChanged( { SetImage } )
-    SetImage
-
-}
-
-
-
-#==============================================================================================================================================================================================
-function CreateTabMain() {
-    
     CreateReduxGroup    -Tag  "Main"          -Text "Main"
     CreateReduxCheckBox -Name "DualEyes"      -Text "Dual Eyes Cooperative" -Info "Adds cooperative support to GoldenEye`nVersion 2.0"                                                                    -Credits "Rucksack Gamer, pavarini, SubDrag & Zoinkity"
     CreateReduxCheckBox -Name "RestoreBlood"  -Text "Restore Blood"         -Info "Restores the gore and blood removed to fit the ESRB rating"                                                            -Credits "Wreck" -Link $Redux.Main.DualEyes
@@ -105,32 +88,35 @@ function CreateTabMain() {
     CreateReduxCheckBox -Name "Singleplayer" -Text "Disable Singleplayer" -Info "Disable access to Singleplayer mode" -Credits "Coockie1173"
     CreateReduxCheckBox -Name "Multiplayer"  -Text "Disable Multiplayer"  -Info "Disable access to Multiplayer mode"  -Credits "Coockie1173" -Link $Redux.Disable.Singleplayer
 
-    CreateReduxGroup    -Tag  "HUD" -Text "HUD" -Columns 4
+    CreateReduxGroup    -Tag  "HUD"           -Text "HUD"
     CreateReduxComboBox -Name "Cursor"        -Text "Cursor" -Items @("GoldenEye") -FilePath ($GameFiles.textures + "\Cursors") -Ext "bin" -Default "GoldenEye" -Info "Set the style for the cursor" -Credits "GhostlyDark (injects) & Intermission (HD assets)"
     CreateReduxCheckBox -Name "ShowCrosshair" -Text "Always Show Crosshair" -Info "Always show crosshair"                            -Credits "Coockie1173"
     CreateReduxCheckBox -Name "MissionTimer"  -Text "Mission Timer"         -Info "Display in-game mission timer"                    -Credits "Carnivorous"
     CreateReduxCheckBox -Name "BriefingTime"  -Text "Briefing Time"         -Info "Add milliseconds to the end results of a mission" -Credits "Carnivorous"
 
-    CreateReduxGroup -Tag "HUD" -Text "Cursor Previews"    $Last.Group.Height = (DPISize ($Redux.ImageSize + 30))
-    CreateImageBox -x 50 -y 20 -w $Redux.ImageSize -h $Redux.ImageSize -Name "CursorPreview"
+    CreateReduxGroup -Tag "HUD" -Text "Cursor Previews"    $Last.Group.Height = (DPISize (130))
+    CreateImageBox -x 50 -y 20 -w 100 -h 100 -Name "CursorPreview"
+
+    CreateReduxGroup    -Tag "Text"      -Text "Dialogue" -Safe
+    CreateReduxComboBox -Name "Language" -Text "Language" -Items ($Files.json.languages.title) -Info "Patch the game with a different language"
+
+    $Redux.Main.DualEyes.Add_CheckedChanged(     { LockOptions })
+    $Redux.Main.RestoreBlood.Add_CheckedChanged( { LockOptions })
+    $Redux.Main.Mouse.Add_CheckedChanged(        { EnableForm -Form $Redux.Main.MouseRemap -Enable $Redux.Main.Mouse.Checked })
+    LockOptions
+
+    $Redux.HUD.Cursor.Add_SelectedIndexChanged( { SetImage } )
+    SetImage
 
 }
 
-
-
-#==============================================================================================================================================================================================
-function CreateTabLanguage() {
-    
-    CreateLanguageContent
-
-}
 
 
 #==============================================================================================================================================================================================
 function SetImage() {
 
     $path = ($GameFiles.textures + "\Cursors\" + $Redux.HUD.Cursor.Text.replace(" (default)", "") + ".png")
-    if (TestFile $path)   { SetBitMap -Path $path -Box $Redux.HUD.CursorPreview -Width $Redux.ImageSize -Height $Redux.ImageSize }
+    if (TestFile $path)   { SetBitMap -Path $path -Box $Redux.HUD.CursorPreview -Width 100 -Height 100 }
     else                  { $Redux.HUD.CursorPreview.Image = $null }
 
 }

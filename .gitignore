@@ -9,11 +9,13 @@ Files/Tools/cygdrive
 Files/Games/**/Extracted
 Files/Games/**/Custom Text/*.*
 Files/Games/**/Editor
+Exclude
 *.exe
 !Files/Tools/*.exe
 Release Prepare.bat
 *.7z
 *.7z.tmp
+*.zip
 *.htm
 *.html
 *.nes

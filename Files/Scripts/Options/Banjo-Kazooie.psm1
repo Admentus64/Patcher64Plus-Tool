@@ -12,7 +12,7 @@ function ByteOptions() {
 #==============================================================================================================================================================================================
 function CreateOptions() {
 
-    CreateOptionsDialog -Columns 1 -Height 190
+    CreateOptionsPanel
 
     CreateReduxGroup    -Tag  "Graphics"   -All -Text "Graphics"
     CreateReduxCheckBox -Name "Widescreen" -All -Text "16:9 Widescreen" -Info "Adjust the aspect ratio from 4:3 to 16:9 widescreen" -Credits "gamemasterplc"

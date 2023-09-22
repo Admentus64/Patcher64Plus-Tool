@@ -1,16 +1,25 @@
-function SetWiiVCMode([boolean]$Enable) {
+function SetWiiVCMode([boolean]$Enable=!$IsWiiVC) {
     
-    if ( ($Enable -eq $IsWiiVC) -and $GameIsSelected) { return }
-    $global:IsWiiVC = $Enable
+    if ($Enable -eq $IsWiiVC) { return }
 
     WriteToConsole "Changing Between Wii VC Mode..."
 
-    if (IsSet $GamePatch.script) { if (Get-Module -Name $GamePatch.script) { Remove-Module -Name $GamePatch.script } }
-    SetGameScript
-    DisablePatches
-    SetVCRemap
-    EnablePatchButtons (IsSet $GamePath)
+    $Settings.Core.WiiMode = $global:IsWiiVC = $Enable
+    if ($Enable) { $png = $Files.icon.WiiEnabled } else { $png = $Files.icon.WiiDisabled }
+    SetBitmap -Path $png -Box $Patches.WiiButton
+
+    if ($RightPanel.RemapControls.Visible) {
+        if ($RightPanel.Options.Controls.ContainsKey("OptionsPanel")) { ShowRightPanel $RightPanel.Options } else { ShowRightPanel $RightPanel.Settings }
+    }
+
+    ChangeGamesList
+    ChangePatchList
+    SetVCContent
+    if ( (TestFile $GameFiles.controls) -and $GameSettings -ne $null -and $IsWiiVC) { CreateVCRemapPanel }
     SetModeLabel
+    HideNativeOptions
+    EnablePatchButtons
+    SetMainScreenSize
 
 }
 
@@ -109,40 +118,39 @@ function ChangeGamesList() {
 
 
 #==============================================================================================================================================================================================
-function ChangePatchPanel() {
+function ChangePatchList() {
     
-    $Patches.Panel.Visible = ($GameType.patches -eq 1 -or ($GameType.patches -eq 2 -and $IsWiiVC) )
-    if ($GameType.patches -eq 0 -or ($GameType.patches -eq 2 -and !$IsWiiVC) ) { return }
+    $Patches.Panel.Visible = $GameType.patches -eq 1 -or ($GameType.patches -eq 2 -and $IsWiiVC)
+    if ($GameType.patches -gt 0) {
+        WriteToConsole "Loading patches..."
 
-    WriteToConsole "Loading patches..."
+        # Reset
+        $Patches.Group.Text = $GameType.mode + " - Patch Options"
+        $Patches.Type.Items.Clear()
 
-    # Reset
-    $Patches.Group.Text = $GameType.mode + " - Patch Options"
-    $Patches.Type.Items.Clear()
-
-    # Set combobox for patches
-    $items = @()
-    foreach ($item in $Files.json.patches) {
-        if (!(IsSet $item.patch)) { $Patches.Type.Items.Add($item.title) }
-        else {
-            if ( ( ($IsWiiVC -and $item.console -eq "Wii VC") -or (!$IsWiiVC -and $item.console -eq "Native") -or ($item.console -eq "Both") -or !(IsSet $item.console) ) ) { $Patches.Type.Items.Add($item.title) }
-        }
-    }
-
-    # Reset last index
-    foreach ($index in $Patches.Type.Items) {
+        # Set combobox for patches
         foreach ($item in $Files.json.patches) {
-            if ($item.title -eq $GamePatch.title -and $item.title -eq $index) {
-                $Patches.Type.Text = $index
-                break
+            if (!(IsSet $item.patch)) { $Patches.Type.Items.Add($item.title) }
+            else {
+                if ( ( ($IsWiiVC -and $item.console -eq "Wii VC") -or (!$IsWiiVC -and $item.console -eq "Native") -or ($item.console -eq "Both") -or !(IsSet $item.console) ) ) { $Patches.Type.Items.Add($item.title) }
             }
         }
-    }
 
-    if ($InputPaths.GameTextBox.Text -notlike '*:\*') { $global:IsActiveGameField = $True }
-    if ($Patches.Type.Items.Count -gt 0 -and $Patches.Type.SelectedIndex -eq -1) {
-        try { $Patches.Type.SelectedIndex = $Settings["Core"][$Patches.Type.Name] }
-        catch { $Patches.Type.SelectedIndex = 0 }
+        # Reset last index
+        foreach ($index in $Patches.Type.Items) {
+            foreach ($item in $Files.json.patches) {
+                if ($item.title -eq $GamePatch.title -and $item.title -eq $index) {
+                    $Patches.Type.Text = $index
+                    break
+                }
+            }
+        }
+
+        if ($InputPaths.GameTextBox.Text -notlike '*:\*') { $global:IsActiveGameField = $True }
+        if ($Patches.Type.Items.Count -gt 0 -and $Patches.Type.SelectedIndex -lt 0) {
+            try { $Patches.Type.SelectedIndex = $Settings["Core"][$Patches.Type.Name] }
+            catch { $Patches.Type.SelectedIndex = 0 }
+        }
     }
 
 }
@@ -159,8 +167,6 @@ function SetMainScreenSize() {
     else            { $CustomHeader.Group.Text = " Custom Game Title and GameID " }
 
     # Set Paths Panels Visibility and sizes
-    $InputPaths.GamePanel.Top = (DPISize 80)
-
     if ($GameType.inject -eq 1 -and $IsWiiVC) {
         $InputPaths.InjectPanel.Visible = $True
         $InputPaths.InjectPanel.Height  = (DPISize 50)
@@ -193,13 +199,12 @@ function SetMainScreenSize() {
     else                                 { $CustomHeader.Panel.Height = (DPISize 50) }
     $CustomHeader.Group.Height = $CustomHeader.Panel.Height
 
-    $InputPaths.InjectPanel.Visible = $IsWiiVC
-    $VC.Panel.Visible = $IsWiiVC
+    $InputPaths.InjectPanel.Visible = $VC.Panel.Visible = $IsWiiVC
 
     # Positioning
-    if ($GameType.custom_patch -eq 1)   { $CurrentGame.Panel.Location = New-Object System.Drawing.Size((DPISize 10), ($InputPaths.PatchPanel.Bottom + (DPISize 5))) }
-    else                                { $CurrentGame.Panel.Location = New-Object System.Drawing.Size((DPISize 10), ($InputPaths.GamePanel.Bottom  + (DPISize 5))) }
-    $CustomHeader.Panel.Location = New-Object System.Drawing.Size((DPISize 10), ($CurrentGame.Panel.Bottom + (DPISize 5)))
+    if ($GameType.custom_patch -eq 1)   { $CurrentGame.Panel.Top = $InputPaths.PatchPanel.Bottom + (DPISize 5) }
+    else                                { $CurrentGame.Panel.Top = $InputPaths.GamePanel.Bottom  + (DPISize 5) }
+    $CustomHeader.Panel.Top = $CurrentGame.Panel.Bottom + (DPISize 5)
     
     # Set VC Panel Size
     if ($GameConsole.t64 -eq 1 -or $GameConsole.expand_memory -eq 1 -or $GameConsole.remove_filter -eq 1 -or (IsSet $Files.json.controls) )   { $VC.Panel.Height = $VC.Group.Height = (DPISize 90) }
@@ -208,54 +213,53 @@ function SetMainScreenSize() {
     # Arrange Panels
     if ($IsWiiVC) {
         if ( ($GameType.patches -eq 1) -or ($GameType.patches -eq 2 -and $IsWiiVC) ) {
-            $Patches.Panel.Location = New-Object System.Drawing.Size((DPISize 10), ($CustomHeader.Panel.Bottom + (DPISize 5)))
-            $VC.Panel.Location      = New-Object System.Drawing.Size((DPISize 10), ($Patches.Panel.Bottom      + (DPISize 5)))
+            $Patches.Panel.Top = $CustomHeader.Panel.Bottom + (DPISize 5)
+            $VC.Panel.Top      = $Patches.Panel.Bottom      + (DPISize 5)
         }
-        else { $VC.Panel.Location = New-Object System.Drawing.Size((DPISize 10), ($CustomHeader.Panel.Bottom   + (DPISize 5))) }
-        $StatusPanel.Location       = New-Object System.Drawing.Size((DPISize 10), ($VC.Panel.Bottom             + (DPISize 5)))
+        else { $VC.Panel.Top   = $CustomHeader.Panel.Bottom + (DPISize 5) }
+        $StatusPanel.Top       = $VC.Panel.Bottom           + (DPISize 5)
     }
     else {
         if ( ($GameConsole.rom_title -eq 0) -and ($GameConsole.rom_gameID -eq 0) ) {
-            if ($GameType.patches) { $Patches.Panel.Location = New-Object System.Drawing.Size((DPISize 10), ($CurrentGame.Panel.Bottom   + (DPISize 5))) }
-            else                   { $StatusPanel.Location   = New-Object System.Drawing.Size((DPISize 10), ($CurrentGame.Panel.Bottom   + (DPISize 5))) }
+            if ($GameType.patches) { $Patches.Panel.Top = $CurrentGame.Panel.Bottom + (DPISize 5) }
+            else                   { $StatusPanel.Top   = $CurrentGame.Panel.Bottom + (DPISize 5) }
         }
         else {
-            if ( ($GameType.patches -eq 1) -or ($GameType.patches -eq 2 -and $IsWiiVC) )   { $Patches.Panel.Location = New-Object System.Drawing.Size((DPISize 10), ($CustomHeader.Panel.Bottom + (DPISize 5))) }
-            else                                                                           { $StatusPanel.Location   = New-Object System.Drawing.Size((DPISize 10), ($CustomHeader.Panel.Bottom + (DPISize 5))) }
+            if ( ($GameType.patches -eq 1) -or ($GameType.patches -eq 2 -and $IsWiiVC) )   { $Patches.Panel.Top = $CustomHeader.Panel.Bottom + (DPISize 5) }
+            else                                                                           { $StatusPanel.Top   = $CustomHeader.Panel.Bottom + (DPISize 5) }
         }
-        if ( ($GameType.patches -eq 1) -or ($GameType.patches -eq 2 -and $IsWiiVC) )       { $StatusPanel.Location   = New-Object System.Drawing.Size((DPISize 10), ($Patches.Panel.Bottom      + (DPISize 5))) }
+        if ( ($GameType.patches -eq 1) -or ($GameType.patches -eq 2 -and $IsWiiVC) )       { $StatusPanel.Top   = $Patches.Panel.Bottom      + (DPISize 5) }
+    }
+
+    if ($StatusPanel.Bottom -gt ( (DPISize $Patcher.WindowHeight) - (DPISize 25) ) ) {
+        $MainDialog.Height = $StatusPanel.Bottom + $MainPanel.Top + (DPISize 45)
+        $MainPanel.Height  = $MainDialog.Height  - $MainPanel.Top
+    }
+    elseif ($StatusPanel.Bottom -lt ( (DPISize $Patcher.WindowHeight) - (DPISize 25) ) ) {
+        $MainDialog.Height = DPISize $Patcher.WindowHeight
+        $MainPanel.Height  = $MainDialog.Height - $MainPanel.Top
     }
     
-    $MainDialog.Height = $StatusPanel.Bottom + (DPISize 50)
 
 }
 
 
 
 #==============================================================================================================================================================================================
-function ResetReduxSettings() {
+function SetVCContent() {
     
-    # Reset Options
-    $global:Redux = @{}
-    $Redux.Box    = @{}
-    $Redux.Groups = @()
-    $Last.Group   = $Last.Panel = $Last.GroupName = $null
-    $Last.Half    = $False
-
-}
-
-
-
-#==============================================================================================================================================================================================
-function SetVCRemap() {
+    # Reset VC panel visibility
+    foreach ($item in $VC.Group.Controls) { EnableElem -Elem $item -Active $False -Hide }
+    EnableElem -Elem @($VC.ActionsLabel, $VC.ExtractROMButton) -Active $True -Hide
     
-    if ( (TestFile $GameFiles.controls) -and $GameSettings -ne $null -and $IsWiiVC) {
-        $Files.json.controls = SetJSONFile $GameFiles.controls
-        CreateVCRemapDialog # Create VC remap settings
+    # Enable VC panel visiblity
+    if ($IsWiiVC) {
+        if ($GameConsole.t64 -eq 1)                                                { EnableElem -Elem @($VC.OptionsLabel, $VC.RemoveT64,     $VC.RemoveT64Label)                              -Active $True -Hide }
+        if ($GameConsole.expand_memory -eq 1 -and $GameType.expansion_pak -ne 0)   { EnableElem -Elem @($VC.OptionsLabel, $VC.ExpandMemory,  $VC.ExpandMemoryLabel)                           -Active $True -Hide }
+        if ($GameConsole.remove_filter -eq 1 -and $GameType.filter        -ne 0)   { EnableElem -Elem @($VC.OptionsLabel, $VC.RemoveFilter,  $VC.RemoveFilterLabel)                           -Active $True -Hide }
+        if (IsSet $Files.json.controls)                                            { EnableElem -Elem @($VC.OptionsLabel, $VC.RemapControls, $VC.RemapControlsLabel, $VC.RemapControlsButton) -Active $True -Hide }
+        $VC.RemapControlsButton.Enabled = $VC.RemapControls.checked -and $VC.RemapControls.Active
     }
-    else { $Files.json.controls  = $null }
-
-    SetVCPanel
 
 }
 
@@ -264,16 +268,24 @@ function SetVCRemap() {
 #==============================================================================================================================================================================================
 function ChangeGameMode() {
     
+    ### LOADING GAME MODE ###
+
     WriteToConsole "Changing game mode..."
 
-    if (IsSet $GamePatch.script) { if (Get-Module -Name $GamePatch.script) { Remove-Module -Name $GamePatch.script } }
+    if ($GameType -ne $null -and $MainDialog.Visible -and $Settings.Core.PerGameFile -eq $True) { $Settings.Paths[$GameType.mode] = $GamePath.FullName }
 
+    if (IsSet $GamePatch.script) { if (Get-Module -Name $GamePatch.script) { Remove-Module -Name $GamePatch.script } }
     foreach ($item in $Files.json.games) {
         if ($item.title -eq $CurrentGame.Game.Text) {
             $global:GameType = $item
             $global:GamePatch = $null
             break
         }
+    }
+
+    if ($GameType -ne $null -and $MainDialog.Visible -and $Settings.Core.PerGameFile -eq $True) {
+        if     ($Settings.Paths[$GameType.mode] -ne $null)   { GamePath_Finish -TextBox $InputPaths.GameTextBox -Path $Settings.Paths[$GameType.mode] }
+        elseif ($GamePath -ne $null)                         { $Settings.Paths[$GameType.mode] = $GamePath.FullName                                   }
     }
 
     $GameFiles.base         = $Paths.Games      + "\" + $GameType.mode
@@ -296,7 +308,7 @@ function ChangeGameMode() {
     $GameFiles.scenesPatch  = $GameFiles.editor + "\scenes.bps"
 
     # JSON Files
-    if ( ($GameType.patches -eq 1) -or ($GameType.patches -eq 2 -and $IsWiiVC) )   { $Files.json.patches   = SetJSONFile $GameFiles.patches }                         else { $Files.json.patches   = $null }
+    if ($GameType.patches -gt 0) { $Files.json.patches = SetJSONFile $GameFiles.patches } else { $Files.json.patches = $null }
     if (TestFile ($GameFiles.languages + "\Languages.json"))                       { $Files.json.languages = SetJSONFile ($GameFiles.languages + "\Languages.json") } else { $Files.json.languages = $null }
     if (TestFile ($Paths.Models        + "\Models.json"))                          { $Files.json.models    = SetJSONFile ($Paths.Models        + "\Models.json")    } else { $Files.json.models    = $null }
     if (TestFile ($GameFiles.base      + "\Music.json"))                           { $Files.json.music     = SetJSONFile ($GameFiles.base      + "\Music.json")     } else { $Files.json.music     = $null }
@@ -305,9 +317,10 @@ function ChangeGameMode() {
     if (TestFile ($GameFiles.base      + "\Blocks.json"))                          { $Files.json.blocks    = SetJSONFile ($GameFiles.base      + "\Blocks.json")    } else { $Files.json.blocks    = $null }
     if (TestFile ($GameFiles.base      + "\Enemies.json"))                         { $Files.json.enemies   = SetJSONFile ($GameFiles.base      + "\Enemies.json")   } else { $Files.json.enemies   = $null }
 
+    SetVCContent
     SetCreditsSections
-    ChangePatchPanel
     SetModeLabel
+    ChangePatchList
 
 }
 
@@ -315,20 +328,20 @@ function ChangeGameMode() {
 
 #==============================================================================================================================================================================================
 function SetCreditsSections() {
-
-    if (!(IsSet $CreditsDialog)) { return }
-
-     # Info
-     if (TestFile $GameFiles.info)   { AddTextFileToTextbox -TextBox $Credits.Sections[0] -File $GameFiles.info }
-     else                            { AddTextFileToTextbox -TextBox $Credits.Sections[0] -File $null }
+    
+    if ($Credits.Info -eq $null -or $Credits.Credits -eq $null) { return }
+    
+    # Info
+    if (TestFile $GameFiles.info)   { AddTextFileToTextbox -TextBox $Credits.Info -File $GameFiles.info }
+    else                            { AddTextFileToTextbox -TextBox $Credits.Info -File $null }
 
     # Credits
     if (TestFile $Files.Text.credits) {
         if ($GameType.mode -ne "Free") {
-            AddTextFileToTextbox -TextBox $Credits.Sections[1] -File $Files.Text.credits -MainCredits
-            AddTextFileToTextbox -TextBox $Credits.Sections[1] -File $Files.Text.credits -GameCredits -Add
+            AddTextFileToTextbox -TextBox $Credits.Credits -File $Files.Text.credits -MainCredits
+            AddTextFileToTextbox -TextBox $Credits.Credits -File $Files.Text.credits -GameCredits -Add
         }
-        else { AddTextFileToTextbox -TextBox $Credits.Sections[1] -File $Files.Text.credits -MainCredits }
+        else { AddTextFileToTextbox -TextBox $Credits.Credits -File $Files.Text.credits -MainCredits }
     }
 
 }
@@ -343,6 +356,7 @@ function ChangeGameRev() {
     if (IsSet $GameType.version)   { $global:GameRev = $GameType.version[0] }
     else                           { $global:GameRev = $null                }
 
+    if (IsSet $GamePatch.script) { if (Get-Module -Name $GamePatch.script) { Remove-Module -Name $GamePatch.script } }
     if (IsSet $GamePatch.version) {
         foreach ($version in $GameType.version) {
             if ($version.name -eq $GamePatch.version) {
@@ -366,66 +380,88 @@ function ChangePatch() {
     $lastMessage = $StatusLabel.Text
     UpdateStatusLabel "Changing patch..."
 
+    # Reset Options
+    if ($GameSettings -ne $null) { Out-IniFile -FilePath $GameSettingsFile -InputObject $GameSettings }
+    if ($RightPanel.Options.Controls.ContainsKey("OptionsPanel")) { $RightPanel.Options.Controls.RemoveByKey("OptionsPanel") }
+    ToggleDialog -Dialog $OptionsPreviews.Dialog -Close
+    $global:Redux           = @{}
+    $global:OptionsPreviews = $null
+    $Redux.Panels           = $Redux.Sections = $Redux.Groups = $Redux.Tabs = $Redux.NativeOptions = @()
+    $Redux.Box              = @{}
+    $global:GameSettings    = $global:GameSettingsFile = $null
+
     if (IsSet $GamePatch.script) { if (Get-Module -Name $GamePatch.script) { Remove-Module -Name $GamePatch.script } }
-    
+
     foreach ($item in $Files.json.patches) {
         if ($item.title -eq $Patches.Type.Text -and ( ($IsWiiVC -and $item.console -eq "Wii VC") -or (!$IsWiiVC -and $item.console -eq "Native") -or ($item.console -eq "Both") -or !(IsSet $item.console) ) ) {
                 $global:GamePatch = $item
                 $PatchToolTip.SetToolTip($Patches.Button, ([string]::Format($item.tooltip, [Environment]::NewLine)))
                 GetHeader
                 GetRegion
-                ResetReduxSettings
-
-                if ($GameSettings -ne $null) {
-                    Out-IniFile -FilePath $GameSettingsFile -InputObject $GameSettings | Out-Null
-                    $global:GameSettings = $global:GameSettingsFile = $null
+                
+                if ($GamePatch.script -or (TestFile $GameFiles.controls) ) {
+                    $global:GameSettingsFile = GetGameSettingsFile
+                    $global:GameSettings     = GetSettings $GameSettingsFile
                 }
+
+                $CustomHeader.ROMTitle.Refresh()
+                $CustomHeader.ROMGameID.Refresh()
+                $CustomHeader.VCTitle.Refresh()
+                $CustomHeader.VCGameID.Refresh()
 
                 ChangeGameRev
                 SetGameScript
-                SetVCRemap
-                DisablePatches
+                
+                # If the patch is a preset disable all options buttons
+                if (IsSet $GamePatch.preset) {
+                    EnableElem -Elem @($Patches.Extend, $Patches.ExtendLabel, $Patches.Redux, $Patches.ReduxLabel, $Patches.Options, $Patches.OptionsLabel, $Patches.PreviewButton, $Redux.WindowPanel) -Active $False -Hide
+                    foreach ($item in $Redux.Groups) {
+                        if ($item.IsRedux) { EnableElem -Elem $item -Active $True }
+                    }
+                }
+                else { # Patches with additional options when available
+                    # Disable boxes if needed
+                    EnableElem -Elem @($Patches.Extend,  $Patches.ExtendLabel)  -Active (IsSet $GamePatch.allow_extend)                                          -Hide
+                    EnableElem -Elem @($Patches.Redux,   $Patches.ReduxLabel)   -Active (IsSet $GamePatch.redux)                                                 -Hide
+                    EnableElem -Elem @($Patches.Options, $Patches.OptionsLabel) -Active (TestFile ($Paths.Scripts + "\Options\" + $GamePatch.script + ".psm1") ) -Hide
+                    EnableElem -Elem $Redux.WindowPanel                         -Active $Patches.Options.Checked
+                    DisableReduxOptions
+                    if (HasCommand "CreateOptionsPreviews") { EnableElem -Elem $Patches.PreviewButton -Active $True -Hide } else { EnableElem -Elem $Patches.PreviewButton -Active $False -Hide }
+                }
+
+                # Create VC controls panel
+                if ($RightPanel.RemapControls.Controls.ContainsKey("RemapVCControlsPanel")) { $RightPanel.RemapControls.Controls.RemoveByKey("RemapVCControlsPanel") }
+                if ( (TestFile $GameFiles.controls) -and $GameSettings -ne $null) {
+                    $Files.json.controls = SetJSONFile $GameFiles.controls
+                    if ($IsWiiVC) { CreateVCRemapPanel } # Create VC remap settings
+                }
+                else {
+                    $Files.json.controls  = $null
+                    if ($RightPanel.RemapControls.Visible) { ShowRightPanel $RightPanel.Options }
+                }
+
                 break
         }
     }
 
     EnableGUI $True
+    [System.GC]::Collect(); [System.GC]::WaitForPendingFinalizers(); [System.GC]::Collect()
     UpdateStatusLabel "Ready to patch..." -NoConsole
 
 }
+
 
 
 #==============================================================================================================================================================================================
 function SetGameScript() {
 
     if (IsSet $GamePatch.script) {
+        if (Get-Module -Name $GamePatch.script) { Remove-Module -Name $GamePatch.script }
         $script = $Paths.Scripts + "\Options\" + $GamePatch.script + ".psm1"
         if (TestFile $script) {
-            $global:GameSettingsFile = GetGameSettingsFile
-            $global:GameSettings     = GetSettings $GameSettingsFile
             Import-Module -Name $script -Global
-            if (GetCommand "CreateOptions") { CreateOptions }
+            if (HasCommand "CreateOptions") { CreateOptions }
         }
-    }
-
-}
-
-
-
-#==============================================================================================================================================================================================
-function SetVCPanel() {
-    
-    # Reset VC panel visibility
-    foreach ($item in $VC.Group.Controls) { EnableElem -Elem $item -Active $False -Hide }
-    EnableElem -Elem @($VC.ActionsLabel, $VC.ExtractROMButton) -Active $True -Hide
-    
-    # Enable VC panel visiblity
-    if ($IsWiiVC) {
-        if ($GameConsole.t64 -eq 1)                                                { EnableElem -Elem @($VC.OptionsLabel, $VC.RemoveT64,     $VC.RemoveT64Label)                              -Active $True -Hide }
-        if ($GameConsole.expand_memory -eq 1 -and $GameType.expansion_pak -ne 0)   { EnableElem -Elem @($VC.OptionsLabel, $VC.ExpandMemory,  $VC.ExpandMemoryLabel)                           -Active $True -Hide }
-        if ($GameConsole.remove_filter -eq 1 -and $GameType.filter        -ne 0)   { EnableElem -Elem @($VC.OptionsLabel, $VC.RemoveFilter,  $VC.RemoveFilterLabel)                           -Active $True -Hide }
-        if (IsSet $Files.json.controls)                                            { EnableElem -Elem @($VC.OptionsLabel, $VC.RemapControls, $VC.RemapControlsLabel, $VC.RemapControlsButton) -Active $True -Hide }
-        $VC.RemapControlsButton.Enabled = $VC.RemapControls.checked -and $VC.RemapControls.Active
     }
 
 }
@@ -477,24 +513,26 @@ function WriteToConsole([string]$Text, [switch]$Error) {
 #==============================================================================================================================================================================================
 function SetModeLabel() {
 	
-    $CurrentModeLabel.Text = "Current  Mode  :  " + $GameType.mode
-    if ($IsWiiVC) { $CurrentModeLabel.Text += "  (Wii  VC)" } else { $CurrentModeLabel.Text += "  (" + $GameConsole.Mode + ")" }
-    $CurrentModeLabel.Location = New-Object System.Drawing.Size(([Math]::Floor($MainDialog.Width / 2) - [Math]::Floor($CurrentModeLabel.Width / 2)), 50)
-    $CurrentModeLabel.Refresh()
+    if ($IsWiiVC) { $CurrentModeLabel.Mode.Text = "Current Mode (Wii VC):" } else { $CurrentModeLabel.Mode.Text = "Current Mode (" + $GameConsole.Mode + "):" }
+    $CurrentModeLabel.Game.Text = $GameType.mode
+    $CurrentModeLabel.Mode.Refresh()
+    $CurrentModeLabel.Game.Refresh()
 
 }
 
 
 
 #==================================================================================================================================================================================================================================================================
-function EnablePatchButtons([boolean]$Enable) {
+function EnablePatchButtons() {
     
-    # Set the status that we are ready to roll... Or not...
-    if ($Enable)        { UpdateStatusLabel "Ready to patch!" }
-    else                { UpdateStatusLabel "Select your ROM or Wii VC WAD file to continue." }
+    if ($GamePath -eq $null)   { $enable = $False }
+    else                       { $enable = ($GamePath.Extension -eq ".wad" -and $IsWiiVC) -or ($GamePath.Extension -ne ".wad" -and !$IsWiiVC) }
 
-    # Enable patcher buttons
-    $Patches.Button.Enabled = $CustomHeader.Panel.Enabled = $VC.ExtractROMButton.Enabled = $Enable
+    if     ($enable)    { UpdateStatusLabel "Ready to patch!"                          } # Set the status that we are ready to roll... Or not...
+    elseif ($IsWiiVC)   { UpdateStatusLabel "Select your Wii VC WAD file to continue." }
+    else                { UpdateStatusLabel "Select your ROM file to continue."        }
+
+    $Patches.Button.Enabled = $CustomHeader.Panel.Enabled = $VC.ExtractROMButton.Enabled = $enable # Enable patcher buttons
 
 }
 
@@ -503,34 +541,16 @@ function EnablePatchButtons([boolean]$Enable) {
 #==================================================================================================================================================================================================================================================================
 function GamePath_Finish([object]$TextBox, [string]$Path) {
     
-    # Set the "GamePath" variable that tracks the path
-    $global:GamePath = (Get-Item -LiteralPath $Path)
+    $file = Get-Item -LiteralPath $Path
+    if ($file -eq $GamePath) { return }
 
-    # Update the textbox with the current game
-    $TextBox.Text = $GamePath
-
-    # Check if the game is a WAD
-    $DroppedExtn = $GamePath.Extension
-
-    $changed = $false
-    if ( ($DroppedExtn -eq '.wad') -and !$IsWiiVC)              { $changed = $true; SetWiiVCMode $True  }
-    elseif ( ($DroppedExtn -ne '.wad') -and $IsWiiVC)           { $changed = $true; SetWiiVCMode $False }
-    elseif ( ($DroppedExtn -ne '.wad') -and !$GameIsSelected)   { $changed = $true; SetWiiVCMode $False }
-    $global:GameIsSelected = $True
-
-    if ($IsWiiVC)   { WriteToConsole ("WAD Path:       " + $GamePath) }
-    else            { WriteToConsole ("ROM Path:       " + $GamePath) }
-    
+    if ($Settings.Core.PerGameFile -eq $True) { $Settings.Paths[$GameType.mode] = $Path }
+    $global:GamePath       = $file
+    $TextBox.Text          = $GamePath
+    $global:GameIsSelected = $InputPaths.ClearGameButton.Enabled = $True
+    EnablePatchButtons
     CalculateHashSum
-
-    if (!$changed) { return }
-
-    $InputPaths.ClearGameButton.Enabled = $True
-    $InputPaths.PatchPanel.Visible      = $True
-    $CustomHeader.EnableHeader.checked -or $CustomHeader.EnableRegion.checked
-
-    ChangeGamesList
-    SetMainScreenSize
+    WriteToConsole ("Game Path:      " + $GamePath)
 
 }
 
@@ -541,14 +561,11 @@ function CalculateHashSum() {
     
     if (!(IsSet $CreditsDialog) -or $GamePath -eq $null) { return }
 
-    # Calculate checksum if Native Mode
-    if (!$IsWiiVC) {
-        # Update hash
-        $VerificationInfo.HashField.Text = (Get-FileHash -Algorithm MD5 -LiteralPath $GamePath).Hash
-
-        # Verify ROM
-        $VerificationInfo.GameField.Text = $VerificationInfo.RegionField.Text = $VerificationInfo.RevField.Text = $VerificationInfo.SupportField.Text = "No Valid ROM Selected"
-        foreach ($item in $Files.json.games) {
+    if (!$IsWiiVC) { # Calculate checksum if Native Mode
+        $VerificationInfo.HashField.Text = (Get-FileHash -Algorithm MD5 -LiteralPath $GamePath).Hash # Update hash
+        
+        $VerificationInfo.GameField.Text = $VerificationInfo.RegionField.Text = $VerificationInfo.RevField.Text = $VerificationInfo.SupportField.Text = "No Valid ROM Selected" 
+        foreach ($item in $Files.json.games) { # Verify ROM
             for ($i=0; $i -lt $item.version.Count; $i++) {
                 if ($VerificationInfo.HashField.Text -eq $item.version[$i].hash) {
                     $VerificationInfo.GameField.Text   = $item.title
@@ -561,13 +578,7 @@ function CalculateHashSum() {
             }
         }
     }
-    else {
-        $VerificationInfo.HashField.Text    = ""
-        $VerificationInfo.GameField.Text    = "No validation for WAD files"
-        $VerificationInfo.RegionField.Text  = "No validation for WAD files"
-        $VerificationInfo.RevField.Text     = "No validation for WAD files"
-        $VerificationInfo.SupportField.Text = "No validation for WAD files"
-    }
+    else { $VerificationInfo.HashField.Text = ""; $VerificationInfo.GameField.Text = $VerificationInfo.RegionField.Text = $VerificationInfo.RevField.Text = $VerificationInfo.SupportField.Text = "No validation for WAD files" }
 
 }
 
@@ -576,14 +587,11 @@ function CalculateHashSum() {
 #==================================================================================================================================================================================================================================================================
 function InjectPath_Finish([object]$TextBox, [string]$Path) {
     
-    # Set the "InjectPath" variable that tracks the path
-    $global:InjectPath = $Path
-    WriteToConsole ("Inject Path:   " + $InjectPath)
-
-    # Update the textbox to the current injection ROM
-    $TextBox.Text = $InjectPath
-
+    if ( (Get-Item -LiteralPath $Path) -eq $InjectPath) { return }
+    $global:InjectPath                    = $Path       # Set the "InjectPath" variable that tracks the path
+    $TextBox.Text                         = $InjectPath # Update the textbox to the current injection ROM
     $InputPaths.ApplyInjectButton.Enabled = $True
+    WriteToConsole ("Inject Path:   " + $InjectPath)
 
 }
 
@@ -592,35 +600,65 @@ function InjectPath_Finish([object]$TextBox, [string]$Path) {
 #==================================================================================================================================================================================================================================================================
 function PatchPath_Finish([object]$TextBox, [string]$Path) {
     
-    # Set the "PatchPath" variable that tracks the path
-    $global:PatchPath = $Path
+    if ( (Get-Item -LiteralPath $Path) -eq $PatchPath) { return }
+    $global:PatchPath                    = $Path      # Set the "PatchPath" variable that tracks the path
+    $TextBox.Text                        = $PatchPath # Update the textbox to the current patch
+    $InputPaths.ApplyPatchButton.Enabled = $True
     WriteToConsole ("Patch Path:    " + $PatchPath)
 
-    # Update the textbox to the current patch
-    $TextBox.Text = $PatchPath
+}
 
-    $InputPaths.ApplyPatchButton.Enabled = $True
+
+
+#==============================================================================================================================================================================================
+function IsDefault([object]$Elem, [byte]$Lang=0, [switch]$Not) {
+    
+    if ($Lang -gt 0 -and (IsSet $Redux.Text.Language) ) {
+        if ($Redux.Text.Language.SelectedIndex -ne $Lang - 1) { return $False }
+    }
+
+    if ( $Elem        -eq $null)          { return $False }
+    if (!$Elem.Active -or $Elem.Hidden)   { return $False }
+
+    if     ($Elem.GetType() -eq [System.Windows.Forms.CheckBox] -or $Elem.GetType() -eq [System.Windows.Forms.RadioButton])   { $value = $Elem.Checked }
+    elseif ($Elem.GetType() -eq [System.Windows.Forms.TrackBar])                                                              { $value = $Elem.Value }
+    else                                                                                                                      { $value = $Elem.Text  }
+
+    if ($Elem.GetType() -eq [System.Windows.Forms.ComboBox]) { $default = $Elem.Items[$Elem.Default] } else { $default = $Elem.Default }
+
+    if ($default -eq $value) { return !$Not } else { return $Not }
 
 }
 
 
 
 #==============================================================================================================================================================================================
-function IsDefault([object]$Elem, $Value, [switch]$Not) {
+function IsChecked([object]$Elem=$null, [byte]$Lang=0, [switch]$Not) {
     
-    if ($Elem -is [int])   { return !$Not  }
-    if (!(IsSet $Elem))    { return $False }
-    if (!(IsSet $Value)) {
-        if ($Elem.GetType() -eq [System.Windows.Forms.TrackBar])   { $Value = $Elem.Value }
-        else                                                       { $Value = $Elem.Text  }
+    if ($Lang -gt 0 -and (IsSet $Redux.Text.Language) ) {
+        if ($Redux.Text.Language.SelectedIndex -ne $Lang - 1) { return $False }
     }
 
-    if ($Elem.GetType() -eq [System.Windows.Forms.ComboBox])   { $Default = $Elem.Items[$Elem.Default] }
-    else                                                       { $Default = $Elem.Default              }
+    if ( $Elem           -eq $null)                                                                                         { return $False }
+    if (!$Elem.Active    -or $Elem.Hidden)                                                                                  { return $False }
+    if ( $Elem.GetType() -ne [System.Windows.Forms.CheckBox] -and $Elem.GetType() -ne [System.Windows.Forms.RadioButton])   { return $False }
+    if ( $Elem.Checked)                                                                                                     { return !$Not  } else { return $Not }
 
-    if (!$Elem.Active)         { return $False }
-    if ($Default -eq $Value)   { return !$Not  }
-    if ($Default -ne $Value)   { return  $Not  }
+}
+
+
+
+#==============================================================================================================================================================================================
+function IsRevert([object]$Elem=$null, [int16]$Index=1, [string]$Text="", [string]$Compare="", [string]$Item="", [byte]$Lang=0) {
+    
+    if ( $Elem        -eq $null)          { return $False }
+    if (!$Elem.Active -or $Elem.Hidden)   { return $False }
+
+    if     ($Elem.GetType() -eq [System.Windows.Forms.CheckBox])   { return (IsChecked -Elem $Elem                           -Lang $Lang -Not) }
+    elseif ($Elem.GetType() -eq [System.Windows.Forms.Listbox])    { return (IsItem    -Elem $Elem -Item $Item               -Lang $Lang -Not) }
+    elseif ($Elem.GetType() -eq [System.Windows.Forms.ComboBox])   { return (IsIndex   -Elem $Elem -Index $Index -Text $Text -Lang $Lang     ) }
+    elseif ($Elem.GetType() -eq [System.Windows.Forms.TextBox])    { return (IsText    -Elem $Elem -Compare $Compare         -Lang $Lang -Not) }
+
     return $False
 
 }
@@ -628,174 +666,92 @@ function IsDefault([object]$Elem, $Value, [switch]$Not) {
 
 
 #==============================================================================================================================================================================================
-function IsChecked([object]$Elem, [switch]$Not) {
+function IsText([object]$Elem=$null, [string]$Compare="", [byte]$Lang=0, [switch]$Not) {
     
-    if ($Elem -is [int])   { return !$Not  }
-    if (!(IsSet $Elem))    { return $False }
-    if (!$Elem.Active)     { return $False }
-    if ($Elem.Checked)     { return !$Not  }
-    if (!$Elem.Checked)    { return  $Not  }
-    return $False
-
-}
-
-
-
-#==============================================================================================================================================================================================
-function IsRevert([object]$Elem) {
-    
-    if ($Elem -eq [int])   { return $True }
-    if (!(IsSet $Elem))    { return $True }
-    if ($Elem.GetType() -eq [System.Windows.Forms.CheckBox]) {
-        return !( (IsChecked $Elem) -and $Patches.Options.Checked)
-    }
-    elseif ($Elem.GetType() -eq [System.Windows.Forms.ComboBox]) {
-        return !( (IsDefault $Elem -Not) -and $Patches.Options.Checked)
+    if ($Lang -gt 0 -and (IsSet $Redux.Text.Language) ) {
+        if ($Redux.Text.Language.SelectedIndex -ne $Lang - 1) { return $False }
     }
 
-}
+    if ( $Elem        -eq $null)          { return $False }
+    if (!$Elem.Active -or $Elem.Hidden)   { return $False }
 
-
-
-#==============================================================================================================================================================================================
-function IsLanguage([object]$Elem, [int]$Lang=0, [switch]$Not) {
-    
-    if (IsSet $Redux.Language) {
-        if (!$Redux.Language[$Lang].Checked)   { return $False }
-    }
-    if ($Elem -is [int])                       { return !$Not  }
-    if (IsChecked $Elem)                       { return !$Not  }
-    if (IsChecked $Elem -Not)                  { return  $Not  }
-    return $False
-
-}
-
-
-
-#==============================================================================================================================================================================================
-function IsText([object]$Elem, [string]$Compare, [switch]$Active, [switch]$Not) {
-    
-    if ($Elem -is [int])                { return !$Not  }
-    if (!(IsSet $Elem))                 { return $False }
     $Text = $Elem.Text.replace(" (default)", "")
-    if ($Active -and !$Elem.Visible)    { return $False }
-    if (!$Active -and !$Elem.Enabled)   { return $False }
-    if ($Text -eq $Compare)             { return !$Not  }
-    if ($Text -ne $Compare)             { return  $Not  }
-    return $False
+    if ($Text -eq $Compare) { return !$Not } else { return $Not }
 
 }
 
 
 
 #==============================================================================================================================================================================================
-function IsLangText([object]$Elem, [string]$Compare, [int]$Lang=0, [switch]$Not) {
+function IsItem([object]$Elem=$null, [string]$Item="", [byte]$Lang=0, [switch]$Not) {
     
-    if (IsSet $Redux.Language) {
-        if (!$Redux.Language[$Lang].Checked)         { return $False }
+    if ($Lang -gt 0 -and (IsSet $Redux.Text.Language) ) {
+        if ($Redux.Text.Language.SelectedIndex -ne $Lang - 1) { return $False }
     }
-    if ($Elem -is [int])                             { return !$Not }
-    if (IsText -Elem $Elem -Compare $Compare)        { return !$Not  }
-    if (IsText -Elem $Elem -Compare $Compare -Not)   { return  $Not  }
-    return $False
+
+    if ( $Elem               -eq $null)          { return $False }
+    if (!$Elem.Active        -or $Elem.Hidden)   { return $False }
+    if ( $Elem.SelectedItems -contains $Item)    { return !$Not  } else { return $Not }
 
 }
 
 
 
 #==============================================================================================================================================================================================
-function IsValue([object]$Elem, [int16]$Value, [switch]$Active, [switch]$Not) {
+function IsValue([object]$Elem=$null, [int16]$Value=$null, [byte]$Lang=0, [switch]$Not) {
     
-    if ($Elem -is [int]) {
-        if ($Not)   { return $Elem -ne $Value }
-        else        { return $Elem -eq $Value }
+    if ($Lang -gt 0 -and (IsSet $Redux.Text.Language) ) {
+        if ($Redux.Text.Language.SelectedIndex -ne $Lang - 1) { return $False }
     }
 
-    if (!(IsSet $Value))                 { $Value = $Elem.Default }
-    if ($Active -and !$Elem.Visible)     { return $False }
-    if (!$Active -and !$Elem.Enabled)    { return $False }
-    if ($Elem.GetType().name -eq "TextBox") {
-        if ([int16]$Elem.text  -eq $Value)   { return !$Not }
-        if ([int16]$Elem.text  -ne $Value)   { return  $Not }
+    if ( $Elem        -eq $null)          { return $False }
+    if (!$Elem.Active -or $Elem.Hidden)   { return $False }
+
+    if ($Value -eq $null) { $Value = $Elem.Default }
+    
+    if ($Elem.GetType() -eq [System.Windows.Forms.TextBox]) {
+        if ([int16]$Elem.text -eq $Value) { return !$Not } else { return $Not }
     }
-    else {
-        if ([int16]$Elem.value -eq $Value)   { return !$Not }
-        if ([int16]$Elem.value -ne $Value)   { return  $Not }
-    }
-    return $False
+    if ([int16]$Elem.value -eq $Value) { return !$Not } else { return $Not }
 
 }
 
 
 
 #==============================================================================================================================================================================================
-function IsIndex([object]$Elem, [int16]$Index=1, [string]$Text, [switch]$Active, [switch]$Not) {
+function IsIndex([object]$Elem=$null, [int16]$Index=1, [string]$Text="", [byte]$Lang=0, [switch]$Not) {
     
-    if ($Elem -is [int]) {
-        if ($Not)   { return $Elem -ne $Index }
-        else        { return $Elem -eq $Index }
+    if ($Lang -gt 0 -and (IsSet $Redux.Text.Language) ) {
+        if ($Redux.Text.Language.SelectedIndex -ne $Lang - 1) { return $False }
     }
 
-    if (!(IsSet $Elem))                 { return $False }
-    if ( $Active -and !$Elem.Visible)   { return $False }
-    if (!$Active -and !$Elem.Enabled)   { return $False }
+    if ( $Elem        -eq $null)                                { return $False }
+    if (!$Elem.Active -or $Elem.Hidden)                         { return $False }
+    if ( $Elem.GetType() -ne [System.Windows.Forms.ComboBox])   { return $False }
+
     if ($Index -lt 1) { $Index = 1 }
-
-    if (IsSet $Text) {
-        if ($Elem.Text.replace(" (default)", "") -eq $Text)   { return !$Not  }
-        if ($Elem.Text.replace(" (default)", "") -ne $Text)   { return  $Not  }
+    if ($Text -ne "") {
+        if ($Elem.Text.replace(" (default)", "") -eq $Text) { return !$Not } else { return $Not }
     }
 
-    if ($Elem.SelectedIndex -eq ($Index-1))   { return !$Not  }
-    if ($Elem.SelectedIndex -ne ($Index-1))   { return  $Not  }
-
-    return $False
+    if ($Elem.SelectedIndex -eq $Index - 1) { return !$Not } else { return $Not }
 
 }
 
 
 
 #==============================================================================================================================================================================================
-function IsLangIndex([object]$Elem, [int16]$Index=1, [int]$Lang=0, [switch]$Not) {
+function IsColor([System.Windows.Forms.ColorDialog]$Elem=$null, [string]$Color="", [byte]$Lang=0, [switch]$Not) {
     
-    if (!$Redux.Language[$Lang].Checked) { return $False }
-
-    if ($Elem -is [int]) {
-        if ($Not)   { return $Elem -ne $Index }
-        else        { return $Elem -eq $Index }
+    if ($Lang -gt 0 -and (IsSet $Redux.Text.Language) ) {
+        if ($Redux.Text.Language.SelectedIndex -ne $Lang - 1) { return $False }
     }
 
-    if (IsIndex -Elem $Elem -Index $Index)        { return !$Not  }
-    if (IsIndex -Elem $Elem -Index $Index -Not)   { return  $Not  }
-    return $False
+    if ($Elem  -eq $null)   { return $False }
+    if ($Color -eq "")      { $Color = $Elem.Default }
 
-}
-
-
-
-#==============================================================================================================================================================================================
-function IsColor([System.Windows.Forms.ColorDialog]$Elem, [string]$Color, [switch]$Not) {
-    
-    if (!(IsSet $Elem))         { return $False }
-    if (!$Elem.Button.Active)   { return $False }
     $c = (Get8Bit $Elem.Color.R) + (Get8Bit $Elem.Color.G) + (Get8Bit $Elem.Color.B)
-    if ($c -eq $Color)          { return !$Not  }
-    if ($c -ne $Color)          { return  $Not  }
-    return $False
-
-}
-
-
-
-#==============================================================================================================================================================================================
-function IsDefaultColor([System.Windows.Forms.ColorDialog]$Elem, [switch]$Not) {
-    
-    if (!(IsSet $Elem))         { return $False }
-    if (!$Elem.Button.Active)   { return $False }
-    $c = (Get8Bit $Elem.Color.R) + (Get8Bit $Elem.Color.G) + (Get8Bit $Elem.Color.B)
-    if ($c -eq $Elem.Default)   { return !$Not  }
-    if ($c -ne $Elem.Default)   { return  $Not  }
-    return $False
+    if ($c -eq $Color) { return !$Not } else { return $Not }
 
 }
 
@@ -923,28 +879,24 @@ function GetHeader() {
     if (IsChecked $CustomHeader.EnableHeader) { return }
 
     # ROM Title
-    if   ( (IsSet $GamePatch.redux.rom_title) -and (IsChecked $Patches.Redux) )    { $CustomHeader.ROMTitle.Text  = $GamePatch.redux.rom_title }
-    elseif (IsSet $GamePatch.rom_title)                                            { $CustomHeader.ROMTitle.Text  = $GamePatch.rom_title       }
-    elseif (IsSet $GameType.rom_title)                                             { $CustomHeader.ROMTitle.Text  = $GameType.rom_title        }
-    else                                                                           { $CustomHeader.ROMTitle.Text  = ""                         }
+    if     (IsSet $GamePatch.rom_title)    { $CustomHeader.ROMTitle.Text  = $GamePatch.rom_title  }
+    elseif (IsSet $GameType.rom_title)     { $CustomHeader.ROMTitle.Text  = $GameType.rom_title   }
+    else                                   { $CustomHeader.ROMTitle.Text  = ""                    }
 
     # ROM GameID
-    if   ( (IsSet $GamePatch.redux.rom_gameID) -and (IsChecked $Patches.Redux) )   { $CustomHeader.ROMGameID.Text = $GamePatch.redux.rom_gameID }
-    elseif (IsSet $GamePatch.rom_gameID)                                           { $CustomHeader.ROMGameID.Text = $GamePatch.rom_gameID       }
-    elseif (IsSet $GameType.rom_gameID)                                            { $CustomHeader.ROMGameID.Text = $GameType.rom_gameID        }
-    else                                                                           { $CustomHeader.ROMGameID.Text = ""                          }
+    if     (IsSet $GamePatch.rom_gameID)   { $CustomHeader.ROMGameID.Text = $GamePatch.rom_gameID }
+    elseif (IsSet $GameType.rom_gameID)    { $CustomHeader.ROMGameID.Text = $GameType.rom_gameID  }
+    else                                   { $CustomHeader.ROMGameID.Text = ""                    }
 
     # VC Title
-    if   ( (IsSet $GamePatch.redux.vc_title) -and (IsChecked $Patches.Redux) )     { $CustomHeader.VCTitle.Text   = $GamePatch.redux.vc_title }
-    elseif (IsSet $GamePatch.vc_title)                                             { $CustomHeader.VCTitle.Text   = $GamePatch.vc_title       }
-    elseif (IsSet $GameType.vc_title)                                              { $CustomHeader.VCTitle.Text   = $GameType.vc_title        }
-    else                                                                           { $CustomHeader.VCTitle.Text   = ""                        }
+    if     (IsSet $GamePatch.vc_title)     { $CustomHeader.VCTitle.Text   = $GamePatch.vc_title   }
+    elseif (IsSet $GameType.vc_title)      { $CustomHeader.VCTitle.Text   = $GameType.vc_title    }
+    else                                   { $CustomHeader.VCTitle.Text   = ""                    }
 
     # VC GameID
-    if   ( (IsSet $GamePatch.redux.vc_gameID) -and (IsChecked $Patches.Redux) )    { $CustomHeader.VCGameID.Text  = $GamePatch.redux.vc_gameID }
-    elseif (IsSet $GamePatch.vc_gameID)                                            { $CustomHeader.VCGameID.Text  = $GamePatch.vc_gameID       }
-    elseif (IsSet $GameType.vc_gameID)                                             { $CustomHeader.VCGameID.Text  = $GameType.vc_gameID        }
-    else                                                                           { $CustomHeader.VCGameID.Text  = ""                         }
+    if     (IsSet $GamePatch.vc_gameID)    { $CustomHeader.VCGameID.Text  = $GamePatch.vc_gameID  }
+    elseif (IsSet $GameType.vc_gameID)     { $CustomHeader.VCGameID.Text  = $GameType.vc_gameID   }
+    else                                   { $CustomHeader.VCGameID.Text  = ""                    }
     
 }
 
@@ -1020,13 +972,12 @@ function StrStarts([string]$Str, [string]$Val, [switch]$Not) {
 #==============================================================================================================================================================================================
 function EnableGUI([boolean]$Enable) {
     
-    $InputPaths.GamePanel.Enabled = $InputPaths.InjectPanel.Enabled = $InputPaths.PatchPanel.Enabled = $CurrentGame.Panel.Enabled = $CustomHeader.Panel.Enabled = $Patches.Panel.Enabled = $VC.Panel.Enabled = $Enable
-    SetModernVisualStyle $GeneralSettings.ModernStyle.Checked
-
-    if ($IsWiiVC -and $GameConsole.support_vc -eq 0) { $Patches.Panel.Enabled = $VC.Panel.Enabled = $False }
-
+    if ($MainDialog -eq $null) { return }
+    $RightPanel.getEnumerator() | foreach { $_.value.Enabled = $Enable }
+    $MainPanel.Enabled = $Enable
     if (IsSet $TextEditor.Dialog)    { $TextEditor.Dialog.Enabled  = $Enable }
     if (IsSet $SceneEditor.Dialog)   { $SceneEditor.Dialog.Enabled = $Enable }
+    SetModernVisualStyle ($Settings.Core.ModernStyle -ne $False)
 
 }
 
@@ -1067,33 +1018,26 @@ function EnableElem([object]$Elem, [boolean]$Active=$True, [switch]$Hide) {
 
 
 
-#==============================================================================================================================================================================================
-function GetFileName([string]$Path, [string]$Description, [string[]]$FileNames) {
-    
-    $OpenFileDialog = New-Object System.Windows.Forms.OpenFileDialog
-    $OpenFileDialog.InitialDirectory = $Path
-    
-    $FilterString = $Description + "|"
-    foreach ($i in 0..($FileNames.Count-1)) {
-        $FilterString += $FileNames[$i] + ';'
-    }
-    $FilterString += "|All Files|(*.*)"
 
-    $OpenFileDialog.Filter = $FilterString.TrimEnd('|')
-    $OpenFileDialog.ShowDialog() | Out-Null
+#==============================================================================================================================================================================================
+function CreatePath([string]$Path="") {
     
-    return $OpenFileDialog.FileName
+    if ($Path -ne "") {                                                                                                # Make sure the path is not null to avoid errors
+        if (!(Test-Path -LiteralPath $Path -PathType Container) ) { [void](New-Item -Path $Path -ItemType Directory) } # Check to see if the path does not exist, then create the path
+    }
 
 }
 
 
 
 #==============================================================================================================================================================================================
-function RemovePath([string]$Path) {
+function CreateSubPath([string]$Path="") {
     
-    if ($Path -ne '') { # Make sure the path isn't null to avoid errors
-        if (TestFile -Path $Path -Container) { # Check to see if the path exists
-            Remove-Item -LiteralPath $Path -Recurse -Force -ErrorAction 'SilentlyContinue' | Out-Null # Remove the path
+    if ($Path -ne "") {
+        if (!(Test-Path -LiteralPath $Path -PathType Container) ) {
+            $subPath = $Path.substring(0, $Path.LastIndexOf('\'))
+            $name    = $Path.substring($Path.LastIndexOf('\') + 1)
+            [void](New-Item -Path $subPath -Name $name -ItemType Directory)
         }
     }
 
@@ -1102,44 +1046,43 @@ function RemovePath([string]$Path) {
 
 
 #==============================================================================================================================================================================================
-function CreatePath([string]$Path) {
+function RemoveFile([string]$Path="") {
     
-    # Make sure the path is not null to avoid errors
-    if ($Path -ne '') {
-        if (!(TestFile -Path $Path -Container)) { New-Item -Path $Path -ItemType 'Directory' | Out-Null } # Check to see if the path does not exist, then create the path
+    if ($Path -ne "") {                                                                            # Make sure the path isn't null to avoid errors
+        if (Test-Path -LiteralPath $Path -PathType Leaf) { Remove-Item -LiteralPath $Path -Force } # Check to see if the path exists, and then remove the file
     }
 
-    # Return the path so it can be set to a variable when creating
-    return $Path
-
 }
 
 
 
 #==============================================================================================================================================================================================
-function RemoveFile([string]$Path) {
+function RemovePath([string]$Path="") {
     
-    if (TestFile $Path) { Remove-Item -LiteralPath $Path -Force }
+    if ($Path -ne "") {                                                                                          # Make sure the path isn't null to avoid errors
+        if (Test-Path -LiteralPath $Path -PathType Container) { Remove-Item -LiteralPath $Path -Recurse -Force } # Check to see if the path exists, and then remove the path
+    }
 
 }
 
 
 
 #==============================================================================================================================================================================================
-function TestFile([string]$Path, [switch]$Container) {
+function TestFile([string]$Path="", [switch]$Container) {
     
     if ($Path -eq "")   { return $False }
-    if ($Container)     { return Test-Path -LiteralPath $Path -PathType Container }
-    else                { return Test-Path -LiteralPath $Path -PathType Leaf }
+    if ($Container)     { return (Test-Path -LiteralPath $Path -PathType Container) }
+    else                { return (Test-Path -LiteralPath $Path -PathType Leaf)      }
 
 }
 
 
 
 #==============================================================================================================================================================================================
-function CountFiles([string]$Path) {
+function CountFiles([string]$Path="") {
     
-    if (!(TestFile -Path $Path -Container)) { return -1 }
+    if ($Path -eq "")                                           { return -1 }
+    if (!(Test-Path -LiteralPath $Path -PathType Container) )   { return -1 }
     return (Get-ChildItem -Recurse -File -LiteralPath $Path | Measure-Object).Count
 
 }
@@ -1147,26 +1090,13 @@ function CountFiles([string]$Path) {
 
 
 #==============================================================================================================================================================================================
-function CreateSubPath([string]$Path) {
-
-    if (!(TestFile -Path $Path -Container)) {
-        New-Item -Path $Path.substring(0, $Path.LastIndexOf('\')) -Name $Path.substring($Path.LastIndexOf('\') + 1) -ItemType Directory | Out-Null
-    }
-
-}
-
-
-
-#==============================================================================================================================================================================================
-function ShowPowerShellConsole([bool]$Show) {
+function ShowPowerShellConsole([bool]$Show=$True) {
     
     if (!$ExternalScript) { return }
 
     # Shows or hide the console window
-    switch ($Show) {
-        $True   { [Console.Window]::ShowWindow([Console.Window]::GetConsoleWindow(), 5) | Out-Null }
-        $False  { [Console.Window]::ShowWindow([Console.Window]::GetConsoleWindow(), 0) | Out-Null }
-    }
+    if ($Show)   { [void]([Console.Window]::ShowWindow([Console.Window]::GetConsoleWindow(), 1)) }
+    else         { [void]([Console.Window]::ShowWindow([Console.Window]::GetConsoleWindow(), 0)) }
 
 }
 
@@ -1196,7 +1126,7 @@ function TogglePowerShellOpenWithClicks([boolean]$Enable) {
     }
 
     # Execute the registry file.
-    & regedit /s $RegFile
+    & regedit /s $RegFile | Out-Null
 
 }
 
@@ -1249,14 +1179,15 @@ function SetLogging([boolean]$Enable) {
 
 
 #==================================================================================================================================================================================================================================================================
-function SetBitmap($Path, $Box, [int]$Width, [int]$Height) {
-
+function SetBitmap($Path, $Box, [int]$Width=0, [int]$Height=0) {
+    
+    if ($IsFoolsDay) { $Path = $Files.icon.jasonBig }
     $imgObject = [Drawing.Image]::FromFile( ( Get-Item $Path ) )
 
-    if (!(IsSet $Width))    { $Width  = $Box.Width }
-    else                    { $Width  = (DPISize $Width) }
-    if (!(IsSet $Height))   { $Height = $Box.Height }
-    else                    { $Height = (DPISize $Height) }
+    if ($Width  -eq 0)   { $Width  = $Box.Width      }
+    else                 { $Width  = DPISize $Width  }
+    if ($Height -eq 0)   { $Height = $Box.Height     }
+    else                 { $Height = DPISize $Height }
 
     $imgBitmap = New-Object Drawing.Bitmap($imgObject, $Width, $Height)
     $imgObject.Dispose()
@@ -1306,11 +1237,36 @@ function GetWindowsVersion() {
 
 
 #==================================================================================================================================================================================================================================================================
-function RefreshScript([string]$Script) {
+function RefreshScripts() {
+    
+    if ($Settings.Debug.RefreshScripts -ne $True) { return }
+
+    Remove-Module -Name "Bytes";        Import-Module -Name ($Paths.Scripts + "\Bytes.psm1")        -Global
+    Remove-Module -Name "Common";       Import-Module -Name ($Paths.Scripts + "\Common.psm1")       -Global
+    Remove-Module -Name "Dialogs";      Import-Module -Name ($Paths.Scripts + "\Dialogs.psm1")      -Global
+    Remove-Module -Name "DPI";          Import-Module -Name ($Paths.Scripts + "\DPI.psm1")          -Global
+    Remove-Module -Name "Files";        Import-Module -Name ($Paths.Scripts + "\Files.psm1")        -Global
+    Remove-Module -Name "Forms";        Import-Module -Name ($Paths.Scripts + "\Forms.psm1")        -Global
+    Remove-Module -Name "Main";         Import-Module -Name ($Paths.Scripts + "\Main.psm1")         -Global
+    Remove-Module -Name "MQ";           Import-Module -Name ($Paths.Scripts + "\MQ.psm1")           -Global
+    Remove-Module -Name "Patch";        Import-Module -Name ($Paths.Scripts + "\Patch.psm1")        -Global
+    Remove-Module -Name "Scene Editor"; Import-Module -Name ($Paths.Scripts + "\Scene Editor.psm1") -Global
+    Remove-Module -Name "Settings";     Import-Module -Name ($Paths.Scripts + "\Settings.psm1")     -Global
+    Remove-Module -Name "Text Editor";  Import-Module -Name ($Paths.Scripts + "\Text Editor.psm1")  -Global
+    Remove-Module -Name "Updater";      Import-Module -Name ($Paths.Scripts + "\Updater.psm1")      -Global
+    Remove-Module -Name "VC";           Import-Module -Name ($Paths.Scripts + "\VC.psm1")           -Global
+    Remove-Module -Name "Zelda 64";     Import-Module -Name ($Paths.Scripts + "\Zelda 64.psm1")     -Global
+
+}
+
+
+
+#==================================================================================================================================================================================================================================================================
+function RefreshGameScript() {
     
     if ($Settings.Debug.RefreshScripts -eq $True) {
-        Remove-Module -Name $Script
-        Import-Module -Name ($Paths.Scripts + "\" + $Script + ".psm1") -Global
+        Remove-Module -Name $GamePatch.Script
+        Import-Module -Name ($Paths.Scripts + "\Options\" + $GamePatch.Script + ".psm1") -Global
     }
 
 }
@@ -1323,26 +1279,64 @@ function StopJobs() {
     if ( (Get-Process "playsmf" -ea SilentlyContinue) -ne $null) { Stop-Process -Name "playsmf" }
     Get-Job | Stop-Job
     Get-Job | Remove-Job
-    [System.GC]::Collect() | Out-Null
+    [System.GC]::Collect(); [System.GC]::WaitForPendingFinalizers(); [System.GC]::Collect()
+
+}
+
+
+
+#==================================================================================================================================================================================================================================================================
+function StartJobLoop([string]$Name, [switch]$Output) {
+    
+    $status = (Get-Job -Name $Name).State
+    while ($status -ne "Completed") {
+        Start-Sleep -m 10
+        $current = Get-Job -Name $Name
+        if ($current -eq $null) { break }
+        $status = $current.State
+        [Windows.Forms.Application]::DoEvents()
+    }
+
+    Stop-Job   -Name $Name
+    if ($Output) { $result = Receive-Job -Job $current }
+    Remove-Job -Name $Name
+    if ($Output) { return $result }
 
 }
 
 
 
 #==============================================================================================================================================================================================
-function GetCommand([string]$Command) { return (Get-Command $Command -errorAction SilentlyContinue) }
+function HasCommand([string]$Command) {
+
+    if (Get-Command $Command -ErrorAction SilentlyContinue) { return $True }
+    return $False
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function HideNativeOptions() {
+
+    foreach ($option in $Redux.NativeOptions) {
+        $option.Visible = !$IsWiiVC
+        $option.Hidden  = $IsWiiVC
+        if ($IsWiiVC -and $option.Link -ne $null -and $option.Checked) { $option.Checked = $False }
+    }
+
+}
 
 
 
 #==============================================================================================================================================================================================
 
 Export-ModuleMember -Function SetWiiVCMode
-Export-ModuleMember -Function SetVCPanel
 Export-ModuleMember -Function CreateToolTip
 Export-ModuleMember -Function ChangeConsolesList
 Export-ModuleMember -Function ChangeGamesList
 Export-ModuleMember -Function SetMainScreenSize
-Export-ModuleMember -Function SetVCRemap
+Export-ModuleMember -Function SetVCContent
 Export-ModuleMember -Function ChangeGameMode
 Export-ModuleMember -Function SetCreditsSections
 Export-ModuleMember -Function ChangeGameRev
@@ -1360,14 +1354,11 @@ Export-ModuleMember -Function PatchPath_Finish
 Export-ModuleMember -Function IsDefault
 Export-ModuleMember -Function IsChecked
 Export-ModuleMember -Function IsRevert
-Export-ModuleMember -Function IsLanguage
+Export-ModuleMember -Function IsItem
 Export-ModuleMember -Function IsText
-Export-ModuleMember -Function IsLangText
 Export-ModuleMember -Function IsValue
 Export-ModuleMember -Function IsIndex
-Export-ModuleMember -Function IsLangIndex
 Export-ModuleMember -Function IsColor
-Export-ModuleMember -Function IsDefaultColor
 Export-ModuleMember -Function IsSet
 
 Export-ModuleMember -Function BoxCheck
@@ -1389,7 +1380,6 @@ Export-ModuleMember -Function EnableGUI
 Export-ModuleMember -Function EnableForm
 Export-ModuleMember -Function EnableElem
 
-Export-ModuleMember -Function GetFileName
 Export-ModuleMember -Function RemoveFile
 Export-ModuleMember -Function RemovePath
 Export-ModuleMember -Function CreatePath
@@ -1404,7 +1394,11 @@ Export-ModuleMember -Function SetModernVisualStyle
 Export-ModuleMember -Function SetLogging
 Export-ModuleMember -Function SetBitmap
 Export-ModuleMember -Function IsRestrictedFolder
-Export-ModuleMember -Function GetCommand
+Export-ModuleMember -Function HasCommand
 Export-ModuleMember -Function StopJobs
+Export-ModuleMember -Function StartJobLoop
+Export-ModuleMember -Function RunJobLoop
 Export-ModuleMember -Function GetWindowsVersion
-Export-ModuleMember -Function RefreshScript
+Export-ModuleMember -Function RefreshScripts
+Export-ModuleMember -Function RefreshGameScript
+Export-ModuleMember -Function HideNativeOptions

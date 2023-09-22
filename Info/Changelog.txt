@@ -1,3 +1,37 @@
+v22.0.0
+- Overhauled entire GUI design to be and fit single window format
+- Added new "Current Floor Icon" option for OoT
+- Added Safe Options setting
+- Added extended support for listboxes
+- Added dynamic options when switching between Wii VC mode
+- Added fallback URL for the auto-updater
+- Added two more option presets
+- Added support for JPG images for OoT & MM option previews
+- Added previews for chests, small crates and pots for OoT & MM
+- Revamped Previews into their own window
+- Revamped Settings window with better design
+- Revamped windows to be toggleable with the same button and stay open
+- Revamped patching logic concerning active windows
+- Optimized booting up the patcher
+- Changed GUI design to be a fixed size
+- Changed menu toolbar with new menu items
+- Changed Update Window to no longer freeze
+- Changed Save Slot options for OoT into listboxes
+- Changed Speedup options for OoT into listboxes
+- Changed language selection for OoT and MM into a dropdown
+- Changed not patching VC Remap Controls when set to default preset
+- Changed Create BPS option into two separate options
+- Changed "Visible Gerudo Tent" option to have the correct bridge in the Child Era
+- Changed Path Buttons to save the last folder path if it still exists
+- Changed direct Scene Editor patching to not shift unless set as argument
+- Corrected checking for ROM hack specific option values for OoT
+- Removed Hide Sword and Hide Shield options for OoT & MM
+- Removed Additional Options Panels support
+- Fixed issues with Ammo Capacity and Item Drops Quantity options for OoT
+- Fixed issue with whole Dialogue Text options not being patched when not applying other text changes
+- Fixed issues with running the Patcher64+ Tool through Wine in Linux or Mac
+- Fixed inserting objects without actor list for Scene Editor
+
 v21.0.3
 - Added "Clear Log When Patching" debug option
 - Fixed compression issue with Brazilian Portuguese translation of Majora's Mask

@@ -50,7 +50,7 @@ function PatchReduxOptions() {
 #==============================================================================================================================================================================================
 function CreateOptions() {
     
-    CreateOptionsDialog -Columns 4 -Height 470
+    CreateOptionsPanel
 
     $Redux.Gameplay.RestartSameScreen.Add_CheckStateChanged({ EnableElem -Elem $Redux.Experience.KeepExpGameOver -Active (!$this.Checked) })
     EnableElem -Elem $Redux.Experience.KeepExpGameOver -Active (!$Redux.Gameplay.RestartSameScreen.Checked)

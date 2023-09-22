@@ -184,11 +184,17 @@ function SetFileParameters() {
 
 
 
-    # Store ICO files
+    # Store ICO & PNG files
     $Files.icon.main                        = $Paths.Main + "\Main.ico"
     $Files.icon.settings                    = $Paths.Main + "\Settings.ico"
     $Files.icon.credits                     = $Paths.Main + "\Credits.ico"
     $Files.icon.additional                  = $Paths.Main + "\Additional.ico"
+    $Files.icon.preview                     = $Paths.Main + "\Preview.ico"
+    $Files.icon.previewButton               = $Paths.Main + "\PreviewButton.png"
+    $Files.icon.wiiEnabled                  = $Paths.Main + "\Wii Enabled.png"
+    $Files.icon.wiiDisabled                 = $Paths.Main + "\Wii Disabled.png"
+    $Files.icon.jason                       = $Paths.Main + "\Jason.ico"
+    $Files.icon.jasonBig                    = $Paths.Main + "\Jason.jpg"
 
 
 
@@ -255,10 +261,8 @@ function SetGetROM() {
 
     if ($GetROM.in -ne $null) { $GetROM.run = $GetROM.in }
 
-    if ($Settings.Debug.CreateBPS -eq $True) {
-        $Files.compBPS   = [System.IO.Path]::GetDirectoryName($GetROM.in) + "\" + [System.IO.Path]::GetFileNameWithoutExtension($GetROM.in) + "_compressed.bps"
-        $Files.decompBPS = [System.IO.Path]::GetDirectoryName($GetROM.in) + "\" + [System.IO.Path]::GetFileNameWithoutExtension($GetROM.in) + "_decompressed.bps"
-    }
+    if ($Settings.Debug.CreateCompressedBPS   -eq $True)   { $Files.compBPS   = [System.IO.Path]::GetDirectoryName($GamePath) + "\" + [System.IO.Path]::GetFileNameWithoutExtension($GamePath) + "_compressed.bps"   }
+    if ($Settings.Debug.CreateDecompressedBPS -eq $True)   { $Files.compBPS   = [System.IO.Path]::GetDirectoryName($GamePath) + "\" + [System.IO.Path]::GetFileNameWithoutExtension($GamePath) + "_decompressed.bps" }  
 
 }
 
@@ -333,6 +337,49 @@ function PlaySound([System.Media.SoundPlayer]$Sound) {
 
 
 #==============================================================================================================================================================================================
+function GetImageFile([string]$Path="") {
+    
+    if ($Path -eq "")   { return $null }
+    if     (Test-Path -LiteralPath  $Path           -PathType Leaf) { return $Path          }
+    if     (Test-Path -LiteralPath ($Path + ".png") -PathType Leaf) { return $Path + ".png" }
+    elseif (Test-Path -LiteralPath ($Path + ".jpg") -PathType Leaf) { return $Path + ".jpg" }
+    return $null
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function IsROMFile([string]$Ext="") {
+    
+    if ($Ext -eq ".z64" -or $Ext -eq ".n64" -or $Ext -eq ".v64" -or $Ext -eq ".sfc" -or $Ext -eq ".smc" -or $Ext -eq ".nes" -or $Ext -eq ".gbc") { return $True }
+    return $False
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function IsPatchFile([string]$Ext="") {
+    
+    if ($Ext -eq ".bps" -or $Ext -eq ".ips" -or $Ext -eq ".ups" -or $Ext -eq ".ppf" -or $Ext -eq ".xdelta" -or $Ext -eq ".vcdiff") { return $True }
+    return $False
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function IsZipFile([string]$Ext="") {
+    
+    if ($Ext -eq ".zip" -or $Ext -eq ".rar" -or $Ext -eq ".7z") { return $True }
+    return $False
+
+}
+
+
+
+#==============================================================================================================================================================================================
 
 Export-ModuleMember -Function SetTempFileParameters
 Export-ModuleMember -Function SetFileParameters
@@ -340,3 +387,7 @@ Export-ModuleMember -Function SetGetROM
 Export-ModuleMember -Function CheckPatchExtension
 Export-ModuleMember -Function LoadSoundEffects
 Export-ModuleMember -Function PlaySound
+Export-ModuleMember -Function GetImageFile
+Export-ModuleMember -Function IsROMFile
+Export-ModuleMember -Function IsPatchFile
+Export-ModuleMember -Function IsZipFile

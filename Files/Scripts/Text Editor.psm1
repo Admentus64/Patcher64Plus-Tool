@@ -1,13 +1,13 @@
-function CreateTextEditorDialog([string]$Game=$GameType.mode) {
+function CreateTextEditorDialog() {
     
-    $global:TextEditor       = @{}
-    $Files.json.textEditor   = SetJSONFile ($Paths.Games + "\" + $Game + "\Text Editor.json")
+    $Files.json.textEditor   = SetJSONFile ($Paths.Games + "\" + $TextEditor.GameType.mode   + "\Text Editor.json")
     $TextEditor.languageFile = SetJSONFile ($Paths.Games + "\" + $Files.json.textEditor.game + "\Languages\Languages.json")
 
     # Create Dialog
     $TextEditor.Dialog           = CreateDialog -Width (DPISize 1100) -Height (DPISize 600)
     $TextEditor.Dialog.Icon      = $Files.icon.additional
     $TextEditor.Dialog.BackColor = 'AntiqueWhite'
+    $TextEditor.Dialog.Add_FormClosing({ param($sender, $e) $e.Cancel = $True; CloseTextEditor })
 
     # Left Panel
     $TextEditor.ListPanel                   = CreatePanel -Width (DPISize 520) -Height ($TextEditor.Dialog.Height - (DPISize 75)) -AddTo $TextEditor.Dialog
@@ -36,7 +36,7 @@ function CreateTextEditorDialog([string]$Game=$GameType.mode) {
     $X = $TextEditor.ContentPanel.Left + ($TextEditor.ContentPanel.Width / 6)
     $Y = $TextEditor.Dialog.Height - (DPISize 170)
     $CloseButton = CreateButton -X $X -Y $Y -Width (DPISize 80) -Height (DPISize 35) -Text "Close" -AddTo $TextEditor.Dialog
-    $CloseButton.Add_Click( { $TextEditor.Dialog.Hide() })
+    $CloseButton.Add_Click( { CloseTextEditor })
     $CloseButton.BackColor = "White"
 
     # Search Button
@@ -56,9 +56,7 @@ function CreateTextEditorDialog([string]$Game=$GameType.mode) {
     $TextEditor.Label.AutoSize = $True
     $TextEditor.Label.Left = ([Math]::Floor($TextEditor.Dialog.Width / 2) - [Math]::Floor($TextEditor.Label.Width / 2))
 
-
     # Languages
-
     $TextEditor.languages     = @()
     $columns                  = 5
     $TextEditor.LanguagePanel = CreatePanel -X ($TextEditor.ContentPanel.Left + (DPISize 15)) -Y ($TextEditor.Dialog.Height - (DPISize 120)) -Width ($TextEditor.Dialog.Width - $TextEditor.ListPanel.Width) -Height (DPISize 100) -AddTo $TextEditor.Dialog
@@ -76,9 +74,9 @@ function CreateTextEditorDialog([string]$Game=$GameType.mode) {
         CreateLabel                                      -X $TextEditor.Languages[$i].Right -Y $TextEditor.Languages[$i].Top -Text $TextEditor.languageFile[$i].title          -AddTo $TextEditor.LanguagePanel
         $TextEditor.languages[$i].Add_CheckedChanged({
             if ($this.checked) {
-                if (IsSet $LastScript) {
+                if ($LastScript -ne $null) {
                     SaveLastMessage
-                    SaveScript -Script ($Paths.Games + "\" + $Game + "\Editor\message_data_static." + $LanguagePatch.code + ".bin") -Table ($Paths.Games + "\" + $Game + "\Editor\message_data." + $LanguagePatch.code + ".tbl")
+                    SaveScript -Script ($Paths.Games + "\" + $TextEditor.GameType.mode + "\Editor\message_data_static." + $LanguagePatch.code + ".bin") -Table ($Paths.Games + "\" + $TextEditor.GameType.mode + "\Editor\message_data." + $LanguagePatch.code + ".tbl")
                 }
                 $global:LanguagePatch = $TextEditor.languageFile[($this.SaveAs-1)]
                 LoadMessages
@@ -97,14 +95,14 @@ function CreateTextEditorDialog([string]$Game=$GameType.mode) {
             $row++
         }
         $index = $i + $TextEditor.languageFile.count
-        $name = ("Editor.Language." + $Files.json.textEditor.parse)
+        $name  = ("Editor.Language." + $Files.json.textEditor.parse)
         $TextEditor.languages += CreateCheckBox -IsRadio -X ($column * (DPISize 100))            -Y (($row-1) * (DPISize 30))                                                     -AddTo $TextEditor.LanguagePanel -Name $name -Max $max -SaveAs ($index + 1) -SaveTo $name
         CreateLabel                                      -X $TextEditor.Languages[$index].Right -Y $TextEditor.Languages[$index].Top -Text $Files.json.textEditor.hacks[$i].title -AddTo $TextEditor.LanguagePanel
         $TextEditor.languages[$index].Add_CheckedChanged({
             if ($this.checked) {
-                if (IsSet $LastScript) {
+                if ($LastScript -ne $null) {
                     SaveLastMessage
-                    SaveScript -Script ($Paths.Games + "\" + $Game + "\Editor\message_data_static." + $LanguagePatch.code + ".bin") -Table ($Paths.Games + "\" + $Game + "\Editor\message_data." + $LanguagePatch.code + ".tbl")
+                    SaveScript -Script ($Paths.Games + "\" + $TextEditor.GameType.mode + "\Editor\message_data_static." + $LanguagePatch.code + ".bin") -Table ($Paths.Games + "\" + $TextEditor.GameType.mode + "\Editor\message_data." + $LanguagePatch.code + ".tbl")
                 }
                 $global:LanguagePatch = $Files.json.textEditor.hacks[($this.SaveAs-1-$TextEditor.languageFile.count)]
                 LoadMessages
@@ -115,8 +113,6 @@ function CreateTextEditorDialog([string]$Game=$GameType.mode) {
             LoadMessages
         }
     }
-
-
 
     # Bottom Panel
     $TextEditor.TextBoxPanel = CreatePanel -X $TextEditor.ContentPanel.Left -Y $TextEditor.ContentPanel.Bottom -Width $TextEditor.ContentPanel.Width -Height ($TextEditor.Dialog.Height - $TextEditor.ContentPanel.Height) -AddTo $TextEditor.Dialog
@@ -177,7 +173,7 @@ function CreateTextEditorDialog([string]$Game=$GameType.mode) {
     }
     $TextEditor.Content.Add_TextChanged( {
         if ( $TextEditor.Edited[0]) { $TextEditor.Edited[1] = $True }
-        if (!$TextEditor.Edited[6] -and (IsSet $TextEditor.LastButton)) { $TextEditor.LastButton.Edited = $True }
+        if (!$TextEditor.Edited[6] -and $TextEditor.LastButton -ne $null) { $TextEditor.LastButton.Edited = $True }
     } )
     $TextEditor.TextBoxType.Add_SelectedIndexChanged(     { if ($TextEditor.Edited[0])   { $TextEditor.Edited[2] = $True } })
     $TextEditor.TextBoxPosition.Add_SelectedIndexChanged( { if ($TextEditor.Edited[0])   { $TextEditor.Edited[2] = $True } })
@@ -238,10 +234,14 @@ function CreateTextEditorDialog([string]$Game=$GameType.mode) {
     })
 
     $ExtractButton.Add_Click({
-        if (!(IsSet $GamePath)) {
+        RefreshScripts
+        if ($Settings.Debug.ClearLog -eq $True) { Clear-Host }
+        SetTextEditorTypes
+
+        if ($GamePath -ne $null) {
             PlaySound $Sounds.done
             UpdateStatusLabel -Text "Failed! No ROM path is given." -Editor -Error
-            return
+            ResetTextEditorTypes; return
         }
 
         # Language Patch
@@ -260,49 +260,41 @@ function CreateTextEditorDialog([string]$Game=$GameType.mode) {
         SetGetROM
 
         if ($IsWiiVC) {
-            if (!(ExtractWADFile))    { return }   # Step A: Extract the contents of the WAD file
-            if (!(CheckVCGameID))     { return }   # Step B: Check the GameID to be vanilla
-            if (!(ExtractU8AppFile))  { return }   # Step C: Extract "00000005.app" file to get the ROM
-            if (!(PatchVCROM))        { return }   # Step D: Do some initial patching stuff for the ROM for VC WAD files
+            if (!(ExtractWADFile))    { ResetTextEditorTypes; return }   # Step A: Extract the contents of the WAD file
+            if (!(CheckVCGameID))     { ResetTextEditorTypes; return }   # Step B: Check the GameID to be vanilla
+            if (!(ExtractU8AppFile))  { ResetTextEditorTypes; return }   # Step C: Extract "00000005.app" file to get the ROM
+            if (!(PatchVCROM))        { ResetTextEditorTypes; return }   # Step D: Do some initial patching stuff for the ROM for VC WAD files
         }
 
         if (!(Unpack)) {
             PlaySound $Sounds.done
             UpdateStatusLabel "Failed! Could not extract ROM." -Editor -Error
-            return
+            ResetTextEditorTypes; return
         }
         if (TestFile $GetROM.run)                                                   { $global:ROMHashSum   = (Get-FileHash -Algorithm MD5 -LiteralPath $GetROM.run).Hash }
         if ($Settings.Debug.IgnoreChecksum -eq $False -and (IsSet $CheckHashsum))   { $PatchInfo.downgrade = ($ROMHashSum -ne $CheckHashSum)                             }
         if ((Get-Item -LiteralPath $GetROM.run).length/"32MB" -ne 1) {
             PlaySound $Sounds.done
             UpdateStatusLabel "Failed! The ROM should be 32 MB!" -Editor -Error
-            return $False
+            ResetTextEditorTypes; return
         }
 
-        if ($PatchInfo.run) {
-            ConvertROM $Command
-            if (!(CompareHashSums $Command)) {
-                PlaySound $Sounds.done
-                UpdateStatusLabel "Failed! The ROM is an incorrect version or is broken." -Editor -Error
-                return
-            }
+        ConvertROM $Command
+        if (!(CompareHashSums $Command)) {
+            PlaySound $Sounds.done
+            UpdateStatusLabel "Failed! The ROM is an incorrect version or is broken." -Editor -Error
+            ResetTextEditorTypes; return
         }
 
         if (!(DecompressROM)) {
             PlaySound $Sounds.done
             UpdateStatusLabel "Failed! The ROM could not be decompressed." -Editor -Error
-            return
+            ResetTextEditorTypes; return
         }
-
         $item = DowngradeROM
-        if ($ROMHashSum -ne $CheckHashSum) {
-            PlaySound $Sounds.done
-            UpdateStatusLabel "Failed! The ROM is an incorrect version or is broken." -Editor -Error
-            return
-        }
 
         # Extract vanilla script
-        if ( !(TestFile ($Paths.Games + "\" + $Game + "\Editor\message_data_static.ori.bin")) -or !(TestFile ($Paths.Games + "\" + $Game + "\Editor\message_data.ori.tbl")) ) {
+        if ( !(TestFile ($Paths.Games + "\" + $TextEditor.GameType.mode + "\Editor\message_data_static.ori.bin")) -or !(TestFile ($Paths.Games + "\" + $TextEditor.GameType.mode + "\Editor\message_data.ori.tbl")) ) {
             $global:ByteArrayGame = [System.IO.File]::ReadAllBytes($GetROM.decomp)
             CreateSubPath $GameFiles.editor
             $start  = CombineHex $ByteArrayGame[((GetDecimal $TextEditor.languageFile[0].script_dma)+0)..((GetDecimal $TextEditor.languageFile[0].script_dma)+3)]
@@ -312,13 +304,13 @@ function CreateTextEditorDialog([string]$Game=$GameType.mode) {
             ExportBytes -Offset $TextEditor.languageFile[0].table_start -Length $LanguagePatch.table_length -Output ($Paths.Games + "\" + $Files.json.textEditor.game + "\Editor\message_data.ori.tbl")        -Force
         }
 
-        if (IsSet $LanguagePatchFile) {
+        if ($LanguagePatchFile -ne $null) {
             UpdateStatusLabel ("Patching " + $Files.json.textEditor.game + " Language...") -Editor
             ApplyPatch -File $GetROM.decomp -Patch ("Games\" + $Files.json.textEditor.game + "\" + $LanguagePatchFile) -FilesPath
         }
 
         # Extract script
-        if ((IsSet $LanguagePatch.script_dma) -and (IsSet $LanguagePatch.table_start) -and (IsSet $LanguagePatch.table_length)) {
+        if ($LanguagePatch.script_dma -ne $null -and $LanguagePatch.table_start -ne $null -and $LanguagePatch.table_length -ne $null) {
             $global:ByteArrayGame = [System.IO.File]::ReadAllBytes($GetROM.decomp)
             CreateSubPath $GameFiles.editor
             $start  = CombineHex $ByteArrayGame[((GetDecimal $LanguagePatch.script_dma)+0)..((GetDecimal $LanguagePatch.script_dma)+3)]
@@ -332,14 +324,15 @@ function CreateTextEditorDialog([string]$Game=$GameType.mode) {
         LoadMessages
         PlaySound $Sounds.done
         UpdateStatusLabel -Text "Success! Script has been extracted." -Editor
+        ResetTextEditorTypes
     })
 
     $ResetButton.Add_Click({
         if (!$TextEditor.Content.Enabled) { return }
-        $TextEditor.Edited[6] = $True
-        $TextEditor.Content.Text = GetMessage -ID $TextEditor.LastButton.Text -Reset
-        $TextEditor.Edited[6] = $False
-        $TextEditor.LastButton.Edited = $False
+        $TextEditor.Edited[6]            = $True
+        $TextEditor.Content.Text         = GetMessage -ID $TextEditor.LastButton.Text -Reset
+        $TextEditor.Edited[6]            = $False
+        $TextEditor.LastButton.Edited    = $False
         $TextEditor.LastButton.BackColor = "DarkGray"
     })
     
@@ -348,26 +341,52 @@ function CreateTextEditorDialog([string]$Game=$GameType.mode) {
 
 
 #==============================================================================================================================================================================================
-function RunTextEditor([string]$Game=$GameType.mode) {
+function RunTextEditor([object]$Game=$null) {
     
-    $LastGame    = $GameType
-    $LastConsole = $GameConsole
+    $global:TextEditor      = @{}
+    $TextEditor.GameConsole = $Files.json.consoles[0]
+    $TextEditor.GameType    = $Game
+    CreateTextEditorDialog
+    $TextEditor.Dialog.Show()
 
-    if     ($Game -eq "Ocarina of Time")   { $global:GameType = $Files.json.games[0] }
-    elseif ($Game -eq "Majora's Mask")     { $global:GameType = $Files.json.games[1] }
-    else                                   { $global:GameType = $null                }
-    $global:GameConsole = $Files.json.consoles[0]
+}
 
-    CreateTextEditorDialog -Game $Game
-    $TextEditor.Dialog.ShowDialog()
-    if (IsSet $LastScript) {
+
+
+#==============================================================================================================================================================================================
+function CloseTextEditor() {
+    
+    $TextEditor.Dialog.Hide()
+
+    if ($LastScript -ne $null) {
         SaveLastMessage
-        SaveScript -Script ($Paths.Games + "\" + $Game + "\Editor\message_data_static." + $LanguagePatch.code + ".bin") -Table ($Paths.Games + "\" + $Game + "\Editor\message_data." + $LanguagePatch.code + ".tbl")
+        SaveScript -Script ($Paths.Games + "\" + $TextEditor.GameType.mode + "\Editor\message_data_static." + $LanguagePatch.code + ".bin") -Table ($Paths.Games + "\" + $TextEditor.GameType.mode + "\Editor\message_data." + $LanguagePatch.code + ".tbl")
     }
-    $global:LastScript = $global:DialogueList = $global:ByteScriptArray = $global:ByteTableArray = $tempList = $Files.json.textEditor = $global:TextEditor = $global:LanguagePatch = $null
+    
+    $global:LastScript = $global:DialogueList = $global:ByteScriptArray = $global:ByteTableArray = $Files.json.textEditor = $global:TextEditor = $global:LanguagePatch = $null
 
-    $global:GameType    = $LastGame
-    $global:GameConsole = $LastConsole
+}
+
+
+
+#==============================================================================================================================================================================================
+function SetTextEditorTypes() {
+    
+    $TextEditor.LastGameType    = $global:GameType
+    $TextEditor.LastGameConsole = $global:GameConsole
+    $global:GameType            = $TextEditor.GameType
+    $global:GameConsole         = $TextEditor.GameConsole
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function ResetTextEditorTypes() {
+
+    $global:GameType         = $TextEditor.LastGameType
+    $global:GameConsole      = $TextEditor.LastGameConsole
+    $TextEditor.LastGameType = $TextEditor.LastGameConsole = $null
 
 }
 
@@ -388,7 +407,7 @@ function OpenHelpDialog() {
 
     # Text Box
     $textbox = CreateTextBox -X (DPISize 40) -Y (DPISize 30) -Width ($Dialog.Width - (DPISize 100)) -Height ($CloseButton.Top - (DPISize 40)) -ReadOnly -Multiline -TextFileFont -AddTo $Dialog
-    AddTextFileToTextbox -TextBox $textbox -File ($Paths.Games + "\" + $GameType.mode + "\Guide Text Editor.txt")
+    AddTextFileToTextbox -TextBox $textbox -File ($Paths.Games + "\" + $TextEditor.GameType.mode + "\Guide Text Editor.txt")
 
     # Show Dialog
     $Dialog.ShowDialog()
@@ -417,9 +436,9 @@ function LoadScript([string]$Script, [string]$Table) {
     
     $global:DialogueList = @{}
     $vanillaList         = @{}
-    $column = $row = 0
+    $column              = $row = 0
 
-    if ( (IsSet $TextEditor) -and (IsSet $LanguagePatch.patch) -and (TestFile ($Paths.Games + "\" + $Game + "\Editor\message_data_static.ori.bin")) -and (TestFile ($Paths.Games + "\" + $Game + "\Editor\message_data.ori.tbl")) ) {
+    if ($TextEditor -ne $null -and $LanguagePatch.patch -ne $null -and (TestFile ($Paths.Games + "\" + $Files.json.textEditor + "\Editor\message_data_static.ori.bin")) -and (TestFile ($Paths.Games + "\" + $Files.json.textEditor + "\Editor\message_data.ori.tbl")) ) {
         $global:ByteScriptArray = [System.IO.File]::ReadAllBytes(($Paths.Games + "\" + $Files.json.textEditor.game + "\Editor\message_data_static.ori.bin"))
         $global:ByteTableArray  = [System.IO.File]::ReadAllBytes(($Paths.Games + "\" + $Files.json.textEditor.game + "\Editor\message_data.ori.tbl"))
         for ($i=0; $i -lt $ByteTableArray.count; $i+=8) {
@@ -443,7 +462,7 @@ function LoadScript([string]$Script, [string]$Table) {
         [uint32]$start = $ByteTableArray[$i+5]   * 65536 + $ByteTableArray[$i+6]   * 256 + $ByteTableArray[$i+7]
         [uint32]$end   = $ByteTableArray[$i+5+8] * 65536 + $ByteTableArray[$i+6+8] * 256 + $ByteTableArray[$i+7+8]
 
-        if (IsSet $lastItem) {
+        if ($lastItem -ne $null) {
             if ($start -eq $DialogueList[$lastItem].start)   { $item; continue }
             if ($start -lt $DialogueList[$lastItem].start)   { $item; break    }
         }
@@ -504,7 +523,7 @@ function LoadScript([string]$Script, [string]$Table) {
             $color = "Gray"
 
             if ($vanillaList.count -gt 0) {
-                if     (!(IsSet $vanillaList[$item])) { $color = "DarkGreen" }
+                if     ($vanillaList[$item] -eq $null) { $color = "DarkGreen" }
                 else {
                     if ($vanillaList[$item].msg.count -ne $DialogueList[$item].msg.count) { $color = "DarkGreen" }
                     else {
@@ -527,7 +546,7 @@ function LoadScript([string]$Script, [string]$Table) {
 #==============================================================================================================================================================================================
 function SaveScript([string]$Script, [string]$Table) {
     
-    if (!(IsSet $DialogueList)) {
+    if ($DialogueList -eq $null) {
         WriteToConsole ("Could not save text messages. Did it ran outside ByteLanguageOptions?" ) -Error
         return
     }
@@ -541,7 +560,7 @@ function SaveScript([string]$Script, [string]$Table) {
         $curr = $ByteTableArray[$i+5]   * 65536 + $ByteTableArray[$i+6]   * 256 + $ByteTableArray[$i+7]
         $next = $ByteTableArray[$i+8+5] * 65536 + $ByteTableArray[$i+8+6] * 256 + $ByteTableArray[$i+8+7]
 
-        if (IsSet $DialogueList[$item]) {
+        if ($DialogueList[$item] -ne $null) {
             foreach ($c in $DialogueList[$item].msg) {
                 $tempList.insert($tempList.count, $c)
             }
@@ -579,7 +598,7 @@ function SaveScript([string]$Script, [string]$Table) {
 #==============================================================================================================================================================================================
 function SaveLastMessage() {
     
-    if (IsSet $LastScript.entry) {
+    if ($LastScript.entry -ne $null) {
         if ($TextEditor.Edited[1])       { SetMessage -Replace $TextEditor.Content.Text -ID $LastScript.entry -Safety -ASCII -Force }
         if ($TextEditor.Edited[2])       { SetMessageBox -ID $LastScript.entry -Type $TextEditor.TextBoxType.selectedIndex -Position $TextEditor.TextBoxPosition.selectedIndex }
         if ($Files.json.textEditor.header -gt 0) {
@@ -597,7 +616,9 @@ function SaveLastMessage() {
 #==============================================================================================================================================================================================
 function GetMessage([string]$ID, [switch]$Reset) {
     
-    if (!(IsSet $DialogueList)) {
+    if ($Files.json.textEditor -eq $null) { LoadTextEditor }
+
+    if ($DialogueList -eq $null) {
         WriteToConsole ("Could not get message ID: " + $ID + " as the message data does not exist. Did it ran outside ByteLanguageOptions?" ) -Error
         return
     }
@@ -657,15 +678,15 @@ function AddMessageIDButton([string]$ID, [byte]$Column, [uint16]$Row, [string]$C
     Add-Member -InputObject $button -NotePropertyMembers @{ Color = $Color; Edited = $False }
     $button.Add_Click( {
         SaveLastMessage
-        $TextEditor.Edited[6] = $True
+        $TextEditor.Edited[6]    = $True
         $TextEditor.Content.Text = GetMessage -ID $this.Text
-        $TextEditor.Edited[6] = $False
-        if (IsSet $TextEditor.LastButton) {
+        $TextEditor.Edited[6]    = $False
+        if ($TextEditor.LastButton -ne $null) {
             if ($TextEditor.LastButton.Edited)   { $TextEditor.LastButton.BackColor = "Red" }
             else                                 { $TextEditor.LastButton.BackColor = $TextEditor.LastButton.Color }
         }
-        $TextEditor.LastButton = $this
-        $this.BackColor = "DarkGray"
+        $TextEditor.LastButton          = $this
+        $this.BackColor                 = "DarkGray"
         $TextEditor.TextBoxType.enabled = $TextEditor.TextBoxPosition.enabled = $True
         if ($Files.json.textEditor.header -gt 0) { $TextEditor.TextBoxIcon.enabled = $TextEditor.TextBoxRupees.enabled = $TextEditor.TextBoxJump.enabled = $True }
         $TextEditor.Edited[0] = $TextEditor.Content.Enabled = $True
@@ -679,12 +700,14 @@ function AddMessageIDButton([string]$ID, [byte]$Column, [uint16]$Row, [string]$C
 #==============================================================================================================================================================================================
 function GetMessageOffset([string]$ID) {
     
-    if (!(IsSet $DialogueList)) {
+    if ($Files.json.textEditor -eq $null) { LoadTextEditor }
+
+    if ($DialogueList -eq $null) {
         WriteToConsole ("Could not get message ID: " + $ID + " offset as the message data does not exist. Did it ran outside ByteLanguageOptions?" ) -Error
         return
     }
 
-    if (IsSet $DialogueList[$ID]) { return $DialogueList[$ID].start }
+    if ($DialogueList[$ID] -ne $null) { return $DialogueList[$ID].start }
     return -1
 
 }
@@ -694,12 +717,14 @@ function GetMessageOffset([string]$ID) {
 #==============================================================================================================================================================================================
 function GetMessageLength([string]$ID) {
     
-    if (!(IsSet $DialogueList)) {
+    if ($Files.json.textEditor -eq $null) { LoadTextEditor }
+
+    if ($DialogueList -eq $null) {
         WriteToConsole ("Could not get message ID: " + $ID + " length as the message data does not exist. Did it ran outside ByteLanguageOptions?" ) -Error
         return
     }
 
-    if (IsSet $DialogueList[$ID]) { return $DialogueList[$ID].end - $DialogueList[$ID].start }
+    if ($DialogueList[$ID] -ne $null) { return $DialogueList[$ID].end - $DialogueList[$ID].start }
     return -1
 
 }
@@ -707,7 +732,9 @@ function GetMessageLength([string]$ID) {
 #==============================================================================================================================================================================================
 function SetMessageBox([string]$ID, [byte]$Type, [byte]$Position) {
     
-    if (!(IsSet $DialogueList)) {
+    if ($Files.json.textEditor -eq $null) { LoadTextEditor }
+
+    if ($DialogueList -eq $null) {
         WriteToConsole ("Could not edit message ID: " + $ID + " as the message data does not exist. Did it ran outside ByteLanguageOptions?" ) -Error
         return
     }
@@ -726,7 +753,9 @@ function SetMessageBox([string]$ID, [byte]$Type, [byte]$Position) {
 #==============================================================================================================================================================================================
 function SetMessageIcon([string]$ID, [string]$Hex, [string]$Value) {
     
-    if (!(IsSet $DialogueList)) {
+    if ($Files.json.textEditor -eq $null) { LoadTextEditor }
+
+    if ($DialogueList -eq $null) {
         WriteToConsole ("Could not edit message ID: " + $ID + " as the message data does not exist. Did it ran outside ByteLanguageOptions?" ) -Error
         return
     }
@@ -748,7 +777,9 @@ function SetMessageIcon([string]$ID, [string]$Hex, [string]$Value) {
 #==============================================================================================================================================================================================
 function SetMessageRupees([string]$ID, [uint16]$Value) {
     
-    if (!(IsSet $DialogueList)) {
+    if ($Files.json.textEditor -eq $null) { LoadTextEditor }
+
+    if ($DialogueList -eq $null) {
         WriteToConsole ("Could not edit message ID: " + $ID + " as the message data does not exist. Did it ran outside ByteLanguageOptions?" ) -Error
         return
     }
@@ -766,7 +797,9 @@ function SetMessageRupees([string]$ID, [uint16]$Value) {
 #==============================================================================================================================================================================================
 function SetJumpToMessage([string]$ID, [string]$Value) {
     
-    if (!(IsSet $DialogueList)) {
+    if ($Files.json.textEditor -eq $null) { LoadTextEditor }
+
+    if ($DialogueList -eq $null) {
         WriteToConsole ("Could not edit message ID: " + $ID + " as the message data does not exist. Did it ran outside ByteLanguageOptions?" ) -Error
         return
     }
@@ -781,7 +814,7 @@ function SetJumpToMessage([string]$ID, [string]$Value) {
 #==============================================================================================================================================================================================
 function FindMatch([byte[]]$Text, [boolean]$All) {
     
-    if (!(IsSet $DialogueList)) {
+    if ($DialogueList -eq $null) {
         WriteToConsole ("Could not find match in message ID: " + $ID + " as the message data does not exist. Did it ran outside ByteLanguageOptions?" ) -Error
         return
     } 
@@ -870,18 +903,18 @@ function FindMatch([byte[]]$Text, [boolean]$All) {
 #==============================================================================================================================================================================================
 function LoadTextEditor() {
     
-    if (IsSet $Files.json.textEditor) { return }
+    if ($Files.json.textEditor -ne $null) { return }
 
-    UpdateStatusLabel ("Patching " + $GameType.mode + " Additional Language Options...")
+    $Files.json.textEditor = SetJSONFile $GameFiles.textEditor
 
     $start  = CombineHex $ByteArrayGame[((GetDecimal $LanguagePatch.script_dma)+0)..((GetDecimal $LanguagePatch.script_dma)+3)]
     $end    = CombineHex $ByteArrayGame[((GetDecimal $LanguagePatch.script_dma)+4)..((GetDecimal $LanguagePatch.script_dma)+7)]
     $length = Get32Bit ( (GetDecimal $end) - (GetDecimal $start) )
+
     ExportBytes -Offset $start                     -Length $length                     -Output ($GameFiles.extracted + "\message_data_static." + $LanguagePatch.code + ".bin") -Force
     ExportBytes -Offset $LanguagePatch.table_start -Length $LanguagePatch.table_length -Output ($GameFiles.extracted + "\message_data."        + $LanguagePatch.code + ".tbl") -Force
 
-    $global:LastScript     = @{}
-    $Files.json.textEditor = SetJSONFile $GameFiles.textEditor
+    $global:LastScript = @{}
     LoadScript -Script ($GameFiles.extracted + "\message_data_static." + $LanguagePatch.code + ".bin") -Table ($GameFiles.extracted + "\message_data." + $LanguagePatch.code + ".tbl")
 
 }
@@ -889,16 +922,16 @@ function LoadTextEditor() {
 
 
 #==============================================================================================================================================================================================
-function SetMessage([string]$ID, [object]$Text, [object]$Replace, [string]$File, [switch]$Full, [switch]$Insert, [switch]$Append, [switch]$All, [switch]$ASCII, [switch]$Silent, [switch]$Safety, [switch]$Force) {
+function SetMessage([string]$ID, [object]$Text, [object]$Replace, [string]$File="", [switch]$Full, [switch]$Insert, [switch]$Append, [switch]$All, [switch]$ASCII, [switch]$Silent, [switch]$Safety, [switch]$Force) {
     
-    if (!(IsSet $Files.json.textEditor)) { LoadTextEditor }
+    if ($Files.json.textEditor -eq $null) { LoadTextEditor }
 
-    if (!(IsSet $DialogueList)) {
+    if ($DialogueList -eq $null) {
         WriteToConsole ("Could not edit message ID: " + $ID + " as the message data does not exist. Did it ran outside ByteLanguageOptions?" ) -Error
         return
     }
 
-    if (!(IsSet $DialogueList[$ID])) {
+    if ($DialogueList[$ID] -eq $null) {
         if (!$Silent) { WriteToConsole ("Could not find message ID: " + $ID) -Error }
         return -1
     }
@@ -947,7 +980,7 @@ function SetMessage([string]$ID, [object]$Text, [object]$Replace, [string]$File,
             }
         }
 
-        if     (IsSet $File) { if (TestFile -Path ($GameFiles.binaries + "\" + $File)) { $Replace = [System.IO.File]::ReadAllBytes($GameFiles.binaries + "\" + $File) } }
+        if     ($File -ne "") { if (TestFile -Path ($GameFiles.binaries + "\" + $File)) { $Replace = [System.IO.File]::ReadAllBytes($GameFiles.binaries + "\" + $File) } }
         elseif ($Replace.count -gt 0) {
             if ($Replace -match $re -and !$ASCII) {
                 if     ($Replace  -is [System.String] -and $Replace  -Like "* *")   { [byte[]]$Replace = $Replace -split ' '           | foreach { [Convert]::ToByte($_, 16) } }
@@ -1180,7 +1213,7 @@ function ParseMessageOoT([char[]]$Text, [switch]$Encode) {
         if ($types[44])    { $Text = ParseMessagePart -Text $Text -Encoded @(171) -Decoded @(60, 68, 45,  80,  97,  100, 62)                                       -Encode $Encode } # AB / <D-Pad>         (D-Pad)
 
         # New box / line break
-        if ( (IsSet $TextEditor.Dialog) -and !(IsSet $TextEditor.Search) ) {
+        if ($TextEditor.Dialog -ne $null -and $TextEditor.Search -eq $null) {
             if ($types[4])   { $Text = ParseMessagePart -Text $Text -Encoded @(4) -Decoded @(13, 10, 60, 78, 101, 119, 32, 66, 111, 120, 62, 13, 10) -Encode $Encode } # 04 / <New Box> (box break with new lines)
             if ($types[1])   { $Text = ParseMessagePart -Text $Text -Encoded @(1) -Decoded @(13, 10)                                                 -Encode $Encode } # 01 / `r`n      (new line)
         }
@@ -1315,7 +1348,7 @@ function ParseMessageMM([char[]]$Text, [switch]$Encode) {
         if ($types[224])   { $Text = ParseMessagePart -Text $Text -Encoded @(224) -Decoded @(60, 69, 110, 100, 62)                                                 -Encode $Encode } # E0 / <End>           (End conversation)
 
         # New box / line break
-        if ( (IsSet $TextEditor.Dialog) -and !(IsSet $TextEditor.Search) ) {
+        if ($TextEditor.Dialog -ne $null -and $TextEditor.Search -eq $null) {
             if ($types[16])   { $Text = ParseMessagePart -Text $Text -Encoded @(16) -Decoded @(13, 10, 60,  78,  101, 119, 32,  66,  111, 120, 62, 13, 10)             -Encode $Encode } # 10 / <New Box>    (box break with new lines)
             if ($types[18])   { $Text = ParseMessagePart -Text $Text -Encoded @(18) -Decoded @(13, 10, 60,  78,  101, 119, 32,  66,  111, 120, 32, 73, 73, 62, 13, 10) -Encode $Encode } # 12 / <New Box II> (box break with new lines)
             if ($types[17])   { $Text = ParseMessagePart -Text $Text -Encoded @(17) -Decoded @(13, 10)                                                                 -Encode $Encode } # 11 / `r`n         (new line)
@@ -1339,7 +1372,7 @@ function ParseMessagePart([System.Collections.ArrayList]$Text, [System.Collectio
     
     $i = $ScriptCounter
 
-    if (!$Encode -and $Text.count -gt $i + 1 -and (IsSet $TextEditor.Dialog) -and !(IsSet $TextEditor.Search) ) {
+    if (!$Encode -and $Text.count -gt $i + 1 -and $TextEditor.Dialog -ne $null -and $TextEditor.Search -eq $null) {
         if ($Text[$i] -eq 13 -and $Text[$i+1] -eq 10) {
             $global:ScriptCounter = $i + 1
             return $Text

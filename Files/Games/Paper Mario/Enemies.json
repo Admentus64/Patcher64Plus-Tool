@@ -782,7 +782,7 @@
 			"value"		: 0,
 			"offset"	: [ "626A98", "66BCF8", "6BEDB8" ]
 		}, {
-			"type"		: "Goombario",
+			"type"		: "Goomba.",
 			"value"		: 0,
 			"offset"	: [ "6286E4", "66D944", "6C0A04" ]
 		}, {
@@ -1040,7 +1040,7 @@
 			"value"		: 0,
 			"offset"	: "469858"
 		}, {
-			"type"		: "Goombario",
+			"type"		: "Goomba.",
 			"value"		: 0,
 			"offset"	: "46AE2C"
 		}, {

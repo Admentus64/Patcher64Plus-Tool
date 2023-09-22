@@ -38,7 +38,7 @@ function Get-IniContent ([string]$FilePath) {
 #==============================================================================================================================================================================================
 function Out-IniFile([hashtable]$InputObject, [string]$FilePath) {
     
-    if (!(TestFile -Path ($Paths.Settings) -Container)) { New-Item -Path $Paths.Master -Name "Settings" -ItemType Directory | Out-Null }
+    if (!(TestFile -Path ($Paths.Settings) -Container)) { New-Item -Path $Paths.Master -Name "Settings" -ItemType Directory }
   # RemoveFile $FilePath
     $OutFile = New-Item -ItemType File -Path $Filepath -Force
     foreach ($i in $InputObject.keys) {
@@ -63,7 +63,7 @@ function Out-IniFile([hashtable]$InputObject, [string]$FilePath) {
 function GetSettings([string]$File) {
     
     if (TestFile $File)   { return Get-IniContent $File }
-    else                  { return @{} }
+    else                  { return @{}                  }
 
 }
 
