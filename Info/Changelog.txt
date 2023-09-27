@@ -31,6 +31,7 @@ v22.0.0
 - Fixed issue with whole Dialogue Text options not being patched when not applying other text changes
 - Fixed issues with running the Patcher64+ Tool through Wine in Linux or Mac
 - Fixed inserting objects without actor list for Scene Editor
+- Fixed MM Pause Screen using wrong alpha values
 
 v21.0.3
 - Added "Clear Log When Patching" debug option
