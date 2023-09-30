@@ -8,6 +8,7 @@ v22.0.0
 - Added two more option presets
 - Added support for JPG images for OoT & MM option previews
 - Added previews for chests, small crates and pots for OoT & MM
+- Added Iron Knuckle symbol from MM (part of the Censor Gerudo Textures option)
 - Revamped Previews into their own window
 - Revamped Settings window with better design
 - Revamped windows to be toggleable with the same button and stay open

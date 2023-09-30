@@ -1631,6 +1631,7 @@ function ByteSceneOptions() {
         PatchBytes -Offset "12985F0" -Texture -Patch "Gerudo Symbols\shadow_temple_room_0.bin"
         PatchBytes -Offset "13B4000" -Texture -Patch "Gerudo Symbols\golden_gauntlets_pillar.bin"
         PatchBytes -Offset "1636940" -Texture -Patch "Gerudo Symbols\spirit_temple_room_0_elevator.bin"
+        PatchBytes -Offset "168F3A0" -Texture -Patch "Gerudo Symbols\iron_knuckle.bin"
         
         PrepareMap -Scene "Dampe's Grave & Windwill" -Map 0  -Header 0; ChangeMapFile   -Search "66888667777877888778777887788778" -Patch "Gerudo Symbols\dampe.bin";                                       SaveLoadedMap           # 3045248
         PrepareMap -Scene "Dampe's Grave & Windwill" -Map 3  -Header 0; ChangeMapFile   -Search "66888667777877888778777887788778" -Patch "Gerudo Symbols\dampe.bin";                                       SaveLoadedMap           # 305FEE0

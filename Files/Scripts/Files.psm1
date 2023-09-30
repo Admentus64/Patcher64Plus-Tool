@@ -120,6 +120,7 @@ function SetFileParameters() {
     $Files.oot.gerudo18                     = $Paths.Games + "\Ocarina of Time\Textures\Gerudo Symbols\spirit_temple_room_0_elevator.bin"
     $Files.oot.gerudo19                     = $Paths.Games + "\Ocarina of Time\Textures\Gerudo Symbols\spirit_temple_room_0_pillars.bin"
     $Files.oot.gerudo20                     = $Paths.Games + "\Ocarina of Time\Textures\Gerudo Symbols\spirit_temple_room_10_20_28.bin"
+    $Files.oot.gerudo21                     = $Paths.Games + "\Ocarina of Time\Textures\Gerudo Symbols\iron_knuckle.bin"
 
 
 
