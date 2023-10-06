@@ -402,6 +402,7 @@ function RunSceneEditor([object]$Game=$null) {
 #==============================================================================================================================================================================================
 function CloseSceneEditor() {
     
+    if ($SceneEditor.Dialog -eq $null) { return }
     $SceneEditor.Dialog.Hide()
 
     if ($SceneEditor.Maps.Items.Count -gt 0) {
@@ -2041,7 +2042,9 @@ function DeleteActor() {
         }
 
         for ($i=$vtx; $i -lt $SceneEditor.MapArray.Count; $i+=4) {
-            if ($SceneEditor.MapArray[$i] -eq 3) {
+            if ($SceneEditor.MapArray[$i-4] -ne 1 -and $SceneEditor.MapArray[$i-4] -ne 3 -and $SceneEditor.MapArray[$i-4] -lt 0xD0) { continue }
+            
+            if ($SceneEditor.MapArray[$i] -eq 3 -and !$skip) {
                 $value = $SceneEditor.MapArray[$i+1] * 65536 + $SceneEditor.MapArray[$i+2] * 256 + $SceneEditor.MapArray[$i+3]
                 if ($value -gt $SceneEditor.Offsets[$SceneEditor.Offsets.Header.Count-1].Header -and $value -lt $SceneEditor.MapArray.Count) { ShiftMap -Offset ($i+1) -Subtract 16 }
             }
@@ -2212,8 +2215,11 @@ function InsertActor([string]$ID="0000", [string]$Name, [int]$X=0, [int]$Y=0, [i
             }
         }
 
+        $skip = $false
         for ($i=$vtx; $i -lt $SceneEditor.MapArray.Count; $i+=4) {
-            if ($SceneEditor.MapArray[$i] -eq 3) {
+            if ($SceneEditor.MapArray[$i-4] -ne 1 -and $SceneEditor.MapArray[$i-4] -ne 3 -and $SceneEditor.MapArray[$i-4] -lt 0xD0) { continue }
+            
+            if ($SceneEditor.MapArray[$i] -eq 3 -and !$skip) {
                 $value = $SceneEditor.MapArray[$i+1] * 65536 + $SceneEditor.MapArray[$i+2] * 256 + $SceneEditor.MapArray[$i+3]
                 if ($value -gt $SceneEditor.Offsets[$SceneEditor.Offsets.Header.Count-1].Header -and $value -lt $SceneEditor.MapArray.Count) { ShiftMap -Offset ($i+1) -Add 16 }
             }
@@ -2241,7 +2247,8 @@ function ReplaceActor($Index, $ID=$null, $Name, $NewID, $New, $X, $Y, $Z, $XRot,
         return $False
     }
 
-    $offset = $null
+    $offset  = $null
+    $printID = $ID
 
     if ($Compare -is [string]) {
         if ($Compare.length -ne 4) {
@@ -2314,10 +2321,10 @@ function ReplaceActor($Index, $ID=$null, $Name, $NewID, $New, $X, $Y, $Z, $XRot,
     }
 
     if ($offset -eq $null) {
-        if     ($Index -ne $null)   { WriteToConsole ("Actor based on entry index: " + $Index + " could not be found") -Error }
-        elseif ($Name  -ne $null)   { WriteToConsole ("Actor based on name: "        + $Name  + " could not be found") -Error }
-        elseif ($ID    -ne $null)   { WriteToConsole ("Actor based on ID: "          + $ID    + " could not be found") -Error }
-        else                        { WriteToConsole  "Actor could not be found."                                      -Error }
+        if     ($Index -ne $null)   { WriteToConsole ("Actor based on entry index: " + $Index   + " could not be found") -Error }
+        elseif ($Name  -ne $null)   { WriteToConsole ("Actor based on name: "        + $Name    + " could not be found") -Error }
+        elseif ($ID    -ne $null)   { WriteToConsole ("Actor based on ID: "          + $printID + " could not be found") -Error }
+        else                        { WriteToConsole  "Actor could not be found."                                        -Error }
         return $False
     }
 
@@ -2395,10 +2402,10 @@ function ReplaceActor($Index, $ID=$null, $Name, $NewID, $New, $X, $Y, $Z, $XRot,
         $SceneEditor.MapArray[$offset+15] = $val[1]
     }
 
-    if     ($Index -is [int])      { WriteToConsole ("Replaced actor entry:    " + $Index) }
-    elseif ($Name  -is [string])   { WriteToConsole ("Replaced actor:          " + $Name)  }
-    elseif ($ID    -is [string])   { WriteToConsole ("Replaced actor with ID:  " + $ID)    }
-    else                           { WriteToConsole  "Replaced actor"                      }
+    if     ($Index -is [int])      { WriteToConsole ("Replaced actor entry:    " + $Index)   }
+    elseif ($Name  -is [string])   { WriteToConsole ("Replaced actor:          " + $Name)    }
+    elseif ($ID    -is [string])   { WriteToConsole ("Replaced actor with ID:  " + $printID) }
+    else                           { WriteToConsole  "Replaced actor"                        }
 
     return $True
 
@@ -2413,6 +2420,8 @@ function RemoveActor($Index, $ID, $Name, $Compare, $CompareX, $CompareY, $Compar
         WriteToConsole "No actor list defined for this header" -Error
         return $False
     }
+
+    $printID = $ID
 
     if ($Compare -is [string]) {
         if ($Compare.length -ne 4) {
@@ -2480,10 +2489,10 @@ function RemoveActor($Index, $ID, $Name, $Compare, $CompareX, $CompareY, $Compar
     }
     DeleteActor
 
-    if     ($Index -is [int])      { WriteToConsole ("Removed actor entry:     " + $Index) }
-    elseif ($Name  -is [string])   { WriteToConsole ("Removed actor:           " + $Name)  }
-    elseif ($ID    -is [string])   { WriteToConsole ("Removed actor with ID:   " + $ID)    }
-    else                           { WriteToConsole  "Removed actor"                       }
+    if     ($Index -is [int])      { WriteToConsole ("Removed actor entry:     " + $Index)   }
+    elseif ($Name  -is [string])   { WriteToConsole ("Removed actor:           " + $Name)    }
+    elseif ($ID    -is [string])   { WriteToConsole ("Removed actor with ID:   " + $printID) }
+    else                           { WriteToConsole  "Removed actor"                         }
 
     return $True
 
@@ -2515,7 +2524,8 @@ function ReplaceTransitionActor($Index, $ID, $Name, $NewID, $New, $X, $Y, $Z, $Y
         return $False
     }
 
-    $offset = $null
+    $offset  = $null
+    $printID = $ID
 
     if ($Compare -is [string]) {
         if ($Compare.length -ne 4) {
@@ -2611,10 +2621,10 @@ function ReplaceTransitionActor($Index, $ID, $Name, $NewID, $New, $X, $Y, $Z, $Y
     }
 
     if ($offset -eq $null) {
-        if     ($Index -ne $null)   { WriteToConsole ("Transition actor based on entry index: " + $Index + " could not be found") -Error }
-        elseif ($Name  -ne $null)   { WriteToConsole ("Transition actor based on name: "        + $Name  + " could not be found") -Error }
-        elseif ($ID    -ne $null)   { WriteToConsole ("Transition actor based on ID: "          + $ID    + " could not be found") -Error }
-        else                        { WriteToConsole  "Transition actor could not be found."                                      -Error }
+        if     ($Index -ne $null)   { WriteToConsole ("Transition actor based on entry index: " + $Index   + " could not be found") -Error }
+        elseif ($Name  -ne $null)   { WriteToConsole ("Transition actor based on name: "        + $Name    + " could not be found") -Error }
+        elseif ($ID    -ne $null)   { WriteToConsole ("Transition actor based on ID: "          + $printID + " could not be found") -Error }
+        else                        { WriteToConsole  "Transition actor could not be found."                                        -Error }
         return $False
     }
 
@@ -2678,10 +2688,10 @@ function ReplaceTransitionActor($Index, $ID, $Name, $NewID, $New, $X, $Y, $Z, $Y
         $SceneEditor.SceneArray[$offset+15] = $val[1]
     }
 
-    if     ($Index -is [int])      { WriteToConsole ("Replaced transition actor entry: "   + $Index) }
-    elseif ($Name  -is [string])   { WriteToConsole ("Replaced transition actor: "         + $Name)  }
-    elseif ($ID    -is [string])   { WriteToConsole ("Replaced transition actor with ID: " + $ID)    }
-    else                           { WriteToConsole  "Replaced transition actor"                     }
+    if     ($Index -is [int])      { WriteToConsole ("Replaced transition actor entry: "   + $Index)   }
+    elseif ($Name  -is [string])   { WriteToConsole ("Replaced transition actor: "         + $Name)    }
+    elseif ($ID    -is [string])   { WriteToConsole ("Replaced transition actor with ID: " + $printID) }
+    else                           { WriteToConsole  "Replaced transition actor"                       }
 
     return $True
 
@@ -2722,6 +2732,8 @@ function InsertObject([string]$ID="0000", [string]$Name) {
     if ((GetObjectCount) -eq $null)                                 { WriteToConsole "No object list defined for this header" -Error; return $False }
     if ((GetObjectCount) -ge $Files.json.sceneEditor.max_objects)   { return $False }
     if ($SceneEditor.GUI)                                           { $SceneEditor.BottomPanelObjects.AutoScroll = $False }
+
+    $printID = $ID
 
     if (IsSet $Name) {
         $ID = ""
@@ -2803,7 +2815,7 @@ function InsertObject([string]$ID="0000", [string]$Name) {
 
         for ($i=$meshStart; $i -lt $meshEnd; $i+= 4) {
             if ($SceneEditor.MapArray[$i] -eq 3) {
-                $value =  $SceneEditor.MapArray[$i+1] * 65536 + $SceneEditor.MapArray[$i+2] * 256 + $SceneEditor.MapArray[$i+3]
+                $value = $SceneEditor.MapArray[$i+1] * 65536 + $SceneEditor.MapArray[$i+2] * 256 + $SceneEditor.MapArray[$i+3]
                 if ($value -gt $SceneEditor.Offsets[$SceneEditor.Offsets.Header.Count-1].Header -and $value -le $SceneEditor.MapArray.Count) {
                     ShiftMap -Offset ($i+1) -Add 16
                     $meshes += $SceneEditor.MapArray[$i+1] * 65536 + $SceneEditor.MapArray[$i+2] * 256 + $SceneEditor.MapArray[$i+3]
@@ -2821,7 +2833,9 @@ function InsertObject([string]$ID="0000", [string]$Name) {
             }
 
             for ($i=$vtx; $i -lt $SceneEditor.MapArray.Count; $i+=4) {
-                if ($SceneEditor.MapArray[$i] -eq 3) {
+                if ($SceneEditor.MapArray[$i-4] -ne 1 -and $SceneEditor.MapArray[$i-4] -ne 3 -and $SceneEditor.MapArray[$i-4] -lt 0xD0) { continue }
+            
+                if ($SceneEditor.MapArray[$i] -eq 3 -and !$skip) {
                     $value = $SceneEditor.MapArray[$i+1] * 65536 + $SceneEditor.MapArray[$i+2] * 256 + $SceneEditor.MapArray[$i+3]
                     if ($value -gt $SceneEditor.Offsets[$SceneEditor.Offsets.Header.Count-1].Header -and $value -lt $SceneEditor.MapArray.Count) { ShiftMap -Offset ($i+1) -Add 16 }
                 }
@@ -2839,7 +2853,7 @@ function InsertObject([string]$ID="0000", [string]$Name) {
         $SceneEditor.BottomPanelObjects.AutoScrollMinSize = New-Object System.Drawing.Size(0, 0)
     }
 
-    if (IsSet $Name) { WriteToConsole ("Inserted object:         " + $Name) } else { WriteToConsole ("Inserted object with ID: " + $ID) }
+    if (IsSet $Name) { WriteToConsole ("Inserted object:         " + $Name) } else { WriteToConsole ("Inserted object with ID: " + $printID) }
 
     return $True
 
@@ -2855,7 +2869,8 @@ function ReplaceObject($Index, $ID, $Name, $NewID, $New) {
         return $False
     }
 
-    $offset = $null
+    $offset  = $null
+    $printID = $ID
 
     if ($Index -is [int]) {
         if ($Index -lt 0 -or $Index -ge (GetObjectCount)) { WriteToConsole "Object index is out of range" -Error; return $False }
@@ -2896,10 +2911,10 @@ function ReplaceObject($Index, $ID, $Name, $NewID, $New) {
     }
 
     if ($offset -eq $null) {
-        if     ($Index -is [int])      { WriteToConsole ("Object based on entry index: " + $Index + " could not be found") -Error }
-        elseif ($Name  -is [string])   { WriteToConsole ("Object based on name: "        + $Name  + " could not be found") -Error }
-        elseif ($ID    -is [string])   { WriteToConsole ("Object based on ID: "          + $ID    + " could not be found") -Error }
-        else                           { WriteToConsole  "Object could not be found"                                       -Error }
+        if     ($Index -is [int])      { WriteToConsole ("Object based on entry index: " + $Index   + " could not be found") -Error }
+        elseif ($Name  -is [string])   { WriteToConsole ("Object based on name: "        + $Name    + " could not be found") -Error }
+        elseif ($ID    -is [string])   { WriteToConsole ("Object based on ID: "          + $printID + " could not be found") -Error }
+        else                           { WriteToConsole  "Object could not be found"                                         -Error }
         return $False
     }
 
@@ -2933,10 +2948,10 @@ function ReplaceObject($Index, $ID, $Name, $NewID, $New) {
         $SceneEditor.MapArray[$offset+1]  = $val[1]
     }
 
-    if     ($Index -is [int])      { WriteToConsole ("Replaced object entry:   " + $Index) }
-    elseif ($Name  -is [string])   { WriteToConsole ("Replaced object:         " + $Name)  }
-    elseif ($ID    -is [string])   { WriteToConsole ("Replaced object with ID: " + $ID)    }
-    else                           { WriteToConsole  "Replaced object"                     }
+    if     ($Index -is [int])      { WriteToConsole ("Replaced object entry:   " + $Index)   }
+    elseif ($Name  -is [string])   { WriteToConsole ("Replaced object:         " + $Name)    }
+    elseif ($ID    -is [string])   { WriteToConsole ("Replaced object with ID: " + $printID) }
+    else                           { WriteToConsole  "Replaced object"                       }
 
     return $True
 
@@ -2951,6 +2966,8 @@ function RemoveObject($Index, $ID, $Name) {
         WriteToConsole "No object list defined for this header" -Error
         return $False
     }
+
+    $printID = $ID
 
     if ($Index -is [int]) {
         if ($Index -lt 0 -or $Index -ge (GetObjectCount)) { WriteToConsole "Object index is out of range" -Error; return $False }
@@ -2997,10 +3014,10 @@ function RemoveObject($Index, $ID, $Name) {
     }
     DeleteObject
 
-    if     ($Index -is [int])      { WriteToConsole ("Removed object entry:    " + $Index) }
-    elseif ($Name  -is [string])   { WriteToConsole ("Removed object:          " + $Name)  }
-    elseif ($ID    -is [string])   { WriteToConsole ("Removed object with ID:  " + $ID)    }
-    else                           { WriteToConsole  "Removed object"                      }
+    if     ($Index -is [int])      { WriteToConsole ("Removed object entry:    " + $Index)   }
+    elseif ($Name  -is [string])   { WriteToConsole ("Removed object:          " + $Name)    }
+    elseif ($ID    -is [string])   { WriteToConsole ("Removed object with ID:  " + $printID) }
+    else                           { WriteToConsole  "Removed object"                        }
 
     return $True
 
@@ -4043,6 +4060,7 @@ function ReloadParams([object]$Actor, [byte]$Index) {
 #==============================================================================================================================================================================================
 
 Export-ModuleMember -Function RunSceneEditor
+Export-ModuleMember -Function CloseSceneEditor
 Export-ModuleMember -Function PrepareMap
 Export-ModuleMember -Function SaveLoadedMap
 Export-ModuleMember -Function PatchLoadedScene
@@ -4063,3 +4081,6 @@ Export-ModuleMember -Function DeleteObject
 Export-ModuleMember -Function InsertObject
 Export-ModuleMember -Function ReplaceObject
 Export-ModuleMember -Function RemoveObject
+
+Export-ModuleMember -Function GetActorCountIndex
+Export-ModuleMember -Function GetMeshIndex

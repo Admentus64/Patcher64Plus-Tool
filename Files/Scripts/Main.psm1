@@ -392,9 +392,8 @@ function CreateMainDialog() {
     # Preview / Wii Mode Buttons #
     ##############################
 
-    $Patches.WiiButton = CreateButton -X ($MainPanel.Right - (DPISize 55) ) -Y ($PictureBox.Bottom + (DPISize 2) ) -Width (DPISize 50) -Height (DPISize 28) -AddTo $MainPanel
+    $Patches.WiiButton = CreateForm -X ($MainPanel.Right - (DPISize 55) ) -Y ($PictureBox.Bottom + (DPISize 2) ) -Width (DPISize 50) -Height (DPISize 28) -Form (New-Object Windows.Forms.PictureBox) -AddTo $MainPanel 
     SetBitmap -Path $Files.icon.WiiDisabled -Box $Patches.WiiButton
-    $Patches.WiiButton.Add_Click( { SetWiiVCMode })
 
     $Patches.PreviewButton = CreateButton -X ($Patches.WiiButton.Left - (DPISize 30)) -Y $Patches.WiiButton.Top -Width (DPISize 28) -Height (DPISize 28) -AddTo $MainPanel
     SetBitmap -Path $Files.icon.PreviewButton -Box $Patches.PreviewButton
@@ -522,13 +521,18 @@ function RunCustomGameIDSyntax([string]$Syntax) {
 function SetJSONFile($File) {
     
     if (TestFile $File) {
-        try { $File = Get-Content -Raw -LiteralPath $File | ConvertFrom-Json }
+        try {
+            $reader  = New-Object System.IO.StreamReader($File)
+            $content = $reader.ReadToEnd() | ConvertFrom-Json
+            $reader.Close()
+            $reader.Dispose()
+        }
         catch {
             Write-Host ("Corrupted JSON File: " + $File)
             CreateErrorDialog -Error "Corrupted JSON"
-            return
+            return $null
         }
-        return $File
+        return $content
     }
     else {
         Write-Host ("Missing JSON File: " + $File)

@@ -4246,6 +4246,18 @@
 		"id"		: "00E0",
 		"type"		: "Enemy"
 	}, {
+		"name"		: "Ladder",
+		"id"		: "00E2",
+		"type"		: "Object",
+		"band"		: [ "FFFF" ],
+		"params" : [ [ {
+			"name"	: "Ladder",
+			"value"	: "0"
+		}, {
+			"name"	: "Clasp",
+			"value"	: "FFFF"
+		} ] ]
+	}, {
 		"name"		: "Forest Temple Objects",
 		"id"		: "00E3",
 		"type"		: "Area",
@@ -4896,7 +4908,7 @@
 			"show"	: 5,
 			"hide"	: 4
 		}, {
-			"name"	: "Switch Interation",
+			"name"	: "Switch Interaction",
 			"value" : "1800",
 			"show"	: 4,
 			"hide"	: 5
@@ -7874,10 +7886,10 @@
 		"name"		: "Bronze Boulder",
 		"id"		: "01D2",
 		"type"		: "Object",
-		"band"		: [ "003F" ],
+		"band"		: [ "00FF" ],
 		"params" : [ [ {
 			"name"	: "Switch",
-			"value"	: "3F"
+			"value"	: "FF"
 		} ] ]
 	}, {
 		"name"		: "Princess Zelda (Child)",
@@ -8332,7 +8344,8 @@
 		"type"		: "Area"
 	}, {
 		"name"		: "Forest Temple Textures",
-		"id"		: "0073"
+		"id"		: "0073",
+		"type"		: "Area"
 	}, {
 		"name"		: "Zora's Fountain",
 		"id"		: "0074",

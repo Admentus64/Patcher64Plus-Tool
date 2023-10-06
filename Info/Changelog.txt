@@ -1,3 +1,15 @@
+v22.0.1
+- Added new sword icons and text labels for OoT
+- Changed Wii VC mode to be detected automatically again
+- Changed symbols into a global variable for Redux options patching
+- Removed Wii VC GameIDs for language patches
+- Fixed issue with custom WAD title and GameID not applying
+- Fixed issue with clearing RAM from reading text content
+- Fixed issue with dynamic generated Patches not applying without options
+- Fixed issue with MM Redux options not properly applying
+- Fixed issue with editor not closing before patching
+- Fixed issues with the Scene Editor
+
 v22.0.0
 - Overhauled entire GUI design to be and fit single window format
 - Added new "Current Floor Icon" option for OoT

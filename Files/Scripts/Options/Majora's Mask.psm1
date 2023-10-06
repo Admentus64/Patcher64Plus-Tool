@@ -884,8 +884,9 @@ function RevertReduxOptions() {
         ChangeBytes -Offset "B66B6C" -Values "8463F6A628610011"; ChangeBytes -Offset "B66B78" -Values "28610011"; ChangeBytes -Offset "B66BA8" -Values "100000208463F6A6"; ChangeBytes -Offset "B66C28" -Values "8463F6A628610011"; ChangeBytes -Offset "B66D10" -Values "8739F6A6000020252B210011"
     }
 
-    if (IsRevert $Redux.Gameplay.UnderwaterOcarina)   { ChangeBytes -Offset "BA6E54" -Values "30CF00FF29E10012"         }
-    if (IsRevert $Redux.Gameplay.ClimbAnything)       { ChangeBytes -Offset "CB7D40" -Values "8C422B0C0000402530490008" }
+    if (IsRevert $Redux.Gameplay.UnderwaterOcarina) { ChangeBytes -Offset "BA6E54" -Values "30CF00FF29E10012" }
+
+    if (IsRevert $Redux.Cheats.ClimbAnything) { ChangeBytes -Offset "CB7D40" -Values "8C422B0C0000402530490008" }
     
 }
 
@@ -894,7 +895,7 @@ function RevertReduxOptions() {
 #==============================================================================================================================================================================================
 function ByteReduxOptions() {
     
-    $Symbols = SetJSONFile ($GameFiles.base + "\symbols.json")
+    ChangeBytes -Offset (AddToOffset $Symbols.MISC_CONFIG -Add "08") -Values "97E2EAE70B2B24A0B052B5999466AC25983908" # Serial Key
 
 
 
@@ -962,10 +963,7 @@ function ByteReduxOptions() {
 
     # CHEATS #
 
-    if (IsChecked $Redux.Cheats.ClimbAnything) {
-        ChangeBytes -Offset (AddToOffset $Symbols.MISC_CONFIG -Add "08") -Values "97E2EAE70B2B24A0B052B5999466AC25983908"
-        ChangeBytes -Offset "CB8810" -Values "1000"; ChangeBytes -Offset "CC69E4" -Values "00000000"
-    }
+    if (IsChecked $Redux.Cheats.ClimbAnything) { ChangeBytes -Offset "CB8810" -Values "1000"; ChangeBytes -Offset "CC69E4" -Values "00000000" }
 
     if (IsChecked $Redux.Cheats.InventoryEditor)   { ChangeBytes -Offset $Symbols.CFG_INVENTORY_EDITOR_ENABLED -Values "01" }
     if (IsChecked $Redux.Cheats.Health)            { ChangeBytes -Offset $Symbols.CFG_INFINITE_HEALTH          -Values "01" }
@@ -1360,12 +1358,11 @@ function CreatePresets() {
         BoxCheck $Redux.Gameplay.FasterBlockPushing
         BoxCheck $Redux.Gameplay.ElegySpeedup
         BoxCheck $Redux.Gameplay.CritWiggle
-        BoxCheck $Redux.Gameplay.UnderwaterOcarina
+      # BoxCheck $Redux.Gameplay.UnderwaterOcarina
         BoxCheck $Redux.Gameplay.FlowOfTime
         BoxCheck $Redux.Gameplay.InstantElegy
 
         if ($Redux.Features.OcarinaIcons -ne $null) { $Redux.Features.OcarinaIcons.SelectedIndex = 1 }
-        BoxCheck $Redux.Features.OcarinaIcons
         BoxCheck $Redux.Features.HealthBar
         BoxCheck $Redux.Features.HUDToggle
         BoxCheck $Redux.Features.ItemsUnequip

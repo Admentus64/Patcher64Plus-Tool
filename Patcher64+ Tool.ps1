@@ -285,11 +285,10 @@ if (!$FatalError) {
     $CustomHeader.EnableRegion.Add_CheckedChanged({ RestoreCustomRegion })
 
     # Restore last settings
-    $global:IsWiiVC = $False
-    if ($Settings.Core.WiiMode -eq $True) { $global:IsWiiVC = $True }
+    $global:IsWiiVC = [System.IO.Path]::GetExtension($Settings.Core["Path.Game"]) -eq ".wad"
     if ($IsWiiVC) { $png = $Files.icon.WiiEnabled } else { $png = $Files.icon.WiiDisabled }
     SetBitmap -Path $png -Box $Patches.WiiButton
-
+    
     ChangeConsolesList
     ChangeGamesList
     [void](ChangeGameMode)

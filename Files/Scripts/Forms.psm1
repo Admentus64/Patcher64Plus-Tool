@@ -379,6 +379,7 @@ function CreatePreviewGroup([single]$Height=0, [string]$Text="", [Object]$Expose
 function CreateReduxGroup([single]$X=(DPISize 10), [single]$Y=0, [single]$Height=0, [string]$Name=$Last.TabName, [string]$Tag="", [boolean]$IsGame=$True, [string]$Text="", [single]$Columns=0, [object]$AddTo=$Last.Panel, [Object]$Expose, [Object]$Exclude, [byte]$Base, [switch]$Child, [switch]$Adult, [switch]$All, [switch]$Safe) {
     
     if  ($Safe -and $Settings.Core.SafeOptions -eq $True) { return $null }
+    if (!(CheckReduxOption -Expose $Expose -Exclude $Exclude -Base $Base -Child $Child -Adult $Adult -All $All) ) { return $null }
     $Width = ($AddTo.Width - (DPISize 30))
     $Last.Column = $Last.Row = 1
 
@@ -772,13 +773,13 @@ function CheckReduxOption([string]$Name, [Object]$Expose, [Object]$Exclude, [byt
     if ($All) { return $True }
 
     if ($Child) {
-        if (!(IsSet $GamePatch.age))                { return $True }
-        if ($GamePatch.age.toLower() -eq "child")   { return $True }
+        if (!(IsSet $GamePatch.age))                 { return $True }
+        if ($GamePatch.age.toLower() -eq "child")    { return $True }
     }
 
     if ($Adult) {
-        if (!(IsSet $GamePatch.age))                { return $True }
-        if ($GamePatch.age.toLower() -eq "adult")   { return $True }
+        if (!(IsSet $GamePatch.age))                 { return $True }
+        if ($GamePatch.age.toLower() -eq "adult")    { return $True }
     }
     
     if ($Base -gt 0 -and $Base -ne $null) {

@@ -4,7 +4,7 @@ function SetWiiVCMode([boolean]$Enable=!$IsWiiVC) {
 
     WriteToConsole "Changing Between Wii VC Mode..."
 
-    $Settings.Core.WiiMode = $global:IsWiiVC = $Enable
+    $global:IsWiiVC = $Enable
     if ($Enable) { $png = $Files.icon.WiiEnabled } else { $png = $Files.icon.WiiDisabled }
     SetBitmap -Path $png -Box $Patches.WiiButton
 
@@ -322,6 +322,8 @@ function ChangeGameMode() {
     SetModeLabel
     ChangePatchList
 
+    [System.GC]::WaitForPendingFinalizers(); [System.GC]::Collect()
+
 }
 
 
@@ -445,7 +447,7 @@ function ChangePatch() {
     }
 
     EnableGUI $True
-    [System.GC]::Collect(); [System.GC]::WaitForPendingFinalizers(); [System.GC]::Collect()
+    [System.GC]::WaitForPendingFinalizers(); [System.GC]::Collect()
     UpdateStatusLabel "Ready to patch..." -NoConsole
 
 }
@@ -551,6 +553,9 @@ function GamePath_Finish([object]$TextBox, [string]$Path) {
     EnablePatchButtons
     CalculateHashSum
     WriteToConsole ("Game Path:      " + $GamePath)
+
+    if     ($file.Extension -eq ".wad" -and !$IsWiiVC) { SetWiiVCMode $True  }
+    elseif ($file.Extension -ne ".wad" -and  $IsWiiVC) { SetWiiVCMode $False }
 
 }
 
@@ -808,7 +813,10 @@ function AddTextFileToTextbox([object]$TextBox, [string]$File, [switch]$Add, [sw
     
     if ($GameCredits -or $MainCredits)   { $Start = $False }
     else                                 { $Start = $True }
-    $content = (Get-Content $File -Raw)
+    $reader  = New-Object System.IO.StreamReader($File)
+    $content = $reader.ReadToEnd()
+    $reader.Close()
+    $reader.Dispose()
 
     if ($GameCredits) {
         if (!(IsSet $GameType.mode)) { return }
@@ -840,6 +848,7 @@ function AddTextFileToTextbox([object]$TextBox, [string]$File, [switch]$Add, [sw
     $content = [string]::Format($content, [Environment]::NewLine)
     if ($Add) { $TextBox.Text += $content }
     else      { $TextBox.Text  = $content }
+    $content = $null
 
 }
 

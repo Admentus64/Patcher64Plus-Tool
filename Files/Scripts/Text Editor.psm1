@@ -356,6 +356,7 @@ function RunTextEditor([object]$Game=$null) {
 #==============================================================================================================================================================================================
 function CloseTextEditor() {
     
+    if ($TextEditor.Dialog -eq $null) { return }
     $TextEditor.Dialog.Hide()
 
     if ($LastScript -ne $null) {
@@ -1441,6 +1442,7 @@ function ParseMessagePart([System.Collections.ArrayList]$Text, [System.Collectio
 #==============================================================================================================================================================================================
 
 Export-ModuleMember -Function RunTextEditor
+Export-ModuleMember -Function CloseTextEditor
 Export-ModuleMember -Function SaveScript
 Export-ModuleMember -Function LoadScript
 Export-ModuleMember -Function GetMessage
