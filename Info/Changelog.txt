@@ -1,3 +1,8 @@
+v22.0.2
+- Added "Functional Weapons" option for OoT
+- Changed "Unlock Mirror Shield" option for OoT to reuse Deku Shield
+- Fixed King Dodongo crashing with Harder Child Bosses
+
 v22.0.1
 - Added new sword icons and text labels for OoT
 - Changed Wii VC mode to be detected automatically again

@@ -28,7 +28,7 @@ function PatchOptions() {
 	
 	# GAMEPLAY #
 	
-	if (IsChecked $Redux.Gameplay.AgileSpeed)                { ApplyPatch -Patch "Decompressed\Optional\agile_speed_settings.ppf"   }
+	if (IsChecked $Redux.Gameplay.AgileSpeed)                { ApplyPatch -Patch "Decompressed\Optional\agile_speed_settings.ppf" }
     
 
 
@@ -42,13 +42,13 @@ function PatchOptions() {
 
     # DIFFICULTY #
 
-    if (IsChecked $Redux.Hero.PotsChallenge)            { ApplyPatch -Patch "Decompressed\Optional\pots_challenge.ppf"      }
+    if (IsChecked $Redux.Hero.PotsChallenge)                { ApplyPatch -Patch "Decompressed\Optional\pots_challenge.ppf" }
     
 
 
     # MM PAUSE SCREEN #
 
-    if (IsChecked $Redux.Text.PauseScreen)              { ApplyPatch -Patch "Decompressed\Optional\mm_pause_screen.ppf" }
+    if (IsChecked $Redux.Text.PauseScreen)                  { ApplyPatch -Patch "Decompressed\Optional\mm_pause_screen.ppf" }
 
 
 
@@ -796,6 +796,25 @@ function ByteOptions() {
         PatchBytes -Offset "7F7000" -Texture -Patch "Equipment\Bow\heros_bow_light.icon"
         if (TestFile ($GameFiles.textures + "\Equipment\Bow\heros_bow." + $LanguagePatch.code + ".label")) { PatchBytes -Offset "89F800" -Texture -Patch ("Equipment\Bow\heros_bow." + $LanguagePatch.code + ".label") }
     }
+    
+ <# if (IsChecked $Redux.Equipment.VisibleGiantsKnife) {
+        ChangeBytes -Offset "B6D81E" -Values "3F38" -Match "5540"; ChangeBytes -Offset "B6D826" -Values "7630" -Match "5540"
+        ChangeBytes -Offset "B6D82E" -Values "3F38" -Match "5540"; ChangeBytes -Offset "B6D836" -Values "7630" -Match "5540"
+    } #>
+
+    if (IsChecked $Redux.Equipment.FunctionalWeapons) {
+        ChangeBytes -Offset "DFE765" -Values "F2"; ChangeBytes -Offset "DFE76C" -Values "F1"; ChangeBytes -Offset "DFE77A" -Values "F1"; ChangeBytes -Offset "DFE77D" -Values "F2"; ChangeBytes -Offset "DFE782" -Values "F4" # Freezard (Deku Stick, Kokiri Slash, Kokiri Spin, Kokiri Jump, Hammer Jump)
+        ChangeBytes -Offset "CB4DB1" -Values "D2"; ChangeBytes -Offset "CB4DB2" -Values "D1"; ChangeBytes -Offset "CB4DB8" -Values "D1"                                                                                       # Blue Bubble (Deku Stick, Slingshot, Kokiri Slash)
+        ChangeBytes -Offset "C673F9" -Values "F2"; ChangeBytes -Offset "C673FA" -Values "F1"; ChangeBytes -Offset "C67400" -Values "F1"                                                                                       # Torch Slug (Deku Stick, Slingshot, Kokiri Slash)
+        ChangeBytes -Offset "D49F5E" -Values "02"; ChangeBytes -Offset "D49F61" -Values "02"; ChangeBytes -Offset "D49F62" -Values "04"; ChangeBytes -Offset "D49F6F" -Values "04"; ChangeBytes -Offset "D49F70" -Values "02" # Big Octorok (Hamer Swing, Master Slash, Giant Slash, Giant Spin, Master Spin)
+        ChangeBytes -Offset "D49F72" -Values "08"; ChangeBytes -Offset "D49F73" -Values "04"; ChangeBytes -Offset "D49F76" -Values "04"                                                                                       # Big Octorok (Giant Jump, Master Jump, Hammer Jump)
+        ChangeBytes -Offset "DAF295" -Values "F2"; ChangeBytes -Offset "DAF296" -Values "F1"; ChangeBytes -Offset "DAF298" -Values "F1"; ChangeBytes -Offset "DAF29C" -Values "F1"; ChangeBytes -Offset "DAF2AA" -Values "F1" # Spike (Deku Stick, Slingshot, Boomerang, Kokiri Slash, Kokiri Spin)
+        ChangeBytes -Offset "DAF2AD" -Values "F2"; ChangeBytes -Offset "DAF2B2" -Values "F4"                                                                                                                                  # Spike (Kokiri Jump, Hammer Jump)
+        ChangeBytes -Offset "D7A35D" -Values "F2"; ChangeBytes -Offset "D7A364" -Values "F1"; ChangeBytes -Offset "D7A372" -Values "F1"; ChangeBytes -Offset "D7A375" -Values "F2"; ChangeBytes -Offset "D7A37A" -Values "F4" # Anubis (Deku Stick, Kokiri Slash, Kokiri Spin, Kokiri Jump, Hammer Jump)
+        ChangeBytes -Offset "C2F5DE" -Values "E4"                                                                                                                                                                             # Leever (Hammer Jump)
+        ChangeBytes -Offset "D4759D" -Values "D2"; ChangeBytes -Offset "D4759E" -Values "F1"; ChangeBytes -Offset "D475A0" -Values "11"; ChangeBytes -Offset "D475BA" -Values "D4"                                            # Shellblade (Deku Stick, Slingshot, Boomerang, Hammer Jump)
+        ChangeBytes -Offset "D76516" -Values "F4"                                                                                                                                                                             # Like-Like (Hammer Jump)
+    }
 
     if (IsChecked $Redux.Equipment.FireProofDekuShield)     { ChangeBytes -Offset "BD3C5B" -Values "00"                                            }
     if (IsChecked $Redux.Equipment.UnsheathSword)           { ChangeBytes -Offset "BD04A0" -Values "28 42 00 05 14 40 00 05 00 00 10 25"           }
@@ -896,14 +915,19 @@ function ByteOptions() {
 
     # UNLOCK CHILD RESTRICTIONS #
 
-    if (IsChecked $Redux.Unlock.Tunics)          { ChangeBytes -Offset "BC77B6" -Values "09 09"; ChangeBytes -Offset "BC77FE" -Values "09 09" }
-    if (IsChecked $Redux.Unlock.MasterSword)     { ChangeBytes -Offset "BC77AE" -Values "09 09" -Interval 74 }
-    if (IsChecked $Redux.Unlock.GiantsKnife)     { ChangeBytes -Offset "BC77AF" -Values "09 09" -Interval 74 ; ChangeBytes -Offset "BC7811" -Values "09" }
-  # if (IsChecked $Redux.Unlock.HylianShield)    { ChangeBytes -Offset "BC77B2" -Values "09 09" -Interval 73 } # Lock Hylian Shield: 00 00
-    if (IsChecked $Redux.Unlock.MirrorShield)    { ChangeBytes -Offset "BC77B3" -Values "09 09" -Interval 73 }
-    if (IsChecked $Redux.Unlock.Boots)           { ChangeBytes -Offset "BC77BA" -Values "09 09"; ChangeBytes -Offset "BC7801" -Values "09 09" }
-    if (IsChecked $Redux.Unlock.Gauntlets)       { ChangeBytes -Offset "AEFA6C" -Values "24 08 00 00" }
-    if (IsChecked $Redux.Unlock.MegatonHammer)   { ChangeBytes -Offset "BC77A3" -Values "09 09" -Interval 42 }
+    if (IsChecked $Redux.Unlock.MirrorShield) {
+        CopyBytes   -Offset "B6D74E" -Length "2" -Start "B6D72E"; CopyBytes -Offset "B6D756" -Length "2" -Start "B6D736"; CopyBytes -Offset "B6D78E" -Length "2" -Start "B6D76E"
+        CopyBytes   -Offset "B6D796" -Length "2" -Start "B6D776"; CopyBytes -Offset "B6D7EE" -Length "2" -Start "B6D7CE"; CopyBytes -Offset "B6D7F6" -Length "2" -Start "B6D7D6"
+        ChangeBytes -Offset "BC77B3" -Values "0909" -Interval 73
+    }
+
+    if (IsChecked $Redux.Unlock.Tunics)          { ChangeBytes -Offset "BC77B6" -Values "0909";              ChangeBytes -Offset "BC77FE" -Values "0909" }
+    if (IsChecked $Redux.Unlock.MasterSword)     { ChangeBytes -Offset "BC77AE" -Values "0909" -Interval 74                                              }
+    if (IsChecked $Redux.Unlock.GiantsKnife)     { ChangeBytes -Offset "BC77AF" -Values "0909" -Interval 74; ChangeBytes -Offset "BC7811" -Values "09"   }
+  # if (IsChecked $Redux.Unlock.HylianShield)    { ChangeBytes -Offset "BC77B2" -Values "0909" -Interval 73                                              } # Lock Hylian Shield: 00 00
+    if (IsChecked $Redux.Unlock.Boots)           { ChangeBytes -Offset "BC77BA" -Values "0909";              ChangeBytes -Offset "BC7801" -Values "0909" }
+    if (IsChecked $Redux.Unlock.Gauntlets)       { ChangeBytes -Offset "AEFA6C" -Values "24080000";          ChangeBytes -Offset "BC780D" -Values "0909" }
+    if (IsChecked $Redux.Unlock.MegatonHammer)   { ChangeBytes -Offset "BC77A3" -Values "0909" -Interval 42                                              }
     
 
     
@@ -1743,11 +1767,11 @@ function ByteSceneOptions() {
          SaveAndPatchLoadedScene
 
          PrepareMap   -Scene "King Dodongo's Lair" -Map 1 -Header 0
-         InsertObject -Name "Baby Dodongo"
-         ReplaceActor -Name "Bomb Flower" -New "Baby Dodongo" -X (-574)  -Y (-1504) -Z (-3615) -Param "0000"
-         ReplaceActor -Name "Bomb Flower" -New "Baby Dodongo" -X (-1216) -Y (-1504) -Z (-3615) -Param "0000"
-         ReplaceActor -Name "Bomb Flower" -New "Baby Dodongo" -X (-1380) -Y (-1505) -Z (-3340) -Param "0000"
-         ReplaceActor -Name "Bomb Flower" -New "Baby Dodongo" -X (-380)  -Y (-1504) -Z (-3340) -Param "0000"
+         ReplaceObject -Name "Bomb Flower" -New "Baby Dodongo"
+         ReplaceActor  -Name "Bomb Flower" -New "Baby Dodongo" -X (-574)  -Y (-1504) -Z (-3615) -Param "0000"
+         ReplaceActor  -Name "Bomb Flower" -New "Baby Dodongo" -X (-1216) -Y (-1504) -Z (-3615) -Param "0000"
+         ReplaceActor  -Name "Bomb Flower" -New "Baby Dodongo" -X (-1380) -Y (-1505) -Z (-3340) -Param "0000"
+         ReplaceActor  -Name "Bomb Flower" -New "Baby Dodongo" -X (-380)  -Y (-1504) -Z (-3340) -Param "0000"
          SaveAndPatchLoadedScene
 
          PrepareMap   -Scene "Barinade's Lair" -Map 1 -Header 0
@@ -3004,7 +3028,7 @@ function CreateTabColors() {
 
     # MISC COLORS #
 
-    CreateReduxGroup -Tag "Colors" -Text "Misc Colors"
+    CreateReduxGroup -Tag "Colors" -All -Text "Misc Colors"
 
     CreateReduxCheckBox -Name "PauseScreenColors" -All -Text "MM Pause Screen Colors" -Info "Use the Pause Screen color scheme from Majora's Mask" -Credits "Garo-Mastah"
 
@@ -3045,6 +3069,8 @@ function CreateTabEquipment() {
     CreateReduxGroup    -Tag  "Equipment"           -All   -Text "Equipment Adjustments"
     CreateReduxCheckBox -Name "UnsheathSword"       -All   -Text "Unsheath Sword"              -Info "The sword is unsheathed first before immediately swinging it"                                  -Credits "Admentus"
     CreateReduxCheckBox -Name "FireproofDekuShield" -Child -Text "Fireproof Deku Shield"       -Info "The Deku Shield turns into an fireproof shield, which will not burn up anymore"                -Credits "Admentus (ported) & Three Pendants (ROM patch)"
+  # CreateReduxCheckBox -Name "VisibleGiantsKnife"  -Child -Text "Visible Giant's Knife"       -Info "The Giant's Knife as Child Link is now shown as a two-handed version of the Kokiri Sword"      -Credits "Admentus" -Exclude "Child Quest"
+    CreateReduxCheckBox -Name "FunctionalWeapons"   -All   -Text "Functional Weapons"          -Info "All melee weapons are useable against enemies, except for obvious boss reasons"                -Credits "Admentus" -Exclude "Child Quest"
     CreateReduxCheckBox -Name "HerosBow"            -Adult -Text "Hero's Bow"                  -Info "Replace the Fairy Bow icon and text with the Hero's Bow"                                       -Credits "GhostlyDark (ported) & Admentus (dialogue)"
     CreateReduxCheckBox -Name "Hookshot"            -Adult -Text "Termina Hookshot"            -Info "Replace the Hyrule Hookshot icon with the Termina Hookshot"                                    -Credits "GhostlyDark (ported)"
     CreateReduxCheckBox -Name "GoronBraceletFix"    -Adult -Text "Keep Goron's Bracelet Color" -Info "Prevent grayscale on Goron's Bracelet, as Adult Link isn't able to push big blocks without it" -Credits "Randomizer"
@@ -3306,24 +3332,24 @@ function CreateTabAnimations() {
     
     # SKIP CUTSCENES #
 
-    CreateReduxGroup   -Tag  "Skip" -Text "Skip Cutscenes"
     $items = @("Opening Cutscene", "Collected All Medallions", "Darunia Dance", "Zelda's Escape", "Beated Dungeon Outro", "Get Light Arrow", "Learn Regular Songs", "Learn Warp Songs", "Opening Royal Tomb", "Chamber of Sages Visits", "Swallowed by Jabu-Jabu", "Ganon's Tower Collapse", "Lost Woods Bullet Bag")
+    CreateReduxGroup   -Tag  "Skip"      -All -Text "Skip Cutscenes"
     CreateReduxListBox -Name "Cutscenes" -All -Items $items -MultiColumn -MultiSelect -Columns 4 -Rows 1.6 -ItemWidth 120
     
 
 
     # SPEEDUP CUTSCENES #
 
-    CreateReduxGroup   -Tag  "Speedup" -Text "Speedup Cutscenes"
     $items = @("Opening Chests", "Opening Kakariko Gate", "Moving King Zora", "Owl Flights", "Ingo Epona Race", "Ranch Epona Escape", "Horseback Archery", "Opening Door of Time", "Draining the Well", "Boss Intros & Outros", "Rainbow Bridge", "Get Fairy Ocarina", "Ganon's Castle Trials")
+    CreateReduxGroup   -Tag  "Speedup"   -All -Text "Speedup Cutscenes"
     CreateReduxListBox -Name "Cutscenes" -All -Items $items -MultiColumn -MultiSelect -Columns 4 -Rows 1.6 -ItemWidth 120
 
 
 
     # RESTORE CUTSCENES #
 
-    CreateReduxGroup    -Tag  "Restore"          -Text "Restore Cutscenes"
-    CreateReduxCheckBox -Name "OpeningCutscene"  -Text "Opening Cutscene" -Info "Restore the beta introduction cutscene" -Link $Redux.Skip.OpeningCutscene -Credits "Admentus (ROM) & CloudModding (RAM)" -Warning "This cutscene has issues in 30 FPS mode"
+    CreateReduxGroup    -Tag  "Restore"         -Base 1 -Text "Restore Cutscenes"
+    CreateReduxCheckBox -Name "OpeningCutscene" -Base 1 -Text "Opening Cutscene" -Info "Restore the beta introduction cutscene" -Link $Redux.Skip.OpeningCutscene -Credits "Admentus (ROM) & CloudModding (RAM)" -Warning "This cutscene has issues in 30 FPS mode"
 
 
 
