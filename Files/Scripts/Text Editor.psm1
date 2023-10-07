@@ -238,7 +238,7 @@ function CreateTextEditorDialog() {
         if ($Settings.Debug.ClearLog -eq $True) { Clear-Host }
         SetTextEditorTypes
 
-        if ($GamePath -ne $null) {
+        if ($GamePath -eq $null) {
             PlaySound $Sounds.done
             UpdateStatusLabel -Text "Failed! No ROM path is given." -Editor -Error
             ResetTextEditorTypes; return
@@ -320,11 +320,11 @@ function CreateTextEditorDialog() {
             ExportBytes -Offset $LanguagePatch.table_start -Length $LanguagePatch.table_length -Output ($Paths.Games + "\" + $Files.json.textEditor.game + "\Editor\message_data."        + $LanguagePatch.code + ".tbl") -Force
         }
 
-        Cleanup
+        Cleanup -SkipLanguageReset
         LoadMessages
+        ResetTextEditorTypes
         PlaySound $Sounds.done
         UpdateStatusLabel -Text "Success! Script has been extracted." -Editor
-        ResetTextEditorTypes
     })
 
     $ResetButton.Add_Click({
@@ -689,7 +689,11 @@ function AddMessageIDButton([string]$ID, [byte]$Column, [uint16]$Row, [string]$C
         $TextEditor.LastButton          = $this
         $this.BackColor                 = "DarkGray"
         $TextEditor.TextBoxType.enabled = $TextEditor.TextBoxPosition.enabled = $True
-        if ($Files.json.textEditor.header -gt 0) { $TextEditor.TextBoxIcon.enabled = $TextEditor.TextBoxRupees.enabled = $TextEditor.TextBoxJump.enabled = $True }
+        if ($Files.json.textEditor.header -gt 0) {
+            if ($TextEditor.TextBoxIcon   -ne $null) { $TextEditor.TextBoxIcon.enabled   = $True }
+            if ($TextEditor.TextBoxRupees -ne $null) { $TextEditor.TextBoxRupees.enabled = $True }
+            if ($TextEditor.TextBoxJump   -ne $null) { $TextEditor.TextBoxJump.enabled   = $True }
+        }
         $TextEditor.Edited[0] = $TextEditor.Content.Enabled = $True
     } )
     $TextEditor.ListPanel.Controls.Add($button)

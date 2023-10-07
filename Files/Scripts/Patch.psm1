@@ -291,9 +291,10 @@ function WriteDebug([string]$Command, [string[]]$Header, [string]$PatchedFileNam
 
 
 #==============================================================================================================================================================================================
-function Cleanup() {
+function Cleanup([switch]$skipLanguageReset) {
     
-    $global:ByteArrayGame = $global:ROMFile = $global:WADFile = $global:CheckHashSum = $global:ROMHashSum = $global:LanguagePatch = $null
+    $global:ByteArrayGame = $global:ROMFile = $global:WADFile = $global:CheckHashSum = $global:ROMHashSum = $null
+    if (!$skipLanguageReset) { $global:LanguagePatch = $null }
     [System.GC]::WaitForPendingFinalizers(); [System.GC]::Collect()
 
     if ($Settings.debug.NoCleanup -eq $True) { return }
