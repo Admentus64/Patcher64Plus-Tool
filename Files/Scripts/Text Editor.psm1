@@ -1324,6 +1324,7 @@ function ParseMessageMM([char[]]$Text, [switch]$Encode) {
         if ($types[230])   { $Text = ParseMessagePart -Text $Text -Encoded @(230) -Decoded @(32, 60, 83, 112, 105, 100, 101, 114, 32, 72, 111, 117, 115, 101, 58, 54, 62) -Encode $Encode } # E6 / <Spider House:6> (oceanside spider house mask color 6)
 
         # Other
+        if ($types[10])    { $Text = ParseMessagePart -Text $Text -Encoded @(10)  -Decoded @(60, 83, 108, 111, 119, 62)                                                             -Encode $Encode } # 0A / <Slow>             (slows down text)
         if ($types[19])    { $Text = ParseMessagePart -Text $Text -Encoded @(19)  -Decoded @(60, 82, 101, 115, 101, 116, 62)                                                        -Encode $Encode } # 13 / <Reset>            (reset cursor position)
         if ($types[23])    { $Text = ParseMessagePart -Text $Text -Encoded @(23)  -Decoded @(60, 68, 73,  62)                                                                       -Encode $Encode } # 17 / <DI>               (enable instantaneous text)
         if ($types[24])    { $Text = ParseMessagePart -Text $Text -Encoded @(24)  -Decoded @(60, 68, 67,  62)                                                                       -Encode $Encode } # 18 / <DC>               (disable instantaneous text)

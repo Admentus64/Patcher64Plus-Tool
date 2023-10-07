@@ -1792,7 +1792,6 @@ function ByteSceneOptions() {
 #==============================================================================================================================================================================================
 function WholeLanguageOptions() {
     
-    if     (IsChecked $Redux.Text.MMoT)      { ApplyDialogue -Script "malon_master_of_Time_static.bps" -Table "malon_master_of_time_table.bps" }
     elseif (IsChecked $Redux.Text.Restore)   { ApplyDialogue -Script "restore_static.bps"              -Table "restore_table.bps"              }
     elseif (IsChecked $Redux.Text.Beta)      { ApplyDialogue -Script "ura_static.bps"                  -Table "ura_table.bps"                  }
     elseif (IsChecked $Redux.Text.Custom) {
@@ -2529,11 +2528,10 @@ function CreateTabLanguage() {
         $last.Column = 1; $last.Row++
     }
 
-    CreateReduxRadioButton -Name "Vanilla" -All                     -Safe -Max 4 -SaveTo "Dialogue" -Text "Vanilla Text"  -Checked -Info "Keep the text as it is"
-    CreateReduxRadioButton -Name "Restore" -Base 1                  -Safe -Max 4 -SaveTo "Dialogue" -Text "Restore Text"           -Info "Restores the text used from the GC revision and applies grammar & typo fixes and corrects some icons in the text" -Credits "ShadowOne333"
-    CreateReduxRadioButton -Name "Beta"    -Base 1                  -Safe -Max 4 -SaveTo "Dialogue" -Text "Beta Text"              -Info "Restores the text as was used in the Ura Quest Beta version"                                                      -Credits "ZethN64, Sakura, Frostclaw & Steve(ToCoool)"
-    CreateReduxRadioButton -Name "MMoT"    -Expose "Master of Time" -Safe -Max 4 -SaveTo "Dialogue" -Text "Malon's Master of Time" -Info "Use the script dialogue from the Malon's Master of Time version"                                                  -Credits "Luna Romana"
-    CreateReduxRadioButton -Name "Custom"  -All                     -Safe -Max 4 -SaveTo "Dialogue" -Text "Custom"                 -Info 'Insert custom dialogue found from "..\Patcher64+ Tool\Files\Games\Ocarina of Time\Custom Text"' -Warning "ROM crashes if the script is not proper`n[!] Won't be applied if the custom script is missing"
+    CreateReduxRadioButton -Name "Vanilla" -All    -Safe -Max 4 -SaveTo "Dialogue" -Text "Vanilla Text"  -Info "Keep the text as it is" -Checked
+    CreateReduxRadioButton -Name "Restore" -Base 1 -Safe -Max 4 -SaveTo "Dialogue" -Text "Restore Text"  -Info "Restores the text used from the GC revision and applies grammar & typo fixes and corrects some icons in the text" -Credits "ShadowOne333"
+    CreateReduxRadioButton -Name "Beta"    -Base 1 -Safe -Max 4 -SaveTo "Dialogue" -Text "Beta Text"     -Info "Restores the text as was used in the Ura Quest Beta version"                                                      -Credits "ZethN64, Sakura, Frostclaw & Steve(ToCoool)"
+    CreateReduxRadioButton -Name "Custom"  -All    -Safe -Max 4 -SaveTo "Dialogue" -Text "Custom"        -Info 'Insert custom dialogue found from "..\Patcher64+ Tool\Files\Games\Ocarina of Time\Custom Text"' -Warning "ROM crashes if the script is not proper`n[!] Won't be applied if the custom script is missing"
    
     CreateReduxCheckBox -Name "FemalePronouns" -Safe -Text "Female Pronouns" -Info "Refer to Link as a female character"                                                                                                                       -Credits "Admentus & Mil"
     CreateReduxCheckBox -Name "TypoFixes"      -Safe -Text "Typo Fixes"      -Info "Include the typo fixes from the Redux script"                                                                                                              -Credits "ShadowOne333"

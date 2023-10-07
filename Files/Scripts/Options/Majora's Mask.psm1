@@ -1088,11 +1088,7 @@ function ByteSceneOptions() {
 #==============================================================================================================================================================================================
 function WholeLanguageOptions([string]$Script, [string]$Table) {
     
-    if (IsChecked $Redux.Text.Restore) {
-        ApplyDialogue -Script "restore_static.bps" -Table "restore_table.bps"
-        PatchBytes -Offset "A2DDC4" -Patch "Icons\troupe_leaders_mask_text.yaz0" -Length "26F" -Texture # Correct Circus Mask
-    }
-    elseif (IsChecked $Redux.Text.Custom) {
+    if (IsChecked $Redux.Text.Custom) {
         if ( (TestFile ($Gamefiles.editor + "\message_data_static." + $LanguagePatch.code + ".bin") ) -and (TestFile ($Gamefiles.editor + "\message_data." + $LanguagePatch.code + ".tbl") ) ) {
             Copy-Item -LiteralPath ($Gamefiles.editor + "\message_data_static." + $LanguagePatch.code + ".bin") -Destination $Script -Force
             Copy-Item -LiteralPath ($Gamefiles.editor + "\message_data."        + $LanguagePatch.code + ".tbl") -Destination $Table  -Force
@@ -1114,6 +1110,77 @@ function ByteLanguageOptions() {
         SetMessage -ID "0C3B" -Text "Keep in mind that after you use<N>your reforged sword <R>100 times<W>, it<N>will lose its edge and it'll be back<N>to its original sharpness..."   -Replace "This reforged blade will be <R>unbreakable<W>.<N>Ohh... Don't look at me like that.<N>Surely I would not dare conning you<N>with a flimsy weapon."
         SetMessage -ID "0C51" -Text "Now keep in mind that after<N>you've used this <R>100 times<W>, the<N>blade will lose its edge and will<N>return to its <R>original sharpness<W>." -Replace "You do not need to worry for it, as<N>this blade is <R>unbreakable<W>. What!?<N>You do not believe me? Go see it<N>for yourself then in action."
         SetMessage -ID "1785" -Text "Use it up to <R>100 times<W>."                                                                                                                     -Replace "Use it as much you want."
+    }
+
+    if (IsChecked $Redux.Text.Restore -Lang 1) {
+        # Trouple Leader's Mask
+        PatchBytes -Offset "A2DDC4" -Patch "Icons\troupe_leaders_mask_text.yaz0" -Length "26F" -Texture # Correct Circus Mask
+        SetMessage -ID "0083" -Text "Circus" -Replace "Trouple"; SetMessage -ID "173D"; SetMessage -ID "1FF4"; SetMessage -ID "210A"; SetMessage -ID "21B4"; SetMessage -ID "2341"
+
+        # Retranslations
+        SetMessage -ID "0804" -Replace "Actually, when I look at you,<N>it reminds me of my son who<N>left the house a long time ago...<New Box>Somehow, it felt as if I was<N>competing with my son once more,<N>so I put all my effort into it...<Reset><New Box II>Please excuse my rudeness.<New Box>I look forward to seeing you again...<N>Be careful.<End>"
+        SetMessage -ID "101F" -Replace "Today, Mikau, the one person<N>whom I didn't want to know,<N>about it, found out everything.<New Box II>At first, I was ashamed and<N>too sad, I couldn't help it.<Reset><New Box II>At that time, I thought the<N>words Mikau said eased my heart.<New Box>But please, Mikau, I'm begging you,<N>don't do anything rash."
+        SetMessage -ID "1030" -Text    "Now I can continue resting in<N>peace. I too must abide the laws<N>of ancient times and again merely<N>watch from my deep slumber." `
+                              -Replace "Now the Zora Warrior's soul<N>can rest in peace...<New Box>I, too, must abide the laws<N>of ancient times, and have to<N>return again to my deep slumber..."
+        # Typos and fixes
+        SetMessage -ID "0089" -Text "Kamaro's Mask<W>!<DC><N>"                                   -Replace "Kamaro's Mask<W>!<DC><New Box>"
+        SetMessage -ID "0089" -Text "hoped they<New Box>"                                        -Replace "hoped they<N>"
+        SetMessage -ID "0097" -Text "Land"                                                       -Replace "Town"
+        SetMessage -ID "0098" -Text "Land"                                                       -Replace "Town"
+        SetMessage -ID "00AA" -Text "<Reset><Reset>Quick! Deliver it for her! Take it<New Box>"  -Replace "<New Box>Quick! Deliver it for her!<N>Take it "
+        SetMessage -ID "0326"                                                                    -Replace "<R>Great Bay Coast<N><W>Beware of Leevers, dangerous<N>fossorial life-forms!"
+        SetMessage -ID "0555" -Text "can.<N><New Box II>"                                        -Replace "can.<New Box II>"
+        SetMessage -ID "0555" -Text "in the stores...<N><Reset>"                                 -Replace "in the stores...<New Box>"
+        SetMessage -ID "0555" -Text "had<New Box>"                                               -Replace "had<N>"
+        SetMessage -ID "061C" -Text "Is Brac working t'night?"                                   -Replace "Gon'be an all-nighter..."
+        SetMessage -ID "061F" -Text "I wonder if this'll make it?"                               -Replace "Again all night!"
+        SetMessage -ID "06A7" -Text "Welcome.<N><Reset><Reset>"                                  -Replace "Welcome.<New Box>"
+        SetMessage -ID "06A7" -Text "you<New Box>"                                               -Replace "you<N>"
+        SetMessage -ID "0849" -Text "gathering medicinal herbs"                                  -Replace "picking mushrooms"
+        SetMessage -ID "0876" -Text "<N><R><Cruise Cruise:Hits><W> hits.<N>"                     -Replace " <R><Cruise Cruise:Hits><W> hits.<New Box>"
+        SetMessage -ID "0876" -Text "you'll<New Box>"                                            -Replace "you'll<N>"
+        SetMessage -ID "0BD0" -Text "them"                                                       -Replace "it"
+        SetMessage -ID "0FA4" -Text "temperature.<N><Reset>"                                     -Replace "temperature.<New Box>"
+        SetMessage -ID "0FA4" -Text "hatch<New Box>"                                             -Replace "hatch<N>"
+        SetMessage -ID "14F6" -Text "<Reset><Reset>There are still swarms of<New Box>"           -Replace "<New Box>There are still swarms of<N>"
+        SetMessage -ID "15E4" -Text "Town Land"                                                  -Replace "Town"
+        SetMessage -ID "164B" -Text " for<N>"                                                    -Replace "<N>for "
+        SetMessage -ID "1659" -Text "<N><Reset>But I'm sure I'd like any song<New Box>"          -Replace "<New Box>But I'm sure I'd like any song<N>"
+        SetMessage -ID "1729" -Text "Land"                                                       -Replace "Town"
+        SetMessage -ID "172A" -Text "Land"                                                       -Replace "Town"
+        SetMessage -ID "1910" -Text "Dinofols"                                                   -Replace "Dinolfos"
+        SetMessage -ID "194B" -Text "Wizrobe"                                                    -Replace "Wizzrobe"
+        SetMessage -ID "2924" -Text "for some reason.<N>Well, we haven't even seen the<New Box>" -Replace "for some reason.<New Box>Well, we haven't even seen the<N>"
+        SetMessage -ID "2974" -Text "go out yet.<N>"                                             -Replace "go out yet.<New Box>"
+        SetMessage -ID "2974" -Text " I<New Box>would bring the wedding mask and<N>"             -Replace "<N>I would bring the wedding mask<N>and"
+        SetMessage -ID "2AFE" -Text "<N><Reset>I can't get any milk in from the<New Box>"        -Replace "<New Box>I can't get any milk in from the<N>"
+        SetMessage -ID "336C" -Text "you all you"                                                -Replace "all you"
+        SetMessage -ID "3549" -Text "<N><Reset>If the doggies smell you, I don't<New Box>"       -Replace "<New Box>If the doggies smell you, I don't<N>"
+        
+        # Sounds
+      # SetMessage -ID "00F4" -Text "<Sound:6850>"    -Replace "<Sound:6850>"
+      # SetMessage -ID "00F5" -Text "<Sound:6850>"    -Replace "<Sound:6850>"
+        SetMessage -ID "0859" -Text "<Sound:3901>"    -Replace "<Sound:3AC7>"
+        SetMessage -ID "0868" -Text "<Sound:3901>"    -Replace "<Sound:3AC7>"
+        SetMessage -ID "08E8" -Text "<Sound:2693>"    -Replace "<Sound:2963>"
+        SetMessage -ID "0963" -Text "<Sound:6394>"    -Replace "<Sound:6934>"
+        SetMessage -ID "0CEA" -Text "...<Sound:3AE8>" -Replace "<Sound:3AD0>..."
+        SetMessage -ID "0CEF" -Text "<Sound:3AE8>"    -Replace "<Sound:3AD0>"
+        SetMessage -ID "0DBC"                         -Replace "<Sound:3ABB>" -Append
+        SetMessage -ID "0E14" -Text "<Sound:3AFD>"    -Replace "<Sound:38FD>"
+        SetMessage -ID "0E74"                         -Replace "<Sound:38E9>" -Append
+        SetMessage -ID "100D"                         -Replace "<Sound:6975>" -Append
+        SetMessage -ID "100E"                         -Replace "<Sound:6974>" -Append
+        SetMessage -ID "151D" -Text "<Sound:3A39>"    -Replace "<Sound:3A89>"
+        SetMessage -ID "151E" -Text "<Sound:3A35>"    -Replace "<Sound:3A36>"
+        for ($i=0; $i -lt 4; $i++) { SetMessage -ID "151F" -Text "<Sound:3A39>" -Replace "<Sound:3A89>" }
+        SetMessage -ID "15F6"                         -Replace "<Sound:3AD2>" -Append
+        SetMessage -ID "1FF8"                         -Replace "<Sound:6983>" -Append
+        SetMessage -ID "208E"                         -Replace "<Sound:6845>" -Append
+        SetMessage -ID "236A"                         -Replace "<Sound:6946>" -Append
+        SetMessage -ID "2784" -Text "Deposit mail here.<N><Resume:000A><Sound:284C><DI>Ka-ching!<DC><NSS>" -Replace "Deposit mail here.<Slow><N><Sound:284C><DI>Ka-ching!<DC><NSS>"
+        SetMessage -ID "2931"                         -Replace "<Sound:6980>" -Append
+        SetMessage -ID "34A3" -Text "<Sound:6925>"    -Replace "<Sound:6952>"
     }
 
     if (IsChecked $Redux.Text.AdultPronouns -Lang 1) {
@@ -1565,15 +1632,14 @@ function CreateTabLanguage() {
     # DIALOGUE #
     
     CreateReduxGroup -Tag "Text" -All -Text "Dialogue" -Safe
-    CreateReduxRadioButton -Base 1 -Safe -Name "Vanilla"        -Text "Vanilla Text" -Max 4 -SaveTo "Dialogue" -Info "Keep the text as it is appeared in the original release" -Checked
-    CreateReduxRadioButton -Base 1 -Safe -Name "Instant"        -Text "Instant Text" -Max 4 -SaveTo "Dialogue" -Info "Most text will be shown instantly"                                         -Credits "Admentus"
-    CreateReduxRadioButton -Base 1 -Safe -Name "Restore"        -Text "Restore Text" -Max 4 -SaveTo "Dialogue" -Info "Restores and fixes the following:`n- Restore the area titles cards for those that do not have any`n- Sound effects that do not play during dialogue`n- Grammar and typo fixes" -Credits "Redux"
-    CreateReduxRadioButton -Base 1 -Safe -Name "Custom"         -Text "Custom"       -Max 4 -SaveTo "Dialogue" -Info ('Insert custom dialogue found from "..\Patcher64+ Tool\Files\Games\Majora' + "'" + 's Mask\Custom Text"') -Warning "Make sure your custom script is proper and correct, or your ROM will crash`n[!] No edit will be made if the custom script is missing"
-    CreateReduxComboBox    -Base 1 -Safe -Name "Language"       -Text "Language"                               -Info "Patch the game with a different language" -Items ($Files.json.languages.title)
-    CreateReduxCheckBox    -All    -Safe -Name "AdultPronouns"  -Text "Adult Pronouns"                         -Info "Refer to Link as an adult instead of a child"                              -Credits "Skilar"
-    CreateReduxCheckBox    -Base 1 -Safe -Name "AreaTitleCards" -Text "Area Title Cards"                       -Info "Add area title cards to missing areas"                                     -Credits "ShadowOne333"
-    CreateReduxCheckBox    -All    -Safe -Name "EasterEggs"     -Text "Easter Eggs"                            -Info "Adds custom Patreon Tier 3 messages into the game`nCan you find them all?" -Credits "Admentus & Patreons" -Checked
-
+    CreateReduxComboBox -Base 1 -Safe -Name "Language"       -Text "Language"         -Info "Patch the game with a different language" -Items ($Files.json.languages.title)
+    CreateReduxCheckBox -Base 1 -Safe -Name "Restore"        -Text "Restore Text"     -Info "Restranslates texts and fixes typos for text and sound effects"            -Credits "Admentus & ShadowOne333" -Checked
+    CreateReduxCheckBox -Base 1 -Safe -Name "AreaTitleCards" -Text "Area Title Cards" -Info "Add area title cards to missing areas"                                     -Credits "Admentus & ShadowOne333" -Checked
+    CreateReduxCheckBox -All    -Safe -Name "AdultPronouns"  -Text "Adult Pronouns"   -Info "Refer to Link as an adult instead of a child"                              -Credits "Skilar"
+    CreateReduxCheckBox -Base 1 -Safe -Name "Instant"        -Text "Instant Text"     -Info "Most text will be shown instantly"                                         -Credits "Admentus"
+    CreateReduxCheckBox -All    -Safe -Name "EasterEggs"     -Text "Easter Eggs"      -Info "Adds custom Patreon Tier 3 messages into the game`nCan you find them all?" -Credits "Admentus & Patreons" -Checked
+    CreateReduxCheckBox -Base 1 -Safe -Name "Custom"         -Text "Custom"           -Info ('Insert custom dialogue found from "..\Patcher64+ Tool\Files\Games\Majora' + "'" + 's Mask\Custom Text"') -Warning "Make sure your custom script is proper and correct, or your ROM will crash`n[!] No edit will be made if the custom script is missing"
+    
     
 
     # OTHER TEXT OPTIONS #

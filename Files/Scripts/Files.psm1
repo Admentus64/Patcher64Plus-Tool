@@ -93,8 +93,6 @@ function SetFileParameters() {
 
     $Files.oot.theme_fire_temple            = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Export\audiobank_fire_temple")
     $Files.oot.debug_map_select             = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Export\debug_map_select")
-    $Files.oot.mmot_static                  = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Export\Message\malon_master_of_time_static")
-    $Files.oot.mmot_table                   = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Export\Message\malon_master_of_time_table")
     $Files.oot.restore_text_static          = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Export\Message\restore_static")
     $Files.oot.restore_text_table           = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Export\Message\restore_table")
     $Files.oot.ura_text_static              = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Export\Message\ura_static")
@@ -159,8 +157,6 @@ function SetFileParameters() {
     $Files.mm.deku_palace_0                 = CheckPatchExtension ($Paths.Games + "\Majora's Mask\Export\Deku Palace\deku_palace_room_0")
     $Files.mm.deku_palace_1                 = CheckPatchExtension ($Paths.Games + "\Majora's Mask\Export\Deku Palace\deku_palace_room_1")
     $Files.mm.deku_palace_2                 = CheckPatchExtension ($Paths.Games + "\Majora's Mask\Export\Deku Palace\deku_palace_room_2")
-    $Files.mm.text_restore_static           = CheckPatchExtension ($Paths.Games + "\Majora's Mask\Export\Message\restore_static")
-    $Files.mm.text_restore_table            = CheckPatchExtension ($Paths.Games + "\Majora's Mask\Export\Message\restore_table")
 
 
 

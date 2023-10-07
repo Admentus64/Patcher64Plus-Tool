@@ -1,3 +1,8 @@
+v22.0.3
+- Added MM Text Editor command <Slow>
+- Reworked Restore Text for MM
+- Removed MMoT Text for OoT
+
 v22.0.2
 - Added "Functional Weapons" option for OoT
 - Changed "Unlock Mirror Shield" option for OoT to reuse Deku Shield
