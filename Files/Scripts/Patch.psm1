@@ -386,10 +386,10 @@ function PrePatchingAdditionalOptions() {
 #==============================================================================================================================================================================================
 function CheckCommands() {
     
-    if (   (CheckCommand "ByteOptions") -or (CheckCommand "ByteReduxOptions") )                                                              { return $True }
-    if (   (HasCommand ($GamePatch.function + "ByteLanguageOptions") ) -or (HasCommand ($GamePatch.function + "ByteSceneOptions") ) )        { return $True }
-    if ( ( (HasCommand "WholeLanguageOptions") -or (HasCommand "ByteLanguageOptions") ) -and $Settings.Debug.NoDialoguePatching -ne $True)   { return $True }
-    if (   (HasCommand "ByteSceneOptions")                                              -and $Settings.Debug.NoScenePatching    -ne $True)   { return $True }
+    if (   (CheckCommand "ByteOptions") -or (CheckCommand "ByteReduxOptions") )                                                     { return $True }
+    if (   (HasCommand ($GamePatch.function + "ByteTextOptions") ) -or (HasCommand ($GamePatch.function + "ByteSceneOptions") ) )   { return $True }
+    if ( ( (HasCommand "WholeTextOptions") -or (HasCommand "ByteTextOptions") ) -and $Settings.Debug.NoTextPatching -ne $True)      { return $True }
+    if (   (HasCommand "ByteSceneOptions")                                      -and $Settings.Debug.NoScenePatching -ne $True)     { return $True }
     return $False
 
 }
@@ -447,12 +447,9 @@ function PatchingAdditionalOptions() {
     if (!(UseOptions)) { return }
     
     # BPS - Additional Options (before languages)
-    if (HasCommand "PrePatchLanguageOptions") {
-        UpdateStatusLabel ("Pre-Patching " + $GameType.mode + " Additional Options Patches...")
-        PrePatchLanguageOptions
-    }
+    RunCommand -Command "PrePatchTextOptions" -Message "Text File"
 
-    if ( (IsSet -Elem $LanguagePatchFile) -and $Settings.Debug.NoDialoguePatching -ne $True) {
+    if ( (IsSet -Elem $LanguagePatchFile) -and $Settings.Debug.NoTextPatching -ne $True) {
         UpdateStatusLabel ("Patching " + $GameType.mode + " Language...")
         ApplyPatch -File $GetROM.decomp -Patch $LanguagePatchFile
         $global:LanguagePatchFile = $null
@@ -485,14 +482,14 @@ function PatchingAdditionalOptions() {
     }
     
     # Language Options
-    if ($Settings.Debug.NoDialoguePatching -ne $True -or (HasCommand ($GamePatch.function + "ByteLanguageOptions"))) {
+    if ($Settings.Debug.NoTextPatching -ne $True -or (HasCommand ($GamePatch.function + "ByteTextOptions"))) {
         $Files.json.textEditor = $null
         if ($LanguagePatch.script_dma -ne $null -and $LanguagePatch.region -ne "J") {
             RemoveFile ($GameFiles.extracted + "\message_data_static." + $LanguagePatch.code + ".bin")
             RemoveFile ($GameFiles.extracted + "\message_data."        + $LanguagePatch.code + ".tbl")
 
-            if (HasCommand "WholeLanguageOptions") {
-                WholeLanguageOptions
+            if (HasCommand "WholeTextOptions") {
+                WholeTextOptions
                 if ( (TestFile ($GameFiles.extracted + "\message_data_static." + $LanguagePatch.code + ".bin") ) -and (TestFile ($GameFiles.extracted + "\message_data." + $LanguagePatch.code + ".tbl") ) ) {
                     $start = CombineHex $ByteArrayGame[((GetDecimal $LanguagePatch.script_dma)+0)..((GetDecimal $LanguagePatch.script_dma)+3)]
                     PatchBytes -Offset $start                     -Patch ("message_data_static." + $LanguagePatch.code + ".bin") -Extracted
@@ -500,7 +497,7 @@ function PatchingAdditionalOptions() {
                 }
             }
             
-            RunCommand -Command "ByteLanguageOptions" -Message "Language"
+            RunCommand -Command "ByteTextOptions" -Message "Text"
         }
         
         if ($Files.json.textEditor -ne $null) {
@@ -538,7 +535,7 @@ function PatchingAdditionalOptions() {
 
 
 #==============================================================================================================================================================================================
-function ApplyDialogue([string]$Script, [string]$Table) {
+function ApplyText([string]$Script, [string]$Table) {
     
     $start  = CombineHex $ByteArrayGame[((GetDecimal $LanguagePatch.script_dma)+0)..((GetDecimal $LanguagePatch.script_dma)+3)]
     $end    = CombineHex $ByteArrayGame[((GetDecimal $LanguagePatch.script_dma)+4)..((GetDecimal $LanguagePatch.script_dma)+7)]
@@ -1322,8 +1319,7 @@ function GetROMVersion() {
 Export-ModuleMember -Function MainFunction
 Export-ModuleMember -Function ApplyPatch
 Export-ModuleMember -Function Cleanup
-Export-ModuleMember -Function FinishLanguagePatching
-Export-ModuleMember -Function ApplyDialogue
+Export-ModuleMember -Function ApplyText
 
 Export-ModuleMember -Function SetROMParameters
 Export-ModuleMember -Function Unpack

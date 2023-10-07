@@ -175,11 +175,8 @@ function CreateCreditsPanel() {
     $Shadow1Label    = CreateLabel -X (DPISize 10)           -Y ($SourcesLabel.Bottom    + (DPISize 2)) -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("ShadowOne333's GitHub")                                                               -AddTo $RightPanel.Links
     $Shadow2Label    = CreateLabel -X $Shadow1Label.Right    -Y ($SourcesLabel.Bottom    + (DPISize 2)) -Width (DPISize 340) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("https://github.com/ShadowOne333/Zelda64-Redux-Documentation")                         -AddTo $RightPanel.Links
     
-    $Female1Label    = CreateLabel -X (DPISize 10)           -Y ($Shadow1Label.Bottom    + (DPISize 2)) -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("Feminine Pronouns Script`nBy Mil")                                                    -AddTo $RightPanel.Links
-    $Female2Label    = CreateLabel -X $Female1Label.Right    -Y ($Shadow1Label.Bottom    + (DPISize 2)) -Width (DPISize 470) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("https://docs.google.com/spreadsheets/d/1Ihccm8noxsfHZfN1E3Gkccov1F27WXXxl-rxOuManUk") -AddTo $RightPanel.Links
-
-    $Skilar1Label    = CreateLabel -X (DPISize 10)           -Y ($Female1Label.Bottom    + (DPISize 2)) -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("Skilarbabcock's YouTube")                                                             -AddTo $RightPanel.Links
-    $Skilar2Label    = CreateLabel -X $Skilar1Label.Right    -Y ($Female1Label.Bottom    + (DPISize 2)) -Width (DPISize 225) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("https://www.youtube.com/user/skilarbabcock")                                          -AddTo $RightPanel.Links
+    $Skilar1Label    = CreateLabel -X (DPISize 10)           -Y ($SourcesLabel.Bottom    + (DPISize 2)) -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("Skilarbabcock's YouTube")                                                             -AddTo $RightPanel.Links
+    $Skilar2Label    = CreateLabel -X $Skilar1Label.Right    -Y ($SourcesLabel.Bottom    + (DPISize 2)) -Width (DPISize 225) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("https://www.youtube.com/user/skilarbabcock")                                          -AddTo $RightPanel.Links
     
     $Malon1Label     = CreateLabel -X (DPISize 10)           -Y ($Skilar1Label.Bottom    + (DPISize 2)) -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("Malon Rose YouTube")                                                                  -AddTo $RightPanel.Links
     $Malon2Label     = CreateLabel -X $Malon1Label.Right     -Y ($Skilar1Label.Bottom    + (DPISize 2)) -Width (DPISize 225) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("https://www.youtube.com/c/MalonRose")                                                 -AddTo $RightPanel.Links
@@ -200,7 +197,6 @@ function CreateCreditsPanel() {
     $IkeyIlex2Label  = CreateLabel -X $IkeyIlex1Label.Right  -Y ($LuigiHero1Label.Bottom + (DPISize 2)) -Width (DPISize 260) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("https://github.com/Caverns4/Custom-Game-Models")                                      -AddTo $RightPanel.Links
 
     $Shadow2Label.add_Click(    { [system.Diagnostics.Process]::start("https://github.com/ShadowOne333/Zelda64-Redux-Documentation") } )
-    $Female2Label.add_Click(    { [system.Diagnostics.Process]::start("https://docs.google.com/spreadsheets/d/1Ihccm8noxsfHZfN1E3Gkccov1F27WXXxl-rxOuManUk") } )
     $Skilar2Label.add_Click(    { [system.Diagnostics.Process]::start("https://www.youtube.com/user/skilarbabcock") } )
     $Malon2Label.add_Click(     { [system.Diagnostics.Process]::start("https://www.youtube.com/c/MalonRose") } )
     $Luigi2Label.add_Click(     { [system.Diagnostics.Process]::start("https://www.youtube.com/channel/UC3071imQKR5cEIobsFHLW9Q") } )
@@ -209,7 +205,7 @@ function CreateCreditsPanel() {
     $LuigiHero2Label.add_Click( { [system.Diagnostics.Process]::start("https://github.com/LuigiXHero/OoT-Randomizer-Music-Pack") } )
     $IkeyIlex2Label.add_Click(  { [system.Diagnostics.Process]::start("https://github.com/Caverns4/Custom-Game-Models") } )
 
-    $Shadow2Label.ForeColor = $Female2Label.ForeColor = $Skilar2Label.ForeColor = $Malon2Label.ForeColor = $Luigi2Label.ForeColor = $Darunia2Label.ForeColor = $Fish2Label.ForeColor = $LuigiHero2Label.ForeColor = $IkeyIlex2Label.ForeColor = "Blue"
+    $Shadow2Label.ForeColor = $Skilar2Label.ForeColor = $Malon2Label.ForeColor = $Luigi2Label.ForeColor = $Darunia2Label.ForeColor = $Fish2Label.ForeColor = $LuigiHero2Label.ForeColor = $IkeyIlex2Label.ForeColor = "Blue"
 
 
     
@@ -305,13 +301,13 @@ function CreateSettingsPanel() {
 
 
     # Debug Settings (Nintendo 64)
-    $GeneralSettings.Box                = CreateSettingsGroup    -Text "Debug Settings (Nintendo 64)"
-    $GeneralSettings.NoCompression      = CreateSettingsCheckbox -Name "NoCompression"      -Text "No Compression"            -IsDebug -Info "Do not attempt to compress the ROM back again when patching is concluded`nThis can cause Wii VC WADs to freeze"
-    $GeneralSettings.KeepDecompressed   = CreateSettingsCheckbox -Name "KeepDecompressed"   -Text "Keep Decompressed"         -IsDebug -Info "Keep the decompressed patched ROM in the output folder"
-    $GeneralSettings.NoCRCChange        = CreateSettingsCheckbox -Name "NoCRCChange"        -Text "No CRC Change"             -IsDebug -Info "Do not change the CRC of the ROM when patching is concluded"
-    $GeneralSettings.Rev0DungeonFiles   = CreateSettingsCheckbox -Name "Rev0DungeonFiles"   -Text "Rev 0 Dungeon Files"       -IsDebug -Info "Extract the dungeon files from the OoT ROM (Rev 0 US) or MM ROM (Rev 0 US) as well when extracting dungeon files"
-    $GeneralSettings.NoDialoguePatching = CreateSettingsCheckbox -Name "NoDialoguePatching" -Text "Prevent Dialogue Patching" -IsDebug -Info "Prevents the patching of any dialogue related options for Ocarina of Time or Majora's Mask`nUseful for when patching Randomizer"
-    $GeneralSettings.NoScenePatching    = CreateSettingsCheckbox -Name "NoScenePatching"    -Text "Prevent Scene Patching"    -IsDebug -Info "Prevents the patching of any scene related options for Ocarina of Time or Majora's Mask`nUseful for when patching Randomizer"
+    $GeneralSettings.Box              = CreateSettingsGroup    -Text "Debug Settings (Nintendo 64)"
+    $GeneralSettings.NoCompression    = CreateSettingsCheckbox -Name "NoCompression"    -Text "No Compression"         -IsDebug -Info "Do not attempt to compress the ROM back again when patching is concluded`nThis can cause Wii VC WADs to freeze"
+    $GeneralSettings.KeepDecompressed = CreateSettingsCheckbox -Name "KeepDecompressed" -Text "Keep Decompressed"      -IsDebug -Info "Keep the decompressed patched ROM in the output folder"
+    $GeneralSettings.NoCRCChange      = CreateSettingsCheckbox -Name "NoCRCChange"      -Text "No CRC Change"          -IsDebug -Info "Do not change the CRC of the ROM when patching is concluded"
+    $GeneralSettings.Rev0DungeonFiles = CreateSettingsCheckbox -Name "Rev0DungeonFiles" -Text "Rev 0 Dungeon Files"    -IsDebug -Info "Extract the dungeon files from the OoT ROM (Rev 0 US) or MM ROM (Rev 0 US) as well when extracting dungeon files"
+    $GeneralSettings.NoTextPatching   = CreateSettingsCheckbox -Name "NoTextPatching"   -Text "Prevent Text Patching"  -IsDebug -Info "Prevents the patching of any dialogue related options for Ocarina of Time or Majora's Mask`nUseful for when patching Randomizer"
+    $GeneralSettings.NoScenePatching  = CreateSettingsCheckbox -Name "NoScenePatching"  -Text "Prevent Scene Patching" -IsDebug -Info "Prevents the patching of any scene related options for Ocarina of Time or Majora's Mask`nUseful for when patching Randomizer"
 
     # Settings preset
     $GeneralSettings.Box      = CreateSettingsGroup -Text "Settings Presets"

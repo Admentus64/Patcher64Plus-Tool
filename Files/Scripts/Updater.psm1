@@ -182,8 +182,9 @@ function AutoUpdate([switch]$Manual) {
         
         if     ($Patcher.Date -lt $newDate)                                                                                                   { $update = $True }
         elseif ($Patcher.Date -le $newDate -and $Patcher.Hotfix -lt $newHotfix -and $newHotfix -ne 0)                                         { $update = $True }
-        elseif ($Patcher.Date -le $newDate -and $Patcher.Hotifx -le $newHotfix -and $newHotfix -ne 0 -and $Patcher.Version -ne $newVersion)   { $update = $True }
-        elseif ($Patcher.Date -le $newDate -and                                     $newHotfix -eq 0 -and $Patcher.Version -ne $newVersion)   { $update = $True }
+        elseif ($Patcher.Date -le $newDate -and $Patcher.Hotfix -le $newHotfix -and $newHotfix -ne 0 -and $Patcher.Version -ne $newVersion)   { $update = $True }
+        elseif ($Patcher.Date -le $newDate -and                                     $newHotfix -eq 0 -and $Patcher.Version -lt $newVersion)   { $update = $True }
+        
         $Settings.Core.LastUpdateVersionCheck = $newVersion
         $Settings.Core.LastUpdateHotfixCheck  = $newHotfix
         $Settings.Core.LastUpdateDateCheck    = $newDate

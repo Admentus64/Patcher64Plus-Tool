@@ -1,3 +1,7 @@
+v22.0.4
+- Renamed Language functions to Text
+- Adjusted credits
+
 v22.0.3
 - Added MM Text Editor command <Slow>
 - Reworked Restore Text for MM

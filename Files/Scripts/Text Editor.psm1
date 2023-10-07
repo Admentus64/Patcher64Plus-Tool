@@ -548,7 +548,7 @@ function LoadScript([string]$Script, [string]$Table) {
 function SaveScript([string]$Script, [string]$Table) {
     
     if ($DialogueList -eq $null) {
-        WriteToConsole ("Could not save text messages. Did it ran outside ByteLanguageOptions?" ) -Error
+        WriteToConsole ("Could not save text messages. Did it ran outside ByteTextOptions?" ) -Error
         return
     }
 
@@ -620,7 +620,7 @@ function GetMessage([string]$ID, [switch]$Reset) {
     if ($Files.json.textEditor -eq $null) { LoadTextEditor }
 
     if ($DialogueList -eq $null) {
-        WriteToConsole ("Could not get message ID: " + $ID + " as the message data does not exist. Did it ran outside ByteLanguageOptions?" ) -Error
+        WriteToConsole ("Could not get message ID: " + $ID + " as the message data does not exist. Did it ran outside ByteTextOptions?" ) -Error
         return
     }
 
@@ -708,7 +708,7 @@ function GetMessageOffset([string]$ID) {
     if ($Files.json.textEditor -eq $null) { LoadTextEditor }
 
     if ($DialogueList -eq $null) {
-        WriteToConsole ("Could not get message ID: " + $ID + " offset as the message data does not exist. Did it ran outside ByteLanguageOptions?" ) -Error
+        WriteToConsole ("Could not get message ID: " + $ID + " offset as the message data does not exist. Did it ran outside ByteTextOptions?" ) -Error
         return
     }
 
@@ -725,7 +725,7 @@ function GetMessageLength([string]$ID) {
     if ($Files.json.textEditor -eq $null) { LoadTextEditor }
 
     if ($DialogueList -eq $null) {
-        WriteToConsole ("Could not get message ID: " + $ID + " length as the message data does not exist. Did it ran outside ByteLanguageOptions?" ) -Error
+        WriteToConsole ("Could not get message ID: " + $ID + " length as the message data does not exist. Did it ran outside ByteTextOptions?" ) -Error
         return
     }
 
@@ -740,7 +740,7 @@ function SetMessageBox([string]$ID, [byte]$Type, [byte]$Position) {
     if ($Files.json.textEditor -eq $null) { LoadTextEditor }
 
     if ($DialogueList -eq $null) {
-        WriteToConsole ("Could not edit message ID: " + $ID + " as the message data does not exist. Did it ran outside ByteLanguageOptions?" ) -Error
+        WriteToConsole ("Could not edit message ID: " + $ID + " as the message data does not exist. Did it ran outside ByteTextOptions?" ) -Error
         return
     }
 
@@ -761,7 +761,7 @@ function SetMessageIcon([string]$ID, [string]$Hex, [string]$Value) {
     if ($Files.json.textEditor -eq $null) { LoadTextEditor }
 
     if ($DialogueList -eq $null) {
-        WriteToConsole ("Could not edit message ID: " + $ID + " as the message data does not exist. Did it ran outside ByteLanguageOptions?" ) -Error
+        WriteToConsole ("Could not edit message ID: " + $ID + " as the message data does not exist. Did it ran outside ByteTextOptions?" ) -Error
         return
     }
 
@@ -785,7 +785,7 @@ function SetMessageRupees([string]$ID, [uint16]$Value) {
     if ($Files.json.textEditor -eq $null) { LoadTextEditor }
 
     if ($DialogueList -eq $null) {
-        WriteToConsole ("Could not edit message ID: " + $ID + " as the message data does not exist. Did it ran outside ByteLanguageOptions?" ) -Error
+        WriteToConsole ("Could not edit message ID: " + $ID + " as the message data does not exist. Did it ran outside ByteTextOptions?" ) -Error
         return
     }
 
@@ -805,7 +805,7 @@ function SetJumpToMessage([string]$ID, [string]$Value) {
     if ($Files.json.textEditor -eq $null) { LoadTextEditor }
 
     if ($DialogueList -eq $null) {
-        WriteToConsole ("Could not edit message ID: " + $ID + " as the message data does not exist. Did it ran outside ByteLanguageOptions?" ) -Error
+        WriteToConsole ("Could not edit message ID: " + $ID + " as the message data does not exist. Did it ran outside ByteTextOptions?" ) -Error
         return
     }
 
@@ -820,7 +820,7 @@ function SetJumpToMessage([string]$ID, [string]$Value) {
 function FindMatch([byte[]]$Text, [boolean]$All) {
     
     if ($DialogueList -eq $null) {
-        WriteToConsole ("Could not find match in message ID: " + $ID + " as the message data does not exist. Did it ran outside ByteLanguageOptions?" ) -Error
+        WriteToConsole ("Could not find match in message ID: " + $ID + " as the message data does not exist. Did it ran outside ByteTextOptions?" ) -Error
         return
     } 
 
@@ -932,7 +932,7 @@ function SetMessage([string]$ID, [object]$Text, [object]$Replace, [string]$File=
     if ($Files.json.textEditor -eq $null) { LoadTextEditor }
 
     if ($DialogueList -eq $null) {
-        WriteToConsole ("Could not edit message ID: " + $ID + " as the message data does not exist. Did it ran outside ByteLanguageOptions?" ) -Error
+        WriteToConsole ("Could not edit message ID: " + $ID + " as the message data does not exist. Did it ran outside ByteTextOptions?" ) -Error
         return
     }
 

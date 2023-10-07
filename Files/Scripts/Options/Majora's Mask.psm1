@@ -109,8 +109,8 @@ function ByteOptions() {
     # RESTORE #
 
     if (IsChecked $Redux.Restore.RupeeColors) {
-        ChangeBytes -Offset "10ED020" -Values "70 6B BB 3F FF FF EF 3F 68 AD C3 FD E6 BF CD 7F 48 9B 91 AF C3 7D BB 3D 40 0F 58 19 88 ED 80 AB" # Purple
-        ChangeBytes -Offset "10ED040" -Values "D4 C3 F7 49 FF FF F7 E1 DD 03 EF 89 E7 E3 E7 DD A3 43 D5 C3 DF 85 E7 45 7A 43 82 83 B4 43 CC 83" # Gold
+        ChangeBytes -Offset "10ED020" -Values "706BBB3FFFFFEF3F68ADC3FDE6BFCD7F489B91AFC37DBB3D400F581988ED80AB" # Purple
+        ChangeBytes -Offset "10ED040" -Values "D4C3F749FFFFF7E1DD03EF89E7E3E7DDA343D5C3DF85E7457A438283B443CC83" # Gold
     }
 
     if (IsChecked $Redux.Restore.CowNoseRing) {
@@ -129,40 +129,40 @@ function ByteOptions() {
     }
 
     if (IsChecked $Redux.Restore.RomaniSign)          { PatchBytes  -Offset "26A58C0" -Texture -Patch "romani_sign.bin" }
-    if (IsChecked $Redux.Restore.Title)               { ChangeBytes -Offset "DE0C2E"  -Values "FF C8 36 10 98 00" }
-    if (IsChecked $Redux.Restore.ShopMusic)           { ChangeBytes -Offset "2678007" -Values "44"                }
-    if (IsChecked $Redux.Restore.IkanaCastle)         { ChangeBytes -Offset "2055505" -Values "02 3E E0 03 01 1D" }
-    if (IsChecked $Redux.Restore.PieceOfHeartSound)   { ChangeBytes -Offset "BA94C8"  -Values "10 00"             }
-    if (IsChecked $Redux.Restore.MoveBomberKid)       { ChangeBytes -Offset "2DE4396" -Values "02 C5 01 18 FB 55 00 07 2D" }
-    if (IsChecked $Redux.Restore.OnTheMoonIntro)      { ChangeBytes -Offset "2D5A6CE" -Values "00 00"             }
+    if (IsChecked $Redux.Restore.Title)               { ChangeBytes -Offset "DE0C2E"  -Values "FFC836109800"       }
+    if (IsChecked $Redux.Restore.ShopMusic)           { ChangeBytes -Offset "2678007" -Values "44"                 }
+    if (IsChecked $Redux.Restore.IkanaCastle)         { ChangeBytes -Offset "2055505" -Values "023EE003011D"       }
+    if (IsChecked $Redux.Restore.PieceOfHeartSound)   { ChangeBytes -Offset "BA94C8"  -Values "1000"               }
+    if (IsChecked $Redux.Restore.MoveBomberKid)       { ChangeBytes -Offset "2DE4396" -Values "02C50118FB5500072D" }
+    if (IsChecked $Redux.Restore.OnTheMoonIntro)      { ChangeBytes -Offset "2D5A6CE" -Values "0000"               }
 
 
 
     # OTHER #
 
     if (IsChecked $Redux.Other.ClockTown) {
-        ChangeBytes -Offset "2E5F200" -Values "FE 77"; ChangeBytes -Offset "2E5F203" -Values "C8";    ChangeBytes -Offset "2E5F20A" -Values "F6 AF EC 69 CA"     # South Clock Town - Ramp                                              
-        ChangeBytes -Offset "2E60552" -Values "00 00"; ChangeBytes -Offset "2E60562" -Values "00 00"; ChangeBytes -Offset "2E60592" -Values "00 00"              # South Clock Town - Wall
-        ChangeBytes -Offset "2E7F451" -Values "7A";    ChangeBytes -Offset "2E7F455" -Values "63";    ChangeBytes -Offset "2E7F458" -Values "0E A6"              # Laundry Pool - Path
-        ChangeBytes -Offset "2E7FA61" -Values "7A";    ChangeBytes -Offset "2E7FA65" -Values "63";    ChangeBytes -Offset "2E7FA68" -Values "17 55"              # Laundry Pool - Path
-        ChangeBytes -Offset "2E33106" -Values "20";    ChangeBytes -Offset "2E3311E" -Values "C1";    ChangeBytes -Offset "2E33125" -Values "05 05" -Interval 32 # North Clock Town - Road           
+        ChangeBytes -Offset "2E5F200" -Values "FE77"; ChangeBytes -Offset "2E5F203" -Values "C8";   ChangeBytes -Offset "2E5F20A" -Values "F6AFEC69CA"        # South Clock Town - Ramp                                              
+        ChangeBytes -Offset "2E60552" -Values "0000"; ChangeBytes -Offset "2E60562" -Values "0000"; ChangeBytes -Offset "2E60592" -Values "0000"              # South Clock Town - Wall
+        ChangeBytes -Offset "2E7F451" -Values "7A";   ChangeBytes -Offset "2E7F455" -Values "63";   ChangeBytes -Offset "2E7F458" -Values "0EA6"              # Laundry Pool - Path
+        ChangeBytes -Offset "2E7FA61" -Values "7A";   ChangeBytes -Offset "2E7FA65" -Values "63";   ChangeBytes -Offset "2E7FA68" -Values "1755"              # Laundry Pool - Path
+        ChangeBytes -Offset "2E33106" -Values "20";   ChangeBytes -Offset "2E3311E" -Values "C1";   ChangeBytes -Offset "2E33125" -Values "0505" -Interval 32 # North Clock Town - Road           
     }
 
     if (IsChecked $Redux.Other.SouthernSwamp) {
         CreateSubPath  -Path ($GameFiles.extracted + "\Southern Swamp")
         ExportAndPatch -Path "Southern Swamp\southern_swamp_cleared_scene"  -Offset "1F0D000" -Length "10630"
-        ExportAndPatch -Path "Southern Swamp\southern_swamp_cleared_room_0" -Offset "1F1E000" -Length "1B240" -NewLength "1B4F0" -TableOffset "1EC26"  -Values "94 F0"
-        ExportAndPatch -Path "Southern Swamp\southern_swamp_cleared_room_2" -Offset "1F4D000" -Length "D0A0"  -NewLength "D1C0"  -TableOffset "1EC46"  -Values "A1 C0"
+        ExportAndPatch -Path "Southern Swamp\southern_swamp_cleared_room_0" -Offset "1F1E000" -Length "1B240" -NewLength "1B4F0" -TableOffset "1EC26"  -Values "94F0"
+        ExportAndPatch -Path "Southern Swamp\southern_swamp_cleared_room_2" -Offset "1F4D000" -Length "D0A0"  -NewLength "D1C0"  -TableOffset "1EC46"  -Values "A1C0"
     }
 
     if (IsChecked $Redux.Other.DebugMapSelect) {
-        # ChangeBytes -Offset "C53F44" -Values "00 C7 AD F0 00 C7 E2 D0 80 80 09 10 80 80 3D F0 00 00 00 00 80 80 1B 4C 80 80 1B 28"
+        # ChangeBytes -Offset "C53F44" -Values "00C7ADF000C7E2D08080091080803DF00000000080801B4C80801B28"
         ExportAndPatch -Path "map_select" -Offset "C7C870" -Length "13C8"
     }
 
     if (IsChecked $Redux.Other.AlwaysBestEnding) {
-        ChangeBytes -Offset "B81CE0" -Values "00 00 00 00"; ChangeBytes -Offset "B81D48" -Values "00 00 00 00"; ChangeBytes -Offset "B81DB0" -Values "00 00 00 00"; ChangeBytes -Offset "B81E18" -Values "00 00 00 00"; ChangeBytes -Offset "B81E80" -Values "00 00 00 00"
-        ChangeBytes -Offset "B81EE8" -Values "00 00 00 00"; ChangeBytes -Offset "B81F84" -Values "00 00 00 00"; ChangeBytes -Offset "B81FEC" -Values "00 00 00 00"; ChangeBytes -Offset "B82054" -Values "00 00 00 00"
+        ChangeBytes -Offset "B81CE0" -Values "00000000"; ChangeBytes -Offset "B81D48" -Values "00000000"; ChangeBytes -Offset "B81DB0" -Values "00000000"; ChangeBytes -Offset "B81E18" -Values "00000000"; ChangeBytes -Offset "B81E80" -Values "00000000"
+        ChangeBytes -Offset "B81EE8" -Values "00000000"; ChangeBytes -Offset "B81F84" -Values "00000000"; ChangeBytes -Offset "B81FEC" -Values "00000000"; ChangeBytes -Offset "B82054" -Values "00000000"
     }
 
     if (IsChecked $Redux.Other.PictoboxDelayFix)    { ChangeBytes -Offset "BFC368"  -Values "00000000"              }
@@ -171,7 +171,7 @@ function ByteOptions() {
     if (IsChecked $Redux.Other.FairyFountain)       { ChangeBytes -Offset "B9133E"  -Values "010F"                  }
     if (IsChecked $Redux.Other.OutOfBoundsGrotto)   { ChangeBytes -Offset "2C2306A" -Values "FEDA008B00A1"          }
     if (IsChecked $Redux.Other.BlueOctorok)         { ChangeBytes -Offset "EA118C"  -Values "FFFF00"                }
-    if (IsChecked $Redux.Other.OutOfBoundsRupee)    { $offset = SearchBytes -Start "2563000" -End "2564000" -Values "00 10 00 00 03 3C 00 07 00 7F 00 7F 0A 00 00 0E"; ChangeBytes -Offset $offset -Values "FD66" }
+    if (IsChecked $Redux.Other.OutOfBoundsRupee)    { $offset = SearchBytes -Start "2563000" -End "2564000" -Values "00100000033C0007007F007F0A00000E"; ChangeBytes -Offset $offset -Values "FD66" }
     if (IsChecked $Redux.Other.DebugItemSelect)     { ExportAndPatch -Path "inventory_editor" -Offset "CA6370" -Length "1E0" }
     
 
@@ -186,8 +186,8 @@ function ByteOptions() {
 
     if (IsChecked $Redux.Graphics.WidescreenAlt) {
         if ($IsWiiVC) { # 16:9 Widescreen
-            ChangeBytes -Offset "BD5D74" -Values "3C 07 3F E3"
-            ChangeBytes -Offset "CA58F5" -Values "6C 53 6C 84 9E B7 53 6C" -Interval 2
+            ChangeBytes -Offset "BD5D74" -Values "3C073FE3"
+            ChangeBytes -Offset "CA58F5" -Values "6C536C849EB7536C" -Interval 2
 
             ChangeBytes -Offset "B9F2DF" -Values "1E" # Dungeon Map - Floors (1A -> 27)
             ChangeBytes -Offset "B9F2EF" -Values "18" # Dungeon Map - Floors (14 -> 21)
@@ -215,7 +215,7 @@ function ByteOptions() {
         PatchBytes -Offset "C74DD0" -Length "800"   -Texture -Patch "Widescreen\lens_of_truth.bin"
     }
 
-    if (IsChecked $Redux.Graphics.ExtendedDraw)     { ChangeBytes -Offset "B50874"  -Values "00 00 00 00"      }
+    if (IsChecked $Redux.Graphics.ExtendedDraw)     { ChangeBytes -Offset "B50874"  -Values "00000000"      }
     if (IsChecked $Redux.Graphics.PixelatedStars)   { ChangeBytes -Offset "B943FC"  -Values "10 00"            }
 
 
@@ -348,49 +348,49 @@ function ByteOptions() {
     if (IsDefault $Redux.UI.Rupees -Not)        { PatchBytes -Offset "1EBDE60" -Shared -Patch ("HUD\Rupees\" + $Redux.UI.Rupees.Text.replace(" (default)", "") + ".bin") }
     if (IsDefault $Redux.UI.Hearts -Not)        { PatchBytes -Offset "1EBD000" -Shared -Patch ("HUD\Hearts\" + $Redux.UI.Hearts.Text.replace(" (default)", "") + ".bin") }
     if (IsDefault $Redux.UI.Magic  -Not)        { PatchBytes -Offset "1EC1DA0" -Shared -Patch ("HUD\Magic\"  + $Redux.UI.Magic.Text.replace(" (default)", "")  + ".bin") }
-    if (IsChecked $Redux.UI.BlackBars)          { ChangeBytes -Offset "BF72A4" -Values "00 00 00 00" }
+    if (IsChecked $Redux.UI.BlackBars)          { ChangeBytes -Offset "BF72A4" -Values "00000000" }
     if (IsChecked $Redux.UI.HUD)                { PatchBytes -Offset "1EBD000" -Shared -Patch "HUD\Hearts\Ocarina of Time.bin"; PatchBytes -Offset "1EC1DA0" -Shared -Patch "HUD\Magic\Ocarina of Time.bin" }
     
 
 
     # EFFECTS #
 
-    if (IsChecked $Redux.Graphics.MotionBlur)         { ChangeBytes -Offset "BFB9A0"  -Values "03 E0 00 08 00 00 00 00 00" }
-    if (IsChecked $Redux.Graphics.FlashbackOverlay)   { ChangeBytes -Offset "BFEB8C"  -Values "24 0F 00 00"                }
+    if (IsChecked $Redux.Graphics.MotionBlur)         { ChangeBytes -Offset "BFB9A0"  -Values "03E000080000000000" }
+    if (IsChecked $Redux.Graphics.FlashbackOverlay)   { ChangeBytes -Offset "BFEB8C"  -Values "240F0000"           }
 
 
 
     # HIDE (Custom edits added by Marcelo - Hide Buttons) #
 
     if (IsChecked $Redux.Hide.AButton) { # A Button
-        ChangeBytes -Offset "BA55F8" -Values "00 00 00 00"; ChangeBytes -Offset "BA5608" -Values "00 00 00 00"; ChangeBytes -Offset "BA5A04" -Values "00 00 00 00"; ChangeBytes -Offset "BA5DA8" -Values "00 00 00 00"
-        ChangeBytes -Offset "BA5FE8" -Values "00 00 00 00"; ChangeBytes -Offset "BA60A0" -Values "00 00 00 00"; ChangeBytes -Offset "BA64F0" -Values "00 00 00 00"
+        ChangeBytes -Offset "BA55F8" -Values "00000000"; ChangeBytes -Offset "BA5608" -Values "00000000"; ChangeBytes -Offset "BA5A04" -Values "00000000"; ChangeBytes -Offset "BA5DA8" -Values "00000000"
+        ChangeBytes -Offset "BA5FE8" -Values "00000000"; ChangeBytes -Offset "BA60A0" -Values "00000000"; ChangeBytes -Offset "BA64F0" -Values "00000000"
     }
 
     if (IsChecked $Redux.Hide.BButton) { # B Button
-        ChangeBytes -Offset "BA5528" -Values "00 00 00 00"; ChangeBytes -Offset "BA5544" -Values "00 00 00 00"; ChangeBytes -Offset "BA5CC4" -Values "00 00 00 00"; ChangeBytes -Offset "BA5DE8" -Values "00 00 00 00"
-        ChangeBytes -Offset "BA5FD8" -Values "00 00 00 00"; ChangeBytes -Offset "BA60B0" -Values "00 00 00 00"; ChangeBytes -Offset "BA6500" -Values "00 00 00 00"
+        ChangeBytes -Offset "BA5528" -Values "00000000"; ChangeBytes -Offset "BA5544" -Values "00000000"; ChangeBytes -Offset "BA5CC4" -Values "00000000"; ChangeBytes -Offset "BA5DE8" -Values "00000000"
+        ChangeBytes -Offset "BA5FD8" -Values "00000000"; ChangeBytes -Offset "BA60B0" -Values "00000000"; ChangeBytes -Offset "BA6500" -Values "00000000"
     }
 
     if (IsChecked $Redux.Hide.CButtons) {
-        ChangeBytes -Offset "BA5568" -Values "00 00 00 00"; ChangeBytes -Offset "BA5578" -Values "00 00 00 00"; ChangeBytes -Offset "BA5FF8" -Values "00 00 00 00"; ChangeBytes -Offset "BA60C0" -Values "00 00 00 00" # C-Left
-        ChangeBytes -Offset "BA5598" -Values "00 00 00 00"; ChangeBytes -Offset "BA55A8" -Values "00 00 00 00"; ChangeBytes -Offset "BA6008" -Values "00 00 00 00"; ChangeBytes -Offset "BA60D0" -Values "00 00 00 00" # C-Down
-        ChangeBytes -Offset "BA55C8" -Values "00 00 00 00"; ChangeBytes -Offset "BA55D8" -Values "00 00 00 00"; ChangeBytes -Offset "BA6018" -Values "00 00 00 00"; ChangeBytes -Offset "BA60E4" -Values "00 00 00 00" # C-Right
+        ChangeBytes -Offset "BA5568" -Values "00000000"; ChangeBytes -Offset "BA5578" -Values "00000000"; ChangeBytes -Offset "BA5FF8" -Values "00000000"; ChangeBytes -Offset "BA60C0" -Values "00000000" # C-Left
+        ChangeBytes -Offset "BA5598" -Values "00000000"; ChangeBytes -Offset "BA55A8" -Values "00000000"; ChangeBytes -Offset "BA6008" -Values "00000000"; ChangeBytes -Offset "BA60D0" -Values "00000000" # C-Down
+        ChangeBytes -Offset "BA55C8" -Values "00000000"; ChangeBytes -Offset "BA55D8" -Values "00000000"; ChangeBytes -Offset "BA6018" -Values "00000000"; ChangeBytes -Offset "BA60E4" -Values "00000000" # C-Right
     }
 
     if (IsChecked $Redux.Hide.Hearts) { # Health
-        ChangeBytes -Offset "BA5B28" -Values "00 00 00 00"; ChangeBytes -Offset "BA5BFC" -Values "00 00 00 00"; ChangeBytes -Offset "BA5A14" -Values "00 00 00 00"
-        ChangeBytes -Offset "BA603C" -Values "00 00 00 00"; ChangeBytes -Offset "BA6530" -Values "00 00 00 00"; ChangeBytes -Offset "BB787C" -Values "00 00 00 00"
+        ChangeBytes -Offset "BA5B28" -Values "00000000"; ChangeBytes -Offset "BA5BFC" -Values "00000000"; ChangeBytes -Offset "BA5A14" -Values "00000000"
+        ChangeBytes -Offset "BA603C" -Values "00000000"; ChangeBytes -Offset "BA6530" -Values "00000000"; ChangeBytes -Offset "BB787C" -Values "00000000"
     }
 
     if (IsChecked $Redux.Hide.Magic) { # Magic Meter & Rupees
-        ChangeBytes -Offset "BA5A28" -Values "00 00 00 00"; ChangeBytes -Offset "BA5B3C" -Values "00 00 00 00"; ChangeBytes -Offset "BA5BE8" -Values "00 00 00 00"
-        ChangeBytes -Offset "BA6028" -Values "00 00 00 00"; ChangeBytes -Offset "BA6520" -Values "00 00 00 00"; ChangeBytes -Offset "BB788C" -Values "00 00 00 00"
+        ChangeBytes -Offset "BA5A28" -Values "00000000"; ChangeBytes -Offset "BA5B3C" -Values "00000000"; ChangeBytes -Offset "BA5BE8" -Values "00000000"
+        ChangeBytes -Offset "BA6028" -Values "00000000"; ChangeBytes -Offset "BA6520" -Values "00000000"; ChangeBytes -Offset "BB788C" -Values "00000000"
     }
 
     if (IsChecked $Redux.Hide.Clock) { # Clock
-		ChangeBytes -Offset "BAFD5C" -Values "00 00 00 00"; ChangeBytes -Offset "BAFC48" -Values "00 00 00 00"; ChangeBytes -Offset "BAFDA8" -Values "00 00 00 00"
-		ChangeBytes -Offset "BAFD00" -Values "00 00 00 00"; ChangeBytes -Offset "BAFD98" -Values "00 00 00 00"; ChangeBytes -Offset "C5606D" -Values "00"
+		ChangeBytes -Offset "BAFD5C" -Values "00000000"; ChangeBytes -Offset "BAFC48" -Values "00000000"; ChangeBytes -Offset "BAFDA8" -Values "00000000"
+		ChangeBytes -Offset "BAFD00" -Values "00000000"; ChangeBytes -Offset "BAFD98" -Values "00000000"; ChangeBytes -Offset "C5606D" -Values "00"
     }
 
     if (IsChecked $Redux.Hide.CountdownTimer)   { ChangeBytes -Offset "BB169A" -Values "01 FF";       ChangeBytes -Offset "C56180" -Values "01 FF 01 FF 01 FF 01 FF 01 FF 01 FF 01 FF 01 FF" } # Disable Countdown timer background / Disable Countdown timer
@@ -527,23 +527,23 @@ function ByteOptions() {
 
     if (IsIndex -Elem $Redux.Hero.Recovery -Not) {
         ChangeBytes -Offset "BABE7F" -Values "09 04" -Interval 16
-        if       ( (IsText -Elem $Redux.Hero.Recovery -Compare "0x Recovery") -or (IsText -Elem $Redux.Hero.ItemDrops -Compare "No Hearts") )   { ChangeBytes -Offset "BABEA2" -Values "29 40"; ChangeBytes -Offset "BABEA5" -Values "05 29 43" }
-        elseif     (IsText -Elem $Redux.Hero.Recovery -Compare "1/2x Recovery")                                                                 { ChangeBytes -Offset "BABEA2" -Values "28 40"; ChangeBytes -Offset "BABEA5" -Values "05 28 43" }
-        elseif     (IsText -Elem $Redux.Hero.Recovery -Compare "1/4x Recovery")                                                                 { ChangeBytes -Offset "BABEA2" -Values "28 80"; ChangeBytes -Offset "BABEA5" -Values "05 28 83" }
+        if       ( (IsText -Elem $Redux.Hero.Recovery -Compare "0x Recovery") -or (IsText -Elem $Redux.Hero.ItemDrops -Compare "No Hearts") )   { ChangeBytes -Offset "BABEA2" -Values "29 40"; ChangeBytes -Offset "BABEA5" -Values "052943" }
+        elseif     (IsText -Elem $Redux.Hero.Recovery -Compare "1/2x Recovery")                                                                 { ChangeBytes -Offset "BABEA2" -Values "28 40"; ChangeBytes -Offset "BABEA5" -Values "052843" }
+        elseif     (IsText -Elem $Redux.Hero.Recovery -Compare "1/4x Recovery")                                                                 { ChangeBytes -Offset "BABEA2" -Values "28 80"; ChangeBytes -Offset "BABEA5" -Values "052883" }
     }
 
-    if     ( (IsText -Elem $Redux.Hero.Damage -Compare "1x Damage") -and ($GameType.title -like    "*Master Quest*") )   { ChangeBytes -Offset "CADEC2" -Values "2C 03" }
-    elseif ( (IsText -Elem $Redux.Hero.Damage -Compare "2x Damage") -and ($GameType.title -notlike "*Master Quest*") )   { ChangeBytes -Offset "CADEC2" -Values "2B C3" }
-    elseif   (IsText -Elem $Redux.Hero.Damage -Compare "4x Damage")                                                      { ChangeBytes -Offset "CADEC2" -Values "2B 83" }
-    elseif   (IsText -Elem $Redux.Hero.Damage -Compare "8x Damage")                                                      { ChangeBytes -Offset "CADEC2" -Values "2B 43" }
-    elseif   (IsText -Elem $Redux.Hero.Damage -Compare "OHKO Mode")                                                      { ChangeBytes -Offset "CADEC2" -Values "2A 03" }
+    if     ( (IsText -Elem $Redux.Hero.Damage -Compare "1x Damage") -and ($GameType.title -like    "*Master Quest*") )   { ChangeBytes -Offset "CADEC2" -Values "2C03" }
+    elseif ( (IsText -Elem $Redux.Hero.Damage -Compare "2x Damage") -and ($GameType.title -notlike "*Master Quest*") )   { ChangeBytes -Offset "CADEC2" -Values "2BC3" }
+    elseif   (IsText -Elem $Redux.Hero.Damage -Compare "4x Damage")                                                      { ChangeBytes -Offset "CADEC2" -Values "2B83" }
+    elseif   (IsText -Elem $Redux.Hero.Damage -Compare "8x Damage")                                                      { ChangeBytes -Offset "CADEC2" -Values "2B43" }
+    elseif   (IsText -Elem $Redux.Hero.Damage -Compare "OHKO Mode")                                                      { ChangeBytes -Offset "CADEC2" -Values "2A03" }
 
-    if     (IsText -Elem $Redux.Hero.MagicUsage -Compare "2x Magic Usage")   { ChangeBytes -Offset "BAC306" -Values "2C 40" }
-    elseif (IsText -Elem $Redux.Hero.MagicUsage -Compare "4x Magic Usage")   { ChangeBytes -Offset "BAC306" -Values "2C 80" }
-    elseif (IsText -Elem $Redux.Hero.MagicUsage -Compare "8x Magic Usage")   { ChangeBytes -Offset "BAC306" -Values "2C C0" }
-    if     (IsText -Elem $Redux.Hero.MagicUsage -Compare "2x Item Usage")    { ChangeBytes -Offset "BABF5E" -Values "2C 40" }
-    elseif (IsText -Elem $Redux.Hero.MagicUsage -Compare "4x Item Usage")    { ChangeBytes -Offset "BABF5E" -Values "2C 80" }
-    elseif (IsText -Elem $Redux.Hero.MagicUsage -Compare "8x Item Usage")    { ChangeBytes -Offset "BABF5E" -Values "2C C0" }
+    if     (IsText -Elem $Redux.Hero.MagicUsage -Compare "2x Magic Usage")   { ChangeBytes -Offset "BAC306" -Values "2C40" }
+    elseif (IsText -Elem $Redux.Hero.MagicUsage -Compare "4x Magic Usage")   { ChangeBytes -Offset "BAC306" -Values "2C80" }
+    elseif (IsText -Elem $Redux.Hero.MagicUsage -Compare "8x Magic Usage")   { ChangeBytes -Offset "BAC306" -Values "2CC0" }
+    if     (IsText -Elem $Redux.Hero.MagicUsage -Compare "2x Item Usage")    { ChangeBytes -Offset "BABF5E" -Values "2C40" }
+    elseif (IsText -Elem $Redux.Hero.MagicUsage -Compare "4x Item Usage")    { ChangeBytes -Offset "BABF5E" -Values "2C80" }
+    elseif (IsText -Elem $Redux.Hero.MagicUsage -Compare "8x Item Usage")    { ChangeBytes -Offset "BABF5E" -Values "2CC0" }
 
     if (IsIndex -Elem $Redux.Hero.DamageEffect -Not) {
         ChangeBytes -Offset "B79A48" -Values "24"
@@ -551,14 +551,14 @@ function ByteOptions() {
     }
 
     if (IsIndex -Elem $Redux.Hero.ClockSpeed -Not) {
-            ChangeBytes -Offset "0BC6674" -Values "3C 01"; ChangeBytes -Offset "0BC6677" -Values "01 14 E2";                ChangeBytes -Offset "0BC667B" -Values "02 00 26 08 21 24 02 00 00"
-            ChangeBytes -Offset "0BC6685" -Values "40";    ChangeBytes -Offset "0BC6687" -Values "02 00 00 00 00 24 02 00"; ChangeBytes -Offset "0BC6691" -Values "22"
-            if     ($Redux.Hero.ClockSpeed.SelectedIndex -eq 1) { ChangeBytes -Offset "BB005E" -Values "00 00"; ChangeBytes -Offset "BC668F" -Values "01"; ChangeBytes -Offset "BEDB8E" -Values "00 00" }
-            elseif ($Redux.Hero.ClockSpeed.SelectedIndex -eq 2) { ChangeBytes -Offset "BB005E" -Values "FF FF"; ChangeBytes -Offset "BC668F" -Values "02"; ChangeBytes -Offset "BEDB8E" -Values "FF FF" }
-            elseif ($Redux.Hero.ClockSpeed.SelectedIndex -eq 3) { ChangeBytes -Offset "BB005E" -Values "FF FC"; ChangeBytes -Offset "BC668F" -Values "06"; ChangeBytes -Offset "BEDB8E" -Values "FF FC" }
-            elseif ($Redux.Hero.ClockSpeed.SelectedIndex -eq 4) { ChangeBytes -Offset "BB005E" -Values "FF FA"; ChangeBytes -Offset "BC668F" -Values "09"; ChangeBytes -Offset "BEDB8E" -Values "FF FA" }
-            elseif ($Redux.Hero.ClockSpeed.SelectedIndex -eq 5) { ChangeBytes -Offset "BB005E" -Values "FF F4"; ChangeBytes -Offset "BC668F" -Values "12"; ChangeBytes -Offset "BEDB8E" -Values "FF F4" }
-            elseif ($Redux.Hero.ClockSpeed.SelectedIndex -eq 6) { ChangeBytes -Offset "BB005E" -Values "FF EC"; ChangeBytes -Offset "BC668F" -Values "1E"; ChangeBytes -Offset "BEDB8E" -Values "FF EC" }
+            ChangeBytes -Offset "0BC6674" -Values "3C01"; ChangeBytes -Offset "0BC6677" -Values "0114E2";           ChangeBytes -Offset "0BC667B" -Values "020026082124020000"
+            ChangeBytes -Offset "0BC6685" -Values "40";   ChangeBytes -Offset "0BC6687" -Values "0200000000240200"; ChangeBytes -Offset "0BC6691" -Values "22"
+            if     ($Redux.Hero.ClockSpeed.SelectedIndex -eq 1) { ChangeBytes -Offset "BB005E" -Values "0000"; ChangeBytes -Offset "BC668F" -Values "01"; ChangeBytes -Offset "BEDB8E" -Values "0000" }
+            elseif ($Redux.Hero.ClockSpeed.SelectedIndex -eq 2) { ChangeBytes -Offset "BB005E" -Values "FFFF"; ChangeBytes -Offset "BC668F" -Values "02"; ChangeBytes -Offset "BEDB8E" -Values "FFFF" }
+            elseif ($Redux.Hero.ClockSpeed.SelectedIndex -eq 3) { ChangeBytes -Offset "BB005E" -Values "FFFC"; ChangeBytes -Offset "BC668F" -Values "06"; ChangeBytes -Offset "BEDB8E" -Values "FFFC" }
+            elseif ($Redux.Hero.ClockSpeed.SelectedIndex -eq 4) { ChangeBytes -Offset "BB005E" -Values "FFFA"; ChangeBytes -Offset "BC668F" -Values "09"; ChangeBytes -Offset "BEDB8E" -Values "FFFA" }
+            elseif ($Redux.Hero.ClockSpeed.SelectedIndex -eq 5) { ChangeBytes -Offset "BB005E" -Values "FFF4"; ChangeBytes -Offset "BC668F" -Values "12"; ChangeBytes -Offset "BEDB8E" -Values "FFF4" }
+            elseif ($Redux.Hero.ClockSpeed.SelectedIndex -eq 6) { ChangeBytes -Offset "BB005E" -Values "FFEC"; ChangeBytes -Offset "BC668F" -Values "1E"; ChangeBytes -Offset "BEDB8E" -Values "FFEC" }
     }
 
     if (IsText -Elem $Redux.Hero.ItemDrops -Compare "Nothing") {
@@ -810,8 +810,8 @@ function ByteOptions() {
     }
 
     if (IsChecked $Redux.Skip.TatlInterrupts) {
-        ChangeBytes -Offset "DA1158" -Values "00 00 00 00"; ChangeBytes -Offset "E96988" -Values "00 00 00 00"
-        ChangeBytes -Offset "F6279C" -Values "00 00 00 00"; ChangeBytes -Offset "F62DAC" -Values "00 00 00 00"
+        ChangeBytes -Offset "DA1158" -Values "00000000"; ChangeBytes -Offset "E96988" -Values "00000000"
+        ChangeBytes -Offset "F6279C" -Values "00000000"; ChangeBytes -Offset "F62DAC" -Values "00000000"
     }
 
 
@@ -819,20 +819,20 @@ function ByteOptions() {
     # SPEEDUP #
 
     if (IsChecked $Redux.Speedup.LabFish) {
-        ChangeBytes -Offset "F8D904" -Values "00 00"; ChangeBytes -Offset "F8D907" -Values "00";    ChangeBytes -Offset "F8D91C" -Values "00 00";          ChangeBytes -Offset "F8D91F" -Values "00 00 00"
-        ChangeBytes -Offset "F8D923" -Values "00";    ChangeBytes -Offset "F8D934" -Values "00";    ChangeBytes -Offset "F8D937" -Values "00 00 00 00 00"; ChangeBytes -Offset "F8D958" -Values "00 00"
-        ChangeBytes -Offset "F8D95B" -Values "00";    ChangeBytes -Offset "F8D96C" -Values "00 00"; ChangeBytes -Offset "F8D96F" -Values "00 00 00";       ChangeBytes -Offset "F8D973" -Values "00"
-        ChangeBytes -Offset "F8D984" -Values "00 00"; ChangeBytes -Offset "F8D987" -Values "00 00 00 00 00"
+        ChangeBytes -Offset "F8D904" -Values "0000"; ChangeBytes -Offset "F8D907" -Values "00";   ChangeBytes -Offset "F8D91C" -Values "0000";       ChangeBytes -Offset "F8D91F" -Values "000000"
+        ChangeBytes -Offset "F8D923" -Values "00";   ChangeBytes -Offset "F8D934" -Values "00";   ChangeBytes -Offset "F8D937" -Values "0000000000"; ChangeBytes -Offset "F8D958" -Values "0000"
+        ChangeBytes -Offset "F8D95B" -Values "00";   ChangeBytes -Offset "F8D96C" -Values "0000"; ChangeBytes -Offset "F8D96F" -Values "000000";     ChangeBytes -Offset "F8D973" -Values "00"
+        ChangeBytes -Offset "F8D984" -Values "0000"; ChangeBytes -Offset "F8D987" -Values "0000000000"
     }
 
     if (IsChecked $Redux.Speedup.Dampe) {
-        ChangeBytes -Offset "FC86CC" -Values "00 00 00 00 00 00 00 00 00"; ChangeBytes -Offset "FC86D6" -Values "00 00 00 00 00"
-        ChangeBytes -Offset "FC86DC" -Values "24 08";                      ChangeBytes -Offset "FC86DF" -Values "08"
+        ChangeBytes -Offset "FC86CC" -Values "000000000000000000"; ChangeBytes -Offset "FC86D6" -Values "0000000000"
+        ChangeBytes -Offset "FC86DC" -Values "2408";               ChangeBytes -Offset "FC86DF" -Values "08"
     }
 
     if (IsChecked $Redux.Speedup.DogRace) {
-        ChangeBytes -Offset "0E34608" -Values "3C 18 80 1F 83 18 F7 08 07"; ChangeBytes -Offset "0E34613" -Values "04 24 18";             ChangeBytes -Offset "0E34617" -Values "09 24 07 00 0D 53 05"; ChangeBytes -Offset "0E3461F" -Values "01 24 07"
-        ChangeBytes -Offset "0E34624" -Values "30 B8";                      ChangeBytes -Offset "0E34627" -Values "01 13 00 00 0D 00 00"; ChangeBytes -Offset "0E3462F" -Values "00";                   ChangeBytes -Offset "0E34631" -Values "05"
+        ChangeBytes -Offset "0E34608" -Values "3C18801F8318F70807"; ChangeBytes -Offset "0E34613" -Values "042418";         ChangeBytes -Offset "0E34617" -Values "092407000D5305"; ChangeBytes -Offset "0E3461F" -Values "012407"
+        ChangeBytes -Offset "0E34624" -Values "30B8";               ChangeBytes -Offset "0E34627" -Values "011300000D0000"; ChangeBytes -Offset "0E3462F" -Values "00";             ChangeBytes -Offset "0E34631" -Values "05"
     }
 
     if (IsText -Elem $Redux.Speedup.Bank1 -Compare $Redux.Speedup.Bank1.default -Not) {
@@ -856,8 +856,8 @@ function ByteOptions() {
 
     # SCRIPT
 
-    if (IsChecked $Redux.Text.YeetPrompt)   { PatchBytes  -Offset "AC0D80" -Shared -Patch "Action Prompts\throw.en.prompt"              }
-    if (IsChecked $Redux.Text.Comma)        { ChangeBytes -Offset "ACC660" -Values "00 F3 00 00 00 00 00 00 4F 60 00 00 00 00 00 00 24" }
+    if (IsChecked $Redux.Text.YeetPrompt)   { PatchBytes  -Offset "AC0D80" -Shared -Patch "Action Prompts\throw.en.prompt" }
+    if (IsChecked $Redux.Text.Comma)        { ChangeBytes -Offset "ACC660" -Values "00F30000000000004F6000000000000024"    }
 
 }
 
@@ -1086,7 +1086,7 @@ function ByteSceneOptions() {
 
 
 #==============================================================================================================================================================================================
-function WholeLanguageOptions([string]$Script, [string]$Table) {
+function WholeTextOptions([string]$Script, [string]$Table) {
     
     if (IsChecked $Redux.Text.Custom) {
         if ( (TestFile ($Gamefiles.editor + "\message_data_static." + $LanguagePatch.code + ".bin") ) -and (TestFile ($Gamefiles.editor + "\message_data." + $LanguagePatch.code + ".tbl") ) ) {
@@ -1101,7 +1101,7 @@ function WholeLanguageOptions([string]$Script, [string]$Table) {
 
 
 #==============================================================================================================================================================================================
-function ByteLanguageOptions() {
+function ByteTextOptions() {
     
     if (IsChecked $Redux.UI.GCScheme -Lang 1) { SetMessage -ID "0227" -Text "5A20" -Replace "4C20"; SetMessage -ID "1912"; SetMessage -ID "191D"; SetMessage -ID "1946"; SetMessage -ID "1954" }
 
@@ -1543,10 +1543,10 @@ function CreateTabMain() {
 
     CreateReduxGroup    -All -Tag  "Cutscenes"         -Text "Cutscene Fixes" 
     CreateReduxCheckBox -All -Name "GohtAwakening"     -Text "Goht Awakening"    -Info "Fix Goht's awakening cutscene so that Link no longer gets run over" -Credits "ShadowOne333"
-    CreateReduxCheckBox -All -Name "BombLady"          -Text "Bomb Lady"         -Info "Fix the Bomb Lady for the cutscene in North Clock Town"             -Credits "Chez Cousteau"
-    CreateReduxCheckBox -All -Name "ChamberOfGiants"   -Text "Chamber of Giants" -Info "Fix the Giants in the unused cutscenes in the Chamber of Giants"    -Credits "Chez Cousteau"
-    CreateReduxCheckBox -All -Name "MountainVillage"   -Text "Mountain Village"  -Info "Fix unloaded actors for the cutscene in Mountain Village (Spring)"  -Credits "Chez Cousteau"
-    CreateReduxCheckBox -All -Name "IkanaCanyon"       -Text "Ikana Canyon"      -Info "Fix transitions and unloaded actors for cutscenes in Ikana Canyon"  -Credits "Chez Cousteau"
+    CreateReduxCheckBox -All -Name "BombLady"          -Text "Bomb Lady"         -Info "Fix the Bomb Lady for the cutscene in North Clock Town"             -Credits "Admentus"
+    CreateReduxCheckBox -All -Name "ChamberOfGiants"   -Text "Chamber of Giants" -Info "Fix the Giants in the unused cutscenes in the Chamber of Giants"    -Credits "Admentus"
+    CreateReduxCheckBox -All -Name "MountainVillage"   -Text "Mountain Village"  -Info "Fix unloaded actors for the cutscene in Mountain Village (Spring)"  -Credits "Admentus"
+    CreateReduxCheckBox -All -Name "IkanaCanyon"       -Text "Ikana Canyon"      -Info "Fix transitions and unloaded actors for cutscenes in Ikana Canyon"  -Credits "Admentus"
     
 
 

@@ -826,18 +826,18 @@ function ByteOptions() {
     # SWORDS & SHIELDS #
 
     if (IsDefault $Redux.Equipment.KokiriSword -Not) {
-        if (TestFile ($GameFiles.textures + "\Equipment\Kokiri Sword\" + $Redux.Equipment.KokiriSword.text + ".icon"))                                    { PatchBytes -Offset "7F8000" -Texture -Patch ("Equipment\Kokiri Sword\" + $Redux.Equipment.KokiriSword.text + ".icon")                              }
-        if (TestFile ($GameFiles.textures + "\Equipment\Kokiri Sword\" + $Redux.Equipment.KokiriSword.text + "." + $LanguagePatch.code + ".label"))       { PatchBytes -Offset "8AD800" -Texture -Patch ("Equipment\Kokiri Sword\" + $Redux.Equipment.KokiriSword.text + "." + $LanguagePatch.code + ".label") }
+        if (TestFile ($GameFiles.textures + "\Equipment\Kokiri Sword\" + $Redux.Equipment.KokiriSword.text   + ".icon"))                                  { PatchBytes -Offset "7F8000" -Texture -Patch ("Equipment\Kokiri Sword\" + $Redux.Equipment.KokiriSword.text   + ".icon")                              }
+        if (TestFile ($GameFiles.textures + "\Equipment\Kokiri Sword\" + $Redux.Equipment.KokiriSword.text   + "." + $LanguagePatch.code + ".label"))     { PatchBytes -Offset "8AD800" -Texture -Patch ("Equipment\Kokiri Sword\" + $Redux.Equipment.KokiriSword.text   + "." + $LanguagePatch.code + ".label") }
     }
 
     if (IsDefault $Redux.Equipment.MasterSword -Not) {
-        if (TestFile ($GameFiles.textures + "\Equipment\Master Sword\" + $Redux.Equipment.MasterSword.text + ".icon"))                                    { PatchBytes -Offset "7F9000" -Texture -Patch ("Equipment\Master Sword\" + $Redux.Equipment.MasterSword.text + ".icon")                              }
-        if (TestFile ($GameFiles.textures + "\Equipment\Master Sword\" + $Redux.Equipment.MasterSword.text + "." + $LanguagePatch.code + ".label"))       { PatchBytes -Offset "8ADC00" -Texture -Patch ("Equipment\Master Sword\" + $Redux.Equipment.MasterSword.text + "." + $LanguagePatch.code + ".label") }
+        if (TestFile ($GameFiles.textures + "\Equipment\Master Sword\" + $Redux.Equipment.MasterSword.text   + ".icon"))                                  { PatchBytes -Offset "7F9000" -Texture -Patch ("Equipment\Master Sword\" + $Redux.Equipment.MasterSword.text   + ".icon")                              }
+        if (TestFile ($GameFiles.textures + "\Equipment\Master Sword\" + $Redux.Equipment.MasterSword.text   + "." + $LanguagePatch.code + ".label"))     { PatchBytes -Offset "8ADC00" -Texture -Patch ("Equipment\Master Sword\" + $Redux.Equipment.MasterSword.text   + "." + $LanguagePatch.code + ".label") }
     }
 
     if (IsDefault $Redux.Equipment.GiantsKnife -Not) {
-        if (TestFile ($GameFiles.textures + "\Equipment\Master Sword\" + $Redux.Equipment.GiantsKnife.text + ".icon"))                                    { PatchBytes -Offset "7FA000" -Texture -Patch ("Equipment\Master Sword\" + $Redux.Equipment.GiantsKnife.text + ".icon")                              }
-        if (TestFile ($GameFiles.textures + "\Equipment\Master Sword\" + $Redux.Equipment.GiantsKnife.text + "." + $LanguagePatch.code + ".label"))       { PatchBytes -Offset "8AE000" -Texture -Patch ("Equipment\Master Sword\" + $Redux.Equipment.GiantsKnife.text + "." + $LanguagePatch.code + ".label") }
+        if (TestFile ($GameFiles.textures + "\Equipment\Master Sword\" + $Redux.Equipment.GiantsKnife.text   + ".icon"))                                  { PatchBytes -Offset "7FA000" -Texture -Patch ("Equipment\Master Sword\" + $Redux.Equipment.GiantsKnife.text   + ".icon")                              }
+        if (TestFile ($GameFiles.textures + "\Equipment\Master Sword\" + $Redux.Equipment.GiantsKnife.text   + "." + $LanguagePatch.code + ".label"))     { PatchBytes -Offset "8AE000" -Texture -Patch ("Equipment\Master Sword\" + $Redux.Equipment.GiantsKnife.text   + "." + $LanguagePatch.code + ".label") }
     }
 
     if (IsDefault $Redux.Equipment.BiggoronSword -Not) {
@@ -1790,10 +1790,10 @@ function ByteSceneOptions() {
 
 
 #==============================================================================================================================================================================================
-function WholeLanguageOptions() {
+function WholeTextOptions() {
     
-    elseif (IsChecked $Redux.Text.Restore)   { ApplyDialogue -Script "restore_static.bps"              -Table "restore_table.bps"              }
-    elseif (IsChecked $Redux.Text.Beta)      { ApplyDialogue -Script "ura_static.bps"                  -Table "ura_table.bps"                  }
+    elseif (IsChecked $Redux.Text.Restore)   { ApplyText -Script "restore_static.bps" -Table "restore_table.bps" }
+    elseif (IsChecked $Redux.Text.Beta)      { ApplyText -Script "ura_static.bps"     -Table "ura_table.bps"     }
     elseif (IsChecked $Redux.Text.Custom) {
         if ( (TestFile ($Gamefiles.editor + "\message_data_static." + $LanguagePatch.code + ".bin") ) -and (TestFile ($Gamefiles.editor + "\message_data." + $LanguagePatch.code + ".tbl") ) ) {
             Copy-Item -LiteralPath ($Gamefiles.editor + "\message_data_static." + $LanguagePatch.code + ".bin") -Destination $Script -Force
@@ -1807,7 +1807,7 @@ function WholeLanguageOptions() {
 
 
 #==============================================================================================================================================================================================
-function ByteLanguageOptions() {
+function ByteTextOptions() {
     
     if ($GamePatch.vanilla -le 3) {
         if ( (IsChecked $Redux.Text.Speed3x) -or (IsChecked $Redux.Text.Instant -Lang 1) ) {
@@ -2305,7 +2305,7 @@ function CreateTabMain() {
     # QUALITY OF LIFE #
     
     CreateReduxGroup    -Tag  "Gameplay"             -All                 -Text "Quality of Life" 
-    CreateReduxComboBox -Name "FasterBlockPushing"   -All -Exclude "Gold" -Text "Faster Block Pushing"   -Info "All blocks are pushed faster" -Items @("Disabled", "Exclude Time-Based Puzzles", "Fully Enabled") -Default 3 -TrueDefault 1                                                  -Credits "GhostlyDark (from Randomizer)"
+    CreateReduxComboBox -Name "FasterBlockPushing"   -All -Exclude "Gold" -Text "Faster Block Pushing"   -Info "All blocks are pushed faster" -Items @("Disabled", "Exclude Time-Based Puzzles", "Fully Enabled") -Default 3 -TrueDefault 1                                                  -Credits "GhostlyDark (Randomizer)"
     CreateReduxCheckBox -Name "NoKillFlash"          -All                 -Text "No Kill Flash"          -Info "Disable the flash effect when killing certain enemies such as the Guay or Skullwalltula"                                                                                     -Credits "Chez Cousteau"
     CreateReduxCheckBox -Name "RemoveNaviTimer"      -All                 -Text "Remove Navi Timer"      -Info "Navi will no longer pop up with text messages during gameplay`nDoes not apply to location-triggered messages"                                                                -Credits "Admentus"
     CreateReduxCheckBox -Name "ResumeLastArea"       -All -Exclude "Dawn" -Text "Resume From Last Area"  -Info "Resume playing from the area you last saved in"                                                                                             -Warning "Don't save in Grottos" -Credits "Admentus (ROM) & Aegiker (RAM)"
@@ -2318,9 +2318,9 @@ function CreateTabMain() {
     CreateReduxCheckBox -Name "RutoNeverDisappears"  -Base 4              -Text "Ruto Never Disappears"  -Info "Ruto never disappears in Jabu Jabu's Belly and will remain in place when leaving the room"                                                                                   -Credits "Randomizer"
     CreateReduxCheckBox -Name "Medallions"           -Base 4              -Text "Require All Medallions" -Info "All six medallions are required for the Rainbow Bridge to appear before Ganon's Castle`nThe vanilla requirements were the Shadow and Spirit Medallions and the Light Arrows" -Credits "Randomizer"
     CreateReduxCheckBox -Name "OpenBombchuShop"      -Base 5              -Text "Open Bombchu Shop"      -Info "The Bombchu Shop is open right away without the need to defeat King Dodongo"                                                                                                 -Credits "Randomizer"
-    CreateReduxCheckBox -Name "RemoveNaviPrompts"    -All                 -Text "Remove Navi Prompts"    -Info "Navi will no longer interrupt you with tutorial text boxes in dungeons"     -Force "Child Quest"                                                                             -Credits "Admentus & Randomizer"
-    CreateReduxCheckBox -Name "RemoveOwls"           -Base 4              -Text "Remove Owls"            -Info "Kaepora Gaebora the owl will no longer interrupt Link with tutorials"       -Force "Child Quest" -Safe                                                                       -Credits "Admentus & Chez Cousteau"
-    CreateReduxCheckBox -Name "RemoveDisruptiveText" -Base 4              -Text "Remove Disruptive Text" -Info "Remove disruptive text from Gerudo Training Ground and early Shadow Temple" -Force "Child Quest" -Safe                                                                       -Credits "Admentus & Randomizer"
+    CreateReduxCheckBox -Name "RemoveNaviPrompts"    -All                 -Text "Remove Navi Prompts"    -Info "Navi will no longer interrupt you with tutorial text boxes in dungeons"     -Force "Child Quest"                                                                             -Credits "Admentus"
+    CreateReduxCheckBox -Name "RemoveOwls"           -Base 4              -Text "Remove Owls"            -Info "Kaepora Gaebora the owl will no longer interrupt Link with tutorials"       -Force "Child Quest" -Safe                                                                       -Credits "Admentus"
+    CreateReduxCheckBox -Name "RemoveDisruptiveText" -Base 4              -Text "Remove Disruptive Text" -Info "Remove disruptive text from Gerudo Training Ground and early Shadow Temple" -Force "Child Quest" -Safe                                                                       -Credits "Admentus"
     
 
 
@@ -2379,14 +2379,14 @@ function CreateTabMain() {
     CreateReduxCheckBox -Name "RemoveFishingPiracy"       -Base 4 -Checked       -Text "Remove Fishing DRM"      -Info "Removes the anti-piracy check for fishing that can cause the fish to always let go after 51 frames"                                                   -Credits "Randomizer"
     CreateReduxCheckBox -Name "Boomerang"                 -Child -Exclude "Dawn" -Text "Boomerang"               -Info "Fix the gem color on the thrown boomerang"                                                                                                            -Credits "Aria"
     CreateReduxCheckBox -Name "OpenTimeDoor"              -Base 4                -Text "Open Door of Time Fix"   -Info "Fix Door of Time not opening on first visit"                                                                                                          -Credits "Randomizer"
-    CreateReduxCheckBox -Name "VisibleGerudoTent"         -Base 4                -Text "Visible Gerudo Tent"     -Info "Make the tent in the Gerudo Valley during the Child era visible`nThe tent was always accessible, just invisible"                                      -Credits "Admentus & Chez Cousteau"
-    CreateReduxCheckBox -Name "Graves"                    -Base 4 -Safe          -Text "Graveyard Graves"        -Info "The grave holes in Kakariko Graveyard behave as in the Rev 1 revision`nThe edges no longer force Link to grab or jump over them when trying to enter" -Credits "Admentus & Randomizer"
-    CreateReduxCheckBox -Name "CorrectTimeDoor"           -Base 4 -Safe          -Text "Correct Door of Time"    -Info "Fix the positioning of the Temple of Time door, so you can not skip past it"                                                                          -Credits "Admentus & Chez Cousteau"
-    CreateReduxCheckBox -Name "DodongosCavernGossipStone" -Base 4 -Safe          -Text "DC Gossip Stone"         -Info "Fix the Gossip Stones in Dodongo's Cavern so that a fairy can be spawned from them"                                                                   -Credits "Admentus & Randomizer"
-    CreateReduxCheckBox -Name "CraterFairy"               -Base 4 -Safe          -Text "Crater Fairy"            -Info 'Remove the "...???" textbox outside the Crater Fairy'                                                                                                 -Credits "Admentus & Randomizer"
-    CreateReduxCheckBox -Name "WaterTempleActors"         -Base 4 -Safe          -Text "Fix Water Temple Actors" -Info "Fix several actors in the Water Temple`nUnreachable hookshot spot in room 22, three out of bounds pots, restore two Keese in room 1"                  -Credits "Admentus & Chez Cousteau"
-    CreateReduxCheckBox -Name "ChildColossusFairy"        -Base 4 -Safe          -Text "Child Colossus Fairy"    -Info 'Fix "...???" textbox outside Child Colossus Fairy to use the right flag and disappear once the wall is destroyed'                                     -Credits "Admentus & Randomizer"
-    CreateReduxCheckBox -Name "NaviTarget"                -Base 4 -Safe          -Text "Navi Targettable Spots"  -Info "Fix several spots in dungeons which Navi could not target for Link"                                                                                   -Credits "Admentus & Chez Cousteau"
+    CreateReduxCheckBox -Name "VisibleGerudoTent"         -Base 4                -Text "Visible Gerudo Tent"     -Info "Make the tent in the Gerudo Valley during the Child era visible`nThe tent was always accessible, just invisible"                                      -Credits "Admentus"
+    CreateReduxCheckBox -Name "Graves"                    -Base 4 -Safe          -Text "Graveyard Graves"        -Info "The grave holes in Kakariko Graveyard behave as in the Rev 1 revision`nThe edges no longer force Link to grab or jump over them when trying to enter" -Credits "Admentus"
+    CreateReduxCheckBox -Name "CorrectTimeDoor"           -Base 4 -Safe          -Text "Correct Door of Time"    -Info "Fix the positioning of the Temple of Time door, so you can not skip past it"                                                                          -Credits "Admentus"
+    CreateReduxCheckBox -Name "DodongosCavernGossipStone" -Base 4 -Safe          -Text "DC Gossip Stone"         -Info "Fix the Gossip Stones in Dodongo's Cavern so that a fairy can be spawned from them"                                                                   -Credits "Admentus"
+    CreateReduxCheckBox -Name "CraterFairy"               -Base 4 -Safe          -Text "Crater Fairy"            -Info 'Remove the "...???" textbox outside the Crater Fairy'                                                                                                 -Credits "Admentus"
+    CreateReduxCheckBox -Name "WaterTempleActors"         -Base 4 -Safe          -Text "Fix Water Temple Actors" -Info "Fix several actors in the Water Temple`nUnreachable hookshot spot in room 22, three out of bounds pots, restore two Keese in room 1"                  -Credits "Admentus"
+    CreateReduxCheckBox -Name "ChildColossusFairy"        -Base 4 -Safe          -Text "Child Colossus Fairy"    -Info 'Fix "...???" textbox outside Child Colossus Fairy to use the right flag and disappear once the wall is destroyed'                                     -Credits "Admentus"
+    CreateReduxCheckBox -Name "NaviTarget"                -Base 4 -Safe          -Text "Navi Targettable Spots"  -Info "Fix several spots in dungeons which Navi could not target for Link"                                                                                   -Credits "Admentus"
 
 
 
@@ -2533,7 +2533,7 @@ function CreateTabLanguage() {
     CreateReduxRadioButton -Name "Beta"    -Base 1 -Safe -Max 4 -SaveTo "Dialogue" -Text "Beta Text"     -Info "Restores the text as was used in the Ura Quest Beta version"                                                      -Credits "ZethN64, Sakura, Frostclaw & Steve(ToCoool)"
     CreateReduxRadioButton -Name "Custom"  -All    -Safe -Max 4 -SaveTo "Dialogue" -Text "Custom"        -Info 'Insert custom dialogue found from "..\Patcher64+ Tool\Files\Games\Ocarina of Time\Custom Text"' -Warning "ROM crashes if the script is not proper`n[!] Won't be applied if the custom script is missing"
    
-    CreateReduxCheckBox -Name "FemalePronouns" -Safe -Text "Female Pronouns" -Info "Refer to Link as a female character"                                                                                                                       -Credits "Admentus & Mil"
+    CreateReduxCheckBox -Name "FemalePronouns" -Safe -Text "Female Pronouns" -Info "Refer to Link as a female character"                                                                                                                       -Credits "Admentus"
     CreateReduxCheckBox -Name "TypoFixes"      -Safe -Text "Typo Fixes"      -Info "Include the typo fixes from the Redux script"                                                                                                              -Credits "ShadowOne333"
     CreateReduxCheckBox -Name "GoldSkulltula"  -Safe -Text "Gold Skulltula"  -Info "The textbox for obtaining a Gold Skulltula will no longer interrupt the gameplay`nThe English & German scripts also shows the total amount you got so far" -Credits "ShadowOne333"
     CreateReduxCheckBox -Name "EasterEggs"     -Safe -Text "Easter Eggs"     -Info "Adds custom Patreon Tier 3 messages into the game`nCan you find them all?" -Checked                                                                        -Credits "Admentus & Patreons"
@@ -3039,14 +3039,14 @@ function CreateTabEquipment() {
     
     # UNLOCK CHILD RESTRICTIONS #
 
-    CreateReduxGroup    -Tag  "Unlock"        -Child -Text "Unlock Child Restrictions"
-    CreateReduxCheckBox -Name "Tunics"        -Child -Text "Unlock Tunics"        -Info "Child Link is able to use the Goron Tunic and Zora Tunic`nSince you might want to walk around in style as well when you are young`nThe dialogue script will be adjusted to reflect this (only for English)" -Credits "GhostlyDark"
-    CreateReduxCheckBox -Name "MasterSword"   -Child -Text "Unlock Master Sword"  -Info "Child Link is able to use the Master Sword`nThe Master Sword does twice as much damage as the Kokiri Sword"                                          -Credits "GhostlyDark"
-    CreateReduxCheckBox -Name "GiantsKnife"   -Child -Text "Unlock Giant's Knife" -Info "Child Link is able to use the Giant's Knife / Biggoron Sword`nThe Giant's Knife / Biggoron Sword does four times as much damage as the Kokiri Sword" -Credits "GhostlyDark" -Warning "The Giant's Knife / Biggoron Sword appears as if Link if thrusting the sword through the ground"
-    CreateReduxCheckBox -Name "MirrorShield"  -Child -Text "Unlock Mirror Shield" -Info "Child Link is able to use the Mirror Shield"                                                                                                         -Credits "GhostlyDark" -Warning "The Mirror Shield appears as invisible but can still reflect magic or sunlight"
-    CreateReduxCheckBox -Name "Boots"         -Child -Text "Unlock Boots"         -Info "Child Link is able to use the Iron Boots and Hover Boots"                                                                                            -Credits "GhostlyDark" -Warning "The Iron and Hover Boots appears as the Kokiri Boots"
-    CreateReduxCheckBox -Name "Gauntlets"     -Child -Text "Unlock Gauntlets"     -Info "Child Link is able to use the Silver and Golden Gauntlets"                                                                                           -Credits "Admentus (ROM) & Aegiker (RAM)"
-    CreateReduxCheckBox -Name "MegatonHammer" -Child -Text "Unlock Hammer"        -Info "Child Link is able to use the Megaton Hammer"                                                                                                        -Credits "GhostlyDark"
+    CreateReduxGroup    -Tag  "Unlock"        -Child -Exclude "Child Quest" -Text "Unlock Child Restrictions"
+    CreateReduxCheckBox -Name "Tunics"        -Child -Exclude "Child Quest" -Text "Unlock Tunics"        -Info "Child Link is able to use the Goron Tunic and Zora Tunic`nSince you might want to walk around in style as well when you are young`nThe dialogue script will be adjusted to reflect this (only for English)" -Credits "GhostlyDark"
+    CreateReduxCheckBox -Name "MasterSword"   -Child -Exclude "Child Quest" -Text "Unlock Master Sword"  -Info "Child Link is able to use the Master Sword`nThe Master Sword does twice as much damage as the Kokiri Sword"                                          -Credits "GhostlyDark"
+    CreateReduxCheckBox -Name "GiantsKnife"   -Child -Exclude "Child Quest" -Text "Unlock Giant's Knife" -Info "Child Link is able to use the Giant's Knife / Biggoron Sword`nThe Giant's Knife / Biggoron Sword does four times as much damage as the Kokiri Sword" -Credits "GhostlyDark" -Warning "The Giant's Knife / Biggoron Sword appears as if Link if thrusting the sword through the ground"
+    CreateReduxCheckBox -Name "MirrorShield"  -Child -Exclude "Child Quest" -Text "Unlock Mirror Shield" -Info "Child Link is able to use the Mirror Shield"                                                                                                         -Credits "GhostlyDark" -Warning "The Mirror Shield will look like the Deku Shield for Child Link"
+    CreateReduxCheckBox -Name "Boots"         -Child -Exclude "Child Quest" -Text "Unlock Boots"         -Info "Child Link is able to use the Iron Boots and Hover Boots"                                                                                            -Credits "GhostlyDark" -Warning "The Iron and Hover Boots appears as the Kokiri Boots"
+    CreateReduxCheckBox -Name "Gauntlets"     -Child -Exclude "Child Quest" -Text "Unlock Gauntlets"     -Info "Child Link is able to use the Silver and Golden Gauntlets"                                                                                           -Credits "Admentus (ROM) & Aegiker (RAM)"
+    CreateReduxCheckBox -Name "MegatonHammer" -Child -Exclude "Child Quest" -Text "Unlock Hammer"        -Info "Child Link is able to use the Megaton Hammer"                                                                                                        -Credits "GhostlyDark"
 
 
 
