@@ -2065,11 +2065,8 @@ function DeleteActor() {
 #==============================================================================================================================================================================================
 function InsertActor([string]$ID="0000", [string]$Name, [int]$X=0, [int]$Y=0, [int]$Z=0, [uint16]$XRot=0, [uint16]$YRot=0, [uint16]$ZRot=0, [switch]$NoXRot, [switch]$NoYRot, [switch]$NoZRot, [string]$Param="0000", [boolean[]]$SpawnTimes=@(1, 1, 1, 1, 1, 1, 1, 1, 1, 1), [byte]$SceneCommand=0x7F) {
     
-    if ((GetActorCount) -eq $null) {
-        WriteToConsole "No object list defined for this header" -Error
-        return $False
-    }
-    if ((GetActorCount) -ge 255) { return $False }
+    if ((GetActorCount) -eq $null)   { WriteToConsole "No object list defined for this header"      -Error; return $False }
+    if ((GetActorCount) -ge 255)     { WriteToConsole "Reached the max actor limit for this header" -Error; return $False }
 
     if (IsSet $Name) {
         $ID = ""
@@ -2729,8 +2726,8 @@ function DeleteObject() {
 #==============================================================================================================================================================================================
 function InsertObject([string]$ID="0000", [string]$Name) {
     
-    if ((GetObjectCount) -eq $null)                                 { WriteToConsole "No object list defined for this header" -Error; return $False }
-    if ((GetObjectCount) -ge $Files.json.sceneEditor.max_objects)   { return $False }
+    if ((GetObjectCount) -eq $null)                                 { WriteToConsole "No object list defined for this header"       -Error; return $False }
+    if ((GetObjectCount) -ge $Files.json.sceneEditor.max_objects)   { WriteToConsole "Reached the max object limit for this header" -Error; return $False }
     if ($SceneEditor.GUI)                                           { $SceneEditor.BottomPanelObjects.AutoScroll = $False }
 
     $printID = $ID

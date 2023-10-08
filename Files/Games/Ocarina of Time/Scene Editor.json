@@ -1,7 +1,7 @@
 ﻿{
 	"game"			: "Ocarina of Time",
 	"parse"			: "oot",
-	"max_objects"	: 15,
+	"max_objects"	: 20,
 	"hash"			: "5BD1FE107BF8106B2AB6650ABECD54D6",
 	"quest"			: [ "Master Quest", "Ura Quest" ],
 	
