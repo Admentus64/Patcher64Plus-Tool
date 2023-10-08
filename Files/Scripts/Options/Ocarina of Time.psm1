@@ -1843,17 +1843,31 @@ function ByteTextOptions() {
         }
 
         if (IsChecked $Redux.Graphics.GCScheme) {
-            SetMessage -ID "0103" -ASCII -Text "7072657373696E67" -Replace "7573696E67"; SetMessage -ID "0108"; SetMessage -ID "103A"; SetMessage -ID "4081" # pressing -> using
+            SetMessage -ID "0103" -Text "7072657373696E67" -Replace "7573696E67"; SetMessage -ID "0108"; SetMessage -ID "103A"; SetMessage -ID "4081" # pressing -> using
 
             # press -> use
-            SetMessage -ID "001C" -ASCII -Text "7072657373" -Replace "757365";   SetMessage -ID "001D"; SetMessage -ID "0030"; SetMessage -ID "0037"; SetMessage -ID "0039"; SetMessage -ID "0047"; SetMessage -ID "004A"; SetMessage -ID "004C"; SetMessage -ID "007A"; SetMessage -ID "0099"; SetMessage -ID "009A"; SetMessage -ID "00A3" 
+            SetMessage -ID "001C" -Text "7072657373" -Replace "757365";   SetMessage -ID "001D"; SetMessage -ID "0030"; SetMessage -ID "0037"; SetMessage -ID "0039"; SetMessage -ID "0047"; SetMessage -ID "004A"; SetMessage -ID "004C"; SetMessage -ID "007A"; SetMessage -ID "0099"; SetMessage -ID "009A"; SetMessage -ID "00A3" 
             SetMessage -ID "00B1"; SetMessage -ID "00CB"; SetMessage -ID "00CD"; SetMessage -ID "00CE"; SetMessage -ID "00DD"; SetMessage -ID "0108"; SetMessage -ID "0336"; SetMessage -ID "0337"; SetMessage -ID "0343" -All;                   SetMessage -ID "0401"; SetMessage -ID "1007" -All; SetMessage -ID "100D" -All
             SetMessage -ID "1037"; SetMessage -ID "1039"; SetMessage -ID "103A" -All;                   SetMessage -ID "103B" -All;                   SetMessage -ID "103D" -All;                   SetMessage -ID "103F"; SetMessage -ID "2035"; SetMessage -ID "2037"; SetMessage -ID "407F" -All; SetMessage -ID "7004"; SetMessage -ID "70A3"
 
             # Press -> Use
-            SetMessage -ID "0030" -ASCII -Text "5072657373" -Replace "557365"; SetMessage -ID "0031"; SetMessage -ID "0032"; SetMessage -ID "0035"; SetMessage -ID "0038"; SetMessage -ID "004A"; SetMessage -ID "004C"; SetMessage -ID "004E"; SetMessage -ID "0066"; SetMessage -ID "2035"; SetMessage -ID "2065"; SetMessage -ID "3022"
+            SetMessage -ID "0030" -Text "5072657373" -Replace "557365"; SetMessage -ID "0031"; SetMessage -ID "0032"; SetMessage -ID "0035"; SetMessage -ID "0038"; SetMessage -ID "004A"; SetMessage -ID "004C"; SetMessage -ID "004E"; SetMessage -ID "0066"; SetMessage -ID "2035"; SetMessage -ID "2065"; SetMessage -ID "3022"
             SetMessage -ID "302B"; SetMessage -ID "407F"; SetMessage -ID "7004"
 
+            # C-Buttons -> C
+	    
+            SetMessage -ID "1025" -Text "62792072656C656173696E67207468650D0A627574746F6E2120486F7720636F6F6C21" -Replace "62792072656C656173696E6720697421200D0A486F7720636F6F6C21";
+	    
+            SetMessage -ID "1036" -Text "627574746F6E73" -Replace "3C573E2E";
+	    
+            SetMessage -ID "103A" -Text "427574746F6E206974656D73" -Replace "6974656D73";
+
+            # C-Buttons Sentencing Adjustments
+	    
+            SetMessage -ID "1036" -Text "427574746F6E206974656D" -Replace "6974656D";
+	    
+            SetMessage -ID "103A" -Text "75736564206279207072657373696E672074686F736520627574746F6E732E" -Replace "7468656E207573656420617420616E7974696D652E";
+	    
             SetMessage -ID "0068" -Text "50616B" -Replace "46656174757265"; SetMessage -ID "407C" -All; SetMessage -ID "407D" # Pak -> Feature
 
             SetMessage -ID "0103" -Text "<B><A Button>"  -Replace "<G><A Button>";  SetMessage -ID "0103" -Text "<B>Icon" -Replace "<G>Icon"; SetMessage -ID "0103" -Text "<B>blue" -Replace "<B>green" # Deku Tree - Opening a door
@@ -1877,7 +1891,8 @@ function ByteTextOptions() {
         if (IsChecked $Redux.Unlock.Tunics -Lang 1) {
             SetMessage -ID "0050" -Text "adult size, so it won't fit a kid..." -Replace "unisize, so it fits an adult and kid"   # Goron Tunic
             SetMessage -ID "0051" -Text "adult size,<N>so it won't fit a kid." -Replace "unisize,<N>so it fits an adult and kid" # Zora Tunic
-            SetMessage -ID "00AA" -Text "Adult" -Replace "Uni-"; SetMessage -ID "00AB"  # Tunic
+            SetMessage -ID "00AA" -Text "Adult" -Replace "Uni-"; # Goron Tunic (Shop)
+	    SetMessage -ID "00AB" -Text "Adult size" -Replace "Uni-size"; # Zora Tunic (Shop)
         }
     }
     elseif (IsChecked $Redux.Text.Speed2x) { ChangeBytes -Offset "B5006F" -Values "02" }
