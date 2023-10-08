@@ -1792,7 +1792,7 @@ function ByteSceneOptions() {
 #==============================================================================================================================================================================================
 function WholeTextOptions() {
     
-    elseif (IsChecked $Redux.Text.Restore)   { ApplyText -Script "restore_static.bps" -Table "restore_table.bps" }
+    if     (IsChecked $Redux.Text.Restore)   { ApplyText -Script "restore_static.bps" -Table "restore_table.bps" }
     elseif (IsChecked $Redux.Text.Beta)      { ApplyText -Script "ura_static.bps"     -Table "ura_table.bps"     }
     elseif (IsChecked $Redux.Text.Custom) {
         if ( (TestFile ($Gamefiles.editor + "\message_data_static." + $LanguagePatch.code + ".bin") ) -and (TestFile ($Gamefiles.editor + "\message_data." + $LanguagePatch.code + ".tbl") ) ) {
