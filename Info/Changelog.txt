@@ -1,5 +1,6 @@
 v22.0.4
 - Renamed Language functions to Text
+- Added new text changes to the OoT GC Scheme
 - Adjusted credits
 
 v22.0.3

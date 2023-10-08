@@ -1843,6 +1843,19 @@ function ByteTextOptions() {
         }
 
         if (IsChecked $Redux.Graphics.GCScheme) {
+            SetMessage -ID "0103" -ASCII -Text "7072657373696E67" -Replace "7573696E67"; SetMessage -ID "0108"; SetMessage -ID "103A"; SetMessage -ID "4081" # pressing -> using
+
+            # press -> use
+            SetMessage -ID "001C" -ASCII -Text "7072657373" -Replace "757365";   SetMessage -ID "001D"; SetMessage -ID "0030"; SetMessage -ID "0037"; SetMessage -ID "0039"; SetMessage -ID "0047"; SetMessage -ID "004A"; SetMessage -ID "004C"; SetMessage -ID "007A"; SetMessage -ID "0099"; SetMessage -ID "009A"; SetMessage -ID "00A3" 
+            SetMessage -ID "00B1"; SetMessage -ID "00CB"; SetMessage -ID "00CD"; SetMessage -ID "00CE"; SetMessage -ID "00DD"; SetMessage -ID "0108"; SetMessage -ID "0336"; SetMessage -ID "0337"; SetMessage -ID "0343" -All;                   SetMessage -ID "0401"; SetMessage -ID "1007" -All; SetMessage -ID "100D" -All
+            SetMessage -ID "1037"; SetMessage -ID "1039"; SetMessage -ID "103A" -All;                   SetMessage -ID "103B" -All;                   SetMessage -ID "103D" -All;                   SetMessage -ID "103F"; SetMessage -ID "2035"; SetMessage -ID "2037"; SetMessage -ID "407F" -All; SetMessage -ID "7004"; SetMessage -ID "70A3"
+
+            # Press -> Use
+            SetMessage -ID "0030" -ASCII -Text "5072657373" -Replace "557365"; SetMessage -ID "0031"; SetMessage -ID "0032"; SetMessage -ID "0035"; SetMessage -ID "0038"; SetMessage -ID "004A"; SetMessage -ID "004C"; SetMessage -ID "004E"; SetMessage -ID "0066"; SetMessage -ID "2035"; SetMessage -ID "2065"; SetMessage -ID "3022"
+            SetMessage -ID "302B"; SetMessage -ID "407F"; SetMessage -ID "7004"
+
+            SetMessage -ID "0068" -Text "50616B" -Replace "46656174757265"; SetMessage -ID "407C" -All; SetMessage -ID "407D" # Pak -> Feature
+
             SetMessage -ID "0103" -Text "<B><A Button>"  -Replace "<G><A Button>";  SetMessage -ID "0103" -Text "<B>Icon" -Replace "<G>Icon"; SetMessage -ID "0103" -Text "<B>blue" -Replace "<B>green" # Deku Tree - Opening a door
             SetMessage -ID "0337" -Text 'Hole of "Z"'    -Replace 'Hole of "L"'
             SetMessage -ID "1035" -Text "blue icon"      -Replace "green icon";     SetMessage -ID "1037"
@@ -1889,8 +1902,8 @@ function ByteTextOptions() {
 
     if ( (IsDefault $Redux.Text.NaviScript -Not) -and (IsDefault $Redux.Text.NaviName -Not) -and $Redux.Text.NaviName.Text.Count -gt 0) {
         if ($Redux.Text.NaviScript -ne $null) {
-            SetMessage -ID "1000" -Text "4E617669" -Replace $Redux.Text.NaviName.text -NoParse; SetMessage -ID "1015"; SetMessage -ID "1017"; SetMessage -ID "1017"; SetMessage -ID "1017"; SetMessage -ID "103F"
-            SetMessage -ID "103F";                                                              SetMessage -ID "1099"; SetMessage -ID "1099"; SetMessage -ID "109A"; SetMessage -ID "109A"; SetMessage -ID "109A"
+            SetMessage -ID "1000" -ASCII -Text "4E617669" -Replace $Redux.Text.NaviName.text; SetMessage -ID "1015"; SetMessage -ID "1017"; SetMessage -ID "1017"; SetMessage -ID "1017"; SetMessage -ID "103F"; SetMessage -ID "103F"; SetMessage -ID "1099"; SetMessage -ID "1099"; SetMessage -ID "109A"; SetMessage -ID "109A"
+            SetMessage -ID "109A"
         }
         if (TestFile ($GameFiles.textures + "\Action Prompts\Navi\" + $Redux.Text.NaviName.Text + ".cup") ) {
             if (IsChecked $Redux.Text.NaviPrompt) { PatchBytes  -Offset "8E3A80" -Texture -Patch ("Action Prompts\Navi\" + $Redux.Text.NaviName.text + ".prompt") }
@@ -1931,20 +1944,20 @@ function ByteTextOptions() {
         if (StrLike -Str $GamePatch.settings -Val "Gold Quest")       { $bomb3  = "50" }   elseif (StrLike -Str $GamePatch.settings -Val "Master of Time")   { $bomb3  = "99" }   else   { $bomb3 = "40" }
         if (StrLike -Str $GamePatch.settings -Val "Master of Time")   { $nut3   = "99" }   else                                                              { $nut3   = "40" }
 
-        SetMessage -ID "0056" -ASCII -Text "40"   -Replace $Redux.Capacity.Quiver2.text;   SetMessage -ID "0057" -ASCII -Text $arrow3 -Replace $Redux.Capacity.Quiver3.text
-        SetMessage -ID "0058" -ASCII -Text $bomb1 -Replace $Redux.Capacity.BombBag1.text;  SetMessage -ID "0059" -ASCII -Text "30"    -Replace $Redux.Capacity.BombBag2.text;    SetMessage -ID "005A" -Text $bomb3 -Replace $Redux.Capacity.BombBag3.text
-        SetMessage -ID "00A7" -ASCII -Text "30"   -Replace $Redux.Capacity.DekuNuts2.text; SetMessage -ID "00A8" -ASCII -Text $nut3   -Replace $Redux.Capacity.DekuNuts3.text
+            SetMessage -ID "0056" -ASCII -Text "40"   -Replace $Redux.Capacity.Quiver2.text;     SetMessage -ID "0057" -ASCII -Text $arrow3 -Replace $Redux.Capacity.Quiver3.text
+            SetMessage -ID "0058" -ASCII -Text $bomb1 -Replace $Redux.Capacity.BombBag1.text;    SetMessage -ID "0059" -ASCII -Text "30"    -Replace $Redux.Capacity.BombBag2.text;    SetMessage -ID "005A" -ASCII -Text $bomb3 -Replace $Redux.Capacity.BombBag3.text
+            SetMessage -ID "00A7" -ASCII -Text "30"   -Replace $Redux.Capacity.DekuNuts2.text;   SetMessage -ID "00A8" -ASCII -Text $nut3   -Replace $Redux.Capacity.DekuNuts3.text
 
         if ($GamePatch.settings -ne "Master of Time") {
-            SetMessage -ID "0007" -ASCII -Text "40" -Replace $Redux.Capacity.BulletBag2.text;  SetMessage -ID "006C" -ASCII -Text "50" -Replace $Redux.Capacity.BulletBag3.text
-            SetMessage -ID "0037" -ASCII -Text "10" -Replace $Redux.Capacity.DekuSticks1.text; SetMessage -ID "0090" -ASCII -Text "20" -Replace $Redux.Capacity.DekuSticks2.text; SetMessage -ID "0091" -Text "30" -Replace $Redux.Capacity.DekuSticks3.text
+            SetMessage -ID "0007" -ASCII -Text "40"   -Replace $Redux.Capacity.BulletBag2.text;  SetMessage -ID "006C" -ASCII -Text "50"    -Replace $Redux.Capacity.BulletBag3.text
+            SetMessage -ID "0037" -ASCII -Text "10"   -Replace $Redux.Capacity.DekuSticks1.text; SetMessage -ID "0090" -ASCII -Text "20"    -Replace $Redux.Capacity.DekuSticks2.text; SetMessage -ID "0091" -ASCII -Text "30"   -Replace $Redux.Capacity.DekuSticks3.text
         }
     }
 
     if (IsChecked $Redux.Capacity.EnableWallet -Lang 1) {
         if (StrLike -Str $GamePatch.settings -Val "Master of Time")   { $wallet2 = "250" } else { $wallet2 = "200" }
         if ($GamePatch.vanilla  -ne 1)                                { $wallet3 = "999" } else { $wallet3 = "500" }
-        SetMessage -ID "005E" -ASCII -Text $wallet2 -Replace $Redux.Capacity.Wallet2.Text -NoParse; SetMessage -ID "005F" -ASCII -Text $wallet3 -Replace $Redux.Capacity.Wallet3.Text -NoParse
+        SetMessage -ID "005E" -ASCII -Text $wallet2 -Replace $Redux.Capacity.Wallet2.Text; SetMessage -ID "005F" -ASCII -Text $wallet3 -Replace $Redux.Capacity.Wallet3.Text
     }
 
     if (IsChecked $Redux.Equipment.HerosBow -Lang 1) { SetMessage -ID "0031" -Text "Fairy Bow" -Replace "Hero's Bow" }
@@ -1953,7 +1966,7 @@ function ByteTextOptions() {
         $file = $GameFiles.textures + "\Equipment\Kokiri Sword\" + $Redux.Equipment.KokiriSword.text + "." + $LanguagePatch.code + ".txt"
         if (TestFile $file) {
             $replace = Get-Content -Path $file
-            if ($replace.length -gt 0) { SetMessage -ID "00A4" -Text "Kokiri Sword" -Replace $replace -NoParse; SetMessage -ID "10D2" }
+            if ($replace.length -gt 0) { SetMessage -ID "00A4" -ASCII -Text "Kokiri Sword" -Replace $replace; SetMessage -ID "10D2" }
         }
     }
 
@@ -1962,7 +1975,7 @@ function ByteTextOptions() {
         if (TestFile $file) {
             $replace = Get-Content -Path $file
             if ($replace.length -gt 0) {
-                SetMessage -ID "600C" -Text "Master Sword" -Replace $replace -NoParse; SetMessage -ID "704F"; SetMessage -ID "7051"; SetMessage -ID "7059"; SetMessage -ID "706D"; SetMessage -ID "7075"; SetMessage -ID "7081"; SetMessage -ID "7088"; SetMessage -ID "7091"; SetMessage -ID "70E8"
+                SetMessage -ID "600C" -Text "Master Sword" -ASCII -Replace $replace; SetMessage -ID "704F"; SetMessage -ID "7051"; SetMessage -ID "7059"; SetMessage -ID "706D"; SetMessage -ID "7075"; SetMessage -ID "7081"; SetMessage -ID "7088"; SetMessage -ID "7091"; SetMessage -ID "70E8"
             }
         }
     }
@@ -1971,7 +1984,7 @@ function ByteTextOptions() {
         $file = $GameFiles.textures + "\Equipment\Master Knife\" + $Redux.Equipment.GiantsKnife.text + "." + $LanguagePatch.code + ".txt"
         if (TestFile $file) {
             $replace = Get-Content -Path $file
-            if ($replace.length -gt 0) { SetMessage -ID "000B" -Text "Giant's Knife" -Replace $replace -NoParse; SetMessage -ID "004B" }
+            if ($replace.length -gt 0) { SetMessage -ID "000B" -ASCII -Text "Giant's Knife" -Replace $replace; SetMessage -ID "004B" }
         }
     }
 
@@ -1979,7 +1992,7 @@ function ByteTextOptions() {
         $file = $GameFiles.textures + "\Equipment\Maste Sword\" + $Redux.Equipment.BiggoronSword.text + "." + $LanguagePatch.code + ".txt"
         if (TestFile $file) {
             $replace = Get-Content -Path $file
-            if ($replace.length -gt 0) { SetMessage -ID "000A" -Text "Biggoron's Sword" -Replace $replace -NoParse; SetMessage -ID "000B"; SetMessage -ID "000C"; SetMessage -ID "0404" }
+            if ($replace.length -gt 0) { SetMessage -ID "000A" -ASCII -Text "Biggoron's Sword" -Replace $replace; SetMessage -ID "000B"; SetMessage -ID "000C"; SetMessage -ID "0404" }
         }
     }
 
@@ -1987,7 +2000,7 @@ function ByteTextOptions() {
         $file = $GameFiles.textures + "\Equipment\Deku Shield\" + $Redux.Equipment.DekuShield.text + "." + $LanguagePatch.code + ".txt"
         if (TestFile $file) {
             $replace = Get-Content -Path $file
-            if ($replace.length -gt 0) { SetMessage -ID "004C" -Text "Deku Shield" -Replace $replace -NoParse; SetMessage -ID "0089"; SetMessage -ID "009F"; SetMessage -ID "0611"; SetMessage -ID "103D"-Last; SetMessage -ID "1052"; SetMessage -ID "10CB"; SetMessage -ID "10D2" }
+            if ($replace.length -gt 0) { SetMessage -ID "004C" -ASCII -Text "Deku Shield" -Replace $replace; SetMessage -ID "0089"; SetMessage -ID "009F"; SetMessage -ID "0611"; SetMessage -ID "103D"-Last; SetMessage -ID "1052"; SetMessage -ID "10CB"; SetMessage -ID "10D2" }
         }
     }
 
@@ -1995,7 +2008,7 @@ function ByteTextOptions() {
         $file = $GameFiles.textures + "\Equipment\Hylian Shield\" + $Redux.Equipment.HylianShield.text + "." + $LanguagePatch.code + ".txt"
         if (TestFile $file) {
             $replace = Get-Content -Path $file
-            if ($replace.length -gt 0) { SetMessage -ID "004D" -Text "Hylian Shield" -Replace $replace -NoParse; SetMessage -ID "0092"; SetMessage -ID "009C"; SetMessage -ID "00A9"; SetMessage -ID "7013"; SetMessage -ID "7121" }
+            if ($replace.length -gt 0) { SetMessage -ID "004D" -ASCII -Text "Hylian Shield" -Replace $replace; SetMessage -ID "0092"; SetMessage -ID "009C"; SetMessage -ID "00A9"; SetMessage -ID "7013"; SetMessage -ID "7121" }
         }
     }
 
@@ -3039,14 +3052,14 @@ function CreateTabEquipment() {
     
     # UNLOCK CHILD RESTRICTIONS #
 
-    CreateReduxGroup    -Tag  "Unlock"        -Child -Exclude "Child Quest" -Text "Unlock Child Restrictions"
-    CreateReduxCheckBox -Name "Tunics"        -Child -Exclude "Child Quest" -Text "Unlock Tunics"        -Info "Child Link is able to use the Goron Tunic and Zora Tunic`nSince you might want to walk around in style as well when you are young`nThe dialogue script will be adjusted to reflect this (only for English)" -Credits "GhostlyDark"
-    CreateReduxCheckBox -Name "MasterSword"   -Child -Exclude "Child Quest" -Text "Unlock Master Sword"  -Info "Child Link is able to use the Master Sword`nThe Master Sword does twice as much damage as the Kokiri Sword"                                          -Credits "GhostlyDark"
-    CreateReduxCheckBox -Name "GiantsKnife"   -Child -Exclude "Child Quest" -Text "Unlock Giant's Knife" -Info "Child Link is able to use the Giant's Knife / Biggoron Sword`nThe Giant's Knife / Biggoron Sword does four times as much damage as the Kokiri Sword" -Credits "GhostlyDark" -Warning "The Giant's Knife / Biggoron Sword appears as if Link if thrusting the sword through the ground"
-    CreateReduxCheckBox -Name "MirrorShield"  -Child -Exclude "Child Quest" -Text "Unlock Mirror Shield" -Info "Child Link is able to use the Mirror Shield"                                                                                                         -Credits "GhostlyDark" -Warning "The Mirror Shield will look like the Deku Shield for Child Link"
-    CreateReduxCheckBox -Name "Boots"         -Child -Exclude "Child Quest" -Text "Unlock Boots"         -Info "Child Link is able to use the Iron Boots and Hover Boots"                                                                                            -Credits "GhostlyDark" -Warning "The Iron and Hover Boots appears as the Kokiri Boots"
-    CreateReduxCheckBox -Name "Gauntlets"     -Child -Exclude "Child Quest" -Text "Unlock Gauntlets"     -Info "Child Link is able to use the Silver and Golden Gauntlets"                                                                                           -Credits "Admentus (ROM) & Aegiker (RAM)"
-    CreateReduxCheckBox -Name "MegatonHammer" -Child -Exclude "Child Quest" -Text "Unlock Hammer"        -Info "Child Link is able to use the Megaton Hammer"                                                                                                        -Credits "GhostlyDark"
+    CreateReduxGroup    -Tag  "Unlock"        -Child -Exclude "Child" -Text "Unlock Child Restrictions"
+    CreateReduxCheckBox -Name "Tunics"        -Child -Exclude "Child" -Text "Unlock Tunics"        -Info "Child Link is able to use the Goron Tunic and Zora Tunic`nSince you might want to walk around in style as well when you are young`nThe dialogue script will be adjusted to reflect this (only for English)" -Credits "GhostlyDark"
+    CreateReduxCheckBox -Name "MasterSword"   -Child -Exclude "Child" -Text "Unlock Master Sword"  -Info "Child Link is able to use the Master Sword`nThe Master Sword does twice as much damage as the Kokiri Sword"                                          -Credits "GhostlyDark"
+    CreateReduxCheckBox -Name "GiantsKnife"   -Child -Exclude "Child" -Text "Unlock Giant's Knife" -Info "Child Link is able to use the Giant's Knife / Biggoron Sword`nThe Giant's Knife / Biggoron Sword does four times as much damage as the Kokiri Sword" -Credits "GhostlyDark" -Warning "The Giant's Knife / Biggoron Sword appears as if Link if thrusting the sword through the ground"
+    CreateReduxCheckBox -Name "MirrorShield"  -Child -Exclude "Child" -Text "Unlock Mirror Shield" -Info "Child Link is able to use the Mirror Shield"                                                                                                         -Credits "GhostlyDark" -Warning "The Mirror Shield will look like the Deku Shield for Child Link"
+    CreateReduxCheckBox -Name "Boots"         -Child -Exclude "Child" -Text "Unlock Boots"         -Info "Child Link is able to use the Iron Boots and Hover Boots"                                                                                            -Credits "GhostlyDark" -Warning "The Iron and Hover Boots appears as the Kokiri Boots"
+    CreateReduxCheckBox -Name "Gauntlets"     -Child -Exclude "Child" -Text "Unlock Gauntlets"     -Info "Child Link is able to use the Silver and Golden Gauntlets"                                                                                           -Credits "Admentus (ROM) & Aegiker (RAM)"
+    CreateReduxCheckBox -Name "MegatonHammer" -Child -Exclude "Child" -Text "Unlock Hammer"        -Info "Child Link is able to use the Megaton Hammer"                                                                                                        -Credits "GhostlyDark"
 
 
 
@@ -3067,8 +3080,8 @@ function CreateTabEquipment() {
     CreateReduxGroup    -Tag  "Equipment"           -All   -Text "Equipment Adjustments"
     CreateReduxCheckBox -Name "UnsheathSword"       -All   -Text "Unsheath Sword"              -Info "The sword is unsheathed first before immediately swinging it"                                  -Credits "Admentus"
     CreateReduxCheckBox -Name "FireproofDekuShield" -Child -Text "Fireproof Deku Shield"       -Info "The Deku Shield turns into an fireproof shield, which will not burn up anymore"                -Credits "Admentus (ported) & Three Pendants (ROM patch)"
-  # CreateReduxCheckBox -Name "VisibleGiantsKnife"  -Child -Text "Visible Giant's Knife"       -Info "The Giant's Knife as Child Link is now shown as a two-handed version of the Kokiri Sword"      -Credits "Admentus" -Exclude "Child Quest"
-    CreateReduxCheckBox -Name "FunctionalWeapons"   -All   -Text "Functional Weapons"          -Info "All melee weapons are useable against enemies, except for obvious boss reasons"                -Credits "Admentus" -Exclude "Child Quest"
+  # CreateReduxCheckBox -Name "VisibleGiantsKnife"  -Child -Text "Visible Giant's Knife"       -Info "The Giant's Knife as Child Link is now shown as a two-handed version of the Kokiri Sword"      -Credits "Admentus" -Exclude "Child"
+    CreateReduxCheckBox -Name "FunctionalWeapons"   -All   -Text "Functional Weapons"          -Info "All melee weapons are useable against enemies, except for obvious boss reasons"                -Credits "Admentus" -Exclude "Child"
     CreateReduxCheckBox -Name "HerosBow"            -Adult -Text "Hero's Bow"                  -Info "Replace the Fairy Bow icon and text with the Hero's Bow"                                       -Credits "GhostlyDark (ported) & Admentus (dialogue)"
     CreateReduxCheckBox -Name "Hookshot"            -Adult -Text "Termina Hookshot"            -Info "Replace the Hyrule Hookshot icon with the Termina Hookshot"                                    -Credits "GhostlyDark (ported)"
     CreateReduxCheckBox -Name "GoronBraceletFix"    -Adult -Text "Keep Goron's Bracelet Color" -Info "Prevent grayscale on Goron's Bracelet, as Adult Link isn't able to push big blocks without it" -Credits "Randomizer"
