@@ -1539,6 +1539,50 @@ function SetSceneSettings($Music, $NightMusic, $SoundSetting, $Skybox, $Cast, $L
 
 
 #==============================================================================================================================================================================================
+function ChangeSpawnPoint([byte]$Index=0, $X, $Y, $Z, $XRot, $YRot, $ZRot) {
+    
+    $offset = GetPositionsStart + $Index * 16
+
+    if ($X -is [int] -and $X -ge -32768 -and $X -le 32767) {
+        if ($X -lt 0) { $X += 0x10000 }
+        $SceneEditor.SceneArray[$offset+2]  = $X -shr 8
+        $SceneEditor.SceneArray[$offset+3]  = $X % 0x100
+    }
+
+    if ($Y -is [int] -and $Y -ge -32768 -and $Y -le 32767) {
+        if ($Y -lt 0) { $Y += 0x10000 }
+        $SceneEditor.SceneArray[$offset+4]  = $Y -shr 8
+        $SceneEditor.SceneArray[$offset+5]  = $Y % 0x100
+    }
+
+    if ($Z -is [int] -and $Z -ge -32768 -and $Z -le 32767) {
+        if ($Z -lt 0) { $Z += 0x10000 }
+        $SceneEditor.SceneArray[$offset+6]  = $Z -shr 8
+        $SceneEditor.SceneArray[$offset+7]  = $Z % 0x100
+    }
+
+    if ($XRot -is [int] -and $XRot -ge 0 -and $XRot -le 0xFFFF) {
+        $SceneEditor.SceneArray[$offset+8]  = $XRot -shr 8
+        $SceneEditor.SceneArray[$offset+9]  = $XRot % 0x100
+    }
+
+    if ($YRot -is [int] -and $YRot -ge 0 -and $YRot -le 0xFFFF) {
+        $SceneEditor.SceneArray[$offset+10] = $YRot -shr 8
+        $SceneEditor.SceneArray[$offset+11] = $YRot % 0x100
+    }
+
+    if ($ZRot -is [int] -and $ZRot -ge 0 -and $ZRot -le 0xFFFF) {
+        $SceneEditor.SceneArray[$offset+12] = $ZRot -shr 8
+        $SceneEditor.SceneArray[$offset+13] = $ZRot % 0x100
+    }
+
+    WriteToConsole ("Updated spawn point:    " + $index)
+
+}
+
+
+
+#==============================================================================================================================================================================================
 function SetMapSettings($Time, $TimeSpeed, $WindWest, $WindSouth, $WindVertical, $WindStrength, $Restrictions, $IdleAnimation, $DisableWarpSongs, $Rain, $HideInvisibleActors, $DisableSkybox, $DisableSun) {
     
     if ($Time -is [int] -and $Time -ge 0 -and $Time -le 0xFFFF) {
@@ -1862,6 +1906,7 @@ function GetTransitionActorEnd()          { return $SceneEditor.SceneOffsets[$Sc
 function GetTransitionActorCountIndex()   { return $SceneEditor.SceneOffsets[$SceneEditor.LoadedHeader].ActorCountIndex                                          }
 function GetTransitionActorIndex()        { return $SceneEditor.SceneOffsets[$SceneEditor.LoadedHeader].ActorIndex                                               }
 function GetFoundTransitionActors()       { return $SceneEditor.SceneOffsets[$SceneEditor.LoadedHeader].FoundActors                                              }
+function GetPositionsStart()              { return $SceneEditor.SceneOffsets[$SceneEditor.LoadedHeader].PositionsStart                                           }
 
 function GetTotalObjects() {
     $objects = 0
@@ -4068,6 +4113,7 @@ Export-ModuleMember -Function ChangeSceneFile
 Export-ModuleMember -Function PrepareAndSetSceneSettings
 Export-ModuleMember -Function PrepareAndSetMapSettings
 Export-ModuleMember -Function SetSceneSettings
+Export-ModuleMember -Function ChangeSpawnPoint
 Export-ModuleMember -Function SetMapSettings
 Export-ModuleMember -Function DeleteActor
 Export-ModuleMember -Function InsertActor
