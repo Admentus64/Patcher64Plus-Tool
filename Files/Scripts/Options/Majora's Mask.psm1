@@ -342,7 +342,7 @@ function ByteOptions() {
         # Press -> Use
 	SetMessage -ID "001A" -Text "Press" -Replace "Use";  SetMessage -ID "0022" -All; SetMessage -ID "0028"; SetMessage -ID "0029"; SetMessage -ID "002A"; SetMessage -ID "002E"; SetMessage -ID "0034"; SetMessage -ID "0036";
 	SetMessage -ID "003A"; SetMessage -ID "0041"; SetMessage -ID "0043"; SetMessage -ID "1701"; SetMessage -ID "1706"; SetMessage -ID "1709"; SetMessage -ID "170E"; SetMessage -ID "170F"; SetMessage -ID "1717"; SetMessage -ID "171B";
-        SetMessage -ID "172E"
+        SetMessage -ID "172E"; SetMessage -ID "0079"; SetMessage -ID "007A"
 
         # Buttons -> C Icon Only
 	SetMessage -ID "004C" -Text "<W> Buttons" -Replace "<W>"
@@ -350,7 +350,7 @@ function ByteOptions() {
 	SetMessage -ID "1700" -Text "<C Button><N>Buttons. Press" -Replace "<C Button>.<N>Press"
 	
         # N64 -> GC Text phrasing adjustments
-        SetMessage -ID "0078" -Text "Press <C><C Button>" -Replace "Use <C><C Button>";  SetMessage -ID "0079"; SetMessage -ID "007A"
+        SetMessage -ID "0078" -Text "Press <C><C Button><N><W>" -Replace "Use <C><C Button><N><W>"
         
 	# Z to L textures
         PatchBytes -Offset "A7B7CC"  -Texture -Patch "GameCube\l_pause_screen_button.yaz0"
