@@ -1846,7 +1846,7 @@ function ByteTextOptions() {
         if (IsChecked $Redux.Graphics.GCScheme) {
 	    # press -> use
             SetMessage -ID "001C" -Text "press" -Replace "use"; SetMessage -ID "001D"; SetMessage -ID "0030"; SetMessage -ID "0039"; SetMessage -ID "004A"; SetMessage -ID "00A3"; SetMessage -ID "00B1"; SetMessage -ID "00CB";
-            SetMessage -ID "103A"; SetMessage -ID "70A3"
+            SetMessage -ID "70A3"
 
             # Press -> Use
             SetMessage -ID "0030" -Text "Press" -Replace "Use"; SetMessage -ID "0031"; SetMessage -ID "0032";
@@ -1861,13 +1861,16 @@ function ByteTextOptions() {
 	    SetMessage -ID "0099" -Text "press <Y><C Button> <W>to use it..." -Replace "use <Y><C Button> <W>to open it..."
             SetMessage -ID "009A" -Text "and then press <Y><C Button> <W>to use it." -Replace "and then use <Y><C Button><W>."
 	    SetMessage -ID "1025" -Text "the<N>button! How cool!" -Replace "<N>it! How cool!"
-            SetMessage -ID "1036" -Text "Once you get a <Y><C Button> Button item<W>, <N>go into the <Y>Select Item Subscreen<W><N>and set it to one of the three<N><Y><C Button> Buttons<W>." -Replace "Once you get a <Y><C Button> item<W>, <N>go into the <Y>Select Item Subscreen<W><N>and set it to one of the three<N><Y><C Button><W>."
+            SetMessage -ID "1036" -Text "Once you get a <Y><C Button> Button item<W>, <N>go into the <Y>Select Item Subscreen<W> <N>and set it to one of the three<N><Y><C Button> Buttons<W>." -Replace "Once you get a <Y><C Button> item<W>, <N>go into the <Y>Select Item Subscreen<W> <N>and set it to one of the three<N><Y><C Button><W>."
 	    SetMessage -ID "103A" -Text "used by pressing those buttons." -Replace "used at any time."
             SetMessage -ID "70A3" -Text "Button <W>item." -Replace "<W>item."
 
             # Buttons -> C Icon Only
 	    SetMessage -ID "1036" -Text "<W>buttons." -Replace "<W>."
             SetMessage -ID "103A" -Text "Button items" -Replace "items" -All
+	    
+            # GC Text Finalization
+            SetMessage -ID "103A" -Text "press" -Replace "use";
 	    
             # Pak -> Feature	    
             SetMessage -ID "0068" -Text "If you equip a <C>Rumble Pak<W>" -Replace "If you have a <C>Rumble Feature<W>"
