@@ -1843,18 +1843,33 @@ function ByteTextOptions() {
         }
 
         if (IsChecked $Redux.Graphics.GCScheme) {
-            SetMessage -ID "0103" -ASCII -Text "7072657373696E67" -Replace "7573696E67"; SetMessage -ID "0108"; SetMessage -ID "103A"; SetMessage -ID "4081" # pressing -> using
-
-            # press -> use
-            SetMessage -ID "001C" -ASCII -Text "7072657373" -Replace "757365";   SetMessage -ID "001D"; SetMessage -ID "0030"; SetMessage -ID "0037"; SetMessage -ID "0039"; SetMessage -ID "0047"; SetMessage -ID "004A"; SetMessage -ID "004C"; SetMessage -ID "007A"; SetMessage -ID "0099"; SetMessage -ID "009A"; SetMessage -ID "00A3" 
-            SetMessage -ID "00B1"; SetMessage -ID "00CB"; SetMessage -ID "00CD"; SetMessage -ID "00CE"; SetMessage -ID "00DD"; SetMessage -ID "0108"; SetMessage -ID "0336"; SetMessage -ID "0337"; SetMessage -ID "0343" -All;                   SetMessage -ID "0401"; SetMessage -ID "1007" -All; SetMessage -ID "100D" -All
-            SetMessage -ID "1037"; SetMessage -ID "1039"; SetMessage -ID "103A" -All;                   SetMessage -ID "103B" -All;                   SetMessage -ID "103D" -All;                   SetMessage -ID "103F"; SetMessage -ID "2035"; SetMessage -ID "2037"; SetMessage -ID "407F" -All; SetMessage -ID "7004"; SetMessage -ID "70A3"
+	        # press -> use
+            SetMessage -ID "001C" -Text "press" -Replace "use"; SetMessage -ID "001D"; SetMessage -ID "0030"; SetMessage -ID "0039" -All; SetMessage -ID "004A"; SetMessage -ID "00A3"; SetMessage -ID "00B1"; SetMessage -ID "00CB"; SetMessage -ID "70A3"
 
             # Press -> Use
-            SetMessage -ID "0030" -ASCII -Text "5072657373" -Replace "557365"; SetMessage -ID "0031"; SetMessage -ID "0032"; SetMessage -ID "0035"; SetMessage -ID "0038"; SetMessage -ID "004A"; SetMessage -ID "004C"; SetMessage -ID "004E"; SetMessage -ID "0066"; SetMessage -ID "2035"; SetMessage -ID "2065"; SetMessage -ID "3022"
-            SetMessage -ID "302B"; SetMessage -ID "407F"; SetMessage -ID "7004"
+            SetMessage -ID "0030" -Text "Press" -Replace "Use"; SetMessage -ID "0031"; SetMessage -ID "0032";
+            
+	        # pressing -> using
+	        SetMessage -ID "007A" -Text "7072657373696E67" -Replace "7573696E67"
 
-            SetMessage -ID "0068" -Text "50616B" -Replace "46656174757265"; SetMessage -ID "407C" -All; SetMessage -ID "407D" # Pak -> Feature
+            # N64 -> GC Text phrasing adjustments
+            SetMessage -ID "0035" -Text "Press <Y><C Button><W> to use it to <N>attack distant enemies!" -Replace "Use <Y><C Button><W> to throw it <N>at distant enemies!"
+	        SetMessage -ID "0047" -Text "and then press that<N><Y><C Button> <W>to use it."              -Replace "and then use<N><Y><C Button><W>."
+            SetMessage -ID "004A" -Text "and the four <Y><C Button> Buttons<W>."                         -Replace "and the four <Y><C Button><W>."
+	        SetMessage -ID "0099" -Text "press <Y><C Button> <W>to use it..."                            -Replace "use <Y><C Button> <W>to open it..."
+            SetMessage -ID "009A" -Text "and then press <Y><C Button> <W>to use it."                     -Replace "and then use <Y><C Button><W>."
+	        SetMessage -ID "1025" -Text "the<N>button! How cool!"                                        -Replace "<N>it! How cool!"
+            SetMessage -ID "1036" -Text "Once you get a <Y><C Button> Button item<W>, <N>go into the <Y>Select Item Subscreen<W> <N>and set it to one of the three<N><Y><C Button> Buttons<W>." -Replace "Once you get a <Y><C Button> item<W>, <N>go into the <Y>Select Item Subscreen<W> <N>and set it to one of the three<N><Y><C Button><W>."
+            SetMessage -ID "1036" -Text " <W>buttons."                                                   -Replace "<W>."       # Buttons -> C Icon Only
+            SetMessage -ID "103A" -Text "used by pressing those buttons."                                -Replace "be used at any time."
+            SetMessage -ID "103A" -Text "Button items"                                                   -Replace "items" -All
+            SetMessage -ID "103A" -Text "press"                                                          -Replace "use"   -All # GC Text Finalization (A little trick)
+            SetMessage -ID "70A3" -Text "Button <W>item."                                                -Replace "<W>item."
+
+            # Pak -> Feature	    
+            SetMessage -ID "0068" -Text "If you equip a <C>Rumble Pak<W>" -Replace "If you have a <C>Rumble Feature<W>"
+	        SetMessage -ID "407C" -Text "You don't have a <R>Rumble <N>Pak<W>! With a Rumble Pak" -Replace "You don't have a <R>Rumble<N>Feature<W>! With the rumble"
+            SetMessage -ID "407D" -Text "Wow! You have a <R>Rumble Pak<W>!" -Replace "You have a <R>Rumble Feature<W>!"
 
             SetMessage -ID "0103" -Text "<B><A Button>"  -Replace "<G><A Button>";  SetMessage -ID "0103" -Text "<B>Icon" -Replace "<G>Icon"; SetMessage -ID "0103" -Text "<B>blue" -Replace "<B>green" # Deku Tree - Opening a door
             SetMessage -ID "0337" -Text 'Hole of "Z"'    -Replace 'Hole of "L"'
@@ -1877,7 +1892,8 @@ function ByteTextOptions() {
         if (IsChecked $Redux.Unlock.Tunics -Lang 1) {
             SetMessage -ID "0050" -Text "adult size, so it won't fit a kid..." -Replace "unisize, so it fits an adult and kid"   # Goron Tunic
             SetMessage -ID "0051" -Text "adult size,<N>so it won't fit a kid." -Replace "unisize,<N>so it fits an adult and kid" # Zora Tunic
-            SetMessage -ID "00AA" -Text "Adult" -Replace "Uni-"; SetMessage -ID "00AB"  # Tunic
+            SetMessage -ID "00AA" -Text "Adult"                                -Replace "Uni-"                                   # Goron Tunic (Shop)
+	        SetMessage -ID "00AB" -Text "Adult size"                           -Replace "Uni-size"                               # Zora Tunic (Shop)
         }
     }
     elseif (IsChecked $Redux.Text.Speed2x) { ChangeBytes -Offset "B5006F" -Values "02" }
