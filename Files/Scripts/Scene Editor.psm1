@@ -1062,7 +1062,7 @@ function ChangeMapFile([object]$Values, [string]$Patch="", [object]$Search, [obj
         return
     }
     elseif ($Start -gt $End) {
-        Write-Host "Start offset can not be greater than end offset for map file!"
+        WriteToConsole "Start offset can not be greater than end offset for map file!" -Error
         $global:WarningError = $True
         return
     }
@@ -1116,7 +1116,7 @@ function ChangeSceneFile([object]$Values, [string]$Patch="", [object]$Search, [o
         return
     }
     elseif ($Start -gt $End) {
-        Write-Host "Start offset can not be greater than end offset for map file!"
+        WriteToConsole "Start offset can not be greater than end offset for map file!" -Error
         $global:WarningError = $True
         return
     }
@@ -2233,16 +2233,18 @@ function DeleteActor() {
     $meshes = $meshes | Sort-Object
     if ($meshes.count -gt 0) {
         for ($i=$meshes[0]; $i -lt $meshes[0]+512; $i+=4) {
-            if ($SceneEditor.MapArray[$i] -eq 3) {
-                $vtx = $SceneEditor.MapArray[$i+1] * 65536 + $SceneEditor.MapArray[$i+2] * 256 + $SceneEditor.MapArray[$i+3]
-                break
+            if ($SceneEditor.MapArray[$i] -eq 3) { $vtx = $SceneEditor.MapArray[$i+1] * 65536 + $SceneEditor.MapArray[$i+2] * 256 + $SceneEditor.MapArray[$i+3]; break }
+        }
+
+        for ($i=$vtx; $i -gt $vtx-0x300; $i-=8) {
+            if ($SceneEditor.MapArray[$i] -eq 0xD7 -and $SceneEditor.MapArray[$i+1] -eq 0 -and $SceneEditor.MapArray[$i+2] -eq 0 -and $SceneEditor.MapArray[$i+3] -eq 2 -and $SceneEditor.MapArray[$i+4] -eq 0xFF -and $SceneEditor.MapArray[$i+5] -eq 0xFF -and $SceneEditor.MapArray[$i+6] -eq 0xFF -and $SceneEditor.MapArray[$i+7] -eq 0xFF) {
+                $vtx = $i; break
             }
         }
 
         for ($i=$vtx; $i -lt $SceneEditor.MapArray.Count; $i+=4) {
             if ($SceneEditor.MapArray[$i-4] -ne 1 -and $SceneEditor.MapArray[$i-4] -ne 3 -and $SceneEditor.MapArray[$i-4] -lt 0xD0) { continue }
-            
-            if ($SceneEditor.MapArray[$i] -eq 3 -and !$skip) {
+            if ($SceneEditor.MapArray[$i] -eq 3 ) {
                 $value = $SceneEditor.MapArray[$i+1] * 65536 + $SceneEditor.MapArray[$i+2] * 256 + $SceneEditor.MapArray[$i+3]
                 if ($value -gt $SceneEditor.Offsets[$SceneEditor.Offsets.Header.Count-1].Header -and $value -lt $SceneEditor.MapArray.Count) { ShiftMap -Offset ($i+1) -Subtract 16 }
             }
@@ -2404,17 +2406,19 @@ function InsertActor([string]$ID="0000", [string]$Name, [int]$X=0, [int]$Y=0, [i
     $meshes = $meshes | Sort-Object
     if ($meshes.count -gt 0) {
         for ($i=$meshes[0]; $i -lt $meshes[0]+512; $i+=4) {
-            if ($SceneEditor.MapArray[$i] -eq 3) {
-                $vtx = $SceneEditor.MapArray[$i+1] * 65536 + $SceneEditor.MapArray[$i+2] * 256 + $SceneEditor.MapArray[$i+3]
-                break
+            if ($SceneEditor.MapArray[$i] -eq 3) { $vtx = $SceneEditor.MapArray[$i+1] * 65536 + $SceneEditor.MapArray[$i+2] * 256 + $SceneEditor.MapArray[$i+3]; break }
+        }
+
+        for ($i=$vtx; $i -gt $vtx-0x300; $i-=8) {
+            if ($SceneEditor.MapArray[$i] -eq 0xD7 -and $SceneEditor.MapArray[$i+1] -eq 0 -and $SceneEditor.MapArray[$i+2] -eq 0 -and $SceneEditor.MapArray[$i+3] -eq 2 -and $SceneEditor.MapArray[$i+4] -eq 0xFF -and $SceneEditor.MapArray[$i+5] -eq 0xFF -and $SceneEditor.MapArray[$i+6] -eq 0xFF -and $SceneEditor.MapArray[$i+7] -eq 0xFF) {
+                $vtx = $i; break
             }
         }
 
-        $skip = $false
         for ($i=$vtx; $i -lt $SceneEditor.MapArray.Count; $i+=4) {
             if ($SceneEditor.MapArray[$i-4] -ne 1 -and $SceneEditor.MapArray[$i-4] -ne 3 -and $SceneEditor.MapArray[$i-4] -lt 0xD0) { continue }
             
-            if ($SceneEditor.MapArray[$i] -eq 3 -and !$skip) {
+            if ($SceneEditor.MapArray[$i] -eq 3) {
                 $value = $SceneEditor.MapArray[$i+1] * 65536 + $SceneEditor.MapArray[$i+2] * 256 + $SceneEditor.MapArray[$i+3]
                 if ($value -gt $SceneEditor.Offsets[$SceneEditor.Offsets.Header.Count-1].Header -and $value -lt $SceneEditor.MapArray.Count) { ShiftMap -Offset ($i+1) -Add 16 }
             }
@@ -3021,16 +3025,19 @@ function InsertObject([string]$ID="0000", [string]$Name) {
         $meshes = $meshes | Sort-Object
         if ($meshes.count -gt 0) {
             for ($i=$meshes[0]; $i -lt $meshes[0]+512; $i+=4) {
-                if ($SceneEditor.MapArray[$i] -eq 3) {
-                    $vtx = $SceneEditor.MapArray[$i+1] * 65536 + $SceneEditor.MapArray[$i+2] * 256 + $SceneEditor.MapArray[$i+3]
-                    break
+                if ($SceneEditor.MapArray[$i] -eq 3) { $vtx = $SceneEditor.MapArray[$i+1] * 65536 + $SceneEditor.MapArray[$i+2] * 256 + $SceneEditor.MapArray[$i+3]; break }
+            }
+
+            for ($i=$vtx; $i -gt $vtx-0x300; $i-=8) {
+                if ($SceneEditor.MapArray[$i] -eq 0xD7 -and $SceneEditor.MapArray[$i+1] -eq 0 -and $SceneEditor.MapArray[$i+2] -eq 0 -and $SceneEditor.MapArray[$i+3] -eq 2 -and $SceneEditor.MapArray[$i+4] -eq 0xFF -and $SceneEditor.MapArray[$i+5] -eq 0xFF -and $SceneEditor.MapArray[$i+6] -eq 0xFF -and $SceneEditor.MapArray[$i+7] -eq 0xFF) {
+                    $vtx = $i; break
                 }
             }
 
             for ($i=$vtx; $i -lt $SceneEditor.MapArray.Count; $i+=4) {
                 if ($SceneEditor.MapArray[$i-4] -ne 1 -and $SceneEditor.MapArray[$i-4] -ne 3 -and $SceneEditor.MapArray[$i-4] -lt 0xD0) { continue }
             
-                if ($SceneEditor.MapArray[$i] -eq 3 -and !$skip) {
+                if ($SceneEditor.MapArray[$i] -eq 3) {
                     $value = $SceneEditor.MapArray[$i+1] * 65536 + $SceneEditor.MapArray[$i+2] * 256 + $SceneEditor.MapArray[$i+3]
                     if ($value -gt $SceneEditor.Offsets[$SceneEditor.Offsets.Header.Count-1].Header -and $value -lt $SceneEditor.MapArray.Count) { ShiftMap -Offset ($i+1) -Add 16 }
                 }
