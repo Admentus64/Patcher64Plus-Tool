@@ -405,7 +405,7 @@
 		"dma"		: "CFA0",
 		"length"	: 1
 	}, {
-		"name"		: "Dampe's Grave & Windwill",
+		"name"		: "Dampé's Grave & Windmill",
 		"dma"		: "CBC0",
 		"length"	: 7,
 		"maps"		: [ "Dampé's Grave", "Race Section #1", "Race Section #2", "Race Section #3", "Reward Room", "Stairs to Windmill", "Windmill" ]
@@ -6931,7 +6931,7 @@
 		"id"		: "019E",
 		"default"	: "FF00",
 		"type"		: "Object",
-		"band"		: [ "00FF" ],
+		"band"		: [ "00FF", "FF00" ],
 		"params" : [ [ {
 			"name"	: "Flexible",
 			"value"	: "12"
