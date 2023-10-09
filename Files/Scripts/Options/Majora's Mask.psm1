@@ -346,7 +346,7 @@ function ByteOptions() {
 
         # Buttons -> C Icon Only
 	SetMessage -ID "004C" -Text "<W> Buttons" -Replace "<W>"
-        SetMessage -ID "0059" -Text ", then press that<N> <C><C Button> <W>Button to use it." -Replace "<W>."
+        SetMessage -ID "0059" -Text ", then press that <N><C><C Button> <W>Button to use it." -Replace "<W>."
 	SetMessage -ID "1700" -Text "<C Button><N>Buttons. Press" -Replace "<C Button>.<N>Press"
 	
         # N64 -> GC Text phrasing adjustments
