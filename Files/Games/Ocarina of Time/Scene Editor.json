@@ -158,7 +158,7 @@
 		"dma"		: "B6A0",
 		"length"	: 2,
 		"maps"		: [ "Fortress", "Horseback Archery" ],
-		"stages"	: [ "Child", "Adult", "Archery Minigame", "Credits", "Thrown in Jail" ]
+		"stages"	: [ "Child", "Adult", "Archery Minigame", "Credits", "Thrown in Jail", "Crash" ]
 	}, {
 		"name"		: "Haunted Wasteland",
 		"dma"		: "B6D0",

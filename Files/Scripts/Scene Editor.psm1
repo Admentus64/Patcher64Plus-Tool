@@ -1818,23 +1818,23 @@ function RunLoadScene([string]$File) {
             for ($j=$SceneEditor.SceneOffsets[$SceneEditor.SceneOffsets.Count-1].Header; $j -lt ($SceneEditor.SceneOffsets[$SceneEditor.SceneOffsets.Count-1].Header + $headerSize); $j+=8) {
                 if ($SceneEditor.SceneArray[$j] -eq 0x14) { break }
 
-                elseif ($SceneEditor.SceneArray[$i] -eq 0x0) { # Start Positions List
-                    $SceneEditor.SceneOffsets[$SceneEditor.SceneOffsets.Count-1].PositionsCount      = $SceneEditor.SceneArray[$i + 1]
-                    $SceneEditor.SceneOffsets[$SceneEditor.SceneOffsets.Count-1].PositionsStart      = $SceneEditor.SceneArray[$i + 5] * 65536 + $SceneEditor.SceneArray[$i + 6] * 256 + $SceneEditor.SceneArray[$i + 7]
-                    $SceneEditor.SceneOffsets[$SceneEditor.SceneOffsets.Count-1].PositionsCountIndex = $i + 1
-                    $SceneEditor.SceneOffsets[$SceneEditor.SceneOffsets.Count-1].PositionsIndex      = $i + 5
+                elseif ($SceneEditor.SceneArray[$j] -eq 0x0) { # Start Positions List
+                    $SceneEditor.SceneOffsets[$SceneEditor.SceneOffsets.Count-1].PositionsCount      = $SceneEditor.SceneArray[$j + 1]
+                    $SceneEditor.SceneOffsets[$SceneEditor.SceneOffsets.Count-1].PositionsStart      = $SceneEditor.SceneArray[$j + 5] * 65536 + $SceneEditor.SceneArray[$j + 6] * 256 + $SceneEditor.SceneArray[$j + 7]
+                    $SceneEditor.SceneOffsets[$SceneEditor.SceneOffsets.Count-1].PositionsCountIndex = $j + 1
+                    $SceneEditor.SceneOffsets[$SceneEditor.SceneOffsets.Count-1].PositionsIndex      = $j + 5
                 }
-                elseif ($SceneEditor.SceneArray[$i] -eq 0x4) { # Map List
-                    $SceneEditor.SceneOffsets[$SceneEditor.SceneOffsets.Count-1].MapCount            = $SceneEditor.SceneArray[$i + 1]
-                    $SceneEditor.SceneOffsets[$SceneEditor.SceneOffsets.Count-1].MapStart            = $SceneEditor.SceneArray[$i + 5] * 65536 + $SceneEditor.SceneArray[$i + 6] * 256 + $SceneEditor.SceneArray[$i + 7]
-                    $SceneEditor.SceneOffsets[$SceneEditor.SceneOffsets.Count-1].MapCountIndex       = $i + 1
-                    $SceneEditor.SceneOffsets[$SceneEditor.SceneOffsets.Count-1].MapIndex            = $i + 5
+                elseif ($SceneEditor.SceneArray[$j] -eq 0x4) { # Map List
+                    $SceneEditor.SceneOffsets[$SceneEditor.SceneOffsets.Count-1].MapCount            = $SceneEditor.SceneArray[$j + 1]
+                    $SceneEditor.SceneOffsets[$SceneEditor.SceneOffsets.Count-1].MapStart            = $SceneEditor.SceneArray[$j + 5] * 65536 + $SceneEditor.SceneArray[$j + 6] * 256 + $SceneEditor.SceneArray[$j + 7]
+                    $SceneEditor.SceneOffsets[$SceneEditor.SceneOffsets.Count-1].MapCountIndex       = $j + 1
+                    $SceneEditor.SceneOffsets[$SceneEditor.SceneOffsets.Count-1].MapIndex            = $j + 5
                 }
-                elseif ($SceneEditor.SceneArray[$i] -eq 0x6) { # Entrance List
-                    $SceneEditor.SceneOffsets[$SceneEditor.SceneOffsets.Count-1].EntranceCount       = $SceneEditor.SceneArray[$i + 1]
-                    $SceneEditor.SceneOffsets[$SceneEditor.SceneOffsets.Count-1].EntranceStart       = $SceneEditor.SceneArray[$i + 5] * 65536 + $SceneEditor.SceneArray[$i + 6] * 256 + $SceneEditor.SceneArray[$i + 7]
-                    $SceneEditor.SceneOffsets[$SceneEditor.SceneOffsets.Count-1].EntranceCountIndex  = $i + 1
-                    $SceneEditor.SceneOffsets[$SceneEditor.SceneOffsets.Count-1].EntranceIndex       = $i + 5
+                elseif ($SceneEditor.SceneArray[$j] -eq 0x6) { # Entrance List
+                    $SceneEditor.SceneOffsets[$SceneEditor.SceneOffsets.Count-1].EntranceCount       = $SceneEditor.SceneArray[$j + 1]
+                    $SceneEditor.SceneOffsets[$SceneEditor.SceneOffsets.Count-1].EntranceStart       = $SceneEditor.SceneArray[$j + 5] * 65536 + $SceneEditor.SceneArray[$j + 6] * 256 + $SceneEditor.SceneArray[$j + 7]
+                    $SceneEditor.SceneOffsets[$SceneEditor.SceneOffsets.Count-1].EntranceCountIndex  = $j + 1
+                    $SceneEditor.SceneOffsets[$SceneEditor.SceneOffsets.Count-1].EntranceIndex       = $j + 5
                 }
                 elseif ($SceneEditor.SceneArray[$j] -eq 0xE) { # Transition Actor List
                     $SceneEditor.SceneOffsets[$SceneEditor.SceneOffsets.Count-1].ActorCount          = $SceneEditor.SceneArray[$j + 1]
@@ -1848,11 +1848,11 @@ function RunLoadScene([string]$File) {
                     $SceneEditor.SceneOffsets[$SceneEditor.SceneOffsets.Count-1].Cloudy              = $j + 5
                     $SceneEditor.SceneOffsets[$SceneEditor.SceneOffsets.Count-1].LightningControl    = $j + 6
                 }
-                elseif ($SceneEditor.SceneArray[$i] -eq 0x13) { # Exit List
-                    $SceneEditor.SceneOffsets[$SceneEditor.SceneOffsets.Count-1].ExitCount           = $SceneEditor.SceneArray[$i + 1]
-                    $SceneEditor.SceneOffsets[$SceneEditor.SceneOffsets.Count-1].ExitStart           = $SceneEditor.SceneArray[$i + 5] * 65536 + $SceneEditor.SceneArray[$i + 6] * 256 + $SceneEditor.SceneArray[$i + 7]
-                    $SceneEditor.SceneOffsets[$SceneEditor.SceneOffsets.Count-1].ExitCountIndex      = $i + 1
-                    $SceneEditor.SceneOffsets[$SceneEditor.SceneOffsets.Count-1].ExitIndex           = $i + 5
+                elseif ($SceneEditor.SceneArray[$j] -eq 0x13) { # Exit List
+                    $SceneEditor.SceneOffsets[$SceneEditor.SceneOffsets.Count-1].ExitCount           = $SceneEditor.SceneArray[$j + 1]
+                    $SceneEditor.SceneOffsets[$SceneEditor.SceneOffsets.Count-1].ExitStart           = $SceneEditor.SceneArray[$j + 5] * 65536 + $SceneEditor.SceneArray[$j + 6] * 256 + $SceneEditor.SceneArray[$j + 7]
+                    $SceneEditor.SceneOffsets[$SceneEditor.SceneOffsets.Count-1].ExitCountIndex      = $j + 1
+                    $SceneEditor.SceneOffsets[$SceneEditor.SceneOffsets.Count-1].ExitIndex           = $j + 5
                 }
                 elseif ($SceneEditor.SceneArray[$j] -eq 0x15) { # Sound Settings
                     $SceneEditor.SceneOffsets[$SceneEditor.SceneOffsets.Count-1].SoundConfig         = $j + 1
