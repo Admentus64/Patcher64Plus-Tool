@@ -1866,8 +1866,8 @@ function ByteTextOptions() {
             SetMessage -ID "70A3" -Text "Button <W>item." -Replace "<W>item."
 
             # Buttons -> C Icon Only
-	    SetMessage -ID "1036" -Text "627574746F6E732E" -Replace "2E"
-            SetMessage -ID "103A" -Text "Button items" -Replace "items"
+	    SetMessage -ID "1036" -Text "<W>buttons." -Replace "<W>."
+            SetMessage -ID "103A" -Text "Button items" -Replace "items" -All
 	    
             # Pak -> Feature	    
             SetMessage -ID "0068" -Text "If you equip a <C>Rumble Pak<W>" -Replace "If you have a <C>Rumble Feature<W>"
