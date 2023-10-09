@@ -1855,19 +1855,19 @@ function ByteTextOptions() {
 	    SetMessage -ID "007A" -Text "7072657373696E67" -Replace "7573696E67"
 
             # N64 -> GC Text phrasing adjustments
-            SetMessage -ID "0035" -Text "Press <Y><C Button><W> to use it to<N>attack distant enemies!" -Replace "Use <Y><C Button><W> to throw it<N>at distant enemies!"
+            SetMessage -ID "0035" -Text "Press <Y><C Button><W> to use it to <N>attack distant enemies!" -Replace "Use <Y><C Button><W> to throw it <N>at distant enemies!"
 	    SetMessage -ID "0047" -Text "and then press that<N><Y><C Button> <W>to use it." -Replace "and then use<N><Y><C Button><W>."
             SetMessage -ID "004A" -Text "and the four <Y><C Button> Buttons<W>." -Replace "and the four <Y><C Button><W>."
 	    SetMessage -ID "0099" -Text "press <Y><C Button> <W>to use it..." -Replace "use <Y><C Button> <W>to open it..."
             SetMessage -ID "009A" -Text "and then press <Y><C Button> <W>to use it." -Replace "and then use <Y><C Button><W>."
 	    SetMessage -ID "1025" -Text "the<N>button! How cool!" -Replace "<N>it! How cool!"
-            SetMessage -ID "1036" -Text "Once you get a <Y><C Button> Button item<W>,<N>go into the <Y>Select Item Subscreen<W><N>and set it to one of the three<N><Y><C Button> Buttons<W>." -Replace "Once you get a <Y><C Button> item<W>,<N>go into the <Y>Select Item Subscreen<W><N>and set it to one of the three<N><Y><C Button><W>."
+            SetMessage -ID "1036" -Text "Once you get a <Y><C Button> Button item<W>, <N>go into the <Y>Select Item Subscreen<W><N>and set it to one of the three<N><Y><C Button> Buttons<W>." -Replace "Once you get a <Y><C Button> item<W>, <N>go into the <Y>Select Item Subscreen<W><N>and set it to one of the three<N><Y><C Button><W>."
 	    SetMessage -ID "103A" -Text "used by pressing those buttons." -Replace "used at any time."
             SetMessage -ID "70A3" -Text "Button <W>item." -Replace "<W>item."
 
             # Buttons -> C Icon Only
 	    SetMessage -ID "1036" -Text "627574746F6E732E" -Replace "2E"
-            SetMessage -ID "103A" -Text "427574746F6E206974656D73" -Replace "6974656D73"
+            SetMessage -ID "103A" -Text "Button items" -Replace "items"
 	    
             # Pak -> Feature	    
             SetMessage -ID "0068" -Text "If you equip a <C>Rumble Pak<W>" -Replace "If you have a <C>Rumble Feature<W>"
