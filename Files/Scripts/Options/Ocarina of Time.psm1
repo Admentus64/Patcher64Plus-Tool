@@ -1865,7 +1865,7 @@ function ByteTextOptions() {
             SetMessage -ID "70A3" -Text "Button <W>item." -Replace "<W>item."
 
             # Buttons -> C Icon Only
-	    SetMessage -ID "1036" -Text "<W>buttons." -Replace "<W>."
+	    SetMessage -ID "1036" -Text " <W>buttons." -Replace "<W>."
             SetMessage -ID "103A" -Text "Button items" -Replace "items" -All
 	    
             # GC Text Finalization (A little trick)
