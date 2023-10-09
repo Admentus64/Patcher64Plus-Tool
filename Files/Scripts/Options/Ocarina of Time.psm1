@@ -1861,7 +1861,7 @@ function ByteTextOptions() {
             SetMessage -ID "009A" -Text "and then press <Y><C Button> <W>to use it." -Replace "and then use <Y><C Button><W>."
 	    SetMessage -ID "1025" -Text "the<N>button! How cool!" -Replace "<N>it! How cool!"
             SetMessage -ID "1036" -Text "Once you get a <Y><C Button> Button item<W>, <N>go into the <Y>Select Item Subscreen<W> <N>and set it to one of the three<N><Y><C Button> Buttons<W>." -Replace "Once you get a <Y><C Button> item<W>, <N>go into the <Y>Select Item Subscreen<W> <N>and set it to one of the three<N><Y><C Button><W>."
-	    SetMessage -ID "103A" -Text "used by pressing those buttons." -Replace "used at any time."
+	    SetMessage -ID "103A" -Text "used by pressing those buttons." -Replace "be used at any time."
             SetMessage -ID "70A3" -Text "Button <W>item." -Replace "<W>item."
 
             # Buttons -> C Icon Only
