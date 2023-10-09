@@ -1339,7 +1339,6 @@ function ByteOptions() {
     if (IsChecked $Redux.Text.Milk) {
         if (TestFile ($GameFiles.textures + "\Text Labels\milk." + $LanguagePatch.code + ".label"))          { PatchBytes -Offset "8A5400" -Texture -Patch ("Text Labels\milk."      + $LanguagePatch.code + ".label") }
         if (TestFile ($GameFiles.textures + "\Text Labels\milk_half." + $LanguagePatch.code + ".label"))     { PatchBytes -Offset "8A6800" -Texture -Patch ("Text Labels\milk_half." + $LanguagePatch.code + ".label") }
-	SetMessage -ID "0098" -Text "4C6F6E204C6F6E204D696C6B" -Replace "4D696C6B"; SetMessage -ID "2089"
     }
 
     if (IsChecked $Redux.Text.NaviPrompt) {
@@ -1845,7 +1844,7 @@ function ByteTextOptions() {
 
         if (IsChecked $Redux.Graphics.GCScheme) {
 	    # press -> use
-            SetMessage -ID "001C" -Text "press" -Replace "use"; SetMessage -ID "001D"; SetMessage -ID "0030"; SetMessage -ID "0039"; SetMessage -ID "004A"; SetMessage -ID "00A3"; SetMessage -ID "00B1"; SetMessage -ID "00CB";
+            SetMessage -ID "001C" -Text "press" -Replace "use"; SetMessage -ID "001D"; SetMessage -ID "0030"; SetMessage -ID "0039" -All; SetMessage -ID "004A"; SetMessage -ID "00A3"; SetMessage -ID "00B1"; SetMessage -ID "00CB";
             SetMessage -ID "70A3"
 
             # Press -> Use
@@ -1869,8 +1868,8 @@ function ByteTextOptions() {
 	    SetMessage -ID "1036" -Text "<W>buttons." -Replace "<W>."
             SetMessage -ID "103A" -Text "Button items" -Replace "items" -All
 	    
-            # GC Text Finalization
-            SetMessage -ID "103A" -Text "press" -Replace "use";
+            # GC Text Finalization (A little trick)
+            SetMessage -ID "103A" -Text "press" -Replace "use" -All
 	    
             # Pak -> Feature	    
             SetMessage -ID "0068" -Text "If you equip a <C>Rumble Pak<W>" -Replace "If you have a <C>Rumble Feature<W>"
