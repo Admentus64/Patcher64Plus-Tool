@@ -1844,16 +1844,15 @@ function ByteTextOptions() {
         }
 
         if (IsChecked $Redux.Graphics.GCScheme) {
-	    # Press -> Use
-            SetMessage -ID "001C" -Text "5072657373" -Replace "557365"; SetMessage -ID "001D"; SetMessage -ID "0030"; SetMessage -ID "0030"; SetMessage -ID "0030"; SetMessage -ID "0039"; SetMessage -ID "004A"; SetMessage -ID "00A3"; SetMessage -ID "00B1"; SetMessage -ID "00CB";
+	    # press -> use
+            SetMessage -ID "001C" -Text "press" -Replace "use"; SetMessage -ID "001D"; SetMessage -ID "0030"; SetMessage -ID "0039"; SetMessage -ID "004A"; SetMessage -ID "00A3"; SetMessage -ID "00B1"; SetMessage -ID "00CB";
             SetMessage -ID "103A"; SetMessage -ID "70A3"
+
+            # Press -> Use
+            SetMessage -ID "0030" -Text "Press" -Replace "Use"; SetMessage -ID "0031"; SetMessage -ID "0032";
             
 	    # pressing -> using
 	    SetMessage -ID "007A" -Text "7072657373696E67" -Replace "7573696E67"
-
-            # Buttons -> C Icon Only
-	    SetMessage -ID "1036" -Text "627574746F6E732E" -Replace "2E"
-            SetMessage -ID "103A" -Text "427574746F6E206974656D73" -Replace "6974656D73"
 
             # N64 -> GC Text phrasing adjustments
             SetMessage -ID "0035" -Text "Press <Y><C Button><W> to use it to<N>attack distant enemies!" -Replace "Use <Y><C Button><W> to throw it<N>at distant enemies!"
@@ -1865,10 +1864,14 @@ function ByteTextOptions() {
             SetMessage -ID "1036" -Text "Once you get a <Y><C Button> Button item<W>,<N>go into the <Y>Select Item Subscreen<W><N>and set it to one of the three<N><Y><C Button> Buttons<W>." -Replace "Once you get a <Y><C Button> item<W>,<N>go into the <Y>Select Item Subscreen<W><N>and set it to one of the three<N><Y><C Button><W>."
 	    SetMessage -ID "103A" -Text "used by pressing those buttons." -Replace "used at any time."
             SetMessage -ID "70A3" -Text "Button <W>item." -Replace "<W>item."
+
+            # Buttons -> C Icon Only
+	    SetMessage -ID "1036" -Text "627574746F6E732E" -Replace "2E"
+            SetMessage -ID "103A" -Text "427574746F6E206974656D73" -Replace "6974656D73"
 	    
             # Pak -> Feature	    
             SetMessage -ID "0068" -Text "If you equip a <C>Rumble Pak<W>" -Replace "If you have a <C>Rumble Feature<W>"
-	    SetMessage -ID "407C" -Text "You don't have a <R>Rumble<N>Pak<W>! With a Rumble Pak" -Replace "You don't have a <R>Rumble<N>Feature<W>! With the rumble"
+	    SetMessage -ID "407C" -Text "You don't have a <R>Rumble <N>Pak<W>! With a Rumble Pak" -Replace "You don't have a <R>Rumble<N>Feature<W>! With the rumble"
             SetMessage -ID "407D" -Text "Wow! You have a <R>Rumble Pak<W>!" -Replace "You have a <R>Rumble Feature<W>!"
 
             SetMessage -ID "0103" -Text "<B><A Button>"  -Replace "<G><A Button>";  SetMessage -ID "0103" -Text "<B>Icon" -Replace "<G>Icon"; SetMessage -ID "0103" -Text "<B>blue" -Replace "<B>green" # Deku Tree - Opening a door
