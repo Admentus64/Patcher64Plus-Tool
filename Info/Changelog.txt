@@ -1,3 +1,6 @@
+v22.0.5
+- Added new text changes for the GC Scheme option for both OoT & MM
+
 v22.0.4
 - Renamed Language functions to Text
 - Added new text changes to the OoT GC Scheme

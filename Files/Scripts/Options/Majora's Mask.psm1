@@ -335,8 +335,7 @@ function ByteOptions() {
         else { ChangeBytes -Offset "BADD28" -Values "35 CE C0 78 3C 18 00 3D 37 18 40 48 24 6F 00 08 AE 0F 02 A0" }
     }
 
-    if (IsChecked $Redux.UI.GCScheme) {
-        # Z to L textures
+    if (IsChecked $Redux.UI.GCScheme) { # Z to L textures
         PatchBytes -Offset "A7B7CC"  -Texture -Patch "GameCube\l_pause_screen_button.yaz0"
         PatchBytes -Offset "AD0980"  -Texture -Patch "GameCube\dpad_text_icon.bin"
         PatchBytes -Offset "AD0A80"  -Texture -Patch "GameCube\l_text_icon.bin"
@@ -1103,7 +1102,15 @@ function WholeTextOptions([string]$Script, [string]$Table) {
 #==============================================================================================================================================================================================
 function ByteTextOptions() {
     
-    if (IsChecked $Redux.UI.GCScheme -Lang 1) { SetMessage -ID "0227" -Text "5A20" -Replace "4C20"; SetMessage -ID "1912"; SetMessage -ID "191D"; SetMessage -ID "1946"; SetMessage -ID "1954" }
+    if (IsChecked $Redux.UI.GCScheme -Lang 1) { 
+        SetMessage -ID "0227" -Text "5A20"  -Replace "4C20";      SetMessage -ID "1912"; SetMessage -ID "191D"; SetMessage -ID "1946"; SetMessage -ID "1954"                                                                                                      # Z -> L	  
+        SetMessage -ID "0014" -Text "press" -Replace "use";       SetMessage -ID "0015"; SetMessage -ID "0016"; SetMessage -ID "0017"; SetMessage -ID "0018"; SetMessage -ID "0019"; SetMessage -ID "0035"; SetMessage -ID "09E3"                                 # press -> use
+        SetMessage -ID "0078" -Text "Press <C><C Button><N><W>" -Replace "Use <C><C Button><N><W>"                                                                                                                                                                # N64 -> GC Text phrasing adjustments
+        SetMessage -ID "004C" -Text "<W> Buttons" -Replace "<W>"; SetMessage -ID "0059" -Text ", then press that <N><C><C Button> <W>Button to use it." -Replace "<W>."; SetMessage -ID "1700" -Text "<C Button><N>Buttons. Press" -Replace "<C Button>.<N>Press" # Buttons -> C Icon Only	    
+        
+        SetMessage -ID "001A" -Text "Press" -Replace "Use"; SetMessage -ID "0022" -All; SetMessage -ID "0028"; SetMessage -ID "0029"; SetMessage -ID "002A"; SetMessage -ID "002E"; SetMessage -ID "0034"; SetMessage -ID "0036"; SetMessage -ID "003A"; SetMessage -ID "0041"; SetMessage -ID "0043"; SetMessage -ID "1701" # Press -> Use
+        SetMessage -ID "1706";                              SetMessage -ID "1709";      SetMessage -ID "170E"; SetMessage -ID "170F"; SetMessage -ID "1717"; SetMessage -ID "171B"; SetMessage -ID "172E"; SetMessage -ID "0079"; SetMessage -ID "007A"
+    }
 
     if (IsChecked $Redux.Equipment.PermanentRazorSword -Lang 1) {
         SetMessage -ID "0038" -Text "This new, sharper blade is a cut<N>above the rest. Use it up to<N><R>100 times <W>without dulling its<N>superior edge!"                            -Replace "This new, sharper blade is a cut<N>above the rest. Use it as much<N>as you want without dulling its<N>superior edge!"
@@ -1721,7 +1728,7 @@ function CreateTabGraphics() {
     CreateReduxComboBox -All -Name "Hearts"           -Text "Heart Icons" -Items @("Majora's Mask") -FilePath ($Paths.shared + "\HUD\Hearts") -Ext "bin" -Default "Majora's Mask" -Info "Set the style for the heart icons"                                                                 -Credits "GhostlyDark (ported) & AndiiSyn"
     CreateReduxComboBox -All -Name "Magic"            -Text "Magic Bar"   -Items @("Majora's Mask") -FilePath ($Paths.shared + "\HUD\Magic")  -Ext "bin" -Default "Majora's Mask" -Info "Set the style for the magic meter"                                                                 -Credits "GhostlyDark (ported), Pizza, Nerrel (HD), Zeth Alkar"
     CreateReduxCheckBox -All -Name "BlackBars"        -Text "No Black Bars"                                                                                                       -Info "Removes the black bars shown on the top and bottom of the screen during Z-targeting and cutscenes" -Credits "Admentus"
-    CreateReduxCheckBox -All -Name "GCScheme"         -Text "GC Scheme"                                                                                                           -Info "Replace the textures to match the GameCube's scheme"                                               -Credits "Admentus & GhostlyDark"
+    CreateReduxCheckBox -All -Name "GCScheme"         -Text "GC Scheme"                                                                                                           -Info "Replace the textures to match the GameCube's scheme"                                               -Credits "Admentus, GhostlyDark & GoldenMariaNova"
     CreateReduxCheckBox -All -Name "DungeonKeys"      -Text "OoT Key Icon"                                                                                                        -Info "Replace the key icon with that from Ocarina of Time"                                               -Credits "GhostlyDark (ported)"
     CreateReduxCheckBox -All -Name "CenterTatlPrompt" -Text "Center Tatl Prompt"                                                                                                  -Info 'Centers the "Tatl" prompt shown in the C-Up button'                                                -Credits "GhostlyDark (ported)"
 
