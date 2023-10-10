@@ -471,22 +471,22 @@ function SetGameScript() {
 
 
 #==============================================================================================================================================================================================
-function UpdateStatusLabel([string]$Text, [switch]$Main, [switch]$Editor, [switch]$NoConsole, [switch]$Error) {
+function UpdateStatusLabel([string]$Text, [switch]$Error, [switch]$NoConsole) {
     
     if (!$NoConsole) {
         if ($Error)   { WriteToConsole -Text $Text -Error }
         else          { WriteToConsole -Text $Text        }
     }
 
-    if (!$Editor) {
+    if ($TextEditor.Dialog -eq $null -and $SceneEditor.Dialog -eq $null) {
         $StatusLabel.Text = $Text
         $StatusLabel.Refresh()
     }
-    elseif (!$Main -and (IsSet $TextEditor.StatusLabel) ) {
+    elseif ($TextEditor.Dialog -ne $null) {
         $TextEditor.StatusLabel.Text = $Text
         $TextEditor.StatusLabel.Refresh()
     }
-    elseif (!$Main -and (IsSet $SceneEditor.StatusLabel) ) {
+    elseif ($SceneEditor.Dialog -ne $null) {
         $SceneEditor.StatusLabel.Text = $Text
         $SceneEditor.StatusLabel.Refresh()
     }

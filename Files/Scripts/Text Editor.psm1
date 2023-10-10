@@ -240,7 +240,7 @@ function CreateTextEditorDialog() {
 
         if ($GamePath -eq $null) {
             PlaySound $Sounds.done
-            UpdateStatusLabel -Text "Failed! No ROM path is given." -Editor -Error
+            UpdateStatusLabel -Text "Failed! No ROM path is given." -Error
             ResetTextEditorTypes; return
         }
 
@@ -266,31 +266,18 @@ function CreateTextEditorDialog() {
             if (!(PatchVCROM))        { ResetTextEditorTypes; return }   # Step D: Do some initial patching stuff for the ROM for VC WAD files
         }
 
-        if (!(Unpack)) {
-            PlaySound $Sounds.done
-            UpdateStatusLabel "Failed! Could not extract ROM." -Editor -Error
-            ResetTextEditorTypes; return
-        }
+        if (!(Unpack))                                                              { PlaySound $Sounds.done; ResetTextEditorTypes; return }
         if (TestFile $GetROM.run)                                                   { $global:ROMHashSum   = (Get-FileHash -Algorithm MD5 -LiteralPath $GetROM.run).Hash }
         if ($Settings.Debug.IgnoreChecksum -eq $False -and (IsSet $CheckHashsum))   { $PatchInfo.downgrade = ($ROMHashSum -ne $CheckHashSum)                             }
         if ((Get-Item -LiteralPath $GetROM.run).length/"32MB" -ne 1) {
             PlaySound $Sounds.done
-            UpdateStatusLabel "Failed! The ROM should be 32 MB!" -Editor -Error
+            UpdateStatusLabel "Failed! The ROM should be 32 MB!" -Error
             ResetTextEditorTypes; return
         }
 
         ConvertROM $Command
-        if (!(CompareHashSums $Command)) {
-            PlaySound $Sounds.done
-            UpdateStatusLabel "Failed! The ROM is an incorrect version or is broken." -Editor -Error
-            ResetTextEditorTypes; return
-        }
-
-        if (!(DecompressROM)) {
-            PlaySound $Sounds.done
-            UpdateStatusLabel "Failed! The ROM could not be decompressed." -Editor -Error
-            ResetTextEditorTypes; return
-        }
+        if (!(CompareHashSums $Command))   { PlaySound $Sounds.done; ResetTextEditorTypes; return }
+        if (!(DecompressROM))              { PlaySound $Sounds.done; ResetTextEditorTypes; return }
         $item = DowngradeROM
 
         # Extract vanilla script
@@ -305,7 +292,7 @@ function CreateTextEditorDialog() {
         }
 
         if ($LanguagePatchFile -ne $null) {
-            UpdateStatusLabel ("Patching " + $Files.json.textEditor.game + " Language...") -Editor
+            UpdateStatusLabel ("Patching " + $Files.json.textEditor.game + " Language...")
             ApplyPatch -File $GetROM.decomp -Patch ("Games\" + $Files.json.textEditor.game + "\" + $LanguagePatchFile) -FilesPath
         }
 
@@ -324,7 +311,7 @@ function CreateTextEditorDialog() {
         LoadMessages
         ResetTextEditorTypes
         PlaySound $Sounds.done
-        UpdateStatusLabel -Text "Success! Script has been extracted." -Editor
+        UpdateStatusLabel -Text "Success! Script has been extracted."
     })
 
     $ResetButton.Add_Click({
@@ -420,6 +407,8 @@ function OpenHelpDialog() {
 #==============================================================================================================================================================================================
 function LoadMessages() {
     
+
+
     $TextEditor.ListPanel.Controls.Clear()
     if ( (TestFile ($Paths.Games + "\" + $Files.json.textEditor.game + "\Editor\message_data_static." + $LanguagePatch.code + ".bin") ) -and (TestFile ($Paths.Games + "\" + $Files.json.textEditor.game + "\Editor\message_data." + $LanguagePatch.code + ".tbl") ) ) {
         LoadScript -Script ($Paths.Games + "\" + $Files.json.textEditor.game + "\Editor\message_data_static." + $LanguagePatch.code + ".bin") -Table ($Paths.Games + "\" + $Files.json.textEditor.game + "\Editor\message_data." + $LanguagePatch.code + ".tbl")
@@ -439,7 +428,7 @@ function LoadScript([string]$Script, [string]$Table) {
     $vanillaList         = @{}
     $column              = $row = 0
 
-    if ($TextEditor -ne $null -and $LanguagePatch.patch -ne $null -and (TestFile ($Paths.Games + "\" + $Files.json.textEditor + "\Editor\message_data_static.ori.bin")) -and (TestFile ($Paths.Games + "\" + $Files.json.textEditor + "\Editor\message_data.ori.tbl")) ) {
+    if ($TextEditor.Dialog -ne $null -and $LanguagePatch -eq "en" -and (TestFile ($Paths.Games + "\" + $Files.json.textEditor + "\Editor\message_data_static.ori.bin")) -and (TestFile ($Paths.Games + "\" + $Files.json.textEditor + "\Editor\message_data.ori.tbl")) ) {
         $global:ByteScriptArray = [System.IO.File]::ReadAllBytes(($Paths.Games + "\" + $Files.json.textEditor.game + "\Editor\message_data_static.ori.bin"))
         $global:ByteTableArray  = [System.IO.File]::ReadAllBytes(($Paths.Games + "\" + $Files.json.textEditor.game + "\Editor\message_data.ori.tbl"))
         for ($i=0; $i -lt $ByteTableArray.count; $i+=8) {
@@ -516,7 +505,7 @@ function LoadScript([string]$Script, [string]$Table) {
             [byte]$DialogueList[$item].pos  = ($ByteTableArray[$i + 2] -shl 4) / 16 # Lower
         }
 
-        if ($TextEditor) {
+        if ($TextEditor.Dialog -ne $null) {
             if ($column -eq 10) {
                 $row++
                 $column = 0

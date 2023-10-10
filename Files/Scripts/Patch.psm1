@@ -697,7 +697,7 @@ function DowngradeROM() {
 
     if ($romHash -eq $revHash) {
         if ($Settings.Debug.KeepDowngraded -eq $True) { Copy-Item -LiteralPath $GetROM.run -Destination $GetROM.keepDowngrade -Force }
-        if ($Settings.Core.KeepCache -eq $True) {
+        if ($Settings.Core.KeepCache -eq $True -and $TextEditor.Dialog -eq $null -and $SceneEditor.Dialog -eq $null) {
             CreatePath $Paths.Cache
             Copy-Item -LiteralPath $GetROM.run -Destination $GetROM.cache -Force
         }
@@ -1053,7 +1053,7 @@ function DecompressROM() {
         }
 
         # Reuse cache
-        if ($Settings.Core.KeepCache -eq $True) {
+        if ($Settings.Core.KeepCache -eq $True -and $TextEditor.Dialog -eq $null -and $SceneEditor.Dialog -eq $null) {
             if (TestFile $GetROM.cache) {
                 if (IsSet $GameRev.hash_decomp) { $hash = $GameRev.hash_decomp } else { $hash = $GameRev.hash } 
                 if ($hash -eq (Get-FileHash -Algorithm MD5 -LiteralPath $GetROM.cache).Hash) {
@@ -1079,7 +1079,7 @@ function DecompressROM() {
 
         WriteToConsole ("Decompressed ROM: " + $GetROM.decomp)
 
-        if ($Settings.Core.KeepCache -eq $True) {
+        if ($Settings.Core.KeepCache -eq $True -and $TextEditor.Dialog -eq $null -and $SceneEditor.Dialog -eq $null) {
             CreatePath $Paths.Cache
             Copy-Item -LiteralPath $GetROM.decomp -Destination $GetROM.cache -Force
         }

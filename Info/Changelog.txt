@@ -1,5 +1,7 @@
 v22.0.5
 - Added new text changes for the GC Scheme option for both OoT & MM
+- Disable ROM cache for the GUI editors to prevent issues
+- Fixed issues with GUI text messages not properly setting for GUI editors
 
 v22.0.4
 - Renamed Language functions to Text

@@ -143,13 +143,11 @@ function CreateSceneEditorDialog() {
     $ExtractButton.Add_Click({
         RefreshScripts
         if ($Settings.Debug.ClearLog -eq $True) { Clear-Host }
-        $lastMessage = $StatusLabel.Text
         SetSceneEditorTypes
         EnableGUI $False
         RunAllScenes
         EnableGUI $True
         PlaySound $Sounds.done
-        UpdateStatusLabel $lastMessage
         ResetSceneEditorTypes
         Cleanup
     })
@@ -164,12 +162,10 @@ function CreateSceneEditorDialog() {
         RefreshScripts
         if ($Settings.Debug.ClearLog -eq $True) { Clear-Host }
         SetSceneEditorTypes
-        $lastMessage = $StatusLabel.Text
         EnableGUI $False
         RunAllScenes -Current
         EnableGUI $True
         PlaySound $Sounds.done
-        UpdateStatusLabel $lastMessage
         ResetSceneEditorTypes
         Cleanup
     })
@@ -197,10 +193,7 @@ function CreateSceneEditorDialog() {
                 $Settings["Dungeon"]["Gerudo Training Ground"]   = 1
                 $Settings["Dungeon"]["Inside Ganon's Castle"]    = 1
             }
-
-            $lastMessage = $StatusLabel.Text
-            UpdateStatusLabel "All dungeons have been set to Normal Quest again" -Editor
-            UpdateStatusLabel $lastMessage
+            UpdateStatusLabel "All dungeons have been set to Normal Quest again"
         })
         $lastX = $ResetQuestButton.Right
     }
@@ -217,12 +210,10 @@ function CreateSceneEditorDialog() {
         SetSceneEditorTypes
         SaveMap   -Scene $Files.json.sceneEditor.scenes[$SceneEditor.Scenes.SelectedIndex] -Index $SceneEditor.Maps.SelectedIndex
         SaveScene -Scene $Files.json.sceneEditor.scenes[$SceneEditor.Scenes.SelectedIndex]
-        $lastMessage = $StatusLabel.Text
         EnableGUI $False
         RunAllScenes -Patch
         EnableGUI $True
         PlaySound $Sounds.done
-        UpdateStatusLabel $lastMessage
         ResetSceneEditorTypes
         Cleanup
     })
@@ -470,12 +461,9 @@ function OpenHelpDialog() {
 #==============================================================================================================================================================================================
 function RunAllScenes([switch]$Patch, [switch]$Current) {
     
-    if ($GamePath -eq $null) {
-        UpdateStatusLabel -Text "Failed! No ROM path is given." -Editor -Error
-        return
-    }
+    if ($GamePath -eq $null) { UpdateStatusLabel -Text "Failed! No ROM path is given." -Error; return }
 
-    UpdateStatusLabel -Text "Preparing ROM..." -Editor
+    UpdateStatusLabel -Text "Preparing ROM..."
     $global:PatchInfo     = @{}
     $PatchInfo.decompress = $True
     $global:CheckHashSum  = $Files.json.sceneEditor.hash
@@ -489,10 +477,7 @@ function RunAllScenes([switch]$Patch, [switch]$Current) {
         if (!(PatchVCROM))        { return }   # Step D: Do some initial patching stuff for the ROM for VC WAD files
     }
 
-    if (!(Unpack)) {
-        UpdateStatusLabel "Failed! Could not extract ROM." -Error
-        return
-    }
+    if (!(Unpack))                                                              { PlaySound $Sounds.done; return }
     if (TestFile $GetROM.run)                                                   { $global:ROMHashSum   = (Get-FileHash -Algorithm MD5 -LiteralPath $GetROM.run).Hash }
     if ($Settings.Debug.IgnoreChecksum -eq $False -and (IsSet $CheckHashsum))   { $PatchInfo.downgrade = $ROMHashSum -ne $CheckHashSum                               }
     if ((Get-Item -LiteralPath $GetROM.run).length/"32MB" -ne 1) {
@@ -501,31 +486,24 @@ function RunAllScenes([switch]$Patch, [switch]$Current) {
     }
 
     ConvertROM
-    if (!(CompareHashSums)) {
-        UpdateStatusLabel "Failed! The ROM is an incorrect version or is broken." -Error
-        return
-    }
-
-    if (!(DecompressROM)) {
-        UpdateStatusLabel "Failed! The ROM could not be compressed." -Error
-        return
-    }
+    if (!(CompareHashSums))   { return }
+    if (!(DecompressROM))     { return }
     $item                  = DowngradeROM
     $SceneEditor.Resetting = $True
 
     if ($Patch) {
-        UpdateStatusLabel -Text "Patching all scenes..." -Editor
+        UpdateStatusLabel -Text "Patching all scenes..."
         Copy-Item -LiteralPath $GetROM.decomp -Destination $GetROM.cleanDecomp -Force
 
         if (PatchAllScenes) {
             [System.IO.File]::WriteAllBytes($GetROM.decomp, $ByteArrayGame)
             & $Files.tool.flips --create --bps $GetROM.cleanDecomp $GetROM.decomp $GameFiles.scenesPatch
-            UpdateStatusLabel -Text "Success! A patch has been generated." -Editor
+            UpdateStatusLabel -Text "Success! A patch has been generated."
         }
-        else { UpdateStatusLabel -Text "Failed! Extracted scenes were missing." -Editor -Error }
+        else { UpdateStatusLabel -Text "Failed! Extracted scenes were missing." -Error }
     }
     elseif ($Current) {
-        UpdateStatusLabel -Text "Resetting the map..." -Editor
+        UpdateStatusLabel -Text "Resetting the map..."
 
         if ($Files.json.sceneEditor.quest -is [array] -and $Files.json.sceneEditor.quest.Count -gt 0) {
             $vanilla = $True
@@ -542,11 +520,11 @@ function RunAllScenes([switch]$Patch, [switch]$Current) {
         }
         else { ExtractAllScenes -Current }
 
-        UpdateStatusLabel -Text "Success! The map has been reset." -Editor
+        UpdateStatusLabel -Text "Success! The map has been reset."
         LoadMap $Files.json.sceneEditor.scenes[$SceneEditor.Scenes.SelectedIndex]
     }
     else {
-        UpdateStatusLabel -Text "Extracting all scenes..." -Editor
+        UpdateStatusLabel -Text "Extracting all scenes..."
         Copy-Item -LiteralPath $GetROM.decomp -Destination $GetROM.cleanDecomp -Force
         
         if ($SceneEditor.PatchAll.Checked) {
@@ -567,7 +545,7 @@ function RunAllScenes([switch]$Patch, [switch]$Current) {
             }
         }
 
-        UpdateStatusLabel -Text "Success! The scenes have been extracted." -Editor
+        UpdateStatusLabel -Text "Success! The scenes have been extracted."
         $SceneEditor.DropScene  = $null
         $SceneEditor.SceneArray = $null
         LoadScene $Files.json.sceneEditor.scenes[$SceneEditor.Scenes.SelectedIndex]
