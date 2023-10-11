@@ -2220,17 +2220,20 @@ function DeleteActor() {
             }
         }
 
-        $skip = $True
+        $skip    = $True
+        $blockDF = $False
         for ($i=$vtx; $i -lt $SceneEditor.MapArray.Count; $i+=4) {
-            if ($SceneEditor.MapArray[$i] -eq 0xE7 -and $SceneEditor.MapArray[$i+1] -eq 0 -and $SceneEditor.MapArray[$i+2] -eq 0 -and $SceneEditor.MapArray[$i+3] -eq 0) { $skip = $False }
-            if ($SceneEditor.MapArray[$i] -eq 0xDF -and $SceneEditor.MapArray[$i+1] -eq 0 -and $SceneEditor.MapArray[$i+2] -eq 0 -and $SceneEditor.MapArray[$i+3] -eq 0) {
-                if ($SceneEditor.MapArray[$i+8] -eq 0xDE -and $SceneEditor.MapArray[$i+9] -eq 0 -and $SceneEditor.MapArray[$i+10] -eq 0 -and $SceneEditor.MapArray[$i+11] -eq 0) { $skip = $False }
-                if ($SceneEditor.MapArray[$i-8] -eq 0xDE -and $SceneEditor.MapArray[$i-7] -eq 0 -and $SceneEditor.MapArray[$i-6]  -eq 0 -and $SceneEditor.MapArray[$i-5]  -eq 0) { $skip = $True  }
+            if ($SceneEditor.MapArray[$i+1] -eq 0 -and $SceneEditor.MapArray[$i+2] -eq 0 -and $SceneEditor.MapArray[$i+3] -eq 0) {
+                if ($SceneEditor.MapArray[$i] -eq 0xE7 -or $SceneEditor.MapArray[$i] -eq 0xFE) { $skip = $False; $blockDF = $False }
+                if ($SceneEditor.MapArray[$i] -eq 0xFF) { $skip = $True;  $blockDF = $False }
+                if ($SceneEditor.MapArray[$i] -eq 0xDF) {
+                    if (!$blockDF) { $skip = $False; $blockDF = $True } else { $skip = $True; $blockDF = $False }
+                }
             }
 
             if ($SceneEditor.MapArray[$i] -eq 3 -and !$skip) {
                 $value = $SceneEditor.MapArray[$i+1] * 65536 + $SceneEditor.MapArray[$i+2] * 256 + $SceneEditor.MapArray[$i+3]
-                if ($value -gt $SceneEditor.Offsets[$SceneEditor.Offsets.Header.Count-1].Header -and $value -lt $SceneEditor.MapArray.Count) { ShiftMap -Offset ($i+1) -Subtract 16 }
+                if ($value -gt $SceneEditor.Offsets[$SceneEditor.Offsets.Header.Count-1].Header -and $value -gt $SceneEditor.Offsets[$SceneEditor.Offsets.Header.Count-1].MeshStart -and $value -lt $SceneEditor.MapArray.Count) { ShiftMap -Offset ($i+1) -Subtract 16 }
             }
         }
     }
@@ -2399,17 +2402,20 @@ function InsertActor([string]$ID="0000", [string]$Name, [int]$X=0, [int]$Y=0, [i
             }
         }
 
-        $skip = $True
+        $skip    = $True
+        $blockDF = $False
         for ($i=$vtx; $i -lt $SceneEditor.MapArray.Count; $i+=4) {
-            if ($SceneEditor.MapArray[$i] -eq 0xE7 -and $SceneEditor.MapArray[$i+1] -eq 0 -and $SceneEditor.MapArray[$i+2] -eq 0 -and $SceneEditor.MapArray[$i+3] -eq 0) { $skip = $False }
-            if ($SceneEditor.MapArray[$i] -eq 0xDF -and $SceneEditor.MapArray[$i+1] -eq 0 -and $SceneEditor.MapArray[$i+2] -eq 0 -and $SceneEditor.MapArray[$i+3] -eq 0) {
-                if ($SceneEditor.MapArray[$i+8] -eq 0xDE -and $SceneEditor.MapArray[$i+9] -eq 0 -and $SceneEditor.MapArray[$i+10] -eq 0 -and $SceneEditor.MapArray[$i+11] -eq 0) { $skip = $False }
-                if ($SceneEditor.MapArray[$i-8] -eq 0xDE -and $SceneEditor.MapArray[$i-7] -eq 0 -and $SceneEditor.MapArray[$i-6]  -eq 0 -and $SceneEditor.MapArray[$i-5]  -eq 0) { $skip = $True  }
+            if ($SceneEditor.MapArray[$i+1] -eq 0 -and $SceneEditor.MapArray[$i+2] -eq 0 -and $SceneEditor.MapArray[$i+3] -eq 0) {
+                if ($SceneEditor.MapArray[$i] -eq 0xE7 -or $SceneEditor.MapArray[$i] -eq 0xFE) { $skip = $False; $blockDF = $False }
+                if ($SceneEditor.MapArray[$i] -eq 0xFF) { $skip = $True;  $blockDF = $False }
+                if ($SceneEditor.MapArray[$i] -eq 0xDF) {
+                    if (!$blockDF) { $skip = $False; $blockDF = $True } else { $skip = $True; $blockDF = $False }
+                }
             }
-
+            
             if ($SceneEditor.MapArray[$i] -eq 3 -and !$skip) {
                 $value = $SceneEditor.MapArray[$i+1] * 65536 + $SceneEditor.MapArray[$i+2] * 256 + $SceneEditor.MapArray[$i+3]
-                if ($value -gt $SceneEditor.Offsets[$SceneEditor.Offsets.Header.Count-1].Header -and $value -lt $SceneEditor.MapArray.Count) { ShiftMap -Offset ($i+1) -Add 16 }
+                if ($value -gt $SceneEditor.Offsets[$SceneEditor.Offsets.Header.Count-1].Header -and $value -gt $SceneEditor.Offsets[$SceneEditor.Offsets.Header.Count-1].MeshStart -and $value -lt $SceneEditor.MapArray.Count) { ShiftMap -Offset ($i+1) -Add 16 }
             }
         }
     }
@@ -3023,17 +3029,20 @@ function InsertObject([string]$ID="0000", [string]$Name) {
                 }
             }
 
-            $skip = $True
+            $skip    = $True
+            $blockDF = $False
             for ($i=$vtx; $i -lt $SceneEditor.MapArray.Count; $i+=4) {
-                if ($SceneEditor.MapArray[$i] -eq 0xE7 -and $SceneEditor.MapArray[$i+1] -eq 0 -and $SceneEditor.MapArray[$i+2] -eq 0 -and $SceneEditor.MapArray[$i+3] -eq 0) { $skip = $False }
-                if ($SceneEditor.MapArray[$i] -eq 0xDF -and $SceneEditor.MapArray[$i+1] -eq 0 -and $SceneEditor.MapArray[$i+2] -eq 0 -and $SceneEditor.MapArray[$i+3] -eq 0) {
-                if ($SceneEditor.MapArray[$i+8] -eq 0xDE -and $SceneEditor.MapArray[$i+9] -eq 0 -and $SceneEditor.MapArray[$i+10] -eq 0 -and $SceneEditor.MapArray[$i+11] -eq 0) { $skip = $False }
-                if ($SceneEditor.MapArray[$i-8] -eq 0xDE -and $SceneEditor.MapArray[$i-7] -eq 0 -and $SceneEditor.MapArray[$i-6]  -eq 0 -and $SceneEditor.MapArray[$i-5]  -eq 0) { $skip = $True  }
-            }
+                if ($SceneEditor.MapArray[$i+1] -eq 0 -and $SceneEditor.MapArray[$i+2] -eq 0 -and $SceneEditor.MapArray[$i+3] -eq 0) {
+                    if ($SceneEditor.MapArray[$i] -eq 0xE7 -or $SceneEditor.MapArray[$i] -eq 0xFE) { $skip = $False; $blockDF = $False }
+                    if ($SceneEditor.MapArray[$i] -eq 0xFF) { $skip = $True;  $blockDF = $False }
+                    if ($SceneEditor.MapArray[$i] -eq 0xDF) {
+                        if (!$blockDF) { $skip = $False; $blockDF = $True } else { $skip = $True; $blockDF = $False }
+                    }
+                }
 
                 if ($SceneEditor.MapArray[$i] -eq 3 -and !$skip) {
                     $value = $SceneEditor.MapArray[$i+1] * 65536 + $SceneEditor.MapArray[$i+2] * 256 + $SceneEditor.MapArray[$i+3]
-                    if ($value -gt $SceneEditor.Offsets[$SceneEditor.Offsets.Header.Count-1].Header -and $value -lt $SceneEditor.MapArray.Count) { ShiftMap -Offset ($i+1) -Add 16 }
+                    if ($value -gt $SceneEditor.Offsets[$SceneEditor.Offsets.Header.Count-1].Header -and $value -gt $SceneEditor.Offsets[$SceneEditor.Offsets.Header.Count-1].MeshStart -and $value -lt $SceneEditor.MapArray.Count) { ShiftMap -Offset ($i+1) -Add 16 }
                 }
             }
         }
