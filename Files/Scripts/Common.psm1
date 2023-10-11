@@ -564,7 +564,7 @@ function GamePath_Finish([object]$TextBox, [string]$Path) {
 #==================================================================================================================================================================================================================================================================
 function CalculateHashSum() {
     
-    if (!(IsSet $CreditsDialog) -or $GamePath -eq $null) { return }
+    if ($VerificationInfo -eq $null -or $GamePath -eq $null) { return }
 
     if (!$IsWiiVC) { # Calculate checksum if Native Mode
         $VerificationInfo.HashField.Text = (Get-FileHash -Algorithm MD5 -LiteralPath $GamePath).Hash # Update hash
