@@ -1867,9 +1867,9 @@ function ByteTextOptions() {
             SetMessage -ID "1036" -Text " <W>buttons."                                                   -Replace "<W>."       
 	    
             # Buttons -> C Icon Only
-            SetMessage -ID "103A" -Text "Button items"                                                   -Replace "items"
+            SetMessage -ID "103A" -Text "Button items"                                                   -Replace "items" -All
 	    SetMessage -ID "103A" -Text ", and<N>used by pressing those buttons."                                -Replace "<W>."
-            SetMessage -ID "103A" -Text "<Y><C Button> Button items<W>, press <Y><C Left><W>,<N><Y><C Down> <W>or <Y><C Right><W>."                        -Replace "<Y><C Button> items<W>, use <Y><C Left><W>,<N><Y><C Down> <W>or <Y><C Right><W>."  # GC Text Finalization (A little trick to keep the other buttons intact)
+            SetMessage -ID "103A" -Text "<W>, press <Y><C Left><W>,<N><Y><C Down> <W>or <Y><C Right><W>."                        -Replace "<W>, use <Y><C Left><W>,<N><Y><C Down> <W>or <Y><C Right><W>."  # GC Text Finalization (A little trick to keep the other buttons intact)
             SetMessage -ID "70A3" -Text "Button <W>item."                                                -Replace "<W>item."
 
             # Pak -> Feature	    
