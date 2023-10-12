@@ -1656,9 +1656,9 @@ function ByteSceneOptions() {
         PatchBytes -Offset "1636940" -Texture -Patch "Gerudo Symbols\spirit_temple_room_0_elevator.bin"
         PatchBytes -Offset "168F3A0" -Texture -Patch "Gerudo Symbols\iron_knuckle.bin"
         
-        PrepareMap -Scene "Dampe's Grave & Windwill" -Map 0  -Header 0; ChangeMapFile   -Search "66888667777877888778777887788778" -Patch "Gerudo Symbols\dampe.bin";                                       SaveLoadedMap           # 3045248
-        PrepareMap -Scene "Dampe's Grave & Windwill" -Map 3  -Header 0; ChangeMapFile   -Search "66888667777877888778777887788778" -Patch "Gerudo Symbols\dampe.bin";                                       SaveLoadedMap           # 305FEE0
-        PrepareMap -Scene "Dampe's Grave & Windwill" -Map 4  -Header 0; ChangeMapFile   -Search "66888667777877888778777887788778" -Patch "Gerudo Symbols\dampe.bin";                                       SaveAndPatchLoadedScene # 3064E80
+        PrepareMap -Scene "Dampé's Grave & Windmill" -Map 0  -Header 0; ChangeMapFile   -Search "66888667777877888778777887788778" -Patch "Gerudo Symbols\dampe.bin";                                       SaveLoadedMap           # 3045248
+        PrepareMap -Scene "Dampé's Grave & Windmill" -Map 3  -Header 0; ChangeMapFile   -Search "66888667777877888778777887788778" -Patch "Gerudo Symbols\dampe.bin";                                       SaveLoadedMap           # 305FEE0
+        PrepareMap -Scene "Dampé's Grave & Windmill" -Map 4  -Header 0; ChangeMapFile   -Search "66888667777877888778777887788778" -Patch "Gerudo Symbols\dampe.bin";                                       SaveAndPatchLoadedScene # 3064E80
 
         PrepareMap -Scene "Gerudo's Fortress"        -Map 0  -Header 0; ChangeSceneFile -Search "62D45A5062D46B166AD47358418B41CB" -Patch "Gerudo Symbols\gerudo_fortress.bin";                             SaveAndPatchLoadedScene # 21B8678
         PrepareMap -Scene "Forest Temple"            -Map 11 -Header 0; ChangeMapFile   -Search "33445455565536665577988899987777" -Patch "Gerudo Symbols\forest_temple_room_11_hole.bin";                  SaveAndPatchLoadedScene # 2464D88
@@ -1840,35 +1840,42 @@ function ByteTextOptions() {
             SetMessage -ID "108E" -Text "0C3C" -Replace "0C66" -All # Correct Phantom Ganon Defeat Textbox (Delay)
             SetMessage -ID "108E" -Text "0E3C" -Replace "0E60"      # Correct Phantom Ganon Defeat Textbox (Fade)
         }
-
-        if (IsChecked $Redux.Graphics.GCScheme) {
-	        # press -> use
+        
+         if (IsChecked $Redux.Text.Milk) {
+            SetMessage -ID "0098" -Text "Lon Lon Milk" -Replace "Milk"
+         }
+ 
+         if (IsChecked $Redux.Graphics.GCScheme) {
+	    # press -> use
             SetMessage -ID "001C" -Text "press" -Replace "use"; SetMessage -ID "001D"; SetMessage -ID "0030"; SetMessage -ID "0039" -All; SetMessage -ID "004A"; SetMessage -ID "00A3"; SetMessage -ID "00B1"; SetMessage -ID "00CB"; SetMessage -ID "70A3"
 
             # Press -> Use
-            SetMessage -ID "0030" -Text "Press" -Replace "Use"; SetMessage -ID "0031"; SetMessage -ID "0032";
+            SetMessage -ID "0030" -Text "Press" -Replace "Use"; SetMessage -ID "0031"; SetMessage -ID "0032"; SetMessage -ID "0038"
             
-	        # pressing -> using
-	        SetMessage -ID "007A" -Text "7072657373696E67" -Replace "7573696E67"
+	    # pressing -> using
+	    SetMessage -ID "007A" -Text "7072657373696E67" -Replace "7573696E67"
 
             # N64 -> GC Text phrasing adjustments
-            SetMessage -ID "0035" -Text "Press <Y><C Button><W> to use it to <N>attack distant enemies!" -Replace "Use <Y><C Button><W> to throw it <N>at distant enemies!"
-	        SetMessage -ID "0047" -Text "and then press that<N><Y><C Button> <W>to use it."              -Replace "and then use<N><Y><C Button><W>."
+            SetMessage -ID "0031" -Text "As you hold down<N><Y><C Button><W>" -Replace "As you hold <Y><C Button><N><W>"
+	    SetMessage -ID "0035" -Text "Press <Y><C Button><W> to use it to <N>attack distant enemies!" -Replace "Then you can attack distant<N>enemies with it by using <Y><C Button><W>!"
+	    SetMessage -ID "0047" -Text "you can set it to <Y><C Left><W>, <Y><C Down><W><N>or <Y><C Right><W>, and then press that<N><Y><C Button> <W>to use it."              -Replace "you can set it to and use it<N>with <Y><C Left><W>, <Y><C Down><W><N> or <Y><C Right><W>!"
             SetMessage -ID "004A" -Text "and the four <Y><C Button> Buttons<W>."                         -Replace "and the four <Y><C Button><W>."
-	        SetMessage -ID "0099" -Text "press <Y><C Button> <W>to use it..."                            -Replace "use <Y><C Button> <W>to open it..."
-            SetMessage -ID "009A" -Text "and then press <Y><C Button> <W>to use it."                     -Replace "and then use <Y><C Button><W>."
-	        SetMessage -ID "1025" -Text "the<N>button! How cool!"                                        -Replace "<N>it! How cool!"
-            SetMessage -ID "1036" -Text "Once you get a <Y><C Button> Button item<W>, <N>go into the <Y>Select Item Subscreen<W> <N>and set it to one of the three<N><Y><C Button> Buttons<W>." -Replace "Once you get a <Y><C Button> item<W>, <N>go into the <Y>Select Item Subscreen<W> <N>and set it to one of the three<N><Y><C Button><W>."
-            SetMessage -ID "1036" -Text " <W>buttons."                                                   -Replace "<W>."       # Buttons -> C Icon Only
-            SetMessage -ID "103A" -Text "used by pressing those buttons."                                -Replace "be used at any time."
+	    SetMessage -ID "0099" -Text "press <Y><C Button> <W>to use it..."                            -Replace "use it with <Y><C Button><W>..."
+            SetMessage -ID "009A" -Text "you can set it to <Y><C Left><W>, <Y><C Down> <W>or <Y><C Right><W>,<N>and then press <Y><C Button> <W>to use it."                     -Replace "you can set it to and use it<N>with <Y><C Left><W>, <Y><C Down><W><N> or <Y><C Right><W>."
+	    SetMessage -ID "1025" -Text "You can aim while holding down<N><Y><C Button><W> and shoot by releasing the<N>button! How cool!"                                      -Replace "You can aim while holding <N><Y><C Button><W> and shoot by releasing<N>it! How cool!"
+            SetMessage -ID "1036" -Text "Once you get a <Y><C Button> Button item<W>, <N>go into the <Y>Select Item Subscreen<W> <N>and set it to one of the three<N><Y><C Button> Buttons<W>."     -Replace "Once you get a <Y><C Button> item<W>, <N>go into the <Y>Select Item Subscreen<W> <N>and set it to one of the three<N><Y><C Button><W>."
+            SetMessage -ID "1036" -Text " <W>buttons."                                                   -Replace "<W>."       
+	    
+            # Buttons -> C Icon Only
             SetMessage -ID "103A" -Text "Button items"                                                   -Replace "items" -All
-            SetMessage -ID "103A" -Text "press"                                                          -Replace "use"   -All # GC Text Finalization (A little trick)
+	    SetMessage -ID "103A" -Text ", and<N>used by pressing those buttons."                                -Replace "<W>."
+            SetMessage -ID "103A" -Text "<W>, press <Y><C Left><W>,<N><Y><C Down> <W>or <Y><C Right><W>."                        -Replace "<W>, use <Y><C Left><W>,<N><Y><C Down> <W>or <Y><C Right><W>."  # GC Text Finalization (A little trick to keep the other buttons intact)
             SetMessage -ID "70A3" -Text "Button <W>item."                                                -Replace "<W>item."
 
             # Pak -> Feature	    
-            SetMessage -ID "0068" -Text "If you equip a <C>Rumble Pak<W>" -Replace "If you have a <C>Rumble Feature<W>"
-	        SetMessage -ID "407C" -Text "You don't have a <R>Rumble <N>Pak<W>! With a Rumble Pak" -Replace "You don't have a <R>Rumble<N>Feature<W>! With the rumble"
-            SetMessage -ID "407D" -Text "Wow! You have a <R>Rumble Pak<W>!" -Replace "You have a <R>Rumble Feature<W>!"
+            SetMessage -ID "0068" -Text "If you equip a <C>Rumble Pak<W>, it<N>will" -Replace "It causes your <C>Rumble Feature<W><N>to"
+	    SetMessage -ID "407C" -Text "You don't have a <R>Rumble <N>Pak<W>! With a Rumble Pak" -Replace "You don't have a <R>Rumble<N>Feature<W>! With it"
+            SetMessage -ID "407D" -Text "Wow! You have a <R>Rumble Pak<W>!" -Replace "Wow! You have a <R>Rumble Feature<W>!"
 
             SetMessage -ID "0103" -Text "<B><A Button>"  -Replace "<G><A Button>";  SetMessage -ID "0103" -Text "<B>Icon" -Replace "<G>Icon"; SetMessage -ID "0103" -Text "<B>blue" -Replace "<B>green" # Deku Tree - Opening a door
             SetMessage -ID "0337" -Text 'Hole of "Z"'    -Replace 'Hole of "L"'
