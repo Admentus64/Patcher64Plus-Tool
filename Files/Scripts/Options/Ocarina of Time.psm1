@@ -1841,60 +1841,6 @@ function ByteTextOptions() {
             SetMessage -ID "108E" -Text "0E3C" -Replace "0E60"      # Correct Phantom Ganon Defeat Textbox (Fade)
         }
         
-         if (IsChecked $Redux.Text.Milk) {
-            SetMessage -ID "0098" -Text "Lon Lon Milk" -Replace "Milk"
-         }
- 
-         if (IsChecked $Redux.Graphics.GCScheme) {
-	    # press -> use
-            SetMessage -ID "001C" -Text "press" -Replace "use"; SetMessage -ID "001D"; SetMessage -ID "0030"; SetMessage -ID "0039" -All; SetMessage -ID "004A"; SetMessage -ID "00A3"; SetMessage -ID "00B1"; SetMessage -ID "00CB"; SetMessage -ID "70A3"
-
-            # Press -> Use
-            SetMessage -ID "0030" -Text "Press" -Replace "Use"; SetMessage -ID "0031"; SetMessage -ID "0032"; SetMessage -ID "0038"
-            
-	    # pressing -> using
-	    SetMessage -ID "007A" -Text "7072657373696E67" -Replace "7573696E67"
-
-            # N64 -> GC Text phrasing adjustments
-            SetMessage -ID "0031" -Text "As you hold down<N><Y><C Button><W>" -Replace "As you hold <Y><C Button><N><W>"
-	    SetMessage -ID "0035" -Text "Press <Y><C Button><W> to use it to <N>attack distant enemies!" -Replace "Then you can attack distant<N>enemies with it by using <Y><C Button><W>!"
-	    SetMessage -ID "0047" -Text "you can set it to <Y><C Left><W>, <Y><C Down><W><N>or <Y><C Right><W>, and then press that<N><Y><C Button> <W>to use it."              -Replace "you can set it to and use it<N>with <Y><C Left><W>, <Y><C Down><W><N> or <Y><C Right><W>!"
-            SetMessage -ID "004A" -Text "and the four <Y><C Button> Buttons<W>."                         -Replace "and the four <Y><C Button><W>."
-	    SetMessage -ID "0099" -Text "press <Y><C Button> <W>to use it..."                            -Replace "use it with <Y><C Button><W>..."
-            SetMessage -ID "009A" -Text "you can set it to <Y><C Left><W>, <Y><C Down> <W>or <Y><C Right><W>,<N>and then press <Y><C Button> <W>to use it."                     -Replace "you can set it to and use it<N>with <Y><C Left><W>, <Y><C Down><W><N> or <Y><C Right><W>."
-	    SetMessage -ID "1025" -Text "You can aim while holding down<N><Y><C Button><W> and shoot by releasing the<N>button! How cool!"                                      -Replace "You can aim while holding <N><Y><C Button><W> and shoot by releasing<N>it! How cool!"
-            SetMessage -ID "1036" -Text "Once you get a <Y><C Button> Button item<W>, <N>go into the <Y>Select Item Subscreen<W> <N>and set it to one of the three<N><Y><C Button> Buttons<W>."     -Replace "Once you get a <Y><C Button> item<W>, <N>go into the <Y>Select Item Subscreen<W> <N>and set it to one of the three<N><Y><C Button><W>."
-            SetMessage -ID "1036" -Text " <W>buttons."                                                   -Replace "<W>."       
-	    
-            # Buttons -> C Icon Only
-            SetMessage -ID "103A" -Text "Button items"                                                   -Replace "items" -All
-	    SetMessage -ID "103A" -Text ", and<N>used by pressing those buttons."                                -Replace "<W>."
-            SetMessage -ID "103A" -Text "<W>, press <Y><C Left><W>,<N><Y><C Down> <W>or <Y><C Right><W>."                        -Replace "<W>, use <Y><C Left><W>,<N><Y><C Down> <W>or <Y><C Right><W>."  # GC Text Finalization (A little trick to keep the other buttons intact)
-            SetMessage -ID "70A3" -Text "Button <W>item."                                                -Replace "<W>item."
-
-            # Pak -> Feature	    
-            SetMessage -ID "0068" -Text "If you equip a <C>Rumble Pak<W>, it<N>will" -Replace "It causes your <C>Rumble Feature<W><N>to"
-	    SetMessage -ID "407C" -Text "You don't have a <R>Rumble <N>Pak<W>! With a Rumble Pak" -Replace "You don't have a <R>Rumble<N>Feature<W>! With it"
-            SetMessage -ID "407D" -Text "Wow! You have a <R>Rumble Pak<W>!" -Replace "Wow! You have a <R>Rumble Feature<W>!"
-
-            SetMessage -ID "0103" -Text "<B><A Button>"  -Replace "<G><A Button>";  SetMessage -ID "0103" -Text "<B>Icon" -Replace "<G>Icon"; SetMessage -ID "0103" -Text "<B>blue" -Replace "<B>green" # Deku Tree - Opening a door
-            SetMessage -ID "0337" -Text 'Hole of "Z"'    -Replace 'Hole of "L"'
-            SetMessage -ID "1035" -Text "blue icon"      -Replace "green icon";     SetMessage -ID "1037"
-            SetMessage -ID "1037" -Text "<B>Action Icon" -Replace "<G>Action Icon"; SetMessage -ID "1037" -Text "<B><A Button>" -Replace "<G><A Button>"
-
-            SetMessage -ID "0066" -Text "05415354415254" -Replace "05445354415254"; SetMessage -ID "1039"; SetMessage -ID "103A"; SetMessage -ID "103B"; SetMessage -ID "103D"-Last; SetMessage -ID "2065"; SetMessage -ID "2071"; SetMessage -ID "405A" # START
-
-            SetMessage -ID "002E" -Text "0542A0" -Replace "0541A0"; SetMessage -ID "004A"; SetMessage -ID "004B"; SetMessage -ID "00DD"; SetMessage -ID "00DD"; SetMessage -ID "00DD"; SetMessage -ID "0336" # B Button
-            SetMessage -ID "0338"; SetMessage -ID "0401"; SetMessage -ID "086E"; SetMessage -ID "087C"; SetMessage -ID "103B"; SetMessage -ID "1072"; SetMessage -ID "407F"; SetMessage -ID "407F"
-
-            SetMessage -ID "0108" -Text "0543416374696F6E" -Replace "0544416374696F6E"; SetMessage -ID "0337"; SetMessage -ID "0337" # Action
-
-            SetMessage -ID "0037" -Text "05439F" -Replace "05429F"; SetMessage -ID "004A"; SetMessage -ID "004C"; SetMessage -ID "004D"; SetMessage -ID "005B"; SetMessage -ID "005C"; SetMessage -ID "0079"; SetMessage -ID "00A4"; SetMessage -ID "00CD"; SetMessage -ID "00CE"; SetMessage -ID "0108"; SetMessage -ID "0218" # A Button
-            SetMessage -ID "0337"; SetMessage -ID "086D"; SetMessage -ID "086E"; SetMessage -ID "087C"; SetMessage -ID "1004"; SetMessage -ID "1007"; SetMessage -ID "103A"; SetMessage -ID "103D"; SetMessage -ID "2035"; SetMessage -ID "2037"; SetMessage -ID "300C"; SetMessage -ID "301C"; SetMessage -ID "3022"
-            SetMessage -ID "302B"; SetMessage -ID "407F"; SetMessage -ID "4081"; SetMessage -ID "7004"; SetMessage -ID "0108"; SetMessage -ID "1004"; SetMessage -ID "1007"; SetMessage -ID "2035"; SetMessage -ID "302B"; SetMessage -ID "407F"; SetMessage -ID "7004"; SetMessage -ID "0108"; SetMessage -ID "1007"
-            SetMessage -ID "1007"; SetMessage -ID "407F"; SetMessage -ID "407F"; SetMessage -ID "010C" -Text "0543209F" -Replace "0542209F"
-        }
-
         if (IsChecked $Redux.Unlock.Tunics -Lang 1) {
             SetMessage -ID "0050" -Text "adult size, so it won't fit a kid..." -Replace "unisize, so it fits an adult and kid"   # Goron Tunic
             SetMessage -ID "0051" -Text "adult size,<N>so it won't fit a kid." -Replace "unisize,<N>so it fits an adult and kid" # Zora Tunic
@@ -1903,6 +1849,54 @@ function ByteTextOptions() {
         }
     }
     elseif (IsChecked $Redux.Text.Speed2x) { ChangeBytes -Offset "B5006F" -Values "02" }
+
+    if (IsChecked $Redux.Graphics.GCScheme) {
+        if (IsChecked $Redux.Graphics.GCScheme -Lang 1) {
+            SetMessage -ID "001C" -Text "press" -Replace "use"; SetMessage -ID "001D"; SetMessage -ID "0030"; SetMessage -ID "0039" -All; SetMessage -ID "004A"; SetMessage -ID "00A3"; SetMessage -ID "00B1"; SetMessage -ID "00CB"; SetMessage -ID "70A3" # press -> use
+            SetMessage -ID "0030" -Text "Press" -Replace "Use"; SetMessage -ID "0031"; SetMessage -ID "0032"; SetMessage -ID "0038"                                                                                                                         # Press -> Use
+            SetMessage -ID "007A" -Text "7072657373696E67" -Replace "7573696E67"                                                                                                                                                                            # pressing -> using
+
+            # N64 -> GC Text phrasing adjustments
+            SetMessage -ID "0031" -Text "As you hold down<N><Y><C Button><W>" -Replace "As you hold <Y><C Button><N><W>"
+            SetMessage -ID "0035" -Text "Press <Y><C Button><W> to use it to <N>attack distant enemies!" -Replace "Then you can attack distant<N>enemies with it by using <Y><C Button><W>!"
+            SetMessage -ID "0047" -Text "you can set it to <Y><C Left><W>, <Y><C Down><W><N>or <Y><C Right><W>, and then press that<N><Y><C Button> <W>to use it."              -Replace "you can set it to and use it<N>with <Y><C Left><W>, <Y><C Down><W><N> or <Y><C Right><W>!"
+            SetMessage -ID "004A" -Text "and the four <Y><C Button> Buttons<W>."                         -Replace "and the four <Y><C Button><W>."
+            SetMessage -ID "0099" -Text "press <Y><C Button> <W>to use it..."                            -Replace "use it with <Y><C Button><W>..."
+            SetMessage -ID "009A" -Text "you can set it to <Y><C Left><W>, <Y><C Down> <W>or <Y><C Right><W>,<N>and then press <Y><C Button> <W>to use it."                     -Replace "you can set it to and use it<N>with <Y><C Left><W>, <Y><C Down><W><N> or <Y><C Right><W>."
+            SetMessage -ID "1025" -Text "You can aim while holding down<N><Y><C Button><W> and shoot by releasing the<N>button! How cool!"                                      -Replace "You can aim while holding <N><Y><C Button><W> and shoot by releasing<N>it! How cool!"
+            SetMessage -ID "1036" -Text "Once you get a <Y><C Button> Button item<W>, <N>go into the <Y>Select Item Subscreen<W> <N>and set it to one of the three<N><Y><C Button> Buttons<W>."     -Replace "Once you get a <Y><C Button> item<W>, <N>go into the <Y>Select Item Subscreen<W> <N>and set it to one of the three<N><Y><C Button><W>."
+            SetMessage -ID "1036" -Text " <W>buttons."                                                   -Replace "<W>."       
+	    
+            # Buttons -> C Icon Only
+            SetMessage -ID "103A" -Text "Button items"                                                    -Replace "items" -All
+            SetMessage -ID "103A" -Text ", and<N>used by pressing those buttons."                         -Replace "<W>."
+            SetMessage -ID "103A" -Text "<W>, press <Y><C Left><W>,<N><Y><C Down> <W>or <Y><C Right><W>." -Replace "<W>, use <Y><C Left><W>,<N><Y><C Down> <W>or <Y><C Right><W>."  # GC Text Finalization (A little trick to keep the other buttons intact)
+            SetMessage -ID "70A3" -Text "Button <W>item."                                                 -Replace "<W>item."
+
+            # Pak -> Feature	    
+            SetMessage -ID "0068" -Text "If you equip a <C>Rumble Pak<W>, it<N>will" -Replace "It causes your <C>Rumble Feature<W><N>to"
+            SetMessage -ID "407C" -Text "You don't have a <R>Rumble <N>Pak<W>! With a Rumble Pak" -Replace "You don't have a <R>Rumble<N>Feature<W>! With it"
+            SetMessage -ID "407D" -Text "Wow! You have a <R>Rumble Pak<W>!" -Replace "Wow! You have a <R>Rumble Feature<W>!"
+        }
+
+        SetMessage -ID "0103" -Text "<B><A Button>"  -Replace "<G><A Button>";         SetMessage -ID "0103" -Text "<B>Icon" -Replace "<G>Icon"; SetMessage -ID "0103" -Text "<B>blue" -Replace "<B>green" # Deku Tree - Opening a door
+        if (IsChecked $Redux.Graphics.GCScheme -Lang 1) {
+            SetMessage -ID "0337" -Text 'Hole of "Z"'    -Replace 'Hole of "L"'
+            SetMessage -ID "1035" -Text "blue icon"      -Replace "green icon";        SetMessage -ID "1037"
+            SetMessage -ID "1037" -Text "<B>Action Icon" -Replace "<G>Action Icon"
+        }
+        SetMessage -ID "1037" -Text "<B><A Button>" -Replace "<G><A Button>"
+
+        SetMessage -ID "0066" -Text "05415354415254" -Replace "05445354415254";        SetMessage -ID "1039"; SetMessage -ID "103A"; SetMessage -ID "103B"; SetMessage -ID "103D"; SetMessage -ID "2065"; SetMessage -ID "2071"; SetMessage -ID "405A"                                               # START
+        SetMessage -ID "002E" -Text "0542A0" -Replace "0541A0";                        SetMessage -ID "004A"; SetMessage -ID "004B"; SetMessage -ID "00DD"; SetMessage -ID "00DD"; SetMessage -ID "00DD"; SetMessage -ID "0336"; SetMessage -ID "0338"; SetMessage -ID "0401"; SetMessage -ID "086E" # B Button
+        SetMessage -ID "087C";                                                         SetMessage -ID "103B"; SetMessage -ID "1072"; SetMessage -ID "407F"; SetMessage -ID "407F"                                                                                                                    # B Button
+        SetMessage -ID "0108" -Text "0543416374696F6E" -Replace "0544416374696F6E";    SetMessage -ID "0337"; SetMessage -ID "0337"                                                                                                                                                                  # Action
+
+        SetMessage -ID "0037" -Text "05439F" -Replace "05429F"; SetMessage -ID "004A"; SetMessage -ID "004C"; SetMessage -ID "004D"; SetMessage -ID "005B"; SetMessage -ID "005C"; SetMessage -ID "0079"; SetMessage -ID "00A4"; SetMessage -ID "00CD"; SetMessage -ID "00CE"; SetMessage -ID "0108"; SetMessage -ID "0218" # A Button
+        SetMessage -ID "0337"; SetMessage -ID "086D";           SetMessage -ID "086E"; SetMessage -ID "087C"; SetMessage -ID "1004"; SetMessage -ID "1007"; SetMessage -ID "103A"; SetMessage -ID "103D"; SetMessage -ID "2035"; SetMessage -ID "2037"; SetMessage -ID "300C"; SetMessage -ID "301C"; SetMessage -ID "3022"
+        SetMessage -ID "302B"; SetMessage -ID "407F";           SetMessage -ID "4081"; SetMessage -ID "7004"; SetMessage -ID "0108"; SetMessage -ID "1004"; SetMessage -ID "1007"; SetMessage -ID "2035"; SetMessage -ID "302B"; SetMessage -ID "407F"; SetMessage -ID "7004"; SetMessage -ID "0108"; SetMessage -ID "1007"
+        SetMessage -ID "1007"; SetMessage -ID "407F";           SetMessage -ID "407F"; SetMessage -ID "010C" -Text "0543209F" -Replace "0542209F"
+    }
 
     if ( (IsChecked $Redux.Text.LinkScript) -and $Redux.Text.LinkName.Text.Count -gt 0) {
         SetMessage -ID "00D7" -Text "0F" -Replace $Redux.Text.LinkName.text;
@@ -1982,7 +1976,8 @@ function ByteTextOptions() {
         SetMessage -ID "005E" -ASCII -Text $wallet2 -Replace $Redux.Capacity.Wallet2.Text; SetMessage -ID "005F" -ASCII -Text $wallet3 -Replace $Redux.Capacity.Wallet3.Text
     }
 
-    if (IsChecked $Redux.Equipment.HerosBow -Lang 1) { SetMessage -ID "0031" -Text "Fairy Bow" -Replace "Hero's Bow" }
+    if (IsChecked $Redux.Text.Milk          -Lang 1)   { SetMessage -ID "0098" -Text "Lon Lon Milk" -Replace "Milk" }
+    if (IsChecked $Redux.Equipment.HerosBow -Lang 1)   { SetMessage -ID "0031" -Text "Fairy Bow" -Replace "Hero's Bow" }
 
     if (IsDefault $Redux.Equipment.KokiriSword -Not) {
         $file = $GameFiles.textures + "\Equipment\Kokiri Sword\" + $Redux.Equipment.KokiriSword.text + "." + $LanguagePatch.code + ".txt"

@@ -115,7 +115,7 @@
 		"dma"		: "B4E0",
 		"length"	: 3,
 		"maps"		: [ "Village", "Great Deku Tree's Meadow", "Training Center" ],
-		"stages"	: [ "Child", "Adult - Infested", "Adult", "Farore Creates Life", "Ganndorf's Curse", "Kokiri's Emerald", "Navi Opening", "Unused - Cutscene #1", "Unused - Cutscene #2", "Credits - Deku Tree Meadow", "Credits - Forest", "Meeting the Deku Tree Sprout", "Link's Identity" ]
+		"stages"	: [ "Child", "Adult - Infested", "Adult", "Farore Creates Life", "Ganondorf's Curse", "Kokiri's Emerald", "Navi Opening", "Unused - Cutscene #1", "Unused - Cutscene #2", "Credits - Deku Tree Meadow", "Credits - Forest", "Meeting the Deku Tree Sprout", "Link's Identity" ]
 	}, {
 		"name"		: "Sacred Forest Meadow",
 		"dma"		: "B520",
@@ -136,7 +136,7 @@
 		"name"		: "Zora's Fountain",
 		"dma"		: "B590",
 		"length"	: 1,
-		"stages"	: [ "Child", "Child - Cucco", "Adult", "Zora's Sapphire", "Unused Jabu-Jabu", "Unused - Credits" ]
+		"stages"	: [ "Child - Day", "Child - Night", "Adult", "Zora's Sapphire", "Unused Jabu-Jabu", "Unused - Credits" ]
 	}, {
 		"name"		: "Gerudo Valley",
 		"dma"		: "B5B0",
