@@ -378,8 +378,8 @@ function CreatePreviewGroup([single]$Height=0, [string]$Text="", [Object]$Expose
 #==============================================================================================================================================================================================
 function CreateReduxGroup([single]$X=(DPISize 10), [single]$Y=0, [single]$Height=0, [string]$Name=$Last.TabName, [string]$Tag="", [boolean]$IsGame=$True, [string]$Text="", [single]$Columns=0, [object]$AddTo=$Last.Panel, [Object]$Expose, [Object]$Exclude, [byte]$Base, [switch]$Child, [switch]$Adult, [switch]$All, [switch]$Safe) {
     
-    if  ($Safe -and $Settings.Core.SafeOptions -eq $True) { return $null }
-    if (!(CheckReduxOption -Expose $Expose -Exclude $Exclude -Base $Base -Child $Child -Adult $Adult -All $All) ) { return $null }
+    if  ($Safe -and $Settings.Core.SafeOptions -eq $True) { $Last.Group = $null; return $null }
+    if (!(CheckReduxOption -Expose $Expose -Exclude $Exclude -Base $Base -Child $Child -Adult $Adult -All $All) ) { $Last.Group = $null; return $null }
     $Width = ($AddTo.Width - (DPISize 30))
     $Last.Column = $Last.Row = 1
 
@@ -429,7 +429,7 @@ function CreateReduxGroup([single]$X=(DPISize 10), [single]$Y=0, [single]$Height
 function CreateReduxButton([single]$Column=$Last.Column, [single]$Row=$Last.Row, [int16]$Width=100, [int16]$Height=20, [string]$Name="", [string]$Tag="", [string]$Text="", [string]$Info="", [string]$Credits="", [object]$AddTo=$Last.Group, [switch]$Native, [Object]$Expose, [Object]$Exclude, [byte]$Base, [switch]$Child, [switch]$Adult, [switch]$All, [switch]$Safe) {
     
     if  ($Safe -and $Settings.Core.SafeOptions -eq $True) { return $null }
-    if (!(CheckReduxOption -Name $Name -Expose $Expose -Exclude $Exclude -Base $Base -Child $Child -Adult $Adult -All $All) -or $Last.Hide) { return $null }
+    if (!(CheckReduxOption -Name $Name -Expose $Expose -Exclude $Exclude -Base $Base -Child $Child -Adult $Adult -All $All) -or $Last.Hide -or $Last.Group -eq $null) { return $null }
 
     if ($Info -ne "" -and $Credits -ne "") { $Info += ("`n`n- Credits: " + $Credits) }
     $button      = CreateButton -X (($Column-1) * $FormDistance + (DPISize 15)) -Y ($Row * (DPISize 30) - (DPISize 13)) -Width (DPISize $Width) -Height (DPISize $Height) -Name $Name -Tag $Tag -Text $Text -Info $Info -AddTo $AddTo
@@ -453,7 +453,7 @@ function CreateReduxTextBox([single]$Column=$Last.Column, [single]$Row=$Last.Row
     
     if  ($Safe -and $Settings.Core.SafeOptions -eq $True)                   { return $null }
     if   (ForceReduxOption -Name $Name -Force $Force -Value $ForcedValue)   { return $null }
-    if (!(CheckReduxOption -Name $Name -Expose $Expose -Exclude $Exclude -Base $Base -Child $Child -Adult $Adult -All $All) -or $Last.Hide) { return $null }
+    if (!(CheckReduxOption -Name $Name -Expose $Expose -Exclude $Exclude -Base $Base -Child $Child -Adult $Adult -All $All) -or $Last.Hide -or $Last.Group -eq $null) { return $null }
 
     if ($Info -ne "") { $Info += "`nDefault value: " + $Value }
     if ($Warning -ne "") {
@@ -506,7 +506,7 @@ function CreateReduxRadioButton([single]$Column=$Last.Column, [single]$Row=$Last
     
     if  ($Safe -and $Settings.Core.SafeOptions -eq $True)   { return $null }
     if   (ForceReduxOption -Name $Name -Force $Force)       { return $null }
-    if (!(CheckReduxOption -Name $Name -Expose $Expose -Exclude $Exclude -Base $Base -Child $Child -Adult $Adult -All $All) -or $Last.Hide) { return $null }
+    if (!(CheckReduxOption -Name $Name -Expose $Expose -Exclude $Exclude -Base $Base -Child $Child -Adult $Adult -All $All) -or $Last.Hide -or $Last.Group -eq $null) { return $null }
 
     if ($Warning -ne "") {
         if ($Info -ne "")   { $Info += ("`n[!] " + $Warning) }
@@ -545,7 +545,7 @@ function CreateReduxCheckBox([single]$Column=$Last.Column, [single]$Row=$Last.Ro
     
     if  ($Safe -and $Settings.Core.SafeOptions -eq $True)  { return $null }
     if   (ForceReduxOption -Name $Name -Force $Force)      { return $null }
-    if (!(CheckReduxOption -Name $Name -Expose $Expose -Exclude $Exclude -Base $Base -Child $Child -Adult $Adult -All $All) -or $Last.Hide) { return $null }
+    if (!(CheckReduxOption -Name $Name -Expose $Expose -Exclude $Exclude -Base $Base -Child $Child -Adult $Adult -All $All) -or $Last.Hide -or $Last.Group -eq $null) { return $null }
 
     if ($Warning -ne "") {
         if ($Info -ne "")   { $Info += ("`n[!] " + $Warning) }
@@ -584,7 +584,7 @@ function CreateReduxComboBox([single]$Column=$Last.Column, [single]$Row=$Last.Ro
     
     if  ($Safe -and $Settings.Core.SafeOptions -eq $True)                   { return $null }
     if   (ForceReduxOption -Name $Name -Force $Force -Value $ForcedValue)   { return $null }
-    if (!(CheckReduxOption -Name $Name -Expose $Expose -Exclude $Exclude -Base $Base -Child $Child -Adult $Adult -All $All) -or $Last.Hide) { return $null }
+    if (!(CheckReduxOption -Name $Name -Expose $Expose -Exclude $Exclude -Base $Base -Child $Child -Adult $Adult -All $All) -or $Last.Hide -or $Last.Group -eq $null) { return $null }
 
     if ($Column -eq $Last.Width -and $Column -eq $Last.Column -and $Row -eq $Last.Row) { $Column = 1; $Row++ }
 
@@ -656,7 +656,7 @@ function CreateReduxSlider([single]$Column=$Last.Column, [single]$Row=$Last.Row,
     
     if  ($Safe -and $Settings.Core.SafeOptions -eq $True)                   { return $null }
     if   (ForceReduxOption -Name $Name -Force $Force -Value $ForcedValue)   { return $null }
-    if (!(CheckReduxOption -Name $Name -Expose $Expose -Exclude $Exclude -Base $Base -Child $Child -Adult $Adult -All $All) -or $Last.Hide) { return $null }
+    if (!(CheckReduxOption -Name $Name -Expose $Expose -Exclude $Exclude -Base $Base -Child $Child -Adult $Adult -All $All) -or $Last.Hide -or $Last.Group -eq $null) { return $null }
 
     if ($Default.GetType().Name -eq "String")   { $Default = GetDecimal $Default }
     if ($Min.GetType().Name     -eq "String")   { $Min     = GetDecimal $Min }
@@ -697,7 +697,7 @@ function CreateReduxSlider([single]$Column=$Last.Column, [single]$Row=$Last.Row,
 function CreateReduxListBox([single]$Column=$Last.Column, [single]$Row=$Last.Row, [single]$Columns=1, [single]$Rows=1, [string[]]$Items, $Default=$null, [int]$ItemWidth=100, [switch]$MultiColumn, [switch]$MultiSelect, [string]$Text="", [string]$Info="", [string]$Warning="", [string]$Credits="", [string]$Name="", [string]$Tag="", [object]$AddTo=$Last.Group, [switch]$Native, [Object]$Expose, [Object]$Exclude, [byte]$Base, [switch]$Child, [switch]$Adult, [switch]$All, [switch]$Safe) {
     
     if  ($Safe -and $Settings.Core.SafeOptions -eq $True) { return $null }
-    if (!(CheckReduxOption -Name $Name -Expose $Expose -Exclude $Exclude -Base $Base -Child $Child -Adult $Adult -All $All) -or $Last.Hide) { return $null }
+    if (!(CheckReduxOption -Name $Name -Expose $Expose -Exclude $Exclude -Base $Base -Child $Child -Adult $Adult -All $All) -or $Last.Hide -or $Last.Group -eq $null) { return $null }
 
     $listBox      = CreateListBox -X (($Column-1) * $FormDistance + (DPISize 15)) -Y ($Row * (DPISize 45) - (DPISize 25)) -Width ($Columns * (DPISize 180)) -Height ($Rows * (DPISize 35)) -Items $Items -Default $Default -ItemWidth $ItemWidth -MultiColumn $MultiColumn -MultiSelect $MultiSelect -Info $Info -IsGame $True -Name $Name -Tag $Tag -AddTo $AddTo
     $Last.Column += [Math]::floor($Columns)
@@ -720,7 +720,7 @@ function CreateReduxListBox([single]$Column=$Last.Column, [single]$Row=$Last.Row
 function CreateReduxColoredLabel([System.Windows.Forms.Button]$Link=$null, [System.Drawing.Color]$Color=$null, [string]$Name="", [string]$Tag="", [object]$AddTo=$Last.Group, [switch]$Native, [Object]$Expose, [Object]$Exclude, [byte]$Base, [switch]$Child, [switch]$Adult, [switch]$All, [switch]$Safe) {
     
     if  ($Safe -and $Settings.Core.SafeOptions -eq $True) { return $null }
-    if (!(CheckReduxOption -Name $Name -Expose $Expose -Exclude $Exclude -Base $Base -Child $Child -Adult $Adult -All $All) -or $Last.Hide) { return $null }
+    if (!(CheckReduxOption -Name $Name -Expose $Expose -Exclude $Exclude -Base $Base -Child $Child -Adult $Adult -All $All) -or $Last.Hide -or $Last.Group -eq $null) { return $null }
 
     $label = CreateLabel -X ($Link.Right + (DPISize 15)) -Y $Link.Top -Width (DPISize 40) -Height $Link.Height -Name $Name -Tag $Tag -AddTo $AddTo
     if ($Color -ne $null) { $label.BackColor = $Color }

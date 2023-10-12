@@ -448,8 +448,8 @@ function OpenHelpDialog() {
     $CloseButton.Add_Click({ $Dialog.Hide() })
 
     # Text Box
-    CreateTextBox -X (DPISize 40) -Y (DPISize 30) -Width ($Dialog.Width - (DPISize 100)) -Height ($CloseButton.Top - (DPISize 40)) -Text $text -ReadOnly -Multiline -AddTo $Dialog
-    AddTextFileToTextbox -TextBox $textbox -File ($Paths.Games + "\" + $Files.json.sceneEditor.game + "\Guide Scene Editor.txt")
+    $textbox = CreateTextBox -X (DPISize 40) -Y (DPISize 30) -Width ($Dialog.Width - (DPISize 100)) -Height ($CloseButton.Top - (DPISize 40)) -ReadOnly -Multiline -TextFileFont -AddTo $Dialog
+    AddTextFileToTextbox -TextBox $textbox -File ($Paths.Games + "\" + $TextEditor.GameType.mode + "\Guide Scene Editor.txt")
 
     # Show Dialog
     $Dialog.ShowDialog()
@@ -2214,7 +2214,7 @@ function DeleteActor() {
             if ($SceneEditor.MapArray[$i] -eq 3) { $vtx = $SceneEditor.MapArray[$i+1] * 65536 + $SceneEditor.MapArray[$i+2] * 256 + $SceneEditor.MapArray[$i+3]; break }
         }
 
-        for ($i=$vtx; $i -gt $vtx-0x300; $i-=8) {
+        for ($i=$SceneEditor.Offsets[$SceneEditor.Offsets.Header.Count-1].HeaderEnd; $i -lt $SceneEditor.MapArray.Count; $i+=8) {
             if ($SceneEditor.MapArray[$i] -eq 0xD7 -and $SceneEditor.MapArray[$i+1] -eq 0 -and $SceneEditor.MapArray[$i+2] -eq 0 -and $SceneEditor.MapArray[$i+3] -eq 2 -and $SceneEditor.MapArray[$i+4] -eq 0xFF -and $SceneEditor.MapArray[$i+5] -eq 0xFF -and $SceneEditor.MapArray[$i+6] -eq 0xFF -and $SceneEditor.MapArray[$i+7] -eq 0xFF) {
                 $vtx = $i; break
             }
@@ -2396,7 +2396,7 @@ function InsertActor([string]$ID="0000", [string]$Name, [int]$X=0, [int]$Y=0, [i
             if ($SceneEditor.MapArray[$i] -eq 3) { $vtx = $SceneEditor.MapArray[$i+1] * 65536 + $SceneEditor.MapArray[$i+2] * 256 + $SceneEditor.MapArray[$i+3]; break }
         }
 
-        for ($i=$vtx; $i -gt $vtx-0x300; $i-=8) {
+        for ($i=$SceneEditor.Offsets[$SceneEditor.Offsets.Header.Count-1].HeaderEnd; $i -lt $SceneEditor.MapArray.Count; $i+=8) {
             if ($SceneEditor.MapArray[$i] -eq 0xD7 -and $SceneEditor.MapArray[$i+1] -eq 0 -and $SceneEditor.MapArray[$i+2] -eq 0 -and $SceneEditor.MapArray[$i+3] -eq 2 -and $SceneEditor.MapArray[$i+4] -eq 0xFF -and $SceneEditor.MapArray[$i+5] -eq 0xFF -and $SceneEditor.MapArray[$i+6] -eq 0xFF -and $SceneEditor.MapArray[$i+7] -eq 0xFF) {
                 $vtx = $i; break
             }
@@ -3023,7 +3023,7 @@ function InsertObject([string]$ID="0000", [string]$Name) {
                 if ($SceneEditor.MapArray[$i] -eq 3) { $vtx = $SceneEditor.MapArray[$i+1] * 65536 + $SceneEditor.MapArray[$i+2] * 256 + $SceneEditor.MapArray[$i+3]; break }
             }
 
-            for ($i=$vtx; $i -gt $vtx-0x300; $i-=8) {
+            for ($i=$SceneEditor.Offsets[$SceneEditor.Offsets.Header.Count-1].HeaderEnd; $i -lt $SceneEditor.MapArray.Count; $i+=8) {
                 if ($SceneEditor.MapArray[$i] -eq 0xD7 -and $SceneEditor.MapArray[$i+1] -eq 0 -and $SceneEditor.MapArray[$i+2] -eq 0 -and $SceneEditor.MapArray[$i+3] -eq 2 -and $SceneEditor.MapArray[$i+4] -eq 0xFF -and $SceneEditor.MapArray[$i+5] -eq 0xFF -and $SceneEditor.MapArray[$i+6] -eq 0xFF -and $SceneEditor.MapArray[$i+7] -eq 0xFF) {
                     $vtx = $i; break
                 }

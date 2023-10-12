@@ -1,5 +1,6 @@
 --- INFO ---
-- Maximum of 15 Objects for Ocarina of Time
+- Maximum of 20 Objects for Ocarina of Time
+- Not more than 15 Objects recommended for Ocarina of Time
 - Maximum of 255 Actors
 - Actors are not loaded if their objects are missing
 - Objects are not automaticially set when changing Actors
