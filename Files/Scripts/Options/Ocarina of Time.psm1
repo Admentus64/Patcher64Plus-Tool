@@ -1853,7 +1853,7 @@ function ByteTextOptions() {
 
     if (IsChecked $Redux.Graphics.GCScheme) {
         if (IsChecked $Redux.Graphics.GCScheme -Lang 1) {
-            SetMessage -ID "001C" -Text "press" -Replace "use"; SetMessage -ID "001D"; SetMessage -ID "0030"; SetMessage -ID "0039" -All; SetMessage -ID "004A"; SetMessage -ID "00A3"; SetMessage -ID "00B1"; SetMessage -ID "00CB"; SetMessage -ID "70A3" # press -> use
+            SetMessage -ID "001C" -Text "press" -Replace "use"; SetMessage -ID "001D"; SetMessage -ID "0030"; SetMessage -ID "0039" -All; SetMessage -ID "004A"; SetMessage -ID "00A3"; SetMessage -ID "00B1"; SetMessage -ID "00CB"; SetMessage -ID "70A3"; SetMessage -ID "103F" # press -> use
             SetMessage -ID "0030" -Text "Press" -Replace "Use"; SetMessage -ID "0031"; SetMessage -ID "0032"; SetMessage -ID "0038"                                                                                                                         # Press -> Use
             SetMessage -ID "007A" -Text "7072657373696E67" -Replace "7573696E67"                                                                                                                                                                            # pressing -> using
 
@@ -1873,6 +1873,7 @@ function ByteTextOptions() {
             SetMessage -ID "103A" -Text ", and<N>used by pressing those buttons."                         -Replace "<W>."
             SetMessage -ID "103A" -Text "<W>, press <Y><C Left><W>,<N><Y><C Down> <W>or <Y><C Right><W>." -Replace "<W>, use <Y><C Left><W>,<N><Y><C Down> <W>or <Y><C Right><W>."  # GC Text Finalization (A little trick to keep the other buttons intact)
             SetMessage -ID "70A3" -Text "Button <W>item."                                                 -Replace "<W>item."
+	    SetMessage -ID "103E" -Text "use<N>the <Y><C Up> Button<W>?"                                  -Replace "use<N><Y><C Up><W>?"
 
             # Pak -> Feature	    
             SetMessage -ID "0068" -Text "If you equip a <C>Rumble Pak<W>, it<N>will" -Replace "It causes your <C>Rumble Feature<W><N>to"
