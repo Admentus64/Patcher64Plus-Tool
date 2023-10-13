@@ -1597,18 +1597,16 @@ function ByteSceneOptions() {
     
     # QUALITY OF LIFE #
 
-    if (IsChecked $Redux.Gameplay.RemoveOwls) {
+    if (IsDefault $Redux.Gameplay.RemoveOwls -Not) {
         PrepareMap -Scene "Hyrule Field"    -Map 0 -Header 0; RemoveObject -Name "Kaepora Gaebora"; RemoveActor -Name "Kaepora Gaebora"; RemoveActor -Name "Kaepora Gaebora"; RemoveActor -Name "Kaepora Gaebora"; RemoveActor -Name "Kaepora Gaebora"; SaveAndPatchLoadedScene
         PrepareMap -Scene "Zora's River"    -Map 0 -Header 0; RemoveObject -Name "Kaepora Gaebora"; RemoveActor -Name "Kaepora Gaebora"; SaveAndPatchLoadedScene
         PrepareMap -Scene "Lost Woods"      -Map 2 -Header 0; RemoveObject -Name "Kaepora Gaebora"; RemoveActor -Name "Kaepora Gaebora"; SaveLoadedMap
         PrepareMap -Scene "Lost Woods"      -Map 8 -Header 0; RemoveObject -Name "Kaepora Gaebora"; RemoveActor -Name "Kaepora Gaebora"; SaveAndPatchLoadedScene
         PrepareMap -Scene "Desert Colossus" -Map 0 -Header 0; RemoveObject -Name "Kaepora Gaebora"; RemoveActor -Name "Kaepora Gaebora"; SaveAndPatchLoadedScene
         PrepareMap -Scene "Hyrule Castle"   -Map 0 -Header 0; RemoveObject -Name "Kaepora Gaebora"; RemoveActor -Name "Kaepora Gaebora"; SaveAndPatchLoadedScene
+        if (IsIndex $Redux.Gameplay.RemoveOwls -Index 3) { PrepareMap -Scene "Lake Hylia"      -Map 0 -Header 0; RemoveObject -Name "Kaepora Gaebora"; RemoveActor -Name "Kaepora Gaebora"; SaveAndPatchLoadedScene }
     }
-
-    if (IsChecked $Redux.Gameplay.RemoveOwlHylia) {
-	PrepareMap -Scene "Lake Hylia"      -Map 0 -Header 0; RemoveObject -Name "Kaepora Gaebora"; RemoveActor -Name "Kaepora Gaebora"; SaveAndPatchLoadedScene
-    }
+    
 
     if (IsChecked $Redux.Gameplay.RemoveDisruptiveText) {
         PrepareMap -Scene "Shadow Temple" -Map 0 -Header 0
@@ -2341,6 +2339,7 @@ function CreateTabMain() {
     
     CreateReduxGroup    -Tag  "Gameplay"             -All                     -Text "Quality of Life" 
     CreateReduxComboBox -Name "FasterBlockPushing"   -All    -Exclude "Gold"  -Text "Faster Block Pushing"   -Info "All blocks are pushed faster" -Items @("Disabled", "Exclude Time-Based Puzzles", "Fully Enabled") -Default 3 -TrueDefault 1                                                  -Credits "GhostlyDark (Randomizer)"
+    CreateReduxComboBox -Name "RemoveOwls"           -All                     -Text "Remove Owls"            -Info "Kaepora Gaebora the owl will no longer interrupt Link with tutorials"       -Items @("Disabled", "Enabled", "Include Lake Hylia") -Default 2 -TrueDefault 1 -Force "Child Quest" -Safe -Credits "Admentus & GoldenMariaNova"
     CreateReduxCheckBox -Name "NoKillFlash"          -All                     -Text "No Kill Flash"          -Info "Disable the flash effect when killing certain enemies such as the Guay or Skullwalltula"                                                                                     -Credits "Chez Cousteau"
     CreateReduxCheckBox -Name "RemoveNaviTimer"      -All                     -Text "Remove Navi Timer"      -Info "Navi will no longer pop up with text messages during gameplay`nDoes not apply to location-triggered messages"                                                                -Credits "Admentus"
     CreateReduxCheckBox -Name "ResumeLastArea"       -All    -Exclude "Dawn"  -Text "Resume From Last Area"  -Info "Resume playing from the area you last saved in"                                                                                             -Warning "Don't save in Grottos" -Credits "Admentus (ROM) & Aegiker (RAM)"
@@ -2354,8 +2353,6 @@ function CreateTabMain() {
     CreateReduxCheckBox -Name "Medallions"           -Base 4 -Exclude "Child" -Text "Require All Medallions" -Info "All six medallions are required for the Rainbow Bridge to appear before Ganon's Castle`nThe vanilla requirements were the Shadow and Spirit Medallions and the Light Arrows" -Credits "Randomizer"
     CreateReduxCheckBox -Name "OpenBombchuShop"      -Base 5                  -Text "Open Bombchu Shop"      -Info "The Bombchu Shop is open right away without the need to defeat King Dodongo"                                                                                                 -Credits "Randomizer"
     CreateReduxCheckBox -Name "RemoveNaviPrompts"    -All                     -Text "Remove Navi Prompts"    -Info "Navi will no longer interrupt you with tutorial text boxes in dungeons"     -Force "Child Quest"                                                                             -Credits "Admentus"
-    CreateReduxCheckBox -Name "RemoveOwls"           -Base 4                  -Text "Remove Owls"            -Info "Kaepora Gaebora the owl will no longer interrupt Link with tutorials"       -Force "Child Quest" -Safe                                                                       -Credits "Admentus"
-    CreateReduxCheckBox -Name "RemoveOwlHylia"       -Base 4                  -Text "Lake Hylia Owl"         -Info "Remove Kaepora Gaebora from Lake Hylia"                                     -Force "Child Quest" -Safe                                                                       -Credits "GoldenMariaNova" -Link $Redux.Gameplay.RemoveOwls
     CreateReduxCheckBox -Name "RemoveDisruptiveText" -Base 4                  -Text "Remove Disruptive Text" -Info "Remove disruptive text from Gerudo Training Ground and early Shadow Temple" -Force "Child Quest" -Safe                                                                       -Credits "Admentus"
     
 
