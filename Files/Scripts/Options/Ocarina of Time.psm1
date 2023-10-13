@@ -1604,6 +1604,9 @@ function ByteSceneOptions() {
         PrepareMap -Scene "Lost Woods"      -Map 8 -Header 0; RemoveObject -Name "Kaepora Gaebora"; RemoveActor -Name "Kaepora Gaebora"; SaveAndPatchLoadedScene
         PrepareMap -Scene "Desert Colossus" -Map 0 -Header 0; RemoveObject -Name "Kaepora Gaebora"; RemoveActor -Name "Kaepora Gaebora"; SaveAndPatchLoadedScene
         PrepareMap -Scene "Hyrule Castle"   -Map 0 -Header 0; RemoveObject -Name "Kaepora Gaebora"; RemoveActor -Name "Kaepora Gaebora"; SaveAndPatchLoadedScene
+    }
+
+    if (IsChecked $Redux.Gameplay.RemoveOwlHylia) {
 	PrepareMap -Scene "Lake Hylia"      -Map 0 -Header 0; RemoveObject -Name "Kaepora Gaebora"; RemoveActor -Name "Kaepora Gaebora"; SaveAndPatchLoadedScene
     }
 
@@ -2352,6 +2355,7 @@ function CreateTabMain() {
     CreateReduxCheckBox -Name "OpenBombchuShop"      -Base 5                  -Text "Open Bombchu Shop"      -Info "The Bombchu Shop is open right away without the need to defeat King Dodongo"                                                                                                 -Credits "Randomizer"
     CreateReduxCheckBox -Name "RemoveNaviPrompts"    -All                     -Text "Remove Navi Prompts"    -Info "Navi will no longer interrupt you with tutorial text boxes in dungeons"     -Force "Child Quest"                                                                             -Credits "Admentus"
     CreateReduxCheckBox -Name "RemoveOwls"           -Base 4                  -Text "Remove Owls"            -Info "Kaepora Gaebora the owl will no longer interrupt Link with tutorials"       -Force "Child Quest" -Safe                                                                       -Credits "Admentus"
+    CreateReduxCheckBox -Name "RemoveOwlHylia"       -Base 4                  -Text "Lake Hylia Owl"         -Info "Remove Kaepora Gaebora from Lake Hylia"                                     -Force "Child Quest" -Safe                                                                       -Credits "GoldenMariaNova" -Link $Redux.Gameplay.RemoveOwls
     CreateReduxCheckBox -Name "RemoveDisruptiveText" -Base 4                  -Text "Remove Disruptive Text" -Info "Remove disruptive text from Gerudo Training Ground and early Shadow Temple" -Force "Child Quest" -Safe                                                                       -Credits "Admentus"
     
 
