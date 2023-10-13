@@ -2231,7 +2231,8 @@ function CreatePresets() {
 
     $QualityOfLife.Add_Click( {
         if ($Redux.Gameplay.FasterBlockPushing -ne $null) { $Redux.Gameplay.FasterBlockPushing.SelectedIndex = 1 }
-        BoxCheck $Redux.Gameplay.RemoveNaviTimer
+        if ($Redux.Gameplay.RemoveOwls -ne $null) { $Redux.Gameplay.RemoveOwls.SelectedIndex = 1 }
+	BoxCheck $Redux.Gameplay.RemoveNaviTimer
         BoxCheck $Redux.Gameplay.ResumeLastArea
         BoxCheck $Redux.Gameplay.InstantClaimCheck
         BoxCheck $Redux.Gameplay.ReturnChild
@@ -2265,8 +2266,6 @@ function CreatePresets() {
         if ($Redux.Text.TypoFixes           -ne $null)   { if ($Redux.Text.TypoFixes.Enabled)              { BoxCheck $Redux.Text.TypoFixes           } }
         if ($Redux.Text.GoldSkulltula       -ne $null)   { if ($Redux.Text.GoldSkulltula.Enabled)          { BoxCheck $Redux.Text.GoldSkulltula       } }
         if ($Redux.Text.EasterEggs          -ne $null)   { if ($Redux.Text.EasterEggs.Enabled)             { BoxCheck $Redux.Text.EasterEggs          } }
-
-        if ($Redux.Gameplay.RemoveOwls      -ne $null)   { if ($Redux.Gameplay.RemoveOwls.Enabled)         { BoxCheck $Redux.Gameplay.RemoveOwls      } }
         if ($Redux.Fixes.Graves             -ne $null)   { if ($Redux.Fixes.Graves.Enabled)                { BoxCheck $Redux.Fixes.Graves             } }
         if ($Redux.Fixes.CorrectTimeDoor    -ne $null)   { if ($Redux.Fixes.CorrectTimeDoor.Enabled)       { BoxCheck $Redux.Fixes.CorrectTimeDoor    } }
         if ($Redux.Fixes.ChildColossusFairy -ne $null)   { if ($Redux.Fixes.ChildColossusFairy.Enabled)    { BoxCheck $Redux.Fixes.ChildColossusFairy } }
@@ -2339,7 +2338,7 @@ function CreateTabMain() {
     
     CreateReduxGroup    -Tag  "Gameplay"             -All                     -Text "Quality of Life" 
     CreateReduxComboBox -Name "FasterBlockPushing"   -All    -Exclude "Gold"  -Text "Faster Block Pushing"   -Info "All blocks are pushed faster" -Items @("Disabled", "Exclude Time-Based Puzzles", "Fully Enabled") -Default 3 -TrueDefault 1                                                  -Credits "GhostlyDark (Randomizer)"
-    CreateReduxComboBox -Name "RemoveOwls"           -All                     -Text "Remove Owls"            -Info "Kaepora Gaebora the owl will no longer interrupt Link with tutorials" -Items @("Disabled", "Enabled", "Include Lake Hylia") -Default 2 -TrueDefault 1                        -Credits "Admentus & GoldenMariaNova"
+    CreateReduxComboBox -Name "RemoveOwls"           -All                     -Text "Remove Owls"            -Info "Kaepora Gaebora the owl will no longer interrupt Link with tutorials" -Items @("Disabled", "Enabled", "Include Lake Hylia") -Default 1 -TrueDefault 1                        -Credits "Admentus & GoldenMariaNova"
     CreateReduxCheckBox -Name "NoKillFlash"          -All                     -Text "No Kill Flash"          -Info "Disable the flash effect when killing certain enemies such as the Guay or Skullwalltula"                                                                                     -Credits "Chez Cousteau"
     CreateReduxCheckBox -Name "RemoveNaviTimer"      -All                     -Text "Remove Navi Timer"      -Info "Navi will no longer pop up with text messages during gameplay`nDoes not apply to location-triggered messages"                                                                -Credits "Admentus"
     CreateReduxCheckBox -Name "ResumeLastArea"       -All    -Exclude "Dawn"  -Text "Resume From Last Area"  -Info "Resume playing from the area you last saved in"                                                                                             -Warning "Don't save in Grottos" -Credits "Admentus (ROM) & Aegiker (RAM)"
