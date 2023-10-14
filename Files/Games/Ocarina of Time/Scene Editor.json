@@ -1159,7 +1159,7 @@
 			"value"	: "980"
 		}, {
 			"name"	: "Blue Rupee",
-			"value"	: [ "9A0", "780" ]
+			"value"	: "9A0"
 		}, {
 			"name"	: "Red Rupee",
 			"value"	: "9C0"
@@ -1209,7 +1209,10 @@
 			"name"	: "Bombs (30)",
 			"value"	: "D00"
 		}, {
-			"name"	: "Deku Seeds",
+			"name"	: "Deku Seeds (5)",
+			"value"	: "780"
+		}, {
+			"name"	: "Deku Seeds (30)",
 			"value"	: "D20"
 		}, {
 			"name"	: "Arrows (5)",

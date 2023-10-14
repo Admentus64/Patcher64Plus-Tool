@@ -1604,7 +1604,7 @@ function ByteSceneOptions() {
         PrepareMap -Scene "Lost Woods"      -Map 8 -Header 0; RemoveObject -Name "Kaepora Gaebora"; RemoveActor -Name "Kaepora Gaebora"; SaveAndPatchLoadedScene
         PrepareMap -Scene "Desert Colossus" -Map 0 -Header 0; RemoveObject -Name "Kaepora Gaebora"; RemoveActor -Name "Kaepora Gaebora"; SaveAndPatchLoadedScene
         PrepareMap -Scene "Hyrule Castle"   -Map 0 -Header 0; RemoveObject -Name "Kaepora Gaebora"; RemoveActor -Name "Kaepora Gaebora"; SaveAndPatchLoadedScene
-        if (IsIndex $Redux.Gameplay.RemoveOwls -Index 3) { PrepareMap -Scene "Lake Hylia"      -Map 0 -Header 0; RemoveObject -Name "Kaepora Gaebora"; RemoveActor -Name "Kaepora Gaebora"; SaveAndPatchLoadedScene }
+        if (IsIndex $Redux.Gameplay.RemoveOwls -Index 3) { PrepareMap -Scene "Lake Hylia" -Map 0 -Header 0; RemoveObject -Name "Kaepora Gaebora"; RemoveActor -Name "Kaepora Gaebora"; SaveAndPatchLoadedScene }
     }
     
 
@@ -1854,32 +1854,32 @@ function ByteTextOptions() {
 
     if (IsChecked $Redux.Graphics.GCScheme) {
         if (IsChecked $Redux.Graphics.GCScheme -Lang 1) {
-            SetMessage -ID "001C" -Text "press" -Replace "use"; SetMessage -ID "001D"; SetMessage -ID "0030"; SetMessage -ID "0039" -All; SetMessage -ID "004A"; SetMessage -ID "00A3"; SetMessage -ID "00B1"; SetMessage -ID "00CB"; SetMessage -ID "70A3"; SetMessage -ID "103F" # press -> use
-            SetMessage -ID "0030" -Text "Press" -Replace "Use"; SetMessage -ID "0031"; SetMessage -ID "0032"; SetMessage -ID "0038"                                                                                                                         # Press -> Use
-            SetMessage -ID "007A" -Text "7072657373696E67" -Replace "7573696E67"                                                                                                                                                                            # pressing -> using
+            SetMessage -ID "001C" -Text "press"            -Replace "use"; SetMessage -ID "001D"; SetMessage -ID "0030"; SetMessage -ID "0039" -All; SetMessage -ID "004A"; SetMessage -ID "00A3"; SetMessage -ID "00B1"; SetMessage -ID "00CB"; SetMessage -ID "70A3"; SetMessage -ID "103F" # press -> use
+            SetMessage -ID "0030" -Text "Press"            -Replace "Use"; SetMessage -ID "0031"; SetMessage -ID "0032"; SetMessage -ID "0038"                                                                                                                                                # Press -> Use
+            SetMessage -ID "007A" -Text "7072657373696E67" -Replace "7573696E67"                                                                                                                                                                                                              # pressing -> using
 
             # N64 -> GC Text phrasing adjustments
-            SetMessage -ID "0031" -Text "As you hold down<N><Y><C Button><W>" -Replace "As you hold <Y><C Button><N><W>"
-            SetMessage -ID "0035" -Text "Press <Y><C Button><W> to use it to <N>attack distant enemies!" -Replace "Then you can attack distant<N>enemies with it by using <Y><C Button><W>!"
-            SetMessage -ID "0047" -Text "you can set it to <Y><C Left><W>, <Y><C Down><W><N>or <Y><C Right><W>, and then press that<N><Y><C Button> <W>to use it."              -Replace "you can set it to and use it<N>with <Y><C Left><W>, <Y><C Down><W><N> or <Y><C Right><W>!"
-            SetMessage -ID "004A" -Text "and the four <Y><C Button> Buttons<W>."                         -Replace "and the four <Y><C Button><W>."
-            SetMessage -ID "0099" -Text "press <Y><C Button> <W>to use it..."                            -Replace "use it with <Y><C Button><W>..."
-            SetMessage -ID "009A" -Text "you can set it to <Y><C Left><W>, <Y><C Down> <W>or <Y><C Right><W>,<N>and then press <Y><C Button> <W>to use it."                     -Replace "you can set it to and use it<N>with <Y><C Left><W>, <Y><C Down><W><N> or <Y><C Right><W>."
-            SetMessage -ID "1025" -Text "You can aim while holding down<N><Y><C Button><W> and shoot by releasing the<N>button! How cool!"                                      -Replace "You can aim while holding <N><Y><C Button><W> and shoot by releasing<N>it! How cool!"
-            SetMessage -ID "1036" -Text "Once you get a <Y><C Button> Button item<W>, <N>go into the <Y>Select Item Subscreen<W> <N>and set it to one of the three<N><Y><C Button> Buttons<W>."     -Replace "Once you get a <Y><C Button> item<W>, <N>go into the <Y>Select Item Subscreen<W> <N>and set it to one of the three<N><Y><C Button><W>."
-            SetMessage -ID "1036" -Text " <W>buttons."                                                   -Replace "<W>."       
+            SetMessage -ID "0031" -Text "As you hold down<N><Y><C Button><W>"                                                                                                                  -Replace "As you hold <Y><C Button><N><W>"
+            SetMessage -ID "0035" -Text "Press <Y><C Button><W> to use it to <N>attack distant enemies!"                                                                                       -Replace "Then you can attack distant<N>enemies with it by using <Y><C Button><W>!"
+            SetMessage -ID "0047" -Text "you can set it to <Y><C Left><W>, <Y><C Down><W><N>or <Y><C Right><W>, and then press that<N><Y><C Button> <W>to use it."                             -Replace "you can set it to and use it<N>with <Y><C Left><W>, <Y><C Down><W><N> or <Y><C Right><W>!"
+            SetMessage -ID "004A" -Text "and the four <Y><C Button> Buttons<W>."                                                                                                               -Replace "and the four <Y><C Button><W>."
+            SetMessage -ID "0099" -Text "press <Y><C Button> <W>to use it..."                                                                                                                  -Replace "use it with <Y><C Button><W>..."
+            SetMessage -ID "009A" -Text "you can set it to <Y><C Left><W>, <Y><C Down> <W>or <Y><C Right><W>,<N>and then press <Y><C Button> <W>to use it."                                    -Replace "you can set it to and use it<N>with <Y><C Left><W>, <Y><C Down><W><N> or <Y><C Right><W>."
+            SetMessage -ID "1025" -Text "You can aim while holding down<N><Y><C Button><W> and shoot by releasing the<N>button! How cool!"                                                     -Replace "You can aim while holding <N><Y><C Button><W> and shoot by releasing<N>it! How cool!"
+            SetMessage -ID "1036" -Text "Once you get a <Y><C Button> Button item<W>, <N>go into the <Y>Select Item Subscreen<W> <N>and set it to one of the three<N><Y><C Button> Buttons<W>."-Replace "Once you get a <Y><C Button> item<W>, <N>go into the <Y>Select Item Subscreen<W> <N>and set it to one of the three<N><Y><C Button><W>."
+            SetMessage -ID "1036" -Text " <W>buttons."                                                                                                                                         -Replace "<W>."       
 	    
             # Buttons -> C Icon Only
             SetMessage -ID "103A" -Text "Button items"                                                    -Replace "items" -All
             SetMessage -ID "103A" -Text ", and<N>used by pressing those buttons."                         -Replace "<W>."
             SetMessage -ID "103A" -Text "<W>, press <Y><C Left><W>,<N><Y><C Down> <W>or <Y><C Right><W>." -Replace "<W>, use <Y><C Left><W>,<N><Y><C Down> <W>or <Y><C Right><W>."  # GC Text Finalization (A little trick to keep the other buttons intact)
             SetMessage -ID "70A3" -Text "Button <W>item."                                                 -Replace "<W>item."
-	    SetMessage -ID "103E" -Text "use<N>the <Y><C Up> Button<W>?"                                  -Replace "use<N><Y><C Up><W>?"
+	        SetMessage -ID "103E" -Text "use<N>the <Y><C Up> Button<W>?"                                  -Replace "use<N><Y><C Up><W>?"
 
             # Pak -> Feature	    
-            SetMessage -ID "0068" -Text "If you equip a <C>Rumble Pak<W>, it<N>will" -Replace "It causes your <C>Rumble Feature<W><N>to"
+            SetMessage -ID "0068" -Text "If you equip a <C>Rumble Pak<W>, it<N>will"              -Replace "It causes your <C>Rumble Feature<W><N>to"
             SetMessage -ID "407C" -Text "You don't have a <R>Rumble <N>Pak<W>! With a Rumble Pak" -Replace "You don't have a <R>Rumble<N>Feature<W>! With it"
-            SetMessage -ID "407D" -Text "Wow! You have a <R>Rumble Pak<W>!" -Replace "Wow! You have a <R>Rumble Feature<W>!"
+            SetMessage -ID "407D" -Text "Wow! You have a <R>Rumble Pak<W>!"                       -Replace "Wow! You have a <R>Rumble Feature<W>!"
         }
 
         SetMessage -ID "0103" -Text "<B><A Button>"  -Replace "<G><A Button>";         SetMessage -ID "0103" -Text "<B>Icon" -Replace "<G>Icon"; SetMessage -ID "0103" -Text "<B>blue" -Replace "<B>green" # Deku Tree - Opening a door
@@ -2230,9 +2230,9 @@ function CreatePresets() {
     $Reset.Add_Click( { ResetGame } )
 
     $QualityOfLife.Add_Click( {
-        if ($Redux.Gameplay.FasterBlockPushing -ne $null) { $Redux.Gameplay.FasterBlockPushing.SelectedIndex = 1 }
-        if ($Redux.Gameplay.RemoveOwls -ne $null) { $Redux.Gameplay.RemoveOwls.SelectedIndex = 1 }
-	BoxCheck $Redux.Gameplay.RemoveNaviTimer
+        if ($Redux.Gameplay.FasterBlockPushing -ne $null)   { $Redux.Gameplay.FasterBlockPushing.SelectedIndex = 1 }
+        if ($Redux.Gameplay.RemoveOwls         -ne $null)   { $Redux.Gameplay.RemoveOwls.SelectedIndex         = 1 }
+	    BoxCheck $Redux.Gameplay.RemoveNaviTimer
         BoxCheck $Redux.Gameplay.ResumeLastArea
         BoxCheck $Redux.Gameplay.InstantClaimCheck
         BoxCheck $Redux.Gameplay.ReturnChild
@@ -2337,8 +2337,8 @@ function CreateTabMain() {
     # QUALITY OF LIFE #
     
     CreateReduxGroup    -Tag  "Gameplay"             -All                     -Text "Quality of Life" 
-    CreateReduxComboBox -Name "FasterBlockPushing"   -All    -Exclude "Gold"  -Text "Faster Block Pushing"   -Info "All blocks are pushed faster" -Items @("Disabled", "Exclude Time-Based Puzzles", "Fully Enabled") -Default 3 -TrueDefault 1                                                  -Credits "GhostlyDark (Randomizer)"
-    CreateReduxComboBox -Name "RemoveOwls"           -All                     -Text "Remove Owls"            -Info "Kaepora Gaebora the owl will no longer interrupt Link with tutorials" -Items @("Disabled", "Enabled", "Include Lake Hylia") -Default 1 -TrueDefault 1                        -Credits "Admentus & GoldenMariaNova"
+    CreateReduxComboBox -Name "FasterBlockPushing"   -All    -Exclude "Gold"  -Text "Faster Block Pushing"   -Info "All blocks are pushed faster" -Items @("Disabled", "Exclude Time-Based Puzzles", "Fully Enabled")                                                  -TrueDefault 1 -Default 3 -Credits "GhostlyDark (Randomizer)"
+    CreateReduxComboBox -Name "RemoveOwls"           -All    -Safe            -Text "Remove Owls"            -Info "Kaepora Gaebora the owl will no longer interrupt Link with tutorials" -Items @("Disabled", "Enabled", "Include Lake Hylia")                                       -Default 1 -Credits "Admentus & GoldenMariaNova"
     CreateReduxCheckBox -Name "NoKillFlash"          -All                     -Text "No Kill Flash"          -Info "Disable the flash effect when killing certain enemies such as the Guay or Skullwalltula"                                                                                     -Credits "Chez Cousteau"
     CreateReduxCheckBox -Name "RemoveNaviTimer"      -All                     -Text "Remove Navi Timer"      -Info "Navi will no longer pop up with text messages during gameplay`nDoes not apply to location-triggered messages"                                                                -Credits "Admentus"
     CreateReduxCheckBox -Name "ResumeLastArea"       -All    -Exclude "Dawn"  -Text "Resume From Last Area"  -Info "Resume playing from the area you last saved in"                                                                                             -Warning "Don't save in Grottos" -Credits "Admentus (ROM) & Aegiker (RAM)"
@@ -2351,8 +2351,8 @@ function CreateTabMain() {
     CreateReduxCheckBox -Name "RutoNeverDisappears"  -Base 4                  -Text "Ruto Never Disappears"  -Info "Ruto never disappears in Jabu Jabu's Belly and will remain in place when leaving the room"                                                                                   -Credits "Randomizer"
     CreateReduxCheckBox -Name "Medallions"           -Base 4 -Exclude "Child" -Text "Require All Medallions" -Info "All six medallions are required for the Rainbow Bridge to appear before Ganon's Castle`nThe vanilla requirements were the Shadow and Spirit Medallions and the Light Arrows" -Credits "Randomizer"
     CreateReduxCheckBox -Name "OpenBombchuShop"      -Base 5                  -Text "Open Bombchu Shop"      -Info "The Bombchu Shop is open right away without the need to defeat King Dodongo"                                                                                                 -Credits "Randomizer"
-    CreateReduxCheckBox -Name "RemoveNaviPrompts"    -All                     -Text "Remove Navi Prompts"    -Info "Navi will no longer interrupt you with tutorial text boxes in dungeons"     -Force "Child Quest"                                                                             -Credits "Admentus"
-    CreateReduxCheckBox -Name "RemoveDisruptiveText" -Base 4                  -Text "Remove Disruptive Text" -Info "Remove disruptive text from Gerudo Training Ground and early Shadow Temple" -Force "Child Quest" -Safe                                                                       -Credits "Admentus"
+    CreateReduxCheckBox -Name "RemoveNaviPrompts"    -All                     -Text "Remove Navi Prompts"    -Info "Navi will no longer interrupt you with tutorial text boxes in dungeons"                                                                                                      -Credits "Admentus"
+    CreateReduxCheckBox -Name "RemoveDisruptiveText" -Base 4 -Safe                 -Text "Remove Disruptive Text" -Info "Remove disruptive text from Gerudo Training Ground and early Shadow Temple"                                                                                             -Credits "Admentus"
     
 
 
