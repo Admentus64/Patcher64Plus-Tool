@@ -1,5 +1,7 @@
 v22.0.6
 - Added new option to remove the Lake Hylia Owl as well
+- Added support for multiple script files for game patches
+- Corrected Scene Editor.json
 
 v22.0.5
 - Added new text changes for the GC Scheme option for both OoT & MM

@@ -103,12 +103,7 @@ function MainFunction([string]$Command, [string]$PatchedFileName) {
     if ( (IsChecked $Patches.Options) -or (IsChecked $Patches.Redux) -or (IsSet $GamePatch.patch) -or (StrLike -str $Command -val "Apply Patch") -or (IsSet $GamePatch.preset) -or (IsSet $GamePatch.function) ) { $PatchInfo.run = $True } else { $PatchInfo.run = $False }
 
     # Refresh game options script
-    if ($Settings.Debug.RefreshScripts -eq $True) {
-        if (Get-Module -Name $GamePatch.script) {
-            Remove-Module -Name $GamePatch.script
-            Import-Module -Name ($Paths.Scripts + "\Options\" + $GamePatch.script + ".psm1") -Global
-        }
-    }
+    RefreshGameScript
 
     # GO!
     if ($Settings.NoCleanup.Checked -ne $True -and $IsWiiVC) { RemovePath $Paths.Temp } # Remove the temp folder first to avoid issues

@@ -274,7 +274,15 @@ function ChangeGameMode() {
 
     if ($GameType -ne $null -and $MainDialog.Visible -and $Settings.Core.PerGameFile -eq $True) { $Settings.Paths[$GameType.mode] = $GamePath.FullName }
 
-    if (IsSet $GamePatch.script) { if (Get-Module -Name $GamePatch.script) { Remove-Module -Name $GamePatch.script } }
+    if (IsSet $GamePatch.script) {
+        if ($GamePatch.script -is [system.Array]) {
+            foreach ($script in $GamePatch.script) {
+                if (Get-Module -Name $script) { Remove-Module -Name $script }
+            }
+        }
+        elseif (Get-Module -Name $GamePatch.script) { Remove-Module -Name $GamePatch.script }
+    }
+
     foreach ($item in $Files.json.games) {
         if ($item.title -eq $CurrentGame.Game.Text) {
             $global:GameType = $item
@@ -358,7 +366,15 @@ function ChangeGameRev() {
     if (IsSet $GameType.version)   { $global:GameRev = $GameType.version[0] }
     else                           { $global:GameRev = $null                }
 
-    if (IsSet $GamePatch.script) { if (Get-Module -Name $GamePatch.script) { Remove-Module -Name $GamePatch.script } }
+    if (IsSet $GamePatch.script) {
+        if ($GamePatch.script -is [system.Array]) {
+            foreach ($script in $GamePatch.script) {
+                if (Get-Module -Name $script) { Remove-Module -Name $script }
+            }
+        }
+        elseif (Get-Module -Name $GamePatch.script) { Remove-Module -Name $GamePatch.script }
+    }
+
     if (IsSet $GamePatch.version) {
         foreach ($version in $GameType.version) {
             if ($version.name -eq $GamePatch.version) {
@@ -392,7 +408,14 @@ function ChangePatch() {
     $Redux.Box              = @{}
     $global:GameSettings    = $global:GameSettingsFile = $null
 
-    if (IsSet $GamePatch.script) { if (Get-Module -Name $GamePatch.script) { Remove-Module -Name $GamePatch.script } }
+    if ($GamePatch.script -ne $null) {
+        if ($GamePatch.script -is [system.Array]) {
+            foreach ($script in $GamePatch.script) {
+                if (Get-Module -Name $script) { Remove-Module -Name $scriptGame }
+            }
+        }
+        elseif (Get-Module -Name $GamePatch.script) { Remove-Module -Name $GamePatch.script }
+    }
 
     foreach ($item in $Files.json.patches) {
         if ($item.title -eq $Patches.Type.Text -and ( ($IsWiiVC -and $item.console -eq "Wii VC") -or (!$IsWiiVC -and $item.console -eq "Native") -or ($item.console -eq "Both") -or !(IsSet $item.console) ) ) {
@@ -401,7 +424,7 @@ function ChangePatch() {
                 GetHeader
                 GetRegion
                 
-                if ($GamePatch.script -or (TestFile $GameFiles.controls) ) {
+                if ( (IsSet $GamePatch.script) -or (TestFile $GameFiles.controls) ) {
                     $global:GameSettingsFile = GetGameSettingsFile
                     $global:GameSettings     = GetSettings $GameSettingsFile
                 }
@@ -423,9 +446,9 @@ function ChangePatch() {
                 }
                 else { # Patches with additional options when available
                     # Disable boxes if needed
-                    EnableElem -Elem @($Patches.Extend,  $Patches.ExtendLabel)  -Active (IsSet $GamePatch.allow_extend)                                          -Hide
-                    EnableElem -Elem @($Patches.Redux,   $Patches.ReduxLabel)   -Active (IsSet $GamePatch.redux)                                                 -Hide
-                    EnableElem -Elem @($Patches.Options, $Patches.OptionsLabel) -Active (TestFile ($Paths.Scripts + "\Options\" + $GamePatch.script + ".psm1") ) -Hide
+                    EnableElem -Elem @($Patches.Extend,  $Patches.ExtendLabel)  -Active (IsSet $GamePatch.allow_extend) -Hide
+                    EnableElem -Elem @($Patches.Redux,   $Patches.ReduxLabel)   -Active (IsSet $GamePatch.redux)        -Hide
+                    EnableElem -Elem @($Patches.Options, $Patches.OptionsLabel) -Active (IsSet $GamePatch.script)       -Hide
                     EnableElem -Elem $Redux.WindowPanel                         -Active $Patches.Options.Checked
                     DisableReduxOptions
                     if (HasCommand "CreateOptionsPreviews") { EnableElem -Elem $Patches.PreviewButton -Active $True -Hide } else { EnableElem -Elem $Patches.PreviewButton -Active $False -Hide }
@@ -458,12 +481,19 @@ function ChangePatch() {
 function SetGameScript() {
 
     if (IsSet $GamePatch.script) {
-        if (Get-Module -Name $GamePatch.script) { Remove-Module -Name $GamePatch.script }
-        $script = $Paths.Scripts + "\Options\" + $GamePatch.script + ".psm1"
-        if (TestFile $script) {
-            Import-Module -Name $script -Global
-            if (HasCommand "CreateOptions") { CreateOptions }
+        if ($GamePatch.script -is [system.Array]) {
+            foreach ($script in $GamePatch.script) {
+                if (Get-Module -Name $script) { Remove-Module -Name $script }
+                $file = $Paths.Scripts + "\Options\" + $script + ".psm1"
+                if (TestFile $file) { Import-Module -Name $file -Global }
+            }
         }
+        else {
+            if (Get-Module -Name $GamePatch.script) { Remove-Module -Name $GamePatch.script }
+            $file = $Paths.Scripts + "\Options\" + $GamePatch.script + ".psm1"
+            if (TestFile $file) { Import-Module -Name $file -Global }
+        }
+        if (HasCommand "CreateOptions") { CreateOptions }
     }
 
 }
@@ -1274,8 +1304,17 @@ function RefreshScripts() {
 function RefreshGameScript() {
     
     if ($Settings.Debug.RefreshScripts -eq $True) {
-        Remove-Module -Name $GamePatch.Script
-        Import-Module -Name ($Paths.Scripts + "\Options\" + $GamePatch.Script + ".psm1") -Global
+        if ($GamePatch.script -is [system.Array]) {
+            foreach ($script in $GamePatch.script) {
+                Remove-Module -Name $script
+                Import-Module -Name ($Paths.Scripts + "\Options\" + $script + ".psm1") -Global
+            }
+
+        }
+        else {
+            Remove-Module -Name $GamePatch.Script
+            Import-Module -Name ($Paths.Scripts + "\Options\" + $GamePatch.Script + ".psm1") -Global
+        }
     }
 
 }
