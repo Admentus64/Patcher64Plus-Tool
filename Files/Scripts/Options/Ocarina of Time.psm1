@@ -1597,14 +1597,16 @@ function ByteSceneOptions() {
     
     # QUALITY OF LIFE #
 
-    if (IsChecked $Redux.Gameplay.RemoveOwls) {
+    if (IsDefault $Redux.Gameplay.RemoveOwls -Not) {
         PrepareMap -Scene "Hyrule Field"    -Map 0 -Header 0; RemoveObject -Name "Kaepora Gaebora"; RemoveActor -Name "Kaepora Gaebora"; RemoveActor -Name "Kaepora Gaebora"; RemoveActor -Name "Kaepora Gaebora"; RemoveActor -Name "Kaepora Gaebora"; SaveAndPatchLoadedScene
         PrepareMap -Scene "Zora's River"    -Map 0 -Header 0; RemoveObject -Name "Kaepora Gaebora"; RemoveActor -Name "Kaepora Gaebora"; SaveAndPatchLoadedScene
         PrepareMap -Scene "Lost Woods"      -Map 2 -Header 0; RemoveObject -Name "Kaepora Gaebora"; RemoveActor -Name "Kaepora Gaebora"; SaveLoadedMap
         PrepareMap -Scene "Lost Woods"      -Map 8 -Header 0; RemoveObject -Name "Kaepora Gaebora"; RemoveActor -Name "Kaepora Gaebora"; SaveAndPatchLoadedScene
         PrepareMap -Scene "Desert Colossus" -Map 0 -Header 0; RemoveObject -Name "Kaepora Gaebora"; RemoveActor -Name "Kaepora Gaebora"; SaveAndPatchLoadedScene
         PrepareMap -Scene "Hyrule Castle"   -Map 0 -Header 0; RemoveObject -Name "Kaepora Gaebora"; RemoveActor -Name "Kaepora Gaebora"; SaveAndPatchLoadedScene
+        if (IsIndex $Redux.Gameplay.RemoveOwls -Index 3) { PrepareMap -Scene "Lake Hylia"      -Map 0 -Header 0; RemoveObject -Name "Kaepora Gaebora"; RemoveActor -Name "Kaepora Gaebora"; SaveAndPatchLoadedScene }
     }
+    
 
     if (IsChecked $Redux.Gameplay.RemoveDisruptiveText) {
         PrepareMap -Scene "Shadow Temple" -Map 0 -Header 0
@@ -1852,7 +1854,7 @@ function ByteTextOptions() {
 
     if (IsChecked $Redux.Graphics.GCScheme) {
         if (IsChecked $Redux.Graphics.GCScheme -Lang 1) {
-            SetMessage -ID "001C" -Text "press" -Replace "use"; SetMessage -ID "001D"; SetMessage -ID "0030"; SetMessage -ID "0039" -All; SetMessage -ID "004A"; SetMessage -ID "00A3"; SetMessage -ID "00B1"; SetMessage -ID "00CB"; SetMessage -ID "70A3" # press -> use
+            SetMessage -ID "001C" -Text "press" -Replace "use"; SetMessage -ID "001D"; SetMessage -ID "0030"; SetMessage -ID "0039" -All; SetMessage -ID "004A"; SetMessage -ID "00A3"; SetMessage -ID "00B1"; SetMessage -ID "00CB"; SetMessage -ID "70A3"; SetMessage -ID "103F" # press -> use
             SetMessage -ID "0030" -Text "Press" -Replace "Use"; SetMessage -ID "0031"; SetMessage -ID "0032"; SetMessage -ID "0038"                                                                                                                         # Press -> Use
             SetMessage -ID "007A" -Text "7072657373696E67" -Replace "7573696E67"                                                                                                                                                                            # pressing -> using
 
@@ -1872,6 +1874,7 @@ function ByteTextOptions() {
             SetMessage -ID "103A" -Text ", and<N>used by pressing those buttons."                         -Replace "<W>."
             SetMessage -ID "103A" -Text "<W>, press <Y><C Left><W>,<N><Y><C Down> <W>or <Y><C Right><W>." -Replace "<W>, use <Y><C Left><W>,<N><Y><C Down> <W>or <Y><C Right><W>."  # GC Text Finalization (A little trick to keep the other buttons intact)
             SetMessage -ID "70A3" -Text "Button <W>item."                                                 -Replace "<W>item."
+	    SetMessage -ID "103E" -Text "use<N>the <Y><C Up> Button<W>?"                                  -Replace "use<N><Y><C Up><W>?"
 
             # Pak -> Feature	    
             SetMessage -ID "0068" -Text "If you equip a <C>Rumble Pak<W>, it<N>will" -Replace "It causes your <C>Rumble Feature<W><N>to"
@@ -2228,7 +2231,8 @@ function CreatePresets() {
 
     $QualityOfLife.Add_Click( {
         if ($Redux.Gameplay.FasterBlockPushing -ne $null) { $Redux.Gameplay.FasterBlockPushing.SelectedIndex = 1 }
-        BoxCheck $Redux.Gameplay.RemoveNaviTimer
+        if ($Redux.Gameplay.RemoveOwls -ne $null) { $Redux.Gameplay.RemoveOwls.SelectedIndex = 1 }
+	BoxCheck $Redux.Gameplay.RemoveNaviTimer
         BoxCheck $Redux.Gameplay.ResumeLastArea
         BoxCheck $Redux.Gameplay.InstantClaimCheck
         BoxCheck $Redux.Gameplay.ReturnChild
@@ -2262,8 +2266,6 @@ function CreatePresets() {
         if ($Redux.Text.TypoFixes           -ne $null)   { if ($Redux.Text.TypoFixes.Enabled)              { BoxCheck $Redux.Text.TypoFixes           } }
         if ($Redux.Text.GoldSkulltula       -ne $null)   { if ($Redux.Text.GoldSkulltula.Enabled)          { BoxCheck $Redux.Text.GoldSkulltula       } }
         if ($Redux.Text.EasterEggs          -ne $null)   { if ($Redux.Text.EasterEggs.Enabled)             { BoxCheck $Redux.Text.EasterEggs          } }
-
-        if ($Redux.Gameplay.RemoveOwls      -ne $null)   { if ($Redux.Gameplay.RemoveOwls.Enabled)         { BoxCheck $Redux.Gameplay.RemoveOwls      } }
         if ($Redux.Fixes.Graves             -ne $null)   { if ($Redux.Fixes.Graves.Enabled)                { BoxCheck $Redux.Fixes.Graves             } }
         if ($Redux.Fixes.CorrectTimeDoor    -ne $null)   { if ($Redux.Fixes.CorrectTimeDoor.Enabled)       { BoxCheck $Redux.Fixes.CorrectTimeDoor    } }
         if ($Redux.Fixes.ChildColossusFairy -ne $null)   { if ($Redux.Fixes.ChildColossusFairy.Enabled)    { BoxCheck $Redux.Fixes.ChildColossusFairy } }
@@ -2336,6 +2338,7 @@ function CreateTabMain() {
     
     CreateReduxGroup    -Tag  "Gameplay"             -All                     -Text "Quality of Life" 
     CreateReduxComboBox -Name "FasterBlockPushing"   -All    -Exclude "Gold"  -Text "Faster Block Pushing"   -Info "All blocks are pushed faster" -Items @("Disabled", "Exclude Time-Based Puzzles", "Fully Enabled") -Default 3 -TrueDefault 1                                                  -Credits "GhostlyDark (Randomizer)"
+    CreateReduxComboBox -Name "RemoveOwls"           -All                     -Text "Remove Owls"            -Info "Kaepora Gaebora the owl will no longer interrupt Link with tutorials" -Items @("Disabled", "Enabled", "Include Lake Hylia") -Default 1 -TrueDefault 1                        -Credits "Admentus & GoldenMariaNova"
     CreateReduxCheckBox -Name "NoKillFlash"          -All                     -Text "No Kill Flash"          -Info "Disable the flash effect when killing certain enemies such as the Guay or Skullwalltula"                                                                                     -Credits "Chez Cousteau"
     CreateReduxCheckBox -Name "RemoveNaviTimer"      -All                     -Text "Remove Navi Timer"      -Info "Navi will no longer pop up with text messages during gameplay`nDoes not apply to location-triggered messages"                                                                -Credits "Admentus"
     CreateReduxCheckBox -Name "ResumeLastArea"       -All    -Exclude "Dawn"  -Text "Resume From Last Area"  -Info "Resume playing from the area you last saved in"                                                                                             -Warning "Don't save in Grottos" -Credits "Admentus (ROM) & Aegiker (RAM)"
@@ -2349,7 +2352,6 @@ function CreateTabMain() {
     CreateReduxCheckBox -Name "Medallions"           -Base 4 -Exclude "Child" -Text "Require All Medallions" -Info "All six medallions are required for the Rainbow Bridge to appear before Ganon's Castle`nThe vanilla requirements were the Shadow and Spirit Medallions and the Light Arrows" -Credits "Randomizer"
     CreateReduxCheckBox -Name "OpenBombchuShop"      -Base 5                  -Text "Open Bombchu Shop"      -Info "The Bombchu Shop is open right away without the need to defeat King Dodongo"                                                                                                 -Credits "Randomizer"
     CreateReduxCheckBox -Name "RemoveNaviPrompts"    -All                     -Text "Remove Navi Prompts"    -Info "Navi will no longer interrupt you with tutorial text boxes in dungeons"     -Force "Child Quest"                                                                             -Credits "Admentus"
-    CreateReduxCheckBox -Name "RemoveOwls"           -Base 4                  -Text "Remove Owls"            -Info "Kaepora Gaebora the owl will no longer interrupt Link with tutorials"       -Force "Child Quest" -Safe                                                                       -Credits "Admentus"
     CreateReduxCheckBox -Name "RemoveDisruptiveText" -Base 4                  -Text "Remove Disruptive Text" -Info "Remove disruptive text from Gerudo Training Ground and early Shadow Temple" -Force "Child Quest" -Safe                                                                       -Credits "Admentus"
     
 
