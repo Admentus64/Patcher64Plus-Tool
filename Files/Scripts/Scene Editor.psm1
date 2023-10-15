@@ -888,7 +888,7 @@ function PrepareMap([string]$Scene, [byte]$Map, [byte]$Header, [switch]$Shift) {
     }
 
     if ($LoadedScene -ne $SceneEditor.LoadedScene) {
-        $SceneEditor.Shift = $Shift
+        $SceneEditor.Shift       = $Shift
         RemovePath ($Paths.Temp + "\scene")
         $SceneEditor.LoadedScene = $LoadedScene
         $SceneEditor.LoadedMap   = $null
@@ -1569,8 +1569,8 @@ function ChangeSpawnPoint([byte]$Index=0, $X, $Y, $Z, $XRot, $YRot, $ZRot, $Para
 
     if ($Param -is [string]) {
         $val = $Param -split '(..)' -ne '' | foreach { [Convert]::ToByte($_, 16) }
-        $SceneEditor.MapArray[$offset+14] = $val[0]
-        $SceneEditor.MapArray[$offset+15] = $val[1]
+        $SceneEditor.SceneArray[$offset+14] = $val[0]
+        $SceneEditor.SceneArray[$offset+15] = $val[1]
     }
 
     WriteToConsole ("Updated spawn point:     " + $index)
@@ -1580,11 +1580,69 @@ function ChangeSpawnPoint([byte]$Index=0, $X, $Y, $Z, $XRot, $YRot, $ZRot, $Para
 
 
 #==============================================================================================================================================================================================
+function ChangeDoor([byte]$Index=0, $X, $Y, $Z, $YRot, $RoomFront, $RoomBack, $CameraFront, $CameraBack, $Param) {
+    
+    if ($Index -ge (GetTransitionActorCount) -or $Index -lt 0) { WriteToConsole ("Door: " + $Index + " does not exist") -Error; return }
+
+    if ($Param -is [string]) {
+        if ($Param.length -ne 4) {
+            WriteToConsole "Parameter replacement value is not a valid 16-bit hexadecimal length" -Error
+            return $False
+        }
+        if ((GetDecimal $Param) -eq -1) {
+            WriteToConsole "Parameter replacement value is not valid hexadecimal value" -Error
+            return $False
+        }
+    }
+
+    $offset = (GetTransitionActorStart) + $Index * 16
+
+    if ($RoomFront   -is [int] -and $RoomFront   -ge 0 -and $RoomFront   -le (GetMapCountIndex) )   { $SceneEditor.SceneArray[$offset+0] = $RoomFront   }
+    if ($RoomBack    -is [int] -and $RoomBack    -ge 0 -and $RoomBack    -le (GetMapCountIndex) )   { $SceneEditor.SceneArray[$offset+2] = $RoomBack    }
+    if ($CameraFront -is [int] -and $CameraFront -ge 0 -and $CameraFront -le 0xFF)                  { $SceneEditor.SceneArray[$offset+1] = $CameraFront }
+    if ($CameraBack  -is [int] -and $CameraBack  -ge 0 -and $CameraBack  -le 0xFF)                  { $SceneEditor.SceneArray[$offset+3] = $CameraBack  }
+
+    if ($X -is [int] -and $X -ge -32768 -and $X -le 32767) {
+        if ($X -lt 0) { $X += 0x10000 }
+        $SceneEditor.SceneArray[$offset+6]  = $X -shr 8
+        $SceneEditor.SceneArray[$offset+7]  = $X % 0x100
+    }
+
+    if ($Y -is [int] -and $Y -ge -32768 -and $Y -le 32767) {
+        if ($Y -lt 0) { $Y += 0x10000 }
+        $SceneEditor.SceneArray[$offset+8]  = $Y -shr 8
+        $SceneEditor.SceneArray[$offset+9]  = $Y % 0x100
+    }
+
+    if ($Z -is [int] -and $Z -ge -32768 -and $Z -le 32767) {
+        if ($Z -lt 0) { $Z += 0x10000 }
+        $SceneEditor.SceneArray[$offset+10] = $Z -shr 8
+        $SceneEditor.SceneArray[$offset+11] = $Z % 0x100
+    }
+
+    if ($YRot -is [int] -and $YRot -ge 0 -and $YRot -le 0xFFFF) {
+        $SceneEditor.SceneArray[$offset+12] = $YRot -shr 8
+        $SceneEditor.SceneArray[$offset+13] = $YRot % 0x100
+    }
+
+    if ($Param -is [string]) {
+        $val = $Param -split '(..)' -ne '' | foreach { [Convert]::ToByte($_, 16) }
+        $SceneEditor.SceneArray[$offset+14] = $val[0]
+        $SceneEditor.SceneArray[$offset+15] = $val[1]
+    }
+
+    WriteToConsole ("Updated door:            " + $index)
+
+}
+
+
+
+#==============================================================================================================================================================================================
 function ChangeEntrance([byte]$Index=0, [byte]$Map=0, [byte]$Spawn=0) {
     
-    if ($Index -ge (GetPositionsCountIndex) -or $Index -lt 0)   { WriteToConsole ("Entrance: "    + $Index + " does not exist") -Error; return }
-    if ($Map   -ge (GetMapCountIndex)       -or $Map   -lt 0)   { WriteToConsole ("Map: "         + $Map   + " does not exist") -Error; return }
-    if ($Spawn -ge (GetPositionsCountIndex) -or $Spawn -lt 0)   { WriteToConsole ("Spawn point: " + $Spawn + " does not exist") -Error; return }
+    if ($Index -ge (GetPositionsCount) -or $Index -lt 0)   { WriteToConsole ("Entrance: "    + $Index + " does not exist") -Error; return }
+    if ($Map   -ge (GetMapCount)       -or $Map   -lt 0)   { WriteToConsole ("Map: "         + $Map   + " does not exist") -Error; return }
+    if ($Spawn -ge (GetPositionsCount) -or $Spawn -lt 0)   { WriteToConsole ("Spawn point: " + $Spawn + " does not exist") -Error; return }
 
     $SceneEditor.SceneArray[(GetEntranceStart) + $Index * 2]     = $Map
     $SceneEditor.SceneArray[(GetEntranceStart) + $Index * 2 + 1] = $Spawn
@@ -1599,7 +1657,7 @@ function ChangeEntrance([byte]$Index=0, [byte]$Map=0, [byte]$Spawn=0) {
 #==============================================================================================================================================================================================
 function ChangeExit([byte]$Index=0, $Exit) {
     
-    if ($Index -ge (GetPositionsCountIndex) -or $Index -lt 0) { WriteToConsole ("Exit: " + $Index + " does not exist") -Error; return }
+    if ($Index -ge (GetPositionsCount) -or $Index -lt 0) { WriteToConsole ("Exit: " + $Index + " does not exist") -Error; return }
 
     if ($Exit -is [string]) {
         if ($Exit.length -ne 4)          { WriteToConsole "Exit replacement value is not a valid 16-bit hexadecimal length" -Error; return }
@@ -2034,6 +2092,7 @@ function GetTransitionActorEnd()          { return $SceneEditor.SceneOffsets[$Sc
 function GetTransitionActorCountIndex()   { return $SceneEditor.SceneOffsets[$SceneEditor.LoadedHeader].ActorCountIndex                                          }
 function GetTransitionActorIndex()        { return $SceneEditor.SceneOffsets[$SceneEditor.LoadedHeader].ActorIndex                                               }
 function GetFoundTransitionActors()       { return $SceneEditor.SceneOffsets[$SceneEditor.LoadedHeader].FoundActors                                              }
+function GetPositionsCount()              { return $SceneEditor.SceneOffsets[$SceneEditor.LoadedHeader].PositionsCount                                           }
 function GetPositionsStart()              { return $SceneEditor.SceneOffsets[$SceneEditor.LoadedHeader].PositionsStart                                           }
 function GetPositionsCountIndex()         { return $SceneEditor.SceneOffsets[$SceneEditor.LoadedHeader].PositionsCountIndex                                      }
 function GetEntranceStart()               { return $SceneEditor.SceneOffsets[$SceneEditor.LoadedHeader].EntranceStart                                            }
@@ -4277,6 +4336,7 @@ Export-ModuleMember -Function PrepareAndSetSceneSettings
 Export-ModuleMember -Function PrepareAndSetMapSettings
 Export-ModuleMember -Function SetSceneSettings
 Export-ModuleMember -Function ChangeSpawnPoint
+Export-ModuleMember -Function ChangeDoor
 Export-ModuleMember -Function ChangeEntrance
 Export-ModuleMember -Function ChangeExit
 Export-ModuleMember -Function SetMapSettings
