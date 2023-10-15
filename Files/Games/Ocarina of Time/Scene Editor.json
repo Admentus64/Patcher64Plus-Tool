@@ -1098,7 +1098,7 @@
 			"name"	: "Silver Scale",
 			"value"	: "6E0"
 		}, {
-			"name"	: "Gold Scale",
+			"name"	: "Golden Scale",
 			"value"	: "700"
 		}, {
 			"name"	: "Bullet Bag",
@@ -4671,7 +4671,7 @@
 			"name"	: "Silver Scale",
 			"value"	: "4"
 		}, {
-			"name"	: "Gold Scale",
+			"name"	: "Golden Scale",
 			"value"	: "5"
 		}, {
 			"name"	: "Small Key",
