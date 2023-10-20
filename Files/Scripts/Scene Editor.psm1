@@ -935,7 +935,8 @@ function PrepareMap([string]$Scene, [byte]$Map, [byte]$Header, [switch]$Shift) {
     }
 
     if ($Map -lt 0 -or $Map -gt $SceneEditor.SceneOffsets[0].MapCount) {
-        $SceneEditor.LoadedScene -eq $null
+        $SceneEditor.LoadedScene = $SceneEditor.LoadedMap = $SceneEditor.LoadedHeader = $null
+        WriteToConsole ("Could not load map index " + $Map + " for scene: " + $Scene) -Error
         return
     }
 
@@ -952,7 +953,7 @@ function PrepareMap([string]$Scene, [byte]$Map, [byte]$Header, [switch]$Shift) {
 
 
 #==============================================================================================================================================================================================
-function SaveLoadedMap() {
+function SaveLoadedMap([switch]$Silent) {
     
     if ($SceneEditor.LoadedScene -eq $null) { return }
     
@@ -963,9 +964,22 @@ function SaveLoadedMap() {
     [System.Collections.ArrayList]$dmaArray = [System.IO.File]::ReadAllBytes($dma)
     [System.IO.File]::WriteAllBytes($map, $SceneEditor.MapArray)
 
+    $oriEnd  = [System.BitConverter]::GetBytes($dmaArray[4] * 0x1000000 + $dmaArray[5] * 0x10000 + $dmaArray[6] * 0x100 + $dmaArray[7])
+    $newEnd  = [System.BitConverter]::GetBytes($SceneEditor.SceneArray.count + $dmaArray[0] * 0x1000000 + $dmaArray[1] * 0x10000 + $dmaArray[2] * 0x100 + $dmaArray[3])
+
+    if (-not !((Compare-Object $oriEnd $newEnd -SyncWindow 0))) {
+        $dmaArray[4] = $newEnd[3]
+        $dmaArray[5] = $newEnd[2]
+        $dmaArray[6] = $newEnd[1]
+        $dmaArray[7] = $newEnd[0]
+    }
+
     for ($i=0; $i-lt $SceneEditor.LoadedScene.length; $i++) {
-        if ($SceneEditor.Shift)   { $mapStart = $dmaArray[ $i      * 16 + 4] * 0x1000000 + $dmaArray[ $i      * 16 + 4 + 1] * 0x10000 + $dmaArray[ $i      * 16 + 4 + 2] * 0x100 + $dmaArray[ $i      * 16 + 4 + 3] }
-        else                      { $mapStart = $dmaArray[($i + 1) * 16    ] * 0x1000000 + $dmaArray[($i + 1) * 16     + 1] * 0x10000 + $dmaArray[($i + 1) * 16     + 2] * 0x100 + $dmaArray[($i + 1) * 16     + 3] }
+        if ($SceneEditor.Shift)   {
+            if ($i -eq 0)   { $mapStart = $dmaArray[ $i * 16]     * 0x1000000 + $dmaArray[ $i * 16 + 1]     * 0x10000 + $dmaArray[ $i * 16 + 2]     * 0x100 + $dmaArray[ $i * 16 + 3] + $SceneEditor.SceneArray.count }
+            else            { $mapStart = $dmaArray[ $i * 16 + 4] * 0x1000000 + $dmaArray[ $i * 16 + 4 + 1] * 0x10000 + $dmaArray[ $i * 16 + 4 + 2] * 0x100 + $dmaArray[ $i * 16 + 4 + 3]                             }
+        }
+        else { $mapStart = $dmaArray[($i + 1) * 16] * 0x1000000 + $dmaArray[($i + 1) * 16 + 1] * 0x10000 + $dmaArray[($i + 1) * 16 + 2] * 0x100 + $dmaArray[($i + 1) * 16 + 3] }
         $mapEnd = $mapStart + (Get-Item ($Paths.Temp + "\scene\room_" + $i + ".zmap")).length
 
         $mapStart = (Get32Bit $mapStart) -split '(..)' -ne '' | foreach { [Convert]::ToByte($_, 16) }
@@ -999,44 +1013,109 @@ function SaveLoadedMap() {
 
     [System.IO.File]::WriteAllBytes($file, $SceneEditor.SceneArray)
     [System.IO.File]::WriteAllBytes($dma,  $dmaArray)
-    WriteToConsole ("Saved scene & map:       " + $SceneEditor.LoadedScene.name + " " + $SceneEditor.LoadedMap)
+    if (!$Silent) { WriteToConsole ("Saved scene & map:       " + $SceneEditor.LoadedScene.name + " " + $SceneEditor.LoadedMap) }
 
 }
 
 
 
 #==============================================================================================================================================================================================
-function PatchLoadedScene() {
+function PatchLoadedScene([switch]$Silent) {
     
     if ($SceneEditor.LoadedScene -eq $null) { return }
     if (!(TestFile -Path ($Paths.Temp + "\scene") -Container)) { return }
     
     $length = $SceneEditor.LoadedScene.length
     $offset = $SceneEditor.LoadedScene.dma
-    $start  = Get24Bit ( (GetDecimal $offset) )
-    $end    = Get24Bit ( (GetDecimal $start) + ($length * 16) + 16)
-
+    $start  =  GetDecimal $offset
+    $end    = (GetDecimal $start) + ($length * 16) + 16
     $dmaArray = [System.IO.File]::ReadAllBytes(($Paths.Temp + "\scene\table.dma"))
-    for ($i=0; $i -lt $dmaArray.Count; $i++) { $ByteArrayGame[(GetDecimal $start) + $i] = $dmaArray[$i] }
+    
+    ShiftCutscenesTable
+    for ($i=0; $i -lt $dmaArray.Count; $i++) { $ByteArrayGame[$start + $i] = $dmaArray[$i] }
 
-    $table = $ByteArrayGame[(GetDecimal $start)..(GetDecimal $end)]
+    $table = $ByteArrayGame[$start..$end]
     for ($i=0; $i -le $length; $i++) {
         $offset = (Get8Bit $table[($i*16)+0]) + (Get8Bit $table[($i*16)+1]) + (Get8Bit $table[($i*16)+2]) + (Get8Bit $table[($i*16)+3])
         if ($i -eq 0)   { PatchBytes -Offset $offset -Patch ("scene\scene.zscene")             -Temp -Silent }
         else            { PatchBytes -Offset $offset -Patch ("scene\room_" + ($i-1) + ".zmap") -Temp -Silent }
     }
 
-    WriteToConsole ("Patched scene:           " + $SceneEditor.LoadedScene.name)
+    if (!$Silent) { WriteToConsole ("Patched scene:           " + $SceneEditor.LoadedScene.name) }
 
 }
 
 
 
 #==============================================================================================================================================================================================
-function SaveAndPatchLoadedScene() {
+function ShiftCutscenesTable() {
     
-    SaveLoadedMap
-    PatchLoadedScene
+    if ($SceneEditor.SceneShift -eq 0) { return }
+
+    switch ($SceneEditor.LoadedScene.Name) {
+        "Hyrule Field" {
+            ChangeBytes -Offset (0xB65C64 + 7 + 8 * 0)  -Values $SceneEditor.SceneShift -Add -Silent
+            ChangeBytes -Offset (0xB65C64 + 7 + 8 * 8)  -Values $SceneEditor.SceneShift -Add -Silent
+            ChangeBytes -Offset (0xB65C64 + 7 + 8 * 9)  -Values $SceneEditor.SceneShift -Add -Silent
+            ChangeBytes -Offset (0xB65C64 + 7 + 8 * 10) -Values $SceneEditor.SceneShift -Add -Silent
+            ChangeBytes -Offset (0xB65C64 + 7 + 8 * 11) -Values $SceneEditor.SceneShift -Add -Silent
+            ChangeBytes -Offset (0xB65C64 + 7 + 8 * 12) -Values $SceneEditor.SceneShift -Add -Silent
+            break
+        }
+        "Death Mountain Crater" {
+            ChangeBytes -Offset (0xB65C64 + 7 + 8 * 21) -Values $SceneEditor.SceneShift -Add -Silent
+            ChangeBytes -Offset (0xB65C64 + 7 + 8 * 32) -Values $SceneEditor.SceneShift -Add -Silent
+            break
+        }
+        "Gerudo's Fortress" {
+            ChangeBytes -Offset (0xB65C64 + 7 + 8 * 15) -Values $SceneEditor.SceneShift -Add -Silent
+            ChangeBytes -Offset (0xB65C64 + 7 + 8 * 31) -Values $SceneEditor.SceneShift -Add -Silent
+            break
+        }
+        "Inside Ganon's Castle" {
+            ChangeBytes -Offset (0xB65C64 + 7 + 8 * 24) -Values $SceneEditor.SceneShift -Add -Silent
+            ChangeBytes -Offset (0xB65C64 + 7 + 8 * 25) -Values $SceneEditor.SceneShift -Add -Silent
+            ChangeBytes -Offset (0xB65C64 + 7 + 8 * 26) -Values $SceneEditor.SceneShift -Add -Silent
+            ChangeBytes -Offset (0xB65C64 + 7 + 8 * 27) -Values $SceneEditor.SceneShift -Add -Silent
+            ChangeBytes -Offset (0xB65C64 + 7 + 8 * 28) -Values $SceneEditor.SceneShift -Add -Silent
+            ChangeBytes -Offset (0xB65C64 + 7 + 8 * 29) -Values $SceneEditor.SceneShift -Add -Silent
+            break
+        }
+        "Death Mountain Trail"                    { ChangeBytes -Offset (0xB65C64 + 7 + 8 * 1)  -Values $SceneEditor.SceneShift -Add -Silent; break }
+        "Kakariko Village"                        { ChangeBytes -Offset (0xB65C64 + 7 + 8 * 2)  -Values $SceneEditor.SceneShift -Add -Silent; break }
+        "Zora's Domain"                           { ChangeBytes -Offset (0xB65C64 + 7 + 8 * 3)  -Values $SceneEditor.SceneShift -Add -Silent; break }
+        "Hyrule Castle"                           { ChangeBytes -Offset (0xB65C64 + 7 + 8 * 4)  -Values $SceneEditor.SceneShift -Add -Silent; break }
+        "Goron City"                              { ChangeBytes -Offset (0xB65C64 + 7 + 8 * 5)  -Values $SceneEditor.SceneShift -Add -Silent; break }
+        "Temple of Time"                          { ChangeBytes -Offset (0xB65C64 + 7 + 8 * 6)  -Values $SceneEditor.SceneShift -Add -Silent; break }
+        "Inside the Deku Tree"                    { ChangeBytes -Offset (0xB65C64 + 7 + 8 * 7)  -Values $SceneEditor.SceneShift -Add -Silent; break }
+        "Lake Hylia"                              { ChangeBytes -Offset (0xB65C64 + 7 + 8 * 13) -Values $SceneEditor.SceneShift -Add -Silent; break }
+        "Gerudo Valley"                           { ChangeBytes -Offset (0xB65C64 + 7 + 8 * 14) -Values $SceneEditor.SceneShift -Add -Silent; break }
+        "Lon Lon Ranch"                           { ChangeBytes -Offset (0xB65C64 + 7 + 8 * 16) -Values $SceneEditor.SceneShift -Add -Silent; break }
+        "Inside Jabu Jabu's Belly"                { ChangeBytes -Offset (0xB65C64 + 7 + 8 * 17) -Values $SceneEditor.SceneShift -Add -Silent; break }
+        "Graveyard"                               { ChangeBytes -Offset (0xB65C64 + 7 + 8 * 18) -Values $SceneEditor.SceneShift -Add -Silent; break }
+        "Zora's Fountain"                         { ChangeBytes -Offset (0xB65C64 + 7 + 8 * 19) -Values $SceneEditor.SceneShift -Add -Silent; break }
+        "Desert Colossus"                         { ChangeBytes -Offset (0xB65C64 + 7 + 8 * 20) -Values $SceneEditor.SceneShift -Add -Silent; break }
+        "Ganon's Castle Exterior"                 { ChangeBytes -Offset (0xB65C64 + 7 + 8 * 22) -Values $SceneEditor.SceneShift -Add -Silent; break }
+        "Royal Family Tomb"                       { ChangeBytes -Offset (0xB65C64 + 7 + 8 * 23) -Values $SceneEditor.SceneShift -Add -Silent; break }
+        "Twinrova's Lair & Iron Knuckle's Lair"   { ChangeBytes -Offset (0xB65C64 + 7 + 8 * 30) -Values $SceneEditor.SceneShift -Add -Silent; break }
+        "Kokiri's Forest"                         { ChangeBytes -Offset (0xB65C64 + 7 + 8 * 33) -Values $SceneEditor.SceneShift -Add -Silent; break }
+    }
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function SaveAndPatchLoadedScene([switch]$Silent) {
+    
+    if ($Silent) { 
+        SaveLoadedMap    -Silent
+        PatchLoadedScene -Silent
+    }
+    else {
+        SaveLoadedMap
+        PatchLoadedScene
+    }
 
 }
 
@@ -1762,7 +1841,7 @@ function SetMapSettings($Time, $TimeSpeed, $WindWest, $WindSouth, $WindVertical,
 function RunLoadScene([string]$File) {
     
     # Load scene file #
-    $headerSize = 104
+    $headerSize = 0x70
     [System.Collections.ArrayList]$SceneEditor.SceneArray = [System.IO.File]::ReadAllBytes($File)
     $SceneEditor.SceneOffsets                   = @()
     $SceneEditor.SceneOffsets                  += @{}
@@ -1771,10 +1850,12 @@ function RunLoadScene([string]$File) {
     $SceneEditor.SceneOffsets[0].FoundActors    = $False
     $SceneEditor.SceneOffsets[0].FoundExits     = $False
     $SceneEditor.SceneOffsets[0].FoundCutscenes = $False
+    $SceneEditor.SceneShift                     = 0
 
     for ($i=0; $i -lt $headerSize; $i+=8) {
         if ($SceneEditor.SceneArray[$i] -eq 0x14) {
             $SceneEditor.SceneOffsets[0].HeaderEnd           = $i
+            $SceneEditor.SceneOffsets[0].EntranceCount       = $SceneEditor.SceneOffsets[0].PositionCount
             break
         }
         elseif ($SceneEditor.SceneArray[$i] -eq 0x0) { # Start Positions List
@@ -1794,9 +1875,7 @@ function RunLoadScene([string]$File) {
             $SceneEditor.SceneOffsets[0].MapIndex            = $i + 5
         }
         elseif ($SceneEditor.SceneArray[$i] -eq 0x6) { # Entrance List
-            $SceneEditor.SceneOffsets[0].EntranceCount       = $SceneEditor.SceneArray[$i + 1]
             $SceneEditor.SceneOffsets[0].EntranceStart       = $SceneEditor.SceneArray[$i + 5] * 65536 + $SceneEditor.SceneArray[$i + 6] * 256 + $SceneEditor.SceneArray[$i + 7]
-            $SceneEditor.SceneOffsets[0].EntranceCountIndex  = $i + 1
             $SceneEditor.SceneOffsets[0].EntranceIndex       = $i + 5
         }
         elseif ($SceneEditor.SceneArray[$i] -eq 0x7) { # Special Objects
@@ -1863,6 +1942,7 @@ function RunLoadScene([string]$File) {
             for ($j=$SceneEditor.SceneOffsets[$SceneEditor.SceneOffsets.Count-1].Header; $j -lt ($SceneEditor.SceneOffsets[$SceneEditor.SceneOffsets.Count-1].Header + $headerSize); $j+=8) {
                 if ($SceneEditor.SceneArray[$j] -eq 0x14) {
                     $SceneEditor.SceneOffsets[$SceneEditor.SceneOffsets.Count-1].HeaderEnd           = $j
+                    $SceneEditor.SceneOffsets[$SceneEditor.SceneOffsets.Count-1].EntranceCount       = $SceneEditor.SceneOffsets[$SceneEditor.SceneOffsets.Count-1].PositionCount
                     break
                 }
                 elseif ($SceneEditor.SceneArray[$j] -eq 0x0) { # Start Positions List
@@ -1882,9 +1962,7 @@ function RunLoadScene([string]$File) {
                     $SceneEditor.SceneOffsets[$SceneEditor.SceneOffsets.Count-1].MapIndex            = $j + 5
                 }
                 elseif ($SceneEditor.SceneArray[$j] -eq 0x6) { # Entrance List
-                    $SceneEditor.SceneOffsets[$SceneEditor.SceneOffsets.Count-1].EntranceCount       = $SceneEditor.SceneArray[$j + 1]
                     $SceneEditor.SceneOffsets[$SceneEditor.SceneOffsets.Count-1].EntranceStart       = $SceneEditor.SceneArray[$j + 5] * 65536 + $SceneEditor.SceneArray[$j + 6] * 256 + $SceneEditor.SceneArray[$j + 7]
-                    $SceneEditor.SceneOffsets[$SceneEditor.SceneOffsets.Count-1].EntranceCountIndex  = $j + 1
                     $SceneEditor.SceneOffsets[$SceneEditor.SceneOffsets.Count-1].EntranceIndex       = $j + 5
                 }
                 elseif ($SceneEditor.SceneArray[$j] -eq 0x7) { # Special Objects
@@ -2129,8 +2207,9 @@ function GetMapStart()                    { return $SceneEditor.SceneOffsets[$Sc
 function GetMapEnd()                      { return $SceneEditor.SceneOffsets[$SceneEditor.LoadedHeader].MapStart       + ($SceneEditor.SceneOffsets[$SceneEditor.LoadedHeader].MapCount      * 8)   }
 function GetMapCountIndex()               { return $SceneEditor.SceneOffsets[$SceneEditor.LoadedHeader].MapCountIndex                                                                               }
 function GetMapIndex()                    { return $SceneEditor.SceneOffsets[$SceneEditor.LoadedHeader].MapIndex                                                                                    }
+function GetEntranceCount()               { return $SceneEditor.SceneOffsets[$SceneEditor.LoadedHeader].EntranceCount                                                                               }
 function GetEntranceStart()               { return $SceneEditor.SceneOffsets[$SceneEditor.LoadedHeader].EntranceStart                                                                               }
-function GetEntranceEnd()                 { return $SceneEditor.SceneOffsets[$SceneEditor.LoadedHeader].EntranceStart  + ($SceneEditor.SceneOffsets[$SceneEditor.LoadedHeader].MapCount      * 8)   }
+function GetEntranceEnd()                 { return $SceneEditor.SceneOffsets[$SceneEditor.LoadedHeader].EntranceStart  + ($SceneEditor.SceneOffsets[$SceneEditor.LoadedHeader].PositionCount * 2)   }
 function GetEntranceIndex()               { return $SceneEditor.SceneOffsets[$SceneEditor.LoadedHeader].EntranceIndex                                                                               }
 function GetTransitionActorCount()        { return $SceneEditor.SceneOffsets[$SceneEditor.LoadedHeader].ActorCount                                                                                  }
 function GetTransitionActorStart()        { return $SceneEditor.SceneOffsets[$SceneEditor.LoadedHeader].ActorStart                                                                                  }
@@ -2567,20 +2646,20 @@ function InsertSpawnPoint([int]$X=0, [int]$Y=0, [int]$Z=0, [uint16]$XRot=0, [uin
     $SceneEditor.SceneArray[(GetPositionCountIndex)]++
 
     $SceneEditor.SceneOffsets[$SceneEditor.LoadedHeader].MapStart          += 16
-    ShiftScene -Offset (GetMapIndex)           -Add 16
+    ShiftScene -Offset (GetMapIndex)                 -Add 16
 
     $SceneEditor.SceneOffsets[$SceneEditor.LoadedHeader].EntranceStart     += 16
-    ShiftScene -Offset (GetEntranceIndex)      -Add 16
+    ShiftScene -Offset (GetEntranceIndex)            -Add 16
 
     $SceneEditor.SceneOffsets[$SceneEditor.LoadedHeader].LightningStart    += 16
-    ShiftScene -Offset (GetLightningIndex)     -Add 16
+    ShiftScene -Offset (GetLightningIndex)           -Add 16
 
     if (GetFoundPaths) {
         $SceneEditor.SceneOffsets[$SceneEditor.LoadedHeader].PathStart     += 16
-        ShiftScene -Offset   (GetPathIndex)      -Add 16
+        ShiftScene -Offset (GetPathIndex)            -Add 16
         $path = GetPathStart
         do {
-            ShiftScene -Offset ($path + 5) -Add 16
+            ShiftScene -Offset ($path + 5)           -Add 16
             if ($SceneEditor.SceneArray[$path+8] -gt 1 -and $SceneEditor.SceneArray[$path+8] -lt 0x80 -and $SceneEditor.SceneArray[$path+9] -eq 0 -and $SceneEditor.SceneArray[$path+10] -eq 0 -and $SceneEditor.SceneArray[$path+11] -eq 0 -and $SceneEditor.SceneArray[$path+12] -eq 2) {
                 $path += 8
             }
@@ -2590,29 +2669,22 @@ function InsertSpawnPoint([int]$X=0, [int]$Y=0, [int]$Z=0, [uint16]$XRot=0, [uin
 
     if (GetFoundTransitionActors) {
         $SceneEditor.SceneOffsets[$SceneEditor.LoadedHeader].ActorStart    += 16
-        ShiftScene -Offset (GetTransitionActorIndex)     -Add 16
+        ShiftScene -Offset (GetTransitionActorIndex) -Add 16
     }
 
     if (GetFoundExits) {
         $SceneEditor.SceneOffsets[$SceneEditor.LoadedHeader].ExitStart     += 16
-        ShiftScene -Offset (GetExitIndex)      -Add 16
+        ShiftScene -Offset (GetExitIndex)            -Add 16
     }
 
     if (GetFoundCutscenes) {
-        if ( (GetCutsceneStart) -gt (GetSceneHeaderEnd) ) {
-            $SceneEditor.SceneOffsets[$SceneEditor.LoadedHeader].CutsceneStart += 16
-            ShiftScene -Offset (GetCutsceneIndex)  -Add 16
-        }
+        $SceneEditor.SceneOffsets[$SceneEditor.LoadedHeader].CutsceneStart += 16
+        ShiftScene -Offset (GetCutsceneIndex)        -Add 16
     }
 
     if ($SceneEditor.LoadedHeader -eq 0) {
         $SceneEditor.SceneOffsets[0].CollisionStart                        += 16
-        ShiftScene -Offset (GetCollisionIndex) -Add 16
-
-        $start = $SceneEditor.SceneOffsets[$SceneEditor.LoadedHeader].LightningStart + ($SceneEditor.SceneOffsets[$SceneEditor.LoadedHeader].LightningCount * 22)
-        for ($i=$start; $i -lt $start + 0x500; $i+=8) {
-            if ($SceneEditor.SceneArray[$i-1] -eq 3 -and $SceneEditor.SceneArray[$i] -eq 2) { ShiftScene -Offset ($i+1) -Add 16 }
-        }
+        ShiftScene -Offset (GetCollisionIndex)       -Add 16
     }
 
     if (IsSet $SceneEditor.SceneOffsets[0].AlternateStart) {
@@ -2623,35 +2695,112 @@ function InsertSpawnPoint([int]$X=0, [int]$Y=0, [int]$Z=0, [uint16]$XRot=0, [uin
         }
     }
 
+    ShiftSceneData
+
+    WriteToConsole ("Inserted spawn point:    " + (GetPositionCount) )
+    return $True
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function InsertEntrance([byte]$Map=0, [int]$Spawn=0) {
+    
+    if ( (GetPositionCount) -ge 255)                   { WriteToConsole "Reached the max entrances for this header"                       -Error; return $False }
+    if ( (GetEntranceCount) -ge (GetPositionCount) )   { WriteToConsole "Not enough spawn points for this header to add another entrance" -Error; return $False }
+
+    if ($SceneEditor.SceneArray[(GetPositionEnd) + 2] -eq 0 -and $SceneEditor.SceneArray[(GetPositionEnd) + 3] -eq 0) {
+        $SceneEditor.SceneArray[(GetPositionEnd) + 2] = $Spawn
+        $SceneEditor.SceneArray[(GetPositionEnd) + 3] = $Map
+        $SceneEditor.SceneOffsets[$SceneEditor.LoadedHeader].EntranceCount++
+    }
+    else {
+        $values = @($Spawn, $Map, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+        $SceneEditor.SceneArray.InsertRange((GetEntranceEnd)-2, $values)
+        $SceneEditor.SceneOffsets[$SceneEditor.LoadedHeader].EntranceCount++
+        
+        $SceneEditor.SceneOffsets[$SceneEditor.LoadedHeader].LightningStart    += 16
+        ShiftScene -Offset (GetLightningIndex)      -Add 16
+
+        if (GetFoundPaths) {
+            $SceneEditor.SceneOffsets[$SceneEditor.LoadedHeader].PathStart     += 16
+            ShiftScene -Offset (GetPathIndex)       -Add 16
+            $path = GetPathStart
+            do {
+                ShiftScene -Offset ($path + 5)     -Add 16
+                if ($SceneEditor.SceneArray[$path+8] -gt 1 -and $SceneEditor.SceneArray[$path+8] -lt 0x80 -and $SceneEditor.SceneArray[$path+9] -eq 0 -and $SceneEditor.SceneArray[$path+10] -eq 0 -and $SceneEditor.SceneArray[$path+11] -eq 0 -and $SceneEditor.SceneArray[$path+12] -eq 2) {
+                    $path += 8
+                }
+                else { $path += $SceneEditor.SceneArray[$path] * 6 }
+            } while ($SceneEditor.SceneArray[$path] -gt 1 -and $SceneEditor.SceneArray[$path] -lt 0x80 -and $SceneEditor.SceneArray[$path+1] -eq 0 -and $SceneEditor.SceneArray[$path+2] -eq 0 -and $SceneEditor.SceneArray[$path+3] -eq 0)
+        }
+
+        if (GetFoundExits) {
+            $SceneEditor.SceneOffsets[$SceneEditor.LoadedHeader].ExitStart     += 16
+            ShiftScene -Offset (GetExitIndex)      -Add 16
+        }
+
+        if (GetFoundCutscenes) {
+            $SceneEditor.SceneOffsets[$SceneEditor.LoadedHeader].CutsceneStart += 16
+            ShiftScene -Offset (GetCutsceneIndex)  -Add 16
+        }
+
+        if ($SceneEditor.LoadedHeader -eq 0) {
+            $SceneEditor.SceneOffsets[0].CollisionStart                        += 16
+            ShiftScene -Offset (GetCollisionIndex) -Add 16
+        }
+
+        if (IsSet $SceneEditor.SceneOffsets[0].AlternateStart) {
+            for ($i=$SceneEditor.SceneOffsets[0].AlternateStart; $i-lt $SceneEditor.SceneOffsets[0].PositionStart; $i+= 4) {
+                if ($SceneEditor.SceneArray[$i] -ne 2) { continue }
+                $value = $SceneEditor.SceneArray[$i+1] * 65536 + $SceneEditor.SceneArray[$i+2] * 256 + $SceneEditor.SceneArray[$i+3]
+                if ($value -gt (GetSceneHeader)) { ShiftScene -Offset ($i+1) -Add 16 }
+            }
+        }
+
+        ShiftSceneData
+    }
+
+    WriteToConsole ("Inserted entrance:       " + (GetEntranceCount) )
+    return $True
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function ShiftSceneData() {
+    
     for ($i=1; $i -lt $SceneEditor.SceneOffsets.Header.Count; $i++) {
         if ($SceneEditor.SceneOffsets[$i].Header -le (GetSceneHeader)) { continue }
 
-        $SceneEditor.SceneOffsets[$i].Header    += 16
-        $SceneEditor.SceneOffsets[$i].HeaderEnd += 16
-        
-        $SceneEditor.SceneOffsets[$i].PositionStart       += 16
-        $SceneEditor.SceneOffsets[$i].PositionCountIndex  += 16
-        $SceneEditor.SceneOffsets[$i].PositionIndex       += 16
-        ShiftScene -Offset $SceneEditor.SceneOffsets[$i].PositionIndex      -Add 16
+        $SceneEditor.SceneOffsets[$i].Header                += 16
+        $SceneEditor.SceneOffsets[$i].HeaderEnd             += 16
 
-        $SceneEditor.SceneOffsets[$i].MapStart            += 16
-        $SceneEditor.SceneOffsets[$i].MapCountIndex       += 16
-        $SceneEditor.SceneOffsets[$i].MapIndex            += 16
-        ShiftScene -Offset $SceneEditor.SceneOffsets[$i].MapIndex           -Add 16
+        $SceneEditor.SceneOffsets[$i].PositionStart         += 16
+        $SceneEditor.SceneOffsets[$i].PositionCountIndex    += 16
+        $SceneEditor.SceneOffsets[$i].PositionIndex         += 16
+        ShiftScene -Offset $SceneEditor.SceneOffsets[$i].PositionIndex         -Add 16
 
-        $SceneEditor.SceneOffsets[$i].EntranceStart       += 16
-        $SceneEditor.SceneOffsets[$i].EntranceIndex       += 16
-        ShiftScene -Offset $SceneEditor.SceneOffsets[$i].EntranceIndex      -Add 16
+        $SceneEditor.SceneOffsets[$i].MapStart              += 16
+        $SceneEditor.SceneOffsets[$i].MapCountIndex         += 16
+        $SceneEditor.SceneOffsets[$i].MapIndex              += 16
+        ShiftScene -Offset $SceneEditor.SceneOffsets[$i].MapIndex              -Add 16
 
-        $SceneEditor.SceneOffsets[$i].LightningStart      += 16
-        $SceneEditor.SceneOffsets[$i].LightningCountIndex += 16
-        $SceneEditor.SceneOffsets[$i].LightningIndex      += 16
-        ShiftScene -Offset $SceneEditor.SceneOffsets[$i].LightningIndex     -Add 16
+        $SceneEditor.SceneOffsets[$i].EntranceStart         += 16
+        $SceneEditor.SceneOffsets[$i].EntranceIndex         += 16
+        ShiftScene -Offset $SceneEditor.SceneOffsets[$i].EntranceIndex         -Add 16
+
+        $SceneEditor.SceneOffsets[$i].LightningStart        += 16
+        $SceneEditor.SceneOffsets[$i].LightningCountIndex   += 16
+        $SceneEditor.SceneOffsets[$i].LightningIndex        += 16
+        ShiftScene -Offset $SceneEditor.SceneOffsets[$i].LightningIndex        -Add 16
 
         if ($SceneEditor.SceneOffsets[$i].FoundPaths) {
-            $SceneEditor.SceneOffsets[$i].PathStart       += 16
-            $SceneEditor.SceneOffsets[$i].PathIndex       += 16
-            ShiftScene -Offset $SceneEditor.SceneOffsets[$i].PathIndex      -Add 16
+            $SceneEditor.SceneOffsets[$i].PathStart         += 16
+            $SceneEditor.SceneOffsets[$i].PathIndex         += 16
+            ShiftScene -Offset $SceneEditor.SceneOffsets[$i].PathIndex         -Add 16
             $path = $SceneEditor.SceneOffsets[$i].PathStart
             do {
                 ShiftScene -Offset ($path + 5) -Add 16
@@ -2663,30 +2812,28 @@ function InsertSpawnPoint([int]$X=0, [int]$Y=0, [int]$Z=0, [uint16]$XRot=0, [uin
         }
 
         if ($SceneEditor.SceneOffsets[$i].FoundActors) {
-            $SceneEditor.SceneOffsets[$i].ActorStart      += 16
-            $SceneEditor.SceneOffsets[$i].ActorCountIndex += 16
-            $SceneEditor.SceneOffsets[$i].ActorIndex      += 16
-            ShiftScene -Offset $SceneEditor.SceneOffsets[$i].ActorIndex     -Add 16
+            $SceneEditor.SceneOffsets[$i].ActorStart        += 16
+            $SceneEditor.SceneOffsets[$i].ActorCountIndex   += 16
+            $SceneEditor.SceneOffsets[$i].ActorIndex        += 16
+            ShiftScene -Offset $SceneEditor.SceneOffsets[$i].ActorIndex        -Add 16
         }
 
         if ($SceneEditor.SceneOffsets[$i].FoundExits) {
-            $SceneEditor.SceneOffsets[$i].ExitStart       += 16
-            $SceneEditor.SceneOffsets[$i].ExitIndex       += 16
-            ShiftScene -Offset $SceneEditor.SceneOffsets[$i].ExitIndex      -Add 16
+            $SceneEditor.SceneOffsets[$i].ExitStart         += 16
+            $SceneEditor.SceneOffsets[$i].ExitIndex         += 16
+            ShiftScene -Offset $SceneEditor.SceneOffsets[$i].ExitIndex         -Add 16
         }
 
-        if ($SceneEditor.SceneOffsets[$i].FoundCutscenes) {
-            if ($SceneEditor.SceneOffsets[$i].CutsceneStart -gt $SceneEditor.SceneOffsets[0].HeaderEnd) {
-                $SceneEditor.SceneOffsets[$i].CutsceneStart   += 16
-                $SceneEditor.SceneOffsets[$i].CutsceneIndex   += 16
-                ShiftScene -Offset $SceneEditor.SceneOffsets[$i].CutsceneIndex  -Add 16
-            }
+        if ($SceneEditor.SceneOffsets[$i].FoundCutscenes -and $SceneEditor.LoadedHeader -eq 0) {
+            $SceneEditor.SceneOffsets[$i].CutsceneStart += 16
+            $SceneEditor.SceneOffsets[$i].CutsceneIndex += 16
+            ShiftScene -Offset $SceneEditor.SceneOffsets[$i].CutsceneIndex -Add 16
         }
 
-        $SceneEditor.SceneOffsets[$i].CollisionIndex      += 16
+        $SceneEditor.SceneOffsets[$i].CollisionIndex        += 16
         if ($SceneEditor.LoadedHeader -eq 0) {
-            $SceneEditor.SceneOffsets[$i].CollisionStart  += 16
-            ShiftScene -Offset $SceneEditor.SceneOffsets[$i].CollisionIndex -Add 16
+            $SceneEditor.SceneOffsets[$i].CollisionStart    += 16
+            ShiftScene -Offset $SceneEditor.SceneOffsets[$i].CollisionIndex    -Add 16
         }
     }
     
@@ -2694,11 +2841,19 @@ function InsertSpawnPoint([int]$X=0, [int]$Y=0, [int]$Z=0, [uint16]$XRot=0, [uin
     
     if ($SceneEditor.LoadedHeader -eq 0) {
         $nextHeader = $SceneEditor.SceneArray.Count
+
         foreach ($header in $SceneEditor.SceneOffsets.Header) {
             if ($header -lt $nextHeader -and $header -gt 0) { $nextHeader = $header }
         }
 
-        for ($i=$SceneEditor.SceneOffsets[0].CollisionStart; $i -lt $nextHeader; $i+=4) {
+        for ($i=$SceneEditor.SceneOffsets[0].CollisionStart + 0xC; $i -lt $SceneEditor.SceneOffsets[0].CollisionStart + 0x2C; $i+=4) {
+            if ($SceneEditor.SceneArray[$i] -eq 2) {
+                $value = $SceneEditor.SceneArray[$i+1] * 65536 + $SceneEditor.SceneArray[$i+2] * 256 + $SceneEditor.SceneArray[$i+3]
+                if ($value -gt $LightningEnd -and $value -lt $nextHeader) { ShiftScene -Offset ($i+1) -Add 16 }
+            }
+        }
+
+        for ($i=$SceneEditor.SceneOffsets[0].CollisionStart + 0x2C; $i -lt $nextHeader; $i+=4) {
             if ($SceneEditor.SceneArray[$i] -eq 2) {
                 $value = $SceneEditor.SceneArray[$i+1] * 65536 + $SceneEditor.SceneArray[$i+2] * 256 + $SceneEditor.SceneArray[$i+3]
                 if ($value -gt $LightningEnd -and $value -lt $nextHeader) { ShiftScene -Offset ($i+1) -Add 16 }
@@ -2706,8 +2861,22 @@ function InsertSpawnPoint([int]$X=0, [int]$Y=0, [int]$Z=0, [uint16]$XRot=0, [uin
         }
     }
 
+    # Camera List
+    $collisionStart = $SceneEditor.SceneOffsets[0].CollisionStart + 0x20
+    if ($SceneEditor.SceneArray[$collisionStart] -eq 2) {
+        $offset = $SceneEditor.SceneArray[$collisionStart + 1] * 0x10000 + $SceneEditor.SceneArray[$collisionStart + 2] * 0x100 + $SceneEditor.SceneArray[$collisionStart + 3]
+        $value  = $SceneEditor.SceneArray[$offset + 5] * 0x10000 + $SceneEditor.SceneArray[$offset + 6] * 0x100 + $SceneEditor.SceneArray[$offset + 7]
+
+        if ($SceneEditor.LoadedHeader -eq 0) {
+            for ($i=0; $i -lt 5; $i++) {
+                $o = $offset + $i * 8
+                if ($SceneEditor.SceneArray[$o] -eq 0 -and $SceneEditor.SceneArray[$o + 1] -eq 0x20 -and $SceneEditor.SceneArray[$o + 2] -eq 0 -and $SceneEditor.SceneArray[$o + 3] -eq 3  -and $SceneEditor.SceneArray[$o + 4] -eq 2) { ShiftScene -Offset ($o + 5) -Add 16 }
+            }
+        }
+    }
+
     $originalMap = $SceneEditor.LoadedMap
-    SaveLoadedMap
+    SaveLoadedMap -Silent
     for ($map=0; $map -lt $SceneEditor.SceneOffsets[0].MapCount; $map++) {
         $SceneEditor.LoadedMap = $map
         LoadMap
@@ -2745,14 +2914,12 @@ function InsertSpawnPoint([int]$X=0, [int]$Y=0, [int]$Z=0, [uint16]$XRot=0, [uin
             }
         }
 
-        SaveLoadedMap
+        SaveLoadedMap -Silent
     }
-    $SceneEditor.LoadedMap = $originalMap
+
+    $SceneEditor.SceneShift += 0x10
+    $SceneEditor.LoadedMap   = $originalMap
     LoadMap
-
-    WriteToConsole ("Inserted spawn point:    " + (GetPositionCount) )
-
-    return $True
 
 }
 
@@ -4593,6 +4760,94 @@ function ReloadParams([object]$Actor, [byte]$Index) {
 
 
 #==============================================================================================================================================================================================
+function TestScenesFiles() {
+
+    PrepareMap       -Scene "Death Mountain Crater" -Map 1 -Header 0
+    InsertSpawnPoint -Y 441 -YRot 0x8000 -Param "0200"
+    ChangeEntrance   -Index 5 -Map 1 -Spawn 5
+    SaveAndPatchLoadedScene
+
+    AssertSceneFiles -Scene "Death Mountain Crater" -Maps 2
+    
+
+
+    PrepareMap       -Scene "Graveyard" -Map 1 -Header 0
+    InsertSpawnPoint -X 1140 -Y 340 -Z 85 -Param "0201" -YRot 0xC71C
+    InsertEntrance   -Map 1 -Spawn 8
+
+    PrepareMap       -Scene "Graveyard" -Map 1 -Header 1
+    InsertSpawnPoint -X 1140 -Y 340 -Z 85 -Param "0201" -YRot 0xC71C
+    InsertEntrance   -Map 1 -Spawn 8
+    SaveAndPatchLoadedScene
+
+    AssertSceneFiles -Scene "Graveyard" -Maps 2
+
+
+
+    $arr1 = $ByteArrayGame[0xB65C64..0xB65E03]
+    $arr2 = [System.IO.File]::ReadAllBytes($Paths.Base + "\Assert\cutscenes.tbl")
+    
+    if ($arr1.count -ne $arr2.count) { write-host "Cutscene table files not equal in size..." }
+    else {
+    $assert = (-not (Compare-Object $arr1 $arr2 -SyncWindow 0))
+        write-host ("Assert cutscene table files... " + $assert)
+
+        if (!$assert) {
+            for ($j=0; $j -lt $arr1.count; $j++) {
+                if ($arr1[$j] -ne $arr2[$j]) { write-host ("Offset " + (Get24Bit $j) + " is " + (Get8Bit $arr1[$j]) + ", but expected " + (Get8Bit $arr2[$j])) }
+            }
+        }
+    }
+        
+}
+
+
+
+#==============================================================================================================================================================================================
+function AssertSceneFiles([string]$Scene, [byte]$Maps) {
+    
+    for ($i=0; $i -le $Maps + 1; $i++) {
+        if ($i -eq 0) {
+            $file1   = $Paths.Temp + "\scene\scene.zscene"
+            $file2   = $Paths.Base + "\Assert\" + $Scene + "\scene.zscene"
+        }
+        elseif ($i -le $Maps) {
+            $file1   = $Paths.Temp + "\scene\room_" + ($i-1) + ".zmap"
+            $file2   = $Paths.Base + "\Assert\" + $Scene + "\room_" + ($i-1) + ".zmap"
+        }
+        else {
+            $file1   = $Paths.Temp + "\scene\table.dma"
+            $file2   = $Paths.Base + "\Assert\" + $Scene + "\table.dma"
+        }
+
+        $arr1 = [System.IO.File]::ReadAllBytes($file1)
+        $arr2 = [System.IO.File]::ReadAllBytes($file2)
+
+        if ($arr1.count -ne $arr2.count) {
+            if     ($i -eq 0)       { write-host "Scene files not equal in size..."     }
+            elseif ($i -lt $Maps)   { write-host "Map files not equal in size..."       }
+            else                    { write-host "DMA table files not equal in size..." }
+            continue
+        }
+
+        $assert = (-not (Compare-Object $arr1 $arr2 -SyncWindow 0))
+        if     ($i -eq 0)       { write-host ("Assert scene files...          "              + $assert) }
+        elseif ($i -lt $Maps)   { write-host ("Assert map " + ($i-1) + " files...          " + $assert) }
+        else                    { write-host ("Assert DMA table files...      "              + $assert) }
+
+        if (!$assert) {
+            for ($j=0; $j -lt $arr1.count; $j++) {
+                if ($arr1[$j] -ne $arr2[$j]) { write-host ("Offset " + (Get24Bit $j) + " is " + (Get8Bit $arr1[$j]) + ", but expected " + (Get8Bit $arr2[$j])) }
+            }
+        }
+
+    }
+
+}
+
+
+
+#==============================================================================================================================================================================================
 
 Export-ModuleMember -Function RunSceneEditor
 Export-ModuleMember -Function CloseSceneEditor
@@ -4614,6 +4869,7 @@ Export-ModuleMember -Function SetMapSettings
 Export-ModuleMember -Function DeleteActor
 Export-ModuleMember -Function InsertActor
 Export-ModuleMember -Function InsertSpawnPoint
+Export-ModuleMember -Function InsertEntrance
 Export-ModuleMember -Function ReplaceActor
 Export-ModuleMember -Function RemoveActor
 Export-ModuleMember -Function ReplaceTransitionActor
@@ -4621,6 +4877,8 @@ Export-ModuleMember -Function DeleteObject
 Export-ModuleMember -Function InsertObject
 Export-ModuleMember -Function ReplaceObject
 Export-ModuleMember -Function RemoveObject
+
+Export-ModuleMember -Function TestScenesFiles
 
 Export-ModuleMember -Function GetActorCountIndex
 Export-ModuleMember -Function GetMeshIndex

@@ -1,4 +1,4 @@
-function ChangeBytes([string]$File, [byte[]]$Array, [object]$Offset, [object]$Match=$null, [object]$Values, [byte]$Repeat=0, [uint16]$Interval=1, [switch]$Add, [switch]$Subtract) {
+function ChangeBytes([string]$File, [byte[]]$Array, [object]$Offset, [object]$Match=$null, [object]$Values, [byte]$Repeat=0, [uint16]$Interval=1, [switch]$Add, [switch]$Subtract, [switch]$Silent) {
     
     if (IsSet $File) {
         if (!(TestFile $File)) {
@@ -12,6 +12,23 @@ function ChangeBytes([string]$File, [byte[]]$Array, [object]$Offset, [object]$Ma
     elseif ($Match  -is [String])                                        { $matchDec  = $Match -split '(..)' -ne ''  | foreach { [Convert]::ToByte($_, 16) } }
     elseif ($Match  -is [Array]  -and $Match[0] -is [String])            { $matchDec  = $Match                       | foreach { [Convert]::ToByte($_, 16) } }
     else                                                                 { $matchDec  = @(); $matchDec += $Match }
+
+    if ($Values -is [int] -and $Add) {
+        if ($Values -lt 0) {
+            $Add      = $False
+            $Subtract = $True
+            $values  *= -1
+        }
+    }
+    elseif ($Values -is [Array] -and $Add) {
+        if ($Values[0] -lt 0) {
+            for ($i=0; $i -lt $Values.count; $i++) {
+                if ($Values[$i] -lt 0) { $Values[$i] *= -1 }
+            }
+            $Add      = $False
+            $Subtract = $True
+        }
+    }
 
     if     ($Values -is [String] -and $Values -Like "* *")               { $valuesDec = $Values -split ' '           | foreach { [Convert]::ToByte($_, 16) } }
     elseif ($Values -is [String])                                        { $valuesDec = $Values -split '(..)' -ne '' | foreach { [Convert]::ToByte($_, 16) } }
@@ -30,10 +47,10 @@ function ChangeBytes([string]$File, [byte[]]$Array, [object]$Offset, [object]$Ma
 
     # Offset
     if ($Offset -is [String]) { $Offset = $Offset -split ' ' }
-
+    
     $offsetDec = @()
     foreach ($o in $Offset) {
-        $dec = GetDecimal $o
+        if ($o -is [string]) { $dec = GetDecimal $o } else { $dec = $o }
         if ($dec -lt 0) {
             WriteToConsole "Offset is negative, too large or not an integer!" -Error
             $global:WarningError = $True
@@ -63,13 +80,18 @@ function ChangeBytes([string]$File, [byte[]]$Array, [object]$Offset, [object]$Ma
     }
 
     # Print info
-    if ($Offset.Count -eq 1) {
-        $spaces = ""
-        while ($Offset[0].Substring(0, 1) -eq "0") { $Offset[0] = $Offset[0].Substring(1) }
-        for ($i=8; $i -gt $Offset[0].Length; $i--) { $spaces += " " }
-        WriteToConsole ($Offset[0] + $spaces + "-> Change values: " + $Values)
+    if (!$Silent) {
+        if ($Offset.Count -eq 1) {
+            $spaces = ""
+            if ($Offset[0] -isnot [String]) { WriteToConsole ((Get32Bit $Offset[0]) + " -> Change values: " + $Values) }
+            else {
+                while ($Offset[0].Substring(0, 1) -eq "0") { $Offset[0] = $Offset[0].Substring(1) }
+                for ($i=8; $i -gt $Offset[0].Length; $i--) { $spaces += " " }
+                WriteToConsole ($Offset[0] + $spaces + "-> Change values: " + $Values)
+            }
+        }
+        else { WriteToConsole ($Offset + "-> Change values: " + $Values) }
     }
-    else { WriteToConsole ($Offset + "-> Change values: " + $Values) }
 
     # Patch
     foreach ($o in $offsetDec) {
