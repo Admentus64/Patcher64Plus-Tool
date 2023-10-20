@@ -1032,6 +1032,7 @@ function PatchLoadedScene([switch]$Silent) {
     $dmaArray = [System.IO.File]::ReadAllBytes(($Paths.Temp + "\scene\table.dma"))
     
     ShiftCutscenesTable
+    if ($SceneEditor.SceneShift -ne 0) { ChangeBytes -Offset (0xB71440 + 7 + 20 * (GetDecimal $SceneEditor.LoadedScene.id)) -Values $SceneEditor.SceneShift -Add }
     for ($i=0; $i -lt $dmaArray.Count; $i++) { $ByteArrayGame[$start + $i] = $dmaArray[$i] }
 
     $table = $ByteArrayGame[$start..$end]
@@ -4791,6 +4792,21 @@ function TestScenesFiles() {
     else {
     $assert = (-not (Compare-Object $arr1 $arr2 -SyncWindow 0))
         write-host ("Assert cutscene table files... " + $assert)
+
+        if (!$assert) {
+            for ($j=0; $j -lt $arr1.count; $j++) {
+                if ($arr1[$j] -ne $arr2[$j]) { write-host ("Offset " + (Get24Bit $j) + " is " + (Get8Bit $arr1[$j]) + ", but expected " + (Get8Bit $arr2[$j])) }
+            }
+        }
+    }
+
+    $arr1 = $ByteArrayGame[0xB71440..0xB71C23]
+    $arr2 = [System.IO.File]::ReadAllBytes($Paths.Base + "\Assert\scenes.tbl")
+    
+    if ($arr1.count -ne $arr2.count) { write-host "Scenes table files not equal in size..." }
+    else {
+    $assert = (-not (Compare-Object $arr1 $arr2 -SyncWindow 0))
+        write-host ("Assert scenes table files...   " + $assert)
 
         if (!$assert) {
             for ($j=0; $j -lt $arr1.count; $j++) {

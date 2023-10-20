@@ -89,349 +89,424 @@
 	} ],
 	
 	"scenes" : [ {
+		"id"		: "0051",
 		"name"		: "Hyrule Field",
 		"dma"		: "B440",
 		"length"	: 1,
 		"stages"	: [ "Child", "Child - Kakariko Gate Opened", "Adult", "Link's Nightmare", "Zelda & Impla Flee Hyrule Castle", "Zelda Reminisces About Her Escape", "Title Screen Demo", "Song of Time", "Credits", "Escaping Lon Lon Ranch", "Farewell to Zelda", "Escorted by Impa" ]
 	}, {
+		"id"		: "0052",
 		"name"		: "Kakariko Village",
 		"dma"		: "B460",
 		"length"	: 1,
 		"stages"	: [ "Child - Day", "Child - Night", "Adult - Day", "Adult - Night", "Bongo Bongo Escapes the Well", "Nocture of Shadow", "The Well is Drained", "Death Mountain Erupts", "Credits" ]
 	}, {
+		"id"		: "0053",
 		"name"		: "Graveyard",
 		"dma"		: "B480",
 		"length"	: 2,
 		"maps"		: [ "Shadow Temple Entrance", "Graveyard" ],
 		"stages"	: [ "Child - Day", "Child - Night", "Adult - Day", "Adult - Night", "Royal Tomb", "Sun's Song" ]
 	}, {
+		"id"		: "0054",
 		"name"		: "Zora's River",
 		"dma"		: "B4B0",
 		"length"	: 2,
 		"maps"		: [ "River Road", "Zora's Domain Entrance" ],
 		"stages"	: [ "Child", "Adult" ]
 	}, {
+		"id"		: "0055",
 		"name"		: "Kokiri Forest",
 		"dma"		: "B4E0",
 		"length"	: 3,
 		"maps"		: [ "Village", "Great Deku Tree's Meadow", "Training Center" ],
 		"stages"	: [ "Child", "Adult - Infested", "Adult", "Farore Creates Life", "Ganondorf's Curse", "Kokiri's Emerald", "Navi Opening", "Unused - Cutscene #1", "Unused - Cutscene #2", "Credits - Deku Tree Meadow", "Credits - Forest", "Meeting the Deku Tree Sprout", "Link's Identity" ]
 	}, {
+		"id"		: "0056",
 		"name"		: "Sacred Forest Meadow",
 		"dma"		: "B520",
 		"length"	: 1,
 		"stages"	: [ "Child", "Adult", "Minuet of Forest", "Saria's Song" ]
 	}, {
+		"id"		: "0057",
 		"name"		: "Lake Hylia",
 		"dma"		: "B540",
 		"length"	: 1,
 		"stages"	: [ "Child", "Adult", "Defeated Morpha", "Credits" ]
 	}, {
+		"id"		: "0058",
 		"name"		: "Zora's Domain",
 		"dma"		: "B560",
 		"length"	: 2,
 		"maps"		: [ "King's Chambers", "Domain" ],
 		"stages"	: [ "Child", "Adult", "Credits" ]
 	}, {
+		"id"		: "0059",
 		"name"		: "Zora's Fountain",
 		"dma"		: "B590",
 		"length"	: 1,
 		"stages"	: [ "Child - Day", "Child - Night", "Adult", "Zora's Sapphire", "Unused Jabu-Jabu", "Unused - Credits" ]
 	}, {
+		"id"		: "005A",
 		"name"		: "Gerudo Valley",
 		"dma"		: "B5B0",
 		"length"	: 1,
 		"stages"	: [ "Child", "Adult", "Din Creates the Earth #2", "Din Creates the Earth #1", "Credits" ]
 	}, {
+		"id"		: "005B",
 		"name"		: "Lost Woods",
 		"dma"		: "B5D0",
 		"length"	: 10,
 		"maps"		: [ "Entrance", "Bullet Bag Minigame", "Goron City Entrance", "Zora's River Entrance", "Three-Way Fork", "Deku Stick Upgrade", "Three Area", "Road to Sacred Forest Meadow", "Sacred Forest Meadow Entrance", "Skull Mask Skullkid" ],
 		"stages"	: [ "Child", "Adult", "Fairy Ocarina" ]
 	}, {
+		"id"		: "005C",
 		"name"		: "Desert Colossus",
 		"dma"		: "B680",
 		"length"	: 1,
 		"stages"	: [ "Child", "Adult", "Requiem of Spirit", "Nabooru is Kidnapped" ]
 	}, {
+		"id"		: "005D",
 		"name"		: "Gerudo's Fortress",
 		"dma"		: "B6A0",
 		"length"	: 2,
 		"maps"		: [ "Fortress", "Horseback Archery" ],
 		"stages"	: [ "Child", "Adult - Day", "Adult - Night", "Credits", "Thrown in Jail", "Crash" ]
 	}, {
+		"id"		: "005E",
 		"name"		: "Haunted Wasteland",
 		"dma"		: "B6D0",
 		"length"	: 2,
 		"maps"		: [ "Stone Structure", "Desert" ]
 	}, {
+		"id"		: "005F",
 		"name"		: "Hyrule Castle",
 		"dma"		: "B700",
 		"length"	: 1
 	}, {
+		"id"		: "0064",
 		"name"		: "Ganon's Castle Exterior",
 		"dma"		: "C330",
 		"length"	: 1,
 		"stages"	: [ "Adult", "Rainbow Bridge" ]
 	}, {
+		"id"		: "0060",
 		"name"		: "Death Mountain Trail",
 		"dma"		: "B720",
 		"length"	: 1,
 		"stages"	: [ "Child", "Adult", "Nayru Gives Law to the World", "Goron's Ruby", "Unused Goron's Ruby", "Credits #1", "Credits #2 - Sages" ]
 	}, {
+		"id"		: "0061",
 		"name"		: "Death Mountain Crater",
 		"dma"		: "B740",
 		"length"	: 2,
 		"maps"		: [ "Fire Temple Entrance", "Crater" ],
 		"stages"	: [ "Child", "Adult", "Bolero of Fire", "Opening Demo" ]
 	}, {
+		"id"		: "0063",
 		"name"		: "Goron City",
 		"dma"		: "B770",
 		"length"	: 4,
 		"maps"		: [ "Boulders Area", "Darunia's Room", "Medigoron's Smithy", "City" ],
 		"stages"	: [ "Child", "Adult", "Darunia Dances to Saria's Song", "Credits" ]
 	}, {
+		"id"		: "0064",
 		"name"		: "Lon Lon Ranch",
 		"dma"		: "C370",
 		"length"	: 1,
 		"stages"	: [ "Child - Day", "Child - Night", "Adult - Day", "Adult - Night", "Ingo's Race", "Epona's Song", "Credits #1 - Circle of Flame", "Credits #2 - Talon & Ingo", "Credits #3 - Hyrule Market Hagglers", "Credits #4 - Malon Singing", "Credits #5 - Mido & King Zora", "Credits #6 - Shop NPCs" ]
 	}, {
+		"id"		: "0043",
 		"name"		: "Temple of Time",
 		"dma"		: "BC30",
 		"length"	: 2,
 		"maps"		: [ "Pedestal of Time", "Entrance" ],
 		"stages"	: [ "Main", "Return From Chamber of Sages", "Farewell to Navi", "Prelude of Light", "Opening the Door of Time", "Unused - Visions of Kokiri's Emerald", "Unused - Visions of Goron's Ruby", "Unused - Visions of Zora's Sapphire", "Song of Time", "Sheik Tells of the Triforce", "Sheik's Identity Revealed", "Light Arrows" ]
 	}, {
+		"id"		: "0044",
 		"name"		: "Chamber of the Sages",
 		"dma"		: "BC10",
 		"length"	: 1,
 		"stages"	: [ "Main", "Awakening in the Sacred Realm", "All Sages Have Awakened", "Door to the Sacred Realm" ]
 	}, {
+		"id"		: "0042",
 		"name"		: "Shooting Gallery",
 		"dma"		: "C210",
 		"length"	: 1,
 		"stages"	: [ "Main", "Unused #1", "Unused #2", "Unused #3" ]
 	}, {
+		"id"		: "0045",
 		"name"		: "Castle Hedge Maze (Day)",
 		"dma"		: "C310",
 		"length"	: 1
 	}, {
+		"id"		: "0046",
 		"name"		: "Castle Hedge Maze (Night)",
 		"dma"		: "CF20",
 		"length"	: 1
 	}, {
+		"id"		: "003F",
 		"name"		: "Grave (Redead)",
 		"dma"		: "C7E0",
 		"length"	: 1
 	}, {
+		"id"		: "0040",
 		"name"		: "Grave (Fairy's Fountain)",
 		"dma"		: "CE10",
 		"length"	: 1
 	}, {
+		"id"		: "0041",
 		"name"		: "Royal Family Tomb",
 		"dma"		: "CF60",
 		"length"	: 3,
 		"maps"		: [ "Entrance", "Toxic Pool", "Composer Brothers' Tombstone" ],
 		"stages"	: [ "Main", "Sun's Song #1", "Sun's Song #2" ]
 	}, {
+		"id"		: "003B",
 		"name"		: "Great Fairy's Fountain (Upgrades)",
 		"dma"		: "C7C0",
 		"length"	: 1,
 		"stages"	: [ "Main", "Spin Attack", "Enhanced Magic Meter", "Enhanced Defensive Power" ]
 	}, {
+		"id"		: "003C",
 		"name"		: "Fairy's Fountain",
 		"dma"		: "C800",
 		"length"	: 1
 	}, {
+		"id"		: "003D",
 		"name"		: "Great Fairy's Fountain (Spells)",
 		"dma"		: "C820",
 		"length"	: 1,
 		"stages"	: [ "Main", "Farore's Wind", "Din's Fire", "Nayru's Love" ]
 	}, {
+		"id"		: "004A",
 		"name"		: "Castle Courtyard",
 		"dma"		: "C940",
 		"length"	: 1,
 		"stages"	: [ "Main", "The End", "Meeting Impa", "Unused - Meeting Impa" ]
 	}, {
+		"id"		: "0049",
 		"name"		: "Fishing Pond",
 		"dma"		: "CC60",
 		"length"	: 1
 	}, {
+		"id"		: "004B",
 		"name"		: "Bombchu Bowling Alley",
 		"dma"		: "CF40",
 		"length"	: 1
 	}, {
+		"id"		: "004C",
 		"name"		: "Ranch House & Silo",
 		"dma"		: "CFC0",
 		"length"	: 3,
 		"maps"		: [ "Silo", "House", "Bedroom" ]
 	}, {
+		"id"		: "004D",
 		"name"		: "Guard's House",
 		"dma"		: "D000",
 		"length"	: 1,
 		"stages"	: [ "Child", "Adult" ]
 	}, {
+		"id"		: "004E",
 		"name"		: "Granny's Potion Shop",
 		"dma"		: "D020",
 		"length"	: 1
 	}, {
+		"id"		: "0010",
 		"name"		: "Treasure Box Shop",
 		"dma"		: "D040",
 		"length"	: 7,
 		"maps"		: [ "Entrance", "Green Room #1", "Green Room #2", "Blue Room #1", "Blue Room #2", "Red Room", "Yellow Room" ]
 	}, {
+		"id"		: "0050",
 		"name"		: "House of Skulltulas",
 		"dma"		: "D160",
 		"length"	: 1
 	}, {
+		"id"		: "001B",
 		"name"		: "Market Entrance (Child - Day)",
 		"dma"		: "BF30",
 		"length"	: 1
 	}, {
+		"id"		: "001C",
 		"name"		: "Market Entrance (Child - Night)",
 		"dma"		: "C3B0",
 		"length"	: 1
 	}, {
+		"id"		: "001D",
 		"name"		: "Market Entrance (Ruins)",
 		"dma"		: "C3D0",
 		"length"	: 1
 	}, {
+		"id"		: "0020",
 		"name"		: "Market (Child - Day)",
 		"dma"		: "B7C0",
 		"length"	: 1
 	}, {
+		"id"		: "0021",
 		"name"		: "Market (Child - Night)",
 		"dma"		: "B7E0",
 		"length"	: 1
 	}, {
+		"id"		: "0022",
 		"name"		: "Market (Ruins)",
 		"dma"		: "C390",
 		"length"	: 1
 	}, {
+		"id"		: "001E",
 		"name"		: "Back Alley (Child - Day)",
 		"dma"		: "C350",
 		"length"	: 1
 	}, {
+		"id"		: "001F",
 		"name"		: "Back Alley (Child - Night)",
 		"dma"		: "C3F0",
 		"length"	: 1
 	}, {
+		"id"		: "0023",
 		"name"		: "Temple of Time Exterior (Child - Day)",
 		"dma"		: "CC40",
 		"length"	: 1
 	}, {
+		"id"		: "0024",
 		"name"		: "Temple of Time Exterior (Child - Night)",
 		"dma"		: "CC80",
 		"length"	: 1
 	}, {
+		"id"		: "0025",
 		"name"		: "Temple of Time Exterior (Ruins)",
 		"dma"		: "CCA0",
 		"length"	: 1
 	}, {
+		"id"		: "0034",
 		"name"		: "Link's House",
 		"dma"		: "BC60",
 		"length"	: 1,
 		"stages"	: [ "Main", "Awoken by Navi", "Opening" ]
 	}, {
+		"id"		: "002A",
 		"name"		: "Carpenter Boss's House",
 		"dma"		: "C720",
 		"length"	: 1
 	}, {
+		"id"		: "002B",
 		"name"		: "Back Alley House (Man in Green)",
 		"dma"		: "CBA0",
 		"length"	: 1
 	}, {
+		"id"		: "0026",
 		"name"		: "Know-It-All Brothers' House",
 		"dma"		: "BE20",
 		"length"	: 1
 	}, {
+		"id"		: "0027",
 		"name"		: "House of Twins",
 		"dma"		: "C430",
 		"length"	: 1
 	}, {
+		"id"		: "002D",
 		"name"		: "Kokiri Shop",
 		"dma"		: "BC80",
 		"length"	: 1
 	}, {
+		"id"		: "002E",
 		"name"		: "Goron Shop",
 		"dma"		: "C840",
 		"length"	: 1
 	}, {
+		"id"		: "002F",
 		"name"		: "Zora Shop",
 		"dma"		: "C860",
 		"length"	: 1
 	}, {
+		"id"		: "002C",
 		"name"		: "Bazaar",
 		"dma"		: "C2F0",
 		"length"	: 1
 	}, {
+		"id"		: "0033",
 		"name"		: "Happy Mask Shop",
 		"dma"		: "D140",
 		"length"	: 1
 	}, {
+		"id"		: "0030",
 		"name"		: "Kakariko Potion Shop",
 		"dma"		: "C880",
 		"length"	: 1
 	}, {
+		"id"		: "0031",
 		"name"		: "Market Potion Shop",
 		"dma"		: "C8A0",
 		"length"	: 1
 	}, {
+		"id"		: "0032",
 		"name"		: "Bombchu Shop",
 		"dma"		: "C8C0",
 		"length"	: 1
 	}, {
+		"id"		: "003A",
 		"name"		: "Gravekeeper's Hut",
 		"dma"		: "C7A0",
 		"length"	: 1
 	}, {
+		"id"		: "0037",
 		"name"		: "Impa's House",
 		"dma"		: "C900",
 		"length"	: 1
 	}, {
+		"id"		: "0039",
 		"name"		: "Carpenters' Tent",
 		"dma"		: "C920",
 		"length"	: 1
 	}, {
+		"id"		: "0036",
 		"name"		: "Stable",
 		"dma"		: "C700",
 		"length"	: 1
 	}, {
+		"id"		: "0035",
 		"name"		: "Back Alley House (Dog Lady)",
 		"dma"		: "C8E0",
 		"length"	: 1
 	}, {
+		"id"		: "0038",
 		"name"		: "Lakeside Laboratory",
 		"dma"		: "CFA0",
 		"length"	: 1
 	}, {
+		"id"		: "0048",
 		"name"		: "Dampé's Grave & Windmill",
 		"dma"		: "CBC0",
 		"length"	: 7,
 		"maps"		: [ "Dampé's Grave", "Race Section #1", "Race Section #2", "Race Section #3", "Reward Room", "Stairs to Windmill", "Windmill" ]
 	}, {
+		"id"		: "003E",
 		"name"		: "Grottos",
 		"dma"		: "BE40",
 		"length"	: 14,
 		"maps"		: [ "Generic", "Salescrub - Heart Piece", "Two Redeads", "Cow", "Webbed", "Octorok", "Two Salescrubs - Deku Nut Upgrade", "Two Wolfos", "Bombable Wall", "Two Salescrubs - Potions", "Tektite", "Forest Stage", "Three Deku Salescrubs", "Big Skulltula" ]
 	}, {
+		"id"		: "0047",
 		"name"		: "Cutscene Map",
 		"dma"		: "C410",
 		"length"	: 1,
 		"stages"	: [ "Main", "The Goddesses Descend", "Ganondorf Riding Through Flames", "The Triforce is Formed", "Ganondorf Infiltrates the Sacred Realm", "Sheik Tells of the Triforce", "Link's Heritage", "Unused - Ganondorf Riding", "Child Zelda Tells of the Triforce", "Ganondorf Curses His Opposers" ]
 	}, {
+		"id"		: "0000",
 		"name"		: "Inside the Deku Tree",
 		"dma"		: "BB40",
 		"length"	: 12,
 		"dungeon"	: 1,
 		"maps"		: [ "Entrance", "Path to Slingshot", "Slingshot Room", "Basement", "Room to Water Challenge", "Path Across Water", "Room after Water Challenge", "Three-Way Room", "Gold Skulltula Room", "Boss Door Room", "Three Rising Pillars", "Boss Lair" ]
 	}, {
+		"id"		: "0001",
 		"name"		: "Dodongo's Cavern",
 		"dma"		: "B320",
 		"length"	: 17,
 		"dungeon"	: 1,
 		"maps"		: [ "Main Hall", "Baby Dodongo Hallway", "Rising Staircase Hall", "Lizalfos Mini-Boss", "Green Cave", "Armos Pushing Challenge", "Small Room - Large Pillars Hall", "Boos Door Room", "Labyrinth", "Large Pillars Hall", "Jump Across One Pillar", "Small Room - Baby Dodongo Hall", "Jump Across Two Pillars", "Small Room - Green Cave", "Small Room - Labyrinth", "Small Room - Rising Staircase Hall", "Boss Lair" ] 
 	}, {
+		"id"		: "0002",
 		"name"		: "Inside Jabu-Jabu's Belly",
 		"dma"		: "BF50",
 		"length"	: 16,
@@ -439,36 +514,42 @@
 		"maps"		: [ "Entrance", "Main Hall", "Ruto Meeting Room", "Ruto Fallen Down Basement", "Room to Upper Main Hall", "Boss Door Room", "Giant Octo Mini-Boss", "Three-Way Fork", "Middle Fork Tentacle", "East Fork Room", "West Fork Room", "Right Fork Tentacle", "Left Fork Tentacle", "Lone Room in Basement", "Boomerang Hall", "Boss Lair" ],
 		"stages"	: [ "Main", "Finding Zora's Sapphire" ]
 	}, {
+		"id"		: "0003",
 		"name"		: "Forest Temple",
 		"dma"		: "B9C0",
 		"length"	: 23,
 		"dungeon"	: 1,
 		"maps"		: [ "Entrance", "Entrance Hallway", "Elevator Hall", "East Elevator Hall", "North Elevator Hallway", "West Elevator Hallway", "Stalfos Mini-Boss", "East Courtyard", "West Courtyard", "Sewers", "Hallway Connecting Courtyards", "Tall Block Pushing Hall", "Joelle's Hall", "Beth's Hall", "Rotating Platforms Hall", "Chess Hall", "Amy's Block Puzzle", "Boss Door Shifting Hall", "Lone Room - West Courtyard", "Falling Down - West Courtyard", "Fallen Down Room - West Courtyard", "Falling Down - Chess Hall", "Boss Lair" ]
 	}, {
+		"id"		: "0004",
 		"name"		: "Fire Temple",
 		"dma"		: "B800",
 		"length"	: 27,
 		"dungeon"	: 1,
 		"maps"		: [ "Entrance", "Lava Cavern", "Boss Door Hall", "Flare Dance Room - Entrance", "Fire Slug Room", "Boulder Maze", "Narrow Three-Way Bridge", "Room to East Tower", "East Tower", "Hallway Connecting Towers", "Invisible Fire Wall Maze", "Passthrough - Invisible Fire Wall Maze", "Room to West Tower", "West Tower", "Hidden Stairs Room", "Torch Slug Hallway - Entrance", "Flaming Wall of Death Room", "Captured Goron North of Entrance", "Tile Room - Entrance", "Tile Room - Lava Cavern", "Captured Goron - North Lava Cavern", "Flaming Elevator", "Captured Goron - South Lava Cavern", "Captured Goron - Boulder Maze", "Flare Dancer Room - Fire Wall Maze", "Captured Goron - Fire Wall Maze", "Boss Lair" ]
 	}, {
+		"id"		: "0005",
 		"name"		: "Water Temple",
 		"dma"		: "BCA0",
 		"length"	: 23,
 		"dungeon"	: 1,
 		"maps"		: [ "Central Hall", "Central Pillar", "Flooded Basement", "Lower Level - South", "Mid Level - East", "Waterfall Room", "Dragon Statues Room", "Longshot Room", "Spinning Water Room", "Water Pillar Room", "Upper Level - West", "Spike Trap Corridor", "Rolling Boulder Room", "Room of Illusions", "Stinger Room", "Three Water Pillars Room", "Sole Room - Rolling Boulder Room", "Ruto Room", "Lower Room - Ruto Room", "Upper Room - Ruto Room", "Mid Level - South", "Raging Water Cavern", "Boss Lair" ]
 	}, {
+		"id"		: "0007",
 		"name"		: "Shadow Temple",
 		"dma"		: "C060",
 		"length"	: 23,
 		"dungeon"	: 1,
 		"maps"		: [ "Taunting Rooms of Illusion", "First Room - Rooms of Illusion", "Entrance", "Boss Door Room", "Dead Hand Room - Rooms of Illusion", "Beamos Corridor - Entrance", "Scythe Shortcut Room", "Sole Room - Beamos Corridor", "Guillotine Hallway", "Guillotine Cavern", "Falling Spike Blocks Trap Room", "Invisible Spike Room", "Second Giant Skull Jars Room", "Wooden Spike Traps Room", "First Giant Skull Jars Room", "Invisible Maze", "Invisible Scythe Room", "Sacrificial Room", "Wind Fans Room", "Sole Room - Wind Fans Room", "Gibdo Hallway - Wind Fans Room", "River of Death", "Boss Lair" ]
 	}, {
+		"id"		: "0006",
 		"name"		: "Spirit Temple",
 		"dma"		: "C450",
 		"length"	: 29,
 		"dungeon"	: 1,
 		"maps"		: [ "Entrance", "Main Corridor", "East Room - Main Corridor", "West Room - Main Corridor", "Bombiwa Rock Room", "Colossus Room", "Shortcut Room - Entrance", "West Corridor - Colossus Room", "Sun Face Block Pushing Room", "West Hallway to Iron Knuckle Room", "West Iron Knuckle Room", "Exits to Colossus Hands", "Sole Room - Rolling Boulder Room", "Rolling Boulder Room", "Quicksand Room", "Trap Mirror With Mirror", "East Corridor - Colossus Room", "Time Block Puzzle Room", "Armos & Sun Face Room", "East Hallway to Iron Knuckle Room", "East Iron Knuckle Room", "Sole Room - Armos & Sun Face Room", "Sole Room - Triforce Corridor", "Moving Trap Wall", "Triforce Corridor", "Mirror Puzzle Above Colossus Room", "Rotating Mirror Statues Room", "Anubis Room - Main Corridor", "Boss Lair" ]
 	}, {
+		"id"		: "0009",
 		"name"		: "Ice Cavern",
 		"dma"		: "C630",
 		"length"	: 12,
@@ -476,95 +557,111 @@
 		"maps"		: [ "Entrance", "First Open Room", "Hallway Toward Second Area", "Second Open Room", "Hallway Toward Ice Block Puzzle", "Ice Block Puzzle Room", "Hallway to Mini-Boss", "Mini-Boss Room", "Hallway to Pillars", "Pillars Room", "Room to Exit", "Blue Fire Altar" ],
 		"stages"	: [ "Main", "Serenade of Water" ]
 	}, {
+		"id"		: "0008",
 		"name"		: "Bottom of the Well",
 		"dma"		: "CEA0",
 		"length"	: 7,
 		"dungeon"	: 1,
 		"maps"		: [ "Entrance & Main Area", "Bottom Pit", "Coffins Room", "Room With Grates", "Dead Hand Room", "Invisible Floor Room", "Skull Wall Room" ]
 	}, {
+		"id"		: "000C",
 		"name"		: "Thieves' Hideout",
 		"dma"		: "CE30",
 		"length"	: 6,
 		"dungeon"	: 2,
 		"maps"		: [ "Break Room - Hookshot Beams", "Shiro's Prison Cell", "Ichiro's Prison Cell", "Kitchen", "Sabooro's Prison Cell", "Jiro's Prison Cell" ]
 	}, {
+		"id"		: "000B",
 		"name"		: "Gerudo Training Ground",
 		"dma"		: "C230",
 		"length"	: 11,
 		"dungeon"	: 1,
 		"maps"		: [ "Entrance", "Driftsand Fight Challenge", "Hookshot Challenge", "Fake Room", "Eye Statue Challenge", "Hammer Challenge", "Lava Challenge", "Lizalfos Challenge", "Central Crates Room", "Underwater Challenge", "Preview Room" ]
 	}, {
+		"id"		: "000D",
 		"name"		: "Inside Ganon's Castle",
 		"dma"		: "CCC0",
 		"length"	: 20,
 		"dungeon"	: 1,
 		"maps"		: [ "Entrance", "Main Lobby", "Water Trial #1", "Water Trial #2", "Water Barrier", "Forest Trial #1", "Forest Trial #2", "Forest Barrier", "Light Trial #1", "Light Trial #2", "Fake Light Barrier", "Light Barrier", "Shadow Trial", "Shadow Barrier", "Fire Trial", "Fire Barrier", "Deku Scrubs Area", "Spirit Trial #1", "Spirit Trial #2", "Spirit Barrier" ]
 	}, {
+		"id"		: "000A",
 		"name"		: "Ganon's Tower",
 		"dma"		: "CA20",
 		"length"	: 10,
 		"dungeon"	: 2,
 		"maps"		: [ "Lower Room - Lizalfos", "Staircase #1", "Middle Room - Stalfos", "Staircase #2", "Upper Room - Iron Knuckles", "Staircase #3", "Staircase #4 to Boss Door", "Entrance", "Lower Boss Lair", "Upper Boss Lair" ]
 	}, {
+		"id"		: "000F",
 		"name"		: "Inside Ganon's Castle (Collapsing)",
 		"dma"		: "D180",
 		"length"	: 2,
 		"dungeon"	: 2,
 		"maps"		: [ "Main Lobby", "Entrance" ]
 	}, {
+		"id"		: "000E",
 		"name"		: "Ganon's Tower (Collapsing)",
 		"dma"		: "D0C0",
 		"length"	: 5,
 		"dungeon"	: 2,
 		"maps"		: [ "Lower Room - Exit", "Middle Room - Stalfos", "Upper Room - Wallmaster", "Staircase to Exit", "Boss Lair" ]
 	}, {
+		"id"		: "001A",
 		"name"		: "Ganon's Tower Exterior (Collapsing)",
 		"dma"		: "CB80",
 		"length"	: 1,
 		"dungeon"	: 2
 	}, {
+		"id"		: "0011",
 		"name"		: "Gohma's Lair",
 		"dma"		: "C990",
 		"length"	: 2,
 		"dungeon"	: 2,
 		"maps"		: [ "Dungeon Exit", "Boss Lair" ]
 	}, {
+		"id"		: "0012",
 		"name"		: "King Dodongo's Lair",
 		"dma"		: "C960",
 		"length"	: 2,
 		"dungeon"	: 2,
 		"maps"		: [ "Dungeon Exit", "Boss Lair" ]
 	}, {
+		"id"		: "0013",
 		"name"		: "Barinade's Lair",
 		"dma"		: "C740",
 		"length"	: 2,
 		"dungeon"	: 2,
 		"maps"		: [ "Dungeon Exit", "Boss Lair" ]
 	}, {
+		"id"		: "0014",
 		"name"		: "Phantom Ganon's Lair",
 		"dma"		: "C1E0",
 		"length"	: 2,
 		"dungeon"	: 2,
 		"maps"		: [ "Dungeon Exit", "Boss Lair" ]
 	}, {
+		"id"		: "0015",
 		"name"		: "Volvagia's Lair",
 		"dma"		: "C770",
 		"length"	: 2,
 		"dungeon"	: 2,
 		"maps"		: [ "Dungeon Exit", "Boss Lair" ]
 	}, {
+		"id"		: "0016",
 		"name"		: "Morpha's Lair",
 		"dma"		: "C9F0",
 		"length"	: 2,
 		"dungeon"	: 2,
 		"maps"		: [ "Dungeon Exit", "Boss Lair" ]
 	}, {
+		"id"		: "0018",
 		"name"		: "Bongo Bongo's Lair",
 		"dma"		: "C9C0",
 		"length"	: 2,
 		"dungeon"	: 2,
 		"maps"		: [ "Dungeon Exit", "Boss Lair" ]
 	}, {
+		"id"		: "0017",
 		"name"		: "Twinrova's Lair & Iron Knuckle's Lair",
 		"dma"		: "CAF0",
 		"length"	: 4,
@@ -572,11 +669,13 @@
 		"maps"		: [ "Dungeon Exit", "Iron Knuckle Room", "Hallway to Boss", "Boss Lair" ],
 		"stages"	: [ "Main", "Iron Knuckle Fight", "The Iron Knuckle Is Defeated", "Nabooru is Transformed" ]
 	}, {
+		"id"		: "0019",
 		"name"		: "Ganondorf's Lair",
 		"dma"		: "CAD0",
 		"length"	: 1,
 		"dungeon"	: 2
 	}, {
+		"id"		: "004F",
 		"name"		: "Ganon's Battle Arena",
 		"dma"		: "D120",
 		"length"	: 1,
