@@ -233,7 +233,7 @@ function CopyBytes([string]$File, [string]$Start, [string]$Length, [string]$Offs
 
 
 #==============================================================================================================================================================================================
-function PatchBytes([string]$File, [string]$Offset, [string]$Length, [string]$Patch, [switch]$Texture, [switch]$Models, [switch]$Extracted, [switch]$Music, [switch]$Editor, [switch]$Temp, [switch]$Shared, [switch]$Pad, [switch]$Silent) {
+function PatchBytes([string]$File, [object]$Offset, [object]$Length, [string]$Patch, [switch]$Texture, [switch]$Models, [switch]$Extracted, [switch]$Music, [switch]$Editor, [switch]$Temp, [switch]$Shared, [switch]$Pad, [switch]$Silent) {
     
     if (IsSet $File) {
         if (!(TestFile $File)) {
@@ -272,7 +272,7 @@ function PatchBytes([string]$File, [string]$Offset, [string]$Length, [string]$Pa
     $PatchByteArray = [IO.File]::ReadAllBytes($Patch)
 
     # Offset
-    $offsetDec = GetDecimal $Offset
+    if ($offset -is [string]) { $offsetDec = GetDecimal $Offset } else { $offsetDec = $Offset }
     if ($offsetDec -lt 0) {
         WriteToConsole "Offset is negative, too large or not an integer!" -Error
         $global:WarningError = $True
@@ -289,8 +289,8 @@ function PatchBytes([string]$File, [string]$Offset, [string]$Length, [string]$Pa
 
     # Patch
     if (IsSet $Length) {
-        $Length = GetDecimal $Length
-        foreach ($i in 0..($Length-1)) {
+        if ($Length -is [string]) { $lengthDec = GetDecimal $Length } else { $lengthDec = $Length }
+        foreach ($i in 0..($lengthDec-1)) {
             if ($i -le $PatchByteArray.Length)   { $ByteArrayGame[$offsetDec + $i] = $PatchByteArray[($i)] }
             elseif ($Pad)                        { $ByteArrayGame[$offsetDec + $i] = 255 }
             else                                 { $ByteArrayGame[$offsetDec + $i] = 0 }
@@ -308,7 +308,7 @@ function PatchBytes([string]$File, [string]$Offset, [string]$Length, [string]$Pa
 
 
 #==============================================================================================================================================================================================
-function ExportBytes([string]$File, [string]$Offset, [string]$End, [string]$Length, [string]$Output, [switch]$Force, [switch]$Silent) {
+function ExportBytes([string]$File, [Object]$Offset, [Object]$End, [Object]$Length, [string]$Output, [switch]$Force, [switch]$Silent) {
     
     if (IsSet $File) {
         if (!(TestFile $File)) {
@@ -321,15 +321,15 @@ function ExportBytes([string]$File, [string]$Offset, [string]$End, [string]$Leng
 
     if ( (TestFile $Output) -and ($Settings.Debug.ForceExtract -eq $False) -and !$Force) { return }
 
-    [uint32]$Offset = GetDecimal $Offset
+    if ($Offset -is [String]) { $offsetDec = GetDecimal $Offset } else { $offsetDec = $Offset }
     if (!$Silent) { WriteToConsole ("Write file to: " + $Output) }
 
-    if ($Offset -lt 0) {
+    if ($offsetDec -lt 0) {
         WriteToConsole "Offset is negative!" -Error
         $global:WarningError = $True
         return
     }
-    elseif ($Offset -gt $ByteArrayGame.Length) {
+    elseif ($offsetDec -gt $ByteArrayGame.Length) {
         WriteToConsole "Offset is too large for file!" -Error
         $global:WarningError = $True
         return
@@ -342,12 +342,12 @@ function ExportBytes([string]$File, [string]$Offset, [string]$End, [string]$Leng
     if (!(TestFile -Path ($Path + $Folder) -Container)) { New-Item -Path $Path -Name $Folder -ItemType Directory }
 
     if (IsSet $End) {
-        $End = GetDecimal $End
-        [io.file]::WriteAllBytes($Output, $ByteArrayGame[$Offset..($End - 1)])
+        if ($End -is [string]) { $endDec = GetDecimal $End } else { $endDec = $End }
+        [io.file]::WriteAllBytes($Output, $ByteArrayGame[$offsetDec..($endDec - 1)])
     }
     elseif (IsSet $Length) {
-        $Length = GetDecimal $Length
-        [io.file]::WriteAllBytes($Output, $ByteArrayGame[$Offset..($Offset + $Length - 1)])
+        if ($Length -is [String]) { $lengthDec = GetDecimal $Length } else { $lengthDec = $Length }
+        [io.file]::WriteAllBytes($Output, $ByteArrayGame[$offsetDec..($offsetDec + $lengthDec - 1)])
     }
 
 }

@@ -174,6 +174,7 @@ $Paths.cygdrive        = $Paths.Master  + "\Tools\cygdrive"
 $Paths.Addons          = $Paths.Master  + "\Addons"
 $Paths.Models          = $Paths.Addons  + "\Models"
 $Paths.Music           = $Paths.Addons  + "\Music"
+$Paths.Assert          = $Paths.Base    + "\Assert"
 $Patcher.VersionFile   = $Paths.Master  + "\version.txt"
 
 

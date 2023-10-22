@@ -381,10 +381,10 @@ function PrePatchingAdditionalOptions() {
 #==============================================================================================================================================================================================
 function CheckCommands() {
     
-    if (   (CheckCommand "ByteOptions") -or (CheckCommand "ByteReduxOptions") )                                                     { return $True }
-    if (   (HasCommand ($GamePatch.function + "ByteTextOptions") ) -or (HasCommand ($GamePatch.function + "ByteSceneOptions") ) )   { return $True }
-    if ( ( (HasCommand "WholeTextOptions") -or (HasCommand "ByteTextOptions") ) -and $Settings.Debug.NoTextPatching -ne $True)      { return $True }
-    if (   (HasCommand "ByteSceneOptions")                                      -and $Settings.Debug.NoScenePatching -ne $True)     { return $True }
+    if (   (CheckCommand "ByteOptions") -or (CheckCommand "ByteReduxOptions") )                                                     { return $True  }
+    if (   (HasCommand ($GamePatch.function + "ByteTextOptions") ) -or (HasCommand ($GamePatch.function + "ByteSceneOptions") ) )   { return $True  }
+    if ( ( (HasCommand "WholeTextOptions") -or (HasCommand "ByteTextOptions") ) -and $Settings.Debug.NoTextPatching -ne $True)      { return $True  }
+    if (   (HasCommand "ByteSceneOptions")                                      -and $Settings.Debug.NoScenePatching -ne $True)     { return $True  }
     return $False
 
 }
@@ -393,7 +393,7 @@ function CheckCommands() {
 
 #==============================================================================================================================================================================================
 function CheckCommand([string]$Command, [boolean]$Check=$True) {
-
+    
     if ( (HasCommand $Command) -and $Check)              { return $True }
     if   (HasCommand ($GamePatch.function + $Command))   { return $True }
     return $False
@@ -405,6 +405,8 @@ function CheckCommand([string]$Command, [boolean]$Check=$True) {
 #==============================================================================================================================================================================================
 function RunCommand([string]$Command="", [string]$Message="", [boolean]$Check=$True) {
     
+    if (DoAssertSceneFiles) { return }
+
     if ( (IsSet $GamePatch.preset) -or ($Patches.Options.Checked -and $Patches.Options.Visible) ) {
         if ( (HasCommand $Command) -and $Check) {
             UpdateStatusLabel ("Patching " + $GameType.mode + " Additional " + $Message + " Options...")
@@ -429,7 +431,7 @@ function PatchingAdditionalOptions() {
     if (!$PatchInfo.decompress -and !(TestFile $GetROM.decomp) )   { Copy-Item -LiteralPath $GetROM.run -Destination $GetROM.decomp -Force }
     
     # Language patches
-    if ($Settings.Debug.ExtractCleanScript -eq $True -and (IsSet $LanguagePatch.script_dma) -and (IsSet $LanguagePatch.table_start) -and (IsSet $LanguagePatch.table_length)) {
+    if ($Settings.Debug.ExtractCleanScript -eq $True -and (IsSet $LanguagePatch.script_dma) -and (IsSet $LanguagePatch.table_start) -and (IsSet $LanguagePatch.table_length) -and !(DoAssertSceneFiles) ) {
         $global:ByteArrayGame = [System.IO.File]::ReadAllBytes($GetROM.decomp)
         CreateSubPath $GameFiles.editor
         $start  = CombineHex $ByteArrayGame[((GetDecimal $LanguagePatch.script_dma)+0)..((GetDecimal $LanguagePatch.script_dma)+3)]
@@ -444,7 +446,7 @@ function PatchingAdditionalOptions() {
     # BPS - Additional Options (before languages)
     RunCommand -Command "PrePatchTextOptions" -Message "Text File"
 
-    if ( (IsSet -Elem $LanguagePatchFile) -and $Settings.Debug.NoTextPatching -ne $True) {
+    if ( (IsSet -Elem $LanguagePatchFile) -and $Settings.Debug.NoTextPatching -ne $True -and !(DoAssertSceneFiles) ) {
         UpdateStatusLabel ("Patching " + $GameType.mode + " Language...")
         ApplyPatch -File $GetROM.decomp -Patch $LanguagePatchFile
         $global:LanguagePatchFile = $null
@@ -452,6 +454,7 @@ function PatchingAdditionalOptions() {
 
     # BPS - Additional Options
     RunCommand -Command "PatchOptions" -Message "File"
+    if (DoAssertSceneFiles) { ApplyTestSceneFiles }
 
     # BPS - Redux Options
     if ( (HasCommand "PatchReduxOptions") -and ( (IsChecked $Patches.Redux) -or (IsSet $GamePatch.preset) ) -and (IsSet $GamePatch.redux) ) { RunCommand -Command "PatchReduxOptions" -Message "Redux File" }
@@ -462,7 +465,7 @@ function PatchingAdditionalOptions() {
     RunCommand -Command "ByteOptions" -Message "Byte"
 
     # Redux Options
-    if ( (CheckCommand "ByteReduxOptions") -and ( (IsChecked $Patches.Redux) -or (IsSet $GamePatch.preset) ) -and (IsSet $GamePatch.redux) ) {
+    if ( (CheckCommand "ByteReduxOptions") -and ( (IsChecked $Patches.Redux) -or (IsSet $GamePatch.preset) ) -and (IsSet $GamePatch.redux) -and !(DoAssertSceneFiles) ) {
         $global:Symbols = SetJSONFile ($GameFiles.base + "\symbols.json")
         RunCommand -Command "ByteReduxOptions" -Message "Redux"
         $global:Symbols = $null
@@ -473,11 +476,12 @@ function PatchingAdditionalOptions() {
         $global:SceneEditor     = @{}
         $Files.json.sceneEditor = SetJSONFile $GameFiles.sceneEditor
         RunCommand -Command "ByteSceneOptions" -Message "Scene" -Check ($Settings.Debug.NoScenePatching -ne $True)
+        if (DoAssertSceneFiles) { TestScenesFiles }
         $global:SceneEditor = $Files.json.sceneEditor = $null
     }
     
     # Language Options
-    if ($Settings.Debug.NoTextPatching -ne $True -or (HasCommand ($GamePatch.function + "ByteTextOptions"))) {
+    if ($Settings.Debug.NoTextPatching -ne $True -or (HasCommand ($GamePatch.function + "ByteTextOptions") ) -and !(DoAssertSceneFiles) ) {
         $Files.json.textEditor = $null
         if ($LanguagePatch.script_dma -ne $null -and $LanguagePatch.region -ne "J") {
             RemoveFile ($GameFiles.extracted + "\message_data_static." + $LanguagePatch.code + ".bin")
@@ -949,6 +953,8 @@ function ApplyPatch([string]$File=$GetROM.decomp, [string]$Patch, [string]$New, 
         return $False
     }
 
+    write-host "Path: " $Patch
+
     # Patching
     if ($Patch -like "*.bps*" -or $Patch -like "*.ips*") {
         if ($New.Length -gt 0) {
@@ -1162,7 +1168,7 @@ function CompressROM() {
 function PatchRedux() {
     
     # BPS PATCHING REDUX #
-    if (!$Patches.Redux.Checked -or $GamePatch.redux -eq $null -or !(TestFile (CheckPatchExtension ($GameFiles.base + "\redux")))) { return }
+    if (!$Patches.Redux.Checked -or $GamePatch.redux -eq $null -or (DoAssertSceneFiles) -or !(TestFile (CheckPatchExtension ($GameFiles.base + "\redux")))) { return }
 
     if (!(TestFile $GetROM.decomp)) { Copy-Item -LiteralPath $GetROM.run -Destination $GetROM.decomp -Force }
     UpdateStatusLabel ("Patching " + $GameType.mode + " REDUX...")
