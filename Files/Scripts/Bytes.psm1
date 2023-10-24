@@ -34,11 +34,15 @@ function ChangeBytes([string]$File, [byte[]]$Array, [object]$Offset, [object]$Ma
     elseif ($Values -is [String])                                        { $valuesDec = $Values -split '(..)' -ne '' | foreach { [Convert]::ToByte($_, 16) } }
     elseif ($Values -is [Array]  -and $Values[0] -is [System.String])    { $valuesDec = $Values                      | foreach { [Convert]::ToByte($_, 16) } }
     else                                                                 { $valuesDec = @(); $valuesDec += $Values }
-
-    if ($Repeat -gt 0) { $tempValues = $ValuesDec }
-    while ($Repeat -gt 0) {
-        $ValuesDec += $tempValues
-        $Repeat--
+    
+    if ($Repeat -gt 0) {
+        if ($valuesDec -isnot [array]) {
+            $tempValues  = @()
+            $tempValues += $valuesDec
+            $valuesDec   = $tempValues
+        }
+        $tempValues = $ValuesDec
+        for ($i=0; $i -lt $Repeat; $i++) { $valuesDec += $tempValues }
     }
 
     if     ($Array.count -gt 0 -and $Array -ne $null)                    { $ByteArrayGame = $Array                                }

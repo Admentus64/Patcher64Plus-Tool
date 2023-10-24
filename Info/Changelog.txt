@@ -1,3 +1,7 @@
+v22.0.8
+- Updated Scene Editor with more accurate fixes
+- Fixed issue with ChangeBytes for repeating values
+
 v22.0.7
 - Updated Scene Editor with new API calls and fixes
 
