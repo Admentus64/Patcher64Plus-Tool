@@ -23,6 +23,7 @@
 	"settings"			: "Dawn & Dusk",
 	"vanilla"			: 6,
 	"age"				: "Child",
+	"models"			: 0,
 	"output"			: "dawn_&_dusk",
 	"tooltip"			: "A small-sized ROM hack in a completely new setting"
 
@@ -93,6 +94,7 @@
 	"script"			: "Ocarina of Time",
 	"settings"			: "Gold Quest",
 	"vanilla"			: 2,
+	"models"			: 0,
 	"output"			: "gold_quest",
 	"tooltip"			: "Remixes the overworld and dungeons as a harder version of master Quest{0}With support for languages, redux and additional options"
 

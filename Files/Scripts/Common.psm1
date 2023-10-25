@@ -411,7 +411,7 @@ function ChangePatch() {
     if ($GamePatch.script -ne $null) {
         if ($GamePatch.script -is [system.Array]) {
             foreach ($script in $GamePatch.script) {
-                if (Get-Module -Name $script) { Remove-Module -Name $scriptGame }
+                if (Get-Module -Name $script) { Remove-Module -Name $script }
             }
         }
         elseif (Get-Module -Name $GamePatch.script) { Remove-Module -Name $GamePatch.script }

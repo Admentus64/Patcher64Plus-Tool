@@ -1063,6 +1063,46 @@ function PatchLoadedScene([switch]$Silent) {
 }
 
 
+#==============================================================================================================================================================================================
+function ShiftActors([sbyte]$Value) {
+    
+    switch ($SceneEditor.LoadedScene.Name) {
+        "Kokiri Forest" {
+            $SceneEditor.QueuedBytes.add(@{ offset = 0xE297B7; value = $Value}) # Saria
+            break
+        }
+        "Graveyard" {
+            if ($SceneEditor.LoadedHeader -eq 0) {
+                $SceneEditor.QueuedBytes.add(@{ offset = 0xE09D37; value = $Value}) # Royal Tomb Gravestone
+                $SceneEditor.QueuedBytes.add(@{ offset = 0xE09D47; value = $Value}) # Royal Tomb Gravestone
+            }
+            break
+        }
+        "Sacred Forest Meadow" {
+            if ($SceneEditor.LoadedHeader -eq 0) {
+                $SceneEditor.QueuedBytes.add(@{ offset = 0xE29D63; value = $Value}) # Saria
+                $SceneEditor.QueuedBytes.add(@{ offset = 0xC7BA4F; value = $Value}) # Sheik
+            }
+            break
+        }
+        "Lake Hylia" {
+                                                   $SceneEditor.QueuedBytes.add(@{ offset = 0xE31307; value = $Value})   # Owl
+            if ($SceneEditor.LoadedHeader -eq 0) { $SceneEditor.QueuedBytes.add(@{ offset = 0xE9E227; value = $Value}) } # Fire Array Sun
+            break
+        }
+        "Goron City" {
+            if ($SceneEditor.LoadedHeader -eq 0) { $SceneEditor.QueuedBytes.add(@{ offset = 0xCF11D7; value = $Value}) } # Sheik
+            break
+        }
+        "Death Mountain Crater" {
+            if ($SceneEditor.LoadedHeader -eq 0) { $SceneEditor.QueuedBytes.add(@{ offset = 0xC7BC03; value = $Value}) } # Sheik
+            break
+        }
+    }
+
+}
+
+
 
 #==============================================================================================================================================================================================
 function ShiftTexturesTable([sbyte]$Value) {
@@ -1108,33 +1148,14 @@ function ShiftCutscenesTable([sbyte]$Value) {
             ChangeBytes -File ($Paths.Temp + "\scene\cutscenes.tbl") -Offset (7 + 8 * 12) -Values $Value -Add -Silent
             break
         }
-        "Kakariko Village" {
-            ChangeBytes -File ($Paths.Temp + "\scene\cutscenes.tbl") -Offset (7 + 8 * 2)  -Values $Value -Add -Silent
-            break
-        }
-         "Lake Hylia" {
-            ChangeBytes -File ($Paths.Temp + "\scene\cutscenes.tbl") -Offset (7 + 8 * 13) -Values $Value -Add -Silent
-            $SceneEditor.QueuedBytes.add(@{ offset = 0xE31307; value = $Value}) # Owl
-            if ($SceneEditor.LoadedHeader -eq 0) { $SceneEditor.QueuedBytes.add(@{ offset = 0xE9E227; value = $Value}) } # Fire Array Sun
-            break
-        }
-         "Gerudo's Fortress" {
+        "Gerudo's Fortress" {
             ChangeBytes -File ($Paths.Temp + "\scene\cutscenes.tbl") -Offset (7 + 8 * 15) -Values $Value -Add -Silent
             ChangeBytes -File ($Paths.Temp + "\scene\cutscenes.tbl") -Offset (7 + 8 * 31) -Values $Value -Add -Silent
-            break
-        }
-        "Graveyard" {
-            ChangeBytes -File ($Paths.Temp + "\scene\cutscenes.tbl") -Offset (7 + 8 * 18) -Values $Value -Add -Silent
-            if ($SceneEditor.LoadedHeader -eq 0) {
-                $SceneEditor.QueuedBytes.add(@{ offset = 0xE09D37; value = $Value}) # Royal Tomb Gravestone
-                $SceneEditor.QueuedBytes.add(@{ offset = 0xE09D47; value = $Value}) # Royal Tomb Gravestone
-            }
             break
         }
         "Death Mountain Crater" {
             ChangeBytes -File ($Paths.Temp + "\scene\cutscenes.tbl") -Offset (7 + 8 * 21) -Values $Value -Add -Silent
             ChangeBytes -File ($Paths.Temp + "\scene\cutscenes.tbl") -Offset (7 + 8 * 32) -Values $Value -Add -Silent
-            if ($SceneEditor.LoadedHeader -eq 0) { $SceneEditor.QueuedBytes.add(@{ offset = 0xC7BC03; value = $Value}) } # Sheik
             break
         }
         "Inside Ganon's Castle" {
@@ -1146,33 +1167,25 @@ function ShiftCutscenesTable([sbyte]$Value) {
             ChangeBytes -File ($Paths.Temp + "\scene\cutscenes.tbl") -Offset (7 + 8 * 29) -Values $Value -Add -Silent
             break
         }
-        "Kokiri Forest" {
-            ChangeBytes -File ($Paths.Temp + "\scene\cutscenes.tbl") -Offset (7 + 8 * 33) -Values $Value -Add -Silent
-            $SceneEditor.QueuedBytes.add(@{ offset = 0xE297B7; value = $Value}) # Saria
-            break
-        }
-        "Sacred Forest Meadow" {
-            ChangeBytes -File ($Paths.Temp + "\scene\cutscenes.tbl") -Offset (7 + 8 * 35) -Values $Value -Add -Silent
-            if ($SceneEditor.LoadedHeader -eq 0) {
-                $SceneEditor.QueuedBytes.add(@{ offset = 0xE29D63; value = $Value}) # Saria
-                $SceneEditor.QueuedBytes.add(@{ offset = 0xC7BA4F; value = $Value}) # Sheik
-            }
-            break
-        }
         "Death Mountain Trail"                    { ChangeBytes -File ($Paths.Temp + "\scene\cutscenes.tbl") -Offset (7 + 8 * 1)  -Values $Value -Add -Silent; break }
+        "Kakariko Village"                        { ChangeBytes -File ($Paths.Temp + "\scene\cutscenes.tbl") -Offset (7 + 8 * 2)  -Values $Value -Add -Silent; break }
         "Zora's Domain"                           { ChangeBytes -File ($Paths.Temp + "\scene\cutscenes.tbl") -Offset (7 + 8 * 3)  -Values $Value -Add -Silent; break }
         "Hyrule Castle"                           { ChangeBytes -File ($Paths.Temp + "\scene\cutscenes.tbl") -Offset (7 + 8 * 4)  -Values $Value -Add -Silent; break }
         "Goron City"                              { ChangeBytes -File ($Paths.Temp + "\scene\cutscenes.tbl") -Offset (7 + 8 * 5)  -Values $Value -Add -Silent; break }
         "Temple of Time"                          { ChangeBytes -File ($Paths.Temp + "\scene\cutscenes.tbl") -Offset (7 + 8 * 6)  -Values $Value -Add -Silent; break }
         "Inside the Deku Tree"                    { ChangeBytes -File ($Paths.Temp + "\scene\cutscenes.tbl") -Offset (7 + 8 * 7)  -Values $Value -Add -Silent; break }
+        "Lake Hylia"                              { ChangeBytes -File ($Paths.Temp + "\scene\cutscenes.tbl") -Offset (7 + 8 * 13) -Values $Value -Add -Silent; break }
         "Gerudo Valley"                           { ChangeBytes -File ($Paths.Temp + "\scene\cutscenes.tbl") -Offset (7 + 8 * 14) -Values $Value -Add -Silent; break }
         "Lon Lon Ranch"                           { ChangeBytes -File ($Paths.Temp + "\scene\cutscenes.tbl") -Offset (7 + 8 * 16) -Values $Value -Add -Silent; break }
         "Inside Jabu Jabu's Belly"                { ChangeBytes -File ($Paths.Temp + "\scene\cutscenes.tbl") -Offset (7 + 8 * 17) -Values $Value -Add -Silent; break }
+        "Graveyard"                               { ChangeBytes -File ($Paths.Temp + "\scene\cutscenes.tbl") -Offset (7 + 8 * 18) -Values $Value -Add -Silent; break }
         "Zora's Fountain"                         { ChangeBytes -File ($Paths.Temp + "\scene\cutscenes.tbl") -Offset (7 + 8 * 19) -Values $Value -Add -Silent; break }
         "Desert Colossus"                         { ChangeBytes -File ($Paths.Temp + "\scene\cutscenes.tbl") -Offset (7 + 8 * 20) -Values $Value -Add -Silent; break }
         "Ganon's Castle Exterior"                 { ChangeBytes -File ($Paths.Temp + "\scene\cutscenes.tbl") -Offset (7 + 8 * 22) -Values $Value -Add -Silent; break }
         "Royal Family Tomb"                       { ChangeBytes -File ($Paths.Temp + "\scene\cutscenes.tbl") -Offset (7 + 8 * 23) -Values $Value -Add -Silent; break }
         "Twinrova's Lair & Iron Knuckle's Lair"   { ChangeBytes -File ($Paths.Temp + "\scene\cutscenes.tbl") -Offset (7 + 8 * 30) -Values $Value -Add -Silent; break }
+        "Kokiri Forest"                           { ChangeBytes -File ($Paths.Temp + "\scene\cutscenes.tbl") -Offset (7 + 8 * 33) -Values $Value -Add -Silent; break }
+        "Sacred Forest Meadow"                    { ChangeBytes -File ($Paths.Temp + "\scene\cutscenes.tbl") -Offset (7 + 8 * 35) -Values $Value -Add -Silent; break }
     }
 
 }
@@ -2972,6 +2985,7 @@ function ShiftSceneData() {
 
     ShiftCutscenesTable -Value 16
     ShiftTexturesTable  -Value 16
+    ShiftActors         -Value 16
     if ($SceneEditor.parse -eq "oot") { ChangeBytes -File ($Paths.Temp + "\scene\scenes.tbl") -Offset (7 + 20 * (GetDecimal $SceneEditor.LoadedScene.id)) -Values 16 -Add -Silent }
     
     $SceneEditor.LoadedMap   = $originalMap
