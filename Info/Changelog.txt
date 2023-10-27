@@ -1,3 +1,8 @@
+v22.0.9
+- Reworked Restore Text for OoT (merged other text options into Restore Text)
+- Isolated the Gold Skulltula option from Restore Text for OoT
+- Fixed issue with Restore Text for MM
+
 v22.0.8
 - Updated Scene Editor with more accurate fixes
 - Fixed issue with ChangeBytes for repeating values

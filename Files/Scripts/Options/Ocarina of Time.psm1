@@ -1327,10 +1327,6 @@ function ByteOptions() {
 
     # SCRIPT #
 
-    if (IsChecked $Redux.Text.KeatonMaskFix) {
-        if (TestFile ($GameFiles.textures + "\Text Labels\keaton_mask." + $LanguagePatch.code + ".label"))   { PatchBytes -Offset "8A7C00" -Texture -Patch ("Text Labels\keaton_mask." + $LanguagePatch.code + ".label") }
-    }
-
     if (IsChecked $Redux.Text.Fairy) {
         if (TestFile ($GameFiles.textures + "\Text Labels\fairy." + $LanguagePatch.code + ".label"))         { PatchBytes -Offset "8A4C00" -Texture -Patch ("Text Labels\fairy." + $LanguagePatch.code + ".label") }
     }
@@ -1793,9 +1789,7 @@ function ByteSceneOptions() {
 #==============================================================================================================================================================================================
 function WholeTextOptions() {
     
-    if     (IsChecked $Redux.Text.Restore)   { ApplyText -Script "restore_static.bps" -Table "restore_table.bps" }
-    elseif (IsChecked $Redux.Text.Beta)      { ApplyText -Script "ura_static.bps"     -Table "ura_table.bps"     }
-    elseif (IsChecked $Redux.Text.Custom) {
+    if (IsChecked $Redux.Text.Custom) {
         if ( (TestFile ($Gamefiles.editor + "\message_data_static." + $LanguagePatch.code + ".bin") ) -and (TestFile ($Gamefiles.editor + "\message_data." + $LanguagePatch.code + ".tbl") ) ) {
             Copy-Item -LiteralPath ($Gamefiles.editor + "\message_data_static." + $LanguagePatch.code + ".bin") -Destination $Script -Force
             Copy-Item -LiteralPath ($Gamefiles.editor + "\message_data."        + $LanguagePatch.code + ".tbl") -Destination $Table  -Force
@@ -1851,6 +1845,64 @@ function ByteTextOptions() {
         }
     }
     elseif (IsChecked $Redux.Text.Speed2x) { ChangeBytes -Offset "B5006F" -Values "02" }
+
+    if (IsChecked $Redux.Text.FemalePronouns) {
+        SetMessage -ID "10B2" -Text "You must be a nice guy!"                                                                        -Replace "You must be a nice gal!"
+        SetMessage -ID "10B2" -Text "Mr. Nice Guy"                                                                                   -Replace "Ms. Nice Gal"
+        SetMessage -ID "2086" -Text "How'd you like to marry Malon?"                                                                 -Replace "How'd you like to come work for us?"
+        SetMessage -ID "301C" -Text "fella"                                                                                          -Replace "lass"
+        SetMessage -ID "3039" -Text "man-to-man"                                                                                     -Replace "man-to-woman"
+        SetMessage -ID "3042" -Text "a<N>strong man like you"                                                                        -Replace "<N>strong like you"
+        SetMessage -ID "4027" -Text @(6, 69); SetMessage -ID "4027" -Text "All right!"                                               -Replace "You're no man, so let's make<N>this our little secret, ok?"
+        SetMessage -ID "403E" -Text "You're a terrible man to have <N>kept me waiting for these seven<N>long years..."               -Replace "You're a terrible betrothed<N>to have kept me waiting for<N>these seven long years..."
+        SetMessage -ID "4041" -Text "man I chose to be my<N>husband"                                                                 -Replace "woman I chose to be my<>best friend"
+        SetMessage -ID "404E" -Text "If you're a man, act like one!"                                                                 -Replace "If you're supposed to save me, act like it!"
+        SetMessage -ID "507C" -Text "There he is! It's him!<N>He"                                                                    -Replace "There she is! It's her!<N>She"
+        SetMessage -ID "6036" -Text "handsome man...<Delay:50>I should have kept the promise<N>I made back then..."                  -Replace "beautiful woman...<Delay:50>I should have had let you<N>join us back then..."
+        SetMessage -ID "70F4" -Text "handsome"                                                                                       -Replace "pretty"
+
+        SetMessage -ID "00E7" -Text "boy"      -Replace "girl";       SetMessage -ID "0408"; SetMessage -ID "1058" -All; SetMessage -ID "105B"; SetMessage -ID "1065"; SetMessage -ID "1096"; SetMessage -ID "109A"; SetMessage -ID "109F"; SetMessage -ID "2000"; SetMessage -ID "2043"
+        SetMessage -ID "2047" -All;                                   SetMessage -ID "2048"; SetMessage -ID "204A";      SetMessage -ID "2086"; SetMessage -ID "40AC"; SetMessage -ID "5022"; SetMessage -ID "5036"; SetMessage -ID "505B"; SetMessage -ID "505D"; SetMessage -ID "6024"
+        SetMessage -ID "605D" -All;                                   SetMessage -ID "6079"; SetMessage -ID "7007" -All; SetMessage -ID "7023"; SetMessage -ID "7090"; SetMessage -ID "7174"
+
+        SetMessage -ID "00BE" -Text "man"      -Replace "lady";       SetMessage -ID "0168"; SetMessage -ID "021C";      SetMessage -ID "2025"; SetMessage -ID "2030"; SetMessage -ID "2037"; SetMessage -ID "2085"; SetMessage -ID "407D"; SetMessage -ID "4088"; SetMessage -ID "502D"
+        SetMessage -ID "502E";                                        SetMessage -ID "5041"; SetMessage -ID "505B" -All; SetMessage -ID "5081"; SetMessage -ID "6066"; SetMessage -ID "7011"; SetMessage -ID "70F4"; SetMessage -ID "70F5"; SetMessage -ID "70F7"; SetMessage -ID "70F8"
+
+        SetMessage -ID "6035" -Text "man"      -Replace "woman";      SetMessage -ID "70A1"
+        SetMessage -ID "102F" -Text "real man" -Replace "real woman"; SetMessage -ID "10D7"; SetMessage -ID "301C"; SetMessage -ID "301D"; SetMessage -ID "303C"
+        SetMessage -ID "301E" -Text "Brother"  -Replace "Sister";     SetMessage -ID "3027"; SetMessage -ID "3039"; SetMessage -ID "303C"; SetMessage -ID "3041"; SetMessage -ID "3045"; SetMessage -ID "3046"; SetMessage -ID "3068" -All
+        SetMessage -ID "3006" -Text "brother"  -Replace "sister";     SetMessage -ID "70E1"
+        SetMessage -ID "3000" -Text "Brother"  -Replace "Sibling";    SetMessage -ID "3001"; SetMessage -ID "3004"; SetMessage -ID "303D"
+        SetMessage -ID "102F" -Text "Mr."      -Replace "Ms.";        SetMessage -ID "200A"; SetMessage -ID "2010"; SetMessage -ID "2011"; SetMessage -ID "2015"; SetMessage -ID "2020"; SetMessage -ID "5068"; SetMessage -ID "712D"
+        SetMessage -ID "4018" -Text "son"      -Replace "lass";       SetMessage -ID "5063"; SetMessage -ID "5066"
+        SetMessage -ID "708A" -Text "sonny"    -Replace "lassie";     SetMessage -ID "7148"; SetMessage -ID "714A"
+        SetMessage -ID "2060" -Text "lad"      -Replace "lass";       SetMessage -ID "40A9"; SetMessage -ID "5025"
+        SetMessage -ID "101A" -Text "master"   -Replace "mistress";   SetMessage -ID "109B"
+        SetMessage -ID "1052" -Text "mister"   -Replace "miss";       SetMessage -ID "1053"; SetMessage -ID "1055"; SetMessage -ID "1057"; SetMessage -ID "1058"; SetMessage -ID "105A"; SetMessage -ID "105D"; SetMessage -ID "1073"; SetMessage -ID "1076"; SetMessage -ID "4093"
+        SetMessage -ID "105B" -Text "Mister"   -Replace "Miss"
+        SetMessage -ID "0012" -Text "guy"      -Replace "gal";        SetMessage -ID "0058"; SetMessage -ID "00F7"; SetMessage -ID "1074"; SetMessage -ID "10B4"; SetMessage -ID "10B6"; SetMessage -ID "607D"; SetMessage -ID "701F" -All; SetMessage -ID "7190"
+        SetMessage -ID "0420" -Text "he"       -Replace "she";        SetMessage -ID "1075"; SetMessage -ID "5034"; SetMessage -ID "508A"; SetMessage -ID "602B"
+        SetMessage -ID "105B" -Text "He"       -Replace "She";        SetMessage -ID "2010"; SetMessage -ID "6048"
+        SetMessage -ID "109A" -Text "his"      -Replace "her";        SetMessage -ID "604A"; SetMessage -ID "109A" -All
+        SetMessage -ID "1065" -Text "him"      -Replace "her";        SetMessage -ID "1068"; SetMessage -ID "1070"; SetMessage -ID "1071" -All; SetMessage -ID "109A" -All; SetMessage -ID "10D6" -All; SetMessage -ID "5034"; SetMessage -ID "6048"; SetMessage -ID "6049"; SetMessage -ID "604A"
+    }
+
+    if (IsChecked $Redux.Text.Restore -Lang 1) {
+        if (TestFile ($GameFiles.textures + "\Text Labels\keaton_mask." + $LanguagePatch.code + ".label")) { PatchBytes -Offset "8A7C00" -Texture -Patch ("Text Labels\keaton_mask." + $LanguagePatch.code + ".label") }
+
+        SetMessage -ID "0004"                                                                  -Replace "You received an Odd Potion!<N>You don't know what's going on<N>between this lady and that guy,<N>but take it to the Lost Woods!"
+        SetMessage -ID "00F3" -Text "treasure<N>chest and "                                    -Replace "chest and<N>"
+        SetMessage -ID "0616" -Text "try to cut it, it will bounce<N>off your blade!"          -Replace "cut it, it will burst open and<N>knock you back!"
+        SetMessage -ID "10B8"                                                                  -Replace "That guy isn't here anymore.<New Box>Anybody who comes into the<N>forest will be lost.<New Box>Everybody will become a Stalfos.<N>Everybody, Stalfos.<N>So, he's not here anymore.<N>Only his saw is left. Hee hee.<New Box>That medicine is made of<N>forest mushrooms. Give it back!"
+        if (IsChecked $Redux.Text.FemalePronouns -Not) { SetMessage -ID "3006" -Text "brother" -Replace "Brother" }
+        SetMessage -ID "4013" -Text "the<N>temple of Lake Hylia and has not<N>come back... "   -Replace "Lake<N>Hylia and has not come back...<N>"
+        SetMessage -ID "507B" -Text @(1, 1)                                                    -Replace @(1)
+        SetMessage -ID "6041" -Text "again "                                                   -Replace ""
+        SetMessage -ID "6044" -Text "a true"                                                   -Replace "the ultimate"
+        SetMessage -ID "6046"                                                                  -Replace "Fantastic!<N>You are a true master!<N>I will give this to you.<N>Keep improving yourself!"
+        SetMessage -ID "6067"                                                                  -Replace "Building a bridge over the valley<N>is a simple task for four<N>carpenters."
+        SetMessage -ID "6077" -Text "Well Come!"                                               -Replace "Welcome!"
+    }
 
     if (IsChecked $Redux.Graphics.GCScheme) {
         if (IsChecked $Redux.Graphics.GCScheme -Lang 1) {
@@ -1935,16 +1987,8 @@ function ByteTextOptions() {
     }
     if ( (IsIndex -Elem $Redux.Text.NaviScript -Index 3) -and $LanguagePatch.code -eq "en") { SetMessage -ID "1017" -Text "her" -Replace "his"; SetMessage -ID "103F" -Text "her" -Replace "him" }
 
-    if (IsChecked $Redux.Text.TypoFixes -Lang 1)  {
-        if ((GetMessage "4013") -eq "Princess Ruto has gone to the <N>temple of Lake Hylia and has not<N>come back... I'm so worried...again!") {
-            SetMessage "4013" -Text "Princess Ruto has gone to the <N>temple of Lake Hylia and has not<N>come back... I'm so worried...again!" -Replace "Princess Ruto has gone to Lake<N>Hylia and has not come back...<N>I'm so worried...again!"
-            SetMessage "507B" -Text @(1, 1) -Replace @(1)
-            SetMessage "6041" -Text "again "
-        }
-    }
-
-    if ( (IsChecked $Redux.Text.Restore) -or (IsChecked $Redux.Text.GoldSkulltula) ) { ChangeBytes -Offset "EC68CF" -Values "00"; ChangeBytes -Offset "EC69BF" -Values "00"; ChangeBytes -Offset "EC6A2B" -Values "00"; ChangeBytes -Offset "EC6A1C" -Values "14" }
     if (IsChecked $Redux.Text.GoldSkulltula) {
+        ChangeBytes -Offset "EC68CF" -Values "00"; ChangeBytes -Offset "EC69BF" -Values "00"; ChangeBytes -Offset "EC6A2B" -Values "00"; ChangeBytes -Offset "EC6A1C" -Values "14"
         if     ($LanguagePatch.code -eq "en")   { SetMessage -ID "00B4" -Replace "You got a <R>Gold Skulltula Token<W>!<N>You've collected <R><Gold Skulltulas><W> tokens in total.<Fade:28>"        }
         elseif ($LanguagePatch.code -eq "de")   { SetMessage -ID "00B4" -Replace "Du erhältst ein <R>Skulltula-Symbol<W>. Du<N>hast insgesamt <R><Gold Skulltulas><W> Skulltulas zerstört.<Fade:28>" }
         else                                    { SetMessage -ID "00B4" -Replace @(14, 40) -Append }
@@ -2030,47 +2074,6 @@ function ByteTextOptions() {
             $replace = Get-Content -Path $file
             if ($replace.length -gt 0) { SetMessage -ID "004D" -ASCII -Text "Hylian Shield" -Replace $replace; SetMessage -ID "0092"; SetMessage -ID "009C"; SetMessage -ID "00A9"; SetMessage -ID "7013"; SetMessage -ID "7121" }
         }
-    }
-
-    if (IsChecked $Redux.Text.FemalePronouns) {
-        SetMessage -ID "10B2" -Text "You must be a nice guy!"                                                                        -Replace "You must be a nice gal!"
-        SetMessage -ID "10B2" -Text "Mr. Nice Guy"                                                                                   -Replace "Ms. Nice Gal"
-        SetMessage -ID "2086" -Text "How'd you like to marry Malon?"                                                                 -Replace "How'd you like to come work for us?"
-        SetMessage -ID "301C" -Text "fella"                                                                                          -Replace "lass"
-        SetMessage -ID "3039" -Text "man-to-man"                                                                                     -Replace "man-to-woman"
-        SetMessage -ID "3042" -Text "a<N>strong man like you"                                                                        -Replace "<N>strong like you"
-        SetMessage -ID "4027" -Text @(6, 69); SetMessage -ID "4027" -Text "All right!"                                               -Replace "You're no man, so let's make<N>this our little secret, ok?"
-        SetMessage -ID "403E" -Text "You're a terrible man to have <N>kept me waiting for these seven<N>long years..."               -Replace "You're a terrible betrothed<N>to have kept me waiting for<N>these seven long years..."
-        SetMessage -ID "4041" -Text "man I chose to be my<N>husband"                                                                 -Replace "woman I chose to be my<>best friend"
-        SetMessage -ID "404E" -Text "If you're a man, act like one!"                                                                 -Replace "If you're supposed to save me, act like it!"
-        SetMessage -ID "507C" -Text "There he is! It's him!<N>He"                                                                    -Replace "There she is! It's her!<N>She"
-        SetMessage -ID "6036" -Text "handsome man...<Delay:50>I should have kept the promise<N>I made back then..."                  -Replace "beautiful woman...<Delay:50>I should have had let you<N>join us back then..."
-        SetMessage -ID "70F4" -Text "handsome"                                                                                       -Replace "pretty"
-
-        SetMessage -ID "00E7" -Text "boy"      -Replace "girl";       SetMessage -ID "0408"; SetMessage -ID "1058" -All; SetMessage -ID "105B"; SetMessage -ID "1065"; SetMessage -ID "1096"; SetMessage -ID "109A"; SetMessage -ID "109F"; SetMessage -ID "2000"; SetMessage -ID "2043"
-        SetMessage -ID "2047" -All;                                   SetMessage -ID "2048"; SetMessage -ID "204A";      SetMessage -ID "2086"; SetMessage -ID "40AC"; SetMessage -ID "5022"; SetMessage -ID "5036"; SetMessage -ID "505B"; SetMessage -ID "505D"; SetMessage -ID "6024"
-        SetMessage -ID "605D" -All;                                   SetMessage -ID "6079"; SetMessage -ID "7007" -All; SetMessage -ID "7023"; SetMessage -ID "7090"; SetMessage -ID "7174"
-
-        SetMessage -ID "00BE" -Text "man"      -Replace "lady";       SetMessage -ID "0168"; SetMessage -ID "021C";      SetMessage -ID "2025"; SetMessage -ID "2030"; SetMessage -ID "2037"; SetMessage -ID "2085"; SetMessage -ID "407D"; SetMessage -ID "4088"; SetMessage -ID "502D"
-        SetMessage -ID "502E";                                        SetMessage -ID "5041"; SetMessage -ID "505B" -All; SetMessage -ID "5081"; SetMessage -ID "6066"; SetMessage -ID "7011"; SetMessage -ID "70F4"; SetMessage -ID "70F5"; SetMessage -ID "70F7"; SetMessage -ID "70F8"
-
-        SetMessage -ID "6035" -Text "man"      -Replace "woman";      SetMessage -ID "70A1"
-        SetMessage -ID "102F" -Text "real man" -Replace "real woman"; SetMessage -ID "10D7"; SetMessage -ID "301C"; SetMessage -ID "301D"; SetMessage -ID "303C"
-        SetMessage -ID "301E" -Text "Brother"  -Replace "Sister";     SetMessage -ID "3027"; SetMessage -ID "3039"; SetMessage -ID "303C"; SetMessage -ID "3041"; SetMessage -ID "3045"; SetMessage -ID "3046"; SetMessage -ID "3068" -All
-        SetMessage -ID "3006" -Text "brother"  -Replace "sister";     SetMessage -ID "70E1"
-        SetMessage -ID "3000" -Text "Brother"  -Replace "Sibling";    SetMessage -ID "3001"; SetMessage -ID "3004"; SetMessage -ID "303D"
-        SetMessage -ID "102F" -Text "Mr."      -Replace "Ms.";        SetMessage -ID "200A"; SetMessage -ID "2010"; SetMessage -ID "2011"; SetMessage -ID "2015"; SetMessage -ID "2020"; SetMessage -ID "5068"; SetMessage -ID "712D"
-        SetMessage -ID "4018" -Text "son"      -Replace "lass";       SetMessage -ID "5063"; SetMessage -ID "5066"
-        SetMessage -ID "708A" -Text "sonny"    -Replace "lassie";     SetMessage -ID "7148"; SetMessage -ID "714A"
-        SetMessage -ID "2060" -Text "lad"      -Replace "lass";       SetMessage -ID "40A9"; SetMessage -ID "5025"
-        SetMessage -ID "101A" -Text "master"   -Replace "mistress";   SetMessage -ID "109B"
-        SetMessage -ID "1052" -Text "mister"   -Replace "miss";       SetMessage -ID "1053"; SetMessage -ID "1055"; SetMessage -ID "1057"; SetMessage -ID "1058"; SetMessage -ID "105A"; SetMessage -ID "105D"; SetMessage -ID "1073"; SetMessage -ID "1076"; SetMessage -ID "4093"
-        SetMessage -ID "105B" -Text "Mister"   -Replace "Miss"
-        SetMessage -ID "0012" -Text "guy"      -Replace "gal";        SetMessage -ID "0058"; SetMessage -ID "00F7"; SetMessage -ID "1074"; SetMessage -ID "10B4"; SetMessage -ID "10B6"; SetMessage -ID "607D"; SetMessage -ID "701F" -All; SetMessage -ID "7190"
-        SetMessage -ID "0420" -Text "he"       -Replace "she";        SetMessage -ID "1075"; SetMessage -ID "5034"; SetMessage -ID "508A"; SetMessage -ID "602B"
-        SetMessage -ID "105B" -Text "He"       -Replace "She";        SetMessage -ID "2010"; SetMessage -ID "6048"
-        SetMessage -ID "109A" -Text "his"      -Replace "her";        SetMessage -ID "604A"; SetMessage -ID "109A" -All
-        SetMessage -ID "1065" -Text "him"      -Replace "her";        SetMessage -ID "1068"; SetMessage -ID "1070"; SetMessage -ID "1071" -All; SetMessage -ID "109A" -All; SetMessage -ID "10D6" -All; SetMessage -ID "5034"; SetMessage -ID "6048"; SetMessage -ID "6049"; SetMessage -ID "604A"
     }
 
     if (IsChecked $Redux.Text.Instant) {
@@ -2263,7 +2266,6 @@ function CreatePresets() {
 
         if ($Redux.Text.Speed2x             -ne $null)   { if ($Redux.Text.Speed2x.Enabled)                { BoxCheck $Redux.Text.Speed2x             } }
         if ($Redux.Text.Restore             -ne $null)   { if ($Redux.Text.Restore.Enabled)                { BoxCheck $Redux.Text.Restore             } }
-        if ($Redux.Text.TypoFixes           -ne $null)   { if ($Redux.Text.TypoFixes.Enabled)              { BoxCheck $Redux.Text.TypoFixes           } }
         if ($Redux.Text.GoldSkulltula       -ne $null)   { if ($Redux.Text.GoldSkulltula.Enabled)          { BoxCheck $Redux.Text.GoldSkulltula       } }
         if ($Redux.Text.EasterEggs          -ne $null)   { if ($Redux.Text.EasterEggs.Enabled)             { BoxCheck $Redux.Text.EasterEggs          } }
         if ($Redux.Fixes.Graves             -ne $null)   { if ($Redux.Fixes.Graves.Enabled)                { BoxCheck $Redux.Fixes.Graves             } }
@@ -2560,15 +2562,11 @@ function CreateTabLanguage() {
         $last.Column = 1; $last.Row++
     }
 
-    CreateReduxRadioButton -Name "Vanilla" -All    -Safe -Max 4 -SaveTo "Dialogue" -Text "Vanilla Text"  -Info "Keep the text as it is" -Checked
-    CreateReduxRadioButton -Name "Restore" -Base 1 -Safe -Max 4 -SaveTo "Dialogue" -Text "Restore Text"  -Info "Restores the text used from the GC revision and applies grammar & typo fixes and corrects some icons in the text" -Credits "ShadowOne333"
-    CreateReduxRadioButton -Name "Beta"    -Base 1 -Safe -Max 4 -SaveTo "Dialogue" -Text "Beta Text"     -Info "Restores the text as was used in the Ura Quest Beta version"                                                      -Credits "ZethN64, Sakura, Frostclaw & Steve(ToCoool)"
-    CreateReduxRadioButton -Name "Custom"  -All    -Safe -Max 4 -SaveTo "Dialogue" -Text "Custom"        -Info 'Insert custom dialogue found from "..\Patcher64+ Tool\Files\Games\Ocarina of Time\Custom Text"' -Warning "ROM crashes if the script is not proper`n[!] Won't be applied if the custom script is missing"
-   
-    CreateReduxCheckBox -Name "FemalePronouns" -Safe -Text "Female Pronouns" -Info "Refer to Link as a female character"                                                                                                                       -Credits "Admentus"
-    CreateReduxCheckBox -Name "TypoFixes"      -Safe -Text "Typo Fixes"      -Info "Include the typo fixes from the Redux script"                                                                                                              -Credits "ShadowOne333"
-    CreateReduxCheckBox -Name "GoldSkulltula"  -Safe -Text "Gold Skulltula"  -Info "The textbox for obtaining a Gold Skulltula will no longer interrupt the gameplay`nThe English & German scripts also shows the total amount you got so far" -Credits "ShadowOne333"
-    CreateReduxCheckBox -Name "EasterEggs"     -Safe -Text "Easter Eggs"     -Info "Adds custom Patreon Tier 3 messages into the game`nCan you find them all?" -Checked                                                                        -Credits "Admentus & Patreons"
+    CreateReduxCheckBox -Base 1 -Name "Restore"        -Safe -Text "Restore Text"    -Info "Restores the text used from the GC revision and applies grammar & typo fixes and corrects some icons in the text"                                          -Credits "Admentus & ShadowOne333"
+    CreateReduxCheckBox -Base 1 -Name "FemalePronouns" -Safe -Text "Female Pronouns" -Info "Refer to Link as a female character"                                                                                                                       -Credits "Admentus"
+    CreateReduxCheckBox -Base 5 -Name "GoldSkulltula"  -Safe -Text "Gold Skulltula"  -Info "The textbox for obtaining a Gold Skulltula will no longer interrupt the gameplay`nThe English & German scripts also shows the total amount you got so far" -Credits "ShadowOne333"
+    CreateReduxCheckBox -Base 4 -Name "EasterEggs"     -Safe -Text "Easter Eggs"     -Info "Adds custom Patreon Tier 3 messages into the game`nCan you find them all?" -Checked                                                                        -Credits "Admentus & Patreons"
+    CreateReduxCheckBox -Base 1 -Name "Custom"         -Safe -Text "Custom"          -Info ('Insert custom dialogue found from "..\Patcher64+ Tool\Files\Games\Majora' + "'" + 's Mask\Custom Text"') -Warning "Make sure your custom script is proper and correct, or your ROM will crash`n[!] No edit will be made if the custom script is missing"
 
 
 
@@ -2588,7 +2586,6 @@ function CreateTabLanguage() {
     CreateReduxCheckBox -Name "YeetPrompt"    -All    -Text "Yeet Action Prompt"   -Info ('Replace the "Throw" Action Prompt with "Yeet"' + "`nYeeeeet")           -Credits "kr3z"
     CreateReduxCheckBox -Name "Fairy"         -Base 4 -Text "MM Fairy Text"        -Info ("Changes " + '"Bottled Fairy" to "Fairy"' + " as used in Majora's Mask") -Credits "GhostlyDark (ported)"
     CreateReduxCheckBox -Name "Milk"          -Base 4 -Text "MM Milk Text"         -Info ("Changes " + '"Lon Lon Milk" to "Milk"' + " as used in Majora's Mask")   -Credits "GhostlyDark (ported)"
-    CreateReduxCheckBox -Name "KeatonMaskFix" -Base 4 -Text "Keaton Mask Text Fix" -Info 'Fixes the grammatical typo for the "Keaton Mask"'                        -Credits "ShadowOne333"
     CreateReduxCheckBox -Name "PauseScreen"   -Base 4 -Text "MM Pause Screen"      -Info "Replaces the Pause Screen textures to be styled like Majora's Mask"      -Credits "CM & GhostlyDark"
 
 
@@ -2635,17 +2632,11 @@ function UnlockLanguageContent() {
 
     # English options
     EnableElem -Elem $Redux.Text.Restore        -Active ($Redux.Text.Language.SelectedIndex -eq 0)
-    EnableElem -Elem $Redux.Text.Beta           -Active ($Redux.Text.Language.SelectedIndex -eq 0)
     EnableElem -Elem $Redux.Text.FemalePronouns -Active ($Redux.Text.Language.SelectedIndex -eq 0)
-    EnableElem -Elem $Redux.Text.TypoFixes      -Active ($Redux.Text.Language.SelectedIndex -eq 0)
     EnableElem -Elem $Redux.Text.EasterEggs     -Active ($Redux.Text.Language.SelectedIndex -eq 0)
-    
-    EnableElem -Elem $Redux.Text.KeatonMaskFix  -Active ($Redux.Text.Language.SelectedIndex -eq 0)
     EnableElem -Elem $Redux.Text.Fairy          -Active ($Redux.Text.Language.SelectedIndex -eq 0)
     EnableElem -Elem $Redux.Text.Milk           -Active ($Redux.Text.Language.SelectedIndex -eq 0)
     EnableElem -Elem $Redux.Text.PauseScreen    -Active ($Redux.Text.Language.SelectedIndex -eq 0)
-
-    if ($Redux.Text.Language.SelectedIndex -ne 0 -and !$Redux.Text.Vanilla.Checked -and !$Redux.Text.Custom.Checked) { $Redux.Text.Vanilla.Checked = $True }
 
     # German options
     EnableElem -Elem $Redux.Text.CheckPrompt    -Active ($Files.json.languages[$Redux.Text.Language.SelectedIndex].code -eq "de")
