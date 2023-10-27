@@ -1891,11 +1891,11 @@ function ByteTextOptions() {
         if (TestFile ($GameFiles.textures + "\Text Labels\keaton_mask." + $LanguagePatch.code + ".label")) { PatchBytes -Offset "8A7C00" -Texture -Patch ("Text Labels\keaton_mask." + $LanguagePatch.code + ".label") }
 
         SetMessage -ID "0004"                                                                  -Replace "You received an Odd Potion!<N>You don't know what's going on<N>between this lady and that guy,<N>but take it to the Lost Woods!"
-        SetMessage -ID "00F3" -Text "treasure<N>chest and "                                    -Replace "chest and<N>"
+        SetMessage -ID "00F3" -Text "treasure <N>chest and "                                   -Replace "chest and<N>"
         SetMessage -ID "0616" -Text "try to cut it, it will bounce<N>off your blade!"          -Replace "cut it, it will burst open and<N>knock you back!"
         SetMessage -ID "10B8"                                                                  -Replace "That guy isn't here anymore.<New Box>Anybody who comes into the<N>forest will be lost.<New Box>Everybody will become a Stalfos.<N>Everybody, Stalfos.<N>So, he's not here anymore.<N>Only his saw is left. Hee hee.<New Box>That medicine is made of<N>forest mushrooms. Give it back!"
         if (IsChecked $Redux.Text.FemalePronouns -Not) { SetMessage -ID "3006" -Text "brother" -Replace "Brother" }
-        SetMessage -ID "4013" -Text "the<N>temple of Lake Hylia and has not<N>come back... "   -Replace "Lake<N>Hylia and has not come back...<N>"
+        SetMessage -ID "4013" -Text "the <N>temple of Lake Hylia and has not<N>come back... "  -Replace "Lake<N>Hylia and has not come back...<N>"
         SetMessage -ID "507B" -Text @(1, 1)                                                    -Replace @(1)
         SetMessage -ID "6041" -Text "again "                                                   -Replace ""
         SetMessage -ID "6044" -Text "a true"                                                   -Replace "the ultimate"
