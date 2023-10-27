@@ -658,6 +658,8 @@ function GetMessage([string]$ID, [switch]$Reset) {
 #==============================================================================================================================================================================================
 function AddMessageIDButton([string]$ID, [byte]$Column, [uint16]$Row, [string]$Color="Gray") {
     
+    if ($TextEditor.ListPanel -eq $null) { return }
+
     $button           = New-Object System.Windows.Forms.Button
     $button.Text      = $ID
     $button.Font      = $Fonts.Small

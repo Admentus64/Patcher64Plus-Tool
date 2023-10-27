@@ -1125,8 +1125,8 @@ function ByteTextOptions() {
         SetMessage -ID "0083" -Text "Circus" -Replace "Trouple"; SetMessage -ID "173D"; SetMessage -ID "1FF4"; SetMessage -ID "210A"; SetMessage -ID "21B4"; SetMessage -ID "2341"
 
         # Retranslations
-        SetMessage -ID "0804" -Replace "Actually, when I look at you,<N>it reminds me of my son who<N>left the house a long time ago...<New Box>Somehow, it felt as if I was<N>competing with my son once more,<N>so I put all my effort into it...<Reset><New Box II>Please excuse my rudeness.<New Box>I look forward to seeing you again...<N>Be careful.<End>"
-        SetMessage -ID "101F" -Replace "Today, Mikau, the one person<N>whom I didn't want to know,<N>about it, found out everything.<New Box II>At first, I was ashamed and<N>too sad, I couldn't help it.<Reset><New Box II>At that time, I thought the<N>words Mikau said eased my heart.<New Box>But please, Mikau, I'm begging you,<N>don't do anything rash."
+        SetMessage -ID "0804" -Replace "<Sound:398F>Actually, when I look at you,<N>it reminds me of my <R>son<W> who<N>left the house a long time ago...<New Box>Somehow, it felt as if I was<N>competing with my <R>son<W> once more,<N>so I put all my effort into it...<Reset><New Box II>Please excuse my rudeness.<New Box>I look forward to seeing you again...<N>Be careful.<End>"
+        SetMessage -ID "101F" -Replace "Today, Mikau, the one person<N>whom I didn't want to know,<N>about it, found out everything.<New Box>At first, I was ashamed and<N>too sad, I couldn't help it.<Reset><New Box>At that time, I thought the<N>words Mikau said eased my heart.<New Box>But please, Mikau, I'm begging you,<N>don't do anything rash.<End>"
         SetMessage -ID "1030" -Text    "Now I can continue resting in<N>peace. I too must abide the laws<N>of ancient times and again merely<N>watch from my deep slumber." `
                               -Replace "Now the Zora Warrior's soul<N>can rest in peace...<New Box>I, too, must abide the laws<N>of ancient times, and have to<N>return again to my deep slumber..."
         # Typos and fixes
