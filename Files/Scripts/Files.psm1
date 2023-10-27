@@ -236,22 +236,24 @@ function SetGetROM() {
     $GetROM.masterQuest                     = $Paths.Temp  + "\master-quest-decompressed"
     $GetROM.nes                             = $Paths.Temp  + "\rom.nes"
     $GetROM.cache                           = $Paths.Cache + "\cached_rom"
-
+    
     if ($IsWiiVC -and (IsSet $WADFile) ) {
         if (!(IsSet $WADFile.ROM)) { $WADFile.ROM = $GetROM.nes }
         $GetROM.in            = $GetROM.patched = $WADFile.ROM
-        $GetROM.keepConvert   = $WADFile.Convert
-        $GetROM.keepDowngrade = $WADFile.Downgrade
-        $GetROM.keepDecomp    = $WADFile.Decomp
+        $item                 = Get-Item $WADFile.ROM
+        $GetROM.keepConvert   = $GamePath.Directory.toString() + "\" + $GamePath.BaseName.toString() + "-converted"    + $item.Extension.toString()
+        $GetROM.keepDowngrade = $GamePath.Directory.toString() + "\" + $GamePath.BaseName.toString() + "-downgraded"   + $item.Extension.toString()
+        $GetROM.keepDecomp    = $GamePath.Directory.toString() + "\" + $GamePath.BaseName.toString() + "-decompressed" + $item.Extension.toString()
     }
     elseif (!$IsWiiVC -and (IsSet $ROMFile) ) {
         $GetROM.in            = $ROMFile.ROM
         $GetROM.patched       = $ROMFile.Patched
-        $GetROM.keepConvert   = $ROMFile.Convert
-        $GetROM.keepDowngrade = $ROMFile.Downgrade
-        $GetROM.keepDecomp    = $ROMFile.Decomp
+        $item                 = Get-Item $ROMFile.ROM
+        $GetROM.keepConvert   = $GamePath.Directory.toString() + "\" + $GamePath.BaseName.toString() + "-converted"    + $item.Extension.toString()
+        $GetROM.keepDowngrade = $GamePath.Directory.toString() + "\" + $GamePath.BaseName.toString() + "-downgraded"   + $item.Extension.toString()
+        $GetROM.keepDecomp    = $GamePath.Directory.toString() + "\" + $GamePath.BaseName.toString() + "-decompressed" + $item.Extension.toString()
     }
-
+    
     if ($GetROM.in -ne $null) { $GetROM.run = $GetROM.in }
 
     if ($Settings.Debug.CreateCompressedBPS   -eq $True)   { $Files.compBPS   = [System.IO.Path]::GetDirectoryName($GamePath) + "\" + [System.IO.Path]::GetFileNameWithoutExtension($GamePath) + "_compressed.bps"   }
