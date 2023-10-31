@@ -764,24 +764,24 @@ function ByteOptions() {
     # MISC COLORS #
 
    <# if (IsChecked $Redux.Colors.BoomerangTrail) {
-        ChangeBytes -Offset "C5A8FB" -Values "BBBBBBBBBB"       -Interval 4
-        ChangeBytes -Offset "C5A923" -Values "BBBBBBBBBBBBBBBB" -Interval 4
+        ChangeBytes -Offset "C5A8FB" -Values "BB BB BB BB BB"          -Interval 4
+        ChangeBytes -Offset "C5A923" -Values "BB BB BB BB BB BB BB BB" -Interval 4
     } #>
 
     if (IsChecked $Redux.Colors.PauseScreenColors) {
-        ChangeBytes -Offset "BBF88E" -Values "978B" # Menu Title Background
-        ChangeBytes -Offset "BBF892" -Values "61"   # Menu Title Background
-        ChangeBytes -Offset "BBF97E" -Values "978B" # Z
-        ChangeBytes -Offset "BBF982" -Values "61FF" # R
-        ChangeBytes -Offset "BBFC7E" -Values "FFFF" # Unavailable Menu Title
-        ChangeBytes -Offset "BBFC82" -Values "FF"   # Unavailable Menu Title
-        ChangeBytes -Offset "BC793D" -Values "97"   # Z/R Highlight
-        ChangeBytes -Offset "BC793F" -Values "8B"   # Z/R Highlight
-        ChangeBytes -Offset "BC7941" -Values "61"   # Z/R Highlight
-        ChangeBytes -Offset "BC7945" -Values "97"   # Z/R Highlight
-        ChangeBytes -Offset "BC7947" -Values "8B"   # Z/R Highlight
-        ChangeBytes -Offset "BC7949" -Values "61"   # Z/R Highlight
-        ChangeBytes -Offset "BC7994" -Values "B4B4B4B478B4B4B4B4B4B4B478B4B4B4B4B4B4B4B4B4B4B4B4B4B4B478B4B4B4B4B4B4B478B4B4B4B4B4B4B4B4B4B4B4787878784678787878787878467878787878787878787878" # Background
+        ChangeBytes -Offset "BBF88E" -Values "97 8B" # Menu Title Background
+        ChangeBytes -Offset "BBF892" -Values "61" # Menu Title Background
+        ChangeBytes -Offset "BBF97E" -Values "97 8B" # Z
+        ChangeBytes -Offset "BBF982" -Values "61 FF" # R
+        ChangeBytes -Offset "BBFC7E" -Values "FF FF" # Unavailable Menu Title
+        ChangeBytes -Offset "BBFC82" -Values "FF" # Unavailable Menu Title
+        ChangeBytes -Offset "BC793D" -Values "97" # Z/R Highlight
+        ChangeBytes -Offset "BC793F" -Values "8B" # Z/R Highlight
+        ChangeBytes -Offset "BC7941" -Values "61" # Z/R Highlight
+        ChangeBytes -Offset "BC7945" -Values "97" # Z/R Highlight
+        ChangeBytes -Offset "BC7947" -Values "8B" # Z/R Highlight
+        ChangeBytes -Offset "BC7949" -Values "61" # Z/R Highlight
+        ChangeBytes -Offset "BC7994" -Values "B4 B4 B4 B4 78 B4 B4 B4 B4 B4 B4 B4 78 B4 B4 B4 B4 B4 B4 B4 B4 B4 B4 B4 B4 B4 B4 B4 78 B4 B4 B4 B4 B4 B4 B4 78 B4 B4 B4 B4 B4 B4 B4 B4 B4 B4 B4 78 78 78 78 46 78 78 78 78 78 78 78 46 78 78 78 78 78 78 78 78 78 78 78" # Background
     }
 
 
@@ -816,7 +816,7 @@ function ByteOptions() {
     }
 
     if (IsChecked $Redux.Equipment.FireProofDekuShield)     { ChangeBytes -Offset "BD3C5B" -Values "00"                                            }
-    if (IsChecked $Redux.Equipment.UnsheathSword)           { ChangeBytes -Offset "BD04A0" -Values "284200051440000500001025"                      }
+    if (IsChecked $Redux.Equipment.UnsheathSword)           { ChangeBytes -Offset "BD04A0" -Values "28 42 00 05 14 40 00 05 00 00 10 25"           }
     if (IsChecked $Redux.Equipment.Hookshot)                { PatchBytes  -Offset "7C7000" -Texture -Patch "Equipment\termina_hookshot.icon"       }
     if (IsChecked $Redux.Equipment.GoronBraceletFix)        { ChangeBytes -Offset "BB66DD" -Values "C0"; ChangeBytes -Offset "BC780C" -Values "09" }
     
@@ -1972,7 +1972,7 @@ function ByteTextOptions() {
 
     if ( (IsDefault $Redux.Text.NaviScript -Not) -and (IsDefault $Redux.Text.NaviName -Not) -and $Redux.Text.NaviName.Text.Count -gt 0) {
         if ($Redux.Text.NaviScript -ne $null) {
-            SetMessage -ID "1000" -ASCII -Text "Navi" -Replace $Redux.Text.NaviName.text; SetMessage -ID "1015"; SetMessage -ID "1017" -All;  SetMessage -ID "102A" -All; SetMessage -ID "103F" -All; SetMessage -ID "1099" -All; SetMessage -ID "109A -All"
+            SetMessage -ID "1000" -ASCII -Text "Navi" -Replace $Redux.Text.NaviName.text; SetMessage -ID "1015"; SetMessage -ID "1017" -All;  SetMessage -ID "102A" -All; SetMessage -ID "103F" -All; SetMessage -ID "1099" -All; SetMessage -ID "109A" -All"
         }
         if (TestFile ($GameFiles.textures + "\Action Prompts\Navi\" + $Redux.Text.NaviName.Text + ".cup") ) {
             if (IsChecked $Redux.Text.NaviPrompt) { PatchBytes  -Offset "8E3A80" -Texture -Patch ("Action Prompts\Navi\" + $Redux.Text.NaviName.text + ".prompt") }
@@ -2035,35 +2035,42 @@ function ByteTextOptions() {
     if (IsDefault $Redux.Equipment.MasterSword -Not) {
         $file = $GameFiles.textures + "\Equipment\Master Sword\" + $Redux.Equipment.MasterSword.text + "." + $LanguagePatch.code + ".txt"
         if (TestFile $file) {
-            if ($replace.length -gt 0) { SetMessage -ID "600C" -ASCII -Text "Master Sword" -Replace (Get-Content -Path $file); SetMessage -ID "704F"; SetMessage -ID "7051"; SetMessage -ID "7059"; SetMessage -ID "706D"; SetMessage -ID "7075"; SetMessage -ID "7081"; SetMessage -ID "7088"; SetMessage -ID "7091"; SetMessage -ID "70E8" }
+            $replace = Get-Content -Path $file
+            if ($replace.length -gt 0) {
+                SetMessage -ID "600C" -Text "Master Sword" -ASCII -Replace $replace; SetMessage -ID "704F"; SetMessage -ID "7051"; SetMessage -ID "7059"; SetMessage -ID "706D"; SetMessage -ID "7075"; SetMessage -ID "7081"; SetMessage -ID "7088"; SetMessage -ID "7091"; SetMessage -ID "70E8"
+            }
         }
     }
 
     if (IsDefault $Redux.Equipment.GiantsKnife -Not) {
         $file = $GameFiles.textures + "\Equipment\Master Knife\" + $Redux.Equipment.GiantsKnife.text + "." + $LanguagePatch.code + ".txt"
         if (TestFile $file) {
-            if ($replace.length -gt 0) { SetMessage -ID "000B" -ASCII -Text "Giant's Knife" -Replace (Get-Content -Path $file); SetMessage -ID "004B" }
+            $replace = Get-Content -Path $file
+            if ($replace.length -gt 0) { SetMessage -ID "000B" -ASCII -Text "Giant's Knife" -Replace $replace; SetMessage -ID "004B" }
         }
     }
 
     if (IsDefault $Redux.Equipment.BiggoronSword -Not) {
         $file = $GameFiles.textures + "\Equipment\Maste Sword\" + $Redux.Equipment.BiggoronSword.text + "." + $LanguagePatch.code + ".txt"
         if (TestFile $file) {
-            if ($replace.length -gt 0) { SetMessage -ID "000A" -ASCII -Text "Biggoron's Sword" -Replace (Get-Content -Path $file); SetMessage -ID "000B"; SetMessage -ID "000C"; SetMessage -ID "0404" }
+            $replace = Get-Content -Path $file
+            if ($replace.length -gt 0) { SetMessage -ID "000A" -ASCII -Text "Biggoron's Sword" -Replace $replace; SetMessage -ID "000B"; SetMessage -ID "000C"; SetMessage -ID "0404" }
         }
     }
 
     if ( (IsDefault $Redux.Equipment.DekuShield -Not) -and $ChildModel.deku_shield -ne 0) {
         $file = $GameFiles.textures + "\Equipment\Deku Shield\" + $Redux.Equipment.DekuShield.text + "." + $LanguagePatch.code + ".txt"
         if (TestFile $file) {
-            if ($replace.length -gt 0) { SetMessage -ID "004C" -ASCII -Text "Deku Shield" -Replace (Get-Content -Path $file); SetMessage -ID "0089"; SetMessage -ID "009F"; SetMessage -ID "0611"; SetMessage -ID "103D"-Last; SetMessage -ID "1052"; SetMessage -ID "10CB"; SetMessage -ID "10D2" }
+            $replace = Get-Content -Path $file
+            if ($replace.length -gt 0) { SetMessage -ID "004C" -ASCII -Text "Deku Shield" -Replace $replace; SetMessage -ID "0089"; SetMessage -ID "009F"; SetMessage -ID "0611"; SetMessage -ID "103D"-Last; SetMessage -ID "1052"; SetMessage -ID "10CB"; SetMessage -ID "10D2" }
         }
     }
 
     if ( (IsDefault $Redux.Equipment.HylianShield -Not) -and $ChildModel.hylian_shield -ne 0 -and $AdultModel.hylian_shield -ne 0) {
         $file = $GameFiles.textures + "\Equipment\Hylian Shield\" + $Redux.Equipment.HylianShield.text + "." + $LanguagePatch.code + ".txt"
         if (TestFile $file) {
-            if ($replace.length -gt 0) { SetMessage -ID "004D" -ASCII -Text "Hylian Shield" -Replace (Get-Content -Path $file); SetMessage -ID "0092"; SetMessage -ID "009C"; SetMessage -ID "00A9"; SetMessage -ID "7013"; SetMessage -ID "7121" }
+            $replace = Get-Content -Path $file
+            if ($replace.length -gt 0) { SetMessage -ID "004D" -ASCII -Text "Hylian Shield" -Replace $replace; SetMessage -ID "0092"; SetMessage -ID "009C"; SetMessage -ID "00A9"; SetMessage -ID "7013"; SetMessage -ID "7121" }
         }
     }
 
@@ -2329,50 +2336,50 @@ function CreateTabMain() {
 
     # QUALITY OF LIFE #
     
-    CreateReduxGroup    -Tag  "Gameplay"             -All                 -Text "Quality of Life" 
-    CreateReduxComboBox -Name "FasterBlockPushing"   -All -Exclude "Gold" -Text "Faster Block Pushing"   -Info "All blocks are pushed faster" -Items @("Disabled", "Exclude Time-Based Puzzles", "Fully Enabled")                                                  -TrueDefault 1 -Default 3 -Credits "GhostlyDark (Randomizer)"
-    CreateReduxComboBox -Name "RemoveOwls"           -All -Safe           -Text "Remove Owls"            -Info "Kaepora Gaebora the owl will no longer interrupt Link with tutorials" -Items @("Disabled", "Enabled", "Include Lake Hylia")                                                  -Credits "Admentus & GoldenMariaNova"
-    CreateReduxCheckBox -Name "NoKillFlash"          -All                 -Text "No Kill Flash"          -Info "Disable the flash effect when killing certain enemies such as the Guay or Skullwalltula"                                                                                     -Credits "Chez Cousteau"
-    CreateReduxCheckBox -Name "RemoveNaviTimer"      -All                 -Text "Remove Navi Timer"      -Info "Navi will no longer pop up with text messages during gameplay`nDoes not apply to location-triggered messages"                                                                -Credits "Admentus"
-    CreateReduxCheckBox -Name "ResumeLastArea"       -All -Exclude "Dawn" -Text "Resume From Last Area"  -Info "Resume playing from the area you last saved in"                                                                                             -Warning "Don't save in Grottos" -Credits "Admentus (ROM) & Aegiker (RAM)"
-    CreateReduxCheckBox -Name "InstantClaimCheck"    -Base 4 -Adult       -Text "Instant Claim Check"    -Info "Remove the check for waiting until the Biggoron Sword can be claimed through the Claim Check"                                                                                -Credits "Randomizer"
-    CreateReduxCheckBox -Name "ReturnChild"          -Base 4 -Adult       -Text "Can Always Return"      -Info "You can always go back to being a child again before clearing the boss of the Forest Temple`nOut of the way Sheik!"                                                          -Credits "Randomizer"
-    CreateReduxCheckBox -Name "AllowWarpSongs"       -Base 4              -Text "Allow Warp Songs"       -Info "Allow warp songs in Gerudo Training Ground and Ganon's Castle"                                                                                                               -Credits "Randomizer"
-    CreateReduxCheckBox -Name "AllowFaroreWind"      -Base 4              -Text "Allow Farore's Wind"    -Info "Allow Farore's Wind in Gerudo Training Ground and Ganon's Castle"                                                                                                            -Credits "Randomizer"
-    CreateReduxCheckBox -Name "AllowOcarina"         -Base 4              -Text "Allow Ocarina"          -Info "Allow playing the Ocarina in Granny's Potion Shop, Bombchu Bowling Alley and Archery Ranges"                                                                                 -Credits "Randomizer"
-    CreateReduxCheckBox -Name "FasterGoronTunic"     -Base 4 -Adult       -Text "Faster Goron Tunic"     -Info "You only need to select a single dialogue option instead of both for Link the Goron to obtain the Goron Tunic"                                                               -Credits "Randomizer"
-    CreateReduxCheckBox -Name "RutoNeverDisappears"  -Base 4 -Child       -Text "Ruto Never Disappears"  -Info "Ruto never disappears in Jabu Jabu's Belly and will remain in place when leaving the room"                                                                                   -Credits "Randomizer"
-    CreateReduxCheckBox -Name "Medallions"           -Base 4 -Adult       -Text "Require All Medallions" -Info "All six medallions are required for the Rainbow Bridge to appear before Ganon's Castle`nThe vanilla requirements were the Shadow and Spirit Medallions and the Light Arrows" -Credits "Randomizer"
-    CreateReduxCheckBox -Name "OpenBombchuShop"      -Base 5              -Text "Open Bombchu Shop"      -Info "The Bombchu Shop is open right away without the need to defeat King Dodongo"                                                                                                 -Credits "Randomizer"
-    CreateReduxCheckBox -Name "RemoveNaviPrompts"    -All                 -Text "Remove Navi Prompts"    -Info "Navi will no longer interrupt you with tutorial text boxes in dungeons"                                                                                                      -Credits "Admentus"
-    CreateReduxCheckBox -Name "RemoveDisruptiveText" -Base 4 -Safe        -Text "Remove Disruptive Text" -Info "Remove disruptive text from Gerudo Training Ground and early Shadow Temple"                                                                                                  -Credits "Admentus"
+    CreateReduxGroup    -Tag  "Gameplay"             -All                     -Text "Quality of Life" 
+    CreateReduxComboBox -Name "FasterBlockPushing"   -All    -Exclude "Gold"  -Text "Faster Block Pushing"   -Info "All blocks are pushed faster" -Items @("Disabled", "Exclude Time-Based Puzzles", "Fully Enabled")                                                  -TrueDefault 1 -Default 3 -Credits "GhostlyDark (Randomizer)"
+    CreateReduxComboBox -Name "RemoveOwls"           -All    -Safe            -Text "Remove Owls"            -Info "Kaepora Gaebora the owl will no longer interrupt Link with tutorials" -Items @("Disabled", "Enabled", "Include Lake Hylia")                                       -Default 1 -Credits "Admentus & GoldenMariaNova"
+    CreateReduxCheckBox -Name "NoKillFlash"          -All                     -Text "No Kill Flash"          -Info "Disable the flash effect when killing certain enemies such as the Guay or Skullwalltula"                                                                                     -Credits "Chez Cousteau"
+    CreateReduxCheckBox -Name "RemoveNaviTimer"      -All                     -Text "Remove Navi Timer"      -Info "Navi will no longer pop up with text messages during gameplay`nDoes not apply to location-triggered messages"                                                                -Credits "Admentus"
+    CreateReduxCheckBox -Name "ResumeLastArea"       -All    -Exclude "Dawn"  -Text "Resume From Last Area"  -Info "Resume playing from the area you last saved in"                                                                                             -Warning "Don't save in Grottos" -Credits "Admentus (ROM) & Aegiker (RAM)"
+    CreateReduxCheckBox -Name "InstantClaimCheck"    -Base 4                  -Text "Instant Claim Check"    -Info "Remove the check for waiting until the Biggoron Sword can be claimed through the Claim Check"                                                                                -Credits "Randomizer"
+    CreateReduxCheckBox -Name "ReturnChild"          -Base 4                  -Text "Can Always Return"      -Info "You can always go back to being a child again before clearing the boss of the Forest Temple`nOut of the way Sheik!"                                                          -Credits "Randomizer"
+    CreateReduxCheckBox -Name "AllowWarpSongs"       -Base 4                  -Text "Allow Warp Songs"       -Info "Allow warp songs in Gerudo Training Ground and Ganon's Castle"                                                                                                               -Credits "Randomizer"
+    CreateReduxCheckBox -Name "AllowFaroreWind"      -Base 4                  -Text "Allow Farore's Wind"    -Info "Allow Farore's Wind in Gerudo Training Ground and Ganon's Castle"                                                                                                            -Credits "Randomizer"
+    CreateReduxCheckBox -Name "AllowOcarina"         -Base 4                  -Text "Allow Ocarina"          -Info "Allow playing the Ocarina in Granny's Potion Shop, Bombchu Bowling Alley and Archery Ranges"                                                                                 -Credits "Randomizer"
+    CreateReduxCheckBox -Name "FasterGoronTunic"     -Base 4                  -Text "Faster Goron Tunic"     -Info "You only need to select a single dialogue option instead of both for Link the Goron to obtain the Goron Tunic"                                                               -Credits "Randomizer"
+    CreateReduxCheckBox -Name "RutoNeverDisappears"  -Base 4                  -Text "Ruto Never Disappears"  -Info "Ruto never disappears in Jabu Jabu's Belly and will remain in place when leaving the room"                                                                                   -Credits "Randomizer"
+    CreateReduxCheckBox -Name "Medallions"           -Base 4 -Exclude "Child" -Text "Require All Medallions" -Info "All six medallions are required for the Rainbow Bridge to appear before Ganon's Castle`nThe vanilla requirements were the Shadow and Spirit Medallions and the Light Arrows" -Credits "Randomizer"
+    CreateReduxCheckBox -Name "OpenBombchuShop"      -Base 5                  -Text "Open Bombchu Shop"      -Info "The Bombchu Shop is open right away without the need to defeat King Dodongo"                                                                                                 -Credits "Randomizer"
+    CreateReduxCheckBox -Name "RemoveNaviPrompts"    -All                     -Text "Remove Navi Prompts"    -Info "Navi will no longer interrupt you with tutorial text boxes in dungeons"                                                                                                      -Credits "Admentus"
+    CreateReduxCheckBox -Name "RemoveDisruptiveText" -Base 4 -Safe                 -Text "Remove Disruptive Text" -Info "Remove disruptive text from Gerudo Training Ground and early Shadow Temple"                                                                                             -Credits "Admentus"
     
 
 
     # GAMEPLAY #
 
-    CreateReduxGroup    -Tag  "Gameplay"               -All                -Text "Gameplay Changes" 
-    CreateReduxComboBox -Name "SpawnChild" -Safe -Base 4 -Child -Default 1 -Text "Child Starting Location"  -Items ("Link's House", "Temple of Time", "Hyrule Field", "Kakariko Village", "Inside the Deku Tree", "Dodongo's Cavern", "Inside Jabu-Jabu's Belly", "Forest Temple", "Fire Temple", "Water Temple", "Shadow Temple", "Spirit Temple", "Ice Cavern", "Bottom of the Well", "Thieves' Hideout", "Gerudo's Training Ground", "Inside Ganon's Castle", "Ganon's Tower") -Credits "Admentus & GhostlyDark"
-    CreateReduxComboBox -Name "SpawnAdult" -Safe -Base 4 -Adult -Default 2 -Text "Adult Starting Location"  -Items ("Link's House", "Temple of Time", "Hyrule Field", "Kakariko Village", "Inside the Deku Tree", "Dodongo's Cavern", "Inside Jabu-Jabu's Belly", "Forest Temple", "Fire Temple", "Water Temple", "Shadow Temple", "Spirit Temple", "Ice Cavern", "Bottom of the Well", "Thieves' Hideout", "Gerudo's Training Ground", "Inside Ganon's Castle", "Ganon's Tower") -Credits "Admentus & GhostlyDark"
-    CreateReduxCheckBox -Name "NoMagicArrowCooldown"   -Adult              -Text "No Magic Arrow Cooldown"  -Info "Be able to shoot magic arrows without a delay between each shot" -Warning "Prone to crashes upon switching arrow types (Redux feature) to quickly"              -Credits "Randomizer"
-    CreateReduxCheckBox -Name "ManualJump"             -All                -Text "Manual Jump"              -Info "Press Z + A to do a Manual Jump instead of a Jump Attack`nPress B mid-air after jumping to do a Jump Attack"                                                    -Credits "Admentus (ROM) & CloudModding (RAM)"
-    CreateReduxCheckbox -Name "AltManualJump"          -All                -Text "Alt Manual Jump"          -Info "Press Z + A to do a Manual Jump instead of a Jump Attack`nPress B mid-air after jumping to do a Jump Attack`nThis version allows you still to roll when moving" -Credits "BilonFullHDemon" -Link $Redux.Gameplay.ManualJump
-    CreateReduxCheckBox -Name "NoShieldRecoil"         -All                -Text "No Shield Recoil"         -Info "Disable the recoil when being hit while shielding"                                                                                                              -Credits "Admentus (ROM) & Aegiker (RAM)"
-    CreateReduxCheckBox -Name "RunWhileShielding"      -All                -Text "Run While Shielding"      -Info "Press R to shield will no longer prevent Link from moving around" -Link $Redux.Gameplay.NoShieldRecoil                                                          -Credits "Admentus (ROM) & Aegiker (RAM)"
-    CreateReduxCheckBox -Name "PushbackAttackingWalls" -All                -Text "Pushback Attacking Walls" -Info "Link is getting pushed back a bit when hitting the wall with the sword"                                                                                         -Credits "Admentus (ROM) & Aegiker (RAM)"
-    CreateReduxCheckBox -Name "RemoveCrouchStab"       -All                -Text "Remove Crouch Stab"       -Info "The Crouch Stab move is removed"                                                                                                                                -Credits "Garo-Mastah"
-    CreateReduxCheckBox -Name "RemoveQuickSpin"        -All                -Text "Remove Magic Quick Spin"  -Info "The magic Quick Spin Attack move is removed`nIt's a regular Quick Spin Attack now instead"                                                                      -Credits "Admentus & Three Pendants"
-    CreateReduxCheckBox -Name "AgileSpeed"             -All                -Text "Feline Agility"           -Info "Faster run speed & longer jumps, made for Ikey's characters but works with anyone" -Warning "You may need to play a little more cautiously."                    -Credits "Ikey Ilex"
-    CreateReduxCheckbox -Name "RemoveSpeedClamp"       -All                -Text "Remove Jump Speed Limit"  -Info "Removes the jumping speed limit just like in MM"                                                                                                                -Credits "Admentus (ROM) & Aegiker (RAM)"
+    CreateReduxGroup    -Tag  "Gameplay"               -All               -Text "Gameplay Changes" 
+    CreateReduxComboBox -Name "SpawnChild"       -Safe -Base 4 -Default 1 -Text "Child Starting Location"  -Items ("Link's House", "Temple of Time", "Hyrule Field", "Kakariko Village", "Inside the Deku Tree", "Dodongo's Cavern", "Inside Jabu-Jabu's Belly", "Forest Temple", "Fire Temple", "Water Temple", "Shadow Temple", "Spirit Temple", "Ice Cavern", "Bottom of the Well", "Thieves' Hideout", "Gerudo's Training Ground", "Inside Ganon's Castle", "Ganon's Tower") -Credits "Admentus & GhostlyDark"
+    CreateReduxComboBox -Name "SpawnAdult"       -Safe -Base 4 -Default 2 -Text "Adult Starting Location"  -Items ("Link's House", "Temple of Time", "Hyrule Field", "Kakariko Village", "Inside the Deku Tree", "Dodongo's Cavern", "Inside Jabu-Jabu's Belly", "Forest Temple", "Fire Temple", "Water Temple", "Shadow Temple", "Spirit Temple", "Ice Cavern", "Bottom of the Well", "Thieves' Hideout", "Gerudo's Training Ground", "Inside Ganon's Castle", "Ganon's Tower") -Credits "Admentus & GhostlyDark"
+    CreateReduxCheckBox -Name "NoMagicArrowCooldown"   -Adult             -Text "No Magic Arrow Cooldown"  -Info "Be able to shoot magic arrows without a delay between each shot" -Warning "Prone to crashes upon switching arrow types (Redux feature) to quickly"              -Credits "Randomizer"
+    CreateReduxCheckBox -Name "ManualJump"             -All               -Text "Manual Jump"              -Info "Press Z + A to do a Manual Jump instead of a Jump Attack`nPress B mid-air after jumping to do a Jump Attack"                                                    -Credits "Admentus (ROM) & CloudModding (RAM)"
+    CreateReduxCheckbox -Name "AltManualJump"          -All               -Text "Alt Manual Jump"          -Info "Press Z + A to do a Manual Jump instead of a Jump Attack`nPress B mid-air after jumping to do a Jump Attack`nThis version allows you still to roll when moving" -Credits "BilonFullHDemon" -Link $Redux.Gameplay.ManualJump
+    CreateReduxCheckBox -Name "NoShieldRecoil"         -All               -Text "No Shield Recoil"         -Info "Disable the recoil when being hit while shielding"                                                                                                              -Credits "Admentus (ROM) & Aegiker (RAM)"
+    CreateReduxCheckBox -Name "RunWhileShielding"      -All               -Text "Run While Shielding"      -Info "Press R to shield will no longer prevent Link from moving around" -Link $Redux.Gameplay.NoShieldRecoil                                                          -Credits "Admentus (ROM) & Aegiker (RAM)"
+    CreateReduxCheckBox -Name "PushbackAttackingWalls" -All               -Text "Pushback Attacking Walls" -Info "Link is getting pushed back a bit when hitting the wall with the sword"                                                                                         -Credits "Admentus (ROM) & Aegiker (RAM)"
+    CreateReduxCheckBox -Name "RemoveCrouchStab"       -All               -Text "Remove Crouch Stab"       -Info "The Crouch Stab move is removed"                                                                                                                                -Credits "Garo-Mastah"
+    CreateReduxCheckBox -Name "RemoveQuickSpin"        -All               -Text "Remove Magic Quick Spin"  -Info "The magic Quick Spin Attack move is removed`nIt's a regular Quick Spin Attack now instead"                                                                      -Credits "Admentus & Three Pendants"
+    CreateReduxCheckBox -Name "AgileSpeed"             -All               -Text "Feline Agility"           -Info "Faster run speed & longer jumps, made for Ikey's characters but works with anyone" -Warning "You may need to play a little more cautiously."                    -Credits "Ikey Ilex"
+    CreateReduxCheckbox -Name "RemoveSpeedClamp"       -All               -Text "Remove Jump Speed Limit"  -Info "Removes the jumping speed limit just like in MM"                                                                                                                -Credits "Admentus (ROM) & Aegiker (RAM)"
     
 
 
     # GAMEPLAY (UNSTABLE) #
 
     CreateReduxGroup    -Tag  "Gameplay"          -All   -Text "Gameplay Changes (Unstable)" 
-    CreateReduxCheckBox -Name "HookshotAnything"  -Adult -Text "Hookshot Anything"   -Info "Be able to hookshot most surfaces" -Warning "Prone to softlocks, be careful" -Credits "Randomizer"
-    CreateReduxCheckBox -Name "ClimbAnything"     -All   -Text "Climb Anything"      -Info "Climb most walls in the game"      -Warning "Prone to softlocks, be careful" -Credits "Randomizer"
-    CreateReduxCheckBox -Name "DistantZTargeting" -All   -Text "Distant Z-Targeting" -Info "Allow to use Z-Targeting on enemies, objects and NPC's from any distance"    -Credits "Admentus"
+    CreateReduxCheckBox -Name "HookshotAnything"  -Adult -Text "Hookshot Anything"   -Info "Be able to hookshot most surfaces"                                       -Warning "Prone to softlocks, be careful" -Credits "Randomizer"
+    CreateReduxCheckBox -Name "ClimbAnything"     -All   -Text "Climb Anything"      -Info "Climb most walls in the game"                                            -Warning "Prone to softlocks, be careful" -Credits "Randomizer"
+    CreateReduxCheckBox -Name "DistantZTargeting" -All   -Text "Distant Z-Targeting" -Info "Allow to use Z-Targeting on enemies, objects and NPC's from any distance"                                          -Credits "Admentus"
 
 
 
@@ -2391,27 +2398,27 @@ function CreateTabMain() {
 
     # FIXES #
 
-    CreateReduxGroup    -Tag  "Fixes"                     -All           -Text "Fixes"
-    CreateReduxCheckBox -Name "BuyableBombs"              -Base 5        -Text "Buyable Bombs"           -Info "You no longer need the Goron's Ruby before you can buy bombs`nOnly the Bomb Bag is required"                                                          -Credits "Admentus"
-    CreateReduxCheckBox -Name "PauseScreenDelay"          -Base 5        -Text "Pause Screen Delay"      -Info "Removes the delay when opening the Pause Screen by removing the anti-aliasing"                                                       -Native -Checked -Credits "zel"
-    CreateReduxCheckBox -Name "PauseScreenCrash"          -Base 5        -Text "Pause Screen Crash Fix"  -Info "Prevents the game from randomly crashing emulating a decompressed ROM upon pausing"                                                          -Checked -Credits "zel"
-    CreateReduxCheckBox -Name "WhiteBubbleCrash"          -All           -Text "White Bubble Crash Fix"  -Info "Prevents the game from crashing when using Din's Fire on White Bubbles"                                                                      -Checked -Credits "Randomizer"
-    CreateReduxCheckBox -Name "PoacherSaw"                -Base 4 -Adult -Text "Poacher's Saw"           -Info "Obtaining the Poacher's Saw no longer prevents Link from obtaining the second Deku Nut upgrade"                                              -Checked -Credits "Randomizer"
-    CreateReduxCheckBox -Name "FortressMinimap"           -Base 4 -Child -Text "Gerudo Fortress Minimap" -Info "Display the complete minimap for the Gerudo Fortress during the Child era"                                                           -Exclude "Child" -Credits "GhostlyDark"
-    CreateReduxCheckBox -Name "AlwaysMoveKingZora"        -Base 4 -Child -Text "Always Move King Zora"   -Info "King Zora will move aside even if the Zora Sapphire is in possession"                                                                                 -Credits "Randomizer"
-    CreateReduxCheckBox -Name "DeathMountainOwl"          -Base 4 -Child -Text "Death Mountain Owl"      -Info "The Owl on top of the Death Mountain will always carry down Link regardless of having magic"                                                          -Credits "Randomizer"
-    CreateReduxCheckBox -Name "SpiritTempleMirrors"       -Base 4        -Text "Spirit Temple Mirrors"   -Info "Fix a broken effect with the mirrors in the Spirit Temple"                                                                                            -Credits "ZethN64, Sakura, Frostclaw, Steve(ToCoool) & GhostlyDark (ported)"
-    CreateReduxCheckBox -Name "RemoveFishingPiracy"       -Base 4        -Text "Remove Fishing DRM"      -Info "Removes the anti-piracy check for fishing that can cause the fish to always let go after 51 frames"                                          -Checked -Credits "Randomizer"
-    CreateReduxCheckBox -Name "Boomerang"                 -Child         -Text "Boomerang"               -Info "Fix the gem color on the thrown boomerang"                                                                                            -Exclude "Dawn" -Credits "Aria"
-    CreateReduxCheckBox -Name "OpenTimeDoor"              -Base 4        -Text "Open Door of Time Fix"   -Info "Fix Door of Time not opening on first visit"                                                                                                          -Credits "Randomizer"
-    CreateReduxCheckBox -Name "VisibleGerudoTent"         -Base 4 -Child -Text "Visible Gerudo Tent"     -Info "Make the tent in the Gerudo Valley during the Child era visible`nThe tent was always accessible, just invisible"                     -Exclude "Child" -Credits "Admentus"
-    CreateReduxCheckBox -Name "Graves"                    -Base 4 -Safe  -Text "Graveyard Graves"        -Info "The grave holes in Kakariko Graveyard behave as in the Rev 1 revision`nThe edges no longer force Link to grab or jump over them when trying to enter" -Credits "Admentus"
-    CreateReduxCheckBox -Name "CorrectTimeDoor"           -Base 4 -Safe  -Text "Correct Door of Time"    -Info "Fix the positioning of the Temple of Time door, so you can not skip past it"                                                                          -Credits "Admentus"
-    CreateReduxCheckBox -Name "DodongosCavernGossipStone" -Base 4 -Safe  -Text "DC Gossip Stone"         -Info "Fix the Gossip Stones in Dodongo's Cavern so that a fairy can be spawned from them"                                                                   -Credits "Admentus"
-    CreateReduxCheckBox -Name "CraterFairy"               -Base 4 -Safe  -Text "Crater Fairy"            -Info 'Remove the "...???" textbox outside the Crater Fairy'                                                                                                 -Credits "Admentus"
-    CreateReduxCheckBox -Name "WaterTempleActors"         -Base 4 -Safe  -Text "Fix Water Temple Actors" -Info "Fix several actors in the Water Temple`nUnreachable hookshot spot in room 22, three out of bounds pots, restore two Keese in room 1"                  -Credits "Admentus"
-    CreateReduxCheckBox -Name "ChildColossusFairy" -Child -Base 4 -Safe  -Text "Child Colossus Fairy"    -Info 'Fix "...???" textbox outside Child Colossus Fairy to use the right flag and disappear once the wall is destroyed'                                     -Credits "Admentus"
-    CreateReduxCheckBox -Name "NaviTarget"                -Base 4 -Safe  -Text "Navi Targettable Spots"  -Info "Fix several spots in dungeons which Navi could not target for Link"                                                                                   -Credits "Admentus"
+    CreateReduxGroup    -Tag  "Fixes"                     -All          -Text "Fixes"
+    CreateReduxCheckBox -Name "BuyableBombs"              -Base 5       -Text "Buyable Bombs"           -Info "You no longer need the Goron's Ruby before you can buy bombs`nOnly the Bomb Bag is required"                                                          -Credits "Admentus"
+    CreateReduxCheckBox -Name "PauseScreenDelay"          -Base 5       -Text "Pause Screen Delay"      -Info "Removes the delay when opening the Pause Screen by removing the anti-aliasing"                                                       -Native -Checked -Credits "zel"
+    CreateReduxCheckBox -Name "PauseScreenCrash"          -Base 5       -Text "Pause Screen Crash Fix"  -Info "Prevents the game from randomly crashing emulating a decompressed ROM upon pausing"                                                          -Checked -Credits "zel"
+    CreateReduxCheckBox -Name "WhiteBubbleCrash"          -All          -Text "White Bubble Crash Fix"  -Info "Prevents the game from crashing when using Din's Fire on White Bubbles"                                                                      -Checked -Credits "Randomizer"
+    CreateReduxCheckBox -Name "PoacherSaw"                -Base 4       -Text "Poacher's Saw"           -Info "Obtaining the Poacher's Saw no longer prevents Link from obtaining the second Deku Nut upgrade"                                              -Checked -Credits "Randomizer"
+    CreateReduxCheckBox -Name "FortressMinimap"           -Base 4       -Text "Gerudo Fortress Minimap" -Info "Display the complete minimap for the Gerudo Fortress during the Child era"                                                           -Exclude "Child" -Credits "GhostlyDark"
+    CreateReduxCheckBox -Name "AlwaysMoveKingZora"        -Base 4       -Text "Always Move King Zora"   -Info "King Zora will move aside even if the Zora Sapphire is in possession"                                                                                 -Credits "Randomizer"
+    CreateReduxCheckBox -Name "DeathMountainOwl"          -Base 4       -Text "Death Mountain Owl"      -Info "The Owl on top of the Death Mountain will always carry down Link regardless of having magic"                                                          -Credits "Randomizer"
+    CreateReduxCheckBox -Name "SpiritTempleMirrors"       -Base 4       -Text "Spirit Temple Mirrors"   -Info "Fix a broken effect with the mirrors in the Spirit Temple"                                                                                            -Credits "ZethN64, Sakura, Frostclaw, Steve(ToCoool) & GhostlyDark (ported)"
+    CreateReduxCheckBox -Name "RemoveFishingPiracy"       -Base 4       -Text "Remove Fishing DRM"      -Info "Removes the anti-piracy check for fishing that can cause the fish to always let go after 51 frames"                                          -Checked -Credits "Randomizer"
+    CreateReduxCheckBox -Name "Boomerang"                 -Child        -Text "Boomerang"               -Info "Fix the gem color on the thrown boomerang"                                                                                            -Exclude "Dawn" -Credits "Aria"
+    CreateReduxCheckBox -Name "OpenTimeDoor"              -Base 4       -Text "Open Door of Time Fix"   -Info "Fix Door of Time not opening on first visit"                                                                                                          -Credits "Randomizer"
+    CreateReduxCheckBox -Name "VisibleGerudoTent"         -Base 4       -Text "Visible Gerudo Tent"     -Info "Make the tent in the Gerudo Valley during the Child era visible`nThe tent was always accessible, just invisible"                     -Exclude "Child" -Credits "Admentus"
+    CreateReduxCheckBox -Name "Graves"                    -Base 4 -Safe -Text "Graveyard Graves"        -Info "The grave holes in Kakariko Graveyard behave as in the Rev 1 revision`nThe edges no longer force Link to grab or jump over them when trying to enter" -Credits "Admentus"
+    CreateReduxCheckBox -Name "CorrectTimeDoor"           -Base 4 -Safe -Text "Correct Door of Time"    -Info "Fix the positioning of the Temple of Time door, so you can not skip past it"                                                                          -Credits "Admentus"
+    CreateReduxCheckBox -Name "DodongosCavernGossipStone" -Base 4 -Safe -Text "DC Gossip Stone"         -Info "Fix the Gossip Stones in Dodongo's Cavern so that a fairy can be spawned from them"                                                                   -Credits "Admentus"
+    CreateReduxCheckBox -Name "CraterFairy"               -Base 4 -Safe -Text "Crater Fairy"            -Info 'Remove the "...???" textbox outside the Crater Fairy'                                                                                                 -Credits "Admentus"
+    CreateReduxCheckBox -Name "WaterTempleActors"         -Base 4 -Safe -Text "Fix Water Temple Actors" -Info "Fix several actors in the Water Temple`nUnreachable hookshot spot in room 22, three out of bounds pots, restore two Keese in room 1"                  -Credits "Admentus"
+    CreateReduxCheckBox -Name "ChildColossusFairy"        -Base 4 -Safe -Text "Child Colossus Fairy"    -Info 'Fix "...???" textbox outside Child Colossus Fairy to use the right flag and disappear once the wall is destroyed'                                     -Credits "Admentus"
+    CreateReduxCheckBox -Name "NaviTarget"                -Base 4 -Safe -Text "Navi Targettable Spots"  -Info "Fix several spots in dungeons which Navi could not target for Link"                                                                                   -Credits "Admentus"
 
 
 
@@ -2455,14 +2462,14 @@ function CreateTabRedux() {
     CreateReduxCheckBox -Name "RupeeIconColors"      -All                 -Checked -Text "Rupee Icon Colors"        -Info "The color of the Rupees counter icon changes depending on your wallet size"                             -Credits "Randomizer"
     CreateReduxCheckBox -Name "EmptyBombFix"         -All -Exclude "Dawn" -Checked -Text "Empty Bomb Fix"           -Info "Fixes Empty Bomb Glitch"                                                                                -Credits "Randomizer"
     CreateReduxCheckBox -Name "BlueFireArrow"        -Adult                        -Text "Blue Fire Arrows"         -Info "Ice Arrows have the same attributes as Blue Fire, thus the ability to melt Blue Ice and bombable walls" -Credits "Randomizer"
-    CreateReduxCheckBox -Name "ShowFileSelectIcons"  -All                          -Text "Show File Select Icons"   -Info "Show icons on the File Select screen to display your save file progress"                                -Credits "Randomizer"
+    CreateReduxCheckBox -Name "ShowFileSelectIcons"  -All                 -Checked -Text "Show File Select Icons"   -Info "Show icons on the File Select screen to display your save file progress"                                -Credits "Randomizer"
     CreateReduxCheckBox -Name "StoneOfAgony"         -Base 5              -Checked -Text "Stone of Agony Indicator" -Info "The Stony of Agony uses a visual indicator in addition to rumble"                                       -Credits "Randomizer"
-    CreateReduxCheckBox -Name "BiggoronFix"          -Base 4 -Adult                -Text "Biggoron Fix"             -Info "Fix bug when trying to trade in the Biggoron Sword"                                                     -Credits "Randomizer"
-    CreateReduxCheckBox -Name "DampeFix"             -Base 4 -Child                -Text "Dampé Fix"                -Info "Prevent the heart piece of the Gravedigging Tour from being missable"                                   -Credits "Randomizer"
-    CreateReduxCheckBox -Name "HyruleGuardsSoftlock" -Base 4 -Child                -Text "Hyrule Guards Softlock"   -Info "Fix a potential softlock when culling Hyrule Guards"                                                    -Credits "Randomizer"
+    CreateReduxCheckBox -Name "BiggoronFix"          -Base 4                       -Text "Biggoron Fix"             -Info "Fix bug when trying to trade in the Biggoron Sword"                                                     -Credits "Randomizer"
+    CreateReduxCheckBox -Name "DampeFix"             -Base 4                       -Text "Dampé Fix"                -Info "Prevent the heart piece of the Gravedigging Tour from being missable"                                   -Credits "Randomizer"
+    CreateReduxCheckBox -Name "HyruleGuardsSoftlock" -Base 4                       -Text "Hyrule Guards Softlock"   -Info "Fix a potential softlock when culling Hyrule Guards"                                                    -Credits "Randomizer"
     CreateReduxCheckBox -Name "WarpSongsSpeedup"     -Base 5                       -Text "Warp Songs Speedup"       -Info "Speedup the warp songs warping sequences"                                                               -Credits "Randomizer"
-    CreateReduxCheckBox -Name "GoldGauntletsSpeedup" -Base 5                       -Text "Golden Gauntlets Speedup" -Info "Cutscene speed-up for throwing pillars that require Golden Gauntlets"                                   -Credits "Randomizer"
-    CreateReduxCheckBox -Name "TalonSkip"            -Base 3 -Child                -Text "Skip Talon Cutscene"      -Info "Skip the cutscene after waking up Talon before entering the Castle Courtyard"                           -Credits "Randomizer"
+    CreateReduxCheckBox -Name "GoldGauntletsSpeedup" -Base 5                       -Text "Gold Gauntlets Speedup"   -Info "Cutscene speed-up for throwing pillars that require Golden Gauntlets"                                   -Credits "Randomizer"
+    CreateReduxCheckBox -Name "TalonSkip"            -Base 3                       -Text "Skip Talon Cutscene"      -Info "Skip the cutscene after waking up Talon before entering the Castle Courtyard"                           -Credits "Randomizer"
 
 
 
@@ -2673,7 +2680,7 @@ function CreateTabGraphics() {
     CreateReduxCheckBox -Name "Widescreen"        -All    -Text "16:9 Widescreen (Advanced)"   -Info "Patch the game to be in true 16:9 widescreen with the HUD pushed to the edges"         -Safe -Native -Credits "Widescreen Patch by gamemasterplc, enhanced and ported by GhostlyDark"
     CreateReduxCheckBox -Name "WidescreenAlt"     -All    -Text "16:9 Widescreen (Simplified)" -Info "Apply 16:9 Widescreen adjusted backgrounds and textures (as well as 16:9 Widescreen for the Wii VC)" -Credits "Aspect Ratio Fix by Admentus and 16:9 backgrounds by GhostlyDark, ShadowOne333 & CYB3RTRON" -Link $Redux.Graphics.Widescreen
     CreateReduxCheckBox -Name "ExtendedDraw"      -All    -Text "Extended Draw Distance"       -Info "Increases the game's draw distance for objects`nDoes not work on all objects"                  -Safe -Credits "Admentus"
-    CreateReduxCheckBox -Name "ForceHiresModel"   -All    -Text "Force Hires Link Model"       -Info "Always use Link's High Resolution Model when Link is too far away"                                   -Credits "GhostlyDark" -Exclude @("Dawn & Dusk", "Child")
+    CreateReduxCheckBox -Name "ForceHiresModel"   -All    -Text "Force Hires Link Model"       -Info "Always use Link's High Resolution Model when Link is too far away"            -Exclude "Dawn & Dusk" -Credits "GhostlyDark"
     CreateReduxCheckBox -Name "HideDungeonIcon"   -Base 3 -Text "Hide Dungeon Icon"            -Info "Hide dungeon icon for minimaps that do not have a dungeon entrance"                                  -Credits "GhostlyDark"
     CreateReduxCheckBox -Name "GCScheme"          -All    -Text "GC Scheme"                    -Info "Replace and change the textures, dialogue and text colors to match the GameCube's scheme"            -Credits "Admentus, GhostlyDark, ShadowOne333 & GoldenMariaNova"
     CreateReduxCheckBox -Name "OverworldSkyboxes" -Base 4 -Text "Overworld Skyboxes"           -Info "Use day and night skyboxes for all overworld areas lacking one"                                -Safe -Credits "Admentus"
