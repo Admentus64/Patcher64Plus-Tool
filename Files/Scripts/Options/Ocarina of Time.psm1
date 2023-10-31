@@ -1960,7 +1960,7 @@ function ByteTextOptions() {
         SetMessage -ID "00D7" -Text "0F" -Replace $Redux.Text.LinkName.text;
         SetMessage -ID "00D8";      SetMessage -ID "00D9";      SetMessage -ID "00DB";      SetMessage -ID "00E2"; SetMessage -ID "00EA";      SetMessage -ID "0101"; SetMessage -ID "0102";      SetMessage -ID "011F";      SetMessage -ID "012F";      SetMessage -ID "0131"; SetMessage -ID "0132"
         SetMessage -ID "0133";      SetMessage -ID "015F";      SetMessage -ID "0162";      SetMessage -ID "0165"; SetMessage -ID "0166";      SetMessage -ID "0168"; SetMessage -ID "016A";      SetMessage -ID "016B" -All; SetMessage -ID "016C" -All; SetMessage -ID "018D"; SetMessage -ID "0198"
-        SetMessage -ID "01A3";      SetMessage -ID "01AB";      SetMessage -ID "0218";      SetMessage -ID "022A"; SetMessage -ID "031F";      SetMessage -ID "0626"; SetMessage -ID "1001";      SetMessage -ID "1002";      SetMessage -ID "1005"; SetMessage -ID "100F"
+        SetMessage -ID "01A3";      SetMessage -ID "01AB";      SetMessage -ID "0218";      SetMessage -ID "022A"; SetMessage -ID "031F";      SetMessage -ID "0626"; SetMessage -ID "1001";      SetMessage -ID "1002";      SetMessage -ID "1005";      SetMessage -ID "100F";
         SetMessage -ID "1015" -All; SetMessage -ID "1017" -All; SetMessage -ID "1024";      SetMessage -ID "1026"; SetMessage -ID "102A" -All; SetMessage -ID "102B"; SetMessage -ID "1045";      SetMessage -ID "1047";      SetMessage -ID "1048";      SetMessage -ID "104B"; SetMessage -ID "1058" -All
         SetMessage -ID "105B";      SetMessage -ID "105C";      SetMessage -ID "1066";      SetMessage -ID "106D"; SetMessage -ID "1070";      SetMessage -ID "1075"; SetMessage -ID "107A";      SetMessage -ID "107C";      SetMessage -ID "1093";      SetMessage -ID "1094"; SetMessage -ID "1095" -All
         SetMessage -ID "10A8";      SetMessage -ID "10C0";      SetMessage -ID "2000" -All; SetMessage -ID "2005"; SetMessage -ID "2008";      SetMessage -ID "2009"; SetMessage -ID "2010";      SetMessage -ID "2018";      SetMessage -ID "2064";      SetMessage -ID "2068"; SetMessage -ID "206C"
@@ -1976,7 +1976,7 @@ function ByteTextOptions() {
 
     if ( (IsDefault $Redux.Text.NaviScript -Not) -and (IsDefault $Redux.Text.NaviName -Not) -and $Redux.Text.NaviName.Text.Count -gt 0) {
         if ($Redux.Text.NaviScript -ne $null) {
-            SetMessage -ID "1000" -ASCII -Text "4E617669" -Replace $Redux.Text.NaviName.text; SetMessage -ID "1015"; SetMessage -ID "1017"; SetMessage -ID "1017"; SetMessage -ID "1017"; SetMessage -ID "103F"; SetMessage -ID "103F"; SetMessage -ID "1099"; SetMessage -ID "1099"; SetMessage -ID "109A"; SetMessage -ID "109A"
+            SetMessage -ID "1000" -Text "4E617669" -Replace $Redux.Text.NaviName.text; SetMessage -ID "1015"; SetMessage -ID "1017"; SetMessage -ID "1017"; SetMessage -ID "1017"; SetMessage -ID "103F"; SetMessage -ID "103F"; SetMessage -ID "1099"; SetMessage -ID "1099"; SetMessage -ID "109A"; SetMessage -ID "109A"
             SetMessage -ID "109A"
         }
         if (TestFile ($GameFiles.textures + "\Action Prompts\Navi\" + $Redux.Text.NaviName.Text + ".cup") ) {
