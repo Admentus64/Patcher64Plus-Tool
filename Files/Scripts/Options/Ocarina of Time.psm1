@@ -88,6 +88,7 @@ function ByteOptions() {
         if (IsIndex $Redux.Gameplay.FasterBlockPushing -Index 3) { ChangeBytes -Offset "CE1BD0" -Values "40800000"; ChangeBytes -Offset "CE0F0F" -Values "03" } # Amy Puzzle Speed, Delay
     }
 
+    if (IsIndex $Redux.Gameplay.RemoveOwls -Index 3 -Not)   { ChangeBytes -Offset "CF8C84" -Values "1500"                                                                                            }
     if (IsChecked $Redux.Gameplay.NoKillFlash)              { ChangeBytes -Offset "B11C33" -Values "00"                                                                                              }
     if (IsChecked $Redux.Gameplay.RemoveNaviTimer)          { ChangeBytes -Offset "C26C14" -Values "10000013"; ChangeBytes -Offset "C26C1C"  -Values "10000013"                                      }
     if (IsChecked $Redux.Gameplay.ResumeLastArea)           { ChangeBytes -Offset "B06348" -Values "0000";     ChangeBytes -Offset "B06350"  -Values "0000"                                          }
@@ -1601,8 +1602,7 @@ function ByteSceneOptions() {
         PrepareMap -Scene "Desert Colossus" -Map 0 -Header 0; RemoveObject -Name "Kaepora Gaebora"; RemoveActor -Name "Kaepora Gaebora"; SaveAndPatchLoadedScene
         PrepareMap -Scene "Hyrule Castle"   -Map 0 -Header 0; RemoveObject -Name "Kaepora Gaebora"; RemoveActor -Name "Kaepora Gaebora"; SaveAndPatchLoadedScene
         if (IsIndex $Redux.Gameplay.RemoveOwls -Index 3) { 
-	PrepareMap -Scene "Lake Hylia" -Map 0 -Header 0; RemoveObject -Name "Kaepora Gaebora"; RemoveActor -Name "Kaepora Gaebora"; SaveLoadedMap
-        PrepareMap -Scene "Lake Hylia" -Map 0 -Header 0; RemoveObject -Name "Gravestone"; RemoveActor -Name "Gravestone"; SaveAndPatchLoadedScene
+	PrepareMap -Scene "Lake Hylia"      -Map 0 -Header 0; RemoveObject -Name "Kaepora Gaebora"; RemoveActor -Name "Kaepora Gaebora"; SaveAndPatchLoadedScene
         }
     }
     
@@ -1976,7 +1976,7 @@ function ByteTextOptions() {
 
     if ( (IsDefault $Redux.Text.NaviScript -Not) -and (IsDefault $Redux.Text.NaviName -Not) -and $Redux.Text.NaviName.Text.Count -gt 0) {
         if ($Redux.Text.NaviScript -ne $null) {
-            SetMessage -ID "1000" -ASCII -Text "Navi" -Replace $Redux.Text.NaviName.text; SetMessage -ID "1015"; SetMessage -ID "1017";  SetMessage -ID "102A"; SetMessage -ID "103F"; SetMessage -ID "1099"; SetMessage -ID "109A"
+            SetMessage -ID "1000" -ASCII -Text "Navi" -Replace $Redux.Text.NaviName.text; SetMessage -ID "1015"; SetMessage -ID "1017" -All;  SetMessage -ID "102A" -All; SetMessage -ID "103F" -All; SetMessage -ID "1099" -All; SetMessage -ID "109A -All"
         }
         if (TestFile ($GameFiles.textures + "\Action Prompts\Navi\" + $Redux.Text.NaviName.Text + ".cup") ) {
             if (IsChecked $Redux.Text.NaviPrompt) { PatchBytes  -Offset "8E3A80" -Texture -Patch ("Action Prompts\Navi\" + $Redux.Text.NaviName.text + ".prompt") }
