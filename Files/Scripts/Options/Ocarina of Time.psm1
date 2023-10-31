@@ -1976,8 +1976,7 @@ function ByteTextOptions() {
 
     if ( (IsDefault $Redux.Text.NaviScript -Not) -and (IsDefault $Redux.Text.NaviName -Not) -and $Redux.Text.NaviName.Text.Count -gt 0) {
         if ($Redux.Text.NaviScript -ne $null) {
-            SetMessage -ID "1000" -Text "4E617669" -Replace $Redux.Text.NaviName.text; SetMessage -ID "1015"; SetMessage -ID "1017"; SetMessage -ID "1017"; SetMessage -ID "1017"; SetMessage -ID "103F"; SetMessage -ID "103F"; SetMessage -ID "1099"; SetMessage -ID "1099"; SetMessage -ID "109A"; SetMessage -ID "109A"
-            SetMessage -ID "109A"
+            SetMessage -ID "1000" -Text "4E617669" -Replace $Redux.Text.NaviName.text; SetMessage -ID "1015"; SetMessage -ID "1017"; SetMessage -ID "102A"; SetMessage -ID "103F"; SetMessage -ID "1099"; SetMessage -ID "109A"
         }
         if (TestFile ($GameFiles.textures + "\Action Prompts\Navi\" + $Redux.Text.NaviName.Text + ".cup") ) {
             if (IsChecked $Redux.Text.NaviPrompt) { PatchBytes  -Offset "8E3A80" -Texture -Patch ("Action Prompts\Navi\" + $Redux.Text.NaviName.text + ".prompt") }
