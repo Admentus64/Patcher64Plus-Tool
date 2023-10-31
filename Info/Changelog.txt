@@ -2,6 +2,7 @@ v22.0.10
 - Fixed issue with removing the Owl from Lake Hylia
 - Fixed issue with changing the name for Navi
 - Fixed duplicate with changing the name for Link (OoT)
+- Updated Scene Editor
 
 v22.0.9
 - Reworked Restore Text for OoT (merged other text options into Restore Text)

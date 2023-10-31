@@ -36,6 +36,52 @@ function PatchModel([string]$Category, [string]$Name) {
 
 
 #==============================================================================================================================================================================================
+function GetOoTCollision([switch]$DekuNut, [switch]$DekuStick, [switch]$Slingshot, [switch]$Bomb, [switch]$Boomerang, [switch]$Arrow, [switch]$HammerSwing, [switch]$Hookshot, [switch]$KokiriSlash, [switch]$MasterSlash, [switch]$GiantSlash, [switch]$ArrowFire, [switch]$ArrowIce, [switch]$ArrowLight,
+[switch]$ArrowUnknown1, [switch]$ArrowUnknown2, [switch]$ArrowUnknown3, [switch]$MagicFire, [switch]$MagicIce, [switch]$MagicLight, [switch]$Shield, [switch]$MirrorRay, [switch]$KokiriSpin, [switch]$MasterSpin, [switch]$GiantSpin, [switch]$KokiriJump, [switch]$MasterJump, [switch]$GiantJump,
+[switch]$Unknown1, [switch]$HammerJump, [switch]$Unknown2) {
+    
+    $value = 0
+
+    if ($DekuNut)         { $value +=        0x1 }
+    if ($DekuStick)       { $value +=        0x2 }
+    if ($Slingshot)       { $value +=        0x4 }
+    if ($Bomb)            { $value +=        0x8 }
+    if ($Boomerang)       { $value +=       0x10 }
+    if ($Arrow)           { $value +=       0x20 }
+    if ($HammerSwing)     { $value +=       0x40 }
+    if ($Hookshot)        { $value +=       0x80 }
+    if ($KokiriSlash)     { $value +=      0x100 }
+    if ($MasterSlash)     { $value +=      0x200 }
+    if ($GiantSlash)      { $value +=      0x400 }
+    if ($ArrowFire)       { $value +=      0x800 }
+    if ($ArrowIce)        { $value +=     0x1000 }
+    if ($ArrowLight)      { $value +=     0x2000 }
+    if ($ArrowUnknown1)   { $value +=     0x4000 }
+    if ($ArrowUnknown2)   { $value +=     0x8000 }
+    if ($ArrowUnknown3)   { $value +=    0x10000 }
+    if ($MagicFire)       { $value +=    0x20000 }
+    if ($MagicIce)        { $value +=    0x40000 }
+    if ($MagicLight)      { $value +=    0x80000 }
+    if ($Shield)          { $value +=   0x100000 }
+    if ($MirrorRay)       { $value +=   0x200000 }
+    if ($KokiriSpin)      { $value +=   0x400000 }
+    if ($GiantSpin)       { $value +=   0x800000 }
+    if ($MasterSpin)      { $value +=  0x1000000 }
+    if ($KokiriJump)      { $value +=  0x2000000 }
+    if ($GiantJump)       { $value +=  0x4000000 }
+    if ($MasterJump)      { $value +=  0x8000000 }
+    if ($Unknown1)        { $value += 0x10000000 }
+    if ($HammerJump)      { $value += 0x20000000 }
+    if ($Unknown2)        { $value += 0x40000000 }
+
+
+    return (Get32Bit $value)
+
+}
+
+
+
+#==============================================================================================================================================================================================
 function GetButtonScale([byte]$Size) {
 
     switch ($Size) {
@@ -1836,6 +1882,7 @@ function SetFormColorLabel([object]$ComboBox, [object]$Label) {
 
 Export-ModuleMember -Function PatchModel
 
+Export-ModuleMember -Function GetOoTCollision
 Export-ModuleMember -Function GetButtonScale
 Export-ModuleMember -Function SetMMCUpTextCoords
 Export-ModuleMember -Function GetOoTEntranceIndex

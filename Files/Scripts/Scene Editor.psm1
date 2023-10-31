@@ -2487,8 +2487,8 @@ function ShiftMapVtxData([int16]$Shift=0x10) {
 
     for ($i=$meshStart; $i -lt $meshEnd; $i+= 4) {
         if ($SceneEditor.MapArray[$i] -eq 3) {
-            $value =  $SceneEditor.MapArray[$i+1] * 65536 + $SceneEditor.MapArray[$i+2] * 256 + $SceneEditor.MapArray[$i+3]
-            if ( ($value + $Shift) -gt $SceneEditor.Offsets[$SceneEditor.Offsets.Header.Count-1].Header -and ($value + $Shift) -le $SceneEditor.MapArray.Count) {
+            $value = $SceneEditor.MapArray[$i+1] * 65536 + $SceneEditor.MapArray[$i+2] * 256 + $SceneEditor.MapArray[$i+3] + $Shift
+            if ($value -gt $SceneEditor.Offsets[$SceneEditor.Offsets.Header.Count-1].Header -and $value -le $SceneEditor.MapArray.Count) {
                 ShiftMap -Offset ($i+1) -Shift $Shift
                 $meshes += $SceneEditor.MapArray[$i+1] * 65536 + $SceneEditor.MapArray[$i+2] * 256 + $SceneEditor.MapArray[$i+3]
             }
@@ -2509,7 +2509,7 @@ function ShiftMapVtxData([int16]$Shift=0x10) {
 
         $skip    = $True
         $blockDF = $False
-        for ($i=$vtx + $Shift; $i -lt $SceneEditor.MapArray.Count; $i+=4) {
+        for ($i=$vtx; $i -lt $SceneEditor.MapArray.Count; $i+=4) {
             if ($SceneEditor.MapArray[$i+1] -eq 0 -and $SceneEditor.MapArray[$i+2] -eq 0 -and $SceneEditor.MapArray[$i+3] -eq 0) {
                 if ($SceneEditor.MapArray[$i] -eq 0xE7 -or $SceneEditor.MapArray[$i] -eq 0xFE) { $skip = $False; $blockDF = $False }
                 if ($SceneEditor.MapArray[$i] -eq 0xFF) { $skip = $True;  $blockDF = $False }
@@ -2519,8 +2519,8 @@ function ShiftMapVtxData([int16]$Shift=0x10) {
             }
             
             if ($SceneEditor.MapArray[$i] -eq 3 -and !$skip) {
-                $value = $SceneEditor.MapArray[$i+1] * 65536 + $SceneEditor.MapArray[$i+2] * 256 + $SceneEditor.MapArray[$i+3]
-                if ( ($value + $Shift) -gt $SceneEditor.Offsets[$SceneEditor.Offsets.Header.Count-1].Header -and ($value + $Shift) -gt $SceneEditor.Offsets[$SceneEditor.Offsets.Header.Count-1].MeshStart -and $value -lt $SceneEditor.MapArray.Count) { ShiftMap -Offset ($i+1) -Shift $Shift }
+                $value = $SceneEditor.MapArray[$i+1] * 65536 + $SceneEditor.MapArray[$i+2] * 256 + $SceneEditor.MapArray[$i+3] + $Shift
+                if ($value -gt $SceneEditor.Offsets[$SceneEditor.Offsets.Header.Count-1].Header -and $value -gt $SceneEditor.Offsets[$SceneEditor.Offsets.Header.Count-1].MeshStart -and $value -lt $SceneEditor.MapArray.Count) { ShiftMap -Offset ($i+1) -Shift $Shift }
             }
         }
     }
@@ -4826,6 +4826,22 @@ function TestScenesFiles() {
 
 
 
+        PrepareMap   -Scene "Gerudo Valley" -Map 0 -Header 0
+        RemoveActor  -Name "Obstacle Fence"
+        InsertActor  -Name "Bronze Boulder" -X (-1352) -Y 69  -Z 767     -Param "000B"
+        InsertActor  -Name "Bronze Boulder" -X (-1291) -Y 65  -Z 787     -Param "0009"
+        InsertActor  -Name "Bronze Boulder" -X (-1416) -Y 59  -Z 778     -Param "000D"
+        InsertActor  -Name "Bronze Boulder" -X (-1256) -Y 55  -Z 856     -Param "0010"
+        InsertObject -Name "Treasure Chest"
+        InsertActor  -Name "Treasure Chest" -X (-1341) -Y 76  -Z 858     -Param "5AA0" -YRot 0xE2D8
+        InsertActor  -Name "Skullwalltula"  -X (-1329) -Y 360 -Z 309     -Param "B404" -XRot 0x31C7 -YRot 0xE4FA
+        InsertActor  -Name "Skullwalltula"  -X (-1171) -Y 160 -Z (-1225) -Param "B408" -XRot 0x4000
+        InsertActor  -Name "Grotto Entrance" -X (-1323) -Y 15  -Z (-969) -Param "01F0" -YRot 0x9555
+        SaveAndPatchLoadedScene
+        AssertSceneFiles
+
+
+
         AssertArrays -Array1 ([System.IO.File]::ReadAllBytes($Paths.Temp + "\scene\cutscenes.tbl") ) -Array2 ([System.IO.File]::ReadAllBytes($Paths.Base + "\Assert\cutscenes.tbl") ) -Message1 "Cutscenes table files not equal in size..." -Message2 "Assert cutscenes table files... "
         AssertArrays -Array1 ([System.IO.File]::ReadAllBytes($Paths.Temp + "\scene\scenes.tbl") )    -Array2 ([System.IO.File]::ReadAllBytes($Paths.Base + "\Assert\scenes.tbl")    ) -Message1 "Scenes table files not equal in size... "   -Message2 "Assert scenes table files...    "
     }
@@ -4880,7 +4896,10 @@ function AssertSceneFiles() {
 
         $assert = (-not (Compare-Object $arr1 $arr2 -SyncWindow 0))
         if     ($i -eq 0)                                 { WriteToConsole ("Assert scene files...           "              + $assert) }
-        elseif ($i -le $SceneEditor.LoadedScene.length)   { WriteToConsole ("Assert map " + ($i-1) + " files...           " + $assert) }
+        elseif ($i -le $SceneEditor.LoadedScene.length)   {
+            if ($i -le 10)                                { WriteToConsole ("Assert map " + ($i-1) + " files...           " + $assert) }
+            else                                          { WriteToConsole ("Assert map " + ($i-1) + " files...          "  + $assert) }
+        }
         else                                              { WriteToConsole ("Assert DMA table files...       "              + $assert) }
 
         if ($assert) { continue }
