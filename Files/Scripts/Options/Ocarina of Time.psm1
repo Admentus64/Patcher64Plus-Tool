@@ -1849,19 +1849,27 @@ function ByteTextOptions() {
     if (IsChecked $Redux.Text.FemalePronouns) {
         SetMessage -ID "10B2" -Text "You must be a nice guy!"                                                                        -Replace "You must be a nice gal!"
         SetMessage -ID "10B2" -Text "Mr. Nice Guy"                                                                                   -Replace "Ms. Nice Gal"
+	SetMessage -ID "1070" -Text "waiting for him..."                                                                             -Replace "waiting for her..."
         SetMessage -ID "2086" -Text "How'd you like to marry Malon?"                                                                 -Replace "How'd you like to come work for us?"
         SetMessage -ID "301C" -Text "fella"                                                                                          -Replace "lass"
         SetMessage -ID "3039" -Text "man-to-man"                                                                                     -Replace "man-to-woman"
-        SetMessage -ID "3042" -Text "a<N>strong man like you"                                                                        -Replace "<N>strong like you"
-        SetMessage -ID "4027" -Text @(6, 69); SetMessage -ID "4027" -Text "All right!"                                               -Replace "You're no man, so let's make<N>this our little secret, ok?"
-        SetMessage -ID "403E" -Text "You're a terrible man to have <N>kept me waiting for these seven<N>long years..."               -Replace "You're a terrible betrothed<N>to have kept me waiting for<N>these seven long years..."
-        SetMessage -ID "4041" -Text "man I chose to be my<N>husband"                                                                 -Replace "woman I chose to be my<>best friend"
-        SetMessage -ID "404E" -Text "If you're a man, act like one!"                                                                 -Replace "If you're supposed to save me, act like it!"
+        SetMessage -ID "3042" -Text "be a<N>strong man like you"                                                                     -Replace "<N>be strong like you"
+        SetMessage -ID "4027" -Text @(6, 69); SetMessage -ID "4027" -Text "All right!"                                               -Replace "You're no man, so let this<N>be our little secret, ok?"
+        SetMessage -ID "403E" -Text "It's me, your fiancée, <B>Ruto<W>!"                                                             -Replace "It's me, your friend, <B>Ruto<W>!"
+	SetMessage -ID "403E" -Text "I never forgot the vows we<N>made to each other seven years <N>ago!"                            -Replace "I never forgot the<N>promise we made to<N>each other seven <N>years ago!"
+        SetMessage -ID "403E" -Text "husband"                                                                                        -Replace "confidant"
+	SetMessage -ID "403E" -Text "love"                                                                                           -Replace "friendship"
+        SetMessage -ID "403E" -Text "the<N>woman who is going to be your<N>wife!"                                                    -Replace "the <N>woman who trusted you!"
+        SetMessage -ID "4041" -Text "man I chose to be my<N>husband"                                                                 -Replace "woman I chose to be <N>my<>confidant"
+	SetMessage -ID "4041" -Text "Well, that's what I want to say, <N>but I don't think I can offer that<N>now."                  -Replace "Ah! Just kidding!<N>We're friends and <N>that's more than enough."
+        SetMessage -ID "404E" -Text "If you're a man, act like one!"                                                                 -Replace "If you're trying to save me, act like it!"
         SetMessage -ID "507C" -Text "There he is! It's him!<N>He"                                                                    -Replace "There she is! It's her!<N>She"
+	SetMessage -ID "6004" -Text "I used to think that all men, <N>besides the great Ganondorf, were <N>useless..."               -Replace "I used to think that <N>outsiders were nothing but <N>trouble..."
         SetMessage -ID "6036" -Text "handsome man...<Delay:50>I should have kept the promise<N>I made back then..."                  -Replace "beautiful woman...<Delay:50>I should have had let you<N>join us back then..."
         SetMessage -ID "70F4" -Text "handsome"                                                                                       -Replace "pretty"
+	SetMessage -ID "7177"                                                                                                        -Replace "Ah ah ah!<N>You're so funny!"
 
-        SetMessage -ID "00E7" -Text "boy"      -Replace "girl";       SetMessage -ID "0408"; SetMessage -ID "1058" -All; SetMessage -ID "105B"; SetMessage -ID "1065"; SetMessage -ID "1096"; SetMessage -ID "109A"; SetMessage -ID "109F"; SetMessage -ID "2000"; SetMessage -ID "2043"
+        SetMessage -ID "00E7" -Text "boy"      -Replace "girl";       SetMessage -ID "0408"; SetMessage -ID "1058" -All; SetMessage -ID "105B"; SetMessage -ID "1065"; SetMessage -ID "1096"; SetMessage -ID "109A"; SetMessage -ID "109F"; SetMessage -ID "2000"; SetMessage -ID "2041"; SetMessage -ID "2043"
         SetMessage -ID "2047" -All;                                   SetMessage -ID "2048"; SetMessage -ID "204A";      SetMessage -ID "2086"; SetMessage -ID "40AC"; SetMessage -ID "5022"; SetMessage -ID "5036"; SetMessage -ID "505B"; SetMessage -ID "505D"; SetMessage -ID "6024"
         SetMessage -ID "605D" -All;                                   SetMessage -ID "6079"; SetMessage -ID "7007" -All; SetMessage -ID "7023"; SetMessage -ID "7090"; SetMessage -ID "7174"
 
@@ -1883,8 +1891,8 @@ function ByteTextOptions() {
         SetMessage -ID "0012" -Text "guy"      -Replace "gal";        SetMessage -ID "0058"; SetMessage -ID "00F7"; SetMessage -ID "1074"; SetMessage -ID "10B4"; SetMessage -ID "10B6"; SetMessage -ID "607D"; SetMessage -ID "701F" -All; SetMessage -ID "7190"
         SetMessage -ID "0420" -Text "he"       -Replace "she";        SetMessage -ID "1075"; SetMessage -ID "5034"; SetMessage -ID "508A"; SetMessage -ID "602B"
         SetMessage -ID "105B" -Text "He"       -Replace "She";        SetMessage -ID "2010"; SetMessage -ID "6048"
-        SetMessage -ID "109A" -Text "his"      -Replace "her";        SetMessage -ID "604A"; SetMessage -ID "109A" -All
-        SetMessage -ID "1065" -Text "him"      -Replace "her";        SetMessage -ID "1068"; SetMessage -ID "1070"; SetMessage -ID "1071" -All; SetMessage -ID "109A" -All; SetMessage -ID "10D6" -All; SetMessage -ID "5034"; SetMessage -ID "6048"; SetMessage -ID "6049"; SetMessage -ID "604A"
+        SetMessage -ID "109A" -Text "his"      -Replace "her";        SetMessage -ID "604A"; SetMessage -ID "109A" -All; SetMessage -ID "6048"
+        SetMessage -ID "1065" -Text "him"      -Replace "her";        SetMessage -ID "1068"; SetMessage -ID "1071" -All; SetMessage -ID "109A" -All; SetMessage -ID "10D6" -All; SetMessage -ID "5034"; SetMessage -ID "6048"; SetMessage -ID "6049"; SetMessage -ID "604A"
     }
 
     if (IsChecked $Redux.Text.Restore -Lang 1) {
