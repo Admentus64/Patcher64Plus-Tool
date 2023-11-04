@@ -2569,11 +2569,11 @@ function CreateTabLanguage() {
 
     # TEXT SPEED #
 
-    CreateReduxGroup -Tag "Text"           -All  -Text "Text Speed"
-    CreateReduxRadioButton -Name "Speed1x" -All  -Max 4 -SaveTo "Speed" -Text "1x Text Speed" -Info "Leave the dialogue text speed at normal"               -Checked
-    CreateReduxRadioButton -Name "Speed2x" -All  -Max 4 -SaveTo "Speed" -Text "2x Text Speed" -Info "Set the dialogue text speed to be twice as fast"       -Credits "Maroc"
-    CreateReduxRadioButton -Name "Speed3x"       -Max 4 -SaveTo "Speed" -Text "3x Text Speed" -Info "Set the dialogue text speed to be three times as fast" -Credits "Admentus & Maroc"
-    CreateReduxRadioButton -Name "Instant" -Safe -Max 4 -SaveTo "Speed" -Text "Instant Text"  -Info "Most text will be shown instantly"                     -Credits "Admentus"
+    CreateReduxGroup       -Tag  "Text"    -All                              -Text "Text Speed"
+    CreateReduxRadioButton -Name "Speed1x" -All       -Max 4 -SaveTo "Speed" -Text "1x Text Speed" -Info "Leave the dialogue text speed at normal"               -Checked
+    CreateReduxRadioButton -Name "Speed2x" -All       -Max 4 -SaveTo "Speed" -Text "2x Text Speed" -Info "Set the dialogue text speed to be twice as fast"       -Credits "Maroc"
+    CreateReduxRadioButton -Name "Speed3x" -All       -Max 4 -SaveTo "Speed" -Text "3x Text Speed" -Info "Set the dialogue text speed to be three times as fast" -Credits "Admentus & Maroc"
+    CreateReduxRadioButton -Name "Instant" -All -Safe -Max 4 -SaveTo "Speed" -Text "Instant Text"  -Info "Most text will be shown instantly"                     -Credits "Admentus"
 
 
 
@@ -2597,21 +2597,19 @@ function CreateTabLanguage() {
 
     # OTHER TEXT OPTIONS #
 
-    if ($Settings.Core.SafeOptions -eq $True) { return }
-
-    CreateReduxGroup    -All -Tag  "Text"       -Text "Other Text Options"
+    CreateReduxGroup    -Safe -All -Tag  "Text"       -Text "Other Text Options"
     if (StrLike -Str $GamePatch.settings -Val "Master of Time")   { $val = "Nite" }                                                    else   { $val   = "Navi"                   }
-    if ($GamePatch.vanilla  -eq 1)                                { $items = @("Disabled", "Enabled as Female", "Enabled as Male") }   else   { $items = @("Disabled", "Enabled") }
+    if ($GamePatch.vanilla  -le 2)                                { $items = @("Disabled", "Enabled as Female", "Enabled as Male") }   else   { $items = @("Disabled", "Enabled") }
     $names = "`n`n--- Supported Names With Textures ---`n" + "Navi`nTatl`nTaya`nТдтп`nTael`nNite`nNagi`nInfo"
-    CreateReduxCheckBox -All -Name "LinkScript" -Text "Link Text"                                               -Info "Separate file name from Link's name in-game"  -Credits "Admentus & Third M"
-    CreateReduxTextBox  -All -Name "LinkName"   -Text "Link Name"      -Length 8 -ASCII -Value "Link" -Width 90 -Info "Select the name for Link"                     -Credits "Admentus & Third M"      -Shift 40
-    CreateReduxComboBox -All -Name "NaviScript" -Text ($val + " Text") -Items $items                            -Info ("Allow renaming " + $val + " and the gender") -Credits "Admentus & ShadowOne333" -Warning "Gender swap is only supported for English"
-    CreateReduxTextBox  -All -Name "NaviName"   -Text ($val + " Name") -Length 5 -ASCII -Value $val   -Width 50 -Info ("Select the name for " + $val)                -Credits "Admentus & ShadowOne333" -Warning ('Most names do not have an unique texture label, and use a default "Info" prompt label' + $names)
-    CreateReduxCheckBox -All -Name "NaviPrompt" -Text ($val + " Prompt")                                        -Info ("Enables the A button prompt for " + $val)    -Credits "Admentus & ShadowOne333" -Warning 'Most names do not have an unique texture prompt, and use a default "Info" prompt label'
+    CreateReduxCheckBox -Safe -All -Name "LinkScript" -Text "Link Text"                                               -Info "Separate file name from Link's name in-game"  -Credits "Admentus & Third M"
+    CreateReduxTextBox  -Safe -All -Name "LinkName"   -Text "Link Name"      -Length 8 -ASCII -Value "Link" -Width 90 -Info "Select the name for Link"                     -Credits "Admentus & Third M"      -Shift 40
+    CreateReduxComboBox -Safe -All -Name "NaviScript" -Text ($val + " Text") -Items $items                            -Info ("Allow renaming " + $val + " and the gender") -Credits "Admentus & ShadowOne333" -Warning "Gender swap is only supported for English"
+    CreateReduxTextBox  -Safe -All -Name "NaviName"   -Text ($val + " Name") -Length 5 -ASCII -Value $val   -Width 50 -Info ("Select the name for " + $val)                -Credits "Admentus & ShadowOne333" -Warning ('Most names do not have an unique texture label, and use a default "Info" prompt label' + $names)
+    CreateReduxCheckBox -Safe -All -Name "NaviPrompt" -Text ($val + " Prompt")                                        -Info ("Enables the A button prompt for " + $val)    -Credits "Admentus & ShadowOne333" -Warning 'Most names do not have an unique texture prompt, and use a default "Info" prompt label'
 
-    if ($Redux.Text.Language -ne $null) { $Redux.Text.Language.Add_SelectedIndexChanged({ UnlockLanguageContent }) }
-    $Redux.Text.NaviScript.Add_SelectedIndexChanged( { UnlockLanguageContent } )
-    $Redux.Text.LinkScript.Add_CheckStateChanged(    { UnlockLanguageContent } )
+    if ($Redux.Text.Language   -ne $null)   { $Redux.Text.Language.Add_SelectedIndexChanged(   { UnlockLanguageContent } ) }
+    if ($Redux.Text.LinkScript -ne $null)   { $Redux.Text.LinkScript.Add_CheckStateChanged(    { UnlockLanguageContent } ) }
+    if ($Redux.Text.NaviScript -ne $null)   { $Redux.Text.NaviScript.Add_SelectedIndexChanged( { UnlockLanguageContent } ) }
     UnlockLanguageContent
 
 }
@@ -2621,38 +2619,40 @@ function CreateTabLanguage() {
 #==============================================================================================================================================================================================
 function UnlockLanguageContent() {
     
-    if ($Redux.Text.Language -eq $null) {
-        EnableElem -Elem $Redux.Text.NaviName -Active ($Redux.Text.NaviScript.SelectedIndex -ne 0 -and $Redux.Text.NaviScript.Enabled)
-        EnableElem -Elem $Redux.Text.LinkName -Active ($Redux.Text.LinkScript.Checked             -and $Redux.Text.LinkScript.Enabled)
-        return
-    }
-
     # English options
-    EnableElem -Elem $Redux.Text.Restore        -Active ($Redux.Text.Language.SelectedIndex -eq 0)
-    EnableElem -Elem $Redux.Text.FemalePronouns -Active ($Redux.Text.Language.SelectedIndex -eq 0)
-    EnableElem -Elem $Redux.Text.EasterEggs     -Active ($Redux.Text.Language.SelectedIndex -eq 0)
-    EnableElem -Elem $Redux.Text.Fairy          -Active ($Redux.Text.Language.SelectedIndex -eq 0)
-    EnableElem -Elem $Redux.Text.Milk           -Active ($Redux.Text.Language.SelectedIndex -eq 0)
-    EnableElem -Elem $Redux.Text.PauseScreen    -Active ($Redux.Text.Language.SelectedIndex -eq 0)
+    if ($Redux.Text.Language -ne $null) {
+        EnableElem -Elem $Redux.Text.Restore        -Active ($Redux.Text.Language.SelectedIndex -eq 0)
+        EnableElem -Elem $Redux.Text.FemalePronouns -Active ($Redux.Text.Language.SelectedIndex -eq 0)
+        EnableElem -Elem $Redux.Text.EasterEggs     -Active ($Redux.Text.Language.SelectedIndex -eq 0)
+        EnableElem -Elem $Redux.Text.Fairy          -Active ($Redux.Text.Language.SelectedIndex -eq 0)
+        EnableElem -Elem $Redux.Text.Milk           -Active ($Redux.Text.Language.SelectedIndex -eq 0)
+        EnableElem -Elem $Redux.Text.PauseScreen    -Active ($Redux.Text.Language.SelectedIndex -eq 0)
+    }
 
     # German options
-    EnableElem -Elem $Redux.Text.CheckPrompt    -Active ($Files.json.languages[$Redux.Text.Language.SelectedIndex].code -eq "de")
-    EnableElem -Elem $Redux.Text.DivePrompt     -Active ($Files.json.languages[$Redux.Text.Language.SelectedIndex].code -eq "de")
+    if ($Redux.Text.Language -ne $null) {
+        EnableElem -Elem $Redux.Text.CheckPrompt    -Active ($Files.json.languages[$Redux.Text.Language.SelectedIndex].code -eq "de")
+        EnableElem -Elem $Redux.Text.DivePrompt     -Active ($Files.json.languages[$Redux.Text.Language.SelectedIndex].code -eq "de")
+    }
 
     # Set max text speed in each language
-    if ($Files.json.languages[$Redux.Text.Language.SelectedIndex].max_text_speed -eq 1) {
-        EnableElem -Elem @($Redux.Text.Speed2x, $Redux.Text.Speed3x) -Active $False
-        $Redux.Text.Speed1x.checked = $True
+    if ($Redux.Text.Language -ne $null) {
+        if ($Files.json.languages[$Redux.Text.Language.SelectedIndex].max_text_speed -eq 1) {
+            EnableElem -Elem @($Redux.Text.Speed2x, $Redux.Text.Speed3x) -Active $False
+            $Redux.Text.Speed1x.checked = $True
+        }
+        elseif ($Files.json.languages[$Redux.Text.Language.SelectedIndex].max_text_speed -eq 2) {
+            EnableElem -Elem $Redux.Text.Speed2x -Active $True
+            EnableElem -Elem $Redux.Text.Speed3x -Active $False
+            if ($Redux.Text.Speed3x.checked -eq $True) { $Redux.Text.Speed2x.checked = $True }
+        }
+        else { EnableElem -Elem @($Redux.Text.Speed2x, $Redux.Text.Speed3x) -Active $True }
     }
-    elseif ($Files.json.languages[$Redux.Text.Language.SelectedIndex].max_text_speed -eq 2) {
-        EnableElem -Elem $Redux.Text.Speed2x -Active $True
-        EnableElem -Elem $Redux.Text.Speed3x -Active $False
-        if ($Redux.Text.Speed3x.checked -eq $True) { $Redux.Text.Speed2x.checked = $True }
-    }
-    else { EnableElem -Elem @($Redux.Text.Speed2x, $Redux.Text.Speed3x) -Active $True }
-    EnableElem -Elem @($Redux.Text.Instant, $Redux.Text.GoldSkulltula, $Redux.Text.LinkScript, $Redux.Text.NaviScript, $Redux.Text.NaviPrompt) -Active ($Files.json.languages[$Redux.Text.Language.SelectedIndex].region -ne "J")
-    EnableElem -Elem $Redux.Text.NaviName -Active ($Redux.Text.NaviScript.SelectedIndex -ne 0 -and $Redux.Text.NaviScript.Enabled)
-    EnableElem -Elem $Redux.Text.LinkName -Active ($Redux.Text.LinkScript.Checked             -and $Redux.Text.LinkScript.Enabled)
+    
+    if ($Redux.Text.Language -ne $null) { EnableElem -Elem @($Redux.Text.Instant, $Redux.Text.GoldSkulltula, $Redux.Text.LinkScript, $Redux.Text.NaviScript, $Redux.Text.NaviPrompt) -Active ($Files.json.languages[$Redux.Text.Language.SelectedIndex].region -ne "J") }
+
+    EnableElem -Elem $Redux.Text.NaviName -Active ($Redux.Text.NaviScript.SelectedIndex -gt 0 -and $Redux.Text.NaviScript.Active)
+    EnableElem -Elem $Redux.Text.LinkName -Active ($Redux.Text.LinkScript.Checked             -and $Redux.Text.LinkScript.Active)
 
 }
 

@@ -504,7 +504,7 @@
 		"dma"		: "B320",
 		"length"	: 17,
 		"dungeon"	: 1,
-		"maps"		: [ "Main Hall", "Baby Dodongo Hallway", "Rising Staircase Hall", "Lizalfos Mini-Boss", "Green Cave", "Armos Pushing Challenge", "Small Room - Large Pillars Hall", "Boos Door Room", "Labyrinth", "Large Pillars Hall", "Jump Across One Pillar", "Small Room - Baby Dodongo Hall", "Jump Across Two Pillars", "Small Room - Green Cave", "Small Room - Labyrinth", "Small Room - Rising Staircase Hall", "Boss Lair" ] 
+		"maps"		: [ "Main Hall", "Baby Dodongo Hallway", "Rising Staircase Hall", "Lizalfos Mini-Boss", "Green Cave", "Armos Pushing Challenge", "Small Room - Large Pillars Hall", "Boss Door Room", "Labyrinth", "Large Pillars Hall", "Jump Across One Pillar", "Small Room - Baby Dodongo Hall", "Jump Across Two Pillars", "Small Room - Green Cave", "Small Room - Labyrinth", "Small Room - Rising Staircase Hall", "Boss Lair" ] 
 	}, {
 		"id"		: "0002",
 		"name"		: "Inside Jabu-Jabu's Belly",

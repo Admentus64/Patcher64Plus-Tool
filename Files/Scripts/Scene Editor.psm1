@@ -974,7 +974,7 @@ function PrepareMap([string]$Scene, [byte]$Map, [byte]$Header, [switch]$Shift) {
     }
     
     if ($Map -ne $SceneEditor.LoadedMap) {
-        $SceneEditor.MapShift  = $SceneEditor.SceneMapShift = 0
+        $SceneEditor.MapShift  = 0
         $SceneEditor.LoadedMap = $Map
         LoadMap
     }
@@ -2414,9 +2414,24 @@ function LoadActors() {
 
     $SceneEditor.BottomPanelActors.AutoScroll = $False
 
+    if ($Settings.Debug.SceneEditorChecks -eq $True) {
+        $SceneEditor.trackFlag1Values = @()
+        $SceneEditor.trackFlag2Values = @()
+        $SceneEditor.trackFlag3Values = @()
+    }
+
     for ([byte]$i=$start; $i -lt $end; $i++) {
         if ($i -ge (GetActorCount)) { break }
         AddActor
+    }
+
+    if ($Settings.Debug.SceneEditorChecks -eq $True) {
+        if ($SceneEditor.trackFlag1Values.count -gt 0 -or $SceneEditor.trackFlag2Values.count -gt 0 -or $SceneEditor.trackFlag3Values.count -gt 0) {
+            WriteToConsole ("Current Setup: " + $SceneEditor.Scenes.Text + " - Map: " + $SceneEditor.Maps.SelectedIndex + ", Header: " + $SceneEditor.LoadedHeader)
+            if ($SceneEditor.trackFlag1Values.count -gt 0)    { WriteToConsole ("Used Flags:        " + ($SceneEditor.trackFlag1Values | Sort-Object | Get-Unique) ) }
+            if ($SceneEditor.trackFlag2Values.count -gt 0)    { WriteToConsole ("Used Switches:     " + ($SceneEditor.trackFlag2Values | Sort-Object | Get-Unique) ) }
+            if ($SceneEditor.trackFlag3Values.count -gt 0)    { WriteToConsole ("Used Collectables: " + ($SceneEditor.trackFlag3Values | Sort-Object | Get-Unique) ) }
+        }
     }
 
     $SceneEditor.BottomPanelActors.AutoScroll        = $True
@@ -2951,7 +2966,7 @@ function InsertActor([string]$ID="0000", [string]$Name, [int]$X=0, [int]$Y=0, [i
         if ($NoYRot)   { $values[0] += 0x80 }
         if ($NoZRot)   { $values[0] += 0x20 }
     }
-
+    
     $SceneEditor.MapArray.InsertRange((GetActorEnd), $values)
     $SceneEditor.Offsets[$SceneEditor.LoadedHeader].ActorCount++
     $SceneEditor.MapArray[(GetActorCountIndex)]++
@@ -4152,6 +4167,8 @@ function LoadParam([object]$Param, [uint16]$Value, [uint16]$Band, [uint16]$LastB
             else                                                                  { $multi = 0  }
         }
 
+        $val = '{0:X}' -f ($calc -shr $multi)
+
         if ($Param.auto -eq 1) {
                if (!$IsScene)   { $label = CreateLabel -X ($lastX + (DPISize 20) ) -Y (DPISize 2) -Height (DPISize 20) -Text ($Param[0].name + ":") -AddTo $SceneEditor.Actors[$TabEntry].ParamsPanel        }
                else             { $label = CreateLabel -X ($lastX + (DPISize 20) ) -Y (DPISize 2) -Height (DPISize 20) -Text ($Param[0].name + ":") -AddTo $SceneEditor.TransitionActors[$Count].ParamsPanel }
@@ -4161,8 +4178,8 @@ function LoadParam([object]$Param, [uint16]$Value, [uint16]$Band, [uint16]$LastB
             else             { $label = CreateLabel -X ($lastX + (DPISize 20) ) -Y (DPISize 2) -Height (DPISize 20) -Text ($Param[0].name + ":") -AddTo $SceneEditor.TransitionActors[$Count].ParamsPanel -Width $LastBandX }
         }
         try {
-            if (!$IsScene)   { $elem = CreateTextBox -X ($label.Right + (DPISize 5) ) -Y 0 -Width (DPISize 50) -Height (DPISize 22) -Text ('{0:X}' -f ($calc -shr $multi) ) -Length $Param[0].value.length -AddTo $SceneEditor.Actors[$TabEntry].ParamsPanel        }
-            else             { $elem = CreateTextBox -X ($label.Right + (DPISize 5) ) -Y 0 -Width (DPISize 50) -Height (DPISize 22) -Text ('{0:X}' -f ($calc -shr $multi) ) -Length $Param[0].value.length -AddTo $SceneEditor.TransitionActors[$Count].ParamsPanel }
+            if (!$IsScene)   { $elem = CreateTextBox -X ($label.Right + (DPISize 5) ) -Y 0 -Width (DPISize 50) -Height (DPISize 22) -Text $val -Length $Param[0].value.length -AddTo $SceneEditor.Actors[$TabEntry].ParamsPanel        }
+            else             { $elem = CreateTextBox -X ($label.Right + (DPISize 5) ) -Y 0 -Width (DPISize 50) -Height (DPISize 22) -Text $val -Length $Param[0].value.length -AddTo $SceneEditor.TransitionActors[$Count].ParamsPanel }
         }
         catch {
             if (!$IsScene)   { $elem = CreateTextBox -X ($label.Right + (DPISize 5) )  -Y 0 -Width (DPISize 50) -Height (DPISize 22) -Text "ERROR" -Length 0 -AddTo $SceneEditor.Actors[$TabEntry].ParamsPanel        }
@@ -4172,6 +4189,13 @@ function LoadParam([object]$Param, [uint16]$Value, [uint16]$Band, [uint16]$LastB
             WriteToConsole ("Could not parse Actor (" + $SceneEditor.Actors[$SceneEditor.Actors.Count-1].text + ") Text Field Param (" + $Param[0].name + ") with band: " + (Get16Bit $Band) + ", " + $calc + ", " + $multi ) -Error
         }
         $defaultValue = '{0:X}' -f ( (GetDecimal $elem.Text) -shl $multi)
+        
+        if ($Settings.Debug.SceneEditorChecks -eq $True -and !$IsScene) {
+            $name = $Param[0].Name
+            if ($name -eq "Flag")          { $SceneEditor.trackFlag1Values += (Get8Bit (GetDecimal $val) ) }
+            if ($name -eq "Switch")        { $SceneEditor.trackFlag2Values += (Get8Bit (GetDecimal $val) ) }
+            if ($name -eq "Collectable")   { $SceneEditor.trackFlag3Values += (Get8Bit (GetDecimal $val) ) }
+        }
 
         Add-Member -InputObject $elem -NotePropertyMembers @{ Label = $label; Max = (GetDecimal $Param[0].value); Multi = $multi }
 
@@ -4243,7 +4267,8 @@ function LoadParam([object]$Param, [uint16]$Value, [uint16]$Band, [uint16]$LastB
                                 if ($SceneEditor.TransitionActors[$this.Index].Params[$this.ResetParam - 1] -is [System.Windows.Forms.ComboBox]) { GetCheckBoxChange -Elem $SceneEditor.TransitionActors[$this.Index].Params[$this.ResetParam - 1] -IsScene $True }
                             }
                         }
-                        GetCheckBoxChange -Elem $this -IsScene $IsScene
+
+                        GetCheckBoxChange -Elem $this -IsScene $this.IsScene
                     })
 
                     break outer
@@ -4712,7 +4737,8 @@ function ReloadParams([object]$Actor, [byte]$Index) {
 function DoAssertSceneFiles() {
     
     if (TestFile -Path ($Paths.Assert + "\assert") ) {
-        if ($GameType.Mode -eq "Ocarina of Time") { return $True }
+        if ($GameType.Mode -eq "Ocarina of Time")   { return $True }
+        if ($GameType.Mode -eq "Majora's Mask")     { return $True }
     }
 
     return $False
@@ -4729,6 +4755,7 @@ function ApplyTestSceneFiles() {
         ApplyPatch -FullPath -Patch ($Paths.Assert + "\Scenes\Graveyard.ppf")
         ApplyPatch -FullPath -Patch ($Paths.Assert + "\Scenes\Lake Hylia.ppf")
         ApplyPatch -FullPath -Patch ($Paths.Assert + "\Scenes\Death Mountain Crater.ppf")
+        ApplyPatch -FullPath -Patch ($Paths.Assert + "\Scenes\Gerudo's Fortress.ppf")
 
       # ApplyPatch -FullPath -Patch ($Paths.Assert + "\Scenes\Death Mountain Trail.ppf")
       # ApplyPatch -FullPath -Patch ($Paths.Assert + "\Scenes\Inside Ganon's Castle.ppf")
@@ -4842,8 +4869,23 @@ function TestScenesFiles() {
 
 
 
+        PrepareMap       -Scene "Gerudo's Fortress" -Map 0 -Header 0
+        InsertSpawnPoint -X 188 -Y 733 -Z (-2919) -Param "0DFF"
+        SaveAndPatchLoadedScene
+        AssertSceneFiles
+
+
+
         AssertArrays -Array1 ([System.IO.File]::ReadAllBytes($Paths.Temp + "\scene\cutscenes.tbl") ) -Array2 ([System.IO.File]::ReadAllBytes($Paths.Base + "\Assert\cutscenes.tbl") ) -Message1 "Cutscenes table files not equal in size..." -Message2 "Assert cutscenes table files... "
         AssertArrays -Array1 ([System.IO.File]::ReadAllBytes($Paths.Temp + "\scene\scenes.tbl") )    -Array2 ([System.IO.File]::ReadAllBytes($Paths.Base + "\Assert\scenes.tbl")    ) -Message1 "Scenes table files not equal in size... "   -Message2 "Assert scenes table files...    "
+    }
+
+    if ($GameType.Mode -eq "Majora's Mask") {
+        PrepareMap   -Scene "Mountain Village (Spring)" -Map 0 -Header 0
+        InsertObject -Name "Treasure Chest"
+        InsertActor  -Name "Treasure Chest" -Param "0D40" -X 310 -Y 463 -Z 700 -YRot 90 -NoXRot -NoZRot
+        SaveAndPatchLoadedScene
+        AssertSceneFiles
     }
 
 }

@@ -74,7 +74,6 @@ function GetOoTCollision([switch]$DekuNut, [switch]$DekuStick, [switch]$Slingsho
     if ($HammerJump)      { $value += 0x20000000 }
     if ($Unknown2)        { $value += 0x40000000 }
 
-
     return (Get32Bit $value)
 
 }
