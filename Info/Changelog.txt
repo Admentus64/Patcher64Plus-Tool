@@ -1,3 +1,6 @@
+v22.0.11
+- Update Female Pronouns for OoT
+
 v22.0.10
 - Fixed issue with removing the Owl from Lake Hylia
 - Fixed issue with changing the name for Navi
