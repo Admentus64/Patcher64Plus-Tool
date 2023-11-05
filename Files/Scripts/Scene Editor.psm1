@@ -2522,17 +2522,17 @@ function ShiftMapVtxData([int16]$Shift=0x10) {
             }
         }
 
-        $skip    = $True
-        $blockDF = $False
+        $skip = $blockDF = $False
         for ($i=$vtx; $i -lt $SceneEditor.MapArray.Count; $i+=4) {
             if ($SceneEditor.MapArray[$i+1] -eq 0 -and $SceneEditor.MapArray[$i+2] -eq 0 -and $SceneEditor.MapArray[$i+3] -eq 0) {
-                if ($SceneEditor.MapArray[$i] -eq 0xE7 -or $SceneEditor.MapArray[$i] -eq 0xFE) { $skip = $False; $blockDF = $False }
-                if ($SceneEditor.MapArray[$i] -eq 0xFF) { $skip = $True;  $blockDF = $False }
+                if ($SceneEditor.MapArray[$i] -eq 0xE7 -or  $SceneEditor.MapArray[$i]   -eq 0xFE)   { $skip = $False; $blockDF = $False }
+                if ($SceneEditor.MapArray[$i] -eq 0xFF -and $SceneEditor.MapArray[$i-4] -gt 0xF0)   { $skip = $True;  $blockDF = $False }
                 if ($SceneEditor.MapArray[$i] -eq 0xDF) {
-                    if (!$blockDF) { $skip = $False; $blockDF = $True } else { $skip = $True; $blockDF = $False }
+                    if     ($SceneEditor.MapArray[$i-8] -eq 0xDE -and !$BlockDF)   { $skip = $False; $blockDF = $True  }
+                    elseif ($SceneEditor.MapArray[$i+8] -eq 0xDE -and  $BlockDF)   { $skip = $True;  $blockDF = $False }
                 }
             }
-            
+
             if ($SceneEditor.MapArray[$i] -eq 3 -and !$skip) {
                 $value = $SceneEditor.MapArray[$i+1] * 65536 + $SceneEditor.MapArray[$i+2] * 256 + $SceneEditor.MapArray[$i+3] + $Shift
                 if ($value -gt $SceneEditor.Offsets[$SceneEditor.Offsets.Header.Count-1].Header -and $value -gt $SceneEditor.Offsets[$SceneEditor.Offsets.Header.Count-1].MeshStart -and $value -lt $SceneEditor.MapArray.Count) { ShiftMap -Offset ($i+1) -Shift $Shift }
@@ -2661,7 +2661,7 @@ function ShiftSceneHeaderData([int16]$Shift=0x10) {
 function ShiftSceneMapData([int16]$Shift=0x10) {
 
     $originalMap = $SceneEditor.LoadedMap
-    if ($SceneEditor.GUI) { SaveLoadedMap -Silent }
+    if ($SceneEditor.GUI) { [System.IO.File]::WriteAllBytes(($Paths.Temp + "\scene\room_" + $SceneEditor.LoadedMap + ".zmap"), $SceneEditor.MapArray) }
     for ($map=0; $map -lt $SceneEditor.SceneOffsets[0].MapCount; $map++) {
         $SceneEditor.LoadedMap = $map
         LoadMap
@@ -2699,7 +2699,7 @@ function ShiftSceneMapData([int16]$Shift=0x10) {
             }
         }
 
-        SaveLoadedMap -Silent
+        [System.IO.File]::WriteAllBytes(($Paths.Temp + "\scene\room_" + $SceneEditor.LoadedMap + ".zmap"), $SceneEditor.MapArray)
     }
 
     ShiftCutscenesTable -Shift $Shift
@@ -4779,12 +4779,35 @@ function TestScenesFiles() {
         SaveAndPatchLoadedScene
         AssertSceneFiles
 
-        PrepareMap       -Scene "Graveyard" -Map 1 -Header 0
+
+
+        PrepareMap   -Scene "Graveyard" -Map 1 -Header 0
+        ReplaceActor -Name "Collectable" -Compare "0406" -X (-850)
+        InsertActor  -Name "Gravestone" -X (-578) -Y 120 -Z (-336) -Param "0001"
+        RemoveActor  -Name "Graveyard"  -CompareX (-578) -CompareY 120 -CompareZ (-336)
+        InsertActor  -Name "Uninteractable Objects" -X (-562) -Y 120 -Z (-289)
+        InsertActor  -Name "Uninteractable Objects" -X (-578) -Y 120 -Z (-280)
+        InsertActor  -Name "Uninteractable Objects" -X (-598) -Y 120 -Z (-287)
+        InsertObject -Name "Warp Circle & Rupee Prism"
+        InsertActor  -Name "Warp Portal" -X 1140 -Y 340 -Z 85 -Param "0006"
         InsertSpawnPoint -X 1140 -Y 340 -Z 85 -Param "0201" -YRot 0xC71C
-        PrepareMap       -Scene "Graveyard" -Map 1 -Header 1
+        SaveLoadedMap
+
+        PrepareMap   -Scene "Graveyard" -Map 1 -Header 1
+        ReplaceActor -Name "Collectable" -Compare "0406" -X (-850)
+        InsertActor  -Name "Gravestone" -X (-578) -Y 120 -Z (-336) -Param "0001"
+        RemoveActor  -Name "Graveyard"  -CompareX (-578) -CompareY 120 -CompareZ (-336)
+        InsertActor  -Name "Uninteractable Objects" -X (-562) -Y 120 -Z (-289)
+        InsertActor  -Name "Uninteractable Objects" -X (-578) -Y 120 -Z (-280)
+        InsertActor  -Name "Uninteractable Objects" -X (-598) -Y 120 -Z (-287)
+        InsertObject -Name "Warp Circle & Rupee Prism"
+        InsertActor  -Name "Warp Portal" -X 1140 -Y 340 -Z 85 -Param "0006"
         InsertSpawnPoint -X 1140 -Y 340 -Z 85 -Param "0201" -YRot 0xC71C
         SaveAndPatchLoadedScene
+
         AssertSceneFiles
+
+
 
         PrepareMap       -Scene "Lake Hylia" -Map 0 -Header 0
         InsertSpawnPoint -X (-1045) -Y (-1223) -Z 7460 -Param "0200" -YRot 0x8000
@@ -4930,9 +4953,9 @@ function AssertSceneFiles() {
         $arr2 = [System.IO.File]::ReadAllBytes($file2)
 
         if ($arr1.count -ne $arr2.count) {
-            if     ($i -eq 0)                                 { WriteToConsole "Scene files not equal in size..."     }
-            elseif ($i -le $SceneEditor.LoadedScene.length)   { WriteToConsole "Map files not equal in size..."       }
-            else                                              { WriteToConsole "DMA table files not equal in size..." }
+            if     ($i -eq 0)                                 { WriteToConsole ("Scene files not equal in size... "      + (Get24Bit $arr1.count) + " vs " + (Get24Bit $arr2.count) ) }
+            elseif ($i -le $SceneEditor.LoadedScene.length)   { WriteToConsole ("Map files not equal in size... "        + (Get24Bit $arr1.count) + " vs " + (Get24Bit $arr2.count) ) }
+            else                                              { WriteToConsole ("DMA table files not equal in size... "  + (Get24Bit $arr1.count) + " vs " + (Get24Bit $arr2.count) ) }
             continue
         }
 
