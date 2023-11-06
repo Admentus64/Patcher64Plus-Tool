@@ -612,7 +612,6 @@ function MusicOptions([string]$Default="File Select") {
                     Start-Sleep -m 25
                     if (!$check) {
                         $MainDialog.Activate()
-                        $OptionsDialog.Activate()
                         $Check = $true
                     }
                 }

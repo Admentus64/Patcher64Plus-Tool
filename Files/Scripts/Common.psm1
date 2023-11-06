@@ -684,6 +684,15 @@ function IsChecked([object]$Elem=$null, [byte]$Lang=0, [switch]$Not) {
 
 
 #==============================================================================================================================================================================================
+function GetCheckedValue([object]$Elem=$null) {
+    
+    if ($Elem.Checked) { return 1 } else { return 0 }
+
+}
+
+
+
+#==============================================================================================================================================================================================
 function IsRevert([object]$Elem=$null, [int16]$Index=1, [string]$Text="", [string]$Compare="", [string]$Item="", [byte]$Lang=0) {
     
     if ( $Elem        -eq $null)          { return $False }
@@ -1401,6 +1410,7 @@ Export-ModuleMember -Function PatchPath_Finish
 
 Export-ModuleMember -Function IsDefault
 Export-ModuleMember -Function IsChecked
+Export-ModuleMember -Function GetCheckedValue
 Export-ModuleMember -Function IsRevert
 Export-ModuleMember -Function IsItem
 Export-ModuleMember -Function IsText

@@ -2651,7 +2651,7 @@ function ShiftSceneHeaderData([int16]$Shift=0x10) {
     }
 
     if ($SceneEditor.GUI) { ShiftSceneMapData -Shift $Shift } else { $SceneEditor.SceneMapShift += $Shift }
-
+    ShiftActors         -Shift $Shift
 
 }
 
@@ -2704,7 +2704,6 @@ function ShiftSceneMapData([int16]$Shift=0x10) {
 
     ShiftCutscenesTable -Shift $Shift
     ShiftTexturesTable  -Shift $Shift
-    ShiftActors         -Shift $Shift
     if ($Files.json.sceneEditor.parse -eq "oot") { ChangeBytes -File ($Paths.Temp + "\scene\scenes.tbl") -Offset (7 + 20 * (GetDecimal $SceneEditor.LoadedScene.id)) -Values $Shift -Add -Silent }
     
     $SceneEditor.LoadedMap   = $originalMap
