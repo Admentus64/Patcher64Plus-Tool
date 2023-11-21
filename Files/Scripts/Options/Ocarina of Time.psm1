@@ -790,19 +790,19 @@ function ByteOptions() {
     # EQUIPMENT #
 
     if (IsChecked $Redux.Equipment.HerosBow) {
-        PatchBytes -Offset "7C0000" -Texture -Patch "Equipment\Bow\heros_bow.icon"
-        PatchBytes -Offset "7F5000" -Texture -Patch "Equipment\Bow\heros_bow_fire.icon"
-        PatchBytes -Offset "7F6000" -Texture -Patch "Equipment\Bow\heros_bow_ice.icon"
-        PatchBytes -Offset "7F7000" -Texture -Patch "Equipment\Bow\heros_bow_light.icon"
-        if (TestFile ($GameFiles.textures + "\Equipment\Bow\heros_bow." + $LanguagePatch.code + ".label")) { PatchBytes -Offset "89F800" -Texture -Patch ("Equipment\Bow\heros_bow." + $LanguagePatch.code + ".label") }
+        PatchBytes -Offset "7C0000" -Texture -Patch "Equipment\Bow\Hero's Bow.icon"
+        PatchBytes -Offset "7F5000" -Texture -Patch "Equipment\Bow\Hero's Bow Fire.icon"
+        PatchBytes -Offset "7F6000" -Texture -Patch "Equipment\Bow\Hero's Bow Ice.icon"
+        PatchBytes -Offset "7F7000" -Texture -Patch "Equipment\Bow\Hero's Bow Light.icon"
+        if (TestFile ($GameFiles.textures + "\Equipment\Bow\Hero's Bow." + $LanguagePatch.code + ".label")) { PatchBytes -Offset "89F800" -Texture -Patch ("Equipment\Bow\Hero's Bow." + $LanguagePatch.code + ".label") }
     }
 
     if (IsChecked $Redux.Equipment.PowerBracelet) {
          $Offset = SearchBytes -Start "FBE000" -End "FEAF80" -Values "00000000000000000000000000000000000000000100010006000C0018002D01"
         if ($Offset -gt 0) { PatchBytes -Offset $Offset  -Texture -Patch ("Equipment\Bracelet\Power Bracelet.bin") }
-        PatchBytes -Offset "80D000" -Texture -Patch "Equipment\Bracelet\power_bracelet.icon"
-        if (TestFile ($GameFiles.textures + "\Equipment\Bracelet\power_bracelet." + $LanguagePatch.code + ".label")) { PatchBytes -Offset "89F800" -Texture -Patch ("Equipment\Bow\heros_bow." + $LanguagePatch.code + ".label") }
-        PatchBytes  -Offset "1791000" -Patch "object_gi_power_bracelet.bin" # Goron's Bracelet GI model
+        PatchBytes -Offset "80D000" -Texture -Patch "Equipment\Bracelet\Power Bracelet.icon"
+        if (TestFile ($GameFiles.textures + "\Equipment\Bracelet\Power Bracelet." + $LanguagePatch.code + ".label")) { PatchBytes -Offset "89F800" -Texture -Patch ("Equipment\Bracelet\Power Bracelet." + $LanguagePatch.code + ".label") }
+        PatchBytes  -Offset "1791000" -Patch "Object GI Models\Power Bracelet.bin" # Goron's Bracelet GI model
     }
     
  <# if (IsChecked $Redux.Equipment.VisibleGiantsKnife) {
@@ -2071,7 +2071,7 @@ function ByteTextOptions() {
 
     if (IsChecked $Redux.Text.Milk               -Lang 1)   { SetMessage -ID "0098" -Text "Lon Lon Milk"     -Replace "Milk"                                  }
     if (IsChecked $Redux.Equipment.HerosBow      -Lang 1)   { SetMessage -ID "0031" -Text "Fairy Bow"        -Replace "Hero's Bow"                            }
-    if (IsChecked $Redux.Equipment.PowerBracelet -Lang 1)   { SetMessage -ID "0079" -Text "Goron's Bracelet" -Replace "Power Bracelet"; SetMessage -ID "3000" }
+    if (IsChecked $Redux.Equipment.PowerBracelet -Lang 1)   { SetMessage -ID "0079" -Text "Goron's Bracelet" -Replace "Power Bracelet"; SetMessage -ID "300C" }
 
     if (IsDefault $Redux.Equipment.KokiriSword -Not) {
         $file = $GameFiles.textures + "\Equipment\Kokiri Sword\" + $Redux.Equipment.KokiriSword.text + "." + $LanguagePatch.code + ".txt"
