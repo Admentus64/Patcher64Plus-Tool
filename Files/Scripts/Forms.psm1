@@ -754,51 +754,42 @@ function CheckReduxOption([string]$Name, [Object]$Expose, [Object]$Exclude, [byt
     
     if ( (IsSet $Last.Extend) -and $Name -ne $null) {
         $section = $Last.Extend
-        if (IsSet $Redux.$section.$Name) { return $null }
+        if (IsSet $Redux.$section.$Name) { return $False }
     }
 
     if ($Expose -eq $null -and (IsSet $Files.json.patches) ) { $Expose = $Files.json.patches[0].title }
 
-    if ($Exclude -is [Array]) {
-        if ($Exclude.count -gt 0) {
-            foreach ($e in $Exclude) {
-                if ($GamePatch.title -like "*$e*")   { return $False }
-            }
-        }
-    }
-    elseif (IsSet $Exclude) {
-        if ($GamePatch.title -like "*$Exclude*")     { return $False }
-    }
-
-    if ($All) { return $True }
-
-    if ($Child) {
-        if (!(IsSet $GamePatch.age))                             { return $True  }
-        if (!$Adult -and $GamePatch.age.toLower() -eq "adult")   { return $False }
-        if ($GamePatch.age.toLower() -eq "child")                { return $True  }
-    }
-
-    if ($Adult) {
-        if (!(IsSet $GamePatch.age))                             { return $True  }
-        if (!$Child -and $GamePatch.age.toLower() -eq "child")   { return $False }
-        if ($GamePatch.age.toLower() -eq "adult")                { return $True  }
-    }
-    
-    if ($Base -gt 0 -and $Base -ne $null) {
-        if ($Base -ge $GamePatch.vanilla) { return $True }
-    }
-    elseif ($Expose -is [Array]) {
+    if ($Expose -is [Array]) {
         if ($Expose.count -gt 0) {
             foreach ($e in $Expose) {
-                if ($GamePatch.title -like "*$e*")   { return $True }
+                if ($GamePatch.title -like "*$e*")       { return $True }
             }
         }
     }
     elseif (IsSet $Expose) {
-        if ($GamePatch.title -like "*$Expose*")      { return $True }
+        if ($GamePatch.title -like "*$Expose*")          { return $True }
     }
 
-    return $False
+    if ($Exclude -is [Array]) {
+        if ($Exclude.count -gt 0) {
+            foreach ($e in $Exclude) {
+                if ($GamePatch.title -like "*$e*")       { return $False }
+            }
+        }
+    }
+    elseif (IsSet $Exclude) {
+        if ($GamePatch.title -like "*$Exclude*")         { return $False }
+    }
+
+    if ($All)                                            { return $True }
+    if ($Base -gt 0 -and $Base -lt $GamePatch.vanilla)   { return $False }
+
+    if (IsSet $GamePatch.age) {
+        if ($Child -and !$Adult -and $GamePatch.age.toLower() -eq "adult") { return $False }
+        if ($Adult -and !$Child -and $GamePatch.age.toLower() -eq "child") { return $False }
+    }
+
+    return $True
 
 }
 

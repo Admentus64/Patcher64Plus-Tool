@@ -1545,9 +1545,21 @@ function LoadSceneSettings() {
 
     # TRANSITION ACTORS #
 
+    if ($Settings.Debug.SceneEditorChecks -eq $True) {
+        $SceneEditor.trackFlag2Values = @()
+    }
+
     if ($SceneEditor.SceneOffsets[$SceneEditor.LoadedHeader].ActorIndex -ne $null) {
         $group = CreateGroupBox -Text "Transition Actors" -X $group.left -Y $y -Width $group.width -Height ( (DPISize 95) * (GetTransitionActorCount) + (DPISize 30) ) -AddTo $SceneEditor.BottomPanelSceneSettings
         for ($i=0; $i -lt (GetTransitionActorCount); $i++) { AddTransitionActor -Group $group }
+    }
+
+    if ($Settings.Debug.SceneEditorChecks -eq $True) {
+        if ($SceneEditor.trackFlag1Values.count -gt 0 -or $SceneEditor.trackFlag2Values.count -gt 0) {
+            WriteToConsole ("Current Setup: " + $SceneEditor.Scenes.Text)
+            if ($SceneEditor.trackFlag1Values.count -gt 0) { WriteToConsole ("Used Plane Switches: " + ($SceneEditor.trackFlag1Values | Sort-Object | Get-Unique) ) }
+            if ($SceneEditor.trackFlag2Values.count -gt 0) { WriteToConsole ("Used Door Switches:  " + ($SceneEditor.trackFlag2Values | Sort-Object | Get-Unique) ) }
+        }
     }
 
 }
@@ -1586,7 +1598,7 @@ function LoadMapSettings() {
 
         $val = $SceneEditor.MapArray[$SceneEditor.Offsets[$SceneEditor.LoadedHeader].TimeSpeed]
         if ($val -gt 0x7F) { $val = ($val - 0x7F) * -1  }
-                CreateLabel   -X (DPISize 150) -Y (DPISize 18) -Width (DPISize 90) -Height (DPISize 20) -Text "Time Speed:" -AddTo $group
+                CreateLabel   -X (DPISize 150) -Y (DPISize 18) -Width (DPISize 90) -Height (DPISize 20) -Text "Time Speed:"  -AddTo $group
         $elem = CreateTextBox -X (DPISize 240) -Y (DPISize 17) -Width (DPISize 30) -Height (DPISize 20) -Length 4 -Text $val -AddTo $group
         $elem.Add_LostFocus({
             if         (($this.Text -as [int]) -eq $null)   { $this.Text = $this.Default }
@@ -1741,7 +1753,7 @@ function PrepareAndSetMapSettings([string]$Scene, [byte]$Map, [byte]$Header, $Ti
 
 
 #==============================================================================================================================================================================================
-function SetSceneSettings($Music, $NightMusic, $SoundSetting, $Skybox, $Cast, $LightningControl) {
+function SetSceneSettings($Music, $NightMusic, $SoundSetting, $Skybox, $Cast, $LightningControl, [switch]$Silent) {
     
     if ($Music            -is [int] -and $Music             -ge 0 -and $Music           -le 0x7F)   { $SceneEditor.SceneArray[$SceneEditor.SceneOffsets[$SceneEditor.LoadedHeader].MusicSequence]    = $Music            }
     if ($NightMusic       -is [int] -and $NightMusic        -ge 0 -and $NightMusic      -le 0x1F)   { $SceneEditor.SceneArray[$SceneEditor.SceneOffsets[$SceneEditor.LoadedHeader].NightSequence]    = $NightMusic       }
@@ -1750,14 +1762,14 @@ function SetSceneSettings($Music, $NightMusic, $SoundSetting, $Skybox, $Cast, $L
     if ($Cast             -is [int] -and ($Cast             -eq 0 -or $Cast             -eq 1))     { $SceneEditor.SceneArray[$SceneEditor.SceneOffsets[$SceneEditor.LoadedHeader].Cloudy]           = $Cast             }
     if ($LightningControl -is [int] -and ($LightningControl -eq 0 -or $LightningControl -eq 1))     { $SceneEditor.SceneArray[$SceneEditor.SceneOffsets[$SceneEditor.LoadedHeader].LightningControl] = $LightningControl }
 
-    WriteToConsole "Scene properties have been updated"
+    if (!$Silent) { WriteToConsole "Scene properties have been updated" }
 
 }
 
 
 
 #==============================================================================================================================================================================================
-function ChangeSpawnPoint([byte]$Index=0, $X, $Y, $Z, $XRot, $YRot, $ZRot, $Param) {
+function ChangeSpawnPoint([byte]$Index=0, $X, $Y, $Z, $XRot, $YRot, $ZRot, $Param, [switch]$Silent) {
     
     if ($Index -ge (GetPositionCountIndex) -or $Index -lt 0) { WriteToConsole ("Spawn point: " + $Index + " does not exist") -Error; return }
 
@@ -1813,18 +1825,17 @@ function ChangeSpawnPoint([byte]$Index=0, $X, $Y, $Z, $XRot, $YRot, $ZRot, $Para
         $SceneEditor.SceneArray[$offset+15] = $val[1]
     }
 
-
     $SceneEditor.SceneArray[(GetEntranceStart) + $Index * 2]     = $Index
     $SceneEditor.SceneArray[(GetEntranceStart) + $Index * 2 + 1] = $SceneEditor.LoadedMap
 
-    WriteToConsole ("Updated spawn point:     " + $index)
+    if (!$Silent) { WriteToConsole ("Updated spawn point:     " + $index) }
 
 }
 
 
 
 #==============================================================================================================================================================================================
-function ChangeDoor([byte]$Index=0, $X, $Y, $Z, $YRot, $RoomFront, $RoomBack, $CameraFront, $CameraBack, $Param) {
+function ChangeDoor([byte]$Index=0, $X, $Y, $Z, $YRot, $RoomFront, $RoomBack, $CameraFront, $CameraBack, $Param, [switch]$Silent) {
     
     if ($Index -ge (GetTransitionActorCount) -or $Index -lt 0) { WriteToConsole ("Door: " + $Index + " does not exist") -Error; return }
 
@@ -1875,14 +1886,14 @@ function ChangeDoor([byte]$Index=0, $X, $Y, $Z, $YRot, $RoomFront, $RoomBack, $C
         $SceneEditor.SceneArray[$offset+15] = $val[1]
     }
 
-    WriteToConsole ("Updated door:            " + $index)
+    if (!$Silent) { WriteToConsole ("Updated door:            " + $index) }
 
 }
 
 
 
 #==============================================================================================================================================================================================
-function ChangeExit([byte]$Index=0, $Exit) {
+function ChangeExit([byte]$Index=0, $Exit, [switch]$Silent) {
     
     if ($Index -ge (GetPositionCount) -or $Index -lt 0) { WriteToConsole ("Exit: " + $Index + " does not exist") -Error; return }
 
@@ -1896,14 +1907,14 @@ function ChangeExit([byte]$Index=0, $Exit) {
     $SceneEditor.SceneArray[(GetExitStart) + $Index * 2]     = $val[0]
     $SceneEditor.SceneArray[(GetExitStart) + $Index * 2 + 1] = $val[1]
 
-    WriteToConsole ("Updated exit:            " + $index + " to value: " + $Exit)
+    if (!$Silent) { WriteToConsole ("Updated exit:            " + $index + " to value: " + $Exit) }
 
 }
 
 
 
 #==============================================================================================================================================================================================
-function SetMapSettings($Time, $TimeSpeed, $WindWest, $WindSouth, $WindVertical, $WindStrength, $Restrictions, $IdleAnimation, $DisableWarpSongs, $Rain, $HideInvisibleActors, $DisableSkybox, $DisableSun) {
+function SetMapSettings($Time, $TimeSpeed, $WindWest, $WindSouth, $WindVertical, $WindStrength, $Restrictions, $IdleAnimation, $DisableWarpSongs, $Rain, $HideInvisibleActors, $DisableSkybox, $DisableSun, [switch]$Silent) {
     
     if ($Time -is [int] -and $Time -ge 0 -and $Time -le 0xFFFF) {
         $SceneEditor.MapArray[$SceneEditor.Offsets[$SceneEditor.LoadedHeader].Time]   = $Time -shr 8
@@ -1942,7 +1953,7 @@ function SetMapSettings($Time, $TimeSpeed, $WindWest, $WindSouth, $WindVertical,
     if ($DisableSkybox -is [int] -and ($DisableSkybox -eq 0 -or $DisableSkybox  -eq 1))     { $SceneEditor.MapArray[$SceneEditor.Offsets[$SceneEditor.LoadedHeader].DisableSkybox] = $DisableSkybox }
     if ($DisableSun    -is [int] -and ($DisableSun    -eq 0 -or $DisableSun     -eq 1))     { $SceneEditor.MapArray[$SceneEditor.Offsets[$SceneEditor.LoadedHeader].DisableSun]    = $DisableSun    }
 
-    WriteToConsole "Map properties have been updated"
+    if (!$Silent) { WriteToConsole "Map properties have been updated" }
 
 }
 
@@ -2428,9 +2439,9 @@ function LoadActors() {
     if ($Settings.Debug.SceneEditorChecks -eq $True) {
         if ($SceneEditor.trackFlag1Values.count -gt 0 -or $SceneEditor.trackFlag2Values.count -gt 0 -or $SceneEditor.trackFlag3Values.count -gt 0) {
             WriteToConsole ("Current Setup: " + $SceneEditor.Scenes.Text + " - Map: " + $SceneEditor.Maps.SelectedIndex + ", Header: " + $SceneEditor.LoadedHeader)
-            if ($SceneEditor.trackFlag1Values.count -gt 0)    { WriteToConsole ("Used Flags:        " + ($SceneEditor.trackFlag1Values | Sort-Object | Get-Unique) ) }
-            if ($SceneEditor.trackFlag2Values.count -gt 0)    { WriteToConsole ("Used Switches:     " + ($SceneEditor.trackFlag2Values | Sort-Object | Get-Unique) ) }
-            if ($SceneEditor.trackFlag3Values.count -gt 0)    { WriteToConsole ("Used Collectables: " + ($SceneEditor.trackFlag3Values | Sort-Object | Get-Unique) ) }
+            if ($SceneEditor.trackFlag1Values.count -gt 0)    { WriteToConsole ("Used Flags:          " + ($SceneEditor.trackFlag1Values | Sort-Object | Get-Unique) ) }
+            if ($SceneEditor.trackFlag2Values.count -gt 0)    { WriteToConsole ("Used Switches:       " + ($SceneEditor.trackFlag2Values | Sort-Object | Get-Unique) ) }
+            if ($SceneEditor.trackFlag3Values.count -gt 0)    { WriteToConsole ("Used Collectables:   " + ($SceneEditor.trackFlag3Values | Sort-Object | Get-Unique) ) }
         }
     }
 
@@ -2528,10 +2539,15 @@ function ShiftMapVtxData([int16]$Shift=0x10) {
                 if ($SceneEditor.MapArray[$i] -eq 0xE7 -or  $SceneEditor.MapArray[$i]   -eq 0xFE)   { $skip = $False; $blockDF = $False }
                 if ($SceneEditor.MapArray[$i] -eq 0xFF -and $SceneEditor.MapArray[$i-4] -gt 0xF0)   { $skip = $True;  $blockDF = $False }
                 if ($SceneEditor.MapArray[$i] -eq 0xDF) {
-                    if     ($SceneEditor.MapArray[$i-8] -eq 0xDE -and !$BlockDF)   { $skip = $False; $blockDF = $True  }
-                    elseif ($SceneEditor.MapArray[$i+8] -eq 0xDE -and  $BlockDF)   { $skip = $True;  $blockDF = $False }
+                    if     ($SceneEditor.MapArray[$i+8] -eq 0xDE -and !$BlockDF)   { $skip = $False; $blockDF = $True  }
+                    elseif ($SceneEditor.MapArray[$i-8] -eq 0xDE -and  $BlockDF)   { $skip = $True;  $blockDF = $False }
                 }
+                if ($SceneEditor.MapArray[$i] -eq 0xD7 -or $SceneEditor.MapArray[$i] -eq 0xFE) { $skip = $False; $blockDF = $False }
             }
+            elseif ($SceneEditor.MapArray[$i+1] -eq 0 -and $SceneEditor.MapArray[$i+2] -eq 0 -and $SceneEditor.MapArray[$i+3] -eq 2) {
+                if ($SceneEditor.MapArray[$i] -eq 0xD7 -or $SceneEditor.MapArray[$i] -eq 0xFE) { $skip = $False; $blockDF = $False }
+            }
+            elseif ($SceneEditor.MapArray[$i] -eq 1 -and $SceneEditor.MapArray[$i+1] -eq 0 -and $SceneEditor.MapArray[$i+2] -eq 0x80 -and $SceneEditor.MapArray[$i+3] -eq 0x10  -and $SceneEditor.MapArray[$i+4] -eq 3) { $skip = $False; $blockDF = $False }
 
             if ($SceneEditor.MapArray[$i] -eq 3 -and !$skip) {
                 $value = $SceneEditor.MapArray[$i+1] * 65536 + $SceneEditor.MapArray[$i+2] * 256 + $SceneEditor.MapArray[$i+3] + $Shift
@@ -2714,7 +2730,7 @@ function ShiftSceneMapData([int16]$Shift=0x10) {
 
 
 #==============================================================================================================================================================================================
-function InsertSpawnPoint([int]$X=0, [int]$Y=0, [int]$Z=0, [uint16]$XRot=0, [uint16]$YRot=0, [uint16]$ZRot=0, [string]$Param="0000") {
+function InsertSpawnPoint([int]$X=0, [int]$Y=0, [int]$Z=0, [uint16]$XRot=0, [uint16]$YRot=0, [uint16]$ZRot=0, [string]$Param="0000", [switch]$Silent) {
     
     if ((GetPositionCount) -eq $null)   { WriteToConsole "No spawn point list defined for this header"       -Error; return $False }
     if ((GetPositionCount) -ge 255)     { WriteToConsole "Reached the max spawn point limit for this header" -Error; return $False }
@@ -2798,7 +2814,7 @@ function InsertSpawnPoint([int]$X=0, [int]$Y=0, [int]$Z=0, [uint16]$XRot=0, [uin
     $shift  = 0x10 + (InsertEntrance)
     ShiftSceneHeaderData -Shift $shift
 
-    WriteToConsole ("Inserted spawn point:    " + (GetPositionCount) )
+    if (!$Silent) { WriteToConsole ("Inserted spawn point:    " + (GetPositionCount) ) }
     return $True
 
 }
@@ -2886,7 +2902,7 @@ function DeleteActor() {
 }
 
 #==============================================================================================================================================================================================
-function InsertActor([string]$ID="0000", [string]$Name, [int]$X=0, [int]$Y=0, [int]$Z=0, [uint16]$XRot=0, [uint16]$YRot=0, [uint16]$ZRot=0, [switch]$NoXRot, [switch]$NoYRot, [switch]$NoZRot, [string]$Param="0000", [boolean[]]$SpawnTimes=@(1, 1, 1, 1, 1, 1, 1, 1, 1, 1), [byte]$SceneCommand=0x7F) {
+function InsertActor([string]$ID="0000", [string]$Name, [int]$X=0, [int]$Y=0, [int]$Z=0, [uint16]$XRot=0, [uint16]$YRot=0, [uint16]$ZRot=0, [switch]$NoXRot, [switch]$NoYRot, [switch]$NoZRot, [string]$Param="0000", [boolean[]]$SpawnTimes=@(1, 1, 1, 1, 1, 1, 1, 1, 1, 1), [byte]$SceneCommand=0x7F, [switch]$Silent) {
     
     if ((GetActorCount) -eq $null)   { WriteToConsole "No actor list defined for this header"       -Error; return $False }
     if ((GetActorCount) -ge 255)     { WriteToConsole "Reached the max actor limit for this header" -Error; return $False }
@@ -2976,7 +2992,9 @@ function InsertActor([string]$ID="0000", [string]$Name, [int]$X=0, [int]$Y=0, [i
         LoadTab -Tab 1
     }
 
-    if (IsSet $Name) { WriteToConsole ("Inserted actor:          " + $Name) } else { WriteToConsole ("Inserted actor with ID:  " + $ID) }
+    if (!$Silent) {
+        if (IsSet $Name) { WriteToConsole ("Inserted actor:          " + $Name) } else { WriteToConsole ("Inserted actor with ID:  " + $ID) }
+    }
 
     return $True
 
@@ -2985,7 +3003,7 @@ function InsertActor([string]$ID="0000", [string]$Name, [int]$X=0, [int]$Y=0, [i
 
 
 #==============================================================================================================================================================================================
-function ReplaceActor($Index, $ID=$null, $Name, $NewID, $New, $X, $Y, $Z, $XRot, $YRot, $ZRot, [switch]$NoXRot, [switch]$NoYRot, [switch]$NoZRot, $Compare, $CompareX, $CompareY, $CompareZ, $Param) {
+function ReplaceActor($Index, $ID=$null, $Name, $NewID, $New, $X, $Y, $Z, $XRot, $YRot, $ZRot, [switch]$NoXRot, [switch]$NoYRot, [switch]$NoZRot, $Compare, $CompareX, $CompareY, $CompareZ, $Param, [switch]$Silent) {
     
     if ((GetActorCount) -eq $null) { WriteToConsole "No actor list defined for this header" -Error; return $False }
 
@@ -3144,10 +3162,12 @@ function ReplaceActor($Index, $ID=$null, $Name, $NewID, $New, $X, $Y, $Z, $XRot,
         $SceneEditor.MapArray[$offset+15] = $val[1]
     }
 
-    if     ($Index -is [int])      { WriteToConsole ("Replaced actor entry:    " + $Index)   }
-    elseif ($Name  -is [string])   { WriteToConsole ("Replaced actor:          " + $Name)    }
-    elseif ($ID    -is [string])   { WriteToConsole ("Replaced actor with ID:  " + $printID) }
-    else                           { WriteToConsole  "Replaced actor"                        }
+    if (!$Silent) {
+        if     ($Index -is [int])      { WriteToConsole ("Replaced actor entry:    " + $Index)   }
+        elseif ($Name  -is [string])   { WriteToConsole ("Replaced actor:          " + $Name)    }
+        elseif ($ID    -is [string])   { WriteToConsole ("Replaced actor with ID:  " + $printID) }
+        else                           { WriteToConsole  "Replaced actor"                        }
+    }
 
     return $True
 
@@ -3156,7 +3176,7 @@ function ReplaceActor($Index, $ID=$null, $Name, $NewID, $New, $X, $Y, $Z, $XRot,
 
 
 #==============================================================================================================================================================================================
-function RemoveActor($Index, $ID, $Name, $Compare, $CompareX, $CompareY, $CompareZ) {
+function RemoveActor($Index, $ID, $Name, $Compare, $CompareX, $CompareY, $CompareZ, [switch]$Silent) {
     
     if ((GetActorCount) -eq $null)   { WriteToConsole "No actor list defined for this header"    -Error; return $False }
     if ((GetActorCount) -eq 0)       { WriteToConsole "No actors left to remove for this header" -Error; return $False }
@@ -3229,10 +3249,12 @@ function RemoveActor($Index, $ID, $Name, $Compare, $CompareX, $CompareY, $Compar
     }
     DeleteActor
 
-    if     ($Index -is [int])      { WriteToConsole ("Removed actor entry:     " + $Index)   }
-    elseif ($Name  -is [string])   { WriteToConsole ("Removed actor:           " + $Name)    }
-    elseif ($ID    -is [string])   { WriteToConsole ("Removed actor with ID:   " + $printID) }
-    else                           { WriteToConsole  "Removed actor"                         }
+    if (!$Silent) {
+        if     ($Index -is [int])      { WriteToConsole ("Removed actor entry:     " + $Index)   }
+        elseif ($Name  -is [string])   { WriteToConsole ("Removed actor:           " + $Name)    }
+        elseif ($ID    -is [string])   { WriteToConsole ("Removed actor with ID:   " + $printID) }
+        else                           { WriteToConsole  "Removed actor"                         }
+    }
 
     return $True
 
@@ -3257,7 +3279,7 @@ function SplitCompare($Compare) {
 
 
 #==============================================================================================================================================================================================
-function ReplaceTransitionActor($Index, $ID, $Name, $NewID, $New, $X, $Y, $Z, $YRot, $MapFront, $MapBack, $CamFront, $CamBack, $Compare, $CompareX, $CompareY, $CompareZ, $Param) {
+function ReplaceTransitionActor($Index, $ID, $Name, $NewID, $New, $X, $Y, $Z, $YRot, $MapFront, $MapBack, $CamFront, $CamBack, $Compare, $CompareX, $CompareY, $CompareZ, $Param, [switch]$Silent) {
     
     if ((GetTransitionActorCount) -eq $null) {
         WriteToConsole "No transition actor list defined for this header" -Error
@@ -3428,10 +3450,12 @@ function ReplaceTransitionActor($Index, $ID, $Name, $NewID, $New, $X, $Y, $Z, $Y
         $SceneEditor.SceneArray[$offset+15] = $val[1]
     }
 
-    if     ($Index -is [int])      { WriteToConsole ("Replaced transition actor entry: "   + $Index)   }
-    elseif ($Name  -is [string])   { WriteToConsole ("Replaced transition actor: "         + $Name)    }
-    elseif ($ID    -is [string])   { WriteToConsole ("Replaced transition actor with ID: " + $printID) }
-    else                           { WriteToConsole  "Replaced transition actor"                       }
+    if (!$Silent) {
+        if     ($Index -is [int])      { WriteToConsole ("Replaced transition actor entry: "   + $Index)   }
+        elseif ($Name  -is [string])   { WriteToConsole ("Replaced transition actor: "         + $Name)    }
+        elseif ($ID    -is [string])   { WriteToConsole ("Replaced transition actor with ID: " + $printID) }
+        else                           { WriteToConsole  "Replaced transition actor"                       }
+    }
 
     return $True
 
@@ -3467,7 +3491,7 @@ function DeleteObject() {
 
 
 #==============================================================================================================================================================================================
-function InsertObject([string]$ID="0000", [string]$Name) {
+function InsertObject([string]$ID="0000", [string]$Name, [switch]$Silent) {
     
     if ((GetObjectCount) -eq $null)                                 { WriteToConsole "No object list defined for this header"       -Error; return $False }
     if ((GetObjectCount) -ge $Files.json.sceneEditor.max_objects)   { WriteToConsole "Reached the max object limit for this header" -Error; return $False }
@@ -3519,7 +3543,9 @@ function InsertObject([string]$ID="0000", [string]$Name) {
         $SceneEditor.BottomPanelObjects.AutoScrollMinSize = New-Object System.Drawing.Size(0, 0)
     }
 
-    if (IsSet $Name) { WriteToConsole ("Inserted object:         " + $Name) } else { WriteToConsole ("Inserted object with ID: " + $printID) }
+    if (!$Silent) {
+        if (IsSet $Name) { WriteToConsole ("Inserted object:         " + $Name) } else { WriteToConsole ("Inserted object with ID: " + $printID) }
+    }
 
     return $True
 
@@ -3528,7 +3554,7 @@ function InsertObject([string]$ID="0000", [string]$Name) {
 
 
 #==============================================================================================================================================================================================
-function ReplaceObject($Index, $ID, $Name, $NewID, $New) {
+function ReplaceObject($Index, $ID, $Name, $NewID, $New, [switch]$Silent) {
     
     if ((GetObjectCount) -eq $null) { WriteToConsole "No object list defined for this header" -Error; return $False }
 
@@ -3611,10 +3637,12 @@ function ReplaceObject($Index, $ID, $Name, $NewID, $New) {
         $SceneEditor.MapArray[$offset+1]  = $val[1]
     }
 
-    if     ($Index -is [int])      { WriteToConsole ("Replaced object entry:   " + $Index)   }
-    elseif ($Name  -is [string])   { WriteToConsole ("Replaced object:         " + $Name)    }
-    elseif ($ID    -is [string])   { WriteToConsole ("Replaced object with ID: " + $printID) }
-    else                           { WriteToConsole  "Replaced object"                       }
+    if (!$Silent) {
+        if     ($Index -is [int])      { WriteToConsole ("Replaced object entry:   " + $Index)   }
+        elseif ($Name  -is [string])   { WriteToConsole ("Replaced object:         " + $Name)    }
+        elseif ($ID    -is [string])   { WriteToConsole ("Replaced object with ID: " + $printID) }
+        else                           { WriteToConsole  "Replaced object"                       }
+    }
 
     return $True
 
@@ -3623,7 +3651,7 @@ function ReplaceObject($Index, $ID, $Name, $NewID, $New) {
 
 
 #==============================================================================================================================================================================================
-function RemoveObject($Index, $ID, $Name) {
+function RemoveObject($Index, $ID, $Name, [switch]$Silent) {
     
     if ((GetObjectCount) -eq $null) { WriteToConsole "No object list defined for this header" -Error; return $False }
 
@@ -3674,10 +3702,12 @@ function RemoveObject($Index, $ID, $Name) {
     }
     DeleteObject
 
-    if     ($Index -is [int])      { WriteToConsole ("Removed object entry:    " + $Index)   }
-    elseif ($Name  -is [string])   { WriteToConsole ("Removed object:          " + $Name)    }
-    elseif ($ID    -is [string])   { WriteToConsole ("Removed object with ID:  " + $printID) }
-    else                           { WriteToConsole  "Removed object"                        }
+    if (!$Silent) {
+        if     ($Index -is [int])      { WriteToConsole ("Removed object entry:    " + $Index)   }
+        elseif ($Name  -is [string])   { WriteToConsole ("Removed object:          " + $Name)    }
+        elseif ($ID    -is [string])   { WriteToConsole ("Removed object with ID:  " + $printID) }
+        else                           { WriteToConsole  "Removed object"                        }
+    }
 
     return $True
 
@@ -4189,11 +4219,17 @@ function LoadParam([object]$Param, [uint16]$Value, [uint16]$Band, [uint16]$LastB
         }
         $defaultValue = '{0:X}' -f ( (GetDecimal $elem.Text) -shl $multi)
         
-        if ($Settings.Debug.SceneEditorChecks -eq $True -and !$IsScene) {
+        if ($Settings.Debug.SceneEditorChecks -eq $True) {
             $name = $Param[0].Name
-            if ($name -eq "Flag")          { $SceneEditor.trackFlag1Values += (Get8Bit (GetDecimal $val) ) }
-            if ($name -eq "Switch")        { $SceneEditor.trackFlag2Values += (Get8Bit (GetDecimal $val) ) }
-            if ($name -eq "Collectable")   { $SceneEditor.trackFlag3Values += (Get8Bit (GetDecimal $val) ) }
+            if (!$IsScene) {
+                if ($name -eq "Flag")            { $SceneEditor.trackFlag1Values += (Get8Bit (GetDecimal $val) ) }
+                if ($name -eq "Switch")          { $SceneEditor.trackFlag2Values += (Get8Bit (GetDecimal $val) ) }
+                if ($name -eq "Collectable")     { $SceneEditor.trackFlag3Values += (Get8Bit (GetDecimal $val) ) }
+            }
+            else {
+                if ($name -eq "Switch")          { $SceneEditor.trackFlag1Values += (Get8Bit (GetDecimal $val) ) }
+                if ($name -eq "Switch / Text")   { $SceneEditor.trackFlag2Values += (Get8Bit (GetDecimal $val) ) }
+            }
         }
 
         Add-Member -InputObject $elem -NotePropertyMembers @{ Label = $label; Max = (GetDecimal $Param[0].value); Multi = $multi }
@@ -4750,14 +4786,14 @@ function DoAssertSceneFiles() {
 function ApplyTestSceneFiles() {
     
     if ($GameType.Mode -eq "Ocarina of Time") {
-        ApplyPatch -FullPath -Patch ($Paths.Assert + "\Scenes\Kokiri Forest.ppf")
-        ApplyPatch -FullPath -Patch ($Paths.Assert + "\Scenes\Graveyard.ppf")
-        ApplyPatch -FullPath -Patch ($Paths.Assert + "\Scenes\Lake Hylia.ppf")
-        ApplyPatch -FullPath -Patch ($Paths.Assert + "\Scenes\Death Mountain Crater.ppf")
-        ApplyPatch -FullPath -Patch ($Paths.Assert + "\Scenes\Gerudo's Fortress.ppf")
+        ApplyPatch -Silent -FullPath -Patch ($Paths.Assert + "\Scenes\Kokiri Forest.ppf")
+        ApplyPatch -Silent -FullPath -Patch ($Paths.Assert + "\Scenes\Graveyard.ppf")
+        ApplyPatch -Silent -FullPath -Patch ($Paths.Assert + "\Scenes\Lake Hylia.ppf")
+        ApplyPatch -Silent -FullPath -Patch ($Paths.Assert + "\Scenes\Death Mountain Crater.ppf")
+        ApplyPatch -Silent -FullPath -Patch ($Paths.Assert + "\Scenes\Gerudo's Fortress.ppf")
 
-      # ApplyPatch -FullPath -Patch ($Paths.Assert + "\Scenes\Death Mountain Trail.ppf")
-      # ApplyPatch -FullPath -Patch ($Paths.Assert + "\Scenes\Inside Ganon's Castle.ppf")
+      # ApplyPatch -Silent -FullPath -Patch ($Paths.Assert + "\Scenes\Death Mountain Trail.ppf")
+      # ApplyPatch -Silent -FullPath -Patch ($Paths.Assert + "\Scenes\Inside Ganon's Castle.ppf")
   }
 
 }
@@ -4769,39 +4805,39 @@ function TestScenesFiles() {
     
     if ($GameType.Mode -eq "Ocarina of Time") {
         PrepareMap       -Scene "Kokiri Forest" -Map 1 -Header 0
-        InsertSpawnPoint -X 3608 -Y (-179) -Z (-1009) -Param "0DFF" -YRot 0x5555
+        InsertSpawnPoint -Silent -X 3608 -Y (-179) -Z (-1009) -Param "0DFF" -YRot 0x5555
         SaveAndPatchLoadedScene
         AssertSceneFiles
 
         PrepareMap       -Scene "Sacred Forest Meadow" -Map 0 -Header 0
-        InsertSpawnPoint -X 10 -Y 500 -Z (-2610) -Param "0201"
+        InsertSpawnPoint -Silent -X 10 -Y 500 -Z (-2610) -Param "0201"
         SaveAndPatchLoadedScene
         AssertSceneFiles
 
 
 
         PrepareMap   -Scene "Graveyard" -Map 1 -Header 0
-        ReplaceActor -Name "Collectable" -Compare "0406" -X (-850)
-        InsertActor  -Name "Gravestone" -X (-578) -Y 120 -Z (-336) -Param "0001"
-        RemoveActor  -Name "Graveyard"  -CompareX (-578) -CompareY 120 -CompareZ (-336)
-        InsertActor  -Name "Uninteractable Objects" -X (-562) -Y 120 -Z (-289)
-        InsertActor  -Name "Uninteractable Objects" -X (-578) -Y 120 -Z (-280)
-        InsertActor  -Name "Uninteractable Objects" -X (-598) -Y 120 -Z (-287)
-        InsertObject -Name "Warp Circle & Rupee Prism"
-        InsertActor  -Name "Warp Portal" -X 1140 -Y 340 -Z 85 -Param "0006"
-        InsertSpawnPoint -X 1140 -Y 340 -Z 85 -Param "0201" -YRot 0xC71C
+        ReplaceActor -Silent -Name "Collectable" -Compare "0406" -X (-850)
+        InsertActor  -Silent -Name "Gravestone" -X (-578) -Y 120 -Z (-336) -Param "0001"
+        RemoveActor  -Silent -Name "Graveyard"  -CompareX (-578) -CompareY 120 -CompareZ (-336)
+        InsertActor  -Silent -Name "Uninteractable Objects" -X (-562) -Y 120 -Z (-289)
+        InsertActor  -Silent -Name "Uninteractable Objects" -X (-578) -Y 120 -Z (-280)
+        InsertActor  -Silent -Name "Uninteractable Objects" -X (-598) -Y 120 -Z (-287)
+        InsertObject -Silent -Name "Warp Circle & Rupee Prism"
+        InsertActor  -Silent -Name "Warp Portal" -X 1140 -Y 340 -Z 85 -Param "0006"
+        InsertSpawnPoint -Silent -X 1140 -Y 340 -Z 85 -Param "0201" -YRot 0xC71C
         SaveLoadedMap
 
         PrepareMap   -Scene "Graveyard" -Map 1 -Header 1
-        ReplaceActor -Name "Collectable" -Compare "0406" -X (-850)
-        InsertActor  -Name "Gravestone" -X (-578) -Y 120 -Z (-336) -Param "0001"
-        RemoveActor  -Name "Graveyard"  -CompareX (-578) -CompareY 120 -CompareZ (-336)
-        InsertActor  -Name "Uninteractable Objects" -X (-562) -Y 120 -Z (-289)
-        InsertActor  -Name "Uninteractable Objects" -X (-578) -Y 120 -Z (-280)
-        InsertActor  -Name "Uninteractable Objects" -X (-598) -Y 120 -Z (-287)
-        InsertObject -Name "Warp Circle & Rupee Prism"
-        InsertActor  -Name "Warp Portal" -X 1140 -Y 340 -Z 85 -Param "0006"
-        InsertSpawnPoint -X 1140 -Y 340 -Z 85 -Param "0201" -YRot 0xC71C
+        ReplaceActor -Silent -Name "Collectable" -Compare "0406" -X (-850)
+        InsertActor  -Silent -Name "Gravestone" -X (-578) -Y 120 -Z (-336) -Param "0001"
+        RemoveActor  -Silent -Name "Graveyard"  -CompareX (-578) -CompareY 120 -CompareZ (-336)
+        InsertActor  -Silent -Name "Uninteractable Objects" -X (-562) -Y 120 -Z (-289)
+        InsertActor  -Silent -Name "Uninteractable Objects" -X (-578) -Y 120 -Z (-280)
+        InsertActor  -Silent -Name "Uninteractable Objects" -X (-598) -Y 120 -Z (-287)
+        InsertObject -Silent -Name "Warp Circle & Rupee Prism"
+        InsertActor  -Silent -Name "Warp Portal" -X 1140 -Y 340 -Z 85 -Param "0006"
+        InsertSpawnPoint -Silent -X 1140 -Y 340 -Z 85 -Param "0201" -YRot 0xC71C
         SaveAndPatchLoadedScene
 
         AssertSceneFiles
@@ -4813,62 +4849,86 @@ function TestScenesFiles() {
         SaveAndPatchLoadedScene
         AssertSceneFiles
 
-        PrepareMap       -Scene "Death Mountain Crater" -Map 1 -Header 0
-        InsertSpawnPoint -Y 441 -YRot 0x8000 -Param "0200"
+
+
+        PrepareMap   -Scene "Death Mountain Crater" -Map 1 -Header 0
+        ReplaceActor -Silent -Name "Pot" -Compare "7F3F" -Param "4308"
+        ReplaceActor -Silent -Name "Pot" -Compare "7F3F" -Param "4103"
+        ReplaceActor -Silent -Name "Pot" -Compare "7F3F" -Param "4501"
+        ReplaceActor -Silent -Name "Pot" -Compare "7F3F" -Param "470F"
+        ReplaceActor -Silent -Name "Bronze Boulder" -Compare "00FF" -Param "0015"
+        ReplaceActor -Silent -Name "Bronze Boulder" -Compare "00FF" -Param "0016"
+        ReplaceActor -Silent -Name "Bronze Boulder" -Compare "00FF" -Param "0017"
+        ReplaceActor -Silent -Name "Bronze Boulder" -Compare "00FF" -Param "0018"
+        RemoveActor  -Silent -Name "Liftable Rock" -Compare "FF01"
+        RemoveActor  -Silent -Name "Liftable Rock" -Compare "FF01"
+        RemoveActor  -Silent -Name "Liftable Rock" -Compare "FF01"
+        InsertActor  -Silent -Name "Liftable Rock" -X (-50) -Y 476 -Z (-714) -Param "0700"
+        InsertActor  -Silent -Name "Liftable Rock" -X (-26) -Y 476 -Z (-807) -Param "0700" -YRot 0x0FA5
+        InsertActor  -Silent -Name "Liftable Rock" -X 61    -Y 476 -Z (-763) -Param "0700" -YRot 0xECCD
+        InsertActor  -Silent -Name "Liftable Rock" -X 71    -Y 471 -Z (-610) -Param "0700" -YRot 0xA9F5
+        InsertActor  -Silent -Name "Liftable Rock" -X 79    -Y 476 -Z (-700) -Param "0700" -YRot 0xE444
+        ReplaceActor -Silent -Name "Collectable" -Compare "0806" -X 1116 -Y 379 -Z (-215)
+        ChangeSpawnPoint -Silent  -Index 1  -X (-1749) -Z 26
+        InsertObject -Silent -Name "Warp Circle & Rupee Prism"
+        InsertActor  -Silent -Name "Warp Portal" -X 0 -Y 441 -Z 0 -Param "0006"
+        InsertSpawnPoint -Silent -Y 441 -Param "0200" -YRot 0x8000 
         SaveAndPatchLoadedScene
         AssertSceneFiles
 
+
+
         PrepareMap       -Scene "Desert Colossus" -Map 0 -Header 0
-        InsertSpawnPoint -X (-850) -Y 20 -Z (-2070) -Param "0200" -YRot 0x1555
+        InsertSpawnPoint -Silent -X (-850) -Y 20 -Z (-2070) -Param "0200" -YRot 0x1555
         SaveAndPatchLoadedScene
         AssertSceneFiles
         
 
 
         PrepareMap   -Scene "Shadow Temple" -Map 2 -Header 0
-        InsertObject -Name "Inside Ganon's Castle"
-        InsertActor  -Name "Clear Block" -X 34     -Y (-63) -Z 295 -Param "FF01"
-        InsertActor  -Name "Clear Block" -X (-142) -Y (-63) -Z 295 -Param "FF01"
+        InsertObject -Silent -Name "Inside Ganon's Castle"
+        InsertActor  -Silent -Name "Clear Block" -X 34     -Y (-63) -Z 295 -Param "FF01"
+        InsertActor  -Silent -Name "Clear Block" -X (-142) -Y (-63) -Z 295 -Param "FF01"
         SaveLoadedMap
 
         PrepareMap   -Scene "Shadow Temple" -Map 6 -Header 0
-        ReplaceActor -Name "Spinning Scythe Trap"                   -Y (-563)
-        ReplaceActor -Name "Silver Rupee" -CompareZ (-1222) -X 3220 -Y (-543) -Z (-747)
+        ReplaceActor -Silent -Name "Spinning Scythe Trap"                   -Y (-563)
+        ReplaceActor -Silent -Name "Silver Rupee" -CompareZ (-1222) -X 3220 -Y (-543) -Z (-747)
         SaveLoadedMap
 
         PrepareMap   -Scene "Shadow Temple" -Map 10 -Header 0
-        ReplaceActor -Name "Treasure Chest" -Compare "5945" -Param "5D25"
-        InsertObject -Name "Hookshot Pillar & Wall Target"
-        InsertActor  -Name "Stone Hookshot Target" -X 275 -Y (-1395) -Z 3735  -Param "FF00"
+        ReplaceActor -Silent -Name "Treasure Chest" -Compare "5945" -Param "5D25"
+        InsertObject -Silent -Name "Hookshot Pillar & Wall Target"
+        InsertActor  -Silent -Name "Stone Hookshot Target" -X 275 -Y (-1395) -Z 3735  -Param "FF00"
         SaveLoadedMap
 	
         PrepareMap   -Scene "Shadow Temple" -Map 11 -Header 0
-        InsertObject -Name "Hookshot Pillar & Wall Target"
-        InsertActor  -Name "Stone Hookshot Target" -X 2021 -Y (-1385) -Z 1013 -Param "FF00"
-        InsertObject -Name "Inside Ganon's Castle"
-        InsertActor  -Name "Clear Block"           -X 2084 -Y (-1203) -Z 1160 -Param "FF01" -YRot 0x9A00
-        InsertActor  -Name "Clear Block"           -X 2275 -Y (-1203) -Z 869  -Param "FF01"
-        InsertActor  -Name "Clear Block"           -X 2750 -Y (-1203) -Z 869  -Param "FF01"
+        InsertObject -Silent -Name "Hookshot Pillar & Wall Target"
+        InsertActor  -Silent -Name "Stone Hookshot Target" -X 2021 -Y (-1385) -Z 1013 -Param "FF00"
+        InsertObject -Silent -Name "Inside Ganon's Castle"
+        InsertActor  -Silent -Name "Clear Block"           -X 2084 -Y (-1203) -Z 1160 -Param "FF01" -YRot 0x9A00
+        InsertActor  -Silent -Name "Clear Block"           -X 2275 -Y (-1203) -Z 869  -Param "FF01"
+        InsertActor  -Silent -Name "Clear Block"           -X 2750 -Y (-1203) -Z 869  -Param "FF01"
         SaveLoadedMap
 
         PrepareMap   -Scene "Shadow Temple" -Map 16 -Header 0
-        ReplaceActor -Name "Time Block"     -Compare "380A" -Param "B80A"
-        ReplaceActor -Name "Treasure Chest" -Compare "6976" -Param "6D36"
-        ReplaceActor -Name "Spinning Scythe Trap"  -Y (-1183)
+        ReplaceActor -Silent -Name "Time Block"     -Compare "380A" -Param "B80A"
+        ReplaceActor -Silent -Name "Treasure Chest" -Compare "6976" -Param "6D36"
+        ReplaceActor -Silent -Name "Spinning Scythe Trap"  -Y (-1183)
         SaveLoadedMap
 
         PrepareMap   -Scene "Shadow Temple" -Map 19 -Header 0
-        ReplaceActor -Name "Treasure Chest" -Compare "6955" -Param "6D35"
+        ReplaceActor -Silent -Name "Treasure Chest" -Compare "6955" -Param "6D35"
         SaveLoadedMap
 
         PrepareMap   -Scene "Shadow Temple" -Map 21 -Header 0
-        RemoveObject -Name "Pierre & Bonooru"
-        RemoveActor  -Name "Pierre the Scarecrow Spawn"
-        RemoveActor  -Name "Pierre the Scarecrow Spawn"
-        ReplaceActor -Name "Skullwalltula" -X 4981 -Y (-948) -Z (-1435)
-        InsertObject -Name "Hookshot Pillar & Wall Target"
-        InsertActor  -Name "Stone Hookshot Target" -X 4520 -Y (-1410) -Z (-1506) -Param "FF00"
-        ReplaceActor -Name "Time Block" -X (-2465) -Y (-1423) -Z (-804) -Param "B80C"
+        RemoveObject -Silent -Name "Pierre & Bonooru"
+        RemoveActor  -Silent -Name "Pierre the Scarecrow Spawn"
+        RemoveActor  -Silent -Name "Pierre the Scarecrow Spawn"
+        ReplaceActor -Silent -Name "Skullwalltula" -X 4981 -Y (-948) -Z (-1435)
+        InsertObject -Silent -Name "Hookshot Pillar & Wall Target"
+        InsertActor  -Silent -Name "Stone Hookshot Target" -X 4520 -Y (-1410) -Z (-1506) -Param "FF00"
+        ReplaceActor -Silent -Name "Time Block" -X (-2465) -Y (-1423) -Z (-804) -Param "B80C"
         SaveAndPatchLoadedScene
 
         AssertSceneFiles
@@ -4876,36 +4936,36 @@ function TestScenesFiles() {
 
 
         PrepareMap   -Scene "Gerudo Valley" -Map 0 -Header 0
-        RemoveActor  -Name "Obstacle Fence"
-        InsertActor  -Name "Bronze Boulder" -X (-1352) -Y 69  -Z 767     -Param "000B"
-        InsertActor  -Name "Bronze Boulder" -X (-1291) -Y 65  -Z 787     -Param "0009"
-        InsertActor  -Name "Bronze Boulder" -X (-1416) -Y 59  -Z 778     -Param "000D"
-        InsertActor  -Name "Bronze Boulder" -X (-1256) -Y 55  -Z 856     -Param "0010"
-        InsertObject -Name "Treasure Chest"
-        InsertActor  -Name "Treasure Chest" -X (-1341) -Y 76  -Z 858     -Param "5AA0" -YRot 0xE2D8
-        InsertActor  -Name "Skullwalltula"  -X (-1329) -Y 360 -Z 309     -Param "B404" -XRot 0x31C7 -YRot 0xE4FA
-        InsertActor  -Name "Skullwalltula"  -X (-1171) -Y 160 -Z (-1225) -Param "B408" -XRot 0x4000
-        InsertActor  -Name "Grotto Entrance" -X (-1323) -Y 15  -Z (-969) -Param "01F0" -YRot 0x9555
+        RemoveActor  -Silent -Name "Obstacle Fence"
+        InsertActor  -Silent -Name "Bronze Boulder" -X (-1352) -Y 69  -Z 767     -Param "000B"
+        InsertActor  -Silent -Name "Bronze Boulder" -X (-1291) -Y 65  -Z 787     -Param "0009"
+        InsertActor  -Silent -Name "Bronze Boulder" -X (-1416) -Y 59  -Z 778     -Param "000D"
+        InsertActor  -Silent -Name "Bronze Boulder" -X (-1256) -Y 55  -Z 856     -Param "0010"
+        InsertObject -Silent -Name "Treasure Chest"
+        InsertActor  -Silent -Name "Treasure Chest" -X (-1341) -Y 76  -Z 858     -Param "5AA0" -YRot 0xE2D8
+        InsertActor  -Silent -Name "Skullwalltula"  -X (-1329) -Y 360 -Z 309     -Param "B404" -XRot 0x31C7 -YRot 0xE4FA
+        InsertActor  -Silent -Name "Skullwalltula"  -X (-1171) -Y 160 -Z (-1225) -Param "B408" -XRot 0x4000
+        InsertActor  -Silent -Name "Grotto Entrance" -X (-1323) -Y 15  -Z (-969) -Param "01F0" -YRot 0x9555
         SaveAndPatchLoadedScene
         AssertSceneFiles
 
 
 
         PrepareMap       -Scene "Gerudo's Fortress" -Map 0 -Header 0
-        InsertSpawnPoint -X 188 -Y 733 -Z (-2919) -Param "0DFF"
+        InsertSpawnPoint -Silent -X 188 -Y 733 -Z (-2919) -Param "0DFF"
         SaveAndPatchLoadedScene
         AssertSceneFiles
 
 
 
-        AssertArrays -Array1 ([System.IO.File]::ReadAllBytes($Paths.Temp + "\scene\cutscenes.tbl") ) -Array2 ([System.IO.File]::ReadAllBytes($Paths.Base + "\Assert\cutscenes.tbl") ) -Message1 "Cutscenes table files not equal in size..." -Message2 "Assert cutscenes table files... "
-        AssertArrays -Array1 ([System.IO.File]::ReadAllBytes($Paths.Temp + "\scene\scenes.tbl") )    -Array2 ([System.IO.File]::ReadAllBytes($Paths.Base + "\Assert\scenes.tbl")    ) -Message1 "Scenes table files not equal in size... "   -Message2 "Assert scenes table files...    "
+         AssertArrays -Array1 ([System.IO.File]::ReadAllBytes($Paths.Temp + "\scene\cutscenes.tbl") ) -Array2 ([System.IO.File]::ReadAllBytes($Paths.Base + "\Assert\cutscenes.tbl") ) -Message1 "Cutscenes table files not equal in size..." -Message2 "Assert cutscenes table files... "
+         AssertArrays -Array1 ([System.IO.File]::ReadAllBytes($Paths.Temp + "\scene\scenes.tbl") )    -Array2 ([System.IO.File]::ReadAllBytes($Paths.Base + "\Assert\scenes.tbl")    ) -Message1 "Scenes table files not equal in size... "   -Message2 "Assert scenes table files...    "
     }
 
     if ($GameType.Mode -eq "Majora's Mask") {
         PrepareMap   -Scene "Mountain Village (Spring)" -Map 0 -Header 0
-        InsertObject -Name "Treasure Chest"
-        InsertActor  -Name "Treasure Chest" -Param "0D40" -X 310 -Y 463 -Z 700 -YRot 90 -NoXRot -NoZRot
+        InsertObject -Silent -Name "Treasure Chest"
+        InsertActor  -Silent -Name "Treasure Chest" -Param "0D40" -X 310 -Y 463 -Z 700 -YRot 90 -NoXRot -NoZRot
         SaveAndPatchLoadedScene
         AssertSceneFiles
     }

@@ -12,6 +12,14 @@
 
 }, {
 
+	"title"				: "The Legend of Zelda Revival",
+	"vc_title"			: "Zelda: Revival",
+	"patch"				: "Decompressed\\zelda_revival.bps",
+	"output"			: "zelda_revival",
+	"tooltip"			: "A small-sized ROM hack in a completely new setting"
+
+}, {
+
 	"title"				: "The Legend of Zelda: Master Quest",
 	"redux" : {
 		"remap_controls"	: 1,

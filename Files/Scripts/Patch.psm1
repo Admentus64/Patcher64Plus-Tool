@@ -919,7 +919,7 @@ function ApplyPatchROM() {
 
 
 #==============================================================================================================================================================================================
-function ApplyPatch([string]$File=$GetROM.decomp, [string]$Patch, [string]$New, [switch]$FilesPath, [switch]$FullPath) {
+function ApplyPatch([string]$File=$GetROM.decomp, [string]$Patch, [string]$New, [switch]$FilesPath, [switch]$FullPath, [switch]$Silent) {
     
     # File Parameter Check
     if ( !(IsSet $File) -or !(IsSet $Patch) ) {
@@ -952,9 +952,7 @@ function ApplyPatch([string]$File=$GetROM.decomp, [string]$Patch, [string]$New, 
         WriteToConsole ("Missing patch file: " + $Patch) -Error
         return $False
     }
-
-    write-host "Path: " $Patch
-
+    
     # Patching
     if ($Patch -like "*.bps*" -or $Patch -like "*.ips*") {
         if ($New.Length -gt 0) {
@@ -1010,8 +1008,10 @@ function ApplyPatch([string]$File=$GetROM.decomp, [string]$Patch, [string]$New, 
     }
     else { return $False }
 
-    if (IsSet $New)   { WriteToConsole ("Applied patch: " + $Patch + " from " + $File + " to " + $New) }
-    else              { WriteToConsole ("Applied patch: " + $Patch + " to " + $File)                   }
+    if (!$Silent) {
+        if (IsSet $New)   { WriteToConsole ("Applied patch: " + $Patch + " from " + $File + " to " + $New) }
+        else              { WriteToConsole ("Applied patch: " + $Patch + " to " + $File)                   }
+    }
     return $True
 
 }

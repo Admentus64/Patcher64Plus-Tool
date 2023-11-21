@@ -4,7 +4,7 @@
 --- Thanks to my Patreons ---
 - Tier 3:	Thanatos-Zero
 
-- Tier 2:	Amara, Andrew Kinney, Petra, Christopher Lillis, Sen
+- Tier 2:	Amara, Andrew Kinney, Petra, Christopher Lillis, Sen, Pikangs_Futaba
 
 - Tier 1:	Yang, mad_scrub, redmaro
 
@@ -190,6 +190,10 @@ https://github.com/DaruniasJoy/OoT-Custom-Sequences
 - Russian:				Zelda64rus (v2.32) & GhostlyDark (improvements)
 - Chinese Simplified:			madcell (2009) & GhostlyDark (improvements)
 - Debug Map Select:			Zelda Edit
+
+--- Child Quest Classic ---
+- Code Development:			Admentus
+- Level Design:				GhostlyDark
 
 --- Dawn and Dusk ---
 - Lead Development and Music:		Captain Seedy-Eye
@@ -516,6 +520,10 @@ https://github.com/DaruniasJoy/OoT-Custom-Sequences
 - Ideka
 - Saneki
 - SpiceyWolf (v4.3 Textpointer Fix)
+
+--- The Legend of Zelda Revival ---
+- Designer:				doncamilo
+- Deku Playground:			Shoopey
 
 --- Master Quest ---
 - DeathBasket

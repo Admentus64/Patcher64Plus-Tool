@@ -1,3 +1,17 @@
+v23.0.0
+- Added new OoT ROM hack: Child Quest Classic
+- Added new MM ROM hack: The Legend of Zelda Revival
+- Added new OoT Redux feature: Arrow Toggle (toggle magic arrow types with R)
+- Added new OoT Redux feature: Enemy HP Display (text display)
+- Added new OoT Redux feature: Chest Contents (different types for items)
+- Added new OoT Redux feature: Random Enemies (add HP and sub-type for enemies)
+- Added default menu options for OoT Redux
+- Added new GI Model replacements for OoT equipment options
+- Added new Power Bracelet option for OoT
+- Added new Scene Editor API features and fixes
+- Changed detection for patches with missing scripts or patches
+- Fixed several issues with OoT Redux
+
 v22.0.11
 - Updated Female Pronouns for OoT
 - Updated Scene Editor

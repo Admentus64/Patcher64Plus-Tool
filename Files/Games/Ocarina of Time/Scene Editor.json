@@ -4987,7 +4987,7 @@
 			"value"	: "FF"
 		} ], [ {
 			"name"	: "Collectable",
-			"value"	: "3F"
+			"value"	: "7F"
 		} ] ]
 	}, {
 		"name"		: "Invisible Collectable",

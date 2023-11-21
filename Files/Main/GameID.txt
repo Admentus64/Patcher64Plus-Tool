@@ -134,6 +134,7 @@ F2DC6C4E093E4F8C6CBEA80E8DBD62CB	(Rev 0)
 - NG2E		Zelda: KZ Practice ROM 			KZ Practice ROM (Lite)
 - NURE		Zelda: Masked Quest			Majora's Mask: Masked Quest
 - NAR1		Zelda: Master Quest			Majora's Mask: Master Quest
+- NAR2		Zelda: Revival				The Legend of Zelda Revival
 
 - NAAM		Super Mario 64: Multiplayer v1.4.2
 - NAA0		Super Mario: Star Road

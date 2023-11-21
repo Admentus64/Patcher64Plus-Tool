@@ -130,6 +130,8 @@ function ChangePatchList() {
 
         # Set combobox for patches
         foreach ($item in $Files.json.patches) {
+            if (!(CheckIfScriptOrPatchExists -Item $item)) { continue }
+
             if (!(IsSet $item.patch)) { $Patches.Type.Items.Add($item.title) }
             else {
                 if ( ( ($IsWiiVC -and $item.console -eq "Wii VC") -or (!$IsWiiVC -and $item.console -eq "Native") -or ($item.console -eq "Both") -or !(IsSet $item.console) ) ) { $Patches.Type.Items.Add($item.title) }
@@ -152,6 +154,26 @@ function ChangePatchList() {
             catch { $Patches.Type.SelectedIndex = 0 }
         }
     }
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function CheckIfScriptOrPatchExists($Item) {
+    
+    if (IsSet $Item.patch) {
+        if (!(TestFile ($GameFiles.base + "\" + $item.patch))) { return $False }
+    }
+    if (IsSet $Item.script) {
+        if ($Item.script -is [system.Array]) {
+            foreach ($script in $Item.script) {
+                if (!(TestFile ($Paths.Scripts + "\Options\" + $script + ".psm1"))) { return $False }
+            }
+        }
+        elseif (!(TestFile ($Paths.Scripts + "\Options\" + $Item.script + ".psm1"))) { return $False }
+    }
+    return $True
 
 }
 

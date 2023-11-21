@@ -12,6 +12,24 @@
 
 }, {
 
+	"title"				: "Child Quest Classic (v1.0.0)",
+	"vc_title"			: "Zelda: Child Quest",
+	"function" 			: "ChildQuestClassic",
+	"redux" : {
+		"remap_controls"	: 1,
+		"expand_memory"		: 1
+	},
+	"script"			: [ "Ocarina of Time", "Child Quest Classic" ],
+	"settings"			: "Child Quest Classic",
+	"vanilla"			: 2,
+	"age"				: "Child",
+	"models"			: 0,
+	"presets"			: 0,
+	"output"			: "child_quest_classic",
+	"tooltip"			: "Collect every Heart Piece and Gold Skulltula, finish any dungeon and beat Ganon{0} - all as Young Link - without having to rely on any (insane) glitches."
+
+}, {
+
 	"title"				: "Dawn & Dusk (v2.0)",
 	"vc_title"			: "Zelda: Dawn & Dusk",
 	"patch" 			: "Decompressed\\dawn_&_dusk.bps",
@@ -42,7 +60,7 @@
 	"vanilla"			: 5,
 	"age"				: "Adult",
 	"output"			: "master_of_time",
-	"tooltip"			: "A small-sized ROM hack in a completely new setting"
+	"tooltip"			: "A large-sized ROM hack in a completely new setting"
 
 }, {
 
