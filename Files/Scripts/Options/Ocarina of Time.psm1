@@ -799,10 +799,10 @@ function ByteOptions() {
 
     if (IsChecked $Redux.Equipment.PowerBracelet) {
          $Offset = SearchBytes -Start "FBE000" -End "FEAF80" -Values "00000000000000000000000000000000000000000100010006000C0018002D01"
-        if ($Offset -gt 0) { PatchBytes -Offset $Offset  -Texture -Patch ("Equipment\Bracelet\Power Bracelet.bin") }
+        if ($Offset -gt 0) { PatchBytes -Offset $Offset  -Texture -Patch ("Equipment\Bracelet\power_bracelet.bin") }
         PatchBytes -Offset "80D000" -Texture -Patch "Equipment\Bracelet\power_bracelet.icon"
-        if (TestFile ($GameFiles.textures + "\Equipment\Bracelet\power_bracelet." + $LanguagePatch.code + ".label")) { PatchBytes -Offset "89F800" -Texture -Patch ("Equipment\Bow\heros_bow." + $LanguagePatch.code + ".label") }
-        PatchBytes  -Offset "1791000" -Patch "object_gi_power_bracelet.bin" # Goron's Bracelet GI model
+        if (TestFile ($GameFiles.textures + "\Equipment\Bracelet\power_bracelet." + $LanguagePatch.code + ".label")) { PatchBytes -Offset "89F800" -Texture -Patch ("\Equipment\Bracelet\power_bracelet." + $LanguagePatch.code + ".label") }
+        PatchBytes  -Offset "1791000" -Patch "\Object GI Models\Power Bracelet.bin" # Goron's Bracelet GI model
     }
     
  <# if (IsChecked $Redux.Equipment.VisibleGiantsKnife) {
