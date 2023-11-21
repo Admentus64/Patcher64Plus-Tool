@@ -2071,7 +2071,7 @@ function ByteTextOptions() {
 
     if (IsChecked $Redux.Text.Milk               -Lang 1)   { SetMessage -ID "0098" -Text "Lon Lon Milk"     -Replace "Milk"                                  }
     if (IsChecked $Redux.Equipment.HerosBow      -Lang 1)   { SetMessage -ID "0031" -Text "Fairy Bow"        -Replace "Hero's Bow"                            }
-    if (IsChecked $Redux.Equipment.PowerBracelet -Lang 1)   { SetMessage -ID "0079" -Text "Goron's Bracelet" -Replace "Power Bracelet"; SetMessage -ID "3000" }
+    if (IsChecked $Redux.Equipment.PowerBracelet -Lang 1)   { SetMessage -ID "0079" -Text "Goron's Bracelet" -Replace "Power Bracelet"; SetMessage -ID "300C" }
 
     if (IsDefault $Redux.Equipment.KokiriSword -Not) {
         $file = $GameFiles.textures + "\Equipment\Kokiri Sword\" + $Redux.Equipment.KokiriSword.text + "." + $LanguagePatch.code + ".txt"
