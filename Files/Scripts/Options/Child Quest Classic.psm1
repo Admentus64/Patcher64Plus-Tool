@@ -633,15 +633,15 @@ function ChildQuestClassicByteSceneOptions() {
 
 
 
-    # DAMP�'S GRAVE & WINDMILL #
+    # DAMPÉ'S GRAVE & WINDMILL #
 
-    PrepareMap   -Scene "Damp�'s Grave & Windmill" -Map 5 -Header 0 # Stairs to Windmill
+    PrepareMap   -Scene "Dampé's Grave & Windmill" -Map 5 -Header 0 # Stairs to Windmill
     # Adjust time blocks
     RemoveActor  -Name "Time Block" -Compare "B806"
     ReplaceActor -Name "Time Block" -Compare "B805" -Y (-469) -Param "3805"
     SaveLoadedMap
 
-    PrepareMap   -Scene "Damp�'s Grave & Windmill" -Map 6 -Header 0 # Windmill
+    PrepareMap   -Scene "Dampé's Grave & Windmill" -Map 6 -Header 0 # Windmill
     # Adjust time blocks
     RemoveActor  -Name "Time Block" -Compare "B806"
     ReplaceActor -Name "Time Block" -Compare "B805" -Y (-469) -Param "3805"
