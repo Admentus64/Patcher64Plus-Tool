@@ -1,3 +1,6 @@
+v23.0.1
+- Fixed issue with Hide HUD for OoT Redux
+
 v23.0.0
 - Added new OoT ROM hack: Child Quest Classic
 - Added new MM ROM hack: The Legend of Zelda Revival
