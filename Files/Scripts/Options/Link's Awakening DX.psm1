@@ -50,11 +50,11 @@ function CreateTabMain() {
     
     # GRAPHICS #
 
-    CreateReduxGroup    -Tag  "Gameplay"                  -All -Text "Gameplay"
-    CreateReduxCheckBox -Name "RemovePrinterPhotoOverlay" -All -Text "Remove Printer-Photo Overlay"    -Info "Remove the Photo Album overlays, to have a clean image of each photograph"                                                                                                                                  -Credits "vince94"
-    CreateReduxCheckBox -Name "RemoveThiefPhotoDownsides" -All -Text "Remove THIEF Downsides"          -Info "Remove the THIEF photo punishment, meaning that you won't get your character named THIEF for obtaining the thief photo`nThe Death counter won’t go up when the shopkeeper kills you for that pic as well" -Credits "IcePenguin"
+    CreateReduxGroup    -Tag  "Gameplay"                  -Text "Gameplay"
+    CreateReduxCheckBox -Name "RemovePrinterPhotoOverlay" -Text "Remove Printer-Photo Overlay"    -Info "Remove the Photo Album overlays, to have a clean image of each photograph"                                                                                                                                  -Credits "vince94"
+    CreateReduxCheckBox -Name "RemoveThiefPhotoDownsides" -Text "Remove THIEF Downsides"          -Info "Remove the THIEF photo punishment, meaning that you won't get your character named THIEF for obtaining the thief photo`nThe Death counter won’t go up when the shopkeeper kills you for that pic as well" -Credits "IcePenguin"
     $items = @("Original", "Start + Select", "A + Start", "A + Select", "B + Start", "B + Select", "Up + Start", "Up + Select", "Down + Start", "Down + Select")
-    CreateReduxComboBox -Name "SaveButtonCombo"           -All -Text "Save Button Combo" -Items $Items -Info "Change the button input combination to access the Save Menu"                                                                                                                                                -Credits "ShadowOne333"
+    CreateReduxComboBox -Name "SaveButtonCombo"           -Text "Save Button Combo" -Items $Items -Info "Change the button input combination to access the Save Menu"                                                                                                                                                -Credits "ShadowOne333"
 
 }
 
@@ -65,13 +65,11 @@ function CreateTabRedux() {
     
     # ORIGINAL #
 
-    CreateReduxGroup    -Tag  "Revert"                 -All -Text "Original (Revert)"
-    CreateReduxCheckBox -Name "RestoreLowHealthBeep"   -All -Text "Restore Low Health Beep"  -Info "Restores the Low Health Beep sound effect like in the original version"                  -Credits "ShadowOne333"
-    CreateReduxCheckBox -Name "RestorePowerupMessages" -All -Text "Restore Powerup Messages" -Info "Restores the textboxes that display when you pick up a Guardian Acorn or Piece of Power" -Credits "IcePenguin"
+    CreateReduxGroup            -Tag  "Revert"                 -Text "Original (Revert)"
+    CreateReduxCheckBox         -Name "RestoreLowHealthBeep"   -Text "Restore Low Health Beep"  -Info "Restores the Low Health Beep sound effect like in the original version"                  -Credits "ShadowOne333"
+    CreateReduxCheckBox         -Name "RestorePowerupMessages" -Text "Restore Powerup Messages" -Info "Restores the textboxes that display when you pick up a Guardian Acorn or Piece of Power" -Credits "IcePenguin"
 
-    if ($GamePatch.title -eq $Files.json.patches[0].title) {
-        CreateReduxGroup    -Tag  "Graphics"    -Text "Graphics"
-        CreateReduxCheckBox -Name "TitleScreen" -Text "Title Screen" -Info ("An edit of the title screen to now read " + '"' + "Link's Awakening Redux" + '"') -Credits "Jayro"
-    }
+    CreateReduxGroup    -Base 1 -Tag  "Graphics"               -Text "Graphics"
+    CreateReduxCheckBox -Base 1 -Name "TitleScreen"            -Text "Title Screen"             -Info ("An edit of the title screen to now read " + '"' + "Link's Awakening Redux" + '"')       -Credits "Jayro"
 
 }

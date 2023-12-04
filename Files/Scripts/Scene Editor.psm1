@@ -1247,23 +1247,35 @@ function SaveAndPatchLoadedScene([switch]$Silent) {
 
 
 #==============================================================================================================================================================================================
-function ChangeMapFile([object]$Values, [string]$Patch="", [object]$Search, [object]$Start="0") {
-
-    <#$offset = SearchBytes -File ($Paths.Temp + "\scene\room_" + $SceneEditor.LoadedMap + ".zmap") -Values $Search -Start $Start -Decimal
-    if ($offset -eq -1) {
-        WriteToConsole ("Could not find offset to replace in room " + $SceneEditor.LoadedMap) -Error
-        return
+function ChangeMapFile([object]$Offset, [object]$Values, [string]$Patch="", [object]$Search, [object]$Start="0") {
+    
+    if (IsSet $Search) {
+        if     ($Search -is [String] -and $Search -Like "* *")   { $Search = $Search -split ' '           }
+        elseif ($Search -is [String])                            { $Search = $Search -split '(..)' -ne '' }
+        else {
+            WriteToConsole "Search values are not valid to look for map file!" -Error
+            $global:WarningError = $True
+            return
+        }
     }
-    $valuesDec = GetValuesData -Values $Values -Patch $Patch
-    foreach ($i in 0..($valuesDec.Length-1)) { $SceneEditor.MapArray[$offset + $i] = $valuesDec[$i] }
-    WriteToConsole ("Changed map values at: " + (Get24Bit $offset) )#>
-
-    if     ($Search -is [String] -and $Search -Like "* *")   { $Search = $Search -split ' '           }
-    elseif ($Search -is [String])                            { $Search = $Search -split '(..)' -ne '' }
+    elseif (IsSet $Offset) {
+        if     ($Offset -is [String] -and $Offset -Like "* *")   { $Offset = $Offset -split ' '           }
+        elseif ($Offset -is [String])                            { $Offset = $Offset -split '(..)' -ne '' }
+        else {
+            WriteToConsole "Offset is not a valid value for map file!" -Error
+            $global:WarningError = $True
+            return
+        }
+    }
     else {
-        WriteToConsole "Search values are not valid to look for map file!" -Error
+        WriteToConsole "No search values or offset provided for map file!" -Error
         $global:WarningError = $True
         return
+    }
+
+    if (IsSet $Values) {
+        if     ($Values -is [String] -and $Search -Like "* *")   { $Values = $Values -split ' '           }
+        elseif ($Values -is [String])                            { $Values = $Values -split '(..)' -ne '' }
     }
 
     [uint32]$Start = GetDecimal $Start
@@ -1285,22 +1297,31 @@ function ChangeMapFile([object]$Values, [string]$Patch="", [object]$Search, [obj
         return
     }
 
-    foreach ($i in $Start..($End-1)) {
-        $found = $True
-        foreach ($j in 0..($Search.Count-1)) {
-            if ($Search[$j] -ne "") {
-                if ($SceneEditor.MapArray[$i + $j] -ne (GetDecimal $Search[$j]) -and $Search[$j] -ne "xx") {
-                    $found = $False
-                    break
+    if (IsSet $Search) {
+        foreach ($i in $Start..($End-1)) {
+            $found = $True
+            foreach ($j in 0..($Search.Count-1)) {
+                if ($Search[$j] -ne "") {
+                    if ($SceneEditor.MapArray[$i + $j] -ne (GetDecimal $Search[$j]) -and $Search[$j] -ne "xx") {
+                        $found = $False
+                        break
+                    }
                 }
             }
+            if ($found -eq $True) {
+                if (IsSet $Values) { $valuesDec = $Values | foreach { [Convert]::ToByte($_, 16) } } else { $valuesDec = GetValuesData -Values $Values -Patch $Patch }
+                foreach ($k in 0..($valuesDec.Count-1)) { $SceneEditor.MapArray[$i + $k] = $valuesDec[$k] }
+                WriteToConsole ("Changed map values at: " + (Get24Bit $i))
+                return
+            }
         }
-        if ($found -eq $True) {
-            $valuesDec = GetValuesData -Values $Values -Patch $Patch
-            foreach ($k in 0..($valuesDec.Count-1)) { $SceneEditor.MapArray[$i + $k] = $valuesDec[$k] }
-            WriteToConsole ("Changed map values at: " + (Get24Bit $i))
-            return
-        }
+    }
+    elseif (IsSet $Offset) {
+        if ($Offset -isnot [int]) { [int]$offsetDec = GetDecimal $Offset } else { [int]$offsetDec = $Offset }
+        if (IsSet $Values) { $valuesDec = $Values | foreach { [Convert]::ToByte($_, 16) } } else { $valuesDec = GetValuesData -Values $Values -Patch $Patch }
+        foreach ($k in 0..($valuesDec.Count-1)) { $SceneEditor.MapArray[$offsetDec + $k] = $valuesDec[$k] }
+        WriteToConsole ("Changed scene values at: " + (Get24Bit $offsetDec))
+        return
     }
 
     WriteToConsole "Could not find offset to replace in map" -Error
@@ -1310,14 +1331,35 @@ function ChangeMapFile([object]$Values, [string]$Patch="", [object]$Search, [obj
 
 
 #==============================================================================================================================================================================================
-function ChangeSceneFile([object]$Values, [string]$Patch="", [object]$Search, [object]$Start="0") {
+function ChangeSceneFile([object]$Offset, [object]$Values, [string]$Patch="", [object]$Search, [object]$Start="0") {
     
-    if     ($Search -is [String] -and $Search -Like "* *")   { $Search = $Search -split ' '           }
-    elseif ($Search -is [String])                            { $Search = $Search -split '(..)' -ne '' }
+    if (IsSet $Search) {
+        if     ($Search -is [String] -and $Search -Like "* *")   { $Search = $Search -split ' '           }
+        elseif ($Search -is [String])                            { $Search = $Search -split '(..)' -ne '' }
+        else {
+            WriteToConsole "Search values are not valid to look for scene file!" -Error
+            $global:WarningError = $True
+            return
+        }
+    }
+    elseif (IsSet $Offset) {
+        if     ($Offset -is [String] -and $Offset -Like "* *")   { $Offset = $Offset -split ' '           }
+        elseif ($Offset -is [String])                            { $Offset = $Offset -split '(..)' -ne '' }
+        else {
+            WriteToConsole "Offset is not a valid value for scene file!" -Error
+            $global:WarningError = $True
+            return
+        }
+    }
     else {
-        WriteToConsole "Search values are not valid to look for scene file!" -Error
+        WriteToConsole "No search values or offset provided for scene file!" -Error
         $global:WarningError = $True
         return
+    }
+
+    if (IsSet $Values) {
+        if     ($Values -is [String] -and $Search -Like "* *")   { $Values = $Values -split ' '           }
+        elseif ($Values -is [String])                            { $Values = $Values -split '(..)' -ne '' }
     }
 
     [uint32]$Start = GetDecimal $Start
@@ -1339,22 +1381,31 @@ function ChangeSceneFile([object]$Values, [string]$Patch="", [object]$Search, [o
         return
     }
 
-    foreach ($i in $Start..($End-1)) {
-        $found = $True
-        foreach ($j in 0..($Search.Count-1)) {
-            if ($Search[$j] -ne "") {
-                if ($SceneEditor.SceneArray[$i + $j] -ne (GetDecimal $Search[$j]) -and $Search[$j] -ne "xx") {
-                    $found = $False
-                    break
+    if (IsSet $Search) {
+        foreach ($i in $Start..($End-1)) {
+            $found = $True
+            foreach ($j in 0..($Search.Count-1)) {
+                if ($Search[$j] -ne "") {
+                    if ($SceneEditor.SceneArray[$i + $j] -ne (GetDecimal $Search[$j]) -and $Search[$j] -ne "xx") {
+                        $found = $False
+                        break
+                    }
                 }
             }
+            if ($found -eq $True) {
+                if (IsSet $Values) { $valuesDec = $Values | foreach { [Convert]::ToByte($_, 16) } } else { $valuesDec = GetValuesData -Values $Values -Patch $Patch }
+                foreach ($k in 0..($valuesDec.Count-1)) { $SceneEditor.SceneArray[$i + $k] = $valuesDec[$k] }
+                WriteToConsole ("Changed scene values at: " + (Get24Bit $i))
+                return
+            }
         }
-        if ($found -eq $True) {
-            $valuesDec = GetValuesData -Values $Values -Patch $Patch
-            foreach ($k in 0..($valuesDec.Count-1)) { $SceneEditor.SceneArray[$i + $k] = $valuesDec[$k] }
-            WriteToConsole ("Changed scene values at: " + (Get24Bit $i))
-            return
-        }
+    }
+    elseif (IsSet $Offset) {
+        if ($Offset -isnot [int]) { [int]$offsetDec = GetDecimal $Offset } else { [int]$offsetDec = $Offset }
+        if (IsSet $Values) { $valuesDec = $Values | foreach { [Convert]::ToByte($_, 16) } } else { $valuesDec = GetValuesData -Values $Values -Patch $Patch }
+        foreach ($k in 0..($valuesDec.Count-1)) { $SceneEditor.SceneArray[$offsetDec + $k] = $valuesDec[$k] }
+        WriteToConsole ("Changed scene values at: " + (Get24Bit $offsetDec))
+        return
     }
 
     WriteToConsole "Could not find offset to replace in scene" -Error
@@ -4222,13 +4273,13 @@ function LoadParam([object]$Param, [uint16]$Value, [uint16]$Band, [uint16]$LastB
         if ($Settings.Debug.SceneEditorChecks -eq $True) {
             $name = $Param[0].Name
             if (!$IsScene) {
-                if ($name -eq "Flag")            { $SceneEditor.trackFlag1Values += (Get8Bit (GetDecimal $val) ) }
-                if ($name -eq "Switch")          { $SceneEditor.trackFlag2Values += (Get8Bit (GetDecimal $val) ) }
-                if ($name -eq "Collectable")     { $SceneEditor.trackFlag3Values += (Get8Bit (GetDecimal $val) ) }
+                if ($name -eq "Flag")            { $SceneEditor.trackFlag1Values += (Get16Bit (GetDecimal $val) ) }
+                if ($name -eq "Switch")          { $SceneEditor.trackFlag2Values += (Get16Bit (GetDecimal $val) ) }
+                if ($name -eq "Collectable")     { $SceneEditor.trackFlag3Values += (Get16Bit (GetDecimal $val) ) }
             }
             else {
-                if ($name -eq "Switch")          { $SceneEditor.trackFlag1Values += (Get8Bit (GetDecimal $val) ) }
-                if ($name -eq "Switch / Text")   { $SceneEditor.trackFlag2Values += (Get8Bit (GetDecimal $val) ) }
+                if ($name -eq "Switch")          { $SceneEditor.trackFlag1Values += (Get16Bit (GetDecimal $val) ) }
+                if ($name -eq "Switch / Text")   { $SceneEditor.trackFlag2Values += (Get16Bit (GetDecimal $val) ) }
             }
         }
 

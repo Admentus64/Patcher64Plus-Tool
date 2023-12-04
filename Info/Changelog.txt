@@ -1,3 +1,10 @@
+v23.0.2
+- Fixed Spirit Temple softlock with Child Quest Classic
+- Fixed issue with options not properly locking and unlocking
+- Fixed issue with Hide HUD for OoT Redux
+- Fixed issue with temp data in "My Documents"
+- Added minor improvements and fixes to Scene Editor
+
 v23.0.1
 - Fixed issue with Hide HUD for OoT Redux
 

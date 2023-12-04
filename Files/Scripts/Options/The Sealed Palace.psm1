@@ -49,23 +49,23 @@ function CreateOptions() {
 
     # GAMEPLAY #
 
-    CreateReduxGroup    -All -Tag  "Gameplay"       -Text "Gameplay"
-    CreateReduxCheckBox -All -Name "ResumeLastArea" -Text "Resume From Last Area" -Info "Resume playing from the area you last saved in" -Warning "Don't save in Grottos" -Credits "Aegiker"
+    CreateReduxGroup    -Tag  "Gameplay"       -Text "Gameplay"
+    CreateReduxCheckBox -Name "ResumeLastArea" -Text "Resume From Last Area" -Info "Resume playing from the area you last saved in" -Warning "Don't save in Grottos" -Credits "Aegiker"
 
 
 
     # HERO MODE #
 
-    CreateReduxGroup    -All -Tag  "Hero"         -Text "Hero Mode"
-    CreateReduxCheckBox -All -Name "NoHeartDrops" -Text "No Heart Drops" -Info "Remove Recovery Heart drops from the game" -Credits "Admentus"
+    CreateReduxGroup    -Tag  "Hero"         -Text "Hero Mode"
+    CreateReduxCheckBox -Name "NoHeartDrops" -Text "No Heart Drops" -Info "Remove Recovery Heart drops from the game" -Credits "Admentus"
 
 
 
     # GRAPHICS #
 
-    CreateReduxGroup    -All -Tag  "Graphics"    -Text "Graphics" 
-    CreateReduxCheckBox -All -Name "MMChildLink" -Text "MM Child Link" -Info "Replaces the Child Link model with the one from Majora's Mask"         -Credits "Nintendo"
-    CreateReduxCheckBox -All -Name "MMAdultLink" -Text "MM Adult Link" -Info "Replaces the Child Link model with the one styled after Majora's Mask" -Credits "Skilar"
+    CreateReduxGroup    -Tag  "Graphics"    -Text "Graphics" 
+    CreateReduxCheckBox -Name "MMChildLink" -Text "MM Child Link" -Info "Replaces the Child Link model with the one from Majora's Mask"         -Credits "Nintendo"
+    CreateReduxCheckBox -Name "MMAdultLink" -Text "MM Adult Link" -Info "Replaces the Child Link model with the one styled after Majora's Mask" -Credits "Skilar"
 
 
 
@@ -73,15 +73,15 @@ function CreateOptions() {
 
     $weapons = "`n`nAffected weapons:`n- Giant's Knife`n- Giant's Knife (Broken)`n- Biggoron Sword`n- Deku Stick`n- Megaton Hammer"
 
-    CreateReduxGroup    -Tag  "Animation"       -All -Text "Link Animations"
-    CreateReduxCheckBox -Name "WeaponIdle"      -All -Text "2-handed Weapon Idle"   -Info ("Restore the beta animation when idly holding a two-handed weapon" + $weapons)                      -Credits "Admentus"
-    CreateReduxCheckBox -Name "WeaponCrouch"    -All -Text "2-handed Weapon Crouch" -Info ("Restore the beta animation when crouching with a two-handed weapon" + $weapons)                    -Credits "Admentus"
-    CreateReduxCheckBox -Name "WeaponAttack"    -All -Text "2-handed Weapon Attack" -Info ("Restore the beta animation when attacking with a two-handed weapon" + $weapons)                    -Credits "Admentus"
-    CreateReduxCheckBox -Name "HoldShieldOut"   -All -Text "Hold Shield Out"        -Info "Restore the beta animation for Link to always holds his shield out even when his sword is sheathed" -Credits "Admentus"
-    CreateReduxCheckBox -Name "BackflipAttack"  -All -Text "Backflip Jump Attack"   -Info "Restore the beta animation to turn the Jump Attack into a Backflip Jump Attack"                     -Credits "Admentus"
-    CreateReduxCheckBox -Name "FrontflipAttack" -All -Text "Frontflip Jump Attack"  -Info "Restore the beta animation to turn the Jump Attack into a Frontflip Jump Attack"                    -Credits "Admentus"    -Link $Redux.Animation.BackflipAttack
-    CreateReduxCheckBox -Name "FrontflipJump"   -All -Text "Frontflip Jump"         -Info "Replace the jumps with frontflip jumps`nThis is a jump from Majora's Mask"                          -Credits "SoulofDeity"
-    CreateReduxCheckBox -Name "SomarsaultJump"  -All -Text "Somarsault Jump"        -Info "Replace the jumps with somarsault jumps`nThis is a jump from Majora's Mask"                         -Credits "SoulofDeity" -Link $Redux.Animation.FrontflipJump
-    CreateReduxCheckBox -Name "SideBackflip"    -All -Text "Side Backflip"          -Info "Replace the backflip jump with side hop jumps"                                                      -Credits "BilonFullHDemon"
+    CreateReduxGroup    -Tag  "Animation"       -Text "Link Animations"
+    CreateReduxCheckBox -Name "WeaponIdle"      -Text "2-handed Weapon Idle"   -Info ("Restore the beta animation when idly holding a two-handed weapon" + $weapons)                      -Credits "Admentus"
+    CreateReduxCheckBox -Name "WeaponCrouch"    -Text "2-handed Weapon Crouch" -Info ("Restore the beta animation when crouching with a two-handed weapon" + $weapons)                    -Credits "Admentus"
+    CreateReduxCheckBox -Name "WeaponAttack"    -Text "2-handed Weapon Attack" -Info ("Restore the beta animation when attacking with a two-handed weapon" + $weapons)                    -Credits "Admentus"
+    CreateReduxCheckBox -Name "HoldShieldOut"   -Text "Hold Shield Out"        -Info "Restore the beta animation for Link to always holds his shield out even when his sword is sheathed" -Credits "Admentus"
+    CreateReduxCheckBox -Name "BackflipAttack"  -Text "Backflip Jump Attack"   -Info "Restore the beta animation to turn the Jump Attack into a Backflip Jump Attack"                     -Credits "Admentus"
+    CreateReduxCheckBox -Name "FrontflipAttack" -Text "Frontflip Jump Attack"  -Info "Restore the beta animation to turn the Jump Attack into a Frontflip Jump Attack"                    -Credits "Admentus"    -Link $Redux.Animation.BackflipAttack
+    CreateReduxCheckBox -Name "FrontflipJump"   -Text "Frontflip Jump"         -Info "Replace the jumps with frontflip jumps`nThis is a jump from Majora's Mask"                          -Credits "SoulofDeity"
+    CreateReduxCheckBox -Name "SomarsaultJump"  -Text "Somarsault Jump"        -Info "Replace the jumps with somarsault jumps`nThis is a jump from Majora's Mask"                         -Credits "SoulofDeity" -Link $Redux.Animation.FrontflipJump
+    CreateReduxCheckBox -Name "SideBackflip"    -Text "Side Backflip"          -Info "Replace the backflip jump with side hop jumps"                                                      -Credits "BilonFullHDemon"
 
 }

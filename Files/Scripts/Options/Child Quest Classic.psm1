@@ -49,13 +49,13 @@ function ChildQuestClassicByteOptions() {
 
 
     # Collision
-    ChangeBytes -Offset "D8D4A0" -Values (GetOoTCollision -KokiriJump -KokiriSpin) -Add                                                                          # Ganondorf Lightball
-    ChangeBytes -Offset "ECF864" -Values (GetOoTCollision -Slingshot)              -Add                                                                          # Sage Barrier
-    ChangeBytes -Offset "CDE1E4" -Values (GetOoTCollision -Slingshot)              -Add; ChangeBytes -Offset "CE1B28" -Values (GetOoTCollision -Slingshot) -Add  # Poe Sister
-    ChangeBytes -Offset "CE1AEC" -Values (GetOoTCollision -Slingshot)              -Add                                                                          # Poe Sister Painting
-    ChangeBytes -Offset "CA8D2C" -Values (GetOoTCollision -Slingshot)              -Add                                                                          # Gerudo Training Ground Eye Statue
-    ChangeBytes -Offset "EA0814" -Values (GetOoTCollision -Slingshot -KokiriSpin -GiantSpin -MasterSpin -KokiriJump -GiantJump -MasterJump)                -Add  # Gerudo Guard
-    ChangeBytes -Offset "C88914" -Values (GetOoTCollision -Slingshot)              -Add                                                                          # Bomb Flower
+    ChangeBytes -Offset "ECF864" -Values (GetOoTCollision -Slingshot)              -Add                                                                                                               # Sage Barrier
+    ChangeBytes -Offset "CE1AEC" -Values (GetOoTCollision -Slingshot)              -Add                                                                                                               # Poe Sister Painting
+    ChangeBytes -Offset "CA8D2C" -Values (GetOoTCollision -Slingshot)              -Add                                                                                                               # Gerudo Training Ground Eye Statue
+    ChangeBytes -Offset "C88914" -Values (GetOoTCollision -Slingshot)              -Add                                                                                                               # Bomb Flower
+    ChangeBytes -Offset "D8D4A0" -Values (GetOoTCollision -KokiriJump -KokiriSpin) -Add                                                                                                               # Ganondorf Lightball
+    ChangeBytes -Offset "CDE1E4" -Values (GetOoTCollision -Slingshot)              -Add; ChangeBytes -Offset "CE1B28" -Values (GetOoTCollision -Slingshot) -Add                                       # Poe Sister
+    ChangeBytes -Offset "EA0814" -Values (GetOoTCollision -Slingshot -KokiriSpin -GiantSpin -MasterSpin -KokiriJump -GiantJump -MasterJump) -Add                                                      # Gerudo Guard
     ChangeBytes -Offset @("CF4CDC", "CF4D00", "CF4D24", "CF4D48", "CF4D6C", "CF4D90", "CF4DB4", "CF4DD8", "CF4DFC", "CF4E07", "CF4E20", "CF4E44", "CF4E68") -Values (GetOoTCollision -Boomerang) -Add # Flare Dancer
 
 
@@ -85,9 +85,9 @@ function ChildQuestClassicByteOptions() {
 
 
     # Other options
-    MultiplyBytes -Offset "D3B4A7" -Factor 0.5                              # Morpha's HP cut in half
-    ChangeBytes -Offset "E2B464" -Values "1100"                             # Remove Light Arrows requirement for Rainbow Bridge
-    CopyBytes   -Offset "96E068" -Length "D48" -Start "974600"              # Fix incomplete Gerudo Fortress minimap
+    MultiplyBytes -Offset "D3B4A7" -Factor 0.5                   # Morpha's HP cut in half
+    ChangeBytes   -Offset "E2B464" -Values "1100"                # Remove Light Arrows requirement for Rainbow Bridge
+    CopyBytes     -Offset "96E068" -Length "D48" -Start "974600" # Fix incomplete Gerudo Fortress minimap
 
 
 
@@ -98,6 +98,7 @@ function ChildQuestClassicByteOptions() {
     ChangeBytes -Offset "B65D56" -Values "01"                                                                                                         # Nabooru Iron Knuckle cutscene as Child
     ChangeBytes -Offset "B65D5E" -Values "02"                                                                                                         # Gerudo Fortress jail cutscene as Child
     ChangeBytes -Offset "B65D15" -Values "3A02"                                                                                                       # Fix Ganon's Castle intro
+    ChangeBytes -Offset "F01C7C" -Values "1500"                                                                                                       # Fix Silver Blocks
 
 
 

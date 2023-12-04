@@ -7,12 +7,12 @@
 	},
 	"finalize"			: "rev0_finalize",
 	"script"			: "Ocarina of Time",
-	"vanilla"			: 1,
+	"base"				: 1,
 	"tooltip"			: "The regular Ocarina of Time experience{0}With support for languages, redux and additional options"
 
 }, {
 
-	"title"				: "Child Quest Classic (v1.0.0)",
+	"title"				: "Child Quest Classic (v1.0.1)",
 	"vc_title"			: "Zelda: Child Quest",
 	"function" 			: "ChildQuestClassic",
 	"redux" : {
@@ -21,7 +21,7 @@
 	},
 	"script"			: [ "Ocarina of Time", "Child Quest Classic" ],
 	"settings"			: "Child Quest Classic",
-	"vanilla"			: 2,
+	"base"				: 2,
 	"age"				: "Child",
 	"models"			: 0,
 	"presets"			: 0,
@@ -39,7 +39,7 @@
 	},
 	"script"			: "Ocarina of Time",
 	"settings"			: "Dawn & Dusk",
-	"vanilla"			: 6,
+	"base"				: 6,
 	"age"				: "Child",
 	"models"			: 0,
 	"output"			: "dawn_&_dusk",
@@ -57,7 +57,7 @@
 	},
 	"script"			: "Ocarina of Time",
 	"settings"			: "Master of Time",
-	"vanilla"			: 5,
+	"base"				: 5,
 	"age"				: "Adult",
 	"output"			: "master_of_time",
 	"tooltip"			: "A large-sized ROM hack in a completely new setting"
@@ -96,7 +96,7 @@
 	},
 	"script"			: "Ocarina of Time",
 	"settings"			: "Nimpize Adventure",
-	"vanilla"			: 4,
+	"base"				: 4,
 	"output"			: "nimpize",
 	"tooltip"			: "A reworked and harder version of Ocarina of Time with remixed dungeons"
 
@@ -111,7 +111,7 @@
 	},
 	"script"			: "Ocarina of Time",
 	"settings"			: "Gold Quest",
-	"vanilla"			: 2,
+	"base"				: 2,
 	"models"			: 0,
 	"output"			: "gold_quest",
 	"tooltip"			: "Remixes the overworld and dungeons as a harder version of master Quest{0}With support for languages, redux and additional options"
@@ -127,7 +127,7 @@
 	},
 	"script"			: "Ocarina of Time",
 	"settings"			: "New Master Quest",
-	"vanilla"			: 3,
+	"base"				: 3,
 	"output"			: "new_master_quest",
 	"tooltip"			: "Remixes the overworld and dungeons as a harder version of master Quest{0}With support for languages and additional options"
 
@@ -142,7 +142,7 @@
 	},
 	"script"			: "Ocarina of Time",
 	"settings"			: "Bombiwa",
-	"vanilla"			: 6,
+	"base"				: 6,
 	"age"				: "Child",
 	"output"			: "bombiwa",
 	"tooltip"			: "A small-sized ROM hack in a completely new setting, and extremely tricky and difficult"
@@ -158,7 +158,7 @@
 	},
 	"script"			: "Ocarina of Time",
 	"settings"			: "Puzzling",
-	"vanilla"			: 6,
+	"base"				: 6,
 	"age"				: "Child",
 	"output"			: "puzzling",
 	"tooltip"			: "A small-sized ROM hack that focuses on puzzling your way through"

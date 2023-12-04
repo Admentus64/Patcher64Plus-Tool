@@ -4,6 +4,7 @@
 	"script"		: "Super Mario 64",
 	"allow_extend"		: 1,
 	"extend"		: 64,
+	"base"			: 1,
 	"tooltip"		: "Customize Super Mario 64 with additional options"
 
 }, {
@@ -59,6 +60,7 @@
 	"patch"			: "Decompressed\\multiplayer.bps",
 	"extend"		: 18,
 	"output"		: "multiplayer_v1.4.2",
+	"base"			: 2,
 	"tooltip"		: "Single-Screen Multiplayer with Mario and Luigi{0}Plugin a second emulated controller for Luigi"
 
 }, {
@@ -95,6 +97,7 @@
 	"console"		: "Native",
 	"extend"		: 45,
 	"output"		: "star_road",
+	"base"			: 3,
 	"tooltip"		: "A brand new world for Super Mario 64 with new stages and more than 120 stars to collect"
 
 }, {
@@ -107,6 +110,7 @@
 	"console"		: "Wii VC",
 	"extend"		: 26,
 	"output"		: "star_road",
+	"base"			: 3,
 	"tooltip"		: "A brand new world for Super Mario 64 with new stages and more than 120 stars to collect"
 
 }, {

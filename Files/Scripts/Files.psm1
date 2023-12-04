@@ -68,11 +68,19 @@ function SetFileParameters() {
     $Files.oot.ura_quest                    = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Dungeons\ura_quest")
     $Files.oot.master_quest                 = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Dungeons\master_quest")
 
+    $Files.oot.agile_speed_settings         = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Optional\agile_speed_settings")
     $Files.oot.feminine_animations          = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Optional\feminine_animations")
     $Files.oot.harder_child_bosses          = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Optional\harder_child_bosses")
     $Files.oot.mm_pause_screen              = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Optional\mm_pause_screen")
-    $Files.oot.widescreen_1                 = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Optional\widescreen_minimum")
-    $Files.oot.widescreen_2                 = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Optional\widescreen_hide_geometry")
+    $Files.oot.pots_challenge               = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Optional\pots_challenge")
+    $Files.oot.widescreen_1                 = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Optional\Widescreen\widescreen_dawn_and_dusk")
+    $Files.oot.widescreen_2                 = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Optional\Widescreen\widescreen_hide_geometry")
+    $Files.oot.widescreen_3                 = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Optional\Widescreen\widescreen_minimum")
+    $Files.oot.widescreen_4                 = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Optional\Widescreen\widescreen_redux_hotfix")
+    $Files.oot.the_sealed_palace_1          = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Optional\The Sealed Palace\tsp_mm_adult_link")
+    $Files.oot.the_sealed_palace_2          = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Optional\The Sealed Palace\tsp_mm_child_link")
+    $Files.oot.the_sealed_palace_3          = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Optional\The Sealed Palace\tsp_mm_child_link")
+    $Files.oot.child_quest_1                = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Optional\Child Quest\child_quest_classic_model")
 
     $Files.oot.lens_of_truth                = $Paths.Games + "\Ocarina of Time\Textures\widescreen\lens_of_truth.bin"
     $Files.oot.title_mq_copyright           = $Paths.Games + "\Ocarina of Time\Textures\Logo\mq_copyright.bin"

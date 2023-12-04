@@ -339,13 +339,14 @@ function ChangeGameMode() {
 
     # JSON Files
     if ($GameType.patches -gt 0) { $Files.json.patches = SetJSONFile $GameFiles.patches } else { $Files.json.patches = $null }
-    if (TestFile ($GameFiles.languages + "\Languages.json"))                       { $Files.json.languages = SetJSONFile ($GameFiles.languages + "\Languages.json") } else { $Files.json.languages = $null }
-    if (TestFile ($Paths.Models        + "\Models.json"))                          { $Files.json.models    = SetJSONFile ($Paths.Models        + "\Models.json")    } else { $Files.json.models    = $null }
-    if (TestFile ($GameFiles.base      + "\Music.json"))                           { $Files.json.music     = SetJSONFile ($GameFiles.base      + "\Music.json")     } else { $Files.json.music     = $null }
-    if (TestFile ($GameFiles.base      + "\Items.json"))                           { $Files.json.items     = SetJSONFile ($GameFiles.base      + "\Items.json")     } else { $Files.json.items     = $null }
-    if (TestFile ($GameFiles.base      + "\Moves.json"))                           { $Files.json.moves     = SetJSONFile ($GameFiles.base      + "\Moves.json")     } else { $Files.json.moves     = $null }
-    if (TestFile ($GameFiles.base      + "\Blocks.json"))                          { $Files.json.blocks    = SetJSONFile ($GameFiles.base      + "\Blocks.json")    } else { $Files.json.blocks    = $null }
-    if (TestFile ($GameFiles.base      + "\Enemies.json"))                         { $Files.json.enemies   = SetJSONFile ($GameFiles.base      + "\Enemies.json")   } else { $Files.json.enemies   = $null }
+    if (TestFile ($GameFiles.languages + "\Languages.json"))                       { $Files.json.languages = SetJSONFile ($GameFiles.languages + "\Languages.json")  } else { $Files.json.languages = $null }
+    if (TestFile ($Paths.Models        + "\Models.json"))                          { $Files.json.models    = SetJSONFile ($Paths.Models        + "\Models.json")     } else { $Files.json.models    = $null }
+    if (TestFile ($GameFiles.base      + "\Music.json"))                           { $Files.json.music     = SetJSONFile ($GameFiles.base      + "\Music.json")      } else { $Files.json.music     = $null }
+    if (TestFile ($GameFiles.base      + "\Items.json"))                           { $Files.json.items     = SetJSONFile ($GameFiles.base      + "\Items.json")      } else { $Files.json.items     = $null }
+    if (TestFile ($GameFiles.base      + "\Moves.json"))                           { $Files.json.moves     = SetJSONFile ($GameFiles.base      + "\Moves.json")      } else { $Files.json.moves     = $null }
+    if (TestFile ($GameFiles.base      + "\Blocks.json"))                          { $Files.json.blocks    = SetJSONFile ($GameFiles.base      + "\Blocks.json")     } else { $Files.json.blocks    = $null }
+    if (TestFile ($GameFiles.base      + "\Enemies.json"))                         { $Files.json.enemies   = SetJSONFile ($GameFiles.base      + "\Enemies.json")    } else { $Files.json.enemies   = $null }
+    if (TestFile ($GameFiles.base      + "\Shop Items.json"))                      { $Files.json.shopItems = SetJSONFile ($GameFiles.base      + "\Shop Items.json") } else { $Files.json.shopItems = $null }
 
     SetVCContent
     SetCreditsSections
@@ -1270,13 +1271,14 @@ function SetBitmap($Path, $Box, [int]$Width=0, [int]$Height=0) {
 #==================================================================================================================================================================================================================================================================
 function IsRestrictedFolder([string]$Path) {
     
-    if ($Path -like $env:APPDATA)                  { return $False }
-    if ($Path -eq    "C:\")                        { return $True }
-    if ($Path -like "*C:\Users\*")                 { return $True }
-    if ($Path -like "*C:\Program Files\*")         { return $True }
-    if ($Path -like "*C:\Program Files (x86)\*")   { return $True }
-    if ($Path -like "*C:\ProgramData\*")           { return $True }
-    if ($Path -like "*C:\Windows\*")               { return $True }
+    if ($Path -like ("*" + [Environment]::GetFolderPath("MyDocuments") + "*"))   { return $False }
+    if ($Path -like ("*" + $env:APPDATA + "*"))                                  { return $False }
+    if ($Path -eq    "C:\")                                                      { return $True }
+    if ($Path -like "*C:\Users\*")                                               { return $True }
+    if ($Path -like "*C:\Program Files\*")                                       { return $True }
+    if ($Path -like "*C:\Program Files (x86)\*")                                 { return $True }
+    if ($Path -like "*C:\ProgramData\*")                                         { return $True }
+    if ($Path -like "*C:\Windows\*")                                             { return $True }
     return $False
 
 }

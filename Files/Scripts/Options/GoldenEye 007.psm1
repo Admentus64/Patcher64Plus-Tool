@@ -78,21 +78,21 @@ function CreateOptions() {
     CreateReduxCheckBox -Name "Levels"        -Text "Unlock Levels"         -Info "Unlock all singleplayer and multiplayer levels"                                                                        -Credits "Elfor"
     CreateReduxCheckBox -Name "SameCharacter" -Text "Same Character"        -Info "Allow selecting the same character in multiplayer"                                                                     -Credits "GhostlyDark"
 
-    CreateReduxGroup    -Tag  "Skip"        -Text "Speedups and Skips"
-    CreateReduxCheckBox -Name "LegalScreen" -Text "Shorten Legal Screen" -Info "Shorten the initial legal screen to disappear almost instantly"           -Credits "Coockie1173"
-    CreateReduxCheckBox -Name "Intro"       -Text "Skippable Intro"      -Info "Pressing a button on the Nintendo logo skips the entire intro sequence"   -Credits "Coockie1173"
-    CreateReduxCheckBox -Name "Demo"        -Text "Skip Demo"            -Info "Skip the character showcase and gameplay demos as part of the game intro" -Credits "Coockie1173"
+    CreateReduxGroup    -Tag  "Skip"          -Text "Speedups and Skips"
+    CreateReduxCheckBox -Name "LegalScreen"   -Text "Shorten Legal Screen"  -Info "Shorten the initial legal screen to disappear almost instantly"                                                        -Credits "Coockie1173"
+    CreateReduxCheckBox -Name "Intro"         -Text "Skippable Intro"       -Info "Pressing a button on the Nintendo logo skips the entire intro sequence"                                                -Credits "Coockie1173"
+    CreateReduxCheckBox -Name "Demo"          -Text "Skip Demo"             -Info "Skip the character showcase and gameplay demos as part of the game intro"                                              -Credits "Coockie1173"
 
-    CreateReduxGroup    -Tag  "Disable"      -Text "Disable Content"
-    CreateReduxCheckBox -Name "Cheats"       -Text "Disable Cheats"       -Info "Make cheats inaccessible"            -Credits "Coockie1173"
-    CreateReduxCheckBox -Name "Singleplayer" -Text "Disable Singleplayer" -Info "Disable access to Singleplayer mode" -Credits "Coockie1173"
-    CreateReduxCheckBox -Name "Multiplayer"  -Text "Disable Multiplayer"  -Info "Disable access to Multiplayer mode"  -Credits "Coockie1173" -Link $Redux.Disable.Singleplayer
+    CreateReduxGroup    -Tag  "Disable"       -Text "Disable Content"
+    CreateReduxCheckBox -Name "Cheats"        -Text "Disable Cheats"        -Info "Make cheats inaccessible"                                                                                              -Credits "Coockie1173"
+    CreateReduxCheckBox -Name "Singleplayer"  -Text "Disable Singleplayer"  -Info "Disable access to Singleplayer mode"                                                                                   -Credits "Coockie1173"
+    CreateReduxCheckBox -Name "Multiplayer"   -Text "Disable Multiplayer"   -Info "Disable access to Multiplayer mode"                                                                                    -Credits "Coockie1173" -Link $Redux.Disable.Singleplayer
 
     CreateReduxGroup    -Tag  "HUD"           -Text "HUD"
-    CreateReduxComboBox -Name "Cursor"        -Text "Cursor" -Items @("GoldenEye") -FilePath ($GameFiles.textures + "\Cursors") -Ext "bin" -Default "GoldenEye" -Info "Set the style for the cursor" -Credits "GhostlyDark (injects) & Intermission (HD assets)"
-    CreateReduxCheckBox -Name "ShowCrosshair" -Text "Always Show Crosshair" -Info "Always show crosshair"                            -Credits "Coockie1173"
-    CreateReduxCheckBox -Name "MissionTimer"  -Text "Mission Timer"         -Info "Display in-game mission timer"                    -Credits "Carnivorous"
-    CreateReduxCheckBox -Name "BriefingTime"  -Text "Briefing Time"         -Info "Add milliseconds to the end results of a mission" -Credits "Carnivorous"
+    CreateReduxComboBox -Name "Cursor"        -Text "Cursor" -Items @("GoldenEye") -FilePath ($GameFiles.textures + "\Cursors") -Ext "bin" -Default "GoldenEye" -Info "Set the style for the cursor"      -Credits "GhostlyDark (injects) & Intermission (HD assets)"
+    CreateReduxCheckBox -Name "ShowCrosshair" -Text "Always Show Crosshair" -Info "Always show crosshair"                                                                                                 -Credits "Coockie1173"
+    CreateReduxCheckBox -Name "MissionTimer"  -Text "Mission Timer"         -Info "Display in-game mission timer"                                                                                         -Credits "Carnivorous"
+    CreateReduxCheckBox -Name "BriefingTime"  -Text "Briefing Time"         -Info "Add milliseconds to the end results of a mission"                                                                      -Credits "Carnivorous"
 
     CreateReduxGroup -Tag "HUD" -Text "Cursor Previews"    $Last.Group.Height = (DPISize (130))
     CreateImageBox -x 50 -y 20 -w 100 -h 100 -Name "CursorPreview"

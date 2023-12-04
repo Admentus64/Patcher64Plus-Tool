@@ -280,38 +280,38 @@ function ApplyPreset1() {
 #==============================================================================================================================================================================================
 function CreateTabMain() {
 
-    CreateReduxGroup    -All -Tag  "Graphics"   -Safe -Text "Graphics" 
-    CreateReduxCheckBox -All -Name "Widescreen" -Safe -Text "16:9 Widescreen" -Info "Adjust the aspect ratio from 4:3 to 16:9 widescreen" -Credits "gamemasterplc & Admentus"
-    CreateReduxCheckBox -All -Name "Ultrawide"  -Safe -Text "21:9 Widescreen" -Info "Adjust the aspect ratio from 4:3 to 21:9 widescreen" -Credits "gamemasterplc & Admentus" -Link $Redux.Graphics.Widescreen
+    CreateReduxGroup       -Tag  "Graphics"   -Safe -Text "Graphics" 
+    CreateReduxCheckBox    -Name "Widescreen" -Safe -Text "16:9 Widescreen"                            -Info "Adjust the aspect ratio from 4:3 to 16:9 widescreen"             -Credits "gamemasterplc & Admentus"
+    CreateReduxCheckBox    -Name "Ultrawide"  -Safe -Text "21:9 Widescreen"                            -Info "Adjust the aspect ratio from 4:3 to 21:9 widescreen"             -Credits "gamemasterplc & Admentus" -Link $Redux.Graphics.Widescreen
 
-    CreateReduxGroup    -All -Tag  "Skip"      -Text "Skip"
-    CreateReduxCheckBox -All -Name "Logo"      -Text "Skip Logos"           -Info "Logos shown on booting up the game are now skipped"              -Credits "Admentus & Star Rod (Utility Tool)"
-    CreateReduxCheckBox -All -Name "Storybook" -Text "Skip Storybook Intro" -Info "The Storybook Intro shown on booting up the game is now skipped" -Credits "Admentus & Star Rod (Utility Tool)"
-    CreateReduxCheckBox -All -Name "Demo"      -Text "Skip Demos"           -Info "Gameplay Demos will no longer play"                              -Credits "Admentus & Star Rod (Utility Tool)"
+    CreateReduxGroup       -Tag  "Skip"             -Text "Skip"
+    CreateReduxCheckBox    -Name "Logo"             -Text "Skip Logos"                                 -Info "Logos shown on booting up the game are now skipped"              -Credits "Admentus & Star Rod (Utility Tool)"
+    CreateReduxCheckBox    -Name "Storybook"        -Text "Skip Storybook Intro"                       -Info "The Storybook Intro shown on booting up the game is now skipped" -Credits "Admentus & Star Rod (Utility Tool)"
+    CreateReduxCheckBox    -Name "Demo"             -Text "Skip Demos"                                 -Info "Gameplay Demos will no longer play"                              -Credits "Admentus & Star Rod (Utility Tool)"
 
-    CreateReduxGroup    -All -Tag  "Gameplay"        -Text "Gameplay"
-    CreateReduxCheckBox -All -Name "FreezeTimer"     -Text "Freeze Game Timer"    -Info "The game timer on your save file no longer increments" -Credits "gamemasterplc & Admentus"
-    CreateReduxCheckBox -All -Name "CanAlwaysEscape" -Text "Can Always Escape"    -Info "Escaping from a battle now always succeeds"            -Credits "gamemasterplc & Admentus"
-    CreateReduxCheckBox -All -Name "CanNeverEscape"  -Text "Can Never Escape"     -Info "Escaping from a battle now never succeeds"             -Credits "gamemasterplc & Admentus" -Link $Redux.Gameplay.CanAlwaysEscape
-    CreateReduxCheckBox -All -Name "NoHealthBars"    -Text "No Health Bars"       -Info "Health Bars for enemies are never shown"               -Credits "Admentus"
-    CreateReduxCheckBox -All -Name "FastSpin"        -Text "Fast Spin"            -Info "Spinning with Z goes faster now"                       -Credits "Admentus"
-    CreateReduxCheckBox -All -Name "SuperFastSpin"   -Text "Super Fast Spin"      -Info "Spinning with Z goes a lot faster now"                 -Credits "Admentus" -Link $Redux.Gameplay.FastSpin
+    CreateReduxGroup       -Tag  "Gameplay"         -Text "Gameplay"
+    CreateReduxCheckBox    -Name "FreezeTimer"      -Text "Freeze Game Timer"                          -Info "The game timer on your save file no longer increments"           -Credits "gamemasterplc & Admentus"
+    CreateReduxCheckBox    -Name "CanAlwaysEscape"  -Text "Can Always Escape"                          -Info "Escaping from a battle now always succeeds"                      -Credits "gamemasterplc & Admentus"
+    CreateReduxCheckBox    -Name "CanNeverEscape"   -Text "Can Never Escape"                           -Info "Escaping from a battle now never succeeds"                       -Credits "gamemasterplc & Admentus" -Link $Redux.Gameplay.CanAlwaysEscape
+    CreateReduxCheckBox    -Name "NoHealthBars"     -Text "No Health Bars"                             -Info "Health Bars for enemies are never shown"                         -Credits "Admentus"
+    CreateReduxCheckBox    -Name "FastSpin"         -Text "Fast Spin"                                  -Info "Spinning with Z goes faster now"                                 -Credits "Admentus"
+    CreateReduxCheckBox    -Name "SuperFastSpin"    -Text "Super Fast Spin"                            -Info "Spinning with Z goes a lot faster now"                           -Credits "Admentus" -Link $Redux.Gameplay.FastSpin
 
-    CreateReduxGroup   -All -Tag  "StarPower"     -Text "Star Powers"
-    CreateReduxTextBox -All -Name "RefreshHP"     -Text "Refresh (HP)"      -Value 5  -Min 1 -Max 99 -Info "Set the amount of HP that Refresh restores"        -Credits "Admentus"
-    CreateReduxTextBox -All -Name "RefreshFP"     -Text "Refresh (FP)"      -Value 5  -Min 1 -Max 99 -Info "Set the amount of FP that Refresh restores"        -Credits "Admentus"
-    CreateReduxTextBox -All -Name "StarStorm"     -Text "Star Storm (DMG)"  -Value 7  -Min 1 -Max 99 -Info "Set the amount of damage that Star Storm does"     -Credits "Admentus"
-    CreateReduxTextBox -All -Name "ChillOutPower" -Text "Chill Out (Power)" -Value 3  -Min 1 -Max 99 -Info "Set the amount of lowered DMG that Chill Out does" -Credits "Admentus"
-    CreateReduxTextBox -All -Name "ChillOutTurns" -Text "Chill Out (Turns)" -Value 4  -Min 1 -Max 99 -Info "Set the amount of how many turns Chill Out lasts"  -Credits "Admentus"
-    CreateReduxTextBox -All -Name "Smooch"        -Text "Smooch (HP)"       -Value 20 -Min 1 -Max 99 -Info "Set the amount of HP that Smooch restores"         -Credits "Admentus"
+    CreateReduxGroup       -Tag  "StarPower"        -Text "Star Powers"
+    CreateReduxTextBox     -Name "RefreshHP"        -Text "Refresh (HP)"      -Value 5  -Min 1 -Max 99 -Info "Set the amount of HP that Refresh restores"                      -Credits "Admentus"
+    CreateReduxTextBox     -Name "RefreshFP"        -Text "Refresh (FP)"      -Value 5  -Min 1 -Max 99 -Info "Set the amount of FP that Refresh restores"                      -Credits "Admentus"
+    CreateReduxTextBox     -Name "StarStorm"        -Text "Star Storm (DMG)"  -Value 7  -Min 1 -Max 99 -Info "Set the amount of damage that Star Storm does"                   -Credits "Admentus"
+    CreateReduxTextBox     -Name "ChillOutPower"    -Text "Chill Out (Power)" -Value 3  -Min 1 -Max 99 -Info "Set the amount of lowered DMG that Chill Out does"               -Credits "Admentus"
+    CreateReduxTextBox     -Name "ChillOutTurns"    -Text "Chill Out (Turns)" -Value 4  -Min 1 -Max 99 -Info "Set the amount of how many turns Chill Out lasts"                -Credits "Admentus"
+    CreateReduxTextBox     -Name "Smooch"           -Text "Smooch (HP)"       -Value 20 -Min 1 -Max 99 -Info "Set the amount of HP that Smooch restores"                       -Credits "Admentus"
 
-    CreateReduxGroup       -All -Tag  "Damage"                         -Text "Hard Mode (Damage)"
-    CreateReduxRadioButton -All -Name "Value1" -Max 3 -SaveTo "Damage" -Text "1x Damage"   -Info "Keep the vanilla game difficulty"              -Checked
-    CreateReduxRadioButton -All -Name "Value2" -Max 3 -SaveTo "Damage" -Text "1.5x Damage" -Info "Increases the damage dealt by enemies by 1.5x" -Credits "Skelux & Admentus"
-    CreateReduxRadioButton -All -Name "Value3" -Max 3 -SaveTo "Damage" -Text "2x Damage"   -Info "Increases the damage dealt by enemies by 2x"   -Credits "Skelux & Admentus"
+    CreateReduxGroup       -Tag  "Damage"           -Text "Hard Mode (Damage)"
+    CreateReduxRadioButton -Name "Value1"           -Text "1x Damage"   -Max 3 -SaveTo "Damage"        -Info "Keep the vanilla game difficulty"                                -Checked
+    CreateReduxRadioButton -Name "Value2"           -Text "1.5x Damage" -Max 3 -SaveTo "Damage"        -Info "Increases the damage dealt by enemies by 1.5x"                   -Credits "Skelux & Admentus"
+    CreateReduxRadioButton -Name "Value3"           -Text "2x Damage"   -Max 3 -SaveTo "Damage"        -Info "Increases the damage dealt by enemies by 2x"                     -Credits "Skelux & Admentus"
 
-    CreateReduxGroup   -All -Tag  "Level" -Text "Leveling"
-    CreateReduxTextBox -All -Name "MaxBP" -Text "Max BP" -Value 30 -Min 0 -Max 75 -Info "Set the maximum amount of BP you can have`nThe maximum amount will be distributed with each upgrade`nLeftover values will be added to the starting value" -Credits "Admentus" -Warning "Affects save data, so use this option on a new save file"
+    CreateReduxGroup       -Tag  "Level" -Text "Leveling"
+    CreateReduxTextBox     -Name "MaxBP" -Text "Max BP" -Value 30 -Min 0 -Max 75 -Info "Set the maximum amount of BP you can have`nThe maximum amount will be distributed with each upgrade`nLeftover values will be added to the starting value" -Credits "Admentus" -Warning "Affects save data, so use this option on a new save file"
 
 }
 
@@ -319,9 +319,9 @@ function CreateTabMain() {
 #==============================================================================================================================================================================================
 function CreateTabReplaceItemBlocks() {
     
-    CreateReduxGroup -All -Tag "Blocks" -Text "Item Blocks (Presets)"
-    $button = CreateReduxButton -All -Text "Reset"      -Info "Keep the vanilla items for item blocks"                                                                            -Credits "Admentus"; $button.Add_Click({ SetAllBlocks             })
-    $button = CreateReduxButton -All -Text "Rebalanced" -Info "Rebalances item blocks by replacing some items with badges for a more forgiving experience on harder difficulties" -Credits "Admentus"; $button.Add_Click({ SetAllBlocks -Rebalanced })
+              CreateReduxGroup  -Tag  "Blocks"     -Text "Item Blocks (Presets)"
+    $button = CreateReduxButton -Text "Reset"      -Info "Keep the vanilla items for item blocks"                                                                            -Credits "Admentus"; $button.Add_Click({ SetAllBlocks             })
+    $button = CreateReduxButton -Text "Rebalanced" -Info "Rebalances item blocks by replacing some items with badges for a more forgiving experience on harder difficulties" -Credits "Admentus"; $button.Add_Click({ SetAllBlocks -Rebalanced })
 
     [System.Collections.ArrayList]$temp = @()
     foreach ($badge in $Files.json.items.badges) {
@@ -337,9 +337,9 @@ function CreateTabReplaceItemBlocks() {
     $items += ($temp | sort)
 
     foreach ($item in $Files.json.blocks) {
-        CreateReduxGroup -All -Tag "Blocks" -Text ("Item Blocks (" + $item.area + ")")
+        CreateReduxGroup -Tag "Blocks" -Text ("Item Blocks (" + $item.area + ")")
         foreach ($block in $item.blocks) {
-            CreateReduxComboBox -All -Name $block.id -Text $block.map -Items $items -Default $block.item -Info ("Set the item for the block: " + $block.id) -Credits "Admentus"
+            CreateReduxComboBox -Name $block.id -Text $block.map -Items $items -Default $block.item -Info ("Set the item for the block: " + $block.id) -Credits "Admentus"
         }
     } 
 
@@ -352,9 +352,9 @@ function CreateTabReplaceItemBlocks() {
 #==============================================================================================================================================================================================
 function CreateTabReplaceBadges() {
     
-    CreateReduxGroup -All -Tag "Badges" -Text "Badges (Presets)"
-    $button = CreateReduxButton -All -Text "Reset"      -Info "Keep the vanilla badges"                                                                               -Credits "Admentus"; $button.Add_Click({ SetAllBadges             })
-    $button = CreateReduxButton -All -Text "Rebalanced" -Info "Rebalances badges by replacing some for others for a more forgiving experience on harder difficulties" -Credits "Admentus"; $button.Add_Click({ SetAllBadges -Rebalanced })
+              CreateReduxGroup  -Tag  "Badges"     -Text "Badges (Presets)"
+    $button = CreateReduxButton -Text "Reset"      -Info "Keep the vanilla badges"                                                                               -Credits "Admentus"; $button.Add_Click({ SetAllBadges             })
+    $button = CreateReduxButton -Text "Rebalanced" -Info "Rebalances badges by replacing some for others for a more forgiving experience on harder difficulties" -Credits "Admentus"; $button.Add_Click({ SetAllBadges -Rebalanced })
 
     [System.Collections.ArrayList]$items = @()
     foreach ($item in $Files.json.items) {
@@ -369,7 +369,7 @@ function CreateTabReplaceBadges() {
 
     foreach ($item in $Files.json.items) {
         if (!(IsSet $item.badges)) { continue }
-        CreateReduxGroup -All -Tag "Badges" -Text ("Badges (" + $item.type + ")")
+        CreateReduxGroup -Tag "Badges" -Text ("Badges (" + $item.type + ")")
         foreach ($badge in $item.badges) {
             $title = $badge.title
             if (IsSet $badge.copy) { $title = $title + " " + $badge.copy }
@@ -382,10 +382,10 @@ function CreateTabReplaceBadges() {
                         break
                     }
                 }
-                CreateReduxComboBox -All -Name $badge.name -Text $title -Items $unusedItems -Default $badge.title -Info ("Replace the " + $badge.title + " Badge with another badge") -Credits "Admentus"
+                CreateReduxComboBox -Name $badge.name -Text $title -Items $unusedItems -Default $badge.title -Info ("Replace the " + $badge.title + " Badge with another badge") -Credits "Admentus"
             }
             else {
-                CreateReduxComboBox -All -Name $badge.name -Text $title -Items $items       -Default $badge.title -Info ("Replace the " + $badge.title + " Badge with another badge") -Credits "Admentus"
+                CreateReduxComboBox -Name $badge.name -Text $title -Items $items       -Default $badge.title -Info ("Replace the " + $badge.title + " Badge with another badge") -Credits "Admentus"
             }
         }
     } 
@@ -399,15 +399,15 @@ function CreateTabReplaceBadges() {
 #==============================================================================================================================================================================================
 function CreateTabBadgePoints() {
     
-    CreateReduxGroup -All -Tag "BadgePoints" -Text "Badge Points (Presets)"
-    $button = CreateReduxButton -All -Text "Reset"      -Info "Keep the vanilla BP values for badges"                                                      -Credits "Admentus"; $button.Add_Click({ SetAllBP             })
-    $button = CreateReduxButton -All -Text "Rebalanced" -Info "Rebalances the BP values for badges for a more forgiving experience on harder difficulties" -Credits "Admentus"; $button.Add_Click({ SetAllBP -Rebalanced })
+              CreateReduxGroup  -Tag  "BadgePoints" -Text "Badge Points (Presets)"
+    $button = CreateReduxButton -Text "Reset"       -Info "Keep the vanilla BP values for badges"                                                      -Credits "Admentus"; $button.Add_Click({ SetAllBP             })
+    $button = CreateReduxButton -Text "Rebalanced"  -Info "Rebalances the BP values for badges for a more forgiving experience on harder difficulties" -Credits "Admentus"; $button.Add_Click({ SetAllBP -Rebalanced })
 
     foreach ($item in $Files.json.moves) {
         if ($item.onlyMoves) { continue }
-        CreateReduxGroup -All -Tag "BadgePoints" -Text ("Badge Points (" + $item.type + ")")
+        CreateReduxGroup -Tag "BadgePoints" -Text ("Badge Points (" + $item.type + ")")
         foreach ($move in $item.moves) {
-            if ($move.bp -is [int]) { CreateReduxTextBox -All -Name $move.name -Text $move.title -Value $move.bp -Min 0 -Max 30 -Info ("Set the BP cost for the " + $move.title + " Badge") -Credits "Admentus" }
+            if ($move.bp -is [int]) { CreateReduxTextBox -Name $move.name -Text $move.title -Value $move.bp -Min 0 -Max 30 -Info ("Set the BP cost for the " + $move.title + " Badge") -Credits "Admentus" }
         }
     }
 
@@ -420,17 +420,17 @@ function CreateTabBadgePoints() {
 #==============================================================================================================================================================================================
 function CreateTabMovesCost() {
     
-    CreateReduxGroup  -All -Tag "FlowerPoints" -Text "Flower Points (Presets)"
-    $button = CreateReduxButton -All -Text "Reset"      -Info "Keep the vanilla FP values for moves"                                                      -Credits "Admentus"; $button.Add_Click({ SetAllFP             })
-    $button = CreateReduxButton -All -Text "Rebalanced" -Info "Rebalances the FP values for moves for a more forgiving experience on harder difficulties" -Credits "Admentus"; $button.Add_Click({ SetAllFP -Rebalanced })
+              CreateReduxGroup  -Tag  "FlowerPoints" -Text "Flower Points (Presets)"
+    $button = CreateReduxButton -Text "Reset"        -Info "Keep the vanilla FP values for moves"                                                      -Credits "Admentus"; $button.Add_Click({ SetAllFP             })
+    $button = CreateReduxButton -Text "Rebalanced"   -Info "Rebalances the FP values for moves for a more forgiving experience on harder difficulties" -Credits "Admentus"; $button.Add_Click({ SetAllFP -Rebalanced })
 
     foreach ($item in $Files.json.moves) {
         if ($item.onlyBadges) { continue }
 
-        if ($item.type -eq "Star Powers")   { CreateReduxGroup -All -Tag "FlowerPoints" -Text ("Star Powers")                       ; $fp = "SP" }
-        else                                { CreateReduxGroup -All -Tag "FlowerPoints" -Text ("Flower Points (" + $item.type + ")"); $fp = "FP" }
+        if ($item.type -eq "Star Powers")   { CreateReduxGroup -Tag "FlowerPoints" -Text ("Star Powers")                       ; $fp = "SP" }
+        else                                { CreateReduxGroup -Tag "FlowerPoints" -Text ("Flower Points (" + $item.type + ")"); $fp = "FP" }
         foreach ($move in $item.moves) {
-            if ($move.fp -is [int]) { CreateReduxTextBox -All -Name $move.name -Text $move.title -Value $move.fp -Min 0 -Max 50 -Info ("Set the " + $fp + " cost for the " + $move.title + " move") -Credits "Admentus" }
+            if ($move.fp -is [int]) { CreateReduxTextBox -Name $move.name -Text $move.title -Value $move.fp -Min 0 -Max 50 -Info ("Set the " + $fp + " cost for the " + $move.title + " move") -Credits "Admentus" }
         }
     }
 
@@ -441,24 +441,24 @@ function CreateTabMovesCost() {
 #==============================================================================================================================================================================================
 function CreateTabHealth() {
     
-    CreateReduxGroup -All -Tag "Health" -Text "Health (Presets)"
-    $button = CreateReduxButton -All -Text "1x Health"    -Info "Keep the vanilla health values for enemies" -Credits "Admentus"; $button.Add_Click({ SetAllEnemyHP -Default    })
-    $button = CreateReduxButton -All -Text "1.25x Health" -Info "Set the health of Enemies to 1.25x"         -Credits "Admentus"; $button.Add_Click({ SetAllEnemyHP -Multi 1.25 })
-    $button = CreateReduxButton -All -Text "1.5x Health"  -Info "Set the health of Enemies to 1.5x"          -Credits "Admentus"; $button.Add_Click({ SetAllEnemyHP -Multi 1.5  })
-    $button = CreateReduxButton -All -Text "1.75x Health" -Info "Set the health of Enemies to 1.75x"         -Credits "Admentus"; $button.Add_Click({ SetAllEnemyHP -Multi 1.75 })
-    $button = CreateReduxButton -All -Text "2x Health"    -Info "Set the health of Enemies to 2x"            -Credits "Admentus"; $button.Add_Click({ SetAllEnemyHP -Multi 2    })
-    $button = CreateReduxButton -All -Text "2.5x Health"  -Info "Set the health of Enemies to 3x"            -Credits "Admentus"; $button.Add_Click({ SetAllEnemyHP -Multi 2.5  })
+              CreateReduxGroup  -Tag  "Health"       -Text "Health (Presets)"
+    $button = CreateReduxButton -Text "1x Health"    -Info "Keep the vanilla health values for enemies" -Credits "Admentus"; $button.Add_Click({ SetAllEnemyHP -Default    })
+    $button = CreateReduxButton -Text "1.25x Health" -Info "Set the health of Enemies to 1.25x"         -Credits "Admentus"; $button.Add_Click({ SetAllEnemyHP -Multi 1.25 })
+    $button = CreateReduxButton -Text "1.5x Health"  -Info "Set the health of Enemies to 1.5x"          -Credits "Admentus"; $button.Add_Click({ SetAllEnemyHP -Multi 1.5  })
+    $button = CreateReduxButton -Text "1.75x Health" -Info "Set the health of Enemies to 1.75x"         -Credits "Admentus"; $button.Add_Click({ SetAllEnemyHP -Multi 1.75 })
+    $button = CreateReduxButton -Text "2x Health"    -Info "Set the health of Enemies to 2x"            -Credits "Admentus"; $button.Add_Click({ SetAllEnemyHP -Multi 2    })
+    $button = CreateReduxButton -Text "2.5x Health"  -Info "Set the health of Enemies to 3x"            -Credits "Admentus"; $button.Add_Click({ SetAllEnemyHP -Multi 2.5  })
 
     foreach ($item in $Files.json.enemies) {
-        CreateReduxGroup -All -Tag "Health" -Text ("Health (" + $item.type + ")")
+        CreateReduxGroup -Tag "Health" -Text ("Health (" + $item.type + ")")
         foreach ($enemy in $item.targets) {
             if ($enemy.hp -is [int] -and (IsSet $enemy.hp_offset) ) {
-                CreateReduxTextBox -All -Name $enemy.name -Text $enemy.title -Value $enemy.hp -Min 1 -Max 127 -Info ("Set the Health Points for " + $enemy.title) -Credits "Admentus"
+                CreateReduxTextBox -Name $enemy.name -Text $enemy.title -Value $enemy.hp -Min 1 -Max 127 -Info ("Set the Health Points for " + $enemy.title) -Credits "Admentus"
             }
         }
     }
 
-    CreateReduxGroup -All -Tag "Heal" -Text "Healing && Damaged"
+    CreateReduxGroup -Tag "Heal" -Text "Healing && Damaged"
     foreach ($item in $Files.json.enemies.targets) {
         foreach ($heal in $item.heal) {
             if ($heal.value -is [int] -and (IsSet $heal.offset) ) {
@@ -474,7 +474,7 @@ function CreateTabHealth() {
                 elseif ($heal.type -eq "Group Heal")   { $info = "Set the power for the group heal ability for "             + $item.title }
                 elseif ($heal.type -eq "Heal Time")    { $info = "Set the amount of times the heal ability can be used for " + $item.title }
                 else                               { $info = "Set the power of the heal ability for "                        + $item.title }
-                CreateReduxTextBox -All -Name $name -Text $text -BoxHeight 5 -Value $heal.value -Min 1 -Max 99 -Info $info -Credits "Admentus"
+                CreateReduxTextBox -Name $name -Text $text -BoxHeight 5 -Value $heal.value -Min 1 -Max 99 -Info $info -Credits "Admentus"
             }
         }
     }
@@ -486,14 +486,14 @@ function CreateTabHealth() {
 #==============================================================================================================================================================================================
 function CreateTabDefense() {
     
-    CreateReduxGroup -All -Tag "Defense" -Text "Defense (Presets)"
-    $button = CreateReduxButton -All -Text "Vanilla Defense" -Info "Keep the vanilla defense values for enemies"                                             -Credits "Admentus"; $button.Add_Click({ SetAllEnemyDEF                 })
-    $button = CreateReduxButton -All -Text "+1 Defense"      -Info "Increase the defense for enemies by 1`nOnly for enemies who had a defense higher than 0" -Credits "Admentus"; $button.Add_Click({ SetAllEnemyDEF -Add 1 -NonNull })
+              CreateReduxGroup  -Tag  "Defense"         -Text "Defense (Presets)"
+    $button = CreateReduxButton -Text "Vanilla Defense" -Info "Keep the vanilla defense values for enemies"                                             -Credits "Admentus"; $button.Add_Click({ SetAllEnemyDEF                 })
+    $button = CreateReduxButton -Text "+1 Defense"      -Info "Increase the defense for enemies by 1`nOnly for enemies who had a defense higher than 0" -Credits "Admentus"; $button.Add_Click({ SetAllEnemyDEF -Add 1 -NonNull })
 
     foreach ($enemy in $Files.json.enemies.targets) {
         if ($enemy.def.count -eq 0)              { continue }
         if ($enemy.def[0].offset.length -eq 0)   { continue }
-        CreateReduxGroup -All -Tag "Defense" -Text $enemy.title
+        CreateReduxGroup -Tag "Defense" -Text $enemy.title
         foreach ($def in $enemy.def) {
             if (!(IsSet $def.offset)) { continue }
             if (IsSet $def.type) {
@@ -502,11 +502,11 @@ function CreateTabDefense() {
             }
             else { $name = $text = "" }
             if ($def.value -is [int]) {
-                CreateReduxTextBox -All -Name ($enemy.name + $name) -Text ("Normal" + $text) -Value $def.value -Min (-99) -Max 99 -Length 3 -Info ("Set the Defense Points for " + $enemy.title + $text) -Credits "Admentus"
+                CreateReduxTextBox -Name ($enemy.name + $name) -Text ("Normal" + $text) -Value $def.value -Min (-99) -Max 99 -Length 3 -Info ("Set the Defense Points for " + $enemy.title + $text) -Credits "Admentus"
             }
             elseif ($def.value -is [array]) {
                 foreach ($i in 0..($def.value.count-1)) {
-                    CreateReduxTextBox -All -Name ($enemy.name + $name + $def.title[$i]) -Text ($def.title[$i] + $text) -Value $def.value[$i] -Min (-99) -Max 99 -Length 3 -Info ("Set the " + $def.title[$i] + " Defense Points for " + $enemy.title + $text) -Credits "Admentus"
+                    CreateReduxTextBox -Name ($enemy.name + $name + $def.title[$i]) -Text ($def.title[$i] + $text) -Value $def.value[$i] -Min (-99) -Max 99 -Length 3 -Info ("Set the " + $def.title[$i] + " Defense Points for " + $enemy.title + $text) -Credits "Admentus"
                 }
                 if ($enemy.separate) { $Last.Row++; $Last.Column = 1 }
             }
