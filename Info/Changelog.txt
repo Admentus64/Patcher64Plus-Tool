@@ -1,3 +1,7 @@
+v23.0.4
+- Fixed issue with Remove Owl options corrupting textures
+- Fixed issue with byte patching not properly recognizing numbers
+
 v23.0.3
 - Updated New Master Quest to v2.5
 - Fixed issue with Harder Gohma Larva for OoT

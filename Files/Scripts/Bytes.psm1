@@ -13,7 +13,7 @@ function ChangeBytes([string]$File, [byte[]]$Array, [object]$Offset, [object]$Ma
     elseif ($Match  -is [Array]  -and $Match[0] -is [String])            { $matchDec  = $Match                       | foreach { [Convert]::ToByte($_, 16) } }
     else                                                                 { $matchDec  = @(); $matchDec += $Match }
 
-    if ($Values -is [int] -and $Add) {
+    if ( (IsNumber -Number $Values) -and $Add) {
         if ($Values -lt 0) {
             $Add      = $False
             $Subtract = $True
@@ -493,6 +493,7 @@ function Get24Bit([uint32]$Value)                              { return '{0:X6}'
 function Get32Bit([uint32]$Value)                              { return '{0:X8}' -f $Value }
 function AddToOffset([string]$Hex, [string]$Add)               { return (Get32Bit ( (GetDecimal $Hex) + (GetDecimal $Add)      ) ) }
 function SubtractFromOffset([string]$Hex, [string]$Subtract)   { return (Get32Bit ( (GetDecimal $Hex) - (GetDecimal $Subtract) ) ) }
+function IsNumber($Number)                                     { return $Number -is [byte] -or $Number -is [int16] -or $Number -is [int32] -or $Number -is [int64] -or $Number -is [sbyte] -or $Number -is [uint16] -or $Number -is [uint32] -or $Number -is [uint64] }
 
 
 

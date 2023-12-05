@@ -2607,6 +2607,8 @@ function ShiftMapVtxData([int16]$Shift=0x10) {
         }
     }
 
+    if ($SceneEditor.LoadedScene.Name -eq "Hyrule Field") { ChangeBytes -Offset "AFC817" -Values ([int]$Shift) -Add -Silent } # Lon Lon Ranch windows
+
 }
 
 
