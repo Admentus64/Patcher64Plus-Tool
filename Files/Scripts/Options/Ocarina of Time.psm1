@@ -54,7 +54,7 @@ function PatchOptions() {
 
     # SCENES #
 
-    if (IsIndex $Redux.MQ.Custom -Text "Custom") {
+    if (IsIndex $Redux.MQ.Dungeons -Text "Custom") {
         if (TestFile $GameFiles.scenesPatch) { ApplyPatch -Patch $GameFiles.scenesPatch -FullPath }
     }
     
