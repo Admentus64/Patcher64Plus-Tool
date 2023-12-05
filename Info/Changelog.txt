@@ -1,3 +1,10 @@
+v23.0.3
+- Updated New Master Quest to v2.5
+- Fixed issue with Harder Gohma Larva for OoT
+- Fixed issue with Crouch Stab Fix for OoT
+- Fixed issue with Fairy Recovery (Revive) for OoT
+- Fixed issue with not applying Custom Scenes for OoT
+
 v23.0.2
 - Fixed Spirit Temple softlock with Child Quest Classic
 - Fixed issue with options not properly locking and unlocking

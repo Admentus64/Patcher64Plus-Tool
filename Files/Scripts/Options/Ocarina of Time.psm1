@@ -54,7 +54,7 @@ function PatchOptions() {
 
     # SCENES #
 
-    if (IsChecked $Redux.MQ.Custom) {
+    if (IsIndex $Redux.MQ.Custom -Text "Custom") {
         if (TestFile $GameFiles.scenesPatch) { ApplyPatch -Patch $GameFiles.scenesPatch -FullPath }
     }
     
@@ -574,7 +574,7 @@ function ByteOptions() {
     if (IsChecked $Redux.HeroHarder.KingDodongo)     { ChangeBytes -Offset "C3CB7F" -Values "32"; ChangeBytes -Offset "C3CF73" -Values "00"; ChangeBytes -Offset "C3CE5E" -Values "FFFF" }
 
     if (IsChecked $Redux.HeroHarder.GohmaLarve) {
-        ChangeBytes -Offset "C51CFE" -Values "40FF"; ChangeBytes -Offset "C523E6" -Values "0000"; ChangeBytes -Offset "C5283E" -Values "0000"; ChangeBytes -Offset "C5298A" -Values "0000"; ChangeBytes -Offset "C52D3E" -Values "40AA"
+        ChangeBytes -Offset "C51CFE" -Values "40FF"; ChangeBytes -Offset "C523E6" -Values "0000"; ChangeBytes -Offset "C5283E" -Values "0000"; ChangeBytes -Offset "C5298A" -Values "0007"; ChangeBytes -Offset "C52A9A" -Values "0000"; ChangeBytes -Offset "C52D3E" -Values "40AA"
     }
 
     if (IsChecked $Redux.HeroHarder.Keese) {
@@ -595,11 +595,11 @@ function ByteOptions() {
 
     # RECOVERY #
 
-    if (IsDefault $Redux.Recovery.Heart       -Not)   { ChangeBytes -Offset "AE6FC6" -Values (Get16Bit $Redux.Recovery.Heart.Text      ) }
-    if (IsDefault $Redux.Recovery.Fairy       -Not)   { ChangeBytes -Offset "BEAA4A" -Values (Get16Bit $Redux.Recovery.Fairy.Text      ) }
-    if (IsDefault $Redux.Recovery.FairyRevive -Not)   { ChangeBytes -Offset "BDF65A" -Values (Get16Bit $Redux.Recovery.FairyRevive.Text) }
-    if (IsDefault $Redux.Recovery.Milk        -Not)   { ChangeBytes -Offset "BEA64A" -Values (Get16Bit $Redux.Recovery.Milk.Text       ) }
-    if (IsDefault $Redux.Recovery.RedPotion   -Not)   { ChangeBytes -Offset "BEA616" -Values (Get16Bit $Redux.Recovery.RedPotion.Text  ) }
+    if (IsDefault $Redux.Recovery.Heart       -Not)   { ChangeBytes -Offset   "AE6FC6"            -Values (Get16Bit $Redux.Recovery.Heart.Text      ) }
+    if (IsDefault $Redux.Recovery.Fairy       -Not)   { ChangeBytes -Offset   "BEAA4A"            -Values (Get16Bit $Redux.Recovery.Fairy.Text      ) }
+    if (IsDefault $Redux.Recovery.FairyRevive -Not)   { ChangeBytes -Offset @("BDF65A", "BDF60E") -Values (Get16Bit $Redux.Recovery.FairyRevive.Text) }
+    if (IsDefault $Redux.Recovery.Milk        -Not)   { ChangeBytes -Offset   "BEA64A"            -Values (Get16Bit $Redux.Recovery.Milk.Text       ) }
+    if (IsDefault $Redux.Recovery.RedPotion   -Not)   { ChangeBytes -Offset   "BEA616"            -Values (Get16Bit $Redux.Recovery.RedPotion.Text  ) }
 
 
 
