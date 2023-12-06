@@ -1939,6 +1939,11 @@ function ByteTextOptions() {
         SetMessage -ID "6077" -Text "Well Come!"                                               -Replace "Welcome!"
     }
 
+    if (IsIndex $Redux.Gameplay.RemoveOwls -Index 3) {
+        SetMessage -ID "0416"                                                                  -Replace "They say that an owl flying<N>around Hyrule is the<N>reincarnation of an ancient Sage."
+	SetMessage -ID "0417"                                                                  -Replace "They say that a strange owl<N>around here, may look big and<N>heavy, but its character is rather <N>lighthearted."
+    }
+    
     if (IsChecked $Redux.Graphics.GCScheme) {
         if (IsChecked $Redux.Graphics.GCScheme -Lang 1) {
             SetMessage -ID "001C" -Text "press"            -Replace "use"; SetMessage -ID "001D"; SetMessage -ID "0030"; SetMessage -ID "0039" -All; SetMessage -ID "004A"; SetMessage -ID "00A3"; SetMessage -ID "00B1"; SetMessage -ID "00CB"; SetMessage -ID "70A3"; SetMessage -ID "103F" # press -> use
