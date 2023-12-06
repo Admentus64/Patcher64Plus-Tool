@@ -1941,7 +1941,7 @@ function ByteTextOptions() {
 
     if (IsIndex $Redux.Gameplay.RemoveOwls -Index 3) {
         SetMessage -ID "0416"                                                                  -Replace "They say that an owl flying<N>around Hyrule is the<N>reincarnation of an ancient Sage."
-	SetMessage -ID "0417"                                                                  -Replace "They say that a strange owl<N>roaming around, may look big and<N>heavy, but its character is rather <N>lighthearted."
+	SetMessage -ID "0417"                                                                  -Replace "They say that a strange owl<N>around here, may look big and<N>heavy, but its character is rather <N>lighthearted."
     }
     
     if (IsChecked $Redux.Graphics.GCScheme) {
