@@ -1626,7 +1626,10 @@ function ByteSceneOptions() {
         PrepareMap -Scene "Lost Woods"      -Map 8 -Header 0; RemoveObject -Name "Kaepora Gaebora"; RemoveActor -Name "Kaepora Gaebora"; SaveAndPatchLoadedScene
         PrepareMap -Scene "Desert Colossus" -Map 0 -Header 0; RemoveObject -Name "Kaepora Gaebora"; RemoveActor -Name "Kaepora Gaebora"; SaveAndPatchLoadedScene
         PrepareMap -Scene "Hyrule Castle"   -Map 0 -Header 0; RemoveObject -Name "Kaepora Gaebora"; RemoveActor -Name "Kaepora Gaebora"; SaveAndPatchLoadedScene
-        if (IsIndex $Redux.Gameplay.RemoveOwls -Index 3) { PrepareMap -Scene "Lake Hylia" -Map 0 -Header 0; RemoveObject -Name "Kaepora Gaebora"; RemoveActor -Name "Kaepora Gaebora"; SaveAndPatchLoadedScene; ChangeBytes -Offset "CF8C84" -Values "1500" }
+        if (IsIndex $Redux.Gameplay.RemoveOwls -Index 3) {
+            PrepareMap -Scene "Lake Hylia"           -Map 0 -Header 0; RemoveObject -Name "Kaepora Gaebora"; RemoveActor -Name "Kaepora Gaebora"; SaveAndPatchLoadedScene; ChangeBytes -Offset "CF8C84" -Values "1500" 
+            PrepareMap -Scene "Death Mountain Trail" -Map 0 -Header 0; RemoveObject -Name "Kaepora Gaebora"; RemoveActor -Name "Kaepora Gaebora"; SaveAndPatchLoadedScene
+        }
     }
     
 
@@ -1938,6 +1941,11 @@ function ByteTextOptions() {
         SetMessage -ID "6077" -Text "Well Come!"                                               -Replace "Welcome!"
     }
 
+    if (IsIndex $Redux.Gameplay.RemoveOwls -Index 3 -Lang 1) {
+        SetMessage -ID "0416"                                                                  -Replace "They say that an owl flying<N>around Hyrule is the<N>reincarnation of an ancient Sage."
+        SetMessage -ID "0417"                                                                  -Replace "They say that a strange owl<N>around here, may look big and<N>heavy, but its character is rather <N>lighthearted."
+    }
+    
     if (IsChecked $Redux.Graphics.GCScheme) {
         if (IsChecked $Redux.Graphics.GCScheme -Lang 1) {
             SetMessage -ID "001C" -Text "press"            -Replace "use"; SetMessage -ID "001D"; SetMessage -ID "0030"; SetMessage -ID "0039" -All; SetMessage -ID "004A"; SetMessage -ID "00A3"; SetMessage -ID "00B1"; SetMessage -ID "00CB"; SetMessage -ID "70A3"; SetMessage -ID "103F" # press -> use
@@ -2364,7 +2372,7 @@ function CreateTabMain() {
     
     CreateReduxGroup    -Tag  "Gameplay"                             -Text "Quality of Life" 
     CreateReduxComboBox -Name "FasterBlockPushing"   -Exclude "Gold" -Text "Faster Block Pushing"   -Info "All blocks are pushed faster" -Items @("Disabled", "Exclude Time-Based Puzzles", "Fully Enabled")                                                  -TrueDefault 1 -Default 3 -Credits "GhostlyDark (Randomizer)"
-    CreateReduxComboBox -Name "RemoveOwls"           -Safe           -Text "Remove Owls"            -Info "Kaepora Gaebora the owl will no longer interrupt Link with tutorials" -Items @("Disabled", "Enabled", "Include Lake Hylia")                                                  -Credits "Admentus & GoldenMariaNova"
+    CreateReduxComboBox -Name "RemoveOwls"           -Safe           -Text "Remove Owls"            -Info "Kaepora Gaebora the owl will no longer interrupt Link with tutorials" -Items @("Disabled", "Exclude Shortcuts", "Fully Enabled")                                             -Credits "Admentus & GoldenMariaNova"
     CreateReduxCheckBox -Name "NoKillFlash"                          -Text "No Kill Flash"          -Info "Disable the flash effect when killing certain enemies such as the Guay or Skullwalltula"                                                                                     -Credits "Chez Cousteau"
     CreateReduxCheckBox -Name "RemoveNaviTimer"                      -Text "Remove Navi Timer"      -Info "Navi will no longer pop up with text messages during gameplay`nDoes not apply to location-triggered messages"                                                                -Credits "Admentus"
     CreateReduxCheckBox -Name "ResumeLastArea"       -Exclude "Dawn" -Text "Resume From Last Area"  -Info "Resume playing from the area you last saved in"                                                                                             -Warning "Don't save in Grottos" -Credits "Admentus (ROM) & Aegiker (RAM)"

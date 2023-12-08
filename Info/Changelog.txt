@@ -1,3 +1,6 @@
+v23.0.5
+- Improved Remove Owls option
+
 v23.0.4
 - Fixed issue with Remove Owl options corrupting textures
 - Fixed issue with byte patching not properly recognizing numbers
