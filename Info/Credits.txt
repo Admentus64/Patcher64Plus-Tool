@@ -426,6 +426,7 @@ https://github.com/DaruniasJoy/OoT-Custom-Sequences
 - darklord92
 - kuirivito
 - GoldenMariaNova
+- Qlonever
 
 --- Custom Textures ---
 - Community Texture pack
