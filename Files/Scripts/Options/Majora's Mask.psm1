@@ -24,6 +24,12 @@
 #==============================================================================================================================================================================================
 function PatchOptions() {
     
+    # TEXT COMMANDS FIX #
+
+	if (IsChecked $Redux.Restore.TextCommands) { ApplyPatch -Patch "Decompressed\Optional\text_commands.ppf" }
+
+
+
     # MODELS #
 
     if (IsDefault -Elem $Redux.Graphics.ChildModels -Not)   { PatchModel -Category "Child" -Name $Redux.Graphics.ChildModels.Text }
@@ -1185,7 +1191,6 @@ function ByteTextOptions() {
         SetMessage -ID "1FF8"                         -Replace "<Sound:6983>" -Append
         SetMessage -ID "208E"                         -Replace "<Sound:6845>" -Append
         SetMessage -ID "236A"                         -Replace "<Sound:6946>" -Append
-        SetMessage -ID "2784" -Text "Deposit mail here.<N><Resume:000A><Sound:284C><DI>Ka-ching!<DC><NSS>" -Replace "Deposit mail here.<Slow><N><Sound:284C><DI>Ka-ching!<DC><NSS>"
         SetMessage -ID "2931"                         -Replace "<Sound:6980>" -Append
         SetMessage -ID "34A3" -Text "<Sound:6925>"    -Replace "<Sound:6952>"
     }
@@ -1456,6 +1461,7 @@ function CreatePresets() {
         BoxCheck $Redux.Restore.PieceOfHeartSound
         BoxCheck $Redux.Restore.MoveBomberKid
         BoxCheck $Redux.Restore.OnTheMoonIntro
+        BoxCheck $Redux.Restore.TextCommands
     } )
 
     $HeroMode.Add_Click( {
@@ -1525,7 +1531,7 @@ function CreateTabMain() {
     CreateReduxCheckBox -Name "PieceOfHeartSound" -Text "4th Piece of Heart Sound" -Info "Restore the sound effect when collecting the fourth Piece of Heart that grants Link a new Heart Container" -Credits "ShadowOne333"
     CreateReduxCheckBox -Name "MoveBomberKid"     -Text "Move Bomber Kid"          -Info "Moves the Bomber at the top of the Stock Pot Inn to be behind the bell like in the original Japanese ROM"  -Credits "ShadowOne333"
     CreateReduxCheckBox -Name "OnTheMoonIntro"    -Text "On The Moon Intro"        -Info "Restores the intro cutscene when you get to the On The Moon area"                                          -Credits "Chez Cousteau"
-
+    CreateReduxCheckBox -Name "TextCommands"      -Text "Fix Text Commands"        -Info "Fixes instant text, delay, and sound effect text commands not working sometimes"                           -Credits "Qlonever"
 
 
     # OTHER #
