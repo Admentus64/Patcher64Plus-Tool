@@ -1273,7 +1273,6 @@ function IsRestrictedFolder([string]$Path) {
     
     if ($Path -like ("*" + [Environment]::GetFolderPath("MyDocuments") + "*"))   { return $False }
     if ($Path -like ("*" + $env:APPDATA + "*"))                                  { return $False }
-    if ($Path -eq    "C:\")                                                      { return $True }
     if ($Path -like "*C:\Users\*")                                               { return $True }
     if ($Path -like "*C:\Program Files\*")                                       { return $True }
     if ($Path -like "*C:\Program Files (x86)\*")                                 { return $True }
