@@ -77,9 +77,6 @@ function SetFileParameters() {
     $Files.oot.widescreen_2                 = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Optional\Widescreen\widescreen_hide_geometry")
     $Files.oot.widescreen_3                 = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Optional\Widescreen\widescreen_minimum")
     $Files.oot.widescreen_4                 = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Optional\Widescreen\widescreen_redux_hotfix")
-    $Files.oot.the_sealed_palace_1          = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Optional\The Sealed Palace\tsp_mm_adult_link")
-    $Files.oot.the_sealed_palace_2          = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Optional\The Sealed Palace\tsp_mm_child_link")
-    $Files.oot.the_sealed_palace_3          = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Optional\The Sealed Palace\tsp_mm_child_link")
     $Files.oot.child_quest_1                = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Optional\Child Quest\child_quest_classic_model")
 
     $Files.oot.lens_of_truth                = $Paths.Games + "\Ocarina of Time\Textures\widescreen\lens_of_truth.bin"
