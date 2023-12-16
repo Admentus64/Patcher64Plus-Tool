@@ -175,11 +175,8 @@ function CreateCreditsPanel() {
     $Shadow1Label    = CreateLabel -X (DPISize 10)           -Y ($SourcesLabel.Bottom    + (DPISize 2)) -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("ShadowOne333's GitHub")                                                               -AddTo $RightPanel.Links
     $Shadow2Label    = CreateLabel -X $Shadow1Label.Right    -Y ($SourcesLabel.Bottom    + (DPISize 2)) -Width (DPISize 340) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("https://github.com/ShadowOne333/Zelda64-Redux-Documentation")                         -AddTo $RightPanel.Links
     
-    $Skilar1Label    = CreateLabel -X (DPISize 10)           -Y ($SourcesLabel.Bottom    + (DPISize 2)) -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("Skilarbabcock's YouTube")                                                             -AddTo $RightPanel.Links
-    $Skilar2Label    = CreateLabel -X $Skilar1Label.Right    -Y ($SourcesLabel.Bottom    + (DPISize 2)) -Width (DPISize 225) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("https://www.youtube.com/user/skilarbabcock")                                          -AddTo $RightPanel.Links
-    
-    $Malon1Label     = CreateLabel -X (DPISize 10)           -Y ($Skilar1Label.Bottom    + (DPISize 2)) -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("Malon Rose YouTube")                                                                  -AddTo $RightPanel.Links
-    $Malon2Label     = CreateLabel -X $Malon1Label.Right     -Y ($Skilar1Label.Bottom    + (DPISize 2)) -Width (DPISize 225) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("https://www.youtube.com/c/MalonRose")                                                 -AddTo $RightPanel.Links
+    $Malon1Label     = CreateLabel -X (DPISize 10)           -Y ($Shadow1Label.Bottom    + (DPISize 2)) -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("Malon Rose YouTube")                                                                  -AddTo $RightPanel.Links
+    $Malon2Label     = CreateLabel -X $Malon1Label.Right     -Y ($Shadow1Label.Bottom    + (DPISize 2)) -Width (DPISize 225) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("https://www.youtube.com/c/MalonRose")                                                 -AddTo $RightPanel.Links
 
     $Luigi1Label     = CreateLabel -X (DPISize 10)           -Y ($Malon1Label.Bottom     + (DPISize 2)) -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("theluigidude2007 YouTube")                                                            -AddTo $RightPanel.Links
     $Luigi2Label     = CreateLabel -X $Luigi1Label.Right     -Y ($Malon1Label.Bottom     + (DPISize 2)) -Width (DPISize 300) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("www.youtube.com/channel/UC3071imQKR5cEIobsFHLW9Q")                                    -AddTo $RightPanel.Links
@@ -197,7 +194,6 @@ function CreateCreditsPanel() {
     $IkeyIlex2Label  = CreateLabel -X $IkeyIlex1Label.Right  -Y ($LuigiHero1Label.Bottom + (DPISize 2)) -Width (DPISize 260) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("https://github.com/Caverns4/Custom-Game-Models")                                      -AddTo $RightPanel.Links
 
     $Shadow2Label.add_Click(    { [system.Diagnostics.Process]::start("https://github.com/ShadowOne333/Zelda64-Redux-Documentation") } )
-    $Skilar2Label.add_Click(    { [system.Diagnostics.Process]::start("https://www.youtube.com/user/skilarbabcock") } )
     $Malon2Label.add_Click(     { [system.Diagnostics.Process]::start("https://www.youtube.com/c/MalonRose") } )
     $Luigi2Label.add_Click(     { [system.Diagnostics.Process]::start("https://www.youtube.com/channel/UC3071imQKR5cEIobsFHLW9Q") } )
     $Darunia2Label.add_Click(   { [system.Diagnostics.Process]::start("https://github.com/DaruniasJoy/OoT-Custom-Sequences") } )
@@ -205,7 +201,7 @@ function CreateCreditsPanel() {
     $LuigiHero2Label.add_Click( { [system.Diagnostics.Process]::start("https://github.com/LuigiXHero/OoT-Randomizer-Music-Pack") } )
     $IkeyIlex2Label.add_Click(  { [system.Diagnostics.Process]::start("https://github.com/Caverns4/Custom-Game-Models") } )
 
-    $Shadow2Label.ForeColor = $Skilar2Label.ForeColor = $Malon2Label.ForeColor = $Luigi2Label.ForeColor = $Darunia2Label.ForeColor = $Fish2Label.ForeColor = $LuigiHero2Label.ForeColor = $IkeyIlex2Label.ForeColor = "Blue"
+    $Shadow2Label.ForeColor = $Malon2Label.ForeColor = $Luigi2Label.ForeColor = $Darunia2Label.ForeColor = $Fish2Label.ForeColor = $LuigiHero2Label.ForeColor = $IkeyIlex2Label.ForeColor = "Blue"
 
 
     

@@ -92,7 +92,7 @@
 - Amara Valkyrie:			Amara & Karicyan
 - Aria the Demon:			AriaHiro64
 - Athena:				Ikey Ilex (https://github.com/Caverns4/Custom-Game-Models)
-- Breath of the Wild:			Skilarbabcock (www.youtube.com/user/skilarbabcock)
+- Breath of the Wild:			Skilarbabcock
 - Dark Link:				CrookedPoe (adult)
 - Dark Link Smash:			Mikus64
 - Dawn & Dusk:				LuigiBlood
@@ -113,7 +113,7 @@
 - Kyle:					Ikey Ilex (https://github.com/Caverns4/Custom-Game-Models)
 - Lorna Rissa:				JanexLane
 - Link Baldrics:			Amara
-- Link's Awakening:			Skilarbabcock (www.youtube.com/user/skilarbabcock)
+- Link's Awakening:			Skilarbabcock
 - Machop / Machoke:			Ikey Ilex (https://github.com/Caverns4/Custom-Game-Models)
 - Majora's Mask:			The3Dude (child) & Skilarbabcock (adult)
 - Majora's Mask + OoT Eyes:		The3Dude (model) & GhostlyDark (eyes)
@@ -125,7 +125,7 @@
 - MoT Revisited:			Syeo
 - Mr. April Fools:			Maple
 - Nabooru:				Hailey
-- Ocarina of Time 3D:			Skilarbabcock (www.youtube.com/user/skilarbabcock)
+- Ocarina of Time 3D:			Skilarbabcock
 - Princess Ruto:			Unesag
 - Princess Zelda 3D:			Hailey
 - Princess Zelda ALttP:			Unesag (child) & Lopieloo (adult)
@@ -135,9 +135,9 @@
 - Saria:				Malon Rose (www.patreon.com/MalonRose & www.youtube.com/c/MalonRose)
 - Sashed:				AriaHiro64
 - Sonic:				Ikey Ilex (https://github.com/Caverns4/Custom-Game-Models)
-- Skyward Sword:			Skilarbabcock (www.youtube.com/user/skilarbabcock)
+- Skyward Sword:			Skilarbabcock
 - Sunny:				Unesag & Amara
-- Twilight Princess:			Skilarbabcock (www.youtube.com/user/skilarbabcock)
+- Twilight Princess:			Skilarbabcock
 - Violet:				Ikey Ilex (https://github.com/Caverns4/Custom-Game-Models)
 - Zora Link:				spyfoxgames
 - Xavres:				Ikey Ilex (https://github.com/Caverns4/Custom-Game-Models)
@@ -444,7 +444,7 @@ https://github.com/DaruniasJoy/OoT-Custom-Sequences
 
 --- Hylian Link Models ---
 - 1996 Link:				Ikey Ilex (https://github.com/Caverns4/Custom-Game-Models)
-- Adult Link (MM):			Skilarbabcock (www.youtube.com/user/skilarbabcock)
+- Adult Link (MM):			Skilarbabcock
 - Athena:				Ikey Ilex (https://github.com/Caverns4/Custom-Game-Models)
 - Diddy Kong:				Ikey Ilex (https://github.com/Caverns4/Custom-Game-Models)
 - Elegy of Emptiness:			JerryWester
@@ -454,8 +454,8 @@ https://github.com/DaruniasJoy/OoT-Custom-Sequences
 - Gatomon:				Ikey Ilex (https://github.com/Caverns4/Custom-Game-Models)
 - Glover:				Unesag
 - Hat Kid:				Hailey
-- Improved Link + OoT Eyes:		Skilarbabcock (model), Nerrel (owner) & GhostlyDark (eyes)
-- Improved Link:			Skilarbabcock (www.youtube.com/user/skilarbabcock) & Nerrel
+- Improved Link + OoT Eyes:		Skilarbabcock
+- Improved Link:			Skilarbabcock & Nerrel
 - Kristin:				Ikey Ilex (https://github.com/Caverns4/Custom-Game-Models)
 - Kristina:				Ikey Ilex (https://github.com/Caverns4/Custom-Game-Models)
 - Machop:				Ikey Ilex (https://github.com/Caverns4/Custom-Game-Models)
