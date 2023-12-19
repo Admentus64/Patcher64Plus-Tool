@@ -1,3 +1,6 @@
+v23.0.8
+- Restored OoT & MM music tracks
+
 v23.0.7
 - Added MM Equipment + Hammer model
 - Integrated custom models
