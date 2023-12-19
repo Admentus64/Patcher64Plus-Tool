@@ -1650,7 +1650,7 @@ function CreateTabLanguage() {
     CreateReduxComboBox -Base 1 -Safe -Name "Language"       -Text "Language"         -Info "Patch the game with a different language" -Items ($Files.json.languages.title)
     CreateReduxCheckBox -Base 1 -Safe -Name "Restore"        -Text "Restore Text"     -Info "Restranslates texts and fixes typos for text and sound effects"            -Credits "Admentus & ShadowOne333" -Checked
     CreateReduxCheckBox -Base 1 -Safe -Name "AreaTitleCards" -Text "Area Title Cards" -Info "Add area title cards to missing areas"                                     -Credits "Admentus & ShadowOne333" -Checked
-    CreateReduxCheckBox         -Safe -Name "AdultPronouns"  -Text "Adult Pronouns"   -Info "Refer to Link as an adult instead of a child"                              -Credits "Skilar"
+    CreateReduxCheckBox         -Safe -Name "AdultPronouns"  -Text "Adult Pronouns"   -Info "Refer to Link as an adult instead of a child"                              -Credits "Admentus"
     CreateReduxCheckBox -Base 1 -Safe -Name "Instant"        -Text "Instant Text"     -Info "Most text will be shown instantly"                                         -Credits "Admentus"
     CreateReduxCheckBox         -Safe -Name "EasterEggs"     -Text "Easter Eggs"      -Info "Adds custom Patreon Tier 3 messages into the game`nCan you find them all?" -Credits "Admentus & Patreons" -Checked
     CreateReduxCheckBox -Base 1 -Safe -Name "Custom"         -Text "Custom"           -Info ('Insert custom dialogue found from "..\Patcher64+ Tool\Files\Games\Majora' + "'" + 's Mask\Custom Text"') -Warning "Make sure your custom script is proper and correct, or your ROM will crash`n[!] No edit will be made if the custom script is missing"

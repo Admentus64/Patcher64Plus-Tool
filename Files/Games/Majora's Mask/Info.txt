@@ -25,7 +25,6 @@ Instructions:
 
 Documentation / Sources:
 - https://github.com/ShadowOne333/Zelda64-Redux-Documentation
-- www.youtube.com/user/skilarbabcock
 
 Information:
 - Original Z64 ROM or VC WAD is preserved
