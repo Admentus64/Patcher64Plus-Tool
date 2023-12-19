@@ -1889,7 +1889,7 @@ function ByteTextOptions() {
         SetMessage -ID "403E" -Text "man"                                                                              -Replace "confidant"
         SetMessage -ID "403E" -Text "love"                                                                             -Replace "friendship"
         SetMessage -ID "403E" -Text "the<N>woman who is going to be your<N>wife!"                                      -Replace "the <N>woman who trusted you!"
-        SetMessage -ID "4041" -Text "man I chose to be my<N>husband"                                                   -Replace "woman I chose to be <N>my<>confidant"
+        SetMessage -ID "4041" -Text "man I chose to be my<N>husband"                                                   -Replace "woman I chose to be <N>my confidant"
         SetMessage -ID "4046" -Text "Well, that's what I want to say, <N>but I don't think I can offer that<N>now."    -Replace "Ah! Just kidding!<N>We're friends and <N>that's more than enough."
         SetMessage -ID "404E" -Text "If you're a man, act like one!"                                                   -Replace "If you're trying to save me, act like it!"
         SetMessage -ID "507C" -Text "There he is! It's him!<N>He"                                                      -Replace "There she is! It's her!<N>She"
