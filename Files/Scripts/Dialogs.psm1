@@ -180,28 +180,12 @@ function CreateCreditsPanel() {
 
     $Luigi1Label     = CreateLabel -X (DPISize 10)           -Y ($Malon1Label.Bottom     + (DPISize 2)) -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("theluigidude2007 YouTube")                                                            -AddTo $RightPanel.Links
     $Luigi2Label     = CreateLabel -X $Luigi1Label.Right     -Y ($Malon1Label.Bottom     + (DPISize 2)) -Width (DPISize 300) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("www.youtube.com/channel/UC3071imQKR5cEIobsFHLW9Q")                                    -AddTo $RightPanel.Links
-    
-    $Darunia1Label   = CreateLabel -X (DPISize 10)           -Y ($Luigi1Label.Bottom     + (DPISize 2)) -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("Darunias Joy GitHub")                                                                 -AddTo $RightPanel.Links
-    $Darunia2Label   = CreateLabel -X $Darunia1Label.Right   -Y ($Luigi1Label.Bottom     + (DPISize 2)) -Width (DPISize 275) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("https://github.com/DaruniasJoy/OoT-Custom-Sequences")                                 -AddTo $RightPanel.Links
-
-    $Fish1Label      = CreateLabel -X (DPISize 10)           -Y ($Darunia1Label.Bottom   + (DPISize 2)) -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("Fish-waffle64's GitHub")                                                              -AddTo $RightPanel.Links
-    $Fish2Label      = CreateLabel -X $Fish1Label.Right      -Y ($Darunia1Label.Bottom   + (DPISize 2)) -Width (DPISize 260) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("https://github.com/Fish-waffle64/Feeshs-MM-Music")                                    -AddTo $RightPanel.Links
-
-    $LuigiHero1Label = CreateLabel -X (DPISize 10)           -Y ($Fish1Label.Bottom      + (DPISize 2)) -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("LuigiXHero's GitHub")                                                                 -AddTo $RightPanel.Links
-    $LuigiHero2Label = CreateLabel -X $LuigiHero1Label.Right -Y ($Fish1Label.Bottom      + (DPISize 2)) -Width (DPISize 300) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("https://github.com/LuigiXHero/OoT-Randomizer-Music-Pack")                             -AddTo $RightPanel.Links
-
-    $IkeyIlex1Label  = CreateLabel -X (DPISize 10)           -Y ($LuigiHero1Label.Bottom + (DPISize 2)) -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("Ikey Ilex's GitHub")                                                                  -AddTo $RightPanel.Links
-    $IkeyIlex2Label  = CreateLabel -X $IkeyIlex1Label.Right  -Y ($LuigiHero1Label.Bottom + (DPISize 2)) -Width (DPISize 260) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("https://github.com/Caverns4/Custom-Game-Models")                                      -AddTo $RightPanel.Links
 
     $Shadow2Label.add_Click(    { [system.Diagnostics.Process]::start("https://github.com/ShadowOne333/Zelda64-Redux-Documentation") } )
     $Malon2Label.add_Click(     { [system.Diagnostics.Process]::start("https://www.youtube.com/c/MalonRose") } )
     $Luigi2Label.add_Click(     { [system.Diagnostics.Process]::start("https://www.youtube.com/channel/UC3071imQKR5cEIobsFHLW9Q") } )
-    $Darunia2Label.add_Click(   { [system.Diagnostics.Process]::start("https://github.com/DaruniasJoy/OoT-Custom-Sequences") } )
-    $Fish2Label.add_Click(      { [system.Diagnostics.Process]::start("https://github.com/Fish-waffle64/Feeshs-MM-Music") } )
-    $LuigiHero2Label.add_Click( { [system.Diagnostics.Process]::start("https://github.com/LuigiXHero/OoT-Randomizer-Music-Pack") } )
-    $IkeyIlex2Label.add_Click(  { [system.Diagnostics.Process]::start("https://github.com/Caverns4/Custom-Game-Models") } )
 
-    $Shadow2Label.ForeColor = $Malon2Label.ForeColor = $Luigi2Label.ForeColor = $Darunia2Label.ForeColor = $Fish2Label.ForeColor = $LuigiHero2Label.ForeColor = $IkeyIlex2Label.ForeColor = "Blue"
+    $Shadow2Label.ForeColor = $Malon2Label.ForeColor = $Luigi2Label.ForeColor = "Blue"
 
 
     
@@ -256,7 +240,6 @@ function CreateSettingsPanel() {
     $GeneralSettings.LocalTempFolder = CreateSettingsCheckbox -Name "LocalTempFolder" -Text "Use Local Temp Folder"   -Checked -Info "Store all temporary and extracted files within the local Patcher64+ Tool folder`nIf unchecked the temporary and extracted files are kept in the Patcher64+ Tool folder in %AppData%"
     $GeneralSettings.KeepCache       = CreateSettingsCheckbox -Name "KeepCache"       -Text "Keep Cache"              -Checked -Info "Keep a copy of the downgraded or decompressed ROM to speed up patching for subsequent attempts"
     $GeneralSettings.DisableUpdates  = CreateSettingsCheckbox -Name "DisableUpdates"  -Text "Disable Auto-Updater"             -Info "Disable the Auto-Updater that runs when starting the Patcher64+ Tool"
-    $GeneralSettings.DisableAddons   = CreateSettingsCheckbox -Name "DisableAddons"   -Text "Disable Addons Updater"           -Info "Disable automatically updating addons (music, models, etc) when starting the Patcher64+ Tool"
 
     if ((GetWindowsVersion) -lt 11) {
         try {

@@ -22,33 +22,6 @@ function CreateMainDialog() {
     $Files.json.consoles = SetJSONFile $Files.json.consoles
     $Files.json.games    = SetJSONFile $Files.json.games
 
-    # Addons
-    $AddonsToolTip = CreateToolTip
-    for ($i=0; $i -lt $Files.json.repo.addons.length; $i++) {
-        $Addon = $Files.json.repo.addons[$i]
-
-        $icon = $Paths.AddonIcons + "\" + $Addon.title
-        if (!(TestFile ($Paths.Addons + "\" + $Addon.title) -Container)) {
-            $icon += "_missing"
-            $tooltip = "Addon: " + $Addon.title + " is missing"
-        }
-        elseif ($Addons[$Addon.title].isUpdated) {
-            $icon += "_updated"
-            $tooltip = "Addon: " + $Addon.title + " just got updated"
-            $tooltip += "{0}{0}New version for " + $Addon.title +": " + $Addons[$Addon.title].date
-            if (IsSet $Addon.hotfix) { $tooltip += "{0}Hotfix: " + $Addons[$Addon.title].hotfix }
-        }
-        else {
-            $tooltip = "Current version for " + $Addon.title + ": " + $Addons[$Addon.title].date
-            if (IsSet $Addon.hotfix) { $tooltip += "{0}Hotfix: " + $Addons[$Addon.title].hotfix }
-        }
-        $icon += ".png"
-        
-        $PictureBox = CreateForm -X ($MainPanel.Width - (DPISize 25) - (DPISize 30) * $i) -Width (DPISize 20) -Height (DPISize 20) -Form (New-Object Windows.Forms.PictureBox) -AddTo $MainPanel 
-        SetBitmap -Path $icon -Box $PictureBox
-        $AddonsToolTip.SetToolTip($PictureBox, ([string]::Format($tooltip, [Environment]::NewLine)))
-    }
-
     # Menu bar
     $menuBarMain           = New-Object System.Windows.Forms.MenuStrip; $MainDialog.Controls.Add($menuBarMain)
 

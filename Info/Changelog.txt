@@ -1,3 +1,12 @@
+v23.0.7
+- Added MM Equipment + Hammer model
+- Integrated custom models & music
+- Removed a majority of all custom models and removed all custom music
+- Removed filters for custom models
+- Removed all code related to addons
+- Made Music options hidden if the music folder isn't present
+- Cleaned up credits
+
 v23.0.6
 - Added "Fix Text Commands" option for MM
 

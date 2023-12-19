@@ -1,0 +1,237 @@
+DICTIONARY
+	//
+	// For use with decompressed 1.0 MM only!
+	//
+	VROM_CODE             0x00B3C000	// start of code within rom
+	TABLE_OBJECT          0x11CC80		// start of object table within code
+	VROM_OBJ              O_0x11		// object to overwrite
+	VROM_ARMS_HOOK        0xD3B220
+
+	HIERARCHY_CODE        0x11A350		// Relative to the start of code;
+ 						// Link's hierarchy pointer will
+         					// be written at this address
+
+	SEG			0x06000000	// ram segment
+
+	OBJ_CHILD		0x0011		// object_link_child object number
+
+	// Hierarchy
+	DL_WAIST		0x00BDB0	"Limb 1" // this is the name zzconvert automatically uses
+	DL_RTHIGH		0x00B360	"Limb 3"
+	DL_RSHIN		0x00B538	"Limb 4"
+	DL_RFOOT		0x00B778	"Limb 5"
+	DL_LTHIGH		0x00B888	"Limb 6"
+	DL_LSHIN		0x00BA60	"Limb 7"
+	DL_LFOOT		0x00BCA0	"Limb 8"
+	DL_HEAD			0x00C3E8	"Limb 10"
+	DL_HAT			0x00CAA8	"Limb 11"
+	DL_COLLAR		0x00BF88	"Limb 12"
+	DL_LSHOULDER		0x00D1B0	"Limb 13"
+	DL_LFOREARM		0x00E1C8	"Limb 14"
+	DL_RSHOULDER		0x00CCE0	"Limb 16"
+	DL_RFOREARM		0x00CF08	"Limb 17"
+	DL_TORSO		0x00C048	"Limb 20"
+
+	// Hands
+	DL_LHAND		0x00F1D8	"Limb 15"
+	DL_LFIST		0x00F548	"Fist.L"
+	DL_LHAND_BOTTLE		0x01DFA8	"Bottle.Hand.L"
+	DL_RHAND		0x00F998	"Limb 18"
+	DL_RFIST		0x00FD08	"Fist.R"
+
+	// Equipment
+	DL_SHIELD_MIRROR_FACE	0x015F98	"Shield.2.Face"
+	DL_SHIELD_MIRROR	0x016480	"Shield.2"
+	DL_BLADE_GFSWORD	0x016898	"Sword.4"
+	DL_SHEATH_GILDED	0x016B80	"Sheath.3"
+	DL_HILT_GILDED		0x017058	"Hilt.3"
+	DL_BLADE_GILDED		0x017310	"Blade.3"
+	DL_SHEATH_RAZOR		0x017338	"Sheath.2"
+	DL_SHIELD_HERO		0x017458	"Shield.1"
+	DL_SHEATH_KOKIRI	0x017700	"Sheath.1"
+	DL_HOOKSHOT		0x017858	"Hookshot"
+	DL_BOW			0x0181C8	"Bow"
+	DL_HOOKSHOT_SPIKE	0x01D960	"Hookshot.Spike"
+	DL_OCARINA_TIME		0x010448	"Ocarina.2"
+
+	// First-Person
+	DL_FPS_RIGHT_ARM	0x017EC0	"FPS.Forearm.R"
+
+	// Misc
+	DL_BOW_STRING		0x017818	"Bow.String"
+    
+	// External dependencies (gameplay_keep)
+	GK_HILT_KOKIRI		0x040021A8	// Kokiri Sword Handle
+	GK_HILT_RAZOR		0x04001D00	// Razor Sword Handle
+	GK_BLADE_KOKIRI		0x040028C0	// Kokiri Sword Blade
+	GK_BLADE_RAZOR		0x04002168	// Razor Sword Blade
+END
+
+// Matrix function parameters:
+// Matrix( XR, YR, ZR, XT, YT, ZT, XS, YS, ZS );
+
+OBJECT
+      MATRIX_SHIELD_MIRROR_BACK: // Mirror Shield Matrix
+          Matrix( 0, 0, 182, 552, 0, -50, 1, 1, 1 );
+
+      MATRIX_SHIELD_HERO_BACK: // Hero Shield Matrix
+          Matrix( 0, 0, 182, 552, 0, 0, 1, 1, 1 );
+
+      MATRIX_SWORD_BACK_A: // Kokiri / Gilded Hilt Matrix
+          Matrix( 0, 0, 0, -578, -221, -32, 1, 1, 1 );
+
+      MATRIX_SWORD_BACK_B: // Razor Hilt Matrix
+          Matrix( 0, 0, 0, -480, -240, -14, 1, 1, 1 );
+
+      DL_SHIELD_HERO_BACK: // Rotated Hero's Shield
+          CallMatrix( MATRIX_SHIELD_HERO_BACK );
+          CallList( DL_SHIELD_HERO );
+
+      DL_SHIELD_MIRROR_BACK: // Rotated Mirror Shield
+          CallMatrix( MATRIX_SHIELD_MIRROR_BACK );
+          CallList( DL_SHIELD_MIRROR );
+
+      DL_SWORD_KOKIRI_SHEATHED: // Sheathed Kokiri Sword
+          CallMatrix( MATRIX_SWORD_BACK_A );
+          CallList( GK_HILT_KOKIRI );
+          PopMatrix( 1 );
+          CallList( DL_SHEATH_KOKIRI );
+
+      DL_SWORD_RAZOR_SHEATHED: // Sheathed Razor Sword
+          CallMatrix( MATRIX_SWORD_BACK_B );
+          CallList( GK_HILT_RAZOR );
+          PopMatrix( 1 );
+          CallList( DL_SHEATH_RAZOR );
+
+      DL_SWORD_GILDED_SHEATHED: // Sheathed Gilded Sword
+          CallMatrix( MATRIX_SWORD_BACK_A );
+          CallList( DL_HILT_GILDED );
+          PopMatrix( 1 );
+          CallList( DL_SHEATH_GILDED );
+
+      DL_LFIST_KOKIRI_SWORD: // Left Fist + Kokiri Sword
+        CallList( GK_HILT_KOKIRI );
+        CallList( GK_BLADE_KOKIRI );
+        CallList( DL_LFIST );
+
+      DL_LFIST_RAZOR_SWORD: // Left Fist + Razor Sword
+        CallList( GK_HILT_RAZOR );
+        CallList( GK_BLADE_RAZOR );
+        CallList( DL_LFIST );
+
+      DL_LFIST_GILDED_SWORD: // Left Fist + Gilded Sword
+        CallList( DL_HILT_GILDED );
+        CallList( DL_BLADE_GILDED );
+        CallList( DL_LFIST );
+
+      DL_LFIST_GFSWORD_SWORD: // Left Fist + Great Fairy's Sword
+        CallList( DL_BLADE_GFSWORD );
+        CallList( DL_LFIST );
+
+      DL_RFIST_SHIELD_HERO: // Right Fist + Hero's Shield
+            CallList( DL_SHIELD_HERO );
+            CallList( DL_RFIST );
+
+      DL_RFIST_SHIELD_MIRROR: // Right Fist + Mirror Shield
+            CallList( DL_SHIELD_MIRROR );
+            CallList( DL_RFIST );
+
+      DL_RFIST_HOOKSHOT: // Right Fist + Hookshot
+            CallList( DL_HOOKSHOT );
+            CallList( DL_RFIST );
+
+      DL_RFIST_BOW: // Right Fist + Bow
+            CallList( DL_BOW );
+            CallList( DL_RFIST );
+
+      DL_RHAND_OCARINA_TIME:
+        CallList( DL_OCARINA_TIME );
+        CallList( DL_RHAND );
+
+      DL_FPS_RARM_HOOKSHOT:
+            CallList( DL_HOOKSHOT );
+            CallList( DL_FPS_RIGHT_ARM );
+
+      DL_FPS_RARM_BOW:
+            CallList( DL_BOW );
+            CallList( DL_FPS_RIGHT_ARM );
+END
+
+REPOINT
+      GoTo(VROM_CODE+0x11A55C);
+      Write32(DL_WAIST);                   // Waist
+      Write32(DL_WAIST);
+      Write32(DL_RFIST_SHIELD_HERO);       // Right Fist + Hero's Shield
+      Write32(DL_RFIST_SHIELD_HERO);
+      Write32(DL_RFIST_SHIELD_MIRROR);     // Right Fist + Mirror Shield
+      Write32(DL_RFIST_SHIELD_MIRROR);
+      GoTo(0x00C565EC);
+      Write32(DL_SHIELD_HERO_BACK);        // Rotated Hero's Shield
+      Write32(DL_SHIELD_HERO_BACK);
+      Write32(DL_SHIELD_MIRROR_BACK);      // Rotated Mirror Shield
+      Write32(DL_SHIELD_MIRROR_BACK);
+      Write32(DL_SWORD_KOKIRI_SHEATHED);   // Sheathed Kokiri Sword
+      Write32(DL_SWORD_KOKIRI_SHEATHED);
+      Write32(DL_SWORD_RAZOR_SHEATHED);   // Sheathed Razor Sword
+      Write32(DL_SWORD_RAZOR_SHEATHED);
+      Write32(DL_SWORD_GILDED_SHEATHED);   // Sheathed Gilded Sword
+      Write32(DL_SWORD_GILDED_SHEATHED);
+      Write32(DL_SHEATH_KOKIRI);           // Kokiri Sword Sheath
+      Write32(DL_SHEATH_KOKIRI);
+      Write32(DL_SHEATH_RAZOR);            // Razor Sword Sheath
+      Write32(DL_SHEATH_RAZOR);
+      Write32(DL_SHEATH_GILDED);           // Gilded Sword Sheath
+      Write32(DL_SHEATH_GILDED);
+      GoTo(0x00C5664C);                    // Left Fist + Great Fairy's Sword
+      Write32(DL_LFIST_GFSWORD_SWORD);
+      Write32(DL_LFIST_GFSWORD_SWORD);
+      GoTo(0x00C56674);                    // Left Hand
+      Write32(DL_LHAND);
+      Write32(DL_LHAND);
+      GoTo(0x00C5669C);                    // Left Fist
+      Write32(DL_LFIST);
+      Write32(DL_LFIST);
+      GoTo(0x00C566CC);                    // Left Fist + Kokiri Sword
+      Write32(DL_LFIST_KOKIRI_SWORD);
+      Write32(DL_LFIST_KOKIRI_SWORD);
+      GoTo(0x00C566D4);                    // Left Fist + Razor Sword
+      Write32(DL_LFIST_RAZOR_SWORD);
+      Write32(DL_LFIST_RAZOR_SWORD);
+      GoTo(0x00C566DC);                    // Left Fist + Gilded Sword
+      Write32(DL_LFIST_GILDED_SWORD);
+      Write32(DL_LFIST_GILDED_SWORD);
+      GoTo(0x00C56704);                    // Right Hand
+      Write32(DL_RHAND);
+      Write32(DL_RHAND);
+      GoTo(0x00C5672C);                    // Right Fist
+      Write32(DL_RFIST);
+      Write32(DL_RFIST);
+      GoTo(0x00C56754);                    // Right Fist + Hero's Bow
+      Write32(DL_RFIST_BOW);
+      Write32(DL_RFIST_BOW);
+      GoTo(0x00C5677C);                    // Right Hand + Ocarina of Time
+      Write32(DL_RHAND_OCARINA_TIME);
+      Write32(DL_RHAND_OCARINA_TIME);
+      GoTo(0x00C567A4);                    // Right Fist + Hookshot
+      Write32(DL_RFIST_HOOKSHOT);
+      Write32(DL_RFIST_HOOKSHOT);
+      GoTo(0x00C567CC);                    // Outstreched Left Hand (for holding bottles)
+      Write32(DL_LHAND_BOTTLE);
+      Write32(DL_LHAND_BOTTLE);
+      GoTo(0x00C567F8);                    // Left Fist
+      Write32(DL_LFIST);
+      GoTo(0x00C5680C);                    // Right Shoulder
+      Write32(DL_RSHOULDER);
+      GoTo(0x00C56820);                    // FPS Right Arm + Hero's Bow
+      Write32(DL_FPS_RARM_BOW);
+      GoTo(0x00C56834);                    // FPS Right Arm + Hookshot
+      Write32(DL_FPS_RARM_HOOKSHOT);
+      GoTo(0x00C572D4);                    // Hero's Bow String
+      Write32(DL_BOW_STRING);
+
+      // Hookshot Spike
+      GoTo(0x00D3BC4E);
+      Hi32(DL_HOOKSHOT_SPIKE);
+      GoTo(0x00D3BC52);
+      Lo32(DL_HOOKSHOT_SPIKE);
+END

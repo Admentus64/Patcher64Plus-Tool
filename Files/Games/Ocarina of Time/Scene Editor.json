@@ -4067,7 +4067,7 @@
 			"value"	: "FF"
 		} ] ]
 	}, {
-		"name"		: "Saria",
+		"name"		: "Saria (Cutscene)",
 		"id"		: "00C9",
 		"type"		: "Cutscene",
 		"band"		: [ "FFFF" ],
@@ -4085,7 +4085,7 @@
 			"value"	: "5"
 		} ] ]
 	}, {
-		"name"		: "Gorons",
+		"name"		: "Goron (Cutscene)",
 		"id"		: "00CA",
 		"type"		: "Cutscene",
 		"band"		: [ "FFFF" ],
@@ -5716,7 +5716,7 @@
 		}, {
 		} ] ]
 	}, {
-		"name"		: "Boss Carpenter",
+		"name"		: "Master Craftsman",
 		"id"		: "0132",
 		"default"	: "FFFF",
 		"type"		: "NPC"
@@ -6081,7 +6081,7 @@
 			"value"	: "FF"
 		} ] ]
 	}, {
-		"name"		: "Gorons",
+		"name"		: "Goron 2",
 		"id"		: "0152",
 		"type"		: "Unused",
 		"band"		: [ "000F", "00F0", "3F00" ],
@@ -6629,7 +6629,7 @@
 			"name"	: "Little Old Lady",
 			"value"	: "8"
 		}, {
-			"name"	: "Singing Carpenter Boss",
+			"name"	: "Singing Master Craftsman",
 			"value"	: "9"
 		}, {
 			"name"	: "Singing Carpenter #1",
@@ -7342,7 +7342,7 @@
 			"value"	: "8"
 		} ] ]
 	}, {
-		"name"		: "Gorons",
+		"name"		: "Goron",
 		"id"		: "01AE",
 		"type"		: "NPC",
 		"band"		: [ "001F", "FC00", "03E0" ],
@@ -8257,7 +8257,7 @@
 		"id"		: "0043",
 		"type"		: "Unused"
 	}, {
-		"name"		: "Carpenter's Boss's Wife (Early)",
+		"name"		: "Master Craftsman's Wife (Early)",
 		"id"		: "0044",
 		"type"		: "Unused"
 	}, {
@@ -8653,7 +8653,7 @@
 	}, {
 		"name"		: "Music Notes",
 		"id"		: "00B6",
-		"type"		: "Unused"
+		"type"		: "Model"
 	}, {
 		"name"		: "Recovery Heart",
 		"id"		: "00B7",
@@ -9023,7 +9023,7 @@
 		"id"		: "0114",
 		"type"		: "Enemy"
 	}, {
-		"name"		: "Carpenter Boss' Wife",
+		"name"		: "Master Craftsman's Wife",
 		"id"		: "0115",
 		"type"		: "NPC"
 	}, {
@@ -9066,7 +9066,7 @@
 		"id"		: "011F",
 		"type"		: "Object"
 	}, {
-		"name"		: "Carpenter Boss",
+		"name"		: "Master Craftsman",
 		"id"		: "0121",
 		"type"		: "NPC"
 	}, {

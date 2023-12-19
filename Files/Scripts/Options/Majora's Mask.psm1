@@ -24,12 +24,6 @@
 #==============================================================================================================================================================================================
 function PatchOptions() {
     
-    # TEXT COMMANDS FIX #
-
-	if (IsChecked $Redux.Restore.TextCommands) { ApplyPatch -Patch "Decompressed\Optional\text_commands.ppf" }
-
-
-
     # MODELS #
 
     if (IsDefault -Elem $Redux.Graphics.ChildModels -Not)   { PatchModel -Category "Child" -Name $Redux.Graphics.ChildModels.Text }
@@ -68,13 +62,19 @@ function PatchOptions() {
     elseif (IsIndex -Elem $Redux.Equipment.SpinAttack -Index 3)   { ApplyPatch -Patch "Decompressed\optional\no_quick_spin.ppf"                  }
     elseif (IsIndex -Elem $Redux.Equipment.SpinAttack -Index 4)   { ApplyPatch -Patch "Decompressed\optional\no_quick_spin_and_smaller_spin.ppf" }
 
+
+
+    # TEXT COMMANDS FIX #
+
+	if (IsChecked $Redux.Restore.TextCommands) { ApplyPatch -Patch "Decompressed\Optional\text_commands.ppf" }
+
 }
 
 
 
 #==============================================================================================================================================================================================
 function ByteOptions() {
-
+    
     # GAMEPLAY #
 
     if (IsChecked $Redux.Gameplay.FormItems) {
@@ -445,8 +445,10 @@ function ByteOptions() {
 
     # MUSIC #
 
-    PatchReplaceMusic -BankPointerTableStart "C77A60" -BankPointerTableEnd "C77B70" -PointerTableStart "C77B80" -PointerTableEnd "C78380" -SeqStart "46AF0" -SeqEnd "97F70"
-    PatchMuteMusic -SequenceTable "C77B80" -Sequence "46AF0" -Length 127
+    if (TestFile -Path $Paths.Music -Container) {
+        PatchReplaceMusic -BankPointerTableStart "C77A60" -BankPointerTableEnd "C77B70" -PointerTableStart "C77B80" -PointerTableEnd "C78380" -SeqStart "46AF0" -SeqEnd "97F70"
+        PatchMuteMusic -SequenceTable "C77B80" -Sequence "46AF0" -Length 127
+    }
 
     if (IsIndex -Elem $Redux.Music.FileSelect -Text $Redux.Music.FileSelect.default -Not) {
         foreach ($track in $Files.json.music.tracks) {
@@ -1704,16 +1706,7 @@ function CreateTabGraphics() {
     # GRAPHICS #
 
     CreateReduxGroup -Tag "Graphics" -Text "Graphics"
-    
-    if ($GamePatch.models -ne 0) {
-        CreateReduxRadioButton -Name "FilterAll"      -Column 1   -Max 5 -SaveTo "ModelFilter" -Text "All"       -Info "Don't filter any custom models" -Checked
-        CreateReduxRadioButton -Name "FilterLink"     -Column 1.3 -Max 5 -SaveTo "ModelFilter" -Text "Link"      -Info "Filter custom models by Link styled"
-        CreateReduxRadioButton -Name "FilterMale"     -Column 1.6 -Max 5 -SaveTo "ModelFilter" -Text "Male"      -Info "Filter custom models by male"                                                     
-        CreateReduxRadioButton -Name "FilterFemale"   -Column 1.9 -Max 5 -SaveTo "ModelFilter" -Text "Female"    -Info "Filter custom models by female"
-        CreateReduxRadioButton -Name "FilterNonHuman" -Column 2.3 -Max 5 -SaveTo "ModelFilter" -Text "Non-Human" -Info "Filter custom models by non-human"
-        CreateReduxComboBox    -Name "ChildModels"    -Text "Hylian Model" -Items (@("Original") + (LoadModelsList -Category "Child")) -Default "Original" -Info "Replace the Hylian model used for Link"
-    }
-    
+    if ($GamePatch.models -ne 0) { CreateReduxComboBox -Name "ChildModels" -Text "Hylian Model" -Items (@("Original") + (LoadModelsList -Category "Child")) -Default "Original" -Info "Replace the Hylian model used for Link" }
     CreateReduxCheckBox -Name "Widescreen"     -Text "16:9 Widescreen (Advanced)"   -Info "Patches true 16:9 widescreen with the HUD pushed to the edges.`n`nKnown Issue: Stretched Notebook screen" -Safe -Native -Credits "Granny Story images by Nerrel, Widescreen Patch by gamemasterplc, enhanced and ported by GhostlyDark" -Base 2
     CreateReduxCheckBox -Name "WidescreenAlt"  -Text "16:9 Widescreen (Simplified)" -Info "Apply 16:9 Widescreen adjusted backgrounds and textures (as well as 16:9 Widescreen for the Wii VC)"                    -Credits "Aspect Ratio Fix by Admentus and 16:9 backgrounds by GhostlyDark & ShadowOne333" -Link $Redux.Graphics.Widescreen
     CreateReduxCheckBox -Name "ExtendedDraw"   -Text "Extended Draw Distance"       -Info "Increases the game's draw distance for objects`nDoes not work on all objects"                                     -Safe -Credits "Admentus"

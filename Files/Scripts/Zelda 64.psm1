@@ -396,16 +396,16 @@ function GetMMInstrumentID([string]$SFX) {
 #==============================================================================================================================================================================================
 function PatchMuteMusic([string]$SequenceTable, [string]$Sequence, [byte]$Length) {
     
-    if ( (IsChecked $Redux.Music.MuteSelected -Not) -and (IsChecked $Redux.Music.MuteAreaOnly -Not) -and (IsChecked $Redux.Music.MuteAll -Not) ) { return }
+    if ( (IsChecked $Redux.MuteMusic.MuteSelected -Not) -and (IsChecked $Redux.MuteMusic.MuteAreaOnly -Not) -and (IsChecked $Redux.MuteMusic.MuteAll -Not) ) { return }
 
     UpdateStatusLabel "Muting Music Sequences"
 
     $include = $force = @()
     foreach ($i in 0..($Files.json.music.tracks.Count-1)) {
-        if ( ( (!(IsSet $GameSettings["ReplaceMusic"][$Files.json.music.tracks[$i].title]) -or $GameSettings["ReplaceMusic"][$Files.json.music.tracks[$i].title] -eq "Default") -and (IsChecked $Redux.Music.EnableReplace) ) -or (IsChecked -Elem $Redux.Music.EnableReplace -Not) ) {
-            if     (IsChecked $Redux.Music.MuteSelected)   { if ($Redux.MuteMusic.Tracks.GetSelected($i))       { foreach ($id in $Files.json.music.tracks[$i].id) { $include += (GetDecimal $id) }; foreach ($id in $Files.json.music.tracks[$i].muteId) { $include += (GetDecimal $id) } } }
-            elseif (IsChecked $Redux.Music.MuteAreaOnly)   { if (!(IsSet $Files.json.music.tracks[$i].event))   { foreach ($id in $Files.json.music.tracks[$i].id) { $include += (GetDecimal $id) }; foreach ($id in $Files.json.music.tracks[$i].muteId) { $include += (GetDecimal $id) } } }
-            elseif (IsChecked $Redux.Music.MuteAll)                                                             { foreach ($id in $Files.json.music.tracks[$i].id) { $include += (GetDecimal $id) }; foreach ($id in $Files.json.music.tracks[$i].muteId) { $include += (GetDecimal $id) } }
+        if ( ( (!(IsSet $GameSettings["ReplaceMusic"][$Files.json.music.tracks[$i].title]) -or $GameSettings["ReplaceMusic"][$Files.json.music.tracks[$i].title] -eq "Default") -and (IsChecked $Redux.ReplaceMusic.EnableReplace) ) -or (IsChecked -Elem $Redux.ReplaceMusic.EnableReplace -Not) ) {
+            if     (IsChecked $Redux.MuteMusic.MuteSelected)   { if ($Redux.MuteMusic.Tracks.GetSelected($i))       { foreach ($id in $Files.json.music.tracks[$i].id) { $include += (GetDecimal $id) }; foreach ($id in $Files.json.music.tracks[$i].muteId) { $include += (GetDecimal $id) } } }
+            elseif (IsChecked $Redux.MuteMusic.MuteAreaOnly)   { if (!(IsSet $Files.json.music.tracks[$i].event))   { foreach ($id in $Files.json.music.tracks[$i].id) { $include += (GetDecimal $id) }; foreach ($id in $Files.json.music.tracks[$i].muteId) { $include += (GetDecimal $id) } } }
+            elseif (IsChecked $Redux.MuteMusic.MuteAll)                                                             { foreach ($id in $Files.json.music.tracks[$i].id) { $include += (GetDecimal $id) }; foreach ($id in $Files.json.music.tracks[$i].muteId) { $include += (GetDecimal $id) } }
         }
     }
 
@@ -420,7 +420,7 @@ function PatchMuteMusic([string]$SequenceTable, [string]$Sequence, [byte]$Length
 #==============================================================================================================================================================================================
 function PatchReplaceMusic([string]$BankPointerTableStart, [string]$BankPointerTableEnd, [string]$PointerTableStart, [string]$PointerTableEnd, [string]$SeqStart, [string]$SeqEnd) {
 
-    if (IsChecked -Elem $Redux.Music.EnableReplace -Not) { return }
+    if (IsChecked -Elem $Redux.ReplaceMusic.EnableReplace -Not) { return }
 
     UpdateStatusLabel "Patching Music Sequences"
 
@@ -501,37 +501,40 @@ function MusicOptions([string]$Default="File Select") {
 
     # MUSIC #
 
-    CreateReduxGroup       -Tag "Music"          -All -Text "Music"
-    CreateReduxRadioButton -Name "EnableAll"     -All -Max 4 -SaveTo "Mute" -Text "Enable All Music"     -Info "Keep the music as it is"                                  -Checked -Credits "Admentus"
-    CreateReduxRadioButton -Name "MuteSelected"  -All -Max 4 -SaveTo "Mute" -Text "Mute Selected Music"  -Info "Mute the selected music from the list in the game"                 -Credits "Admentus"
-    CreateReduxRadioButton -Name "MuteAreaOnly"  -All -Max 4 -SaveTo "Mute" -Text "Mute Area Music Only" -Info "Mute only the area music in the game"                              -Credits "Admentus"
-    CreateReduxRadioButton -Name "MuteAll"       -All -Max 4 -SaveTo "Mute" -Text "Mute All Music"       -Info "Mute all the music in the game"                                    -Credits "Admentus"
-    CreateReduxComboBox    -Name "FileSelect"    -All -Items $tracks        -Text "File Select Theme"    -Info "Set the music theme for the File Select menu"    -Default $Default -Credits "Admentus"
-    CreateReduxComboBox    -Name "SelectReplace" -All -Items $tracks        -Text "Select Replace Track" -Info "Select the ingame track that should be replaced" -NoDefault
-    CreateReduxCheckBox    -Name "EnableReplace" -All                       -Text "Enable Replace Music" -Info "Enables patching in music replacements"
-    $Redux.Music.Reset = CreateReduxButton       -All                       -Text "Reset Replacements"
+    CreateReduxGroup    -Tag "Music"       -All -Text "Music"
+    CreateReduxComboBox -Name "FileSelect" -All -Items $tracks -Text "File Select Theme" -Info "Set the music theme for the File Select menu" -Default $Default -Credits "Admentus"
+    if (TestFile -Path $Paths.Music -Container) { $Redux.Music.Reset = CreateReduxButton -All -Text "Reset Replacements" }
+
+
+    if (!(TestFile -Path $Paths.Music -Container)) { return }
 
 
 
     # MUTE MUSIC #
 
-    CreateReduxGroup   -Tag  "MuteMusic" -All -Text "Mute Music Tracks"   -Columns 2   -Height 8
-    CreateReduxListBox -Name "Tracks"    -All -Items $tracks -MultiSelect -Columns 1.9 -Rows 4.8
+    CreateReduxGroup       -Tag  "MuteMusic"    -All -Text "Mute Music Tracks" -Height 7
+    CreateReduxRadioButton -Name "EnableAll"    -All -Max 4 -SaveTo "Mute" -Text "Enable All Music"     -Info "Keep the music as it is"                                  -Checked -Credits "Admentus"
+    CreateReduxRadioButton -Name "MuteSelected" -All -Max 4 -SaveTo "Mute" -Text "Mute Selected Music"  -Info "Mute the selected music from the list in the game"                 -Credits "Admentus"
+    CreateReduxRadioButton -Name "MuteAreaOnly" -All -Max 4 -SaveTo "Mute" -Text "Mute Area Music Only" -Info "Mute only the area music in the game"                              -Credits "Admentus"
+    CreateReduxRadioButton -Name "MuteAll"      -All -Max 4 -SaveTo "Mute" -Text "Mute All Music"       -Info "Mute all the music in the game"                                    -Credits "Admentus"
+    CreateReduxListBox     -Name "Tracks"       -All -Items $tracks -Multicolumn -MultiSelect -Columns 4 -Rows 4 -ItemWidth 200
 
-    EnableForm -Form $Redux.MuteMusic.Tracks -Enable $Redux.Music.MuteSelected.Checked
-    $Redux.Music.MuteSelected.Add_CheckedChanged({ EnableForm -Form $Redux.MuteMusic.Tracks -Enable $this.Checked })
+    EnableForm -Form $Redux.MuteMusic.Tracks -Enable $Redux.MuteMusic.MuteSelected.Checked
+    $Redux.MuteMusic.MuteSelected.Add_CheckedChanged({ EnableForm -Form $Redux.MuteMusic.Tracks -Enable $this.Checked })
 
 
 
     # REPLACE MUSIC #
 
-                                 CreateReduxGroup   -Tag  "ReplaceMusic" -All -Text "Replace Music Tracks" -Columns 2
-    $Redux.ReplaceMusic.Tracks = CreateReduxListBox                      -All                              -Columns 1.9 -Rows 4.8
+                                 CreateReduxGroup    -Tag  "ReplaceMusic"  -All -Text "Replace Music Tracks" -Height 9
+                                 CreateReduxCheckBox -Name "EnableReplace" -All                -Text "Enable Replace Music" -Info "Enables patching in music replacements"
+                                 CreateReduxComboBox -Name "SelectReplace" -All -Items $tracks -Text "Select Replace Track" -Info "Select the ingame track that should be replaced" -NoDefault
+    $Redux.ReplaceMusic.Tracks = CreateReduxListBox                        -All -Multicolumn -Columns 4 -Rows 4 -Row 2 -Column 1 -ItemWidth 200
 
-    EnableElem -Elem @($Redux.ReplaceMusic.Tracks, $Redux.Music.SelectReplace) -Active $Redux.Music.EnableReplace.Checked
-    $Redux.Music.EnableReplace.Add_CheckedChanged({ EnableElem -Elem @($Redux.ReplaceMusic.Tracks, $Redux.Music.SelectReplace) -Active $this.Checked })
+    EnableElem -Elem @($Redux.ReplaceMusic.Tracks, $Redux.ReplaceMusic.SelectReplace) -Active $Redux.ReplaceMusic.EnableReplace.Checked
+    $Redux.ReplaceMusic.EnableReplace.Add_CheckedChanged({ EnableElem -Elem @($Redux.ReplaceMusic.Tracks, $Redux.ReplaceMusic.SelectReplace) -Active $this.Checked })
 
-    $Redux.Music.Preview = CreateReduxButton -All -Text "Start Music Preview" -Height 50 -Row 7 -Column 2
+    $Redux.Music.Preview = CreateReduxButton -All -Text "Start Music Preview" -Height 50 -Row 8 -Column 2
     $Redux.Music.AuthorName = CreateLabel -X 10 -Y $Redux.Music.Preview.Top                  -Text "Nintendo" -Font $Fonts.Medium
     $Redux.Music.AuthorLink = CreateLabel -X 10 -Y ($Redux.Music.Preview.Top + (DPISize 30)) -Text "URL Link" -Font $Fonts.Medium
     
@@ -557,8 +560,8 @@ function MusicOptions([string]$Default="File Select") {
 
     # PREVIEW #
 
-    $Redux.Music.SelectReplace.Add_SelectedIndexChanged( { GetReplacementTracks })
-    $Redux.ReplaceMusic.Tracks.Add_SelectedIndexChanged( { $GameSettings["ReplaceMusic"][$Redux.Music.SelectReplace.text] = $Redux.ReplaceMusic.Tracks.text } )
+    $Redux.ReplaceMusic.SelectReplace.Add_SelectedIndexChanged( { GetReplacementTracks })
+    $Redux.ReplaceMusic.Tracks.Add_SelectedIndexChanged( { $GameSettings["ReplaceMusic"][$Redux.ReplaceMusic.SelectReplace.text] = $Redux.ReplaceMusic.Tracks.text } )
 
     $Redux.Music.Preview.BackColor = "Green"
     $Redux.Music.Preview.ForeColor = "White"
@@ -675,7 +678,7 @@ function GetReplacementTracks() {
     $Redux.ReplaceMusic.Tracks.items.Clear()
     $items = @()
     foreach ($track in $Files.json.music.tracks)  {
-        if ($track.title -eq $Redux.Music.SelectReplace.text) {
+        if ($track.title -eq $Redux.ReplaceMusic.SelectReplace.text) {
             foreach ($item in Get-ChildItem -LiteralPath $Paths.Music -Recurse) {
                 if ($item.extension -eq ".zseq" -or $item.extension -eq ".seq") {
                     if ($item.length -le (GetDecimal $track.size) ) {
@@ -733,8 +736,8 @@ function GetReplacementTracks() {
     $Redux.ReplaceMusic.Tracks.Sorted = $False
     $Redux.ReplaceMusic.Tracks.Items.Insert(0, "Default")
 
-    if (IsSet $GameSettings["ReplaceMusic"][$Redux.Music.SelectReplace.text])   { $Redux.ReplaceMusic.Tracks.text = $GameSettings["ReplaceMusic"][$Redux.Music.SelectReplace.text] }
-    else                                                                        { $Redux.ReplaceMusic.Tracks.selectedIndex = 0 }
+    if (IsSet $GameSettings["ReplaceMusic"][$Redux.ReplaceMusic.SelectReplace.text])   { $Redux.ReplaceMusic.Tracks.text = $GameSettings["ReplaceMusic"][$Redux.Music.SelectReplace.text] }
+    else                                                                               { $Redux.ReplaceMusic.Tracks.selectedIndex = 0 }
 
 }
 
@@ -774,6 +777,7 @@ function ShowHudPreview([switch]$IsOoT) {
     if ($Redux.UI.Hearts       -ne $null)   { ShowPreviewImage -Option $Redux.UI.Hearts.Text       -Path "HUD\Hearts"        -Box $Redux.Previews.Hearts       }
     if ($Redux.UI.Rupees       -ne $null)   { ShowPreviewImage -Option $Redux.UI.Rupees.Text       -Path "HUD\Rupees"        -Box $Redux.Previews.Rupees       }
     if ($Redux.UI.CurrentFloor -ne $null)   { ShowPreviewImage -Option $Redux.UI.CurrentFloor.Text -Path "HUD\Current Floor" -Box $Redux.Previews.CurrentFloor }
+    if ($Redux.UI.BossFloor    -ne $null)   { ShowPreviewImage -Option $Redux.UI.BossFloor.Text    -Path "HUD\Boss Floor"    -Box $Redux.Previews.BossFloor    }
 
     if       ( ( (IsChecked $Redux.UI.DungeonKeys)      -or (IsChecked $Redux.UI.HUD) )      -and  $IsOoT)   { $file = "Majora's Mask"   }
     elseif   ( ( (IsChecked $Redux.UI.DungeonKeys)      -or (IsChecked $Redux.UI.HUD) )      -and !$IsOoT)   { $file = "Ocarina of Time" }
@@ -960,107 +964,19 @@ function ChangeModelsSelection() {
         })
     }
 
-    if (IsSet $Redux.Graphics.FilterAll) {
-        $Redux.Graphics.FilterAll.Add_CheckedChanged({
-            if ($this.checked) { FilterModelsSelection }
-        } )
+    if (IsSet $Redux.Graphics.ChildModels) {
+        $lastIndex = $Redux.Graphics.ChildModels.SelectedIndex
+        $Redux.Graphics.ChildModels.Items.Clear()
+        $Redux.Graphics.ChildModels.Items.AddRange(@("Original (default)") + (LoadModelsList -Category "Child"))
+        if ($lastIndex -le $Redux.Graphics.ChildModels.Items.Count)   { $Redux.Graphics.ChildModels.SelectedIndex = $lastIndex }
+        else                                                          { $Redux.Graphics.ChildModels.SelectedIndex = 0          }
     }
-
-    if (IsSet $Redux.Graphics.FilterLink) {
-        $Redux.Graphics.FilterLink.Add_CheckedChanged( {
-            if ($this.checked) { FilterModelsSelection -Filter $this.Label }
-        } )
-        if (IsChecked $Redux.Graphics.FilterLink) { FilterModelsSelection -Filter $Redux.Graphics.FilterLink.Label }
-    }
-
-    if (IsSet $Redux.Graphics.FilterMale) {
-        $Redux.Graphics.FilterMale.Add_CheckedChanged( {
-            if ($this.checked) { FilterModelsSelection -Filter $this.Label }
-        } )
-        if (IsChecked $Redux.Graphics.FilterMale) { FilterModelsSelection -Filter $Redux.Graphics.FilterMale.Label }
-    }
-
-    if (IsSet $Redux.Graphics.FilterFemale) {
-        $Redux.Graphics.FilterFemale.Add_CheckedChanged( {
-            if ($this.checked) { FilterModelsSelection -Filter $this.Label }
-        } )
-        if (IsChecked $Redux.Graphics.FilterFemale) { FilterModelsSelection -Filter $Redux.Graphics.FilterFemale.Label }
-    }
-
-    if (IsSet $Redux.Graphics.FilterNonHuman) {
-        $Redux.Graphics.FilterNonHuman.Add_CheckedChanged( {
-            if ($this.checked) { FilterModelsSelection -Filter $this.Label }
-        } )
-        if (IsChecked $Redux.Graphics.FilterNonHuman) { FilterModelsSelection -Filter $Redux.Graphics.FilterNonHuman.Label }
-    }
-
-}
-
-
-
-#==============================================================================================================================================================================================
-function FilterModelsSelection([string]$Filter="") {
-    
-    if ($Filter -eq "") {
-        if (IsSet $Redux.Graphics.ChildModels) {
-            $lastIndex = $Redux.Graphics.ChildModels.SelectedIndex
-            $Redux.Graphics.ChildModels.Items.Clear()
-            $Redux.Graphics.ChildModels.Items.AddRange(@("Original (default)") + (LoadModelsList -Category "Child"))
-            if ($lastIndex -le $Redux.Graphics.ChildModels.Items.Count)   { $Redux.Graphics.ChildModels.SelectedIndex = $lastIndex }
-            else                                                          { $Redux.Graphics.ChildModels.SelectedIndex = 0          }
-        }
-
-        if (IsSet $Redux.Graphics.AdultModels) {
-            $lastIndex = $Redux.Graphics.AdultModels.SelectedIndex
-            $Redux.Graphics.AdultModels.Items.Clear()
-            $Redux.Graphics.AdultModels.Items.AddRange(@("Original (default)") + (LoadModelsList -Category "Adult"))
-            if ($lastIndex -le $Redux.Graphics.AdultModels.Items.Count)   { $Redux.Graphics.AdultModels.SelectedIndex = $lastIndex }
-            else                                                          { $Redux.Graphics.AdultModels.SelectedIndex = 0          }
-        }
-    }
-
-    else {
-        if (!(IsSet $Files.json.models)) {return }
-
-        if (IsSet $Redux.Graphics.ChildModels) {
-            $models         = @("Original (default)") + (LoadModelsList -Category "Child")
-            $filteredModels = @()
-
-            :outer foreach ($model in $models) {
-                foreach ($entry in $Files.json.models.child) {
-                    if ($model.replace(" (default)", "") -eq $entry.name) {
-                        if ($entry.filter -eq $Filter) { $filteredModels += $model }
-                        continue outer
-                    }
-                }
-            }
-
-            $lastIndex = $Redux.Graphics.ChildModels.SelectedIndex
-            $Redux.Graphics.ChildModels.Items.Clear()
-            $Redux.Graphics.ChildModels.Items.AddRange($filteredModels)
-            if ($lastIndex -le $Redux.Graphics.ChildModels.Items.Count)   { $Redux.Graphics.ChildModels.SelectedIndex = $lastIndex }
-            else                                                          { $Redux.Graphics.ChildModels.SelectedIndex = 0          }
-        }
-
-        if (IsSet $Redux.Graphics.AdultModels) {
-            $models         =  @("Original (default)") + (LoadModelsList -Category "Adult")
-            $filteredModels = @()
-
-            :outer foreach ($model in $models) {
-                foreach ($entry in $Files.json.models.adult) {
-                    if ($model.replace(" (default)", "") -eq $entry.name) {
-                        if ($entry.filter -eq $Filter) { $filteredModels += $model }
-                        continue outer
-                    }
-                }
-            }
-
-            $lastIndex = $Redux.Graphics.AdultModels.SelectedIndex
-            $Redux.Graphics.AdultModels.Items.Clear()
-            $Redux.Graphics.AdultModels.Items.AddRange($filteredModels)
-            if ($lastIndex -le $Redux.Graphics.AdultModels.Items.Count)   { $Redux.Graphics.AdultModels.SelectedIndex = $lastIndex }
-            else                                                          { $Redux.Graphics.AdultModels.SelectedIndex = 0          }
-        }
+    elseif (IsSet $Redux.Graphics.AdultModels) {
+        $lastIndex = $Redux.Graphics.AdultModels.SelectedIndex
+        $Redux.Graphics.AdultModels.Items.Clear()
+        $Redux.Graphics.AdultModels.Items.AddRange(@("Original (default)") + (LoadModelsList -Category "Adult"))
+        if ($lastIndex -le $Redux.Graphics.AdultModels.Items.Count)   { $Redux.Graphics.AdultModels.SelectedIndex = $lastIndex }
+        else                                                          { $Redux.Graphics.AdultModels.SelectedIndex = 0          }
     }
 
 }

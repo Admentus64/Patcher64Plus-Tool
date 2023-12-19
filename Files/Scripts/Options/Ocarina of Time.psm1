@@ -28,7 +28,7 @@ function PatchOptions() {
 	
 	# GAMEPLAY #
 	
-	if (IsChecked $Redux.Gameplay.AgileSpeed)                { ApplyPatch -Patch "Decompressed\Optional\agile_speed_settings.ppf" }
+	if (IsChecked $Redux.Gameplay.RunFaster)                { ApplyPatch -Patch "Decompressed\Optional\run_faster.ppf" }
     
 
 
@@ -435,13 +435,15 @@ function ByteOptions() {
     # MUSIC #
 
     if ($GamePatch.base -le 3) {
-        if (IsChecked $Redux.Restore.FireTemple) {
-            PatchReplaceMusic -bankPointerTableStart "B899EC" -BankPointerTableEnd "B89AD0" -PointerTableStart "B89AE0" -PointerTableEnd "B8A1C0" -SeqStart "39130" -SeqEnd "88BB0"
-            PatchMuteMusic -SequenceTable "B89AE0" -Sequence "29DE0" -Length 108
-        }
-        else {
-            PatchReplaceMusic -bankPointerTableStart "B899EC" -BankPointerTableEnd "B89AD0" -PointerTableStart "B89AE0" -PointerTableEnd "B8A1C0" -SeqStart "29DE0" -SeqEnd "79470"
-            PatchMuteMusic -SequenceTable "B89AE0" -Sequence "29DE0" -Length 108
+        if (TestFile -Path $Paths.Music -Container) {
+            if (IsChecked $Redux.Restore.FireTemple) {
+                PatchReplaceMusic -bankPointerTableStart "B899EC" -BankPointerTableEnd "B89AD0" -PointerTableStart "B89AE0" -PointerTableEnd "B8A1C0" -SeqStart "39130" -SeqEnd "88BB0"
+                PatchMuteMusic -SequenceTable "B89AE0" -Sequence "29DE0" -Length 108
+            }
+            else {
+                PatchReplaceMusic -bankPointerTableStart "B899EC" -BankPointerTableEnd "B89AD0" -PointerTableStart "B89AE0" -PointerTableEnd "B8A1C0" -SeqStart "29DE0" -SeqEnd "79470"
+                PatchMuteMusic -SequenceTable "B89AE0" -Sequence "29DE0" -Length 108
+            }
         }
 
         if (IsIndex -Elem $Redux.Music.FileSelect -Text $Redux.Music.FileSelect.default -Not) {
@@ -2403,7 +2405,7 @@ function CreateTabMain() {
     CreateReduxCheckBox -Name "PushbackAttackingWalls"                     -Text "Pushback Attacking Walls" -Info "Link is getting pushed back a bit when hitting the wall with the sword"                                                                                         -Credits "Admentus (ROM) & Aegiker (RAM)"
     CreateReduxCheckBox -Name "RemoveCrouchStab"                           -Text "Remove Crouch Stab"       -Info "The Crouch Stab move is removed"                                                                                                                                -Credits "Garo-Mastah"
     CreateReduxCheckBox -Name "RemoveQuickSpin"                            -Text "Remove Magic Quick Spin"  -Info "The magic Quick Spin Attack move is removed`nIt's a regular Quick Spin Attack now instead"                                                                      -Credits "Admentus & Three Pendants"
-    CreateReduxCheckBox -Name "AgileSpeed"                                 -Text "Feline Agility"           -Info "Faster run speed & longer jumps, made for Ikey's characters but works with anyone" -Warning "You may need to play a little more cautiously."                    -Credits "Ikey Ilex"
+    CreateReduxCheckBox -Name "RunFaster"                                  -Text "Run Faster"               -Info "Faster run speed & longer jumps"                                                                       -Warning "You may need to play a little more cautiously" -Credits "Ikey Ilex"
     CreateReduxCheckbox -Name "RemoveSpeedClamp"                           -Text "Remove Jump Speed Limit"  -Info "Removes the jumping speed limit just like in MM"                                                                                                                -Credits "Admentus (ROM) & Aegiker (RAM)"
     
 
@@ -2737,18 +2739,10 @@ function CreateTabGraphics() {
     # GRAPHICS #
 
     CreateReduxGroup -Tag  "Graphics" -Text "Graphics"
-
     if ($GamePatch.models -ne 0) {
-        CreateReduxRadioButton -Name "FilterAll"      -Column 1   -Max 5 -SaveTo "ModelFilter" -Text "All"       -Info "Don't filter any custom models" -Checked
-        CreateReduxRadioButton -Name "FilterLink"     -Column 1.3 -Max 5 -SaveTo "ModelFilter" -Text "Link"      -Info "Filter custom models by Link styled"
-        CreateReduxRadioButton -Name "FilterMale"     -Column 1.6 -Max 5 -SaveTo "ModelFilter" -Text "Male"      -Info "Filter custom models by male"                                                     
-        CreateReduxRadioButton -Name "FilterFemale"   -Column 1.9 -Max 5 -SaveTo "ModelFilter" -Text "Female"    -Info "Filter custom models by female"
-        CreateReduxRadioButton -Name "FilterNonHuman" -Column 2.3 -Max 5 -SaveTo "ModelFilter" -Text "Non-Human" -Info "Filter custom models by non-human"
-        if ($GamePatch.age -eq $null) { $Last.Row++; $Last.Column = 1 }
-        CreateReduxComboBox    -Name "ChildModels" -Child -Text "Child Model" -Items (@("Original") + (LoadModelsList -Category "Child")) -Default "Original" -Info "Replace the child model used for Link"
-        CreateReduxComboBox    -Name "AdultModels" -Adult -Text "Adult Model" -Items (@("Original") + (LoadModelsList -Category "Adult")) -Default "Original" -Info "Replace the adult model used for Link"
+        CreateReduxComboBox -Name "ChildModels" -Child -Text "Child Model" -Items (@("Original") + (LoadModelsList -Category "Child")) -Default "Original" -Info "Replace the child model used for Link"
+        CreateReduxComboBox -Name "AdultModels" -Adult -Text "Adult Model" -Items (@("Original") + (LoadModelsList -Category "Adult")) -Default "Original" -Info "Replace the adult model used for Link"
     }
-
     CreateReduxCheckBox -Name "EnhancedChildQuestModel" -Expose "Child Quest Classic" -Text "Enhanced Child Quest Model" -Info "Use an enhanced model instead for Child Quest with unique swords and shields" -Credits "Admentus"
 
     CreateReduxCheckBox -Name "Widescreen"                -Text "16:9 Widescreen (Advanced)"   -Info "Patch the game to be in true 16:9 widescreen with the HUD pushed to the edges"         -Safe -Native -Credits "Widescreen Patch by gamemasterplc, enhanced and ported by GhostlyDark"
