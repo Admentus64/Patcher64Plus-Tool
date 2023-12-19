@@ -1,6 +1,6 @@
 v23.0.7
 - Added MM Equipment + Hammer model
-- Integrated custom models & music
+- Integrated custom models
 - Removed a majority of all custom models and removed all custom music
 - Removed filters for custom models
 - Removed all code related to addons
