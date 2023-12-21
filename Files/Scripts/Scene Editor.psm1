@@ -2583,6 +2583,7 @@ function ShiftMapVtxData([int16]$Shift=0x10) {
                 $vtx = $i; break
             }
         }
+        if ($vtx -lt $meshEnd) { $vtx = $meshEnd }
 
         $skip = $blockDF = $False
         for ($i=$vtx; $i -lt $SceneEditor.MapArray.Count; $i+=4) {
@@ -5012,8 +5013,16 @@ function TestScenesFiles() {
 
 
 
-         AssertArrays -Array1 ([System.IO.File]::ReadAllBytes($Paths.Temp + "\scene\cutscenes.tbl") ) -Array2 ([System.IO.File]::ReadAllBytes($Paths.Base + "\Assert\cutscenes.tbl") ) -Message1 "Cutscenes table files not equal in size..." -Message2 "Assert cutscenes table files... "
-         AssertArrays -Array1 ([System.IO.File]::ReadAllBytes($Paths.Temp + "\scene\scenes.tbl") )    -Array2 ([System.IO.File]::ReadAllBytes($Paths.Base + "\Assert\scenes.tbl")    ) -Message1 "Scenes table files not equal in size... "   -Message2 "Assert scenes table files...    "
+        PrepareMap -Scene "Goron Shop" -Map 0 -Header 0
+        InsertObject -Silent -Name "Poacher's Saw"
+        InsertObject -Silent -Name "SOLD OUT"
+        SaveAndPatchLoadedScene
+        AssertSceneFiles
+
+
+
+        AssertArrays -Array1 ([System.IO.File]::ReadAllBytes($Paths.Temp + "\scene\cutscenes.tbl") ) -Array2 ([System.IO.File]::ReadAllBytes($Paths.Base + "\Assert\cutscenes.tbl") ) -Message1 "Cutscenes table files not equal in size..." -Message2 "Assert cutscenes table files... "
+        AssertArrays -Array1 ([System.IO.File]::ReadAllBytes($Paths.Temp + "\scene\scenes.tbl") )    -Array2 ([System.IO.File]::ReadAllBytes($Paths.Base + "\Assert\scenes.tbl")    ) -Message1 "Scenes table files not equal in size... "   -Message2 "Assert scenes table files...    "
     }
 
     if ($GameType.Mode -eq "Majora's Mask") {
