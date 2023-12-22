@@ -1424,9 +1424,14 @@ function CreatePresets() {
         BoxCheck $Redux.Other.FairyFountain
         BoxCheck $Redux.Other.OutOfBoundsGrotto
         BoxCheck $Redux.Other.OutOfBoundsRupee
-
-        if ($Redux.Graphics.Widescreen -eq $null) { BoxCheck $Redux.Graphics.WidescreenAlt } else { BoxCheck $Redux.Graphics.Widescreen }
         BoxCheck $Redux.Graphics.ExtendedDraw
+        
+        foreach ($option in $Redux.NativeOptions) {
+            if ($option.Label -eq "16:9 Widescreen (Advanced)") {
+                if ($Redux.NativeOptions[0].hidden) { BoxCheck $Redux.Graphics.WidescreenAlt } else { BoxCheck $Redux.Graphics.Widescreen }
+                break
+            }
+        }
 
         if ($Redux.Text.Restore        -ne $null)   { if ($Redux.Text.Restore.Enabled)          { BoxCheck $Redux.Text.Restore        } }
         if ($Redux.Text.AreaTitleCards -ne $null)   { if ($Redux.Text.AreaTitleCards.Enabled)   { BoxCheck $Redux.Text.AreaTitleCards } }

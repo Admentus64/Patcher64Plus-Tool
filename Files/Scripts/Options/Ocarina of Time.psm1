@@ -2293,11 +2293,17 @@ function CreatePresets() {
         BoxCheck $Redux.Fixes.RemoveFishingPiracy
         BoxCheck $Redux.Fixes.Boomerang
 
-        if ($Redux.Graphics.Widescreen -eq $null) { BoxCheck $Redux.Graphics.WidescreenAlt } else { BoxCheck $Redux.Graphics.Widescreen }
         BoxCheck $Redux.Graphics.ExtendedDraw
         BoxCheck $Redux.Graphics.ForceHiresModel
         BoxCheck $Redux.Graphics.HideDungeonIcon
 
+        foreach ($option in $Redux.NativeOptions) {
+            if ($option.Label -eq "16:9 Widescreen (Advanced)") {
+                if ($Redux.NativeOptions[0].hidden) { BoxCheck $Redux.Graphics.WidescreenAlt } else { BoxCheck $Redux.Graphics.Widescreen }
+                break
+            }
+        }
+        
         if ($Redux.Text.Speed2x             -ne $null)   { if ($Redux.Text.Speed2x.Enabled)                { BoxCheck $Redux.Text.Speed2x             } }
         if ($Redux.Text.Restore             -ne $null)   { if ($Redux.Text.Restore.Enabled)                { BoxCheck $Redux.Text.Restore             } }
         if ($Redux.Text.GoldSkulltula       -ne $null)   { if ($Redux.Text.GoldSkulltula.Enabled)          { BoxCheck $Redux.Text.GoldSkulltula       } }
