@@ -77,6 +77,11 @@ function ByteOptions() {
     
     # GAMEPLAY #
 
+    if (IsChecked $Redux.Gameplay.PermanentOwlSaves) {
+      ChangeBytes -Offset "BDB990" -Values "00" -Repeat 0xB
+      ChangeBytes -Offset "BDAA78" -Values "A240101426A446B80C051CC58E453CA0"
+    }
+
     if (IsChecked $Redux.Gameplay.FormItems) {
         ChangeBytes -Offset "C58950" -Values "01";             ChangeBytes -Offset "C58956" -Values "01 01 00 01 01 00 01 01 01"; ChangeBytes -Offset "C58978" -Values "01 01 01 01 01 01 01 01 01 01 01 01 01"; ChangeBytes -Offset "C589C8" -Values "01 01 00 01 01"
         ChangeBytes -Offset "C58A3A" -Values "01 01 01 01 01"; ChangeBytes -Offset "C58AAE" -Values "01 01 01";                   ChangeBytes -Offset "CA587C" -Values "01";                                     ChangeBytes -Offset "CA5881" -Values "01 01 01 00 01 01 01 01 01 01 00 00 01"
@@ -221,8 +226,8 @@ function ByteOptions() {
         PatchBytes -Offset "C74DD0" -Length "800"   -Texture -Patch "Widescreen\lens_of_truth.bin"
     }
 
-    if (IsChecked $Redux.Graphics.ExtendedDraw)     { ChangeBytes -Offset "B50874"  -Values "00000000"      }
-    if (IsChecked $Redux.Graphics.PixelatedStars)   { ChangeBytes -Offset "B943FC"  -Values "10 00"            }
+    if (IsChecked $Redux.Graphics.ExtendedDraw)     { ChangeBytes -Offset "B50874" -Values "00000000" }
+    if (IsChecked $Redux.Graphics.PixelatedStars)   { ChangeBytes -Offset "B943FC" -Values "1000"     }
 
 
 
@@ -804,6 +809,12 @@ function ByteOptions() {
 
 
     # SKIP #
+
+    if (IsDefault $Redux.Skip.OpeningSequence -Not) {
+        ChangeBytes -Offset "BDAB78" -Values "340ED800"; ChangeBytes -Offset "BDB880" -Values "340CD800"; ChangeBytes -Offset "BDB997" -Values "C4"; ChangeBytes -Offset "BDABA1" -Values "4F"
+        if (IsIndex -Elem $Redux.Skip.OpeningSequence -Index 3) { ChangeBytes -Offset "C5CE24" -Values "00"; ChangeBytes -Offset "C5CDEC" -Values "01"; ChangeBytes -Offset "C5CDF4" -Values "01"; ChangeBytes -Offset "C5CE41" -Values "32"; ChangeBytes -Offset "C5CE72" -Values "30" }
+        else { ChangeBytes -Offset "BDADE7" -Values "03"; ChangeBytes -Offset "BDAB89" -Values "4F" }
+    }
 
     if (IsChecked $Redux.Skip.BossCutscenes) {
         ChangeBytes -Offset "E425EC" -Values "00000000"                                                                                                                # Odolwa
@@ -1508,6 +1519,7 @@ function CreateTabMain() {
     # GAMEPLAY #
 
     CreateReduxGroup    -Tag  "Gameplay"             -Text "Gameplay"
+    CreateReduxCheckBox -Name "PermanentOwlSaves"    -Text "Permanent Owl Saves"       -Info "Owl saves are no longer deleted`nYou always restart from the latest owl statue you saved, even after the Song of Time"                                           -Credits "Admentus"
     CreateReduxCheckBox -Name "ZoraPhysics"          -Text "Zora Physics"              -Info "Change the Zora physics when using the boomerang`nZora Link will take a step forward instead of staying on his spot"                                             -Credits "ShadowOne333"
     CreateReduxCheckBox -Name "DistantZTargeting"    -Text "Distant Z-Targeting"       -Info "Allow to use Z-Targeting on enemies, objects and NPC's from any distance"                                                                                        -Credits "Admentus"
     CreateReduxCheckBox -Name "ManualJump"           -Text "Manual Jump"               -Info "Press Z + A to do a Manual Jump instead of a Jump Attack`nPress B mid-air after jumping to do a Jump Attack"                                                     -Credits "Admentus"
@@ -2046,6 +2058,7 @@ function CreateTabSpeedup() {
     # SKIP #
 
     CreateReduxGroup    -Tag  "Skip" -Text "Skip"
+    CreateReduxComboBox -Name "OpeningSequence" -Text "Opening Sequence"     -Info "The the opening sequence or the first cycle"                -Credits "Admentus" -Items @("Opening Sequence Start", "Clock Town Start", "Skip First Cycle")
     CreateReduxCheckBox -Name "BossCutscenes"   -Text "Skip Boss Cutscenes"  -Info "Skip the cutscenes that play during bosses and mini-bosses" -Credits "Randomizer"
     CreateReduxCheckBox -Name "TatlInterrupts"  -Text "Skip Tatl Interrupts" -Info "Skip the cutscenes that are triggered by Tatl"              -Credits "Randomizer"
 

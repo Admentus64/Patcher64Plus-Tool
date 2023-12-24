@@ -330,6 +330,7 @@ function CreateTextEditorDialog() {
 #==============================================================================================================================================================================================
 function RunTextEditor([object]$Game=$null) {
     
+    if ($global:TextEditor -ne $null -and $global:SceneEditor -ne $null) { return }
     $global:TextEditor      = @{}
     $TextEditor.GameConsole = $Files.json.consoles[0]
     $TextEditor.GameType    = $Game

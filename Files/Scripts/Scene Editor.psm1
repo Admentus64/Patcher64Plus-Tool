@@ -380,6 +380,7 @@ function LoadTab([byte]$Tab) {
 #==============================================================================================================================================================================================
 function RunSceneEditor([object]$Game=$null) {
     
+    if ($global:TextEditor -ne $null -and $global:SceneEditor -ne $null) { return }
     $global:SceneEditor      = @{}
     $SceneEditor.GameConsole = $Files.json.consoles[0]
     $SceneEditor.GameType    = $Game

@@ -36,6 +36,18 @@ function PatchModel([string]$Category, [string]$Name) {
 
 
 #==============================================================================================================================================================================================
+function GetOoTShopItem([string]$Item) {
+    
+    foreach ($entry in $Files.json.shopItems.items) {
+        if ($entry.title -eq $Item) { return (Get16Bit $entry.index) }
+    }
+    return "0000"
+
+}
+
+
+
+#==============================================================================================================================================================================================
 function GetOoTCollision([switch]$DekuNut, [switch]$DekuStick, [switch]$Slingshot, [switch]$Bomb, [switch]$Boomerang, [switch]$Arrow, [switch]$HammerSwing, [switch]$Hookshot, [switch]$KokiriSlash, [switch]$MasterSlash, [switch]$GiantSlash, [switch]$ArrowFire, [switch]$ArrowIce, [switch]$ArrowLight,
 [switch]$ArrowUnknown1, [switch]$ArrowUnknown2, [switch]$ArrowUnknown3, [switch]$MagicFire, [switch]$MagicIce, [switch]$MagicLight, [switch]$Shield, [switch]$MirrorRay, [switch]$KokiriSpin, [switch]$MasterSpin, [switch]$GiantSpin, [switch]$KokiriJump, [switch]$MasterJump, [switch]$GiantJump,
 [switch]$Unknown1, [switch]$HammerJump, [switch]$Unknown2) {
@@ -1796,6 +1808,7 @@ function SetFormColorLabel([object]$ComboBox, [object]$Label) {
 
 Export-ModuleMember -Function PatchModel
 
+Export-ModuleMember -Function GetOoTShopItem
 Export-ModuleMember -Function GetOoTCollision
 Export-ModuleMember -Function GetButtonScale
 Export-ModuleMember -Function SetMMCUpTextCoords

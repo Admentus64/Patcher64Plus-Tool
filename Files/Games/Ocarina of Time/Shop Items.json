@@ -1,0 +1,180 @@
+{
+	"item_table_start": "C022CC",
+	"shop_table_start": "C71ED0",
+
+	"items" : [ {
+		"title" : "Deku Nuts (5)",
+		"index"	: 0
+	}, {
+		"title" : "Arrows (30)",
+		"index"	: 1
+	}, {
+		"title" : "Arrows (50)",
+		"index"	: 2
+	}, {
+		"title" : "Bombs (5 - A)",
+		"index"	: 3
+	}, {
+		"title" : "Deku Nuts (10)",
+		"index"	: 4
+	}, {
+		"title" : "Deku Stick",
+		"index"	: 5
+	}, {
+		"title" : "Bombs (10)",
+		"index"	: 6
+	}, {
+		"title" : "Fish",
+		"index"	: 7
+	}, {
+		"title" : "Red Potion (A)",
+		"index"	: 8
+	}, {
+		"title" : "Green Potion",
+		"index"	: 9
+	}, {
+		"title" : "Blue Potion",
+		"index"	: 10
+	}, {
+		"title" : "Giant's Knife",
+		"index"	: 11
+	}, {
+		"title" : "Hylian Shield",
+		"index"	: 12
+	}, {
+		"title" : "Deku Shield",
+		"index"	: 13
+	}, {
+		"title" : "Goron Tunic",
+		"index"	: 14
+	}, {
+		"title" : "Zora Tunic",
+		"index"	: 15
+	}, {
+		"title" : "Recovery Heart",
+		"index"	: 16
+	}, {
+		"title" : "Milk",
+		"index"	: 17
+	}, {
+		"title" : "Weird Egg",
+		"index"	: 18
+	}, {
+		"title" : "Milk (Nothing)",
+		"index"	: 19,
+		"hide"	: 1
+	}, {
+		"title" : "Egg (Nothing)",
+		"index"	: 20,
+		"hide"	: 1
+	}, {
+		"title" : "Bombchus (10 - A)",
+		"index"	: 21
+	}, {
+		"title" : "Bombchus (20 - A)",
+		"index"	: 22
+	}, {
+		"title" : "Bombchus (10 - B)",
+		"index"	: 23
+	}, {
+		"title" : "Bombchus (20 - B)",
+		"index"	: 24
+	}, {
+		"title" : "Bombchus (10 - C)",
+		"index"	: 25
+	}, {
+		"title" : "Bombchus (20 - C)",
+		"index"	: 26
+	}, {
+		"title" : "Bombchus (10 - D)",
+		"index"	: 27
+	}, {
+		"title" : "Bombchus (20 - D)",
+		"index"	: 28
+	}, {
+		"title" : "Deku Seeds (30)",
+		"index"	: 29
+	}, {
+		"title" : "Keaton Mask",
+		"index"	: 30,
+		"hide"	: 1
+	}, {
+		"title" : "Spooky Mask",
+		"index"	: 31,
+		"hide"	: 1
+	}, {
+		"title" : "Skull Mask",
+		"index"	: 32,
+		"hide"	: 1
+	}, {
+		"title" : "Buny Hood",
+		"index"	: 33,
+		"hide"	: 1
+	}, {
+		"title" : "Mask of Truth",
+		"index"	: 34,
+		"hide"	: 1
+	}, {
+		"title" : "Zora Mask",
+		"index"	: 35,
+		"hide"	: 1
+	}, {
+		"title" : "Goron Mask",
+		"index"	: 36,
+		"hide"	: 1
+	}, {
+		"title" : "Gerudo Mask",
+		"index"	: 37,
+		"hide"	: 1
+	}, {
+		"title" : "SOLD OUT",
+		"index"	: 38,
+		"hide"	: 1
+	}, {
+		"title" : "Blue Fire",
+		"index"	: 39
+	}, {
+		"title" : "Bug",
+		"index"	: 40
+	}, {
+		"title" : "Big Poe",
+		"index"	: 41,
+		"hide"	: 1
+	}, {
+		"title" : "Poe",
+		"index"	: 42
+	}, {
+		"title" : "Fairy",
+		"index"	: 43
+	}, {
+		"title" : "Arrows (10)",
+		"index"	: 44
+	}, {
+		"title" : "Bombs (20)",
+		"index"	: 45
+	}, {
+		"title" : "Bombs (30)",
+		"index"	: 46
+	}, {
+		"title" : "Bombs (5 - B)",
+		"index"	: 47
+	}, {
+		"title" : "Red Potion (B)",
+		"index"	: 48
+	}, {
+		"title" : "Red Potion (C)",
+		"index"	: 49
+	} ],
+
+	"kokiriShop"         : [ "Deku Shield",       "Deku Nuts (5)",     "Deku Nuts (10)",    "Deku Stick",        "Deku Seeds (30)",   "Arrows (10)",       "Arrows (30)",       "Recovery Heart"    ],
+	"kakarikoPotionShop" : [ "Green Potion",      "Blue Fire",         "Red Potion (A)",    "Fairy",             "Deku Nuts (5)",     "Bug",               "Poe",               "Fish"              ],
+	"bombchuShop"        : [ "Bombchus (10 - B)", "Bombchus (10 - D)", "Bombchus (10 - C)", "Bombchus (10 - A)", "Bombchus (20 - C)", "Bombchus (20 - A)", "Bombchus (20 - D)", "Bombchus (20 - B)" ],
+	"marketPotionShop"   : [ "Green Potion",      "Blue Fire",         "Red Potion (A)",    "Fairy",             "Deku Nuts (5)",     "Bug",               "Poe",               "Fish"              ],
+	"bazaar"             : [ "Hylian Shield",     "Bombs (5 - B)",     "Deku Nuts (5)",     "Recovery Heart",    "Arrows (10)",       "Arrows (50)",       "Deku Stick",        "Arrows (30)"       ],
+	"bazaar2"            : [ "Hylian Shield",     "Bombs (5 - A)",     "Deku Nuts (5)",     "Recovery Heart",    "Arrows (10)",       "Arrows (50)",       "Deku Stick",        "Arrows (30)"       ],
+	"talonShop"          : [ "Milk",              "Deku Nuts (5)",     "Deku Nuts (10)",    "Recovery Heart",    "Weird Egg",         "Deku Stick",        "Recovery Heart",    "Recovery Heart"    ],
+	"zoraShop"           : [ "Zora Tunic",        "Arrows (10)",       "Recovery Heart",    "Arrows (30)",       "Deku Nuts (5)",     "Arrows (50)",       "Fish",              "Red Potion (C)"    ],
+	"goronShop"          : [ "Bombs (5 - A)",     "Bombs (10)",        "Bombs (20)",        "Bombs (30)",        "Goron Tunic",       "Recovery Heart",    "Red Potion (B)",    "Recovery Heart"    ],
+	"ingoShop"           : [ "Milk (Nothing)",    "Milk (Nothing)",    "Milk (Nothing)",    "Milk (Nothing)",    "Egg (Nothing)",     "Egg (Nothing)",     "Egg (Nothing)",     "Egg (Nothing)"     ],
+	"happyMaskShop"      : [ "Gerudo Mask",       "Zora Mask",         "Mask of Truth",     "Goron Mask",        "Skull Mask",        "Keaton Mask",       "Bunny Hood",        "Spooky Mask"       ]
+}

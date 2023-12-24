@@ -171,7 +171,7 @@
 	"patch"		: "Decompressed\\snacker_coral_bay.bps",
 	"script"	: "Banjo-Kazooie",
 	"output"	: "snacker_coral_bay",
-	"tooltip"	: "A tiny-sized ROM hack in a completely new setting{0}Features 1 worlds, 100 notes, 5 jiggies and 6 honeycombs with an average length of 2-3 hours{0}Includes custom objects with assembly injection"
+	"tooltip"	: "A tiny-sized ROM hack in a completely new setting{0}Features 1 world, 100 notes, 5 jiggies and 6 honeycombs with an average length of 2-3 hours{0}Includes custom objects with assembly injection"
 
 }, {
 
@@ -180,5 +180,12 @@
 	"script"	: "Banjo-Kazooie",
 	"output"	: "snow_glow_village",
 	"tooltip"	: "A small-sized ROM hack in a completely new setting{0}Features 1 world with an average length of 1 hours"
+
+}, {
+
+	"title"		: "Banjo-Kazooie: Santa's Village (v1.1)",
+	"patch"		: "Decompressed\\santas_village.bps",
+	"output"	: "santas_village",
+	"tooltip"	: "A small-sized ROM hack in a completely new setting{0}Features 1 world, 200 notes, 10 jiggies with an average length of 1 hours"
 
 } ]

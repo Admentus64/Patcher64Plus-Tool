@@ -1,6 +1,6 @@
 ﻿function ChildQuestClassicPatchOptions() {
-    
-   PatchModel -Category "Child" -Name "Child Quest"
+   
+   if (IsChecked $Redux.Graphics.EnhancedChildQuestModel) { ApplyPatch -Patch "Decompressed\Optional\Child Quest\child_quest_classic_enhanced_model.ppf" } else { ApplyPatch -Patch "Decompressed\Optional\Child Quest\child_quest_classic_model.ppf" }
 
 }
 
@@ -9,13 +9,43 @@
 #==============================================================================================================================================================================================
 function ChildQuestClassicByteOptions() {
 
-    # Change equipment display lists for Child Link
-    ChangeBytes -Offset "B6D74D" -Values "0210F8";            ChangeBytes -Offset "B6D78D" -Values "0210D8"; ChangeBytes -Offset "B6D7ED" -Values "0210E8" # Mirror Shield as Hylian Shield
-    ChangeBytes -Offset "AF2A1F" -Values "00";                ChangeBytes -Offset "AF2A24" -Values "11";     ChangeBytes -Offset "B6D6CF" -Values "0A11"   # Show Hylian Shield as one-handed in Pause Screen
-    ChangeBytes -Offset "B6D980" -Values "800F7908";          ChangeBytes -Offset "B6D679" -Values "02";     ChangeBytes -Offset "B6DC2A" -Values "02"     # Biggoron Sword as One-Handed
-    ChangeBytes -Offset "B6D6E0" -Values "1401020A11";        ChangeBytes -Offset "AEFBDF" -Values "06"                                                    # Biggoron Sword as One-Handed
-    ChangeBytes -Offset "AF0C38" -Values "240100FF1501";      ChangeBytes -Offset "AF0C74" -Values "240100FF1541"                                          # Show sheath for swords as Child Link
-    ChangeBytes -Offset "BEDF00" -Values "00" -Repeat 0x1F                                                                                                 # Fix animation for losing sword during Ganon boss fight
+    if (IsChecked -Elem $Redux.Graphics.EnhancedChildQuestModel) {
+        # Equipment
+        PatchBytes  -Offset "7F9000"  -Texture -Patch "Equipment\Kokiri Sword\Razor Sword.icon"                                                                                             # Icon:  Master Sword -> Razor Sword
+        PatchBytes  -Offset "8ADC00"  -Texture -Patch "Equipment\Kokiri Sword\Razor Sword.en.label"                                                                                         # Label: Master Sword -> Razor Sword
+        PatchBytes  -Offset "1793000" -Patch ("Object GI Models\Razor Sword.bin");           ChangeBytes -Offset "A674" -Values "01794560"; ChangeBytes -Offset "B6F9A4" -Values "01794560" # Model: Master Sword -> Razor Sword
+        ChangeBytes -Offset "B66A1A"  -Values "0C00"; ChangeBytes -Offset "B66A1E" -Values "0C08"
+
+        PatchBytes  -Offset "7F0000"  -Texture -Patch "Equipment\Kokiri Sword\Termina Kokiri Sword.icon"                                                                                    # Icon:  Broken Goron's Sword -> Termina Kokiri Sword
+        PatchBytes  -Offset "812000"  -Texture -Patch "Equipment\Kokiri Sword\Termina Kokiri Sword.icon"                                                                                    # Icon:  Broken Giant's Knife -> Termina Kokiri Sword
+        PatchBytes  -Offset "8B4000"  -Texture -Patch "Equipment\Kokiri Sword\Knife.en.label"                                                                                               # Label: Broken Giant's Knife -> Knife
+        PatchBytes  -Offset "3483000" -Patch ("Object GI Models\Termina Kokiri Sword.bin")                                                                                                  # Model: Broken Giant's Knife -> Termina Kokiri Sword
+        ChangeBytes -Offset "A610"    -Values "034830000348421003483000"; ChangeBytes -Offset "B6F970" -Values "0348300003484210"; ChangeBytes -Offset "B6698A" -Values "0850"
+
+        PatchBytes  -Offset "7FA000"  -Texture -Patch "Equipment\Master Sword\Gilded Sword.icon"                                                                                            # Icon:  Biggoron Sword -> Gilded Sword
+        PatchBytes  -Offset "8AE000"  -Texture -Patch "Equipment\Master Sword\Razor Longsword.en.label"                                                                                     # Label: Giant's Knife  -> Razor Longsword
+        PatchBytes  -Offset "8BD400"  -Texture -Patch "Equipment\Master Sword\Gilded Sword.en.label"                                                                                        # Label: Biggoron Sword -> Gilded Sword
+        PatchBytes  -Offset "347F000" -Patch ("Object GI Models\Gilded Sword.bin")                                                                                                          # Model: Giant's Knife  -> Gilded Sword
+        ChangeBytes -Offset "A190"    -Values "0347F000034802A00347F000"; ChangeBytes -Offset "B6F718" -Values "0347F000034802A0"; ChangeBytes -Offset "B666DE" -Values "09E8"
+
+        PatchBytes  -Offset "7FC000"  -Texture -Patch "Equipment\Hylian Shield\Hero's Shield.icon"                                                                                          # Icon:  Hylian Shield -> Hero's Shield
+        PatchBytes  -Offset "8AE800"  -Texture -Patch "Equipment\Hylian Shield\Hero's Shield.en.label"                                                                                      # Label: Hylian Shield -> Hero's Shield
+        PatchBytes  -Offset "15B9000" -Patch ("Object GI Models\Hero's Shield.bin");         ChangeBytes -Offset "9FF4" -Values "015BAEC0"; ChangeBytes -Offset "B6F63C" -Values "015BAEC0" # Model: Hylian Shield -> Hero's Shield
+        ChangeBytes -Offset "B663A2"  -Values "09F0"
+    
+        PatchBytes  -Offset "7FD000"  -Texture -Patch "Equipment\Mirror Shield\Termina Mirror Shield.icon"                                                                                  # Icon:  Mirror Shield -> Termina Mirror Shield
+        PatchBytes  -Offset "1616000" -Patch ("Object GI Models\Termina Mirror Shield.bin"); ChangeBytes -Offset "A0F4" -Values "01617C00"; ChangeBytes -Offset "B6F6CC" -Values "01617C00" # Model: Mirror Shield -> Termina Mirror Shield
+        ChangeBytes -Offset "B6659A"  -Values "0770"; ChangeBytes -Offset "B6659E" -Values "0BF8"
+    }
+    else {
+        # Change equipment display lists for Child Link
+        ChangeBytes -Offset "B6D74D" -Values "0210F8";            ChangeBytes -Offset "B6D78D" -Values "0210D8"; ChangeBytes -Offset "B6D7ED" -Values "0210E8" # Mirror Shield as Hylian Shield
+        ChangeBytes -Offset "AF2A1F" -Values "00";                ChangeBytes -Offset "AF2A24" -Values "11";     ChangeBytes -Offset "B6D6CF" -Values "0A11"   # Show Hylian Shield as one-handed in Pause Screen
+        ChangeBytes -Offset "B6D980" -Values "800F7908";          ChangeBytes -Offset "B6D679" -Values "02";     ChangeBytes -Offset "B6DC2A" -Values "02"     # Biggoron Sword as One-Handed
+        ChangeBytes -Offset "B6D6E0" -Values "1401020A11";        ChangeBytes -Offset "AEFBDF" -Values "06"                                                    # Biggoron Sword as One-Handed
+        ChangeBytes -Offset "AF0C38" -Values "240100FF1501";      ChangeBytes -Offset "AF0C74" -Values "240100FF1541"                                          # Show sheath for swords as Child Link
+    }
+    ChangeBytes -Offset "BEDF00" -Values "00" -Repeat 0x1F # Fix animation for losing sword during Ganon boss fight
 
 
 
@@ -120,7 +150,7 @@ function ChildQuestClassicByteOptions() {
     ChangeBytes -Offset "BEF09E" -Values "5A80037000B6" # Fire Arrow  -> Minuet of Forest
     ChangeBytes -Offset "BEF0A4" -Values "6B804B71012E" # Ice Arrow   -> Light Medallion
     ChangeBytes -Offset "BEF0AA" -Values "5F80087200B6" # Light Arrow -> Prelude of Light
-    ChangeBytes -Offset "BEF17C" -Values "3C8074BE018D" # None        -> Master Sword
+    if (IsChecked -Elem $Redux.Graphics.EnhancedChildQuestModel) { ChangeBytes -Offset "BEF17C" -Values "3C805ABE0149" } else { ChangeBytes -Offset "BEF17C" -Values "3C8074BE018D" } # None -> Master Sword
 
     ChangeBytes -Offset "BDA300" -Values "11000000" # Remove item possession check for playing long chest animation
     ChangeBytes -Offset "BEF040" -Values "F7"       # Set Recovery Hearts to short anim
@@ -1207,20 +1237,34 @@ function ChildQuestClassicByteSceneOptions() {
 function ChildQuestClassicByteTextOptions() {
     
     # Chests
-    SetMessage -ID "000C" -Replace "<NS><Icon:3D><DI>You got the <R>Biggoron's Sword<W>!<DC><N>This blade was forged by a<N>master smith to deal<N>extra damage!"
     SetMessage -ID "0031" -Replace "<NS><DI>You obtained the <R>Bolero of Fire<W>!<DC><N>Finally, you may fully explore<N>the depths of the Death<N>Mountain Crater."
     SetMessage -ID "0036" -Replace "<NS><DI>You obtained the <M>Song of Storms<W>!<DC><N>Its destructive power seems<N>overwhelming. Be mindful when<N>using it."
     SetMessage -ID "0070" -Replace "<NS><DI>You obtained the <G>Minuet of Forest<W>!<DC><N>The Sacred Forest Meadow and its<N>Temple are now always within<N>reach."
     SetMessage -ID "0071" -Replace "<NS><Icon:6B>You received something useless,<N>very reminiscent of the<N><C>Light Medallion<W>!"
     SetMessage -ID "0072" -Replace "<NS><DI>You obtained the <C>Prelude of Light<W>!<DC><N>Return to the Temple of Time<N>swiftly, regardless of your<N>current location."
-    SetMessage -ID "00BE" -Replace "<NS><Icon:3C><DI>You got the <G>Master Sword<W>!<DC><N>This is a treasure of the<N>chosen hero."
     SetMessage -ID "502D" -Replace "<NS>Hehehe, young man...<N>You were very quick to be able<N>to keep up with me! Hehehe!<N><New Box><NS>As a reward, I'm going to give<N>you my treasure.<N><New Box><NS>I'm sure it will help you!<N><New Box><NS>I live here now, so come back<N>again sometime. I'll give you<N>something cool!<N><New Box><NS>One more thing! Be careful on<N>your way back!<N>Heheheh...."
     SetMessage -ID "6069" -Replace "The <R>Gerudo's Fortress <W>is located<N>beyond this bridge. A kid like<N>you has no business there."
+    if (IsChecked -Elem $Redux.Graphics.EnhancedChildQuestModel) {
+        SetMessage -ID "00BE" -Replace "<NS><Icon:3C><DI>You got the <G>Razor Sword<W>!<DC><N>This new, sharper blade is a cut<N>above the rest."
+        SetMessage -ID "000C" -Replace "<NS><Icon:3D><DI>You got the <R>Gilded Sword<W>!<DC><N>This blade was forged by a<N>master smith to deal<N>extra damage!"
+    }
+    else {
+        SetMessage -ID "00BE" -Replace "<NS><Icon:3C><DI>You got the <G>Master Sword<W>!<DC><N>This is a treasure of the<N>chosen hero."
+        SetMessage -ID "000C" -Replace "<NS><Icon:3D><DI>You got the <R>Biggoron's Sword<W>!<DC><N>This blade was forged by a<N>master smith to deal<N>extra damage!"
+    }
 
 
 
     # Hylian Shield
-    SetMessage -ID "009C" -Replace "My current hot seller is the<N><C>Hylian Shield<W>, but it might be too<N>heavy for you, kid.<Event>"
+    if (IsChecked -Elem $Redux.Graphics.EnhancedChildQuestModel) {
+           SetMessage -ID "004D" -Replace "<Icon:3F><DI>You got a <C>Hero's Shield<W>!<DC><N>Switch to the <B>Equipment<N>Subscreen<W> and select this<N>shield, then equip it with <B><A Button><W>."
+           SetMessage -ID "0092" -ASCII -Text "Hylian Shield" -Replace "Hero's Shield"
+           SetMessage -ID "009C" -Replace "My current hot seller is the<N><C>Hero's Shield<W>, but it might be too<N>heavy for you, kid.<Event>"
+           SetMessage -ID "00A9" -Replace "<DI><R>Hero's Shield   80 Rupees<N><W>This is the shield heroes use.<N>It can stand up to flame attacks!<DC><Shop Description>"
+           SetMessage -ID "7013" -Replace "If you plan on scaling Death<N>Mountain, buy a <C>Hero's Shield<W>.<N>You can defend yourself against<N>falling rocks with that shield."
+           SetMessage -ID "7121" -ASCII -Text "Hylian Shields" -Replace "Hero's Shields"
+    }
+    else { SetMessage -ID "009C" -Replace "My current hot seller is the<N><C>Hylian Shield<W>, but it might be too<N>heavy for you, kid.<Event>" }
 
 
 

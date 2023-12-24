@@ -117,6 +117,7 @@ function ByteOptions() {
     if (IsChecked $Redux.Gameplay.RemoveCrouchStab)         { ChangeBytes -Offset "BDE374" -Values "1000000D"                                                  }
     if (IsChecked $Redux.Gameplay.RemoveQuickSpin)          { ChangeBytes -Offset "C9C9E8" -Values "1000000E"                                                  }
     if (IsChecked $Redux.Gameplay.RemoveSpeedClamp)         { ChangeBytes -Offset "BD9AF0" -Values "2400"                                                      }
+    if (IsChecked $Redux.Gameplay.ChildShops)               { ChangeBytes -Offset "C6CEB4" -Values "1500"                                                      }
     
 
 
@@ -294,6 +295,7 @@ function ByteOptions() {
     if (IsDefault $Redux.UI.Hearts       -Not)   { PatchBytes  -Offset "1A3C000" -Shared -Patch ("HUD\Hearts\"        + $Redux.UI.Hearts.Text.replace(       " (default)", "") + ".bin") }
     if (IsDefault $Redux.UI.Magic        -Not)   { PatchBytes  -Offset "1A3F8C0" -Shared -Patch ("HUD\Magic\"         + $Redux.UI.Magic.Text.replace(        " (default)", "") + ".bin") }
     if (IsDefault $Redux.UI.CurrentFloor -Not)   { PatchBytes  -Offset "85F980"  -Shared -Patch ("HUD\Current Floor\" + $Redux.UI.CurrentFloor.Text.replace( " (default)", "") + ".bin") }
+    if (IsDefault $Redux.UI.BossFloor    -Not)   { PatchBytes  -Offset "85FB80"  -Shared -Patch ("HUD\Boss Floor\"    + $Redux.UI.BossFloor.Text.replace(    " (default)", "") + ".bin") }
     if (IsChecked $Redux.UI.DungeonKeys)         { PatchBytes  -Offset "1A3DE00" -Shared -Patch  "HUD\Keys\Majora's Mask.bin"   }
     if (IsChecked $Redux.UI.Chests)              { PatchBytes  -Offset "1A3E580" -Shared -Patch  "HUD\Chests\Majora's Mask.bin" }
 
@@ -787,6 +789,13 @@ function ByteOptions() {
     
     # EQUIPMENT #
 
+    if   ( (IsChecked $Redux.Equipment.HideSword) -and (IsChecked $Redux.Equipment.HideShield) )   { ChangeBytes -Offset "B6D758" -Values "00" -Repeat 0xBF    }
+    elseif (IsChecked $Redux.Equipment.HideSword)                                                  { CopyBytes   -Offset "B6D7B8" -Length "60" -Start "B6D758" }
+    elseif (IsChecked $Redux.Equipment.HideShield) {
+        CopyBytes -Offset "B6D758" -Length "10" -Start "B6D768"; CopyBytes -Offset "B6D758" -Length "10" -Start "B6D778"; CopyBytes -Offset "B6D758" -Length "10" -Start "B6D788"; ChangeBytes -Offset "B6D798" -Values "00" -Repeat 0x1F
+        CopyBytes -Offset "B6D7B8" -Length "10" -Start "B6D7C8"; CopyBytes -Offset "B6D7B8" -Length "10" -Start "B6D7D8"; CopyBytes -Offset "B6D7B8" -Length "10" -Start "B6D7E8"; ChangeBytes -Offset "B6D7F8" -Values "00" -Repeat 0x1F
+    }
+
     if (IsChecked $Redux.Equipment.HerosBow) {
         PatchBytes -Offset "7C0000" -Texture -Patch "Equipment\Bow\Hero's Bow.icon"
         PatchBytes -Offset "7F5000" -Texture -Patch "Equipment\Bow\Hero's Bow Fire.icon"
@@ -1151,9 +1160,158 @@ function ByteOptions() {
         ChangeBytes -Offset "B6D4DC" -Values ($RupeeG + $RupeeB + $RupeeR + $RupeeP + $RupeeO)
         ChangeBytes -Offset "DF362E" -Values (Get16Bit $Redux.Capacity.RupeeS.Text)
     }
+    
+
+
+    # SHOP ITEMS QUANTITY #
+
+    $start = GetDecimal $Files.json.shopItems.item_table_start
+
+    if (IsDefault $Redux.ShopQuantity.RecoveryHeart -Not)   { ChangeBytes -Offset ($start + 11 + 0x20 * 16) -Values ([byte]$Redux.ShopQuantity.RecoveryHeart.Text * 16) }
+    if (IsDefault $Redux.ShopQuantity.Bombchus10A   -Not)   { ChangeBytes -Offset ($start + 11 + 0x20 * 21) -Values        $Redux.ShopQuantity.Bombchus10A.Text         }
+    if (IsDefault $Redux.ShopQuantity.Bombchus10B   -Not)   { ChangeBytes -Offset ($start + 11 + 0x20 * 23) -Values        $Redux.ShopQuantity.Bombchus10B.Text         }
+    if (IsDefault $Redux.ShopQuantity.Bombchus10C   -Not)   { ChangeBytes -Offset ($start + 11 + 0x20 * 25) -Values        $Redux.ShopQuantity.Bombchus10C.Text         }
+    if (IsDefault $Redux.ShopQuantity.Bombchus10D   -Not)   { ChangeBytes -Offset ($start + 11 + 0x20 * 27) -Values        $Redux.ShopQuantity.Bombchus10D.Text         }
+    if (IsDefault $Redux.ShopQuantity.Bombchus20A   -Not)   { ChangeBytes -Offset ($start + 11 + 0x20 * 22) -Values        $Redux.ShopQuantity.Bombchus20A.Text         }
+    if (IsDefault $Redux.ShopQuantity.Bombchus20B   -Not)   { ChangeBytes -Offset ($start + 11 + 0x20 * 24) -Values        $Redux.ShopQuantity.Bombchus20B.Text         }
+    if (IsDefault $Redux.ShopQuantity.Bombchus20C   -Not)   { ChangeBytes -Offset ($start + 11 + 0x20 * 26) -Values        $Redux.ShopQuantity.Bombchus20C.Text         }
+    if (IsDefault $Redux.ShopQuantity.Bombchus20D   -Not)   { ChangeBytes -Offset ($start + 11 + 0x20 * 28) -Values        $Redux.ShopQuantity.Bombchus20D.Text         }
+    if (IsDefault $Redux.ShopQuantity.Arrows10      -Not)   { ChangeBytes -Offset ($start + 11 + 0x20 * 44) -Values        $Redux.ShopQuantity.Arrows10.Text            }
+    if (IsDefault $Redux.ShopQuantity.Arrows30      -Not)   { ChangeBytes -Offset ($start + 11 + 0x20 * 1)  -Values        $Redux.ShopQuantity.Arrows30.Text            }
+    if (IsDefault $Redux.ShopQuantity.Arrows50      -Not)   { ChangeBytes -Offset ($start + 11 + 0x20 * 2)  -Values        $Redux.ShopQuantity.Arrows50.Text            }
 
 
 
+    # SHOP ITEMS PRICE #
+    
+    if (IsDefault $Redux.ShopPrice.RecoveryHeart   -Not)   { $item = Get16Bit $Redux.ShopPrice.RecoveryHeart.Text;   ChangeBytes -Offset ($start + 8 + 0x20 * 16) -Values @($item.Substring(0, 2), $item.Substring(2) ) }
+    if (IsDefault $Redux.ShopPrice.DekuStick       -Not)   { $item = Get16Bit $Redux.ShopPrice.DekuStick.Text;       ChangeBytes -Offset ($start + 8 + 0x20 * 5)  -Values @($item.Substring(0, 2), $item.Substring(2) ) }
+    if (IsDefault $Redux.ShopPrice.DekuNuts5       -Not)   { $item = Get16Bit $Redux.ShopPrice.DekuNuts5.Text;       ChangeBytes -Offset ($start + 8 + 0x20 * 0)  -Values @($item.Substring(0, 2), $item.Substring(2) ) }
+    if (IsDefault $Redux.ShopPrice.DekuNuts10      -Not)   { $item = Get16Bit $Redux.ShopPrice.DekuNuts10.Text;      ChangeBytes -Offset ($start + 8 + 0x20 * 4)  -Values @($item.Substring(0, 2), $item.Substring(2) ) }
+    if (IsDefault $Redux.ShopPrice.Bombs5A         -Not)   { $item = Get16Bit $Redux.ShopPrice.Bombs5A.Text;         ChangeBytes -Offset ($start + 8 + 0x20 * 3)  -Values @($item.Substring(0, 2), $item.Substring(2) ) }
+    if (IsDefault $Redux.ShopPrice.Bombs5B         -Not)   { $item = Get16Bit $Redux.ShopPrice.Bombs5B.Text;         ChangeBytes -Offset ($start + 8 + 0x20 * 47) -Values @($item.Substring(0, 2), $item.Substring(2) ) }
+    if (IsDefault $Redux.ShopPrice.Bombs10         -Not)   { $item = Get16Bit $Redux.ShopPrice.Bombs10.Text;         ChangeBytes -Offset ($start + 8 + 0x20 * 6)  -Values @($item.Substring(0, 2), $item.Substring(2) ) }
+    if (IsDefault $Redux.ShopPrice.Bombs20         -Not)   { $item = Get16Bit $Redux.ShopPrice.Bombs20.Text;         ChangeBytes -Offset ($start + 8 + 0x20 * 45) -Values @($item.Substring(0, 2), $item.Substring(2) ) }
+    if (IsDefault $Redux.ShopPrice.Bombs30         -Not)   { $item = Get16Bit $Redux.ShopPrice.Bombs30.Text;         ChangeBytes -Offset ($start + 8 + 0x20 * 46) -Values @($item.Substring(0, 2), $item.Substring(2) ) }
+    if (IsDefault $Redux.ShopPrice.Bombchus10A     -Not)   { $item = Get16Bit $Redux.ShopPrice.Bombchus10A.Text;     ChangeBytes -Offset ($start + 8 + 0x20 * 21) -Values @($item.Substring(0, 2), $item.Substring(2) ) }
+    if (IsDefault $Redux.ShopPrice.Bombchus10B     -Not)   { $item = Get16Bit $Redux.ShopPrice.Bombchus10B.Text;     ChangeBytes -Offset ($start + 8 + 0x20 * 23) -Values @($item.Substring(0, 2), $item.Substring(2) ) }
+    if (IsDefault $Redux.ShopPrice.Bombchus10C     -Not)   { $item = Get16Bit $Redux.ShopPrice.Bombchus10C.Text;     ChangeBytes -Offset ($start + 8 + 0x20 * 25) -Values @($item.Substring(0, 2), $item.Substring(2) ) }
+    if (IsDefault $Redux.ShopPrice.Bombchus10D     -Not)   { $item = Get16Bit $Redux.ShopPrice.Bombchus10D.Text;     ChangeBytes -Offset ($start + 8 + 0x20 * 27) -Values @($item.Substring(0, 2), $item.Substring(2) ) }
+    if (IsDefault $Redux.ShopPrice.Bombchus20A     -Not)   { $item = Get16Bit $Redux.ShopPrice.Bombchus20A.Text;     ChangeBytes -Offset ($start + 8 + 0x20 * 22) -Values @($item.Substring(0, 2), $item.Substring(2) ) }
+    if (IsDefault $Redux.ShopPrice.Bombchus20B     -Not)   { $item = Get16Bit $Redux.ShopPrice.Bombchus20B.Text;     ChangeBytes -Offset ($start + 8 + 0x20 * 24) -Values @($item.Substring(0, 2), $item.Substring(2) ) }
+    if (IsDefault $Redux.ShopPrice.Bombchus20C     -Not)   { $item = Get16Bit $Redux.ShopPrice.Bombchus20C.Text;     ChangeBytes -Offset ($start + 8 + 0x20 * 26) -Values @($item.Substring(0, 2), $item.Substring(2) ) }
+    if (IsDefault $Redux.ShopPrice.Bombchus20D     -Not)   { $item = Get16Bit $Redux.ShopPrice.Bombchus20D.Text;     ChangeBytes -Offset ($start + 8 + 0x20 * 28) -Values @($item.Substring(0, 2), $item.Substring(2) ) }
+    if (IsDefault $Redux.ShopPrice.DekuSeedBullets -Not)   { $item = Get16Bit $Redux.ShopPrice.DekuSeedBullets.Text; ChangeBytes -Offset ($start + 8 + 0x20 * 29) -Values @($item.Substring(0, 2), $item.Substring(2) ) }
+    if (IsDefault $Redux.ShopPrice.Arrows10        -Not)   { $item = Get16Bit $Redux.ShopPrice.Arrows10.Text;        ChangeBytes -Offset ($start + 8 + 0x20 * 44) -Values @($item.Substring(0, 2), $item.Substring(2) ) }
+    if (IsDefault $Redux.ShopPrice.Arrows30        -Not)   { $item = Get16Bit $Redux.ShopPrice.Arrows30.Text;        ChangeBytes -Offset ($start + 8 + 0x20 * 1)  -Values @($item.Substring(0, 2), $item.Substring(2) ) }
+    if (IsDefault $Redux.ShopPrice.Arrows50        -Not)   { $item = Get16Bit $Redux.ShopPrice.Arrows50.Text;        ChangeBytes -Offset ($start + 8 + 0x20 * 2)  -Values @($item.Substring(0, 2), $item.Substring(2) ) }
+    if (IsDefault $Redux.ShopPrice.DekuShield      -Not)   { $item = Get16Bit $Redux.ShopPrice.DekuShield.Text;      ChangeBytes -Offset ($start + 8 + 0x20 * 13) -Values @($item.Substring(0, 2), $item.Substring(2) ) }
+    if (IsDefault $Redux.ShopPrice.HylianShield    -Not)   { $item = Get16Bit $Redux.ShopPrice.HylianShield.Text;    ChangeBytes -Offset ($start + 8 + 0x20 * 12) -Values @($item.Substring(0, 2), $item.Substring(2) ) }
+    if (IsDefault $Redux.ShopPrice.GiantsKnife     -Not)   { $item = Get16Bit $Redux.ShopPrice.GiantsKnife.Text;     ChangeBytes -Offset ($start + 8 + 0x20 * 11) -Values @($item.Substring(0, 2), $item.Substring(2) ) }
+    if (IsDefault $Redux.ShopPrice.GoronTunic      -Not)   { $item = Get16Bit $Redux.ShopPrice.GoronTunic.Text;      ChangeBytes -Offset ($start + 8 + 0x20 * 14) -Values @($item.Substring(0, 2), $item.Substring(2) ) }
+    if (IsDefault $Redux.ShopPrice.ZoraTunic       -Not)   { $item = Get16Bit $Redux.ShopPrice.ZoraTunic.Text;       ChangeBytes -Offset ($start + 8 + 0x20 * 15) -Values @($item.Substring(0, 2), $item.Substring(2) ) }
+    if (IsDefault $Redux.ShopPrice.RedPotionA      -Not)   { $item = Get16Bit $Redux.ShopPrice.RedPotionA.Text;      ChangeBytes -Offset ($start + 8 + 0x20 * 8)  -Values @($item.Substring(0, 2), $item.Substring(2) ) }
+    if (IsDefault $Redux.ShopPrice.RedPotionB      -Not)   { $item = Get16Bit $Redux.ShopPrice.RedPotionB.Text;      ChangeBytes -Offset ($start + 8 + 0x20 * 48) -Values @($item.Substring(0, 2), $item.Substring(2) ) }
+    if (IsDefault $Redux.ShopPrice.RedPotionC      -Not)   { $item = Get16Bit $Redux.ShopPrice.RedPotionC.Text;      ChangeBytes -Offset ($start + 8 + 0x20 * 49) -Values @($item.Substring(0, 2), $item.Substring(2) ) }
+    if (IsDefault $Redux.ShopPrice.GreenPotion     -Not)   { $item = Get16Bit $Redux.ShopPrice.GreenPotion.Text;     ChangeBytes -Offset ($start + 8 + 0x20 * 9)  -Values @($item.Substring(0, 2), $item.Substring(2) ) }
+    if (IsDefault $Redux.ShopPrice.BluePotion      -Not)   { $item = Get16Bit $Redux.ShopPrice.BluePotion.Text;      ChangeBytes -Offset ($start + 8 + 0x20 * 10) -Values @($item.Substring(0, 2), $item.Substring(2) ) }
+    if (IsDefault $Redux.ShopPrice.Milk            -Not)   { $item = Get16Bit $Redux.ShopPrice.Milk.Text;            ChangeBytes -Offset ($start + 8 + 0x20 * 17) -Values @($item.Substring(0, 2), $item.Substring(2) ) }
+    if (IsDefault $Redux.ShopPrice.Fairy           -Not)   { $item = Get16Bit $Redux.ShopPrice.Fairy.Text;           ChangeBytes -Offset ($start + 8 + 0x20 * 43) -Values @($item.Substring(0, 2), $item.Substring(2) ) }
+    if (IsDefault $Redux.ShopPrice.BlueFire        -Not)   { $item = Get16Bit $Redux.ShopPrice.BlueFire.Text;        ChangeBytes -Offset ($start + 8 + 0x20 * 39) -Values @($item.Substring(0, 2), $item.Substring(2) ) }
+    if (IsDefault $Redux.ShopPrice.Bug             -Not)   { $item = Get16Bit $Redux.ShopPrice.Bug.Text;             ChangeBytes -Offset ($start + 8 + 0x20 * 40) -Values @($item.Substring(0, 2), $item.Substring(2) ) }
+    if (IsDefault $Redux.ShopPrice.Fish            -Not)   { $item = Get16Bit $Redux.ShopPrice.Fish.Text;            ChangeBytes -Offset ($start + 8 + 0x20 * 7)  -Values @($item.Substring(0, 2), $item.Substring(2) ) }
+    if (IsDefault $Redux.ShopPrice.Poe             -Not)   { $item = Get16Bit $Redux.ShopPrice.Poe.Text;             ChangeBytes -Offset ($start + 8 + 0x20 * 42) -Values @($item.Substring(0, 2), $item.Substring(2) ) }
+    if (IsDefault $Redux.ShopPrice.BigPoe          -Not)   { $item = Get16Bit $Redux.ShopPrice.BigPoe.Text;          ChangeBytes -Offset ($start + 8 + 0x20 * 41) -Values @($item.Substring(0, 2), $item.Substring(2) ) }
+    if (IsDefault $Redux.ShopPrice.WeirdEgg        -Not)   { $item = Get16Bit $Redux.ShopPrice.WeirdEgg.Text;        ChangeBytes -Offset ($start + 8 + 0x20 * 18) -Values @($item.Substring(0, 2), $item.Substring(2) ) }
+
+    if (IsChecked $Redux.ShopPrice.FixItems) {
+        ChangeBytes -Offset ($start + 12 + 0x20 * 11) -Values "010E010D" # Giant's Knife
+        ChangeBytes -Offset ($start + 12 + 0x20 * 17) -Values "0110010F" # Milk
+        ChangeBytes -Offset ($start + 12 + 0x20 * 18) -Values "01120111" # Weird Egg
+        ChangeBytes -Offset ($start + 12 + 0x20 * 41) -Values "0113506F" # Big Poe
+    }
+
+
+
+
+    # SHOP ITEMS #
+
+    $start = GetDecimal $Files.json.shopItems.shop_table_start
+
+    if (IsDefault $Redux.Bazaar.Slot1             -Not)   { ChangeBytes -Offset ($start + 8 * 0 + 0x40 * 4) -Values (GetOoTShopItem $Redux.Bazaar.Slot1.Text)             }
+    if (IsDefault $Redux.Bazaar.Slot2             -Not)   { ChangeBytes -Offset ($start + 8 * 1 + 0x40 * 4) -Values (GetOoTShopItem $Redux.Bazaar.Slot2.Text)             }
+    if (IsDefault $Redux.Bazaar.Slot3             -Not)   { ChangeBytes -Offset ($start + 8 * 2 + 0x40 * 4) -Values (GetOoTShopItem $Redux.Bazaar.Slot3.Text)             }
+    if (IsDefault $Redux.Bazaar.Slot4             -Not)   { ChangeBytes -Offset ($start + 8 * 3 + 0x40 * 4) -Values (GetOoTShopItem $Redux.Bazaar.Slot4.Text)             }
+    if (IsDefault $Redux.Bazaar.Slot5             -Not)   { ChangeBytes -Offset ($start + 8 * 4 + 0x40 * 4) -Values (GetOoTShopItem $Redux.Bazaar.Slot5.Text)             }
+    if (IsDefault $Redux.Bazaar.Slot6             -Not)   { ChangeBytes -Offset ($start + 8 * 5 + 0x40 * 4) -Values (GetOoTShopItem $Redux.Bazaar.Slot6.Text)             }
+    if (IsDefault $Redux.Bazaar.Slot7             -Not)   { ChangeBytes -Offset ($start + 8 * 6 + 0x40 * 4) -Values (GetOoTShopItem $Redux.Bazaar.Slot7.Text)             }
+    if (IsDefault $Redux.Bazaar.Slot8             -Not)   { ChangeBytes -Offset ($start + 8 * 7 + 0x40 * 4) -Values (GetOoTShopItem $Redux.Bazaar.Slot8.Text)             }
+
+    if (IsDefault $Redux.Bazaar2.Slot1            -Not)   { ChangeBytes -Offset ($start + 8 * 0 + 0x40 * 5) -Values (GetOoTShopItem $Redux.Bazaar2.Slot1.Text)            }
+    if (IsDefault $Redux.Bazaar2.Slot2            -Not)   { ChangeBytes -Offset ($start + 8 * 1 + 0x40 * 5) -Values (GetOoTShopItem $Redux.Bazaar2.Slot2.Text)            }
+    if (IsDefault $Redux.Bazaar2.Slot3            -Not)   { ChangeBytes -Offset ($start + 8 * 2 + 0x40 * 5) -Values (GetOoTShopItem $Redux.Bazaar2.Slot3.Text)            }
+    if (IsDefault $Redux.Bazaar2.Slot4            -Not)   { ChangeBytes -Offset ($start + 8 * 3 + 0x40 * 5) -Values (GetOoTShopItem $Redux.Bazaar2.Slot4.Text)            }
+    if (IsDefault $Redux.Bazaar2.Slot5            -Not)   { ChangeBytes -Offset ($start + 8 * 4 + 0x40 * 5) -Values (GetOoTShopItem $Redux.Bazaar2.Slot5.Text)            }
+    if (IsDefault $Redux.Bazaar2.Slot6            -Not)   { ChangeBytes -Offset ($start + 8 * 5 + 0x40 * 5) -Values (GetOoTShopItem $Redux.Bazaar2.Slot6.Text)            }
+    if (IsDefault $Redux.Bazaar2.Slot7            -Not)   { ChangeBytes -Offset ($start + 8 * 6 + 0x40 * 5) -Values (GetOoTShopItem $Redux.Bazaar2.Slot7.Text)            }
+    if (IsDefault $Redux.Bazaar2.Slot8            -Not)   { ChangeBytes -Offset ($start + 8 * 7 + 0x40 * 5) -Values (GetOoTShopItem $Redux.Bazaar2.Slot8.Text)            }
+
+    if (IsDefault $Redux.MarketPotionShop.Slot1   -Not)   { ChangeBytes -Offset ($start + 8 * 0 + 0x40 * 3) -Values (GetOoTShopItem $Redux.MarketPotionShop.Slot1.Text)   }
+    if (IsDefault $Redux.MarketPotionShop.Slot2   -Not)   { ChangeBytes -Offset ($start + 8 * 1 + 0x40 * 3) -Values (GetOoTShopItem $Redux.MarketPotionShop.Slot2.Text)   }
+    if (IsDefault $Redux.MarketPotionShop.Slot3   -Not)   { ChangeBytes -Offset ($start + 8 * 2 + 0x40 * 3) -Values (GetOoTShopItem $Redux.MarketPotionShop.Slot3.Text)   }
+    if (IsDefault $Redux.MarketPotionShop.Slot4   -Not)   { ChangeBytes -Offset ($start + 8 * 3 + 0x40 * 3) -Values (GetOoTShopItem $Redux.MarketPotionShop.Slot4.Text)   }
+    if (IsDefault $Redux.MarketPotionShop.Slot5   -Not)   { ChangeBytes -Offset ($start + 8 * 4 + 0x40 * 3) -Values (GetOoTShopItem $Redux.MarketPotionShop.Slot5.Text)   }
+    if (IsDefault $Redux.MarketPotionShop.Slot6   -Not)   { ChangeBytes -Offset ($start + 8 * 5 + 0x40 * 3) -Values (GetOoTShopItem $Redux.MarketPotionShop.Slot6.Text)   }
+    if (IsDefault $Redux.MarketPotionShop.Slot7   -Not)   { ChangeBytes -Offset ($start + 8 * 6 + 0x40 * 3) -Values (GetOoTShopItem $Redux.MarketPotionShop.Slot7.Text)   }
+    if (IsDefault $Redux.MarketPotionShop.Slot8   -Not)   { ChangeBytes -Offset ($start + 8 * 7 + 0x40 * 3) -Values (GetOoTShopItem $Redux.MarketPotionShop.Slot8.Text)   }
+
+    if (IsDefault $Redux.KakarikoPotionShop.Slot1 -Not)   { ChangeBytes -Offset ($start + 8 * 0 + 0x40 * 1) -Values (GetOoTShopItem $Redux.KakarikoPotionShop.Slot1.Text) }
+    if (IsDefault $Redux.KakarikoPotionShop.Slot2 -Not)   { ChangeBytes -Offset ($start + 8 * 1 + 0x40 * 1) -Values (GetOoTShopItem $Redux.KakarikoPotionShop.Slot2.Text) }
+    if (IsDefault $Redux.KakarikoPotionShop.Slot3 -Not)   { ChangeBytes -Offset ($start + 8 * 2 + 0x40 * 1) -Values (GetOoTShopItem $Redux.KakarikoPotionShop.Slot3.Text) }
+    if (IsDefault $Redux.KakarikoPotionShop.Slot4 -Not)   { ChangeBytes -Offset ($start + 8 * 3 + 0x40 * 1) -Values (GetOoTShopItem $Redux.KakarikoPotionShop.Slot4.Text) }
+    if (IsDefault $Redux.KakarikoPotionShop.Slot5 -Not)   { ChangeBytes -Offset ($start + 8 * 4 + 0x40 * 1) -Values (GetOoTShopItem $Redux.KakarikoPotionShop.Slot5.Text) }
+    if (IsDefault $Redux.KakarikoPotionShop.Slot6 -Not)   { ChangeBytes -Offset ($start + 8 * 5 + 0x40 * 1) -Values (GetOoTShopItem $Redux.KakarikoPotionShop.Slot6.Text) }
+    if (IsDefault $Redux.KakarikoPotionShop.Slot7 -Not)   { ChangeBytes -Offset ($start + 8 * 6 + 0x40 * 1) -Values (GetOoTShopItem $Redux.KakarikoPotionShop.Slot7.Text) }
+    if (IsDefault $Redux.KakarikoPotionShop.Slot8 -Not)   { ChangeBytes -Offset ($start + 8 * 7 + 0x40 * 1) -Values (GetOoTShopItem $Redux.KakarikoPotionShop.Slot8.Text) }
+
+    if (IsDefault $Redux.BombchuShop.Slot1        -Not)   { ChangeBytes -Offset ($start + 8 * 0 + 0x40 * 2) -Values (GetOoTShopItem $Redux.BombchuShop.Slot1.Text)        }
+    if (IsDefault $Redux.BombchuShop.Slot2        -Not)   { ChangeBytes -Offset ($start + 8 * 1 + 0x40 * 2) -Values (GetOoTShopItem $Redux.BombchuShop.Slot2.Text)        }
+    if (IsDefault $Redux.BombchuShop.Slot3        -Not)   { ChangeBytes -Offset ($start + 8 * 2 + 0x40 * 2) -Values (GetOoTShopItem $Redux.BombchuShop.Slot3.Text)        }
+    if (IsDefault $Redux.BombchuShop.Slot4        -Not)   { ChangeBytes -Offset ($start + 8 * 3 + 0x40 * 2) -Values (GetOoTShopItem $Redux.BombchuShop.Slot4.Text)        }
+    if (IsDefault $Redux.BombchuShop.Slot5        -Not)   { ChangeBytes -Offset ($start + 8 * 4 + 0x40 * 2) -Values (GetOoTShopItem $Redux.BombchuShop.Slot5.Text)        }
+    if (IsDefault $Redux.BombchuShop.Slot6        -Not)   { ChangeBytes -Offset ($start + 8 * 5 + 0x40 * 2) -Values (GetOoTShopItem $Redux.BombchuShop.Slot6.Text)        }
+    if (IsDefault $Redux.BombchuShop.Slot7        -Not)   { ChangeBytes -Offset ($start + 8 * 6 + 0x40 * 2) -Values (GetOoTShopItem $Redux.BombchuShop.Slot7.Text)        }
+    if (IsDefault $Redux.BombchuShop.Slot8        -Not)   { ChangeBytes -Offset ($start + 8 * 7 + 0x40 * 2) -Values (GetOoTShopItem $Redux.BombchuShop.Slot8.Text)        }
+
+    if (IsDefault $Redux.KokiriShop.Slot1         -Not)   { ChangeBytes -Offset ($start + 8 * 0 + 0x40 * 0) -Values (GetOoTShopItem $Redux.KokiriShop.Slot1.Text)         }
+    if (IsDefault $Redux.KokiriShop.Slot2         -Not)   { ChangeBytes -Offset ($start + 8 * 1 + 0x40 * 0) -Values (GetOoTShopItem $Redux.KokiriShop.Slot2.Text)         }
+    if (IsDefault $Redux.KokiriShop.Slot3         -Not)   { ChangeBytes -Offset ($start + 8 * 2 + 0x40 * 0) -Values (GetOoTShopItem $Redux.KokiriShop.Slot3.Text)         }
+    if (IsDefault $Redux.KokiriShop.Slot4         -Not)   { ChangeBytes -Offset ($start + 8 * 3 + 0x40 * 0) -Values (GetOoTShopItem $Redux.KokiriShop.Slot4.Text)         }
+    if (IsDefault $Redux.KokiriShop.Slot5         -Not)   { ChangeBytes -Offset ($start + 8 * 4 + 0x40 * 0) -Values (GetOoTShopItem $Redux.KokiriShop.Slot5.Text)         }
+    if (IsDefault $Redux.KokiriShop.Slot6         -Not)   { ChangeBytes -Offset ($start + 8 * 5 + 0x40 * 0) -Values (GetOoTShopItem $Redux.KokiriShop.Slot6.Text)         }
+    if (IsDefault $Redux.KokiriShop.Slot7         -Not)   { ChangeBytes -Offset ($start + 8 * 6 + 0x40 * 0) -Values (GetOoTShopItem $Redux.KokiriShop.Slot7.Text)         }
+    if (IsDefault $Redux.KokiriShop.Slot8         -Not)   { ChangeBytes -Offset ($start + 8 * 7 + 0x40 * 0) -Values (GetOoTShopItem $Redux.KokiriShop.Slot8.Text)         }
+
+    if (IsDefault $Redux.GoronShop.Slot1          -Not)   { ChangeBytes -Offset ($start + 8 * 0 + 0x40 * 8) -Values (GetOoTShopItem $Redux.GoronShop.Slot1.Text)          }
+    if (IsDefault $Redux.GoronShop.Slot2          -Not)   { ChangeBytes -Offset ($start + 8 * 1 + 0x40 * 8) -Values (GetOoTShopItem $Redux.GoronShop.Slot2.Text)          }
+    if (IsDefault $Redux.GoronShop.Slot3          -Not)   { ChangeBytes -Offset ($start + 8 * 2 + 0x40 * 8) -Values (GetOoTShopItem $Redux.GoronShop.Slot3.Text)          }
+    if (IsDefault $Redux.GoronShop.Slot4          -Not)   { ChangeBytes -Offset ($start + 8 * 3 + 0x40 * 8) -Values (GetOoTShopItem $Redux.GoronShop.Slot4.Text)          }
+    if (IsDefault $Redux.GoronShop.Slot5          -Not)   { ChangeBytes -Offset ($start + 8 * 4 + 0x40 * 8) -Values (GetOoTShopItem $Redux.GoronShop.Slot5.Text)          }
+    if (IsDefault $Redux.GoronShop.Slot6          -Not)   { ChangeBytes -Offset ($start + 8 * 5 + 0x40 * 8) -Values (GetOoTShopItem $Redux.GoronShop.Slot6.Text)          }
+    if (IsDefault $Redux.GoronShop.Slot7          -Not)   { ChangeBytes -Offset ($start + 8 * 6 + 0x40 * 8) -Values (GetOoTShopItem $Redux.GoronShop.Slot7.Text)          }
+    if (IsDefault $Redux.GoronShop.Slot8          -Not)   { ChangeBytes -Offset ($start + 8 * 7 + 0x40 * 8) -Values (GetOoTShopItem $Redux.GoronShop.Slot8.Text)          }
+
+    if (IsDefault $Redux.ZoraShop.Slot1           -Not)   { ChangeBytes -Offset ($start + 8 * 0 + 0x40 * 7) -Values (GetOoTShopItem $Redux.ZoraShop.Slot1.Text)           }
+    if (IsDefault $Redux.ZoraShop.Slot2           -Not)   { ChangeBytes -Offset ($start + 8 * 1 + 0x40 * 7) -Values (GetOoTShopItem $Redux.ZoraShop.Slot2.Text)           }
+    if (IsDefault $Redux.ZoraShop.Slot3           -Not)   { ChangeBytes -Offset ($start + 8 * 2 + 0x40 * 7) -Values (GetOoTShopItem $Redux.ZoraShop.Slot3.Text)           }
+    if (IsDefault $Redux.ZoraShop.Slot4           -Not)   { ChangeBytes -Offset ($start + 8 * 3 + 0x40 * 7) -Values (GetOoTShopItem $Redux.ZoraShop.Slot4.Text)           }
+    if (IsDefault $Redux.ZoraShop.Slot5           -Not)   { ChangeBytes -Offset ($start + 8 * 4 + 0x40 * 7) -Values (GetOoTShopItem $Redux.ZoraShop.Slot5.Text)           }
+    if (IsDefault $Redux.ZoraShop.Slot6           -Not)   { ChangeBytes -Offset ($start + 8 * 5 + 0x40 * 7) -Values (GetOoTShopItem $Redux.ZoraShop.Slot6.Text)           }
+    if (IsDefault $Redux.ZoraShop.Slot7           -Not)   { ChangeBytes -Offset ($start + 8 * 6 + 0x40 * 7) -Values (GetOoTShopItem $Redux.ZoraShop.Slot7.Text)           }
+    if (IsDefault $Redux.ZoraShop.Slot8           -Not)   { ChangeBytes -Offset ($start + 8 * 7 + 0x40 * 7) -Values (GetOoTShopItem $Redux.ZoraShop.Slot8.Text)           }
+
+    
+    
     # CUTSCENES #
 
     if (IsItem -Elem $Redux.Skip.RegularSongs -Item "Learn Regular Songs") {
@@ -1668,6 +1826,33 @@ function ByteSceneOptions() {
 
 
 
+    # GAMEPLAY #
+
+    if (IsChecked $Redux.Gameplay.ChildShops) {
+        PrepareMap   -Scene "Kakariko Village" -Map 0 -Header 0
+        InsertActor  -Name  "Kakariko Village" -Param "0002" -X (-234) -Y 425 -Z (-560) -YRot 0x305B # Bazaar Poster
+        InsertActor  -Name  "Kakariko Village" -Param "0000" -X   126  -Y 425 -Z (-566) -YRot 0xB05B # Potion Shop Poster
+        InsertObject -Name  "Kakariko Village (Adult)"
+        ReplaceTransitionActor -Index 6 -Param "01BF" # Bazaar
+        ReplaceTransitionActor -Index 3 -Param "01BF" # Granny's Potion Shop
+        SaveLoadedMap
+
+        PrepareMap   -Scene "Kakariko Village" -Map 0 -Header 1
+        InsertActor  -Name  "Kakariko Village" -Param "0002" -X (-234) -Y 425 -Z (-560) -YRot 0x305B # Bazaar Poster
+        InsertActor  -Name  "Kakariko Village" -Param "0000" -X   126  -Y 425 -Z (-566) -YRot 0xB05B # Potion Shop Poster
+        InsertObject -Name  "Kakariko Village (Adult)"
+        ReplaceTransitionActor -Index 6 -Param "0291" # Bazaar
+        ReplaceTransitionActor -Index 3 -Param "01BF" # Granny's Potion Shop
+        SaveAndPatchLoadedScene
+
+        PrepareMap      -Scene "Guard's House" -Map 0 -Header 0
+        ChangeMapFile   -Offset "48" -Values "03000470"
+        ChangeSceneFile -Offset "68" -Values "02000B60"
+        SaveAndPatchLoadedScene
+    }
+
+
+
     # RESTORE #
 
     if (IsChecked $Redux.Restore.GerudoTextures) {
@@ -1721,6 +1906,7 @@ function ByteSceneOptions() {
         SaveAndPatchLoadedScene
     }
 
+    if (IsChecked $Redux.Fixes.GerudosFortressChest)        { PrepareMap -Scene "Gerudo's Fortress"     -Map 0 -Header 0; ReplaceActor -Name "Treasure Chest"                          -Compare "03E0" -Param "07C0";                                        SaveAndPatchLoadedScene }
     if (IsChecked $Redux.Fixes.ChildColossusFairy)          { PrepareMap -Scene "Desert Colossus"       -Map 0 -Header 0; ReplaceActor -Name "Dialog Spot"                             -Compare "8EFF" -Param "8EDD";                                        SaveAndPatchLoadedScene }
     if (IsChecked $Redux.Fixes.CraterFairy)                 { PrepareMap -Scene "Death Mountain Crater" -Map 1 -Header 1; ReplaceActor -Name "Dialog Spot" -New "Falling Burning Rock" -Compare "8EDC" -X 0 -Y 0 -Z 0 -XRot 0 -YRot 0 -ZRot 0 -Param "FFFF"; SaveAndPatchLoadedScene }
     if (IsChecked $Redux.Fixes.DodongosCavernGossipStone)   { PrepareMap -Scene "Dodongo's Cavern"      -Map 0 -Header 0; ReplaceActor -Name "Gossip Stone"                            -Compare "1114" -Param "1138";                                        SaveAndPatchLoadedScene }
@@ -1876,6 +2062,135 @@ function ByteTextOptions() {
         }
     }
     elseif (IsChecked $Redux.Text.Speed2x) { ChangeBytes -Offset "B5006F" -Values "02" }
+
+    if (IsChecked $Redux.ShopPrice.FixItems) {
+        # Giant's Knife
+        SetMessage -ID "010D" -Replace "<DI>Giant's Knife   1000 Rupees<DC><N><N><Two Choices><G>Buy<N>Don't buy<W>"
+        SetMessage -ID "010E" -Replace "<DI><R>Giant's Knife   1000 Rupees<N><W>This is a big, heavy sword just <N>like the ones Hylian Knights use.<N>It does massive damage upon your foes!<DC><Shop Description>"
+        
+        # Milk
+        SetMessage -ID "010F" -Replace "<DI>Milk   100 Rupees<DC><N><N><Two Choices><G>Buy<N>Don't buy<W>"
+        SetMessage -ID "0110" -Replace "<DI><R>Milk   100 Rupees<N><W>This is a big, heavy sword just <N>like the ones Hylian Knights use.<N>It does massive damage upon your foes!<DC><Shop Description>"
+
+        # Weird Egg
+        SetMessage -ID "0111" -Replace "<DI>Weird Egg   100 Rupees<DC><N><N><Two Choices><G>Buy<N>Don't buy<W>"
+        SetMessage -ID "0112" -Replace "<DI><R>Weird Egg   100 Rupees<N><W>This is a big, heavy sword just <N>like the ones Hylian Knights use.<N>It does massive damage upon your foes!<DC><Shop Description>"
+
+        # Big Poe
+        SetMessage -ID "0113" -Replace "<DI>Big Poe   50 Rupees<DC><N><N><Two Choices><G>Buy<N>Don't buy<W>"
+        SetMessage -ID "506F" -Replace "<DI><R>Big Poe   50 Rupees<N><W>This is a big, heavy sword just <N>like the ones Hylian Knights use.<N>It does massive damage upon your foes!<DC><Shop Description>"
+    }
+
+    # Shop Quantity
+    if (IsDefault $Redux.ShopQuantity.RecoveryHeart -Not) {
+        if     ($Redux.ShopQuantity.RecoveryHeart.Text -eq "2")    { $text = "two<N>Heart Containers"       }
+        elseif ($Redux.ShopQuantity.RecoveryHeart.Text -eq "3")    { $text = "three<N>Heart Containers"     }
+        elseif ($Redux.ShopQuantity.RecoveryHeart.Text -eq "4")    { $text = "four<N>Heart Containers"      }
+        elseif ($Redux.ShopQuantity.RecoveryHeart.Text -eq "5")    { $text = "five<N>Heart Containers"      }
+        elseif ($Redux.ShopQuantity.RecoveryHeart.Text -eq "6")    { $text = "six<N>Heart Containers"       }
+        elseif ($Redux.ShopQuantity.RecoveryHeart.Text -eq "7")    { $text = "seven<N>Heart Containers"     }
+        elseif ($Redux.ShopQuantity.RecoveryHeart.Text -eq "8")    { $text = "eight<N>Heart Containers"     }
+        elseif ($Redux.ShopQuantity.RecoveryHeart.Text -eq "9")    { $text = "nine<N>Heart Containers"      }
+        elseif ($Redux.ShopQuantity.RecoveryHeart.Text -eq "10")   { $text = "ten<N>Heart Containers"       }
+        elseif ($Redux.ShopQuantity.RecoveryHeart.Text -eq "11")   { $text = "eleven<N>Heart Containers"    }
+        elseif ($Redux.ShopQuantity.RecoveryHeart.Text -eq "12")   { $text = "twelve<N>Heart Containers"    }
+        elseif ($Redux.ShopQuantity.RecoveryHeart.Text -eq "13")   { $text = "thirteen<N>Heart Containers"  }
+        elseif ($Redux.ShopQuantity.RecoveryHeart.Text -eq "14")   { $text = "fourteen<N>Heart Containers"  }
+        elseif ($Redux.ShopQuantity.RecoveryHeart.Text -eq "15")   { $text = "fifteen<N>Heart Containers"   }
+        elseif ($Redux.ShopQuantity.RecoveryHeart.Text -eq "16")   { $text = "sixteen<N>Heart Containers"   }
+        elseif ($Redux.ShopQuantity.RecoveryHeart.Text -eq "17")   { $text = "seventeen<N>Heart Containers" }
+        elseif ($Redux.ShopQuantity.RecoveryHeart.Text -eq "18")   { $text = "eighteen<N>Heart Containers"  }
+        elseif ($Redux.ShopQuantity.RecoveryHeart.Text -eq "19")   { $text = "nineteen<N>Heart Containers"  }
+        elseif ($Redux.ShopQuantity.RecoveryHeart.Text -eq "20")   { $text = "twenty<N>Heart Containers"    }
+        else                                                       { $text = "???<N>Heart Containers"       }
+        SetMessage -ID "00AC" -Text "one<N>Heart Container" -Replace $text
+    }
+
+    if (IsDefault $Redux.Quantity.ItemDrops5 -Not) {
+        $text = $Redux.Quantity.ItemDrops5.Text
+        if ($Redux.Quantity.ItemDrops5.Text -eq "1") { $text += " piece" } else { $text += " pieces" }
+        SetMessage -ID "007F" -Text "5 Pieces"  -Replace $text; SetMessage -ID "00B2" -Text "5 pieces"  -Replace $text
+    }
+
+    if (IsDefault $Redux.Quantity.ItemDrops10 -Not) {
+        $text = $Redux.Quantity.ItemDrops10.Text
+        if ($Redux.Quantity.ItemDrops10.Text -eq "1") { $text += " piece" } else { $text += " pieces" }
+        SetMessage -ID "0087" -Text "10 pieces" -Replace $text; SetMessage -ID "00A2" -Text "10 pieces" -Replace $text
+        SetMessage -ID "007C" -Text "10 pieces" -Replace $text; SetMessage -ID "00B1" -Text "10 pieces" -Replace $text
+    }
+
+    if (IsDefault $Redux.Quantity.ItemDrops20 -Not) {
+        $text = $Redux.Quantity.ItemDrops20.Text
+        if ($Redux.Quantity.ItemDrops20.Text -eq "1") { $text += " piece" } else { $text += " pieces" }
+        SetMessage -ID "0006" -Text "20 pieces" -Replace $text; SetMessage -ID "001C" -Text "20 pieces" -Replace $text
+    }
+
+    if (IsDefault $Redux.Quantity.ItemDrops30 -Not) {
+        $text = $Redux.Quantity.ItemDrops30.Text
+        if ($Redux.Quantity.ItemDrops30.Text -eq "1") { $text += " piece" } else { $text += " pieces" }
+        SetMessage -ID "001D" -Text "30 pieces" -Replace $text; SetMessage -ID "001E" -Text "30 pieces" -Replace $text
+    }
+
+    if (IsDefault $Redux.ShopQuantity.Bombs5 -Not) {
+        $text = $Redux.ShopQuantity.Bombs5A.Text
+        if ($Redux.ShopQuantity.Bombs5A.Text -eq "1") { $text += " piece" } else { $text += " pieces" }
+        SetMessage -ID "008B" -Text "5 pieces" -Replace $text; SetMessage -ID "00A3" -Text "5 pieces" -Replace $text
+        SetMessage -ID "00CA" -Text "5 pieces" -Replace $text; SetMessage -ID "00CB" -Text "5 pieces" -Replace $text
+    }
+
+    if (IsDefault $Redux.ShopQuantity.Bombchus10A    -Not)   { $text = $Redux.ShopQuantity.Bombchus10A.Text   + " Rupee"; if ($Redux.ShopQuantity.Bombchus10A.Text    -ne "1") { $text += "s" }; SetMessage -ID "008C" -Text "10 pieces"   -Replace $text; SetMessage -ID "00BC" -Text "10 pieces"   -Replace $text }
+    if (IsDefault $Redux.ShopQuantity.Bombchus10B    -Not)   { $text = $Redux.ShopQuantity.Bombchus10B.Text   + " Rupee"; if ($Redux.ShopQuantity.Bombchus10B.Text    -ne "1") { $text += "s" }; SetMessage -ID "008C" -Text "10 pieces"   -Replace $text; SetMessage -ID "00BC" -Text "10 Rupees"   -Replace $text }
+    if (IsDefault $Redux.ShopQuantity.Bombchus10C    -Not)   { $text = $Redux.ShopQuantity.Bombchus10C.Text   + " Rupee"; if ($Redux.ShopQuantity.Bombchus10C.Text    -ne "1") { $text += "s" }; SetMessage -ID "008C" -Text "10 pieces"   -Replace $text; SetMessage -ID "00BC" -Text "10 pieces"   -Replace $text }
+    if (IsDefault $Redux.ShopQuantity.Bombchus10D    -Not)   { $text = $Redux.ShopQuantity.Bombchus10D.Text   + " Rupee"; if ($Redux.ShopQuantity.Bombchus10D.Text    -ne "1") { $text += "s" }; SetMessage -ID "008C" -Text "10 pieces"   -Replace $text; SetMessage -ID "00BC" -Text "10 pieces"   -Replace $text }
+    if (IsDefault $Redux.ShopQuantity.Bombchus20A    -Not)   { $text = $Redux.ShopQuantity.Bombchus20A.Text   + " Rupee"; if ($Redux.ShopQuantity.Bombchus20A.Text    -ne "1") { $text += "s" }; SetMessage -ID "0061" -Text "20 pieces"   -Replace $text; SetMessage -ID "002A" -Text "20 pieces"   -Replace $text }
+    if (IsDefault $Redux.ShopQuantity.Bombchus20B    -Not)   { $text = $Redux.ShopQuantity.Bombchus20B.Text   + " Rupee"; if ($Redux.ShopQuantity.Bombchus20B.Text    -ne "1") { $text += "s" }; SetMessage -ID "0061" -Text "20 pieces"   -Replace $text; SetMessage -ID "002A" -Text "20 pieces"   -Replace $text }
+    if (IsDefault $Redux.ShopQuantity.Bombchus20C    -Not)   { $text = $Redux.ShopQuantity.Bombchus20C.Text   + " Rupee"; if ($Redux.ShopQuantity.Bombchus20C.Text    -ne "1") { $text += "s" }; SetMessage -ID "0061" -Text "20 pieces"   -Replace $text; SetMessage -ID "002A" -Text "20 pieces"   -Replace $text }
+    if (IsDefault $Redux.ShopQuantity.Bombchus20D    -Not)   { $text = $Redux.ShopQuantity.Bombchus20D.Text   + " Rupee"; if ($Redux.ShopQuantity.Bombchus20D.Text    -ne "1") { $text += "s" }; SetMessage -ID "0061" -Text "20 pieces"   -Replace $text; SetMessage -ID "002A" -Text "20 pieces"   -Replace $text }
+    if (IsDefault $Redux.Capacity.DekuSeedBullets30  -Not)   { $text = $Redux.Capacity.DekuSeedBullets30.Text + " Rupee"; if ($Redux.Capacity.DekuSeedBullets30.Text  -ne "1") { $text += "s" }; SetMessage -ID "00DE" -Text "30 pieces"   -Replace $text; SetMessage -ID "00DF" -Text "30 pieces"   -Replace $text }
+    if (IsDefault $Redux.ShopQuantity.Arrows10       -Not)   { $text = $Redux.ShopQuantity.Arrows10.Text      + " Rupee"; if ($Redux.ShopQuantity.Arrows10.Text       -ne "1") { $text += "s" }; SetMessage -ID "008A" -Text "10 pieces"   -Replace $text; SetMessage -ID "00A0" -Text "10 pieces"   -Replace $text }
+    if (IsDefault $Redux.ShopQuantity.Arrows30       -Not)   { $text = $Redux.ShopQuantity.Arrows30.Text      + " Rupee"; if ($Redux.ShopQuantity.Arrows30.Text       -ne "1") { $text += "s" }; SetMessage -ID "009B" -Text "30 pieces"   -Replace $text; SetMessage -ID "00C1" -Text "30 pieces"   -Replace $text }
+    if (IsDefault $Redux.ShopQuantity.Arrows50       -Not)   { $text = $Redux.ShopQuantity.Arrows50.Text      + " Rupee"; if ($Redux.ShopQuantity.Arrows50.Text       -ne "1") { $text += "s" }; SetMessage -ID "007D" -Text "50 pieces"   -Replace $text; SetMessage -ID "00B0" -Text "50 pieces"   -Replace $text }
+
+    # Shop Price
+    if (IsDefault $Redux.ShopPrice.RecoveryHeart     -Not)   { $text = $Redux.ShopPrice.RecoveryHeart.Text     + " Rupee"; if ($Redux.ShopPrice.RecoveryHeart.Text     -ne "1") { $text += "s" }; SetMessage -ID "0095" -Text "10 Rupees"   -Replace $text; SetMessage -ID "00AC" -Text "10 Rupees"   -Replace $text }
+    if (IsDefault $Redux.ShopPrice.DekuStick         -Not)   { $text = $Redux.ShopPrice.DekuStick.Text         + " Rupee"; if ($Redux.ShopPrice.DekuStick.Text         -ne "1") { $text += "s" }; SetMessage -ID "0088" -Text "10 Rupees"   -Replace $text; SetMessage -ID "00A1" -Text "10 Rupees"   -Replace $text }
+    if (IsDefault $Redux.ShopPrice.DekuNuts5         -Not)   { $text = $Redux.ShopPrice.DekuNuts5.Text         + " Rupee"; if ($Redux.ShopPrice.DekuNuts5.Text         -ne "1") { $text += "s" }; SetMessage -ID "007F" -Text "5 Rupees"    -Replace $text; SetMessage -ID "00B2" -Text "5 Rupees"    -Replace $text }
+    if (IsDefault $Redux.ShopPrice.DekuNuts10        -Not)   { $text = $Redux.ShopPrice.DekuNuts10.Text        + " Rupee"; if ($Redux.ShopPrice.DekuNuts10.Text        -ne "1") { $text += "s" }; SetMessage -ID "0087" -Text "10 Rupees"   -Replace $text; SetMessage -ID "00A2" -Text "10 Rupees"   -Replace $text }
+    if (IsDefault $Redux.ShopPrice.Bombs5A           -Not)   { $text = $Redux.ShopPrice.Bombs5A.Text           + " Rupee"; if ($Redux.ShopPrice.Bombs5A.Text           -ne "1") { $text += "s" }; SetMessage -ID "008B" -Text "25 Rupees"   -Replace $text; SetMessage -ID "00A3" -Text "25 Rupees"   -Replace $text }
+    if (IsDefault $Redux.ShopPrice.Bombs5B           -Not)   { $text = $Redux.ShopPrice.Bombs5B.Text           + " Rupee"; if ($Redux.ShopPrice.Bombs5B.Text           -ne "1") { $text += "s" }; SetMessage -ID "00CA" -Text "35 Rupees"   -Replace $text; SetMessage -ID "00CB" -Text "35 Rupees"   -Replace $text }
+    if (IsDefault $Redux.ShopPrice.Bombs10           -Not)   { $text = $Redux.ShopPrice.Bombs10.Text           + " Rupee"; if ($Redux.ShopPrice.Bombs10.Text           -ne "1") { $text += "s" }; SetMessage -ID "007C" -Text "50 Rupees"   -Replace $text; SetMessage -ID "00B1" -Text "50 Rupees"   -Replace $text }
+    if (IsDefault $Redux.ShopPrice.Bombs20           -Not)   { $text = $Redux.ShopPrice.Bombs20.Text           + " Rupee"; if ($Redux.ShopPrice.Bombs20.Text           -ne "1") { $text += "s" }; SetMessage -ID "0006" -Text "80 Rupees"   -Replace $text; SetMessage -ID "001C" -Text "80 Rupees"   -Replace $text }
+    if (IsDefault $Redux.ShopPrice.Bombs30           -Not)   { $text = $Redux.ShopPrice.Bombs30.Text           + " Rupee"; if ($Redux.ShopPrice.Bombs30.Text           -ne "1") { $text += "s" }; SetMessage -ID "001D" -Text "120 Rupees"  -Replace $text; SetMessage -ID "001E" -Text "120 Rupees"  -Replace $text }
+    if (IsDefault $Redux.ShopPrice.Bombchus10A       -Not)   { $text = $Redux.ShopPrice.Bombchus10A.Text       + " Rupee"; if ($Redux.ShopPrice.Bombchus10A.Text       -ne "1") { $text += "s" }; SetMessage -ID "008C" -Text "100 Rupees"  -Replace $text; SetMessage -ID "00BC" -Text "100 Rupees"  -Replace $text }
+    if (IsDefault $Redux.ShopPrice.Bombchus10B       -Not)   { $text = $Redux.ShopPrice.Bombchus10B.Text       + " Rupee"; if ($Redux.ShopPrice.Bombchus10B.Text       -ne "1") { $text += "s" }; SetMessage -ID "008C" -Text "100 Rupees"  -Replace $text; SetMessage -ID "00BC" -Text "100 Rupees"  -Replace $text }
+    if (IsDefault $Redux.ShopPrice.Bombchus10C       -Not)   { $text = $Redux.ShopPrice.Bombchus10C.Text       + " Rupee"; if ($Redux.ShopPrice.Bombchus10C.Text       -ne "1") { $text += "s" }; SetMessage -ID "008C" -Text "100 Rupees"  -Replace $text; SetMessage -ID "00BC" -Text "100 Rupees"  -Replace $text }
+    if (IsDefault $Redux.ShopPrice.Bombchus10D       -Not)   { $text = $Redux.ShopPrice.Bombchus10D.Text       + " Rupee"; if ($Redux.ShopPrice.Bombchus10D.Text       -ne "1") { $text += "s" }; SetMessage -ID "008C" -Text "100 Rupees"  -Replace $text; SetMessage -ID "00BC" -Text "100 Rupees"  -Replace $text }
+    if (IsDefault $Redux.ShopPrice.Bombchus20A       -Not)   { $text = $Redux.ShopPrice.Bombchus20A.Text       + " Rupee"; if ($Redux.ShopPrice.Bombchus20A.Text       -ne "1") { $text += "s" }; SetMessage -ID "0061" -Text "180 Rupees"  -Replace $text; SetMessage -ID "002A" -Text "180 Rupees"  -Replace $text }
+    if (IsDefault $Redux.ShopPrice.Bombchus20B       -Not)   { $text = $Redux.ShopPrice.Bombchus20B.Text       + " Rupee"; if ($Redux.ShopPrice.Bombchus20B.Text       -ne "1") { $text += "s" }; SetMessage -ID "0061" -Text "180 Rupees"  -Replace $text; SetMessage -ID "002A" -Text "180 Rupees"  -Replace $text }
+    if (IsDefault $Redux.ShopPrice.Bombchus20C       -Not)   { $text = $Redux.ShopPrice.Bombchus20C.Text       + " Rupee"; if ($Redux.ShopPrice.Bombchus20C.Text       -ne "1") { $text += "s" }; SetMessage -ID "0061" -Text "180 Rupees"  -Replace $text; SetMessage -ID "002A" -Text "180 Rupees"  -Replace $text }
+    if (IsDefault $Redux.ShopPrice.Bombchus20D       -Not)   { $text = $Redux.ShopPrice.Bombchus20D.Text       + " Rupee"; if ($Redux.ShopPrice.Bombchus20D.Text       -ne "1") { $text += "s" }; SetMessage -ID "0061" -Text "180 Rupees"  -Replace $text; SetMessage -ID "002A" -Text "180 Rupees"  -Replace $text }
+    if (IsDefault $Redux.ShopPrice.DekuSeedBullets30 -Not)   { $text = $Redux.ShopPrice.DekuSeedBullets30.Text + " Rupee"; if ($Redux.ShopPrice.DekuSeedBullets30.Text -ne "1") { $text += "s" }; SetMessage -ID "00DE" -Text "30 Rupees"   -Replace $text; SetMessage -ID "00DF" -Text "30 Rupees"   -Replace $text }
+    if (IsDefault $Redux.ShopPrice.Arrows10          -Not)   { $text = $Redux.ShopPrice.Arrows10.Text          + " Rupee"; if ($Redux.ShopPrice.Arrows10.Text          -ne "1") { $text += "s" }; SetMessage -ID "008A" -Text "20 Rupees"   -Replace $text; SetMessage -ID "00A0" -Text "20 Rupees"   -Replace $text }
+    if (IsDefault $Redux.ShopPrice.Arrows30          -Not)   { $text = $Redux.ShopPrice.Arrows30.Text          + " Rupee"; if ($Redux.ShopPrice.Arrows30.Text          -ne "1") { $text += "s" }; SetMessage -ID "009B" -Text "60 Rupees"   -Replace $text; SetMessage -ID "00C1" -Text "60 Rupees"   -Replace $text }
+    if (IsDefault $Redux.ShopPrice.Arrows50          -Not)   { $text = $Redux.ShopPrice.Arrows50.Text          + " Rupee"; if ($Redux.ShopPrice.Arrows50.Text          -ne "1") { $text += "s" }; SetMessage -ID "007D" -Text "80 Rupees"   -Replace $text; SetMessage -ID "00B0" -Text "80 Rupees"   -Replace $text }
+    if (IsDefault $Redux.ShopPrice.DekuShield        -Not)   { $text = $Redux.ShopPrice.DekuShield.Text        + " Rupee"; if ($Redux.ShopPrice.DekuShield.Text        -ne "1") { $text += "s" }; SetMessage -ID "0089" -Text "40 Rupees"   -Replace $text; SetMessage -ID "009F" -Text "40 Rupees"   -Replace $text }
+    if (IsDefault $Redux.ShopPrice.HylianShield      -Not)   { $text = $Redux.ShopPrice.HylianShield.Text      + " Rupee"; if ($Redux.ShopPrice.HylianShield.Text      -ne "1") { $text += "s" }; SetMessage -ID "0092" -Text "80 Rupees"   -Replace $text; SetMessage -ID "00A9" -Text "80 Rupees"   -Replace $text }
+    if (IsDefault $Redux.ShopPrice.GiantsKnife       -Not)   { $text = $Redux.ShopPrice.GiantsKnife.Text       + " Rupee"; if ($Redux.ShopPrice.GiantsKnife.Text       -ne "1") { $text += "s" }; SetMessage -ID "010D" -Text "1000 Rupees" -Replace $text; SetMessage -ID "010E" -Text "1000 Rupees" -Replace $text }
+    if (IsDefault $Redux.ShopPrice.GoronTunic        -Not)   { $text = $Redux.ShopPrice.GoronTunic.Text        + " Rupee"; if ($Redux.ShopPrice.GoronTunic.Text        -ne "1") { $text += "s" }; SetMessage -ID "0093" -Text "200 Rupees"  -Replace $text; SetMessage -ID "00AA" -Text "200 Rupees"  -Replace $text }
+    if (IsDefault $Redux.ShopPrice.ZoraTunic         -Not)   { $text = $Redux.ShopPrice.ZoraTunic.Text         + " Rupee"; if ($Redux.ShopPrice.ZoraTunic.Text         -ne "1") { $text += "s" }; SetMessage -ID "0094" -Text "300 Rupees"  -Replace $text; SetMessage -ID "00AB" -Text "300 Rupees"  -Replace $text }
+    if (IsDefault $Redux.ShopPrice.RedPotionA        -Not)   { $text = $Redux.ShopPrice.RedPotionA.Text        + " Rupee"; if ($Redux.ShopPrice.RedPotionA.Text        -ne "1") { $text += "s" }; SetMessage -ID "008E" -Text "30 Rupees"   -Replace $text; SetMessage -ID "00A5" -Text "30 Rupees"   -Replace $text }
+    if (IsDefault $Redux.ShopPrice.RedPotionB        -Not)   { $text = $Redux.ShopPrice.RedPotionB.Text        + " Rupee"; if ($Redux.ShopPrice.RedPotionB.Text        -ne "1") { $text += "s" }; SetMessage -ID "0062" -Text "40 Rupees"   -Replace $text; SetMessage -ID "0064" -Text "40 Rupees"   -Replace $text }
+    if (IsDefault $Redux.ShopPrice.RedPotionC        -Not)   { $text = $Redux.ShopPrice.RedPotionC.Text        + " Rupee"; if ($Redux.ShopPrice.RedPotionC.Text        -ne "1") { $text += "s" }; SetMessage -ID "0063" -Text "50 Rupees"   -Replace $text; SetMessage -ID "0065" -Text "50 Rupees"   -Replace $text }
+    if (IsDefault $Redux.ShopPrice.GreenPotion       -Not)   { $text = $Redux.ShopPrice.GreenPotion.Text       + " Rupee"; if ($Redux.ShopPrice.GreenPotion.Text       -ne "1") { $text += "s" }; SetMessage -ID "008F" -Text "30 Rupees"   -Replace $text; SetMessage -ID "00A6" -Text "30 Rupees"   -Replace $text }
+    if (IsDefault $Redux.ShopPrice.BluePotion        -Not)   { $text = $Redux.ShopPrice.BluePotion.Text        + " Rupee"; if ($Redux.ShopPrice.BluePotion.Text        -ne "1") { $text += "s" }; SetMessage -ID "0090" -Text "60 Rupees"   -Replace $text; SetMessage -ID "00A7" -Text "60 Rupees"   -Replace $text }
+    if (IsDefault $Redux.ShopPrice.Milk              -Not)   { $text = $Redux.ShopPrice.Milk.Text              + " Rupee"; if ($Redux.ShopPrice.Milk.Text              -ne "1") { $text += "s" }; SetMessage -ID "010F" -Text "100 Rupees"  -Replace $text; SetMessage -ID "0110" -Text "100 Rupees"  -Replace $text }
+    if (IsDefault $Redux.ShopPrice.Fairy             -Not)   { $text = $Redux.ShopPrice.Fairy.Text             + " Rupee"; if ($Redux.ShopPrice.Fairy.Text             -ne "1") { $text += "s" }; SetMessage -ID "00B6" -Text "50 Rupees"   -Replace $text; SetMessage -ID "00B7" -Text "50 Rupees"   -Replace $text }
+    if (IsDefault $Redux.ShopPrice.BlueFire          -Not)   { $text = $Redux.ShopPrice.BlueFire.Text          + " Rupee"; if ($Redux.ShopPrice.BlueFire.Text          -ne "1") { $text += "s" }; SetMessage -ID "00B8" -Text "300 Rupees"  -Replace $text; SetMessage -ID "00B9" -Text "300 Rupees"  -Replace $text }
+    if (IsDefault $Redux.ShopPrice.Bug               -Not)   { $text = $Redux.ShopPrice.Bug.Text               + " Rupee"; if ($Redux.ShopPrice.Bug.Text               -ne "1") { $text += "s" }; SetMessage -ID "00BA" -Text "50 Rupees"   -Replace $text; SetMessage -ID "00BB" -Text "50 Rupees"   -Replace $text }
+    if (IsDefault $Redux.ShopPrice.Fish              -Not)   { $text = $Redux.ShopPrice.Fish.Text              + " Rupee"; if ($Redux.ShopPrice.Fish.Text              -ne "1") { $text += "s" }; SetMessage -ID "007E" -Text "200 Rupees"  -Replace $text; SetMessage -ID "00B3" -Text "200 Rupees"  -Replace $text }
+    if (IsDefault $Redux.ShopPrice.Poe               -Not)   { $text = $Redux.ShopPrice.Poe.Text               + " Rupee"; if ($Redux.ShopPrice.Poe.Text               -ne "1") { $text += "s" }; SetMessage -ID "506E" -Text "30 Rupees"   -Replace $text; SetMessage -ID "506D" -Text "30 Rupees"   -Replace $text }
+    if (IsDefault $Redux.ShopPrice.BigPoe            -Not)   { $text = $Redux.ShopPrice.BigPoe.Text            + " Rupee"; if ($Redux.ShopPrice.BigPoe.Text            -ne "1") { $text += "s" }; SetMessage -ID "506F" -Text "50 Rupees"   -Replace $text; SetMessage -ID "0113" -Text "50 Rupees"   -Replace $text }
+    if (IsDefault $Redux.ShopPrice.WeirdEgg          -Not)   { $text = $Redux.ShopPrice.WeirdEgg.Text          + " Rupee"; if ($Redux.ShopPrice.WeirdEgg.Text          -ne "1") { $text += "s" }; SetMessage -ID "0111" -Text "100 Rupees"  -Replace $text; SetMessage -ID "0112" -Text "100 Rupees"  -Replace $text }
 
     if (IsChecked $Redux.Text.FemalePronouns) {
         SetMessage -ID "10B2" -Text "You must be a nice guy!"                                                          -Replace "You must be a nice gal!"
@@ -2221,6 +2536,7 @@ function CreateOptionsPreviews() {
     CreateImageBox -X 210 -Y 70  -W 40  -H 40 -Name "Rupees";       $Redux.UI.Rupees.Add_SelectedIndexChanged(       { ShowHUDPreview -IsOoT } )
     CreateImageBox -X 260 -Y 70  -W 40  -H 40 -Name "DungeonKeys";  $Redux.UI.DungeonKeys.Add_CheckStateChanged(     { ShowHUDPreview -IsOoT } )
     CreateImageBox -X 160 -Y 120 -W 40  -H 40 -Name "CurrentFloor"; $Redux.UI.CurrentFloor.Add_SelectedIndexChanged( { ShowHUDPreview -IsOoT } )
+    CreateImageBox -X 210 -Y 120 -W 40  -H 40 -Name "BossFloor";    $Redux.UI.BossFloor.Add_SelectedIndexChanged(    { ShowHUDPreview -IsOoT } )
     ShowHUDPreview -IsOoT
 
 
@@ -2413,6 +2729,7 @@ function CreateTabMain() {
     CreateReduxCheckBox -Name "RemoveQuickSpin"                            -Text "Remove Magic Quick Spin"  -Info "The magic Quick Spin Attack move is removed`nIt's a regular Quick Spin Attack now instead"                                                                      -Credits "Admentus & Three Pendants"
     CreateReduxCheckBox -Name "RunFaster"                                  -Text "Run Faster"               -Info "Faster run speed & longer jumps"                                                                       -Warning "You may need to play a little more cautiously" -Credits "Ikey Ilex"
     CreateReduxCheckbox -Name "RemoveSpeedClamp"                           -Text "Remove Jump Speed Limit"  -Info "Removes the jumping speed limit just like in MM"                                                                                                                -Credits "Admentus (ROM) & Aegiker (RAM)"
+    CreateReduxCheckbox -Name "ChildShops"               -Child            -Text "Child Shops"              -Info "Open the Potion Shop and Bazaar in Kakariko Village for Child Link"                                                                                             -Credits "Admentus"
     
 
 
@@ -2455,6 +2772,7 @@ function CreateTabMain() {
     CreateReduxCheckBox -Name "Boomerang"                 -Child         -Text "Boomerang"                -Info "Fix the gem color on the thrown boomerang"                                                                                           -Exclude "Dawn"  -Credits "Aria"
     CreateReduxCheckBox -Name "OpenTimeDoor"              -Base 4        -Text "Open Door of Time Fix"    -Info "Fix Door of Time not opening on first visit"                                                                                                          -Credits "Randomizer"
     CreateReduxCheckBox -Name "VisibleGerudoTent"         -Base 4 -Child -Text "Visible Gerudo Tent"      -Info "Make the tent in the Gerudo Valley during the Child era visible`nThe tent was always accessible, just invisible"                     -Exclude "Child" -Credits "Admentus"
+    CreateReduxCheckBox -Name "GerudosFortressChest"      -Base 1        -Text "Gerudo's Fortress Chest"  -Info "Fixes the chest on top of the Gerudo's Fortress to contain a Piece of Heart when opening it as Child Link"                                            -Credits "Admentus"
     CreateReduxCheckBox -Name "Graves"                    -Base 4 -Safe  -Text "Graveyard Graves"         -Info "The grave holes in Kakariko Graveyard behave as in the Rev 1 revision`nThe edges no longer force Link to grab or jump over them when trying to enter" -Credits "Admentus"
     CreateReduxCheckBox -Name "CorrectTimeDoor"           -Base 4 -Safe  -Text "Correct Door of Time"     -Info "Fix the positioning of the Temple of Time door, so you can not skip past it"                                                                          -Credits "Admentus"
     CreateReduxCheckBox -Name "DodongosCavernGossipStone" -Base 4 -Safe  -Text "DC Gossip Stone"          -Info "Fix the Gossip Stones in Dodongo's Cavern so that a fairy can be spawned from them"                                                                   -Credits "Admentus"
@@ -2770,7 +3088,6 @@ function CreateTabGraphics() {
     # INTERFACE #
     
     if (StrLike -Str $GamePatch.settings -Val "Gold Quest") { $val = "Gold Quest" } else { $val = "Ocarina of Time" }
-    CreateReduxCheckBox -Name "ButtonPositions"  -All -Text "MM Button Positions" -Info "Positions the A and B buttons like in Majora's Mask"         -Credits "GhostlyDark (ported)"
     CreateReduxGroup    -Tag  "UI"               -Text "Interface"
     CreateReduxComboBox -Name "BlackBars"        -Text "Black Bars"          -Items @("Enabled", "Disabled for Z-Targeting", "Disabled for Cutscenes", "Always Disabled")                    -Info "Removes the black bars shown on the top and bottom of the screen during Z-targeting and cutscenes" -Credits "Admentus"
     CreateReduxComboBox -Name "ButtonStyle"      -Text "Buttons Style"       -Items "Ocarina of Time" -FilePath ($Paths.shared + "\HUD\Buttons")       -Ext "bin" -Default $val              -Info "Set the style for the HUD buttons"                                                                 -Credits "Admentus (ported), GhostlyDark (ported), Pizza (HD), Djipi, Community, Nerrel, Federelli, AndiiSyn & Syeo"
@@ -3162,6 +3479,8 @@ function CreateTabEquipment() {
     # EQUIPMENT #
 
     CreateReduxGroup    -Tag  "Equipment"                  -Text "Equipment Adjustments"
+    CreateReduxCheckBox -Name "HideSword"                  -Text "Hide Sword"                  -Info "The sword is hidden when sheathed"                                                             -Credits "Admentus"
+    CreateReduxCheckBox -Name "HideShield"                 -Text "Hide Shield"                 -Info "The shield is hidden when sheathed"                                                            -Credits "Admentus"
     CreateReduxCheckBox -Name "UnsheathSword"              -Text "Unsheath Sword"              -Info "The sword is unsheathed first before immediately swinging it"                                  -Credits "Admentus"
     CreateReduxCheckBox -Name "FireproofDekuShield" -Child -Text "Fireproof Deku Shield"       -Info "The Deku Shield turns into an fireproof shield, which will not burn up anymore"                -Credits "Admentus (ported) & Three Pendants (ROM patch)"
     CreateReduxCheckBox -Name "FunctionalWeapons"          -Text "Functional Weapons"          -Info "All melee weapons are useable against enemies, except for obvious boss reasons"                -Credits "Admentus" -Exclude "Child"
@@ -3368,23 +3687,179 @@ function CreateTabCapacity() {
 
 
 
+    # SHOP ITEMS QUANTITY #
 
+    $Redux.Box.ShopQuantity = CreateReduxGroup -Tag "ShopQuantity" -Text "Shop Items Quantity"
 
+    CreateReduxTextBox -Name "RecoveryHeart" -Text "Recovery Heart"    -Value 1  -Info "Set the quantity for buying a Recovery Heart" -Credits "Admentus" -Min 1 -Base 5 -Max 20
+    CreateReduxTextBox -Name "Bombchus10A"   -Text "Bombchus (10 - A)" -Value 10 -Info "Set the quantity for buying Bombchus (10)"    -Credits "Admentus" -Min 1 -Base 5
+    CreateReduxTextBox -Name "Bombchus10B"   -Text "Bombchus (10 - B)" -Value 10 -Info "Set the quantity for buying Bombchus (10)"    -Credits "Admentus" -Min 1 -Base 5
+    CreateReduxTextBox -Name "Bombchus10C"   -Text "Bombchus (10 - C)" -Value 10 -Info "Set the quantity for buying Bombchus (10)"    -Credits "Admentus" -Min 1 -Base 5
+    CreateReduxTextBox -Name "Bombchus10D"   -Text "Bombchus (10 - D)" -Value 10 -Info "Set the quantity for buying Bombchus (10)"    -Credits "Admentus" -Min 1 -Base 5
+    CreateReduxTextBox -Name "Bombchus20A"   -Text "Bombchus (20 - A)" -Value 20 -Info "Set the quantity for buying Bombchus (20)"    -Credits "Admentus" -Min 1 -Base 5
+    CreateReduxTextBox -Name "Bombchus20B"   -Text "Bombchus (20 - B)" -Value 20 -Info "Set the quantity for buying Bombchus (20)"    -Credits "Admentus" -Min 1 -Base 5
+    CreateReduxTextBox -Name "Bombchus20C"   -Text "Bombchus (20 - C)" -Value 20 -Info "Set the quantity for buying Bombchus (20)"    -Credits "Admentus" -Min 1 -Base 5
+    CreateReduxTextBox -Name "Bombchus20D"   -Text "Bombchus (20 - D)" -Value 20 -Info "Set the quantity for buying Bombchus (20)"    -Credits "Admentus" -Min 1 -Base 5
+    CreateReduxTextBox -Name "Arrows10"      -Text "Arrows (10)"       -Value 10 -Info "Set the quantity for buying Arrows (10)"      -Credits "Admentus" -Min 1 -Adult
+    CreateReduxTextBox -Name "Arrows30"      -Text "Arrows (30)"       -Value 30 -Info "Set the quantity for buying Arrows (30)"      -Credits "Admentus" -Min 1 -Adult
+    CreateReduxTextBox -Name "Arrows50"      -Text "Arrows (50)"       -Value 50 -Info "Set the quantity for buying Arrows (50)"      -Credits "Admentus" -Min 1 -Adult
 
 
 
     # SHOP ITEMS PRICE #
 
-    EnableForm -Form $Redux.Box.Ammo         -Enable $Redux.Capacity.EnableAmmo.Checked
-    EnableForm -Form $Redux.Box.Wallet       -Enable $Redux.Capacity.EnableWallet.Checked
-    EnableForm -Form $Redux.Box.Drops        -Enable $Redux.Capacity.EnableDrops.Checked
+    $Redux.Box.ShopPrice = CreateReduxGroup -Tag "ShopPrice" -Text "Shop Items Price"
+    
+    CreateReduxTextBox -Name "RecoveryHeart"     -Text "Recovery Hearts"        -Value 10   -Info "Set the price for buying a Recovery Heart"       -Credits "Admentus" -Length 4 -Base 5
+    CreateReduxTextBox -Name "DekuStick"         -Text "Deku Stick"             -Value 10   -Info "Set the price for buying a Deku Stick"           -Credits "Admentus" -Length 4 -Child
+    CreateReduxTextBox -Name "DekuNuts5"         -Text "Deku Nuts (5)"          -Value 5    -Info "Set the price for buying Deku Nuts (5)"          -Credits "Admentus" -Length 4
+    CreateReduxTextBox -Name "DekuNuts10"        -Text "Deku Nuts (10)"         -Value 10   -Info "Set the price for buying Deku Nuts (10)"         -Credits "Admentus" -Length 4
+    CreateReduxTextBox -Name "Bombs5A"           -Text "Bombs (5 - A)"          -Value 25   -Info "Set the price for buying Bombs (5)"              -Credits "Admentus" -Length 4 -Base 5
+    CreateReduxTextBox -Name "Bombs5B"           -Text "Bombs (5 - B)"          -Value 35   -Info "Set the price for buying Bombs (5)"              -Credits "Admentus" -Length 4 -Base 5
+    CreateReduxTextBox -Name "Bombs10"           -Text "Bombs (10)"             -Value 50   -Info "Set the price for buying Bombs (10)"             -Credits "Admentus" -Length 4 -Base 5
+    CreateReduxTextBox -Name "Bombs20"           -Text "Bombs (20)"             -Value 80   -Info "Set the price for buying Bombs (20)"             -Credits "Admentus" -Length 4 -Base 5
+    CreateReduxTextBox -Name "Bombs30"           -Text "Bombs (30)"             -Value 120  -Info "Set the price for buying Bombs (30)"             -Credits "Admentus" -Length 4 -Base 5
+    CreateReduxTextBox -Name "Bombchus10A"       -Text "Bombchus (10 - A)"      -Value 100  -Info "Set the price for buying Bombchus (10)"          -Credits "Admentus" -Length 4 -Base 5
+    CreateReduxTextBox -Name "Bombchus10B"       -Text "Bombchus (10 - B)"      -Value 100  -Info "Set the price for buying Bombchus (10)"          -Credits "Admentus" -Length 4 -Base 5
+    CreateReduxTextBox -Name "Bombchus10C"       -Text "Bombchus (10 - C)"      -Value 100  -Info "Set the price for buying Bombchus (10)"          -Credits "Admentus" -Length 4 -Base 5
+    CreateReduxTextBox -Name "Bombchus10D"       -Text "Bombchus (10 - D)"      -Value 100  -Info "Set the price for buying Bombchus (10)"          -Credits "Admentus" -Length 4 -Base 5
+    CreateReduxTextBox -Name "Bombchus20A"       -Text "Bombchus (20 - A)"      -Value 180  -Info "Set the price for buying Bombchus (20)"          -Credits "Admentus" -Length 4 -Base 5
+    CreateReduxTextBox -Name "Bombchus20B"       -Text "Bombchus (20 - B)"      -Value 180  -Info "Set the price for buying Bombchus (20)"          -Credits "Admentus" -Length 4 -Base 5
+    CreateReduxTextBox -Name "Bombchus20C"       -Text "Bombchus (20 - C)"      -Value 180  -Info "Set the price for buying Bombchus (20)"          -Credits "Admentus" -Length 4 -Base 5
+    CreateReduxTextBox -Name "Bombchus20D"       -Text "Bombchus (20 - D)"      -Value 180  -Info "Set the price for buying Bombchus (20)"          -Credits "Admentus" -Length 4 -Base 5
+    CreateReduxTextBox -Name "DekuSeedBullets30" -Text "Bullet Seeds (30)"      -Value 30   -Info "Set the price for buying Deku Seed Bullets (30)" -Credits "Admentus" -Length 4 -Child
+    CreateReduxTextBox -Name "Arrows10"          -Text "Arrows (10)"            -Value 20   -Info "Set the price for buying Arrows (10)"            -Credits "Admentus" -Length 4 -Adult
+    CreateReduxTextBox -Name "Arrows30"          -Text "Arrows (30)"            -Value 60   -Info "Set the price for buying Arrows (30)"            -Credits "Admentus" -Length 4 -Adult
+    CreateReduxTextBox -Name "Arrows50"          -Text "Arrows (50)"            -Value 90   -Info "Set the price for buying Arrows (50)"            -Credits "Admentus" -Length 4 -Adult
+    CreateReduxTextBox -Name "DekuShield"        -Text "Deku Shield"            -Value 40   -Info "Set the price for buying a Deku Shield"          -Credits "Admentus" -Length 4 -Child
+    CreateReduxTextBox -Name "HylianShield"      -Text "Hylian Shield"          -Value 80   -Info "Set the price for buying a Hylian Shield"        -Credits "Admentus" -Length 4 -Base 5
+    CreateReduxTextBox -Name "GiantsKnife"       -Text "Giant's Knife"          -Value 1000 -Info "Set the price for buying a Giant's Knife"        -Credits "Admentus" -Length 4 -Base 5 -Adult
+    CreateReduxTextBox -Name "GoronTunic"        -Text "Goron Tunic"            -Value 200  -Info "Set the price for buying a Goron Tunic"          -Credits "Admentus" -Length 4 -Base 5 -Adult
+    CreateReduxTextBox -Name "ZoraTunic"         -Text "Zora Tunic"             -Value 300  -Info "Set the price for buying a Zora Tunic"           -Credits "Admentus" -Length 4 -Base 5 -Adult
+    CreateReduxTextBox -Name "RedPotionA"        -Text "Red Potion (A)"         -Value 30   -Info "Set the price for buying a Red Potion"           -Credits "Admentus" -Length 4
+    CreateReduxTextBox -Name "RedPotionB"        -Text "Red Potion (B)"         -Value 40   -Info "Set the price for buying a Red Potion"           -Credits "Admentus" -Length 4 -Base 5
+    CreateReduxTextBox -Name "RedPotionC"        -Text "Red Potion (C)"         -Value 50   -Info "Set the price for buying a Red Potion"           -Credits "Admentus" -Length 4 -Base 5
+    CreateReduxTextBox -Name "GreenPotion"       -Text "Green Potion"           -Value 30   -Info "Set the price for buying a Green Potion"         -Credits "Admentus" -Length 4
+    CreateReduxTextBox -Name "BluePotion"        -Text "Blue Potion"            -Value 60   -Info "Set the price for buying a Blue Potion"          -Credits "Admentus" -Length 4 -Base 5
+    CreateReduxTextBox -Name "Milk"              -Text "Milk"                   -Value 100  -Info "Set the price for buying Milk"                   -Credits "Admentus" -Length 4
+    CreateReduxTextBox -Name "Fairy"             -Text "Fairy"                  -Value 50   -Info "Set the price for buying a Fairy"                -Credits "Admentus" -Length 4
+    CreateReduxTextBox -Name "BlueFire"          -Text "Blue Fire"              -Value 300  -Info "Set the price for buying a Blue Fire"            -Credits "Admentus" -Length 4 -Base 5
+    CreateReduxTextBox -Name "Bug"               -Text "Bug"                    -Value 50   -Info "Set the price for buying Bugs"                   -Credits "Admentus" -Length 4 -Base 5
+    CreateReduxTextBox -Name "Fish"              -Text "Fish"                   -Value 200  -Info "Set the price for buying a Fish"                 -Credits "Admentus" -Length 4 -Base 5
+    CreateReduxTextBox -Name "Poe"               -Text "Poe"                    -Value 30   -Info "Set the price for buying a Poe"                  -Credits "Admentus" -Length 4 -Base 5
+    CreateReduxTextBox -Name "BigPoe"            -Text "Big Poe"                -Value 50   -Info "Set the price for buying a Big Poe"              -Credits "Admentus" -Length 4 -Base 5
+    CreateReduxTextBox -Name "WeirdEgg"          -Text "Weird Egg"              -Value 100  -Info "Set the price for buying a Weird Egg"            -Credits "Admentus" -Length 4 -Base 5
+
+    CreateReduxCheckBox -Name "FixItems" -Adult -Base 5 -Text "Fix Unused Items" -Info "Fix the textboxs for the unused items" -Credits "Admentus"
+
+
+    # SHOP ITEMS #
+    
+    $items = @()
+    foreach ($item in $Files.json.shopItems.items) {
+        if ($item.hide -ne 1) { $items += $item.title }
+    }
+    
+    $Redux.Box.Bazaar = CreateReduxGroup -Tag "Bazaar" -Text "Bazaar Items" -Base 2
+    CreateReduxComboBox -Name "Slot1" -Base 2 -Text "Slot 1" -Info "Set the item for slot 1" -Default $Files.json.shopItems.bazaar[0] -Items $items
+    CreateReduxComboBox -Name "Slot2" -Base 2 -Text "Slot 2" -Info "Set the item for slot 2" -Default $Files.json.shopItems.bazaar[1] -Items $items
+    CreateReduxComboBox -Name "Slot3" -Base 2 -Text "Slot 3" -Info "Set the item for slot 3" -Default $Files.json.shopItems.bazaar[2] -Items $items
+    CreateReduxComboBox -Name "Slot4" -Base 2 -Text "Slot 4" -Info "Set the item for slot 4" -Default $Files.json.shopItems.bazaar[3] -Items $items
+    CreateReduxComboBox -Name "Slot5" -Base 2 -Text "Slot 5" -Info "Set the item for slot 5" -Default $Files.json.shopItems.bazaar[4] -Items $items
+    CreateReduxComboBox -Name "Slot6" -Base 2 -Text "Slot 6" -Info "Set the item for slot 6" -Default $Files.json.shopItems.bazaar[5] -Items $items
+    CreateReduxComboBox -Name "Slot7" -Base 2 -Text "Slot 7" -Info "Set the item for slot 7" -Default $Files.json.shopItems.bazaar[6] -Items $items
+    CreateReduxComboBox -Name "Slot8" -Base 2 -Text "Slot 8" -Info "Set the item for slot 8" -Default $Files.json.shopItems.bazaar[7] -Items $items
+
+    $Redux.Box.MarketPotionShop = CreateReduxGroup -Tag "MarketPotionShop" -Text "Market Potion Shop Items" -Child -Base 2
+    CreateReduxComboBox -Name "Slot1" -Child -Base 2 -Text "Slot 1" -Info "Set the item for slot 1" -Default $Files.json.shopItems.marketPotionShop[0] -Items $items
+    CreateReduxComboBox -Name "Slot2" -Child -Base 2 -Text "Slot 2" -Info "Set the item for slot 2" -Default $Files.json.shopItems.marketPotionShop[1] -Items $items
+    CreateReduxComboBox -Name "Slot3" -Child -Base 2 -Text "Slot 3" -Info "Set the item for slot 3" -Default $Files.json.shopItems.marketPotionShop[2] -Items $items
+    CreateReduxComboBox -Name "Slot4" -Child -Base 2 -Text "Slot 4" -Info "Set the item for slot 4" -Default $Files.json.shopItems.marketPotionShop[3] -Items $items
+    CreateReduxComboBox -Name "Slot5" -Child -Base 2 -Text "Slot 5" -Info "Set the item for slot 5" -Default $Files.json.shopItems.marketPotionShop[4] -Items $items
+    CreateReduxComboBox -Name "Slot6" -Child -Base 2 -Text "Slot 6" -Info "Set the item for slot 6" -Default $Files.json.shopItems.marketPotionShop[5] -Items $items
+    CreateReduxComboBox -Name "Slot7" -Child -Base 2 -Text "Slot 7" -Info "Set the item for slot 7" -Default $Files.json.shopItems.marketPotionShop[6] -Items $items
+    CreateReduxComboBox -Name "Slot8" -Child -Base 2 -Text "Slot 8" -Info "Set the item for slot 8" -Default $Files.json.shopItems.marketPotionShop[7] -Items $items
+
+    $Redux.Box.KakarikoPotionShop = CreateReduxGroup -Tag "KakarikoPotionShop" -Text "Kakariko Potion Shop Items" -Adult -Base 2
+    CreateReduxComboBox -Name "Slot1" -Adult -Base 2 -Text "Slot 1" -Info "Set the item for slot 1" -Default $Files.json.shopItems.kakarikoPotionShop[0] -Items $items
+    CreateReduxComboBox -Name "Slot2" -Adult -Base 2 -Text "Slot 2" -Info "Set the item for slot 2" -Default $Files.json.shopItems.kakarikoPotionShop[1] -Items $items
+    CreateReduxComboBox -Name "Slot3" -Adult -Base 2 -Text "Slot 3" -Info "Set the item for slot 3" -Default $Files.json.shopItems.kakarikoPotionShop[2] -Items $items
+    CreateReduxComboBox -Name "Slot4" -Adult -Base 2 -Text "Slot 4" -Info "Set the item for slot 4" -Default $Files.json.shopItems.kakarikoPotionShop[3] -Items $items
+    CreateReduxComboBox -Name "Slot5" -Adult -Base 2 -Text "Slot 5" -Info "Set the item for slot 5" -Default $Files.json.shopItems.kakarikoPotionShop[4] -Items $items
+    CreateReduxComboBox -Name "Slot6" -Adult -Base 2 -Text "Slot 6" -Info "Set the item for slot 6" -Default $Files.json.shopItems.kakarikoPotionShop[5] -Items $items
+    CreateReduxComboBox -Name "Slot7" -Adult -Base 2 -Text "Slot 7" -Info "Set the item for slot 7" -Default $Files.json.shopItems.kakarikoPotionShop[6] -Items $items
+    CreateReduxComboBox -Name "Slot8" -Adult -Base 2 -Text "Slot 8" -Info "Set the item for slot 8" -Default $Files.json.shopItems.kakarikoPotionShop[7] -Items $items
+
+    $Redux.Box.BombchuShop = CreateReduxGroup -Tag "BombchuShop" -Text "Bombchu Shop Items" -Base 2
+    CreateReduxComboBox -Name "Slot1" -Base 2 -Text "Slot 1" -Info "Set the item for slot 1" -Default $Files.json.shopItems.bombchuShop[0] -Items $items
+    CreateReduxComboBox -Name "Slot2" -Base 2 -Text "Slot 2" -Info "Set the item for slot 2" -Default $Files.json.shopItems.bombchuShop[1] -Items $items
+    CreateReduxComboBox -Name "Slot3" -Base 2 -Text "Slot 3" -Info "Set the item for slot 3" -Default $Files.json.shopItems.bombchuShop[2] -Items $items
+    CreateReduxComboBox -Name "Slot4" -Base 2 -Text "Slot 4" -Info "Set the item for slot 4" -Default $Files.json.shopItems.bombchuShop[3] -Items $items
+    CreateReduxComboBox -Name "Slot5" -Base 2 -Text "Slot 5" -Info "Set the item for slot 5" -Default $Files.json.shopItems.bombchuShop[4] -Items $items
+    CreateReduxComboBox -Name "Slot6" -Base 2 -Text "Slot 6" -Info "Set the item for slot 6" -Default $Files.json.shopItems.bombchuShop[5] -Items $items
+    CreateReduxComboBox -Name "Slot7" -Base 2 -Text "Slot 7" -Info "Set the item for slot 7" -Default $Files.json.shopItems.bombchuShop[6] -Items $items
+    CreateReduxComboBox -Name "Slot8" -Base 2 -Text "Slot 8" -Info "Set the item for slot 8" -Default $Files.json.shopItems.bombchuShop[7] -Items $items
+
+    $Redux.Box.KokiriShop = CreateReduxGroup -Tag "KokiriShop" -Text "Kokiri Shop Items" -Base 2
+    CreateReduxComboBox -Name "Slot1" -Base 2 -Text "Slot 1" -Info "Set the item for slot 1" -Default $Files.json.shopItems.kokiriShop[0] -Items $items
+    CreateReduxComboBox -Name "Slot2" -Base 2 -Text "Slot 2" -Info "Set the item for slot 2" -Default $Files.json.shopItems.kokiriShop[1] -Items $items
+    CreateReduxComboBox -Name "Slot3" -Base 2 -Text "Slot 3" -Info "Set the item for slot 3" -Default $Files.json.shopItems.kokiriShop[2] -Items $items
+    CreateReduxComboBox -Name "Slot4" -Base 2 -Text "Slot 4" -Info "Set the item for slot 4" -Default $Files.json.shopItems.kokiriShop[3] -Items $items
+    CreateReduxComboBox -Name "Slot5" -Base 2 -Text "Slot 5" -Info "Set the item for slot 5" -Default $Files.json.shopItems.kokiriShop[4] -Items $items
+    CreateReduxComboBox -Name "Slot6" -Base 2 -Text "Slot 6" -Info "Set the item for slot 6" -Default $Files.json.shopItems.kokiriShop[5] -Items $items
+    CreateReduxComboBox -Name "Slot7" -Base 2 -Text "Slot 7" -Info "Set the item for slot 7" -Default $Files.json.shopItems.kokiriShop[6] -Items $items
+    CreateReduxComboBox -Name "Slot8" -Base 2 -Text "Slot 8" -Info "Set the item for slot 8" -Default $Files.json.shopItems.kokiriShop[7] -Items $items
+
+    $Redux.Box.GoronShop = CreateReduxGroup -Tag "GoronShop" -Text "Goron Shop Items" -Base 2
+    CreateReduxComboBox -Name "Slot1" -Base 2 -Text "Slot 1" -Info "Set the item for slot 1" -Default $Files.json.shopItems.goronShop[0] -Items $items
+    CreateReduxComboBox -Name "Slot2" -Base 2 -Text "Slot 2" -Info "Set the item for slot 2" -Default $Files.json.shopItems.goronShop[1] -Items $items
+    CreateReduxComboBox -Name "Slot3" -Base 2 -Text "Slot 3" -Info "Set the item for slot 3" -Default $Files.json.shopItems.goronShop[2] -Items $items
+    CreateReduxComboBox -Name "Slot4" -Base 2 -Text "Slot 4" -Info "Set the item for slot 4" -Default $Files.json.shopItems.goronShop[3] -Items $items
+    CreateReduxComboBox -Name "Slot5" -Base 2 -Text "Slot 5" -Info "Set the item for slot 5" -Default $Files.json.shopItems.goronShop[4] -Items $items
+    CreateReduxComboBox -Name "Slot6" -Base 2 -Text "Slot 6" -Info "Set the item for slot 6" -Default $Files.json.shopItems.goronShop[5] -Items $items
+    CreateReduxComboBox -Name "Slot7" -Base 2 -Text "Slot 7" -Info "Set the item for slot 7" -Default $Files.json.shopItems.goronShop[6] -Items $items
+    CreateReduxComboBox -Name "Slot8" -Base 2 -Text "Slot 8" -Info "Set the item for slot 8" -Default $Files.json.shopItems.goronShop[7] -Items $items
+
+    $Redux.Box.ZoraShop = CreateReduxGroup -Tag "ZoraShop" -Text "Zora Shop Items" -Base 2
+    CreateReduxComboBox -Name "Slot1" -Base 2 -Text "Slot 1" -Info "Set the item for slot 1" -Default $Files.json.shopItems.zoraShop[0] -Items $items
+    CreateReduxComboBox -Name "Slot2" -Base 2 -Text "Slot 2" -Info "Set the item for slot 2" -Default $Files.json.shopItems.zoraShop[1] -Items $items
+    CreateReduxComboBox -Name "Slot3" -Base 2 -Text "Slot 3" -Info "Set the item for slot 3" -Default $Files.json.shopItems.zoraShop[2] -Items $items
+    CreateReduxComboBox -Name "Slot4" -Base 2 -Text "Slot 4" -Info "Set the item for slot 4" -Default $Files.json.shopItems.zoraShop[3] -Items $items
+    CreateReduxComboBox -Name "Slot5" -Base 2 -Text "Slot 5" -Info "Set the item for slot 5" -Default $Files.json.shopItems.zoraShop[4] -Items $items
+    CreateReduxComboBox -Name "Slot6" -Base 2 -Text "Slot 6" -Info "Set the item for slot 6" -Default $Files.json.shopItems.zoraShop[5] -Items $items
+    CreateReduxComboBox -Name "Slot7" -Base 2 -Text "Slot 7" -Info "Set the item for slot 7" -Default $Files.json.shopItems.zoraShop[6] -Items $items
+    CreateReduxComboBox -Name "Slot8" -Base 2 -Text "Slot 8" -Info "Set the item for slot 8" -Default $Files.json.shopItems.zoraShop[7] -Items $items
+
+
+
+
+    EnableForm -Form $Redux.Box.Ammo               -Enable $Redux.Capacity.EnableAmmo.Checked
+    EnableForm -Form $Redux.Box.Wallet             -Enable $Redux.Capacity.EnableWallet.Checked
+    EnableForm -Form $Redux.Box.Drops              -Enable $Redux.Capacity.EnableDrops.Checked
+    EnableForm -Form $Redux.Box.ShopQuantity       -Enable $Redux.Capacity.EnableShop.Checked
+    EnableForm -Form $Redux.Box.ShopPrice          -Enable $Redux.Capacity.EnableShop.Checked
+    EnableForm -Form $Redux.Box.Bazaar             -Enable $Redux.Capacity.EnableShop.Checked
+    EnableForm -Form $Redux.Box.MarketPotionShop   -Enable $Redux.Capacity.EnableShop.Checked
+    EnableForm -Form $Redux.Box.KakarikoPotionShop -Enable $Redux.Capacity.EnableShop.Checked
+    EnableForm -Form $Redux.Box.BombchuShop        -Enable $Redux.Capacity.EnableShop.Checked
+    EnableForm -Form $Redux.Box.KokiriShop         -Enable $Redux.Capacity.EnableShop.Checked
+    EnableForm -Form $Redux.Box.GoronShop          -Enable $Redux.Capacity.EnableShop.Checked
+    EnableForm -Form $Redux.Box.ZoraShop           -Enable $Redux.Capacity.EnableShop.Checked
     $Redux.Capacity.EnableAmmo.Add_CheckStateChanged(   { EnableForm -Form $Redux.Box.Ammo   -Enable $Redux.Capacity.EnableAmmo.Checked   } )
     $Redux.Capacity.EnableWallet.Add_CheckStateChanged( { EnableForm -Form $Redux.Box.Wallet -Enable $Redux.Capacity.EnableWallet.Checked } )
     $Redux.Capacity.EnableDrops.Add_CheckStateChanged(  { EnableForm -Form $Redux.Box.Drops  -Enable $Redux.Capacity.EnableDrops.Checked  } )
- <# $Redux.Capacity.EnableShop.Add_CheckStateChanged( {
-        EnableForm -Form $Redux.Box.ShopQuantity -Enable $Redux.Capacity.EnableShop.Checked
-        EnableForm -Form $Redux.Box.ShopPrice    -Enable $Redux.Capacity.EnableShop.Checked
-    } ) #>
+    $Redux.Capacity.EnableShop.Add_CheckStateChanged( {
+        EnableForm -Form $Redux.Box.ShopQuantity       -Enable $Redux.Capacity.EnableShop.Checked
+        EnableForm -Form $Redux.Box.ShopPrice          -Enable $Redux.Capacity.EnableShop.Checked
+        EnableForm -Form $Redux.Box.ShopPrice          -Enable $Redux.Capacity.EnableShop.Checked
+        EnableForm -Form $Redux.Box.Bazaar             -Enable $Redux.Capacity.EnableShop.Checked
+        EnableForm -Form $Redux.Box.MarketPotionShop   -Enable $Redux.Capacity.EnableShop.Checked
+        EnableForm -Form $Redux.Box.KakarikoPotionShop -Enable $Redux.Capacity.EnableShop.Checked
+        EnableForm -Form $Redux.Box.BombchuShop        -Enable $Redux.Capacity.EnableShop.Checked
+        EnableForm -Form $Redux.Box.KokiriShop         -Enable $Redux.Capacity.EnableShop.Checked
+        EnableForm -Form $Redux.Box.GoronShop          -Enable $Redux.Capacity.EnableShop.Checked
+        EnableForm -Form $Redux.Box.ZoraShop           -Enable $Redux.Capacity.EnableShop.Checked
+    } )
 
     if ($Redux.Capacity.BombBag1 -ne $null) {
         $Redux.Capacity.BombBag3.Add_LostFocus({

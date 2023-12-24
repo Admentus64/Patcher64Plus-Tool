@@ -1,3 +1,11 @@
+v23.1.0
+- Added Enhanced Model for Child Quest
+- Added new ROM hack for BK
+- Added Shop options for OoT
+- Added Child Shops option for OoT
+- Added new HUD icons for OoT
+- Added Skip Opening Sequence & Permanent Owl Saving options for MM
+
 v23.0.9
 - Updated New Master Quest to v2.6
 
