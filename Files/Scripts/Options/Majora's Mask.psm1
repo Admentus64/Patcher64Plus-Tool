@@ -815,12 +815,16 @@ function ByteOptions() {
 
     if (IsDefault $Redux.Skip.OpeningSequence -Not) {
         ChangeBytes -Offset "BDAB78" -Values "340ED800"; ChangeBytes -Offset "BDB880" -Values "340CD800"; ChangeBytes -Offset "BDB997" -Values "C4"; ChangeBytes -Offset "BDABA1" -Values "4F"
+        ChangeBytes -Offset "F22D90" -Values "1500"                                              # Skip first cycle introduction to Clock Town
+        ChangeBytes -Offset "F36EBC" -Values "1500"; ChangeBytes -Offset "F37744" -Values "1100" # Skip first introduction with Happy Mask Salesman
+      # PatchBytes  -Offset "BDABC7"  -Patch  "skip_first_cycle.bin" # Skip first cycle introduction to Clock Town
         if (IsIndex -Elem $Redux.Skip.OpeningSequence -Index 3) {
             ChangeBytes -Offset "C5CE24"  -Values "00"; ChangeBytes -Offset "C5CDEC" -Values "01"; ChangeBytes -Offset "C5CDF4" -Values "01";
             ChangeBytes -Offset "C5CE41"  -Values "32"; ChangeBytes -Offset "C5CE72" -Values "30"
             ChangeBytes -Offset "B80F84"  -Values "1500"                 # Skip saving when first entering clock town
             ChangeBytes -Offset "1006864" -Values "1500"                 # Tatl message skip to visit the four giants
-            PatchBytes  -Offset "BDABC7"  -Patch  "skip_first_cycle.bin" # Skip first cycle introduction to Clock Town
+          
+            
         }
         else { ChangeBytes -Offset "BDADE7" -Values "03"; ChangeBytes -Offset "BDAB89" -Values "4F" }
     }
