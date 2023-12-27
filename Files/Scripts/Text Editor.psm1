@@ -344,8 +344,8 @@ function RunTextEditor([object]$Game=$null) {
 #==============================================================================================================================================================================================
 function CloseTextEditor() {
     
-    if ($TextEditor.Dialog -eq $null) { return }
-    $TextEditor.Dialog.Hide()
+    if ($TextEditor -eq $null) { return }
+    if ($TextEditor.Dialog.IsHandleCreated) { $TextEditor.Dialog.Hide() }
 
     if ($LastScript -ne $null) {
         SaveLastMessage

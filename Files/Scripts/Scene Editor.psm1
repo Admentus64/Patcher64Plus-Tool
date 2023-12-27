@@ -394,8 +394,8 @@ function RunSceneEditor([object]$Game=$null) {
 #==============================================================================================================================================================================================
 function CloseSceneEditor() {
     
-    if ($SceneEditor.Dialog -eq $null) { return }
-    $SceneEditor.Dialog.Hide()
+    if ($SceneEditor -eq $null) { return }
+    if ($SceneEditor.Dialog.IsHandleCreated) { $SceneEditor.Dialog.Hide() }
 
     if ($SceneEditor.Maps.Items.Count -gt 0) {
         SaveMap   -Scene $Files.json.sceneEditor.scenes[$SceneEditor.Scenes.SelectedIndex] -Index $SceneEditor.Maps.SelectedIndex
