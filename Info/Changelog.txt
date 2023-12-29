@@ -1,3 +1,6 @@
+v23.1.2
+- Added new MM options by Euler
+
 v23.1.1
 - Improved Skip First Cycle and Permanent Owl Save options for MM
 - Fixed issue with editors crashing

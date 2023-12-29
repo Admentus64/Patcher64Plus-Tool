@@ -336,6 +336,7 @@
 - Admentus
 - GhostlyDark
 - ShadowOne333
+- Euler
 - Chez Cousteau
 - Linkz
 - Marcelo20XX

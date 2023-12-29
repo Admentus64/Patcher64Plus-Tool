@@ -66,7 +66,7 @@ function PatchOptions() {
 
     # TEXT COMMANDS FIX #
 
-	if (IsChecked $Redux.Restore.TextCommands) { ApplyPatch -Patch "Decompressed\Optional\text_commands.ppf" }
+	if (IsChecked $Redux.Fixes.TextCommands) { ApplyPatch -Patch "Decompressed\Optional\text_commands.ppf" }
 
 }
 
@@ -84,6 +84,9 @@ function ByteOptions() {
       PatchBytes  -Offset "BDD90B" -Patch  "permanent_owl_saves.bin"
 
     }
+
+    if     (IsIndex -Elem $Redux.Gameplay.CremiaReward -Index 2)   { ChangeBytes -Offset "FF3B4C" -Values "00000000" }
+    elseif (IsIndex -Elem $Redux.Gameplay.CremiaReward -Index 3)   { ChangeBytes -Offset "FF3B4C" -Values "304B0000" }
 
     if (IsChecked $Redux.Gameplay.FormItems) {
         ChangeBytes -Offset "C58950" -Values "01";             ChangeBytes -Offset "C58956" -Values "01 01 00 01 01 00 01 01 01"; ChangeBytes -Offset "C58978" -Values "01 01 01 01 01 01 01 01 01 01 01 01 01"; ChangeBytes -Offset "C589C8" -Values "01 01 00 01 01"
@@ -107,6 +110,7 @@ function ByteOptions() {
         ChangeBytes -Offset "1069B6C" -Values "2841000301014022A4E802C2A4F902CE00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
     }
 
+    if (IsChecked $Redux.Gameplay.NoKillFlash)            { ChangeBytes -Offset "BFE043"  -Values "00"                                              }
     if (IsChecked $Redux.Gameplay.ZoraPhysics)            { PatchBytes  -Offset "65D000"  -Patch "zora_physics_fix.bin"                             }
     if (IsChecked $Redux.Gameplay.DistantZTargeting)      { ChangeBytes -Offset "B4E924"  -Values "00000000"                                        }
     if (IsChecked $Redux.Gameplay.ManualJump)             { ChangeBytes -Offset "CB4008"  -Values "04C1"; ChangeBytes -Offset "CB402B" -Values "01" }
@@ -117,6 +121,7 @@ function ByteOptions() {
     if (IsChecked $Redux.Gameplay.SariaSong)              { ChangeBytes -Offset "C5CE72"  -Values "08"                                              }
     if (IsChecked $Redux.Gameplay.HookshotAnything)       { ChangeBytes -Offset "D3BA30"  -Values "00000000"                                        }
     if (IsChecked $Redux.Gameplay.NoMagicArrowCooldown)   { ChangeBytes -Offset "BAC3CD"  -Values "69"                                              }
+    if (IsChecked $Redux.Gameplay.AcceptBombersCode)      { ChangeBytes -Offset "1069E7F" -Values "00"                                              }
 
     
 
@@ -152,9 +157,9 @@ function ByteOptions() {
 
 
 
-    # OTHER #
+    # FIXES #
 
-    if (IsChecked $Redux.Other.ClockTown) {
+    if (IsChecked $Redux.Fixes.ClockTown) {
         ChangeBytes -Offset "2E5F200" -Values "FE77"; ChangeBytes -Offset "2E5F203" -Values "C8";   ChangeBytes -Offset "2E5F20A" -Values "F6AFEC69CA"        # South Clock Town - Ramp                                              
         ChangeBytes -Offset "2E60552" -Values "0000"; ChangeBytes -Offset "2E60562" -Values "0000"; ChangeBytes -Offset "2E60592" -Values "0000"              # South Clock Town - Wall
         ChangeBytes -Offset "2E7F451" -Values "7A";   ChangeBytes -Offset "2E7F455" -Values "63";   ChangeBytes -Offset "2E7F458" -Values "0EA6"              # Laundry Pool - Path
@@ -162,33 +167,42 @@ function ByteOptions() {
         ChangeBytes -Offset "2E33106" -Values "20";   ChangeBytes -Offset "2E3311E" -Values "C1";   ChangeBytes -Offset "2E33125" -Values "0505" -Interval 32 # North Clock Town - Road           
     }
 
-    if (IsChecked $Redux.Other.SouthernSwamp) {
+    if (IsChecked $Redux.Fixes.SouthernSwamp) {
         CreateSubPath  -Path ($GameFiles.extracted + "\Southern Swamp")
         ExportAndPatch -Path "Southern Swamp\southern_swamp_cleared_scene"  -Offset "1F0D000" -Length "10630"
         ExportAndPatch -Path "Southern Swamp\southern_swamp_cleared_room_0" -Offset "1F1E000" -Length "1B240" -NewLength "1B4F0" -TableOffset "1EC26"  -Values "94F0"
         ExportAndPatch -Path "Southern Swamp\southern_swamp_cleared_room_2" -Offset "1F4D000" -Length "D0A0"  -NewLength "D1C0"  -TableOffset "1EC46"  -Values "A1C0"
     }
 
-    if (IsChecked $Redux.Other.DebugMapSelect) {
-        # ChangeBytes -Offset "C53F44" -Values "00C7ADF000C7E2D08080091080803DF00000000080801B4C80801B28"
-        ExportAndPatch -Path "map_select" -Offset "C7C870" -Length "13C8"
+    if (IsChecked $Redux.Fixes.PictoboxDelay)       { ChangeBytes -Offset "BFC368"  -Values "00000000"              }
+    if (IsChecked $Redux.Fixes.MushroomBottle)      { ChangeBytes -Offset "CD7C48"  -Values "1E6B"                  }
+    if (IsChecked $Redux.Fixes.GreatBay)            { ChangeBytes -Offset "26F0BC9" -Values "0F0F5F5F" -Interval 16 }
+    if (IsChecked $Redux.Fixes.FairyFountain)       { ChangeBytes -Offset "B9133E"  -Values "010F"                  }
+    if (IsChecked $Redux.Fixes.OutOfBoundsGrotto)   { ChangeBytes -Offset "2C2306A" -Values "FEDA008B00A1"          }
+    if (IsChecked $Redux.Other.OutOfBoundsRupee)    { $offset = SearchBytes -Start "2563000" -End "2564000" -Values "00100000033C0007007F007F0A00000E"; ChangeBytes -Offset $offset -Values "FD66" }
+
+
+
+    # OTHER #
+
+    if ( (IsIndex -Elem $Redux.Other.MapSelect -Text "Translate Only") -or (IsIndex $Redux.Other.MapSelect -Text "Translate and Enable") ) { ExportAndPatch -Path "map_select" -Offset "C7C870" -Length "13C8" }
+    if ( (IsIndex -Elem $Redux.Other.MapSelect -Text "Enable Only")    -or (IsIndex $Redux.Other.MapSelect -Text "Translate and Enable") ) {
+        ChangeBytes -Offset "C0A592" -Values "D940" # ChangeBytes -Offset "C53F44" -Values "00C7ADF000C7E2D08080091080803DF00000000080801B4C80801B28"
     }
+
+    if ( (IsIndex -Elem $Redux.Other.SkipIntro -Text "Skip Logo")         -or (IsIndex -Elem $Redux.Other.SkipIntro -Text "Skip Logo and Title Screen") )   { ChangeBytes -Offset "C7A54C" -Values "00000000" }
+    if ( (IsIndex -Elem $Redux.Other.SkipIntro -Text "Skip Title Screen") -or (IsIndex -Elem $Redux.Other.SkipIntro -Text "Skip Logo and Title Screen") )   { ChangeBytes -Offset "C0A566" -Values "DA00"     }
 
     if (IsChecked $Redux.Other.AlwaysBestEnding) {
         ChangeBytes -Offset "B81CE0" -Values "00000000"; ChangeBytes -Offset "B81D48" -Values "00000000"; ChangeBytes -Offset "B81DB0" -Values "00000000"; ChangeBytes -Offset "B81E18" -Values "00000000"; ChangeBytes -Offset "B81E80" -Values "00000000"
         ChangeBytes -Offset "B81EE8" -Values "00000000"; ChangeBytes -Offset "B81F84" -Values "00000000"; ChangeBytes -Offset "B81FEC" -Values "00000000"; ChangeBytes -Offset "B82054" -Values "00000000"
     }
 
-    if (IsChecked $Redux.Other.PictoboxDelayFix)    { ChangeBytes -Offset "BFC368"  -Values "00000000"              }
-    if (IsChecked $Redux.Other.MushroomBottle)      { ChangeBytes -Offset "CD7C48"  -Values "1E6B"                  }
-    if (IsChecked $Redux.Other.GreatBay)            { ChangeBytes -Offset "26F0BC9" -Values "0F0F5F5F" -Interval 16 }
-    if (IsChecked $Redux.Other.FairyFountain)       { ChangeBytes -Offset "B9133E"  -Values "010F"                  }
-    if (IsChecked $Redux.Other.OutOfBoundsGrotto)   { ChangeBytes -Offset "2C2306A" -Values "FEDA008B00A1"          }
-    if (IsChecked $Redux.Other.BlueOctorok)         { ChangeBytes -Offset "EA118C"  -Values "FFFF00"                }
-    if (IsChecked $Redux.Other.OutOfBoundsRupee)    { $offset = SearchBytes -Start "2563000" -End "2564000" -Values "00100000033C0007007F007F0A00000E"; ChangeBytes -Offset $offset -Values "FD66" }
-    if (IsChecked $Redux.Other.DebugItemSelect)     { ExportAndPatch -Path "inventory_editor" -Offset "CA6370" -Length "1E0" }
+    if (IsChecked $Redux.Other.ItemSelect)          { ExportAndPatch -Path "inventory_editor" -Offset "CA6370" -Length "1E0" }
+    if (IsChecked $Redux.Other.BlueOctorok)         { ChangeBytes -Offset "EA118C" -Values "FFFF00" }
+    if (IsChecked $Redux.Other.DefaultZTargeting)   { ChangeBytes -Offset "BDCA3D" -Values "0D"     }
     
-
+    
 
     # CUTSCENES
 
@@ -1492,7 +1506,7 @@ function CreatePresets() {
         BoxCheck $Redux.Restore.PieceOfHeartSound
         BoxCheck $Redux.Restore.MoveBomberKid
         BoxCheck $Redux.Restore.OnTheMoonIntro
-        BoxCheck $Redux.Restore.TextCommands
+        BoxCheck $Redux.Fixes.TextCommands
     } )
 
     $HeroMode.Add_Click( {
@@ -1532,7 +1546,11 @@ function CreateTabMain() {
     # GAMEPLAY #
 
     CreateReduxGroup    -Tag  "Gameplay"             -Text "Gameplay"
+    CreateReduxComboBox -Name "CremiaReward"         -Text "Cremia's Reward"           -Info "Change the reward Cremia gives for protecting the carriage" -Items @("Default", "Always Hug", "Always Gold Rupee")                                               -Credits "Euler"
+    CreateReduxComboBox -Name "LinkJumpAttack"       -Text "Link Jump Attack"          -Info "Set the Jump Attack animation for Link in his Hylian Form" -Items @("Jumpslash", "Frontflip", "Beta Frontflip", "Beta Backflip", "Spin Slash", "Zora Jumpslash") -Credits "Admentus (ported), SoulofDeity & Aegiker"
+    CreateReduxComboBox -Name "ZoraJumpAttack"       -Text "Zora Jump Attack"          -Info "Set the Jump Attack animation for Link in his Zora Form"   -Items @("Zora Jumpslash", "Beta Frontflip", "Beta Backflip", "Spin Slash")                           -Credits "Admentus (ported) & Aegiker"
     CreateReduxCheckBox -Name "PermanentOwlSaves"    -Text "Permanent Owl Saves"       -Info "Owl saves are no longer deleted`nYou always restart from the latest owl statue you saved, even after the Song of Time"                                           -Credits "Admentus"
+    CreateReduxCheckBox -Name "NoKillFlash"          -Text "No Kill Flash"             -Info "Disable the flash effect when killing certain enemies such as the Guay or Skullwalltula"                                                                         -Credits "Euler"
     CreateReduxCheckBox -Name "ZoraPhysics"          -Text "Zora Physics"              -Info "Change the Zora physics when using the boomerang`nZora Link will take a step forward instead of staying on his spot"                                             -Credits "ShadowOne333"
     CreateReduxCheckBox -Name "DistantZTargeting"    -Text "Distant Z-Targeting"       -Info "Allow to use Z-Targeting on enemies, objects and NPC's from any distance"                                                                                        -Credits "Admentus"
     CreateReduxCheckBox -Name "ManualJump"           -Text "Manual Jump"               -Info "Press Z + A to do a Manual Jump instead of a Jump Attack`nPress B mid-air after jumping to do a Jump Attack"                                                     -Credits "Admentus"
@@ -1545,8 +1563,7 @@ function CreateTabMain() {
     CreateReduxCheckBox -Name "HookshotAnything"     -Text "Hookshot Anything"         -Info "Be able to hookshot most surfaces"                               -Warning "Prone to softlocks, be careful"                                                       -Credits "Randomizer"
     CreateReduxCheckBox -Name "NoMagicArrowCooldown" -Text "No Magic Arrow Cooldown"   -Info "Be able to shoot magic arrows without a delay between each shot" -Warning "Prone to crashes upon switching arrow types (Redux feature) to quickly"               -Credits "Randomizer"
     CreateReduxCheckBox -Name "FierceDeityAnywhere"  -Text "Fierce Deity Anywhere"     -Info "The Fierce Deity Mask can be used anywhere now´nApplies additional fixes to make the form more usable, such as being able to push blocks"                        -Credits "Randomizer"
-    CreateReduxComboBox -Name "LinkJumpAttack"       -Text "Link Jump Attack"          -Info "Set the Jump Attack animation for Link in his Hylian Form" -Items @("Jumpslash", "Frontflip", "Beta Frontflip", "Beta Backflip", "Spin Slash", "Zora Jumpslash") -Credits "Admentus (ported), SoulofDeity & Aegiker"
-    CreateReduxComboBox -Name "ZoraJumpAttack"       -Text "Zora Jump Attack"          -Info "Set the Jump Attack animation for Link in his Zora Form"   -Items @("Zora Jumpslash", "Beta Frontflip", "Beta Backflip", "Spin Slash")                           -Credits "Admentus (ported) & Aegiker"
+    CreateReduxCheckBox -Name "AcceptBombersCode"    -Text "Accept Bomber's Code"      -Info "The Bomber's secret code is always accepted, even if it's wrong"                                                                                                 -Credits "Euler"
 
 
 
@@ -1563,13 +1580,15 @@ function CreateTabMain() {
     CreateReduxCheckBox -Name "PieceOfHeartSound" -Text "4th Piece of Heart Sound" -Info "Restore the sound effect when collecting the fourth Piece of Heart that grants Link a new Heart Container" -Credits "ShadowOne333"
     CreateReduxCheckBox -Name "MoveBomberKid"     -Text "Move Bomber Kid"          -Info "Moves the Bomber at the top of the Stock Pot Inn to be behind the bell like in the original Japanese ROM"  -Credits "ShadowOne333"
     CreateReduxCheckBox -Name "OnTheMoonIntro"    -Text "On The Moon Intro"        -Info "Restores the intro cutscene when you get to the On The Moon area"                                          -Credits "Chez Cousteau"
-    CreateReduxCheckBox -Name "TextCommands"      -Text "Fix Text Commands"        -Info "Fixes instant text, delay, and sound effect text commands not working sometimes"                           -Credits "Qlonever"
+    
 
 
-    # OTHER #
 
-    CreateReduxGroup    -Tag  "Other"             -Text "Other"
-    CreateReduxCheckBox -Name "PictoboxDelayFix"  -Text "Pictograph Box Delay Fix" -Info "Photos are taken instantly with the Pictograph Box by removing the Anti-Aliasing"                                                                        -Checked -Credits "Randomizer"
+    # FIXES #
+
+    CreateReduxGroup    -Tag  "Fixes"             -Text "Fixes"
+    CreateReduxCheckBox -Name "TextCommands"      -Text "Fix Text Commands"        -Info "Fixes instant text, delay, and sound effect text commands not working sometimes"                                                                                  -Credits "Qlonever"
+    CreateReduxCheckBox -Name "PictoboxDelay"     -Text "Pictograph Box Delay Fix" -Info "Photos are taken instantly with the Pictograph Box by removing the Anti-Aliasing"                                                                        -Checked -Credits "Randomizer"
     CreateReduxCheckBox -Name "MushroomBottle"    -Text "Fix Mushroom Bottle"      -Info "Fix the item reference when collecting Magical Mushrooms as Link puts away the bottle automatically due to an error"                                              -Credits "ozidual"
     CreateReduxCheckBox -Name "ClockTown"         -Text "Fix Clock Town"           -Info "Fix misaligned gaps and seams in several places in Clock Town"                                                                                              -Safe -Credits "Linkz"
     CreateReduxCheckBox -Name "SouthernSwamp"     -Text "Fix Southern Swamp"       -Info "Fix a misplaced door after Woodfall has been cleared and you return to the Potion Shop`nThe door is slightly pushed forward after Odolwa has been defeated" -Safe -Credits "ShadowOne333"
@@ -1577,10 +1596,18 @@ function CreateTabMain() {
     CreateReduxCheckBox -Name "FairyFountain"     -Text "Fix Fairy Fountain"       -Info "Fix the Ikana Canyon Fairy Fountain area not displaying the correct color"                                                                                  -Safe -Credits "Dybbles (fix) & ShadowOne333 (patch)"
     CreateReduxCheckBox -Name "OutOfBoundsGrotto" -Text "Fix Out-of-Bounds Grotto" -Info "Fix the out-of-bounds grotto in the Mountain Village area during winter"                                                                                    -Safe -Credits "Chez Cousteau"
     CreateReduxCheckBox -Name "OutOfBoundsRupee"  -Text "Fix Out-of-Bounds Rupee"  -Info "Fix the out-of-bounds Rupee in the Deku Palace Left Outer Garden area"                                                                                      -Safe -Credits "Chez Cousteau"
-    CreateReduxCheckBox -Name "DebugMapSelect"    -Text "Debug Map Select"         -Info "Translates the Debug Map Select menu into English"                                                                                                                -Credits "GhostlyDark"
-    CreateReduxCheckBox -Name "DebugItemSelect"   -Text "Debug Item Select"        -Info "Translates the Debug Inventory Select menu into English"                                                                                                          -Credits "GhostlyDark"
+
+
+
+    # OTHER #
+
+    CreateReduxGroup    -Tag  "Other"             -Text "Other"
+    CreateReduxComboBox -Name "MapSelect"         -Text "Enable Map Select" -Items @("Disable", "Translate Only", "Enable Only", "Translate and Enable")           -Info "Enable the Map Select menu like in the Debug ROM`nThe File Select menu now opens the Map Select menu instead`nA separate debug save file is used" -Credits "Euler & GhostlyDark"
+    CreateReduxComboBox -Name "SkipIntro"         -Text "Skip Intro"        -Items @("Don't Skip", "Skip Logo", "Skip Title Screen", "Skip Logo and Title Screen") -Info "Skip the logo, title screen or both"                                                                                                              -Credits "Euler"
+    CreateReduxCheckBox -Name "ItemSelect"        -Text "Translate Item Select"    -Info "Translates the Debug Inventory Select menu into English"                                                                                                          -Credits "GhostlyDark"
     CreateReduxCheckBox -Name "AlwaysBestEnding"  -Text "Always Best Ending"       -Info "The credits sequence always includes the best ending, regardless of actual ingame progression"                                                                    -Credits "Marcelo20XX"
     CreateReduxCheckBox -Name "BlueOctorok"       -Text "Blue Octorok Color"       -Info "Change the color of the Blue Octorok for the Shooting Gallery Minigame into something more distinctive from the Red Octoroks"                                     -Credits "Admentus"
+    CreateReduxCheckBox -Name "DefaultZTargeting" -Text "Default Hold Z-Targeting" -Info "Change the Default Z-Targeting option to Hold instead of Switch"                                                                                                  -Credits "Euler"
 
 
 
