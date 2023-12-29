@@ -1095,9 +1095,9 @@ function DecompressROM() {
         }
 
         $script = { Param([string]$Tool, [string]$File, [string]$Extend, [string]$Out)
-            & $Tool -s $File $Extend $Out | Out-Null
+            & $Tool $File -s $Extend $Out | Out-Null
         }
-        Start-Job    -Name "Script" -ScriptBlock $script -ArgumentList @($Files.tool.sm64extend, $GetROM.run, $GetROM.extend, $GetROM.decomp)
+        Start-Job    -Name "Script" -ScriptBlock $script -ArgumentList @($Files.tool.sm64extend, $GetROM.run, $GamePatch.extend, $GetROM.decomp)
         StartJobLoop -Name "Script"
     }
     elseif ($GameType.decompress -eq 3) {
