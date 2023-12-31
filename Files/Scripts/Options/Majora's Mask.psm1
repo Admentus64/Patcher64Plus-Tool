@@ -24,6 +24,18 @@
 #==============================================================================================================================================================================================
 function PatchOptions() {
     
+    # FIXES #
+
+	if (IsChecked $Redux.Fixes.TextCommands) { ApplyPatch -Patch "Decompressed\Optional\text_commands.ppf" }
+    
+
+
+    # OTHER #
+
+    if (IsChecked $Redux.Other.LinkMask) { ApplyPatch -Patch "Decompressed\Optional\link_mask.ppf" }
+    
+
+
     # MODELS #
 
     if (IsDefault -Elem $Redux.Graphics.ChildModels -Not)   { PatchModel -Category "Child" -Name $Redux.Graphics.ChildModels.Text }
@@ -33,26 +45,8 @@ function PatchOptions() {
     # DIFFICULTY #
 
     if (IsChecked $Redux.Hero.RaisedResearchLabPlatform)   { ApplyPatch -Patch "Decompressed\optional\raised_research_lab_platform.ppf" }
-
-
-
-    # CAPACITY #
-
-    if (IsChecked $Redux.Capacity.EnableWallet) {
-        if ($Redux.Capacity.Wallet1.Text.Length -gt 3 -or $Redux.Capacity.Wallet2.Text.Length -gt 3 -or $Redux.Capacity.Wallet3.Text.Length -gt 3 -or $Redux.Capacity.Wallet4.Text.Length -gt 3) { ApplyPatch -Patch "Decompressed\optional\four_digits_wallet.ppf" }
-    }
-
-
-
-    # HERO MODE #
-
-    if (IsChecked $Redux.Hero.MoveGoldDust) { ApplyPatch -Patch "Decompressed\Optional\chest.ppf" }
-    
-    
-    
-    # EASY MODE #
-    
-    if (IsChecked $Redux.EasyMode.OceansideSpiderHouse) { ApplyPatch -Patch "Decompressed\Optional\oceanside_spider_house.ppf" }
+    if (IsChecked $Redux.Hero.MoveGoldDust)                { ApplyPatch -Patch "Decompressed\Optional\chest.ppf"                        }
+    if (IsChecked $Redux.EasyMode.OceansideSpiderHouse)    { ApplyPatch -Patch "Decompressed\Optional\oceanside_spider_house.ppf"       }
 
 
 
@@ -64,9 +58,11 @@ function PatchOptions() {
 
 
 
-    # TEXT COMMANDS FIX #
+    # CAPACITY #
 
-	if (IsChecked $Redux.Fixes.TextCommands) { ApplyPatch -Patch "Decompressed\Optional\text_commands.ppf" }
+    if (IsChecked $Redux.Capacity.EnableWallet) {
+        if ($Redux.Capacity.Wallet1.Text.Length -gt 3 -or $Redux.Capacity.Wallet2.Text.Length -gt 3 -or $Redux.Capacity.Wallet3.Text.Length -gt 3 -or $Redux.Capacity.Wallet4.Text.Length -gt 3) { ApplyPatch -Patch "Decompressed\optional\four_digits_wallet.ppf" }
+    }
 
 }
 
@@ -1607,6 +1603,7 @@ function CreateTabMain() {
     CreateReduxCheckBox -Name "ItemSelect"        -Text "Translate Item Select"    -Info "Translates the Debug Inventory Select menu into English"                                                                                                          -Credits "GhostlyDark"
     CreateReduxCheckBox -Name "AlwaysBestEnding"  -Text "Always Best Ending"       -Info "The credits sequence always includes the best ending, regardless of actual ingame progression"                                                                    -Credits "Marcelo20XX"
     CreateReduxCheckBox -Name "BlueOctorok"       -Text "Blue Octorok Color"       -Info "Change the color of the Blue Octorok for the Shooting Gallery Minigame into something more distinctive from the Red Octoroks"                                     -Credits "Admentus"
+    CreateReduxCheckBox -Name "LinkMask"          -Text "Link Mask"                -Info "Replaces the Fierce Deity Mask with the Link Mask"                                                                                                                -Credits "Admentus"
     CreateReduxCheckBox -Name "DefaultZTargeting" -Text "Default Hold Z-Targeting" -Info "Change the Default Z-Targeting option to Hold instead of Switch"                                                                                                  -Credits "Euler"
 
 
