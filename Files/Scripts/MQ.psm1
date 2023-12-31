@@ -4,7 +4,7 @@ function PatchDungeonsOoTMQ() {
 
     if ( (IsIndex -Elem $Redux.MQ.Logo -Text "Master Quest") -or (IsIndex -Elem $Redux.MQ.Logo -Text "New Master Quest") ) { # MQ Title with Subtitle
         if     (IsIndex -Elem $Redux.MQ.Logo -Text "Master Quest")       { PatchBytes -Offset "1795300" -Texture -Patch "Logo\mq_logo.bin"  }
-        elseif (IsIndex -Elem $Redux.MQ.Logo -Text "Neq Master Quest")   { PatchBytes -Offset "1795300" -Texture -Patch "Logo\nmq_logo.bin" }
+        elseif (IsIndex -Elem $Redux.MQ.Logo -Text "New Master Quest")   { PatchBytes -Offset "1795300" -Texture -Patch "Logo\nmq_logo.bin" }
         PatchBytes -Offset "17AE300" -Texture -Patch "Logo\mq_copyright.bin"
         ChangeBytes -Offset "E6E266" -Values "64 96 34 21 FF" # THE LEGEND OF + OCARINA OF TIME (14 50 35 8C A0)
         ChangeBytes -Offset "E6E2A6" -Values "08 5C 35 8C 98" # Overlay Title color
