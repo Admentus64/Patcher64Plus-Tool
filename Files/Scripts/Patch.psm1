@@ -211,9 +211,11 @@ function MainFunctionPatch([string]$Command, [Array]$Header, [string]$PatchedFil
 
     # Step 11: Final message
     if ($IsWiiVC) { $text = "WAD" } else { $text = "ROM" }
-    if     ($WarningError)         { UpdateStatusLabel ("Finished patching " + $GameType.mode + " " + $text + " file, but encountered issues. Please enable and check the log.")          -Error }
-    elseif ($ModelPatchingError)   { UpdateStatusLabel ("Finished patching " + $GameType.mode + " " + $text + " file, but couldn't apply custom model. Please enable and check the log.") -Error }
-    else                           { UpdateStatusLabel ("Finished patching " + $GameType.mode + " " + $text + " file.") }
+    if     (!$PatchInfo.run)                { UpdateStatusLabel ("There was nothing to patch for the " + $GameType.mode + " " + $text + ".")                                                      }
+    elseif ($WarningError)                  { UpdateStatusLabel ("Done patching " + $GameType.mode + " " + $text + ", but encountered issues. Please check the log.")                      -Error }
+    elseif (!(TestFile $GetROM.patched) )   { UpdateStatusLabel ("Done patching " + $GameType.mode + " " + $text + ", but couldn't write to changed " + $text + ". Please check the log.") -Error; WriteToConsole -Text "Are folder permission enabled for file writing?" -Error }
+    elseif ($ModelPatchingError)            { UpdateStatusLabel ("Done patching " + $GameType.mode + " " + $text + ", but couldn't apply custom model. Please check the log.")             -Error }
+    else                                    { UpdateStatusLabel ("Done patching " + $GameType.mode + " " + $text + ".") }
 
 }
 
