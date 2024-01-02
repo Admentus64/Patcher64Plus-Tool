@@ -32,7 +32,7 @@ function ChildQuestClassicByteOptions() {
         PatchBytes  -Offset "8AE800"  -Texture -Patch "Equipment\Hylian Shield\Hero's Shield.en.label"                                                                                      # Label: Hylian Shield -> Hero's Shield
         PatchBytes  -Offset "15B9000" -Patch ("Object GI Models\Hero's Shield.bin");         ChangeBytes -Offset "9FF4" -Values "015BAEC0"; ChangeBytes -Offset "B6F63C" -Values "015BAEC0" # Model: Hylian Shield -> Hero's Shield
         ChangeBytes -Offset "B663A2"  -Values "09F0"
-    
+        
         PatchBytes  -Offset "7FD000"  -Texture -Patch "Equipment\Mirror Shield\Termina Mirror Shield.icon"                                                                                  # Icon:  Mirror Shield -> Termina Mirror Shield
         PatchBytes  -Offset "1616000" -Patch ("Object GI Models\Termina Mirror Shield.bin"); ChangeBytes -Offset "A0F4" -Values "01617C00"; ChangeBytes -Offset "B6F6CC" -Values "01617C00" # Model: Mirror Shield -> Termina Mirror Shield
         ChangeBytes -Offset "B6659A"  -Values "0770"; ChangeBytes -Offset "B6659E" -Values "0BF8"
@@ -44,8 +44,8 @@ function ChildQuestClassicByteOptions() {
         ChangeBytes -Offset "B6D980" -Values "800F7908";          ChangeBytes -Offset "B6D679" -Values "02";     ChangeBytes -Offset "B6DC2A" -Values "02"     # Biggoron Sword as One-Handed
         ChangeBytes -Offset "B6D6E0" -Values "1401020A11";        ChangeBytes -Offset "AEFBDF" -Values "06"                                                    # Biggoron Sword as One-Handed
         ChangeBytes -Offset "AF0C38" -Values "240100FF1501";      ChangeBytes -Offset "AF0C74" -Values "240100FF1541"                                          # Show sheath for swords as Child Link
+        ChangeBytes -Offset "BEDF00" -Values "00" -Repeat 0x1F                                                                                                 # Fix animation for losing sword during Ganon boss fight
     }
-    ChangeBytes -Offset "BEDF00" -Values "00" -Repeat 0x1F # Fix animation for losing sword during Ganon boss fight
 
 
 
@@ -73,23 +73,19 @@ function ChildQuestClassicByteOptions() {
 
 
 
-    # Stun Ganondorf using Slingshot
-    ChangeBytes -Offset "D85E36" -Values "0004"
-
-
-
     # Collision
-    ChangeBytes -Offset "ECF864" -Values (GetOoTCollision -Slingshot)              -Add                                                                                                               # Sage Barrier
+    ChangeBytes -Offset @("CF4CDC", "CF4D00", "CF4D24", "CF4D48", "CF4D6C", "CF4D90", "CF4DB4", "CF4DD8", "CF4DFC", "CF4E07", "CF4E20", "CF4E44", "CF4E68") -Values (GetOoTCollision -Boomerang) -Add # Flare Dancer
+    ChangeBytes -Offset "EA0814" -Values (GetOoTCollision -Slingshot -KokiriSpin -GiantSpin -MasterSpin -KokiriJump -GiantJump -MasterJump) -Add                                                      # Gerudo Guard
+    ChangeBytes -Offset "CDE1E4" -Values (GetOoTCollision -Slingshot)              -Add; ChangeBytes -Offset "CE1B28" -Values (GetOoTCollision -Slingshot) -Add                                       # Poe Sister
     ChangeBytes -Offset "CE1AEC" -Values (GetOoTCollision -Slingshot)              -Add                                                                                                               # Poe Sister Painting
+    ChangeBytes -Offset "ECF864" -Values (GetOoTCollision -Slingshot)              -Add                                                                                                               # Sage Barrier
+    ChangeBytes -Offset "D8D4A0" -Values (GetOoTCollision -KokiriJump -KokiriSpin) -Add                                                                                                               # Ganondorf Lightball
+    ChangeBytes -Offset "D85E34" -Values (GetOoTCollision -Slingshot)              -Add                                                                                                               # Ganondorf (stun)
     ChangeBytes -Offset "CA8D2C" -Values (GetOoTCollision -Slingshot)              -Add                                                                                                               # Gerudo Training Ground Eye Statue
     ChangeBytes -Offset "C88914" -Values (GetOoTCollision -Slingshot)              -Add                                                                                                               # Bomb Flower
-    ChangeBytes -Offset "D8D4A0" -Values (GetOoTCollision -KokiriJump -KokiriSpin) -Add                                                                                                               # Ganondorf Lightball
-    ChangeBytes -Offset "CDE1E4" -Values (GetOoTCollision -Slingshot)              -Add; ChangeBytes -Offset "CE1B28" -Values (GetOoTCollision -Slingshot) -Add                                       # Poe Sister
-    ChangeBytes -Offset "EA0814" -Values (GetOoTCollision -Slingshot -KokiriSpin -GiantSpin -MasterSpin -KokiriJump -GiantJump -MasterJump) -Add                                                      # Gerudo Guard
-    ChangeBytes -Offset @("CF4CDC", "CF4D00", "CF4D24", "CF4D48", "CF4D6C", "CF4D90", "CF4DB4", "CF4DD8", "CF4DFC", "CF4E07", "CF4E20", "CF4E44", "CF4E68") -Values (GetOoTCollision -Boomerang) -Add # Flare Dancer
-
-
-
+    
+    
+    
     # Death Mountain Trail falling rocks
     ChangeBytes -Offset "D1C8C4" -Values "1100" # Despawn after beating Volvagia
     ChangeBytes -Offset "D1CF10" -Values "1500" # Use Adult behavior
@@ -102,15 +98,15 @@ function ChildQuestClassicByteOptions() {
 
 
     # Credits
-    ChangeBytes -Offset "ACAAEC" -Values "00" -Repeat 0xB  # Zelda cutscene as Child
-    ChangeBytes -Offset "ACA00C" -Values "35F93000"        # Fix Tunic during final scenes
-    ChangeBytes -Offset "ACA02C" -Values "39092000"        # Fix Boots during final scenes
+    ChangeBytes -Offset "ACAAEC" -Values "00" -Repeat 0xB # Zelda cutscene as Child
+    ChangeBytes -Offset "ACA00C" -Values "35F93000"       # Fix Tunic during final scenes
+    ChangeBytes -Offset "ACA02C" -Values "39092000"       # Fix Boots during final scenes
 
 
 
     # Testing
-    ChangeBytes -Offset "B71F56" -Values "01"   # Biggoron Sword on new Debug Save Slot
-    ChangeBytes -Offset "B71FBB" -Values "C9"   # Golden Gauntlets on new Debug Save Slot
+    ChangeBytes -Offset "B71F56" -Values "01" # Biggoron Sword on new Debug Save Slot
+    ChangeBytes -Offset "B71FBB" -Values "C9" # Golden Gauntlets on new Debug Save Slot
 
 
 
@@ -157,7 +153,6 @@ function ChildQuestClassicByteOptions() {
 
 
 
-
     # Damage tables
     ChangeBytes -Offset "DFE765" -Values "F2"; ChangeBytes -Offset "DFE76C" -Values "F1"; ChangeBytes -Offset "DFE77A" -Values "F1"; ChangeBytes -Offset "DFE77D" -Values "F2"; ChangeBytes -Offset "DFE782" -Values "F4" # Freezard (Deku Stick, Kokiri Slash, Kokiri Spin, Kokiri Jump, Hammer Jump)
     ChangeBytes -Offset "CB4DB1" -Values "D2"; ChangeBytes -Offset "CB4DB2" -Values "D1"; ChangeBytes -Offset "CB4DB8" -Values "D1"                                                                                       # Blue Bubble (Deku Stick, Slingshot, Kokiri Slash)
@@ -189,6 +184,7 @@ function ChildQuestClassicByteOptions() {
     ChangeBytes -Offset "CA3E82" -Values "060C" # Water Temple
     ChangeBytes -Offset "CA3FA2" -Values "0580" # Shadow Temple
     ChangeBytes -Offset "CA3F12" -Values "0610" # Spirit Temple
+
 }
 
 
@@ -208,7 +204,7 @@ function ChildQuestClassicByteReduxOptions() {
 
 #==============================================================================================================================================================================================
 function ChildQuestClassicByteSceneOptions() {
-
+    
     # KAKARIKO VILLAGE #
 
     PrepareMap   -Scene "Kakariko Village" -Map 0 -Header 1 # Child - Night
