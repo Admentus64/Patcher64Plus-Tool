@@ -6,7 +6,7 @@
 
 - Tier 2:	Amara, Andrew Kinney, Petra, Christopher Lillis, Sen, Pikangs_Futaba
 
-- Tier 1:	Yang, mad_scrub, redmaro
+- Tier 1:	Yang, mad_scrub, redmaro, Maria Nova
 
 
 --- Patcher64+ Tool ---
@@ -60,7 +60,6 @@
 - CrookedPoe
 - SoulofDeity
 - Feonyx
-- Ikey Ilex
 - GoldenMariaNova
 
 --- Custom Textures ---
