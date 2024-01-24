@@ -68,7 +68,6 @@ function SetFileParameters() {
     $Files.oot.ura_quest                    = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Dungeons\ura_quest")
     $Files.oot.master_quest                 = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Dungeons\master_quest")
 
-    $Files.oot.run_faster                   = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Optional\run_faster")
     $Files.oot.feminine_animations          = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Optional\feminine_animations")
     $Files.oot.harder_child_bosses          = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Optional\harder_child_bosses")
     $Files.oot.mm_pause_screen              = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Optional\mm_pause_screen")
@@ -99,6 +98,8 @@ function SetFileParameters() {
 
     $Files.oot.theme_fire_temple            = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Export\audiobank_fire_temple")
     $Files.oot.debug_map_select             = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Export\debug_map_select")
+
+    $Files.oot.improved_moon                = $Paths.Games + "\Ocarina of Time\Textures\Moon\improved_moon.bin"
 
     $Files.oot.gerudo1                      = $Paths.Games + "\Ocarina of Time\Textures\Gerudo Symbols\crystal_switch.bin"
     $Files.oot.gerudo2                      = $Paths.Games + "\Ocarina of Time\Textures\Gerudo Symbols\dampe.bin"

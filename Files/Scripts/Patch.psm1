@@ -12,12 +12,15 @@ function MainFunction([string]$Command, [string]$PatchedFileName) {
     if (IsSet $GameSettings) { Out-IniFile -FilePath (GetGameSettingsFile) -InputObject $GameSettings }
     
     # Reset variables
-    $global:WarningError  = $False
-    $global:PatchInfo     = @{}
-    $PatchInfo.decompress = $False
-    $PatchInfo.downgrade  = $False
-    $PatchInfo.finalize   = $True
-    $PatchInfo.run        = $True
+    $global:WarningError                                   = $global:ModelPatchingError = $global:OverwriteError = $global:MissingError = $False
+    $global:PatchInfo                                      = @{}
+    $PatchInfo.decompress                                  = $False
+    $PatchInfo.downgrade                                   = $False
+    $PatchInfo.finalize                                    = $True
+    $PatchInfo.run                                         = $True
+    $global:RunOverwriteChecks                             = $False
+    $global:OverwritechecksROM                             = $null
+    [System.Collections.ArrayList]$global:OptionsPatchList = @()
 
     # Header
     $Header = @($null) * 5
@@ -180,7 +183,7 @@ function MainFunctionPatch([string]$Command, [Array]$Header, [string]$PatchedFil
     }
 
     # Step 08: Patch the ROM
-    if ( !(StrLike -str $Command -val "Inject") -and !(StrLike -str $Command -val "Apply Patch") -and !(StrLike -str $Command -val "Extract") -and $PatchInfo.run) {           
+    if ( !(StrLike -str $Command -val "Inject") -and !(StrLike -str $Command -val "Apply Patch") -and !(StrLike -str $Command -val "Extract") -and $PatchInfo.run) {
         if (!(PatchDecompressedROM)) { return }         # Step A: Patch the decompressed ROM file with the patch through Floating IPS
         ExtractMQData                                   # Step B: Extract MQ dungeon data for OoT
         PrePatchingAdditionalOptions                    # Step C: Apply additional options before Redux
@@ -211,11 +214,18 @@ function MainFunctionPatch([string]$Command, [Array]$Header, [string]$PatchedFil
 
     # Step 11: Final message
     if ($IsWiiVC) { $text = "WAD" } else { $text = "ROM" }
+    if (DoAssertSceneFiles) { UpdateStatusLabel ("Done asserting " + $GameType.mode + " " + $text + "."); return }
     if     (!$PatchInfo.run)                { UpdateStatusLabel ("There was nothing to patch for the " + $GameType.mode + " " + $text + ".")                                                      }
     elseif ($WarningError)                  { UpdateStatusLabel ("Done patching " + $GameType.mode + " " + $text + ", but encountered issues. Please check the log.")                      -Error }
     elseif (!(TestFile $GetROM.patched) )   { UpdateStatusLabel ("Done patching " + $GameType.mode + " " + $text + ", but couldn't write to changed " + $text + ". Please check the log.") -Error; WriteToConsole -Text "Are folder permission enabled for file writing?" -Error }
+    elseif ($OverwriteError)                { UpdateStatusLabel ("Done patching " + $GameType.mode + " " + $text + ", but some options got overwritten. Please check the log.")            -Error }
+    elseif ($MissingError)                  { UpdateStatusLabel ("Done patching " + $GameType.mode + " " + $text + ", but some options are missing. Please check the log.")                -Error }
     elseif ($ModelPatchingError)            { UpdateStatusLabel ("Done patching " + $GameType.mode + " " + $text + ", but couldn't apply custom model. Please check the log.")             -Error }
     else                                    { UpdateStatusLabel ("Done patching " + $GameType.mode + " " + $text + ".") }
+
+    if ($OptionsPatchList.Count -gt 0) {
+        foreach ($option in $OptionsPatchlist) { WriteToConsole ("Missing option: " + $option) -Error }
+    }
 
 }
 
@@ -270,12 +280,12 @@ function WriteDebug([string]$Command, [string[]]$Header, [string]$PatchedFileNam
         foreach ($group in $panel.Controls) {
             if (!$group.Enabled) { continue }
             foreach ($form in $group.Controls) {
-                if     ($form.GetType().Name -eq "CheckBox")      { if   (IsChecked $form)                                                        { WriteToConsole ($group.text.replace("&&", "&") + ". " + $form.name) } }
-                elseif ($form.GetType().Name -eq "RadioButton")   { if ( (IsChecked $form) -and (IsDefault $form -Not) )                          { WriteToConsole ($group.text.replace("&&", "&") + ". " + $form.name) } }
-                elseif ($form.GetType().Name -eq "ComboBox")      { if   (IsDefault $form -Not)                                                   { WriteToConsole ($group.text.replace("&&", "&") + ". " + $form.name + " -> " + $form.text.replace(" (default)", "") ) } }
-                elseif ($form.GetType().Name -eq "TrackBar")      { if   (IsDefault $form -Not)                                                   { WriteToConsole ($group.text.replace("&&", "&") + ". " + $form.name + " -> " + $form.value                          ) } }
-                elseif ($form.GetType().Name -eq "TextBox")       { if   (IsDefault $form -Not)                                                   { WriteToConsole ($group.text.replace("&&", "&") + ". " + $form.name + " -> " + $form.text                           ) } }
-                elseif ($form.GetType().Name -eq "ListBox")       { if   ($form.SelectedItems -ne $null -and $form.SelectedItems -ne "Default")   { WriteToConsole ($group.text.replace("&&", "&") + ". " + $form.name + " -> " + $form.SelectedItems                  ) } }
+                if     ($form.GetType().Name -eq "CheckBox")      { if   (IsChecked $form)                                                        { if ($Settings.Debug.MissingChecks -eq $True) { $global:OptionsPatchList += $form.section + "." + $form.name }; WriteToConsole ($group.text.replace("&&", "&") + ". " + $form.name) } }
+                elseif ($form.GetType().Name -eq "RadioButton")   { if ( (IsChecked $form) -and (IsDefault $form -Not) )                          { if ($Settings.Debug.MissingChecks -eq $True) { $global:OptionsPatchList += $form.section + "." + $form.name }; WriteToConsole ($group.text.replace("&&", "&") + ". " + $form.name) } }
+                elseif ($form.GetType().Name -eq "ComboBox")      { if   (IsDefault $form -Not)                                                   { if ($Settings.Debug.MissingChecks -eq $True) { $global:OptionsPatchList += $form.section + "." + $form.name }; WriteToConsole ($group.text.replace("&&", "&") + ". " + $form.name + " -> " + $form.text.replace(" (default)", "") ) } }
+                elseif ($form.GetType().Name -eq "TrackBar")      { if   (IsDefault $form -Not)                                                   { if ($Settings.Debug.MissingChecks -eq $True) { $global:OptionsPatchList += $form.section + "." + $form.name }; WriteToConsole ($group.text.replace("&&", "&") + ". " + $form.name + " -> " + $form.value                          ) } }
+                elseif ($form.GetType().Name -eq "TextBox")       { if   (IsDefault $form -Not)                                                   { if ($Settings.Debug.MissingChecks -eq $True) { $global:OptionsPatchList += $form.section + "." + $form.name }; WriteToConsole ($group.text.replace("&&", "&") + ". " + $form.name + " -> " + $form.text                           ) } }
+                elseif ($form.GetType().Name -eq "ListBox")       { if   ($form.SelectedItems -ne $null -and $form.SelectedItems -ne "Default")   { if ($Settings.Debug.MissingChecks -eq $True) { $global:OptionsPatchList += $form.section + "." + $form.name }; WriteToConsole ($group.text.replace("&&", "&") + ". " + $form.name + " -> " + $form.SelectedItems                  ) } }
             }
         }
     }
@@ -290,7 +300,7 @@ function WriteDebug([string]$Command, [string[]]$Header, [string]$PatchedFileNam
 #==============================================================================================================================================================================================
 function Cleanup([switch]$skipLanguageReset) {
     
-    $global:ByteArrayGame = $global:ROMFile = $global:WADFile = $global:CheckHashSum = $global:ROMHashSum = $null
+    $global:ByteArrayGame = $global:ROMFile = $global:WADFile = $global:CheckHashSum = $global:ROMHashSum = $global:OverwritechecksROM = $null
     if (!$skipLanguageReset) { $global:LanguagePatch = $null }
     [System.GC]::WaitForPendingFinalizers(); [System.GC]::Collect()
 
@@ -445,6 +455,11 @@ function PatchingAdditionalOptions() {
 
     if (!(UseOptions)) { return }
     
+    if ($Settings.Debug.OverwriteChecks -eq $True) {
+        $global:RunOverwriteChecks = $True
+        $global:OverwritechecksROM = [System.IO.File]::ReadAllBytes($GetROM.decomp)
+    }
+
     # BPS - Additional Options (before languages)
     RunCommand -Command "PrePatchTextOptions" -Message "Text File"
 
@@ -475,11 +490,13 @@ function PatchingAdditionalOptions() {
 
     # Scene Options
     if (CheckCommand -Command "ByteSceneOptions" -Check ($Settings.Debug.NoScenePatching -ne $True) ) {
-        $global:SceneEditor     = @{}
-        $Files.json.sceneEditor = SetJSONFile $GameFiles.sceneEditor
+        $global:RunOverwriteChecks = $False
+        $global:SceneEditor        = @{}
+        $Files.json.sceneEditor    = SetJSONFile $GameFiles.sceneEditor
         RunCommand -Command "ByteSceneOptions" -Message "Scene" -Check ($Settings.Debug.NoScenePatching -ne $True)
         if (DoAssertSceneFiles) { TestScenesFiles }
         $global:SceneEditor = $Files.json.sceneEditor = $null
+        $global:RunOverwriteChecks = $True
     }
     
     # Language Options
@@ -530,6 +547,8 @@ function PatchingAdditionalOptions() {
     }
 
     if (!$PatchInfo.decompress) { Move-Item -LiteralPath $GetROM.decomp -Destination $GetROM.patched -Force }
+
+    $global:RunOverwriteChecks = $False
 
 }
 

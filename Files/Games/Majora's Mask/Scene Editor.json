@@ -5909,16 +5909,46 @@
 		"type"		: "Animal",
 		"xrot"		: 0,
 		"spawn"		: 1,
-		"band"		: [ "00FF", "FF00" ],
+		"band"		: [ "0780", "007F", "F800" ],
 		"params" : [ [ {
-			"name"	: "Param #1",
-			"value"	: "FF"
+			"name"	: "Type #1",
+			"value"	: "0"
+		}, {
+			"name"	: "Outside Woods",
+			"value"	: "80"
+		}, {
+			"name"	: "Near Witch",
+			"value"	: "100"
+		}, {
+			"name"	: "Outside Chamber",
+			"value"	: "180"
+		}, {
+			"name"	: "Outside Palace",
+			"value"	: "200"
+		}, {
+			"name"	: "Tied Up",
+			"value"	: "280"
+		}, {
+			"name"	: "Hanging",
+			"value"	: "300"
+		}, {
+			"name"	: "Guide",
+			"value"	: "380"
+		}, {
+			"name"	: "Type #9",
+			"value"	: "400"
+		}, {
+			"name"	: "Saved",
+			"value"	: "480"
+		}, {
+			"name"	: "Type #11",
+			"value"	: "500"
 		} ], [ {
-			"name"	: "Param #2",
-			"value"	: "FF"
+			"name"	: "Switch",
+			"value"	: "7F"
 		} ], [ {
-			"name"	: "Param #3",
-			"value"	: "1FF"
+			"name"	: "Path",
+			"value"	: "1F"
 		} ] ]
 	}, {
 		"name"		: "Deku Scrub Guard",

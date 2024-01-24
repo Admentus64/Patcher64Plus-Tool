@@ -561,9 +561,9 @@ function ChildQuestClassicByteSceneOptions() {
 
     PrepareMap  -Scene "Death Mountain Trail" -Map 0 -Header 0
     # Remove actors to improve performance
-    RemoveActor -Name "Brown Bombable Boulder" -Compare "0007"
-    RemoveActor -Name "Collectable"            -Compare "0701"
-    RemoveActor -Name "Collectable"            -Compare "0A02"
+    RemoveActor -Name "Bombable Boulder" -Compare "0007"
+    RemoveActor -Name "Collectable"      -Compare "0701"
+    RemoveActor -Name "Collectable"      -Compare "0A02"
     # Gold Skulltula (Near Bomb Flower)
     InsertActor -Name "Bronze Boulder" -X (-1175) -Y 1417 -Z (-803)  -Param "0009"
     InsertActor -Name "Skullwalltula"  -X (-1166) -Y 1465 -Z (-812)  -Param "B008" -XRot 0x4000 -YRot 0xD333

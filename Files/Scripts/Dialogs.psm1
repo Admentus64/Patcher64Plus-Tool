@@ -261,7 +261,6 @@ function CreateSettingsPanel() {
     $GeneralSettings.NoConversion       = CreateSettingsCheckbox -Name "NoConversion"       -Text "No Conversion"           -IsDebug -Info "Do not attempt to convert the ROM to a proper format"
     $GeneralSettings.RefreshScripts     = CreateSettingsCheckbox -Name "RefreshScripts"     -Text "Refresh Scripts"         -IsDebug -Info "Refresh several code scripts prior to running them so that any code changes are included"
 
-
     # Debug Settings
     $GeneralSettings.Box                   = CreateSettingsGroup    -Text "Debug Settings"
     $GeneralSettings.Console               = CreateSettingsCheckbox -Name "Console"               -Text "Console"                 -IsDebug -Info "Show the console log"
@@ -276,8 +275,8 @@ function CreateSettingsPanel() {
     $GeneralSettings.KeepDowngraded        = CreateSettingsCheckbox -Name "KeepDowngraded"        -Text "Keep Downgraded"         -IsDebug -Info "Keep the downgraded patched ROM in the output folder"
     $GeneralSettings.KeepConverted         = CreateSettingsCheckbox -Name "KeepConverted"         -Text "Keep Converted"          -IsDebug -Info "Keep the converted patched ROM in the output folder"
     $GeneralSettings.SceneEditorChecks     = CreateSettingsCheckbox -Name "SceneEditorChecks"     -Text "Scene Editor Checks"     -IsDebug -Info "Print out extras debug info and perform extra checks for the Scene Editor`nThis may slow down performance a bit"
-    
-
+    $GeneralSettings.OverwriteChecks       = CreateSettingsCheckbox -Name "OverwriteChecks"       -Text "Overwrite Checks"        -IsDebug -Info "Check if during patching data got overwritten and inform if so"
+    $GeneralSettings.MissingChecks         = CreateSettingsCheckbox -Name "MissingChecks"         -Text "Missing Checks"          -IsDebug -Info "Check if during patching options did not get patched in and inform if so"
 
     # Debug Settings (Nintendo 64)
     $GeneralSettings.Box              = CreateSettingsGroup    -Text "Debug Settings (Nintendo 64)"

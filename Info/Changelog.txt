@@ -1,3 +1,14 @@
+v23.2.0
+- Added Permanent Owl Saves & Additional Save Statues options
+- Added new HUD layout and fixed issues for OoT Redux
+- Added new OoT & MM options
+- Added new MM options by Euler
+- Added new debugging options
+- Changed several byte options into byte scene options for OoT & MM
+- Updated Smash Remix to v1.5.0
+- Fixed several options for OoT & MM
+- Fixed issue with Restore Text for OoT
+
 v23.1.4
 - Improved final output error handling
 

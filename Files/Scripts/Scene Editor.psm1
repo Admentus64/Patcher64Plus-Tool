@@ -2591,16 +2591,23 @@ function ShiftMapVtxData([int16]$Shift=0x10) {
             if ($SceneEditor.MapArray[$i+1] -eq 0 -and $SceneEditor.MapArray[$i+2] -eq 0 -and $SceneEditor.MapArray[$i+3] -eq 0) {
                 if ($SceneEditor.MapArray[$i] -eq 0xE7 -or  $SceneEditor.MapArray[$i]   -eq 0xFE)   { $skip = $False; $blockDF = $False }
                 if ($SceneEditor.MapArray[$i] -eq 0xFF -and $SceneEditor.MapArray[$i-4] -gt 0xF0)   { $skip = $True;  $blockDF = $False }
+                if ($SceneEditor.MapArray[$i] -eq 0xDE) {
+                    if ($SceneEditor.MapArray[$i-8] -eq 0xDF -and $SceneEditor.MapArray[$i+8] -eq 0xDF) { $skip = $False; $blockDF = $False }
+                }
                 if ($SceneEditor.MapArray[$i] -eq 0xDF) {
-                    if     ($SceneEditor.MapArray[$i+8] -eq 0xDE -and !$BlockDF)   { $skip = $False; $blockDF = $True  }
-                    elseif ($SceneEditor.MapArray[$i-8] -eq 0xDE -and  $BlockDF)   { $skip = $True;  $blockDF = $False }
+                    if     ($SceneEditor.MapArray[$i+8] -eq 0xDF)                                    { $skip = $False; $blockDF = $False }
+                    elseif ($SceneEditor.MapArray[$i+8] -eq 0xDE -and $SceneEditor.MapArray[$i-8])   { $skip = $False; $blockDF = $True  }
+                    elseif ($SceneEditor.MapArray[$i+8] -eq 0xDE -and !$BlockDF)                     { $skip = $False; $blockDF = $True  }
+                    elseif ($SceneEditor.MapArray[$i-8] -eq 0xDE -and  $BlockDF)                     { $skip = $True;  $blockDF = $False }
+                    
                 }
                 if ($SceneEditor.MapArray[$i] -eq 0xD7 -or $SceneEditor.MapArray[$i] -eq 0xFE) { $skip = $False; $blockDF = $False }
             }
+            elseif ($SceneEditor.MapArray[$i] -eq 3 -and $SceneEditor.MapArray[$i-8] -eq 0xFF -and $SceneEditor.MapArray[$i-7] -eq 0x10 -and $SceneEditor.MapArray[$i-6] -eq 0 -and $SceneEditor.MapArray[$i+1] -eq 0 -and $SceneEditor.MapArray[$i-1] -eq 0 -and $SceneEditor.MapArray[$i-2] -eq 0) { $skip = $True; $blockDF = $False }
             elseif ($SceneEditor.MapArray[$i+1] -eq 0 -and $SceneEditor.MapArray[$i+2] -eq 0 -and $SceneEditor.MapArray[$i+3] -eq 2) {
                 if ($SceneEditor.MapArray[$i] -eq 0xD7 -or $SceneEditor.MapArray[$i] -eq 0xFE) { $skip = $False; $blockDF = $False }
             }
-            elseif ($SceneEditor.MapArray[$i] -eq 1 -and $SceneEditor.MapArray[$i+1] -eq 0 -and $SceneEditor.MapArray[$i+2] -eq 0x80 -and $SceneEditor.MapArray[$i+3] -eq 0x10  -and $SceneEditor.MapArray[$i+4] -eq 3) { $skip = $False; $blockDF = $False }
+            elseif ($SceneEditor.MapArray[$i] -eq 1 -and $SceneEditor.MapArray[$i+1] -eq 0 -and $SceneEditor.MapArray[$i+2] -eq 0x80 -and $SceneEditor.MapArray[$i+3] -eq 0x10 -and $SceneEditor.MapArray[$i+4] -eq 3) { $skip = $False; $blockDF = $False }
 
             if ($SceneEditor.MapArray[$i] -eq 3 -and !$skip) {
                 $value = $SceneEditor.MapArray[$i+1] * 65536 + $SceneEditor.MapArray[$i+2] * 256 + $SceneEditor.MapArray[$i+3] + $Shift
@@ -2958,7 +2965,7 @@ function DeleteActor() {
 }
 
 #==============================================================================================================================================================================================
-function InsertActor([string]$ID="0000", [string]$Name, [int]$X=0, [int]$Y=0, [int]$Z=0, [uint16]$XRot=0, [uint16]$YRot=0, [uint16]$ZRot=0, [switch]$NoXRot, [switch]$NoYRot, [switch]$NoZRot, [string]$Param="0000", [boolean[]]$SpawnTimes=@(1, 1, 1, 1, 1, 1, 1, 1, 1, 1), [byte]$SceneCommand=0x7F, [switch]$Silent) {
+function InsertActor([string]$ID="0000", [string]$Name, [int]$X=0, [int]$Y=0, [int]$Z=0, [uint16]$XRot=0, [uint16]$YRot=0, [uint16]$ZRot=0, [switch]$NoXRot, [switch]$NoYRot, [switch]$NoZRot, [string]$Param="0000", [boolean[]]$SpawnTimes=@(1, 1, 1, 1, 1, 1, 1, 1, 1, 1), [byte]$Cutscene=0x7F, [switch]$Silent) {
     
     if ((GetActorCount) -eq $null)   { WriteToConsole "No actor list defined for this header"       -Error; return $False }
     if ((GetActorCount) -ge 255)     { WriteToConsole "Reached the max actor limit for this header" -Error; return $False }
@@ -2998,15 +3005,15 @@ function InsertActor([string]$ID="0000", [string]$Name, [int]$X=0, [int]$Y=0, [i
         if ($SpawnTimes[8])    { $arr[1] = 1 }
         if ($SpawnTimes[9])    { $arr[2] = 1 }
         if ($XRot -gt 0x1FF)   { $XRot = 0x1FF }
-        $XRot    = $arr[0] + ($arr[1] -shl 1) + ($arr[2] -shl 2) + ($XRot -shl 7)
-        $values += $XRot -shr 8
-        $values += $XRot % 0x100
-        
-        if ($SceneCommand -gt 0x7F)    { $SceneCommand = 0x7F  }
-        if ($YRot         -gt 0x1FF)   { $YRot         = 0x1FF }
-        $YRot    = $SceneCommand + ($YRot -shl 7)
-        $values += $YRot -shr 8
-        $values += $YRot % 0x100
+        $values += ($XRot -shl 7) -shr 8
+        $values += $arr[0] + ($arr[1] -shl 1) + ($arr[2] -shl 2) + ($XRot -shl 7) + ( ($XRot -shl 7) % 0x100)
+        write-host "XRot" (Get8Bit $values[8])  (Get8Bit $values[9]) 
+
+        if ($Cutscene -gt 0x7F)    { $Cutscene = 0x7F  }
+        if ($YRot     -gt 0x1FF)   { $YRot     = 0x1FF }
+        $values += ($YRot -shl 7) -shr 8
+        $values += $Cutscene + ( ($YRot -shl 7) % 0x100)
+        write-host "YRot" (Get8Bit $values[10])  (Get8Bit $values[11]) 
 
         $arr = @(0, 0, 0, 0, 0, 0, 0)
         if ($SpawnTimes[0])    { $arr[0] = 1 }
@@ -3017,9 +3024,9 @@ function InsertActor([string]$ID="0000", [string]$Name, [int]$X=0, [int]$Y=0, [i
         if ($SpawnTimes[5])    { $arr[5] = 1 }
         if ($SpawnTimes[6])    { $arr[6] = 1 }
         if ($ZRot -gt 0x1FF)   { $ZRot = 0x1FF }
-        $ZRot    = $arr[0] + ($arr[1] -shl 1) + ($arr[2] -shl 2) + ($arr[3] -shl 3) + ($arr[4] -shl 4) + ($arr[5] -shl 5) + ($arr[6] -shl 6) + ($ZRot -shl 7)
-        $values += $ZRot -shr 8
-        $values += $ZRot % 0x100
+        $values += ($XRot -shl 7) -shr 8
+        $values += $arr[0] + ($arr[1] -shl 1) + ($arr[2] -shl 2) + ($arr[3] -shl 3) + ($arr[4] -shl 4) + ($arr[5] -shl 5) + ($arr[6] -shl 6) + ($ZRot -shl 7) + ( ($XRot -shl 7) % 0x100)
+        write-host "ZRot" (Get8Bit $values[12])  (Get8Bit $values[13]) 
     }
     else {
         $values += $XRot -shr 8
@@ -3059,7 +3066,7 @@ function InsertActor([string]$ID="0000", [string]$Name, [int]$X=0, [int]$Y=0, [i
 
 
 #==============================================================================================================================================================================================
-function ReplaceActor($Index, $ID=$null, $Name, $NewID, $New, $X, $Y, $Z, $XRot, $YRot, $ZRot, [switch]$NoXRot, [switch]$NoYRot, [switch]$NoZRot, $Compare, $CompareX, $CompareY, $CompareZ, $Param, [switch]$Silent) {
+function ReplaceActor($Index, $ID=$null, $Name, $NewID, $New, $X, $Y, $Z, $XRot, $YRot, $ZRot, $Spawn, $Cutscene, [switch]$NoXRot, [switch]$NoYRot, [switch]$NoZRot, $Compare, $CompareX, $CompareY, $CompareZ, $Param, [switch]$Silent) {
     
     if ((GetActorCount) -eq $null) { WriteToConsole "No actor list defined for this header" -Error; return $False }
 
@@ -3197,19 +3204,39 @@ function ReplaceActor($Index, $ID=$null, $Name, $NewID, $New, $X, $Y, $Z, $XRot,
         $SceneEditor.MapArray[$offset+7]  = $Z % 0x100
     }
 
-    if ($XRot -is [int] -and $XRot -ge 0 -and $XRot -le 0xFFFF) {
-        $SceneEditor.MapArray[$offset+8]  = $XRot -shr 8
-        $SceneEditor.MapArray[$offset+9]  = $XRot % 0x100
+    if ($GameType.Mode -eq "Ocarina of Time") { $shift = 0 } else { $shift = 7 }
+
+    if ($XRot -is [int] -and $XRot -ge 0 -and $XRot -le (0xFFFF -shr $shift) ) {
+        if ($shift -gt 0) { $SceneEditor.MapArray[$offset+9] -= $SceneEditor.MapArray[$offset+9] -band (1 -shl $shift) } else { $SceneEditor.MapArray[$offset+9] = 0 }
+        $SceneEditor.MapArray[$offset+8]   = ($XRot -shl $shift) -shr 8
+        $SceneEditor.MapArray[$offset+9]  += ($XRot -shl $shift) % 0x100
     }
 
-    if ($YRot -is [int] -and $YRot -ge 0 -and $YRot -le 0xFFFF) {
-        $SceneEditor.MapArray[$offset+10] = $YRot -shr 8
-        $SceneEditor.MapArray[$offset+11] = $YRot % 0x100
+    if ($YRot -is [int] -and $YRot -ge 0 -and $YRot -le (0xFFFF -shr $shift) ) {
+        if ($shift -gt 0) { $SceneEditor.MapArray[$offset+11] -= $SceneEditor.MapArray[$offset+11] -band (1 -shl $shift) } else { $SceneEditor.MapArray[$offset+11] = 0 }
+        $SceneEditor.MapArray[$offset+10]  = ($YRot -shl $shift) -shr 8
+        $SceneEditor.MapArray[$offset+11] += ($YRot -shl $shift) % 0x100
     }
 
-    if ($ZRot -is [int] -and $ZRot -ge 0 -and $ZRot -le 0xFFFF) {
-        $SceneEditor.MapArray[$offset+12] = $ZRot -shr 8
-        $SceneEditor.MapArray[$offset+13] = $ZRot % 0x100
+    if ($ZRot -is [int] -and $ZRot -ge 0 -and $ZRot -le (0xFFFF -shr $shift) ) {
+        if ($shift -gt 0) { $SceneEditor.MapArray[$offset+13] -= $SceneEditor.MapArray[$offset+13] -band (1 -shl $shift) } else { $SceneEditor.MapArray[$offset+13] = 0 }
+        $SceneEditor.MapArray[$offset+12]  = ($ZRot -shl $shift) -shr 8
+        $SceneEditor.MapArray[$offset+13] += ($ZRot -shl $shift) % 0x100
+    }
+
+    if ($GameType.Mode -eq "Majora's Mask") {
+        if ($Cutscene -is [int] -and $Cutscene -ge 0 -and $Cutscene -le 0x7F) {
+            $SceneEditor.MapArray[$offset+11] -= $SceneEditor.MapArray[$offset+13] -band (1 -shl $shift)
+            $SceneEditor.MapArray[$offset+11] += $Cutscene
+        }
+
+        if ($Spawn -is [array] -and $Spawn.Count -eq 10) {
+            $SceneEditor.MapArray[$offset+9]  -= $SceneEditor.MapArray[$offset+9]  -band 0x7F
+            $SceneEditor.MapArray[$offset+13] -= $SceneEditor.MapArray[$offset+13] -band 0x7F
+            $SceneEditor.MapArray[$offset+9]  += [byte]$Spawn[0] + ([byte]$Spawn[1] -shl 1) + ([byte]$Spawn[2] -shl 2)
+            $SceneEditor.MapArray[$offset+13] += [byte]$Spawn[3] + ([byte]$Spawn[4] -shl 1) + ([byte]$Spawn[5] -shl 2) + ([byte]$Spawn[6] -shl 3) + ([byte]$Spawn[7] -shl 4) + ([byte]$Spawn[8] -shl 5) + ([byte]$Spawn[9] -shl 6)
+        }
+        elseif ($Spawn -is [array] -and $Spawn.Count -ne 10) { WriteToConsole "Spawn Times must consist out of 10 elements" }
     }
 
     if ($Param -is [string]) {
@@ -4121,7 +4148,8 @@ function LoadActor([object]$Actor, [byte]$Count, [switch]$IsScene) {
             else                                             { $LastX = $elem.label.left - (DPISize 15) }
         }
 
-        $params += LoadParam -Param $Actor.params[$i] -Value $value -Band $band -LastBandX $lastBandX -LastX $lastX -Count $Count -Rotation $rotation -IsScene $IsScene
+        try     { $params += LoadParam -Param $Actor.params[$i] -Value $value -Band $band -LastBandX $lastBandX -LastX $lastX -Count $Count -Rotation $rotation -IsScene $IsScene }
+        catch   { WriteToConsole ("Loading loading params for actor: " + $Actor.name) -Error }
 
         $LastX = $params[$i].Right
         if ($i -lt $Actor.params.Count - 1) {
@@ -5030,6 +5058,18 @@ function TestScenesFiles() {
         PrepareMap   -Scene "Mountain Village (Spring)" -Map 0 -Header 0
         InsertObject -Silent -Name "Treasure Chest"
         InsertActor  -Silent -Name "Treasure Chest" -Param "0D40" -X 310 -Y 463 -Z 700 -YRot 90 -NoXRot -NoZRot
+        SaveAndPatchLoadedScene
+        AssertSceneFiles
+
+        PrepareMap   -Scene "North Clock Town" -Map 0 -Header 0
+        InsertActor  -Name "Owl Statue" -Param "000A" -X (-400) -Y 200 -Z (-1760)
+        InsertObject -Name "Owl Statue"
+        SaveAndPatchLoadedScene
+        AssertSceneFiles
+
+        PrepareMap   -Scene "Romani Ranch" -Map 0 -Header 0
+        InsertActor  -Name "Owl Statue" -Param "000C" -X (-1050) -Y 260 -Z (-1600)
+        InsertObject -Name "Owl Statue"
         SaveAndPatchLoadedScene
         AssertSceneFiles
     }

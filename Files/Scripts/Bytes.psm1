@@ -100,6 +100,13 @@ function ChangeBytes([string]$File, [byte[]]$Array, [object]$Offset, [object]$Ma
     # Patch
     foreach ($o in $offsetDec) {
         foreach ($i in 0..($valuesDec.Length-1)) {
+            if ($Settings.Debug.OverwriteChecks -eq $True -and $RunOverwriteChecks) {
+                if ($OverwritechecksROM[$o + ($i * $Interval)] -ne $ByteArrayGame[$o + ($i * $Interval)]) {
+                    $global:OverwriteError = $True
+                    WriteToConsole ("Offset " + $Offset + " is overwritten: " + (Get8Bit $OverwritechecksROM[$o + ($i * $Interval)]) + " -> " + (Get8Bit $ByteArrayGame[$o + ($i * $Interval)])) -Error
+                }
+            }
+
             $value = $valuesDec[$i]
             do {
                 if ($value -ge 255) {
@@ -295,13 +302,29 @@ function PatchBytes([string]$File, [object]$Offset, [object]$Length, [string]$Pa
     if (IsSet $Length) {
         if ($Length -is [string]) { $lengthDec = GetDecimal $Length } else { $lengthDec = $Length }
         foreach ($i in 0..($lengthDec-1)) {
+            if ($Settings.Debug.OverwriteChecks -eq $True -and $RunOverwriteChecks) {
+                if ($OverwritechecksROM[$o + ($i * $Interval)] -ne $ByteArrayGame[$o + ($i * $Interval)]) {
+                    $global:OverwriteError = $True
+                    WriteToConsole ("Offset " + $Offset + " is overwritten: " + (Get8Bit $OverwritechecksROM[$offsetDec + $i]) + " -> " + (Get8Bit $ByteArrayGame[$offsetDec + $i])) -Error
+                }
+            }
+
             if ($i -le $PatchByteArray.Length)   { $ByteArrayGame[$offsetDec + $i] = $PatchByteArray[($i)] }
             elseif ($Pad)                        { $ByteArrayGame[$offsetDec + $i] = 255 }
             else                                 { $ByteArrayGame[$offsetDec + $i] = 0 }
         }
     }
     else {
-        foreach ($i in 0..($PatchByteArray.Length-1)) { $ByteArrayGame[$offsetDec + $i] = $PatchByteArray[($i)] }
+        foreach ($i in 0..($PatchByteArray.Length-1)) {
+            if ($Settings.Debug.OverwriteChecks -eq $True -and $RunOverwriteChecks) {
+                if ($OverwritechecksROM[$o + ($i * $Interval)] -ne $ByteArrayGame[$o + ($i * $Interval)]) {
+                    $global:OverwriteError = $True
+                    WriteToConsole ("Offset " + $Offset + " is overwritten: " + (Get8Bit $OverwritechecksROM[$offsetDec + $i]) + " -> " + (Get8Bit $ByteArrayGame[$offsetDec + $i])) -Error
+                }
+            }
+
+            $ByteArrayGame[$offsetDec + $i] = $PatchByteArray[($i)]
+        }
     }
 
     # Write to File

@@ -5454,7 +5454,7 @@
 			"value"	: "2"
 		} ] ]
 	}, {
-		"name"		: "Brown Bombable Boulder",
+		"name"		: "Bombable Boulder",
 		"id"		: "0127",
 		"type"		: "Object",
 		"band"		: [ "8000", "003F" ],

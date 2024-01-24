@@ -669,8 +669,25 @@ function PatchPath_Finish([object]$TextBox, [string]$Path) {
 
 
 #==============================================================================================================================================================================================
+function RemoveOptionCheckFromList([object]$Elem) {
+
+    if ($OptionsPatchList.Count -gt 0) {
+        for ($i=0; $i -lt $OptionsPatchList.Count; $i++) {
+            if ($Elem.Section + "." + $Elem.Name -eq $OptionsPatchList[$i]) {
+                $OptionsPatchList.RemoveAt($i)
+                break
+            }
+        }
+    }
+
+}
+
+
+
+#==============================================================================================================================================================================================
 function IsDefault([object]$Elem, [byte]$Lang=0, [switch]$Not) {
     
+    RemoveOptionCheckFromList $Elem
     if ($Lang -gt 0 -and (IsSet $Redux.Text.Language) ) {
         if ($Redux.Text.Language.SelectedIndex -ne $Lang - 1) { return $False }
     }
@@ -693,6 +710,7 @@ function IsDefault([object]$Elem, [byte]$Lang=0, [switch]$Not) {
 #==============================================================================================================================================================================================
 function IsChecked([object]$Elem=$null, [byte]$Lang=0, [switch]$Not) {
     
+    RemoveOptionCheckFromList $Elem
     if ($Lang -gt 0 -and (IsSet $Redux.Text.Language) ) {
         if ($Redux.Text.Language.SelectedIndex -ne $Lang - 1) { return $False }
     }
@@ -735,6 +753,7 @@ function IsRevert([object]$Elem=$null, [int16]$Index=1, [string]$Text="", [strin
 #==============================================================================================================================================================================================
 function IsText([object]$Elem=$null, [string]$Compare="", [byte]$Lang=0, [switch]$Not) {
     
+    RemoveOptionCheckFromList $Elem
     if ($Lang -gt 0 -and (IsSet $Redux.Text.Language) ) {
         if ($Redux.Text.Language.SelectedIndex -ne $Lang - 1) { return $False }
     }
@@ -752,6 +771,7 @@ function IsText([object]$Elem=$null, [string]$Compare="", [byte]$Lang=0, [switch
 #==============================================================================================================================================================================================
 function IsItem([object]$Elem=$null, [string]$Item="", [byte]$Lang=0, [switch]$Not) {
     
+    RemoveOptionCheckFromList $Elem
     if ($Lang -gt 0 -and (IsSet $Redux.Text.Language) ) {
         if ($Redux.Text.Language.SelectedIndex -ne $Lang - 1) { return $False }
     }
@@ -767,6 +787,7 @@ function IsItem([object]$Elem=$null, [string]$Item="", [byte]$Lang=0, [switch]$N
 #==============================================================================================================================================================================================
 function IsValue([object]$Elem=$null, [int16]$Value=$null, [byte]$Lang=0, [switch]$Not) {
     
+    RemoveOptionCheckFromList $Elem
     if ($Lang -gt 0 -and (IsSet $Redux.Text.Language) ) {
         if ($Redux.Text.Language.SelectedIndex -ne $Lang - 1) { return $False }
     }
@@ -788,6 +809,7 @@ function IsValue([object]$Elem=$null, [int16]$Value=$null, [byte]$Lang=0, [switc
 #==============================================================================================================================================================================================
 function IsIndex([object]$Elem=$null, [int16]$Index=1, [string]$Text="", [byte]$Lang=0, [switch]$Not) {
     
+    RemoveOptionCheckFromList $Elem
     if ($Lang -gt 0 -and (IsSet $Redux.Text.Language) ) {
         if ($Redux.Text.Language.SelectedIndex -ne $Lang - 1) { return $False }
     }
@@ -810,6 +832,7 @@ function IsIndex([object]$Elem=$null, [int16]$Index=1, [string]$Text="", [byte]$
 #==============================================================================================================================================================================================
 function IsColor([System.Windows.Forms.ColorDialog]$Elem=$null, [string]$Color="", [byte]$Lang=0, [switch]$Not) {
     
+    RemoveOptionCheckFromList $Elem
     if ($Lang -gt 0 -and (IsSet $Redux.Text.Language) ) {
         if ($Redux.Text.Language.SelectedIndex -ne $Lang - 1) { return $False }
     }
@@ -826,7 +849,8 @@ function IsColor([System.Windows.Forms.ColorDialog]$Elem=$null, [string]$Color="
 
 #==============================================================================================================================================================================================
 function IsSet([object]$Elem, [int16]$Min, [int16]$Max, [int16]$MinLength, [int16]$MaxLength, [switch]$HasInt) {
-
+    
+    RemoveOptionCheckFromList $Elem
     if ($Elem -eq $null -or $Elem -eq "")                                               { return $False }
     if ($HasInt) {
         if ($Elem -NotMatch "^\d+$" )                                                   { return $False }
