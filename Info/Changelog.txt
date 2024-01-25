@@ -1,5 +1,6 @@
 v23.2.1
 - Added No Fairy Drops and a new Fairy Recovery options for OoT
+- Fixed issue with HUD not hiding when exiting grotto for OoT Redux
 - Fixed issue with the Jar Collectible flag in the OoT Scene Editor
 
 v23.2.0
