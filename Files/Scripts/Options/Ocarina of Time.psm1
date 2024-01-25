@@ -2312,15 +2312,15 @@ function ByteTextOptions() {
         }
         SetMessage -ID "1037" -Text "<B><A Button>" -Replace "<G><A Button>"
 
-        SetMessage -ID "0066" -Text "05415354415254" -Replace "05445354415254";        SetMessage -ID "1039"; SetMessage -ID "103A"; SetMessage -ID "103B"; SetMessage -ID "103D"; SetMessage -ID "2065"; SetMessage -ID "2071"; SetMessage -ID "405A"                                               # START
-        SetMessage -ID "002E" -Text "0542A0" -Replace "0541A0";                        SetMessage -ID "004A"; SetMessage -ID "004B"; SetMessage -ID "00DD"; SetMessage -ID "00DD"; SetMessage -ID "00DD"; SetMessage -ID "0336"; SetMessage -ID "0338"; SetMessage -ID "0401"; SetMessage -ID "086E" # B Button
-        SetMessage -ID "087C";                                                         SetMessage -ID "103B"; SetMessage -ID "1072"; SetMessage -ID "407F"; SetMessage -ID "407F"                                                                                                                    # B Button
-        SetMessage -ID "0108" -Text "0543416374696F6E" -Replace "0544416374696F6E";    SetMessage -ID "0337"; SetMessage -ID "0337"                                                                                                                                                                  # Action
+        SetMessage -ID "0066" -Text "05415354415254" -Replace "05445354415254";        SetMessage -ID "1039"; SetMessage -ID "103A"; SetMessage -ID "103B"; SetMessage -ID "103D"; SetMessage -ID "2065"; SetMessage -ID "2071"; SetMessage -ID "405A" # START
+        SetMessage -ID "002E" -Text "0542A0" -Replace "0541A0";                        SetMessage -ID "004A"; SetMessage -ID "004B"; SetMessage -ID "00DD" -All; SetMessage -ID "0336"; SetMessage -ID "0338"; SetMessage -ID "0401"; SetMessage -ID "086E" # B Button
+        SetMessage -ID "087C";                                                         SetMessage -ID "103B"; SetMessage -ID "1072"; SetMessage -ID "407F" -All # B Button
+        SetMessage -ID "0108" -Text "0543416374696F6E" -Replace "0544416374696F6E";    SetMessage -ID "0337" -All # Action
 
-        SetMessage -ID "0037" -Text "05439F" -Replace "05429F"; SetMessage -ID "004A"; SetMessage -ID "004C"; SetMessage -ID "004D"; SetMessage -ID "005B"; SetMessage -ID "005C"; SetMessage -ID "0079"; SetMessage -ID "00A4"; SetMessage -ID "00CD"; SetMessage -ID "00CE"; SetMessage -ID "0108"; SetMessage -ID "0218" # A Button
-        SetMessage -ID "0337"; SetMessage -ID "086D";           SetMessage -ID "086E"; SetMessage -ID "087C"; SetMessage -ID "1004"; SetMessage -ID "1007"; SetMessage -ID "103A"; SetMessage -ID "103D"; SetMessage -ID "2035"; SetMessage -ID "2037"; SetMessage -ID "300C"; SetMessage -ID "301C"; SetMessage -ID "3022"
-        SetMessage -ID "302B"; SetMessage -ID "407F";           SetMessage -ID "4081"; SetMessage -ID "7004"; SetMessage -ID "0108"; SetMessage -ID "1004"; SetMessage -ID "1007"; SetMessage -ID "2035"; SetMessage -ID "302B"; SetMessage -ID "407F"; SetMessage -ID "7004"; SetMessage -ID "0108"; SetMessage -ID "1007"
-        SetMessage -ID "1007"; SetMessage -ID "407F";           SetMessage -ID "407F"; SetMessage -ID "010C" -Text "0543209F" -Replace "0542209F"
+        SetMessage -ID "0037" -Text "05439F" -Replace "05429F"; SetMessage -ID "004A"; SetMessage -ID "004C"; SetMessage -ID "004D"; SetMessage -ID "005B"; SetMessage -ID "005C"; SetMessage -ID "0079"; SetMessage -ID "00A4"; SetMessage -ID "00CD"; SetMessage -ID "00CE"; SetMessage -ID "0108" -All; SetMessage -ID "0218" # A Button
+        SetMessage -ID "0337"; SetMessage -ID "086D";           SetMessage -ID "086E"; SetMessage -ID "087C"; SetMessage -ID "1004" -All; SetMessage -ID "1007" -All; SetMessage -ID "103A"; SetMessage -ID "103D"; SetMessage -ID "2035" -All; SetMessage -ID "2037"; SetMessage -ID "300C"; SetMessage -ID "301C"; SetMessage -ID "3022"
+        SetMessage -ID "302B" -All;                             SetMessage -ID "407F" -All; SetMessage -ID "4081"; SetMessage -ID "7004" -All
+        SetMessage -ID "010C" -Text "0543209F" -Replace "0542209F"
     }
 
     if ( (IsChecked $Redux.Text.LinkScript) -and $Redux.Text.LinkName.Text.Count -gt 0) {
