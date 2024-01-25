@@ -534,15 +534,16 @@ function ExtractU8AppFile([string]$Command) {
     # ROM is within "00000001.app" VC emulator file, but extract it only
     elseif ($GameConsole.appfile -eq "00000001.app") {
         UpdateStatusLabel 'Extracting ROM from "00000001.app" file...'                  # Set the status label
-        SetGetROM
-        RemoveFile $GetROM.nes
-        $WADFile.Offset = SearchBytes -File $WADFile.AppFile01 -Values @("4E", "45", "53", "1A") -Start "100000"
+        RemoveFile ($Paths.Temp  + "\rom.nes")
+        $WADFile.Offset = SearchBytes -File $WADFile.AppFile01 -Values "4E45531A" -Start "100000" -Silent
         
         if ($WADFile.Offset -ne -1) {
+            $GetROM.nes = $Paths.Temp + "\rom.nes"
             $arr = [IO.File]::ReadAllBytes($WADFile.AppFile01)
             $WADFile.Length = Get24Bit (16 + ($arr[(GetDecimal $WADFile.Offset) + 4] * 16384) + ($arr[(GetDecimal $WADFile.Offset) + 5] * 8192))
-            ExportBytes -File $WADFile.AppFile01 -Offset $WADFile.Offset -Length $WADFile.Length -Output $WADFile.ROM
+            ExportBytes -File $WADFile.AppFile01 -Offset $WADFile.Offset -Length $WADFile.Length -Output $GetROM.nes -Silent
             $global:ROMHashSum = (Get-FileHash -Algorithm MD5 -LiteralPath $GetROM.nes).Hash
+            SetGetROM
         }
     }
 

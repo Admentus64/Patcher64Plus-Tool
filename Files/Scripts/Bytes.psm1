@@ -382,7 +382,7 @@ function ExportBytes([string]$File, [Object]$Offset, [Object]$End, [Object]$Leng
 
 
 #==============================================================================================================================================================================================
-function SearchBytes([string]$File, [object]$Start="0", [object]$End, [object]$Values, [switch]$Suppress, [switch]$Decimal) {
+function SearchBytes([string]$File, [object]$Start="0", [object]$End, [object]$Values, [switch]$Decimal, [switch]$Silent) {
     
     if (IsSet $File) {
         if (!(TestFile $File)) {
@@ -432,13 +432,13 @@ function SearchBytes([string]$File, [object]$Start="0", [object]$End, [object]$V
             }
         }
         if ($found -eq $True) {
-            if (!$Suppress) { WriteToConsole ("Found values at: " + (Get32Bit $i)) }
+            if (!$Silent) { WriteToConsole ("Found values at: " + (Get32Bit $i)) }
             if ($Decimal) { return $i }
             return Get32Bit $i
         }
     }
 
-    if (!$Suppress) { WriteToConsole "Did not find searched values" -Error }
+    if (!$Silent) { WriteToConsole "Did not find searched values" -Error }
     return -1;
 
 }

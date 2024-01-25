@@ -493,8 +493,8 @@ function ChangePatch() {
     }
 
     EnableGUI $True
+    EnablePatchButtons
     [System.GC]::WaitForPendingFinalizers(); [System.GC]::Collect()
-    UpdateStatusLabel "Ready to patch..." -NoConsole
 
 }
 
@@ -583,9 +583,9 @@ function EnablePatchButtons() {
     if ($GamePath -eq $null)   { $enable = $False }
     else                       { $enable = ($GamePath.Extension -eq ".wad" -and $IsWiiVC) -or ($GamePath.Extension -ne ".wad" -and !$IsWiiVC) }
 
-    if     ($enable)    { UpdateStatusLabel "Ready to patch!"                          } # Set the status that we are ready to roll... Or not...
-    elseif ($IsWiiVC)   { UpdateStatusLabel "Select your Wii VC WAD file to continue." }
-    else                { UpdateStatusLabel "Select your ROM file to continue."        }
+    if     ($enable)    { UpdateStatusLabel "Ready to patch!"                          -NoConsole } # Set the status that we are ready to roll... Or not...
+    elseif ($IsWiiVC)   { UpdateStatusLabel "Select your Wii VC WAD file to continue." -NoConsole }
+    else                { UpdateStatusLabel "Select your ROM file to continue."        -NoConsole }
 
     $Patches.Button.Enabled = $CustomHeader.Panel.Enabled = $VC.ExtractROMButton.Enabled = $enable # Enable patcher buttons
 

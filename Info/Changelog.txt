@@ -2,6 +2,8 @@ v23.2.1
 - Added No Fairy Drops and a new Fairy Recovery options for OoT
 - Fixed issue with HUD not hiding when exiting grotto for OoT Redux
 - Fixed issue with the Jar Collectible flag in the OoT Scene Editor
+- Fixed issue with Main Window ready status display
+- Fixed issue with WAD NES ROM extraction
 
 v23.2.0
 - Added Permanent Owl Saves & Additional Save Statues options
