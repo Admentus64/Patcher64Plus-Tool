@@ -2311,7 +2311,7 @@ function ByteTextOptions() {
 
         SetMessage -ID "0037" -Text "05439F" -Replace "05429F"; SetMessage -ID "004A"; SetMessage -ID "004C"; SetMessage -ID "004D"; SetMessage -ID "005B"; SetMessage -ID "005C"; SetMessage -ID "0079"; SetMessage -ID "00A4"; SetMessage -ID "00CD"; SetMessage -ID "00CE"; SetMessage -ID "0108"; SetMessage -ID "0218" # A Button
         SetMessage -ID "0337"; SetMessage -ID "086D";           SetMessage -ID "086E"; SetMessage -ID "087C"; SetMessage -ID "1004"; SetMessage -ID "1007"; SetMessage -ID "103A"; SetMessage -ID "103D"; SetMessage -ID "2035"; SetMessage -ID "2037"; SetMessage -ID "300C"; SetMessage -ID "301C"; SetMessage -ID "3022"
-        SetMessage -ID "302B"; SetMessage -ID "407F";           SetMessage -ID "4081"; SetMessage -ID "7004"; SetMessage -ID "0108"; SetMessage -ID "1004"; SetMessage -ID "1007"; SetMessage -ID "2035"; SetMessage -ID "302B"; SetMessage -ID "407F"; SetMessage -ID "7004"; SetMessage -ID "0108"; SetMessage -ID "1007"
+        SetMessage -ID "302B"; SetMessage -ID "407F";           SetMessage -ID "4081"; SetMessage -ID "7004"; SetMessage -ID "0108"; SetMessage -ID "1004"; SetMessage -ID "1007"; SetMessage -ID "2035"; SetMessage -ID "2035"; SetMessage -ID "302B"; SetMessage -ID "407F"; SetMessage -ID "407F"; SetMessage -ID "7004"; SetMessage -ID "0108"; SetMessage -ID "1007"
         SetMessage -ID "1007"; SetMessage -ID "407F";           SetMessage -ID "407F"; SetMessage -ID "010C" -Text "0543209F" -Replace "0542209F"
     }
 
