@@ -563,6 +563,13 @@ function ByteOptions() {
     if ( (IsValue $Redux.Recovery.Hearts -Value 0) -or (IsDefault $Redux.Hero.ItemDrops -Not) )   { ChangeBytes -Offset "A895B7"  -Values "2E"       }
     if   (IsChecked $Redux.Hero.NoBottledFairy)                                                   { ChangeBytes -Offset "BF0264"  -Values "00000000" }
     
+    if (IsChecked $Redux.Hero.NoFairyDrops) {
+        ChangeBytes -Offset "A89662" -Values "0135"     # Drop unused Cucco Chick instead of Fairy when a Fixed Flexible Item drops
+        ChangeBytes -Offset "A896A4" -Values "00003025" # Play an unused empty sound when a Fairy is drops (Fixed Flexible Item drop)
+      # ChangeBytes -Offset "A89B40" -Values "1000"     # Skip Random Flexible Item drops
+        ChangeBytes -Offset "A89B57" -values "00"       # Fairies only drop from Flexible Items when health is below 0
+    }
+
     if (IsChecked $Redux.HeroHarder.Wolfos)          { ChangeBytes -Offset "EDBE3F" -Values "00"                                                                                                         }
     if (IsChecked $Redux.HeroHarder.Lizalfos)        { ChangeBytes -Offset "C36DC0" -Values "00000000"; ChangeBytes -Offset "C34DE0" -Values "00000000"; ChangeBytes -Offset "C34E04" -Values "00000000" }
     if (IsChecked $Redux.HeroHarder.Stalfos)         { ChangeBytes -Offset "BFB35C" -Values "00000000"; ChangeBytes -Offset "BFC148" -Values "00000000"                                                  }
@@ -593,11 +600,12 @@ function ByteOptions() {
 
     # RECOVERY #
 
-    if (IsDefault $Redux.Recovery.Heart       -Not)   { ChangeBytes -Offset   "AE6FC6"            -Values (Get16Bit $Redux.Recovery.Heart.Text      ) }
-    if (IsDefault $Redux.Recovery.Fairy       -Not)   { ChangeBytes -Offset   "BEAA4A"            -Values (Get16Bit $Redux.Recovery.Fairy.Text      ) }
-    if (IsDefault $Redux.Recovery.FairyRevive -Not)   { ChangeBytes -Offset @("BDF65A", "BDF60E") -Values (Get16Bit $Redux.Recovery.FairyRevive.Text) }
-    if (IsDefault $Redux.Recovery.Milk        -Not)   { ChangeBytes -Offset   "BEA64A"            -Values (Get16Bit $Redux.Recovery.Milk.Text       ) }
-    if (IsDefault $Redux.Recovery.RedPotion   -Not)   { ChangeBytes -Offset   "BEA616"            -Values (Get16Bit $Redux.Recovery.RedPotion.Text  ) }
+    if (IsDefault $Redux.Recovery.Heart       -Not)   { ChangeBytes -Offset   "AE6FC6"            -Values (Get16Bit $Redux.Recovery.Heart.Text       ) }
+    if (IsDefault $Redux.Recovery.Fairy       -Not)   { ChangeBytes -Offset   "C24BA6"            -Values (Get16Bit $Redux.Recovery.Fairy.Text       ) }
+    if (IsDefault $Redux.Recovery.FairyBottle -Not)   { ChangeBytes -Offset   "BEAA4A"            -Values (Get16Bit $Redux.Recovery.FairyBottle.Text ) }
+    if (IsDefault $Redux.Recovery.FairyRevive -Not)   { ChangeBytes -Offset @("BDF65A", "BDF60E") -Values (Get16Bit $Redux.Recovery.FairyRevive.Text ) }
+    if (IsDefault $Redux.Recovery.Milk        -Not)   { ChangeBytes -Offset   "BEA64A"            -Values (Get16Bit $Redux.Recovery.Milk.Text        ) }
+    if (IsDefault $Redux.Recovery.RedPotion   -Not)   { ChangeBytes -Offset   "BEA616"            -Values (Get16Bit $Redux.Recovery.RedPotion.Text   ) }
 
 
 
@@ -3268,6 +3276,7 @@ function CreateTabDifficulty() {
     CreateReduxCheckBox -Name "HarderChildBosses" -Safe -Text "Harder Child Bosses" -Info "Replace objects in the Child Dungeon Boss arenas with additional monsters" -Credits "Admentus"
     CreateReduxCheckBox -Name "PotsChallenge"     -Safe -Text "Pots Challenge"      -Info "Throw pots at your enemies to defeat them! Pots everywhere!"               -Credits "Aegiker"
     CreateReduxCheckBox -Name "NoBottledFairy"          -Text "No Bottled Fairies"  -Info "Fairies can no longer be put into a bottle"                                -Credits "Admentus & Three Pendants"
+    CreateReduxCheckBox -Name "NoFairyDrops"            -Text "No Fairy Drops"      -Info "Flexible Items will no longer drop fairies"                                -Credits "Admentus"
 
     CreateReduxGroup    -Tag  "HeroHarder"    -Text "Hero Mode (Harder Enemies)"
     CreateReduxCheckBox -Name "GohmaLarve"    -Text "Harder Gohma Larve"    -Info "Gohma Larves are faster"                                                               -Credits "Euler"
@@ -3288,18 +3297,21 @@ function CreateTabDifficulty() {
 
     CreateReduxGroup   -Tag  "Recovery"    -Text "Recovery" -Height 4
     CreateReduxTextBox -Name "Heart"       -Text "Recovery Heart" -Value 16  -Min 0 -Max 320 -Length 3 -Info "Set the amount of HP that Recovery Hearts will replenish`nRecovery Heart drops are removed if set to 0" -Credits "Admentus, Three Pendants & Randomizer (No Heart Drops)"
-    CreateReduxTextBox -Name "Fairy"       -Text "Fairy (Bottle)" -Value 320 -Min 0 -Max 320 -Length 3 -Info "Set the amount of HP that a Bottled Fairy will replenish"                                               -Credits "Admentus & Three Pendants"
-    CreateReduxTextBox -Name "FairyRevive" -Text "Fairy (Revive)" -Value 320 -Min 0 -Max 320 -Length 3 -Info "Set the amount of HP that a Bottled Fairy will replenish after Link died"                               -Credits "Admentus & Three Pendants"
-    CreateReduxTextBox -Name "Milk"        -Text "Milk"           -Value 80  -Min 0 -Max 320 -Length 3 -Info "Set the amount of HP that Milk will replenish"                                                          -Credits "Admentus & Three Pendants"; $Last.Row++
+    CreateReduxTextBox -Name "Fairy"       -Text "Fairy"          -Value 128 -Min 0 -Max 320 -Length 3 -Info "Set the amount of HP that a Fairy will replenish"                                                       -Credits "Admentus"
+    CreateReduxTextBox -Name "FairyBottle" -Text "Fairy (Bottle)" -Value 320 -Min 0 -Max 320 -Length 3 -Info "Set the amount of HP that a Bottled Fairy will replenish"                                               -Credits "Admentus & Three Pendants"
+    CreateReduxTextBox -Name "FairyRevive" -Text "Fairy (Revive)" -Value 320 -Min 0 -Max 320 -Length 3 -Info "Set the amount of HP that a Bottled Fairy will replenish after Link died"                               -Credits "Admentus & Three Pendants"; $Last.Row++
+    CreateReduxTextBox -Name "Milk"        -Text "Milk"           -Value 80  -Min 0 -Max 320 -Length 3 -Info "Set the amount of HP that Milk will replenish"                                                          -Credits "Admentus & Three Pendants"
     CreateReduxTextBox -Name "RedPotion"   -Text "Red Potion"     -Value 320 -Min 0 -Max 320 -Length 3 -Info "Set the amount of HP that a Red Potion will replenish"                                                  -Credits "Admentus & Three Pendants"
 
     $Redux.Recovery.HeartLabel       = CreateLabel -X $Redux.Recovery.Heart.Left       -Y ($Redux.Recovery.Heart.Bottom       + (DPISize 6)) -Text ("(" + [math]::Round($Redux.Recovery.Heart.text/16,       1) + " Hearts)") -AddTo $Last.Group
     $Redux.Recovery.FairyLabel       = CreateLabel -X $Redux.Recovery.Fairy.Left       -Y ($Redux.Recovery.Fairy.Bottom       + (DPISize 6)) -Text ("(" + [math]::Round($Redux.Recovery.Fairy.text/16,       1) + " Hearts)") -AddTo $Last.Group
+    $Redux.Recovery.FairyBottleLabel = CreateLabel -X $Redux.Recovery.FairyBottle.Left -Y ($Redux.Recovery.FairyBottle.Bottom + (DPISize 6)) -Text ("(" + [math]::Round($Redux.Recovery.FairyBottle.text/16, 1) + " Hearts)") -AddTo $Last.Group
     $Redux.Recovery.FairyReviveLabel = CreateLabel -X $Redux.Recovery.FairyRevive.Left -Y ($Redux.Recovery.FairyRevive.Bottom + (DPISize 6)) -Text ("(" + [math]::Round($Redux.Recovery.FairyRevive.text/16, 1) + " Hearts)") -AddTo $Last.Group
     $Redux.Recovery.MilkLabel        = CreateLabel -X $Redux.Recovery.Milk.Left        -Y ($Redux.Recovery.Milk.Bottom        + (DPISize 6)) -Text ("(" + [math]::Round($Redux.Recovery.Milk.text/16,        1) + " Hearts)") -AddTo $Last.Group
     $Redux.Recovery.RedPotionLabel   = CreateLabel -X $Redux.Recovery.RedPotion.Left   -Y ($Redux.Recovery.RedPotion.Bottom   + (DPISize 6)) -Text ("(" + [math]::Round($Redux.Recovery.RedPotion.text/16,   1) + " Hearts)") -AddTo $Last.Group
     $Redux.Recovery.Heart.Add_TextChanged(       { if ($this.text -eq "16") { $Redux.Recovery.HeartLabel.Text       = "(1 Heart)" } else { $Redux.Recovery.HeartLabel.Text       = "(" + [math]::Round($this.text/16, 1) + " Hearts)" } } )
     $Redux.Recovery.Fairy.Add_TextChanged(       { if ($this.text -eq "16") { $Redux.Recovery.FairyLabel.Text       = "(1 Heart)" } else { $Redux.Recovery.FairyLabel.Text       = "(" + [math]::Round($this.text/16, 1) + " Hearts)" } } )
+    $Redux.Recovery.FairyBottle.Add_TextChanged( { if ($this.text -eq "16") { $Redux.Recovery.FairyBottleLabel.Text = "(1 Heart)" } else { $Redux.Recovery.FairyBottleLabel.Text = "(" + [math]::Round($this.text/16, 1) + " Hearts)" } } )
     $Redux.Recovery.FairyRevive.Add_TextChanged( { if ($this.text -eq "16") { $Redux.Recovery.FairyReviveLabel.Text = "(1 Heart)" } else { $Redux.Recovery.FairyReviveLabel.Text = "(" + [math]::Round($this.text/16, 1) + " Hearts)" } } )
     $Redux.Recovery.Milk.Add_TextChanged(        { if ($this.text -eq "16") { $Redux.Recovery.MilkLabel.Text        = "(1 Heart)" } else { $Redux.Recovery.MilkLabel.Text        = "(" + [math]::Round($this.text/16, 1) + " Hearts)" } } )
     $Redux.Recovery.RedPotion.Add_TextChanged(   { if ($this.text -eq "16") { $Redux.Recovery.RedPotionLabel.Text   = "(1 Heart)" } else { $Redux.Recovery.RedPotionLabel.Text   = "(" + [math]::Round($this.text/16, 1) + " Hearts)" } } )

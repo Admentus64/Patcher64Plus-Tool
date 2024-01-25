@@ -1,3 +1,7 @@
+v23.2.1
+- Added No Fairy Drops and a new Fairy Recovery options for OoT
+- Fixed issue with the Jar Collectible flag in the OoT Scene Editor
+
 v23.2.0
 - Added Permanent Owl Saves & Additional Save Statues options
 - Added new HUD layout and fixed issues for OoT Redux

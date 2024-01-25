@@ -4903,7 +4903,7 @@
 		"name"		: "Pot",
 		"id"		: "0111",
 		"type"		: "Object",
-		"band"		: [ "00FF", "7E00" ],
+		"band"		: [ "00FF", "7F00" ],
 		"params" : [ [ {
 			"name"	: "Flexible",
 			"value"	: "12"
