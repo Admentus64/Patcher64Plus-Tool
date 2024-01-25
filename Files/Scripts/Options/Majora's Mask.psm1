@@ -78,8 +78,7 @@ function ByteOptions() {
       ChangeBytes -Offset "BDAA78" -Values "A240101426A446B80C051CC58E453CA0"
       ChangeBytes -Offset "BDCBBB" -Values "04"
       PatchBytes  -Offset "BDD90B" -Patch  "permanent_owl_saves.bin"
-    # ChangeBytes -Offset @("BEEB17", "BEEB4B") -Values "00" # Don't reset back to main menu
-      ChangeBytes -Offset "BEEB78" -Values "55E100168FBF001C0C051DED020020250C051DED020020250C051DED020020250C051DED020020250C051DED020020250C051DED020020250C051DED02002025100000068FBF001C"
+      ChangeBytes -Offset "BEEB78" -Values "55E100168FBF001C0C051DED020020250C051DED020020250C051DED020020250C051DED020020253C06801F24C6F6708CD93CA0240100F0532100088FBF001C10000005A0C000233C010001002D0821241800FFA038" # Don't boot back to main menu, close textbox and remove Owl Save status only after saving is completed
     }
 
     if (IsChecked $Redux.Gameplay.FormItems) {
