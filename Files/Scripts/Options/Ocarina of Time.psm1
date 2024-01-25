@@ -2305,7 +2305,7 @@ function ByteTextOptions() {
         }
 
         SetMessage -ID "0103" -Text "<B><A Button>"  -Replace "<G><A Button>";         SetMessage -ID "0103" -Text "<B>Icon" -Replace "<G>Icon"; SetMessage -ID "0103" -Text "<B>blue" -Replace "<G>green"; SetMessage -ID "0103" -Text "<B>Action" -Replace "<G>Action" # Deku Tree - Opening a door
-        SetMessage -ID "0108" -Text "<C>Action"  -Replace "<G>Action";                 SetMessage -ID "0337" -All # Deku Tree - Other Tutorials
+        SetMessage -ID "0108" -Text "<B>Action"  -Replace "<G>Action";                 SetMessage -ID "0337" -Text "<C>Action"  -Replace "<G>Action" -All # Deku Tree - Other Tutorials
 	if (IsChecked $Redux.Graphics.GCScheme -Lang 1) {
             SetMessage -ID "0337" -Text 'Hole of "Z"'    -Replace 'Hole of "L"'
             SetMessage -ID "1035" -Text "blue icon"      -Replace "green icon";        SetMessage -ID "1037"
