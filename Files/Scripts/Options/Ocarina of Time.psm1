@@ -2305,7 +2305,7 @@ function ByteTextOptions() {
         }
 
         SetMessage -ID "0103" -Text "<B><A Button>"  -Replace "<G><A Button>";         SetMessage -ID "0103" -Text "<B>Icon" -Replace "<G>Icon"; SetMessage -ID "0103" -Text "<B>blue" -Replace "<G>green"; SetMessage -ID "0103" -Text "<B>Action" -Replace "<G>Action" # Deku Tree - Opening a door
-        SetMessage -ID "0108" -Text "<B>Action"  -Replace "<G>Action";                 SetMessage -ID "0337" -Text "<C>Action"  -Replace "<G>Action" -All # Deku Tree - Other Tutorials
+        SetMessage -ID "0108" -Text "<B>Action"  -Replace "<G>Action";                 SetMessage -ID "0337" -Text "<B>Action"  -Replace "<G>Action" -All # Deku Tree - Other Tutorials
 	if (IsChecked $Redux.Graphics.GCScheme -Lang 1) {
             SetMessage -ID "0337" -Text 'Hole of "Z"'    -Replace 'Hole of "L"'
             SetMessage -ID "1035" -Text "blue icon"      -Replace "green icon";        SetMessage -ID "1037"
@@ -2317,8 +2317,8 @@ function ByteTextOptions() {
         SetMessage -ID "002E" -Text "0542A0" -Replace "0541A0";                        SetMessage -ID "004A"; SetMessage -ID "004B"; SetMessage -ID "00DD" -All; SetMessage -ID "0336"; SetMessage -ID "0338"; SetMessage -ID "0401"; SetMessage -ID "086E" # B Button
         SetMessage -ID "087C";                                                         SetMessage -ID "103B"; SetMessage -ID "1072"; SetMessage -ID "407F" -All # B Button
 
-        SetMessage -ID "0037" -Text "05439F" -Replace "05429F"; SetMessage -ID "004A"; SetMessage -ID "004C"; SetMessage -ID "004D"; SetMessage -ID "005B"; SetMessage -ID "005C"; SetMessage -ID "0079"; SetMessage -ID "00A4"; SetMessage -ID "00CD"; SetMessage -ID "00CE"; SetMessage -ID "0108" -All; SetMessage -ID "0218" # A Button
-        SetMessage -ID "0337"; SetMessage -ID "086D";           SetMessage -ID "086E"; SetMessage -ID "087C"; SetMessage -ID "1004" -All; SetMessage -ID "1007" -All; SetMessage -ID "103A"; SetMessage -ID "103D"; SetMessage -ID "2035" -All; SetMessage -ID "2037"; SetMessage -ID "300C"; SetMessage -ID "301C"; SetMessage -ID "3022"
+        SetMessage -ID "0037" -Text "05439F" -Replace "05429F"; SetMessage -ID "004A"; SetMessage -ID "004C"; SetMessage -ID "004D"; SetMessage -ID "005B"; SetMessage -ID "005C"; SetMessage -ID "0079"; SetMessage -ID "00A4"; SetMessage -ID "00CD"; SetMessage -ID "00CE"; SetMessage -ID "0108" -All; SetMessage -ID "0218"; SetMessage -ID "0337" # A Button
+        SetMessage -ID "086D";                                  SetMessage -ID "086E"; SetMessage -ID "087C"; SetMessage -ID "1004" -All; SetMessage -ID "1007" -All; SetMessage -ID "103A"; SetMessage -ID "103D"; SetMessage -ID "2035" -All; SetMessage -ID "2037"; SetMessage -ID "300C"; SetMessage -ID "301C"; SetMessage -ID "3022"
         SetMessage -ID "302B" -All;                             SetMessage -ID "407F" -All; SetMessage -ID "4081"; SetMessage -ID "7004" -All
         SetMessage -ID "010C" -Text "0543209F" -Replace "0542209F"
     }
