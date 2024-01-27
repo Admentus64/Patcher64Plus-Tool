@@ -519,6 +519,7 @@ function PatchingAdditionalOptions() {
         }
         
         if ($Files.json.textEditor -ne $null) {
+            RunAllStoredMessages
             $start = CombineHex $ByteArrayGame[((GetDecimal $LanguagePatch.script_dma)+0)..((GetDecimal $LanguagePatch.script_dma)+3)]
             $end   = CombineHex $ByteArrayGame[((GetDecimal $LanguagePatch.script_dma)+4)..((GetDecimal $LanguagePatch.script_dma)+7)]
             

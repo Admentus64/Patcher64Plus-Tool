@@ -344,15 +344,15 @@ function RunTextEditor([object]$Game=$null) {
 #==============================================================================================================================================================================================
 function CloseTextEditor() {
     
-    if ($TextEditor -eq $null) { return }
-    if ($TextEditor.Dialog.IsHandleCreated) { $TextEditor.Dialog.Hide() }
+    if ($TextEditor -eq $null)                 { return }
+    if ($TextEditor.Dialog.IsHandleCreated)   { $TextEditor.Dialog.Hide() }
 
-    if ($LastScript -ne $null) {
+     if ($LastScript -ne $null -and $TextEditor.Dialog -ne $null) {
         SaveLastMessage
         SaveScript -Script ($Paths.Games + "\" + $TextEditor.GameType.mode + "\Editor\message_data_static." + $LanguagePatch.code + ".bin") -Table ($Paths.Games + "\" + $TextEditor.GameType.mode + "\Editor\message_data." + $LanguagePatch.code + ".tbl")
     }
     
-    $global:LastScript = $global:DialogueList = $global:ByteScriptArray = $global:ByteTableArray = $Files.json.textEditor = $global:TextEditor = $global:LanguagePatch = $null
+    $global:LastScript = $global:DialogueList = $global:ByteScriptArray = $global:ByteTableArray = $Files.json.textEditor = $global:TextEditor = $global:LanguagePatch = $global:StoredMessages = $null
 
 }
 
@@ -408,8 +408,6 @@ function OpenHelpDialog() {
 #==============================================================================================================================================================================================
 function LoadMessages() {
     
-
-
     $TextEditor.ListPanel.Controls.Clear()
     if ( (TestFile ($Paths.Games + "\" + $Files.json.textEditor.game + "\Editor\message_data_static." + $LanguagePatch.code + ".bin") ) -and (TestFile ($Paths.Games + "\" + $Files.json.textEditor.game + "\Editor\message_data." + $LanguagePatch.code + ".tbl") ) ) {
         LoadScript -Script ($Paths.Games + "\" + $Files.json.textEditor.game + "\Editor\message_data_static." + $LanguagePatch.code + ".bin") -Table ($Paths.Games + "\" + $Files.json.textEditor.game + "\Editor\message_data." + $LanguagePatch.code + ".tbl")
@@ -923,6 +921,55 @@ function SetMessage([string]$ID, [object]$Text, [object]$Replace, [string]$File=
     
     if ($Files.json.textEditor -eq $null) { LoadTextEditor }
 
+    if ($TextEditor.Dialog -ne $null) {
+        RunSetMessage -ID $ID -Text $Text -Replace $Replace -File $File -Full $Full -Insert $Insert -Append $Append -All $All -ASCII $ASCII -Silent $Silent -Safety $Safety -Force $Force
+        return
+    }
+
+    if ($StoredMessages -eq $null) { [System.Collections.ArrayList]$global:StoredMessages = @() }
+
+    if ($Text.count -eq 0 -and $Replace.count -eq 0 -and $StoredMessages.Count -gt 0) {
+        $Replace = $StoredMessages[$StoredMessages.Count-1].replace
+        $Text    = $StoredMessages[$StoredMessages.Count-1].text
+    }
+
+    [void]$global:StoredMessages.Add(@{ id = $ID; text = $Text; replace = $Replace; file = $File; full = $Full; insert = $Insert; append = $Append; all = $All; ascii = $ASCII; silent = $Silent; safety = $Safety; force = $Force })
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function BubbleSortMessages($list) {
+    $n = $list.Count
+    for ($i = 0; $i -lt $n; $i+=1) {
+        for ($j = 0; $j -lt $n-1; $j+=1) {
+            if($list[$j].id -gt $list[$j+1].id) {
+                $temp = $list[$j+1]
+                $list[$j+1]=$list[$j]
+                $list[$j]=$temp
+            }
+        }
+    }
+    return $list
+}
+
+
+
+#==============================================================================================================================================================================================
+function RunAllStoredMessages() {
+    
+    $StoredMessages = BubbleSortMessages $StoredMessages
+    foreach ($msg in $StoredMessages) { RunSetMessage -ID $msg.id -Text $msg.text -Replace $msg.replace -File $msg.file -Full $msg.full -Insert $msg.insert -Append $msg.append -All $msg.all -ASCII $msg.ascii -Silent $msg.silent -Safety $msg.safety -Force $msg.force }
+    $global:StoredMessages = $null
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function RunSetMessage([string]$ID, [object]$Text, [object]$Replace, [string]$File="", [boolean]$Full, [boolean]$Insert, [boolean]$Append, [boolean]$All, [boolean]$ASCII, [boolean]$Silent, [boolean]$Safety, [boolean]$Force) {
+    
     if ($DialogueList -eq $null) {
         WriteToConsole ("Could not edit message ID: " + $ID + " as the message data does not exist. Did it ran outside ByteTextOptions?" ) -Error
         return
@@ -1446,6 +1493,7 @@ Export-ModuleMember -Function GetMessage
 Export-ModuleMember -Function GetMessageOffset
 Export-ModuleMember -Function GetMessagelength
 Export-ModuleMember -Function LoadTextEditor
+Export-ModuleMember -Function RunAllStoredMessages
 Export-ModuleMember -Function SetMessage
 Export-ModuleMember -Function SetMessageBox
 Export-ModuleMember -Function SetMessagePosition

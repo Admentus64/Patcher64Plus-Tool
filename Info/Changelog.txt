@@ -1,3 +1,6 @@
+v23.2.2
+- Text Editor API changes are now cached in and sorted for optimal performance
+
 v23.2.1
 - Added No Fairy Drops and a new Fairy Recovery options for OoT
 - Fixed issue with HUD not hiding when exiting grotto for OoT Redux
