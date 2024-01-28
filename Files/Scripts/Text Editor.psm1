@@ -940,26 +940,20 @@ function SetMessage([string]$ID, [object]$Text, [object]$Replace, [string]$File=
 
 
 #==============================================================================================================================================================================================
-function BubbleSortMessages($list) {
-    $n = $list.Count
-    for ($i = 0; $i -lt $n; $i+=1) {
-        for ($j = 0; $j -lt $n-1; $j+=1) {
-            if($list[$j].id -gt $list[$j+1].id) {
-                $temp = $list[$j+1]
-                $list[$j+1]=$list[$j]
-                $list[$j]=$temp
+function RunAllStoredMessages() {
+    
+    # Bubble Sort
+    $count = $StoredMessages.Count
+    for ($i=0; $i -lt $count; $i++) {
+        for ($j=0; $j -lt ($count-1); $j++) {
+            if ($StoredMessages[$j].id -gt $StoredMessages[$j+1].id) {
+                $temp                 = $StoredMessages[$j+1]
+                $StoredMessages[$j+1] = $StoredMessages[$j]
+                $StoredMessages[$j]   = $temp
             }
         }
     }
-    return $list
-}
 
-
-
-#==============================================================================================================================================================================================
-function RunAllStoredMessages() {
-    
-    $StoredMessages = BubbleSortMessages $StoredMessages
     foreach ($msg in $StoredMessages) { RunSetMessage -ID $msg.id -Text $msg.text -Replace $msg.replace -File $msg.file -Full $msg.full -Insert $msg.insert -Append $msg.append -All $msg.all -ASCII $msg.ascii -Silent $msg.silent -Safety $msg.safety -Force $msg.force }
     $global:StoredMessages = $null
 
