@@ -44,11 +44,12 @@ function PatchOptions() {
 
     # DIFFICULTY #
 
-    if (IsChecked $Redux.Hero.RaisedResearchLabPlatform)   { ApplyPatch -Patch "Decompressed\optional\raised_research_lab_platform.ppf" }
-    if (IsChecked $Redux.Hero.MoveGoldDust)                { ApplyPatch -Patch "Decompressed\Optional\chest.ppf"                        }
-    if (IsChecked $Redux.EasyMode.OceansideSpiderHouse)    { ApplyPatch -Patch "Decompressed\Optional\oceanside_spider_house.ppf"       }
+    if ( (IsValue $Redux.Recovery.Heart -Value 0) -or (IsDefault $Redux.Hero.ItemDrops -Not) )   { ApplyPatch -Patch "Decompressed\Optional\no_recovery_hearts.ppf"           }
+    if (IsChecked $Redux.Hero.RaisedResearchLabPlatform)                                         { ApplyPatch -Patch "Decompressed\optional\raised_research_lab_platform.ppf" }
+    if (IsChecked $Redux.Hero.MoveGoldDust)                                                      { ApplyPatch -Patch "Decompressed\Optional\chest.ppf"                        }
+    if (IsChecked $Redux.EasyMode.OceansideSpiderHouse)                                          { ApplyPatch -Patch "Decompressed\Optional\oceanside_spider_house.ppf"       }
 
-
+    
 
     # EQUIPMENT ADJUSTMENTS #
 
@@ -591,8 +592,8 @@ function ByteOptions() {
     }
     elseif (IsText -Elem $Redux.Hero.ItemDrops -Compare "Only Rupees") { PatchBytes  -Offset "C444B9" -Patch "only_rupee_drops.bin" }
 
-    if ( (IsValue $Redux.Recovery.Hearts -Value 0) -or (IsDefault $Redux.Hero.ItemDrops -Not) )   { ChangeBytes -Offset "B3DC54"  -Values "50" }
-    if   (IsChecked $Redux.Hero.NoBottledFairy)                                                   { ChangeBytes -Offset "CD7C09"  -Values "00" }
+  # if ( (IsValue $Redux.Recovery.Heart -Value 0) -or (IsDefault $Redux.Hero.ItemDrops -Not) )   { ChangeBytes -Offset "B3DC54"  -Values "50" }
+    if   (IsChecked $Redux.Hero.NoBottledFairy)                                                  { ChangeBytes -Offset "CD7C09"  -Values "00" }
     
     if (IsChecked $Redux.Hero.PalaceRoute) {
         CreateSubPath  -Path ($GameFiles.extracted + "\Deku Palace")
