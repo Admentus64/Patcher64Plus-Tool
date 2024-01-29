@@ -1443,6 +1443,7 @@ function ByteTextOptions() {
 
     if (IsChecked $Redux.Text.Instant) {
         WriteToConsole "Starting Generating Instant Text"
+        if ($Files.json.textEditor -eq $null) { LoadTextEditor }
         :outer foreach ($h in $DialogueList.GetEnumerator()) {
             if     ($DialogueList[$h.name].msg.count -eq 0) { continue }
             elseif ( (GetDecimal $h.name) -ge 256 -and (GetDecimal $h.name) -le 329) { continue } # Area Title Cards

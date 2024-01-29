@@ -2439,6 +2439,7 @@ function ByteTextOptions() {
 
     if (IsChecked $Redux.Text.Instant) {
         WriteToConsole "Starting Generating Instant Text"
+        if ($Files.json.textEditor -eq $null) { LoadTextEditor }
         :outer foreach ($h in $DialogueList.GetEnumerator()) {
             if     ($h.name -eq "108E" -or $h.name -eq "403E" -or $h.name -eq "605A" -or $h.name -eq "706C" -or $h.name -eq "70DD" -or $h.name -eq "706F" -or $h.name -eq "7091" -or $h.name -eq "7092" -or $h.name -eq "7093" -or $h.name -eq "7094" -or $h.name -eq "7095" -or $h.name -eq "7070") { continue }
             elseif ( (GetDecimal $h.name) -ge 2157 -and (GetDecimal $h.name) -le 2172) { continue } # Learning Songs
