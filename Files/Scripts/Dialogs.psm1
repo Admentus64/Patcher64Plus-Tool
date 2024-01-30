@@ -238,7 +238,7 @@ function CreateSettingsPanel() {
     $GeneralSettings.PerGameFile     = CreateSettingsCheckbox -Name "PerGameFile"     -Text "Use ROM per Game Mode"            -Info "The last ROM or Wii VC WAD for a chosen Game Mode is stored when switching back to it"
     $GeneralSettings.EnableSounds    = CreateSettingsCheckbox -Name "EnableSounds"    -Text "Enable Sound Effects"    -Checked -Info "Enable the use of sound effects, for example when patching is concluded"
     $GeneralSettings.LocalTempFolder = CreateSettingsCheckbox -Name "LocalTempFolder" -Text "Use Local Temp Folder"   -Checked -Info "Store all temporary and extracted files within the local Patcher64+ Tool folder`nIf unchecked the temporary and extracted files are kept in the Patcher64+ Tool folder in %AppData%"
-    $GeneralSettings.KeepCache       = CreateSettingsCheckbox -Name "KeepCache"       -Text "Keep Cache"              -Checked -Info "Keep a copy of the downgraded or decompressed ROM to speed up patching for subsequent attempts"
+    $GeneralSettings.UseCache        = CreateSettingsCheckbox -Name "UseCache"        -Text "Use Cache"               -Checked -Info "Enables caching`n- Keep a copy of the downgraded or decompressed ROM to speed up patching for subsequent attempts`n- Store all text messages to patch until the end so they can be applied in sorted order"
     $GeneralSettings.DisableUpdates  = CreateSettingsCheckbox -Name "DisableUpdates"  -Text "Disable Auto-Updater"             -Info "Disable the Auto-Updater that runs when starting the Patcher64+ Tool"
 
     if ((GetWindowsVersion) -lt 11) {

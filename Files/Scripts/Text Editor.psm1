@@ -921,7 +921,7 @@ function SetMessage([string]$ID, [object]$Text, [object]$Replace, [string]$File=
     
     if ($Files.json.textEditor -eq $null) { LoadTextEditor }
 
-    if ($TextEditor.Dialog -ne $null) {
+    if ($TextEditor.Dialog -ne $null -or $Settings.Core.UseCache -ne $True) {
         RunSetMessage -ID $ID -Text $Text -Replace $Replace -File $File -Full $Full -Insert $Insert -Append $Append -All $All -ASCII $ASCII -Silent $Silent -Safety $Safety -Force $Force
         return
     }
