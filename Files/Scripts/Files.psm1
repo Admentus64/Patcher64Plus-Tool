@@ -193,8 +193,6 @@ function SetFileParameters() {
     $Files.icon.previewButton               = $Paths.Main + "\PreviewButton.png"
     $Files.icon.wiiEnabled                  = $Paths.Main + "\Wii Enabled.png"
     $Files.icon.wiiDisabled                 = $Paths.Main + "\Wii Disabled.png"
-    $Files.icon.jason                       = $Paths.Main + "\Jason.ico"
-    $Files.icon.jasonBig                    = $Paths.Main + "\Jason.jpg"
 
 
 

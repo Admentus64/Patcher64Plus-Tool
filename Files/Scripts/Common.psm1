@@ -568,8 +568,27 @@ function WriteToConsole([string]$Text, [switch]$Error) {
 #==============================================================================================================================================================================================
 function SetModeLabel() {
 	
+    $title = $GameType.mode
+    if ($IsFoolsDay) {
+        if     ($title -like "*Time*")      { $title = $title.replace("Time",    "Jason") }
+        elseif ($title -like "*Majora*")    { $title = $title.replace("Majora",  "Jason") }
+        elseif ($title -like "*Mario*")     { $title = $title.replace("Mario",   "Jason") }
+        elseif ($title -like "*Smash*")     { $title = $title.replace("Smash",   "Jason") }
+        elseif ($title -like "*Bomber*")    { $title = $title.replace("Bomber",  "Jason") }
+        elseif ($title -like "*Banjo*")     { $title = $title.replace("Banjo",   "Jason") }
+        elseif ($title -like "*Diddy*")     { $title = $title.replace("Diddy",   "Jason") }
+        elseif ($title -like "*Donkey*")    { $title = $title.replace("Donkey",  "Jason") }
+        elseif ($title -like "*Eye*")       { $title = $title.replace("Eye",     "Jason") }
+        elseif ($title -like "*Link*")      { $title = $title.replace("Link",    "Jason") }
+        elseif ($title -like "*Zelda*")     { $title = $title.replace("Zelda",   "Jason") }
+        elseif ($title -like "*Metroid*")   { $title = $title.replace("Metroid", "Jason") }
+        elseif ($title -like "*Ages*")      { $title = $title.replace("Ages",    "Jason") }
+        elseif ($title -like "*Seasons*")   { $title = $title.replace("Seasons", "Jason") }
+        elseif ($title -like "*Free*")      { $title = $title.replace("Free",    "Jason") }
+    }
+
     if ($IsWiiVC) { $CurrentModeLabel.Mode.Text = "Current Mode (Wii VC):" } else { $CurrentModeLabel.Mode.Text = "Current Mode (" + $GameConsole.Mode + "):" }
-    $CurrentModeLabel.Game.Text = $GameType.mode
+    $CurrentModeLabel.Game.Text = $title
     $CurrentModeLabel.Mode.Refresh()
     $CurrentModeLabel.Game.Refresh()
 
@@ -1276,7 +1295,11 @@ function SetLogging([boolean]$Enable) {
 #==================================================================================================================================================================================================================================================================
 function SetBitmap($Path, $Box, [int]$Width=0, [int]$Height=0) {
     
-    if ($IsFoolsDay) { $Path = $Files.icon.jasonBig }
+    if ($IsFoolsDay) {
+        $rand = Get-Random -Minimum 1 -Maximum 10
+        $Path = $Paths.Main + "\JASON\jason-" + $rand + ".jpg"
+    }
+
     $imgObject = [Drawing.Image]::FromFile( ( Get-Item $Path ) )
 
     if ($Width  -eq 0)   { $Width  = $Box.Width      }

@@ -13,8 +13,7 @@ function CreateMainDialog() {
     $MainDialog.FormBorderStyle = [System.Windows.Forms.FormBorderStyle]::FixedDialog
     $MainDialog.StartPosition   = "CenterScreen"
     $MainDialog.KeyPreview      = $True
-    if ($IsFoolsDay)   { $MainDialog.Icon = $Files.icon.jason }
-    else               { $MainDialog.Icon = $Files.icon.main  }
+    if ($IsFoolsDay) { $MainDialog.Icon = $Paths.Main + "\JASON\jason-1.ico" } else { $MainDialog.Icon = $Files.icon.main  }
     $MainDialog.Add_Shown({ $MainDialog.Activate() })
     $global:MainPanel           = CreatePanel -Y (DPISize 25) -Width (DPISize 525) -Height ($MainDialog.Height - (DPISize 25)) -AddTo $MainDialog
 

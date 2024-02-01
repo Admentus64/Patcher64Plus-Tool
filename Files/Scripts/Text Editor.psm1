@@ -933,7 +933,7 @@ function SetMessage([string]$ID, [object]$Text, [object]$Replace, [string]$File=
         $Text    = $StoredMessages[$StoredMessages.Count-1].text
     }
 
-    [void]$global:StoredMessages.Add(@{ dec = (GetDecimal $ID); id = $ID; text = $Text; replace = $Replace; file = $File; full = $Full; insert = $Insert; append = $Append; all = $All; ascii = $ASCII; silent = $Silent; safety = $Safety; force = $Force })
+    [void]$global:StoredMessages.Add(@{ index = $StoredMessages.Count; dec = (GetDecimal $ID); id = $ID; text = $Text; replace = $Replace; file = $File; full = $Full; insert = $Insert; append = $Append; all = $All; ascii = $ASCII; silent = $Silent; safety = $Safety; force = $Force })
 
 }
 
@@ -942,7 +942,7 @@ function SetMessage([string]$ID, [object]$Text, [object]$Replace, [string]$File=
 #==============================================================================================================================================================================================
 function RunAllStoredMessages() {
     
-    $global:StoredMessages = $StoredMessages | Sort-Object { [int]$_.dec }
+    $global:StoredMessages = $StoredMessages | Sort-Object { [int]$_.dec, [int]$_.index }
     foreach ($msg in $StoredMessages) { RunSetMessage -ID $msg.id -Text $msg.text -Replace $msg.replace -File $msg.file -Full $msg.full -Insert $msg.insert -Append $msg.append -All $msg.all -ASCII $msg.ascii -Silent $msg.silent -Safety $msg.safety -Force $msg.force }
     $global:StoredMessages = $null
 
