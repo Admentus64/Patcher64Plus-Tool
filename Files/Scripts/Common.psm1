@@ -966,7 +966,10 @@ function GetFilePaths() {
         if (TestFile $Settings["Core"][$InputPaths.GameTextBox.Name]) {
             GamePath_Finish $InputPaths.GameTextBox -VarName $InputPaths.GameTextBox.Name -Path $Settings["Core"][$InputPaths.GameTextBox.Name]
         }
-        else { $InputPaths.GameTextBox.Text = "Select your ROM or Wii VC WAD file..." }
+        else {
+            $InputPaths.GameTextBox.Text = "Select your ROM or Wii VC WAD file..."
+            if ($IsWiiVC) { SetWiiVCMode $False}
+        }
     }
 
     if (IsSet $Settings["Core"][$InputPaths.InjectTextBox.Name]) {

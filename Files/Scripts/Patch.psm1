@@ -217,7 +217,10 @@ function MainFunctionPatch([string]$Command, [Array]$Header, [string]$PatchedFil
     if (DoAssertSceneFiles) { UpdateStatusLabel ("Done asserting " + $GameType.mode + " " + $text + "."); return }
     if     (!$PatchInfo.run)                { UpdateStatusLabel ("There was nothing to patch for the " + $GameType.mode + " " + $text + ".")                                                      }
     elseif ($WarningError)                  { UpdateStatusLabel ("Done patching " + $GameType.mode + " " + $text + ", but encountered issues. Please check the log.")                      -Error }
-    elseif (!(TestFile $GetROM.patched) )   { UpdateStatusLabel ("Done patching " + $GameType.mode + " " + $text + ", but couldn't write to changed " + $text + ". Please check the log.") -Error; WriteToConsole -Text "Are folder permission enabled for file writing?" -Error }
+    elseif ( ($IsWiiVC -and !(TestFile $WADFile.patched) ) -or (!$IsWiiVC -and !(TestFile $GetROM.patched) ) ) {
+        UpdateStatusLabel ("Done patching " + $GameType.mode + " " + $text + ", but couldn't write to changed " + $text + ". Please check the log.") -Error
+        WriteToConsole -Text "Are folder permission enabled for file writing?" -Error
+    }
     elseif ($OverwriteError)                { UpdateStatusLabel ("Done patching " + $GameType.mode + " " + $text + ", but some options got overwritten. Please check the log.")            -Error }
     elseif ($MissingError)                  { UpdateStatusLabel ("Done patching " + $GameType.mode + " " + $text + ", but some options are missing. Please check the log.")                -Error }
     elseif ($ModelPatchingError)            { UpdateStatusLabel ("Done patching " + $GameType.mode + " " + $text + ", but couldn't apply custom model. Please check the log.")             -Error }

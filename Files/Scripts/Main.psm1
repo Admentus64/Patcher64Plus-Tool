@@ -119,14 +119,15 @@ function CreateMainDialog() {
     $InputPaths.GameButton.Add_Click({ RefreshScripts; GamePath_Button -TextBox $InputPaths.GameTextBox -Description "ROM/WAD Files" -FileNames @('*.wad', '*.z64', '*.n64', '*.v64', '*.sfc', '*.smc', '*.nes', '*.gbc', '*.zip', '*.rar', '*.7z') })
     #"Image Files(*.BMP;*.JPG;*.GIF)|*.BMP;*.JPG;*.GIF|All files (*.*)|*.*"
 
-    # Create a button to clear the WAD Path
+    # Create a button to clear the game Path
     $InputPaths.ClearGameButton = CreateButton -X ($InputPaths.GameButton.Right + (DPISize 5)) -Y (DPISize 18) -Width ($InputPaths.GameGroup.Right - $InputPaths.GameButton.Right - (DPISize 10)) -Height (DPISize 22) -Text "Clear" -Info "Clear the selected paths (ROM / Wii VC WAD), ROM injection and custom patch"
     $InputPaths.ClearGameButton.Add_Click({
         RefreshScripts
         if (IsSet -Elem $GamePath -MinLength 1) {
             if ($IsWiiVC) { SetWiiVCMode $False }
             $global:GamePath                                = $global:InjectPath = $global:PatchPath = $null
-            $Settings["Core"][$InputPaths.GameTextBox.name] = $Settings["Core"][$InputPaths.InjectTextBox.name] = $Settings["Core"][$InputPaths.PatchTextBox.name] = ""
+            $Settings["Core"][$InputPaths.GameTextBox.name] = $Settings["Core"][$InputPaths.InjectTextBox.name] = $Settings["Core"][$InputPaths.PatchTextBox.name] = $Settings["Paths"][$GameType.mode] = ""
+            $InputPaths.GameTextBox.Text                    = "Select your ROM or Wii VC WAD file..."
             $InputPaths.InjectTextBox.Text                  = "Select your ROM for injection..."
             $InputPaths.PatchTextBox.Text                   = "Select your custom patch file..."
             $global:GameIsSelected                          = $Patches.Button.Enabled = $InputPaths.ClearGameButton.Enabled = $InputPaths.ApplyInjectButton.Enabled = $InputPaths.ApplyPatchButton.Enabled = $False
