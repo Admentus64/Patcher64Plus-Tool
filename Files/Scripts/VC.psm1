@@ -580,7 +580,7 @@ function RepackU8AppFile() {
     # The ROM is located witin the "00000001.app" VC emulator file
     elseif ($GameConsole.appFile -eq "00000001.app") {
         UpdateStatusLabel 'Re-injecting ROM into "00000001.app" file...'     # Set the status label
-        $ByteArrayROM = [IO.File]::ReadAllBytes($GetROM.patched)
+        $ByteArrayROM = [IO.File]::ReadAllBytes($GetROM.run)
         $ByteArrayApp = [IO.File]::ReadAllBytes($WADFile.AppFile01)
         for ($i=0; $i -lt (GetDecimal -Hex $WADFile.Length); $i++) { $ByteArrayApp[$i + (GetDecimal -Hex $WADFile.Offset)] = $ByteArrayROM[($i)] }
         [io.file]::WriteAllBytes($WADFile.AppFile01, $ByteArrayApp)

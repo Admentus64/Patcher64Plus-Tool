@@ -1465,6 +1465,7 @@ Export-ModuleMember -Function SetWiiVCMode
 Export-ModuleMember -Function CreateToolTip
 Export-ModuleMember -Function ChangeConsolesList
 Export-ModuleMember -Function ChangeGamesList
+Export-ModuleMember -Function ChangePatchList
 Export-ModuleMember -Function SetMainScreenSize
 Export-ModuleMember -Function SetVCContent
 Export-ModuleMember -Function ChangeGameMode

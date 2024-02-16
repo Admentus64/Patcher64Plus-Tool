@@ -415,7 +415,14 @@ function InitializeEvents() {
     # Current Game
     $CurrentGame.Console.Add_SelectedIndexChanged({
         $Settings["Core"][$this.Name] = $this.SelectedIndex
-        if ($this.Text -ne $GameConsole.title) { ChangeGamesList }
+        if ($this.Text -ne $GameConsole.title) {
+            $switchedWiiVC = $IsWiiVC
+            ChangeGamesList
+            if ($switchedWiiVC -ne $IsWiiVC) {
+                ChangePatchList
+                ChangeGameMode
+            }
+        }
     })
 
     $CurrentGame.Game.Add_SelectedIndexChanged({

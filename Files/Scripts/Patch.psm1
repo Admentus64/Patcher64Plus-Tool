@@ -378,6 +378,7 @@ function PrePatchingAdditionalOptions() {
 
     if (!(UseOptions))                                             { return }
     if (!$PatchInfo.decompress -and !(TestFile $GetROM.decomp) )   { Copy-Item -LiteralPath $GetROM.run -Destination $GetROM.decomp -Force }
+    $GetROM.run = $GetROM.decomp
 
     # BPS - Pre-Redux Options
     if (HasCommand "PrePatchOptions") {
@@ -444,6 +445,7 @@ function PatchingAdditionalOptions() {
     
     if (!(IsSet $GamePatch.script))                                { return }
     if (!$PatchInfo.decompress -and !(TestFile $GetROM.decomp) )   { Copy-Item -LiteralPath $GetROM.run -Destination $GetROM.decomp -Force }
+    $GetROM.run = $GetROM.decomp
     
     # Language patches
     if ($Settings.Debug.ExtractCleanScript -eq $True -and (IsSet $LanguagePatch.script_dma) -and (IsSet $LanguagePatch.table_start) -and (IsSet $LanguagePatch.table_length) -and !(DoAssertSceneFiles) ) {
@@ -550,7 +552,7 @@ function PatchingAdditionalOptions() {
         $global:ByteArrayGame = $global:LanguagePatch = $null
     }
 
-    if (!$PatchInfo.decompress) { Move-Item -LiteralPath $GetROM.decomp -Destination $GetROM.patched -Force }
+    if (!$PatchInfo.decompress) { Move-Item -LiteralPath $GetROM.decomp -Destination $GetROM.patched -Force; $GetROM.run = $GetROM.patched }
 
     $global:RunOverwriteChecks = $False
 
@@ -580,7 +582,7 @@ function UpdateROMCRC() {
     
     if ($Settings.Debug.NoCRCChange -eq $True -or $GameConsole.mode -ne "N64") { return }
 
-    if (!(TestFile $GetROM.patched)) { Copy-Item -LiteralPath $GetROM.run -Destination $GetROM.patched }
+    if (!(TestFile $GetROM.patched)) { Copy-Item -LiteralPath $GetROM.run -Destination $GetROM.patched; $GetROM.run = $GetROM.patched }
     & $Files.tool.rn64crc $GetROM.patched -update | Out-Null
     WriteToConsole ("Updated CRC hash for ROM: " + $GetROM.patched)
 
@@ -674,14 +676,15 @@ function DowngradeROM() {
         return $null
     }
 
-    if (!(TestFile $GetROM.decomp))   { Copy-Item -LiteralPath $GetROM.run -Destination $GetROM.decomp -Force }
-    if ($PatchInfo.decompress)        { $GetROM.run = $GetROM.decomp }
+    if ($PatchInfo.decompress) {
+        if (!(TestFile $GetROM.decomp)) { Copy-Item -LiteralPath $GetROM.run -Destination $GetROM.decomp -Force }
+        $GetROM.run = $GetROM.decomp
+    }
     else {
         Copy-Item -LiteralPath $GetROM.run -Destination $GetROM.downgrade -Force
         $GetROM.run = $GetROM.downgrade
     }
     
-
     $romHash = (Get-FileHash -Algorithm MD5 -LiteralPath $GetROM.run).Hash
     if ($PatchInfo.decompress -and (IsSet $GameRev.hash_decomp)) { $revHash = $GameRev.hash_decomp } else { $revHash = $GameRev.hash }
 
@@ -1196,6 +1199,7 @@ function PatchRedux() {
     if (!$Patches.Redux.Checked -or $GamePatch.redux -eq $null -or (DoAssertSceneFiles) -or !(TestFile (CheckPatchExtension ($GameFiles.base + "\redux")))) { return }
 
     if (!(TestFile $GetROM.decomp)) { Copy-Item -LiteralPath $GetROM.run -Destination $GetROM.decomp -Force }
+    $GetROM.run = $GetROM.decomp
     UpdateStatusLabel ("Patching " + $GameType.mode + " REDUX...")
 
     # Redux patch
