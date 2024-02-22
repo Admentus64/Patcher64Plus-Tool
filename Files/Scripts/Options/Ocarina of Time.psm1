@@ -1134,8 +1134,8 @@ function ByteOptions() {
         ChangeBytes -Offset "B6EC50" -Values (Get16Bit $Redux.Capacity.Wallet3.Text)
         ChangeBytes -Offset "B6EC52" -Values (Get16Bit $Redux.Capacity.Wallet4.Text)
 
-        ChangeBytes -Offset "B6D571" -Values @( ($max - $Redux.Capacity.Wallet1.Text.Length), (3 - $Redux.Capacity.Wallet2.Text.Length), (3 - $Redux.Capacity.Wallet3.Text.Length), (3 - $Redux.Capacity.Wallet4.Text.Length) ) -Interval 2
-        ChangeBytes -Offset "B6D579" -Values @(         $Redux.Capacity.Wallet1.Text.Length,       $Redux.Capacity.Wallet2.Text.Length,       $Redux.Capacity.Wallet3.Text.Length,       $Redux.Capacity.Wallet4.Text.Length)   -Interval 2
+        ChangeBytes -Offset "B6D571" -Values @( (3 - $Redux.Capacity.Wallet1.Text.Length), (3 - $Redux.Capacity.Wallet2.Text.Length), (3 - $Redux.Capacity.Wallet3.Text.Length), (3 - $Redux.Capacity.Wallet4.Text.Length) ) -Interval 2
+        ChangeBytes -Offset "B6D579" -Values @(      $Redux.Capacity.Wallet1.Text.Length,       $Redux.Capacity.Wallet2.Text.Length,       $Redux.Capacity.Wallet3.Text.Length,       $Redux.Capacity.Wallet4.Text.Length)   -Interval 2
 
         if ($Redux.Capacity.Wallet4.Text -lt $Redux.Capacity.Wallet3.Text) { ChangeBytes -Offset "E5088A" -Values (Get16Bit $Redux.Capacity.Wallet3.Text) } else { ChangeBytes -Offset "E5088A" -Values (Get16Bit $Redux.Capacity.Wallet4.Text) } # Running Man
     }
