@@ -3014,6 +3014,13 @@ function CreateTabLanguage() {
     CreateReduxTextBox  -Safe -Name "NaviName"   -Text ($val + " Name") -Length 5 -ASCII -Value $val   -Width 50 -Info ("Select the name for " + $val)                -Credits "Admentus & ShadowOne333" -Warning ('Most names do not have an unique texture label, and use a default "Info" prompt label' + $names)
     CreateReduxCheckBox -Safe -Name "NaviPrompt" -Text ($val + " Prompt")                                        -Info ("Enables the A button prompt for " + $val)    -Credits "Admentus & ShadowOne333" -Warning 'Most names do not have an unique texture prompt, and use a default "Info" prompt label'
 
+    if ($IsFoolsDay -and $Redux.Text.LinkScript -ne $null) {
+        $Redux.Text.LinkScript.Checked       = $True
+        $Redux.Text.LinkName.Text            = "Jason"
+        $Redux.Text.NaviScript.SelectedIndex = 2
+        $Redux.Text.NaviName.Text            = "Cage"
+    }
+
     if ($Redux.Text.Language   -ne $null)   { $Redux.Text.Language.Add_SelectedIndexChanged(   { UnlockLanguageContent } ) }
     if ($Redux.Text.LinkScript -ne $null)   { $Redux.Text.LinkScript.Add_CheckStateChanged(    { UnlockLanguageContent } ) }
     if ($Redux.Text.NaviScript -ne $null)   { $Redux.Text.NaviScript.Add_SelectedIndexChanged( { UnlockLanguageContent } ) }

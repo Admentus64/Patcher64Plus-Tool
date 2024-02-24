@@ -1,3 +1,6 @@
+v23.2.3
+- Removed Link Mask option for MM
+
 v23.2.2
 - Text Editor API changes are now cached in and sorted for optimal performance
 

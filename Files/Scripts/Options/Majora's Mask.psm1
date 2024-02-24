@@ -30,12 +30,6 @@ function PatchOptions() {
     
 
 
-    # OTHER #
-
-    if (IsChecked $Redux.Other.LinkMask) { ApplyPatch -Patch "Decompressed\Optional\link_mask.ppf" }
-    
-
-
     # MODELS #
 
     if (IsDefault -Elem $Redux.Graphics.ChildModels -Not)   { PatchModel -Category "Child" -Name $Redux.Graphics.ChildModels.Text }
@@ -1711,7 +1705,6 @@ function CreateTabMain() {
     CreateReduxComboBox -Name "SkipIntro"         -Text "Skip Intro"      -Items @("Don't Skip", "Skip Logo", "Skip Title Screen", "Skip Logo and Title Screen")             -Info "Skip the logo, title screen or both" -Credits "Euler"
     CreateReduxCheckBox -Name "AlwaysBestEnding"  -Text "Always Best Ending"       -Info "The credits sequence always includes the best ending, regardless of actual ingame progression"                                 -Credits "Marcelo20XX"
     CreateReduxCheckBox -Name "BlueOctorok"       -Text "Blue Octorok Color"       -Info "Change the color of the Blue Octorok for the Shooting Gallery Minigame into something more distinctive from the Red Octoroks"  -Credits "Admentus"
-    CreateReduxCheckBox -Name "LinkMask"          -Text "Link Mask"                -Info "Replaces the Fierce Deity Mask with the Link Mask"                                                                             -Credits "Admentus"
     CreateReduxCheckBox -Name "DefaultZTargeting" -Text "Default Hold Z-Targeting" -Info "Change the Default Z-Targeting option to Hold instead of Switch"                                                               -Credits "Euler"
     
 
@@ -1822,6 +1815,15 @@ function CreateTabLanguage() {
     CreateReduxCheckBox -Name "YeetPrompt"      -Text "Yeet Action Prompt"                                                     -Info ('Replace the "Throw" Action Prompt with "Yeet"' + "`nYeeeeet")                                               -Credits "kr3z"
     CreateReduxCheckBox -Name "Comma"           -Text "Better Comma"                                                           -Info "Make the comma not look as awful"                                                                            -Credits "ShadowOne333"
     CreateReduxCheckBox -Name "DefaultFileName" -Text "Default File Name"                                                      -Info 'Set the default file name to "Link"'                                                                 -Credits "Euler"      
+
+    if ($IsFoolsDay -and $Redux.Text.LinkScript -ne $null) {
+        $Redux.Text.TatlScript.SelectedIndex = 2
+        $Redux.Text.TatlName.Text            = "Keanu"
+        $Redux.Text.TaelScript.SelectedIndex = 2
+        $Redux.Text.TaelName.Text            = "Chuck"
+        $Redux.Text.LinkScript.Checked       = $True
+        $Redux.Text.LinkName.Text            = "Jason"
+    }
 
     if ($Settings.Core.SafeOptions -eq $True) { return }
 
