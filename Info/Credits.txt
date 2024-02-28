@@ -4,9 +4,9 @@
 --- Thanks to my Patreons ---
 - Tier 3:	Thanatos-Zero
 
-- Tier 2:	Amara, Andrew Kinney, Petra, Christopher Lillis, Sen, Pikangs_Futaba
+- Tier 2:	Amara, Third M, Christopher Lillis, Sen, Pikangs_Futaba, Lexchima
 
-- Tier 1:	Yang, mad_scrub, redmaro, GoldenMariaNova
+- Tier 1:	redmaro, mad_scrub, GoldenMariaNova
 
 
 --- Patcher64+ Tool ---
