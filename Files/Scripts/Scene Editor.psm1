@@ -1262,7 +1262,7 @@ function ChangeMapFile([object]$Offset, [object]$Values, [string]$Patch="", [obj
     elseif (IsSet $Offset) {
         if     ($Offset -is [String] -and $Offset -Like "* *")   { $Offset = $Offset -split ' '           }
         elseif ($Offset -is [String])                            { $Offset = $Offset -split '(..)' -ne '' }
-        else {
+        elseif ($Offset -isnot [int]) {
             WriteToConsole "Offset is not a valid value for map file!" -Error
             $global:WarningError = $True
             return
@@ -1313,7 +1313,7 @@ function ChangeMapFile([object]$Offset, [object]$Values, [string]$Patch="", [obj
                 if (IsSet $Values) { $valuesDec = $Values | foreach { [Convert]::ToByte($_, 16) } } else { $valuesDec = GetValuesData -Values $Values -Patch $Patch }
                 foreach ($k in 0..($valuesDec.Count-1)) { $SceneEditor.MapArray[$i + $k] = $valuesDec[$k] }
                 WriteToConsole ("Changed map values at: " + (Get24Bit $i))
-                return
+                return $i
             }
         }
     }
@@ -1321,8 +1321,8 @@ function ChangeMapFile([object]$Offset, [object]$Values, [string]$Patch="", [obj
         if ($Offset -isnot [int]) { [int]$offsetDec = GetDecimal $Offset } else { [int]$offsetDec = $Offset }
         if (IsSet $Values) { $valuesDec = $Values | foreach { [Convert]::ToByte($_, 16) } } else { $valuesDec = GetValuesData -Values $Values -Patch $Patch }
         foreach ($k in 0..($valuesDec.Count-1)) { $SceneEditor.MapArray[$offsetDec + $k] = $valuesDec[$k] }
-        WriteToConsole ("Changed scene values at: " + (Get24Bit $offsetDec))
-        return
+        WriteToConsole ("Changed map values at: " + (Get24Bit $offsetDec))
+        return $offset
     }
 
     WriteToConsole "Could not find offset to replace in map" -Error
@@ -1346,7 +1346,7 @@ function ChangeSceneFile([object]$Offset, [object]$Values, [string]$Patch="", [o
     elseif (IsSet $Offset) {
         if     ($Offset -is [String] -and $Offset -Like "* *")   { $Offset = $Offset -split ' '           }
         elseif ($Offset -is [String])                            { $Offset = $Offset -split '(..)' -ne '' }
-        else {
+        elseif ($Offset -isnot [int]) {
             WriteToConsole "Offset is not a valid value for scene file!" -Error
             $global:WarningError = $True
             return
@@ -1397,7 +1397,7 @@ function ChangeSceneFile([object]$Offset, [object]$Values, [string]$Patch="", [o
                 if (IsSet $Values) { $valuesDec = $Values | foreach { [Convert]::ToByte($_, 16) } } else { $valuesDec = GetValuesData -Values $Values -Patch $Patch }
                 foreach ($k in 0..($valuesDec.Count-1)) { $SceneEditor.SceneArray[$i + $k] = $valuesDec[$k] }
                 WriteToConsole ("Changed scene values at: " + (Get24Bit $i))
-                return
+                return $i
             }
         }
     }
@@ -1406,7 +1406,7 @@ function ChangeSceneFile([object]$Offset, [object]$Values, [string]$Patch="", [o
         if (IsSet $Values) { $valuesDec = $Values | foreach { [Convert]::ToByte($_, 16) } } else { $valuesDec = GetValuesData -Values $Values -Patch $Patch }
         foreach ($k in 0..($valuesDec.Count-1)) { $SceneEditor.SceneArray[$offsetDec + $k] = $valuesDec[$k] }
         WriteToConsole ("Changed scene values at: " + (Get24Bit $offsetDec))
-        return
+        return $offset
     }
 
     WriteToConsole "Could not find offset to replace in scene" -Error

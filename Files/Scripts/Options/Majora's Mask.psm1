@@ -1153,7 +1153,10 @@ function ByteSceneOptions() {
         SaveAndPatchLoadedScene
 
         PrepareMap -Scene "Great Bay Coast" -Map 0 -Header 0
-        ChangeMapFile -Values "0F0F5F5F" -Search "07FFD30F3A0000089904002E920032F5" -Start "12BC0" # Research Lab Platform
+        $offset = ChangeMapFile -Values "0F" -Search "07FFD30F3A0000089904002E920032F5" -Start "12BC0" # Research Lab Platform
+        $offset = ChangeMapFile -Values "0F" -Offset ($offset + 0x10)
+        $offset = ChangeMapFile -Values "5F" -Offset ($offset + 0x10)
+        $offset = ChangeMapFile -Values "5F" -Offset ($offset + 0x10)
         SaveAndPatchLoadedScene
 
         PrepareMap -Scene "Ikana Canyon" -Map 0 -Header 0
