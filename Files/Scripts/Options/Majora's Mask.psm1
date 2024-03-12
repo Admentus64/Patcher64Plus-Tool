@@ -95,7 +95,11 @@ function ByteOptions() {
         ChangeBytes -Offset "1068960" -Values "00000000"; ChangeBytes -Offset "1069B60" -Values "24080002";     ChangeBytes -Offset "2704FF7" -Values "A9";           ChangeBytes -Offset "2704FFD" -Values "A9";               ChangeBytes -Offset "C564D8"  -Values "02"
         ChangeBytes -Offset "1069B6C" -Values "2841000301014022A4E802C2A4F902CE00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
 
-        ChangeBytes -Offset "E9B695" -Values "01" # ChuChu
+        # Damage Tables Sword Beam
+        ChangeBytes -Offset @("CF05C5", "CF350D", "CF56DD", "D10D35", "D10D35", "D13749", "D21895", "D2B2F1", "D2F09D", "D3916D", "D3AFB5", "D3D9D5", "D4DABD", "D512F5", "D55C01", "D55C2D", "D6CFD9", "D76381", "D9F1E9", "D9F209", "DF85CD", "E07001", "E07021", "E0EE45", "E59389", "E5CE29", "E5CE49", "E5F299", "E9B695", "EA5E8D", `
+        "EAE535", "EB924D", "EC1F25", "ECBE79", "F3E84D", "F7ED71", "F82DBD", "F949F9", "10489A5", "105A76D", "10785DD") -Values "01"
+        ChangeBytes -Offset @("D4774D", "D5F015", "DA7845", "E1BA65", "E23C11", "E9D409", "EB27ED", "EB280D", "EDD629", "EDEC29", "EE2F59", "F666A5", "F8693D", "F9DE41", "FC6621", "FCB989", "FE3699", "FFF715", "100D425", "101D2C9") -Values "F1"
+        ChangeBytes -Offset @("D5C0FD", "EE8815", "FEFCC5") -Values "E1"
     }
 
     if (IsChecked $Redux.Gameplay.NoKillFlash)              { ChangeBytes -Offset "BFE043"  -Values "00"       }
@@ -923,27 +927,27 @@ function ByteOptions() {
 #==============================================================================================================================================================================================
 function RevertReduxOptions() {
     
-    if (IsRevert $Redux.Gameplay.FasterBlockPushing) {
+   <# if (IsRevert $Redux.Hooks.FasterBlockPushing) {
         ChangeBytes -Offset "E93FD0" -Values "241900058DC71CCC25F80001A6180188860201882604018A2405038428410006"; ChangeBytes -Offset "FA1930" -Values "008038258FAE002424E40168240500648DC31CCCAFA7002024060001"; ChangeBytes -Offset "D8B3F4" -Values "AFA50004948E01603C0140004480200044813000"
         ChangeBytes -Offset "E94384" -Values "241900058DC31CCC25F80001A6180188860201882604018A2405038428410006"; ChangeBytes -Offset "E8FA0C" -Values "3C014060448160003C0180A2C432707C3C0180A2C4267080";         ChangeBytes -Offset "E90F34" -Values "45002E1446002E1845002E1C46002E20"
         ChangeBytes -Offset "FD59C8" -Values "4500076046000764450007684600076C450007A4460007A8450007AC460007B0"; ChangeBytes -Offset "FE4424" -Values "3C063ECC34C6CCCD2604016C0C03FC0F3C054000";                 ChangeBytes -Offset "FD5410" -Values "3C0180B7C43007943C0180B7C4240798"
         ChangeBytes -Offset "FD5454" -Values "3C0180B7C432079C3C0180B7C42607A0";                                 ChangeBytes -Offset "CC2418" -Values "C6280AD03C013F0044818000";                                 ChangeBytes -Offset "E16944" -Values "3C06401334C63333"
         ChangeBytes -Offset "E93FBC" -Values "00808025AFBF001C"; ChangeBytes -Offset "E94370" -Values "00808025AFBF001C"; ChangeBytes -Offset "FD5688" -Values "3C0180B7C42C07A4"; ChangeBytes -Offset "FD5A04" -Values "450009D8460009DC"
-    }
+    } #>
 
-    if (IsRevert $Redux.Gameplay.ElegySpeedup) {
+   <# if (IsRevert $Redux.Hooks.ElegySpeedup) {
         ChangeBytes -Offset "CC2AF4"  -Values "8FA3004C861800BE24190014";         ChangeBytes -Offset "CCFEF4"  -Values "0080302500A03825";         ChangeBytes -Offset "CCFF08"  -Values "2843005B"; ChangeBytes -Offset "CCFF3C" -Values "2401000A"; ChangeBytes -Offset "D1D610"  -Values "00022C0000052C03"
         ChangeBytes -Offset "D1D620"  -Values "24060008";                         ChangeBytes -Offset "EB60B0"  -Values "AFB0002000808025AFBF0024"; ChangeBytes -Offset "EB6214"  -Values "0C03F4AD"; ChangeBytes -Offset "EB6240" -Values "0C03C761"; ChangeBytes -Offset "1029228" -Values "3C0141A0448120008E0E015C8E020160E604007091"
         ChangeBytes -Offset "1029448" -Values "3C0142208E020160448120003C0F80BC"; ChangeBytes -Offset "102945C" -Values "E6040070";                 ChangeBytes -Offset "1029734" -Values "45000AF4"
-    }
+    } #>
 
-    if (IsRevert $Redux.Gameplay.CritWiggle) {
+   <# if (IsRevert $Redux.Hooks.CritWiggle) {
         ChangeBytes -Offset "B66B6C" -Values "8463F6A628610011"; ChangeBytes -Offset "B66B78" -Values "28610011"; ChangeBytes -Offset "B66BA8" -Values "100000208463F6A6"; ChangeBytes -Offset "B66C28" -Values "8463F6A628610011"; ChangeBytes -Offset "B66D10" -Values "8739F6A6000020252B210011"
-    }
+    } #>
 
-    if (IsRevert $Redux.Gameplay.UnderwaterOcarina) { ChangeBytes -Offset "BA6E54" -Values "30CF00FF29E10012" }
+   # if (IsRevert $Redux.Hooks.UnderwaterOcarina) { ChangeBytes -Offset "BA6E54" -Values "30CF00FF29E10012" }
 
-    if (IsRevert $Redux.Cheats.ClimbAnything) { ChangeBytes -Offset "CB7D40" -Values "8C422B0C0000402530490008" }
+   # if (IsRevert $Redux.Hooks.ClimbAnything) { ChangeBytes -Offset "CB7D40" -Values "8C422B0C0000402530490008" }
     
 }
 
@@ -952,10 +956,6 @@ function RevertReduxOptions() {
 #==============================================================================================================================================================================================
 function ByteReduxOptions() {
     
-    ChangeBytes -Offset (AddToOffset $Symbols.MISC_CONFIG -Add "08") -Values "97E2EAE70B2B24A0B052B5999466AC25983908" # Serial Key
-
-
-
     # WIDESCREEN #
 
     if (IsChecked $Redux.Graphics.Widescreen) {
@@ -970,22 +970,15 @@ function ByteReduxOptions() {
 
     if     (IsChecked $Redux.DPad.Disable)       { ChangeBytes -Offset (AddToOffset $Symbols.DPAD_CONFIG -Add "18") -Values "0000" }
     else {
-      # if (IsChecked $Redux.DPad.DualSet)       { ChangeBytes -Offset $Symbols.CFG_DUAL_DPAD_ENABLED               -Values "01"   }
+        if (IsChecked $Redux.DPad.DualSet)       { ChangeBytes -Offset $Symbols.CFG_DUAL_DPAD_ENABLED               -Values "01"   }
         if (IsChecked $Redux.DPad.Hide)          { ChangeBytes -Offset (AddToOffset $Symbols.DPAD_CONFIG -Add "18") -Values "0100" }
         if (IsChecked $Redux.DPad.LayoutLeft)    { ChangeBytes -Offset (AddToOffset $Symbols.DPAD_CONFIG -Add "18") -Values "0101" }
         if (IsChecked $Redux.DPad.LayoutRight)   { ChangeBytes -Offset (AddToOffset $Symbols.DPAD_CONFIG -Add "18") -Values "0102" }
-        ChangeBytes -Offset @("BACB4C", "BACB58", "BACB64") -Values "1000" # Lens of Truth
+       #ChangeBytes -Offset @("BACB4C", "BACB58", "BACB64", "CAA490", "CAA4DC", "CAA524", "CAA2EC") -Values "1000" # Don't toggle off Lens of Truth or unequip items/masks if not on C button 
     }
 
 
-
-    # GAMEPLAY #
-
-    if (IsChecked $Redux.Gameplay.FlowOfTime)     { ChangeBytes -Offset $Symbols.CFG_FLOW_OF_TIME_ENABLED  -Values "01" }
-    if (IsChecked $Redux.Gameplay.InstantElegy)   { ChangeBytes -Offset $Symbols.CFG_INSTANT_ELEGY_ENABLED -Values "01" }
-
-
-
+    
     # FEATURES #
 
     if (IsDefault $Redux.Features.OcarinaIcons -Not) {
@@ -1007,26 +1000,47 @@ function ByteReduxOptions() {
         ChangeBytes -Offset $Symbols.CFG_OCARINA_ICONS_ENABLED -Values "01"
     }
 
-    if (IsChecked $Redux.Features.RupeeDrain)        { ChangeBytes -Offset $Symbols.CFG_RUPEE_DRAIN                          -Values (Get8Bit $Redux.Features.RupeeDrain.Text) }
-    if (IsChecked $Redux.Features.FPS)               { ChangeBytes -Offset $Symbols.CFG_FPS_ENABLED                          -Values "01"                                      }
-    if (IsChecked $Redux.Features.HealthBar)         { ChangeBytes -Offset (AddToOffset -Hex $Symbols.MISC_CONFIG -Add "1A") -Values "10" -Add                                 }
-    if (IsChecked $Redux.Features.HUDToggle)         { ChangeBytes -Offset $Symbols.CFG_HIDE_HUD_ENABLED                     -Values "01"                                      }
-    if (IsChecked $Redux.Features.ItemsUnequip)      { ChangeBytes -Offset $Symbols.CFG_UNEQUIP_ENABLED                      -Values "01"                                      }
-    if (IsChecked $Redux.Features.ItemsOnB)          { ChangeBytes -Offset $Symbols.CFG_B_BUTTON_ITEM_ENABLED                -Values "01"                                      }
-    if (IsChecked $Redux.Features.GearSwap)          { ChangeBytes -Offset $Symbols.CFG_SWAP_ENABLED                         -Values "01"                                      }
-    if (IsChecked $Redux.Features.SkipGuard)         { ChangeBytes -Offset $Symbols.CFG_SKIP_GUARD_ENABLED                   -Values "01"                                      }
+    if     (IsIndex -Elem $Redux.Features.CritWiggle        -Index 2)        { ChangeBytes -Offset (AddToOffset $Symbols.MISC_CONFIG -Add "18") -Values "40" -Add }
+    elseif (IsIndex -Elem $Redux.Features.CritWiggle        -Index 3)        { ChangeBytes -Offset (AddToOffset $Symbols.MISC_CONFIG -Add "18") -Values "80" -Add }
+    if     (IsChecked     $Redux.Features.FasterBlockPushing)                { ChangeBytes -Offset (AddToOffset $Symbols.MISC_CONFIG -Add "18") -Values "10" -Add }
+    if     (IsIndex -Elem $Redux.Features.UnderwaterOcarina -Index 1 -Not)   { ChangeBytes -Offset (AddToOffset $Symbols.MISC_CONFIG -Add "18") -Values "08" -Add }
+    if     (IsChecked     $Redux.Features.ArrowToggle)                       { ChangeBytes -Offset (AddToOffset $Symbols.MISC_CONFIG -Add "19") -Values "40" -Add }
+    if     (IsChecked     $Redux.Features.ElegySpeedup)                      { ChangeBytes -Offset (AddToOffset $Symbols.MISC_CONFIG -Add "19") -Values "10" -Add }
+    if     (IsIndex -Elem $Redux.Features.ContinuousDekuHop -Index 1 -Not)   { ChangeBytes -Offset (AddToOffset $Symbols.MISC_CONFIG -Add "19") -Values "08" -Add }
+    if     (IsIndex -Elem $Redux.Features.HealthBar         -Index 1 -Not)   { ChangeBytes -Offset (AddToOffset $Symbols.MISC_CONFIG -Add "1A") -Values "40" -Add }
+    if     (IsIndex -Elem $Redux.Features.BombchuDrops      -Index 1 -Not)   { ChangeBytes -Offset (AddToOffset $Symbols.MISC_CONFIG -Add "1B") -Values "40" -Add }
+    if     (IsChecked     $Redux.Features.InstantTransform)                  { ChangeBytes -Offset (AddToOffset $Symbols.MISC_CONFIG -Add "1B") -Values "20" -Add }
+  # if     (IsChecked     $Redux.Features.BombArrows)                        { ChangeBytes -Offset (AddToOffset $Symbols.MISC_CONFIG -Add "1B") -Values "10" -Add }
+    if     (IsIndex -Elem $Redux.Features.GiantMaskAnywhere -Index 1 -Not)   { ChangeBytes -Offset (AddToOffset $Symbols.MISC_CONFIG -Add "1B") -Values "08" -Add }
+    
+    if (IsIndex -Elem $Redux.Features.UnderwaterOcarina -Index 1 -Not)   { ChangeBytes -Offset $Symbols.CFG_BOSS_REMAINS_UNDERWATER_OCARINA -Values ($Redux.Features.UnderwaterOcarina.SelectedIndex - 1) }
+    if (IsIndex -Elem $Redux.Features.ContinuousDekuHop -Index 1 -Not)   { ChangeBytes -Offset $Symbols.CFG_BOSS_REMAINS_DEKU_HOP           -Values ($Redux.Features.ContinuousDekuHop.SelectedIndex - 1) }
+    if (IsIndex -Elem $Redux.Features.HealthBar         -Index 1 -Not)   { ChangeBytes -Offset $Symbols.CFG_BOSS_REMAINS_HEALTH_BAR         -Values ($Redux.Features.HealthBar.SelectedIndex         - 1) }
+    if (IsIndex -Elem $Redux.Features.BombchuDrops      -Index 1 -Not)   { ChangeBytes -Offset $Symbols.CFG_BOSS_REMAINS_BOMBCHU_DROPS      -Values ($Redux.Features.BombchuDrops.SelectedIndex      - 1) }
+    if (IsIndex -Elem $Redux.Features.GiantMaskAnywhere -Index 3)        { ChangeBytes -Offset $Symbols.CFG_FIERCE_DEITY_GIANTS_MASK        -Values "01" }
+
+    if (IsIndex -Elem $Redux.Features.ClockControl -Index 1 -Not)   { ChangeBytes -Offset $Symbols.CFG_CLOCK_CONTROL_ENABLED -Values $Redux.Features.ClockControl.SelectedIndex }
+    if (IsChecked     $Redux.Features.FlowOfTime)                   { ChangeBytes -Offset $Symbols.CFG_FLOW_OF_TIME_ENABLED  -Values "01"                                       }
+    if (IsChecked     $Redux.Features.InstantElegy)                 { ChangeBytes -Offset $Symbols.CFG_INSTANT_ELEGY_ENABLED -Values "01"                                       }
+    if (IsChecked     $Redux.Features.RupeeDrain)                   { ChangeBytes -Offset $Symbols.CFG_RUPEE_DRAIN           -Values (Get8Bit $Redux.Features.RupeeDrain.Text)  }
+    if (IsChecked     $Redux.Features.FPS)                          { ChangeBytes -Offset $Symbols.CFG_FPS_ENABLED           -Values "01"                                       }
+    if (IsChecked     $Redux.Features.HUDToggle)                    { ChangeBytes -Offset $Symbols.CFG_HIDE_HUD_ENABLED      -Values "01"                                       }
+    if (IsChecked     $Redux.Features.ItemsUnequip)                 { ChangeBytes -Offset $Symbols.CFG_UNEQUIP_ENABLED       -Values "01"                                       }
+    if (IsChecked     $Redux.Features.ItemsOnB)                     { ChangeBytes -Offset $Symbols.CFG_B_BUTTON_ITEM_ENABLED -Values "01"                                       }
+    if (IsChecked     $Redux.Features.GearSwap)                     { ChangeBytes -Offset $Symbols.CFG_SWAP_ENABLED          -Values "01"                                       }
+    if (IsChecked     $Redux.Features.SkipGuard)                    { ChangeBytes -Offset $Symbols.CFG_SKIP_GUARD_ENABLED    -Values "01"                                       }
+    if (IsChecked     $Redux.Default.InverseAim)                    { ChangeBytes -Offset $Symbols.CFG_DEFAULT_INVERSE_AIM   -Values "01"                                       }
     
 
 
     # CHEATS #
-
-    if (IsChecked $Redux.Cheats.ClimbAnything) { ChangeBytes -Offset "CB8810" -Values "1000"; ChangeBytes -Offset "CC69E4" -Values "00000000" }
 
     if (IsChecked $Redux.Cheats.InventoryEditor)   { ChangeBytes -Offset $Symbols.CFG_INVENTORY_EDITOR_ENABLED -Values "01" }
     if (IsChecked $Redux.Cheats.Health)            { ChangeBytes -Offset $Symbols.CFG_INFINITE_HEALTH          -Values "01" }
     if (IsChecked $Redux.Cheats.Magic)             { ChangeBytes -Offset $Symbols.CFG_INFINITE_MAGIC           -Values "01" }
     if (IsChecked $Redux.Cheats.Ammo)              { ChangeBytes -Offset $Symbols.CFG_INFINITE_AMMO            -Values "01" }
     if (IsChecked $Redux.Cheats.Rupees)            { ChangeBytes -Offset $Symbols.CFG_INFINITE_RUPEES          -Values "01" }
+    if (IsChecked $Redux.Cheats.ClimbAnything)     { ChangeBytes -Offset "CB8810" -Values "1000"; ChangeBytes -Offset "CC69E4" -Values "00000000"; ChangeBytes -Offset (AddToOffset $Symbols.MISC_CONFIG -Add "1A") -Values "20" -Add }
 
 
 
@@ -1569,17 +1583,20 @@ function CreatePresets() {
     } )
 
     $OptimalRedux.Add_Click( {
+        if ($Redux.Features.CritWiggle        -ne $null)   { $Redux.Features.CritWiggle.SelectedIndex        = 2 }
+        if ($Redux.Features.OcarinaIcons      -ne $null)   { $Redux.Features.OcarinaIcons.SelectedIndex      = 1 }
+        if ($Redux.Features.UnderwaterOcarina -ne $null)   { $Redux.Features.UnderwaterOcarina.SelectedIndex = 1 }
+        if ($Redux.Features.HealthBar         -ne $null)   { $Redux.Features.HealthBar.SelectedIndex         = 1 }
+        if ($Redux.Features.ClockControl      -ne $null)   { $Redux.Features.ClockControl.SelectedIndex      = 1 }
+
         BoxCheck $Redux.Dpad.LayoutLeft
-
-        BoxCheck $Redux.Gameplay.FasterBlockPushing
-        BoxCheck $Redux.Gameplay.ElegySpeedup
-        BoxCheck $Redux.Gameplay.CritWiggle
-      # BoxCheck $Redux.Gameplay.UnderwaterOcarina
-        BoxCheck $Redux.Gameplay.FlowOfTime
-        BoxCheck $Redux.Gameplay.InstantElegy
-
-        if ($Redux.Features.OcarinaIcons -ne $null) { $Redux.Features.OcarinaIcons.SelectedIndex = 1 }
-        BoxCheck $Redux.Features.HealthBar
+        BoxCheck $Redux.Dpad.DualSet
+        
+        BoxCheck $Redux.Features.FasterBlockPushing
+        BoxCheck $Redux.Features.ElegySpeedup
+        BoxCheck $Redux.Features.ArrowToggle
+        BoxCheck $Redux.Features.FlowOfTime
+        BoxCheck $Redux.Features.InstantElegy
         BoxCheck $Redux.Features.HUDToggle
         BoxCheck $Redux.Features.ItemsUnequip
         BoxCheck $Redux.Features.ItemsOnB
@@ -1727,11 +1744,11 @@ function CreateTabRedux() {
     # D-PAD #
 
     CreateReduxGroup       -Tag  "Dpad"                                -Text "D-Pad Layout"
-    CreateReduxRadioButton -Name "Disable"     -Max 4 -SaveTo "Layout" -Text "Disable"    -Info "Completely disable the D-Pad"                                                                                           -Credits "Randomizer"
-    CreateReduxRadioButton -Name "Hide"        -Max 4 -SaveTo "Layout" -Text "Hidden"     -Info "Hide the D-Pad icons, while they are still active`nYou can rebind the items to the D-Pad in the pause screen"           -Credits "Randomizer"
-    CreateReduxRadioButton -Name "LayoutLeft"  -Max 4 -SaveTo "Layout" -Text "Left Side"  -Info "Show the D-Pad icons on the left side of the HUD`nYou can rebind the items to the D-Pad in the pause screen"   -Checked -Credits "Randomizer"
-    CreateReduxRadioButton -Name "LayoutRight" -Max 4 -SaveTo "Layout" -Text "Right Side" -Info "Show the D-Pad icons on the right side of the HUD`nYou can rebind the items to the D-Pad in the pause screen"           -Credits "Randomizer"
-  # CreateReduxCheckBox    -Name "DualSet"                             -Text "Dual Set"   -Info "Allow switching between two different D-Pad sets`nPress L + R ingame to swap between layouts" -Link $Redux.Dpad.Disable -Credits "Admentus"
+    CreateReduxRadioButton -Name "Disable"     -Max 4 -SaveTo "Layout" -Text "Disable"    -Info "Completely disable the D-Pad"                                                                                                 -Credits "Randomizer"
+    CreateReduxRadioButton -Name "Hide"        -Max 4 -SaveTo "Layout" -Text "Hidden"     -Info "Hide the D-Pad icons, while they are still active`nYou can rebind the items to the D-Pad in the pause screen"                 -Credits "Randomizer"
+    CreateReduxRadioButton -Name "LayoutLeft"  -Max 4 -SaveTo "Layout" -Text "Left Side"  -Info "Show the D-Pad icons on the left side of the HUD`nYou can rebind the items to the D-Pad in the pause screen"         -Checked -Credits "Randomizer"
+    CreateReduxRadioButton -Name "LayoutRight" -Max 4 -SaveTo "Layout" -Text "Right Side" -Info "Show the D-Pad icons on the right side of the HUD`nYou can rebind the items to the D-Pad in the pause screen"                 -Credits "Randomizer"
+    CreateReduxCheckBox    -Name "DualSet"                             -Text "Dual Set"   -Info "Allow switching between two different D-Pad sets`nHold L and press R to swap between D-Pad layouts" -Link $Redux.Dpad.Disable -Credits "Admentus"
 
 
 
@@ -1741,32 +1758,42 @@ function CreateTabRedux() {
     $warning += "--- Known Issues --`n"
     $warning += "Gravity for throwing objects`nExplosion timers are shorter`nLit torches burn out faster`nTriple swing is extremely hard to perform`nBaddies act and attack faster`nMinigame timers run too fast"
 
-    CreateReduxGroup    -Tag  "Gameplay"           -Text "Gameplay"
-    CreateReduxCheckBox -Name "FasterBlockPushing" -Text "Faster Block Pushing"       -Info "All blocks are pushed faster"                                                                                                 -Checked -Credits "Randomizer"
-    CreateReduxCheckBox -Name "ElegySpeedup"       -Text "Elegy of Emptiness Speedup" -Info "The Elegy of Emptiness statue summoning cutscene is skipped after playing the song"                                           -Checked -Credits "Randomizer"
-    CreateReduxCheckBox -Name "CritWiggle"         -Text "Disable Crit Wiggle"        -Info "Link no longer randomly moves when his health is critical"                                                                    -Checked -Credits "Randomizer"
-    CreateReduxCheckBox -Name "UnderwaterOcarina"  -Text "Underwater Ocarina"         -Info "Zora Link can play the Ocarina when standing on the bottom of water" -Warning "Not compatible with Ocarina Icons"             -Checked -Credits "Randomizer"
-    CreateReduxCheckBox -Name "FlowOfTime"         -Text "Control Flow of Time"       -Info "Hold L and press D-Pad Up, Right or Left to control the flow of time`nTime can be sped up and inversed without the use of the Ocarina" -Credits "Admentus"
-    CreateReduxCheckBox -Name "InstantElegy"       -Text "Instant Elegy Statue"       -Info "Hold L and press D-Pad Down to summon an Elegy of Emptiness Statue without the use of the Ocarina"                                     -Credits "Admentus"
-    
     CreateReduxGroup    -Tag  "Features"           -Text "Features"
-    CreateReduxComboBox -Name "OcarinaIcons"       -Text "Ocarina Icons"              -Info "Restore the Ocarina Icons with their text when transformed like in the N64 Beta or 3DS version`nRequires the language to be set to English" -Items @("Disabled", "Enabled", "Enabled with Original Icon") -Credits "Admentus & ShadowOne333" -Warning "Not compatible with Underwater Ocarina"
-    CreateReduxTextBox  -Name "RupeeDrain"         -Text "Rupee Drain"                -Info "A difficulty option that drains your Rupees over time, and then your health over time`nThe value is the amount of seconds before each drain occurs"                     -Length 2 -Value 0 -Min 0 -Max 10 -Credits "Admentus"
-    CreateReduxCheckBox -Name "FPS"                -Text "30 FPS (Experimental)"      -Info "Experimental 30 FPS support`nUse L + Z to toggle between 20 FPS and 30 FPS mode"                                                                                                                          -Credits "Admentus" -Warning $warning
-    CreateReduxCheckBox -Name "HealthBar"          -Text "Health Bar"                 -Info "Shows the total health and remaining health of enemies and bosses as a bar when you Z-Target them"                                                                                                        -Credits "Randomizer"
-    CreateReduxCheckBox -Name "HUDToggle"          -Text "HUD Toggle"                 -Info "Toggle the HUD by using the L button`nPress L in the MAP subscreen to toggle it in its entirety`nPress L ingame to toggle the essential display"                                                          -Credits "Admentus"
-    CreateReduxCheckBox -Name "ItemsUnequip"       -Text "Unequip Items"              -Info "Press C-Up on an equipped C Button item to unequip it from the assigned C Button"                                                                                                                         -Credits "Admentus"
-    CreateReduxCheckBox -Name "ItemsOnB"           -Text "Items on B Button"          -Info "Press the L Button on an item in the SELECT ITEM subscreen to equip it on the B button`nSome items are excluded`nPress C-Up on the Sword icon to equip the sword again"                                   -Credits "Admentus"
+    CreateReduxComboBox -Name "CritWiggle"         -Text "Crit Wiggle"                -Info "Link no longer randomly changes direction when moving at times when his health is critical"                                                 -Items @("Disabled", "Always On", "Always Off")        -Default 3 -Credits "Randomizer"
+    CreateReduxComboBox -Name "OcarinaIcons"       -Text "Ocarina Icons"              -Info "Restore the Ocarina Icons with their text when transformed like in the N64 Beta or 3DS version`nRequires the language to be set to English" -Items @("Disabled", "Enabled", "Enabled with Original Icon")     -Credits "Admentus & ShadowOne333" -Warning "Not compatible with Underwater Ocarina"
+    CreateReduxComboBox -Name "GiantMaskAnywhere"  -Text "Giant Mask Anywhere"        -Info "The Giant's Mask can now be used in most open maps"                                                                                         -Items @("Disabled", "Enabled", "Enabled with Fierce Deity Mask") -Credits "Randomizer"
+    CreateReduxTextBox  -Name "RupeeDrain"         -Text "Rupee Drain"                -Info "A difficulty option that drains your Rupees over time, and then your health over time`nThe value is the amount of seconds before each drain occurs"            -Shift (-16) -Length 2 -Value 0 -Min 0 -Max 10 -Credits "Admentus"
+    
+    $items = @("Disabled", "Enabled", "Enabled with Odolwa's Remains", "Enabled with Goht's Remains", "Enabled with Gyorg's Remains", "Enabled with Twinmold's Remains")
+    CreateReduxComboBox -Name "UnderwaterOcarina"  -Text "Underwater Ocarina"         -Info "Zora Link can play the Ocarina when standing on the bottom of water" -Warning "Not compatible with Ocarina Icons"                                                        -Checked -Items $items -Credits "Randomizer"
+    CreateReduxComboBox -Name "ContinuousDekuHop"  -Text "Continuous Deku Hop"        -Info "Press A while hopping across water to keep hopping"                                                                                                                                             -Items $items -Credits "Randomizer"
+    CreateReduxComboBox -Name "HealthBar"          -Text "Health Bar"                 -Info "Shows the total health and remaining health of enemies and bosses as a bar when you Z-Target them"                                                                                              -Items $items -Credits "Randomizer"
+    CreateReduxComboBox -Name "BombchuDrops"       -Text "Bombchu Drops"              -Info "Bombchus can now drop from defeated enemies, cutting grass and broken jars"                                                                                                                     -Items $items -Credits "Randomizer"
+    CreateReduxComboBox -Name "ClockControl"       -Text "Clock Control"              -Info "Press B in the Pause Screen to bring up the Clock Control display`nUse C-Left and C-Right to set the time to advance to`nPress A to save or B to cancel`nTime is aplied when resuming the game" -Items $items -Credits "Admentus"
+
+    CreateReduxCheckBox -Name "FasterBlockPushing" -Text "Faster Block Pushing"       -Info "All blocks are pushed faster"                                                                                                                                                                    -Checked -Credits "Randomizer"
+    CreateReduxCheckBox -Name "ArrowToggle"        -Text "Arrow Toggle"               -Info "Press R while aiming to toggle between arrow types"                                                                                                                                              -Checked -Credits "Randomizer"
+    CreateReduxCheckBox -Name "ElegySpeedup"       -Text "Elegy of Emptiness Speedup" -Info "The Elegy of Emptiness statue summoning cutscene is skipped after playing the song"                                                                                                              -Checked -Credits "Randomizer"
+  # CreateReduxCheckBox -Name "BombArrows"         -Text "Bomb Arrows"                -Info "Shoot bombs with the bow by using both items at the same time"                                                                                                                                            -Credits "Randomizer"
+    CreateReduxCheckBox -Name "InstantTransform"   -Text "Instant Transform"          -Info "Skip the transformation cutscenes when equiping or unequiping a transformation mask"                                                                                                                      -Credits "Randomizer"
+    
+    CreateReduxCheckBox -Name "FlowOfTime"         -Text "Control Flow of Time"       -Info "Hold L and press D-Pad Down to invert or restore the flow or time without having to use the Ocarina of Time"                                                                                              -Credits "Admentus"
+    CreateReduxCheckBox -Name "InstantElegy"       -Text "Instant Elegy Statue"       -Info "Hold L and press D-Pad Up to summon an Elegy of Emptiness Statue without having to use the Ocarina of Time"                                                                                               -Credits "Admentus"
+    CreateReduxCheckBox -Name "FPS"                -Text "30 FPS (Experimental)"      -Info "Experimental 30 FPS support`nHold L and press Z to toggle between 20 FPS and 30 FPS mode"                                                                                                                 -Credits "Admentus" -Warning $warning
+    CreateReduxCheckBox -Name "HUDToggle"          -Text "HUD Toggle"                 -Info "Hold L and press B during the Pause Screen to toggle between HUD displays"                                                                                                                                -Credits "Admentus"
+    CreateReduxCheckBox -Name "ItemsUnequip"       -Text "Unequip Items"              -Info "Unassign items or masks by setting them again with their respective C button"                                                                                                                             -Credits "Admentus"
+    CreateReduxCheckBox -Name "ItemsOnB"           -Text "Items on B Button"          -Info "Hold L and press A to equip an item to the B button`nSome items are excluded`nPress C-Up on the Sword icon to equip the sword again"                                                                      -Credits "Admentus"
     CreateReduxCheckBox -Name "GearSwap"           -Text "Swap Gear"                  -Info "Press C-Left or C-Right on a sword or shield icon to change between equipment`nYou must have obtained the upgrades, and must not be stolen or reforged`nThis option also makes the Razor Sword permanent" -Credits "Admentus"
     CreateReduxCheckBox -Name "SkipGuard"          -Text "Skip Clock Town Guard"      -Info "The Clock Town Guard will no longer block entry to Termina Field on subsequent cycles when Hylian Link has spoken to them at least once"                                                                  -Credits "Admentus"
+    CreateReduxCheckBox -Name "InverseAim"         -Text "Inverse Aim"                -Info "Inverse y-axis for analog controls when aiming in first-person view"
 
     CreateReduxGroup    -Tag  "Cheats"             -Text "Cheats"
-    CreateReduxCheckBox -Name "ClimbAnything"      -Text "Climb Anything"             -Info "Climb most walls in the game" -Warning "Prone to softlocks, be careful"        -Credits "Randomizer"
     CreateReduxCheckBox -Name "InventoryEditor"    -Text "Inventory Editor"           -Info "Press the L button in the QUEST STATUS subscreen to open the Inventory Editor" -Credits "Admentus"
     CreateReduxCheckBox -Name "Health"             -Text "Infinite Health"            -Info "Link's health is always at its maximum"                                        -Credits "Admentus"
     CreateReduxCheckBox -Name "Magic"              -Text "Infinite Magic"             -Info "Link's magic is always at its maximum"                                         -Credits "Admentus"
     CreateReduxCheckBox -Name "Ammo"               -Text "Infinite Ammo"              -Info "Link's ammo for items are always at their maximum"                             -Credits "Admentus"
     CreateReduxCheckBox -Name "Rupees"             -Text "Infinite Rupees"            -Info "Link's wallet is always filled at its maximum"                                 -Credits "Admentus"
+    CreateReduxCheckBox -Name "ClimbAnything"      -Text "Climb Anything"             -Info "Climb most walls in the game" -Warning "Prone to softlocks, be careful"        -Credits "Randomizer"
 
     if ( (IsSet $Redux.Gameplay.UnderwaterOcarina) -and (IsSet $Redux.Gameplay.OcarinaIcons) ) {
         if     ($Redux.Gameplay.UnderwaterOcarina.Checked -and $Redux.Features.OcarinaIcons.SelectedIndex -gt 0)   { $Redux.Gameplay.UnderwaterOcarina.Checked = $False; $Redux.Features.OcarinaIcons.SelectedIndex = 0 }
@@ -1864,7 +1891,7 @@ function CreateTabGraphics() {
 
     CreateReduxGroup -Tag "Graphics" -Text "Graphics"
     if ($GamePatch.models -ne 0) { CreateReduxComboBox -Name "ChildModels" -Text "Hylian Model" -Items (@("Original") + (LoadModelsList -Category "Child")) -Default "Original" -Info "Replace the Hylian model used for Link" }
-    CreateReduxCheckBox -Name "Widescreen"     -Text "16:9 Widescreen (Advanced)"   -Info "Patches true 16:9 widescreen with the HUD pushed to the edges.`n`nKnown Issue: Stretched Notebook screen" -Safe -Native -Credits "Granny Story images by Nerrel, Widescreen Patch by gamemasterplc, enhanced and ported by GhostlyDark" -Base 2
+    CreateReduxCheckBox -Name "Widescreen"     -Text "16:9 Widescreen (Advanced)"   -Info "Patches true 16:9 widescreen with the HUD pushed to the edges.`n`nKnown Issue: Stretched Notebook screen" -Safe -Native -Credits "Granny Story images by Nerrel, Widescreen Patch by gamemasterplc, enhanced and ported by GhostlyDark" -Base 2 -Exclude "Master Quest"
     CreateReduxCheckBox -Name "WidescreenAlt"  -Text "16:9 Widescreen (Simplified)" -Info "Apply 16:9 Widescreen adjusted backgrounds and textures (as well as 16:9 Widescreen for the Wii VC)"                    -Credits "Aspect Ratio Fix by Admentus and 16:9 backgrounds by GhostlyDark & ShadowOne333" -Link $Redux.Graphics.Widescreen
     CreateReduxCheckBox -Name "ExtendedDraw"   -Text "Extended Draw Distance"       -Info "Increases the game's draw distance for objects`nDoes not work on all objects"                                     -Safe -Credits "Admentus"
     CreateReduxCheckBox -Name "PixelatedStars" -Text "Disable Pixelated Stars"      -Info "Completely disable stars during the night, which are pixelated dots and do not have any textures for HD replacement"    -Credits "Admentus"

@@ -94,6 +94,7 @@ function ByteOptions() {
     if (IsChecked $Redux.Gameplay.RutoNeverDisappears)      { ChangeBytes -Offset "D01EA3" -Values "00"                                                                                              }
     if (IsChecked $Redux.Gameplay.Medallions)               { ChangeBytes -Offset "E2B454" -Values "80EA00A72401003F314A003F00000000"                                                                }
     if (IsChecked $Redux.Gameplay.OpenBombchuShop)          { ChangeBytes -Offset "C6CEDC" -Values "340B0001"                                                                                        }
+  # if (IsChecked $Redux.Gameplay.OpenBombchuShop)          { ChangeBytes -Offset "E2D724"  -Values "1500";    ChangeBytes -Offset "E2D898" -Values "1500"                                           } # Bomchu Bowling Alley
     if (IsChecked $Redux.Gameplay.RemoveNaviPrompts)        { ChangeBytes -Offset "DF8B84" -Values "00000000"                                                                                        }
     
 

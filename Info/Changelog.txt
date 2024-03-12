@@ -1,3 +1,9 @@
+v23.3.0
+- Updated Redux for MM with new options and fixes
+- Updated Fierce Deity Anywhere for MM option with usable Sword Beam attack against most enemies
+- Changed Wii VC mode to show all options (but locked) for optimal performance
+- Removed Advanced Widescreen for Majora's Mask: Master Quest
+
 v23.2.3
 - Removed Link Mask option for MM
 

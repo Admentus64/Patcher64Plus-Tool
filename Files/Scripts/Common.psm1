@@ -12,8 +12,8 @@ function SetWiiVCMode([boolean]$Enable=!$IsWiiVC) {
         if ($RightPanel.Options.Controls.ContainsKey("OptionsPanel")) { ShowRightPanel $RightPanel.Options } else { ShowRightPanel $RightPanel.Settings }
     }
 
-    ChangeGamesList
-    ChangePatchList
+    if ( ($GamePatch.console -eq "Native" -and $WiiVC) -or ($GamePatch.console -eq "Wii VC" -and !$WiiVC) ) { ChangePatch }
+
     SetVCContent
     if ( (TestFile $GameFiles.controls) -and $GameSettings -ne $null -and $IsWiiVC) { CreateVCRemapPanel }
     SetModeLabel
@@ -48,12 +48,7 @@ function ChangeConsolesList() {
 
     # Reset
     $CurrentGame.Console.Items.Clear()
-
-    $Items = @()
-    foreach ($item in $Files.json.consoles) {
-        $Items += $item.title
-    }
-
+    $Items = $Files.json.consoles.title
     $CurrentGame.Console.Items.AddRange($Items)
 
     # Reset last index
@@ -92,10 +87,7 @@ function ChangeGamesList() {
 
     $items = @()
     foreach ($item in $Files.json.games) {
-        if ( ($CurrentGame.Console.Text -eq $GameConsole.title) -and ($GameConsole.mode -contains $item.console) ) {
-            if ( ( $IsWiiVC -and $item.support_vc -eq 1) -or (!$IsWiiVC) ) { $items += $item.title }
-        }
-        elseif ($item.console -contains "All") { $items += $item.title }
+        if ( ($CurrentGame.Console.Text -eq $GameConsole.title -and $GameConsole.mode -contains $item.console) -or $item.console -contains "All") { $items += $item.title }
     }
 
     $CurrentGame.Game.Items.AddRange($items)
@@ -127,16 +119,7 @@ function ChangePatchList() {
         # Reset
         $Patches.Group.Text = $GameType.mode + " - Patch Options"
         $Patches.Type.Items.Clear()
-
-        # Set combobox for patches
-        foreach ($item in $Files.json.patches) {
-            if (!(CheckIfScriptOrPatchExists -Item $item)) { continue }
-
-            if (!(IsSet $item.patch)) { $Patches.Type.Items.Add($item.title) }
-            else {
-                if ( ( ($IsWiiVC -and $item.console -eq "Wii VC") -or (!$IsWiiVC -and $item.console -eq "Native") -or ($item.console -eq "Both") -or !(IsSet $item.console) ) ) { $Patches.Type.Items.Add($item.title) }
-            }
-        }
+        $Patches.Type.Items.AddRange(($Files.json.patches.title | Get-Unique))
 
         # Reset last index
         foreach ($index in $Patches.Type.Items) {
@@ -442,53 +425,55 @@ function ChangePatch() {
 
     foreach ($item in $Files.json.patches) {
         if ($item.title -eq $Patches.Type.Text -and ( ($IsWiiVC -and $item.console -eq "Wii VC") -or (!$IsWiiVC -and $item.console -eq "Native") -or ($item.console -eq "Both") -or !(IsSet $item.console) ) ) {
-                $global:GamePatch = $item
-                $PatchToolTip.SetToolTip($Patches.Button, ([string]::Format($item.tooltip, [Environment]::NewLine)))
-                GetHeader
-                GetRegion
+            if ( ($item.console -eq "Native" -and $IsWiiVC) -or ($item.console -eq "Wii VC" -and !$IsWiiVC) ) { continue }
+
+            $global:GamePatch = $item
+            $PatchToolTip.SetToolTip($Patches.Button, ([string]::Format($item.tooltip, [Environment]::NewLine)))
+            GetHeader
+            GetRegion
                 
-                if ( (IsSet $GamePatch.script) -or (TestFile $GameFiles.controls) ) {
-                    $global:GameSettingsFile = GetGameSettingsFile
-                    $global:GameSettings     = GetSettings $GameSettingsFile
-                }
+            if ( (IsSet $GamePatch.script) -or (TestFile $GameFiles.controls) ) {
+                $global:GameSettingsFile = GetGameSettingsFile
+                $global:GameSettings     = GetSettings $GameSettingsFile
+            }
 
-                $CustomHeader.ROMTitle.Refresh()
-                $CustomHeader.ROMGameID.Refresh()
-                $CustomHeader.VCTitle.Refresh()
-                $CustomHeader.VCGameID.Refresh()
+            $CustomHeader.ROMTitle.Refresh()
+            $CustomHeader.ROMGameID.Refresh()
+            $CustomHeader.VCTitle.Refresh()
+            $CustomHeader.VCGameID.Refresh()
 
-                ChangeGameRev
-                SetGameScript
+            ChangeGameRev
+            SetGameScript
                 
-                # If the patch is a preset disable all options buttons
-                if (IsSet $GamePatch.preset) {
-                    EnableElem -Elem @($Patches.Extend, $Patches.ExtendLabel, $Patches.Redux, $Patches.ReduxLabel, $Patches.Options, $Patches.OptionsLabel, $Patches.PreviewButton, $Redux.WindowPanel) -Active $False -Hide
-                    foreach ($item in $Redux.Groups) {
-                        if ($item.IsRedux) { EnableElem -Elem $item -Active $True }
-                    }
+            # If the patch is a preset disable all options buttons
+            if (IsSet $GamePatch.preset) {
+                EnableElem -Elem @($Patches.Extend, $Patches.ExtendLabel, $Patches.Redux, $Patches.ReduxLabel, $Patches.Options, $Patches.OptionsLabel, $Patches.PreviewButton, $Redux.WindowPanel) -Active $False -Hide
+                foreach ($item in $Redux.Groups) {
+                    if ($item.IsRedux) { EnableElem -Elem $item -Active $True }
                 }
-                else { # Patches with additional options when available
-                    # Disable boxes if needed
-                    EnableElem -Elem @($Patches.Extend,  $Patches.ExtendLabel)  -Active (IsSet $GamePatch.allow_extend) -Hide
-                    EnableElem -Elem @($Patches.Redux,   $Patches.ReduxLabel)   -Active (IsSet $GamePatch.redux)        -Hide
-                    EnableElem -Elem @($Patches.Options, $Patches.OptionsLabel) -Active (IsSet $GamePatch.script)       -Hide
-                    EnableElem -Elem $Redux.WindowPanel                         -Active $Patches.Options.Checked
-                    DisableReduxOptions
-                    if (HasCommand "CreateOptionsPreviews") { EnableElem -Elem $Patches.PreviewButton -Active $True -Hide } else { EnableElem -Elem $Patches.PreviewButton -Active $False -Hide }
-                }
+            }
+            else { # Patches with additional options when available
+                # Disable boxes if needed
+                EnableElem -Elem @($Patches.Extend,  $Patches.ExtendLabel)  -Active (IsSet $GamePatch.allow_extend) -Hide
+                EnableElem -Elem @($Patches.Redux,   $Patches.ReduxLabel)   -Active (IsSet $GamePatch.redux)        -Hide
+                EnableElem -Elem @($Patches.Options, $Patches.OptionsLabel) -Active (IsSet $GamePatch.script)       -Hide
+                EnableElem -Elem $Redux.WindowPanel                         -Active $Patches.Options.Checked
+                DisableReduxOptions
+                if (HasCommand "CreateOptionsPreviews") { EnableElem -Elem $Patches.PreviewButton -Active $True -Hide } else { EnableElem -Elem $Patches.PreviewButton -Active $False -Hide }
+            }
 
-                # Create VC controls panel
-                if ($RightPanel.RemapControls.Controls.ContainsKey("RemapVCControlsPanel")) { $RightPanel.RemapControls.Controls.RemoveByKey("RemapVCControlsPanel") }
-                if ( (TestFile $GameFiles.controls) -and $GameSettings -ne $null) {
-                    $Files.json.controls = SetJSONFile $GameFiles.controls
-                    if ($IsWiiVC) { CreateVCRemapPanel } # Create VC remap settings
-                }
-                else {
-                    $Files.json.controls  = $null
-                    if ($RightPanel.RemapControls.Visible) { ShowRightPanel $RightPanel.Options }
-                }
+            # Create VC controls panel
+            if ($RightPanel.RemapControls.Controls.ContainsKey("RemapVCControlsPanel")) { $RightPanel.RemapControls.Controls.RemoveByKey("RemapVCControlsPanel") }
+            if ( (TestFile $GameFiles.controls) -and $GameSettings -ne $null) {
+                $Files.json.controls = SetJSONFile $GameFiles.controls
+                if ($IsWiiVC) { CreateVCRemapPanel } # Create VC remap settings
+            }
+            else {
+                $Files.json.controls  = $null
+                if ($RightPanel.RemapControls.Visible) { ShowRightPanel $RightPanel.Options }
+            }
 
-                break
+            break
         }
     }
 
@@ -599,12 +584,18 @@ function SetModeLabel() {
 #==================================================================================================================================================================================================================================================================
 function EnablePatchButtons() {
     
-    if ($GamePath -eq $null)   { $enable = $False }
-    else                       { $enable = ($GamePath.Extension -eq ".wad" -and $IsWiiVC) -or ($GamePath.Extension -ne ".wad" -and !$IsWiiVC) }
+    if     ($GamePath -eq $null)                              { $enable = $False }
+    elseif ($GamePatch.console   -eq "Native" -and  $WiiVC)   { $enable = $False }
+    elseif ($GamePatch.console   -eq "Wii VC" -and !$WiiVC)   { $enable = $False }
+    elseif ($GameType.support_vc -eq 0 -and $WiiVC)           { $enable = $False }
+    else                                                      { $enable = ($GamePath.Extension -eq ".wad" -and $IsWiiVC) -or ($GamePath.Extension -ne ".wad" -and !$IsWiiVC) }
 
-    if     ($enable)    { UpdateStatusLabel "Ready to patch!"                          -NoConsole } # Set the status that we are ready to roll... Or not...
-    elseif ($IsWiiVC)   { UpdateStatusLabel "Select your Wii VC WAD file to continue." -NoConsole }
-    else                { UpdateStatusLabel "Select your ROM file to continue."        -NoConsole }
+    if     ($GameType.support_vc -eq 0 -and $WiiVC)           { UpdateStatusLabel "This game does not support Wii VC!"       -NoConsole }
+    elseif ($GamePatch.console   -eq "Native" -and  $WiiVC)   { UpdateStatusLabel "This patch does not support Wii VC!"      -NoConsole }
+    elseif ($GamePatch.console   -eq "Wii VC" -and !$WiiVC)   { UpdateStatusLabel "This patch only supports Wii VC!"         -NoConsole }
+    elseif ($enable)                                          { UpdateStatusLabel "Ready to patch!"                          -NoConsole } # Set the status that we are ready to roll... Or not...
+    elseif ($IsWiiVC)                                         { UpdateStatusLabel "Select your Wii VC WAD file to continue." -NoConsole }
+    else                                                      { UpdateStatusLabel "Select your ROM file to continue."        -NoConsole }
 
     $Patches.Button.Enabled = $CustomHeader.Panel.Enabled = $VC.ExtractROMButton.Enabled = $enable # Enable patcher buttons
 
