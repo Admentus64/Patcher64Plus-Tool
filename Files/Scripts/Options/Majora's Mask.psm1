@@ -1260,15 +1260,15 @@ function ByteTextOptions() {
         SetMessage -ID "1700" -Text "<C Button><N>Buttons. Press" -Replace "<C Button>.<N>Press"
 	
         SetMessage -ID "001A" -Text "Press" -Replace "Use";      SetMessage -ID "0022" -All; SetMessage -ID "0028"; SetMessage -ID "0029"; SetMessage -ID "002A"; SetMessage -ID "002E"; SetMessage -ID "0034"; SetMessage -ID "0036"
-        SetMessage -ID "003A"; SetMessage -ID "0041"; SetMessage -ID "0043"; SetMessage -ID "0078"; SetMessage -ID "1701"; SetMessage -ID "1706"; SetMessage -ID "1709"; SetMessage -ID "170E"; SetMessage -ID "170F"; SetMessage -ID "1717"
+        SetMessage -ID "003A"; SetMessage -ID "0041"; SetMessage -ID "0078"; SetMessage -ID "1701"; SetMessage -ID "1706"; SetMessage -ID "1709"; SetMessage -ID "170E"; SetMessage -ID "170F"; SetMessage -ID "1717"
 	SetMessage -ID "171B"; SetMessage -ID "172E"
 
         SetMessage -ID "0014" -Text "press" -Replace "use"; SetMessage -ID "0015"; SetMessage -ID "0016"; SetMessage -ID "0017"; SetMessage -ID "0018"; SetMessage -ID "0019"; SetMessage -ID "0035"; SetMessage -ID "0200"; SetMessage -ID "09E3"
 	SetMessage -ID "1F4F"
 
-        SetMessage -ID "0078"; -Text "Deku. Press" -Replace "Deku. Use"
-	SetMessage -ID "0079"; -Text "Goron. Press" -Replace "Goron. Use"
-        SetMessage -ID "007A"; -Text "Zora. Press" -Replace "Zora. Use"
+        SetMessage -ID "0078"; -Text "the body of a Deku. Press <C><C Button>" -Replace "the body of a Deku. Use <C><C Button>"
+	SetMessage -ID "0079"; -Text "the body of a Goron. Press <C><C Button>" -Replace "the body of a Goron. Use <C><C Button>"
+        SetMessage -ID "007A"; -Text "the body of a Zora. Press <C><C Button>" -Replace "the body of a Zora. Use <C><C Button>"
 
         SetMessage -ID "0043" -Text "Press <C><C Button> <W>to look through it" -Replace "Use <C><C Button> <W>to look through it"
 	SetMessage -ID "0059" -Text "then press that <N><C><C Button> <W>Button to use it." -Replace "then use <N><C><C Button><W>."
