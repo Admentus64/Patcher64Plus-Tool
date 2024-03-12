@@ -1266,9 +1266,9 @@ function ByteTextOptions() {
         SetMessage -ID "0014" -Text "press" -Replace "use"; SetMessage -ID "0015"; SetMessage -ID "0016"; SetMessage -ID "0017"; SetMessage -ID "0018"; SetMessage -ID "0019"; SetMessage -ID "0035"; SetMessage -ID "0200"; SetMessage -ID "09E3"
 	SetMessage -ID "1F4F"
 
-        SetMessage -ID "0078"; -Text "the body of a Deku. Press <C><C Button>" -Replace "the body of a Deku. Use <C><C Button>"
-	SetMessage -ID "0079"; -Text "the body of a Goron. Press <C><C Button>" -Replace "the body of a Goron. Use <C><C Button>"
-        SetMessage -ID "007A"; -Text "the body of a Zora. Press <C><C Button>" -Replace "the body of a Zora. Use <C><C Button>"
+        SetMessage -ID "0078" -Text "the body of a Deku. Press <C><C Button>" -Replace "the body of a Deku. Use <C><C Button>"
+	SetMessage -ID "0079" -Text "the body of a Goron. Press <C><C Button>" -Replace "the body of a Goron. Use <C><C Button>"
+        SetMessage -ID "007A" -Text "the body of a Zora. Press <C><C Button>" -Replace "the body of a Zora. Use <C><C Button>"
 
         SetMessage -ID "0043" -Text "Press <C><C Button> <W>to look through it" -Replace "Use <C><C Button> <W>to look through it"
 	SetMessage -ID "0059" -Text "then press that <N><C><C Button> <W>Button to use it." -Replace "then use <N><C><C Button><W>."
