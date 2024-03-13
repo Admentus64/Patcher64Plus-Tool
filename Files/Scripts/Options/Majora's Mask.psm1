@@ -1279,6 +1279,8 @@ function ByteTextOptions() {
         SetMessage -ID "0C3B" -Text "Keep in mind that after you use<N>your reforged sword <R>100 times<W>, it<N>will lose its edge and it'll be back<N>to its original sharpness..."   -Replace "This reforged blade will be <R>unbreakable<W>.<N>Ohh... Don't look at me like that.<N>Surely I would not dare conning you<N>with a flimsy weapon."
         SetMessage -ID "0C51" -Text "Now keep in mind that after<N>you've used this <R>100 times<W>, the<N>blade will lose its edge and will<N>return to its <R>original sharpness<W>." -Replace "You do not need to worry for it, as<N>this blade is <R>unbreakable<W>. What!?<N>You do not believe me? Go see it<N>for yourself then in action."
         SetMessage -ID "1785" -Text "Use it up to <R>100 times<W>."                                                                                                                     -Replace "Use it as much you want."
+    
+    if ( (IsIndex -Elem $Redux.Features.OcarinaIcons.selectedIndex -Text "Enabled") -or (IsIndex -Elem $Redux.Features.OcarinaIcons.selectedIndex -Text "Enabled with Original Icon") )   { SetMessage -ID "1726" -Text "<C Button><N>Buttons. Press" -Replace "<C Button>.<N>Press"; SetMessage -ID "171C"; SetMessage -ID "1727" }    
     }
 
     if (IsChecked $Redux.Text.Restore -Lang 1) {
@@ -1460,8 +1462,6 @@ function ByteTextOptions() {
         SetMessage     -ID "1727" -Replace "<R>Zora Guitar<N><W>A soulful guitar from a Zora band.<N>It's overflowing with good vibes.<N><New Box II>Play it with <A Button> and the four <C Button><N>Buttons. Press <B Button> to stop."
         SetMessageIcon -ID "1727" -Hex "44"
     }
-
-    if ( (IsIndex -Elem $Redux.Features.OcarinaIcons.selectedIndex -Text "Enabled") -or (IsIndex -Elem $Redux.Features.OcarinaIcons.selectedIndex -Text "Enabled with Original Icon") )   { SetMessage -ID "1726" -Text "<C Button><N>Buttons. Press" -Replace "<C Button>.<N>Press"; SetMessage -ID "171C"; SetMessage -ID "1727" }
 
     if (IsChecked $Redux.Text.Instant) {
         WriteToConsole "Starting Generating Instant Text"
