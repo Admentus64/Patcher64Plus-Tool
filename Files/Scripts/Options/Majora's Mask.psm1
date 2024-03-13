@@ -1273,7 +1273,7 @@ function ByteTextOptions() {
         SetMessage -ID "0043" -Text "Press <C><C Button> <W>to look through it" -Replace "Use <C><C Button> <W>to look through it"
 	SetMessage -ID "0059" -Text "then press that <N><C><C Button> <W>Button to use it." -Replace "then use <N><C><C Button><W>."
 
-        if (IsChecked $Redux.Features.OcarinaIcons) { SetMessage -ID "1726" -Text "<C Button><N>Buttons. Press" -Replace "<C Button>.<N>Press"; SetMessage -ID "171C"; SetMessage -ID "1727" }
+	if ( (IsIndex -Elem $Redux.Features.OcarinaIcons.selectedIndex -Text "Enabled") -or (IsIndex -Elem $Redux.Features.OcarinaIcons.selectedIndex -Text "Enabled with Original Icon") )   { SetMessage -ID "1726" -Text "<C Button><N>Buttons. Press" -Replace "<C Button>.<N>Press"; SetMessage -ID "171C"; SetMessage -ID "1727" }
     }
 
     if (IsChecked $Redux.Equipment.PermanentRazorSword -Lang 1) {
