@@ -1,3 +1,6 @@
+v23.3.1
+- Updated New Master Quest to v2.7
+
 v23.3.0
 - Updated Redux for MM with new options and fixes
 - Updated Fierce Deity Anywhere for MM option with usable Sword Beam attack against most enemies
