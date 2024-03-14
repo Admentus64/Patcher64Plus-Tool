@@ -606,20 +606,28 @@ function EnablePatchButtons() {
 #==================================================================================================================================================================================================================================================================
 function GamePath_Finish([object]$TextBox, [string]$Path) {
     
-    $file = Get-Item -LiteralPath $Path
-    if ($file -eq $GamePath) { return }
+    $file = $null
+    if (TestFile $Path)        { $file = Get-Item -LiteralPath $Path }
+    if ($file -eq $GamePath)   { return }
 
-    if ($Settings.Core.PerGameFile -eq $True) { $Settings.Paths[$GameType.mode] = $Path }
-    $global:GamePath       = $file
-    $TextBox.Text          = $GamePath
-    $global:GameIsSelected = $InputPaths.ClearGameButton.Enabled = $True
+    $global:GameIsSelected = $InputPaths.ClearGameButton.Enabled = ($file -ne $null)
+    $global:GamePath       = if ($file -eq $null) { $null } else { $file }
+    if ($Settings.Core.PerGameFile -eq $True) { $Settings.Paths[$GameType.mode] = if ($file -eq $null) { $null } else { $path } }
+
     EnablePatchButtons
     CalculateHashSum
-    WriteToConsole ("Game Path:      " + $GamePath)
 
-    if     ($file.Extension -eq ".wad" -and !$IsWiiVC) { SetWiiVCMode $True  }
-    elseif ($file.Extension -ne ".wad" -and  $IsWiiVC) { SetWiiVCMode $False }
-
+    if ($file -ne $null) {
+        $TextBox.Text = $GamePath
+        WriteToConsole ("Game Path:      " + $GamePath)
+        if     ($file.Extension -eq ".wad" -and !$IsWiiVC)   { SetWiiVCMode $True  }
+        elseif ($file.Extension -ne ".wad" -and  $IsWiiVC)   { SetWiiVCMode $False }
+    }
+    else {
+        SetWiiVCMode $False
+        $InputPaths.GameTextBox.Text = "Select your ROM or Wii VC WAD file..."
+    }
+    
 }
 
 
@@ -627,7 +635,11 @@ function GamePath_Finish([object]$TextBox, [string]$Path) {
 #==================================================================================================================================================================================================================================================================
 function CalculateHashSum() {
     
-    if ($VerificationInfo -eq $null -or $GamePath -eq $null) { return }
+    if ($VerificationInfo -eq $null -or $GamePath -eq $null) {
+        $VerificationInfo.HashField.Text = ""
+        $VerificationInfo.GameField.Text = $VerificationInfo.RegionField.Text = $VerificationInfo.RevField.Text = $VerificationInfo.SupportField.Text = "No ROM provided for validation"
+        return
+    }
 
     if (!$IsWiiVC) { # Calculate checksum if Native Mode
         $VerificationInfo.HashField.Text = (Get-FileHash -Algorithm MD5 -LiteralPath $GamePath).Hash # Update hash
@@ -646,7 +658,10 @@ function CalculateHashSum() {
             }
         }
     }
-    else { $VerificationInfo.HashField.Text = ""; $VerificationInfo.GameField.Text = $VerificationInfo.RegionField.Text = $VerificationInfo.RevField.Text = $VerificationInfo.SupportField.Text = "No validation for WAD files" }
+    else {
+        $VerificationInfo.HashField.Text = ""
+        $VerificationInfo.GameField.Text = $VerificationInfo.RegionField.Text = $VerificationInfo.RevField.Text = $VerificationInfo.SupportField.Text = "No validation for WAD files"
+    }
 
 }
 

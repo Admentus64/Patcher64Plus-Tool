@@ -1273,7 +1273,6 @@ function ByteTextOptions() {
 
         SetMessage -ID "0043" -Text "Press <C><C Button> <W>to look through it" -Replace "Use <C><C Button> <W>to look through it"
         SetMessage -ID "0059" -Text "then press that <N><C><C Button> <W>Button to use it." -Replace "then use <N><C><C Button><W>."
-        if (IsDefault $Redux.Features.OcarinaIcons -Not) { SetMessage -ID "1726" -Text "<C Button><N>Buttons. Press" -Replace "<C Button>.<N>Press"; SetMessage -ID "171C"; SetMessage -ID "1727" } 
     }
 
     if (IsChecked $Redux.Equipment.PermanentRazorSword -Lang 1) {
@@ -1440,11 +1439,11 @@ function ByteTextOptions() {
     if (IsChecked $Redux.Capacity.EnableAmmo -Lang 1) {
         SetMessage -ID "0019" -ASCII -Text "10" -Replace $Redux.Capacity.DekuSticks1.text
         SetMessage -ID "178A" -ASCII -Text "30" -Replace $Redux.Capacity.Quiver1.text
-        SetMessage -ID "178B" -ASCII -Text "40" -Replace $Redux.Capacity.Quiver2.text;  SetMessage -ID "0023"
-        SetMessage -ID "178C" -ASCII -Text "50" -Replace $Redux.Capacity.Quiver3.text;  SetMessage -ID "0024"
+        SetMessage -ID "178B" -ASCII -Text "40" -Replace $Redux.Capacity.Quiver2.text;  SetMessage -ID "0023" -ASCII -Text "40" -Replace $Redux.Capacity.Quiver2.text;
+        SetMessage -ID "178C" -ASCII -Text "50" -Replace $Redux.Capacity.Quiver3.text;  SetMessage -ID "0024" -ASCII -Text "50" -Replace $Redux.Capacity.Quiver3.text;
         SetMessage -ID "178D" -ASCII -Text "20" -Replace $Redux.Capacity.BombBag1.text
-        SetMessage -ID "178E" -ASCII -Text "30" -Replace $Redux.Capacity.BombBag2.text; SetMessage -ID "001C"
-        SetMessage -ID "178F" -ASCII -Text "40" -Replace $Redux.Capacity.BombBag3.text; SetMessage -ID "001D"
+        SetMessage -ID "178E" -ASCII -Text "30" -Replace $Redux.Capacity.BombBag2.text; SetMessage -ID "001C" -ASCII -Text "30" -Replace $Redux.Capacity.BombBag2.text;
+        SetMessage -ID "178F" -ASCII -Text "40" -Replace $Redux.Capacity.BombBag3.text; SetMessage -ID "001D" -ASCII -Text "40" -Replace $Redux.Capacity.BombBag3.text;
     }
 
     if (IsChecked $Redux.Capacity.EnableWallet -Lang 1) {
@@ -1453,13 +1452,16 @@ function ByteTextOptions() {
     }
 
     if ( (IsDefault $Redux.Features.OcarinaIcons -Not) -and $Patches.Redux.Checked -and $LanguagePatch.code -eq "en") {
-        SetMessage     -ID "1726" -Replace "<R>Deku Pipes<N><W>Loud pipes that sprout forth from<N>your Deku Scrub body.<N><New Box II>Play it with <A Button> and the four <C Button><N>Buttons. Press <B Button> to stop."
+        if (IsChecked $Redux.UI.GCScheme)   { SetMessage -ID "1726" -Replace "<R>Deku Pipes<N><W>Loud pipes that sprout forth from<N>your Deku Scrub body.<N><New Box II>Play it with <A Button> and the four <C><C Button><W> directions.<N>Press <B Button> to stop." }
+        else                                { SetMessage -ID "1726" -Replace "<R>Deku Pipes<N><W>Loud pipes that sprout forth from<N>your Deku Scrub body.<N><New Box II>Play it with <A Button> and the four <C><C Button><W><N>Buttons. Press <B Button> to stop."    }
         SetMessageIcon -ID "1726" -Hex "70"
         
-        SetMessage     -ID "171C" -Replace "<R>Goron Drums<N><W>The traditional instrument of the<N>Goron tribe.<N><New Box II>Play it with <A Button> and the four <C Button><N>Buttons. Press <B Button> to stop."
+        if (IsChecked $Redux.UI.GCScheme)   { SetMessage -ID "171C" -Replace "<R>Goron Drums<N><W>The traditional instrument of the<N>Goron tribe.<N><New Box II>Play it with <A Button> and the four <C><C Button><W> directions.<N>Press <B Button> to stop." }
+        else                                { SetMessage -ID "171C" -Replace "<R>Goron Drums<N><W>The traditional instrument of the<N>Goron tribe.<N><New Box II>Play it with <A Button> and the four <C><C Button><W><N>Buttons. Press <B Button> to stop."    }
         SetMessageIcon -ID "171C" -Hex "64"
         
-        SetMessage     -ID "1727" -Replace "<R>Zora Guitar<N><W>A soulful guitar from a Zora band.<N>It's overflowing with good vibes.<N><New Box II>Play it with <A Button> and the four <C Button><N>Buttons. Press <B Button> to stop."
+        if (IsChecked $Redux.UI.GCScheme)   { SetMessage -ID "1727" -Replace "<R>Zora Guitar<N><W>A soulful guitar from a Zora band.<N>It's overflowing with good vibes.<N><New Box II>Play it with <A Button> and the four <C><C Button><W> directions.<N>Press <B Button> to stop." }
+        else                                { SetMessage -ID "1727" -Replace "<R>Zora Guitar<N><W>A soulful guitar from a Zora band.<N>It's overflowing with good vibes.<N><New Box II>Play it with <A Button> and the four <C><C Button><W><N>Buttons. Press <B Button> to stop."    }
         SetMessageIcon -ID "1727" -Hex "44"
     }
 
