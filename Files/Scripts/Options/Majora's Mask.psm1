@@ -489,12 +489,13 @@ function ByteOptions() {
     if (IsIndex -Elem $Redux.Hero.MonsterHP -Index 3 -Not) { # Monsters
         if (IsIndex -Elem $Redux.Hero.MonsterHP)   { $multi = 0   }
         else                                       { [float]$multi = [float]$Redux.Hero.MiniBossHP.text.split('x')[0] }
+        if ( (StrLike -Str $GamePatch.settings -Val "Master Quest") -and $multi -gt 4) { $multi2 = 4 } else { $multi2 = $multi }
         
-        MultiplyBytes -Offset "D4E07F" -Factor $multi; MultiplyBytes -Offset "E0790F" -Factor $multi; MultiplyBytes -Offset "F94A00" -Factor $multi # ReDead / Gibdo, Stalchild, Poe
-        MultiplyBytes -Offset "D2F07C" -Factor $multi; MultiplyBytes -Offset "D6CFB8" -Factor $multi; MultiplyBytes -Offset "E59933" -Factor $multi # Deku Baba, Wilted Deku Baba, Bio Deku Baba
-        MultiplyBytes -Offset "FC3A5F" -Factor $multi; MultiplyBytes -Offset "EDBA17" -Factor $multi; MultiplyBytes -Offset "E9BD87" -Factor $multi # Deep Python, Skullfish, Desbreko
-        MultiplyBytes -Offset "D47754" -Factor $multi; MultiplyBytes -Offset "D76388" -Factor $multi; MultiplyBytes -Offset "D74167" -Factor $multi # Beamos, Like Like (Weak), Like Like (Strong)
-        MultiplyBytes -Offset "CF05CC" -Factor $multi; MultiplyBytes -Offset "D4DA9C" -Factor $multi; MultiplyBytes -Offset "D4BCAB" -Factor $multi # Wallmaster, Floormaster, Mini Floormaster
+        MultiplyBytes -Offset "D4E07F" -Factor $multi; MultiplyBytes -Offset "E0790F" -Factor $multi2; MultiplyBytes -Offset "F94A00" -Factor $multi # ReDead / Gibdo, Stalchild, Poe
+        MultiplyBytes -Offset "D2F07C" -Factor $multi; MultiplyBytes -Offset "D6CFB8" -Factor $multi;  MultiplyBytes -Offset "E59933" -Factor $multi # Deku Baba, Wilted Deku Baba, Bio Deku Baba
+        MultiplyBytes -Offset "FC3A5F" -Factor $multi; MultiplyBytes -Offset "EDBA17" -Factor $multi;  MultiplyBytes -Offset "E9BD87" -Factor $multi # Deep Python, Skullfish, Desbreko
+        MultiplyBytes -Offset "D47754" -Factor $multi; MultiplyBytes -Offset "D76388" -Factor $multi;  MultiplyBytes -Offset "D74167" -Factor $multi # Beamos, Like Like (Weak), Like Like (Strong)
+        MultiplyBytes -Offset "CF05CC" -Factor $multi; MultiplyBytes -Offset "D4DA9C" -Factor $multi;  MultiplyBytes -Offset "D4BCAB" -Factor $multi # Wallmaster, Floormaster, Mini Floormaster
         MultiplyBytes -Offset "D13750" -Factor $multi; MultiplyBytes -Offset "D1375C" -Factor $multi                                                # Peahat, Peahat Larva
         MultiplyBytes -Offset "D55BDC" -Factor $multi; MultiplyBytes -Offset "D55C08" -Factor $multi                                                # Skullwalltula, Golden Skullwalltula
         MultiplyBytes -Offset "CF3514" -Factor $multi; MultiplyBytes -Offset "CF0A4B" -Factor $multi                                                # Dodongo (Small), Dodongo (Big)
