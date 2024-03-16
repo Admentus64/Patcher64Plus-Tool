@@ -1030,7 +1030,7 @@ function ByteReduxOptions() {
     if (IsChecked     $Redux.Features.ItemsOnB)                     { ChangeBytes -Offset $Symbols.CFG_B_BUTTON_ITEM_ENABLED -Values "01"                                       }
     if (IsChecked     $Redux.Features.GearSwap)                     { ChangeBytes -Offset $Symbols.CFG_SWAP_ENABLED          -Values "01"                                       }
     if (IsChecked     $Redux.Features.SkipGuard)                    { ChangeBytes -Offset $Symbols.CFG_SKIP_GUARD_ENABLED    -Values "01"                                       }
-    if (IsChecked     $Redux.Default.InverseAim)                    { ChangeBytes -Offset $Symbols.CFG_DEFAULT_INVERSE_AIM   -Values "01"                                       }
+    if (IsChecked     $Redux.Features.InverseAim)                   { ChangeBytes -Offset $Symbols.CFG_INVERSE_AIM           -Values "01"                                       }
     
 
 

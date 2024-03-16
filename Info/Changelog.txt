@@ -3,6 +3,7 @@ v23.3.2
 - Fixed issue with the Game Path not properly resetting when the path is invalid
 - Fixed issue with Text Box changes for Enable Ammo for MM not recognizing
 - Fixed issue with GC Scheme option for the Ocarina Icons option text boxes for MM
+- Fixed Inverse Aim option for MM
 
 v23.3.1
 - Updated New Master Quest to v2.7
