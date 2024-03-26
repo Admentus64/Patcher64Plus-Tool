@@ -3403,7 +3403,7 @@ function ReplaceTransitionActor($Index, $ID, $Name, $NewID, $New, $X, $Y, $Z, $Y
 
         if ($Compare -is [string]) {
             $comp = $Compare -split '(..)' -ne '' | foreach { [Convert]::ToByte($_, 0x10) }
-            if ($SceneEditor.SceneArray[$offset+14] -ne $comp[0] -and $SceneEditor.SceneArray[$offset+15] -ne $comp[1]) { return $False }
+            if ($SceneEditor.SceneArray[$offset+14] -ne $comp[0] -or $SceneEditor.SceneArray[$offset+15] -ne $comp[1]) { return $False }
         }
     }
     elseif ($Name -is [string] -or $ID -is [string]) {

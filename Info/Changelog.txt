@@ -1,5 +1,6 @@
 v23.3.3
 - Fixed crash with MM Redux on Wii VC
+- Fixed issue with Water Temple locked door
 
 v23.3.2
 - Changed Stalchild to have a maximum of 4x HP for MM Master Quest
