@@ -263,6 +263,7 @@ if (IsRestrictedFolder $Paths.FullBase) {
 
 # Critical info
 WriteToConsole ("OS:             " + $Patcher.OS + " (" + $Patcher.Bit + ")")
+WriteToConsole ("PowerShell:     " + $PSVersionTable.PSVersion)
 WriteToConsole ("Version:        " + $Patcher.Version)
 WriteToConsole ("Version Date:   " + $Patcher.Date)
 WriteToConsole ("Version Hotfix: #" + $Patcher.Hotfix)

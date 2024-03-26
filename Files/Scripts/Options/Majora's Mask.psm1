@@ -975,7 +975,7 @@ function ByteReduxOptions() {
         if (IsChecked $Redux.DPad.Hide)          { ChangeBytes -Offset (AddToOffset $Symbols.DPAD_CONFIG -Add "18") -Values "0100" }
         if (IsChecked $Redux.DPad.LayoutLeft)    { ChangeBytes -Offset (AddToOffset $Symbols.DPAD_CONFIG -Add "18") -Values "0101" }
         if (IsChecked $Redux.DPad.LayoutRight)   { ChangeBytes -Offset (AddToOffset $Symbols.DPAD_CONFIG -Add "18") -Values "0102" }
-       #ChangeBytes -Offset @("BACB4C", "BACB58", "BACB64", "CAA490", "CAA4DC", "CAA524", "CAA2EC") -Values "1000" # Don't toggle off Lens of Truth or unequip items/masks if not on C button 
+        ChangeBytes -Offset @("BACB4C", "BACB58", "BACB64", "CAA490", "CAA4DC", "CAA524", "CAA2EC") -Values "1000" # Don't toggle off Lens of Truth or unequip items/masks if not on C button 
     }
 
 

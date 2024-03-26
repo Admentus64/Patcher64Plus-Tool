@@ -1,3 +1,6 @@
+v23.3.3
+- Fixed crash with MM Redux on Wii VC
+
 v23.3.2
 - Changed Stalchild to have a maximum of 4x HP for MM Master Quest
 - Fixed issue with the Game Path not properly resetting when the path is invalid
