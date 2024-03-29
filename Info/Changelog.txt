@@ -1,4 +1,5 @@
 v23.3.3
+- Added new HUD button option for OoT/MM
 - Fixed crash with MM Redux on Wii VC
 - Fixed issue with Water Temple locked door
 
