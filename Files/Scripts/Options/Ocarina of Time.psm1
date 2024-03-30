@@ -1953,7 +1953,7 @@ function ByteSceneOptions() {
         for ($i=0; $i-le 12; $i++)   { PrepareAndSetSceneSettings -Scene "Kokiri Forest"        -Map 0 -Header $i -Skybox 1 }; SaveAndPatchLoadedScene
         for ($i=0; $i-le 2;  $i++)   { PrepareAndSetSceneSettings -Scene "Lost Woods"           -Map 0 -Header $i -Skybox 1 }; SaveAndPatchLoadedScene
         for ($i=0; $i-le 3;  $i++)   { PrepareAndSetSceneSettings -Scene "Sacred Forest Meadow" -Map 0 -Header $i -Skybox 1 }; SaveAndPatchLoadedScene
-        for ($i=0; $i-le 2;  $i++)   { PrepareAndSetSceneSettings -Scene "Zora Fountain"        -Map 0 -Header $i -Skybox 1 }; SaveAndPatchLoadedScene
+        for ($i=0; $i-le 2;  $i++)   { PrepareAndSetSceneSettings -Scene "Zora's Fountain"      -Map 0 -Header $i -Skybox 1 }; SaveAndPatchLoadedScene
                                        PrepareAndSetSceneSettings -Scene "Haunted Wasteland"    -Map 0 -Header 0  -Skybox 3;   SaveAndPatchLoadedScene
     }
 
@@ -2785,7 +2785,7 @@ function CreateTabMain() {
     CreateReduxCheckBox -Name "Graves"                    -Base 4 -Safe  -Text "Graveyard Graves"          -Info "The grave holes in Kakariko Graveyard behave as in the Rev 1 revision`nThe edges no longer force Link to grab or jump over them when trying to enter" -Credits "Admentus"
     CreateReduxCheckBox -Name "TimeDoor"                  -Base 4 -Safe  -Text "Fix Door of Time"          -Info "Fix the positioning of the Temple of Time door, so you can not skip past it`nAlso fixes a bug where the door doesn't open on your first visit"        -Credits "Admentus & Randomizer"
     $text = "Fix issues in Dodogono's Cavern, Water Temple and Spirit Temple`n`n- Gossip Stones that won't spawn fairies (Dodongo's Cavern)`n- Unreachable hookshot spot (Raging Water Cavern)`n- Three out of bounds pots (Raging Water Cavern)`n- Restore two Keese (Central Hall)`n- Fix a broken effect with the mirrors (Spirit Temple)"
-    CreateReduxCheckBox -Name "Dungeons"                  -Base 4 -Safe  -Text "Fix Dungeons"              -Info ($text + "`n- Navi targeting Spots in Fire Temple, Ice Cavern, Shadow Temple and Spirit Temple" )                                                      -Credits "Admentus, ZethN64, Sakura, Frostclaw, Steve(ToCoool) & GhostlyDark (ported)"
+    CreateReduxCheckBox -Name "Dungeons"                  -Base 4 -Safe  -Text "Fix Dungeons"              -Info ($text + "`n- Navi targeting Spots in Fire Temple, Ice Cavern, Shadow Temple and Spirit Temple" )                               -Exclude "Child Quest" -Credits "Admentus, ZethN64, Sakura, Frostclaw, Steve(ToCoool) & GhostlyDark (ported)"
     CreateReduxCheckBox -Name "GreatFairyTextBoxes"       -Base 4 -Safe  -Text "Fix Great Fairy Textboxes" -Info 'Fix the broken textboxes outside the Great Fairy entrances in Death Mountain Crater and Desert Colossus'                                              -Credits "Admentus"
 
 

@@ -1,3 +1,7 @@
+v23.3.4
+- Removed the Dungeon Fixes option for OoT Child Quest
+- Fixed Zora's Fountain skybox with the Overworld Skyboxes option for OoT
+
 v23.3.3
 - Added new HUD button option for OoT/MM
 - Fixed crash with MM Redux on Wii VC
