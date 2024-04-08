@@ -1,5 +1,6 @@
 v23.3.5
-- Updated New Master Quest to v2.8.
+- Updated New Master Quest to v2.8
+- Fixed issue with Right-Side D-Pad not working for MM Redux
 
 v23.3.4
 - Removed the Dungeon Fixes option for OoT Child Quest
