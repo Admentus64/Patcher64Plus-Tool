@@ -39,25 +39,26 @@ If you use a 32-bit machine (x86) make sure to install only the _wine32_ option 
 
 **NOTE #2:** If you get some window prompts during the installation of the `winetricks` packages, like `dotnet452` or `mono210`, please refer to the [Possible Errors](#possible-errors) section of the Tutorial.
 
+**NOTE #3:** For Patcher64+ Tool, we will create a specific Wine prefix exclusive for the application, so our installation of .NET Framework 4.5.2 only affects Patcher and Patcher alone, without modifying any other Wine applications that the user might have already installed in their system.
+
 * **Ubuntu / Debian** (or distros with _Aptitude_ as package manager)
     ```
     $ sudo apt update
     $ sudo apt install wine32 wine64 winetricks
-    $ winetricks dotnet452 mono210
     ```
+    **NOTE:** In the case of Ubuntu or Debian (or other aptitude based distros), it seems like apt downloads a really old version of Wine (6.0). For Patcher64+ to run properly, you'd need a higher version or else its Kernel.dll will fail. For this case, I recommend following this tutorial to install a more recent and compatible version of Wine:
+    https://www.omgubuntu.co.uk/2023/01/install-wine-on-ubuntu
 
 * **Gentoo** (or distros with _Portage_ as package manager)
     ```
     $ sudo emerge --sync
     $ sudo emerge wine-vanilla winetricks wine-mono
-    $ winetricks dotnet452
     ```
 
 * **Arch Linux** (or distros with _pacman_ as package manager)
     ```
     $ sudo pacman -Sy
     $ sudo pacman -S wine wine-mono winetricks
-    $ winetricks dotnet452
     ```
 * **MacOS**
 
@@ -99,13 +100,19 @@ After this, we need to make sure that the Wine Prefix is set to a Windows versio
 
 If Windows 7 was already set as the version, you can leave it like that and close the window, then proceed to the next step of [downloading PowerShell](#download-powershell-x86).
 
-However, if there was another Windows version set, like Windows XP or Vista for example, we need to change the version to "Windows 7", and then run the `winetricks` packages installations again from Terminal (the packages being `dotnet452` and/or `mono210` depending on our distribution/OS).
+However, if there was another Windows version set, like Windows XP or Vista for example, we need to change the version to "Windows 7", and then run the `winetricks` package installations again from Terminal (the package being `dotnet452`).
+
+After confirming that the Windows version is indeed Windows 7, we will continue to install .NET Framework 4.5.2 under the Wine installation and the custom prefix we made for it:
+
+    ```
+    $ env WINEPREFIX=~/.wine-p64 winetricks dotnet452 win7
+    ```
 
 -----------------
 
 ## Download PowerShell x86
 
-After installing both Wine & Winetricks, and confirm that they're running, we can continue with PowerShell.
+After installing Wine, Winetricks and .NET Framework 4.5.2, and we confirm that they're running, we can continue with PowerShell.
 
 Enter the [PowerShell's releases page on GitHUb, and download version 7.3.6](https://github.com/PowerShell/PowerShell/releases/tag/v7.3.6) (as 7.3.6 was the most recent version known to work for Patcher64 with Wine). Make sure to download exactly the .zip that ends with win-x86, like [PowerShell-7.3.6-win-x86.zip](https://github.com/PowerShell/PowerShell/releases/download/v7.3.6/PowerShell-7.3.6-win-x86.zip), downloading any other version won't work for this purpose.
 
@@ -113,7 +120,7 @@ After downloading the x86 zip, create a folder called "PowerShell" anywhere in y
 
 **NOTE:** The "user" in the path **_should be changed to your username_** in your Linux/Mac OS!
 
-`/home/user/.wine/drive_c/Program Files (x86)/PowerShell/`
+`/home/user/.wine-p64/drive_c/Program Files (x86)/PowerShell/`
 
 Inside the PowerShell folder you should have all of the files for PowerShell to run, including the `pwsh.exe` executable, which is the one we'll run with Wine later on. For now, we'll leave that folder where it's at, and proceed with downloading Patcher64+ Tool.
 
@@ -129,7 +136,7 @@ The downloaded package should be a .7z file called "Patcher64+ Tool.7z". As with
 
 Once all the contents have been extracted, we will move the "Patcher64+ Tool" folder into the same "Program Files (x86)" directory that the PowerShell folder resides in, with the final path /directory like this:
 
-`/home/user/.wine/drive_c/Program Files (x86)/Patcher64+ Tool/`
+`/home/user/.wine-p64/drive_c/Program Files (x86)/Patcher64+ Tool/`
 
 **NOTE:** Once again, remember that the "user" in the path **_should be changed to your username_** in your Linux/Mac OS!
 
@@ -141,7 +148,7 @@ Now that we have both PowerShell and Patcher64+ Tool downloaded and in their res
 
 Open Terminal one again, and type in the following command:
 
-	$ WINEDEBUG=-all wine "/home/user/.wine/drive_c/Program Files (x86)/PowerShell/pwsh.exe" "/home/user/.wine/drive_c/Program Files (x86)/Patcher64+ Tool/Patcher64+ Tool.ps1"
+	$ env WINEPREFIX=~/.wine-p64 WINEDEBUG=-all wine "/home/user/.wine-p64/drive_c/Program Files (x86)/PowerShell/pwsh.exe" "/home/user/.wine-p64/drive_c/Program Files (x86)/Patcher64+ Tool/Patcher64+ Tool.ps1"
 
 After running the command, you should start seeing the log information for Patcher64+ Tool in the terminal being registered, and after a few seconds, you should be greeted with this:
 
@@ -165,7 +172,7 @@ We can start by creating a simple bash script with the name `patcher64.sh`, whic
 
     #! /bin/bash
 
-    WINEDEBUG=-all wine "/home/user/.wine/drive_c/Program Files (x86)/PowerShell/pwsh.exe" "/home/user/.wine/drive_c/Program Files (x86)/Patcher64+ Tool/Patcher64+ Tool.ps1"
+    WINEDEBUG=-all wine "/home/user/.wine-p64/drive_c/Program Files (x86)/PowerShell/pwsh.exe" "/home/user/.wine-p64/drive_c/Program Files (x86)/Patcher64+ Tool/Patcher64+ Tool.ps1"
 
 After creating the `patcher64.sh` script, save it and then run the following command on Terminal to give it executable permissions:
 
@@ -190,7 +197,7 @@ Given how we are basically running Patcher64 through several layers, some errors
 -----------------
 * _**Winetricks installations errors**_
 
-    When installing either `dotnet452` or `mono210`, it's possible that you might get the following message:
+    When installing `dotnet452`, it's possible that you might get the following message:
 
 <p align="center">
 <img src="https://i.imgur.com/3gTjY5z.png" alt="Winetricks error">
@@ -214,13 +221,13 @@ In these cases, you can simply close the prompted message and the compilation of
 
     In case of a failure when opening Patcher64, the most likely culprit is in PowerShell itself, and not Patcher64. In this dire case, if running the wine command through Terminal listed in [Running Patcher64+ Tool with Wine+PowerShell](#running-patcher64+-tool-with-wine+powershell) doesn't work, we need to re-enable the debugging options for Wine by removing the `WINEDEBUG=-all` portion of the command:
     ```
-    $ wine "/home/user/.wine/drive_c/Program Files (x86)/PowerShell/pwsh.exe" "/home/user/.wine/drive_c/Program Files (x86)/Patcher64+ Tool/Patcher64+ Tool.ps1"
+    $ wine "/home/user/.wine-p64/drive_c/Program Files (x86)/PowerShell/pwsh.exe" "/home/user/.wine-p64/drive_c/Program Files (x86)/Patcher64+ Tool/Patcher64+ Tool.ps1"
     ```
 
     After doing this, the terminal should now output a much more detailed information on what's going on when trying to run PowerShell. The output might be a bit overwhelming, but from the bunch of text being printed out, the error for launching the application will most likely appear within the very first dozen or so lines after the command runs. We might be looking for something like this to find the error:
     ```
-    Unhandled exception. System.IO.FileNotFoundException: Could not load file or assembly 'Z:\home\user\.wine\drive_c\Program Files (x86)\PowerShell\System.Runtime.dll'. Module not found.
-    File name: 'Z:\home\user\.wine\drive_c\Program Files (x86)\PowerShell\System.Runtime.dll'
+    Unhandled exception. System.IO.FileNotFoundException: Could not load file or assembly 'Z:\home\user\.wine-p64\drive_c\Program Files (x86)\PowerShell\System.Runtime.dll'. Module not found.
+    File name: 'Z:\home\user\.wine-p64\drive_c\Program Files (x86)\PowerShell\System.Runtime.dll'
     wine: Unhandled exception 0xe0434352 in thread 24 at address 7B0129D6 (thread 0024), starting debugger...
     ```
 
@@ -232,11 +239,11 @@ In these cases, you can simply close the prompted message and the compilation of
 
     1. Check which version of .NET has been installed on your system  with `winetricks uninstaller`. You should see "Microsoft .NET Framework 4.5.2" in the list of installed applications, if not, install .NET 4.5.2 by running `winetricks dotnet452` from terminal.
 
-    1. If you have done the previous 2 steps and are still getting the error of the DLL file, you have to uninstall .NET 4.5.2 by using `winetricks uninstaller`, and then make sure to delete ANYTHING related to .NET from within the .wine folder. This includes the following folders that you'd need to remove (don't forget to rename the "user" in these paths to your username):
+    1. If you have done the previous 2 steps and are still getting the error of the DLL file, you have to uninstall .NET 4.5.2 by using `winetricks uninstaller`, and then make sure to delete ANYTHING related to .NET from within the .wine-p64 folder. This includes the following folders that you'd need to remove (don't forget to rename the "user" in these paths to your username):
     ```
-    /home/user/.wine/drive_c/ProgramData/NetFramework/
-    /home/user/.wine/drive_c/Program Files (x86)/Microsoft.NET/
-    /home/user/.wine/drive_c/windows/Microsoft.NET/
+    /home/user/.wine-p64/drive_c/ProgramData/NetFramework/
+    /home/user/.wine-p64/drive_c/Program Files (x86)/Microsoft.NET/
+    /home/user/.wine-p64/drive_c/windows/Microsoft.NET/
     ```
     After deleting these folders and making sure .NET 4.5.2 is NOT installed, attempt to run Patcher64 once again (it might work without .NET, happened once during testing). If it still doesn't launch, reinstall .NET 4.5.2 with `winetricks dotnet452`.
     
