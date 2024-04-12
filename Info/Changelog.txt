@@ -1,3 +1,7 @@
+v23.3.6
+- Added option to fix the N64 logo, like in Rev 1 and newer
+- Updated Smash Remix to v1.5.1
+
 v23.3.5
 - Updated New Master Quest to v2.8
 - Fixed issue with Right-Side D-Pad not working for MM Redux
