@@ -46,6 +46,12 @@ function PatchOptions() {
 
 
 
+    # RESTORE N64 LOGO #
+
+    if (IsChecked $Redux.Restore.N64Logo)                  { ApplyPatch -Patch "Decompressed\Optional\restore_n64_logo.ppf" }
+
+
+
     # SCENES #
 
     if (IsIndex $Redux.MQ.Dungeons -Text "Custom") {
@@ -2762,6 +2768,7 @@ function CreateTabMain() {
     CreateReduxCheckBox -Name "RupeeColors"                  -Text "Correct Rupee Colors"   -Info "Corrects the color palette for the in-game Purple (50) and Golden (200) Rupees`nIn the base game they are closer to pink and orange, this changes them to more closely match their 3D get item models"                                                                     -Credits "GhostlyDark"
     CreateReduxCheckBox -Name "CowNoseRing"                  -Text "Restore Cow Nose Ring"  -Info "Restore the rings in the noses for Cows as seen in the Japanese release"                                                                                                                                                                                                   -Credits "ShadowOne333"
     CreateReduxCheckBox -Name "CenterTextboxCursor"          -Text "Center Textbox Cursor"  -Info "Aligns the textbox cursor to the center of the screen"                                                                                                                                                                                                                     -Credits "BilonFullHDemon"
+    CreateReduxCheckBox -Name "N64Logo"         			-Text "Restore N64 Logo"  		-Info "Fixes the appearance of the N64 intro logo as seen in Rev 1 and newer"                                                                                                                                                                                                                     -Credits "GhostlyDark"
     CreateReduxCheckBox -Name "FireTemple"     -Safe -Base 3 -Text "Censor Fire Temple"     -Info "Censor Fire Temple theme as used in the Rev 2 ROM"                                                                                                                                                                                                                         -Credits "ShadowOne333"
     CreateReduxCheckBox -Name "GerudoTextures" -Safe -Base 2 -Text "Censor Gerudo Textures" -Info "Censor Gerudo symbol textures used in the GameCube / Virtual Console releases`n- Disable the option to uncensor the Gerudo Texture used in the Master Quest dungeons`n- Player model textures such as the Mirror Shield might not get restored for specific custom models" -Credits "GhostlyDark & ShadowOne333"
 
