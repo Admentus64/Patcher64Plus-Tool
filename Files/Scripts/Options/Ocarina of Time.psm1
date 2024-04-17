@@ -524,13 +524,13 @@ function ByteOptions() {
         if (IsIndex -Elem $Redux.Hero.BossHP)   { $multi = 0   }
         else                                    { [float]$multi = [float]$Redux.Hero.BossHP.text.split('x')[0] }
 
-        MultiplyBytes -Offset "C44F2B" -Factor $multi; ChangeBytes -Offset "C486CC" -Values "00000000" # Gohma
-        MultiplyBytes -Offset "D258BB" -Factor $multi; MultiplyBytes  -Offset "D25B0B" -Factor $multi  # Barinade
-        MultiplyBytes -Offset "D64EFB" -Factor $multi; MultiplyBytes  -Offset "D6223F" -Factor $multi  # Twinrova
-        MultiplyBytes -Offset "C3B9FF" -Factor $multi                                                  # King Dodongo
-        MultiplyBytes -Offset "CE6D2F" -Factor $multi                                                  # Volvagia
-        MultiplyBytes -Offset "D3B4A7" -Factor $multi                                                  # Morpha
-        MultiplyBytes -Offset "DAC824" -Factor $multi                                                  # Bongo Bongo
+        MultiplyBytes -Offset "C44F2B" -Factor $multi; ChangeBytes    -Offset "C486CC" -Values "00000000" # Gohma
+        MultiplyBytes -Offset "D258BB" -Factor $multi; MultiplyBytes  -Offset "D25B0B" -Factor $multi     # Barinade
+        MultiplyBytes -Offset "D64EFB" -Factor $multi; MultiplyBytes  -Offset "D6223F" -Factor $multi     # Twinrova
+        MultiplyBytes -Offset "C3B9FF" -Factor $multi                                                     # King Dodongo
+        MultiplyBytes -Offset "CE6D2F" -Factor $multi                                                     # Volvagia
+        MultiplyBytes -Offset "D3B4A7" -Factor $multi                                                     # Morpha
+        MultiplyBytes -Offset "DAC824" -Factor $multi                                                     # Bongo Bongo
 
         if ($multi -gt 3) { $multi = 3 }
 
@@ -624,20 +624,6 @@ function ByteOptions() {
     if (IsDefault $Redux.Magic.DinsFire    -Not)   { ChangeBytes -Offset "BEFC05" -Values (Get8Bit $Redux.Magic.DinsFire.Text)    }
     if (IsDefault $Redux.Magic.FaroresWind -Not)   { ChangeBytes -Offset "BEFC03" -Values (Get8Bit $Redux.Magic.FaroresWind.Text) }
     if (IsDefault $Redux.Magic.NayrusLove  -Not)   { ChangeBytes -Offset "BEFC05" -Values (Get8Bit $Redux.Magic.NayrusLove.Text)  }
-    
-
-
-    # MINIGAMES #
-
-    if (IsChecked $Redux.Minigames.FishSize) {
-        ChangeBytes -Offset "DCBEA8" -Values "3C014248"; ChangeBytes -Offset "DCBF24" -Values "3C014248"                                                  # Adult Fish size requirement
-        ChangeBytes -Offset "DCBF30" -Values "3C014230"; ChangeBytes -Offset "DCBF9C" -Values "3C014230"                                                  # Child Fish size requirement
-    }
-
-    if (IsChecked $Redux.Minigames.FishLoss) {
-        ChangeBytes -Offset "DC87A0" -Values "00000000"; ChangeBytes -Offset "DC87BC" -Values "00000000"; ChangeBytes -Offset "DC87CC" -Values "00000000" # Remove most fish loss branches
-        ChangeBytes -Offset "DC8828" -Values "01A00821"                                                                                                   # Prevent RNG fish loss
-    }
     
     if (IsChecked $Redux.Minigames.Bowling) {
         ChangeBytes -Offset "E2E697" -Values $Redux.Minigames.Bowling1.value; ChangeBytes -Offset "E2E69B" -Values $Redux.Minigames.Bowling2.value; ChangeBytes -Offset "E2E69F" -Values $Redux.Minigames.Bowling3.value
@@ -1550,8 +1536,8 @@ function RevertReduxOptions() {
 
     if (IsRevert $Redux.Speedup.Cutscenes -Item "Opening Door of Time")   { ChangeBytes -Offset "CCE9A4" -Values "3C013F8044813000"                                                                                                                       }
     if (IsRevert $Redux.Hooks.FasterArmosPushing)                         { ChangeBytes -Offset "C97C68" -Values "24C8F800"; ChangeBytes -Offset "C97D68" -Values "3C013F0044814000"; ChangeBytes -Offset "C97E20" -Values "3C013F0044815000"             }
-    if (IsRevert $Redux.Hooks.FishLarger)                                 { ChangeBytes -Offset "DBF428" -Values "C652019C3C0142824481400046009100E644"; ChangeBytes -Offset "DBF484" -Values "E652019C"; ChangeBytes -Offset "DBF4A8" -Values "E648019C" }
-    if (IsRevert $Redux.Hooks.FishBites)                                  { ChangeBytes -Offset "DC7090" -Values "C60A019846025102"                                                                                                                       }
+    if (IsRevert $Redux.Hooks.LessDemandingFishing)                       { ChangeBytes -Offset "DBF428" -Values "C652019C3C0142824481400046009100E644"; ChangeBytes -Offset "DBF484" -Values "E652019C"; ChangeBytes -Offset "DBF4A8" -Values "E648019C" }
+    if (IsRevert $Redux.Hooks.GuaranteedFishing)                          { ChangeBytes -Offset "DC7090" -Values "C60A019846025102"                                                                                                                       }
     if (IsRevert $Redux.Hooks.BlueFireArrow)                              { ChangeBytes -Offset "DB32C8" -Values "240100F0"                                                                                                                               }
     if (IsRevert $Redux.Hooks.RupeeIconColors)                            { ChangeBytes -Offset "AEB764" -Values "3C01C8FF26380008AE9802B0"; ChangeBytes -Offset "AEB778" -Values "34216400"                                                              }
     if (IsRevert $Redux.Hooks.StoneOfAgony)                               { ChangeBytes -Offset "BE4A14" -Values "4602003C";                 ChangeBytes -Offset "BE4A40" -Values "4606203C"; ChangeBytes -Offset "BE4A60" -Values "27BD002003E00008"     }
@@ -1647,6 +1633,16 @@ function ByteReduxOptions() {
     # CODE HOOKS FEATURES #
     
     if (IsChecked $Redux.Hooks.BlueFireArrow) { ChangeBytes -Offset "C230C1" -Values "29"; ChangeBytes -Offset "DB38FE" -Values "EF"; ChangeBytes -Offset "C9F036" -Values "10"; ChangeBytes -Offset "DB391B" -Values "50"; ChangeBytes -Offset "DB3927" -Values "5A" }
+
+    if (IsChecked $Redux.Hooks.LessDemandingFishing) {
+        ChangeBytes -Offset "DCBEA8" -Values "3C014248"; ChangeBytes -Offset "DCBF24" -Values "3C014248"                                                  # Adult Fish size requirement
+        ChangeBytes -Offset "DCBF30" -Values "3C014230"; ChangeBytes -Offset "DCBF9C" -Values "3C014230"                                                  # Child Fish size requirement
+    }
+
+    if (IsChecked $Redux.Hooks.GuaranteedFishing) {
+        ChangeBytes -Offset "DC87A0" -Values "00000000"; ChangeBytes -Offset "DC87BC" -Values "00000000"; ChangeBytes -Offset "DC87CC" -Values "00000000" # Remove most fish loss branches
+        ChangeBytes -Offset "DC8828" -Values "01A00821"                                                                                                   # Prevent RNG fish loss
+    }
 
 
 
@@ -2661,8 +2657,8 @@ function CreatePresets() {
     $OptimalRedux.Add_Click( {
         BoxCheck $Redux.Misc.FastBunnyHood
         BoxCheck $Redux.Misc.BombchuDrops
-        BoxCheck $Redux.Hooks.FishLarger
-        BoxCheck $Redux.Hooks.FishBites
+        BoxCheck $Redux.Hooks.LessDemandingFishing
+        BoxCheck $Redux.Hooks.GuaranteedFishing
         BoxCheck $Redux.Hooks.RupeeIconColors
         BoxCheck $Redux.Hooks.EmptyBombFix
         BoxCheck $Redux.Hooks.ShowFileSelectIcons
@@ -2825,7 +2821,7 @@ function CreateTabRedux() {
     CreateReduxCheckBox -Name "BombchuDrops"  -Exclude ("Dawn", "New Master Quest") -Text "Bombchu Drops"   -Info "Bombchus can now drop from defeated enemies, cutting grass and broken jars"                                                   -Credits "Randomizer"
     CreateReduxCheckBox -Name "BombchuDrops"  -Expose "New Master Quest"   -Checked -Text "Bombchu Drops"   -Info "Bombchus can now drop from defeated enemies, cutting grass and broken jars"                                                   -Credits "Randomizer"
     CreateReduxCheckBox -Name "TycoonWallet"                                        -Text "Tycoon's Wallet" -Info "You get the Tycoon's Wallet from one of the Gold Skulltula reward in addition`nOnly activated if you have the Giant's Wallet" -Credits "Admentus"
-    
+
 
 
     # DEFAULT SETTINGS #
@@ -2865,14 +2861,12 @@ function CreateTabRedux() {
     CreateReduxComboBox -Name "HUDLayout"         -Text "HUD Layout"                -Items @("Ocarina of Time", "Majora's Mask", "Inverted A and B", "Nintendo", "Modern", "GameCube (Original)", "GameCube (Modern)") -Info "Choose from seven different layouts to change the HUD"
     CreateReduxComboBox -Name "DamageTaken"       -Text "Damage Taken"              -Items @("1x Damage", "2x Damage", "4x Damage", "8x Damage", "16x Damage", "32x Damage", "64x Damage")                             -Info "Multiplies taken damage by the chosen factor`nCan be stacked with other damage multiplication options"
     
-    
+
 
     # CODE HOOKS FEATURES #
 
     CreateReduxGroup    -Tag  "Hooks"                                         -Text "Code Hook Features"
     CreateReduxCheckBox -Name "FasterArmosPushing"                   -Checked -Text "Faster Armos Pushing"     -Info "Armos statues are being pushed faster"                                                                  -Credits "Randomizer"
-    CreateReduxCheckBox -Name "FishLarger"           -Base 5                  -Text "Larger Fish"              -Info "Fish are now larger"                                                                                    -Credits "Randomizer"
-    CreateReduxCheckBox -Name "FishBites"            -Base 5                  -Text "Guaranteed Fish Bites"    -Info "Make fish bites guaranteed when the hook of the rod is stable"                                          -Credits "Randomizer"
     CreateReduxCheckBox -Name "RupeeIconColors"                      -Checked -Text "Rupee Icon Colors"        -Info "The color of the Rupees counter icon changes depending on your wallet size"                             -Credits "Randomizer"
     CreateReduxCheckBox -Name "EmptyBombFix"         -Exclude "Dawn" -Checked -Text "Empty Bomb Fix"           -Info "Fixes Empty Bomb Glitch"                                                                                -Credits "Randomizer"
     CreateReduxCheckBox -Name "BlueFireArrow"        -Adult                   -Text "Blue Fire Arrows"         -Info "Ice Arrows have the same attributes as Blue Fire, thus the ability to melt Blue Ice and bombable walls" -Credits "Randomizer"
@@ -2884,6 +2878,8 @@ function CreateTabRedux() {
     CreateReduxCheckBox -Name "WarpSongsSpeedup"     -Base 5                  -Text "Warp Songs Speedup"       -Info "Speedup the warp songs warping sequences"                                                               -Credits "Randomizer"
     CreateReduxCheckBox -Name "GoldGauntletsSpeedup" -Base 5                  -Text "Golden Gauntlets Speedup" -Info "Cutscene speed-up for throwing pillars that require Golden Gauntlets"                                   -Credits "Randomizer"
     CreateReduxCheckBox -Name "TalonSkip"            -Base 3 -Child           -Text "Skip Talon Cutscene"      -Info "Skip the cutscene after waking up Talon before entering the Castle Courtyard"                           -Credits "Randomizer"
+    CreateReduxCheckBox -Name "LessDemandingFishing" -Base 5                  -Text "Less Demanding Fishing"   -Info "Fishing has less demanding size requirements and are found in smaller sizes"                                                       -Credits "Randomizer"
+    CreateReduxCheckBox -Name "GuaranteedFishing"    -Base 5                  -Text "Guaranteed Fishing"       -Info "Make fish bites guaranteed when the hook of the rod is stable and fish will no longer randomly let go when trying to reel them in" -Credits "Randomizer"
 
 
 
@@ -3352,8 +3348,6 @@ function CreateTabDifficulty() {
     CreateReduxGroup    -Tag  "Minigames"       -Base 5 -Text "Minigames"
     CreateReduxCheckBox -Name "Dampe"           -Base 4 -Text "Dampé's Digging"         -Info "Dampé's Digging Game is always first try"                   -Credits "Randomizer"
     CreateReduxCheckBox -Name "SkullKidOcarina" -Base 4 -Text "Skull Kid Ocarina"       -Info "Make each Skull Kid Ocarina Minigame round last shorter"    -Credits "Admentus"
-    CreateReduxCheckBox -Name "FishSize"        -Base 5 -Text "Lower Fish Requirements" -Info "Fishing has less demanding size requirements"               -Credits "Randomizer"
-    CreateReduxCheckBox -Name "FishLoss"        -Base 5 -Text "No Fish RNG Loss"        -Info "Fish no longer randomly let go when trying to reel them in" -Credits "Randomizer"
     
     CreateReduxCheckBox -Name "Bowling"   -Base 5 -Exclude "New Master Quest" -Text "Bombchu Bowling"                                                                                                       -Info "Bombchu Bowling prizes now appear in fixed order instead of random" -Credits "Randomizer"
     CreateReduxComboBox -Name "Bowling1"  -Base 5 -Exclude "New Master Quest" -Text "Bowling Reward #1" -Items ("Piece of Heart", "Bomb Bag", "Purple Rupee", "Bombchus") -Values @("64", "28", "4C", "58") -Info "Set the first reward for the Bombchu Bowling Minigame"              -Credits "Randomizer" -Default 1

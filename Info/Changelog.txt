@@ -1,3 +1,9 @@
+v23.3.7
+- Merged fishing options for OoT
+- Added map toggle delay timer with L for MM Redux
+- Fixed issue with custom Kokiri Tunic color for MM
+- Fixed issue with Long Chest animation for MM Redux
+
 v23.3.6
 - Added option to fix the N64 logo, like in Rev 1 and newer
 - Updated Smash Remix to v1.5.1

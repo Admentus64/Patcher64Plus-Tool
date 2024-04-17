@@ -2096,8 +2096,8 @@ function CreateTabColors() {
     CreateReduxGroup    -Tag  "Colors" -Text "Tunic Colors"
     $Colors = @("Kokiri Green", "Goron Red", "Zora Blue", "Black", "White", "Azure Blue", "Vivid Cyan", "Light Red", "Fuchsia", "Purple", "Majora Purple", "Twitch Purple", "Persian Rose", "Dirty Yellow", "Blush Pink", "Hot Pink", "Rose Pink", "Orange", "Gray", "Gold", "Silver", "Beige", "Teal", "Blood Red", "Blood Orange", "Royal Blue", "Sonic Blue", "NES Green", "Dark Green", "Lumen", "Randomized", "Custom")
     CreateReduxComboBox -Name "KokiriTunic" -Text "Kokiri Tunic" -Length 230 -Items $Colors -Info ("Select a color scheme for the Kokiri Tunic`n" + '"Randomized" fully randomizes the colors each time the patcher is opened') -Credits "Randomizer"
-    $Redux.Colors.KokiriTunicButton = CreateReduxButton -Text "Kokiri Tunic" -Info "Select the color you want for the Kokiri Tunic"                                                                                                 -Credits "Randomizer"
-    $Redux.Colors.KokiriTunicButton.Add_Click({ $Redux.Colors.SetKokiriTunic.ShowDialog(); $Redux.Colors.KokiriTunic.Text = "Custom"; $Redux.Colors.KokiriTunicLabel.BackColor = $Redux.Colors.SetKokiriTunic.Color; $GameSettings["Hex"][$Redux.Colors.SetKokiriTunic] = $Redux.Colors.SetKokiriTunic.Color.Name })
+    $Redux.Colors.KokiriTunicButton = CreateReduxButton -Text "Kokiri Tunic" -Info "Select the color you want for the Kokiri Tunic"                                                                                             -Credits "Randomizer"
+    $Redux.Colors.KokiriTunicButton.Add_Click({ $Redux.Colors.SetKokiriTunic.ShowDialog(); $Redux.Colors.KokiriTunic.Text = "Custom"; $Redux.Colors.KokiriTunicLabel.BackColor = $Redux.Colors.SetKokiriTunic.Color; $GameSettings["Colors"][$Redux.Colors.SetKokiriTunic] = $Redux.Colors.SetKokiriTunic.Color.Name })
     $Redux.Colors.SetKokiriTunic   = CreateColorDialog -Name "SetKokiriTunic" -Color "1E691B" -IsGame -Button $Redux.Colors.KokiriTunicButton
     $Redux.Colors.KokiriTunicLabel = CreateReduxColoredLabel -Link $Redux.Colors.KokiriTunicButton -Color $Redux.Colors.SetKokiriTunic.Color
 
@@ -2271,7 +2271,7 @@ function CreateTabSpeedup() {
     # SKIP #
 
     CreateReduxGroup    -Tag  "Skip" -Text "Skip"
-    CreateReduxComboBox -Name "OpeningSequence" -Text "Opening Sequence"     -Info "The the opening sequence or the first cycle"                -Credits "Admentus" -Items @("Opening Sequence Start", "Clock Town Start", "Skip First Cycle")
+    CreateReduxComboBox -Name "OpeningSequence" -Text "Opening Sequence"     -Info "The the opening sequence or the first cycle"                -Credits "Admentus" -Items @("Default Start", "Clock Town Start", "Skip First Cycle")
     CreateReduxCheckBox -Name "BossCutscenes"   -Text "Skip Boss Cutscenes"  -Info "Skip the cutscenes that play during bosses and mini-bosses" -Credits "Randomizer"
     CreateReduxCheckBox -Name "TatlInterrupts"  -Text "Skip Tatl Interrupts" -Info "Skip the cutscenes that are triggered by Tatl"              -Credits "Randomizer"
 
