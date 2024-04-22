@@ -1,3 +1,6 @@
+v23.3.8
+- Added female voice for MM Child Link (Melee Zelda) by Mickey Saeed
+
 v23.3.7
 - Merged fishing options for OoT
 - Added map toggle delay timer with L for MM Redux

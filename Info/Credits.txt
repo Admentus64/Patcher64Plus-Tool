@@ -80,7 +80,7 @@
 - kr3z
 
 --- Link Voices ---
-- Amara, GhostlyDark, Korey Cryderman, theluigidude2007 & Mickey Devi
+- Amara, GhostlyDark, Korey Cryderman, theluigidude2007 & Mickey Saeed
 - Hylian Modding Models License:	https://github.com/hylian-modding/Z64-CustomPlayerModels
 					GNU General Public License v3.0 (GPL-3.0 License)
 
