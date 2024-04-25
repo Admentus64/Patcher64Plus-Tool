@@ -2018,7 +2018,7 @@ function ByteSceneOptions() {
 
 
 #==============================================================================================================================================================================================
-function WholeTextOptions() {
+function WholeTextOptions([string]$Script, [string]$Table) {
     
     if (IsChecked $Redux.Text.Custom) {
         if ( (TestFile ($Gamefiles.editor + "\message_data_static." + $LanguagePatch.code + ".bin") ) -and (TestFile ($Gamefiles.editor + "\message_data." + $LanguagePatch.code + ".tbl") ) ) {

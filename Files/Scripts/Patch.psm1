@@ -399,7 +399,7 @@ function CheckCommands() {
     
     if (   (CheckCommand "ByteOptions") -or (CheckCommand "ByteReduxOptions") )                                                     { return $True  }
     if (   (HasCommand ($GamePatch.function + "ByteTextOptions") ) -or (HasCommand ($GamePatch.function + "ByteSceneOptions") ) )   { return $True  }
-    if ( ( (HasCommand "WholeTextOptions") -or (HasCommand "ByteTextOptions") ) -and $Settings.Debug.NoTextPatching -ne $True)      { return $True  }
+    if ( ( (HasCommand "WholeTextOptions") -or (HasCommand "ByteTextOptions") ) -and $Settings.Debug.NoTextPatching  -ne $True)     { return $True  }
     if (   (HasCommand "ByteSceneOptions")                                      -and $Settings.Debug.NoScenePatching -ne $True)     { return $True  }
     return $False
 
@@ -505,14 +505,14 @@ function PatchingAdditionalOptions() {
     }
     
     # Language Options
-    if ($Settings.Debug.NoTextPatching -ne $True -or (HasCommand ($GamePatch.function + "ByteTextOptions") ) -and !(DoAssertSceneFiles) ) {
+    if ($Settings.Debug.NoTextPatching -ne $True -or (HasCommand ($GamePatch.function + "ByteTextOptions") ) -or (HasCommand "WholeTextOptions") -and !(DoAssertSceneFiles) ) {
         $Files.json.textEditor = $null
         if ($LanguagePatch.script_dma -ne $null -and $LanguagePatch.region -ne "J") {
             RemoveFile ($GameFiles.extracted + "\message_data_static." + $LanguagePatch.code + ".bin")
             RemoveFile ($GameFiles.extracted + "\message_data."        + $LanguagePatch.code + ".tbl")
 
             if (HasCommand "WholeTextOptions") {
-                WholeTextOptions
+                WholeTextOptions -Script ($GameFiles.extracted + "\message_data_static." + $LanguagePatch.code + ".bin") -Table ($GameFiles.extracted + "\message_data." + $LanguagePatch.code + ".tbl")
                 if ( (TestFile ($GameFiles.extracted + "\message_data_static." + $LanguagePatch.code + ".bin") ) -and (TestFile ($GameFiles.extracted + "\message_data." + $LanguagePatch.code + ".tbl") ) ) {
                     $start = CombineHex $ByteArrayGame[((GetDecimal $LanguagePatch.script_dma)+0)..((GetDecimal $LanguagePatch.script_dma)+3)]
                     PatchBytes -Offset $start                     -Patch ("message_data_static." + $LanguagePatch.code + ".bin") -Extracted
