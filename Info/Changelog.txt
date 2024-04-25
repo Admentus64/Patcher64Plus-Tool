@@ -1,5 +1,6 @@
 v23.3.9
 - Fixed issue with Custom Text not working for OoT and MM
+- Updated Smash Remix to v1.5.2
 
 v23.3.8
 - Added female voice for MM Child Link (Melee Zelda) by Mickey Saeed
