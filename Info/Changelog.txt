@@ -1,3 +1,23 @@
+v23.4.0
+- Updated Redux for OoT with new options and fixes
+	- Items on the D-Pad are bound to the slot rather than the item
+	- Changed Options Menu and Minimap toggle to be on a short button release timer
+	- Added support to change 30 FPS mode and the D-Pad Layout in the Pause Screen
+	- Added D-Pad Layout tracking
+	- Added FPS tracker when 30 FPS mode is enabled
+	- Added new D-Pad Layout for cycling through gear while holding L
+	- Added Mask Swap option (once the sidequest is completed)
+	- Added Mask Abilities option
+	- Added restoring the D-Pad Layout and last equipped mask upon loading the save slot
+	- Fixed issue with default colors for Extra Ability Tunic being wrong
+	- Fixed issue with Lens of Truth not properly unlocking on Redux with D-Pad
+	- Fixed issues with restoring the last equipped mask
+	- Fixed issues with Random Enemies and Inverse Aiming
+- Changed In-Game Menu Default Options to also apply with In-Game Menu options disabled
+- Changed fishing options for OoT to partly apply without Redux
+- Added Pause Screen Options Menu text prompt
+- Added Short Chest Opening option for MM
+
 v23.3.9
 - Fixed issue with Custom Text not working for OoT and MM
 - Updated Smash Remix to v1.5.2

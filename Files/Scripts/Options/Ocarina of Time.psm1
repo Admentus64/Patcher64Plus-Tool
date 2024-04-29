@@ -630,6 +630,16 @@ function ByteOptions() {
         ChangeBytes -Offset "E2E6A3" -Values $Redux.Minigames.Bowling4.value; ChangeBytes -Offset "E2E6A7" -Values $Redux.Minigames.Bowling5.value; ChangeBytes -Offset "E2D440" -Values "24190000"
     }
 
+    if (IsChecked $Redux.Minigames.LessDemandingFishing) {
+        ChangeBytes -Offset "DCBEA8" -Values "3C014248"; ChangeBytes -Offset "DCBF24" -Values "3C014248"                                                  # Adult Fish size requirement
+        ChangeBytes -Offset "DCBF30" -Values "3C014230"; ChangeBytes -Offset "DCBF9C" -Values "3C014230"                                                  # Child Fish size requirement
+    }
+
+    if (IsChecked $Redux.Minigames.GuaranteedFishing) {
+        ChangeBytes -Offset "DC87A0" -Values "00000000"; ChangeBytes -Offset "DC87BC" -Values "00000000"; ChangeBytes -Offset "DC87CC" -Values "00000000" # Remove most fish loss branches
+        ChangeBytes -Offset "DC8828" -Values "01A00821"                                                                                                   # Prevent RNG fish loss
+    }
+
     if (IsChecked $Redux.Minigames.SkullKidOcarina)   { ChangeBytes -Offset "B781D8" -Values "030405"   } # Skull Kid Ocarina
     if (IsChecked $Redux.Minigames.Dampe)             { ChangeBytes -Offset "CC4024" -Values "00000000" } # Dampé's Digging Game
     
@@ -1536,8 +1546,6 @@ function RevertReduxOptions() {
 
     if (IsRevert $Redux.Speedup.Cutscenes -Item "Opening Door of Time")   { ChangeBytes -Offset "CCE9A4" -Values "3C013F8044813000"                                                                                                                       }
     if (IsRevert $Redux.Hooks.FasterArmosPushing)                         { ChangeBytes -Offset "C97C68" -Values "24C8F800"; ChangeBytes -Offset "C97D68" -Values "3C013F0044814000"; ChangeBytes -Offset "C97E20" -Values "3C013F0044815000"             }
-    if (IsRevert $Redux.Hooks.LessDemandingFishing)                       { ChangeBytes -Offset "DBF428" -Values "C652019C3C0142824481400046009100E644"; ChangeBytes -Offset "DBF484" -Values "E652019C"; ChangeBytes -Offset "DBF4A8" -Values "E648019C" }
-    if (IsRevert $Redux.Hooks.GuaranteedFishing)                          { ChangeBytes -Offset "DC7090" -Values "C60A019846025102"                                                                                                                       }
     if (IsRevert $Redux.Hooks.BlueFireArrow)                              { ChangeBytes -Offset "DB32C8" -Values "240100F0"                                                                                                                               }
     if (IsRevert $Redux.Hooks.RupeeIconColors)                            { ChangeBytes -Offset "AEB764" -Values "3C01C8FF26380008AE9802B0"; ChangeBytes -Offset "AEB778" -Values "34216400"                                                              }
     if (IsRevert $Redux.Hooks.StoneOfAgony)                               { ChangeBytes -Offset "BE4A14" -Values "4602003C";                 ChangeBytes -Offset "BE4A40" -Values "4606203C"; ChangeBytes -Offset "BE4A60" -Values "27BD002003E00008"     }
@@ -1548,6 +1556,8 @@ function RevertReduxOptions() {
     if (IsRevert $Redux.Hooks.HyruleGuardsSoftlock)                       { ChangeBytes -Offset "E24E7C" -Values "0C00863B24060001"                                                                                                                       }
     if (IsRevert $Redux.Hooks.TalonSkip)                                  { ChangeBytes -Offset "CC0038" -Values "8FA4001824090041"                                                                                                                       }
     if (IsRevert $Redux.Misc.SkipCutscenes)                               { ChangeBytes -Offset "B06C2C" -Values "A2280020A2250021"                                                                                                                       }
+    if (IsRevert $Redux.Minigames.LessDemandingFishing)                   { ChangeBytes -Offset "DBF428" -Values "C652019C3C0142824481400046009100E644"; ChangeBytes -Offset "DBF484" -Values "E652019C"; ChangeBytes -Offset "DBF4A8" -Values "E648019C" }
+    if (IsRevert $Redux.Minigames.GuaranteedFishing)                      { ChangeBytes -Offset "DC7090" -Values "C60A019846025102"                                                                                                                       }
 
 }
 
@@ -1571,14 +1581,15 @@ function ByteReduxOptions() {
     if (IsDefault $Redux.Default.KeepMask          -Not)   { ChangeBytes -Offset $Symbols.CFG_DEFAULT_KEEP_MASK            -Values (Get8Bit (GetCheckedValue $Redux.Default.KeepMask)       ) }
     if (IsDefault $Redux.Default.TriSwipe          -Not)   { ChangeBytes -Offset $Symbols.CFG_DEFAULT_TRISWIPE             -Values (Get8Bit (GetCheckedValue $Redux.Default.TriSwipe)       ) }
     
-    if (IsDefault $Redux.Default.RandomEnemies     -Not)   { ChangeBytes -Offset $Symbols.CFG_DEFAULT_RANDOM_ENEMIES       -Values (Get8Bit (GetCheckedValue $Redux.Default.RandomEnemies)  ) }
+    if (IsDefault $Redux.Default.SwapItem          -Not)   { ChangeBytes -Offset $Symbols.CFG_DEFAULT_SWAP_ITEM            -Values (Get8Bit (GetCheckedValue $Redux.Default.SwapItem)       ) }
     if (IsDefault $Redux.Default.UnequipItem       -Not)   { ChangeBytes -Offset $Symbols.CFG_DEFAULT_UNEQUIP_ITEM         -Values (Get8Bit (GetCheckedValue $Redux.Default.UnequipItem)    ) }
     if (IsDefault $Redux.Default.UnequipGear       -Not)   { ChangeBytes -Offset $Symbols.CFG_DEFAULT_UNEQUIP_GEAR         -Values (Get8Bit (GetCheckedValue $Redux.Default.UnequipGear)    ) }
     if (IsDefault $Redux.Default.ItemOnB           -Not)   { ChangeBytes -Offset $Symbols.CFG_DEFAULT_ITEM_ON_B            -Values (Get8Bit (GetCheckedValue $Redux.Default.ItemOnB)        ) }
-    if (IsDefault $Redux.Default.DowngradeItem     -Not)   { ChangeBytes -Offset $Symbols.CFG_DEFAULT_DOWNGRADE_ITEM       -Values (Get8Bit (GetCheckedValue $Redux.Default.DowngradeItem)  ) }
+    if (IsDefault $Redux.Default.MaskAbilities     -Not)   { ChangeBytes -Offset $Symbols.CFG_DEFAULT_MASK_ABILITIES       -Values (Get8Bit (GetCheckedValue $Redux.Default.MaskAbilities)  ) }
+    if (IsDefault $Redux.Default.ExtraAbilities    -Not)   { ChangeBytes -Offset $Symbols.CFG_DEFAULT_EXTRA_ABILITIES      -Values (Get8Bit (GetCheckedValue $Redux.Default.ExtraAbilities) ) }
+    if (IsDefault $Redux.Default.RandomEnemies     -Not)   { ChangeBytes -Offset $Symbols.CFG_DEFAULT_RANDOM_ENEMIES       -Values (Get8Bit (GetCheckedValue $Redux.Default.RandomEnemies)  ) }
     if (IsDefault $Redux.Default.CrouchStabFix     -Not)   { ChangeBytes -Offset $Symbols.CFG_DEFAULT_CROUCH_STAB_FIX      -Values (Get8Bit (GetCheckedValue $Redux.Default.CrouchStabFix)  ) }
     if (IsDefault $Redux.Default.WeakerSwords      -Not)   { ChangeBytes -Offset $Symbols.CFG_DEFAULT_WEAKER_SWORDS        -Values (Get8Bit (GetCheckedValue $Redux.Default.WeakerSwords)   ) }
-    if (IsDefault $Redux.Default.ExtraAbilities    -Not)   { ChangeBytes -Offset $Symbols.CFG_DEFAULT_EXTRA_ABILITIES      -Values (Get8Bit (GetCheckedValue $Redux.Default.ExtraAbilities) ) }
     if (IsDefault $Redux.Default.Levitation        -Not)   { ChangeBytes -Offset $Symbols.CFG_DEFAULT_LEVITATION           -Values (Get8Bit (GetCheckedValue $Redux.Default.Levitation)     ) }
     if (IsDefault $Redux.Default.InfiniteHP        -Not)   { ChangeBytes -Offset $Symbols.CFG_DEFAULT_INFINITE_HP          -Values (Get8Bit (GetCheckedValue $Redux.Default.InfiniteHP)     ) }
     if (IsDefault $Redux.Default.InfiniteMP        -Not)   { ChangeBytes -Offset $Symbols.CFG_DEFAULT_INFINITE_MP          -Values (Get8Bit (GetCheckedValue $Redux.Default.InfiniteMP)     ) }
@@ -1612,6 +1623,12 @@ function ByteReduxOptions() {
 
 
 
+    # QUALITY OF LIFE #
+
+    if (IsChecked $Redux.Gameplay.ResumeLastArea) { ChangeBytes -Offset $Symbols.CFG_PREVENT_GROTTO_SAVING -Values "01" }
+
+
+
     # MISC #
     
     if (IsDefault $Redux.Misc.SkipCutscenes -Not) {
@@ -1624,7 +1641,6 @@ function ByteReduxOptions() {
     }
 
     if (IsDefault $Redux.Misc.OptionsMenu -Not)     { ChangeBytes -Offset $Symbols.CFG_OPTIONS_MENU        -Values $Redux.Misc.OptionsMenu.SelectedIndex }
-    if (IsChecked $Redux.Misc.FastBunnyHood)        { ChangeBytes -Offset $Symbols.FAST_BUNNY_HOOD_ENABLED -Values "01" }
     if (IsChecked $Redux.Misc.BombchuDrops)         { ChangeBytes -Offset $Symbols.BOMBCHUS_IN_LOGIC       -Values "01" }
     if (IsChecked $Redux.Misc.TycoonWallet)         { ChangeBytes -Offset $Symbols.CFG_TYCOON_WALLET       -Values "01" }
     
@@ -1633,16 +1649,6 @@ function ByteReduxOptions() {
     # CODE HOOKS FEATURES #
     
     if (IsChecked $Redux.Hooks.BlueFireArrow) { ChangeBytes -Offset "C230C1" -Values "29"; ChangeBytes -Offset "DB38FE" -Values "EF"; ChangeBytes -Offset "C9F036" -Values "10"; ChangeBytes -Offset "DB391B" -Values "50"; ChangeBytes -Offset "DB3927" -Values "5A" }
-
-    if (IsChecked $Redux.Hooks.LessDemandingFishing) {
-        ChangeBytes -Offset "DCBEA8" -Values "3C014248"; ChangeBytes -Offset "DCBF24" -Values "3C014248"                                                  # Adult Fish size requirement
-        ChangeBytes -Offset "DCBF30" -Values "3C014230"; ChangeBytes -Offset "DCBF9C" -Values "3C014230"                                                  # Child Fish size requirement
-    }
-
-    if (IsChecked $Redux.Hooks.GuaranteedFishing) {
-        ChangeBytes -Offset "DC87A0" -Values "00000000"; ChangeBytes -Offset "DC87BC" -Values "00000000"; ChangeBytes -Offset "DC87CC" -Values "00000000" # Remove most fish loss branches
-        ChangeBytes -Offset "DC8828" -Values "01A00821"                                                                                                   # Prevent RNG fish loss
-    }
 
 
 
@@ -2637,6 +2643,9 @@ function CreatePresets() {
         BoxCheck $Redux.Graphics.ForceHiresModel
         BoxCheck $Redux.Graphics.HideDungeonIcon
 
+        BoxCheck $Redux.Minigames.LessDemandingFishing
+        BoxCheck $Redux.Minigames.GuaranteedFishing
+
         foreach ($option in $Redux.NativeOptions) {
             if ($option.Label -eq "16:9 Widescreen (Advanced)") {
                 if ($Redux.NativeOptions[0].hidden) { BoxCheck $Redux.Graphics.WidescreenAlt } else { BoxCheck $Redux.Graphics.Widescreen }
@@ -2655,10 +2664,7 @@ function CreatePresets() {
     } )
 
     $OptimalRedux.Add_Click( {
-        BoxCheck $Redux.Misc.FastBunnyHood
         BoxCheck $Redux.Misc.BombchuDrops
-        BoxCheck $Redux.Hooks.LessDemandingFishing
-        BoxCheck $Redux.Hooks.GuaranteedFishing
         BoxCheck $Redux.Hooks.RupeeIconColors
         BoxCheck $Redux.Hooks.EmptyBombFix
         BoxCheck $Redux.Hooks.ShowFileSelectIcons
@@ -2817,7 +2823,6 @@ function CreateTabRedux() {
     CreateReduxGroup    -Tag  "Misc"                                                -Text "Misc Options"
     CreateReduxComboBox -Name "OptionsMenu"   -Default 4                            -Text "Options Menu"    -Items @("Disable", "Core Only", "Essentials", "Fully Enabled") -Info "Adjust how much of the Redux options are available ingame and can be used`nPress L in the Pause Screen to toggle the ingame options menu" -Credits "Admentus"
     CreateReduxComboBox -Name "SkipCutscenes" -Base 3 -Exclude "Child Quest"        -Text "Skip Cutscenes"  -Items @("Disabled", "Useful Cutscenes Excluded", "All")        -Info "Skip Cutscenes`nUseful Cutscenes Excluded keeps cutscenes intact which are useful for performing glitches`nRequires a new save to take effect" -Credits "Randomizer"
-    CreateReduxCheckBox -Name "FastBunnyHood" -Child                       -Checked -Text "Fast Bunny Hood" -Info "The Bunny Hood makes Link run faster just like in Majora's Mask"                                                              -Credits "Randomizer"
     CreateReduxCheckBox -Name "BombchuDrops"  -Exclude ("Dawn", "New Master Quest") -Text "Bombchu Drops"   -Info "Bombchus can now drop from defeated enemies, cutting grass and broken jars"                                                   -Credits "Randomizer"
     CreateReduxCheckBox -Name "BombchuDrops"  -Expose "New Master Quest"   -Checked -Text "Bombchu Drops"   -Info "Bombchus can now drop from defeated enemies, cutting grass and broken jars"                                                   -Credits "Randomizer"
     CreateReduxCheckBox -Name "TycoonWallet"                                        -Text "Tycoon's Wallet" -Info "You get the Tycoon's Wallet from one of the Gold Skulltula reward in addition`nOnly activated if you have the Giant's Wallet" -Credits "Admentus"
@@ -2835,14 +2840,15 @@ function CreateTabRedux() {
     CreateReduxCheckBox -Name "NoIdleCamera"      -Text "No Idle Camera"                                  -Info "The camera no longer moves behind Link during idle stance"
     CreateReduxCheckBox -Name "KeepMask"          -Text "Keep Mask"      -Checked                         -Info "Mask remains equipped upon entering another area"
     CreateReduxCheckBox -Name "TriSwipe"          -Text "Tri-Swipe"                                       -Info "Replaces the transition effect with a twirling Triforce animation"
-    CreateReduxCheckBox -Name "RandomEnemies"     -Text "Random Enemies"                                  -Info "Multiplies the health and changes the subtype for regular enemies randomly"
+    CreateReduxCheckBox -Name "SwapItem"          -Text "Swap Item"      -Checked                         -Info "Cycle with C-Up between obtained items you own"
     CreateReduxCheckBox -Name "UnequipItem"       -Text "Unequip Item"                                    -Info "Unassign items using the respective C button"
     CreateReduxCheckBox -Name "UnequipGear"       -Text "Unequip Gear"                                    -Info "Unassign equipment by pressing A"
     CreateReduxCheckBox -Name "ItemOnB"           -Text "Item on B"                                       -Info "Assign items to the B button by pressing A"
-    CreateReduxCheckBox -Name "DowngradeItem"     -Text "Downgrade Item"                                  -Info "Change between previously obtained items by pressing the C-Up button"
+    CreateReduxCheckBox -Name "MaskAbilities"     -Text "Mask Abilties"  -Checked                         -Info "Equipping masks grants abilities such as thhe Bunny Hood to make Link run faster just like in Majora's Mask"
+    CreateReduxCheckBox -Name "ExtraAbilities"    -Text "Extra Abilities"                                 -Info "Obtain Spiritual Stones and Medallions to earn new abilities"
+    CreateReduxCheckBox -Name "RandomEnemies"     -Text "Random Enemies"                                  -Info "Multiplies the health and changes the subtype for regular enemies randomly"
     CreateReduxCheckBox -Name "CrouchStabFix"     -Text "Crouch Stab Fix"                                 -Info "The Crouch Stab move no longer keeps the last dealt damage"
     CreateReduxCheckBox -Name "WeakerSwords"      -Text "Weaker Swords"                                   -Info "Sword slashes now deal one less point of damage"
-    CreateReduxCheckBox -Name "ExtraAbilities"    -Text "Extra Abilities"                                 -Info "Obtain Spiritual Stones and Medallions to earn new abilities"
     CreateReduxCheckBox -Name "Levitation"        -Text "Levitation"                                      -Info "Hold the L button to levitate"
     CreateReduxCheckBox -Name "InfiniteHP"        -Text "Infinite HP"                                     -Info "Your Health is kept at the current maximum limit"
     CreateReduxCheckBox -Name "InfiniteMP"        -Text "Infinite MP"                                     -Info "Your Magic is kept at the current maximum limit"
@@ -2878,8 +2884,6 @@ function CreateTabRedux() {
     CreateReduxCheckBox -Name "WarpSongsSpeedup"     -Base 5                  -Text "Warp Songs Speedup"       -Info "Speedup the warp songs warping sequences"                                                               -Credits "Randomizer"
     CreateReduxCheckBox -Name "GoldGauntletsSpeedup" -Base 5                  -Text "Golden Gauntlets Speedup" -Info "Cutscene speed-up for throwing pillars that require Golden Gauntlets"                                   -Credits "Randomizer"
     CreateReduxCheckBox -Name "TalonSkip"            -Base 3 -Child           -Text "Skip Talon Cutscene"      -Info "Skip the cutscene after waking up Talon before entering the Castle Courtyard"                           -Credits "Randomizer"
-    CreateReduxCheckBox -Name "LessDemandingFishing" -Base 5                  -Text "Less Demanding Fishing"   -Info "Fishing has less demanding size requirements and are found in smaller sizes"                                                       -Credits "Randomizer"
-    CreateReduxCheckBox -Name "GuaranteedFishing"    -Base 5                  -Text "Guaranteed Fishing"       -Info "Make fish bites guaranteed when the hook of the rod is stable and fish will no longer randomly let go when trying to reel them in" -Credits "Randomizer"
 
 
 
@@ -2909,11 +2913,11 @@ function CreateTabRedux() {
     $Redux.Colors.ExtraEquipment += CreateReduxComboBox -Name "ShadowTunic"   -Text "Shadow Tunic"   -Default 5 -Length 230 -Items $items -PostItems $postItems -FilePath $Files -Info ("Select a color scheme for the upgraded Unequipped Tunic (Extra Abilities only)`n" + $Randomize) -Credits "Admentus"
     $Buttons += CreateReduxButton -Tag $Buttons.Count -Text "Shadow Tunic"    -Info "Select the color you want for the upgraded Unequipped Tunic (Extra Abilities only)" -Credits "Admentus"
 
-    $Redux.Colors.SetExtraEquipment += CreateColorDialog -Color "1E691B" -Name "SetMagicianTunic" -IsGame -Button $Buttons[0]
-    $Redux.Colors.SetExtraEquipment += CreateColorDialog -Color "641400" -Name "SetGuardianTunic" -IsGame -Button $Buttons[1]
-    $Redux.Colors.SetExtraEquipment += CreateColorDialog -Color "003C64" -Name "SetHeroTunic"     -IsGame -Button $Buttons[2]
-    $Redux.Colors.SetExtraEquipment += CreateColorDialog -Color "003C64" -Name "SetNoTunic"       -IsGame -Button $Buttons[3]
-    $Redux.Colors.SetExtraEquipment += CreateColorDialog -Color "003C64" -Name "SetShadowTunic"   -IsGame -Button $Buttons[4]
+    $Redux.Colors.SetExtraEquipment += CreateColorDialog -Color "00913C" -Name "SetMagicianTunic" -IsGame -Button $Buttons[0]
+    $Redux.Colors.SetExtraEquipment += CreateColorDialog -Color "A5AFBE" -Name "SetGuardianTunic" -IsGame -Button $Buttons[1]
+    $Redux.Colors.SetExtraEquipment += CreateColorDialog -Color "C8AF32" -Name "SetHeroTunic"     -IsGame -Button $Buttons[2]
+    $Redux.Colors.SetExtraEquipment += CreateColorDialog -Color "64B4FF" -Name "SetNoTunic"       -IsGame -Button $Buttons[3]
+    $Redux.Colors.SetExtraEquipment += CreateColorDialog -Color "503CAA" -Name "SetShadowTunic"   -IsGame -Button $Buttons[4]
 
     $Redux.Colors.ExtraEquipmentLabels = @()
     for ($i=0; $i -lt $Buttons.length; $i++) {
@@ -3345,9 +3349,11 @@ function CreateTabDifficulty() {
 
     # MINIGAMES #
 
-    CreateReduxGroup    -Tag  "Minigames"       -Base 5 -Text "Minigames"
-    CreateReduxCheckBox -Name "Dampe"           -Base 4 -Text "Dampé's Digging"         -Info "Dampé's Digging Game is always first try"                   -Credits "Randomizer"
-    CreateReduxCheckBox -Name "SkullKidOcarina" -Base 4 -Text "Skull Kid Ocarina"       -Info "Make each Skull Kid Ocarina Minigame round last shorter"    -Credits "Admentus"
+    CreateReduxGroup    -Tag  "Minigames"            -Base 5 -Text "Minigames"
+    CreateReduxCheckBox -Name "Dampe"                -Base 4 -Text "Dampé's Digging"       -Info "Dampé's Digging Game is always first try"                                                                                                                             -Credits "Randomizer"
+    CreateReduxCheckBox -Name "SkullKidOcarina"      -Base 4 -Text "Skull Kid Ocarina"     -Info "Make each Skull Kid Ocarina Minigame round last shorter"                                                                                                              -Credits "Admentus"
+    CreateReduxCheckBox -Name "LessDemandingFishing" -Base 5 -Text "Less Demanding Fishing"-Info "Fishing has less demanding size requirements and are found in smaller sizes`nEnable Redux for the full version"                                                       -Credits "Randomizer"
+    CreateReduxCheckBox -Name "GuaranteedFishing"    -Base 5 -Text "Guaranteed Fishing"    -Info "Make fish bites guaranteed when the hook of the rod is stable and fish will no longer randomly let go when trying to reel them in`nEnable Redux for the full version" -Credits "Randomizer"
     
     CreateReduxCheckBox -Name "Bowling"   -Base 5 -Exclude "New Master Quest" -Text "Bombchu Bowling"                                                                                                       -Info "Bombchu Bowling prizes now appear in fixed order instead of random" -Credits "Randomizer"
     CreateReduxComboBox -Name "Bowling1"  -Base 5 -Exclude "New Master Quest" -Text "Bowling Reward #1" -Items ("Piece of Heart", "Bomb Bag", "Purple Rupee", "Bombchus") -Values @("64", "28", "4C", "58") -Info "Set the first reward for the Bombchu Bowling Minigame"              -Credits "Randomizer" -Default 1

@@ -1013,6 +1013,7 @@ function ByteReduxOptions() {
     if     (IsChecked     $Redux.Features.InstantTransform)                  { ChangeBytes -Offset (AddToOffset $Symbols.MISC_CONFIG -Add "1B") -Values "20" -Add }
   # if     (IsChecked     $Redux.Features.BombArrows)                        { ChangeBytes -Offset (AddToOffset $Symbols.MISC_CONFIG -Add "1B") -Values "10" -Add }
     if     (IsIndex -Elem $Redux.Features.GiantMaskAnywhere -Index 1 -Not)   { ChangeBytes -Offset (AddToOffset $Symbols.MISC_CONFIG -Add "1B") -Values "08" -Add }
+    if     (IsChecked     $Redux.Features.ShortChestOpening)                 { ChangeBytes -Offset (AddToOffset $Symbols.MISC_CONFIG -Add "25") -Values "80" -Add }
     
     if (IsIndex -Elem $Redux.Features.UnderwaterOcarina -Index 1 -Not)   { ChangeBytes -Offset $Symbols.CFG_BOSS_REMAINS_UNDERWATER_OCARINA -Values ($Redux.Features.UnderwaterOcarina.SelectedIndex - 1) }
     if (IsIndex -Elem $Redux.Features.ContinuousDekuHop -Index 1 -Not)   { ChangeBytes -Offset $Symbols.CFG_BOSS_REMAINS_DEKU_HOP           -Values ($Redux.Features.ContinuousDekuHop.SelectedIndex - 1) }
@@ -1789,6 +1790,7 @@ function CreateTabRedux() {
     CreateReduxCheckBox -Name "ElegySpeedup"       -Text "Elegy of Emptiness Speedup" -Info "The Elegy of Emptiness statue summoning cutscene is skipped after playing the song"                                                                                                              -Checked -Credits "Randomizer"
   # CreateReduxCheckBox -Name "BombArrows"         -Text "Bomb Arrows"                -Info "Shoot bombs with the bow by using both items at the same time"                                                                                                                                            -Credits "Randomizer"
     CreateReduxCheckBox -Name "InstantTransform"   -Text "Instant Transform"          -Info "Skip the transformation cutscenes when equiping or unequiping a transformation mask"                                                                                                                      -Credits "Randomizer"
+    CreateReduxCheckBox -Name "ShortChestOpening"  -Text "Short Chest Opening"        -Info "All chests are opened using the short animation"                                                                                                                                                          -Credits "Randomizer"
     
     CreateReduxCheckBox -Name "FlowOfTime"         -Text "Control Flow of Time"       -Info "Hold L and press D-Pad Down to invert or restore the flow or time without having to use the Ocarina of Time"                                                                                              -Credits "Admentus"
     CreateReduxCheckBox -Name "InstantElegy"       -Text "Instant Elegy Statue"       -Info "Hold L and press D-Pad Up to summon an Elegy of Emptiness Statue without having to use the Ocarina of Time"                                                                                               -Credits "Admentus"
