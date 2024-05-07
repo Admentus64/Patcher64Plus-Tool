@@ -917,12 +917,12 @@ function LoadTextEditor() {
 
 
 #==============================================================================================================================================================================================
-function SetMessage([string]$ID, [object]$Text, [object]$Replace, [string]$File="", [switch]$Full, [switch]$Insert, [switch]$Append, [switch]$All, [switch]$ASCII, [switch]$Silent, [switch]$Safety, [switch]$Force) {
+function SetMessage([string]$ID, [object]$Text, [object]$Replace, [string]$File="", [switch]$Full, [switch]$Insert, [byte]$Offset=0, [switch]$Append, [switch]$All, [switch]$ASCII, [switch]$Silent, [switch]$Safety, [switch]$Force) {
     
     if ($Files.json.textEditor -eq $null) { LoadTextEditor }
 
     if ($TextEditor.Dialog -ne $null -or $Settings.Core.UseCache -ne $True) {
-        RunSetMessage -ID $ID -Text $Text -Replace $Replace -File $File -Full $Full -Insert $Insert -Append $Append -All $All -ASCII $ASCII -Silent $Silent -Safety $Safety -Force $Force
+        RunSetMessage -ID $ID -Text $Text -Replace $Replace -File $File -Full $Full -Insert $Insert -Offset $Offset -Append $Append -All $All -ASCII $ASCII -Silent $Silent -Safety $Safety -Force $Force
         return
     }
 
@@ -933,7 +933,7 @@ function SetMessage([string]$ID, [object]$Text, [object]$Replace, [string]$File=
         $Text    = $StoredMessages[$StoredMessages.Count-1].text
     }
 
-    [void]$global:StoredMessages.Add(@{ index = $StoredMessages.Count; dec = (GetDecimal $ID); id = $ID; text = $Text; replace = $Replace; file = $File; full = $Full; insert = $Insert; append = $Append; all = $All; ascii = $ASCII; silent = $Silent; safety = $Safety; force = $Force })
+    [void]$global:StoredMessages.Add(@{ index = $StoredMessages.Count; dec = (GetDecimal $ID); id = $ID; text = $Text; replace = $Replace; file = $File; full = $Full; insert = $Insert; offset = $Offset; append = $Append; all = $All; ascii = $ASCII; silent = $Silent; safety = $Safety; force = $Force })
 
 }
 
@@ -943,7 +943,7 @@ function SetMessage([string]$ID, [object]$Text, [object]$Replace, [string]$File=
 function RunAllStoredMessages() {
     
     $global:StoredMessages = $StoredMessages | Sort-Object { [int]$_.dec, [int]$_.index }
-    foreach ($msg in $StoredMessages) { RunSetMessage -ID $msg.id -Text $msg.text -Replace $msg.replace -File $msg.file -Full $msg.full -Insert $msg.insert -Append $msg.append -All $msg.all -ASCII $msg.ascii -Silent $msg.silent -Safety $msg.safety -Force $msg.force }
+    foreach ($msg in $StoredMessages) { RunSetMessage -ID $msg.id -Text $msg.text -Replace $msg.replace -File $msg.file -Full $msg.full -Insert $msg.insert -Offset $msg.offset -Append $msg.append -All $msg.all -ASCII $msg.ascii -Silent $msg.silent -Safety $msg.safety -Force $msg.force }
     $global:StoredMessages = $null
 
 }
@@ -951,7 +951,7 @@ function RunAllStoredMessages() {
 
 
 #==============================================================================================================================================================================================
-function RunSetMessage([string]$ID, [object]$Text, [object]$Replace, [string]$File="", [boolean]$Full, [boolean]$Insert, [boolean]$Append, [boolean]$All, [boolean]$ASCII, [boolean]$Silent, [boolean]$Safety, [boolean]$Force) {
+function RunSetMessage([string]$ID, [object]$Text, [object]$Replace, [string]$File="", [boolean]$Full, [boolean]$Insert, [byte]$Offset=0, [boolean]$Append, [boolean]$All, [boolean]$ASCII, [boolean]$Silent, [boolean]$Safety, [boolean]$Force) {
     
     if ($DialogueList -eq $null) {
         WriteToConsole ("Could not edit message ID: " + $ID + " as the message data does not exist. Did it ran outside ByteTextOptions?" ) -Error
@@ -1042,7 +1042,7 @@ function RunSetMessage([string]$ID, [object]$Text, [object]$Replace, [string]$Fi
     }
 
     if ($Insert) {
-        if ($Replace.count -gt 0) { $DialogueList[$ID].msg.InsertRange($Files.json.textEditor.header, $Replace) }
+        if ($Replace.count -gt 0) { $DialogueList[$ID].msg.InsertRange($Files.json.textEditor.header + $Offset, $Replace) }
     }
     elseif ($Append)   {
         if ($Replace.count -gt 0) { $DialogueList[$ID].msg.InsertRange($DialogueList[$ID].msg.count, $Replace) }

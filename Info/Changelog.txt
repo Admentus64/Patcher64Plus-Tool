@@ -17,6 +17,7 @@ v23.4.0
 - Changed fishing options for OoT to partly apply without Redux
 - Added Pause Screen Options Menu text prompt
 - Added Short Chest Opening option for MM
+- Fixed issue with sounds in text boxes with Instant Text for MM
 
 v23.3.9
 - Fixed issue with Custom Text not working for OoT and MM

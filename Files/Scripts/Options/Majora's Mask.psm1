@@ -926,35 +926,6 @@ function ByteOptions() {
 
 
 #==============================================================================================================================================================================================
-function RevertReduxOptions() {
-    
-   <# if (IsRevert $Redux.Hooks.FasterBlockPushing) {
-        ChangeBytes -Offset "E93FD0" -Values "241900058DC71CCC25F80001A6180188860201882604018A2405038428410006"; ChangeBytes -Offset "FA1930" -Values "008038258FAE002424E40168240500648DC31CCCAFA7002024060001"; ChangeBytes -Offset "D8B3F4" -Values "AFA50004948E01603C0140004480200044813000"
-        ChangeBytes -Offset "E94384" -Values "241900058DC31CCC25F80001A6180188860201882604018A2405038428410006"; ChangeBytes -Offset "E8FA0C" -Values "3C014060448160003C0180A2C432707C3C0180A2C4267080";         ChangeBytes -Offset "E90F34" -Values "45002E1446002E1845002E1C46002E20"
-        ChangeBytes -Offset "FD59C8" -Values "4500076046000764450007684600076C450007A4460007A8450007AC460007B0"; ChangeBytes -Offset "FE4424" -Values "3C063ECC34C6CCCD2604016C0C03FC0F3C054000";                 ChangeBytes -Offset "FD5410" -Values "3C0180B7C43007943C0180B7C4240798"
-        ChangeBytes -Offset "FD5454" -Values "3C0180B7C432079C3C0180B7C42607A0";                                 ChangeBytes -Offset "CC2418" -Values "C6280AD03C013F0044818000";                                 ChangeBytes -Offset "E16944" -Values "3C06401334C63333"
-        ChangeBytes -Offset "E93FBC" -Values "00808025AFBF001C"; ChangeBytes -Offset "E94370" -Values "00808025AFBF001C"; ChangeBytes -Offset "FD5688" -Values "3C0180B7C42C07A4"; ChangeBytes -Offset "FD5A04" -Values "450009D8460009DC"
-    } #>
-
-   <# if (IsRevert $Redux.Hooks.ElegySpeedup) {
-        ChangeBytes -Offset "CC2AF4"  -Values "8FA3004C861800BE24190014";         ChangeBytes -Offset "CCFEF4"  -Values "0080302500A03825";         ChangeBytes -Offset "CCFF08"  -Values "2843005B"; ChangeBytes -Offset "CCFF3C" -Values "2401000A"; ChangeBytes -Offset "D1D610"  -Values "00022C0000052C03"
-        ChangeBytes -Offset "D1D620"  -Values "24060008";                         ChangeBytes -Offset "EB60B0"  -Values "AFB0002000808025AFBF0024"; ChangeBytes -Offset "EB6214"  -Values "0C03F4AD"; ChangeBytes -Offset "EB6240" -Values "0C03C761"; ChangeBytes -Offset "1029228" -Values "3C0141A0448120008E0E015C8E020160E604007091"
-        ChangeBytes -Offset "1029448" -Values "3C0142208E020160448120003C0F80BC"; ChangeBytes -Offset "102945C" -Values "E6040070";                 ChangeBytes -Offset "1029734" -Values "45000AF4"
-    } #>
-
-   <# if (IsRevert $Redux.Hooks.CritWiggle) {
-        ChangeBytes -Offset "B66B6C" -Values "8463F6A628610011"; ChangeBytes -Offset "B66B78" -Values "28610011"; ChangeBytes -Offset "B66BA8" -Values "100000208463F6A6"; ChangeBytes -Offset "B66C28" -Values "8463F6A628610011"; ChangeBytes -Offset "B66D10" -Values "8739F6A6000020252B210011"
-    } #>
-
-   # if (IsRevert $Redux.Hooks.UnderwaterOcarina) { ChangeBytes -Offset "BA6E54" -Values "30CF00FF29E10012" }
-
-   # if (IsRevert $Redux.Hooks.ClimbAnything) { ChangeBytes -Offset "CB7D40" -Values "8C422B0C0000402530490008" }
-    
-}
-
-
-
-#==============================================================================================================================================================================================
 function ByteReduxOptions() {
     
     # WIDESCREEN #
@@ -1473,31 +1444,13 @@ function ByteTextOptions() {
             if     ($DialogueList[$h.name].msg.count -eq 0) { continue }
             elseif ( (GetDecimal $h.name) -ge 256 -and (GetDecimal $h.name) -le 329) { continue } # Area Title Cards
 
-          # if     ($h.name -eq "108E" -or $h.name -eq "403E" -or $h.name -eq "605A" -or $h.name -eq "706C" -or $h.name -eq "70DD" -or $h.name -eq "706F" -or $h.name -eq "7091" -or $h.name -eq "7092" -or $h.name -eq "7093" -or $h.name -eq "7094" -or $h.name -eq "7095" -or $h.name -eq "7070") { continue }
-          # elseif ( (GetDecimal $h.name) -ge 2157 -and (GetDecimal $h.name) -le 2172) { continue } # Learning Songs
+            SetMessage -ID $h.name -Text @(23) -Silent -All # Remove all <DI>
+            SetMessage -ID $h.name -Text @(24) -Silent -All # Remove all <DC>
 
-         <# if ($h.name -ne "00B4") {
-                for ($i=0; $i -lt $DialogueList[$h.name].msg.count-1; $i++) {
-                    if ($DialogueList[$h.name].msg[$i] -eq 14) {
-                        if ($i -eq 0) { $h.name; continue outer }
-                        elseif ($i -ge 2) {
-                            if     ($DialogueList[$h.name].msg[$i-2] -eq 7 -or $DialogueList[$h.name].msg[$i-2] -eq 8)                                                                                                                                        { continue }
-                            elseif ($DialogueList[$h.name].msg[$i-1] -eq 6 -or $DialogueList[$h.name].msg[$i-1] -eq 12 -or $DialogueList[$h.name].msg[$i-1] -eq 17 -or $DialogueList[$h.name].msg[$i-1] -eq 19 -or $DialogueList[$h.name].msg[$i-1] -eq 20)   { continue }
-                            else { continue outer }
-                        }
-                        else {
-                            if     ($DialogueList[$h.name].msg[$i-1] -eq 6 -or $DialogueList[$h.name].msg[$i-1] -eq 12 -or $DialogueList[$h.name].msg[$i-1] -eq 17 -or $DialogueList[$h.name].msg[$i-1] -eq 19 -or $DialogueList[$h.name].msg[$i-1] -eq 20)   { continue }
-                            else { continue outer }
-                        }
-                    }
-                }
-            } #>
+            if ($DialogueList[$h.name].msg[$Files.json.textEditor.header] -ne 0x1E) { SetMessage -ID $h.name -Replace @(23) -Silent -Insert } # Insert <DI> to start
 
-            SetMessage -ID $h.name -Text @(23)                    -Silent -All    # Remove all <DI>
-            SetMessage -ID $h.name -Text @(24)                    -Silent -All    # Remove all <DC>
-            SetMessage -ID $h.name             -Replace @(23)     -Silent -Insert # Insert <DI> to start
-            SetMessage -ID $h.name -Text @(16) -Replace @(16, 23) -Silent -All    # Add <DI> after <New Box>
-            SetMessage -ID $h.name -Text @(18) -Replace @(18, 24) -Silent -All    # Add <DI> after <New Box II>
+            SetMessage -ID $h.name -Text @(16) -Replace @(16, 23) -Silent -All # Add <DI> after <New Box>
+            SetMessage -ID $h.name -Text @(18) -Replace @(18, 23) -Silent -All # Add <DI> after <New Box II>
         }
         WriteToConsole "Finished Generating Instant Text"
     }
