@@ -135,7 +135,6 @@ function SetFileParameters() {
     $Files.mm.zora_guitar_icon              = $Paths.Games + "\Majora's Mask\Textures\Icons\zora_guitar_icon.yaz0"
     $Files.mm.zora_guitar_text              = $Paths.Games + "\Majora's Mask\Textures\Icons\zora_guitar_text.yaz0"
 
-    $Files.mm.research_lab_platform         = CheckPatchExtension ($Paths.Games + "\Majora's Mask\Decompressed\Optional\raised_research_lab_platform")
     $Files.mm.widescreen                    = CheckPatchExtension ($Paths.Games + "\Majora's Mask\Decompressed\Optional\widescreen")
 
     $Files.mm.l_target_button               = $Paths.Games + "\Majora's Mask\Textures\GameCube\l_pause_screen_button.yaz0"
