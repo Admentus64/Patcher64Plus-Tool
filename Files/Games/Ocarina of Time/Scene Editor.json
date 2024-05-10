@@ -8679,11 +8679,7 @@
 		"id"		: "00BC",
 		"type"		: "NPC"
 	}, {
-		"name"		: "Heart Containers & Piece of Heart",
-		"id"		: "00BD",
-		"type"		: "Model"
-	}, {
-		"name"		: "Heart Containers",
+		"name"		: "Heart Container & Piece of Heart",
 		"id"		: "00BD",
 		"type"		: "Model"
 	}, {

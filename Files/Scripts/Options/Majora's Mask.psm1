@@ -39,7 +39,6 @@ function PatchOptions() {
     # DIFFICULTY #
 
     if ( (IsValue $Redux.Recovery.Heart -Value 0) -or (IsDefault $Redux.Hero.ItemDrops -Not) )   { ApplyPatch -Patch "Decompressed\Optional\no_recovery_hearts.ppf"           }
-    if (IsChecked $Redux.Hero.RaisedResearchLabPlatform)                                         { ApplyPatch -Patch "Decompressed\optional\raised_research_lab_platform.ppf" }
     if (IsChecked $Redux.Hero.MoveGoldDust)                                                      { ApplyPatch -Patch "Decompressed\Optional\chest.ppf"                        }
     if (IsChecked $Redux.EasyMode.OceansideSpiderHouse)                                          { ApplyPatch -Patch "Decompressed\Optional\oceanside_spider_house.ppf"       }
 
@@ -1139,12 +1138,14 @@ function ByteSceneOptions() {
         ChangeMapFile -Values "05" -Search "0D0050E600000000000000F300000007" -Start "5120"; ChangeMapFile -Values "05" -Search "0D0050F20000000007C03CD900000000" -Start "5140" # Road
         SaveAndPatchLoadedScene
 
-        PrepareMap -Scene "Great Bay Coast" -Map 0 -Header 0
-        $offset = ChangeMapFile -Values "0F" -Search "07FFD30F3A0000089904002E920032F5" -Start "12BC0" # Research Lab Platform
-        $offset = ChangeMapFile -Values "0F" -Offset ($offset + 0x10)
-        $offset = ChangeMapFile -Values "5F" -Offset ($offset + 0x10)
-        $offset = ChangeMapFile -Values "5F" -Offset ($offset + 0x10)
-        SaveAndPatchLoadedScene
+        if (IsChecked $Redux.Hero.RaisedResearchLabPlatform -Not) {
+            PrepareMap -Scene "Great Bay Coast" -Map 0 -Header 0
+            $offset = ChangeMapFile -Values "0F" -Search "07FFD30F3A0000089904002E920032F5" -Start "12BC0" # Research Lab Platform (0x26F0BC9)
+            $offset = ChangeMapFile -Values "0F" -Offset ($offset + 0x10)
+            $offset = ChangeMapFile -Values "5F" -Offset ($offset + 0x10)
+                      ChangeMapFile -Values "5F" -Offset ($offset + 0x10)
+            SaveAndPatchLoadedScene
+        }
 
         PrepareMap -Scene "Ikana Canyon" -Map 0 -Header 0
         ChangeMapFile -Values "023EE003011D" -Search "011D000000000000E8FDF80CF607B800" -Start "500" # Texture on Ancient Castle of Ikana wall
@@ -1196,6 +1197,76 @@ function ByteSceneOptions() {
 
 
     # HERO MODE #
+
+    if (IsChecked $Redux.Hero.RaisedResearchLabPlatform) {
+        PrepareMap -Scene "Great Bay Coast" -Map 0 -Header 0
+
+                  ChangeSceneFile -Values "28"                                                                                     -Search "0F0F8A00075A00007F06FF0000FB3501" -Start "15D"  # 0x26BF15D
+        $offset = ChangeSceneFile -Values "D8"                                                                                     -Search "F1001202340230023200007FFF0000FF" -Start "60DF" # 0x26C50DF
+        $offset = ChangeSceneFile -Values "D8"                                                                                     -Offset ($offset + 0x10)                                 # 0x26C50EF
+        $offset = ChangeSceneFile -Values "EC"                                                                                     -Offset ($offset + 0x50)                                 # 0x26C513F
+                  ChangeSceneFile -Values "EC"                                                                                     -Offset ($offset + 0x10)                                 # 0x26C514F
+        $offset = ChangeSceneFile -Values "EC10CAF51BFFEC10CAF51B002810CAF453002810CAF51B00280F3AF51BFFEC0F3AF45300280F3AF453FFEC" -Search "D310CAF51BFFD310CAF51B000F10CAF4" -Start "8B50" # 0x26C7B57
+        $offset = ChangeSceneFile -Values "28"                                                                                     -Offset ($offset + 0x114)                                # 0x26C7C6B
+                  ChangeSceneFile -Values "28"                                                                                     -Offset ($offset + 0x6)                                  # 0x26C7C71
+                  ChangeSceneFile -Values "28"                                                                                     -Search "0F0F8A00075A00007F06FF0000FB3501" -Start "9560" # 0x26C8565
+
+                  ChangeMapFile -Values "28" -Search "0F0F5100070010007F00002055054F00" -Start "420"   # 0x26DE425
+                  ChangeMapFile -Values "28" -Search "0F0F5100070010007F0000E0C6FEA7FE" -Start "1590"  # 0x26DF599
+        
+        $offset = ChangeMapFile -Values "28" -Search "0F0F3A000013670400D26E00D4F45F00" -Start "12030" # 0x26F003B
+        $offset = ChangeMapFile -Values "28" -Offset ($offset + 0x10)
+        $offset = ChangeMapFile -Values "28" -Offset ($offset + 0x10)
+        $offset = ChangeMapFile -Values "28" -Offset ($offset + 0x10)
+        $offset = ChangeMapFile -Values "EC" -Offset ($offset + 0x10)
+        $offset = ChangeMapFile -Values "EC" -Offset ($offset + 0x10)
+        $offset = ChangeMapFile -Values "F8" -Offset ($offset + 0x10)
+        $offset = ChangeMapFile -Values "1C" -Offset ($offset + 0x10)
+        $offset = ChangeMapFile -Values "28" -Offset ($offset + 0x10)
+        $offset = ChangeMapFile -Values "28" -Offset ($offset + 0x10)
+        $offset = ChangeMapFile -Values "1C" -Offset ($offset + 0x10)
+        $offset = ChangeMapFile -Values "F8" -Offset ($offset + 0x10)
+        $offset = ChangeMapFile -Values "F8" -Offset ($offset + 0x10)
+        $offset = ChangeMapFile -Values "1C" -Offset ($offset + 0x10)
+        $offset = ChangeMapFile -Values "28" -Offset ($offset + 0x10)
+        $offset = ChangeMapFile -Values "28" -Offset ($offset + 0x10)
+        $offset = ChangeMapFile -Values "1C" -Offset ($offset + 0x10)
+        $offset = ChangeMapFile -Values "F8" -Offset ($offset + 0x10)
+        $offset = ChangeMapFile -Values "EC" -Offset ($offset + 0x10)
+        $offset = ChangeMapFile -Values "EC" -Offset ($offset + 0x10)
+        $offset = ChangeMapFile -Values "28" -Offset ($offset + 0x10)
+        $offset = ChangeMapFile -Values "28" -Offset ($offset + 0x10)
+        $offset = ChangeMapFile -Values "1C" -Offset ($offset + 0x10)
+        $offset = ChangeMapFile -Values "1C" -Offset ($offset + 0x10)
+        $offset = ChangeMapFile -Values "F8" -Offset ($offset + 0x10)
+        $offset = ChangeMapFile -Values "F8" -Offset ($offset + 0x10)
+        $offset = ChangeMapFile -Values "EC" -Offset ($offset + 0x10)
+        $offset = ChangeMapFile -Values "EC" -Offset ($offset + 0x10)
+        $offset = ChangeMapFile -Values "1C" -Offset ($offset + 0x10)
+        $offset = ChangeMapFile -Values "1C" -Offset ($offset + 0x10)
+        $offset = ChangeMapFile -Values "28" -Offset ($offset + 0x10)
+        $offset = ChangeMapFile -Values "28" -Offset ($offset + 0x10)
+        $offset = ChangeMapFile -Values "F8" -Offset ($offset + 0x10)
+        $offset = ChangeMapFile -Values "F8" -Offset ($offset + 0x10)
+        $offset = ChangeMapFile -Values "EC" -Offset ($offset + 0x10)
+                  ChangeMapFile -Values "EC" -Offset ($offset + 0x10)
+
+        $offset = ChangeMapFile -Values "0FFFEC" -Search "07FFD30F3A0000089904002E920032F5" -Start "12BC0" # 0x26F0BC9
+        $offset = ChangeMapFile -Values "0FFFEC" -Offset ($offset + 0x10)                                  # 0x26F0BD9
+        $offset = ChangeMapFile -Values "5FFFEC" -Offset ($offset + 0x10)                                  # 0x26F0BE9
+                  ChangeMapFile -Values "5FFFEC" -Offset ($offset + 0x10)                                  # 0x26F0BF9
+        
+        $offset = ChangeMapFile -Values "00C4"   -Search "041C780000E6F471000F0FF500000266" -Start "144EA" # 0x26F24EA
+        $offset = ChangeMapFile -Values "28"     -Offset ($offset + 0x9)                                   # 0x26F24F3
+        $offset = ChangeMapFile -Values "28"     -Offset ($offset + 0x10)                                  # 0x26F2503
+        $offset = ChangeMapFile -Values "00C4"   -Offset ($offset + 0x17)                                  # 0x26F251A
+        $offset = ChangeMapFile -Values "28"     -Offset ($offset + 0x9)                                   # 0x26F2523
+        $offset = ChangeMapFile -Values "28"     -Offset ($offset + 0x10)                                  # 0x26F2533
+        $offset = ChangeMapFile -Values "28"     -Offset ($offset + 0x50)                                  # 0x26F2583
+                  ChangeMapFile -Values "28"     -Offset ($offset + 0x10)                                  # 0x26F2593
+
+        SaveAndPatchLoadedScene
+    }
 
     if (IsChecked $Redux.Hero.MoveGoldDust) {
         PrepareMap  -Scene "Mountain Village (Spring)" -Map 0 -Header 0; InsertObject -Name "Treasure Chest"; InsertActor -Name "Treasure Chest" -Param "0D40" -X 310 -Y 463 -Z 700 -YRot 90 -NoXRot -NoZRot; SaveAndPatchLoadedScene

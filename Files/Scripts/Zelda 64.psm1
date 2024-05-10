@@ -291,6 +291,8 @@ function SetMMCUpTextCoords([int16]$X, [int16]$Y) {
 function GetOoTEntranceIndex([string]$Index) {
 
     if     ($index -eq "Link's House")               { return "00 BB" }     elseif ($index -eq "Temple of Time")             { return "05 F4" }     elseif ($index -eq "Hyrule Field")               { return "01 FD" }
+    elseif ($index -eq "Hyrule Castle")              { return "01 38" }     elseif ($index -eq "Ganon's Castle")             { return "01 3A" }     elseif ($index -eq "Goron City")                 { return "01 4D" }
+    elseif ($index -eq "Zora's Domain")              { return "01 08" }     elseif ($index -eq "Gerudo Valley")              { return "01 17" }     elseif ($index -eq "Lon Lon Ranch")              { return "01 57" }
     elseif ($index -eq "Kakariko Village")           { return "00 DB" }     elseif ($index -eq "Inside the Deku Tree")       { return "00 00" }     elseif ($index -eq "Dodongo's Cavern")           { return "00 04" }
     elseif ($index -eq "Inside Jabu-Jabu's Belly")   { return "00 28" }     elseif ($index -eq "Forest Temple")              { return "01 69" }     elseif ($index -eq "Fire Temple")                { return "01 65" }
     elseif ($index -eq "Water Temple")               { return "00 10" }     elseif ($index -eq "Shadow Temple")              { return "00 82" }     elseif ($index -eq "Spirit Temple")              { return "00 37" }

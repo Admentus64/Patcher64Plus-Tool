@@ -1,3 +1,7 @@
+v23.4.1
+- Added extra starting location points for OoT
+- Fixed issue with Raised Research Lab Platform for MM
+
 v23.4.0
 - Updated Redux for OoT with new options and fixes
 	- Items on the D-Pad are bound to the slot rather than the item
