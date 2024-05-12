@@ -1,3 +1,6 @@
+v23.4.2
+- Fixed for OoT Redux
+
 v23.4.1
 - Added extra starting location points for OoT
 - Fixed issue with Raised Research Lab Platform for MM
