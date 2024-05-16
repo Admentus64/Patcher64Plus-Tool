@@ -1,5 +1,6 @@
 v23.4.2
-- Fixed for OoT Redux
+- Fixed OoT Redux
+- Fixed Ura Quest: Inside Jabu-Jabu's Belly scenes with Like-Likes not returning shields and tunics
 
 v23.4.1
 - Added extra starting location points for OoT
