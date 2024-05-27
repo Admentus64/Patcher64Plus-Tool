@@ -1,3 +1,9 @@
+v23.4.3
+- Fixed issues with OoT Redux
+- Fixed several typos
+- Fixed issue with not generating a decompressed patch
+- Added forced re-extraction of MQ / Ura dungeon data when either patch gets updated
+
 v23.4.2
 - Fixed OoT Redux
 - Fixed Ura Quest: Inside Jabu-Jabu's Belly scenes with Like-Likes not returning shields and tunics

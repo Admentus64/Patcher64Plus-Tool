@@ -8,6 +8,7 @@
 	"finalize"			: "rev0_finalize",
 	"script"			: "Ocarina of Time",
 	"base"				: 1,
+	"mq"				: 1,
 	"tooltip"			: "The regular Ocarina of Time experience{0}With support for languages, redux and additional options"
 
 }, {

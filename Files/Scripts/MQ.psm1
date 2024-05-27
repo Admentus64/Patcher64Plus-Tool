@@ -22,102 +22,100 @@ function PatchDungeonsOoTMQ() {
         ChangeBytes -Offset "E6DE2E" -Values "96" # Title Flames color
     }
 
-    if ( (IsDefault $Redux.MQ.Dungeons) -or (IsIndex -Elem $Redux.MQ.Dungeons -Text "Custom") ) { return }
-    $dungeons = PatchDungeonsMQ
+    if (IsIndex -Elem $Redux.MQ.Dungeons -Text "Custom") { return }
+    PatchDungeonsMQ
 
     $title = "Inside the Deku Tree" # Inside the Deku Tree
-    if ($dungeons[$title] -ne "Vanilla") { 
+    if ($DungeonList[$title] -ne "Vanilla") { 
         UpdateStatusLabel ("Patching MQ Dungeon: " + $title)
-        if (!(PatchDungeon -TableOffset "BB40" -Path ($dungeons[$title] + "\" + $title + "\") -Length 12 -Scene "B71440")) { return }
+        if (!(PatchDungeon -TableOffset "BB40" -Path ($DungeonList[$title] + "\" + $title + "\") -Length 12 -Scene "B71440")) { return }
         PatchBytes -Offset ( Get24Bit ( (GetDecimal "BC7E00") + (GetDecimal "0") ) )          -Patch ("Master Quest Chests\" + $title + "\mainmap_chests.bin") # BC7E00 -> BC879C (99C)
         PatchBytes -Offset ( Get24Bit ( (GetDecimal "BF40D0") + (GetDecimal "0") ) )          -Patch ("Master Quest Chests\" + $title + "\minimap_chests.bin") # BF40D0 -> BF469C (5CC)
     }
 
     $title = "Dodongo's Cavern" # Dodongo's Cavern
-    if ($dungeons[$title] -ne "Vanilla") { 
+    if ($DungeonList[$title] -ne "Vanilla") { 
         UpdateStatusLabel ("Patching MQ Dungeon: " + $title)
-        if (!(PatchDungeon -TableOffset "B320" -Path ($dungeons[$title] + "\" + $title + "\") -Length 17 -Scene "B71454")) { return }
+        if (!(PatchDungeon -TableOffset "B320" -Path ($DungeonList[$title] + "\" + $title + "\") -Length 17 -Scene "B71454")) { return }
         PatchBytes -Offset ( Get24Bit ( (GetDecimal "BC7E00") + (GetDecimal "99C") ) )        -Patch ("Master Quest Chests\" + $title + "\mainmap_chests.bin") # BC8B74 -> BC8F4C (3D8)
         PatchBytes -Offset ( Get24Bit ( (GetDecimal "BF40D0") + (GetDecimal "5CC") ) )        -Patch ("Master Quest Chests\" + $title + "\minimap_chests.bin") # BF469C -> BF4F14 (878)
     }
 
     $title = "Inside Jabu-Jabu's Belly" # Inside Jabu-Jabu's Belly
-    if ($dungeons[$title] -ne "Vanilla") { 
+    if ($DungeonList[$title] -ne "Vanilla") { 
         UpdateStatusLabel ("Patching MQ Dungeon: " + $title)
-        if (!(PatchDungeon -TableOffset "BF50" -Path ($dungeons[$title] + "\" + $title + "\") -Length 16 -Scene "B71468")) { return }
+        if (!(PatchDungeon -TableOffset "BF50" -Path ($DungeonList[$title] + "\" + $title + "\") -Length 16 -Scene "B71468")) { return }
         PatchBytes -Offset ( Get24Bit ( (GetDecimal "BC7E00") + (GetDecimal "D74") ) )        -Patch ("Master Quest Chests\" + $title + "\mainmap_chests.bin") # BC8B74 -> BC8F4C (3D8)
         PatchBytes -Offset ( Get24Bit ( (GetDecimal "BF40D0") + (GetDecimal "E44") ) )        -Patch ("Master Quest Chests\" + $title + "\minimap_chests.bin") # BF4F14 -> BF56A8 (794)
     }
 
     $title = "Forest Temple" # Forest Temple
-    if ($dungeons[$title] -ne "Vanilla") { 
+    if ($DungeonList[$title] -ne "Vanilla") { 
         UpdateStatusLabel ("Patching MQ Dungeon: " + $title)
-        if (!(PatchDungeon -TableOffset "B9C0" -Path ($dungeons[$title] + "\" + $title + "\") -Length 23 -Scene "B7147C")) { return }
+        if (!(PatchDungeon -TableOffset "B9C0" -Path ($DungeonList[$title] + "\" + $title + "\") -Length 23 -Scene "B7147C")) { return }
         PatchBytes -Offset ( Get24Bit ( (GetDecimal "BC7E00") + (GetDecimal "114C") ) )       -Patch ("Master Quest Chests\" + $title + "\mainmap_chests.bin") # BC8F4C -> BC96FC (7B0)
         PatchBytes -Offset ( Get24Bit ( (GetDecimal "BF40D0") + (GetDecimal "15D8") ) )       -Patch ("Master Quest Chests\" + $title + "\minimap_chests.bin") # BF56A8 -> BF62B0 (C08)
     }
 
     $title = "Fire Temple" # Fire Temple
-    if ($dungeons[$title] -ne "Vanilla") { 
+    if ($DungeonList[$title] -ne "Vanilla") { 
         UpdateStatusLabel ("Patching MQ Dungeon: " + $title)
-        if (!(PatchDungeon -TableOffset "B800" -Path ($dungeons[$title] + "\" + $title + "\") -Length 27 -Scene "B71490")) { return }
+        if (!(PatchDungeon -TableOffset "B800" -Path ($DungeonList[$title] + "\" + $title + "\") -Length 27 -Scene "B71490")) { return }
         PatchBytes -Offset ( Get24Bit ( (GetDecimal "BC7E00") + (GetDecimal "18FC") ) )       -Patch ("Master Quest Chests\" + $title + "\mainmap_chests.bin") # BC96FC -> BCA098 (99C)
         PatchBytes -Offset ( Get24Bit ( (GetDecimal "BF40D0") + (GetDecimal "21E0") ) )       -Patch ("Master Quest Chests\" + $title + "\minimap_chests.bin") # BF62B0 -> BF739C (10EC)
     }
 
     $title = "Water Temple" # Water Temple
-    if ($dungeons[$title] -ne "Vanilla") { 
+    if ($DungeonList[$title] -ne "Vanilla") { 
         UpdateStatusLabel ("Patching MQ Dungeon: " + $title)
-        if (!(PatchDungeon -TableOffset "BCA0" -Path ($dungeons[$title] + "\" + $title + "\") -Length 23 -Scene "B714A4")) { return }
+        if (!(PatchDungeon -TableOffset "BCA0" -Path ($DungeonList[$title] + "\" + $title + "\") -Length 23 -Scene "B714A4")) { return }
         PatchBytes -Offset ( Get24Bit ( (GetDecimal "BC7E00") + (GetDecimal "2298") ) )       -Patch ("Master Quest Chests\" + $title + "\mainmap_chests.bin") # BCA098 -> BCA848 (7B0)
         PatchBytes -Offset ( Get24Bit ( (GetDecimal "BF40D0") + (GetDecimal "32CC") ) )       -Patch ("Master Quest Chests\" + $title + "\minimap_chests.bin") # BF739C -> BF8734 (1398)
     }
 
     $title = "Shadow Temple" # Shadow Temple
-    if ($dungeons[$title] -ne "Vanilla") { 
+    if ($DungeonList[$title] -ne "Vanilla") { 
         UpdateStatusLabel ("Patching MQ Dungeon: " + $title)
-        if (!(PatchDungeon -TableOffset "C060" -Path ($dungeons[$title] + "\" + $title + "\") -Length 23 -Scene "B714CC")) { return }
+        if (!(PatchDungeon -TableOffset "C060" -Path ($DungeonList[$title] + "\" + $title + "\") -Length 23 -Scene "B714CC")) { return }
         PatchBytes -Offset ( Get24Bit ( (GetDecimal "BC7E00") + (GetDecimal "31F8") ) )       -Patch ("Master Quest Chests\" + $title + "\mainmap_chests.bin") # BCAFF8 -> BCB7A8 (7B0)
         PatchBytes -Offset ( Get24Bit ( (GetDecimal "BF40D0") + (GetDecimal "5518") ) )       -Patch ("Master Quest Chests\" + $title + "\minimap_chests.bin") # BF95E8 -> BFA1F0 (C08)
     }
     
     $title = "Spirit Temple" # Spirit Temple
-    if ($dungeons[$title] -ne "Vanilla") { 
+    if ($DungeonList[$title] -ne "Vanilla") { 
         UpdateStatusLabel ("Patching MQ Dungeon: " + $title)
-        if (!(PatchDungeon -TableOffset "C450" -Path ($dungeons[$title] + "\" + $title + "\") -Length 29 -Scene "B714B8")) { return }
+        if (!(PatchDungeon -TableOffset "C450" -Path ($DungeonList[$title] + "\" + $title + "\") -Length 29 -Scene "B714B8")) { return }
         PatchBytes -Offset ( Get24Bit ( (GetDecimal "BC7E00") + (GetDecimal "2A48") ) )       -Patch ("Master Quest Chests\" + $title + "\mainmap_chests.bin") # BCA848 -> BCAFF8 (7B0)
         PatchBytes -Offset ( Get24Bit ( (GetDecimal "BF40D0") + (GetDecimal "4664") ) )       -Patch ("Master Quest Chests\" + $title + "\minimap_chests.bin") # BF8734 -> BF95E8 (EB4)
     }
     
     $title = "Ice Cavern" # Ice Cavern
-    if ($dungeons[$title] -ne "Vanilla") { 
+    if ($DungeonList[$title] -ne "Vanilla") { 
         UpdateStatusLabel ("Patching MQ Dungeon: " + $title)
-        if (!(PatchDungeon -TableOffset "C630" -Path ($dungeons[$title] + "\" + $title + "\") -Length 12 -Scene "B714F4")) { return }
+        if (!(PatchDungeon -TableOffset "C630" -Path ($DungeonList[$title] + "\" + $title + "\") -Length 12 -Scene "B714F4")) { return }
         PatchBytes -Offset ( Get24Bit ( (GetDecimal "BC7E00") + (GetDecimal "3F6C") ) )       -Patch ("Master Quest Chests\" + $title + "\mainmap_chests.bin") # BCBD6C -> BCBF60 (1F4)
         PatchBytes -Offset ( Get24Bit ( (GetDecimal "BF40D0") + (GetDecimal "6594") ) )       -Patch ("Master Quest Chests\" + $title + "\minimap_chests.bin") # BFA664 -> BFABBC (558)
     }
 
     $title = "Bottom of the Well" # Bottom of the Well
-    if ($dungeons[$title] -ne "Vanilla") { 
+    if ($DungeonList[$title] -ne "Vanilla") { 
         UpdateStatusLabel ("Patching MQ Dungeon: " + $title)
-        if (!(PatchDungeon -TableOffset "CEA0" -Path ($dungeons[$title] + "\" + $title + "\") -Length 7  -Scene "B714E0")) { return }
+        if (!(PatchDungeon -TableOffset "CEA0" -Path ($DungeonList[$title] + "\" + $title + "\") -Length 7  -Scene "B714E0")) { return }
         PatchBytes -Offset ( Get24Bit ( (GetDecimal "BC7E00") + (GetDecimal "39A8") ) )       -Patch ("Master Quest Chests\" + $title + "\mainmap_chests.bin") # BCB7A8 -> BCBD6C (5C4)
         PatchBytes -Offset ( Get24Bit ( (GetDecimal "BF40D0") + (GetDecimal "6120") ) )       -Patch ("Master Quest Chests\" + $title + "\minimap_chests.bin") # BFA1F0 -> BFA664 (474)
     }
 
     $title = "Gerudo Training Ground" # Gerudo Training Ground
-    if ($dungeons[$title] -ne "Vanilla") { 
+    if ($DungeonList[$title] -ne "Vanilla") { 
         UpdateStatusLabel "Patching MQ Dungeon: " + $title
-        if (!(PatchDungeon -TableOffset "C230" -Path ($dungeons[$title] + "\" + $title + "\") -Length 11 -Scene "B7151C")) { return }
+        if (!(PatchDungeon -TableOffset "C230" -Path ($DungeonList[$title] + "\" + $title + "\") -Length 11 -Scene "B7151C")) { return }
     }
     
     $title = "Inside Ganon's Castle" # Inside Ganon's Castle
-    if ($dungeons[$title] -ne "Vanilla") { 
+    if ($DungeonList[$title] -ne "Vanilla") { 
         UpdateStatusLabel ("Patching MQ Dungeon: " + $title)
-        if (!(PatchDungeon -TableOffset "CCC0" -Path ($dungeons[$title] + "\" + $title + "\") -Length 20 -Scene "B71544")) { return }
+        if (!(PatchDungeon -TableOffset "CCC0" -Path ($DungeonList[$title] + "\" + $title + "\") -Length 20 -Scene "B71544")) { return }
     }
-
-    return $dungeons
 
 }
 
@@ -143,15 +141,16 @@ function PatchDungeonsMQ() {
     }
 
     UpdateStatusLabel ("Patching " + $GameType.mode + " Master Quest Dungeons...")
-    $dungeons = @{}
+    $global:DungeonList = @{}
     $versions = @{}
 
     foreach ($item in $Redux.Box.SelectMQ) {
         foreach ($label in $item.controls) {
-            if     ( (IsIndex -Elem $Redux.MQ.Dungeons -Text "Select")       -and $label.GetType() -eq [System.Windows.Forms.Label]) { $dungeons[$label.text.replace(":", "")] = $label.ComboBox.text     }
-            elseif ( (IsIndex -Elem $Redux.MQ.Dungeons -Text "Master Quest") -and $label.GetType() -eq [System.Windows.Forms.Label]) { $dungeons[$label.text.replace(":", "")] = $label.ComboBox.items[1] }
-            elseif ( (IsIndex -Elem $Redux.MQ.Dungeons -Text "Ura Quest")    -and $label.GetType() -eq [System.Windows.Forms.Label]) { $dungeons[$label.text.replace(":", "")] = $label.ComboBox.items[2] }
-            elseif ( (IsIndex -Elem $Redux.MQ.Dungeons -Text "Randomize")    -and $label.GetType() -eq [System.Windows.Forms.Label]) { $dungeons[$label.text.replace(":", "")] = $label.ComboBox.items[0]; $versions[$label.text.replace(":", "")] = $label.ComboBox.items }
+            if     ( (IsIndex -Elem $Redux.MQ.Dungeons -Text "Select")       -and $label.GetType() -eq [System.Windows.Forms.Label]) { $DungeonList[$label.text.replace(":", "")] = $label.ComboBox.text     }
+            elseif ( (IsIndex -Elem $Redux.MQ.Dungeons -Text "Vanilla")      -and $label.GetType() -eq [System.Windows.Forms.Label]) { $DungeonList[$label.text.replace(":", "")] = $label.ComboBox.items[0] }
+            elseif ( (IsIndex -Elem $Redux.MQ.Dungeons -Text "Master Quest") -and $label.GetType() -eq [System.Windows.Forms.Label]) { $DungeonList[$label.text.replace(":", "")] = $label.ComboBox.items[1] }
+            elseif ( (IsIndex -Elem $Redux.MQ.Dungeons -Text "Ura Quest")    -and $label.GetType() -eq [System.Windows.Forms.Label]) { $DungeonList[$label.text.replace(":", "")] = $label.ComboBox.items[2] }
+            elseif ( (IsIndex -Elem $Redux.MQ.Dungeons -Text "Randomize")    -and $label.GetType() -eq [System.Windows.Forms.Label]) { $DungeonList[$label.text.replace(":", "")] = $label.ComboBox.items[0]; $versions[$label.text.replace(":", "")] = $label.ComboBox.items }
         }
     }
 
@@ -160,19 +159,17 @@ function PatchDungeonsMQ() {
         $max   = $Redux.MQ.Maximum.Text.replace(" (default)", "")
         $count = (Get-Random -Minimum $min -Maximum $max)
         while ($count -gt 0) {
-            foreach ($h in $dungeons.Keys) {
+            foreach ($h in $DungeonList.Keys) {
                 $change = (Get-Random -Maximum 20)
-                if ($change -eq 0 -and $dungeons.$h -eq "Vanilla") {
-                    $dungeons.$h = $versions.$h[(Get-Random -Minimum 1 -Maximum ($versions.$h.count))]
-                    WriteToConsole ("Dungeon Spoiler: " + $h + " -> " + $dungeons.$h)
+                if ($change -eq 0 -and $DungeonList.$h -eq "Vanilla") {
+                    $DungeonList.$h = $versions.$h[(Get-Random -Minimum 1 -Maximum ($versions.$h.count))]
+                    WriteToConsole ("Dungeon Spoiler: " + $h + " -> " + $DungeonList.$h)
                     $count--
                     break
                 }
             }
         }
     }
-
-    return $dungeons
 
 }
 
@@ -195,10 +192,24 @@ function CheckDungeonData([string]$Path) {
 function ExtractMQData() {
     
     if (!$PatchInfo.decompress) { return }
+    
+    $MQHash  = (Get-FileHash -Algorithm MD5 -LiteralPath $Files.oot.master_quest).Hash
+    $UraHash = (Get-FileHash -Algorithm MD5 -LiteralPath $Files.oot.ura_quest).Hash
+
+    if ($MQHash -ne $Settings.Hashes.MQ) {
+        if ($Settings.Hashes -eq $null) { $Settings.Hashes = @{} }
+        $Settings.Hashes.MQ  = $MQHash
+        RemovePath ($GameFiles.extracted + "\Master Quest")
+    }
+    if ($UraHash -ne $Settings.Hashes.Ura) {
+        if ($Settings.Hashes -eq $null) { $Settings.Hashes = @{} }
+        $Settings.Hashes.Ura  = $UraHash
+        RemovePath ($GameFiles.extracted + "\Ura Quest")
+    }
 
     # EXTRACT MQ DATA #
     if ($GameType.mode -eq "Ocarina of Time") {
-        if ( ( (IsIndex -Elem $Redux.MQ.Dungeons -Text "Select") -or (IsIndex -Elem $Redux.MQ.Dungeons -Text "Master Quest") -or (IsIndex -Elem $Redux.MQ.Dungeons -Text "Randomize") ) -and (IsChecked $Patches.Options) ) { # EXTRACT MQ DUNGEON DATA
+        if ( ( (IsIndex -Elem $Redux.MQ.Dungeons -Text "Select") -or (IsIndex -Elem $Redux.MQ.Dungeons -Text "Master Quest") -or (IsIndex -Elem $Redux.MQ.Dungeons -Text "Randomize") ) -and ( (IsChecked $Patches.Options) -or ($GamePatch.mq -eq 1 -and $GamePatch.function -is [String]) ) ) { # EXTRACT MQ DUNGEON DATA
             if ( (CountFiles ($GameFiles.extracted + "\Master Quest")) -ne $GameType.mq_files -or $Settings.Debug.ForceExtract -eq $True) {
                 if (TestFile -Path ($GameFiles.decompressed + "\Dungeons\master_quest.bps") ) {
                     WriteToConsole "Extracting Master Quest dungeon files"
@@ -208,7 +219,8 @@ function ExtractMQData() {
                 }
             }
         }
-        if ( ( (IsIndex -Elem $Redux.MQ.Dungeons -Text "Select") -or (IsIndex -Elem $Redux.MQ.Dungeons -Text "Ura Quest") -or (IsIndex -Elem $Redux.MQ.Dungeons -Text "Randomize") ) -and (IsChecked $Patches.Options) ) { # EXTRACT URA DUNGEON DATA
+
+        if ( ( (IsIndex -Elem $Redux.MQ.Dungeons -Text "Select") -or (IsIndex -Elem $Redux.MQ.Dungeons -Text "Ura Quest") -or (IsIndex -Elem $Redux.MQ.Dungeons -Text "Randomize") ) -and ( (IsChecked $Patches.Options) -or ($GamePatch.mq -eq 1 -and $GamePatch.function -is [String]) ) ) { # EXTRACT URA DUNGEON DATA
             if ( (CountFiles ($GameFiles.extracted + "\Ura Quest")) -ne $GameType.mq_files -or $Settings.Debug.ForceExtract -eq $True) {
                 if (TestFile -Path ($GameFiles.decompressed + "\Dungeons\ura_quest.bps") ) {
                     WriteToConsole "Extracting Ura Quest dungeon files"

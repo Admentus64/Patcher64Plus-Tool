@@ -157,7 +157,7 @@
 		"name"		: "Lost Woods",
 		"dma"		: "B5D0",
 		"length"	: 10,
-		"maps"		: [ "Entrance", "Bullet Bag Minigame", "Goron City Entrance", "Zora's River Entrance", "Three-Way Fork", "Deku Stick Upgrade", "Three Area", "Road to Sacred Forest Meadow", "Sacred Forest Meadow Entrance", "Skull Mask Skullkid" ],
+		"maps"		: [ "Entrance", "Bullet Bag Minigame", "Goron City Entrance", "Zora's River Entrance", "Three-Way Fork", "Deku Stick Upgrade", "Tree Area", "Road to Sacred Forest Meadow", "Sacred Forest Meadow Entrance", "Skull Mask Skullkid" ],
 		"stages"	: [ "Child", "Adult", "Fairy Ocarina" ]
 	}, {
 		"id"		: "005C",
@@ -526,7 +526,7 @@
 		"dma"		: "B800",
 		"length"	: 27,
 		"dungeon"	: 1,
-		"maps"		: [ "Entrance", "Lava Cavern", "Boss Door Hall", "Flare Dance Room - Entrance", "Fire Slug Room", "Boulder Maze", "Narrow Three-Way Bridge", "Room to East Tower", "East Tower", "Hallway Connecting Towers", "Invisible Fire Wall Maze", "Passthrough - Invisible Fire Wall Maze", "Room to West Tower", "West Tower", "Hidden Stairs Room", "Torch Slug Hallway - Entrance", "Flaming Wall of Death Room", "Captured Goron North of Entrance", "Tile Room - Entrance", "Tile Room - Lava Cavern", "Captured Goron - North Lava Cavern", "Flaming Elevator", "Captured Goron - South Lava Cavern", "Captured Goron - Boulder Maze", "Flare Dancer Room - Fire Wall Maze", "Captured Goron - Fire Wall Maze", "Boss Lair" ]
+		"maps"		: [ "Entrance", "Lava Cavern", "Boss Door Hall", "Flare Dancer Room - Entrance", "Fire Slug Room", "Boulder Maze", "Narrow Three-Way Bridge", "Room to East Tower", "East Tower", "Hallway Connecting Towers", "Invisible Fire Wall Maze", "Passthrough - Invisible Fire Wall Maze", "Room to West Tower", "West Tower", "Hidden Stairs Room", "Torch Slug Hallway - Entrance", "Flaming Wall of Death Room", "Captured Goron North of Entrance", "Tile Room - Entrance", "Tile Room - Lava Cavern", "Captured Goron - North Lava Cavern", "Flaming Elevator", "Captured Goron - South Lava Cavern", "Captured Goron - Boulder Maze", "Flare Dancer Room - Fire Wall Maze", "Captured Goron - Fire Wall Maze", "Boss Lair" ]
 	}, {
 		"id"		: "0005",
 		"name"		: "Water Temple",
@@ -547,7 +547,7 @@
 		"dma"		: "C450",
 		"length"	: 29,
 		"dungeon"	: 1,
-		"maps"		: [ "Entrance", "Main Corridor", "East Room - Main Corridor", "West Room - Main Corridor", "Bombiwa Rock Room", "Colossus Room", "Shortcut Room - Entrance", "West Corridor - Colossus Room", "Sun Face Block Pushing Room", "West Hallway to Iron Knuckle Room", "West Iron Knuckle Room", "Exits to Colossus Hands", "Sole Room - Rolling Boulder Room", "Rolling Boulder Room", "Quicksand Room", "Trap Mirror With Mirror", "East Corridor - Colossus Room", "Time Block Puzzle Room", "Armos & Sun Face Room", "East Hallway to Iron Knuckle Room", "East Iron Knuckle Room", "Sole Room - Armos & Sun Face Room", "Sole Room - Triforce Corridor", "Moving Trap Wall", "Triforce Corridor", "Mirror Puzzle Above Colossus Room", "Rotating Mirror Statues Room", "Anubis Room - Main Corridor", "Boss Lair" ]
+		"maps"		: [ "Entrance", "Main Corridor", "East Room - Main Corridor", "West Room - Main Corridor", "Bombiwa Rock Room", "Colossus Room", "Shortcut Room - Entrance", "West Corridor - Colossus Room", "Sun Face Block Pushing Room", "West Hallway to Iron Knuckle Room", "West Iron Knuckle Room", "Exits to Colossus Hands", "Sole Room - Rolling Boulder Room", "Rolling Boulder Room", "Quicksand Room", "Trap Room With Mirror", "East Corridor - Colossus Room", "Time Block Puzzle Room", "Armos & Sun Face Room", "East Hallway to Iron Knuckle Room", "East Iron Knuckle Room", "Sole Room - Armos & Sun Face Room", "Sole Room - Triforce Corridor", "Moving Trap Wall", "Triforce Corridor", "Mirror Puzzle Above Colossus Room", "Rotating Mirror Statues Room", "Anubis Room - Main Corridor", "Boss Lair" ]
 	}, {
 		"id"		: "0009",
 		"name"		: "Ice Cavern",
@@ -4491,7 +4491,7 @@
 			"name"	: "Epona's Song",
 			"value"	: "1"
 		}, {
-			"name"	: "Saria's song",
+			"name"	: "Saria's Song",
 			"value"	: "2"
 		}, {
 			"name"	: "Sun's Song",
@@ -5035,7 +5035,7 @@
 			"show"	: 4,
 			"hide"	: 5
 		}, {
-			"name"	: "Slingshotable & Throws Bomb",
+			"name"	: "Bomb Soldier",
 			"value" : "4000",
 			"show"	: 4,
 			"hide"	: 5

@@ -175,6 +175,7 @@ $Paths.Addons          = $Paths.Master  + "\Addons"
 $Paths.Models          = $Paths.Addons  + "\Models"
 $Paths.Music           = $Paths.Addons  + "\Music"
 $Paths.Assert          = $Paths.Base    + "\Assert"
+$Paths.Extract         = $Paths.Base    + "\Extract"
 $Patcher.VersionFile   = $Paths.Master  + "\version.txt"
 
 

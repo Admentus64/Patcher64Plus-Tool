@@ -214,12 +214,14 @@ function MainFunctionPatch([string]$Command, [Array]$Header, [string]$PatchedFil
 
     # Step 11: Final message
     if ($IsWiiVC) { $text = "WAD" } else { $text = "ROM" }
-    if (DoAssertSceneFiles) { UpdateStatusLabel ("Done asserting " + $GameType.mode + " " + $text + "."); return }
+    if (DoAssertSceneFiles)                 { UpdateStatusLabel ("Done asserting "  + $GameType.mode + " " + $text + ".");                                                                 return }
+    if (DoExtractSceneFiles)                { UpdateStatusLabel ("Done extracting " + $GameType.mode + " " + $text + ".");                                                                 return }
+    if     (!$PatchInfo.run)                { UpdateStatusLabel ("There was nothing to patch for the " + $GameType.mode + " " + $text + ".")                                                      }
     if     (!$PatchInfo.run)                { UpdateStatusLabel ("There was nothing to patch for the " + $GameType.mode + " " + $text + ".")                                                      }
     elseif ($WarningError)                  { UpdateStatusLabel ("Done patching " + $GameType.mode + " " + $text + ", but encountered issues. Please check the log.")                      -Error }
     elseif ( ($IsWiiVC -and !(TestFile $WADFile.patched) ) -or (!$IsWiiVC -and !(TestFile $GetROM.patched) ) ) {
-        UpdateStatusLabel ("Done patching " + $GameType.mode + " " + $text + ", but couldn't write to changed " + $text + ". Please check the log.") -Error
-        WriteToConsole -Text "Are folder permission enabled for file writing?" -Error
+        UpdateStatusLabel ("Done patching " + $GameType.mode + " " + $text + ", but couldn't write to changed " + $text + ". Please check the log.")                                       -Error
+        WriteToConsole -Text "Are folder permission enabled for file writing?"                                                                                                             -Error
     }
     elseif ($OverwriteError)                { UpdateStatusLabel ("Done patching " + $GameType.mode + " " + $text + ", but some options got overwritten. Please check the log.")            -Error }
     elseif ($MissingError)                  { UpdateStatusLabel ("Done patching " + $GameType.mode + " " + $text + ", but some options are missing. Please check the log.")                -Error }
@@ -303,7 +305,7 @@ function WriteDebug([string]$Command, [string[]]$Header, [string]$PatchedFileNam
 #==============================================================================================================================================================================================
 function Cleanup([switch]$skipLanguageReset) {
     
-    $global:ByteArrayGame = $global:ROMFile = $global:WADFile = $global:CheckHashSum = $global:ROMHashSum = $global:OverwritechecksROM = $null
+    $global:ByteArrayGame = $global:ROMFile = $global:WADFile = $global:CheckHashSum = $global:ROMHashSum = $global:OverwritechecksROM = $global:DungeonList = $null
     if (!$skipLanguageReset) { $global:LanguagePatch = $null }
     [System.GC]::WaitForPendingFinalizers(); [System.GC]::Collect()
 
@@ -421,7 +423,7 @@ function CheckCommand([string]$Command, [boolean]$Check=$True) {
 #==============================================================================================================================================================================================
 function RunCommand([string]$Command="", [string]$Message="", [boolean]$Check=$True) {
     
-    if (DoAssertSceneFiles) { return }
+    if ( (DoAssertSceneFiles) -or (DoExtractSceneFiles) ) { return }
 
     if ( (IsSet $GamePatch.preset) -or ($Patches.Options.Checked -and $Patches.Options.Visible) ) {
         if ( (HasCommand $Command) -and $Check) {
@@ -448,7 +450,7 @@ function PatchingAdditionalOptions() {
     $GetROM.run = $GetROM.decomp
     
     # Language patches
-    if ($Settings.Debug.ExtractCleanScript -eq $True -and (IsSet $LanguagePatch.script_dma) -and (IsSet $LanguagePatch.table_start) -and (IsSet $LanguagePatch.table_length) -and !(DoAssertSceneFiles) ) {
+    if ($Settings.Debug.ExtractCleanScript -eq $True -and (IsSet $LanguagePatch.script_dma) -and (IsSet $LanguagePatch.table_start) -and (IsSet $LanguagePatch.table_length) -and !(DoAssertSceneFiles) -and !(DoExtractSceneFiles) ) {
         $global:ByteArrayGame = [System.IO.File]::ReadAllBytes($GetROM.decomp)
         CreateSubPath $GameFiles.editor
         $start  = CombineHex $ByteArrayGame[((GetDecimal $LanguagePatch.script_dma)+0)..((GetDecimal $LanguagePatch.script_dma)+3)]
@@ -468,7 +470,7 @@ function PatchingAdditionalOptions() {
     # BPS - Additional Options (before languages)
     RunCommand -Command "PrePatchTextOptions" -Message "Text File"
 
-    if ( (IsSet -Elem $LanguagePatchFile) -and $Settings.Debug.NoTextPatching -ne $True -and !(DoAssertSceneFiles) ) {
+    if ( (IsSet -Elem $LanguagePatchFile) -and $Settings.Debug.NoTextPatching -ne $True -and !(DoAssertSceneFiles) -and !(DoExtractSceneFiles) ) {
         UpdateStatusLabel ("Patching " + $GameType.mode + " Language...")
         ApplyPatch -File $GetROM.decomp -Patch $LanguagePatchFile
         $global:LanguagePatchFile = $null
@@ -476,7 +478,7 @@ function PatchingAdditionalOptions() {
 
     # BPS - Additional Options
     RunCommand -Command "PatchOptions" -Message "File"
-    if (DoAssertSceneFiles) { ApplyTestSceneFiles }
+    if ( (DoAssertSceneFiles) -or (DoExtractSceneFiles) ) { ApplyTestSceneFiles }
 
     # BPS - Redux Options
     if ( (HasCommand "PatchReduxOptions") -and ( (IsChecked $Patches.Redux) -or (IsSet $GamePatch.preset) ) -and (IsSet $GamePatch.redux) ) { RunCommand -Command "PatchReduxOptions" -Message "Redux File" }
@@ -487,7 +489,7 @@ function PatchingAdditionalOptions() {
     RunCommand -Command "ByteOptions" -Message "Byte"
 
     # Redux Options
-    if ( (CheckCommand "ByteReduxOptions") -and ( (IsChecked $Patches.Redux) -or (IsSet $GamePatch.preset) ) -and (IsSet $GamePatch.redux) -and !(DoAssertSceneFiles) ) {
+    if ( (CheckCommand "ByteReduxOptions") -and ( (IsChecked $Patches.Redux) -or (IsSet $GamePatch.preset) ) -and (IsSet $GamePatch.redux) -and !(DoAssertSceneFiles) -and !(DoExtractSceneFiles) ) {
         $global:Symbols = SetJSONFile ($GameFiles.base + "\symbols.json")
         RunCommand -Command "ByteReduxOptions" -Message "Redux"
         $global:Symbols = $null
@@ -499,13 +501,14 @@ function PatchingAdditionalOptions() {
         $global:SceneEditor        = @{}
         $Files.json.sceneEditor    = SetJSONFile $GameFiles.sceneEditor
         RunCommand -Command "ByteSceneOptions" -Message "Scene" -Check ($Settings.Debug.NoScenePatching -ne $True)
-        if (DoAssertSceneFiles) { TestScenesFiles }
+        if (DoAssertSceneFiles)    { AssertSceneFiles  }
+        if (DoExtractSceneFiles)   { ExtractSceneFiles }
         $global:SceneEditor = $Files.json.sceneEditor = $null
         $global:RunOverwriteChecks = $True
     }
     
     # Language Options
-    if ($Settings.Debug.NoTextPatching -ne $True -or (HasCommand ($GamePatch.function + "ByteTextOptions") ) -or (HasCommand "WholeTextOptions") -and !(DoAssertSceneFiles) ) {
+    if ($Settings.Debug.NoTextPatching -ne $True -or (HasCommand ($GamePatch.function + "ByteTextOptions") ) -or (HasCommand "WholeTextOptions") -and !(DoAssertSceneFiles) -and !(DoExtractSceneFiles) ) {
         $Files.json.textEditor = $null
         if ($LanguagePatch.script_dma -ne $null -and $LanguagePatch.region -ne "J") {
             RemoveFile ($GameFiles.extracted + "\message_data_static." + $LanguagePatch.code + ".bin")
@@ -611,13 +614,13 @@ function ApplyUpdateROMCRC([string]$File) {
 #==============================================================================================================================================================================================
 function CreateDebugPatches() {
     
-    if ($Settings.Debug.CreateDecompressedBPS -eq $True -or $Settings.Debug.CreateCompressedBPS -eq $True) {
+    if ($Settings.Debug.CreateDecompressedBPS -eq $True -or $Settings.Debug.CreateCompressedBPS -eq $True -or (DoExtractSceneFiles) ) {
         $script = { Param([string]$Tool, [string]$Original, [string]$Compare, [string]$Out)
             & $Tool --create --bps $Original $Compare $Out | Out-Null
         }
     }
 
-    if ($Settings.Debug.CreateDecompressedBPS -eq $True -and (TestFile $GetROM.cleanDecomp) -and (TestFile $GetROM.decomp) ) {
+    if ( ($Settings.Debug.CreateDecompressedBPS -eq $True -or (DoExtractSceneFiles) ) -and (TestFile $GetROM.cleanDecomp) -and (TestFile $GetROM.decomp) ) {
         Start-Job    -Name "Script" -ScriptBlock $script -ArgumentList @($Files.tool.flips, $GetROM.cleanDecomp, $GetROM.decomp, $Files.decompBPS)
         StartJobLoop -Name "Script"
         WriteToConsole ("Created decompressed BPS patch: " + $Files.decompBPS)
@@ -1182,10 +1185,7 @@ function CompressROM() {
             }
         }
     }
-    else {
-        Copy-Item   -LiteralPath $GetROM.decomp -Destination $GetROM.patched -Force
-        Remove-Item -LiteralPath $GetROM.decomp
-    }
+    else { Copy-Item -LiteralPath $GetROM.decomp -Destination $GetROM.patched -Force }
 
     $GetROM.run = $GetROM.patched
 }
@@ -1196,7 +1196,7 @@ function CompressROM() {
 function PatchRedux() {
     
     # BPS PATCHING REDUX #
-    if (!$Patches.Redux.Checked -or $GamePatch.redux -eq $null -or (DoAssertSceneFiles) -or !(TestFile (CheckPatchExtension ($GameFiles.base + "\redux")))) { return }
+    if (!$Patches.Redux.Checked -or $GamePatch.redux -eq $null -or (DoAssertSceneFiles) -or (DoExtractSceneFiles) -or !(TestFile (CheckPatchExtension ($GameFiles.base + "\redux")))) { return }
 
     if (!(TestFile $GetROM.decomp)) { Copy-Item -LiteralPath $GetROM.run -Destination $GetROM.decomp -Force }
     $GetROM.run = $GetROM.decomp

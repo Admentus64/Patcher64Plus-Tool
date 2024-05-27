@@ -10,6 +10,7 @@ Files/Games/**/Custom Text/*.*
 Files/Games/**/Editor
 Exclude
 Assert
+Extract
 *.exe
 !Files/Tools/*.exe
 Release Prepare.bat

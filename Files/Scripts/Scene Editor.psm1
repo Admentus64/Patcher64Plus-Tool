@@ -380,12 +380,15 @@ function LoadTab([byte]$Tab) {
 #==============================================================================================================================================================================================
 function RunSceneEditor([object]$Game=$null) {
     
-    if ($global:TextEditor -ne $null -and $global:SceneEditor -ne $null) { return }
-    $global:SceneEditor      = @{}
-    $SceneEditor.GameConsole = $Files.json.consoles[0]
-    $SceneEditor.GameType    = $Game
-    CreateSceneEditorDialog
-    $SceneEditor.Dialog.Show()
+    try {
+        if ($global:TextEditor -ne $null -and $global:SceneEditor -ne $null) { return }
+        $global:SceneEditor      = @{}
+        $SceneEditor.GameConsole = $Files.json.consoles[0]
+        $SceneEditor.GameType    = $Game
+        CreateSceneEditorDialog
+        $SceneEditor.Dialog.Show()
+    }
+    catch { WriteToConsole -Text ("Error Opening Scene Editor:" + $_) -Error }
 
 }
 
@@ -407,6 +410,19 @@ function CloseSceneEditor() {
 
     $global:ByteScriptArray = $global:ByteTableArray = $Files.json.sceneEditor = $global:SceneEditor = $null
     if (TestFile ($GameFiles.base + "\Music.json")) { $Files.json.music = SetJSONFile ($GameFiles.base + "\Music.json") } else { $Files.json.music = $null }
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function EnableAutoScroll() {
+
+    if ($SceneEditor.GUI) {
+        $SceneEditor.BottomPanelObjects.AutoScroll        = $True
+        $SceneEditor.BottomPanelObjects.AutoScrollMargin  = New-Object System.Drawing.Size(0, 0)
+        $SceneEditor.BottomPanelObjects.AutoScrollMinSize = New-Object System.Drawing.Size(0, 0)
+    }
 
 }
 
@@ -992,7 +1008,7 @@ function PrepareMap([string]$Scene, [byte]$Map, [byte]$Header, [switch]$Shift) {
 function SaveLoadedMap([switch]$Silent) {
     
     if ($SceneEditor.LoadedScene -eq $null) { return }
-    
+
     if ($SceneEditor.MapShift -ne 0) {
         ShiftMapVtxData -Shift $SceneEditor.MapShift
         $SceneEditor.MapShift = 0
@@ -2266,7 +2282,7 @@ function LoadMap([object[]]$Scene=$SceneEditor.LoadedScene, [byte]$Map=$SceneEdi
     if (IsSet $SceneEditor.Offsets[0].AlternateStart) {
         for ($i=$SceneEditor.Offsets[0].AlternateStart; $i -lt $SceneEditor.Offsets[0].NextAlternate; $i+=4) {
             if ($SceneEditor.MapArray[$i] -ne 3) { continue }
-
+            
             $SceneEditor.Offsets                                           += @{}
             $SceneEditor.Offsets[$SceneEditor.Offsets.Count-1].Header       = $SceneEditor.MapArray[$i + 1] * 65536 + $SceneEditor.MapArray[$i + 2] * 256 + $SceneEditor.MapArray[$i + 3]
             $SceneEditor.Offsets[$SceneEditor.Offsets.Count-1].FoundActors  = $False
@@ -2549,7 +2565,7 @@ function ShiftMapHeaderData([int16]$Shift=0x10) {
         ShiftMap -Offset ($SceneEditor.Offsets[0].MeshStart+5) -Shift $Shift
         ShiftMap -Offset ($SceneEditor.Offsets[0].MeshStart+9) -Shift $Shift
     }
-
+    
     if ($SceneEditor.GUI) { ShiftMapVtxData -Shift $Shift } else { $SceneEditor.MapShift += $Shift }
 
 }
@@ -2738,7 +2754,7 @@ function ShiftSceneHeaderData([int16]$Shift=0x10) {
 
 #==============================================================================================================================================================================================
 function ShiftSceneMapData([int16]$Shift=0x10) {
-
+    
     $originalMap = $SceneEditor.LoadedMap
     if ($SceneEditor.GUI) { [System.IO.File]::WriteAllBytes(($Paths.Temp + "\scene\room_" + $SceneEditor.LoadedMap + ".zmap"), $SceneEditor.MapArray) }
     for ($map=0; $map -lt $SceneEditor.SceneOffsets[0].MapCount; $map++) {
@@ -3007,13 +3023,13 @@ function InsertActor([string]$ID="0000", [string]$Name, [int]$X=0, [int]$Y=0, [i
         if ($XRot -gt 0x1FF)   { $XRot = 0x1FF }
         $values += ($XRot -shl 7) -shr 8
         $values += $arr[0] + ($arr[1] -shl 1) + ($arr[2] -shl 2) + ($XRot -shl 7) + ( ($XRot -shl 7) % 0x100)
-        write-host "XRot" (Get8Bit $values[8])  (Get8Bit $values[9]) 
+      # write-host "XRot" (Get8Bit $values[8])  (Get8Bit $values[9]) 
 
         if ($Cutscene -gt 0x7F)    { $Cutscene = 0x7F  }
         if ($YRot     -gt 0x1FF)   { $YRot     = 0x1FF }
         $values += ($YRot -shl 7) -shr 8
         $values += $Cutscene + ( ($YRot -shl 7) % 0x100)
-        write-host "YRot" (Get8Bit $values[10])  (Get8Bit $values[11]) 
+      # write-host "YRot" (Get8Bit $values[10])  (Get8Bit $values[11]) 
 
         $arr = @(0, 0, 0, 0, 0, 0, 0)
         if ($SpawnTimes[0])    { $arr[0] = 1 }
@@ -3026,7 +3042,7 @@ function InsertActor([string]$ID="0000", [string]$Name, [int]$X=0, [int]$Y=0, [i
         if ($ZRot -gt 0x1FF)   { $ZRot = 0x1FF }
         $values += ($XRot -shl 7) -shr 8
         $values += $arr[0] + ($arr[1] -shl 1) + ($arr[2] -shl 2) + ($arr[3] -shl 3) + ($arr[4] -shl 4) + ($arr[5] -shl 5) + ($arr[6] -shl 6) + ($ZRot -shl 7) + ( ($XRot -shl 7) % 0x100)
-        write-host "ZRot" (Get8Bit $values[12])  (Get8Bit $values[13]) 
+      # write-host "ZRot" (Get8Bit $values[12])  (Get8Bit $values[13]) 
     }
     else {
         $values += $XRot -shr 8
@@ -3561,12 +3577,7 @@ function DeleteObject() {
     }
     $SceneEditor.MapArray[(GetObjectEnd)] = $SceneEditor.MapArray[(GetObjectEnd)+1] = 0
 
-    if ($SceneEditor.GUI) {
-        $SceneEditor.BottomPanelObjects.AutoScroll        = $True
-        $SceneEditor.BottomPanelObjects.AutoScrollMargin  = New-Object System.Drawing.Size(0, 0)
-        $SceneEditor.BottomPanelObjects.AutoScrollMinSize = New-Object System.Drawing.Size(0, 0)
-    }
-
+    EnableAutoScroll
     return $True
 
 }
@@ -3618,13 +3629,9 @@ function InsertObject([string]$ID="0000", [string]$Name, [switch]$Silent) {
 
     $SceneEditor.MapArray[(GetObjectEnd) - 2] = $ID[0]
     $SceneEditor.MapArray[(GetObjectEnd) - 1] = $ID[1]
-
-    if ($SceneEditor.GUI) {
-        AddObject
-        $SceneEditor.BottomPanelObjects.AutoScroll        = $True
-        $SceneEditor.BottomPanelObjects.AutoScrollMargin  = New-Object System.Drawing.Size(0, 0)
-        $SceneEditor.BottomPanelObjects.AutoScrollMinSize = New-Object System.Drawing.Size(0, 0)
-    }
+    
+    if ($SceneEditor.GUI) { AddObject }
+    EnableAutoScroll
 
     if (!$Silent) {
         if (IsSet $Name) { WriteToConsole ("Inserted object:         " + $Name) } else { WriteToConsole ("Inserted object with ID: " + $printID) }
@@ -4149,7 +4156,7 @@ function LoadActor([object]$Actor, [byte]$Count, [switch]$IsScene) {
         }
 
         try     { $params += LoadParam -Param $Actor.params[$i] -Value $value -Band $band -LastBandX $lastBandX -LastX $lastX -Count $Count -Rotation $rotation -IsScene $IsScene }
-        catch   { WriteToConsole ("Loading loading params for actor: " + $Actor.name) -Error }
+        catch   { WriteToConsole ("Loading params for actor: " + $Actor.name) -Error }
 
         $LastX = $params[$i].Right
         if ($i -lt $Actor.params.Count - 1) {
@@ -4855,7 +4862,38 @@ function ReloadParams([object]$Actor, [byte]$Index) {
 #==============================================================================================================================================================================================
 function DoAssertSceneFiles() {
     
-    if (TestFile -Path ($Paths.Assert + "\assert") ) {
+    if ( (TestFile -Path ($Paths.Assert + "\assert") ) -or (TestFile -Path ($Paths.Assert + "\assert_mq") ) -or (TestFile -Path ($Paths.Assert + "\assert_ura") ) ) {
+        if ($GameType.Mode -eq "Ocarina of Time")   { return $True }
+    }
+    elseif (TestFile -Path ($Paths.Assert + "\assert") ) {
+        if ($GameType.Mode -eq "Majora's Mask")     { return $True }
+    }
+
+    return $False
+    
+}
+
+
+
+#==============================================================================================================================================================================================
+function DoAssertMQSceneFiles() {
+    
+    if (TestFile -Path ($Paths.Assert + "\assert_mq") ) {
+        if ($GameType.Mode -eq "Ocarina of Time")   { return $True }
+        if ($GameType.Mode -eq "Majora's Mask")     { return $True }
+    }
+
+    return $False
+    
+}
+
+
+
+
+#==============================================================================================================================================================================================
+function DoAssertUraSceneFiles() {
+    
+    if (TestFile -Path ($Paths.Assert + "\assert_ura") ) {
         if ($GameType.Mode -eq "Ocarina of Time")   { return $True }
         if ($GameType.Mode -eq "Majora's Mask")     { return $True }
     }
@@ -4870,33 +4908,58 @@ function DoAssertSceneFiles() {
 function ApplyTestSceneFiles() {
     
     if ($GameType.Mode -eq "Ocarina of Time") {
-        ApplyPatch -Silent -FullPath -Patch ($Paths.Assert + "\Scenes\Kokiri Forest.ppf")
-        ApplyPatch -Silent -FullPath -Patch ($Paths.Assert + "\Scenes\Graveyard.ppf")
-        ApplyPatch -Silent -FullPath -Patch ($Paths.Assert + "\Scenes\Lake Hylia.ppf")
-        ApplyPatch -Silent -FullPath -Patch ($Paths.Assert + "\Scenes\Death Mountain Crater.ppf")
-        ApplyPatch -Silent -FullPath -Patch ($Paths.Assert + "\Scenes\Gerudo's Fortress.ppf")
+        if ( (DoAssertMQSceneFiles)  -or (GetExtractQuest) -eq "Master Quest") {
+            if     ( (TestFile ($Paths.extract + "\Patches\master_quest_extract.bps") ) -and (GetExtractType) -eq "Extract")   { ApplyPatch -Silent -FullPath -Patch ($Paths.extract + "\Patches\master_quest_extract.bps") ; return }
+            elseif ( (TestFile ($Paths.extract + "\Patches\master_quest_apply.bps"  ) ) -and (GetExtractType) -eq "Apply")     { ApplyPatch -Silent -FullPath -Patch ($Paths.extract + "\Patches\master_quest_apply.bps") ;   return }
+            else                                                                                                               { ApplyPatch -Silent           -Patch "Decompressed\Dungeons\master_quest.bps";                return }
+        }
+        if ( (DoAssertUraSceneFiles) -or (GetExtractQuest) -eq "Ura Quest") {
+            if     ( (TestFile ($Paths.extract + "\Patches\ura_quest_extract.bps") )    -and (GetExtractType) -eq "Extract")   { ApplyPatch -Silent -FullPath -Patch ($Paths.extract + "\Patches\ura_quest_extract.bps");     return }
+            elseif ( (TestFile ($Paths.extract + "\Patches\ura_quest_apply.bps")   )    -and (GetExtractType) -eq "Apply")     { ApplyPatch -Silent -FullPath -Patch ($Paths.extract + "\Patches\ura_quest_extract.bps");     return }
+            else                                                                                                               { ApplyPatch -Silent           -Patch "Decompressed\Dungeons\ura_quest.bps";                   return }
+        }
 
-      # ApplyPatch -Silent -FullPath -Patch ($Paths.Assert + "\Scenes\Death Mountain Trail.ppf")
-      # ApplyPatch -Silent -FullPath -Patch ($Paths.Assert + "\Scenes\Inside Ganon's Castle.ppf")
-  }
+        if (!(DoExtractSceneFiles)) {
+            ApplyPatch -Silent -FullPath -Patch ($Paths.Assert + "\Scenes\Kokiri Forest.ppf")
+            ApplyPatch -Silent -FullPath -Patch ($Paths.Assert + "\Scenes\Graveyard.ppf")
+            ApplyPatch -Silent -FullPath -Patch ($Paths.Assert + "\Scenes\Lake Hylia.ppf")
+            ApplyPatch -Silent -FullPath -Patch ($Paths.Assert + "\Scenes\Death Mountain Crater.ppf")
+            ApplyPatch -Silent -FullPath -Patch ($Paths.Assert + "\Scenes\Gerudo's Fortress.ppf")
+
+          # ApplyPatch -Silent -FullPath -Patch ($Paths.Assert + "\Scenes\Death Mountain Trail.ppf")
+          # ApplyPatch -Silent -FullPath -Patch ($Paths.Assert + "\Scenes\Inside Ganon's Castle.ppf")
+        }
+    }
 
 }
 
 
 
 #==============================================================================================================================================================================================
-function TestScenesFiles() {
+function AssertSceneFiles() {
     
     if ($GameType.Mode -eq "Ocarina of Time") {
+        if ( (DoAssertMQSceneFiles) -or (DoAssertUraSceneFiles) ) {
+            foreach ($scene in $Files.json.sceneEditor.scenes) {
+                for ($i=0; $i -lt $scene.length; $i++) {
+                    PrepareMap -Scene $scene.name -Map $i -Header 0
+                    InsertActor  -Silent -Name "Treasure Chest"
+                    try   { SaveLoadedMap -Silent }
+                    catch { WriteToConsole -Text ("Scene: " + $Scene.Name + ", Map: " + $i + " just ran into an error trying to insert test actor") -Error }
+                }
+            }
+            return
+        }
+
         PrepareMap       -Scene "Kokiri Forest" -Map 1 -Header 0
         InsertSpawnPoint -Silent -X 3608 -Y (-179) -Z (-1009) -Param "0DFF" -YRot 0x5555
         SaveAndPatchLoadedScene
-        AssertSceneFiles
+        CheckAssertSceneFiles
 
         PrepareMap       -Scene "Sacred Forest Meadow" -Map 0 -Header 0
         InsertSpawnPoint -Silent -X 10 -Y 500 -Z (-2610) -Param "0201"
         SaveAndPatchLoadedScene
-        AssertSceneFiles
+        CheckAssertSceneFiles
 
 
 
@@ -4924,14 +4987,14 @@ function TestScenesFiles() {
         InsertSpawnPoint -Silent -X 1140 -Y 340 -Z 85 -Param "0201" -YRot 0xC71C
         SaveAndPatchLoadedScene
 
-        AssertSceneFiles
+        CheckAssertSceneFiles
 
 
 
         PrepareMap       -Scene "Lake Hylia" -Map 0 -Header 0
         InsertSpawnPoint -X (-1045) -Y (-1223) -Z 7460 -Param "0200" -YRot 0x8000
         SaveAndPatchLoadedScene
-        AssertSceneFiles
+        CheckAssertSceneFiles
 
 
 
@@ -4956,16 +5019,16 @@ function TestScenesFiles() {
         ChangeSpawnPoint -Silent  -Index 1  -X (-1749) -Z 26
         InsertObject -Silent -Name "Warp Circle & Rupee Prism"
         InsertActor  -Silent -Name "Warp Portal" -X 0 -Y 441 -Z 0 -Param "0006"
-        InsertSpawnPoint -Silent -Y 441 -Param "0200" -YRot 0x8000 
+        InsertSpawnPoint -Silent -Y 441 -Param "0200" -YRot 0x8000
         SaveAndPatchLoadedScene
-        AssertSceneFiles
+        CheckAssertSceneFiles
 
 
 
         PrepareMap       -Scene "Desert Colossus" -Map 0 -Header 0
         InsertSpawnPoint -Silent -X (-850) -Y 20 -Z (-2070) -Param "0200" -YRot 0x1555
         SaveAndPatchLoadedScene
-        AssertSceneFiles
+        CheckAssertSceneFiles
         
 
 
@@ -5015,7 +5078,7 @@ function TestScenesFiles() {
         ReplaceActor -Silent -Name "Time Block" -X (-2465) -Y (-1423) -Z (-804) -Param "B80C"
         SaveAndPatchLoadedScene
 
-        AssertSceneFiles
+        CheckAssertSceneFiles
 
 
 
@@ -5031,14 +5094,14 @@ function TestScenesFiles() {
         InsertActor  -Silent -Name "Skullwalltula"  -X (-1171) -Y 160 -Z (-1225) -Param "B408" -XRot 0x4000
         InsertActor  -Silent -Name "Grotto Entrance" -X (-1323) -Y 15  -Z (-969) -Param "01F0" -YRot 0x9555
         SaveAndPatchLoadedScene
-        AssertSceneFiles
+        CheckAssertSceneFiles
 
 
 
         PrepareMap       -Scene "Gerudo's Fortress" -Map 0 -Header 0
         InsertSpawnPoint -Silent -X 188 -Y 733 -Z (-2919) -Param "0DFF"
         SaveAndPatchLoadedScene
-        AssertSceneFiles
+        CheckAssertSceneFiles
 
 
 
@@ -5046,7 +5109,7 @@ function TestScenesFiles() {
         InsertObject -Silent -Name "Poacher's Saw"
         InsertObject -Silent -Name "SOLD OUT"
         SaveAndPatchLoadedScene
-        AssertSceneFiles
+        CheckAssertSceneFiles
 
 
 
@@ -5059,19 +5122,19 @@ function TestScenesFiles() {
         InsertObject -Silent -Name "Treasure Chest"
         InsertActor  -Silent -Name "Treasure Chest" -Param "0D40" -X 310 -Y 463 -Z 700 -YRot 90 -NoXRot -NoZRot
         SaveAndPatchLoadedScene
-        AssertSceneFiles
+        CheckAssertSceneFiles
 
         PrepareMap   -Scene "North Clock Town" -Map 0 -Header 0
         InsertActor  -Name "Owl Statue" -Param "000A" -X (-400) -Y 200 -Z (-1760)
         InsertObject -Name "Owl Statue"
         SaveAndPatchLoadedScene
-        AssertSceneFiles
+        CheckAssertSceneFiles
 
         PrepareMap   -Scene "Romani Ranch" -Map 0 -Header 0
         InsertActor  -Name "Owl Statue" -Param "000C" -X (-1050) -Y 260 -Z (-1600)
         InsertObject -Name "Owl Statue"
         SaveAndPatchLoadedScene
-        AssertSceneFiles
+        CheckAssertSceneFiles
     }
 
 }
@@ -5096,7 +5159,7 @@ function AssertArrays([byte[]]$Array1, [byte[]]$Array2, [string]$Message1, [stri
 
 
 #==============================================================================================================================================================================================
-function AssertSceneFiles() {
+function CheckAssertSceneFiles() {
     
     for ($i=0; $i -le $SceneEditor.LoadedScene.length + 1; $i++) {
         if ($i -eq 0) {
@@ -5142,6 +5205,235 @@ function AssertSceneFiles() {
 
 
 #==============================================================================================================================================================================================
+function DoExtractSceneFiles() {
+    
+    if (DoAssertSceneFiles) { return $False }
+    
+    if ( (TestFile -Path ($Paths.Extract + "\extract") ) -or (TestFile -Path ($Paths.Extract + "\extract_mq") ) -or (TestFile -Path ($Paths.Extract + "\extract_ura") ) ) {
+        if ($GameType.Mode -eq "Ocarina of Time")   { return $True }
+    }
+    elseif ( (TestFile -Path ($Paths.Extract + "\apply") ) -or (TestFile -Path ($Paths.Extract + "\apply_mq") ) -or (TestFile -Path ($Paths.Extract + "\apply_ura") ) ) {
+        if ($GameType.Mode -eq "Ocarina of Time")   { return $True }
+    }
+    elseif (TestFile -Path ($Paths.Extract + "\extract") ) {
+        if ($GameType.Mode -eq "Majora's Mask")     { return $True }
+    }
+    elseif (TestFile -Path ($Paths.Extract + "\apply") ) {
+        if ($GameType.Mode -eq "Majora's Mask")     { return $True }
+    }
+
+    return $False
+    
+}
+
+
+
+#==============================================================================================================================================================================================
+function GetExtractType() {
+    
+    if (DoAssertSceneFiles)                                   { return "Assert"  }
+    if (TestFile -Path ($Paths.Extract + "\extract") )        { return "Extract" }
+    if (TestFile -Path ($Paths.Extract + "\extract_mq") )     { return "Extract" }
+    if (TestFile -Path ($Paths.Extract + "\extract_ura") )    { return "Extract" }
+    if (TestFile -Path ($Paths.Extract + "\apply") )          { return "Apply"   }
+    if (TestFile -Path ($Paths.Extract + "\apply_mq") )       { return "Apply"   }
+    if (TestFile -Path ($Paths.Extract + "\apply_ura") )      { return "Apply"   }
+    return "Unknown"
+    
+}
+
+
+
+#==============================================================================================================================================================================================
+function GetExtractQuest() {
+    
+    if (DoAssertSceneFiles)                                  { return "Assert"        }
+    if (TestFile -Path ($Paths.Extract + "\extract") )       { return "Vanilla"       }
+    if (TestFile -Path ($Paths.Extract + "\extract_mq") )    { return "Master Quest"  }
+    if (TestFile -Path ($Paths.Extract + "\extract_ura") )   { return "Ura Quest"     }
+    if (TestFile -Path ($Paths.Extract + "\apply") )         { return "Vanilla"       }
+    if (TestFile -Path ($Paths.Extract + "\apply_mq") )      { return "Master Quest"  }
+    if (TestFile -Path ($Paths.Extract + "\apply_ura") )     { return "Ura Quest"     }
+    return "Unknown"
+    
+}
+
+
+
+#==============================================================================================================================================================================================
+function ExtractSceneFiles() {
+    
+    if ($GameType.Mode -eq "Ocarina of Time") {
+
+        if ( (GetExtractType) -eq "Extract") {
+            foreach ($scene in $Files.json.sceneEditor.scenes) {
+                if ($scene.dungeon -ne 1)       { continue }
+                if ($scene.stages  -ne $null)   { $stages = $scene.stages.count } else { $stages = 1 }
+
+                for ($map=0; $map -lt $scene.length; $map++) {
+                    for ($header=0; $header -lt $stages; $header++) {
+                        $file = $Paths.Extract + "\" + (GetExtractQuest) + "\" + $scene.name + "\Header " + $header + "\Room " + $map
+                        CreateSubPath $file
+
+                        PrepareMap -Scene $scene.name -Map $map -Header $header
+                        if ( (GetActorStart)  -gt 0) { [io.file]::WriteAllBytes($file + "\Actors.bin",  $SceneEditor.MapArray[(GetActorStart)..((GetActorEnd)   - 1)]) }
+                        if ( (GetObjectStart) -gt 0) { [io.file]::WriteAllBytes($file + "\Objects.bin", $SceneEditor.MapArray[(GetObjectStart)..((GetObjectEnd) - 1)]) }
+                    }
+                }
+            }
+        }
+        elseif ( (GetExtractType) -eq "Apply") {
+            foreach ($scene in $Files.json.sceneEditor.scenes) {
+                if ($scene.dungeon -ne 1)       { continue }
+                if ($scene.stages  -ne $null)   { $stages = $scene.stages.count } else { $stages = 1 }
+
+              # if ($scene.name -ne "Inside Jabu-Jabu's Belly") { continue }
+
+                if (!(TestFile ($Paths.Extract + "\" + (GetExtractQuest) + "\" + $scene.name) -Container)) { continue }
+
+                for ($map=0; $map -lt $scene.length; $map++) {
+                  # if ($map -ne 2) { continue }
+
+                    for ($header=0; $header -lt $stages; $header++) {
+                        if (!(TestFile ($Paths.Extract + "\" + (GetExtractQuest) + "\" + $scene.name + "\Header " + $header) -Container)) { continue }
+
+                        PrepareMap -Scene $scene.name -Map $map -Header $header
+
+                        $fileActors  = $Paths.Extract + "\" + (GetExtractQuest) + "\" + $scene.name + "\Header " + $header + "\Room " + $map + "\Actors.bin"
+                        $fileObjects = $Paths.Extract + "\" + (GetExtractQuest) + "\" + $scene.name + "\Header " + $header + "\Room " + $map + "\Objects.bin"
+                        
+                        if (TestFile $fileActors) {
+                            $count = GetActorCount
+                            for ($i=0; $i -lt $count; $i++) { RemoveActor -Index 0 -Silent }
+                            $actors = [System.IO.File]::ReadAllBytes($fileActors)
+
+                            for ($k=0; $k -lt $actors.length; $k+=0x10) {
+                                $actor = $actors[$k..($k+15)]
+                                $id    = Get16Bit ($actor[0]  * 256 + $actor[1])
+                                $x     =           $actor[2]  * 256 + $actor[3]
+                                $y     =           $actor[4]  * 256 + $actor[5]
+                                $z     =           $actor[6]  * 256 + $actor[7]
+                                $xrot  =           $actor[8]  * 256 + $actor[9]
+                                $yrot  =           $actor[10] * 256 + $actor[11]
+                                $zrot  =           $actor[12] * 256 + $actor[13]
+                                $param = Get16Bit ($actor[14] * 256 + $actor[15])
+                                InsertActor -ID $id -X $x -Y $y -Z $z -XRot $xrot -YRot $yrot -ZRot $zrot -Param $param -Silent
+                            }
+                        }
+
+                        if (TestFile $fileObjects) {
+                            $count = GetObjectCount
+                            for ($i=0; $i -lt $count; $i++) { RemoveObject -Index 0 -Silent }
+                            $objects = [System.IO.File]::ReadAllBytes($fileObjects)
+                            for ($k=0; $k -lt $objects.length; $k+=2) { InsertObject -ID (Get16Bit ($objects[$k] * 256 + $objects[$k+1])) -SkipCheck -Silent }
+                        }
+                        
+                      # WriteToConsole ("Added Shifted Rows: " + $SceneEditor.MapShift/0x10)
+                        SaveLoadedMap -Silent
+                    }
+                    $file = $Paths.Extract + "\" + (GetExtractQuest) + "\" + $scene.name
+                    [io.file]::WriteAllBytes($Paths.Extract + "\" + (GetExtractQuest) + "\" + $scene.name + "\Room " + $map + ".zmap", $SceneEditor.MapArray)
+                }
+                
+                PatchLoadedScene -Silent
+                $file = $Paths.Extract + "\" + (GetExtractQuest) + "\" + $scene.name
+                [io.file]::WriteAllBytes($file + "\Scene.zscene", $SceneEditor.SceneArray)
+            }
+
+            if ( (TestFile ($Paths.Extract + "\" + (GetExtractQuest) + "\Inside Jabu-Jabu's Belly\Room 1.zmap") ) -and (TestFile ($Paths.Extract + "\" + (GetExtractQuest) + "\Inside Jabu-Jabu's Belly\Room 2.zmap") ) ) {
+                $file    = $Paths.Extract + "\" + (GetExtractQuest) + "\Inside Jabu-Jabu's Belly\Room 2.zmap"
+                $fileMap = [System.IO.File]::ReadAllBytes($file)
+                for ($i=0; $i -lt $fileMap.length; $i++) { $ByteArrayGame[$i + 0x275F100]  = $fileMap[$i] }
+
+                $file    = $Paths.Extract + "\" + (GetExtractQuest) + "\Inside Jabu-Jabu's Belly\Room 1.zmap"
+                $fileMap = [System.IO.File]::ReadAllBytes($file)
+                for ($i=0; $i -lt $fileMap.length; $i++) { $ByteArrayGame[$i + 0x2759000] = $fileMap[$i] }
+                for ($i=0x2759000 + $fileMap.length; $i -lt 0x275F100; $i++) { $ByteArrayGame[$i] = 0 }
+            
+                $ByteArrayGame[0xBF82]++;    $ByteArrayGame[0xBF86]++; $ByteArrayGame[0xBF8A]++
+                $ByteArrayGame[0x273E20A]++; $ByteArrayGame[0x273E20E]++
+                $ByteArrayGame[0x27518FA]++; $ByteArrayGame[0x27518FE]++
+            }
+
+            if ( (TestFile ($Paths.Extract + "\" + (GetExtractQuest) + "\Forest Temple\Room 7.zmap") ) -and (TestFile ($Paths.Extract + "\" + (GetExtractQuest) + "\Forest Temple\Room 8.zmap") ) ) {
+                $file    = $Paths.Extract + "\" + (GetExtractQuest) + "\Forest Temple\Room 8.zmap"
+                $fileMap = [System.IO.File]::ReadAllBytes($file)
+                for ($i=0; $i -lt $fileMap.length; $i++) { $ByteArrayGame[$i + 0x2432100]  = $fileMap[$i] }
+
+                $file    = $Paths.Extract + "\" + (GetExtractQuest) + "\Forest Temple\Room 7.zmap"
+                $fileMap = [System.IO.File]::ReadAllBytes($file)
+                for ($i=0; $i -lt $fileMap.length; $i++) { $ByteArrayGame[$i + 0x241F000] = $fileMap[$i] }
+                for ($i=0x241F000 + $fileMap.length; $i -lt 0x2432100; $i++) { $ByteArrayGame[$i] = 0 }
+            
+                $ByteArrayGame[0xBA52]++;    $ByteArrayGame[0xBA56]++; $ByteArrayGame[0xBA5A]++
+                $ByteArrayGame[0x23CF2A2]++; $ByteArrayGame[0x23CF2A6]++
+            }
+
+            if ( (TestFile ($Paths.Extract + "\" + (GetExtractQuest) + "\Fire Temple\Room 2.zmap") ) -and (TestFile ($Paths.Extract + "\" + (GetExtractQuest) + "\Fire Temple\Room 3.zmap") ) ) {
+                $file    = $Paths.Extract + "\" + (GetExtractQuest) + "\Fire Temple\Room 3.zmap"
+                $fileMap = [System.IO.File]::ReadAllBytes($file)
+                for ($i=0; $i -lt $fileMap.length; $i++) { $ByteArrayGame[$i + 0x2318100]  = $fileMap[$i] }
+
+                $file    = $Paths.Extract + "\" + (GetExtractQuest) + "\Fire Temple\Room 2.zmap"
+                $fileMap = [System.IO.File]::ReadAllBytes($file)
+                for ($i=0; $i -lt $fileMap.length; $i++) { $ByteArrayGame[$i + 0x2308000] = $fileMap[$i] }
+                for ($i=0x2308000 + $fileMap.length; $i -lt 0x2318100; $i++) { $ByteArrayGame[$i] = 0 }
+            
+                $ByteArrayGame[0xB842]++;    $ByteArrayGame[0xB846]++; $ByteArrayGame[0xB84A]++
+                $ByteArrayGame[0x22D82F2]++; $ByteArrayGame[0x22D82F6]++
+            }
+
+            if ( (TestFile ($Paths.Extract + "\" + (GetExtractQuest) + "\Water Temple\Room 4.zmap") ) -and (TestFile ($Paths.Extract + "\" + (GetExtractQuest) + "\Water Temple\Room 5.zmap") ) ) {
+                $file    = $Paths.Extract + "\" + (GetExtractQuest) + "\Water Temple\Room 5.zmap"
+                $fileMap = [System.IO.File]::ReadAllBytes($file)
+                for ($i=0; $i -lt $fileMap.length; $i++) { $ByteArrayGame[$i + 0x2602100]  = $fileMap[$i] }
+
+                $file    = $Paths.Extract + "\" + (GetExtractQuest) + "\Water Temple\Room 4.zmap"
+                $fileMap = [System.IO.File]::ReadAllBytes($file)
+                for ($i=0; $i -lt $fileMap.length; $i++) { $ByteArrayGame[$i + 0x25FC000] = $fileMap[$i] }
+                for ($i=0x25FC000 + $fileMap.length; $i -lt 0x2602100; $i++) { $ByteArrayGame[$i] = 0 }
+            
+                $ByteArrayGame[0xBD02]++;    $ByteArrayGame[0xBD06]++; $ByteArrayGame[0xBD0A]++
+                $ByteArrayGame[0x25B8252]++; $ByteArrayGame[0x25B8256]++
+            }
+
+            if ( (TestFile ($Paths.Extract + "\" + (GetExtractQuest) + "\Spirit Temple\Room 5.zmap") ) -and (TestFile ($Paths.Extract + "\" + (GetExtractQuest) + "\Spirit Temple\Room 6.zmap") ) ) {
+                $file    = $Paths.Extract + "\" + (GetExtractQuest) + "\Spirit Temple\Room 6.zmap"
+                $fileMap = [System.IO.File]::ReadAllBytes($file)
+                for ($i=0; $i -lt $fileMap.length; $i++) { $ByteArrayGame[$i + 0x2B3D100]  = $fileMap[$i] }
+
+                $file    = $Paths.Extract + "\" + (GetExtractQuest) + "\Spirit Temple\Room 5.zmap"
+                $fileMap = [System.IO.File]::ReadAllBytes($file)
+                for ($i=0; $i -lt $fileMap.length; $i++) { $ByteArrayGame[$i + 0x2B25000] = $fileMap[$i] }
+                for ($i=0x2B25000 + $fileMap.length; $i -lt 0x2B3D100; $i++) { $ByteArrayGame[$i] = 0 }
+            
+                $ByteArrayGame[0xC4C2]++;    $ByteArrayGame[0xC4C6]++; $ByteArrayGame[0xC4CA]++
+                $ByteArrayGame[0x2ADE2EA]++; $ByteArrayGame[0x2ADE2EE]++
+            }
+
+            if ( (TestFile ($Paths.Extract + "\" + (GetExtractQuest) + "\Gerudo Training Ground\Room 2.zmap") ) -and (TestFile ($Paths.Extract + "\" + (GetExtractQuest) + "\Gerudo Training Ground\Room 3.zmap") ) ) {
+                $file    = $Paths.Extract + "\" + (GetExtractQuest) + "\Gerudo Training Ground\Room 3.zmap"
+                $fileMap = [System.IO.File]::ReadAllBytes($file)
+                for ($i=0; $i -lt $fileMap.length; $i++) { $ByteArrayGame[$i + 0x28A6100]  = $fileMap[$i] }
+
+                $file    = $Paths.Extract + "\" + (GetExtractQuest) + "\Gerudo Training Ground\Room 2.zmap"
+                $fileMap = [System.IO.File]::ReadAllBytes($file)
+                for ($i=0; $i -lt $fileMap.length; $i++) { $ByteArrayGame[$i + 0x28A1000] = $fileMap[$i] }
+                for ($i=0x28A1000 + $fileMap.length; $i -lt 0x28A6100; $i++) { $ByteArrayGame[$i] = 0 }
+            
+                $ByteArrayGame[0xC272]++;    $ByteArrayGame[0xC276]++; $ByteArrayGame[0xC27A]++
+                $ByteArrayGame[0x28751F2]++; $ByteArrayGame[0x28751F6]++
+            }
+
+        }
+
+    }
+
+}
+
+
+
+#==============================================================================================================================================================================================
 
 Export-ModuleMember -Function RunSceneEditor
 Export-ModuleMember -Function CloseSceneEditor
@@ -5155,12 +5447,16 @@ Export-ModuleMember -Function ChangeSceneFile
 Export-ModuleMember -Function PrepareAndSetSceneSettings
 Export-ModuleMember -Function PrepareAndSetMapSettings
 Export-ModuleMember -Function SetSceneSettings
+
+Export-ModuleMember -Function GetActorCountIndex
+Export-ModuleMember -Function GetMeshIndex
+
 Export-ModuleMember -Function ChangeSpawnPoint
 Export-ModuleMember -Function ChangeDoor
 Export-ModuleMember -Function ChangeExit
 Export-ModuleMember -Function SetMapSettings
-Export-ModuleMember -Function InsertActor
 Export-ModuleMember -Function InsertSpawnPoint
+Export-ModuleMember -Function InsertActor
 Export-ModuleMember -Function ReplaceActor
 Export-ModuleMember -Function RemoveActor
 Export-ModuleMember -Function ReplaceTransitionActor
@@ -5171,7 +5467,7 @@ Export-ModuleMember -Function RemoveObject
 
 Export-ModuleMember -Function DoAssertSceneFiles
 Export-ModuleMember -Function ApplyTestSceneFiles
-Export-ModuleMember -Function TestScenesFiles
+Export-ModuleMember -Function AssertSceneFiles
 
-Export-ModuleMember -Function GetActorCountIndex
-Export-ModuleMember -Function GetMeshIndex
+Export-ModuleMember -Function DoExtractSceneFiles
+Export-ModuleMember -Function ExtractSceneFiles

@@ -2220,12 +2220,12 @@ function CreateTabEquipment() {
     # HITBOX #
 
     CreateReduxGroup  -Tag  "Equipment" -Text "Sliders"
-    CreateReduxSlider -Name "KokiriSword"      -Default 3000 -Min 512 -Max 8192 -Freq 512 -Small 256 -Large 512 -Text "Kokiri Sword"        -Info "Set the length of the hitbox of the Kokiri Sword"              -Credits "Admentus"
-    CreateReduxSlider -Name "RazorSword"       -Default 3000 -Min 512 -Max 8192 -Freq 512 -Small 256 -Large 512 -Text "Razor Sword"         -Info "Set the length of the hitbox of the Razor Sword"               -Credits "Admentus"
-    CreateReduxSlider -Name "GildedSword"      -Default 4000 -Min 512 -Max 8192 -Freq 512 -Small 256 -Large 512 -Text "Gilded Sword"        -Info "Set the length of the hitbox of the Gilded Sword"              -Credits "Admentus"
-    CreateReduxSlider -Name "GreatFairysSword" -Default 5500 -Min 512 -Max 8192 -Freq 512 -Small 256 -Large 512 -Text "Great Fairy's Sword" -Info "Set the length of the hitbox of the Great Fairy's Sword Knife" -Credits "Admentus"
-    CreateReduxSlider -Name "BlastMask"        -Default 310  -Min 1   -Max 1024 -Freq 64  -Small 32  -Large 64  -Text "Blast Mask"          -Info "Set the cooldown duration of the Blast Mask"                   -Credits "Randomizer"
-    CreateReduxSlider -Name "ShieldRecoil"     -Default 4552 -Min 0   -Max 8248 -Freq 512 -Small 256 -Large 512 -Text "Shield Recoil"       -Info "Set the pushback distance when getting hit while shielding"    -Credits "Admentus"
+    CreateReduxSlider -Name "KokiriSword"      -Default 3000 -Min 512 -Max 8192 -Freq 512 -Small 256 -Large 512 -Text "Kokiri Sword"        -Info "Set the length of the hitbox of the Kokiri Sword"           -Credits "Admentus"
+    CreateReduxSlider -Name "RazorSword"       -Default 3000 -Min 512 -Max 8192 -Freq 512 -Small 256 -Large 512 -Text "Razor Sword"         -Info "Set the length of the hitbox of the Razor Sword"            -Credits "Admentus"
+    CreateReduxSlider -Name "GildedSword"      -Default 4000 -Min 512 -Max 8192 -Freq 512 -Small 256 -Large 512 -Text "Gilded Sword"        -Info "Set the length of the hitbox of the Gilded Sword"           -Credits "Admentus"
+    CreateReduxSlider -Name "GreatFairysSword" -Default 5500 -Min 512 -Max 8192 -Freq 512 -Small 256 -Large 512 -Text "Great Fairy's Sword" -Info "Set the length of the hitbox of the Great Fairy's Sword"    -Credits "Admentus"
+    CreateReduxSlider -Name "BlastMask"        -Default 310  -Min 1   -Max 1024 -Freq 64  -Small 32  -Large 64  -Text "Blast Mask"          -Info "Set the cooldown duration of the Blast Mask"                -Credits "Randomizer"
+    CreateReduxSlider -Name "ShieldRecoil"     -Default 4552 -Min 0   -Max 8248 -Freq 512 -Small 256 -Large 512 -Text "Shield Recoil"       -Info "Set the pushback distance when getting hit while shielding" -Credits "Admentus"
 
 
 

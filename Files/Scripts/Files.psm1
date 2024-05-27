@@ -218,9 +218,6 @@ function SetFileParameters() {
 
     SetTempFileParameters
 
-    # Clear data
-    $Files.oot = $Files.mm = $Files.sm64 = $null
-
 }
 
 
@@ -260,8 +257,8 @@ function SetGetROM() {
     
     if ($GetROM.in -ne $null) { $GetROM.run = $GetROM.in }
 
-    if ($Settings.Debug.CreateCompressedBPS   -eq $True)   { $Files.compBPS   = [System.IO.Path]::GetDirectoryName($GamePath) + "\" + [System.IO.Path]::GetFileNameWithoutExtension($GamePath) + "_compressed.bps"   }
-    if ($Settings.Debug.CreateDecompressedBPS -eq $True)   { $Files.compBPS   = [System.IO.Path]::GetDirectoryName($GamePath) + "\" + [System.IO.Path]::GetFileNameWithoutExtension($GamePath) + "_decompressed.bps" }  
+    if ($Settings.Debug.CreateCompressedBPS   -eq $True)                              { $Files.compBPS   = [System.IO.Path]::GetDirectoryName($GamePath) + "\" + [System.IO.Path]::GetFileNameWithoutExtension($GamePath) + "_compressed.bps"   }
+    if ($Settings.Debug.CreateDecompressedBPS -eq $True -or (DoExtractSceneFiles) )   { $Files.decompBPS = [System.IO.Path]::GetDirectoryName($GamePath) + "\" + [System.IO.Path]::GetFileNameWithoutExtension($GamePath) + "_decompressed.bps" }  
 
 }
 
