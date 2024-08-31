@@ -12,7 +12,7 @@ function SetWiiVCMode([boolean]$Enable=!$IsWiiVC) {
         if ($RightPanel.Options.Controls.ContainsKey("OptionsPanel")) { ShowRightPanel $RightPanel.Options } else { ShowRightPanel $RightPanel.Settings }
     }
 
-    if ( ($GamePatch.console -eq "Native" -and $WiiVC) -or ($GamePatch.console -eq "Wii VC" -and !$WiiVC) ) { ChangePatch }
+    if ( ($GamePatch.console -eq "Native" -and $IsWiiVC) -or ($GamePatch.console -eq "Wii VC" -and !$IsWiiVC) ) { ChangePatch }
 
     SetVCContent
     if ( (TestFile $GameFiles.controls) -and $GameSettings -ne $null -and $IsWiiVC) { CreateVCRemapPanel }
@@ -308,7 +308,6 @@ function ChangeGameMode() {
     $GameFiles.decompressed = $GameFiles.Base   + "\Decompressed"
     $GameFiles.languages    = $GameFiles.Base   + "\Languages"
     $GameFiles.banks        = $GameFiles.Base   + "\Audio Banks"
-    $GameFiles.models       = $Paths.Models     + "\" + $GameType.mode
     $GameFiles.downgrade    = $GameFiles.Base   + "\Downgrade"
     $GameFiles.textures     = $GameFiles.Base   + "\Textures"
     $GameFiles.editor       = $GameFiles.Base   + "\Editor"
@@ -322,14 +321,32 @@ function ChangeGameMode() {
 
     # JSON Files
     if ($GameType.patches -gt 0) { $Files.json.patches = SetJSONFile $GameFiles.patches } else { $Files.json.patches = $null }
-    if (TestFile ($GameFiles.languages + "\Languages.json"))                       { $Files.json.languages = SetJSONFile ($GameFiles.languages + "\Languages.json")  } else { $Files.json.languages = $null }
-    if (TestFile ($Paths.Models        + "\Models.json"))                          { $Files.json.models    = SetJSONFile ($Paths.Models        + "\Models.json")     } else { $Files.json.models    = $null }
-    if (TestFile ($GameFiles.base      + "\Music.json"))                           { $Files.json.music     = SetJSONFile ($GameFiles.base      + "\Music.json")      } else { $Files.json.music     = $null }
-    if (TestFile ($GameFiles.base      + "\Items.json"))                           { $Files.json.items     = SetJSONFile ($GameFiles.base      + "\Items.json")      } else { $Files.json.items     = $null }
-    if (TestFile ($GameFiles.base      + "\Moves.json"))                           { $Files.json.moves     = SetJSONFile ($GameFiles.base      + "\Moves.json")      } else { $Files.json.moves     = $null }
-    if (TestFile ($GameFiles.base      + "\Blocks.json"))                          { $Files.json.blocks    = SetJSONFile ($GameFiles.base      + "\Blocks.json")     } else { $Files.json.blocks    = $null }
-    if (TestFile ($GameFiles.base      + "\Enemies.json"))                         { $Files.json.enemies   = SetJSONFile ($GameFiles.base      + "\Enemies.json")    } else { $Files.json.enemies   = $null }
-    if (TestFile ($GameFiles.base      + "\Shop Items.json"))                      { $Files.json.shopItems = SetJSONFile ($GameFiles.base      + "\Shop Items.json") } else { $Files.json.shopItems = $null }
+
+    # Rename patch titles to include version if present
+    if ($Files.json.patches -ne $null) {
+        for ($i=0; $i -lt $Files.json.patches.Length; $i++) {
+            $title   = $Files.json.patches[$i].title
+            $version =  $Files.json.patches[$i].version
+            if ($version -ne $null) {
+                $title += " ("
+                if ($version -is [string] -and $version.Length -gt 0) {
+                    if ($version.toLower() -ne "demo" -and $version.toLower().Substring(0, 1) -ne 'r' -and $version.toLower().Substring(0, 1) -ne 'v') { $title += 'v' }
+                }
+                $title += [string]$version + ")"
+            }
+            $Files.json.patches[$i].title = $title
+        }
+    }
+
+    if (TestFile ($GameFiles.languages + "\Languages.json"))                       { $Files.json.languages   = SetJSONFile ($GameFiles.languages + "\Languages.json")   } else { $Files.json.languages   = $null }
+    if (TestFile ($GameFiles.base      + "\Music.json"))                           { $Files.json.music       = SetJSONFile ($GameFiles.base      + "\Music.json")       } else { $Files.json.music       = $null }
+    if (TestFile ($GameFiles.base      + "\Items.json"))                           { $Files.json.items       = SetJSONFile ($GameFiles.base      + "\Items.json")       } else { $Files.json.items       = $null }
+    if (TestFile ($GameFiles.base      + "\Moves.json"))                           { $Files.json.moves       = SetJSONFile ($GameFiles.base      + "\Moves.json")       } else { $Files.json.moves       = $null }
+    if (TestFile ($GameFiles.base      + "\Blocks.json"))                          { $Files.json.blocks      = SetJSONFile ($GameFiles.base      + "\Blocks.json")      } else { $Files.json.blocks      = $null }
+    if (TestFile ($GameFiles.base      + "\Enemies.json"))                         { $Files.json.enemies     = SetJSONFile ($GameFiles.base      + "\Enemies.json")     } else { $Files.json.enemies     = $null }
+    if (TestFile ($GameFiles.base      + "\Shop Items.json"))                      { $Files.json.shopItems   = SetJSONFile ($GameFiles.base      + "\Shop Items.json")  } else { $Files.json.shopItems   = $null }
+
+    $Files.json.models = $null
 
     SetVCContent
     SetCreditsSections
@@ -369,8 +386,8 @@ function ChangeGameRev() {
     
     if (!(IsSet $GameType)) { return }
 
-    if (IsSet $GameType.version)   { $global:GameRev = $GameType.version[0] }
-    else                           { $global:GameRev = $null                }
+    if (IsSet $GameType.revision)   { $global:GameRev = $GameType.revision[0] }
+    else                            { $global:GameRev = $null                 }
 
     if (IsSet $GamePatch.script) {
         if ($GamePatch.script -is [system.Array]) {
@@ -381,10 +398,10 @@ function ChangeGameRev() {
         elseif (Get-Module -Name $GamePatch.script) { Remove-Module -Name $GamePatch.script }
     }
 
-    if (IsSet $GamePatch.version) {
-        foreach ($version in $GameType.version) {
-            if ($version.name -eq $GamePatch.version) {
-                $global:GameRev = $version
+    if (IsSet $GamePatch.revision) {
+        foreach ($revision in $GameType.revision) {
+            if ($version.name -eq $GamePatch.revision) {
+                $global:GameRev = $revision
                 break
             }
         }
@@ -423,14 +440,33 @@ function ChangePatch() {
         elseif (Get-Module -Name $GamePatch.script) { Remove-Module -Name $GamePatch.script }
     }
 
+    $global:GamePatch = @{}
+    if (!$IsWiiVC) { $Gamepatch.Console = "Wii VC" } else { $Gamepatch.Console = "Native" }
+
     foreach ($item in $Files.json.patches) {
         if ($item.title -eq $Patches.Type.Text -and ( ($IsWiiVC -and $item.console -eq "Wii VC") -or (!$IsWiiVC -and $item.console -eq "Native") -or ($item.console -eq "Both") -or !(IsSet $item.console) ) ) {
             if ( ($item.console -eq "Native" -and $IsWiiVC) -or ($item.console -eq "Wii VC" -and !$IsWiiVC) ) { continue }
 
             $global:GamePatch = $item
-            $PatchToolTip.SetToolTip($Patches.Button, ([string]::Format($item.tooltip, [Environment]::NewLine)))
+
+            if ($item.tooltip -ne $null) {
+                $info = $item.tooltip
+                if ($item.version -ne $null -or $item.redux.version -ne $null)   { $info += "{0}"                                      }
+                if ($item.version                                   -ne $null)   { $info += "{0}Patch version: " + $item.version       }
+                if ($item.redux.version                             -ne $null)   { $info += "{0}Redux version: " + $item.redux.version }
+                $PatchToolTip.SetToolTip($Patches.Button, ([string]::Format($info, [Environment]::NewLine)))
+            }
+            else { $PatchToolTip.RemoveAll() }
+
             GetHeader
             GetRegion
+
+            $info = "Enable the Redux patch which improves game mechanics"
+            if ($item.redux.tooltip -ne $null)   { $info += "{0}"                   + $item.redux.tooltip }
+            if ($item.redux.version -ne $null)   { $info += "{0}{0}Redux version: " + $item.redux.version }
+
+            $ReduxToolTip.SetToolTip($Patches.ReduxLabel, ([string]::Format($info, [Environment]::NewLine)))
+            $ReduxToolTip.SetToolTip($Patches.Redux,      ([string]::Format($info, [Environment]::NewLine)))
                 
             if ( (IsSet $GamePatch.script) -or (TestFile $GameFiles.controls) ) {
                 $global:GameSettingsFile = GetGameSettingsFile
@@ -441,6 +477,14 @@ function ChangePatch() {
             $CustomHeader.ROMGameID.Refresh()
             $CustomHeader.VCTitle.Refresh()
             $CustomHeader.VCGameID.Refresh()
+
+            if ($GamePatch.Models -ne 0) {
+                $GamePatch | Add-Member -MemberType NoteProperty -Name "LoadedModelsList" -Value @{}
+                $GamePatch | Add-Member -MemberType NoteProperty -Name "LoadedModel"      -Value @{}
+            } else {
+                $GamePatch | Add-Member -MemberType NoteProperty -Name "LoadedModelsList" -Value @$null
+                $GamePatch | Add-Member -MemberType NoteProperty -Name "LoadedModel"      -Value @$null
+            }
 
             ChangeGameRev
             SetGameScript
@@ -501,7 +545,10 @@ function SetGameScript() {
             $file = $Paths.Scripts + "\Options\" + $GamePatch.script + ".psm1"
             if (TestFile $file) { Import-Module -Name $file -Global }
         }
-        if (HasCommand "CreateOptions") { CreateOptions }
+        if (HasCommand "CreateOptions") {
+            CreateOptions
+            if (Get-Command "AdjustGUI" -errorAction SilentlyContinue) { iex "AdjustGUI" } # Lock GUI if needed
+        }
     }
 
 }
@@ -585,14 +632,14 @@ function SetModeLabel() {
 function EnablePatchButtons() {
     
     if     ($GamePath -eq $null)                              { $enable = $False }
-    elseif ($GamePatch.console   -eq "Native" -and  $WiiVC)   { $enable = $False }
-    elseif ($GamePatch.console   -eq "Wii VC" -and !$WiiVC)   { $enable = $False }
-    elseif ($GameType.support_vc -eq 0 -and $WiiVC)           { $enable = $False }
+    elseif ($GamePatch.console -eq "Native" -and  $IsWiiVC)   { $enable = $False }
+    elseif ($GamePatch.console -eq "Wii VC" -and !$IsWiiVC)   { $enable = $False }
+    elseif ($GameType.support_vc -eq 0 -and $IsWiiVC)         { $enable = $False }
     else                                                      { $enable = ($GamePath.Extension -eq ".wad" -and $IsWiiVC) -or ($GamePath.Extension -ne ".wad" -and !$IsWiiVC) }
-
-    if     ($GameType.support_vc -eq 0 -and $WiiVC)           { UpdateStatusLabel "This game does not support Wii VC!"       -NoConsole }
-    elseif ($GamePatch.console   -eq "Native" -and  $WiiVC)   { UpdateStatusLabel "This patch does not support Wii VC!"      -NoConsole }
-    elseif ($GamePatch.console   -eq "Wii VC" -and !$WiiVC)   { UpdateStatusLabel "This patch only supports Wii VC!"         -NoConsole }
+    
+    if     ($GameType.support_vc -eq 0 -and $IsWiiVC)         { UpdateStatusLabel "This game does not support Wii VC!"       -NoConsole }
+    elseif ($GamePatch.console -eq "Native" -and  $IsWiiVC)   { UpdateStatusLabel "This patch does not support Wii VC!"      -NoConsole }
+    elseif ($GamePatch.console -eq "Wii VC" -and !$IsWiiVC)   { UpdateStatusLabel "This patch only supports Wii VC!"         -NoConsole }
     elseif ($enable)                                          { UpdateStatusLabel "Ready to patch!"                          -NoConsole } # Set the status that we are ready to roll... Or not...
     elseif ($IsWiiVC)                                         { UpdateStatusLabel "Select your Wii VC WAD file to continue." -NoConsole }
     else                                                      { UpdateStatusLabel "Select your ROM file to continue."        -NoConsole }
@@ -646,13 +693,13 @@ function CalculateHashSum() {
         
         $VerificationInfo.GameField.Text = $VerificationInfo.RegionField.Text = $VerificationInfo.RevField.Text = $VerificationInfo.SupportField.Text = "No Valid ROM Selected" 
         foreach ($item in $Files.json.games) { # Verify ROM
-            for ($i=0; $i -lt $item.version.Count; $i++) {
-                if ($VerificationInfo.HashField.Text -eq $item.version[$i].hash) {
+            for ($i=0; $i -lt $item.revision.Count; $i++) {
+                if ($VerificationInfo.HashField.Text -eq $item.revision[$i].hash) {
                     $VerificationInfo.GameField.Text   = $item.title
-                    $VerificationInfo.RegionField.Text = $item.version[$i].region
-                    $VerificationInfo.RevField.Text    = $item.version[$i].rev
-                    if ($i -eq 0 -or (IsSet $item.version[$i].downgrade) -or (IsSet $item.version[$i].upgrade) -or $item.version[$i].supported -eq 1)   { $VerificationInfo.SupportField.Text = "This ROM is supported"                                                    }
-                    else                                                                                                                                { $VerificationInfo.SupportField.Text = "This ROM is NOT supported! Please use a different ROM that is supported!" }
+                    $VerificationInfo.RegionField.Text = $item.revision[$i].region
+                    $VerificationInfo.RevField.Text    = $item.revision[$i].rev
+                    if ($i -eq 0 -or (IsSet $item.revision[$i].downgrade) -or (IsSet $item.revision[$i].upgrade) -or $item.revision[$i].supported -eq 1)   { $VerificationInfo.SupportField.Text = "This ROM is supported"                                                    }
+                    else                                                                                                                                   { $VerificationInfo.SupportField.Text = "This ROM is NOT supported! Please use a different ROM that is supported!" }
                     break
                 }
             }
@@ -733,13 +780,14 @@ function IsDefault([object]$Elem, [byte]$Lang=0, [switch]$Not) {
 
 
 #==============================================================================================================================================================================================
-function IsChecked([object]$Elem=$null, [byte]$Lang=0, [switch]$Not) {
+function IsChecked([object]$Elem=$null, [byte]$Lang=0, [switch]$Not, [switch]$Redux) {
     
     RemoveOptionCheckFromList $Elem
     if ($Lang -gt 0 -and (IsSet $Redux.Text.Language) ) {
         if ($Redux.Text.Language.SelectedIndex -ne $Lang - 1) { return $False }
     }
 
+    if ($Redux -and !(IsChecked $Patches.Redux) )                                                                           { return $False }
     if ( $Elem           -eq $null)                                                                                         { return $False }
     if (!$Elem.Active    -or $Elem.Hidden)                                                                                  { return $False }
     if ( $Elem.GetType() -ne [System.Windows.Forms.CheckBox] -and $Elem.GetType() -ne [System.Windows.Forms.RadioButton])   { return $False }

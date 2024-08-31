@@ -1,36 +1,40 @@
 [ {
 	
-	"title"		: "Additional Options & Redux",
-	"version"	: "Rev 0 (US / PAL)",
-	"redux"		: 1,
-	"script"	: "Link's Awakening DX",
-	"base"		: 1,
-	"tooltip"	: "Customize Link's Awakening with Redux and additional options{0}Redux version: 1.3.5"
+	"title"			: "Additional Options & Redux",
+	"version"		: "Rev 0 (US / PAL)",
+	"redux" : {
+		"version"	: "1.3.5"
+	},
+	"script"		: "Link's Awakening DX",
+	"base"			: 1,
+	"tooltip"		: "Customize Link's Awakening with Redux and additional options"
 
 }, {
 
-	"title"		: "Font Improvement",
-	"version"	: "Rev 2 (US / PAL)",
-	"patch"		: "Compressed\\font_improvement.ips",
-	"script"	: "Link's Awakening DX",
-	"output"	: "font_improvement",
-	"base"		: 2,
-	"tooltip"	: "Customize Link's Awakening with Redux and additional options{0}Includes the Font Improvement patch{0}Redux version: 1.3.5"
+	"title"			: "Font Improvement",
+	"version"		: "1.3.5",
+	"revision"		: "Rev 2 (US / PAL)",
+	"patch"			: "Compressed\\font_improvement.ips",
+	"script"		: "Link's Awakening DX",
+	"output"		: "font_improvement",
+	"base"			: 2,
+	"tooltip"		: "Customize Link's Awakening with Redux and additional options{0}Includes the Font Improvement patch"
 
 }, {
 
-	"title"		: "Zelda 1 Port",
-	"patch"		: "Compressed\\zelda1.bps",
-	"output"	: "zelda1",
-	"base"		: 3,
-	"tooltip"	: "A port of the original The Legend of Zelda (NES) within Link's Awakening (GBC)"
+	"title"			: "Zelda 1 Port",
+	"patch"			: "Compressed\\zelda1.bps",
+	"output"		: "zelda1",
+	"base"			: 3,
+	"tooltip"		: "A port of the original The Legend of Zelda (NES) within Link's Awakening (GBC)"
 
 }, {
 
-	"title"		: "Zelda's Adventure Port (v1.3.0)",
-	"patch"		: "Compressed\\zeldas_adventure.bps",
-	"output"	: "zelda1",
-	"base"		: 4,
-	"tooltip"	: "A port of the original Zelda's Adventure (CDI) within Link's Awakening (GBC)"
+	"title"			: "Zelda's Adventure Port",
+	"version"		: "1.3.0",
+	"patch"			: "Compressed\\zeldas_adventure.bps",
+	"output"		: "zelda1",
+	"base"			: 4,
+	"tooltip"		: "A port of the original Zelda's Adventure (CDI) within Link's Awakening (GBC)"
 
 } ]

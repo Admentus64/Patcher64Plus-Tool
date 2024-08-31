@@ -6,7 +6,8 @@
 
 }, {
 
-	"title"		: "Smash Remix (v1.5.2)",
+	"title"		: "Smash Remix",
+	"version"	: "1.5.2",
 	"console"	: "Native",
 	"patch"		: "Compressed\\remix.bps",
 	"output"	: "remix",
@@ -14,7 +15,8 @@
 
 }, {
 
-	"title"		: "More Stages Edition (v0.5.1)",
+	"title"		: "More Stages Edition",
+	"version"	: "0.5.1",
 	"script"	: "Super Smash Bros",
 	"expand_memory"	: -1,
 	"vc_title"	: "Super Smash Bros: MSE",

@@ -13,9 +13,6 @@ function CreateOptionsPanel([array]$Tabs=@()) {
 
     CreateTabButtons -Tabs $Tabs
 
-    # Lock GUI if needed
-    if (Get-Command "AdjustGUI" -errorAction SilentlyContinue) { iex "AdjustGUI" }
-
     # Run Preset
     if (IsSet $GamePatch.preset) {
         if (HasCommand ("ApplyPreset" + $GamePatch.preset)) {
@@ -43,25 +40,31 @@ function CreateOptionsPanel([array]$Tabs=@()) {
 #==============================================================================================================================================================================================
 function CreateTabButtons([string[]]$Tabs) {
     
-    if ($Tabs.Count -eq 0 -and (IsSet $GamePatch.redux) ) {
+    if ($Tabs.Count -eq 0 -and (IsSet $GamePatch.redux)) {
         $Tabs        += "Main"
         $Last.TabName = "Main"
     }
-    if ( (IsSet $GamePatch.redux) -and $Tabs -notcontains "Redux") { $Tabs += "Redux" }
-    if (!(IsSet $GameSettings.Core) -and $Tabs.Length -gt 0) { $GameSettings.Core = @{} }
+    if ( (IsSet $GamePatch.redux)   -and $Tabs -notcontains "Redux")   { $Tabs             += "Redux" }
+    if (!(IsSet $GameSettings.Core) -and $Tabs.Length -gt 0)           { $GameSettings.Core = @{}     }
 
     $Tabs = $Tabs | Select-Object -Unique
-    if ($Tabs.Count -eq 1) {
+    if ($Tabs.Count -eq 1 -and (HasCommand ("CreateTab" + $Tabs[0] -replace '\s',''))) {
         $Last.TabName               = $Tabs[0]
         $Redux.Panels              += CreatePanel -Width $Redux.WindowPanel.Width -Height ($Redux.WindowPanel.Height - (DPISize 70)) -AddTo $Redux.WindowPanel
         $Redux.Panels[0].AutoScroll = $True
+        iex ("CreateTab" + $Tabs[0] -replace '\s','')
         return
     }
+
+    $actualTabs = $Tabs.Count
 
     # Create tabs
     for ($i=0; $i -lt $Tabs.Count; $i++) {
         $name = $Tabs[$i] -replace '\s',''
-        if (!(HasCommand ("CreateTab" + $name))) { continue }
+        if (!(HasCommand ("CreateTab" + $name))) {
+            $actualTabs--
+            continue
+        }
 
         $button       = CreateButton -X ( (DPISize 20) + ( ( ($Redux.WindowPanel.width - (DPISize 50) ) / $Tabs.Count) * $i) ) -Y (DPISize 20) -Width ( ($Redux.WindowPanel.width - (DPISize 50) ) / $Tabs.Count) -Height (DPISize 25) -ForeColor "White" -BackColor "Gray" -Tag $i -Text $Tabs[$i] -AddTo $Redux.WindowPanel
         $Last.TabName = $name
@@ -80,7 +83,8 @@ function CreateTabButtons([string[]]$Tabs) {
     }
 
     # Restore last tab
-    if ($Tabs.Count -gt 0) {
+
+    if ($actualTabs -gt 0) {
         if (IsSet -Elem $GameSettings["Core"]["LastTab"] -HasInt) {
             if ($Redux.Tabs.Length -lt $GameSettings["Core"]["LastTab"]) {
                 $Redux.Tabs[0].BackColor = "DarkGray"
@@ -159,10 +163,10 @@ function CreateCreditsPanel() {
     $Discord2Label.ForeColor = $GitHub2Label.ForeColor = $Patreon2Label.ForeColor = $PayPal2Label.ForeColor = "Blue"
 
     # Support Me QR
-    $SwishLabel = CreateLabel -X (DPISize 470) -Y (DPISize 10) -Height (DPISize 15) -Font $Fonts.SmallBold -Text ("Swish") -AddTo $RightPanel.Links
+    $SwishLabel = CreateLabel -X (DPISize 520) -Y (DPISize 10) -Height (DPISize 15) -Font $Fonts.SmallBold -Text ("Swish") -AddTo $RightPanel.Links
     $PictureBox = New-Object Windows.Forms.PictureBox
     $PictureBox.Location = New-object System.Drawing.Size($SwishLabel.Left, ($SwishLabel.Bottom + (DPISize 5)))
-    SetBitmap -Path ($Paths.Main + "\qr.png") -Box $PictureBox -Width 125 -Height 125
+    SetBitmap -Path ($Paths.Main + "\qr.jpg") -Box $PictureBox -Width 250 -Height 280
     $PictureBox.Width  = $PictureBox.Image.Size.Width
     $PictureBox.Height = $PictureBox.Image.Size.Height
     $RightPanel.Links.controls.add($PictureBox)
@@ -240,6 +244,7 @@ function CreateSettingsPanel() {
     $GeneralSettings.LocalTempFolder = CreateSettingsCheckbox -Name "LocalTempFolder" -Text "Use Local Temp Folder"   -Checked -Info "Store all temporary and extracted files within the local Patcher64+ Tool folder`nIf unchecked the temporary and extracted files are kept in the Patcher64+ Tool folder in %AppData%"
     $GeneralSettings.UseCache        = CreateSettingsCheckbox -Name "UseCache"        -Text "Use Cache"               -Checked -Info "Enables caching`n- Keep a copy of the downgraded or decompressed ROM to speed up patching for subsequent attempts`n- Store all text messages to patch until the end so they can be applied in sorted order"
     $GeneralSettings.DisableUpdates  = CreateSettingsCheckbox -Name "DisableUpdates"  -Text "Disable Auto-Updater"             -Info "Disable the Auto-Updater that runs when starting the Patcher64+ Tool"
+    $GeneralSettings.DisableAddons   = CreateSettingsCheckbox -Name "DisableAddons"   -Text "Disable Addons Updater"           -Info "Disable automatically updating addons (music, models, etc) when starting the Patcher64+ Tool"
 
     if ((GetWindowsVersion) -lt 11) {
         try {

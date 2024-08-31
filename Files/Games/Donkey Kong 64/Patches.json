@@ -1,6 +1,7 @@
 [ {
-	"title"		: "Tag Anywhere (v5.0)",
+	"title"		: "Tag Anywhere",
+	"version"	: "5.0",
 	"patch"		: "Compressed\\tag_anywhere.bps",
 	"output"	: "tag_anywhere",
-	"tooltip"	: "Use the D-Pad to switch between Kongs{0}- Supported: Rev 0 (US)"
+	"tooltip"	: "Use the D-Pad to switch between Kongs"
 } ]

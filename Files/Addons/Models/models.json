@@ -4,10 +4,6 @@
 		"filter"	: "Link",
 		"author"	: 0
 	}, {
-		"name"		: "Amara Valkyrie",
-		"author"	: "Amara & Karicyan",
-		"deku_shield"	: 0
-	}, {
 		"name"		: "Child Quest",
 		"author"	: "GhostlyDark & LuigiBlood",
 		"hylian_shield"	: 0,
@@ -32,10 +28,7 @@
 		"author"	: "GhostlyDark & Nerrel"
 	}, {
 		"name"		: "Kafei",
-		"author"	: "Malon Rose",
-		"url"		: [ "https://youtube.com/c/MalonRose", "https://www.patreon.com/MalonRose" ],
-		"deku_shield"	: 0,
-		"hylian_shield"	: 0
+		"author"	: "Randomizer",
 	}, {
 		"name"		: "Majora's Mask",
 		"author"	: "The3Dude"
@@ -65,19 +58,6 @@
 		"name"		: "Original",
 		"author"	: 0
 	}, {
-		"name"		: "Amara",
-		"author"	: "Amara & Karicyan",
-		"hylian_shield"	: 0
-	}, {
-		"name"		: "Amara Ranch",
-		"author"	: "Amara & Karicyan",
-		"hylian_shield"	: 0
-	}, {
-		"name"		: "Amara Valkyrie",
-		"author"	: "Amara & Karicyan",
-		"hylian_shield"	: 0,
-		"mirror_shield"	: 0
-	}, {
 		"name"		: "Fierce Deity",
 		"author"	: "CrookedPoe"
 	}, {
@@ -88,9 +68,6 @@
 		"author"	: "JanexLane",
 		"hylian_shield"	: 0,
 		"mirror_shield"	: 0
-	}, {
-		"name"		: "Link Baldrics",
-		"author"	: "Amara"
 	}, {
 		"name"		: "MoT Revisited",
 		"author"	: "Syeo",

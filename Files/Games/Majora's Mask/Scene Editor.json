@@ -1436,6 +1436,33 @@
 			"value"	: "1FF"
 		} ] ]
 	}, {
+		"name"		: "Room Change Plane",
+		"id"		: "0018",
+		"spawn"		: 1,
+		"band"		: [ "FC00", "0380", "007F" ],
+		"params" : [ [ {
+			"name"	: "ID",
+			"value"	: "3F"
+		} ], [ {
+			"name"	: "Default",
+			"value"	: "0"
+		}, {
+			"name"	: "Vertical",
+			"value"	: "80"
+		}, {
+			"name"	: "Transparent",
+			"value"	: "100"
+		}, {
+			"name"	: "Vertical Cover",
+			"value"	: "180"
+		}, {
+			"name"	: "Scene Changer",
+			"value"	: "200"
+		} ], [ {
+			"name"	: "Exit Index",
+			"value"	: "7F"
+		} ] ]
+	}, {
 		"name"		: "Dinolfos",
 		"id"		: "0019",
 		"type"		: "Enemy",

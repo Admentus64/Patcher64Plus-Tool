@@ -11,6 +11,7 @@
 
 	"title"			: "Rumble Support",
 	"patch"			: "Compressed\\rumble.bps",
+	"console"		: "Native",
 	"output"		: "_rumble_patched",
 	"tooltip"		: "Adds Rumble Support to Super Mario 64"
 
@@ -32,6 +33,7 @@
 
 	"title"			: "render96 Mario Model",
 	"patch"			: "Compressed\\render96_mario.bps",
+	"console"		: "Native",
 	"output"		: "render96_mario",
 	"tooltip"		: "render96 patch with the Mario model with 3D models and promo styles for several objects{0}Both widescreen (stretched HUD) and puppycam can be enabled/disabled in the pause menu"
 
@@ -39,6 +41,7 @@
 
 	"title"			: "render96 Luigi Model",
 	"patch"			: "Compressed\\render96_luigi.bps",
+	"console"		: "Native",
 	"output"		: "render96_luigi",
 	"tooltip"		: "render96 patch with the Luigi model with 3D models and promo styles for several objects{0}Both widescreen (stretched HUD) and puppycam can be enabled/disabled in the pause menu"
 
@@ -46,12 +49,14 @@
 
 	"title"			: "Termina Invasion",
 	"patch"			: "Compressed\\termina_invasion.bps",
+	"console"		: "Native",
 	"output"		: "termina_invasion",
 	"tooltip"		: "Termina takes over the Mushroom Kingdom"
 
 }, {
 
-	"title"			: "Multiplayer (v1.4.2)",
+	"title"			: "Multiplayer",
+	"version"		: "1.4.2",
 	"command"		: "Patch Boot DOL",
 	"expand_memory"		: -1,
 	"script"		: "Super Mario 64",
@@ -74,7 +79,8 @@
 
 }, {
 
-	"title"			: "Arguably Better Edition (R3)",
+	"title"			: "Arguably Better Edition",
+	"version"		: "R3",
 	"patch"			: "Compressed\\abe.bps",
 	"console"		: "Native",
 	"output"		: "abe",	
@@ -82,7 +88,8 @@
 
 }, {
 
-	"title"			: "Arguably Better Edition (WS) (R3)",
+	"title"			: "Arguably Better Edition (WS)",
+	"version"		: "R3",
 	"patch"			: "Compressed\\abe_ws.bps",
 	"console"		: "Native",
 	"output"		: "abe_ws",	
@@ -90,7 +97,8 @@
 
 }, {
 
-	"title"			: "Star Road (2019)",
+	"title"			: "Star Road",
+	"version"		: 2019,
 	"script"		: "Super Mario 64",
 	"rom_title"		: "SM64 Star Road",
 	"patch"			: "Decompressed\\star_road_n64.bps",
@@ -102,7 +110,8 @@
 
 }, {
 
-	"title"			: "Star Road (2019)",
+	"title"			: "Star Road",
+	"version"		: 2019,
 	"command"		: "Patch Boot DOL",
 	"script"		: "Super Mario 64",
 	"vc_title"		: "Super Mario: Star Road",
@@ -115,7 +124,8 @@
 
 }, {
 
-	"title"			: "Last Impact (v1.2)",
+	"title"			: "Last Impact",
+	"version"		: "1.2",
 	"rom_title"		: "SM64 Last Impact",
 	"patch"			: "Decompressed\\last_impact.vcdiff",
 	"console"		: "Native",
@@ -125,7 +135,8 @@
 
 }, {
 
-	"title"			: "Super Mario 64 Land (v1.1)",
+	"title"			: "Super Mario 64 Land",
+	"version"		: "1.1",
 	"rom_title"		: "SM64 Land",
 	"patch"			: "Decompressed\\land.vcdiff",
 	"console"		: "Native",
@@ -145,7 +156,8 @@
 
 }, {
 
-	"title"			: "Internal Plexus: Build 3313 (v0.7)",
+	"title"			: "Internal Plexus: Build 3313",
+	"version"		: "0.7",
 	"rom_title"		: "SM64 B3313",
 	"patch"			: "Decompressed\\internal_plexus.bps",
 	"console"		: "Native",
@@ -157,13 +169,14 @@
 
 	"title"			: "Italian Translation",
 	"patch"			: "Compressed\\ita.bps",
+	"console"		: "Native",
 	"output"		: "ita",
 	"tooltip"		: "Italian Translation of Super Mario 64{0}Based on the Japanese Shindou version"
 
 }, {
 
 	"title"			: "iQue: Header Fix + Save Fix + Rumble Fix",
-	"version"		: "China (iQue)",
+	"revision"		: "China (iQue)",
 	"console"		: "Native",
 	"patch"			: "Compressed\\iQue_chn.bps",
 	"output"		: "iQue_chn",

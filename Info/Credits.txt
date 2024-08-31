@@ -2,6 +2,8 @@
 <<< PATCHER64+ TOOL >>>
 
 --- Thanks to my Patreons ---
+- Tier 3:	Thanatos-Zero
+
 - Tier 2:	Amara
 
 - Tier 1:	redmaro, mad_scrub, GoldenMariaNova
@@ -83,8 +85,6 @@
 					GNU General Public License v3.0 (GPL-3.0 License)
 
 --- Custom Models ---
-- Amara:				Amara & Karicyan
-- Amara Valkyrie:			Amara & Karicyan
 - Child Quest:				GhostlyDark & LuigiBlood
 - Child Quest Enhanced:			Admentus
 - Dawn & Dusk:				LuigiBlood
@@ -145,6 +145,9 @@
 - E-gor
 - Apasher
 - Menou
+
+--- Zelda's Birthday ---
+- jsa
 
 --- Ocarina of Time Puzzling ---
 - DezZiBao
@@ -850,13 +853,34 @@ Grahf, ShadowOne333, CeruCap, ScoutTown, MrBlueDork, Duopierce, Skorph2014, mars
 
 
 ===========================
+<<< THE MINISH CAP >>>
+
+--- Redux ---
+- Main Hacking:				Admentus
+- Decompilation Assistance:		Henny022 & Catobat
+
+--- Additional Options ---
+- Miscellaneous Options:		Admentus
+- US Backport Fixes:			Prof. 9
+- "The Wind Waker" Voices:		Weario
+
+--- Language Restorations ---
+- English, Formatting and Coding:	Admentus
+- French:				Ticamus
+- German:				GhostlyDark
+- Spanish:				ShadowOne333
+- Italian:				Rulesless
+
+
+
+===========================
 <<< LINK'S AWAKENING DX >>>
 
 --- Zelda 1 Port ---
-daid
+- daid
 
 --- Zelda's Adventure Port ---
-John Lay (https://john-lay.itch.io/zeldas-adventure)
+- John Lay (https://john-lay.itch.io/zeldas-adventure)
 
 --- Redux ---
 - Main Hacking:				ShadowOne333
@@ -870,3 +894,19 @@ John Lay (https://john-lay.itch.io/zeldas-adventure)
 - Restore Low Health Beep:		ShadowOne333
 - Restore Powerup Messages:		the_icepenguin
 - Title Screen:				Jayro
+
+
+
+===========================
+<<< ORACLE OF AGES >>>
+
+--- GBC to GBA ---
+- DuoDreamer
+
+
+
+===========================
+<<< ORACLE OF SEASONS >>>
+
+--- GBC to GBA ---
+- DuoDreamer

@@ -1,6 +1,7 @@
 [ {
 
-	"title"		: "Donkey Kong Country: Boss Blitz (1.5)",
+	"title"		: "Donkey Kong Country: Boss Blitz",
+	"version"	: "1.5",
 	"command"	: "Force Downgrade",
 	"vc_title"	: "Donkey Kong Country: Boss Blitz",
 	"patch"		: "Compressed\\boss_blitz.ips",

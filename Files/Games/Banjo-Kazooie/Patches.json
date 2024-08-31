@@ -8,7 +8,7 @@
 }, {
 
 	"title"		: "16:9 Widescreen (Rev 1)",
-	"version"	: "Rev 1 (US)",
+	"revision"	: "Rev 1 (US)",
 	"patch"		: "Compressed\\widescreen_rev1.ips",
 	"output"	: "widescreen",
 	"tooltip"	: "16:9 Widescreen adjusted format for Banjo-Kazooie"
@@ -23,7 +23,8 @@
 
 }, {
 
-	"title"		: "Banjo-Kazooie Returns (Demo v1.2)",
+	"title"		: "Banjo-Kazooie Returns",
+	"version"	: "1.2 Demo",
 	"patch"		: "Decompressed\\banjo_kazooie_returns.bps",
 	"script"	: "Banjo-Kazooie",
 	"output"	: "banjo_kazooie_returns",
@@ -31,14 +32,16 @@
 
 }, {
 
-	"title"		: "Banjo-Kazooie: Cut-Throat Coast (v1.4)",
+	"title"		: "Banjo-Kazooie: Cut-Throat Coast",
+	"version"	: "1.4",
 	"patch"		: "Decompressed\\cut_throat_coast.bps",
 	"output"	: "cut_throat_coast",
 	"tooltip"	: "A small-sized ROM hack in a completely new setting, as part of a collaborative Halloween mod{0}Features 1 world, 100 notes & 10 jiggies with an average length of 1-2 hours"
 
 }, {
 
-	"title"		: "Banjo-Kazooie: Worlds Collide (v2.0)",
+	"title"		: "Banjo-Kazooie: Worlds Collide",
+	"version"	: "2.0",
 	"patch"		: "Decompressed\\worlds_collide.bps",
 	"script"	: "Banjo-Kazooie",
 	"output"	: "worlds_collide",
@@ -46,7 +49,8 @@
 
 }, {
 
-	"title"		: "Banjo-Kazooie: The Jiggies of Time (v1.3)",
+	"title"		: "Banjo-Kazooie: The Jiggies of Time",
+	"version"	: "1.3",
 	"patch"		: "Decompressed\\jiggies_of_time.bps",
 	"script"	: "Banjo-Kazooie",
 	"output"	: "jiggies_of_time",
@@ -62,7 +66,8 @@
 
 }, {
 
-	"title"		: "Banjo-Kazooie: The Night-Bear Before Christmas (v1.0)",
+	"title"		: "Banjo-Kazooie: The Night-Bear Before Christmas",
+	"version"	: "1.0",
 	"patch"		: "Decompressed\\night_bear_before_christmas.bps",
 	"script"	: "Banjo-Kazooie",
 	"output"	: "night_bear_before_christmas",
@@ -70,7 +75,8 @@
 
 }, {
 
-	"title"		: "Banjo-Kazooie: Gruntilda's Mask (v1.2)",
+	"title"		: "Banjo-Kazooie: Gruntilda's Mask",
+	"version"	: "1.2",
 	"patch"		: "Decompressed\\gruntildas_mask.bps",
 	"script"	: "Banjo-Kazooie",
 	"output"	: "gruntildas_mask",
@@ -94,7 +100,8 @@
 
 }, {
 
-	"title"		: "Banjo-Kazooie: Fort Adventure (v1.1)",
+	"title"		: "Banjo-Kazooie: Fort Adventure",
+	"version"	: "1.1",
 	"patch"		: "Decompressed\\fort_adventure.bps",
 	"script"	: "Banjo-Kazooie",
 	"output"	: "fort_adventure",
@@ -183,7 +190,8 @@
 
 }, {
 
-	"title"		: "Banjo-Kazooie: Santa's Village (v1.1)",
+	"title"		: "Banjo-Kazooie: Santa's Village",
+	"version"	: "1.1",
 	"patch"		: "Decompressed\\santas_village.bps",
 	"output"	: "santas_village",
 	"tooltip"	: "A small-sized ROM hack in a completely new setting{0}Features 1 world, 200 notes, 10 jiggies with an average length of 1 hours"

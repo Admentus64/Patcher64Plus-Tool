@@ -51,7 +51,7 @@ function PatchReduxOptions() {
 #==============================================================================================================================================================================================
 function CreateOptions() {
     
-    CreateOptionsPanel
+    CreateOptionsPanel @("Main")
 
 }
 
@@ -61,13 +61,13 @@ function CreateOptions() {
 function CreateTabMain() {
 
     # MAIN #
-
+    
     CreateReduxGroup    -Tag  "Main"                   -Text "Main"
-    CreateReduxCheckBox -Name "MaxBombArrow"           -Text "Max Bombs && Arrows"          -Info "Maxes ammo amounts:`Total amount for bombs is 20 to 99`nTotal amount for arrows is 30 to 99" -Credits "Kazuto"
-    CreateReduxCheckBox -Name "MirrorWorksBothWorlds"  -Text "Mirror Works in Both Worlds"  -Info "The Mirror can be used in both the Light and Dark Worlds"                                    -Credits "Redux Project"
-    CreateReduxCheckBox -Name "MoveBlocksIndefinitely" -Text "Move Blocks Indefinitely"     -Info "Blocks which can be pushed can now be pushed several times"                                  -Credits "Redux Project"
-    CreateReduxCheckBox -Name "RemoveLowHealthBeep"    -Text "Remove Low Health Beep"       -Info "Completely remove the constant beeping that plays when you're low on hearts"                 -Credits "Redux Project"
-    CreateReduxCheckBox -Name "StartFullHearts"        -Text "Start at Full Hearts"         -Info "Makes Link spawn with a full set of hearts upon save load"                                   -Credits "Redux Project"
+    CreateReduxCheckBox -Name "MaxBombArrow"           -Text "Max Bombs & Arrows"          -Info "Maxes ammo amounts:`Total amount for bombs is 20 to 99`nTotal amount for arrows is 30 to 99" -Credits "Kazuto"
+    CreateReduxCheckBox -Name "MirrorWorksBothWorlds"  -Text "Mirror Works in Both Worlds" -Info "The Mirror can be used in both the Light and Dark Worlds"                                    -Credits "Redux Project"
+    CreateReduxCheckBox -Name "MoveBlocksIndefinitely" -Text "Move Blocks Indefinitely"    -Info "Blocks which can be pushed can now be pushed several times"                                  -Credits "Redux Project"
+    CreateReduxCheckBox -Name "RemoveLowHealthBeep"    -Text "Remove Low Health Beep"      -Info "Completely remove the constant beeping that plays when you're low on hearts"                 -Credits "Redux Project"
+    CreateReduxCheckBox -Name "StartFullHearts"        -Text "Start at Full Hearts"        -Info "Makes Link spawn with a full set of hearts upon save load"                                   -Credits "Redux Project"
 
 
 

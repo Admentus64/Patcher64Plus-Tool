@@ -1,5 +1,5 @@
 ﻿function PrePatchOptions() {
-
+    
     if (IsChecked $Redux.Graphics.Widescreen)          { ApplyPatch -Patch "Decompressed\Optional\widescreen.ppf"    }
     if (IsDefault $Redux.Features.OcarinaIcons -Not)   { ApplyPatch -Patch "Decompressed\Optional\ocarina_icons.ppf" }
 
@@ -26,21 +26,21 @@ function PatchOptions() {
     
     # FIXES #
 
-	if (IsChecked $Redux.Fixes.TextCommands) { ApplyPatch -Patch "Decompressed\Optional\text_commands.ppf" }
+    if (IsChecked $Redux.Fixes.TextCommands)                { ApplyPatch -Patch "Decompressed\Optional\text_commands.ppf" }
     
 
 
     # MODELS #
 
-    if (IsDefault -Elem $Redux.Graphics.ChildModels -Not)   { PatchModel -Category "Child" -Name $Redux.Graphics.ChildModels.Text }
+    if (IsDefault -Elem $Redux.Graphics.ChildModels -Not)   { PatchModel -Category "Child" -Name $GamePatch.LoadedModelsList["Child"][$Redux.Graphics.ChildModels.SelectedIndex] }
 
 
 
     # DIFFICULTY #
 
-    if ( (IsValue $Redux.Recovery.Heart -Value 0) -or (IsDefault $Redux.Hero.ItemDrops -Not) )   { ApplyPatch -Patch "Decompressed\Optional\no_recovery_hearts.ppf"           }
-    if (IsChecked $Redux.Hero.MoveGoldDust)                                                      { ApplyPatch -Patch "Decompressed\Optional\chest.ppf"                        }
-    if (IsChecked $Redux.EasyMode.OceansideSpiderHouse)                                          { ApplyPatch -Patch "Decompressed\Optional\oceanside_spider_house.ppf"       }
+    if ( (IsValue $Redux.Recovery.Heart -Value 0) -or (IsDefault $Redux.Hero.ItemDrops -Not) )   { ApplyPatch -Patch "Decompressed\Optional\no_recovery_hearts.ppf"     }
+    if (IsChecked $Redux.Hero.MoveGoldDust)                                                      { ApplyPatch -Patch "Decompressed\Optional\chest.ppf"                  }
+    if (IsChecked $Redux.EasyMode.OceansideSpiderHouse)                                          { ApplyPatch -Patch "Decompressed\Optional\oceanside_spider_house.ppf" }
 
     
 
@@ -99,6 +99,32 @@ function ByteOptions() {
         "EAE535", "EB924D", "EC1F25", "ECBE79", "F3E84D", "F7ED71", "F82DBD", "F949F9", "10489A5", "105A76D", "10785DD") -Values "01"
         ChangeBytes -Offset @("D4774D", "D5F015", "DA7845", "E1BA65", "E23C11", "E9D409", "EB27ED", "EB280D", "EDD629", "EDEC29", "EE2F59", "F666A5", "F8693D", "F9DE41", "FC6621", "FCB989", "FE3699", "FFF715", "100D425", "101D2C9") -Values "F1"
         ChangeBytes -Offset @("D5C0FD", "EE8815", "FEFCC5") -Values "E1"
+    }
+
+    if (IsChecked $Redux.Gameplay.RoyalWallet) {
+        PatchBytes  -Offset "1372B70" -Patch "royal_wallet.bin"
+        ChangeBytes -Offset @("1D337", "C591C7") -Values "F0"
+
+        # Change Deku Stick upgrade into Wallet upgrade
+        ChangeBytes -Offset "BA99F7" -Values "7C"   # Royal Wallet item check instead of Deku Stick (20) upgrade check
+        ChangeBytes -Offset "BA99FF" -Values "04"   # Deku Stick upgrade to Wallet upgrade
+        ChangeBytes -Offset "BA9A1C" -Values "1500" # No Deku Stick check
+        ChangeBytes -Offset "BA9A2F" -Values "03"   # Third upgrade
+        ChangeBytes -Offset "BA9A3B" -Values "00"   # Affect ammo index slot 0 (Ocarina of Time)
+        ChangeBytes -Offset "BA9A47" -Values "2C"   # Ammo to set
+
+        ChangeBytes -Offset "C51C76" -Values "FBFC0600185006001B7006001B90060019A006001BB006001A2806001BD006001AD8" # Draw Royal Wallet instead of unused Hookshot
+        ChangeBytes -Offset "CD6C66" -Values "7C A0 2A 32 00 A8"                                                         # Get Item Royal Wallet instead of unused item
+
+        ExportAndPatch -Path "girla"  -Offset "CDDC60" -Length "1B00"
+      # ChangeBytes -Offset "CDEA63" -Values "7C"                                       # Give Royal Wallet instead of Mirror Shield when buying item 
+      # ChangeBytes -Offset "CDE4C0" -Values "1500"                                     # Remove has no shield check
+      # ChangeBytes -Offset "CDF380" -Values "00A80029800B80500001277627780000000000AC" # Royal Wallet shop item instead of unused Mirror Shield shop item
+      # ChangeBytes -Offset "CDE4D8" -Values "24020001"                                 # Fanfare 2
+
+      # ChangeBytes -Offset "D263E5" -Values "2A" # Sell Royal Wallet instead of Deku Nuts (10) at Trading Post daytime
+        ChangeBytes -Offset "D26425" -Values "2A" # Sell Royal Wallet instead of Deku Nuts (10) at Trading Post nighttime
+
     }
 
     if (IsChecked $Redux.Gameplay.NoKillFlash)              { ChangeBytes -Offset "BFE043"  -Values "00"       }
@@ -637,6 +663,15 @@ function ByteOptions() {
 
 
 
+    # MINIGAMES #
+    
+    if (IsDefault $Redux.Minigames.TownShootingGallery1  -Not)   { ChangeBytes -Offset   "BD9FC3"            -Values (Get8Bit  $Redux.Minigames.TownShootingGallery1.Text)  }
+    if (IsDefault $Redux.Minigames.TownShootingGallery2  -Not)   { ChangeBytes -Offset @("E3A17F", "E3A19F") -Values (Get8Bit  $Redux.Minigames.TownShootingGallery2.Text)  }
+    if (IsDefault $Redux.Minigames.SwampShootingGallery1 -Not)   { ChangeBytes -Offset @("E39942", "E39A2E") -Values (Get16Bit $Redux.Minigames.SwampShootingGallery1.Text) }
+    if (IsDefault $Redux.Minigames.SwampShootingGallery2 -Not)   { ChangeBytes -Offset @("E3901A", "E3909E") -Values (Get16Bit $Redux.Minigames.SwampShootingGallery2.Text) }
+
+
+
     # EASY MODE #
 
     if     (IsIndex -Elem $Redux.EasyMode.KeepBottles -Index 2)   { ChangeBytes -Offset "BDA5AB"  -Values "17" }
@@ -783,14 +818,15 @@ function ByteOptions() {
         ChangeBytes -Offset "C5625D" -Values @( ($max - $Redux.Capacity.Wallet1.Text.Length), ($max - $Redux.Capacity.Wallet2.Text.Length), ($max - $Redux.Capacity.Wallet3.Text.Length), ($max - $Redux.Capacity.Wallet4.Text.Length) ) -Interval 2
         ChangeBytes -Offset "C56265" -Values @(         $Redux.Capacity.Wallet1.Text.Length,          $Redux.Capacity.Wallet2.Text.Length,          $Redux.Capacity.Wallet3.Text.Length,          $Redux.Capacity.Wallet4.Text.Length)   -Interval 2
     }
+    elseif (IsChecked $Redux.Gameplay.RoyalWallet) { ChangeBytes -Offset "C58372" -Values "03E7"; ChangeBytes -Offset "C5626B" -Values "03" }
 
 
 
     # EQUIPMENT ADJUSTMENTS #
 
-    if ( (IsChecked $Redux.Equipment.PermanentRazorSword) -or (IsChecked $Redux.Features.GearSwap) ) {
-        ChangeBytes -Offset "CBA496" -Values "00 00" # Prevent losing hits
-        ChangeBytes -Offset "BDA6B7" -Values "01"    # Keep sword after Song of Time
+    if ( (IsChecked $Redux.Equipment.PermanentRazorSword) -or (IsChecked -Elem $Redux.Features.GearSwap -Redux) ) {
+        ChangeBytes -Offset "CBA496" -Values "0000" # Prevent losing hits
+        ChangeBytes -Offset "BDA6B7" -Values "01"   # Keep sword after Song of Time
     }
 
     if (IsChecked $Redux.Equipment.MajoraMirrorShield)   { PatchBytes  -Offset "1177B00" -Texture -Patch "majora_mirror_shield.bin"                  }
@@ -1119,6 +1155,12 @@ function ByteSceneOptions() {
         SaveAndPatchLoadedScene
     }
 
+    if (IsChecked $Redux.Gameplay.RoyalWallet) {
+        PrepareMap   -Scene "Trading Post" -Map 0 -Header 0
+        InsertObject -Name "Wallets"
+        SaveAndPatchLoadedScene
+    }
+
 
 
     # FIXES #
@@ -1196,6 +1238,23 @@ function ByteSceneOptions() {
 
 
 
+    # GRAPHICS #
+
+    if (IsChecked $Redux.Graphics.OverworldSkyboxes) {
+        for ($i=0; $i-lt 4;  $i++)   { PrepareAndSetSceneSettings -Scene "Lost Woods"                     -Map 0 -Header $i -Skybox 1 }; SaveAndPatchLoadedScene
+        for ($i=0; $i-lt 2;  $i++)   { PrepareAndSetSceneSettings -Scene "Path to Mountain Village"       -Map 0 -Header $i -Skybox 1 }; SaveAndPatchLoadedScene
+                                       PrepareAndSetSceneSettings -Scene "Mountain Village (Winter)"      -Map 0 -Header 0  -Skybox 1;   SaveAndPatchLoadedScene
+                                       PrepareAndSetSceneSettings -Scene "Path to Goron Village (Winter)" -Map 0 -Header 0  -Skybox 1;   SaveAndPatchLoadedScene
+        for ($i=0; $i-lt 2;  $i++)   { PrepareAndSetSceneSettings -Scene "Goron Racetrack"                -Map 0 -Header $i -Skybox 1 }; SaveAndPatchLoadedScene
+                                       PrepareAndSetSceneSettings -Scene "Goron Village (Winter)"         -Map 0 -Header 0  -Skybox 1;   SaveAndPatchLoadedScene
+        for ($i=0; $i-lt 2;  $i++)   { PrepareAndSetSceneSettings -Scene "Path to Snowhead"               -Map 0 -Header $i -Skybox 1 }; SaveAndPatchLoadedScene
+        for ($i=0; $i-lt 2;  $i++)   { PrepareAndSetSceneSettings -Scene "Snowhead"                       -Map 0 -Header $i -Skybox 1 }; SaveAndPatchLoadedScene
+                                       PrepareAndSetSceneSettings -Scene "Beneath the Graveyard"          -Map 0 -Header 0  -Skybox 0;   SaveAndPatchLoadedScene
+        for ($i=0; $i-lt 12; $i++)   { PrepareAndSetSceneSettings -Scene "Cutscene Map"                   -Map 0 -Header $i -Skybox 0 }; SaveAndPatchLoadedScene
+    }
+
+
+
     # HERO MODE #
 
     if (IsChecked $Redux.Hero.RaisedResearchLabPlatform) {
@@ -1269,7 +1328,7 @@ function ByteSceneOptions() {
     }
 
     if (IsChecked $Redux.Hero.MoveGoldDust) {
-        PrepareMap  -Scene "Mountain Village (Spring)" -Map 0 -Header 0; InsertObject -Name "Treasure Chest"; InsertActor -Name "Treasure Chest" -Param "0D40" -X 310 -Y 463 -Z 700 -YRot 90 -NoXRot -NoZRot; SaveAndPatchLoadedScene
+        PrepareMap  -Scene "Mountain Village (Spring)" -Map 0 -Header 0; InsertActor -Name "Treasure Chest" -Param "0D40" -X 310 -Y 463 -Z 700 -YRot 90 -NoXRot -NoZRot; SaveAndPatchLoadedScene
         ChangeBytes -Offset "FB76E7" -Values "5A"; ChangeBytes -Offset "FB76FF" -Values "04"; ChangeBytes -Offset "FB7723" -Values "5A" # Goron Race
     }
 
@@ -1295,9 +1354,31 @@ function WholeTextOptions([string]$Script, [string]$Table) {
 #==============================================================================================================================================================================================
 function ByteTextOptions() {
     
+    # QUALITY OF LIFE #
+
     if (IsChecked $Redux.Gameplay.PermanentOwlSaves) {
         SetMessage -ID "0C01" -Replace "<DI>You can <R>save<W> your <R>progress<W> here.<N>When you reselect your file, my face<N>will appear by your file name.<DC><New Box><DI>This indicates that the next time<N>you reopen your file, you'll resume<N>playing at this <R>very place<W> and<N><R>time<W> with your <R>current status<W>.<DC><New Box><DI>Play the <R>Song of Time<W> to erase my<N>face from your file name again. Then<N>you start from the <R>First Day<W> again.<DC><New Box><R>Save<W> your <R>progress<W> up to this point?<N><G><Two Choices>No<N>Yes"
     }
+
+    if (IsChecked $Redux.Gameplay.RoyalWallet) {
+        if (IsChecked $Redux.Capacity.EnableWallet) { $wallet = $Redux.Capacity.Wallet4.Text } else { $wallet = "999" }
+        SetMessage       -ID "00BF" -Replace ("<DI>You got a <R>Royal Wallet<W>!<DC><N><Resume:000A>This thing is bottomless!<N>It can hold up to <R>" + $wallet + " Rupees<W>.")
+        SetMessageBox    -ID "00BF" -Type 2 -Position 0
+        SetMessageIcon   -ID "00BF" -Hex "70"
+
+        SetMessage       -ID "2776" -Replace ("<R>Royal Wallet: " + $Redux.Capacity.Wallet3.Text + " Rupees<W><N>A bottomless wallet that can<N>hold an insane amount of Rupees<N>inside of it!<Shop Description>")
+        SetMessageRupees -ID "2776" -Value ([uint16]$Redux.Capacity.Wallet3.Text)
+        SetMessageBox    -ID "2776" -Type 6 -Position 3
+        SetMessageIcon   -ID "2776" -Hex "FE"
+        SetMessage       -ID "2778" -Replace ("Royal Wallet: "    + $Redux.Capacity.Wallet3.Text + " Rupees<N><N><G><Two Choices>I'll buy it<N>No thanks")
+        SetMessageRupees -ID "2778" -Value ([uint16]$Redux.Capacity.Wallet3.Text)
+        SetMessageBox    -ID "2778" -Type 6 -Position 3
+        SetMessageIcon   -ID "2778" -Hex "FE"
+    }
+
+
+
+    # GRAPHICS #
 
     if (IsChecked $Redux.UI.GCScheme -Lang 1) { 
         SetMessage -ID "004C" -Text "four <C><C Button><W> Buttons to play it. Press<N><B Button> to stop." -Replace "four <C><C Button><W> directions to play it.<N>Press <B Button> to stop."
@@ -1318,12 +1399,20 @@ function ByteTextOptions() {
         SetMessage -ID "0059" -Text "then press that <N><C><C Button> <W>Button to use it." -Replace "then use <N><C><C Button><W>."
     }
 
+
+
+    # EQUIPMENT #
+
     if (IsChecked $Redux.Equipment.PermanentRazorSword -Lang 1) {
         SetMessage -ID "0038" -Text "This new, sharper blade is a cut<N>above the rest. Use it up to<N><R>100 times <W>without dulling its<N>superior edge!"                            -Replace "This new, sharper blade is a cut<N>above the rest. Use it as much<N>as you want without dulling its<N>superior edge!"
         SetMessage -ID "0C3B" -Text "Keep in mind that after you use<N>your reforged sword <R>100 times<W>, it<N>will lose its edge and it'll be back<N>to its original sharpness..."   -Replace "This reforged blade will be <R>unbreakable<W>.<N>Ohh... Don't look at me like that.<N>Surely I would not dare conning you<N>with a flimsy weapon."
         SetMessage -ID "0C51" -Text "Now keep in mind that after<N>you've used this <R>100 times<W>, the<N>blade will lose its edge and will<N>return to its <R>original sharpness<W>." -Replace "You do not need to worry for it, as<N>this blade is <R>unbreakable<W>. What!?<N>You do not believe me? Go see it<N>for yourself then in action."
         SetMessage -ID "1785" -Text "Use it up to <R>100 times<W>."                                                                                                                     -Replace "Use it as much you want."
     }
+
+
+
+    # LANGUAGE #
 
     if (IsChecked $Redux.Text.Restore -Lang 1) {
         # Trouple Leader's Mask
@@ -1545,7 +1634,7 @@ function CreateOptionsPreviews() {
     
     if ($GamePatch.models -ne 0) {
         CreatePreviewGroup -Text "Model Previews" -Height 8
-        CreateImageBox -X 20 -Y 20 -W 154 -H 220 -Name "ModelChild"
+        CreateImageBox -X 20 -Y 20 -W 154 -H 220 -Name "Child"
         $global:PreviewToolTip = CreateToolTip
     }
 
@@ -1700,6 +1789,7 @@ function CreateTabMain() {
     CreateReduxCheckBox -Name "FierceDeityAnywhere"    -Text "Fierce Deity Anywhere"     -Info "The Fierce Deity Mask can be used anywhere now´nApplies additional fixes to make the form more usable, such as being able to push blocks" -Credits "Randomizer"
     CreateReduxCheckBox -Name "DisableScreenShrinking" -Text "Disable Screen Shrinking"  -Info "Disables the effect of the screen shrinking just before the next day"                                                                     -Credits "Euler"
     CreateReduxCheckBox -Name "KeepDekuBubble"         -Text "Don't Burst Deku Bubble"   -Info "Holding B button will not burst the Deku Link Bubble"                                                                                     -Credits "Euler"
+    CreateReduxCheckBox -Name "RoyalWallet"            -Text "Royal Wallet"              -Info "A third wallet upgrade can be bought"                                                                                                     -Credits "Admentus"
 
 
 
@@ -1827,12 +1917,12 @@ function CreateTabRedux() {
     CreateReduxCheckBox -Name "InverseAim"         -Text "Inverse Aim"                -Info "Inverse y-axis for analog controls when aiming in first-person view"
 
     CreateReduxGroup    -Tag  "Cheats"             -Text "Cheats"
-    CreateReduxCheckBox -Name "InventoryEditor"    -Text "Inventory Editor"           -Info "Press the L button in the QUEST STATUS subscreen to open the Inventory Editor" -Credits "Admentus"
-    CreateReduxCheckBox -Name "Health"             -Text "Infinite Health"            -Info "Link's health is always at its maximum"                                        -Credits "Admentus"
-    CreateReduxCheckBox -Name "Magic"              -Text "Infinite Magic"             -Info "Link's magic is always at its maximum"                                         -Credits "Admentus"
-    CreateReduxCheckBox -Name "Ammo"               -Text "Infinite Ammo"              -Info "Link's ammo for items are always at their maximum"                             -Credits "Admentus"
-    CreateReduxCheckBox -Name "Rupees"             -Text "Infinite Rupees"            -Info "Link's wallet is always filled at its maximum"                                 -Credits "Admentus"
-    CreateReduxCheckBox -Name "ClimbAnything"      -Text "Climb Anything"             -Info "Climb most walls in the game" -Warning "Prone to softlocks, be careful"        -Credits "Randomizer"
+    CreateReduxCheckBox -Name "InventoryEditor"    -Text "Inventory Editor"           -Info "Press the L + Z buttons when the game is paused to open the Inventory Editor" -Credits "Admentus"
+    CreateReduxCheckBox -Name "Health"             -Text "Infinite Health"            -Info "Link's health is always at its maximum"                                       -Credits "Admentus"
+    CreateReduxCheckBox -Name "Magic"              -Text "Infinite Magic"             -Info "Link's magic is always at its maximum"                                        -Credits "Admentus"
+    CreateReduxCheckBox -Name "Ammo"               -Text "Infinite Ammo"              -Info "Link's ammo for items are always at their maximum"                            -Credits "Admentus"
+    CreateReduxCheckBox -Name "Rupees"             -Text "Infinite Rupees"            -Info "Link's wallet is always filled at its maximum"                                -Credits "Admentus"
+    CreateReduxCheckBox -Name "ClimbAnything"      -Text "Climb Anything"             -Info "Climb most walls in the game" -Warning "Prone to softlocks, be careful"       -Credits "Randomizer"
 
     if ( (IsSet $Redux.Gameplay.UnderwaterOcarina) -and (IsSet $Redux.Gameplay.OcarinaIcons) ) {
         if     ($Redux.Gameplay.UnderwaterOcarina.Checked -and $Redux.Features.OcarinaIcons.SelectedIndex -gt 0)   { $Redux.Gameplay.UnderwaterOcarina.Checked = $False; $Redux.Features.OcarinaIcons.SelectedIndex = 0 }
@@ -1883,7 +1973,7 @@ function CreateTabLanguage() {
     CreateReduxCheckBox -Name "GossipTime"      -Text "Add Gossip Stone Clock"                                                 -Info "Makes it so that the gossip stones, in addition to telling time left to moonfall, also act as a clock" -Safe -Credits "kuirivito"
     CreateReduxCheckBox -Name "YeetPrompt"      -Text "Yeet Action Prompt"                                                     -Info ('Replace the "Throw" Action Prompt with "Yeet"' + "`nYeeeeet")                                               -Credits "kr3z"
     CreateReduxCheckBox -Name "Comma"           -Text "Better Comma"                                                           -Info "Make the comma not look as awful"                                                                            -Credits "ShadowOne333"
-    CreateReduxCheckBox -Name "DefaultFileName" -Text "Default File Name"                                                      -Info 'Set the default file name to "Link"'                                                                 -Credits "Euler"      
+    CreateReduxCheckBox -Name "DefaultFileName" -Text "Default File Name"                                                      -Info 'Set the default file name to "Link"'                                                                         -Credits "Euler"      
 
     if ($IsFoolsDay -and $Redux.Text.LinkScript -ne $null) {
         $Redux.Text.TatlScript.SelectedIndex = 2
@@ -1917,7 +2007,7 @@ function UnlockLanguageContent() {
     if ($Redux.Text.Language -eq $null) { return }
 
     # English options
-    EnableElem -Elem @($Redux.Text.Restore, $Redux.Text.AdultPronouns, $Redux.Text.AreaTitleCards, $Redux.Text.EasterEggs, $Redux.Text.GossipTime, $Redux.Features.OcarinaIcons) -Active ($Redux.Text.Language.SelectedIndex -eq 0)
+    EnableElem -Elem @($Redux.Text.Restore, $Redux.Text.AdultPronouns, $Redux.Text.AreaTitleCards, $Redux.Text.EasterEggs, $Redux.Text.GossipTime, $Redux.Text.YeetPrompt, $Redux.Features.OcarinaIcons) -Active ($Redux.Text.Language.SelectedIndex -eq 0)
 
 }
 
@@ -1929,11 +2019,12 @@ function CreateTabGraphics() {
     # GRAPHICS #
 
     CreateReduxGroup -Tag "Graphics" -Text "Graphics"
-    if ($GamePatch.models -ne 0) { CreateReduxComboBox -Name "ChildModels" -Text "Hylian Model" -Items (@("Original") + (LoadModelsList -Category "Child")) -Default "Original" -Info "Replace the Hylian model used for Link" }
-    CreateReduxCheckBox -Name "Widescreen"     -Text "16:9 Widescreen (Advanced)"   -Info "Patches true 16:9 widescreen with the HUD pushed to the edges.`n`nKnown Issue: Stretched Notebook screen" -Safe -Native -Credits "Granny Story images by Nerrel, Widescreen Patch by gamemasterplc, enhanced and ported by GhostlyDark" -Base 2 -Exclude "Master Quest"
-    CreateReduxCheckBox -Name "WidescreenAlt"  -Text "16:9 Widescreen (Simplified)" -Info "Apply 16:9 Widescreen adjusted backgrounds and textures (as well as 16:9 Widescreen for the Wii VC)"                    -Credits "Aspect Ratio Fix by Admentus and 16:9 backgrounds by GhostlyDark & ShadowOne333" -Link $Redux.Graphics.Widescreen
-    CreateReduxCheckBox -Name "ExtendedDraw"   -Text "Extended Draw Distance"       -Info "Increases the game's draw distance for objects`nDoes not work on all objects"                                     -Safe -Credits "Admentus"
-    CreateReduxCheckBox -Name "PixelatedStars" -Text "Disable Pixelated Stars"      -Info "Completely disable stars during the night, which are pixelated dots and do not have any textures for HD replacement"    -Credits "Admentus"
+    if ($GamePatch.models -ne 0) { CreateReduxComboBox -Name "ChildModels" -Text "Hylian Model" -Items (LoadModelsList -Category "Child") -Default "Original" -Info "Replace the Hylian model used for Link" }
+    CreateReduxCheckBox -Name "Widescreen"        -Text "16:9 Widescreen (Advanced)"   -Info "Patches true 16:9 widescreen with the HUD pushed to the edges.`n`nKnown Issue: Stretched Notebook screen" -Safe -Native -Credits "Granny Story images by Nerrel, Widescreen Patch by gamemasterplc, enhanced and ported by GhostlyDark" -Base 2 -Exclude "Master Quest"
+    CreateReduxCheckBox -Name "WidescreenAlt"     -Text "16:9 Widescreen (Simplified)" -Info "Apply 16:9 Widescreen adjusted backgrounds and textures (as well as 16:9 Widescreen for the Wii VC)"                    -Credits "Aspect Ratio Fix by Admentus and 16:9 backgrounds by GhostlyDark & ShadowOne333" -Link $Redux.Graphics.Widescreen
+    CreateReduxCheckBox -Name "ExtendedDraw"      -Text "Extended Draw Distance"       -Info "Increases the game's draw distance for objects`nDoes not work on all objects"                                     -Safe -Credits "Admentus"
+    CreateReduxCheckBox -Name "PixelatedStars"    -Text "Disable Pixelated Stars"      -Info "Completely disable stars during the night, which are pixelated dots and do not have any textures for HD replacement"    -Credits "Admentus"
+    CreateReduxCheckBox -Name "OverworldSkyboxes" -Text "Overworld Skyboxes"           -Info "Use day and night skyboxes for all overworld areas lacking one`nAlso fixes broken skyboxes in some scenes"        -Safe -Credits "Admentus & GhostlyDark"
     
     if (!$IsWiiVC)   { $info = "`n`n--- WARNING ---`nDisabling cutscene effects fixes temporary issues with both Widescreen and Redux patched where garbage pixels at the edges of the screen or garbled text appears`nWorkaround: Resize the window when that happens" }
     else             { $info = "" }
@@ -2097,6 +2188,51 @@ function CreateTabDifficulty() {
     CreateReduxTextBox -Name "IceArrow"   -Text "Ice Arrow"   -Value 4 -Max 96 -Info "Set the magic cost for using Ice Arrows´n48 is the maximum amount of the standard magic meter´n96 is the maximum amount of the double magic meter"   -Credits "Garo-Mastah"
     CreateReduxTextBox -Name "LightArrow" -Text "Light Arrow" -Value 8 -Max 96 -Info "Set the magic cost for using Light Arrows´n48 is the maximum amount of the standard magic meter´n96 is the maximum amount of the double magic meter" -Credits "Garo-Mastah"
     CreateReduxTextBox -Name "DekuBubble" -Text "Deku Bubble" -Value 2 -Max 96 -Info "Set the magic cost for using Deku Bubbles´n48 is the maximum amount of the standard magic meter´n96 is the maximum amount of the double magic meter" -Credits "retroben"
+
+
+    # MINIGAMES #
+
+    CreateReduxGroup    -Tag  "Minigames"             -Text "Minigames"
+    CreateReduxTextBox  -Name "TownShootingGallery1"  -Text "Town Shooting Gallery (1)"  -Info "Set the default highscore for the Town Shooting Gallery upon starting a new save slot`nThis score has to be beaten for the Quiver upgrade" -Value 39   -Min 0   -Max 49   -Length 2 -Credits "Admentus" -Shift (-35) -Width 30
+    CreateReduxTextBox  -Name "TownShootingGallery2"  -Text "Town Shooting Gallery (2)"  -Info "Set the required Piece of Heart score for the Town Shooting Gallery"                                                                       -Value 50   -Min 5   -Max 50   -Length 2 -Credits "Admentus" -Shift (-35) -Width 30
+    CreateReduxTextBox  -Name "SwampShootingGallery1" -Text "Swamp Shooting Gallery (1)" -Info "Set the required Quiver upgrade score for the Swamp Shooting Gallery"                                                                      -Value 2120 -Min 500 -Max 2120 -Length 4 -Credits "Admentus" -Shift (-35) -Width 30
+    CreateReduxTextBox  -Name "SwampShootingGallery2" -Text "Swamp Shooting Gallery (2)" -Info "Set the required Piece of Heart score for the Swamp Shooting Gallery"                                                                      -Value 2180 -Min 550 -Max 2180 -Length 4 -Credits "Admentus" -Shift (-35) -Width 30
+
+    if ($Redux.Minigames.TownShootingGallery1 -ne $null) {
+        $Redux.Minigames.TownShootingGallery1.Add_LostFocus({
+            if ([byte]$Redux.Minigames.TownShootingGallery2.Text -le [byte]$Redux.Minigames.TownShootingGallery1.Text ) {
+                $value = [byte]$Redux.Minigames.TownShootingGallery1.Text
+                if ($value -gt 50) { $value = 50 }
+                $Redux.Minigames.TownShootingGallery2.Text = $value
+            }
+        })
+
+        $Redux.Minigames.TownShootingGallery2.Add_LostFocus({
+            if ([byte]$Redux.Minigames.TownShootingGallery2.Text -le [byte]$Redux.Minigames.TownShootingGallery1.Text ) {
+                $value = [byte]$Redux.Minigames.TownShootingGallery1.Text + 1
+                if ($value -gt 50) { $value = 50 }
+                $Redux.Minigames.TownShootingGallery2.Text = $value
+            }
+        })
+    }
+
+    if ($Redux.Minigames.SwampShootingGallery1 -ne $null) {
+        $Redux.Minigames.SwampShootingGallery1.Add_LostFocus({
+            if ([int16]$Redux.Minigames.SwampShootingGallery2.Text -le [int16]$Redux.Minigames.SwampShootingGallery1.Text ) {
+                $value = [int16]$Redux.Minigames.SwampShootingGallery1.Text
+                if ($value -gt 2180) { $value = 2180 }
+                $Redux.Minigames.SwampShootingGallery2.Text = $value
+            }
+        })
+
+        $Redux.Minigames.SwampShootingGallery2.Add_LostFocus({
+            if ([int16]$Redux.Minigames.SwampShootingGallery2.Text -le [int16]$Redux.Minigames.SwampShootingGallery1.Text ) {
+                $value = [int16]$Redux.Minigames.SwampShootingGallery1.Text + 1
+                if ($value -gt 2180) { $value = 2180 }
+                $Redux.Minigames.SwampShootingGallery2.Text = $value
+            }
+        })
+    }
 
 
 

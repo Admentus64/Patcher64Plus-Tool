@@ -33,9 +33,7 @@ function CreateTextEditorDialog() {
     $TextEditor.Content.Enabled = $False
 
     # Close Button
-    $X = $TextEditor.ContentPanel.Left + ($TextEditor.ContentPanel.Width / 6)
-    $Y = $TextEditor.Dialog.Height - (DPISize 170)
-    $CloseButton = CreateButton -X $X -Y $Y -Width (DPISize 80) -Height (DPISize 35) -Text "Close" -AddTo $TextEditor.Dialog
+    $CloseButton = CreateButton -X ($TextEditor.ContentPanel.Left + ($TextEditor.ContentPanel.Width / 6)) -Y ($TextEditor.Dialog.Height - (DPISize 170)) -Width (DPISize 80) -Height (DPISize 35) -Text "Close" -AddTo $TextEditor.Dialog
     $CloseButton.Add_Click( { CloseTextEditor })
     $CloseButton.BackColor = "White"
 
@@ -180,10 +178,14 @@ function CreateTextEditorDialog() {
     $TextEditor.TextBoxType.enabled = $TextEditor.TextBoxPosition.enabled = $False
 
     $SearchButton.Add_Click({
+        if ($DialogueList -eq $null) {
+            WriteToConsole -Text "Error! No dialogue list defined!" -Error
+            return
+        }
+
         $TextEditor.Search = $True
-        $TextEditor.ListPanel.VerticalScroll.Value = 0;
-        $i      = 0
-        $row    = $column = 0
+        $row = $column = $TextEditor.ListPanel.VerticalScroll.Value = 0;
+
         if ($TextEditor.SearchBar.text.length -eq 0) {
             foreach ($btn in $TextEditor.ListPanel.Controls) {
                 if ($column -eq 10) {
@@ -197,11 +199,14 @@ function CreateTextEditorDialog() {
         }
         else {
             $search = ParseMessage $TextEditor.SearchBar.text.toCharArray() -Encode
+            $searchLength = $search.Count
+
             foreach ($btn in $TextEditor.ListPanel.Controls) {
                 $matches = $False
                 $index   = 0
 
                 $msg = $DialogueList[$btn.text].msg
+
                 for ($i=$msg.count-1; $i -ge $msg.count-4; $i--) {
                     if ($msg[$i] -eq [byte]$Files.json.textEditor.end) {
                         $msg = $msg[0..($i-1)]
@@ -213,6 +218,11 @@ function CreateTextEditorDialog() {
                     if ([byte]$c -eq [byte]$search[$index])   { $index++   }
                     elseif ($index -gt 0)                     { $index = 0 }
                     if ($index -eq $search.count) {
+                        $matches = $True
+                        break
+                    }
+
+                    if ($index -eq $searchLength) {
                         $matches = $True
                         break
                     }
@@ -330,12 +340,20 @@ function CreateTextEditorDialog() {
 #==============================================================================================================================================================================================
 function RunTextEditor([object]$Game=$null) {
     
-    if ($global:TextEditor -ne $null -and $global:SceneEditor -ne $null) { return }
-    $global:TextEditor      = @{}
-    $TextEditor.GameConsole = $Files.json.consoles[0]
-    $TextEditor.GameType    = $Game
-    CreateTextEditorDialog
-    $TextEditor.Dialog.Show()
+    CloseTextEditor
+    CloseSceneEditor
+
+    if ($Game -eq $null) { return }
+
+    try {
+        if ($global:TextEditor -ne $null -or $global:SceneEditor -ne $null) { return }
+        $global:TextEditor      = @{}
+        $TextEditor.GameConsole = $Files.json.consoles[0]
+        $TextEditor.GameType    = $Game
+        CreateTextEditorDialog
+        $TextEditor.Dialog.Show()
+    }
+    catch { WriteToConsole -Text ("Error Opening Text Editor:" + $_) -Error }
 
 }
 
@@ -344,15 +362,18 @@ function RunTextEditor([object]$Game=$null) {
 #==============================================================================================================================================================================================
 function CloseTextEditor() {
     
-    if ($TextEditor -eq $null)                 { return }
-    if ($TextEditor.Dialog.IsHandleCreated)   { $TextEditor.Dialog.Hide() }
+    if ($TextEditor        -eq $null)                                           { return }
+    if ($TextEditor.Dialog -ne $null -and $TextEditor.Dialog.IsHandleCreated)   { $TextEditor.Dialog.Hide() }
 
      if ($LastScript -ne $null -and $TextEditor.Dialog -ne $null) {
         SaveLastMessage
-        SaveScript -Script ($Paths.Games + "\" + $TextEditor.GameType.mode + "\Editor\message_data_static." + $LanguagePatch.code + ".bin") -Table ($Paths.Games + "\" + $TextEditor.GameType.mode + "\Editor\message_data." + $LanguagePatch.code + ".tbl")
+        if ($TextEditor.GameType -ne $null -and $LanguagePatch -ne $null) {
+            SaveScript -Script ($Paths.Games + "\" + $TextEditor.GameType.mode + "\Editor\message_data_static." + $LanguagePatch.code + ".bin") -Table ($Paths.Games + "\" + $TextEditor.GameType.mode + "\Editor\message_data." + $LanguagePatch.code + ".tbl")
+        }
     }
     
     $global:LastScript = $global:DialogueList = $global:ByteScriptArray = $global:ByteTableArray = $Files.json.textEditor = $global:TextEditor = $global:LanguagePatch = $global:StoredMessages = $null
+    [System.GC]::WaitForPendingFinalizers(); [System.GC]::Collect()
 
 }
 
@@ -619,7 +640,7 @@ function GetMessage([string]$ID, [switch]$Reset) {
         $LastScript.entry = $ID
         
         if ($Files.json.textEditor.header -gt 0) {
-            if ($DialogueList[$ID].cost -eq 65535) { $TextEditor.LastBoxRupees = 0 } else { $TextEditor.TextBoxRupees = $DialogueList[$ID].cost }
+            if ($DialogueList[$ID].cost -eq 65535) { $TextEditor.TextBoxRupees.Text = $TextEditor.LastBoxRupees = 0 } else { $TextEditor.TextBoxRupees.Text = $TextEditor.LastBoxRupees = $DialogueList[$ID].cost }
             foreach ($icon in $Files.json.textEditor.icons) {
                 if ($icon.id -eq $DialogueList[$ID].icon) {
                     $TextEditor.TextBoxIcon.text = $icon.name
@@ -680,9 +701,9 @@ function AddMessageIDButton([string]$ID, [byte]$Column, [uint16]$Row, [string]$C
         $this.BackColor                 = "DarkGray"
         $TextEditor.TextBoxType.enabled = $TextEditor.TextBoxPosition.enabled = $True
         if ($Files.json.textEditor.header -gt 0) {
-            if ($TextEditor.TextBoxIcon   -ne $null) { $TextEditor.TextBoxIcon.enabled   = $True }
-            if ($TextEditor.TextBoxRupees -ne $null) { $TextEditor.TextBoxRupees.enabled = $True }
-            if ($TextEditor.TextBoxJump   -ne $null) { $TextEditor.TextBoxJump.enabled   = $True }
+            if ($TextEditor.TextBoxIcon   -ne $null)   { $TextEditor.TextBoxIcon.enabled   = $True }
+            if ($TextEditor.TextBoxRupees -ne $null)   { $TextEditor.TextBoxRupees.enabled = $True }
+            if ($TextEditor.TextBoxJump   -ne $null)   { $TextEditor.TextBoxJump.enabled   = $True }
         }
         $TextEditor.Edited[0] = $TextEditor.Content.Enabled = $True
     } )
@@ -780,8 +801,8 @@ function SetMessageRupees([string]$ID, [uint16]$Value) {
     }
 
     if ($Value -eq 0) { $Value = 65535 }
-    $value = (Get16Bit $Value)
-    [byte[]]$split = $Value -split '(..)' -ne '' | foreach { [Convert]::ToByte($_, 16) }
+    $valueHex = (Get16Bit $Value)
+    [byte[]]$split = $valueHex -split '(..)' -ne '' | foreach { [Convert]::ToByte($_, 16) }
 
     $DialogueList[$ID].msg[5] = $split[0]
     $DialogueList[$ID].msg[6] = $split[1]
@@ -1481,5 +1502,5 @@ Export-ModuleMember -Function SetMessage
 Export-ModuleMember -Function SetMessageBox
 Export-ModuleMember -Function SetMessagePosition
 Export-ModuleMember -Function SetMessageIcon
-Export-ModuleMember -Function SetMessageRupeeCost
+Export-ModuleMember -Function SetMessageRupees
 Export-ModuleMember -Function SetJumpToMessage

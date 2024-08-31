@@ -1,12 +1,26 @@
 function PatchModel([string]$Category, [string]$Name) {
 
     $global:ModelPatchingError = $False
-    $path = $GameFiles.models + "\" + $Category
-    $file = $path + "\" + $Name
+
+    $folders = Get-ChildItem $Paths.Models
+    if ($Category -eq "Child") { $folder = $GamePatch.LoadedModel["Child"].folder } else { $folder = $GamePatch.LoadedModel["Adult"].folder }
+    
+    $path    = $Paths.Models + "\" + $folder
+    $subpath = $path + "\" + $GameType.mode + " - " + $Category
+    $file    = $subpath + "\" + $Name
     
     if (TestFile ($file + ".zobj"))   {
-        $manifest  = $path + "\Manifest\" + $GameRev.name + ".txt"
-        $optimized = $path + "\Manifest\Optimized.zobj"
+        if     (TestFile ($file + ".txt"))                                     { $manifest = $file + ".txt" }
+        elseif (TestFile ($subpath + "\Manifest\" + $GameRev.name + ".txt"))   { $manifest = $subpath + "\Manifest\" + $GameRev.name + ".txt" }
+        else                                                                   { $manifest = $Paths.Models + "\Core\Manifests\" + $GameType.mode + " - " + $Category + "\" + $GameRev.name + ".txt" }
+
+        if     (TestFile ($file + ".opt"))                                     { $optimized = $file + ".opt" }
+        elseif (TestFile ($subpath + "\Manifest\Optimized.opt"))               { $optimized = $subpath + "\Manifest\Optimized.opt" }
+        else                                                                   { $optimized = $Paths.Models + "\Core\Manifests\" + $GameType.mode + " - " + $Category + "\Optimized.opt" }
+
+        write-host $manifest
+        write-host $optimized
+
         $script = { Param([string]$Tool, [string]$Model, [string]$File, [string]$Path, [string]$Manifest, [string]$Optimized)
             & $Tool playas -i ($Model + ".zobj") -r $File -o ($Path + "\model") -m $Manifest -b $Optimized | Out-Null
         }
@@ -22,10 +36,11 @@ function PatchModel([string]$Category, [string]$Name) {
             $global:ModelPatchingError = $True
         }
     }
+
     elseif (TestFile ($file + ".ppf")) {
         ApplyPatch -Patch ($file + ".ppf") -FullPath
         WriteToConsole ("Applied PPF model patch: " + $Name)
-    } 
+    }
     else {
         WriteToConsole ("Could not find custom model to patch: " + $Name) -Error
         $global:ModelPatchingError = $True
@@ -449,16 +464,18 @@ function PatchReplaceMusic([string]$BankPointerTableStart, [string]$BankPointerT
         if (IsSet $GameSettings["ReplaceMusic"][$track.title]) {
             if ($GameSettings["ReplaceMusic"][$track.title] -ne "Default") {
                 # Music File
-                foreach ($item in (Get-ChildItem -LiteralPath $Paths.Music -Directory)) {
-                    if (TestFile ($Paths.Music + "\" + $item.BaseName + "\" + $GameSettings["ReplaceMusic"][$track.title] + ".seq")) { # .seq
-                        $file = $item.BaseName + "\" + $GameSettings["ReplaceMusic"][$track.title]
-                        $ext  = ".seq"
-                        break
-                    }
-                    elseif (TestFile ($Paths.Music + "\" + $item.BaseName + "\" + $GameSettings["ReplaceMusic"][$track.title] + ".zseq")) { # .zseq
-                        $file = $item.BaseName + "\" + $GameSettings["ReplaceMusic"][$track.title]
-                        $ext  = ".zseq"
-                        break
+                foreach ($folder in (Get-ChildItem -LiteralPath $Paths.Music -Directory)) {
+                    foreach ($item in (Get-ChildItem -LiteralPath ($Paths.Music + "\" + $folder.BaseName) -Directory)) {
+                        if (TestFile ($Paths.Music + "\" + $folder.BaseName + "\" + $item.BaseName + "\" + $GameSettings["ReplaceMusic"][$track.title] + ".seq")) { # .seq
+                            $file = $folder.BaseName + "\" + $item.BaseName + "\" + $GameSettings["ReplaceMusic"][$track.title]
+                            $ext  = ".seq"
+                            break
+                        }
+                        elseif (TestFile ($Paths.Music + "\" + $folder.BaseName + "\" + $item.BaseName + "\" + $GameSettings["ReplaceMusic"][$track.title] + ".zseq")) { # .zseq
+                            $file = $folder.BaseName + "\" + $item.BaseName + "\" + $GameSettings["ReplaceMusic"][$track.title]
+                            $ext  = ".zseq"
+                            break
+                        }
                     }
                 }
 
@@ -548,7 +565,7 @@ function MusicOptions([string]$Default="File Select") {
     EnableElem -Elem @($Redux.ReplaceMusic.Tracks, $Redux.ReplaceMusic.SelectReplace) -Active $Redux.ReplaceMusic.EnableReplace.Checked
     $Redux.ReplaceMusic.EnableReplace.Add_CheckedChanged({ EnableElem -Elem @($Redux.ReplaceMusic.Tracks, $Redux.ReplaceMusic.SelectReplace) -Active $this.Checked })
 
-    $Redux.Music.Preview = CreateReduxButton -Text "Start Music Preview" -Height 50 -Row 8 -Column 2
+    $Redux.Music.Preview    = CreateReduxButton -Text "Start Music Preview" -Height 50 -Row 8 -Column 2
     $Redux.Music.AuthorName = CreateLabel -X 10 -Y $Redux.Music.Preview.Top                  -Text "Nintendo" -Font $Fonts.Medium
     $Redux.Music.AuthorLink = CreateLabel -X 10 -Y ($Redux.Music.Preview.Top + (DPISize 30)) -Text "URL Link" -Font $Fonts.Medium
     
@@ -591,28 +608,30 @@ function MusicOptions([string]$Default="File Select") {
 
             $midiFile  = $null
             $audioBank = $null
-            foreach ($item in (Get-ChildItem -LiteralPath $Paths.Music -Directory)) {
-                $file = $Paths.Music + "\" + $item.BaseName + "\" + $Redux.ReplaceMusic.Tracks.SelectedItems
-                if ( (TestFile ($file + ".mid")) -or (TestFile ($file + ".zip")) ) {
-                    if (TestFile ($file + ".meta"))   { $audioBank = (Get-Content -Path ($file + ".meta"))[1].replace("0x", "") }         # Meta
-                    else                              { $audioBank = (($file + ".mid").Substring(($file.IndexOf('_')+1))).split("_")[0] } # Filename
+            foreach ($folder in (Get-ChildItem -LiteralPath $Paths.Music -Directory)) {
+                foreach ($item in (Get-ChildItem -LiteralPath ($Paths.Music + "\" + $folder.BaseName) -Directory)) {
+                    $file = $Paths.Music + "\" + $folder.BaseName + "\" + $item.BaseName + "\" + $Redux.ReplaceMusic.Tracks.SelectedItems
 
-                    $file = $Paths.Music + "\" + $item.BaseName + "\" + $Redux.ReplaceMusic.Tracks.SelectedItems
-                    if     (TestFile ($file + ".mid"))   { $midiFile  = $file + ".mid" }
-                    elseif (TestFile ($file + ".zip"))   { $midiFile  = $file + ".zip#" + $Redux.ReplaceMusic.Tracks.SelectedItems + ".mid" }
-                    
-                    $ext = ".seq"
-                    if (TestFile ($file + ".zseq")) { $ext = ".zseq" }
-                    if ($ext -eq $Files.json.music.conversion.ext) {
-                        foreach ($conversion in $Files.json.music.conversion.bank) {
+                    if ( (TestFile ($file + ".mid")) -or (TestFile ($file + ".zip")) ) {
+                        if (TestFile ($file + ".meta"))   { $audioBank = (Get-Content -Path ($file + ".meta"))[1].replace("0x", "") }         # Meta
+                        else                              { $audioBank = (($file + ".mid").Substring(($file.IndexOf('_')+1))).split("_")[0] } # Filename
+
+                        if     (TestFile ($file + ".mid"))   { $midiFile  = $file + ".mid" }
+                        elseif (TestFile ($file + ".zip"))   { $midiFile  = $file + ".zip#" + $Redux.ReplaceMusic.Tracks.SelectedItems + ".mid" }
+
+                        $ext = ".seq"
+                        if (TestFile ($file + ".zseq")) { $ext = ".zseq" }
+                        if ($ext -eq $Files.json.music.conversion.ext) {
+                            foreach ($conversion in $Files.json.music.conversion.bank) {
                                 if ( (GetDecimal $audioBank) -eq (GetDecimal $conversion.original) ) {
                                     $audioBank = $conversion.replace
                                     break
                                 }
                             }
+                        }
+                        $audioBank = "`"soundfont " + (Get8Bit (GetDecimal $audioBank)) + ".sf2`""
+                        break
                     }
-                    $audioBank = "`"soundfont " + (Get8Bit (GetDecimal $audioBank)) + ".sf2`""
-                    break
                 }
             }
             if ( (IsSet $midiFile) -and (IsSet $audioBank) ) {
@@ -633,6 +652,9 @@ function MusicOptions([string]$Default="File Select") {
                     }
                 }
                 StopJobs
+
+                # & $Files.tool.timidity -c 
+
                 $this.Text      = "Start Music Preview"
                 $this.BackColor = "Green"
             }
@@ -660,20 +682,22 @@ function CheckAuthor() {
         return
     }
 
-    foreach ($item in (Get-ChildItem -LiteralPath $Paths.Music -Directory)) {
-        if ( (TestFile ($Paths.Music + "\" + $item.BaseName + "\" + $Redux.ReplaceMusic.Tracks.Text + ".seq")) -or (TestFile ($Paths.Music + "\" + $item.BaseName + "\" + $Redux.ReplaceMusic.Tracks.Text + ".zseq")) ) {
-            $Redux.Music.AuthorName.Text = $item.BaseName
-            $Redux.Music.AuthorURL = $null
-            EnableElem -Elem $Redux.Music.AuthorLink -Active $False -Hide
-            foreach ($i in $Files.json.sequences) {
-                if ($i.author -eq $item.BaseName) {
-                    $Redux.Music.AuthorURL = $i.url
-                    EnableElem -Elem $Redux.Music.AuthorLink -Active $True -Hide
-                    break
+    foreach ($folder in (Get-ChildItem -LiteralPath $Paths.Music -Directory)) {
+        foreach ($item in (Get-ChildItem -LiteralPath ($Paths.Music + "\" + $folder.BaseName) -Directory)) {
+            if ( (TestFile ($Paths.Music + "\" + $folder.BaseName + "\" + $item.BaseName + "\" + $Redux.ReplaceMusic.Tracks.Text + ".seq")) -or (TestFile ($Paths.Music + "\" + $folder.BaseName + "\" + $item.BaseName + "\" + $Redux.ReplaceMusic.Tracks.Text + ".zseq")) ) {
+                $Redux.Music.AuthorName.Text = $item.BaseName
+                $Redux.Music.AuthorURL = $null
+                EnableElem -Elem $Redux.Music.AuthorLink -Active $False -Hide
+                foreach ($i in $Files.json.sequences) {
+                    if ($i.author -eq $item.BaseName) {
+                        $Redux.Music.AuthorURL = $i.url
+                        EnableElem -Elem $Redux.Music.AuthorLink -Active $True -Hide
+                        break
+                    }
                 }
-            }
 
-            return
+                return
+            }
         }
     }
 
@@ -749,8 +773,8 @@ function GetReplacementTracks() {
     $Redux.ReplaceMusic.Tracks.Sorted = $True
     $Redux.ReplaceMusic.Tracks.Sorted = $False
     $Redux.ReplaceMusic.Tracks.Items.Insert(0, "Default")
-
-    if (IsSet $GameSettings["ReplaceMusic"][$Redux.ReplaceMusic.SelectReplace.text])   { $Redux.ReplaceMusic.Tracks.text = $GameSettings["ReplaceMusic"][$Redux.Music.SelectReplace.text] }
+    
+    if (IsSet $GameSettings["ReplaceMusic"][$Redux.ReplaceMusic.SelectReplace.text])   { $Redux.ReplaceMusic.Tracks.text = $GameSettings["ReplaceMusic"][$Redux.ReplaceMusic.SelectReplace.text] }
     else                                                                               { $Redux.ReplaceMusic.Tracks.selectedIndex = 0 }
 
 }
@@ -857,32 +881,39 @@ function ShowEquipmentPreviewImage([object]$Option=$null, [string]$Equipment="",
 #==============================================================================================================================================================================================
 function ShowModelsPreview([object]$Dropdown, [string]$Category) {
     
-    if (!(IsSet $Files.json.models) -or $OptionsPreviews -eq $null) { return }
+    if ($OptionsPreviews -eq $null) { return }
+    
+    $GamePatch.LoadedModel[$Category] = $Files.json.models = $null
+    $Text = $GamePatch.LoadedModelsList[$Category][$Dropdown.SelectedIndex]
+    
+    :outer foreach ($folder in (Get-ChildItem -LiteralPath $Paths.Models -Directory)) {
+        $path = $Paths.Models + "\" + $folder.BaseName + "\" + $GameType.mode + " - " + $Category + "\"
+        $file = $path + $Text
+    
+        if ( (TestFile ($file + ".jpg") ) -or (TestFile ($file + ".png") ) -or (TestFile ($file + ".zobj") ) -or (TestFile ($file + ".ppf") ) ) {
+            if (TestFile ($Paths.Models + "\" + $folder + "\models.json") )   { $Files.json.models = SetJSONFile ($Paths.Models + "\" + $folder + "\models.json") -Safe                            }
+            else                                                              { WriteToConsole -Text ("Could not find JSON configuration file for " + $Category.ToLower() +" models addon") -Error }
+            
+            if ($Files.json.models -ne $null) {
+                :inner for ($i=0; $i -lt $Files.json.models.$Category.length; $i++) {
+                    if ($Files.json.models.$Category[$i].name -eq $Text) {
+                        $GamePatch.LoadedModel[$Category] = $Files.json.models.$Category[$i]
+                        Add-Member -InputObject $GamePatch.LoadedModel[$Category] -NotePropertyMembers @{ folder = $folder.BaseName }
+                        break inner
+                    }   
+                }
+            }
 
-    $Path = $GameFiles.models + "\" + $Category + "\"
-    $Text = $Dropdown.Text.replace(" (default)", "")
+            if ($GamePatch.LoadedModel[$Category] -eq $null) {
+                $GamePatch.LoadedModel[$Category] = @{}
+                $GamePatch.LoadedModel[$Category].folder = $folder.BaseName
+                WriteToConsole -Text ("No metadata configuration found for: " + $Text) -Error
+            }
 
-    if ($Category -eq "Child") {
-        $global:ChildModel = @{}
-        for ($i=0; $i -lt $Files.json.models.child.length; $i++) {
-            if ($Files.json.models.child[$i].name -eq $Text) {
-                $global:ChildModel = $Files.json.models.child[$i]
-                break
-            }   
+            ShowModelPreview -Box $Redux.Previews[$Category] -Path $Path -Text $Text -Category $Category -Type $GamePatch.LoadedModel[$Category]
+            break outer
         }
-        ShowModelPreview -Box $Redux.Previews.ModelChild -Path $Path -Text $Text -Category $Category -Type $ChildModel
 
-    }
-
-    if ($Category -eq "Adult") {
-        $global:AdultModel = @{}
-        for ($i=0; $i -lt $Files.json.models.adult.length; $i++) {
-            if ($Files.json.models.adult[$i].name -eq $Text) {
-                $global:AdultModel = $Files.json.models.adult[$i]
-                break
-            }   
-        }
-        ShowModelPreview -Box $Redux.Previews.ModelAdult -Path $Path -Text $Text -Category $Category -Type $AdultModel
     }
 
 }
@@ -891,13 +922,12 @@ function ShowModelsPreview([object]$Dropdown, [string]$Category) {
 
 #==============================================================================================================================================================================================
 function ShowModelPreview([object]$Box, [string]$Path, [string]$Text, [string]$Category, $Type) {
-
-    if (!(IsSet $Files.json.models)) {return }
+    
+    if ($Type -eq $null) { return }
 
     $image = GetImageFile ($Path + $Text)
     if ($image -ne $null) { SetBitMap -Path $image -Box $Box }
     elseif ($Category -eq "Child" -and $GameType.mode -eq "Majora's Mask") {
-        $Path  = $Path.Replace("\Majora's Mask\Child", "\Ocarina of Time\Child")
         $image = GetImageFile ($Path + $Text)
         if ($image -ne $null) { SetBitMap -Path $image -Box $Box } else { $Box.Image = $null }
     }
@@ -906,10 +936,9 @@ function ShowModelPreview([object]$Box, [string]$Path, [string]$Text, [string]$C
     $Credits = ""
 
     if     (!(IsSet $Type.name))                                { $Credits += "--- Model with missing license ---{0}" }
-    else                                                        { $Credits += "--- " + $Type.name + " ---{0}"         }
-    if       ($Type.author -eq 0)                               { }
-    elseif   (IsSet $Type.author)                               { $Credits += "{0}Made by: " + $Type.author                           }
-    else                                                        { $Credits += "{0}Made by: Unknown"                                   }
+    else                                                        { $Credits += "--- " + ($Type.name -replace '_.*$') + " ---{0}"       }
+    if       (IsSet $Type.author)                               { $Credits += "{0}Made by: " + $Type.author                           }
+    elseif   ($Type.author -ne 0)                               { $Credits += "{0}Made by: Unknown"                                   }
     if       (IsSet $Type.source)                               { $Credits += "{0}Source: "  + $Type.source                           }
     if       ($Type.WIP -eq 1)                                  { $Credits += "{0}This model is still Work-In-Progress"               }
     if       ($Type.WIP -eq 2)                                  { $Credits += "{0}This model is a demonstration of the final version" }
@@ -925,6 +954,8 @@ function ShowModelPreview([object]$Box, [string]$Path, [string]$Text, [string]$C
         if ($Type.hylian_shield -eq 0)   { $Credits += "{0}[!] " + "This model does not support Hylian Shield changes" }
         if ($Type.mirror_shield -eq 0)   { $Credits += "{0}[!] " + "This model does not support Mirror Shield changes" }
     }
+
+    if ($GamePatch.LoadedModel[$Category].folder -ne "Core") { $Credits += "{0}{0}This is an addon model made by a community member{0}Issues should be reported to the model author instead" }
 
     if (IsSet $Credits)   { $PreviewToolTip.SetToolTip($Box, ([string]::Format($Credits, [Environment]::NewLine))) }
     else                  { $PreviewToolTip.RemoveAll() }
@@ -942,11 +973,16 @@ function LoadModelsList([string]$Category) {
     
     $list = @()
 
-    $path = $GameFiles.models + "\" + $Category
-    if (!(TestFile -Container $path)) { return @("No models found?") } 
-    foreach ($item in Get-ChildItem -LiteralPath $path -Force) { if ($item.Extension -eq ".ppf" -or $item.Extension -eq ".zobj") { $list += $item.BaseName } }
+    foreach ($folder in (Get-ChildItem -LiteralPath $Paths.Models -Directory)) {
+        $path = $Paths.Models + "\" + $folder.BaseName + "\" + $GameType.mode + " - " + $Category
+        if (!(TestFile -Container $path)) { return @("No models found?") } 
+        foreach ($item in Get-ChildItem -LiteralPath $path -Force) { if ($item.Extension -eq ".ppf" -or $item.Extension -eq ".zobj") { $list += $item.BaseName } }
+    }
 
-    return $list | Sort-Object | select -Unique
+    $list                                  = $list | Sort-Object | select -Unique
+    $GamePatch.LoadedModelsList[$Category] = @("Original") + $list
+    for ($i=0; $i -lt $list.Count; $i++) { $list[$i] = $list[$i] -replace '_.*$' }
+    return @("Original (default)") + $list
 
 }
 
@@ -957,45 +993,24 @@ function ChangeModelsSelection() {
     
     if ($GamePatch.models -eq 0) { return }
 
-    if     ($GamePatch.age -eq "Adult")   { $global:ChildModel = @{}; $ChildModel.deku_shield   = 1; $ChildModel.hylian_shield = 1 }
-    elseif ($GamePatch.age -eq "Child")   { $global:AdultModel = @{}; $AdultModel.hylian_shield = 1; $AdultModel.mirror_shield = 1 }
-
+    if     ($GamePatch.age -eq "Adult")   { $GamePatch.LoadedModel["Child"] = @{}; $GamePatch.LoadedModel["Child"].deku_shield   = 1; $GamePatch.LoadedModel["Child"].hylian_shield = 1 }
+    elseif ($GamePatch.age -eq "Child")   { $GamePatch.LoadedModel["Adult"] = @{}; $GamePatch.LoadedModel["Adult"].hylian_shield = 1; $GamePatch.LoadedModel["Adult"].mirror_shield = 1 }
+    
     if (IsSet $Redux.Graphics.ChildModels) {
-        ShowModelsPreview -Dropdown $Redux.Graphics.ChildModels -Category "Child"
         $Redux.Graphics.ChildModels.Add_SelectedIndexChanged( { ShowModelsPreview -Dropdown $Redux.Graphics.ChildModels -Category "Child" } )
+        ShowModelsPreview -Dropdown $Redux.Graphics.ChildModels -Category "Child"
+
+        $Redux.Previews["Child"].add_Click({
+            if (IsSet $GamePatch.LoadedModel["Child"].url) { $GamePatch.LoadedModel["Child"].url | foreach { [system.Diagnostics.Process]::start($_) } }
+        })
     }
     if (IsSet $Redux.Graphics.AdultModels) {
-        ShowModelsPreview -Dropdown $Redux.Graphics.AdultModels -Category "Adult"
         $Redux.Graphics.AdultModels.Add_SelectedIndexChanged( { ShowModelsPreview -Dropdown $Redux.Graphics.AdultModels -Category "Adult" } )
-    }
+        ShowModelsPreview -Dropdown $Redux.Graphics.AdultModels -Category "Adult"
 
-    # Child URL
-    if (IsSet $Redux.Previews.ModelChild) {
-        $Redux.Previews.ModelChild.add_Click({
-            if (IsSet $ChildModel.url) { $ChildModel.url | foreach { [system.Diagnostics.Process]::start($_) } }
+        $Redux.Previews["Adult"].add_Click({
+            if (IsSet $GamePatch.LoadedModel["Adult"].url) { $GamePatch.LoadedModel["Adult"].url | foreach { [system.Diagnostics.Process]::start($_) } }
         })
-    }
-
-    # Adult URL
-    if (IsSet $Redux.Previews.ModelAdult) {
-        $Redux.Previews.ModelAdult.add_Click({
-            if (IsSet $AdultModel.url) { $AdultModel.url | foreach { [system.Diagnostics.Process]::start($_) } }
-        })
-    }
-
-    if (IsSet $Redux.Graphics.ChildModels) {
-        $lastIndex = $Redux.Graphics.ChildModels.SelectedIndex
-        $Redux.Graphics.ChildModels.Items.Clear()
-        $Redux.Graphics.ChildModels.Items.AddRange(@("Original (default)") + (LoadModelsList -Category "Child"))
-        if ($lastIndex -le $Redux.Graphics.ChildModels.Items.Count)   { $Redux.Graphics.ChildModels.SelectedIndex = $lastIndex }
-        else                                                          { $Redux.Graphics.ChildModels.SelectedIndex = 0          }
-    }
-    elseif (IsSet $Redux.Graphics.AdultModels) {
-        $lastIndex = $Redux.Graphics.AdultModels.SelectedIndex
-        $Redux.Graphics.AdultModels.Items.Clear()
-        $Redux.Graphics.AdultModels.Items.AddRange(@("Original (default)") + (LoadModelsList -Category "Adult"))
-        if ($lastIndex -le $Redux.Graphics.AdultModels.Items.Count)   { $Redux.Graphics.AdultModels.SelectedIndex = $lastIndex }
-        else                                                          { $Redux.Graphics.AdultModels.SelectedIndex = 0          }
     }
 
 }

@@ -146,7 +146,7 @@ function ChangeBytes([string]$File, [byte[]]$Array, [object]$Offset, [object]$Ma
 
 
 #==============================================================================================================================================================================================
-function MultiplyBytes([string]$File, [string]$Offset, [object]$Match=$null, [float]$Factor) {
+function MultiplyBytes([string]$File, [object]$Offset, [object]$Match=$null, [float]$Factor) {
     
     if (IsSet $File) {
         if (!(TestFile $File)) {
@@ -163,34 +163,52 @@ function MultiplyBytes([string]$File, [string]$Offset, [object]$Match=$null, [fl
     else                                                       { $matchDec = $Match }
 
     # Offset
-    $offsetDec = GetDecimal $Offset
-    if ($offsetDec -lt 0) {
-        WriteToConsole "Offset is negative, too large or not an integer!" -Error
-        $global:WarningError = $True
-        return $False
-    }
-    if ($offsetDec -gt $ByteArrayGame.Length) {
-        WriteToConsole "Offset is too large for file!" -Error
-        $global:WarningError = $True
-        return $False
+    if ($Offset -is [String]) { $Offset = $Offset -split ' ' }
+    
+    $offsetDec = @()
+    $offsets   = @()
+    foreach ($o in $Offset) {
+        if ($o -is [string]) { $dec = GetDecimal $o } else { $dec = $o }
+        if ($dec -lt 0) {
+            WriteToConsole "Offset is negative, too large or not an integer!" -Error
+            $global:WarningError = $True
+            return $False
+        }
+        if ($dec -gt $ByteArrayGame.Length) {
+            WriteToConsole "Offset is too large for file!" -Error
+            $global:WarningError = $True
+            return $False
+        }
+        $offsetDec += $dec
+        $offsets   += $o
     }
 
     # Match
-    if ($MatchDec -ne $null) {
-        foreach ($i in 0..($MatchDec.Length-1)) {
-            if ($ByteArrayGame[$offsetDec + $i] -ne $MatchDec[$i]) { return $True }
+    if ($matchDec -ne $null) {
+        foreach ($o in $offsetDec) {
+            foreach ($i in 0..($matchDec.Length-1)) {
+                try {
+                    if ($ByteArrayGame[$o + $i] -ne $matchDec[$i]) { return $True }
+                }
+                catch {
+                    WriteToConsole "Match value is negative!" -Error
+                    return $False
+                }
+            }
         }
     }
 
     # Patch
-    if ($Factor -eq 0) {
-        WriteToConsole ($Offset + " -> Set value " + (Get8Bit $ByteArrayGame[$offsetDec]) +" to: 1")
-        $ByteArrayGame[$offsetDec] = 1
-    }
-    elseif ($ByteArrayGame[$offsetDec] -gt 0) {
-        WriteToConsole ($Offset + " -> Multiplied value " + (Get8Bit $ByteArrayGame[$offsetDec]) +" by: " + $Factor)
-        $ByteArrayGame[$offsetDec] *= $Factor
-        if ($ByteArrayGame[$offsetDec] -eq 0) { $ByteArrayGame[$offsetDec] = 1 }
+    for ($i=0; $i -lt $offsetDec.length; $i++) {
+        if ($Factor -eq 0) {
+            WriteToConsole ($offsets[$i] + " -> Set value " + (Get8Bit $ByteArrayGame[$offsetDec[$i]]) +" to: 1")
+            $ByteArrayGame[$offsetDec[$i]] = 1
+        }
+        elseif ($ByteArrayGame[$offsetDec[$i]] -gt 0) {
+            WriteToConsole ($offsets[$i] + " -> Multiplied value " + (Get8Bit $ByteArrayGame[$offsetDec[$i]]) +" by: " + $Factor)
+            $ByteArrayGame[$offsetDec[$i]] *= $Factor
+            if ($ByteArrayGame[$offsetDec[$i]] -eq 0) { $ByteArrayGame[$offsetDec[$i]] = 1 }
+        }
     }
 
     # Write to File

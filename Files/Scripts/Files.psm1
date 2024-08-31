@@ -348,7 +348,7 @@ function GetImageFile([string]$Path="") {
 #==============================================================================================================================================================================================
 function IsROMFile([string]$Ext="") {
     
-    if ($Ext -eq ".z64" -or $Ext -eq ".n64" -or $Ext -eq ".v64" -or $Ext -eq ".sfc" -or $Ext -eq ".smc" -or $Ext -eq ".nes" -or $Ext -eq ".gbc") { return $True }
+    if ($Ext -eq ".z64" -or $Ext -eq ".n64" -or $Ext -eq ".v64" -or $Ext -eq ".sfc" -or $Ext -eq ".smc" -or $Ext -eq ".nes" -or $Ext -eq ".gbc" -or $Ext -eq ".gba") { return $True }
     return $False
 
 }

@@ -1,12 +1,40 @@
 function PerformUpdate() {
-    
+
     $Files.json.repo = SetJSONFile ($Paths.Master + "\repo.json")
     if (IsSet $Settings.Core) {
         if ($Settings.Core.DisableUpdates -ne $True) { AutoUpdate }
+        if ($Settings.Core.DisableAddons -ne $True) {
+            foreach ($addon in $Files.json.repo.addons) {
+                CheckAddon  -Addon $Addon
+                UpdateAddon -Addon $Addon
+            }
+        }
     }
-    else { AutoUpdate }
+    else {
+        AutoUpdate
+        foreach ($addon in $Files.json.repo.addons) {
+            CheckAddon  -Addon $Addon
+            UpdateAddon -Addon $Addon
+        }
+    }
+
+    CleaningRepos -Type "Models"
+    CleaningRepos -Type "Music"
 
 }
+
+
+#==============================================================================================================================================================================================
+function CleaningRepos([string]$Type) {
+    
+    $addonTitles = @("Core") + ($Files.json.repo.addons | Where-Object { $_.type -eq $Type } | ForEach-Object { $_.title })
+    ((Get-ChildItem -Path ($Paths.Addons + "\" + $Type) -Directory -Force) | Where {$addonTitles -NotContains $_}) | ForEach-Object {
+        RemovePath $_.FullName
+        WriteToConsole ("Removed unused " + $Type.toLower() + " repo: " + $_.BaseName) 
+    }
+
+}
+
 
 
 
@@ -292,7 +320,8 @@ function RunUpdate() {
     RemovePath $Paths.Tools
     RemovePath $Paths.Main
     RemovePath $Paths.Scripts
-    RemovePath $Paths.Addons
+    RemovePath ($Paths.Addons + "\Models\Core")
+    RemovePath ($Paths.Addons + "\Music\Core")
     RemovePath ($Paths.Base + "\Info")
 
     $folder = $path + "\Patcher64Plus-Tool-master"
@@ -310,5 +339,144 @@ function RunUpdate() {
     $global:FatalError = $global:Relaunch = $True
 
 }
+
+#==============================================================================================================================================================================================
+function CheckAddon([Object]$Addon) {
+    
+    $title                    = $Addon.type  + "-" + $Addon.title
+    $info                     = $Addon.title + " (" + $Addon.type + ")"
+    $Addons[$title]           = @{}
+    $Addons[$title].isUpdated = $False
+    $file                     = $Paths.Addons + "\" + $Addon.type + "\" + $Addon.title + "\version.txt"
+
+    # Load content
+    if (!(TestFile $file)) { return }
+    try { [array]$content = Get-Content -LiteralPath $file }
+    catch {
+        WriteToConsole ("Could not read current version info for " + $info + "!") -Error
+        return
+    }
+        
+    # Parse content
+    try     { $Addons[$title].date = Get-Date -Format $Patcher.DateFormat -Date $content[0] }
+    catch   { $Addons[$title].date = Get-Date -Format $Patcher.DateFormat -Date "1970-01-01"; WriteToConsole ("Could not read current version date info for " + $info + "!") -Error }
+    
+    if ($content.Count -gt 1) {
+        try   { [byte]$Addons[$title].hotfix = $content[1] }
+        catch { [byte]$Addons[$title].hotfix = 0           }
+    }
+    else { [byte]$Addons[$title].hotfix = 0}
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function UpdateAddon([Object]$Addon) {
+    
+    $title     = $Addon.type + "-" + $Addon.title
+    $info      = $Addon.title + " (" + $Addon.type + ")"
+    $update    = $error = $False
+    $addonPath = $Paths.Addons + "\" + $Addon.type + "\" + $Addon.title
+    $content   = $date = $hotfix = $null
+
+    if ($Settings.Core.LocalTempFolder -ne $False)   { $path = $Paths.LocalTemp   }
+    else                                             { $path = $Paths.AppDataTemp }
+    CreateSubPath $path
+    $path = $path + "\updater-" + $title.ToLower()
+    CreateSubPath $path
+
+    if (TestFile ($addonPath + "\version.txt")) {
+        # Download version info
+        try {
+            $response = ReadWebRequest $Addon.version
+            $content  = [string]($response.AllElements | Where {$_.type -eq "application/json"})
+            $index    = $content.indexOf('"blob":{"rawLines":[')
+            $content  = $content.substring($index, $index+50)
+            $content  = $content.substring($content.indexOf("[")+1)
+            $content  = $content.substring(0, $content.indexOf("]"))
+            $content  = $content.replace('"', '')
+            $content  = $content.split(",")
+        }
+        catch {
+            WriteToConsole ("Could not retrieve last version info for " + $info + "! Trying fallback URL...") -Error
+            $error = $True
+        }
+
+        # Download version info using fallback URL
+        if ($error) {
+            $error = $False
+            try {
+                InvokeWebRequest -Uri $Addon.versionFallback -OutFile     ($path + "\version.txt")
+                [array]$content = Get-Content                -LiteralPath ($path + "\version.txt")
+                RemoveFile ($Path + "\version.txt")
+            }
+            catch {
+                WriteToConsole ("Could not retrieve " + $info + " version info using fallback URL!") -Error
+                RemoveFile ($path + "\version.txt")
+                $error = $True
+            }
+        }
+
+        if ($error) { return }
+
+        # Load content
+        if ($content -eq $null) {
+            RemovePath $path
+            WriteToConsole ("Could not read latest version info for " + $info + "!") -Error
+            return
+        }
+        
+        # Parse content
+        try     { $date = Get-Date -Format $Patcher.DateFormat -Date $content[0] }
+        catch   { $date = Get-Date -Format $Patcher.DateFormat -Date "1970-01-01"; WriteToConsole ("Could not read latest version date info for " + $info + "!") -Error }
+        
+        if ($content.Count -gt 1) {
+            try   { [byte]$hotfix = $content[1] }
+            catch { [byte]$hotfix = 0 }
+        }
+        else { [byte]$hotfix = 0}
+
+        # Compare content
+        if     ($Addons[$title].date    -lt $date)                        { $update = $true }
+        elseif ($Addons[$title].hotfix  -lt $hotfix -and $hotfix -ne 0)   { $update = $true }
+        else                                                              { RemovePath $path; return }
+    }
+    else {
+        WriteToConsole ("Could not find latest update for " + $info + "! Downloading now!")
+        $update = $true
+    }
+
+    if ($update) {
+        $zip = $path + "\" + $title.ToLower().Replace(" ", "-") + ".zip"
+        Get-ChildItem -Path $path -Directory | ForEach-Object { RemovePath ($path + "\" + $_) }
+        RemoveFile $zip
+
+        try {
+            InvokeWebRequest -Uri $Addon.uri -OutFile $zip
+            WriteToConsole ("Downloading latest update for " + $info + "!")
+        }
+        catch {
+            RemovePath $path
+            WriteToConsole ("Could not download latest version for " + $info + "!") -Error
+            return
+        }
+
+        if (!(TestFile $zip)) {
+            RemovePath $path
+            WriteToConsole ("Could not extract new " + $info + "!") -Error
+            return
+        }
+        
+        ExpandArchive -LiteralPath $zip -DestinationPath $path -Force
+        Get-ChildItem -Path $path -Directory -Force | ForEach-Object { Move-Item -LiteralPath $_.FullName -Destination $addonPath -Force }
+        Remove-Item   -LiteralPath ($addonPath + "\" + ".gitattributes")
+        RemovePath $path
+        CheckAddon -Addon $Addon
+        $Addons[$title].isUpdated = $True
+    }
+
+}
+
 
 (Get-Command -Module "Updater") | % { Export-ModuleMember $_ }
