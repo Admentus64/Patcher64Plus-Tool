@@ -8,6 +8,10 @@ Files/Tools/cygdrive
 Files/Games/**/Extracted
 Files/Games/**/Custom Text/*.*
 Files/Games/**/Editor
+Files/Addons/Models/*
+!Files/Addons/Models/Core
+Files/Addons/Music/*
+!Files/Addons/Music/Core
 Exclude
 Assert
 Extract

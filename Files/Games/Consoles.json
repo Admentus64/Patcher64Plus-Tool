@@ -43,6 +43,20 @@
 	"rom_gameID"			: 0,
 	"max_size"			: "1"
 }, {
+	"title"				: "GameBoy Advance",
+	"mode"				: "GBA",
+	"extension"			: ".gba",
+	"rom_title"			: 1,
+	"rom_title_length"		: 12,
+	"rom_title_offset"		: "A0",
+	"rom_gameID"			: 1,
+	"rom_gameID_offset"		: "AC",
+	"max_size"			: "64",
+	"support_vc"			: 0,
+	"rom_title"			: 0,
+	"rom_gameID"			: 0,
+	"max_size"			: "32"
+}, {
 	"title"				: "Sega Master System",
 	"mode"				: "SMS",
 	"extension"			: ".sms",

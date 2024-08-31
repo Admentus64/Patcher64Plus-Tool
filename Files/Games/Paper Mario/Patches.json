@@ -15,7 +15,8 @@
 
 }, {
 
-	"title"		: "Master Quest (v1.3.0.2)",
+	"title"		: "Master Quest",
+	"version"	: "1.3.0.2",
 	"script"	: "Paper Mario",
 	"console"	: "Native",
 	"patch"		: "Compressed\\master_quest.bps",
@@ -24,7 +25,8 @@
 
 }, {
 
-	"title"		: "Master Quest Jr. (v1.0.1)",
+	"title"		: "Master Quest Jr.",
+	"version"	: "1.0.1",
 	"script"	: "Paper Mario",
 	"console"	: "Native",
 	"patch"		: "Compressed\\master_quest_junior.bps",

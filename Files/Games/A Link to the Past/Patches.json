@@ -1,32 +1,36 @@
 [ {
 	
-	"title"		: "Additional Options & Redux",
-	"redux"		: 1,
-	"script"	: "A Link to the Past",
-	"tooltip"	: "Customize A Link to the Past with Redux and additional options{0}Redux version: 10.2.2"
+	"title"			: "Additional Options & Redux",
+	"redux" : {
+		"version"	: "10.2.3"
+	},
+	"script"		: "A Link to the Past",
+	"tooltip"		: "Customize A Link to the Past with Redux and additional options"
 
 }, {
 
-	"title"		: "ALttP: Quick Commands (v1.0)",
-	"script"	: "A Link to the Past",
-	"patch"		: "Compressed\\quick_commands.ips",
-	"output"	: "quick_commands",
-	"tooltip"	: "Assign up to eight Y-Button items to quick access by holding the L or R buttons and pressing A, B, X or Y{0}With support for redux and additional options"
+	"title"			: "ALttP: Quick Commands",
+	"version"		: "2.2",
+	"patch"			: "Compressed\\quick_commands.ips",
+	"output"		: "quick_commands",
+	"tooltip"		: "Assign up to eight Y-Button items to quick access by holding the L or R buttons and pressing A, B, X or Y{0}With support for redux and additional options"
 
 }, {
 
-	"title"		: "The Legend of Zelda: Parallel Worlds (v1.23)",
-	"vc_title"	: "Parallel Worlds",
-	"patch"		: "Compressed\\parallel_worlds.ips",
-	"output"	: "parallel_worlds",
-	"tooltip"	: "A full-sized ROM hack in a completely new setting, which can be quite difficult"
+	"title"			: "The Legend of Zelda: Parallel Worlds",
+	"version"		: "1.23",
+	"vc_title"		: "Parallel Worlds",
+	"patch"			: "Compressed\\parallel_worlds.ips",
+	"output"		: "parallel_worlds",
+	"tooltip"		: "A full-sized ROM hack in a completely new setting, which can be quite difficult"
 
 }, {
 
-	"title"		: "The Legend of Zelda: Parallel Remodel (v1.1)",
-	"vc_title"	: "Parallel Remodel",
-	"patch"		: "Compressed\\parallel_remodel.ips",
-	"output"	: "parallel_remodel",
-	"tooltip"	: "An easier and more vanilla-like balanced version of the Parallel Worlds ROM hack"
+	"title"			: "The Legend of Zelda: Parallel Remodel",
+	"version"		: "1.1",
+	"vc_title"		: "Parallel Remodel",
+	"patch"			: "Compressed\\parallel_remodel.ips",
+	"output"		: "parallel_remodel",
+	"tooltip"		: "An easier and more vanilla-like balanced version of the Parallel Worlds ROM hack"
 
 } ]

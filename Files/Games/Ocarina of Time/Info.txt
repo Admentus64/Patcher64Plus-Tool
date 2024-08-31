@@ -5,7 +5,7 @@ Patch Options for Ocarina of Time:
 	* Extract ROM Only
 2. Free Patching (requires .IPS, .BPS, .XDELTA, .VCDIFF or .PPF File)
 3. Patch Header
-4. Thirteen ROM hacks
+4. Fourteen ROM hacks
 5. Eight fan translations
 6. Redux and Additional Options
 

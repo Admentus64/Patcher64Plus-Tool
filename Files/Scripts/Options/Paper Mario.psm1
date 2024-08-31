@@ -5,6 +5,27 @@ function PatchOptions() {
     if     (IsChecked $Redux.Gameplay.FastSpin)        { ApplyPatch -Patch "Compressed\Optional\fast_spin.ppf"       }
     elseif (IsChecked $Redux.Gameplay.SuperFastSpin)   { ApplyPatch -Patch "Compressed\Optional\super_fast_spin.ppf" }
 
+    :outer foreach ($enemy in $Files.json.enemies.targets) {
+        if ($enemy.hp -is [int] -and (IsSet $enemy.hp_offset) ) { # Health
+            if (IsDefault $Redux.Health[$enemy.name] -Not) {
+                if ($enemy.hp_offset -is [system.Array]) {
+                    foreach ($offset in $enemy.hp_offset) {
+                        if ([int]$Redux.Health[$enemy.name].text -gt 127) {
+                            ApplyPatch -Patch "Compressed\Optional\more_health.ppf"
+                            break outer
+                        }
+                    }
+                }
+                else {
+                    if ([int]$Redux.Health[$enemy.name].text -gt 127) {
+                        ApplyPatch -Patch "Compressed\Optional\more_health.ppf"
+                        break outer
+                    }
+                }
+            }
+        }
+    }
+
 }
 
 
@@ -24,7 +45,10 @@ function ByteOptions() {
     if     (IsChecked $Redux.Gameplay.FreezeTimer)             { ChangeBytes -Offset "1B80"   -Values "2400"   }
     if     (IsChecked $Redux.Gameplay.CanAlwaysEscape)         { ChangeBytes -Offset "18F6F0" -Values "2400"   }
     elseif (IsChecked $Redux.Gameplay.CanNeverEscape)          { ChangeBytes -Offset "18F6F0" -Values "1000"   }
-    if     (IsChecked $Redux.Gameplay.NoHealthBars)            { ChangeBytes -Offset "16E9D8" -Values "1000"   }
+
+    if (IsChecked $Redux.Gameplay.NoHealthBars) {
+        if ($ByteArrayGame[0x16E9D8] -eq 0x50) { ChangeBytes -Offset "16E9D8" -Values "1000" } else { ChangeBytes -Offset "16E9F4" -Values "1000" }
+    }
     
     if (IsDefault $Redux.StarPower.RefreshHP     -Not)   { ChangeBytes -Offset "78D0FB" -Values (Get8Bit $Redux.StarPower.RefreshHP.Text); ChangeBytes -Offset "78D04B" -Values (Get8Bit $Redux.StarPower.RefreshHP.Text) }
     if (IsDefault $Redux.StarPower.RefreshFP     -Not)   { ChangeBytes -Offset "78D10B" -Values (Get8Bit $Redux.StarPower.RefreshFP.Text); ChangeBytes -Offset "78D0A3" -Values (Get8Bit $Redux.StarPower.RefreshFP.Text) }
@@ -49,6 +73,14 @@ function ByteOptions() {
         ChangeBytes -Offset "18DB07" -Values (Get8Bit ($levelBP * 10));          ChangeBytes -Offset "18E32B" -Values (Get8Bit ($levelBP * 10 + 1)); ChangeBytes -Offset "18E337" -Values (Get8Bit ($levelBP * 10))
         $maxBP = $levelBP = $null
     }
+
+
+
+    # DEBUG
+    
+    if ( (IsDefault $Redux.Debug.StartingArea -Not) -or (IsDefault $Redux.Debug.StartingMap -Not) )   { ChangeBytes -Offset "168080" -Values "24020000A462008624020011"              }
+    if   (IsDefault $Redux.Debug.StartingArea -Not)                                                   { ChangeBytes -Offset "168083" -Values $Redux.Debug.StartingArea.SelectedIndex }
+    if   (IsDefault $Redux.Debug.StartingMap  -Not)                                                   { ChangeBytes -Offset "16808B" -Values (Get8Bit $Redux.Debug.StartingMap.Text) }
 
 
 
@@ -121,6 +153,7 @@ function ByteOptions() {
                             $title = $y.title
                             if (IsSet $y.copy) { $title += " " + $y.copy }
                             if ($Redux.Blocks[$block.id].text -eq $title) {
+                                if ($block.id -eq "ARN03_Coin") { ChangeBytes -Offset "BE3582" -Value "0168" }
                                 $new     = $y
                                 $isBadge = $True
                                 break compare
@@ -313,6 +346,11 @@ function CreateTabMain() {
     CreateReduxGroup       -Tag  "Level" -Text "Leveling"
     CreateReduxTextBox     -Name "MaxBP" -Text "Max BP" -Value 30 -Min 0 -Max 75 -Info "Set the maximum amount of BP you can have`nThe maximum amount will be distributed with each upgrade`nLeftover values will be added to the starting value" -Credits "Admentus" -Warning "Affects save data, so use this option on a new save file"
 
+    CreateReduxGroup       -Tag  "Debug" -Text "Debugging"
+    $items = @("Goomba Region", "Toad Town", "Town Town Tunnels", "Inside the Whale", "Princess Peach's Castle", "Shooting Star Summit", "Koopa Village", "Koopa Bros. Fortress", "Mt. Rugged", "Dry Dry Outpost", "Dry Dry Desert", "Dry Dry Ruins", "Forever Forest", "Boo's Mansion", "Gusty Gulch", "Tubba Blubba's Castle", "Shy Guy's Toy Box", "Jade Jungle", "Mt. Lavalava", "Flower Fields", "Shiver City", "Crystal Palace", "Bowser's Castle", "Outside Peach's Castle", "Ending", "Minigames", "Game Over", "Test Map")
+    CreateReduxComboBox    -Name "StartingArea" -Text "Starting Area" -Items $items                        -Info "Set the default starting area for a new save slot" -Credits "Admentus"
+    CreateReduxTextBox     -Name "StartingMap"  -Text "Staring Map"     -Value 11  -Min 0 -Max 134 -Length 3 -Info "Set the default starting map for a new save slot"  -Credits "Admentus" -Warning "Invalid map indexes will make the game crash, 0 tends to always exists as the first map of an area"
+
 }
 
 
@@ -453,12 +491,12 @@ function CreateTabHealth() {
         CreateReduxGroup -Tag "Health" -Text ("Health (" + $item.type + ")")
         foreach ($enemy in $item.targets) {
             if ($enemy.hp -is [int] -and (IsSet $enemy.hp_offset) ) {
-                CreateReduxTextBox -Name $enemy.name -Text $enemy.title -Value $enemy.hp -Min 1 -Max 127 -Info ("Set the Health Points for " + $enemy.title) -Credits "Admentus"
+                CreateReduxTextBox -Name $enemy.name -Text $enemy.title -Value $enemy.hp -Min 1 -Max 255 -Length 3 -Info ("Set the Health Points for " + $enemy.title) -Credits "Admentus" -Shift (-40) -Width 30
             }
         }
     }
 
-    CreateReduxGroup -Tag "Heal" -Text "Healing && Damaged"
+    CreateReduxGroup -Tag "Heal" -Text "Healing & Damaged" -Height 2.2
     foreach ($item in $Files.json.enemies.targets) {
         foreach ($heal in $item.heal) {
             if ($heal.value -is [int] -and (IsSet $heal.offset) ) {
@@ -473,8 +511,8 @@ function CreateTabHealth() {
                 if     ($heal.type -eq "Damaged")      { $info = "Set the starting HP value for " + $item.title              + " due to being damaged prior to the battle" }
                 elseif ($heal.type -eq "Group Heal")   { $info = "Set the power for the group heal ability for "             + $item.title }
                 elseif ($heal.type -eq "Heal Time")    { $info = "Set the amount of times the heal ability can be used for " + $item.title }
-                else                               { $info = "Set the power of the heal ability for "                        + $item.title }
-                CreateReduxTextBox -Name $name -Text $text -BoxHeight 5 -Value $heal.value -Min 1 -Max 99 -Info $info -Credits "Admentus"
+                else                                   { $info = "Set the power of the heal ability for "                    + $item.title }
+                CreateReduxTextBox -Name $name -Text $text -BoxHeight 5 -Value $heal.value -Min 1 -Max 99 -Info $info -Credits "Admentus" -Shift (-40) -Width 30
             }
         }
     }
@@ -690,7 +728,13 @@ function SetAllEnemyHP([single]$Multi=1, [switch]$Default) {
     foreach ($item in $Redux.Groups) {
         if ($item.tag -eq "Health" -or $item.tag -eq "Heal") {
             foreach ($form in $item.controls) {
-                if ($form.GetType() -eq [System.Windows.Forms.TextBox]) { $form.text = [Math]::Floor([byte]$form.Default * $Multi) }
+                if ($form.GetType() -eq [System.Windows.Forms.TextBox]) {
+                    $health = [Math]::Floor([byte]$form.Default * $Multi)
+                    if     ($health -eq 247) { $health = 250 }
+                    elseif ($health -eq 198) { $health = 200 }
+                    elseif ($health -eq 148) { $health = 150 }
+                    $form.text = $health
+                }
             }
         }
     }

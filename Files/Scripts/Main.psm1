@@ -21,6 +21,10 @@ function CreateMainDialog() {
     $Files.json.consoles = SetJSONFile $Files.json.consoles
     $Files.json.games    = SetJSONFile $Files.json.games
 
+    # Addons
+    ShowAddonsIcons -Type "Models" -Index 0
+    ShowAddonsIcons -Type "Music"  -Index 1
+
     # Menu bar
     $menuBarMain           = New-Object System.Windows.Forms.MenuStrip; $MainDialog.Controls.Add($menuBarMain)
 
@@ -116,7 +120,7 @@ function CreateMainDialog() {
 
     # Create a button to allow manually selecting a ROM or WAD
     $InputPaths.GameButton = CreateButton -X ($InputPaths.GameTextBox.Right + (DPISize 5)) -Y (DPISize 18) -Width (DPISize 24) -Height (DPISize 22) -Text "..." -Info "Select your ROM or Wii VC WAD using file explorer"
-    $InputPaths.GameButton.Add_Click({ RefreshScripts; GamePath_Button -TextBox $InputPaths.GameTextBox -Description "ROM/WAD Files" -FileNames @('*.wad', '*.z64', '*.n64', '*.v64', '*.sfc', '*.smc', '*.nes', '*.gbc', '*.zip', '*.rar', '*.7z') })
+    $InputPaths.GameButton.Add_Click({ RefreshScripts; GamePath_Button -TextBox $InputPaths.GameTextBox -Description "ROM/WAD Files" -FileNames @('*.wad', '*.z64', '*.n64', '*.v64', '*.sfc', '*.smc', '*.nes', '*.gbc', '*.gba', '*.zip', '*.rar', '*.7z') })
     #"Image Files(*.BMP;*.JPG;*.GIF)|*.BMP;*.JPG;*.GIF|All files (*.*)|*.*"
 
     # Create a button to clear the game Path
@@ -159,7 +163,7 @@ function CreateMainDialog() {
 
     # Create a button to allow manually selecting a ROM
     $InputPaths.InjectButton = CreateButton -X ($InputPaths.InjectTextBox.Right + (DPISize 5)) -Y (DPISize 18) -Width (DPISize 24) -Height (DPISize 22) -Text "..." -Info "Select your N64, SNES or NES ROM File using file explorer"
-    $InputPaths.InjectButton.Add_Click({ RefreshScripts; InjectPath_Button -TextBox $InputPaths.InjectTextBox -Description "ROM Files" -FileNames @('*.z64', '*.n64', '*.v64', '*.sfc', '*.smc', '*.nes', '*.gbc', '*.zip', '*.rar', '*.7z') })
+    $InputPaths.InjectButton.Add_Click({ RefreshScripts; InjectPath_Button -TextBox $InputPaths.InjectTextBox -Description "ROM Files" -FileNames @('*.z64', '*.n64', '*.v64', '*.sfc', '*.smc', '*.nes', '*.gbc', '*.gba', '*.zip', '*.rar', '*.7z') })
 
     # Create a button to allow patch the WAD with a ROM file
     $InputPaths.ApplyInjectButton = CreateButton -X ($InputPaths.InjectButton.Right + (DPISize 5)) -Y (DPISize 18) -Width ($InputPaths.InjectGroup.Right - $InputPaths.InjectButton.Right - (DPISize 10)) -Height (DPISize 22) -Text "Inject ROM" -Info "Replace the ROM in your selected WAD File with your selected injection file"
@@ -287,19 +291,20 @@ function CreateMainDialog() {
 
     # Additional Options Checkbox
     $Patches.OptionsLabel = CreateLabel    -X ($Patches.Button.Right + (DPISize 10)) -Y ($Patches.Type.Top         + (DPISize 5) ) -Width (DPISize 85) -Height (DPISize 15) -Text "Enable Options:" -Info "Enable options in order to apply a customizable set of features and changes" 
-    $Patches.Options      = CreateCheckBox -X ($Patches.OptionsLabel.Right)          -Y ($Patches.OptionsLabel.Top - (DPISize 2) ) -Width (DPISize 20) -Height (DPISize 20) -Info "Enable options in order to apply a customizable set of features and changes" -Name "Patches.Options" -Checked $True
+    $Patches.Options      = CreateCheckBox -X ($Patches.OptionsLabel.Right)          -Y ($Patches.OptionsLabel.Top - (DPISize 2) ) -Width (DPISize 20) -Height (DPISize 20)                         -Info "Enable options in order to apply a customizable set of features and changes" -Name "Patches.Options" -Checked $True
     $Patches.OptionsLabel.Add_Click({ $Patches.Options.Checked = !$Patches.Options.Checked })
 
     # Extend Checkbox
     $Patches.ExtendLabel = CreateLabel    -X ($Patches.Button.Right + (DPISize 10)) -Y ($Patches.OptionsLabel.Bottom + (DPISize 15) ) -Width (DPISize 85) -Height (DPISize 15) -Text "Allow Extend:" -Info "Allows extending the ROM beyond it's regular size`nSome patches will automaticially force an extend of the ROM"
-    $Patches.Extend      = CreateCheckBox -X ($Patches.ExtendLabel.Right)           -Y ($Patches.ExtendLabel.Top     - (DPISize 2)  ) -Width (DPISize 20) -Height (DPISize 20) -Info "Allows extending the ROM beyond it's regular size`nSome patches will automaticially force an extend of the ROM" -Name "Patches.Extend"
+    $Patches.Extend      = CreateCheckBox -X ($Patches.ExtendLabel.Right)           -Y ($Patches.ExtendLabel.Top     - (DPISize 2)  ) -Width (DPISize 20) -Height (DPISize 20)                       -Info "Allows extending the ROM beyond it's regular size`nSome patches will automaticially force an extend of the ROM" -Name "Patches.Extend"
     $Patches.ExtendLabel.Add_Click({ $Patches.Extend.Checked = !$Patches.Extend.Checked })
 
     # Redux Checkbox
-    $Patches.ReduxLabel = CreateLabel    -X ($Patches.Button.Right + (DPISize 10)) -Y ($Patches.OptionsLabel.Bottom + (DPISize 15) ) -Width (DPISize 85) -Height (DPISize 15) -Text "Enable Redux:" -Info "Enable the Redux patch which improves game mechanics`nIncludes among other changes the inclusion of the D-Pad for dedicated item buttons"
-    $Patches.Redux      = CreateCheckBox -X ($Patches.ReduxLabel.Right)            -Y ($Patches.ReduxLabel.Top      - (DPISize 2)  ) -Width (DPISize 20) -Height (DPISize 20) -Info "Enable the Redux patch which improves game mechanics`nIncludes among other changes the inclusion of the D-Pad for dedicated item buttons" -Name "Patches.Redux" -Checked $True
+    $Patches.ReduxLabel = CreateLabel    -X ($Patches.Button.Right + (DPISize 10)) -Y ($Patches.OptionsLabel.Bottom + (DPISize 15) ) -Width (DPISize 85) -Height (DPISize 15) -Text "Enable Redux:"
+    $Patches.Redux      = CreateCheckBox -X ($Patches.ReduxLabel.Right)            -Y ($Patches.ReduxLabel.Top      - (DPISize 2)  ) -Width (DPISize 20) -Height (DPISize 20) -Name "Patches.Redux" -Checked $True
     $Patches.ReduxLabel.Add_Click({ $Patches.Redux.Checked = !$Patches.Redux.Checked })
-
+    
+    $global:ReduxToolTip = CreateToolTip
 
 
     ####################
@@ -365,7 +370,7 @@ function CreateMainDialog() {
     # Preview / Wii Mode Buttons #
     ##############################
 
-    $Patches.WiiButton = CreateForm -X ($MainPanel.Right - (DPISize 55) ) -Y ($PictureBox.Bottom + (DPISize 2) ) -Width (DPISize 50) -Height (DPISize 28) -Form (New-Object Windows.Forms.PictureBox) -AddTo $MainPanel 
+    $Patches.WiiButton = CreateForm -X ($MainPanel.Right - (DPISize 55) ) -Y (DPISize 22) -Width (DPISize 50) -Height (DPISize 28) -Form (New-Object Windows.Forms.PictureBox) -AddTo $MainPanel 
     SetBitmap -Path $Files.icon.WiiDisabled -Box $Patches.WiiButton
 
     $Patches.PreviewButton = CreateButton -X ($Patches.WiiButton.Left - (DPISize 30)) -Y $Patches.WiiButton.Top -Width (DPISize 28) -Height (DPISize 28) -AddTo $MainPanel
@@ -404,6 +409,46 @@ function ShowRightPanel([System.Windows.Forms.Panel]$Panel) {
     
     $RightPanel.getEnumerator() | foreach { $_.value.Visible = $False }
     $Panel.Visible = $True
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function ShowAddonsIcons([string]$Type, [byte]$Index) {
+
+    $addonTitles = $Files.json.repo.addons | Where-Object { $_.type -eq $Type }
+    if ($addonTitles.count -eq 0) { return }
+
+    $tooltip = CreateToolTip
+    $text    = $icon = ""
+
+    foreach ($addon in $Files.json.repo.addons | Where-Object { $_.type -eq $Type }) {
+        $title = $addon.type + "-" + $addon.title
+
+        if (!(TestFile ($Paths.Addons + "\" + $Type + "\" + $addon.title) -Container)) {
+            $icon  = "_missing"
+            if ($text -ne "") { $text += "{0}" }
+            $text += "`Addon: " + $addon.title + " is missing"
+        }
+
+        elseif ($Addons[$title].isUpdated) {
+            $icon  = "_updated"
+            if ($text -ne "") { $text += "{0}" }
+            $text += "Updated version for " + $addon.title +": " + $Addons[$title].date
+            if (IsSet $Addon.hotfix) { $text += ", #" + $Addons[$title].hotfix }
+        }
+
+        else {
+            if ($text -ne "") { $text += "{0}" }
+            $text += "Current version for " + $Addon.title + ": " + $Addons[$title].date
+            if (IsSet $Addon.hotfix) { $text += ", #" + $Addons[$title].hotfix }
+        }
+    }
+
+    $box = CreateForm -X ($MainPanel.Width - (DPISize 25) - (DPISize 30) * $Index) -Width (DPISize 20) -Height (DPISize 20) -Form (New-Object Windows.Forms.PictureBox) -AddTo $MainPanel 
+    SetBitmap -Path ($Paths.AddonIcons + "\" + $Type + $icon + ".png") -Box $box
+    $tooltip.SetToolTip($box, ([string]::Format($text, [Environment]::NewLine)))
 
 }
 
@@ -491,7 +536,7 @@ function RunCustomGameIDSyntax([string]$Syntax) {
 
 
 #==============================================================================================================================================================================================
-function SetJSONFile($File) {
+function SetJSONFile($File, [switch]$Safe) {
     
     if (TestFile $File) {
         try {
@@ -502,15 +547,19 @@ function SetJSONFile($File) {
         }
         catch {
             Write-Host ("Corrupted JSON File: " + $File)
-            CreateErrorDialog -Error "Corrupted JSON"
-            return $null
+            if (!$Safe) {
+                CreateErrorDialog -Error "Corrupted JSON"
+                return $null
+            }
         }
         return $content
     }
     else {
         Write-Host ("Missing JSON File: " + $File)
-        CreateErrorDialog "Missing JSON"
-        return $null
+        if (!$Safe) {
+            CreateErrorDialog "Missing JSON"
+            return $null
+        }
     }
 
 }
@@ -520,7 +569,7 @@ function SetJSONFile($File) {
 #=========================================================================================================================================================================================
 function CheckDowngradable() {
 
-    foreach ($item in $GameType.version) { if (IsSet $item.file) { return $True } }
+    foreach ($item in $GameType.revision) { if (IsSet $item.file) { return $True } }
     return $False
 
 }
@@ -534,7 +583,6 @@ function DisableReduxOptions() {
     if ($Redux.Panels.Count -gt 0) {
         foreach ($panel in $Redux.Panels) {
             if ($panel.Name -eq "Redux")   { EnableElem -Elem $panel -Active $Patches.Redux.Checked }
-            if (HasCommand "AdjustGUI")    { iex "AdjustGUI" }
         }
     }
 

@@ -1,3 +1,23 @@
+v24.0.0
+- Added new GBA console mode with new TMC game mode offering Redux & Additional Options
+- Added Zelda's Birthday for OoT
+- Added fourth wallet option for MM
+- Added Overworld Skyboxes option for MM
+- Added minigame difficulty options for OoT & MM
+- Added enemy difficulty options for OoT
+- Added external repo support for models and music
+- Increased Max Health for enemies in PM up to 255
+- Updated Scene Editor
+- Updated ALttP Redux to 10.2.3
+- Updated Quick Commands for ALttP to v2.2
+- Changed compressed game patches to apply prior to Additional Options patching
+- Changed Dropdown Menu column alignment to an uneven index always
+- Changed patches JSON formatting to include patch and/or redux version
+- Fixed issues with sword-related Redux options for OoT
+- Fixed issue with Time Control not restricted in scenes where the Song of Time is restricted for MM
+- Fixed issue with Native or Wii VC patches not locking up
+- Fixed issue with item block when containing a badge in Ghost Town 1 for PM
+
 v23.4.3
 - Fixed issues with OoT Redux
 - Fixed several typos

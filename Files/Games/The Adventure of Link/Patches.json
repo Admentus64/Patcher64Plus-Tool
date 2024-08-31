@@ -1,6 +1,8 @@
 [ {
-	"title"		: "Additional Options & Redux",
-	"redux"		: 1,
-	"script"	: "The Adventure of Link",
-	"tooltip"	: "Customize Zelda II: The Adventure of Link with Redux and additional options{0}Redux version: 3.0{0}- Supported: Rev 0 (US)"
+	"title"			: "Additional Options & Redux",
+	"redux"	: {
+		"version"	: "3.0"
+	},
+	"script"		: "The Adventure of Link",
+	"tooltip"		: "Customize Zelda II: The Adventure of Link with Redux and additional options"
 } ]
