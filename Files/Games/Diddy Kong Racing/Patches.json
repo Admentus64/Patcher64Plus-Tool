@@ -2,5 +2,5 @@
 	"title"		: "16:9 Widescreen",
 	"patch"		: "Compressed\\widescreen.bps",
 	"output"	: "widescreen",
-	"tooltip"	: "Includes 16:9 Widescreen support for Diddy Kong Racing{0}Can be activated/deactivated ingame{0}- Supported: Rev 0 (US)"
+	"tooltip"	: "Includes 16:9 Widescreen support for Diddy Kong Racing{0}Can be activated/deactivated ingame"
 } ]

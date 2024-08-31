@@ -1059,7 +1059,7 @@
 			"name"	: "Compass",
 			"value"	: "800"
 		}, {
-			"name"	: "Map",
+			"name"	: "Dungeon Map",
 			"value"	: "820"
 		}, {
 			"name"	: "Boss Key",
@@ -1384,10 +1384,10 @@
 			"name"	: "Wall",
 			"value"	: "1000"
 		} ], [ {
-			"name"	: "Burned",
+			"name"	: "Switch",
 			"value"	: "3F"
 		} ], [ {
-			"name"	: "Destroyed",
+			"name"	: "Flag",
 			"value"	: "3F"
 		} ] ]
 	}, {
@@ -1716,7 +1716,7 @@
 		"name"		: "Lizalfos",
 		"id"		: "0025",
 		"type"		: "Enemy",
-		"band"		: [ "00FF" ],
+		"band"		: [ "00FF", "3F00" ],
 		"params" : [ [ {
 			"name"	: "Lizalfos (Mini-Boss A)",
 			"value"	: "0"
@@ -1732,6 +1732,9 @@
 		}, {
 			"name"	: "Lizalfos (Ceiling Drop)",
 			"value"	: "FF"
+		} ], [ {
+			"name"	: "Switch",
+			"value"	: "3F"
 		} ] ]
 	}, {
 		"name"		: "Wooden Flagpole",
@@ -2548,7 +2551,7 @@
 			"value"	: "400"
 		} ], [ {
 			"name"	: "Total",
-			"value"	: "3C"
+			"value"	: "F"
 		} ], [ {
 			"name"	: "Switch",
 			"value"	: "3F"
@@ -4132,7 +4135,7 @@
 			"value"	: "3F"
 		} ] ]
 	}, {
-		"name"		: "Bombable Wall Fire Temple",
+		"name"		: "Bombable Wall Temple",
 		"id"		: "00CF",
 		"type"		: "Area",
 		"band"		: [ "00FF", "3F00" ],
@@ -4150,7 +4153,7 @@
 			"value"	: "3F"
 		} ] ]
 	}, {
-		"name"		: "2D Bombable Wall",
+		"name"		: "Bombable Wall 2D",
 		"id"		: "00D0",
 		"type"		: "Area",
 		"band"		: [ "00FF", "3F00" ],
@@ -6317,7 +6320,7 @@
 		"id"		: "0167",
 		"type"		: "NPC"
 	}, {
-		"name"		: "Iron Knuckle Room",
+		"name"		: "Iron Knuckle Objects",
 		"id"		: "0169",
 		"type"		: "Area",
 		"band"		: [ "FFFF" ],
@@ -7559,7 +7562,7 @@
 			"value"	: "FF"
 		} ] ]
 	}, {
-		"name"		: "Bombable Stone Wall",
+		"name"		: "Bombable Wall Stone",
 		"id"		: "01BA",
 		"type"		: "Area",
 		"band"		: [ "000F", "3F00" ],
@@ -8539,7 +8542,7 @@
 		"id"		: "0098",
 		"type"		: "Enemy"
 	}, {
-		"name"		: "Poe Sisters & Objects",
+		"name"		: "Poe Sisters",
 		"id"		: "0099",
 		"type"		: "Enemy"
 	}, {
@@ -8591,7 +8594,7 @@
 		"id"		: "00A5",
 		"type"		: "Boss"
 	}, {
-		"name"		: "Dead Hand & Hands",
+		"name"		: "Dead Hand",
 		"id"		: "00A6",
 		"type"		: "Enemy"
 	}, {
@@ -8607,7 +8610,7 @@
 		"id"		: "00AA",
 		"type"		: "Model"
 	}, {
-		"name"		: "Mirror Shield's Light Reflection",
+		"name"		: "Mirror Shield Light Reflection",
 		"id"		: "00AB",
 		"type"		: "Animation"
 	}, {
@@ -8635,7 +8638,7 @@
 		"id"		: "00B1",
 		"type"		: "Area"
 	}, {
-		"name"		: "Shop Shelves",
+		"name"		: "Shop Shelf",
 		"id"		: "00B2",
 		"type"		: "Object"
 	}, {
@@ -8795,11 +8798,11 @@
 		"id"		: "00D9",
 		"type"		: "Model"
 	}, {
-		"name"		: "Pocket & Weird Eggs",
+		"name"		: "Pocket & Weird Egg",
 		"id"		: "00DA",
 		"type"		: "Model"
 	}, {
-		"name"		: "Silver & Golden Scales",
+		"name"		: "Silver & Golden Scale",
 		"id"		: "00DB",
 		"type"		: "Model"
 	}, {
@@ -9468,7 +9471,7 @@
 		"id"		: "0189",
 		"type"		: "NPC"
 	}, {
-		"name"		: "Dodongo's Cavern Bombable Wall",
+		"name"		: "Bombable Wall Stone",
 		"id"		: "018A",
 		"type"		: "Object"
 	}, {

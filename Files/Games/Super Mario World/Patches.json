@@ -64,6 +64,6 @@
 	"rom_title"	: "DINOSAUR LAND",
 	"patch"		: "Compressed\\return_to_dinosaur_land_es.ips",
 	"output"	: "dinosaur_land_es",
-	"tooltip"	: "A full-sized ROM hack in a completely new setting, which is moderately challenging{0}- Supported: Rev 0 (US)"
+	"tooltip"	: "A full-sized ROM hack in a completely new setting, which is moderately challenging"
 
 } ]

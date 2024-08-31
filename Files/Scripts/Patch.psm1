@@ -184,13 +184,14 @@ function MainFunctionPatch([string]$Command, [Array]$Header, [string]$PatchedFil
 
     # Step 08: Patch the ROM
     if ( !(StrLike -str $Command -val "Inject") -and !(StrLike -str $Command -val "Apply Patch") -and !(StrLike -str $Command -val "Extract") -and $PatchInfo.run) {
-        if (!(PatchDecompressedROM)) { return }         # Step A: Patch the decompressed ROM file with the patch through Floating IPS
+        if (!(PatchDecompressedROM))   { return }       # Step A-1: Patch the decompressed ROM file with the patch through Floating IPS
+        if (!(PatchCompressedROM))     { return }       # Step A-2: Patch the compressed ROM file with the patch through Floating IPS
         ExtractMQData                                   # Step B: Extract MQ dungeon data for OoT
         PrePatchingAdditionalOptions                    # Step C: Apply additional options before Redux
         PatchRedux                                      # Step D: Apply the Redux patch
         PatchingAdditionalOptions                       # Step F: Apply additional options
         CompressROM                                     # Step G: Compress the decompressed ROM if required          
-        if (!(PatchCompressedROM)) { return }           # Step H: Patch the compressed ROM file with the patch through Floating IPS
+        
     }
     elseif (StrLike -str $Command -val "Apply Patch") { # Step I: Compress if needed and apply provided BPS Patch
         CompressROM
@@ -446,7 +447,7 @@ function RunCommand([string]$Command="", [string]$Message="", [boolean]$Check=$T
 function PatchingAdditionalOptions() {
     
     if (!(IsSet $GamePatch.script))                                { return }
-    if (!$PatchInfo.decompress -and !(TestFile $GetROM.decomp) )   { Copy-Item -LiteralPath $GetROM.run -Destination $GetROM.decomp -Force }
+    if (!$PatchInfo.decompress -and !(TestFile $GetROM.decomp) )   { Copy-Item -LiteralPath $GetROM.run     -Destination $GetROM.decomp -Force }
     $GetROM.run = $GetROM.decomp
     
     # Language patches
@@ -669,15 +670,11 @@ function SetROMParameters([string]$Path, [string]$PatchedFileName) {
 #==============================================================================================================================================================================================
 function DowngradeROM() {
     
-    if (!$PatchInfo.downgrade) { return }
+    if (!$PatchInfo.downgrade)           { return }
+    if ($ROMHashSum -eq $CheckHashSum)   { return $null }
 
     # Downgrade a ROM if it is required first
     UpdateStatusLabel "Downgrading ROM..."
-
-    if ($ROMHashSum -eq $CheckHashSum) {
-        WriteToConsole "ROM is already downgraded" -Error
-        return $null
-    }
 
     if ($PatchInfo.decompress) {
         if (!(TestFile $GetROM.decomp)) { Copy-Item -LiteralPath $GetROM.run -Destination $GetROM.decomp -Force }
@@ -693,10 +690,10 @@ function DowngradeROM() {
 
     :outer while ($romHash -ne $revHash) {
         $downgradeFile = $null
-        :inner for ($i=0; $i -lt $GameType.version.Count; $i++) {
-            if ($PatchInfo.decompress -and (IsSet $GameType.version[$i].hash_decomp)) { $hash = $GameType.version[$i].hash_decomp } else { $hash = $GameType.version[$i].hash }
-            if ($romHash -eq $hash -and (IsSet $GameType.version[$i].downgrade)) {
-                $downgradeFile = "Downgrade\" + $GameType.version[$i].downgrade
+        :inner for ($i=0; $i -lt $GameType.revision.Count; $i++) {
+            if ($PatchInfo.decompress -and (IsSet $GameType.revision[$i].hash_decomp)) { $hash = $GameType.revision[$i].hash_decomp } else { $hash = $GameType.revision[$i].hash }
+            if ($romHash -eq $hash -and (IsSet $GameType.revision[$i].downgrade)) {
+                $downgradeFile = "Downgrade\" + $GameType.revision[$i].downgrade
                 break inner
             }
         }
@@ -712,7 +709,7 @@ function DowngradeROM() {
     }
 
     if ($romHash -ne $revHash) {
-        foreach ($item in $GameType.version) {
+        foreach ($item in $GameType.revision) {
             if ($PatchInfo.decompress -and (IsSet $item.hash_decomp)) { $hash = $item.hash_decomp } else { $hash = $item.hash }
             if ($romHash -eq $hash -and (IsSet $item.upgrade)) {
                 if (!(ApplyPatch -File $GetROM.run -Patch ("Downgrade\" + $item.upgrade))) {
@@ -765,8 +762,9 @@ function ConvertROM([string]$Command) {
     
     if ($Settings.Debug.NoConversion -eq $True)    { return }
     if ( (StrLike -str $Command -val "Inject") )   { return }
+    if ($ROMHashSum -eq $CheckHashSum)             { return }
 
-    $array = [IO.File]::ReadAllBytes($GetROM.run)
+    $array  = [IO.File]::ReadAllBytes($GetROM.run)
 
     # Convert ROM if needed
     if ($GameConsole.mode -eq "NES") {
@@ -816,12 +814,53 @@ function ConvertROM([string]$Command) {
             }
         }
     }
+    elseif ($GameConsole.mode -eq "GBA") {
+        if ((Get-Item -LiteralPath $GetROM.run).length/4MB % 1 -ne 0) {
+            
+            if ($Settings.Core.UseCache -eq $True) {
+                if (TestFile $GetROM.cache) {
+                    if (IsSet $GameRev.hash_decomp) { $hash = $GameRev.hash_decomp } else { $hash = $GameRev.hash }
+                    
+                    if ($hash -eq (Get-FileHash -Algorithm MD5 -LiteralPath $GetROM.cache).Hash) {
+                        WriteToConsole "Reused ROM from cache"
+                        CreatePath $Paths.Temp
+                        $GetROM.run        = $Paths.Temp + "\converted"
+                        Copy-Item -LiteralPath $GetROM.cache -Destination $GetROM.run -Force
+                        $global:ROMHashSum = (Get-FileHash -Algorithm MD5 -LiteralPath $GetROM.run).Hash
+                        return
+                    }
+                }
+            }
+
+            UpdateStatusLabel "Unpadding ROM..."
+
+            $lastRow = $array[($array.Count-16)..$array.Count]
+            $zeroes  = 0
+            for ($i=15; $i -gt 0; $i--) {
+                if ($lastRow[$i] -eq 0) { $zeroes++ } else { break }
+            }
+
+            $new = [Array]::CreateInstance('int', 24 - $zeroes)
+            for ($i = 0; $i -lt $new.Length; $i++) { $new.SetValue(0, $i) }
+            $array += $new
+
+            $new = [Array]::CreateInstance('int', 4MB - ($array.length % 4MB))
+            for ($i = 0; $i -lt $new.Length; $i++) { $new.SetValue(0xFF, $i) }
+            $array += $new
+        }
+    }
     else { return }
 
     [IO.File]::WriteAllBytes($Paths.Temp + "\converted", $array)
-    $GetROM.run =  $Paths.Temp + "\converted"
+    CreatePath $Paths.Temp
+    $GetROM.run        = $Paths.Temp + "\converted"
     $global:ROMHashSum = (Get-FileHash -Algorithm MD5 -LiteralPath $GetROM.run).Hash
     if ($Settings.Debug.KeepConverted -eq $True) { Copy-Item -LiteralPath $GetROM.run -Destination $GetROM.keepConvert -Force }
+
+    if ($GameConsole.mode -eq "GBA" -and $Settings.Core.UseCache -eq $True) {
+        CreatePath $Paths.Cache
+        Copy-Item -LiteralPath $GetROM.run -Destination $GetROM.cache -Force
+    }
 
 }
 
@@ -1038,6 +1077,8 @@ function ApplyPatch([string]$File=$GetROM.decomp, [string]$Patch, [string]$New, 
         StartJobLoop -Name "Script"
     }
     else { return $False }
+
+    if ($New) { $GetROM.run = $New }
 
     if (!$Silent) {
         if (IsSet $New)   { WriteToConsole ("Applied patch: " + $Patch + " from " + $File + " to " + $New) }
@@ -1331,7 +1372,7 @@ function IsReduxOnly() {
 #==============================================================================================================================================================================================
 function GetROMVersion() {
     
-    foreach ($item in $GameType.version) {
+    foreach ($item in $GameType.revision) {
         if ($ROMHashSum -eq $item.hash) {
             if     ( (IsSet $item.file) -and $CurrentGame.Rev.SelectedIndex -eq 0)   { return $GameRev }
             elseif ($item.list -eq $GameRev.list)                                    { return $item }

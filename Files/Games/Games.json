@@ -3,7 +3,7 @@
 	"mode"				: "Ocarina of Time",
 	"support_vc"			: 1,
 	"console"			: "N64",
-	"version" : [ {
+	"revision" : [ {
 		"name"			: "Rev 0 (US)",
 		"upgrade"		: "rev0_us_to_eu_debug_gc_mq.bps",
 		"hash"			: "5BD1FE107BF8106B2AB6650ABECD54D6",
@@ -184,7 +184,7 @@
 	"support_vc"			: 1,
 	"expansion_pak"			: 0,
 	"console"			: "N64",
-	"version" : [ {
+	"revision" : [ {
 		"name"			: "Rev 0 (US)",
 		"hash"			: "2A0A8ACB61538235BC1094D297FB6556",
 		"hash_decomp"		: "05FD2B38816173F92AB279C059FABBFB",
@@ -281,7 +281,7 @@
 	"mode"				: "Super Mario 64",
 	"support_vc"			: 1,
 	"console"			: "N64",
-	"version" : [ {
+	"revision" : [ {
 		"name"			: "Rev 0 (US)",
 		"hash"			: "20B854B239203BAF6C961B850A4A51A2",
 		"rev"			: "Revision 0",
@@ -320,7 +320,7 @@
 	"support_vc"			: 1,
 	"expansion_pak"			: 0,
 	"console"			: "N64",
-	"version" : [ {
+	"revision" : [ {
 		"name"			: "Rev 0 (US)",
 		"hash"			: "A722F8161FF489943191330BF8416496",
 		"rev"			: "Revision 0",
@@ -337,7 +337,7 @@
 	"support_vc"			: 1,
 	"expansion_pak"			: 0,
 	"console"			: "N64",
-	"version" : [ {
+	"revision" : [ {
 		"name"			: "Rev 0 (US)",
 		"hash"			: "F7C52568A31AADF26E14DC2B6416B2ED",
 		"rev"			: "Revision 0",
@@ -354,7 +354,7 @@
 	"support_vc"			: 1,
 	"expansion_pak"			: 0,
 	"console"			: "N64",
-	"version" : [ {
+	"revision" : [ {
 		"name"			: "Rev 0 (US)",
 		"hash"			: "3A67D9986F54EB282924FCA4CD5F6DFF",
 		"rev"			: "Revision 0",
@@ -382,7 +382,7 @@
 	"expansion_pak"			: 1,
 	"filter"			: 0,
 	"console"			: "N64",
-	"version" : [ {
+	"revision" : [ {
 		"name"			: "Rev 0 (US)",
 		"hash"			: "EF2453BFF7AD0C4BFA9AB0BD6324EBF3",
 		"rev"			: "Revision 0",
@@ -397,7 +397,7 @@
 	"title"				: "Diddy Kong Racing",
 	"mode"				: "Diddy Kong Racing",
 	"console"			: "N64",
-	"version" : [ {
+	"revision" : [ {
 		"name"			: "Rev 0 (US)",
 		"hash"			: "4F0E07F0EEAC7E5D7CE3A75461888D03",
 		"rev"			: "Revision 0",
@@ -416,7 +416,7 @@
 	"title"				: "Donkey Kong 64",
 	"mode"				: "Donkey Kong 64",
 	"console"			: "N64",
-	"version" : [ {
+	"revision" : [ {
 		"name"			: "Rev 0 (US)",
 		"hash"			: "9EC41ABF2519FC386CADD0731F6E868C",
 		"rev"			: "Revision 0",
@@ -429,7 +429,7 @@
 	"title"				: "Banjo-Kazooie",
 	"mode"				: "Banjo-Kazooie",
 	"console"			: "N64",
-	"version" : [ {
+	"revision" : [ {
 		"name"			: "Rev 0 (US)",
 		"hash"			: "B29599651A13F681C9923D69354BF4A3",
 		"rev"			: "Revision 0",
@@ -449,7 +449,7 @@
 	"title"				: "Banjo-Tooie",
 	"mode"				: "Banjo-Tooie",
 	"console"			: "N64",
-	"version" : [ {
+	"revision" : [ {
 		"name"			: "Rev 0 (US)",
 		"hash"			: "40E98FAA24AC3EBE1D25CB5E5DDF49E4",
 		"rev"			: "Revision 0",
@@ -462,7 +462,7 @@
 	"title"				: "GoldenEye 007",
 	"mode"				: "GoldenEye 007",
 	"console"			: "N64",
-	"version" : [ {
+	"revision" : [ {
 		"name"			: "Rev 0 (US)",
 		"hash"			: "70C525880240C1E838B8B1BE35666C3B",
 		"rev"			: "Revision 0",
@@ -476,7 +476,7 @@
 	"mode"				: "A Link to the Past",
 	"support_vc"			: 1,
 	"console"			: "SNES",
-	"version" : [ {
+	"revision" : [ {
 		"name"			: "Rev 0 (US)",
 		"hash"			: "608C22B8FF930C62DC2DE54BCD6EBA72",
 		"rev"			: "Revision 0",
@@ -498,7 +498,7 @@
 	"mode"				: "Super Mario World",
 	"support_vc"			: 1,
 	"console"			: "SNES",
-	"version" : [ {
+	"revision" : [ {
 		"name"			: "Rev 0 (US)",
 		"hash"			: "CDD3C8C37322978CA8669B34BC89C804",
 		"rev"			: "Revision 0",
@@ -520,7 +520,7 @@
 	"mode"				: "Super Metroid",
 	"support_vc"			: 1,
 	"console"			: "SNES",
-	"version" : [ {
+	"revision" : [ {
 		"name"			: "Rev 0 (US)",
 		"hash"			: "21F3E98DF4780EE1C667B84E57D88675",
 		"rev"			: "Revision 0",
@@ -542,7 +542,7 @@
 	"mode"				: "Donkey Kong Country",
 	"support_vc"			: 1,
 	"console"			: "SNES",
-	"version" : [ {
+	"revision" : [ {
 		"name"			: "Rev 0 (US)",
 		"hash"			: "30C5F292FF4CBBFCC00FD8FA96C2DE3B",
 		"rev"			: "Revision 0",
@@ -576,7 +576,7 @@
 	"mode"				: "The Legend of Zelda",
 	"support_vc"			: 1,
 	"console"			: "NES",
-	"version" : [ {
+	"revision" : [ {
 		"name"			: "Rev 0 iNES 2.0 (US)",
 		"hash"			: "4156F66C0FAC36222B5A1DA05DB85D68",
 		"rev"			: "Revision 0 (iNES 2.0)",
@@ -644,7 +644,7 @@
 	"mode"				: "The Adventure of Link",
 	"support_vc"			: 1,
 	"console"			: "NES",
-	"version" : [ {
+	"revision" : [ {
 		"name"			: "Rev 0 iNES 2.0 (US)",
 		"hash"			: "E6DD4104FA46EB4BEF2CB52DC341DD38",
 		"rev"			: "Revision 0 (iNES 2.0)",
@@ -684,11 +684,31 @@
 	"vc_title"			: "Zelda II: The Adventure of Link",
 	"vc_gameID"			: "FA9E"
 }, {
+	"title"				: "The Legend of Zelda: The Minish Cap",
+	"mode"				: "The Minish Cap",
+	"support_vc"			: 0,
+	"console"			: "GBA",
+	"revision" : [ {
+		"name"			: "Rev 0 (PAL)",
+		"downgrade"		: "eu_rev0_to_us_rev0.bps",
+		"hash"			: "2AF78EDBE244B5DE44471368AE2B6F0B",
+		"rev"			: "Revision 0",
+		"region"		: "Europe / PAL"
+	}, {
+		"name"			: "Rev 0 (US)",
+		"downgrade"		: "us_rev0_to_eu_rev0.bps",
+		"hash"			: "A104896DA0047ABE8BEE2A6E3F4C7290",
+		"rev"			: "Revision 0",
+		"region"		: "North America / NTSC-U"
+	} ],
+	"patches"			: 1,
+	"rom_title"			: "GBAZELDA MC"
+}, {
 	"title"				: "The Legend of Zelda: Link's Awakening DX",
 	"mode"				: "Link's Awakening DX",
 	"support_vc"			: 0,
 	"console"			: "GBC",
-	"version" : [ {
+	"revision" : [ {
 		"name"			: "Rev 0 (US / PAL)",
 		"upgrade"		: "rev0_to_rev2.bps",
 		"hash"			: "07C211479386825042EFB4AD31BB525F",
@@ -714,7 +734,7 @@
 	"mode"				: "Oracle of Ages",
 	"support_vc"			: 0,
 	"console"			: "GBC",
-	"version" : [ {
+	"revision" : [ {
 		"name"			: "Rev 2 (US)",
 		"hash"			: "C4639CC61C049E5A085526BB6CAC03BB",
 		"rev"			: "Revision 2",
@@ -727,7 +747,7 @@
 	"mode"				: "Oracle of Seasons",
 	"support_vc"			: 0,
 	"console"			: "GBC",
-	"version" : [ {
+	"revision" : [ {
 		"name"			: "Rev 2 (US)",
 		"hash"			: "F2DC6C4E093E4F8C6CBEA80E8DBD62CB",
 		"rev"			: "Revision 2",

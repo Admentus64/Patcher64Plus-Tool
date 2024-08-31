@@ -464,7 +464,7 @@ function CreateReduxTextBox([single]$Column=$Last.Column, [single]$Row=$Last.Row
 
     if ($Text -ne "") { $Text += ":" }
 
-    $label   = CreateLabel   -X (($Column-1) * $FormDistance + (DPISize 15)) -Y ($Row * (DPISize 30) - (DPISize 10)) -Width (DPISize (105 - $Shift) ) -Height (DPISize 20)                 -Text $Text                                      -Info $Info -AddTo $AddTo
+    $label   = CreateLabel   -X (($Column-1) * $FormDistance + (DPISize 15)) -Y ($Row * (DPISize 30) - (DPISize 10)) -Width (DPISize (105 - $Shift) ) -Height (DPISize 28)                 -Text $Text                                      -Info $Info -AddTo $AddTo
     $textBox = CreateTextBox -X $label.Right                                 -Y ($label.Top + (DPISize $BoxHeight))  -Width (DPISize $Width)          -Height (DPISize 15) -Length $Length -Text $Value -IsGame $True -Name $Name -Tag $Tag -Info $Info -AddTo $AddTo
 
     if (!$ASCII) {
@@ -485,7 +485,7 @@ function CreateReduxTextBox([single]$Column=$Last.Column, [single]$Row=$Last.Row
             Add-Member -InputObject $textBox -NotePropertyMembers @{ Max = $Max }
         }
     }
-
+    
     $Last.Column = [Math]::floor($Column) + 1
     $Last.Row    = [Math]::floor($Row)
     if ($Column -ge $Last.Width) {
@@ -618,6 +618,8 @@ function CreateReduxComboBox([single]$Column=$Last.Column, [single]$Row=$Last.Ro
         if ($TrueDefault.GetType().Name -eq "String")                                  { $TrueDefault          = [array]::indexof($Items, $TrueDefault) + 1 }
         if ($Items[$Default - 1] -ne "Default" -and $Default -gt 0 -and !$NoDefault)   { $Items[$Default - 1] += " (default)"                               }
     }
+
+    if ($Column % 2 -eq 0) { $Column++ }
 
     $Default  = [byte]$Default
     $label    = CreateLabel    -X (($Column-1) * $FormDistance + (DPISize 15)) -Y ($Row * (DPISize 30) - (DPISize 10)) -Width $Width                       -Height (DPISize 15) -Text $Text -Info $Info -AddTo $AddTo

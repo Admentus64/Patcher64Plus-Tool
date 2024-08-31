@@ -1,0 +1,12 @@
+[ {
+
+	"title"			: "Additional Options (EU + US)",
+	"redux"	: {
+		"tooltip"	: "Includes among other changes the inclusion of the item shortcuts holding the L button, difficulty options and other quality of life changes",
+		"version"	: "1.0"
+	},
+	"revision"		: "Rev 0 (PAL)",
+	"script"		: "The Minish Cap",
+	"tooltip"		: "The regular The Minish Cap experience{0}With support for additional options{0}{0}Redux Features:{0}- Bug fixes and improvements from the US version{0}- EU languages restored{0}- Ezlo hint removed upon resuming file{0}- Item button shortcuts added{0}     - L + R:          Pegasus Boots{0}     - L + SELECT: Ocarina{0}     - L + A/B:       Use secondary items{0}- Hold SELECT in the Item Menu to equip secondary items{0}- Mirror Shield can be obtained earlier in the game and requires less waiting{0}- Oracles offer the Joy Butterfly Fusion earlier{0}- The oracle left behind will also offer her homemade charm{0}- Improved some re-occuring text boxes{0}- Removed several Ezlo tutorials{0}- Shells limit cap raised to 9999{0}- Rupee Like has been overhauled{0}- Press L in the file select options menu to change Hero Mode difficulty level{0}- Minimum figurine chances are raised{0}- Library is no longer clossed off after obtaining the Four Sword"
+
+} ]

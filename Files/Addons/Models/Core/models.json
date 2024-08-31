@@ -1,0 +1,79 @@
+[ {
+	"child" : [ {
+		"name"		: "Original",
+		"filter"	: "Link",
+		"author"	: 0
+	}, {
+		"name"		: "Child Quest",
+		"author"	: "GhostlyDark & LuigiBlood",
+		"hylian_shield"	: 0,
+		"info"		: "- Visible Hammer{0}- Hylian Shield can be used like Hero's Shield in MM"
+	}, {
+		"name"		: "Dawn & Dusk",
+		"author"	: "LuigiBlood",
+		"hylian_shield"	: 0,
+		"info"		: "- Visible Hammer{0}- Hylian Shield can be used like Hero's Shield in MM"
+	}, {
+		"name"		: "Hatsune Miku Link",
+		"author"	: "JanexLane"
+	}, {
+		"name"		: "Hatsune Miku Vocaloid",
+		"author"	: "JanexLane",
+		"deku_shield"	: 0
+	}, {
+		"name"		: "Improved Link",
+		"author"	: "Nerrel"
+	}, {
+		"name"		: "Improved Link + OoT Eyes",
+		"author"	: "GhostlyDark & Nerrel"
+	}, {
+		"name"		: "Majora's Mask",
+		"author"	: "The3Dude"
+	}, {
+		"name"		: "Majora's Mask + OoT Eyes",
+		"author"	: "GhostlyDark & The3Dude"
+	}, {
+		"name"		: "Majora's Mask Eyes",
+		"author"	: "GhostlyDark"
+	}, {
+		"name"		: "Megaton Hammer",
+		"author"	: "jsa",
+		"info"		: "- Visible Hammer"
+	}, {
+		"name"		: "Megaton Hammer + MM Eyes",
+		"author"	: "GhostlyDark & jsa",
+		"info"		: "- Visible Hammer"
+	}, {
+		"name"		: "Ocarina of Time",
+		"author"	: "Rando"
+	}, {
+		"name"		: "Ocarina of Time 3D",
+		"filter"	: "Link",
+		"author"	: "Skilarbabcock",
+		"hylian_shield"	: 0
+	}, {
+		"name"		: "Ocarina of Time + MM Eyes",
+		"author"	: "GhostlyDark & Rando"
+	} ],
+	
+	"adult" : [ {
+		"name"		: "Original",
+		"author"	: 0
+	}, {
+		"name"		: "Fierce Deity",
+		"author"	: "CrookedPoe"
+	}, {
+		"name"		: "Hatsune Miku Link",
+		"author"	: "JanexLane"
+	}, {
+		"name"		: "Hatsune Miku Vocaloid",
+		"author"	: "JanexLane",
+		"hylian_shield"	: 0,
+		"mirror_shield"	: 0
+	}, {
+		"name"		: "MoT Revisited",
+		"author"	: "Syeo",
+		"hylian_shield"	: 0,
+		"mirror_shield"	: 0
+	} ]
+} ]
