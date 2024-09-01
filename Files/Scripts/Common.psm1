@@ -400,7 +400,7 @@ function ChangeGameRev() {
 
     if (IsSet $GamePatch.revision) {
         foreach ($revision in $GameType.revision) {
-            if ($version.name -eq $GamePatch.revision) {
+            if ($revision.name -eq $GamePatch.revision) {
                 $global:GameRev = $revision
                 break
             }
@@ -1442,14 +1442,18 @@ function RefreshGameScript() {
     if ($Settings.Debug.RefreshScripts -eq $True) {
         if ($GamePatch.script -is [system.Array]) {
             foreach ($script in $GamePatch.script) {
-                Remove-Module -Name $script
-                Import-Module -Name ($Paths.Scripts + "\Options\" + $script + ".psm1") -Global
+                if ($script -ne $null) {
+                    Remove-Module -Name $script
+                    Import-Module -Name ($Paths.Scripts + "\Options\" + $script + ".psm1") -Global
+                }
             }
 
         }
         else {
-            Remove-Module -Name $GamePatch.Script
-            Import-Module -Name ($Paths.Scripts + "\Options\" + $GamePatch.Script + ".psm1") -Global
+            if ($GamePatch.Script -ne $null) {
+                Remove-Module -Name $GamePatch.Script
+                Import-Module -Name ($Paths.Scripts + "\Options\" + $GamePatch.Script + ".psm1") -Global
+            }
         }
     }
 
