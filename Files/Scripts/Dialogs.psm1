@@ -145,22 +145,23 @@ function CreateCreditsPanel() {
 
     # Support
     $SupportLabel  = CreateLabel -X (DPISize 10)         -Y (DPISize 10)                          -Width (DPISize 200) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("--- Support or visit me at ---")   -AddTo $RightPanel.Links
-
-    $Discord1Label = CreateLabel -X (DPISize 10)         -Y ($SupportLabel.Bottom + (DPISize 2))  -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("Discord")                          -AddTo $RightPanel.Links
-    $Discord2Label = CreateLabel -X $Discord1Label.Right -Y ($SupportLabel.Bottom + (DPISize 2))  -Width (DPISize 140) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("https://discord.gg/P22GGzz")       -AddTo $RightPanel.Links
+    $Discord1Label = CreateLabel -X (DPISize 10)         -Y ($SupportLabel.Bottom  + (DPISize 2)) -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("Discord")                          -AddTo $RightPanel.Links
+    $Discord2Label = CreateLabel -X $Discord1Label.Right -Y ($SupportLabel.Bottom  + (DPISize 2)) -Width (DPISize 140) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("https://discord.gg/P22GGzz")       -AddTo $RightPanel.Links
     $GitHub1Label  = CreateLabel -X (DPISize 10)         -Y ($Discord1Label.Bottom + (DPISize 2)) -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("GitHub")                           -AddTo $RightPanel.Links
     $GitHub2Label  = CreateLabel -X $GitHub1Label.Right  -Y ($Discord1Label.Bottom + (DPISize 2)) -Width (DPISize 180) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("https://github.com/Admentus64")    -AddTo $RightPanel.Links
-    
-    $Patreon1Label = CreateLabel -X (DPISize 10)         -Y ($GitHub1Label.Bottom + (DPISize 2))  -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("Patreon")                          -AddTo $RightPanel.Links
-    $Patreon2Label = CreateLabel -X $Patreon1Label.Right -Y ($GitHub1Label.Bottom + (DPISize 2))  -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("www.patreon.com/Admentus")         -AddTo $RightPanel.Links
+    $Patreon1Label = CreateLabel -X (DPISize 10)         -Y ($GitHub1Label.Bottom  + (DPISize 2)) -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("Patreon")                          -AddTo $RightPanel.Links
+    $Patreon2Label = CreateLabel -X $Patreon1Label.Right -Y ($GitHub1Label.Bottom  + (DPISize 2)) -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("www.patreon.com/Admentus")         -AddTo $RightPanel.Links
     $PayPal1Label  = CreateLabel -X (DPISize 10)         -Y ($Patreon1Label.Bottom + (DPISize 2)) -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("PayPal")                           -AddTo $RightPanel.Links
     $PayPal2Label  = CreateLabel -X $PayPal1Label.Right  -Y ($Patreon1Label.Bottom + (DPISize 2)) -Width (DPISize 200) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("www.paypal.com/paypalme/Admentus") -AddTo $RightPanel.Links
+    $Kofi1Label    = CreateLabel -X (DPISize 10)         -Y ($PayPal1Label.Bottom  + (DPISize 2)) -Width (DPISize 150) -Height (DPISize 15) -Font $Fonts.SmallBold      -Text ("Ko-fi")                            -AddTo $RightPanel.Links
+    $Kofi2Label    = CreateLabel -X $Kofi1Label.Right    -Y ($PayPal1Label.Bottom  + (DPISize 2)) -Width (DPISize 180) -Height (DPISize 15) -Font $Fonts.SmallUnderline -Text ("https://ko-fi.com/admentus")       -AddTo $RightPanel.Links
 
-    $Discord2Label.add_Click( { [system.Diagnostics.Process]::start("https://discord.gg/P22GGzz") } )
-    $GitHub2Label.add_Click(  { [system.Diagnostics.Process]::start("https://github.com/Admentus64") } )
-    $Patreon2Label.add_Click( { [system.Diagnostics.Process]::start("https://www.patreon.com/Admentus") } )
-    $PayPal2Label.add_Click(  { [system.Diagnostics.Process]::start("https://www.paypal.com/paypalme/Admentus/") } )
-    $Discord2Label.ForeColor = $GitHub2Label.ForeColor = $Patreon2Label.ForeColor = $PayPal2Label.ForeColor = "Blue"
+    $Discord2Label.add_Click( { [system.Diagnostics.Process]::start("https://discord.gg/P22GGzz")               } )
+    $GitHub2Label.add_Click(  { [system.Diagnostics.Process]::start("https://github.com/Admentus64")            } )
+    $Patreon2Label.add_Click( { [system.Diagnostics.Process]::start("https://www.patreon.com/Admentus")         } )
+    $PayPal2Label.add_Click(  { [system.Diagnostics.Process]::start("https://www.paypal.com/paypalme/Admentus") } )
+    $Kofi2Label.add_Click(    { [system.Diagnostics.Process]::start("https://ko-fi.com/admentus")               } )
+    $Discord2Label.ForeColor = $GitHub2Label.ForeColor = $Patreon2Label.ForeColor = $PayPal2Label.ForeColor = $Kofi2Label.ForeColor = "Blue"
 
     # Support Me QR
     $SwishLabel = CreateLabel -X (DPISize 520) -Y (DPISize 10) -Height (DPISize 15) -Font $Fonts.SmallBold -Text ("Swish") -AddTo $RightPanel.Links
