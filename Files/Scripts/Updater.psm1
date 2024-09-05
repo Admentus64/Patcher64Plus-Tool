@@ -28,7 +28,7 @@ function PerformUpdate() {
 function CleaningRepos([string]$Type) {
     
     $addonTitles = @("Core") + ($Files.json.repo.addons | Where-Object { $_.type -eq $Type } | ForEach-Object { $_.title })
-    ((Get-ChildItem -Path ($Paths.Addons + "\" + $Type) -Directory -Force) | Where {$addonTitles -NotContains $_}) | ForEach-Object {
+    ((Get-ChildItem -Path ($Paths.Addons + "\" + $Type) -Directory -Force) | Where {$addonTitles -NotContains $_.Name}) | ForEach-Object {
         RemovePath $_.FullName
         WriteToConsole ("Removed unused " + $Type.toLower() + " repo: " + $_.BaseName) 
     }
@@ -108,30 +108,26 @@ function CheckUpdate() {
 #==============================================================================================================================================================================================
 function AutoUpdate([switch]$Manual) {
 
-    $update     = $error = $False
+    $update     = $False
     $oldContent = $newContent = $newVersion = $newDate = $newHotfix = $null
+    $error      = 0
 
     if (TestFile $Patcher.VersionFile) {
         # Download version info
         try {
             $response   = ReadWebRequest $Files.json.repo.version
-          # $newContent = $response.AllElements | Where { $_.class -eq "blob-code blob-code-inner js-file-line" }
-            $newcontent = $response.AllElements | Where { $_.type -eq "application/json" }
-            
-            $newContent = [string]$newContent[1]
-            $start      = ($newContent | Select-String "blob").Matches.Index
-            $newContent = $newContent.substring($start, $newContent.substring($start).indexOf("]"))
+            $newContent = [string]($response.AllElements | Where {$_.type -eq "application/json"})
+            $index      = $newContent.indexOf('"blob":{"rawLines":[')
+            $newContent = $newContent.substring($index, $index+50)
             $newContent = $newContent.substring($newContent.indexOf("[")+1)
+            $newContent = $newContent.substring(0, $newContent.indexOf("]"))
             $newContent = $newContent.replace('"', '')
             $newContent = $newContent.split(",")
         }
-        catch {
-            WriteToConsole "Could not retrieve Patcher version info! Trying fallback URL..." -Error
-            $error = $True
-        }
+        catch { $error++ }
 
         # Download version info using fallback URL
-        if ($error) {
+        if ($error -ne 0) {
             $error = $False
             try {
                 if ($Settings.Core.LocalTempFolder -ne $False)   { CreateSubPath $Paths.LocalTemp;   $file = $Paths.LocalTemp   + "\version.txt" }
@@ -139,15 +135,19 @@ function AutoUpdate([switch]$Manual) {
                 InvokeWebRequest -Uri $Files.json.repo.versionFallback -OutFile $file
                 [array]$newcontent = Get-Content -LiteralPath $file
                 RemoveFile $file
+                $error = 0
             }
             catch {
-                WriteToConsole "Could not retrieve Patcher version info using fallback URL!" -Error
                 RemoveFile $file
-                $error = $True
+                $error++
             }
         }
 
-        if ($error) { return }
+        if ($error -ne 0) {
+            if  ($error -eq 1)   { WriteToConsole "Could not retrieve Patcher version info! Trying fallback URL..." -Error }
+            else                 { WriteToConsole "Could not retrieve Patcher version info using fallback URL!"     -Error }
+            return
+        }
 
         # Load content
         try { [array]$oldContent = Get-Content -LiteralPath $Patcher.VersionFile }
@@ -268,9 +268,7 @@ function ShowUpdateDialog([String]$Version, [String]$Date, [String]$Hotfix) {
         EnableGUI $True
     } )
 
-    $Updater.noBtn.Add_Click( {
-        $Updater.Dialog.Close()
-    } )
+    $Updater.noBtn.Add_Click( { $Updater.Dialog.Close() } )
 
     $Updater.skipBtn.Add_Click( {
         $Updater.Dialog.Close()
@@ -295,7 +293,7 @@ function RunUpdate() {
     CreateSubPath $Path
 
     $zip = $path + "\master.zip"
-    Get-ChildItem -Path $path -Directory | ForEach-Object { RemovePath ($path + "\" + $_) }
+    Get-ChildItem -Path $path -Directory | ForEach-Object { RemovePath ($path + "\" + $_.BaseName) }
     RemoveFile $zip
 
     try { InvokeWebRequest -Uri $Files.json.repo.uri -OutFile $zip }
@@ -326,7 +324,7 @@ function RunUpdate() {
 
     $folder = $path + "\Patcher64Plus-Tool-master"
     Get-ChildItem -Path $folder -Directory | ForEach-Object {
-        if ($_.name -ne ".github") { Copy-Item -LiteralPath ($folder + "\" + $_) -Destination $Paths.Base -Force -Recurse }
+        if ($_.BaseName -ne ".github") { Copy-Item -LiteralPath ($folder + "\" + $_.BaseName) -Destination $Paths.Base -Force -Recurse }
     }
     Move-Item -LiteralPath ($folder + "\Patcher64+ Tool.ps1") -Destination ($Paths.Base   + "\Patcher64+ Tool.ps1") -Force
     Move-Item -LiteralPath ($folder + "\Readme.txt")          -Destination ($Paths.Base   + "\ReadMe.txt")          -Force
@@ -376,9 +374,10 @@ function UpdateAddon([Object]$Addon) {
     
     $title     = $Addon.type + "-" + $Addon.title
     $info      = $Addon.title + " (" + $Addon.type + ")"
-    $update    = $error = $False
+    $update    = $False
     $addonPath = $Paths.Addons + "\" + $Addon.type + "\" + $Addon.title
     $content   = $date = $hotfix = $null
+    $error     = 0
 
     if ($Settings.Core.LocalTempFolder -ne $False)   { $path = $Paths.LocalTemp   }
     else                                             { $path = $Paths.AppDataTemp }
@@ -398,27 +397,27 @@ function UpdateAddon([Object]$Addon) {
             $content  = $content.replace('"', '')
             $content  = $content.split(",")
         }
-        catch {
-            WriteToConsole ("Could not retrieve last version info for " + $info + "! Trying fallback URL...") -Error
-            $error = $True
-        }
+        catch { $error++ }
 
         # Download version info using fallback URL
-        if ($error) {
-            $error = $False
+        if ($error -ne 0) {
             try {
                 InvokeWebRequest -Uri $Addon.versionFallback -OutFile     ($path + "\version.txt")
                 [array]$content = Get-Content                -LiteralPath ($path + "\version.txt")
                 RemoveFile ($Path + "\version.txt")
+                $error = 0
             }
             catch {
-                WriteToConsole ("Could not retrieve " + $info + " version info using fallback URL!") -Error
                 RemoveFile ($path + "\version.txt")
-                $error = $True
+                $error++
             }
         }
 
-        if ($error) { return }
+        if ($error -ne 0) {
+            if ($error -eq 1)   { WriteToConsole ("Could not retrieve last version info for " + $info + "! Trying fallback URL...") -Error }
+            else                { WriteToConsole ("Could not retrieve " + $info + " version info using fallback URL!")              -Error }
+            return
+        }
 
         # Load content
         if ($content -eq $null) {
@@ -449,7 +448,7 @@ function UpdateAddon([Object]$Addon) {
 
     if ($update) {
         $zip = $path + "\" + $title.ToLower().Replace(" ", "-") + ".zip"
-        Get-ChildItem -Path $path -Directory | ForEach-Object { RemovePath ($path + "\" + $_) }
+        Get-ChildItem -Path $path -Directory | ForEach-Object { RemovePath ($path + "\" + $_.BaseName) }
         RemoveFile $zip
 
         try {
