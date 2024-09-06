@@ -5687,6 +5687,20 @@ function ExtractSceneFiles() {
                 $ByteArrayGame[0x25B8282]++; $ByteArrayGame[0x25B8286]++
             }
 
+            if ( (TestFile ($Paths.Extract + "\" + (GetExtractQuest) + "\Shadow Temple\Room 13.zmap") ) -and (TestFile ($Paths.Extract + "\" + (GetExtractQuest) + "\Shadow Temple\Room 14.zmap") ) ) {
+                $file    = $Paths.Extract + "\" + (GetExtractQuest) + "\Shadow Temple\Room 14.zmap"
+                $fileMap = [System.IO.File]::ReadAllBytes($file)
+                for ($i=0; $i -lt $fileMap.length; $i++) { $ByteArrayGame[$i + 0x2814100]  = $fileMap[$i] }
+
+                $file    = $Paths.Extract + "\" + (GetExtractQuest) + "\Shadow Temple\Room 13.zmap"
+                $fileMap = [System.IO.File]::ReadAllBytes($file)
+                for ($i=0; $i -lt $fileMap.length; $i++) { $ByteArrayGame[$i + 0x2813000] = $fileMap[$i] }
+                for ($i=0x2813000 + $fileMap.length; $i -lt 0x2814100; $i++) { $ByteArrayGame[$i] = 0 }
+            
+                $ByteArrayGame[0xC152]++;    $ByteArrayGame[0xC156]++; $ByteArrayGame[0xC15A]++
+                $ByteArrayGame[0x27A7262]++; $ByteArrayGame[0x27A7266]++
+            }
+
             if ( (TestFile ($Paths.Extract + "\" + (GetExtractQuest) + "\Spirit Temple\Room 5.zmap") ) -and (TestFile ($Paths.Extract + "\" + (GetExtractQuest) + "\Spirit Temple\Room 6.zmap") ) ) {
                 $file    = $Paths.Extract + "\" + (GetExtractQuest) + "\Spirit Temple\Room 6.zmap"
                 $fileMap = [System.IO.File]::ReadAllBytes($file)
