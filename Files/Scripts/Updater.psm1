@@ -27,7 +27,7 @@ function PerformUpdate() {
 #==============================================================================================================================================================================================
 function CleaningRepos([string]$Type) {
     
-    $addonTitles = @("Core") + ($Files.json.repo.addons | Where-Object { $_.type -eq $Type } | ForEach-Object { $_.title })
+    $addonTitles = @("Core", "Custom") + ($Files.json.repo.addons | Where-Object { $_.type -eq $Type } | ForEach-Object { $_.title })
     ((Get-ChildItem -Path ($Paths.Addons + "\" + $Type) -Directory -Force) | Where {$addonTitles -NotContains $_.Name}) | ForEach-Object {
         RemovePath $_.FullName
         WriteToConsole ("Removed unused " + $Type.toLower() + " repo: " + $_.BaseName) 
@@ -311,8 +311,10 @@ function RunUpdate() {
 
     ExpandArchive -LiteralPath $zip -DestinationPath $path
 
-    if (TestFile -Path ($Paths.Games + "\Ocarina of Time\Editor") -Container)   { Copy-Item -LiteralPath ($Paths.Games + "\Ocarina of Time\Editor") -Destination ($Paths.Base + "\Ocarina of Time\Editor") -Force -Recurse }
-    if (TestFile -Path ($Paths.Games + "\Majora's Mask\Editor")   -Container)   { Copy-Item -LiteralPath ($Paths.Games + "\Majora's Mask\Editor")   -Destination ($Paths.Base + "\Majora's Mask\Editor")   -Force -Recurse }
+    if (TestFile -Path ($Paths.Games  + "\Ocarina of Time\Editor") -Container)   { Copy-Item -LiteralPath ($Paths.Games  + "\Ocarina of Time\Editor") -Destination ($Paths.Base + "\Ocarina of Time\Editor") -Force -Recurse }
+    if (TestFile -Path ($Paths.Games  + "\Majora's Mask\Editor")   -Container)   { Copy-Item -LiteralPath ($Paths.Games  + "\Majora's Mask\Editor")   -Destination ($Paths.Base + "\Majora's Mask\Editor")   -Force -Recurse }
+    if (TestFile -Path ($Paths.Addons + "\Models\Custom")          -Container)   { Copy-Item -LiteralPath ($Paths.Addons + "\Models\Custom")          -Destination ($Paths.Base + "\Addons\Models\Custom")   -Force -Recurse }
+    if (TestFile -Path ($Paths.Addons + "\Music\Custom")           -Container)   { Copy-Item -LiteralPath ($Paths.Addons + "\Music\Custom")           -Destination ($Paths.Base + "\Addons\Music\Custom")    -Force -Recurse }
 
     RemovePath $Paths.Games
     RemovePath $Paths.Tools
@@ -332,6 +334,7 @@ function RunUpdate() {
 
     if (TestFile -Path ($Paths.Base + "\Ocarina of Time") -Container)   { Move-Item -LiteralPath ($Paths.Base + "\Ocarina of Time") -Destination ($Paths.Games + "\Ocarina of Time") -Force }
     if (TestFile -Path ($Paths.Base + "\Majora's Mask")   -Container)   { Move-Item -LiteralPath ($Paths.Base + "\Majora's Mask")   -Destination ($Paths.Games + "\Majora's Mask")   -Force }
+    if (TestFile -Path ($Paths.Base + "\Addons")          -Container)   { Move-Item -LiteralPath ($Paths.Base + "\Addons")          -Destination  $Paths.Addons                      -Force }
 
     RemovePath $folder
     $global:FatalError = $global:Relaunch = $True

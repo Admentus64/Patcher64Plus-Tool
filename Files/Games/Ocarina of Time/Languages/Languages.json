@@ -50,7 +50,7 @@
 	"max_text_speed"	: 2,
 	"encode" : [128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158],
 	"decode" : [192, 193, 194, 195, 199, 200, 201, 202, 203, 205, 212, 213, 211, 220, 218, 223, 224, 225, 226, 227, 231, 232, 233, 234, 235, 237, 244, 245, 243, 252, 250],
-	"credits"		: "Fserve (v1.7a), Mex Maximus BR, Projeto BR (MM v1.1c) & GhostlyDark"
+	"credits"		: "Fserve (v1.8), Mex Maximus BR, Projeto BR (MM v1.1c) & GhostlyDark"
 }, {
 	"title"			: "Italian",
 	"code"			: "it",
