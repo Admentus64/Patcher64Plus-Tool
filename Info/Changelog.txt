@@ -1,3 +1,6 @@
+v24.0.1
+- Keep Custom folder for custom models and music when opening patcher or updating
+
 v24.0.0
 - Added new GBA console mode with new TMC game mode offering Redux & Additional Options
 - Added Zelda's Birthday for OoT
