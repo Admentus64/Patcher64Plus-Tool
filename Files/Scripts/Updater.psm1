@@ -334,7 +334,16 @@ function RunUpdate() {
 
     if (TestFile -Path ($Paths.Base + "\Ocarina of Time") -Container)   { Move-Item -LiteralPath ($Paths.Base + "\Ocarina of Time") -Destination ($Paths.Games + "\Ocarina of Time") -Force }
     if (TestFile -Path ($Paths.Base + "\Majora's Mask")   -Container)   { Move-Item -LiteralPath ($Paths.Base + "\Majora's Mask")   -Destination ($Paths.Games + "\Majora's Mask")   -Force }
-    if (TestFile -Path ($Paths.Base + "\Addons")          -Container)   { Move-Item -LiteralPath ($Paths.Base + "\Addons")          -Destination  $Paths.Addons                      -Force }
+    
+    if (TestFile -Path ($Paths.Base + "\Addons") -Container) {
+        if (TestFile -Path ($Paths.Base + "\Addons\Models\Custom") -Container) {
+            Move-Item -LiteralPath ($Paths.Base + "\Addons\Models\Custom") -Destination ($Paths.Addons + "\Models") -Force
+        }
+        if (TestFile -Path ($Paths.Base + "\Addons\\Music\Custom") -Container) {
+            Copy-Item -LiteralPath ($Paths.Base + "\Addons\Music\Custom")  -Destination ($Paths.Addons + "\Music")  -Force
+        }
+        RemovePath ($Paths.Base + "\Addons")
+    }
 
     RemovePath $folder
     $global:FatalError = $global:Relaunch = $True

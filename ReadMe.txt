@@ -22,7 +22,7 @@ Run the launcher or right click the .ps1 file -> Run with PowerShell.
 
 --- Instructions: Windows 7/8.1 ---
 Download and install WMF 5.1 from here: https://www.microsoft.com/en-us/download/details.aspx?id=54616
-- Windows 7: Win7AndW2K8R2-KB3191566-x64.zip
+- Windows 7:   Win7AndW2K8R2-KB3191566-x64.zip
 - Windows 8.1: Win8.1AndW2K12R2-KB3191564-x64.msu
 Initiate a reboot after the installation is done. Running the launcher will now work.
 
@@ -63,6 +63,7 @@ Optional: After installing WMF 5.1 and rebooting the system, download and instal
 - www.romhacking.net/hacks/5122 (MM)
 - www.romhacking.net/hacks/4963 (SM)
 - https://github.com/MarocZan (OoT & MM)
+- https://github.com/Admentus64/tmc-redux (TMC)
 - https://github.com/ShadowOne333 (multiple games)
 
 
@@ -133,6 +134,7 @@ Popular ROM hacks for many games among others but not limited to are featured su
 The following games have support for Redux which allows for many quality of life enhancements:
 - The Legend of Zelda: Ocarina of Time (OoT)
 - The Legend of Zelda: Majora's Mask (MM)
+- The Legend of Zelda: The Minish Cap (GBA)
 - The Legend of Zelda (TLoZ)
 - Zelda II: The Adventure of Link (TAoL)
 - The Legend of Zelda: A Link to the Past (ALttP)
@@ -149,6 +151,7 @@ The following games have support for Additional Options which allows you to cust
 - Banjo-Kazooie (BK)
 - Bomberman Hero (BH)
 - GoldenEye 007 (GE)
+- The Legend of Zelda: The Minish Cap (TMC)
 - The Legend of Zelda: A Link to the Past (ALttP)
 - Super Metroid (SM)
 - The Legend of Zelda (TLoZ)
@@ -158,13 +161,13 @@ The following games have support for Additional Options which allows you to cust
 Some ROM Hacks for many multiple games also support Additional Options, so this feature isn't just limited to the original vanilla game.
 This includes ROM hacks such Dawn & Dusk, Gold Quest, Master of Time, Paper Mario: Hard Mode, Super Mario: Star Road and more.
 
-Ocarina of Time and Majora's Mask also have support for different languages, and includes the following:
-- English (OoT, MM)
-- German (OoT, MM)
-- French (OoT, MM)
-- Spanish (OoT, MM)
+Ocarina of Time, Majora's Mask and The Minish Cap also have support for different languages, and includes the following:
+- English (OoT, MM, TMC)
+- German (OoT, MM, TMC)
+- French (OoT, MM, TMC)
+- Spanish (OoT, MM, TMC)
 - Brazilian Portuguese (OoT, MM)
-- Italian (OoT)
+- Italian (OoT, TMC)
 - Polish (OoT, MM)
 - Russian (OoT, MM)
 - Japanese (OoT)
@@ -220,11 +223,11 @@ All of this can be customized like you want it to be. Turn it on or off at will.
 These customizations work in combination with the regular non-Redux customizations.
 
 
-=======================
-=== MAJORA'S REDUX ===
-======================
+===========================
+=== MAJORA'S MASK REDUX ===
+===========================
 
-Majora's Redux customizable features:
+Majora's Mask Redux customizable features:
 - D-Pad layout (disabled, hidden, left or right)
 - Faster block pushing
 - Elegy of Emptiness speedup
@@ -243,6 +246,34 @@ Majora's Redux customizable features:
 - Inventory editor
 - Infinite cheats
 - Different colors for buttons and the interface
+
+All of this can be customized like you want it to be. Turn it on or off at will when patching.
+These customizations work in combination with the regular non-Redux customizations.
+
+
+============================
+=== THE MINISH CAP REDUX ===
+============================
+
+The Minish Cap Redux customizable features:
+- Bug fixes and improvements from the US version
+- EU languages restored
+- Ezlo hint removed upon resuming file
+- Item button shortcuts added
+     - L + R:      Pegasus Boots
+     - L + SELECT: Ocarina
+     - L + A/B:    Use secondary items
+- Hold SELECT in the Item Menu to equip secondary items
+- Mirror Shield can be obtained earlier in the game and requires less waiting
+- Oracles offer the Joy Butterfly Fusion earlier
+- The oracle left behind will also offer her homemade charm
+- Improved some re-occuring text boxes
+- Removed several Ezlo tutorials
+- Shells limit cap raised to 9999
+- Rupee Like has been overhauled
+- Press L in the file select options menu to change Hero Mode difficulty level
+- Minimum figurine chances are raised
+- Library is no longer clossed off after obtaining the Four Sword
 
 All of this can be customized like you want it to be. Turn it on or off at will when patching.
 These customizations work in combination with the regular non-Redux customizations.
