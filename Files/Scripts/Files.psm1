@@ -235,6 +235,7 @@ function SetGetROM() {
     $GetROM.decomp                          = $Paths.Temp  + "\decompressed"
     $GetROM.downgrade                       = $Paths.Temp  + "\downgraded"
     $GetROM.masterQuest                     = $Paths.Temp  + "\master-quest-decompressed"
+    $GetROM.converted                       = $Paths.Temp  + "\converted"
     $GetROM.nes                             = $Paths.Temp  + "\rom.nes"
     $GetROM.cache                           = $Paths.Cache + "\cached_rom"
     

@@ -126,21 +126,21 @@ function ByteOptions() {
         }
 
       
-        if (IsChecked $Redux.Gameplay.MusicHouse)      { ChangeBytes -Offset "63B9E" -Values "09" }
-        if (IsChecked $Redux.Gameplay.RedRupeeLike)    { ChangeBytes -Offset "CD20E" -Values "F6" }
+        if (IsChecked $Redux.Gameplay.MusicHouse)      { ChangeBytes -Offset "63BCE" -Values "09" }
+        if (IsChecked $Redux.Gameplay.RedRupeeLike)    { ChangeBytes -Offset "CD23E" -Values "F6" }
 
 
 
         # INTERFACE #
 
-        if (IsChecked $Redux.Interface.SwapButtons) { ChangeBytes -Offset @("1C486", "129280") -Values "B8"; ChangeBytes -Offset @("1C48A", "129283") -Values "D0" }
+        if (IsChecked $Redux.Interface.SwapButtons) { ChangeBytes -Offset @("1C4B6", "1292C0") -Values "B8"; ChangeBytes -Offset @("1C4BA", "1292C3") -Values "D0" }
 
 
 
         # AUDIO #
 
-        if (IsChecked $Redux.Audio.Voices)      { PatchBytes  -Offset   "C66F8E"                   -Patch "tww_voices.bin" }
-        if (IsChecked $Redux.Audio.LowHealth)   { ChangeBytes -Offset @("170E0", "170E4", "170EA") -Values "00"            }
+        if (IsChecked $Redux.Audio.Voices)      { PatchBytes  -Offset   "C6741E"                   -Patch "tww_voices.bin" }
+        if (IsChecked $Redux.Audio.LowHealth)   { ChangeBytes -Offset @("17110", "17114", "1711A") -Values "00"            }
 
     }
 

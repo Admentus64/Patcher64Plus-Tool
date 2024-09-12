@@ -146,7 +146,7 @@ function ChangeBytes([string]$File, [byte[]]$Array, [object]$Offset, [object]$Ma
 
 
 #==============================================================================================================================================================================================
-function MultiplyBytes([string]$File, [object]$Offset, [object]$Match=$null, [float]$Factor) {
+function MultiplyBytes([string]$File, [object]$Offset, [object]$Match=$null, [float]$Factor, [byte]$Min=0, [byte]$Max=0) {
     
     if (IsSet $File) {
         if (!(TestFile $File)) {
@@ -203,11 +203,14 @@ function MultiplyBytes([string]$File, [object]$Offset, [object]$Match=$null, [fl
         if ($Factor -eq 0) {
             WriteToConsole ($offsets[$i] + " -> Set value " + (Get8Bit $ByteArrayGame[$offsetDec[$i]]) +" to: 1")
             $ByteArrayGame[$offsetDec[$i]] = 1
+            if ($Min -gt 0 -and $ByteArrayGame[$offsetDec[$i]] -lt $Min) { $ByteArrayGame[$offsetDec[$i]] = $Min }
         }
         elseif ($ByteArrayGame[$offsetDec[$i]] -gt 0) {
             WriteToConsole ($offsets[$i] + " -> Multiplied value " + (Get8Bit $ByteArrayGame[$offsetDec[$i]]) +" by: " + $Factor)
             $ByteArrayGame[$offsetDec[$i]] *= $Factor
-            if ($ByteArrayGame[$offsetDec[$i]] -eq 0) { $ByteArrayGame[$offsetDec[$i]] = 1 }
+            if                     ($ByteArrayGame[$offsetDec[$i]] -eq 0)      { $ByteArrayGame[$offsetDec[$i]] = 1    }
+            elseif ($Max -gt 0 -and $ByteArrayGame[$offsetDec[$i]] -gt $Max)   { $ByteArrayGame[$offsetDec[$i]] = $Max }
+            elseif ($Min -gt 0 -and $ByteArrayGame[$offsetDec[$i]] -lt $Min)   { $ByteArrayGame[$offsetDec[$i]] = $Min }
         }
     }
 

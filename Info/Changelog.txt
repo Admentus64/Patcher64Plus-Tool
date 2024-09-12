@@ -1,3 +1,9 @@
+v24.0.2
+- Updated Redux for TMC to v1.1
+- Improved raising enemy HP for OoT & MM
+- Fixed issues with custom models GUI initialization
+- Fixed issues with patching ROMs
+
 v24.0.1
 - Keep Custom folder for custom models and music when opening patcher or updating
 

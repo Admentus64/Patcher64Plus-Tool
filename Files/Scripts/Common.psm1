@@ -478,13 +478,10 @@ function ChangePatch() {
             $CustomHeader.VCTitle.Refresh()
             $CustomHeader.VCGameID.Refresh()
 
-            if ($GamePatch.Models -ne 0) {
-                $GamePatch | Add-Member -MemberType NoteProperty -Name "LoadedModelsList" -Value @{}
-                $GamePatch | Add-Member -MemberType NoteProperty -Name "LoadedModel"      -Value @{}
-            } else {
-                $GamePatch | Add-Member -MemberType NoteProperty -Name "LoadedModelsList" -Value @$null
-                $GamePatch | Add-Member -MemberType NoteProperty -Name "LoadedModel"      -Value @$null
-            }
+            $global:GamePatch.PSObject.Properties.Remove('LoadedModelsList')
+            $global:GamePatch.PSObject.Properties.Remove('LoadedModel')
+            $global:GamePatch | Add-Member -MemberType NoteProperty -Name "LoadedModelsList" -Value @{}
+            $global:GamePatch | Add-Member -MemberType NoteProperty -Name "LoadedModel"      -Value @{}
 
             ChangeGameRev
             SetGameScript

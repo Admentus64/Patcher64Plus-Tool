@@ -512,72 +512,69 @@ function ByteOptions() {
     # HERO MODE #
 
     if (IsIndex -Elem $Redux.Hero.MonsterHP -Index 3 -Not) { # Monsters
-        if (IsIndex -Elem $Redux.Hero.MonsterHP)   { $multi = 0   }
-        else                                       { [float]$multi = [float]$Redux.Hero.MiniBossHP.text.split('x')[0] }
-        if ( (StrLike -Str $GamePatch.settings -Val "Master Quest") -and $multi -gt 4) { $multi2 = 4 } else { $multi2 = $multi }
+        if (IsIndex -Elem $Redux.Hero.MonsterHP) { $multi = 0 } else { [float]$multi = [float]$Redux.Hero.MonsterHP.text.split('x')[0] }
         
-        MultiplyBytes -Offset "D4E07F" -Factor $multi; MultiplyBytes -Offset "E0790F" -Factor $multi2; MultiplyBytes -Offset "F94A00" -Factor $multi # ReDead / Gibdo, Stalchild, Poe
-        MultiplyBytes -Offset "D2F07C" -Factor $multi; MultiplyBytes -Offset "D6CFB8" -Factor $multi;  MultiplyBytes -Offset "E59933" -Factor $multi # Deku Baba, Wilted Deku Baba, Bio Deku Baba
-        MultiplyBytes -Offset "FC3A5F" -Factor $multi; MultiplyBytes -Offset "EDBA17" -Factor $multi;  MultiplyBytes -Offset "E9BD87" -Factor $multi # Deep Python, Skullfish, Desbreko
-        MultiplyBytes -Offset "D47754" -Factor $multi; MultiplyBytes -Offset "D76388" -Factor $multi;  MultiplyBytes -Offset "D74167" -Factor $multi # Beamos, Like Like (Weak), Like Like (Strong)
-        MultiplyBytes -Offset "CF05CC" -Factor $multi; MultiplyBytes -Offset "D4DA9C" -Factor $multi;  MultiplyBytes -Offset "D4BCAB" -Factor $multi # Wallmaster, Floormaster, Mini Floormaster
-        MultiplyBytes -Offset "D13750" -Factor $multi; MultiplyBytes -Offset "D1375C" -Factor $multi                                                # Peahat, Peahat Larva
-        MultiplyBytes -Offset "D55BDC" -Factor $multi; MultiplyBytes -Offset "D55C08" -Factor $multi                                                # Skullwalltula, Golden Skullwalltula
-        MultiplyBytes -Offset "CF3514" -Factor $multi; MultiplyBytes -Offset "CF0A4B" -Factor $multi                                                # Dodongo (Small), Dodongo (Big)
-        MultiplyBytes -Offset "D10D3C" -Factor $multi; MultiplyBytes -Offset "D0DBDB" -Factor $multi                                                # Red Tektite, Blue Tektite
-        MultiplyBytes -Offset "E0336B" -Factor $multi; MultiplyBytes -Offset "E07028" -Factor $multi                                                # Wolfos, White Wolfos
-        MultiplyBytes -Offset "D3D9DC" -Factor $multi; MultiplyBytes -Offset "D3AFBC" -Factor $multi                                                # Blue Bubble, Red Bubble
-        MultiplyBytes -Offset "D5E0E3" -Factor $multi; MultiplyBytes -Offset "F3E82C" -Factor $multi                                                # Shell Blade, Snapper
-        MultiplyBytes -Offset "D3914C" -Factor $multi; MultiplyBytes -Offset "CEACD8" -Factor $multi                                                # Mad Scrub, Octorok
-        MultiplyBytes -Offset "F7ED78" -Factor $multi; MultiplyBytes -Offset "EC1F2C" -Factor $multi                                                # Eeno, Real Bombchu
-        MultiplyBytes -Offset "EB922C" -Factor $multi; MultiplyBytes -Offset "E9B69C" -Factor $multi                                                # White Boe, Black Boe, Chuchu
-        MultiplyBytes -Offset "FE1AA3" -Factor $multi; MultiplyBytes -Offset "FE1ABF" -Factor $multi                                                # Leever, Purple Leever
-        MultiplyBytes -Offset "F831D3" -Factor $multi; MultiplyBytes -Offset "E19013" -Factor $multi                                                # Hiploop, Dragonfly
-        MultiplyBytes -Offset "E205BB" -Factor $multi                                                                                               # Garo
-        MultiplyBytes -Offset "F5B7FC" -Factor $multi                                                                                               # Dexihand
+        MultiplyBytes -Offset @("D2F07C", "D6CFB8", "E59933") -Factor $multi -Max 127 # Deku Baba, Wilted Deku Baba, Bio Deku Baba
+        MultiplyBytes -Offset @("FC3A5F", "EDBA17", "E9BD87") -Factor $multi -Max 127 # Deep Python, Skullfish, Desbreko
+        MultiplyBytes -Offset @("D47754", "D76388", "D74167") -Factor $multi -Max 127 # Beamos, Like Like (Weak), Like Like (Strong)
+        MultiplyBytes -Offset @("CF05CC", "D4DA9C", "D4BCAB") -Factor $multi -Max 127 # Wallmaster, Floormaster, Mini Floormaster
+        MultiplyBytes -Offset @("D4E07F", "F94A00")           -Factor $multi -Max 127 # ReDead / Gibdo, Poe
+        MultiplyBytes -Offset @("D13750", "D1375C")           -Factor $multi -Max 127 # Peahat, Peahat Larva
+        MultiplyBytes -Offset @("D55BDC", "D55C08")           -Factor $multi -Max 127 # Skullwalltula, Golden Skullwalltula
+        MultiplyBytes -Offset @("CF3514", "CF0A4B")           -Factor $multi -Max 127 # Dodongo (Small), Dodongo (Big)
+        MultiplyBytes -Offset @("D10D3C", "D0DBDB")           -Factor $multi -Max 127 # Red Tektite, Blue Tektite
+        MultiplyBytes -Offset @("E0336B", "E07028")           -Factor $multi -Max 127 # Wolfos, White Wolfos
+        MultiplyBytes -Offset @("D3D9DC", "D3AFBC")           -Factor $multi -Max 127 # Blue Bubble, Red Bubble
+        MultiplyBytes -Offset @("D5E0E3", "F3E82C")           -Factor $multi -Max 127 # Shell Blade, Snapper
+        MultiplyBytes -Offset @("D3914C", "CEACD8")           -Factor $multi -Max 127 # Mad Scrub, Octorok
+        MultiplyBytes -Offset @("F7ED78", "EC1F2C")           -Factor $multi -Max 127 # Eeno, Real Bombchu
+        MultiplyBytes -Offset @("EB922C", "E9B69C")           -Factor $multi -Max 127 # White Boe, Black Boe, Chuchu
+        MultiplyBytes -Offset @("FE1AA3", "FE1ABF")           -Factor $multi -Max 127 # Leever, Purple Leever
+        MultiplyBytes -Offset @("F831D3", "E19013")           -Factor $multi -Max 127 # Hiploop, Dragonfly
+        MultiplyBytes -Offset   "E205BB"                      -Factor $multi -Max 127 # Garo
+        MultiplyBytes -Offset   "F5B7FC"                      -Factor $multi -Max 127 # Dexihand
+        MultiplyBytes -Offset   "E0790F"                      -Factor $multi -Max 8   # Stalchild
         
-      # MultiplyBytes -Offset "??????" -Factor $multi                                                # Ghost (ovl_En_Invadepoh)
-      # MultiplyBytes -Offset "DA556F" -Factor $multi; MultiplyBytes -Offset "DA6E67" -Factor $multi # Freezard
-      # MultiplyBytes -Offset "D21870" -Factor $multi; MultiplyBytes -Offset "CF56BC" -Factor $multi # Skulltula, Keese
-      # MultiplyBytes -Offset "E0EE24" -Factor $multi; MultiplyBytes -Offset "EAE53C" -Factor $multi # Guay, Bad Bat
-      # MultiplyBytes -Offset "D2B2F8" -Factor $multi                                                # Armos
+      # MultiplyBytes -Offset   "??????"            -Factor $multi -Max 127 # Ghost (ovl_En_Invadepoh)
+      # MultiplyBytes -Offset @("DA556F", "DA6E67") -Factor $multi -Max 127 # Freezard
+      # MultiplyBytes -Offset @("D21870", "CF56BC") -Factor $multi -Max 127 # Skulltula, Keese
+      # MultiplyBytes -Offset @("E0EE24", "EAE53C") -Factor $multi -Max 127 # Guay, Bad Bat
+      # MultiplyBytes -Offset   "D2B2F8"            -Factor $multi -Max 127 # Armos
     }
 
     if (IsIndex -Elem $Redux.Hero.MiniBossHP -Index 3 -Not) { # Mini-Bosses
-        if (IsIndex -Elem $Redux.Hero.MiniBossHP)   { $multi = 0   }
-        else                                        { [float]$multi = [float]$Redux.Hero.MiniBossHP.text.split('x')[0] }
+        if (IsIndex -Elem $Redux.Hero.MiniBossHP) { $multi = 0 } else { [float]$multi = [float]$Redux.Hero.MiniBossHP.text.split('x')[0] }
 
-        MultiplyBytes -Offset "10785BC" -Factor $multi                                                 # Takkuri
-        MultiplyBytes -Offset "CE718B"  -Factor $multi; MultiplyBytes -Offset "CE7DB8"  -Factor $multi # Gekko & Snapper (Gekko)
-        MultiplyBytes -Offset "D18554"  -Factor $multi                                                 # Dinolfos
-        MultiplyBytes -Offset "EAEFB7"  -Factor $multi; MultiplyBytes -Offset "EB10B7"  -Factor $multi # Ice Wizzrobe
-        MultiplyBytes -Offset "FEA75F"  -Factor $multi                                                 # Gerudo Pirate
-        MultiplyBytes -Offset "E9329C"  -Factor $multi; MultiplyBytes -Offset "D6A48C"  -Factor $multi # Gekko & Snapper (Snapper), Gekko & Mad Jelly
-        MultiplyBytes -Offset "E57387"  -Factor $multi; MultiplyBytes -Offset "E580D7"  -Factor $multi # Wart
-        MultiplyBytes -Offset "10706BF" -Factor $multi; MultiplyBytes -Offset "107215F" -Factor $multi # Captain Keeta
-        MultiplyBytes -Offset "D9F210"  -Factor $multi; MultiplyBytes -Offset "D9E3A3"  -Factor $multi # Iron Knuckle
-        MultiplyBytes -Offset "F82D9C"  -Factor $multi; MultiplyBytes -Offset "F7F873"  -Factor $multi # Poe Sisters
-        MultiplyBytes -Offset "FCA1BC"  -Factor $multi                                                 # Big Poe
-        MultiplyBytes -Offset "EAEF9B"  -Factor $multi; MultiplyBytes -Offset "EB10AF"  -Factor $multi # Fire wizzrobe
-        MultiplyBytes -Offset "EDEE3B"  -Factor $multi                                                 # Garo Master
-        MultiplyBytes -Offset "EE480F"  -Factor $multi                                                 # Eyegore
-        MultiplyBytes -Offset "D43C10"  -Factor $multi                                                 # Gomess
+        MultiplyBytes -Offset   "10785BC"             -Factor $multi -Max 127 # Takkuri
+        MultiplyBytes -Offset @("CE718B",  "CE7DB8")  -Factor $multi -Max 127 # Gekko & Snapper (Gekko)
+        MultiplyBytes -Offset   "D18554"              -Factor $multi -Max 127 # Dinolfos
+        MultiplyBytes -Offset @("EAEFB7",  "EB10B7")  -Factor $multi -Max 127 # Ice Wizzrobe
+        MultiplyBytes -Offset   "FEA75F"              -Factor $multi -Max 127 # Gerudo Pirate
+        MultiplyBytes -Offset @("E9329C",  "D6A48C")  -Factor $multi -Max 127 # Gekko & Snapper (Snapper), Gekko & Mad Jelly
+        MultiplyBytes -Offset @("E57387",  "E580D7")  -Factor $multi -Max 127 # Wart
+        MultiplyBytes -Offset @("10706BF", "107215F") -Factor $multi -Max 127 # Captain Keeta
+        MultiplyBytes -Offset @("D9F210",  "D9E3A3")  -Factor $multi -Max 127 # Iron Knuckle
+        MultiplyBytes -Offset @("F82D9C",  "F7F873")  -Factor $multi -Max 127 # Poe Sisters
+        MultiplyBytes -Offset   "FCA1BC"              -Factor $multi -Max 127 # Big Poe
+        MultiplyBytes -Offset @("EAEF9B",  "EB10AF")  -Factor $multi -Max 127 # Fire wizzrobe
+        MultiplyBytes -Offset   "EDEE3B"              -Factor $multi -Max 127 # Garo Master
+        MultiplyBytes -Offset   "EE480F"              -Factor $multi -Max 127 # Eyegore
+        MultiplyBytes -Offset   "D43C10"              -Factor $multi -Max 127 # Gomess
     }
 
     if (IsIndex -Elem $Redux.Hero.BossHP -Index 3 -Not) { # Bosses
-        if (IsIndex -Elem $Redux.Hero.BossHP)   { $multi = 0   }
-        else                                    { [float]$multi = [float]$Redux.Hero.MiniBossHP.text.split('x')[0] }
+        if (IsIndex -Elem $Redux.Hero.BossHP)   { $multi = 0 } else { [float]$multi = [float]$Redux.Hero.BossHP.text.split('x')[0] }
 
-        MultiplyBytes -Offset "E424E7" -Factor $multi; MultiplyBytes -Offset "E41F67" -Factor $multi                                                # Odolwa
-        MultiplyBytes -Offset "E42307" -Factor $multi                                                                                               # Odolwa's Insect
-        MultiplyBytes -Offset "F73D90" -Factor $multi; MultiplyBytes -Offset "F6BF37" -Factor $multi; MultiplyBytes -Offset "F6C07F" -Factor $multi # Goht
-        MultiplyBytes -Offset "E50D33" -Factor $multi; MultiplyBytes -Offset "E54683" -Factor $multi                                                # Gyorg
-        MultiplyBytes -Offset "E2556F" -Factor $multi; MultiplyBytes -Offset "E2828F" -Factor $multi                                                # King's Lackeys
-        MultiplyBytes -Offset "E25617" -Factor $multi; MultiplyBytes -Offset "E28277" -Factor $multi                                                # Igos du Ikana
-        MultiplyBytes -Offset "E4A607" -Factor $multi                                                                                               # Twinmold
-        MultiplyBytes -Offset "E60633" -Factor $multi; MultiplyBytes -Offset "E6B20B" -Factor $multi                                                # Majora's Mask
-        MultiplyBytes -Offset "E6FA2F" -Factor $multi                                                                                               # Four Remains
-        MultiplyBytes -Offset "E60743" -Factor $multi; MultiplyBytes -Offset "E606AB" -Factor $multi                                                # Majora's Incarnation, Majora's Wrath
+        MultiplyBytes -Offset @("E424E7", "E41F67")           -Factor $multi -Max 127 # Odolwa
+        MultiplyBytes -Offset   "E42307"                      -Factor $multi -Max 127 # Odolwa's Insect
+        MultiplyBytes -Offset @("F73D90", "F6BF37", "F6C07F") -Factor $multi -Max 127 # Goht
+        MultiplyBytes -Offset @("E50D33", "E54683")           -Factor $multi -Max 127 # Gyorg
+        MultiplyBytes -Offset @("E2556F", "E2828F")           -Factor $multi -Max 127 # King's Lackeys
+        MultiplyBytes -Offset @("E25617", "E28277")           -Factor $multi -Max 127 # Igos du Ikana
+        MultiplyBytes -Offset   "E4A607"                      -Factor $multi -Max 127 # Twinmold
+        MultiplyBytes -Offset @("E60633", "E6B20B")           -Factor $multi -Max 127 # Majora's Mask
+        MultiplyBytes -Offset   "E6FA2F"                      -Factor $multi -Max 127 # Four Remains
+        MultiplyBytes -Offset @("E60743", "E606AB")           -Factor $multi -Max 127 # Majora's Incarnation, Majora's Wrath
     }
 
     if     ( (IsText -Elem $Redux.Hero.Damage -Compare "1x Damage") -and ($GameType.title -like    "*Master Quest*") )   { ChangeBytes -Offset "CADEC2" -Values "2C03" }
