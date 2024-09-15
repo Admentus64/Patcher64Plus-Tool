@@ -895,7 +895,7 @@ function ByteOptions() {
         ChangeBytes -Offset @("BC77B3", "BC77FC") -Values "09"
     }
 
-    if (IsChecked $Redux.Unlock.Tunics)          { ChangeBytes -Offset @("BC77B6", "BC77FE")           -Values "0909"; ChangeBytes -Offset "C00DD0" -Values "1500"; ChangeBytes -Offset "C00E78" -Values "1500" } # Purchasable Child Tunics added codes from : OOT Child Quest)
+    if (IsChecked $Redux.Unlock.Tunics)          { ChangeBytes -Offset @("BC77B6", "BC77FE")           -Values "0909"; ChangeBytes -Offset "C00DD0" -Values "1500"; ChangeBytes -Offset "C00E78" -Values "1500" } # Purchasable Tunics as Child, ported from : OOT - Child Quest Classic)
     if (IsChecked $Redux.Unlock.MasterSword)     { ChangeBytes -Offset @("BC77AE", "BC77F8")           -Values "09"                                                  }
     if (IsChecked $Redux.Unlock.GiantsKnife)     { ChangeBytes -Offset @("BC77AF", "BC77F9", "BC7811") -Values "09"                                                  }
     if (IsChecked $Redux.Unlock.Boots)           { ChangeBytes -Offset @("BC77BA", "BC7801")           -Values "0909"                                                }
