@@ -2040,7 +2040,7 @@ function ByteTextOptions() {
             SetMessage -ID "0050" -Text "adult size, so it won't fit a kid..." -Replace "unisize, so it fits everyone."   # Goron Tunic
             SetMessage -ID "0051" -Text "adult size,<N>so it won't fit a kid." -Replace "unisize,<N>so it fits everyone." # Zora Tunic
             SetMessage -ID "00AA" -Text "Adult"                                -Replace "Uni-"                            # Goron Tunic (Shop)
-	    SetMessage -ID "00AB" -Text "Adult size"                           -Replace "Uni-size"                        # Zora Tunic (Shop)
+	    SetMessage -ID "00AB" -Text "Adult size"                           -Replace "Unisize"                        # Zora Tunic (Shop)
         }
     }
     elseif (IsChecked $Redux.Text.Speed2x) { ChangeBytes -Offset "B5006F" -Values "02" }
