@@ -2037,10 +2037,10 @@ function ByteTextOptions() {
         }
         
         if (IsChecked $Redux.Unlock.Tunics -Lang 1) {
-            SetMessage -ID "0050" -Text "adult size, so it won't fit a kid..." -Replace "unisize, so it fits an adult and kid"   # Goron Tunic
-            SetMessage -ID "0051" -Text "adult size,<N>so it won't fit a kid." -Replace "unisize,<N>so it fits an adult and kid" # Zora Tunic
-            SetMessage -ID "00AA" -Text "Adult"                                -Replace "Uni-"                                   # Goron Tunic (Shop)
-	        SetMessage -ID "00AB" -Text "Adult size"                           -Replace "Uni-size"                               # Zora Tunic (Shop)
+            SetMessage -ID "0050" -Text "adult size, so it won't fit a kid..." -Replace "unisize, so it fits everyone."   # Goron Tunic
+            SetMessage -ID "0051" -Text "adult size,<N>so it won't fit a kid." -Replace "unisize,<N>so it fits everyone." # Zora Tunic
+            SetMessage -ID "00AA" -Text "Adult"                                -Replace "Uni-"                            # Goron Tunic (Shop)
+	    SetMessage -ID "00AB" -Text "Adult size"                           -Replace "Uni-size"                        # Zora Tunic (Shop)
         }
     }
     elseif (IsChecked $Redux.Text.Speed2x) { ChangeBytes -Offset "B5006F" -Values "02" }
@@ -2243,6 +2243,11 @@ function ByteTextOptions() {
     if (IsIndex $Redux.Gameplay.RemoveOwls -Index 3 -Lang 1) {
         SetMessage -ID "0416"                                                                  -Replace "They say that an owl flying<N>around Hyrule is the<N>reincarnation of an ancient Sage."
         SetMessage -ID "0417"                                                                  -Replace "They say that a strange owl<N>around here, may look big and<N>heavy, but its character is rather <N>lighthearted."
+    }
+
+    if (IsChecked $Redux.Gameplay.InstantClaimCheck -Lang 1) {
+        SetMessage -ID "305A" -Text "My worrrrrk is not <N>verrrry consistent, so "            -Replace "Now, I know you're <N>verrrry busy, so "
+        SetMessage -ID "305C"                                                                  -Replace "Please returrrrrrn soon...<N>When you're readyyyy<N>for it, show the claim<N>agaaaain..."
     }
     
     if (IsChecked $Redux.Graphics.GCScheme) {
@@ -3071,7 +3076,7 @@ function CreateTabGraphics() {
     CreateReduxCheckBox -Name "DungeonKeys"      -Text "MM Key Icon"         -Info "Replace the key icon with that from Majora's Mask"          -Credits "GhostlyDark (ported)"
     CreateReduxCheckBox -Name "Chests"           -Text "MM Chests Map Icon"  -Info "Replace the chests map icons with those from Majora's Mask" -Credits "GhostlyDark (ported)"
     CreateReduxCheckBox -Name "CenterNaviPrompt" -Text "Center Navi Prompt"  -Info 'Centers the "Navi" prompt shown in the C-Up button'         -Credits "GhostlyDark (ported)"
-    # CreateReduxCheckBox -Name "ButtonPositions"  -Text "MM Button Positions" -Info "Positions the A and B buttons like in Majora's Mask"        -Credits "GhostlyDark (ported)" (No longer used)
+    CreateReduxCheckBox -Name "ButtonPositions"  -Text "MM Button Positions" -Info "Positions the A and B buttons like in Majora's Mask"        -Credits "GhostlyDark (ported)"
     
     
 
@@ -3456,7 +3461,7 @@ function CreateTabEquipment() {
     # UNLOCK CHILD RESTRICTIONS #
 
     CreateReduxGroup    -Tag  "Unlock"        -Child -Text "Unlock Child Restrictions" -Exclude "Child"
-    CreateReduxCheckBox -Name "Tunics"        -Child -Text "Unlock Tunics"        -Info "Child Link is able to use the Goron Tunic and Zora Tunic`nSince you might want to walk around in style as well when you are young`nThe dialogue script will be adjusted to reflect this (only for English)" -Credits "GhostlyDark"
+    CreateReduxCheckBox -Name "Tunics"        -Child -Text "Unlock Tunics"        -Info "Child Link is able to use the Goron Tunic and Zora Tunic`nSince you might want to walk around in style as well when you are young.`nThe dialogue script will be adjusted to reflect this (only for English)`nChild Link will be also able to purchase them aswell" -Credits "GhostlyDark"
     CreateReduxCheckBox -Name "MasterSword"   -Child -Text "Unlock Master Sword"  -Info "Child Link is able to use the Master Sword`nThe Master Sword does twice as much damage as the Kokiri Sword"                                          -Credits "GhostlyDark"
     CreateReduxCheckBox -Name "GiantsKnife"   -Child -Text "Unlock Giant's Knife" -Info "Child Link is able to use the Giant's Knife / Biggoron Sword`nThe Giant's Knife / Biggoron Sword does four times as much damage as the Kokiri Sword" -Credits "GhostlyDark" -Warning "The Giant's Knife / Biggoron Sword appears as if Link if thrusting the sword through the ground"
     CreateReduxCheckBox -Name "MirrorShield"  -Child -Text "Unlock Mirror Shield" -Info "Child Link is able to use the Mirror Shield"                                                                                                         -Credits "GhostlyDark" -Warning "The Mirror Shield will look like the Deku Shield for Child Link"
