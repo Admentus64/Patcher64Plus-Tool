@@ -2,7 +2,7 @@ function PatchOptions() {
     
     if (IsChecked $Redux.Gameplay.FPS)       { ApplyPatch -Patch "Compressed\fps.ppf" }
     if (IsChecked $Redux.Gameplay.FreeCam)   { ApplyPatch -Patch "Compressed\cam.ppf" }
-    if (IsChecked $Redux.Graphics.PromoModels) { ApplyPatch -Patch "Compressed\ld_promo_models-mario.ppf" }
+
 }
 
 
@@ -104,8 +104,6 @@ function CreateTabGraphics() {
     CreateReduxCheckBox -Name "BlackBars"          -Text "No Black Bars"           -Info "Removes the black bars shown on the top and bottom of the screen"                                            -Credits "Theboy181 (RAM) & Admentus (ROM)"
     CreateReduxCheckBox -Name "ExtendedDraw" -Safe -Text "Extended Draw Distance"  -Info "Increases the game's draw distance for solid objects with collision`nIncludes coin formations as well"       -Credits "Theboy181 (RAM) & Admentus (ROM)"
     CreateReduxCheckBox -Name "ForceHiresModel"    -Text "Force Hires Mario Model" -Info "Always use Mario's High Resolution Model when Mario is too far away"                                         -Credits "Theboy181 (RAM) & Admentus (ROM)"
-    CreateReduxCheckBox -Name "PromoModels"  -Exclude ("Star Road", "Split-Screen Multiplayer")  -Text "Low-Poly Promo Models"   -Info "Uses the Low-Poly Promo models that are closer to the CGI promo art from SM64 and MK64"  -Credits "Ported into patch by GoldenMariaNova, made by fznmeatpopsicle"
-
 
 
 
