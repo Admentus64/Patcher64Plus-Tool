@@ -9,12 +9,6 @@
 
 }, {
 
-	"title"			: "Super Luigi 64 - Definitive Edition",
-	"patch"			: "Compressed\\luigi_64 _definitive_edition.ips",
-	"output"		: "_luigi64definitive_patched",
-	"tooltip"		: "Customize Super Luigi 64 with additional options"
-}, {
-
 	"title"			: "Rumble Support",
 	"patch"			: "Compressed\\rumble.bps",
 	"console"		: "Native",
