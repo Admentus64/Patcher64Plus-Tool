@@ -2572,7 +2572,7 @@ function CreatePresets() {
         $FemaleModels  = CreateReduxButton -Width 150 -Text "Female Link"
 
         $VanillaModels.Add_Click( { $Redux.Graphics.ChildModels.SelectedIndex =                  $Redux.Graphics.AdultModels.SelectedIndex = 0                  ; BoxUncheck $Redux.Text.FemalePronouns; $Redux.Sounds.ChildVoices.SelectedIndex = $Redux.Sounds.AdultVoices.SelectedIndex = 0       } )
-        $MajoraModels.Add_Click(  { $Redux.Graphics.ChildModels.Text          = "Majora's Mask"; $Redux.Graphics.AdultModels.Text          = "Ocarina Of Time"           ; BoxUncheck $Redux.Text.FemalePronouns; $Redux.Sounds.ChildVoices.SelectedIndex = $Redux.Sounds.AdultVoices.SelectedIndex = 0       } )
+        $MajoraModels.Add_Click(  { $Redux.Graphics.ChildModels.Text          = "Majora's Mask"; $Redux.Graphics.AdultModels.Text          = "Original"           ; BoxUncheck $Redux.Text.FemalePronouns; $Redux.Sounds.ChildVoices.SelectedIndex = $Redux.Sounds.AdultVoices.SelectedIndex = 0       } )  # Might be temporary
         $FemaleModels.Add_Click(  { $Redux.Graphics.ChildModels.Text          =                  $Redux.Graphics.AdultModels.Text          = "Hatsune Miku Link"; BoxCheck   $Redux.Text.FemalePronouns; $Redux.Sounds.ChildVoices.Text          = $Redux.Sounds.AdultVoices.Text          = "Amara" } )
     }
 
