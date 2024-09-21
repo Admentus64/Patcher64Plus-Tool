@@ -1023,7 +1023,7 @@ function ChangeModelsSelection() {
 #==============================================================================================================================================================================================
 function CreateButtonColorOptions($Default=1) {
     
-    $items     = @("N64 OoT", "N64 MM", "GC OoT", "GC MM", "Xbox OoT", "Xbox MM", "JP PlayStation OoT", "JP PlayStation MM", "WE PlayStation OoT", "WE PlayStation MM", "Randomized", "Custom")
+    $items     = @("N64 OoT", "N64 MM", "GC OoT", "GC MM", "Xbox OoT", "Xbox MM", "JP PlayStation OoT", "JP PlayStation MM", "WE PlayStation OoT", "WE PlayStation MM", "N64 TML", "GC TML", "Randomized", "Custom")
     $randomize = "`n" + '"Randomized" fully randomizes the colors each time the patcher is opened'
     $buttons   = $Redux.Colors.SetButtons = $Redux.Colors.ButtonLabels = @()
 
