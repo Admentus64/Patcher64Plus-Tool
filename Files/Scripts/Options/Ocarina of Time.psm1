@@ -2806,7 +2806,7 @@ function CreateTabRedux() {
     CreateReduxCheckBox -Name "UnequipItem"       -Text "Unequip Item"                                    -Info "Unassign items using the respective C button"
     CreateReduxCheckBox -Name "UnequipGear"       -Text "Unequip Gear"                                    -Info "Unassign equipment by pressing A"
     CreateReduxCheckBox -Name "ItemOnB"           -Text "Item on B"                                       -Info "Assign items to the B button by pressing A"
-    CreateReduxCheckBox -Name "MaskAbilities"     -Text "Mask Abilties"  -Checked                         -Info "Equipping masks grants abilities such as thhe Bunny Hood to make Link run faster just like in Majora's Mask"
+    CreateReduxCheckBox -Name "MaskAbilities"     -Text "Mask Abilties"  -Checked                         -Info "Equipping masks grant abilities such as the Bunny Hood making Link run faster just like in Majora's Mask"
     CreateReduxCheckBox -Name "ExtraAbilities"    -Text "Extra Abilities"                                 -Info "Obtain Spiritual Stones and Medallions to earn new abilities"
     CreateReduxCheckBox -Name "RandomEnemies"     -Text "Random Enemies"                                  -Info "Multiplies the health and changes the subtype for regular enemies randomly"
     CreateReduxCheckBox -Name "CrouchStabFix"     -Text "Crouch Stab Fix"                                 -Info "The Crouch Stab move no longer keeps the last dealt damage"
