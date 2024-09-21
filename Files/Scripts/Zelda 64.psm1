@@ -1459,8 +1459,8 @@ function SetButtonColorsPreset([object]$ComboBox) {
     elseif ($Text -eq "JP PlayStation MM")    { SetColors -Colors @("FF6464", "64C8FF", "787878", "787878") -Dialogs $Redux.Colors.SetButtons -Labels $Redux.Colors.ButtonLabels }
     elseif ($Text -eq "WE PlayStation OoT")   { SetColors -Colors @("5A96FF", "FF1E1E", "505050", "505050") -Dialogs $Redux.Colors.SetButtons -Labels $Redux.Colors.ButtonLabels }
     elseif ($Text -eq "WE PlayStation MM")    { SetColors -Colors @("64C8FF", "FF6464", "787878", "787878") -Dialogs $Redux.Colors.SetButtons -Labels $Redux.Colors.ButtonLabels }
-    elseif ($Text -eq "N64 TML")              { SetColors -Colors @("3EB3EF", "09D131", "F5ED4D", "DA5955") -Dialogs $Redux.Colors.SetButtons -Labels $Redux.Colors.ButtonLabels }
-    elseif ($Text -eq "GC TML")               { SetColors -Colors @("09D131", "DA5955", "F5ED4D", "626262") -Dialogs $Redux.Colors.SetButtons -Labels $Redux.Colors.ButtonLabels }
+    elseif ($Text -eq "N64 TML")              { SetColors -Colors @("3EB3EF", "09D131", "F7E048", "D44646") -Dialogs $Redux.Colors.SetButtons -Labels $Redux.Colors.ButtonLabels }
+    elseif ($Text -eq "GC TML")               { SetColors -Colors @("09D131", "D44646", "F7E048", "656565") -Dialogs $Redux.Colors.SetButtons -Labels $Redux.Colors.ButtonLabels }
     elseif ($Text -eq "Randomized")           {
         $Colors = @()
         for ($i=0; $i -lt $Redux.Colors.SetButtons.length; $i++) { $Colors += SetRandomColor -Dialog $Redux.Colors.SetButtons[$i] -Label $Redux.Colors.ButtonLabels[$i] }
