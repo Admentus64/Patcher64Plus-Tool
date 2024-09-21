@@ -1,6 +1,11 @@
 ﻿function ChildQuestClassicPatchOptions() {
-   
-   if (IsChecked $Redux.Graphics.EnhancedChildQuestModel) { ApplyPatch -Patch "Decompressed\Optional\Child Quest\child_quest_classic_enhanced_model.ppf" } else { ApplyPatch -Patch "Decompressed\Optional\Child Quest\child_quest_classic_model.ppf" }
+
+    if (IsChecked $Redux.Graphics.EnhancedChildQuestModel) {
+        ApplyPatch -Patch "Decompressed\Optional\Child Quest\child_quest_classic_enhanced_model.ppf"
+    }
+    else {
+        ApplyPatch -Patch "Decompressed\Optional\Child Quest\child_quest_classic_model.ppf"
+    }
 
 }
 
@@ -36,7 +41,9 @@ function ChildQuestClassicByteOptions() {
         PatchBytes  -Offset "7FD000"  -Texture -Patch "Equipment\Mirror Shield\Termina Mirror Shield.icon"                                                                                  # Icon:  Mirror Shield -> Termina Mirror Shield
         PatchBytes  -Offset "1616000" -Patch ("Object GI Models\Termina Mirror Shield.bin"); ChangeBytes -Offset "A0F4" -Values "01617C00"; ChangeBytes -Offset "B6F6CC" -Values "01617C00" # Model: Mirror Shield -> Termina Mirror Shield
         ChangeBytes -Offset "B6659A"  -Values "0770"; ChangeBytes -Offset "B6659E" -Values "0BF8"
+        PatchBytes  -Offset "1456188" -Texture -Patch "Child Quest\mm_style_reflection.bin"                                                                                                 # Mirror Shield reflection
     }
+
     else {
         # Change equipment display lists for Child Link
         ChangeBytes -Offset "B6D74D" -Values "0210F8";            ChangeBytes -Offset "B6D78D" -Values "0210D8"; ChangeBytes -Offset "B6D7ED" -Values "0210E8" # Mirror Shield as Hylian Shield
@@ -125,6 +132,7 @@ function ChildQuestClassicByteOptions() {
     ChangeBytes -Offset "B65D5E" -Values "02"                                                                                                         # Gerudo Fortress jail cutscene as Child
     ChangeBytes -Offset "B65D15" -Values "3A02"                                                                                                       # Fix Ganon's Castle intro
     ChangeBytes -Offset "F01C7C" -Values "1500"                                                                                                       # Fix Silver Blocks
+    ChangeBytes -Offset "EB7FA8" -Values "1400"                                                                                                       # Fix Spirit Temple Stone Elevator
 
 
 
@@ -157,11 +165,10 @@ function ChildQuestClassicByteOptions() {
     ChangeBytes -Offset "DFE765" -Values "F2"; ChangeBytes -Offset "DFE76C" -Values "F1"; ChangeBytes -Offset "DFE77A" -Values "F1"; ChangeBytes -Offset "DFE77D" -Values "F2"; ChangeBytes -Offset "DFE782" -Values "F4" # Freezard (Deku Stick, Kokiri Slash, Kokiri Spin, Kokiri Jump, Hammer Jump)
     ChangeBytes -Offset "CB4DB1" -Values "D2"; ChangeBytes -Offset "CB4DB2" -Values "D1"; ChangeBytes -Offset "CB4DB8" -Values "D1"                                                                                       # Blue Bubble (Deku Stick, Slingshot, Kokiri Slash)
     ChangeBytes -Offset "C673F9" -Values "F2"; ChangeBytes -Offset "C673FA" -Values "F1"; ChangeBytes -Offset "C67400" -Values "F1"                                                                                       # Torch Slug (Deku Stick, Slingshot, Kokiri Slash)
-    ChangeBytes -Offset "D49F5E" -Values "02"; ChangeBytes -Offset "D49F61" -Values "02"; ChangeBytes -Offset "D49F62" -Values "04"; ChangeBytes -Offset "D49F6F" -Values "04"; ChangeBytes -Offset "D49F70" -Values "02" # Big Octorok (Hamer Swing, Master Slash, Giant Slash, Giant Spin, Master Spin)
+    ChangeBytes -Offset "D49F5E" -Values "02"; ChangeBytes -Offset "D49F61" -Values "02"; ChangeBytes -Offset "D49F62" -Values "04"; ChangeBytes -Offset "D49F6F" -Values "04"; ChangeBytes -Offset "D49F70" -Values "02" # Big Octorok (Hammer Swing, Master Slash, Giant Slash, Giant Spin, Master Spin)
     ChangeBytes -Offset "D49F72" -Values "08"; ChangeBytes -Offset "D49F73" -Values "04"; ChangeBytes -Offset "D49F76" -Values "04"                                                                                       # Big Octorok (Giant Jump, Master Jump, Hammer Jump)
     ChangeBytes -Offset "DAF295" -Values "F2"; ChangeBytes -Offset "DAF296" -Values "F1"; ChangeBytes -Offset "DAF298" -Values "F1"; ChangeBytes -Offset "DAF29C" -Values "F1"; ChangeBytes -Offset "DAF2AA" -Values "F1" # Spike (Deku Stick, Slingshot, Boomerang, Kokiri Slash, Kokiri Spin)
     ChangeBytes -Offset "DAF2AD" -Values "F2"; ChangeBytes -Offset "DAF2B2" -Values "F4"                                                                                                                                  # Spike (Kokiri Jump, Hammer Jump)
-    ChangeBytes -Offset "D7A35D" -Values "F2"; ChangeBytes -Offset "D7A364" -Values "F1"; ChangeBytes -Offset "D7A372" -Values "F1"; ChangeBytes -Offset "D7A375" -Values "F2"; ChangeBytes -Offset "D7A37A" -Values "F4" # Anubis (Deku Stick, Kokiri Slash, Kokiri Spin, Kokiri Jump, Hammer Jump)
     ChangeBytes -Offset "C2F5DE" -Values "E4"                                                                                                                                                                             # Leever (Hammer Jump)
     ChangeBytes -Offset "D4759E" -Values "F1"; ChangeBytes -Offset "D475A0" -Values "11"; ChangeBytes -Offset "D475BA" -Values "D4" # Shell Blade (Slingshot, Boomerang, Hammer Jump) 
     ChangeBytes -Offset "D76516" -Values "F4"
@@ -219,7 +226,7 @@ function ChildQuestClassicByteSceneOptions() {
     PrepareMap   -Scene "Graveyard" -Map 1 -Header 0 # Child - Day
     # Reposition heart piece
     ReplaceActor -Name "Collectable" -Compare "0406" -X (-850)
-    # Unlock Damp�'s grave and add grave flowers
+    # Unlock Dampé's grave and add grave flowers
     InsertActor  -Name "Gravestone" -X (-578) -Y 120 -Z (-336) -Param "0001"
     RemoveActor  -Name "Graveyard"  -CompareX (-578) -CompareY 120 -CompareZ (-336)
     InsertActor  -Name "Uninteractable Objects" -X (-562) -Y 120 -Z (-289)
@@ -234,7 +241,7 @@ function ChildQuestClassicByteSceneOptions() {
     PrepareMap   -Scene "Graveyard" -Map 1 -Header 1 # Child - Night
     # Reposition heart piece
     ReplaceActor -Name "Collectable" -Compare "0406" -X (-850)
-    # Unlock Damp�'s grave and add grave flowers
+    # Unlock Dampé's grave and add grave flowers
     InsertActor  -Name "Gravestone" -X (-578) -Y 120 -Z (-336) -Param "0001"
     RemoveActor  -Name "Graveyard"  -CompareX (-578) -CompareY 120 -CompareZ (-336)
     InsertActor  -Name "Uninteractable Objects" -X (-562) -Y 120 -Z (-289)
@@ -448,7 +455,7 @@ function ChildQuestClassicByteSceneOptions() {
 
     # LOST WOODS #
 
-    PrepareMap   -Scene "Lost Woods" -Map 6 -Header 0 # Three Area
+    PrepareMap   -Scene "Lost Woods" -Map 6 -Header 0 # Tree Area
     # Gold Skulltula (Near Deku Theater, unique position)
     InsertActor  -Name "Skullwalltula" -X 772 -Y 185 -Z (-1738) -Param "AE04" -XRot 0x4000
     SaveAndPatchLoadedScene
@@ -488,9 +495,6 @@ function ChildQuestClassicByteSceneOptions() {
     InsertActor  -Name "Skullwalltula" -X 1598 -Y 999 -Z (-2008) -Param "B502" -XRot 0x4000 -YRot 0xC000
     # Correct treasure chest to contain a heart piece
     ReplaceActor -Name "Treasure Chest" -Compare "03E0" -Param "07C0"
-    # Hookshot tower for reaching the top of the fortress
-    InsertObject -Name "Hookshot Pillar & Wall Target"
-    InsertActor  -Name "Stone Hookshot Target" -X 1020 -Y 773 -Z (-1735) -Param "FF00"
     # Be able to enter Gerudo Training Ground
     ReplaceActor -Name "Training Area Gate" -Compare "0002" -Param "003A"
     InsertActor  -Name "White Clothed Gerudo" -X 38 -Y 333 -Z (-1097) -Param "3A46" -YRot 0xC000
@@ -520,6 +524,8 @@ function ChildQuestClassicByteSceneOptions() {
     # Climbable wall in jail
     InsertObject -Name "Spirit Temple"
     InsertActor  -Name "Metal Crating Bridge" -X 80 -Y 713 -Z (-2802) -Param "00FF" -YRot 0x0400
+    # Climbable wall for reaching the top of the fortress
+    InsertActor  -Name "Metal Crating Bridge" -X 1050 -Y 673 -Z (-1715) -Param "00FF"
     SaveLoadedMap
 
     PrepareMap   -Scene "Gerudo's Fortress" -Map 1 -Header 0
@@ -779,9 +785,13 @@ function ChildQuestClassicByteSceneOptions() {
     InsertActor  -Name "Stone Blocks" -X 1835 -Y 2930 -Z (-500) -Param "0001"
     SaveLoadedMap
 
+    PrepareMap   -Scene "Fire Temple" -Map 10 -Header 0 # Invisible Fire Wall Maze
+    # Prevent being stuck
+    InsertActor  -Name "Stone Hookshot Target" -X (-1238) -Y 2660 -Z (-17) -Param "FF00"
+    SaveLoadedMap
+
     PrepareMap   -Scene "Fire Temple" -Map 11 -Header 0 # Passthrough - Invisible Fire Wall Maze
     # Hookshot target and repositioned Time Block
-    InsertObject -Name "Hookshot Pillar & Wall Target"
     InsertActor  -Name "Stone Hookshot Target" -X (-1700) -Y 2740 -Z 280 -Param "FF00"
     ReplaceActor -Name "Navi Block Info Spot" -Compare "3021" -CompareX (-1730) -X (-1780)
     SaveLoadedMap
@@ -987,14 +997,15 @@ function ChildQuestClassicByteSceneOptions() {
     RemoveActor  -Name "Clear Block"           -Compare "FF01"
     RemoveActor  -Name "Clear Block"           -Compare "0101"
     RemoveActor  -Name "Switch"                -Compare "3700"
-    ReplaceActor -Name "Switch"                -Param "3702" # Use the eye switch to turn off the fire
+    # Use the eye switch to turn off the fire
+    ReplaceActor -Name "Switch"                -Param "3702"
     SaveLoadedMap
 
     PrepareMap   -Scene "Spirit Temple" -Map 26 -Header 0 # Rotating Mirror Statues Room
     # Time block, so Child can activate the sun switch
     InsertObject -Name "Time Block"
     InsertObject -Name "Time Block Disappearance Effect"
-    InsertActor  -Name "Time Block" -X (-560) -Y 1680 -Z (-900) -Param "381F" -ZRot 0x0003
+    InsertActor  -Name "Time Block" -X (-560) -Y 1720 -Z (-900) -Param "39FF" -ZRot 0x0003
     SaveAndPatchLoadedScene
 
 
@@ -1068,7 +1079,6 @@ function ChildQuestClassicByteSceneOptions() {
     # Reposition Gold Skulltula
     ReplaceActor -Name "Skullwalltula" -CompareX 3881 -CompareY (-948) -CompareZ (-1495) -X 4981 -Y (-948) -Z (-1435)
     # Reach ladder
-    InsertObject -Name "Hookshot Pillar & Wall Target"
     InsertActor  -Name "Stone Hookshot Target" -X 4520 -Y (-1410) -Z (-1506) -Param "FF00"
     # Reposition Time Block to be able to backtrack
     ReplaceActor -Name "Time Block" -Compare "380C" -CompareX (-3065) -CompareY (-1363) -CompareZ (-642) -X (-2465) -Y (-1423) -Z (-804) -Param "B80C"
@@ -1081,7 +1091,6 @@ function ChildQuestClassicByteSceneOptions() {
     PrepareMap   -Scene "Ice Cavern" -Map 3 -Header 0 # Second Open Room
     # Hookshot target and a clear block for climbing up
     InsertObject -Name  "Hookshot Pillar & Wall Target"
-    InsertObject -Name  "Inside Ganon's Castle"
     InsertActor  -Name  "Stone Hookshot Target" -X 600 -Y (-60) -Z (-570) -Param "FF00" -YRot 0x1000
     InsertActor  -Name  "Clear Block"           -X 415 -Y 164   -Z (-570) -Param "FF01" -YRot 0x2000
     SaveAndPatchLoadedScene
@@ -1165,6 +1174,8 @@ function ChildQuestClassicByteSceneOptions() {
     InsertActor  -Name  "Stone Hookshot Target" -X 2947 -Y (-200) -Z (-1380) -Param "FF00" -XRot 0x4000
     # Reach door leading to the barrier
     InsertActor  -Name  "Stone Hookshot Target" -X 3310 -Y (-380) -Z (-945)  -Param "FF00"
+    # Prevent being stuck in the push block gap
+    InsertActor  -Name  "Stone Hookshot Target" -X 2829 -Y (-480) -Z (-743)  -Param "FF00"
     SaveLoadedMap
 
     PrepareMap   -Scene "Inside Ganon's Castle" -Map 5 -Header 0 # Forest Trial #1
@@ -1233,13 +1244,12 @@ function ChildQuestClassicByteSceneOptions() {
 function ChildQuestClassicByteTextOptions() {
     
     # Chests
-    SetMessage -ID "0031" -Replace "<NS><DI>You obtained the <R>Bolero of Fire<W>!<DC><N>Finally, you may fully explore<N>the depths of the Death<N>Mountain Crater."
-    SetMessage -ID "0036" -Replace "<NS><DI>You obtained the <M>Song of Storms<W>!<DC><N>Its destructive power seems<N>overwhelming. Be mindful when<N>using it."
-    SetMessage -ID "0070" -Replace "<NS><DI>You obtained the <G>Minuet of Forest<W>!<DC><N>The Sacred Forest Meadow and its<N>Temple are now always within<N>reach."
-    SetMessage -ID "0071" -Replace "<NS><Icon:6B>You received something useless,<N>very reminiscent of the<N><C>Light Medallion<W>!"
-    SetMessage -ID "0072" -Replace "<NS><DI>You obtained the <C>Prelude of Light<W>!<DC><N>Return to the Temple of Time<N>swiftly, regardless of your<N>current location."
-    SetMessage -ID "502D" -Replace "<NS>Hehehe, young man...<N>You were very quick to be able<N>to keep up with me! Hehehe!<N><New Box><NS>As a reward, I'm going to give<N>you my treasure.<N><New Box><NS>I'm sure it will help you!<N><New Box><NS>I live here now, so come back<N>again sometime. I'll give you<N>something cool!<N><New Box><NS>One more thing! Be careful on<N>your way back!<N>Heheheh...."
-    SetMessage -ID "6069" -Replace "The <R>Gerudo's Fortress <W>is located<N>beyond this bridge. A kid like<N>you has no business there."
+    SetMessage -ID "0031" -Replace "<NS><DI>You obtained the <R>Bolero of Fire<W>!<DC><N>Finally, you may fully explore<N>the depths of the Death<N>Mountain Crater." # Fairy Bow -> Bolero of Fire
+    SetMessage -ID "0036" -Replace "<NS><DI>You obtained the <M>Song of Storms<W>!<DC><N>Its destructive power seems<N>overwhelming. Be mindful when<N>using it." # Hookshot -> Song of Storms
+    SetMessage -ID "0070" -Replace "<NS><DI>You obtained the <G>Minuet of Forest<W>!<DC><N>The Sacred Forest Meadow and its<N>Temple are now always within<N>reach." # Fire Arrows -> Minuet of Forest
+    SetMessage -ID "0071" -Replace "<NS><Icon:6B>You received something useless,<N>very reminiscent of the<N><C>Light Medallion<W>!" # Ice Arrows -> Light Medallion
+    SetMessage -ID "0072" -Replace "<NS><DI>You obtained the <C>Prelude of Light<W>!<DC><N>Return to the Temple of Time<N>swiftly, regardless of your<N>current location." # Light Arrows -> Prelude of Light
+
     if (IsChecked -Elem $Redux.Graphics.EnhancedChildQuestModel) {
         SetMessage -ID "00BE" -Replace "<NS><Icon:3C><DI>You got the <G>Razor Sword<W>!<DC><N>This new, sharper blade is a cut<N>above the rest."
         SetMessage -ID "000C" -Replace "<NS><Icon:3D><DI>You got the <R>Gilded Sword<W>!<DC><N>This blade was forged by a<N>master smith to deal<N>extra damage!"
@@ -1277,11 +1287,11 @@ function ChildQuestClassicByteTextOptions() {
 
 
     # Time related dialog
-    SetMessage -ID "5025" -Replace "<NS>We Sheikah have served the<N>royalty of Hyrule from generation<N>to generation as attendants.<N>However...<N><New Box><NS>On that day Ganondorf<N>suddenly attacked...and<N>Hyrule Castle surrendered<N>after a short time.<N><New Box><NS>Ganondorf's target was one of<N>the keys to the Sacred Realm...the<N>hidden treasure of the Royal<N>Family...The Ocarina of Time!<N><New Box><NS>My duty bound me to take Zelda<N>out of Ganondorf's reach.<N><New Box><NS>When last I saw you, as we made<N>our escape from the castle, you<N>were just a lad...<N><New Box><NS>Now I see that you have become<N> a fine hero..." # Impa
-    SetMessage -ID "70C9" -Replace "<NS>The two Triforce parts that I<N>could not capture on that day...<N><New Box><NS>I didn't expect they would be<N>hidden within you two!" # Ganondorf
+    SetMessage -ID "5025" -Replace "<NS>We Sheikah have served the<N>royalty of Hyrule from generation<N>to generation as attendants.<N>However...<New Box><NS>On that day Ganondorf<N>suddenly attacked...and<N>Hyrule Castle surrendered<N>after a short time.<New Box><NS>Ganondorf's target was one of<N>the keys to the Sacred Realm...the<N>hidden treasure of the Royal<N>Family...The Ocarina of Time!<New Box><NS>My duty bound me to take Zelda<N>out of Ganondorf's reach.<New Box><NS>When last I saw you, as we made<N>our escape from the castle, you<N>were just a lad...<New Box><NS>Now I see that you have become<N> a fine hero..." # Impa
+    SetMessage -ID "70C9" -Replace "<NS>The two Triforce parts that I<N>could not capture on that day...<New Box><NS>I didn't expect they would be<N>hidden within you two!" # Ganondorf
     SetMessage -ID "6035" -Replace "<NS>Kid, let me thank you.<N><NS>Heheheh...look what the little<N>kid has become--a competent<N>swordsman!" # Nabooru
-    SetMessage -ID "600C" -Replace "<NS>Past, present, future...<N><New Box><NS>The Master Sword is a ship with<N>which you can sail upstream and<N>downstream through time's river...<N><New Box><NS>The port for that ship is in the<N>Temple of Time...<N><New Box><NS>Listen to this <Y>Requiem of Spirit<W>...<N>This melody will lead a child back<N>to the desert." # Sheik
-    SetMessage -ID "6079" -Replace "<NS>Hey, what's up, <Player>?<N>Surprised to see me?<N><New Box><NS>A long time in this world is<N>almost nothing to you, is it?<N>How mysterious!<N><New Box><NS>Even I thought that the tales of a<N>boy who could defeat the evil<N>was merely a legend.<N><New Box><NS><Player>, you have fully<N>matured as an adult.<Jump:607A>" # Kaepora Gaebora
+    SetMessage -ID "600C" -Replace "<NS>Past, present, future...<New Box><NS>The Master Sword is a ship with<N>which you can sail upstream and<N>downstream through time's river...<New Box><NS>The port for that ship is in the<N>Temple of Time...<New Box><NS>Listen to this <Y>Requiem of Spirit<W>...<N>This melody will lead a child back<N>to the desert." # Sheik
+    SetMessage -ID "6079" -Replace "<NS>Hey, what's up, <Player>?<N>Surprised to see me?<New Box><NS>A long time in this world is<N>almost nothing to you, is it?<N>How mysterious!<New Box><NS>Even I thought that the tales of a<N>boy who could defeat the evil<N>was merely a legend.<New Box><NS><Player>, you have fully<N>matured as an adult.<Jump:607A>" # Kaepora Gaebora
 
 
 
@@ -1296,22 +1306,32 @@ function ChildQuestClassicByteTextOptions() {
 
 
     # All medallions cutscene (Rauru)
-    SetMessage -ID "5024" -Replace "<NS><Player>, the hero!<N><New Box><NS>Finally, all of us, the <R>six Sages<W>,<N>have been awakened!<N>The time for the final showdown<N>with the King of Evil has come!<N><New Box><NS>During the night at the market,<N>head to the <C>Temple of Time<W> to<N>find Ganon's Castle."
+    SetMessage -ID "5024" -Replace "<NS><Player>, the hero!<New Box><NS>Finally, all of us, the <R>six Sages<W>,<N>have been awakened!<N>The time for the final showdown<N>with the King of Evil has come!<New Box><NS>During the night at the market,<N>head to the <C>Temple of Time<W> to<N>find Ganon's Castle."
 
 
 
     # Haunted Wasteland hint (Gerudo Fortress guard opening the gate)
-    SetMessage -ID "6018" -Replace "The first trial is...the <R>River of<N>Sand<W>! You can't walk across this<N>river without the <R>proper boots<W>!<N><New Box>After you cross it, follow<N>the flags we placed there.<N><New Box>The second trial is...the <R>Phantom<N>Guide<W>!<N><New Box>Those without <R>eyes that can see<N>the truth <W>will only find themselves<N>returning here.<N><New Box>You are going anyway, aren't you?<N>I won't stop you...<N>Go ahead!<Event>"
+    SetMessage -ID "6018" -Replace "The first trial is...the <R>River of<N>Sand<W>! You can't walk across this<N>river without the <R>proper boots<W>!<New Box>After you cross it, follow<N>the flags we placed there.<New Box>The second trial is...the <R>Phantom<N>Guide<W>!<New Box>Those without <R>eyes that can see<N>the truth <W>will only find themselves<N>returning here.<New Box>You are going anyway, aren't you?<N>I won't stop you...<N>Go ahead!<Event>"
+
+
+
+    # Dampé chest reward
+    SetMessage -ID "502D" -Replace "<NS>Hehehe, young man...<N>You were very quick to be able<N>to keep up with me! Hehehe!<New Box><NS>As a reward, I'm going to give<N>you my treasure.<New Box><NS>I'm sure it will help you!<New Box><NS>I live here now, so come back<N>again sometime. I'll give you<N>something cool!<New Box><NS>One more thing! Be careful on<N>your way back!<N>Heheheh...."
+
+
+
+    # Gerudo Guard on Gerudo Valley bridge
+    SetMessage -ID "6069" -Replace "The <R>Gerudo's Fortress <W>is located<N>beyond this bridge. A kid like<N>you has no business there."
 
 
 
     # Slingshot (Get Item)
-    SetMessage -ID "0030" -Replace "<NS><Icon:06><DI>You found the <R>Fairy Slingshot<W>!<DC><N>On the <Y>Select Item Subscreen<W>,<N>you can set it to <Y><C Left><W>, <Y><C Down><W> or<Y> <C Right><W>.<N><New Box><NS><Icon:06>Press <Y><C Button> <W>to take it out and hold<N>it. As you hold <Y><C Button> <W>you can aim<N>with <C><Control Stick><W>. Release <Y><C Button><W> to unleash<N>a <R>Deku Seed<W>.<N><New Box><NS><Icon:06>If you want to shoot right<N>away, when you first press <Y><C Button><W>,<N>hold down <Y><C Button> <W>a little longer to<N>get a seed ready.<N><New Box><NS><Icon:06>This weapon inherits strenghts<N>of the so called <R>Fairy Bow<W>.<N>Make sure to try it out in<N>sticky situations.<N>"
+    SetMessage -ID "0030" -Replace "<NS><Icon:06><DI>You found the <R>Fairy Slingshot<W>!<DC><N>On the <Y>Select Item Subscreen<W>,<N>you can set it to <Y><C Left><W>, <Y><C Down><W> or<Y> <C Right><W>.<New Box><NS><Icon:06>Press <Y><C Button> <W>to take it out and hold<N>it. As you hold <Y><C Button> <W>you can aim<N>with <C><Control Stick><W>. Release <Y><C Button><W> to unleash<N>a <R>Deku Seed<W>.<New Box><NS><Icon:06>If you want to shoot right<N>away, when you first press <Y><C Button><W>,<N>hold down <Y><C Button> <W>a little longer to<N>get a seed ready.<New Box><NS><Icon:06>This weapon inherits strenghts<N>of the so called <R>Fairy Bow<W>.<N>Make sure to try it out in<N>sticky situations.<N>"
 
 
 
     # Silver Gauntlets
-    SetMessage -ID "005B" -Replace "<NS><Icon:51><DI>You found the <B>Silver Gauntlets<W>!<DC><N>If you wore them, you would<N>feel power in your arms, the<N>power to lift big things with <B><A Button><W>!<N><New Box><NS><Icon:51>But, you promised to give them<N>to <R>Nabooru<W>. You should keep your<N>word..."
+    SetMessage -ID "005B" -Replace "<NS><Icon:51><DI>You found the <B>Silver Gauntlets<W>!<DC><N>If you wore them, you would<N>feel power in your arms, the<N>power to lift big things with <B><A Button><W>!<New Box><NS><Icon:51>But, you promised to give them<N>to <R>Nabooru<W>. You should keep your<N>word..."
 
 
 

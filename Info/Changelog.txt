@@ -1,3 +1,14 @@
+v24.0.3
+- Updated Child Quest Classic to v1.0.2
+	- Corrected damage table and collision changes
+	- Fixed Spirit Temple elevator not working on subsequent visits
+	- Fixed enhanced model mirror reflection
+	- Prevent possible softlock in Fire Temple (Fire Wall Maze)
+	- Prevent possible softlock Inside Ganon's Castle (Water Trial #2)
+	- Removed duplicate objects in various rooms, including Ice Cavern, Fire Temple and Shadow Temple
+	- Replaced Spirit Temple time block (Mirror Statues Room) with a smaller variant
+	- Replaced hookshot target block with a climbable wall in Gerudo's Fortress
+
 v24.0.2
 - Updated Redux for TMC to v1.1
 - Improved raising enemy HP for OoT & MM
