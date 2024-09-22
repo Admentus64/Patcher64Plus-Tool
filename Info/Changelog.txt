@@ -1,3 +1,7 @@
+v24.0.4
+- Several small OoT option fixes for OoT by Maria Nova
+- Fixed song previews and renamed songs
+
 v24.0.3
 - Updated Child Quest Classic to v1.0.2
 	- Corrected damage table and collision changes

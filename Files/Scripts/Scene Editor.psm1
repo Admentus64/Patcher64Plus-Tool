@@ -3843,13 +3843,6 @@ function InsertObject([string]$ID="0000", [string]$Name, [switch]$Silent, [switc
         }
     }
 
-  <#if ( (GetObjectCount) % 4 -eq 0 -and !(GetFoundActors) ) {
-        if (IsSet $Name)   { WriteToConsole ("Failed inserting object: " + $Name + " (missing actor list)") -Error }
-        else               { WriteToConsole ("Failed inserting object: " + $ID   + " (missing actor list)") -Error }
-        EnableAutoScroll
-        return $False
-    }#>
-    
     [System.Collections.ArrayList]$objects = @()
     if (!$SkipCheck) {
         for ($i=0; $i -lt (GetObjectCount); $i++) {

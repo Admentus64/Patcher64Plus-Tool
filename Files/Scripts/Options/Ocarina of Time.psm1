@@ -1829,38 +1829,39 @@ function ByteSceneOptions() {
     # RESTORE #
 
     if (IsDefault $Redux.Restore.GerudoTextures -Not) {
-        PrepareMap -Scene "Dampé's Grave & Windmill" -Map 0  -Header 0; ChangeMapFile   -Search "66888667777877888778777887788778" -Patch "Gerudo Symbols\dampe.bin";                                       SaveLoadedMap           # 3045248
-        PrepareMap -Scene "Dampé's Grave & Windmill" -Map 3  -Header 0; ChangeMapFile   -Search "66888667777877888778777887788778" -Patch "Gerudo Symbols\dampe.bin";                                       SaveLoadedMap           # 305FEE0
-        PrepareMap -Scene "Dampé's Grave & Windmill" -Map 4  -Header 0; ChangeMapFile   -Search "66888667777877888778777887788778" -Patch "Gerudo Symbols\dampe.bin";                                       SaveAndPatchLoadedScene # 3064E80
-    if (IsIndex $Redux.Restore.GerudoTextures -Index 3) {
-        PatchBytes -Offset "E68CE8"  -Texture -Patch "Gerudo Symbols\ganondorf_cape.bin"
-        PatchBytes -Offset "F70350"  -Texture -Patch "Gerudo Symbols\pushing_block.bin"
-        PatchBytes -Offset "F70B50"  -Texture -Patch "Gerudo Symbols\silver_gauntlets_block.bin"
-        PatchBytes -Offset "F71350"  -Texture -Patch "Gerudo Symbols\forest_temple_room_11_block.bin"
-        PatchBytes -Offset "F748A0"  -Texture -Patch "Gerudo Symbols\floor_switch.bin"
-        PatchBytes -Offset "F7A8A0"  -Texture -Patch "Gerudo Symbols\rusted_floor_switch.bin"
-        PatchBytes -Offset "F80CB0"  -Texture -Patch "Gerudo Symbols\crystal_switch.bin"
-        PatchBytes -Offset "15B1000" -Texture -Patch "Gerudo Symbols\gerudo_membership_card.bin"
-        PatchBytes -Offset "11FB000" -Texture -Patch "Gerudo Symbols\gerudo_training_ground_door.bin"
-        PatchBytes -Offset "12985F0" -Texture -Patch "Gerudo Symbols\shadow_temple_room_0.bin"
-        PatchBytes -Offset "13B4000" -Texture -Patch "Gerudo Symbols\golden_gauntlets_pillar.bin"
-        PatchBytes -Offset "1636940" -Texture -Patch "Gerudo Symbols\spirit_temple_room_0_elevator.bin"
-        PatchBytes -Offset "168F3A0" -Texture -Patch "Gerudo Symbols\iron_knuckle.bin"
-
-        PrepareMap -Scene "Gerudo's Fortress"        -Map 0  -Header 0; ChangeSceneFile -Search "62D45A5062D46B166AD47358418B41CB" -Patch "Gerudo Symbols\gerudo_fortress.bin";                             SaveAndPatchLoadedScene # 21B8678
-        PrepareMap -Scene "Forest Temple"            -Map 11 -Header 0; ChangeMapFile   -Search "33445455565536665577988899987777" -Patch "Gerudo Symbols\forest_temple_room_11_hole.bin";                  SaveAndPatchLoadedScene # 2464D88
+        PrepareMap -Scene "Dampé's Grave & Windmill" -Map 0  -Header 0; ChangeMapFile   -Search "66888667777877888778777887788778" -Patch "Gerudo Symbols\dampe.bin"; SaveLoadedMap           # 3045248
+        PrepareMap -Scene "Dampé's Grave & Windmill" -Map 3  -Header 0; ChangeMapFile   -Search "66888667777877888778777887788778" -Patch "Gerudo Symbols\dampe.bin"; SaveLoadedMap           # 305FEE0
+        PrepareMap -Scene "Dampé's Grave & Windmill" -Map 4  -Header 0; ChangeMapFile   -Search "66888667777877888778777887788778" -Patch "Gerudo Symbols\dampe.bin"; SaveAndPatchLoadedScene # 3064E80
         
-        PrepareMap -Scene "Spirit Temple"            -Map 0  -Header 0; ChangeMapFile   -Search "000500110600064E0606060611110611" -Patch "Gerudo Symbols\spirit_temple_room_0_pillars.bin";                SaveLoadedMap           # 2B03928
-        PrepareMap -Scene "Spirit Temple"            -Map 10 -Header 0; ChangeMapFile   -Search "01010101120118010101010101013A37" -Patch "Gerudo Symbols\spirit_temple_room_10_20_28.bin";                 SaveLoadedMap           # 2B5CDA0
-        PrepareMap -Scene "Spirit Temple"            -Map 20 -Header 0; ChangeMapFile   -Search "01010101120118010101010101013A37" -Patch "Gerudo Symbols\spirit_temple_room_10_20_28.bin";                 SaveLoadedMap           # 2B9BDB8
-        PrepareMap -Scene "Spirit Temple"            -Map 28 -Header 0; ChangeMapFile   -Search "01010101120118010101010101013A37" -Patch "Gerudo Symbols\spirit_temple_room_10_20_28.bin";                 SaveAndPatchLoadedScene # 2BE7920
+        if (IsIndex $Redux.Restore.GerudoTextures -Index 3) {
+            PatchBytes -Offset "E68CE8"  -Texture -Patch "Gerudo Symbols\ganondorf_cape.bin"
+            PatchBytes -Offset "F70350"  -Texture -Patch "Gerudo Symbols\pushing_block.bin"
+            PatchBytes -Offset "F70B50"  -Texture -Patch "Gerudo Symbols\silver_gauntlets_block.bin"
+            PatchBytes -Offset "F71350"  -Texture -Patch "Gerudo Symbols\forest_temple_room_11_block.bin"
+            PatchBytes -Offset "F748A0"  -Texture -Patch "Gerudo Symbols\floor_switch.bin"
+            PatchBytes -Offset "F7A8A0"  -Texture -Patch "Gerudo Symbols\rusted_floor_switch.bin"
+            PatchBytes -Offset "F80CB0"  -Texture -Patch "Gerudo Symbols\crystal_switch.bin"
+            PatchBytes -Offset "15B1000" -Texture -Patch "Gerudo Symbols\gerudo_membership_card.bin"
+            PatchBytes -Offset "11FB000" -Texture -Patch "Gerudo Symbols\gerudo_training_ground_door.bin"
+            PatchBytes -Offset "12985F0" -Texture -Patch "Gerudo Symbols\shadow_temple_room_0.bin"
+            PatchBytes -Offset "13B4000" -Texture -Patch "Gerudo Symbols\golden_gauntlets_pillar.bin"
+            PatchBytes -Offset "1636940" -Texture -Patch "Gerudo Symbols\spirit_temple_room_0_elevator.bin"
+            PatchBytes -Offset "168F3A0" -Texture -Patch "Gerudo Symbols\iron_knuckle.bin"
 
-        PrepareMap -Scene "Gerudo Training Ground"   -Map 1  -Header 0; ChangeMapFile   -Search "0B0C08080B08080C23150B08000C4215" -Patch "Gerudo Symbols\gerudo_training_ground_room_1_ceiling_frame.bin"; SaveLoadedMap           # 289CA90
-        PrepareMap -Scene "Gerudo Training Ground"   -Map 5  -Header 0; ChangeMapFile   -Search "0C131313131D131D1D101D1013102D13" -Patch "Gerudo Symbols\gerudo_training_ground_room_5_7.bin";             SaveLoadedMap           # 28BBCD8
-        PrepareMap -Scene "Gerudo Training Ground"   -Map 7  -Header 0; ChangeMapFile   -Search "0C131313131D131D1D101D1013102D13" -Patch "Gerudo Symbols\gerudo_training_ground_room_5_7.bin";             SaveAndPatchLoadedScene # 28CA728
+            PrepareMap -Scene "Gerudo's Fortress"        -Map 0  -Header 0; ChangeSceneFile -Search "62D45A5062D46B166AD47358418B41CB" -Patch "Gerudo Symbols\gerudo_fortress.bin";                             SaveAndPatchLoadedScene # 21B8678
+            PrepareMap -Scene "Forest Temple"            -Map 11 -Header 0; ChangeMapFile   -Search "33445455565536665577988899987777" -Patch "Gerudo Symbols\forest_temple_room_11_hole.bin";                  SaveAndPatchLoadedScene # 2464D88
+        
+            PrepareMap -Scene "Spirit Temple"            -Map 0  -Header 0; ChangeMapFile   -Search "000500110600064E0606060611110611" -Patch "Gerudo Symbols\spirit_temple_room_0_pillars.bin";                SaveLoadedMap           # 2B03928
+            PrepareMap -Scene "Spirit Temple"            -Map 10 -Header 0; ChangeMapFile   -Search "01010101120118010101010101013A37" -Patch "Gerudo Symbols\spirit_temple_room_10_20_28.bin";                 SaveLoadedMap           # 2B5CDA0
+            PrepareMap -Scene "Spirit Temple"            -Map 20 -Header 0; ChangeMapFile   -Search "01010101120118010101010101013A37" -Patch "Gerudo Symbols\spirit_temple_room_10_20_28.bin";                 SaveLoadedMap           # 2B9BDB8
+            PrepareMap -Scene "Spirit Temple"            -Map 28 -Header 0; ChangeMapFile   -Search "01010101120118010101010101013A37" -Patch "Gerudo Symbols\spirit_temple_room_10_20_28.bin";                 SaveAndPatchLoadedScene # 2BE7920
 
-        PrepareMap -Scene "Twinrova's Lair & Iron Knuckle's Lair" -Map 1 -Header 0; ChangeMapFile -Search "498B498B498B498B41494989518B498B" -Patch "Gerudo Symbols\spirit_temple_boss.bin"; SaveLoadedMap            # 2F64E38
-        PrepareMap -Scene "Twinrova's Lair & Iron Knuckle's Lair" -Map 3 -Header 0; ChangeMapFile -Search "498B498B498B498B41494989518B498B" -Patch "Gerudo Symbols\spirit_temple_boss.bin"; SaveAndPatchLoadedScene  # 2F73700
+            PrepareMap -Scene "Gerudo Training Ground"   -Map 1  -Header 0; ChangeMapFile   -Search "0B0C08080B08080C23150B08000C4215" -Patch "Gerudo Symbols\gerudo_training_ground_room_1_ceiling_frame.bin"; SaveLoadedMap           # 289CA90
+            PrepareMap -Scene "Gerudo Training Ground"   -Map 5  -Header 0; ChangeMapFile   -Search "0C131313131D131D1D101D1013102D13" -Patch "Gerudo Symbols\gerudo_training_ground_room_5_7.bin";             SaveLoadedMap           # 28BBCD8
+            PrepareMap -Scene "Gerudo Training Ground"   -Map 7  -Header 0; ChangeMapFile   -Search "0C131313131D131D1D101D1013102D13" -Patch "Gerudo Symbols\gerudo_training_ground_room_5_7.bin";             SaveAndPatchLoadedScene # 28CA728
+
+            PrepareMap -Scene "Twinrova's Lair & Iron Knuckle's Lair" -Map 1 -Header 0; ChangeMapFile -Search "498B498B498B498B41494989518B498B" -Patch "Gerudo Symbols\spirit_temple_boss.bin"; SaveLoadedMap            # 2F64E38
+            PrepareMap -Scene "Twinrova's Lair & Iron Knuckle's Lair" -Map 3 -Header 0; ChangeMapFile -Search "498B498B498B498B41494989518B498B" -Patch "Gerudo Symbols\spirit_temple_boss.bin"; SaveAndPatchLoadedScene  # 2F73700
         }
     }
 
@@ -2228,6 +2229,7 @@ function ByteTextOptions() {
         if (TestFile ($GameFiles.textures + "\Text Labels\keaton_mask." + $LanguagePatch.code + ".label")) { PatchBytes -Offset "8A7C00" -Texture -Patch ("Text Labels\keaton_mask." + $LanguagePatch.code + ".label") }
 
         SetMessage -ID "0004"                                                                  -Replace "You received an Odd Potion!<N>You don't know what's going on<N>between this lady and that guy,<N>but take it to the Lost Woods!"
+        SetMessage -ID "0057" -Text "<Icon:4B>"                                                -Replace "<Icon:4C>"
         SetMessage -ID "00F3" -Text "treasure <N>chest and "                                   -Replace "chest and<N>"
         SetMessage -ID "0616" -Text "try to cut it, it will bounce<N>off your blade!"          -Replace "cut it, it will burst open and<N>knock you back!"
         SetMessage -ID "10B8"                                                                  -Replace "That guy isn't here anymore.<New Box>Anybody who comes into the<N>forest will be lost.<New Box>Everybody will become a Stalfos.<N>Everybody, Stalfos.<N>So, he's not here anymore.<N>Only his saw is left. Hee hee.<New Box>That medicine is made of<N>forest mushrooms. Give it back!<N><Two Choices><G>Yes<N>No<W>"

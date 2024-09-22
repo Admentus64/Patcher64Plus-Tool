@@ -307,7 +307,7 @@ function WriteDebug([string]$Command, [string[]]$Header, [string]$PatchedFileNam
 #==============================================================================================================================================================================================
 function Cleanup([switch]$skipLanguageReset) {
     
-    $global:ByteArrayGame = $global:ROMFile = $global:WADFile = $global:CheckHashSum = $global:ROMHashSum = $global:OverwritechecksROM = $global:DungeonList = $null
+    $global:ByteArrayGame = $global:ROMFile = $global:WADFile = $global:CheckHashSum = $global:ROMHashSum = $global:OverwritechecksROM = $global:DungeonList = $global:Symbols = $null
     if (!$skipLanguageReset) { $global:LanguagePatch = $null }
     [System.GC]::WaitForPendingFinalizers(); [System.GC]::Collect()
 
@@ -488,15 +488,14 @@ function PatchingAdditionalOptions() {
 
     if (CheckCommands) { $global:ByteArrayGame = [System.IO.File]::ReadAllBytes($GetROM.decomp) }
 
+    # Load symbols data
+    if ( (CheckCommand "ByteReduxOptions") -and ( (IsChecked $Patches.Redux) -or (IsSet $GamePatch.preset) ) -and (IsSet $GamePatch.redux) -and !(DoAssertSceneFiles) -and !(DoExtractSceneFiles) ) { $global:Symbols = SetJSONFile ($GameFiles.base + "\symbols.json") }
+
     # Additional Options
     RunCommand -Command "ByteOptions" -Message "Byte"
 
     # Redux Options
-    if ( (CheckCommand "ByteReduxOptions") -and ( (IsChecked $Patches.Redux) -or (IsSet $GamePatch.preset) ) -and (IsSet $GamePatch.redux) -and !(DoAssertSceneFiles) -and !(DoExtractSceneFiles) ) {
-        $global:Symbols = SetJSONFile ($GameFiles.base + "\symbols.json")
-        RunCommand -Command "ByteReduxOptions" -Message "Redux"
-        $global:Symbols = $null
-    }
+    if ( (CheckCommand "ByteReduxOptions") -and ( (IsChecked $Patches.Redux) -or (IsSet $GamePatch.preset) ) -and (IsSet $GamePatch.redux) -and !(DoAssertSceneFiles) -and !(DoExtractSceneFiles) ) { RunCommand -Command "ByteReduxOptions" -Message "Redux" }
 
     # Scene Options
     if (CheckCommand -Command "ByteSceneOptions" -Check ($Settings.Debug.NoScenePatching -ne $True) ) {

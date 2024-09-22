@@ -19,6 +19,7 @@ if ( (Get-ExecutionPolicy) -eq "Restricted") {
 #==============================================================================================================================================================================================
 Add-Type -AssemblyName 'System.Windows.Forms'
 Add-Type -AssemblyName 'System.Drawing'
+Add-Type -AssemblyName 'System.IO.Compression.FileSystem'
 [Windows.Forms.Application]::EnableVisualStyles()
 #Write-Host $((Get-PSCallStack)[1]).Command
 

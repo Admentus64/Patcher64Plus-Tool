@@ -506,6 +506,19 @@ function PatchReplaceMusic([string]$BankPointerTableStart, [string]$BankPointerT
                     $offset = (Get16Bit ( (GetDecimal $id) * 2 + 2) )
                     ChangeBytes -File $bankPointerTable -Offset $offset -Values $value
                 }
+
+                if ($Symbols.music_track_titles -ne $null) {
+                    $title = ($GameSettings["ReplaceMusic"][$track.title] -replace '^[^-]*-\s*', '' -replace "_.*", "").TrimStart()
+                    if ($title.length -gt 0x20) { $title = $title.substring(0, 0x1F) }
+                    $title = [System.Text.Encoding]::UTF8.GetBytes($title)
+                    if ($title.count -lt 0x20) {
+                        $padded = (New-Object byte[] 0x20);
+                        [Array]::Copy($title, 0, $padded, 0, [Math]::Min($title.Length, 0x20))
+                        $title = $padded
+                    }
+                    ChangeBytes -Offset (Get32Bit ( (GetDecimal $Symbols.music_track_titles) + (GetDecimal $track.id) * 0x20) ) -Values $title
+                }
+
             }
         }
     }
@@ -616,8 +629,11 @@ function MusicOptions([string]$Default="File Select") {
                         if (TestFile ($file + ".meta"))   { $audioBank = (Get-Content -Path ($file + ".meta"))[1].replace("0x", "") }         # Meta
                         else                              { $audioBank = (($file + ".mid").Substring(($file.IndexOf('_')+1))).split("_")[0] } # Filename
 
-                        if     (TestFile ($file + ".mid"))   { $midiFile  = $file + ".mid" }
-                        elseif (TestFile ($file + ".zip"))   { $midiFile  = $file + ".zip#" + $Redux.ReplaceMusic.Tracks.SelectedItems + ".mid" }
+                        if (TestFile ($file + ".mid")) { $midiFile = $file + ".mid" }
+                        elseif (TestFile ($file + ".zip")) {
+                            $zipArchive = [System.IO.Compression.ZipFile]::OpenRead($file + ".zip")
+                            if ($zipArchive.Entries.Length -gt 0) { $midiFile = $file + ".zip#" + $zipArchive.Entries[0].FullName } else { $midiFile = $null }
+                        }
 
                         $ext = ".seq"
                         if (TestFile ($file + ".zseq")) { $ext = ".zseq" }
@@ -652,9 +668,6 @@ function MusicOptions([string]$Default="File Select") {
                     }
                 }
                 StopJobs
-
-                # & $Files.tool.timidity -c 
-
                 $this.Text      = "Start Music Preview"
                 $this.BackColor = "Green"
             }
