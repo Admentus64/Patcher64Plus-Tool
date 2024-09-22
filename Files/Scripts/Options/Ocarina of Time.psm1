@@ -895,7 +895,7 @@ function ByteOptions() {
         ChangeBytes -Offset @("BC77B3", "BC77FC") -Values "09"
     }
 
-    if (IsChecked $Redux.Unlock.Tunics)          { ChangeBytes -Offset @("BC77B6", "BC77FE")           -Values "0909"                                                }
+    if (IsChecked $Redux.Unlock.Tunics)          { ChangeBytes -Offset @("BC77B6", "BC77FE")           -Values "0909"; ChangeBytes -Offset "C00DD0" -Values "1500"; ChangeBytes -Offset "C00E78" -Values "1500" } # Purchasable Tunics as Child, ported from : OOT - Child Quest Classic)
     if (IsChecked $Redux.Unlock.MasterSword)     { ChangeBytes -Offset @("BC77AE", "BC77F8")           -Values "09"                                                  }
     if (IsChecked $Redux.Unlock.GiantsKnife)     { ChangeBytes -Offset @("BC77AF", "BC77F9", "BC7811") -Values "09"                                                  }
     if (IsChecked $Redux.Unlock.Boots)           { ChangeBytes -Offset @("BC77BA", "BC7801")           -Values "0909"                                                }
@@ -1828,7 +1828,11 @@ function ByteSceneOptions() {
 
     # RESTORE #
 
-    if (IsChecked $Redux.Restore.GerudoTextures) {
+    if (IsDefault $Redux.Restore.GerudoTextures -Not) {
+        PrepareMap -Scene "Dampé's Grave & Windmill" -Map 0  -Header 0; ChangeMapFile   -Search "66888667777877888778777887788778" -Patch "Gerudo Symbols\dampe.bin";                                       SaveLoadedMap           # 3045248
+        PrepareMap -Scene "Dampé's Grave & Windmill" -Map 3  -Header 0; ChangeMapFile   -Search "66888667777877888778777887788778" -Patch "Gerudo Symbols\dampe.bin";                                       SaveLoadedMap           # 305FEE0
+        PrepareMap -Scene "Dampé's Grave & Windmill" -Map 4  -Header 0; ChangeMapFile   -Search "66888667777877888778777887788778" -Patch "Gerudo Symbols\dampe.bin";                                       SaveAndPatchLoadedScene # 3064E80
+    if (IsIndex $Redux.Restore.GerudoTextures -Index 3) {
         PatchBytes -Offset "E68CE8"  -Texture -Patch "Gerudo Symbols\ganondorf_cape.bin"
         PatchBytes -Offset "F70350"  -Texture -Patch "Gerudo Symbols\pushing_block.bin"
         PatchBytes -Offset "F70B50"  -Texture -Patch "Gerudo Symbols\silver_gauntlets_block.bin"
@@ -1842,10 +1846,6 @@ function ByteSceneOptions() {
         PatchBytes -Offset "13B4000" -Texture -Patch "Gerudo Symbols\golden_gauntlets_pillar.bin"
         PatchBytes -Offset "1636940" -Texture -Patch "Gerudo Symbols\spirit_temple_room_0_elevator.bin"
         PatchBytes -Offset "168F3A0" -Texture -Patch "Gerudo Symbols\iron_knuckle.bin"
-        
-        PrepareMap -Scene "Dampé's Grave & Windmill" -Map 0  -Header 0; ChangeMapFile   -Search "66888667777877888778777887788778" -Patch "Gerudo Symbols\dampe.bin";                                       SaveLoadedMap           # 3045248
-        PrepareMap -Scene "Dampé's Grave & Windmill" -Map 3  -Header 0; ChangeMapFile   -Search "66888667777877888778777887788778" -Patch "Gerudo Symbols\dampe.bin";                                       SaveLoadedMap           # 305FEE0
-        PrepareMap -Scene "Dampé's Grave & Windmill" -Map 4  -Header 0; ChangeMapFile   -Search "66888667777877888778777887788778" -Patch "Gerudo Symbols\dampe.bin";                                       SaveAndPatchLoadedScene # 3064E80
 
         PrepareMap -Scene "Gerudo's Fortress"        -Map 0  -Header 0; ChangeSceneFile -Search "62D45A5062D46B166AD47358418B41CB" -Patch "Gerudo Symbols\gerudo_fortress.bin";                             SaveAndPatchLoadedScene # 21B8678
         PrepareMap -Scene "Forest Temple"            -Map 11 -Header 0; ChangeMapFile   -Search "33445455565536665577988899987777" -Patch "Gerudo Symbols\forest_temple_room_11_hole.bin";                  SaveAndPatchLoadedScene # 2464D88
@@ -1859,8 +1859,9 @@ function ByteSceneOptions() {
         PrepareMap -Scene "Gerudo Training Ground"   -Map 5  -Header 0; ChangeMapFile   -Search "0C131313131D131D1D101D1013102D13" -Patch "Gerudo Symbols\gerudo_training_ground_room_5_7.bin";             SaveLoadedMap           # 28BBCD8
         PrepareMap -Scene "Gerudo Training Ground"   -Map 7  -Header 0; ChangeMapFile   -Search "0C131313131D131D1D101D1013102D13" -Patch "Gerudo Symbols\gerudo_training_ground_room_5_7.bin";             SaveAndPatchLoadedScene # 28CA728
 
-        PrepareMap -Scene "Twinrova's Lair & Iron Knuckle's Lair" -Map 1 -Header 0; ChangeMapFile -Search "498B498B498B498B41494989518B498B" -Patch "Gerudo Symbols\spirit_temple_boss.bin"; SaveLoadedMap           # 2F64E38
-        PrepareMap -Scene "Twinrova's Lair & Iron Knuckle's Lair" -Map 3 -Header 0; ChangeMapFile -Search "498B498B498B498B41494989518B498B" -Patch "Gerudo Symbols\spirit_temple_boss.bin"; SaveAndPatchLoadedScene # 2F73700
+        PrepareMap -Scene "Twinrova's Lair & Iron Knuckle's Lair" -Map 1 -Header 0; ChangeMapFile -Search "498B498B498B498B41494989518B498B" -Patch "Gerudo Symbols\spirit_temple_boss.bin"; SaveLoadedMap            # 2F64E38
+        PrepareMap -Scene "Twinrova's Lair & Iron Knuckle's Lair" -Map 3 -Header 0; ChangeMapFile -Search "498B498B498B498B41494989518B498B" -Patch "Gerudo Symbols\spirit_temple_boss.bin"; SaveAndPatchLoadedScene  # 2F73700
+        }
     }
 
     
@@ -2037,10 +2038,10 @@ function ByteTextOptions() {
         }
         
         if (IsChecked $Redux.Unlock.Tunics -Lang 1) {
-            SetMessage -ID "0050" -Text "adult size, so it won't fit a kid..." -Replace "unisize, so it fits an adult and kid"   # Goron Tunic
-            SetMessage -ID "0051" -Text "adult size,<N>so it won't fit a kid." -Replace "unisize,<N>so it fits an adult and kid" # Zora Tunic
-            SetMessage -ID "00AA" -Text "Adult"                                -Replace "Uni-"                                   # Goron Tunic (Shop)
-	        SetMessage -ID "00AB" -Text "Adult size"                           -Replace "Uni-size"                               # Zora Tunic (Shop)
+            SetMessage -ID "0050" -Text "adult size, so it won't fit a kid..." -Replace "unisize, so it fits everyone."   # Goron Tunic
+            SetMessage -ID "0051" -Text "adult size,<N>so it won't fit a kid." -Replace "unisize,<N>so it fits everyone." # Zora Tunic
+            SetMessage -ID "00AA" -Text "Adult"                                -Replace "Uni-"                            # Goron Tunic (Shop)
+	    SetMessage -ID "00AB" -Text "Adult size"                           -Replace "Unisize"                        # Zora Tunic (Shop)
         }
     }
     elseif (IsChecked $Redux.Text.Speed2x) { ChangeBytes -Offset "B5006F" -Values "02" }
@@ -2243,6 +2244,11 @@ function ByteTextOptions() {
     if (IsIndex $Redux.Gameplay.RemoveOwls -Index 3 -Lang 1) {
         SetMessage -ID "0416"                                                                  -Replace "They say that an owl flying<N>around Hyrule is the<N>reincarnation of an ancient Sage."
         SetMessage -ID "0417"                                                                  -Replace "They say that a strange owl<N>around here, may look big and<N>heavy, but its character is rather <N>lighthearted."
+    }
+
+    if (IsChecked $Redux.Gameplay.InstantClaimCheck -Lang 1) {
+        SetMessage -ID "305A" -Text "My worrrrrk is not <N>verrrry consistent, so "            -Replace "Now, I know you're <N>verrrry busy, so "
+        SetMessage -ID "305C"                                                                  -Replace "Please returrrrrrn soon...<N>When you're readyyyy<N>for it, show the claim<N>agaaaain..."
     }
     
     if (IsChecked $Redux.Graphics.GCScheme) {
@@ -2566,7 +2572,7 @@ function CreatePresets() {
         $FemaleModels  = CreateReduxButton -Width 150 -Text "Female Link"
 
         $VanillaModels.Add_Click( { $Redux.Graphics.ChildModels.SelectedIndex =                  $Redux.Graphics.AdultModels.SelectedIndex = 0                  ; BoxUncheck $Redux.Text.FemalePronouns; $Redux.Sounds.ChildVoices.SelectedIndex = $Redux.Sounds.AdultVoices.SelectedIndex = 0       } )
-        $MajoraModels.Add_Click(  { $Redux.Graphics.ChildModels.Text          = "Majora's Mask"; $Redux.Graphics.AdultModels.Text          = "Link Baldrics"    ; BoxUncheck $Redux.Text.FemalePronouns; $Redux.Sounds.ChildVoices.SelectedIndex = $Redux.Sounds.AdultVoices.SelectedIndex = 0       } )
+        $MajoraModels.Add_Click(  { $Redux.Graphics.ChildModels.Text          = "Majora's Mask"; $Redux.Graphics.AdultModels.Text          = "Original"           ; BoxUncheck $Redux.Text.FemalePronouns; $Redux.Sounds.ChildVoices.SelectedIndex = $Redux.Sounds.AdultVoices.SelectedIndex = 0       } )  # Might be temporary
         $FemaleModels.Add_Click(  { $Redux.Graphics.ChildModels.Text          =                  $Redux.Graphics.AdultModels.Text          = "Hatsune Miku Link"; BoxCheck   $Redux.Text.FemalePronouns; $Redux.Sounds.ChildVoices.Text          = $Redux.Sounds.AdultVoices.Text          = "Amara" } )
     }
 
@@ -2575,7 +2581,7 @@ function CreatePresets() {
     $QualityOfLife.Add_Click( {
         if ($Redux.Gameplay.FasterBlockPushing -ne $null)   { $Redux.Gameplay.FasterBlockPushing.SelectedIndex = 1 }
         if ($Redux.Gameplay.RemoveOwls         -ne $null)   { $Redux.Gameplay.RemoveOwls.SelectedIndex         = 1 }
-	    BoxCheck $Redux.Gameplay.RemoveNaviTimer
+        BoxCheck $Redux.Gameplay.RemoveNaviTimer
         BoxCheck $Redux.Gameplay.ResumeLastArea
         BoxCheck $Redux.Gameplay.InstantClaimCheck
         BoxCheck $Redux.Gameplay.ReturnChild
@@ -2728,13 +2734,14 @@ function CreateTabMain() {
 
     CreateReduxGroup    -Tag  "Restore"                      -Text "Restore / Correct / Censor"
     CreateReduxComboBox -Name "Blood"                -Base 3 -Text "Blood Color"            -Info "Change the color of blood used for several monsters, Ganondorf and Ganon`nSeveral monsters have blue or green blood, while Ganondorf/Ganon has red blood" -Items @("Default", "Red blood for monsters", "Green blood for Ganondorf/Ganon", "Change both") -Credits "ShadowOne333 & Admentus"
+    CreateReduxComboBox -Name "GerudoTextures"       -Safe   -Text "Gerudo Textures"        -Info "Censor Gerudo symbol textures as they were used in the GameCube ROMs and Virtual Console versions`nAlso remove the Gerudo Symbols in Dampe's Maze as it was done in the Gateway ROM version" -Items @("Disabled", "Only Remove Dampe", "Fix And Censor")  -Credits "GhostlyDark, ShadowOne333 and GoldenMariaNova"
     CreateReduxCheckBox -Name "Blood"                -Base 6 -Text "Red Blood"              -Info "Change the color of blood used for several monsters to red"                                                                                                                                                                                               -Credits "Admentus"
     CreateReduxCheckBox -Name "RupeeColors"                  -Text "Correct Rupee Colors"   -Info "Corrects the color palette for the in-game Purple (50) and Golden (200) Rupees`nIn the base game they are closer to pink and orange, this changes them to more closely match their 3D get item models"                                                    -Credits "GhostlyDark"
     CreateReduxCheckBox -Name "CowNoseRing"                  -Text "Restore Cow Nose Ring"  -Info "Restore the rings in the noses for Cows as seen in the Japanese release"                                                                                                                                                                                  -Credits "ShadowOne333"
     CreateReduxCheckBox -Name "CenterTextboxCursor"          -Text "Center Textbox Cursor"  -Info "Aligns the textbox cursor to the center of the screen"                                                                                                                                                                                                    -Credits "BilonFullHDemon"
-    CreateReduxCheckBox -Name "N64Logo"         			-Text "Restore N64 Logo"  		-Info "Fixes the appearance of the N64 intro logo as seen in the Rev 1 ROM and newer"                                                                                                                                                                                    -Credits "GhostlyDark"
-    CreateReduxCheckBox -Name "FireTemple"     -Safe -Base 3 -Text "Censor Fire Temple"     -Info "Censor Fire Temple theme as used in the Rev 2 ROM"                                                                                                                                                                                                        -Credits "ShadowOne333"
-    CreateReduxCheckBox -Name "GerudoTextures" -Safe -Base 2 -Text "Censor Gerudo Textures" -Info "Censor Gerudo symbol textures as they were used in the GameCube ROMs and Virtual Console versions"                                                                                                                                                                            -Credits "GhostlyDark & ShadowOne333"
+    CreateReduxCheckBox -Name "N64Logo"         	     -Text "Restore N64 Logo"  	    -Info "Fixes the appearance of the N64 intro logo as seen in the Rev 1 ROM and newer"                                                                                                                                                                            -Credits "GhostlyDark"
+    CreateReduxCheckBox -Name "FireTemple"     -Safe -Base 3 -Text "Censor Fire Temple"     -Info "Censor Fire Temple theme as used in the Rev 2 ROM"                                                                                                                                                                                                        -Credits "ShadowOne333" 
+
 
 
 
@@ -3456,7 +3463,7 @@ function CreateTabEquipment() {
     # UNLOCK CHILD RESTRICTIONS #
 
     CreateReduxGroup    -Tag  "Unlock"        -Child -Text "Unlock Child Restrictions" -Exclude "Child"
-    CreateReduxCheckBox -Name "Tunics"        -Child -Text "Unlock Tunics"        -Info "Child Link is able to use the Goron Tunic and Zora Tunic`nSince you might want to walk around in style as well when you are young`nThe dialogue script will be adjusted to reflect this (only for English)" -Credits "GhostlyDark"
+    CreateReduxCheckBox -Name "Tunics"        -Child -Text "Unlock Tunics"        -Info "Child Link is able to use the Goron Tunic and Zora Tunic`nSince you might want to walk around in style as well when you are young.`nThe dialogue script will be adjusted to reflect this (only for English)`nChild Link will be also able to purchase them aswell" -Credits "GhostlyDark"
     CreateReduxCheckBox -Name "MasterSword"   -Child -Text "Unlock Master Sword"  -Info "Child Link is able to use the Master Sword`nThe Master Sword does twice as much damage as the Kokiri Sword"                                          -Credits "GhostlyDark"
     CreateReduxCheckBox -Name "GiantsKnife"   -Child -Text "Unlock Giant's Knife" -Info "Child Link is able to use the Giant's Knife / Biggoron Sword`nThe Giant's Knife / Biggoron Sword does four times as much damage as the Kokiri Sword" -Credits "GhostlyDark" -Warning "The Giant's Knife / Biggoron Sword appears as if Link if thrusting the sword through the ground"
     CreateReduxCheckBox -Name "MirrorShield"  -Child -Text "Unlock Mirror Shield" -Info "Child Link is able to use the Mirror Shield"                                                                                                         -Credits "GhostlyDark" -Warning "The Mirror Shield will look like the Deku Shield for Child Link"
