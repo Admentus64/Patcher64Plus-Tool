@@ -841,6 +841,7 @@ function ByteOptions() {
     if (IsDefault $Redux.Equipment.GreatFairysSword -Not)   { ChangeBytes -Offset "C572C8" -Values (ConvertFloatToHex $Redux.Equipment.GreatFairysSword.Value) }
     if (IsDefault $Redux.Equipment.BlastMask        -Not)   { ChangeBytes -Offset "CAA666" -Values (Get16Bit  $Redux.Equipment.BlastMask.Value)                }
     if (IsDefault $Redux.Equipment.ShieldRecoil     -Not)   { ChangeBytes -Offset "CAEDC6" -Values (Get16Bit ($Redux.Equipment.ShieldRecoil.Value + 45000) )   }
+    if (IsDefault $Redux.Equipment.Hookshot         -Not)   { ChangeBytes -Offset "D3B327" -Values (Get8Bit   $Redux.Equipment.Hookshot.Value)                 }
 
 
 
@@ -2359,6 +2360,7 @@ function CreateTabEquipment() {
     CreateReduxSlider -Name "GreatFairysSword" -Default 5500 -Min 512 -Max 8192 -Freq 512 -Small 256 -Large 512 -Text "Great Fairy's Sword" -Info "Set the length of the hitbox of the Great Fairy's Sword"    -Credits "Admentus"
     CreateReduxSlider -Name "BlastMask"        -Default 310  -Min 1   -Max 1024 -Freq 64  -Small 32  -Large 64  -Text "Blast Mask"          -Info "Set the cooldown duration of the Blast Mask"                -Credits "Randomizer"
     CreateReduxSlider -Name "ShieldRecoil"     -Default 4552 -Min 0   -Max 8248 -Freq 512 -Small 256 -Large 512 -Text "Shield Recoil"       -Info "Set the pushback distance when getting hit while shielding" -Credits "Admentus"
+    CreateReduxSlider -Name "Hookshot"         -Default 26   -Min 0   -Max 50   -Freq 10  -Small 5   -Large 10  -Text "Hookshot Length"     -Info "Set the length of the Hookshot"                             -Credits "Admentus" -Warning "Going above the default length can look weird"
 
 
 

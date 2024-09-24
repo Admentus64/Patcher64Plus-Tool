@@ -2760,6 +2760,8 @@ function ShiftMapVtxData([int16]$Shift=0x10) {
     $meshEnd   = $SceneEditor.MapArray[$SceneEditor.Offsets[0].MeshStart + 9] * 65536 + $SceneEditor.MapArray[$SceneEditor.Offsets[0].MeshStart + 10] * 256 + $SceneEditor.MapArray[$SceneEditor.Offsets[0].MeshStart + 11]
     $meshes    = @()
 
+    if ($SceneEditor.MapArray[$SceneEditor.Offsets[0].MeshStart] -eq 1 -and ($SceneEditor.MapArray[$SceneEditor.Offsets[0].MeshStart + 1] -eq 1 -or $SceneEditor.MapArray[$SceneEditor.Offsets[0].MeshStart + 1] -eq 2) ) { $meshEnd = $meshStart + 4 }
+
     for ($i=$meshStart; $i -lt $meshEnd; $i+= 4) {
         if ($SceneEditor.MapArray[$i] -eq 3) {
             $value = $SceneEditor.MapArray[$i+1] * 65536 + $SceneEditor.MapArray[$i+2] * 256 + $SceneEditor.MapArray[$i+3] + $Shift
@@ -3822,8 +3824,8 @@ function InsertObject([string]$ID="0000", [string]$Name, [switch]$Silent, [switc
         WriteToConsole "Reached the max object limit for this header due to unusual map behaviour" -Error
         return $False
     }
-    elseif ($SceneEditor.Offsets[0].ObjectStart -ge (GetMeshStart) -or  $SceneEditor.Offsets[0].ActorStart -ge (GetMeshStart) ) { $allowMapShift = $False }
-    else { $allowMapShift = $True }
+    elseif ($SceneEditor.Offsets[0].ObjectStart -ge (GetMeshStart) -or ($SceneEditor.Offsets[0].ActorStart -ne $null -and $SceneEditor.Offsets[0].ActorStart -ge (GetMeshStart) ) )   { $allowMapShift = $False }
+    else                                                                                                                                                                              { $allowMapShift = $True  }
 
     if ($SceneEditor.GUI) { $SceneEditor.BottomPanelObjects.AutoScroll = $False }
 
@@ -3860,13 +3862,28 @@ function InsertObject([string]$ID="0000", [string]$Name, [switch]$Silent, [switc
     $SceneEditor.Offsets[$SceneEditor.LoadedHeader].ObjectCount++
     $SceneEditor.MapArray[(GetObjectCountIndex)]++
     
-    $end = GetObjectEnd
-    if ($SceneEditor.Offsets[0].ObjectStart -lt (GetMeshStart) -and $SceneEditor.Offsets[0].ActorStart -gt (GetMeshStart)) { $start = GetMeshStart } else { $start = GetActorStart }
+    if ($SceneEditor.Offsets[0].ActorStart -ne $null) {
+        $end = GetObjectEnd
+        if ($SceneEditor.Offsets[0].ObjectStart -lt (GetMeshStart) -and $SceneEditor.Offsets[0].ActorStart -gt (GetMeshStart))   { $start = GetMeshStart  }
+        else                                                                                                                     { $start = GetActorStart }
+    }
+    else {
+        $end   = $SceneEditor.Offsets[0].ObjectEnd
+        $start = GetMeshStart
+    }
 
     if ( ($end -gt $start -and $start -gt 0) ) {
-        $SceneEditor.MapArray.InsertRange((GetActorStart), @(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0))
-        $SceneEditor.Offsets[$SceneEditor.LoadedHeader].ActorStart += 0x10
-        ShiftMap -Offset (GetActorIndex) -Shift 0x10
+        if ($SceneEditor.Offsets[0].ActorStart -ne $null) {
+            $SceneEditor.MapArray.InsertRange((GetActorStart), @(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0))
+            $SceneEditor.Offsets[$SceneEditor.LoadedHeader].ActorStart += 0x10
+            ShiftMap -Offset (GetActorIndex) -Shift 0x10
+        }
+        else {
+            $SceneEditor.MapArray.InsertRange((GetMeshStart), @(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0))
+            $SceneEditor.Offsets[$SceneEditor.LoadedHeader].MeshStart += 0x10
+            ShiftMap -Offset (GetMeshIndex) -Shift 0x10
+        }
+
         if ($allowMapShift) { ShiftMapHeaderData -Shift 0x10 }
     }
 
@@ -5612,7 +5629,7 @@ function ExtractSceneFiles() {
             if ( (TestFile ($Paths.Extract + "\" + (GetExtractQuest) + "\Inside Jabu-Jabu's Belly\Room 1.zmap") ) -and (TestFile ($Paths.Extract + "\" + (GetExtractQuest) + "\Inside Jabu-Jabu's Belly\Room 2.zmap") ) ) {
                 $file    = $Paths.Extract + "\" + (GetExtractQuest) + "\Inside Jabu-Jabu's Belly\Room 2.zmap"
                 $fileMap = [System.IO.File]::ReadAllBytes($file)
-                for ($i=0; $i -lt $fileMap.length; $i++) { $ByteArrayGame[$i + 0x275F100]  = $fileMap[$i] }
+                for ($i=0; $i -lt $fileMap.length; $i++) { $ByteArrayGame[$i + 0x275F100] = $fileMap[$i] }
 
                 $file    = $Paths.Extract + "\" + (GetExtractQuest) + "\Inside Jabu-Jabu's Belly\Room 1.zmap"
                 $fileMap = [System.IO.File]::ReadAllBytes($file)
@@ -5627,7 +5644,7 @@ function ExtractSceneFiles() {
             if ( (TestFile ($Paths.Extract + "\" + (GetExtractQuest) + "\Forest Temple\Room 7.zmap") ) -and (TestFile ($Paths.Extract + "\" + (GetExtractQuest) + "\Forest Temple\Room 8.zmap") ) ) {
                 $file    = $Paths.Extract + "\" + (GetExtractQuest) + "\Forest Temple\Room 8.zmap"
                 $fileMap = [System.IO.File]::ReadAllBytes($file)
-                for ($i=0; $i -lt $fileMap.length; $i++) { $ByteArrayGame[$i + 0x2432100]  = $fileMap[$i] }
+                for ($i=0; $i -lt $fileMap.length; $i++) { $ByteArrayGame[$i + 0x2432100] = $fileMap[$i] }
 
                 $file    = $Paths.Extract + "\" + (GetExtractQuest) + "\Forest Temple\Room 7.zmap"
                 $fileMap = [System.IO.File]::ReadAllBytes($file)
@@ -5641,7 +5658,7 @@ function ExtractSceneFiles() {
             if ( (TestFile ($Paths.Extract + "\" + (GetExtractQuest) + "\Fire Temple\Room 2.zmap") ) -and (TestFile ($Paths.Extract + "\" + (GetExtractQuest) + "\Fire Temple\Room 3.zmap") ) ) {
                 $file    = $Paths.Extract + "\" + (GetExtractQuest) + "\Fire Temple\Room 3.zmap"
                 $fileMap = [System.IO.File]::ReadAllBytes($file)
-                for ($i=0; $i -lt $fileMap.length; $i++) { $ByteArrayGame[$i + 0x2318100]  = $fileMap[$i] }
+                for ($i=0; $i -lt $fileMap.length; $i++) { $ByteArrayGame[$i + 0x2318100] = $fileMap[$i] }
 
                 $file    = $Paths.Extract + "\" + (GetExtractQuest) + "\Fire Temple\Room 2.zmap"
                 $fileMap = [System.IO.File]::ReadAllBytes($file)
@@ -5655,7 +5672,7 @@ function ExtractSceneFiles() {
             if ( (TestFile ($Paths.Extract + "\" + (GetExtractQuest) + "\Water Temple\Room 4.zmap") ) -and (TestFile ($Paths.Extract + "\" + (GetExtractQuest) + "\Water Temple\Room 5.zmap") ) ) {
                 $file    = $Paths.Extract + "\" + (GetExtractQuest) + "\Water Temple\Room 5.zmap"
                 $fileMap = [System.IO.File]::ReadAllBytes($file)
-                for ($i=0; $i -lt $fileMap.length; $i++) { $ByteArrayGame[$i + 0x2602100]  = $fileMap[$i] }
+                for ($i=0; $i -lt $fileMap.length; $i++) { $ByteArrayGame[$i + 0x2602100] = $fileMap[$i] }
 
                 $file    = $Paths.Extract + "\" + (GetExtractQuest) + "\Water Temple\Room 4.zmap"
                 $fileMap = [System.IO.File]::ReadAllBytes($file)
@@ -5666,24 +5683,38 @@ function ExtractSceneFiles() {
                 $ByteArrayGame[0x25B8252]++; $ByteArrayGame[0x25B8256]++
             }
 
+            if ( (TestFile ($Paths.Extract + "\" + (GetExtractQuest) + "\Water Temple\Room 9.zmap") ) -and (TestFile ($Paths.Extract + "\" + (GetExtractQuest) + "\Water Temple\Room 10.zmap") ) ) {
+                $file    = $Paths.Extract + "\" + (GetExtractQuest) + "\Water Temple\Room 10.zmap"
+                $fileMap = [System.IO.File]::ReadAllBytes($file)
+                for ($i=0; $i -lt $fileMap.length; $i++) { $ByteArrayGame[$i + 0x2635100] = $fileMap[$i] }
+
+                $file    = $Paths.Extract + "\" + (GetExtractQuest) + "\Water Temple\Room 9.zmap"
+                $fileMap = [System.IO.File]::ReadAllBytes($file)
+                for ($i=0; $i -lt $fileMap.length; $i++) { $ByteArrayGame[$i + 0x0262D000] = $fileMap[$i] }
+                for ($i=0x262D000 + $fileMap.length; $i -lt 0x2635100; $i++) { $ByteArrayGame[$i] = 0 }
+            
+                $ByteArrayGame[0xBD52]++;    $ByteArrayGame[0xBD56]++; $ByteArrayGame[0xBD5A]++
+                $ByteArrayGame[0x25B827A]++; $ByteArrayGame[0x25B827E]++
+            }
+
             if ( (TestFile ($Paths.Extract + "\" + (GetExtractQuest) + "\Water Temple\Room 10.zmap") ) -and (TestFile ($Paths.Extract + "\" + (GetExtractQuest) + "\Water Temple\Room 11.zmap") ) ) {
                 $file    = $Paths.Extract + "\" + (GetExtractQuest) + "\Water Temple\Room 11.zmap"
                 $fileMap = [System.IO.File]::ReadAllBytes($file)
-                for ($i=0; $i -lt $fileMap.length; $i++) { $ByteArrayGame[$i + 0x263B100]  = $fileMap[$i] }
+                for ($i=0; $i -lt $fileMap.length; $i++) { $ByteArrayGame[$i + 0x263B200] = $fileMap[$i] }
 
                 $file    = $Paths.Extract + "\" + (GetExtractQuest) + "\Water Temple\Room 10.zmap"
                 $fileMap = [System.IO.File]::ReadAllBytes($file)
-                for ($i=0; $i -lt $fileMap.length; $i++) { $ByteArrayGame[$i + 0x2635000] = $fileMap[$i] }
-                for ($i=0x2635000 + $fileMap.length; $i -lt 0x263B100; $i++) { $ByteArrayGame[$i] = 0 }
+                for ($i=0; $i -lt $fileMap.length; $i++) { $ByteArrayGame[$i + 0x2635100] = $fileMap[$i] }
+                for ($i=0x2635100 + $fileMap.length; $i -lt 0x263B200; $i+=2) { $ByteArrayGame[$i] = 0 }
             
-                $ByteArrayGame[0xBD62]++;    $ByteArrayGame[0xBD66]++; $ByteArrayGame[0xBD6A]++
-                $ByteArrayGame[0x25B8282]++; $ByteArrayGame[0x25B8286]++
+                $ByteArrayGame[0xBD62]+=2;    $ByteArrayGame[0xBD66]+=2; $ByteArrayGame[0xBD6A]+=2
+                $ByteArrayGame[0x25B8282]+=2; $ByteArrayGame[0x25B8286]+=2
             }
 
             if ( (TestFile ($Paths.Extract + "\" + (GetExtractQuest) + "\Shadow Temple\Room 13.zmap") ) -and (TestFile ($Paths.Extract + "\" + (GetExtractQuest) + "\Shadow Temple\Room 14.zmap") ) ) {
                 $file    = $Paths.Extract + "\" + (GetExtractQuest) + "\Shadow Temple\Room 14.zmap"
                 $fileMap = [System.IO.File]::ReadAllBytes($file)
-                for ($i=0; $i -lt $fileMap.length; $i++) { $ByteArrayGame[$i + 0x2814100]  = $fileMap[$i] }
+                for ($i=0; $i -lt $fileMap.length; $i++) { $ByteArrayGame[$i + 0x2814100] = $fileMap[$i] }
 
                 $file    = $Paths.Extract + "\" + (GetExtractQuest) + "\Shadow Temple\Room 13.zmap"
                 $fileMap = [System.IO.File]::ReadAllBytes($file)
@@ -5697,7 +5728,7 @@ function ExtractSceneFiles() {
             if ( (TestFile ($Paths.Extract + "\" + (GetExtractQuest) + "\Spirit Temple\Room 5.zmap") ) -and (TestFile ($Paths.Extract + "\" + (GetExtractQuest) + "\Spirit Temple\Room 6.zmap") ) ) {
                 $file    = $Paths.Extract + "\" + (GetExtractQuest) + "\Spirit Temple\Room 6.zmap"
                 $fileMap = [System.IO.File]::ReadAllBytes($file)
-                for ($i=0; $i -lt $fileMap.length; $i++) { $ByteArrayGame[$i + 0x2B3D100]  = $fileMap[$i] }
+                for ($i=0; $i -lt $fileMap.length; $i++) { $ByteArrayGame[$i + 0x2B3D100] = $fileMap[$i] }
 
                 $file    = $Paths.Extract + "\" + (GetExtractQuest) + "\Spirit Temple\Room 5.zmap"
                 $fileMap = [System.IO.File]::ReadAllBytes($file)
@@ -5711,7 +5742,7 @@ function ExtractSceneFiles() {
             if ( (TestFile ($Paths.Extract + "\" + (GetExtractQuest) + "\Gerudo Training Ground\Room 2.zmap") ) -and (TestFile ($Paths.Extract + "\" + (GetExtractQuest) + "\Gerudo Training Ground\Room 3.zmap") ) ) {
                 $file    = $Paths.Extract + "\" + (GetExtractQuest) + "\Gerudo Training Ground\Room 3.zmap"
                 $fileMap = [System.IO.File]::ReadAllBytes($file)
-                for ($i=0; $i -lt $fileMap.length; $i++) { $ByteArrayGame[$i + 0x28A6100]  = $fileMap[$i] }
+                for ($i=0; $i -lt $fileMap.length; $i++) { $ByteArrayGame[$i + 0x28A6100] = $fileMap[$i] }
 
                 $file    = $Paths.Extract + "\" + (GetExtractQuest) + "\Gerudo Training Ground\Room 2.zmap"
                 $fileMap = [System.IO.File]::ReadAllBytes($file)

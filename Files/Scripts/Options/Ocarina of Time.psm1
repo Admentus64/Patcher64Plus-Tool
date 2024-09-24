@@ -3548,9 +3548,9 @@ function CreateTabEquipment() {
     CreateReduxSlider -Name "BrokenGiantsKnife" -Adult -Expose "Child"            -Default 1500 -Min 512 -Max 8192 -Freq 512 -Small 256 -Large 512 -Text "Broken Knife"    -Info "Set the length of the hitbox of the Broken Giant's Knife"           -Credits "Admentus"
     CreateReduxSlider -Name "MegatonHammer"     -Adult -Expose @("Dawn", "Child") -Default 2500 -Min 512 -Max 8192 -Freq 512 -Small 256 -Large 512 -Text "Megaton Hammer"  -Info "Set the length of the hitbox of the Megaton Hammer"                 -Credits "Admentus"
     CreateReduxSlider -Name "ShieldRecoil"                                        -Default 4552 -Min 0   -Max 8248 -Freq 512 -Small 256 -Large 512 -Text "Shield Recoil"   -Info "Set the pushback distance when getting hit while shielding"         -Credits "Admentus (ROM) & Aegiker (RAM)"
-    CreateReduxSlider -Name "Hookshot"          -Adult                            -Default 13   -Min 0   -Max 255  -Freq 16  -Small 8   -Large 16  -Text "Hookshot Length" -Info "Set the length of the Hookshot"                                     -Credits "AndiiSyn"
+    CreateReduxSlider -Name "Hookshot"          -Adult                            -Default 13   -Min 0   -Max 110  -Freq 10  -Small 5   -Large 10  -Text "Hookshot Length" -Info "Set the length of the Hookshot"                                     -Credits "Admentu"             -Warning "Going above the default length can look weird"
     if (StrLike -Str $GamePatch.settings -Val "Gold Quest") { $val = 26 } else { $val = 104 }
-    CreateReduxSlider -Name "Longshot"          -Adult                            -Default $val -Min 0   -Max 255  -Freq 16  -Small 8   -Large 16  -Text "Longshot Length" -Info "Set the length of the Longshot"                                     -Credits "AndiiSyn"
+    CreateReduxSlider -Name "Longshot"          -Adult                            -Default $val -Min 0   -Max 110  -Freq 10  -Small 5   -Large 10  -Text "Longshot Length" -Info "Set the length of the Longshot"                                     -Credits "Admentus & AndiiSyn" -Warning "Going above the default length can look weird"
 
 
 

@@ -100,10 +100,11 @@ function MainFunction([string]$Command, [string]$PatchedFileName) {
         elseif ($GameType.decompress -eq 2 -and (IsChecked $Patches.Extend))                                                                                                            { $PatchInfo.decompress = $True }
         elseif ($GameType.decompress -eq 3 -and (IsChecked $Patches.Extend))                                                                                                            { $PatchInfo.decompress = $True }
         if     ($Settings.Debug.ExtractCleanScript -eq $True -and (IsSet $LanguagePatch.script_dma) -and (IsSet $LanguagePatch.table_start) -and (IsSet $LanguagePatch.table_length))   { $PatchInfo.decompress = $True }
+        if     (DoAssertSceneFiles)                                                                                                                                                     { $PatchInfo.decompress = $True }
     }
 
     # Check if ROM is getting patched
-    if ( (IsChecked $Patches.Options) -or (IsChecked $Patches.Redux) -or (IsSet $GamePatch.patch) -or (StrLike -str $Command -val "Apply Patch") -or (IsSet $GamePatch.preset) -or (IsSet $GamePatch.function) ) { $PatchInfo.run = $True } else { $PatchInfo.run = $False }
+    if ( (IsChecked $Patches.Options) -or (IsChecked $Patches.Redux) -or (IsSet $GamePatch.patch) -or (StrLike -str $Command -val "Apply Patch") -or (IsSet $GamePatch.preset) -or (IsSet $GamePatch.function) -or (DoAssertSceneFiles) ) { $PatchInfo.run = $True } else { $PatchInfo.run = $False }
 
     # Refresh game options script
     RefreshGameScript
@@ -368,6 +369,7 @@ function Unpack() {
 #==============================================================================================================================================================================================
 function UseOptions() {
     
+    if (DoAssertSceneFiles) { return $True }
     if (IsSet $GamePatch.script) {
         if ( (IsSet $GamePatch.preset) -or ($Patches.Options.Checked -and $Patches.Options.Visible) -or (IsSet $GamePatch.function) ) { return $True }
     }

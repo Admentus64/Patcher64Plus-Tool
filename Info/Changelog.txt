@@ -1,3 +1,9 @@
+v24.0.5
+- Added new Hookshot Length option for MM
+- Adjusted maximum limit for hookshot/longshot length for OoT
+- Fixed issues with the Scene and Text Editors
+- Fixed issues with Master Quest and Ura Quest for OoT
+
 v24.0.4
 - Several small OoT option fixes for OoT by Maria Nova
 - Fixed song previews and renamed songs

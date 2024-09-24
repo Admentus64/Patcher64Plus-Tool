@@ -963,9 +963,9 @@ function SetMessage([string]$ID, [object]$Text, [object]$Replace, [string]$File=
 #==============================================================================================================================================================================================
 function RunAllStoredMessages() {
     
-    $global:StoredMessages = $StoredMessages | Sort-Object { [int]$_.dec, [int]$_.index }
-    foreach ($msg in $StoredMessages) { RunSetMessage -ID $msg.id -Text $msg.text -Replace $msg.replace -File $msg.file -Full $msg.full -Insert $msg.insert -Offset $msg.offset -Append $msg.append -All $msg.all -ASCII $msg.ascii -Silent $msg.silent -Safety $msg.safety -Force $msg.force }
-    $global:StoredMessages = $null
+    $messages = $StoredMessages | Sort-Object { [int]$_.dec, [int]$_.index }
+    foreach ($msg in $messages) { RunSetMessage -ID $msg.id -Text $msg.text -Replace $msg.replace -File $msg.file -Full $msg.full -Insert $msg.insert -Offset $msg.offset -Append $msg.append -All $msg.all -ASCII $msg.ascii -Silent $msg.silent -Safety $msg.safety -Force $msg.force }
+    $global:StoredMessages = $messages = $null
 
 }
 
