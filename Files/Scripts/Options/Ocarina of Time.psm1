@@ -895,12 +895,12 @@ function ByteOptions() {
         ChangeBytes -Offset @("BC77B3", "BC77FC") -Values "09"
     }
 
-    if (IsChecked $Redux.Unlock.Tunics)          { ChangeBytes -Offset @("BC77B6", "BC77FE")           -Values "0909"; ChangeBytes -Offset "C00DD0" -Values "1500"; ChangeBytes -Offset "C00E78" -Values "1500" } # Purchasable Tunics as Child, ported from : OOT - Child Quest Classic)
-    if (IsChecked $Redux.Unlock.MasterSword)     { ChangeBytes -Offset @("BC77AE", "BC77F8")           -Values "09"                                                  }
-    if (IsChecked $Redux.Unlock.GiantsKnife)     { ChangeBytes -Offset @("BC77AF", "BC77F9", "BC7811") -Values "09"                                                  }
-    if (IsChecked $Redux.Unlock.Boots)           { ChangeBytes -Offset @("BC77BA", "BC7801")           -Values "0909"                                                }
-    if (IsChecked $Redux.Unlock.Gauntlets)       { ChangeBytes -Offset @("BC77B4", "BC780D", "BC780E") -Values "09"; ChangeBytes -Offset "AEFA6C" -Values "24080000" }
-    if (IsChecked $Redux.Unlock.MegatonHammer)   { ChangeBytes -Offset @("BC77A3", "BC77CD")           -Values "09"                                                  }
+    if (IsChecked $Redux.Unlock.Tunics)          { ChangeBytes -Offset @("BC77B6", "BC77FE")           -Values "0909"; ChangeBytes -Offset "C00DD0" -Values "1500"; ChangeBytes -Offset "C00E78" -Values "1500" }
+    if (IsChecked $Redux.Unlock.MasterSword)     { ChangeBytes -Offset @("BC77AE", "BC77F8")           -Values "09"                                                                                             }
+    if (IsChecked $Redux.Unlock.GiantsKnife)     { ChangeBytes -Offset @("BC77AF", "BC77F9", "BC7811") -Values "09"                                                                                             }
+    if (IsChecked $Redux.Unlock.Boots)           { ChangeBytes -Offset @("BC77BA", "BC7801")           -Values "0909"                                                                                           }
+    if (IsChecked $Redux.Unlock.Gauntlets)       { ChangeBytes -Offset @("BC77B4", "BC780D", "BC780E") -Values "09"; ChangeBytes -Offset "AEFA6C" -Values "24080000"                                            }
+    if (IsChecked $Redux.Unlock.MegatonHammer)   { ChangeBytes -Offset @("BC77A3", "BC77CD")           -Values "09"                                                                                             }
     
 
     
@@ -2574,7 +2574,7 @@ function CreatePresets() {
         $FemaleModels  = CreateReduxButton -Width 150 -Text "Female Link"
 
         $VanillaModels.Add_Click( { $Redux.Graphics.ChildModels.SelectedIndex =                  $Redux.Graphics.AdultModels.SelectedIndex = 0                  ; BoxUncheck $Redux.Text.FemalePronouns; $Redux.Sounds.ChildVoices.SelectedIndex = $Redux.Sounds.AdultVoices.SelectedIndex = 0       } )
-        $MajoraModels.Add_Click(  { $Redux.Graphics.ChildModels.Text          = "Majora's Mask"; $Redux.Graphics.AdultModels.Text          = "Original"           ; BoxUncheck $Redux.Text.FemalePronouns; $Redux.Sounds.ChildVoices.SelectedIndex = $Redux.Sounds.AdultVoices.SelectedIndex = 0       } )  # Might be temporary
+        $MajoraModels.Add_Click(  { $Redux.Graphics.ChildModels.Text          = "Majora's Mask"; $Redux.Graphics.AdultModels.Text          = "Original"         ; BoxUncheck $Redux.Text.FemalePronouns; $Redux.Sounds.ChildVoices.SelectedIndex = $Redux.Sounds.AdultVoices.SelectedIndex = 0       } )
         $FemaleModels.Add_Click(  { $Redux.Graphics.ChildModels.Text          =                  $Redux.Graphics.AdultModels.Text          = "Hatsune Miku Link"; BoxCheck   $Redux.Text.FemalePronouns; $Redux.Sounds.ChildVoices.Text          = $Redux.Sounds.AdultVoices.Text          = "Amara" } )
     }
 
@@ -3548,7 +3548,7 @@ function CreateTabEquipment() {
     CreateReduxSlider -Name "BrokenGiantsKnife" -Adult -Expose "Child"            -Default 1500 -Min 512 -Max 8192 -Freq 512 -Small 256 -Large 512 -Text "Broken Knife"    -Info "Set the length of the hitbox of the Broken Giant's Knife"           -Credits "Admentus"
     CreateReduxSlider -Name "MegatonHammer"     -Adult -Expose @("Dawn", "Child") -Default 2500 -Min 512 -Max 8192 -Freq 512 -Small 256 -Large 512 -Text "Megaton Hammer"  -Info "Set the length of the hitbox of the Megaton Hammer"                 -Credits "Admentus"
     CreateReduxSlider -Name "ShieldRecoil"                                        -Default 4552 -Min 0   -Max 8248 -Freq 512 -Small 256 -Large 512 -Text "Shield Recoil"   -Info "Set the pushback distance when getting hit while shielding"         -Credits "Admentus (ROM) & Aegiker (RAM)"
-    CreateReduxSlider -Name "Hookshot"          -Adult                            -Default 13   -Min 0   -Max 110  -Freq 10  -Small 5   -Large 10  -Text "Hookshot Length" -Info "Set the length of the Hookshot"                                     -Credits "Admentu"             -Warning "Going above the default length can look weird"
+    CreateReduxSlider -Name "Hookshot"          -Adult                            -Default 13   -Min 0   -Max 110  -Freq 10  -Small 5   -Large 10  -Text "Hookshot Length" -Info "Set the length of the Hookshot"                                     -Credits "Admentus"            -Warning "Going above the default length can look weird"
     if (StrLike -Str $GamePatch.settings -Val "Gold Quest") { $val = 26 } else { $val = 104 }
     CreateReduxSlider -Name "Longshot"          -Adult                            -Default $val -Min 0   -Max 110  -Freq 10  -Small 5   -Large 10  -Text "Longshot Length" -Info "Set the length of the Longshot"                                     -Credits "Admentus & AndiiSyn" -Warning "Going above the default length can look weird"
 
