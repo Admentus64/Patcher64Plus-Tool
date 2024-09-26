@@ -511,6 +511,9 @@ function ByteOptions() {
 
     # HERO MODE #
 
+    if (IsChecked $Redux.Hero.RedTektites) {        PatchBytes  -Offset "D0DB3C" -Patch "ovl_en_tite.bin"        ChangeBytes -Offset "D10D3C" -Values "06"; ChangeBytes -Offset "D10E57" -Values "64"; ChangeBytes -Offset "D10E5B" -Values "68"; ChangeBytes -Offset "D10E5F" -Values "74"; ChangeBytes -Offset "D10E63" -Values "BC"; ChangeBytes -Offset @("D0DC6C", "D0DD08", "D0DDA0") -Values "1100"
+    }
+
     if (IsIndex -Elem $Redux.Hero.MonsterHP -Index 3 -Not) { # Monsters
         if (IsIndex -Elem $Redux.Hero.MonsterHP) { $multi = 0 } else { [float]$multi = [float]$Redux.Hero.MonsterHP.text.split('x')[0] }
         
@@ -1330,6 +1333,18 @@ function ByteSceneOptions() {
         ChangeBytes -Offset "FB76E7" -Values "5A"; ChangeBytes -Offset "FB76FF" -Values "04"; ChangeBytes -Offset "FB7723" -Values "5A" # Goron Race
     }
 
+    if (IsChecked $Redux.Hero.RedTektites) {
+        PrepareMap  -Scene "Path to Mountain Village" -Map 0 -Header 1
+        ReplaceActor -Name "Tektite" -Compare "FFFE" -Param "FFFF"
+        ReplaceActor -Name "Tektite" -Compare "FFFE" -Param "FFFF"
+        ReplaceActor -Name "Tektite" -Compare "FFFE" -Param "FFFF"
+        SaveAndPatchLoadedScene
+
+        PrepareMap  -Scene "Path to Goron Village (Spring)" -Map 0 -Header 0
+        ReplaceActor -Name "Tektite" -Compare "FFFE" -Param "FFFF"
+        SaveAndPatchLoadedScene
+    }
+
 }
 
 
@@ -1396,6 +1411,12 @@ function ByteTextOptions() {
         SetMessage -ID "0043" -Text "Press <C><C Button> <W>to look through it" -Replace "Use <C><C Button> <W>to look through it"
         SetMessage -ID "0059" -Text "then press that <N><C><C Button> <W>Button to use it." -Replace "then use <N><C><C Button><W>."
     }
+
+
+
+    # DIFFICULTY #
+
+    if (IsChecked $Redux.Hero.RedTektites) { SetMessage -ID "1946" -Text "Blue" -Replace "" }
 
 
 
@@ -2147,6 +2168,7 @@ function CreateTabDifficulty() {
     CreateReduxCheckBox -Name "DeathIsMoonCrash"          -Text "Death is Moon Crash"                                                                     -Info "If you die, the moon will crash`nThere are no continues anymore"                             -Credits "Randomizer"
     CreateReduxCheckBox -Name "CloseBombShop"             -Text "Close Bomb Shop"                                                                   -Safe -Info "The bomb shop is now closed and the bomb bag is now found somewhere else"                    -Credits "Admentus (ported) & DeathBasket (ROM hack)"
     CreateReduxCheckBox -Name "MoveGoldDust"              -Text "Move Gold Dust"                                                            -Base 1 -Safe -Info "The Goron Race now just gives an empty bottle and the Gold Dust is now found somewhere else" -Credits "Admentus"
+    CreateReduxCheckBox -Name "RedTektites"               -Text "Red Tektites"                                                              -Base 1 -Safe -Info "Replace Blue Tektites with red ones once spring has arrived"                                 -Credits "Admentus"
     CreateReduxCheckBox -Name "PermanentKeese"            -Text "Permanent Keese"                                                                         -Info "Fire Keese or Ice Keese won't turn into regular Keese after hitting Link"                    -Credits "Garo-Mastah"
     CreateReduxCheckBox -Name "FasterIronKnuckles"        -Text "Faster Iron Knuckles"                                                                    -Info "Iron Knuckles now always run, even when in their armored form"                               -Credits "Garo-Mastah"
     CreateReduxCheckBox -Name "LargeIronKnuckles"         -Text "Large Iron Knuckles"                                                                     -Info "Iron Knuckles now now much bigger"                                                           -Credits "Garo-Mastah"

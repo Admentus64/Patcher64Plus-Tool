@@ -1,3 +1,6 @@
+v24.0.6
+- Added new Red Tektites option for MM for when spring has come (yes, they can swim)
+
 v24.0.5
 - Added new Hookshot Length option for MM
 - Adjusted maximum limit for hookshot/longshot length for OoT
