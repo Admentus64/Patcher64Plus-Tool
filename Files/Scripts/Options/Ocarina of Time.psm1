@@ -185,8 +185,7 @@ function ByteOptions() {
     if (IsChecked $Redux.Fixes.PoacherSaw)            { ChangeBytes -Offset "AE72CC" -Values "00000000"                                                  }
     if (IsChecked $Redux.Fixes.GerudosFortress)       { CopyBytes   -Offset "96E068" -Length "D48" -Start "974600"                                       } # Minimap fix
     if (IsChecked $Redux.Fixes.AlwaysMoveKingZora)    { ChangeBytes -Offset "E55BB0" -Values "85CE8C3C"; ChangeBytes -Offset "E55BB4" -Values "844F0EDA" }
-    if (IsChecked $Redux.Fixes.DeathMountainOwl)      { ChangeBytes -Offset "E304F0" -Values "240E0001"                                                  } # Spirit Temple Mirrors
-    if (IsChecked $Redux.Fixes.Dungeons)              { ChangeBytes -Offset "E45678" -Values "0000";     ChangeBytes -Offset "E4567B" -Values "00"       }
+    if (IsChecked $Redux.Fixes.DeathMountainOwl)      { ChangeBytes -Offset "E304F0" -Values "240E0001"                                                  }
     if (IsChecked $Redux.Fixes.Boomerang)             { ChangeBytes -Offset "F0F718" -Values "FC41C7FFFFFFFE38"                                          }
     if (IsChecked $Redux.Fixes.TimeDoor)              { ChangeBytes -Offset "AC8608" -Values "00902025848E00A4340100430000000000000000"                  } # Fix open Temple of Time door on first visit bug
     
@@ -2764,7 +2763,7 @@ function CreateTabMain() {
     CreateReduxCheckBox -Name "VisibleGerudoTent"         -Base 4 -Child -Text "Visible Gerudo Tent"       -Info "Make the tent in Gerudo Valley during the Child era visible`nThe tent was always accessible, just invisible"                              -Exclude "Child" -Credits "Admentus"
     CreateReduxCheckBox -Name "Graves"                    -Base 4 -Safe  -Text "Graveyard Graves"          -Info "The grave holes in Kakariko Graveyard behave as in the Rev 1 revision`nThe edges no longer force Link to grab or jump over them when trying to enter"      -Credits "Admentus"
     CreateReduxCheckBox -Name "TimeDoor"                  -Base 4 -Safe  -Text "Fix Door of Time"          -Info "Fix the positioning of the Temple of Time door, so you can not skip past it`nAlso fixes a bug where the door doesn't open on your first visit"             -Credits "Admentus & Randomizer"
-    $text = "Fix issues in Dodogono's Cavern, Water Temple and Spirit Temple`n`n- Gossip Stones that won't spawn fairies (Dodongo's Cavern)`n- Unreachable hookshot spot (Raging Water Cavern)`n- Three out of bounds pots (Raging Water Cavern)`n- Restore two Keese (Central Hall)`n- Fix a broken effect with the mirrors (Spirit Temple)"
+    $text = "Fix issues in Dodogono's Cavern, Water Temple and Spirit Temple`n`n- Gossip Stones that won't spawn fairies (Dodongo's Cavern)`n- Unreachable hookshot spot (Raging Water Cavern)`n- Three out of bounds pots (Raging Water Cavern)`n- Restore two Keese (Central Hall)"
     CreateReduxCheckBox -Name "Dungeons"                  -Base 4 -Safe  -Text "Fix Dungeons"              -Info ($text + "`n- Navi targeting Spots in Fire Temple, Ice Cavern, Shadow Temple and Spirit Temple" )                                    -Exclude "Child Quest" -Credits "Admentus, ZethN64, Sakura, Frostclaw, Steve(ToCoool) & GhostlyDark (ported)"
     CreateReduxCheckBox -Name "GreatFairyTextBoxes"       -Base 4 -Safe  -Text "Fix Great Fairy Textboxes" -Info 'Fix the broken textboxes outside the Great Fairy entrances in Death Mountain Crater and Desert Colossus'                                                   -Credits "Admentus"
 

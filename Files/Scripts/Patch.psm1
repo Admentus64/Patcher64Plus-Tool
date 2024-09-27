@@ -872,9 +872,9 @@ function ConvertROM([string]$Command) {
 #==============================================================================================================================================================================================
 function CompareHashSums([string]$Command) {
     
-    if ($Settings.Debug.CreateCompressedBPS -eq $True -or $Settings.Debug.CreateDecompressedBPS -eq $True)   { Copy-Item -LiteralPath $GetROM.run -Destination $GetROM.clean -Force }
-    if ($Settings.Debug.IgnoreChecksum -eq $True)                                                            { return $True }
-    if ( (StrLike -str $Command -val "Inject") -or (StrLike -str $Command -val "Apply Patch") )              { return $True }
+    if ($Settings.Debug.CreateCompressedBPS -eq $True -or $Settings.Debug.CreateDecompressedBPS -eq $True -or (DoExtractSceneFiles) )   { Copy-Item -LiteralPath $GetROM.run -Destination $GetROM.clean -Force }
+    if ($Settings.Debug.IgnoreChecksum -eq $True)                                                                                       { return $True }
+    if ( (StrLike -str $Command -val "Inject") -or (StrLike -str $Command -val "Apply Patch") )                                         { return $True }
 
     $item = GetROMVersion
     if ($item -eq $null) {
@@ -1135,7 +1135,7 @@ function DecompressROM() {
                 if ($hash -eq (Get-FileHash -Algorithm MD5 -LiteralPath $GetROM.cache).Hash) {
                     WriteToConsole "Reused ROM from cache"
                     Copy-Item -LiteralPath $GetROM.cache -Destination $GetROM.decomp -Force
-                    if ($Settings.Debug.CreateDecompressedBPS -eq $True -or (IsSet $ActorEditor) ) { Copy-Item -LiteralPath $GetROM.decomp -Destination $GetROM.cleanDecomp -Force }
+                    if ($Settings.Debug.CreateDecompressedBPS -eq $True -or (DoExtractSceneFiles) ) { Copy-Item -LiteralPath $GetROM.decomp -Destination $GetROM.cleanDecomp -Force }
                     if ($IsWiiVC) { RemoveFile $GetROM.run }
                     return $True
                 }
@@ -1159,7 +1159,7 @@ function DecompressROM() {
             CreatePath $Paths.Cache
             Copy-Item -LiteralPath $GetROM.decomp -Destination $GetROM.cache -Force
         }
-        if ($Settings.Debug.CreateDecompressedBPS -eq $True -or (IsSet $ActorEditor) ) { Copy-Item -LiteralPath $GetROM.decomp -Destination $GetROM.cleanDecomp -Force }
+        if ($Settings.Debug.CreateDecompressedBPS -eq $True -or (DoExtractSceneFiles) ) { Copy-Item -LiteralPath $GetROM.decomp -Destination $GetROM.cleanDecomp -Force }
     }
     elseif ($GameType.decompress -eq 2) {
         UpdateStatusLabel ("Extending " + $GameType.mode + " ROM...")

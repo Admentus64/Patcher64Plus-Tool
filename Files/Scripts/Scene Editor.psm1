@@ -5605,6 +5605,10 @@ function ExtractSceneFiles() {
                                 $param = Get16Bit ($actor[14] * 256 + $actor[15])
                                 InsertActor -ID $id -X $x -Y $y -Z $z -XRot $xrot -YRot $yrot -ZRot $zrot -Param $param -Silent
                             }
+
+                            if ($Scene.name -eq "Spirit Temple" -and $map -eq 25 -and (GetExtractQuest) -eq "Ura Quest") {
+                                InsertActor -ID "0112" -X (-167) -Y 1733 -Z (-830) -XRot 0 -YRot 0 -ZRot 0 -Param "3FE9" -Silent
+                            }
                         }
 
                         if (TestFile $fileObjects) {
