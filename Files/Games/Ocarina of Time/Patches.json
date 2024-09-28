@@ -15,7 +15,7 @@
 }, {
 
 	"title"				: "Child Quest Classic",
-	"version"			: "1.0.2",
+	"version"			: "1.0.3",
 	"vc_title"			: "Zelda: Child Quest",
 	"function" 			: "ChildQuestClassic",
 	"redux" : {
@@ -34,6 +34,25 @@
 
 }, {
 
+	"title"				: "Child Quest Pro (v1.0.0)",
+	"vc_title"			: "Zelda: Child Quest",
+	"function" 			: "ChildQuestPro",
+	"redux" : {
+		"remap_controls"	: 1,
+		"expand_memory"		: 1,
+		"tooltip"		: "Includes among other changes the inclusion of the D-Pad for dedicated item buttons"
+	},
+	"script"			: [ "Ocarina of Time", "Child Quest Pro" ],
+	"settings"			: "Child Quest Pro",
+	"base"				: 2,
+	"mq"				: 1,
+	"age"				: "Child",
+	"models"			: 0,
+	"presets"			: 0,
+	"output"			: "child_quest_pro",
+	"tooltip"			: "Child Quest Classic with a more powerful Young Link, being able to use Hookshot and Bow."
+
+}, {
 
 	"title"				: "Dawn & Dusk",
 	"version"			: "2.0",

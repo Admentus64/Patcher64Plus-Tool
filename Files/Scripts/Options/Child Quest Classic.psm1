@@ -14,6 +14,11 @@
 #==============================================================================================================================================================================================
 function ChildQuestClassicByteOptions() {
 
+    # Sound
+    CopyBytes   -Offset "2FDD2"  -Length "3F" -Start "2FE12" # Use Child sound IDs for Adult voice
+
+
+
     if (IsChecked -Elem $Redux.Graphics.EnhancedChildQuestModel) {
         # Equipment
         PatchBytes  -Offset "7F9000"  -Texture -Patch "Equipment\Kokiri Sword\Razor Sword.icon"                                                                                             # Icon:  Master Sword -> Razor Sword
@@ -133,6 +138,9 @@ function ChildQuestClassicByteOptions() {
     ChangeBytes -Offset "B65D15" -Values "3A02"                                                                                                       # Fix Ganon's Castle intro
     ChangeBytes -Offset "F01C7C" -Values "1500"                                                                                                       # Fix Silver Blocks
     ChangeBytes -Offset "EB7FA8" -Values "1400"                                                                                                       # Fix Spirit Temple Stone Elevator
+    ChangeBytes -Offset "AFCD2C" -Values "1400"                                                                                                       # Withered Deku Tree during Deku Sprout cutscenes (tree)
+    ChangeBytes -Offset "C7332C" -Values "1400"                                                                                                       # Withered Deku Tree during Deku Sprout cutscenes (jaw)
+    ChangeBytes -Offset "D5A80C" -Values "1500"                                                                                                       # Prevent Deku Tree Sprout from disappearing after its cutscene
 
 
 
@@ -1287,6 +1295,7 @@ function ChildQuestClassicByteTextOptions() {
 
 
     # Time related dialog
+    SetMessage -ID "1063" -Replace "<NS>Hey, have you seen your old<N>friends? None of them grew<N>a tiny bit since you first left,<N>did they?<New Box><NS>That's because the <G>Kokiri<W> never<N>grow up! Even after many years,<N>they're still going to be kids!" # Deku Tree Sprout
     SetMessage -ID "5025" -Replace "<NS>We Sheikah have served the<N>royalty of Hyrule from generation<N>to generation as attendants.<N>However...<New Box><NS>On that day Ganondorf<N>suddenly attacked...and<N>Hyrule Castle surrendered<N>after a short time.<New Box><NS>Ganondorf's target was one of<N>the keys to the Sacred Realm...the<N>hidden treasure of the Royal<N>Family...The Ocarina of Time!<New Box><NS>My duty bound me to take Zelda<N>out of Ganondorf's reach.<New Box><NS>When last I saw you, as we made<N>our escape from the castle, you<N>were just a lad...<New Box><NS>Now I see that you have become<N> a fine hero..." # Impa
     SetMessage -ID "70C9" -Replace "<NS>The two Triforce parts that I<N>could not capture on that day...<New Box><NS>I didn't expect they would be<N>hidden within you two!" # Ganondorf
     SetMessage -ID "6035" -Replace "<NS>Kid, let me thank you.<N><NS>Heheheh...look what the little<N>kid has become--a competent<N>swordsman!" # Nabooru

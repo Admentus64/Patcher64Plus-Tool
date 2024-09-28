@@ -1,3 +1,10 @@
+v24.1.0
+- Added new OoT ROM hack: Child Quest Pro
+- Updated Child Quest Classic to v1.0.3
+	- Adjust Deku Tree Sprout cutscene, with altered dialog and a withered Deku Tree
+	- Fix Deku Tree Sprout disappearing after its cutscene
+	- Use Child Link sound IDs for Adult Link's voice to fix SFX during the final blow on Ganon
+
 v24.0.6
 - Added new Red Tektites option for MM for when spring has come (yes, they can swim)
 - Fixed issues with Ura Quest
