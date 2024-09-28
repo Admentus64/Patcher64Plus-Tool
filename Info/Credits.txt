@@ -120,6 +120,10 @@
 - Code Development:			Admentus
 - Level Design:				GhostlyDark
 
+--- Child Quest Pro ---
+- Code Development:			Admentus
+- Level Design:				GhostlyDark
+
 --- Dawn and Dusk ---
 - Lead Development and Music:		Captain Seedy-Eye
 - 64DD Porting:				LuigiBlood
