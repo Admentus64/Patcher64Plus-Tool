@@ -451,9 +451,10 @@ function ChangePatch() {
 
             if ($item.tooltip -ne $null) {
                 $info = $item.tooltip
-                if ($item.version -ne $null -or $item.redux.version -ne $null)   { $info += "{0}"                                      }
-                if ($item.version                                   -ne $null)   { $info += "{0}Patch version: " + $item.version       }
-                if ($item.redux.version                             -ne $null)   { $info += "{0}Redux version: " + $item.redux.version }
+                if ($item.version -ne $null -or $item.redux.version -ne $null)   { $info += "{0}"                                         }
+                if ($item.version                                   -ne $null)   { $info += "{0}Patch version: "    + $item.version       }
+                if ($item.redux.version                             -ne $null)   { $info += "{0}Redux version: "    + $item.redux.version }
+                if ($item.credits                                   -ne $null)   { $info += "{0}{0}Patch made by: " + $item.credits       }
                 $PatchToolTip.SetToolTip($Patches.Button, ([string]::Format($info, [Environment]::NewLine)))
             }
             else { $PatchToolTip.RemoveAll() }
