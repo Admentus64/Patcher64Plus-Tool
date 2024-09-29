@@ -1,5 +1,13 @@
 [ {
+
+	"title"		: "Native ROM",
+	"console"	: "Native",
+	"tooltip"	: "For patching a native ROM"
+
+}, {
+
 	"title"		: "Wii VC Emulator",
-	"tooltip"	: "For patching the Wii VC emulator",
-	"console"	: "Wii VC"
+	"console"	: "Wii VC",
+	"tooltip"	: "For patching the Wii VC emulator"
+
 } ]

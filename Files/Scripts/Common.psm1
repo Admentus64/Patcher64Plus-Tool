@@ -12,7 +12,10 @@ function SetWiiVCMode([boolean]$Enable=!$IsWiiVC) {
         if ($RightPanel.Options.Controls.ContainsKey("OptionsPanel")) { ShowRightPanel $RightPanel.Options } else { ShowRightPanel $RightPanel.Settings }
     }
 
-    if ( ($GamePatch.console -eq "Native" -and $IsWiiVC) -or ($GamePatch.console -eq "Wii VC" -and !$IsWiiVC) ) { ChangePatch }
+    if ( ($GamePatch.console -eq "Native" -and $IsWiiVC) -or ($GamePatch.console -eq "Wii VC" -and !$IsWiiVC) ) {
+        if ($GameType.patches -eq 2) { ChangePatchList }
+        ChangePatch
+    }
 
     SetVCContent
     if ( (TestFile $GameFiles.controls) -and $GameSettings -ne $null -and $IsWiiVC) { CreateVCRemapPanel }
@@ -112,7 +115,7 @@ function ChangeGamesList() {
 #==============================================================================================================================================================================================
 function ChangePatchList() {
     
-    $Patches.Panel.Visible = $GameType.patches -eq 1 -or ($GameType.patches -eq 2 -and $IsWiiVC)
+    $Patches.Panel.Visible = $GameType.patches -gt 0
     if ($GameType.patches -gt 0) {
         WriteToConsole "Loading patches..."
 
@@ -120,6 +123,13 @@ function ChangePatchList() {
         $Patches.Group.Text = $GameType.mode + " - Patch Options"
         $Patches.Type.Items.Clear()
         $Patches.Type.Items.AddRange(($Files.json.patches.title | Get-Unique))
+
+        # Remove items when in patch mode 2
+        if ($GameType.patches -eq 2) {
+            foreach ($item in $Files.json.patches) {
+                if ( (!$IsWiiVC -and $item.console -eq "Wii VC") -or ($IsWiiVC -and $item.console -eq "Native") ) { $Patches.Type.Items.Remove($item.title) }
+            }
+        }
 
         # Reset last index
         foreach ($index in $Patches.Type.Items) {
@@ -217,7 +227,7 @@ function SetMainScreenSize() {
 
     # Arrange Panels
     if ($IsWiiVC) {
-        if ( ($GameType.patches -eq 1) -or ($GameType.patches -eq 2 -and $IsWiiVC) ) {
+        if ($GameType.patches -gt 0) {
             $Patches.Panel.Top = $CustomHeader.Panel.Bottom + (DPISize 5)
             $VC.Panel.Top      = $Patches.Panel.Bottom      + (DPISize 5)
         }
@@ -230,10 +240,10 @@ function SetMainScreenSize() {
             else                   { $StatusPanel.Top   = $CurrentGame.Panel.Bottom + (DPISize 5) }
         }
         else {
-            if ( ($GameType.patches -eq 1) -or ($GameType.patches -eq 2 -and $IsWiiVC) )   { $Patches.Panel.Top = $CustomHeader.Panel.Bottom + (DPISize 5) }
-            else                                                                           { $StatusPanel.Top   = $CustomHeader.Panel.Bottom + (DPISize 5) }
+            if ($GameType.patches -gt 0)   { $Patches.Panel.Top = $CustomHeader.Panel.Bottom + (DPISize 5) }
+            else                           { $StatusPanel.Top   = $CustomHeader.Panel.Bottom + (DPISize 5) }
         }
-        if ( ($GameType.patches -eq 1) -or ($GameType.patches -eq 2 -and $IsWiiVC) )       { $StatusPanel.Top   = $Patches.Panel.Bottom      + (DPISize 5) }
+        if ($GameType.patches -gt 0)       { $StatusPanel.Top   = $Patches.Panel.Bottom      + (DPISize 5) }
     }
 
     if ($StatusPanel.Bottom -gt ( (DPISize $Patcher.WindowHeight) - (DPISize 25) ) ) {

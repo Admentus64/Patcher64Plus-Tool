@@ -104,7 +104,7 @@ function MainFunction([string]$Command, [string]$PatchedFileName) {
     }
 
     # Check if ROM is getting patched
-    if ( (IsChecked $Patches.Options) -or (IsChecked $Patches.Redux) -or (IsSet $GamePatch.patch) -or (StrLike -str $Command -val "Apply Patch") -or (IsSet $GamePatch.preset) -or (IsSet $GamePatch.function) -or (DoAssertSceneFiles) ) { $PatchInfo.run = $True } else { $PatchInfo.run = $False }
+    if ( (IsChecked $Patches.Options) -or (IsChecked $Patches.Redux) -or (IsSet $GamePatch.patch) -or (StrLike -str $Command -val "Apply Patch") -or (IsSet $GamePatch.preset) -or (IsSet $GamePatch.function) -or (DoAssertSceneFiles) -or (IsChecked $CustomHeader.EnableHeader) ) { $PatchInfo.run = $True } else { $PatchInfo.run = $False }
 
     # Refresh game options script
     RefreshGameScript
@@ -217,7 +217,6 @@ function MainFunctionPatch([string]$Command, [Array]$Header, [string]$PatchedFil
     if ($IsWiiVC) { $text = "WAD" } else { $text = "ROM" }
     if (DoAssertSceneFiles)                 { UpdateStatusLabel ("Done asserting "  + $GameType.mode + " " + $text + ".");                                                                 return }
     if (DoExtractSceneFiles)                { UpdateStatusLabel ("Done extracting " + $GameType.mode + " " + $text + ".");                                                                 return }
-    if     (!$PatchInfo.run)                { UpdateStatusLabel ("There was nothing to patch for the " + $GameType.mode + " " + $text + ".")                                                      }
     if     (!$PatchInfo.run)                { UpdateStatusLabel ("There was nothing to patch for the " + $GameType.mode + " " + $text + ".")                                                      }
     elseif ($WarningError)                  { UpdateStatusLabel ("Done patching " + $GameType.mode + " " + $text + ", but encountered issues. Please check the log.")                      -Error }
     elseif ( ($IsWiiVC -and !(TestFile $WADFile.patched) ) -or (!$IsWiiVC -and !(TestFile $GetROM.patched) ) ) {
@@ -875,6 +874,7 @@ function CompareHashSums([string]$Command) {
     if ($Settings.Debug.CreateCompressedBPS -eq $True -or $Settings.Debug.CreateDecompressedBPS -eq $True -or (DoExtractSceneFiles) )   { Copy-Item -LiteralPath $GetROM.run -Destination $GetROM.clean -Force }
     if ($Settings.Debug.IgnoreChecksum -eq $True)                                                                                       { return $True }
     if ( (StrLike -str $Command -val "Inject") -or (StrLike -str $Command -val "Apply Patch") )                                         { return $True }
+    if ($GameType.custom_patch -eq 1)                                                                                                   { return $True }
 
     $item = GetROMVersion
     if ($item -eq $null) {
