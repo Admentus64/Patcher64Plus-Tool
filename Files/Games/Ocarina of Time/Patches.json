@@ -36,7 +36,7 @@
 }, {
 
 	"title"				: "Child Quest Pro",
-	"version"			: "1.0.0",
+	"version"			: "1.0.1",
 	"vc_title"			: "Zelda: Child Quest",
 	"function" 			: "ChildQuestPro",
 	"redux" : {

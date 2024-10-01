@@ -66,7 +66,7 @@ function ChildQuestProByteOptions() {
     ChangeBytes -Offset @("BB5E40", "BB60C8", "BB6288") -Values "1500"                                                                # Ignore Bullet Bag for Cursor Selection
     ChangeBytes -Offset "BB64E4" -Values "1500"                                                                                       # Show Quiver Text Label
     ChangeBytes -Offset "BC70F0" -Values "00";   ChangeBytes -Offset "BC70F8" -Values "4A"; ChangeBytes -Offset "BB6513" -Values "49" # Display Quiver in Equipment Subscreen
-    ChangeBytes -Offset "D35EC4" -Values "1500"                                                                                       # Quiver reward shooting gallery
+    ChangeBytes -Offset @("D35EC4", "D36114") -Values "1500"                                                                          # Quiver reward shooting gallery
     
     # Quiver reward lost woods
     ChangeBytes -Offset "E59376" -Values "00BE"; ChangeBytes -Offset "E59717" -Values "15"   # Loaded Object, Present Prize Model (Quiver 40) 
