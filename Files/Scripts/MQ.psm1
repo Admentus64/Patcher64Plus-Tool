@@ -2,23 +2,23 @@ function PatchDungeonsOoTMQ() {
     
     if ($GameType.mode -ne "Ocarina of Time") { return }
 
-    if ( (IsIndex -Elem $Redux.MQ.Logo -Text "Master Quest") -or (IsIndex -Elem $Redux.MQ.Logo -Text "New Master Quest") ) { # MQ Title with Subtitle
-        if     (IsIndex -Elem $Redux.MQ.Logo -Text "Master Quest")       { PatchBytes -Offset "1795300" -Texture -Patch "Logo\mq_logo.bin"  }
-        elseif (IsIndex -Elem $Redux.MQ.Logo -Text "New Master Quest")   { PatchBytes -Offset "1795300" -Texture -Patch "Logo\nmq_logo.bin" }
+    if (IsIndex -Elem $Redux.MQ.Logo -Text "Master Quest") { # MQ Title with Subtitle
+        PatchBytes -Offset "1795300" -Texture -Patch "Logo\mq_logo.bin"
         PatchBytes -Offset "17AE300" -Texture -Patch "Logo\mq_copyright.bin"
-        ChangeBytes -Offset "E6E266" -Values "64 96 34 21 FF" # THE LEGEND OF + OCARINA OF TIME (14 50 35 8C A0)
-        ChangeBytes -Offset "E6E2A6" -Values "08 5C 35 8C 98" # Overlay Title color
-        ChangeBytes -Offset "E6C4BC" -Values "3C 01 43 48 44 81 30 00 E4 60 62 D8 E4 60 62 DC E4 60 62 E4 E4 64 62 D4 E4 66 62 E0"
-        ChangeBytes -Offset "E6C764" -Values "3C 01 43 2A 44 81 50 00 26 01 7F FF 24 0A 00 02 E4 42 62 D8 E4 42 62 DC E4 42 62 E4 E4 48 62 D4 E4 4A 62 E0"
-        ChangeBytes -Offset "E6C9F0" -Values "3C 01 BF B0 C4 44 62 D4 44 81 80 00 C4 4A 62 E0 46 06 22 00 84 4E 62 CA 26 01 7F FF 46 10 54 80 E4 48 62 D4 25 CF FF FF E4 52 62 E0"
-        ChangeBytes -Offset "E6CA48" -Values "3C 01 43 48 44 81 40 00 26 01 7F FF E4 46 62 D4 E4 48 62 E0"
+        ChangeBytes -Offset "E6E266" -Values "64963421FF" # THE LEGEND OF + OCARINA OF TIME (1450358CA0)
+        ChangeBytes -Offset "E6E2A6" -Values "085C358C98" # Overlay Title color
+        ChangeBytes -Offset "E6C4BC" -Values "3C01434844813000E46062D8E46062DCE46062E4E46462D4E46662E0"
+        ChangeBytes -Offset "E6C764" -Values "3C01432A4481500026017FFF240A0002E44262D8E44262DCE44262E4E44862D4E44A62E0"
+        ChangeBytes -Offset "E6C9F0" -Values "3C01BFB0C44462D444818000C44A62E046062200844E62CA26017FFF46105480E44862D425CFFFFFE45262E0"
+        ChangeBytes -Offset "E6CA48" -Values "3C0143484481400026017FFFE44662D4E44862E0"
     }
+    elseif   (IsIndex -Elem $Redux.MQ.Logo -Text "New Master Quest")         { PatchBytes -Offset "1795300" -Texture -Patch "Logo\nmq_logo.bin" }          # New Master Quest Title
     elseif ( (IsIndex -Elem $Redux.MQ.Logo -Text "Ura Quest") -or (IsIndex -Elem $Redux.MQ.Logo -Text "Ura Quest + Subtitle") ) { # Ura Title
         if     (IsIndex -Elem $Redux.MQ.Logo -Text "Ura Quest")              { PatchBytes -Offset "1795300" -Texture -Patch "Logo\ura_logo.bin"          } # Ura Title
         elseif (IsIndex -Elem $Redux.MQ.Logo -Text "Ura Quest + Subtitle")   { PatchBytes -Offset "1795300" -Texture -Patch "Logo\ura_subtitle_logo.bin" } # Ura Title + Subtitle
         PatchBytes -Offset "17AE300" -Texture -Patch "Logo\ura_copyright.bin"
-        ChangeBytes -Offset "E6E266" -Values "C8 96 34 21 C8" # THE LEGEND OF + OCARINA OF TIME
-        ChangeBytes -Offset "E6E2A6" -Values "64 32 35 8C 64" # Overlay Title color
+        ChangeBytes -Offset "E6E266" -Values "C8963421C8" # THE LEGEND OF + OCARINA OF TIME
+        ChangeBytes -Offset "E6E2A6" -Values "6432358C64" # Overlay Title color
         ChangeBytes -Offset "E6DE2E" -Values "96" # Title Flames color
     }
 

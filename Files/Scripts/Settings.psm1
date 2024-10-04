@@ -42,16 +42,16 @@ function Out-IniFile([hashtable]$InputObject, [string]$FilePath) {
   # RemoveFile $FilePath
     $OutFile = New-Item -ItemType File -Path $Filepath -Force
     foreach ($i in $InputObject.keys) {
-        if (!($($InputObject[$i].GetType().Name) -eq "Hashtable")) { Add-Content -Path $outFile -Value "$i=$($InputObject[$i])" } # No Sections
+        if (!($($InputObject[$i].GetType().Name) -eq "Hashtable")) { Add-Content -Path $outFile -Value "$i=$($InputObject[$i])" -Encoding UTF8 } # No Sections
         else {
             #Sections
-            Add-Content -Path $outFile -Value "[$i]"
+            Add-Content -Path $outFile -Value "[$i]" -Encoding UTF8
             foreach ($j in ($InputObject[$i].keys | Sort-Object)) {
                 
-                if ($j -match "^Comment[\d]+")   { Add-Content -Path $OutFile -Value "$($InputObject[$i][$j])" }
-                else                             { Add-Content -Path $OutFile -Value "$j=$($InputObject[$i][$j])" }
+                if ($j -match "^Comment[\d]+")   { Add-Content -Path $OutFile -Value "$($InputObject[$i][$j])"    -Encoding UTF8 }
+                else                             { Add-Content -Path $OutFile -Value "$j=$($InputObject[$i][$j])" -Encoding UTF8 }
             }
-            Add-Content -Path $outFile -Value ""
+            Add-Content -Path $outFile -Value "" -Encoding UTF8
         }
     }
 

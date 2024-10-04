@@ -1560,7 +1560,7 @@ function ByteTextOptions() {
    }
 
     if ( (IsDefault $Redux.Text.TatlScript -Not) -and (IsDefault $Redux.Text.TatlName -Not) -and $Redux.Text.TatlName.Text.Count -gt 0) {
-        SetMessage -ID "057A" -Text $LanguagePatch.tatl -Replace $Redux.Text.TatlName.Text; SetMessage -ID "057C"; SetMessage -ID "057E"; SetMessage -ID "058E"; SetMessage -ID "0735"; SetMessage -ID "073E"; SetMessage -ID "073F"; SetMessage -ID "1F4E"
+        SetMessage -ID "057A" -Text $LanguagePatch.tatl -Replace ($Redux.Text.TatlName.Text -replace "Тдтп", "Tatl"); SetMessage -ID "057C"; SetMessage -ID "057E"; SetMessage -ID "058E"; SetMessage -ID "0735"; SetMessage -ID "073E"; SetMessage -ID "073F"; SetMessage -ID "1F4E"
         if (TestFile ($GameFiles.textures + "\Tatl\" + $Redux.Text.TatlName.Text + ".cup") )   { PatchBytes -Offset "1EBFAE0" -Texture -Patch ("Tatl\" + $Redux.Text.TatlName.Text + ".cup") }
         else                                                                                   { PatchBytes -Offset "1EBFAE0" -Texture -Patch ("Tatl\Info.cup")                              }
     }

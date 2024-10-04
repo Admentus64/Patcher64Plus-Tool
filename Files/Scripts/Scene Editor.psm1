@@ -18,40 +18,40 @@ function CreateSceneEditorDialog() {
 
 
     # Groups
-    $SceneEditor.TopGroup                                          = CreateGroupBox -X (DPISize 10) -Y (DPISize 5)                                  -Width ($SceneEditor.Dialog.Width - (DPISize 30)) -Height (DPISize 70)                                 -AddTo $SceneEditor.Dialog
-    $SceneEditor.BottomGroup                                       = CreateGroupBox -X (DPISize 10) -Y ($SceneEditor.TopGroup.Bottom + (DPISize 5)) -Width ($SceneEditor.Dialog.Width - (DPISize 30)) -Height ($SceneEditor.Dialog.Height - (DPISize 190)) -AddTo $SceneEditor.Dialog
+    $SceneEditor.TopGroup                                             = CreateGroupBox -X (DPISize 10) -Y (DPISize 5)                                  -Width ($SceneEditor.Dialog.Width - (DPISize 30)) -Height (DPISize 70)                                 -AddTo $SceneEditor.Dialog
+    $SceneEditor.BottomGroup                                          = CreateGroupBox -X (DPISize 10) -Y ($SceneEditor.TopGroup.Bottom + (DPISize 5)) -Width ($SceneEditor.Dialog.Width - (DPISize 30)) -Height ($SceneEditor.Dialog.Height - (DPISize 190)) -AddTo $SceneEditor.Dialog
     
-    $SceneEditor.BottomPanelMapSettings                            = CreatePanel -X (DPISize 5) -Y (DPISize 10) -Width ($SceneEditor.BottomGroup.Width - (DPISize 10)) -Height ($SceneEditor.BottomGroup.Height - (DPISize 15)) -AddTo $SceneEditor.BottomGroup
-    $SceneEditor.BottomPanelMapSettings.AutoScroll                 = $SceneEditor.BottomPanelMapSettings.HorizontalScroll.Enabled = $SceneEditor.BottomPanelMapSettings.HorizontalScroll.Visible = $False
-    $SceneEditor.BottomPanelMapSettings.HorizontalScroll.Maximum   = 0
-    $SceneEditor.BottomPanelMapSettings.AutoScroll                 = $True
-    $SceneEditor.BottomPanelMapSettings.AutoScrollMargin           = $SceneEditor.BottomPanelMapSettings.AutoScrollMinSize = New-Object System.Drawing.Size(0, 0)
+    $SceneEditor.BottomPanelMapSettings                               = CreatePanel -X (DPISize 5) -Y (DPISize 10) -Width ($SceneEditor.BottomGroup.Width - (DPISize 10)) -Height ($SceneEditor.BottomGroup.Height - (DPISize 15)) -AddTo $SceneEditor.BottomGroup
+    $SceneEditor.BottomPanelMapSettings.AutoScroll                    = $SceneEditor.BottomPanelMapSettings.HorizontalScroll.Enabled = $SceneEditor.BottomPanelMapSettings.HorizontalScroll.Visible = $False
+    $SceneEditor.BottomPanelMapSettings.HorizontalScroll.Maximum      = 0
+    $SceneEditor.BottomPanelMapSettings.AutoScroll                    = $True
+    $SceneEditor.BottomPanelMapSettings.AutoScrollMargin              = $SceneEditor.BottomPanelMapSettings.AutoScrollMinSize = New-Object System.Drawing.Size(0, 0)
     $SceneEditor.BottomPanelMapSettings.Hide()
 
-    $SceneEditor.BottomPanelSceneSettings                          = CreatePanel -X $SceneEditor.BottomPanelMapSettings.Left   -Y $SceneEditor.BottomPanelMapSettings.Top    -Width $SceneEditor.BottomPanelMapSettings.Width   -Height $SceneEditor.BottomPanelMapSettings.Height   -AddTo $SceneEditor.BottomGroup
-    $SceneEditor.BottomPanelSceneSettings.AutoScroll               = $SceneEditor.BottomPanelSceneSettings.HorizontalScroll.Enabled = $SceneEditor.BottomPanelSceneSettings.HorizontalScroll.Visible = $False
-    $SceneEditor.BottomPanelSceneSettings.HorizontalScroll.Maximum = 0
-    $SceneEditor.BottomPanelSceneSettings.AutoScroll               = $True
-    $SceneEditor.BottomPanelSceneSettings.AutoScrollMargin         = $SceneEditor.BottomPanelSceneSettings.AutoScrollMinSize = New-Object System.Drawing.Size(0, 0)
+    $SceneEditor.BottomPanelSceneSettings                             = CreatePanel -X $SceneEditor.BottomPanelMapSettings.Left   -Y $SceneEditor.BottomPanelMapSettings.Top    -Width $SceneEditor.BottomPanelMapSettings.Width   -Height $SceneEditor.BottomPanelMapSettings.Height   -AddTo $SceneEditor.BottomGroup
+    $SceneEditor.BottomPanelSceneSettings.AutoScroll                  = $SceneEditor.BottomPanelSceneSettings.HorizontalScroll.Enabled = $SceneEditor.BottomPanelSceneSettings.HorizontalScroll.Visible = $False
+    $SceneEditor.BottomPanelSceneSettings.HorizontalScroll.Maximum    = 0
+    $SceneEditor.BottomPanelSceneSettings.AutoScroll                  = $True
+    $SceneEditor.BottomPanelSceneSettings.AutoScrollMargin            = $SceneEditor.BottomPanelSceneSettings.AutoScrollMinSize = New-Object System.Drawing.Size(0, 0)
     $SceneEditor.BottomPanelSceneSettings.Hide()
 
-    $SceneEditor.BottomPanelActors                                 = CreatePanel -X $SceneEditor.BottomPanelSceneSettings.Left -Y $SceneEditor.BottomPanelSceneSettings.Top  -Width $SceneEditor.BottomPanelSceneSettings.Width -Height $SceneEditor.BottomPanelSceneSettings.Height -AddTo $SceneEditor.BottomGroup
-    $SceneEditor.BottomPanelActors.AutoScroll                      = $SceneEditor.BottomPanelActors.HorizontalScroll.Enabled = $SceneEditor.BottomPanelActors.HorizontalScroll.Visible = $False
-    $SceneEditor.BottomPanelActors.HorizontalScroll.Maximum        = 0
-    $SceneEditor.BottomPanelActors.AutoScroll                      = $True
-    $SceneEditor.BottomPanelActors.AutoScrollMargin                = $SceneEditor.BottomPanelActors.AutoScrollMinSize = New-Object System.Drawing.Size(0, 0)
+    $SceneEditor.BottomPanelActors                                    = CreatePanel -X $SceneEditor.BottomPanelSceneSettings.Left -Y $SceneEditor.BottomPanelSceneSettings.Top  -Width $SceneEditor.BottomPanelSceneSettings.Width -Height $SceneEditor.BottomPanelSceneSettings.Height -AddTo $SceneEditor.BottomGroup
+    $SceneEditor.BottomPanelActors.AutoScroll                         = $SceneEditor.BottomPanelActors.HorizontalScroll.Enabled = $SceneEditor.BottomPanelActors.HorizontalScroll.Visible = $False
+    $SceneEditor.BottomPanelActors.HorizontalScroll.Maximum           = 0
+    $SceneEditor.BottomPanelActors.AutoScroll                         = $True
+    $SceneEditor.BottomPanelActors.AutoScrollMargin                   = $SceneEditor.BottomPanelActors.AutoScrollMinSize = New-Object System.Drawing.Size(0, 0)
 
-    $SceneEditor.BottomPanelObjects                                = CreatePanel -X $SceneEditor.BottomPanelActors.Left        -Y $SceneEditor.BottomPanelActors.Top         -Width $SceneEditor.BottomPanelActors.Width        -Height $SceneEditor.BottomPanelActors.Height        -AddTo $SceneEditor.BottomGroup
-    $SceneEditor.BottomPanelObjects.AutoScroll                     = $SceneEditor.BottomPanelObjects.HorizontalScroll.Enabled = $SceneEditor.BottomPanelObjects.HorizontalScroll.Visible = $False
-    $SceneEditor.BottomPanelObjects.HorizontalScroll.Maximum       = 0
-    $SceneEditor.BottomPanelObjects.AutoScroll                     = $True
-    $SceneEditor.BottomPanelObjects.AutoScrollMargin               = $SceneEditor.BottomPanelObjects.AutoScrollMinSize = New-Object System.Drawing.Size(0, 0)
+    $SceneEditor.BottomPanelObjects                                   = CreatePanel -X $SceneEditor.BottomPanelActors.Left        -Y $SceneEditor.BottomPanelActors.Top         -Width $SceneEditor.BottomPanelActors.Width        -Height $SceneEditor.BottomPanelActors.Height        -AddTo $SceneEditor.BottomGroup
+    $SceneEditor.BottomPanelObjects.AutoScroll                        = $SceneEditor.BottomPanelObjects.HorizontalScroll.Enabled = $SceneEditor.BottomPanelObjects.HorizontalScroll.Visible = $False
+    $SceneEditor.BottomPanelObjects.HorizontalScroll.Maximum          = 0
+    $SceneEditor.BottomPanelObjects.AutoScroll                        = $True
+    $SceneEditor.BottomPanelObjects.AutoScrollMargin                  = $SceneEditor.BottomPanelObjects.AutoScrollMinSize = New-Object System.Drawing.Size(0, 0)
     $SceneEditor.BottomPanelObjects.Hide()
 
-    $SceneEditor.BottomPanelMapPreview                             = CreatePanel -X $SceneEditor.BottomPanelActors.Left        -Y $SceneEditor.BottomPanelActors.Top         -Width $SceneEditor.BottomPanelActors.Width        -Height $SceneEditor.BottomPanelActors.Height        -AddTo $SceneEditor.BottomGroup
-    $SceneEditor.MapPreviewImage                                   = CreateForm  -X (DPISize 50) -Y (DPISize 5) -Width (DPISize 1152) -Height (DPISize 648) -Form (New-Object Windows.Forms.PictureBox) -AddTo $SceneEditor.BottomPanelMapPreview
+    $SceneEditor.BottomPanelMapPreview                                = CreatePanel -X $SceneEditor.BottomPanelActors.Left        -Y $SceneEditor.BottomPanelActors.Top         -Width $SceneEditor.BottomPanelActors.Width        -Height $SceneEditor.BottomPanelActors.Height        -AddTo $SceneEditor.BottomGroup
+    $SceneEditor.MapPreviewImage                                      = CreateForm  -X (DPISize 50) -Y (DPISize 5) -Width (DPISize 1152) -Height (DPISize 648) -Form (New-Object Windows.Forms.PictureBox) -AddTo $SceneEditor.BottomPanelMapPreview
     $SceneEditor.BottomPanelMapPreview.Hide()
-    $file                                                          = $Paths.Games + "\" + $Files.json.sceneEditor.game + "\Maps\default.jpg"
+    $file                                                             = $Paths.Games + "\" + $Files.json.sceneEditor.game + "\Maps\default.jpg"
     if (TestFile $file) { SetBitMap -Path $file -Box $SceneEditor.MapPreviewImage } else { $SceneEditor.MapPreviewImage.Image = $null }
 
 
@@ -399,7 +399,7 @@ function RunSceneEditor([object]$Game=$null) {
         CreateSceneEditorDialog
         $SceneEditor.Dialog.Show()
     }
-    catch { WriteToConsole -Text ("Error Opening Scene Editor:" + $_) -Error }
+    catch { WriteToConsole -Text ("Error Opening Scene Editor: " + $_) -Error }
 
 }
 
@@ -1684,8 +1684,57 @@ function LoadSceneSettings() {
     # TRANSITION ACTORS #
 
     if ($SceneEditor.SceneOffsets[$SceneEditor.LoadedHeader].ActorIndex -ne $null) {
-        $group = CreateGroupBox -Text "Transition Actors" -X $group.left -Y $y -Width $group.width -Height ( (DPISize 95) * (GetTransitionActorCount) + (DPISize 30) ) -AddTo $SceneEditor.BottomPanelSceneSettings
+        if ($SceneEditor.BottomPanelTransitionActors -ne $null) { $SceneEditor.BottomPanelTransitionActors.Controls.Clear() }
+        $SceneEditor.BottomPanelTransitionActors                          = CreatePanel -X $group.left -Y $y -Width ($group.width - (DPISize 20) ) -Height (DPISize 500) -AddTo $SceneEditor.BottomPanelSceneSettings
+        $SceneEditor.BottomPanelTransitionActors.AutoScroll               = $SceneEditor.BottomPanelTransitionActors.HorizontalScroll.Enabled = $SceneEditor.BottomPanelTransitionActors.HorizontalScroll.Visible = $False
+        $SceneEditor.BottomPanelTransitionActors.HorizontalScroll.Maximum = 0
+        $SceneEditor.BottomPanelTransitionActors.AutoScroll               = $True
+        $SceneEditor.BottomPanelTransitionActors.AutoScrollMargin         = $SceneEditor.BottomPanelTransitionActors.AutoScrollMinSize = New-Object System.Drawing.Size(0, 0)
+
+        $group = CreateGroupBox -Text "Transition Actors" -X 0 -Y 0 -Width $group.width -Height ( (DPISize 95) * (GetTransitionActorCount) + (DPISize 30) ) -AddTo $SceneEditor.BottomPanelTransitionActors
+        $y     = $SceneEditor.BottomPanelTransitionActors.bottom + (DPISize 10)
         for ($i=0; $i -lt (GetTransitionActorCount); $i++) { AddTransitionActor -Group $group }
+    }
+
+
+
+    # LIGHTNING LIST #
+
+    if ($SceneEditor.SceneOffsets[$SceneEditor.LoadedHeader].LightningCount -gt 0) {
+        $group = CreateGroupBox -Text "Lightning List" -X $group.left -Y $y -Width $group.width -Height ( (DPISize 20) * (GetLightningCount) + (DPISize 30) ) -AddTo $SceneEditor.BottomPanelSceneSettings
+        
+        for ($i=0; $i -lt (GetLightningCount); $i++) {
+            $offset = (GetLightningStart) + $i * 22
+
+            CreateLabel -X (DPISize 10)   -Y ( (DPISize (30 + $i * 20) ) ) -Width (DPISize 50)   -Height (DPISize 20) -Text ("Index: "           + ($i+1))             -AddTo $group
+
+            $value = $SceneEditor.SceneArray[$offset+0]  * 0x10000 + $SceneEditor.SceneArray[$offset+1]  * 0x100 + $SceneEditor.SceneArray[$offset+2]
+            CreateLabel -X (DPISize 80)   -Y ( (DPISize (30 + $i * 20) ) ) -Width (DPISize 140)  -Height (DPISize 20) -Text ("Ambient Color: "   + "{0:X6}" -f $value) -AddTo $group
+
+            $value = $SceneEditor.SceneArray[$offset+3]  * 0x10000 + $SceneEditor.SceneArray[$offset+4]  * 0x100 + $SceneEditor.SceneArray[$offset+5]
+            CreateLabel -X (DPISize 220)  -Y ( (DPISize (30 + $i * 20) ) ) -Width (DPISize 140)  -Height (DPISize 20) -Text ("1st Light Path: "  + "{0:X6}" -f $value) -AddTo $group
+
+            $value = $SceneEditor.SceneArray[$offset+6]  * 0x10000 + $SceneEditor.SceneArray[$offset+7]  * 0x100 + $SceneEditor.SceneArray[$offset+8]
+            CreateLabel -X (DPISize 360)  -Y ( (DPISize (30 + $i * 20) ) ) -Width (DPISize 140)  -Height (DPISize 20) -Text ("1st Light Color: " + "{0:X6}" -f $value) -AddTo $group
+
+            $value = $SceneEditor.SceneArray[$offset+9]  * 0x10000 + $SceneEditor.SceneArray[$offset+10] * 0x100 + $SceneEditor.SceneArray[$offset+11]
+            CreateLabel -X (DPISize 500)  -Y ( (DPISize (30 + $i * 20) ) ) -Width (DPISize 140)  -Height (DPISize 20) -Text ("2nd Light Path: "  + "{0:X6}" -f $value) -AddTo $group
+
+            $value = $SceneEditor.SceneArray[$offset+12] * 0x10000 + $SceneEditor.SceneArray[$offset+13] * 0x100 + $SceneEditor.SceneArray[$offset+14]
+            CreateLabel -X (DPISize 640)  -Y ( (DPISize (30 + $i * 20) ) ) -Width (DPISize 140)  -Height (DPISize 20) -Text ("2nd Light Color: " + "{0:X6}" -f $value) -AddTo $group
+
+            $value = $SceneEditor.SceneArray[$offset+15] * 0x10000 + $SceneEditor.SceneArray[$offset+16] * 0x100 + $SceneEditor.SceneArray[$offset+17]
+            CreateLabel -X (DPISize 780)  -Y ( (DPISize (30 + $i * 20) ) ) -Width (DPISize 100)  -Height (DPISize 20) -Text ("Fog Color: "       + "{0:X6}" -f $value) -AddTo $group
+
+            $value = ($SceneEditor.SceneArray[$offset+18] * 0x100 + $SceneEditor.SceneArray[$offset+19]) -shr 10 -band 0xFF
+            CreateLabel -X (DPISize 880)  -Y ( (DPISize (30 + $i * 20) ) ) -Width (DPISize 100)  -Height (DPISize 20) -Text ("Blend Rate: "      + "{0:X3}" -f $value) -AddTo $group
+
+            $value = ($SceneEditor.SceneArray[$offset+18] * 0x100 + $SceneEditor.SceneArray[$offset+19]) -band 0x3FF
+            CreateLabel -X (DPISize 980)  -Y ( (DPISize (30 + $i * 20) ) ) -Width (DPISize 100)  -Height (DPISize 20) -Text ("Fog Near: "        + "{0:X2}" -f $value) -AddTo $group
+
+            $value = $SceneEditor.SceneArray[$offset+20] * 0x100 + $SceneEditor.SceneArray[$offset+21]
+            CreateLabel -X (DPISize 1080) -Y ( (DPISize (30 + $i * 20) ) ) -Width (DPISize 100)  -Height (DPISize 20) -Text ("Fog Far: "         + "{0:X4}" -f $value) -AddTo $group
+        }
     }
 
     $SceneEditor.trackSceneFlag1Values = $SceneEditor.trackSceneFlag1Values -Split '(....)' -ne ''
@@ -1897,6 +1946,76 @@ function SetSceneSettings($Music, $NightMusic, $SoundSetting, $Skybox, $Cast, $L
 
 
 #==============================================================================================================================================================================================
+function ChangeLightning([byte]$Index=0, $AmbientLightColor, $FirstLightDirection, $FirstLightColor, $SecondLightDirection, $SecondLightColor, $FogColor, $BlendRate, $FogNear, $FogFar, [switch]$Silent) {
+    
+    if ($Index -ge (GetLightningCountIndex) -or $Index -lt 0) { WriteToConsole ("Lightning point: " + $Index + " does not exist") -Error; return }
+
+    $offset = (GetLightningStart) + $Index * 22
+
+    if ($AmbientLightColor    -is [int] -and $AmbientLightColor    -le 0xFFFFFF) {
+        $SceneEditor.SceneArray[$offset+0]  = $AmbientLightColor    -shr 16
+        $SceneEditor.SceneArray[$offset+1]  = $AmbientLightColor    -shr 8 -band 0xFF
+        $SceneEditor.SceneArray[$offset+2]  = $AmbientLightColor    -band 0xFF
+    }
+
+    if ($FirstLightDirection  -is [int] -and $FirstLightDirection  -le 0xFFFFFF) {
+        $SceneEditor.SceneArray[$offset+3]  = $FirstLightDirection  -shr 16
+        $SceneEditor.SceneArray[$offset+4]  = $FirstLightDirection  -shr 8 -band 0xFF
+        $SceneEditor.SceneArray[$offset+5]  = $FirstLightDirection  -band 0xFF
+    }
+
+    if ($FirstLightColor      -is [int] -and $FirstLightColor      -le 0xFFFFFF) {
+        $SceneEditor.SceneArray[$offset+6]  = $FirstLightColor      -shr 16
+        $SceneEditor.SceneArray[$offset+7]  = $FirstLightColor      -shr 8 -band 0xFF
+        $SceneEditor.SceneArray[$offset+8]  = $FirstLightColor      -band 0xFF
+    }
+
+    if ($SecondLightDirection -is [int] -and $SecondLightDirection -le 0xFFFFFF) {
+        $SceneEditor.SceneArray[$offset+9]  = $SecondLightDirection -shr 16
+        $SceneEditor.SceneArray[$offset+10] = $SecondLightDirection -shr 8 -band 0xFF
+        $SceneEditor.SceneArray[$offset+11] = $SecondLightDirection -band 0xFF
+    }
+
+    if ($SecondLightColor      -is [int] -and $SecondLightColor    -le 0xFFFFFF) {
+        $SceneEditor.SceneArray[$offset+12] = $SecondLightColor     -shr 16
+        $SceneEditor.SceneArray[$offset+13] = $SecondLightColor     -shr 8 -band 0xFF
+        $SceneEditor.SceneArray[$offset+14] = $SecondLightColor     -band 0xFF
+    }
+
+    if ($FogColor             -is [int] -and $FogColor             -le 0xFFFFFF) {
+        $SceneEditor.SceneArray[$offset+15] = $FogColor             -shr 16
+        $SceneEditor.SceneArray[$offset+16] = $FogColor             -shr 8 -band 0xFF
+        $SceneEditor.SceneArray[$offset+17] = $FogColor             -band 0xFF
+    }
+
+    if ($BlendRate            -is [int] -and $BlendRate            -le 0x3F) {
+        $value  = $SceneEditor.SceneArray[$offset+18] = $BlendRate + $SceneEditor.SceneArray[$offset+19] * 0x100
+        $value -= (($value -shr 10) -shl 10) - ($BlendRate -shl 10)
+
+        $SceneEditor.SceneArray[$offset+18] = $value                -shr 8 -band 0xFF
+        $SceneEditor.SceneArray[$offset+19] = $value                -band 0xFF
+    }
+    
+    if ($FogNear              -is [int] -and $FogNear              -le 0x3FF) {
+        $value  = $SceneEditor.SceneArray[$offset+18] = $BlendRate + $SceneEditor.SceneArray[$offset+19] * 0x100
+        $value -= ($value -band 0x3FF) - ($FogNear -band 0x3FF)
+
+        $SceneEditor.SceneArray[$offset+18] = $value                -shr 8 -band 0xFF
+        $SceneEditor.SceneArray[$offset+19] = $value                -band 0xFF
+    }
+
+    if ($FogFar               -is [int] -and $FogFar               -le 0xFFFF) {
+        $SceneEditor.SceneArray[$offset+20] = $FogFar               -shr 8 -band 0xFF
+        $SceneEditor.SceneArray[$offset+21] = $FogFar               -band 0xFF
+    }
+    
+    if (!$Silent) { WriteToConsole ("Updated lightning point: " + $Index) }
+
+}
+
+
+
+#==============================================================================================================================================================================================
 function ChangeSpawnPoint([byte]$Index=0, $X, $Y, $Z, $XRot, $YRot, $ZRot, $Param, [switch]$Silent) {
     
     if ($Index -ge (GetPositionCountIndex) -or $Index -lt 0) { WriteToConsole ("Spawn point: " + $Index + " does not exist") -Error; return }
@@ -1956,7 +2075,7 @@ function ChangeSpawnPoint([byte]$Index=0, $X, $Y, $Z, $XRot, $YRot, $ZRot, $Para
     $SceneEditor.SceneArray[(GetEntranceStart) + $Index * 2]     = $Index
     $SceneEditor.SceneArray[(GetEntranceStart) + $Index * 2 + 1] = $SceneEditor.LoadedMap
 
-    if (!$Silent) { WriteToConsole ("Updated spawn point:     " + $index) }
+    if (!$Silent) { WriteToConsole ("Updated spawn point:     " + $Index) }
 
 }
 
@@ -1993,7 +2112,7 @@ function ChangeDoor([byte]$Index=0, $ID, $X, $Y, $Z, $YRot, $RoomFront, $RoomBac
         }
 
         if (!$foundId) {
-            WriteToConsole ("Transistion Actor ID " + $id + " does not exist for replacement") -Error
+            WriteToConsole ("Transition Actor ID " + $id + " does not exist for replacement") -Error
             return $False
         }
 
@@ -4109,7 +4228,7 @@ function AddTransitionActor([System.Windows.Forms.GroupBox]$Group) {
     }
 
     $param = $SceneEditor.SceneArray[$index + 14] * 256 + $SceneEditor.SceneArray[$index + 15]
-    if ($Settings.Debug.SceneEditorChecks -eq $True) { $label = CreateLabel -X (DPISize 63) -Y (DPISize 28) -Width (DPISize 50) -Height (DPISize 20) -Text ("Init: " + (Get16Bit $param) ) -AddTo $actor.Panel }
+    if ($Settings.Debug.SceneEditorChecks -eq $True) { $label = CreateLabel -X (DPISize 63) -Y (DPISize 28) -Width (DPISize 55) -Height (DPISize 20) -Text ("Init: " + (Get16Bit $param) ) -AddTo $actor.Panel }
 
     $actor.Map = @()
                   CreateLabel    -X (DPISize 20)  -Y (DPISize 2) -Width (DPISize 70) -Height (DPISize 20) -Text "Map (Front):" -AddTo $actor.MapPanel
@@ -5783,6 +5902,7 @@ Export-ModuleMember -Function SetSceneSettings
 Export-ModuleMember -Function GetActorCountIndex
 Export-ModuleMember -Function GetMeshIndex
 
+Export-ModuleMember -Function ChangeLightning
 Export-ModuleMember -Function ChangeSpawnPoint
 Export-ModuleMember -Function ChangeDoor
 Export-ModuleMember -Function ChangeExit
