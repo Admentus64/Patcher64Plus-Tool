@@ -1,3 +1,7 @@
+v24.1.6
+- Updated The legend of Zelda: Revival to v1.1
+- Fixed issue with params for the SetSceneOptions API call
+
 v24.1.5
 - Added Lightning List info for Scene Editor
 - Updated optional New Master Quest logo

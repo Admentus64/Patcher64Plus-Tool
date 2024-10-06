@@ -1932,12 +1932,12 @@ function PrepareAndSetMapSettings([string]$Scene, [byte]$Map, [byte]$Header, $Ti
 #==============================================================================================================================================================================================
 function SetSceneSettings($Music, $NightMusic, $SoundSetting, $Skybox, $Cast, $LightningControl, [switch]$Silent) {
     
-    if ($Music            -is [int] -and $Music             -ge 0 -and $Music           -le 0x7F)   { $SceneEditor.SceneArray[$SceneEditor.SceneOffsets[$SceneEditor.LoadedHeader].MusicSequence]    = $Music            }
-    if ($NightMusic       -is [int] -and $NightMusic        -ge 0 -and $NightMusic      -le 0x1F)   { $SceneEditor.SceneArray[$SceneEditor.SceneOffsets[$SceneEditor.LoadedHeader].NightSequence]    = $NightMusic       }
-    if ($SoundSetting     -is [int] -and $SoundSetting      -ge 0 -and $SoundSetting    -le 0x11)   { $SceneEditor.SceneArray[$SceneEditor.SceneOffsets[$SceneEditor.LoadedHeader].SoundConfig]      = $SoundSetting     }
-    if ($Skybox           -is [int] -and $Skybox            -ge 0 -and $Skybox          -le 0x22)   { $SceneEditor.SceneArray[$SceneEditor.SceneOffsets[$SceneEditor.LoadedHeader].Skybox]           = $Skybox           }
-    if ($Cast             -is [int] -and ($Cast             -eq 0 -or $Cast             -eq 1))     { $SceneEditor.SceneArray[$SceneEditor.SceneOffsets[$SceneEditor.LoadedHeader].Cloudy]           = $Cast             }
-    if ($LightningControl -is [int] -and ($LightningControl -eq 0 -or $LightningControl -eq 1))     { $SceneEditor.SceneArray[$SceneEditor.SceneOffsets[$SceneEditor.LoadedHeader].LightningControl] = $LightningControl }
+    if ($Music            -is [int] -and ( $Music            -ge 0 -and $Music            -le 0x7F))                             { $SceneEditor.SceneArray[$SceneEditor.SceneOffsets[$SceneEditor.LoadedHeader].MusicSequence]    = $Music            }
+    if ($NightMusic       -is [int] -and (($NightMusic       -ge 0 -and $NightMusic       -le 0x1F) -or $NightMusic -le 0xFF))   { $SceneEditor.SceneArray[$SceneEditor.SceneOffsets[$SceneEditor.LoadedHeader].NightSequence]    = $NightMusic       }
+    if ($SoundSetting     -is [int] -and ( $SoundSetting     -ge 0 -and $SoundSetting     -le 0x11))                             { $SceneEditor.SceneArray[$SceneEditor.SceneOffsets[$SceneEditor.LoadedHeader].SoundConfig]      = $SoundSetting     }
+    if ($Skybox           -is [int] -and ( $Skybox           -ge 0 -and $Skybox           -le 0x22))                             { $SceneEditor.SceneArray[$SceneEditor.SceneOffsets[$SceneEditor.LoadedHeader].Skybox]           = $Skybox           }
+    if ($Cast             -is [int] -and ( $Cast             -eq 0 -or  $Cast             -eq 1))                                { $SceneEditor.SceneArray[$SceneEditor.SceneOffsets[$SceneEditor.LoadedHeader].Cloudy]           = $Cast             }
+    if ($LightningControl -is [int] -and ( $LightningControl -eq 0 -or  $LightningControl -eq 1))                                { $SceneEditor.SceneArray[$SceneEditor.SceneOffsets[$SceneEditor.LoadedHeader].LightningControl] = $LightningControl }
 
     if (!$Silent) { WriteToConsole "Scene properties have been updated" }
 
