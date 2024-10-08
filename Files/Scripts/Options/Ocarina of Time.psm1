@@ -752,7 +752,7 @@ function ByteOptions() {
          $Offset = SearchBytes -Start "FBE000" -End "FEAF80" -Values "00000000000000000000000000000000000000000100010006000C0018002D01"
         if ($Offset -gt 0) { PatchBytes -Offset $Offset  -Texture -Patch ("Equipment\Bracelet\Power Bracelet.bin") }
         PatchBytes -Offset "80D000" -Texture -Patch "Equipment\Bracelet\Power Bracelet.icon"
-        if (TestFile ($GameFiles.textures + "\Equipment\Bracelet\Power Bracelet." + $LanguagePatch.code + ".label")) { PatchBytes -Offset "89F800" -Texture -Patch ("Equipment\Bracelet\Power Bracelet." + $LanguagePatch.code + ".label") }
+        if (TestFile ($GameFiles.textures + "\Equipment\Bracelet\Power Bracelet." + $LanguagePatch.code + ".label")) { PatchBytes -Offset "8B2C00" -Texture -Patch ("Equipment\Bracelet\Power Bracelet." + $LanguagePatch.code + ".label") }
         PatchBytes  -Offset "1791000" -Patch "Object GI Models\Power Bracelet.bin" # Goron's Bracelet GI model
     }
     
@@ -838,8 +838,9 @@ function ByteOptions() {
             if ($Offset -gt 0)                                                                                                                          { PatchBytes -Offset $Offset  -Texture -Patch ("Equipment\Hylian Shield\" + $Redux.Equipment.HylianShield.text + ".front") }
         }
 
-        if (TestFile ($GameFiles.textures + "\Equipment\Hylian Shield\" + $Redux.Equipment.HylianShield.text + ".back") ) {
-            $Offset = SearchBytes -Start "FBE000" -End "FEAF80" -Values "B5F3ADF3ADF3B5F1C675A56F8CEB6BE5"
+        if (TestFile ($GameFiles.textures + "\Equipment\Hylian Shield\" + $Redux.Equipment.HylianShield.text + ".back")) {
+            PatchBytes -Offset "FC6E88" -Texture -Patch ("Equipment\Hylian Shield\" + $Redux.Equipment.HylianShield.text + ".back")
+	    $Offset = SearchBytes -Start "FBE000" -End "FEAF80" -Values "B5F3ADF3ADF3B5F1C675A56F8CEB6BE5" -Silent
             if ($Offset -gt 0)                                                                                                                          { PatchBytes -Offset $Offset  -Texture -Patch ("Equipment\Hylian Shield\" + $Redux.Equipment.HylianShield.text + ".back") }
         }
 
