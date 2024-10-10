@@ -1383,6 +1383,13 @@ function ByteOptions() {
         ChangeBytes -Offset "DD375E" -Values "40000000000000000000"; ChangeBytes -Offset "DD3756" -Values "4000"; ChangeBytes -Offset "DD3747" -Values "D0"
     }
 
+    if (IsItem -Elem $Redux.Speedup.Cutscenes -Item "Ingo Epona Race") {
+        ChangeBytes -Offset   "29BE9CB"                        -Values "01"   # Ingo Epona Race
+        ChangeBytes -Offset @("29BE987", "29BE9CD")            -Values "02"   # Ingo Epona Race
+        ChangeBytes -Offset @("1FC79E6", "1FC7F06", "1FC8556") -Values "0054" # South, East, West
+        ChangeBytes -Offset   "1FC8B36"                        -Values "002A" # Front gate
+    }
+
     if (IsItem -Elem $Redux.Speedup.Cutscenes -Item "Boss Intros & Outros") {
         ChangeBytes -Offset "C944D8"  -Values "00 00 00 00";  ChangeBytes -Offset "C94548"  -Values "00 00 00 00"; ChangeBytes -Offset "C94730" -Values "00 00 00 00";  ChangeBytes -Offset "C945A8" -Values "00 00 00 00"; ChangeBytes -Offset "C94594" -Values "00 00 00 00"                                     # Phantom Ganon
         ChangeBytes -Offset "2F5AF84" -Values "00 00 00 05";  ChangeBytes -Offset "2F5C7DA" -Values "00 01 00 02"; ChangeBytes -Offset "2F5C7A2" -Values "00 03 00 04"; ChangeBytes -Offset "2F5B369" -Values "09";         ChangeBytes -Offset "2F5B491" -Values "04"; ChangeBytes -Offset "2F5B559" -Values "04" # Nabooru
@@ -1411,8 +1418,6 @@ function ByteOptions() {
         ChangeBytes -Offset "31A9430" -Values "00 6D 00 01 00 02 00 02"; ChangeBytes -Offset "31AB200" -Values "00 70 00 01 00 02 00 02"; ChangeBytes -Offset "31AA830" -Values "00 6F 00 01 00 02 00 02"
     }
 
-    
-
     if (IsItem -Elem $Redux.Skip.Cutscenes    -Item "Opening Cutscene" )          { ChangeBytes -Offset "B06BBA"  -Values "0000"                                                                       }
     if (IsItem -Elem $Redux.Skip.Cutscenes    -Item "Darunia Dance")              { ChangeBytes -Offset "22769E4" -Values "FFFFFFFF"                                                                   }
     if (IsItem -Elem $Redux.Skip.Cutscenes    -Item "Zelda's Escape")             { ChangeBytes -Offset "1FC0CF8" -Values "000000010021000100020002"                                                   }
@@ -1423,8 +1428,6 @@ function ByteOptions() {
     if (IsItem -Elem $Redux.Speedup.Cutscenes -Item "Opening Chests")             { ChangeBytes -Offset "BDA2E8"  -Values "240AFFFF"                                                                   }
     if (IsItem -Elem $Redux.Speedup.Cutscenes -Item "Moving King Zora")           { ChangeBytes -Offset "E56924"  -Values "00000000"                                                                   }
     if (IsItem -Elem $Redux.Speedup.Cutscenes -Item "Owl Flights")                { ChangeBytes -Offset "20E60D2" -Values "0001";             ChangeBytes -Offset "223B6B2" -Values "0001"             }
-    if (IsItem -Elem $Redux.Speedup.Cutscenes -Item "Ingo Epona Race")            { ChangeBytes -Offset "29BE984" -Values "00000002";         ChangeBytes -Offset "29BE9CA" -Values "00010002"         }
-    if (IsItem -Elem $Redux.Speedup.Cutscenes -Item "Ranch Epona Escape")         { ChangeBytes -Offset "1FC8B36" -Values "002A"                                                                       }
     if (IsItem -Elem $Redux.Speedup.Cutscenes -Item "Horseback Archery")          { ChangeBytes -Offset "21B2064" -Values "00000002";         ChangeBytes -Offset "21B20AA" -Values "00010002"         }
     if (IsItem -Elem $Redux.Speedup.Cutscenes -Item "Draining the Well")          { ChangeBytes -Offset "E0A010"  -Values "002A000100020002"; ChangeBytes -Offset "2001110" -Values "002B00B700B800B8" }
     if (IsItem -Elem $Redux.Speedup.Cutscenes -Item "Opening Door of Time")       { ChangeBytes -Offset "E0A176"  -Values "0002";             ChangeBytes -Offset "E0A35A"  -Values "00010002"         }
@@ -3936,7 +3939,7 @@ function CreateTabAnimations() {
 
     # SPEEDUP CUTSCENES #
 
-    $items = @("Opening Chests", "Opening Kakariko Gate", "Moving King Zora", "Owl Flights", "Ingo Epona Race", "Ranch Epona Escape", "Horseback Archery", "Opening Door of Time", "Draining the Well", "Boss Intros & Outros", "Rainbow Bridge", "Get Fairy Ocarina", "Ganon's Castle Trials")
+    $items = @("Opening Chests", "Opening Kakariko Gate", "Moving King Zora", "Owl Flights", "Ingo Epona Race", "Horseback Archery", "Opening Door of Time", "Draining the Well", "Boss Intros & Outros", "Rainbow Bridge", "Get Fairy Ocarina", "Ganon's Castle Trials")
     CreateReduxGroup   -Tag  "Speedup"   -Text "Speedup Cutscenes"
     CreateReduxListBox -Name "Cutscenes" -Items $items -MultiColumn -MultiSelect -Columns 4 -Rows 1.6 -ItemWidth 120
 

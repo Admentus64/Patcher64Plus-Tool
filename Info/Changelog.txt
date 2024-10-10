@@ -3,6 +3,7 @@ v24.1.6
 - Fixed issue with params for the SetSceneOptions API call
 - Fixed several issues with OoT options
 - Corrected several textures for OoT options
+- Merged "Ingo Epona Race" and "Ranch Epona Escape" with new fixes for OoT
 
 v24.1.5
 - Added Lightning List info for Scene Editor
