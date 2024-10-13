@@ -11,6 +11,7 @@ v24.1.6
 - Fixed eyes for MM models:
 	- Improved Link + OoT Eyes
 	- Majora's Mask + OoT Eyes
+- Fixed French OoT File Select
 
 v24.1.5
 - Added Lightning List info for Scene Editor
