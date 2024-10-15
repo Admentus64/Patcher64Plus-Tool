@@ -37,6 +37,10 @@ v24.1.0
 	- Adjust Deku Tree Sprout cutscene, with altered dialog and a withered Deku Tree
 	- Fix Deku Tree Sprout disappearing after its cutscene
 	- Use Child Link sound IDs for Adult Link's voice to fix SFX during the final blow on Ganon
+- Updated Redux for OoT
+	- Hookshot/Longshot usability fixes in the middle of pulling Link towards a target
+	- Item on D-Pad fixes for non-vanilla layouts
+- Updated MQ and Ura patches for OoT with missing fixes
 
 v24.0.6
 - Added new Red Tektites option for MM for when spring has come (yes, they can swim)
