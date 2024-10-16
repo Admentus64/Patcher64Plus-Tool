@@ -11,7 +11,7 @@ Requirements:
 Instructions:
 - Select GBA ROM
 - Select patch
-- Enable optional "Enable Options" checkbox
+- Enable optional "Enable Redux" or "Enable Options" checkboxes
 - Customize your patch within "Select Options"
 - Press "Patch Selected Options"
 

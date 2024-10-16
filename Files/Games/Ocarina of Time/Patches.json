@@ -135,15 +135,6 @@
 
 }, {
 
-	"title"				: "Zelda's Birthday",
-	"revision"			: "Debug GC MQ (EU)",
-	"vc_title"			: "Zelda: Birthday",
-	"patch"				: "Decompressed\\zeldas_birthday.bps",
-	"output"			: "zeldas_birthday",
-	"tooltip"			: "One of the first ROM hacks ever made for Ocarina of Time"
-
-}, {
-
 	"title"				: "Gold Quest",
 	"version"			: "2.1",
 	"vc_title"			: "Zelda: Gold Quest",

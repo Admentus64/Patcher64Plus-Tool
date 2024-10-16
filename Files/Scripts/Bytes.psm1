@@ -253,7 +253,7 @@ function CopyBytes([string]$File, [string]$Start, [string]$Length, [string]$Offs
     # Patch
     WriteToConsole ($Offset + " -> Copying values: from " + $Start)
     foreach ($i in 0..($lengthDec-1)) {
-        $ByteArrayGame[$offsetDec + $i]  = $ByteArrayGame[$startDec + $i]
+        $ByteArrayGame[$offsetDec + $i] = $ByteArrayGame[$startDec + $i]
     }
 
     # Write to File
