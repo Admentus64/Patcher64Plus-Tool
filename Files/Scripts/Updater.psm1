@@ -480,8 +480,9 @@ function UpdateAddon([Object]$Addon) {
         }
         
         ExpandArchive -LiteralPath $zip -DestinationPath $path -Force
+        if (TestFile -Path $addonPath -Container) { RemovePath $addonPath }
         Get-ChildItem -Path $path -Directory -Force | ForEach-Object { Move-Item -LiteralPath $_.FullName -Destination $addonPath -Force }
-        Remove-Item   -LiteralPath ($addonPath + "\" + ".gitattributes")
+        if (TestFile ($addonPath + "\" + ".gitattributes")) { Remove-Item   -LiteralPath ($addonPath + "\" + ".gitattributes") }
         RemovePath $path
         CheckAddon -Addon $Addon
         $Addons[$title].isUpdated = $True

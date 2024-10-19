@@ -115,7 +115,6 @@ function ByteOptions() {
 
     if (IsDefault $Redux.Gameplay.SpawnChild -Not)          { ChangeBytes -Offset @("B0631E", "B06342") -Values (GetOoTEntranceIndex $Redux.Gameplay.SpawnChild.Text)                                              }
     if (IsDefault $Redux.Gameplay.SpawnAdult -Not)          { ChangeBytes -Offset "B06332"              -Values (GetOoTEntranceIndex $Redux.Gameplay.SpawnAdult.Text); ChangeBytes -Offset "B06318" -Values "1000" }
-    if (IsChecked $Redux.Gameplay.NoMagicArrowCooldown)     { ChangeBytes -Offset "AE85C9" -Values "62"                                                                                                            }
     if (IsChecked $Redux.Gameplay.ManualJump)               { ChangeBytes -Offset "BD78C0" -Values "04C1";     ChangeBytes -Offset "BD78E3" -Values "01"                                                           }
     if (IsChecked $Redux.Gameplay.AltManualJump)            { ChangeBytes -Offset "BD78E3" -Values "00"                                                                                                            }
     if (IsChecked $Redux.Gameplay.NoShieldRecoil)           { ChangeBytes -Offset "BD416C" -Values "2400"                                                                                                          }
@@ -169,6 +168,12 @@ function ByteOptions() {
     
 
     # FIXES #
+
+    if (IsChecked $Redux.Fixes.MagicMeter) {
+        ChangeBytes -Offset @("AE9436", "AE96E6") -Values "3840"
+        CopyBytes   -Offset   "1A3F840"           -Length "40" -Start "1A3FAC0"
+        ChangeBytes -Offset   "1A3F880"           -Values (0..0x3F | ForEach-Object { 0 })
+    }
 
     if (IsChecked $Redux.Fixes.VisibleGerudoTent) {
         ChangeBytes -Offset "D215D3" -Values "128483"
@@ -2712,7 +2717,6 @@ function CreateTabMain() {
     $items = @("Link's House", "Temple of Time", "Hyrule Field", "Kakariko Village", "Hyrule Castle", "Ganon's Castle", "Goron City", "Zora's Domain", "Gerudo Valley", "Lon Lon Ranch", "Inside the Deku Tree", "Dodongo's Cavern", "Inside Jabu-Jabu's Belly", "Forest Temple", "Fire Temple", "Water Temple", "Shadow Temple", "Spirit Temple", "Ice Cavern", "Bottom of the Well", "Thieves' Hideout", "Gerudo's Training Ground", "Inside Ganon's Castle", "Ganon's Tower")
     CreateReduxComboBox -Name "SpawnChild" -Safe -Base 4 -Child -Default 1 -Text "Child Starting Location"  -Items $items                                                                                                                                                          -Credits "Admentus & GhostlyDark"
     CreateReduxComboBox -Name "SpawnAdult" -Safe -Base 4 -Adult -Default 2 -Text "Adult Starting Location"  -Items $items                                                                                                                                                          -Credits "Admentus & GhostlyDark"
-    CreateReduxCheckBox -Name "NoMagicArrowCooldown"     -Adult            -Text "No Magic Arrow Cooldown"  -Info "Be able to shoot magic arrows without a delay between each shot" -Warning "Prone to crashes upon switching arrow types (Redux feature) to quickly"              -Credits "Randomizer"
     CreateReduxCheckBox -Name "ManualJump"                                 -Text "Manual Jump"              -Info "Press Z + A to do a Manual Jump instead of a Jump Attack`nPress B mid-air after jumping to do a Jump Attack"                                                    -Credits "Admentus (ROM) & CloudModding (RAM)"
     CreateReduxCheckbox -Name "AltManualJump"                              -Text "Alt Manual Jump"          -Info "Press Z + A to do a Manual Jump instead of a Jump Attack`nPress B mid-air after jumping to do a Jump Attack`nThis version allows you still to roll when moving" -Credits "BilonFullHDemon" -Link $Redux.Gameplay.ManualJump
     CreateReduxCheckBox -Name "NoShieldRecoil"                             -Text "No Shield Recoil"         -Info "Disable the recoil when being hit while shielding"                                                                                                              -Credits "Admentus (ROM) & Aegiker (RAM)"
@@ -2753,6 +2757,7 @@ function CreateTabMain() {
     # FIXES #
 
     CreateReduxGroup    -Tag  "Fixes"                                    -Text "Fixes"
+    CreateReduxCheckBox -Name "MagicMeter"                -Base 5        -Text "Magic Meter Fix"           -Info "Prevent fill texture from fetching garbage to avoid HD texture duplicates"                                                                        -Checked -Credits "Admentus & GhostlyDark"
     CreateReduxCheckBox -Name "BuyableBombs"              -Base 5        -Text "Buyable Bombs"             -Info "You no longer need the Goron's Ruby before you can buy bombs`nOnly the Bomb Bag is required"                                                               -Credits "Admentus"
     CreateReduxCheckBox -Name "PauseScreenDelay"          -Base 5        -Text "Pause Screen Delay"        -Info "Removes the delay when opening the Pause Screen by removing the anti-aliasing"                                                            -Native -Checked -Credits "zel"
     CreateReduxCheckBox -Name "PauseScreenCrash"          -Base 5        -Text "Pause Screen Crash Fix"    -Info "Prevents the game from randomly crashing emulating a decompressed ROM upon pausing"                                                               -Checked -Credits "zel"
@@ -2909,7 +2914,7 @@ function CreateTabRedux() {
                                                                SetTunicColorsPreset -ComboBox $Redux.Colors.ExtraEquipment[3] -Dialog $Redux.Colors.SetExtraEquipment[3] -Label $Redux.Colors.ExtraEquipmentLabels[3]
     $Redux.Colors.ExtraEquipment[4].Add_SelectedIndexChanged({ SetTunicColorsPreset -ComboBox $Redux.Colors.ExtraEquipment[4] -Dialog $Redux.Colors.SetExtraEquipment[4] -Label $Redux.Colors.ExtraEquipmentLabels[4] })
                                                                SetTunicColorsPreset -ComboBox $Redux.Colors.ExtraEquipment[4] -Dialog $Redux.Colors.SetExtraEquipment[4] -Label $Redux.Colors.ExtraEquipmentLabels[4]
-
+    
     CreateButtonColorOptions
     CreateRupeeColorOptions
     CreateHUDColorOptions

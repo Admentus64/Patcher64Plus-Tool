@@ -163,7 +163,6 @@ function ByteOptions() {
     # GAMEPLAY (UNSTABLE) #
 
     if (IsChecked $Redux.Gameplay.HookshotAnything)       { ChangeBytes -Offset "D3BA30"  -Values "00000000" }
-    if (IsChecked $Redux.Gameplay.NoMagicArrowCooldown)   { ChangeBytes -Offset "BAC3CD"  -Values "69"       }
 
     
 
@@ -1832,8 +1831,6 @@ function CreateTabMain() {
 
     CreateReduxGroup    -Tag  "Gameplay"             -Text "Gameplay Changes (Unstable)" 
     CreateReduxCheckBox -Name "HookshotAnything"     -Text "Hookshot Anything"       -Info "Be able to hookshot most surfaces"                               -Warning "Prone to softlocks, be careful"                                         -Credits "Randomizer"
-    CreateReduxCheckBox -Name "NoMagicArrowCooldown" -Text "No Magic Arrow Cooldown" -Info "Be able to shoot magic arrows without a delay between each shot" -Warning "Prone to crashes upon switching arrow types (Redux feature) to quickly" -Credits "Randomizer"
-
 
 
 
@@ -1860,7 +1857,7 @@ function CreateTabMain() {
     CreateReduxCheckBox -Name "Geometry"          -Text "Fix Geometry"             -Info "Fix misaligned gaps and seams in several places:`n- Clock Town`n- Misplaced Potion Shop Door after Odolwa`n- Research Lab platform in Great Bay`n- Texture on Ancient Castle of Ikana wall" -Safe -Credits "Linkz & ShadowOne333"
     CreateReduxCheckBox -Name "FairyFountain"     -Text "Fix Fairy Fountain"       -Info "Fix the Ikana Canyon Fairy Fountain area not displaying the correct color"                                                                                                                  -Safe -Credits "Dybbles (fix) & ShadowOne333 (patch)"
     CreateReduxCheckBox -Name "OutOfBounds"       -Text "Fix Out-of-Bounds"        -Info "Fix a Grotto in the Road to Goron Village (Winter) and a Rupee in the Deku Palace Left Courtyard from being out-of-bounds"                                                                  -Safe -Credits "Admentus"
-    CreateReduxCheckBox -Name "Cutscenes"         -Text "Fix Cutscenes"            -Info "Fix several cutscenes:`n- Goht running Link over`n- Bomb Lady`n- Chamber of Giants (unused)`n- Spring arrives in Mountain Village`n- Ikana Caynon- On The Moon entrance intro"              -Safe -Credits "Admentus, ShadowOne333 & Chez Cousteau"
+    CreateReduxCheckBox -Name "Cutscenes"         -Text "Fix Cutscenes"            -Info "Fix several cutscenes:`n- Goht running Link over`n- Bomb Lady`n- Unused Chamber of Giants`n- Spring arrives in Mountain Village`n- Ikana Canyon`n- On The Moon entrance intro"              -Safe -Credits "Admentus, ShadowOne333 & Chez Cousteau"
 
 
 

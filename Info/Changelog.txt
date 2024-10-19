@@ -1,3 +1,11 @@
+v24.1.7
+- Added and fixed HUD buttons (by MariaNova)
+- Added Magic Meter Fix option for OoT (for OoT Reloaded)
+- Changed sorting for custom models (core first, followed by addons by name)
+- Removed "No Magic Arrow Cooldown" option for OoT & MM
+- Fixed issue with updating addons
+- Fixed tooltip typos for MM
+
 v24.1.6
 - Updated The legend of Zelda: Revival to v1.1
 - Fixed issue with params for the SetSceneOptions API call
