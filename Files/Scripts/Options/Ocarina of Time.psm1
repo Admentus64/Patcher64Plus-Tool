@@ -255,9 +255,10 @@ function ByteOptions() {
 
     
 
-    if (IsChecked $Redux.Graphics.GCScheme) { # Z to L + L to D-Pad textures
+    if (IsChecked $Redux.Graphics.GCScheme) { # Z to L + L to D-Pad textures and GC R button
         if (IsChecked $Redux.Text.PauseScreen -Lang 1) { PatchBytes -Offset "844540" -Texture -Patch "GameCube\l_pause_screen_button_mm.bin" } else { PatchBytes -Offset "844540" -Texture -Patch "GameCube\l_pause_screen_button.bin" }
-        PatchBytes -Offset "92C100" -Texture -Patch "GameCube\dpad_text_icon.bin"
+        if (IsChecked $Redux.Text.PauseScreen -Lang 1) { PatchBytes -Offset "844840" -Texture -Patch "GameCube\r_pause_screen_button_mm.bin" } else { PatchBytes -Offset "844840" -Texture -Patch "GameCube\r_pause_screen_button.bin" }
+	PatchBytes -Offset "92C100" -Texture -Patch "GameCube\dpad_text_icon.bin"
         PatchBytes -Offset "92C200" -Texture -Patch "GameCube\l_text_icon.bin"
         if (TestFile ($GameFiles.textures + "\GameCube\l_targeting_" + $LanguagePatch.code + ".bin")) {
             if ($LanguagePatch.l_target_jpn -eq 1) { $offset = "1A0B300" } else { $offset = "1A35680" }
@@ -2203,7 +2204,8 @@ function ByteTextOptions() {
         SetMessage -ID "404E" -Text "If you're a man, act like one!"                                                   -Replace "If you're trying to save me, act like it!"
         SetMessage -ID "507C" -Text "There he is! It's him!<N>He"                                                      -Replace "There she is! It's her!<N>She"
         SetMessage -ID "6004" -Text "I used to think that all men, <N>besides the great Ganondorf, were <N>useless..." -Replace "I used to think that <N>outsiders were nothing but <N>trouble..."
-        SetMessage -ID "6036" -Text "handsome man...<Delay:50>I should have kept the promise<N>I made back then..."    -Replace "beautiful woman...<Delay:50>I should have had let you<N>join us back then..."
+        SetMessage -ID "6035" -Text "swordsman"                                                                        -Replace "warrior"
+	SetMessage -ID "6036" -Text "handsome man...<Delay:50>I should have kept the promise<N>I made back then..."    -Replace "beautiful woman...<Delay:50>I should have had let you<N>join us back then..."
         SetMessage -ID "70F4" -Text "handsome"                                                                         -Replace "pretty"
         SetMessage -ID "7177"                                                                                          -Replace "Ah ah ah!<N>You're so funny!"
 
@@ -2240,15 +2242,26 @@ function ByteTextOptions() {
         SetMessage -ID "0057" -Text "<Icon:4B>"                                                -Replace "<Icon:4C>"
         SetMessage -ID "00F3" -Text "treasure <N>chest and "                                   -Replace "chest and<N>"
         SetMessage -ID "0616" -Text "try to cut it, it will bounce<N>off your blade!"          -Replace "cut it, it will burst open and<N>knock you back!"
-        SetMessage -ID "10B8"                                                                  -Replace "That guy isn't here anymore.<New Box>Anybody who comes into the<N>forest will be lost.<New Box>Everybody will become a Stalfos.<N>Everybody, Stalfos.<N>So, he's not here anymore.<N>Only his saw is left. Hee hee.<New Box>That medicine is made of<N>forest mushrooms. Give it back!<N><Two Choices><G>Yes<N>No<W>"
+        SetMessage -ID "109B" -Text "<DI><C>Twenty-three is number one!<W><DC><N><NS><Sound:3880>Do you think I'm a traitor?"                                                  -Replace "<DI><C>Twenty-three is number one!<W><DC><New Box><NS><Sound:3880>Do you think I'm a traitor?"
+	SetMessage -ID "10B8"                                                                  -Replace "That guy isn't here anymore.<New Box>Anybody who comes into the<N>forest will be lost.<New Box>Everybody will become a Stalfos.<N>Everybody, Stalfos.<N>So, he's not here anymore.<N>Only his saw is left. Hee hee.<New Box>That medicine is made of<N>forest mushrooms. Give it back!<N><Two Choices><G>Yes<N>No<W>"
         if (IsChecked $Redux.Text.FemalePronouns -Not) { SetMessage -ID "3006" -Text "brother" -Replace "Brother" }
-        SetMessage -ID "4013" -Text "the <N>temple of Lake Hylia and has not<N>come back... "  -Replace "Lake<N>Hylia and has not come back...<N>"
+        SetMessage -ID "2047" -Text "I heard that you found my dad!"                           -Replace "<NS>I heard that you found my dad!"
+	SetMessage -ID "4013" -Text "the <N>temple of Lake Hylia and has not<N>come back... "  -Replace "Lake<N>Hylia and has not come back...<N>"
         SetMessage -ID "507B" -Text @(1, 1)                                                    -Replace @(1)
-        SetMessage -ID "6041" -Text "again "                                                   -Replace ""
+        SetMessage -ID "6035" -Text "<NS>Kid, let me thank you.<N><NS>Heheheh..."              -Replace "<NS>Kid, let me thank you.<New Box><NS>Heheheh..."
+	SetMessage -ID "6041" -Text "again "                                                   -Replace ""
         SetMessage -ID "6044" -Text "a true"                                                   -Replace "the ultimate"
+	SetMessage -ID "6044" -Text "a master"                                                 -Replace "the master"
         SetMessage -ID "6046"                                                                  -Replace "Fantastic!<N>You are a true master!<N>I will give this to you.<N>Keep improving yourself!"
         SetMessage -ID "6067"                                                                  -Replace "Building a bridge over the valley<N>is a simple task for four<N>carpenters."
         SetMessage -ID "6077" -Text "Well Come!"                                               -Replace "Welcome!"
+	SetMessage -ID "7027" -Text "<NS>But with the long peace, no one<N>has seen a Sheikah around here <N>for a long time.<N><NS>However..."                               -Replace "<NS>But with the long peace, no one<N>has seen a Sheikah around here <N>for a long time.<New Box><NS>However..."
+        SetMessage -ID "7074" -Text "<New Box>under water...<New Box>and even through time..."                                                                                -Replace "<New Box><NS>under water...<New Box><NS>and even through time..."
+	SetMessage -ID "7084" -Text "Thus, Ganondorf the Evil King"                            -Replace "<NS>Thus, Ganondorf the Evil King"
+	if (IsChecked $Redux.Text.FemalePronouns -Not) { SetMessage -ID "70E1" -Text "brother" -Replace "Brother" }
+        SetMessage -ID "7091" -Text "<NS>I dragged you into it, too.<N><NS>Now it is time for me to make up <N>for my mistakes..."                                            -Replace "<NS>I dragged you into it, too.<New Box><NS>Now it is time for me to make up <N>for my mistakes..."
+	SetMessage -ID "70AA" -Text "Ho ho ho!"                                                -Replace "<NS>Ho ho ho!"
+        SetMessage -ID "70F7" -Text "On top of that"                                           -Replace "<NS>On top of that"
     }
 
     if (IsIndex $Redux.Gameplay.RemoveOwls -Index 3 -Lang 1) {
