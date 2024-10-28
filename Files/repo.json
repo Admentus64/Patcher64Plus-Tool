@@ -8,5 +8,10 @@
         	"uri"			: "https://github.com/Caverns4/OoT-Models/archive/refs/heads/main.zip",
         	"version"		: "https://github.com/Caverns4/OoT-Models/blob/main/version.txt",
         	"versionFallback"	: "https://raw.githubusercontent.com/Caverns4/OoT-Models/main/version.txt"
-    	} ]
-}
+}, {
+	        "title"			: "Maria's OOT-MM-Models Repo",
+       		"type"			: "Models",
+        	"uri"			: "https://github.com/GoldenMariaNova/OOT-MM-Models/archive/refs/heads/main.zip",
+        	"version"		: "https://github.com/GoldenMariaNova/OOT-MM-Models/blob/main/version.txt",
+        	"versionFallback"	: "https://raw.githubusercontent.com/GoldenMariaNova/OOT-MM-Models/main/version.txt"	
+} ]
