@@ -984,15 +984,18 @@ function ShowModelPreview([object]$Box, [string]$Path, [string]$Text, [string]$C
 #==============================================================================================================================================================================================
 function LoadModelsList([string]$Category) {
     
-    $list = @()
+    $repo = @()
+    foreach ($item in Get-ChildItem -LiteralPath ($Paths.Models + "\Core\" + $GameType.mode + " - " + $Category) -Force) { if ($item.Extension -eq ".ppf" -or $item.Extension -eq ".zobj") { $repo += $item.BaseName } }
+    $list = $repo | Sort-Object | select -Unique
 
-    foreach ($folder in (Get-ChildItem -LiteralPath $Paths.Models -Directory)) {
-        $path = $Paths.Models + "\" + $folder.BaseName + "\" + $GameType.mode + " - " + $Category
+    foreach ($addon in ($Files.json.repo.addons | Where-Object { $_.type -eq "Models" })) {
+        $repo = @()
+        $path = $Paths.Models + "\" + $addon.title + "\" + $GameType.mode + " - " + $Category
         if (!(TestFile -Container $path)) { continue }
-        foreach ($item in Get-ChildItem -LiteralPath $path -Force) { if ($item.Extension -eq ".ppf" -or $item.Extension -eq ".zobj") { $list += $item.BaseName } }
+        foreach ($item in Get-ChildItem -LiteralPath $path -Force) { if ($item.Extension -eq ".ppf" -or $item.Extension -eq ".zobj") { $repo += $item.BaseName } }
+        $list += $repo | Sort-Object | select -Unique
     }
 
-    $list                                  = $list | Sort-Object | select -Unique
     $GamePatch.LoadedModelsList[$Category] = @("Original") + $list
 
     if ($GamePatch.LoadedModelsList[$Category].Count -eq 0) { return @("No models found?") } 

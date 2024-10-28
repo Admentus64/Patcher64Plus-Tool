@@ -1,6 +1,13 @@
+v24.1.8
+- Re-added Skilar's models again
+- Added "Restore Text" fixes
+- Added "GC Scheme" R button
+- Updated Triforce current floor icon
+- Fixed issues with sorting for custom models
+
 v24.1.7
 - Added and fixed HUD buttons (by MariaNova)
-- Added Magic Meter Fix option for OoT (for OoT Reloaded)
+- Added "Magic Meter Fix" option for OoT (for OoT Reloaded)
 - Changed sorting for custom models (core first, followed by addons by name)
 - Removed "No Magic Arrow Cooldown" option for OoT & MM
 - Fixed issue with updating addons
