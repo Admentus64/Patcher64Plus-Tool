@@ -18,9 +18,6 @@ function PatchModel([string]$Category, [string]$Name) {
         elseif (TestFile ($subpath + "\Manifest\Optimized.opt"))               { $optimized = $subpath + "\Manifest\Optimized.opt" }
         else                                                                   { $optimized = $Paths.Models + "\Core\Manifests\" + $GameType.mode + " - " + $Category + "\Optimized.opt" }
 
-        write-host $manifest
-        write-host $optimized
-
         $script = { Param([string]$Tool, [string]$Model, [string]$File, [string]$Path, [string]$Manifest, [string]$Optimized)
             & $Tool playas -i ($Model + ".zobj") -r $File -o ($Path + "\model") -m $Manifest -b $Optimized | Out-Null
         }
@@ -1000,7 +997,7 @@ function LoadModelsList([string]$Category) {
 
     if ($GamePatch.LoadedModelsList[$Category].Count -eq 0) { return @("No models found?") } 
 
-    for ($i=0; $i -lt $list.Count; $i++) { $list[$i] = $list[$i] -replace '_.*$' }
+    for ($i=0; $i -lt $list.Count; $i++) { $list[$i] = $list[$i] -replace '_[^_]*$' }
     return @("Original (default)") + $list
 
 }

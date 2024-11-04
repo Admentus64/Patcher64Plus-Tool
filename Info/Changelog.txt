@@ -4,6 +4,7 @@ v24.1.8
 - Added "GC Scheme" R button
 - Updated Triforce current floor icon
 - Fixed issues with sorting for custom models
+- Fixed issue with removing suffix for custom models
 
 v24.1.7
 - Added and fixed HUD buttons (by MariaNova)
