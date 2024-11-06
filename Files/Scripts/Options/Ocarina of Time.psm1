@@ -1886,7 +1886,7 @@ function ByteSceneOptions() {
     }
 
     if (IsChecked $Redux.Fixes.RemoveUselessMagicJar) { 
-        PrepareMap -Scene "Gerudo Training Ground" -Map 5 -Header 0; RemoveObject -Name "Invisible Collectable"; RemoveActor -Name "Invisible Collectable"; SaveAndPatchLoadedScene
+        ReplaceActor -Name "Invisible Collectable" -CompareX (-68) -X (-68) -Y 88 -Z 2752 -YRot 0); SaveAndPatchLoadedScene
     }
     
     if (IsChecked $Redux.Fixes.TimeDoor) {
