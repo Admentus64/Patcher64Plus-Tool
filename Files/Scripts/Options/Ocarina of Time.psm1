@@ -1885,6 +1885,10 @@ function ByteSceneOptions() {
         SaveAndPatchLoadedScene
     }
 
+    if (IsChecked $Redux.Fixes.UselessMagicJar) {
+        PrepareMap -Scene "Gerudo Training Ground" -Map 4 -Header 0; ReplaceActor -Name "Invisible Collectable" -Compare "1093" -Y (-1000) -Z (-4000); SaveAndPatchLoadedScene
+    }
+    
     if (IsChecked $Redux.Fixes.TimeDoor) {
         for ($i=0; $i -le 11; $i++) { PrepareMap -Scene "Temple of Time" -Map 1 -Header $i; ReplaceActor -Name "Temple of Time" -Compare "000D" -X "FFFC" }
         SaveAndPatchLoadedScene
@@ -2216,10 +2220,10 @@ function ByteTextOptions() {
         SetMessage -ID "00BE" -Text "man"      -Replace "lady";       SetMessage -ID "0168"; SetMessage -ID "021C";      SetMessage -ID "2025"; SetMessage -ID "2030"; SetMessage -ID "2037"; SetMessage -ID "2085"; SetMessage -ID "407D"; SetMessage -ID "4088"; SetMessage -ID "502D"
         SetMessage -ID "502E";                                        SetMessage -ID "5041"; SetMessage -ID "505B" -All; SetMessage -ID "5081"; SetMessage -ID "6066"; SetMessage -ID "7011"; SetMessage -ID "70F4"; SetMessage -ID "70F5"; SetMessage -ID "70F7"; SetMessage -ID "70F8"
 
-        SetMessage -ID "6035" -Text "man"      -Replace "woman";      SetMessage -ID "70A1"
+        SetMessage -ID "70A1" -Text "man"      -Replace "woman"
         SetMessage -ID "102F" -Text "real man" -Replace "real woman"; SetMessage -ID "10D7"; SetMessage -ID "301C"; SetMessage -ID "301D"; SetMessage -ID "303C"
         SetMessage -ID "301E" -Text "Brother"  -Replace "Sister";     SetMessage -ID "3027"; SetMessage -ID "3039"; SetMessage -ID "303C"; SetMessage -ID "3041"; SetMessage -ID "3045"; SetMessage -ID "3046"; SetMessage -ID "3068" -All
-        SetMessage -ID "3006" -Text "brother"  -Replace "sister";     SetMessage -ID "70E1"
+        SetMessage -ID "3006" -Text "brother"  -Replace "Sister";     SetMessage -ID "70E1"
         SetMessage -ID "3000" -Text "Brother"  -Replace "Sibling";    SetMessage -ID "3001"; SetMessage -ID "3004"; SetMessage -ID "303D"
         SetMessage -ID "102F" -Text "Mr."      -Replace "Ms.";        SetMessage -ID "200A"; SetMessage -ID "2010"; SetMessage -ID "2011"; SetMessage -ID "2015"; SetMessage -ID "2020"; SetMessage -ID "5068"; SetMessage -ID "712D"
         SetMessage -ID "4018" -Text "son"      -Replace "lass";       SetMessage -ID "5063"; SetMessage -ID "5066"
@@ -2787,8 +2791,8 @@ function CreateTabMain() {
     CreateReduxCheckBox -Name "TimeDoor"                  -Base 4 -Safe  -Text "Fix Door of Time"          -Info "Fix the positioning of the Temple of Time door, so you can not skip past it`nAlso fixes a bug where the door doesn't open on your first visit"             -Credits "Admentus & Randomizer"
     $text = "Fix issues in Dodogono's Cavern, Water Temple and Spirit Temple`n`n- Gossip Stones that won't spawn fairies (Dodongo's Cavern)`n- Unreachable hookshot spot (Raging Water Cavern)`n- Three out of bounds pots (Raging Water Cavern)`n- Restore two Keese (Central Hall)"
     CreateReduxCheckBox -Name "Dungeons"                  -Base 4 -Safe  -Text "Fix Dungeons"              -Info ($text + "`n- Navi targeting Spots in Fire Temple, Ice Cavern, Shadow Temple and Spirit Temple" )                                    -Exclude "Child Quest" -Credits "Admentus, ZethN64, Sakura, Frostclaw, Steve(ToCoool) & GhostlyDark (ported)"
-    CreateReduxCheckBox -Name "GreatFairyTextBoxes"       -Base 4 -Safe  -Text "Fix Great Fairy Textboxes" -Info 'Fix the broken textboxes outside the Great Fairy entrances in Death Mountain Crater and Desert Colossus'                                                   -Credits "Admentus"
-
+    CreateReduxCheckBox -Name "GreatFairyTextBoxes"       -Base 4 -Safe  -Text "Fix Great Fairy Textboxes" -Info "Fix the broken textboxes outside the Great Fairy entrances in Death Mountain Crater and Desert Colossus"                                                   -Credits "Admentus"
+    CreateReduxCheckBox -Name "UselessMagicJar"           -Base 4        -Text "Remove Useless Jar"        -Info "Removes the non-functional Magic Jar atop the Statues in Gerudo Training Ground"                                                                           -Credits "GoldenMariaNova"
 
 
     # OTHER #
@@ -2966,7 +2970,7 @@ function CreateTabLanguage() {
         $last.Column = 1; $last.Row++
     }
 
-    CreateReduxCheckBox -Base 1 -Name "Restore"        -Safe -Text "Restore Text"    -Info "Restores the text used from the GC revision and applies grammar & typo fixes and corrects some icons in the text"                                          -Credits "Admentus & ShadowOne333"
+    CreateReduxCheckBox -Base 1 -Name "Restore"        -Safe -Text "Restore Text"    -Info "Restores the text used from the GC and later revisions and applies their text and icons fixes in the game dialogue"                                        -Credits "Admentus & ShadowOne333"
     CreateReduxCheckBox -Base 1 -Name "FemalePronouns" -Safe -Text "Female Pronouns" -Info "Refer to Link as a female character"                                                                                                                       -Credits "Admentus"
     CreateReduxCheckBox -Base 5 -Name "GoldSkulltula"  -Safe -Text "Gold Skulltula"  -Info "The textbox for obtaining a Gold Skulltula will no longer interrupt the gameplay`nThe English & German scripts also shows the total amount you got so far" -Credits "ShadowOne333"
     CreateReduxCheckBox -Base 4 -Name "EasterEggs"     -Safe -Text "Easter Eggs"     -Info "Adds custom Patreon Tier 3 messages into the game`nCan you find them all?" -Checked                                                                        -Credits "Admentus & Patreons"
