@@ -1884,10 +1884,6 @@ function ByteSceneOptions() {
         ChangeSceneFile -Values "24" -Search "0000000400000FC80000000400000FCA" # 202043C
         SaveAndPatchLoadedScene
     }
-
-    if (IsChecked $Redux.Fixes.UselessMagicJar) {
-        PrepareMap -Scene "Gerudo Training Ground" -Map 4 -Header 0; ReplaceActor -Name "Invisible Collectable" -Compare "1093" -Y (-1000) -Z (-4000); SaveAndPatchLoadedScene
-    }
     
     if (IsChecked $Redux.Fixes.TimeDoor) {
         for ($i=0; $i -le 11; $i++) { PrepareMap -Scene "Temple of Time" -Map 1 -Header $i; ReplaceActor -Name "Temple of Time" -Compare "000D" -X "FFFC" }
@@ -1895,7 +1891,7 @@ function ByteSceneOptions() {
     }
 
     if (IsChecked $Redux.Fixes.GerudosFortress) { PrepareMap -Scene "Gerudo's Fortress" -Map 0 -Header 0; ReplaceActor -Name "Treasure Chest" -Compare "03E0" -Param "07C0"; SaveAndPatchLoadedScene }
-    
+   
     if (IsChecked $Redux.Fixes.Dungeons) {
         PrepareMap   -Scene "Dodongo's Cavern" -Map 0 -Header 0
         ReplaceActor -Name "Gossip Stone" -Compare "1114" -Param "1138"
@@ -1917,7 +1913,8 @@ function ByteSceneOptions() {
         PrepareMap -Scene "Fire Temple"   -Map 13 -Header 0; ReplaceActor -Name "Navi Message"     -Compare "BFA7" -Y 4171  -YRot 22;               SaveAndPatchLoadedScene
         PrepareMap -Scene "Ice Cavern"    -Map 3  -Header 0; ReplaceActor -Name "Navi Message"     -Compare "0580" -XRot 24 -YRot 0 -ZRot 0;        SaveAndPatchLoadedScene
         PrepareMap -Scene "Shadow Temple" -Map 21 -Header 0; ReplaceActor -Name "Information Spot" -Compare "2084" -X (-2724) -Y (-1293) -Z (-596); SaveAndPatchLoadedScene
-        PrepareMap -Scene "Spirit Temple" -Map 5  -Header 0; ReplaceActor -Name "Information Spot" -Compare "3C24" -Z (-1410);                      SaveAndPatchLoadedScene
+        PrepareMap -Scene "Gerudo Training Ground" -Map 4 -Header 0; ReplaceActor -Name "Invisible Collectable" -Compare "1093" -Y (-1000) -Z (-4000); SaveAndPatchLoadedScene
+	PrepareMap -Scene "Spirit Temple" -Map 5  -Header 0; ReplaceActor -Name "Information Spot" -Compare "3C24" -Z (-1410);                      SaveAndPatchLoadedScene
     }
 
     if (IsChecked $Redux.Fixes.GreatFairyTextBoxes) {
@@ -2789,10 +2786,9 @@ function CreateTabMain() {
     CreateReduxCheckBox -Name "VisibleGerudoTent"         -Base 4 -Child -Text "Visible Gerudo Tent"       -Info "Make the tent in Gerudo Valley during the Child era visible`nThe tent was always accessible, just invisible"                              -Exclude "Child" -Credits "Admentus"
     CreateReduxCheckBox -Name "Graves"                    -Base 4 -Safe  -Text "Graveyard Graves"          -Info "The grave holes in Kakariko Graveyard behave as in the Rev 1 revision`nThe edges no longer force Link to grab or jump over them when trying to enter"      -Credits "Admentus"
     CreateReduxCheckBox -Name "TimeDoor"                  -Base 4 -Safe  -Text "Fix Door of Time"          -Info "Fix the positioning of the Temple of Time door, so you can not skip past it`nAlso fixes a bug where the door doesn't open on your first visit"             -Credits "Admentus & Randomizer"
-    $text = "Fix issues in Dodogono's Cavern, Water Temple and Spirit Temple`n`n- Gossip Stones that won't spawn fairies (Dodongo's Cavern)`n- Unreachable hookshot spot (Raging Water Cavern)`n- Three out of bounds pots (Raging Water Cavern)`n- Restore two Keese (Central Hall)"
-    CreateReduxCheckBox -Name "Dungeons"                  -Base 4 -Safe  -Text "Fix Dungeons"              -Info ($text + "`n- Navi targeting Spots in Fire Temple, Ice Cavern, Shadow Temple and Spirit Temple" )                                    -Exclude "Child Quest" -Credits "Admentus, ZethN64, Sakura, Frostclaw, Steve(ToCoool) & GhostlyDark (ported)"
+    $text = "Fix issues in Dodogono's Cavern, Water Temple and Spirit Temple`n`n- Gossip Stones that won't spawn fairies (Dodongo's Cavern)`n- Unreachable hookshot spot (Raging Water Cavern)`n- Three out of bounds pots (Raging Water Cavern)`n- Restore two Keese (Central Hall)`n- Removes the non-functional Magic Jar atop the Statues in Gerudo Training Ground (Statues Challenge)"
+    CreateReduxCheckBox -Name "Dungeons"                  -Base 4 -Safe  -Text "Fix Dungeons"              -Info ($text + "`n- Navi targeting Spots in Fire Temple, Ice Cavern, Shadow Temple and Spirit Temple" )                                    -Exclude "Child Quest" -Credits "Admentus, ZethN64, Sakura, Frostclaw, Steve(ToCoool), GoldenMariaNova & GhostlyDark (ported)"
     CreateReduxCheckBox -Name "GreatFairyTextBoxes"       -Base 4 -Safe  -Text "Fix Great Fairy Textboxes" -Info "Fix the broken textboxes outside the Great Fairy entrances in Death Mountain Crater and Desert Colossus"                                                   -Credits "Admentus"
-    CreateReduxCheckBox -Name "UselessMagicJar"           -Base 4        -Text "Remove Useless Jar"        -Info "Removes the non-functional Magic Jar atop the Statues in Gerudo Training Ground"                                                                           -Credits "GoldenMariaNova"
 
 
     # OTHER #
