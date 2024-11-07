@@ -1891,7 +1891,7 @@ function ByteSceneOptions() {
     }
 
     if (IsChecked $Redux.Fixes.GerudosFortress) { PrepareMap -Scene "Gerudo's Fortress" -Map 0 -Header 0; ReplaceActor -Name "Treasure Chest" -Compare "03E0" -Param "07C0"; SaveAndPatchLoadedScene }
-    
+
     if (IsChecked $Redux.Fixes.Dungeons) {
         PrepareMap   -Scene "Dodongo's Cavern" -Map 0 -Header 0
         ReplaceActor -Name "Gossip Stone" -Compare "1114" -Param "1138"
@@ -1910,10 +1910,11 @@ function ByteSceneOptions() {
         ReplaceActor -Name "Pot" -Compare "7003" -Y 860; ReplaceActor -Name "Pot" -Compare "7203" -Y 860; ReplaceActor -Name "Pot" -Compare "7403" -Y 860
         SaveAndPatchLoadedScene
 
-        PrepareMap -Scene "Fire Temple"   -Map 13 -Header 0; ReplaceActor -Name "Navi Message"     -Compare "BFA7" -Y 4171  -YRot 22;               SaveAndPatchLoadedScene
-        PrepareMap -Scene "Ice Cavern"    -Map 3  -Header 0; ReplaceActor -Name "Navi Message"     -Compare "0580" -XRot 24 -YRot 0 -ZRot 0;        SaveAndPatchLoadedScene
-        PrepareMap -Scene "Shadow Temple" -Map 21 -Header 0; ReplaceActor -Name "Information Spot" -Compare "2084" -X (-2724) -Y (-1293) -Z (-596); SaveAndPatchLoadedScene
-        PrepareMap -Scene "Spirit Temple" -Map 5  -Header 0; ReplaceActor -Name "Information Spot" -Compare "3C24" -Z (-1410);                      SaveAndPatchLoadedScene
+        PrepareMap -Scene "Fire Temple"            -Map 13 -Header 0; ReplaceActor -Name "Navi Message"          -Compare "BFA7" -Y 4171  -YRot 22;               SaveAndPatchLoadedScene
+        PrepareMap -Scene "Ice Cavern"             -Map 3  -Header 0; ReplaceActor -Name "Navi Message"          -Compare "0580" -XRot 24 -YRot 0 -ZRot 0;        SaveAndPatchLoadedScene
+        PrepareMap -Scene "Shadow Temple"          -Map 21 -Header 0; ReplaceActor -Name "Information Spot"      -Compare "2084" -X (-2724) -Y (-1293) -Z (-596); SaveAndPatchLoadedScene
+        PrepareMap -Scene "Gerudo Training Ground" -Map 4  -Header 0; ReplaceActor -Name "Invisible Collectable" -Compare "1093" -Y (-1000) -Z (-4000);           SaveAndPatchLoadedScene
+	    PrepareMap -Scene "Spirit Temple"          -Map 5  -Header 0; ReplaceActor -Name "Information Spot"      -Compare "3C24" -Z (-1410);                      SaveAndPatchLoadedScene
     }
 
     if (IsChecked $Redux.Fixes.GreatFairyTextBoxes) {
@@ -2205,7 +2206,7 @@ function ByteTextOptions() {
         SetMessage -ID "507C" -Text "There he is! It's him!<N>He"                                                      -Replace "There she is! It's her!<N>She"
         SetMessage -ID "6004" -Text "I used to think that all men, <N>besides the great Ganondorf, were <N>useless..." -Replace "I used to think that <N>outsiders were nothing but <N>trouble..."
         SetMessage -ID "6035" -Text "swordsman"                                                                        -Replace "warrior"
-	SetMessage -ID "6036" -Text "handsome man...<Delay:50>I should have kept the promise<N>I made back then..."    -Replace "beautiful woman...<Delay:50>I should have had let you<N>join us back then..."
+	    SetMessage -ID "6036" -Text "handsome man...<Delay:50>I should have kept the promise<N>I made back then..."    -Replace "beautiful woman...<Delay:50>I should have had let you<N>join us back then..."
         SetMessage -ID "70F4" -Text "handsome"                                                                         -Replace "pretty"
         SetMessage -ID "7177"                                                                                          -Replace "Ah ah ah!<N>You're so funny!"
 
@@ -2216,10 +2217,10 @@ function ByteTextOptions() {
         SetMessage -ID "00BE" -Text "man"      -Replace "lady";       SetMessage -ID "0168"; SetMessage -ID "021C";      SetMessage -ID "2025"; SetMessage -ID "2030"; SetMessage -ID "2037"; SetMessage -ID "2085"; SetMessage -ID "407D"; SetMessage -ID "4088"; SetMessage -ID "502D"
         SetMessage -ID "502E";                                        SetMessage -ID "5041"; SetMessage -ID "505B" -All; SetMessage -ID "5081"; SetMessage -ID "6066"; SetMessage -ID "7011"; SetMessage -ID "70F4"; SetMessage -ID "70F5"; SetMessage -ID "70F7"; SetMessage -ID "70F8"
 
-        SetMessage -ID "6035" -Text "man"      -Replace "woman";      SetMessage -ID "70A1"
+        SetMessage -ID "70A1" -Text "man"      -Replace "woman"
         SetMessage -ID "102F" -Text "real man" -Replace "real woman"; SetMessage -ID "10D7"; SetMessage -ID "301C"; SetMessage -ID "301D"; SetMessage -ID "303C"
         SetMessage -ID "301E" -Text "Brother"  -Replace "Sister";     SetMessage -ID "3027"; SetMessage -ID "3039"; SetMessage -ID "303C"; SetMessage -ID "3041"; SetMessage -ID "3045"; SetMessage -ID "3046"; SetMessage -ID "3068" -All
-        SetMessage -ID "3006" -Text "brother"  -Replace "sister";     SetMessage -ID "70E1"
+        SetMessage -ID "3006" -Text "brother"  -Replace "Sister";     SetMessage -ID "70E1"
         SetMessage -ID "3000" -Text "Brother"  -Replace "Sibling";    SetMessage -ID "3001"; SetMessage -ID "3004"; SetMessage -ID "303D"
         SetMessage -ID "102F" -Text "Mr."      -Replace "Ms.";        SetMessage -ID "200A"; SetMessage -ID "2010"; SetMessage -ID "2011"; SetMessage -ID "2015"; SetMessage -ID "2020"; SetMessage -ID "5068"; SetMessage -ID "712D"
         SetMessage -ID "4018" -Text "son"      -Replace "lass";       SetMessage -ID "5063"; SetMessage -ID "5066"
@@ -2243,24 +2244,24 @@ function ByteTextOptions() {
         SetMessage -ID "00F3" -Text "treasure <N>chest and "                                   -Replace "chest and<N>"
         SetMessage -ID "0616" -Text "try to cut it, it will bounce<N>off your blade!"          -Replace "cut it, it will burst open and<N>knock you back!"
         SetMessage -ID "109B" -Text "<DI><C>Twenty-three is number one!<W><DC><N><NS><Sound:3880>Do you think I'm a traitor?"                                                  -Replace "<DI><C>Twenty-three is number one!<W><DC><New Box><NS><Sound:3880>Do you think I'm a traitor?"
-	SetMessage -ID "10B8"                                                                  -Replace "That guy isn't here anymore.<New Box>Anybody who comes into the<N>forest will be lost.<New Box>Everybody will become a Stalfos.<N>Everybody, Stalfos.<N>So, he's not here anymore.<N>Only his saw is left. Hee hee.<New Box>That medicine is made of<N>forest mushrooms. Give it back!<N><Two Choices><G>Yes<N>No<W>"
+	    SetMessage -ID "10B8"                                                                  -Replace "That guy isn't here anymore.<New Box>Anybody who comes into the<N>forest will be lost.<New Box>Everybody will become a Stalfos.<N>Everybody, Stalfos.<N>So, he's not here anymore.<N>Only his saw is left. Hee hee.<New Box>That medicine is made of<N>forest mushrooms. Give it back!<N><Two Choices><G>Yes<N>No<W>"
         if (IsChecked $Redux.Text.FemalePronouns -Not) { SetMessage -ID "3006" -Text "brother" -Replace "Brother" }
         SetMessage -ID "2047" -Text "I heard that you found my dad!"                           -Replace "<NS>I heard that you found my dad!"
-	SetMessage -ID "4013" -Text "the <N>temple of Lake Hylia and has not<N>come back... "  -Replace "Lake<N>Hylia and has not come back...<N>"
+	    SetMessage -ID "4013" -Text "the <N>temple of Lake Hylia and has not<N>come back... "  -Replace "Lake<N>Hylia and has not come back...<N>"
         SetMessage -ID "507B" -Text @(1, 1)                                                    -Replace @(1)
         SetMessage -ID "6035" -Text "<NS>Kid, let me thank you.<N><NS>Heheheh..."              -Replace "<NS>Kid, let me thank you.<New Box><NS>Heheheh..."
-	SetMessage -ID "6041" -Text "again "                                                   -Replace ""
+	    SetMessage -ID "6041" -Text "again "                                                   -Replace ""
         SetMessage -ID "6044" -Text "a true"                                                   -Replace "the ultimate"
-	SetMessage -ID "6044" -Text "a master"                                                 -Replace "the master"
+	    SetMessage -ID "6044" -Text "a master"                                                 -Replace "the master"
         SetMessage -ID "6046"                                                                  -Replace "Fantastic!<N>You are a true master!<N>I will give this to you.<N>Keep improving yourself!"
         SetMessage -ID "6067"                                                                  -Replace "Building a bridge over the valley<N>is a simple task for four<N>carpenters."
         SetMessage -ID "6077" -Text "Well Come!"                                               -Replace "Welcome!"
-	SetMessage -ID "7027" -Text "<NS>But with the long peace, no one<N>has seen a Sheikah around here <N>for a long time.<N><NS>However..."                               -Replace "<NS>But with the long peace, no one<N>has seen a Sheikah around here <N>for a long time.<New Box><NS>However..."
+	    SetMessage -ID "7027" -Text "<NS>But with the long peace, no one<N>has seen a Sheikah around here <N>for a long time.<N><NS>However..."                               -Replace "<NS>But with the long peace, no one<N>has seen a Sheikah around here <N>for a long time.<New Box><NS>However..."
         SetMessage -ID "7074" -Text "<New Box>under water...<New Box>and even through time..."                                                                                -Replace "<New Box><NS>under water...<New Box><NS>and even through time..."
-	SetMessage -ID "7084" -Text "Thus, Ganondorf the Evil King"                            -Replace "<NS>Thus, Ganondorf the Evil King"
-	if (IsChecked $Redux.Text.FemalePronouns -Not) { SetMessage -ID "70E1" -Text "brother" -Replace "Brother" }
+	    SetMessage -ID "7084" -Text "Thus, Ganondorf the Evil King"                            -Replace "<NS>Thus, Ganondorf the Evil King"
+	    if (IsChecked $Redux.Text.FemalePronouns -Not) { SetMessage -ID "70E1" -Text "brother" -Replace "Brother" }
         SetMessage -ID "7091" -Text "<NS>I dragged you into it, too.<N><NS>Now it is time for me to make up <N>for my mistakes..."                                            -Replace "<NS>I dragged you into it, too.<New Box><NS>Now it is time for me to make up <N>for my mistakes..."
-	SetMessage -ID "70AA" -Text "Ho ho ho!"                                                -Replace "<NS>Ho ho ho!"
+	    SetMessage -ID "70AA" -Text "Ho ho ho!"                                                -Replace "<NS>Ho ho ho!"
         SetMessage -ID "70F7" -Text "On top of that"                                           -Replace "<NS>On top of that"
     }
 
@@ -2785,10 +2786,9 @@ function CreateTabMain() {
     CreateReduxCheckBox -Name "VisibleGerudoTent"         -Base 4 -Child -Text "Visible Gerudo Tent"       -Info "Make the tent in Gerudo Valley during the Child era visible`nThe tent was always accessible, just invisible"                              -Exclude "Child" -Credits "Admentus"
     CreateReduxCheckBox -Name "Graves"                    -Base 4 -Safe  -Text "Graveyard Graves"          -Info "The grave holes in Kakariko Graveyard behave as in the Rev 1 revision`nThe edges no longer force Link to grab or jump over them when trying to enter"      -Credits "Admentus"
     CreateReduxCheckBox -Name "TimeDoor"                  -Base 4 -Safe  -Text "Fix Door of Time"          -Info "Fix the positioning of the Temple of Time door, so you can not skip past it`nAlso fixes a bug where the door doesn't open on your first visit"             -Credits "Admentus & Randomizer"
-    $text = "Fix issues in Dodogono's Cavern, Water Temple and Spirit Temple`n`n- Gossip Stones that won't spawn fairies (Dodongo's Cavern)`n- Unreachable hookshot spot (Raging Water Cavern)`n- Three out of bounds pots (Raging Water Cavern)`n- Restore two Keese (Central Hall)"
-    CreateReduxCheckBox -Name "Dungeons"                  -Base 4 -Safe  -Text "Fix Dungeons"              -Info ($text + "`n- Navi targeting Spots in Fire Temple, Ice Cavern, Shadow Temple and Spirit Temple" )                                    -Exclude "Child Quest" -Credits "Admentus, ZethN64, Sakura, Frostclaw, Steve(ToCoool) & GhostlyDark (ported)"
-    CreateReduxCheckBox -Name "GreatFairyTextBoxes"       -Base 4 -Safe  -Text "Fix Great Fairy Textboxes" -Info 'Fix the broken textboxes outside the Great Fairy entrances in Death Mountain Crater and Desert Colossus'                                                   -Credits "Admentus"
-
+    $text = "Fix issues in Dodogono's Cavern, Water Temple and Spirit Temple`n`n- Gossip Stones that won't spawn fairies (Dodongo's Cavern)`n- Unreachable hookshot spot (Raging Water Cavern)`n- Three out of bounds pots (Raging Water Cavern)`n- Restore two Keese (Central Hall)`n- Removes the non-functional Magic Jar atop the Statues in Gerudo Training Ground (Statues Challenge)"
+    CreateReduxCheckBox -Name "Dungeons"                  -Base 4 -Safe  -Text "Fix Dungeons"              -Info ($text + "`n- Navi targeting Spots in Fire Temple, Ice Cavern, Shadow Temple and Spirit Temple" )                                    -Exclude "Child Quest" -Credits "Admentus, ZethN64, Sakura, Frostclaw, Steve(ToCoool), GoldenMariaNova & GhostlyDark (ported)"
+    CreateReduxCheckBox -Name "GreatFairyTextBoxes"       -Base 4 -Safe  -Text "Fix Great Fairy Textboxes" -Info "Fix the broken textboxes outside the Great Fairy entrances in Death Mountain Crater and Desert Colossus"                                                   -Credits "Admentus"
 
 
     # OTHER #
@@ -2966,7 +2966,7 @@ function CreateTabLanguage() {
         $last.Column = 1; $last.Row++
     }
 
-    CreateReduxCheckBox -Base 1 -Name "Restore"        -Safe -Text "Restore Text"    -Info "Restores the text used from the GC revision and applies grammar & typo fixes and corrects some icons in the text"                                          -Credits "Admentus & ShadowOne333"
+    CreateReduxCheckBox -Base 1 -Name "Restore"        -Safe -Text "Restore Text"    -Info "Restores the text used from the GC and later revisions and applies their text and icons fixes in the game dialogue"                                        -Credits "Admentus & ShadowOne333"
     CreateReduxCheckBox -Base 1 -Name "FemalePronouns" -Safe -Text "Female Pronouns" -Info "Refer to Link as a female character"                                                                                                                       -Credits "Admentus"
     CreateReduxCheckBox -Base 5 -Name "GoldSkulltula"  -Safe -Text "Gold Skulltula"  -Info "The textbox for obtaining a Gold Skulltula will no longer interrupt the gameplay`nThe English & German scripts also shows the total amount you got so far" -Credits "ShadowOne333"
     CreateReduxCheckBox -Base 4 -Name "EasterEggs"     -Safe -Text "Easter Eggs"     -Info "Adds custom Patreon Tier 3 messages into the game`nCan you find them all?" -Checked                                                                        -Credits "Admentus & Patreons"
