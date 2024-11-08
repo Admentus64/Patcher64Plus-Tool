@@ -2,6 +2,7 @@ v24.1.9
 - Updated "Fix Dungeons" with new Magic Jar fix in Gerudo Training Grounds
 - Updated "Female Pronouns"
 - Updated some tooltips
+- Updated "Gerudo Textures"
 
 v24.1.8
 - Re-added Skilar's models again

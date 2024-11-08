@@ -1838,11 +1838,11 @@ function ByteSceneOptions() {
     # RESTORE #
 
     if (IsDefault $Redux.Restore.GerudoTextures -Not) {
-        PrepareMap -Scene "Dampé's Grave & Windmill" -Map 0  -Header 0; ChangeMapFile   -Search "66888667777877888778777887788778" -Patch "Gerudo Symbols\dampe.bin"; SaveLoadedMap           # 3045248
-        PrepareMap -Scene "Dampé's Grave & Windmill" -Map 3  -Header 0; ChangeMapFile   -Search "66888667777877888778777887788778" -Patch "Gerudo Symbols\dampe.bin"; SaveLoadedMap           # 305FEE0
-        PrepareMap -Scene "Dampé's Grave & Windmill" -Map 4  -Header 0; ChangeMapFile   -Search "66888667777877888778777887788778" -Patch "Gerudo Symbols\dampe.bin"; SaveAndPatchLoadedScene # 3064E80
+        PrepareMap -Scene "Dampé's Grave & Windmill" -Map 0  -Header 0; ChangeMapFile   -Search "66888667777877888778777887788778" -Patch "Gerudo Symbols\dampe.bin"; SaveLoadedMap
+        PrepareMap -Scene "Dampé's Grave & Windmill" -Map 3  -Header 0; ChangeMapFile   -Search "66888667777877888778777887788778" -Patch "Gerudo Symbols\dampe.bin"; SaveLoadedMap
+        PrepareMap -Scene "Dampé's Grave & Windmill" -Map 4  -Header 0; ChangeMapFile   -Search "66888667777877888778777887788778" -Patch "Gerudo Symbols\dampe.bin"; SaveAndPatchLoadedScene
         
-        if (IsIndex $Redux.Restore.GerudoTextures -Index 3) {
+    if (IsIndex $Redux.Restore.GerudoTextures -Index 3) {
             PatchBytes -Offset "E68CE8"  -Texture -Patch "Gerudo Symbols\ganondorf_cape.bin"
             PatchBytes -Offset "F70350"  -Texture -Patch "Gerudo Symbols\pushing_block.bin"
             PatchBytes -Offset "F70B50"  -Texture -Patch "Gerudo Symbols\silver_gauntlets_block.bin"
@@ -1857,20 +1857,22 @@ function ByteSceneOptions() {
             PatchBytes -Offset "1636940" -Texture -Patch "Gerudo Symbols\spirit_temple_room_0_elevator.bin"
             PatchBytes -Offset "168F3A0" -Texture -Patch "Gerudo Symbols\iron_knuckle.bin"
 
-            PrepareMap -Scene "Gerudo's Fortress"        -Map 0  -Header 0; ChangeSceneFile -Search "62D45A5062D46B166AD47358418B41CB" -Patch "Gerudo Symbols\gerudo_fortress.bin";                             SaveAndPatchLoadedScene # 21B8678
-            PrepareMap -Scene "Forest Temple"            -Map 11 -Header 0; ChangeMapFile   -Search "33445455565536665577988899987777" -Patch "Gerudo Symbols\forest_temple_room_11_hole.bin";                  SaveAndPatchLoadedScene # 2464D88
-        
-            PrepareMap -Scene "Spirit Temple"            -Map 0  -Header 0; ChangeMapFile   -Search "000500110600064E0606060611110611" -Patch "Gerudo Symbols\spirit_temple_room_0_pillars.bin";                SaveLoadedMap           # 2B03928
-            PrepareMap -Scene "Spirit Temple"            -Map 10 -Header 0; ChangeMapFile   -Search "01010101120118010101010101013A37" -Patch "Gerudo Symbols\spirit_temple_room_10_20_28.bin";                 SaveLoadedMap           # 2B5CDA0
-            PrepareMap -Scene "Spirit Temple"            -Map 20 -Header 0; ChangeMapFile   -Search "01010101120118010101010101013A37" -Patch "Gerudo Symbols\spirit_temple_room_10_20_28.bin";                 SaveLoadedMap           # 2B9BDB8
-            PrepareMap -Scene "Spirit Temple"            -Map 28 -Header 0; ChangeMapFile   -Search "01010101120118010101010101013A37" -Patch "Gerudo Symbols\spirit_temple_room_10_20_28.bin";                 SaveAndPatchLoadedScene # 2BE7920
+            PrepareMap -Scene "Gerudo's Fortress"                     -Map 0  -Header 0; ChangeSceneFile -Search "62D45A5062D46B166AD47358418B41CB" -Patch "Gerudo Symbols\gerudo_fortress.bin";                             SaveAndPatchLoadedScene
+            PrepareMap -Scene "Forest Temple"                         -Map 11 -Header 0; ChangeMapFile   -Search "33445455565536665577988899987777" -Patch "Gerudo Symbols\forest_temple_room_11_hole.bin";                  SaveAndPatchLoadedScene
+            
+            PrepareMap -Scene "Spirit Temple"                         -Map 0  -Header 0; ChangeMapFile   -Search "000500110600064E0606060611110611" -Patch "Gerudo Symbols\spirit_temple_room_0_pillars.bin";                SaveLoadedMap
+            PrepareMap -Scene "Spirit Temple"                         -Map 10 -Header 0; ChangeMapFile   -Search "01010101120118010101010101013A37" -Patch "Gerudo Symbols\spirit_temple_room_10_20_28.bin";                 SaveLoadedMap
+            PrepareMap -Scene "Spirit Temple"                         -Map 20 -Header 0; ChangeMapFile   -Search "01010101120118010101010101013A37" -Patch "Gerudo Symbols\spirit_temple_room_10_20_28.bin";                 SaveLoadedMap
+            PrepareMap -Scene "Spirit Temple"                         -Map 28 -Header 0; ChangeMapFile   -Search "01010101120118010101010101013A37" -Patch "Gerudo Symbols\spirit_temple_room_10_20_28.bin";                 SaveAndPatchLoadedScene
 
-            PrepareMap -Scene "Gerudo Training Ground"   -Map 1  -Header 0; ChangeMapFile   -Search "0B0C08080B08080C23150B08000C4215" -Patch "Gerudo Symbols\gerudo_training_ground_room_1_ceiling_frame.bin"; SaveLoadedMap           # 289CA90
-            PrepareMap -Scene "Gerudo Training Ground"   -Map 5  -Header 0; ChangeMapFile   -Search "0C131313131D131D1D101D1013102D13" -Patch "Gerudo Symbols\gerudo_training_ground_room_5_7.bin";             SaveLoadedMap           # 28BBCD8
-            PrepareMap -Scene "Gerudo Training Ground"   -Map 7  -Header 0; ChangeMapFile   -Search "0C131313131D131D1D101D1013102D13" -Patch "Gerudo Symbols\gerudo_training_ground_room_5_7.bin";             SaveAndPatchLoadedScene # 28CA728
+            PrepareMap -Scene "Gerudo Training Ground"                -Map 1  -Header 0; ChangeMapFile   -Search "0B0C08080B08080C23150B08000C4215" -Patch "Gerudo Symbols\gerudo_training_ground_room_1_ceiling_frame.bin"; SaveLoadedMap
+            PrepareMap -Scene "Gerudo Training Ground"                -Map 3  -Header 0; ChangeMapFile   -Search "0B0C08080B08080C23150B08000C4215" -Patch "Gerudo Symbols\gerudo_training_ground_room_1_ceiling_frame.bin"; SaveLoadedMap
+            PrepareMap -Scene "Gerudo Training Ground"                -Map 5  -Header 0; ChangeMapFile   -Search "0C131313131D131D1D101D1013102D13" -Patch "Gerudo Symbols\gerudo_training_ground_room_5_7.bin";             SaveLoadedMap
+            PrepareMap -Scene "Gerudo Training Ground"                -Map 7  -Header 0; ChangeMapFile   -Search "0C131313131D131D1D101D1013102D13" -Patch "Gerudo Symbols\gerudo_training_ground_room_5_7.bin";             SaveLoadedMap
+            PrepareMap -Scene "Gerudo Training Ground"                -Map 10 -Header 0; ChangeMapFile   -Search "0B0C08080B08080C23150B08000C4215" -Patch "Gerudo Symbols\gerudo_training_ground_room_1_ceiling_frame.bin"; SaveAndPatchLoadedScene
 
-            PrepareMap -Scene "Twinrova's Lair & Iron Knuckle's Lair" -Map 1 -Header 0; ChangeMapFile -Search "498B498B498B498B41494989518B498B" -Patch "Gerudo Symbols\spirit_temple_boss.bin"; SaveLoadedMap            # 2F64E38
-            PrepareMap -Scene "Twinrova's Lair & Iron Knuckle's Lair" -Map 3 -Header 0; ChangeMapFile -Search "498B498B498B498B41494989518B498B" -Patch "Gerudo Symbols\spirit_temple_boss.bin"; SaveAndPatchLoadedScene  # 2F73700
+            PrepareMap -Scene "Twinrova's Lair & Iron Knuckle's Lair" -Map 1  -Header 0; ChangeMapFile   -Search "498B498B498B498B41494989518B498B" -Patch "Gerudo Symbols\spirit_temple_boss.bin";                          SaveLoadedMap
+            PrepareMap -Scene "Twinrova's Lair & Iron Knuckle's Lair" -Map 3  -Header 0; ChangeMapFile   -Search "498B498B498B498B41494989518B498B" -Patch "Gerudo Symbols\spirit_temple_boss.bin";                          SaveAndPatchLoadedScene
         }
     }
 
@@ -2755,15 +2757,15 @@ function CreateTabMain() {
 
     # RESTORE #
 
-    CreateReduxGroup    -Tag  "Restore"                      -Text "Restore / Correct / Censor"
-    CreateReduxComboBox -Name "Blood"                -Base 3 -Text "Blood Color"            -Info "Change the color of blood used for several monsters, Ganondorf and Ganon`nSeveral monsters have blue or green blood, while Ganondorf/Ganon has red blood" -Items @("Default", "Red blood for monsters", "Green blood for Ganondorf/Ganon", "Change both") -Credits "ShadowOne333 & Admentus"
-    CreateReduxComboBox -Name "GerudoTextures"       -Safe   -Text "Gerudo Textures"        -Info "Censor Gerudo symbol textures as they were used in the GameCube ROMs and Virtual Console versions`nAlso remove the Gerudo Symbols in Dampe's Maze as it was done in the Gateway ROM version" -Items @("Disabled", "Only Remove Dampe", "Fix And Censor")  -Credits "GhostlyDark, ShadowOne333 and GoldenMariaNova"
-    CreateReduxCheckBox -Name "Blood"                -Base 6 -Text "Red Blood"              -Info "Change the color of blood used for several monsters to red"                                                                                                                                                                                               -Credits "Admentus"
-    CreateReduxCheckBox -Name "RupeeColors"                  -Text "Correct Rupee Colors"   -Info "Corrects the color palette for the in-game Purple (50) and Golden (200) Rupees`nIn the base game they are closer to pink and orange, this changes them to more closely match their 3D get item models"                                                    -Credits "GhostlyDark"
-    CreateReduxCheckBox -Name "CowNoseRing"                  -Text "Restore Cow Nose Ring"  -Info "Restore the rings in the noses for Cows as seen in the Japanese release"                                                                                                                                                                                  -Credits "ShadowOne333"
-    CreateReduxCheckBox -Name "CenterTextboxCursor"          -Text "Center Textbox Cursor"  -Info "Aligns the textbox cursor to the center of the screen"                                                                                                                                                                                                    -Credits "BilonFullHDemon"
-    CreateReduxCheckBox -Name "N64Logo"         	     -Text "Restore N64 Logo"  	    -Info "Fixes the appearance of the N64 intro logo as seen in the Rev 1 ROM and newer"                                                                                                                                                                            -Credits "GhostlyDark"
-    CreateReduxCheckBox -Name "FireTemple"     -Safe -Base 3 -Text "Censor Fire Temple"     -Info "Censor Fire Temple theme as used in the Rev 2 ROM"                                                                                                                                                                                                        -Credits "ShadowOne333" 
+    CreateReduxGroup    -Tag  "Restore"                  -Text "Restore / Correct / Censor"
+    CreateReduxComboBox -Name "Blood"            -Base 3 -Text "Blood Color"           -Info "Change the color of blood used for several monsters, Ganondorf and Ganon`nSeveral monsters have blue or green blood, while Ganondorf/Ganon has red blood" -Items @("Default", "Red blood for monsters", "Green blood for Ganondorf/Ganon", "Change both") -Credits "ShadowOne333 & Admentus"
+    CreateReduxComboBox -Name "GerudoTextures"   -Safe   -Text "Gerudo Textures"       -Info "Censor Gerudo symbol textures as they were used in the GameCube ROMs and Virtual Console versions`nAlso remove the Gerudo Symbols in Dampe's Maze as it was done in the Gateway ROM version" -Items @("Disabled", "Only Remove Dampe", "Fix And Censor")  -Credits "GhostlyDark, ShadowOne333 and GoldenMariaNova"
+    CreateReduxCheckBox -Name "Blood"            -Base 6 -Text "Red Blood"             -Info "Change the color of blood used for several monsters to red"                                                                                                                                                                                               -Credits "Admentus"
+    CreateReduxCheckBox -Name "RupeeColors"              -Text "Correct Rupee Colors"  -Info "Corrects the color palette for the in-game Purple (50) and Golden (200) Rupees`nIn the base game they are closer to pink and orange, this changes them to more closely match their 3D get item models"                                                    -Credits "GhostlyDark"
+    CreateReduxCheckBox -Name "CowNoseRing"              -Text "Restore Cow Nose Ring" -Info "Restore the rings in the noses for Cows as seen in the Japanese release"                                                                                                                                                                                  -Credits "ShadowOne333"
+    CreateReduxCheckBox -Name "CenterTextboxCursor"      -Text "Center Textbox Cursor" -Info "Aligns the textbox cursor to the center of the screen"                                                                                                                                                                                                    -Credits "BilonFullHDemon"
+    CreateReduxCheckBox -Name "N64Logo"         	     -Text "Restore N64 Logo"  	   -Info "Fixes the appearance of the N64 intro logo as seen in the Rev 1 ROM and newer"                                                                                                                                                                            -Credits "GhostlyDark"
+    CreateReduxCheckBox -Name "FireTemple" -Safe -Base 3 -Text "Censor Fire Temple"    -Info "Censor Fire Temple theme as used in the Rev 2 ROM"                                                                                                                                                                                                        -Credits "ShadowOne333" 
 
 
 
