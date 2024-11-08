@@ -714,11 +714,6 @@ function ByteOptions() {
 
     # MISC COLORS #
 
-   <# if (IsChecked $Redux.Colors.BoomerangTrail) {
-        ChangeBytes -Offset "C5A8FB" -Values "BBBBBBBBBB"       -Interval 4
-        ChangeBytes -Offset "C5A923" -Values "BBBBBBBBBBBBBBBB" -Interval 4
-    } #>
-
     if (IsChecked $Redux.Colors.PauseScreenColors) {
         ChangeBytes -Offset "BBF88E" -Values "978B" # Menu Title Background
         ChangeBytes -Offset "BBF892" -Values "61"   # Menu Title Background
@@ -761,11 +756,6 @@ function ByteOptions() {
         if (TestFile ($GameFiles.textures + "\Equipment\Bracelet\Power Bracelet." + $LanguagePatch.code + ".label")) { PatchBytes -Offset "8B2C00" -Texture -Patch ("Equipment\Bracelet\Power Bracelet." + $LanguagePatch.code + ".label") }
         PatchBytes  -Offset "1791000" -Patch "Object GI Models\Power Bracelet.bin" # Goron's Bracelet GI model
     }
-    
- <# if (IsChecked $Redux.Equipment.VisibleGiantsKnife) {
-        ChangeBytes -Offset "B6D81E" -Values "3F38" -Match "5540"; ChangeBytes -Offset "B6D826" -Values "7630" -Match "5540"
-        ChangeBytes -Offset "B6D82E" -Values "3F38" -Match "5540"; ChangeBytes -Offset "B6D836" -Values "7630" -Match "5540"
-    } #>
 
     if (IsChecked $Redux.Equipment.FunctionalWeapons) {
         ChangeBytes -Offset "DFE765" -Values "F2"; ChangeBytes -Offset "DFE76C" -Values "F1"; ChangeBytes -Offset "DFE77A" -Values "F1"; ChangeBytes -Offset "DFE77D" -Values "F2"; ChangeBytes -Offset "DFE782" -Values "F4" # Freezard (Deku Stick, Kokiri Slash, Kokiri Spin, Kokiri Jump, Hammer Jump)
