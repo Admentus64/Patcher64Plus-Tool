@@ -148,10 +148,10 @@ function CreateTabMain() {
     # QUALITY OF LIFE #
     
     CreateReduxGroup    -Tag  "Gameplay"    -Text "Quality of Life & Adjustments" 
-    CreateReduxCheckBox -Name "NoKillFlash" -Text "No Kill Flash" -Info "Disable the flashing effect when killing certain enemies like walltula etc" -Credits "Chez Cousteau (original) & Anthrogi (debug gc mq (pal))"
-    CreateReduxCheckBox -Name "InstantClaimCheck" -Text "Instant Claim Check" -Info "Allows you to use the claim check immediately to get the biggoron's sword" -Credits "Randomizer (original) & Anthrogi (debug gc mq (pal))"
-    CreateReduxCheckBox -Name "BlackBars" -Text "No Black Bars (Z-Targeting)" -Info "Removes the black bars shown on the top & bottom of the screen during Z-targeting" -Credits "Admentus (original) & Anthrogi (debug gc mq (pal))"
-    CreateReduxCheckBox -Name "TextSpeed" -Text "2x Text Speed" -Info "Makes text go 2x as fast" -Credits "Admentus (original) & Anthrogi (debug gc mq (pal))"
+    CreateReduxCheckBox -Name "NoKillFlash" -Text "No Kill Flash" -Info "Disable the flashing effect when killing certain enemies like walltula etc" -Credits "Chez Cousteau (original) & Anthrogi (ported))"
+    CreateReduxCheckBox -Name "InstantClaimCheck" -Text "Instant Claim Check" -Info "Allows you to use the claim check immediately to get the biggoron's sword" -Credits "Randomizer (original) & Anthrogi (ported)"
+    CreateReduxCheckBox -Name "BlackBars" -Text "No Black Bars (Z-Targeting)" -Info "Removes the black bars shown on the top & bottom of the screen during Z-targeting" -Credits "Admentus (original) & Anthrogi (ported)"
+    CreateReduxCheckBox -Name "TextSpeed" -Text "2x Text Speed" -Info "Makes text go 2x as fast" -Credits "Admentus (original) & Anthrogi (ported)"
 }
 #==============================================================================================================================================================================================
 function CreateTabAudio() {
@@ -161,7 +161,6 @@ function CreateTabAudio() {
     CreateReduxGroup    -Tag  "Sounds"             -Text "Sounds / Voices"
     CreateReduxComboBox -Name "ChildVoices" -Child -Text "Child Voice" -Default "Original" -Items @("Original") -FilePath ($GameFiles.binaries + "\Voices Child")   -Info "Replace the voice used for the Child Link Model"        -Credits "`nMajora's Mask: Korey Cryderman (ported) & GhostlyDark (corrected)`nMelee Zelda: Mickey Saeed & theluigidude2007 (edits)`nAmara: Amara (ripping) & theluigidude2007 (edits)"
     CreateReduxComboBox -Name "AdultVoices" -Adult -Text "Adult Voice" -Default "Original" -Items @("Original") -FilePath ($GameFiles.binaries + "\Voices Adult")   -Info "Replace the voice used for the Adult Link Model"        -Credits "`nMajora's Mask: Korey Cryderman (ported) & GhostlyDark (corrected)`nMelee Zelda: Mickey Saeed & theluigidude2007 (edits)`nAmara: Amara (ripping) & theluigidude2007`nPeach: theluigidude2007"
-
 }
 #==============================================================================================================================================================================================
 function CreateTabDifficulty() {
@@ -173,33 +172,33 @@ function CreateTabDifficulty() {
     $items3 = @("1 Boss HP", "0.5x Boss HP", "1x Boss HP", "1.5x Boss HP", "2x Boss HP", "2.5x Boss HP", "3x Boss HP", "3.5x Boss HP", "4x Boss HP", "5x Boss HP")
 
     CreateReduxGroup    -Tag  "Hero"       -Text "Hero Mode"
-    CreateReduxComboBox -Name "MonsterHP"  -Text "Monster HP"   -Items $items1 -Default 3 -Info "Set the amount of health for monsters`nDoesn't include monsters which die in 1 hit or do not work with increased hp" -Credits "Admentus (original & formula) & Anthrogi (debug gc mq (pal))"
-    CreateReduxComboBox -Name "MiniBossHP" -Text "Mini-Boss HP" -Items $items2 -Default 3 -Info "Set the amount of health for mini-bosses`nSome enemies are not included" -Credits "Admentus (original & formula) & Anthrogi (debug gc mq (pal))"
-    CreateReduxComboBox -Name "BossHP"     -Text "Boss HP"      -Items $items3 -Default 3 -Info "Set the amount of health for bosses`nPhantom Ganon, Ganondorf and Ganon have a max of 3x HP"          -Credits "Admentus, Marcelo20XX (original & formula) & Anthrogi (debug gc mq (pal))"
-    CreateReduxComboBox -Name "Damage"     -Text "Damage"       -Items @("1x Damage", "2x Damage", "4x Damage", "8x Damage", "OHKO Mode") -Info "Set the amount of damage you receive`nOHKO Mode = You die in one hit" -Credits "Admentus (original) & Anthrogi (debug gc mq (pal))"
+    CreateReduxComboBox -Name "MonsterHP"  -Text "Monster HP"   -Items $items1 -Default 3 -Info "Set the amount of health for monsters`nDoesn't include monsters which die in 1 hit or do not work with increased hp" -Credits "Admentus (original & formula) & Anthrogi (ported)"
+    CreateReduxComboBox -Name "MiniBossHP" -Text "Mini-Boss HP" -Items $items2 -Default 3 -Info "Set the amount of health for mini-bosses`nSome enemies are not included" -Credits "Admentus (original & formula) & Anthrogi (ported)"
+    CreateReduxComboBox -Name "BossHP"     -Text "Boss HP"      -Items $items3 -Default 3 -Info "Set the amount of health for bosses`nPhantom Ganon, Ganondorf and Ganon have a max of 3x HP"          -Credits "Admentus, Marcelo20XX (original & formula) & Anthrogi (ported)"
+    CreateReduxComboBox -Name "Damage"     -Text "Damage"       -Items @("1x Damage", "2x Damage", "4x Damage", "8x Damage", "OHKO Mode") -Info "Set the amount of damage you receive`nOHKO Mode = You die in one hit" -Credits "Admentus (original) & Anthrogi (ported)"
 
-    CreateReduxCheckBox -Name "NoBottledFairy" -Text "No Bottled Fairies"  -Info "Fairies can no longer be put into a bottle" -Credits "Admentus (original) & Anthrogi (debug gc mq (pal))"
+    CreateReduxCheckBox -Name "NoBottledFairy" -Text "No Bottled Fairies"  -Info "Fairies can no longer be put into a bottle" -Credits "Admentus (original) & Anthrogi (ported)"
 
     CreateReduxGroup    -Tag  "HeroHarder"   -Text "Hero Mode (Harder Enemies)"
-    CreateReduxCheckBox -Name "GohmaLarva"   -Text "Harder Gohma Larva"    -Info "Gohma Larvas are faster and reach further" -Credits "Euler (original) & Anthrogi (debug gc mq (pal))"
-    CreateReduxCheckBox -Name "Keese"        -Text "Harder Keese"          -Info "Keese attack faster and move further, as well as not lose their fire when impacting the player" -Credits "Euler (original) & Anthrogi (debug gc mq (pal))"
-    CreateReduxCheckBox -Name "Wolfos"       -Text "Harder Wolfos"         -Info "Wolfos will attack faster and do not falter from having attacks blocked`nThey also attack when z-targeting another enemy" -Credits "BilonFullHDemon (original) & Anthrogi (debug gc mq (pal))"
-    CreateReduxCheckBox -Name "Lizards"      -Text "Harder Lizards"        -Info "Lizalfos & Dinolfos will attack faster and do not falter from having attacks blocked`nThey also attack when z-targeting another enemy" -Credits "Nokaubure, Euler (original) & Anthrogi (debug gc mq (pal))"
-    CreateReduxCheckBox -Name "DeadHand"     -Text "Harder Dead Hand"      -Info "Dead Hands are faster and do not stay risen for long" -Credits "Euler (original) & Anthrogi (debug gc mq (pal))"
-    CreateReduxCheckBox -Name "DarkLink"     -Text "Harder Dark Link"      -Info "Dark Link starts attacking you right away after spawning" -Credits "Nokaubure, BilonFullHDemon (original) & Anthrogi (debug gc mq (pal))"
-    CreateReduxCheckBox -Name "IronKnuckle"  -Text "Harder Iron Knuckle"   -Info "Iron Knuckles now move faster and may use back swing more likely" -Credits "Admentus (original) & Anthrogi (debug gc mq (pal))"
-    CreateReduxCheckBox -Name "Gohma"        -Text "Harder Gohma"          -Info "Gohma recovers faster from being stunned" -Credits "Euler (original) & Anthrogi (debug gc mq (pal))"
-    CreateReduxCheckBox -Name "KingDodongo"  -Text "Harder King Dodongo"   -Info "King Dodongo inhales faster and is no longer stunned" -Credits "Euler (original) & Anthrogi (debug gc mq (pal))"
+    CreateReduxCheckBox -Name "GohmaLarva"   -Text "Harder Gohma Larva"    -Info "Gohma Larvas are faster and reach further" -Credits "Euler (original) & Anthrogi (ported)"
+    CreateReduxCheckBox -Name "Keese"        -Text "Harder Keese"          -Info "Keese attack faster and move further, as well as not lose their fire when impacting the player" -Credits "Euler (original) & Anthrogi (ported)"
+    CreateReduxCheckBox -Name "Wolfos"       -Text "Harder Wolfos"         -Info "Wolfos will attack faster and do not falter from having attacks blocked`nThey also attack when z-targeting another enemy" -Credits "BilonFullHDemon (original) & Anthrogi (ported)"
+    CreateReduxCheckBox -Name "Lizards"      -Text "Harder Lizards"        -Info "Lizalfos & Dinolfos will attack faster and do not falter from having attacks blocked`nThey also attack when z-targeting another enemy" -Credits "Nokaubure, Euler (original) & Anthrogi (ported)"
+    CreateReduxCheckBox -Name "DeadHand"     -Text "Harder Dead Hand"      -Info "Dead Hands are faster and do not stay risen for long" -Credits "Euler (original) & Anthrogi (ported)"
+    CreateReduxCheckBox -Name "DarkLink"     -Text "Harder Dark Link"      -Info "Dark Link starts attacking you right away after spawning" -Credits "Nokaubure, BilonFullHDemon (original) & Anthrogi (ported)"
+    CreateReduxCheckBox -Name "IronKnuckle"  -Text "Harder Iron Knuckle"   -Info "Iron Knuckles now move faster and may use back swing more likely" -Credits "Admentus (original) & Anthrogi (ported)"
+    CreateReduxCheckBox -Name "Gohma"        -Text "Harder Gohma"          -Info "Gohma recovers faster from being stunned" -Credits "Euler (original) & Anthrogi (ported)"
+    CreateReduxCheckBox -Name "KingDodongo"  -Text "Harder King Dodongo"   -Info "King Dodongo inhales faster and is no longer stunned" -Credits "Euler (original) & Anthrogi (ported)"
         
     # RECOVERY #
 
     CreateReduxGroup   -Tag  "Recovery"    -Text "Recovery" -Height 4
-    CreateReduxTextBox -Name "Heart"       -Text "Recovery Heart" -Value 16  -Min 0 -Max 320 -Length 3 -Info "Set the amount of HP that Recovery Hearts will replenish" -Credits "Admentus, Three Pendants (original) & Anthrogi (debug gc mq (pal))"
-    CreateReduxTextBox -Name "Fairy"       -Text "Fairy"          -Value 128 -Min 0 -Max 320 -Length 3 -Info "Set the amount of HP that a Fairy will replenish"                                                       -Credits "Admentus (original) & Anthrogi (debug gc mq (pal))"
-    CreateReduxTextBox -Name "FairyBottle" -Text "Fairy (Bottle)" -Value 320 -Min 0 -Max 320 -Length 3 -Info "Set the amount of HP that a Bottled Fairy will replenish"                                               -Credits "Admentus, Three Pendants & Anthrogi (debug gc mq (pal))"
-    CreateReduxTextBox -Name "FairyRevive" -Text "Fairy (Revive)" -Value 320 -Min 0 -Max 320 -Length 3 -Info "Set the amount of HP that a Bottled Fairy will replenish after Link died"                               -Credits "Admentus, Three Pendants & Anthrogi (debug gc mq (pal))"; $Last.Row++
-    CreateReduxTextBox -Name "Milk"        -Text "Milk"           -Value 80  -Min 0 -Max 320 -Length 3 -Info "Set the amount of HP that Milk will replenish"                                                          -Credits "Admentus, Three Pendants & Anthrogi (debug gc mq (pal))"
-    CreateReduxTextBox -Name "RedPotion"   -Text "Red Potion"     -Value 320 -Min 0 -Max 320 -Length 3 -Info "Set the amount of HP that a Red Potion will replenish"                                                  -Credits "Admentus, Three Pendants (original) & Anthrogi (debug gc mq (pal))"
+    CreateReduxTextBox -Name "Heart"       -Text "Recovery Heart" -Value 16  -Min 0 -Max 320 -Length 3 -Info "Set the amount of HP that Recovery Hearts will replenish" -Credits "Admentus, Three Pendants (original) & Anthrogi (ported)"
+    CreateReduxTextBox -Name "Fairy"       -Text "Fairy"          -Value 128 -Min 0 -Max 320 -Length 3 -Info "Set the amount of HP that a Fairy will replenish" -Credits "Admentus (original) & Anthrogi (ported)"
+    CreateReduxTextBox -Name "FairyBottle" -Text "Fairy (Bottle)" -Value 320 -Min 0 -Max 320 -Length 3 -Info "Set the amount of HP that a Bottled Fairy will replenish" -Credits "Admentus, Three Pendants & Anthrogi (ported)"
+    CreateReduxTextBox -Name "FairyRevive" -Text "Fairy (Revive)" -Value 320 -Min 0 -Max 320 -Length 3 -Info "Set the amount of HP that a Bottled Fairy will replenish after Link died" -Credits "Admentus, Three Pendants & Anthrogi (ported)"; $Last.Row++
+    CreateReduxTextBox -Name "Milk"        -Text "Milk"           -Value 80  -Min 0 -Max 320 -Length 3 -Info "Set the amount of HP that Milk will replenish" -Credits "Admentus, Three Pendants & Anthrogi (ported)"
+    CreateReduxTextBox -Name "RedPotion"   -Text "Red Potion"     -Value 320 -Min 0 -Max 320 -Length 3 -Info "Set the amount of HP that a Red Potion will replenish" -Credits "Admentus, Three Pendants (original) & Anthrogi (ported)"
 
     $Redux.Recovery.HeartLabel       = CreateLabel -X $Redux.Recovery.Heart.Left       -Y ($Redux.Recovery.Heart.Bottom       + (DPISize 6)) -Text ("(" + [math]::Round($Redux.Recovery.Heart.text/16,       1) + " Hearts)") -AddTo $Last.Group
     $Redux.Recovery.FairyLabel       = CreateLabel -X $Redux.Recovery.Fairy.Left       -Y ($Redux.Recovery.Fairy.Bottom       + (DPISize 6)) -Text ("(" + [math]::Round($Redux.Recovery.Fairy.text/16,       1) + " Hearts)") -AddTo $Last.Group
@@ -217,9 +216,9 @@ function CreateTabDifficulty() {
     # MAGIC #
 
     CreateReduxGroup   -Tag  "Magic"       -Text "Magic Costs"
-    CreateReduxTextBox -Name "FireArrow"   -Text "Fire Arrow"    -Value 4  -Max 96 -Info "Set the magic cost for using Fire Arrows´n48 is the maximum amount of the standard magic meter´n96 is the maximum amount of the double magic meter"   -Credits "Admentus (original) & Anthrogi (debug gc mq (pal))"
-    CreateReduxTextBox -Name "IceArrow"    -Text "Ice Arrow"     -Value 4  -Max 96 -Info "Set the magic cost for using Ice Arrows´n48 is the maximum amount of the standard magic meter´n96 is the maximum amount of the double magic meter"    -Credits "Admentus (original) & Anthrogi (debug gc mq (pal))"
-    CreateReduxTextBox -Name "LightArrow"  -Text "Light Arrow"   -Value 8  -Max 96 -Info "Set the magic cost for using Light Arrows´n48 is the maximum amount of the standard magic meter´n96 is the maximum amount of the double magic meter"  -Credits "Admentus (original) & Anthrogi (debug gc mq (pal))"
+    CreateReduxTextBox -Name "FireArrow"   -Text "Fire Arrow"    -Value 4  -Max 96 -Info "Set the magic cost for using Fire Arrows´n48 is the maximum amount of the standard magic meter´n96 is the maximum amount of the double magic meter"   -Credits "Admentus (original) & Anthrogi (ported)"
+    CreateReduxTextBox -Name "IceArrow"    -Text "Ice Arrow"     -Value 4  -Max 96 -Info "Set the magic cost for using Ice Arrows´n48 is the maximum amount of the standard magic meter´n96 is the maximum amount of the double magic meter"    -Credits "Admentus (original) & Anthrogi (ported)"
+    CreateReduxTextBox -Name "LightArrow"  -Text "Light Arrow"   -Value 8  -Max 96 -Info "Set the magic cost for using Light Arrows´n48 is the maximum amount of the standard magic meter´n96 is the maximum amount of the double magic meter"  -Credits "Admentus (original) & Anthrogi (ported)"
 }
 #==============================================================================================================================================================================================
 function CreateTabColors() {
@@ -282,10 +281,10 @@ function CreateTabEquipment() {
     # EQUIPMENT #
 
     CreateReduxGroup -Tag  "Hitbox" -Height 4.5 -Text "Equipment Adjustments"
-    CreateReduxTextBox -Name "SwordHealth" -Text "Sword Durability" -Length 3 -Info "Set the amount of hits the Giant's Knife can take before it breaks" -Value 8 -Min 1 -Max 255 -Credits "Admentus (original) & Anthrogi (debug gc mq (pal))" 
-    CreateReduxSlider -Name "KokiriSword" -Column 3 -Default 3000 -Min 512 -Max 8192 -Freq 512 -Small 256 -Large 512 -Text "Kokiri Sword" -Info "Set the length of the hitbox of the Kokiri Sword" -Credits "Admentus (original) & Anthrogi (debug gc mq (pal))"
-    CreateReduxSlider -Name "MasterSword" -Default 4000 -Min 512 -Max 8192 -Freq 512 -Small 256 -Large 512 -Text "Master Sword" -Info "Set the length of the hitbox of the Master Sword" -Credits "Admentus (original) & Anthrogi (debug gc mq (pal))"
-    CreateReduxSlider -Name "GiantsKnife" -Default 5500 -Min 512 -Max 8192 -Freq 512 -Small 256 -Large 512 -Text "Two-Handed Sword" -Info "Set the length of the hitbox of the Giant's_Knife/Biggoron_Sword" -Credits "Admentus (original) & Anthrogi (debug gc mq (pal))"
-    CreateReduxSlider -Name "Hookshot" -Default 13  -Min 0   -Max 110  -Freq 10  -Small 5   -Large 10  -Text "Hookshot Length" -Info "Set the length of the Hookshot" -Credits "Admentus (original) & Anthrogi (debug gc mq (pal))" -Warning "Going above the default length by a certain amount can look weird"
-    CreateReduxSlider -Name "Longshot" -Default 104 -Min 0   -Max 110  -Freq 10  -Small 5   -Large 10  -Text "Longshot Length" -Info "Set the length of the Longshot" -Credits "Admentus (original) & Anthrogi (debug gc mq (pal))" -Warning "Going above the default length by a certain amount can look weird"
+    CreateReduxTextBox -Name "SwordHealth" -Text "Sword Durability" -Length 3 -Info "Set the amount of hits the Giant's Knife can take before it breaks" -Value 8 -Min 1 -Max 255 -Credits "Admentus (original) & Anthrogi (ported)" 
+    CreateReduxSlider -Name "KokiriSword" -Column 3 -Default 3000 -Min 512 -Max 8192 -Freq 512 -Small 256 -Large 512 -Text "Kokiri Sword" -Info "Set the length of the hitbox of the Kokiri Sword" -Credits "Admentus (original) & Anthrogi (ported)"
+    CreateReduxSlider -Name "MasterSword" -Default 4000 -Min 512 -Max 8192 -Freq 512 -Small 256 -Large 512 -Text "Master Sword" -Info "Set the length of the hitbox of the Master Sword" -Credits "Admentus (original) & Anthrogi (ported)"
+    CreateReduxSlider -Name "GiantsKnife" -Default 5500 -Min 512 -Max 8192 -Freq 512 -Small 256 -Large 512 -Text "Two-Handed Sword" -Info "Set the length of the hitbox of the Giant's_Knife/Biggoron_Sword" -Credits "Admentus (original) & Anthrogi (ported)"
+    CreateReduxSlider -Name "Hookshot" -Default 13  -Min 0   -Max 110  -Freq 10  -Small 5   -Large 10  -Text "Hookshot Length" -Info "Set the length of the Hookshot" -Credits "Admentus (original) & Anthrogi (ported)" -Warning "Going above the default length by a certain amount can look weird"
+    CreateReduxSlider -Name "Longshot" -Default 104 -Min 0   -Max 110  -Freq 10  -Small 5   -Large 10  -Text "Longshot Length" -Info "Set the length of the Longshot" -Credits "Admentus (original) & Anthrogi (ported)" -Warning "Going above the default length by a certain amount can look weird"
 }
