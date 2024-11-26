@@ -7,12 +7,11 @@ function ByteOptions() {
     
     # SOUNDS / VOICES #
 
-    if ($GamePatch.age -eq "Child") {
-        try     { $file = "Voices Child\" + $Redux.Sounds.ChildVoices.Text.replace(" (default)", "") + ".bin" }
-        catch   { $file = "Voices Child\Majora's Mask.bin" }
+    if (IsDefault -Elem $Redux.Sounds.ChildVoices -Not) {
+        $file = "Voices Child\" + $Redux.Sounds.ChildVoices.Text.replace(" (default)", "") + ".bin"
         if (TestFile ($GameFiles.binaries + "\" + $file)) { PatchBytes -Offset "1FB000" -Patch $file }
     }
-    elseif ($GamePatch.age -eq "Adult") {
+    if (IsDefault -Elem $Redux.Sounds.AdultVoices -Not) {
         $file = "Voices Adult\" + $Redux.Sounds.AdultVoices.Text.replace(" (default)", "") + ".bin"
         if (TestFile ($GameFiles.binaries + "\" + $file)) { PatchBytes -Offset "1A95E0" -Patch $file }
     }
