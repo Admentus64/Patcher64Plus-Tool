@@ -1,3 +1,6 @@
+v24.1.10
+- Added options for TSP
+
 v24.1.9
 - Updated "Fix Dungeons" with new Magic Jar fix in Gerudo Training Grounds
 - Updated "Female Pronouns"

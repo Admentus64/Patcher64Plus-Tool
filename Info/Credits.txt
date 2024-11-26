@@ -61,6 +61,7 @@
 - SoulofDeity
 - Feonyx
 - GoldenMariaNova
+- Anthrogi
 
 --- Custom Textures ---
 - Community Texture pack
