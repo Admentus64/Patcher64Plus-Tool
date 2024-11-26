@@ -18,7 +18,7 @@ function ByteOptions() {
 
     # SFX SOUND EFFECTS #
 
-    if (IsIndex -Elem $Redux.Sounds.LowHP      -Not)   { ChangeBytes -Offset "AF0E0E" -Values (GetSFXID $Redux.SFX.LowHP.Text) }    
+    if (IsIndex -Elem $Redux.Sounds.LowHP      -Not)   { ChangeBytes -Offset "AF0E0E" -Values (GetSFXID $Redux.Sounds.LowHP.Text) }    
 
     # HERO MODE #
 
@@ -162,7 +162,7 @@ function CreateTabAudio() {
     
     # SOUNDS / VOICES #
 
-    CreateReduxGroup    -Tag  "Sounds"             -Text "Sounds / Voices (Does Not Work Currently)"
+    CreateReduxGroup    -Tag  "Sounds"             -Text "Sounds / Voices"
     CreateReduxComboBox -Name "ChildVoices" -Child -Text "Child Voice" -Default "Original" -Items @("Original") -FilePath ($GameFiles.binaries + "\Voices Child")   -Info "Replace the voice used for the Child Link Model"        -Credits "`nMajora's Mask: Korey Cryderman (ported) & GhostlyDark (corrected)`nMelee Zelda: Mickey Saeed & theluigidude2007 (edits)`nAmara: Amara (ripping) & theluigidude2007 (edits)"
     CreateReduxComboBox -Name "AdultVoices" -Adult -Text "Adult Voice" -Default "Original" -Items @("Original") -FilePath ($GameFiles.binaries + "\Voices Adult")   -Info "Replace the voice used for the Adult Link Model"        -Credits "`nMajora's Mask: Korey Cryderman (ported) & GhostlyDark (corrected)`nMelee Zelda: Mickey Saeed & theluigidude2007 (edits)`nAmara: Amara (ripping) & theluigidude2007`nPeach: theluigidude2007"
 
