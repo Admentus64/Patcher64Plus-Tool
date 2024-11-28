@@ -450,14 +450,6 @@ function ByteOptions() {
             ChangeBytes -Offset "B65660" -Values "1001010110020101010101020202000000010100000001010101010100000000" # Skulltula
             ChangeBytes -Offset "DFE767" -Values "F1F0F0F1F1F0F1F222F0F0F0F0F02200000000F0F2F1F0F4F2"               # Freezard
         }
-
-      # MultiplyBytes -Offset   "EEF780"                      -Factor $multi -Max 127 # Guay
-      # MultiplyBytes -Offset   "xxxxxx"                      -Factor $multi -Max 127 # Peehat Larva (HP: 01) C2F8D0 -> C32FD0 (Length: 3700) (ovl_En_Peehat)
-      # MultiplyBytes -Offset   "xxxxxx"                      -Factor $multi -Max 127 # Anubis       (HP: 01) D79240 -> D7A4F0 (Length: 12B0) (ovl_En_Anubice)
-      # MultiplyBytes -Offset @("DFC9A3", "DFDE43")           -Factor $multi -Max 127 # Freezard
-      # MultiplyBytes -Offset @("C96A5B", "C96B0C")           -Factor $multi -Max 127 # Armos
-      # MultiplyBytes -Offset @("C6417C", "C15814", "CB1BCB") -Factor $multi -Max 127 # Skulltula, Keese, Green Bubble
-      # MultiplyBytes -Offset   "CE39AF"                      -Factor $multi -Max 127 # Skullwalltula
     }
 
     if (IsIndex -Elem $Redux.Hero.MiniBossHP -Index 3 -Not) { # Mini-Bosses
@@ -498,9 +490,7 @@ function ByteOptions() {
 
         MultiplyBytes -Offset "E82AFB" -Factor $multi -Max 127 -Min 3 # Ganon (phase 1)
         $value = $ByteArrayGame[0xE87F2F]; $value--; $value *= ($ByteArrayGame[0xE82AFB] / 0x1E); $value++;
-
-        write-host ($ByteArrayGame[0xE82AFB] / 0x1E) $value
-
+        
         ChangeBytes   -Offset "E87F2F" -Values $value # Ganon (phase 2)
     }
     
@@ -667,9 +657,9 @@ function ByteOptions() {
     # SWORD TRAIL COLORS #
 
     if ($Redux.Colors.SetSwordTrail -ne $null) {
-        if (IsColor $Redux.Colors.SetSwordTrail[0]   -Not)            { ChangeBytes -Offset "BEFF7C" -Values @($Redux.Colors.SetSwordTrail[0].Color.R, $Redux.Colors.SetSwordTrail[0].Color.G, $Redux.Colors.SetSwordTrail[0].Color.B) }
-        if (IsColor $Redux.Colors.SetSwordTrail[1]   -Not)            { ChangeBytes -Offset "BEFF84" -Values @($Redux.Colors.SetSwordTrail[1].Color.R, $Redux.Colors.SetSwordTrail[1].Color.G, $Redux.Colors.SetSwordTrail[1].Color.B) }
-        if (IsIndex $Redux.Colors.SwordTrailDuration -Not -Index 2)   { ChangeBytes -Offset "BEFF8C" -Values (($Redux.Colors.SwordTrailDuration.SelectedIndex) * 5) }
+        if (IsColor   $Redux.Colors.SetSwordTrail[0]   -Not)   { ChangeBytes -Offset "BEFF7C" -Values @($Redux.Colors.SetSwordTrail[0].Color.R, $Redux.Colors.SetSwordTrail[0].Color.G, $Redux.Colors.SetSwordTrail[0].Color.B) }
+        if (IsColor   $Redux.Colors.SetSwordTrail[1]   -Not)   { ChangeBytes -Offset "BEFF84" -Values @($Redux.Colors.SetSwordTrail[1].Color.R, $Redux.Colors.SetSwordTrail[1].Color.G, $Redux.Colors.SetSwordTrail[1].Color.B) }
+        if (IsDefault $Redux.Colors.SwordTrailDuration -Not)   { ChangeBytes -Offset "BEFF8C" -Values ( $Redux.Colors.SwordTrailDuration.SelectedIndex * 5) }
     }
     
 
@@ -1713,12 +1703,14 @@ function ByteReduxOptions() {
 
     # TUNIC COLORS #
 
-    if (IsColor $Redux.Colors.SetExtraEquipment[0] -Not)   { ChangeBytes -Offset $Symbols.CFG_TUNIC_MAGICIAN -Values @($Redux.Colors.SetExtraEquipment[0].Color.R, $Redux.Colors.SetExtraEquipment[0].Color.G, $Redux.Colors.SetExtraEquipment[0].Color.B) } # Magician Tunic
-    if (IsColor $Redux.Colors.SetExtraEquipment[1] -Not)   { ChangeBytes -Offset $Symbols.CFG_TUNIC_GUARDIAN -Values @($Redux.Colors.SetExtraEquipment[1].Color.R, $Redux.Colors.SetExtraEquipment[1].Color.G, $Redux.Colors.SetExtraEquipment[1].Color.B) } # Guardian Tunic
-    if (IsColor $Redux.Colors.SetExtraEquipment[2] -Not)   { ChangeBytes -Offset $Symbols.CFG_TUNIC_HERO     -Values @($Redux.Colors.SetExtraEquipment[2].Color.R, $Redux.Colors.SetExtraEquipment[2].Color.G, $Redux.Colors.SetExtraEquipment[2].Color.B) } # Hero Tunic
-    if (IsColor $Redux.Colors.SetExtraEquipment[3] -Not)   { ChangeBytes -Offset $Symbols.CFG_TUNIC_NONE     -Values @($Redux.Colors.SetExtraEquipment[3].Color.R, $Redux.Colors.SetExtraEquipment[3].Color.G, $Redux.Colors.SetExtraEquipment[3].Color.B) } # No Tunic
-    if (IsColor $Redux.Colors.SetExtraEquipment[4] -Not)   { ChangeBytes -Offset $Symbols.CFG_TUNIC_SHADOW   -Values @($Redux.Colors.SetExtraEquipment[4].Color.R, $Redux.Colors.SetExtraEquipment[4].Color.G, $Redux.Colors.SetExtraEquipment[4].Color.B) } # Shadow Tunic
-    
+    if ($Redux.Colors.SetExtraEquipment -ne $null) {
+        if (IsColor $Redux.Colors.SetExtraEquipment[0] -Not)   { ChangeBytes -Offset $Symbols.CFG_TUNIC_MAGICIAN -Values @($Redux.Colors.SetExtraEquipment[0].Color.R, $Redux.Colors.SetExtraEquipment[0].Color.G, $Redux.Colors.SetExtraEquipment[0].Color.B) } # Magician Tunic
+        if (IsColor $Redux.Colors.SetExtraEquipment[1] -Not)   { ChangeBytes -Offset $Symbols.CFG_TUNIC_GUARDIAN -Values @($Redux.Colors.SetExtraEquipment[1].Color.R, $Redux.Colors.SetExtraEquipment[1].Color.G, $Redux.Colors.SetExtraEquipment[1].Color.B) } # Guardian Tunic
+        if (IsColor $Redux.Colors.SetExtraEquipment[2] -Not)   { ChangeBytes -Offset $Symbols.CFG_TUNIC_HERO     -Values @($Redux.Colors.SetExtraEquipment[2].Color.R, $Redux.Colors.SetExtraEquipment[2].Color.G, $Redux.Colors.SetExtraEquipment[2].Color.B) } # Hero Tunic
+        if (IsColor $Redux.Colors.SetExtraEquipment[3] -Not)   { ChangeBytes -Offset $Symbols.CFG_TUNIC_NONE     -Values @($Redux.Colors.SetExtraEquipment[3].Color.R, $Redux.Colors.SetExtraEquipment[3].Color.G, $Redux.Colors.SetExtraEquipment[3].Color.B) } # No Tunic
+        if (IsColor $Redux.Colors.SetExtraEquipment[4] -Not)   { ChangeBytes -Offset $Symbols.CFG_TUNIC_SHADOW   -Values @($Redux.Colors.SetExtraEquipment[4].Color.R, $Redux.Colors.SetExtraEquipment[4].Color.G, $Redux.Colors.SetExtraEquipment[4].Color.B) } # Shadow Tunic
+    }
+
 
 
     # TRAIL COLORS #
@@ -3256,7 +3248,7 @@ function CreateTabDifficulty() {
     CreateReduxGroup    -Tag  "Hero"       -Text "Hero Mode"
     CreateReduxComboBox -Name "MonsterHP"  -Text "Monster HP"   -Items $items1 -Default 3                                                        -Info "Set the amount of health for monsters`nDoesn't include monsters which die in 1 hit already"           -Credits "Admentus"
     CreateReduxComboBox -Name "MiniBossHP" -Text "Mini-Boss HP" -Items $items2 -Default 3                                                        -Info "Set the amount of health for elite monsters and mini-bosses`nBig Octo and Dark Link are not included" -Credits "Admentus"
-    CreateReduxComboBox -Name "BossHP"     -Text "Boss HP"      -Items $items3 -Default 3                                                        -Info "Set the amount of health for bosses`nPhantom Ganon, Ganondorf and Ganon have a max of 3x HP"          -Credits "Admentus & Marcelo20XX"
+    CreateReduxComboBox -Name "BossHP"     -Text "Boss HP"      -Items $items3 -Default 3                                                        -Info "Set the amount of health for bosses`nPhantom Ganon, Ganondorf and Ganon have a max of 3x health"      -Credits "Admentus & Marcelo20XX"
     CreateReduxComboBox -Name "Damage"     -Text "Damage"       -Items @("1x Damage", "2x Damage", "4x Damage", "8x Damage", "OHKO Mode")        -Info "Set the amount of damage you receive`nOHKO Mode = You die in one hit"                                 -Credits "Admentus"
     CreateReduxComboBox -Name "MagicUsage" -Text "Magic Usage"  -Items @("1x Magic Usage", "2x Magic Usage", "4x Magic Usage", "8x Magic Usage") -Info "Set the amount of times magic is consumed at"                                                         -Credits "Admentus"
     CreateReduxComboBox -Name "ItemDrops"  -Text "Item Drops"   -Items @("Default", "No Hearts", "Only Rupees", "Nothing")                       -Info "Set the items that will drop from grass, pots and more"                                               -Credits "Randomizer, Admentus, Third M & BilonFullHDemon"
@@ -3278,7 +3270,7 @@ function CreateTabDifficulty() {
     CreateReduxGroup    -Tag  "HeroHarder"    -Text "Hero Mode (Harder Enemies)"
     CreateReduxCheckBox -Name "Guay"          -Text "Harder Guay"           -Info "Guays attack faster and move further"                                                                                                                                                                              -Credits "Anthrogi"
     CreateReduxCheckBox -Name "HandMaster"    -Text "Harder Handmaster"     -Info "Wallmasters drop from above much quicker`nFloormasters attack faster and suffers less lag on miss or impact against player`nSmaller Floormasters jump and start chasing from further away and drain health faster" -Credits "Anthrogi"
-    CreateReduxCheckBox -Name "Zombies"       -Text "Harder Zombies"        -Info "Redeads/Gibdos chase the player more quickly and efficiently, while also draining hp faster"                                                                                                                       -Credits "Anthrogi"
+    CreateReduxCheckBox -Name "Zombies"       -Text "Harder Zombies"        -Info "Redeads/Gibdos chase the player more quickly and efficiently, while also draining health faster"                                                                                                                   -Credits "Anthrogi"
     CreateReduxCheckBox -Name "LikeLike"      -Text "Harder Like-Like"      -Info "Like-Likes move faster and notice the player from much further away"                                                                                                                                               -Credits "Anthrogi"
     CreateReduxCheckBox -Name "Octorok"       -Text "Harder Octorok"        -Info "Octoroks appear from more distance away from the player and shoot projectiles much faster at quicker intervals"                                                                                                    -Credits "Anthrogi"
     CreateReduxCheckBox -Name "Tektite"       -Text "Harder Tektite"        -Info "Tektites chase the player more effectively and lunge with greater reach"                                                                                                                                           -Credits "Anthrogi"
@@ -3301,12 +3293,12 @@ function CreateTabDifficulty() {
     # RECOVERY #
 
     CreateReduxGroup   -Tag  "Recovery"    -Text "Recovery" -Height 4
-    CreateReduxTextBox -Name "Heart"       -Text "Recovery Heart" -Value 16  -Min 0 -Max 320 -Length 3 -Info "Set the amount of HP that Recovery Hearts will replenish`nRecovery Heart drops are removed if set to 0" -Credits "Admentus, Three Pendants & Randomizer (No Heart Drops)"
-    CreateReduxTextBox -Name "Fairy"       -Text "Fairy"          -Value 128 -Min 0 -Max 320 -Length 3 -Info "Set the amount of HP that a Fairy will replenish"                                                       -Credits "Admentus"
-    CreateReduxTextBox -Name "FairyBottle" -Text "Fairy (Bottle)" -Value 320 -Min 0 -Max 320 -Length 3 -Info "Set the amount of HP that a Bottled Fairy will replenish"                                               -Credits "Admentus & Three Pendants"
-    CreateReduxTextBox -Name "FairyRevive" -Text "Fairy (Revive)" -Value 320 -Min 0 -Max 320 -Length 3 -Info "Set the amount of HP that a Bottled Fairy will replenish after Link died"                               -Credits "Admentus & Three Pendants"; $Last.Row++
-    CreateReduxTextBox -Name "Milk"        -Text "Milk"           -Value 80  -Min 0 -Max 320 -Length 3 -Info "Set the amount of HP that Milk will replenish"                                                          -Credits "Admentus & Three Pendants"
-    CreateReduxTextBox -Name "RedPotion"   -Text "Red Potion"     -Value 320 -Min 0 -Max 320 -Length 3 -Info "Set the amount of HP that a Red Potion will replenish"                                                  -Credits "Admentus & Three Pendants"
+    CreateReduxTextBox -Name "Heart"       -Text "Recovery Heart" -Value 16  -Min 0 -Max 320 -Length 3 -Info "Set the amount of health that Recovery Hearts will replenish`nRecovery Heart drops are removed if set to 0" -Credits "Admentus, Three Pendants & Randomizer (No Heart Drops)"
+    CreateReduxTextBox -Name "Fairy"       -Text "Fairy"          -Value 128 -Min 0 -Max 320 -Length 3 -Info "Set the amount of health that a Fairy will replenish"                                                       -Credits "Admentus"
+    CreateReduxTextBox -Name "FairyBottle" -Text "Fairy (Bottle)" -Value 320 -Min 0 -Max 320 -Length 3 -Info "Set the amount of health that a Bottled Fairy will replenish"                                               -Credits "Admentus & Three Pendants"
+    CreateReduxTextBox -Name "FairyRevive" -Text "Fairy (Revive)" -Value 320 -Min 0 -Max 320 -Length 3 -Info "Set the amount of health that a Bottled Fairy will replenish after Link died"                               -Credits "Admentus & Three Pendants"; $Last.Row++
+    CreateReduxTextBox -Name "Milk"        -Text "Milk"           -Value 80  -Min 0 -Max 320 -Length 3 -Info "Set the amount of health that Milk will replenish"                                                          -Credits "Admentus & Three Pendants"
+    CreateReduxTextBox -Name "RedPotion"   -Text "Red Potion"     -Value 320 -Min 0 -Max 320 -Length 3 -Info "Set the amount of health that a Red Potion will replenish"                                                  -Credits "Admentus & Three Pendants"
 
     $Redux.Recovery.HeartLabel       = CreateLabel -X $Redux.Recovery.Heart.Left       -Y ($Redux.Recovery.Heart.Bottom       + (DPISize 6)) -Text ("(" + [math]::Round($Redux.Recovery.Heart.text/16,       1) + " Hearts)") -AddTo $Last.Group
     $Redux.Recovery.FairyLabel       = CreateLabel -X $Redux.Recovery.Fairy.Left       -Y ($Redux.Recovery.Fairy.Bottom       + (DPISize 6)) -Text ("(" + [math]::Round($Redux.Recovery.Fairy.text/16,       1) + " Hearts)") -AddTo $Last.Group
