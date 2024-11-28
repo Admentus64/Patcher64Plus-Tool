@@ -4,7 +4,8 @@ function ByteOptions() {
     if (IsChecked $Redux.Gameplay.InstantClaimCheck)        { ChangeBytes -Offset "1EB327C" -Values "00000000"; ChangeBytes -Offset "1EB32A4"  -Values "00000000" }
     if (IsChecked $Redux.Gameplay.BlackBars)                { ChangeBytes -Offset "B2ABEC"  -Values "00000000" }
     if (IsChecked $Redux.Gameplay.TextSpeed)                { ChangeBytes -Offset "B80AAB"  -Values "02"       }
-    
+    if (IsChecked $Redux.Gameplay.FastArrows)               { ChangeBytes -Offset @("1DBF502", "1DC14C2", "1DC34A2") -Values "0010" }
+    if (IsChecked $Redux.Gameplay.FastCharge)               { ChangeBytes -Offset @("1C51C58", "1C51C64", "1C51C6C") -Values "00000000"; ChangeBytes -Offset @("1C51C60", "1C51C70", "1C51C9C") -Values "3D59999A" }
 
 
     # SOUNDS / VOICES #
@@ -82,18 +83,22 @@ function ByteOptions() {
 
     if (IsChecked $Redux.Hero.NoBottledFairy) { ChangeBytes -Offset "1B9A7F4"  -Values "00000000" }
     
-    if (IsChecked $Redux.HeroHarder.IronKnuckle) {
-        ChangeBytes -Offset "1DCA64E" -Values "0001"; ChangeBytes -Offset "1DCA48E" -Values "0820"; ChangeBytes -Offset "1DCA47A" -Values "10B0"; ChangeBytes -Offset "1DCC98C" -Values "40808080"; ChangeBytes -Offset "1DCC990" -Values "40A0" }
-        if (IsChecked $Redux.HeroHarder.GohmaLarva)    { ChangeBytes -Offset "1C06A66" -Values "0000"; ChangeBytes -Offset "1C06EC2" -Values "0000"; ChangeBytes -Offset "1C07016" -Values "0006"; ChangeBytes -Offset "1C07202" -Values "40E0"; ChangeBytes -Offset "1C07286" -Values "4170"; ChangeBytes -Offset "1C073CA" -Values "4100" }
-        if (IsChecked $Redux.HeroHarder.Keese)         { ChangeBytes -Offset "1BC6403" -Values "00"; ChangeBytes -Offset "1BC67EE" -Values "0000"; ChangeBytes -Offset "1BC67DE" -Values "4110"; ChangeBytes -Offset "1BC6FB2" -Values "4500"; ChangeBytes -Offset "1BC7186" -Values "4150" }
-        if (IsChecked $Redux.HeroHarder.Wolfos)        { ChangeBytes -Offset "1EB88CE" -Values "0000"; ChangeBytes -Offset "1EB8C8E" -Values "D000"; ChangeBytes -Offset "1EBADFF" -Values "00" }
-        if (IsChecked $Redux.HeroHarder.Lizards)       { ChangeBytes -Offset @("1BEC6E3", "1BEC707") -Values "00"; ChangeBytes -Offset @("1BEE3FA", "1BEE41E") -Values "4000"; ChangeBytes -Offset "1BEE72E" -Values "D000" }
-        if (IsChecked $Redux.HeroHarder.DarkLink)      { ChangeBytes -Offset "1C0FD9F" -Values "FF" }
-        if (IsChecked $Redux.HeroHarder.DeadHand)      { ChangeBytes -Offset "1CC2CA2" -Values "4080"; ChangeBytes -Offset "1CC2CAE" -Values "0029"; ChangeBytes -Offset "1CC2E22" -Values "000E"; ChangeBytes -Offset "1CC2D0A" -Values "12FA" }
-        if (IsChecked $Redux.HeroHarder.Gohma)         { ChangeBytes -Offset "1BF96CA" -Values "0016"; ChangeBytes -Offset "1BFC3E6" -Values "0030"; ChangeBytes -Offset "1BFD46E" -Values "0020"; ChangeBytes -Offset "1BFD48E" -Values "000C" }
-        if (IsChecked $Redux.HeroHarder.KingDodongo)   { ChangeBytes -Offset "1BF59EE" -Values "0024"; ChangeBytes -Offset "1BF2C4A" -Values "0000"
-    }
-    
+    if (IsChecked $Redux.HeroHarder.IronKnuckle) { ChangeBytes -Offset "1DCA64E" -Values "0001"; ChangeBytes -Offset "1DCA48E" -Values "0820"; ChangeBytes -Offset "1DCA47A" -Values "10B0"; ChangeBytes -Offset "1DCC98C" -Values "40808080"; ChangeBytes -Offset "1DCC990" -Values "40A0" }
+    if (IsChecked $Redux.HeroHarder.Guay)        { ChangeBytes -Offset "1ECCE86" -Values "4150"; ChangeBytes -Offset "1ECD6F6" -Values "4500" }
+    if (IsChecked $Redux.HeroHarder.HandMaster)  { ChangeBytes -Offset "1BC1CE2" -Values "0001"; ChangeBytes -Offset "1C8A212" -Values "4100"; ChangeBytes -Offset @("1C8A292", "1C8A2B2", "1C8B606", "1C8B672") -Values "0000"; ChangeBytes -Offset "1C8B8EA" -Values "44A0"; ChangeBytes -Offset "1C8B9EE" -Values "41A0"; ChangeBytes -Offset "1C8BD3E" -Values "000A" }
+    if (IsChecked $Redux.HeroHarder.LikeLike)    { ChangeBytes -Offset "1D34D9A" -Values "0014"; ChangeBytes -Offset "1D35B7A" -Values "45C8"; ChangeBytes -Offset @("1D35B4A", "1D35C0A") -Values "1000"; ChangeBytes -Offset "1D35BCA" -Values "4100" }
+    if (IsChecked $Redux.HeroHarder.Zombies)     { ChangeBytes -Offset "1C8EE76" -Values "02FA"; ChangeBytes -Offset "1C8EED2" -Values "4516"; ChangeBytes -Offset @("1C8F6D3", "1C8F8CF") -Values "0A"; ChangeBytes -Offset "1C90B6C" -Values "3FCCCCCD" }
+    if (IsChecked $Redux.HeroHarder.Octorok)     { ChangeBytes -Offset "1BBCF82" -Values "41B0"; ChangeBytes -Offset "1BBD2E6" -Values "0000"; ChangeBytes -Offset "1BBD662" -Values "44F0"; ChangeBytes -Offset "1BBD96A" -Values "450C"; ChangeBytes -Offset "1BBD9E6" -Values "4448" }
+    if (IsChecked $Redux.HeroHarder.DekuScrub)   { ChangeBytes -Offset "1E988D2" -Values "41B0"}
+    if (IsChecked $Redux.HeroHarder.Tektite)     { ChangeBytes -Offset @("1BDC7EA", "1BDC7EE") -Values "0000"; ChangeBytes -Offset "1BDCA86" -Values "40F0"; ChangeBytes -Offset @("1BDCAB6", "1BDD3EE", "1BDD876") -Values "4150" }
+    if (IsChecked $Redux.HeroHarder.GohmaLarva)  { ChangeBytes -Offset @("1C06A66", "1C06EC2") -Values "0000"; ChangeBytes -Offset "1C07016" -Values "0006"; ChangeBytes -Offset "1C07202" -Values "40E0"; ChangeBytes -Offset "1C07286" -Values "4170"; ChangeBytes -Offset "1C073CA" -Values "4100" }
+    if (IsChecked $Redux.HeroHarder.Keese)       { ChangeBytes -Offset "1BC6403" -Values "00"; ChangeBytes -Offset "1BC67EE" -Values "0000"; ChangeBytes -Offset "1BC67DE" -Values "4110"; ChangeBytes -Offset "1BC6FB2" -Values "4500"; ChangeBytes -Offset "1BC7186" -Values "4150" }
+    if (IsChecked $Redux.HeroHarder.Wolfos)      { ChangeBytes -Offset "1EB88CE" -Values "0000"; ChangeBytes -Offset "1EB8C8E" -Values "D000"; ChangeBytes -Offset "1EBADFF" -Values "00" }
+    if (IsChecked $Redux.HeroHarder.Reptiles)    { ChangeBytes -Offset @("1BEC6E3", "1BEC707") -Values "00"; ChangeBytes -Offset @("1BEE3FA", "1BEE41E") -Values "4000"; ChangeBytes -Offset "1BEE72E" -Values "D000" }
+    if (IsChecked $Redux.HeroHarder.DarkLink)    { ChangeBytes -Offset "1C0FD9F" -Values "FF" }
+    if (IsChecked $Redux.HeroHarder.DeadHand)    { ChangeBytes -Offset "1CC2CA2" -Values "4080"; ChangeBytes -Offset "1CC2CAE" -Values "0025"; ChangeBytes -Offset "1CC2E22" -Values "000A"; ChangeBytes -Offset "1CC2D0A" -Values "12FA" }
+    if (IsChecked $Redux.HeroHarder.Gohma)       { ChangeBytes -Offset "1BF96CA" -Values "0016"; ChangeBytes -Offset "1BFC3E6" -Values "0030"; ChangeBytes -Offset "1BFD46E" -Values "0020"; ChangeBytes -Offset "1BFD48E" -Values "000C" }
+    if (IsChecked $Redux.HeroHarder.KingDodongo) { ChangeBytes -Offset "1BF59EE" -Values "0024"; ChangeBytes -Offset "1BF2C4A" -Values "0000" }    
 
 
     # RECOVERY #
@@ -174,7 +179,8 @@ function CreateTabMain() {
     CreateReduxCheckBox -Name "InstantClaimCheck" -Text "Instant Claim Check"         -Info "Allows you to use the claim check immediately to get the biggoron's sword"         -Credits "Randomizer (original) & Anthrogi (ported)"
     CreateReduxCheckBox -Name "BlackBars"         -Text "No Black Bars (Z-Targeting)" -Info "Removes the black bars shown on the top & bottom of the screen during Z-targeting" -Credits "Admentus (original) & Anthrogi (ported)"
     CreateReduxCheckBox -Name "TextSpeed"         -Text "2x Text Speed"               -Info "Makes text go 2x as fast"                                                          -Credits "Admentus (original) & Anthrogi (ported)"
-
+    CreateReduxCheckBox -Name "FastArrows"        -Text "Less Magic Arrows Cooldown"  -Info "The burst animation for fire, ice & light arrows are shorter, allowing you to shoot the next magic arrow a bit quicker." -Credits "Anthrogi (ported)"
+    CreateReduxCheckBox -Name "FastCharge"        -Text "Instant Lv2 Magic Spin"      -Info "Allows you to perform the lv2 magic spin attack immediately during charge." -Credits "Admentus (original idea) & Anthrogi (fixed & ported)"
 }
 
 
@@ -210,16 +216,22 @@ function CreateTabDifficulty() {
     CreateReduxCheckBox -Name "NoBottledFairy" -Text "No Bottled Fairies"  -Info "Fairies can no longer be put into a bottle" -Credits "Admentus (original) & Anthrogi (ported)"
 
     CreateReduxGroup    -Tag  "HeroHarder"   -Text "Hero Mode (Harder Enemies)"
-    CreateReduxCheckBox -Name "GohmaLarva"   -Text "Harder Gohma Larva"    -Info "Gohma Larvas are faster and reach further" -Credits "Euler (original) & Anthrogi (ported)"
-    CreateReduxCheckBox -Name "Keese"        -Text "Harder Keese"          -Info "Keese attack faster and move further, as well as not lose their fire when impacting the player" -Credits "Euler (original) & Anthrogi (ported)"
-    CreateReduxCheckBox -Name "Wolfos"       -Text "Harder Wolfos"         -Info "Wolfos will attack faster and do not falter from having attacks blocked`nThey also attack when z-targeting another enemy" -Credits "BilonFullHDemon (original) & Anthrogi (ported)"
-    CreateReduxCheckBox -Name "Lizards"      -Text "Harder Lizards"        -Info "Lizalfos & Dinolfos will attack faster and do not falter from having attacks blocked`nThey also attack when z-targeting another enemy" -Credits "Nokaubure, Euler (original) & Anthrogi (ported)"
-    CreateReduxCheckBox -Name "DeadHand"     -Text "Harder Dead Hand"      -Info "Dead Hands are faster and do not stay risen for long" -Credits "Euler (original) & Anthrogi (ported)"
-    CreateReduxCheckBox -Name "DarkLink"     -Text "Harder Dark Link"      -Info "Dark Link starts attacking you right away after spawning" -Credits "Nokaubure, BilonFullHDemon (original) & Anthrogi (ported)"
-    CreateReduxCheckBox -Name "IronKnuckle"  -Text "Harder Iron Knuckle"   -Info "Iron Knuckles now move faster and may use back swing more likely" -Credits "Admentus (original) & Anthrogi (ported)"
-    CreateReduxCheckBox -Name "Gohma"        -Text "Harder Gohma"          -Info "Gohma recovers faster from being stunned" -Credits "Euler (original) & Anthrogi (ported)"
-    CreateReduxCheckBox -Name "KingDodongo"  -Text "Harder King Dodongo"   -Info "King Dodongo inhales faster and is no longer stunned" -Credits "Euler (original) & Anthrogi (ported)"
-
+    CreateReduxCheckBox -Name "Guay"         -Text "Harder Guay"           -Info "Guays attack faster and move further." -Credits "Anthrogi (original & ported)"
+    CreateReduxCheckBox -Name "HandMaster"   -Text "Harder Handmaster"     -Info "Wallmasters drop from above much quicker.`nFloormasters attack faster and suffers less lag on miss or impact against player.`nFragmasters chase the player much quicker and can jump from much further away, along with draining hp faster." -Credits "Anthrogi (original & ported)"
+    CreateReduxCheckBox -Name "Zombies"      -Text "Harder Zombies"        -Info "Redeads/Gibdos chase the player more quickly and efficiently, while also draining hp faster." -Credits "Anthrogi (original & ported)"
+    CreateReduxCheckBox -Name "LikeLike"     -Text "Harder Like-Like"      -Info "Like-Likes move faster and notice the player from much further away." -Credits "Anthrogi (original & ported)"
+    CreateReduxCheckBox -Name "Octorok"      -Text "Harder Octorok"        -Info "Octoroks appear from more distance away from the player and shoot projectiles much faster at quicker intervals." -Credits "Anthrogi (original & ported)"
+    CreateReduxCheckBox -Name "Tektite"      -Text "Harder Tektite"        -Info "Tektites chase the player more effectively and lunge with greater reach." -Credits "Anthrogi (original & ported)"
+    CreateReduxCheckBox -Name "DekuScrub"    -Text "Harder Scrub"          -Info "All enemy deku scrub variations will shoot their projectiles faster." -Credits "Anthrogi (original & ported)"
+    CreateReduxCheckBox -Name "GohmaLarva"   -Text "Harder Gohma Larva"    -Info "Gohma Larvas are faster and reach further." -Credits "Euler (original) & Anthrogi (edited & ported)"
+    CreateReduxCheckBox -Name "Keese"        -Text "Harder Keese"          -Info "Keese attack faster and move further, as well as not lose their fire when impacting the player." -Credits "Euler (original) & Anthrogi (edited & ported)"
+    CreateReduxCheckBox -Name "Wolfos"       -Text "Harder Wolfos"         -Info "Wolfos will attack faster and do not falter from having attacks blocked,`nThey also attack when z-targeting another enemy." -Credits "BilonFullHDemon (original) & Anthrogi (edited & ported)"
+    CreateReduxCheckBox -Name "Reptiles"     -Text "Harder Reptiles"       -Info "Lizalfos/Dinolfos will attack faster and do not falter from having attacks blocked,`nThey also attack when z-targeting another enemy." -Credits "Nokaubure, Euler (original) & Anthrogi (edited & ported)"
+    CreateReduxCheckBox -Name "DeadHand"     -Text "Harder Dead Hand"      -Info "Dead Hands are faster and do not stay risen for long." -Credits "Euler (original) & Anthrogi (edited & ported)"
+    CreateReduxCheckBox -Name "DarkLink"     -Text "Harder Dark Link"      -Info "Dark Link starts attacking you right away after spawning." -Credits "Nokaubure, BilonFullHDemon (original) & Anthrogi (edited & ported)"
+    CreateReduxCheckBox -Name "IronKnuckle"  -Text "Harder Iron Knuckle"   -Info "Iron Knuckles now move faster and may use back swing more likely." -Credits "Admentus (original) & Anthrogi (edited & ported)"
+    CreateReduxCheckBox -Name "Gohma"        -Text "Harder Gohma"          -Info "Gohma recovers faster from being stunned." -Credits "Euler (original) & Anthrogi (edited & ported)"
+    CreateReduxCheckBox -Name "KingDodongo"  -Text "Harder King Dodongo"   -Info "King Dodongo inhales faster and is no longer stunned." -Credits "Euler (original) & Anthrogi (edited & ported)"
 
 
     # RECOVERY #
