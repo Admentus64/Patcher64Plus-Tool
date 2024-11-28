@@ -1,10 +1,11 @@
 function ByteOptions() {
     
-    if (IsChecked $Redux.Gameplay.NoKillFlash)              { ChangeBytes -Offset "B35573"  -Values "00"       }
-    if (IsChecked $Redux.Gameplay.InstantClaimCheck)        { ChangeBytes -Offset "1EB327C" -Values "00000000"; ChangeBytes -Offset "1EB32A4"  -Values "00000000" }
-    if (IsChecked $Redux.Gameplay.BlackBars)                { ChangeBytes -Offset "B2ABEC"  -Values "00000000" }
-    if (IsChecked $Redux.Gameplay.TextSpeed)                { ChangeBytes -Offset "B80AAB"  -Values "02"       }
-    
+    if (IsChecked $Redux.Gameplay.NoKillFlash)              { ChangeBytes -Offset "B35573"  -Values "00"                                                                                                           }
+    if (IsChecked $Redux.Gameplay.InstantClaimCheck)        { ChangeBytes -Offset "1EB327C" -Values "00000000"; ChangeBytes -Offset "1EB32A4"  -Values "00000000"                                                  }
+    if (IsChecked $Redux.Gameplay.BlackBars)                { ChangeBytes -Offset "B2ABEC"  -Values "00000000"                                                                                                     }
+    if (IsChecked $Redux.Gameplay.TextSpeed)                { ChangeBytes -Offset "B80AAB"  -Values "02"                                                                                                           }
+    if (IsChecked $Redux.Gameplay.FastArrows)               { ChangeBytes -Offset @("1DBF502", "1DC14C2", "1DC34A2") -Values "0010"                                                                                }
+    if (IsChecked $Redux.Gameplay.FastCharge)               { ChangeBytes -Offset @("1C51C58", "1C51C64", "1C51C6C") -Values "00000000"; ChangeBytes -Offset @("1C51C60", "1C51C70", "1C51C9C") -Values "3D59999A" }
 
 
     # SOUNDS / VOICES #
@@ -82,19 +83,23 @@ function ByteOptions() {
 
     if (IsChecked $Redux.Hero.NoBottledFairy) { ChangeBytes -Offset "1B9A7F4"  -Values "00000000" }
     
-    if (IsChecked $Redux.HeroHarder.IronKnuckle) {
-        ChangeBytes -Offset "1DCA64E" -Values "0001"; ChangeBytes -Offset "1DCA48E" -Values "0820"; ChangeBytes -Offset "1DCA47A" -Values "10B0"; ChangeBytes -Offset "1DCC98C" -Values "40808080"; ChangeBytes -Offset "1DCC990" -Values "40A0" }
-        if (IsChecked $Redux.HeroHarder.GohmaLarva)    { ChangeBytes -Offset "1C06A66" -Values "0000"; ChangeBytes -Offset "1C06EC2" -Values "0000"; ChangeBytes -Offset "1C07016" -Values "0006"; ChangeBytes -Offset "1C07202" -Values "40E0"; ChangeBytes -Offset "1C07286" -Values "4170"; ChangeBytes -Offset "1C073CA" -Values "4100" }
-        if (IsChecked $Redux.HeroHarder.Keese)         { ChangeBytes -Offset "1BC6403" -Values "00"; ChangeBytes -Offset "1BC67EE" -Values "0000"; ChangeBytes -Offset "1BC67DE" -Values "4110"; ChangeBytes -Offset "1BC6FB2" -Values "4500"; ChangeBytes -Offset "1BC7186" -Values "4150" }
-        if (IsChecked $Redux.HeroHarder.Wolfos)        { ChangeBytes -Offset "1EB88CE" -Values "0000"; ChangeBytes -Offset "1EB8C8E" -Values "D000"; ChangeBytes -Offset "1EBADFF" -Values "00" }
-        if (IsChecked $Redux.HeroHarder.Lizards)       { ChangeBytes -Offset @("1BEC6E3", "1BEC707") -Values "00"; ChangeBytes -Offset @("1BEE3FA", "1BEE41E") -Values "4000"; ChangeBytes -Offset "1BEE72E" -Values "D000" }
-        if (IsChecked $Redux.HeroHarder.DarkLink)      { ChangeBytes -Offset "1C0FD9F" -Values "FF" }
-        if (IsChecked $Redux.HeroHarder.DeadHand)      { ChangeBytes -Offset "1CC2CA2" -Values "4080"; ChangeBytes -Offset "1CC2CAE" -Values "0029"; ChangeBytes -Offset "1CC2E22" -Values "000E"; ChangeBytes -Offset "1CC2D0A" -Values "12FA" }
-        if (IsChecked $Redux.HeroHarder.Gohma)         { ChangeBytes -Offset "1BF96CA" -Values "0016"; ChangeBytes -Offset "1BFC3E6" -Values "0030"; ChangeBytes -Offset "1BFD46E" -Values "0020"; ChangeBytes -Offset "1BFD48E" -Values "000C" }
-        if (IsChecked $Redux.HeroHarder.KingDodongo)   { ChangeBytes -Offset "1BF59EE" -Values "0024"; ChangeBytes -Offset "1BF2C4A" -Values "0000"
-    }
+    if (IsChecked $Redux.HeroHarder.IronKnuckle)   { ChangeBytes -Offset   "1DCA64E"             -Values "0001"; ChangeBytes -Offset   "1DCA48E"             -Values "0820"; ChangeBytes -Offset   "1DCA47A"                                   -Values "10B0"; ChangeBytes -Offset "1DCC98C" -Values "40808080"; ChangeBytes -Offset "1DCC990" -Values "40A0"                                               }
+    if (IsChecked $Redux.HeroHarder.HandMaster)    { ChangeBytes -Offset   "1BC1CE2"             -Values "0001"; ChangeBytes -Offset   "1C8A212"             -Values "4100"; ChangeBytes -Offset @("1C8A292", "1C8A2B2", "1C8B606", "1C8B672") -Values "0000"; ChangeBytes -Offset "1C8B8EA" -Values "44A0";     ChangeBytes -Offset "1C8B9EE" -Values "41A0"; ChangeBytes -Offset "1C8BD3E" -Values "000A" }
+    if (IsChecked $Redux.HeroHarder.LikeLike)      { ChangeBytes -Offset   "1D34D9A"             -Values "0014"; ChangeBytes -Offset   "1D35B7A"             -Values "45C8"; ChangeBytes -Offset @("1D35B4A", "1D35C0A")                       -Values "1000"; ChangeBytes -Offset "1D35BCA" -Values "4100"                                                                                                 }
+    if (IsChecked $Redux.HeroHarder.Zombies)       { ChangeBytes -Offset   "1C8EE76"             -Values "02FA"; ChangeBytes -Offset   "1C8EED2"             -Values "4516"; ChangeBytes -Offset @("1C8F6D3", "1C8F8CF")                       -Values "0A";   ChangeBytes -Offset "1C90B6C" -Values "3FCCCCCD"                                                                                             }
+    if (IsChecked $Redux.HeroHarder.Octorok)       { ChangeBytes -Offset   "1BBCF82"             -Values "41B0"; ChangeBytes -Offset   "1BBD2E6"             -Values "0000"; ChangeBytes -Offset   "1BBD662"                                   -Values "44F0"; ChangeBytes -Offset "1BBD96A" -Values "450C";     ChangeBytes -Offset "1BBD9E6" -Values "4448"                                               }
+    if (IsChecked $Redux.HeroHarder.Tektite)       { ChangeBytes -Offset @("1BDC7EA", "1BDC7EE") -Values "0000"; ChangeBytes -Offset   "1BDCA86"             -Values "40F0"; ChangeBytes -Offset @("1BDCAB6", "1BDD3EE", "1BDD876")            -Values "4150"                                                                                                                                               }
+    if (IsChecked $Redux.HeroHarder.GohmaLarva)    { ChangeBytes -Offset @("1C06A66", "1C06EC2") -Values "0000"; ChangeBytes -Offset   "1C07016"             -Values "0006"; ChangeBytes -Offset   "1C07202"                                   -Values "40E0"; ChangeBytes -Offset "1C07286" -Values "4170";     ChangeBytes -Offset "1C073CA" -Values "4100"                                               }
+    if (IsChecked $Redux.HeroHarder.Keese)         { ChangeBytes -Offset   "1BC6403"             -Values "00";   ChangeBytes -Offset   "1BC67EE"             -Values "0000"; ChangeBytes -Offset   "1BC67DE"                                   -Values "4110"; ChangeBytes -Offset "1BC6FB2" -Values "4500";     ChangeBytes -Offset "1BC7186" -Values "4150"                                               }
+    if (IsChecked $Redux.HeroHarder.Wolfos)        { ChangeBytes -Offset   "1EB88CE"             -Values "0000"; ChangeBytes -Offset   "1EB8C8E"             -Values "D000"; ChangeBytes -Offset   "1EBADFF"                                   -Values "00"                                                                                                                                                 }
+    if (IsChecked $Redux.HeroHarder.Reptiles)      { ChangeBytes -Offset @("1BEC6E3", "1BEC707") -Values "00";   ChangeBytes -Offset @("1BEE3FA", "1BEE41E") -Values "4000"; ChangeBytes -Offset   "1BEE72E"                                   -Values "D000"                                                                                                                                               }
+    if (IsChecked $Redux.HeroHarder.DeadHand)      { ChangeBytes -Offset   "1CC2CA2"             -Values "4080"; ChangeBytes -Offset   "1CC2CAE"             -Values "0025"; ChangeBytes -Offset   "1CC2E22"                                   -Values "000A"; ChangeBytes -Offset "1CC2D0A" -Values "12FA"                                                                                                 }
+    if (IsChecked $Redux.HeroHarder.Gohma)         { ChangeBytes -Offset   "1BF96CA"             -Values "0016"; ChangeBytes -Offset   "1BFC3E6"             -Values "0030"; ChangeBytes -Offset   "1BFD46E"                                   -Values "0020"; ChangeBytes -Offset "1BFD48E" -Values "000C"                                                                                                 }
+    if (IsChecked $Redux.HeroHarder.KingDodongo)   { ChangeBytes -Offset   "1BF59EE"             -Values "0024"; ChangeBytes -Offset   "1BF2C4A"             -Values "0000"                                                                                                                                                                                                                                 }    
+    if (IsChecked $Redux.HeroHarder.Guay)          { ChangeBytes -Offset   "1ECCE86"             -Values "4150"; ChangeBytes -Offset   "1ECD6F6"             -Values "4500"                                                                                                                                                                                                                                 }
+    if (IsChecked $Redux.HeroHarder.DekuScrub)     { ChangeBytes -Offset   "1E988D2"             -Values "41B0"                                                                                                                                                                                                                                                                                             }
+    if (IsChecked $Redux.HeroHarder.DarkLink)      { ChangeBytes -Offset   "1C0FD9F"             -Values "FF"                                                                                                                                                                                                                                                                                               }
     
-
 
     # RECOVERY #
 
@@ -170,11 +175,12 @@ function CreateTabMain() {
     # QUALITY OF LIFE #
     
     CreateReduxGroup    -Tag  "Gameplay"          -Text "Quality of Life & Adjustments" 
-    CreateReduxCheckBox -Name "NoKillFlash"       -Text "No Kill Flash"               -Info "Disable the flashing effect when killing certain enemies like walltula etc"        -Credits "Chez Cousteau (original) & Anthrogi (ported))"
-    CreateReduxCheckBox -Name "InstantClaimCheck" -Text "Instant Claim Check"         -Info "Allows you to use the claim check immediately to get the biggoron's sword"         -Credits "Randomizer (original) & Anthrogi (ported)"
-    CreateReduxCheckBox -Name "BlackBars"         -Text "No Black Bars (Z-Targeting)" -Info "Removes the black bars shown on the top & bottom of the screen during Z-targeting" -Credits "Admentus (original) & Anthrogi (ported)"
-    CreateReduxCheckBox -Name "TextSpeed"         -Text "2x Text Speed"               -Info "Makes text go 2x as fast"                                                          -Credits "Admentus (original) & Anthrogi (ported)"
-
+    CreateReduxCheckBox -Name "NoKillFlash"       -Text "No Kill Flash"               -Info "Disable the flashing effect when killing certain enemies like walltula etc"                                              -Credits "Chez Cousteau & Anthrogi (ported))"
+    CreateReduxCheckBox -Name "InstantClaimCheck" -Text "Instant Claim Check"         -Info "Allows you to use the claim check immediately to get the biggoron's sword"                                               -Credits "Randomizer & Anthrogi (ported)"
+    CreateReduxCheckBox -Name "BlackBars"         -Text "No Black Bars (Z-Targeting)" -Info "Removes the black bars shown on the top & bottom of the screen during Z-targeting"                                       -Credits "Admentus & Anthrogi (ported)"
+    CreateReduxCheckBox -Name "TextSpeed"         -Text "2x Text Speed"               -Info "Makes text go 2x as fast"                                                                                                -Credits "Admentus & Anthrogi (ported)"
+    CreateReduxCheckBox -Name "FastArrows"        -Text "Less Magic Arrows Cooldown"  -Info "The burst animation for Fire, Ice and Light Arrows are shorter`nAllows Link to shoot the next magic arrow a bit quicker" -Credits "Anthrogi"
+    CreateReduxCheckBox -Name "FastCharge"        -Text "Instant Lv2 Magic Spin"      -Info "Allows you to perform the lv2 magic spin attack immediately during charge"                                               -Credits "Anthrogi"
 }
 
 
@@ -202,35 +208,42 @@ function CreateTabDifficulty() {
     $items3 = @("1 Boss HP", "0.5x Boss HP", "1x Boss HP", "1.5x Boss HP", "2x Boss HP", "2.5x Boss HP", "3x Boss HP", "3.5x Boss HP", "4x Boss HP", "5x Boss HP")
 
     CreateReduxGroup    -Tag  "Hero"       -Text "Hero Mode"
-    CreateReduxComboBox -Name "MonsterHP"  -Text "Monster HP"   -Items $items1 -Default 3 -Info "Set the amount of health for monsters`nDoesn't include monsters which die in 1 hit or do not work with increased hp" -Credits "Admentus (original & formula) & Anthrogi (ported)"
-    CreateReduxComboBox -Name "MiniBossHP" -Text "Mini-Boss HP" -Items $items2 -Default 3 -Info "Set the amount of health for mini-bosses`nSome enemies are not included" -Credits "Admentus (original & formula) & Anthrogi (ported)"
-    CreateReduxComboBox -Name "BossHP"     -Text "Boss HP"      -Items $items3 -Default 3 -Info "Set the amount of health for bosses`nPhantom Ganon, Ganondorf and Ganon have a max of 3x HP"          -Credits "Admentus, Marcelo20XX (original & formula) & Anthrogi (ported)"
-    CreateReduxComboBox -Name "Damage"     -Text "Damage"       -Items @("1x Damage", "2x Damage", "4x Damage", "8x Damage", "OHKO Mode") -Info "Set the amount of damage you receive`nOHKO Mode = You die in one hit" -Credits "Admentus (original) & Anthrogi (ported)"
+    CreateReduxComboBox -Name "MonsterHP"  -Text "Monster HP"   -Items $items1 -Default 3 -Info "Set the amount of health for monsters`nDoesn't include monsters which die in 1 hit or do not work with increased hp"  -Credits "Admentus & Anthrogi (ported)"
+    CreateReduxComboBox -Name "MiniBossHP" -Text "Mini-Boss HP" -Items $items2 -Default 3 -Info "Set the amount of health for mini-bosses`nSome enemies are not included"                                              -Credits "Admentus & Anthrogi (ported)"
+    CreateReduxComboBox -Name "BossHP"     -Text "Boss HP"      -Items $items3 -Default 3 -Info "Set the amount of health for bosses`nPhantom Ganon, Ganondorf and Ganon have a max of 3x HP"                          -Credits "Admentus, Marcelo20XX & Anthrogi (ported)"
+    CreateReduxComboBox -Name "Damage"     -Text "Damage"       -Items @("1x Damage", "2x Damage", "4x Damage", "8x Damage", "OHKO Mode") -Info "Set the amount of damage you receive`nOHKO Mode = You die in one hit" -Credits "Admentus & Anthrogi (ported)"
 
     CreateReduxCheckBox -Name "NoBottledFairy" -Text "No Bottled Fairies"  -Info "Fairies can no longer be put into a bottle" -Credits "Admentus (original) & Anthrogi (ported)"
 
-    CreateReduxGroup    -Tag  "HeroHarder"   -Text "Hero Mode (Harder Enemies)"
-    CreateReduxCheckBox -Name "GohmaLarva"   -Text "Harder Gohma Larva"    -Info "Gohma Larvas are faster and reach further" -Credits "Euler (original) & Anthrogi (ported)"
-    CreateReduxCheckBox -Name "Keese"        -Text "Harder Keese"          -Info "Keese attack faster and move further, as well as not lose their fire when impacting the player" -Credits "Euler (original) & Anthrogi (ported)"
-    CreateReduxCheckBox -Name "Wolfos"       -Text "Harder Wolfos"         -Info "Wolfos will attack faster and do not falter from having attacks blocked`nThey also attack when z-targeting another enemy" -Credits "BilonFullHDemon (original) & Anthrogi (ported)"
-    CreateReduxCheckBox -Name "Lizards"      -Text "Harder Lizards"        -Info "Lizalfos & Dinolfos will attack faster and do not falter from having attacks blocked`nThey also attack when z-targeting another enemy" -Credits "Nokaubure, Euler (original) & Anthrogi (ported)"
-    CreateReduxCheckBox -Name "DeadHand"     -Text "Harder Dead Hand"      -Info "Dead Hands are faster and do not stay risen for long" -Credits "Euler (original) & Anthrogi (ported)"
-    CreateReduxCheckBox -Name "DarkLink"     -Text "Harder Dark Link"      -Info "Dark Link starts attacking you right away after spawning" -Credits "Nokaubure, BilonFullHDemon (original) & Anthrogi (ported)"
-    CreateReduxCheckBox -Name "IronKnuckle"  -Text "Harder Iron Knuckle"   -Info "Iron Knuckles now move faster and may use back swing more likely" -Credits "Admentus (original) & Anthrogi (ported)"
-    CreateReduxCheckBox -Name "Gohma"        -Text "Harder Gohma"          -Info "Gohma recovers faster from being stunned" -Credits "Euler (original) & Anthrogi (ported)"
-    CreateReduxCheckBox -Name "KingDodongo"  -Text "Harder King Dodongo"   -Info "King Dodongo inhales faster and is no longer stunned" -Credits "Euler (original) & Anthrogi (ported)"
+    CreateReduxGroup    -Tag  "HeroHarder"  -Text "Hero Mode (Harder Enemies)"
+    CreateReduxCheckBox -Name "Guay"        -Text "Harder Guay"         -Info "Guays attack faster and move further"                                                                                                                                                                              -Credits "Anthrogi"
+    CreateReduxCheckBox -Name "HandMaster"  -Text "Harder Handmaster"   -Info "Wallmasters drop from above much quicker`nFloormasters attack faster and suffers less lag on miss or impact against player`nSmaller Floormasters jump and start chasing from further away and drain health faster" -Credits "Anthrogi"
+    CreateReduxCheckBox -Name "Zombies"     -Text "Harder Zombies"      -Info "Redeads/Gibdos chase the player more quickly and efficiently, while also draining hp faster"                                                                                                                       -Credits "Anthrogi"
+    CreateReduxCheckBox -Name "LikeLike"    -Text "Harder Like-Like"    -Info "Like-Likes move faster and notice the player from much further away"                                                                                                                                               -Credits "Anthrogi"
+    CreateReduxCheckBox -Name "Octorok"     -Text "Harder Octorok"      -Info "Octoroks appear from more distance away from the player and shoot projectiles much faster at quicker intervals"                                                                                                    -Credits "Anthrogi"
+    CreateReduxCheckBox -Name "Tektite"     -Text "Harder Tektite"      -Info "Tektites chase the player more effectively and lunge with greater reach"                                                                                                                                           -Credits "Anthrogi"
+    CreateReduxCheckBox -Name "DekuScrub"   -Text "Harder Scrub"        -Info "All enemy deku scrub variations will shoot their projectiles faster"                                                                                                                                               -Credits "Anthrogi"
+    CreateReduxCheckBox -Name "GohmaLarva"  -Text "Harder Gohma Larva"  -Info "Gohma Larvas are faster and reach further"                                                                                                                                                                         -Credits "Euler & Anthrogi"
+    CreateReduxCheckBox -Name "Keese"       -Text "Harder Keese"        -Info "Keese attack faster and move further, as well as not lose their fire when impacting the player"                                                                                                                    -Credits "Euler & Anthrogi"
+    CreateReduxCheckBox -Name "Wolfos"      -Text "Harder Wolfos"       -Info "Wolfos will attack faster and do not falter from having attacks blocked`nThey also attack when z-targeting another enemy"                                                                                          -Credits "BilonFullHDemon & Anthrogi"
+    CreateReduxCheckBox -Name "Reptiles"    -Text "Harder Reptiles"     -Info "Lizalfos/Dinolfos will attack faster and do not falter from having attacks blocked`nThey also attack when z-targeting another enemy"                                                                               -Credits "Nokaubure, Euler & Anthrogi"
+    CreateReduxCheckBox -Name "DeadHand"    -Text "Harder Dead Hand"    -Info "Dead Hands are faster and do not stay risen for long"                                                                                                                                                              -Credits "Euler & Anthrogi"
+    CreateReduxCheckBox -Name "DarkLink"    -Text "Harder Dark Link"    -Info "Dark Link starts attacking you right away after spawning"                                                                                                                                                          -Credits "Nokaubure, BilonFullHDemon & Anthrogi"
+    CreateReduxCheckBox -Name "IronKnuckle" -Text "Harder Iron Knuckle" -Info "Iron Knuckles now move faster and may use back swing more likely"                                                                                                                                                  -Credits "Admentus & Anthrogi (ported)"
+    CreateReduxCheckBox -Name "Gohma"       -Text "Harder Gohma"        -Info "Gohma recovers faster from being stunned"                                                                                                                                                                          -Credits "Euler & Anthrogi (ported)"
+    CreateReduxCheckBox -Name "KingDodongo" -Text "Harder King Dodongo" -Info "King Dodongo inhales faster and is no longer stunned"                                                                                                                                                              -Credits "Euler & Anthrogi (ported)"
 
 
 
     # RECOVERY #
 
     CreateReduxGroup   -Tag  "Recovery"    -Text "Recovery" -Height 4
-    CreateReduxTextBox -Name "Heart"       -Text "Recovery Heart" -Value 16  -Min 0 -Max 320 -Length 3 -Info "Set the amount of HP that Recovery Hearts will replenish" -Credits "Admentus, Three Pendants (original) & Anthrogi (ported)"
-    CreateReduxTextBox -Name "Fairy"       -Text "Fairy"          -Value 128 -Min 0 -Max 320 -Length 3 -Info "Set the amount of HP that a Fairy will replenish" -Credits "Admentus (original) & Anthrogi (ported)"
-    CreateReduxTextBox -Name "FairyBottle" -Text "Fairy (Bottle)" -Value 320 -Min 0 -Max 320 -Length 3 -Info "Set the amount of HP that a Bottled Fairy will replenish" -Credits "Admentus, Three Pendants & Anthrogi (ported)"
+    CreateReduxTextBox -Name "Heart"       -Text "Recovery Heart" -Value 16  -Min 0 -Max 320 -Length 3 -Info "Set the amount of HP that Recovery Hearts will replenish"                 -Credits "Admentus, Three Pendants (original) & Anthrogi (ported)"
+    CreateReduxTextBox -Name "Fairy"       -Text "Fairy"          -Value 128 -Min 0 -Max 320 -Length 3 -Info "Set the amount of HP that a Fairy will replenish"                         -Credits "Admentus (original) & Anthrogi (ported)"
+    CreateReduxTextBox -Name "FairyBottle" -Text "Fairy (Bottle)" -Value 320 -Min 0 -Max 320 -Length 3 -Info "Set the amount of HP that a Bottled Fairy will replenish"                 -Credits "Admentus, Three Pendants & Anthrogi (ported)"
     CreateReduxTextBox -Name "FairyRevive" -Text "Fairy (Revive)" -Value 320 -Min 0 -Max 320 -Length 3 -Info "Set the amount of HP that a Bottled Fairy will replenish after Link died" -Credits "Admentus, Three Pendants & Anthrogi (ported)"; $Last.Row++
-    CreateReduxTextBox -Name "Milk"        -Text "Milk"           -Value 80  -Min 0 -Max 320 -Length 3 -Info "Set the amount of HP that Milk will replenish" -Credits "Admentus, Three Pendants & Anthrogi (ported)"
-    CreateReduxTextBox -Name "RedPotion"   -Text "Red Potion"     -Value 320 -Min 0 -Max 320 -Length 3 -Info "Set the amount of HP that a Red Potion will replenish" -Credits "Admentus, Three Pendants (original) & Anthrogi (ported)"
+    CreateReduxTextBox -Name "Milk"        -Text "Milk"           -Value 80  -Min 0 -Max 320 -Length 3 -Info "Set the amount of HP that Milk will replenish"                            -Credits "Admentus, Three Pendants & Anthrogi (ported)"
+    CreateReduxTextBox -Name "RedPotion"   -Text "Red Potion"     -Value 320 -Min 0 -Max 320 -Length 3 -Info "Set the amount of HP that a Red Potion will replenish"                    -Credits "Admentus, Three Pendants (original) & Anthrogi (ported)"
 
     $Redux.Recovery.HeartLabel       = CreateLabel -X $Redux.Recovery.Heart.Left       -Y ($Redux.Recovery.Heart.Bottom       + (DPISize 6)) -Text ("(" + [math]::Round($Redux.Recovery.Heart.text/16,       1) + " Hearts)") -AddTo $Last.Group
     $Redux.Recovery.FairyLabel       = CreateLabel -X $Redux.Recovery.Fairy.Left       -Y ($Redux.Recovery.Fairy.Bottom       + (DPISize 6)) -Text ("(" + [math]::Round($Redux.Recovery.Fairy.text/16,       1) + " Hearts)") -AddTo $Last.Group
@@ -325,12 +338,12 @@ function CreateTabEquipment() {
     
     # EQUIPMENT #
 
-    CreateReduxGroup -Tag  "Hitbox" -Height 4.5 -Text "Equipment Adjustments"
-    CreateReduxTextBox -Name "SwordHealth" -Text "Sword Durability" -Length 3 -Info "Set the amount of hits the Giant's Knife can take before it breaks" -Value 8 -Min 1 -Max 255 -Credits "Admentus (original) & Anthrogi (ported)" 
-    CreateReduxSlider -Name "KokiriSword" -Column 3 -Default 3000 -Min 512 -Max 8192 -Freq 512 -Small 256 -Large 512 -Text "Kokiri Sword" -Info "Set the length of the hitbox of the Kokiri Sword" -Credits "Admentus (original) & Anthrogi (ported)"
-    CreateReduxSlider -Name "MasterSword" -Default 4000 -Min 512 -Max 8192 -Freq 512 -Small 256 -Large 512 -Text "Master Sword" -Info "Set the length of the hitbox of the Master Sword" -Credits "Admentus (original) & Anthrogi (ported)"
-    CreateReduxSlider -Name "GiantsKnife" -Default 5500 -Min 512 -Max 8192 -Freq 512 -Small 256 -Large 512 -Text "Two-Handed Sword" -Info "Set the length of the hitbox of the Giant's_Knife/Biggoron_Sword" -Credits "Admentus (original) & Anthrogi (ported)"
-    CreateReduxSlider -Name "Hookshot" -Default 13  -Min 0   -Max 110  -Freq 10  -Small 5   -Large 10  -Text "Hookshot Length" -Info "Set the length of the Hookshot" -Credits "Admentus (original) & Anthrogi (ported)" -Warning "Going above the default length by a certain amount can look weird"
-    CreateReduxSlider -Name "Longshot" -Default 104 -Min 0   -Max 110  -Freq 10  -Small 5   -Large 10  -Text "Longshot Length" -Info "Set the length of the Longshot" -Credits "Admentus (original) & Anthrogi (ported)" -Warning "Going above the default length by a certain amount can look weird"
+    CreateReduxGroup   -Tag  "Hitbox"      -Height 4.5 -Text "Equipment Adjustments"
+    CreateReduxTextBox -Name "SwordHealth" -Text "Sword Durability" -Length 3  -Value 8 -Min 1 -Max 255                              -Info "Set the amount of hits the Giant's Knife can take before it breaks" -Credits "Admentus (original) & Anthrogi (ported)" 
+    CreateReduxSlider  -Name "KokiriSword" -Default 3000 -Min 512 -Max 8192 -Freq 512 -Small 256 -Large 512 -Text "Kokiri Sword"     -Info "Set the length of the hitbox of the Kokiri Sword"         -Column 3 -Credits "Admentus (original) & Anthrogi (ported)" 
+    CreateReduxSlider  -Name "MasterSword" -Default 4000 -Min 512 -Max 8192 -Freq 512 -Small 256 -Large 512 -Text "Master Sword"     -Info "Set the length of the hitbox of the Master Sword"                   -Credits "Admentus (original) & Anthrogi (ported)"
+    CreateReduxSlider  -Name "GiantsKnife" -Default 5500 -Min 512 -Max 8192 -Freq 512 -Small 256 -Large 512 -Text "Two-Handed Sword" -Info "Set the length of the hitbox of the Giant's_Knife/Biggoron_Sword"   -Credits "Admentus (original) & Anthrogi (ported)"
+    CreateReduxSlider  -Name "Hookshot"    -Default 13   -Min 0   -Max 110  -Freq 10  -Small 5   -Large 10  -Text "Hookshot Length"  -Info "Set the length of the Hookshot"                                     -Credits "Admentus (original) & Anthrogi (ported)" -Warning "Going above the default length by a certain amount can look weird"
+    CreateReduxSlider  -Name "Longshot"    -Default 104  -Min 0   -Max 110  -Freq 10  -Small 5   -Large 10  -Text "Longshot Length"  -Info "Set the length of the Longshot"                                     -Credits "Admentus (original) & Anthrogi (ported)" -Warning "Going above the default length by a certain amount can look weird"
 
 }
