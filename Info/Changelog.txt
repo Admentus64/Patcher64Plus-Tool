@@ -1,5 +1,6 @@
 v24.1.11
 - Extra difficulty options for OoT and TSP
+- Fixed issue with "Custom" folder for models not showing up
 
 v24.1.10
 - Added options for TSP

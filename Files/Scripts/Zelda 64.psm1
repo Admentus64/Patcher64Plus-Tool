@@ -993,6 +993,11 @@ function LoadModelsList([string]$Category) {
         $list += $repo | Sort-Object | select -Unique
     }
 
+    if (TestFile -Path ($Paths.Models + "\Custom\" + $GameType.mode + " - " + $Category) -Container) {
+        foreach ($item in Get-ChildItem -LiteralPath ($Paths.Models + "\Custom\" + $GameType.mode + " - " + $Category) -Force) { if ($item.Extension -eq ".ppf" -or $item.Extension -eq ".zobj") { $repo += $item.BaseName } }
+        $list = $repo | Sort-Object | select -Unique
+    }
+
     $GamePatch.LoadedModelsList[$Category] = @("Original") + $list
 
     if ($GamePatch.LoadedModelsList[$Category].Count -eq 0) { return @("No models found?") } 
