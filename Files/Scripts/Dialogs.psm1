@@ -3,6 +3,18 @@ function CreateOptionsPanel([array]$Tabs=@()) {
     WriteToConsole "Creating additional options..."
     RefreshScripts
 
+    if ($GamePatch.ExposeGroups -eq $null) {
+        $GamePatch | Add-Member -MemberType NoteProperty -Name ExposeGroups        -Value ([System.Collections.ArrayList]@())
+        $GamePatch | Add-Member -MemberType NoteProperty -Name ExcludeGroups       -Value ([System.Collections.ArrayList]@())
+        $GamePatch | Add-Member -MemberType NoteProperty -Name ExposeOptions       -Value ([System.Collections.ArrayList]@())
+        $GamePatch | Add-Member -MemberType NoteProperty -Name ExcludeOptions      -Value ([System.Collections.ArrayList]@())
+        $GamePatch | Add-Member -MemberType NoteProperty -Name ForceOptions        -Value ([System.Collections.ArrayList]@())
+        $GamePatch | Add-Member -MemberType NoteProperty -Name DefaultOptionValues -Value ([System.Collections.ArrayList]@())
+    }
+    else { $GamePatch.ExposeGroups = $GamePatch.ExcludeGroups = $GamePatch.ExposeOptions = $GamePatch.ExcludeOptions = $GamePatch.ForceOptions = $GamePatch.DefaultOptionValues= @() }
+
+    if (HasCommand ($GamePatch.function + "ExposeOptions") ) { iex ($GamePatch.function + "ExposeOptions") }
+
     if ($RightPanel.Options.Controls.ContainsKey("OptionsPanel")) { $RightPanel.Options.Controls.RemoveByKey("OptionsPanel") }
     $Redux.WindowPanel = CreatePanel -Name "OptionsPanel" -Width $RightPanel.Options.Width -Height $RightPanel.Options.Height -AddTo $RightPanel.Options
 
@@ -44,8 +56,10 @@ function CreateTabButtons([string[]]$Tabs) {
         $Tabs        += "Main"
         $Last.TabName = "Main"
     }
-    if ( (IsSet $GamePatch.redux)   -and $Tabs -notcontains "Redux")   { $Tabs             += "Redux" }
-    if (!(IsSet $GameSettings.Core) -and $Tabs.Length -gt 0)           { $GameSettings.Core = @{}     }
+    
+    if     ( $GamePatch.redux -ne $null -and $Tabs -notcontains "Redux")   { $Tabs                              += "Redux" }
+    elseif ( $GamePatch.redux -eq $null -and $Tabs -contains    "Redux")   { $Tabs = $Tabs | Where-Object { $_ -ne "Redux" } }
+    if     (!(IsSet $GameSettings.Core) -and $Tabs.Length -gt 0)           { $GameSettings.Core                  = @{}     }
 
     $Tabs = $Tabs | Select-Object -Unique
     if ($Tabs.Count -eq 1 -and (HasCommand ("CreateTab" + $Tabs[0] -replace '\s',''))) {
@@ -239,14 +253,15 @@ function CreateSettingsPanel() {
     $GeneralSettings.ClearType       = CreateSettingsCheckbox -Name "ClearType"       -Text "Use ClearType Font"      -Checked -Info ('Use the ClearType font "Segoe UI" instead of the default font "Microsft Sans Serif"' + "`nThe option will only go in effect when opening the tool`nThis change requires the tool to restart to be applied")
     $GeneralSettings.HiDPIMode       = CreateSettingsCheckbox -Name "HiDPIMode"       -Text "Use Hi-DPI Mode"         -Checked -Info "Enables Hi-DPI Mode suitable for higher resolution displays`nThe option will only go in effect when opening the tool`nThis change requires the tool to restart to be applied"
     $GeneralSettings.ModernStyle     = CreateSettingsCheckbox -Name "ModernStyle"     -Text "Use Modern Visual Style" -Checked -Info "Use a modern-looking visual style for the whole interface of the tool"
-    $GeneralSettings.SafeOptions     = CreateSettingsCheckbox -Name "SafeOptions"     -Text "Use Safe Options"                 -Info "Hide any options which are not considered safe for Randomizer or the Everdrive"
+    $GeneralSettings.Safe            = CreateSettingsCheckbox -Name "Safe"            -Text "Use Safe Options"                 -Info "Hide any options which are not considered safe for Randomizer or the Everdrive"
+    $GeneralSettings.Lite            = CreateSettingsCheckbox -Name "Lite"            -Text "Use Lite Options"                 -Info "Hide any casual options for OoT and MM"
     $GeneralSettings.PerGameFile     = CreateSettingsCheckbox -Name "PerGameFile"     -Text "Use ROM per Game Mode"            -Info "The last ROM or Wii VC WAD for a chosen Game Mode is stored when switching back to it"
     $GeneralSettings.EnableSounds    = CreateSettingsCheckbox -Name "EnableSounds"    -Text "Enable Sound Effects"    -Checked -Info "Enable the use of sound effects, for example when patching is concluded"
     $GeneralSettings.LocalTempFolder = CreateSettingsCheckbox -Name "LocalTempFolder" -Text "Use Local Temp Folder"   -Checked -Info "Store all temporary and extracted files within the local Patcher64+ Tool folder`nIf unchecked the temporary and extracted files are kept in the Patcher64+ Tool folder in %AppData%"
     $GeneralSettings.UseCache        = CreateSettingsCheckbox -Name "UseCache"        -Text "Use Cache"               -Checked -Info "Enables caching`n- Keep a copy of the downgraded or decompressed ROM to speed up patching for subsequent attempts`n- Store all text messages to patch until the end so they can be applied in sorted order"
     $GeneralSettings.DisableUpdates  = CreateSettingsCheckbox -Name "DisableUpdates"  -Text "Disable Auto-Updater"             -Info "Disable the Auto-Updater that runs when starting the Patcher64+ Tool"
     $GeneralSettings.DisableAddons   = CreateSettingsCheckbox -Name "DisableAddons"   -Text "Disable Addons Updater"           -Info "Disable automatically updating addons (music, models, etc) when starting the Patcher64+ Tool"
-
+    
     if ((GetWindowsVersion) -lt 11) {
         try {
             $reg = (Get-ItemProperty -LiteralPath "HKLM:\Software\Classes\Microsoft.PowerShellScript.1\Shell").'(default)'
@@ -334,39 +349,45 @@ function CreateSettingsPanel() {
             if (!(IsSet $GamePatch.script) -and $GameSettings -ne $null) { return }
             RefreshGameScript
 
-            if (!$this.checked) { Out-IniFile -FilePath $GameSettingsFile -InputObject $GameSettings }
+            if (!$this.checked) { OutIniFile -FilePath $GameSettingsFile -InputObject $GameSettings }
             else {
                 $global:GameSettingsFile = GetGameSettingsFile
                 $global:GameSettings     = GetSettings $GameSettingsFile
-                $global:Redux            = @{}
-                $global:OptionsPreviews  = $null
-                $Redux.Panels            = $Redux.Sections = $Redux.Groups = $Redux.Tabs = $Redux.NativeOptions = @()
-                $Redux.Box               = @{}
-
-                if (HasCommand "CreateOptions") { CreateOptions }
-                DisableReduxOptions
-                if (HasCommand "CreateOptionsPreviews") { EnableElem -Elem $Patches.PreviewButton -Active $True -Hide } else { EnableElem -Elem $Patches.PreviewButton -Active $False -Hide }
-                [System.GC]::Collect(); [System.GC]::WaitForPendingFinalizers(); [System.GC]::Collect()
+                RegenerateOptions
             }
         } )
     }
 
-    # Safe Options
-    $GeneralSettings.SafeOptions.Add_CheckStateChanged({
-        if (!(IsSet $GamePatch.script) -or $GameSettings -eq $null -or !(HasCommand "CreateOptions")) { return }
-        RefreshGameScript
-        Out-IniFile -FilePath $GameSettingsFile -InputObject $GameSettings
+    $GeneralSettings.Safe.Add_CheckStateChanged({ ChangeOptionsMode }) # Safe Options
+    $GeneralSettings.Lite.Add_CheckStateChanged({ ChangeOptionsMode }) # Lite Options
 
-        $global:Redux            = @{}
-        $global:OptionsPreviews  = $null
-        $Redux.Panels            = $Redux.Sections = $Redux.Groups = $Redux.Tabs = $Redux.NativeOptions = @()
-        $Redux.Box               = @{}
+}
 
-        if (HasCommand "CreateOptions") { CreateOptions }
-        DisableReduxOptions
-        if (HasCommand "CreateOptionsPreviews") { EnableElem -Elem $Patches.PreviewButton -Active $True -Hide } else { EnableElem -Elem $Patches.PreviewButton -Active $False -Hide }
-        [System.GC]::Collect(); [System.GC]::WaitForPendingFinalizers(); [System.GC]::Collect()
-    })
+
+
+#==============================================================================================================================================================================================
+function ChangeOptionsMode() {
+
+    if (!(IsSet $GamePatch.script) -or $GameSettings -eq $null -or !(HasCommand "CreateOptions")) { return }
+    RefreshGameScript
+    OutIniFile -FilePath $GameSettingsFile -InputObject $GameSettings
+    RegenerateOptions
+
+}
+
+
+#==============================================================================================================================================================================================
+function RegenerateOptions() {
+
+    $global:Redux            = @{}
+    $global:OptionsPreviews  = $null
+    $Redux.Panels            = $Redux.Sections = $Redux.Groups = $Redux.Tabs = $Redux.NativeOptions = @()
+    $Redux.Box               = @{}
+
+    if (HasCommand "CreateOptions") { CreateOptions }
+    DisableReduxOptions
+    if (HasCommand "CreateOptionsPreviews") { EnableElem -Elem $Patches.PreviewButton -Active $True -Hide } else { EnableElem -Elem $Patches.PreviewButton -Active $False -Hide }
+    [System.GC]::Collect(); [System.GC]::WaitForPendingFinalizers(); [System.GC]::Collect()
 
 }
 
@@ -398,7 +419,7 @@ function CreateSettingsCheckbox([byte]$Column=$Last.Column, [byte]$Row=$Last.Row
             if ($this.CheckBox.Enabled) { $this.CheckBox.Checked = !$this.CheckBox.Checked }
         })
     }
-
+    
     $Last.Column = $column + 1;
     $Last.Row = $Row;
     if ($Column -ge $Last.Width) {
@@ -406,7 +427,7 @@ function CreateSettingsCheckbox([byte]$Column=$Last.Column, [byte]$Row=$Last.Row
         $Last.Row++
     }
     $Last.Group.Height = ($Row * (DPISize 30) + (DPISize 20))
-
+    
     return $CheckBox
 
 }

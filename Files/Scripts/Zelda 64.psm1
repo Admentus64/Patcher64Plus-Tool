@@ -422,7 +422,8 @@ function GetMMInstrumentID([string]$SFX) {
 #==============================================================================================================================================================================================
 function PatchMuteMusic([string]$SequenceTable, [string]$Sequence, [byte]$Length) {
     
-    if ( (IsChecked $Redux.MuteMusic.MuteSelected -Not) -and (IsChecked $Redux.MuteMusic.MuteAreaOnly -Not) -and (IsChecked $Redux.MuteMusic.MuteAll -Not) ) { return }
+    if ($GameSettings["ReplaceMusic"] -eq $null)                                                                                                               { return }
+    if ( (IsChecked $Redux.MuteMusic.MuteSelected -Not) -and (IsChecked $Redux.MuteMusic.MuteAreaOnly -Not) -and (IsChecked $Redux.MuteMusic.MuteAll -Not) )   { return }
 
     UpdateStatusLabel "Muting Music Sequences"
 
@@ -445,8 +446,9 @@ function PatchMuteMusic([string]$SequenceTable, [string]$Sequence, [byte]$Length
     
 #==============================================================================================================================================================================================
 function PatchReplaceMusic([string]$BankPointerTableStart, [string]$BankPointerTableEnd, [string]$PointerTableStart, [string]$PointerTableEnd, [string]$SeqStart, [string]$SeqEnd) {
-
-    if (IsChecked -Elem $Redux.ReplaceMusic.EnableReplace -Not) { return }
+    
+    if ($GameSettings["ReplaceMusic"] -eq $null)                  { return }
+    if (IsChecked -Elem $Redux.ReplaceMusic.EnableReplace -Not)   { return }
 
     UpdateStatusLabel "Patching Music Sequences"
 
@@ -531,7 +533,7 @@ function PatchReplaceMusic([string]$BankPointerTableStart, [string]$BankPointerT
 #==============================================================================================================================================================================================
 function MusicOptions([string]$Default="File Select") {
     
-    if ($Settings.Core.SafeOptions -eq $True) { return }
+    if ($Settings.Core.Lite -or $Settings.Core.Safe) { return }
 
     $tracks = @()
     foreach ($track in $Files.json.music.tracks) {
@@ -856,12 +858,12 @@ function ShowPreviewImage([string]$Option=$null, [string]$Path="", [object]$Box=
 #==============================================================================================================================================================================================
 function ShowEquipmentPreview() {
     
-    if ($Redux.Equipment.DekuShield   -ne $null)   { ShowEquipmentPreviewImage -Option $Redux.Equipment.DekuShield   -Equipment "Deku Shield"   -IconBox $Redux.Previews.DekuShieldIcon   -LinkBox $Redux.Previews.DekuShield   }
-    if ($Redux.Equipment.HylianShield -ne $null)   { ShowEquipmentPreviewImage -Option $Redux.Equipment.HylianShield -Equipment "Hylian Shield" -IconBox $Redux.Previews.HylianShieldIcon -LinkBox $Redux.Previews.HylianShield }
-    if ($Redux.Equipment.MirrorShield -ne $null)   { ShowEquipmentPreviewImage -Option $Redux.Equipment.MirrorShield -Equipment "Mirror Shield" -IconBox $Redux.Previews.MirrorShieldIcon -LinkBox $Redux.Previews.MirrorShield }
+    if ($Redux.EquipmentGear.DekuShield   -ne $null)   { ShowEquipmentPreviewImage -Option $Redux.EquipmentGear.DekuShield   -Equipment "Deku Shield"   -IconBox $Redux.Previews.DekuShieldIcon   -LinkBox $Redux.Previews.DekuShield   }
+    if ($Redux.EquipmentGear.HylianShield -ne $null)   { ShowEquipmentPreviewImage -Option $Redux.EquipmentGear.HylianShield -Equipment "Hylian Shield" -IconBox $Redux.Previews.HylianShieldIcon -LinkBox $Redux.Previews.HylianShield }
+    if ($Redux.EquipmentGear.MirrorShield -ne $null)   { ShowEquipmentPreviewImage -Option $Redux.EquipmentGear.MirrorShield -Equipment "Mirror Shield" -IconBox $Redux.Previews.MirrorShieldIcon -LinkBox $Redux.Previews.MirrorShield }
 
-    if ($Redux.Equipment.KokiriSword  -ne $null)   { ShowEquipmentPreviewImage -Option $Redux.Equipment.KokiriSword  -Equipment "Kokiri Sword"  -IconBox $Redux.Previews.KokiriSwordIcon }
-    if ($Redux.Equipment.MasterSword  -ne $null)   { ShowEquipmentPreviewImage -Option $Redux.Equipment.MasterSword  -Equipment "Master Sword"  -IconBox $Redux.Previews.MasterSwordIcon }
+    if ($Redux.EquipmentGear.KokiriSword  -ne $null)   { ShowEquipmentPreviewImage -Option $Redux.EquipmentGear.KokiriSword  -Equipment "Kokiri Sword"  -IconBox $Redux.Previews.KokiriSwordIcon }
+    if ($Redux.EquipmentGear.MasterSword  -ne $null)   { ShowEquipmentPreviewImage -Option $Redux.EquipmentGear.MasterSword  -Equipment "Master Sword"  -IconBox $Redux.Previews.MasterSwordIcon }
 
 }
 
@@ -1041,6 +1043,8 @@ function ChangeModelsSelection() {
 #==============================================================================================================================================================================================
 function CreateButtonColorOptions($Default=1) {
     
+    if ($Settings.Core.Lite) { return }
+
     $items     = @("N64 OoT", "N64 MM", "GC OoT", "GC MM", "Xbox OoT", "Xbox MM", "JP PlayStation OoT", "JP PlayStation MM", "WE PlayStation OoT", "WE PlayStation MM", "N64 TML", "GC TML", "Randomized", "Custom")
     $randomize = "`n" + '"Randomized" fully randomizes the colors each time the patcher is opened'
     $buttons   = $Redux.Colors.SetButtons = $Redux.Colors.ButtonLabels = @()
@@ -1077,6 +1081,8 @@ function CreateButtonColorOptions($Default=1) {
 #==============================================================================================================================================================================================
 function CreateBoomerangColorOptions($Default=1) {
     
+    if ($Settings.Core.Lite) { return }
+
     $randomize = "`n" + '"Randomized" fully randomizes the colors each time the patcher is opened'
     $buttons   = $Redux.Colors.SetBoomerang = $Redux.Colors.BoomerangLabels = @()
 
@@ -1107,6 +1113,8 @@ function CreateBoomerangColorOptions($Default=1) {
 #==============================================================================================================================================================================================
 function CreateBombchuColorOptions() {
     
+    if ($Settings.Core.Lite) { return }
+
     $randomize = "`n" + '"Randomized" fully randomizes the colors each time the patcher is opened'
     $buttons = $Redux.Colors.SetBombchu = $Redux.Colors.BombchuLabels = @()
 
@@ -1137,6 +1145,8 @@ function CreateBombchuColorOptions() {
 #==============================================================================================================================================================================================
 function CreateRupeeColorOptions() {
     
+    if ($Settings.Core.Lite) { return }
+
     $randomize = "`n" + '"Randomized" fully randomizes the colors each time the patcher is opened'
     $buttons   = $Redux.Colors.SetRupee = $Redux.Colors.RupeeLabels = @()
 
@@ -1171,6 +1181,8 @@ function CreateRupeeColorOptions() {
 #==============================================================================================================================================================================================
 function CreateRupeeVanillaColorOptions($Preset=1, $Color="C8FF64") {
     
+    if ($Settings.Core.Lite) { return }
+
     $items     = @("Base Wallet", "Adult's Wallet", "Giant's Wallet", "Tycoon's Wallet", "Gold Quest", "Randomized", "Custom")
     $randomize = "`n" + '"Randomized" fully randomizes the colors each time the patcher is opened'
 
@@ -1194,6 +1206,8 @@ function CreateRupeeVanillaColorOptions($Preset=1, $Color="C8FF64") {
 #==============================================================================================================================================================================================
 function CreateSpinAttackColorOptions() {
     
+    if ($Settings.Core.Lite) { return }
+
     $items     = @("Blue", "Red", "Green", "White", "Cyan", "Magenta", "Orange", "Gold", "Purple", "Pink", "Black", "Randomized", "Custom")
     $randomize = "`n" + '"Randomized" fully randomizes the colors each time the patcher is opened'
     $buttons   = $Redux.Colors.SetSpinAttack = $Redux.Colors.SpinAttackLabels = @()
@@ -1249,18 +1263,19 @@ function CreateSpinAttackColorOptions() {
 
 
 #==============================================================================================================================================================================================
-function CreateSwordTrailColorOptions([switch]$duration) {
+function CreateSwordTrailColorOptions() {
     
-    $items1                  = @("White", "Red", "Green", "Blue", "Cyan", "Magenta", "Orange", "Gold", "Purple", "Pink", "Randomized", "Custom")
-    if ($duration) { $items2 = @("Disabled", "Short", "Long", "Very Long", "Lightsaber") }
-    $randomize               = "`n" + '"Randomized" fully randomizes the colors each time the patcher is opened'
-    $buttons                 = $Redux.Colors.SetSwordTrail = $Redux.Colors.SwordTrailLabels = @()
+    if ($Settings.Core.Lite) { return }
+
+    $randomize = "`n" + '"Randomized" fully randomizes the colors each time the patcher is opened'
+    $buttons   = $Redux.Colors.SetSwordTrail = $Redux.Colors.SwordTrailLabels = @()
+    if ($GameType.mode -eq "Ocarina of Time" ){ $credits = "Ported from $Rando" } else { $credits = "Admentus" }
 
     CreateReduxGroup -Tag  "Colors" -Text "Sword Trail Colors"
-                     CreateReduxComboBox -Name "SwordTrail"         -Text "Sword Trail Color"    -Items $items1 -Default 1 -Info ("Select a preset for the sword trail color" + $randomize) -Credits "Ported from Rando"
-    $buttons +=      CreateReduxButton   -Tag $Buttons.Count        -Text "Trail (Inner)"                                  -Info "Select the inner color you want for the sword trail"      -Credits "Ported from Rando"
-    $buttons +=      CreateReduxButton   -Tag $Buttons.Count        -Text "Trail (Outer)"                                  -Info "Select the outer color you want for the sword trail"      -Credits "Ported from Rando"
-    if ($duration) { CreateReduxComboBox -Name "SwordTrailDuration" -Text "Sword Trail Duration" -Items $items2 -Default 2 -Info ("Select the duration for sword trail")                    -Credits "Ported from Rando" }
+                     CreateReduxComboBox -Name "SwordTrail"         -Text "Sword Trail Color"    -Items @("White", "Red", "Green", "Blue", "Cyan", "Magenta", "Orange", "Gold", "Purple", "Pink", "Randomized", "Custom") -Default 1 -Info ("Select a preset for the sword trail color" + $randomize) -Credits "Ported from Rando"
+    $buttons +=      CreateReduxButton   -Tag $Buttons.Count        -Text "Trail (Inner)"                                                                                                                                            -Info "Select the inner color you want for the sword trail"      -Credits "Ported from Rando"
+    $buttons +=      CreateReduxButton   -Tag $Buttons.Count        -Text "Trail (Outer)"                                                                                                                                            -Info "Select the outer color you want for the sword trail"      -Credits "Ported from Rando"
+                     CreateReduxComboBox -Name "SwordTrailDuration" -Text "Sword Trail Duration" -Items @("Disabled", "Short", "Long", "Very Long", "Lightsaber")                                                         -Default 2 -Info "Select the duration for sword trail"                      -Credits $credits
 
     $Redux.Colors.SetSwordTrail += CreateColorDialog -Color "FFFFFF" -Name "SetInnerSwordTrail" -IsGame -Button $Buttons[0]
     $Redux.Colors.SetSwordTrail += CreateColorDialog -Color "FFFFFF" -Name "SetOuterSwordTrail" -IsGame -Button $Buttons[1]
@@ -1288,6 +1303,8 @@ function CreateSwordTrailColorOptions([switch]$duration) {
 
 #==============================================================================================================================================================================================
 function CreateFairyColorOptions($name) {
+    
+    if ($Settings.Core.Lite) { return }
 
     # FAIRY COLORS #
 
@@ -1333,6 +1350,8 @@ function CreateFairyColorOptions($name) {
 
 #==============================================================================================================================================================================================
 function CreateHUDColorOptions([switch]$MM) { 
+    
+    if ($Settings.Core.Lite) { return }
 
     $buttons = $Redux.Colors.SetHUDStats = $Redux.Colors.HUDStatsLabels = @()
     CreateReduxGroup -Tag "Colors" -Text "HUD Colors" -IsRedux
@@ -1426,6 +1445,8 @@ function CreateHUDColorOptions([switch]$MM) {
 
 #==============================================================================================================================================================================================
 function CreateTextColorOptions() { 
+    
+    if ($Settings.Core.Lite) { return }
 
     $Items     = @("Blue", "Green", "Randomized", "Custom");
     $buttons   = $Redux.Colors.SetText = $Redux.Colors.TextLabels = @()
@@ -1538,6 +1559,8 @@ function SetRupeeColorsPreset([object]$ComboBox) {
 #==============================================================================================================================================================================================
 function SetRupeeVanillaColorsPreset([object]$ComboBox) {
     
+    if ($Settings.Core.Lite) { return }
+
     $Text = $ComboBox.Text.replace(' (default)', "")
     if     ($Text -eq "Base Wallet")       { SetColor -Color "C8FF64" -Dialog $Redux.Colors.SetRupeeVanilla -Label $Redux.Colors.RupeeVanillaLabel }
     elseif ($Text -eq "Adult's Wallet")    { SetColor -Color "8282FF" -Dialog $Redux.Colors.SetRupeeVanilla -Label $Redux.Colors.RupeeVanillaLabel }

@@ -1,6 +1,6 @@
 Patch Options for The Minish Cap:
 1. Apply Patch (requires a patch file)
-2. Redux and Additional Options
+2. Reborn and Additional Options
 
 Known Issues:
 - Unknown

@@ -214,20 +214,20 @@ if (!(IsSet $Settings.Paths)   -and !$FatalError)   { $Settings.Paths   = @{} }
 
 # Logging
 if (!$ExternalScript) { $global:TranscriptTime = $SystemDate }
-SetLogging ($Settings.Debug.Logging -eq $True)
+SetLogging ($Settings.Debug.Logging -ne $False)
 
 # Temp
-if ($Settings.Core.LocalTempFolder -eq $True)   { $Paths.Temp = $Paths.LocalTemp   }
-else                                            { $Paths.Temp = $Paths.AppDataTemp }
+if ($Settings.Core.LocalTempFolder)   { $Paths.Temp = $Paths.LocalTemp   }
+else                                  { $Paths.Temp = $Paths.AppDataTemp }
 
 # Hi-DPI Mode
-if ($Settings.Core.HiDPIMode -eq $False) { $global:DisableHighDPIMode = $True } else { $global:DisableHighDPIMode = $False }
+$global:DisableHighDPIMode = $Settings.Core.HiDPIMode -eq $False
 InitializeHiDPIMode
 $global:ColumnWidth  = DPISize 180
 $global:FormDistance = DPISize 185
 
 # Hide the PowerShell console from the user
-ShowPowerShellConsole ($Settings.Debug.Console -eq $True)
+ShowPowerShellConsole ($Settings.Debug.Console -ne $False)
 
 # Visual Style
 SetModernVisualStyle ($Settings.Core.ModernStyle -ne $False)
@@ -236,7 +236,7 @@ SetModernVisualStyle ($Settings.Core.ModernStyle -ne $False)
 SetFileParameters
 
 # Enable sounds
-LoadSoundEffects ($Settings.Core.EnableSounds -eq $True)
+LoadSoundEffects ($Settings.Core.EnableSounds -ne $False)
 
 # Font
 if ($Settings.Core.ClearType -ne $False) { $Font = "Segoe UI" } else { $Font = "Microsoft Sans Serif" }
@@ -254,7 +254,6 @@ $Fonts.Editor         = New-Object System.Drawing.Font("Consolas", 16, [System.D
 [void](CreateMainDialog)
 CreateSettingsPanel
 CreateCreditsPanel
-
 
 # Check if restricted
 if (IsRestrictedFolder $Paths.FullBase) {
@@ -316,8 +315,8 @@ if (!$FatalError) { [void]($MainDialog.ShowDialog()) }
 
 # Exit
 if (!$FatalError) {
-    Out-IniFile -FilePath $Files.settings -InputObject $Settings
-    if (IsSet $GameSettings) { Out-IniFile -FilePath (GetGameSettingsFile) -InputObject $GameSettings }
+    OutIniFile -FilePath $Files.settings -InputObject $Settings
+    if (IsSet $GameSettings) { OutIniFile -FilePath (GetGameSettingsFile) -InputObject $GameSettings }
     RemovePath $Paths.Registry
     SetLogging $False
 }

@@ -173,6 +173,17 @@
 --- The Sealed Palace ---
 - Jinnosuke9, Shoopey & Col0Korn
 
+--- Ultimate Trial ---
+- Hacking:				Richie, ZeeRoX, hiisuya, aegiker
+- Design:				Syeo, ShuggyTheBuggy
+- Music:				Zeraphyr, Woon
+- German:				Only1_Rudeboy, RetroEggy
+- French:				Babou Linet
+- Contributors:				Debuglog, Le Séducteur, Kentonm, Yanis, Tharo, Dragorn421,
+					thinedave, rogual, Fig, owl is not a cat, Amara, CDi-Fails,
+					Salom, Rikugo.studio, DezZival, Mark Kurko, Tharo, bradyOne,
+					Mark Kurko, scittykitty
+
 --- Master of Time ---
 - Aegiker
 - doncamilo
@@ -191,6 +202,7 @@
 - Nighttime71
 - Rogue_Millipede
 - DezZival
+- OniHelix
 
 --- Gold Quest ---
 - AndiiSyn
@@ -403,6 +415,7 @@
 - Ideka
 - Saneki
 - SpiceyWolf (v4.3 Textpointer Fix)
+- OniHelix (v4.4)
 
 --- The Legend of Zelda Revival ---
 - Designer:				doncamilo
@@ -720,6 +733,7 @@ Other:			Admentus & gamemasterplc
 --- Additional Options ---
 - Re-Wizardized Script:			Kyler Ashton
 - Kakariko Shortcut:			PowerPanda
+- Custom Models:			Third M, ShadowOne333
 
 --- Retranslation Quest ---
 - Chicken Knife, Dattebayo, nejimakipiyo
@@ -784,7 +798,7 @@ Other:			Admentus & gamemasterplc
 - Widescreen:				ocesse
 - Save Stations Refill:			Adamf
 - No Music:				Kejardon
-- ShadowOne333
+- ShadowOne333, wittyphoenix, GoodLuckTrying
 
 --- Project Base ---
 - Level Designer:			begrimed
@@ -857,7 +871,7 @@ Grahf, ShadowOne333, CeruCap, ScoutTown, MrBlueDork, Duopierce, Skorph2014, mars
 ===========================
 <<< THE MINISH CAP >>>
 
---- Redux ---
+--- Reborn ---
 - Main Hacking:				Admentus
 - Decompilation Assistance:		Henny022 & Catobat
 

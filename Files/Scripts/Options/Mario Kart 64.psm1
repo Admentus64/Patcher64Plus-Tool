@@ -2,7 +2,7 @@ function PatchOptions() {
     
     # GRAPHICS #
 
-    if (IsChecked $Redux.Graphics.WidescreenBackgrounds)   { ApplyPatch -Patch "Compressed\Optional\ws_backgrounds.ips" }
+    if (IsChecked $Redux.Graphics.WidescreenBackgrounds)   { ApplyPatch -Patch "Compressed\Optional\ws_backgrounds.bps" }
 
 
 

@@ -294,8 +294,8 @@ function CreateTextEditorDialog() {
         if ( !(TestFile ($Paths.Games + "\" + $TextEditor.GameType.mode + "\Editor\message_data_static.ori.bin")) -or !(TestFile ($Paths.Games + "\" + $TextEditor.GameType.mode + "\Editor\message_data.ori.tbl")) ) {
             $global:ByteArrayGame = [System.IO.File]::ReadAllBytes($GetROM.decomp)
             CreateSubPath $GameFiles.editor
-            $start  = CombineHex $ByteArrayGame[((GetDecimal $TextEditor.languageFile[0].script_dma)+0)..((GetDecimal $TextEditor.languageFile[0].script_dma)+3)]
-            $end    = CombineHex $ByteArrayGame[((GetDecimal $TextEditor.languageFile[0].script_dma)+4)..((GetDecimal $TextEditor.languageFile[0].script_dma)+7)]
+            $start  = CombineHex $ByteArrayGame[((GetDecimal $TextEditor.languageFile[0].script_dma)+0+$GamePatch.dma_shift)..((GetDecimal $TextEditor.languageFile[0].script_dma)+3+$GamePatch.dma_shift)]
+            $end    = CombineHex $ByteArrayGame[((GetDecimal $TextEditor.languageFile[0].script_dma)+4+$GamePatch.dma_shift)..((GetDecimal $TextEditor.languageFile[0].script_dma)+7+$GamePatch.dma_shift)]
             $length = Get32Bit ( (GetDecimal $end) - (GetDecimal $start) )
             ExportBytes -Offset $start                                  -Length $length                     -Output ($Paths.Games + "\" + $Files.json.textEditor.game + "\Editor\message_data_static.ori.bin") -Force
             ExportBytes -Offset $TextEditor.languageFile[0].table_start -Length $LanguagePatch.table_length -Output ($Paths.Games + "\" + $Files.json.textEditor.game + "\Editor\message_data.ori.tbl")        -Force
@@ -310,8 +310,8 @@ function CreateTextEditorDialog() {
         if ($LanguagePatch.script_dma -ne $null -and $LanguagePatch.table_start -ne $null -and $LanguagePatch.table_length -ne $null) {
             $global:ByteArrayGame = [System.IO.File]::ReadAllBytes($GetROM.decomp)
             CreateSubPath $GameFiles.editor
-            $start  = CombineHex $ByteArrayGame[((GetDecimal $LanguagePatch.script_dma)+0)..((GetDecimal $LanguagePatch.script_dma)+3)]
-            $end    = CombineHex $ByteArrayGame[((GetDecimal $LanguagePatch.script_dma)+4)..((GetDecimal $LanguagePatch.script_dma)+7)]
+            $start  = CombineHex $ByteArrayGame[((GetDecimal $LanguagePatch.script_dma)+0+$GamePatch.dma_shift)..((GetDecimal $LanguagePatch.script_dma)+3+$GamePatch.dma_shift)]
+            $end    = CombineHex $ByteArrayGame[((GetDecimal $LanguagePatch.script_dma)+4+$GamePatch.dma_shift)..((GetDecimal $LanguagePatch.script_dma)+7+$GamePatch.dma_shift)]
             $length = Get32Bit ( (GetDecimal $end) - (GetDecimal $start) )
             ExportBytes -Offset $start                     -Length $length                     -Output ($Paths.Games + "\" + $Files.json.textEditor.game + "\Editor\message_data_static." + $LanguagePatch.code + ".bin") -Force
             ExportBytes -Offset $LanguagePatch.table_start -Length $LanguagePatch.table_length -Output ($Paths.Games + "\" + $Files.json.textEditor.game + "\Editor\message_data."        + $LanguagePatch.code + ".tbl") -Force
@@ -923,8 +923,8 @@ function LoadTextEditor() {
 
     $Files.json.textEditor = SetJSONFile $GameFiles.textEditor
 
-    $start  = CombineHex $ByteArrayGame[((GetDecimal $LanguagePatch.script_dma)+0)..((GetDecimal $LanguagePatch.script_dma)+3)]
-    $end    = CombineHex $ByteArrayGame[((GetDecimal $LanguagePatch.script_dma)+4)..((GetDecimal $LanguagePatch.script_dma)+7)]
+    $start  = CombineHex $ByteArrayGame[((GetDecimal $LanguagePatch.script_dma)+0+$GamePatch.dma_shift)..((GetDecimal $LanguagePatch.script_dma)+3+$GamePatch.dma_shift)]
+    $end    = CombineHex $ByteArrayGame[((GetDecimal $LanguagePatch.script_dma)+4+$GamePatch.dma_shift)..((GetDecimal $LanguagePatch.script_dma)+7+$GamePatch.dma_shift)]
     $length = Get32Bit ( (GetDecimal $end) - (GetDecimal $start) )
 
     ExportBytes -Offset $start                     -Length $length                     -Output ($GameFiles.extracted + "\message_data_static." + $LanguagePatch.code + ".bin") -Force

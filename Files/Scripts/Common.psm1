@@ -287,7 +287,7 @@ function ChangeGameMode() {
 
     WriteToConsole "Changing game mode..."
 
-    if ($GameType -ne $null -and $MainDialog.Visible -and $Settings.Core.PerGameFile -eq $True) { $Settings.Paths[$GameType.mode] = $GamePath.FullName }
+    if ($GameType -ne $null -and $MainDialog.Visible -and $Settings.Core.PerGameFile) { $Settings.Paths[$GameType.mode] = $GamePath.FullName }
 
     if (IsSet $GamePatch.script) {
         if ($GamePatch.script -is [system.Array]) {
@@ -306,7 +306,7 @@ function ChangeGameMode() {
         }
     }
 
-    if ($GameType -ne $null -and $MainDialog.Visible -and $Settings.Core.PerGameFile -eq $True) {
+    if ($GameType -ne $null -and $MainDialog.Visible -and $Settings.Core.PerGameFile) {
         if     ($Settings.Paths[$GameType.mode] -ne $null)   { GamePath_Finish -TextBox $InputPaths.GameTextBox -Path $Settings.Paths[$GameType.mode] }
         elseif ($GamePath -ne $null)                         { $Settings.Paths[$GameType.mode] = $GamePath.FullName                                   }
     }
@@ -432,8 +432,8 @@ function ChangePatch() {
     UpdateStatusLabel "Changing patch..."
 
     # Reset Options
-    if ($GameSettings -ne $null) { Out-IniFile -FilePath $GameSettingsFile -InputObject $GameSettings }
-    if ($RightPanel.Options.Controls.ContainsKey("OptionsPanel")) { $RightPanel.Options.Controls.RemoveByKey("OptionsPanel") }
+    if ($GameSettings -ne $null)                                    { OutIniFile -FilePath $GameSettingsFile -InputObject $GameSettings }
+    if ($RightPanel.Options.Controls.ContainsKey("OptionsPanel"))   { $RightPanel.Options.Controls.RemoveByKey("OptionsPanel") }
     ToggleDialog -Dialog $OptionsPreviews.Dialog -Close
     $global:Redux           = @{}
     $global:OptionsPreviews = $null
@@ -461,10 +461,11 @@ function ChangePatch() {
 
             if ($item.tooltip -ne $null) {
                 $info = $item.tooltip
-                if ($item.version -ne $null -or $item.redux.version -ne $null)   { $info += "{0}"                                         }
-                if ($item.version                                   -ne $null)   { $info += "{0}Patch version: "    + $item.version       }
-                if ($item.redux.version                             -ne $null)   { $info += "{0}Redux version: "    + $item.redux.version }
-                if ($item.credits                                   -ne $null)   { $info += "{0}{0}Patch made by: " + $item.credits       }
+                if     ($item.version -ne $null -or $item.redux.version -ne $null)   { $info += "{0}"                                          }
+                if     ($item.version                                   -ne $null)   { $info += "{0}Patch version: "    + $item.version        }
+                if     ($item.redux.version                             -ne $null)   { $info += "{0}Redux version: "    + $item.redux.version  }
+                elseif ($item.reborn.version                            -ne $null)   { $info += "{0}Reborn version: "   + $item.reborn.version }
+                if     ($item.credits                                   -ne $null)   { $info += "{0}{0}Patch made by: " + $item.credits        }
                 $PatchToolTip.SetToolTip($Patches.Button, ([string]::Format($info, [Environment]::NewLine)))
             }
             else { $PatchToolTip.RemoveAll() }
@@ -472,13 +473,23 @@ function ChangePatch() {
             GetHeader
             GetRegion
 
-            $info = "Enable the Redux patch which improves game mechanics"
-            if ($item.redux.tooltip -ne $null)   { $info += "{0}"                   + $item.redux.tooltip }
-            if ($item.redux.version -ne $null)   { $info += "{0}{0}Redux version: " + $item.redux.version }
+            if (IsSet $item.redux) {
+                $Patches.ReduxLabel.Text = "Enable Redux:"
+                $info                    = "Enable the Redux patch which improves game mechanics"
+            }
+            elseif (IsSet $item.reborn) {
+                $Patches.ReduxLabel.Text = "Enable Reborn:"
+                $info                    = "Enable the Reborn patch which improves game mechanics"
+            }
+
+            if     ($item.redux.tooltip  -ne $null)   { $info += "{0}"                    + $item.redux.tooltip  }
+            elseif ($item.reborn.tooltip -ne $null)   { $info += "{0}"                    + $item.reborn.tooltip }
+            if     ($item.redux.version  -ne $null)   { $info += "{0}{0}Redux version: "  + $item.redux.version  }
+            elseif ($item.reborn.version -ne $null)   { $info += "{0}{0}Reborn version: " + $item.reborn.version }
 
             $ReduxToolTip.SetToolTip($Patches.ReduxLabel, ([string]::Format($info, [Environment]::NewLine)))
             $ReduxToolTip.SetToolTip($Patches.Redux,      ([string]::Format($info, [Environment]::NewLine)))
-                
+            
             if ( (IsSet $GamePatch.script) -or (TestFile $GameFiles.controls) ) {
                 $global:GameSettingsFile = GetGameSettingsFile
                 $global:GameSettings     = GetSettings $GameSettingsFile
@@ -493,6 +504,7 @@ function ChangePatch() {
             $global:GamePatch.PSObject.Properties.Remove('LoadedModel')
             $global:GamePatch | Add-Member -MemberType NoteProperty -Name "LoadedModelsList" -Value @{}
             $global:GamePatch | Add-Member -MemberType NoteProperty -Name "LoadedModel"      -Value @{}
+            if ($GamePatch.dmaShift -eq $null) { $global:GamePatch | Add-Member -MemberType NoteProperty -Name "dmaShift" -Value 0 }
 
             ChangeGameRev
             SetGameScript
@@ -506,10 +518,10 @@ function ChangePatch() {
             }
             else { # Patches with additional options when available
                 # Disable boxes if needed
-                EnableElem -Elem @($Patches.Extend,  $Patches.ExtendLabel)  -Active (IsSet $GamePatch.allow_extend) -Hide
-                EnableElem -Elem @($Patches.Redux,   $Patches.ReduxLabel)   -Active (IsSet $GamePatch.redux)        -Hide
-                EnableElem -Elem @($Patches.Options, $Patches.OptionsLabel) -Active (IsSet $GamePatch.script)       -Hide
-                EnableElem -Elem $Redux.WindowPanel                         -Active $Patches.Options.Checked
+                EnableElem -Elem @($Patches.Extend,  $Patches.ExtendLabel)  -Active   (IsSet $GamePatch.allow_extend)                          -Hide
+                EnableElem -Elem @($Patches.Redux,   $Patches.ReduxLabel)   -Active ( (IsSet $GamePatch.redux) -or (IsSet $GamePatch.reborn) ) -Hide
+                EnableElem -Elem @($Patches.Options, $Patches.OptionsLabel) -Active   (IsSet $GamePatch.script)                                -Hide
+                EnableElem -Elem $Redux.WindowPanel                         -Active          $Patches.Options.Checked
                 DisableReduxOptions
                 if (HasCommand "CreateOptionsPreviews") { EnableElem -Elem $Patches.PreviewButton -Active $True -Hide } else { EnableElem -Elem $Patches.PreviewButton -Active $False -Hide }
             }
@@ -595,11 +607,11 @@ function WriteToConsole([string]$Text, [switch]$Error) {
         if ($Error)   { Write-Host $Text -ForegroundColor "Red" }
         else          { Write-Host $Text }
     }
-    if ($Settings.Debug.Logging -eq $True  -and !$ExternalScript) {
+    if ($Settings.Debug.Logging  -and !$ExternalScript) {
         if (!(TestFile -Path $Paths.Logs -Container)) { CreatePath $Paths.Logs }
         Add-Content -LiteralPath ($Paths.Logs + "\" + $TranscriptTime + ".log") -Value $Text
     }
-    elseif ($Settings.Debug.Logging -eq $False -and !$ExternalScript) { $global:ConsoleHistory += $Text }
+    elseif (!$Settings.Debug.Logging -and !$ExternalScript) { $global:ConsoleHistory += $Text }
 
 }
 
@@ -667,7 +679,7 @@ function GamePath_Finish([object]$TextBox, [string]$Path) {
 
     $global:GameIsSelected = $InputPaths.ClearGameButton.Enabled = ($file -ne $null)
     $global:GamePath       = if ($file -eq $null) { $null } else { $file }
-    if ($Settings.Core.PerGameFile -eq $True) { $Settings.Paths[$GameType.mode] = if ($file -eq $null) { $null } else { $path } }
+    if ($Settings.Core.PerGameFile) { $Settings.Paths[$GameType.mode] = if ($file -eq $null) { $null } else { $path } }
 
     EnablePatchButtons
     CalculateHashSum
@@ -775,9 +787,10 @@ function IsDefault([object]$Elem, [byte]$Lang=0, [switch]$Not) {
     if ( $Elem        -eq $null)          { return $False }
     if (!$Elem.Active -or $Elem.Hidden)   { return $False }
 
-    if     ($Elem.GetType() -eq [System.Windows.Forms.CheckBox] -or $Elem.GetType() -eq [System.Windows.Forms.RadioButton])   { $value = $Elem.Checked }
-    elseif ($Elem.GetType() -eq [System.Windows.Forms.TrackBar])                                                              { $value = $Elem.Value }
-    else                                                                                                                      { $value = $Elem.Text  }
+    if     ($Elem           -is [int] -or $Elem -is [string])                                                                 { $value = $Elem         }
+    elseif ($Elem.GetType() -eq [System.Windows.Forms.CheckBox] -or $Elem.GetType() -eq [System.Windows.Forms.RadioButton])   { $value = $Elem.Checked }
+    elseif ($Elem.GetType() -eq [System.Windows.Forms.TrackBar])                                                              { $value = $Elem.Value   }
+    else                                                                                                                      { $value = $Elem.Text    }
 
     if ($Elem.GetType() -eq [System.Windows.Forms.ComboBox]) { $default = $Elem.Items[$Elem.Default] } else { $default = $Elem.Default }
 
@@ -795,11 +808,13 @@ function IsChecked([object]$Elem=$null, [byte]$Lang=0, [switch]$Not, [switch]$Re
         if ($Redux.Text.Language.SelectedIndex -ne $Lang - 1) { return $False }
     }
 
-    if ($Redux -and !(IsChecked $Patches.Redux) )                                                                           { return $False }
-    if ( $Elem           -eq $null)                                                                                         { return $False }
-    if (!$Elem.Active    -or $Elem.Hidden)                                                                                  { return $False }
-    if ( $Elem.GetType() -ne [System.Windows.Forms.CheckBox] -and $Elem.GetType() -ne [System.Windows.Forms.RadioButton])   { return $False }
-    if ( $Elem.Checked)                                                                                                     { return !$Not  } else { return $Not }
+    if     ( $Elem -is [int] -and ( ($Elem -eq 1 -and !$Not) -or ($Elem -eq 0 -and $Not) ) )                                    { return $True  }
+    elseif ( $Elem -is [int] -and ( ($Elem -eq 0 -and !$Not) -or ($Elem -eq 1 -and $Not) ) )                                    { return $False }
+    elseif ($Redux -and !(IsChecked $Patches.Redux) )                                                                           { return $False }
+    elseif ( $Elem           -eq $null)                                                                                         { return $False }
+    elseif (!$Elem.Active    -or $Elem.Hidden)                                                                                  { return $False }
+    elseif ( $Elem.GetType() -ne [System.Windows.Forms.CheckBox] -and $Elem.GetType() -ne [System.Windows.Forms.RadioButton])   { return $False }
+    elseif ( $Elem.Checked)                                                                                                     { return !$Not  } else { return $Not }
 
 }
 
@@ -819,11 +834,11 @@ function IsRevert([object]$Elem=$null, [int16]$Index=1, [string]$Text="", [strin
     
     if ( $Elem        -eq $null)          { return $False }
     if (!$Elem.Active -or $Elem.Hidden)   { return $False }
-
-    if     ($Elem.GetType() -eq [System.Windows.Forms.CheckBox])   { return (IsChecked -Elem $Elem                           -Lang $Lang -Not) }
-    elseif ($Elem.GetType() -eq [System.Windows.Forms.Listbox])    { return (IsItem    -Elem $Elem -Item $Item               -Lang $Lang -Not) }
-    elseif ($Elem.GetType() -eq [System.Windows.Forms.ComboBox])   { return (IsIndex   -Elem $Elem -Index $Index -Text $Text -Lang $Lang     ) }
-    elseif ($Elem.GetType() -eq [System.Windows.Forms.TextBox])    { return (IsText    -Elem $Elem -Compare $Compare         -Lang $Lang -Not) }
+    
+    if     ($Elem.GetType() -eq [System.Windows.Forms.CheckBox] -or $Elem -is [int])      { return (IsChecked -Elem $Elem                           -Lang $Lang -Not) }
+    elseif ($Elem.GetType() -eq [System.Windows.Forms.Listbox])                           { return (IsItem    -Elem $Elem -Item $Item               -Lang $Lang -Not) }
+    elseif ($Elem.GetType() -eq [System.Windows.Forms.ComboBox] -or $Elem -is [int])      { return (IsIndex   -Elem $Elem -Index $Index -Text $Text -Lang $Lang     ) }
+    elseif ($Elem.GetType() -eq [System.Windows.Forms.TextBox]  -or $Elem -is [string])   { return (IsText    -Elem $Elem -Compare $Compare         -Lang $Lang -Not) }
 
     return $False
 
@@ -842,8 +857,9 @@ function IsText([object]$Elem=$null, [string]$Compare="", [byte]$Lang=0, [switch
     if ( $Elem        -eq $null)          { return $False }
     if (!$Elem.Active -or $Elem.Hidden)   { return $False }
 
-    $Text = $Elem.Text.replace(" (default)", "")
-    if ($Text -eq $Compare) { return !$Not } else { return $Not }
+    if ($Elem -is [string])   { $Text = $Elem                                }
+    else                      { $Text = $Elem.Text.replace(" (default)", "") }
+    if ($Text -eq $Compare)   { return !$Not } else { return $Not }
 
 }
 
@@ -876,7 +892,8 @@ function IsValue([object]$Elem=$null, [int16]$Value=$null, [byte]$Lang=0, [switc
     if ( $Elem        -eq $null)          { return $False }
     if (!$Elem.Active -or $Elem.Hidden)   { return $False }
 
-    if ($Value -eq $null) { $Value = $Elem.Default }
+    if     ($Elem  -is [int])   { $Value = $Elem         }
+    elseif ($Value -eq $null)   { $Value = $Elem.Default }
     
     if ($Elem.GetType() -eq [System.Windows.Forms.TextBox]) {
         if ([int16]$Elem.text -eq $Value) { return !$Not } else { return $Not }
@@ -895,11 +912,12 @@ function IsIndex([object]$Elem=$null, [int16]$Index=1, [string]$Text="", [byte]$
         if ($Redux.Text.Language.SelectedIndex -ne $Lang - 1) { return $False }
     }
 
-    if ( $Elem        -eq $null)                                { return $False }
-    if (!$Elem.Active -or $Elem.Hidden)                         { return $False }
-    if ( $Elem.GetType() -ne [System.Windows.Forms.ComboBox])   { return $False }
+    if ( $Elem        -eq $null)                                                        { return $False }
+    if (!$Elem.Active -or $Elem.Hidden)                                                 { return $False }
+    if ( $Elem.GetType() -ne [System.Windows.Forms.ComboBox] -and $Elem -isnot [int])   { return $False }
 
-    if ($Index -lt 1) { $Index = 1 }
+    if ($Elem  -is [int])   { $Index = $Elem }
+    if ($Index -lt 1)       { $Index = 1     }
     if ($Text -ne "") {
         if ($Elem.Text.replace(" (default)", "") -eq $Text) { return !$Not } else { return $Not }
     }
@@ -1156,7 +1174,7 @@ function EnableGUI([boolean]$Enable) {
     $MainPanel.Enabled = $Enable
     if (IsSet $TextEditor.Dialog)    { $TextEditor.Dialog.Enabled  = $Enable }
     if (IsSet $SceneEditor.Dialog)   { $SceneEditor.Dialog.Enabled = $Enable }
-    SetModernVisualStyle ($Settings.Core.ModernStyle -ne $False)
+    SetModernVisualStyle $Settings.Core.ModernStyle
 
 }
 
@@ -1447,7 +1465,7 @@ function RefreshScripts() {
 #==================================================================================================================================================================================================================================================================
 function RefreshGameScript() {
     
-    if ($Settings.Debug.RefreshScripts -eq $True) {
+    if ($Settings.Debug.RefreshScripts) {
         if ($GamePatch.script -is [system.Array]) {
             foreach ($script in $GamePatch.script) {
                 if ($script -ne $null) {

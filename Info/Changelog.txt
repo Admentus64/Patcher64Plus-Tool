@@ -1,3 +1,35 @@
+v25.0.0
+- Added Lite Mode for hiding casual options from OoT & MM
+- Added new API functions to expose, exclude, force and default
+- Added dma_shift property to Patches.json
+- Added new "Ultimate Trial" patch option for OoT
+- Added several new options for OoT & MM
+- Added new "Fix Burn Smoke" option for SM64
+- Added new patches for ALttP
+- Added new patches for SM
+- Overhauled several parts of the codebase
+- Renamed several functions and properties
+- Renamed Redux for TMC to Reborn
+- Changed boolean and int settings to be properly parsed instead of string
+- Changed how options are hidden/generated through new properties
+- Updated Gold Quest to v2.1a
+- Updated Master of Time to v1.1
+- Updated Masked Quest to v4.4
+- Updated Widescreen patch for MK64
+- Updated tooltip and Redux descriptions for ALttP
+- Updated and added custom Link sprites for ALttP, including fixed gloves for the pink/blond hair versions
+- Updated Redux for OoT
+	- Complete D-Pad overhaul
+	- Progression Overlay
+	- Debug Menu
+	- Merged Unequip Item & Unequip Gear
+	- Fixed Zora Mask ability
+	- Fixed Mask of Truth swap
+	- Fixed several texts
+- Updated Redux for MM
+	- Progression Overlay
+	- Music Track Display
+
 v24.1.12
 - Updated "New Master Quest" for OoT with fixes
 

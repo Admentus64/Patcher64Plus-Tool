@@ -1,11 +1,36 @@
-﻿function ChildQuestClassicPatchOptions() {
+﻿function ChildQuestClassicExposeOptions() {
+    
+    # Exclude Group
+    ExcludeGroup  -Group "Unlock"       -Name "Swords & Shields"
 
-    if (IsChecked $Redux.Graphics.EnhancedChildQuestModel) {
-        ApplyPatch -Patch "Decompressed\Optional\Child Quest\child_quest_classic_enhanced_model.ppf"
-    }
-    else {
-        ApplyPatch -Patch "Decompressed\Optional\Child Quest\child_quest_classic_model.ppf"
-    }
+
+
+    # Expose Options
+    ExposeOption  -Group "Graphics"     -Option "EnhancedChildQuestModel"
+    ExposeOption  -Group "Hitbox"       -Option "MasterSword"
+    ExposeOption  -Group "Hitbox"       -Option "GiantsKnife"
+    ExposeOption  -Group "Hitbox"       -Option "BrokenGiantsKnife"
+    ExposeOption  -Group "Hitbox"       -Option "MegatonHammer"
+
+
+
+    # Exclude Options
+    ExcludeOption -Group "Misc"         -Option "SkipCutscenes"
+    ExcludeOption -Group "Gameplay"     -Option "Medallions"
+    ExcludeOption -Group "Fixes"        -Option "GerudosFortress"
+    ExcludeOption -Group "Fixes"        -Option "VisibleGerudoTent"
+    ExcludeOption -Group "Fixes"        -Option "Dungeons"
+    ExcludeOption -Group "Equipment"    -Option "FunctionalWeapons"
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function ChildQuestClassicPatchOptions() {
+
+    if (IsChecked $Redux.Graphics.EnhancedChildQuestModel)   { ApplyPatch -Patch "Decompressed\Optional\Child Quest\child_quest_classic_enhanced_model.ppf" }
+    else                                                     { ApplyPatch -Patch "Decompressed\Optional\Child Quest\child_quest_classic_model.ppf"          }
 
 }
 

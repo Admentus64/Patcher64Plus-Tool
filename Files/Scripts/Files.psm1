@@ -163,8 +163,9 @@ function SetFileParameters() {
 
 
     # Store Super Mario 64 files
-    $Files.sm64.cam                         = CheckPatchExtension ($Paths.Games + "\Super Mario 64\Compressed\cam")
-    $Files.sm64.fps                         = CheckPatchExtension ($Paths.Games + "\Super Mario 64\Compressed\fps")
+    $Files.sm64.cam                         = CheckPatchExtension ($Paths.Games + "\Super Mario 64\Compressed\Optional\cam")
+    $Files.sm64.fps                         = CheckPatchExtension ($Paths.Games + "\Super Mario 64\Compressed\Optional\fps")
+    $Files.sm64.fix_burn_smoke              = CheckPatchExtension ($Paths.Games + "\Super Mario 64\Compressed\Optional\fix_burn_smoke")
 
 
 

@@ -2,6 +2,7 @@
 	
 	"title"			: "Additional Options & Redux",
 	"redux" : {
+		"tooltip"	: "Quality of Life changes included with Redux:{0}{0}- New inventory screen{0}- Dash turning{0}- New retranslation and dialogue changes for consistency{0}- Max 60 bombs and 99 arrows{0}- Ice Palace matches GBA layout{0}- Permanent Shovel{0}- A map shortcut between Kakariko Village and Hyrule Castle{0}- Skip Title Screen sequence by pressing Start{0}- Restore censored and unused content{0}- Graphical changes to match original artwork",
 		"version"	: "10.2.3"
 	},
 	"script"		: "A Link to the Past",

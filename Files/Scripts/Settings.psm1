@@ -1,4 +1,4 @@
-function Get-IniContent ([string]$FilePath) {
+function GetIniContent ([string]$FilePath) {
     
     $ini = @{}
 
@@ -17,11 +17,21 @@ function Get-IniContent ([string]$FilePath) {
                 $value = $Matches[1]
                 $CommentCount = $CommentCount + 1
                 $name = "Comment" + $CommentCount
+
+                if     ($value -eq "False")                       { $value = $False -as [boolean] }
+                elseif ($value -eq "True")                        { $value = $True  -as [boolean] }
+                elseif ([double]::TryParse($value, [ref]$null))   { $value = $value -as [int]     }
+
                 $ini[$section][$name] = $value
             }
 
             "(.+?)\s*=(.*)" { # Key
                 $name,$value = $Matches[1..2]
+
+                if     ($value -eq "False")                       { $value = $False -as [boolean] }
+                elseif ($value -eq "True")                        { $value = $True  -as [boolean] }
+                elseif ([double]::TryParse($value, [ref]$null))   { $value = $value -as [int]     }
+
                 $ini[$section][$name] = $value
             }
 
@@ -36,7 +46,7 @@ function Get-IniContent ([string]$FilePath) {
 
 
 #==============================================================================================================================================================================================
-function Out-IniFile([hashtable]$InputObject, [string]$FilePath) {
+function OutIniFile([hashtable]$InputObject, [string]$FilePath) {
     
     if (!(TestFile -Path ($Paths.Settings) -Container)) { New-Item -Path $Paths.Master -Name "Settings" -ItemType Directory }
   # RemoveFile $FilePath
@@ -62,7 +72,7 @@ function Out-IniFile([hashtable]$InputObject, [string]$FilePath) {
 #==============================================================================================================================================================================================
 function GetSettings([string]$File) {
     
-    if (TestFile $File)   { return Get-IniContent $File }
+    if (TestFile $File)   { return GetIniContent $File }
     else                  { return @{}                  }
 
 }
@@ -109,8 +119,8 @@ function GetGameSettingsFile() { return $Paths.Settings + "\" + (GetGameTypePres
 
 #==============================================================================================================================================================================================
 
-Export-ModuleMember -Function Get-IniContent
-Export-ModuleMember -Function Out-IniFile
+Export-ModuleMember -Function GetIniContent
+Export-ModuleMember -Function OutIniFile
 Export-ModuleMember -Function GetSettings
 Export-ModuleMember -Function GetGameTypePreset
 Export-ModuleMember -Function CreateGameTypePreset

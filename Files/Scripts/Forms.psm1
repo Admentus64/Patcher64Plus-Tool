@@ -176,8 +176,8 @@ function CreateCheckBox([uint16]$X=0, [uint16]$Y=0, [byte]$SaveAs=$Last.SaveAs, 
                 $checkBox.Add_CheckedChanged({ $GameSettings[$this.Section][$this.SaveTo] = $this.SaveAs })
             }
             else {
-                if (IsSet $GameSettings[$checkBox.Section][$CheckBox.Name])                             { $checkBox.Checked = $GameSettings[$checkBox.Section][$checkBox.Name] -eq "True"  }
-                else                                                                                    { $checkBox.Checked = $GameSettings[$checkBox.Section][$checkBox.Name] = $Checked  }
+                if ($GameSettings[$checkBox.Section][$CheckBox.Name] -is [boolean])                     { $checkBox.Checked = $GameSettings[$checkBox.Section][$checkBox.Name]            }
+                else                                                                                    { $checkBox.Checked = $GameSettings[$checkBox.Section][$checkBox.Name] = $Checked }
                 $checkBox.Add_CheckStateChanged({ $GameSettings[$this.Section][$this.Name] = $this.Checked })
             }
         }
@@ -189,7 +189,7 @@ function CreateCheckBox([uint16]$X=0, [uint16]$Y=0, [byte]$SaveAs=$Last.SaveAs, 
                 $checkBox.Add_CheckedChanged({ $Settings[$this.Section][$this.SaveTo] = $this.SaveAs })
             }
             else {
-                if (IsSet $Settings[$checkBox.Section][$checkBox.Name])                                 { $checkBox.Checked = $Settings[$checkBox.Section][$checkBox.Name] -eq "True" }
+                if ($Settings[$checkBox.Section][$checkBox.Name] -is [boolean])                         { $checkBox.Checked = $Settings[$checkBox.Section][$checkBox.Name]            }
                 else                                                                                    { $checkBox.Checked = $Settings[$checkBox.Section][$checkBox.Name] = $Checked }
                 $checkBox.Add_CheckStateChanged({ $Settings[$this.Section][$this.Name] = $this.Checked })
             }
@@ -310,7 +310,7 @@ function CreateListBox([uint16]$X=0, [uint16]$Y=0, [uint16]$Width=0, [uint16]$He
             
             $listBox.Add_SelectedIndexChanged({
                 $save = ""
-                foreach ($i in 0..($this.items.count-1)) { if ($this.getSelected($i) -eq $True) { $save += "1" } else { $save += "0" } }
+                foreach ($i in 0..($this.items.count-1)) { if ($this.getSelected($i)) { $save += "1" } else { $save += "0" } }
                 $GameSettings[$this.Section][$this.Name] = $save
             })
         }
@@ -353,7 +353,9 @@ function CreateButton([uint16]$X=0, [uint16]$Y=0, [uint16]$Width=(DPISize 100), 
 
 
 #==============================================================================================================================================================================================
-function CreatePreviewGroup([single]$Height=0, [string]$Text="") {
+function CreatePreviewGroup([single]$Height=0, [string]$Text="", [switch]$Safe, [switch]$Lite) {
+    
+    if ( ($Safe -and $Settings.Core.Safe) -or ($Lite -and $Settings.Core.Lite) ) { return $null }
 
     $Last.Column = $Last.Row = 1
 
@@ -376,10 +378,34 @@ function CreatePreviewGroup([single]$Height=0, [string]$Text="") {
 
 
 #==============================================================================================================================================================================================
-function CreateReduxGroup([single]$X=(DPISize 10), [single]$Y=0, [single]$Height=0, [string]$Name=$Last.TabName, [string]$Tag="", [boolean]$IsGame=$True, [string]$Text="", [single]$Columns=0, [object]$AddTo=$Last.Panel, [Object]$Expose, [Object]$Exclude, [byte]$Base, [switch]$Child, [switch]$Adult, [switch]$Safe) {
+function CreateReduxGroup([single]$X=(DPISize 10), [single]$Y=0, [single]$Height=0, [string]$Name=$Last.TabName, [string]$Tag="", [boolean]$IsGame=$True, [string]$Text="", [single]$Columns=0, [object]$AddTo=$Last.Panel, [Object]$Expose, [Object]$Exclude, [byte]$Base, [switch]$Child, [switch]$Adult, [switch]$Safe, [switch]$Lite, [switch]$Scene) {
     
-    if  ($Safe -and $Settings.Core.SafeOptions -eq $True) { return $null }
-    if (!(CheckReduxOption -Expose $Expose -Exclude $Exclude -Base $Base -Child $Child -Adult $Adult) ) { return $null }
+    if (!(OptionIsAvailable -Safe $Safe -Lite $Lite -Scene $Scene)) { $Last.Hide = $True; return $null }
+
+    $exposeCheck = $False
+    if ($GamePatch.ExposeGroups.Count -gt 0) {
+        foreach ($group in $GamePatch.ExposeGroups) {
+            if ($Tag -eq $group.Tag -and $Text -eq $group.Name) {
+                $exposeCheck = $True
+                $GamePatch.ExposeGroups.Remove($group)
+                break
+            }
+        }
+    }
+
+    if (!$exposeCheck) {
+        if (!(CheckReduxOption -Expose $Expose -Exclude $Exclude -Base $Base -Child $Child -Adult $Adult) ) { $Last.Hide = $True; return $null }
+        if ($GamePatch.ExcludeGroups.Count -gt 0) {
+            foreach ($group in $GamePatch.ExcludeGroups) {
+                if ($Tag -eq $group.Tag -and $Text -eq $group.Name) {
+                    $Last.Hide = $True
+                    $GamePatch.ExcludeGroups.Remove($group)
+                    return $null
+                }
+            }
+        }
+    }
+
     $Width = ($AddTo.Width - (DPISize 30))
     $Last.Column = $Last.Row = 1
 
@@ -426,10 +452,9 @@ function CreateReduxGroup([single]$X=(DPISize 10), [single]$Y=0, [single]$Height
 
 
 #==============================================================================================================================================================================================
-function CreateReduxButton([single]$Column=$Last.Column, [single]$Row=$Last.Row, [int16]$Width=100, [int16]$Height=20, [string]$Name="", [string]$Tag="", [string]$Text="", [string]$Info="", [string]$Credits="", [object]$AddTo=$Last.Group, [switch]$Native, [Object]$Expose, [Object]$Exclude, [byte]$Base, [switch]$Child, [switch]$Adult, [switch]$Safe) {
+function CreateReduxButton([single]$Column=$Last.Column, [single]$Row=$Last.Row, [int16]$Width=100, [int16]$Height=20, [string]$Name="", [string]$Tag="", [string]$Text="", [string]$Info="", [string]$Credits="", [object]$AddTo=$Last.Group, [switch]$Native, [Object]$Expose, [Object]$Exclude, [byte]$Base, [switch]$Child, [switch]$Adult, [switch]$Safe, [switch]$Lite, [switch]$Scene) {
     
-    if  ($Safe -and $Settings.Core.SafeOptions -eq $True) { return $null }
-    if (!(CheckReduxOption -Name $Name -Expose $Expose -Exclude $Exclude -Base $Base -Child $Child -Adult $Adult) -or $Last.Hide -or $Last.Group -eq $null) { return $null }
+    if (!(OptionIsAvailable -Safe $Safe -Lite $Lite -Scene $Scene) -or (!(CheckReduxOption -Name $Name -Expose $Expose -Exclude $Exclude -Base $Base -Child $Child -Adult $Adult)) -or $Last.Hide -or $Last.Group -eq $null) { return $null }
 
     if ($Info -ne "" -and $Credits -ne "") { $Info += ("`n`n- Credits: " + $Credits) }
     $button      = CreateButton -X (($Column-1) * $FormDistance + (DPISize 15)) -Y ($Row * (DPISize 30) - (DPISize 13)) -Width (DPISize $Width) -Height (DPISize $Height) -Name $Name -Tag $Tag -Text $Text -Info $Info -AddTo $AddTo
@@ -449,11 +474,19 @@ function CreateReduxButton([single]$Column=$Last.Column, [single]$Row=$Last.Row,
 
 
 #==============================================================================================================================================================================================
-function CreateReduxTextBox([single]$Column=$Last.Column, [single]$Row=$Last.Row, [byte]$Length=2, [int16]$Width=35, [int16]$Shift=0,[sbyte]$BoxHeight=-1, [string]$Value=0, [switch]$ASCII, [int]$Min, [int]$Max, [string]$Text="", [string]$Info="", [string]$Warning="", [string]$Credits="", [string]$Name="", [string]$Tag="", [object]$AddTo=$Last.Group, [switch]$Native, [Object]$Expose, [Object]$Exclude, [Object]$Force, [int16]$ForcedValue=0, [byte]$Base, [switch]$Child, [switch]$Adult, [switch]$Safe) {
+function CreateReduxTextBox([single]$Column=$Last.Column, [single]$Row=$Last.Row, [byte]$Length=2, [int16]$Width=35, [int16]$Shift=0,[sbyte]$BoxHeight=-1, [string]$Value=0, [switch]$ASCII, [int]$Min, [int]$Max, [string]$Text="", [string]$Info="", [string]$Warning="", [string]$Credits="", [string]$Name="", [string]$Tag="", [object]$AddTo=$Last.Group, [switch]$Native, [Object]$Expose, [Object]$Exclude, [Object]$Force, [int16]$ForcedValue=0, [byte]$Base, [switch]$Child, [switch]$Adult, [switch]$Safe, [switch]$Lite, [switch]$Scene) {
     
-    if  ($Safe -and $Settings.Core.SafeOptions -eq $True)                   { return $null }
-    if   (ForceReduxOption -Name $Name -Force $Force -Value $ForcedValue)   { return $null }
-    if (!(CheckReduxOption -Name $Name -Expose $Expose -Exclude $Exclude -Base $Base -Child $Child -Adult $Adult) -or $Last.Hide -or $Last.Group -eq $null) { return $null }
+    if (!(OptionIsAvailable -Safe $Safe -Lite $Lite -Scene $Scene) -or (ForceReduxOption -Name $Name -Force $Force -Value $ForcedValue) -or (!(CheckReduxOption -Name $Name -Expose $Expose -Exclude $Exclude -Base $Base -Child $Child -Adult $Adult)) -or $Last.Hide -or $Last.Group -eq $null) { return $null }
+
+    if ($GamePatch.DefaultOptionValues.Count -gt 0 -and $Last.group -ne $null) {
+        foreach ($option in $GamePatch.DefaultOptionValues) {
+            if ($Name -eq $option.Name -and $Last.group.Tag -eq $option.Group) {
+                $GamePatch.DefaultOptionValues.Remove($option)
+                $Value = $option.Value
+                break
+            }
+        }
+    }
 
     if ($Info -ne "") {
         $Info += "`nDefault value: " + $Value
@@ -502,11 +535,19 @@ function CreateReduxTextBox([single]$Column=$Last.Column, [single]$Row=$Last.Row
 
 
 #==============================================================================================================================================================================================
-function CreateReduxRadioButton([single]$Column=$Last.Column, [single]$Row=$Last.Row, [switch]$Checked, [switch]$Disable, [string]$Text="", [string]$Info="", [string]$Warning="", [string]$Credits="", [string]$Name="", [object]$Link=$null, [string]$SaveTo="", [byte]$Max, [string]$Tag, [object]$AddTo=$Last.Group, [switch]$Native, [Object]$Expose, [Object]$Exclude, [Object]$Force, [byte]$Base, [switch]$Child, [switch]$Adult, [switch]$Safe) {
+function CreateReduxRadioButton([single]$Column=$Last.Column, [single]$Row=$Last.Row, [switch]$Checked, [switch]$Disable, [string]$Text="", [string]$Info="", [string]$Warning="", [string]$Credits="", [string]$Name="", [object]$Link=$null, [string]$SaveTo="", [byte]$Max, [string]$Tag, [object]$AddTo=$Last.Group, [switch]$Native, [Object]$Expose, [Object]$Exclude, [Object]$Force, [byte]$Base, [switch]$Child, [switch]$Adult, [switch]$Safe, [switch]$Lite, [switch]$Scene) {
     
-    if  ($Safe -and $Settings.Core.SafeOptions -eq $True)   { return $null }
-    if   (ForceReduxOption -Name $Name -Force $Force)       { return $null }
-    if (!(CheckReduxOption -Name $Name -Expose $Expose -Exclude $Exclude -Base $Base -Child $Child -Adult $Adult) -or $Last.Hide -or $Last.Group -eq $null) { return $null }
+    if (!(OptionIsAvailable -Safe $Safe -Lite $Lite -Scene $Scene) -or (ForceReduxOption -Name $Name -Force $Force -Value 1) -or (!(CheckReduxOption -Name $Name -Expose $Expose -Exclude $Exclude -Base $Base -Child $Child -Adult $Adult)) -or $Last.Hide -or $Last.Group -eq $null) { return $null }
+
+    if ($GamePatch.DefaultOptionValues.Count -gt 0 -and $Last.group -ne $null) {
+        foreach ($option in $GamePatch.DefaultOptionValues) {
+            if ($Name -eq $option.Name -and $Last.group.Tag -eq $option.Group) {
+                $GamePatch.DefaultOptionValues.Remove($option)
+                $Checked = $option.Value
+                break
+            }
+        }
+    }
 
     if ($Info -ne "") {
         if ($Text -Like "*FPS*" -or $Text -Like "*Widescreen*" -or $Text -Like "*Extended Draw Distance*")   { $Info += ("`n[!] "          + "Should not be used on console") }
@@ -541,11 +582,19 @@ function CreateReduxRadioButton([single]$Column=$Last.Column, [single]$Row=$Last
 
 
 #==============================================================================================================================================================================================
-function CreateReduxCheckBox([single]$Column=$Last.Column, [single]$Row=$Last.Row, [switch]$Checked, [switch]$Disable, [string]$Text="", [string]$Info="", [string]$Warning="", [string]$Credits="", [string]$Name="", [string]$Tag="", [object]$Link=$null, [object]$AddTo=$Last.Group, [switch]$Native, [Object]$Expose, [Object]$Exclude, [Object]$Force, [byte]$Base, [switch]$Child, [switch]$Adult, [switch]$Safe) {
-    
-    if  ($Safe -and $Settings.Core.SafeOptions -eq $True)  { return $null }
-    if   (ForceReduxOption -Name $Name -Force $Force)      { return $null }
-    if (!(CheckReduxOption -Name $Name -Expose $Expose -Exclude $Exclude -Base $Base -Child $Child -Adult $Adult) -or $Last.Hide -or $Last.Group -eq $null) { return $null }
+function CreateReduxCheckBox([single]$Column=$Last.Column, [single]$Row=$Last.Row, [switch]$Checked, [switch]$Disable, [string]$Text="", [string]$Info="", [string]$Warning="", [string]$Credits="", [string]$Name="", [string]$Tag="", [object]$Link=$null, [object]$AddTo=$Last.Group, [switch]$Native, [Object]$Expose, [Object]$Exclude, [Object]$Force, [byte]$Base, [switch]$Child, [switch]$Adult, [switch]$Safe, [switch]$Lite, [switch]$Scene) {
+
+    if (!(OptionIsAvailable -Safe $Safe -Lite $Lite -Scene $Scene) -or (ForceReduxOption -Name $Name -Force $Force -Value 1) -or (!(CheckReduxOption -Name $Name -Expose $Expose -Exclude $Exclude -Base $Base -Child $Child -Adult $Adult)) -or $Last.Hide -or $Last.Group -eq $null) { return $null }
+
+    if ($GamePatch.DefaultOptionValues.Count -gt 0 -and $Last.group -ne $null) {
+        foreach ($option in $GamePatch.DefaultOptionValues) {
+            if ($Name -eq $option.Name -and $Last.group.Tag -eq $option.Group) {
+                $GamePatch.DefaultOptionValues.Remove($option)
+                $Checked = $option.Value
+                break
+            }
+        }
+    }
 
     if ($Info -ne "") {
         if ($Text -Like "*FPS*" -or $Text -Like "*Widescreen*" -or $Text -Like "*Extended Draw Distance*")   { $Info += ("`n[!] "          + "Should not be used on console") }
@@ -580,13 +629,21 @@ function CreateReduxCheckBox([single]$Column=$Last.Column, [single]$Row=$Last.Ro
 
 
 #==============================================================================================================================================================================================
-function CreateReduxComboBox([single]$Column=$Last.Column, [single]$Row=$Last.Row, [int16]$Length=170, [sbyte]$Shift=0, [string[]]$Items=$null, [string[]]$Values=@(), [string[]]$PostItems=$null, [string]$FilePath="", $Ext="bin", $Default=1, $TrueDefault=0, [switch]$NoDefault, [string]$Text="", [string]$Info="", [string]$Warning="", [string]$Credits="", [string]$Name="", [string]$Tag="", [object]$AddTo=$Last.Group, [switch]$Native, [Object]$Expose, [Object]$Exclude, [Object]$Force, [byte]$ForcedValue=0, [byte]$Base, [switch]$Child, [switch]$Adult, [switch]$Safe) {
+function CreateReduxComboBox([single]$Column=$Last.Column, [single]$Row=$Last.Row, [int16]$Length=170, [sbyte]$Shift=0, [string[]]$Items=$null, [string[]]$Values=@(), [string[]]$PostItems=$null, [string]$FilePath="", $Ext="bin", $Default=1, $TrueDefault=0, [switch]$NoDefault, [string]$Text="", [string]$Info="", [string]$Warning="", [string]$Credits="", [string]$Name="", [string]$Tag="", [object]$AddTo=$Last.Group, [switch]$Native, [Object]$Expose, [Object]$Exclude, [Object]$Force, [byte]$ForcedValue=0, [byte]$Base, [switch]$Child, [switch]$Adult, [switch]$Safe, [switch]$Lite, [switch]$Scene) {
     
-    if  ($Safe -and $Settings.Core.SafeOptions -eq $True)                   { return $null }
-    if   (ForceReduxOption -Name $Name -Force $Force -Value $ForcedValue)   { return $null }
-    if (!(CheckReduxOption -Name $Name -Expose $Expose -Exclude $Exclude -Base $Base -Child $Child -Adult $Adult) -or $Last.Hide -or $Last.Group -eq $null) { return $null }
+    if (!(OptionIsAvailable -Safe $Safe -Lite $Lite -Scene $Scene) -or (ForceReduxOption -Name $Name -Force $Force -Value $ForcedValue -Items $Items) -or (!(CheckReduxOption -Name $Name -Expose $Expose -Exclude $Exclude -Base $Base -Child $Child -Adult $Adult)) -or $Last.Hide -or $Last.Group -eq $null) { return $null }
 
     if ($Column -eq $Last.Width -and $Column -eq $Last.Column -and $Row -eq $Last.Row) { $Column = 1; $Row++ }
+
+    if ($GamePatch.DefaultOptionValues.Count -gt 0 -and $Last.group -ne $null) {
+        foreach ($option in $GamePatch.DefaultOptionValues) {
+            if ($Name -eq $option.Name -and $Last.group.Tag -eq $option.Group) {
+                $GamePatch.DefaultOptionValues.Remove($option)
+                $Default = $option.Value
+                break
+            }
+        }
+    }
 
     if ($Info -ne "") {
         if ($Text -Like "*FPS*" -or $Text -Like "*Widescreen*" -or $Text -Like "*Extended Draw Distance*")   { $Info += ("`n[!] "          + "Should not be used on console") }
@@ -655,11 +712,19 @@ function CreateReduxComboBox([single]$Column=$Last.Column, [single]$Row=$Last.Ro
 
 
 #==============================================================================================================================================================================================
-function CreateReduxSlider([single]$Column=$Last.Column, [single]$Row=$Last.Row, $Default, $Min, $Max, $Freq, $Small, $Large, [string]$Text, [string]$Info="", [string]$Warning="", [string]$Credits="", [string]$Name="", [string]$Tag="", [object]$AddTo=$Last.Group, [switch]$Native, [Object]$Expose, [Object]$Exclude, [Object]$Force, [byte]$ForcedValue=0, [byte]$Base, [switch]$Child, [switch]$Adult, [switch]$Safe) {
+function CreateReduxSlider([single]$Column=$Last.Column, [single]$Row=$Last.Row, $Default, $Min, $Max, $Freq, $Small, $Large, [string]$Text, [string]$Info="", [string]$Warning="", [string]$Credits="", [string]$Name="", [string]$Tag="", [object]$AddTo=$Last.Group, [switch]$Native, [Object]$Expose, [Object]$Exclude, [Object]$Force, [byte]$ForcedValue=0, [byte]$Base, [switch]$Child, [switch]$Adult, [switch]$Safe, [switch]$Lite, [switch]$Scene) {
     
-    if  ($Safe -and $Settings.Core.SafeOptions -eq $True)                   { return $null }
-    if   (ForceReduxOption -Name $Name -Force $Force -Value $ForcedValue)   { return $null }
-    if (!(CheckReduxOption -Name $Name -Expose $Expose -Exclude $Exclude -Base $Base -Child $Child -Adult $Adult) -or $Last.Hide -or $Last.Group -eq $null) { return $null }
+    if (!(OptionIsAvailable -Safe $Safe -Lite $Lite -Scene $Scene) -or (ForceReduxOption -Name $Name -Force $Force -Value $ForcedValue) -or (!(CheckReduxOption -Name $Name -Expose $Expose -Exclude $Exclude -Base $Base -Child $Child -Adult $Adult)) -or $Last.Hide -or $Last.Group -eq $null) { return $null }
+
+    if ($GamePatch.DefaultOptionValues.Count -gt 0 -and $Last.group -ne $null) {
+        foreach ($option in $GamePatch.DefaultOptionValues) {
+            if ($Name -eq $option.Name -and $Last.group.Tag -eq $option.Group) {
+                $GamePatch.DefaultOptionValues.Remove($option)
+                $Default = $option.Value
+                break
+            }
+        }
+    }
 
     if ($Default.GetType().Name -eq "String")   { $Default = GetDecimal $Default }
     if ($Min.GetType().Name     -eq "String")   { $Min     = GetDecimal $Min }
@@ -697,10 +762,9 @@ function CreateReduxSlider([single]$Column=$Last.Column, [single]$Row=$Last.Row,
 
 
 #==============================================================================================================================================================================================
-function CreateReduxListBox([single]$Column=$Last.Column, [single]$Row=$Last.Row, [single]$Columns=1, [single]$Rows=1, [string[]]$Items, $Default=$null, [int]$ItemWidth=100, [switch]$MultiColumn, [switch]$MultiSelect, [string]$Text="", [string]$Info="", [string]$Warning="", [string]$Credits="", [string]$Name="", [string]$Tag="", [object]$AddTo=$Last.Group, [switch]$Native, [Object]$Expose, [Object]$Exclude, [byte]$Base, [switch]$Child, [switch]$Adult, [switch]$Safe) {
+function CreateReduxListBox([single]$Column=$Last.Column, [single]$Row=$Last.Row, [single]$Columns=1, [single]$Rows=1, [string[]]$Items, $Default=$null, [int]$ItemWidth=100, [switch]$MultiColumn, [switch]$MultiSelect, [string]$Text="", [string]$Info="", [string]$Warning="", [string]$Credits="", [string]$Name="", [string]$Tag="", [object]$AddTo=$Last.Group, [switch]$Native, [Object]$Expose, [Object]$Exclude, [byte]$Base, [switch]$Child, [switch]$Adult, [switch]$Safe, [switch]$Lite, [switch]$Scene) {
     
-    if  ($Safe -and $Settings.Core.SafeOptions -eq $True) { return $null }
-    if (!(CheckReduxOption -Name $Name -Expose $Expose -Exclude $Exclude -Base $Base -Child $Child -Adult $Adult) -or $Last.Hide -or $Last.Group -eq $null) { return $null }
+    if (!(OptionIsAvailable -Safe $Safe -Lite $Lite -Scene $Scene) -or (!(CheckReduxOption -Name $Name -Expose $Expose -Exclude $Exclude -Base $Base -Child $Child -Adult $Adult)) -or $Last.Hide -or $Last.Group -eq $null) { return $null }
 
     $listBox      = CreateListBox -X (($Column-1) * $FormDistance + (DPISize 15)) -Y ($Row * (DPISize 45) - (DPISize 25)) -Width ($Columns * (DPISize 180)) -Height ($Rows * (DPISize 35)) -Items $Items -Default $Default -ItemWidth $ItemWidth -MultiColumn $MultiColumn -MultiSelect $MultiSelect -Info $Info -IsGame $True -Name $Name -Tag $Tag -AddTo $AddTo
     $Last.Column += [Math]::floor($Columns)
@@ -720,10 +784,9 @@ function CreateReduxListBox([single]$Column=$Last.Column, [single]$Row=$Last.Row
 
 
 #==============================================================================================================================================================================================
-function CreateReduxColoredLabel([System.Windows.Forms.Button]$Link=$null, [System.Drawing.Color]$Color=$null, [string]$Name="", [string]$Tag="", [object]$AddTo=$Last.Group, [switch]$Native, [Object]$Expose, [Object]$Exclude, [byte]$Base, [switch]$Child, [switch]$Adult, [switch]$Safe) {
+function CreateReduxColoredLabel([System.Windows.Forms.Button]$Link=$null, [System.Drawing.Color]$Color=$null, [string]$Name="", [string]$Tag="", [object]$AddTo=$Last.Group, [switch]$Native, [Object]$Expose, [Object]$Exclude, [byte]$Base, [switch]$Child, [switch]$Adult, [switch]$Safe, [switch]$Lite, [switch]$Scene) {
     
-    if  ($Safe -and $Settings.Core.SafeOptions -eq $True) { return $null }
-    if (!(CheckReduxOption -Name $Name -Expose $Expose -Exclude $Exclude -Base $Base -Child $Child -Adult $Adult) -or $Last.Hide -or $Last.Group -eq $null) { return $null }
+    if (!(OptionIsAvailable -Safe $Safe -Lite $Lite -Scene $Scene) -or (!(CheckReduxOption -Name $Name -Expose $Expose -Exclude $Exclude -Base $Base -Child $Child -Adult $Adult)) -or $Last.Hide -or $Last.Group -eq $null) { return $null }
 
     $label = CreateLabel -X ($Link.Right + (DPISize 15)) -Y $Link.Top -Width (DPISize 40) -Height $Link.Height -Name $Name -Tag $Tag -AddTo $AddTo
     if ($Color -ne $null) { $label.BackColor = $Color }
@@ -736,10 +799,9 @@ function CreateReduxColoredLabel([System.Windows.Forms.Button]$Link=$null, [Syst
 
 
 #==============================================================================================================================================================================================
-function CreateImageBox([int]$X=0, [int]$Y=0, [int]$W=0, [int]$H=0, [boolean]$IsGame=$True, [string]$Name="", [string]$Tag="", [object]$AddTo=$Last.Group, [switch]$Native, [Object]$Expose, [Object]$Exclude, [byte]$Base, [switch]$Child, [switch]$Adult, [switch]$Safe) {
+function CreateImageBox([int]$X=0, [int]$Y=0, [int]$W=0, [int]$H=0, [boolean]$IsGame=$True, [string]$Name="", [string]$Tag="", [object]$AddTo=$Last.Group, [switch]$Native, [Object]$Expose, [Object]$Exclude, [byte]$Base, [switch]$Child, [switch]$Adult, [switch]$Safe, [switch]$Lite, [switch]$Scene) {
     
-    if  ($Safe -and $Settings.Core.SafeOptions -eq $True) { return $null }
-    if (!(CheckReduxOption -Name $Name -Expose $Expose -Exclude $Exclude -Base $Base -Child $Child -Adult $Adult) -or $Last.Hide) { return $null }
+    if (!(OptionIsAvailable -Safe $Safe -Lite $Lite -Scene $Scene) -or (!(CheckReduxOption -Name $Name -Expose $Expose -Exclude $Exclude -Base $Base -Child $Child -Adult $Adult)) -or $Last.Hide -or $Last.Group -eq $null) { return $null } 
 
     $image          = CreateForm -X $X -Y $Y -Width $Width -Height $Height -IsGame $IsGame -Name $Name -Tag $Tag -Form (New-Object Windows.Forms.PictureBox) -AddTo $AddTo 
     $image.Location = DPISize (New-object System.Drawing.Size($X, $Y))
@@ -753,11 +815,39 @@ function CreateImageBox([int]$X=0, [int]$Y=0, [int]$W=0, [int]$H=0, [boolean]$Is
 
 
 #==============================================================================================================================================================================================
+function OptionIsAvailable([boolean]$Safe, [boolean]$Lite, [boolean]$Scene) {
+    
+    if ( ($Safe -and $Settings.Core.Safe) -or ($Lite -and $Settings.Core.Lite) -or ($Scene -and $GamePatch.custom_maps -eq 1) -or ($Scene -and $Settings.Core.Safe) ) { return $False }
+    return $True
+
+}
+
+
+
+#==============================================================================================================================================================================================
 function CheckReduxOption([string]$Name, [Object]$Expose, [Object]$Exclude, [byte]$Base=0, [boolean]$Child=$False, [boolean]$Adult=$False) {
     
     if ( (IsSet $Last.Extend) -and $Name -ne $null) {
         $section = $Last.Extend
         if (IsSet $Redux.$section.$Name) { return $False }
+    }
+
+    if ($GamePatch.ExposeOptions.Count -gt 0 -and $Last.group -ne $null) {
+        foreach ($option in $GamePatch.ExposeOptions) {
+            if ($Name -eq $option.Name -and $Last.group.Tag -eq $option.Group) {
+                $GamePatch.ExposeOptions.Remove($option)
+                return $True
+            }
+        }
+    }
+
+    if ($GamePatch.ExcludeOptions.Count -gt 0 -and $Last.group -ne $null) {
+        foreach ($option in $GamePatch.ExcludeOptions) {
+            if ($Name -eq $option.Name -and $Last.group.Tag -eq $option.Group) {
+                $GamePatch.ExcludeOptions.Remove($option)
+                return $False
+            }
+        }
     }
 
     if ($Expose -is [Array]) {
@@ -795,8 +885,23 @@ function CheckReduxOption([string]$Name, [Object]$Expose, [Object]$Exclude, [byt
 }
 
 #==============================================================================================================================================================================================
-function ForceReduxOption([object]$Force, [int]$Value=0) {
+function ForceReduxOption([string]$Name, [object]$Force, [object]$Value=0, [string[]]$Items=$null) {
     
+    if ($GamePatch.ForceOptions.Count -gt 0 -and $Last.group -ne $null) {
+        foreach ($option in $GamePatch.ForceOptions) {
+            if ($Name -eq $option.Name -and $Last.group.Tag -eq $option.Group) {
+                $Force = $GamePatch.title
+                $Value = $option.Value
+                break
+            }
+        }
+    }
+
+    if ($Items.Count -gt 0) {
+        $Items = $Items | Select-Object -Unique
+        if ($Value.GetType().Name -eq "String") { $Value = [array]::indexof($Items, $Value) + 1 }
+    }
+
     if ($Force -is [Array]) {
         if ($Force.count -gt 0) {
             foreach ($e in $Force) {
@@ -817,6 +922,16 @@ function ForceReduxOption([object]$Force, [int]$Value=0) {
     return $False
 
 }
+
+
+
+#==============================================================================================================================================================================================
+function ExposeGroup($Group, $Name)                    { $GamePatch.ExposeGroup.Add(        @{ Tag   = $Group; Name = $Name                   }) }
+function ExcludeGroup($Group, $Name)                   { $GamePatch.ExcludeGroups.Add(      @{ Tag   = $Group; Name = $Name                   }) }
+function ExposeOption($Group, $Option)                 { $GamePatch.ExposeOptions.Add(      @{ Group = $Group; Name = $Option                 }) }
+function ExcludeOption($Group, $Option)                { $GamePatch.ExcludeOptions.Add(     @{ Group = $Group; Name = $Option                 }) }
+function ForceOption($Group, $Option, $Value=1)        { $GamePatch.ForceOptions.Add(       @{ Group = $Group; Name = $Option; Value = $Value }) }
+function DefaultOptionValue($Group, $Option, $Value)   { $GamePatch.DefaultOptionValues.Add(@{ Group = $Group; Name = $Option; Value = $Value }) }
 
 
 

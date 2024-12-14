@@ -484,7 +484,7 @@
 		"name"		: "Grottos",
 		"dma"		: "BE40",
 		"length"	: 14,
-		"maps"		: [ "Generic", "Salescrub - Heart Piece", "Two Redeads", "Cow", "Webbed", "Octorok", "Two Salescrubs - Deku Nut Upgrade", "Two Wolfos", "Bombable Wall", "Two Salescrubs - Potions", "Tektite", "Forest Stage", "Three Deku Salescrubs", "Big Skulltula" ]
+		"maps"		: [ "Generic", "Salescrub: Heart Piece", "Two Redeads", "Cow", "Webbed", "Octorok", "Two Salescrubs: Deku Nut Upgrade", "Two Wolfos", "Bombable Wall", "Two Salescrubs: Potions", "Tektite", "Forest Stage", "Three Deku Salescrubs", "Big Skulltula" ]
 	}, {
 		"id"		: "0047",
 		"name"		: "Cutscene Map",
@@ -497,21 +497,21 @@
 		"dma"		: "BB40",
 		"length"	: 12,
 		"dungeon"	: 1,
-		"maps"		: [ "Entrance", "Path to Slingshot", "Slingshot Room", "Basement", "Room to Water Challenge", "Path Across Water", "Room after Water Challenge", "Three-Way Room", "Gold Skulltula Room", "Boss Door Room", "Three Rising Pillars", "Boss Lair" ]
+		"maps"		: [ "Entrance", "Path to Slingshot", "Slingshot Room", "Basement", "Room to Water Challenge", "Path Across Water", "Room After Water Challenge", "Three-Way Room", "Gold Skulltula Room", "Boss Door Room", "Three Rising Pillars", "Boss Lair" ]
 	}, {
 		"id"		: "0001",
 		"name"		: "Dodongo's Cavern",
 		"dma"		: "B320",
 		"length"	: 17,
 		"dungeon"	: 1,
-		"maps"		: [ "Main Hall", "Baby Dodongo Hallway", "Rising Staircase Hall", "Lizalfos Mini-Boss", "Green Cave", "Armos Pushing Challenge", "Small Room - Large Pillars Hall", "Boss Door Room", "Labyrinth", "Large Pillars Hall", "Jump Across One Pillar", "Small Room - Baby Dodongo Hall", "Jump Across Two Pillars", "Small Room - Green Cave", "Small Room - Labyrinth", "Small Room - Rising Staircase Hall", "Boss Lair" ] 
+		"maps"		: [ "Main Hall", "Baby Dodongo Hallway", "Rising Staircase", "Lizalfos Mini-Boss", "Green Cave", "Armos Pushing Challenge", "Large Pillars Hall: Subroom", "Boss Door Room", "Labyrinth", "Large Pillars Hall", "Jump Across One Pillar", "Baby Dodongo Hallway: Subroom", "Jump Across Two Pillars", "Green Cave: Subroom", "Labyrinth: Subroom", "Rising Staircase: Subroom", "Boss Lair" ] 
 	}, {
 		"id"		: "0002",
 		"name"		: "Inside Jabu-Jabu's Belly",
 		"dma"		: "BF50",
 		"length"	: 16,
 		"dungeon"	: 1,
-		"maps"		: [ "Entrance", "Main Hall", "Ruto Meeting Room", "Ruto Fallen Down Basement", "Room to Upper Main Hall", "Boss Door Room", "Giant Octo Mini-Boss", "Three-Way Fork", "Middle Fork Tentacle", "East Fork Room", "West Fork Room", "Right Fork Tentacle", "Left Fork Tentacle", "Lone Room in Basement", "Boomerang Hall", "Boss Lair" ],
+		"maps"		: [ "Entrance", "Main Hall", "Ruto Meeting Room", "Ruto Fallen Down Basement", "Room to Upper Main Hall", "Boss Door Room", "Giant Octo Mini-Boss", "Three-Way Fork", "North Fork Room", "East Fork Room", "West Fork Room", "North-East Fork Room", "North-West Fork Room", "Lone Room in Basement", "Boomerang Hall", "Boss Lair" ],
 		"stages"	: [ "Main", "Finding Zora's Sapphire" ]
 	}, {
 		"id"		: "0003",
@@ -519,42 +519,42 @@
 		"dma"		: "B9C0",
 		"length"	: 23,
 		"dungeon"	: 1,
-		"maps"		: [ "Entrance", "Entrance Hallway", "Elevator Hall", "East Elevator Hall", "North Elevator Hallway", "West Elevator Hallway", "Stalfos Mini-Boss", "East Courtyard", "West Courtyard", "Sewers", "Hallway Connecting Courtyards", "Tall Block Pushing Hall", "Joelle's Hall", "Beth's Hall", "Rotating Platforms Hall", "Chess Hall", "Amy's Block Puzzle", "Boss Door Shifting Hall", "Lone Room - West Courtyard", "Falling Down - West Courtyard", "Fallen Down Room - West Courtyard", "Falling Down - Chess Hall", "Boss Lair" ]
+		"maps"		: [ "Entrance", "Entrance Hallway", "Elevator Hall", "East Elevator Hall", "North Elevator Hallway", "West Elevator Hallway", "Stalfos Mini-Boss", "East Courtyard", "West Courtyard", "Sewers", "Hallway Connecting Courtyards", "Tall Block Pushing Hall", "Joelle's Hall", "Beth's Hall", "Rotating Platforms Hall", "Chess Hall", "Amy's Block Puzzle", "Boss Door Shifting Hall", " West Courtyard: Subroom", "West Twisted Hallway", "East Twisted Hallway", "West Courtyard: Fallen Room", "Boss Lair" ]
 	}, {
 		"id"		: "0004",
 		"name"		: "Fire Temple",
 		"dma"		: "B800",
 		"length"	: 27,
 		"dungeon"	: 1,
-		"maps"		: [ "Entrance", "Lava Cavern", "Boss Door Hall", "Flare Dancer Room - Entrance", "Fire Slug Room", "Boulder Maze", "Narrow Three-Way Bridge", "Room to East Tower", "East Tower", "Hallway Connecting Towers", "Invisible Fire Wall Maze", "Passthrough - Invisible Fire Wall Maze", "Room to West Tower", "West Tower", "Hidden Stairs Room", "Torch Slug Hallway - Entrance", "Flaming Wall of Death Room", "Captured Goron North of Entrance", "Tile Room - Entrance", "Tile Room - Lava Cavern", "Captured Goron - North Lava Cavern", "Flaming Elevator", "Captured Goron - South Lava Cavern", "Captured Goron - Boulder Maze", "Flare Dancer Room - Fire Wall Maze", "Captured Goron - Fire Wall Maze", "Boss Lair" ]
+		"maps"		: [ "Entrance", "Lava Cave", "Boss Door Hall", "Entrance: Flare Dancer", "Fire Slug Room", "Boulder Maze", "Narrow Three-Way Bridge", "Room to East Tower", "East Tower", "Hallway Connecting Towers", "Fire Wall Maze", "Fire Wall Maze: Hallway", "Room to West Tower", "West Tower", "Hidden Stairs Room", "Entrance: Torch Slug Hall", "Fire Wall Death Room", "Entrance: Goron", "Entrance: Tile Room", "Lava Cave: Tile Room", "Lava Cave: North Goron", "Flaming Elevator", "Lava Cave: South Goron", "Boulder Maze: Goron", "Fire Wall Maze: Flare Dancer", "Fire Wall Maze: Subroom", "Boss Lair" ]
 	}, {
 		"id"		: "0005",
 		"name"		: "Water Temple",
 		"dma"		: "BCA0",
 		"length"	: 23,
 		"dungeon"	: 1,
-		"maps"		: [ "Central Hall", "Central Pillar", "Flooded Basement", "Lower Level - South", "Mid Level - East", "Waterfall Room", "Dragon Statues Room", "Longshot Room", "Spinning Water Room", "Water Pillar Room", "Upper Level - West", "Spike Trap Corridor", "Rolling Boulder Room", "Room of Illusions", "Stinger Room", "Three Water Pillars Room", "Sole Room - Rolling Boulder Room", "Ruto Room", "Lower Room - Ruto Room", "Upper Room - Ruto Room", "Mid Level - South", "Raging Water Cavern", "Boss Lair" ]
+		"maps"		: [ "Central Hall", "Central Pillar", "Flooded Basement", "Lower Level: South", "Mid Level: East", "Waterfall Room", "Dragon Statues Room", "Longshot Room", "Spinning Water Room", "Water Pillar Room", "Upper Level: West", "Spike Trap Corridor", "Rolling Boulder Room", "Room of Illusions", "Stinger Room", "Three Water Pillars Room", "Rolling Boulder Subroom", "Ruto Hall", "Lower Ruto Room", "Upper Ruto Room", "Mid Level: South", "Raging Water Cave", "Boss Lair" ]
 	}, {
 		"id"		: "0007",
 		"name"		: "Shadow Temple",
 		"dma"		: "C060",
 		"length"	: 23,
 		"dungeon"	: 1,
-		"maps"		: [ "Taunting Rooms of Illusion", "First Room - Rooms of Illusion", "Entrance", "Boss Door Room", "Dead Hand Room - Rooms of Illusion", "Beamos Corridor - Entrance", "Scythe Shortcut Room", "Sole Room - Beamos Corridor", "Guillotine Hallway", "Guillotine Cavern", "Falling Spike Blocks Trap Room", "Invisible Spike Room", "Second Giant Skull Jars Room", "Wooden Spike Traps Room", "First Giant Skull Jars Room", "Invisible Maze", "Invisible Scythe Room", "Sacrificial Room", "Wind Fans Room", "Sole Room - Wind Fans Room", "Gibdo Hallway - Wind Fans Room", "River of Death", "Boss Lair" ]
+		"maps"		: [ "Room of Illusion", "Room of Illusion: Room #1", "Entrance", "Boss Door Room", "Room of Illusion: Dead Hand Room", "Beamos Corridor: Entrance", "Scythe Shortcut Room", "Beamos Corridor: Subroom", "Guillotine Hallway", "Guillotine Cave", "Falling Spike Blocks Room", "Invisible Spike Room", "Giant Skull Jars Room #2", "Wooden Spike Traps Room", "Giant Skull Jars Room #1", "Invisible Maze", "Invisible Scythe Room", "Sacrificial Room", "Wind Fans Room", "Wind Fans Subroom", "Wind Fans Gibdo Hallway", "River of Death", "Boss Lair" ]
 	}, {
 		"id"		: "0006",
 		"name"		: "Spirit Temple",
 		"dma"		: "C450",
 		"length"	: 29,
 		"dungeon"	: 1,
-		"maps"		: [ "Entrance", "Main Corridor", "East Room - Main Corridor", "West Room - Main Corridor", "Bombiwa Rock Room", "Colossus Room", "Shortcut Room - Entrance", "West Corridor - Colossus Room", "Sun Face Block Pushing Room", "West Hallway to Iron Knuckle Room", "West Iron Knuckle Room", "Exits to Colossus Hands", "Sole Room - Rolling Boulder Room", "Rolling Boulder Room", "Quicksand Room", "Trap Room With Mirror", "East Corridor - Colossus Room", "Time Block Puzzle Room", "Armos & Sun Face Room", "East Hallway to Iron Knuckle Room", "East Iron Knuckle Room", "Sole Room - Armos & Sun Face Room", "Sole Room - Triforce Corridor", "Moving Trap Wall", "Triforce Corridor", "Mirror Puzzle Above Colossus Room", "Rotating Mirror Statues Room", "Anubis Room - Main Corridor", "Boss Lair" ]
+		"maps"		: [ "Entrance", "Main Corridor", "Main Corridor: East", "Main Corridor: West", "Bombiwa Rock Room", "Colossus Room", "Entrance Shortcut Room", "Colossus Room: West Corridor", "Sun Face Block Pushing Room", "West Iron Knuckle Hallway", "West Iron Knuckle Room", "Colossus Hand Exit", "Rolling Boulder Subroom", "Rolling Boulder Room", "Quicksand Room", "Trap Room With Mirror", "Colossus Room: East Corridor", "Time Block Puzzle Room", "Armos & Sun Face Room", "East Iron Knuckle Hallway", "East Iron Knuckle Room", "Armos & Sun Face Subroom", "Triforce Corridor: Subroom", "Moving Trap Wall", "Triforce Corridor", "Mirror Platform Room", "Rotating Mirror Statues Room", "Main Corridor: Anubis", "Boss Lair" ]
 	}, {
 		"id"		: "0009",
 		"name"		: "Ice Cavern",
 		"dma"		: "C630",
 		"length"	: 12,
 		"dungeon"	: 1,
-		"maps"		: [ "Entrance", "First Open Room", "Hallway Toward Second Area", "Second Open Room", "Hallway Toward Ice Block Puzzle", "Ice Block Puzzle Room", "Hallway to Mini-Boss", "Mini-Boss Room", "Hallway to Pillars", "Pillars Room", "Room to Exit", "Blue Fire Altar" ],
+		"maps"		: [ "Entrance", "Open Room #1", "Hallway to Room #1", "Open Room #2", "Hallway to Ice Block Puzzle", "Ice Block Puzzle Room", "Hallway to Mini-Boss", "Mini-Boss Room", "Hallway to Pillars", "Pillars Room", "Room to Exit", "Blue Fire Altar" ],
 		"stages"	: [ "Main", "Serenade of Water" ]
 	}, {
 		"id"		: "0008",
@@ -569,28 +569,28 @@
 		"dma"		: "CE30",
 		"length"	: 6,
 		"dungeon"	: 2,
-		"maps"		: [ "Break Room - Hookshot Beams", "Shiro's Prison Cell", "Ichiro's Prison Cell", "Kitchen", "Sabooro's Prison Cell", "Jiro's Prison Cell" ]
+		"maps"		: [ "Break Room", "Shiro's Prison Cell", "Ichiro's Prison Cell", "Kitchen", "Sabooro's Prison Cell", "Jiro's Prison Cell" ]
 	}, {
 		"id"		: "000B",
 		"name"		: "Gerudo Training Ground",
 		"dma"		: "C230",
 		"length"	: 11,
 		"dungeon"	: 1,
-		"maps"		: [ "Entrance", "Driftsand Fight Challenge", "Hookshot Challenge", "Fake Room", "Eye Statue Challenge", "Hammer Challenge", "Lava Challenge", "Lizalfos Challenge", "Central Crates Room", "Underwater Challenge", "Preview Room" ]
+		"maps"		: [ "Entrance", "Driftsand Fight Challenge", "Hookshot Challenge", "Fake Room", "Eye Statue Challenge", "Hammer Challenge", "Lava Challenge", "Lizalfos Challenge", "Central Crates Room", "Underwater Challenge", "Isolated Room" ]
 	}, {
 		"id"		: "000D",
 		"name"		: "Inside Ganon's Castle",
 		"dma"		: "CCC0",
 		"length"	: 20,
 		"dungeon"	: 1,
-		"maps"		: [ "Entrance", "Main Lobby", "Water Trial #1", "Water Trial #2", "Water Barrier", "Forest Trial #1", "Forest Trial #2", "Forest Barrier", "Light Trial #1", "Light Trial #2", "Fake Light Barrier", "Light Barrier", "Shadow Trial", "Shadow Barrier", "Fire Trial", "Fire Barrier", "Deku Scrubs Area", "Spirit Trial #1", "Spirit Trial #2", "Spirit Barrier" ]
+		"maps"		: [ "Entrance", "Main Lobby", "Water Trial #1", "Water Trial #2", "Water Barrier", "Forest Trial #1", "Forest Trial #2", "Forest Barrier", "Light Trial #2", "Light Trial #1", "Fake Light Barrier", "Light Barrier", "Shadow Trial", "Shadow Barrier", "Fire Trial", "Fire Barrier", "Deku Scrubs Area", "Spirit Trial #1", "Spirit Trial #2", "Spirit Barrier" ]
 	}, {
 		"id"		: "000A",
 		"name"		: "Ganon's Tower",
 		"dma"		: "CA20",
 		"length"	: 10,
 		"dungeon"	: 2,
-		"maps"		: [ "Lower Room - Lizalfos", "Staircase #1", "Middle Room - Stalfos", "Staircase #2", "Upper Room - Iron Knuckles", "Staircase #3", "Staircase #4 to Boss Door", "Entrance", "Lower Boss Lair", "Upper Boss Lair" ]
+		"maps"		: [ "Lower Room: Lizalfos", "Staircase #1", "Middle Room: Stalfos", "Staircase #2", "Upper Room: Iron Knuckles", "Staircase #3", "Staircase #4 to Boss Door", "Entrance", "Lower Boss Lair", "Upper Boss Lair" ]
 	}, {
 		"id"		: "000F",
 		"name"		: "Inside Ganon's Castle (Collapsing)",
@@ -604,7 +604,7 @@
 		"dma"		: "D0C0",
 		"length"	: 5,
 		"dungeon"	: 2,
-		"maps"		: [ "Lower Room - Exit", "Middle Room - Stalfos", "Upper Room - Wallmaster", "Staircase to Exit", "Boss Lair" ]
+		"maps"		: [ "Lower Room: Exit", "Middle Room: Stalfos", "Upper Room: Wallmaster", "Staircase to Exit", "Boss Lair" ]
 	}, {
 		"id"		: "001A",
 		"name"		: "Ganon's Tower Exterior (Collapsing)",

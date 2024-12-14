@@ -1,7 +1,15 @@
 function PatchOptions() {
     
-    if (IsChecked $Redux.Gameplay.FPS)       { ApplyPatch -Patch "Compressed\fps.ppf" }
-    if (IsChecked $Redux.Gameplay.FreeCam)   { ApplyPatch -Patch "Compressed\cam.ppf" }
+    # GRAPHICS #
+
+    if (IsChecked $Redux.Graphics.FixBurnSmoke) { ApplyPatch -Patch "Compressed\Optional\fix_burn_smoke.ppf" }
+
+
+
+    # GAMEPLAY #
+
+    if (IsChecked $Redux.Gameplay.FPS)       { ApplyPatch -Patch "Compressed\Optional\fps.ppf" }
+    if (IsChecked $Redux.Gameplay.FreeCam)   { ApplyPatch -Patch "Compressed\Optional\cam.ppf" }
 
 }
 
@@ -18,6 +26,7 @@ function ByteOptions() {
 
 
     # GRAPHICS #
+
     if (IsChecked $Redux.Graphics.WideScreen) {
         ChangeBytes -Offset "3855E" -Values "4740"
         ChangeBytes -Offset "35456" -Values "46C0"
@@ -104,6 +113,7 @@ function CreateTabGraphics() {
     CreateReduxCheckBox -Name "BlackBars"          -Text "No Black Bars"           -Info "Removes the black bars shown on the top and bottom of the screen"                                            -Credits "Theboy181 (RAM) & Admentus (ROM)"
     CreateReduxCheckBox -Name "ExtendedDraw" -Safe -Text "Extended Draw Distance"  -Info "Increases the game's draw distance for solid objects with collision`nIncludes coin formations as well"       -Credits "Theboy181 (RAM) & Admentus (ROM)"
     CreateReduxCheckBox -Name "ForceHiresModel"    -Text "Force Hires Mario Model" -Info "Always use Mario's High Resolution Model when Mario is too far away"                                         -Credits "Theboy181 (RAM) & Admentus (ROM)"
+    CreateReduxCheckBox -Name "FixBurnSmoke"       -Text "Fix Burn Smoke"          -Info "Fix the burn smoke texture"                                                                                  -Credits "Admentus"
 
 
 

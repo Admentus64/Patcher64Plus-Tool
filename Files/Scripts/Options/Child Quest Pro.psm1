@@ -1,3 +1,71 @@
+function ChildQuestProExposeOptions() {
+    
+    # Exclude Group
+    ExcludeGroup  -Group "Unlock"       -Name "Unlock Child Restrictions"
+    ExcludeGroup  -Group "Equipment"    -Name "Swords & Shields"
+
+
+
+    # Expose Options
+    ExposeOption  -Group "Fixes"        -Option "PoacherSaw"
+    ExposeOption  -Group "Hitbox"       -Option "MasterSword"
+    ExposeOption  -Group "Hitbox"       -Option "GiantsKnife"
+    ExposeOption  -Group "Hitbox"       -Option "BrokenGiantsKnife"
+    ExposeOption  -Group "Hitbox"       -Option "MegatonHammer"
+    ExposeOption  -Group "Hitbox"       -Option "Hookshot"
+    ExposeOption  -Group "Hitbox"       -Option "Longshot"
+    ExposeOption  -Group "Save"         -Option "Quiver"
+    ExposeOption  -Group "Capacity"     -Option "Quiver1"
+    ExposeOption  -Group "Capacity"     -Option "Quiver2"
+    ExposeOption  -Group "Capacity"     -Option "Quiver3"
+    ExposeOption  -Group "Capacity"     -Option "Arrows5"
+    ExposeOption  -Group "Capacity"     -Option "Arrows10"
+    ExposeOption  -Group "Capacity"     -Option "Arrows30"
+    ExposeOption  -Group "ShopQuantity" -Option "Arrows10"
+    ExposeOption  -Group "ShopQuantity" -Option "Arrows30"
+    ExposeOption  -Group "ShopQuantity" -Option "Arrows50"
+    ExposeOption  -Group "ShopPrice"    -Option "Arrows10"
+    ExposeOption  -Group "ShopPrice"    -Option "Arrows30"
+    ExposeOption  -Group "ShopPrice"    -Option "Arrows50"
+
+
+
+    # Exclude Options
+    ExcludeOption -Group "Misc"         -Option "SkipCutscenes"
+    ExcludeOption -Group "Gameplay"     -Option "Medallions"
+    ExcludeOption -Group "Fixes"        -Option "GerudosFortress"
+    ExcludeOption -Group "Fixes"        -Option "VisibleGerudoTent"
+    ExcludeOption -Group "Fixes"        -Option "Dungeons"
+    ExcludeOption -Group "Graphics"     -Option "ForceHiresModel"
+    ExcludeOption -Group "Equipment"    -Option "FunctionalWeapons"
+    ExcludeOption -Group "Save"         -Option "BulletBag"
+    ExcludeOption -Group "Save"         -Option "OcarinaOfTime"
+    ExcludeOption -Group "Save"         -Option "LongShot"
+    ExcludeOption -Group "Capacity"     -Option "BulletBag1"
+    ExcludeOption -Group "Capacity"     -Option "BulletBag2"
+    ExcludeOption -Group "Capacity"     -Option "BulletBag3"
+    ExcludeOption -Group "Capacity"     -Option "DekuSeedBullets5"
+    ExcludeOption -Group "Capacity"     -Option "DekuSeedBullets30"
+    ExcludeOption -Group "ShopPrice"    -Option "DekuSeedBullets30"
+
+
+
+    # Force Options
+    ForceOption   -Group "Sounds"       -Option "ChildVoices"   -Values "Majora's Mask"
+    ForceOption   -Group "Equipment"    -Option "PowerBracelet"
+    ForceOption   -Group "Equipment"    -Option "HerosBow"
+
+
+
+    # Default Option Values
+    DefaultOptionValue -Group "Hitbox"  -Option "MasterSword" -Value 3500
+    DefaultOptionValue -Group "Hitbox"  -Option "GiantsKnife" -Value 4000
+
+}
+
+
+
+#==============================================================================================================================================================================================
 function ChildQuestProPatchOptions() {
 
     ApplyPatch -Patch "Decompressed\Optional\Child Quest\child_quest_pro_model.ppf"
@@ -45,12 +113,7 @@ function ChildQuestProByteOptions() {
     PatchBytes  -Offset "1616000" -Patch ("Object GI Models\Termina Mirror Shield.bin"); ChangeBytes -Offset "A0F4" -Values "01617C00"; ChangeBytes -Offset "B6F6CC" -Values "01617C00" # Model: Mirror Shield -> Termina Mirror Shield
     ChangeBytes -Offset "B6659A"  -Values "0770"; ChangeBytes -Offset "B6659E" -Values "0BF8"
     PatchBytes  -Offset "1456188" -Texture -Patch "Child Quest\mm_style_reflection.bin"                                                                                                 # Mirror Shield reflection
-
-    PatchBytes  -Offset "7C0000"  -Texture -Patch "Equipment\Bow\Hero's Bow.icon"                                                                                                       # Icon: Fairy Bow -> Hero's Bow
-    PatchBytes  -Offset "7F5000"  -Texture -Patch "Equipment\Bow\Hero's Bow Fire.icon"
-    PatchBytes  -Offset "7F6000"  -Texture -Patch "Equipment\Bow\Hero's Bow Ice.icon"
-    PatchBytes  -Offset "7F7000"  -Texture -Patch "Equipment\Bow\Hero's Bow Light.icon"
-    PatchBytes  -Offset "89F800"  -Texture -Patch ("Equipment\Bow\Hero's Bow.en.label")                                                                                                 # Label: Fairy Bow -> Hero's Bow
+    
     PatchBytes  -Offset "3481000" -Patch ("Object GI Models\Hero's Bow.bin");
     ChangeBytes -Offset "A0A0"    -Values "03481000034822F003481000"; ChangeBytes -Offset "B6F6A0" -Values "03481000034822F0"; ChangeBytes -Offset "B664E6"  -Values "0C80"             # Model: Fairy Bow -> Hero's Bow
 
@@ -303,6 +366,8 @@ function ChildQuestProByteReduxOptions() {
 
 #==============================================================================================================================================================================================
 function ChildQuestProByteSceneOptions() {
+    
+    return
 
     # KAKARIKO VILLAGE #
 
@@ -1452,6 +1517,8 @@ function ChildQuestProByteSceneOptions() {
 
 #==============================================================================================================================================================================================
 function ChildQuestProByteTextOptions() {
+    
+    return
 
     # Items
     SetMessage -ID "0002" -Replace "<NS><DI>You obtained the <M>Song of Storms<W>!<DC><N>Its destructive power seems<N>overwhelming. Be mindful when<N>using it." # Cojiro -> Song of Storms
