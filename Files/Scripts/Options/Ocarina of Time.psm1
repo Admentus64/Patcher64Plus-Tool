@@ -107,7 +107,7 @@ function ByteOptions() {
     # GAMEPLAY #
 
 	if (IsChecked $Redux.Gameplay.RunFaster) {
-        ChangeBytes -Offset "B6D5B6" -Values "00AE03200358"; ChangeBytes -Offset "B6D5C2" -Values "03EE"; ChangeBytes -Offset "B6D5FE" -Values "02EE"; ChangeBytes -Offset "B6D664" -Values "0258"; ChangeBytes -Offset "BD2ABA" -Values "4448"
+        ChangeBytes -Offset "B6D5B6" -Values "00EE03200300"; ChangeBytes -Offset "B6D5FA" -Values "010E03200300"; ChangeBytes -Offset "B6D664" -Values "0258"; ChangeBytes -Offset "BD2ABA" -Values "4448"
     }
 
     if (IsDefault $Redux.Gameplay.SpawnChild -Not)          { ChangeBytes -Offset @("B0631E", "B06342")           -Values (GetOoTEntranceIndex $Redux.Gameplay.SpawnChild.Text)                                                                         }
@@ -2711,7 +2711,7 @@ function CreateTabMain() {
     CreateReduxCheckBox -Name "PushbackAttackingWalls"                     -Text "Pushback Attacking Walls"   -Info "Link is getting pushed back a bit when hitting the wall with the sword"                                                                                         -Credits "Admentus (ROM) & Aegiker (RAM)"
     CreateReduxCheckBox -Name "RemoveCrouchStab"                           -Text "Remove Crouch Stab"         -Info "The Crouch Stab move is removed"                                                                                                                                -Credits "Garo-Mastah"
     CreateReduxCheckBox -Name "RemoveQuickSpin"                            -Text "Remove Magic Quick Spin"    -Info "The magic Quick Spin Attack move is removed`nIt's a regular Quick Spin Attack now instead"                                                                      -Credits "Admentus & Three Pendants"
-    CreateReduxCheckBox -Name "RunFaster"                                  -Text "Run Faster"                 -Info "Faster run speed & longer jumps"                                                                       -Warning "You may need to play a little more cautiously" -Credits "Admentus"
+    CreateReduxCheckBox -Name "RunFaster"                                  -Text "Run Faster"                 -Info "Faster run speed & longer jumps"                                                                                                    -Credits "Admentus & Ikey Ilex"
     CreateReduxCheckbox -Name "RemoveSpeedClamp"                           -Text "Remove Jump Speed Limit"    -Info "Removes the jumping speed limit just like in MM"                                                                                                                -Credits "Admentus (ROM) & Aegiker (RAM)"
     CreateReduxCheckbox -Name "ChildShops"                          -Child -Text "Child Shops"                -Info "Open the Potion Shop and Bazaar in Kakariko Village for Child Link"                                                                                             -Credits "Admentus"
     CreateReduxCheckBox -Name "FastArrows"                                 -Text "Less Magic Arrows Cooldown" -Info "The burst animation for Fire, Ice and Light Arrows are shorter`nAllows Link to shoot the next magic arrow a bit quicker"                                        -Credits "Anthrogi"
