@@ -1,3 +1,6 @@
+v25.0.1
+- Improved "Run Faster" option for OoT
+
 v25.0.0
 - Added Lite Mode for hiding casual options from OoT & MM
 - Added new API functions to expose, exclude, force and default
