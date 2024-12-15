@@ -1000,8 +1000,7 @@ function LoadModelsList([string]$Category) {
         $list = $repo | Sort-Object | select -Unique
     }
 
-    $GamePatch.LoadedModelsList[$Category] = @("Original") + $list
-
+    $GamePatch.LoadedModelsList[$Category] = @("Original") + $list | Select-Object -Unique
     if ($GamePatch.LoadedModelsList[$Category].Count -eq 0) { return @("No models found?") } 
 
     for ($i=0; $i -lt $list.Count; $i++) { $list[$i] = $list[$i] -replace '_[^_]*$' }
