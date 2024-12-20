@@ -6,15 +6,6 @@
 
 }, {
 
-	"title"		: "Smash Remix",
-	"version"	: "1.5.2",
-	"console"	: "Native",
-	"patch"		: "Compressed\\remix.bps",
-	"output"	: "remix",
-	"tooltip"	: "Remixes the whole of Super Smash Bros.{0}Contains new stages and characters to use"
-
-}, {
-
 	"title"		: "More Stages Edition",
 	"version"	: "0.5.1",
 	"script"	: "Super Smash Bros",

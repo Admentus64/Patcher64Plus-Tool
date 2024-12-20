@@ -18,9 +18,8 @@ function GetIniContent ([string]$FilePath) {
                 $CommentCount = $CommentCount + 1
                 $name = "Comment" + $CommentCount
 
-                if     ($value -eq "False")                       { $value = $False -as [boolean] }
-                elseif ($value -eq "True")                        { $value = $True  -as [boolean] }
-                elseif ([double]::TryParse($value, [ref]$null))   { $value = $value -as [int]     }
+                if     ($value -eq "False")   { $value = $False -as [boolean] }
+                elseif ($value -eq "True")    { $value = $True  -as [boolean] }
 
                 $ini[$section][$name] = $value
             }
@@ -28,9 +27,8 @@ function GetIniContent ([string]$FilePath) {
             "(.+?)\s*=(.*)" { # Key
                 $name,$value = $Matches[1..2]
 
-                if     ($value -eq "False")                       { $value = $False -as [boolean] }
-                elseif ($value -eq "True")                        { $value = $True  -as [boolean] }
-                elseif ([double]::TryParse($value, [ref]$null))   { $value = $value -as [int]     }
+                if     ($value -eq "False")   { $value = $False -as [boolean] }
+                elseif ($value -eq "True")    { $value = $True  -as [boolean] }
 
                 $ini[$section][$name] = $value
             }

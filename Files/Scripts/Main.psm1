@@ -22,8 +22,9 @@ function CreateMainDialog() {
     $Files.json.games    = SetJSONFile $Files.json.games
 
     # Addons
-    ShowAddonsIcons -Type "Models" -Index 0
-    ShowAddonsIcons -Type "Music"  -Index 1
+    ShowAddonsIcons -Type "Patches" -Index 0
+    ShowAddonsIcons -Type "Models"  -Index 1
+    ShowAddonsIcons -Type "Music"   -Index 2
 
     # Menu bar
     $menuBarMain           = New-Object System.Windows.Forms.MenuStrip; $MainDialog.Controls.Add($menuBarMain)

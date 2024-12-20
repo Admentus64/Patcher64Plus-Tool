@@ -33,14 +33,6 @@
 
 }, {
 
-	"title"		: "Hooting Time",
-	"version"	: "1.1a",
-	"patch"		: "Compressed\\hooting_time.bps",
-	"output"	: "hooting_time",
-	"tooltip"	: "Overhauls the HUD and various options and gameplay changes for Mario Kart 64"
-
-}, {
-
 	"title"		: "US Audio (Rev 0)",
 	"revision"	: "Rev 0 (JPN)",
 	"patch"		:"Compressed\\us_audio_rev0.bps",

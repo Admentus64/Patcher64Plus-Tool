@@ -20,6 +20,7 @@ function PerformUpdate() {
 
     CleaningRepos -Type "Models"
     CleaningRepos -Type "Music"
+    CleaningRepos -Type "Patches"
 
 }
 
@@ -390,7 +391,7 @@ function UpdateAddon([Object]$Addon) {
     $addonPath = $Paths.Addons + "\" + $Addon.type + "\" + $Addon.title
     $content   = $date = $hotfix = $null
     $error     = 0
-
+    
     if ($Settings.Core.LocalTempFolder -ne $False)   { $path = $Paths.LocalTemp   }
     else                                             { $path = $Paths.AppDataTemp }
     CreateSubPath $path
@@ -480,9 +481,12 @@ function UpdateAddon([Object]$Addon) {
         }
         
         ExpandArchive -LiteralPath $zip -DestinationPath $path -Force
+        if (!(TestFile -Path ($Paths.Addons + "\" + $Addon.type) -Container)) { CreateSubPath ($Paths.Addons + "\" + $Addon.type) }
+
         if (TestFile -Path $addonPath -Container) { RemovePath $addonPath }
         Get-ChildItem -Path $path -Directory -Force | ForEach-Object { Move-Item -LiteralPath $_.FullName -Destination $addonPath -Force }
-        if (TestFile ($addonPath + "\" + ".gitattributes")) { Remove-Item   -LiteralPath ($addonPath + "\" + ".gitattributes") }
+        if (TestFile ($addonPath + "\" + ".gitattributes"))   { Remove-Item   -LiteralPath ($addonPath + "\" + ".gitattributes") }
+        if (TestFile ($addonPath + "\" + ".README.md"))       { Remove-Item   -LiteralPath ($addonPath + "\" + ".README.md")     }
         RemovePath $path
         CheckAddon -Addon $Addon
         $Addons[$title].isUpdated = $True

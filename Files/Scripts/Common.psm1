@@ -330,7 +330,14 @@ function ChangeGameMode() {
     $GameFiles.scenesPatch  = $GameFiles.editor + "\scenes.bps"
 
     # JSON Files
-    if ($GameType.patches -gt 0) { $Files.json.patches = SetJSONFile $GameFiles.patches } else { $Files.json.patches = $null }
+    if ($GameType.patches -gt 0) {
+        $Files.json.patches = SetJSONFile $GameFiles.patches
+        $Files.json.repo.addons | Where-Object { $_.type -eq "Patches" } | ForEach-Object {
+            if (TestFile ($Paths.Patches + "\" + $_.title + "\" + $GameType.mode + "\Patches.json")) { $Files.json.patches += SetJSONFile ($Paths.Patches + "\" + $_.title + "\" + $GameType.mode + "\Patches.json") }
+            write-host ($Paths.Patches + "\" + $_.title + "\" + $GameType.mode + "\Patches.json")
+        }
+    }
+    else { $Files.json.patches = $null }
 
     # Rename patch titles to include version if present
     if ($Files.json.patches -ne $null) {

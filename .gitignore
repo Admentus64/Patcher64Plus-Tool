@@ -12,6 +12,7 @@ Files/Addons/Models/*
 !Files/Addons/Models/Core
 Files/Addons/Music/*
 !Files/Addons/Music/Core
+Files/Addons/Patches/*
 Exclude
 Assert
 Extract

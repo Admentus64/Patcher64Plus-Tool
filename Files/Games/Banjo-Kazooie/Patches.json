@@ -15,14 +15,6 @@
 
 }, {
 
-	"title"		: "Banjo-Dreamie",
-	"patch"		: "Decompressed\\banjo_dreamie.bps",
-	"script"	: "Banjo-Kazooie",
-	"output"	: "banjo_dreamie",
-	"tooltip"	: "A full-sized ROM hack in a completely new setting{0}Features 8 worlds, 160 notes & no jiggies with an average length of 10 hours"
-
-}, {
-
 	"title"		: "Banjo-Kazooie Returns",
 	"version"	: "1.2 Demo",
 	"patch"		: "Decompressed\\banjo_kazooie_returns.bps",
@@ -40,47 +32,12 @@
 
 }, {
 
-	"title"		: "Banjo-Kazooie: Worlds Collide",
-	"version"	: "2.0",
-	"patch"		: "Decompressed\\worlds_collide.bps",
-	"script"	: "Banjo-Kazooie",
-	"output"	: "worlds_collide",
-	"tooltip"	: "A medium-sized ROM hack in a completely new setting{0}Features 8 worlds, 80 notes & no jiggies with an average length of 3 hours"
-
-}, {
-
-	"title"		: "Banjo-Kazooie: The Jiggies of Time",
-	"version"	: "1.3",
-	"patch"		: "Decompressed\\jiggies_of_time.bps",
-	"script"	: "Banjo-Kazooie",
-	"output"	: "jiggies_of_time",
-	"tooltip"	: "A full-sized ROM hack in a completely new setting, inspired by Ocarina of Time{0}Features 9 worlds, 900 notes & 100 jiggies with an average length of 8 hours"
-
-}, {
-
-	"title"		: "Banjo-Kazooie: The Legend of the Crystal Jiggy",
-	"patch"		: "Decompressed\\crystal_jiggy.bps",
-	"script"	: "Banjo-Kazooie",
-	"output"	: "crystal_jiggy",
-	"tooltip"	: "A full-sized ROM hack in a completely new setting{0}Features 9 worlds & 90 jiggies with an average length of 5 hours"
-
-}, {
-
 	"title"		: "Banjo-Kazooie: The Night-Bear Before Christmas",
 	"version"	: "1.0",
 	"patch"		: "Decompressed\\night_bear_before_christmas.bps",
 	"script"	: "Banjo-Kazooie",
 	"output"	: "night_bear_before_christmas",
 	"tooltip"	: "A small-sized ROM hack in a completely new setting{0}Features 2 worlds, 200 notes & 10 jiggies with an average length of 2 hours"
-
-}, {
-
-	"title"		: "Banjo-Kazooie: Gruntilda's Mask",
-	"version"	: "1.2",
-	"patch"		: "Decompressed\\gruntildas_mask.bps",
-	"script"	: "Banjo-Kazooie",
-	"output"	: "gruntildas_mask",
-	"tooltip"	: "A small-sized ROM hack in a completely new setting{0}Features 2 worlds, 100 notes & 20 jiggies with an average length of 3 hours"
 
 }, {
 
@@ -187,13 +144,5 @@
 	"script"	: "Banjo-Kazooie",
 	"output"	: "snow_glow_village",
 	"tooltip"	: "A small-sized ROM hack in a completely new setting{0}Features 1 world with an average length of 1 hours"
-
-}, {
-
-	"title"		: "Banjo-Kazooie: Santa's Village",
-	"version"	: "1.1",
-	"patch"		: "Decompressed\\santas_village.bps",
-	"output"	: "santas_village",
-	"tooltip"	: "A small-sized ROM hack in a completely new setting{0}Features 1 world, 200 notes, 10 jiggies with an average length of 1 hours"
 
 } ]

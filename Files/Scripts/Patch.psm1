@@ -1016,75 +1016,90 @@ function ApplyPatch([string]$File=$GetROM.decomp, [string]$Patch, [string]$New, 
     }
 
     # Patch File
-    if     ($FullPath)     {  }
-    elseif ($FilesPath)    { $Patch = $Paths.Master   + "\" + $Patch }
-    else                   { $Patch = $GameFiles.base + "\" + $Patch }
+    if     ($FullPath)     { $PatchFile = $Patch                         }
+    elseif ($FilesPath)    { $PatchFile = $Paths.Master   + "\" + $Patch }
+    else                   { $PatchFile = $GameFiles.base + "\" + $Patch }
 
-    if (TestFile ($Patch + ".bps"))      { $Patch + ".bps"    }
-    if (TestFile ($Patch + ".ips"))      { $Patch + ".ips"    }
-    if (TestFile ($Patch + ".ups"))      { $Patch + ".ups"    }
-    if (TestFile ($Patch + ".xdelta"))   { $Patch + ".xdelta" }
-    if (TestFile ($Patch + ".vcdiff"))   { $Patch + ".vcdiff" }
-    if (TestFile ($Patch + ".ppf"))      { $Patch + ".ppf"    }
+    if     (TestFile ($PatchFile + ".bps"))      { $PatchFile += ".bps"    }
+    elseif (TestFile ($PatchFile + ".ips"))      { $PatchFile += ".ips"    }
+    elseif (TestFile ($PatchFile + ".ups"))      { $PatchFile += ".ups"    }
+    elseif (TestFile ($PatchFile + ".xdelta"))   { $PatchFile += ".xdelta" }
+    elseif (TestFile ($PatchFile + ".vcdiff"))   { $PatchFile += ".vcdiff" }
+    elseif (TestFile ($PatchFile + ".ppf"))      { $PatchFile += ".ppf"    }
 
-    if (TestFile $Patch) { $Patch = Get-Item -LiteralPath $Patch }
+    if (!(TestFile $PatchFile) -and !$FullPath -and !$FilesPath) {
+        foreach ($addon in $Files.json.repo.addons) {
+            if ($addon.type -eq "Patches") {
+                $PatchFile = $Paths.Patches + "\" + $addon.title + "\" + $GameType.mode + "\" + $Patch
+                if     (TestFile ($PatchFile + ".bps"))      { $PatchFile += ".bps"    }
+                elseif (TestFile ($PatchFile + ".ips"))      { $PatchFile += ".ips"    }
+                elseif (TestFile ($PatchFile + ".ups"))      { $PatchFile += ".ups"    }
+                elseif (TestFile ($PatchFile + ".xdelta"))   { $PatchFile += ".xdelta" }
+                elseif (TestFile ($PatchFile + ".vcdiff"))   { $PatchFile += ".vcdiff" }
+                elseif (TestFile ($PatchFile + ".ppf"))      { $PatchFile += ".ppf"    }
+                if     (TestFile  $PatchFile)                { break }
+            }
+        }
+    }
+    
+    if (TestFile $PatchFile) { $PatchFile = Get-Item -LiteralPath $PatchFile }
     else { # Patch File does not exist
         UpdateStatusLabel "Failed! Could not find patch file." -Error
-        WriteToConsole ("Missing patch file: " + $Patch) -Error
+        WriteToConsole ("Missing patch file: " + $PatchFile) -Error
         return $False
     }
     
     # Patching
-    if ($Patch -like "*.bps*" -or $Patch -like "*.ips*") {
+    if ($PatchFile -like "*.bps*" -or $PatchFile -like "*.ips*") {
         if ($New.Length -gt 0) {
-            $script = { Param([string]$Tool, [string]$Patch, [string]$File, [string]$New)
-                & $Tool --ignore-checksum --apply $Patch $File $New | Out-Null
+            $script = { Param([string]$Tool, [string]$PatchFile, [string]$File, [string]$New)
+                & $Tool --ignore-checksum --apply $PatchFile $File $New | Out-Null
             }
-            Start-Job    -Name "Script" -ScriptBlock $script -ArgumentList @($Files.tool.flips, $Patch, $File, $New)
+            Start-Job    -Name "Script" -ScriptBlock $script -ArgumentList @($Files.tool.flips, $PatchFile, $File, $New)
         }
         else {
-            $script = { Param([string]$Tool, [string]$Patch, [string]$File)
-                & $Tool --ignore-checksum --apply $Patch $File | Out-Null
+            $script = { Param([string]$Tool, [string]$PatchFile, [string]$File)
+                & $Tool --ignore-checksum --apply $PatchFile $File | Out-Null
             }
-            Start-Job    -Name "Script" -ScriptBlock $script -ArgumentList @($Files.tool.flips, $Patch, $File)
+            Start-Job    -Name "Script" -ScriptBlock $script -ArgumentList @($Files.tool.flips, $PatchFile, $File)
         }
         StartJobLoop -Name "Script"
     }
-    elseif ($Patch -like "*.ups*") {
-        $script = { Param([string]$Tool, [string]$File, [string]$Patch, [String]$Out)
-            & $Tool apply -b $File -p $Patch -o $Out | Out-Null
+    elseif ($PatchFile -like "*.ups*") {
+        $script = { Param([string]$Tool, [string]$File, [string]$PatchFile, [String]$Out)
+            & $Tool apply -b $File -p $PatchFile -o $Out | Out-Null
         }
-        if ($New.Length -gt 0)   { Start-Job -Name "Script" -ScriptBlock $script -ArgumentList @($Files.tool.ups, $File, $Patch, $New) }
-        else                     { Start-Job -Name "Script" -ScriptBlock $script -ArgumentList @($Files.tool.ups, $File, $Patch, $File) }
+        if ($New.Length -gt 0)   { Start-Job -Name "Script" -ScriptBlock $script -ArgumentList @($Files.tool.ups, $File, $PatchFile, $New) }
+        else                     { Start-Job -Name "Script" -ScriptBlock $script -ArgumentList @($Files.tool.ups, $File, $PatchFile, $File) }
         StartJobLoop -Name "Script"
     }
-    elseif ($Patch -like "*.xdelta*" -or $Patch -like "*.vcdiff*") {
-        if     ($Patch -like "*.xdelta*")   { $Tool = $Files.tool.xdelta  }
-        elseif ($Patch -like "*.vcdiff*")   { $Tool = $Files.tool.xdelta3 }
+    elseif ($PatchFile -like "*.xdelta*" -or $PatchFile -like "*.vcdiff*") {
+        if     ($PatchFile -like "*.xdelta*")   { $Tool = $Files.tool.xdelta  }
+        elseif ($PatchFile -like "*.vcdiff*")   { $Tool = $Files.tool.xdelta3 }
 
-        $script = { Param([string]$Tool, [string]$File, [string]$Patch, [string]$New)
-            & $Tool -d -s $File $Patch $New | Out-Null
+        $script = { Param([string]$Tool, [string]$File, [string]$PatchFile, [string]$New)
+            & $Tool -d -s $File $PatchFile $New | Out-Null
         }
         if ($New.Length -gt 0) {
             RemoveFile $New
-            Start-Job    -Name "Script" -ScriptBlock $script -ArgumentList @($Tool, $File, $Patch, $New)
+            Start-Job    -Name "Script" -ScriptBlock $script -ArgumentList @($Tool, $File, $PatchFile, $New)
             StartJobLoop -Name "Script"
         }
         else {
-            Start-Job    -Name "Script" -ScriptBlock $script -ArgumentList @($Tool, $File, $Patch, ($File + ".ext"))
+            Start-Job    -Name "Script" -ScriptBlock $script -ArgumentList @($Tool, $File, $PatchFile, ($File + ".ext"))
             StartJobLoop -Name "Script"
             Move-Item -LiteralPath ($File + ".ext") -Destination $File -Force
         }
     }
-    elseif ($Patch -like "*.ppf*") {
-        $script = { Param([string]$Tool, [string]$File, [string]$Patch)
-            & $Tool a $File $Patch | Out-Null
+    elseif ($PatchFile -like "*.ppf*") {
+        $script = { Param([string]$Tool, [string]$File, [string]$PatchFile)
+            & $Tool a $File $PatchFile | Out-Null
         }
         if ($New.Length -gt 0) {
             Copy-Item -LiteralPath $File -Destination $New -Force
-            Start-Job -Name "Script" -ScriptBlock $script -ArgumentList @($Files.tool.applyPPF3, $New, $Patch)
+            Start-Job -Name "Script" -ScriptBlock $script -ArgumentList @($Files.tool.applyPPF3, $New, $PatchFile)
         }
-        else { Start-Job -Name "Script" -ScriptBlock $script -ArgumentList @($Files.tool.applyPPF3, $File, $Patch) }
+        else { Start-Job -Name "Script" -ScriptBlock $script -ArgumentList @($Files.tool.applyPPF3, $File, $PatchFile) }
         StartJobLoop -Name "Script"
     }
     else { return $False }
@@ -1092,8 +1107,8 @@ function ApplyPatch([string]$File=$GetROM.decomp, [string]$Patch, [string]$New, 
     if ($New) { $GetROM.run = $New }
 
     if (!$Silent) {
-        if (IsSet $New)   { WriteToConsole ("Applied patch: " + $Patch + " from " + $File + " to " + $New) }
-        else              { WriteToConsole ("Applied patch: " + $Patch + " to " + $File)                   }
+        if (IsSet $New)   { WriteToConsole ("Applied patch: " + $PatchFile + " from " + $File + " to " + $New) }
+        else              { WriteToConsole ("Applied patch: " + $PatchFile + " to " + $File)                   }
     }
     return $True
 
@@ -1201,7 +1216,7 @@ function DecompressROM() {
 function CompressROM() {
     
     if (!$PatchInfo.decompress -or !(TestFile $GetROM.decomp) -or $GamePatch.compress -eq 0) {
-        if (!$PatchInfo.decompress -and !(UseOptions)) {
+        if (!$PatchInfo.decompress -and !(UseOptions) -and $GetROM.run -ne $GetROM.patched) {
             Copy-Item -LiteralPath $GetROM.run -Destination $GetROM.patched -Force
             $GetROM.run = $GetROM.patched
         }
