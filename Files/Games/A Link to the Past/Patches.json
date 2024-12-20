@@ -34,4 +34,22 @@
 	"output"		: "parallel_remodel",
 	"tooltip"		: "An easier and more vanilla-like balanced version of the Parallel Worlds ROM hack"
 
+}, {
+
+	"title"			: "The Legend of Zelda: Oracle of Secrets",
+	"version"		: "0.162 Beta",
+	"vc_title"		: "Secrets",
+	"patch"			: "Compressed\\oracle_of_secrets.bps",
+	"output"		: "oracle_of_secrets",
+	"tooltip"		: "ROM hack which completely reimagines the game with a new world, story, bosses and more{0}Features seven main dungeons and three mini-dungeons{0}As well as complete new or reworked items, music, graphics, menu, secrets, story and more"
+
+}, {
+
+	"title"			: "The Legend of Zelda: Meadow of Shadows",
+	"version"		: "1",
+	"vc_title"		: "Meadow",
+	"patch"			: "Compressed\\meadow_of_secrets.bps",
+	"output"		: "meadow_of_shadows",
+	"tooltip"		: "A short prequel hack to the Oracle of Secrets hack{0}Features three dungeons and a final gauntlet area"
+
 } ]

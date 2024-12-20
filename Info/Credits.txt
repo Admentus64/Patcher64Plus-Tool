@@ -230,6 +230,25 @@
 - Design:				Core Pride
 - Music:				Green Ocarina
 
+--- Star Fox Survival ---
+- Main Programming:			Zel, Kaze Emanuar
+
+--- Sands of Time ---
+- Main Programming:			Debug log, Woon
+- Other:				Jinnosuke, Shoopey, StoneeBadLuck, Nokaubure, Pugsly, X dude awesome, Owl,
+					Richie, Syeo, Goblinlord, Grandlovania, Sklitte, Cursed Crafts
+-- Time Lost ---
+- Main Programming:			Stonee Bad Luck
+- Other:				Don Camilo, Jinnosuke, LemonTea, Shoopey, X-DudeAwesome, z64tools, Bobbahawk,
+					Zeldaboy14, Nokaubure, Woon, z64me, Skawo, Ashes, FrankStarr, Highly, Skieth,
+					Shoobee-Doowap-Baoh
+
+--- Demon's Quest ---
+- Main Programming:			dave
+
+--- Indigo ---
+- Main Programming:			The Indigo Team
+
 --- Randomizer ---
 - Cuphat
 - fenhl
@@ -467,7 +486,7 @@
 --- Lowpoly Promo Mario / Luigi Model ---
 - fznmeatpopsicle
 
---- Multiplayer (v1.4.2) ---
+--- Multiplayer ---
 - Skelux
 
 --- Split-screen Multiplayer ---
@@ -478,30 +497,78 @@
 - Kaze Emanuar (revised ROM Hack)
 - aglab2 (Wii VC crashfixes)
 
---- Star Road Multiplayer (v1.2.1) ---
+--- Star Road Multiplayer ---
 - Skelux
 
---- Arguably Better Edition (R3) ---
+--- Arguably Better Edition ---
 - Mors
 - GTM
 - Benial
 - Kaze Emanuar
 - SM64 Decompilation Project
 
---- Last Impact (v1.2)
+--- Last Impact ---
 - Kaze Emanuar
 
---- SM64: Ocarina of Time
+--- SM64: Ocarina of Time ---
 - Kaze Emanuar
 
---- Super Mario 64 Land (v1.1)
+--- Super Mario 64 Land ---
 - Kaze Emanuar
 
---- Super Mario Odyssey 64
+--- Super Mario Odyssey 64 ---
 - Kaze Emanuar
 
---- Super Mario 64 Internal Plexus: Build 3313 (v0.7) ---
-- Christopher Rios Lillo
+--- Super Mario 64 Internal Plexus: Build 3313 ---
+- Annielogue
+- Alieneer
+- Arthurtilly
+- Benedani
+- BikdipOnABus
+- BlackJoystick
+- Blakeoramo
+- Bobstar 
+- Cavin856
+- Charles445
+- ChrisRLillo
+- Curly
+- Dudaw
+- Dynalox
+- Falcobuster
+- Felegg
+- FluffaMario
+- Gab64
+- Gronoti
+- Halo/MariHalo 
+- Hornet 
+- iProgramInCpp 
+- jefftastic
+- JoshTheBosh 
+- Kaze Emanuar
+- Kyan Pepper 
+- LaytonLoztew
+- Lily
+- MarioMaster810
+- Marionova
+- Mrs_kitty
+- NewSupKaizo55
+- NicoSwitch 
+- PatCangy 
+- Pointnclick 
+- Pyro Jay
+- Quills 
+- Rovert
+- SigmaShield
+- someone2639
+- SonicAndMarioGames1985
+- Stalechilibeans
+- Super Mario 64 Beta Archive Team
+- The Bob
+- TheGreatestRoman
+- The Preservation Project Team
+- wasteofblood
+- Willisaclown
+- Zany Z-Fight
 
 --- Termina Invasion ---
 - Reonu
@@ -757,6 +824,12 @@ Other:			Admentus & gamemasterplc
 --- Parallel Remodel ---
 - Remodel Hacking:			PuzzleDude
 - Original Hacking:			Euclid, SePH and all Parallel World contributors
+
+--- Oracle of Secrets ---
+- scawful, Zeldix community, SePH, Conn, Euclid, SpritersResource, ghillie
+
+--- Meadow of Shadows ---
+- scawful & JaredBrian, Letterbomb, and Zarby89
 
 
 

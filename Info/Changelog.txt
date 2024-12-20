@@ -1,3 +1,11 @@
+v25.1.0
+- Added two new ROM hacks for ALttP
+- Added addon support for Patches with new and moves patches
+- Updated Harder Iron Kunckle for MM
+- Fixed several issues for OoT Redux
+- Fixed issue with list box selections not being saved
+- Fixed issue with "Royal Wallet" for MM not being defined as a Scene option
+
 v25.0.1
 - Improved "Run Faster" option for OoT
 

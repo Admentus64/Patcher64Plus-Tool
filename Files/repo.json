@@ -14,5 +14,11 @@
 		"uri"			: "https://github.com/Caverns4/OoT-Models/archive/refs/heads/main.zip",
 		"version"		: "https://github.com/Caverns4/OoT-Models/blob/main/version.txt",
 		"versionFallback"	: "https://raw.githubusercontent.com/Caverns4/OoT-Models/main/version.txt"
+	}, {
+		"title"			: "Expanded ROM Hacks",
+		"type"			: "Patches",
+		"uri"			: "https://github.com/Admentus64/Patcher64Plus-Tool-Patches/archive/refs/heads/main.zip",
+		"version"		: "https://github.com/Admentus64/Patcher64Plus-Tool-Patches/blob/main/version.txt",
+		"versionFallback"	: "https://raw.githubusercontent.com/Admentus64/Patcher64Plus-Tool-Patches/main/version.txt"
 	} ]
 }

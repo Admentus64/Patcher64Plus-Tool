@@ -47,14 +47,6 @@
 
 }, {
 
-	"title"			: "Termina Invasion",
-	"patch"			: "Compressed\\termina_invasion.bps",
-	"console"		: "Native",
-	"output"		: "termina_invasion",
-	"tooltip"		: "Termina takes over the Mushroom Kingdom"
-
-}, {
-
 	"title"			: "Multiplayer",
 	"version"		: "1.4.2",
 	"command"		: "Patch Boot DOL",
@@ -124,28 +116,6 @@
 
 }, {
 
-	"title"			: "Last Impact",
-	"version"		: "1.2",
-	"rom_title"		: "SM64 Last Impact",
-	"patch"			: "Decompressed\\last_impact.vcdiff",
-	"console"		: "Native",
-	"extend"		: 64,
-	"output"		: "last_impact",
-	"tooltip"		: "A brand new world for Super Mario 64 with new stages and more than 120 stars to collect"
-
-}, {
-
-	"title"			: "Super Mario 64 Land",
-	"version"		: "1.1",
-	"rom_title"		: "SM64 Land",
-	"patch"			: "Decompressed\\land.vcdiff",
-	"console"		: "Native",
-	"extend"		: 64,
-	"output"		: "land",
-	"tooltip"		: "A brand new world for Super Mario 64 with new stages and more than 120 stars to collect"
-
-}, {
-
 	"title"			: "Super Mario Odyssey 64",
 	"rom_title"		: "SM64 Odyssey",
 	"patch"			: "Decompressed\\odyssey.vcdiff",
@@ -153,17 +123,6 @@
 	"extend"		: 64,
 	"output"		: "odyssey",
 	"tooltip"		: "A brand new world for Super Mario 64 with new stages and 80 stars to collect"
-
-}, {
-
-	"title"			: "Internal Plexus: Build 3313",
-	"version"		: "0.7",
-	"rom_title"		: "SM64 B3313",
-	"patch"			: "Decompressed\\internal_plexus.bps",
-	"console"		: "Native",
-	"extend"		: 64,
-	"output"		: "internal_plexus",
-	"tooltip"		: "A brand new beta-based world for Super Mario 64 with new stages and 142 stars to collect"
 
 }, {
 

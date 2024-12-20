@@ -634,12 +634,15 @@ function ByteOptions() {
     }
     
     if (IsChecked $Redux.Hero.IronKnuckle) {
-        ChangeBytes -Offset @("D9D028", "D9D030") -Values "00000000"                                                                                                                                                                                                                                      # Start moving by himself
-        ChangeBytes -Offset   "D9CEEC"            -Values "14400004"; ChangeBytes -Offset "D9CEFC" -Values "10400003"                                                                                                                                                                                     # Run faster
-        ChangeBytes -Offset   "D9CF08"            -Values "00000000"; ChangeBytes -Offset "D9D05E" -Values "A849"                                                                                                                                                                                         # Always run
-        ChangeBytes -Offset   "D9D402"            -Values "4170";     ChangeBytes -Offset "D9CD76" -Values "4316"; ChangeBytes -Offset "D9CD48" -Values "00000000"; ChangeBytes -Offset "D9DC6B" -Values "03"                                                                                             # Block attacks, even armored
-        ChangeBytes -Offset   "D9CE0E"            -Values "3FFC";     ChangeBytes -Offset "D9D362" -Values "4000"; ChangeBytes -Offset "D9D592" -Values "4180";     ChangeBytes -Offset "D9D6CA" -Values "4060"; ChangeBytes -Offset "D9D96E" -Values "A8A3"; ChangeBytes -Offset "D9CE84" -Values "1000" # Attack faster
-        ChangeBytes -Offset @("D9D358", "D9D564", "D9D5C0", "D9D638", "D9D6C0", "D9D74C", "D9D784", "D9D8C8", "D9D9A4", "D9DB3C") -Values "00000000"                                                                                                                                                      # Attack faster
+        ChangeBytes -Offset @("D9D028", "D9D030") -Values "00000000"                                                                                                                                            # Start moving by himself
+        ChangeBytes -Offset   "D9CEEC"            -Values "14400004"; ChangeBytes -Offset "D9CEFC" -Values "10400003"                                                                                           # Run faster
+        ChangeBytes -Offset   "D9CF08"            -Values "00000000"; ChangeBytes -Offset "D9D05E" -Values "A849"                                                                                               # Always run
+        ChangeBytes -Offset   "D9D402"            -Values "4170";     ChangeBytes -Offset "D9CD76" -Values "4316"; ChangeBytes -Offset "D9CD48" -Values "00000000"; ChangeBytes -Offset "D9DC6B" -Values "03"   # Block attacks, even armored
+        ChangeBytes -Offset   "D9CE0E"            -Values "3FFC";     ChangeBytes -Offset "D9D592" -Values "4180"; ChangeBytes -Offset "D9D6CA" -Values "4060";     ChangeBytes -Offset "D9CE84" -Values "1000" # Attack faster
+        ChangeBytes -Offset   "D9D362"            -Values "4000"                                                                                                                                                # Faster vertical attack but less reach
+        ChangeBytes -Offset   "D9D96E"            -Values "A8A3"                                                                                                                                                # Vertical attack after double horizontal attack
+        ChangeBytes -Offset   "D9DB02"            -Values "A9A0"                                                                                                                                                # Double horizontal attack after single horizontal attack
+        ChangeBytes -Offset @("D9D358", "D9D564", "D9D5C0", "D9D638", "D9D6C0", "D9D74C", "D9D784", "D9D8C8", "D9D9A4", "D9DB3C") -Values "00000000"                                                            # Attack faster
     }
 
     if (IsChecked $Redux.Hero.Keese)      { ChangeBytes -Offset   "CF3B58"             -Values "0000000000000000"; ChangeBytes -Offset   "CF3B60"                                                                                  -Values "000000000000000000000000" }
@@ -647,8 +650,6 @@ function ByteOptions() {
     if (IsChecked $Redux.Hero.Wolfos)     { ChangeBytes -Offset @("E03774", "E04270" ) -Values "1000";             ChangeBytes -Offset @("E03974", "E043D0", "E048B4", "E04B18", "E05060", "E053A8", "E05578", "E05778", "E05A6C") -Values "00000000"                 }
     
     
-
-
 
     # MAGIC #
 
@@ -1871,7 +1872,7 @@ function CreateTabMain() {
     CreateReduxCheckBox -Name "FierceDeityAnywhere"    -Text "Fierce Deity Anywhere"     -Info "The Fierce Deity Mask can be used anywhere now´nApplies additional fixes to make the form more usable, such as being able to push blocks" -Credits "Randomizer"
     CreateReduxCheckBox -Name "DisableScreenShrinking" -Text "Disable Screen Shrinking"  -Info "Disables the effect of the screen shrinking just before the next day"                                                                     -Credits "Euler"
     CreateReduxCheckBox -Name "KeepDekuBubble"         -Text "Don't Burst Deku Bubble"   -Info "Holding B button will not burst the Deku Link Bubble"                                                                                     -Credits "Euler"
-    CreateReduxCheckBox -Name "RoyalWallet"            -Text "Royal Wallet"              -Info "A third wallet upgrade can be bought"                                                                                                     -Credits "Admentus"
+    CreateReduxCheckBox -Name "RoyalWallet"            -Text "Royal Wallet"              -Info "A third wallet upgrade can be bought"                                                                                              -Scene -Credits "Admentus"
 
 
 
