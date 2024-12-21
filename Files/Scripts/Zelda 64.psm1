@@ -730,7 +730,7 @@ function GetReplacementTracks() {
     foreach ($track in $Files.json.music.tracks)  {
         if ($track.title -eq $Redux.ReplaceMusic.SelectReplace.text) {
             foreach ($item in Get-ChildItem -LiteralPath $Paths.Music -Recurse) {
-                if ($item.extension -eq ".zseq" -or $item.extension -eq ".seq") {
+                if ($item.extension -eq ".zseq" -or $item.extension -eq ".seq" -and $item.DirectoryName -ne $Paths.Music) {
                     if ($item.length -le (GetDecimal $track.size) ) {
                         $event = $False
 
