@@ -1870,7 +1870,7 @@ function ByteSceneOptions() {
         }
 
         PrepareMap   -Scene "Water Temple" -Map 10 -Header 0
-        ReplaceTransitionActor -Index 22 -Compare "0082" -Param "0084" # Master Quest door bug
+        ReplaceTransitionActor -Index 22 -Compare "0083" -Param "0084" # Master Quest door bug
         ReplaceActor -Name "Pot" -Compare "7003" -Y 860; ReplaceActor -Name "Pot" -Compare "7203" -Y 860; ReplaceActor -Name "Pot" -Compare "7403" -Y 860
         SaveAndPatchLoadedScene
 

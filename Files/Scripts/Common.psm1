@@ -511,7 +511,7 @@ function ChangePatch() {
             $global:GamePatch.PSObject.Properties.Remove('LoadedModel')
             $global:GamePatch | Add-Member -MemberType NoteProperty -Name "LoadedModelsList" -Value @{}
             $global:GamePatch | Add-Member -MemberType NoteProperty -Name "LoadedModel"      -Value @{}
-            if ($GamePatch.dmaShift -eq $null) { $global:GamePatch | Add-Member -MemberType NoteProperty -Name "dmaShift" -Value 0 }
+            if ($GamePatch.dma_shift -eq $null) { $global:GamePatch | Add-Member -MemberType NoteProperty -Name "dma_shift" -Value 0 }
 
             ChangeGameRev
             SetGameScript

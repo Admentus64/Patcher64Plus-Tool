@@ -3,6 +3,8 @@ v25.1.1
 - Fixed issue with reading music track replacements not in an author subfolder
 - Fixed issue with some GamePatch properties not properly resetting between changing patches
 - Fixed issue with "Enhanced Child Model Option" always showing by allowing base to -1
+- Fixed issue with patching the Water Temple MQ duplicate door key flag
+- Fixed issue with Scene Editor GUI scene extractions
 
 v25.1.0
 - Added two new ROM hacks for ALttP

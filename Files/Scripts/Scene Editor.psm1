@@ -601,7 +601,7 @@ function ExtractAllScenes([switch]$Current, [String]$Quest="Normal Quest") {
             CreateSubPath      ($Paths.Games + "\" + $Files.json.sceneEditor.game + "\Editor\Scenes\" + $Scene.name + "\" + $Quest)
             ExtractScene -Path ($Paths.Games + "\" + $Files.json.sceneEditor.game + "\Editor\Scenes\" + $Scene.name + "\" + $Quest) -Offset $scene.dma -Length $scene.length -Current
         }
-        elseif ($Quest -eq "Normal Quest") { ExtractScene -Path ($Paths.Games + "\" + $Files.json.sceneEditor.game + "\Editor\Scenes\" + $scene.name) -Offset (AddToOffset -Offset $scene.dma -Add (Get8Bit $GamePatch.dma_shift)) -Length $scene.length -Current }
+        elseif ($Quest -eq "Normal Quest") { ExtractScene -Path ($Paths.Games + "\" + $Files.json.sceneEditor.game + "\Editor\Scenes\" + $scene.name) -Offset ('{0:X}' -f ((GetDecimal $scene.dma) + $GamePatch.shift_dma)) -Length $scene.length -Current }
     }
     else {
         foreach ($scene in $Files.json.sceneEditor.scenes) {
@@ -610,9 +610,9 @@ function ExtractAllScenes([switch]$Current, [String]$Quest="Normal Quest") {
 
             if ($scene.dungeon -eq 1 -and $Quest -ne "Normal Quest") {
                 CreateSubPath      ($Paths.Games + "\" + $Files.json.sceneEditor.game + "\Editor\Scenes\" + $Scene.name + "\" + $Quest)
-                ExtractScene -Path ($Paths.Games + "\" + $Files.json.sceneEditor.game + "\Editor\Scenes\" + $Scene.name + "\" + $Quest) -Offset (AddToOffset -Offset $scene.dma -Add (Get8Bit $GamePatch.dma_shift)) -Length $scene.length
+                ExtractScene -Path ($Paths.Games + "\" + $Files.json.sceneEditor.game + "\Editor\Scenes\" + $Scene.name + "\" + $Quest) -Offset ('{0:X}' -f ((GetDecimal $scene.dma) + $GamePatch.shift_dma)) -Length $scene.length
             }
-            elseif ($Quest -eq "Normal Quest") { ExtractScene -Path ($Paths.Games + "\" + $Files.json.sceneEditor.game + "\Editor\Scenes\" + $scene.name) -Offset (AddToOffset -Offset $scene.dma -Add (Get8Bit $GamePatch.dma_shift)) -Length $scene.length }
+            elseif ($Quest -eq "Normal Quest") { ExtractScene -Path ($Paths.Games + "\" + $Files.json.sceneEditor.game + "\Editor\Scenes\" + $scene.name) -Offset ('{0:X}' -f ((GetDecimal $scene.dma) + $GamePatch.shift_dma)) -Length $scene.length }
         }
     }
 
@@ -712,7 +712,7 @@ function PatchAllScenes() {
         if     ($SceneEditor.PatchDungeons.Checked -and $scene.dungeon -ne 1)                          { continue }
         elseif ($SceneEditor.PatchCurrent.Checked  -and $scene.name    -ne $SceneEditor.Scenes.Text)   { continue }
 
-        if (!(PatchScene -Path ("Scenes\" + $Scene.name) -Offset (AddToOffset -Offset $scene.dma -Add (Get8Bit $GamePatch.dma_shift)) -Length $Scene.length -Scene $scene)) { return $False }
+        if (!(PatchScene -Path ("Scenes\" + $Scene.name) -Offset ('{0:X}' -f ((GetDecimal $scene.dma) + $GamePatch.shift_dma)) -Length $Scene.length -Scene $scene)) { return $False }
     }
     return $True
     
