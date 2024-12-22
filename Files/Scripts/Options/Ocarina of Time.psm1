@@ -3041,7 +3041,7 @@ function CreateTabGraphics() {
         CreateReduxComboBox -Name "ChildModels" -Child -Text "Child Model" -Items (LoadModelsList -Category "Child") -Default "Original" -Info "Replace the child model used for Link"
         CreateReduxComboBox -Name "AdultModels" -Adult -Text "Adult Model" -Items (LoadModelsList -Category "Adult") -Default "Original" -Info "Replace the adult model used for Link"
     }
-    CreateReduxCheckBox -Name "EnhancedChildQuestModel" -Base 0 -Text "Enhanced Child Quest Model" -Info "Use an enhanced model instead for Child Quest with unique swords and shields" -Credits "Admentus"
+    CreateReduxCheckBox -Name "EnhancedChildQuestModel" -Base (-1) -Text "Enhanced Child Quest Model" -Info "Use an enhanced model instead for Child Quest with unique swords and shields" -Credits "Admentus"
 
     CreateReduxCheckBox -Name "Widescreen"        -Text "16:9 Widescreen (Advanced)"   -Info "Patch the game to be in true 16:9 widescreen with the HUD pushed to the edges"         -Safe -Native -Credits "Widescreen Patch by gamemasterplc, enhanced and ported by GhostlyDark"
     CreateReduxCheckBox -Name "WidescreenAlt"     -Text "16:9 Widescreen (Simplified)" -Info "Apply 16:9 Widescreen adjusted backgrounds and textures (as well as 16:9 Widescreen for the Wii VC)" -Credits "Aspect Ratio Fix by Admentus and 16:9 backgrounds by GhostlyDark, ShadowOne333 & CYB3RTRON" -Link $Redux.Graphics.Widescreen
@@ -3051,7 +3051,6 @@ function CreateTabGraphics() {
     CreateReduxCheckBox -Name "GCScheme"          -Text "GC Scheme"                    -Info "Replace and change the textures, dialogue and text colors to match the GameCube's scheme"            -Credits "Admentus, GhostlyDark, ShadowOne333 & GoldenMariaNova"
     CreateReduxCheckBox -Name "OverworldSkyboxes" -Text "Overworld Skyboxes"           -Info "Use day and night skyboxes for all overworld areas lacking one"                               -Scene -Credits "Admentus"
     CreateReduxCheckBox -Name "ImprovedMoon"      -Text "Improved Moon"                -Info "Replaces the moon with a nicer looking texture"                                                      -Credits "Admentus & GoldenMariaNova"
-
 
     if (!$IsWiiVC -and $Redux.Graphics.Widescreen -ne $null) {
         EnableElem -Elem @($Redux.Fixes.PauseScreenDelay, $Redux.Fixes.PauseScreenCrash) -Active (!$Redux.Graphics.Widescreen.Checked)
