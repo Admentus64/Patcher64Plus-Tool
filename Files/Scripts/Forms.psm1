@@ -898,7 +898,7 @@ function ForceReduxOption([string]$Name, [object]$Force, [object]$Value=0, [stri
         }
     }
 
-    if ($Items.Count -gt 0) {
+    if ($Items.Count -gt 0 -and $Value -ne $null) {
         $Items = $Items | Select-Object -Unique
         if ($Value.GetType().Name -eq "String") { $Value = [array]::indexof($Items, $Value) + 1 }
     }

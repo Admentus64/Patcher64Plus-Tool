@@ -11,7 +11,14 @@ function CreateOptionsPanel([array]$Tabs=@()) {
         $GamePatch | Add-Member -MemberType NoteProperty -Name ForceOptions        -Value ([System.Collections.ArrayList]@())
         $GamePatch | Add-Member -MemberType NoteProperty -Name DefaultOptionValues -Value ([System.Collections.ArrayList]@())
     }
-    else { $GamePatch.ExposeGroups = $GamePatch.ExcludeGroups = $GamePatch.ExposeOptions = $GamePatch.ExcludeOptions = $GamePatch.ForceOptions = $GamePatch.DefaultOptionValues= [System.Collections.ArrayList]@() }
+    else {
+        $GamePatch.ExposeGroups        = [System.Collections.ArrayList]@()
+        $GamePatch.ExcludeGroups       = [System.Collections.ArrayList]@()
+        $GamePatch.ExposeOptions       = [System.Collections.ArrayList]@()
+        $GamePatch.ExcludeOptions      = [System.Collections.ArrayList]@()
+        $GamePatch.ForceOptions        = [System.Collections.ArrayList]@()
+        $GamePatch.DefaultOptionValues = [System.Collections.ArrayList]@()
+    }
 
     if (HasCommand ($GamePatch.function + "ExposeOptions") ) { iex ($GamePatch.function + "ExposeOptions") }
 
