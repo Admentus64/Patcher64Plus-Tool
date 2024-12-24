@@ -30,7 +30,7 @@
 	"models"			: 0,
 	"presets"			: 0,
 	"output"			: "child_quest_classic",
-	"tooltip"			: "Collect every Heart Piece and Gold Skulltula, finish any dungeon and beat Ganon{0} - all as Young Link - without having to rely on any (insane) glitches.",
+	"tooltip"			: "Collect every Heart Piece and Gold Skulltula, finish any dungeon and beat Ganon{0}Experience the entire story as Young Link",
 	"credits"			: "Admentus & GhostlyDark"
 
 }, {
@@ -52,7 +52,7 @@
 	"models"			: 0,
 	"presets"			: 0,
 	"output"			: "child_quest_pro",
-	"tooltip"			: "Child Quest Classic with a more powerful Young Link, being able to use Hookshot and Bow.",
+	"tooltip"			: "Child Quest Classic with a more powerful Young Link, being able to use Hookshot and Bow",
 	"credits"			: "Admentus & GhostlyDark"
 
 }, {
