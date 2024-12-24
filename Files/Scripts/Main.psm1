@@ -35,6 +35,7 @@ function CreateMainDialog() {
     $menuBarEditors        = New-Object System.Windows.Forms.ToolStripMenuItem; $menuBarEditors.Text        = "Editors";            $menuBarMain.Items.Add($menuBarEditors)
 
     $menuBarUpdate         = New-Object System.Windows.Forms.ToolStripButton;   $menuBarUpdate.Text         = "Update Tool";        $menuBarFile.DropDownItems.Add($menuBarUpdate)
+    $menuBarUpdateAddons   = New-Object System.Windows.Forms.ToolStripButton;   $menuBarUpdateAddons.Text   = "Update Addons";      $menuBarFile.DropDownItems.Add($menuBarUpdateAddons)
     $menuBarExit           = New-Object System.Windows.Forms.ToolStripButton;   $menuBarExit.Text           = "Exit";               $menuBarFile.DropDownItems.Add($menuBarExit)
 
     $menuBarSettings       = New-Object System.Windows.Forms.ToolStripButton;   $menuBarSettings.Text       = "Settings";           $menuBarView.DropDownItems.Add($menuBarSettings)
@@ -58,7 +59,14 @@ function CreateMainDialog() {
 
     $menuBarExit.Add_Click(           { $MainDialog.Close()                 } )
     $menuBarUpdate.Add_Click(         { RefreshScripts; AutoUpdate -Manual  } )
-
+    $menuBarUpdateAddons.Add_Click( {
+        RefreshScripts
+        foreach ($addon in $Files.json.repo.addons) {
+            CheckAddon  -Addon $addon
+            UpdateAddon -Addon $addon
+        }
+    } )
+    
     $menuBarSettings.Add_Click(       { RefreshScripts; ShowRightPanel $RightPanel.Settings  } )
     $menuBarOptions.Add_Click(        { RefreshScripts; ShowRightPanel $RightPanel.Options   } )
     $menuBarCredits.Add_Click(        { RefreshScripts; ShowRightPanel $RightPanel.Credits   } )

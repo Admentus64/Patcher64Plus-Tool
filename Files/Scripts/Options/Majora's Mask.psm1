@@ -217,10 +217,10 @@ function ByteOptions() {
 
     # OTHER #
 
-    if ( (IsIndex -Elem $Redux.Other.Select -Text "Translate Only")         -or (IsIndex $Redux.Other.Select -Text "Translate and Enable Map Select") )       { ExportAndPatch -Path "map_select" -Offset "C7C870" -Length "13C8"; ExportAndPatch -Path "inventory_editor" -Offset "CA6370" -Length "1E0" }
-    if ( (IsIndex -Elem $Redux.Other.Select -Text "Enable Map Select Only") -or (IsIndex $Redux.Other.Select -Text "Translate and Enable Map Select") )       { ChangeBytes -Offset "C0A592" -Values "D940" }
-    if ( (IsIndex -Elem $Redux.Other.SkipIntro -Text "Skip Logo")           -or (IsIndex -Elem $Redux.Other.SkipIntro -Text "Skip Logo and Title Screen") )   { ChangeBytes -Offset "C7A54C" -Values "00000000" }
-    if ( (IsIndex -Elem $Redux.Other.SkipIntro -Text "Skip Title Screen")   -or (IsIndex -Elem $Redux.Other.SkipIntro -Text "Skip Logo and Title Screen") )   { ChangeBytes -Offset "C0A566" -Values "DA00"     }
+    if ( (IsIndex -Elem $Redux.Other.Select    -Text "Translate Only")         -or (IsIndex $Redux.Other.Select          -Text "Translate and Enable Map Select") )       { ExportAndPatch -Path "map_select" -Offset "C7C870" -Length "13C8"; ExportAndPatch -Path "inventory_editor" -Offset "CA6370" -Length "1E0" }
+    if ( (IsIndex -Elem $Redux.Other.Select    -Text "Enable Map Select Only") -or (IsIndex $Redux.Other.Select          -Text "Translate and Enable Map Select") )       { ChangeBytes                       -Offset "C0A592" -Values "D940"     }
+    if ( (IsIndex -Elem $Redux.Other.SkipIntro -Text "Skip Logo")              -or (IsIndex -Elem $Redux.Other.SkipIntro -Text "Skip Logo and Title Screen") )            { ChangeBytes                       -Offset "C7A54C" -Values "00000000" }
+    if ( (IsIndex -Elem $Redux.Other.SkipIntro -Text "Skip Title Screen")      -or (IsIndex -Elem $Redux.Other.SkipIntro -Text "Skip Logo and Title Screen") )            { ChangeBytes                       -Offset "C0A566" -Values "DA00"     }
 
     if (IsChecked $Redux.Other.AlwaysBestEnding) {
         ChangeBytes -Offset "B81CE0" -Values "00000000"; ChangeBytes -Offset "B81D48" -Values "00000000"; ChangeBytes -Offset "B81DB0" -Values "00000000"; ChangeBytes -Offset "B81E18" -Values "00000000"; ChangeBytes -Offset "B81E80" -Values "00000000"
@@ -257,7 +257,7 @@ function ByteOptions() {
 
             ChangeBytes -Offset "C9795B" -Values "1E" # Dungeon Map - Stray Fairy Slash (1C -> 29)
             ChangeBytes -Offset "C97993" -Values "1C" # Dungeon Map - Stray Fairy Slash (1A -> 27)
-            ChangeBytes -Offset "C981F3" -Values "1A 35 EF 82 90 3C 19 00 12 37 39 82 30 24 4D 00 08 AE 0D 02 B0" # Dungeon Map - Stray Fairy Icon (22 35 EF 82 90 3C 19 00 1A 37 39 82 30 24 4D 00 08 AE 0D 02 B0)
+            ChangeBytes -Offset "C981F3" -Values "1A35EF82903C19001237398230244D0008AE0D02B0" # Dungeon Map - Stray Fairy Icon (22 35 EF 82 90 3C 19 00 1A 37 39 82 30 24 4D 00 08 AE 0D 02 B0)
         }
 
         PatchBytes -Offset "A9A000" -Length "12C00" -Texture -Patch "Widescreen\carnival_of_time.bin"
@@ -645,9 +645,9 @@ function ByteOptions() {
         ChangeBytes -Offset @("D9D358", "D9D564", "D9D5C0", "D9D638", "D9D6C0", "D9D74C", "D9D784", "D9D8C8", "D9D9A4", "D9DB3C") -Values "00000000"                                                            # Attack faster
     }
 
-    if (IsChecked $Redux.Hero.Keese)      { ChangeBytes -Offset   "CF3B58"             -Values "0000000000000000"; ChangeBytes -Offset   "CF3B60"                                                                                  -Values "000000000000000000000000" }
-    if (IsChecked $Redux.Hero.Dinolfos)   { ChangeBytes -Offset   "D14C20"             -Values "00000000";         ChangeBytes -Offset @("D15B18", "D15BE8", "D16108")                                                             -Values "1000"                     }
-    if (IsChecked $Redux.Hero.Wolfos)     { ChangeBytes -Offset @("E03774", "E04270" ) -Values "1000";             ChangeBytes -Offset @("E03974", "E043D0", "E048B4", "E04B18", "E05060", "E053A8", "E05578", "E05778", "E05A6C") -Values "00000000"                 }
+    if (IsChecked $Redux.Hero.Keese)      { ChangeBytes -Offset   "CF4E68"             -Values "1500"                                                                                                                                         }
+    if (IsChecked $Redux.Hero.Dinolfos)   { ChangeBytes -Offset   "D14C20"             -Values "00000000"; ChangeBytes -Offset @("D15B18", "D15BE8", "D16108")                                                             -Values "1000"     }
+    if (IsChecked $Redux.Hero.Wolfos)     { ChangeBytes -Offset @("E03774", "E04270" ) -Values "1000";     ChangeBytes -Offset @("E03974", "E043D0", "E048B4", "E04B18", "E05060", "E053A8", "E05578", "E05778", "E05A6C") -Values "00000000" }
     
     
 
@@ -2234,7 +2234,7 @@ function CreateTabDifficulty() {
     CreateReduxCheckBox -Name "NoBottledFairy"            -Text "No Bottled Fairies"                                                                      -Info "Fairies can no longer be put into a bottle"                                                  -Credits "Euler"
     
     CreateReduxGroup    -Tag  "Hero"        -Text "Hero Mode (Harder Enemies)"
-    CreateReduxCheckBox -Name "Keese"       -Text "Keese"        -Info "Fire Keese or Ice Keese won't turn into regular Keese after hitting Link"                                                                     -Credits "Garo-Mastah"
+    CreateReduxCheckBox -Name "Keese"       -Text "Keese"        -Info "Fire Keese or Ice Keese won't turn into regular Keese after hitting Link"                                                                     -Credits "Admentus"
     CreateReduxCheckBox -Name "Wolfos"      -Text "Wolfos"       -Info "Wolfos do not wait to attack and keep chasing Link"                                                                                           -Credits "Euler"
     CreateReduxCheckBox -Name "Dinolfos"    -Text "Dinolfos"     -Info "Dinolfos do not wait to attack"                                                                                                               -Credits "Euler"
     CreateReduxCheckBox -Name "IronKnuckle" -Text "Iron Knuckle" -Info "Iron Knuckles are harder`nAlways run, even armored`n`nRun faster`nAttack faster`nMove toward Link right away`nCan block attacks when armored" -Credits "Garo-Mastah & Euler"

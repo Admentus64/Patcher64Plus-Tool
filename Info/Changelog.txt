@@ -1,3 +1,8 @@
+v25.1.2
+- Added new button to check to update addons in the menu bar
+- Fixed issue with Switch Age debug menu option in background rendered scenes
+- Changed Harder Keese option for MM with an always false if-statement
+
 v25.1.1
 - Moved some ALttP patches to the patches addon
 - Fixed issue with reading music track replacements not in an author subfolder
