@@ -367,8 +367,6 @@ function ChildQuestProByteReduxOptions() {
 #==============================================================================================================================================================================================
 function ChildQuestProByteSceneOptions() {
     
-    return
-
     # KAKARIKO VILLAGE #
 
     PrepareMap   -Scene "Kakariko Village" -Map 0 -Header 0 # Child - Day
@@ -1518,8 +1516,6 @@ function ChildQuestProByteSceneOptions() {
 #==============================================================================================================================================================================================
 function ChildQuestProByteTextOptions() {
     
-    return
-
     # Items
     SetMessage -ID "0002" -Replace "<NS><DI>You obtained the <M>Song of Storms<W>!<DC><N>Its destructive power seems<N>overwhelming. Be mindful when<N>using it." # Cojiro -> Song of Storms
     SetMessage -ID "0003" -Replace "<NS><DI>You obtained the <C>Prelude of Light<W>!<DC><N>Return to the Temple of Time<N>swiftly, regardless of your<N>current location." # Odd Mushroom -> Prelude of Light
