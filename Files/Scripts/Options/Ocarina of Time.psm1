@@ -3564,13 +3564,13 @@ function CreateTabEquipment() {
 
     # HITBOX #
 
-    CreateReduxGroup  -Tag  "Hitbox"            -Text "Sliders"
+    CreateReduxGroup  -Tag  "Hitbox" -Height 7.25 -Text "Sliders"
     CreateReduxSlider -Name "KokiriSword"       -Child                -Default 3000 -Min 512 -Max 8192 -Freq 512 -Small 256 -Large 512 -Text "Kokiri Sword"    -Info "Set the hitbox length of the Kokiri Sword"                   -Credits "Admentus"
     CreateReduxSlider -Name "MasterSword"       -Adult                -Default 4000 -Min 512 -Max 8192 -Freq 512 -Small 256 -Large 512 -Text "Master Sword"    -Info "Set the hitbox length of the Master Sword"                   -Credits "Admentus"
     CreateReduxSlider -Name "GiantsKnife"       -Adult                -Default 5500 -Min 512 -Max 8192 -Freq 512 -Small 256 -Large 512 -Text "Two-Handed Sword"-Info "Set the hitbox length of the Giant's_Knife/Biggoron's_Sword" -Credits "Admentus"
     CreateReduxSlider -Name "BrokenGiantsKnife" -Adult                -Default 1500 -Min 512 -Max 8192 -Freq 512 -Small 256 -Large 512 -Text "Broken Knife"    -Info "Set the hitbox length of the Broken Giant's Knife"           -Credits "Admentus"
     CreateReduxSlider -Name "Stick" 				      -Default 5000 -Min 512 -Max 8192 -Freq 512 -Small 256 -Large 512 -Text "Deku Stick"      -Info "Set the hitbox length of the Deku Stick" 		           -Credits "Anthrogi"
-    CreateReduxSlider -Name "MegatonHammer"     -Adult -Expose "Dawn" -Default 2500 -Min 512 -Max 8192 -Freq 512 -Small 256 -Large 512 -Text "Megaton Hammer"  -Info "Set the length of the hitbox of the Megaton Hammer"          -Credits "Admentus"
+    CreateReduxSlider -Name "MegatonHammer"     -Adult -Expose "Dawn" -Default 2500 -Min 512 -Max 8192 -Freq 512 -Small 256 -Large 512 -Text "Megaton Hammer"  -Info "Set the hitbox length of the Megaton Hammer"                 -Credits "Admentus"
     CreateReduxSlider -Name "ShieldRecoil"                            -Default 4552 -Min 0   -Max 8248 -Freq 512 -Small 256 -Large 512 -Text "Shield Recoil"   -Info "Set the pushback distance when getting hit while shielding"  -Credits "Admentus (ROM) & Aegiker (RAM)"
     CreateReduxSlider -Name "Hookshot"          -Adult                -Default 13   -Min 0   -Max 110  -Freq 10  -Small 5   -Large 10  -Text "Hookshot Length" -Info "Set the length of the Hookshot"                              -Credits "Admentus"            -Warning "Going above the default length can look weird"
     if (StrLike -Str $GamePatch.settings -Val "Gold Quest") { $val = 26 } else { $val = 104 }
