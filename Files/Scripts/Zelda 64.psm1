@@ -858,12 +858,12 @@ function ShowPreviewImage([string]$Option=$null, [string]$Path="", [object]$Box=
 #==============================================================================================================================================================================================
 function ShowEquipmentPreview() {
     
-    if ($Redux.EquipmentGear.DekuShield   -ne $null)   { ShowEquipmentPreviewImage -Option $Redux.EquipmentGear.DekuShield   -Equipment "Deku Shield"   -IconBox $Redux.Previews.DekuShieldIcon   -LinkBox $Redux.Previews.DekuShield   }
-    if ($Redux.EquipmentGear.HylianShield -ne $null)   { ShowEquipmentPreviewImage -Option $Redux.EquipmentGear.HylianShield -Equipment "Hylian Shield" -IconBox $Redux.Previews.HylianShieldIcon -LinkBox $Redux.Previews.HylianShield }
-    if ($Redux.EquipmentGear.MirrorShield -ne $null)   { ShowEquipmentPreviewImage -Option $Redux.EquipmentGear.MirrorShield -Equipment "Mirror Shield" -IconBox $Redux.Previews.MirrorShieldIcon -LinkBox $Redux.Previews.MirrorShield }
+    if ($Redux.Equipment.DekuShield   -ne $null)   { ShowEquipmentPreviewImage -Option $Redux.Equipment.DekuShield   -Equipment "Deku Shield"   -IconBox $Redux.Previews.DekuShieldIcon   -LinkBox $Redux.Previews.DekuShield   }
+    if ($Redux.Equipment.HylianShield -ne $null)   { ShowEquipmentPreviewImage -Option $Redux.Equipment.HylianShield -Equipment "Hylian Shield" -IconBox $Redux.Previews.HylianShieldIcon -LinkBox $Redux.Previews.HylianShield }
+    if ($Redux.Equipment.MirrorShield -ne $null)   { ShowEquipmentPreviewImage -Option $Redux.Equipment.MirrorShield -Equipment "Mirror Shield" -IconBox $Redux.Previews.MirrorShieldIcon -LinkBox $Redux.Previews.MirrorShield }
 
-    if ($Redux.EquipmentGear.KokiriSword  -ne $null)   { ShowEquipmentPreviewImage -Option $Redux.EquipmentGear.KokiriSword  -Equipment "Kokiri Sword"  -IconBox $Redux.Previews.KokiriSwordIcon }
-    if ($Redux.EquipmentGear.MasterSword  -ne $null)   { ShowEquipmentPreviewImage -Option $Redux.EquipmentGear.MasterSword  -Equipment "Master Sword"  -IconBox $Redux.Previews.MasterSwordIcon }
+    if ($Redux.Equipment.KokiriSword  -ne $null)   { ShowEquipmentPreviewImage -Option $Redux.Equipment.KokiriSword  -Equipment "Kokiri Sword"  -IconBox $Redux.Previews.KokiriSwordIcon }
+    if ($Redux.Equipment.MasterSword  -ne $null)   { ShowEquipmentPreviewImage -Option $Redux.Equipment.MasterSword  -Equipment "Master Sword"  -IconBox $Redux.Previews.MasterSwordIcon }
 
 }
 

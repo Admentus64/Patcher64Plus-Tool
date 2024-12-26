@@ -3,6 +3,7 @@ function ChildQuestProExposeOptions() {
     # Exclude Group
     ExcludeGroup  -Group "Unlock"       -Name "Unlock Child Restrictions"
     ExcludeGroup  -Group "Equipment"    -Name "Swords & Shields"
+    ExcludeGroup  -Group "Previews"     -Name "Equipment Previews"
 
 
 
@@ -37,6 +38,7 @@ function ChildQuestProExposeOptions() {
     ExcludeOption -Group "Fixes"        -Option "VisibleGerudoTent"
     ExcludeOption -Group "Fixes"        -Option "Dungeons"
     ExcludeOption -Group "Graphics"     -Option "ForceHiresModel"
+    ExcludeOption -Group "Styles"       -Option "HairColor"
     ExcludeOption -Group "Equipment"    -Option "FunctionalWeapons"
     ExcludeOption -Group "Save"         -Option "BulletBag"
     ExcludeOption -Group "Save"         -Option "OcarinaOfTime"

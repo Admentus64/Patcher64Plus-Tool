@@ -20,6 +20,7 @@
     ExcludeOption -Group "Fixes"        -Option "GerudosFortress"
     ExcludeOption -Group "Fixes"        -Option "VisibleGerudoTent"
     ExcludeOption -Group "Fixes"        -Option "Dungeons"
+    ExcludeOption -Group "Styles"       -Option "HairColor"
     ExcludeOption -Group "Equipment"    -Option "FunctionalWeapons"
 
 }

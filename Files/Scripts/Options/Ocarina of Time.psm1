@@ -122,7 +122,7 @@ function ByteOptions() {
     if (IsChecked $Redux.Gameplay.RemoveSpeedClamp)         { ChangeBytes -Offset   "BD9AF0"                      -Values "2400"                                                                                                                        }
     if (IsChecked $Redux.Gameplay.ChildShops)               { ChangeBytes -Offset   "C6CEB4"                      -Values "1500"                                                                                                                        }
     if (IsChecked $Redux.Gameplay.FastArrows)               { ChangeBytes -Offset @("DE178E", "DE364E", "DE552E") -Values "0010"                                                                                                                        }
-    if (IsChecked $Redux.Gameplay.FastCharge)               { ChangeBytes -Offset @("C9DCE8", "C9DCF4", "C9DCFC") -Values "00000000";                                            ChangeBytes -Offset @("C9DCF0", "C9DD00", "C9DD2C") -Values "3D59999A" }
+
 
 
     # GAMEPLAY (UNSTABLE) #
@@ -2530,7 +2530,7 @@ function CreateOptionsPreviews() {
 
     # EQUIPMENT PREVIEWS #
 
-    CreatePreviewGroup -Text "Equipment Previews" -Height 9
+    CreatePreviewGroup -Text "Equipment Previews" -Height 9 -Lite
     CreateImageBox -X 20  -Y 40  -W 80 -H 80  -Child -Name "DekuShieldIcon"
     CreateImageBox -X 110 -Y 20  -W 80 -H 120 -Child -Name "DekuShield";      if ($Redux.Equipment.DekuShield   -ne $null)   { $Redux.Equipment.DekuShield.Add_SelectedIndexChanged(   { ShowEquipmentPreview } ) }
     CreateImageBox -X 200 -Y 40  -W 80 -H 80         -Name "HylianShieldIcon"
@@ -2715,7 +2715,6 @@ function CreateTabMain() {
     CreateReduxCheckbox -Name "RemoveSpeedClamp"                           -Text "Remove Jump Speed Limit"    -Info "Removes the jumping speed limit just like in MM"                                                                                                                -Credits "Admentus (ROM) & Aegiker (RAM)"
     CreateReduxCheckbox -Name "ChildShops"                          -Child -Text "Child Shops"                -Info "Open the Potion Shop and Bazaar in Kakariko Village for Child Link"                                                                                             -Credits "Admentus"
     CreateReduxCheckBox -Name "FastArrows"                                 -Text "Less Magic Arrows Cooldown" -Info "The burst animation for Fire, Ice and Light Arrows are shorter`nAllows Link to shoot the next magic arrow a bit quicker"                                        -Credits "Anthrogi"
-    CreateReduxCheckBox -Name "FastCharge"                                 -Text "Instant Lv2 Magic Spin"     -Info "Allows you to perform the Red Magic Spin Attack immediately during charge"                                                                                      -Credits "Anthrogi"
 
 
     # GAMEPLAY (UNSTABLE) #
