@@ -1408,6 +1408,7 @@ function ChildQuestProByteSceneOptions() {
     if ($DungeonList["Ice Cavern"] -eq "Vanilla") {
         PrepareMap   -Scene "Ice Cavern" -Map 3 -Header 0 # Second Open Room
         # Hookshot target and a clear block for climbing up
+        InsertObject -Name "Inside Ganon's Castle"
         InsertObject -Name "Hookshot Pillar & Wall Target"
         InsertActor  -Name "Stone Hookshot Target" -X 600 -Y (-60) -Z (-570) -Param "FF00" -YRot 0x1000
         InsertActor  -Name "Clear Block"           -X 415 -Y 164   -Z (-570) -Param "FF01" -YRot 0x2000
@@ -1524,7 +1525,7 @@ function ChildQuestProByteTextOptions() {
     SetMessage -ID "0004" -Replace "<NS><DI>You obtained the <G>Minuet of Forest<W>!<DC><N>The Sacred Forest Meadow and its<N>Temple are now always within<N>reach." # Odd Potion -> Minuet of Forest
     SetMessage -ID "000C" -Replace "<NS><Icon:3D><DI>You got the <R>Gilded Sword<W>!<DC><N>This blade was forged by a<N>master smith to deal<N>extra damage!" # Biggoron Sword -> Gilded Sword
     SetMessage -ID "0030" -Replace "<NS><Icon:3C><DI>You got the <G>Razor Sword<W>!<DC><N>This new, sharper blade is a cut<N>above the rest." # Fairy Slingshot -> Razor Sword
-    SetMessage -ID "0031" -ASCII -Text "Fairy Bow" -Replace "Hero's Bow"
+  # SetMessage -ID "0031" -ASCII -Text "Fairy Bow" -Replace "Hero's Bow"
     SetMessage -ID "0048" -Replace "<NS><Icon:6B>You received something useless,<N>very reminiscent of the<N><C>Light Medallion<W>!" # Magic Beans -> Light Medallion
     SetMessage -ID "004B" -Replace "<NS><Icon:3D><DI>You got the <R>Razor Longsword<W>!<DC><N>This legendary sword deals<N>massive damage to your foes!<N>Let's hope it won't break..." # Giant's Knife -> Razor Longsword
     SetMessage -ID "004D" -Replace "<Icon:3F><DI>You got a <C>Hero's Shield<W>!<DC><N>Switch to the <B>Equipment<N>Subscreen<W> and select this<N>shield, then equip it with <B><A Button><W>."

@@ -3,6 +3,8 @@ v25.1.4
 - Fixed issue with losing sword when a different item is set to B for OoT Redux
 - Fixed issue with the "Reset Tool" button
 - Fixed issue with setting gamepath and modern GUI style
+- Fixed issue with vanilla Ice Cavern in Child Quest missing a Clear Block
+- Fixed issue with Child Quest Pro applying a text box change twice
 
 v25.1.3
 - Removed "Lv2 Instant Charge" option for OoT
