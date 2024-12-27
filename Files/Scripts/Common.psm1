@@ -686,7 +686,9 @@ function GamePath_Finish([object]$TextBox, [string]$Path) {
 
     $global:GameIsSelected = $InputPaths.ClearGameButton.Enabled = ($file -ne $null)
     $global:GamePath       = if ($file -eq $null) { $null } else { $file }
-    if ($Settings.Core.PerGameFile) { $Settings.Paths[$GameType.mode] = if ($file -eq $null) { $null } else { $path } }
+    if ($Settings.Core.PerGameFile) {
+        if ($file -eq $null) { $Settings.Paths[$GameType.mode] = $null } else { $Settings.Paths[$GameType.mode] = $path }
+    }
 
     EnablePatchButtons
     CalculateHashSum
@@ -1181,7 +1183,7 @@ function EnableGUI([boolean]$Enable) {
     $MainPanel.Enabled = $Enable
     if (IsSet $TextEditor.Dialog)    { $TextEditor.Dialog.Enabled  = $Enable }
     if (IsSet $SceneEditor.Dialog)   { $SceneEditor.Dialog.Enabled = $Enable }
-    SetModernVisualStyle $Settings.Core.ModernStyle
+    SetModernVisualStyle ($Settings.Core.ModernStyle -eq $True)
 
 }
 

@@ -793,14 +793,15 @@ function ResetTool() {
     SetWiiVCMode $False
     RestoreCustomHeader
     ChangeGameMode
-    EnablePatchButtons
     SetMainScreenSize
+    ChangePatch
+    EnablePatchButtons
 
     $Settings.Core.WiiMode = $global:WiiMode = $global:GameIsSelected = $False
     [System.GC]::Collect()
 
-    Out-IniFile -FilePath $Files.settings -InputObject $Settings
-    if (IsSet $GameSettings) { Out-IniFile -FilePath (GetGameSettingsFile) -InputObject $GameSettings }
+    OutIniFile -FilePath $Files.settings -InputObject $Settings
+    if (IsSet $GameSettings) { OutIniFile -FilePath (GetGameSettingsFile) -InputObject $GameSettings }
 
 }
 

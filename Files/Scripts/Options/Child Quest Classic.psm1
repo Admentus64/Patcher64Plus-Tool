@@ -1124,6 +1124,7 @@ function ChildQuestClassicByteSceneOptions() {
 
     PrepareMap   -Scene "Ice Cavern" -Map 3 -Header 0 # Second Open Room
     # Hookshot target and a clear block for climbing up
+    InsertObject -Name  "Inside Ganon's Castle"
     InsertObject -Name  "Hookshot Pillar & Wall Target"
     InsertActor  -Name  "Stone Hookshot Target" -X 600 -Y (-60) -Z (-570) -Param "FF00" -YRot 0x1000
     InsertActor  -Name  "Clear Block"           -X 415 -Y 164   -Z (-570) -Param "FF01" -YRot 0x2000
