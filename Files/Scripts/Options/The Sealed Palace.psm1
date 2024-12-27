@@ -5,7 +5,7 @@ function ByteOptions() {
     if (IsChecked $Redux.Gameplay.BlackBars)                { ChangeBytes -Offset "B2ABEC"  -Values "00000000"                                                                                                     }
     if (IsChecked $Redux.Gameplay.TextSpeed)                { ChangeBytes -Offset "B80AAB"  -Values "02"                                                                                                           }
     if (IsChecked $Redux.Gameplay.FastArrows)               { ChangeBytes -Offset @("1DBF502", "1DC14C2", "1DC34A2") -Values "0010"                                                                                }
-    if (IsChecked $Redux.Gameplay.FastCharge)               { ChangeBytes -Offset @("E56558", "E56564") -Values "3E12159A"; ChangeBytes -Offset "E5656C" -Values "3DC448CD"; ChangeBytes -Offset @("E56560", "E56570", "E5659C") -Values "3E132200" }
+    if (IsChecked $Redux.Gameplay.FastCharge)               { ChangeBytes -Offset @("1C51C58", "1C51C64") -Values "3E12159A"; ChangeBytes -Offset "1C51C6C" -Values "3DC448CD"; ChangeBytes -Offset @("1C51C60", "1C51C70", "1C51C9C") -Values "3E132200" }
 
 
     # SOUNDS / VOICES #
