@@ -1,6 +1,7 @@
 v25.1.4
 - Updated Redux for OoT to show ammo for the Slingshot/Bow on the D-Pad
 - Fixed issue with the "Reset Tool" button
+- Fixed issue with setting gamepath and modern GUI style
 
 v25.1.3
 - Removed "Lv2 Instant Charge" option for OoT
