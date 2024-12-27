@@ -132,6 +132,7 @@ function ByteOptions() {
     if (IsChecked $Redux.Gameplay.NoKillFlash)              { ChangeBytes -Offset "BFE043"  -Values "00"       }
     if (IsChecked $Redux.Gameplay.DisableScreenShrinking)   { ChangeBytes -Offset "EAC2DC"  -Values "00000000" }
     if (IsChecked $Redux.Gameplay.KeepDekuBubble)           { ChangeBytes -Offset "D04843"  -Values "00"       }
+    if (IsChecked $Redux.Gameplay.FastArrows)               { ChangeBytes -Offset @("D9397A", "D959BE", "D9787E") -Values "0010" }
 
     
 
@@ -513,7 +514,9 @@ function ByteOptions() {
 
     # HERO MODE #
 
-    if (IsChecked $Redux.Hero.RedTektites) {        PatchBytes  -Offset "D0DB3C" -Patch "ovl_en_tite.bin"        ChangeBytes -Offset "D10D3C" -Values "06"; ChangeBytes -Offset "D10E57" -Values "64"; ChangeBytes -Offset "D10E5B" -Values "68"; ChangeBytes -Offset "D10E5F" -Values "74"; ChangeBytes -Offset "D10E63" -Values "BC"; ChangeBytes -Offset @("D0DC6C", "D0DD08", "D0DDA0") -Values "1100"
+    if (IsChecked $Redux.Hero.RedTektites) {
+        PatchBytes  -Offset "D0DB3C" -Patch "ovl_en_tite.bin"
+        ChangeBytes -Offset "D10D3C" -Values "06"; ChangeBytes -Offset "D10E57" -Values "64"; ChangeBytes -Offset "D10E5B" -Values "68"; ChangeBytes -Offset "D10E5F" -Values "74"; ChangeBytes -Offset "D10E63" -Values "BC"; ChangeBytes -Offset @("D0DC6C", "D0DD08", "D0DDA0") -Values "1100"
     }
 
     if (IsIndex -Elem $Redux.Hero.MonsterHP -Index 3 -Not) { # Monsters
@@ -644,10 +647,25 @@ function ByteOptions() {
         ChangeBytes -Offset   "D9DB02"            -Values "A9A0"                                                                                                                                                # Double horizontal attack after single horizontal attack
         ChangeBytes -Offset @("D9D358", "D9D564", "D9D5C0", "D9D638", "D9D6C0", "D9D74C", "D9D784", "D9D8C8", "D9D9A4", "D9DB3C") -Values "00000000"                                                            # Attack faster
     }
-
-    if (IsChecked $Redux.Hero.Keese)      { ChangeBytes -Offset   "CF4E68"             -Values "1500"                                                                                                                                         }
-    if (IsChecked $Redux.Hero.Dinolfos)   { ChangeBytes -Offset   "D14C20"             -Values "00000000"; ChangeBytes -Offset @("D15B18", "D15BE8", "D16108")                                                             -Values "1000"     }
-    if (IsChecked $Redux.Hero.Wolfos)     { ChangeBytes -Offset @("E03774", "E04270" ) -Values "1000";     ChangeBytes -Offset @("E03974", "E043D0", "E048B4", "E04B18", "E05060", "E053A8", "E05578", "E05778", "E05A6C") -Values "00000000" }
+    if (IsChecked $Redux.Hero.Octorok)       { ChangeBytes -Offset "CE83EA" -Values "41B0"; ChangeBytes -Offset "CE8916" -Values "44F0"; ChangeBytes -Offset "CE8DAA" -Values "450C"; ChangeBytes -Offset "CE8CFE" -Values "0000"; ChangeBytes -Offset "CE8E4A" -Values "44F0" }
+    if (IsChecked $Redux.Hero.Handmaster)    { ChangeBytes -Offset @("CEEDC6", "D4B972", "D4B992", "D4BB6A", "D4BD46") -Values "0000"; ChangeBytes -Offset "D4B7FE" -Values "4000"; ChangeBytes -Offset "D4C06E" -Values "44A0"; ChangeBytes -Offset "D4C286" -Values "41A0"; ChangeBytes -Offset "D4C5EE" -Values "000A" }
+    if (IsChecked $Redux.Hero.Tektite)       { ChangeBytes -Offset "D0E35A" -Values "40C0"; ChangeBytes -Offset @("D0E47A", "D0EACA") -Values "4150" }
+    if (IsChecked $Redux.Hero.Peahat)        { ChangeBytes -Offset @("D11264", "D11760", "D11B94", "D124AC", "D122A0") -Values "00"; ChangeBytes -Offset "D1176A" -Values "4539"; ChangeBytes -Offset @("D11BA6", "D122B2", "D124BE") -Values "4596"; ChangeBytes -Offset "D11AEB" -Values "F9"; ChangeBytes -Offset "D11AF3" -Values "07"; ChangeBytes -Offset @("D11B4E", "D11B52") -Values "40B0"; ChangeBytes -Offset "D11BB2" -Values "06E8" }
+    if (IsChecked $Redux.Hero.DekuScrub)     { ChangeBytes -Offset @("D37C6B", "DF8A33") -Values "00"; ChangeBytes -Offset "DF8A26" -Values "41B0" }
+    if (IsChecked $Redux.Hero.Zombies)       { ChangeBytes -Offset @("D4E6DA", "D4F33E") -Values "4326"; ChangeBytes -Offset "D4F2EE" -Values "4516"; ChangeBytes -Offset "D4F262" -Values "02FA"; ChangeBytes -Offset @("D4F392", "D4FEFE") -Values "0008"; ChangeBytes -Offset @("D4FB4F", "D4FD6F") -Values "0A"; ChangeBytes -Offset "D5132C" -Values "3FECECED" }
+    if (IsChecked $Redux.Hero.LikeLike)      { ChangeBytes -Offset "D745DA" -Values "0014"; ChangeBytes -Offset @("D7517A", "D75272") -Values "1000"; ChangeBytes -Offset "D751E2" -Values "4500"; ChangeBytes -Offset "D75232" -Values "4100" }
+    if (IsChecked $Redux.Hero.Guay)          { ChangeBytes -Offset "E0D9EA" -Values "0070"; ChangeBytes -Offset "E0DA56" -Values "40F0"; ChangeBytes -Offset "E0DE1A" -Values "4120"; ChangeBytes -Offset @("E0DAA2", "E0DD4E") -Values "4500" }
+    if (IsChecked $Redux.Hero.Dragonfly)     { ChangeBytes -Offset "E196F2" -Values "4500"; ChangeBytes -Offset "E19EBA" -Values "0132"; ChangeBytes -Offset "E1A246" -Values "40B0"; ChangeBytes -Offset "E1A622" -Values "0011" }
+    if (IsChecked $Redux.Hero.Garo)          { ChangeBytes -Offset ("E21A2A", "E21B0A", "E21C3E", "EE066E", "EE07C2", "EE057E") -Values "4100"; ChangeBytes -Offset "E21AFE" -Values "41A8"; ChangeBytes -Offset ("EE0662", "EE0D7A") -Values "41C0"; ChangeBytes -Offset @("E21F66", "E21F7E", "E220CE", "EE0902", "EE0ECA") -Values "0000"; ChangeBytes -Offset "EE0E2E" -Values "1F00"; ChangeBytes -Offset "EE0EE2" -Values "000D" }
+    if (IsChecked $Redux.Hero.Jelly)         { ChangeBytes -Offset "E98E4E" -Values "458C"; ChangeBytes -Offset @("E98E72", "E991A2") -Values "7800"; ChangeBytes -Offset "E9947A" -Values "2500"; ChangeBytes -Offset "E99512" -Values "0000"; ChangeBytes -Offset "E99546" -Values "41D0"; ChangeBytes -Offset "E9954E" -Values "C020"; ChangeBytes -Offset "E996CA" -Values "0001"; ChangeBytes -Offset "E9B730" -Values "47505050" }
+    if (IsChecked $Redux.Hero.Bat)           { ChangeBytes -Offset "EAD3EE" -Values "40F0"; ChangeBytes -Offset "EAD79E" -Values "4120"; ChangeBytes -Offset "EAD3FA" -Values "0070"; ChangeBytes -Offset "EAD6EE" -Values "4500" }
+    if (IsChecked $Redux.Hero.Rat)           { ChangeBytes -Offset "EC0FA6" -Values "0001"; ChangeBytes -Offset "EC1FEC" -Values "42000000" }
+    if (IsChecked $Redux.Hero.ThiefBird)     { ChangeBytes -Offset "10764E6" -Values "002F"; ChangeBytes -Offset @("1076596", "10767D6") -Values "4500"; ChangeBytes -Offset "107688E" -Values "4120" }
+    if (IsChecked $Redux.Hero.Wizard)        { ChangeBytes -Offset @("EB004E", "EB0A96") -Values "0000"; ChangeBytes -Offset @("EB0183", "EB0773") -Values "01"; ChangeBytes -Offset @("EB0388", "EB0960") -Values "00"; ChangeBytes -Offset "EB3452" -Values "41C0" }
+    if (IsChecked $Redux.Hero.GerudoFighter) { ChangeBytes -Offset @("FED262", "FEDC96") -Values "0000"; ChangeBytes -Offset "FEDB1E" -Values "4200" }
+    if (IsChecked $Redux.Hero.Keese)         { ChangeBytes -Offset "CF4E68" -Values "1500"; ChangeBytes -Offset @("CF3E46", "CF3E4E", "CF4746") -Values "0000"; ChangeBytes -Offset "CF40F2" -Values "4500"; ChangeBytes -Offset @("CF452E", "CF4542") -Values "4120"; ChangeBytes -Offset @("CF48B2", "CF48BA") -Values "40F0"; ChangeBytes -Offset "CF4736" -Values "2000"; ChangeBytes -Offset "CF480A" -Values "0070" }
+    if (IsChecked $Redux.Hero.Dinolfos)      { ChangeBytes -Offset @("D15B19", "D15BE9", "D16109") -Values "40"; ChangeBytes -Offset "D1647A" -Values "4170"; ChangeBytes -Offset ("D1656E", "D168EA") -Values "D000" }
+    if (IsChecked $Redux.Hero.Wolfos)        { ChangeBytes -Offset "E0315E" -Values "4420"; ChangeBytes -Offset "E0470A" -Values "4100"; ChangeBytes -Offset "E049CE" -Values "0000"; ChangeBytes -Offset "E04D92" -Values "D000"; ChangeBytes -Offset "E06F2C" -Values "00" }
     
     
 
@@ -749,9 +767,25 @@ function ByteOptions() {
     # SWORD TRAIL COLORS #
 
     if ($Redux.Colors.SetSwordTrail -ne $null) {
-        if (IsColor   $Redux.Colors.SetSwordTrail[0]   -Not)   { ChangeBytes -Offset @("CD73F8", "CD7400")           -Values @($Redux.Colors.SetSwordTrail[0].Color.R, $Redux.Colors.SetSwordTrail[0].Color.G, $Redux.Colors.SetSwordTrail[0].Color.B) }
-        if (IsColor   $Redux.Colors.SetSwordTrail[1]   -Not)   { ChangeBytes -Offset @("CD73FC", "CD7404")           -Values @($Redux.Colors.SetSwordTrail[1].Color.R, $Redux.Colors.SetSwordTrail[1].Color.G, $Redux.Colors.SetSwordTrail[1].Color.B) }
-        if (IsDefault $Redux.Colors.SwordTrailDuration -Not)   { ChangeBytes -Offset @("CA9FBF", "CBC2A7", "CBC46B") -Values ($Redux.Colors.SwordTrailDuration.SelectedIndex * 5); ChangeBytes -Offset "CB5CFB" -Values ($ByteArrayGame[0xCA9FBF] * 2) }
+        if (IsColor   $Redux.Colors.SetSwordTrail[0]   -Not)   { ChangeBytes -Offset @("CD73F8", "CD73FC")           -Values @($Redux.Colors.SetSwordTrail[0].Color.R, $Redux.Colors.SetSwordTrail[0].Color.G, $Redux.Colors.SetSwordTrail[0].Color.B) }
+        if (IsColor   $Redux.Colors.SetSwordTrail[1]   -Not)   { ChangeBytes -Offset @("CD7400", "CD7404")           -Values @($Redux.Colors.SetSwordTrail[1].Color.R, $Redux.Colors.SetSwordTrail[1].Color.G, $Redux.Colors.SetSwordTrail[1].Color.B) }
+        if (IsDefault $Redux.Colors.SwordTrailDuration -Not)   { ChangeBytes -Offset "CA9FBF" -Values ($Redux.Colors.SwordTrailDuration.SelectedIndex * 5); ChangeBytes -Offset "CA9EA3" -Values ($ByteArrayGame[0xCA9FBF] * 1.05) }
+	if (IsDefault $Redux.Colors.AlphaTip1 -Not) {
+        $value =  (Get8Bit $Redux.Colors.AlphaTip1.Text)
+        ChangeBytes -Offset "CD73FB" -Values $value
+     }
+        if (IsDefault $Redux.Colors.AlphaBase1 -Not) {
+        $value =  (Get8Bit $Redux.Colors.AlphaBase1.Text)
+        ChangeBytes -Offset "CD73FF" -Values $value
+     }
+        if (IsDefault $Redux.Colors.AlphaTip2 -Not) {
+        $value =  (Get8Bit $Redux.Colors.AlphaTip2.Text)
+        ChangeBytes -Offset "CD7403" -Values $value
+     }
+        if (IsDefault $Redux.Colors.AlphaBase2 -Not) {
+        $value =  (Get8Bit $Redux.Colors.AlphaBase2.Text)
+        ChangeBytes -Offset "CD7407" -Values $value
+     }
     }
 
 
@@ -852,9 +886,10 @@ function ByteOptions() {
     if (IsDefault $Redux.Equipment.RazorSword       -Not)   { ChangeBytes -Offset "C572C0" -Values (ConvertFloatToHex $Redux.Equipment.RazorSword.Value)       }
     if (IsDefault $Redux.Equipment.GildedSword      -Not)   { ChangeBytes -Offset "C572C4" -Values (ConvertFloatToHex $Redux.Equipment.GildedSword.Value)      }
     if (IsDefault $Redux.Equipment.GreatFairysSword -Not)   { ChangeBytes -Offset "C572C8" -Values (ConvertFloatToHex $Redux.Equipment.GreatFairysSword.Value) }
+    if (IsDefault $Redux.Equipment.Stick 	    -Not)   { ChangeBytes -Offset "C74334" -Values (ConvertFloatToHex $Redux.Equipment.Stick.Value) 	       }
     if (IsDefault $Redux.Equipment.BlastMask        -Not)   { ChangeBytes -Offset "CAA666" -Values (Get16Bit  $Redux.Equipment.BlastMask.Value)                }
     if (IsDefault $Redux.Equipment.ShieldRecoil     -Not)   { ChangeBytes -Offset "CAEDC6" -Values (Get16Bit ($Redux.Equipment.ShieldRecoil.Value + 45000) )   }
-    if (IsDefault $Redux.Equipment.Hookshot         -Not)   { ChangeBytes -Offset "D3B327" -Values (Get8Bit   $Redux.Equipment.Hookshot.Value)                 }
+    if (IsDefault $Redux.Equipment.Hookshot         -Not)   { ChangeBytes -Offset "D3B327" -Values (Get8Bit  ($Redux.Equipment.Hookshot.Value)                 }
 
 
 
@@ -1873,6 +1908,7 @@ function CreateTabMain() {
     CreateReduxCheckBox -Name "DisableScreenShrinking" -Text "Disable Screen Shrinking"  -Info "Disables the effect of the screen shrinking just before the next day"                                                                     -Credits "Euler"
     CreateReduxCheckBox -Name "KeepDekuBubble"         -Text "Don't Burst Deku Bubble"   -Info "Holding B button will not burst the Deku Link Bubble"                                                                                     -Credits "Euler"
     CreateReduxCheckBox -Name "RoyalWallet"            -Text "Royal Wallet"              -Info "A third wallet upgrade can be bought"                                                                                              -Scene -Credits "Admentus"
+    CreateReduxCheckBox -Name "FastArrows"             -Text "Less Magic Arrows Cooldown"-Info "The burst animation for Fire, Ice and Light Arrows are shorter`nAllows Link to shoot the next magic arrow a bit quicker" 		  -Credits "Anthrogi"
 
 
 
@@ -2233,11 +2269,27 @@ function CreateTabDifficulty() {
     CreateReduxCheckBox -Name "RedTektites"               -Text "Red Tektites"                                                             -Base 1 -Scene -Info "Replace Blue Tektites with red ones once spring has arrived"                                 -Credits "Admentus"
     CreateReduxCheckBox -Name "NoBottledFairy"            -Text "No Bottled Fairies"                                                                      -Info "Fairies can no longer be put into a bottle"                                                  -Credits "Euler"
     
-    CreateReduxGroup    -Tag  "Hero"        -Text "Hero Mode (Harder Enemies)"
-    CreateReduxCheckBox -Name "Keese"       -Text "Keese"        -Info "Fire Keese or Ice Keese won't turn into regular Keese after hitting Link"                                                                     -Credits "Admentus"
-    CreateReduxCheckBox -Name "Wolfos"      -Text "Wolfos"       -Info "Wolfos do not wait to attack and keep chasing Link"                                                                                           -Credits "Euler"
-    CreateReduxCheckBox -Name "Dinolfos"    -Text "Dinolfos"     -Info "Dinolfos do not wait to attack"                                                                                                               -Credits "Euler"
-    CreateReduxCheckBox -Name "IronKnuckle" -Text "Iron Knuckle" -Info "Iron Knuckles are harder`nAlways run, even armored`n`nRun faster`nAttack faster`nMove toward Link right away`nCan block attacks when armored" -Credits "Garo-Mastah & Euler"
+    CreateReduxGroup    -Tag  "Hero"         -Text "Harder Enemies"
+    CreateReduxCheckBox -Name "Octorok"      -Text "Octorok" 	    -Info "Octoroks appear from much further away and shoot projectiles much more faster at quicker intervals" 								      						      -Credits "Anthrogi"
+    CreateReduxCheckBox -Name "HandMaster"   -Text "Handmaster"     -Info "Wallmasters drop from above much quicker`nFloormasters attack faster and suffers less lag on miss or impact against player`nSmaller Floormasters jump and start chasing from further away and drain health faster" -Credits "Anthrogi"
+    CreateReduxCheckBox -Name "Tektite"      -Text "Tektite" 	    -Info "Tektites chase the player more effectively and lunge with greater reach" 											      						      -Credits "Anthrogi"
+    CreateReduxCheckBox -Name "Peahat"       -Text "Peahat" 	    -Info "Peahats will attack even at night and move much faster along with rotating their blades a bit quicker" 								      					      -Credits "Anthrogi"
+    CreateReduxCheckBox -Name "DekuScrub"    -Text "Scrub" 	    -Info "Enemy scrubs will shoot faster and use their shot behaviour from OoT" 												      					      -Credits "Anthrogi"
+    CreateReduxCheckBox -Name "Zombies"      -Text "Redead/Gibdo"   -Info "Redeads/Gibdos chase the player more quickly and efficiently, while also draining health faster" 								      						      -Credits "Anthrogi"
+    CreateReduxCheckBox -Name "LikeLike"     -Text "Like-Like" 	    -Info "Like-Likes move faster and notice the player from much further away" 												      					      -Credits "Anthrogi"
+    CreateReduxCheckBox -Name "Guay" 	     -Text "Guay" 	    -Info "Guays attack faster and move further" 																      					      -Credits "Anthrogi"
+    CreateReduxCheckbox -Name "Dragonfly"    -Text "Dragonfly" 	    -Info "Dragonflies will notice you from much further away and attack more efficiently along with moving a bit faster" 							      					      -Credits "Anthrogi"
+    CreateReduxCheckbox -Name "Garo" 	     -Text "Garos" 	    -Info "Regular Garos will never cower upon attacks being blocked and attack quicker`nMaster Garos attack quicker and have much less vulnerability" 			      						      -Credits "Anthrogi"
+    CreateReduxCheckbox -Name "Jelly" 	     -Text "Chuchu" 	    -Info "Chuchus will notice you from much further away and lunge with greater reach" 											      					      -Credits "Anthrogi"
+    CreateReduxCheckbox -Name "Bat" 	     -Text "Badbat" 	    -Info "Bad Bats attack faster and move further" 															      						      -Credits "Anthrogi"
+    CreateReduxCheckbox -Name "Rat" 	     -Text "Real Bombchu"   -Info "Real Bombchus will dance only once and are faster" 														      						      -Credits "Anthrogi"
+    CreateReduxCheckbox -Name "ThiefBird"    -Text "Takkuri" 	    -Info "Takkuri will notice you from much further away and chase much more efficiently" 										      						      -Credits "Anthrogi"
+    CreateReduxCheckbox -Name "Wizard" 	     -Text "Wizzrobe" 	    -Info "Wizzrobes will appear and retreat more quickly and shoot their projectiles faster" 																      -Credits "Anthrogi"
+    CreateReduxCheckBox -Name "GerudoFighter"-Text "Gerudo Fighter" -Info "Gerudo Fighters don't get distracted if player moves out of their sight and recovers from spin attacks instantly" 												      -Credits "Anthrogi"
+    CreateReduxCheckBox -Name "Keese" 	     -Text "Keese" 	    -Info "Keese attack faster and move further, as well as variations not losing their effect when impacting the player`nThey also won't falter from hitting the player either" 					      -Credits "Admentus & Anthrogi"
+    CreateReduxCheckBox -Name "Wolfos" 	     -Text "Wolfos" 	    -Info "Wolfos will attack faster and do not falter from having attacks blocked`nThey also attack when z-targeting another enemy" 					      						      -Credits "Euler & Anthrogi"
+    CreateReduxCheckBox -Name "Dinolfos"     -Text "Dinolfos" 	    -Info "Dinolfos will attack faster and do not falter from having attacks blocked`nThey also attack when z-targeting another enemy" 					      						      -Credits "Euler & Anthrogi"
+    CreateReduxCheckBox -Name "IronKnuckle"  -Text "Iron Knuckle"   -Info "Iron Knuckles are harder`nAlways run, even armored`n`nRun faster`nAttack faster`nMove toward Link right away`nCan block attacks when armored" 			      					      -Credits "Garo-Mastah & Euler"
     
 
 
@@ -2391,9 +2443,12 @@ function CreateTabColors() {
 
 
     # COLORS #
-
-    CreateSwordTrailColorOptions
     CreateSpinAttackColorOptions
+    CreateSwordTrailColorOptions
+    CreateReduxTextBox -Name "AlphaTip1" -Length 3  -Text "Tip Alpha Start" -Value 255 -Min 0 -Max 255 -Info "Set the starting tip transparency of the sword trail" -Credits "Anthrogi"
+    CreateReduxTextBox -Name "AlphaBase1" -Length 3  -Text "Base Alpha Start" -Value 64 -Min 0 -Max 255  -Info "Set the starting base transparency of the sword trail" -Credits "Anthrogi"
+    CreateReduxTextBox -Name "AlphaTip2" -Column 3 -Length 3  -Text "Tip Alpha End" -Value 0 -Min 0 -Max 255  -Info "Set the ending tip transparency of the sword trail" -Credits "Anthrogi"
+    CreateReduxTextBox -Name "AlphaBase2" -Column 4 -Length 3  -Text "Base Alpha End" -Value 0 -Min 0 -Max 255  -Info "Set the ending base transparency of the sword trail" -Credits "Anthrogi"
     CreateFairyColorOptions -Name "Tatl"
 
     # Tael Colors - Buttons, Dialogs & Labels
@@ -2441,17 +2496,14 @@ function CreateTabEquipment() {
 
 
 
-    #
-
-
-
     # HITBOX #
 
-    CreateReduxGroup  -Tag  "Equipment" -Text "Sliders"
-    CreateReduxSlider -Name "KokiriSword"      -Default 3000 -Min 512 -Max 8192 -Freq 512 -Small 256 -Large 512 -Text "Kokiri Sword"        -Info "Set the length of the hitbox of the Kokiri Sword"           -Credits "Admentus"
-    CreateReduxSlider -Name "RazorSword"       -Default 3000 -Min 512 -Max 8192 -Freq 512 -Small 256 -Large 512 -Text "Razor Sword"         -Info "Set the length of the hitbox of the Razor Sword"            -Credits "Admentus"
-    CreateReduxSlider -Name "GildedSword"      -Default 4000 -Min 512 -Max 8192 -Freq 512 -Small 256 -Large 512 -Text "Gilded Sword"        -Info "Set the length of the hitbox of the Gilded Sword"           -Credits "Admentus"
-    CreateReduxSlider -Name "GreatFairysSword" -Default 5500 -Min 512 -Max 8192 -Freq 512 -Small 256 -Large 512 -Text "Great Fairy's Sword" -Info "Set the length of the hitbox of the Great Fairy's Sword"    -Credits "Admentus"
+    CreateReduxGroup  -Tag  "Equipment" -Height 5.75 -Text "Sliders"
+    CreateReduxSlider -Name "KokiriSword"      -Default 3000 -Min 512 -Max 8192 -Freq 512 -Small 256 -Large 512 -Text "Kokiri Sword"        -Info "Set the hitbox length of the Kokiri Sword"                  -Credits "Admentus"
+    CreateReduxSlider -Name "RazorSword"       -Default 3000 -Min 512 -Max 8192 -Freq 512 -Small 256 -Large 512 -Text "Razor Sword"         -Info "Set the hitbox length of the Razor Sword"                   -Credits "Admentus"
+    CreateReduxSlider -Name "GildedSword"      -Default 4000 -Min 512 -Max 8192 -Freq 512 -Small 256 -Large 512 -Text "Gilded Sword"        -Info "Set the hitbox length of the Gilded Sword"                  -Credits "Admentus"
+    CreateReduxSlider -Name "GreatFairysSword" -Default 5500 -Min 512 -Max 8192 -Freq 512 -Small 256 -Large 512 -Text "Two-Handed Sword"    -Info "Set the hitbox length of the Great_Fairy/Fierce_Deity Sword"-Credits "Admentus"
+    CreateReduxSlider -Name "Stick" 	       -Default 5000 -Min 512 -Max 8192 -Freq 512 -Small 256 -Large 512 -Text "Deku Stick"          -Info "Set the hitbox length of the Deku Stick" 		       -Credits "Anthrogi"
     CreateReduxSlider -Name "BlastMask"        -Default 310  -Min 1   -Max 1024 -Freq 64  -Small 32  -Large 64  -Text "Blast Mask"          -Info "Set the cooldown duration of the Blast Mask"                -Credits "Randomizer"
     CreateReduxSlider -Name "ShieldRecoil"     -Default 4552 -Min 0   -Max 8248 -Freq 512 -Small 256 -Large 512 -Text "Shield Recoil"       -Info "Set the pushback distance when getting hit while shielding" -Credits "Admentus"
     CreateReduxSlider -Name "Hookshot"         -Default 26   -Min 0   -Max 50   -Freq 10  -Small 5   -Large 10  -Text "Hookshot Length"     -Info "Set the length of the Hookshot"                             -Credits "Admentus" -Warning "Going above the default length can look weird"
