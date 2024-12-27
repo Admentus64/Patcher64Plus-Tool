@@ -1,5 +1,6 @@
 v25.1.4
 - Updated Redux for OoT to show ammo for the Slingshot/Bow on the D-Pad
+- Fixed issue with losing sword when a different item is set to B for OoT Redux
 - Fixed issue with the "Reset Tool" button
 - Fixed issue with setting gamepath and modern GUI style
 
