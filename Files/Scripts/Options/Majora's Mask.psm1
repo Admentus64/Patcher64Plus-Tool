@@ -889,7 +889,7 @@ function ByteOptions() {
     if (IsDefault $Redux.Equipment.Stick 	    -Not)   { ChangeBytes -Offset "C74334" -Values (ConvertFloatToHex $Redux.Equipment.Stick.Value) 	       }
     if (IsDefault $Redux.Equipment.BlastMask        -Not)   { ChangeBytes -Offset "CAA666" -Values (Get16Bit  $Redux.Equipment.BlastMask.Value)                }
     if (IsDefault $Redux.Equipment.ShieldRecoil     -Not)   { ChangeBytes -Offset "CAEDC6" -Values (Get16Bit ($Redux.Equipment.ShieldRecoil.Value + 45000) )   }
-    if (IsDefault $Redux.Equipment.Hookshot         -Not)   { ChangeBytes -Offset "D3B327" -Values (Get8Bit  ($Redux.Equipment.Hookshot.Value)                 }
+    if (IsDefault $Redux.Equipment.Hookshot         -Not)   { ChangeBytes -Offset "D3B327" -Values (Get8Bit   $Redux.Equipment.Hookshot.Value)                 }
 
 
 
