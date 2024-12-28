@@ -2,7 +2,7 @@
 *.psm1 text=auto
 *.txt text=auto
 *.json text=auto
-*.ps1 text eol=crlf
-*.psm1 text eol=crlf
-*.txt text eol=crlf
-*.json text eol=crlf
+*.ps1 text eol=crlf working-tree-encoding=UTF-8
+*.psm1 text eol=crlf working-tree-encoding=UTF-8
+*.txt text eol=crlf working-tree-encoding=UTF-8
+*.json text eol=crlf working-tree-encoding=UTF-8
