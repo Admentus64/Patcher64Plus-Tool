@@ -1,3 +1,6 @@
+v25.1.5
+- Update Child Quest Pro to v1.0.2 (faster Scarecrow)
+
 v25.1.4
 - Updated Redux for OoT to show ammo for the Slingshot/Bow on the D-Pad
 - Fixed issue with losing sword when a different item is set to B for OoT Redux

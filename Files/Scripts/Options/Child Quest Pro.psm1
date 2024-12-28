@@ -256,7 +256,8 @@ function ChildQuestProByteOptions() {
     ChangeBytes -Offset "EB7FA8" -Values "1400"                                                                                                       # Fix Spirit Temple Stone Elevator
     ChangeBytes -Offset "ACCE48" -Values "15000000"                                                                                                   # Light Arrows cutscene as Child
     ChangeBytes -Offset "AC9914" -Values "00" -Repeat 0xB                                                                                             # Stay Child during the Light Arrows cutscene
-    ChangeBytes -Offset "EF5A48" -Values "1100"                                                                                                       # Allow Bonooru to activate the Scarecrow's Song as Child
+  # ChangeBytes -Offset "EF5A48" -Values "1100"                                                                                                       # Allow Bonooru to activate the Scarecrow's Song as Child
+    ChangeBytes -Offset "EF4F8C" -Values "1100"                                                                                                       # Allow Bonooru to activate the Scarecrow's Song as Child
   # ChangeBytes -Offset "AFCD2C" -Values "1400"                                                                                                       # Withered Deku Tree during Deku Sprout cutscenes (tree)
   # ChangeBytes -Offset "C7332C" -Values "1400"                                                                                                       # Withered Deku Tree during Deku Sprout cutscenes (jaw)
     ChangeBytes -Offset "D5A80C" -Values "1500"                                                                                                       # Prevent Deku Tree Sprout from disappearing after its cutscene
@@ -1583,7 +1584,7 @@ function ChildQuestProByteTextOptions() {
 
 
     # Bonooru the Scarecrow
-    SetMessage -ID "40A5" -Replace "Well...not bad!<N>I will remember it for you<N>anyway!<New Box>Make sure to play it again to me!<Event>"
+  # SetMessage -ID "40A5" -Replace "Well...not bad!<N>I will remember it for you<N>anyway!<New Box>Make sure to play it again to me!<Event>"
 
 
 
