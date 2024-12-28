@@ -1,4 +1,4 @@
-function ChildQuestProExposeOptions() {
+ï»¿function ChildQuestProExposeOptions() {
     
     # Exclude Group
     ExcludeGroup  -Group "Unlock"       -Name "Unlock Child Restrictions"
@@ -307,7 +307,7 @@ function ChildQuestProByteOptions() {
 
     # Chests
     ChangeBytes -Offset "C7BCF0" -Values "8CB91D38340800048CA21C4400000000000000000000000000000000" # Fix Serenade of Water
-    ChangeBytes -Offset "DFEC3C" -Values "3C1880128F18AE8C27A500243319001000000000"                 # Fix Dampé Hookshot chest
+    ChangeBytes -Offset "DFEC3C" -Values "3C1880128F18AE8C27A500243319001000000000"                 # Fix DampÃ© Hookshot chest
     ChangeBytes -Offset "AE76FF" -Values "58"                                                       # Fix Deku Seeds in chests
     ChangeBytes -Offset "AE7780" -Values "1500"                                                     # Fix Magic Jars (small + large) in chests
 
@@ -411,7 +411,7 @@ function ChildQuestProByteSceneOptions() {
     SaveLoadedMap
 
     PrepareMap   -Scene "Graveyard" -Map 1 -Header 0 # Child - Day
-    # Unlock Dampé's grave and add grave flowers
+    # Unlock DampÃ©'s grave and add grave flowers
     InsertActor  -Name "Gravestone" -X (-578) -Y 120 -Z (-336) -Param "0001"
     RemoveActor  -Name "Graveyard"  -CompareX (-578) -CompareY 120 -CompareZ (-336)
     InsertActor  -Name "Uninteractable Objects" -X (-562) -Y 120 -Z (-289)
@@ -424,7 +424,7 @@ function ChildQuestProByteSceneOptions() {
     SaveLoadedMap
 
     PrepareMap   -Scene "Graveyard" -Map 1 -Header 1 # Child - Night
-    # Unlock Dampé's grave and add grave flowers
+    # Unlock DampÃ©'s grave and add grave flowers
     InsertActor  -Name "Gravestone" -X (-578) -Y 120 -Z (-336) -Param "0001"
     RemoveActor  -Name "Graveyard"  -CompareX (-578) -CompareY 120 -CompareZ (-336)
     InsertActor  -Name "Uninteractable Objects" -X (-562) -Y 120 -Z (-289)
@@ -874,20 +874,20 @@ function ChildQuestProByteSceneOptions() {
 
 
 
-    # DAMPÉ'S GRAVE & WINDMILL #
+    # DAMPÃ‰'S GRAVE & WINDMILL #
 
-    PrepareMap   -Scene "Dampé's Grave & Windmill" -Map 4 -Header 0 # Reward Room
+    PrepareMap   -Scene "DampÃ©'s Grave & Windmill" -Map 4 -Header 0 # Reward Room
     # Hookshot -> Song of Storms (Cojiro)
     ReplaceActor -Name "Treasure Chest" -Compare "1100" -Param "11C0"
     SaveLoadedMap
 
-    PrepareMap   -Scene "Dampé's Grave & Windmill" -Map 5 -Header 0 # Stairs to Windmill
+    PrepareMap   -Scene "DampÃ©'s Grave & Windmill" -Map 5 -Header 0 # Stairs to Windmill
     # Adjust time blocks
     RemoveActor  -Name "Time Block" -Compare "B806"
     ReplaceActor -Name "Time Block" -Compare "B805" -Y (-469) -Param "3805"
     SaveLoadedMap
 
-    PrepareMap   -Scene "Dampé's Grave & Windmill" -Map 6 -Header 0 # Windmill
+    PrepareMap   -Scene "DampÃ©'s Grave & Windmill" -Map 6 -Header 0 # Windmill
     # Adjust time blocks
     RemoveActor  -Name "Time Block" -Compare "B806"
     ReplaceActor -Name "Time Block" -Compare "B805" -Y (-469) -Param "3805"
@@ -1571,7 +1571,7 @@ function ChildQuestProByteTextOptions() {
 
 
 
-    # Dampé chest reward
+    # DampÃ© chest reward
     SetMessage -ID "502D" -Replace "<NS>Hehehe, young man...<N>You were very quick to be able<N>to keep up with me! Hehehe!<N><New Box><NS>As a reward, I'm going to give<N>you my treasure.<N><New Box><NS>I'm sure it will help you!<N><New Box><NS>I live here now, so come back<N>again sometime. I'll give you<N>something cool!<N><New Box><NS>One more thing! Be careful on<N>your way back!<N>Heheheh...."
 
 
