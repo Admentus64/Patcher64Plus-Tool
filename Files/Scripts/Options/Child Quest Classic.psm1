@@ -164,8 +164,8 @@ function ChildQuestClassicByteOptions() {
     ChangeBytes -Offset "B65D15" -Values "3A02"                                                                                                       # Fix Ganon's Castle intro
     ChangeBytes -Offset "F01C7C" -Values "1500"                                                                                                       # Fix Silver Blocks
     ChangeBytes -Offset "EB7FA8" -Values "1400"                                                                                                       # Fix Spirit Temple Stone Elevator
-    ChangeBytes -Offset "AFCD2C" -Values "1400"                                                                                                       # Withered Deku Tree during Deku Sprout cutscenes (tree)
-    ChangeBytes -Offset "C7332C" -Values "1400"                                                                                                       # Withered Deku Tree during Deku Sprout cutscenes (jaw)
+  # ChangeBytes -Offset "AFCD2C" -Values "1400"                                                                                                       # Withered Deku Tree during Deku Sprout cutscenes (tree)
+  # ChangeBytes -Offset "C7332C" -Values "1400"                                                                                                       # Withered Deku Tree during Deku Sprout cutscenes (jaw)
     ChangeBytes -Offset "D5A80C" -Values "1500"                                                                                                       # Prevent Deku Tree Sprout from disappearing after its cutscene
 
 

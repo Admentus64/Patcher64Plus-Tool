@@ -5,6 +5,7 @@ v25.1.4
 - Fixed issue with setting gamepath and modern GUI style
 - Fixed issue with vanilla Ice Cavern in Child Quest missing a Clear Block
 - Fixed issue with Child Quest Pro applying a text box change twice
+- Fixed issue with Child Quest making the Deku Tree be withered early
 
 v25.1.3
 - Removed "Lv2 Instant Charge" option for OoT

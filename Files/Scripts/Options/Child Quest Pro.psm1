@@ -257,8 +257,8 @@ function ChildQuestProByteOptions() {
     ChangeBytes -Offset "ACCE48" -Values "15000000"                                                                                                   # Light Arrows cutscene as Child
     ChangeBytes -Offset "AC9914" -Values "00" -Repeat 0xB                                                                                             # Stay Child during the Light Arrows cutscene
     ChangeBytes -Offset "EF5A48" -Values "1100"                                                                                                       # Allow Bonooru to activate the Scarecrow's Song as Child
-    ChangeBytes -Offset "AFCD2C" -Values "1400"                                                                                                       # Withered Deku Tree during Deku Sprout cutscenes (tree)
-    ChangeBytes -Offset "C7332C" -Values "1400"                                                                                                       # Withered Deku Tree during Deku Sprout cutscenes (jaw)
+  # ChangeBytes -Offset "AFCD2C" -Values "1400"                                                                                                       # Withered Deku Tree during Deku Sprout cutscenes (tree)
+  # ChangeBytes -Offset "C7332C" -Values "1400"                                                                                                       # Withered Deku Tree during Deku Sprout cutscenes (jaw)
     ChangeBytes -Offset "D5A80C" -Values "1500"                                                                                                       # Prevent Deku Tree Sprout from disappearing after its cutscene
     ChangeBytes -Offset "A894B0" -Values "11000000"                                                                                                   # Turn Deku Seed drops into Small Arrow Bundles
     ChangeBytes -Offset "A89C64" -Values "1000"                                                                                                       # Flexible Item drop for Deku Seeds is skipped
