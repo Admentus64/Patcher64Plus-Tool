@@ -523,32 +523,18 @@ function ByteOptions() {
         ChangeBytes -Offset "A89B57" -values "00"       # Fairies only drop from Flexible Items when health is below 0
     }
 
-    if ( (IsChecked $Redux.Hero.MiniBosses) -or (IsChecked $Redux.Hero.IronKnuckle) ) {
-        ChangeBytes -Offset   "DEDA10"            -Values "4019999A"; ChangeBytes -Offset   "DEA06B"            -Values "00";       ChangeBytes -Offset "DEA072" -Values "6734"; ChangeBytes -Offset "DEA087" -Values "0024A56734" # Move Faster
-        ChangeBytes -Offset @("DEA742", "DEA9C6") -Values "40"                                                                                                                                                                     # Attack Faster
-        ChangeBytes -Offset   "DEA30A"            -Values "0001";     ChangeBytes -Offset @("DEA742", "DEA9C6") -Values "4100";     ChangeBytes -Offset "DEA16E" -Values "0820"
-        ChangeBytes -Offset   "DEA15A"            -Values "10B0";     ChangeBytes -Offset   "DEDA10"            -Values "40808080"; ChangeBytes -Offset "DEA102" -Values "40A0"
-    }
-
-    if ( (IsChecked $Redux.Hero.Enemies)    -or (IsChecked $Redux.Hero.HandMaster)    )   { ChangeBytes -Offset   "C0F32A"            -Values "0001";     ChangeBytes -Offset   "CD2EEA"            -Values "4100"; ChangeBytes -Offset @("CD2F6E", "CD2F8E", "CD42EE", "CD435A") -Values "0000"; ChangeBytes -Offset "CD45D2" -Values "44A0"; ChangeBytes -Offset "CD46D6" -Values "41A0"; ChangeBytes -Offset "CD4A2A" -Values "000A" }
-    if ( (IsChecked $Redux.Hero.Enemies)    -or (IsChecked $Redux.Hero.Octorok)       )   { ChangeBytes -Offset   "C0BEC6"            -Values "41B0";     ChangeBytes -Offset   "C0C23A"            -Values "0000"; ChangeBytes -Offset   "C0C5B6"                                -Values "44F0"; ChangeBytes -Offset "C0C8BE" -Values "450C"; ChangeBytes -Offset "C0C93A" -Values "4448"                                              }
-    if ( (IsChecked $Redux.Hero.Enemies)    -or (IsChecked $Redux.Hero.GohmaLarva)    )   { ChangeBytes -Offset @("C523E6", "C5283E") -Values "0000";     ChangeBytes -Offset   "C5298A"            -Values "0006"; ChangeBytes -Offset   "C52B76"                                -Values "40E0"; ChangeBytes -Offset "C52BFA" -Values "4170"; ChangeBytes -Offset "C52D3E" -Values "4100"                                              }
-    if ( (IsChecked $Redux.Hero.Enemies)    -or (IsChecked $Redux.Hero.Keese)         )   { ChangeBytes -Offset   "C13977"            -Values "00";       ChangeBytes -Offset   "C13D6E"            -Values "0000"; ChangeBytes -Offset   "C13D5E"                                -Values "4110"; ChangeBytes -Offset "C14546" -Values "4500"; ChangeBytes -Offset "C1471E" -Values "4150"                                              }
-    if ( (IsChecked $Redux.Hero.Bosses)     -or (IsChecked $Redux.Hero.Gohma)         )   { ChangeBytes -Offset   "C455A7"            -Values "20";       ChangeBytes -Offset   "C482B3"            -Values "40";   ChangeBytes -Offset   "C49347"                                -Values "24";   ChangeBytes -Offset "C49367" -Values "0F";   ChangeBytes -Offset "C486CC" -Values "00000000"                                          }
-    if ( (IsChecked $Redux.Hero.Enemies)    -or (IsChecked $Redux.Hero.LikeLike)      )   { ChangeBytes -Offset   "D7474E"            -Values "0014";     ChangeBytes -Offset   "D754E2"            -Values "45C8"; ChangeBytes -Offset @("D754B2", "D75572")                     -Values "1000"; ChangeBytes -Offset "D75532" -Values "4100"                                                                                           }
-    if ( (IsChecked $Redux.Hero.MiniBosses) -or (IsChecked $Redux.Hero.Stalfos)       )   { ChangeBytes -Offset @("BFB35C", "BFC148") -Values "00000000"; ChangeBytes -Offset   "BFCE4F"            -Values "30";   ChangeBytes -Offset   "BFCA6F"                                -Values "20";   ChangeBytes -Offset "BFD21F" -Values "20"                                                                                             }
-    if ( (IsChecked $Redux.Hero.MiniBosses) -or (IsChecked $Redux.Hero.DeadHand)      )   { ChangeBytes -Offset @("D0982E", "D099A2") -Values "4080";     ChangeBytes -Offset @("D099AE", "D09EAA") -Values "0008"; ChangeBytes -Offset   "D0983A"                                -Values "0025"; ChangeBytes -Offset "D09C26" -Values "0010"                                                                                           }
-    if ( (IsChecked $Redux.Hero.Enemies)    -or (IsChecked $Redux.Hero.ReDead)        )   { ChangeBytes -Offset   "CD7A62"            -Values "02FA";     ChangeBytes -Offset   "CD7ABE"            -Values "4516"; ChangeBytes -Offset @("CD82CF", "CD84CB")                     -Values "0A";   ChangeBytes -Offset "CD973C" -Values "3FCCCCCD"                                                                                       }
-    if ( (IsChecked $Redux.Hero.MiniBosses) -or (IsChecked $Redux.Hero.Wolfos)        )   { ChangeBytes -Offset   "ED9912"            -Values "0000";     ChangeBytes -Offset   "ED9CDE"            -Values "D000"; ChangeBytes -Offset   "EDBE3F"                                -Values "00"                                                                                                                                          }
-    if ( (IsChecked $Redux.Hero.MiniBosses) -or (IsChecked $Redux.Hero.Lizalfos)      )   { ChangeBytes -Offset @("C34DE3", "C34E07") -Values "00";       ChangeBytes -Offset @("C36B12", "C36B36") -Values "4000"; ChangeBytes -Offset   "C36E56"                                -Values "D000"                                                                                                                                        }
-    if ( (IsChecked $Redux.Hero.Enemies)    -or (IsChecked $Redux.Hero.Tektite)       )   { ChangeBytes -Offset @("C2B29A", "C2B29E") -Values "0000";     ChangeBytes -Offset   "C2B536"            -Values "40F0"; ChangeBytes -Offset @("C2B566", "C2BE9E", "C2C326")           -Values "4150"                                                                                                                                        }
-    if ( (IsChecked $Redux.Hero.Bosses)     -or (IsChecked $Redux.Hero.KingDodongo)   )   { ChangeBytes -Offset   "C3CB7F"            -Values "32";       ChangeBytes -Offset   "C3CF73"            -Values "00"                                                                                                                                                                                                                        }
-    if ( (IsChecked $Redux.Hero.Enemies)    -or (IsChecked $Redux.Hero.Guay)          )   { ChangeBytes -Offset   "EEE442"            -Values "4150";     ChangeBytes -Offset   "EEECBE"            -Values "4500"                                                                                                                                                                                                                      }
-    if ( (IsChecked $Redux.Hero.Enemies)    -or (IsChecked $Redux.Hero.Skulltula)     )   { ChangeBytes -Offset   "C627FF"            -Values "F0"                                                                                                                                                                                                                                                                                      }
-    if ( (IsChecked $Redux.Hero.Enemies)    -or (IsChecked $Redux.Hero.DekuScrub)     )   { ChangeBytes -Offset   "EBB0FA"            -Values "41B0"                                                                                                                                                                                                                                                                                    }
-    if ( (IsChecked $Redux.Hero.MiniBosses) -or (IsChecked $Redux.Hero.DarkLink)      )   { ChangeBytes -Offset   "1C0FD9F"           -Values "FF"                                                                                                                                                                                                                                                                                      }
-    if ( (IsChecked $Redux.Hero.MiniBosses) -or (IsChecked $Redux.Hero.GerudoFighter) )   { ChangeBytes -Offset   "EC15A5"            -Values "10"                                                                                                                                                                                                                                                                                      }
-    if ( (IsChecked $Redux.Hero.MiniBosses) -or (IsChecked $Redux.Hero.FlareDancer)   )   { ChangeBytes -Offset @("CF4CD9", "CF4CFD", "CF4D21", "CF4D45", "CF4D69", "CF4D8D", "CF4DB1", "CF4DD5", "CF4DF9", "CF4E1D", "CF4E41", "CF4E65") -Values "04"                                                                                                                                                                                  }
+    if (IsChecked $Redux.Hero.IronKnuckle)     { ChangeBytes -Offset @("DEA742", "DEA9C6")           -Values "40";       ChangeBytes -Offset   "DEDA10"            -Values "4019999A"; ChangeBytes -Offset "DEA06B" -Values "00";   ChangeBytes -Offset "DEA072" -Values "6734"; ChangeBytes -Offset "DEA087" -Values "0024A56734" }
+    if (IsChecked $Redux.Hero.GohmaLarva)      { ChangeBytes -Offset @("C523E6", "C5283E", "C52A9A") -Values "0000";     ChangeBytes -Offset   "C51CFE"            -Values "40FF";     ChangeBytes -Offset "C5298A" -Values "0007"; ChangeBytes -Offset "C52D3E" -Values "40AA"                                                    }                                             
+    if (IsChecked $Redux.Hero.Gohma)           { ChangeBytes -Offset   "C455A7"                      -Values "20";       ChangeBytes -Offset   "C482B3"            -Values "40";       ChangeBytes -Offset "C49347" -Values "24";   ChangeBytes -Offset "C49367" -Values "0F";   ChangeBytes -Offset "C486CC" -Values "00000000"   }
+    if (IsChecked $Redux.Hero.Stalfos)         { ChangeBytes -Offset @("BFB35C", "BFC148")           -Values "00000000"; ChangeBytes -Offset @("BFCA6F", "BFD21F") -Values "20";       ChangeBytes -Offset "BFCE4F" -Values "30";                                                                                                  }
+    if (IsChecked $Redux.Hero.DeadHand)        { ChangeBytes -Offset @("D0982E", "D099A2")           -Values "4080";     ChangeBytes -Offset @("D099AE", "D09EAA") -Values "0008";     ChangeBytes -Offset "D0983A" -Values "0025"; ChangeBytes -Offset "D09C26" -Values "0010"                                                    }
+    if (IsChecked $Redux.Hero.Wolfos)          { ChangeBytes -Offset   "EDBE3F"                      -Values "00";                                                                                                                                                                                                                 }
+    if (IsChecked $Redux.Hero.KingDodongo)     { ChangeBytes -Offset   "C3CB7F"                      -Values "32";       ChangeBytes -Offset   "C3CF73"            -Values "00";       ChangeBytes -Offset "C3CE5E" -Values "FFFF"                                                                                                 }
+    if (IsChecked $Redux.Hero.Lizalfos)        { ChangeBytes -Offset @("C36DC0", "C34DE0", "C34E04") -Values "00000000"                                                                                                                                                                                                            }
+    if (IsChecked $Redux.Hero.Keese)           { ChangeBytes -Offset   "C14FFC"                      -Values "1500"                                                                                                                                                                                                                }
+    if (IsChecked $Redux.Hero.Skulltula)       { ChangeBytes -Offset   "C627FF"                      -Values "F0"                                                                                                                                                                                                                  }
+    if (IsChecked $Redux.Hero.GerudoFighter)   { ChangeBytes -Offset   "EC15A5"                      -Values "10"                                                                                                                                                                                                                  }
+    if (IsChecked $Redux.Hero.FlareDancer)     { ChangeBytes -Offset @("CF4CD9", "CF4CFD", "CF4D21", "CF4D45", "CF4D69", "CF4D8D", "CF4DB1", "CF4DD5", "CF4DF9", "CF4E1D", "CF4E41", "CF4E65") -Values "04"                                                                                                                        }
 
     if (IsChecked $Redux.Hero.RefightBosses) { ChangeBytes -Offset @("C47ACC", "C40B14", "D26494", "C94A40", "D06794", "D3E400", "DA4AA8", "D68CE4") -Values "00000000" }
 
@@ -1926,7 +1912,7 @@ function ByteSceneOptions() {
         ChangeSceneFile -Values "07E1" -Search "006105F830FE98F380099C033E09EC04" -Start "AC00"; SaveAndPatchLoadedScene
     }
 
-    if ( (IsChecked $Redux.Hero.Bosses) -or (IsChecked $Redux.Hero.Gohma) ) {
+    if (IsChecked $Redux.Hero.Gohma) {
             PrepareMap   -Scene "Gohma's Lair" -Map 1 -Header 0
             ReplaceActor -Name "Grass Shrub" -New "Gohma Larva" -X (-121) -Y (-110) -Z (-686) -YRot 4150 -Param "0008"
             ReplaceActor -Name "Grass Shrub" -New "Gohma Larva" -X   18   -Y (-110) -Z (-510) -YRot 4150 -Param "0008"
@@ -1939,7 +1925,7 @@ function ByteSceneOptions() {
             SaveAndPatchLoadedScene
     }
 
-    if ( (IsChecked $Redux.Hero.Bosses) -or (IsChecked $Redux.Hero.KingDodongo) ) {
+    if (IsChecked $Redux.Hero.KingDodongo) {
             PrepareMap   -Scene "King Dodongo's Lair" -Map 1 -Header 0
             ReplaceObject -Name "Bomb Flower" -New "Baby Dodongo"
             ReplaceActor  -Name "Bomb Flower" -New "Baby Dodongo" -X (-574)  -Y (-1504) -Z (-3615) -Param "0000"
@@ -1949,9 +1935,8 @@ function ByteSceneOptions() {
             SaveAndPatchLoadedScene
     }
 
-    if ( (IsChecked $Redux.Hero.Bosses) -or (IsChecked $Redux.Hero.Barinade) ) {
+    if (IsChecked $Redux.Hero.Barinade) {
             PrepareMap   -Scene "Barinade's Lair" -Map 1 -Header 0
-            InsertObject -Name "Biri"
             ReplaceActor -Name "Pot" -New "Biri" -X   130  -Y 180 -Z (-340) -Param "FFFF"
             ReplaceActor -Name "Pot" -New "Biri" -X   130  -Y 180 -Z (-170) -Param "FFFF"
             ReplaceActor -Name "Pot" -New "Biri" -X (-230) -Y 180 -Z (-255) -Param "FFFF"
@@ -2646,14 +2631,13 @@ function CreatePresets() {
         BoxCheck $Redux.Hero.LostWoodsOctorok
         BoxCheck $Redux.Hero.NoBottledFairy
 
-        BoxCheck $Redux.Hero.GohmaLarve
+        BoxCheck $Redux.Hero.GohmaLarva
         BoxCheck $Redux.Hero.Skulltula
         BoxCheck $Redux.Hero.Keese
         BoxCheck $Redux.Hero.Wolfos
         BoxCheck $Redux.Hero.Lizalfos
         BoxCheck $Redux.Hero.Stalfos
         BoxCheck $Redux.Hero.FlareDancer
-        BoxCheck $Redux.Hero.DarkLink
         BoxCheck $Redux.Hero.DeadHand
         BoxCheck $Redux.Hero.GerudoFighter
         BoxCheck $Redux.Hero.IronKnuckle
@@ -3223,18 +3207,13 @@ function CreateTabDifficulty() {
     $items3 = @("1 Boss HP", "0.5x Boss HP", "1x Boss HP", "1.5x Boss HP", "2x Boss HP", "2.5x Boss HP", "3x Boss HP", "3.5x Boss HP", "4x Boss HP", "5x Boss HP")
 
     CreateReduxGroup    -Tag  "Hero"       -Text "Hero Mode"
-    CreateReduxComboBox -Name "MonsterHP"  -Text "Monster HP"   -Items $items1 -Default 3                                                        -Info "Set the amount of health for monsters`nDoesn't include monsters which die in 1 hit already"           -Credits "Admentus"
-    CreateReduxComboBox -Name "MiniBossHP" -Text "Mini-Boss HP" -Items $items2 -Default 3                                                        -Info "Set the amount of health for elite monsters and mini-bosses`nBig Octo and Dark Link are not included" -Credits "Admentus"
-    CreateReduxComboBox -Name "BossHP"     -Text "Boss HP"      -Items $items3 -Default 3                                                        -Info "Set the amount of health for bosses`nPhantom Ganon, Ganondorf and Ganon have a max of 3x health"      -Credits "Admentus & Marcelo20XX"
-    CreateReduxComboBox -Name "Damage"     -Text "Damage"       -Items @("1x Damage", "2x Damage", "4x Damage", "8x Damage", "OHKO Mode")        -Info "Set the amount of damage you receive`nOHKO Mode = You die in one hit"                                 -Credits "Admentus"
-    CreateReduxComboBox -Name "MagicUsage" -Text "Magic Usage"  -Items @("1x Magic Usage", "2x Magic Usage", "4x Magic Usage", "8x Magic Usage") -Info "Set the amount of times magic is consumed at"                                                         -Credits "Admentus"
-    CreateReduxComboBox -Name "ItemDrops"  -Text "Item Drops"   -Items @("Default", "No Hearts", "Only Rupees", "Nothing")                       -Info "Set the items that will drop from grass, pots and more"                                               -Credits "Randomizer, Admentus, Third M & BilonFullHDemon"
-    
-    if ($Settings.Core.Lite) {
-        CreateReduxCheckBox -Name "Enemies"    -Text "Enemies"     -Info "Make some regular enemies harder with extra properties such as faster attacking or speed" -Credits "Admentus, Euler & Anthrogi"
-        CreateReduxCheckBox -Name "MiniBosses" -Text "Mini-Bosses" -Info "Make some mini-bosses harder with extra properties such as faster attacking or speed"     -Credits "Admentus, Euler, Anthrogi, Nokaubure & BilonFullHDemon"
-        CreateReduxCheckBox -Name "Bosses"     -Text "Bosses"      -Info "Make some bosses harder with extra properties such as faster attacking or speed"          -Credits "Admentus, Euler & Anthrogi"
-    }
+    CreateReduxComboBox -Name "MonsterHP"  -Text "Monster HP"   -Items $items1 -Default 3                                                        -Info "Set the amount of health for monsters`nDoesn't include monsters which die in one hit already"    -Credits "Admentus"
+    CreateReduxComboBox -Name "MiniBossHP" -Text "Mini-Boss HP" -Items $items2 -Default 3                                                        -Info "Set the amount of health for elite monsters and mini-bosses`nThe Big Octo is not affected"       -Credits "Admentus & Euler"
+    CreateReduxComboBox -Name "BossHP"     -Text "Boss HP"      -Items $items3 -Default 3                                                        -Info "Set the amount of health for bosses`nPhantom Ganon, Ganondorf and Ganon have a max of 3x health" -Credits "Admentus & Marcelo20XX"
+    CreateReduxComboBox -Name "Damage"     -Text "Damage"       -Items @("1x Damage", "2x Damage", "4x Damage", "8x Damage", "OHKO Mode")        -Info "Set the amount of damage you receive`nOHKO Mode = You die in one hit"                            -Credits "Admentus"
+    CreateReduxComboBox -Name "MagicUsage" -Text "Magic Usage"  -Items @("1x Magic Usage", "2x Magic Usage", "4x Magic Usage", "8x Magic Usage") -Info "Set the amount of times magic is consumed at"                                                    -Credits "Admentus"
+    CreateReduxComboBox -Name "ItemDrops"  -Text "Item Drops"   -Items @("Default", "No Hearts", "Only Rupees", "Nothing")                       -Info "Set the items that will drop from grass, pots and more"                                          -Credits "Randomizer, Admentus, Third M & BilonFullHDemon"
+
 
 
     # HERO MODE #
@@ -3249,27 +3228,19 @@ function CreateTabDifficulty() {
     CreateReduxCheckBox -Name "NoFairyDrops"            -Text "No Fairy Drops"      -Info "Flexible Items will no longer drop fairies"                             -Credits "Admentus"
     CreateReduxCheckBox -Name "RefightBosses"           -Text "Refight Bosses"      -Info "Bosses can be fought again after being defeated"                        -Credits "Euler" -Warning "Doesn't work on already defeated bosses prior to patching"
 
-    CreateReduxGroup    -Tag  "Hero"          -Text "Hero Mode (Harder Enemies)" -Lite
-    CreateReduxCheckBox -Name "Guay"          -Text "Guay"           -Info "Guays attack faster and move further"                                                                                                                                                                              -Credits "Anthrogi"
-    CreateReduxCheckBox -Name "HandMaster"    -Text "Handmaster"     -Info "Wallmasters drop from above much quicker`nFloormasters attack faster and suffers less lag on miss or impact against player`nSmaller Floormasters jump and start chasing from further away and drain health faster" -Credits "Anthrogi"
-    CreateReduxCheckBox -Name "ReDead"        -Text "ReDead"         -Info "ReDeads/Gibdos chase the player more quickly and efficiently, while also draining health faster"                                                                                                                   -Credits "Anthrogi"
-    CreateReduxCheckBox -Name "LikeLike"      -Text "Like-Like"      -Info "Like-Likes move faster and notice the player from much further away"                                                                                                                                               -Credits "Anthrogi"
-    CreateReduxCheckBox -Name "Octorok"       -Text "Octorok"        -Info "Octoroks appear from more distance away from the player and shoot projectiles much faster at quicker intervals"                                                                                                    -Credits "Anthrogi"
-    CreateReduxCheckBox -Name "Tektite"       -Text "Tektite"        -Info "Tektites chase the player more effectively and lunge with greater reach"                                                                                                                                           -Credits "Anthrogi"
-    CreateReduxCheckBox -Name "DekuScrub"     -Text "Scrub"          -Info "All enemy deku scrub variations will shoot their projectiles faster"                                                                                                                                               -Credits "Anthrogi"
-    CreateReduxCheckBox -Name "GohmaLarva"    -Text "Gohma Larva"    -Info "Gohma Larvas are faster and reach further"                                                                                                                                                                         -Credits "Euler & Anthrogi"
+    CreateReduxGroup    -Tag  "Hero"          -Text "Hero Mode (Harder Enemies)"
+    CreateReduxCheckBox -Name "GohmaLarva"    -Text "Gohma Larva"    -Info "Gohma Larves are faster"                                                                                                                                                                                           -Credits "Euler"
     CreateReduxCheckBox -Name "Skulltula"     -Text "Skulltula"      -Info "Skulltula attacks hit harder"                                                                                                                                                                                      -Credits "Admentus"
-    CreateReduxCheckBox -Name "Keese"         -Text "Keese"          -Info "Keese attack faster and move further, as well as not lose their fire when impacting the player"                                                                                                                    -Credits "Euler & Anthrogi"
-    CreateReduxCheckBox -Name "Wolfos"        -Text "Wolfos"         -Info "Wolfos will attack faster and do not falter from having attacks blocked`nThey also attack when z-targeting another enemy"                                                                                          -Credits "BilonFullHDemon & Anthrogi"
-    CreateReduxCheckBox -Name "Lizalfos"      -Text "Lizalfos"       -Info "Lizalfos/Dinolfos will attack faster and do not falter from having attacks blocked`nThey also attack when z-targeting another enemy"                                                                               -Credits "Nokaubure, Euler & Anthrogi"
+    CreateReduxCheckBox -Name "Keese"         -Text "Keese"          -Info "Fire Keese or Ice Keese won't turn into regular Keese after hitting Link"                                                                                                                                          -Credits "Euler"
+    CreateReduxCheckBox -Name "Wolfos"        -Text "Wolfos"         -Info "Wolfos will attack you even not Z-Targeted"                                                                                                                                                                        -Credits "BilonFullHDemon"
+    CreateReduxCheckBox -Name "Lizalfos"      -Text "Lizalfos"       -Info "Lizalfos & Dinolfos will attack you even not Z-Targeted"                                                                                                                                                           -Credits "Nokaubure & Euler"
     CreateReduxCheckBox -Name "Stalfos"       -Text "Stalfos"        -Info "Stalfos will attack you even not Z-Targeted and their attacks hit harder"                                                                                                                                          -Credits "Nokaubure, BilonFullHDemon & Admentus"
-    CreateReduxCheckBox -Name "FlareDancer"   -Text "FlareDancer"    -Info "Flare Dancers now deal damage when running into them"                                                                                                                                                              -Credits "Euler"
-    CreateReduxCheckBox -Name "DarkLink"      -Text "Dark Link"      -Info "Dark Link starts attacking you right away after spawning"                                                                                                                                                  -Base 4 -Credits "Nokaubure, BilonFullHDemon & Anthrogi"
-    CreateReduxCheckBox -Name "DeadHand"      -Text "Dead Hand"      -Info "Dead Hands are faster and do not stay risen for long."                                                                                                                                                             -Credits "Euler & Anthrogi"
+    CreateReduxCheckBox -Name "FlareDancer"   -Text "Flare Dancer"   -Info "Flare Dancers now deal damage when running into them"                                                                                                                                                              -Credits "Euler"
+    CreateReduxCheckBox -Name "DeadHand"      -Text "Dead Hand"      -Info "Dead Hands are faster and deal twice as much damage"                                                                                                                                                               -Credits "Euler"
     CreateReduxCheckBox -Name "GerudoFighter" -Text "Gerudo Fighter" -Info "Gerudo Fighters deal twice as much damage"                                                                                                                                                                 -Base 4 -Credits "Euler"
-    CreateReduxCheckBox -Name "IronKnuckle"   -Text "Iron Knuckle"   -Info "Iron Knuckles now move faster and recover from attacks faster"                                                                                                                                                     -Credits "Admentus & Anthrogi"
-    CreateReduxCheckBox -Name "Gohma"         -Text "Gohma"          -Info "Gohma recovers faster from being stunned and replace objects with extra enemies in the boss arena"                                                                                                                 -Credits "Admentus, Euler & Anthrogi"
-    CreateReduxCheckBox -Name "KingDodongo"   -Text "King Dodongo"   -Info "King Dodongo inhales faster and is no longer stunned and replace objects with extra enemies in the boss arena"                                                                                                     -Credits "Admentus, Euler & Anthrogi"
+    CreateReduxCheckBox -Name "IronKnuckle"   -Text "Iron Knuckle"   -Info "Iron Knuckles now move faster and recover from attacks faster"                                                                                                                                                     -Credits "Admentus"
+    CreateReduxCheckBox -Name "Gohma"         -Text "Gohma"          -Info "Gohma recovers faster from being stunned and grass patches are replaced with enemies"                                                                                                                              -Credits "Admentus & Euler"
+    CreateReduxCheckBox -Name "KingDodongo"   -Text "King Dodongo"   -Info "King Dodongo inhales faster, receives half damage from bombs, is no longer stunned and Bomb Flowers are replaced with enemies"                                                                                     -Credits "Admentus & Euler"
     CreateReduxCheckBox -Name "Barinade"      -Text "Barinade"       -Info "Replace objects with extra enemies in the boss arena"                                                                                                                                                       -Scene -Credits "Admentus"
 
 

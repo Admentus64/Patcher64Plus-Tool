@@ -1,3 +1,9 @@
+v25.1.6
+- Added extra progression flag for the OoT Redux Debug Menu
+- Removed and restored several "Harder Enemies" options for OoT
+- Fixed issue with having both the Zora Mask and Iron Boots equipped for OoT Redux
+- Fixed issue with being able to use certain items when you shouldn't in OoT Redux
+
 v25.1.5
 - Update Child Quest Pro to v1.0.2 (faster Scarecrow)
 
