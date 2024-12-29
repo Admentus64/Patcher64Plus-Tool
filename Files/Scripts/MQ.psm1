@@ -2,6 +2,10 @@ function PatchDungeonsOoTMQ() {
     
     if ($GameType.mode -ne "Ocarina of Time") { return }
 
+    if (IsIndex -Elem $Redux.MQ.Logo -Text "Vanilla + GC Copyright") { # The GC copyright is the same as OOT Master Quest, as they are on the same disk
+        PatchBytes -Offset "17AE300" -Texture -Patch "Logo\mq_copyright.bin" 
+    }
+
     if (IsIndex -Elem $Redux.MQ.Logo -Text "Master Quest") { # MQ Title with Subtitle
         PatchBytes -Offset "1795300" -Texture -Patch "Logo\mq_logo.bin"
         PatchBytes -Offset "17AE300" -Texture -Patch "Logo\mq_copyright.bin"
