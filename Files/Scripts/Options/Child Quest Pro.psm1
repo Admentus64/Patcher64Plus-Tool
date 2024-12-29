@@ -1,4 +1,4 @@
-function ChildQuestProExposeOptions() {
+﻿function ChildQuestProExposeOptions() {
     
     # Exclude Group
     ExcludeGroup  -Group "Unlock"       -Name "Unlock Child Restrictions"

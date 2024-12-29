@@ -1,4 +1,4 @@
-function ChildQuestClassicExposeOptions() {
+﻿function ChildQuestClassicExposeOptions() {
     
     # Exclude Group
     ExcludeGroup  -Group "Unlock"       -Name "Swords & Shields"
