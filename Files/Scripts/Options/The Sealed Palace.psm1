@@ -131,25 +131,11 @@ function ByteOptions() {
     # SWORD TRAIL EFFECTS #
 
     if ($Redux.Colors.SetSwordTrail -ne $null) {
-        if (IsColor $Redux.Colors.SetSwordTrail[0]   -Not)            { ChangeBytes -Offset @("1B9A97C", "1B9A980") -Values @($Redux.Colors.SetSwordTrail[0].Color.R, $Redux.Colors.SetSwordTrail[0].Color.G, $Redux.Colors.SetSwordTrail[0].Color.B) }
-        if (IsColor $Redux.Colors.SetSwordTrail[1]   -Not)            { ChangeBytes -Offset @("1B9A984", "1B9A988") -Values @($Redux.Colors.SetSwordTrail[1].Color.R, $Redux.Colors.SetSwordTrail[1].Color.G, $Redux.Colors.SetSwordTrail[1].Color.B) }
+        if (IsColor $Redux.Colors.SetSwordTrail[0]   -Not)            { ChangeBytes -Offset @("1B9A97C", "1B9A984") -Values @($Redux.Colors.SetSwordTrail[0].Color.R, $Redux.Colors.SetSwordTrail[0].Color.G, $Redux.Colors.SetSwordTrail[0].Color.B) }
+        if (IsColor $Redux.Colors.SetSwordTrail[1]   -Not)            { ChangeBytes -Offset @("1B9A980", "1B9A988") -Values @($Redux.Colors.SetSwordTrail[1].Color.R, $Redux.Colors.SetSwordTrail[1].Color.G, $Redux.Colors.SetSwordTrail[1].Color.B) }
         if (IsIndex $Redux.Colors.SwordTrailDuration -Not -Index 2)   { ChangeBytes -Offset "1B9A98C" -Values (($Redux.Colors.SwordTrailDuration.SelectedIndex) * 5) }
-        if (IsDefault $Redux.Colors.AlphaTip1 -Not) {
-        $value =  (Get8Bit $Redux.Colors.AlphaTip1.Text)
-        ChangeBytes -Offset "1B9A97F" -Values $value
-     }
-        if (IsDefault $Redux.Colors.AlphaBase1 -Not) {
-        $value =  (Get8Bit $Redux.Colors.AlphaBase1.Text)
-        ChangeBytes -Offset "1B9A983" -Values $value
-     }
-        if (IsDefault $Redux.Colors.AlphaTip2 -Not) {
-        $value =  (Get8Bit $Redux.Colors.AlphaTip2.Text)
-        ChangeBytes -Offset "1B9A987" -Values $value
-     }
-        if (IsDefault $Redux.Colors.AlphaBase2 -Not) {
-        $value =  (Get8Bit $Redux.Colors.AlphaBase2.Text)
-        ChangeBytes -Offset "1B9A98B" -Values $value
-     }
+        if (IsText -Elem $Redux.Colors.Alpha -Compare "Low Tip Full Base")   { ChangeBytes -Offset "1B9A97F" -Values "40"; ChangeBytes -Offset "1B9A983" -Values "FF" }
+        elseif (IsText -Elem $Redux.Colors.Alpha -Compare "Full Tip & Base")   { ChangeBytes -Offset "1B9A97F" -Values "FF"; ChangeBytes -Offset "1B9A983" -Values "FF" }
     }
 
 
@@ -327,10 +313,7 @@ function CreateTabColors() {
     # COLORS #
     CreateSpinAttackColorOptions
     CreateSwordTrailColorOptions -Duration
-    CreateReduxTextBox -Name "AlphaTip1" -Length 3  -Text "Tip Alpha Start" -Value 255 -Min 0 -Max 255 -Info "Set the starting tip transparency of the sword trail" -Credits "Anthrogi"
-    CreateReduxTextBox -Name "AlphaBase1" -Length 3  -Text "Base Alpha Start" -Value 64 -Min 0 -Max 255  -Info "Set the starting base transparency of the sword trail" -Credits "Anthrogi"
-    CreateReduxTextBox -Name "AlphaTip2" -Column 3 -Length 3  -Text "Tip Alpha End" -Value 0 -Min 0 -Max 255  -Info "Set the ending tip transparency of the sword trail" -Credits "Anthrogi"
-    CreateReduxTextBox -Name "AlphaBase2" -Column 4 -Length 3  -Text "Base Alpha End" -Value 0 -Min 0 -Max 255  -Info "Set the ending base transparency of the sword trail" -Credits "Anthrogi"
+    CreateReduxComboBox -Name "Alpha" -Text "Sword Alpha Style" -Items ("Default", "Low Tip Full Base", "Full Tip & Base") -Info "Select the attack trail transparent style you want when attacking" -Credits "Anthrogi"
     
 }
 
