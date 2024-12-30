@@ -886,7 +886,7 @@ function ByteOptions() {
     if (IsDefault $Redux.Hitbox.MasterSword       -Not)   { ChangeBytes -Offset "B6DB14" -Values (ConvertFloatToHex $Redux.Hitbox.MasterSword.Value)       }
     if (IsDefault $Redux.Hitbox.GiantsKnife       -Not)   { ChangeBytes -Offset "B6DB1C" -Values (ConvertFloatToHex $Redux.Hitbox.GiantsKnife.Value)       }
     if (IsDefault $Redux.Hitbox.BrokenGiantsKnife -Not)   { ChangeBytes -Offset "B7E8CC" -Values (ConvertFloatToHex $Redux.Hitbox.BrokenGiantsKnife.Value) }
-    if (IsDefault $Redux.Hitbox.DekuStick 	  -Not)   { ChangeBytes -Offset "B7E8C0"  -Values (ConvertFloatToHex $Redux.Hitbox.DekuStick.Value) 	   }
+    if (IsDefault $Redux.Hitbox.DekuStick 	  -Not)   { ChangeBytes -Offset "B7E8C0" -Values (ConvertFloatToHex $Redux.Hitbox.DekuStick.Value) 	   }
     if (IsDefault $Redux.Hitbox.MegatonHammer     -Not)   { ChangeBytes -Offset "B6DB24" -Values (ConvertFloatToHex $Redux.Hitbox.MegatonHammer.Value)     }
     if (IsDefault $Redux.Hitbox.ShieldRecoil      -Not)   { ChangeBytes -Offset "BD4162" -Values (Get16Bit ($Redux.Hitbox.ShieldRecoil.Value + 45000))     }
     if (IsDefault $Redux.Hitbox.Hookshot          -Not)   { ChangeBytes -Offset "CAD3C7" -Values (Get8Bit $Redux.Hitbox.Hookshot.Value)                    }
