@@ -1,3 +1,7 @@
+v25.1.7
+- Added new logo alternative for OoT (by MariaNova)
+- Fixed "Business Scrubs" speedup for MM
+
 v25.1.6
 - Added extra progression flag for the OoT Redux Debug Menu
 - Removed and restored several "Harder Enemies" options for OoT
