@@ -1865,7 +1865,7 @@ function CreateTabMain() {
 
     CreateReduxGroup    -Tag  "Gameplay"               -Text "Quality of Life"
     CreateReduxCheckBox -Name "AdditionalSaveStatues"  -Text "Additional Save Statues"   -Info "Add an Owl Statue for saving only in Pirate's Fortress (Exterior) and Ikana Graveyard and in each of the four temples"            -Base 2 -Credits "Admentus"
-    CreateReduxCheckBox -Name "PermanentOwlSaves"      -Text "Permanent Owl Saves"       -Info "Owl saves are no longer deleted"                                                                                                          -Credits "Admentus"
+    CreateReduxCheckBox -Name "PermanentOwlSaves"      -Text "Permanent Owl Saves"       -Info "Owl saves are no longer deleted"                                                                                                  -Base 1 -Credits "Admentus"
     CreateReduxCheckBox -Name "ZoraPhysics"            -Text "Zora Physics"              -Info "Change the Zora physics when using the boomerang`nZora Link will take a step forward instead of staying on his spot"                      -Credits "ShadowOne333"
     CreateReduxCheckBox -Name "FormItems"              -Text "Use Items With Mask Forms" -Info "Deku Link, Goron Link and Zora Link are able to use a few items such as Bombs and Deku Sticks"                                            -Credits "bry_dawg02"
     CreateReduxCheckBox -Name "NoKillFlash"            -Text "No Kill Flash"             -Info "Disable the flash effect when killing certain enemies such as the Guay or Skullwalltula"                                                  -Credits "Euler"
@@ -2537,7 +2537,7 @@ function CreateTabSpeedup() {
     CreateReduxCheckBox -Name "BossCutscenes"   -Text "Boss Cutscenes"   -Info "Skip the cutscenes that play during bosses and mini-bosses"                                      -Credits "Randomizer"
     CreateReduxCheckBox -Name "TatlInterrupts"  -Text "Tatl Interrupts"  -Info "Skip the cutscenes that are triggered by Tatl"                                                   -Credits "Randomizer"
     CreateReduxCheckBox -Name "OpeningChests"   -Text "Opening Chest"    -Info "Skip the cutscene for opening large chests"                                                      -Credits "Euler"
-    CreateReduxCheckBox -Name "BusinessScrubs"  -Text "Business Scrubs"  -Info "Skip the cutscene for all Business Scrubs, and the Clock Town Business Scrub is already present" -Credits "Euler"
+    CreateReduxCheckBox -Name "BusinessScrubs"  -Text "Business Scrubs"  -Info "Skip the cutscene for all Business Scrubs, and the Clock Town Business Scrub is already present" -Credits "Euler" -Base 1
     CreateReduxCheckBox -Name "IronKnuckles"    -Text "Iron Knuckles"    -Info "Skip the cutscene when the armor breaks broken or dies"                                          -Credits "Euler"
 
 

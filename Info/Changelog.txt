@@ -1,3 +1,7 @@
+v25.1.7
+- Added new logo alternative for OoT (by MariaNova)
+- Limited some options for MM to vanilla
+
 v25.1.6
 - Added extra progression flag for the OoT Redux Debug Menu
 - Removed and restored several "Harder Enemies" options for OoT
