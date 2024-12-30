@@ -754,7 +754,7 @@ function ByteOptions() {
     if ($Redux.Colors.SetSwordTrail -ne $null) {
         if (IsColor   $Redux.Colors.SetSwordTrail[0]   -Not)   { ChangeBytes -Offset @("CD73F8", "CD73FC")           -Values @($Redux.Colors.SetSwordTrail[0].Color.R, $Redux.Colors.SetSwordTrail[0].Color.G, $Redux.Colors.SetSwordTrail[0].Color.B) }
         if (IsColor   $Redux.Colors.SetSwordTrail[1]   -Not)   { ChangeBytes -Offset @("CD7400", "CD7404")           -Values @($Redux.Colors.SetSwordTrail[1].Color.R, $Redux.Colors.SetSwordTrail[1].Color.G, $Redux.Colors.SetSwordTrail[1].Color.B) }
-        if (IsDefault $Redux.Colors.SwordTrailDuration -Not)   { ChangeBytes -Offset @("CA9FBF", "CBC2A7", "CBC46B") -Values ($Redux.Colors.SwordTrailDuration.SelectedIndex * 5); ChangeBytes -Offset "CB5CFB" -Values ($ByteArrayGame[0xCA9FBF] * 2) }
+        if (IsDefault $Redux.Colors.SwordTrailDuration -Not)   { ChangeBytes -Offset "CA9FBF" 			     -Values ($Redux.Colors.SwordTrailDuration.SelectedIndex * 5)  								       }
 	if (IsDefault $Redux.Colors.AlphaTip1 -Not) {
         $value =  (Get8Bit $Redux.Colors.AlphaTip1.Text)
         ChangeBytes -Offset "CD73FB" -Values $value
