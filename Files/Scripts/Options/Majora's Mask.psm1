@@ -132,6 +132,7 @@ function ByteOptions() {
     if (IsChecked $Redux.Gameplay.NoKillFlash)              { ChangeBytes -Offset "BFE043"  -Values "00"       }
     if (IsChecked $Redux.Gameplay.DisableScreenShrinking)   { ChangeBytes -Offset "EAC2DC"  -Values "00000000" }
     if (IsChecked $Redux.Gameplay.KeepDekuBubble)           { ChangeBytes -Offset "D04843"  -Values "00"       }
+    if (IsChecked $Redux.Gameplay.FastArrows)               { ChangeBytes -Offset @("D9397A", "D959BE", "D9787E") -Values "0010" }
 
     
 
@@ -513,7 +514,9 @@ function ByteOptions() {
 
     # HERO MODE #
 
-    if (IsChecked $Redux.Hero.RedTektites) {        PatchBytes  -Offset "D0DB3C" -Patch "ovl_en_tite.bin"        ChangeBytes -Offset "D10D3C" -Values "06"; ChangeBytes -Offset "D10E57" -Values "64"; ChangeBytes -Offset "D10E5B" -Values "68"; ChangeBytes -Offset "D10E5F" -Values "74"; ChangeBytes -Offset "D10E63" -Values "BC"; ChangeBytes -Offset @("D0DC6C", "D0DD08", "D0DDA0") -Values "1100"
+    if (IsChecked $Redux.Hero.RedTektites) {
+        PatchBytes  -Offset "D0DB3C" -Patch "ovl_en_tite.bin"
+        ChangeBytes -Offset "D10D3C" -Values "06"; ChangeBytes -Offset "D10E57" -Values "64"; ChangeBytes -Offset "D10E5B" -Values "68"; ChangeBytes -Offset "D10E5F" -Values "74"; ChangeBytes -Offset "D10E63" -Values "BC"; ChangeBytes -Offset @("D0DC6C", "D0DD08", "D0DDA0") -Values "1100"
     }
 
     if (IsIndex -Elem $Redux.Hero.MonsterHP -Index 3 -Not) { # Monsters
@@ -749,9 +752,25 @@ function ByteOptions() {
     # SWORD TRAIL COLORS #
 
     if ($Redux.Colors.SetSwordTrail -ne $null) {
-        if (IsColor   $Redux.Colors.SetSwordTrail[0]   -Not)   { ChangeBytes -Offset @("CD73F8", "CD7400")           -Values @($Redux.Colors.SetSwordTrail[0].Color.R, $Redux.Colors.SetSwordTrail[0].Color.G, $Redux.Colors.SetSwordTrail[0].Color.B) }
-        if (IsColor   $Redux.Colors.SetSwordTrail[1]   -Not)   { ChangeBytes -Offset @("CD73FC", "CD7404")           -Values @($Redux.Colors.SetSwordTrail[1].Color.R, $Redux.Colors.SetSwordTrail[1].Color.G, $Redux.Colors.SetSwordTrail[1].Color.B) }
+        if (IsColor   $Redux.Colors.SetSwordTrail[0]   -Not)   { ChangeBytes -Offset @("CD73F8", "CD73FC")           -Values @($Redux.Colors.SetSwordTrail[0].Color.R, $Redux.Colors.SetSwordTrail[0].Color.G, $Redux.Colors.SetSwordTrail[0].Color.B) }
+        if (IsColor   $Redux.Colors.SetSwordTrail[1]   -Not)   { ChangeBytes -Offset @("CD7400", "CD7404")           -Values @($Redux.Colors.SetSwordTrail[1].Color.R, $Redux.Colors.SetSwordTrail[1].Color.G, $Redux.Colors.SetSwordTrail[1].Color.B) }
         if (IsDefault $Redux.Colors.SwordTrailDuration -Not)   { ChangeBytes -Offset @("CA9FBF", "CBC2A7", "CBC46B") -Values ($Redux.Colors.SwordTrailDuration.SelectedIndex * 5); ChangeBytes -Offset "CB5CFB" -Values ($ByteArrayGame[0xCA9FBF] * 2) }
+	if (IsDefault $Redux.Colors.AlphaTip1 -Not) {
+        $value =  (Get8Bit $Redux.Colors.AlphaTip1.Text)
+        ChangeBytes -Offset "CD73FB" -Values $value
+     }
+        if (IsDefault $Redux.Colors.AlphaBase1 -Not) {
+        $value =  (Get8Bit $Redux.Colors.AlphaBase1.Text)
+        ChangeBytes -Offset "CD73FF" -Values $value
+     }
+        if (IsDefault $Redux.Colors.AlphaTip2 -Not) {
+        $value =  (Get8Bit $Redux.Colors.AlphaTip2.Text)
+        ChangeBytes -Offset "CD7403" -Values $value
+     }
+        if (IsDefault $Redux.Colors.AlphaBase2 -Not) {
+        $value =  (Get8Bit $Redux.Colors.AlphaBase2.Text)
+        ChangeBytes -Offset "CD7407" -Values $value
+     }
     }
 
 
@@ -852,6 +871,7 @@ function ByteOptions() {
     if (IsDefault $Redux.Equipment.RazorSword       -Not)   { ChangeBytes -Offset "C572C0" -Values (ConvertFloatToHex $Redux.Equipment.RazorSword.Value)       }
     if (IsDefault $Redux.Equipment.GildedSword      -Not)   { ChangeBytes -Offset "C572C4" -Values (ConvertFloatToHex $Redux.Equipment.GildedSword.Value)      }
     if (IsDefault $Redux.Equipment.GreatFairysSword -Not)   { ChangeBytes -Offset "C572C8" -Values (ConvertFloatToHex $Redux.Equipment.GreatFairysSword.Value) }
+    if (IsDefault $Redux.Equipment.DekuStick 	    -Not)   { ChangeBytes -Offset "C74334" -Values (ConvertFloatToHex $Redux.Equipment.DekuStick.Value)        }
     if (IsDefault $Redux.Equipment.BlastMask        -Not)   { ChangeBytes -Offset "CAA666" -Values (Get16Bit  $Redux.Equipment.BlastMask.Value)                }
     if (IsDefault $Redux.Equipment.ShieldRecoil     -Not)   { ChangeBytes -Offset "CAEDC6" -Values (Get16Bit ($Redux.Equipment.ShieldRecoil.Value + 45000) )   }
     if (IsDefault $Redux.Equipment.Hookshot         -Not)   { ChangeBytes -Offset "D3B327" -Values (Get8Bit   $Redux.Equipment.Hookshot.Value)                 }
@@ -1873,6 +1893,7 @@ function CreateTabMain() {
     CreateReduxCheckBox -Name "DisableScreenShrinking" -Text "Disable Screen Shrinking"  -Info "Disables the effect of the screen shrinking just before the next day"                                                                     -Credits "Euler"
     CreateReduxCheckBox -Name "KeepDekuBubble"         -Text "Don't Burst Deku Bubble"   -Info "Holding B button will not burst the Deku Link Bubble"                                                                                     -Credits "Euler"
     CreateReduxCheckBox -Name "RoyalWallet"            -Text "Royal Wallet"              -Info "A third wallet upgrade can be bought"                                                                                              -Scene -Credits "Admentus"
+    CreateReduxCheckBox -Name "FastArrows"             -Text "Less Magic Arrows Cooldown"-Info "The burst animation for Fire, Ice and Light Arrows are shorter`nAllows Link to shoot the next magic arrow a bit quicker" 		  -Credits "Anthrogi"
 
 
 
@@ -2393,6 +2414,10 @@ function CreateTabColors() {
     # COLORS #
 
     CreateSwordTrailColorOptions
+    CreateReduxTextBox -Name "AlphaTip1" -Length 3  -Text "Tip Alpha Start" -Value 255 -Min 0 -Max 255 -Info "Set the starting tip transparency of the sword trail" -Credits "Anthrogi"
+    CreateReduxTextBox -Name "AlphaBase1" -Length 3  -Text "Base Alpha Start" -Value 64 -Min 0 -Max 255  -Info "Set the starting base transparency of the sword trail" -Credits "Anthrogi"
+    CreateReduxTextBox -Name "AlphaTip2" -Column 3 -Length 3  -Text "Tip Alpha End" -Value 0 -Min 0 -Max 255  -Info "Set the ending tip transparency of the sword trail" -Credits "Anthrogi"
+    CreateReduxTextBox -Name "AlphaBase2" -Column 4 -Length 3  -Text "Base Alpha End" -Value 0 -Min 0 -Max 255  -Info "Set the ending base transparency of the sword trail" -Credits "Anthrogi"
     CreateSpinAttackColorOptions
     CreateFairyColorOptions -Name "Tatl"
 
@@ -2448,13 +2473,14 @@ function CreateTabEquipment() {
     # HITBOX #
 
     CreateReduxGroup  -Tag  "Equipment" -Text "Sliders"
-    CreateReduxSlider -Name "KokiriSword"      -Default 3000 -Min 512 -Max 8192 -Freq 512 -Small 256 -Large 512 -Text "Kokiri Sword"        -Info "Set the length of the hitbox of the Kokiri Sword"           -Credits "Admentus"
-    CreateReduxSlider -Name "RazorSword"       -Default 3000 -Min 512 -Max 8192 -Freq 512 -Small 256 -Large 512 -Text "Razor Sword"         -Info "Set the length of the hitbox of the Razor Sword"            -Credits "Admentus"
-    CreateReduxSlider -Name "GildedSword"      -Default 4000 -Min 512 -Max 8192 -Freq 512 -Small 256 -Large 512 -Text "Gilded Sword"        -Info "Set the length of the hitbox of the Gilded Sword"           -Credits "Admentus"
-    CreateReduxSlider -Name "GreatFairysSword" -Default 5500 -Min 512 -Max 8192 -Freq 512 -Small 256 -Large 512 -Text "Great Fairy's Sword" -Info "Set the length of the hitbox of the Great Fairy's Sword"    -Credits "Admentus"
-    CreateReduxSlider -Name "BlastMask"        -Default 310  -Min 1   -Max 1024 -Freq 64  -Small 32  -Large 64  -Text "Blast Mask"          -Info "Set the cooldown duration of the Blast Mask"                -Credits "Randomizer"
-    CreateReduxSlider -Name "ShieldRecoil"     -Default 4552 -Min 0   -Max 8248 -Freq 512 -Small 256 -Large 512 -Text "Shield Recoil"       -Info "Set the pushback distance when getting hit while shielding" -Credits "Admentus"
-    CreateReduxSlider -Name "Hookshot"         -Default 26   -Min 0   -Max 50   -Freq 10  -Small 5   -Large 10  -Text "Hookshot Length"     -Info "Set the length of the Hookshot"                             -Credits "Admentus" -Warning "Going above the default length can look weird"
+    CreateReduxSlider -Name "KokiriSword"      -Default 3000 -Min 512 -Max 8192 -Freq 512 -Small 256 -Large 512 -Text "Kokiri Sword"        -Info "Set the hitbox length of the Kokiri Sword"           	  -Credits "Admentus"
+    CreateReduxSlider -Name "RazorSword"       -Default 3000 -Min 512 -Max 8192 -Freq 512 -Small 256 -Large 512 -Text "Razor Sword"         -Info "Set the hitbox length of the Razor Sword"            	  -Credits "Admentus"
+    CreateReduxSlider -Name "GildedSword"      -Default 4000 -Min 512 -Max 8192 -Freq 512 -Small 256 -Large 512 -Text "Gilded Sword"        -Info "Set the hitbox length of the Gilded Sword"           	  -Credits "Admentus"
+    CreateReduxSlider -Name "GreatFairysSword" -Default 5500 -Min 512 -Max 8192 -Freq 512 -Small 256 -Large 512 -Text "Two-Handed Sword"    -Info "Set the hitbox length of the Great_Fairy's/Double_Helix Sword" -Credits "Admentus"
+    CreateReduxSlider -Name "DekuStick"        -Default 5000 -Min 512 -Max 8192 -Freq 512 -Small 256 -Large 512 -Text "Deku Stick" 	    -Info "Set the hitbox length of the Deku Stick" 		          -Credits "Anthrogi"
+    CreateReduxSlider -Name "BlastMask"        -Default 310  -Min 1   -Max 1024 -Freq 64  -Small 32  -Large 64  -Text "Blast Mask"          -Info "Set the cooldown duration of the Blast Mask"                   -Credits "Randomizer"
+    CreateReduxSlider -Name "ShieldRecoil"     -Default 4552 -Min 0   -Max 8248 -Freq 512 -Small 256 -Large 512 -Text "Shield Recoil"       -Info "Set the pushback distance when getting hit while shielding"    -Credits "Admentus"
+    CreateReduxSlider -Name "Hookshot"         -Default 26   -Min 0   -Max 50   -Freq 10  -Small 5   -Large 10  -Text "Hookshot Length"     -Info "Set the length of the Hookshot"                                -Credits "Admentus" -Warning "Going above the default length can look weird"
 
 
 
