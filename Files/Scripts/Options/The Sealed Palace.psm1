@@ -5,6 +5,7 @@ function ByteOptions() {
     if (IsChecked $Redux.Gameplay.BlackBars)                { ChangeBytes -Offset "B2ABEC"  -Values "00000000"                                                                                                     }
     if (IsChecked $Redux.Gameplay.TextSpeed)                { ChangeBytes -Offset "B80AAB"  -Values "02"                                                                                                           }
     if (IsChecked $Redux.Gameplay.FastArrows)               { ChangeBytes -Offset @("1DBF502", "1DC14C2", "1DC34A2") -Values "0010"                                                                                }
+    if (IsChecked $Redux.Gameplay.FastCharge)               { ChangeBytes -Offset @("E56558", "E56564") -Values "3E12159A"; ChangeBytes -Offset "E5656C" -Values "3DC448CD"; ChangeBytes -Offset @("E56560", "E56570", "E5659C") -Values "3E132200" }
 
 
 
@@ -108,10 +109,21 @@ function ByteOptions() {
 
     if ($Redux.Colors.SetEquipment -ne $null) {
         if (IsColor $Redux.Colors.SetEquipment[0] -Not)   { ChangeBytes -Offset "B9D1A8" -Values @($Redux.Colors.SetEquipment[0].Color.R, $Redux.Colors.SetEquipment[0].Color.G, $Redux.Colors.SetEquipment[0].Color.B) } # Kokiri Tunic
-        if (IsColor $Redux.Colors.SetEquipment[1] -Not)   { ChangeBytes -Offset "B9D1AB"  -Values @($Redux.Colors.SetEquipment[1].Color.R, $Redux.Colors.SetEquipment[1].Color.G, $Redux.Colors.SetEquipment[1].Color.B) } # Goron Tunic
-        if (IsColor $Redux.Colors.SetEquipment[2] -Not)   { ChangeBytes -Offset "B9D1AE"  -Values @($Redux.Colors.SetEquipment[2].Color.R, $Redux.Colors.SetEquipment[2].Color.G, $Redux.Colors.SetEquipment[2].Color.B) } # Zora Tunic
+        if (IsColor $Redux.Colors.SetEquipment[1] -Not)   { ChangeBytes -Offset "B9D1AB" -Values @($Redux.Colors.SetEquipment[1].Color.R, $Redux.Colors.SetEquipment[1].Color.G, $Redux.Colors.SetEquipment[1].Color.B) } # Goron Tunic
+        if (IsColor $Redux.Colors.SetEquipment[2] -Not)   { ChangeBytes -Offset "B9D1AE" -Values @($Redux.Colors.SetEquipment[2].Color.R, $Redux.Colors.SetEquipment[2].Color.G, $Redux.Colors.SetEquipment[2].Color.B) } # Zora Tunic
         if (IsColor $Redux.Colors.SetEquipment[3] -Not)   { ChangeBytes -Offset "B9D1B4" -Values @($Redux.Colors.SetEquipment[3].Color.R, $Redux.Colors.SetEquipment[3].Color.G, $Redux.Colors.SetEquipment[3].Color.B) } # Silver Gauntlets
         if (IsColor $Redux.Colors.SetEquipment[4] -Not)   { ChangeBytes -Offset "B9D1B7" -Values @($Redux.Colors.SetEquipment[4].Color.R, $Redux.Colors.SetEquipment[4].Color.G, $Redux.Colors.SetEquipment[4].Color.B) } # Golden Gauntlets
+    }
+
+
+
+    # MAGIC SPIN ATTACK COLORS #
+
+    if ($Redux.Colors.SetSpinAttack -ne $null) {
+        if (IsColor $Redux.Colors.SetSpinAttack[0] -Not)   { ChangeBytes -Offset "1F02614" -Values @($Redux.Colors.SetSpinAttack[0].Color.R, $Redux.Colors.SetSpinAttack[0].Color.G, $Redux.Colors.SetSpinAttack[0].Color.B) } # Blue Spin Attack
+        if (IsColor $Redux.Colors.SetSpinAttack[1] -Not)   { ChangeBytes -Offset "1F02734" -Values @($Redux.Colors.SetSpinAttack[1].Color.R, $Redux.Colors.SetSpinAttack[1].Color.G, $Redux.Colors.SetSpinAttack[1].Color.B) } # Blue Spin Attack
+        if (IsColor $Redux.Colors.SetSpinAttack[2] -Not)   { ChangeBytes -Offset "1F02B94" -Values @($Redux.Colors.SetSpinAttack[2].Color.R, $Redux.Colors.SetSpinAttack[2].Color.G, $Redux.Colors.SetSpinAttack[2].Color.B) } # Red Spin Attack
+        if (IsColor $Redux.Colors.SetSpinAttack[3] -Not)   { ChangeBytes -Offset "1F02CB4" -Values @($Redux.Colors.SetSpinAttack[3].Color.R, $Redux.Colors.SetSpinAttack[3].Color.G, $Redux.Colors.SetSpinAttack[3].Color.B) } # Red Spin Attack
     }
 
 
@@ -119,9 +131,25 @@ function ByteOptions() {
     # SWORD TRAIL EFFECTS #
 
     if ($Redux.Colors.SetSwordTrail -ne $null) {
-        if (IsColor $Redux.Colors.SetSwordTrail[0]   -Not)            { ChangeBytes -Offset "1B9A97C" -Values @($Redux.Colors.SetSwordTrail[0].Color.R, $Redux.Colors.SetSwordTrail[0].Color.G, $Redux.Colors.SetSwordTrail[0].Color.B) }
-        if (IsColor $Redux.Colors.SetSwordTrail[1]   -Not)            { ChangeBytes -Offset "1B9A984" -Values @($Redux.Colors.SetSwordTrail[1].Color.R, $Redux.Colors.SetSwordTrail[1].Color.G, $Redux.Colors.SetSwordTrail[1].Color.B) }
+        if (IsColor $Redux.Colors.SetSwordTrail[0]   -Not)            { ChangeBytes -Offset @("1B9A97C", "1B9A980") -Values @($Redux.Colors.SetSwordTrail[0].Color.R, $Redux.Colors.SetSwordTrail[0].Color.G, $Redux.Colors.SetSwordTrail[0].Color.B) }
+        if (IsColor $Redux.Colors.SetSwordTrail[1]   -Not)            { ChangeBytes -Offset @("1B9A984", "1B9A988") -Values @($Redux.Colors.SetSwordTrail[1].Color.R, $Redux.Colors.SetSwordTrail[1].Color.G, $Redux.Colors.SetSwordTrail[1].Color.B) }
         if (IsIndex $Redux.Colors.SwordTrailDuration -Not -Index 2)   { ChangeBytes -Offset "1B9A98C" -Values (($Redux.Colors.SwordTrailDuration.SelectedIndex) * 5) }
+        if (IsDefault $Redux.Colors.AlphaTip1 -Not) {
+        $value =  (Get8Bit $Redux.Colors.AlphaTip1.Text)
+        ChangeBytes -Offset "1B9A97F" -Values $value
+     }
+        if (IsDefault $Redux.Colors.AlphaBase1 -Not) {
+        $value =  (Get8Bit $Redux.Colors.AlphaBase1.Text)
+        ChangeBytes -Offset "1B9A983" -Values $value
+     }
+        if (IsDefault $Redux.Colors.AlphaTip2 -Not) {
+        $value =  (Get8Bit $Redux.Colors.AlphaTip2.Text)
+        ChangeBytes -Offset "1B9A987" -Values $value
+     }
+        if (IsDefault $Redux.Colors.AlphaBase2 -Not) {
+        $value =  (Get8Bit $Redux.Colors.AlphaBase2.Text)
+        ChangeBytes -Offset "1B9A98B" -Values $value
+     }
     }
 
 
@@ -136,6 +164,9 @@ function ByteOptions() {
     if (IsDefault $Redux.Hitbox.KokiriSword       -Not)   { ChangeBytes -Offset "B9D288"  -Values (ConvertFloatToHex $Redux.Hitbox.KokiriSword.Value) }
     if (IsDefault $Redux.Hitbox.MasterSword       -Not)   { ChangeBytes -Offset "B9D284"  -Values (ConvertFloatToHex $Redux.Hitbox.MasterSword.Value) }
     if (IsDefault $Redux.Hitbox.GiantsKnife       -Not)   { ChangeBytes -Offset "B9D28C"  -Values (ConvertFloatToHex $Redux.Hitbox.GiantsKnife.Value) }
+    if (IsDefault $Redux.Hitbox.BrokenKnife	      -Not)   { ChangeBytes -Offset "BB5AEC"  -Values (ConvertFloatToHex $Redux.Hitbox.BrokenKnife.Value) }
+    if (IsDefault $Redux.Hitbox.DekuStick         -Not)   { ChangeBytes -Offset "BB5AE0"  -Values (ConvertFloatToHex $Redux.Hitbox.DekuStick.Value)   }
+    if (IsDefault $Redux.Hitbox.MegatonHammer	  -Not)   { ChangeBytes -Offset "B9D294"  -Values (ConvertFloatToHex $Redux.Hitbox.MegatonHammer.Value) }
     if (IsDefault $Redux.Hitbox.Hookshot          -Not)   { ChangeBytes -Offset "1C61773" -Values (Get8Bit $Redux.Hitbox.Hookshot.Value)              }
     if (IsDefault $Redux.Hitbox.Longshot          -Not)   { ChangeBytes -Offset "1C6175F" -Values (Get8Bit $Redux.Hitbox.Longshot.Value)              }
 
@@ -163,7 +194,8 @@ function CreateTabMain() {
     CreateReduxCheckBox -Name "InstantClaimCheck" -Text "Instant Claim Check"         -Info "Allows you to use the claim check immediately to get the biggoron's sword"                                               -Credits "Randomizer & Anthrogi (ported)"
     CreateReduxCheckBox -Name "BlackBars"         -Text "No Black Bars (Z-Targeting)" -Info "Removes the black bars shown on the top & bottom of the screen during Z-targeting"                                       -Credits "Admentus & Anthrogi (ported)"
     CreateReduxCheckBox -Name "TextSpeed"         -Text "2x Text Speed"               -Info "Makes text go 2x as fast"                                                                                                -Credits "Admentus & Anthrogi (ported)"
-    CreateReduxCheckBox -Name "FastArrows"        -Text "Less Magic Arrows Cooldown"  -Info "The burst animation for Fire, Ice and Light Arrows are shorter`nAllows Link to shoot the next magic arrow a bit quicker" -Credits "Anthrogi"
+    CreateReduxCheckBox -Name "FastArrows"        -Text "Less Magic Arrows Cooldown"  -Info "The burst animation for Fire, Ice and Light Arrows are shorter`nAllows Link to shoot the next magic arrow a bit quicker" -Credits "Anthrogi (ported)"
+    CreateReduxCheckBox -Name "FastCharge"        -Text "Fast Lv2 Magic Spin"         -Info "Allows you to perform the lv2 spin attack near immediately during charge"                                                -Credits "Anthrogi (ported)"
 
 }
 
@@ -293,8 +325,13 @@ function CreateTabColors() {
 
 
     # COLORS #
+    CreateSpinAttackColorOptions
     CreateSwordTrailColorOptions -Duration
-
+    CreateReduxTextBox -Name "AlphaTip1" -Length 3  -Text "Tip Alpha Start" -Value 255 -Min 0 -Max 255 -Info "Set the starting tip transparency of the sword trail" -Credits "Anthrogi"
+    CreateReduxTextBox -Name "AlphaBase1" -Length 3  -Text "Base Alpha Start" -Value 64 -Min 0 -Max 255  -Info "Set the starting base transparency of the sword trail" -Credits "Anthrogi"
+    CreateReduxTextBox -Name "AlphaTip2" -Column 3 -Length 3  -Text "Tip Alpha End" -Value 0 -Min 0 -Max 255  -Info "Set the ending tip transparency of the sword trail" -Credits "Anthrogi"
+    CreateReduxTextBox -Name "AlphaBase2" -Column 4 -Length 3  -Text "Base Alpha End" -Value 0 -Min 0 -Max 255  -Info "Set the ending base transparency of the sword trail" -Credits "Anthrogi"
+    
 }
 
 
@@ -304,12 +341,15 @@ function CreateTabEquipment() {
     
     # EQUIPMENT #
 
-    CreateReduxGroup   -Tag  "Hitbox"      -Height 4.5 -Text "Equipment Adjustments"
-    CreateReduxTextBox -Name "SwordHealth" -Text "Sword Durability" -Length 3  -Value 8 -Min 1 -Max 255                              -Info "Set the amount of hits the Giant's Knife can take before it breaks" -Credits "Admentus (original) & Anthrogi (ported)" 
-    CreateReduxSlider  -Name "KokiriSword" -Default 3000 -Min 512 -Max 8192 -Freq 512 -Small 256 -Large 512 -Text "Kokiri Sword"     -Info "Set the length of the hitbox of the Kokiri Sword"         -Column 3 -Credits "Admentus (original) & Anthrogi (ported)" 
-    CreateReduxSlider  -Name "MasterSword" -Default 4000 -Min 512 -Max 8192 -Freq 512 -Small 256 -Large 512 -Text "Master Sword"     -Info "Set the length of the hitbox of the Master Sword"                   -Credits "Admentus (original) & Anthrogi (ported)"
-    CreateReduxSlider  -Name "GiantsKnife" -Default 5500 -Min 512 -Max 8192 -Freq 512 -Small 256 -Large 512 -Text "Two-Handed Sword" -Info "Set the length of the hitbox of the Giant's_Knife/Biggoron_Sword"   -Credits "Admentus (original) & Anthrogi (ported)"
-    CreateReduxSlider  -Name "Hookshot"    -Default 13   -Min 0   -Max 110  -Freq 10  -Small 5   -Large 10  -Text "Hookshot Length"  -Info "Set the length of the Hookshot"                                     -Credits "Admentus (original) & Anthrogi (ported)" -Warning "Going above the default length by a certain amount can look weird"
-    CreateReduxSlider  -Name "Longshot"    -Default 104  -Min 0   -Max 110  -Freq 10  -Small 5   -Large 10  -Text "Longshot Length"  -Info "Set the length of the Longshot"                                     -Credits "Admentus (original) & Anthrogi (ported)" -Warning "Going above the default length by a certain amount can look weird"
+    CreateReduxGroup   -Tag  "Hitbox" -Height 7.25 -Text "Equipment Adjustments"
+    CreateReduxTextBox -Name "SwordHealth"   -Text "Sword Durability" -Length 3  -Value 8 -Min 1 -Max 255                              -Info "Set the amount of hits the Giant's Knife can take before it breaks" -Credits "Admentus (original) & Anthrogi (ported)" 
+    CreateReduxSlider  -Name "KokiriSword"   -Default 3000 -Min 512 -Max 8192 -Freq 512 -Small 256 -Large 512 -Text "Kokiri Sword"     -Info "Set the hitbox length of the Kokiri Sword"                -Column 3 -Credits "Admentus (original) & Anthrogi (ported)" 
+    CreateReduxSlider  -Name "MasterSword"   -Default 4000 -Min 512 -Max 8192 -Freq 512 -Small 256 -Large 512 -Text "Master Sword"     -Info "Set the hitbox length of the Master Sword"                          -Credits "Admentus (original) & Anthrogi (ported)"
+    CreateReduxSlider  -Name "GiantsKnife"   -Default 5500 -Min 512 -Max 8192 -Freq 512 -Small 256 -Large 512 -Text "Two-Handed Sword" -Info "Set the hitbox length of the Giant's_Knife/Biggoron's_Sword"        -Credits "Admentus (original) & Anthrogi (ported)"
+    CreateReduxSlider  -Name "BrokenKnife"   -Default 1500 -Min 512 -Max 8192 -Freq 512 -Small 256 -Large 512 -Text "Broken Knife"     -Info "Set the hitbox length of the Broken Giant's Knife"                  -Credits "Admentus (original) & Anthrogi (ported)"
+    CreateReduxSlider  -Name "MegatonHammer" -Default 2500 -Min 512 -Max 8192 -Freq 512 -Small 256 -Large 512 -Text "Megaton Hammer"   -Info "Set the hitbox length of the Megaton Hammer"                        -Credits "Admentus (original) & Anthrogi (ported)"
+    CreateReduxSlider  -Name "DekuStick"     -Default 5000 -Min 512 -Max 8192 -Freq 512 -Small 256 -Large 512 -Text "Deku Stick"       -Info "Set the hitbox length of the Deku Stick"                            -Credits "Anthrogi (ported)"
+    CreateReduxSlider  -Name "Hookshot"      -Default 13   -Min 0   -Max 110  -Freq 10  -Small 5   -Large 10  -Text "Hookshot Length"  -Info "Set the length of the Hookshot"                                     -Credits "Admentus (original) & Anthrogi (ported)" -Warning "Going above the default length by a certain amount can look weird"
+    CreateReduxSlider  -Name "Longshot"      -Default 104  -Min 0   -Max 110  -Freq 10  -Small 5   -Large 10  -Text "Longshot Length"  -Info "Set the length of the Longshot"                                     -Credits "Admentus (original) & Anthrogi (ported)" -Warning "Going above the default length by a certain amount can look weird"
 
 }
