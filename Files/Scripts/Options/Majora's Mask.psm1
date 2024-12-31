@@ -513,7 +513,9 @@ function ByteOptions() {
 
     # HERO MODE #
 
-    if (IsChecked $Redux.Hero.RedTektites) {        PatchBytes  -Offset "D0DB3C" -Patch "ovl_en_tite.bin"        ChangeBytes -Offset "D10D3C" -Values "06"; ChangeBytes -Offset "D10E57" -Values "64"; ChangeBytes -Offset "D10E5B" -Values "68"; ChangeBytes -Offset "D10E5F" -Values "74"; ChangeBytes -Offset "D10E63" -Values "BC"; ChangeBytes -Offset @("D0DC6C", "D0DD08", "D0DDA0") -Values "1100"
+    if (IsChecked $Redux.Hero.RedTektites) {
+        PatchBytes  -Offset "D0DB3C" -Patch "ovl_en_tite.bin"
+        ChangeBytes -Offset "D10D3C" -Values "06"; ChangeBytes -Offset "D10E57" -Values "64"; ChangeBytes -Offset "D10E5B" -Values "68"; ChangeBytes -Offset "D10E5F" -Values "74"; ChangeBytes -Offset "D10E63" -Values "BC"; ChangeBytes -Offset @("D0DC6C", "D0DD08", "D0DDA0") -Values "1100"
     }
 
     if (IsIndex -Elem $Redux.Hero.MonsterHP -Index 3 -Not) { # Monsters
@@ -752,6 +754,8 @@ function ByteOptions() {
         if (IsColor   $Redux.Colors.SetSwordTrail[0]   -Not)   { ChangeBytes -Offset @("CD73F8", "CD7400")           -Values @($Redux.Colors.SetSwordTrail[0].Color.R, $Redux.Colors.SetSwordTrail[0].Color.G, $Redux.Colors.SetSwordTrail[0].Color.B) }
         if (IsColor   $Redux.Colors.SetSwordTrail[1]   -Not)   { ChangeBytes -Offset @("CD73FC", "CD7404")           -Values @($Redux.Colors.SetSwordTrail[1].Color.R, $Redux.Colors.SetSwordTrail[1].Color.G, $Redux.Colors.SetSwordTrail[1].Color.B) }
         if (IsDefault $Redux.Colors.SwordTrailDuration -Not)   { ChangeBytes -Offset @("CA9FBF", "CBC2A7", "CBC46B") -Values ($Redux.Colors.SwordTrailDuration.SelectedIndex * 5); ChangeBytes -Offset "CB5CFB" -Values ($ByteArrayGame[0xCA9FBF] * 2) }
+	if (IsText -Elem $Redux.Colors.Alpha -Compare "Low Tip Full Base")   { ChangeBytes -Offset "CD73FB" -Values "40"; ChangeBytes -Offset "CD73FF" -Values "FF" }
+        elseif (IsText -Elem $Redux.Colors.Alpha -Compare "Full Tip & Base")   { ChangeBytes -Offset "CD73FB" -Values "FF"; ChangeBytes -Offset "CD73FF" -Values "FF" }
     }
 
 
@@ -2393,6 +2397,7 @@ function CreateTabColors() {
     # COLORS #
 
     CreateSwordTrailColorOptions
+    CreateReduxComboBox -Name "Alpha" -Text "Sword Alpha Style" -Items ("Default", "Low Tip Full Base", "Full Tip & Base") -Info "Select the attack trail transparent style you want when attacking" -Credits "Anthrogi"
     CreateSpinAttackColorOptions
     CreateFairyColorOptions -Name "Tatl"
 
