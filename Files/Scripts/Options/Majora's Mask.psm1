@@ -513,9 +513,7 @@ function ByteOptions() {
 
     # HERO MODE #
 
-    if (IsChecked $Redux.Hero.RedTektites) {
-        PatchBytes  -Offset "D0DB3C" -Patch "ovl_en_tite.bin"
-        ChangeBytes -Offset "D10D3C" -Values "06"; ChangeBytes -Offset "D10E57" -Values "64"; ChangeBytes -Offset "D10E5B" -Values "68"; ChangeBytes -Offset "D10E5F" -Values "74"; ChangeBytes -Offset "D10E63" -Values "BC"; ChangeBytes -Offset @("D0DC6C", "D0DD08", "D0DDA0") -Values "1100"
+    if (IsChecked $Redux.Hero.RedTektites) {        PatchBytes  -Offset "D0DB3C" -Patch "ovl_en_tite.bin"        ChangeBytes -Offset "D10D3C" -Values "06"; ChangeBytes -Offset "D10E57" -Values "64"; ChangeBytes -Offset "D10E5B" -Values "68"; ChangeBytes -Offset "D10E5F" -Values "74"; ChangeBytes -Offset "D10E63" -Values "BC"; ChangeBytes -Offset @("D0DC6C", "D0DD08", "D0DDA0") -Values "1100"
     }
 
     if (IsIndex -Elem $Redux.Hero.MonsterHP -Index 3 -Not) { # Monsters
