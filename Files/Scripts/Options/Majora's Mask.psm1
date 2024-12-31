@@ -933,9 +933,9 @@ function ByteOptions() {
         ChangeBytes -Offset "F6279C" -Values "00000000"; ChangeBytes -Offset "F62DAC" -Values "00000000"
     }
 
-    if (IsChecked $Redux.Skip.OpeningChests)    { ChangeBytes -Offset   "CB79D0"                                     -Values "1000"                                                    }
-    if (IsChecked $Redux.Skip.BusinessScrubs)   { ChangeBytes -Offset @("C03C71A", "C03C71A", "C03C71A", "13000033") -Values "00000000"                                                }
-    if (IsChecked $Redux.Skip.IronKnuckles)     { ChangeBytes -Offset   "D9D004"                                     -Values "00000000"; ChangeBytes -Offset   "D9E17C" -Values "1000" }
+    if (IsChecked $Redux.Skip.OpeningChests)    { ChangeBytes -Offset   "CB79D0"                                  -Values "1000"                                                    }
+    if (IsChecked $Redux.Skip.BusinessScrubs)   { ChangeBytes -Offset @("F4187C", "F42584", "1054648", "1054C80") -Values "00000000"                                                }
+    if (IsChecked $Redux.Skip.IronKnuckles)     { ChangeBytes -Offset   "D9D004"                                  -Values "00000000"; ChangeBytes -Offset   "D9E17C" -Values "1000" }
 
 
 
