@@ -832,19 +832,19 @@ function ByteOptions() {
 
         if (TestFile ($GameFiles.textures + "\Equipment\Hylian Shield\" + $Redux.Equipment.HylianShield.text + ".back")) {
             PatchBytes -Offset "FC6E88" -Texture -Patch ("Equipment\Hylian Shield\" + $Redux.Equipment.HylianShield.text + ".back")
-	    $Offset = SearchBytes -Start "FBE000" -End "FEAF80" -Values "B5F3ADF3ADF3B5F1C675A56F8CEB6BE5" -Silent
+            $Offset = SearchBytes -Start "FBE000" -End "FEAF80" -Values "B5F3ADF3ADF3B5F1C675A56F8CEB6BE5" -Silent
             if ($Offset -gt 0)                                                                                                                          { PatchBytes -Offset $Offset  -Texture -Patch ("Equipment\Hylian Shield\" + $Redux.Equipment.HylianShield.text + ".back") }
         }
 
         if (TestFile ($GameFiles.textures + "\Equipment\Hylian Shield\" + $Redux.Equipment.HylianShield.text + ".icon"))                                { PatchBytes -Offset "7FC000" -Texture -Patch ("Equipment\Hylian Shield\" + $Redux.Equipment.HylianShield.text + ".icon")                              }
         if (TestFile ($GameFiles.textures + "\Equipment\Hylian Shield\" + $Redux.Equipment.HylianShield.text + "." + $LanguagePatch.code + ".label"))   { PatchBytes -Offset "8AE800" -Texture -Patch ("Equipment\Hylian Shield\" + $Redux.Equipment.HylianShield.text + "." + $LanguagePatch.code + ".label") }
 
-        $file = $GameFiles.textures + "\Equipment\Hylian Shield\" + $Redux.Equipment.HylianShield.text + "." + $LanguagePatch.code + ".txt"
+     <# $file = $GameFiles.textures + "\Equipment\Hylian Shield\" + $Redux.Equipment.HylianShield.text + "." + $LanguagePatch.code + ".txt"
         if (TestFile $file) {
             $content     = (Get-Content -Path $file)
             $contentFile = $GameFiles.binaries + "\Object GI Models\" + $content + ".bin"
             if (TestFile $contentFile) { PatchBytes  -Offset "15B9000" -Patch ("Object GI Models\" + $content + ".bin"); ChangeBytes -Offset "9FF4" -Values "015BA250"; ChangeBytes -Offset "B6F63C" -Values "015BA250"; ChangeBytes -Offset "B663A2" -Values "1238" }
-        }
+        } #>
     }
 
     if (IsDefault $Redux.Equipment.MirrorShield -Not) {
@@ -2720,7 +2720,7 @@ function CreateTabMain() {
 
     CreateReduxGroup    -Tag  "Restore"                  -Text "Restore / Correct / Censor"
     CreateReduxComboBox -Name "Blood"            -Base 3 -Text "Blood Color"           -Info "Change the color of blood used for several monsters, Ganondorf and Ganon`nSeveral monsters have blue or green blood, while Ganondorf/Ganon has red blood" -Items @("Default", "Red blood for monsters", "Green blood for Ganondorf/Ganon", "Change both") -Credits "ShadowOne333 & Admentus"
-    CreateReduxComboBox -Name "GerudoTextures"   -Safe   -Text "Gerudo Textures"       -Info "Censor Gerudo symbol textures as they were used in the GameCube ROMs and Virtual Console versions`nAlso remove the Gerudo Symbols in Dampe's Maze as it was done in the Gateway ROM version" -Items @("Disabled", "Only Remove Dampe", "Fix And Censor")  -Credits "GhostlyDark, ShadowOne333 and GoldenMariaNova"
+    CreateReduxComboBox -Name "GerudoTextures"   -Scene  -Text "Gerudo Textures" -Safe -Info "Censor Gerudo symbol textures as they were used in the GameCube ROMs and Virtual Console versions`nAlso remove the Gerudo Symbols in Dampe's Maze as it was done in the Gateway ROM version" -Items @("Disabled", "Only Remove Dampe", "Fix And Censor")  -Credits "GhostlyDark, ShadowOne333 and GoldenMariaNova"
     CreateReduxCheckBox -Name "Blood"            -Base 6 -Text "Red Blood"             -Info "Change the color of blood used for several monsters to red"                                                                                                                                                                                               -Credits "Admentus"
     CreateReduxCheckBox -Name "RupeeColors"              -Text "Correct Rupee Colors"  -Info "Corrects the color palette for the in-game Purple (50) and Golden (200) Rupees`nIn the base game they are closer to pink and orange, this changes them to more closely match their 3D get item models"                                                    -Credits "GhostlyDark"
     CreateReduxCheckBox -Name "CowNoseRing"              -Text "Restore Cow Nose Ring" -Info "Restore the rings in the noses for Cows as seen in the Japanese release"                                                                                                                                                                                  -Credits "ShadowOne333"
@@ -3447,7 +3447,7 @@ function CreateTabEquipment() {
     
     # UNLOCK CHILD RESTRICTIONS #
 
-    CreateReduxGroup    -Tag  "Unlock"        -Text "Unlock Child Restrictions" -Child
+    CreateReduxGroup    -Tag  "Unlock"        -Text "Unlock Child Restrictions" -Child -Base 4
     CreateReduxCheckBox -Name "Tunics"        -Text "Unlock Tunics"        -Info "Child Link is able to use the Goron Tunic and Zora Tunic`nSince you might want to walk around in style as well when you are young.`nThe dialogue script will be adjusted to reflect this (only for English)`nChild Link will be also able to purchase them aswell" -Credits "GhostlyDark"
     CreateReduxCheckBox -Name "MasterSword"   -Text "Unlock Master Sword"  -Info "Child Link is able to use the Master Sword`nThe Master Sword does twice as much damage as the Kokiri Sword"                                          -Credits "GhostlyDark"
     CreateReduxCheckBox -Name "GiantsKnife"   -Text "Unlock Giant's Knife" -Info "Child Link is able to use the Giant's Knife / Biggoron Sword`nThe Giant's Knife / Biggoron Sword does four times as much damage as the Kokiri Sword" -Credits "GhostlyDark" -Warning "The Giant's Knife / Biggoron Sword appears as if Link if thrusting the sword through the ground"
@@ -3460,7 +3460,7 @@ function CreateTabEquipment() {
 
     # UNLOCK ADULT RESTRICTIONS #
 
-    CreateReduxGroup    -Tag  "Unlock"         -Text "Unlock Adult Restrictions" -Adult
+    CreateReduxGroup    -Tag  "Unlock"         -Text "Unlock Adult Restrictions" -Adult -Base 4
     CreateReduxCheckBox -Name "KokiriSword"    -Text "Unlock Kokiri Sword" -Info "Adult Link is able to use the Kokiri Sword`nThe Kokiri Sword does half as much damage as the Master Sword" -Credits "GhostlyDark"
     CreateReduxCheckBox -Name "DekuShield"     -Text "Unlock Deku Shield"  -Info "Adult Link is able to use the Deku Shield"                                                                 -Credits "GhostlyDark" -Warning "The Deku Shield appears as invisible but can still be burned up by fire"
     CreateReduxCheckBox -Name "FairySlingshot" -Text "Unlock Slingshot"    -Info "Adult Link is able to use the Fairy Slingshot"                                                             -Credits "GhostlyDark" -Warning "The Fairy Slingshot appears as the Fairy Bow"
