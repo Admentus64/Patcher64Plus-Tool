@@ -116,12 +116,25 @@ function ByteOptions() {
 
 
 
+    # MAGIC SPIN ATTACK COLORS #
+
+    if ($Redux.Colors.SetSpinAttack -ne $null) {
+        if (IsColor $Redux.Colors.SetSpinAttack[0] -Not)   { ChangeBytes -Offset "1F02614" -Values @($Redux.Colors.SetSpinAttack[0].Color.R, $Redux.Colors.SetSpinAttack[0].Color.G, $Redux.Colors.SetSpinAttack[0].Color.B) } # Blue Spin Attack
+        if (IsColor $Redux.Colors.SetSpinAttack[1] -Not)   { ChangeBytes -Offset "1F02734" -Values @($Redux.Colors.SetSpinAttack[1].Color.R, $Redux.Colors.SetSpinAttack[1].Color.G, $Redux.Colors.SetSpinAttack[1].Color.B) } # Blue Spin Attack
+        if (IsColor $Redux.Colors.SetSpinAttack[2] -Not)   { ChangeBytes -Offset "1F02B94" -Values @($Redux.Colors.SetSpinAttack[2].Color.R, $Redux.Colors.SetSpinAttack[2].Color.G, $Redux.Colors.SetSpinAttack[2].Color.B) } # Red Spin Attack
+        if (IsColor $Redux.Colors.SetSpinAttack[3] -Not)   { ChangeBytes -Offset "1F02CB4" -Values @($Redux.Colors.SetSpinAttack[3].Color.R, $Redux.Colors.SetSpinAttack[3].Color.G, $Redux.Colors.SetSpinAttack[3].Color.B) } # Red Spin Attack
+    }
+
+
+
     # SWORD TRAIL EFFECTS #
 
     if ($Redux.Colors.SetSwordTrail -ne $null) {
-        if (IsColor $Redux.Colors.SetSwordTrail[0]   -Not)            { ChangeBytes -Offset "1B9A97C" -Values @($Redux.Colors.SetSwordTrail[0].Color.R, $Redux.Colors.SetSwordTrail[0].Color.G, $Redux.Colors.SetSwordTrail[0].Color.B) }
-        if (IsColor $Redux.Colors.SetSwordTrail[1]   -Not)            { ChangeBytes -Offset "1B9A984" -Values @($Redux.Colors.SetSwordTrail[1].Color.R, $Redux.Colors.SetSwordTrail[1].Color.G, $Redux.Colors.SetSwordTrail[1].Color.B) }
+        if (IsColor $Redux.Colors.SetSwordTrail[0]   -Not)            { ChangeBytes -Offset @("1B9A97C", "1B9A984") -Values @($Redux.Colors.SetSwordTrail[0].Color.R, $Redux.Colors.SetSwordTrail[0].Color.G, $Redux.Colors.SetSwordTrail[0].Color.B) }
+        if (IsColor $Redux.Colors.SetSwordTrail[1]   -Not)            { ChangeBytes -Offset @("1B9A980", "1B9A988") -Values @($Redux.Colors.SetSwordTrail[1].Color.R, $Redux.Colors.SetSwordTrail[1].Color.G, $Redux.Colors.SetSwordTrail[1].Color.B) }
         if (IsIndex $Redux.Colors.SwordTrailDuration -Not -Index 2)   { ChangeBytes -Offset "1B9A98C" -Values (($Redux.Colors.SwordTrailDuration.SelectedIndex) * 5) }
+        if (IsText -Elem $Redux.Colors.Alpha -Compare "Low Tip Full Base")   { ChangeBytes -Offset "1B9A97F" -Values "40"; ChangeBytes -Offset "1B9A983" -Values "FF" }
+        elseif (IsText -Elem $Redux.Colors.Alpha -Compare "Full Tip & Base")   { ChangeBytes -Offset "1B9A97F" -Values "FF"; ChangeBytes -Offset "1B9A983" -Values "FF" }
     }
 
 
@@ -293,8 +306,9 @@ function CreateTabColors() {
 
 
     # COLORS #
+    CreateSpinAttackColorOptions
     CreateSwordTrailColorOptions -Duration
-
+    CreateReduxComboBox -Name "Alpha" -Text "Sword Alpha Style" -Items ("Default", "Low Tip Full Base", "Full Tip & Base") -Info "Select the attack trail transparent style you want when attacking" -Credits "Anthrogi"
 }
 
 
