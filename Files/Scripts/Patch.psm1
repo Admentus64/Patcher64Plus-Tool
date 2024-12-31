@@ -412,10 +412,11 @@ function PrePatchingAdditionalOptions() {
 #==============================================================================================================================================================================================
 function CheckCommands() {
     
-    if (   (CheckCommand "ByteOptions") -or (CheckCommand "ByteReduxOptions") )                                                     { return $True  }
-    if (   (HasCommand ($GamePatch.function + "ByteTextOptions") ) -or (HasCommand ($GamePatch.function + "ByteSceneOptions") ) )   { return $True  }
-    if ( ( (HasCommand "WholeTextOptions") -or (HasCommand "ByteTextOptions") ) -and $Settings.Debug.NoTextPatching  -ne $True)     { return $True  }
-    if (   (HasCommand "ByteSceneOptions")                                      -and $Settings.Debug.NoScenePatching -ne $True)     { return $True  }
+    if (   (CheckCommand "ByteOptions")                            -or (CheckCommand "ByteReduxOptions") )                                       { return $True  }
+    if (   (HasCommand ($GamePatch.function + "ByteTextOptions") ) -or (HasCommand ($GamePatch.function + "ByteSceneOptions") ) )                { return $True  }
+    if     (HasCommand "WholeTextOptions")                                                                                                       { return $True  }
+    if ( ( (HasCommand "ByteTextOptions") ) -and !$Settings.Debug.NoTextPatching  -and !$Settings.Core.Safe)                                     { return $True  }
+    if (   (HasCommand "ByteSceneOptions")  -and !$Settings.Debug.NoScenePatching -and !$Settings.Core.Safe -and $GamePatch.custom_maps -ne 1)   { return $True  }
     return $False
 
 }
@@ -516,7 +517,7 @@ function PatchingAdditionalOptions() {
         $global:SceneEditor        = @{}
         $Files.json.sceneEditor    = SetJSONFile $GameFiles.sceneEditor
 
-        RunCommand -Command "ByteSceneOptions" -Message "Scene" -Check ($Settings.Debug.NoScenePatching -ne $True)
+        RunCommand -Command "ByteSceneOptions" -Message "Scene" -Check (!$Settings.Debug.NoScenePatching -and !$Settings.Core.Safe -and $GamePatch.custom_maps -ne 1)
         if (DoAssertSceneFiles)    { AssertSceneFiles  }
         if (DoExtractSceneFiles)   { ExtractSceneFiles }
         $global:SceneEditor = $Files.json.sceneEditor = $null

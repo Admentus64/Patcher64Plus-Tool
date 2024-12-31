@@ -1,3 +1,8 @@
+v25.1.8
+- Reworked Triforce dungeon floor icon
+- Temporary removed Hylian Shield Get Item model until fixed
+- Fixed "Hylian Shield" texture replacements for OoT ROM hacks
+
 v25.1.7
 - Added new logo alternative for OoT (by MariaNova)
 - Fixed "Business Scrubs" speedup for MM
