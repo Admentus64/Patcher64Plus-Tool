@@ -1965,7 +1965,7 @@ function CreateTabRedux() {
 
     $warning  = "30 FPS mode will have issues that prevent you from completing the game and certain challenges`nSwitch back to 20 FPS mode to continue these sections before returning to 30 FPS mode`n`n"
     $warning += "--- Known Issues --`n"
-    $warning += "Gravity for throwing objects`nExplosion timers are shorter`nLit torches burn out faster`nTriple swing is extremely hard to perform`nBaddies act and attack faster`nMinigame timers run too fast"
+    $warning += "Gravity for throwing objects`nExplosion timers are shorter`nLit torches burn out faster`nTriple swing is extremely hard to perform`nEnemies move and attack faster`nMinigame timers run too fast"
 
     CreateReduxGroup    -Tag  "Features"           -Text "Features"
     CreateReduxComboBox -Name "CritWiggle"         -Text "Crit Wiggle"                -Info "Link no longer randomly changes direction when moving at times when his health is critical"                                                 -Items @("Disabled", "Always On", "Always Off")        -Default 3 -Credits "Randomizer"

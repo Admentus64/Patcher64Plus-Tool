@@ -2780,8 +2780,12 @@ function CreateTabRedux() {
 
     # DEFAULT SETTINGS #
 
+    $warning  = "30 FPS mode will have issues that prevent you from completing the game and certain challenges`nSwitch back to 20 FPS mode to continue these sections before returning to 30 FPS mode`n`n"
+    $warning += "--- Known Issues --`n"
+    $warning += "Gravity for throwing objects`nExplosion timers are shorter`nLit torches burn out faster`nTriple swing is extremely hard to perform`nEnemies move and attack faster`nMinigame timers run too fast"
+
     CreateReduxGroup    -Tag  "Default"           -Text "Default Options Menu Settings"
-    CreateReduxCheckBox -Name "FPS"               -Text "30 FPS"                                          -Info "Allows 30 FPS`nPress L and Z to toggle between 30 FPS and 20 FPS mode"
+    CreateReduxCheckBox -Name "FPS"               -Text "30 FPS (Experimental)"                           -Info "Allows 30 FPS`nPress L and Z to toggle between 30 FPS and 20 FPS mode" -Warning $warning
     CreateReduxCheckBox -Name "ArrowToggle"       -Text "Arrow Toggle"   -Checked                         -Info "Enables Arrow Toggle`nPress R while aiming to toggle arrow types"
     CreateReduxCheckBox -Name "ShowHealth"        -Text "Show Health"                                     -Info "Show the amount of health enemies have left in the HUD"
     CreateReduxCheckBox -Name "ChestContents"     -Text "Chest Contents"                                  -Info "Adjusts the appearance of the chest according to the contents it contains"
@@ -2793,7 +2797,7 @@ function CreateTabRedux() {
     CreateReduxCheckBox -Name "UnequipGear"       -Text "Unequip Gear"   -Checked                         -Info "Unassign equipment by pressing A and items using the respective C button"
     CreateReduxCheckBox -Name "ItemOnB"           -Text "Item on B"                                       -Info "Assign items to the B button by pressing A"
     CreateReduxCheckBox -Name "MaskAbilities"     -Text "Mask Abilties"  -Checked                         -Info "Equipping masks grant abilities such as the Bunny Hood making Link run faster just like in Majora's Mask"
-    CreateReduxCheckBox -Name "ExtraAbilities"    -Text "Extra Abilities"                                 -Info "Obtain Spiritual Stones and Medallions to earn new abilities"
+    CreateReduxCheckBox -Name "ExtraAbilities"    -Text "Extra Abilities"                                 -Info "Obtain Spiritual Stones and Medallions to earn new abilities`n`nPress and hold A on a Spiritual Stone or Medallion for info"
     CreateReduxCheckBox -Name "RandomEnemies"     -Text "Random Enemies"                                  -Info "Multiplies the health and changes the subtype for regular enemies randomly"
     CreateReduxCheckBox -Name "CrouchStabFix"     -Text "Crouch Stab Fix"                                 -Info "The Crouch Stab move no longer keeps the last dealt damage"
     CreateReduxCheckBox -Name "WeakerSwords"      -Text "Weaker Swords"                                   -Info "Sword slashes now deal one less point of damage"

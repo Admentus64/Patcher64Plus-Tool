@@ -1,4 +1,5 @@
 v25.1.8
+- Updated some tooltips
 - Reworked Triforce dungeon floor icon
 - Temporary removed Hylian Shield Get Item model until fixed
 - Fixed "Hylian Shield" texture replacements for OoT ROM hacks
