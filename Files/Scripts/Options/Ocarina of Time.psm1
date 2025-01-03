@@ -180,7 +180,7 @@ function ByteOptions() {
 
     if (IsChecked $Redux.Fixes.BuyableBombs)          { ChangeBytes -Offset "C00840" -Values "1000"                                                      }
     if (IsChecked $Redux.Fixes.PauseScreenDelay)      { ChangeBytes -Offset "B15DD0" -Values "00000000"                                                  } # Pause Screen Anti-Aliasing
-    if (IsChecked $Redux.Fixes.PauseScreenCrash)      { ChangeBytes -Offset "B12947" -Values "03"                                                        } # Pause Screen Delay Speed
+    if (IsChecked $Redux.Fixes.PauseScreenCrash)      { ChangeBytes -Offset "B12947" -Values "03";       ChangeBytes -Offset "BBED6C" -Values "1000"     } # Pause Screen Delay Speed, Game Over Continue as Adult Link fix
   # if (IsChecked $Redux.Fixes.ShieldBurningCrash)    { ChangeBytes -Offset "DB2732" -Values "0000"                                                      }
     if (IsChecked $Redux.Fixes.WhiteBubbleCrash)      { ChangeBytes -Offset "CB4397" -Values "00"                                                        }
     if (IsChecked $Redux.Fixes.RemoveFishingPiracy)   { ChangeBytes -Offset "DBEC80" -Values "34020000"                                                  }

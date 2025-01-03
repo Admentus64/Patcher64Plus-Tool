@@ -200,8 +200,7 @@ function ByteOptions() {
 
     # FIXES #
 
-    if (IsChecked $Redux.Fixes.Geometry) {
-        # Potion Shop door post-Odolwa in Southern Swamp
+    if (IsChecked $Redux.Fixes.Geometry) { # Potion Shop door post-Odolwa in Southern Swamp
         CreateSubPath  -Path ($GameFiles.extracted + "\Southern Swamp")
         ExportAndPatch -Path "Southern Swamp\southern_swamp_cleared_scene"  -Offset "1F0D000" -Length "10630"
         ExportAndPatch -Path "Southern Swamp\southern_swamp_cleared_room_0" -Offset "1F1E000" -Length "1B240" -NewLength "1B4F0" -TableOffset "1EC26"  -Values "94F0"
@@ -1188,12 +1187,15 @@ function ByteSceneOptions() {
 
     if (IsChecked $Redux.Fixes.Geometry) {
         PrepareMap -Scene "South Clock Town" -Map 0 -Header 0
-        ChangeMapFile -Values "FE7700C8FB1B000004F6AFEC69CA" -Search "FDFF0097FB1B000004E5FD28000078FF" -Start "3200" # Ramp
-        ChangeMapFile -Values "0000" -Search "FFCF540054FFFCE001B8FF38000003A3" -Start "4550"; ChangeMapFile -Values "0000" -Search "FFCF6F002CFFFCE00000FF38000003A3" -Start "4560"; ChangeMapFile -Values "0000" -Search "FFCF780000FF00C80000FFEC000003A3" -Start "4590" # Wall
+        $offset = ChangeMapFile -Values "FE7700C8FB1B000004E5F6AFEC69CA" -Search "FDFF0097FB1B000004E5" -Start "3100"              # Ramp
+        $offset = ChangeMapFile -Values "0000"                                                          -Offset ($offset + 0x1352) # Wall
+        $offset = ChangeMapFile -Values "0000"                                                          -Offset ($offset + 0x10)   # Wall
+                  ChangeMapFile -Values "0000"                                                          -Offset ($offset + 0x30)   # Wall
         SaveAndPatchLoadedScene
 
         PrepareMap -Scene "Laundry Pool" -Map 0 -Header 0
-        ChangeMapFile -Values "7AFFE4016300000EA6" -Search "49FFE4014E00000CC40200D1006EFFFA" -Start "1450"; ChangeMapFile -Values "7AFFE4016300001755" -Search "49FFE4014E000014AC0200D1006EFFFA" -Start "1A60" # Path
+        ChangeMapFile -Values "7AFFE4016300000EA6" -Search "49FFE4014E00000CC40200D1006EFFFA" -Start "1450" # Path
+        ChangeMapFile -Values "7AFFE4016300001755" -Search "49FFE4014E000014AC0200D1006EFFFA" -Start "1A60" # Path
         SaveAndPatchLoadedScene
 
         PrepareMap -Scene "North Clock Town" -Map 0 -Header 0
@@ -1349,7 +1351,14 @@ function ByteSceneOptions() {
     }
 
     if (IsChecked $Redux.Hero.MoveGoldDust) {
-        PrepareMap  -Scene "Mountain Village (Spring)" -Map 0 -Header 0; InsertActor -Name "Treasure Chest" -Param "0D40" -X 310 -Y 463 -Z 700 -YRot 90 -NoXRot -NoZRot; SaveAndPatchLoadedScene
+        PrepareMap   -Scene "Pirates' Fortress (Entrance)" -Map 0 -Header 0
+        InsertActor  -Name "Treasure Chest" -Param "00C2" -X 50 -Y 220 -Z 1580 -YRot 200 -NoXRot -NoZRot
+        SaveAndPatchLoadedScene
+
+        PrepareMap   -Scene "Pirates' Fortress (Interior)" -Map 7 -Header 0
+        ReplaceActor -Name "Treasure Chest" -Compare "00C3" -Param "0D43"
+        SaveAndPatchLoadedScene
+
         ChangeBytes -Offset "FB76E7" -Values "5A"; ChangeBytes -Offset "FB76FF" -Values "04"; ChangeBytes -Offset "FB7723" -Values "5A" # Goron Race
     }
 
@@ -1489,6 +1498,12 @@ function ByteTextOptions() {
 
 
     # LANGUAGE #
+
+    if (IsChecked $Redux.Hero.MoveGoldDust -Lang 1) {
+        SetMessage -ID "0C49" -Text "is the prize for winning<N>the <R>Patriarch's Race<W> that's held by<N>the Gorons every spring?" -Replace "has been stolen by<N>the <R>pirates at Great Bay<W>?"
+        SetMessage -ID "0C4A" -Text "entering that"                                                                                   -Replace "to retrieve it back"
+        SetMessage -ID "0C4B" -Text "be first prize at the<N>Goron racetrack"                                                         -Replace "be stolen by the pirates<N>of Great Bay"
+    }
 
     if (IsChecked $Redux.Text.Restore -Lang 1) {
         # Trouple Leader's Mask
@@ -1915,14 +1930,15 @@ function CreateTabMain() {
     
     # FIXES #
 
+    $fixes = "`n- Several gaps in Clock Town`n- Misplaced Potion Shop Door after defeating Odolwa`n- Research Lab platform in Great Bay`n- Ancient Castle of Ikana wall texture"
     CreateReduxGroup    -Tag  "Fixes"          -Text "Fixes"
-    CreateReduxCheckBox -Name "TextCommands"   -Text "Fix Text Commands"          -Info "Fixes instant text, delay, and sound effect text commands not working sometimes"                                                                                                                -Credits "Qlonever"
-    CreateReduxCheckBox -Name "PictoboxDelay"  -Text "Pictograph Box Delay Fix"   -Info "Photos are taken instantly with the Pictograph Box by removing the Anti-Aliasing"                                                                                                      -Checked -Credits "Randomizer"
-    CreateReduxCheckBox -Name "MushroomBottle" -Text "Fix Mushroom Bottle"        -Info "Fix the item reference when collecting Magical Mushrooms as Link puts away the bottle automatically due to an error"                                                                            -Credits "ozidual"
-    CreateReduxCheckBox -Name "Geometry"       -Text "Fix Geometry"               -Info "Fix misaligned gaps and seams in several places:`n- Clock Town`n- Misplaced Potion Shop Door after Odolwa`n- Research Lab platform in Great Bay`n- Ancient Castle of Ikana wall texture" -Scene -Credits "Linkz & ShadowOne333"
-    CreateReduxCheckBox -Name "FairyFountain"  -Text "Fix Fairy Fountain" -Base 1 -Info "Fix the Ikana Canyon Fairy Fountain area not displaying the correct color"                                                                                                               -Scene -Credits "Dybbles (fix) & ShadowOne333 (patch)"
-    CreateReduxCheckBox -Name "OutOfBounds"    -Text "Fix Out-of-Bounds"  -Base 1 -Info "Fix a Grotto in the Road to Goron Village (Winter) and a Rupee in the Deku Palace Left Courtyard from being out-of-bounds"                                                               -Scene -Credits "Admentus"
-    CreateReduxCheckBox -Name "Cutscenes"      -Text "Fix Cutscenes"      -Base 1 -Info "Fix several cutscenes:`n- Goht running Link over`n- Bomb Lady`n- Unused Chamber of Giants`n- Spring arrives in Mountain Village`n- Ikana Canyon`n- On The Moon entrance intro"           -Scene -Credits "Admentus, ShadowOne333 & Chez Cousteau"
+    CreateReduxCheckBox -Name "TextCommands"   -Text "Fix Text Commands"          -Info "Fixes instant text, delay, and sound effect text commands not working sometimes"                                                                                                      -Credits "Qlonever"
+    CreateReduxCheckBox -Name "PictoboxDelay"  -Text "Pictograph Box Delay Fix"   -Info "Photos are taken instantly with the Pictograph Box by removing the Anti-Aliasing"                                                                                            -Checked -Credits "Randomizer"
+    CreateReduxCheckBox -Name "MushroomBottle" -Text "Fix Mushroom Bottle"        -Info "Fix the item reference when collecting Magical Mushrooms as Link puts away the bottle automatically due to an error"                                                                  -Credits "ozidual"
+    CreateReduxCheckBox -Name "Geometry"       -Text "Fix Geometry"               -Info ("Fix misaligned gaps and seams in several places:" + $fixes)                                                                                                                   -Scene -Credits "Linkz & ShadowOne333"
+    CreateReduxCheckBox -Name "FairyFountain"  -Text "Fix Fairy Fountain" -Base 1 -Info "Fix the Ikana Canyon Fairy Fountain area not displaying the correct color"                                                                                                     -Scene -Credits "Dybbles (fix) & ShadowOne333 (patch)"
+    CreateReduxCheckBox -Name "OutOfBounds"    -Text "Fix Out-of-Bounds"  -Base 1 -Info "Fix a Grotto in the Road to Goron Village (Winter) and a Rupee in the Deku Palace Left Courtyard from being out-of-bounds"                                                     -Scene -Credits "Admentus"
+    CreateReduxCheckBox -Name "Cutscenes"      -Text "Fix Cutscenes"      -Base 1 -Info "Fix several cutscenes:`n- Goht running Link over`n- Bomb Lady`n- Unused Chamber of Giants`n- Spring arrives in Mountain Village`n- Ikana Canyon`n- On The Moon entrance intro" -Scene -Credits "Admentus, ShadowOne333 & Chez Cousteau"
 
 
 
