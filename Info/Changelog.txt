@@ -1,3 +1,6 @@
+v25.1.9
+- Fix issues with compressing OoT Redux
+
 v25.1.8
 - Updated some tooltips
 - Reworked Triforce dungeon floor icon
