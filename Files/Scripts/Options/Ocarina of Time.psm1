@@ -624,10 +624,11 @@ function ByteOptions() {
         if (IsColor $Redux.Colors.SetEquipment[4] -Not)   { ChangeBytes -Offset "B6DA47" -Values @($Redux.Colors.SetEquipment[4].Color.R, $Redux.Colors.SetEquipment[4].Color.G, $Redux.Colors.SetEquipment[4].Color.B) } # Golden Gauntlets
         if ( (IsColor $Redux.Colors.SetEquipment[5] -Not) -and $GamePatch.LoadedModel["Adult"].mirror_shield -ne 0) { # Mirror Shield Frame
             $offset = "F86000"
+            $silent = $False
             do {
-                $offset = SearchBytes -Start $offset -End "FBD800" -Values "FA000000D70000"
+                if (!$silent) { $offset = SearchBytes -Start $offset -End "FBD800" -Values "FA000000D70000"; $silent = $True } else { $offset = SearchBytes -Start $offset -End "FBD800" -Values "FA000000D70000" -Silent }
                 if ($offset -ge 0) {
-                    $Offset = ( Get24Bit ( (GetDecimal $offset) + (GetDecimal "4") ) )
+                    $Offset = AddToOffset -Hex $offset -Add "4"
                     if (!(ChangeBytes -Offset $offset -Values @($Redux.Colors.SetEquipment[5].Color.R, $Redux.Colors.SetEquipment[5].Color.G, $Redux.Colors.SetEquipment[5].Color.B))) { break }
                 }
             } while ($Offset -ge 0)
