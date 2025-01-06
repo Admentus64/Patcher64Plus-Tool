@@ -2320,18 +2320,21 @@ function ByteTextOptions() {
    }
 
     if (IsChecked $Redux.Capacity.EnableAmmo -Lang 1) {
-        if (StrLike -Str $GamePatch.settings -Val "Master of Time")   { $arrow3 = "99" }   else                                                              { $arrow3 = "50" }
-        if (StrLike -Str $GamePatch.settings -Val "Gold Quest")       { $bomb1  = "10" }   elseif (StrLike -Str $GamePatch.settings -Val "Master of Time")   { $bomb1  = "15" }   else   { $bomb1 = "20" }
-        if (StrLike -Str $GamePatch.settings -Val "Gold Quest")       { $bomb3  = "50" }   elseif (StrLike -Str $GamePatch.settings -Val "Master of Time")   { $bomb3  = "99" }   else   { $bomb3 = "40" }
-        if (StrLike -Str $GamePatch.settings -Val "Master of Time")   { $nut3   = "99" }   else                                                              { $nut3   = "40" }
+        if ($GamePatch.settings -eq "Gold Quest")     { $bomb1  = "10" } elseif ($GamePatch.settings -eq "Master of Time") { $bomb1  = "15" } else { $bomb1 = "20" }
+        if ($GamePatch.settings -eq "Gold Quest")     { $bomb3  = "50" } elseif ($GamePatch.settings -eq "Master of Time") { $bomb3  = "99" } else { $bomb3 = "40" }
+        if ($GamePatch.settings -eq "Master of Time") { $nut3   = "99" } else                                              { $nut3   = "40" }
 
-            SetMessage -ID "0056" -ASCII -Text "40"   -Replace $Redux.Capacity.Quiver2.text;     SetMessage -ID "0057" -ASCII -Text $arrow3 -Replace $Redux.Capacity.Quiver3.text
-            SetMessage -ID "0058" -ASCII -Text $bomb1 -Replace $Redux.Capacity.BombBag1.text;    SetMessage -ID "0059" -ASCII -Text "30"    -Replace $Redux.Capacity.BombBag2.text;    SetMessage -ID "005A" -ASCII -Text $bomb3 -Replace $Redux.Capacity.BombBag3.text
-            SetMessage -ID "00A7" -ASCII -Text "30"   -Replace $Redux.Capacity.DekuNuts2.text;   SetMessage -ID "00A8" -ASCII -Text $nut3   -Replace $Redux.Capacity.DekuNuts3.text
+        SetMessage -ID "0058" -ASCII -Text $bomb1 -Replace $Redux.Capacity.BombBag1.text;  SetMessage -ID "0059" -ASCII -Text "30"  -Replace $Redux.Capacity.BombBag2.text; SetMessage -ID "005A" -ASCII -Text $bomb3 -Replace $Redux.Capacity.BombBag3.text
+        SetMessage -ID "00A7" -ASCII -Text "30"   -Replace $Redux.Capacity.DekuNuts2.text; SetMessage -ID "00A8" -ASCII -Text $nut3 -Replace $Redux.Capacity.DekuNuts3.text
+        
+        if ($GamePatch.age -ne "Child" -or $GamePatch.settings -eq "Child Quest Pro") {
+            if ($GamePatch.settings -eq "Master of Time") { $arrow3 = "99" } else { $arrow3 = "50" }
+            SetMessage -ID "0056" -ASCII -Text "40" -Replace $Redux.Capacity.Quiver2.text; SetMessage -ID "0057" -ASCII -Text $arrow3 -Replace $Redux.Capacity.Quiver3.text
+        }
 
-        if ($GamePatch.settings -ne "Master of Time") {
-            SetMessage -ID "0007" -ASCII -Text "40"   -Replace $Redux.Capacity.BulletBag2.text;  SetMessage -ID "006C" -ASCII -Text "50"    -Replace $Redux.Capacity.BulletBag3.text
-            SetMessage -ID "0037" -ASCII -Text "10"   -Replace $Redux.Capacity.DekuSticks1.text; SetMessage -ID "0090" -ASCII -Text "20"    -Replace $Redux.Capacity.DekuSticks2.text; SetMessage -ID "0091" -ASCII -Text "30"   -Replace $Redux.Capacity.DekuSticks3.text
+        if ($GamePatch.age -ne "Adult") {
+            SetMessage -ID "0007" -ASCII -Text "40" -Replace $Redux.Capacity.BulletBag2.text;  SetMessage -ID "006C" -ASCII -Text "50" -Replace $Redux.Capacity.BulletBag3.text
+            SetMessage -ID "0037" -ASCII -Text "10" -Replace $Redux.Capacity.DekuSticks1.text; SetMessage -ID "0090" -ASCII -Text "20" -Replace $Redux.Capacity.DekuSticks2.text; SetMessage -ID "0091" -ASCII -Text "30" -Replace $Redux.Capacity.DekuSticks3.text
         }
     }
 

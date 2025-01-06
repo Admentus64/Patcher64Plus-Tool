@@ -2,6 +2,7 @@ v25.1.10
 - Added Game Over Continue crash fix to the "Pause Screen Crash" Fix option for OoT
 - Fixed South Clock Town ramp for the "Fix Geometry" option for MM
 - Fixed issue with false positive error when changing Mirror Shield frame
+- Fixed ammo capacity values for dialogs for MoT
 - Moved Gold Dust to another location, with new dialogue, for MM
 - Removed "Fix Unused Items" from larger ROM hacks
 
