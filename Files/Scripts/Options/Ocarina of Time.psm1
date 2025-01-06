@@ -74,8 +74,6 @@ function ByteDMAOptions() {
 #==============================================================================================================================================================================================
 function ByteOptions() {
     
-    ChangeBytes -Offset "B061DF" -Values "02"
-
     # QUALITY OF LIFE #
 
     if (IsDefault $Redux.Gameplay.FasterBlockPushing -Not) {
@@ -3748,7 +3746,7 @@ function CreateTabCapacity() {
     CreateReduxTextBox -Name "BigPoe"            -Text "Big Poe"                -Value 50   -Info "Set the price for buying a Big Poe"              -Credits "Admentus" -Length 4 -Base 5
     CreateReduxTextBox -Name "WeirdEgg"          -Text "Weird Egg"              -Value 100  -Info "Set the price for buying a Weird Egg"            -Credits "Admentus" -Length 4 -Base 5
 
-    CreateReduxCheckBox -Name "FixItems" -Adult -Base 5 -Text "Fix Unused Items" -Info "Fix the textboxs for the unused items" -Credits "Admentus"
+    CreateReduxCheckBox -Name "FixItems" -Adult -Base 4 -Text "Fix Unused Items" -Info "Fix the textboxs for the unused items" -Scene -Credits "Admentus"
 
 
     # SHOP ITEMS #

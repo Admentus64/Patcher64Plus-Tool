@@ -3,6 +3,7 @@ v25.1.10
 - Fixed South Clock Town ramp for the "Fix Geometry" option for MM
 - Fixed issue with false positive error when changing Mirror Shield frame
 - Moved Gold Dust to another location, with new dialogue, for MM
+- Removed "Fix Unused Items" from larger ROM hacks
 
 v25.1.9
 - Fix issues with compressing OoT Redux
