@@ -1,3 +1,8 @@
+v25.1.11
+- Linked Amara's addon repo
+- Fixed issue with trying to read non-existing symbols.json for Redux patches
+- Fixed issue with empty Dual Suit option for Super Metroid
+
 v25.1.10
 - Added Game Over Continue crash fix to the "Pause Screen Crash" Fix option for OoT
 - Fixed South Clock Town ramp for the "Fix Geometry" option for MM

@@ -502,7 +502,9 @@ function PatchingAdditionalOptions() {
     if (CheckCommands) { $global:ByteArrayGame = [System.IO.File]::ReadAllBytes($GetROM.decomp) }
 
     # Load symbols data
-    if ( (CheckCommand "ByteReduxOptions") -and ( (IsChecked $Patches.Redux) -or (IsSet $GamePatch.preset) ) -and (IsSet $GamePatch.redux) -and !(DoAssertSceneFiles) -and !(DoExtractSceneFiles) ) { $global:Symbols = SetJSONFile ($GameFiles.base + "\symbols.json") }
+    if (TestFile ($GameFiles.base + "\symbols.json")) {
+        if ( (CheckCommand "ByteReduxOptions") -and ( (IsChecked $Patches.Redux) -or (IsSet $GamePatch.preset) ) -and (IsSet $GamePatch.redux) -and !(DoAssertSceneFiles) -and !(DoExtractSceneFiles) ) { $global:Symbols = SetJSONFile ($GameFiles.base + "\symbols.json") }
+    }
 
     # Additional Options
     RunCommand -Command "ByteOptions" -Message "Byte"

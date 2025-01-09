@@ -9,6 +9,13 @@
 		"version"		: "https://github.com/GoldenMariaNova/OOT-MM-Models/blob/main/version.txt",
 		"versionFallback"	: "https://raw.githubusercontent.com/GoldenMariaNova/OOT-MM-Models/main/version.txt"
 	}, {
+		"title"			: "Amara's Models",
+		"type"			: "Models",
+		"uri"			: "https://github.com/Teutonicknight2/Amara-Public/archive/refs/heads/main.zip",
+		"version"		: "https://github.com/Teutonicknight2/Amara-Public/blob/main/version.txt",
+		"versionFallback"	: "https://raw.githubusercontent.com/Teutonicknight2/Amara-Public/main/version.txt"
+
+	}, {
 		"title"			: "Caverns4 OoT-Models",
 		"type"			: "Models",
 		"uri"			: "https://github.com/Caverns4/OoT-Models/archive/refs/heads/main.zip",
