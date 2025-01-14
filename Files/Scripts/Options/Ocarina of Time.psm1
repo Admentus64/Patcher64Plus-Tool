@@ -3227,7 +3227,7 @@ function CreateTabDifficulty() {
     CreateReduxGroup    -Tag  "Hero"                    -Text "Hero Mode"
     CreateReduxCheckBox -Name "Arwing"           -Scene -Text "Arwing"              -Info "Add an Arwing to Kokiri Forest"                                         -Credits "Admentus"
     CreateReduxCheckBox -Name "LikeLike"         -Scene -Text "Like-Like"           -Info "Add an Like-Like to Kokiri Forest"                                      -Credits "Admentus"
-    CreateReduxCheckBox -Name "GraveyardKeese"   -Scene -Text "Graveyard Keese"     -Info "Restore the Keese that appear at the Graveyard as Adult Kink"           -Credits "Admentus"
+    CreateReduxCheckBox -Name "GraveyardKeese"   -Scene -Text "Graveyard Keese"     -Info "Restore the Keese that appear at the Graveyard as Adult Link"           -Credits "Admentus"
     CreateReduxCheckBox -Name "LostWoodsOctorok" -Scene -Text "Lost Woods Octorok"  -Info "Restore the Octorok in the Lost Woods area which leads to Zora's River" -Credits "Admentus"
     CreateReduxCheckBox -Name "PotsChallenge"    -Safe  -Text "Pots Challenge"      -Info "Throw pots at your enemies to defeat them! Pots everywhere!"            -Credits "Aegiker"
     CreateReduxCheckBox -Name "NoBottledFairy"          -Text "No Bottled Fairies"  -Info "Fairies can no longer be put into a bottle"                             -Credits "Admentus & Three Pendants"
