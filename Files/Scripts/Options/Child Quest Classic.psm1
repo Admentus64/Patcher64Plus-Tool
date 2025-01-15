@@ -1,12 +1,15 @@
 ﻿function ChildQuestClassicExposeOptions() {
     
     # Exclude Group
+    ExcludeGroup  -Group "Unlock"       -Name "Unlock Child Restrictions"
     ExcludeGroup  -Group "Unlock"       -Name "Swords & Shields"
+    ExcludeGroup  -Group "Previews"     -Name "Equipment Previews"
 
 
 
     # Expose Options
     ExposeOption  -Group "Graphics"     -Option "EnhancedChildQuestModel"
+    ExposeOption  -Group "Equipment"    -Option "NoSlipperyBoots"
     ExposeOption  -Group "Hitbox"       -Option "MasterSword"
     ExposeOption  -Group "Hitbox"       -Option "GiantsKnife"
     ExposeOption  -Group "Hitbox"       -Option "BrokenGiantsKnife"
@@ -21,6 +24,8 @@
     ExcludeOption -Group "Fixes"        -Option "VisibleGerudoTent"
     ExcludeOption -Group "Fixes"        -Option "Dungeons"
     ExcludeOption -Group "Styles"       -Option "HairColor"
+    ExcludeOption -Group "Equipment"    -Option "HideSword"
+    ExcludeOption -Group "Equipment"    -Option "HideShield"
     ExcludeOption -Group "Equipment"    -Option "FunctionalWeapons"
 
 }

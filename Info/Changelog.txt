@@ -1,3 +1,6 @@
+v25.1.12
+- Hide some equipment options for Child Quest Classic & Child Quest Pro
+
 v25.1.11
 - Linked Amara's addon repo
 - Fixed issue with trying to read non-existing symbols.json for Redux patches

@@ -3473,8 +3473,8 @@ function CreateTabEquipment() {
 
     CreateReduxGroup    -Tag  "Equipment"                  -Text "Equipment Adjustments"
     CreateReduxCheckBox -Name "HideSword"                  -Text "Hide Sword"                  -Info "The sword is hidden when sheathed"                                                             -Credits "Admentus"
-    CreateReduxCheckBox -Name "NoSlipperyBoots"     -Adult -Text "No Slippery Boots"           -Info "The Hover Boots are no longer slippery"                                                        -Credits "Admentus" 
     CreateReduxCheckBox -Name "HideShield"                 -Text "Hide Shield"                 -Info "The shield is hidden when sheathed"                                                            -Credits "Admentus"
+    CreateReduxCheckBox -Name "NoSlipperyBoots"     -Adult -Text "No Slippery Boots"           -Info "The Hover Boots are no longer slippery"                                                        -Credits "Admentus" 
     CreateReduxCheckBox -Name "UnsheathSword"              -Text "Unsheath Sword"              -Info "The sword is unsheathed first before immediately swinging it"                                  -Credits "Admentus"
     CreateReduxCheckBox -Name "FireproofDekuShield" -Child -Text "Fireproof Deku Shield"       -Info "The Deku Shield turns into an fireproof shield, which will not burn up anymore"                -Credits "Admentus (ported) & Three Pendants (ROM patch)"
     CreateReduxCheckBox -Name "FunctionalWeapons"          -Text "Functional Weapons"          -Info "All melee weapons are useable against enemies, except for obvious boss reasons"                -Credits "Admentus"

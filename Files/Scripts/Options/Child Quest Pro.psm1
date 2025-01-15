@@ -9,6 +9,7 @@
 
     # Expose Options
     ExposeOption  -Group "Fixes"        -Option "PoacherSaw"
+    ExposeOption  -Group "Equipment"    -Option "NoSlipperyBoots"
     ExposeOption  -Group "Hitbox"       -Option "MasterSword"
     ExposeOption  -Group "Hitbox"       -Option "GiantsKnife"
     ExposeOption  -Group "Hitbox"       -Option "BrokenGiantsKnife"
@@ -39,6 +40,8 @@
     ExcludeOption -Group "Fixes"        -Option "Dungeons"
     ExcludeOption -Group "Graphics"     -Option "ForceHiresModel"
     ExcludeOption -Group "Styles"       -Option "HairColor"
+    ExcludeOption -Group "Equipment"    -Option "HideSword"
+    ExcludeOption -Group "Equipment"    -Option "HideShield"
     ExcludeOption -Group "Equipment"    -Option "FunctionalWeapons"
     ExcludeOption -Group "Save"         -Option "BulletBag"
     ExcludeOption -Group "Save"         -Option "OcarinaOfTime"
