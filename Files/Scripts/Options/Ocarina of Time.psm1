@@ -2227,6 +2227,10 @@ function ByteTextOptions() {
         SetMessage -ID "305C"                                                                  -Replace "Please returrrrrrn soon...<N>When you're readyyyy<N>for it, show the claim<N>agaaaain..."
     }
     
+    if (IsChecked $Redux.Equipment.NoSlipperyBoots -Lang 1) {
+        SetMessage -ID "0054" -Text "The downside? No traction!<N><New Box>"                   -Replace "<New Box>"
+    }
+    
     if (IsChecked $Redux.Graphics.GCScheme) {
         if (IsChecked $Redux.Graphics.GCScheme -Lang 1) {
             SetMessage -ID "001C" -Text "press"            -Replace "use"; SetMessage -ID "001D"; SetMessage -ID "0030"; SetMessage -ID "0039" -All; SetMessage -ID "004A"; SetMessage -ID "00A3"; SetMessage -ID "00B1"; SetMessage -ID "00CB"; SetMessage -ID "70A3"; SetMessage -ID "103F" # press -> use
