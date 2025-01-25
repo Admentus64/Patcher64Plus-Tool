@@ -1,3 +1,6 @@
+v25.1.13
+- Changed Item Get textbox for Hover Boots when No Slippery Boots option is set for OoT (by MariaNova)
+
 v25.1.12
 - Hide some equipment options for Child Quest Classic & Child Quest Pro
 

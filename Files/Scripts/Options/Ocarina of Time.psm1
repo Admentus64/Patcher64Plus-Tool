@@ -184,7 +184,7 @@ function ByteOptions() {
     if (IsChecked $Redux.Fixes.RemoveFishingPiracy)   { ChangeBytes -Offset "DBEC80" -Values "34020000"                                                  }
     if (IsChecked $Redux.Fixes.PoacherSaw)            { ChangeBytes -Offset "AE72CC" -Values "00000000"                                                  }
     if (IsChecked $Redux.Fixes.GerudosFortress)       { CopyBytes   -Offset "96E068" -Length "D48" -Start "974600"                                       } # Minimap fix
-    if (IsChecked $Redux.Fixes.AlwaysMoveKingZora)    { ChangeBytes -Offset "E55BB0" -Values "85CE8C3C"; ChangeBytes -Offset "E55BB4" -Values "844F0EDA" }
+    if (IsChecked $Redux.Fixes.AlwaysMoveKingZora)    { ChangeBytes -Offset "E55BB0" -Values "85CE8C3C844F0EDA"                                          }
     if (IsChecked $Redux.Fixes.DeathMountainOwl)      { ChangeBytes -Offset "E304F0" -Values "240E0001"                                                  }
     if (IsChecked $Redux.Fixes.Boomerang)             { ChangeBytes -Offset "F0F718" -Values "FC41C7FFFFFFFE38"                                          }
     if (IsChecked $Redux.Fixes.TimeDoor)              { ChangeBytes -Offset "AC8608" -Values "00902025848E00A4340100430000000000000000"                  } # Fix open Temple of Time door on first visit bug
