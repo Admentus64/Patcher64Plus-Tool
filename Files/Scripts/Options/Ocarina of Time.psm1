@@ -193,11 +193,11 @@ function ByteOptions() {
 
     # OTHER #
 
-    if ( (IsIndex -Elem $Redux.Other.Select -Text "Translate Only")         -or (IsIndex $Redux.Other.Select -Text "Translate and Enable Map Select") )       { ExportAndPatch -Path "map_select" -Offset "B9FD90" -Length "EC0"; ExportAndPatch -Path "inventory_editor" -Offset "BCBF64" -Length "C8" }
-    if ( (IsIndex -Elem $Redux.Other.Select -Text "Enable Map Select Only") -or (IsIndex $Redux.Other.Select -Text "Translate and Enable Map Select") )       { ChangeBytes -Offset "A94994" -Values "00000000AE0800143484B92C8E020018240B0000AC8B0000"; ChangeBytes -Offset "B67395" -Values "B9E40000BA1160808009C08080372080801C1480801C1480801C08" }
-    if ( (IsIndex -Elem $Redux.Other.SkipIntro -Text "Skip Logo")           -or (IsIndex -Elem $Redux.Other.SkipIntro -Text "Skip Logo and Title Screen") )   { ChangeBytes -Offset "B9DAAC" -Values "00000000"                        }
-    if ( (IsIndex -Elem $Redux.Other.SkipIntro -Text "Skip Title Screen")   -or (IsIndex -Elem $Redux.Other.SkipIntro -Text "Skip Logo and Title Screen") )   { ChangeBytes -Offset "B17237" -Values "30"                              }
-    if   (IsDefault -Elem $Redux.Other.Skybox  -Not)                                                                                                          { ChangeBytes -Offset "B67722" -Values $Redux.Other.Skybox.SelectedIndex }
+    if ( (IsIndex -Elem $Redux.Other.Select    -Text "Translate Only")         -or (IsIndex $Redux.Other.Select -Text "Translate and Enable Map Select") )       { ExportAndPatch -Path "map_select" -Offset "B9FD90" -Length "EC0"; ExportAndPatch -Path "inventory_editor" -Offset "BCBF64" -Length "C8" }
+    if ( (IsIndex -Elem $Redux.Other.Select    -Text "Enable Map Select Only") -or (IsIndex $Redux.Other.Select -Text "Translate and Enable Map Select") )       { ChangeBytes -Offset "A94994" -Values "00000000AE0800143484B92C8E020018240B0000AC8B0000"; ChangeBytes -Offset "B67395" -Values "B9E40000BA1160808009C08080372080801C1480801C1480801C08" }
+    if ( (IsIndex -Elem $Redux.Other.SkipIntro -Text "Skip Logo")              -or (IsIndex -Elem $Redux.Other.SkipIntro -Text "Skip Logo and Title Screen") )   { ChangeBytes -Offset "B9DAAC" -Values "00000000"                        }
+    if ( (IsIndex -Elem $Redux.Other.SkipIntro -Text "Skip Title Screen")      -or (IsIndex -Elem $Redux.Other.SkipIntro -Text "Skip Logo and Title Screen") )   { ChangeBytes -Offset "B17237" -Values "30"                              }
+    if   (IsDefault -Elem $Redux.Other.Skybox  -Not)                                                                                                             { ChangeBytes -Offset "B67722" -Values $Redux.Other.Skybox.SelectedIndex }
 
     if (IsChecked $Redux.Other.DefaultZTargeting)    { ChangeBytes -Offset "B71E6D" -Values "01"                                            }
     if (IsChecked $Redux.Other.DiskDrive)            { ChangeBytes -Offset "BAF1F1" -Values "26"; ChangeBytes -Offset "E6D83B" -Values "04" }

@@ -1,3 +1,6 @@
+v25.1.15
+- Fixed crash issue with OoT Redux dropping bombs
+
 v25.1.14
 - Updated OoT Redux Debug Menu with extra warps and event flags
 - Fixed crash issue with OoT Redux Options Menu
