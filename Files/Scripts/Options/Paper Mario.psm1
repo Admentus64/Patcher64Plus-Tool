@@ -349,7 +349,7 @@ function CreateTabMain() {
     CreateReduxGroup       -Tag  "Debug" -Text "Debugging"
     $items = @("Goomba Region", "Toad Town", "Town Town Tunnels", "Inside the Whale", "Princess Peach's Castle", "Shooting Star Summit", "Koopa Village", "Koopa Bros. Fortress", "Mt. Rugged", "Dry Dry Outpost", "Dry Dry Desert", "Dry Dry Ruins", "Forever Forest", "Boo's Mansion", "Gusty Gulch", "Tubba Blubba's Castle", "Shy Guy's Toy Box", "Jade Jungle", "Mt. Lavalava", "Flower Fields", "Shiver City", "Crystal Palace", "Bowser's Castle", "Outside Peach's Castle", "Ending", "Minigames", "Game Over", "Test Map")
     CreateReduxComboBox    -Name "StartingArea" -Text "Starting Area" -Items $items                        -Info "Set the default starting area for a new save slot" -Credits "Admentus"
-    CreateReduxTextBox     -Name "StartingMap"  -Text "Staring Map"     -Value 11  -Min 0 -Max 134 -Length 3 -Info "Set the default starting map for a new save slot"  -Credits "Admentus" -Warning "Invalid map indexes will make the game crash, 0 tends to always exists as the first map of an area"
+    CreateReduxTextBox     -Name "StartingMap"  -Text "Starting Map"  -Value 11  -Min 0 -Max 134 -Length 3 -Info "Set the default starting map for a new save slot"  -Credits "Admentus" -Warning "Invalid map indexes will make the game crash, 0 tends to always exists as the first map of an area"
 
 }
 

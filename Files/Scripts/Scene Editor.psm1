@@ -3436,10 +3436,13 @@ function ReplaceActor($Index, $ID=$null, $Name, $NewID, $New, $X, $Y, $Z, $XRot,
             return $False
         }
 
-        $compP = SplitCompare $Compare
-        $compX = SplitCompare $CompareX
-        $compY = SplitCompare $CompareY
-        $compZ = SplitCompare $CompareZ
+        if ($CompareX -is [string] -and $CompareX -match '^-?\d+$')   { $CompareX = [int]$CompareX         }
+        if ($CompareY -is [string] -and $CompareY -match '^-?\d+$')   { $CompareY = [int]$CompareY         }
+        if ($CompareZ -is [string] -and $CompareZ -match '^-?\d+$')   { $CompareZ = [int]$CompareZ         }
+        if ($Compare  -is [string])                                   { $compP    = SplitCompare $Compare  }
+        if ($CompareX -is [int])                                      { $compX    = SplitCompare $CompareX }
+        if ($CompareY -is [int])                                      { $compY    = SplitCompare $CompareY }
+        if ($CompareZ -is [int])                                      { $compZ    = SplitCompare $CompareZ }
 
         for ($i=(GetActorStart); $i -lt (GetActorEnd); $i+=0x10) {
             if ( ( ($SceneEditor.MapArray[$i] * 256 + $SceneEditor.MapArray[$i+1]) -band 4095) -eq $val) {
@@ -3496,6 +3499,10 @@ function ReplaceActor($Index, $ID=$null, $Name, $NewID, $New, $X, $Y, $Z, $XRot,
         $SceneEditor.MapArray[$offset+0]  = $val[0]
         $SceneEditor.MapArray[$offset+1]  = $val[1]
     }
+
+    if ($X -is [string] -and $X -match '^-?\d+$')   { $X = [int]$X }
+    if ($Y -is [string] -and $Y -match '^-?\d+$')   { $Y = [int]$Y }
+    if ($Z -is [string] -and $Z -match '^-?\d+$')   { $Z = [int]$Z }
 
     if ($X -is [int] -and $X -ge -32768 -and $X -le 32767) {
         if ($X -lt 0) { $X += 0x10000 }
@@ -3619,10 +3626,13 @@ function RemoveActor($Index, $ID, $Name, $Compare, $CompareX, $CompareY, $Compar
             return $False
         }
 
-        $compP = SplitCompare $Compare
-        $compX = SplitCompare $CompareX
-        $compY = SplitCompare $CompareY
-        $compZ = SplitCompare $CompareZ
+        if ($CompareX -is [string] -and $CompareX -match '^-?\d+$')   { $CompareX = [int]$CompareX         }
+        if ($CompareY -is [string] -and $CompareY -match '^-?\d+$')   { $CompareY = [int]$CompareY         }
+        if ($CompareZ -is [string] -and $CompareZ -match '^-?\d+$')   { $CompareZ = [int]$CompareZ         }
+        if ($Compare  -is [string])                                   { $compP    = SplitCompare $Compare  }
+        if ($CompareX -is [int])                                      { $compX    = SplitCompare $CompareX }
+        if ($CompareY -is [int])                                      { $compY    = SplitCompare $CompareY }
+        if ($CompareZ -is [int])                                      { $compZ    = SplitCompare $CompareZ }
         $Index = 0;
 
         for ($i=(GetActorStart); $i -lt (GetActorEnd); $i+=0x10) {
@@ -4174,9 +4184,9 @@ function RemoveObject($Index, $ID, $Name, [switch]$Silent) {
     DeleteObject
 
     if (!$Silent) {
-        if     ($Index -is [int])      { WriteToConsole ("Removed object entry:    " + $Index)   }
-        elseif ($Name  -is [string])   { WriteToConsole ("Removed object:          " + $Name)    }
+        if     ($Name  -is [string])   { WriteToConsole ("Removed object:          " + $Name)    }
         elseif ($ID    -is [string])   { WriteToConsole ("Removed object with ID:  " + $printID) }
+        elseif ($Index -is [int])      { WriteToConsole ("Removed object entry:    " + $Index)   }
         else                           { WriteToConsole  "Removed object"                        }
     }
 

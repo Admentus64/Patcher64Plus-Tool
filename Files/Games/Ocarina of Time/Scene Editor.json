@@ -2461,7 +2461,7 @@
 			"value"	: "3F"
 		} ] ]
 	}, {
-		"name"		: "Lord Jabu-Jabu",
+		"name"		: "Jabu-Jabu",
 		"id"		: "005A",
 		"type"		: "Animal",
 		"band"		: [ "FFFF" ],
@@ -2771,7 +2771,7 @@
 		"id"		: "0072",
 		"type"		: "Animal"
 	}, {
-		"name"		: "Trees and Bushes",
+		"name"		: "Greenery",
 		"id"		: "0077",
 		"type"		: "Object",
 		"band"		: [ "00FF", "FF00", "00FF rz" ],
@@ -2954,7 +2954,7 @@
 		"default"	: "FFFF",
 		"type"		: "NPC"
 	}, {
-		"name"		: "Dampé (Alive)",
+		"name"		: "Dampé",
 		"id"		: "0085",
 		"default"	: "FFFF",
 		"type"		: "NPC"
@@ -3788,7 +3788,7 @@
 			"value"	: "1"
 		} ] ]
 	}, {
-		"name"		: "Hyrulian Guards",
+		"name"		: "Hyrule Guard",
 		"id"		: "00B3",
 		"type"		: "NPC",
 		"band"		: [ "00FF" ],
@@ -4274,7 +4274,7 @@
 		"id"		: "00D6",
 		"type"		: "Object"
 	}, {
-		"name"		: "Malon (Ingo's Ranch)",
+		"name"		: "Adult Malon Enslaved",
 		"id"		: "00D9",
 		"default"	: "FFFF",
 		"type"		: "NPC"
@@ -4431,7 +4431,7 @@
 			"value"	: "3F"
 		} ] ]
 	}, {
-		"name"		: "Malon (Child)",
+		"name"		: "Child Malon",
 		"id"		: "00E7",
 		"default"	: "FFFF",
 		"type"		: "NPC"
@@ -4483,7 +4483,7 @@
 			"value"	: "2"
 		} ] ]
 	}, {
-		"name"		: "Frogs & Song Spot",
+		"name"		: "Frog",
 		"id"		: "00ED",
 		"type"		: "Animal",
 		"band"		: [ "FFFF" ],
@@ -5816,7 +5816,7 @@
 			"value"	: "3F"
 		} ] ]
 	}, {
-		"name"		: "Bean Salesman",
+		"name"		: "Bean Seller",
 		"id"		: "013E",
 		"default"	: "FFFF",
 		"type"		: "NPC"
@@ -6216,7 +6216,7 @@
 			"value"	: "1"
 		} ] ]
 	}, {
-		"name"		: "Running Man (Child)",
+		"name"		: "Running Man",
 		"id"		: "0162",
 		"type"		: "NPC",
 		"band"		: [ "FF00" ],
@@ -6873,7 +6873,7 @@
 			"value"	: "3"
 		} ] ]
 	}, {
-		"name"		: "Hyrule Field",
+		"name"		: "Broken Drawbridge",
 		"id"		: "0194",
 		"type"		: "Area",
 		"band"		: [ "FFFF" ],
@@ -7684,19 +7684,19 @@
 		"name"		: "Sliding Doors Goron City",
 		"id"		: "01C4",
 		"type"		: "Area",
-		"band"		: [ "0100", "003F" ],
+		"band"		: [ "0100", "00FF" ],
 		"params" : [ [ {
-			"name"	: "Door",
+			"name"	: "Darunia",
 			"value"	: "0"
 		}, {
-			"name"	: "Doormat",
+			"name"	: "Shop",
 			"value"	: "100"
 		} ], [ {
 			"name"	: "Switch",
-			"value"	: "3F"
+			"value"	: "FF"
 		} ] ]
 	}, {
-		"name"		: "Malon (Lon Lon Ranch)",
+		"name"		: "Adult Malon Freed",
 		"id"		: "01C5",
 		"default"	: "FFFF",
 		"type"		: "NPC"
@@ -7795,26 +7795,12 @@
 			"value"	: "FF"
 		} ] ]
 	}, {
-		"name"		: "Skullwalltula (Bean Spot)",
+		"name"		: "Skulltula (Bean Spot)",
 		"id"		: "01CF",
+		"default"	: "4101",
 		"type"		: "Enemy",
-		"band"		: [ "E000", "1F00", "00FF" ],
+		"band"		: [ "1F00", "00FF" ],
 		"params" : [ [ {
-			"name"	: "Skullwalltula",
-			"value"	: "0"
-		}, {
-			"name"	: "Gold Skulltula (Anytime)",
-			"value"	: [ "8000", "2000", "4000" ]
-		}, {
-			"name"	: "Gold Skulltula (Appears)",
-			"value"	: [ "6000", "D000", "F000" ]
-		}, {
-			"name"	: "Gold Skulltula (Night)",
-			"value"	: "A000"
-		} ], [ {
-			"name"	: "None",
-			"value"	: "0"
-		}, {
 			"name"	: "Deku Tree",
 			"value"	: "100"
 		}, {
@@ -7881,28 +7867,28 @@
 			"name"	: "Desert",
 			"value"	: "1600"
 		} ], [ {
-			"name"	: "Flag 1",
+			"name"	: "Token 1",
 			"value"	: "1"
 		}, {
-			"name"	: "Flag 2",
+			"name"	: "Token 2",
 			"value"	: "2"
 		}, {
-			"name"	: "Flag 3",
+			"name"	: "Token 3",
 			"value"	: "4"
 		}, {
-			"name"	: "Flag 4",
+			"name"	: "Token 4",
 			"value"	: "8"
 		}, {
-			"name"	: "Flag 5",
+			"name"	: "Token 5",
 			"value"	: "10"
 		}, {
-			"name"	: "Flag 6",
+			"name"	: "Token 6",
 			"value"	: "20"
 		}, {
-			"name"	: "Flag 7",
+			"name"	: "Token 7",
 			"value"	: "40"
 		}, {
-			"name"	: "Flag 8",
+			"name"	: "Token 8",
 			"value"	: "80"
 		} ] ]
 	}, {
@@ -7978,7 +7964,7 @@
 			"name"	: "Color: Forest Temple",
 			"value"	: "4"
 		}, {
-			"name"	: "Color: Dampe's Grave",
+			"name"	: "Color: Dampé's Grave",
 			"value"	: "5"
 		}, {
 			"name"	: "Color: Gerudo Training Ground",
@@ -7997,11 +7983,11 @@
 			"value"	: "FF"
 		} ] ]
 	}, {
-		"name"		: "Princess Zelda (Child)",
+		"name"		: "Young Princess Zelda",
 		"id"		: "01D3",
 		"type"		: "NPC"
 	}, {
-		"name"		: "Running Man (Adult)",
+		"name"		: "Marathon Man",
 		"id"		: "01D4",
 		"type"		: "NPC",
 		"band"		: [ "FFFF" ],
@@ -8108,7 +8094,7 @@
 		"id"		: "001C",
 		"type"		: "Boss"
 	}, {
-		"name"		: "Princess Zelda (Window)",
+		"name"		: "Princess Zelda at Window",
 		"id"		: "001D",
 		"type"		: "NPC"
 	}, {
@@ -8136,7 +8122,7 @@
 		"id"		: "0023",
 		"type"		: "Unused"
 	}, {
-		"name"		: "Skulltulas",
+		"name"		: "Skulltula",
 		"id"		: "0024",
 		"type"		: "Enemy"
 	}, {
@@ -8180,7 +8166,7 @@
 		"id"		: "002E",
 		"type"		: "Unused"
 	}, {
-		"name"		: "Hyrule Field (Child)",
+		"name"		: "Drawbridge",
 		"id"		: "002F",
 		"type"		: "Area"
 	}, {
@@ -8372,7 +8358,7 @@
 		"id"		: "005F",
 		"type"		: "Enemy"
 	}, {
-		"name"		: "Princess Zelda (Adult)",
+		"name"		: "Adult Princess Zelda",
 		"id"		: "0060",
 		"type"		: "NPC"
 	}, {
@@ -8464,7 +8450,7 @@
 		"id"		: "0077",
 		"type"		: "Animal"
 	}, {
-		"name"		: "Bushes & Trees",
+		"name"		: "Greenery",
 		"id"		: "007C",
 		"type"		: "Object"
 	}, {
@@ -8492,7 +8478,7 @@
 		"id"		: "0088",
 		"type"		: "NPC"
 	}, {
-		"name"		: "Dampé & Ghost",
+		"name"		: "Dampé",
 		"id"		: "0089",
 		"type"		: "NPC"
 	}, {
@@ -8534,7 +8520,7 @@
 		"id"		: "0096",
 		"type"		: "Area"
 	}, {
-		"name"		: "Soldiers",
+		"name"		: "Soldier",
 		"id"		: "0097",
 		"type"		: "NPC"
 	}, {
@@ -8542,7 +8528,7 @@
 		"id"		: "0098",
 		"type"		: "Enemy"
 	}, {
-		"name"		: "Poe Sisters",
+		"name"		: "Poe Sister",
 		"id"		: "0099",
 		"type"		: "Enemy"
 	}, {
@@ -8586,7 +8572,7 @@
 		"id"		: "00A3",
 		"type"		: "NPC"
 	}, {
-		"name"		: "Torches",
+		"name"		: "Torch",
 		"id"		: "00A4",
 		"type"		: "Object"
 	}, {
@@ -8766,7 +8752,7 @@
 		"id"		: "00D1",
 		"type"		: "Model"
 	}, {
-		"name"		: "Ingo's Horse & Archery Range Horse",
+		"name"		: "Rideable Brown Horse",
 		"id"		: "00D2",
 		"type"		: "Animal"
 	}, {
@@ -8834,7 +8820,7 @@
 		"id"		: "00E2",
 		"type"		: "Boss"
 	}, {
-		"name"		: "Spikes",
+		"name"		: "Spike",
 		"id"		: "00E5",
 		"type"		: "Enemy"
 	}, {
@@ -8974,11 +8960,11 @@
 		"id"		: "0108",
 		"type"		: "NPC"
 	}, {
-		"name"		: "Cuccos",
+		"name"		: "Pocket Cucco",
 		"id"		: "0109",
 		"type"		: "Model"
 	}, {
-		"name"		: "Skull Kid",
+		"name"		: "Skullkid",
 		"id"		: "010A",
 		"type"		: "NPC"
 	}, {
@@ -9085,7 +9071,7 @@
 		"id"		: "0126",
 		"type"		: "Animation"
 	}, {
-		"name"		: "Magic Bean Seller",
+		"name"		: "Bean Seller",
 		"id"		: "0127",
 		"type"		: "NPC"
 	}, {
@@ -9334,7 +9320,7 @@
 		"id"		: "0165",
 		"type"		: "NPC"
 	}, {
-		"name"		: "Hyrule Field (Adult)",
+		"name"		: "Broken Drawbridge",
 		"id"		: "0166",
 		"type"		: "Area"
 	}, {
@@ -9499,7 +9485,7 @@
 		"id"		: "0190",
 		"type"		: "Object"
 	}, {
-		"name"		: "Princess Zelda (Child)",
+		"name"		: "Young Princess Zelda",
 		"id"		: "0191",
 		"type"		: "NPC"
 	} ]

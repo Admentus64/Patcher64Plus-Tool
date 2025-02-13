@@ -69,7 +69,7 @@
 	"script"			: "Ocarina of Time",
 	"settings"			: "Dawn & Dusk",
 	"base"				: 6,
-	"custom_maps"			: 1,
+	"custom_maps"			: 2,
 	"age"				: "Child",
 	"models"			: 0,
 	"output"			: "dawn_&_dusk",
@@ -90,7 +90,7 @@
 	"script"			: "Ocarina of Time",
 	"settings"			: "Master of Time",
 	"base"				: 5,
-	"custom_maps"			: 1,
+	"custom_maps"			: 2,
 	"age"				: "Adult",
 	"output"			: "master_of_time",
 	"tooltip"			: "A large-sized ROM hack in a completely new setting"
@@ -174,7 +174,7 @@
 	"script"			: "Ocarina of Time",
 	"settings"			: "Bombiwa",
 	"base"				: 6,
-	"custom_maps"			: 1,
+	"custom_maps"			: 2,
 	"age"				: "Child",
 	"output"			: "bombiwa",
 	"tooltip"			: "A small-sized ROM hack in a completely new setting, and extremely tricky and difficult"
@@ -193,7 +193,7 @@
 	"script"			: "Ocarina of Time",
 	"settings"			: "Puzzling",
 	"base"				: 6,
-	"custom_maps"			: 1,
+	"custom_maps"			: 2,
 	"age"				: "Child",
 	"output"			: "puzzling",
 	"tooltip"			: "A small-sized ROM hack that focuses on puzzling your way through"

@@ -1,3 +1,14 @@
+v25.1.16
+- Updated OoT Redux with minor changes
+- Added Silver Sword icon for Swords for OoT
+- Added Termina Longshot icon for OoT
+- Added new icons and GI models from MM for OoT for future content use
+- Changed Master of Time to no longer use a custom GameID
+- Changed Hide Geometry patch for OoT to dynamically apply for Bazaar
+- Changed Power Bracelet option for OoT to dynamically search where to apply in the Child Link model
+- Fixed issue with passing negative string values into the Scene Editor API when replacing or removing actors
+- Fixed issue with updating the status label during patching
+
 v25.1.15
 - Fixed crash issue with OoT Redux dropping bombs
 

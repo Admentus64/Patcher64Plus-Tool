@@ -425,6 +425,7 @@ function PatchMuteMusic([string]$SequenceTable, [string]$Sequence, [byte]$Length
     if ($GameSettings["ReplaceMusic"] -eq $null)                                                                                                               { return }
     if ( (IsChecked $Redux.MuteMusic.MuteSelected -Not) -and (IsChecked $Redux.MuteMusic.MuteAreaOnly -Not) -and (IsChecked $Redux.MuteMusic.MuteAll -Not) )   { return }
 
+    $lastMessage = $StatusLabel.Text
     UpdateStatusLabel "Muting Music Sequences"
 
     $include = $force = @()
@@ -439,6 +440,8 @@ function PatchMuteMusic([string]$SequenceTable, [string]$Sequence, [byte]$Length
     $tableStart = GetDecimal $SequenceTable
     for ($i=1; $i -le $Length; $i++) { if ($include -contains $i) { ChangeBytes -Offset (Get24Bit ($tableStart + $i * 16) ) -Values "00 00 00 00 00 00 00 00 00 00" } }
 
+    UpdateStatusLabel -Text $lastMessage -NoConsole
+
 }
 
 
@@ -450,6 +453,7 @@ function PatchReplaceMusic([string]$BankPointerTableStart, [string]$BankPointerT
     if ($GameSettings["ReplaceMusic"] -eq $null)                  { return }
     if (IsChecked -Elem $Redux.ReplaceMusic.EnableReplace -Not)   { return }
 
+    $lastMessage = $StatusLabel.Text
     UpdateStatusLabel "Patching Music Sequences"
 
     $bankPointerTable = $GameFiles.extracted + "\AudiobankPointerTable.bin"; ExportBytes -Offset $BankPointerTableStart  -End $BankPointerTableEnd -Output $bankPointerTable -Force
@@ -525,6 +529,8 @@ function PatchReplaceMusic([string]$BankPointerTableStart, [string]$BankPointerT
     PatchBytes -Offset $BankPointerTableStart -Patch "AudiobankPointerTable.bin" -Extracted
     PatchBytes -Offset $PointerTableStart     -Patch "AudioPointerTable.bin"     -Extracted
     PatchBytes -Offset $SeqStart              -Patch "Audioseq.bin"              -Extracted
+
+    UpdateStatusLabel -Text $lastMessage -NoConsole
 
 }
 

@@ -5,7 +5,7 @@
     if (IsChecked $Redux.Graphics.Widescreen) {
         ApplyPatch -Patch "Decompressed\Optional\Widescreen\widescreen_minimum.ppf"
         if     (StrLike -Str $GamePatch.settings -Val "Dawn & Dusk")   { ApplyPatch -Patch "Decompressed\Optional\Widescreen\widescreen_dawn_and_dusk.ppf" }
-        elseif ($GamePatch.backgrounds -ne 0)                          { ApplyPatch -Patch "Decompressed\Optional\Widescreen\widescreen_hide_geometry.ppf" }
+        elseif ($GamePatch.custom_maps -ne 2)                          { ApplyPatch -Patch "Decompressed\Optional\Widescreen\widescreen_hide_geometry.ppf" }
     }
 
 }
@@ -205,6 +205,12 @@ function ByteOptions() {
 
 
     # GRAPHICS #
+
+    if (IsChecked $Redux.Graphics.Widescreen) {
+        $offset = (SearchBytes -Start "28E6FC4" -End "290D7B0" -Values "00A100FF" -Decimal -Silent) - 0x28E6FC4
+        if ($Offset -ge 0)   { ChangeBytes -Offset @( (0x28E6FC4 + $offset), (0x28E7044 + $offset), (0x28E70D4 + $offset), (0x28E7164 + $offset), (0x28E71F4 + $offset), (0x28E72D4 + $offset), (0x28E7354 + $offset), (0x28E73E4 + $offset)) -Values "00000000" }
+        else                 { WriteToConsole "Could not apply widesreen geometry fixes" -Error }
+    }
 
     if (IsChecked $Redux.Graphics.WidescreenAlt) {
         if ($IsWiiVC ) { ChangeBytes -Offset "B08038" -Values "3C073FE3" } # 16:9 Widescreen
@@ -741,7 +747,10 @@ function ByteOptions() {
     }
     
     if (IsChecked $Redux.Equipment.PowerBracelet) {
-         $Offset = SearchBytes -Start "FBE000" -End "FEAF80" -Values "00000000000000000000000000000000000000000100010006000C0018002D01"
+        $start = Get24Bit ($ByteArrayGame[0x93A1] * 0x10000 + $ByteArrayGame[0x93A2] * 0x100 + $ByteArrayGame[0x93A3])
+        $end   = Get24Bit ($ByteArrayGame[0x93A5] * 0x10000 + $ByteArrayGame[0x93A6] * 0x100 + $ByteArrayGame[0x93A7])
+
+        $Offset = SearchBytes -Start $start -End $end -Values "00000000000000000000000000000000000000000100010006000C0018002D01"
         if ($Offset -gt 0) { PatchBytes -Offset $Offset  -Texture -Patch ("Equipment\Bracelet\Power Bracelet.bin") }
         PatchBytes -Offset "80D000" -Texture -Patch "Equipment\Bracelet\Power Bracelet.icon"
         if (TestFile ($GameFiles.textures + "\Equipment\Bracelet\Power Bracelet." + $LanguagePatch.code + ".label")) { PatchBytes -Offset "8B2C00" -Texture -Patch ("Equipment\Bracelet\Power Bracelet." + $LanguagePatch.code + ".label") }
@@ -762,11 +771,11 @@ function ByteOptions() {
         ChangeBytes -Offset "D76516" -Values "F4"                                                                                                                                                                             # Like-Like (Hammer Jump)
     }
 
-    if (IsChecked $Redux.Equipment.NoSlipperyBoots)         { ChangeBytes -Offset "BE4E78" -Values "1500"                                          }
-    if (IsChecked $Redux.Equipment.FireProofDekuShield)     { ChangeBytes -Offset "BD3C5B" -Values "00"                                            }
-    if (IsChecked $Redux.Equipment.UnsheathSword)           { ChangeBytes -Offset "BD04A0" -Values "284200051440000500001025"                      }
-    if (IsChecked $Redux.Equipment.Hookshot)                { PatchBytes  -Offset "7C7000" -Texture -Patch "Equipment\termina_hookshot.icon"       }
-    if (IsChecked $Redux.Equipment.GoronBraceletFix)        { ChangeBytes -Offset "BB66DD" -Values "C0"; ChangeBytes -Offset "BC780C" -Values "09" }
+    if (IsChecked $Redux.Equipment.NoSlipperyBoots)         { ChangeBytes -Offset "BE4E78" -Values "1500"                                                                                                                    }
+    if (IsChecked $Redux.Equipment.FireProofDekuShield)     { ChangeBytes -Offset "BD3C5B" -Values "00"                                                                                                                      }
+    if (IsChecked $Redux.Equipment.UnsheathSword)           { ChangeBytes -Offset "BD04A0" -Values "284200051440000500001025"                                                                                                }
+    if (IsChecked $Redux.Equipment.Hookshot)                { PatchBytes  -Offset "7C7000" -Texture -Patch "Equipment\termina_hookshot.icon"; PatchBytes  -Offset "7C8000" -Texture -Patch "Equipment\termina_longshot.icon" }
+    if (IsChecked $Redux.Equipment.GoronBraceletFix)        { ChangeBytes -Offset "BB66DD" -Values "C0";                                      ChangeBytes -Offset "BC780C" -Values "09"                                      }
     
     
 
