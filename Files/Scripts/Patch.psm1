@@ -439,16 +439,16 @@ function RunCommand([string]$Command="", [string]$Message="", [boolean]$Check=$T
     
     if ( (DoAssertSceneFiles) -or (DoExtractSceneFiles) ) { return }
 
-    if ( (IsSet $GamePatch.preset) -or ($Patches.Options.Checked -and $Patches.Options.Visible) ) {
-        if ( (HasCommand $Command) -and $Check) {
-            UpdateStatusLabel ("Patching " + $GameType.mode + " Additional " + $Message + " Options...")
-            iex $Command
-        }
-    }
     if ($Gamepatch.function -ne $null) {
         if (HasCommand ($GamePatch.function + $Command) ) {
             UpdateStatusLabel ("Patching " + $GameType.mode + " ROM Hack " + $Message + " Options...")
             iex ($GamePatch.function + $Command)
+        }
+    }
+    if ( (IsSet $GamePatch.preset) -or $GamePatch.ForceOptions.Count -gt 0 -or ($Patches.Options.Checked -and $Patches.Options.Visible) ) {
+        if ( (HasCommand $Command) -and $Check) {
+            UpdateStatusLabel ("Patching " + $GameType.mode + " Additional " + $Message + " Options...")
+            iex $Command
         }
     }
 
@@ -519,7 +519,7 @@ function PatchingAdditionalOptions() {
         $global:SceneEditor        = @{}
         $Files.json.sceneEditor    = SetJSONFile $GameFiles.sceneEditor
 
-        RunCommand -Command "ByteSceneOptions" -Message "Scene" -Check (!$Settings.Debug.NoScenePatching -and !$Settings.Core.Safe -and $GamePatch.custom_maps -ne 1)
+        RunCommand -Command "ByteSceneOptions" -Message "Scene" -Check (!$Settings.Debug.NoScenePatching -and !$Settings.Core.Safe -and $GamePatch.custom_maps -ne 2)
         if (DoAssertSceneFiles)    { AssertSceneFiles  }
         if (DoExtractSceneFiles)   { ExtractSceneFiles }
         $global:SceneEditor = $Files.json.sceneEditor = $null

@@ -428,8 +428,9 @@ function PatchMuteMusic([string]$SequenceTable, [string]$Sequence, [byte]$Length
     $lastMessage = $StatusLabel.Text
     UpdateStatusLabel "Muting Music Sequences"
 
-    $include = $force = @()
-    foreach ($i in 0..($Files.json.music.tracks.Count-1)) {
+    $include = @()
+
+    foreach ($i in 0..($Files.json.music.tracks.Count-2)) {
         if ( ( (!(IsSet $GameSettings["ReplaceMusic"][$Files.json.music.tracks[$i].title]) -or $GameSettings["ReplaceMusic"][$Files.json.music.tracks[$i].title] -eq "Default") -and (IsChecked $Redux.ReplaceMusic.EnableReplace) ) -or (IsChecked -Elem $Redux.ReplaceMusic.EnableReplace -Not) ) {
             if     (IsChecked $Redux.MuteMusic.MuteSelected)   { if ($Redux.MuteMusic.Tracks.GetSelected($i))       { foreach ($id in $Files.json.music.tracks[$i].id) { $include += (GetDecimal $id) }; foreach ($id in $Files.json.music.tracks[$i].muteId) { $include += (GetDecimal $id) } } }
             elseif (IsChecked $Redux.MuteMusic.MuteAreaOnly)   { if (!(IsSet $Files.json.music.tracks[$i].event))   { foreach ($id in $Files.json.music.tracks[$i].id) { $include += (GetDecimal $id) }; foreach ($id in $Files.json.music.tracks[$i].muteId) { $include += (GetDecimal $id) } } }
@@ -438,7 +439,15 @@ function PatchMuteMusic([string]$SequenceTable, [string]$Sequence, [byte]$Length
     }
 
     $tableStart = GetDecimal $SequenceTable
-    for ($i=1; $i -le $Length; $i++) { if ($include -contains $i) { ChangeBytes -Offset (Get24Bit ($tableStart + $i * 16) ) -Values "00 00 00 00 00 00 00 00 00 00" } }
+
+    if ($Files.json.music.game -eq "Ocarina of Time") {
+        if ($include -contains 0x28) { CopyBytes -Offset ($tableStart + 0x57 * 16) -Length 10 -Start ($tableStart + 0x28 * 16) } # Great Fairy's Fountain
+    }
+    elseif ($Files.json.music.game -eq "Majora's Mask") {
+        if ($include -contains 0x18) { CopyBytes -Offset ($tableStart + 0x28 * 16) -Length 10 -Start ($tableStart + 0x18 * 16) } # File Select
+    }
+
+    for ($i=1; $i -le $Length; $i++) { if ($include -contains $i) { ChangeBytes -Offset ($tableStart + $i * 16) -Values "00000000000000000000" } }
 
     UpdateStatusLabel -Text $lastMessage -NoConsole
 
@@ -541,9 +550,11 @@ function MusicOptions([string]$Default="File Select") {
     
     if ($Settings.Core.Lite -or $Settings.Core.Safe) { return }
 
-    $tracks = @()
+    $tracks = [System.Collections.Generic.HashSet[string]]::new()
+    $empty  = [System.Collections.Generic.HashSet[string]]::new()
     foreach ($track in $Files.json.music.tracks) {
-        if ($track.size -ne 0) { $tracks += $track.title }
+        if ($track.id   -ne "7F")   { [void]$tracks.Add($track.title) }
+        if ($track.size -eq 0)      { [void]$empty.Add($track.title)  }
     }
 
 
@@ -553,7 +564,6 @@ function MusicOptions([string]$Default="File Select") {
     CreateReduxGroup    -Tag "Music"       -Text "Music"
     CreateReduxComboBox -Name "FileSelect" -Items $tracks -Text "File Select Theme" -Info "Set the music theme for the File Select menu" -Default $Default -Credits "Admentus"
     if (TestFile -Path $Paths.Music -Container) { $Redux.Music.Reset = CreateReduxButton -Text "Reset Replacements" }
-
 
     if (!(TestFile -Path $Paths.Music -Container)) { return }
 
@@ -574,6 +584,8 @@ function MusicOptions([string]$Default="File Select") {
 
 
     # REPLACE MUSIC #
+
+    $tracks.ExceptWith($empty)
 
                                  CreateReduxGroup    -Tag  "ReplaceMusic"                 -Text "Replace Music Tracks" -Height 9
                                  CreateReduxCheckBox -Name "EnableReplace"                -Text "Enable Replace Music" -Info "Enables patching in music replacements"

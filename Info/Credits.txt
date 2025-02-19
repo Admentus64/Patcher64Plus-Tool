@@ -62,6 +62,7 @@
 - Feonyx
 - GoldenMariaNova
 - Anthrogi
+- ZNemesis
 
 --- Custom Textures ---
 - Community Texture pack
@@ -126,7 +127,7 @@
 - Level Design:				GhostlyDark
 
 --- Dawn and Dusk ---
-- Lead Development and Music:		Captain Seedy-Eye
+- Lead Development & Music:		Captain Seedy-Eye
 - 64DD Porting:				LuigiBlood
 - Special Thanks:			PK-LOVE, BWIX, Hylian Modding
 - Testers:				Captain Seedy, LuigiBlood, Hard4Games, ZFG, Dry4Haz, fig02

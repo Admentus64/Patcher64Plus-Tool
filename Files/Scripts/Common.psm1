@@ -771,14 +771,11 @@ function PatchPath_Finish([object]$TextBox, [string]$Path) {
 
 #==============================================================================================================================================================================================
 function RemoveOptionCheckFromList([object]$Elem) {
-
-    if ($OptionsPatchList.Count -gt 0) {
-        for ($i=0; $i -lt $OptionsPatchList.Count; $i++) {
-            if ($Elem.Section + "." + $Elem.Name -eq $OptionsPatchList[$i]) {
-                $OptionsPatchList.RemoveAt($i)
-                break
-            }
-        }
+    
+    if ($OptionsPatchList.Count -gt 0 -and $Elem -ne $null) {
+        $target = "$($Elem.Section).$($Elem.Name)"
+        $index = $OptionsPatchList.IndexOf($target)
+        if ($index -ge 0) { $OptionsPatchList.RemoveAt($index) }
     }
 
 }
@@ -793,17 +790,21 @@ function IsDefault([object]$Elem, [byte]$Lang=0, [switch]$Not) {
         if ($Redux.Text.Language.SelectedIndex -ne $Lang - 1) { return $False }
     }
 
-    if ( $Elem        -eq $null)          { return $False }
-    if (!$Elem.Active -or $Elem.Hidden)   { return $False }
+    if ($Elem -eq $null) { return $False }
+    $type = $Elem.GetType()
 
-    if     ($Elem           -is [int] -or $Elem -is [string])                                                                 { $value = $Elem         }
-    elseif ($Elem.GetType() -eq [System.Windows.Forms.CheckBox] -or $Elem.GetType() -eq [System.Windows.Forms.RadioButton])   { $value = $Elem.Checked }
-    elseif ($Elem.GetType() -eq [System.Windows.Forms.TrackBar])                                                              { $value = $Elem.Value   }
-    else                                                                                                                      { $value = $Elem.Text    }
+    if     ($type -eq [int] -or $type -eq [string])                                                       { $value = $Elem         }
+    elseif (!$Patches.Options.Checked -or !$Elem.Active -or $Elem.Hidden)                                 { return $False          }
+    elseif ($type -eq [System.Windows.Forms.CheckBox] -or $type -eq [System.Windows.Forms.RadioButton])   { $value = $Elem.Checked }
+    elseif ($type -eq [System.Windows.Forms.TrackBar])                                                    { $value = $Elem.Value   }
+    else                                                                                                  { $value = $Elem.Text    }
 
-    if ($Elem.GetType() -eq [System.Windows.Forms.ComboBox]) { $default = $Elem.Items[$Elem.Default] } else { $default = $Elem.Default }
+    if ($type -eq [System.Windows.Forms.ComboBox]) {
+        if ($Elem.TrueDefault -gt 0) { $default = $Elem.Items[$Elem.TrueDefault - 1] } else { $default = $Elem.Items[$Elem.Default] }
+    }
+    else { $default = $Elem.Default }
 
-    if ($default -eq $value) { return !$Not } else { return $Not }
+    return ($default -eq $value) -xor $Not
 
 }
 
@@ -817,13 +818,14 @@ function IsChecked([object]$Elem=$null, [byte]$Lang=0, [switch]$Not, [switch]$Re
         if ($Redux.Text.Language.SelectedIndex -ne $Lang - 1) { return $False }
     }
 
-    if     ( $Elem -is [int] -and ( ($Elem -eq 1 -and !$Not) -or ($Elem -eq 0 -and $Not) ) )                                    { return $True  }
-    elseif ( $Elem -is [int] -and ( ($Elem -eq 0 -and !$Not) -or ($Elem -eq 1 -and $Not) ) )                                    { return $False }
-    elseif ($Redux -and !(IsChecked $Patches.Redux) )                                                                           { return $False }
-    elseif ( $Elem           -eq $null)                                                                                         { return $False }
-    elseif (!$Elem.Active    -or $Elem.Hidden)                                                                                  { return $False }
-    elseif ( $Elem.GetType() -ne [System.Windows.Forms.CheckBox] -and $Elem.GetType() -ne [System.Windows.Forms.RadioButton])   { return $False }
-    elseif ( $Elem.Checked)                                                                                                     { return !$Not  } else { return $Not }
+    if ($Elem -eq $null) { return $False }
+    $type = $Elem.GetType()
+
+    if     ($type -eq [int])                                                                               { return (($Elem -eq (1 - [int]([bool]$Not))) -as [bool]) }
+    elseif (!$Patches.Options.Checked -or !$Elem.Active -or $Elem.Hidden)                                  { return $False }
+    elseif ($Redux -and !(IsChecked $Patches.Redux) )                                                      { return $False }
+    elseif ($type -ne [System.Windows.Forms.CheckBox] -and $type -ne [System.Windows.Forms.RadioButton])   { return $False }
+    return $Elem.Checked -xor $Not
 
 }
 
@@ -841,13 +843,13 @@ function GetCheckedValue([object]$Elem=$null) {
 #==============================================================================================================================================================================================
 function IsRevert([object]$Elem=$null, [int16]$Index=1, [string]$Text="", [string]$Compare="", [string]$Item="", [byte]$Lang=0) {
     
-    if ( $Elem        -eq $null)          { return $False }
-    if (!$Elem.Active -or $Elem.Hidden)   { return $False }
-    
-    if     ($Elem.GetType() -eq [System.Windows.Forms.CheckBox] -or $Elem -is [int])      { return (IsChecked -Elem $Elem                           -Lang $Lang -Not) }
-    elseif ($Elem.GetType() -eq [System.Windows.Forms.Listbox])                           { return (IsItem    -Elem $Elem -Item $Item               -Lang $Lang -Not) }
-    elseif ($Elem.GetType() -eq [System.Windows.Forms.ComboBox] -or $Elem -is [int])      { return (IsIndex   -Elem $Elem -Index $Index -Text $Text -Lang $Lang     ) }
-    elseif ($Elem.GetType() -eq [System.Windows.Forms.TextBox]  -or $Elem -is [string])   { return (IsText    -Elem $Elem -Compare $Compare         -Lang $Lang -Not) }
+    if ($Elem -eq $null) { return $False }
+    $type = $Elem.GetType()
+
+    if     ($type -eq [System.Windows.Forms.CheckBox] -or $type -eq [int])      { return (IsChecked -Elem $Elem                           -Lang $Lang -Not) }
+    elseif ($type -eq [System.Windows.Forms.Listbox])                           { return (IsItem    -Elem $Elem -Item $Item               -Lang $Lang -Not) }
+    elseif ($type -eq [System.Windows.Forms.ComboBox] -or $type -eq [int])      { return (IsIndex   -Elem $Elem -Index $Index -Text $Text -Lang $Lang     ) }
+    elseif ($type -eq [System.Windows.Forms.TextBox]  -or $type -eq [string])   { return (IsText    -Elem $Elem -Compare $Compare         -Lang $Lang -Not) }
 
     return $False
 
@@ -858,17 +860,17 @@ function IsRevert([object]$Elem=$null, [int16]$Index=1, [string]$Text="", [strin
 #==============================================================================================================================================================================================
 function IsText([object]$Elem=$null, [string]$Compare="", [byte]$Lang=0, [switch]$Not) {
     
+    if ($Elem -eq $null) { return $False }
     RemoveOptionCheckFromList $Elem
+
     if ($Lang -gt 0 -and (IsSet $Redux.Text.Language) ) {
         if ($Redux.Text.Language.SelectedIndex -ne $Lang - 1) { return $False }
     }
 
-    if ( $Elem        -eq $null)          { return $False }
-    if (!$Elem.Active -or $Elem.Hidden)   { return $False }
-
-    if ($Elem -is [string])   { $Text = $Elem                                }
-    else                      { $Text = $Elem.Text.replace(" (default)", "") }
-    if ($Text -eq $Compare)   { return !$Not } else { return $Not }
+    if     ($Elem -is [string])                                             { $Text = $Elem                                }
+    elseif (!$Patches.Options.Checked -or !$Elem.Active -or $Elem.Hidden)   { return $False                                }
+    else                                                                    { $Text = $Elem.Text.replace(" (default)", "") }
+    return ($Text -eq $Compare) -xor $Not
 
 }
 
@@ -877,14 +879,12 @@ function IsText([object]$Elem=$null, [string]$Compare="", [byte]$Lang=0, [switch
 #==============================================================================================================================================================================================
 function IsItem([object]$Elem=$null, [string]$Item="", [byte]$Lang=0, [switch]$Not) {
     
+    if ($Elem -eq $null) { return $False }
     RemoveOptionCheckFromList $Elem
-    if ($Lang -gt 0 -and (IsSet $Redux.Text.Language) ) {
-        if ($Redux.Text.Language.SelectedIndex -ne $Lang - 1) { return $False }
-    }
 
-    if ( $Elem               -eq $null)          { return $False }
-    if (!$Elem.Active        -or $Elem.Hidden)   { return $False }
-    if ( $Elem.SelectedItems -contains $Item)    { return !$Not  } else { return $Not }
+    if ($Lang -gt 0 -and (IsSet $Redux.Text.Language) -and $Redux.Text.Language.SelectedIndex -ne $Lang - 1)   { return $False }
+    if (!$Patches.Options.Checked -or !$Elem.Active -or $Elem.Hidden)                                          { return $False }
+    return ($Elem.SelectedItems -contains $Item) -xor $Not
 
 }
 
@@ -893,21 +893,15 @@ function IsItem([object]$Elem=$null, [string]$Item="", [byte]$Lang=0, [switch]$N
 #==============================================================================================================================================================================================
 function IsValue([object]$Elem=$null, [int16]$Value=$null, [byte]$Lang=0, [switch]$Not) {
     
+    if ($Elem -eq $null) { return $False }
     RemoveOptionCheckFromList $Elem
-    if ($Lang -gt 0 -and (IsSet $Redux.Text.Language) ) {
-        if ($Redux.Text.Language.SelectedIndex -ne $Lang - 1) { return $False }
-    }
 
-    if ( $Elem        -eq $null)          { return $False }
-    if (!$Elem.Active -or $Elem.Hidden)   { return $False }
+    if     ($Lang -gt 0 -and (IsSet $Redux.Text.Language) -and $Redux.Text.Language.SelectedIndex -ne $Lang - 1)   { return $False          }
+    elseif ($Elem  -is [int])                                                                                      { $Value = $Elem         }
+    elseif (!$Patches.Options.Checked -or !$Elem.Active -or $Elem.Hidden)                                          { return $False          }
+    elseif ($Value -eq $null)                                                                                      { $Value = $Elem.Default }
 
-    if     ($Elem  -is [int])   { $Value = $Elem         }
-    elseif ($Value -eq $null)   { $Value = $Elem.Default }
-    
-    if ($Elem.GetType() -eq [System.Windows.Forms.TextBox]) {
-        if ([int16]$Elem.text -eq $Value) { return !$Not } else { return $Not }
-    }
-    if ([int16]$Elem.value -eq $Value) { return !$Not } else { return $Not }
+    if ($Elem.GetType() -eq [System.Windows.Forms.TextBox]) { return ([int16]$Elem.Text  -eq $Value) -xor $Not } else { return ([int16]$Elem.Value -eq $Value) -xor $Not }
 
 }
 
@@ -916,17 +910,15 @@ function IsValue([object]$Elem=$null, [int16]$Value=$null, [byte]$Lang=0, [switc
 #==============================================================================================================================================================================================
 function IsIndex([object]$Elem=$null, [int16]$Index=1, [string]$Text="", [byte]$Lang=0, [switch]$Not) {
     
+    if ($Elem -eq $null) { return $False }
     RemoveOptionCheckFromList $Elem
-    if ($Lang -gt 0 -and (IsSet $Redux.Text.Language) ) {
-        if ($Redux.Text.Language.SelectedIndex -ne $Lang - 1) { return $False }
-    }
 
-    if ( $Elem        -eq $null)                                                        { return $False }
-    if (!$Elem.Active -or $Elem.Hidden)                                                 { return $False }
-    if ( $Elem.GetType() -ne [System.Windows.Forms.ComboBox] -and $Elem -isnot [int])   { return $False }
+    if     ($Lang -gt 0 -and (IsSet $Redux.Text.Language) -and $Redux.Text.Language.SelectedIndex -ne $Lang - 1)   { return $False  }
+    elseif ($Elem.GetType() -ne [System.Windows.Forms.ComboBox] -and $Elem -isnot [int])                           { return $False  }
+    elseif ($Elem  -is [int])                                                                                      { $Index = $Elem }
+    elseif (!$Patches.Options.Checked -or !$Elem.Active -or $Elem.Hidden)                                          { return $False  }
 
-    if ($Elem  -is [int])   { $Index = $Elem }
-    if ($Index -lt 1)       { $Index = 1     }
+    if ($Index -lt 1) { $Index = 1 }
     if ($Text -ne "") {
         if ($Elem.Text.replace(" (default)", "") -eq $Text) { return !$Not } else { return $Not }
     }
@@ -940,16 +932,15 @@ function IsIndex([object]$Elem=$null, [int16]$Index=1, [string]$Text="", [byte]$
 #==============================================================================================================================================================================================
 function IsColor([System.Windows.Forms.ColorDialog]$Elem=$null, [string]$Color="", [byte]$Lang=0, [switch]$Not) {
     
+    if ($Elem -eq $null) { return $False }
     RemoveOptionCheckFromList $Elem
-    if ($Lang -gt 0 -and (IsSet $Redux.Text.Language) ) {
-        if ($Redux.Text.Language.SelectedIndex -ne $Lang - 1) { return $False }
-    }
 
-    if ($Elem  -eq $null)   { return $False }
-    if ($Color -eq "")      { $Color = $Elem.Default }
+    if ($Lang -gt 0 -and (IsSet $Redux.Text.Language) -and ($Redux.Text.Language.SelectedIndex -ne ($Lang - 1)))   { return $False }
+    if (!$Patches.Options.Checked)                                                                                 { return $False }
 
-    $c = (Get8Bit $Elem.Color.R) + (Get8Bit $Elem.Color.G) + (Get8Bit $Elem.Color.B)
-    if ($c -eq $Color) { return !$Not } else { return $Not }
+    $Color = if ($Color -eq "") { $Elem.Default } else { $Color }
+    $c = '{0:X2}{1:X2}{2:X2}' -f $Elem.Color.R, $Elem.Color.G, $Elem.Color.B
+    return (($c -eq $Color) -ne $Not)
 
 }
 
@@ -959,14 +950,16 @@ function IsColor([System.Windows.Forms.ColorDialog]$Elem=$null, [string]$Color="
 function IsSet([object]$Elem, [int16]$Min, [int16]$Max, [int16]$MinLength, [int16]$MaxLength, [switch]$HasInt) {
     
     RemoveOptionCheckFromList $Elem
-    if ($Elem -eq $null -or $Elem -eq "")                                               { return $False }
+    if ($Elem -eq $null -or $Elem -eq "")                                              { return $False }
     if ($HasInt) {
-        if ($Elem -NotMatch "^\d+$" )                                                   { return $False }
-        if ($Min -ne $null -and $Min -ne "" -and [int16]$Elem -lt $Min)                 { return $False }
-        if ($Max -ne $null -and $Max -ne "" -and [int16]$Elem -gt $Max)                 { return $False }
+        if ($Elem -NotMatch "^\d+$" )                                                  { return $False }
+        $elemInt = [int16]$Elem
+        if ($Min -ne $null -and $Min -ne "" -and $elemInt -lt $Min)                    { return $False }
+        if ($Max -ne $null -and $Max -ne "" -and $elemInt -gt $Max)                    { return $False }
     }
-    if ($MinLength -ne $null -and $MinLength -ne "" -and $Elem.Length -lt $MinLength)   { return $False }
-    if ($MaxLength -ne $null -and $MaxLength -ne "" -and $Elem.Length -gt $MaxLength)   { return $False }
+    $elemLength = $Elem.Length
+    if ($MinLength -ne $null -and $MinLength -ne "" -and $elemLength -lt $MinLength)   { return $False }
+    if ($MaxLength -ne $null -and $MaxLength -ne "" -and $elemLength -gt $MaxLength)   { return $False }
 
     return $True
 

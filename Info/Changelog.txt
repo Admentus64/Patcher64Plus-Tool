@@ -1,3 +1,14 @@
+v25.2.0
+- Updated OoT Redux with minor changes
+- Added "Invert Aiming Controls" option for OoT
+- Changed GUI forms generation in Forms functions to process faster
+- Changed Byte patching in Bytes functions to process faster
+- Changed options activated checks in Common functions to process faster
+- Changed Text Editor API to process faster
+- Fixed issue with muting music for OoT & MM
+- Fixed issue with the true default of a ComboBox
+- Fixed issue wth ListBoxes not resetting
+
 v25.1.16
 - Updated OoT Redux with minor changes
 - Added Silver Sword icon for Swords for OoT

@@ -56,7 +56,7 @@ function CreateVCRemapPanel() {
 #==============================================================================================================================================================================================
 function CheckVCGameID() {
     
-    if ($GameType.checksum -eq 0 -or $Settings.Debug.IgnoreChecksum -eq $True) { return $True } # Return if freely patching, injecting or extracting
+    if ($GameType.checksum -eq 0 -or $Settings.Debug.IgnoreChecksum) { return $True } # Return if freely patching, injecting or extracting
 
     UpdateStatusLabel "Checking GameID in .tmd..."     # Set the status label
     $ByteArray = [IO.File]::ReadAllBytes($WadFile.tmd) # Get the ".tmd" file as a byte array# Get the ".tmd" file as a byte array
@@ -329,8 +329,7 @@ function ExtendROM() {
 #==============================================================================================================================================================================================
 function HackOpeningBNRTitle($Title) {
     
-    if ($Settings.Debug.NoChannelTitleChange -eq $True)   { return }
-    if ($Title -eq $null)                                 { return }
+    if ($Settings.Debug.NoChannelTitleChange -or $Title -eq $null) { return }
 
     # Set the status label.
     UpdateStatusLabel "Hacking in Opening.bnr custom title..."
@@ -481,7 +480,7 @@ function RepackWADFile($GameID) {
     }
 
     # Repack the WAD using the new files
-    if ($GameID -ne $null -and $Settings.Debug.NoChannelIDChange -ne $True) {
+    if ($GameID -ne $null -and !$Settings.Debug.NoChannelIDChange) {
         $script = { Param([string]$Tool, [string]$Tik, [string]$Tmd, [string]$Cert, [string]$Out, [string]$ID, [string]$Path)
             Push-Location -LiteralPath $Path
             & $Tool $Tik $Tmd $Cert $Out '-sign' '-i' $ID | Out-Null

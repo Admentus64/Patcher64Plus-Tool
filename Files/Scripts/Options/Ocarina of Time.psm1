@@ -97,29 +97,32 @@ function ByteOptions() {
     if (IsChecked $Redux.Gameplay.RutoNeverDisappears)      { ChangeBytes -Offset "D01EA3" -Values "00"                                                                                              }
     if (IsChecked $Redux.Gameplay.Medallions)               { ChangeBytes -Offset "E2B454" -Values "80EA00A72401003F314A003F00000000"                                                                }
     if (IsChecked $Redux.Gameplay.OpenBombchuShop)          { ChangeBytes -Offset "C6CEDC" -Values "340B0001"                                                                                        }
-  # if (IsChecked $Redux.Gameplay.OpenBombchuShop)          { ChangeBytes -Offset "E2D724"  -Values "1500";    ChangeBytes -Offset "E2D898" -Values "1500"                                           } # Bomchu Bowling Alley
     if (IsChecked $Redux.Gameplay.RemoveNaviPrompts)        { ChangeBytes -Offset "DF8B84" -Values "00000000"                                                                                        }
     
 
 
     # GAMEPLAY #
 
+    if (IsChecked $Redux.Gameplay.InvertAimingControls) {
+        ChangeBytes -Offset "BDECD0" -Values "340D006401AC001900006812000D682300000000"; ChangeBytes -Offset @("BDB8CA", "BE6636") -Values "C3"; ChangeBytes -Offset "BF0C34" -Values "C4" # Crouch Shield aiming, Third person aiming (strafing), First person aiming (no weapon), First person aiming (weapon)
+    }
+
 	if (IsChecked $Redux.Gameplay.RunFaster) {
         ChangeBytes -Offset "B6D5B6" -Values "00EE03200300"; ChangeBytes -Offset "B6D5FA" -Values "010E03200300"; ChangeBytes -Offset "B6D664" -Values "0258"; ChangeBytes -Offset "BD2ABA" -Values "4448"
     }
 
-    if (IsDefault $Redux.Gameplay.SpawnChild -Not)          { ChangeBytes -Offset @("B0631E", "B06342")           -Values (GetOoTEntranceIndex $Redux.Gameplay.SpawnChild.Text)                                                                         }
-    if (IsDefault $Redux.Gameplay.SpawnAdult -Not)          { ChangeBytes -Offset   "B06332"                      -Values (GetOoTEntranceIndex $Redux.Gameplay.SpawnAdult.Text); ChangeBytes -Offset   "B06318"                      -Values "1000"     }
-    if (IsChecked $Redux.Gameplay.ManualJump)               { ChangeBytes -Offset   "BD78C0"                      -Values "04C1";                                                ChangeBytes -Offset   "BD78E3"                      -Values "01"       }
-    if (IsChecked $Redux.Gameplay.AltManualJump)            { ChangeBytes -Offset   "BD78E3"                      -Values "00"                                                                                                                          }
-    if (IsChecked $Redux.Gameplay.NoShieldRecoil)           { ChangeBytes -Offset   "BD416C"                      -Values "2400"                                                                                                                        }
-    if (IsChecked $Redux.Gameplay.RunWhileShielding)        { ChangeBytes -Offset   "BD7DA0"                      -Values "10000055";                                            ChangeBytes -Offset   "BD01D4"                      -Values "00000000" }
-    if (IsChecked $Redux.Gameplay.PushbackAttackingWalls)   { ChangeBytes -Offset   "BDEAE0"                      -Values "2624000024850000"                                                                                                            }
-    if (IsChecked $Redux.Gameplay.RemoveCrouchStab)         { ChangeBytes -Offset   "BDE374"                      -Values "1000000D"                                                                                                                    }
-    if (IsChecked $Redux.Gameplay.RemoveQuickSpin)          { ChangeBytes -Offset   "C9C9E8"                      -Values "1000000E"                                                                                                                    }
-    if (IsChecked $Redux.Gameplay.RemoveSpeedClamp)         { ChangeBytes -Offset   "BD9AF0"                      -Values "2400"                                                                                                                        }
-    if (IsChecked $Redux.Gameplay.ChildShops)               { ChangeBytes -Offset   "C6CEB4"                      -Values "1500"                                                                                                                        }
-    if (IsChecked $Redux.Gameplay.FastArrows)               { ChangeBytes -Offset @("DE178E", "DE364E", "DE552E") -Values "0010"                                                                                                                        }
+    if (IsDefault $Redux.Gameplay.SpawnChild -Not)          { ChangeBytes -Offset @("B0631E", "B06342")           -Values (GetOoTEntranceIndex $Redux.Gameplay.SpawnChild.Text)                                                  }
+    if (IsDefault $Redux.Gameplay.SpawnAdult -Not)          { ChangeBytes -Offset   "B06332"                      -Values (GetOoTEntranceIndex $Redux.Gameplay.SpawnAdult.Text); ChangeBytes -Offset "B06318" -Values "1000"     }
+    if (IsChecked $Redux.Gameplay.ManualJump)               { ChangeBytes -Offset   "BD78C0"                      -Values "04C1";                                                ChangeBytes -Offset "BD78E3" -Values "01"       }
+    if (IsChecked $Redux.Gameplay.AltManualJump)            { ChangeBytes -Offset   "BD78E3"                      -Values "00"                                                                                                   }
+    if (IsChecked $Redux.Gameplay.NoShieldRecoil)           { ChangeBytes -Offset   "BD416C"                      -Values "2400"                                                                                                 }
+    if (IsChecked $Redux.Gameplay.RunWhileShielding)        { ChangeBytes -Offset   "BD7DA0"                      -Values "10000055";                                            ChangeBytes -Offset "BD01D4" -Values "00000000" }
+    if (IsChecked $Redux.Gameplay.PushbackAttackingWalls)   { ChangeBytes -Offset   "BDEAE0"                      -Values "2624000024850000"                                                                                     }
+    if (IsChecked $Redux.Gameplay.RemoveCrouchStab)         { ChangeBytes -Offset   "BDE374"                      -Values "1000000D"                                                                                             }
+    if (IsChecked $Redux.Gameplay.RemoveQuickSpin)          { ChangeBytes -Offset   "C9C9E8"                      -Values "1000000E"                                                                                             }
+    if (IsChecked $Redux.Gameplay.RemoveSpeedClamp)         { ChangeBytes -Offset   "BD9AF0"                      -Values "2400"                                                                                                 }
+    if (IsChecked $Redux.Gameplay.ChildShops)               { ChangeBytes -Offset   "C6CEB4"                      -Values "1500"                                                                                                 }
+    if (IsChecked $Redux.Gameplay.FastArrows)               { ChangeBytes -Offset @("DE178E", "DE364E", "DE552E") -Values "0010"                                                                                                 }
 
 
 
@@ -2707,6 +2710,7 @@ function CreateTabMain() {
     CreateReduxCheckbox -Name "AltManualJump"                              -Text "Alt Manual Jump"            -Info "Press Z + A to do a Manual Jump instead of a Jump Attack`nPress B mid-air after jumping to do a Jump Attack`nThis version allows you still to roll when moving" -Credits "BilonFullHDemon" -Link $Redux.Gameplay.ManualJump
     CreateReduxCheckBox -Name "NoShieldRecoil"                             -Text "No Shield Recoil"           -Info "Disable the recoil when being hit while shielding"                                                                                                              -Credits "Admentus (ROM) & Aegiker (RAM)"
     CreateReduxCheckBox -Name "RunWhileShielding"                          -Text "Run While Shielding"        -Info "Press R to shield will no longer prevent Link from moving around" -Link $Redux.Gameplay.NoShieldRecoil                                                          -Credits "Admentus (ROM) & Aegiker (RAM)"
+    CreateReduxCheckBox -Name "InvertAimingControls"                       -Text "Invert Aiming Controls"     -Info "Invert the Y-axis analog controls when aiming with items or shielding"                                                                                          -Credits "ZNemesis"
     CreateReduxCheckBox -Name "PushbackAttackingWalls"                     -Text "Pushback Attacking Walls"   -Info "Link is getting pushed back a bit when hitting the wall with the sword"                                                                                         -Credits "Admentus (ROM) & Aegiker (RAM)"
     CreateReduxCheckBox -Name "RemoveCrouchStab"                           -Text "Remove Crouch Stab"         -Info "The Crouch Stab move is removed"                                                                                                                                -Credits "Garo-Mastah"
     CreateReduxCheckBox -Name "RemoveQuickSpin"                            -Text "Remove Magic Quick Spin"    -Info "The magic Quick Spin Attack move is removed`nIt's a regular Quick Spin Attack now instead"                                                                      -Credits "Admentus & Three Pendants"

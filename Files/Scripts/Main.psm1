@@ -819,6 +819,7 @@ function ResetGame() {
             elseif ($form.GetType() -eq [System.Windows.Forms.ComboBox])      { $form.SelectedIndex = $form.Default }
             elseif ($form.GetType() -eq [System.Windows.Forms.TextBox])       { $form.Text          = $form.Default }
             elseif ($form.GetType() -eq [System.Windows.Forms.TrackBar])      { $form.Value         = $form.Default }
+            elseif ($form.GetType() -eq [System.Windows.Forms.ListBox])       { $form.SelectedItems.Clear()         }
         }
     }
 

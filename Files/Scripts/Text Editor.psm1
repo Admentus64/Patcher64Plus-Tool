@@ -975,7 +975,7 @@ function RunAllStoredMessages() {
 function RunSetMessage([string]$ID, [object]$Text, [object]$Replace, [string]$File="", [boolean]$Full, [boolean]$Insert, [byte]$Offset=0, [boolean]$Append, [boolean]$All, [boolean]$ASCII, [boolean]$Silent, [boolean]$Safety, [boolean]$Force) {
     
     if ($DialogueList -eq $null) {
-        WriteToConsole ("Could not edit message ID: " + $ID + " as the message data does not exist. Did it ran outside ByteTextOptions?" ) -Error
+        WriteToConsole ("Could not edit message ID: " + $ID + " as the message data does not exist. Did it ran outside ByteTextOptions?") -Error
         return
     }
 
@@ -998,16 +998,18 @@ function RunSetMessage([string]$ID, [object]$Text, [object]$Replace, [string]$Fi
     else {
         if ($Text.count -gt 0) {
             if ($Text -match $re -and !$ASCII) {
-                if     ($Text -is [System.String] -and $Text  -Like "* *")   { [byte[]]$Text = $Text -split ' '           | foreach { [Convert]::ToByte($_, 16) } }
-                elseif ($Text -is [System.String])                           { [byte[]]$Text = $Text -split '(..)' -ne '' | foreach { [Convert]::ToByte($_, 16) } }
+                if     ($Text -is [string] -and $Text -like "* *")   { return $Text -split ' '           | ForEach-Object { [Convert]::ToByte($_, 16) } }
+                elseif ($Text -is [string])                          { return $Text -split '(..)' -ne '' | ForEach-Object { [Convert]::ToByte($_, 16) } }
             }
             else {
-                $parse = $False
-                if ($Text -like "*<*" -and $Text -like "*>*")   { $parse = $True }
-                elseif ($Force)                                 { $parse = $True }
-                $Text = $Text.toCharArray()
-                if ($parse)    { $Text = ParseMessage -Text $Text -Encode }
-                if ($Safety)   { for ($i=0; $i -lt $Text.count; $i++) { if ($Text[$i] -gt 255) { $Text[$i] = 63 } } }
+                $parse = ($Force -or ($Text -like "*<*" -and $Text -like "*>*"))
+                $Text  = $Text.toCharArray()
+                if ($parse) { $Text = ParseMessage -Text $Text -Encode }
+                if ($Safety) {
+                    for ($i=0; $i -lt $Text.count; $i++) {
+                        if ($Text[$i] -gt 255) { $Text[$i] = 63 }
+                    }
+                }
             }
 
             $match = FindMatch -Text $Text -All $All
@@ -1028,19 +1030,24 @@ function RunSetMessage([string]$ID, [object]$Text, [object]$Replace, [string]$Fi
             }
         }
 
-        if     ($File -ne "") { if (TestFile -Path ($GameFiles.binaries + "\" + $File)) { $Replace = [System.IO.File]::ReadAllBytes($GameFiles.binaries + "\" + $File) } }
+        if ($File -ne "") {
+            $filePath = Join-Path $GameFiles.binaries $File
+            if (TestFile -Path $filePath) { $Replace = [System.IO.File]::ReadAllBytes($filePath) }
+        }
         elseif ($Replace.count -gt 0) {
             if ($Replace -match $re -and !$ASCII) {
-                if     ($Replace  -is [System.String] -and $Replace  -Like "* *")   { [byte[]]$Replace = $Replace -split ' '           | foreach { [Convert]::ToByte($_, 16) } }
-                elseif ($Replace  -is [System.String])                              { [byte[]]$Replace = $Replace -split '(..)' -ne '' | foreach { [Convert]::ToByte($_, 16) } }
+                if     ($Replace -is [string] -and $Replace -like "* *")   { return $Replace -split ' '           | ForEach-Object { [Convert]::ToByte($_, 16) } }
+                elseif ($Replace -is [string])                             { return $Replace -split '(..)' -ne '' | ForEach-Object { [Convert]::ToByte($_, 16) } }
             }
             else {
-                $parse = $False
-                if ($Replace -like "*<*" -and $Replace -like "*>*")   { $parse = $True }
-                elseif ($Force)                                       { $parse = $True }
-                $Replace = $Replace.toCharArray()
-                if ($parse)    { $Replace = ParseMessage -Text $Replace -Encode }
-                if ($Safety)   { for ($i=0; $i -lt $Replace.count; $i++) { if ($Replace[$i] -gt 255) { $Replace[$i] = 63 } } }
+                $parse = ($Force -or ($Replace -like "*<*" -and $Replace -like "*>*"))
+                $Replace  = $Replace.toCharArray()
+                if ($parse) { $Replace = ParseMessage -Text $Replace -Encode }
+                if ($Safety) {
+                    for ($i=0; $i -lt $Replace.count; $i++) {
+                        if ($Replace[$i] -gt 255) { $Replace[$i] = 63 }
+                    }
+                }
             }
         }
         else { [byte[]]$Replace = @() }
@@ -1056,8 +1063,8 @@ function RunSetMessage([string]$ID, [object]$Text, [object]$Replace, [string]$Fi
         }
     }
     if ($Text.count -gt ($DialogueList[$ID].msg.count - $Files.json.textEditor.header) ) {
-        $DialogueList[$ID].msg.Insert($DialogueList[$ID].msg.count, [byte]$Files.json.textEditor.end)
-        while ($DialogueList[$ID].msg.count % 4 -ne 0) { $DialogueList[$ID].msg.Insert($DialogueList[$ID].msg.count, 0) }
+        $DialogueList[$ID].msg.Add([byte]$Files.json.textEditor.end)
+        while ($DialogueList[$ID].msg.count % 4 -ne 0) { $DialogueList[$ID].msg.Add(0) }
         if (!$Silent) { WriteToConsole ("Text is too long to search for message ID: " + $ID) -Error }
         return -3
     }
@@ -1065,8 +1072,8 @@ function RunSetMessage([string]$ID, [object]$Text, [object]$Replace, [string]$Fi
     if ($Insert) {
         if ($Replace.count -gt 0) { $DialogueList[$ID].msg.InsertRange($Files.json.textEditor.header + $Offset, $Replace) }
     }
-    elseif ($Append)   {
-        if ($Replace.count -gt 0) { $DialogueList[$ID].msg.InsertRange($DialogueList[$ID].msg.count, $Replace) }
+    elseif ($Append) {
+        if ($Replace.count -gt 0) { $DialogueList[$ID].msg.AddRange($Replace) }
     }
     elseif (!$All) {
         if ($Text.count    -gt 0) { $DialogueList[$ID].msg.RemoveRange($match, $Text.count) }
@@ -1077,12 +1084,12 @@ function RunSetMessage([string]$ID, [object]$Text, [object]$Replace, [string]$Fi
         foreach ($m in $match) {
             if ($Text.count    -gt 0)   { $DialogueList[$ID].msg.RemoveRange($m + $correct, $Text.count) }
             if ($Replace.count -gt 0)   { $DialogueList[$ID].msg.InsertRange($m + $correct, $Replace)    }
-            $correct += $Replace.count - $Text.Count
+            $correct += $Replace.count - $Text.count
         }
     }
 
-    $DialogueList[$ID].msg.Insert($DialogueList[$ID].msg.count, [byte]$Files.json.textEditor.end)
-    while ($DialogueList[$ID].msg.count % 4 -ne 0) { $DialogueList[$ID].msg.Insert($DialogueList[$ID].msg.count, 0) }
+    $DialogueList[$ID].msg.Add([byte]$Files.json.textEditor.end)
+    while ($DialogueList[$ID].msg.count % 4 -ne 0) { $DialogueList[$ID].msg.Add(0) }
 
     if (!$Silent) {
         if ($All)   { WriteToConsole ("Changed for all text at: " + $match            + " (ID: " + $ID + ")") }
@@ -1118,46 +1125,40 @@ function ParseMessageLanguage([char[]]$Text, [switch]$Encode) {
     
     # Language Parsing
 
-    [System.Collections.ArrayList]$types = @()
-    for ($i=0; $i -lt $LanguagePatch.encode.length; $i++) { $types += $False }
+    $types = [bool[]](0..($LanguagePatch.encode.Length - 1) | ForEach-Object { $False })
     if (!$Encode) {
+        $encodedSet = [System.Collections.Generic.HashSet[char]]::new()
+        $LanguagePatch.encode | ForEach-Object { $encodedSet.Add($_) }
         foreach ($c in $Text) {
             if ($c -eq [byte]$Files.json.textEditor.end) { break }
 
-            for ($i=0; $i -lt $LanguagePatch.encode.length; $i++) {
-                if ([char]$c -eq [char]$LanguagePatch.encode[$i]) {
-                    $types[$i] = $True
-                }
+            if ($encodedSet.Contains($c)) {
+                $index = [Array]::IndexOf($LanguagePatch.encode, $c)
+                if ($index -ge 0) { $types[$index] = $True }
             }
         }
     }
-    else {
-        for ($i=0; $i -lt $LanguagePatch.encode.length; $i++) { $types[$i] = $True }
-    }
+    else { $types = $types | ForEach-Object { $True } }
 
-    for ($global:ScriptCounter=0; $ScriptCounter -lt $Text.count; $global:ScriptCounter++) {
-        if ($Text[$ScriptCounter] -eq [byte]$Files.json.textEditor.end) { break }
+    $skip = $False
+    for ($global:ScriptCounter = 0; $global:ScriptCounter -lt $Text.Length; $global:ScriptCounter++) {
+        if ($Text[$global:ScriptCounter] -eq [byte]$Files.json.textEditor.end) { break }
 
-        if ($Text[$ScriptCounter] -eq 60) {
-            $skip = $False
-            
-            for ($i=$global:ScriptCounter; $i -lt $Text.count-1; $i++) {
-                if     ($Text[$i+1] -eq 60)   { $skip = $False; break }
-                elseif ($Text[$i+1] -eq 62)   { $skip = $True;  break }
+        if ($Text[$global:ScriptCounter] -eq 60) {
+            # Detect and handle skip regions
+            for ($i = $global:ScriptCounter + 1; $i -lt $Text.Length; $i++) {
+                if ($Text[$i] -eq 60) { $skip = $False; break }
+                if ($Text[$i] -eq 62) { $skip = $True; $global:ScriptCounter = $i; break }
             }
         }
-        if ($Text[$ScriptCounter] -eq 62) { $skip = $False }
 
         if (!$skip) {
-            for ($i=0; $i -lt $LanguagePatch.encode.length; $i++) {
-                if ($types[$i]) {
-                    $Text = ParseMessagePart -Text $Text -Encoded @($LanguagePatch.encode[$i]) -Decoded @($LanguagePatch.decode[$i]) -Encode $Encode
-                }
+            for ($i = 0; $i -lt $LanguagePatch.encode.Length; $i++) {
+                if ($types[$i]) { $Text = ParseMessagePart -Text $Text -Encoded @($LanguagePatch.encode[$i]) -Decoded @($LanguagePatch.decode[$i]) -Encode $Encode }
             }
         }
     }
 
-    $types = $null
     return $Text
 
 }

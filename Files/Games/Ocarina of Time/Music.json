@@ -1,5 +1,6 @@
 {
-"conversion" : {
+"game"		: "Ocarina of Time",
+"conversion"	: {
 	"ext"			: ".zseq",
 	"bank" : [ {
 		"original"	: "03",
@@ -390,6 +391,10 @@
 	"title"		: "Chamber of the Sages",
 	"id"		: "56",
 	"size"		: "0470"
+}, {
+	"title"		: "File Select",
+	"id"		: "57",
+	"size"		: 0
 }, {
 	"title"		: "Ice Cavern",
 	"id"		: "58",

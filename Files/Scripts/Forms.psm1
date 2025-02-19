@@ -1,5 +1,6 @@
 function CreateForm([uint16]$X=0, [uint16]$Y=0, [uint16]$Width=0, [uint16]$Height=0, [string]$Name="", [string]$Tag="", [object]$Form, [boolean]$IsGame=$False, [object]$AddTo=$null) {
     
+    $Form.SuspendLayout()
     $Form.Size     = New-Object System.Drawing.Size($Width, $Height)
     $Form.Location = New-Object System.Drawing.Size($X, $Y)
     if ($Tag   -ne "")      { $Form.Tag = $Tag }
@@ -92,6 +93,7 @@ function CreateGroupBox([uint16]$X=0, [uint16]$Y=0, [uint16]$Width=0, [uint16]$H
         while ($Text -like "* & *") { $Text = $Text.Replace("&", "&&") }
         $Last.Group.Text = (" " + $Text + " ")
     }
+    $Last.Group.ResumeLayout()
     return $Last.Group
 
 }
@@ -105,6 +107,7 @@ function CreatePanel([uint16]$X=0, [uint16]$Y=0, [uint16]$Width=0, [uint16]$Heig
     $Last.Group = $null
     $Last.Half  = $False
     if ($Hide) { $Last.Panel.Hide() }
+    $Last.Panel.ResumeLayout()
     return $Last.Panel
 
 }
@@ -114,7 +117,7 @@ function CreatePanel([uint16]$X=0, [uint16]$Y=0, [uint16]$Width=0, [uint16]$Heig
 #==============================================================================================================================================================================================
 function CreateTextBox([uint16]$X=0, [uint16]$Y=0, [uint16]$Width=0, [uint16]$Height=0, [uint16]$Length=10, [string]$Name="", [string]$Tag="", [switch]$ReadOnly, [switch]$Multiline, [string]$Text="", [string]$Info="", [switch]$IsGame, [switch]$TextFileFont, [object]$AddTo=$Last.Group) {
     
-    $textBox = CreateForm -X $X -Y $Y -Width $Width -Height $Height -Name $Name -Tag $Tag -IsGame $IsGame -Form (New-Object System.Windows.Forms.TextBox) -AddTo $AddTo
+    $textBox      = CreateForm -X $X -Y $Y -Width $Width -Height $Height -Name $Name -Tag $Tag -IsGame $IsGame -Form (New-Object System.Windows.Forms.TextBox) -AddTo $AddTo
     $textBox.Text = $Text
     if ($TextFileFont)   { $textBox.Font = $Fonts.TextFile }
     else                 { $textBox.Font = $Fonts.Small    }
@@ -150,6 +153,8 @@ function CreateTextBox([uint16]$X=0, [uint16]$Y=0, [uint16]$Width=0, [uint16]$He
     
     Add-Member -InputObject $textBox -NotePropertyMembers @{ Default = $Text }
     $ToolTip = CreateToolTip -Form $textBox -Info $Info
+
+    $TextBox.ResumeLayout()
     return $TextBox
 
 }
@@ -165,6 +170,7 @@ function CreateCheckBox([uint16]$X=0, [uint16]$Y=0, [byte]$SaveAs=$Last.SaveAs, 
         Add-Member -InputObject $CheckBox -NotePropertyMembers @{ SaveAs = $SaveAs; SaveTo = $SaveTo }
     }
     else { $CheckBox = CreateForm -X $X -Y $Y -Width (DPISize 20) -Height (DPISize 20) -Name $Name -Tag $Tag -IsGame $IsGame -Form (New-Object System.Windows.Forms.CheckBox) -AddTo $AddTo }
+    
     $ToolTip = CreateToolTip -Form $checkBox -Info $Info
     $checkBox.Enabled = !$Disable
 
@@ -211,8 +217,10 @@ function CreateCheckBox([uint16]$X=0, [uint16]$Y=0, [byte]$SaveAs=$Last.SaveAs, 
         if ($link.checked     -and $Link.link.Checked)       { $Link.Checked     = $False }
     }
 
-    Add-Member -InputObject $CheckBox -NotePropertyMembers @{ Default = $Checked }
-    return $CheckBox
+    Add-Member -InputObject $checkBox -NotePropertyMembers @{ Default = $Checked }
+
+    $checkBox.ResumeLayout()
+    return $checkBox
 
 }
 
@@ -221,7 +229,7 @@ function CreateCheckBox([uint16]$X=0, [uint16]$Y=0, [byte]$SaveAs=$Last.SaveAs, 
 #==============================================================================================================================================================================================
 function CreateComboBox([uint16]$X=0, [uint16]$Y=0, [uint16]$Width=0, [uint16]$Height=0, [string]$Name="", [string]$Tag="", [string[]]$Items=@(), [byte]$Default=1, [string]$Info, [switch]$IsGame, [object]$AddTo=$Last.Group) {
     
-    $comboBox = CreateForm -X $X -Y $Y -Width $Width -Height $Height -Name $Name -Tag $Tag -IsGame $IsGame -Form (New-Object System.Windows.Forms.ComboBox) -AddTo $AddTo
+    $comboBox               = CreateForm -X $X -Y $Y -Width $Width -Height $Height -Name $Name -Tag $Tag -IsGame $IsGame -Form (New-Object System.Windows.Forms.ComboBox) -AddTo $AddTo
     $comboBox.DropDownStyle = "DropDownList"
     $comboBox.Add_Mousewheel({ $_.Handled = $True })
     $comboBox.Font = $Fonts.Small
@@ -246,6 +254,8 @@ function CreateComboBox([uint16]$X=0, [uint16]$Y=0, [uint16]$Width=0, [uint16]$H
     }
 
     Add-Member -InputObject $comboBox -NotePropertyMembers @{ Default = $Default - 1 }
+
+    $comboBox.ResumeLayout()
     return $comboBox
 
 }
@@ -283,6 +293,7 @@ function CreateSlider([uint16]$X=0, [uint16]$Y=0, [uint16]$Width=0, [uint16]$Hei
     })
     $slider.Add_Mousewheel({ $_.Handled = $True })
 
+    $slider.ResumeLayout()
     return $slider
 
 }
@@ -293,6 +304,7 @@ function CreateSlider([uint16]$X=0, [uint16]$Y=0, [uint16]$Width=0, [uint16]$Hei
 function CreateListBox([uint16]$X=0, [uint16]$Y=0, [uint16]$Width=0, [uint16]$Height=0, [string[]]$Items, [int]$ItemWidth=100, [boolean]$MultiColumn=$False, [boolean]$MultiSelect=$False, [string]$Name="", [string]$Tag="", [string]$Info="", [switch]$IsGame, [object]$AddTo=$Last.Group) {
 
     $listBox = CreateForm -X $X -Y $Y -Width $Width -Height $Height -Name $Name -Tag $Tag -IsGame $IsGame -Form (New-Object System.Windows.Forms.Listbox) -AddTo $AddTo
+
     if ($MultiSelect) { $listBox.SelectionMode = 'MultiSimple' }
     if ($MultiColumn) {
         $listBox.MultiColumn = $True
@@ -316,6 +328,7 @@ function CreateListBox([uint16]$X=0, [uint16]$Y=0, [uint16]$Width=0, [uint16]$He
         }
     }
 
+    $listBox.ResumeLayout()
     return $listBox
 
 }
@@ -324,12 +337,15 @@ function CreateListBox([uint16]$X=0, [uint16]$Y=0, [uint16]$Width=0, [uint16]$He
 #==============================================================================================================================================================================================
 function CreateLabel([uint16]$X=0, [uint16]$Y=0, [uint16]$Width=0, [uint16]$Height=20, [string]$Name, [string]$Tag, [string]$Text="", [System.Drawing.Font]$Font=$Fonts.Small, [string]$Info="", [object]$AddTo=$Last.Group) {
     
-    $label             = CreateForm -X $X -Y $Y -Width $Width -Height $Height -Name $Name -Tag $Tag -Form (New-Object System.Windows.Forms.Label) -AddTo $AddTo
+    $label = CreateForm -X $X -Y $Y -Width $Width -Height $Height -Name $Name -Tag $Tag -Form (New-Object System.Windows.Forms.Label) -AddTo $AddTo
+    
     $label.UseMnemonic = $False
     if ($Text  -ne "")   { $label.Text     = $Text }
     if ($Width -eq 0)    { $label.AutoSize = $True }
     $label.Font = $Font
     $ToolTip = CreateToolTip -Form $label -Info $Info
+
+    $label.ResumeLayout()
     return $label
 
 }
@@ -340,11 +356,14 @@ function CreateLabel([uint16]$X=0, [uint16]$Y=0, [uint16]$Width=0, [uint16]$Heig
 function CreateButton([uint16]$X=0, [uint16]$Y=0, [uint16]$Width=(DPISize 100), [uint16]$Height=(DPISize 20), [string]$Name, [string]$Tag, [string]$ForeColor="", [string]$BackColor="", [string]$Text="", [string]$Info="", [System.Drawing.Font]$Font=$Fonts.Small, [object]$AddTo=$Last.Group) {
     
     $button = CreateForm -X $X -Y $Y -Width $Width -Height $Height -Name $Name -Tag $Tag -Form (New-Object System.Windows.Forms.Button) -AddTo $AddTo
+
     if ($Text -ne "")       { $button.Text = $Text }
     $button.Font = $Font
     if ($ForeColor -ne "")   { $button.ForeColor = $ForeColor }
     if ($BackColor -ne "")   { $button.BackColor = $BackColor }
     if ($Info      -ne "")   { $ToolTip = CreateToolTip -Form $button -Info $Info }
+    
+    $button.ResumeLayout()
     return $button
 
 }
@@ -356,6 +375,16 @@ function CreateButton([uint16]$X=0, [uint16]$Y=0, [uint16]$Width=(DPISize 100), 
 function CreatePreviewGroup([single]$Height=0, [string]$Text="", [switch]$Safe, [switch]$Lite) {
     
     if ( ($Safe -and $Settings.Core.Safe) -or ($Lite -and $Settings.Core.Lite) ) { return $null }
+
+    if ($GamePatch.ExcludeGroups.Count -gt 0) {
+        foreach ($group in $GamePatch.ExcludeGroups) {
+            if ("Previews" -eq $group.Tag -and $Text -eq $group.Name) {
+                $Last.Hide = $True
+                $GamePatch.ExcludeGroups.Remove($group)
+                return $null
+            }
+        }
+    }
 
     $Last.Column = $Last.Row = 1
 
@@ -681,7 +710,7 @@ function CreateReduxComboBox([single]$Column=$Last.Column, [single]$Row=$Last.Ro
     $Default  = [byte]$Default
     $label    = CreateLabel    -X (($Column-1) * $FormDistance + (DPISize 15)) -Y ($Row * (DPISize 30) - (DPISize 10)) -Width $Width                       -Height (DPISize 15) -Text $Text -Info $Info -AddTo $AddTo
     $comboBox = CreateComboBox -X $label.Right                                 -Y ($label.Top - (DPISize 2))           -Width (DPISize ($Length - $Shift)) -Height (DPISize 20) -Items $Items -Default $Default -Info $Info -IsGame $True -Name $Name -Tag $Tag -AddTo $AddTo
-    if ($TrueDefault -gt 0) { $comboBox.Default = $TrueDefault - 1 }
+    Add-Member -InputObject $comboBox -NotePropertyMembers @{ TrueDefault = $TrueDefault }
 
     if ($Text -ne "") {
         Add-Member -InputObject $label    -NotePropertyMembers @{ ComboBox = $comboBox }
@@ -808,6 +837,8 @@ function CreateImageBox([int]$X=0, [int]$Y=0, [int]$W=0, [int]$H=0, [boolean]$Is
     $image.Size     = DPISize (New-object System.Drawing.Size($W, $H))
 
     if ($Native) { $Redux.NativeOptions += $image }
+
+    $image.ResumeLayout()
     return $image
 
 }
@@ -817,7 +848,7 @@ function CreateImageBox([int]$X=0, [int]$Y=0, [int]$W=0, [int]$H=0, [boolean]$Is
 #==============================================================================================================================================================================================
 function OptionIsAvailable([boolean]$Safe, [boolean]$Lite, [boolean]$Scene) {
     
-    if ( ($Safe -and $Settings.Core.Safe) -or ($Lite -and $Settings.Core.Lite) -or ($Scene -and $GamePatch.custom_maps -eq 1) -or ($Scene -and $Settings.Core.Safe) ) { return $False }
+    if ( ($Safe -and $Settings.Core.Safe) -or ($Lite -and $Settings.Core.Lite) -or ($Scene -and $GamePatch.custom_maps -eq 2) -or ($Scene -and $Settings.Core.Safe) ) { return $False }
     return $True
 
 }

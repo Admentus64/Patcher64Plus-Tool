@@ -1,5 +1,6 @@
 {
-"conversion" : {
+"game"		: "Majora's Mask",
+"conversion"	: {
 	"ext"			: ".seq",
 	"bank" : [ {
 		"original"	: "03",
@@ -260,6 +261,10 @@
 	"id"		: "27",
 	"size"		: "09D0"
 }, {
+	"title"		: "Great Fairy's Fountain",
+	"id"		: "28",
+	"size"		: 0
+}, {
 	"title"		: "Zelda's Lullaby",
 	"id"		: "29",
 	"size"		: "0A00"
@@ -468,12 +473,12 @@
 	"id"		: "7E",
 	"size"		: "06C0"
 }, {
-	"title"		: "No Music",
-	"id"		: "7F",
-	"size"		: 0
-}, {
 	"title"		: "The End/Credits II",
 	"id"		: "82",
 	"event"		: 2,
 	"size"		: "3260"
+}, {
+	"title"		: "No Music",
+	"id"		: "7F",
+	"size"		: 0
 } ] }
